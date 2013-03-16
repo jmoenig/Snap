@@ -1,0 +1,14 @@
+CACHE MANIFEST
+snap.html
+blocks.js
+byob.js
+gui.js
+lists.js
+morphic.js
+objects.js
+threads.js
+widgets.js
+store.js
+xml.js
+scriptsPaneTexture.gif
+snap_logo_sm.gif
