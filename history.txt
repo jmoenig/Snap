@@ -1528,3 +1528,4 @@ ______
 ------
 * GUI, Blocks, BYOB, Widgets: Scaling Blocks and Scripts (shift-click on settings menu)
 * Widets: numerical prompts
+* GUI: #signup URL switch

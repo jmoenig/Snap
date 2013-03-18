@@ -7,7 +7,7 @@ saving, loading, exporting, importing
 
 artefacts: projects, blocks, sprites
 
-URL options: #run: #open:
+URL options: #run: #open: #lang: #signup
 
 supported browsers, problems with the Android virtual keyboard
 

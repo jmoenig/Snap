@@ -233,6 +233,8 @@ IDE_Morph.prototype.openIn = function (world) {
     } else if (location.hash.substr(0, 6) === '#lang:') {
         this.setLanguage(location.hash.substr(6));
         this.newProject();
+    } else if (location.hash.substr(0, 7) === '#signup') {
+        this.createCloudAccount();
     }
 };
 
@@ -2860,6 +2862,11 @@ IDE_Morph.prototype.initializeCloud = function () {
 IDE_Morph.prototype.createCloudAccount = function () {
     var myself = this,
         world = this.world();
+/*
+    // force-logout, commented out for now:
+    delete localStorage['-snap-user'];
+    SnapCloud.clear();
+*/
     new DialogBoxMorph(
         null,
         function (user) {
