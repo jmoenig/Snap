@@ -73,7 +73,7 @@ newCanvas, StringMorph, Morph, TextMorph, nop, detect, StringFieldMorph,
 HTMLCanvasElement, fontHeight, SymbolMorph, localize, SpeechBubbleMorph,
 ArrowMorph, MenuMorph, isString*/
 
-modules.widgets = '2013-February-26';
+modules.widgets = '2013-March-18';
 
 var PushButtonMorph;
 var ToggleButtonMorph;
@@ -1531,11 +1531,12 @@ DialogBoxMorph.prototype.prompt = function (
     world,
     pic,
     choices, // optional dictionary for drop-down of choices
-    isReadOnly // optional when using choices
+    isReadOnly, // optional when using choices
+    isNumeric // optional
 ) {
     var txt = new InputFieldMorph(
         defaultString,
-        false, // numeric?
+        isNumeric || false, // numeric?
         choices || null, // drop-down dict, optional
         choices ? isReadOnly || false : false
     );

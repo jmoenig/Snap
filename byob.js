@@ -105,7 +105,7 @@ CommentMorph, localize, CSlotMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2013-February-18';
+modules.byob = '2013-March-18';
 
 // Declarations
 
@@ -2002,7 +2002,7 @@ BlockLabelPlaceHolderMorph.prototype.drawNew = function () {
         context.beginPath();
         context.arc(
             cx,
-            cy,
+            cy * 1.2,
             Math.min(cx, cy),
             radians(0),
             radians(360),
@@ -2127,7 +2127,8 @@ InputSlotDialogMorph.prototype.init = function (
     environment,
     category
 ) {
-    var fh = fontHeight(10) / 1.2; // "raw height"
+    var scale = SyntaxElementMorph.prototype.scale,
+        fh = fontHeight(10) / 1.2 * scale; // "raw height"
 
     // additional properties:
     this.fragment = fragment || new BlockLabelFragment();
@@ -2152,7 +2153,7 @@ InputSlotDialogMorph.prototype.init = function (
     this.slots = new BoxMorph();
     this.slots.color = new Color(55, 55, 55); // same as palette
     this.slots.borderColor = this.slots.color.lighter(50);
-    this.slots.setExtent(new Point((fh + 10) * 24, (fh + 10) * 10.4));
+    this.slots.setExtent(new Point((fh + 10) * 24, (fh + 10 * scale) * 10.4));
     this.add(this.slots);
     this.createSlotTypeButtons();
     this.fixSlotsLayout();
@@ -2548,10 +2549,11 @@ InputSlotDialogMorph.prototype.addSlotArityButton = function (
 
 InputSlotDialogMorph.prototype.fixSlotsLayout = function () {
     var slots = this.slots,
-        xPadding = 10,
-        ypadding = 14,
-        bh = fontHeight(10) / 1.2 + 15, // slot type button height
-        ah = fontHeight(10) / 1.2 + 10, // arity button height
+        scale = SyntaxElementMorph.prototype.scale,
+        xPadding = 10 * scale,
+        ypadding = 14 * scale,
+        bh = (fontHeight(10) / 1.2 + 15) * scale, // slot type button height
+        ah = (fontHeight(10) / 1.2 + 10) * scale, // arity button height
         size = 12, // number slot type radio buttons
         cols = [
             slots.left() + xPadding,

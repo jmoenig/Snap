@@ -68,7 +68,7 @@ sb*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2013-March-15';
+modules.gui = '2013-March-18';
 
 // Declarations
 
@@ -1687,6 +1687,14 @@ IDE_Morph.prototype.settingsMenu = function () {
 
     menu = new MenuMorph(this);
     menu.addItem('Language...', 'languageMenu');
+    if (shiftClicked) {
+        menu.addItem(
+            'Scale blocks...',
+            'userSetBlocksScale',
+            null,
+            new Color(100, 0, 0)
+        );
+    }
     menu.addLine();
     addPreference(
         'Blurred shadows',
@@ -2752,6 +2760,52 @@ IDE_Morph.prototype.reflectLanguage = function (lang) {
     } else {
         projectData = this.serializer.serialize(this.stage);
     }
+    SpriteMorph.prototype.initBlocks();
+    this.spriteBar.tabBar.tabTo('scripts');
+    this.createCategories();
+    this.createCorralBar();
+    this.fixLayout();
+    this.openProjectString(projectData);
+};
+
+// IDE_Morph blocks scaling
+
+IDE_Morph.prototype.userSetBlocksScale = function () {
+    var myself = this;
+    new DialogBoxMorph(
+        null,
+        function (num) {
+            myself.setBlocksScale(num);
+        }
+    ).prompt(
+        'Scale Blocks',
+        SyntaxElementMorph.prototype.scale.toString(),
+        this.world(),
+        null,
+        {
+            'normal (1)' : 1,
+            'demo (1.2)' : 1.2,
+            'big (2)' : 2,
+            'huge (4)' : 4,
+            'giant (8)' : 8
+        },
+        false, // read only?
+        true // numeric
+    );
+};
+
+IDE_Morph.prototype.setBlocksScale = function (num) {
+    var projectData;
+    if (Process.prototype.isCatchingErrors) {
+        try {
+            projectData = this.serializer.serialize(this.stage);
+        } catch (err) {
+            this.showMessage('Serialization failed: ' + err);
+        }
+    } else {
+        projectData = this.serializer.serialize(this.stage);
+    }
+    SyntaxElementMorph.prototype.setScale(num);
     SpriteMorph.prototype.initBlocks();
     this.spriteBar.tabBar.tabTo('scripts');
     this.createCategories();

@@ -1523,3 +1523,8 @@ ______
 ------
 * GUI: When logged into the Cloud, "cloud" becomes default in the project dialog
 * Store: local custom blocks can now store their definition receiver directly as value (avoiding turning them into "Obsolete!" blocks when re-opening the project), this is important for reified blocks assigned to variables elsewhere, and such for the part of OOP we can already do now.
+
+130318
+------
+* GUI, Blocks, BYOB, Widgets: Scaling Blocks and Scripts (shift-click on settings menu)
+* Widets: numerical prompts

@@ -153,7 +153,7 @@ DialogBoxMorph, BlockInputFragmentMorph, PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2013-February-26';
+modules.blocks = '2013-March-18';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -296,37 +296,46 @@ SyntaxElementMorph.uber = Morph.prototype;
         rfColor            - <Color> for reified outlines and slot backgrounds
 */
 
-SyntaxElementMorph.prototype.corner = 3;
-SyntaxElementMorph.prototype.rounding = 9;
-SyntaxElementMorph.prototype.edge = 1.000001; // shadow bug in Chrome
-SyntaxElementMorph.prototype.inset = 6;
-SyntaxElementMorph.prototype.hatHeight = 12;
-SyntaxElementMorph.prototype.hatWidth = 70;
-SyntaxElementMorph.prototype.rfBorder = 3;
-SyntaxElementMorph.prototype.minWidth = 0;
-SyntaxElementMorph.prototype.dent = 8;
-SyntaxElementMorph.prototype.bottomPadding = 3;
-SyntaxElementMorph.prototype.cSlotPadding = 4;
-SyntaxElementMorph.prototype.typeInPadding = 1;
-SyntaxElementMorph.prototype.labelPadding = 4;
-SyntaxElementMorph.prototype.labelFontName = 'Verdana';
-SyntaxElementMorph.prototype.labelFontStyle = 'sans-serif';
-SyntaxElementMorph.prototype.fontSize = 10;
-SyntaxElementMorph.prototype.embossing = new Point(-1, -1);
-SyntaxElementMorph.prototype.labelWidth = 450;
-SyntaxElementMorph.prototype.labelWordWrap = true;
-SyntaxElementMorph.prototype.dynamicInputLabels = true;
-SyntaxElementMorph.prototype.feedbackColor = new Color(255, 255, 255);
-SyntaxElementMorph.prototype.feedbackMinHeight = 5;
-SyntaxElementMorph.prototype.minSnapDistance = 20;
-SyntaxElementMorph.prototype.reporterDropFeedbackPadding = 10;
-SyntaxElementMorph.prototype.contrast = 65;
-SyntaxElementMorph.prototype.labelContrast = 25;
-SyntaxElementMorph.prototype.activeHighlight = new Color(153, 255, 213);
-SyntaxElementMorph.prototype.errorHighlight = new Color(173, 15, 0);
-SyntaxElementMorph.prototype.activeBlur = 20;
-SyntaxElementMorph.prototype.activeBorder = 4;
-SyntaxElementMorph.prototype.rfColor = new Color(120, 120, 120);
+SyntaxElementMorph.prototype.setScale = function (num) {
+    var scale = Math.max(num, 1);
+    SyntaxElementMorph.prototype.scale = scale;
+    SyntaxElementMorph.prototype.corner = 3 * scale;
+    SyntaxElementMorph.prototype.rounding = 9 * scale;
+    SyntaxElementMorph.prototype.edge = 1.000001 * scale;
+    SyntaxElementMorph.prototype.inset = 6 * scale;
+    SyntaxElementMorph.prototype.hatHeight = 12 * scale;
+    SyntaxElementMorph.prototype.hatWidth = 70 * scale;
+    SyntaxElementMorph.prototype.rfBorder = 3 * scale;
+    SyntaxElementMorph.prototype.minWidth = 0;
+    SyntaxElementMorph.prototype.dent = 8 * scale;
+    SyntaxElementMorph.prototype.bottomPadding = 3 * scale;
+    SyntaxElementMorph.prototype.cSlotPadding = 4 * scale;
+    SyntaxElementMorph.prototype.typeInPadding = scale;
+    SyntaxElementMorph.prototype.labelPadding = 4 * scale;
+    SyntaxElementMorph.prototype.labelFontName = 'Verdana';
+    SyntaxElementMorph.prototype.labelFontStyle = 'sans-serif';
+    SyntaxElementMorph.prototype.fontSize = 10 * scale;
+    SyntaxElementMorph.prototype.embossing = new Point(
+        -1 * Math.max(scale / 2, 1),
+        -1 * Math.max(scale / 2, 1)
+    );
+    SyntaxElementMorph.prototype.labelWidth = 450 * scale;
+    SyntaxElementMorph.prototype.labelWordWrap = true;
+    SyntaxElementMorph.prototype.dynamicInputLabels = true;
+    SyntaxElementMorph.prototype.feedbackColor = new Color(255, 255, 255);
+    SyntaxElementMorph.prototype.feedbackMinHeight = 5;
+    SyntaxElementMorph.prototype.minSnapDistance = 20;
+    SyntaxElementMorph.prototype.reporterDropFeedbackPadding = 10 * scale;
+    SyntaxElementMorph.prototype.contrast = 65;
+    SyntaxElementMorph.prototype.labelContrast = 25;
+    SyntaxElementMorph.prototype.activeHighlight = new Color(153, 255, 213);
+    SyntaxElementMorph.prototype.errorHighlight = new Color(173, 15, 0);
+    SyntaxElementMorph.prototype.activeBlur = 20;
+    SyntaxElementMorph.prototype.activeBorder = 4;
+    SyntaxElementMorph.prototype.rfColor = new Color(120, 120, 120);
+};
+
+SyntaxElementMorph.prototype.setScale(1);
 
 // SyntaxElementMorph instance creation:
 
@@ -2033,6 +2042,7 @@ BlockMorph.prototype.showHelp = function () {
 
 BlockMorph.prototype.eraseHoles = function (context) {
     var myself = this,
+        isReporter = this instanceof ReporterBlockMorph,
         shift = this.edge * 0.5,
         gradient,
         rightX,
@@ -2071,9 +2081,9 @@ BlockMorph.prototype.eraseHoles = function (context) {
         var w = hole.width(),
             h = Math.floor(hole.height()) - 2; // Opera needs this
         context.clearRect(
-            Math.floor(hole.bounds.origin.x - myself.bounds.origin.x),
+            Math.floor(hole.bounds.origin.x - myself.bounds.origin.x) + 1,
             Math.floor(hole.bounds.origin.y - myself.bounds.origin.y) + 1,
-            w,
+            isReporter ? w - 1 : w + 1,
             h
         );
     });
@@ -2760,9 +2770,9 @@ CommandBlockMorph.prototype.drawNew = function () {
 CommandBlockMorph.prototype.drawBody = function (context) {
     context.fillRect(
         0,
-        this.corner,
+        Math.floor(this.corner),
         this.width(),
-        this.height() - (this.corner * 3)
+        this.height() - Math.floor(this.corner * 3) + 1
     );
 };
 
@@ -3173,9 +3183,9 @@ HatBlockMorph.prototype.drawTop = function (context) {
 HatBlockMorph.prototype.drawBody = function (context) {
     context.fillRect(
         0,
-        this.hatHeight + this.corner,
+        this.hatHeight + Math.floor(this.corner) - 1,
         this.width(),
-        this.height() - (this.corner * 3) - (this.hatHeight)
+        this.height() - Math.floor(this.corner * 3) - this.hatHeight + 2
     );
 };
 
