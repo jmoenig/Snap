@@ -557,6 +557,10 @@ SyntaxElementMorph.prototype.reactToGrabOf = function (grabbedMorph) {
         topBlock.allComments().forEach(function (comment) {
             comment.align(topBlock);
         });
+        if (topBlock.getHighlight()) {
+            topBlock.removeHighlight();
+            topBlock.addHighlight();
+        }
     }
 };
 
@@ -1148,6 +1152,7 @@ SyntaxElementMorph.prototype.fixLayout = function () {
                 1 : Math.floor(fontHeight(this.fontSize) / 3),
         bottomCorrection,
         needsHighlight = false,
+        top = this.topBlock(),
         initialExtent = this.extent();
 
     if ((this instanceof MultiArgMorph) && (this.slotSpec !== '%c')) {
@@ -1364,6 +1369,12 @@ SyntaxElementMorph.prototype.fixLayout = function () {
                 this.parent.fixLayout();
             }
         }
+    }
+
+    // fix highlights, if any
+    if (top.getHighlight()) {
+        top.removeHighlight();
+        top.addHighlight();
     }
 
     // restore highlight:
@@ -2481,6 +2492,14 @@ BlockMorph.prototype.snap = function () {
     top.allComments().forEach(function (comment) {
         comment.align(top);
     });
+    // fix highlights, if any
+    if (this.getHighlight() && (this !== top)) {
+        this.removeHighlight();
+    }
+    if (top.getHighlight()) {
+        top.removeHighlight();
+        top.addHighlight();
+    }
 };
 
 // CommandBlockMorph ///////////////////////////////////////////////////
