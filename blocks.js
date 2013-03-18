@@ -1372,7 +1372,7 @@ SyntaxElementMorph.prototype.fixLayout = function () {
     }
 
     // fix highlights, if any
-    if (top.getHighlight()) {
+    if (top.getHighlight && top.getHighlight()) {
         top.removeHighlight();
         top.addHighlight();
     }
@@ -6990,13 +6990,14 @@ SymbolMorph.prototype.drawSymbolFlag = function (canvas, color) {
     // answer a canvas showing a flag
     var ctx = canvas.getContext('2d'),
         w = canvas.width,
+        l = Math.max(w / 12, 1),
         h = canvas.height;
 
-    ctx.lineWidth = 1; // w / 5;
+    ctx.lineWidth = l;
     ctx.strokeStyle = color.toString();
     ctx.beginPath();
-    ctx.moveTo(0, 0);
-    ctx.lineTo(0, canvas.height);
+    ctx.moveTo(l / 2, 0);
+    ctx.lineTo(l / 2, canvas.height);
     ctx.stroke();
 
     ctx.lineWidth = h / 2;
@@ -7118,11 +7119,13 @@ SymbolMorph.prototype.drawSymbolTurnRight = function (canvas, color) {
     // answer a canvas showing a right-turning arrow
     var ctx = canvas.getContext('2d'),
         w = canvas.width,
+        l = Math.max(w / 10, 1),
         r = w / 2;
 
+    ctx.lineWidth = l;
     ctx.strokeStyle = color.toString();
     ctx.beginPath();
-    ctx.arc(r, r * 2, r - 1, radians(0), radians(-90), false);
+    ctx.arc(r, r * 2, r - l / 2, radians(0), radians(-90), false);
     ctx.stroke();
 
     ctx.fillStyle = color.toString();
@@ -7140,11 +7143,13 @@ SymbolMorph.prototype.drawSymbolTurnLeft = function (canvas, color) {
     // answer a canvas showing a left-turning arrow
     var ctx = canvas.getContext('2d'),
         w = canvas.width,
+        l = Math.max(w / 10, 1),
         r = w / 2;
 
+    ctx.lineWidth = l;
     ctx.strokeStyle = color.toString();
     ctx.beginPath();
-    ctx.arc(r, r * 2, r - 1, radians(180), radians(-90), true);
+    ctx.arc(r, r * 2, r - l / 2, radians(180), radians(-90), true);
     ctx.stroke();
 
     ctx.fillStyle = color.toString();
