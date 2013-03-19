@@ -111,6 +111,7 @@ IDE_Morph.prototype.init = function (isAutoFill) {
     MorphicPreferences.globalFontFamily = 'Helvetica, Arial';
 
     // additional properties:
+    this.cloudMsg = null;
     this.source = 'local';
     this.serializer = new SnapSerializer();
 
@@ -204,6 +205,8 @@ IDE_Morph.prototype.openIn = function (world) {
         }
     }
 
+    // dynamic notifications from non-source text files
+    this.cloudMsg = getURL('http://snap.berkeley.edu/cloudmsg.txt');
     motd = getURL('http://snap.berkeley.edu/motd.txt');
     if (motd) {
         this.inform('Snap!', motd);
@@ -3175,13 +3178,6 @@ IDE_Morph.prototype.setCloudURL = function () {
     );
 };
 
-IDE_Morph.prototype.cloudMsg = null;
-/*
-    'Snap!Cloud is in Beta-test status.\n' +
-        'Expect hiccups and downtimes and don\'t\n' +
-        'forget to save important work locally.';
-*/
-
 // IDE_Morph user dialog shortcuts
 
 IDE_Morph.prototype.showMessage = function (message, secs) {
@@ -3274,12 +3270,30 @@ ProjectDialogMorph.prototype.init = function (ide, task) {
 };
 
 ProjectDialogMorph.prototype.buildContents = function () {
-    var thumbnail;
+    var thumbnail, notification;
 
     this.addBody(new Morph());
     this.body.color = this.color;
 
     this.srcBar = new AlignmentMorph('column', this.padding / 2);
+
+    if (this.ide.cloudMsg) {
+        notification = new TextMorph(
+            this.ide.cloudMsg,
+            10,
+            null, // style
+            false, // bold
+            null, // italic
+            null, // alignment
+            null, // width
+            null, // font name
+            new Point(1, 1), // shadow offset
+            new Color(255, 255, 255) // shadowColor
+        );
+        notification.refresh = nop;
+        this.srcBar.add(notification);
+    }
+
     this.addSourceButton('cloud', localize('Cloud'), 'cloud');
     this.addSourceButton('local', localize('Browser'), 'storage');
     if (this.task === 'open') {
@@ -3376,7 +3390,11 @@ ProjectDialogMorph.prototype.buildContents = function () {
     }
     this.addButton('cancel', 'Cancel');
 
-    this.setExtent(new Point(455, 335));
+    if (notification) {
+        this.setExtent(new Point(455, 335).add(notification.extent()));
+    } else {
+        this.setExtent(new Point(455, 335));
+    }
     this.fixLayout();
 
 };
