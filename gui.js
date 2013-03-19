@@ -149,7 +149,7 @@ IDE_Morph.prototype.init = function (isAutoFill) {
 };
 
 IDE_Morph.prototype.openIn = function (world) {
-    var hash, usr;
+    var hash, usr, motd;
 
     this.buildPanes();
     world.add(this);
@@ -191,13 +191,22 @@ IDE_Morph.prototype.openIn = function (world) {
     this.reactToWorldResize(world.bounds);
 
     function getURL(url) {
-        var request = new XMLHttpRequest();
-        request.open('GET', url, false);
-        request.send();
-        if (request.status === 200) {
-            return request.responseText;
+        try {
+            var request = new XMLHttpRequest();
+            request.open('GET', url, false);
+            request.send();
+            if (request.status === 200) {
+                return request.responseText;
+            }
+            throw new Error('unable to retrieve ' + url);
+        } catch (err) {
+            return;
         }
-        throw new Error('unable to retrieve ' + url);
+    }
+
+    motd = getURL('http://snap.berkeley.edu/motd.txt');
+    if (motd) {
+        this.inform('Snap!', motd);
     }
 
     if (location.hash.substr(0, 6) === '#open:') {
