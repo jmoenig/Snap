@@ -8738,9 +8738,13 @@ CommentMorph.uber = BoxMorph.prototype;
 
 // CommentMorph preferences settings (pseudo-inherited from SyntaxElement):
 
-CommentMorph.prototype.fontSize = SyntaxElementMorph.prototype.fontSize;
-CommentMorph.prototype.padding = 5;
-CommentMorph.prototype.rounding = 8;
+CommentMorph.prototype.refreshScale = function () {
+    CommentMorph.prototype.fontSize = SyntaxElementMorph.prototype.fontSize;
+    CommentMorph.prototype.padding = 5 * SyntaxElementMorph.prototype.scale;
+    CommentMorph.prototype.rounding = 8 * SyntaxElementMorph.prototype.scale;
+};
+
+CommentMorph.prototype.refreshScale();
 
 // CommentMorph instance creation:
 
@@ -8749,13 +8753,14 @@ function CommentMorph(contents) {
 }
 
 CommentMorph.prototype.init = function (contents) {
-    var myself = this;
+    var myself = this,
+        scale = SyntaxElementMorph.prototype.scale;
     this.block = null; // optional anchor block
     this.stickyOffset = null; // not to be persisted
     this.isCollapsed = false;
     this.titleBar = new BoxMorph(
         this.rounding,
-        1.000001, // shadow bug in Chrome,
+        1.000001 * scale, // shadow bug in Chrome,
         new Color(255, 255, 180)
     );
     this.titleBar.color = new Color(255, 255, 180);
@@ -8773,7 +8778,7 @@ CommentMorph.prototype.init = function (contents) {
     );
     this.contents.isEditable = true;
     this.contents.enableSelecting();
-    this.contents.maxWidth = 90;
+    this.contents.maxWidth = 90 * scale;
     this.contents.drawNew();
     this.handle = new HandleMorph(
         this.contents,
@@ -8782,13 +8787,13 @@ CommentMorph.prototype.init = function (contents) {
         -2,
         -2
     );
-    this.handle.setExtent(new Point(11, 11));
+    this.handle.setExtent(new Point(11 * scale, 11 * scale));
     this.anchor = null;
 
     CommentMorph.uber.init.call(
         this,
         this.rounding,
-        1.000001, // shadow bug in Chrome,
+        1.000001 * scale, // shadow bug in Chrome,
         new Color(255, 255, 180)
     );
     this.color = new Color(255, 255, 220);

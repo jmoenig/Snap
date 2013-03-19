@@ -64,11 +64,11 @@ standardSettings, Sound, BlockMorph, ToggleMorph, InputSlotDialogMorph,
 ScriptsMorph, isNil, SymbolMorph, BlockExportDialogMorph,
 BlockImportDialogMorph, SnapTranslator, localize, List, InputSlotMorph,
 SnapCloud, Uint8Array, HandleMorph, SVG_Costume, fontHeight, hex_sha512,
-sb*/
+sb, CommentMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2013-March-18';
+modules.gui = '2013-March-19';
 
 // Declarations
 
@@ -2787,9 +2787,11 @@ IDE_Morph.prototype.userSetBlocksScale = function () {
         {
             'normal (1)' : 1,
             'demo (1.2)' : 1.2,
+            'presentation (1.4)' : 1.4,
             'big (2)' : 2,
             'huge (4)' : 4,
-            'giant (8)' : 8
+            'giant (8)' : 8,
+            'monstrous (10)' : 10
         },
         false, // read only?
         true // numeric
@@ -2808,6 +2810,7 @@ IDE_Morph.prototype.setBlocksScale = function (num) {
         projectData = this.serializer.serialize(this.stage);
     }
     SyntaxElementMorph.prototype.setScale(num);
+    CommentMorph.prototype.refreshScale();
     SpriteMorph.prototype.initBlocks();
     this.spriteBar.tabBar.tabTo('scripts');
     this.createCategories();

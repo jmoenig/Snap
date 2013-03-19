@@ -1535,3 +1535,4 @@ ______
 ------
 * Blocks: SyntaxElementMorph fixLayout() optimization for active highlights
 * Russian translation!! Yay, thanks, Svetlana Ptashnaya!!
+* Store, GUI, Blocks: Scaling support for Comments and serialization/deserialization
