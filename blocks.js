@@ -153,7 +153,7 @@ DialogBoxMorph, BlockInputFragmentMorph, PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2013-March-18';
+modules.blocks = '2013-March-19';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -1151,8 +1151,6 @@ SyntaxElementMorph.prototype.fixLayout = function () {
         space = this.isPrototype ?
                 1 : Math.floor(fontHeight(this.fontSize) / 3),
         bottomCorrection,
-        needsHighlight = false,
-        top = this.topBlock(),
         initialExtent = this.extent();
 
     if ((this instanceof MultiArgMorph) && (this.slotSpec !== '%c')) {
@@ -1183,11 +1181,9 @@ SyntaxElementMorph.prototype.fixLayout = function () {
                 lines.push([part]);
             }
         } else if (part instanceof BlockHighlightMorph) {
-            if (!(myself.parent.topBlock)) { // I am on top
-                needsHighlight = true;
-            }
-            myself.fullChanged();
-            myself.removeChild(part);
+            nop(); // should be redundant now
+            // myself.fullChanged();
+            // myself.removeChild(part);
         } else {
             if (part.isVisible) {
                 x += part.fullBounds().width() + space;
@@ -1363,23 +1359,25 @@ SyntaxElementMorph.prototype.fixLayout = function () {
                 affected.fixLayout();
             }
         }
+        if (affected) {
+            return;
+        }
     } else if (this instanceof ReporterBlockMorph) {
         if (this.parent) {
             if (this.parent.fixLayout) {
-                this.parent.fixLayout();
+                return this.parent.fixLayout();
             }
         }
     }
 
-    // fix highlights, if any
+    this.fixHighlight();
+};
+
+SyntaxElementMorph.prototype.fixHighlight = function () {
+    var top = this.topBlock();
     if (top.getHighlight && top.getHighlight()) {
         top.removeHighlight();
         top.addHighlight();
-    }
-
-    // restore highlight:
-    if (needsHighlight) {
-        this.addHighlight();
     }
 };
 

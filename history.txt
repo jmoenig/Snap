@@ -1530,3 +1530,7 @@ ______
 * Widets: numerical prompts
 * GUI: #signup URL switch
 * Blocks: adjusting highlights when modifying active scripts
+
+130319
+------
+* Blocks: SyntaxElementMorph fixLayout optimization for active highlights
