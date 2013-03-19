@@ -9,6 +9,10 @@ artefacts: projects, blocks, sprites
 
 URL options: #run: #open: #lang: #signup
 
+dynamic content:
+	http://snap.berkeley.edu/cloudmsg.txt
+	http://snap.berkeley.edu/motd.txt
+
 supported browsers, problems with the Android virtual keyboard
 
 supported browser / OS settings
