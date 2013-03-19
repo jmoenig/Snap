@@ -1533,4 +1533,5 @@ ______
 
 130319
 ------
-* Blocks: SyntaxElementMorph fixLayout optimization for active highlights
+* Blocks: SyntaxElementMorph fixLayout() optimization for active highlights
+* Russian translation!! Yay, thanks, Svetlana Ptashnaya!!
