@@ -1537,3 +1537,4 @@ ______
 * Russian translation!! Yay, thanks, Svetlana Ptashnaya!!
 * Store, GUI, Blocks: Scaling support for Comments and serialization/deserialization
 * GUI: motd support: On startup Snap! looks for http://snap.berkeley.edu/motd.txt, if it exists it is shown in a dialog box
+* GUI: fix for #run: URL switch

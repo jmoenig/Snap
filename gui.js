@@ -232,10 +232,10 @@ IDE_Morph.prototype.openIn = function (world) {
             hash = decodeURIComponent(hash);
         }
         if (hash.substr(0, 8) === '<project>') {
-            this.openProjectString(hash);
+            this.rawOpenProjectString(hash);
         } else {
-//            this.openProjectString(getURL(hash));
-            this.droppedText(getURL(hash));
+            this.rawOpenProjectString(getURL(hash));
+//            this.droppedText(getURL(hash));
         }
         this.toggleAppMode(true);
         this.runScripts();
