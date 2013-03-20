@@ -8,13 +8,11 @@ The above copyright notice and this permission notice shall be included in all c
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-last change: 2013-March-20 by Jens Moenig
-
 */
 
 var sb = (function (sb) {
     'use strict';
-    
+
     function extend(o, p) {
         var key;
         for (key in p) if (p.hasOwnProperty(key)) {
@@ -937,7 +935,7 @@ var sb = (function (sb) {
 			'distanceTo:': 'reportDistanceTo',
 			'timerReset': 'doResetTimer',
 			'timer': 'reportTimer',
-			// 'getAttribute:of:': '',
+			'getAttribute:of:': 'reportAttributeOf',
 			// 'attribute:of:': '',
 			// 'soundLevel': '',
 			// 'isLoud': '',
@@ -1011,6 +1009,9 @@ var sb = (function (sb) {
 		Text.prototype.toXML = function (string) {
 			string.push(escapeXML(this.value));
 		};
+        Text.prototype.toDOM = function () {
+            return document.createTextNode(this.value);
+        };
 
 		function Element(tagName) {
 			this.tagName = tagName;
@@ -1034,6 +1035,18 @@ var sb = (function (sb) {
 				string.push('/>');
 			}
 		};
+        Element.prototype.toDOM = function () {
+            var el = document.createElement(this.tagName),
+                attributes = this.attributes, key,
+                children = this.children, i = 0, child;
+            for (key in attributes) if (attributes.hasOwnProperty(key)) {
+                el.setAttribute(key, attributes[key]);
+            }
+            while (child = children[i++]) {
+                el.appendChild(child.toDOM());
+            }
+            return el;
+        };
 
 		function n(tagName, attributes, children) {
 			var el = new Element(tagName), key;
@@ -1289,7 +1302,9 @@ var sb = (function (sb) {
 							node.children.push(n('script', {}, nsScript(arg)));
 						}
 					} else {
-						node.children.push(nValue(arg));
+                        a = nValue(arg);
+                        delete a.attributes.id;
+						node.children.push(a);
 					}
 				});
 				return node;
@@ -1350,17 +1365,20 @@ var sb = (function (sb) {
 				});
 			}
 			function nsSprites(sprites, vars, lists) {
-				return sprites.map(function (sprite) {
+				return sprites.map(function (sprite, i) {
 					return id(n('sprite', {
 						name: sprite.objName,
 						x: (sprite.bounds.origin.x + sprite.bounds.corner.x) / 2 - 240,
 						y: 180 - (sprite.bounds.origin.y + sprite.bounds.corner.y) / 2,
+                        hidden: sprite.flags === 1,
 						heading: sprite.rotationDegrees + 90,
 						scale: sprite.scalePoint.x,
 						rotation: rotationStyles[sprite.rotationStyle],
 						draggable: sprite.draggable,
 						costume: costumeIndex(sprite),
-						color: (sprite.color.r * 255 | 0) + ',' + (sprite.color.g * 255 | 0) + ',' + (sprite.color.b * 255 | 0)
+						color: (sprite.color.r * 255 | 0) + ',' + (sprite.color.g * 255 | 0) + ',' + (sprite.color.b * 255 | 0),
+                        pen: 'tip',
+                        idx: i
 					}, [
 						n('variables', {}, nsVariables(sprite.vars, sprite.lists)),
 						n('costumes', {}, nsCostumes(sprite.media)),
@@ -1379,21 +1397,25 @@ var sb = (function (sb) {
 					});
 				}));
 			}
-			
+
+			console.log(project);
 			preCustomBlocks('__global__', project.stage.customBlocks);
 			project.stage.sprites.forEach(function (sprite) {
 				preCustomBlocks(sprite.objName, sprite.customBlocks);
 			});
 			xml = n('project', {
 				name: projectName,
-				app: 'Snap! 4.0, http://snap.berkeley.edu; serialized by yprxml, http://dl.dropbox.com/u/10715865/Web/sb/yprxml.html',
+				app: 'Snap! 4.0, http://snap.berkeley.edu; serialized by yprxml, http://dl.dropbox.com/u/10715865/Web/snap/app/yprxml.html',
 				version: '1'
 			}, [
 				n('notes', {}, [t(project.info.get('comment') || '')]),
 				n('thumbnail', {}, [t((a = project.info.get('thumbnail')) ? a.image.toDataURL() : '')]),
 				id(n('stage', {
+                    name: 'Stage',
+                    tempo: project.stage.tempoBPM,
 					costume: costumeIndex(project.stage),
-					threadsafe: 'false'
+					threadsafe: 'false',
+                    scheduled: true
 				}, [
 					n('pentrails', {}, [t((a = project.info.get('penTrails')) ? a.image.toDataURL() : '')]),
 					n('costumes', {}, nsCostumes(project.stage.media)),
@@ -1407,6 +1429,9 @@ var sb = (function (sb) {
 				n('blocks', {}, nsCustomBlocks(project.stage.customBlocks, true))
 			]);
 			xml.toXML(out = []);
+            var d = document.createElement('textarea');
+            d.style.position = 'absolute';
+            document.body.appendChild(d).value = out.join('');
 			return out.join('');
 		};
 
