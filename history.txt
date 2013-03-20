@@ -1543,3 +1543,6 @@ ______
 130320
 ------
 * GUI: deactivated motd and cloudmsg mechanism for now (has some issues)
+* Updated Portuguese translation, thanks, Manuel!
+* Updated all translations for %keyHat and %msgHat specs
+* YPR: fixed turnLeft / turnRight swap bug
