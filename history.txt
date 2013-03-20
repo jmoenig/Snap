@@ -1539,3 +1539,7 @@ ______
 * GUI: motd support: On startup Snap! looks for http://snap.berkeley.edu/motd.txt, if it exists it is shown in a dialog box
 * GUI: fix for #run: URL switch
 * GUI: cloudmsg support: cloud related notifications can be put into http://snap.berkeley.edu/cloudmsg.txt
+
+130320
+------
+* GUI: deactivated motd and cloudmsg mechanism for now (has some issues)

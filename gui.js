@@ -68,7 +68,7 @@ sb, CommentMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2013-March-19';
+modules.gui = '2013-March-20';
 
 // Declarations
 
@@ -206,8 +206,11 @@ IDE_Morph.prototype.openIn = function (world) {
     }
 
     // dynamic notifications from non-source text files
+    // has some issues, commented out for now
+    /*
     this.cloudMsg = getURL('http://snap.berkeley.edu/cloudmsg.txt');
     motd = getURL('http://snap.berkeley.edu/motd.txt');
+    */
     if (motd) {
         this.inform('Snap!', motd);
     }
