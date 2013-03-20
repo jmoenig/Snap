@@ -185,11 +185,7 @@ SnapTranslator.dict.pt = {
     'translator_e-mail':
         'mmsequeira@gmail.com',
     'last_changed':
-<<<<<<< HEAD
-        '2013-03-19',
-=======
         '2013-03-20',
->>>>>>> Portuguese translation update
 
     // GUI
     // control bar:
@@ -291,11 +287,7 @@ SnapTranslator.dict.pt = {
 
     // movimento:
     'Stage selected:\nno motion primitives':
-<<<<<<< HEAD
-        'Palco seleccionado:\sem primitivas de movimento',
-=======
         'Palco seleccionado:\nsem primitivas de movimento',
->>>>>>> Portuguese translation update
 
 
     'move %n steps':
