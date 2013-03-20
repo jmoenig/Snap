@@ -406,12 +406,12 @@ SnapTranslator.dict.si = {
     // control:
     'when %greenflag clicked':
         'ko kliknemo na %greenflag',
-    'when %key key pressed':
-        'ko pritisnemo na tipko %key ',
+    'when %keyHat key pressed':
+        'ko pritisnemo na tipko %keyHat ',
     'when I am clicked':
         'ko  je klik name',
-    'when I receive %msg':
-        'ko sprejmem %msg',
+    'when I receive %msgHat':
+        'ko sprejmem %msgHat',
     'broadcast %msg':
         'po\u0161lji %msg vsem',
     'broadcast %msg and wait':

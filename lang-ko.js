@@ -415,12 +415,12 @@ SnapTranslator.dict.ko = {
     // control:
     'when %greenflag clicked':
         '%greenflag 클릭되었을 때',
-    'when %key key pressed':
-        '%key 키 눌렀을 때',
+    'when %keyHat key pressed':
+        '%keyHat 키 눌렀을 때',
     'when I am clicked':
         '자신이 클릭되었을 때',
-    'when I receive %msg':
-        '%msg 받을 때',
+    'when I receive %msgHat':
+        '%msgHat 받을 때',
     'broadcast %msg':
         '%msg 방송하기',
     'broadcast %msg and wait':
