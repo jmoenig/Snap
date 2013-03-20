@@ -404,12 +404,12 @@ SnapTranslator.dict.ja = {
     // control:
     'when %greenflag clicked':
         '%greenflag が押されたとき',
-    'when %key key pressed':
-        '%key が押されたとき',
+    'when %keyHat key pressed':
+        '%keyHat が押されたとき',
     'when I am clicked':
         '自分がクリックされたとき',
-    'when I receive %msg':
-        '%msg を受け取ったとき',
+    'when I receive %msgHat':
+        '%msgHat を受け取ったとき',
     'broadcast %msg':
         '%msg を送る',
     'broadcast %msg and wait':

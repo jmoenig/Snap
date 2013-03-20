@@ -409,12 +409,12 @@ SnapTranslator.dict.ru = {
     // control:
     'when %greenflag clicked':
         'когда щелкнуть на %greenflag',
-    'when %key key pressed':
-        'когда нажать %key клавишу',
+    'when %keyHat key pressed':
+        'когда нажать %keyHat клавишу',
     'when I am clicked':
         'когда щелкнуть на меня',
-    'when I receive %msg':
-        'когда я получу %msg',
+    'when I receive %msgHat':
+        'когда я получу %msgHat',
     'broadcast %msg':
         'переслать %msg всем',
     'broadcast %msg and wait':

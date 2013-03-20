@@ -405,12 +405,12 @@ SnapTranslator.dict.zh = {
     // control:
     'when %greenflag clicked':
         '当 %greenflag 被点击',
-    'when %key key pressed':
-        '当按下 %key ',
+    'when %keyHat key pressed':
+        '当按下 %keyHat',
     'when I am clicked':
         '当角色被点击',
-    'when I receive %msg':
-        '当接收到 %msg ',
+    'when I receive %msgHat':
+        '当接收到 %msgHat',
     'broadcast %msg':
         '广播 %msg ',
     'broadcast %msg and wait':
@@ -450,7 +450,7 @@ SnapTranslator.dict.zh = {
     'call %cmdRing w/continuation':
         '持续调用 %cmdRing ',
     'warp %c':
-        '弯曲 %c ',
+        '弯曲 %c',
 
     // sensing:
     'touching %col ?':

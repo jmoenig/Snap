@@ -414,12 +414,12 @@ SnapTranslator.dict.fr = {
       // control:
     'when %greenflag clicked':
         'Quand %greenflag est press\u00E9',
-    'when %key key pressed':
-        'Quand %key est press\u00E9',
+    'when %keyHat key pressed':
+        'Quand %keyHat est press\u00E9',
     'when I am clicked':
         'Quand je suis press\u00E9 ',
-    'when I receive %msg':
-        'Quand je re\u00E7ois %msg',
+    'when I receive %msgHat':
+        'Quand je re\u00E7ois %msgHat',
     'broadcast %msg':
         'envoyer \u00E0 tous %msg',
     'broadcast %msg and wait':
