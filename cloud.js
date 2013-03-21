@@ -29,7 +29,7 @@
 
 /*global modules, IDE_Morph, SnapSerializer, hex_sha512, alert, nop*/
 
-modules.cloud = '2013-February-27';
+modules.cloud = '2013-March-21';
 
 // Global stuff
 
@@ -82,6 +82,7 @@ Cloud.prototype.signup = function (
                 + email,
             true
         );
+        request.withCredentials = true;
         request.onreadystatechange = function () {
             if (request.readyState === 4) {
                 if (request.responseText) {
@@ -126,6 +127,7 @@ Cloud.prototype.connect = function (
             (this.hasProtocol() ? '' : 'http://') + this.url,
             true
         );
+        request.withCredentials = true;
         request.onreadystatechange = function () {
             if (request.readyState === 4) {
                 if (request.responseText) {
