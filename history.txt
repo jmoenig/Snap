@@ -1546,3 +1546,7 @@ ______
 * Updated Portuguese translation, thanks, Manuel!
 * Updated all translations for %keyHat and %msgHat specs
 * YPR: fixed turnLeft / turnRight swap bug
+
+130321
+------
+* Cloud: allow every XMLHttpRequest to transport cookies (withCredentials = true)
