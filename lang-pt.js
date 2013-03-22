@@ -185,7 +185,7 @@ SnapTranslator.dict.pt = {
     'translator_e-mail':
         'mmsequeira@gmail.com',
     'last_changed':
-        '2013-03-20',
+        '2013-03-22',
 
     // GUI
     // control bar:
@@ -661,6 +661,8 @@ SnapTranslator.dict.pt = {
     // menu de preferências
     'Language...':
         'Língua…',
+    'Zoom blocks...':
+        'Ampliação dos blocos…',
     'Blurred shadows':
         'Sombras desfocadas',
     'uncheck to use solid drop\nshadows and highlights':
@@ -789,6 +791,10 @@ SnapTranslator.dict.pt = {
     // palco:
     'show all':
         'mostrar todos os actores',
+    'pic...':
+        'fotografar...',
+    'open a new window\nwith a picture of the stage':
+        'Abre uma nova janela com\numa fotografia do palco.',
 
     // área de guiões:
     'clean up':
@@ -836,6 +842,30 @@ SnapTranslator.dict.pt = {
     // ajuda
     'Help':
         'Ajuda',
+
+    // ampliação de blocos
+    'Zoom blocks':
+        'Ampliação de blocos',
+    'build':
+        'cria',
+    'your own':
+        'os teus próprios',
+    'blocks':
+        'blocos',
+    'normal (1x)':
+        'normal (1x)',
+    'demo (1.2x)':
+        'demonstração (1.2x)',
+    'presentation (1.4x)':
+        'apresentação (1.4x)',
+    'big (2x)':
+        'grande (2x)',
+    'huge (4x)':
+        'enorme (4x)',
+    'giant (8x)':
+        'gigante (8x)',
+    'monstrous (10x)':
+        'monstruosa (10x)',
 
     // Gestor de Projectos
      'Untitled':
@@ -1009,13 +1039,13 @@ SnapTranslator.dict.pt = {
     // drop downs
     // direcções
     '(90) right':
-        '(90°) direita',
+        '90° (direita)',
     '(-90) left':
-        '(-90°) esquerda',
+        '-90° (esquerda)',
     '(0) up':
-        '(0°) cima',
+        '0° (cima)',
     '(180) down':
-        '(180°) baixo',
+        '180° (baixo)',
 
     // detecção de colisões
     'mouse-pointer':
