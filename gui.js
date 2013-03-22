@@ -2847,13 +2847,13 @@ IDE_Morph.prototype.userSetBlocksScale = function () {
         this.world(),
         sample, // pic
         {
-            'normal (1)' : 1,
-            'demo (1.2)' : 1.2,
-            'presentation (1.4)' : 1.4,
-            'big (2)' : 2,
-            'huge (4)' : 4,
-            'giant (8)' : 8,
-            'monstrous (10)' : 10
+            'normal (1x)' : 1,
+            'demo (1.2x)' : 1.2,
+            'presentation (1.4x)' : 1.4,
+            'big (2x)' : 2,
+            'huge (4x)' : 4,
+            'giant (8x)' : 8,
+            'monstrous (10x)' : 10
         },
         false, // read only?
         true, // numeric
