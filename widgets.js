@@ -71,9 +71,9 @@
 /*global TriggerMorph, modules, Color, Point, BoxMorph, radians,
 newCanvas, StringMorph, Morph, TextMorph, nop, detect, StringFieldMorph,
 HTMLCanvasElement, fontHeight, SymbolMorph, localize, SpeechBubbleMorph,
-ArrowMorph, MenuMorph, isString*/
+ArrowMorph, MenuMorph, isString, isNil, SliderMorph*/
 
-modules.widgets = '2013-March-18';
+modules.widgets = '2013-March-22';
 
 var PushButtonMorph;
 var ToggleButtonMorph;
@@ -1532,18 +1532,86 @@ DialogBoxMorph.prototype.prompt = function (
     pic,
     choices, // optional dictionary for drop-down of choices
     isReadOnly, // optional when using choices
-    isNumeric // optional
+    isNumeric, // optional
+    sliderMin, // optional for numeric sliders
+    sliderMax, // optional for numeric sliders
+    sliderAction // optional single-arg function for numeric slider
 ) {
-    var txt = new InputFieldMorph(
-        defaultString,
-        isNumeric || false, // numeric?
-        choices || null, // drop-down dict, optional
-        choices ? isReadOnly || false : false
-    );
+    var sld,
+        head,
+        txt = new InputFieldMorph(
+            defaultString,
+            isNumeric || false, // numeric?
+            choices || null, // drop-down dict, optional
+            choices ? isReadOnly || false : false
+        );
     txt.setWidth(250);
+    if (isNumeric) {
+        if (pic) {
+            head = new AlignmentMorph('column', this.padding);
+            pic.setPosition(head.position());
+            head.add(pic);
+        }
+        if (!isNil(sliderMin) && !isNil(sliderMax)) {
+            sld = new SliderMorph(
+                sliderMin * 100,
+                sliderMax * 100,
+                parseFloat(defaultString) * 100,
+                (sliderMax - sliderMin) / 10 * 100,
+                'horizontal'
+            );
+            sld.alpha = 1;
+            sld.color = this.color.lighter(50);
+            sld.setHeight(txt.height() * 0.7);
+            sld.setWidth(txt.width());
+            sld.action = function (num) {
+                if (sliderAction) {
+                    sliderAction(num / 100);
+                }
+                txt.setContents(num / 100);
+                txt.edit();
+            };
+            if (!head) {
+                head = new AlignmentMorph('column', this.padding);
+            }
+            head.add(sld);
+        }
+        if (head) {
+            head.fixLayout();
+            this.setPicture(head);
+            head.fixLayout();
+        }
+    } else {
+        if (pic) {this.setPicture(pic); }
+    }
+
+    this.reactToChoice = function (inp) {
+        if (sld) {
+            sld.value = inp * 100;
+            sld.drawNew();
+            sld.changed();
+        }
+        if (sliderAction) {
+            sliderAction(inp);
+        }
+    };
+
+    txt.reactToKeystroke = function () {
+        var inp = txt.getValue();
+        if (sld) {
+            inp = Math.max(inp, sliderMin);
+            sld.value = inp * 100;
+            sld.drawNew();
+            sld.changed();
+        }
+        if (sliderAction) {
+            sliderAction(inp);
+        }
+    };
+
     this.labelString = title;
     this.createLabel();
-    if (pic) {this.setPicture(pic); }
+
     this.addBody(txt);
     txt.drawNew();
     this.addButton('ok', 'OK');

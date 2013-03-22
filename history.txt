@@ -1550,3 +1550,9 @@ ______
 130321
 ------
 * Cloud: allow every XMLHttpRequest to transport cookies (withCredentials = true)
+
+130322
+------
+* Widgets: optional sliders and "lively" graphics for numerical prompters
+* Blocks, GUI: "Zoom blocks…" feature in the settings menu (no longer hidden)
+* Objects: numeric prompters for watcher's sliderMin/Max

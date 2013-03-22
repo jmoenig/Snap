@@ -120,7 +120,7 @@ PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.objects = '2013-March-12';
+modules.objects = '2013-March-22';
 
 var SpriteMorph;
 var StageMorph;
@@ -5453,7 +5453,11 @@ WatcherMorph.prototype.userSetSliderMin = function () {
     ).prompt(
         "Slider minimum value",
         this.sliderMorph.start.toString(),
-        this.world()
+        this.world(),
+        null, // pic
+        null, // choices
+        null, // read only
+        true // numeric
     );
 };
 
@@ -5465,7 +5469,11 @@ WatcherMorph.prototype.userSetSliderMax = function () {
     ).prompt(
         "Slider maximum value",
         this.sliderMorph.stop.toString(),
-        this.world()
+        this.world(),
+        null, // pic
+        null, // choices
+        null, // read only
+        true // numeric
     );
 };
 
