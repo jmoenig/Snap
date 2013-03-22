@@ -1556,3 +1556,4 @@ ______
 * Widgets: optional sliders and "lively" graphics for numerical prompters
 * Blocks, GUI: "Zoom blocks…" feature in the settings menu (no longer hidden)
 * Objects: numeric prompters for watcher's sliderMin/Max
+* translation updates

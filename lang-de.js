@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org', // optional
     'last_changed':
-        '2013-03-15', // this, too, will appear in the Translators tab
+        '2013-03-22', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -661,6 +661,8 @@ SnapTranslator.dict.de = {
     // settings menu
     'Language...':
         'Sprache...',
+    'Zoom blocks...':
+        'Bl\u00f6cke vergr\u00f6\u00dfern...',
     'Blurred shadows':
         'Weiche Schatten',
     'uncheck to use solid drop\nshadows and highlights':
@@ -836,6 +838,30 @@ SnapTranslator.dict.de = {
     // help
     'Help':
         'Hilfe',
+
+    // zoom blocks
+    'Zoom blocks':
+        'Bl\u00f6cke vergr\u00f6\u00dfern',
+    'build':
+        'baue',
+    'your own':
+        'eigene',
+    'blocks':
+        'Bl\u00f6cke',
+    'normal (1x)':
+        'normal (1x)',
+    'demo (1.2x)':
+        'Demo (1.2x)',
+    'presentation (1.4x)':
+        'Pr\u00e4sentation (1.4x)',
+    'big (2x)':
+        'gro\u00df (2x)',
+    'huge (4x)':
+        'riesig (4x)',
+    'giant (8x)':
+        'gigantisch (8x)',
+    'monstrous (10x)':
+        'ungeheuerlich (10x)',
 
     // Project Manager
     'Untitled':
