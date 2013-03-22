@@ -3180,8 +3180,31 @@ IDE_Morph.prototype.cloudResponse = function () {
 
 IDE_Morph.prototype.cloudError = function () {
     var myself = this;
+
+    function getURL(url) {
+        try {
+            var request = new XMLHttpRequest();
+            request.open('GET', url, false);
+            request.send();
+            if (request.status === 200) {
+                return request.responseText;
+            }
+            return null;
+        } catch (err) {
+            return null;
+        }
+    }
+
     return function (responseText, url) {
-        var response = responseText;
+        // first, try to find out an explanation for the error
+        // and notify the user about it,
+        // if none is found, show an error dialog box
+        var response = responseText,
+            explanation = getURL('http://snap.berkeley.edu/cloudmsg.txt');
+        if (explanation) {
+            myself.showMessage(explanation);
+            return;
+        }
         if (response.length > 50) {
             response = response.substring(0, 50) + '...';
         }
