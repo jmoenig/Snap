@@ -3896,7 +3896,8 @@ StageMorph.prototype.clear = function () {
 
 StageMorph.prototype.userMenu = function () {
     var ide = this.parentThatIsA(IDE_Morph),
-        menu = new MenuMorph(this);
+        menu = new MenuMorph(this),
+        myself = this;
 
     if (ide && ide.isAppMode) {
         menu.addItem('help', 'nop');
@@ -3904,6 +3905,13 @@ StageMorph.prototype.userMenu = function () {
     }
     menu.addItem("edit", 'edit');
     menu.addItem("show all", 'showAll');
+    menu.addItem(
+        "pic...",
+        function () {
+            window.open(myself.fullImageClassic().toDataURL());
+        },
+        'open a new window\nwith a picture of the stage'
+    );
     return menu;
 };
 
