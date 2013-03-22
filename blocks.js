@@ -153,7 +153,7 @@ DialogBoxMorph, BlockInputFragmentMorph, PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2013-March-19';
+modules.blocks = '2013-March-22';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -297,42 +297,42 @@ SyntaxElementMorph.uber = Morph.prototype;
 */
 
 SyntaxElementMorph.prototype.setScale = function (num) {
-    var scale = Math.max(num, 1);
-    SyntaxElementMorph.prototype.scale = scale;
-    SyntaxElementMorph.prototype.corner = 3 * scale;
-    SyntaxElementMorph.prototype.rounding = 9 * scale;
-    SyntaxElementMorph.prototype.edge = 1.000001 * scale;
-    SyntaxElementMorph.prototype.inset = 6 * scale;
-    SyntaxElementMorph.prototype.hatHeight = 12 * scale;
-    SyntaxElementMorph.prototype.hatWidth = 70 * scale;
-    SyntaxElementMorph.prototype.rfBorder = 3 * scale;
-    SyntaxElementMorph.prototype.minWidth = 0;
-    SyntaxElementMorph.prototype.dent = 8 * scale;
-    SyntaxElementMorph.prototype.bottomPadding = 3 * scale;
-    SyntaxElementMorph.prototype.cSlotPadding = 4 * scale;
-    SyntaxElementMorph.prototype.typeInPadding = scale;
-    SyntaxElementMorph.prototype.labelPadding = 4 * scale;
-    SyntaxElementMorph.prototype.labelFontName = 'Verdana';
-    SyntaxElementMorph.prototype.labelFontStyle = 'sans-serif';
-    SyntaxElementMorph.prototype.fontSize = 10 * scale;
-    SyntaxElementMorph.prototype.embossing = new Point(
+    var scale = Math.min(Math.max(num, 1), 25);
+    this.scale = scale;
+    this.corner = 3 * scale;
+    this.rounding = 9 * scale;
+    this.edge = 1.000001 * scale;
+    this.inset = 6 * scale;
+    this.hatHeight = 12 * scale;
+    this.hatWidth = 70 * scale;
+    this.rfBorder = 3 * scale;
+    this.minWidth = 0;
+    this.dent = 8 * scale;
+    this.bottomPadding = 3 * scale;
+    this.cSlotPadding = 4 * scale;
+    this.typeInPadding = scale;
+    this.labelPadding = 4 * scale;
+    this.labelFontName = 'Verdana';
+    this.labelFontStyle = 'sans-serif';
+    this.fontSize = 10 * scale;
+    this.embossing = new Point(
         -1 * Math.max(scale / 2, 1),
         -1 * Math.max(scale / 2, 1)
     );
-    SyntaxElementMorph.prototype.labelWidth = 450 * scale;
-    SyntaxElementMorph.prototype.labelWordWrap = true;
-    SyntaxElementMorph.prototype.dynamicInputLabels = true;
-    SyntaxElementMorph.prototype.feedbackColor = new Color(255, 255, 255);
-    SyntaxElementMorph.prototype.feedbackMinHeight = 5;
-    SyntaxElementMorph.prototype.minSnapDistance = 20;
-    SyntaxElementMorph.prototype.reporterDropFeedbackPadding = 10 * scale;
-    SyntaxElementMorph.prototype.contrast = 65;
-    SyntaxElementMorph.prototype.labelContrast = 25;
-    SyntaxElementMorph.prototype.activeHighlight = new Color(153, 255, 213);
-    SyntaxElementMorph.prototype.errorHighlight = new Color(173, 15, 0);
-    SyntaxElementMorph.prototype.activeBlur = 20;
-    SyntaxElementMorph.prototype.activeBorder = 4;
-    SyntaxElementMorph.prototype.rfColor = new Color(120, 120, 120);
+    this.labelWidth = 450 * scale;
+    this.labelWordWrap = true;
+    this.dynamicInputLabels = true;
+    this.feedbackColor = new Color(255, 255, 255);
+    this.feedbackMinHeight = 5;
+    this.minSnapDistance = 20;
+    this.reporterDropFeedbackPadding = 10 * scale;
+    this.contrast = 65;
+    this.labelContrast = 25;
+    this.activeHighlight = new Color(153, 255, 213);
+    this.errorHighlight = new Color(173, 15, 0);
+    this.activeBlur = 20;
+    this.activeBorder = 4;
+    this.rfColor = new Color(120, 120, 120);
 };
 
 SyntaxElementMorph.prototype.setScale(1);

@@ -64,11 +64,11 @@ standardSettings, Sound, BlockMorph, ToggleMorph, InputSlotDialogMorph,
 ScriptsMorph, isNil, SymbolMorph, BlockExportDialogMorph,
 BlockImportDialogMorph, SnapTranslator, localize, List, InputSlotMorph,
 SnapCloud, Uint8Array, HandleMorph, SVG_Costume, fontHeight, hex_sha512,
-sb, CommentMorph*/
+sb, CommentMorph, CommandBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2013-March-20';
+modules.gui = '2013-March-22';
 
 // Declarations
 
@@ -1704,14 +1704,10 @@ IDE_Morph.prototype.settingsMenu = function () {
 
     menu = new MenuMorph(this);
     menu.addItem('Language...', 'languageMenu');
-    if (shiftClicked) {
-        menu.addItem(
-            'Scale blocks...',
-            'userSetBlocksScale',
-            null,
-            new Color(100, 0, 0)
-        );
-    }
+    menu.addItem(
+        'Zoom blocks...',
+        'userSetBlocksScale'
+    );
     menu.addLine();
     addPreference(
         'Blurred shadows',
@@ -2788,17 +2784,68 @@ IDE_Morph.prototype.reflectLanguage = function (lang) {
 // IDE_Morph blocks scaling
 
 IDE_Morph.prototype.userSetBlocksScale = function () {
-    var myself = this;
+    var myself = this,
+        scrpt,
+        blck,
+        shield,
+        sample,
+        action;
+
+    scrpt = new CommandBlockMorph();
+    scrpt.color = SpriteMorph.prototype.blockColor.motion;
+    scrpt.setSpec(localize('build'));
+    blck = new CommandBlockMorph();
+    blck.color = SpriteMorph.prototype.blockColor.sound;
+    blck.setSpec(localize('your own'));
+    scrpt.nextBlock(blck);
+    blck = new CommandBlockMorph();
+    blck.color = SpriteMorph.prototype.blockColor.operators;
+    blck.setSpec(localize('blocks'));
+    scrpt.bottomBlock().nextBlock(blck);
+    /*
+    blck = SpriteMorph.prototype.blockForSelector('doForever');
+    blck.inputs()[0].nestedBlock(scrpt);
+    */
+
+    sample = new FrameMorph();
+    sample.texture = 'scriptsPaneTexture.gif';
+    sample.setExtent(new Point(250, 180));
+    scrpt.setPosition(sample.position().add(10));
+    sample.add(scrpt);
+
+    shield = new Morph();
+    shield.alpha = 0;
+    shield.setExtent(sample.extent());
+    shield.setPosition(sample.position());
+    sample.add(shield);
+
+    action = function (num) {
+    /*
+        var c;
+        blck.setScale(num);
+        blck.drawNew();
+        blck.setSpec(blck.blockSpec);
+        c = blck.inputs()[0];
+        c.setScale(num);
+        c.nestedBlock(scrpt);
+    */
+        scrpt.blockSequence().forEach(function (block) {
+            block.setScale(num);
+            block.drawNew();
+            block.setSpec(block.blockSpec);
+        });
+    };
+
     new DialogBoxMorph(
         null,
         function (num) {
             myself.setBlocksScale(num);
         }
     ).prompt(
-        'Scale Blocks',
+        'Zoom blocks',
         SyntaxElementMorph.prototype.scale.toString(),
         this.world(),
-        null,
+        sample, // pic
         {
             'normal (1)' : 1,
             'demo (1.2)' : 1.2,
@@ -2809,7 +2856,10 @@ IDE_Morph.prototype.userSetBlocksScale = function () {
             'monstrous (10)' : 10
         },
         false, // read only?
-        true // numeric
+        true, // numeric
+        1, // slider min
+        12, // slider max
+        action // slider action
     );
 };
 
