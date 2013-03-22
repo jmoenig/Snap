@@ -4172,7 +4172,18 @@ SpriteIconMorph.prototype.fixLayout = function () {
 // SpriteIconMorph menu
 
 SpriteIconMorph.prototype.userMenu = function () {
-    var menu = new MenuMorph(this);
+    var menu = new MenuMorph(this),
+        myself = this;
+    if (this.object instanceof StageMorph) {
+        menu.addItem(
+            'pic...',
+            function () {
+                window.open(myself.object.fullImageClassic().toDataURL());
+            },
+            'open a new window\nwith a picture of the stage'
+        );
+        return menu;
+    }
     if (!(this.object instanceof SpriteMorph)) {return null; }
     menu.addItem("show", 'showSpriteOnStage');
     menu.addLine();

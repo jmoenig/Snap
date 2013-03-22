@@ -1557,3 +1557,4 @@ ______
 * Blocks, GUI: "Zoom blocks…" feature in the settings menu (no longer hidden)
 * Objects: numeric prompters for watcher's sliderMin/Max
 * translation updates
+* Objects: 'pic...' screenshot feature for the stage

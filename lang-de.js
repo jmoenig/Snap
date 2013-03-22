@@ -791,6 +791,10 @@ SnapTranslator.dict.de = {
     // stage:
     'show all':
         'Alles zeigen',
+    'pic...':
+        'Bild exportieren...',
+    'open a new window\nwith a picture of the stage':
+        'ein neues Browserfenster mit einem\nBild der B\u00fchne \u00f6ffnen',
 
     // scripting area
     'clean up':
