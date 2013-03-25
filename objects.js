@@ -120,7 +120,7 @@ PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.objects = '2013-March-22';
+modules.objects = '2013-March-25';
 
 var SpriteMorph;
 var StageMorph;
@@ -3020,7 +3020,7 @@ SpriteMorph.prototype.booleanMorph = function (bool) {
     // answer a block which can be shown in watchers, speech bubbles etc.
     var block = new ReporterBlockMorph(true);
     block.color = SpriteMorph.prototype.blockColor.operators;
-    block.setSpec(bool.toString());
+    block.setSpec(localize(bool.toString()));
     return block;
 };
 

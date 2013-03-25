@@ -1559,3 +1559,7 @@ ______
 * translation updates
 * Objects: 'pic…' screenshot feature for the stage
 * GUI, Cloud: Fallback message support before showing an error
+
+130325
+------
+* Objects: Boolean value block representations are now translated, thanks, Victor, for the report
