@@ -186,7 +186,7 @@ SnapTranslator.dict.zh = {
     'translator_e-mail':
         'djh@rhjxx.cn', // optional
     'last_changed':
-        '2012-11-26', // this, too, will appear in the Translators tab
+        '2013-3-25', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -377,6 +377,16 @@ SnapTranslator.dict.zh = {
         '播放声音 %snd 直到播放完毕',
     'stop all sounds':
         '停止所有声音',
+    'rest for %n beats':
+        '停止 %n 秒',
+    'play note %n for %n beats':
+        '弹奏 %n  %n 拍',
+    'change tempo by %n':
+        '将节奏加快 %n',
+    'set tempo to %n bpm':
+        '将节奏设定为 %n',
+    'tempo':
+        '节奏',
 
     // pen:
     'clear':
@@ -450,7 +460,15 @@ SnapTranslator.dict.zh = {
     'call %cmdRing w/continuation':
         '持续调用 %cmdRing ',
     'warp %c':
-        '弯曲 %c',
+        '直接运行 %c',
+    'when I start as a clone':
+        '当我开始克隆',
+    'create a clone of %cln':
+        '新建一个克隆 %cln',
+    'myself':
+        '自己',
+    'delete this clone':
+        '删除这个克隆',
 
     // sensing:
     'touching %col ?':
@@ -481,6 +499,10 @@ SnapTranslator.dict.zh = {
         '计时器',
     'http:// %s':
         'http:// %s',
+    'turbo mode?':
+        'Turbo模式',
+    'set turbo mode to %b':
+        '设置Turbo模式 %b',
 
     'filtered for %clr':
         '选择颜色  %clr ',
@@ -524,6 +546,8 @@ SnapTranslator.dict.zh = {
         'Unicode编码值为 %n 的字符',
     'is %s a %typ ?':
         '%s 是 %typ 类型？',
+    'is %s identical to %s ?':
+        '%s 与 %s 相同吗？',
 
     'type of %s':
         '%s 类型',
@@ -579,10 +603,12 @@ SnapTranslator.dict.zh = {
     // snap menu
     'About...':
         '关于Snap!...',
+    'Reference manual':
+        '参考手册',
     'Snap! website':
-        'Snap!官方网站',
+        '官方网站',
     'Download source':
-        '下载源代码',
+        '下载源码',
     'Switch back to user mode':
         '切换到用户模式',
     'disable deep-Morphic\ncontext menus\nand show user-friendly ones':
@@ -591,6 +617,7 @@ SnapTranslator.dict.zh = {
         '切换到开发人员模式',
     'enable Morphic\ncontext menus\nand inspectors,\nnot user-friendly!':
         '启用 正常语式\n快捷菜单\n与非检查\n友好用户界面',
+
 
     // project menu
     'Project Notes...':
@@ -619,10 +646,21 @@ SnapTranslator.dict.zh = {
         '导出程序块...',
     'show global custom block definitions as XML\nin a new browser window':
         '新浏览窗以XML格式显示全局自定义程序块',
+    'Import tools...':
+        '导入工具包...',
+    'load the official library of\npowerful blocks':
+        '载入官方库和强大的程序块',
 
+    // cloud menu
+    'Login...':
+        '登录...',
+    'Signup...':
+        '注册...',
     // settings menu
     'Language...':
         '语言选择...',
+    'Zoom blocks...':
+        '放大程序块...',
     'Blurred shadows':
         '半透明阴影',
     'uncheck to use solid drop\nshadows and highlights':
@@ -635,6 +673,12 @@ SnapTranslator.dict.zh = {
         '检测 使嵌套块的颜色交换',
     'uncheck to disable alternating\ncolors for nested block':
         '取消选中 使嵌套块的颜色交换',
+    'Dynamic input labels':
+        '动态输入标签',
+    'uncheck to disable dynamic\nlabels for variadic inputs':
+        '取消选中要禁用动态可变参数输入标签',
+    '检查启用动态可变参数输入标签':
+        'marcar para habilitar etiquetas\ndin\u00E1micas para entradas varidic',
     'Prefer empty slot drops':
         '喜欢减少空槽',
     'settings menu prefer empty slots hint':
@@ -665,12 +709,30 @@ SnapTranslator.dict.zh = {
         '取消选中 关闭点击程序块的声音',
     'check to turn\nblock clicking\nsound on':
         '检查 关闭点击程序块的声音',
+    'Animations':
+        '动画',
+    'uncheck to disable\nIDE animations':
+        '取消选中禁用IDE动画',
+    'Turbo mode':
+        'Turbo模式',
+    'check to prioritize\nscript execution':
+        '检查的优先执行脚本顺序',
+    'uncheck to run scripts\nat normal speed':
+        '取消选中正常速度运行脚本',
+    'check to enable\nIDE animations':
+        '检查启用IDE动画',
     'Thread safe scripts':
         '线程安全的脚本',
-    'uncheck to allow\nscript reentrancy':
+    'uncheck to allow\nscript reentrance':
         '取消选中 允许脚本重新载入',
-    'check to disallow\nscript reentrancy':
+    'check to disallow\nscript reentrance':
         '检查 不允许脚本重新载入',
+    'Prefer smooth animations':
+        '不流畅的动画',
+    'uncheck for greater speed\nat variable frame rates':
+        '取消选中在可变帧频更快的速度',
+    'check for smooth, predictable\nanimations across computers':
+        '检查是否平滑，可预见的多台电脑动画',
 
     // inputs
     'with inputs':
@@ -679,6 +741,8 @@ SnapTranslator.dict.zh = {
         '参数名:',
     'Input Names:':
         '参数名:',
+    'input list:':
+        '输入列表:',
 
     // context menus:
     'help':
@@ -687,10 +751,14 @@ SnapTranslator.dict.zh = {
     // blocks:
     'help...':
         '帮助...',
+    'relabel...':
+        '重新标记...',
     'duplicate':
         '复制',
     'make a copy\nand pick it up':
         '创建一个副本并抓起',
+    'only duplicate this block':
+        '只复制此块',
     'delete':
         '删除',
     'script pic...':
@@ -699,6 +767,8 @@ SnapTranslator.dict.zh = {
         '新浏览窗口中打开脚本的图片',
     'ringify':
         '环',
+    'unringify':
+        '删除环',
 
     // custom blocks:
     'delete block definition...':
@@ -712,6 +782,12 @@ SnapTranslator.dict.zh = {
     'export...':
         '导出...',
 
+    'show all':
+        '显示所有',
+    'pic...':
+        '导出图像...',
+    'open a new window\nwith a picture of the stage':
+        '打开一张图片舞台的新窗口，',
     // scripting area
     'clean up':
         '清除',
@@ -727,6 +803,8 @@ SnapTranslator.dict.zh = {
         '重命名',
     'export':
         '导出',
+    'rename costume':
+        '重命名造型',
 
     // sounds
     'Play sound':
@@ -737,6 +815,8 @@ SnapTranslator.dict.zh = {
         '停止',
     'Play':
         '播放',
+    'rename sound':
+        '重命名声音',
 
     // dialogs
     // buttons
@@ -752,7 +832,46 @@ SnapTranslator.dict.zh = {
     // help
     'Help':
         '帮助',
+    // zoom blocks
+    'Zoom blocks':
+        '放大程序块',
+    'build':
+        '建立',
+    'your own':
+        '你自己',
+    'blocks':
+        '程序块',
+    'normal (1x)':
+        '标准 (1x)',
+    'demo (1.2x)':
+        '演示 (1.2x)',
+    'presentation (1.4x)':
+        '演示文稿 (1.4x)',
+    'big (2x)':
+        '大(2x)',
+    'huge (4x)':
+        '超大型 (4x)',
+    'giant (8x)':
+        '巨人型 (8x)',
+    'monstrous (10x)':
+        '无敌型 (10x)',
 
+ 'Untitled':
+        '无标题',
+    'Open Project':
+        '打开项目',
+    'Open':
+        '打开',
+    '(empty)':
+        '(空)',
+    'Saved!':
+        '已保存！',
+    'Delete Project':
+        '删除项目',
+    'Are you sure you want to delete':
+        '你确定要删除吗？',
+    'rename...':
+        '重命名...',
     // costume editor
     'Costume Editor':
         '造型编辑器',
@@ -780,6 +899,8 @@ SnapTranslator.dict.zh = {
     // export blocks
     'Export blocks':
         '导出程序块',
+    'Import blocks':
+        '导入程序块',
     'this project doesn\'t have any\ncustom global blocks yet':
         '这个项目没有包含全局性的自定义程序块',
     'select':
@@ -822,6 +943,8 @@ SnapTranslator.dict.zh = {
         '创建参数名',
     'Edit input name':
         '编辑参数名',
+    'Edit label fragment':
+        '编辑标签片段',
     'Title text':
         '标题文本',
     'Input name':
@@ -890,6 +1013,8 @@ SnapTranslator.dict.zh = {
         '滑块的最小值...',
     'slider max...':
         '滑块的最大值...',
+    'import...':
+        '导入...',
     'Slider minimum value':
         '滑块的最小值',
     'Slider maximum value':
