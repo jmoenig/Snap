@@ -1564,3 +1564,4 @@ ______
 ------
 * Spanish translation! Yay, thanks, Victor Muratalla!!
 * Objects: Boolean value block representations are now translated, thanks, Victor, for the report
+* Simplified Chinese translation update, thanks 邓江华 !!
