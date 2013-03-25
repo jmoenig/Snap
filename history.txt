@@ -1562,4 +1562,5 @@ ______
 
 130325
 ------
+* Spanish translation! Yay, thanks, Victor Muratalla!!
 * Objects: Boolean value block representations are now translated, thanks, Victor, for the report
