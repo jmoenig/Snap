@@ -185,7 +185,7 @@ SnapTranslator.dict.ja = {
     'translator_e-mail':
         'abee@squeakland.jp', // optional
     'last_changed':
-        '2012-10-20', // this, too, will appear in the Translators tab
+        '2013-04-02', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -376,6 +376,16 @@ SnapTranslator.dict.ja = {
         '終わるまで %snd の音を鳴らす',
     'stop all sounds':
         'すべての音を止める',
+    'rest for %n beats':
+        '%n 拍休む',
+    'play note %n for %n beats':
+        '%n の音符を %n 拍鳴らす',
+    'change tempo by %n':
+        'テンポを %n ずつ変える',
+    'set tempo to %n bpm':
+        'テンポを %n BPMにする',
+    'tempo':
+        'テンポ',
 
     // pen:
     'clear':
@@ -450,6 +460,14 @@ SnapTranslator.dict.ja = {
         '継続付きで %cmdRing を呼ぶ',
     'warp %c':
         'ワープする %c',
+    'when I start as a clone':
+        'クローンされたとき',
+    'create a clone of %cln':
+        '%cln のクローンを作る',
+    'myself':
+        '自分自身',
+    'delete this clone':
+        'このクローンを削除する',
 
     // sensing:
     'touching %col ?':
@@ -480,6 +498,10 @@ SnapTranslator.dict.ja = {
         'タイマー',
     'http:// %s':
         'http:// %s',
+    'turbo mode?':
+        'ターボモード?',
+    'set turbo mode to %b':
+        'ターボーモードを %b にする',
 
     'filtered for %clr':
         '%clr 色を抽出',
@@ -522,7 +544,9 @@ SnapTranslator.dict.ja = {
     'unicode %n as letter':
         'Unicodeで %n の文字',
     'is %s a %typ ?':
-        '%s は %typ 型か',
+        '%s は %typ 型',
+    'is %s identical to %s ?':
+        '%s は %s と同一',
 
     'type of %s':
         '%s の型',
@@ -618,10 +642,22 @@ SnapTranslator.dict.ja = {
         'ブロックを書き出す...',
     'show global custom block definitions as XML\nin a new browser window':
         'グローバルカスタムブロックの定義をXMLとして\nブラウザの新しいウインドウに表示する',
+    'Import tools...':
+        'ツールを読み込む...',
+    'load the official library of\npowerful blocks':
+        '強力なブロックの公式\nライブラリを読み込む',
+
+    // cloud menu
+    'Login...':
+        'ログイン...',
+    'Signup...':
+        'サインアップ...',
 
     // settings menu
     'Language...':
         '言語...',
+    'Zoom blocks...':
+        'ブロックをズーム...',
     'Blurred shadows':
         '半透明の影',
     'uncheck to use solid drop\nshadows and highlights':
@@ -634,6 +670,12 @@ SnapTranslator.dict.ja = {
         'チェックすると入れ子になった\nブロックを縞々で表示します',
     'uncheck to disable alternating\ncolors for nested block':
         'チェックを外すと入れ子になった\nブロックを普通に表示します',
+    'Dynamic input labels':
+        '動的な入力ラベル',
+    'uncheck to disable dynamic\nlabels for variadic inputs':
+        'チェックを外すと可変個引数の\n動的ラベルを不可にします',
+    'check to enable dynamic\nlabels for variadic inputs':
+        'チェックすると可変個引数の\n動的ラベルを可能にします',
     'Prefer empty slot drops':
         '空のスロットのドロップを許す',
     'settings menu prefer empty slots hint':
@@ -664,12 +706,30 @@ SnapTranslator.dict.ja = {
         'チェックを外すとブロックの\nクリック音を切ります',
     'check to turn\nblock clicking\nsound on':
         'チェックを外すとブロックの\nクリック音を入れます',
+    'Animations':
+        'アニメーション',
+    'uncheck to disable\nIDE animations':
+        'チェックを外すとIDEの\nアニメーションを切ります',
+    'check to prioritize\nscript execution':
+        'チェックするとスクリプトの\n処理を優先します',
+    'uncheck to run scripts\nat normal speed':
+        'チェックを外すとスクリプトを\n通常の速度で実行します',
+    'check to enable\nIDE animations':
+        'チェックするとIDEの\nアニメーションを入れます',
+    'Turbo mode':
+        'ターボモード',
     'Thread safe scripts':
         'スクリプトをスレッドセーフにする',
     'uncheck to allow\nscript reentrancy':
         'チェックを外すとスクリプトを\n再入可能にします',
     'check to disallow\nscript reentrancy':
         'チェックするとスクリプトを\n再入不能にします',
+    'Prefer smooth animations':
+        'なめらかなアニメーションにする',
+    'uncheck for greater speed\nat variable frame rates':
+        'チェックを外すとフレームレート\n当たりの速度を上げます',
+    'check for smooth, predictable\nanimations across computers':
+        'チェックするとコンピューター間で\nなめらかで予測可能なアニメーションにします',
 
     // inputs
     'with inputs':
@@ -678,6 +738,8 @@ SnapTranslator.dict.ja = {
         '引数名:',
     'Input Names:':
         '引数名:',
+    'input list:':
+        '引数リスト:',
 
     // context menus:
     'help':
@@ -690,6 +752,8 @@ SnapTranslator.dict.ja = {
         '複製',
     'make a copy\nand pick it up':
         'コピーを作って\nそれを掴みます',
+    'only duplicate this block':
+        'このブロックをコピーするだけ',
     'delete':
         '削除',
     'script pic...':
@@ -698,6 +762,8 @@ SnapTranslator.dict.ja = {
         'このスクリプトの画像を表示する新しいウィンドウを開きます',
     'ringify':
         'リング化',
+    'unringify':
+        '非リング化',
 
     // custom blocks:
     'delete block definition...':
@@ -710,6 +776,14 @@ SnapTranslator.dict.ja = {
         '編集',
     'export...':
         '書き出し...',
+
+    // stage:
+    'show all':
+        'すべてを表示',
+    'pic...':
+        '画像...',
+    'open a new window\nwith a picture of the stage':
+        'このステージの画像で\n新しいウィンドウを開く',
 
     // scripting area
     'clean up':
@@ -726,6 +800,8 @@ SnapTranslator.dict.ja = {
         '名前を変更',
     'export':
         '書き出し',
+    'rename costume':
+        'コスチュームの名前を変更',
 
     // sounds
     'Play sound':
@@ -736,10 +812,14 @@ SnapTranslator.dict.ja = {
         '停止',
     'Play':
         '再生',
+    'rename sound':
+        '音の名前を変更',
 
     // dialogs
     // buttons
     'OK':
+        'OK',
+    'Ok':
         'OK',
     'Cancel':
         'キャンセル',
@@ -751,6 +831,48 @@ SnapTranslator.dict.ja = {
     // help
     'Help':
         'ヘルプ',
+
+    // zoom blocks
+    'Zoom blocks':
+        'ブロックをズーム',
+    'build':
+        '作ろう',
+    'your own':
+        'あなた自身の',
+    'blocks':
+        'ブロックを',
+    'normal (1x)':
+        'ノーマル (1x)',
+    'demo (1.2x)':
+        'デモ (1.2x)',
+    'presentation (1.4x)':
+        'プレゼンテーション (1.4x)',
+    'big (2x)':
+        '大 (2x)',
+    'huge (4x)':
+        '特大 (4x)',
+    'giant (8x)':
+        '巨大 (8x)',
+    'monstrous (10x)':
+        '超巨大 (10x)',
+
+    // Project Manager
+    'Untitled':
+        '名称未設定',
+    'Open Project':
+        'プロジェクトを開く',
+    'Open':
+        '開く',
+    '(empty)':
+        '(空)',
+    'Saved!':
+        '保存しました!',
+    'Delete Project':
+        'プロジェクトを削除',
+    'Are you sure you want to delete':
+        '本当に削除しますか',
+    'rename...':
+        '名前を変更...',
 
     // costume editor
     'Costume Editor':
@@ -779,6 +901,8 @@ SnapTranslator.dict.ja = {
     // export blocks
     'Export blocks':
         'ブロックを書き出し',
+    'Import blocks':
+        'ブロックを読み込み',
     'this project doesn\'t have any\ncustom global blocks yet':
         'このプロジェクトはカスタムグローバルブロックを持っていません',
     'select':
@@ -821,6 +945,8 @@ SnapTranslator.dict.ja = {
         '引数名を作成',
     'Edit input name':
         '引数名を編集',
+    'Edit label fragment':
+        'ラベルの断片を編集',
     'Title text':
         'タイトルテキスト',
     'Input name':
@@ -830,7 +956,7 @@ SnapTranslator.dict.ja = {
     'Object':
         'オブジェクト',
     'Number':
-        '数字',
+        '数',
     'Text':
         'テキスト',
     'List':
@@ -855,8 +981,8 @@ SnapTranslator.dict.ja = {
         '複数の引数 (値は引数のリスト)',
     'Upvar - make internal variable visible to caller':
         'Upvar - 呼び出し元から見える内部的な変数',
-
-    // About Snap
+ 
+   // About Snap
     'About Snap':
         'Snapについて',
     'Back...':
@@ -889,6 +1015,8 @@ SnapTranslator.dict.ja = {
         'スライダーの最小値...',
     'slider max...':
         'スライダーの最大値...',
+    'import...':
+        '読み込み...',
     'Slider minimum value':
         'スライダーの最小値',
     'Slider maximum value':
@@ -910,8 +1038,8 @@ SnapTranslator.dict.ja = {
         '(-90) 左',
     '(0) up':
         '(0) 上',
-    '(180) right':
-        '(180) 右',
+    '(180) down':
+        '(180) 下',
 
     // collision detection
     'mouse-pointer':
@@ -924,6 +1052,8 @@ SnapTranslator.dict.ja = {
     // costumes
     'Turtle':
         'タートル',
+    'Empty':
+        '空',
 
     // graphical effects
     'ghost':
@@ -1041,7 +1171,7 @@ SnapTranslator.dict.ja = {
 
     // data types
     'number':
-        '数字',
+        '数',
     'text':
         'テキスト',
     'Boolean':
@@ -1062,27 +1192,59 @@ SnapTranslator.dict.ja = {
         '任意',
 
     // missing entries
-    'Untitled':
-        '名称未設定',
-    'Open Project':
-        'プロジェクトを開く',
-    'Open':
-        '開く',
-    '(empty)':
-        '(空)',
-    'Saved!':
-        '保存しました!',
-    'Delete Project':
-        'プロジェクトを削除',
-    'Are you sure you want to delete':
-        '本当に削除しますか',
-    'unringify':
-        '非リング化',
-    'rename...':
-        '名前を変更...',
-    '(180) down':
-        '(180) 下',
-    'Ok':
-        'OK'
+    'Reference manual':
+        'リファレンスマニュアル',
+    'Sign in':
+        'サインイン',
+    'User name:':
+        'ユーザー名:',
+    'Password:':
+        'パスワード:',
+    'stay signed in on this computer\nuntil logging out':
+        'ログアウトするまでこのコンピューターに\nサインインしたままにする',
+    'Sign up':
+        'サインアップ',
+    'User name:':
+        'ユーザー名:',
+    'Password:':
+        'パスワード:',
+    'Birth date:':
+        '誕生月:',
+    'Birth date:':
+        '年:',
+    'January':
+        '1月',
+    'February':
+        '2月',
+    'March':
+        '3月',
+    'April':
+        '4月',
+    'May':
+        '5月',
+    'June':
+        '6月',
+    'July':
+        '7月',
+    'August':
+        '8月',
+    'September':
+        '9月',
+    'October':
+        '10月',
+    'November':
+        '11月',
+    'December':
+        '12月',
+    '1993 or before':
+        '1993年以前',
+    'E-mail address:':
+        '電子メールアドレス:',
+    'Terms of Service...':
+        'サービス利用規約...',
+    'Privacy...':
+        '個人情報...',
+    'I have read and agree\nto the Terms of Service':
+        'サービス利用規約を読み\nそれに同意します',
 
 };
