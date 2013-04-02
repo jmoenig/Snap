@@ -1360,7 +1360,7 @@ ______
 * Blocks: Drawn symbols for TURN RIGHT / LEFT
 * continuations tweaks
 * revert of "returning 'undefined' to parent frame fix" (121204), breaks call/cc
-* ScriptPane cleanUp teak for attached comments
+* ScriptPane cleanUp tweak for attached comments
 
 130111
 ------
@@ -1565,3 +1565,9 @@ ______
 * Spanish translation! Yay, thanks, Victor Muratalla!!
 * Objects: Boolean value block representations are now translated, thanks, Victor, for the report
 * Simplified Chinese translation update, thanks 邓江华 !!
+
+130402
+------
+* Japanese translations update, thanks, Kazuhiro Abe!
+* Content-type support for Cloud backend
+* sharing / unsharing projects support and GUI
