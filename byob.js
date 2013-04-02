@@ -105,7 +105,7 @@ CommentMorph, localize, CSlotMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2013-March-18';
+modules.byob = '2013-April-02';
 
 // Declarations
 
@@ -1420,7 +1420,6 @@ BlockEditorMorph.prototype.init = function (definition, target) {
 
     // create scripting area
     scripts = new ScriptsMorph(target);
-    scripts.allowsStickyComments = false;
     scripts.isDraggable = false;
     scripts.color = new Color(71, 71, 71);
     scripts.texture = 'scriptsPaneTexture.gif';
@@ -1440,6 +1439,14 @@ BlockEditorMorph.prototype.init = function (definition, target) {
         block = element.fullCopy();
         block.setPosition(scripts.position().add(element.position()));
         scripts.add(block);
+        if (block instanceof BlockMorph) {
+            block.allComments().forEach(function (comment) {
+                comment.align(block);
+            });
+        }
+    });
+    proto.allComments().forEach(function (comment) {
+        comment.align(proto);
     });
 
     scriptsFrame = new ScrollFrameMorph(scripts);
@@ -1559,7 +1566,7 @@ BlockEditorMorph.prototype.updateDefinition = function () {
         if (morph instanceof PrototypeHatBlockMorph) {
             head = morph;
         } else if (morph instanceof BlockMorph ||
-                morph instanceof CommentMorph) {
+                (morph instanceof CommentMorph && !morph.block)) {
             element = morph.fullCopy();
             element.parent = null;
             element.setPosition(morph.position().subtract(pos));
