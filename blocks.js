@@ -153,7 +153,7 @@ DialogBoxMorph, BlockInputFragmentMorph, PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2013-March-22';
+modules.blocks = '2013-April-02';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -2344,7 +2344,11 @@ BlockMorph.prototype.fullCopy = function () {
     ans.allChildren().filter(function (block) {
         return !isNil(block.comment);
     }).forEach(function (block) {
-        block.comment = null;
+        var cmnt = block.comment.fullCopy();
+        block.comment = cmnt;
+        cmnt.block = block;
+        //block.comment = null;
+
     });
     return ans;
 };
@@ -2475,6 +2479,13 @@ BlockMorph.prototype.allComments = function () {
     }).map(function (block) {
         return block.comment;
     });
+};
+
+BlockMorph.prototype.destroy = function () {
+    this.allComments().forEach(function (comment) {
+        comment.destroy();
+    });
+    BlockMorph.uber.destroy.call(this);
 };
 
 BlockMorph.prototype.stackHeight = function () {
@@ -3950,7 +3961,6 @@ ScriptsMorph.prototype.init = function (owner) {
     this.owner = owner || null;
     this.feedbackColor = SyntaxElementMorph.prototype.feedbackColor;
     this.feedbackMorph = new BoxMorph();
-    this.allowsStickyComments = true;
 
     ScriptsMorph.uber.init.call(this);
     this.setColor(new Color(70, 70, 70));
@@ -3963,9 +3973,16 @@ ScriptsMorph.prototype.fullCopy = function () {
         pos = this.position(),
         child;
     this.children.forEach(function (morph) {
-        child = morph.fullCopy();
-        child.setPosition(morph.position().subtract(pos));
-        cpy.add(child);
+        if (!morph.block) { // omit anchored comments
+            child = morph.fullCopy();
+            child.setPosition(morph.position().subtract(pos));
+            cpy.add(child);
+            if (child instanceof BlockMorph) {
+                child.allComments().forEach(function (comment) {
+                    comment.align(child);
+                });
+            }
+        }
     });
     cpy.adjustBounds();
     return cpy;
@@ -4191,7 +4208,6 @@ ScriptsMorph.prototype.closestBlock = function (comment, hand) {
         target,
         all;
 
-    if (!this.allowsStickyComments) {return null; }
     all = [];
     stacks.forEach(function (stack) {
         all = all.concat(stack.allChildren().slice(0).reverse().filter(
@@ -4207,6 +4223,8 @@ ScriptsMorph.prototype.closestBlock = function (comment, hand) {
             all,
             function (block) {
                 return !block.comment
+                    && !(block instanceof PrototypeHatBlockMorph)
+                    && !block.isPrototype
                     && block.bounds.containsPoint(handPos);
             }
         );
@@ -4218,6 +4236,8 @@ ScriptsMorph.prototype.closestBlock = function (comment, hand) {
         all,
         function (block) {
             return !block.comment
+                && !(block instanceof PrototypeHatBlockMorph)
+                && !block.isPrototype
                 && block.bounds.intersects(fb);
         }
     );
@@ -8314,7 +8334,7 @@ ReporterSlotMorph.prototype.evaluate = function () {
     return this.nestedBlock();
 };
 
-CommandSlotMorph.prototype.isEmptySlot = function () {
+ReporterSlotMorph.prototype.isEmptySlot = function () {
     return this.nestedBlock() === null;
 };
 
@@ -8988,7 +9008,7 @@ CommentMorph.prototype.align = function (topBlock, ignoreLayer) {
         );
 
         this.setLeft(rightMost + 5);
-        if (!ignoreLayer) {
+        if (!ignoreLayer && scripts) {
             scripts.addBack(this); // push to back and show
         }
 

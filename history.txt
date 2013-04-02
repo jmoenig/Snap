@@ -1571,3 +1571,6 @@ ______
 * Japanese translations update, thanks, Kazuhiro Abe!
 * Content-type support for Cloud backend
 * sharing / unsharing projects support and GUI
+* the Block Editor now allows anchored comments
+* duplicating a block / script / sprite now also duplicates anchored comments
+* deleting a block / script now also deletes anchored comments
