@@ -68,7 +68,7 @@ sb, CommentMorph, CommandBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2013-March-22';
+modules.gui = '2013-April-02';
 
 // Declarations
 
@@ -3325,6 +3325,9 @@ ProjectDialogMorph.prototype.init = function (ide, task) {
     this.preview = null;
     this.notesText = null;
     this.notesField = null;
+    this.deleteButton = null;
+    this.shareButton = null;
+    this.unshareButton = null;
 
     // initialize inherited properties:
     ProjectDialogMorph.uber.init.call(
@@ -3458,7 +3461,13 @@ ProjectDialogMorph.prototype.buildContents = function () {
 
     if (this.task === 'open') {
         this.addButton('openProject', 'Open');
-        this.addButton('deleteProject', 'Delete');
+
+        this.shareButton = this.addButton('shareProject', 'Share');
+        this.unshareButton = this.addButton('unshareProject', 'Unshare');
+        this.shareButton.hide();
+        this.unshareButton.hide();
+
+        this.deleteButton = this.addButton('deleteProject', 'Delete');
         this.action = 'openProject';
     } else { // 'save'
         this.addButton('saveProject', 'Save');
@@ -3684,6 +3693,24 @@ ProjectDialogMorph.prototype.setSource = function (source) {
         };
     }
     this.body.add(this.listField);
+
+    if (this.task === 'open') {
+        if (this.source === 'cloud') {
+            this.shareButton.show();
+            this.unshareButton.hide();
+            this.deleteButton.show();
+        } else {
+            this.shareButton.hide();
+            this.unshareButton.hide();
+            if (this.source === 'local') {
+                this.deleteButton.show();
+            } else { // examples
+                this.deleteButton.hide();
+            }
+        }
+    }
+    this.buttons.fixLayout();
+
     this.fixLayout();
     if (this.task === 'open') {
         this.clearDetails();
@@ -3747,6 +3774,15 @@ ProjectDialogMorph.prototype.installCloudProjectList = function (pl) {
             myself.preview.texture = item.Thumbnail || null;
             myself.preview.cachedTexture = null;
             myself.preview.drawNew();
+            if (item.Public === 'true') {
+                myself.shareButton.hide();
+                myself.unshareButton.show();
+            } else {
+                myself.unshareButton.hide();
+                myself.shareButton.show();
+            }
+            myself.buttons.fixLayout();
+            myself.fixLayout();
         }
         myself.edit();
     };
@@ -3908,7 +3944,7 @@ ProjectDialogMorph.prototype.deleteProject = function () {
                                     ); // refresh list
                                 },
                                 myself.ide.cloudError(),
-                                [myself.listField.selected.ProjectName]
+                                [proj.ProjectName]
                             );
                         },
                         myself.ide.cloudError()
@@ -3930,6 +3966,70 @@ ProjectDialogMorph.prototype.deleteProject = function () {
                 }
             );
         }
+    }
+};
+
+ProjectDialogMorph.prototype.shareProject = function () {
+    var myself = this,
+        proj = this.listField.selected;
+
+    if (proj) {
+        this.ide.confirm(
+            localize(
+                'Are you sure you want to publish'
+            ) + '\n"' + proj.ProjectName + '"?',
+            'Share Project',
+            function () {
+                SnapCloud.reconnect(
+                    function () {
+                        SnapCloud.callService(
+                            'publishProject',
+                            function () {
+                                SnapCloud.disconnect();
+                                proj.Public = 'true';
+                                myself.listField.select(proj);
+                                myself.ide.showMessage('shared.', 2);
+                            },
+                            myself.ide.cloudError(),
+                            [proj.ProjectName]
+                        );
+                    },
+                    myself.ide.cloudError()
+                );
+            }
+        );
+    }
+};
+
+ProjectDialogMorph.prototype.unshareProject = function () {
+    var myself = this,
+        proj = this.listField.selected;
+
+    if (proj) {
+        this.ide.confirm(
+            localize(
+                'Are you sure you want to unpublish'
+            ) + '\n"' + proj.ProjectName + '"?',
+            'Unshare Project',
+            function () {
+                SnapCloud.reconnect(
+                    function () {
+                        SnapCloud.callService(
+                            'unpublishProject',
+                            function () {
+                                SnapCloud.disconnect();
+                                proj.Public = 'false';
+                                myself.listField.select(proj);
+                                myself.ide.showMessage('unshared.', 2);
+                            },
+                            myself.ide.cloudError(),
+                            [proj.ProjectName]
+                        );
+                    },
+                    myself.ide.cloudError()
+                );
+            }
+        );
     }
 };
 

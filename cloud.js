@@ -29,7 +29,7 @@
 
 /*global modules, IDE_Morph, SnapSerializer, hex_sha512, alert, nop*/
 
-modules.cloud = '2013-March-22';
+modules.cloud = '2013-April-02';
 
 // Global stuff
 
@@ -82,6 +82,10 @@ Cloud.prototype.signup = function (
                 + email,
             true
         );
+        request.setRequestHeader(
+            "Content-Type",
+            "application/x-www-form-urlencoded"
+        );
         request.withCredentials = true;
         request.onreadystatechange = function () {
             if (request.readyState === 4) {
@@ -126,6 +130,10 @@ Cloud.prototype.connect = function (
             "GET",
             (this.hasProtocol() ? '' : 'http://') + this.url,
             true
+        );
+        request.setRequestHeader(
+            "Content-Type",
+            "application/x-www-form-urlencoded"
         );
         request.withCredentials = true;
         request.onreadystatechange = function () {
@@ -318,7 +326,10 @@ Cloud.prototype.callURL = function (url, callBack, errorCall) {
     try {
         request.open('GET', url, true);
         request.withCredentials = true;
-        request.setRequestHeader('Content-Type', 'text/plain');
+        request.setRequestHeader(
+            "Content-Type",
+            "application/x-www-form-urlencoded"
+        );
         request.setRequestHeader('MioCracker', this.session);
         request.onreadystatechange = function () {
             if (request.readyState === 4) {
@@ -355,11 +366,15 @@ Cloud.prototype.callService = function (
         postDict;
 
     if (!this.session) {
-        errorCall.call('You are not connected', 'Cloud');
+        errorCall.call(null, 'You are not connected', 'Cloud');
         return;
     }
     if (!service) {
-        errorCall.call('service ' + serviceName + ' is not available', 'API');
+        errorCall.call(
+            null,
+            'service ' + serviceName + ' is not available',
+            'API'
+        );
         return;
     }
     if (args && args.length > 0) {
@@ -371,7 +386,10 @@ Cloud.prototype.callService = function (
     try {
         request.open(service.method, service.url, true);
         request.withCredentials = true;
-        request.setRequestHeader('Content-Type', 'text/plain');
+        request.setRequestHeader(
+            "Content-Type",
+            "application/x-www-form-urlencoded"
+        );
         request.setRequestHeader('MioCracker', this.session);
         request.onreadystatechange = function () {
             if (request.readyState === 4) {
