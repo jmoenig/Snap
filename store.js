@@ -61,7 +61,7 @@ SyntaxElementMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2013-March-19';
+modules.store = '2013-April-03';
 
 
 // XML_Serializer ///////////////////////////////////////////////////////
@@ -627,8 +627,9 @@ SnapSerializer.prototype.loadCustomBlocks = function (
     isGlobal
 ) {
     // private
+    var myself = this;
     element.children.forEach(function (child) {
-        var definition, names, inputs, i;
+        var definition, names, inputs, comment, i;
         if (child.tag !== 'block-definition') {
             return;
         }
@@ -664,6 +665,11 @@ SnapSerializer.prototype.loadCustomBlocks = function (
                 definition.declarations[names[i += 1]]
                     = [child.attributes.type, child.contents];
             });
+        }
+
+        comment = child.childNamed('comment');
+        if (comment) {
+            definition.comment = myself.loadComment(comment);
         }
     });
 };
@@ -1482,11 +1488,13 @@ CustomBlockDefinition.prototype.toXML = function (serializer) {
 
     return serializer.format(
         '<block-definition s="@" type="@" category="@">' +
+            '%' +
             '<inputs>%</inputs>%%' +
             '</block-definition>',
         this.spec,
         this.type,
         this.category || 'other',
+        this.comment ? this.comment.toXML(serializer) : '',
         Object.keys(this.declarations).reduce(function (xml, decl) {
                 return xml + serializer.format(
                     '<input type="@">$</input>',

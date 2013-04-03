@@ -153,7 +153,7 @@ DialogBoxMorph, BlockInputFragmentMorph, PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2013-April-02';
+modules.blocks = '2013-April-03';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -4223,7 +4223,6 @@ ScriptsMorph.prototype.closestBlock = function (comment, hand) {
             all,
             function (block) {
                 return !block.comment
-                    && !(block instanceof PrototypeHatBlockMorph)
                     && !block.isPrototype
                     && block.bounds.containsPoint(handPos);
             }
@@ -4236,7 +4235,6 @@ ScriptsMorph.prototype.closestBlock = function (comment, hand) {
         all,
         function (block) {
             return !block.comment
-                && !(block instanceof PrototypeHatBlockMorph)
                 && !block.isPrototype
                 && block.bounds.intersects(fb);
         }

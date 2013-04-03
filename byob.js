@@ -105,7 +105,7 @@ CommentMorph, localize, CSlotMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2013-April-02';
+modules.byob = '2013-April-03';
 
 // Declarations
 
@@ -137,6 +137,7 @@ function CustomBlockDefinition(spec, receiver) {
     this.type = 'command';
     this.spec = spec || '';
     this.declarations = {}; // {'inputName' : [type, default]}
+    this.comment = null;
 
     // don't serialize (not needed for functionality):
     this.receiver = receiver || null; // for serialization only (pointer)
@@ -1400,7 +1401,7 @@ function BlockEditorMorph(definition, target) {
 }
 
 BlockEditorMorph.prototype.init = function (definition, target) {
-    var scripts, proto, scriptsFrame, block, myself = this;
+    var scripts, proto, scriptsFrame, block, comment, myself = this;
 
     // additional properties:
     this.definition = definition;
@@ -1427,6 +1428,12 @@ BlockEditorMorph.prototype.init = function (definition, target) {
 
     proto = new PrototypeHatBlockMorph(this.definition);
     proto.setPosition(scripts.position().add(10));
+
+    if (definition.comment !== null) {
+        comment = definition.comment.fullCopy();
+        proto.comment = comment;
+        comment.block = proto;
+    }
 
     if (definition.body !== null) {
         proto.nextBlock(definition.body.expression.fullCopy());
@@ -1577,6 +1584,10 @@ BlockEditorMorph.prototype.updateDefinition = function () {
     if (head) {
         this.definition.category = head.blockCategory;
         this.definition.type = head.type;
+        if (head.comment) {
+            this.definition.comment = head.comment.fullCopy();
+            this.definition.comment.block = true; // serialize in short form
+        }
     }
 
     this.definition.body = this.context(head);
