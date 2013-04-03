@@ -1574,3 +1574,7 @@ ______
 * the Block Editor now allows anchored comments
 * duplicating a block / script / sprite now also duplicates anchored comments
 * deleting a block / script now also deletes anchored comments
+
+130403
+------
+* YPR converter fix: No more text area in upper left corner of the Snap! IDE
