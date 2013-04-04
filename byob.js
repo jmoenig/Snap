@@ -105,7 +105,7 @@ CommentMorph, localize, CSlotMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2013-April-03';
+modules.byob = '2013-April-04';
 
 // Declarations
 
@@ -1587,6 +1587,8 @@ BlockEditorMorph.prototype.updateDefinition = function () {
         if (head.comment) {
             this.definition.comment = head.comment.fullCopy();
             this.definition.comment.block = true; // serialize in short form
+        } else {
+            this.definition.comment = null;
         }
     }
 
