@@ -1579,3 +1579,7 @@ ______
 ------
 * YPR converter fix: No more text area in upper left corner of the Snap! IDE
 * Blocks, BYOB, Store: PrototypeHatBlocks in the BlockEditor accept anchored comments
+
+130404
+------
+* loading shared projects in presentation mode, exporting URL for shared projects

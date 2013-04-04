@@ -68,7 +68,7 @@ sb, CommentMorph, CommandBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2013-April-02';
+modules.gui = '2013-April-04';
 
 // Declarations
 
@@ -150,7 +150,7 @@ IDE_Morph.prototype.init = function (isAutoFill) {
 };
 
 IDE_Morph.prototype.openIn = function (world) {
-    var hash, usr, motd;
+    var hash, usr, motd, myself = this;
 
     this.buildPanes();
     world.add(this);
@@ -245,6 +245,15 @@ IDE_Morph.prototype.openIn = function (world) {
         }
         this.toggleAppMode(true);
         this.runScripts();
+    } else if (location.hash.substr(0, 9) === '#present:') {
+        SnapCloud.getPublicProject(
+            location.hash.substr(9),
+            function (projectData) {
+                myself.rawOpenProjectString(projectData);
+                myself.toggleAppMode(true);
+            },
+            this.cloudError()
+        );
     } else if (location.hash.substr(0, 6) === '#lang:') {
         this.setLanguage(location.hash.substr(6));
         this.newProject();
@@ -3831,7 +3840,8 @@ ProjectDialogMorph.prototype.openSelectedCloudProject = function () {
 };
 
 ProjectDialogMorph.prototype.rawOpenSelectedCloudProject = function () {
-    var myself = this;
+    var myself = this,
+        proj = this.listField.selected;
     SnapCloud.reconnect(
         function () {
             SnapCloud.callService(
@@ -3840,9 +3850,15 @@ ProjectDialogMorph.prototype.rawOpenSelectedCloudProject = function () {
                     SnapCloud.disconnect();
                     myself.ide.source = 'cloud';
                     myself.ide.droppedText(response[0].SourceCode);
+                    if (proj.Public === 'true') {
+                        location.hash = '#present:Username=' +
+                            encodeURIComponent(SnapCloud.username) +
+                            '&ProjectName=' +
+                            encodeURIComponent(proj.ProjectName);
+                    }
                 },
                 myself.ide.cloudError(),
-                [myself.listField.selected.ProjectName]
+                [proj.ProjectName]
             );
         },
         myself.ide.cloudError()

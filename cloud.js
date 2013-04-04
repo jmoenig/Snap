@@ -29,7 +29,7 @@
 
 /*global modules, IDE_Morph, SnapSerializer, hex_sha512, alert, nop*/
 
-modules.cloud = '2013-April-02';
+modules.cloud = '2013-April-04';
 
 // Global stuff
 
@@ -37,6 +37,8 @@ var Cloud;
 
 var SnapCloud = new Cloud(
     'https://snapcloud.miosoft.com/miocon/app/login?_app=SnapCloud'
+    // '192.168.2.108:8087/miocon/app/login?_app=SnapCloud'
+    // 'localhost/miocon/app/login?_app=SnapCloud'
 );
 
 // Cloud /////////////////////////////////////////////////////////////
@@ -107,6 +109,60 @@ Cloud.prototype.signup = function (
                     errorCall.call(
                         null,
                         myself.url + 'SignUp',
+                        'could not connect to:'
+                    );
+                }
+            }
+        };
+        request.send(null);
+    } catch (err) {
+        errorCall.call(this, err.toString(), 'Snap!Cloud');
+    }
+};
+
+Cloud.prototype.getPublicProject = function (
+    id,
+    callBack,
+    errorCall
+) {
+    // id is Username=username&projectName=projectname,
+    // where the values are url-component encoded
+    // callBack is a single argument function, errorCall take two args
+    var request = new XMLHttpRequest(),
+        myself = this;
+    try {
+        request.open(
+            "GET",
+            (this.hasProtocol() ? '' : 'http://')
+                + this.url + 'Public'
+                + '&'
+                + id,
+            true
+        );
+        request.setRequestHeader(
+            "Content-Type",
+            "application/x-www-form-urlencoded"
+        );
+        request.withCredentials = true;
+        request.onreadystatechange = function () {
+            if (request.readyState === 4) {
+                if (request.responseText) {
+                    if (request.responseText.indexOf('ERROR') === 0) {
+                        errorCall.call(
+                            this,
+                            request.responseText
+                        );
+                    } else {
+                        callBack.call(
+                            null,
+                            request.responseText,
+                            'Published Project'
+                        );
+                    }
+                } else {
+                    errorCall.call(
+                        null,
+                        myself.url + 'Public',
                         'could not connect to:'
                     );
                 }
