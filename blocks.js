@@ -153,7 +153,7 @@ DialogBoxMorph, BlockInputFragmentMorph, PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2013-April-03';
+modules.blocks = '2013-April-04';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -2029,7 +2029,10 @@ BlockMorph.prototype.showHelp = function () {
     var myself = this,
         pic = new Image(),
         help,
-        spec = this.selector === 'evaluateCustomBlock' ?
+        comment,
+        block,
+        isCustomBlock = this.selector === 'evaluateCustomBlock',
+        spec = isCustomBlock ?
                 this.definition.helpSpec() : this.selector,
         ctx;
 
@@ -2044,7 +2047,25 @@ BlockMorph.prototype.showHelp = function () {
             help
         );
     };
-    pic.src = 'help/' + spec + '.png';
+
+    if (isCustomBlock && this.definition.comment) {
+        block = this.fullCopy();
+        block.addShadow();
+        comment = this.definition.comment.fullCopy();
+        comment.contents.parse();
+        help = '';
+        comment.contents.lines.forEach(function (line) {
+            help = help + '\n' + line;
+        });
+        new DialogBoxMorph().inform(
+            'Help',
+            help.substr(1),
+            myself.world(),
+            block.fullImage()
+        );
+    } else {
+        pic.src = 'help/' + spec + '.png';
+    }
 };
 
 // BlockMorph drawing
