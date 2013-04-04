@@ -1584,3 +1584,4 @@ ______
 ------
 * loading shared projects in presentation mode, exporting URL for shared projects
 * Selecting "Help" for a custom block now pops up the comment attached to its definition's prototype hat, if any
+* BYOB fix for detaching comments from prototype hat blocks
