@@ -153,7 +153,7 @@ DialogBoxMorph, BlockInputFragmentMorph, PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2013-April-04';
+modules.blocks = '2013-April-05';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -1777,7 +1777,8 @@ BlockMorph.prototype.rebuild = function (contrast) {
 BlockMorph.prototype.userMenu = function () {
     var menu = new MenuMorph(this),
         world = this.world(),
-        myself = this;
+        myself = this,
+        blck;
 
     menu.addItem(
         "help...",
@@ -1788,6 +1789,8 @@ BlockMorph.prototype.userMenu = function () {
     }
     menu.addLine();
     if (this.selector === 'reportGetVar') {
+        blck = this.fullCopy();
+        blck.addShadow();
         menu.addItem(
             'rename...',
             function () {
@@ -1798,7 +1801,9 @@ BlockMorph.prototype.userMenu = function () {
                 ).prompt(
                     "Variable name",
                     myself.blockSpec,
-                    world
+                    world,
+                    blck.fullImage(), // pic
+                    InputSlotMorph.prototype.getVarNamesDict.call(myself)
                 );
             }
         );
