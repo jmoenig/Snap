@@ -330,6 +330,8 @@ SnapTranslator.dict.pt = {
         'passa para o próximo traje',
     'costume #':
         'o número do traje',
+    'costume name':
+        'o nome do traje',
     'say %s for %n secs':
         'diz %s durante %n s',
     'say %s':
@@ -728,10 +730,10 @@ SnapTranslator.dict.pt = {
     'check to enable\nIDE animations':
         'Assinalar para activar\nas animações do AID',
     'Thread safe scripts':
-        'Guiões thread-safe',
-    'uncheck to allow\nscript reentrancy':
+        'Guiões seguros face a threads',
+    'uncheck to allow\nscript reentrance':
         'Desassinar para permitir\nreentrância nos guiões.',
-    'check to disallow\nscript reentrancy':
+    'check to disallow\nscript reentrance':
         'Assinar para não permitir\nreentrância nos guiões.',
     'Prefer smooth animations':
         'Preferir animações suaves',
@@ -838,6 +840,10 @@ SnapTranslator.dict.pt = {
         'Sim',
     'No':
         'Não',
+    'Open':
+        'Abrir',
+    'Share':
+        'Partilhar',
 
     // ajuda
     'Help':
@@ -882,6 +888,24 @@ SnapTranslator.dict.pt = {
         'Quer mesmo remover?',
     'rename...':
         'alterar o nome…',
+    'Cloud':
+        'Nuvem',
+    'Browser':
+        'Navegador',
+    'Examples':
+        'Exemplos',
+    'You are not logged in':
+        'Ainda não se autenticou',
+    'Updating project list...':
+        'Actualizando a lista de projectos…',
+    'Opening project...':
+        'Abrindo o projecto…',
+    'Fetching project from the cloud...':
+        'Obtendo o projecto da nuvem…',
+    'Saving project to the cloud...':
+        'Guardando o projecto na nuvem…',
+    'saved.':
+        'guardado.',
 
     // editor de trajes
     'Costume Editor':
