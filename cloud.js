@@ -29,7 +29,7 @@
 
 /*global modules, IDE_Morph, SnapSerializer, hex_sha512, alert, nop*/
 
-modules.cloud = '2013-April-04';
+modules.cloud = '2013-April-08';
 
 // Global stuff
 
@@ -37,7 +37,7 @@ var Cloud;
 
 var SnapCloud = new Cloud(
     'https://snapcloud.miosoft.com/miocon/app/login?_app=SnapCloud'
-    // '192.168.2.108:8087/miocon/app/login?_app=SnapCloud'
+    //'192.168.2.108:8087/miocon/app/login?_app=SnapCloud'
     // 'localhost/miocon/app/login?_app=SnapCloud'
 );
 
@@ -129,6 +129,7 @@ Cloud.prototype.getPublicProject = function (
     // where the values are url-component encoded
     // callBack is a single argument function, errorCall take two args
     var request = new XMLHttpRequest(),
+        responseList,
         myself = this;
     try {
         request.open(
@@ -153,10 +154,12 @@ Cloud.prototype.getPublicProject = function (
                             request.responseText
                         );
                     } else {
+                        responseList = myself.parseResponse(
+                            request.responseText
+                        );
                         callBack.call(
                             null,
-                            request.responseText,
-                            'Published Project'
+                            responseList[0].SourceCode
                         );
                     }
                 } else {
