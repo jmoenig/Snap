@@ -1589,3 +1589,7 @@ ______
 130405
 ------
 * renaming variable blobs now features a drop-down with reachable variable names and a picture of the block to be renamed
+
+130408
+------
+* Cloud, GUI: Sharing / Unsharing projects finalization

@@ -68,7 +68,7 @@ sb, CommentMorph, CommandBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2013-April-04';
+modules.gui = '2013-April-08';
 
 // Declarations
 
@@ -246,11 +246,24 @@ IDE_Morph.prototype.openIn = function (world) {
         this.toggleAppMode(true);
         this.runScripts();
     } else if (location.hash.substr(0, 9) === '#present:') {
+        myself.showMessage('Fetching project\nfrom the cloud...');
         SnapCloud.getPublicProject(
             location.hash.substr(9),
             function (projectData) {
-                myself.rawOpenProjectString(projectData);
-                myself.toggleAppMode(true);
+                var msg;
+                myself.nextSteps([
+                    function () {
+                        msg = myself.showMessage('Opening project...');
+                    },
+                    function () {
+                        myself.rawOpenCloudDataString(projectData);
+                    },
+                    function () {
+                        msg.destroy();
+                        myself.toggleAppMode(true);
+                        myself.runScripts();
+                    }
+                ]);
             },
             this.cloudError()
         );
