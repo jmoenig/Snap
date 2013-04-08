@@ -1595,3 +1595,4 @@ ______
 * Cloud, GUI: Sharing / Unsharing projects finalization
 * Lists: Adjust initial list watcher size to blocks' zoom scale
 * Portuguese and Italian translations update, thanks, Manuel and Stefano!
+* GUI fix: switch to edit mode and tab to scripts when loading a project
