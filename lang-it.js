@@ -2,7 +2,7 @@
 
 	lang-it.js
 
-	German translation for SNAP!
+	Italian  translation for SNAP!
 
 	written by Jens Mönig
 
@@ -376,6 +376,16 @@ SnapTranslator.dict.it = {
         'produci suono %snd e attendi la fine',
     'stop all sounds':
         'arresta tutti i suoni',
+    'rest for %n beats':
+        'fai una pausa di %n battute',
+    'play note %n for %n beats':
+        'suona nota %n per %n battute',
+    'change tempo by %n':
+        'cambia tempo di %n',
+    'set tempo to %n bpm':
+        'porta tempo a %n bpm',
+    'tempo':
+        'tempo',
 
     // pen:
     'clear':
@@ -407,9 +417,9 @@ SnapTranslator.dict.it = {
     'when %keyHat key pressed':
         'quando si preme il tasto %keyHat',
     'when I am clicked':
-        'Quando vengo cliccato',
+        'quando vengo cliccato',
     'when I receive %msgHat':
-        'Quando ricevo %msgHat',
+        'quando ricevo %msgHat',
     'broadcast %msg':
         'invia a tutti %msg',
     'broadcast %msg and wait':
@@ -450,6 +460,14 @@ SnapTranslator.dict.it = {
         'chiama %cmdRing con continuazione',
     'warp %c':
         'esegui in modalit\u00E0 turbo %c',
+    'when I start as a clone':
+        'quando vengo clonato',
+    'create a clone of %cln':
+        'crea un clone di %cln',
+    'myself':
+        'me stesso',
+    'delete this clone':
+        'elimina questo clone',
 
     // sensing:
     'touching %col ?':
@@ -461,7 +479,7 @@ SnapTranslator.dict.it = {
     'ask %s and wait':
         'chiedi %s e attendi',
     'what\'s your name?':
-        'Come ti chiami?',
+        'come ti chiami?',
     'answer':
         'risposta',
     'mouse x':
@@ -478,8 +496,14 @@ SnapTranslator.dict.it = {
         'azzera cronometro',
     'timer':
         'cronometro',
+    '%att of %spr':
+        '%att di %spr',
     'http:// %s':
         'leggi pagina web http:// %s',
+    'turbo mode?':
+        'modalit\u00E0 turbo attiva',
+    'set turbo mode to %b':
+        'porta modalit\u00E0 turbo a %b',
 
     'filtered for %clr':
         'selezionati per colore %clr',
@@ -518,11 +542,13 @@ SnapTranslator.dict.it = {
     'length of %s':
         'lunghezza di %s',
     'unicode of %s':
-        'unicode di %s',
+        'codice unicode di %s',
     'unicode %n as letter':
-        'unicode %n come lettera',
+        'lettera del codice unicode %n',
     'is %s a %typ ?':
         '%s \u00E8 di tipo %typ',
+    'is %s identical to %s ?':
+        '%s \u00E8 identico a %s ?',
 
     'type of %s':
         'tipo di %s',
@@ -618,10 +644,22 @@ SnapTranslator.dict.it = {
         'Esporta blocchi...',
     'show global custom block definitions as XML\nin a new browser window':
         'mostra in formato XML le definizione dei nuovi blocchi\nin una nuova finestra del browser',
+    'Import tools...':
+        'Importa tools...',
+    'load the official library of\npowerful blocks':
+        'carica la libreria ufficiale di\nblocchi Snap',
+
+    // cloud menu
+    'Login...':
+        'Accedi...',
+    'Signup...':
+        'Registrati...',
 
     // settings menu
     'Language...':
         'Lingua...',
+    'Zoom blocks...':
+        'Zoom dei blocchi...',
     'Blurred shadows':
         'Ombreggiature attenuate',
     'uncheck to use solid drop\nshadows and highlights':
@@ -634,6 +672,14 @@ SnapTranslator.dict.it = {
         'abilitare per visualizzare a colori\nalternati i blocchi annidati',
     'uncheck to disable alternating\ncolors for nested block':
         'disabilitare per non visualizzare a colori\nalternati i blocchi annidati',
+
+    'Dynamic input labels':
+        'Etichette degli input dinamiche',
+    'uncheck to disable dynamic\nlabels for variadic inputs':
+        'disabilitare per non avere etichette\ndinamiche per input variabili',
+    'check to enable dynamic\nlabels for variadic inputs':
+        'abilitare per avere etichette\ndinamiche per input variabili',
+
     'Prefer empty slot drops':
         'Favorisci l\'aggancio a slot vuoti',
     'settings menu prefer empty slots hint':
@@ -664,12 +710,30 @@ SnapTranslator.dict.it = {
         'disabilitare per non riprodurre il suono di aggancio dei blocchi',
     'check to turn\nblock clicking\nsound on':
         'abilitare per riprodurre il suono di aggancio dei blocchi',
+    'Animations':
+        'Animazioni',
+    'uncheck to disable\nIDE animations':
+        'disabilitare per non consentire\nanimazioni dell\u0027IDE',
+    'Turbo mode':
+        'Modalit\u00E0 Turbo',
+    'check to prioritize\nscript execution':
+        'abilitare per dare priorit\u00E0\nall\u0027esecuzione degli script',
+    'uncheck to run scripts\nat normal speed':
+        'disabilitare per eseguire gli script\na velocità normale',
+    'check to enable\nIDE animations':
+        'abilitare per nconsentire\nanimazioni dell\u0027IDE',
     'Thread safe scripts':
         'Script thread safe',
     'uncheck to allow\nscript reentrancy':
         'disabilitare per permettere agli script di rientrare',
     'check to disallow\nscript reentrancy':
         'abilitare per impedire agli script di rientrare',
+    'Prefer smooth animations':
+        'Animazioni a framerate fisso',
+    'uncheck for greater speed\nat variable frame rates':
+        'disabilitare per massima velocità\na framerate variabile',
+    'check for smooth, predictable\nanimations across computers':
+        'abilitare per avere animazioni\nfluide su tutti i computer',
 
     // inputs
     'with inputs':
@@ -686,10 +750,14 @@ SnapTranslator.dict.it = {
     // blocks:
     'help...':
         'aiuto...',
+    'relabel...':
+        'rinomina...',
     'duplicate':
         'duplica',
     'make a copy\nand pick it up':
         'crea una copia',
+    'only duplicate this block':
+        'duplica solo questo blocco',
     'delete':
         'cancella',
     'script pic...':
@@ -703,7 +771,7 @@ SnapTranslator.dict.it = {
 
     // custom blocks:
     'delete block definition...':
-        'cancella la definizione del blocco',
+        'cancella la definizione del blocco...',
     'edit...':
         'modifica...',
 
@@ -712,6 +780,14 @@ SnapTranslator.dict.it = {
         'modifica',
     'export...':
         'esporta...',
+
+    // stage:
+    'show all':
+        'mostra tutti gli sprite',
+    'pic...':
+        'salva immagine dello Stage...',
+    'open a new window\nwith a picture of the stage':
+        'apre una nuova finestra con un\u0027immagine dello Stage',
 
     // scripting area
     'clean up':
@@ -758,6 +834,46 @@ SnapTranslator.dict.it = {
     'Help':
         'Aiuto',
 
+    // zoom blocks
+    'Zoom blocks':
+        'Zoom dei blocchi',
+    'build':
+        'costruisci',
+    'your own':
+        'i tuoi',
+    'blocks':
+        'blocchi',
+    'normal (1x)':
+        'normale (1x)',
+    'demo (1.2x)':
+        'Demo (1.2x)',
+    'presentation (1.4x)':
+        'presentazione(1.4x)',
+    'big (2x)':
+        'grandi (2x)',
+    'huge (4x)':
+        'molto grandi (4x)',
+    'giant (8x)':
+        'giganti (8x)',
+    'monstrous (10x)':
+        'grandissimi (10x)',
+
+    // Project Manager
+    'Untitled':
+        'Senza Titolo',
+    'Open Project':
+        'Apri Progetto',
+    '(empty)':
+        '(vuoto)',
+    'Saved!':
+        'Salvato!',
+    'Delete Project':
+        'Elimina Progetto',
+    'Are you sure you want to delete':
+        'Sei sicuro di voler eliminare',
+    'rename...':
+        'rinomina...',
+
     // costume editor
     'Costume Editor':
         'Editor di Immagini',
@@ -785,6 +901,8 @@ SnapTranslator.dict.it = {
     // export blocks
     'Export blocks':
         'Esporta blocchi',
+    'Import blocks':
+        'Importa blocchi',
     'this project doesn\'t have any\ncustom global blocks yet':
         'in questo progetto non sono stati ancora definiti dei nuovi blocchi',
     'select':
@@ -796,9 +914,9 @@ SnapTranslator.dict.it = {
 
     // variable dialog
     'for all sprites':
-        'Per tutti gli sprite',
+        'per tutti gli sprite',
     'for this sprite only':
-        'Solo per questo sprite',
+        'solo per questo sprite',
 
     // block dialog
     'Change block':
@@ -828,6 +946,8 @@ SnapTranslator.dict.it = {
         'Crea parametro',
     'Edit input name':
         'Modifica parametro',
+    'Edit label fragment':
+        'Modifica porzione di etichetta',
     'Title text':
         'Parole della definizione',
     'Input name':
@@ -896,6 +1016,8 @@ SnapTranslator.dict.it = {
         'Scegli il min del cursore...',
     'slider max...':
         'Scegli il max del cursore...',
+    'import...':
+        'importa...',
     'Slider minimum value':
         'Valore minimo del cursore',
     'Slider maximum value':
@@ -917,7 +1039,7 @@ SnapTranslator.dict.it = {
         '(-90) sinistra',
     '(0) up':
         '(0) su',
-    '(180) right':
+    '(180) down':
         '(180) gi\u00F9',
 
     // collision detection
@@ -931,6 +1053,8 @@ SnapTranslator.dict.it = {
     // costumes
     'Turtle':
         'Tartaruga',
+    'Empty':
+        'Vuoto',
 
     // graphical effects
     'ghost':
