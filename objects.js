@@ -120,7 +120,7 @@ PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.objects = '2013-March-25';
+modules.objects = '2013-April-08';
 
 var SpriteMorph;
 var StageMorph;
@@ -3897,6 +3897,7 @@ StageMorph.prototype.clear = function () {
 StageMorph.prototype.userMenu = function () {
     var ide = this.parentThatIsA(IDE_Morph),
         menu = new MenuMorph(this),
+        shiftClicked = this.world().currentKey === 16,
         myself = this;
 
     if (ide && ide.isAppMode) {
@@ -3912,6 +3913,24 @@ StageMorph.prototype.userMenu = function () {
         },
         'open a new window\nwith a picture of the stage'
     );
+    if (shiftClicked) {
+        menu.addLine();
+        menu.addItem(
+            "turn pen trails into new costume...",
+            function () {
+                var costume = new Costume(
+                    myself.trailsCanvas,
+                    Date.now().toString()
+                ).copy();
+                ide.currentSprite.addCostume(costume);
+                ide.currentSprite.wearCostume(costume);
+                ide.hasChangedMedia = true;
+            },
+            'turn all pen trails and stamps\n' +
+                'into a new costume for the\ncurrently selected sprite',
+            new Color(100, 0, 0)
+        );
+    }
     return menu;
 };
 
