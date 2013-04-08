@@ -1593,3 +1593,4 @@ ______
 130408
 ------
 * Cloud, GUI: Sharing / Unsharing projects finalization
+* Lists: Adjust initial list watcher size to blocks' zoom scale

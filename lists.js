@@ -61,7 +61,7 @@ PushButtonMorph, SyntaxElementMorph, Color, Point, WatcherMorph,
 StringMorph, SpriteMorph, ScrollFrameMorph, CellMorph, ArrowMorph,
 MenuMorph, snapEquals, Morph, isNil, localize*/
 
-modules.lists = '2013-March-12';
+modules.lists = '2013-April-08';
 
 var List;
 var ListWatcherMorph;
@@ -414,7 +414,9 @@ ListWatcherMorph.prototype.init = function (list) {
 
     this.color = new Color(220, 220, 220);
     this.isDraggable = true;
-    this.setExtent(new Point(80, 70));
+    this.setExtent(new Point(80, 70).multiplyBy(
+        SyntaxElementMorph.prototype.scale
+    ));
     this.add(this.label);
     this.add(this.frame);
     this.add(this.plusButton);
