@@ -11,7 +11,7 @@
 
     Copyright (C) 2013 by Jens Mšnig
 
-    This file is part of Snap!. 
+    This file is part of Snap!.
 
     Snap! is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -1227,7 +1227,7 @@ IDE_Morph.prototype.createCorral = function () {
 // IDE_Morph layout
 
 IDE_Morph.prototype.fixLayout = function (situation) {
-    // situation is a string, i.e. 
+    // situation is a string, i.e.
     // 'selectSprite' or 'refreshPalette' or 'tabEditor'
     var padding = 5;
 
@@ -4478,8 +4478,8 @@ SpriteIconMorph.prototype.copySound = function (sound) {
 
 /*
     I am a selectable element in the SpriteEditor's "Costumes" tab, keeping
-    a self-updating thumbnail of the costume I'm respresenting, and a 
-    self-updating label of the costume's name (in case it is changed 
+    a self-updating thumbnail of the costume I'm respresenting, and a
+    self-updating label of the costume's name (in case it is changed
     elsewhere)
 */
 

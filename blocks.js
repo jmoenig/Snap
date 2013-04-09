@@ -11,7 +11,7 @@
 
     Copyright (C) 2013 by Jens Mšnig
 
-    This file is part of Snap!. 
+    This file is part of Snap!.
 
     Snap! is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -1588,9 +1588,9 @@ SyntaxElementMorph.prototype.endLayout = function () {
     special form: upvar
 
     %upvar - same as %t (inline variable reporter template)
-    
+
     special form: input name
-    
+
     %inputName - variable blob (used in input type dialog)
 
     examples:
@@ -4386,7 +4386,7 @@ ScriptsMorph.prototype.reactToDropOf = function (droppedMorph, hand) {
     Usually I am just a receptacle for inherited methods and attributes,
     however, if my 'type' attribute is set to one of the following
     values, I act as an iconic slot myself:
-    
+
         'list'    - a list symbol
 */
 
