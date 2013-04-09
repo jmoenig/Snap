@@ -4,10 +4,10 @@
 
     a simple XML DOM, encoder and parser for morphic.js
 
-    written by Jens Mšnig
+    written by Jens MÃ¶nig
     jens@moenig.org
 
-    Copyright (C) 2013 by Jens Mšnig
+    Copyright (C) 2013 by Jens MÃ¶nig
 
     This file is part of Snap!.
 

@@ -4,10 +4,10 @@
 
     list data structure and GUI for SNAP!
 
-    written by Jens Mšnig and Brian Harvey
+    written by Jens MÃ¶nig and Brian Harvey
     jens@moenig.org, bh@cs.berkeley.edu
 
-    Copyright (C) 2013 by Jens Mšnig and Brian Harvey
+    Copyright (C) 2013 by Jens MÃ¶nig and Brian Harvey
 
     This file is part of Snap!.
 
