@@ -1601,3 +1601,5 @@ ______
 130409
 ------
 * various formatting and encoding normalizations
+* Morphic: Formatting options for Triggers and MenuItems (and ListItems): bold, italic
+* Morphic: ListMorph (items) manipulation capabilites

@@ -1033,7 +1033,7 @@
 /*global window, HTMLCanvasElement, getMinimumFontHeight, FileReader, Audio,
 FileList, getBlurredShadowSupport*/
 
-var morphicVersion = '2013-March-11';
+var morphicVersion = '2013-April-09';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = getBlurredShadowSupport(); // check for Chrome-bug
 
@@ -6598,7 +6598,14 @@ MenuMorph.prototype.init = function (target, title, environment, fontSize) {
     this.edge = null;
 };
 
-MenuMorph.prototype.addItem = function (labelString, action, hint, color) {
+MenuMorph.prototype.addItem = function (
+    labelString,
+    action,
+    hint,
+    color,
+    bold, // bool
+    italic // bool
+) {
     /*
     labelString is normally a single-line string. But it can also be one
     of the following:
@@ -6611,7 +6618,9 @@ MenuMorph.prototype.addItem = function (labelString, action, hint, color) {
         localize(labelString || 'close'),
         action || nop,
         hint,
-        color]);
+        color,
+        bold || false,
+        italic || false]);
 };
 
 MenuMorph.prototype.addLine = function (width) {
@@ -6697,7 +6706,9 @@ MenuMorph.prototype.drawNew = function () {
                 MorphicPreferences.menuFontName,
                 myself.environment,
                 tuple[2], // bubble help hint
-                tuple[3] // color
+                tuple[3], // color
+                tuple[4], // bold
+                tuple[5] // italic
             );
         }
         if (isLine) {
@@ -7892,7 +7903,9 @@ function TriggerMorph(
     fontStyle,
     environment,
     hint,
-    labelColor
+    labelColor,
+    labelBold,
+    labelItalic
 ) {
     this.init(
         target,
@@ -7902,7 +7915,9 @@ function TriggerMorph(
         fontStyle,
         environment,
         hint,
-        labelColor
+        labelColor,
+        labelBold,
+        labelItalic
     );
 }
 
@@ -7914,7 +7929,9 @@ TriggerMorph.prototype.init = function (
     fontStyle,
     environment,
     hint,
-    labelColor
+    labelColor,
+    labelBold,
+    labelItalic
 ) {
     // additional properties:
     this.target = target || null;
@@ -7928,6 +7945,8 @@ TriggerMorph.prototype.init = function (
     this.highlightColor = new Color(192, 192, 192);
     this.pressColor = new Color(128, 128, 128);
     this.labelColor = labelColor || new Color(0, 0, 0);
+    this.labelBold = labelBold || false;
+    this.labelItalic = labelItalic || false;
 
     // initialize inherited properties:
     TriggerMorph.uber.init.call(this);
@@ -7976,8 +7995,8 @@ TriggerMorph.prototype.createLabel = function () {
         this.labelString,
         this.fontSize,
         this.fontStyle,
-        false, // bold
-        false, // italic
+        this.labelBold,
+        this.labelItalic,
         false, // numeric
         null, // shadow offset
         null, // shadow color
@@ -8014,7 +8033,9 @@ TriggerMorph.prototype.trigger = function () {
     in the environment as optionally specified.
     Note: if action is also a function, instead of becoming
     the argument itself it will be called to answer the argument.
-    for selections, Yes/No Choices etc:
+    for selections, Yes/No Choices etc. As second argument pass
+    myself, so I can be modified to reflect status changes, e.g.
+    inside a list box:
 
     else (if target is not a function):
 
@@ -8028,9 +8049,9 @@ TriggerMorph.prototype.trigger = function () {
     */
     if (typeof this.target === 'function') {
         if (typeof this.action === 'function') {
-            this.target.call(this.environment, this.action.call());
+            this.target.call(this.environment, this.action.call(), this);
         } else {
-            this.target.call(this.environment, this.action);
+            this.target.call(this.environment, this.action, this);
         }
     } else {
         if (typeof this.action === 'function') {
@@ -8115,7 +8136,9 @@ function MenuItemMorph(
     fontStyle,
     environment,
     hint,
-    color
+    color,
+    bold,
+    italic
 ) {
     this.init(
         target,
@@ -8125,7 +8148,9 @@ function MenuItemMorph(
         fontStyle,
         environment,
         hint,
-        color
+        color,
+        bold,
+        italic
     );
 }
 
@@ -8179,7 +8204,9 @@ MenuItemMorph.prototype.createLabelString = function (string) {
     var lbl = new TextMorph(
         string,
         this.fontSize,
-        this.fontStyle
+        this.fontStyle,
+        this.labelBold,
+        this.labelItalic
     );
     lbl.setColor(this.labelColor);
     return lbl;
@@ -8830,13 +8857,16 @@ function ListMorph(elements, labelGetter, format) {
 
         [
             [<color>, <single-argument predicate>],
+            ['bold', <single-argument predicate>],
+            ['italic', <single-argument predicate>],
             ...
         ]
 
-    multiple color conditions can be passed in such a format list, the
+    multiple conditions can be passed in such a format list, the
     last predicate to evaluate true when given the list element sets
-    the given color. If no condition is met, the default color (black)
-    will be assigned.
+    the given format category (color, bold, italic).
+    If no condition is met, the default format (color black, non-bold,
+    non-italic) will be assigned.
 
     An example of how to use fomats can be found in the InspectorMorph's
     "markOwnProperties" mechanism.
@@ -8867,7 +8897,8 @@ ListMorph.prototype.init = function (elements, labelGetter, format) {
     this.labelGetter = labelGetter;
     this.format = format;
     this.listContents = null;
-    this.selected = null;
+    this.selected = null; // actual element currently selected
+    this.active = null; // menu item representing the selected element
     this.action = null;
     this.acceptsDrops = false;
     this.buildListContents();
@@ -8887,18 +8918,28 @@ ListMorph.prototype.buildListContents = function () {
         this.elements = ['(empty)'];
     }
     this.elements.forEach(function (element) {
-        var color = null;
+        var color = null,
+            bold = false,
+            italic = false;
 
         myself.format.forEach(function (pair) {
             if (pair[1].call(null, element)) {
-                color = pair[0];
+                if (pair[0] === 'bold') {
+                    bold = true;
+                } else if (pair[0] === 'italic') {
+                    italic = true;
+                } else { // assume it's a color
+                    color = pair[0];
+                }
             }
         });
         myself.listContents.addItem(
             myself.labelGetter(element), // label string
             element, // action
             null, // hint
-            color
+            color,
+            bold,
+            italic
         );
     });
     this.listContents.setPosition(this.contents.position());
@@ -8907,8 +8948,9 @@ ListMorph.prototype.buildListContents = function () {
     this.addContents(this.listContents);
 };
 
-ListMorph.prototype.select = function (item) {
+ListMorph.prototype.select = function (item, trigger) {
     this.selected = item;
+    this.active = trigger;
     if (this.action) {
         this.action.call(null, item);
     }
