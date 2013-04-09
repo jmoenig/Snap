@@ -1601,3 +1601,9 @@ ______
 130409
 ------
 * various formatting and encoding normalizations
+* Morphic: Formatting options for Triggers and MenuItems (and ListItems): bold, italic
+* Morphic: ListMorph (items) manipulation capabilites
+* GUI: display shared project names bold typed in the project dialog
+* GUI: Feedback msg when sharing / unsharing projects
+* GUI: Shield (hide) IDE while opening a shared project for presentation
+* GUI: Support for debugging shared projects

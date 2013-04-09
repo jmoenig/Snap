@@ -143,6 +143,7 @@ IDE_Morph.prototype.init = function (isAutoFill) {
     this.stageRatio = 1; // for IDE animations, e.g. when zooming
 
     this.loadNewProject = false; // flag when starting up translated
+    this.shield = null;
 
     // initialize inherited properties:
     IDE_Morph.uber.init.call(this);
@@ -248,6 +249,11 @@ IDE_Morph.prototype.openIn = function (world) {
         this.toggleAppMode(true);
         this.runScripts();
     } else if (location.hash.substr(0, 9) === '#present:') {
+        this.shield = new Morph();
+        this.shield.color = this.color;
+        this.shield.setExtent(this.parent.extent());
+        this.parent.add(this.shield);
+
         myself.showMessage('Fetching project\nfrom the cloud...');
         SnapCloud.getPublicProject(
             location.hash.substr(9),
@@ -261,6 +267,8 @@ IDE_Morph.prototype.openIn = function (world) {
                         myself.rawOpenCloudDataString(projectData);
                     },
                     function () {
+                        myself.shield.destroy();
+                        myself.shield = null;
                         msg.destroy();
                         myself.toggleAppMode(true);
                         myself.runScripts();
@@ -1686,7 +1694,6 @@ IDE_Morph.prototype.cloudMenu = function () {
             null,
             new Color(100, 0, 0)
         );
-        menu.addLine();
         menu.addItem(
             'export project as cloud data...',
             function () {
@@ -1697,6 +1704,53 @@ IDE_Morph.prototype.cloudMenu = function () {
                         myself.exportProjectAsCloudData(name);
                     });
                 }
+            },
+            null,
+            new Color(100, 0, 0)
+        );
+        menu.addLine();
+        menu.addItem(
+            'open shared project from cloud...',
+            function () {
+                myself.prompt('Author name…', function (usr) {
+                    myself.prompt('Project name...', function (prj) {
+                        var id = 'Username=' +
+                            encodeURIComponent(usr) +
+                            '&ProjectName=' +
+                            encodeURIComponent(prj);
+                        myself.showMessage(
+                            'Fetching project\nfrom the cloud...'
+                        );
+                        SnapCloud.getPublicProject(
+                            id,
+                            function (projectData) {
+                                var msg;
+                                if (!Process.prototype.isCatchingErrors) {
+                                    window.open(
+                                        'data:text/xml,' + projectData
+                                    );
+                                }
+                                myself.nextSteps([
+                                    function () {
+                                        msg = myself.showMessage(
+                                            'Opening project...'
+                                        );
+                                    },
+                                    function () {
+                                        myself.rawOpenCloudDataString(
+                                            projectData
+                                        );
+                                    },
+                                    function () {
+                                        msg.destroy();
+                                    }
+                                ]);
+                            },
+                            myself.cloudError()
+                        );
+
+                    });
+                });
             },
             null,
             new Color(100, 0, 0)
@@ -3235,6 +3289,10 @@ IDE_Morph.prototype.cloudError = function () {
         // if none is found, show an error dialog box
         var response = responseText,
             explanation = getURL('http://snap.berkeley.edu/cloudmsg.txt');
+        if (myself.shield) {
+            myself.shield.destroy();
+            myself.shield = null;
+        }
         if (explanation) {
             myself.showMessage(explanation);
             return;
@@ -3785,7 +3843,13 @@ ProjectDialogMorph.prototype.installCloudProjectList = function (pl) {
         this.projectList.length > 0 ?
                 function (element) {
                     return element.ProjectName;
-                } : null
+                } : null,
+        [ // format: display shared project names bold
+            [
+                'bold',
+                function (proj) {return proj.Public === 'true'; }
+            ]
+        ]
     );
 
     this.fixListFieldItemColors();
@@ -4012,7 +4076,8 @@ ProjectDialogMorph.prototype.deleteProject = function () {
 
 ProjectDialogMorph.prototype.shareProject = function () {
     var myself = this,
-        proj = this.listField.selected;
+        proj = this.listField.selected,
+        entry = this.listField.active;
 
     if (proj) {
         this.ide.confirm(
@@ -4021,6 +4086,7 @@ ProjectDialogMorph.prototype.shareProject = function () {
             ) + '\n"' + proj.ProjectName + '"?',
             'Share Project',
             function () {
+                myself.ide.showMessage('sharing\nproject...');
                 SnapCloud.reconnect(
                     function () {
                         SnapCloud.callService(
@@ -4028,7 +4094,10 @@ ProjectDialogMorph.prototype.shareProject = function () {
                             function () {
                                 SnapCloud.disconnect();
                                 proj.Public = 'true';
-                                myself.listField.select(proj);
+                                entry.label.isBold = true;
+                                entry.label.drawNew();
+                                entry.label.changed();
+                                myself.listField.select(proj, entry);
                                 myself.ide.showMessage('shared.', 2);
                             },
                             myself.ide.cloudError(),
@@ -4044,7 +4113,9 @@ ProjectDialogMorph.prototype.shareProject = function () {
 
 ProjectDialogMorph.prototype.unshareProject = function () {
     var myself = this,
-        proj = this.listField.selected;
+        proj = this.listField.selected,
+        entry = this.listField.active;
+
 
     if (proj) {
         this.ide.confirm(
@@ -4053,6 +4124,7 @@ ProjectDialogMorph.prototype.unshareProject = function () {
             ) + '\n"' + proj.ProjectName + '"?',
             'Unshare Project',
             function () {
+                myself.ide.showMessage('unsharing\nproject...');
                 SnapCloud.reconnect(
                     function () {
                         SnapCloud.callService(
@@ -4060,7 +4132,10 @@ ProjectDialogMorph.prototype.unshareProject = function () {
                             function () {
                                 SnapCloud.disconnect();
                                 proj.Public = 'false';
-                                myself.listField.select(proj);
+                                entry.label.isBold = false;
+                                entry.label.drawNew();
+                                entry.label.changed();
+                                myself.listField.select(proj, entry);
                                 myself.ide.showMessage('unshared.', 2);
                             },
                             myself.ide.cloudError(),
