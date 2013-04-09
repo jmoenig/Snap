@@ -8,7 +8,7 @@
 
 	Copyright (C) 2012 by Jens Mönig
 
-	This file is part of Snap!. 
+	This file is part of Snap!.
 
 	Snap! is free software: you can redistribute it and/or modify
 	it under the terms of the GNU Affero General Public License as
@@ -265,21 +265,21 @@ SnapTranslator.dict.ko = {
         abbreviation.
 
         For example:
-        
+
             'say %s for %n secs'
 
         can currently not be changed into
-        
+
             'say %n secs long %s'
 
         and still work as intended.
 
         Similarly
-        
+
             'point towards %dst'
 
         cannot be changed into
-        
+
             'point towards %cst'
 
         without breaking its functionality.
@@ -386,7 +386,7 @@ SnapTranslator.dict.ko = {
         '템포를 %n bpm으로 맞추기',
     'tempo':
         '템포',
-        
+
 
     // pen:
     'clear':
@@ -579,7 +579,7 @@ SnapTranslator.dict.ko = {
         '%s 을(를) %idx 위치에 추가하기 %l',
     'replace item %idx of %l with %s':
         '%idx 항목 %l 에 %s 로 교체하기',
-        
+
     // other
     'Make a block':
         '블록 만들기',
