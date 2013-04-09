@@ -269,7 +269,7 @@ IDE_Morph.prototype.openIn = function (world) {
         );
     } else if (location.hash.substr(0, 6) === '#lang:') {
         this.setLanguage(location.hash.substr(6));
-        this.newProject();
+        this.loadNewProject = true;
     } else if (location.hash.substr(0, 7) === '#signup') {
         this.createCloudAccount();
     }
@@ -2177,7 +2177,9 @@ IDE_Morph.prototype.newProject = function () {
     if (this.stage) {
         this.stage.destroy();
     }
-    location.hash = '';
+    if (location.hash.substr(0, 6) !== '#lang:') {
+        location.hash = '';
+    }
     this.globalVariables = new VariableFrame();
     this.currentSprite = new SpriteMorph(this.globalVariables);
     this.sprites = new List([this.currentSprite]);
@@ -2788,21 +2790,27 @@ IDE_Morph.prototype.setLanguage = function (lang) {
 IDE_Morph.prototype.reflectLanguage = function (lang) {
     var projectData;
     SnapTranslator.language = lang;
-    if (Process.prototype.isCatchingErrors) {
-        try {
+    if (!this.loadNewProject) {
+        if (Process.prototype.isCatchingErrors) {
+            try {
+                projectData = this.serializer.serialize(this.stage);
+            } catch (err) {
+                this.showMessage('Serialization failed: ' + err);
+            }
+        } else {
             projectData = this.serializer.serialize(this.stage);
-        } catch (err) {
-            this.showMessage('Serialization failed: ' + err);
         }
-    } else {
-        projectData = this.serializer.serialize(this.stage);
     }
     SpriteMorph.prototype.initBlocks();
     this.spriteBar.tabBar.tabTo('scripts');
     this.createCategories();
     this.createCorralBar();
     this.fixLayout();
-    this.openProjectString(projectData);
+    if (this.loadNewProject){
+        this.newProject();
+    } else {
+        this.openProjectString(projectData);
+    }
 };
 
 // IDE_Morph blocks scaling
