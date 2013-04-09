@@ -1604,3 +1604,4 @@ ______
 * Morphic: Formatting options for Triggers and MenuItems (and ListItems): bold, italic
 * Morphic: ListMorph (items) manipulation capabilites
 * GUI: display shared project names bold typed in the project dialog
+* GUI: Feedback msg when sharing / unsharing projects
