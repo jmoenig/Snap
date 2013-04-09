@@ -8091,6 +8091,10 @@ TriggerMorph.prototype.mouseClickLeft = function () {
     this.trigger();
 };
 
+TriggerMorph.prototype.rootForGrab = function () {
+    return null;
+};
+
 // TriggerMorph bubble help:
 
 TriggerMorph.prototype.bubbleHelp = function (contents) {
