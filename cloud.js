@@ -4,9 +4,9 @@
 
     a backend API for SNAP!
 
-    written by Jens Mšnig
+    written by Jens Mönig
 
-    Copyright (C) 2013 by Jens Mšnig
+    Copyright (C) 2013 by Jens Mönig
 
     This file is part of Snap!.
 
