@@ -8,7 +8,7 @@
 
 	Copyright (C) 2012 by Jens Mönig
 
-	This file is part of Snap!. 
+	This file is part of Snap!.
 
 	Snap! is free software: you can redistribute it and/or modify
 	it under the terms of the GNU Affero General Public License as
@@ -265,21 +265,21 @@ SnapTranslator.dict.ja = {
         abbreviation.
 
         For example:
-        
+
             'say %s for %n secs'
 
         can currently not be changed into
-        
+
             'say %n secs long %s'
 
         and still work as intended.
 
         Similarly
-        
+
             'point towards %dst'
 
         cannot be changed into
-        
+
             'point towards %cst'
 
         without breaking its functionality.
@@ -981,7 +981,7 @@ SnapTranslator.dict.ja = {
         '複数の引数 (値は引数のリスト)',
     'Upvar - make internal variable visible to caller':
         'Upvar - 呼び出し元から見える内部的な変数',
- 
+
    // About Snap
     'About Snap':
         'Snapについて',

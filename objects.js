@@ -6,12 +6,12 @@
     based on morphic.js, blocks.js and threads.js
     inspired by Scratch
 
-    written by Jens Mšnig
+    written by Jens MÃ¶nig
     jens@moenig.org
 
-    Copyright (C) 2013 by Jens Mšnig
+    Copyright (C) 2013 by Jens MÃ¶nig
 
-    This file is part of Snap!. 
+    This file is part of Snap!.
 
     Snap! is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -5080,7 +5080,7 @@ CellMorph.prototype.mouseClickLeft = function (pos) {
 /*
     I am a little window which observes some value and continuously
     updates itself accordingly.
-    
+
     My target can be either a SpriteMorph or a VariableFrame.
 */
 
@@ -5337,7 +5337,7 @@ WatcherMorph.prototype.fixLayout = function () {
 
 // WatcherMorph events:
 
-/* 
+/*
 // Scratch-like watcher-toggling, commented out b/c we have a drop-down menu
 
 WatcherMorph.prototype.mouseClickLeft = function () {

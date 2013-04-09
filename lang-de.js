@@ -4,11 +4,11 @@
 
     German translation for SNAP!
 
-    written by Jens Mšnig
+    written by Jens MÃ¶nig
 
-    Copyright (C) 2013 by Jens Mšnig
+    Copyright (C) 2013 by Jens MÃ¶nig
 
-    This file is part of Snap!. 
+    This file is part of Snap!.
 
     Snap! is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -171,10 +171,10 @@ SnapTranslator.dict.de = {
 /*
     Special characters: (see <http://0xcc.net/jsescape/>)
 
-    €, Š   \u00c4, \u00e4
-    …, š   \u00d6, \u00f6
-    †, Ÿ   \u00dc, \u00fc
-    §      \u00df
+    Ã„, Ã¤   \u00c4, \u00e4
+    Ã–, Ã¶   \u00d6, \u00f6
+    Ãœ, Ã¼   \u00dc, \u00fc
+    ÃŸ      \u00df
 */
 
     // translations meta information
@@ -265,21 +265,21 @@ SnapTranslator.dict.de = {
         abbreviation.
 
         For example:
-        
+
             'say %s for %n secs'
 
         can currently not be changed into
-        
+
             'say %n secs long %s'
 
         and still work as intended.
 
         Similarly
-        
+
             'point towards %dst'
 
         cannot be changed into
-        
+
             'point towards %cst'
 
         without breaking its functionality.

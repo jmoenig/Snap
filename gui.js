@@ -6,12 +6,12 @@
     based on morphic.js, blocks.js, threads.js and objects.js
     inspired by Scratch
 
-    written by Jens Mšnig
+    written by Jens MÃ¶nig
     jens@moenig.org
 
-    Copyright (C) 2013 by Jens Mšnig
+    Copyright (C) 2013 by Jens MÃ¶nig
 
-    This file is part of Snap!. 
+    This file is part of Snap!.
 
     Snap! is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -269,7 +269,7 @@ IDE_Morph.prototype.openIn = function (world) {
         );
     } else if (location.hash.substr(0, 6) === '#lang:') {
         this.setLanguage(location.hash.substr(6));
-        this.newProject();
+        this.loadNewProject = true;
     } else if (location.hash.substr(0, 7) === '#signup') {
         this.createCloudAccount();
     }
@@ -1227,7 +1227,7 @@ IDE_Morph.prototype.createCorral = function () {
 // IDE_Morph layout
 
 IDE_Morph.prototype.fixLayout = function (situation) {
-    // situation is a string, i.e. 
+    // situation is a string, i.e.
     // 'selectSprite' or 'refreshPalette' or 'tabEditor'
     var padding = 5;
 
@@ -2177,7 +2177,9 @@ IDE_Morph.prototype.newProject = function () {
     if (this.stage) {
         this.stage.destroy();
     }
-    location.hash = '';
+    if (location.hash.substr(0, 6) !== '#lang:') {
+        location.hash = '';
+    }
     this.globalVariables = new VariableFrame();
     this.currentSprite = new SpriteMorph(this.globalVariables);
     this.sprites = new List([this.currentSprite]);
@@ -2788,21 +2790,27 @@ IDE_Morph.prototype.setLanguage = function (lang) {
 IDE_Morph.prototype.reflectLanguage = function (lang) {
     var projectData;
     SnapTranslator.language = lang;
-    if (Process.prototype.isCatchingErrors) {
-        try {
+    if (!this.loadNewProject) {
+        if (Process.prototype.isCatchingErrors) {
+            try {
+                projectData = this.serializer.serialize(this.stage);
+            } catch (err) {
+                this.showMessage('Serialization failed: ' + err);
+            }
+        } else {
             projectData = this.serializer.serialize(this.stage);
-        } catch (err) {
-            this.showMessage('Serialization failed: ' + err);
         }
-    } else {
-        projectData = this.serializer.serialize(this.stage);
     }
     SpriteMorph.prototype.initBlocks();
     this.spriteBar.tabBar.tabTo('scripts');
     this.createCategories();
     this.createCorralBar();
     this.fixLayout();
-    this.openProjectString(projectData);
+    if (this.loadNewProject){
+        this.newProject();
+    } else {
+        this.openProjectString(projectData);
+    }
 };
 
 // IDE_Morph blocks scaling
@@ -4478,8 +4486,8 @@ SpriteIconMorph.prototype.copySound = function (sound) {
 
 /*
     I am a selectable element in the SpriteEditor's "Costumes" tab, keeping
-    a self-updating thumbnail of the costume I'm respresenting, and a 
-    self-updating label of the costume's name (in case it is changed 
+    a self-updating thumbnail of the costume I'm respresenting, and a
+    self-updating label of the costume's name (in case it is changed
     elsewhere)
 */
 
