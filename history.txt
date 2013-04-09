@@ -1597,3 +1597,7 @@ ______
 * Portuguese and Italian translations update, thanks, Manuel and Stefano!
 * GUI fix: switch to edit mode and tab to scripts when loading a project,
 * Objects: new feature (hidden in shift-clicked stage context menu): turn pen trails into new costume
+
+130409
+------
+* various formatting and encoding normalizations
