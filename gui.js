@@ -143,6 +143,7 @@ IDE_Morph.prototype.init = function (isAutoFill) {
     this.stageRatio = 1; // for IDE animations, e.g. when zooming
 
     this.loadNewProject = false; // flag when starting up translated
+    this.shield = null;
 
     // initialize inherited properties:
     IDE_Morph.uber.init.call(this);
@@ -248,6 +249,11 @@ IDE_Morph.prototype.openIn = function (world) {
         this.toggleAppMode(true);
         this.runScripts();
     } else if (location.hash.substr(0, 9) === '#present:') {
+        this.shield = new Morph();
+        this.shield.color = this.color;
+        this.shield.setExtent(this.parent.extent());
+        this.parent.add(this.shield);
+
         myself.showMessage('Fetching project\nfrom the cloud...');
         SnapCloud.getPublicProject(
             location.hash.substr(9),
@@ -261,6 +267,8 @@ IDE_Morph.prototype.openIn = function (world) {
                         myself.rawOpenCloudDataString(projectData);
                     },
                     function () {
+                        this.shield.destroy();
+                        this.shield = null;
                         msg.destroy();
                         myself.toggleAppMode(true);
                         myself.runScripts();
@@ -3235,6 +3243,10 @@ IDE_Morph.prototype.cloudError = function () {
         // if none is found, show an error dialog box
         var response = responseText,
             explanation = getURL('http://snap.berkeley.edu/cloudmsg.txt');
+        if (myself.shield) {
+            myself.shield.destroy();
+            myself.shield = null;
+        }
         if (explanation) {
             myself.showMessage(explanation);
             return;

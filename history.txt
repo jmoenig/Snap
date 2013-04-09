@@ -1605,3 +1605,4 @@ ______
 * Morphic: ListMorph (items) manipulation capabilites
 * GUI: display shared project names bold typed in the project dialog
 * GUI: Feedback msg when sharing / unsharing projects
+* GUI: Shield (hide) IDE while opening a shared project for presentation
