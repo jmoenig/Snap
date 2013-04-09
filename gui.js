@@ -4028,6 +4028,7 @@ ProjectDialogMorph.prototype.shareProject = function () {
             ) + '\n"' + proj.ProjectName + '"?',
             'Share Project',
             function () {
+                myself.ide.showMessage('sharing\nproject...');
                 SnapCloud.reconnect(
                     function () {
                         SnapCloud.callService(
@@ -4065,6 +4066,7 @@ ProjectDialogMorph.prototype.unshareProject = function () {
             ) + '\n"' + proj.ProjectName + '"?',
             'Unshare Project',
             function () {
+                myself.ide.showMessage('unsharing\nproject...');
                 SnapCloud.reconnect(
                     function () {
                         SnapCloud.callService(
