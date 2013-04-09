@@ -3785,7 +3785,13 @@ ProjectDialogMorph.prototype.installCloudProjectList = function (pl) {
         this.projectList.length > 0 ?
                 function (element) {
                     return element.ProjectName;
-                } : null
+                } : null,
+        [ // format: display shared project names bold
+            [
+                'bold',
+                function (proj) {return proj.Public === 'true'; }
+            ]
+        ]
     );
 
     this.fixListFieldItemColors();
@@ -4012,7 +4018,8 @@ ProjectDialogMorph.prototype.deleteProject = function () {
 
 ProjectDialogMorph.prototype.shareProject = function () {
     var myself = this,
-        proj = this.listField.selected;
+        proj = this.listField.selected,
+        entry = this.listField.active;
 
     if (proj) {
         this.ide.confirm(
@@ -4028,7 +4035,10 @@ ProjectDialogMorph.prototype.shareProject = function () {
                             function () {
                                 SnapCloud.disconnect();
                                 proj.Public = 'true';
-                                myself.listField.select(proj);
+                                entry.label.isBold = true;
+                                entry.label.drawNew();
+                                entry.label.changed();
+                                myself.listField.select(proj, entry);
                                 myself.ide.showMessage('shared.', 2);
                             },
                             myself.ide.cloudError(),
@@ -4044,7 +4054,9 @@ ProjectDialogMorph.prototype.shareProject = function () {
 
 ProjectDialogMorph.prototype.unshareProject = function () {
     var myself = this,
-        proj = this.listField.selected;
+        proj = this.listField.selected,
+        entry = this.listField.active;
+
 
     if (proj) {
         this.ide.confirm(
@@ -4060,7 +4072,10 @@ ProjectDialogMorph.prototype.unshareProject = function () {
                             function () {
                                 SnapCloud.disconnect();
                                 proj.Public = 'false';
-                                myself.listField.select(proj);
+                                entry.label.isBold = false;
+                                entry.label.drawNew();
+                                entry.label.changed();
+                                myself.listField.select(proj, entry);
                                 myself.ide.showMessage('unshared.', 2);
                             },
                             myself.ide.cloudError(),
