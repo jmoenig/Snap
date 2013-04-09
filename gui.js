@@ -267,8 +267,8 @@ IDE_Morph.prototype.openIn = function (world) {
                         myself.rawOpenCloudDataString(projectData);
                     },
                     function () {
-                        this.shield.destroy();
-                        this.shield = null;
+                        myself.shield.destroy();
+                        myself.shield = null;
                         msg.destroy();
                         myself.toggleAppMode(true);
                         myself.runScripts();
@@ -1694,7 +1694,6 @@ IDE_Morph.prototype.cloudMenu = function () {
             null,
             new Color(100, 0, 0)
         );
-        menu.addLine();
         menu.addItem(
             'export project as cloud data...',
             function () {
@@ -1705,6 +1704,53 @@ IDE_Morph.prototype.cloudMenu = function () {
                         myself.exportProjectAsCloudData(name);
                     });
                 }
+            },
+            null,
+            new Color(100, 0, 0)
+        );
+        menu.addLine();
+        menu.addItem(
+            'open shared project from cloud...',
+            function () {
+                myself.prompt('Author name…', function (usr) {
+                    myself.prompt('Project name...', function (prj) {
+                        var id = 'Username=' +
+                            encodeURIComponent(usr) +
+                            '&ProjectName=' +
+                            encodeURIComponent(prj);
+                        myself.showMessage(
+                            'Fetching project\nfrom the cloud...'
+                        );
+                        SnapCloud.getPublicProject(
+                            id,
+                            function (projectData) {
+                                var msg;
+                                if (!Process.prototype.isCatchingErrors) {
+                                    window.open(
+                                        'data:text/xml,' + projectData
+                                    );
+                                }
+                                myself.nextSteps([
+                                    function () {
+                                        msg = myself.showMessage(
+                                            'Opening project...'
+                                        );
+                                    },
+                                    function () {
+                                        myself.rawOpenCloudDataString(
+                                            projectData
+                                        );
+                                    },
+                                    function () {
+                                        msg.destroy();
+                                    }
+                                ]);
+                            },
+                            myself.cloudError()
+                        );
+
+                    });
+                });
             },
             null,
             new Color(100, 0, 0)

@@ -1606,3 +1606,4 @@ ______
 * GUI: display shared project names bold typed in the project dialog
 * GUI: Feedback msg when sharing / unsharing projects
 * GUI: Shield (hide) IDE while opening a shared project for presentation
+* GUI: Support for debugging shared projects
