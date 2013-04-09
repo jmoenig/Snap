@@ -6,10 +6,10 @@
     based on morphic.js, widgets.js blocks.js, threads.js and objects.js
     inspired by Scratch
 
-    written by Jens Mönig
+    written by Jens Mšnig
     jens@moenig.org
 
-    Copyright (C) 2013 by Jens Mönig
+    Copyright (C) 2013 by Jens Mšnig
 
     This file is part of Snap!.
 

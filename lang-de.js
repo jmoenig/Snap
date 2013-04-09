@@ -4,9 +4,9 @@
 
     German translation for SNAP!
 
-    written by Jens Mönig
+    written by Jens Mšnig
 
-    Copyright (C) 2013 by Jens Mönig
+    Copyright (C) 2013 by Jens Mšnig
 
     This file is part of Snap!.
 
@@ -171,10 +171,10 @@ SnapTranslator.dict.de = {
 /*
     Special characters: (see <http://0xcc.net/jsescape/>)
 
-    Ä, ä   \u00c4, \u00e4
-    Ö, ö   \u00d6, \u00f6
-    Ü, ü   \u00dc, \u00fc
-    ß      \u00df
+    €, Š   \u00c4, \u00e4
+    …, š   \u00d6, \u00f6
+    †, Ÿ   \u00dc, \u00fc
+    §      \u00df
 */
 
     // translations meta information
