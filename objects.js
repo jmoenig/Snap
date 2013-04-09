@@ -2138,7 +2138,7 @@ SpriteMorph.prototype.setHue = function (num) {
         x = this.xPosition(),
         y = this.yPosition();
 
-    hsv[0] = Math.max(Math.min(parseFloat(num), 100), 0) / 100;
+    hsv[0] = Math.max(Math.min(+num || 0, 100), 0) / 100;
     hsv[1] = 1; // we gotta fix this at some time
     this.color.set_hsv.apply(this.color, hsv);
     if (!this.costume) {
@@ -2149,7 +2149,7 @@ SpriteMorph.prototype.setHue = function (num) {
 };
 
 SpriteMorph.prototype.changeHue = function (delta) {
-    this.setHue(this.getHue() + parseFloat(delta));
+    this.setHue(this.getHue() + (+delta || 0));
 };
 
 SpriteMorph.prototype.getBrightness = function () {
@@ -2162,7 +2162,7 @@ SpriteMorph.prototype.setBrightness = function (num) {
         y = this.yPosition();
 
     hsv[1] = 1; // we gotta fix this at some time
-    hsv[2] = Math.max(Math.min(parseFloat(num), 100), 0) / 100;
+    hsv[2] = Math.max(Math.min(+num || 0, 100), 0) / 100;
     this.color.set_hsv.apply(this.color, hsv);
     if (!this.costume) {
         this.drawNew();
@@ -2172,7 +2172,7 @@ SpriteMorph.prototype.setBrightness = function (num) {
 };
 
 SpriteMorph.prototype.changeBrightness = function (delta) {
-    this.setBrightness(this.getBrightness() + parseFloat(delta));
+    this.setBrightness(this.getBrightness() + (+delta || 0));
 };
 
 // SpriteMorph layers
@@ -2185,13 +2185,12 @@ SpriteMorph.prototype.comeToFront = function () {
 };
 
 SpriteMorph.prototype.goBack = function (layers) {
-    var layer;
-
+    var layer, newLayer = +layers || 0;
     if (!this.parent) {return null; }
     layer = this.parent.children.indexOf(this);
-    if (layer < parseFloat(layers)) {return null; }
+    if (layer < newLayer) {return null; }
     this.parent.removeChild(this);
-    this.parent.children.splice(layer - parseFloat(layers), null, this);
+    this.parent.children.splice(layer - newLayer, null, this);
     this.parent.changed();
 };
 
@@ -2251,11 +2250,13 @@ SpriteMorph.prototype.clear = function () {
 
 SpriteMorph.prototype.setSize = function (size) {
     // pen size
-    this.size = Math.min(Math.max(parseFloat(size), 0.0001), 1000);
+    if (!isNaN(size)) {
+        this.size = Math.min(Math.max(+size, 0.0001), 1000);
+    }
 };
 
 SpriteMorph.prototype.changeSize = function (delta) {
-    this.setSize(this.size + parseFloat(delta));
+    this.setSize(this.size + (+delta || 0));
 };
 
 // SpriteMorph scale
@@ -2273,7 +2274,7 @@ SpriteMorph.prototype.setScale = function (percentage) {
     if (isWarped) {
         this.endWarp();
     }
-    this.scale = Math.max(parseFloat((percentage || '0') / 100), 0.01);
+    this.scale = Math.max((+percentage || 0) / 100, 0.01);
     this.changed();
     this.drawNew();
     this.changed();
@@ -2285,7 +2286,7 @@ SpriteMorph.prototype.setScale = function (percentage) {
 };
 
 SpriteMorph.prototype.changeScale = function (delta) {
-    this.setScale(this.getScale() + parseFloat(delta || '0'));
+    this.setScale(this.getScale() + (+delta || 0));
 };
 
 // SpriteMorph graphic effects
@@ -2293,8 +2294,7 @@ SpriteMorph.prototype.changeScale = function (delta) {
 SpriteMorph.prototype.setEffect = function (effect, value) {
     var eff = effect instanceof Array ? effect[0] : null;
     if (eff === 'ghost') {
-        this.alpha = 1 -
-            Math.min(Math.max(parseFloat(value), 0), 100) / 100;
+        this.alpha = 1 - Math.min(Math.max(+value || 0, 0), 100) / 100;
         this.changed();
     }
 };
@@ -2306,7 +2306,7 @@ SpriteMorph.prototype.getGhostEffect = function () {
 SpriteMorph.prototype.changeEffect = function (effect, value) {
     var eff = effect instanceof Array ? effect[0] : null;
     if (eff === 'ghost') {
-        this.setEffect(effect, this.getGhostEffect() + parseFloat(value));
+        this.setEffect(effect, this.getGhostEffect() + (+value || 0));
     }
 };
 
@@ -2425,7 +2425,7 @@ SpriteMorph.prototype.drawLine = function (start, dest) {
 SpriteMorph.prototype.forward = function (steps) {
     var start = this.rotationCenter(),
         dest,
-        dist = parseFloat(steps * this.parent.scale);
+        dist = steps * this.parent.scale || 0;
 
     if (dist >= 0) {
         dest = this.position().distanceAngle(dist, this.heading);
@@ -2461,11 +2461,11 @@ SpriteMorph.prototype.faceToXY = function (x, y) {
 };
 
 SpriteMorph.prototype.turn = function (degrees) {
-    this.setHeading(this.heading + parseFloat(degrees || '0'));
+    this.setHeading(this.heading + (+degrees || 0));
 };
 
 SpriteMorph.prototype.turnLeft = function (degrees) {
-    this.setHeading(this.heading - parseFloat(degrees || '0'));
+    this.setHeading(this.heading - (+degrees || 0));
 };
 
 SpriteMorph.prototype.xPosition = function () {
@@ -2507,8 +2507,8 @@ SpriteMorph.prototype.gotoXY = function (x, y) {
         newY,
         dest;
 
-    newX = stage.center().x + (parseFloat(x || '0') * stage.scale);
-    newY = stage.center().y - (parseFloat(y || '0') * stage.scale);
+    newX = stage.center().x + (+x || 0) * stage.scale;
+    newY = stage.center().y - (+y || 0) * stage.scale;
     if (this.costume) {
         dest = new Point(newX, newY).subtract(this.rotationOffset);
     } else {
@@ -2528,19 +2528,19 @@ SpriteMorph.prototype.silentGotoXY = function (x, y) {
 };
 
 SpriteMorph.prototype.setXPosition = function (num) {
-    this.gotoXY(parseFloat(num), this.yPosition());
+    this.gotoXY(+num || 0, this.yPosition());
 };
 
 SpriteMorph.prototype.changeXPosition = function (delta) {
-    this.setXPosition(this.xPosition() + parseFloat(delta));
+    this.setXPosition(this.xPosition() + (+delta || 0));
 };
 
 SpriteMorph.prototype.setYPosition = function (num) {
-    this.gotoXY(this.xPosition(), parseFloat(num));
+    this.gotoXY(this.xPosition(), +num || 0);
 };
 
 SpriteMorph.prototype.changeYPosition = function (delta) {
-    this.setYPosition(this.yPosition() + parseFloat(delta));
+    this.setYPosition(this.yPosition() + (+delta || 0));
 };
 
 SpriteMorph.prototype.glide = function (
@@ -3306,11 +3306,11 @@ StageMorph.prototype.getTimer = function () {
 // StageMorph tempo
 
 StageMorph.prototype.setTempo = function (bpm) {
-    this.tempo = Math.max(20, parseFloat(bpm || '0'));
+    this.tempo = Math.max(20, (+bpm || 0));
 };
 
 StageMorph.prototype.changeTempo = function (delta) {
-    this.setTempo(this.getTempo() + parseFloat(delta || '0'));
+    this.setTempo(this.getTempo() + (+delta || 0));
 };
 
 StageMorph.prototype.getTempo = function () {
