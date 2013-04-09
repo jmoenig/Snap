@@ -68,7 +68,7 @@ sb, CommentMorph, CommandBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2013-April-08';
+modules.gui = '2013-April-09';
 
 // Declarations
 
@@ -141,6 +141,8 @@ IDE_Morph.prototype.init = function (isAutoFill) {
 
     this.isAnimating = true;
     this.stageRatio = 1; // for IDE animations, e.g. when zooming
+
+    this.loadNewProject = false; // flag when starting up translated
 
     // initialize inherited properties:
     IDE_Morph.uber.init.call(this);
@@ -2806,7 +2808,7 @@ IDE_Morph.prototype.reflectLanguage = function (lang) {
     this.createCategories();
     this.createCorralBar();
     this.fixLayout();
-    if (this.loadNewProject){
+    if (this.loadNewProject) {
         this.newProject();
     } else {
         this.openProjectString(projectData);
