@@ -4,7 +4,7 @@
 
     Russian translation for SNAP!
 
-    This file is part of Snap!. 
+    This file is part of Snap!.
 
     Snap! is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -168,7 +168,7 @@ SnapTranslator.dict.ru = {
     Special characters: (see <http://0xcc.net/jsescape/>)
 
     ,    \u00c4, \u00e4
-    ,    \u00d6, \u00f6
+,    \u00d6, \u00f6
     ,    \u00dc, \u00fc
     §      \u00df
 */
@@ -260,21 +260,21 @@ SnapTranslator.dict.ru = {
         abbreviation.
 
         For example:
-        
+
             'say %s for %n secs'
 
         can currently not be changed into
-        
+
             'say %n secs long %s'
 
         and still work as intended.
 
         Similarly
-        
+
             'point towards %dst'
 
         cannot be changed into
-        
+
             'point towards %cst'
 
         without breaking its functionality.

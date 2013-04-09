@@ -9,7 +9,7 @@
 
     Copyright (C) 2013 by Jens Mšnig
 
-    This file is part of Snap!. 
+    This file is part of Snap!.
 
     Snap! is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -46,7 +46,7 @@
     working version of a complete XMLSerializer. I have taken much of the
     overall design and many of the functions and methods in this file from
     Nathan's fine original prototype.
-    
+
 */
 
 /*global modules, XML_Element, XML_Serializer, VariableFrame, StageMorph,
