@@ -4,9 +4,9 @@
 
     Spanish translation for SNAP!
 
-    written by Jens Mšnig
+    written by Jens MÃ¶nig
 
-    Copyright (C) 2013 by Jens Mšnig
+    Copyright (C) 2013 by Jens MÃ¶nig
 
     This file is part of Snap!.
 
@@ -171,10 +171,10 @@ SnapTranslator.dict.es = {
 /*
     Special characters: (see <http://0xcc.net/jsescape/>)
 
-    €, Š   \u00c4, \u00e4
-    …, š   \u00d6, \u00f6
-    †, Ÿ   \u00dc, \u00fc
-    §      \u00df
+    Ã„, Ã¤   \u00c4, \u00e4
+    Ã–, Ã¶   \u00d6, \u00f6
+    Ãœ, Ã¼   \u00dc, \u00fc
+    ÃŸ      \u00df
 */
 
     // translations meta information
