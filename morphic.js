@@ -5,12 +5,12 @@
     a lively Web-GUI
     inspired by Squeak
 
-    written by Jens Mšnig
+    written by Jens MÃ¶nig
     jens@moenig.org
 
-    Copyright (C) 2013 by Jens Mšnig
+    Copyright (C) 2013 by Jens MÃ¶nig
 
-    This file is part of Snap!. 
+    This file is part of Snap!.
 
     Snap! is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -591,9 +591,9 @@
     rasterization can be deferred until the destination scale is known, taking
     advantage of SVG's ability for smooth scaling. If instead SVGs are to be
     rasterized right away, you can set the
-    
+
         MorphicPreferences.rasterizeSVGs
-    
+
     preference to <true>. In this case dropped SVGs also trigger the
     droppedImage() event with a canvas containing a rasterized version of the
     SVG.
@@ -602,12 +602,12 @@
     canvas.
 
     Those are dispatched as
-    
+
         droppedAudio(anAudio, name)
         droppedText(aString, name)
 
     events to interested Morphs at the mouse pointer.
-    
+
     if none of the above content types can be determined, the file contents
     is dispatched as an ArrayBuffer to interested Morphs:
 
@@ -637,7 +637,7 @@
         keyboardReceiver
 
     property.
-    
+
     Note that processKeyUp() is optional and doesn't have to be present
     if your morph doesn't require it.
 
@@ -708,34 +708,34 @@
     a stream of events, mostly by "bubbling" them up the text element's
     owner chain. Text elements' parents are notified about the following
     events:
-    
+
     Whenever the user presses a key on the keyboard while a text element
     is being edited, a
-    
+
         reactToKeystroke(event)
 
     is escalated up its parent chain, the "event" parameter being the
     original one received by the World.
-    
+
     Once the user has completed the edit, the following events are
     dispatched:
-    
+
         accept() - <enter> was pressed on a single line of text
         cancel() - <esc> was pressed on any text element
 
     Note that "accept" only gets triggered by single-line texte elements,
     as the <enter> key is used to insert line breaks in multi-line
     elements. Therefore, whenever a text edit is terminated by the user
-    (accepted, cancelled or otherwise), 
+    (accepted, cancelled or otherwise),
 
         reactToEdit(StringOrTextMorph)
 
     is triggered.
 
     If the MorphicPreference's
-    
+
         useSliderForInput
-    
+
     setting is turned on, a slider is popped up underneath the currently
     edited text element letting the user insert numbers out of the given
     slider range. Whenever this happens, i.e. whenever the slider is moved
@@ -751,7 +751,7 @@
     method is invoked. That way complex Morphs containing text elements
     get a chance to react if something about the embedded text has been
     modified programmatically. These events are:
-    
+
         layoutChanged() - sent from instances of TextMorph
         fixLayout() - sent from instances of StringMorph
 
@@ -842,12 +842,12 @@
     menu features Gui-Builder-wise functionality to directly inspect,
     take apart, reassamble and otherwise manipulate morphs and their
     contents.
-    
+
     Instead of using the "customContextMenu" property you can also
     assign a more dynamic contextMenu by overriding the general
-    
+
         userMenu()
-    
+
     method with a customized menu constructor. The difference between
     the customContextMenu property and the userMenu() method is that
     the former is also present in development mode and overrides the
@@ -936,11 +936,11 @@
     seemingly dramatic slow-down of the Morphic system. Typically this
     occurs when updating the layout of complex Morphs with very many
     submorphs, e.g. when resizing an inspector window.
-    
+
     An effective strategy to cope with this is to use the inherited
-    
+
         trackChanges
-        
+
     property of the Morph prototype for damage list housekeeping.
 
     The trackChanges property of the Morph prototype is a Boolean switch
@@ -953,20 +953,20 @@
     achieved by setting the trackChanges flag to false before propagating
     the layout changes, setting it to true again and then storing the full
     bounds of the surrounding morph. An an example refer to the
-    
+
         moveBy()
-    
+
     method of HandMorph, and to the
 
         fixLayout()
-        
+
     method of InspectorMorph, or the
-    
+
         startLayout()
         endLayout()
 
-    methods of SyntaxElementMorph in the Snap application.    
-    
+    methods of SyntaxElementMorph in the Snap application.
+
 
     (9) minifying morphic.js
     ------------------------
@@ -1025,7 +1025,7 @@
     Ian Reynolds contributed backspace key handling for Chrome.
     Davide Della Casa contributed performance optimizations for Firefox.
 
-    - Jens Mšnig
+    - Jens MÃ¶nig
 */
 
 // Global settings /////////////////////////////////////////////////////
@@ -2157,9 +2157,9 @@ Morph.uber = Node.prototype;
     bounds of the surrounding morph. An an example refer to the
 
         fixLayout()
-        
+
     method of InspectorMorph, or the
-    
+
         startLayout()
         endLayout()
 
@@ -3975,7 +3975,7 @@ PenMorph.prototype.drawNew = function (facing) {
 /*
     my orientation can be overridden with the "facing" parameter to
     implement Scratch-style rotation styles
-    
+
 */
     var context, start, dest, left, right, len,
         direction = facing || this.heading;
@@ -6602,7 +6602,7 @@ MenuMorph.prototype.addItem = function (labelString, action, hint, color) {
     /*
     labelString is normally a single-line string. But it can also be one
     of the following:
-    
+
         * a multi-line string (containing line breaks)
         * an icon (either a Morph or a Canvas)
         * a tuple of format: [icon, string]
@@ -8137,7 +8137,7 @@ MenuItemMorph.prototype.createLabel = function () {
     if (isString(this.labelString)) {
         this.label = this.createLabelString(this.labelString);
     } else if (this.labelString instanceof Array) {
-        // assume its pattern is: [icon, string] 
+        // assume its pattern is: [icon, string]
         this.label = new Morph();
         this.label.alpha = 0; // transparent
         this.label.add(icon = this.createIcon(this.labelString[0]));
@@ -8837,7 +8837,7 @@ function ListMorph(elements, labelGetter, format) {
     last predicate to evaluate true when given the list element sets
     the given color. If no condition is met, the default color (black)
     will be assigned.
-    
+
     An example of how to use fomats can be found in the InspectorMorph's
     "markOwnProperties" mechanism.
 */
@@ -9551,11 +9551,11 @@ HandMorph.prototype.processDrop = function (event) {
     find out whether an external image or audio file was dropped
     onto the world canvas, turn it into an offscreen canvas or audio
     element and dispatch the
-    
+
         droppedImage(canvas, name)
         droppedSVG(image, name)
         droppedAudio(audio, name)
-    
+
     events to interested Morphs at the mouse pointer
 */
     var files = event instanceof FileList ? event

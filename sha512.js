@@ -18,7 +18,7 @@
 
 var hex_sha512 = (function (hex_sha512) {
 
-    var hexcase = 0; 
+    var hexcase = 0;
 
     function hex_sha512(s)
     {

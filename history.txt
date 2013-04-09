@@ -39,7 +39,7 @@ BYOB4 (Snap) history
 ------
 * StringMorphs and TextMorph notify their parents of layout changes
 * TypeInSlotMorphs (round - %n - and rectangular - %s -)
- 
+
 110705
 ------
 * block specs
@@ -76,7 +76,7 @@ BYOB4 (Snap) history
 110714
 ------
 * optional drop-down menu for type-in slots
-* read-only menus for type-in slots (%inst, %var, %lst, %obj, %eff, 
+* read-only menus for type-in slots (%inst, %var, %lst, %obj, %eff,
   %dir, %cst, %snd, %key, %idx, %msg, %att, %fun, %typ)
 * global pixel color sensing
 * renamed TypeInSlotMorph to InputSlotMorph

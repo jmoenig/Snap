@@ -6,12 +6,12 @@
     based on morphic.js, widgets.js blocks.js, threads.js and objects.js
     inspired by Scratch
 
-    written by Jens Mšnig
+    written by Jens MÃ¶nig
     jens@moenig.org
 
-    Copyright (C) 2013 by Jens Mšnig
+    Copyright (C) 2013 by Jens MÃ¶nig
 
-    This file is part of Snap!. 
+    This file is part of Snap!.
 
     Snap! is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -57,7 +57,7 @@
     ReporterBlockMorph***
         CustomReporterBlockMorph
         JaggedBlockMorph
-        
+
 
     StringMorph*
         BlockLabelFragmentMorph
@@ -90,7 +90,7 @@
     VariableDialogMorph
     BlockExportDialogMorph
     BlockImportDialogMorph
-    
+
 */
 
 /*global modules, CommandBlockMorph, SpriteMorph, TemplateSlotMorph,
@@ -418,7 +418,7 @@ CustomCommandBlockMorph.prototype.refreshPrototype = function () {
     protoSpec = this.specFromFragments();
 
 
-    // update the prototype's type 
+    // update the prototype's type
     // and possibly exchange 'this' for 'myself'
     if (this instanceof CustomCommandBlockMorph
             && ((hat.type === 'reporter') || (hat.type === 'predicate'))) {
@@ -1302,7 +1302,7 @@ BlockDialogMorph.prototype.fixLayout = function () {
                     + this.padding
             );
         }
-    } else if (this.head) { // when changing an existing prototype    
+    } else if (this.head) { // when changing an existing prototype
         if (this.types) {
             this.types.fixLayout();
             this.silentSetWidth(
@@ -2125,7 +2125,7 @@ InputSlotDialogMorph.uber = DialogBoxMorph.prototype;
 
 // InputSlotDialogMorph preferences settings:
 
-// if "isLaunchingExpanded" is true I always open in the long form 
+// if "isLaunchingExpanded" is true I always open in the long form
 InputSlotDialogMorph.prototype.isLaunchingExpanded = false;
 
 // InputSlotDialogMorph instance creation:
@@ -2486,13 +2486,13 @@ InputSlotDialogMorph.prototype.addSlotTypeButton = function (
     its right.
     Note that you can make the slot picture interactive (turn
     it into a ToggleElementMorph by changing the
-    
+
         element.fullImage()
-    
+
     line to just
-    
+
         element
-        
+
     I've opted for the simpler representation because it reduces
     the duration of time it takes for the InputSlotDialog to load
     and show. But in the future computers and browsers may be
