@@ -5,10 +5,10 @@
     a lively Web-GUI
     inspired by Squeak
 
-    written by Jens Mönig
+    written by Jens Mšnig
     jens@moenig.org
 
-    Copyright (C) 2013 by Jens Mönig
+    Copyright (C) 2013 by Jens Mšnig
 
     This file is part of Snap!.
 
@@ -1025,7 +1025,7 @@
     Ian Reynolds contributed backspace key handling for Chrome.
     Davide Della Casa contributed performance optimizations for Firefox.
 
-    - Jens Mönig
+    - Jens Mšnig
 */
 
 // Global settings /////////////////////////////////////////////////////
