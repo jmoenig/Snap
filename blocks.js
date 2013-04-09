@@ -6,10 +6,10 @@
     based on morphic.js
     inspired by Scratch
 
-    written by Jens Mšnig
+    written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2013 by Jens Mšnig
+    Copyright (C) 2013 by Jens Mönig
 
     This file is part of Snap!.
 
