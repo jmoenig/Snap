@@ -1607,3 +1607,8 @@ ______
 * GUI: Feedback msg when sharing / unsharing projects
 * GUI: Shield (hide) IDE while opening a shared project for presentation
 * GUI: Support for debugging shared projects
+
+130410
+------
+* Fixes for type casting and dragging dialogs by buttons, thanks, Nathan!
+* Fix for loading shared projects in different formats (cloud data and plain project data)

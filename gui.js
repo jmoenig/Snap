@@ -68,7 +68,7 @@ sb, CommentMorph, CommandBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2013-April-09';
+modules.gui = '2013-April-10';
 
 // Declarations
 
@@ -253,7 +253,6 @@ IDE_Morph.prototype.openIn = function (world) {
         this.shield.color = this.color;
         this.shield.setExtent(this.parent.extent());
         this.parent.add(this.shield);
-
         myself.showMessage('Fetching project\nfrom the cloud...');
         SnapCloud.getPublicProject(
             location.hash.substr(9),
@@ -264,7 +263,11 @@ IDE_Morph.prototype.openIn = function (world) {
                         msg = myself.showMessage('Opening project...');
                     },
                     function () {
-                        myself.rawOpenCloudDataString(projectData);
+                        if (projectData.indexOf('<snapdata') === 0) {
+                            myself.rawOpenCloudDataString(projectData);
+                        } else if (projectData.indexOf('<project') === 0) {
+                            myself.rawOpenProjectString(projectData);
+                        }
                     },
                     function () {
                         myself.shield.destroy();
