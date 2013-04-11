@@ -1616,3 +1616,4 @@ ______
 130411
 ------
 * Morphic: virtual keyboard enhancements (see Morphic.js)
+* GUI: disabled localStorage (as in I9 running locally) no longer prevents Snap! from loading

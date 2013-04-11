@@ -68,7 +68,7 @@ sb, CommentMorph, CommandBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2013-April-10';
+modules.gui = '2013-April-11';
 
 // Declarations
 
@@ -160,12 +160,14 @@ IDE_Morph.prototype.openIn = function (world) {
     world.userMenu = this.userMenu;
 
     // get persistent user data, if any
-    usr = localStorage['-snap-user'];
-    if (usr) {
-        usr = SnapCloud.parseResponse(usr)[0];
+    if (localStorage) {
+        usr = localStorage['-snap-user'];
         if (usr) {
-            SnapCloud.username = usr.username || null;
-            SnapCloud.password = usr.password || null;
+            usr = SnapCloud.parseResponse(usr)[0];
+            if (usr) {
+                SnapCloud.username = usr.username || null;
+                SnapCloud.password = usr.password || null;
+            }
         }
     }
 
