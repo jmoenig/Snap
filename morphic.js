@@ -1033,7 +1033,7 @@
 /*global window, HTMLCanvasElement, getMinimumFontHeight, FileReader, Audio,
 FileList, getBlurredShadowSupport*/
 
-var morphicVersion = '2013-April-10';
+var morphicVersion = '2013-April-11';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = getBlurredShadowSupport(); // check for Chrome-bug
 
@@ -1051,6 +1051,7 @@ var standardSettings = {
     mouseScrollAmount: 40,
     useSliderForInput: false,
     useVirtualKeyboard: true,
+    isTouchDevice: false, // turned on by touch events, don't set
     rasterizeSVGs: false
 };
 
@@ -1068,6 +1069,7 @@ var touchScreenSettings = {
     mouseScrollAmount: 40,
     useSliderForInput: true,
     useVirtualKeyboard: true,
+    isTouchDevice: false,
     rasterizeSVGs: false
 };
 
@@ -9398,6 +9400,7 @@ HandMorph.prototype.processMouseDown = function (event) {
 
 HandMorph.prototype.processTouchStart = function (event) {
     var myself = this;
+    MorphicPreferences.isTouchDevice = true;
     clearInterval(this.touchHoldTimeout);
     if (event.touches.length === 1) {
         this.touchHoldTimeout = setInterval( // simulate mouseRightClick
@@ -9416,6 +9419,7 @@ HandMorph.prototype.processTouchStart = function (event) {
 };
 
 HandMorph.prototype.processTouchMove = function (event) {
+    MorphicPreferences.isTouchDevice = true;
     if (event.touches.length === 1) {
         var touch = event.touches[0];
         this.processMouseMove(touch);
@@ -9424,6 +9428,7 @@ HandMorph.prototype.processTouchMove = function (event) {
 };
 
 HandMorph.prototype.processTouchEnd = function (event) {
+    MorphicPreferences.isTouchDevice = true;
     clearInterval(this.touchHoldTimeout);
     nop(event);
     this.processMouseUp({button: 0});
@@ -9921,7 +9926,8 @@ WorldMorph.prototype.initVirtualKeyboard = function () {
         document.body.removeChild(this.virtualKeyboard);
         this.virtualKeyboard = null;
     }
-    if (!MorphicPreferences.useVirtualKeyboard) {
+    if (!MorphicPreferences.isTouchDevice
+            || !MorphicPreferences.useVirtualKeyboard) {
         return;
     }
     this.virtualKeyboard = document.createElement("input");
@@ -9935,6 +9941,7 @@ WorldMorph.prototype.initVirtualKeyboard = function () {
     this.virtualKeyboard.style.left = "0px";
     this.virtualKeyboard.style.width = "0px";
     this.virtualKeyboard.style.height = "0px";
+    this.virtualKeyboard.autocapitalize = "none"; // iOS specific
     document.body.appendChild(this.virtualKeyboard);
 
     this.virtualKeyboard.addEventListener(
@@ -10528,7 +10535,8 @@ WorldMorph.prototype.edit = function (aStringOrTextMorph) {
     this.keyboardReceiver = this.cursor;
 
     this.initVirtualKeyboard();
-    if (MorphicPreferences.useVirtualKeyboard) {
+    if (MorphicPreferences.isTouchDevice
+            && MorphicPreferences.useVirtualKeyboard) {
         this.virtualKeyboard.style.top = this.cursor.top() + pos.y + "px";
         this.virtualKeyboard.style.left = this.cursor.left() + pos.x + "px";
         this.virtualKeyboard.focus();

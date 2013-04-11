@@ -1612,3 +1612,7 @@ ______
 ------
 * Fixes for type casting and dragging dialogs by buttons, thanks, Nathan!
 * Fix for loading shared projects in different formats (cloud data and plain project data)
+
+130411
+------
+* Morphic: virtual keyboard enhancements (see Morphic.js)
