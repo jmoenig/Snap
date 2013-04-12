@@ -1622,3 +1622,4 @@ ______
 ------
 * Lists: fix for typecasting bug in CONTAINS
 * BYOB: Tooltips for custom block templates (sitting in the palette): mousing over a custom block in the palette pops up its definition hat comment in a comment-colored speech bubble
+* GUI: Sharing/Unsharing/Deleting now available in all version of the project dialog

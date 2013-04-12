@@ -68,7 +68,7 @@ sb, CommentMorph, CommandBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2013-April-11';
+modules.gui = '2013-April-12';
 
 // Declarations
 
@@ -3558,18 +3558,16 @@ ProjectDialogMorph.prototype.buildContents = function () {
 
     if (this.task === 'open') {
         this.addButton('openProject', 'Open');
-
-        this.shareButton = this.addButton('shareProject', 'Share');
-        this.unshareButton = this.addButton('unshareProject', 'Unshare');
-        this.shareButton.hide();
-        this.unshareButton.hide();
-
-        this.deleteButton = this.addButton('deleteProject', 'Delete');
         this.action = 'openProject';
     } else { // 'save'
         this.addButton('saveProject', 'Save');
         this.action = 'saveProject';
     }
+    this.shareButton = this.addButton('shareProject', 'Share');
+    this.unshareButton = this.addButton('unshareProject', 'Unshare');
+    this.shareButton.hide();
+    this.unshareButton.hide();
+    this.deleteButton = this.addButton('deleteProject', 'Delete');
     this.addButton('cancel', 'Cancel');
 
     if (notification) {
@@ -3791,19 +3789,17 @@ ProjectDialogMorph.prototype.setSource = function (source) {
     }
     this.body.add(this.listField);
 
-    if (this.task === 'open') {
-        if (this.source === 'cloud') {
-            this.shareButton.show();
-            this.unshareButton.hide();
+    if (this.source === 'cloud') {
+        this.shareButton.show();
+        this.unshareButton.hide();
+        this.deleteButton.show();
+    } else {
+        this.shareButton.hide();
+        this.unshareButton.hide();
+        if (this.source === 'local') {
             this.deleteButton.show();
-        } else {
-            this.shareButton.hide();
-            this.unshareButton.hide();
-            if (this.source === 'local') {
-                this.deleteButton.show();
-            } else { // examples
-                this.deleteButton.hide();
-            }
+        } else { // examples
+            this.deleteButton.hide();
         }
     }
     this.buttons.fixLayout();
@@ -3877,16 +3873,16 @@ ProjectDialogMorph.prototype.installCloudProjectList = function (pl) {
             myself.preview.texture = item.Thumbnail || null;
             myself.preview.cachedTexture = null;
             myself.preview.drawNew();
-            if (item.Public === 'true') {
-                myself.shareButton.hide();
-                myself.unshareButton.show();
-            } else {
-                myself.unshareButton.hide();
-                myself.shareButton.show();
-            }
-            myself.buttons.fixLayout();
-            myself.fixLayout();
         }
+        if (item.Public === 'true') {
+            myself.shareButton.hide();
+            myself.unshareButton.show();
+        } else {
+            myself.unshareButton.hide();
+            myself.shareButton.show();
+        }
+        myself.buttons.fixLayout();
+        myself.fixLayout();
         myself.edit();
     };
     this.body.add(this.listField);
@@ -4102,7 +4098,6 @@ ProjectDialogMorph.prototype.shareProject = function () {
                                 entry.label.isBold = true;
                                 entry.label.drawNew();
                                 entry.label.changed();
-                                myself.listField.select(proj, entry);
                                 myself.ide.showMessage('shared.', 2);
                             },
                             myself.ide.cloudError(),
@@ -4140,7 +4135,6 @@ ProjectDialogMorph.prototype.unshareProject = function () {
                                 entry.label.isBold = false;
                                 entry.label.drawNew();
                                 entry.label.changed();
-                                myself.listField.select(proj, entry);
                                 myself.ide.showMessage('unshared.', 2);
                             },
                             myself.ide.cloudError(),
