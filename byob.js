@@ -101,11 +101,11 @@ Context, StringMorph, nop, newCanvas, radians, BoxMorph,
 ArrowMorph, PushButtonMorph, contains, InputSlotMorph, ShadowMorph,
 ToggleButtonMorph, IDE_Morph, MenuMorph, copy, ToggleElementMorph,
 Morph, fontHeight, StageMorph, SyntaxElementMorph, SnapSerializer,
-CommentMorph, localize, CSlotMorph*/
+CommentMorph, localize, CSlotMorph, SpeechBubbleMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2013-April-04';
+modules.byob = '2013-April-12';
 
 // Declarations
 
@@ -700,6 +700,56 @@ CustomCommandBlockMorph.prototype.deleteBlockDefinition = function () {
     );
 };
 
+// CustomCommandBlockMorph events:
+
+CustomCommandBlockMorph.prototype.mouseEnter = function () {
+    var comment, help;
+    if (this.isTemplate && this.definition.comment) {
+        comment = this.definition.comment.fullCopy();
+        comment.contents.parse();
+        help = '';
+        comment.contents.lines.forEach(function (line) {
+            help = help + '\n' + line;
+        });
+        this.bubbleHelp(
+            help.substr(1),
+            this.definition.comment.color
+        );
+    }
+};
+
+CustomCommandBlockMorph.prototype.mouseLeave = function () {
+    if (this.isTemplate && this.definition.comment) {
+        this.world().hand.destroyTemporaries();
+    }
+};
+
+// CustomCommandBlockMorph bubble help:
+
+CustomCommandBlockMorph.prototype.bubbleHelp = function (contents, color) {
+    var myself = this;
+    this.fps = 2;
+    this.step = function () {
+        if (this.bounds.containsPoint(this.world().hand.position())) {
+            myself.popUpbubbleHelp(contents, color);
+        }
+        myself.fps = 0;
+        delete myself.step;
+    };
+};
+
+CustomCommandBlockMorph.prototype.popUpbubbleHelp = function (
+    contents,
+    color
+) {
+    new SpeechBubbleMorph(
+        contents,
+        color,
+        null,
+        1
+    ).popUp(this.world(), this.rightCenter().add(new Point(-8, 0)));
+};
+
 // CustomReporterBlockMorph ////////////////////////////////////////////
 
 // CustomReporterBlockMorph inherits from ReporterBlockMorph:
@@ -799,6 +849,21 @@ CustomReporterBlockMorph.prototype.userMenu
 CustomReporterBlockMorph.prototype.deleteBlockDefinition
     = CustomCommandBlockMorph.prototype.deleteBlockDefinition;
 
+// CustomReporterBlockMorph events:
+
+CustomReporterBlockMorph.prototype.mouseEnter
+    = CustomCommandBlockMorph.prototype.mouseEnter;
+
+CustomReporterBlockMorph.prototype.mouseLeave
+    = CustomCommandBlockMorph.prototype.mouseLeave;
+
+// CustomReporterBlockMorph bubble help:
+
+CustomReporterBlockMorph.prototype.bubbleHelp
+    = CustomCommandBlockMorph.prototype.bubbleHelp;
+
+CustomReporterBlockMorph.prototype.popUpbubbleHelp
+    = CustomCommandBlockMorph.prototype.popUpbubbleHelp;
 
 // JaggedBlockMorph ////////////////////////////////////////////////////
 
