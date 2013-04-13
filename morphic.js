@@ -9509,14 +9509,15 @@ HandMorph.prototype.processMouseMove = function (event) {
                 this.grab(morph);
                 this.grabOrigin = this.morphToGrab.situation();
             }
-            // if the mouse has left its fullBounds, center it
-            fb = morph.fullBounds();
-            if (!fb.containsPoint(pos)) {
-                this.bounds.origin = fb.center();
-                this.grab(morph);
-                this.setPosition(pos);
+            if (morph) {
+                // if the mouse has left its fullBounds, center it
+                fb = morph.fullBounds();
+                if (!fb.containsPoint(pos)) {
+                    this.bounds.origin = fb.center();
+                    this.grab(morph);
+                    this.setPosition(pos);
+                }
             }
-
         }
 
 /*
