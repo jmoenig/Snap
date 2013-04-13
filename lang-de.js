@@ -621,7 +621,7 @@ SnapTranslator.dict.de = {
         'erm\u00f6glicht Morphic Funktionen',
 
     // project menu
-    'Project Notes...':
+    'Project notes...':
         'Projektanmerkungen...',
     'New':
         'Neu',

@@ -599,7 +599,7 @@ SnapTranslator.dict.ru = {
         'включить Morphic\nконтекст меню',
 
     // project menu
-    'Project Notes...':
+    'Project notes...':
         'Проектные Записки...',
     'New':
         'Новый проект',
