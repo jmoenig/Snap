@@ -244,7 +244,7 @@ SnapTranslator.dict.zh = {
         '只能水平翻转',
 
     // new sprite button:
-    'add a new Sprite':
+    'add a new sprite':
         '新建角色',
 
     // tab help

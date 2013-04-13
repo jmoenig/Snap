@@ -239,7 +239,7 @@ SnapTranslator.dict.ru = {
         'вращаемый только слева направо',
 
     // new sprite button:
-    'add a new Sprite':
+    'add a new sprite':
         'Добавить новый Образ',
 
     // tab help

@@ -243,7 +243,7 @@ SnapTranslator.dict.ja = {
         '左右に反転するだけ',
 
     // new sprite button:
-    'add a new Sprite':
+    'add a new sprite':
         '新しいスプライトを追加する',
 
     // tab help

@@ -243,7 +243,7 @@ SnapTranslator.dict.de = {
         'kann sich nur nach\nlinks/rechts drehen',
 
     // new sprite button:
-    'add a new Sprite':
+    'add a new sprite':
         'ein neues Objekt\nhinzuf\u00fcgen',
 
     // tab help

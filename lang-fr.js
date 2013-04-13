@@ -243,7 +243,7 @@ SnapTranslator.dict.fr = {
         'le lutin reste en position horizontale \nsoit vers la gauche soit vers la droite ',
 
     // new sprite button:
-    'add a new Sprite':
+    'add a new sprite':
         'ajouter un nouveau lutin',
 
     // tab help
