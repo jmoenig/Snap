@@ -616,7 +616,7 @@ SnapTranslator.dict.ja = {
         'ユーザーフレンドリーではない\nモーフィックコンテクストメニューと\nインスペクターを有効にする',
 
     // project menu
-    'Project Notes...':
+    'Project notes...':
         'プロジェクトのメモ...',
     'New':
         '新規',

@@ -602,7 +602,7 @@ SnapTranslator.dict.ko = {
         '모픽 컨텍스트 메뉴와 인스펙터를 사용할 수 있으나, 사용자 친화적이지 않습니다!',
 
     // project menu
-    'Project Notes...':
+    'Project notes...':
         '프로젝트 메모...',
     'New':
         '새로 만들기',

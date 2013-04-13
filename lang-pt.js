@@ -623,7 +623,7 @@ SnapTranslator.dict.pt = {
         'Activar menus de contexto\ne inspectores não\namigáveis do Morphic!',
 
     // menu de projecto
-    'Project Notes...':
+    'Project notes...':
         'Notas deste projecto…',
     'New':
         'Criar um novo projecto',

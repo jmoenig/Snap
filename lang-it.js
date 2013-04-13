@@ -618,7 +618,7 @@ SnapTranslator.dict.it = {
         'Abilita i menu contestuali\ndi Morphic e l\'inspector,\n non user-friendly',
 
     // project menu
-    'Project Notes...':
+    'Project notes...':
         'Note di Progetto...',
     'New':
         'Nuovo',

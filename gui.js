@@ -1914,7 +1914,7 @@ IDE_Morph.prototype.projectMenu = function () {
         shiftClicked = (world.currentKey === 16);
 
     menu = new MenuMorph(this);
-    menu.addItem('Project Notes...', 'editProjectNotes');
+    menu.addItem('Project notes...', 'editProjectNotes');
     menu.addLine();
     menu.addItem(
         'New',
