@@ -243,8 +243,8 @@ SnapTranslator.dict.cs = {
         'jen vlevo/vpravo',
 
     // new sprite button:
-    'add a new Sprite':
-        'přidat nový Sprite',
+    'add a new sprite':
+        'přidat nový sprite',
 
     // tab help
     'costumes tab help':

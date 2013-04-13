@@ -243,8 +243,8 @@ SnapTranslator.dict.pt = {
         'olha apenas para a esquerda ou para a direita',
 
     // botão de criação de novo actor:
-    'add a new Sprite':
-        'adicionar um novo Actor',
+    'add a new sprite':
+        'adicionar um novo actor',
 
     // ajuda nos tabuladores
     'costumes tab help':

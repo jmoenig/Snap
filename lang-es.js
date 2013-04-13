@@ -243,8 +243,8 @@ SnapTranslator.dict.es = {
         's\u00F3lo mirar izquierda/derecha',
 
     // new sprite button:
-    'add a new Sprite':
-        'Agregar un nuevo objeto',
+    'add a new sprite':
+        'agregar un nuevo objeto',
 
     // tab help
     'costumes tab help':
