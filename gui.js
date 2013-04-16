@@ -2079,7 +2079,7 @@ IDE_Morph.prototype.aboutSnap = function () {
         + '\nJoe Otto: Morphic Testing and Debugging';
 
     for (module in modules) {
-        if (modules.hasOwnProperty(module)) {
+        if (Object.prototype.hasOwnProperty.call(modules, module)) {
             versions += ('\n' + module + ' (' +
                             modules[module] + ')');
         }
@@ -3814,7 +3814,7 @@ ProjectDialogMorph.prototype.getLocalProjectList = function () {
     var stored, name, dta,
         projects = [];
     for (stored in localStorage) {
-        if (localStorage.hasOwnProperty(stored)
+        if (Object.prototype.hasOwnProperty.call(localStorage, stored)
                 && stored.substr(0, 14) === '-snap-project-') {
             name = stored.substr(14);
             dta = {

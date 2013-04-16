@@ -1821,10 +1821,10 @@ Process.prototype.reportIsIdentical = function (a, b) {
     }
 
     function clear() {
-        if (a.hasOwnProperty(tag)) {
+        if (Object.prototype.hasOwnProperty.call(a, tag)) {
             delete a[tag];
         }
-        if (b.hasOwnProperty(tag)) {
+        if (Object.prototype.hasOwnProperty.call(b, tag)) {
             delete b[tag];
         }
     }
@@ -2710,7 +2710,7 @@ VariableFrame.prototype.deleteVar = function (name) {
 VariableFrame.prototype.names = function () {
     var each, names = [];
     for (each in this.vars) {
-        if (this.vars.hasOwnProperty(each)) {
+        if (Object.prototype.hasOwnProperty.call(this.vars, each)) {
             names.push(each);
         }
     }
@@ -2723,7 +2723,7 @@ VariableFrame.prototype.allNamesDict = function () {
     function addKeysToDict(srcDict, trgtDict) {
         var eachKey;
         for (eachKey in srcDict) {
-            if (srcDict.hasOwnProperty(eachKey)) {
+            if (Object.prototype.hasOwnProperty.call(srcDict, eachKey)) {
                 trgtDict[eachKey] = eachKey;
             }
         }
@@ -2744,7 +2744,7 @@ VariableFrame.prototype.allNames = function () {
     var answer = [], each, dict = this.allNamesDict();
 
     for (each in dict) {
-        if (dict.hasOwnProperty(each)) {
+        if (Object.prototype.hasOwnProperty.call(dict, each)) {
             answer.push(each);
         }
     }

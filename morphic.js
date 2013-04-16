@@ -1114,7 +1114,7 @@ function sizeOf(object) {
     // answer the number of own properties
     var size = 0, key;
     for (key in object) {
-        if (object.hasOwnProperty(key)) {
+        if (Object.prototype.hasOwnProperty.call(object, key)) {
             size += 1;
         }
     }
@@ -1251,7 +1251,7 @@ function copy(target) {
             target.constructor !== Object) {
         c = clone(target.constructor.prototype);
         for (property in target) {
-            if (target.hasOwnProperty(property)) {
+            if (Object.prototype.hasOwnProperty.call(target, property)) {
                 c[property] = target[property];
             }
         }
@@ -6202,7 +6202,10 @@ InspectorMorph.prototype.buildPanes = function () {
                     [ // format element: [color, predicate(element]
                         new Color(0, 0, 180),
                         function (element) {
-                            return myself.target.hasOwnProperty(element);
+                            return Object.prototype.hasOwnProperty.call(
+                                myself.target,
+                                element
+                            );
                         }
                     ]
                 ]
@@ -9579,7 +9582,10 @@ HandMorph.prototype.processMouseScroll = function (event) {
     if (morph) {
         morph.mouseScroll(
             (event.detail / -3) || (
-                event.hasOwnProperty('wheelDeltaY') ?
+                Object.prototype.hasOwnProperty.call(
+                    event,
+                    'wheelDeltaY'
+                ) ?
                         event.wheelDeltaY / 120 :
                         event.wheelDelta / 120
             ),
@@ -10499,7 +10505,7 @@ WorldMorph.prototype.about = function () {
     var versions = '', module;
 
     for (module in modules) {
-        if (modules.hasOwnProperty(module)) {
+        if (Object.prototype.hasOwnProperty.call(modules, module)) {
             versions += ('\n' + module + ' (' + modules[module] + ')');
         }
     }
