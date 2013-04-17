@@ -68,7 +68,7 @@ sb, CommentMorph, CommandBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2013-April-12';
+modules.gui = '2013-April-17';
 
 // Declarations
 
@@ -3343,8 +3343,10 @@ IDE_Morph.prototype.setCloudURL = function () {
             'Snap!Cloud' :
                 'https://snapcloud.miosoft.com/miocon/app/' +
                     'login?_app=SnapCloud',
-            'local network dev' :
+            'local network lab' :
                 '192.168.2.108:8087/miocon/app/login?_app=SnapCloud',
+            'local network office' :
+                '192.168.186.167:8087/miocon/app/login?_app=SnapCloud',
             'localhost dev' :
                 'localhost/miocon/app/login?_app=SnapCloud'
         }

@@ -1623,3 +1623,15 @@ ______
 * Lists: fix for typecasting bug in CONTAINS
 * BYOB: Tooltips for custom block templates (sitting in the palette): mousing over a custom block in the palette pops up its definition hat comment in a comment-colored speech bubble
 * GUI: Sharing/Unsharing/Deleting now available in all version of the project dialog
+
+130415
+------
+* Blocks: place sticky comments on World layer on dragging their anchor block 
+
+130416
+------
+* Cloud, GUI: additional dev settings
+
+130417
+------
+* Blocks: "scripts pic" option in the ScriptsMorph's userMenu lets you export a picture of all scripts (including comments)
