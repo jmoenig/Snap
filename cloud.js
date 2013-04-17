@@ -29,7 +29,7 @@
 
 /*global modules, IDE_Morph, SnapSerializer, hex_sha512, alert, nop*/
 
-modules.cloud = '2013-April-08';
+modules.cloud = '2013-April-17';
 
 // Global stuff
 
@@ -38,6 +38,7 @@ var Cloud;
 var SnapCloud = new Cloud(
     'https://snapcloud.miosoft.com/miocon/app/login?_app=SnapCloud'
     //'192.168.2.108:8087/miocon/app/login?_app=SnapCloud'
+    //'192.168.186.167:8087/miocon/app/login?_app=SnapCloud'
     // 'localhost/miocon/app/login?_app=SnapCloud'
 );
 

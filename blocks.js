@@ -153,7 +153,7 @@ DialogBoxMorph, BlockInputFragmentMorph, PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2013-April-05';
+modules.blocks = '2013-April-17';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -4285,6 +4285,11 @@ ScriptsMorph.prototype.userMenu = function () {
     }
     menu.addItem('clean up', 'cleanUp', 'arrange scripts\nvertically');
     menu.addItem('add comment', 'addComment');
+    menu.addItem(
+        'scripts pic...',
+        'exportScriptsPicture',
+        'open a new window\nwith a picture of all scripts'
+    );
     if (ide) {
         menu.addLine();
         menu.addItem(
@@ -4343,6 +4348,29 @@ ScriptsMorph.prototype.cleanUp = function () {
     this.adjustBounds();
 };
 
+ScriptsMorph.prototype.exportScriptsPicture = function () {
+    var boundingBox, pic, ctx;
+    if (this.children.length === 0) {return; }
+    boundingBox = this.children[0].fullBounds();
+    this.children.forEach(function (child) {
+        if (child.isVisible) {
+            boundingBox = boundingBox.merge(child.fullBounds());
+        }
+    });
+    pic = newCanvas(boundingBox.extent());
+    ctx = pic.getContext('2d');
+    this.children.forEach(function (child) {
+        var pos = child.position();
+        if (child.isVisible) {
+            ctx.drawImage(
+                child.fullImageClassic(),
+                pos.x - boundingBox.origin.x,
+                pos.y - boundingBox.origin.y
+            );
+        }
+    });
+    window.open(pic.toDataURL());
+};
 
 ScriptsMorph.prototype.addComment = function () {
     new CommentMorph().pickUp(this.world());
@@ -9057,6 +9085,7 @@ CommentMorph.prototype.align = function (topBlock, ignoreLayer) {
 CommentMorph.prototype.startFollowing = function (topBlock) {
     var myself = this;
     this.align(topBlock);
+    this.world().add(this);
     this.addShadow();
     this.stickyOffset = this.position().subtract(this.block.position());
     this.step = function () {
