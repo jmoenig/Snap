@@ -7735,13 +7735,20 @@ MultiArgMorph.prototype.drawNew = function () {
 // MultiArgMorph arity control:
 
 MultiArgMorph.prototype.addInput = function (contents) {
-    var newPart = this.labelPart(this.slotSpec),
+    var i, name,
+        newPart = this.labelPart(this.slotSpec),
         idx = this.children.length - 1;
     // newPart.alpha = this.alpha ? 1 : (1 - this.alpha) / 2;
     if (contents) {
         newPart.setContents(contents);
     } else if (this.elementSpec === '%scriptVars') {
-        newPart.setContents('abcdefghijklmnopqrstuvwxyz'[idx - 1] || 'foo');
+        name = '';
+        i = idx;
+        while (i > 0) {
+            name = String.fromCharCode(97 + (i - 1) % 26) + name;
+            i = Math.floor((i - 1) / 26);
+        }
+        newPart.setContents(name);
     } else if (contains(['%parms', '%ringparms'], this.elementSpec)) {
         newPart.setContents('#' + idx);
     }
