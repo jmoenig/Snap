@@ -64,7 +64,7 @@ Localizer.prototype.translate = function (string) {
     return Object.prototype.hasOwnProperty.call(
         this.dict[this.language],
         string
-    ) ? this.dict[this.language][string] || string;
+    ) ? this.dict[this.language][string] : string;
 };
 
 Localizer.prototype.languages = function () {
