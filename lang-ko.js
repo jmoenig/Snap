@@ -243,7 +243,7 @@ SnapTranslator.dict.ko = {
         '왼쪽에서 오른쪽으로만',
 
     // new sprite button:
-    'add a new Sprite':
+    'add a new sprite':
         '새로운 스프라이트 추가',
 
     // tab help

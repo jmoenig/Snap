@@ -1130,7 +1130,7 @@ IDE_Morph.prototype.createCorralBar = function () {
     button.labelColor = new Color(255, 255, 255);
     button.contrast = this.buttonContrast;
     button.drawNew();
-    button.hint = 'add a new Sprite';
+    button.hint = 'add a new sprite';
     button.fixLayout();
     button.setCenter(this.corralBar.center());
     button.setLeft(this.corralBar.left() + padding);

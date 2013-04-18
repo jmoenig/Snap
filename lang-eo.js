@@ -248,7 +248,7 @@ SnapTranslator.dict.eo = {
         'nur maldekstren/dekstren',
 
     // new sprite button:
-    'add a new Sprite':
+    'add a new sprite':
         'aldoni novan objekton',
 
     // tab help

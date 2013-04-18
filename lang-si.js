@@ -245,7 +245,7 @@ SnapTranslator.dict.si = {
         'lahko obrnemo le levo/desno',
 
     // new sprite button:
-    'add a new Sprite':
+    'add a new sprite':
         'dodaj nov objekt',
 
     // tab help

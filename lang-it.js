@@ -243,8 +243,8 @@ SnapTranslator.dict.it = {
         'voltati solo a destra/sinistra',
 
     // new sprite button:
-    'add a new Sprite':
-        'aggiungi un nuovo Sprite',
+    'add a new sprite':
+        'aggiungi un nuovo sprite',
 
     // tab help
     'costumes tab help':
