@@ -61,13 +61,16 @@ function Localizer(language, dict) {
 }
 
 Localizer.prototype.translate = function (string) {
-    return this.dict[this.language][string] || string;
+    return Object.prototype.hasOwnProperty.call(
+        this.dict[this.language],
+        string
+    ) ? this.dict[this.language][string] || string;
 };
 
 Localizer.prototype.languages = function () {
     var property, arr = [];
     for (property in this.dict) {
-        if (this.dict.hasOwnProperty(property)) {
+        if (Object.prototype.hasOwnProperty.call(this.dict, property)) {
             arr.push(property);
         }
     }
@@ -100,7 +103,8 @@ Localizer.prototype.unload = function () {
         if (lang !== 'en') {
             dict = myself.dict[lang];
             for (key in dict) {
-                if (dict.hasOwnProperty(key) && !contains(keep, key)) {
+                if (Object.prototype.hasOwnProperty.call(dict, key)
+                        && !contains(keep, key)) {
                     delete dict[key];
                 }
             }

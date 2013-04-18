@@ -246,7 +246,8 @@ XML_Element.prototype.toString = function (isFormatted, indentationLevel) {
 
     // attributes, if any
     for (key in this.attributes) {
-        if (this.attributes.hasOwnProperty(key) && this.attributes[key]) {
+        if (Object.prototype.hasOwnProperty.call(this.attributes, key)
+                && this.attributes[key]) {
             result += ' ' + key + '="' + this.attributes[key] + '"';
         }
     }
