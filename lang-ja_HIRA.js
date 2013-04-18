@@ -616,7 +616,7 @@ SnapTranslator.dict.ja_HIRA = {
         'ユーザーフレンドリーではない\nモーフィックコンテクストメニューと\nインスペクターをゆうこうにする',
 
     // project menu
-    'Project Notes...':
+    'Project notes...':
         'プロジェクトのメモ...',
     'New':
         'しんき',

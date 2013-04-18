@@ -602,7 +602,7 @@ SnapTranslator.dict.fr = {
         'activer la fonction morphic',
 
     // project menu
-    'Project Notes...':
+    'Project notes...':
         'Notes du projet...',
     'New':
         'Nouveau',
