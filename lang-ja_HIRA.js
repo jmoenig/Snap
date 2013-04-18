@@ -243,7 +243,7 @@ SnapTranslator.dict.ja_HIRA = {
         'さゆうにはんてんするだけ',
 
     // new sprite button:
-    'add a new Sprite':
+    'add a new sprite':
         'あたらしいスプライトをついかする',
 
     // tab help
