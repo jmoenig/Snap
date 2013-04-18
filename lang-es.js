@@ -605,7 +605,7 @@ SnapTranslator.dict.es = {
         'habilitar men\u0075s \nM\u00F3rficos contextuales\n e inspectores,\n\u00A1no f\u0061ciles de utilizar! ',
 
     // project menu
-    'Project Notes...':
+    'Project notes...':
         'Notas del proyecto...',
     'New':
         'Nuevo',

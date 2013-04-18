@@ -618,7 +618,7 @@ SnapTranslator.dict.cs = {
         'Referenční příručka',
 
     // project menu
-    'Project Notes...':
+    'Project notes...':
         'Poznámky k projektu...',
     'New':
         'Nový',
