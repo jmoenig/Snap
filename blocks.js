@@ -5657,7 +5657,7 @@ InputSlotMorph.prototype.dropDownMenu = function () {
     }
     menu.addItem(' ', null);
     for (key in choices) {
-        if (choices.hasOwnProperty(key)) {
+        if (Object.prototype.hasOwnProperty.call(choices, key)) {
             if (key[0] === '~') {
                 menu.addLine();
             } else {

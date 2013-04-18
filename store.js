@@ -319,7 +319,8 @@ SnapSerializer.prototype.loadProjectModel = function (xmlNode) {
     if (!project.name) {
         nameID = 1;
         while (
-            localStorage.hasOwnProperty(
+            Object.prototype.hasOwnProperty.call(
+                localStorage,
                 '-snap-project-Untitled ' + nameID
             )
         ) {
@@ -339,7 +340,10 @@ SnapSerializer.prototype.loadProjectModel = function (xmlNode) {
     model.stage = model.project.require('stage');
     StageMorph.prototype.frameRate = 0;
     project.stage = new StageMorph(project.globalVariables);
-    if (model.stage.attributes.hasOwnProperty('id')) {
+    if (Object.prototype.hasOwnProperty.call(
+            model.stage.attributes,
+            'id'
+        )) {
         this.objects[model.stage.attributes.id] = project.stage;
     }
     if (model.stage.attributes.name) {
@@ -399,17 +403,24 @@ SnapSerializer.prototype.loadProjectModel = function (xmlNode) {
         var watcher, color, target, hidden, extX, extY;
 
         color = myself.loadColor(model.attributes.color);
-        target = model.attributes.hasOwnProperty('scope') ?
-                project.sprites[model.attributes.scope] : null;
+        target = Object.prototype.hasOwnProperty.call(
+            model.attributes,
+            'scope'
+        ) ? project.sprites[model.attributes.scope] : null;
 
         // determine whether the watcher is hidden, slightly
         // complicated to retain backward compatibility
         // with former tag format: hidden="hidden"
         // now it's: hidden="true"
-        hidden = model.attributes.hasOwnProperty('hidden')
-            && (model.attributes.hidden !== 'false');
+        hidden = Object.prototype.hasOwnProperty.call(
+            model.attributes,
+            'hidden'
+        ) && (model.attributes.hidden !== 'false');
 
-        if (model.attributes.hasOwnProperty('var')) {
+        if (Object.prototype.hasOwnProperty.call(
+                model.attributes,
+                'var'
+            )) {
             watcher = new WatcherMorph(
                 model.attributes['var'],
                 color,
@@ -584,7 +595,10 @@ SnapSerializer.prototype.loadCostumes = function (object, model) {
     if (costumes) {
         object.costumes = this.loadValue(costumes.require('list'));
     }
-    if (model.attributes.hasOwnProperty('costume')) {
+    if (Object.prototype.hasOwnProperty.call(
+            model.attributes,
+            'costume'
+        )) {
         costume = object.costumes.asArray()[model.attributes.costume - 1];
         if (costume) {
             if (costume.loaded) {
@@ -807,7 +821,10 @@ SnapSerializer.prototype.loadBlock = function (model, isReporter) {
     // private
     var block, info, inputs, isGlobal, rm, receiver;
     if (model.tag === 'block') {
-        if (model.attributes.hasOwnProperty('var')) {
+        if (Object.prototype.hasOwnProperty.call(
+                model.attributes,
+                'var'
+            )) {
             return SpriteMorph.prototype.variableBlock(
                 model.attributes['var']
             );
@@ -930,19 +947,28 @@ SnapSerializer.prototype.loadValue = function (model) {
         myself = this;
 
     function record() {
-        if (model.attributes.hasOwnProperty('id')) {
+        if (Object.prototype.hasOwnProperty.call(
+                model.attributes,
+                'id'
+            )) {
             myself.objects[model.attributes.id] = v;
         }
-        if (model.attributes.hasOwnProperty('mediaID')) {
+        if (Object.prototype.hasOwnProperty.call(
+                model.attributes,
+                'mediaID'
+            )) {
             myself.mediaDict[model.attributes.mediaID] = v;
         }
     }
     switch (model.tag) {
     case 'ref':
-        if (model.attributes.hasOwnProperty('id')) {
+        if (Object.prototype.hasOwnProperty.call(model.attributes, 'id')) {
             return this.objects[model.attributes.id];
         }
-        if (model.attributes.hasOwnProperty('mediaID')) {
+        if (Object.prototype.hasOwnProperty.call(
+                model.attributes,
+                'mediaID'
+            )) {
             return this.mediaDict[model.attributes.mediaID];
         }
         throw new Error('expecting a reference id');
@@ -1060,16 +1086,28 @@ SnapSerializer.prototype.loadValue = function (model) {
         return v;
     case 'costume':
         center = new Point();
-        if (model.attributes.hasOwnProperty('center-x')) {
+        if (Object.prototype.hasOwnProperty.call(
+                model.attributes,
+                'center-x'
+            )) {
             center.x = parseFloat(model.attributes['center-x']);
         }
-        if (model.attributes.hasOwnProperty('center-y')) {
+        if (Object.prototype.hasOwnProperty.call(
+                model.attributes,
+                'center-y'
+            )) {
             center.y = parseFloat(model.attributes['center-y']);
         }
-        if (model.attributes.hasOwnProperty('name')) {
+        if (Object.prototype.hasOwnProperty.call(
+                model.attributes,
+                'name'
+            )) {
             name = model.attributes.name;
         }
-        if (model.attributes.hasOwnProperty('image')) {
+        if (Object.prototype.hasOwnProperty.call(
+                model.attributes,
+                'image'
+            )) {
             image = new Image();
             if (model.attributes.image.indexOf('data:image/svg+xml') === 0
                     && !MorphicPreferences.rasterizeSVGs) {
@@ -1108,7 +1146,10 @@ SnapSerializer.prototype.loadValue = function (model) {
         audio = new Audio();
         audio.src = model.attributes.sound;
         v = new Sound(audio, model.attributes.name);
-        if (model.attributes.hasOwnProperty('mediaID')) {
+        if (Object.prototype.hasOwnProperty.call(
+                model.attributes,
+                'mediaID'
+            )) {
             myself.mediaDict[model.attributes.mediaID] = v;
         }
         return v;
