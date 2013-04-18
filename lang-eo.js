@@ -592,7 +592,7 @@ SnapTranslator.dict.eo = {
         'ŝalti Morphic\nkuntekstajn menuojn\nkaj kontrolilojn, \nne la afablajn!',
 
     // project menu
-    'Project Notes...':
+    'Project notes...':
         'Projektonotoj...',
     'New':
         'Nova',

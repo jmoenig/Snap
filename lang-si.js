@@ -594,7 +594,7 @@ SnapTranslator.dict.si = {
         'omogo\u010Di  Morphic menuje in in\u0161pektorje, \ni uporabniku prijazno',
 
     // project menu
-    'Project Notes...':
+    'Project notes...':
         'Opis projekta...',
     'New':
         'Nov',

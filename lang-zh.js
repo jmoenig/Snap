@@ -620,7 +620,7 @@ SnapTranslator.dict.zh = {
 
 
     // project menu
-    'Project Notes...':
+    'Project notes...':
         '项目说明...',
     'New':
         '新建',
