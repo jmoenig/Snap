@@ -618,13 +618,13 @@ SnapTranslator.dict.ko = {
         '내보낸 프로젝트 파일, 블록 라이브러리\n'
 		+ '스프라이트 모양 또는 소리를 가져옵니다.\n\n'
 		+ '일부 웹브라우저에서는 지원되지 않습니다.',
-    'Export project as plain text ...':
+    'Export project as plain text...':
         '프로젝트를 텍스트 파일로 내보내기...',
     'Export project...':
         '프로젝트 내보내기...',
     'show project data as XML\nin a new browser window':
         '프로젝트 데이터를\n새로운 윈도우에 XML 형태로 보여주기',
-    'Export blocks ...':
+    'Export blocks...':
         '블록 내보내기...',
     'show global custom block definitions as XML\nin a new browser window':
         '새롭게 정의한 전역 블록 데이터를\n새로운 윈도우에 XML 형태로 보여주기',

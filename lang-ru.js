@@ -613,13 +613,13 @@ SnapTranslator.dict.ru = {
         'Импорт...',
     'file menu import hint':
         'загрузить экспортированный проект\nили библиотеку блоков, маску или звук',
-    'Export project as plain text ...':
+    'Export project as plain text...':
         'Экспорт проект как текстовый файл...',
     'Export project...':
         'Экспорт проект...',
     'show project data as XML\nin a new browser window':
         'представить проектные данные как XML\nв новом окне браузера',
-    'Export blocks ...':
+    'Export blocks...':
         'Экспорт блоки...',
     'show global custom block definitions as XML\nin a new browser window':
         'представить определения глобальных пользовательских блоков как XML\nв новом окне браузера',
