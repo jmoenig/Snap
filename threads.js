@@ -83,7 +83,7 @@ ArgLabelMorph, localize*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.threads = '2013-March-13';
+modules.threads = '2013-April-19';
 
 var ThreadManager;
 var Process;

@@ -73,7 +73,7 @@ newCanvas, StringMorph, Morph, TextMorph, nop, detect, StringFieldMorph,
 HTMLCanvasElement, fontHeight, SymbolMorph, localize, SpeechBubbleMorph,
 ArrowMorph, MenuMorph, isString, isNil, SliderMorph*/
 
-modules.widgets = '2013-March-22';
+modules.widgets = '2013-April-19';
 
 var PushButtonMorph;
 var ToggleButtonMorph;
