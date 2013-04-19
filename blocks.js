@@ -3443,16 +3443,19 @@ ReporterBlockMorph.prototype.getSlotSpec = function () {
 // ReporterBlockMorph events
 
 ReporterBlockMorph.prototype.mouseClickLeft = function (pos) {
+    var isRing;
     if (this.parent instanceof BlockInputFragmentMorph) {
         return this.parent.mouseClickLeft();
     }
     if (this.parent instanceof TemplateSlotMorph) {
+        isRing = this.parent.parent && this.parent.parent.parent &&
+            this.parent.parent.parent instanceof RingMorph;
         new DialogBoxMorph(
             this,
             this.setSpec,
             this
         ).prompt(
-            "Input name",
+            isRing ? "Input name" : "Script variable name",
             this.blockSpec,
             this.world()
         );
