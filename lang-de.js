@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org', // optional
     'last_changed':
-        '2013-03-22', // this, too, will appear in the Translators tab
+        '2013-04-19', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -803,6 +803,10 @@ SnapTranslator.dict.de = {
         'Skripte der Reihe nach\nanordnen',
     'add comment':
         'Anmerkung hinzuf\u00fcgen',
+    'scripts pic...':
+        'Bild aller Scripte...',
+    'open a new window\nwith a picture of all scripts':
+        'ein neues Browserfenster mit einem\nBild aller Skripte \u00f6ffnen',
     'make a block...':
         'Neuen Block bauen...',
 

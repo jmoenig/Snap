@@ -65,7 +65,7 @@
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.xml = '2013-February-18';
+modules.xml = '2013-April-19';
 
 // Declarations
 

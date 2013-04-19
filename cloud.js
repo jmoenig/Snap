@@ -29,7 +29,7 @@
 
 /*global modules, IDE_Morph, SnapSerializer, hex_sha512, alert, nop*/
 
-modules.cloud = '2013-April-17';
+modules.cloud = '2013-April-19';
 
 // Global stuff
 
