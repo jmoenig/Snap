@@ -637,13 +637,13 @@ SnapTranslator.dict.de = {
         'l\u00e4dt ein exportiertes Projekt,\neine Bibliothek mit '
             + 'Bl\u00f6cken\n'
             + 'ein Kost\u00fcm oder einen Klang',
-    'Export project as plain text ...':
+    'Export project as plain text...':
         'Projekt als normalen Text exportieren...',
     'Export project...':
         'Projekt exportieren...',
     'show project data as XML\nin a new browser window':
         'zeigt das Projekt als XML\nin einem neuen Browserfenster an',
-    'Export blocks ...':
+    'Export blocks...':
         'Bl\u00f6cke exportieren...',
     'show global custom block definitions as XML\nin a new browser window':
         'zeigt globale Benutzerblockdefinitionen\nals XML im Browser an',

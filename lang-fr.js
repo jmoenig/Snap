@@ -587,7 +587,7 @@ SnapTranslator.dict.fr = {
    // menus
     // snap menu
     'About...':
-        'A propos de Snap! ...',
+        'A propos de Snap!...',
     'Snap! website':
         'Snap! le site web',
     'Download source':
@@ -618,13 +618,13 @@ SnapTranslator.dict.fr = {
         'importer un projet export\u00E9,\nune biblioth\u00E8que de '
             + 'blocs\n'
             + 'un costume ou un son',
-    'Export project as plain text ...':
+    'Export project as plain text...':
         'Exporter le projet comme texte...',
     'Export project...':
         'Exporter le projet...',
     'show project data as XML\nin a new browser window':
         'ouvrir le projet au format XML\ndans une nouvelle fen\u00EAtre de votre navigateur',
-    'Export blocks ...':
+    'Export blocks...':
         'Exporter les blocs ',
     'show global custom block definitions as XML\nin a new browser window':
         'montrer les d\u00E9finitions de bloc global personnalis\u00E9 au format XML \ndans une nouvelle fen\u00EAtre de navigateur',

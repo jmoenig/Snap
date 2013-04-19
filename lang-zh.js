@@ -636,13 +636,13 @@ SnapTranslator.dict.zh = {
         '当你拖动到系统，注意查看检查报告\n'
 		+ '要注意检查报告为空\n\n'
 		+ '有一些浏览器不支持这一功能',
-    'Export project as plain text ...':
+    'Export project as plain text...':
         '纯文本格式导出项目...',
     'Export project...':
         '导出项目...',
     'show project data as XML\nin a new browser window':
         '新浏览窗以XML格式显示项目',
-    'Export blocks ...':
+    'Export blocks...':
         '导出程序块...',
     'show global custom block definitions as XML\nin a new browser window':
         '新浏览窗以XML格式显示全局自定义程序块',

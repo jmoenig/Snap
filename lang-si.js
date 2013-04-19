@@ -610,13 +610,13 @@ SnapTranslator.dict.si = {
         'Nalaganje izvo\u017Eenega projekta,\nknji\u017Enice z '
             + 'bloki\n'
             + 'obleko ali zvokom',
-    'Export project as plain text ...':
+    'Export project as plain text...':
         'Izvozi projekt kot navadno besedilo...',
     'Export project...':
         'Izvozi projekt...',
     'show project data as XML\nin a new browser window':
         'Prikaz projekta kot XML\nv novem oknu brkljalnika',
-    'Export blocks ...':
+    'Export blocks...':
         'Izvozi bloke',
     'show global custom block definitions as XML\nin a new browser window':
         'Prikaz definicij globalnih lastnih blokov kot XML\nv novem oknu brkljalnika',

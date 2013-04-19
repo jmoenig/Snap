@@ -634,13 +634,13 @@ SnapTranslator.dict.it = {
         'carica un file di progetto,\nuna libreria di blocchi,'
             + '\nun costume o un suono esportati'
             + '\n\nNon supportato da tutti i browser',
-    'Export project as plain text ...':
+    'Export project as plain text...':
         'Esporta il progetto come un file di testo...',
     'Export project...':
         'Esporta il progetto...',
     'show project data as XML\nin a new browser window':
         'mostra i dati del progetto in formato XML\nin una nuova finestra del browser',
-    'Export blocks ...':
+    'Export blocks...':
         'Esporta blocchi...',
     'show global custom block definitions as XML\nin a new browser window':
         'mostra in formato XML le definizione dei nuovi blocchi\nin una nuova finestra del browser',
