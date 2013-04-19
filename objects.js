@@ -4921,7 +4921,6 @@ CellMorph.prototype.drawNew = function () {
                 isSafe = true;
                 lw = this.parentThatIsA(ListWatcherMorph);
                 while (lw) {
-                    console.log(lw);
                     if (lw.list === this.contents) {
                         nestedDepth += 1;
                         if (nestedDepth > 1) {
