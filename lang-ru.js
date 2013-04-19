@@ -623,8 +623,8 @@ SnapTranslator.dict.ru = {
         'Экспорт блоки...',
     'show global custom block definitions as XML\nin a new browser window':
         'представить определения глобальных пользовательских блоков как XML\nв новом окне браузера',
-    'Import tools...':
-        'Импорт сервисные ср-ва...',
+    'Import tools':
+        'Импорт сервисные ср-ва',
     'load the official library of\npowerful blocks':
         'загрузить служебную библиотеку блоков',
 
