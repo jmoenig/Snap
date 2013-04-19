@@ -1675,7 +1675,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
                 new VariableDialogMorph(
                     null,
                     function (pair) {
-                        if (pair) {
+                        if (pair && !myself.variables.silentFind(pair[0])) {
                             myself.addVariable(pair[0], pair[1]);
                             myself.toggleVariableWatcher(pair[0], pair[1]);
                             myself.blocksCache[cat] = null;
@@ -3796,7 +3796,7 @@ StageMorph.prototype.blockTemplates = function (category) {
                 new VariableDialogMorph(
                     null,
                     function (pair) {
-                        if (pair) {
+                        if (pair && !myself.variables.silentFind(pair[0])) {
                             myself.addVariable(pair[0], pair[1]);
                             myself.toggleVariableWatcher(pair[0], pair[1]);
                             myself.blocksCache[cat] = null;
