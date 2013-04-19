@@ -434,9 +434,13 @@ ListWatcherMorph.prototype.update = function (anyway) {
         starttime, maxtime = 1000;
 
     this.frame.contents.children.forEach(function (m) {
-        if (m instanceof CellMorph
-                && m.contentsMorph instanceof ListWatcherMorph) {
-            m.contentsMorph.update();
+        if (m instanceof CellMorph) {
+            if (m.contentsMorph instanceof ListWatcherMorph) {
+                m.contentsMorph.update();
+            } else if (m.contents instanceof List) {
+                m.drawNew();
+                m.fixLayout();
+            }
         }
     });
 
