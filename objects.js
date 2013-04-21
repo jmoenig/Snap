@@ -4476,11 +4476,7 @@ Costume.prototype.edit = function (aWorld) {
     dialog.fixLayout();
     dialog.drawNew();
     dialog.fixLayout();
-    if (aWorld) {
-        aWorld.add(dialog);
-        aWorld.keyboardReceiver = dialog;
-        dialog.setCenter(aWorld.center());
-    }
+    dialog.popUp(aWorld);
 };
 
 // Costume thumbnail

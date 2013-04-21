@@ -1475,6 +1475,11 @@ DialogBoxMorph.prototype.inform = function (
         new Point(1, 1),
         new Color(255, 255, 255)
     );
+
+    if (!this.key) {
+        this.key = 'information';
+    }
+
     this.labelString = title;
     this.createLabel();
     if (pic) {this.setPicture(pic); }
@@ -1484,11 +1489,7 @@ DialogBoxMorph.prototype.inform = function (
     this.addButton('ok', 'OK');
     this.drawNew();
     this.fixLayout();
-    if (world) {
-        world.add(this);
-        world.keyboardReceiver = this;
-        this.setCenter(world.center());
-    }
+    this.popUp(world);
 };
 
 DialogBoxMorph.prototype.askYesNo = function (
@@ -1509,6 +1510,11 @@ DialogBoxMorph.prototype.askYesNo = function (
         new Point(1, 1),
         new Color(255, 255, 255)
     );
+
+    if (!this.key) {
+        this.key = 'prompt';
+    }
+
     this.labelString = title;
     this.createLabel();
     if (pic) {this.setPicture(pic); }
@@ -1518,11 +1524,7 @@ DialogBoxMorph.prototype.askYesNo = function (
     this.fixLayout();
     this.drawNew();
     this.fixLayout();
-    if (world) {
-        world.add(this);
-        world.keyboardReceiver = this;
-        this.setCenter(world.center());
-    }
+    this.popUp(world);
 };
 
 DialogBoxMorph.prototype.prompt = function (
@@ -1612,6 +1614,10 @@ DialogBoxMorph.prototype.prompt = function (
     this.labelString = title;
     this.createLabel();
 
+    if (!this.key) {
+        this.key = 'prompt';
+    }
+
     this.addBody(txt);
     txt.drawNew();
     this.addButton('ok', 'OK');
@@ -1619,11 +1625,7 @@ DialogBoxMorph.prototype.prompt = function (
     this.fixLayout();
     this.drawNew();
     this.fixLayout();
-    if (world) {
-        world.add(this);
-        this.setCenter(world.center());
-        this.edit();
-    }
+    this.popUp(world);
 };
 
 DialogBoxMorph.prototype.promptCredentials = function (
@@ -1980,11 +1982,11 @@ DialogBoxMorph.prototype.promptCredentials = function (
 
     this.reactToChoice(); // initialize e-mail label
 
-    if (world) {
-        world.add(this);
-        this.setCenter(world.center());
-        this.edit();
+    if (!this.key) {
+        this.key = 'prompt';
     }
+
+    this.popUp(world);
 };
 
 DialogBoxMorph.prototype.accept = function () {
@@ -2022,6 +2024,34 @@ DialogBoxMorph.prototype.accept = function () {
         }
     }
     this.destroy();
+};
+
+DialogBoxMorph.prototype.withKey = function (key) {
+    this.key = key;
+    return this;
+};
+
+DialogBoxMorph.prototype.popUp = function (world) {
+    if (world) {
+        if (this.key) {
+            if ((world.dialogs || (world.dialogs = {}))[this.key]) {
+                world.dialogs[this.key].destroy();
+            }
+            world.dialogs[this.key] = this;
+        }
+        this.popUpWorld = world;
+        world.add(this);
+        world.keyboardReceiver = this;
+        this.setCenter(world.center());
+        this.edit();
+    }
+};
+
+DialogBoxMorph.prototype.destroy = function () {
+    DialogBoxMorph.uber.destroy.call(this);
+    if (this.key && this.popUpWorld && this.popUpWorld.dialogs) {
+        this.popUpWorld.dialogs[this.key] = undefined;
+    }
 };
 
 DialogBoxMorph.prototype.ok = function () {
