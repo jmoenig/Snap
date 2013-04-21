@@ -1026,6 +1026,10 @@ BlockDialogMorph.prototype = new DialogBoxMorph();
 BlockDialogMorph.prototype.constructor = BlockDialogMorph;
 BlockDialogMorph.uber = DialogBoxMorph.prototype;
 
+// BlockDialogMorph constants:
+
+BlockDialogMorph.prototype.key = 'makeABlock';
+
 // BlockDialogMorph instance creation:
 
 function BlockDialogMorph(target, action, environment) {
@@ -1099,11 +1103,7 @@ BlockDialogMorph.prototype.openForChange = function (
     this.scopes = null;
     this.fixLayout();
     this.drawNew();
-    if (world) {
-        world.add(this);
-        this.setCenter(world.center());
-        this.edit();
-    }
+    this.popUp(world);
 };
 
 // category buttons
@@ -1544,8 +1544,7 @@ BlockEditorMorph.prototype.popUp = function () {
     var world = this.target.world();
 
     if (world) {
-        world.add(this);
-        world.keyboardReceiver = this;
+        BlockEditorMorph.uber.popUp.call(this, world);
         this.handle = new HandleMorph(
             this,
             280,
@@ -1553,7 +1552,6 @@ BlockEditorMorph.prototype.popUp = function () {
             this.corner,
             this.corner
         );
-        this.setCenter(world.center());
     }
 };
 
@@ -2424,11 +2422,7 @@ InputSlotDialogMorph.prototype.open = function (
     this.fixLayout();
     this.drawNew();
     this.fixLayout();
-    if (world) {
-        world.add(this);
-        this.setCenter(world.center());
-        this.edit();
-    }
+    this.popUp(world);
     this.add(this.types); // make the types come to front
     Morph.prototype.trackChanges = oldFlag;
     this.changed();
@@ -2846,6 +2840,10 @@ BlockExportDialogMorph.prototype = new DialogBoxMorph();
 BlockExportDialogMorph.prototype.constructor = BlockExportDialogMorph;
 BlockExportDialogMorph.uber = DialogBoxMorph.prototype;
 
+// BlockExportDialogMorph constants:
+
+BlockExportDialogMorph.prototype.key = 'blockExport';
+
 // BlockExportDialogMorph instance creation:
 
 function BlockExportDialogMorph(serializer, blocks) {
@@ -2952,8 +2950,7 @@ BlockExportDialogMorph.prototype.buildContents = function () {
 BlockExportDialogMorph.prototype.popUp = function (wrrld) {
     var world = wrrld || this.target.world();
     if (world) {
-        world.add(this);
-        world.keyboardReceiver = this;
+        BlockExportDialogMorph.uber.popUp.call(this, world);
         this.handle = new HandleMorph(
             this,
             200,
@@ -2961,7 +2958,6 @@ BlockExportDialogMorph.prototype.popUp = function (wrrld) {
             this.corner,
             this.corner
         );
-        this.setCenter(world.center());
     }
 };
 
@@ -3023,6 +3019,10 @@ BlockExportDialogMorph.prototype.fixLayout
 BlockImportDialogMorph.prototype = new DialogBoxMorph();
 BlockImportDialogMorph.prototype.constructor = BlockImportDialogMorph;
 BlockImportDialogMorph.uber = DialogBoxMorph.prototype;
+
+// BlockImportDialogMorph constants:
+
+BlockImportDialogMorph.prototype.key = 'blockImport';
 
 // BlockImportDialogMorph instance creation:
 
