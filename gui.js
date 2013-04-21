@@ -2901,6 +2901,7 @@ IDE_Morph.prototype.userSetBlocksScale = function () {
     */
 
     sample = new FrameMorph();
+    sample.acceptsDrops = false;
     sample.texture = 'scriptsPaneTexture.gif';
     sample.setExtent(new Point(250, 180));
     scrpt.setPosition(sample.position().add(10));
