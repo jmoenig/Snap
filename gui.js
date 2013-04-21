@@ -68,7 +68,7 @@ sb, CommentMorph, CommandBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2013-April-19';
+modules.gui = '2013-April-21';
 
 // Declarations
 
@@ -3738,7 +3738,9 @@ ProjectDialogMorph.prototype.setSource = function (source) {
         this.projectList.length > 0 ?
                 function (element) {
                     return element.name;
-                } : null
+                } : null,
+        null,
+        function () {myself.ok(); }
     );
 
     this.fixListFieldItemColors();
@@ -3754,6 +3756,7 @@ ProjectDialogMorph.prototype.setSource = function (source) {
         this.listField.action = function (item) {
             var src, xml;
 
+            if (item === undefined) {return; }
             if (myself.nameField) {
                 myself.nameField.setContents(item.name || '');
             }
@@ -3775,6 +3778,7 @@ ProjectDialogMorph.prototype.setSource = function (source) {
         };
     } else { // 'examples', 'cloud' is initialized elsewhere
         this.listField.action = function (item) {
+            if (item === undefined) {return; }
             if (myself.nameField) {
                 myself.nameField.setContents(item.name || '');
             }
@@ -3852,7 +3856,9 @@ ProjectDialogMorph.prototype.installCloudProjectList = function (pl) {
                 'bold',
                 function (proj) {return proj.Public === 'true'; }
             ]
-        ]
+        ],
+        null,
+        function () {myself.ok(); }
     );
 
     this.fixListFieldItemColors();
@@ -3865,6 +3871,7 @@ ProjectDialogMorph.prototype.installCloudProjectList = function (pl) {
     this.listField.drawRectBorder = InputFieldMorph.prototype.drawRectBorder;
 
     this.listField.action = function (item) {
+        if (item === undefined) {return; }
         if (myself.nameField) {
             myself.nameField.setContents(item.ProjectName || '');
         }
