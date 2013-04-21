@@ -147,6 +147,7 @@
     III. yet to implement
     ---------------------
     - keyboard support for scroll frames and lists
+    - virtual keyboard support for Android and IE
 
 
     IV. open issues
@@ -416,7 +417,7 @@
     * add(submorph)            - attaches submorph ontop
     * addBack(submorph)        - attaches submorph underneath
 
-    * fullCopy()            - duplication
+    * fullCopy()               - duplication
     * destroy()                - deletion
 
 
@@ -450,6 +451,7 @@
         mouseDownRight
         mouseClickLeft
         mouseClickRight
+        mouseDoubleClick
         mouseEnter
         mouseLeave
         mouseEnterDragging
@@ -1033,7 +1035,7 @@
 /*global window, HTMLCanvasElement, getMinimumFontHeight, FileReader, Audio,
 FileList, getBlurredShadowSupport*/
 
-var morphicVersion = '2013-April-19';
+var morphicVersion = '2013-April-21';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = getBlurredShadowSupport(); // check for Chrome-bug
 
@@ -6161,7 +6163,7 @@ InspectorMorph.prototype.setTarget = function (target) {
 };
 
 InspectorMorph.prototype.buildPanes = function () {
-    var attribs = [], property, myself = this, ctrl, ev;
+    var attribs = [], property, myself = this, ctrl, ev, doubleClickAction;
 
     // remove existing panes
     this.children.forEach(function (m) {
@@ -6194,6 +6196,20 @@ InspectorMorph.prototype.buildPanes = function () {
             return typeof myself.target[prop] === 'function';
         });
     } // otherwise show all properties
+
+    doubleClickAction = function () {
+        var world, inspector;
+        if (!isObject(myself.currentProperty)) {return; }
+        world = myself.world();
+        inspector = new InspectorMorph(
+            myself.currentProperty
+        );
+        inspector.setPosition(world.hand.position());
+        inspector.keepWithin(world);
+        world.add(inspector);
+        inspector.changed();
+    };
+
     this.list = new ListMorph(
         this.target instanceof Array ? attribs : attribs.sort(),
         null, // label getter
@@ -6209,10 +6225,13 @@ InspectorMorph.prototype.buildPanes = function () {
                         }
                     ]
                 ]
-                : null
+                : null,
+        doubleClickAction
     );
+
     this.list.action = function (selected) {
         var val, txt, cnts;
+        if (selected === undefined) {return; }
         val = myself.target[selected];
         myself.currentProperty = val;
         if (val === null) {
@@ -6228,6 +6247,7 @@ InspectorMorph.prototype.buildPanes = function () {
         cnts.setReceiver(myself.target);
         myself.detail.setContents(cnts);
     };
+
     this.list.hBar.alpha = 0.6;
     this.list.vBar.alpha = 0.6;
     this.list.contents.step = null;
@@ -6609,7 +6629,8 @@ MenuMorph.prototype.addItem = function (
     hint,
     color,
     bold, // bool
-    italic // bool
+    italic, // bool
+    doubleClickAction // optional, when used as list contents
 ) {
     /*
     labelString is normally a single-line string. But it can also be one
@@ -6625,7 +6646,8 @@ MenuMorph.prototype.addItem = function (
         hint,
         color,
         bold || false,
-        italic || false]);
+        italic || false,
+        doubleClickAction]);
 };
 
 MenuMorph.prototype.addLine = function (width) {
@@ -6713,7 +6735,8 @@ MenuMorph.prototype.drawNew = function () {
                 tuple[2], // bubble help hint
                 tuple[3], // color
                 tuple[4], // bold
-                tuple[5] // italic
+                tuple[5], // italic
+                tuple[6] // doubleclick action
             );
         }
         if (isLine) {
@@ -7910,7 +7933,8 @@ function TriggerMorph(
     hint,
     labelColor,
     labelBold,
-    labelItalic
+    labelItalic,
+    doubleClickAction
 ) {
     this.init(
         target,
@@ -7922,7 +7946,8 @@ function TriggerMorph(
         hint,
         labelColor,
         labelBold,
-        labelItalic
+        labelItalic,
+        doubleClickAction
     );
 }
 
@@ -7936,11 +7961,13 @@ TriggerMorph.prototype.init = function (
     hint,
     labelColor,
     labelBold,
-    labelItalic
+    labelItalic,
+    doubleClickAction
 ) {
     // additional properties:
     this.target = target || null;
     this.action = action || null;
+    this.doubleClickAction = doubleClickAction || null;
     this.environment = environment || null;
     this.labelString = labelString || null;
     this.label = null;
@@ -8067,6 +8094,29 @@ TriggerMorph.prototype.trigger = function () {
     }
 };
 
+TriggerMorph.prototype.triggerDoubleClick = function () {
+    // same as trigger() but use doubleClickAction instead of action property
+    // note that specifying a doubleClickAction is optional
+    if (!this.doubleClickAction) {return; }
+    if (typeof this.target === 'function') {
+        if (typeof this.doubleClickAction === 'function') {
+            this.target.call(
+                this.environment,
+                this.doubleClickAction.call(),
+                this
+            );
+        } else {
+            this.target.call(this.environment, this.doubleClickAction, this);
+        }
+    } else {
+        if (typeof this.doubleClickAction === 'function') {
+            this.doubleClickAction.call(this.target);
+        } else { // assume it's a String
+            this.target[this.doubleClickAction]();
+        }
+    }
+};
+
 // TriggerMorph events:
 
 TriggerMorph.prototype.mouseEnter = function () {
@@ -8094,6 +8144,10 @@ TriggerMorph.prototype.mouseClickLeft = function () {
     this.image = this.highlightImage;
     this.changed();
     this.trigger();
+};
+
+TriggerMorph.prototype.mouseDoubleClick = function () {
+    this.triggerDoubleClick();
 };
 
 TriggerMorph.prototype.rootForGrab = function () {
@@ -8147,7 +8201,8 @@ function MenuItemMorph(
     hint,
     color,
     bold,
-    italic
+    italic,
+    doubleClickAction // optional when used as list morph item
 ) {
     this.init(
         target,
@@ -8159,7 +8214,8 @@ function MenuItemMorph(
         hint,
         color,
         bold,
-        italic
+        italic,
+        doubleClickAction
     );
 }
 
@@ -8859,7 +8915,7 @@ ListMorph.prototype = new ScrollFrameMorph();
 ListMorph.prototype.constructor = ListMorph;
 ListMorph.uber = ScrollFrameMorph.prototype;
 
-function ListMorph(elements, labelGetter, format) {
+function ListMorph(elements, labelGetter, format, doubleClickAction) {
 /*
     passing a format is optional. If the format parameter is specified
     it has to be of the following pattern:
@@ -8891,11 +8947,17 @@ function ListMorph(elements, labelGetter, format) {
             }
             return element.toString();
         },
-        format || []
+        format || [],
+        doubleClickAction // optional callback
     );
 }
 
-ListMorph.prototype.init = function (elements, labelGetter, format) {
+ListMorph.prototype.init = function (
+    elements,
+    labelGetter,
+    format,
+    doubleClickAction
+) {
     ListMorph.uber.init.call(this);
 
     this.contents.acceptsDrops = false;
@@ -8909,6 +8971,7 @@ ListMorph.prototype.init = function (elements, labelGetter, format) {
     this.selected = null; // actual element currently selected
     this.active = null; // menu item representing the selected element
     this.action = null;
+    this.doubleClickAction = doubleClickAction || null;
     this.acceptsDrops = false;
     this.buildListContents();
 };
@@ -8948,7 +9011,8 @@ ListMorph.prototype.buildListContents = function () {
             null, // hint
             color,
             bold,
-            italic
+            italic,
+            myself.doubleClickAction
         );
     });
     this.listContents.setPosition(this.contents.position());
@@ -9340,6 +9404,7 @@ HandMorph.prototype.drop = function () {
         mouseDownRight
         mouseClickLeft
         mouseClickRight
+        mouseDoubleClick
         mouseEnter
         mouseLeave
         mouseEnterDragging
@@ -9472,6 +9537,23 @@ HandMorph.prototype.processMouseUp = function () {
     this.mouseButton = null;
 };
 
+HandMorph.prototype.processDoubleClick = function () {
+    var morph = this.morphAtPointer();
+
+    this.destroyTemporaries();
+    if (this.children.length !== 0) {
+        this.drop();
+    } else {
+        while (morph && !morph.mouseDoubleClick) {
+            morph = morph.parent;
+        }
+        if (morph) {
+            morph.mouseDoubleClick(this.bounds.origin);
+        }
+    }
+    this.mouseButton = null;
+};
+
 HandMorph.prototype.processMouseMove = function (event) {
     var pos,
         posInDocument = getDocumentPositionOf(this.world.worldCanvas),
@@ -9525,7 +9607,7 @@ HandMorph.prototype.processMouseMove = function (event) {
 
 /*
     original, more cautious code for grabbing Morphs,
-    retained in case of needing    to fall back:
+    retained in case of needing to fall back:
 
         if (morph === this.morphToGrab) {
             if (morph.isDraggable) {
@@ -10035,6 +10117,15 @@ WorldMorph.prototype.initEventListeners = function () {
         function (event) {
             event.preventDefault();
             myself.hand.processMouseUp(event);
+        },
+        false
+    );
+
+    canvas.addEventListener(
+        "dblclick",
+        function (event) {
+            event.preventDefault();
+            myself.hand.processDoubleClick(event);
         },
         false
     );
