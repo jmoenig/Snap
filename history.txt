@@ -1643,3 +1643,7 @@ ______
 130419
 ------
 * German translation update for "scripts pic" feature
+
+130421
+------
+* using the percent character in variable names is now safe (fixes Github issue #65)

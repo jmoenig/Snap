@@ -153,7 +153,7 @@ DialogBoxMorph, BlockInputFragmentMorph, PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2013-April-19';
+modules.blocks = '2013-April-21';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -628,8 +628,9 @@ SyntaxElementMorph.prototype.fixBlockColor = function (
 
 SyntaxElementMorph.prototype.labelPart = function (spec) {
     var part;
-    if ((spec[0] === '%') && (spec.length > 1)) {
-
+    if (spec[0] === '%' &&
+            spec.length > 1 &&
+            this.selector !== 'reportGetVar') {
         // check for variable multi-arg-slot:
         if ((spec.length > 5) && (spec.slice(0, 5) === '%mult')) {
             part = new MultiArgMorph(spec.slice(5));
