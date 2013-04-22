@@ -1649,3 +1649,7 @@ ______
 * using the percent character in variable names is now safe (fixes Github issue #65)
 * Morphic: added Doubleclick support, example: inspectors
 * GUI: Double clicking a project in the project dialog performs the dialog's action on it (open / save)
+
+130422
+------
+* GUI: Double clicking support for cloud side of project dialog
