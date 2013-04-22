@@ -4914,8 +4914,41 @@ CellMorph.prototype.drawNew = function () {
             this.contentsMorph.silentSetHeight(img.height);
             this.contentsMorph.image = img;
         } else if (this.contents instanceof List) {
-            this.contentsMorph = new ListWatcherMorph(this.contents);
-            this.contentsMorph.isDraggable = false;
+            var isSafe = false,
+                nestedDepth = 0,
+                lw;
+            if (this.parent) {
+                isSafe = true;
+                lw = this.parentThatIsA(ListWatcherMorph);
+                while (lw) {
+                    if (lw.list === this.contents) {
+                        nestedDepth += 1;
+                        if (nestedDepth > 1) {
+                            isSafe = false;
+                            break;
+                        }
+                    }
+                    if (lw.parent) {
+                        lw = lw.parent.parentThatIsA(ListWatcherMorph);
+                    } else {
+                        break;
+                    }
+                }
+            }
+            if (isSafe) {
+                this.contentsMorph = new ListWatcherMorph(this.contents);
+                this.contentsMorph.isDraggable = false;
+            } else {
+                this.contentsMorph = new TextMorph(
+                    '[...]',
+                    fontSize,
+                    null,
+                    true,
+                    false,
+                    'center'
+                );
+                this.contentsMorph.setColor(new Color(255, 255, 255));
+            }
         } else {
             this.contentsMorph = new TextMorph(
                 !isNil(this.contents) ? this.contents.toString() : '',
@@ -5518,6 +5551,11 @@ WatcherMorph.prototype.userSetSliderMax = function () {
         true // numeric
     );
 };
+
+WatcherMorph.prototype.show = function() {
+    WatcherMorph.uber.show.call(this);
+    this.parent.add(this); // move to front
+}
 
 // WatcherMorph drawing:
 
