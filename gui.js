@@ -68,7 +68,7 @@ sb, CommentMorph, CommandBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2013-April-21';
+modules.gui = '2013-April-22';
 
 // Declarations
 
@@ -3724,7 +3724,7 @@ ProjectDialogMorph.prototype.setSource = function (source) {
                 myself.ide.cloudError().call(null, err, lbl);
             }
         );
-        break;
+        return;
     case 'local':
         this.projectList = this.getLocalProjectList();
         break;
@@ -3732,8 +3732,8 @@ ProjectDialogMorph.prototype.setSource = function (source) {
         this.projectList = [];
         break;
     }
-    this.listField.destroy();
 
+    this.listField.destroy();
     this.listField = new ListMorph(
         this.projectList,
         this.projectList.length > 0 ?
@@ -3796,21 +3796,14 @@ ProjectDialogMorph.prototype.setSource = function (source) {
     }
     this.body.add(this.listField);
 
-    if (this.source === 'cloud') {
-        this.shareButton.show();
-        this.unshareButton.hide();
+    this.shareButton.hide();
+    this.unshareButton.hide();
+    if (this.source === 'local') {
         this.deleteButton.show();
-    } else {
-        this.shareButton.hide();
-        this.unshareButton.hide();
-        if (this.source === 'local') {
-            this.deleteButton.show();
-        } else { // examples
-            this.deleteButton.hide();
-        }
+    } else { // examples
+        this.deleteButton.hide();
     }
     this.buttons.fixLayout();
-
     this.fixLayout();
     if (this.task === 'open') {
         this.clearDetails();
@@ -3858,10 +3851,8 @@ ProjectDialogMorph.prototype.installCloudProjectList = function (pl) {
                 function (proj) {return proj.Public === 'true'; }
             ]
         ],
-        null,
         function () {myself.ok(); }
     );
-
     this.fixListFieldItemColors();
     this.listField.fixLayout = nop;
     this.listField.edge = InputFieldMorph.prototype.edge;
@@ -3896,6 +3887,10 @@ ProjectDialogMorph.prototype.installCloudProjectList = function (pl) {
         myself.edit();
     };
     this.body.add(this.listField);
+    this.shareButton.show();
+    this.unshareButton.hide();
+    this.deleteButton.show();
+    this.buttons.fixLayout();
     this.fixLayout();
     if (this.task === 'open') {
         this.clearDetails();
@@ -3912,36 +3907,32 @@ ProjectDialogMorph.prototype.clearDetails = function () {
 };
 
 ProjectDialogMorph.prototype.openProject = function () {
-    var myself = this;
-
+    var myself = this,
+        proj = this.listField.selected;
+    if (!proj) {return; }
     if (this.source === 'cloud') {
-        if (this.listField.selected) {
-            this.openSelectedCloudProject();
-        }
+        this.openCloudProject(proj);
     } else { // 'local, examples'
-        if (this.listField.selected) {
-            myself.ide.source = 'local';
-            this.ide.openProject(this.listField.selected.name);
-            this.destroy();
-        }
+        myself.ide.source = 'local';
+        this.ide.openProject(proj.name);
+        this.destroy();
     }
 };
 
-ProjectDialogMorph.prototype.openSelectedCloudProject = function () {
+ProjectDialogMorph.prototype.openCloudProject = function (project) {
     var myself = this;
-    this.nextSteps([
+    myself.ide.nextSteps([
         function () {
             myself.ide.showMessage('Fetching project\nfrom the cloud...');
         },
         function () {
-            myself.rawOpenSelectedCloudProject();
+            myself.rawOpenCloudProject(project);
         }
     ]);
 };
 
-ProjectDialogMorph.prototype.rawOpenSelectedCloudProject = function () {
-    var myself = this,
-        proj = this.listField.selected;
+ProjectDialogMorph.prototype.rawOpenCloudProject = function (proj) {
+    var myself = this;
     SnapCloud.reconnect(
         function () {
             SnapCloud.callService(
