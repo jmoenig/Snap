@@ -105,7 +105,7 @@ CommentMorph, localize, CSlotMorph, SpeechBubbleMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2013-April-12';
+modules.byob = '2013-April-23';
 
 // Declarations
 
