@@ -3964,7 +3964,6 @@ ProjectDialogMorph.prototype.saveProject = function () {
 
     this.ide.projectNotes = notes || this.ide.projectNotes;
     if (name) {
-        this.ide.setProjectName(name);
         if (this.source === 'cloud') {
             if (detect(
                     this.projectList,
@@ -3976,11 +3975,12 @@ ProjectDialogMorph.prototype.saveProject = function () {
                     ) + '\n"' + name + '"?',
                     'Replace Project',
                     function () {
+                        myself.ide.setProjectName(name);
                         myself.saveCloudProject();
                     }
-
                 );
             } else {
+                this.ide.setProjectName(name);
                 myself.saveCloudProject();
             }
         } else { // 'local'
@@ -3994,12 +3994,14 @@ ProjectDialogMorph.prototype.saveProject = function () {
                     ) + '\n"' + name + '"?',
                     'Replace Project',
                     function () {
+                        myself.ide.setProjectName(name);
                         myself.ide.source = 'local';
                         myself.ide.saveProject(name);
                         myself.destroy();
                     }
                 );
             } else {
+                this.ide.setProjectName(name);
                 myself.ide.source = 'local';
                 this.ide.saveProject(name);
                 this.destroy();
