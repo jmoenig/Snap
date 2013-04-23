@@ -642,8 +642,8 @@ SnapTranslator.dict.ja = {
         'ブロックを書き出す...',
     'show global custom block definitions as XML\nin a new browser window':
         'グローバルカスタムブロックの定義をXMLとして\nブラウザの新しいウインドウに表示する',
-    'Import tools...':
-        'ツールを読み込む...',
+    'Import tools':
+        'ツールを読み込む',
     'load the official library of\npowerful blocks':
         '強力なブロックの公式\nライブラリを読み込む',
 

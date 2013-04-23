@@ -2011,7 +2011,7 @@ IDE_Morph.prototype.projectMenu = function () {
 
     menu.addLine();
     menu.addItem(
-        'Import tools...',
+        'Import tools',
         function () {
 
             var url = 'http://snap.berkeley.edu/snapsource/tools.xml',

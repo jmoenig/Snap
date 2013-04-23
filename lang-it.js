@@ -644,8 +644,8 @@ SnapTranslator.dict.it = {
         'Esporta blocchi...',
     'show global custom block definitions as XML\nin a new browser window':
         'mostra in formato XML le definizione dei nuovi blocchi\nin una nuova finestra del browser',
-    'Import tools...':
-        'Importa tools...',
+    'Import tools':
+        'Importa tools',
     'load the official library of\npowerful blocks':
         'carica la libreria ufficiale di\nblocchi Snap',
 

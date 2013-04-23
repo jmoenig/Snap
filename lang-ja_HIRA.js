@@ -642,8 +642,8 @@ SnapTranslator.dict.ja_HIRA = {
         'ブロックをかきだす...',
     'show global custom block definitions as XML\nin a new browser window':
         'グローバルカスタムブロックのていぎをXMLとして\nブラウザのあたらしいウインドウにひょうじする',
-    'Import tools...':
-        'ツールをよみこむ...',
+    'Import tools':
+        'ツールをよみこむ',
     'load the official library of\npowerful blocks':
         'きょうりょくなブロックのこうしき\nライブラリをよみこむ',
 
