@@ -558,8 +558,7 @@ SyntaxElementMorph.prototype.reactToGrabOf = function (grabbedMorph) {
             comment.align(topBlock);
         });
         if (topBlock.getHighlight()) {
-            topBlock.removeHighlight();
-            topBlock.addHighlight();
+            topBlock.addHighlight(topBlock.removeHighlight());
         }
     }
 };
@@ -1377,8 +1376,7 @@ SyntaxElementMorph.prototype.fixLayout = function () {
 SyntaxElementMorph.prototype.fixHighlight = function () {
     var top = this.topBlock();
     if (top.getHighlight && top.getHighlight()) {
-        top.removeHighlight();
-        top.addHighlight();
+        top.addHighlight(top.removeHighlight());
     }
 };
 
@@ -2127,13 +2125,13 @@ BlockMorph.prototype.eraseHoles = function (context) {
 
 // BlockMorph highlighting
 
-BlockMorph.prototype.addHighlight = function () {
+BlockMorph.prototype.addHighlight = function (oldHighlight) {
     var isHidden = !this.isVisible,
         highlight;
 
     if (isHidden) {this.show(); }
     highlight = this.highlight(
-        this.activeHighlight,
+        oldHighlight ? oldHighlight.color : this.activeHighlight,
         this.activeBlur,
         this.activeBorder
     );
@@ -2166,6 +2164,7 @@ BlockMorph.prototype.removeHighlight = function () {
         this.fullChanged();
         this.removeChild(highlight);
     }
+    return highlight;
 };
 
 BlockMorph.prototype.toggleHighlight = function () {
@@ -2181,6 +2180,7 @@ BlockMorph.prototype.highlight = function (color, blur, border) {
         fb = this.fullBounds(),
         edge = useBlurredShadows ? blur : border;
     highlight.setExtent(fb.extent().add(edge * 2));
+    highlight.color = color;
     highlight.image = useBlurredShadows ?
             this.highlightImageBlurred(color, blur)
                 : this.highlightImage(color, border);
@@ -2533,8 +2533,7 @@ BlockMorph.prototype.snap = function () {
         this.removeHighlight();
     }
     if (top.getHighlight()) {
-        top.removeHighlight();
-        top.addHighlight();
+        top.addHighlight(top.removeHighlight());
     }
 };
 
