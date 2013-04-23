@@ -1653,3 +1653,7 @@ ______
 130422
 ------
 * GUI: Double clicking support for cloud side of project dialog
+
+130423
+------
+* Lists, Objects: Circularity no longer breaks watchers
