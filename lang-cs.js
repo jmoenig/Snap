@@ -633,13 +633,13 @@ SnapTranslator.dict.cs = {
     'file menu import hint':
         'Načíst exportovaný projekt, '
             + 'knihovnu bloků, kostýmy nebo zvuky',
-    'Export project as plain text ...':
+    'Export project as plain text...':
         'Exportovat projekt jako prostý text...',
     'Export project...':
         'Exportovat projekt...',
     'show project data as XML\nin a new browser window':
         'zobrazit data projektu jako xml  XML\n v novém okně prohlížeče',
-    'Export blocks ...':
+    'Export blocks...':
         'Exportovat bloky...',
     'show global custom block definitions as XML\nin a new browser window':
         'Zobrazit definici vlastních bloků jako\nXML v novém okně prohlížeče',

@@ -632,13 +632,13 @@ SnapTranslator.dict.ja_HIRA = {
         'チェックするとレポーターをドラッグ&ドロップするとき\n'
 		+ 'そらのレポーターにフォーカスします\n\n'
 		+ 'いくつかのブラウザーではサポートされません',
-    'Export project as plain text ...':
+    'Export project as plain text...':
         'テキストファイルとしてプロジェクトをかきだす...',
     'Export project...':
         'プロジェクトをかきだす...',
     'show project data as XML\nin a new browser window':
         'プロジェクトのデータをXMLとして\nブラウザのあたらしいウインドウにひょうじする',
-    'Export blocks ...':
+    'Export blocks...':
         'ブロックをかきだす...',
     'show global custom block definitions as XML\nin a new browser window':
         'グローバルカスタムブロックのていぎをXMLとして\nブラウザのあたらしいウインドウにひょうじする',
