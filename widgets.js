@@ -73,7 +73,7 @@ newCanvas, StringMorph, Morph, TextMorph, nop, detect, StringFieldMorph,
 HTMLCanvasElement, fontHeight, SymbolMorph, localize, SpeechBubbleMorph,
 ArrowMorph, MenuMorph, isString, isNil, SliderMorph*/
 
-modules.widgets = '2013-April-19';
+modules.widgets = '2013-April-23';
 
 var PushButtonMorph;
 var ToggleButtonMorph;
@@ -1391,7 +1391,16 @@ ToggleElementMorph.prototype.mouseClickLeft
 
 // DialogBoxMorph /////////////////////////////////////////////////////
 
-// I am a DialogBox frame
+/*
+    I am a DialogBox frame.
+
+    Note:
+    -----
+    I add a property "dialogs" to whichever World I'm popped up in, which
+    keeps track of my instances, preventing double instances of the same type
+    and on the same objects, while allowing multiple instance where
+    appropriate
+*/
 
 // DialogBoxMorph inherits from Morph:
 
@@ -1438,6 +1447,8 @@ DialogBoxMorph.prototype.init = function (target, action, environment) {
     this.target = target || null;
     this.action = action || null;
     this.environment = environment || null;
+    this.popUpWorld = null; // keep track of open instances per world
+    this.key = null; // keep track of my purpose to prevent mulitple instances
 
     this.labelString = null;
     this.label = null;
@@ -2034,7 +2045,8 @@ DialogBoxMorph.prototype.withKey = function (key) {
 DialogBoxMorph.prototype.popUp = function (world) {
     if (world) {
         if (this.key) {
-            if ((world.dialogs || (world.dialogs = {}))[this.key]) {
+            if (!world.dialogs) {world.dialogs = {}; } // lazy init
+            if (world.dialogs[this.key]) {
                 world.dialogs[this.key].destroy();
             }
             world.dialogs[this.key] = this;

@@ -1657,3 +1657,5 @@ ______
 130423
 ------
 * Lists, Objects: Circularity no longer breaks watchers
+* Widgets: Multiple Dialogs of the same kind are prevented except for a few (e.g. BlockEditor). Thanks for this fix, Nathan! (and for the many little UI things you've fixed as well)
+* German translation update

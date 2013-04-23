@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org', // optional
     'last_changed':
-        '2013-04-19', // this, too, will appear in the Translators tab
+        '2013-04-23', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -559,6 +559,8 @@ SnapTranslator.dict.de = {
         'Neue Variable',
     'Variable name':
         'Variablenname',
+    'Script variable name':
+        'Skriptvariablenname',
     'Delete a variable':
         'Variable l\u00f6schen',
 
