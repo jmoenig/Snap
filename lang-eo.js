@@ -606,14 +606,14 @@ SnapTranslator.dict.eo = {
         'Importi...',
     'file menu import hint':
         'elŝutu dosieron kun blokoj sonoj aŭ kostumoj',
-    'Export project as plain text ...':
-        'Eksporti projekton en plata teksta formo ...',
+    'Export project as plain text...':
+        'Eksporti projekton en plata teksta formo...',
     'Export project...':
         'Eksporti projekton...',
     'show project data as XML\nin a new browser window':
         'prezenti projekton kiel XML\nen nova fenestro de retumilo',
-    'Export blocks ...':
-        'Eksporti blokojn ...',
+    'Export blocks...':
+        'Eksporti blokojn...',
     'show global custom block definitions as XML\nin a new browser window':
         'prezenti mallokajn difinojn de propraj blokoj kiel XML\nen nova fenestro de retumilo',
     'Delete Project':

@@ -1989,7 +1989,7 @@ IDE_Morph.prototype.projectMenu = function () {
 
     menu.addItem(
         shiftClicked ?
-                'Export project as plain text ...' : 'Export project...',
+                'Export project as plain text...' : 'Export project...',
         function () {
             if (myself.projectName) {
                 myself.exportProject(myself.projectName, shiftClicked);
@@ -2004,7 +2004,7 @@ IDE_Morph.prototype.projectMenu = function () {
     );
 
     menu.addItem(
-        'Export blocks ...',
+        'Export blocks...',
         function () {myself.exportGlobalBlocks(); },
         'show global custom block definitions as XML\nin a new browser window'
     );
