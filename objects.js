@@ -120,7 +120,7 @@ PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.objects = '2013-April-19';
+modules.objects = '2013-April-23';
 
 var SpriteMorph;
 var StageMorph;
@@ -4805,16 +4805,17 @@ CellMorph.uber = BoxMorph.prototype;
 
 // CellMorph instance creation:
 
-function CellMorph(contents, color, idx) {
-    this.init(contents, color, idx);
+function CellMorph(contents, color, idx, parentCell) {
+    this.init(contents, color, idx, parentCell);
 }
 
-CellMorph.prototype.init = function (contents, color, idx) {
+CellMorph.prototype.init = function (contents, color, idx, parentCell) {
     this.contents = (contents === 0 ? 0
             : contents === false ? false
                     : contents || '');
     this.isEditable = isNil(idx) ? false : true;
     this.idx = idx || null; // for list watchers
+    this.parentCell = parentCell || null; // for list circularity detection
     CellMorph.uber.init.call(
         this,
         SyntaxElementMorph.prototype.corner,
@@ -4840,6 +4841,17 @@ CellMorph.prototype.normal = function () {
     this.changed();
     this.drawNew();
     this.changed();
+};
+
+// CellMorph circularity testing:
+
+
+CellMorph.prototype.isCircular = function (list) {
+    if (!this.parentCell) {return false; }
+    if (list instanceof List) {
+        return this.contents === list || this.parentCell.isCircular(list);
+    }
+    return this.parentCell.isCircular(this.contents);
 };
 
 // CellMorph layout:
@@ -4914,8 +4926,23 @@ CellMorph.prototype.drawNew = function () {
             this.contentsMorph.silentSetHeight(img.height);
             this.contentsMorph.image = img;
         } else if (this.contents instanceof List) {
-            this.contentsMorph = new ListWatcherMorph(this.contents);
-            this.contentsMorph.isDraggable = false;
+            if (this.isCircular()) {
+                this.contentsMorph = new TextMorph(
+                    '(...)',
+                    fontSize,
+                    null,
+                    false, // bold
+                    true, // italic
+                    'center'
+                );
+                this.contentsMorph.setColor(new Color(255, 255, 255));
+            } else {
+                this.contentsMorph = new ListWatcherMorph(
+                    this.contents,
+                    this
+                );
+                this.contentsMorph.isDraggable = false;
+            }
         } else {
             this.contentsMorph = new TextMorph(
                 !isNil(this.contents) ? this.contents.toString() : '',

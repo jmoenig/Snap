@@ -61,7 +61,7 @@ PushButtonMorph, SyntaxElementMorph, Color, Point, WatcherMorph,
 StringMorph, SpriteMorph, ScrollFrameMorph, CellMorph, ArrowMorph,
 MenuMorph, snapEquals, Morph, isNil, localize*/
 
-modules.lists = '2013-April-12';
+modules.lists = '2013-April-23';
 
 var List;
 var ListWatcherMorph;
@@ -345,11 +345,11 @@ ListWatcherMorph.prototype.cellColor =
 
 // ListWatcherMorph instance creation:
 
-function ListWatcherMorph(list) {
-    this.init(list);
+function ListWatcherMorph(list, parentCell) {
+    this.init(list, parentCell);
 }
 
-ListWatcherMorph.prototype.init = function (list) {
+ListWatcherMorph.prototype.init = function (list, parentCell) {
     var myself = this;
 
     this.list = list || new List();
@@ -357,6 +357,7 @@ ListWatcherMorph.prototype.init = function (list) {
     this.range = 100;
     this.lastUpdated = Date.now();
     this.lastCell = null;
+    this.parentCell = parentCell || null; // for circularity detection
 
     // elements declarations
     this.label = new StringMorph(
@@ -434,6 +435,7 @@ ListWatcherMorph.prototype.update = function (anyway) {
         starttime, maxtime = 1000;
 
     this.frame.contents.children.forEach(function (m) {
+
         if (m instanceof CellMorph
                 && m.contentsMorph instanceof ListWatcherMorph) {
             m.contentsMorph.update();
@@ -529,7 +531,8 @@ ListWatcherMorph.prototype.update = function (anyway) {
             cell = new CellMorph(
                 this.list.at(idx),
                 this.cellColor,
-                idx
+                idx,
+                this.parentCell
             );
             button = new PushButtonMorph(
                 this.list.remove,
