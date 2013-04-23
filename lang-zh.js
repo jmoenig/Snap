@@ -646,8 +646,8 @@ SnapTranslator.dict.zh = {
         '导出程序块...',
     'show global custom block definitions as XML\nin a new browser window':
         '新浏览窗以XML格式显示全局自定义程序块',
-    'Import tools...':
-        '导入工具包...',
+    'Import tools':
+        '导入工具包',
     'load the official library of\npowerful blocks':
         '载入官方库和强大的程序块',
 

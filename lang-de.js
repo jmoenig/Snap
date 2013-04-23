@@ -647,8 +647,8 @@ SnapTranslator.dict.de = {
         'Bl\u00f6cke exportieren...',
     'show global custom block definitions as XML\nin a new browser window':
         'zeigt globale Benutzerblockdefinitionen\nals XML im Browser an',
-    'Import tools...':
-        'Tools laden...',
+    'Import tools':
+        'Tools laden',
     'load the official library of\npowerful blocks':
         'das offizielle Modul mit\nm\u00e4chtigen Bl\u00f6cken laden',
 

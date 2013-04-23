@@ -643,8 +643,8 @@ SnapTranslator.dict.cs = {
         'Exportovat bloky...',
     'show global custom block definitions as XML\nin a new browser window':
         'Zobrazit definici vlastních bloků jako\nXML v novém okně prohlížeče',
-    'Import tools...':
-        'Importovat nástroje...',
+    'Import tools':
+        'Importovat nástroje',
     'load the official library of\npowerful blocks':
         'nahraje oficialní knihovnu\npokročilých bloků',
 
