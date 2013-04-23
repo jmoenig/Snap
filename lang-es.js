@@ -619,13 +619,13 @@ SnapTranslator.dict.es = {
         'Importar...',
     'file menu import hint':
         'men\u00FA de archivo de importaci\u00F3n indirecta',
-    'Export project as plain text ...':
+    'Export project as plain text...':
         'Exportar proyecto como texto...',
     'Export project...':
         'Exportar proyecto...',
     'show project data as XML\nin a new browser window':
         'mostrar informaci\u00F3n de proyecto como XML\nen una nueva ventana',
-    'Export blocks ...':
+    'Export blocks...':
         'Exportar bloques...',
     'show global custom block definitions as XML\nin a new browser window':
         'mostrar definiciones de bloques globales personalizados como XML\nen una nueva ventana',

@@ -639,13 +639,13 @@ SnapTranslator.dict.pt = {
         'Importar para este projecto\num projecto exportado,\n'
             + 'uma biblioteca de blocos,\n'
             + 'um traje ou um som.',
-    'Export project as plain text ...':
+    'Export project as plain text...':
         'Exportar este projecto como texto simples…',
     'Export project...':
         'Exportar este projecto…',
     'show project data as XML\nin a new browser window':
         'Mostrar os dados do projecto no\nformato XML numa nova janela do navegador.',
-    'Export blocks ...':
+    'Export blocks...':
         'Exportar blocos deste projecto…',
     'show global custom block definitions as XML\nin a new browser window':
         'Mostrar as definições de blocos\npersonalizados globais no formato\nXML numa nova janela do navegador.',
