@@ -1679,7 +1679,7 @@ IDE_Morph.prototype.cloudMenu = function () {
                 } else {
                     myself.prompt('Export Project As...', function (name) {
                         myself.exportProjectMedia(name);
-                    });
+                    }, 'exportProject');
                 }
             },
             null,
@@ -1693,7 +1693,7 @@ IDE_Morph.prototype.cloudMenu = function () {
                 } else {
                     myself.prompt('Export Project As...', function (name) {
                         myself.exportProjectNoMedia(name);
-                    });
+                    }, 'exportProject');
                 }
             },
             null,
@@ -1707,7 +1707,7 @@ IDE_Morph.prototype.cloudMenu = function () {
                 } else {
                     myself.prompt('Export Project As...', function (name) {
                         myself.exportProjectAsCloudData(name);
-                    });
+                    }, 'exportProject');
                 }
             },
             null,
@@ -1754,8 +1754,8 @@ IDE_Morph.prototype.cloudMenu = function () {
                             myself.cloudError()
                         );
 
-                    });
-                });
+                    }, 'project');
+                }, 'project');
             },
             null,
             new Color(100, 0, 0)
@@ -1996,7 +1996,7 @@ IDE_Morph.prototype.projectMenu = function () {
             } else {
                 myself.prompt('Export Project As...', function (name) {
                     myself.exportProject(name);
-                });
+                }, 'exportProject');
             }
         },
         'show project data as XML\nin a new browser window',
@@ -2181,7 +2181,7 @@ IDE_Morph.prototype.aboutSnap = function () {
 };
 
 IDE_Morph.prototype.editProjectNotes = function () {
-    var dialog = new DialogBoxMorph(),
+    var dialog = new DialogBoxMorph().withKey('projectNotes'),
         frame = new ScrollFrameMorph(),
         text = new TextMorph(this.projectNotes || ''),
         ok = dialog.ok,
@@ -2228,7 +2228,7 @@ IDE_Morph.prototype.editProjectNotes = function () {
     dialog.addButton('cancel', 'Cancel');
     dialog.fixLayout();
     dialog.drawNew();
-    world.add(dialog);
+    dialog.popUp(world);
     dialog.setCenter(world.center());
     text.edit();
 };
@@ -2935,7 +2935,7 @@ IDE_Morph.prototype.userSetBlocksScale = function () {
         function (num) {
             myself.setBlocksScale(num);
         }
-    ).prompt(
+    ).withKey('zoomBlocks').prompt(
         'Zoom blocks',
         SyntaxElementMorph.prototype.scale.toString(),
         this.world(),
@@ -3007,7 +3007,7 @@ IDE_Morph.prototype.initializeCloud = function () {
                 myself.cloudError()
             );
         }
-    ).promptCredentials(
+    ).withKey('cloud').promptCredentials(
         'Sign in',
         'login',
         null,
@@ -3048,7 +3048,7 @@ IDE_Morph.prototype.createCloudAccount = function () {
                 myself.cloudError()
             );
         }
-    ).promptCredentials(
+    ).withKey('cloud').promptCredentials(
         'Sign up',
         'signup',
         'http://snap.berkeley.edu/tos.html',
@@ -3078,7 +3078,7 @@ IDE_Morph.prototype.changeCloudPassword = function () {
                 myself.cloudError()
             );
         }
-    ).promptCredentials(
+    ).withKey('cloud').promptCredentials(
         'Change Password',
         'changePassword',
         null,
@@ -3335,7 +3335,7 @@ IDE_Morph.prototype.setCloudURL = function () {
         function (url) {
             SnapCloud.url = url;
         }
-    ).prompt(
+    ).withKey('cloudURL').prompt(
         'Cloud URL',
         SnapCloud.url,
         this.world(),
@@ -3385,8 +3385,8 @@ IDE_Morph.prototype.confirm = function (message, title, action) {
     );
 };
 
-IDE_Morph.prototype.prompt = function (message, callback, choices) {
-    (new DialogBoxMorph(null, callback)).prompt(
+IDE_Morph.prototype.prompt = function (message, callback, choices, key) {
+    (new DialogBoxMorph(null, callback)).withKey(key).prompt(
         message,
         '',
         this.world(),
@@ -3402,6 +3402,10 @@ IDE_Morph.prototype.prompt = function (message, callback, choices) {
 ProjectDialogMorph.prototype = new DialogBoxMorph();
 ProjectDialogMorph.prototype.constructor = ProjectDialogMorph;
 ProjectDialogMorph.uber = DialogBoxMorph.prototype;
+
+// ProjectDialogMorph constants:
+
+ProjectDialogMorph.prototype.key = 'project';
 
 // ProjectDialogMorph instance creation:
 
@@ -3585,8 +3589,7 @@ ProjectDialogMorph.prototype.buildContents = function () {
 ProjectDialogMorph.prototype.popUp = function (wrrld) {
     var world = wrrld || this.ide.world();
     if (world) {
-        world.add(this);
-        world.keyboardReceiver = this;
+        ProjectDialogMorph.uber.popUp.call(this, world);
         this.handle = new HandleMorph(
             this,
             350,
@@ -3594,8 +3597,6 @@ ProjectDialogMorph.prototype.popUp = function (wrrld) {
             this.corner,
             this.corner
         );
-        this.setCenter(world.center());
-        this.edit();
     }
 };
 
@@ -4690,7 +4691,7 @@ CostumeIconMorph.prototype.editCostume = function () {
 CostumeIconMorph.prototype.renameCostume = function () {
     var costume = this.object,
         ide = this.parentThatIsA(IDE_Morph);
-    (new DialogBoxMorph(
+    new DialogBoxMorph(
         null,
         function (answer) {
             if (answer && (answer !== costume.name)) {
@@ -4699,7 +4700,7 @@ CostumeIconMorph.prototype.renameCostume = function () {
                 ide.hasChangedMedia = true;
             }
         }
-    )).prompt(
+    ).prompt(
         'rename costume',
         costume.name,
         this.world()
