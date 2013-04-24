@@ -1659,3 +1659,7 @@ ______
 * Lists, Objects: Circularity no longer breaks watchers
 * Widgets: Multiple Dialogs of the same kind are prevented except for a few (e.g. BlockEditor). Thanks for this fix, Nathan! (and for the many little UI things you've fixed as well)
 * German translation update
+
+130424
+------
+* Widgets, BYOB, GUI: prevent multiple block editors on the same block definition, allow multiple dialogs on different objects, handle dialog instances in DialogBoxMorph.prototype

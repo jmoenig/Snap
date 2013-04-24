@@ -105,7 +105,7 @@ CommentMorph, localize, CSlotMorph, SpeechBubbleMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2013-April-23';
+modules.byob = '2013-April-24';
 
 // Declarations
 
@@ -1026,10 +1026,6 @@ BlockDialogMorph.prototype = new DialogBoxMorph();
 BlockDialogMorph.prototype.constructor = BlockDialogMorph;
 BlockDialogMorph.uber = DialogBoxMorph.prototype;
 
-// BlockDialogMorph constants:
-
-BlockDialogMorph.prototype.key = 'makeABlock';
-
 // BlockDialogMorph instance creation:
 
 function BlockDialogMorph(target, action, environment) {
@@ -1053,6 +1049,8 @@ BlockDialogMorph.prototype.init = function (target, action, environment) {
     );
 
     // override inherited properites:
+    this.key = 'makeABlock';
+
     this.types = new AlignmentMorph('row', this.padding);
     this.add(this.types);
     this.scopes = new AlignmentMorph('row', this.padding);
@@ -1079,6 +1077,7 @@ BlockDialogMorph.prototype.openForChange = function (
     preventTypeChange // <bool>
 ) {
     var clr = SpriteMorph.prototype.blockColor[category];
+    this.key = 'changeABlock';
     this.category = category;
     this.blockType = type;
 
@@ -1481,6 +1480,7 @@ BlockEditorMorph.prototype.init = function (definition, target) {
     );
 
     // override inherited properites:
+    this.key = 'editBlock' + definition.spec;
     this.labelString = 'Block Editor';
     this.createLabel();
 

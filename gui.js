@@ -68,7 +68,7 @@ sb, CommentMorph, CommandBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2013-April-23';
+modules.gui = '2013-April-24';
 
 // Declarations
 
@@ -3007,7 +3007,7 @@ IDE_Morph.prototype.initializeCloud = function () {
                 myself.cloudError()
             );
         }
-    ).withKey('cloud').promptCredentials(
+    ).withKey('cloudlogin').promptCredentials(
         'Sign in',
         'login',
         null,
@@ -3048,7 +3048,7 @@ IDE_Morph.prototype.createCloudAccount = function () {
                 myself.cloudError()
             );
         }
-    ).withKey('cloud').promptCredentials(
+    ).withKey('cloudsignup').promptCredentials(
         'Sign up',
         'signup',
         'http://snap.berkeley.edu/tos.html',
@@ -3078,7 +3078,7 @@ IDE_Morph.prototype.changeCloudPassword = function () {
                 myself.cloudError()
             );
         }
-    ).withKey('cloud').promptCredentials(
+    ).withKey('cloudpassword').promptCredentials(
         'Change Password',
         'changePassword',
         null,
@@ -3403,10 +3403,6 @@ ProjectDialogMorph.prototype = new DialogBoxMorph();
 ProjectDialogMorph.prototype.constructor = ProjectDialogMorph;
 ProjectDialogMorph.uber = DialogBoxMorph.prototype;
 
-// ProjectDialogMorph constants:
-
-ProjectDialogMorph.prototype.key = 'project';
-
 // ProjectDialogMorph instance creation:
 
 function ProjectDialogMorph(ide, label) {
@@ -3444,6 +3440,7 @@ ProjectDialogMorph.prototype.init = function (ide, task) {
     // override inherited properites:
     this.labelString = this.task === 'save' ? 'Save Project' : 'Open Project';
     this.createLabel();
+    this.key = 'project' + task;
 
     // build contents
     this.buildContents();
