@@ -73,7 +73,7 @@ newCanvas, StringMorph, Morph, TextMorph, nop, detect, StringFieldMorph,
 HTMLCanvasElement, fontHeight, SymbolMorph, localize, SpeechBubbleMorph,
 ArrowMorph, MenuMorph, isString, isNil, SliderMorph*/
 
-modules.widgets = '2013-April-23';
+modules.widgets = '2013-April-24';
 
 var PushButtonMorph;
 var ToggleButtonMorph;
@@ -1396,10 +1396,8 @@ ToggleElementMorph.prototype.mouseClickLeft
 
     Note:
     -----
-    I add a property "dialogs" to whichever World I'm popped up in, which
-    keeps track of my instances, preventing double instances of the same type
-    and on the same objects, while allowing multiple instance where
-    appropriate
+    my key property keeps track of my purpose to prevent multiple instances
+    on the same or similar objects
 */
 
 // DialogBoxMorph inherits from Morph:
@@ -1435,6 +1433,7 @@ DialogBoxMorph.prototype.buttonOutlineColor
     = PushButtonMorph.prototype.color;
 DialogBoxMorph.prototype.buttonOutlineGradient = true;
 
+DialogBoxMorph.prototype.instances = {}; // prevent multiple instances
 
 // DialogBoxMorph instance creation:
 
@@ -1447,7 +1446,6 @@ DialogBoxMorph.prototype.init = function (target, action, environment) {
     this.target = target || null;
     this.action = action || null;
     this.environment = environment || null;
-    this.popUpWorld = null; // keep track of open instances per world
     this.key = null; // keep track of my purpose to prevent mulitple instances
 
     this.labelString = null;
@@ -1488,7 +1486,7 @@ DialogBoxMorph.prototype.inform = function (
     );
 
     if (!this.key) {
-        this.key = 'information';
+        this.key = 'inform' + title + textString;
     }
 
     this.labelString = title;
@@ -1523,7 +1521,7 @@ DialogBoxMorph.prototype.askYesNo = function (
     );
 
     if (!this.key) {
-        this.key = 'prompt';
+        this.key = 'decide' + title + textString;
     }
 
     this.labelString = title;
@@ -1626,7 +1624,7 @@ DialogBoxMorph.prototype.prompt = function (
     this.createLabel();
 
     if (!this.key) {
-        this.key = 'prompt';
+        this.key = 'prompt' + title + defaultString;
     }
 
     this.addBody(txt);
@@ -1994,7 +1992,7 @@ DialogBoxMorph.prototype.promptCredentials = function (
     this.reactToChoice(); // initialize e-mail label
 
     if (!this.key) {
-        this.key = 'prompt';
+        this.key = 'credentials' + title + purpose;
     }
 
     this.popUp(world);
@@ -2045,13 +2043,11 @@ DialogBoxMorph.prototype.withKey = function (key) {
 DialogBoxMorph.prototype.popUp = function (world) {
     if (world) {
         if (this.key) {
-            if (!world.dialogs) {world.dialogs = {}; } // lazy init
-            if (world.dialogs[this.key]) {
-                world.dialogs[this.key].destroy();
+            if (this.instances[this.key]) {
+                this.instances[this.key].destroy();
             }
-            world.dialogs[this.key] = this;
+            this.instances[this.key] = this;
         }
-        this.popUpWorld = world;
         world.add(this);
         world.keyboardReceiver = this;
         this.setCenter(world.center());
@@ -2061,8 +2057,8 @@ DialogBoxMorph.prototype.popUp = function (world) {
 
 DialogBoxMorph.prototype.destroy = function () {
     DialogBoxMorph.uber.destroy.call(this);
-    if (this.key && this.popUpWorld && this.popUpWorld.dialogs) {
-        this.popUpWorld.dialogs[this.key] = undefined;
+    if (this.key) {
+        delete this.instances[this.key];
     }
 };
 
