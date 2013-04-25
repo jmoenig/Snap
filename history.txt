@@ -1667,3 +1667,5 @@ ______
 130425
 ------
 * Objects, Blocks, GUI, Store: Hide primitives feature
+* Morphic: Introducing World.stamp as reference in multi-World setups
+* Widgets: restore multi-dialog restrictions for multi-world setups

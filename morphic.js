@@ -1035,7 +1035,7 @@
 /*global window, HTMLCanvasElement, getMinimumFontHeight, FileReader, Audio,
 FileList, getBlurredShadowSupport*/
 
-var morphicVersion = '2013-April-21';
+var morphicVersion = '2013-April-25';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = getBlurredShadowSupport(); // check for Chrome-bug
 
@@ -9885,6 +9885,7 @@ WorldMorph.prototype.init = function (aCanvas, fillPage) {
     this.worldCanvas = aCanvas;
 
     // additional properties:
+    this.stamp = Date.now(); // reference in multi-world setups
     this.useFillPage = fillPage;
     if (this.useFillPage === undefined) {
         this.useFillPage = true;

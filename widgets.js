@@ -2043,10 +2043,15 @@ DialogBoxMorph.prototype.withKey = function (key) {
 DialogBoxMorph.prototype.popUp = function (world) {
     if (world) {
         if (this.key) {
-            if (this.instances[this.key]) {
-                this.instances[this.key].destroy();
+            if (this.instances[world.stamp]) {
+                if (this.instances[world.stamp][this.key]) {
+                    this.instances[world.stamp][this.key].destroy();
+                }
+                this.instances[world.stamp][this.key] = this;
+            } else {
+                this.instances[world.stamp] = {};
+                this.instances[world.stamp][this.key] = this;
             }
-            this.instances[this.key] = this;
         }
         world.add(this);
         world.keyboardReceiver = this;
