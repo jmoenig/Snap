@@ -68,7 +68,7 @@ sb, CommentMorph, CommandBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2013-April-24';
+modules.gui = '2013-April-25';
 
 // Declarations
 
@@ -2244,6 +2244,7 @@ IDE_Morph.prototype.newProject = function () {
     this.globalVariables = new VariableFrame();
     this.currentSprite = new SpriteMorph(this.globalVariables);
     this.sprites = new List([this.currentSprite]);
+    StageMorph.prototype.hiddenPrimitives = {};
     this.setProjectName('');
     this.projectNotes = '';
     this.createStage();

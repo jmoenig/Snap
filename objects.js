@@ -120,7 +120,7 @@ PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.objects = '2013-April-23';
+modules.objects = '2013-April-25';
 
 var SpriteMorph;
 var StageMorph;
@@ -1363,6 +1363,9 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         cat = category || 'motion', txt;
 
     function block(selector) {
+        if (StageMorph.prototype.hiddenPrimitives[selector]) {
+            return null;
+        }
         var newBlock = SpriteMorph.prototype.blockForSelector(selector, true);
         newBlock.isTemplate = true;
         return newBlock;
@@ -1376,6 +1379,9 @@ SpriteMorph.prototype.blockTemplates = function (category) {
     }
 
     function watcherToggle(selector) {
+        if (StageMorph.prototype.hiddenPrimitives[selector]) {
+            return null;
+        }
         var info = SpriteMorph.prototype.blocks[selector];
         return new ToggleMorph(
             'checkbox',
@@ -1804,6 +1810,7 @@ SpriteMorph.prototype.freshPalette = function (category) {
         y = 5,
         ry = 0,
         blocks,
+        hideNextSpace = false,
         myself = this,
         stage = this.parentThatIsA(StageMorph),
         oldFlag = Morph.prototype.trackChanges;
@@ -1813,6 +1820,90 @@ SpriteMorph.prototype.freshPalette = function (category) {
     palette.owner = this;
     palette.padding = unit / 2;
     palette.color = this.paletteColor;
+
+    // menu:
+
+    palette.userMenu = function () {
+        var menu = new MenuMorph(),
+            ide = this.parentThatIsA(IDE_Morph),
+            more = {
+                operators:
+                    ['reifyScript', 'reifyReporter', 'reifyPredicate'],
+                control:
+                    ['doWarp'],
+                variables:
+                    [
+                        'doDeclareVariables',
+                        'reportNewList',
+                        'reportCONS',
+                        'reportListItem',
+                        'reportCDR',
+                        'reportListLength',
+                        'reportListContainsItem',
+                        'doAddToList',
+                        'doDeleteFromList',
+                        'doInsertInList',
+                        'doReplaceInList'
+                    ]
+            };
+
+        function hasHiddenPrimitives() {
+            var defs = SpriteMorph.prototype.blocks,
+                hiddens = StageMorph.prototype.hiddenPrimitives;
+            return Object.keys(hiddens).some(function (any) {
+                return defs[any].category === category ||
+                    contains((more[category] || []), any);
+            });
+        }
+
+        function canHidePrimitives() {
+            return palette.contents.children.some(function (any) {
+                return contains(
+                    Object.keys(SpriteMorph.prototype.blocks),
+                    any.selector
+                );
+            });
+        }
+
+        if (canHidePrimitives()) {
+            menu.addItem(
+                'hide primitives',
+                function () {
+                    var defs = SpriteMorph.prototype.blocks;
+                    Object.keys(defs).forEach(function (sel) {
+                        if (defs[sel].category === category) {
+                            StageMorph.prototype.hiddenPrimitives[sel] = true;
+                        }
+                    });
+                    (more[category] || []).forEach(function (sel) {
+                        StageMorph.prototype.hiddenPrimitives[sel] = true;
+                    });
+                    ide.flushBlocksCache(category);
+                    ide.refreshPalette();
+                }
+            );
+        }
+        if (hasHiddenPrimitives()) {
+            menu.addItem(
+                'show primitives',
+                function () {
+                    var hiddens = StageMorph.prototype.hiddenPrimitives,
+                        defs = SpriteMorph.prototype.blocks;
+                    Object.keys(hiddens).forEach(function (sel) {
+                        if (defs[sel].category === category) {
+                            delete StageMorph.prototype.hiddenPrimitives[sel];
+                        }
+                    });
+                    (more[category] || []).forEach(function (sel) {
+                        delete StageMorph.prototype.hiddenPrimitives[sel];
+                    });
+                    ide.flushBlocksCache(category);
+                    ide.refreshPalette();
+                }
+            );
+        }
+        return menu;
+    };
 
     // primitives:
 
@@ -1825,14 +1916,22 @@ SpriteMorph.prototype.freshPalette = function (category) {
     }
 
     blocks.forEach(function (block) {
+        if (block === null) {
+            return;
+        }
         if (block === '-') {
+            if (hideNextSpace) {return; }
             y += unit * 0.8;
+            hideNextSpace = true;
         } else if (block === '=') {
+            if (hideNextSpace) {return; }
             y += unit * 1.6;
+            hideNextSpace = true;
         } else if (block === '#') {
             x = 0;
             y = ry;
         } else {
+            hideNextSpace = false;
             if (x === 0) {
                 y += unit * 0.3;
             }
@@ -3063,6 +3162,8 @@ StageMorph.prototype.isCachingPrimitives
 StageMorph.prototype.sliderColor
     = SpriteMorph.prototype.sliderColor;
 
+StageMorph.prototype.hiddenPrimitives = {};
+
 // StageMorph instance creation
 
 function StageMorph(globals) {
@@ -3545,6 +3646,9 @@ StageMorph.prototype.blockTemplates = function (category) {
         cat = category || 'motion', txt;
 
     function block(selector) {
+        if (myself.hiddenPrimitives[selector]) {
+            return null;
+        }
         var newBlock = SpriteMorph.prototype.blockForSelector(selector, true);
         newBlock.isTemplate = true;
         return newBlock;
@@ -3558,6 +3662,9 @@ StageMorph.prototype.blockTemplates = function (category) {
     }
 
     function watcherToggle(selector) {
+        if (myself.hiddenPrimitives[selector]) {
+            return null;
+        }
         var info = SpriteMorph.prototype.blocks[selector];
         return new ToggleMorph(
             'checkbox',
