@@ -61,7 +61,7 @@ SyntaxElementMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2013-April-19';
+modules.store = '2013-April-25';
 
 
 // XML_Serializer ///////////////////////////////////////////////////////
@@ -367,6 +367,17 @@ SnapSerializer.prototype.loadProjectModel = function (xmlNode) {
     project.stage.setExtent(StageMorph.prototype.dimensions);
     project.stage.isThreadSafe =
         model.stage.attributes.threadsafe === 'true';
+
+    model.hiddenPrimitives = model.project.childNamed('hidden');
+    if (model.hiddenPrimitives) {
+        model.hiddenPrimitives.contents.split(' ').forEach(
+            function (sel) {
+                if (sel) {
+                    StageMorph.prototype.hiddenPrimitives[sel] = true;
+                }
+            }
+        );
+    }
 
     model.globalBlocks = model.project.childNamed('blocks');
     if (model.globalBlocks) {
@@ -1246,6 +1257,7 @@ StageMorph.prototype.toXML = function (serializer) {
             '<blocks>%</blocks>' +
             '<scripts>%</scripts><sprites>%</sprites>' +
             '</stage>' +
+            '<hidden>$</hidden>' +
             '<blocks>%</blocks>' +
             '<variables>%</variables>' +
             '</project>',
@@ -1266,6 +1278,10 @@ StageMorph.prototype.toXML = function (serializer) {
         serializer.store(this.customBlocks),
         serializer.store(this.scripts),
         serializer.store(this.children),
+        Object.keys(StageMorph.prototype.hiddenPrimitives).reduce(
+                function(a, b) {return a + ' ' + b; },
+                ''
+            ),
         serializer.store(this.globalBlocks),
         (ide && ide.globalVariables) ?
                     serializer.store(ide.globalVariables) : ''

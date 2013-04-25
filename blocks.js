@@ -153,7 +153,7 @@ DialogBoxMorph, BlockInputFragmentMorph, PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2013-April-23';
+modules.blocks = '2013-April-25';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -1784,6 +1784,12 @@ BlockMorph.prototype.userMenu = function () {
         'showHelp'
     );
     if (this.isTemplate) {
+        if (this.selector !== 'evaluateCustomBlock') {
+            menu.addItem(
+                "hide",
+                'hidePrimitive'
+            );
+        }
         return menu;
     }
     menu.addLine();
@@ -1881,6 +1887,24 @@ BlockMorph.prototype.developersMenu = function () {
         );
     });
     return menu;
+};
+
+BlockMorph.prototype.hidePrimitive = function () {
+    // passing a selector is optional
+    var ide = this.parentThatIsA(IDE_Morph),
+        cat;
+    if (!ide) {return; }
+    StageMorph.prototype.hiddenPrimitives[this.selector] = true;
+    cat = {
+        doWarp: 'control',
+        reifyScript: 'operators',
+        reifyReporter: 'operators',
+        reifyPredicate: 'operators',
+        doDeclareVariables: 'variables'
+    }[this.selector] || this.category;
+    if (cat === 'lists') {cat = 'variables'; }
+    ide.flushBlocksCache(cat);
+    ide.refreshPalette();
 };
 
 BlockMorph.prototype.deleteBlock = function () {

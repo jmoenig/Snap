@@ -1663,3 +1663,7 @@ ______
 130424
 ------
 * Widgets, BYOB, GUI: prevent multiple block editors on the same block definition, allow multiple dialogs on different objects, handle dialog instances in DialogBoxMorph.prototype
+
+130425
+------
+* Objects, Blocks, GUI, Store: Hide primitives feature
