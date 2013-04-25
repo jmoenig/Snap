@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org', // optional
     'last_changed':
-        '2013-04-23', // this, too, will appear in the Translators tab
+        '2013-04-25', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -755,6 +755,12 @@ SnapTranslator.dict.de = {
     // context menus:
     'help':
         'Hilfe',
+
+    // palette:
+    'hide primitives':
+        'Basisbl\u00f6cke ausblenden',
+    'show primitives':
+        'Basisbl\u00f6cke anzeigen',
 
     // blocks:
     'help...':
