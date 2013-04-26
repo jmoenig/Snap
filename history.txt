@@ -1670,3 +1670,7 @@ ______
 * Morphic: Introducing World.stamp as reference in multi-World setups
 * Widgets: restore multi-dialog restrictions for multi-world setups
 * Translation update for "hide primitives" feature
+
+130426
+------
+* Morphic: ensure unique World stamps
