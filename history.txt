@@ -1674,3 +1674,4 @@ ______
 130426
 ------
 * Morphic: ensure unique World stamps
+* Blocks: symbols for paint editor

@@ -153,7 +153,7 @@ DialogBoxMorph, BlockInputFragmentMorph, PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2013-April-25';
+modules.blocks = '2013-April-26';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -188,12 +188,12 @@ WorldMorph.prototype.customMorphs = function () {
 /*
     return [
         new SymbolMorph(
-            'flash',
-            50,
-            new Color(250, 250, 0),
+            'brush',
+            20,
+            new Color(250, 250, 250),
             new Point(-1, -1),
-            new Color(0, 0, 200)
-        ),
+            new Color(20, 20, 20)
+        )
     ];
 */
 /*
@@ -1890,7 +1890,6 @@ BlockMorph.prototype.developersMenu = function () {
 };
 
 BlockMorph.prototype.hidePrimitive = function () {
-    // passing a selector is optional
     var ide = this.parentThatIsA(IDE_Morph),
         cat;
     if (!ide) {return; }
@@ -6809,6 +6808,16 @@ SymbolMorph.prototype.symbolCanvasColored = function (aColor) {
         return this.drawSymbolPoster(canvas, aColor);
     case 'flash':
         return this.drawSymbolFlash(canvas, aColor);
+    case 'brush':
+        return this.drawSymbolBrush(canvas, aColor);
+    case 'rectangle':
+        return this.drawSymbolRectangle(canvas, aColor);
+    case 'circle':
+        return this.drawSymbolCircle(canvas, aColor);
+    case 'line':
+        return this.drawSymbolLine(canvas, aColor);
+    case 'crosshairs':
+        return this.drawSymbolCrosshairs(canvas, aColor);
     default:
         return canvas;
     }
@@ -7386,6 +7395,107 @@ SymbolMorph.prototype.drawSymbolFlash = function (canvas, color) {
     ctx.lineTo(w, 0);
     ctx.closePath();
     ctx.fill();
+    return canvas;
+};
+
+SymbolMorph.prototype.drawSymbolBrush = function (canvas, color) {
+    // answer a canvas showing a paintbrush
+    var ctx = canvas.getContext('2d'),
+        w = canvas.width,
+        h = canvas.height,
+        l = Math.max(w / 30, 0.5);
+
+    ctx.fillStyle = color.toString();
+    ctx.lineWidth = l * 2;
+    ctx.beginPath();
+    ctx.moveTo(w / 8 * 3, h / 2);
+    ctx.quadraticCurveTo(0, h / 2, l, h - l);
+    ctx.quadraticCurveTo(w / 2, h, w / 2, h / 8 * 5);
+    ctx.closePath();
+    ctx.fill();
+
+    ctx.lineJoin = 'round';
+    ctx.lineCap = 'round';
+    ctx.strokeStyle = color.toString();
+
+    ctx.moveTo(w / 8 * 3, h / 2);
+    ctx.lineTo(w * 0.75, l);
+    ctx.quadraticCurveTo(w, 0, w - l, h * 0.25);
+    ctx.stroke();
+
+    ctx.moveTo(w / 2, h / 8 * 5);
+    ctx.lineTo(w - l, h * 0.25);
+    ctx.stroke();
+
+    return canvas;
+};
+
+SymbolMorph.prototype.drawSymbolRectangle = function (canvas, color) {
+    // answer a canvas showing a rectangle
+    var ctx = canvas.getContext('2d'),
+        w = canvas.width,
+        h = canvas.width,
+        l = Math.max(w / 20, 0.5);
+
+    ctx.strokeStyle = color.toString();
+    ctx.lineWidth = l * 2;
+    ctx.beginPath();
+    ctx.moveTo(l, l);
+    ctx.lineTo(w - l, l);
+    ctx.lineTo(w - l, h - l);
+    ctx.lineTo(l, h - l);
+    ctx.closePath();
+    ctx.stroke();
+    return canvas;
+};
+
+SymbolMorph.prototype.drawSymbolCircle = function (canvas, color) {
+    // answer a canvas showing a circle
+    var ctx = canvas.getContext('2d'),
+        w = canvas.width,
+        l = Math.max(w / 20, 0.5);
+
+    ctx.strokeStyle = color.toString();
+    ctx.lineWidth = l * 2;
+    ctx.arc(w / 2, w / 2, w / 2 - l, radians(0), radians(360), false);
+    ctx.stroke();
+    return canvas;
+};
+
+SymbolMorph.prototype.drawSymbolLine = function (canvas, color) {
+    // answer a canvas showing a diagonal line
+    var ctx = canvas.getContext('2d'),
+        w = canvas.width,
+        h = canvas.height,
+        l = Math.max(w / 20, 0.5);
+
+    ctx.strokeStyle = color.toString();
+    ctx.lineWidth = l * 2;
+    ctx.lineCap = 'round';
+    ctx.moveTo(l, l);
+    ctx.lineTo(w - l, h - l);
+    ctx.stroke();
+    return canvas;
+};
+
+SymbolMorph.prototype.drawSymbolCrosshairs = function (canvas, color) {
+    // answer a canvas showing a crosshairs
+    var ctx = canvas.getContext('2d'),
+        w = canvas.width,
+        h = canvas.height,
+        l = 0.5;
+
+    ctx.strokeStyle = color.toString();
+    ctx.lineWidth = l * 2;
+    ctx.moveTo(l, h / 2);
+    ctx.lineTo(w - l, h / 2);
+    ctx.stroke();
+    ctx.moveTo(w / 2, l);
+    ctx.lineTo(w / 2, h - l);
+    ctx.stroke();
+    ctx.moveTo(w / 2, h / 2);
+    ctx.arc(w / 2, w / 2, w / 3 - l, radians(0), radians(360), false);
+    ctx.stroke();
     return canvas;
 };
 
