@@ -1679,3 +1679,4 @@ ______
 130427
 ------
 * Blocks: paint bucket symbol
+* highlight adjustments when merging scripts (#70)

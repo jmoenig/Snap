@@ -2766,6 +2766,7 @@ CommandBlockMorph.prototype.snap = function () {
     this.startLayout();
     if (target.loc === 'bottom') {
         if (target.type === 'slot') {
+            this.removeHighlight();
             target.element.nestedBlock(this);
         } else {
             target.element.nextBlock(this);
@@ -2782,6 +2783,7 @@ CommandBlockMorph.prototype.snap = function () {
             }
         }
     } else if (target.loc === 'top') {
+        target.element.removeHighlight();
         offsetY = this.bottomBlock().bottom() - this.bottom();
         this.setBottom(target.element.top() + this.corner - offsetY);
         this.setLeft(target.element.left());
