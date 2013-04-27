@@ -1675,3 +1675,7 @@ ______
 ------
 * Morphic: ensure unique World stamps
 * Blocks: symbols for paint editor
+
+130427
+------
+* Blocks: paint bucket symbol

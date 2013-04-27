@@ -153,7 +153,7 @@ DialogBoxMorph, BlockInputFragmentMorph, PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2013-April-26';
+modules.blocks = '2013-April-27';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -188,8 +188,8 @@ WorldMorph.prototype.customMorphs = function () {
 /*
     return [
         new SymbolMorph(
-            'brush',
-            20,
+            'paintbucket',
+            50,
             new Color(250, 250, 250),
             new Point(-1, -1),
             new Color(20, 20, 20)
@@ -6818,6 +6818,8 @@ SymbolMorph.prototype.symbolCanvasColored = function (aColor) {
         return this.drawSymbolLine(canvas, aColor);
     case 'crosshairs':
         return this.drawSymbolCrosshairs(canvas, aColor);
+    case 'paintbucket':
+        return this.drawSymbolPaintbucket(canvas, aColor);
     default:
         return canvas;
     }
@@ -7496,6 +7498,54 @@ SymbolMorph.prototype.drawSymbolCrosshairs = function (canvas, color) {
     ctx.moveTo(w / 2, h / 2);
     ctx.arc(w / 2, w / 2, w / 3 - l, radians(0), radians(360), false);
     ctx.stroke();
+    return canvas;
+};
+
+SymbolMorph.prototype.drawSymbolPaintbucket = function (canvas, color) {
+    // answer a canvas showing a paint bucket
+    var ctx = canvas.getContext('2d'),
+        w = canvas.width,
+        h = canvas.height,
+        n = canvas.width / 5,
+        l = Math.max(w / 30, 0.5);
+
+    ctx.strokeStyle = color.toString();
+    ctx.lineWidth = l * 2;
+    ctx.beginPath();
+    ctx.moveTo(n * 2, n);
+    ctx.lineTo(n * 4, n * 3);
+    ctx.lineTo(n * 3, n * 4);
+    ctx.quadraticCurveTo(n * 2, h, n, n * 4);
+    ctx.quadraticCurveTo(0, n * 3, n, n * 2);
+    ctx.closePath();
+    ctx.stroke();
+
+    ctx.lineWidth = l;
+    ctx.moveTo(n * 2, n * 2.5);
+    ctx.arc(n * 2, n * 2.5, l, radians(0), radians(360), false);
+    ctx.stroke();
+
+    ctx.moveTo(n * 2, n * 2.5);
+    ctx.lineTo(n * 2, n / 2 + l);
+    ctx.stroke();
+
+    ctx.arc(n * 1.5, n / 2 + l, n / 2, radians(0), radians(180), true);
+    ctx.stroke();
+
+    ctx.moveTo(n, n / 2 + l);
+    ctx.lineTo(n, n * 2);
+    ctx.stroke();
+
+    ctx.fillStyle = color.toString();
+    ctx.beginPath();
+    ctx.moveTo(n * 3.5, n * 3.5);
+    ctx.quadraticCurveTo(w, n * 3.5, w - l, h);
+    ctx.lineTo(w, h);
+    ctx.quadraticCurveTo(w, n * 2, n * 2.5, n * 1.5);
+    ctx.lineTo(n * 4, n * 3);
+    ctx.closePath();
+    ctx.fill();
+
     return canvas;
 };
 
