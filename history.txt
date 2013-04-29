@@ -1680,3 +1680,7 @@ ______
 ------
 * Blocks: paint bucket symbol
 * highlight adjustments when merging scripts (#70)
+
+130429
+------
+* Blocks: symbols for solid rectangles and circles

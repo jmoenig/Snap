@@ -153,7 +153,7 @@ DialogBoxMorph, BlockInputFragmentMorph, PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2013-April-27';
+modules.blocks = '2013-April-29';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -6814,8 +6814,12 @@ SymbolMorph.prototype.symbolCanvasColored = function (aColor) {
         return this.drawSymbolBrush(canvas, aColor);
     case 'rectangle':
         return this.drawSymbolRectangle(canvas, aColor);
+    case 'rectangleSolid':
+        return this.drawSymbolRectangleSolid(canvas, aColor);
     case 'circle':
         return this.drawSymbolCircle(canvas, aColor);
+    case 'circleSolid':
+        return this.drawSymbolCircleSolid(canvas, aColor);
     case 'line':
         return this.drawSymbolLine(canvas, aColor);
     case 'crosshairs':
@@ -7453,6 +7457,23 @@ SymbolMorph.prototype.drawSymbolRectangle = function (canvas, color) {
     return canvas;
 };
 
+SymbolMorph.prototype.drawSymbolRectangleSolid = function (canvas, color) {
+    // answer a canvas showing a solid rectangle
+    var ctx = canvas.getContext('2d'),
+        w = canvas.width,
+        h = canvas.width;
+
+    ctx.fillStyle = color.toString();
+    ctx.beginPath();
+    ctx.moveTo(0, 0);
+    ctx.lineTo(w, 0);
+    ctx.lineTo(w, h);
+    ctx.lineTo(0, h);
+    ctx.closePath();
+    ctx.fill();
+    return canvas;
+};
+
 SymbolMorph.prototype.drawSymbolCircle = function (canvas, color) {
     // answer a canvas showing a circle
     var ctx = canvas.getContext('2d'),
@@ -7463,6 +7484,17 @@ SymbolMorph.prototype.drawSymbolCircle = function (canvas, color) {
     ctx.lineWidth = l * 2;
     ctx.arc(w / 2, w / 2, w / 2 - l, radians(0), radians(360), false);
     ctx.stroke();
+    return canvas;
+};
+
+SymbolMorph.prototype.drawSymbolCircleSolid = function (canvas, color) {
+    // answer a canvas showing a solid circle
+    var ctx = canvas.getContext('2d'),
+        w = canvas.width;
+
+    ctx.fillStyle = color.toString();
+    ctx.arc(w / 2, w / 2, w / 2, radians(0), radians(360), false);
+    ctx.fill();
     return canvas;
 };
 
