@@ -1684,3 +1684,7 @@ ______
 130429
 ------
 * Blocks: symbols for solid rectangles and circles
+
+130430
+------
+* Objects: Costume shrink-wrapping
