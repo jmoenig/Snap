@@ -8681,11 +8681,11 @@ ScrollFrameMorph.prototype.scrollX = function (steps) {
         newX;
 
     newX = cl + steps;
-    if (newX > l) {
-        newX = l;
-    }
     if (newX + cw < r) {
         newX = r - cw;
+    }
+    if (newX > l) {
+        newX = l;
     }
     if (newX !== cl) {
         this.contents.setLeft(newX);
@@ -8700,14 +8700,11 @@ ScrollFrameMorph.prototype.scrollY = function (steps) {
         newY;
 
     newY = ct + steps;
-    if (newY > t) {
-        newY = t;
-    }
     if (newY + ch < b) {
         newY = b - ch;
-        if (newY > t) {
-            newY = t;
-        }
+    }
+    if (newY > t) {
+        newY = t;
     }
     if (newY !== ct) {
         this.contents.setTop(newY);
