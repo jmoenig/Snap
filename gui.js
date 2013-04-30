@@ -68,7 +68,7 @@ sb, CommentMorph, CommandBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2013-April-25';
+modules.gui = '2013-April-30';
 
 // Declarations
 
@@ -5053,6 +5053,7 @@ WardrobeMorph.prototype.reactToDropOf = function (icon) {
     });
     this.sprite.costumes.add(costume, idx + 1);
     this.updateList();
+    icon.mouseClickLeft(); // select
 };
 
 // SoundIconMorph ///////////////////////////////////////////////////////

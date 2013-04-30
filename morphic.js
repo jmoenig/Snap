@@ -1035,7 +1035,7 @@
 /*global window, HTMLCanvasElement, getMinimumFontHeight, FileReader, Audio,
 FileList, getBlurredShadowSupport*/
 
-var morphicVersion = '2013-April-26';
+var morphicVersion = '2013-April-30';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = getBlurredShadowSupport(); // check for Chrome-bug
 
@@ -8151,7 +8151,7 @@ TriggerMorph.prototype.mouseDoubleClick = function () {
 };
 
 TriggerMorph.prototype.rootForGrab = function () {
-    return null;
+    return this.isDraggable ? TriggerMorph.uber.rootForGrab.call(this) : null;
 };
 
 // TriggerMorph bubble help:
