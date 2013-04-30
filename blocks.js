@@ -153,7 +153,7 @@ DialogBoxMorph, BlockInputFragmentMorph, PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2013-April-29';
+modules.blocks = '2013-April-30';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -188,14 +188,14 @@ WorldMorph.prototype.customMorphs = function () {
 /*
     return [
         new SymbolMorph(
-            'paintbucket',
+            'eraser',
             50,
             new Color(250, 250, 250),
             new Point(-1, -1),
             new Color(20, 20, 20)
         )
     ];
-*/
+
 /*
     var sm = new ScriptsMorph();
     sm.setExtent(new Point(800, 600));
@@ -6826,6 +6826,8 @@ SymbolMorph.prototype.symbolCanvasColored = function (aColor) {
         return this.drawSymbolCrosshairs(canvas, aColor);
     case 'paintbucket':
         return this.drawSymbolPaintbucket(canvas, aColor);
+    case 'eraser':
+        return this.drawSymbolEraser(canvas, aColor);
     default:
         return canvas;
     }
@@ -7577,6 +7579,36 @@ SymbolMorph.prototype.drawSymbolPaintbucket = function (canvas, color) {
     ctx.lineTo(w, h);
     ctx.quadraticCurveTo(w, n * 2, n * 2.5, n * 1.5);
     ctx.lineTo(n * 4, n * 3);
+    ctx.closePath();
+    ctx.fill();
+
+    return canvas;
+};
+
+SymbolMorph.prototype.drawSymbolEraser = function (canvas, color) {
+    // answer a canvas showing an eraser
+    var ctx = canvas.getContext('2d'),
+        w = canvas.width,
+        h = canvas.height,
+        n = canvas.width / 4,
+        l = Math.max(w / 20, 0.5);
+
+    ctx.strokeStyle = color.toString();
+    ctx.lineWidth = l * 2;
+    ctx.beginPath();
+    ctx.moveTo(n * 3, l);
+    ctx.lineTo(l, n * 3);
+    ctx.quadraticCurveTo(n, h, n * 2, n * 3);
+    ctx.lineTo(w - l, n);
+    ctx.closePath();
+    ctx.stroke();
+
+    ctx.fillStyle = color.toString();
+    ctx.beginPath();
+    ctx.moveTo(n * 3, 0);
+    ctx.lineTo(n * 1.5, n * 1.5);
+    ctx.lineTo(n * 2.5, n * 2.5);
+    ctx.lineTo(w, n);
     ctx.closePath();
     ctx.fill();
 
