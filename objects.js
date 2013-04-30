@@ -120,7 +120,7 @@ PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.objects = '2013-April-25';
+modules.objects = '2013-April-30';
 
 var SpriteMorph;
 var StageMorph;
@@ -4510,6 +4510,92 @@ Costume.prototype.height = function () {
 
 Costume.prototype.bounds = function () {
     return new Rectangle(0, 0, this.width(), this.height());
+};
+
+// Costume shrink-wrapping
+
+Costume.prototype.shrinkWrap = function () {
+    // adjust my contents'  bounds to my visible bounding box
+    var bb = this.boundingBox(),
+        ext = bb.extent(),
+        pic = newCanvas(ext),
+        ctx = pic.getContext('2d');
+
+    ctx.drawImage(
+        this.contents,
+        bb.origin.x,
+        bb.origin.y,
+        ext.x,
+        ext.y,
+        0,
+        0,
+        ext.x,
+        ext.y
+    );
+    this.rotationCenter = this.rotationCenter.add(bb.origin);
+    this.contents = pic;
+    this.version = Date.now();
+};
+
+Costume.prototype.boundingBox = function () {
+    // answer the rectangle surrounding my contents' non-transparent pixels 
+    var row,
+        col,
+        pic = this.contents,
+        w = pic.width,
+        h = pic.height,
+        ctx = pic.getContext('2d'),
+        dta = ctx.getImageData(0, 0, w, h);
+
+    function getAlpha(x, y) {
+        return dta.data[((y * w * 4) + (x * 4)) + 3];
+    }
+
+    function getLeft() {
+        for (col = 0; col < w; col += 1) {
+            for (row = 0; row < h; row += 1) {
+                if (getAlpha(col, row)) {
+                    return col;
+                }
+            }
+        }
+        return 0;
+    }
+
+    function getTop() {
+        for (row = 0; row < h; row += 1) {
+            for (col = 0; col < h; col += 1) {
+                if (getAlpha(col, row)) {
+                    return row;
+                }
+            }
+        }
+        return 0;
+    }
+
+    function getRight() {
+        for (col = w - 1; col >= 0; col -= 1) {
+            for (row = h - 1; row > 0; row -= 1) {
+                if (getAlpha(col, row)) {
+                    return col;
+                }
+            }
+        }
+        return w - 1;
+    }
+
+    function getBottom() {
+        for (row = h - 1; row >= 0; row -= 1) {
+            for (col = w - 1; col >= 0; col -= 1) {
+                if (getAlpha(col, row)) {
+                    return row;
+                }
+            }
+        }
+        return h - 1;
+    }
+
+    return new Rectangle(getLeft(), getTop(), getRight(), getBottom());
 };
 
 // Costume duplication
