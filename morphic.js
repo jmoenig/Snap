@@ -8705,6 +8705,9 @@ ScrollFrameMorph.prototype.scrollY = function (steps) {
     }
     if (newY + ch < b) {
         newY = b - ch;
+        if (newY > t) {
+            newY = t;
+        }
     }
     if (newY !== ct) {
         this.contents.setTop(newY);
