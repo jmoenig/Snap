@@ -1690,3 +1690,4 @@ ______
 * Objects: Costume shrink-wrapping
 * Morphic: Allow triggers to be dragged if so specified (#83)
 * GUI: select dragged costume
+* Blocks: eraser symbol for paint editor
