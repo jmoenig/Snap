@@ -2339,6 +2339,19 @@ Process.prototype.doPlayNoteForSecs = function (pitch, secs) {
     this.pushContext();
 };
 
+Process.prototype.doPlayGuitarString = function(pitch) {
+    if (!this.context.activeNote) {
+        this.context.activeNote = new GuitarString(pitch);
+        this.context.activeNote.play();
+    }
+    if (this.context.activeNote && !this.context.activeNote.playing) {
+      this.context.activeNote = null;
+      return null;
+    }
+    this.pushContext('doYield');
+    this.pushContext();
+}
+
 // Process constant input options
 
 Process.prototype.inputOption = function (dta) {

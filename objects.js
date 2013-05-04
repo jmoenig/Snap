@@ -129,11 +129,13 @@ var Costume;
 var SVG_Costume;
 var CostumeEditorMorph;
 var Sound;
+
+var AudioContext;
+var Guitar;
 var Note;
 var CellMorph;
 var WatcherMorph;
 var StagePrompterMorph;
-var Note;
 
 // SpriteMorph /////////////////////////////////////////////////////////
 
@@ -416,6 +418,12 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'sound',
             spec: 'play note %n for %n beats',
             defaults: [60, 0.5]
+        },
+        doPlayGuitarString: {
+            type: 'command',
+            category: 'sound',
+            spec: 'play guitar string %n',
+            defaults: [60]
         },
         doChangeTempo: {
             type: 'command',
@@ -1502,6 +1510,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('doRest'));
         blocks.push('-');
         blocks.push(block('doPlayNote'));
+        blocks.push(block('doPlayGuitarString'));
         blocks.push('-');
         blocks.push(block('doChangeTempo'));
         blocks.push(block('doSetTempo'));
@@ -3745,6 +3754,7 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('doRest'));
         blocks.push('-');
         blocks.push(block('doPlayNote'));
+        blocks.push(block('doPlayGuitarString'));
         blocks.push('-');
         blocks.push(block('doChangeTempo'));
         blocks.push(block('doSetTempo'));
@@ -4922,6 +4932,20 @@ Sound.prototype.toDataURL = function () {
     return this.audio.src;
 };
 
+// audioContext /////////////////////////////////////////////////
+
+audioContext = (function() {
+  var AudioContextCreator = (function () {
+    // cross browser some day?
+    return window.AudioContext ||
+      window.mozAudioContext ||
+      window.msAudioContext ||
+      window.oAudioContext ||
+      window.webkitAudioContext;
+  }())
+  return new AudioContextCreator();
+})();
+
 // Note /////////////////////////////////////////////////////////
 
 // I am a single musical note
@@ -4929,46 +4953,26 @@ Sound.prototype.toDataURL = function () {
 // Note instance creation
 
 function Note(pitch) {
-    this.pitch = pitch === 0 ? 0 : pitch || 69;
-    this.setupContext();
-    this.oscillator = null;
-}
+  this.ensureAudioContext();
+  this.pitch = pitch === 0 ? 0 : pitch || 69;
+  this.oscillator = null;
 
-// Note shared properties
-
-Note.prototype.audioContext = null;
-Note.prototype.gainNode = null;
-
-// Note audio context
-
-Note.prototype.setupContext = function () {
-    if (this.audioContext) { return; }
-    var AudioContext = (function () {
-        // cross browser some day?
-        return window.AudioContext ||
-            window.mozAudioContext ||
-            window.msAudioContext ||
-            window.oAudioContext ||
-            window.webkitAudioContext;
-    }());
-    if (!AudioContext) {
-        throw new Error('Web Audio API is not supported\nin this browser');
-    }
-    Note.prototype.audioContext = new AudioContext();
-    Note.prototype.gainNode = Note.prototype.audioContext.createGainNode();
+  if (!Note.prototype.gainNode) {
+    Note.prototype.gainNode = audioContext.createGainNode();
     Note.prototype.gainNode.gain.value = 0.25; // reduce volume by 1/4
-};
+  }
+}
 
 // Note playing
 
 Note.prototype.play = function () {
-    this.oscillator = this.audioContext.createOscillator();
-    this.oscillator.type = 0;
-    this.oscillator.frequency.value =
-        Math.pow(2, (this.pitch - 69) / 12) * 440;
-    this.oscillator.connect(this.gainNode);
-    this.gainNode.connect(this.audioContext.destination);
-    this.oscillator.noteOn(0); // deprecated, renamed to start()
+  this.oscillator = audioContext.createOscillator();
+  this.oscillator.type = 0;
+  this.oscillator.frequency.value =
+    Math.pow(2, (this.pitch - 69) / 12) * 440;
+  this.oscillator.connect(this.gainNode);
+  this.gainNode.connect(audioContext.destination);
+  this.oscillator.noteOn(0); // deprecated, renamed to start()
 };
 
 Note.prototype.stop = function () {
@@ -4977,6 +4981,63 @@ Note.prototype.stop = function () {
         this.oscillator = null;
     }
 };
+
+Note.prototype.ensureAudioContext = function() {
+  if (typeof audioContext == "undefined") {
+    throw new Error('Web Audio API is not supported\nin this browser');
+  }
+}
+
+// GuitarString ///////////////////////////////////////////////////////
+
+// I am a single guitar string that inherits from Note
+
+// GuitarString instance creation
+
+function GuitarString(pitch) {
+  this.pitch = pitch === 0 ? 0 : pitch || 69;
+  this.frequency = Math.pow(2, (this.pitch - 69) / 12) * 440;
+  this.N = audioContext.sampleRate / this.frequency;
+  this.node = audioContext.createJavaScriptNode(4096, 0, 1);
+  this.playing = false;
+}
+
+GuitarString.prototype.play = function() {
+  var myself = this,
+      N = Math.round(this.N),
+      signal = new Float32Array(N),
+      signalOffset = 0,
+      noiseOffset = 0,
+      noise = 0;
+
+  this.numIterations = 0;
+
+  this.node.onaudioprocess = function(e) {
+    var output = e.outputBuffer.getChannelData(0);
+    for (var i = 0; i < e.outputBuffer.length; i++) {
+      if (noise < N) {
+        output[i] = signal[signalOffset] = 2*(Math.random() - 0.5);
+      } else {
+        output[i] = signal[signalOffset] = (signal[signalOffset] + 
+                                            signal[(signalOffset+1) % N]) / 2;
+      }
+      noise++;
+      // wrap around if necessary
+      signalOffset = (signalOffset + 1) % N;
+    }
+    // after about 1500 low pass filter passes later, the 
+    if ((noise / N) > 1500)
+      myself.stop();
+  }
+
+  this.node.connect(audioContext.destination);
+  this.playing = true;
+}
+
+GuitarString.prototype.stop = function() {
+  this.node.disconnect(audioContext.destination);
+  this.playing = false;
+}
 
 // CellMorph //////////////////////////////////////////////////////////
 
