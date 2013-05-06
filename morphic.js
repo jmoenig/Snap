@@ -1035,7 +1035,7 @@
 /*global window, HTMLCanvasElement, getMinimumFontHeight, FileReader, Audio,
 FileList, getBlurredShadowSupport*/
 
-var morphicVersion = '2013-April-30';
+var morphicVersion = '2013-May-06';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = getBlurredShadowSupport(); // check for Chrome-bug
 
@@ -1231,7 +1231,7 @@ function getDocumentPositionOf(aDOMelement) {
 function clone(target) {
     // answer a new instance of target's type
     if (typeof target === 'object') {
-        var Clone = function () {};
+        var Clone = function () {nop(); };
         Clone.prototype = target;
         return new Clone();
     }
@@ -8230,8 +8230,10 @@ MenuItemMorph.prototype.createLabel = function () {
         // assume its pattern is: [icon, string]
         this.label = new Morph();
         this.label.alpha = 0; // transparent
-        this.label.add(icon = this.createIcon(this.labelString[0]));
-        this.label.add(lbl = this.createLabelString(this.labelString[1]));
+        icon = this.createIcon(this.labelString[0]);
+        this.label.add(icon);
+        lbl = this.createLabelString(this.labelString[1]);
+        this.label.add(lbl);
         lbl.setCenter(icon.center());
         lbl.setLeft(icon.right() + 4);
         this.label.bounds = (icon.bounds.merge(lbl.bounds));
