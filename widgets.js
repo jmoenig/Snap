@@ -73,7 +73,7 @@ newCanvas, StringMorph, Morph, TextMorph, nop, detect, StringFieldMorph,
 HTMLCanvasElement, fontHeight, SymbolMorph, localize, SpeechBubbleMorph,
 ArrowMorph, MenuMorph, isString, isNil, SliderMorph*/
 
-modules.widgets = '2013-April-24';
+modules.widgets = '2013-May-06';
 
 var PushButtonMorph;
 var ToggleButtonMorph;
@@ -1805,7 +1805,8 @@ DialogBoxMorph.prototype.promptCredentials = function (
         dof.add(mCol);
         dof.add(yCol);
         inp.add(dof);
-        inp.add(emlLabel = labelText('foo'));
+        emlLabel = labelText('foo');
+        inp.add(emlLabel);
         inp.add(eml);
     }
 
@@ -1821,6 +1822,14 @@ DialogBoxMorph.prototype.promptCredentials = function (
         inp.add(pw1);
         inp.add(labelText('Repeat new password:'));
         inp.add(pw2);
+    }
+
+    if (purpose === 'resetPassword') {
+        inp.add(labelText('User name:'));
+        inp.add(usr);
+        emlLabel = labelText('E-mail address:');
+        inp.add(emlLabel);
+        inp.add(eml);
     }
 
     if (msg) {
@@ -1912,6 +1921,8 @@ DialogBoxMorph.prototype.promptCredentials = function (
             checklist = [usr, bmn, byr, eml];
         } else if (purpose === 'changePassword') {
             checklist = [opw, pw1, pw2];
+        } else if (purpose === 'resetPassword') {
+            checklist = [usr, eml];
         }
 
         empty = detect(
@@ -1945,6 +1956,13 @@ DialogBoxMorph.prototype.promptCredentials = function (
                 return false;
             }
         }
+        if (purpose === 'resetPassword') {
+            if (em.indexOf(' ') > -1 || em.indexOf('@') === -1
+                    || em.indexOf('.') === -1) {
+                indicate(eml, 'please provide a valid\nemail address');
+                return false;
+            }
+        }
         if (purpose === 'signup') {
             if (!agree) {
                 indicate(chk, 'please agree to\nthe TOS');
@@ -1963,7 +1981,7 @@ DialogBoxMorph.prototype.promptCredentials = function (
     this.edit = function () {
         if (purpose === 'changePassword') {
             opw.edit();
-        } else { // 'signup', 'login'
+        } else { // 'signup', 'login', 'resetPassword'
             usr.edit();
         }
     };

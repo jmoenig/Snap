@@ -68,7 +68,7 @@ sb, CommentMorph, CommandBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2013-April-30';
+modules.gui = '2013-May-06';
 
 // Declarations
 
@@ -153,7 +153,7 @@ IDE_Morph.prototype.init = function (isAutoFill) {
 };
 
 IDE_Morph.prototype.openIn = function (world) {
-    var hash, usr, motd, myself = this;
+    var hash, usr, myself = this;
 
     this.buildPanes();
     world.add(this);
@@ -215,10 +215,10 @@ IDE_Morph.prototype.openIn = function (world) {
     /*
     this.cloudMsg = getURL('http://snap.berkeley.edu/cloudmsg.txt');
     motd = getURL('http://snap.berkeley.edu/motd.txt');
-    */
     if (motd) {
         this.inform('Snap!', motd);
     }
+    */
 
     if (location.hash.substr(0, 6) === '#open:') {
         hash = location.hash.substr(6);
@@ -411,7 +411,8 @@ IDE_Morph.prototype.createControlBar = function () {
     // button.hint = 'stage size\nsmall & normal';
     button.fixLayout();
     button.refresh();
-    this.controlBar.add(stageSizeButton = button);
+    stageSizeButton = button;
+    this.controlBar.add(stageSizeButton);
     this.controlBar.stageSizeButton = button; // for refreshing
 
     //appModeButton
@@ -442,8 +443,9 @@ IDE_Morph.prototype.createControlBar = function () {
     // button.hint = 'app & edit\nmodes';
     button.fixLayout();
     button.refresh();
-    this.controlBar.add(appModeButton = button);
-    this.controlBar.appModeButton = button; // for refreshing
+    appModeButton = button;
+    this.controlBar.add(appModeButton);
+    this.controlBar.appModeButton = appModeButton; // for refreshing
 
     // stopButton
     button = new PushButtonMorph(
@@ -464,7 +466,8 @@ IDE_Morph.prototype.createControlBar = function () {
     button.drawNew();
     // button.hint = 'stop\nevery-\nthing';
     button.fixLayout();
-    this.controlBar.add(stopButton = button);
+    stopButton = button;
+    this.controlBar.add(stopButton);
 
     //pauseButton
     button = new ToggleButtonMorph(
@@ -494,8 +497,9 @@ IDE_Morph.prototype.createControlBar = function () {
     // button.hint = 'pause/resume\nall scripts';
     button.fixLayout();
     button.refresh();
-    this.controlBar.add(pauseButton = button);
-    this.controlBar.pauseButton = button; // for refreshing
+    pauseButton = button;
+    this.controlBar.add(pauseButton);
+    this.controlBar.pauseButton = pauseButton; // for refreshing
 
     // startButton
     button = new PushButtonMorph(
@@ -516,7 +520,8 @@ IDE_Morph.prototype.createControlBar = function () {
     button.drawNew();
     // button.hint = 'start green\nflag scripts';
     button.fixLayout();
-    this.controlBar.add(startButton = button);
+    startButton = button;
+    this.controlBar.add(startButton);
     this.controlBar.startButton = startButton;
 
     // projectButton
@@ -539,7 +544,8 @@ IDE_Morph.prototype.createControlBar = function () {
     button.drawNew();
     // button.hint = 'open, save, & annotate project';
     button.fixLayout();
-    this.controlBar.add(projectButton = button);
+    projectButton = button;
+    this.controlBar.add(projectButton);
     this.controlBar.projectButton = projectButton; // for menu positioning
 
     // settingsButton
@@ -562,7 +568,8 @@ IDE_Morph.prototype.createControlBar = function () {
     button.drawNew();
     // button.hint = 'edit settings';
     button.fixLayout();
-    this.controlBar.add(settingsButton = button);
+    settingsButton = button;
+    this.controlBar.add(settingsButton);
     this.controlBar.settingsButton = settingsButton; // for menu positioning
 
     // cloudButton
@@ -584,7 +591,8 @@ IDE_Morph.prototype.createControlBar = function () {
     button.drawNew();
     // button.hint = 'cloud operations';
     button.fixLayout();
-    this.controlBar.add(cloudButton = button);
+    cloudButton = button;
+    this.controlBar.add(cloudButton);
     this.controlBar.cloudButton = cloudButton; // for menu positioning
 
     this.controlBar.fixLayout = function () {
@@ -1018,8 +1026,8 @@ IDE_Morph.prototype.createSpriteBar = function () {
     tabBar.children.forEach(function (each) {
         each.refresh();
     });
-
-    this.spriteBar.add(this.spriteBar.tabBar = tabBar);
+    this.spriteBar.tabBar = tabBar;
+    this.spriteBar.add(this.spriteBar.tabBar);
 
     this.spriteBar.fixLayout = function () {
         this.tabBar.setLeft(this.left());
@@ -1169,9 +1177,8 @@ IDE_Morph.prototype.createCorral = function () {
     frame.alpha = 0;
 
     this.sprites.asArray().forEach(function (morph) {
-        frame.contents.add(
-            template = new SpriteIconMorph(morph, template)
-        );
+        template = new SpriteIconMorph(morph, template);
+        frame.contents.add(template);
     });
 
     this.corral.frame = frame;
@@ -1658,6 +1665,10 @@ IDE_Morph.prototype.cloudMenu = function () {
         menu.addItem(
             'Signup...',
             'createCloudAccount'
+        );
+        menu.addItem(
+            'Reset Password...',
+            'resetCloudPassword'
         );
     } else {
         menu.addItem(
@@ -2533,9 +2544,8 @@ IDE_Morph.prototype.openProject = function (name) {
     if (name) {
         this.showMessage('opening project\n' + name);
         this.setProjectName(name);
-        this.openProjectString(
-            str = localStorage['-snap-project-' + name]
-        );
+        str = localStorage['-snap-project-' + name];
+        this.openProjectString(str);
         location.hash = '#open:' + str;
     }
 };
@@ -3063,6 +3073,47 @@ IDE_Morph.prototype.createCloudAccount = function () {
     );
 };
 
+IDE_Morph.prototype.resetCloudPassword = function () {
+    var myself = this,
+        world = this.world();
+/*
+    // force-logout, commented out for now:
+    delete localStorage['-snap-user'];
+    SnapCloud.clear();
+*/
+    new DialogBoxMorph(
+        null,
+        function (user) {
+            SnapCloud.resetPassword(
+                user.username,
+                user.email,
+                function (txt, title) {
+                    new DialogBoxMorph().inform(
+                        title,
+                        txt +
+                            '.\n\nAn e-mail with your password\n' +
+                            'has been sent to the address provided',
+                        world,
+                        myself.cloudIcon(null, new Color(0, 180, 0))
+                    );
+                },
+                myself.cloudError()
+            );
+        }
+    ).withKey('cloudresetpassword').promptCredentials(
+        'Reset password',
+        'resetPassword',
+        null,
+        null,
+        null,
+        null,
+        null,
+        world,
+        myself.cloudIcon(),
+        myself.cloudMsg
+    );
+};
+
 IDE_Morph.prototype.changeCloudPassword = function () {
     var myself = this,
         world = this.world();
@@ -3122,14 +3173,14 @@ IDE_Morph.prototype.saveProjectToCloud = function (name) {
 };
 
 IDE_Morph.prototype.exportProjectMedia = function (name) {
-    var menu, str, media;
+    var menu, media;
     this.serializer.isCollectingMedia = true;
     if (name) {
         this.setProjectName(name);
         if (Process.prototype.isCatchingErrors) {
             try {
                 menu = this.showMessage('Exporting');
-                str = encodeURIComponent(
+                encodeURIComponent(
                     this.serializer.serialize(this.stage)
                 );
                 media = encodeURIComponent(
@@ -3144,7 +3195,7 @@ IDE_Morph.prototype.exportProjectMedia = function (name) {
             }
         } else {
             menu = this.showMessage('Exporting');
-            str = encodeURIComponent(
+            encodeURIComponent(
                 this.serializer.serialize(this.stage)
             );
             media = encodeURIComponent(
@@ -3346,7 +3397,7 @@ IDE_Morph.prototype.setCloudURL = function () {
                 'https://snapcloud.miosoft.com/miocon/app/' +
                     'login?_app=SnapCloud',
             'local network lab' :
-                '192.168.2.108:8087/miocon/app/login?_app=SnapCloud',
+                '192.168.2.110:8087/miocon/app/login?_app=SnapCloud',
             'local network office' :
                 '192.168.186.167:8087/miocon/app/login?_app=SnapCloud',
             'localhost dev' :
@@ -5131,7 +5182,7 @@ SoundIconMorph.prototype.init = function (aSound, aTemplate) {
 };
 
 SoundIconMorph.prototype.createThumbnail = function () {
-    var label, btnColor, btnLabelColor;
+    var label;
     if (this.thumbnail) {
         this.thumbnail.destroy();
     }
@@ -5157,8 +5208,6 @@ SoundIconMorph.prototype.createThumbnail = function () {
         'toggleAudioPlaying',
         (this.object.previewAudio ? 'Stop' : 'Play')
     );
-    btnLabelColor = new Color(110, 100, 110);
-    btnColor = new Color(220, 220, 220);
     this.button.drawNew();
     this.button.hint = 'Play sound';
     this.button.fixLayout();
