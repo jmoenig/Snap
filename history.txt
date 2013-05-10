@@ -1696,3 +1696,7 @@ ______
 130506
 ------
 * Reset Password feature (frontend only)
+
+130510
+------
+* Reset Password via e-mailed link (frontend only)

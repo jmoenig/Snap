@@ -73,7 +73,7 @@ newCanvas, StringMorph, Morph, TextMorph, nop, detect, StringFieldMorph,
 HTMLCanvasElement, fontHeight, SymbolMorph, localize, SpeechBubbleMorph,
 ArrowMorph, MenuMorph, isString, isNil, SliderMorph*/
 
-modules.widgets = '2013-May-06';
+modules.widgets = '2013-May-10';
 
 var PushButtonMorph;
 var ToggleButtonMorph;
@@ -1827,9 +1827,6 @@ DialogBoxMorph.prototype.promptCredentials = function (
     if (purpose === 'resetPassword') {
         inp.add(labelText('User name:'));
         inp.add(usr);
-        emlLabel = labelText('E-mail address:');
-        inp.add(emlLabel);
-        inp.add(eml);
     }
 
     if (msg) {
@@ -1922,7 +1919,7 @@ DialogBoxMorph.prototype.promptCredentials = function (
         } else if (purpose === 'changePassword') {
             checklist = [opw, pw1, pw2];
         } else if (purpose === 'resetPassword') {
-            checklist = [usr, eml];
+            checklist = [usr];
         }
 
         empty = detect(
@@ -1953,13 +1950,6 @@ DialogBoxMorph.prototype.promptCredentials = function (
             }
             if (pw1.getValue() !== pw2.getValue()) {
                 indicate(pw2, 'passwords do\nnot match');
-                return false;
-            }
-        }
-        if (purpose === 'resetPassword') {
-            if (em.indexOf(' ') > -1 || em.indexOf('@') === -1
-                    || em.indexOf('.') === -1) {
-                indicate(eml, 'please provide a valid\nemail address');
                 return false;
             }
         }
