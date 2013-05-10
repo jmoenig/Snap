@@ -29,7 +29,7 @@
 
 /*global modules, IDE_Morph, SnapSerializer, hex_sha512, alert, nop*/
 
-modules.cloud = '2013-May-06';
+modules.cloud = '2013-May-10';
 
 // Global stuff
 
@@ -180,7 +180,6 @@ Cloud.prototype.getPublicProject = function (
 
 Cloud.prototype.resetPassword = function (
     username,
-    email,
     callBack,
     errorCall
 ) {
@@ -193,9 +192,7 @@ Cloud.prototype.resetPassword = function (
             (this.hasProtocol() ? '' : 'http://')
                 + this.url + 'ResetPW'
                 + '&Username='
-                + encodeURIComponent(username)
-                + '&Email='
-                + email,
+                + encodeURIComponent(username),
             true
         );
         request.setRequestHeader(

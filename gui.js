@@ -68,7 +68,7 @@ sb, CommentMorph, CommandBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2013-May-06';
+modules.gui = '2013-May-10';
 
 // Declarations
 
@@ -3086,12 +3086,12 @@ IDE_Morph.prototype.resetCloudPassword = function () {
         function (user) {
             SnapCloud.resetPassword(
                 user.username,
-                user.email,
                 function (txt, title) {
                     new DialogBoxMorph().inform(
                         title,
                         txt +
-                            '.\n\nAn e-mail with your password\n' +
+                            '.\n\nAn e-mail with a link to\n' +
+                            'reset your password\n' +
                             'has been sent to the address provided',
                         world,
                         myself.cloudIcon(null, new Color(0, 180, 0))
