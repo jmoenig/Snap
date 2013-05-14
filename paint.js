@@ -1,46 +1,75 @@
 /*
- paint.js
- Paint editor for Snap!
- Inspired by the Scratch paint editor.
- 
- written by Kartik Chandra
- 
- Latest revision: May 10 (Kartik)
- 
- This file is part of Snap!.
- 
- --current changes
-    Shrinkwrap
-    Draw crosshairs immediately
-    TRANSPARENT PAINT
-    Line width viewer
- 
- --To-Do list (in rough order of priority):
-    Eraser tool
+    paint.js
 
-    After release:
-    --
-    rgba sliders
-    Import image
-    Zoom/pan/Selection tools
-    Pick color from canvas
+    a paint editor for Snap!
+    inspired by the Scratch paint editor.
+ 
+    written by Kartik Chandra
+    Copyright (C) 2013 by Kartik Chandra
+  
+    This file is part of Snap!.
+ 
+    Snap! is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as
+    published by the Free Software Foundation, either version 3 of
+    the License, or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+
+    toc
+    ---
+    the following list shows the order in which all constructors are
+    defined. Use this list to locate code in this document:
+
+        PaintEditorMorph
+        PaintColorPickerMorph
+        PaintCanvasMorph
+
+
+    credits
+    -------
+    Nathan Dinsmore contributed a fully working prototype,
+    Nathan's brilliant flood-fill tool has been more or less
+    directly imported into this paint implementation.
+
+    Jens Mönig has contributed icons and bugfixes and says he has probably
+    introduced many other bugs in that process. :-)
+
+
+    revision history
+    ----------------
+    May 10 - first full release (Kartik)
+    May 14 - bugfixes (bugfixes, Snap integration (Jens)
+
  */
 
 /*global Point, Rectangle, DialogBoxMorph, fontHeight, AlignmentMorph,
  FrameMorph, PushButtonMorph, Color, SymbolMorph, newCanvas, Morph, TextMorph,
  CostumeIconMorph, IDE_Morph, Costume, SpriteMorph, nop, Image, WardrobeMorph,
  TurtleIconMorph, localize, MenuMorph, InputFieldMorph, SliderMorph,
- ToggleMorph, ToggleButtonMorph, BoxMorph
+ ToggleMorph, ToggleButtonMorph, BoxMorph, modules, radians, SVG_Costume
  */
 
-// Global definitions
+// Global stuff ////////////////////////////////////////////////////////
+
+modules.paint = '2013-May-14';
+
+// Declarations
+
 var PaintEditorMorph;
 var PaintCanvasMorph;
 var PaintColorPickerMorph;
 
 // PaintEditorMorph //////////////////////////
+
 // A complete paint editor
-//////////////////////////////////////////////
 
 PaintEditorMorph.prototype = new DialogBoxMorph();
 PaintEditorMorph.prototype.constructor = PaintEditorMorph;
@@ -55,6 +84,7 @@ function PaintEditorMorph() {
 PaintEditorMorph.prototype.init = function() {
     // additional properties:
     this.paper = null; // paint canvas
+    this.oncancel = null;
 
     // initialize inherited properties:
     PaintEditorMorph.uber.init.call(this);
@@ -71,6 +101,7 @@ PaintEditorMorph.prototype.buildContents = function () {
     var myself = this;
 
     this.paper = new PaintCanvasMorph(function() {return myself.shift; });
+    this.paper.setExtent(new Point(480, 360));
 
     this.addBody(new AlignmentMorph('row', this.padding));
     this.controls = new AlignmentMorph('column', this.padding);
@@ -113,22 +144,22 @@ PaintEditorMorph.prototype.buildContents = function () {
 PaintEditorMorph.prototype.buildToolbox = function() {
     var tools = {
             brush:
-                "Paintbrush tool (free draw)",
+                "Paintbrush tool\n(free draw)",
             rectangle:
-                "Stroked Rectangle (shift: square)",
+                "Stroked Rectangle\n(shift: square)",
             circle:
-                "Stroked Ellipse (shift: circle)",
+                "Stroked Ellipse\n(shift: circle)",
             eraser:
                 "Eraser tool",
             crosshairs:
                 "Set the rotation center",
 
             line:
-                "Line tool (shift: vertical/horizontal)",
+                "Line tool\n(shift: vertical/horizontal)",
             rectangleSolid:
-                "Filled Rectangle (shift: square)",
+                "Filled Rectangle\n(shift: square)",
             circleSolid:
-                "Filled Ellipse (shift: circle)",
+                "Filled Ellipse\n(shift: circle)",
             paintbucket:
                 "Fill a region"
         },
@@ -165,21 +196,18 @@ PaintEditorMorph.prototype.buildEdits = function() {
 
     this.edits.add(this.pushButton(
         "undo",
-        function () {paper.undo(); },
-        "Undo last action"
+        function () {paper.undo(); }
     ));
 
     this.edits.add(this.pushButton(
         "clear",
-        function () {paper.clearCanvas(); },
-        "Clear the paper"
+        function () {paper.clearCanvas(); }
     ));
     this.edits.fixLayout();
 };
 
-
-// Open the editor in a world with an optional image to edit
 PaintEditorMorph.prototype.openIn = function(world, oldim, oldrc, callback) {
+    // Open the editor in a world with an optional image to edit
     this.setCenter(world.center());
     this.oldim = oldim;
     this.oldrc = oldrc.copy();
@@ -194,29 +222,40 @@ PaintEditorMorph.prototype.openIn = function(world, oldim, oldrc, callback) {
         this.shift = this.world().currentKey === 16;
         this.propertiesControls.constrain.refresh();
     };
-    this.fixLayout(); // merge oldim - factor out into separate function
-    this.changed();
+
+    //merge oldim:
+    if (this.oldim) {
+        this.paper.centermerge(this.oldim, this.paper.paper);
+        this.paper.rotationCenter =
+            this.oldrc.add(
+                new Point(
+                    (this.paper.paper.width - this.oldim.width) / 2,
+                    (this.paper.paper.height - this.oldim.height) / 2
+                )
+            );
+        this.paper.drawNew();
+    }
+
+    this.fullChanged();
 };
 
 PaintEditorMorph.prototype.fixLayout = function() {
+    var oldFlag = Morph.prototype.trackChanges;
+
+    this.changed();
+    oldFlag = Morph.prototype.trackChanges;
+    Morph.prototype.trackChanges = false;
+
     if (this.paper) {
-        this.paper.setExtent(new Point(480, 360));
-        this.paper.fixLayout();
-        if (this.oldim) {
-            this.paper.centermerge(this.oldim, this.paper.paper);
-            this.paper.rotationCenter =
-                this.oldrc.add(
-                    new Point(
-                        (this.paper.paper.width - this.oldim.width) / 2,
-                        (this.paper.paper.height - this.oldim.height) / 2
-                    )
-                );
-        }
+        this.paper.buildContents();
         this.paper.drawNew();
     }
     if (this.controls) {this.controls.fixLayout(); }
     if (this.body) {this.body.fixLayout(); }
     PaintEditorMorph.uber.fixLayout.call(this);
+
+    Morph.prototype.trackChanges = oldFlag;
+    this.changed();
 };
 
 PaintEditorMorph.prototype.refreshToolButtons = function() {
@@ -230,6 +269,11 @@ PaintEditorMorph.prototype.ok = function() {
         this.paper.paper,
         this.paper.rotationCenter
     );
+    this.destroy();
+};
+
+PaintEditorMorph.prototype.cancel = function () {
+    if (this.oncancel) {this.oncancel(); }
     this.destroy();
 };
 
@@ -317,7 +361,7 @@ PaintEditorMorph.prototype.populatePropertiesMenu = function() {
     c.add(pc.colorpicker);
     //c.add(pc.primaryColorButton);
     c.add(pc.primaryColorViewer);
-    c.add(new TextMorph("Pen size"));
+    c.add(new TextMorph("Brush size"));
     c.add(alpen);
     c.add(pc.constrain);
 };
@@ -354,8 +398,8 @@ PaintEditorMorph.prototype.pushButton = function(title, action, hint) {
 };
 
 // AdvancedColorPickerMorph //////////////////
+
 // A large hsl color picker
-//////////////////////////////////////////////
 
 PaintColorPickerMorph.prototype = new Morph();
 PaintColorPickerMorph.prototype.constructor = PaintColorPickerMorph;
@@ -426,10 +470,12 @@ PaintColorPickerMorph.prototype.mouseDownLeft = function(pos) {
 
 PaintColorPickerMorph.prototype.mouseMove =
     PaintColorPickerMorph.prototype.mouseDownLeft;
+
 // PaintCanvasMorph ///////////////////////////
-// A canvas which reacts to drag events to
-// modify its image, based on a 'tool' property.
-///////////////////////////////////////////////
+/*
+    A canvas which reacts to drag events to
+    modify its image, based on a 'tool' property.
+*/
 
 PaintCanvasMorph.prototype = new Morph();
 PaintCanvasMorph.prototype.constructor = PaintCanvasMorph;
@@ -440,7 +486,6 @@ function PaintCanvasMorph(shift) {
 }
 
 PaintCanvasMorph.prototype.init = function(shift) {
-    this.fixLayout();
     this.rotationCenter = new Point(240, 180);
     this.dragRect = null;
     this.previousDragPoint = null;
@@ -463,6 +508,7 @@ PaintCanvasMorph.prototype.init = function(shift) {
         var key = this.world().currentKey;
         return (key === 16);
     };
+    this.buildContents();
 };
 
 PaintCanvasMorph.prototype.cacheUndo = function() {
@@ -484,6 +530,7 @@ PaintCanvasMorph.prototype.undo = function() {
 PaintCanvasMorph.prototype.merge = function(a, b) {
     b.getContext("2d").drawImage(a, 0, 0);
 };
+
 PaintCanvasMorph.prototype.centermerge = function(a, b) {
     b.getContext("2d").drawImage(
         a,
@@ -507,27 +554,54 @@ PaintCanvasMorph.prototype.toolChanged = function(tool) {
     this.changed();
 };
 
-PaintCanvasMorph.prototype.drawcrosshair = function() {
-    var mctx = this.mask.getContext("2d"),
-        pos = this.rotationCenter;
+PaintCanvasMorph.prototype.drawcrosshair = function(context) {
+    var ctx = context || this.mask.getContext("2d"),
+        rp = this.rotationCenter;
 
-    mctx.strokeStyle = "rgba(0,0,0,0.6)";
-    mctx.lineWidth = 5;
-    mctx.beginPath();
-    mctx.moveTo(pos.x, 0);
-    mctx.lineTo(pos.x, this.extent().y);
-    mctx.moveTo(0, pos.y);
-    mctx.lineTo(this.extent().x, pos.y);
-    mctx.stroke();
+    ctx.lineWidth = 1;
+    ctx.strokeStyle = 'black';
+    ctx.clearRect(0, 0, this.mask.width, this.mask.height);
 
-    mctx.strokeStyle = "rgba(255,255,255,0.6)";
-    mctx.lineWidth = 1;
-    mctx.beginPath();
-    mctx.moveTo(pos.x, 0);
-    mctx.lineTo(pos.x, this.extent().y);
-    mctx.moveTo(0, pos.y);
-    mctx.lineTo(this.extent().x, pos.y);
-    mctx.stroke();
+    // draw crosshairs:
+    ctx.globalAlpha = 0.5;
+
+    // circle around center:
+    ctx.fillStyle = 'white';
+    ctx.beginPath();
+    ctx.arc(
+        rp.x,
+        rp.y,
+        20,
+        radians(0),
+        radians(360),
+        false
+    );
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.arc(
+        rp.x,
+        rp.y,
+        10,
+        radians(0),
+        radians(360),
+        false
+    );
+    ctx.stroke();
+
+    // horizontal line:
+    ctx.beginPath();
+    ctx.moveTo(0, rp.y);
+    ctx.lineTo(this.mask.width, rp.y);
+    ctx.stroke();
+
+    // vertical line:
+    ctx.beginPath();
+    ctx.moveTo(rp.x, 0);
+    ctx.lineTo(rp.x, this.mask.height);
+    ctx.stroke();
 
     this.drawNew();
     this.changed();
@@ -577,6 +651,8 @@ PaintCanvasMorph.prototype.floodfill = function(sourcepoint) {
         }
     }
     ctx.putImageData(img, 0, 0);
+    this.drawNew();
+    this.changed();
 };
 
 PaintCanvasMorph.prototype.mouseDownLeft = function(pos) {
@@ -584,8 +660,13 @@ PaintCanvasMorph.prototype.mouseDownLeft = function(pos) {
     this.dragRect.origin = pos.subtract(this.bounds.origin);
     this.dragRect.corner = pos.subtract(this.bounds.origin);
     this.previousDragPoint = this.dragRect.corner.copy();
+    if (this.currentTool === 'crosshairs') {
+        this.rotationCenter = pos.subtract(this.bounds.origin);
+        this.drawcrosshair();
+        return;
+    }
     if (this.currentTool === "paintbucket") {
-        this.floodfill(pos.subtract(this.bounds.origin));
+        return this.floodfill(pos.subtract(this.bounds.origin));
     }
     if (this.settings.primarycolor === "transparent" &&
             this.currentTool !== "crosshairs") {
@@ -595,6 +676,10 @@ PaintCanvasMorph.prototype.mouseDownLeft = function(pos) {
 };
 
 PaintCanvasMorph.prototype.mouseMove = function(pos) {
+    if (this.currentTool === "paintbucket") {
+        return;
+    }
+
     var relpos = pos.subtract(this.bounds.origin),
         mctx = this.mask.getContext("2d"),
         pctx = this.paper.getContext("2d"),
@@ -708,26 +793,8 @@ PaintCanvasMorph.prototype.mouseMove = function(pos) {
         }
         break;
     case "crosshairs":
-        mctx.save();
-        mctx.globalCompositeOperation = "source-over";
-        mctx.strokeStyle = "rgba(0,0,0,0.6)";
-        mctx.lineWidth = 5;
-        mctx.beginPath();
-        mctx.moveTo(p, 0);
-        mctx.lineTo(p, this.extent().y);
-        mctx.moveTo(0, q);
-        mctx.lineTo(this.extent().x, q);
-        mctx.stroke();
-        mctx.strokeStyle = "rgba(255,255,255,0.6)";
-        mctx.lineWidth = 1;
-        mctx.beginPath();
-        mctx.moveTo(p, 0);
-        mctx.lineTo(p, this.extent().y);
-        mctx.moveTo(0, q);
-        mctx.lineTo(this.extent().x, q);
-        mctx.stroke();
         this.rotationCenter = relpos.copy();
-        mctx.restore();
+        this.drawcrosshair(mctx);
         break;
     case "eraser":
         this.merge(this.paper, this.mask);
@@ -759,7 +826,7 @@ PaintCanvasMorph.prototype.mouseClickLeft = function() {
     this.brushBuffer = [];
 };
 
-PaintCanvasMorph.prototype.fixLayout = function() {
+PaintCanvasMorph.prototype.buildContents = function() {
     this.background = newCanvas(this.extent());
     this.paper = newCanvas(this.extent());
     this.mask = newCanvas(this.extent());
@@ -825,9 +892,16 @@ PaintCanvasMorph.prototype.contrast
 // These will be incorporated into the respective files later
 // They add costume editing functionality to Snap!.
 ////////////////////////////////////////////////////////////////////////
+
 CostumeIconMorph.prototype.editCostume = function () {
-    var ide = this.parentThatIsA(IDE_Morph);
-    this.object.edit(this.world(), ide);
+    if (this.object instanceof SVG_Costume) {
+        this.object.editRotationPointOnly(this.world());
+    } else {
+        this.object.edit(
+            this.world(),
+            this.parentThatIsA(IDE_Morph)
+        );
+    }
 };
 
 Costume.prototype.edit = function (aWorld, anIDE, isnew, oncancel, onsubmit) {
@@ -857,9 +931,6 @@ Costume.prototype.edit = function (aWorld, anIDE, isnew, oncancel, onsubmit) {
     );
 };
 
-
-
-
 IDE_Morph.prototype.createCorralBar = function () {
     // assumes the stage has already been created
     var padding = 5,
@@ -870,13 +941,16 @@ IDE_Morph.prototype.createCorralBar = function () {
             this.frameColor.darker(50),
             this.frameColor.darker(50)
         ];
+
     if (this.corralBar) {
         this.corralBar.destroy();
     }
+
     this.corralBar = new Morph();
     this.corralBar.color = this.frameColor;
     this.corralBar.setHeight(this.logo.height()); // height is fixed
     this.add(this.corralBar);
+
     // new sprite button
     newbutton = new PushButtonMorph(
         this,
@@ -899,6 +973,7 @@ IDE_Morph.prototype.createCorralBar = function () {
     newbutton.setCenter(this.corralBar.center());
     newbutton.setLeft(this.corralBar.left() + padding);
     this.corralBar.add(newbutton);
+
     paintbutton = new PushButtonMorph(
         this,
         "paintNewSprite",
@@ -926,7 +1001,9 @@ IDE_Morph.prototype.createCorralBar = function () {
 
 IDE_Morph.prototype.paintNewSprite = function() {
     var sprite = new SpriteMorph(this.globalVariables),
-        cos = new Costume();
+        cos = new Costume(),
+        myself = this;
+
     sprite.name = sprite.name +
         (this.corral.frame.contents.children.length + 1);
     sprite.setCenter(this.stage.center());
@@ -934,8 +1011,16 @@ IDE_Morph.prototype.paintNewSprite = function() {
     this.sprites.add(sprite);
     this.corral.addSprite(sprite);
     this.selectSprite(sprite);
-    cos.edit(this.world(), this, true, function() {sprite.remove(); });
-    sprite.addCostume(cos);
+    cos.edit(
+        this.world(),
+        this,
+        true,
+        function() {myself.removeSprite(sprite); },
+        function () {
+            sprite.addCostume(cos);
+            sprite.wearCostume(cos);
+        }
+    );
 };
 
 WardrobeMorph.prototype.updateList = function () {
@@ -948,15 +1033,12 @@ WardrobeMorph.prototype.updateList = function () {
         icon,
         template,
         txt,
-        paintbutton,
-        colors = [
-            new Color(50, 50, 50, 1),
-            new Color(60, 60, 60, 1),
-            new Color(70, 70, 70, 1)
-        ];
+        paintbutton;
+
     this.changed();
     oldFlag = Morph.prototype.trackChanges;
     Morph.prototype.trackChanges = false;
+
     this.contents.destroy();
     this.contents = new FrameMorph(this);
     this.contents.acceptsDrops = false;
@@ -964,6 +1046,7 @@ WardrobeMorph.prototype.updateList = function () {
         myself.reactToDropOf(icon);
     };
     this.addBack(this.contents);
+
     icon = new TurtleIconMorph(this.sprite);
     icon.setPosition(new Point(x, y));
     myself.addContents(icon);
@@ -974,31 +1057,37 @@ WardrobeMorph.prototype.updateList = function () {
         "paintNew",
         new SymbolMorph("brush", 15)
     );
-    paintbutton.padding = 5;
+    paintbutton.padding = 0;
     paintbutton.corner = 12;
-    paintbutton.color = colors[0];
-    paintbutton.highlightColor = colors[1];
-    paintbutton.pressColor = colors[2];
+    paintbutton.color = IDE_Morph.prototype.groupColor;
+    paintbutton.highlightColor = IDE_Morph.prototype.frameColor.darker(50);
+    paintbutton.pressColor = paintbutton.highlightColor;
     paintbutton.labelMinExtent = new Point(36, 18);
     paintbutton.labelShadowOffset = new Point(-1, -1);
-    paintbutton.labelShadowColor = colors[1];
+    paintbutton.labelShadowColor = paintbutton.highlightColor;
     paintbutton.labelColor = new Color(255, 255, 255);
     paintbutton.contrast = this.buttonContrast;
     paintbutton.drawNew();
     paintbutton.hint = "Paint a new costume";
     paintbutton.setPosition(new Point(x, y));
     paintbutton.fixLayout();
+    paintbutton.setCenter(icon.center());
+    paintbutton.setLeft(icon.right() + padding * 4);
+
 
     this.addContents(paintbutton);
-    y = paintbutton.bottom() + padding;
+
     txt = new TextMorph(localize(
         "costumes tab help" // look up long string in translator
     ));
     txt.fontSize = 9;
     txt.setColor(new Color(230, 230, 230));
+
     txt.setPosition(new Point(x, y));
     this.addContents(txt);
     y = txt.bottom() + padding;
+
+
     this.sprite.costumes.asArray().forEach(function (costume) {
         template = icon = new CostumeIconMorph(costume, template);
         icon.setPosition(new Point(x, y));
@@ -1006,10 +1095,12 @@ WardrobeMorph.prototype.updateList = function () {
         y = icon.bottom() + padding;
     });
     this.costumesVersion = this.sprite.costumes.lastChanged;
+
     this.contents.setPosition(oldPos);
     this.adjustScrollBars();
     Morph.prototype.trackChanges = oldFlag;
     this.changed();
+
     this.updateSelection();
 };
 
@@ -1029,6 +1120,14 @@ CostumeIconMorph.prototype.userMenu = function () {
     var menu = new MenuMorph(this);
     if (!(this.object instanceof Costume)) {return null; }
     menu.addItem("edit", "editCostume");
+    if (this.world().currentKey === 16) { // shift clicked
+        menu.addItem(
+            'edit rotation point only...',
+            'editRotationPointOnly',
+            null,
+            new Color(100, 0, 0)
+        );
+    }
     menu.addItem("rename", "renameCostume");
     menu.addLine();
     menu.addItem("duplicate", "duplicateCostume");
@@ -1058,7 +1157,6 @@ CostumeIconMorph.prototype.duplicateCostume = function() {
     }
 };
 
-
 // I had to change this because adding a "paint new" button changed the offset
 // of the costume (so the 5th child would be the 3rd costume, not the 4th as
 // it was before with only the text morph child).
@@ -1071,7 +1169,6 @@ CostumeIconMorph.prototype.removeCostume = function () {
         ide.currentSprite.wearCostume(null);
     }
 };
-
 
 Costume.prototype.shrinkWrap = function () {
     // adjust my contents'  bounds to my visible bounding box
