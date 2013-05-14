@@ -1700,3 +1700,7 @@ ______
 130510
 ------
 * Reset Password via e-mailed link (frontend only)
+
+140514
+------
+* paint.js: Paint editor, first version, contributed by Kartik Chandra, Yay!!
