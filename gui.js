@@ -68,7 +68,7 @@ sb, CommentMorph, CommandBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2013-May-10';
+modules.gui = '2013-May-14';
 
 // Declarations
 
@@ -1105,7 +1105,8 @@ IDE_Morph.prototype.createSpriteEditor = function () {
 IDE_Morph.prototype.createCorralBar = function () {
     // assumes the stage has already been created
     var padding = 5,
-        button,
+        newbutton,
+        paintbutton,
         colors = [
             this.groupColor,
             this.frameColor.darker(50),
@@ -1122,28 +1123,51 @@ IDE_Morph.prototype.createCorralBar = function () {
     this.add(this.corralBar);
 
     // new sprite button
-    button = new PushButtonMorph(
+    newbutton = new PushButtonMorph(
         this,
-        'addNewSprite',
-        new SymbolMorph('turtle', 14)
+        "addNewSprite",
+        new SymbolMorph("turtle", 14)
     );
-    button.corner = 12;
-    button.color = colors[0];
-    button.highlightColor = colors[1];
-    button.pressColor = colors[2];
-    button.labelMinExtent = new Point(36, 18);
-    button.padding = 0;
-    button.labelShadowOffset = new Point(-1, -1);
-    button.labelShadowColor = colors[1];
-    button.labelColor = new Color(255, 255, 255);
-    button.contrast = this.buttonContrast;
-    button.drawNew();
-    button.hint = 'add a new sprite';
-    button.fixLayout();
-    button.setCenter(this.corralBar.center());
-    button.setLeft(this.corralBar.left() + padding);
-    this.corralBar.add(button);
+    newbutton.corner = 12;
+    newbutton.color = colors[0];
+    newbutton.highlightColor = colors[1];
+    newbutton.pressColor = colors[2];
+    newbutton.labelMinExtent = new Point(36, 18);
+    newbutton.padding = 0;
+    newbutton.labelShadowOffset = new Point(-1, -1);
+    newbutton.labelShadowColor = colors[1];
+    newbutton.labelColor = new Color(255, 255, 255);
+    newbutton.contrast = this.buttonContrast;
+    newbutton.drawNew();
+    newbutton.hint = "add a new Turtle sprite";
+    newbutton.fixLayout();
+    newbutton.setCenter(this.corralBar.center());
+    newbutton.setLeft(this.corralBar.left() + padding);
+    this.corralBar.add(newbutton);
 
+    paintbutton = new PushButtonMorph(
+        this,
+        "paintNewSprite",
+        new SymbolMorph("brush", 15)
+    );
+    paintbutton.corner = 12;
+    paintbutton.color = colors[0];
+    paintbutton.highlightColor = colors[1];
+    paintbutton.pressColor = colors[2];
+    paintbutton.labelMinExtent = new Point(36, 18);
+    paintbutton.padding = 0;
+    paintbutton.labelShadowOffset = new Point(-1, -1);
+    paintbutton.labelShadowColor = colors[1];
+    paintbutton.labelColor = new Color(255, 255, 255);
+    paintbutton.contrast = this.buttonContrast;
+    paintbutton.drawNew();
+    paintbutton.hint = "paint a new sprite";
+    paintbutton.fixLayout();
+    paintbutton.setCenter(this.corralBar.center());
+    paintbutton.setLeft(
+        this.corralBar.left() + padding + newbutton.width() + padding
+    );
+    this.corralBar.add(paintbutton);
 };
 
 IDE_Morph.prototype.createCorral = function () {
@@ -1546,6 +1570,30 @@ IDE_Morph.prototype.addNewSprite = function () {
     this.sprites.add(sprite);
     this.corral.addSprite(sprite);
     this.selectSprite(sprite);
+};
+
+IDE_Morph.prototype.paintNewSprite = function() {
+    var sprite = new SpriteMorph(this.globalVariables),
+        cos = new Costume(),
+        myself = this;
+
+    sprite.name = sprite.name +
+        (this.corral.frame.contents.children.length + 1);
+    sprite.setCenter(this.stage.center());
+    this.stage.add(sprite);
+    this.sprites.add(sprite);
+    this.corral.addSprite(sprite);
+    this.selectSprite(sprite);
+    cos.edit(
+        this.world(),
+        this,
+        true,
+        function() {myself.removeSprite(sprite); },
+        function () {
+            sprite.addCostume(cos);
+            sprite.wearCostume(cos);
+        }
+    );
 };
 
 IDE_Morph.prototype.duplicateSprite = function (sprite) {
@@ -4724,16 +4772,38 @@ CostumeIconMorph.prototype.fixLayout
 CostumeIconMorph.prototype.userMenu = function () {
     var menu = new MenuMorph(this);
     if (!(this.object instanceof Costume)) {return null; }
-    menu.addItem("edit", 'editCostume');
-    menu.addItem("rename", 'renameCostume');
-    menu.addItem("delete", 'removeCostume');
-    menu.addItem("export", 'exportCostume');
+    menu.addItem("edit", "editCostume");
+    if (this.world().currentKey === 16) { // shift clicked
+        menu.addItem(
+            'edit rotation point only...',
+            'editRotationPointOnly',
+            null,
+            new Color(100, 0, 0)
+        );
+    }
+    menu.addItem("rename", "renameCostume");
+    menu.addLine();
+    menu.addItem("duplicate", "duplicateCostume");
+    menu.addItem("delete", "removeCostume");
+    menu.addLine();
+    menu.addItem("export", "exportCostume");
     return menu;
 };
 
 CostumeIconMorph.prototype.editCostume = function () {
+    if (this.object instanceof SVG_Costume) {
+        this.object.editRotationPointOnly(this.world());
+    } else {
+        this.object.edit(
+            this.world(),
+            this.parentThatIsA(IDE_Morph)
+        );
+    }
+};
+
+CostumeIconMorph.prototype.editRotationPointOnly = function () {
     var ide = this.parentThatIsA(IDE_Morph);
-    this.object.edit(this.world());
+    this.object.editRotationPointOnly(this.world());
     ide.hasChangedMedia = true;
 };
 
@@ -4756,11 +4826,31 @@ CostumeIconMorph.prototype.renameCostume = function () {
     );
 };
 
+CostumeIconMorph.prototype.duplicateCostume = function() {
+    var wardrobe = this.parentThatIsA(WardrobeMorph),
+        ide = this.parentThatIsA(IDE_Morph),
+        newcos = this.object.copy(),
+        split = newcos.name.split(" ");
+    if (split[split.length - 1] === "copy") {
+        newcos.name += " 2";
+    } else if (isNaN(split[split.length - 1])) {
+        newcos.name = newcos.name + " copy";
+    } else {
+        split[split.length - 1] = Number(split[split.length - 1]) + 1;
+        newcos.name = split.join(" ");
+    }
+    wardrobe.sprite.addCostume(newcos);
+    wardrobe.updateList();
+    if (ide) {
+        ide.currentSprite.wearCostume(newcos);
+    }
+};
+
 CostumeIconMorph.prototype.removeCostume = function () {
     var wardrobe = this.parentThatIsA(WardrobeMorph),
         idx = this.parent.children.indexOf(this),
         ide = this.parentThatIsA(IDE_Morph);
-    wardrobe.removeCostumeAt(idx - 1);
+    wardrobe.removeCostumeAt(idx - 2);
     if (ide.currentSprite.costume === this.object) {
         ide.currentSprite.wearCostume(null);
     }
@@ -5016,7 +5106,8 @@ WardrobeMorph.prototype.updateList = function () {
         oldPos = this.contents.position(),
         icon,
         template,
-        txt;
+        txt,
+        paintbutton;
 
     this.changed();
     oldFlag = Morph.prototype.trackChanges;
@@ -5035,14 +5126,41 @@ WardrobeMorph.prototype.updateList = function () {
     myself.addContents(icon);
     y = icon.bottom() + padding;
 
+    paintbutton = new PushButtonMorph(
+        this,
+        "paintNew",
+        new SymbolMorph("brush", 15)
+    );
+    paintbutton.padding = 0;
+    paintbutton.corner = 12;
+    paintbutton.color = IDE_Morph.prototype.groupColor;
+    paintbutton.highlightColor = IDE_Morph.prototype.frameColor.darker(50);
+    paintbutton.pressColor = paintbutton.highlightColor;
+    paintbutton.labelMinExtent = new Point(36, 18);
+    paintbutton.labelShadowOffset = new Point(-1, -1);
+    paintbutton.labelShadowColor = paintbutton.highlightColor;
+    paintbutton.labelColor = new Color(255, 255, 255);
+    paintbutton.contrast = this.buttonContrast;
+    paintbutton.drawNew();
+    paintbutton.hint = "Paint a new costume";
+    paintbutton.setPosition(new Point(x, y));
+    paintbutton.fixLayout();
+    paintbutton.setCenter(icon.center());
+    paintbutton.setLeft(icon.right() + padding * 4);
+
+
+    this.addContents(paintbutton);
+
     txt = new TextMorph(localize(
-        'costumes tab help' // look up long string in translator
+        "costumes tab help" // look up long string in translator
     ));
     txt.fontSize = 9;
     txt.setColor(new Color(230, 230, 230));
+
     txt.setPosition(new Point(x, y));
     this.addContents(txt);
     y = txt.bottom() + padding;
+
 
     this.sprite.costumes.asArray().forEach(function (costume) {
         template = icon = new CostumeIconMorph(costume, template);
@@ -5083,6 +5201,19 @@ WardrobeMorph.prototype.step = function () {
 WardrobeMorph.prototype.removeCostumeAt = function (idx) {
     this.sprite.costumes.remove(idx);
     this.updateList();
+};
+
+WardrobeMorph.prototype.paintNew = function() {
+    var cos = new Costume(newCanvas(), "Untitled"),
+        ide = this.parentThatIsA(IDE_Morph),
+        myself = this;
+    cos.edit(this.world(), null, true, null, function() {
+        myself.sprite.addCostume(cos);
+        myself.updateList();
+        if (ide) {
+            ide.currentSprite.wearCostume(cos);
+        }
+    });
 };
 
 // Wardrobe drag & drop
