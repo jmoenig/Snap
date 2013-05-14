@@ -63,7 +63,10 @@
 
 */
 
-// gloabls from lists.js:
+// globals from paint.js:
+/*global PaintEditorMorph*/
+
+// globals from lists.js:
 
 /*global ListWatcherMorph*/
 
@@ -120,7 +123,7 @@ PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.objects = '2013-April-30';
+modules.objects = '2013-May-14';
 
 var SpriteMorph;
 var StageMorph;
@@ -4532,7 +4535,7 @@ Costume.prototype.shrinkWrap = function () {
         ext.x,
         ext.y
     );
-    this.rotationCenter = this.rotationCenter.add(bb.origin);
+    this.rotationCenter = this.rotationCenter.subtract(bb.origin);
     this.contents = pic;
     this.version = Date.now();
 };
@@ -4639,7 +4642,34 @@ Costume.prototype.flipped = function () {
 
 // Costume actions
 
-Costume.prototype.edit = function (aWorld) {
+Costume.prototype.edit = function (aWorld, anIDE, isnew, oncancel, onsubmit) {
+    var myself = this,
+        editor = new PaintEditorMorph();
+    editor.oncancel = oncancel || nop;
+    editor.openIn(
+        aWorld,
+        isnew ?
+                newCanvas(new Point(480, 360)) :
+                this.contents,
+        isnew ?
+                new Point(240, 180) :
+                this.rotationCenter,
+        function (img, rc) {
+            myself.contents = img;
+            myself.rotationCenter = rc;
+            myself.shrinkWrap();
+            myself.version = Date.now();
+            aWorld.changed();
+            if (anIDE) {
+                anIDE.currentSprite.wearCostume(myself);
+                anIDE.hasChangedMedia = true;
+            }
+            (onsubmit || nop)();
+        }
+    );
+};
+
+Costume.prototype.editRotationPointOnly = function (aWorld) {
     var editor = new CostumeEditorMorph(this),
         action,
         dialog,
