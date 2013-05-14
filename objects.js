@@ -4519,7 +4519,7 @@ Costume.prototype.bounds = function () {
 
 Costume.prototype.shrinkWrap = function () {
     // adjust my contents'  bounds to my visible bounding box
-    var bb = this.boundingBox(),
+    var bb = this.boundingBox().expandBy(3), // tolerance for anti-aliasing
         ext = bb.extent(),
         pic = newCanvas(ext),
         ctx = pic.getContext('2d');
