@@ -2130,6 +2130,7 @@ IDE_Morph.prototype.aboutSnap = function () {
     creditsTxt = localize('Contributors')
         + '\n\nNathan Dinsmore: Saving/Loading, Snap-Logo Design, '
         + 'countless bugfixes'
+        + '\nKartik Chandra: Paint Editor'
         + '\nIan Reynolds: UI Design, Event Bindings, '
         + 'Sound primitives'
         + '\nIvan Motyashov: Initial Squeak Porting'

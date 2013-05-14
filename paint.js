@@ -208,16 +208,15 @@ PaintEditorMorph.prototype.buildEdits = function() {
 
 PaintEditorMorph.prototype.openIn = function(world, oldim, oldrc, callback) {
     // Open the editor in a world with an optional image to edit
-    this.setCenter(world.center());
     this.oldim = oldim;
     this.oldrc = oldrc.copy();
     this.callback = callback || nop;
-    world.add(this);
-    this.world().keyboardReceiver = this;
+
     this.processKeyUp = function() {
         this.shift = false;
         this.propertiesControls.constrain.refresh();
     };
+
     this.processKeyDown = function() {
         this.shift = this.world().currentKey === 16;
         this.propertiesControls.constrain.refresh();
@@ -236,7 +235,8 @@ PaintEditorMorph.prototype.openIn = function(world, oldim, oldrc, callback) {
         this.paper.drawNew();
     }
 
-    this.fullChanged();
+    this.key = 'paint';
+    this.popUp(world);
 };
 
 PaintEditorMorph.prototype.fixLayout = function() {
