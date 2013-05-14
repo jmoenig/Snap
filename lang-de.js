@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org', // optional
     'last_changed':
-        '2013-04-25', // this, too, will appear in the Translators tab
+        '2013-05-14', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -427,6 +427,10 @@ SnapTranslator.dict.de = {
         'sende %msg an alle und warte',
     'Message name':
         'Nachricht',
+    'message':
+        'Nachricht',
+    'any message':
+        'eine beliebige Nachricht',
     'wait %n secs':
         'warte %n Sek.',
     'wait until %b':

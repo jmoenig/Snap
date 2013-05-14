@@ -153,7 +153,7 @@ DialogBoxMorph, BlockInputFragmentMorph, PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2013-April-30';
+modules.blocks = '2013-May-14';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -195,7 +195,7 @@ WorldMorph.prototype.customMorphs = function () {
             new Color(20, 20, 20)
         )
     ];
-
+*/
 /*
     var sm = new ScriptsMorph();
     sm.setExtent(new Point(800, 600));
@@ -936,7 +936,7 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             part = new InputSlotMorph(
                 null,
                 false,
-                'messagesMenu',
+                'messagesReceivedMenu',
                 true
             );
             part.isStatic = true;
@@ -5718,6 +5718,38 @@ InputSlotMorph.prototype.messagesMenu = function () {
     if (allNames.length > 0) {
         dict['~'] = null;
     }
+    dict['new...'] = function () {
+
+        new DialogBoxMorph(
+            myself,
+            myself.setContents,
+            myself
+        ).prompt(
+            'Message name',
+            null,
+            myself.world()
+        );
+    };
+
+    return dict;
+};
+
+InputSlotMorph.prototype.messagesReceivedMenu = function () {
+    var dict = {'any message': ['any message']},
+        rcvr = this.parentThatIsA(BlockMorph).receiver(),
+        stage = rcvr.parentThatIsA(StageMorph),
+        myself = this,
+        allNames = [];
+
+    stage.children.concat(stage).forEach(function (morph) {
+        if (morph instanceof SpriteMorph || morph instanceof StageMorph) {
+            allNames = allNames.concat(morph.allMessageNames());
+        }
+    });
+    allNames.forEach(function (name) {
+        dict[name] = name;
+    });
+    dict['~'] = null;
     dict['new...'] = function () {
 
         new DialogBoxMorph(

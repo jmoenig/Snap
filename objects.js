@@ -532,6 +532,11 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'control',
             spec: 'broadcast %msg and wait'
         },
+        getLastMessage: {
+            type: 'reporter',
+            category: 'control',
+            spec: 'message'
+        },
         doWait: {
             type: 'command',
             category: 'control',
@@ -1539,6 +1544,8 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push('-');
         blocks.push(block('doBroadcast'));
         blocks.push(block('doBroadcastAndWait'));
+        blocks.push(watcherToggle('getLastMessage'));
+        blocks.push(block('getLastMessage'));
         blocks.push('-');
         blocks.push(block('doWarp'));
         blocks.push('-');
@@ -2719,7 +2726,7 @@ SpriteMorph.prototype.allMessageNames = function () {
                     morph.selector
                 )) {
                 txt = morph.inputs()[0].evaluate();
-                if (txt !== '') {
+                if (isString(txt) && txt !== '') {
                     if (!contains(msgs, txt)) {
                         msgs.push(txt);
                     }
@@ -2732,9 +2739,11 @@ SpriteMorph.prototype.allMessageNames = function () {
 
 SpriteMorph.prototype.allHatBlocksFor = function (message) {
     return this.scripts.children.filter(function (morph) {
+        var event;
         if (morph.selector) {
             if (morph.selector === 'receiveMessage') {
-                return morph.inputs()[0].evaluate() === message;
+                event = morph.inputs()[0].evaluate();
+                return event === message || (event instanceof Array);
             }
             if (morph.selector === 'receiveGo') {
                 return message === '__shout__go__';
@@ -2792,6 +2801,16 @@ SpriteMorph.prototype.getTempo = function () {
         return stage.getTempo();
     }
     return 0;
+};
+
+// SpriteMorph last message
+
+SpriteMorph.prototype.getLastMessage = function () {
+    var stage = this.parentThatIsA(StageMorph);
+    if (stage) {
+        return stage.getLastMessage();
+    }
+    return '';
 };
 
 // SpriteMorph user prompting
@@ -3189,6 +3208,7 @@ StageMorph.prototype.init = function (globals) {
 
     this.timerStart = Date.now();
     this.tempo = 60; // bpm
+    this.lastMessage = '';
 
     this.watcherUpdateFrequency = 2;
     this.lastWatcherUpdate = Date.now();
@@ -3434,6 +3454,12 @@ StageMorph.prototype.changeTempo = function (delta) {
 
 StageMorph.prototype.getTempo = function () {
     return +this.tempo;
+};
+
+// StageMorph messages
+
+StageMorph.prototype.getLastMessage = function () {
+    return this.lastMessage || '';
 };
 
 // StageMorph drag & drop
@@ -3767,6 +3793,8 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push('-');
         blocks.push(block('doBroadcast'));
         blocks.push(block('doBroadcastAndWait'));
+        blocks.push(watcherToggle('getLastMessage'));
+        blocks.push(block('getLastMessage'));
         blocks.push('-');
         blocks.push(block('doWarp'));
         blocks.push('-');
@@ -5417,7 +5445,10 @@ WatcherMorph.prototype.object = function () {
 };
 
 WatcherMorph.prototype.isGlobal = function (selector) {
-    return contains(['getTimer', 'getLastAnswer', 'getTempo'], selector);
+    return contains(
+        ['getTimer', 'getLastAnswer', 'getTempo', 'getLastMessage'],
+        selector
+    );
 };
 
 // WatcherMorph slider accessing:
