@@ -1701,7 +1701,11 @@ ______
 ------
 * Reset Password via e-mailed link (frontend only)
 
-140514
+130514
 ------
 * paint.js: Paint editor, first version, contributed by Kartik Chandra, Yay!!
 * Threads, Objects, Blocks: Broadcast & message enhancements: When I receive <any msg>, and getLastMessage reporter + watcher 
+
+130515
+------
+* Objects: Costume shrinkWrap adjustments

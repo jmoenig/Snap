@@ -123,7 +123,7 @@ PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.objects = '2013-May-14';
+modules.objects = '2013-May-15';
 
 var SpriteMorph;
 var StageMorph;
@@ -4547,15 +4547,19 @@ Costume.prototype.bounds = function () {
 
 Costume.prototype.shrinkWrap = function () {
     // adjust my contents'  bounds to my visible bounding box
-    var bb = this.boundingBox().expandBy(3), // tolerance for anti-aliasing
-        ext = bb.extent(),
+    // add a tolerance margin for Chrome's anti-aliasing issue
+    var bb = this.boundingBox(),
+        space = new Point(480, 360).subtract(bb.extent()).floorDivideBy(2),
+        margin = new Point(3, 3).min(space.max(new Point(0, 0))),
+        area = bb.expandBy(margin),
+        ext = area.extent(),
         pic = newCanvas(ext),
         ctx = pic.getContext('2d');
 
     ctx.drawImage(
         this.contents,
-        bb.origin.x,
-        bb.origin.y,
+        area.origin.x,
+        area.origin.y,
         ext.x,
         ext.y,
         0,
@@ -4563,7 +4567,7 @@ Costume.prototype.shrinkWrap = function () {
         ext.x,
         ext.y
     );
-    this.rotationCenter = this.rotationCenter.subtract(bb.origin);
+    this.rotationCenter = this.rotationCenter.subtract(area.origin);
     this.contents = pic;
     this.version = Date.now();
 };
@@ -4583,8 +4587,8 @@ Costume.prototype.boundingBox = function () {
     }
 
     function getLeft() {
-        for (col = 0; col < w; col += 1) {
-            for (row = 0; row < h; row += 1) {
+        for (col = 0; col <= w; col += 1) {
+            for (row = 0; row <= h; row += 1) {
                 if (getAlpha(col, row)) {
                     return col;
                 }
@@ -4594,8 +4598,8 @@ Costume.prototype.boundingBox = function () {
     }
 
     function getTop() {
-        for (row = 0; row < h; row += 1) {
-            for (col = 0; col < h; col += 1) {
+        for (row = 0; row <= h; row += 1) {
+            for (col = 0; col <= h; col += 1) {
                 if (getAlpha(col, row)) {
                     return row;
                 }
@@ -4605,25 +4609,25 @@ Costume.prototype.boundingBox = function () {
     }
 
     function getRight() {
-        for (col = w - 1; col >= 0; col -= 1) {
-            for (row = h - 1; row > 0; row -= 1) {
+        for (col = w; col >= 0; col -= 1) {
+            for (row = h; row >= 0; row -= 1) {
                 if (getAlpha(col, row)) {
-                    return col;
+                    return Math.min(col + 1, w);
                 }
             }
         }
-        return w - 1;
+        return w;
     }
 
     function getBottom() {
-        for (row = h - 1; row >= 0; row -= 1) {
-            for (col = w - 1; col >= 0; col -= 1) {
+        for (row = h; row >= 0; row -= 1) {
+            for (col = w; col >= 0; col -= 1) {
                 if (getAlpha(col, row)) {
-                    return row;
+                    return Math.min(row + 1, h);
                 }
             }
         }
-        return h - 1;
+        return h;
     }
 
     return new Rectangle(getLeft(), getTop(), getRight(), getBottom());
