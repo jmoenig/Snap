@@ -1035,7 +1035,7 @@
 /*global window, HTMLCanvasElement, getMinimumFontHeight, FileReader, Audio,
 FileList, getBlurredShadowSupport*/
 
-var morphicVersion = '2013-May-06';
+var morphicVersion = '2013-May-15';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = getBlurredShadowSupport(); // check for Chrome-bug
 
@@ -1054,7 +1054,8 @@ var standardSettings = {
     useSliderForInput: false,
     useVirtualKeyboard: true,
     isTouchDevice: false, // turned on by touch events, don't set
-    rasterizeSVGs: false
+    rasterizeSVGs: false,
+    isFlat: false
 };
 
 var touchScreenSettings = {
@@ -1072,7 +1073,8 @@ var touchScreenSettings = {
     useSliderForInput: true,
     useVirtualKeyboard: true,
     isTouchDevice: false,
-    rasterizeSVGs: false
+    rasterizeSVGs: false,
+    isFlat: false
 };
 
 var MorphicPreferences = standardSettings;
@@ -5464,7 +5466,7 @@ SliderButtonMorph.prototype.init = function (orientation) {
     this.color = new Color(80, 80, 80);
     this.highlightColor = new Color(90, 90, 140);
     this.pressColor = new Color(80, 80, 160);
-    this.is3D = true;
+    this.is3D = false;
     this.hasMiddleDip = true;
     SliderButtonMorph.uber.init.call(this, orientation);
 };
@@ -5477,21 +5479,21 @@ SliderButtonMorph.prototype.drawNew = function () {
     var colorBak = this.color.copy();
 
     SliderButtonMorph.uber.drawNew.call(this);
-    if (this.is3D) {
+    if (this.is3D || !MorphicPreferences.isFlat) {
         this.drawEdges();
     }
     this.normalImage = this.image;
 
     this.color = this.highlightColor.copy();
     SliderButtonMorph.uber.drawNew.call(this);
-    if (this.is3D) {
+    if (this.is3D || !MorphicPreferences.isFlat) {
         this.drawEdges();
     }
     this.highlightImage = this.image;
 
     this.color = this.pressColor.copy();
     SliderButtonMorph.uber.drawNew.call(this);
-    if (this.is3D) {
+    if (this.is3D || !MorphicPreferences.isFlat) {
         this.drawEdges();
     }
     this.pressImage = this.image;

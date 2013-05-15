@@ -1709,3 +1709,5 @@ ______
 130515
 ------
 * Objects: Costume shrinkWrap adjustments
+* Morphic: Flat design preference introduced (default is off)
+* Widgets: preparing for "flat GUI skins"

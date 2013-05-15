@@ -71,9 +71,9 @@
 /*global TriggerMorph, modules, Color, Point, BoxMorph, radians,
 newCanvas, StringMorph, Morph, TextMorph, nop, detect, StringFieldMorph,
 HTMLCanvasElement, fontHeight, SymbolMorph, localize, SpeechBubbleMorph,
-ArrowMorph, MenuMorph, isString, isNil, SliderMorph*/
+ArrowMorph, MenuMorph, isString, isNil, SliderMorph, MorphicPreferences*/
 
-modules.widgets = '2013-May-10';
+modules.widgets = '2013-May-15';
 
 var PushButtonMorph;
 var ToggleButtonMorph;
@@ -144,6 +144,7 @@ PushButtonMorph.prototype.init = function (
     template
 ) {
     // additional properties:
+    this.is3D = false; // for "flat" design exceptions
     this.target = target || null;
     this.action = action || null;
     this.environment = environment || null;
@@ -209,6 +210,7 @@ PushButtonMorph.prototype.outlinePath = BoxMorph.prototype.outlinePath;
 PushButtonMorph.prototype.drawOutline = function (context) {
     var outlineStyle;
 
+    if (MorphicPreferences.isFlat && !this.is3D) {return; }
     if (!this.outline) {return null; }
     if (this.outlineGradient) {
         outlineStyle = context.createLinearGradient(
@@ -252,6 +254,7 @@ PushButtonMorph.prototype.drawEdges = function (
     topColor,
     bottomColor
 ) {
+    if (MorphicPreferences.isFlat && !this.is3D) {return; }
     var minInset = Math.max(this.corner, this.outline + this.edge),
         w = this.width(),
         h = this.height(),
@@ -431,13 +434,17 @@ PushButtonMorph.prototype.createBackgrounds = function () {
 };
 
 PushButtonMorph.prototype.createLabel = function () {
+    var shading = !MorphicPreferences.isFlat || this.is3D;
+
     if (this.label !== null) {
         this.label.destroy();
     }
     if (this.labelString instanceof SymbolMorph) {
         this.label = this.labelString.fullCopy();
-        this.label.shadowOffset = this.labelShadowOffset;
-        this.label.shadowColor = this.labelShadowColor;
+        if (shading) {
+            this.label.shadowOffset = this.labelShadowOffset;
+            this.label.shadowColor = this.labelShadowColor;
+        }
         this.label.color = this.labelColor;
         this.label.drawNew();
     } else {
@@ -448,7 +455,7 @@ PushButtonMorph.prototype.createLabel = function () {
             true,
             false,
             false,
-            this.labelShadowOffset,
+            shading ? this.labelShadowOffset : null,
             this.labelShadowColor,
             this.labelColor
         );
@@ -717,6 +724,8 @@ ToggleButtonMorph.prototype.drawEdges = function (
     topColor,
     bottomColor
 ) {
+    if (MorphicPreferences.isFlat && !this.is3D) {return; }
+
     var gradient;
 
     ToggleButtonMorph.uber.drawEdges.call(
@@ -773,6 +782,9 @@ ToggleButtonMorph.prototype.previewPath = function (context, radius, inset) {
 };
 
 ToggleButtonMorph.prototype.createLabel = function () {
+    var shading = !MorphicPreferences.isFlat || this.is3D,
+        none = new Point();
+
     if (this.label !== null) {
         this.label.destroy();
     }
@@ -784,12 +796,14 @@ ToggleButtonMorph.prototype.createLabel = function () {
             this.label = this.labelString[0].fullCopy();
             this.trueStateLabel = this.labelString[1].fullCopy();
             if (!this.isPicture) {
-                this.label.shadowOffset = this.labelShadowOffset;
+                this.label.shadowOffset = shading ?
+                        this.labelShadowOffset : none;
                 this.label.shadowColor = this.labelShadowColor;
                 this.label.color = this.labelColor;
                 this.label.drawNew();
 
-                this.trueStateLabel.shadowOffset = this.labelShadowOffset;
+                this.trueStateLabel.shadowOffset = shading ?
+                        this.labelShadowOffset : none;
                 this.trueStateLabel.shadowColor = this.labelShadowColor;
                 this.trueStateLabel.color = this.labelColor;
                 this.trueStateLabel.drawNew();
@@ -805,7 +819,7 @@ ToggleButtonMorph.prototype.createLabel = function () {
                 true,
                 false,
                 false,
-                this.labelShadowOffset,
+                shading ? this.labelShadowOffset : null,
                 this.labelShadowColor,
                 this.labelColor
             );
@@ -816,7 +830,7 @@ ToggleButtonMorph.prototype.createLabel = function () {
                 true,
                 false,
                 false,
-                this.labelShadowOffset,
+                shading ? this.labelShadowOffset : null,
                 this.labelShadowColor,
                 this.labelColor
             );
@@ -825,7 +839,8 @@ ToggleButtonMorph.prototype.createLabel = function () {
         if (this.labelString instanceof SymbolMorph) {
             this.label = this.labelString.fullCopy();
             if (!this.isPicture) {
-                this.label.shadowOffset = this.labelShadowOffset;
+                this.label.shadowOffset = shading ?
+                        this.labelShadowOffset : none;
                 this.label.shadowColor = this.labelShadowColor;
                 this.label.color = this.labelColor;
                 this.label.drawNew();
@@ -840,7 +855,7 @@ ToggleButtonMorph.prototype.createLabel = function () {
                 true,
                 false,
                 false,
-                this.labelShadowOffset,
+                shading ? this.labelShadowOffset : none,
                 this.labelShadowColor,
                 this.labelColor
             );
@@ -956,6 +971,8 @@ TabMorph.prototype.drawEdges = function (
     topColor,
     bottomColor
 ) {
+    if (MorphicPreferences.isFlat && !this.is3D) {return; }
+
     var w = this.width(),
         h = this.height(),
         c = this.corner,
@@ -1114,6 +1131,8 @@ ToggleMorph.prototype.fixLayout = function () {
 };
 
 ToggleMorph.prototype.createLabel = function () {
+    var shading = !MorphicPreferences.isFlat || this.is3D;
+
     if (this.label === null) {
         if (this.captionString) {
             this.label = new TextMorph(
@@ -1133,7 +1152,7 @@ ToggleMorph.prototype.createLabel = function () {
             true,
             false,
             false,
-            new Point(1, 1),
+            shading ? new Point(1, 1) : null,
             new Color(240, 240, 240)
         );
         this.add(this.tick);
@@ -1309,23 +1328,31 @@ ToggleElementMorph.prototype.init = function (
 // ToggleElementMorph drawing:
 
 ToggleElementMorph.prototype.createBackgrounds = function () {
+    var shading = !MorphicPreferences.isFlat || this.is3D;
+
     this.color = this.element.color;
     this.element.removeShadow();
     this.element[this.builder]();
-    this.element.addShadow(this.shadowOffset, this.shadowAlpha);
+    if (shading) {
+        this.element.addShadow(this.shadowOffset, this.shadowAlpha);
+    }
     this.silentSetExtent(this.element.fullBounds().extent()); // w/ shadow
     this.pressImage = this.element.fullImage();
 
     this.element.removeShadow();
     this.element.setColor(this.inactiveColor);
     this.element[this.builder](this.contrast);
-    this.element.addShadow(this.shadowOffset, 0);
+    if (shading) {
+        this.element.addShadow(this.shadowOffset, 0);
+    }
     this.normalImage = this.element.fullImage();
 
     this.element.removeShadow();
     this.element.setColor(this.color.lighter(this.contrast));
     this.element[this.builder](this.contrast);
-    this.element.addShadow(this.shadowOffset, this.shadowAlpha);
+    if (shading) {
+        this.element.addShadow(this.shadowOffset, this.shadowAlpha);
+    }
     this.highlightImage = this.element.fullImage();
 
     this.element.removeShadow();
@@ -1443,6 +1470,7 @@ function DialogBoxMorph(target, action, environment) {
 
 DialogBoxMorph.prototype.init = function (target, action, environment) {
     // additional properties:
+    this.is3D = false; // for "flat" design exceptions
     this.target = target || null;
     this.action = action || null;
     this.environment = environment || null;
@@ -2131,6 +2159,8 @@ DialogBoxMorph.prototype.normalizeSpaces = function (string) {
 // DialogBoxMorph submorph construction
 
 DialogBoxMorph.prototype.createLabel = function () {
+    var shading = !MorphicPreferences.isFlat || this.is3D;
+
     if (this.label) {
         this.label.destroy();
     }
@@ -2142,7 +2172,7 @@ DialogBoxMorph.prototype.createLabel = function () {
             true,
             false,
             false,
-            new Point(2, 1),
+            shading ? new Point(2, 1) : null,
             this.titleBarColor.darker(this.contrast)
         );
         this.label.color = this.titleTextColor;
@@ -2387,16 +2417,20 @@ DialogBoxMorph.prototype.drawNew = function () {
     context = this.image.getContext('2d');
 
     // title bar
-    gradient = context.createLinearGradient(0, 0, 0, th);
-    gradient.addColorStop(
-        0,
-        this.titleBarColor.lighter(this.contrast / 2).toString()
-    );
-    gradient.addColorStop(
-        1,
-        this.titleBarColor.darker(this.contrast).toString()
-    );
-    context.fillStyle = gradient;
+    if (MorphicPreferences.isFlat && !this.is3D) {
+        context.fillStyle = this.titleBarColor.toString();
+    } else {
+        gradient = context.createLinearGradient(0, 0, 0, th);
+        gradient.addColorStop(
+            0,
+            this.titleBarColor.lighter(this.contrast / 2).toString()
+        );
+        gradient.addColorStop(
+            1,
+            this.titleBarColor.darker(this.contrast).toString()
+        );
+        context.fillStyle = gradient;
+    }
     context.beginPath();
     this.outlinePathTitle(
         context,
@@ -2415,6 +2449,13 @@ DialogBoxMorph.prototype.drawNew = function () {
     );
     context.closePath();
     context.fill();
+
+    if (MorphicPreferences.isFlat && !this.is3D) {
+        DialogBoxMorph.uber.addShadow.call(this);
+        Morph.prototype.trackChanges = true;
+        this.fullChanged();
+        return;
+    }
 
     // 3D-effect
     // bottom left corner
@@ -2958,6 +2999,8 @@ InputFieldMorph.prototype.drawNew = function () {
 InputFieldMorph.prototype.drawRectBorder = function (context) {
     var shift = this.edge * 0.5,
         gradient;
+
+    if (MorphicPreferences.isFlat && !this.is3D) {return; }
 
     context.lineWidth = this.edge;
     context.lineJoin = 'round';
