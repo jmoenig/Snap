@@ -1035,7 +1035,7 @@
 /*global window, HTMLCanvasElement, getMinimumFontHeight, FileReader, Audio,
 FileList, getBlurredShadowSupport*/
 
-var morphicVersion = '2013-May-15';
+var morphicVersion = '2013-May-16';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = getBlurredShadowSupport(); // check for Chrome-bug
 
@@ -2794,7 +2794,7 @@ Morph.prototype.shadow = function (off, a, color) {
         alpha = a || ((a === 0) ? 0 : 0.2),
         fb = this.fullBounds();
     shadow.setExtent(fb.extent().add(this.shadowBlur * 2));
-    if (useBlurredShadows) {
+    if (useBlurredShadows && !MorphicPreferences.isFlat) {
         shadow.image = this.shadowImageBlurred(offset, color);
         shadow.alpha = alpha;
         shadow.setPosition(fb.origin.add(offset).subtract(this.shadowBlur));
@@ -6137,7 +6137,7 @@ InspectorMorph.prototype.init = function (target) {
     );
     this.isDraggable = true;
     this.border = 1;
-    this.edge = 5;
+    this.edge = MorphicPreferences.isFlat ? 1 : 5;
     this.color = new Color(60, 60, 60);
     this.borderColor = new Color(95, 95, 95);
     this.drawNew();
@@ -6674,6 +6674,9 @@ MenuMorph.prototype.createLabel = function () {
     text.backgroundColor = this.borderColor;
     text.drawNew();
     this.label = new BoxMorph(3, 0);
+    if (MorphicPreferences.isFlat) {
+        this.label.edge = 0;
+    }
     this.label.color = this.borderColor;
     this.label.borderColor = this.borderColor;
     this.label.setExtent(text.extent().add(4));
@@ -6695,8 +6698,8 @@ MenuMorph.prototype.drawNew = function () {
     });
     this.children = [];
     if (!this.isListContents) {
-        this.edge = 5;
-        this.border = 2;
+        this.edge = MorphicPreferences.isFlat ? 0 : 5;
+        this.border = MorphicPreferences.isFlat ? 1 : 2;
     }
     this.color = new Color(255, 255, 255);
     this.borderColor = new Color(60, 60, 60);

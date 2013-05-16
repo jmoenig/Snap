@@ -123,7 +123,7 @@ PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.objects = '2013-May-15';
+modules.objects = '2013-May-16';
 
 var SpriteMorph;
 var StageMorph;
@@ -178,6 +178,7 @@ SpriteMorph.prototype.blockColor = {
 };
 
 SpriteMorph.prototype.paletteColor = new Color(55, 55, 55);
+SpriteMorph.prototype.paletteTextColor = new Color(230, 230, 230);
 SpriteMorph.prototype.sliderColor
     = SpriteMorph.prototype.paletteColor.lighter(30);
 SpriteMorph.prototype.isCachingPrimitives = true;
@@ -1492,7 +1493,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
                 'development mode \ndebugging primitives:'
             ));
             txt.fontSize = 9;
-            txt.setColor(new Color(230, 230, 230));
+            txt.setColor(this.paletteTextColor);
             blocks.push(txt);
             blocks.push('-');
             blocks.push(block('log'));
@@ -1621,7 +1622,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
                 'development mode \ndebugging primitives:'
             ));
             txt.fontSize = 9;
-            txt.setColor(new Color(230, 230, 230));
+            txt.setColor(this.paletteTextColor);
             blocks.push(txt);
             blocks.push('-');
             blocks.push(block('colorFiltered'));
@@ -1675,7 +1676,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
                 'development mode \ndebugging primitives:'
             );
             txt.fontSize = 9;
-            txt.setColor(new Color(230, 230, 230));
+            txt.setColor(this.paletteTextColor);
             blocks.push(txt);
             blocks.push('-');
             blocks.push(block('reportTypeOf'));
@@ -3184,6 +3185,9 @@ StageMorph.prototype.isCachingPrimitives
 StageMorph.prototype.sliderColor
     = SpriteMorph.prototype.sliderColor;
 
+StageMorph.prototype.paletteTextColor
+    = SpriteMorph.prototype.paletteTextColor;
+
 StageMorph.prototype.hiddenPrimitives = {};
 
 // StageMorph instance creation
@@ -3734,7 +3738,7 @@ StageMorph.prototype.blockTemplates = function (category) {
             'Stage selected:\nno motion primitives'
         ));
         txt.fontSize = 9;
-        txt.setColor(new Color(230, 230, 230));
+        txt.setColor(this.paletteTextColor);
         blocks.push(txt);
 
     } else if (cat === 'looks') {
@@ -3756,7 +3760,7 @@ StageMorph.prototype.blockTemplates = function (category) {
                 'development mode \ndebugging primitives:'
             ));
             txt.fontSize = 9;
-            txt.setColor(new Color(230, 230, 230));
+            txt.setColor(this.paletteTextColor);
             blocks.push(txt);
             blocks.push('-');
             blocks.push(block('log'));
@@ -3862,7 +3866,7 @@ StageMorph.prototype.blockTemplates = function (category) {
                 'development mode \ndebugging primitives:'
             ));
             txt.fontSize = 9;
-            txt.setColor(new Color(230, 230, 230));
+            txt.setColor(this.paletteTextColor);
             blocks.push(txt);
             blocks.push('-');
             blocks.push(block('colorFiltered'));
@@ -3918,7 +3922,7 @@ StageMorph.prototype.blockTemplates = function (category) {
                 'development mode \ndebugging primitives:'
             );
             txt.fontSize = 9;
-            txt.setColor(new Color(230, 230, 230));
+            txt.setColor(this.paletteTextColor);
             blocks.push(txt);
             blocks.push('-');
             blocks.push(block('reportTypeOf'));

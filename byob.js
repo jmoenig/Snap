@@ -101,11 +101,11 @@ Context, StringMorph, nop, newCanvas, radians, BoxMorph,
 ArrowMorph, PushButtonMorph, contains, InputSlotMorph, ShadowMorph,
 ToggleButtonMorph, IDE_Morph, MenuMorph, copy, ToggleElementMorph,
 Morph, fontHeight, StageMorph, SyntaxElementMorph, SnapSerializer,
-CommentMorph, localize, CSlotMorph, SpeechBubbleMorph*/
+CommentMorph, localize, CSlotMorph, SpeechBubbleMorph, MorphicPreferences*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2013-April-24';
+modules.byob = '2013-May-16';
 
 // Declarations
 
@@ -1156,7 +1156,7 @@ BlockDialogMorph.prototype.addCategoryButton = function (category) {
     button.padding = 0;
     button.labelShadowOffset = new Point(-1, -1);
     button.labelShadowColor = colors[1];
-    button.labelColor = new Color(255, 255, 255);
+    button.labelColor = IDE_Morph.prototype.buttonLabelColor;
     button.contrast = this.buttonContrast;
     button.fixLayout();
     button.refresh();
@@ -1190,6 +1190,11 @@ BlockDialogMorph.prototype.fixCategoriesLayout = function () {
         ));
     });
 
+    if (MorphicPreferences.isFlat) {
+        this.categories.corner = 0;
+        this.categories.border = 0;
+        this.categories.edge = 0;
+    }
     this.categories.setExtent(new Point(
         3 * xPadding + 2 * buttonWidth,
         (rows + 1) * yPadding + rows * buttonHeight + 2 * border
@@ -1487,8 +1492,8 @@ BlockEditorMorph.prototype.init = function (definition, target) {
     // create scripting area
     scripts = new ScriptsMorph(target);
     scripts.isDraggable = false;
-    scripts.color = new Color(71, 71, 71);
-    scripts.texture = 'scriptsPaneTexture.gif';
+    scripts.color = IDE_Morph.prototype.groupColor;
+    scripts.texture = IDE_Morph.prototype.scriptsPaneTexture;
     scripts.cleanUpMargin = 10;
 
     proto = new PrototypeHatBlockMorph(this.definition);
@@ -1666,7 +1671,7 @@ BlockEditorMorph.prototype.updateDefinition = function () {
 BlockEditorMorph.prototype.context = function (prototypeHat) {
     // answer my script reified for deferred execution
     // if no prototypeHat is given, my body is scanned
-    var head, topBlock, proto, stackFrame;
+    var head, topBlock, stackFrame;
 
     head = prototypeHat || detect(
         this.body.contents.children,
@@ -1676,7 +1681,6 @@ BlockEditorMorph.prototype.context = function (prototypeHat) {
     if (topBlock === null) {
         return null;
     }
-    proto = head.parts()[0];
     stackFrame = Process.prototype.reify.call(
         null,
         topBlock,
