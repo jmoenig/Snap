@@ -153,7 +153,7 @@ DialogBoxMorph, BlockInputFragmentMorph, PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2013-May-14';
+modules.blocks = '2013-May-16';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -2201,10 +2201,11 @@ BlockMorph.prototype.toggleHighlight = function () {
 BlockMorph.prototype.highlight = function (color, blur, border) {
     var highlight = new BlockHighlightMorph(),
         fb = this.fullBounds(),
-        edge = useBlurredShadows ? blur : border;
+        edge = useBlurredShadows && !MorphicPreferences.isFlat ?
+                blur : border;
     highlight.setExtent(fb.extent().add(edge * 2));
     highlight.color = color;
-    highlight.image = useBlurredShadows ?
+    highlight.image = useBlurredShadows && !MorphicPreferences.isFlat ?
             this.highlightImageBlurred(color, blur)
                 : this.highlightImage(color, border);
     highlight.setPosition(fb.origin.subtract(new Point(edge, edge)));
@@ -2434,7 +2435,8 @@ BlockMorph.prototype.thumbnail = function (scale, clipWidth, noShadow) {
     if (!noShadow) {block.addShadow(); }
     ext = block.fullBounds().extent();
     if (!noShadow) {
-        ext = ext.subtract(this.shadowBlur * (useBlurredShadows ? 1 : 2));
+        ext = ext.subtract(this.shadowBlur *
+            (useBlurredShadows && !MorphicPreferences.isFlat ? 1 : 2));
     }
     trgt = newCanvas(new Point(
         Math.min(ext.x * scale, clipWidth || ext.x),

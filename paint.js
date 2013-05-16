@@ -47,6 +47,7 @@
     ----------------
     May 10 - first full release (Kartik)
     May 14 - bugfixes (bugfixes, Snap integration (Jens)
+    May 16 - flat design adjustments (Jens)
 
  */
 
@@ -54,12 +55,13 @@
  FrameMorph, PushButtonMorph, Color, SymbolMorph, newCanvas, Morph, TextMorph,
  CostumeIconMorph, IDE_Morph, Costume, SpriteMorph, nop, Image, WardrobeMorph,
  TurtleIconMorph, localize, MenuMorph, InputFieldMorph, SliderMorph,
- ToggleMorph, ToggleButtonMorph, BoxMorph, modules, radians
+ ToggleMorph, ToggleButtonMorph, BoxMorph, modules, radians,
+ MorphicPreferences
  */
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.paint = '2013-May-14';
+modules.paint = '2013-May-16';
 
 // Declarations
 
@@ -119,6 +121,9 @@ PaintEditorMorph.prototype.buildContents = function () {
     this.toolbox = new BoxMorph();
     this.toolbox.color = SpriteMorph.prototype.paletteColor.lighter(8);
     this.toolbox.borderColor = this.toolbox.color.lighter(40);
+    if (MorphicPreferences.isFlat) {
+        this.toolbox.edge = 0;
+    }
 
     this.buildToolbox();
     this.controls.add(this.toolbox);
