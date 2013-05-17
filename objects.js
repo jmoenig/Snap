@@ -422,8 +422,8 @@ SpriteMorph.prototype.initBlocks = function () {
         doPlayGuitarString: {
             type: 'command',
             category: 'sound',
-            spec: 'play guitar string %n',
-            defaults: [60]
+            spec: 'play guitar string %n for %n beats',
+            defaults: [60, 0.5]
         },
         doChangeTempo: {
             type: 'command',
@@ -4994,50 +4994,94 @@ Note.prototype.ensureAudioContext = function() {
 
 // GuitarString instance creation
 
-function GuitarString(pitch) {
-  this.pitch = pitch === 0 ? 0 : pitch || 69;
-  this.frequency = Math.pow(2, (this.pitch - 69) / 12) * 440;
-  this.N = audioContext.sampleRate / this.frequency;
-  this.node = audioContext.createJavaScriptNode(4096, 0, 1);
-  this.playing = false;
+function GuitarString(pitch, duration) {
+    this.pitch = pitch === 0 ? 0 : pitch || 69;
+    this.duration = duration === undefined ? 2 : duration;
+    this.frequency = Math.pow(2, (this.pitch - 69) / 12) * 440;
+    this.N = Math.round(AudioContext.sampleRate / this.frequency);
+    this.node = AudioContext.createJavaScriptNode(4096, 0, 1);
+    this.playing = false;
+    this.timeoutId = null;
+
+    /*
+     * The decay after the n^th pass through delay + low pass is
+     *    (cos(pi * f * T_f)*decay)^n
+     * where T_f is the inverse of the sample rate. 
+     * 
+     * We care about the decay per time t, since we want to be able to play a
+     * string for a particular duration. With a sampling rate of s, we go
+     * through n samples in time t = n / s. Furthermore, in one pass, we go
+     * through N + 1/2 samples (the 1/2 comes about as the phase delay from
+     * the averaging low pass). 
+     *
+     * The number of seconds until the magnitude is below audible levels
+     * (generally -60dB) can then be calculated (or rather approximated as):
+     * ln(1000) * t_f where t_f is the "time constant" (time until the
+     * magnitude reaches 1/e the initial value).
+     *
+     * The duration for a given decay then comes out to:
+     *  dur = -(N + 0.5) * ln(1000) / (ln(decay*cos(pi * freq / s)) * s);
+     * where s is the sampleRate
+     *
+     * We can use this to get a decay given the user input duration:
+     *  decay = e^{(-(N + 0.5) * ln(1000)) / (dur * s)} / cos(pi * freq / s);
+     *    
+     * Derivations from 
+     *   Jaffe and Smith "Extensions of the Karplus-Strong Plucked-String
+     *   Algorithm"
+     */
+
+    // variables to make equation more readable
+    var f = this.frequency,
+        s = AudioContext.sampleRate,
+        pi = Math.PI,
+        powE = function(x) { return Math.pow(Math.E, x); },
+        cos = Math.cos,
+        dur = this.duration,
+        N = this.N;
+
+    // 6.908 ~= ln(1000);
+    this.decay = powE((-(N + 0.5) * 6.908) / (dur * s)) / cos(pi * f / s);
 }
 
 GuitarString.prototype.play = function() {
-  var myself = this,
-      N = Math.round(this.N),
-      signal = new Float32Array(N),
-      signalOffset = 0,
-      noiseOffset = 0,
-      noise = 0;
+    var myself = this,
+        N = this.N,
+        signal = new Float32Array(N),
+        signalIndex = 0,
+        noise = 0,
+        i = 0;
 
-  this.numIterations = 0;
+    this.numIterations = 0;
+    this.timeoutId = setTimeout(function() { myself.stop(); },
+                                1000 * myself.duration);
 
-  this.node.onaudioprocess = function(e) {
-    var output = e.outputBuffer.getChannelData(0);
-    for (var i = 0; i < e.outputBuffer.length; i++) {
-      if (noise < N) {
-        output[i] = signal[signalOffset] = 2*(Math.random() - 0.5);
-      } else {
-        output[i] = signal[signalOffset] = (signal[signalOffset] + 
-                                            signal[(signalOffset+1) % N]) / 2;
-      }
-      noise++;
-      // wrap around if necessary
-      signalOffset = (signalOffset + 1) % N;
-    }
-    // after about 1500 low pass filter passes later, the 
-    if ((noise / N) > 1500)
-      myself.stop();
-  }
+    this.node.onaudioprocess = function(e) {
+        var output = e.outputBuffer.getChannelData(0);
+        for (i = 0; i < e.outputBuffer.length; i += 1) {
+            if (noise < N) {
+                output[i] = signal[signalIndex] = 2 * (Math.random() - 0.5);
+                noise += 1;
+            } else {
+                output[i] = myself.decay *
+                    (signal[signalIndex] + signal[(signalIndex + 1) % N]) / 2;
+                signal[signalIndex] = output[i];
+            }
+            // wrap around if necessary
+            signalIndex = (signalIndex + 1) % N;
+        }
+        // after about 1500 low pass filter passes later, the 
+    };
 
-  this.node.connect(audioContext.destination);
-  this.playing = true;
-}
+    this.node.connect(AudioContext.destination);
+    this.playing = true;
+};
 
 GuitarString.prototype.stop = function() {
-  this.node.disconnect(audioContext.destination);
-  this.playing = false;
-}
+    clearTimeout(this.timeoutId);
+    this.node.disconnect(AudioContext.destination);
+    this.playing = false;
+};
 
 // CellMorph //////////////////////////////////////////////////////////
 
