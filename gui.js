@@ -68,7 +68,7 @@ sb, CommentMorph, CommandBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2013-May-16';
+modules.gui = '2013-May-17';
 
 // Declarations
 
@@ -182,6 +182,9 @@ function IDE_Morph(isAutoFill) {
 IDE_Morph.prototype.init = function (isAutoFill) {
     // global font setting
     MorphicPreferences.globalFontFamily = 'Helvetica, Arial';
+
+    // restore saved user preferences
+    this.applySavedSettings();
 
     // additional properties:
     this.cloudMsg = null;
@@ -739,7 +742,6 @@ IDE_Morph.prototype.createCategories = function () {
     if (this.categories) {
         this.categories.destroy();
     }
-
     this.categories = new Morph();
     this.categories.color = this.groupColor;
     this.categories.silentSetWidth(this.logo.width()); // width is fixed
@@ -1624,11 +1626,13 @@ IDE_Morph.prototype.selectSprite = function (sprite) {
 IDE_Morph.prototype.defaultDesign = function () {
     this.setDefaultDesign();
     this.refreshIDE();
+    this.removeSetting('design');
 };
 
 IDE_Morph.prototype.flatDesign = function () {
     this.setFlatDesign();
     this.refreshIDE();
+    this.saveSetting('design', 'flat');
 };
 
 IDE_Morph.prototype.refreshIDE = function () {
@@ -1650,6 +1654,65 @@ IDE_Morph.prototype.refreshIDE = function () {
         this.newProject();
     } else {
         this.openProjectString(projectData);
+    }
+};
+
+// IDE_Morph settings persistance
+
+IDE_Morph.prototype.applySavedSettings = function () {
+    var design = this.getSetting('design'),
+        zoom = this.getSetting('zoom'),
+        language = this.getSetting('language'),
+        click = this.getSetting('click'),
+        longform = this.getSetting('longform');
+
+    // design
+    if (design === 'flat') {
+        this.setFlatDesign();
+    } else {
+        this.setDefaultDesign();
+    }
+
+    // blocks zoom
+    if (zoom) {
+        SyntaxElementMorph.prototype.setScale(zoom);
+        CommentMorph.prototype.refreshScale();
+        SpriteMorph.prototype.initBlocks();
+    }
+
+    // language
+    if (language && language !== 'en') {
+        this.loadNewProject = true;
+        this.setLanguage(language);
+    }
+
+    //  click
+    if (click && !BlockMorph.prototype.snapSound) {
+        BlockMorph.prototype.toggleSnapSound();
+    }
+
+    // long form
+    if (longform) {
+        InputSlotDialogMorph.prototype.isLaunchingExpanded = true;
+    }
+};
+
+IDE_Morph.prototype.saveSetting = function (key, value) {
+    if (localStorage) {
+        localStorage['-snap-setting-' + key] = value;
+    }
+};
+
+IDE_Morph.prototype.getSetting = function (key) {
+    if (localStorage) {
+        return localStorage['-snap-setting-' + key];
+    }
+    return null;
+};
+
+IDE_Morph.prototype.removeSetting = function (key) {
+    if (localStorage) {
+        delete localStorage['-snap-setting-' + key];
     }
 };
 
@@ -2020,7 +2083,14 @@ IDE_Morph.prototype.settingsMenu = function () {
     }
     addPreference(
         'Clicking sound',
-        function () {BlockMorph.prototype.toggleSnapSound(); },
+        function () {
+            BlockMorph.prototype.toggleSnapSound();
+            if (BlockMorph.prototype.snapSound) {
+                myself.saveSetting('click', true);
+            } else {
+                myself.removeSetting('click');
+            }
+        },
         BlockMorph.prototype.snapSound,
         'uncheck to turn\nblock clicking\nsound off',
         'check to turn\nblock clicking\nsound on'
@@ -2861,6 +2931,11 @@ IDE_Morph.prototype.toggleBlurredShadows = function () {
 IDE_Morph.prototype.toggleLongFormInputDialog = function () {
     InputSlotDialogMorph.prototype.isLaunchingExpanded =
         !InputSlotDialogMorph.prototype.isLaunchingExpanded;
+    if (InputSlotDialogMorph.prototype.isLaunchingExpanded) {
+        this.saveSetting('longform', true);
+    } else {
+        this.removeSetting('longform');
+    }
 };
 
 IDE_Morph.prototype.togglePreferEmptySlotDrops = function () {
@@ -3046,9 +3121,11 @@ IDE_Morph.prototype.reflectLanguage = function (lang) {
     this.fixLayout();
     if (this.loadNewProject) {
         this.newProject();
+        this.loadNewProject = false;
     } else {
         this.openProjectString(projectData);
     }
+    this.saveSetting('language', lang);
 };
 
 // IDE_Morph blocks scaling
@@ -3153,6 +3230,7 @@ IDE_Morph.prototype.setBlocksScale = function (num) {
     this.createCorralBar();
     this.fixLayout();
     this.openProjectString(projectData);
+    this.saveSetting('zoom', num);
 };
 
 // IDE_Morph cloud interface

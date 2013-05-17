@@ -1715,3 +1715,7 @@ ______
 130516
 ------
 * "flat" GUI design preference (in the settings menu)
+
+130517
+------
+* GUI: user preferences (settings) are now made persistent in localStorage
