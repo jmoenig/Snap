@@ -63,7 +63,10 @@
 
 */
 
-// gloabls from lists.js:
+// globals from paint.js:
+/*global PaintEditorMorph*/
+
+// globals from lists.js:
 
 /*global ListWatcherMorph*/
 
@@ -120,7 +123,7 @@ PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.objects = '2013-April-30';
+modules.objects = '2013-May-16';
 
 var SpriteMorph;
 var StageMorph;
@@ -177,6 +180,7 @@ SpriteMorph.prototype.blockColor = {
 };
 
 SpriteMorph.prototype.paletteColor = new Color(55, 55, 55);
+SpriteMorph.prototype.paletteTextColor = new Color(230, 230, 230);
 SpriteMorph.prototype.sliderColor
     = SpriteMorph.prototype.paletteColor.lighter(30);
 SpriteMorph.prototype.isCachingPrimitives = true;
@@ -536,6 +540,11 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'command',
             category: 'control',
             spec: 'broadcast %msg and wait'
+        },
+        getLastMessage: {
+            type: 'reporter',
+            category: 'control',
+            spec: 'message'
         },
         doWait: {
             type: 'command',
@@ -1492,7 +1501,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
                 'development mode \ndebugging primitives:'
             ));
             txt.fontSize = 9;
-            txt.setColor(new Color(230, 230, 230));
+            txt.setColor(this.paletteTextColor);
             blocks.push(txt);
             blocks.push('-');
             blocks.push(block('log'));
@@ -1545,6 +1554,8 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push('-');
         blocks.push(block('doBroadcast'));
         blocks.push(block('doBroadcastAndWait'));
+        blocks.push(watcherToggle('getLastMessage'));
+        blocks.push(block('getLastMessage'));
         blocks.push('-');
         blocks.push(block('doWarp'));
         blocks.push('-');
@@ -1620,7 +1631,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
                 'development mode \ndebugging primitives:'
             ));
             txt.fontSize = 9;
-            txt.setColor(new Color(230, 230, 230));
+            txt.setColor(this.paletteTextColor);
             blocks.push(txt);
             blocks.push('-');
             blocks.push(block('colorFiltered'));
@@ -1674,7 +1685,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
                 'development mode \ndebugging primitives:'
             );
             txt.fontSize = 9;
-            txt.setColor(new Color(230, 230, 230));
+            txt.setColor(this.paletteTextColor);
             blocks.push(txt);
             blocks.push('-');
             blocks.push(block('reportTypeOf'));
@@ -2725,7 +2736,7 @@ SpriteMorph.prototype.allMessageNames = function () {
                     morph.selector
                 )) {
                 txt = morph.inputs()[0].evaluate();
-                if (txt !== '') {
+                if (isString(txt) && txt !== '') {
                     if (!contains(msgs, txt)) {
                         msgs.push(txt);
                     }
@@ -2738,9 +2749,11 @@ SpriteMorph.prototype.allMessageNames = function () {
 
 SpriteMorph.prototype.allHatBlocksFor = function (message) {
     return this.scripts.children.filter(function (morph) {
+        var event;
         if (morph.selector) {
             if (morph.selector === 'receiveMessage') {
-                return morph.inputs()[0].evaluate() === message;
+                event = morph.inputs()[0].evaluate();
+                return event === message || (event instanceof Array);
             }
             if (morph.selector === 'receiveGo') {
                 return message === '__shout__go__';
@@ -2798,6 +2811,16 @@ SpriteMorph.prototype.getTempo = function () {
         return stage.getTempo();
     }
     return 0;
+};
+
+// SpriteMorph last message
+
+SpriteMorph.prototype.getLastMessage = function () {
+    var stage = this.parentThatIsA(StageMorph);
+    if (stage) {
+        return stage.getLastMessage();
+    }
+    return '';
 };
 
 // SpriteMorph user prompting
@@ -3171,6 +3194,9 @@ StageMorph.prototype.isCachingPrimitives
 StageMorph.prototype.sliderColor
     = SpriteMorph.prototype.sliderColor;
 
+StageMorph.prototype.paletteTextColor
+    = SpriteMorph.prototype.paletteTextColor;
+
 StageMorph.prototype.hiddenPrimitives = {};
 
 // StageMorph instance creation
@@ -3195,6 +3221,7 @@ StageMorph.prototype.init = function (globals) {
 
     this.timerStart = Date.now();
     this.tempo = 60; // bpm
+    this.lastMessage = '';
 
     this.watcherUpdateFrequency = 2;
     this.lastWatcherUpdate = Date.now();
@@ -3440,6 +3467,12 @@ StageMorph.prototype.changeTempo = function (delta) {
 
 StageMorph.prototype.getTempo = function () {
     return +this.tempo;
+};
+
+// StageMorph messages
+
+StageMorph.prototype.getLastMessage = function () {
+    return this.lastMessage || '';
 };
 
 // StageMorph drag & drop
@@ -3714,7 +3747,7 @@ StageMorph.prototype.blockTemplates = function (category) {
             'Stage selected:\nno motion primitives'
         ));
         txt.fontSize = 9;
-        txt.setColor(new Color(230, 230, 230));
+        txt.setColor(this.paletteTextColor);
         blocks.push(txt);
 
     } else if (cat === 'looks') {
@@ -3736,7 +3769,7 @@ StageMorph.prototype.blockTemplates = function (category) {
                 'development mode \ndebugging primitives:'
             ));
             txt.fontSize = 9;
-            txt.setColor(new Color(230, 230, 230));
+            txt.setColor(this.paletteTextColor);
             blocks.push(txt);
             blocks.push('-');
             blocks.push(block('log'));
@@ -3774,6 +3807,8 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push('-');
         blocks.push(block('doBroadcast'));
         blocks.push(block('doBroadcastAndWait'));
+        blocks.push(watcherToggle('getLastMessage'));
+        blocks.push(block('getLastMessage'));
         blocks.push('-');
         blocks.push(block('doWarp'));
         blocks.push('-');
@@ -3841,7 +3876,7 @@ StageMorph.prototype.blockTemplates = function (category) {
                 'development mode \ndebugging primitives:'
             ));
             txt.fontSize = 9;
-            txt.setColor(new Color(230, 230, 230));
+            txt.setColor(this.paletteTextColor);
             blocks.push(txt);
             blocks.push('-');
             blocks.push(block('colorFiltered'));
@@ -3897,7 +3932,7 @@ StageMorph.prototype.blockTemplates = function (category) {
                 'development mode \ndebugging primitives:'
             );
             txt.fontSize = 9;
-            txt.setColor(new Color(230, 230, 230));
+            txt.setColor(this.paletteTextColor);
             blocks.push(txt);
             blocks.push('-');
             blocks.push(block('reportTypeOf'));
@@ -4526,15 +4561,19 @@ Costume.prototype.bounds = function () {
 
 Costume.prototype.shrinkWrap = function () {
     // adjust my contents'  bounds to my visible bounding box
+    // add a tolerance margin for Chrome's anti-aliasing issue
     var bb = this.boundingBox(),
-        ext = bb.extent(),
+        space = new Point(480, 360).subtract(bb.extent()).floorDivideBy(2),
+        margin = new Point(3, 3).min(space.max(new Point(0, 0))),
+        area = bb.expandBy(margin),
+        ext = area.extent(),
         pic = newCanvas(ext),
         ctx = pic.getContext('2d');
 
     ctx.drawImage(
         this.contents,
-        bb.origin.x,
-        bb.origin.y,
+        area.origin.x,
+        area.origin.y,
         ext.x,
         ext.y,
         0,
@@ -4542,7 +4581,7 @@ Costume.prototype.shrinkWrap = function () {
         ext.x,
         ext.y
     );
-    this.rotationCenter = this.rotationCenter.add(bb.origin);
+    this.rotationCenter = this.rotationCenter.subtract(area.origin);
     this.contents = pic;
     this.version = Date.now();
 };
@@ -4562,8 +4601,8 @@ Costume.prototype.boundingBox = function () {
     }
 
     function getLeft() {
-        for (col = 0; col < w; col += 1) {
-            for (row = 0; row < h; row += 1) {
+        for (col = 0; col <= w; col += 1) {
+            for (row = 0; row <= h; row += 1) {
                 if (getAlpha(col, row)) {
                     return col;
                 }
@@ -4573,8 +4612,8 @@ Costume.prototype.boundingBox = function () {
     }
 
     function getTop() {
-        for (row = 0; row < h; row += 1) {
-            for (col = 0; col < h; col += 1) {
+        for (row = 0; row <= h; row += 1) {
+            for (col = 0; col <= h; col += 1) {
                 if (getAlpha(col, row)) {
                     return row;
                 }
@@ -4584,25 +4623,25 @@ Costume.prototype.boundingBox = function () {
     }
 
     function getRight() {
-        for (col = w - 1; col >= 0; col -= 1) {
-            for (row = h - 1; row > 0; row -= 1) {
+        for (col = w; col >= 0; col -= 1) {
+            for (row = h; row >= 0; row -= 1) {
                 if (getAlpha(col, row)) {
-                    return col;
+                    return Math.min(col + 1, w);
                 }
             }
         }
-        return w - 1;
+        return w;
     }
 
     function getBottom() {
-        for (row = h - 1; row >= 0; row -= 1) {
-            for (col = w - 1; col >= 0; col -= 1) {
+        for (row = h; row >= 0; row -= 1) {
+            for (col = w; col >= 0; col -= 1) {
                 if (getAlpha(col, row)) {
-                    return row;
+                    return Math.min(row + 1, h);
                 }
             }
         }
-        return h - 1;
+        return h;
     }
 
     return new Rectangle(getLeft(), getTop(), getRight(), getBottom());
@@ -4649,7 +4688,34 @@ Costume.prototype.flipped = function () {
 
 // Costume actions
 
-Costume.prototype.edit = function (aWorld) {
+Costume.prototype.edit = function (aWorld, anIDE, isnew, oncancel, onsubmit) {
+    var myself = this,
+        editor = new PaintEditorMorph();
+    editor.oncancel = oncancel || nop;
+    editor.openIn(
+        aWorld,
+        isnew ?
+                newCanvas(new Point(480, 360)) :
+                this.contents,
+        isnew ?
+                new Point(240, 180) :
+                this.rotationCenter,
+        function (img, rc) {
+            myself.contents = img;
+            myself.rotationCenter = rc;
+            myself.shrinkWrap();
+            myself.version = Date.now();
+            aWorld.changed();
+            if (anIDE) {
+                anIDE.currentSprite.wearCostume(myself);
+                anIDE.hasChangedMedia = true;
+            }
+            (onsubmit || nop)();
+        }
+    );
+};
+
+Costume.prototype.editRotationPointOnly = function (aWorld) {
     var editor = new CostumeEditorMorph(this),
         action,
         dialog,
@@ -5496,7 +5562,10 @@ WatcherMorph.prototype.object = function () {
 };
 
 WatcherMorph.prototype.isGlobal = function (selector) {
-    return contains(['getTimer', 'getLastAnswer', 'getTempo'], selector);
+    return contains(
+        ['getTimer', 'getLastAnswer', 'getTempo', 'getLastMessage'],
+        selector
+    );
 };
 
 // WatcherMorph slider accessing:

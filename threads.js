@@ -83,7 +83,7 @@ ArgLabelMorph, localize*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.threads = '2013-April-19';
+modules.threads = '2013-May-14';
 
 var ThreadManager;
 var Process;
@@ -744,8 +744,7 @@ Process.prototype.evaluate = function (
         extra,
         parms = args.asArray(),
         i,
-        value,
-        upvars;
+        value;
 
     if (!outer.receiver) {
         outer.receiver = context.receiver; // for custom blocks
@@ -815,9 +814,7 @@ Process.prototype.evaluate = function (
             }
         }
     }
-    if (upvars) {
-        runnable.upvars = upvars;
-    } else if (this.context.upvars) {
+    if (this.context.upvars) {
         runnable.upvars = new UpvarReference(this.context.upvars);
     }
 
@@ -1665,6 +1662,7 @@ Process.prototype.doBroadcast = function (message) {
         procs = [];
 
     if (message !== '') {
+        stage.lastMessage = message;
         stage.children.concat(stage).forEach(function (morph) {
             if (morph instanceof SpriteMorph || morph instanceof StageMorph) {
                 hats = hats.concat(morph.allHatBlocksFor(message));
@@ -1691,6 +1689,17 @@ Process.prototype.doBroadcastAndWait = function (message) {
     }
     this.pushContext('doYield');
     this.pushContext();
+};
+
+Process.prototype.getLastMessage = function () {
+    var stage;
+    if (this.homeContext.receiver) {
+        stage = this.homeContext.receiver.parentThatIsA(StageMorph);
+        if (stage) {
+            return stage.getLastMessage();
+        }
+    }
+    return '';
 };
 
 // Process type inference

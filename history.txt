@@ -1696,3 +1696,22 @@ ______
 130506
 ------
 * Reset Password feature (frontend only)
+
+130510
+------
+* Reset Password via e-mailed link (frontend only)
+
+130514
+------
+* paint.js: Paint editor, first version, contributed by Kartik Chandra, Yay!!
+* Threads, Objects, Blocks: Broadcast & message enhancements: When I receive <any msg>, and getLastMessage reporter + watcher 
+
+130515
+------
+* Objects: Costume shrinkWrap adjustments
+* Morphic: Flat design preference introduced (default is off)
+* Widgets: preparing for "flat GUI skins"
+
+130516
+------
+* "flat" GUI design preference (in the settings menu)

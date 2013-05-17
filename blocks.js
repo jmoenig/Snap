@@ -153,7 +153,7 @@ DialogBoxMorph, BlockInputFragmentMorph, PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2013-April-30';
+modules.blocks = '2013-May-16';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -195,7 +195,7 @@ WorldMorph.prototype.customMorphs = function () {
             new Color(20, 20, 20)
         )
     ];
-
+*/
 /*
     var sm = new ScriptsMorph();
     sm.setExtent(new Point(800, 600));
@@ -936,7 +936,7 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             part = new InputSlotMorph(
                 null,
                 false,
-                'messagesMenu',
+                'messagesReceivedMenu',
                 true
             );
             part.isStatic = true;
@@ -2201,10 +2201,11 @@ BlockMorph.prototype.toggleHighlight = function () {
 BlockMorph.prototype.highlight = function (color, blur, border) {
     var highlight = new BlockHighlightMorph(),
         fb = this.fullBounds(),
-        edge = useBlurredShadows ? blur : border;
+        edge = useBlurredShadows && !MorphicPreferences.isFlat ?
+                blur : border;
     highlight.setExtent(fb.extent().add(edge * 2));
     highlight.color = color;
-    highlight.image = useBlurredShadows ?
+    highlight.image = useBlurredShadows && !MorphicPreferences.isFlat ?
             this.highlightImageBlurred(color, blur)
                 : this.highlightImage(color, border);
     highlight.setPosition(fb.origin.subtract(new Point(edge, edge)));
@@ -2434,7 +2435,8 @@ BlockMorph.prototype.thumbnail = function (scale, clipWidth, noShadow) {
     if (!noShadow) {block.addShadow(); }
     ext = block.fullBounds().extent();
     if (!noShadow) {
-        ext = ext.subtract(this.shadowBlur * (useBlurredShadows ? 1 : 2));
+        ext = ext.subtract(this.shadowBlur *
+            (useBlurredShadows && !MorphicPreferences.isFlat ? 1 : 2));
     }
     trgt = newCanvas(new Point(
         Math.min(ext.x * scale, clipWidth || ext.x),
@@ -5718,6 +5720,38 @@ InputSlotMorph.prototype.messagesMenu = function () {
     if (allNames.length > 0) {
         dict['~'] = null;
     }
+    dict['new...'] = function () {
+
+        new DialogBoxMorph(
+            myself,
+            myself.setContents,
+            myself
+        ).prompt(
+            'Message name',
+            null,
+            myself.world()
+        );
+    };
+
+    return dict;
+};
+
+InputSlotMorph.prototype.messagesReceivedMenu = function () {
+    var dict = {'any message': ['any message']},
+        rcvr = this.parentThatIsA(BlockMorph).receiver(),
+        stage = rcvr.parentThatIsA(StageMorph),
+        myself = this,
+        allNames = [];
+
+    stage.children.concat(stage).forEach(function (morph) {
+        if (morph instanceof SpriteMorph || morph instanceof StageMorph) {
+            allNames = allNames.concat(morph.allMessageNames());
+        }
+    });
+    allNames.forEach(function (name) {
+        dict[name] = name;
+    });
+    dict['~'] = null;
     dict['new...'] = function () {
 
         new DialogBoxMorph(
