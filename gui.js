@@ -184,6 +184,7 @@ IDE_Morph.prototype.init = function (isAutoFill) {
     MorphicPreferences.globalFontFamily = 'Helvetica, Arial';
 
     // restore saved user preferences
+    this.userLanguage = null; // user language preference for startup
     this.applySavedSettings();
 
     // additional properties:
@@ -229,7 +230,7 @@ IDE_Morph.prototype.init = function (isAutoFill) {
 };
 
 IDE_Morph.prototype.openIn = function (world) {
-    var hash, usr, myself = this;
+    var hash, usr, myself = this, urlLanguage = null;
 
     this.buildPanes();
     world.add(this);
@@ -296,73 +297,85 @@ IDE_Morph.prototype.openIn = function (world) {
     }
     */
 
-    if (location.hash.substr(0, 6) === '#open:') {
-        hash = location.hash.substr(6);
-        if (hash.charAt(0) === '%'
-                || hash.search(/\%(?:[0-9a-f]{2})/i) > -1) {
-            hash = decodeURIComponent(hash);
-        }
-        if (contains(
-                ['project', 'blocks', 'sprites', 'snapdata'].map(
-                    function (each) {return hash.substr(0, 8).indexOf(each); }
-                ),
-                1
-            )) {
-            this.droppedText(hash);
-        } else {
-            this.droppedText(getURL(hash));
-        }
-    } else if (location.hash.substr(0, 5) === '#run:') {
-        hash = location.hash.substr(5);
-        if (hash.charAt(0) === '%'
-                || hash.search(/\%(?:[0-9a-f]{2})/i) > -1) {
-            hash = decodeURIComponent(hash);
-        }
-        if (hash.substr(0, 8) === '<project>') {
-            this.rawOpenProjectString(hash);
-        } else {
-            this.rawOpenProjectString(getURL(hash));
-//            this.droppedText(getURL(hash));
-        }
-        this.toggleAppMode(true);
-        this.runScripts();
-    } else if (location.hash.substr(0, 9) === '#present:') {
-        this.shield = new Morph();
-        this.shield.color = this.color;
-        this.shield.setExtent(this.parent.extent());
-        this.parent.add(this.shield);
-        myself.showMessage('Fetching project\nfrom the cloud...');
-        SnapCloud.getPublicProject(
-            location.hash.substr(9),
-            function (projectData) {
-                var msg;
-                myself.nextSteps([
-                    function () {
-                        msg = myself.showMessage('Opening project...');
-                    },
-                    function () {
-                        if (projectData.indexOf('<snapdata') === 0) {
-                            myself.rawOpenCloudDataString(projectData);
-                        } else if (projectData.indexOf('<project') === 0) {
-                            myself.rawOpenProjectString(projectData);
+    function interpretUrlAnchors() {
+        if (location.hash.substr(0, 6) === '#open:') {
+            hash = location.hash.substr(6);
+            if (hash.charAt(0) === '%'
+                    || hash.search(/\%(?:[0-9a-f]{2})/i) > -1) {
+                hash = decodeURIComponent(hash);
+            }
+            if (contains(
+                    ['project', 'blocks', 'sprites', 'snapdata'].map(
+                        function (each) {
+                            return hash.substr(0, 8).indexOf(each);
                         }
-                    },
-                    function () {
-                        myself.shield.destroy();
-                        myself.shield = null;
-                        msg.destroy();
-                        myself.toggleAppMode(true);
-                        myself.runScripts();
-                    }
-                ]);
-            },
-            this.cloudError()
-        );
-    } else if (location.hash.substr(0, 6) === '#lang:') {
-        this.setLanguage(location.hash.substr(6));
-        this.loadNewProject = true;
-    } else if (location.hash.substr(0, 7) === '#signup') {
-        this.createCloudAccount();
+                    ),
+                    1
+                )) {
+                this.droppedText(hash);
+            } else {
+                this.droppedText(getURL(hash));
+            }
+        } else if (location.hash.substr(0, 5) === '#run:') {
+            hash = location.hash.substr(5);
+            if (hash.charAt(0) === '%'
+                    || hash.search(/\%(?:[0-9a-f]{2})/i) > -1) {
+                hash = decodeURIComponent(hash);
+            }
+            if (hash.substr(0, 8) === '<project>') {
+                this.rawOpenProjectString(hash);
+            } else {
+                this.rawOpenProjectString(getURL(hash));
+            }
+            this.toggleAppMode(true);
+            this.runScripts();
+        } else if (location.hash.substr(0, 9) === '#present:') {
+            this.shield = new Morph();
+            this.shield.color = this.color;
+            this.shield.setExtent(this.parent.extent());
+            this.parent.add(this.shield);
+            myself.showMessage('Fetching project\nfrom the cloud...');
+            SnapCloud.getPublicProject(
+                location.hash.substr(9),
+                function (projectData) {
+                    var msg;
+                    myself.nextSteps([
+                        function () {
+                            msg = myself.showMessage('Opening project...');
+                        },
+                        function () {
+                            if (projectData.indexOf('<snapdata') === 0) {
+                                myself.rawOpenCloudDataString(projectData);
+                            } else if (
+                                projectData.indexOf('<project') === 0
+                            ) {
+                                myself.rawOpenProjectString(projectData);
+                            }
+                        },
+                        function () {
+                            myself.shield.destroy();
+                            myself.shield = null;
+                            msg.destroy();
+                            myself.toggleAppMode(true);
+                            myself.runScripts();
+                        }
+                    ]);
+                },
+                this.cloudError()
+            );
+        } else if (location.hash.substr(0, 6) === '#lang:') {
+            urlLanguage = location.hash.substr(6);
+            this.setLanguage(urlLanguage);
+            this.loadNewProject = true;
+        } else if (location.hash.substr(0, 7) === '#signup') {
+            this.createCloudAccount();
+        }
+    }
+
+    if (this.userLanguage) {
+        this.setLanguage(this.userLanguage, interpretUrlAnchors);
+    } else {
+        interpretUrlAnchors.call(this);
     }
 };
 
@@ -1682,8 +1695,9 @@ IDE_Morph.prototype.applySavedSettings = function () {
 
     // language
     if (language && language !== 'en') {
-        this.loadNewProject = true;
-        this.setLanguage(language);
+        this.userLanguage = language;
+    } else {
+        this.userLanguage = null;
     }
 
     //  click
@@ -3082,7 +3096,7 @@ IDE_Morph.prototype.languageMenu = function () {
     menu.popup(world, pos);
 };
 
-IDE_Morph.prototype.setLanguage = function (lang) {
+IDE_Morph.prototype.setLanguage = function (lang, callback) {
     var translation = document.getElementById('language'),
         src = 'lang-' + lang + '.js',
         myself = this;
@@ -3091,16 +3105,18 @@ IDE_Morph.prototype.setLanguage = function (lang) {
         document.head.removeChild(translation);
     }
     if (lang === 'en') {
-        return this.reflectLanguage('en');
+        return this.reflectLanguage('en', callback);
     }
     translation = document.createElement('script');
     translation.id = 'language';
-    translation.onload = function () {myself.reflectLanguage(lang); };
+    translation.onload = function () {
+        myself.reflectLanguage(lang, callback);
+    };
     document.head.appendChild(translation);
     translation.src = src;
 };
 
-IDE_Morph.prototype.reflectLanguage = function (lang) {
+IDE_Morph.prototype.reflectLanguage = function (lang, callback) {
     var projectData;
     SnapTranslator.language = lang;
     if (!this.loadNewProject) {
@@ -3121,11 +3137,11 @@ IDE_Morph.prototype.reflectLanguage = function (lang) {
     this.fixLayout();
     if (this.loadNewProject) {
         this.newProject();
-        this.loadNewProject = false;
     } else {
         this.openProjectString(projectData);
     }
     this.saveSetting('language', lang);
+    if (callback) {callback.call(this); }
 };
 
 // IDE_Morph blocks scaling
