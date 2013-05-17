@@ -5086,6 +5086,7 @@ GuitarString.prototype.stop = function() {
     this.playing = false;
 };
 
+
 // CellMorph //////////////////////////////////////////////////////////
 
 /*
