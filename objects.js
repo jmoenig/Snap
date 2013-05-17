@@ -131,7 +131,7 @@ var CostumeEditorMorph;
 var Sound;
 
 var AudioContext;
-var Guitar;
+var GuitarString;
 var Note;
 var CellMorph;
 var WatcherMorph;
@@ -4932,19 +4932,19 @@ Sound.prototype.toDataURL = function () {
     return this.audio.src;
 };
 
-// audioContext /////////////////////////////////////////////////
+// AudioContext /////////////////////////////////////////////////
 
-audioContext = (function() {
-  var AudioContextCreator = (function () {
-    // cross browser some day?
-    return window.AudioContext ||
-      window.mozAudioContext ||
-      window.msAudioContext ||
-      window.oAudioContext ||
-      window.webkitAudioContext;
-  }())
-  return new AudioContextCreator();
-})();
+AudioContext = (function() {
+    var AudioContextCreator = (function () {
+        // cross browser some day?
+        return window.AudioContext ||
+            window.mozAudioContext ||
+            window.msAudioContext ||
+            window.oAudioContext ||
+            window.webkitAudioContext;
+    }());
+    return new AudioContextCreator();
+}());
 
 // Note /////////////////////////////////////////////////////////
 
@@ -4953,26 +4953,26 @@ audioContext = (function() {
 // Note instance creation
 
 function Note(pitch) {
-  this.ensureAudioContext();
-  this.pitch = pitch === 0 ? 0 : pitch || 69;
-  this.oscillator = null;
+    this.ensureAudioContext();
+    this.pitch = pitch === 0 ? 0 : pitch || 69;
+    this.oscillator = null;
 
-  if (!Note.prototype.gainNode) {
-    Note.prototype.gainNode = audioContext.createGainNode();
-    Note.prototype.gainNode.gain.value = 0.25; // reduce volume by 1/4
-  }
+    if (!Note.prototype.gainNode) {
+        Note.prototype.gainNode = AudioContext.createGainNode();
+        Note.prototype.gainNode.gain.value = 0.25; // reduce volume by 1/4
+    }
 }
 
 // Note playing
 
 Note.prototype.play = function () {
-  this.oscillator = audioContext.createOscillator();
-  this.oscillator.type = 0;
-  this.oscillator.frequency.value =
-    Math.pow(2, (this.pitch - 69) / 12) * 440;
-  this.oscillator.connect(this.gainNode);
-  this.gainNode.connect(audioContext.destination);
-  this.oscillator.noteOn(0); // deprecated, renamed to start()
+    this.oscillator = AudioContext.createOscillator();
+    this.oscillator.type = 0;
+    this.oscillator.frequency.value =
+        Math.pow(2, (this.pitch - 69) / 12) * 440;
+    this.oscillator.connect(this.gainNode);
+    this.gainNode.connect(AudioContext.destination);
+    this.oscillator.noteOn(0); // deprecated, renamed to start()
 };
 
 Note.prototype.stop = function () {
@@ -4983,18 +4983,21 @@ Note.prototype.stop = function () {
 };
 
 Note.prototype.ensureAudioContext = function() {
-  if (typeof audioContext == "undefined") {
-    throw new Error('Web Audio API is not supported\nin this browser');
-  }
-}
+    if (AudioContext === undefined) {
+        throw new Error('Web Audio API is not supported\nin this browser');
+    }
+};
 
 // GuitarString ///////////////////////////////////////////////////////
 
 // I am a single guitar string that inherits from Note
+GuitarString.prototype = new Note();
+GuitarString.prototype.constructor = GuitarString;
 
 // GuitarString instance creation
 
 function GuitarString(pitch, duration) {
+    this.ensureAudioContext();
     this.pitch = pitch === 0 ? 0 : pitch || 69;
     this.duration = duration === undefined ? 2 : duration;
     this.frequency = Math.pow(2, (this.pitch - 69) / 12) * 440;
