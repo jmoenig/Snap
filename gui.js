@@ -132,7 +132,7 @@ IDE_Morph.prototype.setDefaultDesign = function () {
 };
 
 IDE_Morph.prototype.setFlatDesign = function () {
-    MorphicPreferences.isFlat = true;
+    MorphicPreferences.isFlat = false;
     SpriteMorph.prototype.paletteColor = new Color(255, 255, 255);
     SpriteMorph.prototype.paletteTextColor = new Color(70, 70, 70);
     StageMorph.prototype.paletteTextColor
@@ -159,7 +159,7 @@ IDE_Morph.prototype.setFlatDesign = function () {
     ];
     IDE_Morph.prototype.appModeColor = IDE_Morph.prototype.frameColor;
     IDE_Morph.prototype.scriptsPaneTexture = null;
-    IDE_Morph.prototype.padding = 1;
+    IDE_Morph.prototype.padding = 5;
 
     SpriteIconMorph.prototype.labelColor
         = IDE_Morph.prototype.buttonLabelColor;
