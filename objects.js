@@ -1804,6 +1804,9 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         button.showHelp = BlockMorph.prototype.showHelp;
         blocks.push(button);
     }
+    /* SCRIBBLE HOOK*/
+    this.scribbleHookBlockTemplates(blocks, block, cat);
+    /* END SCRIBBLE HOOK*/
     return blocks;
 };
 

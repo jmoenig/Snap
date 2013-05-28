@@ -436,7 +436,9 @@ IDE_Morph.prototype.createLogo = function () {
     };
 
     this.logo.color = new Color();
-    this.logo.setExtent(new Point(200, 28)); // dimensions are fixed
+    /* SCRIBBLE -- needed to add more room for logo*/
+    this.logo.setExtent(new Point(210, 28)); // dimensions are fixed
+    /* END SCRIBBLE */
     this.add(this.logo);
 };
 
@@ -683,10 +685,17 @@ IDE_Morph.prototype.createControlBar = function () {
     cloudButton = button;
     this.controlBar.add(cloudButton);
     this.controlBar.cloudButton = cloudButton; // for menu positioning
+    
+    /* SCRIBBLE HOOK*/
+    this.createScribbleButtons(colors);
+    var rightHandButtons = this.getRightHandButtons(stopButton);
+    /* END SCRIBBLE HOOK*/
 
     this.controlBar.fixLayout = function () {
         x = this.right() - padding;
-        [stopButton, pauseButton, startButton].forEach(
+	/* SCRIBBLE HOOK*/
+        rightHandButtons.forEach(
+    /* END SCRIBBLE HOOK*/
             function (button) {
                 button.setCenter(myself.controlBar.center());
                 button.setRight(x);
