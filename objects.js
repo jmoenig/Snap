@@ -5068,7 +5068,7 @@ function GuitarString(pitch, duration) {
     this.duration = duration === undefined ? 2 : duration;
     this.frequency = Math.pow(2, (this.pitch - 69) / 12) * 440;
     this.N = Math.round(AudioContext.sampleRate / this.frequency);
-    this.node = AudioContext.createJavaScriptNode(4096, 0, 1);
+    this.node = AudioContext.createJavaScriptNode(4096, 1, 1);
     this.playing = false;
     this.timeoutId = null;
 
