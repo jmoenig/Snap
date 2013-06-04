@@ -1035,7 +1035,7 @@
 /*global window, HTMLCanvasElement, getMinimumFontHeight, FileReader, Audio,
 FileList, getBlurredShadowSupport*/
 
-var morphicVersion = '2013-May-16';
+var morphicVersion = '2013-June-04';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = getBlurredShadowSupport(); // check for Chrome-bug
 
@@ -10110,6 +10110,7 @@ WorldMorph.prototype.initEventListeners = function () {
     canvas.addEventListener(
         "mousedown",
         function (event) {
+            event.preventDefault();
             myself.hand.processMouseDown(event);
         },
         false
