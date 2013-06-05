@@ -1719,3 +1719,11 @@ ______
 130517
 ------
 * GUI: user preferences (settings) are now made persistent in localStorage
+
+130604
+------
+* Morphic: Prevent undesired native dragstart events (introduced in Chrome 27)
+
+130605
+------
+* Objects: fix for hiding 'getLastAnswer' and 'getTimer' primitives 
