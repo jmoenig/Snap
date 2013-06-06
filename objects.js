@@ -123,7 +123,7 @@ PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.objects = '2013-May-16';
+modules.objects = '2013-June-05';
 
 var SpriteMorph;
 var StageMorph;
@@ -700,12 +700,12 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: 'ask %s and wait',
             defaults: [localize('what\'s your name?')]
         },
-        reportLastAnswer: {
+        reportLastAnswer: { // retained for legacy compatibility
             type: 'reporter',
             category: 'sensing',
             spec: 'answer'
         },
-        getLastAnswer: { // variant for watcher
+        getLastAnswer: {
             type: 'reporter',
             category: 'sensing',
             spec: 'answer'
@@ -740,12 +740,12 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'sensing',
             spec: 'reset timer'
         },
-        reportTimer: {
+        reportTimer: { // retained for legacy compatibility
             type: 'reporter',
             category: 'sensing',
             spec: 'timer'
         },
-        getTimer: { // variant for watcher
+        getTimer: {
             type: 'reporter',
             category: 'sensing',
             spec: 'timer'
@@ -1073,8 +1073,8 @@ SpriteMorph.prototype.blockAlternatives = {
     doStopAll: ['doStopBlock', 'doStop'],
 
     // sensing:
-    reportLastAnswer: ['reportTimer'],
-    reportTimer: ['reportLastAnswer'],
+    getLastAnswer: ['getTimer'],
+    getTimer: ['getLastAnswer'],
     reportMouseX: ['reportMouseY'],
     reportMouseY: ['reportMouseX'],
 
@@ -1592,7 +1592,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push('-');
         blocks.push(block('doAsk'));
         blocks.push(watcherToggle('getLastAnswer'));
-        blocks.push(block('reportLastAnswer'));
+        blocks.push(block('getLastAnswer'));
         blocks.push('-');
         blocks.push(block('reportMouseX'));
         blocks.push(block('reportMouseY'));
@@ -1604,7 +1604,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push('-');
         blocks.push(block('doResetTimer'));
         blocks.push(watcherToggle('getTimer'));
-        blocks.push(block('reportTimer'));
+        blocks.push(block('getTimer'));
         blocks.push('-');
         blocks.push(block('reportAttributeOf'));
         blocks.push('-');
@@ -3841,7 +3841,7 @@ StageMorph.prototype.blockTemplates = function (category) {
 
         blocks.push(block('doAsk'));
         blocks.push(watcherToggle('getLastAnswer'));
-        blocks.push(block('reportLastAnswer'));
+        blocks.push(block('getLastAnswer'));
         blocks.push('-');
         blocks.push(block('reportMouseX'));
         blocks.push(block('reportMouseY'));
@@ -3851,7 +3851,7 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push('-');
         blocks.push(block('doResetTimer'));
         blocks.push(watcherToggle('getTimer'));
-        blocks.push(block('reportTimer'));
+        blocks.push(block('getTimer'));
         blocks.push('-');
         blocks.push(block('reportAttributeOf'));
         blocks.push('-');
