@@ -1731,3 +1731,5 @@ ______
 130606
 ------
 * BYOB: Newly created custom reporters now have an initial default REPORT block as definition body
+
+* Morphic: focus World canvas on mouse down (otherwise prevent default)
