@@ -1727,3 +1727,7 @@ ______
 130605
 ------
 * Objects: fix for hiding 'getLastAnswer' and 'getTimer' primitives 
+
+130606
+------
+* BYOB: Newly created custom reporters now have an initial default REPORT block as definition body

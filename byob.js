@@ -105,7 +105,7 @@ CommentMorph, localize, CSlotMorph, SpeechBubbleMorph, MorphicPreferences*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2013-May-16';
+modules.byob = '2013-June-06';
 
 // Declarations
 
@@ -1336,7 +1336,7 @@ BlockDialogMorph.prototype.setScope = function (varType) {
 // other ops
 
 BlockDialogMorph.prototype.getInput = function () {
-    var spec, def;
+    var spec, def, body;
     if (this.body instanceof InputFieldMorph) {
         spec = this.normalizeSpaces(this.body.getValue());
     }
@@ -1344,6 +1344,16 @@ BlockDialogMorph.prototype.getInput = function () {
     def.type = this.blockType;
     def.category = this.category;
     def.isGlobal = this.isGlobal;
+    if (def.type === 'reporter' || def.type === 'predicate') {
+        body = Process.prototype.reify.call(
+            null,
+            SpriteMorph.prototype.blockForSelector('doReport'),
+            new List(),
+            true // ignore empty slots for custom block reification
+        );
+        body.outerContext = null;
+        def.body = body;
+    }
     return def;
 };
 
