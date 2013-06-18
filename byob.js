@@ -105,7 +105,7 @@ CommentMorph, localize, CSlotMorph, SpeechBubbleMorph, MorphicPreferences*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2013-June-06';
+modules.byob = '2013-June-18';
 
 // Declarations
 
@@ -138,6 +138,7 @@ function CustomBlockDefinition(spec, receiver) {
     this.spec = spec || '';
     this.declarations = {}; // {'inputName' : [type, default]}
     this.comment = null;
+    this.codeMapping = null; // experimental, generate text code
 
     // don't serialize (not needed for functionality):
     this.receiver = receiver || null; // for serialization only (pointer)

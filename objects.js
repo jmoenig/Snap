@@ -123,7 +123,7 @@ PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.objects = '2013-June-05';
+modules.objects = '2013-June-18';
 
 var SpriteMorph;
 var StageMorph;
@@ -1016,6 +1016,29 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'lists',
             spec: 'replace item %idx of %l with %s',
             defaults: [1, null, localize('thing')]
+        },
+
+        // Code mapping - experimental
+        doMapCode: { // experimental
+            type: 'command',
+            category: 'other',
+            spec: 'map %cmdRing to code %s'
+        },
+        doMapStringCode: { // experimental
+            type: 'command',
+            category: 'other',
+            spec: 'map String to code %s',
+            defaults: ['<#1>']
+        },
+        doMapListCode: { // experimental
+            type: 'command',
+            category: 'other',
+            spec: 'map %codeListPart of %codeListKind to code %s'
+        },
+        reportMappedCode: { // experimental
+            type: 'reporter',
+            category: 'other',
+            spec: 'code of %cmdRing'
         }
     };
 };
@@ -1770,6 +1793,15 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('doReplaceInList'));
 
         blocks.push('=');
+
+        if (StageMorph.prototype.enableCodeMapping) {
+            blocks.push(block('doMapCode'));
+            blocks.push(block('doMapStringCode'));
+            blocks.push(block('doMapListCode'));
+            blocks.push('-');
+            blocks.push(block('reportMappedCode'));
+            blocks.push('=');
+        }
 
         button = new PushButtonMorph(
             null,
@@ -3189,6 +3221,8 @@ StageMorph.prototype.paletteTextColor
     = SpriteMorph.prototype.paletteTextColor;
 
 StageMorph.prototype.hiddenPrimitives = {};
+StageMorph.prototype.codeMappings = {};
+StageMorph.prototype.enableCodeMapping = false;
 
 // StageMorph instance creation
 
@@ -4010,6 +4044,15 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('doReplaceInList'));
 
         blocks.push('=');
+
+        if (StageMorph.prototype.enableCodeMapping) {
+            blocks.push(block('doMapCode'));
+            blocks.push(block('doMapStringCode'));
+            blocks.push(block('doMapListCode'));
+            blocks.push('-');
+            blocks.push(block('reportMappedCode'));
+            blocks.push('=');
+        }
 
         button = new PushButtonMorph(
             null,
