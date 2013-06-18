@@ -68,7 +68,7 @@ sb, CommentMorph, CommandBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2013-May-17';
+modules.gui = '2013-June-18';
 
 // Declarations
 
@@ -2146,6 +2146,20 @@ IDE_Morph.prototype.settingsMenu = function () {
         MorphicPreferences.isFlat,
         'uncheck for default\nGUI design',
         'check for alternative\nGUI design',
+        false
+    );
+    addPreference(
+        'Code mapping',
+        function () {
+            StageMorph.prototype.enableCodeMapping =
+                !StageMorph.prototype.enableCodeMapping;
+            myself.currentSprite.blocksCache.variables = null;
+            myself.currentSprite.paletteCache.variables = null;
+            myself.refreshPalette();
+        },
+        StageMorph.prototype.enableCodeMapping,
+        'uncheck to disable\nblock to text mapping features',
+        'check for block\nto text mapping features',
         false
     );
     menu.addLine(); // everything below this line is made persistent
