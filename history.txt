@@ -1737,3 +1737,7 @@ ______
 130618
 ------
 * Code mapping (generating textual code from blocks), first iteration
+
+130619
+------
+* Store: persisting code mappings in project and block library files
