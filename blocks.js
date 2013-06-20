@@ -153,7 +153,7 @@ DialogBoxMorph, BlockInputFragmentMorph, PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2013-June-18';
+modules.blocks = '2013-June-20';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -1096,7 +1096,8 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             part.size = this.fontSize * 1.2;
             part.color = new Color(255, 255, 255);
             part.shadowColor = this.color.darker(this.labelContrast);
-            part.shadowOffset = this.embossing;
+            part.shadowOffset = MorphicPreferences.isFlat ?
+                    new Point() : this.embossing;
             part.drawNew();
             break;
         case '%turtleOutline':
@@ -1105,7 +1106,8 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             part.color = new Color(255, 255, 255);
             part.isProtectedLabel = true; // doesn't participate in zebraing
             part.shadowColor = this.color.darker(this.labelContrast);
-            part.shadowOffset = this.embossing;
+            part.shadowOffset = MorphicPreferences.isFlat ?
+                    new Point() : this.embossing;
             part.drawNew();
             break;
         case '%clockwise':
@@ -1114,7 +1116,8 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             part.color = new Color(255, 255, 255);
             part.isProtectedLabel = false; // zebra colors
             part.shadowColor = this.color.darker(this.labelContrast);
-            part.shadowOffset = this.embossing;
+            part.shadowOffset = MorphicPreferences.isFlat ?
+                    new Point() : this.embossing;
             part.drawNew();
             break;
         case '%counterclockwise':
@@ -1123,7 +1126,8 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             part.color = new Color(255, 255, 255);
             part.isProtectedLabel = false; // zebra colors
             part.shadowColor = this.color.darker(this.labelContrast);
-            part.shadowOffset = this.embossing;
+            part.shadowOffset = MorphicPreferences.isFlat ?
+                    new Point() : this.embossing;
             part.drawNew();
             break;
         case '%greenflag':
@@ -1132,7 +1136,8 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             part.color = new Color(0, 200, 0);
             part.isProtectedLabel = true; // doesn't participate in zebraing
             part.shadowColor = this.color.darker(this.labelContrast);
-            part.shadowOffset = this.embossing;
+            part.shadowOffset = MorphicPreferences.isFlat ?
+                    new Point() : this.embossing;
             part.drawNew();
             break;
         case '%stop':
@@ -1141,7 +1146,8 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             part.color = new Color(200, 0, 0);
             part.isProtectedLabel = true; // doesn't participate in zebraing
             part.shadowColor = this.color.darker(this.labelContrast);
-            part.shadowOffset = this.embossing;
+            part.shadowOffset = MorphicPreferences.isFlat ?
+                    new Point() : this.embossing;
             part.drawNew();
             break;
         default:
@@ -1155,7 +1161,9 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
         part.color = new Color(255, 255, 255);
         part.isBold = true;
         part.shadowColor = this.color.darker(this.labelContrast);
-        part.shadowOffset = this.embossing;
+        if (!MorphicPreferences.isFlat) {
+            part.shadowOffset = this.embossing;
+        }
         part.drawNew();
     }
     return part;
@@ -2502,14 +2510,14 @@ BlockMorph.prototype.fixLabelColor = function () {
             this.setLabelColor(
                 new Color(255, 255, 255),
                 clr.darker(this.labelContrast),
-                new Point(-1, -1)
+                MorphicPreferences.isFlat ? null : new Point(-1, -1)
             );
         } else {
             this.setLabelColor(
                 new Color(0, 0, 0),
                 clr.lighter(this.zebraContrast)
                     .lighter(this.labelContrast * 2),
-                new Point(1, 1)
+                MorphicPreferences.isFlat ? null : new Point(1, 1)
             );
         }
     }
@@ -2987,12 +2995,21 @@ CommandBlockMorph.prototype.drawNew = function () {
     this.drawBottom(context);
 
     // add 3D-Effect:
-    this.drawTopDentEdge(context, 0, 0);
-    this.drawBottomDentEdge(context, 0, this.height() - this.corner);
-    this.drawLeftEdge(context);
-    this.drawRightEdge(context);
-    this.drawTopLeftEdge(context);
-    this.drawBottomRightEdge(context);
+    if (!MorphicPreferences.isFlat) {
+        this.drawTopDentEdge(context, 0, 0);
+        this.drawBottomDentEdge(context, 0, this.height() - this.corner);
+        this.drawLeftEdge(context);
+        this.drawRightEdge(context);
+        this.drawTopLeftEdge(context);
+        this.drawBottomRightEdge(context);
+    } else {
+        nop();
+        /*
+        this.drawFlatBottomDentEdge(
+            context, 0, this.height() - this.corner
+        );
+        */
+    }
 
     // erase CommandSlots
     this.eraseHoles(context);
@@ -3223,6 +3240,16 @@ CommandBlockMorph.prototype.drawBottomDentEdge = function (context, x, y) {
     );
     context.lineTo(this.width() - this.corner, y - shift);
     context.stroke();
+};
+
+CommandBlockMorph.prototype.drawFlatBottomDentEdge = function (context) {
+    if (!this.isStop()) {
+        context.fillStyle = this.color.darker(this.contrast / 2).toString();
+        context.beginPath();
+        this.drawDent(context, 0, this.height() - this.corner);
+        context.closePath();
+        context.fill();
+    }
 };
 
 CommandBlockMorph.prototype.drawLeftEdge = function (context) {
@@ -3723,6 +3750,7 @@ ReporterBlockMorph.prototype.drawRounded = function (context) {
     context.closePath();
     context.fill();
 
+    if (MorphicPreferences.isFlat) {return; }
 
     // add 3D-Effect:
     context.lineWidth = this.edge;
@@ -3897,6 +3925,8 @@ ReporterBlockMorph.prototype.drawDiamond = function (context) {
 
     context.closePath();
     context.fill();
+
+    if (MorphicPreferences.isFlat) {return; }
 
     // add 3D-Effect:
     context.lineWidth = this.edge;
@@ -4879,6 +4909,8 @@ CommandSlotMorph.prototype.drawNew = function () {
     context.fillStyle = this.rfColor.toString();
     this.drawFlat(context);
 
+    if (MorphicPreferences.isFlat) {return; }
+
     // add 3D-Effect:
     this.drawEdges(context);
 };
@@ -5204,6 +5236,8 @@ RingCommandSlotMorph.prototype.drawNew = function () {
     // draw the 'flat' shape:
     this.drawFlat(context);
 
+    if (MorphicPreferences.isFlat) {return; }
+
     // add 3D-Effect:
     this.drawEdges(context);
 };
@@ -5384,6 +5418,8 @@ CSlotMorph.prototype.drawNew = function () {
 
     // draw the 'flat' shape:
     this.drawFlat(context);
+
+    if (MorphicPreferences.isFlat) {return; }
 
     // add 3D-Effect:
     this.drawTopRightEdge(context);
@@ -6382,7 +6418,9 @@ InputSlotMorph.prototype.drawNew = function () {
             this.width() - this.edge * 2,
             this.height() - this.edge * 2
         );
-        this.drawRectBorder(context);
+        if (!MorphicPreferences.isFlat) {
+            this.drawRectBorder(context);
+        }
     } else {
         r = (this.height() - (this.edge * 2)) / 2;
         context.fillStyle = this.color.toString();
@@ -6405,7 +6443,9 @@ InputSlotMorph.prototype.drawNew = function () {
         );
         context.closePath();
         context.fill();
-        this.drawRoundBorder(context);
+        if (!MorphicPreferences.isFlat) {
+            this.drawRoundBorder(context);
+        }
     }
 };
 
@@ -6774,6 +6814,8 @@ BooleanSlotMorph.prototype.drawDiamond = function (context) {
 
     context.closePath();
     context.fill();
+
+    if (MorphicPreferences.isFlat) {return; }
 
     // add 3D-Effect:
     context.lineWidth = this.edge;
@@ -7972,7 +8014,9 @@ ColorSlotMorph.prototype.drawNew = function () {
         this.width() - this.edge * 2,
         this.height() - this.edge * 2
     );
-    this.drawRectBorder(context);
+    if (!MorphicPreferences.isFlat) {
+        this.drawRectBorder(context);
+    }
 };
 
 ColorSlotMorph.prototype.drawRectBorder =
@@ -8672,6 +8716,7 @@ FunctionSlotMorph.prototype.drawRounded = function (context) {
     context.closePath();
     context.fill();
 
+    if (MorphicPreferences.isFlat) {return; }
 
     // add 3D-Effect:
     context.lineWidth = this.edge;
@@ -8834,6 +8879,8 @@ FunctionSlotMorph.prototype.drawDiamond = function (context) {
 
     context.closePath();
     context.fill();
+
+    if (MorphicPreferences.isFlat) {return; }
 
     // add 3D-Effect:
     context.lineWidth = this.edge;
@@ -9138,6 +9185,8 @@ RingReporterSlotMorph.prototype.drawRounded = function (context) {
     context.closePath();
     context.fill();
 
+    if (MorphicPreferences.isFlat) {return; }
+
     // add 3D-Effect:
     context.lineWidth = this.edge;
     context.lineJoin = 'round';
@@ -9308,6 +9357,8 @@ RingReporterSlotMorph.prototype.drawDiamond = function (context) {
 
     context.closePath();
     context.fill();
+
+    if (MorphicPreferences.isFlat) {return; }
 
     // add 3D-Effect:
     context.lineWidth = this.edge;

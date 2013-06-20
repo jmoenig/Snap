@@ -123,7 +123,7 @@ PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.objects = '2013-June-18';
+modules.objects = '2013-June-20';
 
 var SpriteMorph;
 var StageMorph;
@@ -5285,7 +5285,7 @@ CellMorph.prototype.drawNew = function () {
     );
     context.closePath();
     context.fill();
-    if (this.border > 0) {
+    if (this.border > 0 && !MorphicPreferences.isFlat) {
         context.lineWidth = this.border;
         context.strokeStyle = this.borderColor.toString();
         context.beginPath();
@@ -5297,7 +5297,9 @@ CellMorph.prototype.drawNew = function () {
         context.shadowOffsetY = this.border;
         context.shadowBlur = this.border;
         context.shadowColor = this.color.darker(80).toString();
-        this.drawShadow(context, this.edge, this.border / 2);
+        if (!MorphicPreferences.isFlat) {
+            this.drawShadow(context, this.edge, this.border / 2);
+        }
     }
 
     // position my contents
@@ -5582,7 +5584,7 @@ WatcherMorph.prototype.fixLayout = function () {
             true,
             false,
             false,
-            new Point(1, 1),
+            MorphicPreferences.isFlat ? new Point() : new Point(1, 1),
             new Color(255, 255, 255)
         );
         this.add(this.labelMorph);
@@ -5856,7 +5858,11 @@ WatcherMorph.prototype.drawNew = function () {
     context = this.image.getContext('2d');
     if ((this.edge === 0) && (this.border === 0)) {
         BoxMorph.uber.drawNew.call(this);
-        return null;
+        return;
+    }
+    if (MorphicPreferences.isFlat) {
+        WatcherMorph.uber.drawNew.call(this);
+        return;
     }
     gradient = context.createLinearGradient(0, 0, 0, this.height());
     gradient.addColorStop(0, this.color.lighter().toString());
