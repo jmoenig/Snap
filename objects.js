@@ -5854,12 +5854,8 @@ WatcherMorph.prototype.drawNew = function () {
         gradient;
     this.image = newCanvas(this.extent());
     context = this.image.getContext('2d');
-    if ((this.edge === 0) && (this.border === 0)) {
+    if (MorphicPreferences.isFlat || (this.edge === 0 && this.border === 0)) {
         BoxMorph.uber.drawNew.call(this);
-        return;
-    }
-    if (MorphicPreferences.isFlat) {
-        WatcherMorph.uber.drawNew.call(this);
         return;
     }
     gradient = context.createLinearGradient(0, 0, 0, this.height());
