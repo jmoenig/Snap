@@ -55,6 +55,7 @@
                         ReporterSlotMorph
                             RingReporterSlotMorph
                     InputSlotMorph
+                        TextSlotMorph
                     MultiArgMorph
                     TemplateSlotMorph
                 BlockMorph
@@ -87,6 +88,7 @@
         InputSlotMorph
         BooleanSlotMorph
         ArrowMorph
+        TextSlotMorph
         SymbolMorph
         ColorSlotMorph
         TemplateSlotMorph
@@ -179,6 +181,7 @@ var RingReporterSlotMorph;
 var SymbolMorph;
 var CommentMorph;
 var ArgLabelMorph;
+var TextSlotMorph;
 
 WorldMorph.prototype.customMorphs = function () {
     // add examples to the world's demo menu
@@ -719,6 +722,10 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
         case '%txt':
             part = new InputSlotMorph();
             part.minWidth = part.height() * 1.7; // "landscape"
+            part.fixLayout();
+            break;
+        case '%mlt':
+            part = new TextSlotMorph();
             part.fixLayout();
             break;
         case '%obj':
@@ -1590,6 +1597,7 @@ SyntaxElementMorph.prototype.endLayout = function () {
     %br        - user-forced line break
     %s        - white rectangular type-in slot ("string-type")
     %txt    - white rectangular type-in slot ("text-type")
+    %mlt    - white rectangular type-in slot ("multi-line-text-type")
     %n        - white roundish type-in slot ("numerical")
     %dir    - white roundish type-in slot with drop-down for directions
     %inst    - white roundish type-in slot with drop-down for instruments
@@ -6224,7 +6232,9 @@ InputSlotMorph.prototype.fixLayout = function () {
                 + arrow.width()
                 + this.edge * 2
                 + this.typeInPadding * 2,
-            contents.rawHeight() + arrow.width(),
+            contents.rawHeight ? // single vs. multi-line contents
+                        contents.rawHeight() + arrow.width()
+                                : contents.height() / 1.2 + arrow.width(),
             this.minWidth // for text-type slots
         ));
     }
@@ -6967,6 +6977,84 @@ ArrowMorph.prototype.drawNew = function () {
     }
     context.closePath();
     context.fill();
+};
+
+// TextSlotMorph //////////////////////////////////////////////////////
+
+/*
+    I am a multi-line input slot, primarily used in Snap's code-mapping
+    blocks.
+*/
+
+// TextSlotMorph inherits from InputSlotMorph:
+
+TextSlotMorph.prototype = new InputSlotMorph();
+TextSlotMorph.prototype.constructor = TextSlotMorph;
+TextSlotMorph.uber = InputSlotMorph.prototype;
+
+// TextSlotMorph instance creation:
+
+function TextSlotMorph(text, isNumeric, choiceDict, isReadOnly) {
+    this.init(text, isNumeric, choiceDict, isReadOnly);
+}
+
+TextSlotMorph.prototype.init = function (
+    text,
+    isNumeric,
+    choiceDict,
+    isReadOnly
+) {
+    var contents = new TextMorph(''),
+        arrow = new ArrowMorph(
+            'down',
+            0,
+            Math.max(Math.floor(this.fontSize / 6), 1)
+        );
+
+    contents.fontSize = this.fontSize;
+    contents.drawNew();
+
+    this.isUnevaluated = false;
+    this.choices = choiceDict || null; // object, function or selector
+    this.oldContentsExtent = contents.extent();
+    this.isNumeric = isNumeric || false;
+    this.isReadOnly = isReadOnly || false;
+    this.minWidth = 0; // can be chaged for text-type inputs ("landscape")
+    this.constant = null;
+
+    InputSlotMorph.uber.init.call(this);
+    this.color = new Color(255, 255, 255);
+    this.add(contents);
+    this.add(arrow);
+    contents.isEditable = true;
+    contents.isDraggable = false;
+    contents.enableSelecting();
+    this.setContents(text);
+
+};
+
+// TextSlotMorph accessing:
+
+TextSlotMorph.prototype.getSpec = function () {
+    if (this.isNumeric) {
+        return '%mln';
+    }
+    return '%mlt'; // default
+};
+
+TextSlotMorph.prototype.contents = function () {
+    return detect(
+        this.children,
+        function (child) {
+            return (child instanceof TextMorph);
+        }
+    );
+};
+
+// TextSlotMorph events:
+
+TextSlotMorph.prototype.layoutChanged = function () {
+    this.fixLayout();
 };
 
 // SymbolMorph //////////////////////////////////////////////////////////
