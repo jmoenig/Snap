@@ -912,7 +912,9 @@ JaggedBlockMorph.prototype.drawNew = function () {
     context.fillStyle = this.cachedClr;
 
     this.drawBackground(context);
-    this.drawEdges(context);
+    if (!MorphicPreferences.isFlat) {
+        this.drawEdges(context);
+    }
 
     // erase holes
     this.eraseHoles(context);

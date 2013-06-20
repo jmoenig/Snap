@@ -59,9 +59,9 @@
 /*global modules, contains, BoxMorph, WorldMorph, HandleMorph,
 PushButtonMorph, SyntaxElementMorph, Color, Point, WatcherMorph,
 StringMorph, SpriteMorph, ScrollFrameMorph, CellMorph, ArrowMorph,
-MenuMorph, snapEquals, Morph, isNil, localize*/
+MenuMorph, snapEquals, Morph, isNil, localize, MorphicPreferences*/
 
-modules.lists = '2013-April-23';
+modules.lists = '2013-June-20';
 
 var List;
 var ListWatcherMorph;
@@ -367,7 +367,7 @@ ListWatcherMorph.prototype.init = function (list, parentCell) {
         false,
         false,
         false,
-        new Point(1, 1),
+        MorphicPreferences.isFlat ? new Point() : new Point(1, 1),
         new Color(255, 255, 255)
     );
     this.label.mouseClickLeft = function () {myself.startIndexMenu(); };
@@ -525,7 +525,7 @@ ListWatcherMorph.prototype.update = function (anyway) {
                 false,
                 false,
                 false,
-                new Point(1, 1),
+                MorphicPreferences.isFlat ? new Point() : new Point(1, 1),
                 new Color(255, 255, 255)
             );
             cell = new CellMorph(

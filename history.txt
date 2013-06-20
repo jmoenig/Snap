@@ -1745,3 +1745,4 @@ ______
 130620
 ------
 * GUI: add code mapping preference to persistent settings
+* Blocks, BYOB, Lists, Objects: "flat" design enhancements for blocks and watchers
