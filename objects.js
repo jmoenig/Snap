@@ -1022,7 +1022,7 @@ SpriteMorph.prototype.initBlocks = function () {
         doMapCode: { // experimental
             type: 'command',
             category: 'other',
-            spec: 'map %cmdRing to code %s'
+            spec: 'map %cmdRing to code %mlt'
         },
         doMapStringCode: { // experimental
             type: 'command',
