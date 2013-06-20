@@ -1741,3 +1741,7 @@ ______
 130619
 ------
 * Store: persisting code mappings in project and block library files
+
+130620
+------
+* GUI: add code mapping preference to persistent settings

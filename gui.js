@@ -68,7 +68,7 @@ sb, CommentMorph, CommandBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2013-June-18';
+modules.gui = '2013-June-20';
 
 // Declarations
 
@@ -1677,7 +1677,8 @@ IDE_Morph.prototype.applySavedSettings = function () {
         zoom = this.getSetting('zoom'),
         language = this.getSetting('language'),
         click = this.getSetting('click'),
-        longform = this.getSetting('longform');
+        longform = this.getSetting('longform'),
+        code = this.getSetting('code');
 
     // design
     if (design === 'flat') {
@@ -1708,6 +1709,11 @@ IDE_Morph.prototype.applySavedSettings = function () {
     // long form
     if (longform) {
         InputSlotDialogMorph.prototype.isLaunchingExpanded = true;
+    }
+
+    //  code mapping
+    if (code && !StageMorph.prototype.enableCodeMapping) {
+        StageMorph.prototype.enableCodeMapping = true;
     }
 };
 
@@ -2153,6 +2159,11 @@ IDE_Morph.prototype.settingsMenu = function () {
         function () {
             StageMorph.prototype.enableCodeMapping =
                 !StageMorph.prototype.enableCodeMapping;
+            if (StageMorph.prototype.enableCodeMapping) {
+                myself.saveSetting('code', true);
+            } else {
+                myself.removeSetting('code');
+            }
             myself.currentSprite.blocksCache.variables = null;
             myself.currentSprite.paletteCache.variables = null;
             myself.refreshPalette();
