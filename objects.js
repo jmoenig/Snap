@@ -5297,9 +5297,7 @@ CellMorph.prototype.drawNew = function () {
         context.shadowOffsetY = this.border;
         context.shadowBlur = this.border;
         context.shadowColor = this.color.darker(80).toString();
-        if (!MorphicPreferences.isFlat) {
-            this.drawShadow(context, this.edge, this.border / 2);
-        }
+        this.drawShadow(context, this.edge, this.border / 2);
     }
 
     // position my contents
@@ -5376,7 +5374,7 @@ CellMorph.prototype.layoutChanged = function () {
     );
     context.closePath();
     context.fill();
-    if (this.border > 0) {
+    if (this.border > 0 && !MorphicPreferences.isFlat) {
         context.lineWidth = this.border;
         context.strokeStyle = this.borderColor.toString();
         context.beginPath();
