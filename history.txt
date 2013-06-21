@@ -1752,3 +1752,4 @@ ______
 130621
 ------
 * Morphic, Blocks: "flat" design fix: Handle manually "unshadowed" StringMorphs
+* Objects, Blocks: %code input slot - multi-line, monospaced, type-in slot for code mappings

@@ -123,7 +123,7 @@ PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.objects = '2013-June-20';
+modules.objects = '2013-June-21';
 
 var SpriteMorph;
 var StageMorph;
@@ -1022,18 +1022,18 @@ SpriteMorph.prototype.initBlocks = function () {
         doMapCode: { // experimental
             type: 'command',
             category: 'other',
-            spec: 'map %cmdRing to code %mlt'
+            spec: 'map %cmdRing to code %code'
         },
         doMapStringCode: { // experimental
             type: 'command',
             category: 'other',
-            spec: 'map String to code %s',
+            spec: 'map String to code %code',
             defaults: ['<#1>']
         },
         doMapListCode: { // experimental
             type: 'command',
             category: 'other',
-            spec: 'map %codeListPart of %codeListKind to code %s'
+            spec: 'map %codeListPart of %codeListKind to code %code'
         },
         reportMappedCode: { // experimental
             type: 'reporter',

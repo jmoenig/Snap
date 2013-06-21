@@ -728,6 +728,12 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             part = new TextSlotMorph();
             part.fixLayout();
             break;
+        case '%code':
+            part = new TextSlotMorph();
+            part.contents().fontName = 'monospace';
+            part.contents().fontStyle = 'monospace';
+            part.fixLayout();
+            break;
         case '%obj':
             part = new ArgMorph('object');
             break;
@@ -1597,6 +1603,7 @@ SyntaxElementMorph.prototype.endLayout = function () {
     %s        - white rectangular type-in slot ("string-type")
     %txt    - white rectangular type-in slot ("text-type")
     %mlt    - white rectangular type-in slot ("multi-line-text-type")
+    %code    - white rectangular type-in slot, monospaced font
     %n        - white roundish type-in slot ("numerical")
     %dir    - white roundish type-in slot with drop-down for directions
     %inst    - white roundish type-in slot with drop-down for instruments
