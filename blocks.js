@@ -5386,7 +5386,7 @@ CSlotMorph.prototype.getSpec = function () {
 };
 
 CSlotMorph.prototype.mappedCode = function () {
-    var code = StageMorph.prototype.codeMappings.reify || '',
+    var code = StageMorph.prototype.codeMappings.reify || '<#1>',
         part = this.nestedBlock(),
         nestedCode = part ? part.mappedCode() : '';
     return code.replace(/<#1>/g, nestedCode);
