@@ -155,7 +155,7 @@ DialogBoxMorph, BlockInputFragmentMorph, PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2013-June-20';
+modules.blocks = '2013-June-21';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -1168,9 +1168,8 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
         part.color = new Color(255, 255, 255);
         part.isBold = true;
         part.shadowColor = this.color.darker(this.labelContrast);
-        if (!MorphicPreferences.isFlat) {
-            part.shadowOffset = this.embossing;
-        }
+        part.shadowOffset = MorphicPreferences.isFlat ?
+                new Point() : this.embossing;
         part.drawNew();
     }
     return part;
@@ -8616,7 +8615,7 @@ ArgLabelMorph.prototype.fixLayout = function () {
 
     if (this.parent) {
         this.color = this.parent.color;
-        shadowOffset = label.shadowOffset;
+        shadowOffset = label.shadowOffset || new Point();
 
         // determine the shadow color for zebra coloring:
         if (shadowOffset.x < 0) {
