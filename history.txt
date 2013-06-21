@@ -1748,3 +1748,7 @@ ______
 * Blocks, BYOB, Lists, Objects: "flat" design enhancements for blocks and watchers
 * Blocks: Multi-line input slots (TextSlotMorphs - %mlt)
 * Objects: doMapCode() primitive now uses a multi-line input slot
+
+130621
+------
+* Morphic, Blocks: "flat" design fix: Handle manually "unshadowed" StringMorphs

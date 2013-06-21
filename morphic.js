@@ -1035,7 +1035,7 @@
 /*global window, HTMLCanvasElement, getMinimumFontHeight, FileReader, Audio,
 FileList, getBlurredShadowSupport*/
 
-var morphicVersion = '2013-June-06';
+var morphicVersion = '2013-June-21';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = getBlurredShadowSupport(); // check for Chrome-bug
 
@@ -6975,6 +6975,7 @@ StringMorph.prototype.font = function () {
 
 StringMorph.prototype.drawNew = function () {
     var context, width, start, stop, i, p, c, x, y,
+        shadowOffset = this.shadowOffset || new Point(),
         txt = this.isPassword ?
                 this.password('*', this.text.length) : this.text;
 
@@ -6985,14 +6986,13 @@ StringMorph.prototype.drawNew = function () {
 
     // set my extent
     width = Math.max(
-        context.measureText(txt).width +
-            Math.abs(this.shadowOffset.x),
+        context.measureText(txt).width + Math.abs(shadowOffset.x),
         1
     );
     this.bounds.corner = this.bounds.origin.add(
         new Point(
             width,
-            fontHeight(this.fontSize) + Math.abs(this.shadowOffset.y)
+            fontHeight(this.fontSize) + Math.abs(shadowOffset.y)
         )
     );
     this.image.width = width;
@@ -7005,15 +7005,15 @@ StringMorph.prototype.drawNew = function () {
 
     // first draw the shadow, if any
     if (this.shadowColor) {
-        x = Math.max(this.shadowOffset.x, 0);
-        y = Math.max(this.shadowOffset.y, 0);
+        x = Math.max(shadowOffset.x, 0);
+        y = Math.max(shadowOffset.y, 0);
         context.fillStyle = this.shadowColor.toString();
         context.fillText(txt, x, fontHeight(this.fontSize) + y);
     }
 
     // now draw the actual text
-    x = Math.abs(Math.min(this.shadowOffset.x, 0));
-    y = Math.abs(Math.min(this.shadowOffset.y, 0));
+    x = Math.abs(Math.min(shadowOffset.x, 0));
+    y = Math.abs(Math.min(shadowOffset.y, 0));
     context.fillStyle = this.color.toString();
 
     if (this.isShowingBlanks) {
