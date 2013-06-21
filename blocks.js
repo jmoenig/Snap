@@ -2246,6 +2246,44 @@ BlockMorph.prototype.mappedCode = function () {
     return code;
 };
 
+/* // under construction - pretty printing
+BlockMorph.prototype.mappedCode = function () {
+    var key = this.selector.substr(0, 5) === 'reify' ?
+            'reify' : this.selector,
+        code,
+        codeLines,
+        count = 1,
+        parts = [];
+    code = key === 'reportGetVar' ? this.blockSpec
+            : this.definition ? this.definition.codeMapping || ''
+                    : StageMorph.prototype.codeMappings[key] || '';
+    codeLines = code.split('\n');
+    this.inputs().forEach(function (input) {
+        parts.push(input.mappedCode());
+    });
+    parts.forEach(function (part) {
+        var partLines = part.split('\n'),
+            placeHolder = '<#' + count + '>',
+            rx = new RegExp(placeHolder, 'g');
+        codeLines.forEach(function (codeLine) {
+            var prefix = '',
+                indent;
+            if (codeLine.trimLeft().startsWith(placeHolder)) {
+                indent = codeLine.indexOf(placeHolder);
+                prefix = codeLine.slice(0, indent);
+            }
+            code = codeLine.replace(new RexExp(placeHolder), part);
+            code = code.replace(rx, part);
+        });
+        count += 1;
+    });
+    if (this.nextBlock && this.nextBlock()) { // Command
+        code += this.nextBlock().mappedCode();
+    }
+    return code;
+};
+*/
+
 BlockMorph.prototype.codeMappingHeader = function () {
     var block = this.definition ? this.definition.blockInstance()
             : SpriteMorph.prototype.blockForSelector(this.selector),
