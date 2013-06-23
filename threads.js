@@ -83,7 +83,7 @@ ArgLabelMorph, localize*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.threads = '2013-May-14';
+modules.threads = '2013-June-18';
 
 var ThreadManager;
 var Process;
@@ -2282,6 +2282,53 @@ Process.prototype.reportTimer = function () {
         }
     }
     return 0;
+};
+
+// Process code mapping
+
+/*
+    for generating textual source code using
+    blocks - not needed to run or debug Snap
+*/
+
+Process.prototype.doMapCode = function (aContext, aString) {
+    if (aContext instanceof Context) {
+        if (aContext.expression instanceof SyntaxElementMorph) {
+            return aContext.expression.mapCode(aString || '');
+        }
+    }
+};
+
+Process.prototype.doMapStringCode = function (aString) {
+    StageMorph.prototype.codeMappings.string = aString || '<#1>';
+};
+
+Process.prototype.doMapListCode = function (part, kind, aString) {
+    var key1 = '',
+        key2 = 'delim';
+
+    if (this.inputOption(kind) === 'parameters') {
+        key1 = 'parms_';
+    } else if (this.inputOption(kind) === 'variables') {
+        key1 = 'tempvars_';
+    }
+
+    if (this.inputOption(part) === 'list') {
+        key2 = 'list';
+    } else if (this.inputOption(part) === 'item') {
+        key2 = 'item';
+    }
+
+    StageMorph.prototype.codeMappings[key1 + key2] = aString || '';
+};
+
+Process.prototype.reportMappedCode = function (aContext) {
+    if (aContext instanceof Context) {
+        if (aContext.expression instanceof SyntaxElementMorph) {
+            return aContext.expression.mappedCode();
+        }
+    }
+    return '';
 };
 
 // Process music primitives

@@ -55,6 +55,7 @@
                         ReporterSlotMorph
                             RingReporterSlotMorph
                     InputSlotMorph
+                        TextSlotMorph
                     MultiArgMorph
                     TemplateSlotMorph
                 BlockMorph
@@ -87,6 +88,7 @@
         InputSlotMorph
         BooleanSlotMorph
         ArrowMorph
+        TextSlotMorph
         SymbolMorph
         ColorSlotMorph
         TemplateSlotMorph
@@ -153,7 +155,7 @@ DialogBoxMorph, BlockInputFragmentMorph, PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2013-May-16';
+modules.blocks = '2013-June-21';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -179,6 +181,7 @@ var RingReporterSlotMorph;
 var SymbolMorph;
 var CommentMorph;
 var ArgLabelMorph;
+var TextSlotMorph;
 
 WorldMorph.prototype.customMorphs = function () {
     // add examples to the world's demo menu
@@ -721,6 +724,16 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             part.minWidth = part.height() * 1.7; // "landscape"
             part.fixLayout();
             break;
+        case '%mlt':
+            part = new TextSlotMorph();
+            part.fixLayout();
+            break;
+        case '%code':
+            part = new TextSlotMorph();
+            part.contents().fontName = 'monospace';
+            part.contents().fontStyle = 'monospace';
+            part.fixLayout();
+            break;
         case '%obj':
             part = new ArgMorph('object');
             break;
@@ -1061,6 +1074,34 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             part = new ReporterSlotMorph(true);
             break;
 
+    // code mapping (experimental)
+
+        case '%codeListPart':
+            part = new InputSlotMorph(
+                null, // text
+                false, // numeric?
+                {
+                    'list' : ['list'],
+                    'item' : ['item'],
+                    'delimiter' : ['delimiter']
+                },
+                true // read-only
+            );
+            break;
+        case '%codeListKind':
+            part = new InputSlotMorph(
+                null, // text
+                false, // numeric?
+                {
+                    'collection' : ['collection'],
+                    'variables' : ['variables'],
+                    'parameters' : ['parameters']
+                },
+                true // read-only
+            );
+            break;
+
+
     // symbols:
 
         case '%turtle':
@@ -1068,7 +1109,8 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             part.size = this.fontSize * 1.2;
             part.color = new Color(255, 255, 255);
             part.shadowColor = this.color.darker(this.labelContrast);
-            part.shadowOffset = this.embossing;
+            part.shadowOffset = MorphicPreferences.isFlat ?
+                    new Point() : this.embossing;
             part.drawNew();
             break;
         case '%turtleOutline':
@@ -1077,7 +1119,8 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             part.color = new Color(255, 255, 255);
             part.isProtectedLabel = true; // doesn't participate in zebraing
             part.shadowColor = this.color.darker(this.labelContrast);
-            part.shadowOffset = this.embossing;
+            part.shadowOffset = MorphicPreferences.isFlat ?
+                    new Point() : this.embossing;
             part.drawNew();
             break;
         case '%clockwise':
@@ -1086,7 +1129,8 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             part.color = new Color(255, 255, 255);
             part.isProtectedLabel = false; // zebra colors
             part.shadowColor = this.color.darker(this.labelContrast);
-            part.shadowOffset = this.embossing;
+            part.shadowOffset = MorphicPreferences.isFlat ?
+                    new Point() : this.embossing;
             part.drawNew();
             break;
         case '%counterclockwise':
@@ -1095,7 +1139,8 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             part.color = new Color(255, 255, 255);
             part.isProtectedLabel = false; // zebra colors
             part.shadowColor = this.color.darker(this.labelContrast);
-            part.shadowOffset = this.embossing;
+            part.shadowOffset = MorphicPreferences.isFlat ?
+                    new Point() : this.embossing;
             part.drawNew();
             break;
         case '%greenflag':
@@ -1104,7 +1149,8 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             part.color = new Color(0, 200, 0);
             part.isProtectedLabel = true; // doesn't participate in zebraing
             part.shadowColor = this.color.darker(this.labelContrast);
-            part.shadowOffset = this.embossing;
+            part.shadowOffset = MorphicPreferences.isFlat ?
+                    new Point() : this.embossing;
             part.drawNew();
             break;
         case '%stop':
@@ -1113,7 +1159,8 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             part.color = new Color(200, 0, 0);
             part.isProtectedLabel = true; // doesn't participate in zebraing
             part.shadowColor = this.color.darker(this.labelContrast);
-            part.shadowOffset = this.embossing;
+            part.shadowOffset = MorphicPreferences.isFlat ?
+                    new Point() : this.embossing;
             part.drawNew();
             break;
         default:
@@ -1127,7 +1174,8 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
         part.color = new Color(255, 255, 255);
         part.isBold = true;
         part.shadowColor = this.color.darker(this.labelContrast);
-        part.shadowOffset = this.embossing;
+        part.shadowOffset = MorphicPreferences.isFlat ?
+                new Point() : this.embossing;
         part.drawNew();
     }
     return part;
@@ -1479,6 +1527,22 @@ SyntaxElementMorph.prototype.showBubble = function (value) {
     );
 };
 
+// SyntaxElementMorph code mapping
+
+/*
+    code mapping lets you use blocks to generate arbitrary text-based
+    source code that can be exported and compiled / embedded elsewhere,
+    it's not part of Snap's evaluator and not needed for Snap itself
+*/
+
+SyntaxElementMorph.prototype.mappedCode = function () {
+    var result = this.evaluate();
+    if (result instanceof BlockMorph) {
+        return result.mappedCode();
+    }
+    return result;
+};
+
 // SyntaxElementMorph layout update optimization
 
 SyntaxElementMorph.prototype.startLayout = function () {
@@ -1538,6 +1602,8 @@ SyntaxElementMorph.prototype.endLayout = function () {
     %br        - user-forced line break
     %s        - white rectangular type-in slot ("string-type")
     %txt    - white rectangular type-in slot ("text-type")
+    %mlt    - white rectangular type-in slot ("multi-line-text-type")
+    %code    - white rectangular type-in slot, monospaced font
     %n        - white roundish type-in slot ("numerical")
     %dir    - white roundish type-in slot with drop-down for directions
     %inst    - white roundish type-in slot with drop-down for instruments
@@ -1790,6 +1856,13 @@ BlockMorph.prototype.userMenu = function () {
                 'hidePrimitive'
             );
         }
+        if (StageMorph.prototype.enableCodeMapping) {
+            menu.addLine();
+            menu.addItem(
+                'code mapping...',
+                'mapToCode'
+            );
+        }
         return menu;
     }
     menu.addLine();
@@ -1867,6 +1940,12 @@ BlockMorph.prototype.userMenu = function () {
     }
     menu.addLine();
     menu.addItem("ringify", 'ringify');
+    if (StageMorph.prototype.enableCodeMapping) {
+        menu.addItem(
+            'code mapping...',
+            'mapToCode'
+        );
+    }
     return menu;
 };
 
@@ -2093,6 +2172,137 @@ BlockMorph.prototype.showHelp = function () {
     } else {
         pic.src = 'help/' + spec + '.png';
     }
+};
+
+// BlockMorph code mapping
+
+/*
+    code mapping lets you use blocks to generate arbitrary text-based
+    source code that can be exported and compiled / embedded elsewhere,
+    it's not part of Snap's evaluator and not needed for Snap itself
+*/
+
+BlockMorph.prototype.mapToCode = function () {
+    // open a dialog box letting the user map code via the GUI
+    var key = this.selector.substr(0, 5) === 'reify' ?
+            'reify' : this.selector,
+        block = this.codeMappingHeader(),
+        myself = this,
+        pic;
+    block.addShadow(new Point(3, 3));
+    pic = block.fullImageClassic();
+    new DialogBoxMorph(
+        this,
+        function (code) {
+            if (key === 'evaluateCustomBlock') {
+                myself.definition.codeMapping = code;
+            } else {
+                StageMorph.prototype.codeMappings[key] = code;
+            }
+        },
+        this
+    ).prompt(
+        'Code mapping',
+        key === 'evaluateCustomBlock' ? this.definition.codeMapping || ''
+                 : StageMorph.prototype.codeMappings[key] || '',
+        this.world(),
+        pic
+    );
+};
+
+BlockMorph.prototype.mapCode = function (aString, key) {
+    // primitive for programatically mapping code
+    var sel = key || this.selector.substr(0, 5) === 'reify' ?
+            'reify' : this.selector;
+    if (aString) {
+        if (this.definition) { // custom block
+            this.definition.codeMapping = aString;
+        } else {
+            StageMorph.prototype.codeMappings[sel] = aString;
+        }
+    }
+};
+
+BlockMorph.prototype.mappedCode = function () {
+    var key = this.selector.substr(0, 5) === 'reify' ?
+            'reify' : this.selector,
+        code,
+        count = 1,
+        parts = [];
+    code = key === 'reportGetVar' ? this.blockSpec
+            : this.definition ? this.definition.codeMapping || ''
+                    : StageMorph.prototype.codeMappings[key] || '';
+    this.inputs().forEach(function (input) {
+        parts.push(input.mappedCode());
+    });
+    parts.forEach(function (part) {
+        var rx = new RegExp('<#' + count + '>', 'g');
+        code = code.replace(rx, part);
+        count += 1;
+    });
+    if (this.nextBlock && this.nextBlock()) { // Command
+        code += this.nextBlock().mappedCode();
+    }
+    return code;
+};
+
+/* // under construction - pretty printing
+BlockMorph.prototype.mappedCode = function () {
+    var key = this.selector.substr(0, 5) === 'reify' ?
+            'reify' : this.selector,
+        code,
+        codeLines,
+        count = 1,
+        parts = [];
+    code = key === 'reportGetVar' ? this.blockSpec
+            : this.definition ? this.definition.codeMapping || ''
+                    : StageMorph.prototype.codeMappings[key] || '';
+    codeLines = code.split('\n');
+    this.inputs().forEach(function (input) {
+        parts.push(input.mappedCode());
+    });
+    parts.forEach(function (part) {
+        var partLines = part.split('\n'),
+            placeHolder = '<#' + count + '>',
+            rx = new RegExp(placeHolder, 'g');
+        codeLines.forEach(function (codeLine) {
+            var prefix = '',
+                indent;
+            if (codeLine.trimLeft().startsWith(placeHolder)) {
+                indent = codeLine.indexOf(placeHolder);
+                prefix = codeLine.slice(0, indent);
+            }
+            code = codeLine.replace(new RexExp(placeHolder), part);
+            code = code.replace(rx, part);
+        });
+        count += 1;
+    });
+    if (this.nextBlock && this.nextBlock()) { // Command
+        code += this.nextBlock().mappedCode();
+    }
+    return code;
+};
+*/
+
+BlockMorph.prototype.codeMappingHeader = function () {
+    var block = this.definition ? this.definition.blockInstance()
+            : SpriteMorph.prototype.blockForSelector(this.selector),
+        hat = new HatBlockMorph(),
+        count = 1;
+
+    block.inputs().forEach(function (input) {
+        var part = new TemplateSlotMorph('<#' + count + '>');
+        block.silentReplaceInput(input, part);
+        count += 1;
+    });
+    block.isPrototype = true;
+    hat.setCategory("control");
+    hat.setSpec('%s');
+    hat.silentReplaceInput(hat.inputs()[0], block);
+    if (this.category === 'control') {
+        hat.alternateBlockColor();
+    }
+    return hat;
 };
 
 // BlockMorph drawing
@@ -2352,14 +2562,14 @@ BlockMorph.prototype.fixLabelColor = function () {
             this.setLabelColor(
                 new Color(255, 255, 255),
                 clr.darker(this.labelContrast),
-                new Point(-1, -1)
+                MorphicPreferences.isFlat ? null : new Point(-1, -1)
             );
         } else {
             this.setLabelColor(
                 new Color(0, 0, 0),
                 clr.lighter(this.zebraContrast)
                     .lighter(this.labelContrast * 2),
-                new Point(1, 1)
+                MorphicPreferences.isFlat ? null : new Point(1, 1)
             );
         }
     }
@@ -2837,12 +3047,21 @@ CommandBlockMorph.prototype.drawNew = function () {
     this.drawBottom(context);
 
     // add 3D-Effect:
-    this.drawTopDentEdge(context, 0, 0);
-    this.drawBottomDentEdge(context, 0, this.height() - this.corner);
-    this.drawLeftEdge(context);
-    this.drawRightEdge(context);
-    this.drawTopLeftEdge(context);
-    this.drawBottomRightEdge(context);
+    if (!MorphicPreferences.isFlat) {
+        this.drawTopDentEdge(context, 0, 0);
+        this.drawBottomDentEdge(context, 0, this.height() - this.corner);
+        this.drawLeftEdge(context);
+        this.drawRightEdge(context);
+        this.drawTopLeftEdge(context);
+        this.drawBottomRightEdge(context);
+    } else {
+        nop();
+        /*
+        this.drawFlatBottomDentEdge(
+            context, 0, this.height() - this.corner
+        );
+        */
+    }
 
     // erase CommandSlots
     this.eraseHoles(context);
@@ -3073,6 +3292,16 @@ CommandBlockMorph.prototype.drawBottomDentEdge = function (context, x, y) {
     );
     context.lineTo(this.width() - this.corner, y - shift);
     context.stroke();
+};
+
+CommandBlockMorph.prototype.drawFlatBottomDentEdge = function (context) {
+    if (!this.isStop()) {
+        context.fillStyle = this.color.darker(this.contrast / 2).toString();
+        context.beginPath();
+        this.drawDent(context, 0, this.height() - this.corner);
+        context.closePath();
+        context.fill();
+    }
 };
 
 CommandBlockMorph.prototype.drawLeftEdge = function (context) {
@@ -3573,6 +3802,7 @@ ReporterBlockMorph.prototype.drawRounded = function (context) {
     context.closePath();
     context.fill();
 
+    if (MorphicPreferences.isFlat) {return; }
 
     // add 3D-Effect:
     context.lineWidth = this.edge;
@@ -3747,6 +3977,8 @@ ReporterBlockMorph.prototype.drawDiamond = function (context) {
 
     context.closePath();
     context.fill();
+
+    if (MorphicPreferences.isFlat) {return; }
 
     // add 3D-Effect:
     context.lineWidth = this.edge;
@@ -4729,6 +4961,8 @@ CommandSlotMorph.prototype.drawNew = function () {
     context.fillStyle = this.rfColor.toString();
     this.drawFlat(context);
 
+    if (MorphicPreferences.isFlat) {return; }
+
     // add 3D-Effect:
     this.drawEdges(context);
 };
@@ -5054,6 +5288,8 @@ RingCommandSlotMorph.prototype.drawNew = function () {
     // draw the 'flat' shape:
     this.drawFlat(context);
 
+    if (MorphicPreferences.isFlat) {return; }
+
     // add 3D-Effect:
     this.drawEdges(context);
 };
@@ -5187,6 +5423,13 @@ CSlotMorph.prototype.getSpec = function () {
     return '%c';
 };
 
+CSlotMorph.prototype.mappedCode = function () {
+    var code = StageMorph.prototype.codeMappings.reify || '<#1>',
+        part = this.nestedBlock(),
+        nestedCode = part ? part.mappedCode() : '';
+    return code.replace(/<#1>/g, nestedCode);
+};
+
 // CSlotMorph layout:
 
 CSlotMorph.prototype.fixLayout = function () {
@@ -5227,6 +5470,8 @@ CSlotMorph.prototype.drawNew = function () {
 
     // draw the 'flat' shape:
     this.drawFlat(context);
+
+    if (MorphicPreferences.isFlat) {return; }
 
     // add 3D-Effect:
     this.drawTopRightEdge(context);
@@ -6031,7 +6276,9 @@ InputSlotMorph.prototype.fixLayout = function () {
                 + arrow.width()
                 + this.edge * 2
                 + this.typeInPadding * 2,
-            contents.rawHeight() + arrow.width(),
+            contents.rawHeight ? // single vs. multi-line contents
+                        contents.rawHeight() + arrow.width()
+                                : contents.height() / 1.2 + arrow.width(),
             this.minWidth // for text-type slots
         ));
     }
@@ -6113,6 +6360,60 @@ InputSlotMorph.prototype.reactToSliderEdit = function () {
     }
 };
 
+// InputSlotMorph menu:
+
+InputSlotMorph.prototype.userMenu = function () {
+    var menu = new MenuMorph(this);
+    if (!StageMorph.prototype.enableCodeMapping || this.isNumeric) {
+        return this.parent.userMenu();
+    }
+    menu.addItem(
+        'code string mapping...',
+        'mapToCode'
+    );
+    return menu;
+};
+
+// InputSlotMorph code mapping
+
+/*
+    code mapping lets you use blocks to generate arbitrary text-based
+    source code that can be exported and compiled / embedded elsewhere,
+    it's not part of Snap's evaluator and not needed for Snap itself
+*/
+
+InputSlotMorph.prototype.mapToCode = function () {
+    // private - open a dialog box letting the user map code via the GUI
+    new DialogBoxMorph(
+        this,
+        function (code) {
+            StageMorph.prototype.codeMappings.string = code;
+        },
+        this
+    ).prompt(
+        'Code mapping - String <#1>',
+        StageMorph.prototype.codeMappings.string || '',
+        this.world()
+    );
+};
+
+InputSlotMorph.prototype.mappedCode = function () {
+    var code = StageMorph.prototype.codeMappings.string || '<#1>',
+        block = this.parentThatIsA(BlockMorph),
+        val = this.evaluate();
+
+    if (this.isNumeric) {return val; }
+    if (!isNaN(parseFloat(val))) {return val; }
+    if (!isString(val)) {return val; }
+    if (block && contains(
+            ['doSetVar', 'doChangeVar', 'doShowVar', 'doHideVar'],
+            block.selector
+        )) {
+        return val;
+    }
+    return code.replace(/<#1>/g, val);
+};
+
 // InputSlotMorph evaluating:
 
 InputSlotMorph.prototype.evaluate = function () {
@@ -6171,7 +6472,9 @@ InputSlotMorph.prototype.drawNew = function () {
             this.width() - this.edge * 2,
             this.height() - this.edge * 2
         );
-        this.drawRectBorder(context);
+        if (!MorphicPreferences.isFlat) {
+            this.drawRectBorder(context);
+        }
     } else {
         r = (this.height() - (this.edge * 2)) / 2;
         context.fillStyle = this.color.toString();
@@ -6194,7 +6497,9 @@ InputSlotMorph.prototype.drawNew = function () {
         );
         context.closePath();
         context.fill();
-        this.drawRoundBorder(context);
+        if (!MorphicPreferences.isFlat) {
+            this.drawRoundBorder(context);
+        }
     }
 };
 
@@ -6564,6 +6869,8 @@ BooleanSlotMorph.prototype.drawDiamond = function (context) {
     context.closePath();
     context.fill();
 
+    if (MorphicPreferences.isFlat) {return; }
+
     // add 3D-Effect:
     context.lineWidth = this.edge;
     context.lineJoin = 'round';
@@ -6714,6 +7021,84 @@ ArrowMorph.prototype.drawNew = function () {
     }
     context.closePath();
     context.fill();
+};
+
+// TextSlotMorph //////////////////////////////////////////////////////
+
+/*
+    I am a multi-line input slot, primarily used in Snap's code-mapping
+    blocks.
+*/
+
+// TextSlotMorph inherits from InputSlotMorph:
+
+TextSlotMorph.prototype = new InputSlotMorph();
+TextSlotMorph.prototype.constructor = TextSlotMorph;
+TextSlotMorph.uber = InputSlotMorph.prototype;
+
+// TextSlotMorph instance creation:
+
+function TextSlotMorph(text, isNumeric, choiceDict, isReadOnly) {
+    this.init(text, isNumeric, choiceDict, isReadOnly);
+}
+
+TextSlotMorph.prototype.init = function (
+    text,
+    isNumeric,
+    choiceDict,
+    isReadOnly
+) {
+    var contents = new TextMorph(''),
+        arrow = new ArrowMorph(
+            'down',
+            0,
+            Math.max(Math.floor(this.fontSize / 6), 1)
+        );
+
+    contents.fontSize = this.fontSize;
+    contents.drawNew();
+
+    this.isUnevaluated = false;
+    this.choices = choiceDict || null; // object, function or selector
+    this.oldContentsExtent = contents.extent();
+    this.isNumeric = isNumeric || false;
+    this.isReadOnly = isReadOnly || false;
+    this.minWidth = 0; // can be chaged for text-type inputs ("landscape")
+    this.constant = null;
+
+    InputSlotMorph.uber.init.call(this);
+    this.color = new Color(255, 255, 255);
+    this.add(contents);
+    this.add(arrow);
+    contents.isEditable = true;
+    contents.isDraggable = false;
+    contents.enableSelecting();
+    this.setContents(text);
+
+};
+
+// TextSlotMorph accessing:
+
+TextSlotMorph.prototype.getSpec = function () {
+    if (this.isNumeric) {
+        return '%mln';
+    }
+    return '%mlt'; // default
+};
+
+TextSlotMorph.prototype.contents = function () {
+    return detect(
+        this.children,
+        function (child) {
+            return (child instanceof TextMorph);
+        }
+    );
+};
+
+// TextSlotMorph events:
+
+TextSlotMorph.prototype.layoutChanged = function () {
+    this.fixLayout();
 };
 
 // SymbolMorph //////////////////////////////////////////////////////////
@@ -7761,7 +8146,9 @@ ColorSlotMorph.prototype.drawNew = function () {
         this.width() - this.edge * 2,
         this.height() - this.edge * 2
     );
-    this.drawRectBorder(context);
+    if (!MorphicPreferences.isFlat) {
+        this.drawRectBorder(context);
+    }
 };
 
 ColorSlotMorph.prototype.drawRectBorder =
@@ -8089,6 +8476,109 @@ MultiArgMorph.prototype.mouseClickLeft = function (pos) {
     this.endLayout();
 };
 
+// MultiArgMorph menu:
+
+MultiArgMorph.prototype.userMenu = function () {
+    var menu = new MenuMorph(this),
+        block = this.parentThatIsA(BlockMorph),
+        key = '',
+        myself = this;
+    if (!StageMorph.prototype.enableCodeMapping) {
+        return this.parent.userMenu();
+    }
+    if (block) {
+        if (block instanceof RingMorph) {
+            key = 'parms_';
+        } else if (block.selector === 'doDeclareVariables') {
+            key = 'tempvars_';
+        }
+    }
+    menu.addItem(
+        'code list mapping...',
+        function () {myself.mapCodeList(key); }
+    );
+    menu.addItem(
+        'code item mapping...',
+        function () {myself.mapCodeItem(key); }
+    );
+    menu.addItem(
+        'code delimiter mapping...',
+        function () {myself.mapCodeDelimiter(key); }
+    );
+    return menu;
+};
+
+// MultiArgMorph code mapping
+
+/*
+    code mapping lets you use blocks to generate arbitrary text-based
+    source code that can be exported and compiled / embedded elsewhere,
+    it's not part of Snap's evaluator and not needed for Snap itself
+*/
+
+MultiArgMorph.prototype.mapCodeDelimiter = function (key) {
+    this.mapToCode(key + 'delim', 'list item delimiter');
+};
+
+MultiArgMorph.prototype.mapCodeList = function (key) {
+    this.mapToCode(key + 'list', 'list contents <#1>');
+};
+
+MultiArgMorph.prototype.mapCodeItem = function (key) {
+    this.mapToCode(key + 'item', 'list item <#1>');
+};
+
+MultiArgMorph.prototype.mapToCode = function (key, label) {
+    // private - open a dialog box letting the user map code via the GUI
+    new DialogBoxMorph(
+        this,
+        function (code) {
+            StageMorph.prototype.codeMappings[key] = code;
+        },
+        this
+    ).prompt(
+        'Code mapping - ' + label,
+        StageMorph.prototype.codeMappings[key] || '',
+        this.world()
+    );
+};
+
+MultiArgMorph.prototype.mappedCode = function () {
+    var block = this.parentThatIsA(BlockMorph),
+        key = '',
+        code,
+        items = '',
+        itemCode,
+        delim,
+        count = 0,
+        parts = [];
+
+    if (block) {
+        if (block instanceof RingMorph) {
+            key = 'parms_';
+        } else if (block.selector === 'doDeclareVariables') {
+            key = 'tempvars_';
+        }
+    }
+
+    code = StageMorph.prototype.codeMappings[key + 'list'] || '<#1>';
+    itemCode = StageMorph.prototype.codeMappings[key + 'item'] || '<#1>';
+    delim = StageMorph.prototype.codeMappings[key + 'delim'] || ' ';
+
+    this.inputs().forEach(function (input) {
+        parts.push(itemCode.replace(/<#1>/g, input.mappedCode()));
+    });
+    parts.forEach(function (part) {
+        if (count) {
+            items += delim;
+        }
+        items += part;
+        count += 1;
+    });
+    code = code.replace(/<#1>/g, items);
+    return code;
+};
+
 // MultiArgMorph arity evaluating:
 
 MultiArgMorph.prototype.evaluate = function () {
@@ -8170,7 +8660,7 @@ ArgLabelMorph.prototype.fixLayout = function () {
 
     if (this.parent) {
         this.color = this.parent.color;
-        shadowOffset = label.shadowOffset;
+        shadowOffset = label.shadowOffset || new Point();
 
         // determine the shadow color for zebra coloring:
         if (shadowOffset.x < 0) {
@@ -8358,6 +8848,7 @@ FunctionSlotMorph.prototype.drawRounded = function (context) {
     context.closePath();
     context.fill();
 
+    if (MorphicPreferences.isFlat) {return; }
 
     // add 3D-Effect:
     context.lineWidth = this.edge;
@@ -8520,6 +9011,8 @@ FunctionSlotMorph.prototype.drawDiamond = function (context) {
 
     context.closePath();
     context.fill();
+
+    if (MorphicPreferences.isFlat) {return; }
 
     // add 3D-Effect:
     context.lineWidth = this.edge;
@@ -8824,6 +9317,8 @@ RingReporterSlotMorph.prototype.drawRounded = function (context) {
     context.closePath();
     context.fill();
 
+    if (MorphicPreferences.isFlat) {return; }
+
     // add 3D-Effect:
     context.lineWidth = this.edge;
     context.lineJoin = 'round';
@@ -8994,6 +9489,8 @@ RingReporterSlotMorph.prototype.drawDiamond = function (context) {
 
     context.closePath();
     context.fill();
+
+    if (MorphicPreferences.isFlat) {return; }
 
     // add 3D-Effect:
     context.lineWidth = this.edge;

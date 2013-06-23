@@ -123,7 +123,7 @@ PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.objects = '2013-May-16';
+modules.objects = '2013-June-21';
 
 var SpriteMorph;
 var StageMorph;
@@ -700,12 +700,12 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: 'ask %s and wait',
             defaults: [localize('what\'s your name?')]
         },
-        reportLastAnswer: {
+        reportLastAnswer: { // retained for legacy compatibility
             type: 'reporter',
             category: 'sensing',
             spec: 'answer'
         },
-        getLastAnswer: { // variant for watcher
+        getLastAnswer: {
             type: 'reporter',
             category: 'sensing',
             spec: 'answer'
@@ -740,12 +740,12 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'sensing',
             spec: 'reset timer'
         },
-        reportTimer: {
+        reportTimer: { // retained for legacy compatibility
             type: 'reporter',
             category: 'sensing',
             spec: 'timer'
         },
-        getTimer: { // variant for watcher
+        getTimer: {
             type: 'reporter',
             category: 'sensing',
             spec: 'timer'
@@ -1016,6 +1016,29 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'lists',
             spec: 'replace item %idx of %l with %s',
             defaults: [1, null, localize('thing')]
+        },
+
+        // Code mapping - experimental
+        doMapCode: { // experimental
+            type: 'command',
+            category: 'other',
+            spec: 'map %cmdRing to code %code'
+        },
+        doMapStringCode: { // experimental
+            type: 'command',
+            category: 'other',
+            spec: 'map String to code %code',
+            defaults: ['<#1>']
+        },
+        doMapListCode: { // experimental
+            type: 'command',
+            category: 'other',
+            spec: 'map %codeListPart of %codeListKind to code %code'
+        },
+        reportMappedCode: { // experimental
+            type: 'reporter',
+            category: 'other',
+            spec: 'code of %cmdRing'
         }
     };
 };
@@ -1073,8 +1096,8 @@ SpriteMorph.prototype.blockAlternatives = {
     doStopAll: ['doStopBlock', 'doStop'],
 
     // sensing:
-    reportLastAnswer: ['reportTimer'],
-    reportTimer: ['reportLastAnswer'],
+    getLastAnswer: ['getTimer'],
+    getTimer: ['getLastAnswer'],
     reportMouseX: ['reportMouseY'],
     reportMouseY: ['reportMouseX'],
 
@@ -1592,7 +1615,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push('-');
         blocks.push(block('doAsk'));
         blocks.push(watcherToggle('getLastAnswer'));
-        blocks.push(block('reportLastAnswer'));
+        blocks.push(block('getLastAnswer'));
         blocks.push('-');
         blocks.push(block('reportMouseX'));
         blocks.push(block('reportMouseY'));
@@ -1604,7 +1627,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push('-');
         blocks.push(block('doResetTimer'));
         blocks.push(watcherToggle('getTimer'));
-        blocks.push(block('reportTimer'));
+        blocks.push(block('getTimer'));
         blocks.push('-');
         blocks.push(block('reportAttributeOf'));
         blocks.push('-');
@@ -1770,6 +1793,15 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('doReplaceInList'));
 
         blocks.push('=');
+
+        if (StageMorph.prototype.enableCodeMapping) {
+            blocks.push(block('doMapCode'));
+            blocks.push(block('doMapStringCode'));
+            blocks.push(block('doMapListCode'));
+            blocks.push('-');
+            blocks.push(block('reportMappedCode'));
+            blocks.push('=');
+        }
 
         button = new PushButtonMorph(
             null,
@@ -3189,6 +3221,8 @@ StageMorph.prototype.paletteTextColor
     = SpriteMorph.prototype.paletteTextColor;
 
 StageMorph.prototype.hiddenPrimitives = {};
+StageMorph.prototype.codeMappings = {};
+StageMorph.prototype.enableCodeMapping = false;
 
 // StageMorph instance creation
 
@@ -3838,7 +3872,7 @@ StageMorph.prototype.blockTemplates = function (category) {
 
         blocks.push(block('doAsk'));
         blocks.push(watcherToggle('getLastAnswer'));
-        blocks.push(block('reportLastAnswer'));
+        blocks.push(block('getLastAnswer'));
         blocks.push('-');
         blocks.push(block('reportMouseX'));
         blocks.push(block('reportMouseY'));
@@ -3848,7 +3882,7 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push('-');
         blocks.push(block('doResetTimer'));
         blocks.push(watcherToggle('getTimer'));
-        blocks.push(block('reportTimer'));
+        blocks.push(block('getTimer'));
         blocks.push('-');
         blocks.push(block('reportAttributeOf'));
         blocks.push('-');
@@ -4010,6 +4044,15 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('doReplaceInList'));
 
         blocks.push('=');
+
+        if (StageMorph.prototype.enableCodeMapping) {
+            blocks.push(block('doMapCode'));
+            blocks.push(block('doMapStringCode'));
+            blocks.push(block('doMapListCode'));
+            blocks.push('-');
+            blocks.push(block('reportMappedCode'));
+            blocks.push('=');
+        }
 
         button = new PushButtonMorph(
             null,
@@ -5242,7 +5285,7 @@ CellMorph.prototype.drawNew = function () {
     );
     context.closePath();
     context.fill();
-    if (this.border > 0) {
+    if (this.border > 0 && !MorphicPreferences.isFlat) {
         context.lineWidth = this.border;
         context.strokeStyle = this.borderColor.toString();
         context.beginPath();
@@ -5331,7 +5374,7 @@ CellMorph.prototype.layoutChanged = function () {
     );
     context.closePath();
     context.fill();
-    if (this.border > 0) {
+    if (this.border > 0 && !MorphicPreferences.isFlat) {
         context.lineWidth = this.border;
         context.strokeStyle = this.borderColor.toString();
         context.beginPath();
@@ -5539,7 +5582,7 @@ WatcherMorph.prototype.fixLayout = function () {
             true,
             false,
             false,
-            new Point(1, 1),
+            MorphicPreferences.isFlat ? new Point() : new Point(1, 1),
             new Color(255, 255, 255)
         );
         this.add(this.labelMorph);
@@ -5811,9 +5854,9 @@ WatcherMorph.prototype.drawNew = function () {
         gradient;
     this.image = newCanvas(this.extent());
     context = this.image.getContext('2d');
-    if ((this.edge === 0) && (this.border === 0)) {
+    if (MorphicPreferences.isFlat || (this.edge === 0 && this.border === 0)) {
         BoxMorph.uber.drawNew.call(this);
-        return null;
+        return;
     }
     gradient = context.createLinearGradient(0, 0, 0, this.height());
     gradient.addColorStop(0, this.color.lighter().toString());
