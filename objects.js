@@ -123,7 +123,7 @@ PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.objects = '2013-June-21';
+modules.objects = '2013-June-24';
 
 var SpriteMorph;
 var StageMorph;
@@ -5200,7 +5200,7 @@ CellMorph.prototype.drawNew = function () {
                 null,
                 true,
                 false,
-                'center'
+                'left' // was formerly 'center', reverted b/c of code-mapping
             );
             if (this.isEditable) {
                 this.contentsMorph.isEditable = true;

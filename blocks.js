@@ -155,7 +155,7 @@ DialogBoxMorph, BlockInputFragmentMorph, PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2013-June-21';
+modules.blocks = '2013-June-24';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -2227,30 +2227,6 @@ BlockMorph.prototype.mappedCode = function () {
     var key = this.selector.substr(0, 5) === 'reify' ?
             'reify' : this.selector,
         code,
-        count = 1,
-        parts = [];
-    code = key === 'reportGetVar' ? this.blockSpec
-            : this.definition ? this.definition.codeMapping || ''
-                    : StageMorph.prototype.codeMappings[key] || '';
-    this.inputs().forEach(function (input) {
-        parts.push(input.mappedCode());
-    });
-    parts.forEach(function (part) {
-        var rx = new RegExp('<#' + count + '>', 'g');
-        code = code.replace(rx, part);
-        count += 1;
-    });
-    if (this.nextBlock && this.nextBlock()) { // Command
-        code += this.nextBlock().mappedCode();
-    }
-    return code;
-};
-
-/* // under construction - pretty printing
-BlockMorph.prototype.mappedCode = function () {
-    var key = this.selector.substr(0, 5) === 'reify' ?
-            'reify' : this.selector,
-        code,
         codeLines,
         count = 1,
         parts = [];
@@ -2259,30 +2235,33 @@ BlockMorph.prototype.mappedCode = function () {
                     : StageMorph.prototype.codeMappings[key] || '';
     codeLines = code.split('\n');
     this.inputs().forEach(function (input) {
-        parts.push(input.mappedCode());
+        parts.push(input.mappedCode().toString());
     });
     parts.forEach(function (part) {
         var partLines = part.split('\n'),
             placeHolder = '<#' + count + '>',
             rx = new RegExp(placeHolder, 'g');
-        codeLines.forEach(function (codeLine) {
+        codeLines.forEach(function (codeLine, idx) {
             var prefix = '',
                 indent;
-            if (codeLine.trimLeft().startsWith(placeHolder)) {
+            if (codeLine.trimLeft().indexOf(placeHolder) === 0) {
                 indent = codeLine.indexOf(placeHolder);
                 prefix = codeLine.slice(0, indent);
             }
-            code = codeLine.replace(new RexExp(placeHolder), part);
-            code = code.replace(rx, part);
+            codeLines[idx] = codeLine.replace(
+                new RegExp(placeHolder),
+                partLines.join('\n' + prefix)
+            );
+            codeLines[idx] = codeLines[idx].replace(rx, partLines.join('\n'));
         });
         count += 1;
     });
+    code = codeLines.join('\n');
     if (this.nextBlock && this.nextBlock()) { // Command
-        code += this.nextBlock().mappedCode();
+        code += ('\n' + this.nextBlock().mappedCode());
     }
     return code;
 };
-*/
 
 BlockMorph.prototype.codeMappingHeader = function () {
     var block = this.definition ? this.definition.blockInstance()
@@ -5425,10 +5404,29 @@ CSlotMorph.prototype.getSpec = function () {
 
 CSlotMorph.prototype.mappedCode = function () {
     var code = StageMorph.prototype.codeMappings.reify || '<#1>',
-        part = this.nestedBlock(),
-        nestedCode = part ? part.mappedCode() : '';
-    return code.replace(/<#1>/g, nestedCode);
+        codeLines = code.split('\n'),
+        nested = this.nestedBlock(),
+        part = nested ? nested.mappedCode() : '',
+        partLines = (part.toString()).split('\n'),
+        rx = new RegExp('<#1>', 'g');
+
+    codeLines.forEach(function (codeLine, idx) {
+        var prefix = '',
+            indent;
+        if (codeLine.trimLeft().indexOf('<#1>') === 0) {
+            indent = codeLine.indexOf('<#1>');
+            prefix = codeLine.slice(0, indent);
+        }
+        codeLines[idx] = codeLine.replace(
+            new RegExp('<#1>'),
+            partLines.join('\n' + prefix)
+        );
+        codeLines[idx] = codeLines[idx].replace(rx, partLines.join('\n'));
+    });
+
+    return codeLines.join('\n');
 };
+
 
 // CSlotMorph layout:
 
