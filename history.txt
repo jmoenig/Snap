@@ -1753,3 +1753,7 @@ ______
 ------
 * Morphic, Blocks: "flat" design fix: Handle manually "unshadowed" StringMorphs
 * Objects, Blocks: %code input slot - multi-line, monospaced, type-in slot for code mappings
+
+130624
+------
+* Objects, Blocks: pretty printing for mapped code, now supporting Python mappings
