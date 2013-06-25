@@ -155,7 +155,7 @@ DialogBoxMorph, BlockInputFragmentMorph, PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2013-June-24';
+modules.blocks = '2013-June-25';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -2201,7 +2201,7 @@ BlockMorph.prototype.mapToCode = function () {
             }
         },
         this
-    ).prompt(
+    ).promptCode(
         'Code mapping',
         key === 'evaluateCustomBlock' ? this.definition.codeMapping || ''
                  : StageMorph.prototype.codeMappings[key] || '',
@@ -6388,7 +6388,7 @@ InputSlotMorph.prototype.mapToCode = function () {
             StageMorph.prototype.codeMappings.string = code;
         },
         this
-    ).prompt(
+    ).promptCode(
         'Code mapping - String <#1>',
         StageMorph.prototype.codeMappings.string || '',
         this.world()
@@ -8534,7 +8534,7 @@ MultiArgMorph.prototype.mapToCode = function (key, label) {
             StageMorph.prototype.codeMappings[key] = code;
         },
         this
-    ).prompt(
+    ).promptCode(
         'Code mapping - ' + label,
         StageMorph.prototype.codeMappings[key] || '',
         this.world()
