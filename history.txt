@@ -1757,3 +1757,7 @@ ______
 130624
 ------
 * Objects, Blocks: pretty printing for mapped code, now supporting Python mappings
+
+130625
+------
+* Widgets, Blocks: code mapping dialog input is now multi-line monospaced
