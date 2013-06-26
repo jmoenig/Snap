@@ -1761,3 +1761,7 @@ ______
 130625
 ------
 * Widgets, Blocks: code mapping dialog input is now multi-line monospaced
+
+130626
+------
+* GUI: fixed #100 saving costumes to the cloud
