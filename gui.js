@@ -68,7 +68,7 @@ sb, CommentMorph, CommandBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2013-June-20';
+modules.gui = '2013-June-26';
 
 // Declarations
 
@@ -351,6 +351,7 @@ IDE_Morph.prototype.openIn = function (world) {
                             ) {
                                 myself.rawOpenProjectString(projectData);
                             }
+                            myself.hasChangedMedia = true;
                         },
                         function () {
                             myself.shield.destroy();
@@ -5449,7 +5450,7 @@ WardrobeMorph.prototype.paintNew = function() {
     var cos = new Costume(newCanvas(), "Untitled"),
         ide = this.parentThatIsA(IDE_Morph),
         myself = this;
-    cos.edit(this.world(), null, true, null, function() {
+    cos.edit(this.world(), ide, true, null, function() {
         myself.sprite.addCostume(cos);
         myself.updateList();
         if (ide) {
