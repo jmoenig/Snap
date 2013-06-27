@@ -1765,3 +1765,7 @@ ______
 130626
 ------
 * GUI: fixed #100 saving costumes to the cloud
+
+130627
+------
+* Objects: fixed speech bubble scaling when sprite is not onstage (reported in the forums)

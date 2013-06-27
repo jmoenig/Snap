@@ -123,7 +123,7 @@ PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.objects = '2013-June-24';
+modules.objects = '2013-June-27';
 
 var SpriteMorph;
 var StageMorph;
@@ -2507,6 +2507,7 @@ SpriteMorph.prototype.talkBubble = function () {
 
 SpriteMorph.prototype.positionTalkBubble = function () {
     var stage = this.parentThatIsA(StageMorph),
+        stageScale = stage ? stage.scale : 1,
         bubble = this.talkBubble(),
         middle = this.center().y;
     if (!bubble) {return null; }
@@ -2519,7 +2520,7 @@ SpriteMorph.prototype.positionTalkBubble = function () {
     bubble.setLeft(this.right());
     bubble.setBottom(this.top());
     while (!this.isTouching(bubble) && bubble.bottom() < middle) {
-        bubble.silentMoveBy(new Point(-1, 1).scaleBy(stage.scale));
+        bubble.silentMoveBy(new Point(-1, 1).scaleBy(stageScale));
     }
     if (!stage) {return null; }
     if (bubble.right() > stage.right()) {
