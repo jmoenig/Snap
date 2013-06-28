@@ -68,7 +68,7 @@ sb, CommentMorph, CommandBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2013-June-26';
+modules.gui = '2013-June-28';
 
 // Declarations
 
@@ -1477,7 +1477,10 @@ IDE_Morph.prototype.reactToWorldResize = function (rect) {
 };
 
 IDE_Morph.prototype.droppedImage = function (aCanvas, name) {
-    var costume = new Costume(aCanvas, name.split('.')[0]); // up to period
+    var costume = new Costume(
+        aCanvas,
+        name ? name.split('.')[0] : '' // up to period
+    );
     this.currentSprite.addCostume(costume);
     this.currentSprite.wearCostume(costume);
     this.spriteBar.tabBar.tabTo('costumes');

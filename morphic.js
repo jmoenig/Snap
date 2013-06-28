@@ -1035,7 +1035,7 @@
 /*global window, HTMLCanvasElement, getMinimumFontHeight, FileReader, Audio,
 FileList, getBlurredShadowSupport*/
 
-var morphicVersion = '2013-June-21';
+var morphicVersion = '2013-June-28';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = getBlurredShadowSupport(); // check for Chrome-bug
 
@@ -9708,6 +9708,8 @@ HandMorph.prototype.processDrop = function (event) {
     var files = event instanceof FileList ? event
                 : event.target.files || event.dataTransfer.files,
         file,
+        url = event.dataTransfer ?
+                event.dataTransfer.getData('URL') : null,
         txt = event.dataTransfer ?
                 event.dataTransfer.getData('Text/HTML') : null,
         src,
@@ -9817,6 +9819,24 @@ HandMorph.prototype.processDrop = function (event) {
             } else { // assume it's meant to be binary
                 readBinary(file);
             }
+        }
+    } else if (url) {
+        if (
+            contains(
+                ['gif', 'png', 'jpg', 'jpeg', 'bmp'],
+                url.slice(url.lastIndexOf('.') + 1).toLowerCase()
+            )
+        ) {
+            while (!target.droppedImage) {
+                target = target.parent;
+            }
+            img = new Image();
+            img.onload = function () {
+                canvas = newCanvas(new Point(img.width, img.height));
+                canvas.getContext('2d').drawImage(img, 0, 0);
+                target.droppedImage(canvas);
+            };
+            img.src = url;
         }
     } else if (txt) {
         while (!target.droppedImage) {
