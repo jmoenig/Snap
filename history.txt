@@ -1769,3 +1769,7 @@ ______
 130627
 ------
 * Objects: fixed speech bubble scaling when sprite is not onstage (reported in the forums)
+
+130628
+------
+* Morphic, GUI: improved importing costumes by dragging in pictures from other web pages
