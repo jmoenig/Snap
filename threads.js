@@ -444,6 +444,13 @@ Process.prototype.evaluateBlock = function (block, argCount) {
         if (this[block.selector]) {
             rcvr = this;
         }
+        /*
+         * SCRIBBLE -- need to give access to process for
+         * reportExpression (script variables are accessable 
+         * here only)
+         */
+        rcvr.callingProcess = this;
+        /* END SCRIBBLE */
         if (this.isCatchingErrors) {
             try {
                 this.returnValueToParentContext(

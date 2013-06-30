@@ -10,6 +10,10 @@
  */
 SpriteMorph.prototype.scribbleHookBlockTemplates = function(blocks, block, cat)
 {
+    if (cat === 'motion')
+    {
+        blocks.splice(blocks.length - 7, 0, '-', block('gotoRandomLocation'));
+    }
     if (cat === 'operators')
     {
         blocks.push(block('reportExpression'));
@@ -115,6 +119,12 @@ SpriteMorph.prototype.addScribbleBlocks = function () {
         category: 'operators',
         spec: '\u03BB %s'
     };
+    
+    SpriteMorph.prototype.blocks.gotoRandomLocation = {
+        type: 'command',
+        category: 'motion',
+        spec: 'go to random location'
+    };
 }
 
 /*
@@ -150,6 +160,7 @@ SpriteMorph.prototype.init = function(globals)
 
 StageMorph.prototype.drawTool = false;
 StageMorph.prototype.previousPoint = null;
+
 /*
  * Override for the default implementation of StageMorph.mouseClickLeft
  * 
@@ -246,7 +257,7 @@ StageMorph.prototype.mouseMove = function(point)
  * ScribbleShape
  * 
  * Simple container for a set of points. May grow in future, but for now,
- * it's just a class
+ * it's just an array
  */
 var ScribbleShape = function()
 {
@@ -297,7 +308,19 @@ function scribble_lambda_lengthOf(s)
         throw { name: "Type Mismatch", message: "You can only use strings with lengthOf!" };
     return s.length;
 }
+
+/*
+ * SpriteMorph.lambdas
+ * 
+ * Caches compiled functions for speed
+ */
 SpriteMorph.prototype.lambdas = { }
+
+/*
+ * SpriteMorph.reportExpression
+ * 
+ * Implements lambdas
+ */
 SpriteMorph.prototype.reportExpression = function (str) {
     var found = this.lambdas[str];
     if (typeof found === "undefined" || found === null)
@@ -307,6 +330,23 @@ SpriteMorph.prototype.reportExpression = function (str) {
     return found.call(this);
 };
 
+/*
+ * SpriteMorph.gotoRandomLocation
+ * 
+ * Implements block logic that goes to a random position
+ */
+SpriteMorph.prototype.gotoRandomLocation = function (num) {
+    var stage = this.parentThatIsA(StageMorph);
+    this.gotoXY(
+    stage.image.width / stage.scale * (Math.random() - 0.5),
+    stage.image.height / stage.scale * (Math.random() - 0.5));
+};
+
+/*
+ * SpriteMorph.setShapeHue
+ * 
+ * Implements block logic that sets the hue of the shape
+ */
 SpriteMorph.prototype.setShapeHue = function (num) {
     var hsv = this.fillColor.hsv(),
         x = this.xPosition(),

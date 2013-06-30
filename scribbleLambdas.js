@@ -351,7 +351,7 @@ var scribble_lambda_lengthOf = function (s)
 
 function wrapName(n)
 {
-    return "(this.variables.getVar(\""+n+"\"))";
+    return "(getVar.call(this, \""+n+"\"))";
 }
 
 var lambdaFunctions = {
@@ -440,8 +440,14 @@ function getLambdaFunction(lambda)
 
     //Cache the eval as a function
     var func;
+    function getVar(v)
+    {
+        var ret = this.callingProcess.context.variables.getVar(v);
+        if (ret instanceof List)
+            return ret.contents;
+        return ret;
+    }
     var evalMe = "func = function () { return "+sanitary_str+"; }";
-    alert(evalMe);
     eval(evalMe);
     return func;
 }
