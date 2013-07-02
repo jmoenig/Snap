@@ -68,7 +68,7 @@ sb, CommentMorph, CommandBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2013-June-28';
+modules.gui = '2013-July-02';
 
 // Declarations
 
@@ -2314,6 +2314,51 @@ IDE_Morph.prototype.projectMenu = function () {
 
         },
         'load the official library of\npowerful blocks'
+    );
+    menu.addItem(
+        'Libraries...',
+        function () {
+            var menu = new MenuMorph(this, 'Import library');
+
+            function loadLib(name) {
+                var url = 'http://snap.berkeley.edu/snapsource/libraries/'
+                        + name
+                        + '.xml',
+                    request = new XMLHttpRequest();
+                request.open('GET', url, false);
+                request.send();
+                if (request.status === 200) {
+                    return myself.droppedText(request.responseText, name);
+                }
+                throw new Error('unable to retrieve ' + url);
+            }
+
+            menu.addItem(
+                'Iteration, composition...',
+                function () {
+                    loadLib('iteration-composition');
+                }
+            );
+            menu.addItem(
+                'List utilities...',
+                function () {
+                    loadLib('list-utilities');
+                }
+            );
+            menu.addItem(
+                'Variadic reporters...',
+                function () {
+                    loadLib('variadic-reporters');
+                }
+            );
+            menu.addItem(
+                'Words, sentences...',
+                function () {
+                    loadLib('word-sentence');
+                }
+            );
+            menu.popup(world, pos);
+        }
     );
 
     menu.popup(world, pos);

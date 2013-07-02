@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org', // optional
     'last_changed':
-        '2013-05-14', // this, too, will appear in the Translators tab
+        '2013-07-02', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -657,6 +657,10 @@ SnapTranslator.dict.de = {
         'Tools laden',
     'load the official library of\npowerful blocks':
         'das offizielle Modul mit\nm\u00e4chtigen Bl\u00f6cken laden',
+    'Libraries...':
+        'Module...',
+    'Import library':
+        'Modul laden',
 
     // cloud menu
     'Login...':
