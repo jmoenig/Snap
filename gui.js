@@ -2334,25 +2334,25 @@ IDE_Morph.prototype.projectMenu = function () {
             }
 
             menu.addItem(
-                'Iteration, composition...',
+                'Iteration, composition',
                 function () {
                     loadLib('iteration-composition');
                 }
             );
             menu.addItem(
-                'List utilities...',
+                'List utilities',
                 function () {
                     loadLib('list-utilities');
                 }
             );
             menu.addItem(
-                'Variadic reporters...',
+                'Variadic reporters',
                 function () {
                     loadLib('variadic-reporters');
                 }
             );
             menu.addItem(
-                'Words, sentences...',
+                'Words, sentences',
                 function () {
                     loadLib('word-sentence');
                 }
