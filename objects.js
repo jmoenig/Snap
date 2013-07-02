@@ -123,7 +123,7 @@ PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.objects = '2013-June-27';
+modules.objects = '2013-July-02';
 
 var SpriteMorph;
 var StageMorph;
@@ -4595,19 +4595,15 @@ Costume.prototype.bounds = function () {
 
 Costume.prototype.shrinkWrap = function () {
     // adjust my contents'  bounds to my visible bounding box
-    // add a tolerance margin for Chrome's anti-aliasing issue
     var bb = this.boundingBox(),
-        space = new Point(480, 360).subtract(bb.extent()).floorDivideBy(2),
-        margin = new Point(3, 3).min(space.max(new Point(0, 0))),
-        area = bb.expandBy(margin),
-        ext = area.extent(),
+        ext = bb.extent(),
         pic = newCanvas(ext),
         ctx = pic.getContext('2d');
 
     ctx.drawImage(
         this.contents,
-        area.origin.x,
-        area.origin.y,
+        bb.origin.x,
+        bb.origin.y,
         ext.x,
         ext.y,
         0,
@@ -4615,7 +4611,7 @@ Costume.prototype.shrinkWrap = function () {
         ext.x,
         ext.y
     );
-    this.rotationCenter = this.rotationCenter.subtract(area.origin);
+    this.rotationCenter = this.rotationCenter.subtract(bb.origin);
     this.contents = pic;
     this.version = Date.now();
 };

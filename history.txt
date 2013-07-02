@@ -1773,3 +1773,7 @@ ______
 130628
 ------
 * Morphic, GUI: improved importing costumes by dragging in pictures from other web pages
+
+130702
+------
+* Objects: took out "security margin" in Costume's shrinkWrap() method b/c Chrome no longer needs it -> fixed empty costume bug when drawing over the paint editor's bounds
