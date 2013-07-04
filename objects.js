@@ -123,7 +123,7 @@ PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.objects = '2013-July-02';
+modules.objects = '2013-July-04';
 
 var SpriteMorph;
 var StageMorph;
@@ -1019,6 +1019,11 @@ SpriteMorph.prototype.initBlocks = function () {
         },
 
         // Code mapping - experimental
+        doMapHeader: { // experimental
+            type: 'command',
+            category: 'other',
+            spec: 'map %cmdRing to header %code'
+        },
         doMapCode: { // experimental
             type: 'command',
             category: 'other',
@@ -1795,6 +1800,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push('=');
 
         if (StageMorph.prototype.enableCodeMapping) {
+            blocks.push(block('doMapHeader'));
             blocks.push(block('doMapCode'));
             blocks.push(block('doMapStringCode'));
             blocks.push(block('doMapListCode'));
@@ -3223,6 +3229,7 @@ StageMorph.prototype.paletteTextColor
 
 StageMorph.prototype.hiddenPrimitives = {};
 StageMorph.prototype.codeMappings = {};
+StageMorph.prototype.codeHeaders = {};
 StageMorph.prototype.enableCodeMapping = false;
 
 // StageMorph instance creation
@@ -4047,6 +4054,7 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push('=');
 
         if (StageMorph.prototype.enableCodeMapping) {
+            blocks.push(block('doMapHeader'));
             blocks.push(block('doMapCode'));
             blocks.push(block('doMapStringCode'));
             blocks.push(block('doMapListCode'));

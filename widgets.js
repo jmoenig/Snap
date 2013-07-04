@@ -74,7 +74,7 @@ HTMLCanvasElement, fontHeight, SymbolMorph, localize, SpeechBubbleMorph,
 ArrowMorph, MenuMorph, isString, isNil, SliderMorph, MorphicPreferences,
 ScrollFrameMorph*/
 
-modules.widgets = '2013-June-25';
+modules.widgets = '2013-July-04';
 
 var PushButtonMorph;
 var ToggleButtonMorph;
@@ -1680,15 +1680,32 @@ DialogBoxMorph.prototype.promptCode = function (
     title,
     defaultString,
     world,
-    pic
+    pic,
+    instructions
 ) {
     var frame = new ScrollFrameMorph(),
         text = new TextMorph(defaultString || ''),
+        bdy = new AlignmentMorph('column', this.padding),
         size = pic ? Math.max(pic.width, 400) : 400;
 
     this.getInput = function () {
         return text.text;
     };
+
+    function remarkText(string) {
+        return new TextMorph(
+            string,
+            10,
+            null, // style
+            false, // bold
+            null, // italic
+            null, // alignment
+            null, // width
+            null, // font name
+            MorphicPreferences.isFlat ? null : new Point(1, 1),
+            new Color(255, 255, 255) // shadowColor
+        );
+    }
 
     frame.padding = 6;
     frame.setWidth(size);
@@ -1723,8 +1740,17 @@ DialogBoxMorph.prototype.promptCode = function (
         this.key = 'promptCode' + title + defaultString;
     }
 
-    this.addBody(frame);
+    bdy.setColor(this.color);
+    bdy.add(frame);
+    if (instructions) {
+        bdy.add(remarkText(instructions));
+    }
+    bdy.fixLayout();
+
+    this.addBody(bdy);
     frame.drawNew();
+    bdy.drawNew();
+
     this.addButton('ok', 'OK');
     this.addButton('cancel', 'Cancel');
     this.fixLayout();
