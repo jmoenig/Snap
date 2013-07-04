@@ -83,7 +83,7 @@ ArgLabelMorph, localize*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.threads = '2013-June-18';
+modules.threads = '2013-July-04';
 
 var ThreadManager;
 var Process;
@@ -2290,6 +2290,14 @@ Process.prototype.reportTimer = function () {
     for generating textual source code using
     blocks - not needed to run or debug Snap
 */
+
+Process.prototype.doMapHeader = function (aContext, aString) {
+    if (aContext instanceof Context) {
+        if (aContext.expression instanceof SyntaxElementMorph) {
+            return aContext.expression.mapHeader(aString || '');
+        }
+    }
+};
 
 Process.prototype.doMapCode = function (aContext, aString) {
     if (aContext instanceof Context) {

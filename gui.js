@@ -68,7 +68,7 @@ sb, CommentMorph, CommandBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2013-July-02';
+modules.gui = '2013-July-04';
 
 // Declarations
 
@@ -1681,8 +1681,7 @@ IDE_Morph.prototype.applySavedSettings = function () {
         zoom = this.getSetting('zoom'),
         language = this.getSetting('language'),
         click = this.getSetting('click'),
-        longform = this.getSetting('longform'),
-        code = this.getSetting('code');
+        longform = this.getSetting('longform');
 
     // design
     if (design === 'flat') {
@@ -1713,11 +1712,6 @@ IDE_Morph.prototype.applySavedSettings = function () {
     // long form
     if (longform) {
         InputSlotDialogMorph.prototype.isLaunchingExpanded = true;
-    }
-
-    //  code mapping
-    if (code && !StageMorph.prototype.enableCodeMapping) {
-        StageMorph.prototype.enableCodeMapping = true;
     }
 };
 
@@ -1763,7 +1757,7 @@ IDE_Morph.prototype.addNewSprite = function () {
     this.selectSprite(sprite);
 };
 
-IDE_Morph.prototype.paintNewSprite = function() {
+IDE_Morph.prototype.paintNewSprite = function () {
     var sprite = new SpriteMorph(this.globalVariables),
         cos = new Costume(),
         myself = this;
@@ -1779,7 +1773,7 @@ IDE_Morph.prototype.paintNewSprite = function() {
         this.world(),
         this,
         true,
-        function() {myself.removeSprite(sprite); },
+        function () {myself.removeSprite(sprite); },
         function () {
             sprite.addCostume(cos);
             sprite.wearCostume(cos);
@@ -2158,26 +2152,7 @@ IDE_Morph.prototype.settingsMenu = function () {
         'check for alternative\nGUI design',
         false
     );
-    addPreference(
-        'Code mapping',
-        function () {
-            StageMorph.prototype.enableCodeMapping =
-                !StageMorph.prototype.enableCodeMapping;
-            if (StageMorph.prototype.enableCodeMapping) {
-                myself.saveSetting('code', true);
-            } else {
-                myself.removeSetting('code');
-            }
-            myself.currentSprite.blocksCache.variables = null;
-            myself.currentSprite.paletteCache.variables = null;
-            myself.refreshPalette();
-        },
-        StageMorph.prototype.enableCodeMapping,
-        'uncheck to disable\nblock to text mapping features',
-        'check for block\nto text mapping features',
-        false
-    );
-    menu.addLine(); // everything below this line is made persistent
+    menu.addLine(); // everything below this line is stored in the project
     addPreference(
         'Thread safe scripts',
         function () {stage.isThreadSafe = !stage.isThreadSafe; },
@@ -2191,6 +2166,20 @@ IDE_Morph.prototype.settingsMenu = function () {
         StageMorph.prototype.frameRate,
         'uncheck for greater speed\nat variable frame rates',
         'check for smooth, predictable\nanimations across computers'
+    );
+    addPreference(
+        'Codification support',
+        function () {
+            StageMorph.prototype.enableCodeMapping =
+                !StageMorph.prototype.enableCodeMapping;
+            myself.currentSprite.blocksCache.variables = null;
+            myself.currentSprite.paletteCache.variables = null;
+            myself.refreshPalette();
+        },
+        StageMorph.prototype.enableCodeMapping,
+        'uncheck to disable\nblock to text mapping features',
+        'check for block\nto text mapping features',
+        false
     );
     menu.popup(world, pos);
 };
@@ -2580,6 +2569,9 @@ IDE_Morph.prototype.newProject = function () {
     this.currentSprite = new SpriteMorph(this.globalVariables);
     this.sprites = new List([this.currentSprite]);
     StageMorph.prototype.hiddenPrimitives = {};
+    StageMorph.prototype.codeMappings = {};
+    StageMorph.prototype.codeHeaders = {};
+    StageMorph.prototype.enableCodeMapping = false;
     this.setProjectName('');
     this.projectNotes = '';
     this.createStage();
@@ -5115,7 +5107,7 @@ CostumeIconMorph.prototype.renameCostume = function () {
     );
 };
 
-CostumeIconMorph.prototype.duplicateCostume = function() {
+CostumeIconMorph.prototype.duplicateCostume = function () {
     var wardrobe = this.parentThatIsA(WardrobeMorph),
         ide = this.parentThatIsA(IDE_Morph),
         newcos = this.object.copy(),
@@ -5494,11 +5486,11 @@ WardrobeMorph.prototype.removeCostumeAt = function (idx) {
     this.updateList();
 };
 
-WardrobeMorph.prototype.paintNew = function() {
+WardrobeMorph.prototype.paintNew = function () {
     var cos = new Costume(newCanvas(), "Untitled"),
         ide = this.parentThatIsA(IDE_Morph),
         myself = this;
-    cos.edit(this.world(), ide, true, null, function() {
+    cos.edit(this.world(), ide, true, null, function () {
         myself.sprite.addCostume(cos);
         myself.updateList();
         if (ide) {
