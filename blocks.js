@@ -155,7 +155,7 @@ DialogBoxMorph, BlockInputFragmentMorph, PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2013-July-04';
+modules.blocks = '2013-July-05';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -9931,6 +9931,24 @@ CommentMorph.prototype.userMenu = function () {
         'open a new window\nwith a picture of this comment'
     );
     return menu;
+};
+
+// CommentMorph hiding and showing:
+
+/*
+    override the inherited behavior to recursively hide/show all
+    children, so that my instances get restored correctly when
+    switching back out of app mode.
+*/
+
+CommentMorph.prototype.hide = function () {
+    this.isVisible = false;
+    this.changed();
+};
+
+CommentMorph.prototype.show = function () {
+    this.isVisible = true;
+    this.changed();
 };
 
 // CommentMorph dragging & dropping
