@@ -1782,3 +1782,7 @@ ______
 130704
 ------
 * Codification (text code mapping and block header support)
+
+130705
+------
+* Blocks: fixed CommentMorph hiding/showing bug when switching to / from presentation mode
