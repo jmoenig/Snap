@@ -1786,3 +1786,7 @@ ______
 130705
 ------
 * Blocks: fixed CommentMorph hiding/showing bug when switching to / from presentation mode
+
+130708
+------
+* Store: fixed serialization placement-bug for sprites

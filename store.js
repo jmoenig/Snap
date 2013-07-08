@@ -61,7 +61,7 @@ SyntaxElementMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2013-July-04';
+modules.store = '2013-July-08';
 
 
 // XML_Serializer ///////////////////////////////////////////////////////
@@ -1349,11 +1349,8 @@ StageMorph.prototype.toXML = function (serializer) {
 
 SpriteMorph.prototype.toXML = function (serializer) {
     var stage = this.parentThatIsA(StageMorph),
-        position = stage ?
-                this.center().subtract(stage.center()) : this.center(),
         ide = stage ? stage.parentThatIsA(IDE_Morph) : null,
         idx = ide ? ide.sprites.asArray().indexOf(this) + 1 : 0;
-
     return serializer.format(
         '<sprite name="@" idx="@" x="@" y="@"' +
             ' heading="@"' +
@@ -1370,8 +1367,8 @@ SpriteMorph.prototype.toXML = function (serializer) {
             '</sprite>',
         this.name,
         idx,
-        position.x,
-        -position.y,
+        this.xPosition(),
+        this.yPosition(),
         this.heading,
         this.scale,
         this.rotationStyle,
