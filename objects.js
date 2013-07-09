@@ -123,7 +123,7 @@ PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.objects = '2013-July-04';
+modules.objects = '2013-July-09';
 
 var SpriteMorph;
 var StageMorph;
@@ -1019,15 +1019,10 @@ SpriteMorph.prototype.initBlocks = function () {
         },
 
         // Code mapping - experimental
-        doMapHeader: { // experimental
+        doMapCodeOrHeader: { // experimental
             type: 'command',
             category: 'other',
-            spec: 'map %cmdRing to header %code'
-        },
-        doMapCode: { // experimental
-            type: 'command',
-            category: 'other',
-            spec: 'map %cmdRing to code %code'
+            spec: 'map %cmdRing to %codeKind %code'
         },
         doMapStringCode: { // experimental
             type: 'command',
@@ -1800,8 +1795,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push('=');
 
         if (StageMorph.prototype.enableCodeMapping) {
-            blocks.push(block('doMapHeader'));
-            blocks.push(block('doMapCode'));
+            blocks.push(block('doMapCodeOrHeader'));
             blocks.push(block('doMapStringCode'));
             blocks.push(block('doMapListCode'));
             blocks.push('-');
@@ -4054,8 +4048,7 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push('=');
 
         if (StageMorph.prototype.enableCodeMapping) {
-            blocks.push(block('doMapHeader'));
-            blocks.push(block('doMapCode'));
+            blocks.push(block('doMapCodeOrHeader'));
             blocks.push(block('doMapStringCode'));
             blocks.push(block('doMapListCode'));
             blocks.push('-');
