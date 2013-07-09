@@ -83,7 +83,7 @@ ArgLabelMorph, localize*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.threads = '2013-July-04';
+modules.threads = '2013-July-09';
 
 var ThreadManager;
 var Process;
@@ -2290,6 +2290,18 @@ Process.prototype.reportTimer = function () {
     for generating textual source code using
     blocks - not needed to run or debug Snap
 */
+
+Process.prototype.doMapCodeOrHeader = function (aContext, anOption, aString) {
+    if (this.inputOption(anOption) === 'code') {
+        return this.doMapCode(aContext, aString);
+    }
+    if (this.inputOption(anOption) === 'header') {
+        return this.doMapHeader(aContext, aString);
+    }
+    throw new Error(
+        ' \'' + anOption + '\'\nis not a valid option'
+    );
+};
 
 Process.prototype.doMapHeader = function (aContext, aString) {
     if (aContext instanceof Context) {

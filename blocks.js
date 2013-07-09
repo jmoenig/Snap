@@ -155,7 +155,7 @@ DialogBoxMorph, BlockInputFragmentMorph, PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2013-July-05';
+modules.blocks = '2013-July-09';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -1024,6 +1024,18 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                 },
                 true
             );
+            break;
+        case '%codeKind':
+            part = new InputSlotMorph(
+                null,
+                false,
+                {
+                    code : ['code'],
+                    header : ['header']
+                },
+                true
+            );
+            part.setContents(['code']);
             break;
         case '%l':
             part = new ArgMorph('list');
@@ -4900,7 +4912,6 @@ ArgMorph.prototype.isEmptySlot = function () {
     return this.type !== null;
 };
 
-
 // CommandSlotMorph ////////////////////////////////////////////////////
 
 /*
@@ -7091,6 +7102,12 @@ BooleanSlotMorph.prototype.drawDiamond = function (context) {
     context.lineTo(w - r - shift, h - shift);
     context.closePath();
     context.stroke();
+};
+
+// BooleanSlotMorph implicit formal parameters:
+
+BooleanSlotMorph.prototype.isEmptySlot = function () {
+    return true;
 };
 
 // ArrowMorph //////////////////////////////////////////////////////////

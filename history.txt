@@ -1790,3 +1790,8 @@ ______
 130708
 ------
 * Store: fixed serialization placement-bug for sprites
+
+130709
+------
+* Objects, Blocks, Threads: Collapsed codification primitives (code, header) into a single block
+* Blocks: Added isEmptySlot() to BooleanArgMorph (thanks, Brian, for the bug report!)
