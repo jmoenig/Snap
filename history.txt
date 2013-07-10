@@ -1795,3 +1795,7 @@ ______
 ------
 * Objects, Blocks, Threads: Collapsed codification primitives (code, header) into a single block
 * Blocks: Added isEmptySlot() to BooleanArgMorph (thanks, Brian, for the bug report!)
+
+130710
+------
+* GUI: Reset hidden primitives and code mappings upon loading a new project
