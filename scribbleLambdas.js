@@ -365,7 +365,6 @@ function getLambdaFunction(lambda)
     var backup_sanitary_str = ""; //This is kept in case the last name was the name of a function, not a variable.
     var sanitary_str = "";
     //Replace all names with a function call to get the value of the variable with that name
-    var previous_symbol = null;
     var current_symbol = null;
     var previous_name = "";
     var current_name = "";
@@ -444,7 +443,7 @@ function getLambdaFunction(lambda)
     {
         var ret = this.callingProcess.context.variables.getVar(v);
         if (ret instanceof List)
-            return ret.contents;
+            return ret.at;
         return ret;
     }
     var evalMe = "func = function () { return "+sanitary_str+"; }";

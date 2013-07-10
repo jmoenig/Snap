@@ -18,12 +18,22 @@ SpriteMorph.prototype.scribbleHookBlockTemplates = function(blocks, block, cat)
     {
         blocks.push(block('reportExpression'));
     }
+    if (cat === 'variables')
+    {
+        blocks.splice(blocks.length - 2, 0, block('reportCopyList'), block('reportListText'));
+    }
     if (cat === 'shapes') { 
-        /* Scribble Shapes */
         blocks.push(block('clear'));
         blocks.push('-');
         blocks.push(block('startShape'));
         blocks.push(block('endShape'));
+        blocks.push('-');
+        blocks.push(block('setFont'));
+        blocks.push(block('setFontSize'));
+        blocks.push(block('drawText'));
+        blocks.push('-');
+        blocks.push(block('setShapeColor'));
+        blocks.push(block('setFillNumber'));
         blocks.push('-');
         blocks.push(block('changeShapeHue'));
         blocks.push(block('setShapeHue'));
@@ -33,6 +43,22 @@ SpriteMorph.prototype.scribbleHookBlockTemplates = function(blocks, block, cat)
         blocks.push('-');
         blocks.push(block('changeShapeGhosting'));
         blocks.push(block('setShapeGhosting'));
+        blocks.push('-');
+        blocks.push(block('getShapeHue'));
+        blocks.push(block('getShapeBrightness'));
+        blocks.push(block('getShapeGhosting'));
+        blocks.push(block('getFillNumber'));
+    }
+    if (cat === 'pen') { 
+        blocks.push('-');
+        blocks.push(block('getPenGhosting'));
+        blocks.push(block('changePenGhosting'));
+        blocks.push(block('setPenGhosting'));
+        blocks.push('-');
+        blocks.push(block('getPenNumber'));
+        blocks.push(block('setPenNumber'));
+        blocks.push('-');
+        blocks.push(block('reportPenDown'));
     }
 }
 
@@ -70,19 +96,31 @@ SpriteMorph.prototype.addScribbleBlocks = function () {
         category: 'shapes',
         spec: 'end shape'
     };
+    
+    SpriteMorph.prototype.blocks.setShapeColor = {
+        type: 'command',
+        category: 'shapes',
+        spec: 'set fill color to %clr',
+    };
 
     SpriteMorph.prototype.blocks.changeShapeHue = {
         type: 'command',
         category: 'shapes',
-        spec: 'change fill color by %n',
+        spec: 'change fill hue by %n',
         defaults: [10]
     };
     
     SpriteMorph.prototype.blocks.setShapeHue = {
         type: 'command',
         category: 'shapes',
-        spec: 'set fill color to %n',
+        spec: 'set fill hue to %n',
         defaults: [0]
+    };
+    
+    SpriteMorph.prototype.blocks.getShapeHue = {
+        type: 'reporter',
+        category: 'shapes',
+        spec: 'get fill hue'
     };
     
     SpriteMorph.prototype.blocks.changeShapeBrightness = {
@@ -90,6 +128,12 @@ SpriteMorph.prototype.addScribbleBlocks = function () {
         category: 'shapes',
         spec: 'change fill shade by %n',
         defaults: [10]
+    };
+    
+    SpriteMorph.prototype.blocks.getShapeBrightness = {
+        type: 'reporter',
+        category: 'shapes',
+        spec: 'get fill shade'
     };
     
     SpriteMorph.prototype.blocks.setShapeBrightness = {
@@ -104,6 +148,12 @@ SpriteMorph.prototype.addScribbleBlocks = function () {
         category: 'shapes',
         spec: 'change fill ghosting by %n',
         defaults: [10]
+    };
+    
+    SpriteMorph.prototype.blocks.getShapeGhosting = {
+        type: 'reporter',
+        category: 'shapes',
+        spec: 'get fill ghosting'
     };
     
     SpriteMorph.prototype.blocks.setShapeGhosting = {
@@ -124,6 +174,86 @@ SpriteMorph.prototype.addScribbleBlocks = function () {
         type: 'command',
         category: 'motion',
         spec: 'go to random location'
+    };
+    
+    SpriteMorph.prototype.blocks.changePenGhosting = {
+        type: 'command',
+        category: 'pen',
+        spec: 'change pen ghosting by %n',
+        defaults: [10]
+    };
+    
+    SpriteMorph.prototype.blocks.getPenGhosting = {
+        type: 'reporter',
+        category: 'pen',
+        spec: 'get pen ghosting'
+    };
+    
+    SpriteMorph.prototype.blocks.setPenGhosting = {
+        type: 'command',
+        category: 'pen',
+        spec: 'set pen ghosting to %n',
+        defaults: [100]
+    };
+    
+    SpriteMorph.prototype.blocks.reportPenDown = {
+        type: 'predicate',
+        category: 'pen',
+        spec: 'pen down?'
+    };
+    
+    SpriteMorph.prototype.blocks.getPenNumber = {
+        type: 'reporter',
+        category: 'pen',
+        spec: 'get pen number'
+    };
+    
+    SpriteMorph.prototype.blocks.setPenNumber = {
+        type: 'command',
+        category: 'pen',
+        spec: 'set pen number %n'
+    };
+    
+    SpriteMorph.prototype.blocks.getFillNumber = {
+        type: 'reporter',
+        category: 'shapes',
+        spec: 'get fill color number'
+    };
+    
+    SpriteMorph.prototype.blocks.setFillNumber = {
+        type: 'command',
+        category: 'shapes',
+        spec: 'set fill color number %n'
+    };
+    
+    SpriteMorph.prototype.blocks.drawText = {
+        type: 'command',
+        category: 'shapes',
+        spec: 'draw text %s'
+    };
+    
+    SpriteMorph.prototype.blocks.setFont = {
+        type: 'command',
+        category: 'shapes',
+        spec: 'set font to %font'
+    };
+    
+    SpriteMorph.prototype.blocks.setFontSize = {
+        type: 'command',
+        category: 'shapes',
+        spec: 'set font size to %n'
+    };
+    
+    SpriteMorph.prototype.blocks.reportCopyList = {
+        type: 'reporter',
+        category: 'lists',
+        spec: 'copy of %l'
+    };
+    
+    SpriteMorph.prototype.blocks.reportListText = {
+        type: 'reporter',
+        category: 'lists',
+        spec: 'get text from %l seperated by %s'
     };
 }
 
@@ -455,6 +585,24 @@ SpriteMorph.prototype.getShapeGhosting = function () {
 SpriteMorph.prototype.changeShapeGhosting = function (delta) {
     this.setShapeGhosting(this.getShapeGhosting() + (+delta || 0));
 };
+
+/*
+ * SpriteMorph.setShapeColor
+ * 
+ * Implements block logic that sets the color of the shape
+ */
+SpriteMorph.prototype.setShapeColor = function (col) {
+    var x = this.xPosition(),
+        y = this.yPosition();
+        
+    this.fillColor = col;
+    if (!this.costume) {
+        this.drawNew();
+        this.changed();
+    }
+    
+    this.gotoXY(x, y);
+};
    
 /*
  * SpriteMorph.startShape
@@ -474,7 +622,7 @@ SpriteMorph.prototype.startShape = function () {
 
     this.changed();
 };
-   
+
 /*
  * SpriteMorph.endShape
  * 
@@ -527,12 +675,280 @@ SpriteMorph.prototype.endShape = function () {
     //Dirty area
     this.world().broken.push(
         new Rectangle(minX, minY, maxX, maxY)
-            .intersect(
-                this.parent.visibleBounds())
+            .intersect(this.parent.visibleBounds())
                     .spread() /* Snaps to integral coordinates */);
 
     this.changed();
 };
+
+/*
+ * SpriteMorph.getPenGhosting
+ * 
+ * Implements block logic that gets the alpha of the pen
+ */
+SpriteMorph.prototype.getPenGhosting = function () {
+    return this.color.a * 100;
+};
+
+/*
+ * SpriteMorph.getPenGhosting
+ * 
+ * Implements block logic that adds to the alpha of the pen
+ */
+SpriteMorph.prototype.changePenGhosting = function (delta) {
+    this.setPenGhosting(this.getPenGhosting() + (+delta || 0));
+};
+    
+/*
+ * SpriteMorph.getPenGhosting
+ * 
+ * Implements block logic that sets the alpha of the pen
+ */
+SpriteMorph.prototype.setPenGhosting = function (num) {
+    var x = this.xPosition(),
+        y = this.yPosition();
+        
+    this.color.a = Math.max(0,Math.min(num, 100)) / 100;
+    if (!this.costume) {
+        this.drawNew();
+        this.changed();
+    }
+    this.gotoXY(x, y);
+};
+    
+/*
+ * SpriteMorph.getPenGhosting
+ * 
+ * Implements block logic that tells if the pen is down
+ */
+SpriteMorph.prototype.reportPenDown = function () {
+    return this.isDown;
+};
+
+function getNumberFromColor(col)
+{
+    //RRR_GGG_BBB.AAA in DECIMAL so it is easier for newbz!!1!!1111
+    var rv = 
+     + (Math.round(col.r / 255 * 999) *    100000000.000)
+    /*///////////////////////////////////RRR GGG BBB.AAA*/
+     + (Math.round(col.g / 255 * 999) *        10000.000)
+    /*///////////////////////////////////RRR GGG BBB.AAA*/
+     + (Math.round(col.b / 255 * 999) *            1.000)
+    /*///////////////////////////////////RRR GGG BBB.AAA*/
+     + (Math.round(col.a       * 999) *            0.001);
+    /*///////////////////////////////////RRR GGG BBB.AAA*/
+    //alert ("get pen number a: " +this.color.a + " r: " + this.color.r / 255 * 999 + " g: " +this.color.g / 255 * 999 + " b: " + this.color.b / 255 * 999 + " result: " +rv);
+    return rv;
+}
+
+function getColorFromNumber(num)
+{
+    function firstThreeDecimalDigits(bob)
+    {
+        bob = bob - Math.floor(bob); //Truncate everything above the decimal point
+        bob = bob * 1000; //Move everything up 3 digits
+        return Math.floor(bob); //Trucate everything below the decimal point
+    }
+    
+    var color = new Color();
+    color.a = firstThreeDecimalDigits(num) / 999.0;
+    num /= 1000; //Move blue into the decimal part
+    color.b = firstThreeDecimalDigits(num) / 999.0 * 255;
+    num /= 10000; //Move green into the decimal part
+    color.g = firstThreeDecimalDigits(num) / 999.0 * 255;
+    num /= 10000; //Move red into the decimal part
+    color.r = firstThreeDecimalDigits(num) / 999.0 * 255;
+    return color;
+}
+
+/*
+ * SpriteMorph.getPenNumber
+ * 
+ * Implements block logic that gets the number of the pen
+ */
+SpriteMorph.prototype.getPenNumber = function () {
+    return getNumberFromColor(this.color);
+};
+
+/*
+ * SpriteMorph.getPenNumber
+ * 
+ * Implements block logic that sets the number of the pen
+ */
+SpriteMorph.prototype.setPenNumber = function (num) {
+    this.setColor(getColorFromNumber(num));
+};
+
+/*
+ * SpriteMorph.getFillNumber
+ * 
+ * Implements block logic that gets the number of the fill
+ */
+SpriteMorph.prototype.getFillNumber = function () {
+    return getNumberFromColor(this.fillColor);
+};
+
+/*
+ * SpriteMorph.getFillNumber
+ * 
+ * Implements block logic that sets the number of the fill
+ */
+SpriteMorph.prototype.getFillNumber = function (num) {
+    this.setShapeColor(getColorFromNumber(num));
+};
+
+/*
+ * SpriteMorph.reportCopyList
+ * 
+ * Implements block logic that returns an exact (unlinked) copy of the list supplied
+ */
+SpriteMorph.prototype.reportCopyList = function (listToCopy)
+{
+    if (!(listToCopy instanceof List))
+        throw new TypeError("You must give a list to copy, not something else!");
+    var retn = new List();
+    var next = listToCopy;
+    while (next != null) {
+        if (next.isLinked) {
+            if (next.first !== undefined)
+                retn.contents.push(next.first);
+            if (next.rest !== undefined && next.rest instanceof List)
+                next = next.rest;
+            else
+                next = null;
+        }
+        else
+        {
+            retn.contents.push.apply(retn.contents, next.contents);
+            break;
+        }
+    }
+    retn.isLinked = false;
+    return retn;
+}
+
+/*
+ * SpriteMorph.reportListText
+ * 
+ * Implements block logic that returns a list with text splitting up the items in between.
+ */
+SpriteMorph.prototype.reportListText = function (list, splitWith)
+{
+    if (!(list instanceof List))
+        throw new TypeError("You must give a list to turn to text, not something else!");
+    if (!(splitWith instanceof String))
+        throw new TypeError("You must give a string to split the list with, not something else!");
+    var l = list.length();
+    var retn = "";
+    for (var i=0; i<l; i++)
+    {
+        retn += list.at(i + 1).toString();
+        if (i != l - 1)
+            retn += splitWith;
+    }
+    return retn;
+}
+
+/*
+ * SpriteMorph.reportListText
+ * 
+ * Implements block logic that returns a list with text splitting up the items in between.
+ */
+SpriteMorph.prototype.reportListText = function (list, splitWith)
+{
+    if (!(list instanceof List))
+        throw new TypeError("You must give a list to turn to text, not something else!");
+    var l = list.length();
+    var retn = "";
+    for (var i=0; i<l; i++)
+    {
+        retn += list.at(i + 1).toString();
+        if (i != l - 1)
+            retn += splitWith.toString();
+    }
+    return retn;
+}
+
+/*
+ * SpriteMorph.setFont
+ * 
+ * Implements block logic that sets the current font
+ */
+SpriteMorph.prototype.currentFont = "Arial"
+SpriteMorph.prototype.setFont = function (font)
+{
+    this.currentFont = font[0];
+}
+
+/*
+ * SpriteMorph.setFont
+ * 
+ * Implements block logic that sets the current font size
+ */
+SpriteMorph.prototype.currentFontSize = 16;
+SpriteMorph.prototype.setFontSize = function (fontSize)
+{
+    this.currentFontSize = Math.floor(parseFloat(fontSize));
+}
+
+/*
+ * SpriteMorph.drawText
+ * 
+ * Implements block logic that draws some text at the current position
+ */
+SpriteMorph.prototype.drawText = function (text)
+{
+    var stage = this.parent,
+        context = stage.penTrails().getContext('2d'),
+        fillColor = this.fillColor,
+        currentFontSize = this.currentFontSize,
+        currentFont = this.currentFont,
+        x = this.rotationCenter().x,
+        y = this.rotationCenter().y;
+    
+    var ok = false;
+    for (var prop in validFonts){
+        if (validFonts[prop] == currentFont)
+        {
+            ok = true;
+        }
+    }
+    if (!ok)
+        return;
+    
+    //Save current transform
+    context.save();
+    
+    //Update transform
+    //The pen draws to a bitmap that does not change size,
+    //so we must scale the real coordinates down to it.
+    context.scale(1 / stage.scale, 1 / stage.scale);
+    context.translate(-stage.left(), -stage.top());
+    
+    context.font = currentFontSize + "px \"" + currentFont + "\"";
+    var stringy = "rgba("+Math.round(fillColor.r)+","+Math.round(fillColor.g)+","+Math.round(fillColor.b)+","+fillColor.a+")";
+    context.fillStyle = stringy;
+    context.fillText(text, x, y);
+    var textWidth = context.measureText(text).width;
+    
+    context.fill();
+    
+    //Restore transform
+    context.restore();
+    
+    var minX = x,
+        maxX = x + textWidth * stage.scale,
+        minY = y - currentFontSize * stage.scale,
+        maxY = y + currentFontSize * stage.scale;
+    
+    //Dirty area
+    this.world().broken.push(
+        new Rectangle(minX, minY, maxX, maxY)
+            .intersect(this.parent.visibleBounds())
+                    .spread() /* Snaps to integral coordinates */);
+
+    this.changed();
+}
 
 /*********************************************************************/
 /****************************** STATICS ******************************/
