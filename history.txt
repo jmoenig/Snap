@@ -1799,3 +1799,7 @@ ______
 130710
 ------
 * GUI: Reset hidden primitives and code mappings upon loading a new project
+
+130711
+------
+* Blocks: fixed occasional flickering in scripting areas (caused by deleted feedback morphs, a bug that surfaced in Chrome 28 on OSX and may be due to a possible Chrome GC issue)
