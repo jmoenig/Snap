@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org', // optional
     'last_changed':
-        '2013-07-02', // this, too, will appear in the Translators tab
+        '2013-07-11', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -1176,6 +1176,8 @@ SnapTranslator.dict.de = {
     // math functions
     'abs':
         'Betrag',
+    'floor':
+        'Abgerundet',
     'sqrt':
         'Wurzel',
     'sin':
