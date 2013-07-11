@@ -83,7 +83,7 @@ ArgLabelMorph, localize*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.threads = '2013-July-09';
+modules.threads = '2013-July-11';
 
 var ThreadManager;
 var Process;
@@ -1875,6 +1875,9 @@ Process.prototype.reportMonadic = function (fname, n) {
     switch (this.inputOption(fname)) {
     case 'abs':
         result = Math.abs(x);
+        break;
+    case 'floor':
+        result = Math.floor(x);
         break;
     case 'sqrt':
         result = Math.sqrt(x);

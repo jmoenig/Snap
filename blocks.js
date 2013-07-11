@@ -412,7 +412,7 @@ SyntaxElementMorph.prototype.allEmptySlots = function () {
 
 SyntaxElementMorph.prototype.replaceInput = function (oldArg, newArg) {
     var scripts = this.parentThatIsA(ScriptsMorph),
-        replacement,
+        replacement = newArg,
         idx = this.children.indexOf(oldArg),
         nb;
 
@@ -424,10 +424,13 @@ SyntaxElementMorph.prototype.replaceInput = function (oldArg, newArg) {
         newArg.parent.removeChild(newArg);
     }
 
-    if (oldArg instanceof MultiArgMorph && this.dynamicInputLabels) {
-        replacement = new ArgLabelMorph(newArg);
-    } else {
-        replacement = newArg;
+    if (oldArg instanceof MultiArgMorph) {
+        oldArg.inputs().forEach(function (inp) { // preserve nested reporters
+            oldArg.replaceInput(inp, new InputSlotMorph());
+        });
+        if (this.dynamicInputLabels) {
+            replacement = new ArgLabelMorph(newArg);
+        }
     }
 
     replacement.parent = this;
@@ -969,6 +972,7 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                 false,
                 {
                     abs : ['abs'],
+                    floor : ['floor'],
                     sqrt : ['sqrt'],
                     sin : ['sin'],
                     cos : ['cos'],
