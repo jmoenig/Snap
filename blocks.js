@@ -155,7 +155,7 @@ DialogBoxMorph, BlockInputFragmentMorph, PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2013-July-09';
+modules.blocks = '2013-July-11';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -4418,6 +4418,7 @@ ScriptsMorph.prototype.step = function () {
 
     if (this.feedbackMorph.parent) {
         this.feedbackMorph.destroy();
+        this.feedbackMorph.parent = null;
     }
     if (hand.children.length === 0) {
         return null;
