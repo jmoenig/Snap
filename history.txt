@@ -1805,3 +1805,8 @@ ______
 * Blocks: fixed occasional flickering in scripting areas (caused by deleted feedback morphs, a bug that surfaced in Chrome 28 on OSX and may be due to a possible Chrome GC issue)
 * Blocks: preserve nested blocks in the scripting area when replacing a variadic input list with another input ("kick out" the nested blocks instead of "swallowing" them)
 * Blocks, Threads: new floor() function in monadic math reporter's drop-down
+
+130712
+------
+* Blocks: Pipette symbol
+* Paint: Pipette tool
