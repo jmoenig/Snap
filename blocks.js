@@ -155,7 +155,7 @@ DialogBoxMorph, BlockInputFragmentMorph, PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2013-July-11';
+modules.blocks = '2013-July-12';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -191,7 +191,7 @@ WorldMorph.prototype.customMorphs = function () {
 /*
     return [
         new SymbolMorph(
-            'eraser',
+            'pipette',
             50,
             new Color(250, 250, 250),
             new Point(-1, -1),
@@ -7410,6 +7410,8 @@ SymbolMorph.prototype.symbolCanvasColored = function (aColor) {
         return this.drawSymbolPaintbucket(canvas, aColor);
     case 'eraser':
         return this.drawSymbolEraser(canvas, aColor);
+    case 'pipette':
+        return this.drawSymbolPipette(canvas, aColor);
     default:
         return canvas;
     }
@@ -8193,6 +8195,41 @@ SymbolMorph.prototype.drawSymbolEraser = function (canvas, color) {
     ctx.lineTo(w, n);
     ctx.closePath();
     ctx.fill();
+
+    return canvas;
+};
+
+SymbolMorph.prototype.drawSymbolPipette = function (canvas, color) {
+    // answer a canvas showing an eyedropper
+    var ctx = canvas.getContext('2d'),
+        w = canvas.width,
+        h = canvas.height,
+        n = canvas.width / 4,
+        n2 = n / 2,
+        l = Math.max(w / 20, 0.5);
+
+    ctx.strokeStyle = color.toString();
+    ctx.lineWidth = l * 2;
+    ctx.beginPath();
+    ctx.moveTo(l, h - l);
+    ctx.quadraticCurveTo(n2, h - n2, n2, h - n);
+    ctx.lineTo(n * 2, n * 1.5);
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.moveTo(l, h - l);
+    ctx.quadraticCurveTo(n2, h - n2, n, h - n2);
+    ctx.lineTo(n * 2.5, n * 2);
+    ctx.stroke();
+
+    ctx.fillStyle = color.toString();
+    ctx.arc(n * 3, n, n - l, radians(0), radians(360), false);
+    ctx.fill();
+
+    ctx.beginPath();
+    ctx.moveTo(n * 2, n);
+    ctx.lineTo(n * 3, n * 2);
+    ctx.stroke();
 
     return canvas;
 };
