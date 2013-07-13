@@ -1810,3 +1810,7 @@ ______
 ------
 * Blocks: Pipette symbol
 * Paint: Pipette tool
+
+130713
+------
+* Paint: fixed pipette tool for floodfill
