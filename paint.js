@@ -62,7 +62,7 @@
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.paint = '2013-July-12';
+modules.paint = '2013-July-13';
 
 // Declarations
 
@@ -424,8 +424,8 @@ PaintEditorMorph.prototype.getUserColor = function () {
             event.pageY - posInDocument.y
         ));
         color = world.getGlobalPixelColor(hand.position());
+        color.a = 255;
         myself.propertiesControls.colorpicker.action(color);
-        myself.paper.settings.primarycolor = color;
     };
 
     hand.processMouseDown = nop;
