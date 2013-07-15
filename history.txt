@@ -1814,3 +1814,7 @@ ______
 130713
 ------
 * Paint: fixed pipette tool for floodfill
+
+130715
+------
+* Objects: increased palette's vertical growth by scrollBarSize
