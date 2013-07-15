@@ -123,7 +123,7 @@ PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.objects = '2013-July-09';
+modules.objects = '2013-July-15';
 
 var SpriteMorph;
 var StageMorph;
@@ -1863,6 +1863,7 @@ SpriteMorph.prototype.freshPalette = function (category) {
     palette.owner = this;
     palette.padding = unit / 2;
     palette.color = this.paletteColor;
+    palette.growth = new Point(0, MorphicPreferences.scrollBarSize);
 
     // menu:
 
