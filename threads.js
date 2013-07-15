@@ -61,7 +61,7 @@ ReporterBlockMorph, ScriptsMorph, ShadowMorph, StringMorph,
 SyntaxElementMorph, TextMorph, WorldMorph, blocksVersion, contains,
 degrees, detect, getDocumentPositionOf, newCanvas, nop, radians,
 useBlurredShadows, ReporterSlotMorph, CSlotMorph, RingMorph, IDE_Morph,
-ArgLabelMorph, localize*/
+ArgLabelMorph, localize, XML_Element, hex_sha512*/
 
 // globals from objects.js:
 
@@ -83,7 +83,7 @@ ArgLabelMorph, localize*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.threads = '2013-July-11';
+modules.threads = '2013-July-15';
 
 var ThreadManager;
 var Process;
@@ -1911,6 +1911,37 @@ Process.prototype.reportMonadic = function (fname, n) {
         break;
     case '10^':
         result = 0;
+        break;
+    default:
+    }
+    return result;
+};
+
+Process.prototype.reportTextFunction = function (fname, string) {
+    var x = (isNil(string) ? '' : string).toString(),
+        result = '';
+
+    switch (this.inputOption(fname)) {
+    case 'encode URI':
+        result = encodeURI(x);
+        break;
+    case 'decode URI':
+        result = decodeURI(x);
+        break;
+    case 'encode URI component':
+        result = encodeURIComponent(x);
+        break;
+    case 'decode URI component':
+        result = decodeURIComponent(x);
+        break;
+    case 'XML escape':
+        result = new XML_Element().escape(x);
+        break;
+    case 'XML unescape':
+        result = new XML_Element().unescape(x);
+        break;
+    case 'hex sha512 hash':
+        result = hex_sha512(x);
         break;
     default:
     }

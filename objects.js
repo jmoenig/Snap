@@ -918,6 +918,13 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: 'type of %s',
             defaults: [5]
         },
+        reportTextFunction: { // only in dev mode - experimental
+            type: 'reporter',
+            category: 'operators',
+            spec: '%txtfun of %s',
+            defaults: [null, "Abelson & Sussman"]
+        },
+
     /*
         reportScript: {
             type: 'reporter',
@@ -1703,6 +1710,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
             blocks.push(txt);
             blocks.push('-');
             blocks.push(block('reportTypeOf'));
+            blocks.push(block('reportTextFunction'));
         }
 
     /////////////////////////////////
@@ -3963,6 +3971,7 @@ StageMorph.prototype.blockTemplates = function (category) {
             blocks.push(txt);
             blocks.push('-');
             blocks.push(block('reportTypeOf'));
+            blocks.push(block('reportTextFunction'));
         }
 
     //////////////////////////////////
