@@ -155,7 +155,7 @@ DialogBoxMorph, BlockInputFragmentMorph, PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2013-July-12';
+modules.blocks = '2013-July-15';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -988,6 +988,23 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                 true
             );
             part.setContents(['sqrt']);
+            break;
+        case '%txtfun':
+            part = new InputSlotMorph(
+                null,
+                false,
+                {
+                    'encode URI' : ['encode URI'],
+                    'decode URI' : ['decode URI'],
+                    'encode URI component' : ['encode URI component'],
+                    'decode URI component' : ['decode URI component'],
+                    'XML escape' : ['XML escape'],
+                    'XML unescape' : ['XML unescape'],
+                    'hex sha512 hash' : ['hex sha512 hash']
+                },
+                true
+            );
+            part.setContents(['encode URI']);
             break;
         case '%typ':
             part = new InputSlotMorph(

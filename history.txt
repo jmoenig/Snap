@@ -1818,3 +1818,4 @@ ______
 130715
 ------
 * Objects: increased palette's vertical growth by scrollBarSize
+* Objects, Blocks, Threads: experimental text-function primitive (hidden, shown only in dev mode)
