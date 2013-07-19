@@ -2449,6 +2449,27 @@ Process.prototype.doPlayNoteForSecs = function (pitch, secs) {
     this.pushContext();
 };
 
+Process.prototype.doPlayGuitarString = function(pitch, beats) {
+    var tempo = this.reportTempo();
+    this.doPlayGuitarStringForSecs(
+        parseFloat(pitch || '0'),
+        60 / tempo * parseFloat(beats || '0')
+    );
+}
+
+Process.prototype.doPlayGuitarStringForSecs = function(pitch, secs) {
+    if (!this.context.activeNote) {
+        this.context.activeNote = new GuitarString(pitch, secs);
+        this.context.activeNote.play();
+    }
+    if (this.context.activeNote && !this.context.activeNote.playing) {
+      this.context.activeNote = null;
+      return null;
+    }
+    this.pushContext('doYield');
+    this.pushContext();
+}
+
 // Process constant input options
 
 Process.prototype.inputOption = function (dta) {
