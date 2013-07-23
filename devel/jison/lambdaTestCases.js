@@ -70,7 +70,7 @@ GLOBAL.SCRIBBLE_LAMBDA_GETLIST_NAME = "lambda_getList";
 GLOBAL.SCRIBBLE_LAMBDA_PREFIX_ARGS = "";
 GLOBAL.SCRIBBLE_LAMBDA_PREFIX_ARGS_COUNT = 0;
 
-var lambda = require("./lambda.js");
+var lambda = require("./lambdaNodeJS.js");
 var parser = new lambda.Parser();
 
 function testCase(line, parseMe, expect)
@@ -91,6 +91,7 @@ function testCase(line, parseMe, expect)
 }
 
 testCase(__line, "1", 1);
+testCase(__line, "one/2+1", 1.5);
 testCase(__line, "(one + two) * three", 9);
 testCase(__line, "one + two * three", 7);
 testCase(__line, "six + two ^ three", 14);

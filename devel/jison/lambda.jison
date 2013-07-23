@@ -171,6 +171,8 @@ expression
       { $$ = "((" + $1 + ") - (" + $3 + "))" }
     | expression '*' expression
       { $$ = "((" + $1 + ") * (" + $3 + "))" }
+    | expression '/' expression
+      { $$ = "((" + $1 + ") / (" + $3 + "))" }
     | expression '^' expression
       { $$ = "Math.pow((" + $1 + "),(" + $3 +"))" }
       
