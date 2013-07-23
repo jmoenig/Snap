@@ -422,21 +422,63 @@ SpriteMorph.prototype.startShape = function () {
     this.changed();
 };
 
-/*
- * Implements the lambda expression. Back end is simple, we simply sanitise
- * the input and use eval()!
- */
-function scribble_lambda_random(n)
+var SCRIBBLE_LAMBDA_FUNCTIONS_NAME = "SCRIBBLE_LAMBDA_FUNCTIONS";
+var SCRIBBLE_LAMBDA_GETVAR_NAME = "SCRIBBLE_LAMBDA_GETVAR";
+var SCRIBBLE_LAMBDA_GETLIST_NAME = "SCRIBBLE_LAMBDA_GETLIST";
+var SCRIBBLE_LAMBDA_PREFIX_ARGS = "spritemorph,";
+var SCRIBBLE_LAMBDA_PREFIX_ARGS_COUNT = 1;
+
+function scribble_lambda_random(spriteMorph, n)
 {
     if (typeof n === "undefined")
         return Math.random();
     return Math.random() * n;
 }
-function scribble_lambda_lengthOf(s)
+function scribble_lambda_lengthOf(spriteMorph, s)
 {
-    if (typeof s !== "String")
+    var type = typeof s;
+    if (type !== "string")
         throw { name: "Type Mismatch", message: "You can only use strings with lengthOf!" };
     return s.length;
+}
+
+function makeNumber(n) {
+    var result = parseFloat(n);
+    if (!isNaN(result) && isFinite(n) && /^[\d.]+$/.test(n))
+    {
+        return result;
+    }
+    else
+    {
+        return n;
+    }
+}
+
+function SCRIBBLE_LAMBDA_GETLIST(spriteMorph, v, i)
+{
+    var bob = spriteMorph.callingProcess.context.variables.getVar(v);
+    if (bob == undefined || bob == null)
+        throw { name: "Not a variable", message: "Tried accessing \"" + v + "\" which is not a variable"};
+    if (!( bob instanceof List ))
+        throw { name: "Not a list", message: "Tried accessing \"" + v + "\" which is not a list"};
+    if (i <= 0 || i > bob.length())
+        throw { name: "Out of bounds", message: "Tried accessing index " + i + " of \"" + v + "\" which has " + bob.length + " elements" };
+    return makeNumber(bob.at(i));
+}
+
+function SCRIBBLE_LAMBDA_GETVAR(spriteMorph, v)
+{
+    var bob = spriteMorph.callingProcess.context.variables.getVar(v);
+    if (bob == undefined || bob == null)
+        throw { name: "Not a variable", message: "Tried accessing \"" + v + "\" which is not a variable"};
+    if (bob instanceof List)
+        throw { name: "Variable is a list", message: "Tried accessing \"" + v + "\" which is a list. You need to use array notation to access an element: aList[1], aList[2]..."};
+    return makeNumber(bob);
+}
+
+var SCRIBBLE_LAMBDA_FUNCTIONS = {
+    lengthOf: scribble_lambda_lengthOf,
+    random: scribble_lambda_random,
 }
 
 /*
@@ -455,9 +497,11 @@ SpriteMorph.prototype.reportExpression = function (str) {
     var found = this.lambdas[str];
     if (typeof found === "undefined" || found === null)
     {
-        this.lambdas[str] = found = getLambdaFunction(str);
+        var parser = new lambda.Parser();
+        var evalMe = parser.parse(str);
+        this.lambdas[str] = found = eval("(function(spritemorph){return ("+evalMe+");})");
     }
-    return found.call(this);
+    return found(this);
 };
 
 /*
