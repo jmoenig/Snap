@@ -45,6 +45,7 @@ SpriteMorph.prototype.scribbleHookBlockTemplates = function(blocks, block, cat)
         blocks.push('-');
         blocks.push(block('drawCircle'));
         blocks.push(block('drawOval'));
+        blocks.push(block('drawRectangle'));
     }
     if (cat === 'text') { 
         blocks.push(block('setFont'));
@@ -195,7 +196,14 @@ SpriteMorph.prototype.addScribbleBlocks = function () {
         type: 'command',
         category: 'shapes',
         spec: 'draw oval radius %n by %n',
-        defaults: [50]
+        defaults: [25, 50]
+    };
+    
+    SpriteMorph.prototype.blocks.drawRectangle = {
+        type: 'command',
+        category: 'shapes',
+        spec: 'draw rectangle %n by %n',
+        defaults: [50, 50]
     };
     
     /* The lambda expression*/
@@ -902,9 +910,9 @@ SpriteMorph.prototype.drawCircle = function (radius)
 }
 
 /*
- * SpriteMorph.drawCircle
+ * SpriteMorph.drawOval
  * 
- * Implements block logic that draws a circle centered at the current position
+ * Implements block logic that draws an oval centered at the current position
  */
 SpriteMorph.prototype.drawOval = function (radiusX, radiusY)
 {
@@ -955,6 +963,52 @@ SpriteMorph.prototype.drawOval = function (radiusX, radiusY)
         maxX = x + rxS,
         minY = y - ryS,
         maxY = y + ryS;
+    
+    //Dirty area
+    this.world().broken.push(
+        new Rectangle(minX, minY, maxX, maxY)
+            .intersect(this.parent.visibleBounds())
+                    .spread() /* Snaps to integral coordinates */);
+
+    this.changed();
+}
+
+/*
+ * SpriteMorph.drawRectangle
+ * 
+ * Implements block logic that draws a rectangle centered at the current position
+ */
+SpriteMorph.prototype.drawRectangle = function (w, h)
+{
+    var stage = this.parent,
+        context = stage.penTrails().getContext('2d'),
+        fillColor = this.fillColor,
+        x = this.rotationCenter().x,
+        y = this.rotationCenter().y;
+    
+    //Save current transform
+    context.save();
+    
+    //Update transform
+    //The pen draws to a bitmap that does not change size,
+    //so we must scale the real coordinates down to it.
+    context.scale(1 / stage.scale, 1 / stage.scale);
+    context.translate(-stage.left(), -stage.top());
+    var wS = w * stage.scale, hS = h * stage.scale;
+    
+    var stringy = "rgba("+Math.round(fillColor.r)+","+Math.round(fillColor.g)+","+Math.round(fillColor.b)+","+fillColor.a+")";
+    context.fillStyle = stringy;
+    context.beginPath();
+    context.rect(x - wS, y - hS, 2 * wS, 2 * hS);
+    context.fill();
+    
+    //Restore transform
+    context.restore();
+    
+    var minX = x - wS,
+        maxX = x + wS,
+        minY = y - hS,
+        maxY = y + hS;
     
     //Dirty area
     this.world().broken.push(
