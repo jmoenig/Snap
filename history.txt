@@ -1819,3 +1819,7 @@ ______
 ------
 * Objects: increased palette's vertical growth by scrollBarSize
 * Objects, Blocks, Threads: experimental text-function primitive (hidden, shown only in dev mode)
+
+130724
+------
+* Dutch translation, yay!! Thanks, Frank Sierens
