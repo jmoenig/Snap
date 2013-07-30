@@ -83,7 +83,7 @@ ArgLabelMorph, localize, XML_Element, hex_sha512*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.threads = '2013-July-15';
+modules.threads = '2013-July-30';
 
 var ThreadManager;
 var Process;
@@ -339,7 +339,7 @@ Process.prototype.runStep = function () {
     a step is an an uninterruptable 'atom', it can consist
     of several contexts, even of several blocks
 */
-    if (this.isPaused) {
+    if (this.isPaused) { // allow pausing in between atomic steps:
         return this.pauseStep();
     }
     this.readyToYield = false;
@@ -348,6 +348,10 @@ Process.prototype.runStep = function () {
             && (this.isAtomic ?
                     (Date.now() - this.lastYield < this.timeout) : true)
                 ) {
+        // also allow pausing inside atomic steps - for PAUSE block primitive:
+        if (this.isPaused) {
+            return this.pauseStep();
+        }
         this.evaluateContext();
     }
     this.lastYield = Date.now();
@@ -1430,6 +1434,18 @@ Process.prototype.doSetFastTracking = function (bool) {
                 ide.startFastTracking();
             }
         }
+    }
+};
+
+Process.prototype.doPauseAll = function () {
+    var stage, ide;
+    if (this.homeContext.receiver) {
+        stage = this.homeContext.receiver.parentThatIsA(StageMorph);
+        if (stage) {
+            stage.threads.pauseAll(stage);
+        }
+        ide = stage.parentThatIsA(IDE_Morph);
+        if (ide) {ide.controlBar.pauseButton.refresh(); }
     }
 };
 
