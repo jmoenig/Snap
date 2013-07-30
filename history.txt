@@ -1828,3 +1828,4 @@ ______
 ------
 * Blocks: Made it harder to drop reporters on the variadic input per se (as opposed to into one of its slots) in (default) "prefer empty slot drops" setting
 * Blocks, Threads, Objects: PAUSE primitive command block
+* GUI: fixed #104 (storing a cloud project under another name causes media loss)
