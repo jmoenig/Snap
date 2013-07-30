@@ -155,7 +155,7 @@ DialogBoxMorph, BlockInputFragmentMorph, PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2013-July-15';
+modules.blocks = '2013-July-30';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -4575,6 +4575,16 @@ ScriptsMorph.prototype.closestInput = function (reporter, hand) {
     });
     if (all.length === 0) {return null; }
 
+    function touchingVariadicArrowsIfAny(inp, point) {
+        if (inp instanceof MultiArgMorph) {
+            if (point) {
+                return inp.arrows().bounds.containsPoint(point);
+            }
+            return inp.arrows().bounds.intersects(fb);
+        }
+        return true;
+    }
+
     if (this.isPreferringEmptySlots) {
         if (hand) {
             handPos = hand.position();
@@ -4588,7 +4598,8 @@ ScriptsMorph.prototype.closestInput = function (reporter, hand) {
                             || input.isEmptySlot())
                         && !input.isLocked()
                         && input.bounds.containsPoint(handPos)
-                        && !contains(blackList, input);
+                        && !contains(blackList, input)
+                        && touchingVariadicArrowsIfAny(input, handPos);
                 }
             );
             if (target) {
@@ -4605,7 +4616,8 @@ ScriptsMorph.prototype.closestInput = function (reporter, hand) {
                         || input.isEmptySlot())
                     && !input.isLocked()
                     && input.bounds.intersects(fb)
-                    && !contains(blackList, input);
+                    && !contains(blackList, input)
+                    && touchingVariadicArrowsIfAny(input);
             }
         );
         if (target) {

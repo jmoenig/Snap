@@ -1823,3 +1823,8 @@ ______
 130724
 ------
 * Dutch translation, yay!! Thanks, Frank Sierens
+
+130730
+------
+* Blocks: Made it harder to drop reporters on the variadic input per se (as opposed to into one of its slots) in (default) "prefer empty slot drops" setting
+
