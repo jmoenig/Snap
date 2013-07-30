@@ -123,7 +123,7 @@ PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.objects = '2013-July-15';
+modules.objects = '2013-July-30';
 
 var SpriteMorph;
 var StageMorph;
@@ -660,6 +660,14 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'command',
             category: 'control',
             spec: 'delete this clone'
+        },
+
+        // Debugging - pausing
+
+        doPauseAll: {
+            type: 'command',
+            category: 'control',
+            spec: 'pause all %pause'
         },
 
         // Sensing
@@ -1613,6 +1621,8 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('receiveOnClone'));
         blocks.push(block('createClone'));
         blocks.push(block('removeClone'));
+        blocks.push('-');
+        blocks.push(block('doPauseAll'));
 
     } else if (cat === 'sensing') {
 
@@ -3701,7 +3711,10 @@ StageMorph.prototype.fireStopAllEvent = function () {
     });
     this.removeAllClones();
     if (ide) {
-        ide.controlBar.pauseButton.refresh();
+        ide.nextSteps([
+            nop,
+            function () {ide.controlBar.pauseButton.refresh(); }
+        ]);
     }
 };
 
@@ -3878,6 +3891,8 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('reportCallCC'));
         blocks.push('-');
         blocks.push(block('createClone'));
+        blocks.push('-');
+        blocks.push(block('doPauseAll'));
 
     } else if (cat === 'sensing') {
 

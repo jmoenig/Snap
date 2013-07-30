@@ -1196,6 +1196,16 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                     new Point() : this.embossing;
             part.drawNew();
             break;
+        case '%pause':
+            part = new SymbolMorph('pause');
+            part.size = this.fontSize;
+            part.color = new Color(160, 80, 0);
+            part.isProtectedLabel = true; // doesn't participate in zebraing
+            part.shadowColor = this.color.darker(this.labelContrast);
+            part.shadowOffset = MorphicPreferences.isFlat ?
+                    new Point() : this.embossing;
+            part.drawNew();
+            break;
         default:
             // nop();
         }
