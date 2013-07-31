@@ -155,7 +155,7 @@ DialogBoxMorph, BlockInputFragmentMorph, PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2013-July-30';
+modules.blocks = '2013-July-31';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -791,6 +791,16 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                     'December' : ['December']
                 },
                 true // read-only
+            );
+            break;
+        case '%delim':
+            part = new InputSlotMorph(
+                null, // text
+                false, // numeric?
+                {
+                    '--line--' : ['--line--']
+                },
+                false // read-only
             );
             break;
         case '%ida':

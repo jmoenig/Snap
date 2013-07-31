@@ -123,7 +123,7 @@ PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.objects = '2013-July-30';
+modules.objects = '2013-July-31';
 
 var SpriteMorph;
 var StageMorph;
@@ -932,6 +932,12 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: '%txtfun of %s',
             defaults: [null, "Abelson & Sussman"]
         },
+        reportTextSplit: { // only in dev mode - experimental
+            type: 'reporter',
+            category: 'operators',
+            spec: 'split %s by %delim',
+            defaults: ["foo bar baz", " "]
+        },
 
     /*
         reportScript: {
@@ -1721,6 +1727,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
             blocks.push('-');
             blocks.push(block('reportTypeOf'));
             blocks.push(block('reportTextFunction'));
+            blocks.push(block('reportTextSplit'));
         }
 
     /////////////////////////////////
@@ -3987,6 +3994,7 @@ StageMorph.prototype.blockTemplates = function (category) {
             blocks.push('-');
             blocks.push(block('reportTypeOf'));
             blocks.push(block('reportTextFunction'));
+            blocks.push(block('reportTextSplit'));
         }
 
     //////////////////////////////////

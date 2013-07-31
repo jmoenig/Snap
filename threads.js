@@ -83,7 +83,7 @@ ArgLabelMorph, localize, XML_Element, hex_sha512*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.threads = '2013-July-30';
+modules.threads = '2013-July-31';
 
 var ThreadManager;
 var Process;
@@ -1998,6 +1998,18 @@ Process.prototype.reportUnicode = function (string) {
 Process.prototype.reportUnicodeAsLetter = function (num) {
     var code = parseFloat(num || 0);
     return String.fromCharCode(code);
+};
+
+Process.prototype.reportTextSplit = function (string, delimiter) {
+    var str = (string || '').toString(),
+        del;
+
+    if (this.inputOption(delimiter) === '--line--') {
+        del = '\n';
+    } else {
+        del = (delimiter || '').toString();
+    }
+    return new List(str.split(del));
 };
 
 // Process debugging
