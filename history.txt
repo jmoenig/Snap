@@ -1836,4 +1836,5 @@ ______
 
 130801
 ------
-* Blocks, Threads: "whitespace" & other options in SPLIT reporter's dropdown 
+* Blocks, Threads: "whitespace" & other options in SPLIT reporter's dropdown
+* Blocks: Italicize editable input options (e.g. for the SPLT block) 

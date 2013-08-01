@@ -6097,7 +6097,9 @@ InputSlotMorph.prototype.setContents = function (aStringOrFloat) {
         isConstant = dta instanceof Array;
     if (isConstant) {
         dta = localize(dta[0]);
+        cnts.isItalic = !this.isReadOnly;
     } else { // assume dta is a localizable choice if it's a key in my choices
+        cnts.isItalic = false;
         if (this.choices !== null && this.choices[dta] instanceof Array) {
             return this.setContents(this.choices[dta]);
         }
@@ -6535,7 +6537,13 @@ InputSlotMorph.prototype.mouseClickLeft = function (pos) {
 };
 
 InputSlotMorph.prototype.reactToKeystroke = function () {
-    this.constant = null;
+    var cnts;
+    if (this.constant) {
+        cnts = this.contents();
+        this.constant = null;
+        cnts.isItalic = false;
+        cnts.drawNew();
+    }
 };
 
 InputSlotMorph.prototype.reactToEdit = function () {
