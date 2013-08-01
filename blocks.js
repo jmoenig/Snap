@@ -414,7 +414,20 @@ SyntaxElementMorph.prototype.replaceInput = function (oldArg, newArg) {
     var scripts = this.parentThatIsA(ScriptsMorph),
         replacement = newArg,
         idx = this.children.indexOf(oldArg),
+        i = 0,
         nb;
+
+    // try to find the ArgLabel embedding the newArg,
+    // used for the undrop() feature
+    if (idx === -1 && newArg instanceof MultiArgMorph) {
+        this.children.forEach(function (morph) {
+            if (morph instanceof ArgLabelMorph &&
+                    morph.argMorph() === oldArg) {
+                idx = i;
+            }
+            i += 1;
+        });
+    }
 
     if ((idx === -1) || (scripts === null)) {
         return null;
@@ -423,7 +436,6 @@ SyntaxElementMorph.prototype.replaceInput = function (oldArg, newArg) {
     if (newArg.parent) {
         newArg.parent.removeChild(newArg);
     }
-
     if (oldArg instanceof MultiArgMorph) {
         oldArg.inputs().forEach(function (inp) { // preserve nested reporters
             oldArg.replaceInput(inp, new InputSlotMorph());
@@ -432,7 +444,6 @@ SyntaxElementMorph.prototype.replaceInput = function (oldArg, newArg) {
             replacement = new ArgLabelMorph(newArg);
         }
     }
-
     replacement.parent = this;
     this.children[idx] = replacement;
     if (oldArg instanceof ReporterBlockMorph) {
@@ -450,7 +461,6 @@ SyntaxElementMorph.prototype.replaceInput = function (oldArg, newArg) {
             nb.fixBlockColor();
         }
     }
-
     if (replacement instanceof MultiArgMorph
             || replacement instanceof ArgLabelMorph
             || replacement.constructor === CommandSlotMorph) {
@@ -3142,9 +3152,15 @@ CommandBlockMorph.prototype.closestAttachTarget = function (newParent) {
 
 CommandBlockMorph.prototype.snap = function () {
     var target = this.closestAttachTarget(),
+        scripts = this.parentThatIsA(ScriptsMorph),
         next,
         offsetY,
         affected;
+
+    scripts.lastDroppedBlock = null;
+    scripts.parent.lastReplacedInput = null;
+    scripts.parent.lastDropTarget = null;
+    scripts.lastPreservedBlocks = null;
 
     if (target === null) {
         this.startLayout();
@@ -3796,13 +3812,26 @@ ReporterBlockMorph.prototype.init = function (isPredicate) {
 
 ReporterBlockMorph.prototype.snap = function (hand) {
     // passing the hand is optional (for when blocks are dragged & dropped)
-    if (!this.parent instanceof ScriptsMorph) {
+    var scripts = this.parent,
+        target;
+
+    if (!scripts instanceof ScriptsMorph) {
         return null;
     }
 
-    var target = this.parent.closestInput(this, hand);
+    scripts.lastDroppedBlock = this;
+    scripts.parent.lastReplacedInput = null;
+    scripts.parent.lastDropTarget = null;
+    scripts.lastPreservedBlocks = null;
 
+    target = scripts.closestInput(this, hand);
     if (target !== null) {
+        scripts.lastReplacedInput = target;
+        scripts.lastDropTarget = target.parent;
+        if (target instanceof MultiArgMorph) {
+            scripts.lastPreservedBlocks = target.inputs();
+            scripts.lastReplacedInput = target.fullCopy();
+        }
         target.parent.replaceInput(target, this);
         if (this.snapSound) {
             this.snapSound.play();
@@ -4428,6 +4457,12 @@ ScriptsMorph.prototype.init = function (owner) {
     this.feedbackColor = SyntaxElementMorph.prototype.feedbackColor;
     this.feedbackMorph = new BoxMorph();
 
+    // "undrop" attributes:
+    this.lastDroppedBlock = null;
+    this.lastReplacedInput = null;
+    this.lastDropTarget = null;
+    this.lastPreservedBlocks = null;
+
     ScriptsMorph.uber.init.call(this);
     this.setColor(new Color(70, 70, 70));
 };
@@ -4738,6 +4773,9 @@ ScriptsMorph.prototype.userMenu = function () {
     }
     menu.addItem('clean up', 'cleanUp', 'arrange scripts\nvertically');
     menu.addItem('add comment', 'addComment');
+    if (this.lastDroppedBlock) {
+        menu.addItem('undrop', 'undrop');
+    }
     menu.addItem(
         'scripts pic...',
         'exportScriptsPicture',
@@ -4827,6 +4865,23 @@ ScriptsMorph.prototype.exportScriptsPicture = function () {
 
 ScriptsMorph.prototype.addComment = function () {
     new CommentMorph().pickUp(this.world());
+};
+
+ScriptsMorph.prototype.undrop = function () {
+    if (!this.lastDroppedBlock) {return; }
+    if (this.lastDropTarget) {
+        this.lastDropTarget.replaceInput(
+            this.lastDroppedBlock,
+            this.lastReplacedInput
+        );
+        this.lastDropTarget.fixBlockColor(null, true);
+        if (this.lastPreservedBlocks) {
+            this.lastPreservedBlocks.forEach(function (morph) {
+                morph.destroy();
+            });
+        }
+    }
+    this.lastDroppedBlock.pickUp(this.world());
 };
 
 // ScriptsMorph blocks layout fix
@@ -10089,11 +10144,19 @@ CommentMorph.prototype.prepareToBeGrabbed = function () {
 
 CommentMorph.prototype.snap = function (hand) {
     // passing the hand is optional (for when blocks are dragged & dropped)
-    if (!this.parent instanceof ScriptsMorph) {
+    var scripts = this.parent,
+        target;
+
+    if (!scripts instanceof ScriptsMorph) {
         return null;
     }
 
-    var target = this.parent.closestBlock(this, hand);
+    scripts.lastDroppedBlock = null;
+    scripts.parent.lastReplacedInput = null;
+    scripts.parent.lastDropTarget = null;
+    scripts.lastPreservedBlocks = null;
+
+    target = this.parent.closestBlock(this, hand);
 
     if (target !== null) {
         target.comment = this;
