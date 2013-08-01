@@ -1833,3 +1833,7 @@ ______
 130731
 ------
 * Blocks, Threads, Objects: experimental text SPLIT primitive in the operators category
+
+130801
+------
+* Blocks, Threads: "whitespace" & other options in SPLIT reporter's dropdown 
