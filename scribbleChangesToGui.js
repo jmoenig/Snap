@@ -1,3 +1,5 @@
+modules.scribbleGui = '2013-August-2';
+
 /*********************************************************************/
 /******************************* HOOKS *******************************/
 /*********because sometimes you HAVE to mod the original file*********/
@@ -12,6 +14,7 @@ IDE_Morph.prototype.createScribbleButtons = function(colors)
         'scribble',
         new SymbolMorph('brush', 14)
     );*/
+    /*
     var button = new ToggleButtonMorph(
         null, //colors,
         myself, // the IDE is the target
@@ -44,18 +47,15 @@ IDE_Morph.prototype.createScribbleButtons = function(colors)
     scribbleButton = button;
     this.controlBar.add(scribbleButton);
     this.controlBar.scribbleButton = scribbleButton;
+    */
 }
 
-/*
- * The stopButton must be passed because, unline all the other buttons,
- * it does not have a field controlBar...
- */
 IDE_Morph.prototype.getRightHandButtons = function(stopButton)
 {
     return [stopButton, 
     this.controlBar.pauseButton, 
-    this.controlBar.startButton,
-    this.controlBar.scribbleButton];
+    this.controlBar.startButton/*,
+    this.controlBar.scribbleButton*/];
 }
 
 /*********************************************************************/

@@ -1841,21 +1841,31 @@ IDE_Morph.prototype.snapMenu = function () {
             window.open('help/SnapManual.pdf', 'SnapReferenceManual');
         }
     );
+    /* SCRIBBLE */
+    menu.addItem(
+        'Scribble website',
+        function () {
+            window.open('http://flipt.org/', 'ScribbleWebsite');
+        }
+    );
+    /* END SCRIBBLE */
     menu.addItem(
         'Snap! website',
         function () {
             window.open('http://snap.berkeley.edu/', 'SnapWebsite');
         }
     );
+    /* SCRIBBLE */
     menu.addItem(
-        'Download source',
+        'View on Github',
         function () {
             window.open(
-                'http://snap.berkeley.edu/snapsource/snap.zip',
+                'https://github.com/snap-apps/scribble',
                 'SnapSource'
             );
         }
     );
+    /* END SCRIBBLE */
     if (world.isDevMode) {
         menu.addLine();
         menu.addItem(
@@ -2306,8 +2316,13 @@ IDE_Morph.prototype.aboutSnap = function () {
         module, btn1, btn2, btn3, btn4, licenseBtn, translatorsBtn,
         world = this.world();
 
-    aboutTxt = 'Snap! 4.0\nBuild Your Own Blocks\n\n--- beta ---\n\n'
-        + 'Copyright \u24B8 2013 Jens M\u00F6nig and '
+/* SCRIBBLE */
+    aboutTxt = 'Scribble 1.0\n Based upon Snap! 4.0\nBuild Your Own Blocks\n\n--- beta ---\n\n'
+        + 'Scribble modifications copyright \u24B8 2013 Aidan Lane and Matthew Ready\n'
+        + 'aidan.lane@monash.edu, matt.ready@monash.edu\n\n'
+        + 'For more information visit http://flipt.org/\n\n'
+    
+        + 'Snap code copyright \u24B8 2013 Jens M\u00F6nig and '
         + 'Brian Harvey\n'
         + 'jens@moenig.org, bh@cs.berkeley.edu\n\n'
 
@@ -2323,7 +2338,7 @@ IDE_Morph.prototype.aboutSnap = function () {
 
     noticeTxt = localize('License')
         + '\n\n'
-        + 'Snap! is free software: you can redistribute it and/or modify\n'
+        + 'Scribble is free software: you can redistribute it and/or modify\n'
         + 'it under the terms of the GNU Affero General Public License as\n'
         + 'published by the Free Software Foundation, either version 3 of\n'
         + 'the License, or (at your option) any later version.\n\n'
@@ -2346,7 +2361,9 @@ IDE_Morph.prototype.aboutSnap = function () {
         + '\nIvan Motyashov: Initial Squeak Porting'
         + '\nDavide Della Casa: Morphic Optimizations'
         + '\nAchal Dave: Web Audio'
-        + '\nJoe Otto: Morphic Testing and Debugging';
+        + '\nJoe Otto: Morphic Testing and Debugging'
+        + '\n\nMatthew Ready: Main scribble additions to Snap!';
+/* END SCRIBBLE */
 
     for (module in modules) {
         if (Object.prototype.hasOwnProperty.call(modules, module)) {
