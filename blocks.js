@@ -155,7 +155,7 @@ DialogBoxMorph, BlockInputFragmentMorph, PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2013-August-01';
+modules.blocks = '2013-August-02';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -3157,10 +3157,7 @@ CommandBlockMorph.prototype.snap = function () {
         offsetY,
         affected;
 
-    scripts.lastDroppedBlock = null;
-    scripts.parent.lastReplacedInput = null;
-    scripts.parent.lastDropTarget = null;
-    scripts.lastPreservedBlocks = null;
+    scripts.clearDropHistory();
 
     if (target === null) {
         this.startLayout();
@@ -3180,7 +3177,7 @@ CommandBlockMorph.prototype.snap = function () {
         if (this.isStop()) {
             next = this.nextBlock();
             if (next) {
-                this.parentThatIsA(ScriptsMorph).add(next);
+                scripts.add(next);
                 next.moveBy(this.extent().floorDivideBy(2));
                 affected = this.parentThatIsA(CommandSlotMorph);
                 if (affected) {
@@ -3819,10 +3816,8 @@ ReporterBlockMorph.prototype.snap = function (hand) {
         return null;
     }
 
+    scripts.clearDropHistory();
     scripts.lastDroppedBlock = this;
-    scripts.parent.lastReplacedInput = null;
-    scripts.parent.lastDropTarget = null;
-    scripts.lastPreservedBlocks = null;
 
     target = scripts.closestInput(this, hand);
     if (target !== null) {
@@ -4882,6 +4877,15 @@ ScriptsMorph.prototype.undrop = function () {
         }
     }
     this.lastDroppedBlock.pickUp(this.world());
+    this.clearDropHistory();
+};
+
+
+ScriptsMorph.prototype.clearDropHistory = function () {
+    this.lastDroppedBlock = null;
+    this.lastReplacedInput = null;
+    this.lastDropTarget = null;
+    this.lastPreservedBlocks = null;
 };
 
 // ScriptsMorph blocks layout fix
@@ -10151,12 +10155,8 @@ CommentMorph.prototype.snap = function (hand) {
         return null;
     }
 
-    scripts.lastDroppedBlock = null;
-    scripts.parent.lastReplacedInput = null;
-    scripts.parent.lastDropTarget = null;
-    scripts.lastPreservedBlocks = null;
-
-    target = this.parent.closestBlock(this, hand);
+    scripts.clearDropHistory();
+    target = scripts.closestBlock(this, hand);
 
     if (target !== null) {
         target.comment = this;

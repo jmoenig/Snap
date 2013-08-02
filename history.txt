@@ -1839,3 +1839,7 @@ ______
 * Blocks, Threads: "whitespace" & other options in SPLIT reporter's dropdown
 * Blocks: Italicize editable input options (e.g. for the SPLT block) 
 * Blocks: Undrop Reporters feature (in script areas' context menus)
+
+130802
+------
+* Blocks: Undrop Reporters feature tweaks
