@@ -10156,6 +10156,7 @@ CommentMorph.prototype.snap = function (hand) {
     }
 
     scripts.clearDropHistory();
+    scripts.lastDroppedBlock = this;
     target = scripts.closestBlock(this, hand);
 
     if (target !== null) {
