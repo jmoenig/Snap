@@ -3158,6 +3158,7 @@ CommandBlockMorph.prototype.snap = function () {
         affected;
 
     scripts.clearDropHistory();
+    scripts.lastDroppedBlock = this;
 
     if (target === null) {
         this.startLayout();
@@ -3166,12 +3167,17 @@ CommandBlockMorph.prototype.snap = function () {
         CommandBlockMorph.uber.snap.call(this); // align stuck comments
         return;
     }
+
+    scripts.lastDropTarget = target;
+
     this.startLayout();
     if (target.loc === 'bottom') {
         if (target.type === 'slot') {
             this.removeHighlight();
+            scripts.lastNextBlock = target.element.nestedBlock();
             target.element.nestedBlock(this);
         } else {
+            scripts.lastNextBlock = target.element.nextBlock();
             target.element.nextBlock(this);
         }
         if (this.isStop()) {
@@ -4457,6 +4463,7 @@ ScriptsMorph.prototype.init = function (owner) {
     this.lastReplacedInput = null;
     this.lastDropTarget = null;
     this.lastPreservedBlocks = null;
+    this.lastNextBlock = null;
 
     ScriptsMorph.uber.init.call(this);
     this.setColor(new Color(70, 70, 70));
@@ -4864,16 +4871,41 @@ ScriptsMorph.prototype.addComment = function () {
 
 ScriptsMorph.prototype.undrop = function () {
     if (!this.lastDroppedBlock) {return; }
-    if (this.lastDropTarget) {
-        this.lastDropTarget.replaceInput(
-            this.lastDroppedBlock,
-            this.lastReplacedInput
-        );
-        this.lastDropTarget.fixBlockColor(null, true);
-        if (this.lastPreservedBlocks) {
-            this.lastPreservedBlocks.forEach(function (morph) {
-                morph.destroy();
-            });
+    if (this.lastDroppedBlock instanceof CommandBlockMorph) {
+        if (this.lastNextBlock) {
+            this.add(this.lastNextBlock);
+        }
+        if (this.lastDropTarget) {
+            if (this.lastDropTarget.loc === 'bottom') {
+                if (this.lastDropTarget.type === 'slot') {
+                    if (this.lastNextBlock) {
+                        this.lastDropTarget.element.nestedBlock(
+                            this.lastNextBlock
+                        );
+                    }
+                } else { // 'block'
+                    if (this.lastNextBlock) {
+                        this.lastDropTarget.element.nextBlock(
+                            this.lastNextBlock
+                        );
+                    }
+                }
+            } else if (this.lastDropTarget.loc === 'top') {
+                this.add(this.lastDropTarget.element);
+            }
+        }
+    } else { // ReporterBlockMorph
+        if (this.lastDropTarget) {
+            this.lastDropTarget.replaceInput(
+                this.lastDroppedBlock,
+                this.lastReplacedInput
+            );
+            this.lastDropTarget.fixBlockColor(null, true);
+            if (this.lastPreservedBlocks) {
+                this.lastPreservedBlocks.forEach(function (morph) {
+                    morph.destroy();
+                });
+            }
         }
     }
     this.lastDroppedBlock.pickUp(this.world());
@@ -4886,6 +4918,7 @@ ScriptsMorph.prototype.clearDropHistory = function () {
     this.lastReplacedInput = null;
     this.lastDropTarget = null;
     this.lastPreservedBlocks = null;
+    this.lastNextBlock = null;
 };
 
 // ScriptsMorph blocks layout fix
