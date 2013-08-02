@@ -83,7 +83,7 @@ ArgLabelMorph, localize, XML_Element, hex_sha512*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.threads = '2013-August-01';
+modules.threads = '2013-August-02';
 
 var ThreadManager;
 var Process;

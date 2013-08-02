@@ -1845,3 +1845,4 @@ ______
 * Blocks: Undrop Reporters feature tweaks
 * Blocks: Undrop Comments feature
 * Blocks: Undrop Commands feature
+* German translation update (for Undrop feature)
