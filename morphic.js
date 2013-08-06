@@ -1035,7 +1035,7 @@
 /*global window, HTMLCanvasElement, getMinimumFontHeight, FileReader, Audio,
 FileList, getBlurredShadowSupport*/
 
-var morphicVersion = '2013-June-28';
+var morphicVersion = '2013-August-06';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = getBlurredShadowSupport(); // check for Chrome-bug
 
@@ -9635,7 +9635,7 @@ HandMorph.prototype.processMouseMove = function (event) {
             if (old.mouseLeave) {
                 old.mouseLeave();
             }
-            if (old.mouseLeaveDragging && this.mouseButton) {
+            if (old.mouseLeaveDragging && myself.mouseButton) {
                 old.mouseLeaveDragging();
             }
         }
@@ -9645,7 +9645,7 @@ HandMorph.prototype.processMouseMove = function (event) {
             if (newMorph.mouseEnter) {
                 newMorph.mouseEnter();
             }
-            if (newMorph.mouseEnterDragging && this.mouseButton) {
+            if (newMorph.mouseEnterDragging && myself.mouseButton) {
                 newMorph.mouseEnterDragging();
             }
         }
@@ -9788,18 +9788,18 @@ HandMorph.prototype.processDrop = function (event) {
     }
 
     function parseImgURL(html) {
-        var url = '',
-            i,
+        var iurl = '',
+            idx,
             c,
             start = html.indexOf('<img src="');
         if (start === -1) {return null; }
         start += 10;
-        for (i = start; i < html.length; i += 1) {
-            c = html[i];
+        for (idx = start; idx < html.length; idx += 1) {
+            c = html[idx];
             if (c === '"') {
-                return url;
+                return iurl;
             }
-            url = url.concat(c);
+            iurl = iurl.concat(c);
         }
         return null;
     }
