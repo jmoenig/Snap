@@ -1850,3 +1850,4 @@ ______
 130805
 ------
 * Polish translation, yay!! Thanks, Witek Kranas!
+* Morphic: mouseEnterDragging fix
