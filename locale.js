@@ -42,7 +42,7 @@
 
 /*global modules, contains*/
 
-modules.locale = '2013-August-02';
+modules.locale = '2013-August-06';
 
 // Global stuff
 
@@ -302,4 +302,15 @@ SnapTranslator.dict.nl = {
         'frank.sierens@telenet.be',
     'last_changed':
         '2013-07-24'
+};
+
+SnapTranslator.dict.pl = {
+    'language_name':
+        'Polski',
+    'language_translator':
+        'Witek Kranas',
+    'translator_e-mail':
+        'witek@oeiizk.waw.pl',
+    'last_changed':
+        '2013-08-05'
 };

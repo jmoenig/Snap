@@ -123,7 +123,7 @@ PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.objects = '2013-July-31';
+modules.objects = '2013-August-06';
 
 var SpriteMorph;
 var StageMorph;
@@ -1168,6 +1168,9 @@ SpriteMorph.prototype.init = function (globals) {
     this.rotationOffset = new Point(); // not to be serialized (!)
     this.idx = 0; // not to be serialized (!) - used for de-serialization
     this.wasWarped = false; // not to be serialized, used for fast-tracking
+
+    this.parts = []; // sprite nesting
+    this.anchor = null; // sprite nesting
 
     SpriteMorph.uber.init.call(this);
 

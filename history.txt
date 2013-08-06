@@ -1846,3 +1846,7 @@ ______
 * Blocks: Undrop Comments feature
 * Blocks: Undrop Commands feature
 * German translation update (for Undrop feature)
+
+130805
+------
+* Polish translation, yay!! Thanks, Witek Kranas!
