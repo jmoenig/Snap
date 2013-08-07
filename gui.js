@@ -4729,7 +4729,11 @@ SpriteIconMorph.prototype.createThumbnail = function () {
 
     this.thumbnail = new Morph();
     this.thumbnail.setExtent(this.thumbSize);
-    this.thumbnail.image = this.object.fullThumbnail(this.thumbSize);
+    if (this.object instanceof SpriteMorph) { // support nested sprites
+        this.thumbnail.image = this.object.fullThumbnail(this.thumbSize);
+    } else {
+        this.thumbnail.image = this.object.thumbnail(this.thumbSize);
+    }
     this.add(this.thumbnail);
 };
 
