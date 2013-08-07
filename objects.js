@@ -2624,6 +2624,14 @@ SpriteMorph.prototype.drawLine = function (start, dest) {
 
 // SpriteMorph motion
 
+SpriteMorph.prototype.moveBy = function (delta) {
+    // override the inherited default to make sure my parts follow
+    SpriteMorph.uber.moveBy.call(this, delta);
+    this.parts.forEach(function (part) {
+        part.moveBy(delta);
+    });
+};
+
 SpriteMorph.prototype.forward = function (steps) {
     var start = this.rotationCenter(),
         dest,
