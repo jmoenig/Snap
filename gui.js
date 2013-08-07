@@ -68,7 +68,7 @@ sb, CommentMorph, CommandBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2013-May-17';
+modules.gui = '2013-July-30';
 
 // Declarations
 
@@ -351,6 +351,7 @@ IDE_Morph.prototype.openIn = function (world) {
                             ) {
                                 myself.rawOpenProjectString(projectData);
                             }
+                            myself.hasChangedMedia = true;
                         },
                         function () {
                             myself.shield.destroy();
@@ -1442,6 +1443,7 @@ IDE_Morph.prototype.fixLayout = function (situation) {
 
 IDE_Morph.prototype.setProjectName = function (string) {
     this.projectName = string;
+    this.hasChangedMedia = true;
     this.controlBar.updateLabel();
 };
 
@@ -1485,7 +1487,10 @@ IDE_Morph.prototype.reactToWorldResize = function (rect) {
 };
 
 IDE_Morph.prototype.droppedImage = function (aCanvas, name) {
-    var costume = new Costume(aCanvas, name.split('.')[0]); // up to period
+    var costume = new Costume(
+        aCanvas,
+        name ? name.split('.')[0] : '' // up to period
+    );
     this.currentSprite.addCostume(costume);
     this.currentSprite.wearCostume(costume);
     this.spriteBar.tabBar.tabTo('costumes');
@@ -1762,7 +1767,7 @@ IDE_Morph.prototype.addNewSprite = function () {
     this.selectSprite(sprite);
 };
 
-IDE_Morph.prototype.paintNewSprite = function() {
+IDE_Morph.prototype.paintNewSprite = function () {
     var sprite = new SpriteMorph(this.globalVariables),
         cos = new Costume(),
         myself = this;
@@ -1778,7 +1783,7 @@ IDE_Morph.prototype.paintNewSprite = function() {
         this.world(),
         this,
         true,
-        function() {myself.removeSprite(sprite); },
+        function () {myself.removeSprite(sprite); },
         function () {
             sprite.addCostume(cos);
             sprite.wearCostume(cos);
@@ -2167,7 +2172,7 @@ IDE_Morph.prototype.settingsMenu = function () {
         'check for alternative\nGUI design',
         false
     );
-    menu.addLine(); // everything below this line is made persistent
+    menu.addLine(); // everything below this line is stored in the project
     addPreference(
         'Thread safe scripts',
         function () {stage.isThreadSafe = !stage.isThreadSafe; },
@@ -2181,6 +2186,20 @@ IDE_Morph.prototype.settingsMenu = function () {
         StageMorph.prototype.frameRate,
         'uncheck for greater speed\nat variable frame rates',
         'check for smooth, predictable\nanimations across computers'
+    );
+    addPreference(
+        'Codification support',
+        function () {
+            StageMorph.prototype.enableCodeMapping =
+                !StageMorph.prototype.enableCodeMapping;
+            myself.currentSprite.blocksCache.variables = null;
+            myself.currentSprite.paletteCache.variables = null;
+            myself.refreshPalette();
+        },
+        StageMorph.prototype.enableCodeMapping,
+        'uncheck to disable\nblock to text mapping features',
+        'check for block\nto text mapping features',
+        false
     );
     menu.popup(world, pos);
 };
@@ -2304,6 +2323,51 @@ IDE_Morph.prototype.projectMenu = function () {
 
         },
         'load the official library of\npowerful blocks'
+    );
+    menu.addItem(
+        'Libraries...',
+        function () {
+            var libMenu = new MenuMorph(this, 'Import library');
+
+            function loadLib(name) {
+                var url = 'http://snap.berkeley.edu/snapsource/libraries/'
+                        + name
+                        + '.xml',
+                    request = new XMLHttpRequest();
+                request.open('GET', url, false);
+                request.send();
+                if (request.status === 200) {
+                    return myself.droppedText(request.responseText, name);
+                }
+                throw new Error('unable to retrieve ' + url);
+            }
+
+            libMenu.addItem(
+                'Iteration, composition',
+                function () {
+                    loadLib('iteration-composition');
+                }
+            );
+            libMenu.addItem(
+                'List utilities',
+                function () {
+                    loadLib('list-utilities');
+                }
+            );
+            libMenu.addItem(
+                'Variadic reporters',
+                function () {
+                    loadLib('variadic-reporters');
+                }
+            );
+            libMenu.addItem(
+                'Words, sentences',
+                function () {
+                    loadLib('word-sentence');
+                }
+            );
+            libMenu.popup(world, pos);
+        }
     );
 
     menu.popup(world, pos);
@@ -2532,6 +2596,9 @@ IDE_Morph.prototype.newProject = function () {
     this.currentSprite = new SpriteMorph(this.globalVariables);
     this.sprites = new List([this.currentSprite]);
     StageMorph.prototype.hiddenPrimitives = {};
+    StageMorph.prototype.codeMappings = {};
+    StageMorph.prototype.codeHeaders = {};
+    StageMorph.prototype.enableCodeMapping = false;
     this.setProjectName('');
     this.projectNotes = '';
     this.createStage();
@@ -2677,6 +2744,10 @@ IDE_Morph.prototype.openProjectString = function (str) {
 IDE_Morph.prototype.rawOpenProjectString = function (str) {
     this.toggleAppMode(false);
     this.spriteBar.tabBar.tabTo('scripts');
+    StageMorph.prototype.hiddenPrimitives = {};
+    StageMorph.prototype.codeMappings = {};
+    StageMorph.prototype.codeHeaders = {};
+    StageMorph.prototype.enableCodeMapping = false;
     if (Process.prototype.isCatchingErrors) {
         try {
             this.serializer.openProject(this.serializer.load(str), this);
@@ -2707,6 +2778,10 @@ IDE_Morph.prototype.openCloudDataString = function (str) {
 
 IDE_Morph.prototype.rawOpenCloudDataString = function (str) {
     var model;
+    StageMorph.prototype.hiddenPrimitives = {};
+    StageMorph.prototype.codeMappings = {};
+    StageMorph.prototype.codeHeaders = {};
+    StageMorph.prototype.enableCodeMapping = false;
     if (Process.prototype.isCatchingErrors) {
         try {
             model = this.serializer.parse(str);
@@ -5067,7 +5142,7 @@ CostumeIconMorph.prototype.renameCostume = function () {
     );
 };
 
-CostumeIconMorph.prototype.duplicateCostume = function() {
+CostumeIconMorph.prototype.duplicateCostume = function () {
     var wardrobe = this.parentThatIsA(WardrobeMorph),
         ide = this.parentThatIsA(IDE_Morph),
         newcos = this.object.copy(),
@@ -5446,11 +5521,11 @@ WardrobeMorph.prototype.removeCostumeAt = function (idx) {
     this.updateList();
 };
 
-WardrobeMorph.prototype.paintNew = function() {
+WardrobeMorph.prototype.paintNew = function () {
     var cos = new Costume(newCanvas(), "Untitled"),
         ide = this.parentThatIsA(IDE_Morph),
         myself = this;
-    cos.edit(this.world(), null, true, null, function() {
+    cos.edit(this.world(), ide, true, null, function () {
         myself.sprite.addCostume(cos);
         myself.updateList();
         if (ide) {

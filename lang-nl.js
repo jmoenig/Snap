@@ -1,12 +1,6 @@
 /*
 
-    lang-de.js
-
-    German translation for SNAP!
-
-    written by Jens Mönig
-
-    Copyright (C) 2013 by Jens Mönig
+    lang-nl.js
 
     This file is part of Snap!.
 
@@ -166,7 +160,7 @@
 
 /*global SnapTranslator*/
 
-SnapTranslator.dict.de = {
+SnapTranslator.dict.nl = {
 
 /*
     Special characters: (see <http://0xcc.net/jsescape/>)
@@ -179,79 +173,78 @@ SnapTranslator.dict.de = {
 
     // translations meta information
     'language_name':
-        'Deutsch', // the name as it should appear in the language menu
+        'Nederlands', // the name as it should appear in the language menu
     'language_translator':
-        'Jens M\u00F6nig', // your name for the Translators tab
+        'Frank Sierens', // your name for the Translators tab
     'translator_e-mail':
-        'jens@moenig.org', // optional
+        'frank.sierens@telenet.be', // optional
     'last_changed':
-        '2013-08-02', // this, too, will appear in the Translators tab
+        '2013-07-24', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
     'untitled':
-        'Unbenannt',
+        'Zonder titel',
     'development mode':
-        'Hackermodus',
+        'Hackermode',
 
     // categories:
     'Motion':
-        'Bewegung',
+        'Beweging',
     'Looks':
-        'Aussehen',
+        'Uitzicht',
     'Sound':
-        'Klang',
+        'Klank',
     'Pen':
-        'Stift',
+        'Pen',
     'Control':
-        'Steuerung',
+        'Sturing',
     'Sensing':
-        'F\u00fchlen',
+        'Voelen',
     'Operators':
         'Operatoren',
     'Variables':
-        'Variablen',
+        'Variabelen',
     'Lists':
-        'Listen',
+        'Lijsten',
     'Other':
         'Andere',
 
     // editor:
     'draggable':
-        'greifbar',
+        'versleepbaar',
 
     // tabs:
     'Scripts':
-        'Skripte',
+        'Scripts',
     'Costumes':
-        'Kost\u00fcme',
+        'Kostuums',
     'Sounds':
-        'Kl\u00e4nge',
+        'Geluiden',
 
     // names:
     'Sprite':
-        'Objekt',
+        'Object',
     'Stage':
-        'B\u00fchne',
+        'Toneel',
 
     // rotation styles:
     'don\'t rotate':
-        'nicht drehbar',
+        'niet draaibaar',
     'can rotate':
-        'frei drehbar',
+        'draaibaar',
     'only face left/right':
-        'kann sich nur nach\nlinks/rechts drehen',
+        'kan alleen links/rechts draaien',
 
     // new sprite button:
     'add a new sprite':
-        'ein neues Objekt\nhinzuf\u00fcgen',
+        'een nieuw object toevoegen',
 
     // tab help
     'costumes tab help':
-        'Bilder durch hereinziehen von einer anderen\n'
-            + 'Webseite or vom Computer importieren',
+        'Kostuum tab help',
     'import a sound from your computer\nby dragging it into here':
-        'Kl\u00e4nge durch hereinziehen importieren',
+        'Geluiden importeren',
 
     // primitive blocks:
 
@@ -287,570 +280,552 @@ SnapTranslator.dict.de = {
 
     // motion:
     'Stage selected:\nno motion primitives':
-        'B\u00fchne ausgew\u00e4hlt:\nkeine Standardbewegungsbl\u00f6cke\n'
-            + 'vorhanden',
+        'Toneel geselecteerd: geen standaardbeweging mogelijk',
 
     'move %n steps':
-        'gehe %n Schritte',
+        'verplaats %n Stappen',
     'turn %clockwise %n degrees':
-        'drehe %clockwise %n Grad',
+        'draai %clockwise %n Graden',
     'turn %counterclockwise %n degrees':
-        'drehe %counterclockwise %n Grad',
+        'draai %counterclockwise %n Graden',
     'point in direction %dir':
-        'zeige Richtung %dir',
+        'Wijs in Richting %dir',
     'point towards %dst':
-        'zeige auf %dst',
+        'wijs naar %dst',
     'go to x: %n y: %n':
-        'gehe zu x: %n y: %n',
+        'ga naar x: %n y: %n',
     'go to %dst':
-        'gehe zu %dst',
+        'ga naar %dst',
     'glide %n secs to x: %n y: %n':
-        'gleite %n Sek. zu x: %n y: %n',
+        'glijd %n Sec. naar x: %n y: %n',
     'change x by %n':
-        '\u00e4ndere x um %n',
+        'Wijzig x met %n',
     'set x to %n':
-        'setze x auf %n',
+        'Maak x gelijk aan %n',
     'change y by %n':
-        '\u00e4ndere y um %n',
+        'Wijzig y met %n',
     'set y to %n':
-        'setze y auf %n',
+        'Maak y gelijk aan %n',
     'if on edge, bounce':
-        'pralle vom Rand ab',
+        'indien tegen de rand, kaats terug',
     'x position':
-        'x-Position',
+        'x-Positie',
     'y position':
-        'y-Position',
+        'y-Positie',
     'direction':
-        'Richtung',
+        'Richting',
 
     // looks:
     'switch to costume %cst':
-        'ziehe Kost\u00fcm %cst an',
+        'Kies kostuum %cst',
     'next costume':
-        'n\u00e4chstes Kost\u00fcm',
+        'volgend kostuum',
     'costume #':
-        'Kost\u00fcm Nr.',
+        'Kostuum Nr.',
     'say %s for %n secs':
-        'sage %s f\u00fcr %n Sek.',
+        'zeg %s gedurende %n Sec.',
     'say %s':
-        'sage %s',
+        'zeg %s',
     'think %s for %n secs':
-        'denke %s f\u00fcr %n Sek.',
+        'denk %s gedurende %n Sec.',
     'think %s':
-        'denke %s',
+        'denk %s',
     'Hello!':
         'Hallo!',
     'Hmm...':
         'Hmm...',
     'change %eff effect by %n':
-        '\u00e4ndere %eff -Effekt um %n',
+        'Wijzig %eff -Effect met %n',
     'set %eff effect to %n':
-        'setze %eff -Effekt auf %n',
+        'Maak %eff -Effect gelijk aan %n',
     'clear graphic effects':
-        'schalte Grafikeffekte aus',
+        'Wis grafische effecten',
     'change size by %n':
-        '\u00e4ndere Gr\u00f6\u00dfe um %n',
+        'Wijzig grootte met %n',
     'set size to %n %':
-        'setze Gr\u00f6\u00dfe auf %n %',
+        'Maak grootte gelijk aan %n %',
     'size':
-        'Gr\u00f6\u00dfe',
+        'Grootte',
     'show':
-        'anzeigen',
+        'Toon',
     'hide':
-        'verstecken',
+        'Verberg',
     'go to front':
-        'komme nach vorn',
+        'Ga naar voor',
     'go back %n layers':
-        'gehe %n Ebenen zur\u00fcck',
+        'Ga %n lagen terug',
 
     'development mode \ndebugging primitives:':
-        'Hackermodus \nDebugging-Bl\u00f6cke',
+        'Hackermode \nDebugging-Blokken',
     'console log %mult%s':
-        'schreibe in die Konsole: %mult%s',
+        'Schrijf naar de console: %mult%s',
     'alert %mult%s':
         'Pop-up: %mult%s',
 
     // sound:
     'play sound %snd':
-        'spiele Klang %snd',
+        'speel geluid %snd',
     'play sound %snd until done':
-        'spiele Klang %snd ganz',
+        'speel geluid %snd volledig',
     'stop all sounds':
-        'stoppe alle Kl\u00e4nge',
+        'stop alle geluid',
     'rest for %n beats':
-        'spiele Pause f\u00fcr %n Schl\u00e4ge',
+        'Pauzeer gedurende %n maten',
     'play note %n for %n beats':
-        'spiele Note %n f\u00fcr %n Schl\u00e4ge',
+        'speel noot %n gedurende %n maten',
     'change tempo by %n':
-        '\u00e4ndere Tempo um %n',
+        'Wijzig tempo naar %n',
     'set tempo to %n bpm':
-        'setze Tempo auf %n Schl\u00e4ge/Min.',
+        'Maak tempo gelijk aan %n bpm',
     'tempo':
         'Tempo',
 
     // pen:
     'clear':
-        'wische',
+        'wis',
     'pen down':
-        'Stift runter',
+        'Pen neer',
     'pen up':
-        'Stift hoch',
+        'Pen omhoog',
     'set pen color to %clr':
-        'setze Stiftfarbe auf %clr',
+        'Maak penkleur gelijk aan %clr',
     'change pen color by %n':
-        '\u00e4ndere Stiftfarbe um %n',
+        'Wijzig penkleur naar %n',
     'set pen color to %n':
-        'setze Stiftfarbe auf %n',
+        'Maak penkleur gelijk aan %n',
     'change pen shade by %n':
-        '\u00e4ndere Farbst\u00e4rke um %n',
+        'Wijzig penschaduw naar %n',
     'set pen shade to %n':
-        'setze Farbst\u00e4rke auf %n',
+        'Maak penschaduw gelijk aan %n',
     'change pen size by %n':
-        '\u00e4ndere Stiftdicke um %n',
+        'Verander pengrootte naar %n',
     'set pen size to %n':
-        'setze Stiftdicke auf %n',
+        'Maak pengrootte gelijk aan %n',
     'stamp':
-        'stemple',
+        'stempel',
 
     // control:
     'when %greenflag clicked':
-        'Wenn %greenflag angeklickt',
+        'Wanneer %greenflag aangeklikt is',
     'when %keyHat key pressed':
-        'Wenn Taste %keyHat gedr\u00fcckt',
+        'Wanneer toets %keyHat ingedrukt is',
     'when I am clicked':
-        'Wenn ich angeklickt werde',
+        'Wanneer er op mij geklikt is',
     'when I receive %msgHat':
-        'Wenn ich %msgHat empfange',
+        'Wanneer ik %msgHat ontvang',
     'broadcast %msg':
-        'sende %msg an alle',
+        'stuur %msg naar iedereen',
     'broadcast %msg and wait':
-        'sende %msg an alle und warte',
+        'stuur %msg naar iedereen en wacht',
     'Message name':
-        'Nachricht',
+        'Bericht naam',
     'message':
-        'Nachricht',
+        'Bericht',
     'any message':
-        'eine beliebige Nachricht',
+        'gelijk welk bericht',
     'wait %n secs':
-        'warte %n Sek.',
+        'wacht %n sec.',
     'wait until %b':
-        'warte bis %b',
+        'wacht tot %b',
     'forever %c':
-        'fortlaufend %c',
+        'doorlopend %c',
     'repeat %n %c':
-        'wiederhole %n mal %c',
+        'Herhaal %n keer %c',
     'repeat until %b %c':
-        'wiederhole bis %b %c',
+        'herhaal tot %b %c',
     'if %b %c':
-        'falls %b %c',
+        'als %b %c',
     'if %b %c else %c':
-        'falls %b %c sonst %c',
+        'als %b %c anders %c',
     'report %s':
-        'berichte %s',
+        'rapporteer %s',
     'stop block':
-        'stoppe diesen Block',
+        'stop blok',
     'stop script':
-        'stoppe dieses Skript',
+        'stop script',
     'stop all %stop':
-        'stoppe alles %stop',
-    'pause all %pause':
-        'pausiere alles %pause',
+        'stop alle %stop',
     'run %cmdRing %inputs':
-        'f\u00fchre %cmdRing aus %inputs',
+        'Voer %cmdRing uit %inputs',
     'launch %cmdRing %inputs':
-        'starte %cmdRing %inputs',
+        'start %cmdRing %inputs',
     'call %repRing %inputs':
-        'rufe %repRing auf %inputs',
+        'aanroepen %repRing op %inputs',
     'run %cmdRing w/continuation':
-        'f\u00fchre %cmdRing mit Continuation aus',
+        'Voer %cmdRing uit met voortgang',
     'call %cmdRing w/continuation':
-        'rufe %cmdRing mit Continuation auf',
+        'aanroepen %cmdRing met voortgang',
     'warp %c':
         'Warp %c',
     'when I start as a clone':
-        'Wenn ich geklont werde',
+        'Wanneer ik start als kloon',
     'create a clone of %cln':
-        'klone %cln',
+        'maak een kloon van %cln',
     'myself':
-        'mich',
+        'mezelf',
     'delete this clone':
-        'entferne diesen Klon',
+        'wis deze kloon',
 
     // sensing:
     'touching %col ?':
-        'ber\u00fchre %col ?',
+        'contact met %col ?',
     'touching %clr ?':
-        'ber\u00fchre %clr ?',
+        'contact met %clr ?',
     'color %clr is touching %clr ?':
-        'Farbe %clr ber\u00fchrt %clr ?',
+        'kleur %clr maakt contact met %clr ?',
     'ask %s and wait':
-        'frage %s und warte',
+        'vraag %s en wacht',
     'what\'s your name?':
-        'Wie hei\u00dft Du?',
+        'Hoe heet je?',
     'answer':
-        'Antwort',
+        'Antwoord',
     'mouse x':
-        'Maus x-Position',
+        'Muis x-Positie',
     'mouse y':
-        'Maus y-Position',
+        'Muis y-Positie',
     'mouse down?':
-        'Maustaste gedr\u00fcckt?',
+        'muisknop ingedrukt?',
     'key %key pressed?':
-        'Taste %key gedr\u00fcckt?',
+        'Toest %key ingedrukt?',
     'distance to %dst':
-        'Entfernung von %dst',
+        'Afstand tot %dst',
     'reset timer':
-        'starte Stoppuhr neu',
+        'herstart timer',
     'timer':
-        'Stoppuhr',
+        'timer',
     '%att of %spr':
-        '%att von %spr',
+        '%att van %spr',
     'http:// %s':
         'http:// %s',
     'turbo mode?':
-        'Turbomodus?',
+        'Turbomode?',
     'set turbo mode to %b':
-        'setze Turbomodus auf %b',
+        'Zet Turbomode op %b',
 
     'filtered for %clr':
-        'nach %clr gefiltert',
+        'volgens %clr gefiltert',
     'stack size':
-        'Stapelgr\u00f6\u00dfe',
+        'Stapelgrootte',
     'frames':
-        'Rahmenz\u00e4hler',
+        'beelden',
 
     // operators:
     '%n mod %n':
         '%n modulo %n',
     'round %n':
-        '%n gerundet',
+        '%n afgerond',
     '%fun of %n':
-        '%fun von %n',
+        '%fun van %n',
     'pick random %n to %n':
-        'Zufallszahl von %n bis %n',
+        'willekeurig getal van %n tot %n',
     '%b and %b':
-        '%b und %b',
+        '%b en %b',
     '%b or %b':
-        '%b oder %b',
+        '%b of %b',
     'not %b':
-        'nicht %b',
+        'niet %b',
     'true':
-        'wahr',
+        'waar',
     'false':
-        'falsch',
+        'vals',
     'join %words':
-        'verbinde %words',
+        'verbind %words',
     'hello':
         'Hallo',
     'world':
-        'Welt',
+        'Wereld',
     'letter %n of %s':
-        'Zeichen %n von %s',
+        'Letter %n van %s',
     'length of %s':
-        'L\u00e4nge von %s',
+        'Lengte van %s',
     'unicode of %s':
-        'Unicode Wert von %s',
+        'Unicode waarde van %s',
     'unicode %n as letter':
-        'Unicode %n als Buchstabe',
-    'is %s a %typ ?':
-        'ist %s ein(e) %typ ?',
-    'is %s identical to %s ?':
-        'ist %s identisch mit %s ?',
-
+        'Unicode %n als hoofdletter',
     'type of %s':
-        'Typ von %s',
+        'Type van %s',
 
     // variables:
     'Make a variable':
-        'Neue Variable',
+        'Maak een variabele',
     'Variable name':
-        'Variablenname',
+        'variabelenaam',
     'Script variable name':
-        'Skriptvariablenname',
+        'Scriptvariabelenaam',
     'Delete a variable':
-        'Variable l\u00f6schen',
+        'Variabele wissen',
 
     'set %var to %s':
-        'setze %var auf %s',
+        'stel %var gelijk aan %s',
     'change %var by %n':
-        '\u00e4ndere %var um %n',
+        'Wijzig %var met %n',
     'show variable %var':
-        'zeige Variable %var',
+        'toon variabele %var',
     'hide variable %var':
-        'verstecke Variable %var',
+        'verberg variabele %var',
     'script variables %scriptVars':
-        'Skriptvariablen %scriptVars',
+        'scriptvariabelen %scriptVars',
 
     // lists:
     'list %exp':
-        'Liste %exp',
+        'Lijst %exp',
     '%s in front of %l':
-        '%s am Anfang von %l',
+        '%s voor %l',
     'item %idx of %l':
-        'Element %idx von %l',
+        'Element %idx van %l',
     'all but first of %l':
-        'alles au\u00dfer dem ersten von %l',
+        'alle behalve de eerste van %l',
     'length of %l':
-        'L\u00e4nge von %l',
+        'lengte van %l',
     '%l contains %s':
-        '%l enth\u00e4lt %s',
+        '%l bevat %s',
     'thing':
-        'etwas',
+        'ding',
     'add %s to %l':
-        'f\u00fcge %s zu %l hinzu',
+        'Tel %s bij %l op',
     'delete %ida of %l':
-        'entferne %ida aus %l',
+        'verwijder %ida van %l',
     'insert %s at %idx of %l':
-        'f\u00fcge %s als %idx in %l ein',
+        'Voeg %s op plaats %idx aan %l toe',
     'replace item %idx of %l with %s':
-        'ersetze Element %idx in %l durch %s',
+        'vervang element %idx in %l door %s',
 
     // other
     'Make a block':
-        'Neuer Block',
+        'maak een blok',
 
     // menus
     // snap menu
     'About...':
-        '\u00dcber Snap!...',
+        'Over Snap!...',
     'Reference manual':
-        'Handbuch lesen',
+        'Handboek',
     'Snap! website':
-        'Snap! Webseite',
+        'Snap! Website',
     'Download source':
-        'Quellcode runterladen',
+        'broncode downloaden',
     'Switch back to user mode':
-        'zur\u00fcck zum Benutzermodus',
+        'terug naar gebruikersmode',
     'disable deep-Morphic\ncontext menus\nand show user-friendly ones':
-        'verl\u00e4sst Morphic',
+        'verlaat Morphic context menus\nen toon gebruiksvriendelijke menus',
     'Switch to dev mode':
-        'zum Hackermodus wechseln',
+        'overschakelen naar hackermode',
     'enable Morphic\ncontext menus\nand inspectors,\nnot user-friendly!':
-        'erm\u00f6glicht Morphic Funktionen',
+        'gebruik Morphic\ncontext menus\nen inspectors,\nniet gebruiksvriendelijk!',
 
     // project menu
     'Project notes...':
-        'Projektanmerkungen...',
+        'Projektnotities...',
     'New':
-        'Neu',
+        'Nieuw',
     'Open...':
-        '\u00d6ffnen...',
+        'Openen...',
     'Save':
-        'Sichern',
+        'opslaan',
     'Save As...':
-        'Sichern als...',
+        'Opslaan als...',
     'Import...':
-        'Importieren...',
+        'Importeren...',
     'file menu import hint':
-        'l\u00e4dt ein exportiertes Projekt,\neine Bibliothek mit '
-            + 'Bl\u00f6cken\n'
-            + 'ein Kost\u00fcm oder einen Klang',
+        'bestandsmenu import hint',
     'Export project as plain text...':
-        'Projekt als normalen Text exportieren...',
+        'Project exporteren als tekst...',
     'Export project...':
-        'Projekt exportieren...',
+        'Project exporteren...',
     'show project data as XML\nin a new browser window':
-        'zeigt das Projekt als XML\nin einem neuen Browserfenster an',
+        'Toon project gegevens als XML\nin een nieuw browservenster',
     'Export blocks...':
-        'Bl\u00f6cke exportieren...',
+        'Blokken exporteren...',
     'show global custom block definitions as XML\nin a new browser window':
-        'zeigt globale Benutzerblockdefinitionen\nals XML im Browser an',
+        'Toon globale custom blokdefinities\nals XML in browser',
     'Import tools':
         'Tools laden',
     'load the official library of\npowerful blocks':
-        'das offizielle Modul mit\nm\u00e4chtigen Bl\u00f6cken laden',
+        'laden van officiele bibliotheek\nmet krachtige blokken',
     'Libraries...':
-        'Module...',
+        'Bibiliotheek...',
     'Import library':
-        'Modul laden',
+        'Bibliotheek importeren',
 
     // cloud menu
     'Login...':
-        'Anmelden...',
+        'Aanmelden...',
     'Signup...':
-        'Benutzerkonto einrichten...',
+        'Gebruikersaccount aanmaken...',
 
     // settings menu
     'Language...':
-        'Sprache...',
+        'Taal...',
     'Zoom blocks...':
-        'Bl\u00f6cke vergr\u00f6\u00dfern...',
+        'Blokken inzoomen...',
     'Blurred shadows':
-        'Weiche Schatten',
+        'Onscherpe schaduwen',
     'uncheck to use solid drop\nshadows and highlights':
-        'abschalten f\u00fcr harte Schatten\nund Beleuchtung',
+        'Uitvinken om volle schaduwen \nen highlights te krijgen',
     'check to use blurred drop\nshadows and highlights':
-        'einschalten f\u00fcr harte Schatten\nund Beleuchtung',
+        'Aanvinken om onscherpe schaduwen \nen highlights te krijgen',
     'Zebra coloring':
-        'Zebrafarben',
+        'Zebrakleuren',
     'check to enable alternating\ncolors for nested blocks':
-        'einschalten \u00fcr abwechselnde Farbnuancen\nin Bl\u00f6cken',
+        'Aanvinken voor afwisselende kleuren\n voor geneste blokken',
     'uncheck to disable alternating\ncolors for nested block':
-        'ausschalten verhindert abwechselnde\nFarbnuancen in Bl\u00f6cken',
+        'Uitvinken om afwisselende \nkleuren voor geneste blokken uit te schakelen',
     'Dynamic input labels':
-        'Eingabenbeschriftung',
+        'Dynamische input labels',
     'uncheck to disable dynamic\nlabels for variadic inputs':
-        'ausschalten verhindert Beschriftung\nvon Mehrfacheingaben',
+        'Uitvinken verhindert dynamische labels\nvoor meervaksingave',
     'check to enable dynamic\nlabels for variadic inputs':
-        'einschalten um Mehrfacheingabefelder\nautomatisch zu beschriften',
+        'Aanvinken voor dynamische labels\nvoor meervaksingave',
     'Prefer empty slot drops':
-        'Leere Platzhalter bevorzugen',
+        'Voorkeur voor lege plaatshouders',
     'settings menu prefer empty slots hint':
-        'einschalten um leere Platzhalter\nbeim Platzieren von Bl\u00f6cken'
-            + 'zu bevorzugen',
+        'Instellingen menu voorkeuren lege plaasthouders',
     'uncheck to allow dropped\nreporters to kick out others':
-        'ausschalten um das "Rauskicken"\nvon platzierten Bl\u00f6cken\n'
-            + 'zu erm\u00f6glichen',
+        'Uitschakelen opm toe te laten dat lege reporters\n anderen buitengooit',
     'Long form input dialog':
-        'Ausf\u00fchrlicher Input-Dialog',
+        'Lang formulier input dialoog',
     'check to always show slot\ntypes in the input dialog':
-        'einschalten, um immer die Datentypen\nim Input-Dialog zu sehen',
+        'aanvinken om data type in\ninputdialoog te zien',
     'uncheck to use the input\ndialog in short form':
-        'ausschalten f\u00fcr kurzen\nInput-Dialog',
+        'uitvinken voor verkorte inputdialoog',
     'Virtual keyboard':
-        'Virtuelle Tastatur',
+        'Virtueel toetsenbord',
     'uncheck to disable\nvirtual keyboard support\nfor mobile devices':
-        'ausschalten um die virtuelle\nTastatur auf mobilen Ger\u00e4ten\n'
-            + 'zu sperren',
+        'uitvinken om het virtueel toetsenbord uit te schakelen voor mobiele toestellen',
     'check to enable\nvirtual keyboard support\nfor mobile devices':
-        'einschalten um die virtuelle\nTastatur auf mobilen Ger\u00e4ten\n'
-            + 'zu erm\u00f6glichen',
+        'aanvinken om het virtueel toetsenbord in te schekelen voor mobiele toestellen',
     'Input sliders':
-        'Eingabeschieber',
+        'invoer schuifbalk',
     'uncheck to disable\ninput sliders for\nentry fields':
-        'ausschalten um Schieber\nin Eingabefeldern zu verhindern',
+        'uitvinken om schuifbalken voor invoer uit te schakelen',
     'check to enable\ninput sliders for\nentry fields':
-        'einschalten um Schieber\nin Eingabefeldern zu aktivieren',
+        'aanvinken om schuifbalken voor invoer in te schakelen',
     'Clicking sound':
-        'Akustisches Klicken',
+        'Klikgeluid',
     'uncheck to turn\nblock clicking\nsound off':
-        'ausschalten um akustisches\nKlicken zu deaktivieren',
+        'uitvinken om klikgeluiden uit te schakelen',
     'check to turn\nblock clicking\nsound on':
-        'einschalten um akustisches\nKlicken zu aktivieren',
+        'aanvinken om geluid bij blokrotatie in te schakelen',
     'Animations':
-        'Animationen',
+        'Animaties',
     'uncheck to disable\nIDE animations':
-        'ausschalten um IDE-\nAnimationen zu verhindern',
+        'uitvinken om IDE animaties uit te schakelen',
     'Turbo mode':
-        'Turbomodus',
+        'Turbomode',
     'check to prioritize\nscript execution':
-        'einschalten, um Skripte\nzu priorisieren',
+        'aanvinken om scriptuitvoering prioriteit te geven',
     'uncheck to run scripts\nat normal speed':
-        'ausschalten, um Skripte\nnormal auszuf\u00fchren',
+        'uitvinken voor scripuitvoering op normale snelheid',
     'check to enable\nIDE animations':
-        'einschalten um IDE-\nAnimationen zu erlauben',
+        'aanvinken om IDE animaties toe te laten',
     'Thread safe scripts':
-        'Threadsicherheit',
+        'Thread veilige scripts',
     'uncheck to allow\nscript reentrance':
-        'verhindert, dass unvollendete\nSkripte erneut gestartet werden',
+        'uitvinken om toe te laten dat\nniet afgewerkte scripts opnieuw gestart worden',
     'check to disallow\nscript reentrance':
-        'verhindert, dass unvollendete\nSkripte erneut gestartet werden',
+        'aanvinken om te verhinderen dat\nniet afgewerkte scripts opnieuw gestart worden',
     'Prefer smooth animations':
-        'Fixe Framerate',
+        'Voorkeur voor vloeiende animatie',
     'uncheck for greater speed\nat variable frame rates':
-        'ausschalten, um Animationen \ndynamischer auszuf\u00fchren',
+        'uitvinken voor groetere snelheid\nbij variabele frame rates',
     'check for smooth, predictable\nanimations across computers':
-        'einschalten, damit Animationen\n\u00fcberall gleich laufen',
+        'aanvinken voor vloeiende\nvoorspelbare animaties tussen computers',
 
     // inputs
     'with inputs':
-        'mit Eingaben',
+        'met inputs',
     'input names:':
-        'Eingaben:',
+        'input namen:',
     'Input Names:':
-        'Eingaben:',
+        'Input Namen:',
     'input list:':
-        'Eingabeliste:',
+        'inputlijst:',
 
     // context menus:
     'help':
-        'Hilfe',
+        'Help',
 
     // palette:
     'hide primitives':
-        'Basisbl\u00f6cke ausblenden',
+        'basisblokken verbergen',
     'show primitives':
-        'Basisbl\u00f6cke anzeigen',
+        'basisblokken tonen',
 
     // blocks:
     'help...':
-        'Hilfe...',
+        'Help...',
     'relabel...':
-        'Umbenennen...',
+        'Herbenoemen...',
     'duplicate':
-        'Duplizieren',
+        'Dupliceren',
     'make a copy\nand pick it up':
-        'eine Kopie aufnehmen',
+        'maak een kopie en selecteer dit blok',
     'only duplicate this block':
-        'nur diesen Block duplizieren',
+        'blok alleen dupliceren',
     'delete':
-        'L\u00f6schen',
+        'Wissen',
     'script pic...':
-        'Skriptbild...',
+        'Scriptafbeelding...',
     'open a new window\nwith a picture of this script':
-        'ein neues Browserfenster mit einem\nBild dieses Skripts \u00f6ffnen',
+        'open een nieuw venster\nmet de afbeelding van dit script',
     'ringify':
-        'Umringen',
+        'ringify',
     'unringify':
-        'Entringen',
+        'unringify',
 
     // custom blocks:
     'delete block definition...':
-        'Blockdefinition l\u00f6schen',
+        'Wis blokdefinitie',
     'edit...':
-        'Bearbeiten...',
+        'editeren...',
 
     // sprites:
     'edit':
-        'Bearbeiten',
+        'Editeren',
     'export...':
-        'Exportieren...',
+        'Exporteren...',
 
     // stage:
     'show all':
-        'Alles zeigen',
+        'Toon alles',
     'pic...':
-        'Bild exportieren...',
+        'afbeelding...',
     'open a new window\nwith a picture of the stage':
-        'ein neues Browserfenster mit einem\nBild der B\u00fchne \u00f6ffnen',
+        'open een nieuw browservenster met een afbeelding op het toneel',
 
     // scripting area
     'clean up':
-        'Aufr\u00e4umen',
+        'Opruimen',
     'arrange scripts\nvertically':
-        'Skripte der Reihe nach\nanordnen',
+        'scripts verticaal ordenen',
     'add comment':
-        'Anmerkung hinzuf\u00fcgen',
-    'undrop':
-        'R\u00fcckg\u00e4ngig',
-    'undo the last\nblock drop\nin this pane':
-        'Setzen des letzten Blocks\nwiderrufen',
+        'opmerking toevoegen',
     'scripts pic...':
-        'Bild aller Scripte...',
+        'afbeelding voor scripts...',
     'open a new window\nwith a picture of all scripts':
-        'ein neues Browserfenster mit einem\nBild aller Skripte \u00f6ffnen',
+        'open een nieuw venster met \nscriptafbeelding op het toneel',
     'make a block...':
-        'Neuen Block bauen...',
+        'blok aanmaken...',
 
     // costumes
     'rename':
-        'Umbenennen',
+        'Hernoemen',
     'export':
-        'Exportieren',
+        'Exporteren',
     'rename costume':
-        'Kost\u00fcm umbenennen',
+        'Kostuum hernoemen',
 
     // sounds
     'Play sound':
-        'Klang\nabspielen',
+        'geluid afspelen',
     'Stop sound':
-        'Klang\nanhalten',
+        'geluid stoppen',
     'Stop':
-        'Halt',
+        'Stop',
     'Play':
-        'Los',
+        'Speel',
     'rename sound':
-        'Klang umbenennen',
+        'Geluid hernoemen',
 
     // dialogs
     // buttons
@@ -859,208 +834,207 @@ SnapTranslator.dict.de = {
     'Ok':
         'OK',
     'Cancel':
-        'Abbrechen',
+        'Annuleren',
     'Yes':
         'Ja',
     'No':
-        'Nein',
+        'Neen',
 
     // help
     'Help':
-        'Hilfe',
+        'Help',
 
     // zoom blocks
     'Zoom blocks':
-        'Bl\u00f6cke vergr\u00f6\u00dfern',
+        'Blok inzoomen',
     'build':
-        'baue',
+        'bouwen',
     'your own':
-        'eigene',
+        'eigen',
     'blocks':
-        'Bl\u00f6cke',
+        'Blokken',
     'normal (1x)':
-        'normal (1x)',
+        'normaal (1x)',
     'demo (1.2x)':
         'Demo (1.2x)',
     'presentation (1.4x)':
-        'Pr\u00e4sentation (1.4x)',
+        'Presentatie (1.4x)',
     'big (2x)':
-        'gro\u00df (2x)',
+        'groot (2x)',
     'huge (4x)':
-        'riesig (4x)',
+        'enorm (4x)',
     'giant (8x)':
         'gigantisch (8x)',
     'monstrous (10x)':
-        'ungeheuerlich (10x)',
+        'monsterlijk (10x)',
 
     // Project Manager
     'Untitled':
-        'Unbenannt',
+        'Onbenoemd',
     'Open Project':
-        'Project \u00f6ffnen',
+        'Project openen',
     '(empty)':
-        '(leer)',
+        '(leeg)',
     'Saved!':
-        'Gesichert!',
+        'Opgeslagen!',
     'Delete Project':
-        'Projekt l\u00f6schen',
+        'Projekt wissen',
     'Are you sure you want to delete':
-        'Wirklich l\u00f6schen?',
+        'Ben je zeker dat je wilt wissen?',
     'rename...':
-        'Umbenennen...',
+        'Hernoemen...',
 
     // costume editor
     'Costume Editor':
-        'Kost\u00fcmeditor',
+        'Kostuumeditor',
     'click or drag crosshairs to move the rotation center':
-        'Fadenkreuz anklicken oder bewegen um den Drehpunkt zu setzen',
+        'Klik of sleep kruisdraden om rotatiecentrum te verplaatsen',
 
     // project notes
     'Project Notes':
-        'Projektanmerkungen',
+        'Projectnotities',
 
     // new project
     'New Project':
-        'Neues Projekt',
+        'Nieuw Project',
     'Replace the current project with a new one?':
-        'Das aktuelle Projekt durch ein neues ersetzen?',
+        'Vervang huidig project door een nieuw?',
 
     // save project
     'Save Project As...':
-        'Projekt Sichern Als...',
+        'Project opslaan als...',
 
     // export blocks
     'Export blocks':
-        'Bl\u00f6cke exportieren',
+        'Blokken exporteren',
     'Import blocks':
-        'Bl\u00f6cke importieren',
+        'Blokken importeren',
     'this project doesn\'t have any\ncustom global blocks yet':
-        'in diesem Projekt gibt es noch keine\nglobalen Bl\u00f6cke',
+        'Dit project bevat nog geen \nglobale blokken',
     'select':
-        'ausw\u00e4hlen',
+        'Kiezen',
     'all':
-        'alles',
+        'alle',
     'none':
-        'nichts',
+        'niets',
 
     // variable dialog
     'for all sprites':
-        'f\u00fcr alle',
+        'met alle objecten',
     'for this sprite only':
-        'nur f\u00fcr dieses Objekt',
+        'alleen met dit object',
 
     // block dialog
     'Change block':
-        'Block ver\u00e4ndern',
+        'Blok aanpassen',
     'Command':
-        'Befehl',
+        'Opdracht',
     'Reporter':
-        'Funktion',
+        'Functie',
     'Predicate':
-        'Pr\u00e4dikat',
+        'Predicaat',
 
     // block editor
     'Block Editor':
-        'Blockeditor',
+        'Blokeditor',
     'Apply':
-        'Anwenden',
+        'Toepassen',
 
     // block deletion dialog
     'Delete Custom Block':
-        'Block L\u00f6schen',
+        'Blok wissen',
     'block deletion dialog text':
-        'Soll dieser Block mit allen seinen Exemplare\n' +
-            'wirklich gel\u00f6scht werden?',
+        'Moet dit blok met al zijn instanties gewist worden?',
 
     // input dialog
     'Create input name':
-        'Eingabe erstellen',
+        'invoernaam',
     'Edit input name':
-        'Eingabe bearbeiten',
+        'invoernaam bewerken',
     'Edit label fragment':
-        'Beschriftung bearbeiten',
+        'label fragment bewerken',
     'Title text':
-        'Beschriftung',
+        'Titel',
     'Input name':
-        'Eingabe',
+        'Invoernaam',
     'Delete':
-        'L\u00f6schen',
+        'Wissen',
     'Object':
-        'Objekt',
+        'Object',
     'Number':
-        'Zahl',
+        'getal',
     'Text':
-        'Text',
+        'Tekst',
     'List':
-        'Liste',
+        'Lijst',
     'Any type':
-        'Beliebig',
+        'Elk type',
     'Boolean (T/F)':
-        'Boolsch (W/F)',
+        'Booleaans (W/V)',
     'Command\n(inline)':
-        'Befehl',
+        'Opdracht (inline)',
     'Command\n(C-shape)':
-        'Befehl\n(C-Form)',
+        'Opdracht (C-Form)',
     'Any\n(unevaluated)':
-        'Beliebig\n(zitiert)',
+        'Alle\n(ongeevalueerd)',
     'Boolean\n(unevaluated)':
-        'Boolsch\n(zitiert)',
+        'Booleaans\n(ongeevalueerd)',
     'Single input.':
-        'Einzeleingabe.',
+        'Enkelvoudige invoer.',
     'Default Value:':
-        'Standardwert:',
+        'Standaardwaarde:',
     'Multiple inputs (value is list of inputs)':
-        'Mehrere Eingaben (als Liste)',
+        'Meervoudige invoer (als Lijst)',
     'Upvar - make internal variable visible to caller':
-        'Interne Variable au\u00dfen sichtbar machen',
+        'Interne Variabele zichtbaar maken',
 
     // About Snap
     'About Snap':
-        '\u00dcber Snap',
+        'Over Snap',
     'Back...':
-        'Zur\u00fcck...',
+        'Terug...',
     'License...':
-        'Lizenz...',
+        'Licentie...',
     'Modules...':
-        'Komponenten...',
+        'Componenten...',
     'Credits...':
-        'Mitwirkende...',
+        'Credits...',
     'Translators...':
-        '\u00dcbersetzer',
+        'Vertalers',
     'License':
-        'Lizenz',
+        'Licentie',
     'current module versions:':
-        'Komponenten-Versionen',
+        'huidige Component-Versies',
     'Contributors':
-        'Mitwirkende',
+        'Medewerkers',
     'Translations':
-        '\u00dcbersetzungen',
+        'Vertalingen',
 
     // variable watchers
     'normal':
-        'normal',
+        'normaal',
     'large':
-        'gro\u00df',
+        'groot',
     'slider':
-        'Regler',
+        'schuifbalk',
     'slider min...':
-        'Minimalwert...',
+        'Minimale waarde...',
     'slider max...':
-        'Maximalwert...',
+        'Maximale waarde...',
     'import...':
-        'Importieren...',
+        'Importiren...',
     'Slider minimum value':
-        'Minimalwert des Reglers',
+        'Minimumlwaarde van de schuifbalk',
     'Slider maximum value':
-        'Maximalwert des Reglers',
+        'Maximumwaarde van de schuifbalk',
 
     // list watchers
     'length: ':
-        'L\u00e4nge: ',
+        'Lengte: ',
 
     // coments
     'add comment here...':
-        'Anmerkung hier hinzuf\u00fcgen',
+        'commentaar hier toevoegen',
 
     // drow downs
     // directions
@@ -1069,39 +1043,39 @@ SnapTranslator.dict.de = {
     '(-90) left':
         '(-90) links',
     '(0) up':
-        '(0) oben',
+        '(0) omhoog',
     '(180) down':
-        '(180) unten',
+        '(180) omlaag',
 
     // collision detection
     'mouse-pointer':
-        'Mauszeiger',
+        'Muisaanwijzer',
     'edge':
-        'Kante',
+        'Rand',
     'pen trails':
-        'Malspuren',
+        'Penspoor',
 
     // costumes
     'Turtle':
-        'Richtungszeiger',
+        'schildpad',
     'Empty':
-        'Leer',
+        'Leeg',
 
     // graphical effects
     'ghost':
-        'Durchsichtigkeit',
+        'Doorzichtigheid',
 
     // keys
     'space':
-        'Leertaste',
+        'Spatie',
     'up arrow':
-        'Pfeil nach oben',
+        'Pijl omhoog',
     'down arrow':
-        'Pfeil nach unten',
+        'Pijl omlaag',
     'right arrow':
-        'Pfeil nach rechts',
+        'Pijl naar rechts',
     'left arrow':
-        'Pfeil nach links',
+        'Pijl naar links',
     'a':
         'a',
     'b':
@@ -1177,15 +1151,15 @@ SnapTranslator.dict.de = {
 
     // messages
     'new...':
-        'Neu...',
+        'Nieuw...',
 
     // math functions
     'abs':
-        'Betrag',
+        'Geheel',
     'floor':
-        'Abgerundet',
+        'Afgerond',
     'sqrt':
-        'Wurzel',
+        'Vierkantswortel',
     'sin':
         'sin',
     'cos':
@@ -1193,11 +1167,11 @@ SnapTranslator.dict.de = {
     'tan':
         'tan',
     'asin':
-        'asin',
+        'bgsin',
     'acos':
-        'acos',
+        'bgcos',
     'atan':
-        'atan',
+        'bgtan',
     'ln':
         'ln',
     'e^':
@@ -1205,23 +1179,24 @@ SnapTranslator.dict.de = {
 
     // data types
     'number':
-        'Zahl',
+        'Getal',
     'text':
-        'Text',
+        'Tekst',
     'Boolean':
-        'Boole',
+        'Booleaans',
     'list':
-        'Liste',
+        'Lijst',
     'command':
-        'Befehlsblock',
+        'Opdracht',
     'reporter':
-        'Funktionsblock',
+        'Functie',
     'predicate':
-        'Pr\u00e4dikat',
+        'Predicaat',
 
     // list indices
     'last':
-        'letztes',
+        'laatste',
     'any':
-        'beliebiges'
+        'alle'
 };
+

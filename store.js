@@ -61,7 +61,7 @@ SyntaxElementMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2013-April-25';
+modules.store = '2013-July-08';
 
 
 // XML_Serializer ///////////////////////////////////////////////////////
@@ -204,7 +204,16 @@ XML_Serializer.prototype.format = function (string) {
 
     return string.replace(/[@$%]([\d]+)?/g, function (spec, index) {
         index = parseInt(index, 10);
-        value = values[(isNaN(index) ? (i += 1) : index) + 1];
+
+        if (isNaN(index)) {
+            i += 1;
+            value = values[i + 1];
+        } else {
+            value = values[index + 1];
+        }
+        // original line of code - now frowned upon by JSLint:
+        // value = values[(isNaN(index) ? (i += 1) : index) + 1];
+
         return spec === '@' ?
                 myself.escape(value)
                     : spec === '$' ?
@@ -303,9 +312,11 @@ SnapSerializer.prototype.load = function (xmlString) {
 SnapSerializer.prototype.loadProjectModel = function (xmlNode) {
     // public - answer a new Project represented by the given XML top node
     var myself = this,
-        project = this.project = {sprites: {}},
+        project = {sprites: {}},
         model,
         nameID;
+
+    this.project = project;
 
     model = {project: xmlNode };
     if (+xmlNode.attributes.version > this.version) {
@@ -367,6 +378,8 @@ SnapSerializer.prototype.loadProjectModel = function (xmlNode) {
     project.stage.setExtent(StageMorph.prototype.dimensions);
     project.stage.isThreadSafe =
         model.stage.attributes.threadsafe === 'true';
+    StageMorph.prototype.enableCodeMapping =
+        model.stage.attributes.codify === 'true';
 
     model.hiddenPrimitives = model.project.childNamed('hidden');
     if (model.hiddenPrimitives) {
@@ -377,6 +390,20 @@ SnapSerializer.prototype.loadProjectModel = function (xmlNode) {
                 }
             }
         );
+    }
+
+    model.codeHeaders = model.project.childNamed('headers');
+    if (model.codeHeaders) {
+        model.codeHeaders.children.forEach(function (xml) {
+            StageMorph.prototype.codeHeaders[xml.tag] = xml.contents;
+        });
+    }
+
+    model.codeMappings = model.project.childNamed('code');
+    if (model.codeMappings) {
+        model.codeMappings.children.forEach(function (xml) {
+            StageMorph.prototype.codeMappings[xml.tag] = xml.contents;
+        });
     }
 
     model.globalBlocks = model.project.childNamed('blocks');
@@ -654,7 +681,7 @@ SnapSerializer.prototype.loadCustomBlocks = function (
     // private
     var myself = this;
     element.children.forEach(function (child) {
-        var definition, names, inputs, comment, i;
+        var definition, names, inputs, header, code, comment, i;
         if (child.tag !== 'block-definition') {
             return;
         }
@@ -687,9 +714,20 @@ SnapSerializer.prototype.loadCustomBlocks = function (
                 if (child.tag !== 'input') {
                     return;
                 }
-                definition.declarations[names[i += 1]]
+                i += 1;
+                definition.declarations[names[i]]
                     = [child.attributes.type, child.contents];
             });
+        }
+
+        header = child.childNamed('header');
+        if (header) {
+            definition.codeHeader = header.contents;
+        }
+
+        code = child.childNamed('code');
+        if (code) {
+            definition.codeMapping = code.contents;
         }
 
         comment = child.childNamed('comment');
@@ -1182,8 +1220,7 @@ SnapSerializer.prototype.loadColor = function (colorString) {
 SnapSerializer.prototype.openProject = function (project, ide) {
     var stage = ide.stage,
         sprites = [],
-        sprite,
-        scripts;
+        sprite;
     if (!project || !project.stage) {
         return;
     }
@@ -1195,7 +1232,8 @@ SnapSerializer.prototype.openProject = function (project, ide) {
     if (stage) {
         stage.destroy();
     }
-    ide.add(ide.stage = project.stage);
+    ide.add(project.stage);
+    ide.stage = project.stage;
     sprites = ide.stage.children.filter(function (child) {
         return child instanceof SpriteMorph;
     });
@@ -1204,7 +1242,6 @@ SnapSerializer.prototype.openProject = function (project, ide) {
     });
     ide.sprites = new List(sprites);
     sprite = sprites[0] || project.stage;
-    scripts = sprite.scripts;
 
     if (sizeOf(this.mediaDict) > 0) {
         ide.hasChangedMedia = false;
@@ -1243,12 +1280,29 @@ StageMorph.prototype.toXML = function (serializer) {
         thumbdata = null;
     }
 
+    function code(key) {
+        var str = '';
+        Object.keys(StageMorph.prototype[key]).forEach(
+            function (selector) {
+                str += (
+                    '<' + selector + '>' +
+                        XML_Element.prototype.escape(
+                            StageMorph.prototype[key][selector]
+                        ) +
+                        '</' + selector + '>'
+                );
+            }
+        );
+        return str;
+    }
+
     this.removeAllClones();
     return serializer.format(
         '<project name="@" app="@" version="@">' +
             '<notes>$</notes>' +
             '<thumbnail>$</thumbnail>' +
             '<stage name="@" costume="@" tempo="@" threadsafe="@" ' +
+            'codify="@" ' +
             'scheduled="@" ~>' +
             '<pentrails>$</pentrails>' +
             '<costumes>%</costumes>' +
@@ -1258,6 +1312,8 @@ StageMorph.prototype.toXML = function (serializer) {
             '<scripts>%</scripts><sprites>%</sprites>' +
             '</stage>' +
             '<hidden>$</hidden>' +
+            '<headers>%</headers>' +
+            '<code>%</code>' +
             '<blocks>%</blocks>' +
             '<variables>%</variables>' +
             '</project>',
@@ -1270,6 +1326,7 @@ StageMorph.prototype.toXML = function (serializer) {
         this.getCostumeIdx(),
         this.getTempo(),
         this.isThreadSafe,
+        this.enableCodeMapping,
         StageMorph.prototype.frameRate !== 0,
         this.trailsCanvas.toDataURL('image/png'),
         serializer.store(this.costumes, this.name + '_cst'),
@@ -1279,9 +1336,11 @@ StageMorph.prototype.toXML = function (serializer) {
         serializer.store(this.scripts),
         serializer.store(this.children),
         Object.keys(StageMorph.prototype.hiddenPrimitives).reduce(
-                function(a, b) {return a + ' ' + b; },
+                function (a, b) {return a + ' ' + b; },
                 ''
             ),
+        code('codeHeaders'),
+        code('codeMappings'),
         serializer.store(this.globalBlocks),
         (ide && ide.globalVariables) ?
                     serializer.store(ide.globalVariables) : ''
@@ -1290,11 +1349,8 @@ StageMorph.prototype.toXML = function (serializer) {
 
 SpriteMorph.prototype.toXML = function (serializer) {
     var stage = this.parentThatIsA(StageMorph),
-        position = stage ?
-                this.center().subtract(stage.center()) : this.center(),
         ide = stage ? stage.parentThatIsA(IDE_Morph) : null,
         idx = ide ? ide.sprites.asArray().indexOf(this) + 1 : 0;
-
     return serializer.format(
         '<sprite name="@" idx="@" x="@" y="@"' +
             ' heading="@"' +
@@ -1311,8 +1367,8 @@ SpriteMorph.prototype.toXML = function (serializer) {
             '</sprite>',
         this.name,
         idx,
-        position.x,
-        -position.y,
+        this.xPosition(),
+        this.yPosition(),
         this.heading,
         this.scale,
         this.rotationStyle,
@@ -1546,12 +1602,16 @@ CustomBlockDefinition.prototype.toXML = function (serializer) {
     return serializer.format(
         '<block-definition s="@" type="@" category="@">' +
             '%' +
+            '<header>@</header>' +
+            '<code>@</code>' +
             '<inputs>%</inputs>%%' +
             '</block-definition>',
         this.spec,
         this.type,
         this.category || 'other',
         this.comment ? this.comment.toXML(serializer) : '',
+        this.codeHeader || '',
+        this.codeMapping || '',
         Object.keys(this.declarations).reduce(function (xml, decl) {
                 return xml + serializer.format(
                     '<input type="@">$</input>',

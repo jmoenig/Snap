@@ -1035,7 +1035,7 @@
 /*global window, HTMLCanvasElement, getMinimumFontHeight, FileReader, Audio,
 FileList, getBlurredShadowSupport*/
 
-var morphicVersion = '2013-June-04';
+var morphicVersion = '2013-August-06';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = getBlurredShadowSupport(); // check for Chrome-bug
 
@@ -6975,6 +6975,7 @@ StringMorph.prototype.font = function () {
 
 StringMorph.prototype.drawNew = function () {
     var context, width, start, stop, i, p, c, x, y,
+        shadowOffset = this.shadowOffset || new Point(),
         txt = this.isPassword ?
                 this.password('*', this.text.length) : this.text;
 
@@ -6985,14 +6986,13 @@ StringMorph.prototype.drawNew = function () {
 
     // set my extent
     width = Math.max(
-        context.measureText(txt).width +
-            Math.abs(this.shadowOffset.x),
+        context.measureText(txt).width + Math.abs(shadowOffset.x),
         1
     );
     this.bounds.corner = this.bounds.origin.add(
         new Point(
             width,
-            fontHeight(this.fontSize) + Math.abs(this.shadowOffset.y)
+            fontHeight(this.fontSize) + Math.abs(shadowOffset.y)
         )
     );
     this.image.width = width;
@@ -7005,15 +7005,15 @@ StringMorph.prototype.drawNew = function () {
 
     // first draw the shadow, if any
     if (this.shadowColor) {
-        x = Math.max(this.shadowOffset.x, 0);
-        y = Math.max(this.shadowOffset.y, 0);
+        x = Math.max(shadowOffset.x, 0);
+        y = Math.max(shadowOffset.y, 0);
         context.fillStyle = this.shadowColor.toString();
         context.fillText(txt, x, fontHeight(this.fontSize) + y);
     }
 
     // now draw the actual text
-    x = Math.abs(Math.min(this.shadowOffset.x, 0));
-    y = Math.abs(Math.min(this.shadowOffset.y, 0));
+    x = Math.abs(Math.min(shadowOffset.x, 0));
+    y = Math.abs(Math.min(shadowOffset.y, 0));
     context.fillStyle = this.color.toString();
 
     if (this.isShowingBlanks) {
@@ -9635,7 +9635,7 @@ HandMorph.prototype.processMouseMove = function (event) {
             if (old.mouseLeave) {
                 old.mouseLeave();
             }
-            if (old.mouseLeaveDragging && this.mouseButton) {
+            if (old.mouseLeaveDragging && myself.mouseButton) {
                 old.mouseLeaveDragging();
             }
         }
@@ -9645,7 +9645,7 @@ HandMorph.prototype.processMouseMove = function (event) {
             if (newMorph.mouseEnter) {
                 newMorph.mouseEnter();
             }
-            if (newMorph.mouseEnterDragging && this.mouseButton) {
+            if (newMorph.mouseEnterDragging && myself.mouseButton) {
                 newMorph.mouseEnterDragging();
             }
         }
@@ -9708,6 +9708,8 @@ HandMorph.prototype.processDrop = function (event) {
     var files = event instanceof FileList ? event
                 : event.target.files || event.dataTransfer.files,
         file,
+        url = event.dataTransfer ?
+                event.dataTransfer.getData('URL') : null,
         txt = event.dataTransfer ?
                 event.dataTransfer.getData('Text/HTML') : null,
         src,
@@ -9786,18 +9788,18 @@ HandMorph.prototype.processDrop = function (event) {
     }
 
     function parseImgURL(html) {
-        var url = '',
-            i,
+        var iurl = '',
+            idx,
             c,
             start = html.indexOf('<img src="');
         if (start === -1) {return null; }
         start += 10;
-        for (i = start; i < html.length; i += 1) {
-            c = html[i];
+        for (idx = start; idx < html.length; idx += 1) {
+            c = html[idx];
             if (c === '"') {
-                return url;
+                return iurl;
             }
-            url = url.concat(c);
+            iurl = iurl.concat(c);
         }
         return null;
     }
@@ -9817,6 +9819,24 @@ HandMorph.prototype.processDrop = function (event) {
             } else { // assume it's meant to be binary
                 readBinary(file);
             }
+        }
+    } else if (url) {
+        if (
+            contains(
+                ['gif', 'png', 'jpg', 'jpeg', 'bmp'],
+                url.slice(url.lastIndexOf('.') + 1).toLowerCase()
+            )
+        ) {
+            while (!target.droppedImage) {
+                target = target.parent;
+            }
+            img = new Image();
+            img.onload = function () {
+                canvas = newCanvas(new Point(img.width, img.height));
+                canvas.getContext('2d').drawImage(img, 0, 0);
+                target.droppedImage(canvas);
+            };
+            img.src = url;
         }
     } else if (txt) {
         while (!target.droppedImage) {
@@ -10111,6 +10131,7 @@ WorldMorph.prototype.initEventListeners = function () {
         "mousedown",
         function (event) {
             event.preventDefault();
+            canvas.focus();
             myself.hand.processMouseDown(event);
         },
         false

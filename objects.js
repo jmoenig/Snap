@@ -123,7 +123,7 @@ PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.objects = '2013-June-05';
+modules.objects = '2013-August-06';
 
 var SpriteMorph;
 var StageMorph;
@@ -662,6 +662,14 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: 'delete this clone'
         },
 
+        // Debugging - pausing
+
+        doPauseAll: {
+            type: 'command',
+            category: 'control',
+            spec: 'pause all %pause'
+        },
+
         // Sensing
 
         reportTouchingObject: {
@@ -918,6 +926,19 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: 'type of %s',
             defaults: [5]
         },
+        reportTextFunction: { // only in dev mode - experimental
+            type: 'reporter',
+            category: 'operators',
+            spec: '%txtfun of %s',
+            defaults: [null, "Abelson & Sussman"]
+        },
+        reportTextSplit: { // only in dev mode - experimental
+            type: 'reporter',
+            category: 'operators',
+            spec: 'split %s by %delim',
+            defaults: ["foo bar baz", " "]
+        },
+
     /*
         reportScript: {
             type: 'reporter',
@@ -1016,6 +1037,29 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'lists',
             spec: 'replace item %idx of %l with %s',
             defaults: [1, null, localize('thing')]
+        },
+
+        // Code mapping - experimental
+        doMapCodeOrHeader: { // experimental
+            type: 'command',
+            category: 'other',
+            spec: 'map %cmdRing to %codeKind %code'
+        },
+        doMapStringCode: { // experimental
+            type: 'command',
+            category: 'other',
+            spec: 'map String to code %code',
+            defaults: ['<#1>']
+        },
+        doMapListCode: { // experimental
+            type: 'command',
+            category: 'other',
+            spec: 'map %codeListPart of %codeListKind to code %code'
+        },
+        reportMappedCode: { // experimental
+            type: 'reporter',
+            category: 'other',
+            spec: 'code of %cmdRing'
         }
     };
 };
@@ -1124,6 +1168,9 @@ SpriteMorph.prototype.init = function (globals) {
     this.rotationOffset = new Point(); // not to be serialized (!)
     this.idx = 0; // not to be serialized (!) - used for de-serialization
     this.wasWarped = false; // not to be serialized, used for fast-tracking
+
+    this.parts = []; // sprite nesting
+    this.anchor = null; // sprite nesting
 
     SpriteMorph.uber.init.call(this);
 
@@ -1583,6 +1630,8 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('receiveOnClone'));
         blocks.push(block('createClone'));
         blocks.push(block('removeClone'));
+        blocks.push('-');
+        blocks.push(block('doPauseAll'));
 
     } else if (cat === 'sensing') {
 
@@ -1680,6 +1729,8 @@ SpriteMorph.prototype.blockTemplates = function (category) {
             blocks.push(txt);
             blocks.push('-');
             blocks.push(block('reportTypeOf'));
+            blocks.push(block('reportTextFunction'));
+            blocks.push(block('reportTextSplit'));
         }
 
     /////////////////////////////////
@@ -1771,6 +1822,15 @@ SpriteMorph.prototype.blockTemplates = function (category) {
 
         blocks.push('=');
 
+        if (StageMorph.prototype.enableCodeMapping) {
+            blocks.push(block('doMapCodeOrHeader'));
+            blocks.push(block('doMapStringCode'));
+            blocks.push(block('doMapListCode'));
+            blocks.push('-');
+            blocks.push(block('reportMappedCode'));
+            blocks.push('=');
+        }
+
         button = new PushButtonMorph(
             null,
             function () {
@@ -1834,6 +1894,7 @@ SpriteMorph.prototype.freshPalette = function (category) {
     palette.owner = this;
     palette.padding = unit / 2;
     palette.color = this.paletteColor;
+    palette.growth = new Point(0, MorphicPreferences.scrollBarSize);
 
     // menu:
 
@@ -2478,6 +2539,7 @@ SpriteMorph.prototype.talkBubble = function () {
 
 SpriteMorph.prototype.positionTalkBubble = function () {
     var stage = this.parentThatIsA(StageMorph),
+        stageScale = stage ? stage.scale : 1,
         bubble = this.talkBubble(),
         middle = this.center().y;
     if (!bubble) {return null; }
@@ -2490,7 +2552,7 @@ SpriteMorph.prototype.positionTalkBubble = function () {
     bubble.setLeft(this.right());
     bubble.setBottom(this.top());
     while (!this.isTouching(bubble) && bubble.bottom() < middle) {
-        bubble.silentMoveBy(new Point(-1, 1).scaleBy(stage.scale));
+        bubble.silentMoveBy(new Point(-1, 1).scaleBy(stageScale));
     }
     if (!stage) {return null; }
     if (bubble.right() > stage.right()) {
@@ -3192,6 +3254,9 @@ StageMorph.prototype.paletteTextColor
     = SpriteMorph.prototype.paletteTextColor;
 
 StageMorph.prototype.hiddenPrimitives = {};
+StageMorph.prototype.codeMappings = {};
+StageMorph.prototype.codeHeaders = {};
+StageMorph.prototype.enableCodeMapping = false;
 
 // StageMorph instance creation
 
@@ -3659,7 +3724,10 @@ StageMorph.prototype.fireStopAllEvent = function () {
     });
     this.removeAllClones();
     if (ide) {
-        ide.controlBar.pauseButton.refresh();
+        ide.nextSteps([
+            nop,
+            function () {ide.controlBar.pauseButton.refresh(); }
+        ]);
     }
 };
 
@@ -3836,6 +3904,8 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('reportCallCC'));
         blocks.push('-');
         blocks.push(block('createClone'));
+        blocks.push('-');
+        blocks.push(block('doPauseAll'));
 
     } else if (cat === 'sensing') {
 
@@ -3929,6 +3999,8 @@ StageMorph.prototype.blockTemplates = function (category) {
             blocks.push(txt);
             blocks.push('-');
             blocks.push(block('reportTypeOf'));
+            blocks.push(block('reportTextFunction'));
+            blocks.push(block('reportTextSplit'));
         }
 
     //////////////////////////////////
@@ -4013,6 +4085,15 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('doReplaceInList'));
 
         blocks.push('=');
+
+        if (StageMorph.prototype.enableCodeMapping) {
+            blocks.push(block('doMapCodeOrHeader'));
+            blocks.push(block('doMapStringCode'));
+            blocks.push(block('doMapListCode'));
+            blocks.push('-');
+            blocks.push(block('reportMappedCode'));
+            blocks.push('=');
+        }
 
         button = new PushButtonMorph(
             null,
@@ -4554,19 +4635,15 @@ Costume.prototype.bounds = function () {
 
 Costume.prototype.shrinkWrap = function () {
     // adjust my contents'  bounds to my visible bounding box
-    // add a tolerance margin for Chrome's anti-aliasing issue
     var bb = this.boundingBox(),
-        space = new Point(480, 360).subtract(bb.extent()).floorDivideBy(2),
-        margin = new Point(3, 3).min(space.max(new Point(0, 0))),
-        area = bb.expandBy(margin),
-        ext = area.extent(),
+        ext = bb.extent(),
         pic = newCanvas(ext),
         ctx = pic.getContext('2d');
 
     ctx.drawImage(
         this.contents,
-        area.origin.x,
-        area.origin.y,
+        bb.origin.x,
+        bb.origin.y,
         ext.x,
         ext.y,
         0,
@@ -4574,7 +4651,7 @@ Costume.prototype.shrinkWrap = function () {
         ext.x,
         ext.y
     );
-    this.rotationCenter = this.rotationCenter.subtract(area.origin);
+    this.rotationCenter = this.rotationCenter.subtract(bb.origin);
     this.contents = pic;
     this.version = Date.now();
 };
@@ -5160,7 +5237,7 @@ CellMorph.prototype.drawNew = function () {
                 null,
                 true,
                 false,
-                'center'
+                'left' // was formerly 'center', reverted b/c of code-mapping
             );
             if (this.isEditable) {
                 this.contentsMorph.isEditable = true;
@@ -5245,7 +5322,7 @@ CellMorph.prototype.drawNew = function () {
     );
     context.closePath();
     context.fill();
-    if (this.border > 0) {
+    if (this.border > 0 && !MorphicPreferences.isFlat) {
         context.lineWidth = this.border;
         context.strokeStyle = this.borderColor.toString();
         context.beginPath();
@@ -5334,7 +5411,7 @@ CellMorph.prototype.layoutChanged = function () {
     );
     context.closePath();
     context.fill();
-    if (this.border > 0) {
+    if (this.border > 0 && !MorphicPreferences.isFlat) {
         context.lineWidth = this.border;
         context.strokeStyle = this.borderColor.toString();
         context.beginPath();
@@ -5542,7 +5619,7 @@ WatcherMorph.prototype.fixLayout = function () {
             true,
             false,
             false,
-            new Point(1, 1),
+            MorphicPreferences.isFlat ? new Point() : new Point(1, 1),
             new Color(255, 255, 255)
         );
         this.add(this.labelMorph);
@@ -5814,9 +5891,9 @@ WatcherMorph.prototype.drawNew = function () {
         gradient;
     this.image = newCanvas(this.extent());
     context = this.image.getContext('2d');
-    if ((this.edge === 0) && (this.border === 0)) {
+    if (MorphicPreferences.isFlat || (this.edge === 0 && this.border === 0)) {
         BoxMorph.uber.drawNew.call(this);
-        return null;
+        return;
     }
     gradient = context.createLinearGradient(0, 0, 0, this.height());
     gradient.addColorStop(0, this.color.lighter().toString());

@@ -61,7 +61,7 @@ ReporterBlockMorph, ScriptsMorph, ShadowMorph, StringMorph,
 SyntaxElementMorph, TextMorph, WorldMorph, blocksVersion, contains,
 degrees, detect, getDocumentPositionOf, newCanvas, nop, radians,
 useBlurredShadows, ReporterSlotMorph, CSlotMorph, RingMorph, IDE_Morph,
-ArgLabelMorph, localize*/
+ArgLabelMorph, localize, XML_Element, hex_sha512*/
 
 // globals from objects.js:
 
@@ -83,7 +83,7 @@ ArgLabelMorph, localize*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.threads = '2013-May-14';
+modules.threads = '2013-August-02';
 
 var ThreadManager;
 var Process;
@@ -339,7 +339,7 @@ Process.prototype.runStep = function () {
     a step is an an uninterruptable 'atom', it can consist
     of several contexts, even of several blocks
 */
-    if (this.isPaused) {
+    if (this.isPaused) { // allow pausing in between atomic steps:
         return this.pauseStep();
     }
     this.readyToYield = false;
@@ -348,6 +348,10 @@ Process.prototype.runStep = function () {
             && (this.isAtomic ?
                     (Date.now() - this.lastYield < this.timeout) : true)
                 ) {
+        // also allow pausing inside atomic steps - for PAUSE block primitive:
+        if (this.isPaused) {
+            return this.pauseStep();
+        }
         this.evaluateContext();
     }
     this.lastYield = Date.now();
@@ -1440,6 +1444,18 @@ Process.prototype.doSetFastTracking = function (bool) {
     }
 };
 
+Process.prototype.doPauseAll = function () {
+    var stage, ide;
+    if (this.homeContext.receiver) {
+        stage = this.homeContext.receiver.parentThatIsA(StageMorph);
+        if (stage) {
+            stage.threads.pauseAll(stage);
+        }
+        ide = stage.parentThatIsA(IDE_Morph);
+        if (ide) {ide.controlBar.pauseButton.refresh(); }
+    }
+};
+
 // Process loop primitives
 
 Process.prototype.doForever = function (body) {
@@ -1883,6 +1899,9 @@ Process.prototype.reportMonadic = function (fname, n) {
     case 'abs':
         result = Math.abs(x);
         break;
+    case 'floor':
+        result = Math.floor(x);
+        break;
     case 'sqrt':
         result = Math.sqrt(x);
         break;
@@ -1915,6 +1934,37 @@ Process.prototype.reportMonadic = function (fname, n) {
         break;
     case '10^':
         result = 0;
+        break;
+    default:
+    }
+    return result;
+};
+
+Process.prototype.reportTextFunction = function (fname, string) {
+    var x = (isNil(string) ? '' : string).toString(),
+        result = '';
+
+    switch (this.inputOption(fname)) {
+    case 'encode URI':
+        result = encodeURI(x);
+        break;
+    case 'decode URI':
+        result = decodeURI(x);
+        break;
+    case 'encode URI component':
+        result = encodeURIComponent(x);
+        break;
+    case 'decode URI component':
+        result = decodeURIComponent(x);
+        break;
+    case 'XML escape':
+        result = new XML_Element().escape(x);
+        break;
+    case 'XML unescape':
+        result = new XML_Element().unescape(x);
+        break;
+    case 'hex sha512 hash':
+        result = hex_sha512(x);
         break;
     default:
     }
@@ -1955,6 +2005,27 @@ Process.prototype.reportUnicode = function (string) {
 Process.prototype.reportUnicodeAsLetter = function (num) {
     var code = parseFloat(num || 0);
     return String.fromCharCode(code);
+};
+
+Process.prototype.reportTextSplit = function (string, delimiter) {
+    var str = (string || '').toString(),
+        del;
+    switch (this.inputOption(delimiter)) {
+    case 'line':
+        del = '\n';
+        break;
+    case 'tab':
+        del = '\t';
+        break;
+    case 'cr':
+        del = '\r';
+        break;
+    case 'whitespace':
+        return new List(str.trim().split(/[\t\r\n ]+/));
+    default:
+        del = (delimiter || '').toString();
+    }
+    return new List(str.split(del));
 };
 
 // Process debugging
@@ -2289,6 +2360,73 @@ Process.prototype.reportTimer = function () {
         }
     }
     return 0;
+};
+
+// Process code mapping
+
+/*
+    for generating textual source code using
+    blocks - not needed to run or debug Snap
+*/
+
+Process.prototype.doMapCodeOrHeader = function (aContext, anOption, aString) {
+    if (this.inputOption(anOption) === 'code') {
+        return this.doMapCode(aContext, aString);
+    }
+    if (this.inputOption(anOption) === 'header') {
+        return this.doMapHeader(aContext, aString);
+    }
+    throw new Error(
+        ' \'' + anOption + '\'\nis not a valid option'
+    );
+};
+
+Process.prototype.doMapHeader = function (aContext, aString) {
+    if (aContext instanceof Context) {
+        if (aContext.expression instanceof SyntaxElementMorph) {
+            return aContext.expression.mapHeader(aString || '');
+        }
+    }
+};
+
+Process.prototype.doMapCode = function (aContext, aString) {
+    if (aContext instanceof Context) {
+        if (aContext.expression instanceof SyntaxElementMorph) {
+            return aContext.expression.mapCode(aString || '');
+        }
+    }
+};
+
+Process.prototype.doMapStringCode = function (aString) {
+    StageMorph.prototype.codeMappings.string = aString || '<#1>';
+};
+
+Process.prototype.doMapListCode = function (part, kind, aString) {
+    var key1 = '',
+        key2 = 'delim';
+
+    if (this.inputOption(kind) === 'parameters') {
+        key1 = 'parms_';
+    } else if (this.inputOption(kind) === 'variables') {
+        key1 = 'tempvars_';
+    }
+
+    if (this.inputOption(part) === 'list') {
+        key2 = 'list';
+    } else if (this.inputOption(part) === 'item') {
+        key2 = 'item';
+    }
+
+    StageMorph.prototype.codeMappings[key1 + key2] = aString || '';
+};
+
+Process.prototype.reportMappedCode = function (aContext) {
+    if (aContext instanceof Context) {
+        if (aContext.expression instanceof SyntaxElementMorph) {
+            return aContext.expression.mappedCode();
+        }
+    }
+    return '';
 };
 
 // Process music primitives

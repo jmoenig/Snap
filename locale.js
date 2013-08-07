@@ -42,7 +42,7 @@
 
 /*global modules, contains*/
 
-modules.locale = '2013-May-14';
+modules.locale = '2013-August-06';
 
 // Global stuff
 
@@ -149,7 +149,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org',
     'last_changed':
-        '2013-05-14'
+        '2013-08-02'
 };
 
 SnapTranslator.dict.it = {
@@ -291,4 +291,26 @@ SnapTranslator.dict.es = {
         'victor.muratalla@yahoo.com',
     'last_changed':
         '2013-03-25'
+};
+
+SnapTranslator.dict.nl = {
+    'language_name':
+        'Nederlands',
+    'language_translator':
+        'Frank Sierens',
+    'translator_e-mail':
+        'frank.sierens@telenet.be',
+    'last_changed':
+        '2013-07-24'
+};
+
+SnapTranslator.dict.pl = {
+    'language_name':
+        'Polski',
+    'language_translator':
+        'Witek Kranas',
+    'translator_e-mail':
+        'witek@oeiizk.waw.pl',
+    'last_changed':
+        '2013-08-05'
 };
