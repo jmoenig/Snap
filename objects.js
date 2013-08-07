@@ -38,6 +38,7 @@
     defined. Use this list to locate code in this document:
 
         SpriteMorph
+        SpriteHighlightMorph
         StageMorph
         Costume
             SVG_Costume
@@ -76,7 +77,7 @@
 
 // gloabls from gui.js:
 
-/*global WatcherMorph*/
+/*global WatcherMorph, SpriteIconMorph*/
 
 // globals from threads.js:
 
@@ -123,7 +124,7 @@ PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.objects = '2013-August-06';
+modules.objects = '2013-August-07';
 
 var SpriteMorph;
 var StageMorph;
@@ -137,6 +138,7 @@ var CellMorph;
 var WatcherMorph;
 var StagePrompterMorph;
 var Note;
+var SpriteHighlightMorph;
 
 // SpriteMorph /////////////////////////////////////////////////////////
 
@@ -182,6 +184,10 @@ SpriteMorph.prototype.paletteTextColor = new Color(230, 230, 230);
 SpriteMorph.prototype.sliderColor
     = SpriteMorph.prototype.paletteColor.lighter(30);
 SpriteMorph.prototype.isCachingPrimitives = true;
+
+SpriteMorph.prototype.enableNesting = false;
+SpriteMorph.prototype.highlightColor = new Color(250, 200, 130);
+SpriteMorph.prototype.highlightBorder = 8;
 
 SpriteMorph.prototype.bubbleColor = new Color(255, 255, 255);
 SpriteMorph.prototype.bubbleFontSize = 14;
@@ -3213,6 +3219,21 @@ SpriteMorph.prototype.thumbnail = function (extentPoint) {
     return trg;
 };
 
+SpriteMorph.prototype.fullThumbnail = function (extentPoint) {
+    // containing parts and anchor symbols, if any
+    var thumb = this.thumbnail(extentPoint),
+        ctx = thumb.getContext('2d');
+
+    if (this.anchor) {
+        ctx.drawImage(
+            this.anchor.thumbnail(extentPoint.divideBy(3)),
+            0,
+            0
+        );
+    }
+    return thumb;
+};
+
 // SpriteMorph Boolean visual representation
 
 SpriteMorph.prototype.booleanMorph = function (bool) {
@@ -3222,6 +3243,185 @@ SpriteMorph.prototype.booleanMorph = function (bool) {
     block.setSpec(localize(bool.toString()));
     return block;
 };
+
+// SpriteMorph nesting
+/*
+    simulate Morphic trees
+*/
+
+SpriteMorph.prototype.addPart = function (aSprite) {
+    var v = Date.now();
+    this.parts.push(aSprite);
+    this.version = v;
+    aSprite.anchor = this;
+    aSprite.version = v;
+};
+
+SpriteMorph.prototype.removePart = function (aSprite) {
+    var idx = this.parts.indexOf(aSprite),
+        v;
+    if (idx !== -1) {
+        v = Date.now();
+        this.parts.splice(idx, 1);
+        this.version = v;
+        aSprite.parent = null;
+        aSprite.version = v;
+    }
+};
+
+SpriteMorph.prototype.allParts = function () {
+    // includes myself
+    var result = [this];
+    this.parts.forEach(function (part) {
+        result = result.concat(part.allParts());
+    });
+    return result;
+};
+
+SpriteMorph.prototype.allAnchors = function () {
+    // includes myself
+    var result = [this];
+    if (this.anchor !== null) {
+        result = result.concat(this.anchor.allAnchors());
+    }
+    return result;
+};
+
+// SpriteMorph highlighting
+
+SpriteMorph.prototype.addHighlight = function (oldHighlight) {
+    var isHidden = !this.isVisible,
+        highlight;
+
+    if (isHidden) {this.show(); }
+    highlight = this.highlight(
+        oldHighlight ? oldHighlight.color : this.highlightColor,
+        this.highlightBorder
+    );
+    this.addBack(highlight);
+    this.fullChanged();
+    if (isHidden) {this.hide(); }
+    return highlight;
+};
+
+SpriteMorph.prototype.removeHighlight = function () {
+    var highlight = this.getHighlight();
+    if (highlight !== null) {
+        this.fullChanged();
+        this.removeChild(highlight);
+    }
+    return highlight;
+};
+
+SpriteMorph.prototype.toggleHighlight = function () {
+    if (this.getHighlight()) {
+        this.removeHighlight();
+    } else {
+        this.addHighlight();
+    }
+};
+
+SpriteMorph.prototype.highlight = function (color, border) {
+    var highlight = new SpriteHighlightMorph(),
+        fb = this.bounds, // sprites are not nested in a Morphic way
+        edge = border,
+        ctx;
+
+    highlight.setExtent(fb.extent().add(edge * 2));
+    highlight.color = color;
+    highlight.image = this.highlightImage(color, border);
+    ctx = highlight.image.getContext('2d');
+    ctx.drawImage(
+        this.highlightImage(new Color(255, 255, 255), 4),
+        border - 4,
+        border - 4
+    );
+    ctx.drawImage(
+        this.highlightImage(new Color(50, 50, 50), 2),
+        border - 2,
+        border - 2
+    );
+    ctx.drawImage(
+        this.highlightImage(new Color(255, 255, 255), 1),
+        border - 1,
+        border - 1
+    );
+    highlight.setPosition(fb.origin.subtract(new Point(edge, edge)));
+    return highlight;
+};
+
+SpriteMorph.prototype.highlightImage = function (color, border) {
+    var fb, img, hi, ctx, out;
+    fb = this.extent();
+    img = this.image;
+
+    hi = newCanvas(fb.add(border * 2));
+    ctx = hi.getContext('2d');
+
+    ctx.drawImage(img, 0, 0);
+    ctx.drawImage(img, border, 0);
+    ctx.drawImage(img, border * 2, 0);
+    ctx.drawImage(img, border * 2, border);
+    ctx.drawImage(img, border * 2, border * 2);
+    ctx.drawImage(img, border, border * 2);
+    ctx.drawImage(img, 0, border * 2);
+    ctx.drawImage(img, 0, border);
+
+    ctx.globalCompositeOperation = 'destination-out';
+    ctx.drawImage(img, border, border);
+
+    out = newCanvas(fb.add(border * 2));
+    ctx = out.getContext('2d');
+    ctx.drawImage(hi, 0, 0);
+    ctx.globalCompositeOperation = 'source-atop';
+    ctx.fillStyle = color.toString();
+    ctx.fillRect(0, 0, out.width, out.height);
+
+    return out;
+};
+
+SpriteMorph.prototype.getHighlight = function () {
+    var highlights;
+    highlights = this.children.slice(0).reverse().filter(
+        function (child) {
+            return child instanceof SpriteHighlightMorph;
+        }
+    );
+    if (highlights.length !== 0) {
+        return highlights[0];
+    }
+    return null;
+};
+
+// SpriteMorph nesting events
+
+SpriteMorph.prototype.mouseEnterDragging = function () {
+    var obj;
+    if (!this.enableNesting) {return; }
+    obj = this.world().hand.children[0];
+    if (!(obj instanceof SpriteIconMorph)) {return; }
+    if (obj.object === this) {return; }
+    this.addHighlight();
+};
+
+SpriteMorph.prototype.mouseLeave = function () {
+    if (!this.enableNesting) {return; }
+    this.removeHighlight();
+};
+
+// SpriteHighlightMorph /////////////////////////////////////////////////
+
+// SpriteHighlightMorph inherits from Morph:
+
+SpriteHighlightMorph.prototype = new Morph();
+SpriteHighlightMorph.prototype.constructor = SpriteHighlightMorph;
+SpriteHighlightMorph.uber = Morph.prototype;
+
+// SpriteHighlightMorph instance creation:
+
+function SpriteHighlightMorph() {
+    this.init();
+}
 
 // StageMorph /////////////////////////////////////////////////////////
 
@@ -4225,6 +4425,11 @@ StageMorph.prototype.thumbnail = function (extentPoint, excludedSprite) {
     });
     return trg;
 };
+
+StageMorph.prototype.fullThumbnail = function (extentPoint, excludedSprite) {
+    return this.thumbnail(extentPoint, excludedSprite);
+};
+
 // StageMorph cloning overrice
 
 StageMorph.prototype.createClone = nop;

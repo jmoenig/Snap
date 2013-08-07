@@ -68,7 +68,7 @@ sb, CommentMorph, CommandBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2013-July-30';
+modules.gui = '2013-August-07';
 
 // Declarations
 
@@ -2152,6 +2152,17 @@ IDE_Morph.prototype.settingsMenu = function () {
         'uncheck for default\nGUI design',
         'check for alternative\nGUI design',
         false
+    );
+    addPreference(
+        'Sprite Nesting',
+        function () {
+            SpriteMorph.prototype.enableNesting =
+                !SpriteMorph.prototype.enableNesting;
+        },
+        SpriteMorph.prototype.enableNesting,
+        'UNDER CONSTRUCTION!\nuncheck to disable\nsprite composition',
+        'UNDER CONSTRUCTION!\ncheck to enable\nsprite composition',
+        true
     );
     menu.addLine(); // everything below this line is stored in the project
     addPreference(
@@ -4718,7 +4729,7 @@ SpriteIconMorph.prototype.createThumbnail = function () {
 
     this.thumbnail = new Morph();
     this.thumbnail.setExtent(this.thumbSize);
-    this.thumbnail.image = this.object.thumbnail(this.thumbSize);
+    this.thumbnail.image = this.object.fullThumbnail(this.thumbSize);
     this.add(this.thumbnail);
 };
 
