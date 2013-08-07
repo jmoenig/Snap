@@ -1857,3 +1857,4 @@ ______
 * Objects, GUI: Sprite Nesting preliminaries
 * Objects: Fixed stage costume scaling & misplacing bug. Thanks, Josh, for the report!
 * Objects, GUI: Sprite Nesting GUI
+* Objects: Nested Sprite Motion
