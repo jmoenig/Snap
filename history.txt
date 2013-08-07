@@ -1851,3 +1851,7 @@ ______
 ------
 * Polish translation, yay!! Thanks, Witek Kranas!
 * Morphic: mouseEnterDragging fix
+
+130807
+------
+* Objects, GUI: Sprite Nesting preliminaries
