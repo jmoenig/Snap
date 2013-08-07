@@ -4834,6 +4834,18 @@ SpriteIconMorph.prototype.userMenu = function () {
     menu.addItem("duplicate", 'duplicateSprite');
     menu.addItem("delete", 'removeSprite');
     menu.addLine();
+    if (this.object.anchor) {
+        menu.addItem(
+            localize('detach from') + ' ' + this.object.anchor.name,
+            function () {myself.object.detachFromAnchor(); }
+        );
+    }
+    if (this.object.parts.length) {
+        menu.addItem(
+            'detach all parts',
+            function () {myself.object.detachAllParts(); }
+        );
+    }
     menu.addItem("export...", 'exportSprite');
     return menu;
 };
