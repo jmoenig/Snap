@@ -3551,8 +3551,8 @@ StageMorph.prototype.drawNew = function () {
         ctx.scale(this.scale, this.scale);
         ctx.drawImage(
             this.costume.contents,
-            (this.width() - this.costume.width() * this.scale) / 2,
-            (this.height() - this.costume.height() * this.scale) / 2
+            (this.width() / this.scale - this.costume.width()) / 2,
+            (this.height() / this.scale - this.costume.height()) / 2
         );
     }
 };
@@ -4424,10 +4424,6 @@ StageMorph.prototype.thumbnail = function (extentPoint, excludedSprite) {
         }
     });
     return trg;
-};
-
-StageMorph.prototype.fullThumbnail = function (extentPoint, excludedSprite) {
-    return this.thumbnail(extentPoint, excludedSprite);
 };
 
 // StageMorph cloning overrice

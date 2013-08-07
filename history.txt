@@ -1855,3 +1855,4 @@ ______
 130807
 ------
 * Objects, GUI: Sprite Nesting preliminaries
+* Objects: Fixed stage costume scaling & misplacing bug. Thanks, Josh, for the report!
