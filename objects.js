@@ -2235,6 +2235,15 @@ SpriteMorph.prototype.userMenu = function () {
     menu.addItem("delete", 'remove');
     menu.addItem("edit", 'edit');
     menu.addLine();
+    if (this.anchor) {
+        menu.addItem(
+            localize('detach from') + ' ' + this.anchor.name,
+            'detachFromAnchor'
+        );
+    }
+    if (this.parts.length) {
+        menu.addItem('detach all parts', 'detachAllParts');
+    }
     menu.addItem("export...", 'exportSprite');
     return menu;
 };
@@ -3210,6 +3219,7 @@ SpriteMorph.prototype.thumbnail = function (extentPoint) {
         trg = newCanvas(extentPoint),
         ctx = trg.getContext('2d');
 
+    ctx.save();
     ctx.scale(scale, scale);
     ctx.drawImage(
         src,
@@ -3222,14 +3232,26 @@ SpriteMorph.prototype.thumbnail = function (extentPoint) {
 SpriteMorph.prototype.fullThumbnail = function (extentPoint) {
     // containing parts and anchor symbols, if any
     var thumb = this.thumbnail(extentPoint),
-        ctx = thumb.getContext('2d');
+        ctx = thumb.getContext('2d'),
+        ext = extentPoint.divideBy(3),
+        i = 0;
 
+    ctx.restore();
     if (this.anchor) {
         ctx.drawImage(
-            this.anchor.thumbnail(extentPoint.divideBy(3)),
+            this.anchor.thumbnail(ext),
             0,
             0
         );
+    }
+    for (i = 0; i < 3; i += 1) {
+        if (this.parts[i]) {
+            ctx.drawImage(
+                this.parts[i].thumbnail(ext),
+                i * ext.x,
+                extentPoint.y - ext.y
+            );
+        }
     }
     return thumb;
 };
@@ -3249,23 +3271,43 @@ SpriteMorph.prototype.booleanMorph = function (bool) {
     simulate Morphic trees
 */
 
-SpriteMorph.prototype.addPart = function (aSprite) {
+SpriteMorph.prototype.attachPart = function (aSprite) {
     var v = Date.now();
+    if (aSprite.anchor) {
+        aSprite.anchor.detachPart(aSprite);
+    }
     this.parts.push(aSprite);
     this.version = v;
     aSprite.anchor = this;
     aSprite.version = v;
 };
 
-SpriteMorph.prototype.removePart = function (aSprite) {
+SpriteMorph.prototype.detachPart = function (aSprite) {
     var idx = this.parts.indexOf(aSprite),
         v;
     if (idx !== -1) {
         v = Date.now();
         this.parts.splice(idx, 1);
         this.version = v;
-        aSprite.parent = null;
+        aSprite.anchor = null;
         aSprite.version = v;
+    }
+};
+
+SpriteMorph.prototype.detachAllParts = function () {
+    var v = Date.now();
+
+    this.parts.forEach(function (part) {
+        part.anchor = null;
+        part.version = v;
+    });
+    this.parts = [];
+    this.version = v;
+};
+
+SpriteMorph.prototype.detachFromAnchor = function () {
+    if (this.anchor) {
+        this.anchor.detachPart(this);
     }
 };
 
@@ -3399,14 +3441,29 @@ SpriteMorph.prototype.mouseEnterDragging = function () {
     var obj;
     if (!this.enableNesting) {return; }
     obj = this.world().hand.children[0];
-    if (!(obj instanceof SpriteIconMorph)) {return; }
-    if (obj.object === this) {return; }
-    this.addHighlight();
+    if (this.wantsDropOf(obj)) {
+        this.addHighlight();
+    }
 };
 
 SpriteMorph.prototype.mouseLeave = function () {
     if (!this.enableNesting) {return; }
     this.removeHighlight();
+};
+
+SpriteMorph.prototype.wantsDropOf = function (morph) {
+    // allow myself to be the anchor of another sprite
+    // by drag & drop
+    return this.enableNesting
+        && morph instanceof SpriteIconMorph
+        && !contains(morph.object.allParts(), this);
+};
+
+SpriteMorph.prototype.reactToDropOf = function (morph, hand) {
+    this.removeHighlight();
+    this.attachPart(morph.object);
+    this.world().add(morph);
+    morph.slideBackTo(hand.grabOrigin);
 };
 
 // SpriteHighlightMorph /////////////////////////////////////////////////
@@ -3736,7 +3793,18 @@ StageMorph.prototype.getLastMessage = function () {
 StageMorph.prototype.wantsDropOf = function (aMorph) {
     return aMorph instanceof SpriteMorph ||
         aMorph instanceof WatcherMorph ||
-        aMorph instanceof ListWatcherMorph;
+        aMorph instanceof ListWatcherMorph ||
+        aMorph instanceof SpriteIconMorph;
+};
+
+StageMorph.prototype.reactToDropOf = function (morph, hand) {
+    if (morph instanceof SpriteIconMorph) { // detach sprite from anchor
+        if (morph.object.anchor) {
+            morph.object.anchor.detachPart(morph.object);
+        }
+        this.world().add(morph);
+        morph.slideBackTo(hand.grabOrigin);
+    }
 };
 
 // StageMorph stepping
