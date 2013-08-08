@@ -2693,11 +2693,22 @@ SpriteMorph.prototype.forward = function (steps) {
 
 SpriteMorph.prototype.setHeading = function (degrees) {
     var x = this.xPosition(),
-        y = this.yPosition();
+        y = this.yPosition(),
+        turn = degrees - this.heading;
+
+    // apply to myself
     this.changed();
     SpriteMorph.uber.setHeading.call(this, degrees);
-    this.silentGotoXY(x, y);
+    this.silentGotoXY(x, y, true); // just me
     this.positionTalkBubble();
+
+    // propagate to my parts
+    this.parts.forEach(function (part) {
+        var pos = new Point(part.xPosition(), part.yPosition()),
+            trg = pos.rotateBy(radians(turn), new Point(x, y));
+        part.turn(turn);
+        part.gotoXY(trg.x, trg.y);
+    });
 };
 
 SpriteMorph.prototype.faceToXY = function (x, y) {
