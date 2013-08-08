@@ -1862,3 +1862,4 @@ ______
 130808
 ------
 * Objects: Nested Sprite Scaling
+* Objects: Nested Sprite Rotation
