@@ -1175,9 +1175,11 @@ SpriteMorph.prototype.init = function (globals) {
     this.idx = 0; // not to be serialized (!) - used for de-serialization
     this.wasWarped = false; // not to be serialized, used for fast-tracking
 
-    this.parts = []; // sprite nesting
-    this.anchor = null; // sprite nesting
-    this.nestingScale = 1; // sprite nesting
+    // sprite nesting properties
+    this.parts = [];
+    this.anchor = null;
+    this.nestingScale = 1;
+    this.rotatesWithAnchor = true;
 
     SpriteMorph.uber.init.call(this);
 
@@ -2706,7 +2708,9 @@ SpriteMorph.prototype.setHeading = function (degrees) {
     this.parts.forEach(function (part) {
         var pos = new Point(part.xPosition(), part.yPosition()),
             trg = pos.rotateBy(radians(turn), new Point(x, y));
-        part.turn(turn);
+        if (part.rotatesWithAnchor) {
+            part.turn(turn);
+        }
         part.gotoXY(trg.x, trg.y);
     });
 };
