@@ -175,9 +175,9 @@ SnapTranslator.dict.nl = {
     'language_name':
         'Nederlands', // the name as it should appear in the language menu
     'language_translator':
-        'Sjoerd Dirk Meijer', // your name for the Translators tab
+        'Sjoerd Dirk Meijer, Frank Sierens', // your name for the Translators tab
     'translator_e-mail':
-        'sjoerddirk@fromScratchEd.nl', // optional
+        'sjoerddirk@fromScratchEd.nl, frank.sierens@telenet.be', // optional
     'last_changed':
         '2013-08-08', // this, too, will appear in the Translators tab
 
@@ -932,7 +932,7 @@ SnapTranslator.dict.nl = {
     'Reporter':
         'Functie',
     'Predicate':
-        'Eigenschap',
+        'Predicaat',
 
     // block editor
     'Block Editor':
@@ -1191,7 +1191,7 @@ SnapTranslator.dict.nl = {
     'reporter':
         'functie',
     'predicate':
-        'eigenschap',
+        'predicaat',
 
     // list indices
     'last':
