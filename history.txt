@@ -1864,3 +1864,4 @@ ______
 * Objects: Nested Sprite Scaling
 * Objects: Nested Sprite Rotation
 * Objects: Nested Sprite synchronous / independent rotation
+* Dutch translation update, thanks, Sjoerd Dirk Meijer!
