@@ -3643,7 +3643,10 @@ StageMorph.prototype.setScale = function (number) {
     this.children.forEach(function (morph) {
         relativePos = morph.position().subtract(pos);
         morph.drawNew();
-        morph.setPosition(relativePos.multiplyBy(delta).add(pos));
+        morph.setPosition(
+            relativePos.multiplyBy(delta).add(pos),
+            true // just me (for nested sprites)
+        );
         if (morph instanceof SpriteMorph) {
             bubble = morph.talkBubble();
             if (bubble) {
