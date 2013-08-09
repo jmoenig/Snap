@@ -1169,17 +1169,17 @@ SpriteMorph.prototype.init = function (globals) {
     this.isClone = false; // indicate a "temporary" Scratch-style clone
     this.cloneOriginName = '';
 
+    // sprite nesting properties
+    this.parts = []; // not serialized, only anchor (name)
+    this.anchor = null;
+    this.nestingScale = 1;
+    this.rotatesWithAnchor = true;
+
     this.blocksCache = {}; // not to be serialized (!)
     this.paletteCache = {}; // not to be serialized (!)
     this.rotationOffset = new Point(); // not to be serialized (!)
     this.idx = 0; // not to be serialized (!) - used for de-serialization
     this.wasWarped = false; // not to be serialized, used for fast-tracking
-
-    // sprite nesting properties
-    this.parts = [];
-    this.anchor = null;
-    this.nestingScale = 1;
-    this.rotatesWithAnchor = true;
 
     SpriteMorph.uber.init.call(this);
 
@@ -2126,7 +2126,7 @@ SpriteMorph.prototype.wearCostume = function (costume) {
         this.startWarp();
     }
     if (x !== null) {
-        this.silentGotoXY(x, y);
+        this.silentGotoXY(x, y, true); // just me
     }
     if (this.positionTalkBubble) { // the stage doesn't talk
         this.positionTalkBubble();
