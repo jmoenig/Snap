@@ -1865,3 +1865,7 @@ ______
 * Objects: Nested Sprite Rotation
 * Objects: Nested Sprite synchronous / independent rotation
 * Dutch translation update, thanks, Sjoerd Dirk Meijer!
+
+130809
+------
+* GUI: Nested Sprite Rotation style buttons on corral icons

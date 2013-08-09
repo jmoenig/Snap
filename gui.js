@@ -68,7 +68,7 @@ sb, CommentMorph, CommandBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2013-August-07';
+modules.gui = '2013-August-09';
 
 // Declarations
 
@@ -4699,6 +4699,7 @@ SpriteIconMorph.prototype.init = function (aSprite, aTemplate) {
     this.object = aSprite || new SpriteMorph(); // mandatory, actually
     this.version = this.object.version;
     this.thumbnail = null;
+    this.rotationButton = null; // synchronous rotation of nested sprites
 
     // initialize inherited properties:
     SpriteIconMorph.uber.init.call(
@@ -4731,6 +4732,7 @@ SpriteIconMorph.prototype.createThumbnail = function () {
     this.thumbnail.setExtent(this.thumbSize);
     if (this.object instanceof SpriteMorph) { // support nested sprites
         this.thumbnail.image = this.object.fullThumbnail(this.thumbSize);
+        this.createRotationButton();
     } else {
         this.thumbnail.image = this.object.thumbnail(this.thumbSize);
     }
@@ -4762,6 +4764,46 @@ SpriteIconMorph.prototype.createLabel = function () {
     txt.setPosition(this.label.position());
     this.label.add(txt);
     this.add(this.label);
+};
+
+SpriteIconMorph.prototype.createRotationButton = function () {
+    var button, myself = this;
+
+    if (this.rotationButton) {
+        this.rotationButton.destroy();
+        this.roationButton = null;
+    }
+    if (!this.object.anchor) {
+        return;
+    }
+
+    button = new ToggleButtonMorph(
+        null, // colors,
+        null, // target
+        function () {
+            myself.object.rotatesWithAnchor =
+                !myself.object.rotatesWithAnchor;
+        },
+        [
+            '\u2192',
+            '\u21BB'
+        ],
+        function () {  // query
+            return myself.object.rotatesWithAnchor;
+        }
+    );
+
+    button.corner = 8;
+    button.labelMinExtent = new Point(11, 11);
+    button.padding = 0;
+    button.pressColor = button.color;
+    button.drawNew();
+    // button.hint = 'rotate synchronously\nwith anchor';
+    button.fixLayout();
+    button.refresh();
+    button.changed();
+    this.rotationButton = button;
+    this.add(this.rotationButton);
 };
 
 // SpriteIconMorph stepping
@@ -4800,6 +4842,11 @@ SpriteIconMorph.prototype.fixLayout = function () {
     this.thumbnail.setTop(
         this.top() + this.outline + this.edge + this.padding
     );
+
+    if (this.rotationButton) {
+        this.rotationButton.setTop(this.top());
+        this.rotationButton.setRight(this.right());
+    }
 
     this.label.setWidth(
         Math.min(
