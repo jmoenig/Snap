@@ -305,7 +305,7 @@ SnapTranslator.dict.nl = {
     'change y by %n':
         'verander y met %n',
     'set y to %n':
-        'Maak y %n',
+        'maak y %n',
     'if on edge, bounce':
         'aan de rand, keer om',
     'x position':
@@ -390,7 +390,7 @@ SnapTranslator.dict.nl = {
     'set pen color to %clr':
         'maak penkleur %clr',
     'change pen color by %n':
-        'verander penkleur %n',
+        'verander penkleur met %n',
     'set pen color to %n':
         'maak penkleur %n',
     'change pen shade by %n':
@@ -445,12 +445,14 @@ SnapTranslator.dict.nl = {
         'stop script',
     'stop all %stop':
         'stop alle %stop',
+    'pause all %pause':
+        'pauzeer alles %pause',
     'run %cmdRing %inputs':
         'voer %cmdRing uit %inputs',
     'launch %cmdRing %inputs':
         'start %cmdRing %inputs',
     'call %repRing %inputs':
-        'roepen %repRing aan %inputs',
+        'roep %repRing aan %inputs',
     'run %cmdRing w/continuation':
         'voer %cmdRing uit en ga door',
     'call %cmdRing w/continuation':
@@ -542,6 +544,10 @@ SnapTranslator.dict.nl = {
         'unicode waarde van %s',
     'unicode %n as letter':
         'unicode %n als letter',
+    'is %s a %typ ?':
+        'is %s een %typ ?',
+    'is %s identical to %s ?':
+        'is %s gelijk aan %s ?',
     'type of %s':
         'type van %s',
 
@@ -627,7 +633,7 @@ SnapTranslator.dict.nl = {
     'Import...':
         'Importeren...',
     'file menu import hint':
-        'bestandsmenu import hint',
+        'importeer een project,\neen bibliotheek met blokken,\neen uiterlijk of een geluid',
     'Export project as plain text...':
         'Project exporteren als tekst...',
     'Export project...':
@@ -782,6 +788,10 @@ SnapTranslator.dict.nl = {
     // sprites:
     'edit':
         'bewerken',
+    'detach from':
+        'losmaken van',
+    'detach all parts':
+        'alle onderdelen losmaken',
     'export...':
         'exporteren...',
 
@@ -800,6 +810,10 @@ SnapTranslator.dict.nl = {
         'scripts verticaal\nordenen',
     'add comment':
         'opmerking toevoegen',
+    'undrop':
+        'ongedaan maken',
+    'undo the last\nblock drop\nin this pane':
+        'de laatste blokbeweging\nongedaan maken',
     'scripts pic...':
         'scripts-afbeelding...',
     'open a new window\nwith a picture of all scripts':
