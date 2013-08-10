@@ -1870,3 +1870,7 @@ ______
 ------
 * GUI: Nested Sprite Rotation style buttons on corral icons
 * Store, Objects: Nested Sprite saving / loading
+
+130810
+------
+* Objects, GUI: Nestable Sprites fixes

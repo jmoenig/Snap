@@ -124,7 +124,7 @@ PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.objects = '2013-August-09';
+modules.objects = '2013-August-10';
 
 var SpriteMorph;
 var StageMorph;
@@ -185,7 +185,7 @@ SpriteMorph.prototype.sliderColor
     = SpriteMorph.prototype.paletteColor.lighter(30);
 SpriteMorph.prototype.isCachingPrimitives = true;
 
-SpriteMorph.prototype.enableNesting = false;
+SpriteMorph.prototype.enableNesting = true;
 SpriteMorph.prototype.highlightColor = new Color(250, 200, 130);
 SpriteMorph.prototype.highlightBorder = 8;
 
@@ -1226,6 +1226,11 @@ SpriteMorph.prototype.fullCopy = function () {
     });
     c.sounds = new List(arr);
 
+    c.parts = [];
+    c.anchor = null;
+    c.nestingScale = 1;
+    c.rotatesWithAnchor = true;
+
     return c;
 };
 
@@ -1333,7 +1338,7 @@ SpriteMorph.prototype.endWarp = function () {
         var x = this.xPosition(),
             y = this.yPosition();
         this.drawNew();
-        this.silentGotoXY(x, y);
+        this.silentGotoXY(x, y, true); // just me
         this.wantsRedraw = false;
     }
     this.parent.changed();
@@ -2476,14 +2481,12 @@ SpriteMorph.prototype.setScale = function (percentage) {
         y = this.yPosition(),
         isWarped = this.isWarped,
         realScale,
-        delta,
         growth;
 
     if (isWarped) {
         this.endWarp();
     }
     realScale = (+percentage || 0) / 100;
-    delta = (realScale - this.nestingScale) * 100;
     growth = realScale / this.nestingScale;
     this.nestingScale = realScale;
     this.scale = Math.max(realScale, 0.01);
@@ -2502,7 +2505,7 @@ SpriteMorph.prototype.setScale = function (percentage) {
     this.parts.forEach(function (part) {
         var xDist = part.xPosition() - x,
             yDist = part.yPosition() - y;
-        part.changeScale(delta);
+        part.setScale(part.scale * 100 * growth);
         part.silentGotoXY(
             x + (xDist * growth),
             y + (yDist * growth)
@@ -2650,8 +2653,13 @@ SpriteMorph.prototype.drawLine = function (start, dest) {
 
 SpriteMorph.prototype.moveBy = function (delta, justMe) {
     // override the inherited default to make sure my parts follow
-    // unless it's justMe
+    // unless it's justMe (a correction)
+    var start = this.isDown && !justMe && this.parent ?
+            this.rotationCenter() : null;
     SpriteMorph.uber.moveBy.call(this, delta);
+    if (start) {
+        this.drawLine(start, this.rotationCenter());
+    }
     if (!justMe) {
         this.parts.forEach(function (part) {
             part.moveBy(delta);
@@ -2676,8 +2684,7 @@ Morph.prototype.setPosition = function (aPoint, justMe) {
 };
 
 SpriteMorph.prototype.forward = function (steps) {
-    var start = this.rotationCenter(),
-        dest,
+    var dest,
         dist = steps * this.parent.scale || 0;
 
     if (dist >= 0) {
@@ -2689,7 +2696,6 @@ SpriteMorph.prototype.forward = function (steps) {
         );
     }
     this.setPosition(dest);
-    this.drawLine(start, this.rotationCenter());
     this.positionTalkBubble();
 };
 
@@ -2768,7 +2774,6 @@ SpriteMorph.prototype.penSize = function () {
 
 SpriteMorph.prototype.gotoXY = function (x, y, justMe) {
     var stage = this.parentThatIsA(StageMorph),
-        start = this.rotationCenter(),
         newX,
         newY,
         dest;
@@ -2781,7 +2786,6 @@ SpriteMorph.prototype.gotoXY = function (x, y, justMe) {
         dest = new Point(newX, newY).subtract(this.extent().divideBy(2));
     }
     this.setPosition(dest, justMe);
-    this.drawLine(start, this.rotationCenter());
     this.positionTalkBubble();
 };
 
