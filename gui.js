@@ -68,7 +68,7 @@ sb, CommentMorph, CommandBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2013-August-09';
+modules.gui = '2013-August-10';
 
 // Declarations
 
@@ -2160,8 +2160,8 @@ IDE_Morph.prototype.settingsMenu = function () {
                 !SpriteMorph.prototype.enableNesting;
         },
         SpriteMorph.prototype.enableNesting,
-        'UNDER CONSTRUCTION!\nuncheck to disable\nsprite composition',
-        'UNDER CONSTRUCTION!\ncheck to enable\nsprite composition',
+        'uncheck to disable\nsprite composition',
+        'check to enable\nsprite composition',
         true
     );
     menu.addLine(); // everything below this line is stored in the project
