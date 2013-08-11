@@ -402,7 +402,7 @@ IDE_Morph.prototype.createLogo = function () {
     }
 
     this.logo = new Morph();
-    this.logo.texture = 'snap_logo_sm.png';
+    this.logo.texture = getSnapLogoImage();
     this.logo.drawNew = function () {
         this.image = newCanvas(this.extent());
         var context = this.image.getContext('2d'),
@@ -437,9 +437,9 @@ IDE_Morph.prototype.createLogo = function () {
     };
 
     this.logo.color = new Color();
-    /* SCRIBBLE -- needed to add more room for logo*/
-    this.logo.setExtent(new Point(210, 28)); // dimensions are fixed
-    /* END SCRIBBLE */
+    /* SNAPAPPS -- needed to add more room for logo*/
+    this.logo.setExtent(getSnapAppsLogoExtent()); // dimensions are fixed
+    /* END SNAPAPPS */
     this.add(this.logo);
 };
 
@@ -687,16 +687,16 @@ IDE_Morph.prototype.createControlBar = function () {
     this.controlBar.add(cloudButton);
     this.controlBar.cloudButton = cloudButton; // for menu positioning
     
-    /* SCRIBBLE HOOK*/
-    this.createScribbleButtons(colors);
+    /* SNAPAPPS HOOK*/
+    this.createSnapAppsButtons(colors);
     var rightHandButtons = this.getRightHandButtons(stopButton);
-    /* END SCRIBBLE HOOK*/
+    /* END SNAPAPPS HOOK*/
 
     this.controlBar.fixLayout = function () {
         x = this.right() - padding;
-	/* SCRIBBLE HOOK*/
+	/* SNAPAPPS HOOK*/
         rightHandButtons.forEach(
-    /* END SCRIBBLE HOOK*/
+    /* END SNAPAPPS HOOK*/
             function (button) {
                 button.setCenter(myself.controlBar.center());
                 button.setRight(x);
@@ -1846,31 +1846,31 @@ IDE_Morph.prototype.snapMenu = function () {
             window.open('help/SnapManual.pdf', 'SnapReferenceManual');
         }
     );
-    /* SCRIBBLE */
+    /* SNAPAPPS */
     menu.addItem(
-        'Scribble website',
+        getSnapAppsName() + ' website',
         function () {
-            window.open('http://flipt.org/', 'ScribbleWebsite');
+            window.open('http://flipt.org/', 'SnapappsWebsite');
         }
     );
-    /* END SCRIBBLE */
+    /* END SNAPAPPS */
     menu.addItem(
         'Snap! website',
         function () {
             window.open('http://snap.berkeley.edu/', 'SnapWebsite');
         }
     );
-    /* SCRIBBLE */
+    /* SNAPAPPS */
     menu.addItem(
         'View on Github',
         function () {
             window.open(
-                'https://github.com/snap-apps/scribble',
+                'https://github.com/berndmeyer/snapapps/',
                 'SnapSource'
             );
         }
     );
-    /* END SCRIBBLE */
+    /* END SNAPAPPS */
     if (world.isDevMode) {
         menu.addLine();
         menu.addItem(
@@ -2380,12 +2380,8 @@ IDE_Morph.prototype.aboutSnap = function () {
         module, btn1, btn2, btn3, btn4, licenseBtn, translatorsBtn,
         world = this.world();
 
-/* SCRIBBLE */
-    aboutTxt = 'Scribble 1.0\n Based upon Snap! 4.0\nBuild Your Own Blocks\n\n--- beta ---\n\n'
-        + 'Scribble modifications copyright \u24B8 2013 Aidan Lane and Matthew Ready\n'
-        + 'aidan.lane@monash.edu, matt.ready@monash.edu\n\n'
-        + 'For more information visit http://flipt.org/\n\n'
-    
+/* SNAPAPPS */
+    aboutTxt = getSnapAppsAboutText() + "\n\n"
         + 'Snap code copyright \u24B8 2013 Jens M\u00F6nig and '
         + 'Brian Harvey\n'
         + 'jens@moenig.org, bh@cs.berkeley.edu\n\n'
@@ -2402,7 +2398,7 @@ IDE_Morph.prototype.aboutSnap = function () {
 
     noticeTxt = localize('License')
         + '\n\n'
-        + 'Scribble is free software: you can redistribute it and/or modify\n'
+        + getSnapAppsName() + ' is free software: you can redistribute it and/or modify\n'
         + 'it under the terms of the GNU Affero General Public License as\n'
         + 'published by the Free Software Foundation, either version 3 of\n'
         + 'the License, or (at your option) any later version.\n\n'
@@ -2426,8 +2422,8 @@ IDE_Morph.prototype.aboutSnap = function () {
         + '\nDavide Della Casa: Morphic Optimizations'
         + '\nAchal Dave: Web Audio'
         + '\nJoe Otto: Morphic Testing and Debugging'
-        + '\n\nMatthew Ready: Main scribble additions to Snap!';
-/* END SCRIBBLE */
+        + '\n\nMatthew Ready: Main ' + getSnapAppsName() + ' additions to Snap!';
+/* END SNAPAPPS */
 
     for (module in modules) {
         if (Object.prototype.hasOwnProperty.call(modules, module)) {

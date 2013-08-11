@@ -1230,9 +1230,9 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             part.drawNew();
             break;
         default:
-            /** SCRIBBLE **/
-            part = this.labelPartScribble(spec);
-            /** END SCRIBBLE **/
+            /** SNAPAPPS **/
+            part = this.labelPartSnapapps(spec);
+            /** END SNAPAPPS **/
             // nop();
         }
     } else {

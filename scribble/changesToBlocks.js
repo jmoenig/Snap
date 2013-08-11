@@ -21,7 +21,7 @@ validFonts = {
                 Verdana : ['Verdana'],
             };
 
-SyntaxElementMorph.prototype.labelPartScribble = function (spec) 
+SyntaxElementMorph.prototype.labelPartSnapapps = function (spec) 
 {
     var part;
     switch (spec)
