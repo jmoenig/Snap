@@ -1422,12 +1422,27 @@ IDE_Morph.prototype.fixLayout = function (situation) {
                 this.bottom() - this.spriteEditor.top()
             ));
         }
+        
+        /* SNAPAPPS - Cellular bar */
+        var corralBarTop;
+        if (this.stageBottomBar !== undefined)
+        {
+            this.stageBottomBar.setLeft(this.stage.left());
+            this.stageBottomBar.setTop(this.stage.bottom());
+            this.stageBottomBar.setWidth(this.stage.width());
+            corralBarTop = this.stage.bottom() + this.stageBottomBar.height() + padding;
+        }
+        else
+        {
+            corralBarTop = this.stage.bottom() + padding;
+        }
 
         // corralBar
         this.corralBar.setLeft(this.stage.left());
-        this.corralBar.setTop(this.stage.bottom() + padding);
+        this.corralBar.setTop(corralBarTop);
         this.corralBar.setWidth(this.stage.width());
-
+        /* END SNAPAPPS */
+        
         // corral
         if (!contains(['selectSprite', 'tabEditor'], situation)) {
             this.corral.setPosition(this.corralBar.bottomLeft());

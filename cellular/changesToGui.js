@@ -5,59 +5,6 @@ modules.cellularGui = '2013-August-2';
 /*********because sometimes you HAVE to mod the original file*********/
 /*********************************************************************/
 
-IDE_Morph.prototype.createSnapAppsButtons = function(colors)
-{
-    var myself = this;
-    // startButton
-    /*var button = new PushButtonMorph(
-        this,
-        'scribble',
-        new SymbolMorph('brush', 14)
-    );*/
-    /*
-    var button = new ToggleButtonMorph(
-        null, //colors,
-        myself, // the IDE is the target
-        'scribble',
-        [
-            new SymbolMorph('brush', 14),
-            new SymbolMorph('brush', 14)
-        ],
-        function () {  // query
-            if (typeof myself.stage !== "undefined"
-                && myself.stage !== null
-                && typeof myself.stage.drawTool !== "undefined"
-                && myself.stage.drawTool !== null)
-                return myself.stage.drawTool;
-            return false;
-        }
-    );
-    button.corner = 12;
-    button.color = colors[0];
-    button.highlightColor = colors[1];
-    button.pressColor = colors[2];
-    button.labelMinExtent = new Point(36, 18);
-    button.padding = 0;
-    button.labelShadowOffset = new Point(-1, -1);
-    button.labelShadowColor = colors[1];
-    button.labelColor = new Color(0, 200, 200);
-    button.contrast = this.buttonContrast;
-    button.drawNew();
-    button.fixLayout();
-    scribbleButton = button;
-    this.controlBar.add(scribbleButton);
-    this.controlBar.scribbleButton = scribbleButton;
-    */
-}
-
-IDE_Morph.prototype.getRightHandButtons = function(stopButton)
-{
-    return [stopButton, 
-    this.controlBar.pauseButton, 
-    this.controlBar.startButton/*,
-    this.controlBar.scribbleButton*/];
-}
-
 function getSnapLogoImage()
 {
     return 'cellular/cellular_logo_sm.png';
@@ -80,6 +27,72 @@ function getSnapAppsLogoExtent()
 {
     return new Point(170, 28);
 }
+
+/*********************************************************************/
+/***************************** OVERRIDES *****************************/
+/*********************************************************************/
+
+IDE_Morph.prototype.createCorralSnap = IDE_Morph.prototype.createCorral;
+IDE_Morph.prototype.createCorral = function()
+{
+    this.createCorralSnap();
+    
+    // assumes the stage has already been created
+    var myself = this,
+        padding = 5,
+        newbutton,
+        paintbutton,
+        colors = [
+            this.groupColor,
+            this.frameColor.darker(50),
+            this.frameColor.darker(50)
+        ];
+
+    if (this.stageBottomBar) {
+        this.stageBottomBar.destroy();
+    }
+
+    this.stageBottomBar = new Morph();
+    this.stageBottomBar.color = this.frameColor;
+    this.stageBottomBar.setHeight(this.logo.height()); // height is fixed
+    this.add(this.stageBottomBar);
+
+    // paint brush tool
+    var scribbleButton = new ToggleButtonMorph(
+        null, //colors,
+        myself, // the IDE is the target
+        'scribble',
+        [
+            new SymbolMorph('brush', 14),
+            new SymbolMorph('brush', 14)
+        ],
+        function () {  // query
+            if (typeof myself.stage !== "undefined"
+                && myself.stage !== null
+                && typeof myself.stage.drawTool !== "undefined"
+                && myself.stage.drawTool !== null)
+                return myself.stage.drawTool;
+            return false;
+        }
+    );
+    scribbleButton.corner = 12;
+    scribbleButton.color = colors[0];
+    scribbleButton.highlightColor = colors[1];
+    scribbleButton.pressColor = colors[2];
+    scribbleButton.labelMinExtent = new Point(36, 18);
+    scribbleButton.padding = 0;
+    scribbleButton.labelShadowOffset = new Point(-1, -1);
+    scribbleButton.labelShadowColor = colors[1];
+    scribbleButton.labelColor = new Color(0, 200, 200);
+    scribbleButton.contrast = this.buttonContrast;
+    scribbleButton.hint = "draw to cell attributes";
+    scribbleButton.drawNew();
+    scribbleButton.fixLayout();
+    scribbleButton.setCenter(this.stageBottomBar.center());
+    scribbleButton.setLeft(this.stageBottomBar.left() + padding);
+    scribbleButton = scribbleButton;
+    this.stageBottomBar.add(scribbleButton);
+};
 
 /*********************************************************************/
 /*************************** BUTTON LOGIC ****************************/
