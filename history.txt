@@ -1879,3 +1879,4 @@ ______
 130812
 ------
 * Objects, Threads: Nestable Sprites Collision Detection & fixes
+* Dutch translation update
