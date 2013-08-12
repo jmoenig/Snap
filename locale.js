@@ -301,7 +301,7 @@ SnapTranslator.dict.nl = {
     'translator_e-mail':
         'frank.sierens@telenet.be, sjoerddirk@fromScratchEd.nl',
     'last_changed':
-        '2013-08-08'
+        '2013-08-12'
 };
 
 SnapTranslator.dict.pl = {
