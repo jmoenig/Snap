@@ -124,7 +124,7 @@ PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.objects = '2013-August-10';
+modules.objects = '2013-August-12';
 
 var SpriteMorph;
 var StageMorph;
@@ -2649,7 +2649,7 @@ SpriteMorph.prototype.drawLine = function (start, dest) {
     }
 };
 
-// SpriteMorph motion
+// SpriteMorph motion - adjustments due to nesting
 
 SpriteMorph.prototype.moveBy = function (delta, justMe) {
     // override the inherited default to make sure my parts follow
@@ -2667,12 +2667,52 @@ SpriteMorph.prototype.moveBy = function (delta, justMe) {
     }
 };
 
+SpriteMorph.prototype.slideBackTo = function (situation, inSteps) {
+    // override the inherited default to make sure my parts follow
+    var steps = inSteps || 5,
+        pos = situation.origin.position().add(situation.position),
+        xStep = -(this.left() - pos.x) / steps,
+        yStep = -(this.top() - pos.y) / steps,
+        stepCount = 0,
+        oldStep = this.step,
+        oldFps = this.fps,
+        myself = this;
+
+    this.fps = 0;
+    this.step = function () {
+        myself.moveBy(new Point(xStep, yStep));
+        stepCount += 1;
+        if (stepCount === steps) {
+            situation.origin.add(myself);
+            if (situation.origin.reactToDropOf) {
+                situation.origin.reactToDropOf(myself);
+            }
+            myself.step = oldStep;
+            myself.fps = oldFps;
+        }
+    };
+};
+
 SpriteMorph.prototype.setCenter = function (aPoint, justMe) {
     // override the inherited default to make sure my parts follow
     // unless it's justMe
     var delta = aPoint.subtract(this.center());
     this.moveBy(delta, justMe);
 };
+
+SpriteMorph.prototype.nestingBounds = function () {
+    // same as fullBounds(), except that it uses "parts" instead of children
+    var result;
+    result = this.bounds;
+    this.parts.forEach(function (part) {
+        if (part.isVisible) {
+            result = result.merge(part.nestingBounds());
+        }
+    });
+    return result;
+};
+
+// SpriteMorph motion primitives
 
 Morph.prototype.setPosition = function (aPoint, justMe) {
     // override the inherited default to make sure my parts follow
@@ -2830,32 +2870,34 @@ SpriteMorph.prototype.glide = function (
 };
 
 SpriteMorph.prototype.bounceOffEdge = function () {
+    // taking nested parts into account
     var stage = this.parentThatIsA(StageMorph),
+        fb = this.nestingBounds(),
         dirX,
         dirY;
 
     if (!stage) {return null; }
-    if (stage.bounds.containsRectangle(this.bounds)) {return null; }
+    if (stage.bounds.containsRectangle(fb)) {return null; }
 
     dirX = Math.cos(radians(this.heading - 90));
     dirY = -(Math.sin(radians(this.heading - 90)));
 
-    if (this.left() < stage.left()) {
+    if (fb.left() < stage.left()) {
         dirX = Math.abs(dirX);
     }
-    if (this.right() > stage.right()) {
+    if (fb.right() > stage.right()) {
         dirX = -(Math.abs(dirX));
     }
-    if (this.top() < stage.top()) {
+    if (fb.top() < stage.top()) {
         dirY = -(Math.abs(dirY));
     }
-    if (this.bottom() > stage.bottom()) {
+    if (fb.bottom() > stage.bottom()) {
         dirY = Math.abs(dirY);
     }
 
     this.setHeading(degrees(Math.atan2(-dirY, dirX)) + 90);
     this.setPosition(this.position().add(
-        this.bounds.amountToTranslateWithin(stage.bounds)
+        fb.amountToTranslateWithin(stage.bounds)
     ));
     this.positionTalkBubble();
 };
