@@ -1875,3 +1875,7 @@ ______
 ------
 * Objects, GUI: Nestable Sprites fixes
 * German translation update
+
+130812
+------
+* Objects, Threads: Nestable Sprites Collision Detection & fixes
