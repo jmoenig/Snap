@@ -1880,3 +1880,7 @@ ______
 ------
 * Objects, Threads: Nestable Sprites Collision Detection & fixes
 * Dutch translation update
+
+130814
+------
+* Traditional Chinese translation, yay!! thanks, Chu-Ching-Huang!
