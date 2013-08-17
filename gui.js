@@ -68,7 +68,7 @@ sb, CommentMorph, CommandBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2013-August-10';
+modules.gui = '2013-August-17';
 
 // Declarations
 
@@ -2319,7 +2319,14 @@ IDE_Morph.prototype.projectMenu = function () {
     menu.addItem(
         'Libraries...',
         function () {
-            var libMenu = new MenuMorph(this, 'Import library');
+            // read a list of libraries from an external file,
+            // this has turned out to be profoundly ugly
+            // we should pull it all apart into meaningful selectors
+            // at some time
+            var libMenu = new MenuMorph(this, 'Import library'),
+                libUrl = 'http://snap.berkeley.edu/snapsource/libraries/' +
+                    'LIBRARIES',
+                lRequest = new XMLHttpRequest();
 
             function loadLib(name) {
                 var url = 'http://snap.berkeley.edu/snapsource/libraries/'
@@ -2334,32 +2341,27 @@ IDE_Morph.prototype.projectMenu = function () {
                 throw new Error('unable to retrieve ' + url);
             }
 
-            libMenu.addItem(
-                'Iteration, composition',
-                function () {
-                    loadLib('iteration-composition');
-                }
-            );
-            libMenu.addItem(
-                'List utilities',
-                function () {
-                    loadLib('list-utilities');
-                }
-            );
-            libMenu.addItem(
-                'Variadic reporters',
-                function () {
-                    loadLib('variadic-reporters');
-                }
-            );
-            libMenu.addItem(
-                'Words, sentences',
-                function () {
-                    loadLib('word-sentence');
-                }
-            );
+            lRequest.open('GET', libUrl, false);
+            lRequest.send();
+            if (lRequest.status === 200) {
+                lRequest.responseText.split('\n').forEach(function (line) {
+                    if (line.length > 0) {
+                        libMenu.addItem(
+                            line.substring(line.indexOf('\t') + 1),
+                            function () {
+                                loadLib(
+                                    line.substring(0, line.indexOf('\t'))
+                                );
+                            }
+                        );
+                    }
+                });
+            } else {
+                throw new Error('unable to retrieve ' + libUrl);
+            }
             libMenu.popup(world, pos);
-        }
+        },
+        'Select categories of additional blocks to add to this project.'
     );
 
     menu.popup(world, pos);
