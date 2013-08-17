@@ -1884,3 +1884,7 @@ ______
 130814
 ------
 * Traditional Chinese translation, yay!! thanks, Chu-Ching-Huang!
+
+130817
+------
+* Norwegian translation, yay!! thanks, Olav Marschall!
