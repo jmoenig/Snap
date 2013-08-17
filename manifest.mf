@@ -1,4 +1,7 @@
 CACHE MANIFEST
+#CHANGE THE VERSION ALONG WITH HISTORY.TXT TO UPDATE CACHE
+#v110511
+CACHE:
 snap.html
 blocks.js
 byob.js
@@ -12,3 +15,16 @@ store.js
 xml.js
 scriptsPaneTexture.gif
 snap_logo_sm.gif
+iOS/57x57.png
+iOS/72x72.png
+iOS/114x114.png
+iOS/120x120.png
+iOS/144x144.png
+iOS/iphone3.png
+iOS/iphone4.png
+iOS/iphone5.png
+iOS/ipadl.png
+iOS/ipadp.png
+iOS/ipadrl.png
+iOS/ipadrl.png
+NETWORK:\n*\n
