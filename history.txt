@@ -1888,3 +1888,4 @@ ______
 130817
 ------
 * Norwegian translation, yay!! thanks, Olav Marschall!
+* "Dynamic" library list, thanks, Brian
