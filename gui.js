@@ -68,7 +68,7 @@ sb, CommentMorph, CommandBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2013-June-20';
+modules.gui = '2013-August-17';
 
 // Declarations
 
@@ -351,6 +351,7 @@ IDE_Morph.prototype.openIn = function (world) {
                             ) {
                                 myself.rawOpenProjectString(projectData);
                             }
+                            myself.hasChangedMedia = true;
                         },
                         function () {
                             myself.shield.destroy();
@@ -1433,6 +1434,7 @@ IDE_Morph.prototype.fixLayout = function (situation) {
 
 IDE_Morph.prototype.setProjectName = function (string) {
     this.projectName = string;
+    this.hasChangedMedia = true;
     this.controlBar.updateLabel();
 };
 
@@ -1476,7 +1478,10 @@ IDE_Morph.prototype.reactToWorldResize = function (rect) {
 };
 
 IDE_Morph.prototype.droppedImage = function (aCanvas, name) {
-    var costume = new Costume(aCanvas, name.split('.')[0]); // up to period
+    var costume = new Costume(
+        aCanvas,
+        name ? name.split('.')[0] : '' // up to period
+    );
     this.currentSprite.addCostume(costume);
     this.currentSprite.wearCostume(costume);
     this.spriteBar.tabBar.tabTo('costumes');
@@ -1677,8 +1682,7 @@ IDE_Morph.prototype.applySavedSettings = function () {
         zoom = this.getSetting('zoom'),
         language = this.getSetting('language'),
         click = this.getSetting('click'),
-        longform = this.getSetting('longform'),
-        code = this.getSetting('code');
+        longform = this.getSetting('longform');
 
     // design
     if (design === 'flat') {
@@ -1709,11 +1713,6 @@ IDE_Morph.prototype.applySavedSettings = function () {
     // long form
     if (longform) {
         InputSlotDialogMorph.prototype.isLaunchingExpanded = true;
-    }
-
-    //  code mapping
-    if (code && !StageMorph.prototype.enableCodeMapping) {
-        StageMorph.prototype.enableCodeMapping = true;
     }
 };
 
@@ -1759,7 +1758,7 @@ IDE_Morph.prototype.addNewSprite = function () {
     this.selectSprite(sprite);
 };
 
-IDE_Morph.prototype.paintNewSprite = function() {
+IDE_Morph.prototype.paintNewSprite = function () {
     var sprite = new SpriteMorph(this.globalVariables),
         cos = new Costume(),
         myself = this;
@@ -1775,7 +1774,7 @@ IDE_Morph.prototype.paintNewSprite = function() {
         this.world(),
         this,
         true,
-        function() {myself.removeSprite(sprite); },
+        function () {myself.removeSprite(sprite); },
         function () {
             sprite.addCostume(cos);
             sprite.wearCostume(cos);
@@ -2155,25 +2154,17 @@ IDE_Morph.prototype.settingsMenu = function () {
         false
     );
     addPreference(
-        'Code mapping',
+        'Sprite Nesting',
         function () {
-            StageMorph.prototype.enableCodeMapping =
-                !StageMorph.prototype.enableCodeMapping;
-            if (StageMorph.prototype.enableCodeMapping) {
-                myself.saveSetting('code', true);
-            } else {
-                myself.removeSetting('code');
-            }
-            myself.currentSprite.blocksCache.variables = null;
-            myself.currentSprite.paletteCache.variables = null;
-            myself.refreshPalette();
+            SpriteMorph.prototype.enableNesting =
+                !SpriteMorph.prototype.enableNesting;
         },
-        StageMorph.prototype.enableCodeMapping,
-        'uncheck to disable\nblock to text mapping features',
-        'check for block\nto text mapping features',
-        false
+        SpriteMorph.prototype.enableNesting,
+        'uncheck to disable\nsprite composition',
+        'check to enable\nsprite composition',
+        true
     );
-    menu.addLine(); // everything below this line is made persistent
+    menu.addLine(); // everything below this line is stored in the project
     addPreference(
         'Thread safe scripts',
         function () {stage.isThreadSafe = !stage.isThreadSafe; },
@@ -2187,6 +2178,20 @@ IDE_Morph.prototype.settingsMenu = function () {
         StageMorph.prototype.frameRate,
         'uncheck for greater speed\nat variable frame rates',
         'check for smooth, predictable\nanimations across computers'
+    );
+    addPreference(
+        'Codification support',
+        function () {
+            StageMorph.prototype.enableCodeMapping =
+                !StageMorph.prototype.enableCodeMapping;
+            myself.currentSprite.blocksCache.variables = null;
+            myself.currentSprite.paletteCache.variables = null;
+            myself.refreshPalette();
+        },
+        StageMorph.prototype.enableCodeMapping,
+        'uncheck to disable\nblock to text mapping features',
+        'check for block\nto text mapping features',
+        false
     );
     menu.popup(world, pos);
 };
@@ -2310,6 +2315,53 @@ IDE_Morph.prototype.projectMenu = function () {
 
         },
         'load the official library of\npowerful blocks'
+    );
+    menu.addItem(
+        'Libraries...',
+        function () {
+            // read a list of libraries from an external file,
+            // this has turned out to be profoundly ugly
+            // we should pull it all apart into meaningful selectors
+            // at some time
+            var libMenu = new MenuMorph(this, 'Import library'),
+                libUrl = 'http://snap.berkeley.edu/snapsource/libraries/' +
+                    'LIBRARIES',
+                lRequest = new XMLHttpRequest();
+
+            function loadLib(name) {
+                var url = 'http://snap.berkeley.edu/snapsource/libraries/'
+                        + name
+                        + '.xml',
+                    request = new XMLHttpRequest();
+                request.open('GET', url, false);
+                request.send();
+                if (request.status === 200) {
+                    return myself.droppedText(request.responseText, name);
+                }
+                throw new Error('unable to retrieve ' + url);
+            }
+
+            lRequest.open('GET', libUrl, false);
+            lRequest.send();
+            if (lRequest.status === 200) {
+                lRequest.responseText.split('\n').forEach(function (line) {
+                    if (line.length > 0) {
+                        libMenu.addItem(
+                            line.substring(line.indexOf('\t') + 1),
+                            function () {
+                                loadLib(
+                                    line.substring(0, line.indexOf('\t'))
+                                );
+                            }
+                        );
+                    }
+                });
+            } else {
+                throw new Error('unable to retrieve ' + libUrl);
+            }
+            libMenu.popup(world, pos);
+        },
+        'Select categories of additional blocks to add to this project.'
     );
 
     menu.popup(world, pos);
@@ -2531,6 +2583,9 @@ IDE_Morph.prototype.newProject = function () {
     this.currentSprite = new SpriteMorph(this.globalVariables);
     this.sprites = new List([this.currentSprite]);
     StageMorph.prototype.hiddenPrimitives = {};
+    StageMorph.prototype.codeMappings = {};
+    StageMorph.prototype.codeHeaders = {};
+    StageMorph.prototype.enableCodeMapping = false;
     this.setProjectName('');
     this.projectNotes = '';
     this.createStage();
@@ -2676,6 +2731,10 @@ IDE_Morph.prototype.openProjectString = function (str) {
 IDE_Morph.prototype.rawOpenProjectString = function (str) {
     this.toggleAppMode(false);
     this.spriteBar.tabBar.tabTo('scripts');
+    StageMorph.prototype.hiddenPrimitives = {};
+    StageMorph.prototype.codeMappings = {};
+    StageMorph.prototype.codeHeaders = {};
+    StageMorph.prototype.enableCodeMapping = false;
     if (Process.prototype.isCatchingErrors) {
         try {
             this.serializer.openProject(this.serializer.load(str), this);
@@ -2706,6 +2765,10 @@ IDE_Morph.prototype.openCloudDataString = function (str) {
 
 IDE_Morph.prototype.rawOpenCloudDataString = function (str) {
     var model;
+    StageMorph.prototype.hiddenPrimitives = {};
+    StageMorph.prototype.codeMappings = {};
+    StageMorph.prototype.codeHeaders = {};
+    StageMorph.prototype.enableCodeMapping = false;
     if (Process.prototype.isCatchingErrors) {
         try {
             model = this.serializer.parse(str);
@@ -4638,6 +4701,7 @@ SpriteIconMorph.prototype.init = function (aSprite, aTemplate) {
     this.object = aSprite || new SpriteMorph(); // mandatory, actually
     this.version = this.object.version;
     this.thumbnail = null;
+    this.rotationButton = null; // synchronous rotation of nested sprites
 
     // initialize inherited properties:
     SpriteIconMorph.uber.init.call(
@@ -4668,7 +4732,12 @@ SpriteIconMorph.prototype.createThumbnail = function () {
 
     this.thumbnail = new Morph();
     this.thumbnail.setExtent(this.thumbSize);
-    this.thumbnail.image = this.object.thumbnail(this.thumbSize);
+    if (this.object instanceof SpriteMorph) { // support nested sprites
+        this.thumbnail.image = this.object.fullThumbnail(this.thumbSize);
+        this.createRotationButton();
+    } else {
+        this.thumbnail.image = this.object.thumbnail(this.thumbSize);
+    }
     this.add(this.thumbnail);
 };
 
@@ -4697,6 +4766,46 @@ SpriteIconMorph.prototype.createLabel = function () {
     txt.setPosition(this.label.position());
     this.label.add(txt);
     this.add(this.label);
+};
+
+SpriteIconMorph.prototype.createRotationButton = function () {
+    var button, myself = this;
+
+    if (this.rotationButton) {
+        this.rotationButton.destroy();
+        this.roationButton = null;
+    }
+    if (!this.object.anchor) {
+        return;
+    }
+
+    button = new ToggleButtonMorph(
+        null, // colors,
+        null, // target
+        function () {
+            myself.object.rotatesWithAnchor =
+                !myself.object.rotatesWithAnchor;
+        },
+        [
+            '\u2192',
+            '\u21BB'
+        ],
+        function () {  // query
+            return myself.object.rotatesWithAnchor;
+        }
+    );
+
+    button.corner = 8;
+    button.labelMinExtent = new Point(11, 11);
+    button.padding = 0;
+    button.pressColor = button.color;
+    button.drawNew();
+    // button.hint = 'rotate synchronously\nwith anchor';
+    button.fixLayout();
+    button.refresh();
+    button.changed();
+    this.rotationButton = button;
+    this.add(this.rotationButton);
 };
 
 // SpriteIconMorph stepping
@@ -4736,6 +4845,11 @@ SpriteIconMorph.prototype.fixLayout = function () {
         this.top() + this.outline + this.edge + this.padding
     );
 
+    if (this.rotationButton) {
+        this.rotationButton.setTop(this.top());
+        this.rotationButton.setRight(this.right());
+    }
+
     this.label.setWidth(
         Math.min(
             this.label.children[0].width(), // the actual text
@@ -4769,6 +4883,18 @@ SpriteIconMorph.prototype.userMenu = function () {
     menu.addItem("duplicate", 'duplicateSprite');
     menu.addItem("delete", 'removeSprite');
     menu.addLine();
+    if (this.object.anchor) {
+        menu.addItem(
+            localize('detach from') + ' ' + this.object.anchor.name,
+            function () {myself.object.detachFromAnchor(); }
+        );
+    }
+    if (this.object.parts.length) {
+        menu.addItem(
+            'detach all parts',
+            function () {myself.object.detachAllParts(); }
+        );
+    }
     menu.addItem("export...", 'exportSprite');
     return menu;
 };
@@ -5066,7 +5192,7 @@ CostumeIconMorph.prototype.renameCostume = function () {
     );
 };
 
-CostumeIconMorph.prototype.duplicateCostume = function() {
+CostumeIconMorph.prototype.duplicateCostume = function () {
     var wardrobe = this.parentThatIsA(WardrobeMorph),
         ide = this.parentThatIsA(IDE_Morph),
         newcos = this.object.copy(),
@@ -5445,11 +5571,11 @@ WardrobeMorph.prototype.removeCostumeAt = function (idx) {
     this.updateList();
 };
 
-WardrobeMorph.prototype.paintNew = function() {
+WardrobeMorph.prototype.paintNew = function () {
     var cos = new Costume(newCanvas(), "Untitled"),
         ide = this.parentThatIsA(IDE_Morph),
         myself = this;
-    cos.edit(this.world(), null, true, null, function() {
+    cos.edit(this.world(), ide, true, null, function () {
         myself.sprite.addCostume(cos);
         myself.updateList();
         if (ide) {

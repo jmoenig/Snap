@@ -1,12 +1,12 @@
 /*
 
-    lang-de.js
+    lang-pl.js
 
-    German translation for SNAP!
+    Polskie tłumaczenie SNAP!
 
-    written by Jens Mönig
+    Podziękowania dla Jensa Möniga
 
-    Copyright (C) 2013 by Jens Mönig
+    za przygotowanie mechanizmu tłumaczenia
 
     This file is part of Snap!.
 
@@ -166,92 +166,97 @@
 
 /*global SnapTranslator*/
 
-SnapTranslator.dict.de = {
+SnapTranslator.dict.pl = {
 
 /*
     Special characters: (see <http://0xcc.net/jsescape/>)
-
-    Ä, ä   \u00c4, \u00e4
-    Ö, ö   \u00d6, \u00f6
-    Ü, ü   \u00dc, \u00fc
-    ß      \u00df
+	Ą, ą	\u0104,	\u0105
+	Ć, ć	\u0106,	\u0107
+	Ę, ę	\u0118,	\u0119
+	Ł, ł	\u0141, \u0142
+	Ń, ń	\u0143, \u0144
+	Ś, ś	\u015A, \u015B
+	Ó, ó	\u00D3, \u00F3
+	Ź, ź	\u0179,	\u017A
+	Ż, ż	\u017B, \u017C
+	
 */
 
     // translations meta information
     'language_name':
-        'Deutsch', // the name as it should appear in the language menu
+        'Polski', // the name as it should appear in the language menu
     'language_translator':
-        'Jens M\u00F6nig', // your name for the Translators tab
+        'Witek Kranas', // your name for the Translators tab
     'translator_e-mail':
-        'jens@moenig.org', // optional
+        'witek@oeiizk.waw.pl', // optional
     'last_changed':
-        '2013-08-10', // this, too, will appear in the Translators tab
+        '2013-08-05', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
     'untitled':
-        'Unbenannt',
+        'bez nazwy',
     'development mode':
-        'Hackermodus',
+        'tryb budowania',
 
     // categories:
     'Motion':
-        'Bewegung',
+        'Ruch',
     'Looks':
-        'Aussehen',
+        'Wygl\u0105d',
     'Sound':
-        'Klang',
+        'D\u017Awi\u0119k',
     'Pen':
-        'Stift',
+        'Pisak',
     'Control':
-        'Steuerung',
+        'Kontrola',
     'Sensing':
-        'F\u00fchlen',
+        'Czujniki',
     'Operators':
-        'Operatoren',
+        'Wyra\u017Cenia',
     'Variables':
-        'Variablen',
+        'Dane',
     'Lists':
-        'Listen',
+        'Listy',
     'Other':
-        'Andere',
+        'Inne',
 
     // editor:
     'draggable':
-        'greifbar',
+        'przeci\u0105ganie',
 
     // tabs:
     'Scripts':
-        'Skripte',
+        'Skrypty',
     'Costumes':
-        'Kost\u00fcme',
+        'Kostiumy',
     'Sounds':
-        'Kl\u00e4nge',
+        'D\u017Awi\u0119ki',
 
     // names:
     'Sprite':
-        'Objekt',
+        'Duszek',
     'Stage':
-        'B\u00fchne',
+        'Scena',
 
     // rotation styles:
     'don\'t rotate':
-        'nicht drehbar',
+        'nie obracaj',
     'can rotate':
-        'frei drehbar',
+        'dowolny obrót',
     'only face left/right':
-        'kann sich nur nach\nlinks/rechts drehen',
+        'tylko lewo/prawo',
 
     // new sprite button:
     'add a new sprite':
-        'ein neues Objekt\nhinzuf\u00fcgen',
+        'dodaj nowego duszka',
 
     // tab help
     'costumes tab help':
-        'Bilder durch hereinziehen von einer anderen\n'
-            + 'Webseite or vom Computer importieren',
+        'Importuj obrazy z innej strony\n'
+            + 'lub z komputera przeci\u0105gaj\u0105c tu',
     'import a sound from your computer\nby dragging it into here':
-        'Kl\u00e4nge durch hereinziehen importieren',
+        'Importuj d\u017Awi\u0119k z komputera\nprzeci\u0105gaj\u0105c tu',
 
     // primitive blocks:
 
@@ -287,825 +292,814 @@ SnapTranslator.dict.de = {
 
     // motion:
     'Stage selected:\nno motion primitives':
-        'B\u00fchne ausgew\u00e4hlt:\nkeine Standardbewegungsbl\u00f6cke\n'
-            + 'vorhanden',
+        'Wybrana scena\nnie ma blok\u00F3w ruchu',
 
     'move %n steps':
-        'gehe %n Schritte',
+        'przesu\u0144 o %n krok\u00F3w',
     'turn %clockwise %n degrees':
-        'drehe %clockwise %n Grad',
+        'obr\u00F3\u0107 %clockwise o %n stopni',
     'turn %counterclockwise %n degrees':
-        'drehe %counterclockwise %n Grad',
+        'obr\u00F3\u0107 %counterclockwise o %n stopni',
     'point in direction %dir':
-        'zeige Richtung %dir',
+        'ustaw kierunek na %dir',
     'point towards %dst':
-        'zeige auf %dst',
+        'ustaw w stron\u0119 %dst',
     'go to x: %n y: %n':
-        'gehe zu x: %n y: %n',
+        'id\u017A do x: %n y: %n',
     'go to %dst':
-        'gehe zu %dst',
+        'id\u017A do %dst',
     'glide %n secs to x: %n y: %n':
-        'gleite %n Sek. zu x: %n y: %n',
+        'le\u0107 przez %n s do x: %n y: %n',
     'change x by %n':
-        '\u00e4ndere x um %n',
+        'zmie\u0144 x o %n',
     'set x to %n':
-        'setze x auf %n',
+        'ustaw x na %n',
     'change y by %n':
-        '\u00e4ndere y um %n',
+        'zmie\u0144 y o %n',
     'set y to %n':
-        'setze y auf %n',
+        'ustaw y na %n',
     'if on edge, bounce':
-        'pralle vom Rand ab',
+        'je\u017Celi na brzegu, odbij si\u0119',
     'x position':
-        'x-Position',
+        'pozycja X',
     'y position':
-        'y-Position',
+        'pozycja Y',
     'direction':
-        'Richtung',
+        'kierunek',
 
-    // looks:
+    // wyglad:
     'switch to costume %cst':
-        'ziehe Kost\u00fcm %cst an',
+        'zmie\u0144 kostium na %cst',
     'next costume':
-        'n\u00e4chstes Kost\u00fcm',
+        'nast\u0118pny kostium',
     'costume #':
-        'Kost\u00fcm Nr.',
+        'kostium nr ',
     'say %s for %n secs':
-        'sage %s f\u00fcr %n Sek.',
+        'powiedz %s przez %n s',
     'say %s':
-        'sage %s',
+        'powiedz %s',
     'think %s for %n secs':
-        'denke %s f\u00fcr %n Sek.',
+        'pomy\u015Bl %s przez %n s',
     'think %s':
-        'denke %s',
+        'pomy\u015Bl %s',
     'Hello!':
         'Hallo!',
     'Hmm...':
         'Hmm...',
     'change %eff effect by %n':
-        '\u00e4ndere %eff -Effekt um %n',
+        'zmie\u0144 efekt %eff o %n',
     'set %eff effect to %n':
-        'setze %eff -Effekt auf %n',
+        'ustaw efekt %eff na %n',
     'clear graphic effects':
-        'schalte Grafikeffekte aus',
+        'wyczy\u015B\u0107 efekty graficzne',
     'change size by %n':
-        '\u00e4ndere Gr\u00f6\u00dfe um %n',
+        'zmie\u0144 rozmiar o %n',
     'set size to %n %':
-        'setze Gr\u00f6\u00dfe auf %n %',
+        'ustaw rozmiar na %n %',
     'size':
-        'Gr\u00f6\u00dfe',
+        'rozmiar',
     'show':
-        'anzeigen',
+        'poka\u017C',
     'hide':
-        'verstecken',
+        'ukryj',
     'go to front':
-        'komme nach vorn',
+        'na wierzch',
     'go back %n layers':
-        'gehe %n Ebenen zur\u00fcck',
+        'wr\u00F3\u0107 o %n poziom\u00F3w',
 
     'development mode \ndebugging primitives:':
-        'Hackermodus \nDebugging-Bl\u00f6cke',
+        'tryb budowania \ndebugowanie procedur pierwotnych',
     'console log %mult%s':
-        'schreibe in die Konsole: %mult%s',
+        'log konsoli: %mult%s',
     'alert %mult%s':
-        'Pop-up: %mult%s',
+        'alert: %mult%s',
 
-    // sound:
+    // dzwiek:
     'play sound %snd':
-        'spiele Klang %snd',
+        'zagraj d\u017Awi\u0119k %snd',
     'play sound %snd until done':
-        'spiele Klang %snd ganz',
+        'zagraj d\u017Awi\u0119k %snd i czekaj',
     'stop all sounds':
-        'stoppe alle Kl\u00e4nge',
+        'zatrzymaj wszystkie d\u017Awi\u0119ki',
     'rest for %n beats':
-        'spiele Pause f\u00fcr %n Schl\u00e4ge',
+        'pauzuj przez %n takt\u00F3w',
     'play note %n for %n beats':
-        'spiele Note %n f\u00fcr %n Schl\u00e4ge',
+        'zagraj nut\u0119 %n przez %n takt\u00F3w',
     'change tempo by %n':
-        '\u00e4ndere Tempo um %n',
+        'zmie\u0144 tempo o %n',
     'set tempo to %n bpm':
-        'setze Tempo auf %n Schl\u00e4ge/Min.',
+        'ustaw tempo na %n takt\u00F3w na min.',
     'tempo':
-        'Tempo',
+        'tempo',
 
-    // pen:
+    // pisak:
     'clear':
-        'wische',
+        'wyczy\u015B\u0107',
     'pen down':
-        'Stift runter',
+        'przy\u0142\u00F3\u017C pisak',
     'pen up':
-        'Stift hoch',
+        'podnie\u015B pisak',
     'set pen color to %clr':
-        'setze Stiftfarbe auf %clr',
+        'ustaw kolor piaka na %clr',
     'change pen color by %n':
-        '\u00e4ndere Stiftfarbe um %n',
+        'zmie\u0144 kolor pisaka o %n',
     'set pen color to %n':
-        'setze Stiftfarbe auf %n',
+        'ustaw kolor pisaka na %n',
     'change pen shade by %n':
-        '\u00e4ndere Farbst\u00e4rke um %n',
+        'zmie\u0144 odcie\u0144 pisaka o %n',
     'set pen shade to %n':
-        'setze Farbst\u00e4rke auf %n',
+        'ustaw odcie\u0144 pisaka na %n',
     'change pen size by %n':
-        '\u00e4ndere Stiftdicke um %n',
+        'zmie\u0144 rozmiar pisaka o %n',
     'set pen size to %n':
-        'setze Stiftdicke auf %n',
+        'ustaw rozmiar pisaka na %n',
     'stamp':
-        'stemple',
+        'stempluj',
 
     // control:
     'when %greenflag clicked':
-        'Wenn %greenflag angeklickt',
+        'kiedy klikni\u0119to %greenflag',
     'when %keyHat key pressed':
-        'Wenn Taste %keyHat gedr\u00fcckt',
+        'kiedy klawisz %keyHat naci\u015Bni\u0119ty',
     'when I am clicked':
-        'Wenn ich angeklickt werde',
+        'kiedy duszek klikni\u0119ty',
     'when I receive %msgHat':
-        'Wenn ich %msgHat empfange',
+        'kiedy otrzymam %msgHat',
     'broadcast %msg':
-        'sende %msg an alle',
+        'nadaj %msg do wszystkich',
     'broadcast %msg and wait':
-        'sende %msg an alle und warte',
+        'nadaj %msg do wszystkich i czekaj',
     'Message name':
-        'Nachricht',
+        'nazwa wiadomo\u015Bci',
     'message':
-        'Nachricht',
+        'wiadomo\u015B\u0107',
     'any message':
-        'eine beliebige Nachricht',
+        'dowolna wiadomo\u015B\u0107',
     'wait %n secs':
-        'warte %n Sek.',
+        'czekaj %n s',
     'wait until %b':
-        'warte bis %b',
+        'czekaj a\u017C %b',
     'forever %c':
-        'fortlaufend %c',
+        'zawsze %c',
     'repeat %n %c':
-        'wiederhole %n mal %c',
+        'powt\u00F3rz %n razy %c',
     'repeat until %b %c':
-        'wiederhole bis %b %c',
+        'powtarzaj a\u017C %b %c',
     'if %b %c':
-        'falls %b %c',
+        'je\u017Celi %b to %c',
     'if %b %c else %c':
-        'falls %b %c sonst %c',
+        'je\u017Celi %b to %c w przeciwnym razie %c',
     'report %s':
-        'berichte %s',
+        'zwr\u00F3\u0107 %s',
     'stop block':
-        'stoppe diesen Block',
+        'zatrzymaj ten blok',
     'stop script':
-        'stoppe dieses Skript',
+        'zatrzymaj ten skrypt',
     'stop all %stop':
-        'stoppe alles %stop',
+        'zatrzymaj wszystko %stop',
     'pause all %pause':
-        'pausiere alles %pause',
+        'pauzuj wszystko %pause',
     'run %cmdRing %inputs':
-        'f\u00fchre %cmdRing aus %inputs',
+        'uruchom %cmdRing z %inputs',
     'launch %cmdRing %inputs':
-        'starte %cmdRing %inputs',
+        'zacznij %cmdRing %inputs',
     'call %repRing %inputs':
-        'rufe %repRing auf %inputs',
+        'wywo\u0142aj %repRing z %inputs',
     'run %cmdRing w/continuation':
-        'f\u00fchre %cmdRing mit Continuation aus',
+        'uruchom %cmdRing z kontynuacj\u0105',
     'call %cmdRing w/continuation':
-        'rufe %cmdRing mit Continuation auf',
+        'wywo\u0142aj %cmdRing z kontynuacj\u0105',
     'warp %c':
-        'Warp %c',
+        'warp %c',
     'when I start as a clone':
-        'Wenn ich geklont werde',
+        'kiedy zaczynam jako klon',
     'create a clone of %cln':
-        'klone %cln',
+        'sklonuj %cln',
     'myself':
-        'mich',
+        'ja',
     'delete this clone':
-        'entferne diesen Klon',
+        'usu\u0144 tego klona',
 
     // sensing:
     'touching %col ?':
-        'ber\u00fchre %col ?',
+        'dotyka %col ?',
     'touching %clr ?':
-        'ber\u00fchre %clr ?',
+        'dotyka koloru %clr ?',
     'color %clr is touching %clr ?':
-        'Farbe %clr ber\u00fchrt %clr ?',
+        'czy kolor %clr dotyka %clr ?',
     'ask %s and wait':
-        'frage %s und warte',
+        'zapytaj %s i czekaj',
     'what\'s your name?':
-        'Wie hei\u00dft Du?',
+        'Jak masz na imi\u0119?',
     'answer':
-        'Antwort',
+        'odpowied\u017A',
     'mouse x':
-        'Maus x-Position',
+        'x myszy',
     'mouse y':
-        'Maus y-Position',
+        'y myszy',
     'mouse down?':
-        'Maustaste gedr\u00fcckt?',
+        'przycisk myszy naci\u015Bni\u0119ty',
     'key %key pressed?':
-        'Taste %key gedr\u00fcckt?',
+        'klawisz %key naci\u015Bni\u0119ty?',
     'distance to %dst':
-        'Entfernung von %dst',
+        'odleg\u0142o\u015B\u0107 do %dst',
     'reset timer':
-        'starte Stoppuhr neu',
+        'kasuj zegar',
     'timer':
-        'Stoppuhr',
+        'czasomierz',
     '%att of %spr':
-        '%att von %spr',
+        '%att z %spr',
     'http:// %s':
         'http:// %s',
     'turbo mode?':
-        'Turbomodus?',
+        'tryb turbo?',
     'set turbo mode to %b':
-        'setze Turbomodus auf %b',
+        'ustaw tryb turbo na %b',
 
     'filtered for %clr':
-        'nach %clr gefiltert',
+        'przefiltrowane dla %clr',
     'stack size':
-        'Stapelgr\u00f6\u00dfe',
+        'rozmiar stosu',
     'frames':
-        'Rahmenz\u00e4hler',
+        'klatki',
 
     // operators:
     '%n mod %n':
         '%n modulo %n',
     'round %n':
-        '%n gerundet',
+        'zaokr\u0105glij %n',
     '%fun of %n':
-        '%fun von %n',
+        '%fun z %n',
     'pick random %n to %n':
-        'Zufallszahl von %n bis %n',
+        'losuj od %n do %n',
     '%b and %b':
-        '%b und %b',
+        '%b i %b',
     '%b or %b':
-        '%b oder %b',
+        '%b lub %b',
     'not %b':
-        'nicht %b',
+        'nie %b',
     'true':
-        'wahr',
+        'prawda',
     'false':
-        'falsch',
+        'fa\u0142sz',
     'join %words':
-        'verbinde %words',
+        'po\u0142\u0105cz %words',
     'hello':
         'Hallo',
     'world':
-        'Welt',
+        's\u0142owo',
     'letter %n of %s':
-        'Zeichen %n von %s',
+        'litera %n z %s',
     'length of %s':
-        'L\u00e4nge von %s',
+        'd\u0142ugo\u015B\u0107 %s',
     'unicode of %s':
-        'Unicode Wert von %s',
+        'Unicode z %s',
     'unicode %n as letter':
-        'Unicode %n als Buchstabe',
+        'Unicode %n jako litera',
     'is %s a %typ ?':
-        'ist %s ein(e) %typ ?',
+        'jest %s typu %typ ?',
     'is %s identical to %s ?':
-        'ist %s identisch mit %s ?',
+        'jest %s identyczne z %s ?',
 
     'type of %s':
-        'Typ von %s',
+        'typ %s',
 
     // variables:
     'Make a variable':
-        'Neue Variable',
+        'Stw\u00F3rz zmienn\u0105',
     'Variable name':
-        'Variablenname',
+        'nazwa zmiennej',
     'Script variable name':
-        'Skriptvariablenname',
+        'nazwa zmiennej skryptu',
     'Delete a variable':
-        'Variable l\u00f6schen',
+        'usu\u0144 zmienn\u0105',
 
     'set %var to %s':
-        'setze %var auf %s',
+        'ustaw %var na %s',
     'change %var by %n':
-        '\u00e4ndere %var um %n',
+        'zmie\u0144 %var o %n',
     'show variable %var':
-        'zeige Variable %var',
+        'poka\u017C zmienn\u0105 %var',
     'hide variable %var':
-        'verstecke Variable %var',
+        'ukryj zmienn\u0105 %var',
     'script variables %scriptVars':
-        'Skriptvariablen %scriptVars',
+        'zmienne skryptu %scriptVars',
 
     // lists:
     'list %exp':
-        'Liste %exp',
+        'lista %exp',
     '%s in front of %l':
-        '%s am Anfang von %l',
+        'wstaw %s przed %l',
     'item %idx of %l':
-        'Element %idx von %l',
+        'element %idx z %l',
     'all but first of %l':
-        'alles au\u00dfer dem ersten von %l',
+        'bez pierwszego z %l',
     'length of %l':
-        'L\u00e4nge von %l',
+        'd\u0142ugo\u015B\u0107 %l',
     '%l contains %s':
-        '%l enth\u00e4lt %s',
+        '%l zawiera %s',
     'thing':
-        'etwas',
+        'co\u015B',
     'add %s to %l':
-        'f\u00fcge %s zu %l hinzu',
+        'dodaj %s do %l',
     'delete %ida of %l':
-        'entferne %ida aus %l',
+        'usu\u0144 %ida z %l',
     'insert %s at %idx of %l':
-        'f\u00fcge %s als %idx in %l ein',
+        'wstaw %s na pozycji %idx do %l',
     'replace item %idx of %l with %s':
-        'ersetze Element %idx in %l durch %s',
+        'zamie\u0144 element %idx z %l na %s',
 
     // other
     'Make a block':
-        'Neuer Block',
+        'nowy blok',
 
     // menus
     // snap menu
     'About...':
-        '\u00dcber Snap!...',
+        'O Snap!...',
     'Reference manual':
-        'Handbuch lesen',
+        'Podr\u0119cznik',
     'Snap! website':
-        'Snap! Webseite',
+        'Strona Snap!',
     'Download source':
-        'Quellcode runterladen',
+        'Pobierz \u017Ar\u00F3d\u0142o',
     'Switch back to user mode':
-        'zur\u00fcck zum Benutzermodus',
+        'Prze\u0142\u0105cz do trybu u\u017Cytkownika',
     'disable deep-Morphic\ncontext menus\nand show user-friendly ones':
-        'verl\u00e4sst Morphic',
+        'disable Morphic',
     'Switch to dev mode':
-        'zum Hackermodus wechseln',
+        'do trybu budowania',
     'enable Morphic\ncontext menus\nand inspectors,\nnot user-friendly!':
-        'erm\u00f6glicht Morphic Funktionen',
+        'enable Morphic',
 
     // project menu
     'Project notes...':
-        'Projektanmerkungen...',
+        'O projekcie...',
     'New':
-        'Neu',
+        'Nowy',
     'Open...':
-        '\u00d6ffnen...',
+        'Otw\u00F3rz...',
     'Save':
-        'Sichern',
+        'Zapisz',
     'Save As...':
-        'Sichern als...',
+        'Zapisz jako...',
     'Import...':
-        'Importieren...',
+        'Importuj...',
     'file menu import hint':
-        'l\u00e4dt ein exportiertes Projekt,\neine Bibliothek mit '
-            + 'Bl\u00f6cken\n'
-            + 'ein Kost\u00fcm oder einen Klang',
+        '\u0142aduje wyeksportowany projekt\n'
+		  + 'biblitek\u0119 '
+          + 'kostium lub d\u017Awi\u0119k',
     'Export project as plain text...':
-        'Projekt als normalen Text exportieren...',
+        'Eksportuj projekt jako tekst...',
     'Export project...':
-        'Projekt exportieren...',
+        'Eksportuj projekt...',
     'show project data as XML\nin a new browser window':
-        'zeigt das Projekt als XML\nin einem neuen Browserfenster an',
+        'poka\u017C projekt jako XML\nin w nowej karcie',
     'Export blocks...':
-        'Bl\u00f6cke exportieren...',
+        'Eksportuj bloki...',
     'show global custom block definitions as XML\nin a new browser window':
-        'zeigt globale Benutzerblockdefinitionen\nals XML im Browser an',
+        'poka\u017C definicje blok\u00F3w jako XML/min w nowej karcie',
     'Import tools':
-        'Tools laden',
+        'Importuj narz\u0119dzia',
     'load the official library of\npowerful blocks':
-        'das offizielle Modul mit\nm\u00e4chtigen Bl\u00f6cken laden',
+        'za\u0142aduj oficjaln\u0105 bibliotek\u0119 blok\u00F3w',
     'Libraries...':
-        'Module...',
+        'Biblioteka...',
     'Import library':
-        'Modul laden',
+        'Importuj bibliotek\u0119',
 
     // cloud menu
     'Login...':
-        'Anmelden...',
+        'Logowanie...',
     'Signup...':
-        'Benutzerkonto einrichten...',
+        'Rejestracja...',
 
     // settings menu
     'Language...':
-        'Sprache...',
+        'J\u0119zyk...',
     'Zoom blocks...':
-        'Bl\u00f6cke vergr\u00f6\u00dfern...',
+        'Powi\u0119ksz bloki...',
     'Blurred shadows':
-        'Weiche Schatten',
+        'Rozmyte cienie',
     'uncheck to use solid drop\nshadows and highlights':
-        'abschalten f\u00fcr harte Schatten\nund Beleuchtung',
+        'Odznacz, aby uzyska\u0107\nmocne cienie i granice',
     'check to use blurred drop\nshadows and highlights':
-        'einschalten f\u00fcr harte Schatten\nund Beleuchtung',
+        'Zaznacz, aby uzyska\u0107\rozmyte cienie i granice',
     'Zebra coloring':
-        'Zebrafarben',
+        'Kolorowanie zebr\u0105',
     'check to enable alternating\ncolors for nested blocks':
-        'einschalten \u00fcr abwechselnde Farbnuancen\nin Bl\u00f6cken',
+        'zaznacz, aby pozowli\u0107 na zmian\u0119\nbarw zagnie\u017Cd\u017Conych blok\u00F3w',
     'uncheck to disable alternating\ncolors for nested block':
-        'ausschalten verhindert abwechselnde\nFarbnuancen in Bl\u00f6cken',
+        'odznacz, aby nie pozowli\u0107 na zmian\u0119\nbarw zagnie\u017Cd\u017Conych blok\u00F3w',
     'Dynamic input labels':
-        'Eingabenbeschriftung',
+        'Dynamiczne opisy parametr\u00F3w',
     'uncheck to disable dynamic\nlabels for variadic inputs':
-        'ausschalten verhindert Beschriftung\nvon Mehrfacheingaben',
+        'odznacz to disable dynamic\nlabels for variadic inputs',
     'check to enable dynamic\nlabels for variadic inputs':
-        'einschalten um Mehrfacheingabefelder\nautomatisch zu beschriften',
+        'zaznacz to enable dynamic\nlabels for variadic inputs',
     'Prefer empty slot drops':
-        'Leere Platzhalter bevorzugen',
+        'Preferuj empty slot drops',
     'settings menu prefer empty slots hint':
-        'einschalten um leere Platzhalter\nbeim Platzieren von Bl\u00f6cken'
-            + 'zu bevorzugen',
+        'menu ustawie\u0144 prefer empty slots hint',
     'uncheck to allow dropped\nreporters to kick out others':
-        'ausschalten um das "Rauskicken"\nvon platzierten Bl\u00f6cken\n'
-            + 'zu erm\u00f6glichen',
+        'odznacz to allow dropped\nreporters to kick out others',
     'Long form input dialog':
-        'Ausf\u00fchrlicher Input-Dialog',
+        'D\u0142uga forma dialogu wej\u015Bcia',
     'check to always show slot\ntypes in the input dialog':
-        'einschalten, um immer die Datentypen\nim Input-Dialog zu sehen',
+        'zaznacz to always show slot\ntypes in the input dialog',
     'uncheck to use the input\ndialog in short form':
-        'ausschalten f\u00fcr kurzen\nInput-Dialog',
+        'odznacz to use the input\ndialog in short form',
     'Virtual keyboard':
-        'Virtuelle Tastatur',
+        'Witualna klawiatura',
     'uncheck to disable\nvirtual keyboard support\nfor mobile devices':
-        'ausschalten um die virtuelle\nTastatur auf mobilen Ger\u00e4ten\n'
-            + 'zu sperren',
+        'odznacz, aby nie u\u017Cywa\u0107 klawiatury\nwirtualnej dla urzdze\u0144 mobilnych',
     'check to enable\nvirtual keyboard support\nfor mobile devices':
-        'einschalten um die virtuelle\nTastatur auf mobilen Ger\u00e4ten\n'
-            + 'zu erm\u00f6glichen',
-    'Input sliders':
-        'Eingabeschieber',
+        'zaznacz, aby u\u017Cywa\u0107 klawiatury\nwirtualnej dla urzdze\u0144 mobilnych',
     'uncheck to disable\ninput sliders for\nentry fields':
-        'ausschalten um Schieber\nin Eingabefeldern zu verhindern',
+        'odznacz, aby nie pozwoli\u0107 na suwaki w polach wej\u015Bciowych',
     'check to enable\ninput sliders for\nentry fields':
-        'einschalten um Schieber\nin Eingabefeldern zu aktivieren',
+        'zaznacz, aby pozwoli\u0107 na suwaki w polach wej\u015Bciowych',
     'Clicking sound':
-        'Akustisches Klicken',
-    'uncheck to turn\nblock clicking\nsound off':
-        'ausschalten um akustisches\nKlicken zu deaktivieren',
-    'check to turn\nblock clicking\nsound on':
-        'einschalten um akustisches\nKlicken zu aktivieren',
+        'D\u017Awi\u0119k klikni\u0119cia',
+	'uncheck to turn\nblock clicking\nsound off':
+		'odznacz, aby wy\u0142\u0105czy\u0107 \nd\u017Awi\u0119k klikni\u0119cia',
+	'check to turn\nblock clicking\nsound on':
+		'zaznacz, aby w\u0142\u0105czy\u0107 \nd\u017Awi\u0119k klikni\u0119cia',
     'Animations':
-        'Animationen',
+        'Animacje',
     'uncheck to disable\nIDE animations':
-        'ausschalten um IDE-\nAnimationen zu verhindern',
+        'odznacz, aby nie pozwoli\u0107\nna animacje IDE',
     'Turbo mode':
-        'Turbomodus',
+        'Tryb turbo',
     'check to prioritize\nscript execution':
-        'einschalten, um Skripte\nzu priorisieren',
+        'zaznacz, aby nada\u0107 priorytet\nwykonaniu skryptu',
     'uncheck to run scripts\nat normal speed':
-        'ausschalten, um Skripte\nnormal auszuf\u00fchren',
+        'odznacz, aby wykona\u0107 skrypt\nz normaln\u0105 szybko\u015Bci\u0105',
     'check to enable\nIDE animations':
-        'einschalten um IDE-\nAnimationen zu erlauben',
+        'zaznacz, aby pozwoli\u0107\nna animacje IDE',
     'Thread safe scripts':
-        'Threadsicherheit',
+        'Omijaj bezpieczne skrypty',
     'uncheck to allow\nscript reentrance':
-        'verhindert, dass unvollendete\nSkripte erneut gestartet werden',
+        'odznacz, aby pozwoli\u0107\nna restartowanie skryptu',
     'check to disallow\nscript reentrance':
-        'verhindert, dass unvollendete\nSkripte erneut gestartet werden',
+        'zaznacz, aby nie pozwoli\u0107\nna restartowanie skryptu',
     'Prefer smooth animations':
-        'Fixe Framerate',
+        'Preferuj g\u0142adkie animacje',
     'uncheck for greater speed\nat variable frame rates':
-        'ausschalten, um Animationen \ndynamischer auszuf\u00fchren',
+        'odznacz, aby pozwoli\u0107na\nwi\u0119ksz pr\u0119dko\u015B\u0107 ramek animacji',
     'check for smooth, predictable\nanimations across computers':
-        'einschalten, damit Animationen\n\u00fcberall gleich laufen',
+        'zaznacz, aby zapewni\u0107na\njednakowe, g\u0142adkie animacje',
 
     // inputs
     'with inputs':
-        'mit Eingaben',
+        'z parametrami',
     'input names:':
-        'Eingaben:',
+        'nazwy parametr\u00F3w:',
     'Input Names:':
-        'Eingaben:',
+        'Nazwy Parametr\u00F3w:',
     'input list:':
-        'Eingabeliste:',
+        'parametr - lista:',
 
     // context menus:
     'help':
-        'Hilfe',
+        'pomoc',
 
     // palette:
     'hide primitives':
-        'Basisbl\u00f6cke ausblenden',
+        'ukryj pierwotne',
     'show primitives':
-        'Basisbl\u00f6cke anzeigen',
+        'poka\u017C pierwotne',
 
     // blocks:
     'help...':
-        'Hilfe...',
+        'pomoc...',
     'relabel...':
-        'Umbenennen...',
+        'przemianuj...',
     'duplicate':
-        'Duplizieren',
+        'powiel',
     'make a copy\nand pick it up':
-        'eine Kopie aufnehmen',
+        'wykonaj i we\u017A kopi\u0119',
     'only duplicate this block':
-        'nur diesen Block duplizieren',
+        'powiel tylko ten blok',
     'delete':
-        'L\u00f6schen',
+        'usu\u0144',
     'script pic...':
-        'Skriptbild...',
+        'obrazek skryptu...',
     'open a new window\nwith a picture of this script':
-        'ein neues Browserfenster mit einem\nBild dieses Skripts \u00f6ffnen',
+        'otw\u00F3rz nowe okno\nz obrazkiem tego skryptu',
     'ringify':
-        'Umringen',
+        'obwiednia',
     'unringify':
-        'Entringen',
+        'bez obwiedni',
 
     // custom blocks:
     'delete block definition...':
-        'Blockdefinition l\u00f6schen',
+        'usu\u0144 definicj\u0119 bloku',
     'edit...':
-        'Bearbeiten...',
+        'edytuj...',
 
     // sprites:
     'edit':
-        'Bearbeiten',
-    'detach from':
-        'Abtrennen von',
-    'detach all parts':
-        'Alle Teile abtrennen',
+        'edytuj',
     'export...':
-        'Exportieren...',
+        'eksportuj...',
 
     // stage:
     'show all':
-        'Alles zeigen',
+        'poka\u017C wszystko',
     'pic...':
-        'Bild exportieren...',
+        'obrazek...',
     'open a new window\nwith a picture of the stage':
-        'ein neues Browserfenster mit einem\nBild der B\u00fchne \u00f6ffnen',
+        'otw\u00F3rz w nowym oknie\nz obrazkiem sceny',
 
     // scripting area
     'clean up':
-        'Aufr\u00e4umen',
+        'wyczy\u015B\u0107',
     'arrange scripts\nvertically':
-        'Skripte der Reihe nach\nanordnen',
+        'ustaw skrypty pionowo',
     'add comment':
-        'Anmerkung hinzuf\u00fcgen',
+        'dodaj komentarz',
     'undrop':
-        'R\u00fcckg\u00e4ngig',
+        'odklej',
     'undo the last\nblock drop\nin this pane':
-        'Setzen des letzten Blocks\nwiderrufen',
-    'scripts pic...':
-        'Bild aller Scripte...',
+        'cofnij ostatnie upuszczenie\nbloku na tej planszy',
+	'scripts pic...':
+        'obrazek skryptu...',
     'open a new window\nwith a picture of all scripts':
-        'ein neues Browserfenster mit einem\nBild aller Skripte \u00f6ffnen',
+        'otw\u00F3rz nowe okno\nz obrazkami wszystkich skrypt\u00F3w',
     'make a block...':
-        'Neuen Block bauen...',
+        'buduj nowy blok...',
 
     // costumes
     'rename':
-        'Umbenennen',
+        'zmie\u0144 nazw\u0119',
     'export':
-        'Exportieren',
+        'eksportuj',
     'rename costume':
-        'Kost\u00fcm umbenennen',
+        'zmie\u0144 nazw\u0119 kostiumu',
 
     // sounds
     'Play sound':
-        'Klang\nabspielen',
+        'Zagraj d\u017Cwi\u0119k',
     'Stop sound':
-        'Klang\nanhalten',
+        'Zatrzymaj d\u017Cwi\u0119k',
     'Stop':
-        'Halt',
+        'Stop',
     'Play':
-        'Los',
+        'Graj',
     'rename sound':
-        'Klang umbenennen',
+        'zmie\u0144 nazw\u0119 d\u017Cwi\u0119ku',
 
     // dialogs
     // buttons
     'OK':
         'OK',
     'Ok':
-        'OK',
+        'Ok',
     'Cancel':
-        'Abbrechen',
+        'Poniechaj',
     'Yes':
-        'Ja',
+        'Tak',
     'No':
-        'Nein',
+        'Nie',
 
     // help
     'Help':
-        'Hilfe',
+        'Pomoc',
 
     // zoom blocks
     'Zoom blocks':
-        'Bl\u00f6cke vergr\u00f6\u00dfern',
+        'Zoom blok\u00F3w',
     'build':
-        'baue',
+        'buduj',
     'your own':
-        'eigene',
+        'swoje',
     'blocks':
-        'Bl\u00f6cke',
+        'bloki',
     'normal (1x)':
-        'normal (1x)',
+        'normalne (1x)',
     'demo (1.2x)':
-        'Demo (1.2x)',
+        'demo (1.2x)',
     'presentation (1.4x)':
-        'Pr\u00e4sentation (1.4x)',
+        'prezentacja (1.4x)',
     'big (2x)':
-        'gro\u00df (2x)',
+        'du\u017Ce (2x)',
     'huge (4x)':
-        'riesig (4x)',
+        'ogromne (4x)',
     'giant (8x)':
-        'gigantisch (8x)',
+        'gigantyczne (8x)',
     'monstrous (10x)':
-        'ungeheuerlich (10x)',
+        'monstrualne (10x)',
 
     // Project Manager
     'Untitled':
-        'Unbenannt',
+        'Bez nazwy',
     'Open Project':
-        'Project \u00f6ffnen',
+        'Otw\u00F3rz projekt',
     '(empty)':
-        '(leer)',
+        '(puste)',
     'Saved!':
-        'Gesichert!',
+        'Zapisane!',
     'Delete Project':
-        'Projekt l\u00f6schen',
+        'Usu\u0144 projekt',
     'Are you sure you want to delete':
-        'Wirklich l\u00f6schen?',
+        'Czy napewno chcesz usun\u0105\u0107?',
     'rename...':
-        'Umbenennen...',
+        'przemianuj',
 
     // costume editor
     'Costume Editor':
-        'Kost\u00fcmeditor',
+        'Edytor kostium\u00F3w',
     'click or drag crosshairs to move the rotation center':
-        'Fadenkreuz anklicken oder bewegen um den Drehpunkt zu setzen',
+        'Kliknij lub przeci\u0105gnij krzy\u017Cyk, aby ustawi\u0107 centrum obrotu',
 
     // project notes
     'Project Notes':
-        'Projektanmerkungen',
+        'Opis projektu',
 
     // new project
     'New Project':
-        'Neues Projekt',
+        'Nowy projekt',
     'Replace the current project with a new one?':
-        'Das aktuelle Projekt durch ein neues ersetzen?',
+        'Zast\u0105pi\u0107 aktualny projekt przez nowy?',
 
     // save project
     'Save Project As...':
-        'Projekt Sichern Als...',
+        'Zapisz projekt jako...',
 
     // export blocks
     'Export blocks':
-        'Bl\u00f6cke exportieren',
+        'Eksportuj bloki',
     'Import blocks':
-        'Bl\u00f6cke importieren',
+        'Importuj bloki',
     'this project doesn\'t have any\ncustom global blocks yet':
-        'in diesem Projekt gibt es noch keine\nglobalen Bl\u00f6cke',
+        'ten projekt nie ma jeszcze\nw\u0142asnych globalnych blok\u00F3w',
     'select':
-        'ausw\u00e4hlen',
+        'wybierz',
     'all':
-        'alles',
+        'wszystko',
     'none':
-        'nichts',
+        'nic',
 
     // variable dialog
     'for all sprites':
-        'f\u00fcr alle',
+        'dla wszystkich duszk\u00F3w',
     'for this sprite only':
-        'nur f\u00fcr dieses Objekt',
+        'tylko dla tego duszka',
 
     // block dialog
     'Change block':
-        'Block ver\u00e4ndern',
+        'Zmie\u0144 blok',
     'Command':
-        'Befehl',
+        'Komenda',
     'Reporter':
-        'Funktion',
+        'Funkcja',
     'Predicate':
-        'Pr\u00e4dikat',
+        'Predykat',
 
     // block editor
     'Block Editor':
-        'Blockeditor',
+        'Edytor blok\u00F3w',
     'Apply':
-        'Anwenden',
+        'Zastosuj',
 
     // block deletion dialog
     'Delete Custom Block':
-        'Block L\u00f6schen',
+        'Usu\u0144 w\u0142asny blok',
     'block deletion dialog text':
-        'Soll dieser Block mit allen seinen Exemplare\n' +
-            'wirklich gel\u00f6scht werden?',
+        'czy ten blok ze wszystkimi wyst\u0105pieniami\n' +
+            'rzeczywi\u015Bcie usun\u0105\u0107?',
 
     // input dialog
     'Create input name':
-        'Eingabe erstellen',
+        'Utw\u00F3rz nazw\u0119 parametru',
     'Edit input name':
-        'Eingabe bearbeiten',
+        'Edytuj nazw\u0119 parametru',
     'Edit label fragment':
-        'Beschriftung bearbeiten',
+        'Edytuj opis parametru',
     'Title text':
-        'Beschriftung',
+        'Tekst tutu\u0142owy',
     'Input name':
-        'Eingabe',
+        'Nazwa',
     'Delete':
-        'L\u00f6schen',
+        'Usu\u0144',
     'Object':
-        'Objekt',
+        'Obiekt',
     'Number':
-        'Zahl',
+        'Liczba',
     'Text':
-        'Text',
+        'Tekst',
     'List':
-        'Liste',
+        'Lista',
     'Any type':
-        'Beliebig',
+        'Dowolnego rodzaju',
     'Boolean (T/F)':
-        'Boolsch (W/F)',
+        'Logiczny (P/F)',
     'Command\n(inline)':
-        'Befehl',
+        'Komenda',
     'Command\n(C-shape)':
-        'Befehl\n(C-Form)',
+        'Komenda\n(C-Form)',
     'Any\n(unevaluated)':
-        'Beliebig\n(zitiert)',
+        'Dowolny\n(nieokre\u015Blony)',
     'Boolean\n(unevaluated)':
-        'Boolsch\n(zitiert)',
+        'Logiczny\n(nieokre\u015Blony)',
     'Single input.':
-        'Einzeleingabe.',
+        'Jeden parametr.',
     'Default Value:':
-        'Standardwert:',
+        'Warto\u015B\u0107 standardowa:',
     'Multiple inputs (value is list of inputs)':
-        'Mehrere Eingaben (als Liste)',
+        'Wiele parametr\u00F3w (jako lista)',
     'Upvar - make internal variable visible to caller':
-        'Interne Variable au\u00dfen sichtbar machen',
+        'Wewn\u0119trzna zmienna widoczna dla wywo\u0142ania',
 
     // About Snap
     'About Snap':
-        '\u00dcber Snap',
+        'O Snap',
     'Back...':
-        'Zur\u00fcck...',
+        'Wstecz...',
     'License...':
-        'Lizenz...',
+        'Licencja...',
     'Modules...':
-        'Komponenten...',
+        'Modu\u0142y...',
     'Credits...':
-        'Mitwirkende...',
+        'Podzi\u0119kowania...',
     'Translators...':
-        '\u00dcbersetzer',
+        'T\u0142umacze',
     'License':
-        'Lizenz',
+        'Licencja',
     'current module versions:':
-        'Komponenten-Versionen',
+        'aktualna wersja modu\u0142\u00F3w',
     'Contributors':
-        'Mitwirkende',
+        'Wsp\u00F3\u0142pracownicy',
     'Translations':
-        '\u00dcbersetzungen',
+        'T\u0142umaczenia',
 
     // variable watchers
     'normal':
-        'normal',
+        'normalny',
     'large':
-        'gro\u00df',
+        'wielki',
     'slider':
-        'Regler',
+        'suwak',
     'slider min...':
-        'Minimalwert...',
+        'minimum suwaka...',
     'slider max...':
-        'Maximalwert...',
+        'maksimum suwaka...',
     'import...':
-        'Importieren...',
+        'importuj...',
     'Slider minimum value':
-        'Minimalwert des Reglers',
+        'Minimalna warto\u015B\u0107 suwaka',
     'Slider maximum value':
-        'Maximalwert des Reglers',
+        'Maksymalna warto\u015B\u0107 suwaka',
 
     // list watchers
     'length: ':
-        'L\u00e4nge: ',
+        'du\u0142go\u015B\u0107: ',
 
     // coments
     'add comment here...':
-        'Anmerkung hier hinzuf\u00fcgen',
+        'dodaj komentarz tutaj...',
 
     // drow downs
     // directions
     '(90) right':
-        '(90) rechts',
+        '(90) prawo',
     '(-90) left':
-        '(-90) links',
+        '(-90) lewo',
     '(0) up':
-        '(0) oben',
+        '(0) g\u00F3ra',
     '(180) down':
-        '(180) unten',
+        '(180) d\u00F3\u0142',
 
     // collision detection
     'mouse-pointer':
-        'Mauszeiger',
+        'Wska\u017Anik myszy',
     'edge':
-        'Kante',
+        'Kraw\u0119dzie',
     'pen trails':
-        'Malspuren',
+        '\u015Alady pisaka',
 
     // costumes
     'Turtle':
-        'Richtungszeiger',
+        'Duszek',
     'Empty':
-        'Leer',
+        'Pusty',
 
     // graphical effects
     'ghost':
-        'Durchsichtigkeit',
+        'duch',
 
     // keys
     'space':
-        'Leertaste',
+        'spacja',
     'up arrow':
-        'Pfeil nach oben',
+        'strz\u0142aka w g\u00F3r\u0119',
     'down arrow':
-        'Pfeil nach unten',
+        'strz\u0142aka w d\u00F3\u0142',
     'right arrow':
-        'Pfeil nach rechts',
+        'strz\u0142aka w prawo',
     'left arrow':
-        'Pfeil nach links',
+        'strz\u0142aka w lewo',
     'a':
         'a',
     'b':
@@ -1181,27 +1175,27 @@ SnapTranslator.dict.de = {
 
     // messages
     'new...':
-        'Neu...',
+        'nowy...',
 
     // math functions
     'abs':
-        'Betrag',
+        'modu\u0142',
     'floor':
-        'Abgerundet',
+        'pod\u0142oga',
     'sqrt':
-        'Wurzel',
+        'pierwiastek kwadratowy',
     'sin':
         'sin',
     'cos':
         'cos',
     'tan':
-        'tan',
+        'tg',
     'asin':
-        'asin',
+        'arcsin',
     'acos':
-        'acos',
+        'arccos',
     'atan':
-        'atan',
+        'arctg',
     'ln':
         'ln',
     'e^':
@@ -1209,23 +1203,23 @@ SnapTranslator.dict.de = {
 
     // data types
     'number':
-        'Zahl',
+        'liczba',
     'text':
-        'Text',
+        'tekst',
     'Boolean':
-        'Boole',
+        'logiczna',
     'list':
-        'Liste',
+        'lista',
     'command':
-        'Befehlsblock',
+        'komenda',
     'reporter':
-        'Funktionsblock',
+        'funkcja',
     'predicate':
-        'Pr\u00e4dikat',
+        'predykat',
 
     // list indices
     'last':
-        'letztes',
+        'ostatni',
     'any':
-        'beliebiges'
+        'dowolny'
 };

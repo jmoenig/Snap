@@ -1753,3 +1753,139 @@ ______
 ------
 * Morphic, Blocks: "flat" design fix: Handle manually "unshadowed" StringMorphs
 * Objects, Blocks: %code input slot - multi-line, monospaced, type-in slot for code mappings
+
+130624
+------
+* Objects, Blocks: pretty printing for mapped code, now supporting Python mappings
+
+130625
+------
+* Widgets, Blocks: code mapping dialog input is now multi-line monospaced
+
+130626
+------
+* GUI: fixed #100 saving costumes to the cloud
+
+130627
+------
+* Objects: fixed speech bubble scaling when sprite is not onstage (reported in the forums)
+
+130628
+------
+* Morphic, GUI: improved importing costumes by dragging in pictures from other web pages
+
+130702
+------
+* Objects: took out "security margin" in Costume's shrinkWrap() method b/c Chrome no longer needs it -> fixed empty costume bug when drawing over the paint editor's bounds
+* GUI: Import libraries feature (in the project menu)
+
+130704
+------
+* Codification (text code mapping and block header support)
+
+130705
+------
+* Blocks: fixed CommentMorph hiding/showing bug when switching to / from presentation mode
+
+130708
+------
+* Store: fixed serialization placement-bug for sprites
+
+130709
+------
+* Objects, Blocks, Threads: Collapsed codification primitives (code, header) into a single block
+* Blocks: Added isEmptySlot() to BooleanArgMorph (thanks, Brian, for the bug report!)
+
+130710
+------
+* GUI: Reset hidden primitives and code mappings upon loading a new project
+
+130711
+------
+* Blocks: fixed occasional flickering in scripting areas (caused by deleted feedback morphs, a bug that surfaced in Chrome 28 on OSX and may be due to a possible Chrome GC issue)
+* Blocks: preserve nested blocks in the scripting area when replacing a variadic input list with another input ("kick out" the nested blocks instead of "swallowing" them)
+* Blocks, Threads: new floor() function in monadic math reporter's drop-down
+
+130712
+------
+* Blocks: Pipette symbol
+* Paint: Pipette tool
+
+130713
+------
+* Paint: fixed pipette tool for floodfill
+
+130715
+------
+* Objects: increased palette's vertical growth by scrollBarSize
+* Objects, Blocks, Threads: experimental text-function primitive (hidden, shown only in dev mode)
+
+130724
+------
+* Dutch translation, yay!! Thanks, Frank Sierens
+
+130730
+------
+* Blocks: Made it harder to drop reporters on the variadic input per se (as opposed to into one of its slots) in (default) "prefer empty slot drops" setting
+* Blocks, Threads, Objects: PAUSE primitive command block
+* GUI: fixed #104 (storing a cloud project under another name causes media loss)
+
+130731
+------
+* Blocks, Threads, Objects: experimental text SPLIT primitive in the operators category
+
+130801
+------
+* Blocks, Threads: "whitespace" & other options in SPLIT reporter's dropdown
+* Blocks: Italicize editable input options (e.g. for the SPLT block) 
+* Blocks: Undrop Reporters feature (in script areas' context menus)
+
+130802
+------
+* Blocks: Undrop Reporters feature tweaks
+* Blocks: Undrop Comments feature
+* Blocks: Undrop Commands feature
+* German translation update (for Undrop feature)
+
+130805
+------
+* Polish translation, yay!! Thanks, Witek Kranas!
+* Morphic: mouseEnterDragging fix
+
+130807
+------
+* Objects, GUI: Sprite Nesting preliminaries
+* Objects: Fixed stage costume scaling & misplacing bug. Thanks, Josh, for the report!
+* Objects, GUI: Sprite Nesting GUI
+* Objects: Nested Sprite Motion
+
+130808
+------
+* Objects: Nested Sprite Scaling
+* Objects: Nested Sprite Rotation
+* Objects: Nested Sprite synchronous / independent rotation
+* Dutch translation update, thanks, Sjoerd Dirk Meijer!
+
+130809
+------
+* GUI: Nested Sprite Rotation style buttons on corral icons
+* Store, Objects: Nested Sprite saving / loading
+
+130810
+------
+* Objects, GUI: Nestable Sprites fixes
+* German translation update
+
+130812
+------
+* Objects, Threads: Nestable Sprites Collision Detection & fixes
+* Dutch translation update
+
+130814
+------
+* Traditional Chinese translation, yay!! thanks, Chu-Ching-Huang!
+
+130817
+------
+* Norwegian translation, yay!! thanks, Olav Marschall!
+* "Dynamic" library list, thanks, Brian

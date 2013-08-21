@@ -38,6 +38,7 @@
     defined. Use this list to locate code in this document:
 
         SpriteMorph
+        SpriteHighlightMorph
         StageMorph
         Costume
             SVG_Costume
@@ -76,7 +77,7 @@
 
 // gloabls from gui.js:
 
-/*global WatcherMorph*/
+/*global WatcherMorph, SpriteIconMorph*/
 
 // globals from threads.js:
 
@@ -123,7 +124,7 @@ PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.objects = '2013-June-21';
+modules.objects = '2013-August-12';
 
 var SpriteMorph;
 var StageMorph;
@@ -137,6 +138,7 @@ var CellMorph;
 var WatcherMorph;
 var StagePrompterMorph;
 var Note;
+var SpriteHighlightMorph;
 
 // SpriteMorph /////////////////////////////////////////////////////////
 
@@ -182,6 +184,10 @@ SpriteMorph.prototype.paletteTextColor = new Color(230, 230, 230);
 SpriteMorph.prototype.sliderColor
     = SpriteMorph.prototype.paletteColor.lighter(30);
 SpriteMorph.prototype.isCachingPrimitives = true;
+
+SpriteMorph.prototype.enableNesting = true;
+SpriteMorph.prototype.highlightColor = new Color(250, 200, 130);
+SpriteMorph.prototype.highlightBorder = 8;
 
 SpriteMorph.prototype.bubbleColor = new Color(255, 255, 255);
 SpriteMorph.prototype.bubbleFontSize = 14;
@@ -662,6 +668,14 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: 'delete this clone'
         },
 
+        // Debugging - pausing
+
+        doPauseAll: {
+            type: 'command',
+            category: 'control',
+            spec: 'pause all %pause'
+        },
+
         // Sensing
 
         reportTouchingObject: {
@@ -918,6 +932,19 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: 'type of %s',
             defaults: [5]
         },
+        reportTextFunction: { // only in dev mode - experimental
+            type: 'reporter',
+            category: 'operators',
+            spec: '%txtfun of %s',
+            defaults: [null, "Abelson & Sussman"]
+        },
+        reportTextSplit: { // only in dev mode - experimental
+            type: 'reporter',
+            category: 'operators',
+            spec: 'split %s by %delim',
+            defaults: ["foo bar baz", " "]
+        },
+
     /*
         reportScript: {
             type: 'reporter',
@@ -1019,10 +1046,10 @@ SpriteMorph.prototype.initBlocks = function () {
         },
 
         // Code mapping - experimental
-        doMapCode: { // experimental
+        doMapCodeOrHeader: { // experimental
             type: 'command',
             category: 'other',
-            spec: 'map %cmdRing to code %code'
+            spec: 'map %cmdRing to %codeKind %code'
         },
         doMapStringCode: { // experimental
             type: 'command',
@@ -1142,6 +1169,12 @@ SpriteMorph.prototype.init = function (globals) {
     this.isClone = false; // indicate a "temporary" Scratch-style clone
     this.cloneOriginName = '';
 
+    // sprite nesting properties
+    this.parts = []; // not serialized, only anchor (name)
+    this.anchor = null;
+    this.nestingScale = 1;
+    this.rotatesWithAnchor = true;
+
     this.blocksCache = {}; // not to be serialized (!)
     this.paletteCache = {}; // not to be serialized (!)
     this.rotationOffset = new Point(); // not to be serialized (!)
@@ -1192,6 +1225,11 @@ SpriteMorph.prototype.fullCopy = function () {
         arr.push(sound);
     });
     c.sounds = new List(arr);
+
+    c.parts = [];
+    c.anchor = null;
+    c.nestingScale = 1;
+    c.rotatesWithAnchor = true;
 
     return c;
 };
@@ -1269,7 +1307,7 @@ SpriteMorph.prototype.drawNew = function () {
         ctx.drawImage(pic.contents, 0, 0);
 
         // adjust my position to the rotation
-        this.setCenter(currentCenter);
+        this.setCenter(currentCenter, true); // just me
 
         // determine my rotation offset
         this.rotationOffset = shift
@@ -1287,7 +1325,7 @@ SpriteMorph.prototype.drawNew = function () {
         );
         this.silentSetExtent(new Point(newX, newX));
         this.image = newCanvas(this.extent());
-        this.setCenter(currentCenter);
+        this.setCenter(currentCenter, true); // just me
         SpriteMorph.uber.drawNew.call(this, facing);
         this.rotationOffset = this.extent().divideBy(2);
     }
@@ -1300,7 +1338,7 @@ SpriteMorph.prototype.endWarp = function () {
         var x = this.xPosition(),
             y = this.yPosition();
         this.drawNew();
-        this.silentGotoXY(x, y);
+        this.silentGotoXY(x, y, true); // just me
         this.wantsRedraw = false;
     }
     this.parent.changed();
@@ -1606,6 +1644,8 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('receiveOnClone'));
         blocks.push(block('createClone'));
         blocks.push(block('removeClone'));
+        blocks.push('-');
+        blocks.push(block('doPauseAll'));
 
     } else if (cat === 'sensing') {
 
@@ -1703,6 +1743,8 @@ SpriteMorph.prototype.blockTemplates = function (category) {
             blocks.push(txt);
             blocks.push('-');
             blocks.push(block('reportTypeOf'));
+            blocks.push(block('reportTextFunction'));
+            blocks.push(block('reportTextSplit'));
         }
 
     /////////////////////////////////
@@ -1795,7 +1837,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push('=');
 
         if (StageMorph.prototype.enableCodeMapping) {
-            blocks.push(block('doMapCode'));
+            blocks.push(block('doMapCodeOrHeader'));
             blocks.push(block('doMapStringCode'));
             blocks.push(block('doMapListCode'));
             blocks.push('-');
@@ -1863,6 +1905,7 @@ SpriteMorph.prototype.freshPalette = function (category) {
     palette.owner = this;
     palette.padding = unit / 2;
     palette.color = this.paletteColor;
+    palette.growth = new Point(0, MorphicPreferences.scrollBarSize);
 
     // menu:
 
@@ -2088,7 +2131,7 @@ SpriteMorph.prototype.wearCostume = function (costume) {
         this.startWarp();
     }
     if (x !== null) {
-        this.silentGotoXY(x, y);
+        this.silentGotoXY(x, y, true); // just me
     }
     if (this.positionTalkBubble) { // the stage doesn't talk
         this.positionTalkBubble();
@@ -2200,6 +2243,15 @@ SpriteMorph.prototype.userMenu = function () {
     menu.addItem("delete", 'remove');
     menu.addItem("edit", 'edit');
     menu.addLine();
+    if (this.anchor) {
+        menu.addItem(
+            localize('detach from') + ' ' + this.anchor.name,
+            'detachFromAnchor'
+        );
+    }
+    if (this.parts.length) {
+        menu.addItem('detach all parts', 'detachAllParts');
+    }
     menu.addItem("export...", 'exportSprite');
     return menu;
 };
@@ -2427,19 +2479,38 @@ SpriteMorph.prototype.setScale = function (percentage) {
     // set my (absolute) scale in percent
     var x = this.xPosition(),
         y = this.yPosition(),
-        isWarped = this.isWarped;
+        isWarped = this.isWarped,
+        realScale,
+        growth;
+
     if (isWarped) {
         this.endWarp();
     }
-    this.scale = Math.max((+percentage || 0) / 100, 0.01);
+    realScale = (+percentage || 0) / 100;
+    growth = realScale / this.nestingScale;
+    this.nestingScale = realScale;
+    this.scale = Math.max(realScale, 0.01);
+
+    // apply to myself
     this.changed();
     this.drawNew();
     this.changed();
     if (isWarped) {
         this.startWarp();
     }
-    this.silentGotoXY(x, y);
+    this.silentGotoXY(x, y, true); // just me
     this.positionTalkBubble();
+
+    // propagate to nested parts
+    this.parts.forEach(function (part) {
+        var xDist = part.xPosition() - x,
+            yDist = part.yPosition() - y;
+        part.setScale(part.scale * 100 * growth);
+        part.silentGotoXY(
+            x + (xDist * growth),
+            y + (yDist * growth)
+        );
+    });
 };
 
 SpriteMorph.prototype.changeScale = function (delta) {
@@ -2507,6 +2578,7 @@ SpriteMorph.prototype.talkBubble = function () {
 
 SpriteMorph.prototype.positionTalkBubble = function () {
     var stage = this.parentThatIsA(StageMorph),
+        stageScale = stage ? stage.scale : 1,
         bubble = this.talkBubble(),
         middle = this.center().y;
     if (!bubble) {return null; }
@@ -2519,7 +2591,7 @@ SpriteMorph.prototype.positionTalkBubble = function () {
     bubble.setLeft(this.right());
     bubble.setBottom(this.top());
     while (!this.isTouching(bubble) && bubble.bottom() < middle) {
-        bubble.silentMoveBy(new Point(-1, 1).scaleBy(stage.scale));
+        bubble.silentMoveBy(new Point(-1, 1).scaleBy(stageScale));
     }
     if (!stage) {return null; }
     if (bubble.right() > stage.right()) {
@@ -2577,11 +2649,82 @@ SpriteMorph.prototype.drawLine = function (start, dest) {
     }
 };
 
-// SpriteMorph motion
+// SpriteMorph motion - adjustments due to nesting
+
+SpriteMorph.prototype.moveBy = function (delta, justMe) {
+    // override the inherited default to make sure my parts follow
+    // unless it's justMe (a correction)
+    var start = this.isDown && !justMe && this.parent ?
+            this.rotationCenter() : null;
+    SpriteMorph.uber.moveBy.call(this, delta);
+    if (start) {
+        this.drawLine(start, this.rotationCenter());
+    }
+    if (!justMe) {
+        this.parts.forEach(function (part) {
+            part.moveBy(delta);
+        });
+    }
+};
+
+SpriteMorph.prototype.slideBackTo = function (situation, inSteps) {
+    // override the inherited default to make sure my parts follow
+    var steps = inSteps || 5,
+        pos = situation.origin.position().add(situation.position),
+        xStep = -(this.left() - pos.x) / steps,
+        yStep = -(this.top() - pos.y) / steps,
+        stepCount = 0,
+        oldStep = this.step,
+        oldFps = this.fps,
+        myself = this;
+
+    this.fps = 0;
+    this.step = function () {
+        myself.moveBy(new Point(xStep, yStep));
+        stepCount += 1;
+        if (stepCount === steps) {
+            situation.origin.add(myself);
+            if (situation.origin.reactToDropOf) {
+                situation.origin.reactToDropOf(myself);
+            }
+            myself.step = oldStep;
+            myself.fps = oldFps;
+        }
+    };
+};
+
+SpriteMorph.prototype.setCenter = function (aPoint, justMe) {
+    // override the inherited default to make sure my parts follow
+    // unless it's justMe
+    var delta = aPoint.subtract(this.center());
+    this.moveBy(delta, justMe);
+};
+
+SpriteMorph.prototype.nestingBounds = function () {
+    // same as fullBounds(), except that it uses "parts" instead of children
+    var result;
+    result = this.bounds;
+    this.parts.forEach(function (part) {
+        if (part.isVisible) {
+            result = result.merge(part.nestingBounds());
+        }
+    });
+    return result;
+};
+
+// SpriteMorph motion primitives
+
+Morph.prototype.setPosition = function (aPoint, justMe) {
+    // override the inherited default to make sure my parts follow
+    // unless it's justMe
+    var delta = aPoint.subtract(this.topLeft());
+    if ((delta.x !== 0) || (delta.y !== 0)) {
+        this.moveBy(delta, justMe);
+    }
+};
 
 SpriteMorph.prototype.forward = function (steps) {
-    var start = this.rotationCenter(),
-        dest,
+    var dest,
         dist = steps * this.parent.scale || 0;
 
     if (dist >= 0) {
@@ -2593,17 +2736,29 @@ SpriteMorph.prototype.forward = function (steps) {
         );
     }
     this.setPosition(dest);
-    this.drawLine(start, this.rotationCenter());
     this.positionTalkBubble();
 };
 
 SpriteMorph.prototype.setHeading = function (degrees) {
     var x = this.xPosition(),
-        y = this.yPosition();
+        y = this.yPosition(),
+        turn = degrees - this.heading;
+
+    // apply to myself
     this.changed();
     SpriteMorph.uber.setHeading.call(this, degrees);
-    this.silentGotoXY(x, y);
+    this.silentGotoXY(x, y, true); // just me
     this.positionTalkBubble();
+
+    // propagate to my parts
+    this.parts.forEach(function (part) {
+        var pos = new Point(part.xPosition(), part.yPosition()),
+            trg = pos.rotateBy(radians(turn), new Point(x, y));
+        if (part.rotatesWithAnchor) {
+            part.turn(turn);
+        }
+        part.gotoXY(trg.x, trg.y);
+    });
 };
 
 SpriteMorph.prototype.faceToXY = function (x, y) {
@@ -2657,9 +2812,8 @@ SpriteMorph.prototype.penSize = function () {
     return this.size;
 };
 
-SpriteMorph.prototype.gotoXY = function (x, y) {
+SpriteMorph.prototype.gotoXY = function (x, y, justMe) {
     var stage = this.parentThatIsA(StageMorph),
-        start = this.rotationCenter(),
         newX,
         newY,
         dest;
@@ -2671,16 +2825,15 @@ SpriteMorph.prototype.gotoXY = function (x, y) {
     } else {
         dest = new Point(newX, newY).subtract(this.extent().divideBy(2));
     }
-    this.setPosition(dest);
-    this.drawLine(start, this.rotationCenter());
+    this.setPosition(dest, justMe);
     this.positionTalkBubble();
 };
 
-SpriteMorph.prototype.silentGotoXY = function (x, y) {
+SpriteMorph.prototype.silentGotoXY = function (x, y, justMe) {
     // move without drawing
     var penState = this.isDown;
     this.isDown = false;
-    this.gotoXY(x, y);
+    this.gotoXY(x, y, justMe);
     this.isDown = penState;
 };
 
@@ -2717,32 +2870,34 @@ SpriteMorph.prototype.glide = function (
 };
 
 SpriteMorph.prototype.bounceOffEdge = function () {
+    // taking nested parts into account
     var stage = this.parentThatIsA(StageMorph),
+        fb = this.nestingBounds(),
         dirX,
         dirY;
 
     if (!stage) {return null; }
-    if (stage.bounds.containsRectangle(this.bounds)) {return null; }
+    if (stage.bounds.containsRectangle(fb)) {return null; }
 
     dirX = Math.cos(radians(this.heading - 90));
     dirY = -(Math.sin(radians(this.heading - 90)));
 
-    if (this.left() < stage.left()) {
+    if (fb.left() < stage.left()) {
         dirX = Math.abs(dirX);
     }
-    if (this.right() > stage.right()) {
+    if (fb.right() > stage.right()) {
         dirX = -(Math.abs(dirX));
     }
-    if (this.top() < stage.top()) {
+    if (fb.top() < stage.top()) {
         dirY = -(Math.abs(dirY));
     }
-    if (this.bottom() > stage.bottom()) {
+    if (fb.bottom() > stage.bottom()) {
         dirY = Math.abs(dirY);
     }
 
     this.setHeading(degrees(Math.atan2(-dirY, dirX)) + 90);
     this.setPosition(this.position().add(
-        this.bounds.amountToTranslateWithin(stage.bounds)
+        fb.amountToTranslateWithin(stage.bounds)
     ));
     this.positionTalkBubble();
 };
@@ -3174,6 +3329,7 @@ SpriteMorph.prototype.thumbnail = function (extentPoint) {
         trg = newCanvas(extentPoint),
         ctx = trg.getContext('2d');
 
+    ctx.save();
     ctx.scale(scale, scale);
     ctx.drawImage(
         src,
@@ -3181,6 +3337,33 @@ SpriteMorph.prototype.thumbnail = function (extentPoint) {
         Math.floor(yOffset / scale)
     );
     return trg;
+};
+
+SpriteMorph.prototype.fullThumbnail = function (extentPoint) {
+    // containing parts and anchor symbols, if any
+    var thumb = this.thumbnail(extentPoint),
+        ctx = thumb.getContext('2d'),
+        ext = extentPoint.divideBy(3),
+        i = 0;
+
+    ctx.restore();
+    if (this.anchor) {
+        ctx.drawImage(
+            this.anchor.thumbnail(ext),
+            0,
+            0
+        );
+    }
+    for (i = 0; i < 3; i += 1) {
+        if (this.parts[i]) {
+            ctx.drawImage(
+                this.parts[i].thumbnail(ext),
+                i * ext.x,
+                extentPoint.y - ext.y
+            );
+        }
+    }
+    return thumb;
 };
 
 // SpriteMorph Boolean visual representation
@@ -3192,6 +3375,223 @@ SpriteMorph.prototype.booleanMorph = function (bool) {
     block.setSpec(localize(bool.toString()));
     return block;
 };
+
+// SpriteMorph nesting
+/*
+    simulate Morphic trees
+*/
+
+SpriteMorph.prototype.attachPart = function (aSprite) {
+    var v = Date.now();
+    if (aSprite.anchor) {
+        aSprite.anchor.detachPart(aSprite);
+    }
+    this.parts.push(aSprite);
+    this.version = v;
+    aSprite.anchor = this;
+    this.allParts().forEach(function (part) {
+        part.nestingScale = part.scale;
+    });
+    aSprite.version = v;
+};
+
+SpriteMorph.prototype.detachPart = function (aSprite) {
+    var idx = this.parts.indexOf(aSprite),
+        v;
+    if (idx !== -1) {
+        v = Date.now();
+        this.parts.splice(idx, 1);
+        this.version = v;
+        aSprite.anchor = null;
+        aSprite.version = v;
+    }
+};
+
+SpriteMorph.prototype.detachAllParts = function () {
+    var v = Date.now();
+
+    this.parts.forEach(function (part) {
+        part.anchor = null;
+        part.version = v;
+    });
+    this.parts = [];
+    this.version = v;
+};
+
+SpriteMorph.prototype.detachFromAnchor = function () {
+    if (this.anchor) {
+        this.anchor.detachPart(this);
+    }
+};
+
+SpriteMorph.prototype.allParts = function () {
+    // includes myself
+    var result = [this];
+    this.parts.forEach(function (part) {
+        result = result.concat(part.allParts());
+    });
+    return result;
+};
+
+SpriteMorph.prototype.allAnchors = function () {
+    // includes myself
+    var result = [this];
+    if (this.anchor !== null) {
+        result = result.concat(this.anchor.allAnchors());
+    }
+    return result;
+};
+
+// SpriteMorph highlighting
+
+SpriteMorph.prototype.addHighlight = function (oldHighlight) {
+    var isHidden = !this.isVisible,
+        highlight;
+
+    if (isHidden) {this.show(); }
+    highlight = this.highlight(
+        oldHighlight ? oldHighlight.color : this.highlightColor,
+        this.highlightBorder
+    );
+    this.addBack(highlight);
+    this.fullChanged();
+    if (isHidden) {this.hide(); }
+    return highlight;
+};
+
+SpriteMorph.prototype.removeHighlight = function () {
+    var highlight = this.getHighlight();
+    if (highlight !== null) {
+        this.fullChanged();
+        this.removeChild(highlight);
+    }
+    return highlight;
+};
+
+SpriteMorph.prototype.toggleHighlight = function () {
+    if (this.getHighlight()) {
+        this.removeHighlight();
+    } else {
+        this.addHighlight();
+    }
+};
+
+SpriteMorph.prototype.highlight = function (color, border) {
+    var highlight = new SpriteHighlightMorph(),
+        fb = this.bounds, // sprites are not nested in a Morphic way
+        edge = border,
+        ctx;
+
+    highlight.setExtent(fb.extent().add(edge * 2));
+    highlight.color = color;
+    highlight.image = this.highlightImage(color, border);
+    ctx = highlight.image.getContext('2d');
+    ctx.drawImage(
+        this.highlightImage(new Color(255, 255, 255), 4),
+        border - 4,
+        border - 4
+    );
+    ctx.drawImage(
+        this.highlightImage(new Color(50, 50, 50), 2),
+        border - 2,
+        border - 2
+    );
+    ctx.drawImage(
+        this.highlightImage(new Color(255, 255, 255), 1),
+        border - 1,
+        border - 1
+    );
+    highlight.setPosition(fb.origin.subtract(new Point(edge, edge)));
+    return highlight;
+};
+
+SpriteMorph.prototype.highlightImage = function (color, border) {
+    var fb, img, hi, ctx, out;
+    fb = this.extent();
+    img = this.image;
+
+    hi = newCanvas(fb.add(border * 2));
+    ctx = hi.getContext('2d');
+
+    ctx.drawImage(img, 0, 0);
+    ctx.drawImage(img, border, 0);
+    ctx.drawImage(img, border * 2, 0);
+    ctx.drawImage(img, border * 2, border);
+    ctx.drawImage(img, border * 2, border * 2);
+    ctx.drawImage(img, border, border * 2);
+    ctx.drawImage(img, 0, border * 2);
+    ctx.drawImage(img, 0, border);
+
+    ctx.globalCompositeOperation = 'destination-out';
+    ctx.drawImage(img, border, border);
+
+    out = newCanvas(fb.add(border * 2));
+    ctx = out.getContext('2d');
+    ctx.drawImage(hi, 0, 0);
+    ctx.globalCompositeOperation = 'source-atop';
+    ctx.fillStyle = color.toString();
+    ctx.fillRect(0, 0, out.width, out.height);
+
+    return out;
+};
+
+SpriteMorph.prototype.getHighlight = function () {
+    var highlights;
+    highlights = this.children.slice(0).reverse().filter(
+        function (child) {
+            return child instanceof SpriteHighlightMorph;
+        }
+    );
+    if (highlights.length !== 0) {
+        return highlights[0];
+    }
+    return null;
+};
+
+// SpriteMorph nesting events
+
+SpriteMorph.prototype.mouseEnterDragging = function () {
+    var obj;
+    if (!this.enableNesting) {return; }
+    obj = this.world().hand.children[0];
+    if (this.wantsDropOf(obj)) {
+        this.addHighlight();
+    }
+};
+
+SpriteMorph.prototype.mouseLeave = function () {
+    if (!this.enableNesting) {return; }
+    this.removeHighlight();
+};
+
+SpriteMorph.prototype.wantsDropOf = function (morph) {
+    // allow myself to be the anchor of another sprite
+    // by drag & drop
+    return this.enableNesting
+        && morph instanceof SpriteIconMorph
+        && !contains(morph.object.allParts(), this);
+};
+
+SpriteMorph.prototype.reactToDropOf = function (morph, hand) {
+    this.removeHighlight();
+    this.attachPart(morph.object);
+    this.world().add(morph);
+    morph.slideBackTo(hand.grabOrigin);
+};
+
+// SpriteHighlightMorph /////////////////////////////////////////////////
+
+// SpriteHighlightMorph inherits from Morph:
+
+SpriteHighlightMorph.prototype = new Morph();
+SpriteHighlightMorph.prototype.constructor = SpriteHighlightMorph;
+SpriteHighlightMorph.uber = Morph.prototype;
+
+// SpriteHighlightMorph instance creation:
+
+function SpriteHighlightMorph() {
+    this.init();
+}
 
 // StageMorph /////////////////////////////////////////////////////////
 
@@ -3222,6 +3622,7 @@ StageMorph.prototype.paletteTextColor
 
 StageMorph.prototype.hiddenPrimitives = {};
 StageMorph.prototype.codeMappings = {};
+StageMorph.prototype.codeHeaders = {};
 StageMorph.prototype.enableCodeMapping = false;
 
 // StageMorph instance creation
@@ -3288,7 +3689,10 @@ StageMorph.prototype.setScale = function (number) {
     this.children.forEach(function (morph) {
         relativePos = morph.position().subtract(pos);
         morph.drawNew();
-        morph.setPosition(relativePos.multiplyBy(delta).add(pos));
+        morph.setPosition(
+            relativePos.multiplyBy(delta).add(pos),
+            true // just me (for nested sprites)
+        );
         if (morph instanceof SpriteMorph) {
             bubble = morph.talkBubble();
             if (bubble) {
@@ -3320,8 +3724,8 @@ StageMorph.prototype.drawNew = function () {
         ctx.scale(this.scale, this.scale);
         ctx.drawImage(
             this.costume.contents,
-            (this.width() - this.costume.width() * this.scale) / 2,
-            (this.height() - this.costume.height() * this.scale) / 2
+            (this.width() / this.scale - this.costume.width()) / 2,
+            (this.height() / this.scale - this.costume.height()) / 2
         );
     }
 };
@@ -3505,7 +3909,18 @@ StageMorph.prototype.getLastMessage = function () {
 StageMorph.prototype.wantsDropOf = function (aMorph) {
     return aMorph instanceof SpriteMorph ||
         aMorph instanceof WatcherMorph ||
-        aMorph instanceof ListWatcherMorph;
+        aMorph instanceof ListWatcherMorph ||
+        aMorph instanceof SpriteIconMorph;
+};
+
+StageMorph.prototype.reactToDropOf = function (morph, hand) {
+    if (morph instanceof SpriteIconMorph) { // detach sprite from anchor
+        if (morph.object.anchor) {
+            morph.object.anchor.detachPart(morph.object);
+        }
+        this.world().add(morph);
+        morph.slideBackTo(hand.grabOrigin);
+    }
 };
 
 // StageMorph stepping
@@ -3690,7 +4105,10 @@ StageMorph.prototype.fireStopAllEvent = function () {
     });
     this.removeAllClones();
     if (ide) {
-        ide.controlBar.pauseButton.refresh();
+        ide.nextSteps([
+            nop,
+            function () {ide.controlBar.pauseButton.refresh(); }
+        ]);
     }
 };
 
@@ -3867,6 +4285,8 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('reportCallCC'));
         blocks.push('-');
         blocks.push(block('createClone'));
+        blocks.push('-');
+        blocks.push(block('doPauseAll'));
 
     } else if (cat === 'sensing') {
 
@@ -3960,6 +4380,8 @@ StageMorph.prototype.blockTemplates = function (category) {
             blocks.push(txt);
             blocks.push('-');
             blocks.push(block('reportTypeOf'));
+            blocks.push(block('reportTextFunction'));
+            blocks.push(block('reportTextSplit'));
         }
 
     //////////////////////////////////
@@ -4046,7 +4468,7 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push('=');
 
         if (StageMorph.prototype.enableCodeMapping) {
-            blocks.push(block('doMapCode'));
+            blocks.push(block('doMapCodeOrHeader'));
             blocks.push(block('doMapStringCode'));
             blocks.push(block('doMapListCode'));
             blocks.push('-');
@@ -4187,6 +4609,7 @@ StageMorph.prototype.thumbnail = function (extentPoint, excludedSprite) {
     });
     return trg;
 };
+
 // StageMorph cloning overrice
 
 StageMorph.prototype.createClone = nop;
@@ -4594,19 +5017,15 @@ Costume.prototype.bounds = function () {
 
 Costume.prototype.shrinkWrap = function () {
     // adjust my contents'  bounds to my visible bounding box
-    // add a tolerance margin for Chrome's anti-aliasing issue
     var bb = this.boundingBox(),
-        space = new Point(480, 360).subtract(bb.extent()).floorDivideBy(2),
-        margin = new Point(3, 3).min(space.max(new Point(0, 0))),
-        area = bb.expandBy(margin),
-        ext = area.extent(),
+        ext = bb.extent(),
         pic = newCanvas(ext),
         ctx = pic.getContext('2d');
 
     ctx.drawImage(
         this.contents,
-        area.origin.x,
-        area.origin.y,
+        bb.origin.x,
+        bb.origin.y,
         ext.x,
         ext.y,
         0,
@@ -4614,7 +5033,7 @@ Costume.prototype.shrinkWrap = function () {
         ext.x,
         ext.y
     );
-    this.rotationCenter = this.rotationCenter.subtract(area.origin);
+    this.rotationCenter = this.rotationCenter.subtract(bb.origin);
     this.contents = pic;
     this.version = Date.now();
 };
@@ -5200,7 +5619,7 @@ CellMorph.prototype.drawNew = function () {
                 null,
                 true,
                 false,
-                'center'
+                'left' // was formerly 'center', reverted b/c of code-mapping
             );
             if (this.isEditable) {
                 this.contentsMorph.isEditable = true;

@@ -42,7 +42,7 @@
 
 /*global modules, contains*/
 
-modules.locale = '2013-May-14';
+modules.locale = '2013-August-17';
 
 // Global stuff
 
@@ -149,7 +149,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org',
     'last_changed':
-        '2013-05-14'
+        '2013-08-10'
 };
 
 SnapTranslator.dict.it = {
@@ -291,4 +291,48 @@ SnapTranslator.dict.es = {
         'victor.muratalla@yahoo.com',
     'last_changed':
         '2013-03-25'
+};
+
+SnapTranslator.dict.nl = {
+    'language_name':
+        'Nederlands',
+    'language_translator':
+        'Frank Sierens, Sjoerd Dirk Meijer',
+    'translator_e-mail':
+        'frank.sierens@telenet.be, sjoerddirk@fromScratchEd.nl',
+    'last_changed':
+        '2013-08-12'
+};
+
+SnapTranslator.dict.pl = {
+    'language_name':
+        'Polski',
+    'language_translator':
+        'Witek Kranas',
+    'translator_e-mail':
+        'witek@oeiizk.waw.pl',
+    'last_changed':
+        '2013-08-05'
+};
+
+SnapTranslator.dict.tw = {
+    'language_name':
+        '繁體中文',
+    'language_translator':
+        'cch',
+    'translator_e-mail':
+        'cchuang2009@gmail.com',
+    'last_changed':
+        '2013-8-14'
+};
+
+SnapTranslator.dict.no = {
+    'language_name':
+        'Norsk',
+    'language_translator':
+        'Olav A Marschall',
+    'translator_e-mail':
+        'mattebananer@gmail.com',
+    'last_changed':
+        '2013-08-17'
 };

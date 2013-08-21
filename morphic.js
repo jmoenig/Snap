@@ -1035,7 +1035,7 @@
 /*global window, HTMLCanvasElement, getMinimumFontHeight, FileReader, Audio,
 FileList, getBlurredShadowSupport*/
 
-var morphicVersion = '2013-June-21';
+var morphicVersion = '2013-August-06';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = getBlurredShadowSupport(); // check for Chrome-bug
 
@@ -9635,7 +9635,7 @@ HandMorph.prototype.processMouseMove = function (event) {
             if (old.mouseLeave) {
                 old.mouseLeave();
             }
-            if (old.mouseLeaveDragging && this.mouseButton) {
+            if (old.mouseLeaveDragging && myself.mouseButton) {
                 old.mouseLeaveDragging();
             }
         }
@@ -9645,7 +9645,7 @@ HandMorph.prototype.processMouseMove = function (event) {
             if (newMorph.mouseEnter) {
                 newMorph.mouseEnter();
             }
-            if (newMorph.mouseEnterDragging && this.mouseButton) {
+            if (newMorph.mouseEnterDragging && myself.mouseButton) {
                 newMorph.mouseEnterDragging();
             }
         }
@@ -9708,6 +9708,8 @@ HandMorph.prototype.processDrop = function (event) {
     var files = event instanceof FileList ? event
                 : event.target.files || event.dataTransfer.files,
         file,
+        url = event.dataTransfer ?
+                event.dataTransfer.getData('URL') : null,
         txt = event.dataTransfer ?
                 event.dataTransfer.getData('Text/HTML') : null,
         src,
@@ -9786,18 +9788,18 @@ HandMorph.prototype.processDrop = function (event) {
     }
 
     function parseImgURL(html) {
-        var url = '',
-            i,
+        var iurl = '',
+            idx,
             c,
             start = html.indexOf('<img src="');
         if (start === -1) {return null; }
         start += 10;
-        for (i = start; i < html.length; i += 1) {
-            c = html[i];
+        for (idx = start; idx < html.length; idx += 1) {
+            c = html[idx];
             if (c === '"') {
-                return url;
+                return iurl;
             }
-            url = url.concat(c);
+            iurl = iurl.concat(c);
         }
         return null;
     }
@@ -9817,6 +9819,24 @@ HandMorph.prototype.processDrop = function (event) {
             } else { // assume it's meant to be binary
                 readBinary(file);
             }
+        }
+    } else if (url) {
+        if (
+            contains(
+                ['gif', 'png', 'jpg', 'jpeg', 'bmp'],
+                url.slice(url.lastIndexOf('.') + 1).toLowerCase()
+            )
+        ) {
+            while (!target.droppedImage) {
+                target = target.parent;
+            }
+            img = new Image();
+            img.onload = function () {
+                canvas = newCanvas(new Point(img.width, img.height));
+                canvas.getContext('2d').drawImage(img, 0, 0);
+                target.droppedImage(canvas);
+            };
+            img.src = url;
         }
     } else if (txt) {
         while (!target.droppedImage) {
