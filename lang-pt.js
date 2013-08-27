@@ -185,7 +185,7 @@ SnapTranslator.dict.pt = {
     'translator_e-mail':
         'mmsequeira@gmail.com',
     'last_changed':
-        '2013-03-22',
+        '2013-08-28',
 
     // GUI
     // control bar:
@@ -330,8 +330,6 @@ SnapTranslator.dict.pt = {
         'passa para o próximo traje',
     'costume #':
         'o número do traje',
-    'costume name':
-        'o nome do traje',
     'say %s for %n secs':
         'diz %s durante %n s',
     'say %s':
@@ -422,13 +420,17 @@ SnapTranslator.dict.pt = {
     'when I am clicked':
         'Quando alguém clicar em ti',
     'when I receive %msgHat':
-        'Quando receberes a mensagem %msgHat',
+        'Quando receberes %msgHat',
     'broadcast %msg':
         'difunde a mensagem %msg',
     'broadcast %msg and wait':
         'difunde a mensagem %msg e espera',
     'Message name':
         'Qual o nome da mensagem?',
+    'message':
+        'mensagem',
+    'any message':
+        'qualquer mensagem',
     'wait %n secs':
         'espera %n s',
     'wait until %b':
@@ -451,6 +453,8 @@ SnapTranslator.dict.pt = {
         'pára este guião de actor',
     'stop all %stop':
         'pára tudo %stop',
+    'pause all %pause':
+        'faz pausa em tudo %pause',
     'run %cmdRing %inputs':
         'executa %cmdRing %inputs',
     'launch %cmdRing %inputs':
@@ -502,7 +506,7 @@ SnapTranslator.dict.pt = {
     '%att of %spr':
         '%att de %spr',
     'http:// %s':
-        'http:// %s',
+        'o recurso http:// %s',
     'turbo mode?':
         'o modo turbo está activo',
     'set turbo mode to %b':
@@ -561,6 +565,8 @@ SnapTranslator.dict.pt = {
         'Criar uma variável',
     'Variable name':
         'Qual o nome da variável?',
+    'Script variable name':
+        'Qual o nome da variável de guião?',
     'Delete a variable':
         'Remover uma variável',
 
@@ -653,6 +659,10 @@ SnapTranslator.dict.pt = {
         'Importar as ferramentas oficiais para este projecto',
     'load the official library of\npowerful blocks':
         'Importar para este projecto\na biblioteca oficial de blocos.',
+    'Libraries...':
+        'Bibliotecas...',
+    'Import library':
+        'Biblioteca a importar',
 
     // menu da nuvem
     'Login...':
@@ -756,6 +766,12 @@ SnapTranslator.dict.pt = {
     'help':
         'ajuda',
 
+    // palette:
+    'hide primitives':
+        'esconder blocos primitivos',
+    'show primitives':
+        'mostrar blocos primitivos',
+
     // blocos:
     'help...':
         'ajuda…',
@@ -770,9 +786,9 @@ SnapTranslator.dict.pt = {
     'delete':
         'remover',
     'script pic...':
-        'imagem do guião…',
+        'fotografia do guião…',
     'open a new window\nwith a picture of this script':
-        'Abrir uma nova janela com\numa imagem deste guião.',
+        'Abrir uma nova janela com\numa fotografia deste guião.',
     'ringify':
         'adicionar anel',
     'unringify':
@@ -787,6 +803,10 @@ SnapTranslator.dict.pt = {
     // actores:
     'edit':
         'editar',
+    'detach from':
+        'soltar de',
+    'detach all parts':
+        'soltar todas as partes',
     'export...':
         'exportar…',
 
@@ -794,9 +814,9 @@ SnapTranslator.dict.pt = {
     'show all':
         'mostrar todos os actores',
     'pic...':
-        'fotografar...',
+        'fotografia…',
     'open a new window\nwith a picture of the stage':
-        'Abre uma nova janela com\numa fotografia do palco.',
+        'Abrir uma nova janela com\numa fotografia do palco.',
 
     // área de guiões:
     'clean up':
@@ -805,6 +825,14 @@ SnapTranslator.dict.pt = {
         'Organizar os guiões\nverticalmente.',
     'add comment':
         'adicionar comentário',
+    'undrop':
+        'desfazer última largada',
+    'undo the last\nblock drop\nin this pane':
+        'Desfazer a última largada de um bloco\nneste separador.',
+    'scripts pic...':
+        'fotografia dos guiões…',
+    'open a new window\nwith a picture of all scripts':
+        'Abrir uma nova janela com\numa fotografia de todos os guiões.',
     'make a block...':
         'criar um bloco…',
 
@@ -840,10 +868,6 @@ SnapTranslator.dict.pt = {
         'Sim',
     'No':
         'Não',
-    'Open':
-        'Abrir',
-    'Share':
-        'Partilhar',
 
     // ajuda
     'Help':
@@ -888,24 +912,6 @@ SnapTranslator.dict.pt = {
         'Quer mesmo remover?',
     'rename...':
         'alterar o nome…',
-    'Cloud':
-        'Nuvem',
-    'Browser':
-        'Navegador',
-    'Examples':
-        'Exemplos',
-    'You are not logged in':
-        'Ainda não se autenticou',
-    'Updating project list...':
-        'Actualizando a lista de projectos…',
-    'Opening project...':
-        'Abrindo o projecto…',
-    'Fetching project from the cloud...':
-        'Obtendo o projecto da nuvem…',
-    'Saving project to the cloud...':
-        'Guardando o projecto na nuvem…',
-    'saved.':
-        'guardado.',
 
     // editor de trajes
     'Costume Editor':
@@ -1040,17 +1046,17 @@ SnapTranslator.dict.pt = {
     'large':
         'grande',
     'slider':
-        'deslizador',
+        'potenciómetro',
     'slider min...':
-        'mínimmo do deslizador…',
+        'mínimo do potenciómetro…',
     'slider max...':
-        'máximo do deslizador…',
+        'máximo do potenciómetro…',
     'import...':
         'importar…',
     'Slider minimum value':
-        'Valor mínimo do deslizador',
+        'Valor mínimo do potenciómetro',
     'Slider maximum value':
-        'Valor máximo do deslizador',
+        'Valor máximo do potenciómetro',
 
     // observadores de listas
     'length: ':
@@ -1180,6 +1186,8 @@ SnapTranslator.dict.pt = {
     // funções matemáticas
     'abs':
         'valor absoluto',
+    'floor':
+        'arredondamento para baixo',
     'sqrt':
         'raiz quadrada',
     'sin':
@@ -1219,5 +1227,31 @@ SnapTranslator.dict.pt = {
     'last':
         'o fim',
     'any':
-        'qualquer dos itens'
+        'qualquer dos itens',
+
+    // em falta no ficheiro lang-de.js
+    'costume name':
+        'o nome do traje',
+    'Open':
+        'Abrir',
+    'Share':
+        'Partilhar',
+    'Cloud':
+        'Nuvem',
+    'Browser':
+        'Navegador',
+    'Examples':
+        'Exemplos',
+    'You are not logged in':
+        'Ainda não se autenticou',
+    'Updating project list...':
+        'Actualizando a lista de projectos…',
+    'Opening project...':
+        'Abrindo o projecto…',
+    'Fetching project from the cloud...':
+        'Obtendo o projecto da nuvem…',
+    'Saving project to the cloud...':
+        'Guardando o projecto na nuvem…',
+    'saved.':
+        'guardado.',
 };
