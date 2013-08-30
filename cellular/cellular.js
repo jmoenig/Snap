@@ -16,10 +16,11 @@ Cell.prototype.getAttribute = function(attribute)
 	return value;
 }
 
-Cell.prototype.setAttribute = function(attribute, value)
+Cell.prototype.setAttribute = function(attribute, value, dirty)
 {
 	this.attributeValues[attribute] = value;
-	this.stageMorph.dirtyCellAt(this.x, this.y);
+	if (dirty == undefined || dirty == true)
+		this.stageMorph.dirtyCellAt(this.x, this.y);
 }
 
 Cell.attributes = ['testAttribute'];

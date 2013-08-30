@@ -1,4 +1,4 @@
-modules.cellularObjects = '2013-August-2';
+modules.cellularObjects = '2013-August-23';
 
 /*********************************************************************/
 /******************************* HOOKS *******************************/
@@ -12,14 +12,117 @@ modules.cellularObjects = '2013-August-2';
  */
  
 SpriteMorph.prototype.scribbleHookBlockTemplates = SpriteMorph.prototype.snapappsHookBlockTemplates;
-SpriteMorph.prototype.snapappsHookBlockTemplates = function(blocks, block, cat)
+SpriteMorph.prototype.snapappsHookBlockTemplates = function(blocks, block, cat, helpMenu)
 {
+	var myself = this;
+	if (cat == "cells")
+	{
+		button = new PushButtonMorph(
+			null,
+			function () {
+				new CellAttributeDialogMorph(
+					null,
+					function (pair) {
+						if (pair) {
+							for (var i=0; i<Cell.attributes.length; i++)
+							{
+								var name = Cell.attributes[i];
+								if (name == pair[0])
+									return;
+							};
+							Cell.attributes.push(pair[0]);
+							myself.blocksCache[cat] = null;
+							myself.paletteCache[cat] = null;
+							myself.parentThatIsA(IDE_Morph).refreshPalette();
+						}
+					},
+					myself
+				).prompt(
+					'Cell attribute name',
+					null,
+					myself.world()
+				);
+			},
+			'Make a cell attribute'
+		);
+		button.userMenu = helpMenu;
+		button.selector = 'addCellAttribute';
+		button.showHelp = BlockMorph.prototype.showHelp;
+		blocks.push(button);
+
+		if (Cell.attributes.length > 0) {
+			button = new PushButtonMorph(
+				null,
+				function () {
+					var menu = new MenuMorph(
+						myself.deleteCellAttribute,
+						null,
+						myself
+					);
+					for (var i=0; i<Cell.attributes.length; i++)
+					{
+						var name = Cell.attributes[i];
+						menu.addItem(name, name);
+					};
+					menu.popUpAtHand(myself.world());
+				},
+				'Delete a cell attribute'
+			);
+			button.userMenu = helpMenu;
+			button.selector = 'deleteCellAttribute';
+			button.showHelp = BlockMorph.prototype.showHelp;
+			blocks.push(button);
+		}
+
+		blocks.push('-');
+
+		if (Cell.attributes.length > 0) {
+			for (var i=0; i<Cell.attributes.length; i++)
+			{
+				var txt = new TextMorph('' + Cell.attributes[i]);
+				txt.fontSize = 12;
+				txt.setColor(this.paletteTextColor);
+				blocks.push(txt);
+			}
+			blocks.push('-');
+		}
+		
+		blocks.push(block('testCell'));
+	}
     return this.scribbleHookBlockTemplates(blocks, block, cat);
+}
+
+SpriteMorph.prototype.deleteCellAttribute = function(name)
+{
+	for (var i=0; i<Cell.attributes.length; i++)
+	{
+		if (Cell.attributes[i] == name)
+		{
+			Cell.attributes.splice(i, 1);
+			this.blocksCache["cells"] = null;
+			this.paletteCache["cells"] = null;
+			this.parentThatIsA(IDE_Morph).refreshPalette();
+			return;
+		}
+	}
+}
+
+SpriteMorph.prototype.addCellularBlocks = function () {
+	//We add the cells palette
+    
+    SpriteMorph.prototype.blocks.testCell = {
+        type: 'command',
+        category: 'cells',
+        spec: 'a test cell block',
+    };
 }
 
 /*********************************************************************/
 /***************************** OVERRIDES *****************************/
 /*********************************************************************/
+
+SpriteMorph.prototype.blockColor.cells = new Color(100, 180, 180);
+SpriteMorph.prototype.categories.push("cells");
 
 /*
 ** Super simple linear interpol
@@ -36,12 +139,6 @@ function valueInterpolate(from, to, mix)
 */
 function cellInterpolate(resultCell, cellArray, cellArrayWidth, cellArrayHeight, u, v)
 {
-	if (cellArrayWidth <= 1 || cellArrayHeight <= 1)
-	{
-		//Fail on a 1xN or Nx1 grid since we don't need to care about that case.
-		//(Cellular always >4x3 no matter what so it doesnt matter)
-		return;
-	}
 	// Basically, we get the 4 pixels that surround the u,v position we're given.
 	//
 	// (floor(u), floor(v))
@@ -68,34 +165,39 @@ function cellInterpolate(resultCell, cellArray, cellArrayWidth, cellArrayHeight,
 	v = Math.min(1, Math.max(0, v));
 	
 	// Get position of top left point
-	var topLeftXFloat = u * cellArrayWidth;
-	var topLeftYFloat = v * cellArrayHeight
-	var topLeftX = Math.floor(topLeftXFloat), topLeftY = Math.floor(topLeftYFloat);
+	var leftXFloat = u * cellArrayWidth;
+	var topYFloat = v * cellArrayHeight
+	var leftX = Math.floor(leftXFloat), topY = Math.floor(topYFloat);
+	var rightX = leftX+1, bottomY = topY+1;
 	
 	//Ensure inside boundaries for u == 1 / v == 1 cases
-	if (topLeftX == cellArrayWidth)
-		topLeftX = cellArrayWidth - 1;
-	if (topLeftY == cellArrayHeight)
-		topLeftY = cellArrayHeight - 1;
+	if (leftX >= cellArrayWidth)
+		leftX = cellArrayWidth - 1;
+	if (topY >= cellArrayHeight)
+		topY = cellArrayHeight - 1;
+	if (rightX >= cellArrayWidth)
+		rightX = cellArrayWidth - 1;
+	if (bottomY >= cellArrayHeight)
+		bottomY = cellArrayHeight - 1;
 		
 	//Get interpolation thingys, we know these are [0,1]
-	var uInterpol = topLeftXFloat - topLeftX;
-	var vInterpol = topLeftYFloat - topLeftY;
+	var uInterpol = leftXFloat - leftX;
+	var vInterpol = topYFloat - topY;
 	
 	//Actually interpolate
 	for (var attribute in Cell.attributes)
 	{
-		var topLeftValue = cellArray[topLeftX][topLeftY].getAttribute(attribute);
-		var topRightValue = cellArray[topLeftX+1][topLeftY].getAttribute(attribute);
-		var bottomLeftValue = cellArray[topLeftX][topLeftY+1].getAttribute(attribute);
-		var bottomRightValue = cellArray[topLeftX+1][topLeftY+1].getAttribute(attribute);
+		var topLeftValue = cellArray[topY][leftX].getAttribute(attribute);
+		var topRightValue = cellArray[topY][rightX].getAttribute(attribute);
+		var bottomLeftValue = cellArray[bottomY][leftX].getAttribute(attribute);
+		var bottomRightValue = cellArray[bottomY][rightX].getAttribute(attribute);
 		
 		var topValue = valueInterpolate(topLeftValue, topRightValue, uInterpol);
 		var bottomValue = valueInterpolate(bottomLeftValue, bottomRightValue, uInterpol);
 		
 		var result = valueInterpolate(topValue, bottomValue, vInterpol);
 		
-		resultCell.setAttribute(attribute, result);
+		resultCell.setAttribute(attribute, result, false);
 	}
 }
 
@@ -116,17 +218,19 @@ StageMorph.prototype.updateCells = function ()
 	if (this._cells != undefined && this._cells != null && this._cells.length > 0)
 	{
 		var oldCells = this._cells;
-		var oldCellsX = oldCells.length, oldCellsY = oldCells[0].length;
+		var oldCellsY = oldCells.length, oldCellsX = oldCells[0].length;
 		for (var y=0; y<newCellsY; y++)
 		{
 			for (var x=0; x<newCellsX; x++)
 			{
-				cellInterpolate(newCells[y][x], oldCells, oldCellsX, oldCellsY, x / newCellsX, y / newCellsY);
+				cellInterpolate(newCells[y][x], oldCells, oldCellsX, oldCellsY, (x + 0.5) / newCellsX, (y + 0.5) / newCellsY);
 			}	
 		}
 	}
 	
 	this._cells = newCells;
+	
+	this.dirtyEntireStage();
 }
 
 StageMorph.prototype.superInit = StageMorph.prototype.init;
@@ -156,6 +260,16 @@ StageMorph.prototype.dirtyCellAt = function(x, y)
 			this.bounds.top() + cellHeight * y,
 			this.bounds.left() + cellWidth * (x+1),
 			this.bounds.top() + cellHeight * (y+1)).spread());
+}
+
+StageMorph.prototype.dirtyEntireStage = function()
+{
+	var world = this.world();
+	if (world == null)
+		return;
+	if (world.broken == null)
+		return;
+    world.broken.push(this.bounds.spread());
 }
 
 StageMorph.prototype.getCellAt = function(pointOrX, y)
@@ -188,29 +302,22 @@ StageMorph.prototype.drawOn = function (aCanvas, aRect) {
 		if (area.extent().gt(new Point(0, 0))) {
 			var ctx = aCanvas.getContext('2d');
 			
-			ctx.lineWidth = 1;
-			ctx.strokeStyle = "rgb(0,0,0)";
+			ctx.save();
+			
 			ctx.beginPath();
+			ctx.rect(area.left(), area.top(), area.width(), area.height());
+			ctx.clip();
+			
 			var cellWidth = this.bounds.width() / this._cellsX;
 			var cellHeight = this.bounds.height() / this._cellsY;
 			var startCellX = Math.floor((area.left()-this.bounds.left())/cellWidth);
 			var endCellX = Math.ceil((area.right()-this.bounds.left())/cellWidth);
 			var startX = startCellX*cellWidth + this.bounds.left();
-			for (var x=startX; x<area.right(); x+=cellWidth)
-			{
-				ctx.moveTo(x+0.5, area.top());
-				ctx.lineTo(x+0.5, area.bottom());
-			}
 			var startCellY = Math.floor((area.top()-this.bounds.top())/cellHeight);
 			var endCellY = Math.ceil((area.bottom()-this.bounds.top())/cellHeight);
 			var startY = startCellY*cellHeight + this.bounds.top();
-			for (var y=startY; y<area.bottom(); y+=cellHeight)
-			{
-				ctx.moveTo(area.left(), y+0.5);
-				ctx.lineTo(area.right(), y+0.5);
-			}
-			ctx.stroke();
 			
+			//Draw cells
 			if (this._cells != undefined && this._cells != null)
 			{
 				for (var y=startCellY; y<endCellY; y++)
@@ -227,13 +334,31 @@ StageMorph.prototype.drawOn = function (aCanvas, aRect) {
 						if (value > 0)
 						{
 							ctx.beginPath();
-							ctx.rect(x*cellWidth + this.bounds.left(), y*cellHeight + this.bounds.top(), cellWidth, cellHeight);
+							ctx.rect(x*cellWidth + this.bounds.left() + 1, y*cellHeight + this.bounds.top() + 1, cellWidth - 1, cellHeight - 1);
 							ctx.fillStyle = 'rgba(255,0,0,' + value + ')';
 							ctx.fill();
 						}
 					}
 				}
 			}
+			
+			//Draw grid
+			ctx.lineWidth = 1;
+			ctx.strokeStyle = "rgb(0,0,0)";
+			ctx.beginPath();
+			for (var x=startX; x<area.right(); x+=cellWidth)
+			{
+				ctx.moveTo(x+0.5, area.top());
+				ctx.lineTo(x+0.5, area.bottom());
+			}
+			for (var y=startY; y<area.bottom(); y+=cellHeight)
+			{
+				ctx.moveTo(area.left(), y+0.5);
+				ctx.lineTo(area.right(), y+0.5);
+			}
+			ctx.stroke();
+			
+			ctx.restore();
 		}
 	}
 	return retnVal;
@@ -266,3 +391,9 @@ StageMorph.prototype.mouseMove = function(point)
 		}
     }
 }
+
+/*********************************************************************/
+/****************************** STATICS ******************************/
+/*********************************************************************/
+//Snap calls this after initBlocks is defined. We call addCellularBlocks to add the new blocks.
+SpriteMorph.prototype.addCellularBlocks();

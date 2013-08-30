@@ -1865,7 +1865,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(button);
     }
     /* SNAPAPPS HOOK*/
-    this.snapappsHookBlockTemplates(blocks, block, cat);
+    this.snapappsHookBlockTemplates(blocks, block, cat, helpMenu);
     /* END SNAPAPPS HOOK*/
     return blocks;
 };

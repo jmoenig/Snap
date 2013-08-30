@@ -90,8 +90,44 @@ IDE_Morph.prototype.createCorral = function()
     scribbleButton.fixLayout();
     scribbleButton.setCenter(this.stageBottomBar.center());
     scribbleButton.setLeft(this.stageBottomBar.left() + padding);
-    scribbleButton = scribbleButton;
     this.stageBottomBar.add(scribbleButton);
+	
+	var gridSizer = new InputFieldMorph(
+            "40x30", false, // numeric?
+            {
+			"16x12": "16x12",
+			"20x15": "20x15",
+			"40x30": "40x30",
+			"80x60": "80x60",
+			}, // drop-down dict, optional
+            true
+        );
+    gridSizer.corner = 12;
+    /*gridSizer.color = colors[0];
+    gridSizer.highlightColor = colors[1];
+    gridSizer.pressColor = colors[2];*/
+    gridSizer.padding = 0;
+    gridSizer.contrast = this.buttonContrast;
+    gridSizer.hint = "grid size";
+    gridSizer.drawNew();
+    gridSizer.fixLayout();
+    gridSizer.setCenter(this.stageBottomBar.center());
+    gridSizer.setLeft(scribbleButton.right() + padding);
+    this.stageBottomBar.add(gridSizer);
+	this.stageBottomBar.reactToChoice = function(choice)
+	{
+		var choiceInt = 40;
+		switch (choice)
+		{
+			case "16x12": choiceInt = 16; break;
+			case "20x15": choiceInt = 20; break;
+			case "40x30": choiceInt = 40; break;
+			case "80x60": choiceInt = 80; break;
+		}
+		myself.stage._cellsX = choiceInt;
+		myself.stage._cellsY = choiceInt * 3 / 4;
+		myself.stage.updateCells();
+	}
 };
 
 /*********************************************************************/

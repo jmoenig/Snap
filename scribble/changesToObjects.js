@@ -10,7 +10,7 @@ modules.scribbleObjects = '2013-August-2';
  * 
  * Adds the blocks to the UI
  */
-SpriteMorph.prototype.snapappsHookBlockTemplates = function(blocks, block, cat)
+SpriteMorph.prototype.snapappsHookBlockTemplates = function(blocks, block, cat, helpMenu)
 {
     if (cat === 'motion')
     {
