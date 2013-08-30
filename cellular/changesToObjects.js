@@ -185,8 +185,9 @@ function cellInterpolate(resultCell, cellArray, cellArrayWidth, cellArrayHeight,
 	var vInterpol = topYFloat - topY;
 	
 	//Actually interpolate
-	for (var attribute in Cell.attributes)
+	for (var i = 0; i < Cell.attributes.length; i++)
 	{
+		var attribute = Cell.attributes[i];
 		var topLeftValue = cellArray[topY][leftX].getAttribute(attribute);
 		var topRightValue = cellArray[topY][rightX].getAttribute(attribute);
 		var bottomLeftValue = cellArray[bottomY][leftX].getAttribute(attribute);
@@ -223,7 +224,7 @@ StageMorph.prototype.updateCells = function ()
 		{
 			for (var x=0; x<newCellsX; x++)
 			{
-				cellInterpolate(newCells[y][x], oldCells, oldCellsX, oldCellsY, (x + 0.5) / newCellsX, (y + 0.5) / newCellsY);
+				cellInterpolate(newCells[y][x], oldCells, oldCellsX, oldCellsY, (x) / newCellsX, (y) / newCellsY);
 			}	
 		}
 	}
@@ -365,7 +366,6 @@ StageMorph.prototype.drawOn = function (aCanvas, aRect) {
 };
 
 //This is the cell attribute draw tool
-
 StageMorph.prototype.drawTool = false;
 StageMorph.prototype.mouseClickLeft = function()
 {
