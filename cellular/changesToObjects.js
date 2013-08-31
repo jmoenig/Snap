@@ -160,25 +160,18 @@ function cellInterpolate(resultCell, cellArray, cellArrayWidth, cellArrayHeight,
 	// Then we get the interpolated (over x axis) cell attribute of the bottom 2 and the top 2 at that u position
 	// From there, we interpolate again over y axis between those two values.
 	
-	// Clamp:
-	u = Math.min(1, Math.max(0, u));
-	v = Math.min(1, Math.max(0, v));
-	
 	// Get position of top left point
-	var leftXFloat = u * cellArrayWidth;
-	var topYFloat = v * cellArrayHeight
+	var leftXFloat = u * cellArrayWidth - 0.5;
+	var topYFloat = v * cellArrayHeight - 0.5;
+	
 	var leftX = Math.floor(leftXFloat), topY = Math.floor(topYFloat);
 	var rightX = leftX+1, bottomY = topY+1;
 	
-	//Ensure inside boundaries for u == 1 / v == 1 cases
-	if (leftX >= cellArrayWidth)
-		leftX = cellArrayWidth - 1;
-	if (topY >= cellArrayHeight)
-		topY = cellArrayHeight - 1;
-	if (rightX >= cellArrayWidth)
-		rightX = cellArrayWidth - 1;
-	if (bottomY >= cellArrayHeight)
-		bottomY = cellArrayHeight - 1;
+	//Ensure inside boundaries.
+	leftX = Math.max(0, Math.min(cellArrayWidth - 1, leftX));
+	topY = Math.max(0, Math.min(cellArrayHeight - 1, topY));
+	rightX = Math.max(0, Math.min(cellArrayWidth - 1, rightX));
+	bottomY = Math.max(0, Math.min(cellArrayHeight - 1, bottomY));
 		
 	//Get interpolation thingys, we know these are [0,1]
 	var uInterpol = leftXFloat - leftX;
@@ -224,7 +217,7 @@ StageMorph.prototype.updateCells = function ()
 		{
 			for (var x=0; x<newCellsX; x++)
 			{
-				cellInterpolate(newCells[y][x], oldCells, oldCellsX, oldCellsY, (x) / newCellsX, (y) / newCellsY);
+				cellInterpolate(newCells[y][x], oldCells, oldCellsX, oldCellsY, (x + 0.5) / newCellsX, (y + 0.5) / newCellsY);
 			}	
 		}
 	}
@@ -336,7 +329,7 @@ StageMorph.prototype.drawOn = function (aCanvas, aRect) {
 						{
 							ctx.beginPath();
 							ctx.rect(x*cellWidth + this.bounds.left() + 1, y*cellHeight + this.bounds.top() + 1, cellWidth - 1, cellHeight - 1);
-							ctx.fillStyle = 'rgba(255,0,0,' + value + ')';
+							ctx.fillStyle = 'rgba(255,0,0,' + value / 255 + ')';
 							ctx.fill();
 						}
 					}

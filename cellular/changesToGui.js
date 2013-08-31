@@ -128,6 +128,34 @@ IDE_Morph.prototype.createCorral = function()
 		myself.stage._cellsY = choiceInt * 3 / 4;
 		myself.stage.updateCells();
 	}
+	
+	var attributeSelector = new InputFieldMorph("", false, { }, true );
+    gridSizer.corner = 12;
+    /*gridSizer.color = colors[0];
+    gridSizer.highlightColor = colors[1];
+    gridSizer.pressColor = colors[2];*/
+    gridSizer.padding = 0;
+    gridSizer.contrast = this.buttonContrast;
+    gridSizer.hint = "grid size";
+    gridSizer.drawNew();
+    gridSizer.fixLayout();
+    gridSizer.setCenter(this.stageBottomBar.center());
+    gridSizer.setLeft(scribbleButton.right() + padding);
+    this.stageBottomBar.add(gridSizer);
+	this.stageBottomBar.reactToChoice = function(choice)
+	{
+		var choiceInt = 40;
+		switch (choice)
+		{
+			case "16x12": choiceInt = 16; break;
+			case "20x15": choiceInt = 20; break;
+			case "40x30": choiceInt = 40; break;
+			case "80x60": choiceInt = 80; break;
+		}
+		myself.stage._cellsX = choiceInt;
+		myself.stage._cellsY = choiceInt * 3 / 4;
+		myself.stage.updateCells();
+	}
 };
 
 /*********************************************************************/
