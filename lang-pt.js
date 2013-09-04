@@ -1185,27 +1185,27 @@ SnapTranslator.dict.pt = {
 
     // funções matemáticas
     'abs':
-        'valor absoluto',
+        'o valor absoluto',
     'floor':
-        'arredondamento para baixo',
+        'o arredondamento para baixo',
     'sqrt':
-        'raiz quadrada',
+        'a raiz quadrada',
     'sin':
-        'seno',
+        'o seno',
     'cos':
-        'cosseno',
+        'o cosseno',
     'tan':
-        'tangente',
+        'a tangente',
     'asin':
-        'arco-seno',
+        'o arco-seno',
     'acos':
-        'arco-cosseno',
+        'o arco-cosseno',
     'atan':
-        'arco-tangente',
+        'o arco-tangente',
     'ln':
-        'logaritmo natural',
+        'o logaritmo natural',
     'e^':
-        'exponencial',
+        'a exponencial',
 
     // tipos de dados
     'number':
