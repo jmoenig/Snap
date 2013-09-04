@@ -760,7 +760,7 @@ SnapTranslator.dict.pt = {
     'Input Names:':
         'Parâmetros:',
     'input list:':
-        'lista de argumentos:',
+        'os itens de',
 
     // menus de contexto:
     'help':
