@@ -179,7 +179,7 @@ SnapTranslator.dict.pt = {
 
     // meta informação sobre a tradução
     'language_name':
-        'Português (literário)',
+        'Português',
     'language_translator':
         'Manuel Menezes de Sequeira',
     'translator_e-mail':
