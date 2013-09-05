@@ -583,13 +583,13 @@ SnapTranslator.dict.pt = {
 
     // listas:
     'list %exp':
-        'uma nova lista com %exp',
+        'uma lista com %exp',
     '%s in front of %l':
         'a prefixação de %s a %l',
     'item %idx of %l':
         '%idx de %l',
     'all but first of %l':
-        'uma nova lista com todos menos o primeiro item de %l',
+        'uma lista com os itens de %l menos o primeiro',
     'length of %l':
         'o comprimento de %l',
     '%l contains %s':
@@ -601,7 +601,7 @@ SnapTranslator.dict.pt = {
     'delete %ida of %l':
         'remove %ida de %l',
     'insert %s at %idx of %l':
-        'insere %s antes de %idx de %l',
+        'insere %s como %idx de %l',
     'replace item %idx of %l with %s':
         'substitui %idx de %l por %s',
 
@@ -1225,9 +1225,9 @@ SnapTranslator.dict.pt = {
 
     // índices de listas
     'last':
-        'o fim',
+        'o último item',
     'any':
-        'qualquer dos itens',
+        'um item ao acaso',
 
     // em falta no ficheiro lang-de.js
     'costume name':
