@@ -124,8 +124,8 @@ IDE_Morph.prototype.createCorral = function()
 			case "40x30": choiceInt = 40; break;
 			case "80x60": choiceInt = 80; break;
 		}
-		myself.stage._cellsX = choiceInt;
-		myself.stage._cellsY = choiceInt * 3 / 4;
+		myself.stage.cellsX = choiceInt;
+		myself.stage.cellsY = choiceInt * 3 / 4;
 		myself.stage.updateCells();
 	}
 	
@@ -152,8 +152,8 @@ IDE_Morph.prototype.createCorral = function()
 			case "40x30": choiceInt = 40; break;
 			case "80x60": choiceInt = 80; break;
 		}
-		myself.stage._cellsX = choiceInt;
-		myself.stage._cellsY = choiceInt * 3 / 4;
+		myself.stage.cellsX = choiceInt;
+		myself.stage.cellsY = choiceInt * 3 / 4;
 		myself.stage.updateCells();
 	}
 };

@@ -197,7 +197,7 @@ function cellInterpolate(resultCell, cellArray, cellArrayWidth, cellArrayHeight,
 
 StageMorph.prototype.updateCells = function ()
 {
-	var newCellsX = this._cellsX, newCellsY = this._cellsY;
+	var newCellsX = this.cellsX, newCellsY = this.cellsY;
 	var newCells = [];
 	for (var y=0; y<newCellsY; y++)
 	{
@@ -209,9 +209,9 @@ StageMorph.prototype.updateCells = function ()
 		newCells.push(newRow);
 	}
 	
-	if (this._cells != undefined && this._cells != null && this._cells.length > 0)
+	if (this.cells != undefined && this.cells != null && this.cells.length > 0)
 	{
-		var oldCells = this._cells;
+		var oldCells = this.cells;
 		var oldCellsY = oldCells.length, oldCellsX = oldCells[0].length;
 		for (var y=0; y<newCellsY; y++)
 		{
@@ -222,32 +222,31 @@ StageMorph.prototype.updateCells = function ()
 		}
 	}
 	
-	this._cells = newCells;
-	
+	this.cells = newCells;
 	this.dirtyEntireStage();
 }
 
 StageMorph.prototype.superInit = StageMorph.prototype.init;
 StageMorph.prototype.init = function (globals) {
 	this.superInit(globals);
-	this._cellsX = 40;
-	this._cellsY = 30;
+	this.cellsX = 40;
+	this.cellsY = 30;
 	this.drawGrid = true;
-	this._cells = [];
+	this.cells = [];
 	this.updateCells();
 }
 
 StageMorph.prototype.changeCellCount = function(newX, newY)
 {
-	this._cellsX = newX;
-	this._cellsY = newY;
+	this.cellsX = newX;
+	this.cellsY = newY;
 	this.updateCells();
 }
 
 StageMorph.prototype.dirtyCellAt = function(x, y)
 {
-	var cellWidth = this.bounds.width() / this._cellsX;
-	var cellHeight = this.bounds.height() / this._cellsY;
+	var cellWidth = this.bounds.width() / this.cellsX;
+	var cellHeight = this.bounds.height() / this.cellsY;
     this.world().broken.push(
         new Rectangle(
 			this.bounds.left() + cellWidth * x,
@@ -266,19 +265,33 @@ StageMorph.prototype.dirtyEntireStage = function()
     world.broken.push(this.bounds.spread());
 }
 
-StageMorph.prototype.getCellAt = function(pointOrX, y)
+StageMorph.prototype.getCellPositionAt = function(pointOrX, y)
 {
 	if (pointOrX instanceof Point)
 	{
-		return this.getCellAt(pointOrX.x, pointOrX.y);
+		return this.getCellPositionAt(pointOrX.x, pointOrX.y);
 	}
 	else
 	{
-		var cellX = Math.floor((pointOrX - this.bounds.left()) / this.bounds.width() * this._cellsX);
-		var cellY = Math.floor((y - this.bounds.top()) / this.bounds.height() * this._cellsY);
-		if (cellX < this._cellsX && cellX >= 0 && cellY < this._cellsY && cellY >= 0)
-			return this._cells[cellY][cellX];
+		var cellX = (pointOrX - this.bounds.left()) / this.bounds.width() * this.cellsX;
+		var cellY = (y - this.bounds.top()) / this.bounds.height() * this.cellsY;
+		if (cellX < this.cellsX && cellX >= 0 && cellY < this.cellsY && cellY >= 0)
+			return new Point(cellX, cellY);
 		return null;
+	}
+}
+
+StageMorph.prototype.getCellAt = function(pointOrX, y)
+{
+    var point = this.getCellPositionAt(pointOrX, y);
+    
+	if (point == null)
+	{
+		return null;
+	}
+	else
+	{
+		return this.cells[Math.floor(point.y)][Math.floor(point.x)];
 	}
 }
 
@@ -302,8 +315,8 @@ StageMorph.prototype.drawOn = function (aCanvas, aRect) {
 			ctx.rect(area.left(), area.top(), area.width(), area.height());
 			ctx.clip();
 			
-			var cellWidth = this.bounds.width() / this._cellsX;
-			var cellHeight = this.bounds.height() / this._cellsY;
+			var cellWidth = this.bounds.width() / this.cellsX;
+			var cellHeight = this.bounds.height() / this.cellsY;
 			var startCellX = Math.floor((area.left()-this.bounds.left())/cellWidth);
 			var endCellX = Math.ceil((area.right()-this.bounds.left())/cellWidth);
 			var startX = startCellX*cellWidth + this.bounds.left();
@@ -312,11 +325,11 @@ StageMorph.prototype.drawOn = function (aCanvas, aRect) {
 			var startY = startCellY*cellHeight + this.bounds.top();
 			
 			//Draw cells
-			if (this._cells != undefined && this._cells != null)
+			if (this.cells != undefined && this.cells != null)
 			{
 				for (var y=startCellY; y<endCellY; y++)
 				{
-					var cellRow = this._cells[y];
+					var cellRow = this.cells[y];
 					if (cellRow == null || cellRow == undefined)
 						break;
 					for (var x=startCellX; x<endCellX; x++)
@@ -359,6 +372,21 @@ StageMorph.prototype.drawOn = function (aCanvas, aRect) {
 };
 
 //This is the cell attribute draw tool
+
+/*
+** This creates a canvas that is used when the user draws with the mouse.
+** It is of the same width and height as the cell array, and is created so that
+** we can use its line drawing functionality
+*/
+StageMorph.prototype.ensureTempDrawCanvas = function ()
+{
+    if (this.tempDrawCanvas == undefined || this.tempDrawCanvas == null)
+        this.tempDrawCanvas = document.createElement('canvas');
+    this.tempDrawCanvas.width = this.cellsX;
+    this.tempDrawCanvas.height = this.cellsY;
+    this.tempDrawCanvas.getContext('2d').clearRect(0,0,this.cellsX,this.cellsY);
+}
+
 StageMorph.prototype.drawTool = false;
 StageMorph.prototype.mouseClickLeft = function()
 {
@@ -366,6 +394,12 @@ StageMorph.prototype.mouseClickLeft = function()
 
 StageMorph.prototype.mouseDownLeft = function()
 {
+    if (this.drawTool)
+    {
+        this.ensureTempDrawCanvas();
+        var worldhand = this.world().hand;
+        this.previousPoint = new Point(worldhand.bounds.origin.x, worldhand.bounds.origin.y);
+    }
 }
 
 /*
@@ -377,12 +411,43 @@ StageMorph.prototype.mouseMove = function(point)
 {
     if (this.drawTool && this.world().hand.mouseButton === "left")
     {
-		var cell = this.getCellAt(point);
-		if (cell != null)
-		{
-			cell.setAttribute(Cell.attributes[0], cell.getAttribute(Cell.attributes[0]) + 1);
-		}
+        this.ensureTempDrawCanvas();
+        var ctx = this.tempDrawCanvas.getContext('2d');
+        
+        var previous = this.getCellPositionAt(this.previousPoint);
+        var next = this.getCellPositionAt(point);
+        if (previous != null && next != null)
+        {
+            ctx.beginPath();
+            ctx.moveTo(next.x, next.y);
+            ctx.lineTo(next.x+5, next.y);
+            ctx.lineTo(next.x+5, next.y+5);
+            ctx.lineTo(next.x, next.y+5);
+            ctx.closePath();
+            ctx.fillStyle = "rgba(0,0,0,1)";
+            ctx.fill();
+            
+            var imgData = ctx.getImageData(0,0,this.cellsX,this.cellsY);
+            for (var y=0; y<this.cellsY; y++)
+            {
+                for (var x=0; x<this.cellsX; x++)
+                {
+                    var cell = this.cells[y][x];
+                    var alpha = imgData[(y * this.cellsX + x) * 4 + 3];
+                    if (alpha > 0)
+                    {
+                        alert("alpha actually > 0");
+                    }
+		            if (cell != null)
+		            {
+			            cell.setAttribute(Cell.attributes[0], cell.getAttribute(Cell.attributes[0]) + alpha);
+		            }
+                }
+            }
+        }
     }
+    
+    this.previousPoint = new Point(point.x, point.y);
 }
 
 /*********************************************************************/
