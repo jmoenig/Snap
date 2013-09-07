@@ -661,17 +661,29 @@ PaintCanvasMorph.prototype.floodfill = function (sourcepoint) {
         read,
         sourcecolor,
         checkpoint;
+
     read = function (p) {
         var d = p * 4;
         return [data[d], data[d + 1], data[d + 2], data[d + 3]];
     };
     sourcecolor = read(stack[0]);
+
+
     checkpoint = function (p) {
         return p[0] === sourcecolor[0] &&
             p[1] === sourcecolor[1] &&
             p[2] === sourcecolor[2] &&
             p[3] === sourcecolor[3];
     };
+    if (sourcecolor[3] === 0 && this.settings.primarycolor === "transparent") return;
+    if (sourcecolor[0] === this.settings.primarycolor.r &&
+        sourcecolor[1] === this.settings.primarycolor.g &&
+        sourcecolor[2] === this.settings.primarycolor.b &&
+        sourcecolor[3] === this.settings.primarycolor.a) {
+        return;
+    }
+    if (sourcecolor[3] === 0 && this.settings.primarycolor.a === 0) return;
+
     while (stack.length > 0) {
         currentpoint = stack.pop();
         if (checkpoint(read(currentpoint))) {
