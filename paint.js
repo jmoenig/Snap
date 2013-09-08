@@ -49,6 +49,7 @@
     May 14 - bugfixes, Snap integration (Jens)
     May 16 - flat design adjustments (Jens)
     July 12 - pipette tool, code formatting adjustments (Jens)
+    September 8 - floodfill issues (Kartik)
 
  */
 
@@ -62,7 +63,7 @@
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.paint = '2013-July-13';
+modules.paint = '2013-September-8';
 
 // Declarations
 
