@@ -92,6 +92,114 @@ IDE_Morph.prototype.createCorral = function()
     scribbleButton.setLeft(this.stageBottomBar.left() + padding);
     this.stageBottomBar.add(scribbleButton);
 	
+	var sizeLabel;
+	sizeLabel = new TextMorph("radius (cells):");
+    sizeLabel.corner = 12;
+    sizeLabel.padding = 0;
+    sizeLabel.color = new Color(255, 255, 255);
+    sizeLabel.contrast = this.buttonContrast;
+    sizeLabel.setCenter(this.stageBottomBar.center());
+    sizeLabel.setLeft(scribbleButton.right() + padding);
+    sizeLabel.drawNew();
+    this.stageBottomBar.add(sizeLabel);
+	
+	var sizeField;
+	sizeField = new InputFieldMorph(this.stage.strokeSize.toString());
+    sizeField.corner = 12;
+    sizeField.padding = 0;
+    sizeField.contrast = this.buttonContrast;
+    sizeField.hint = "brush size (in cells)";
+	sizeField.contents().minWidth = 0;
+    sizeField.setCenter(this.stageBottomBar.center());
+    sizeField.setWidth(32); // fixed dimensions
+    sizeField.setLeft(sizeLabel.right() + padding);
+    sizeField.drawNew();
+    sizeField.accept = function () {
+		var value = Number(sizeField.getValue());
+		if (isNaN(value))
+		{
+			sizeField.setContents(1);
+			return;
+		}
+		if (value > 99)
+		{
+			sizeField.setContents(99);
+			return;
+		}
+		if (value < 0.5)
+		{
+			sizeField.setContents(0.5);
+			return;
+		}
+        myself.stage.strokeSize = value;
+    };
+    this.stageBottomBar.add(sizeField);
+	
+	var hardnessField;
+	/*hardnessField = new InputFieldMorph(this.stage.strokeHardness.toString());
+    hardnessField.corner = 12;
+    hardnessField.padding = 0;
+    hardnessField.contrast = this.buttonContrast;
+    hardnessField.hint = "brush hardness (0-1)";
+	hardnessField.contents().minWidth = 0;
+    hardnessField.setCenter(this.stageBottomBar.center());
+    hardnessField.setWidth(32); // fixed dimensions
+    hardnessField.setLeft(sizeField.right() + padding);
+    hardnessField.drawNew();
+    hardnessField.accept = function () {
+		var value = Number(hardnessField.getValue());
+		if (isNaN(value))
+		{
+			hardnessField.setContents(1);
+			return;
+		}
+		if (value > 1)
+		{
+			hardnessField.setContents(1);
+			return;
+		}
+		if (value < 0)
+		{
+			hardnessField.setContents(0);
+			return;
+		}
+        myself.stage.strokeHardness = value;
+    };
+    this.stageBottomBar.add(hardnessField);*/
+	
+	var valueLabel;
+	valueLabel = new TextMorph("value:");
+    valueLabel.corner = 12;
+    valueLabel.padding = 0;
+    valueLabel.color = new Color(255, 255, 255);
+    valueLabel.contrast = this.buttonContrast;
+    valueLabel.setCenter(this.stageBottomBar.center());
+    valueLabel.setLeft(sizeField.right() + padding);
+    valueLabel.drawNew();
+    this.stageBottomBar.add(valueLabel);
+	
+	var flowField;
+	flowField = new InputFieldMorph(this.stage.strokeFlow.toString());
+    flowField.corner = 12;
+    flowField.padding = 0;
+    flowField.contrast = this.buttonContrast;
+    flowField.hint = "brush flow";
+	flowField.contents().minWidth = 0;
+    flowField.setCenter(this.stageBottomBar.center());
+    flowField.setWidth(32); // fixed dimensions
+    flowField.setLeft(valueLabel.right() + padding);
+    flowField.drawNew();
+    flowField.accept = function () {
+		var value = Number(flowField.getValue());
+		if (isNaN(value))
+		{
+			flowField.setContents(10);
+			return;
+		}
+        myself.stage.strokeFlow = value;
+    };
+    this.stageBottomBar.add(flowField);
+	
 	var gridSizer = new InputFieldMorph(
             "40x30", false, // numeric?
             {
@@ -103,17 +211,28 @@ IDE_Morph.prototype.createCorral = function()
             true
         );
     gridSizer.corner = 12;
-    /*gridSizer.color = colors[0];
-    gridSizer.highlightColor = colors[1];
-    gridSizer.pressColor = colors[2];*/
     gridSizer.padding = 0;
     gridSizer.contrast = this.buttonContrast;
     gridSizer.hint = "grid size";
+    gridSizer.setCenter(this.stageBottomBar.center());
+    gridSizer.setLeft(flowField.right() + padding);
+	gridSizer.contents().minWidth = 0;
+	gridSizer.bounds.setTo(gridSizer.bounds.left(), gridSizer.bounds.top(), (gridSizer.left() + 54), gridSizer.bounds.bottom());
     gridSizer.drawNew();
     gridSizer.fixLayout();
-    gridSizer.setCenter(this.stageBottomBar.center());
-    gridSizer.setLeft(scribbleButton.right() + padding);
     this.stageBottomBar.add(gridSizer);
+	
+	var attributeSelector = new InputFieldMorph("", false, { }, true );
+    attributeSelector.corner = 12;
+    attributeSelector.padding = 0;
+    attributeSelector.contrast = this.buttonContrast;
+    attributeSelector.hint = "grid size";
+    attributeSelector.setCenter(this.stageBottomBar.center());
+    attributeSelector.setLeft(gridSizer.right() + padding);
+    attributeSelector.drawNew();
+    attributeSelector.fixLayout();
+    this.stageBottomBar.add(attributeSelector);
+	
 	this.stageBottomBar.reactToChoice = function(choice)
 	{
 		var choiceInt = 40;
@@ -129,32 +248,9 @@ IDE_Morph.prototype.createCorral = function()
 		myself.stage.updateCells();
 	}
 	
-	var attributeSelector = new InputFieldMorph("", false, { }, true );
-    gridSizer.corner = 12;
-    /*gridSizer.color = colors[0];
-    gridSizer.highlightColor = colors[1];
-    gridSizer.pressColor = colors[2];*/
-    gridSizer.padding = 0;
-    gridSizer.contrast = this.buttonContrast;
-    gridSizer.hint = "grid size";
-    gridSizer.drawNew();
-    gridSizer.fixLayout();
-    gridSizer.setCenter(this.stageBottomBar.center());
-    gridSizer.setLeft(scribbleButton.right() + padding);
-    this.stageBottomBar.add(gridSizer);
-	this.stageBottomBar.reactToChoice = function(choice)
-	{
-		var choiceInt = 40;
-		switch (choice)
-		{
-			case "16x12": choiceInt = 16; break;
-			case "20x15": choiceInt = 20; break;
-			case "40x30": choiceInt = 40; break;
-			case "80x60": choiceInt = 80; break;
-		}
-		myself.stage.cellsX = choiceInt;
-		myself.stage.cellsY = choiceInt * 3 / 4;
-		myself.stage.updateCells();
+    this.stageBottomBar.reactToEdit = function () {
+		sizeField.accept();
+		flowField.accept();
 	}
 };
 

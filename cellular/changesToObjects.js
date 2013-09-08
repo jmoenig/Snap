@@ -79,8 +79,23 @@ SpriteMorph.prototype.snapappsHookBlockTemplates = function(blocks, block, cat, 
 		if (Cell.attributes.length > 0) {
 			for (var i=0; i<Cell.attributes.length; i++)
 			{
-				var txt = new TextMorph('' + Cell.attributes[i]);
+				var cellAttribute = Cell.attributes[i];
+				var toggle = new ToggleMorph(
+					'checkbox',
+					this,
+					function () {
+						myself.parentThatIsA(IDE_Morph).stage.toggleCellAttributeVisibility(cellAttribute);
+					},
+					null,
+					function () {
+						return myself.parentThatIsA(IDE_Morph).stage.getCellAttributeVisibility(cellAttribute);
+					},
+					null
+				);
+				blocks.push(toggle);
+				var txt = new TextMorph(cellAttribute);
 				txt.fontSize = 12;
+				txt.setLeft(toggle.right());
 				txt.setColor(this.paletteTextColor);
 				blocks.push(txt);
 			}
@@ -233,6 +248,9 @@ StageMorph.prototype.init = function (globals) {
 	this.cellsY = 30;
 	this.drawGrid = true;
 	this.cells = [];
+	this.strokeSize = 2;
+	this.strokeHardness = 0.5;
+	this.strokeFlow = 10;
 	this.updateCells();
 }
 
@@ -342,7 +360,7 @@ StageMorph.prototype.drawOn = function (aCanvas, aRect) {
 						{
 							ctx.beginPath();
 							ctx.rect(x*cellWidth + this.bounds.left() + 1, y*cellHeight + this.bounds.top() + 1, cellWidth - 1, cellHeight - 1);
-							ctx.fillStyle = 'rgba(255,0,0,' + value / 255 + ')';
+							ctx.fillStyle = 'rgba(255,0,0,' + (value / 255).toFixed(4) + ')';
 							ctx.fill();
 						}
 					}
@@ -372,21 +390,6 @@ StageMorph.prototype.drawOn = function (aCanvas, aRect) {
 };
 
 //This is the cell attribute draw tool
-
-/*
-** This creates a canvas that is used when the user draws with the mouse.
-** It is of the same width and height as the cell array, and is created so that
-** we can use its line drawing functionality
-*/
-StageMorph.prototype.ensureTempDrawCanvas = function ()
-{
-    if (this.tempDrawCanvas == undefined || this.tempDrawCanvas == null)
-        this.tempDrawCanvas = document.createElement('canvas');
-    this.tempDrawCanvas.width = this.cellsX;
-    this.tempDrawCanvas.height = this.cellsY;
-    this.tempDrawCanvas.getContext('2d').clearRect(0,0,this.cellsX,this.cellsY);
-}
-
 StageMorph.prototype.drawTool = false;
 StageMorph.prototype.mouseClickLeft = function()
 {
@@ -396,11 +399,32 @@ StageMorph.prototype.mouseDownLeft = function()
 {
     if (this.drawTool)
     {
-        this.ensureTempDrawCanvas();
         var worldhand = this.world().hand;
         this.previousPoint = new Point(worldhand.bounds.origin.x, worldhand.bounds.origin.y);
     }
 }
+
+/*
+** Many thanks to Grumdrig (http://stackoverflow.com/users/167531/grumdrig) from StackOverflow.com for this snippet
+** http://stackoverflow.com/questions/849211/shortest-distance-between-a-point-and-a-line-segment
+**
+** BEGIN SNIPPET
+*/
+function sqr(x) { return x * x }
+function dist2(v, w) { return sqr(v.x - w.x) + sqr(v.y - w.y) }
+function distToSegmentSquared(p, v, w) {
+  var l2 = dist2(v, w);
+  if (l2 == 0) return dist2(p, v);
+  var t = ((p.x - v.x) * (w.x - v.x) + (p.y - v.y) * (w.y - v.y)) / l2;
+  if (t < 0) return dist2(p, v);
+  if (t > 1) return dist2(p, w);
+  return dist2(p, { x: v.x + t * (w.x - v.x),
+                    y: v.y + t * (w.y - v.y) });
+}
+function distToSegment(p, v, w) { return Math.sqrt(distToSegmentSquared(p, v, w)); }
+/*
+** END SNIPPET
+*/
 
 /*
  * Override for the default implementation of StageMorph.mouseDownLeft
@@ -411,36 +435,71 @@ StageMorph.prototype.mouseMove = function(point)
 {
     if (this.drawTool && this.world().hand.mouseButton === "left")
     {
-        this.ensureTempDrawCanvas();
-        var ctx = this.tempDrawCanvas.getContext('2d');
-        
         var previous = this.getCellPositionAt(this.previousPoint);
         var next = this.getCellPositionAt(point);
         if (previous != null && next != null)
         {
-            ctx.beginPath();
-            ctx.moveTo(next.x, next.y);
-            ctx.lineTo(next.x+5, next.y);
-            ctx.lineTo(next.x+5, next.y+5);
-            ctx.lineTo(next.x, next.y+5);
-            ctx.closePath();
-            ctx.fillStyle = "rgba(0,0,0,1)";
-            ctx.fill();
-            
-            var imgData = ctx.getImageData(0,0,this.cellsX,this.cellsY);
-            for (var y=0; y<this.cellsY; y++)
+			var strokeDecayWidth = Math.max(0, this.strokeSize);
+			var strokeFullWidth = strokeDecayWidth * Math.max(0, Math.min(1, this.strokeHardness));
+			
+			if (strokeDecayWidth < strokeFullWidth)
+				strokeFullWidth = strokeDecayWidth;
+			
+			var strokeGrad = 1 / (strokeFullWidth - strokeDecayWidth);
+			var strokeXIntercept = strokeDecayWidth;
+			
+			var minX, minY, maxX, maxY;
+			
+			if (previous.x < next.x) {
+				minX = previous.x - strokeDecayWidth;
+				maxX = next.x + strokeDecayWidth;
+			} else {
+				minX = next.x - strokeDecayWidth;
+				maxX = previous.x + strokeDecayWidth;
+			}
+			
+			if (previous.y < next.y) {
+				minY = previous.y - strokeDecayWidth;
+				maxY = next.y + strokeDecayWidth;
+			} else {
+				minY = next.y - strokeDecayWidth;
+				maxY = previous.y + strokeDecayWidth;
+			}
+			
+			minX = Math.floor(minX);
+			minY = Math.floor(minY);
+			maxX = Math.ceil(maxX);
+			maxY = Math.ceil(maxY);
+			
+			minX  = Math.max(0, Math.min(this.cellsX-1, minX));
+			minY = Math.max(0, Math.min(this.cellsY-1, minY));
+			maxX = Math.max(0, Math.min(this.cellsX-1, maxX));
+			maxY = Math.max(0, Math.min(this.cellsY-1, maxY));
+			
+            for (var y=minY; y<=maxY; y++)
             {
-                for (var x=0; x<this.cellsX; x++)
+                for (var x=minX; x<=maxX; x++)
                 {
                     var cell = this.cells[y][x];
-                    var alpha = imgData[(y * this.cellsX + x) * 4 + 3];
-                    if (alpha > 0)
-                    {
-                        alert("alpha actually > 0");
-                    }
-		            if (cell != null)
+					var lineWidth = previous.x - next.x;
+					var lineHeight = previous.y - next.y;
+					var distanceToLine = distToSegment({x: x + 0.5, y: y + 0.5}, previous, next); 
+					var alpha;
+					if (this.strokeHardness == 1)
+					{
+						if (distanceToLine < strokeFullWidth)
+							alpha = 1;
+						else
+							alpha = 0;
+					}
+					else
+					{
+						alpha = Math.min(1, (distanceToLine - strokeXIntercept) * strokeGrad);
+					}
+		            if (alpha > 0 && cell != null)
 		            {
-			            cell.setAttribute(Cell.attributes[0], cell.getAttribute(Cell.attributes[0]) + alpha);
+						var newValue = cell.getAttribute(Cell.attributes[0]) * (1 - alpha) + this.strokeFlow * alpha;
+						cell.setAttribute(Cell.attributes[0], newValue);
 		            }
                 }
             }
