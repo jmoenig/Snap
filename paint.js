@@ -52,7 +52,6 @@
     September 8 - floodfill issues (Kartik)
 
     */
-
 /*global Point, Rectangle, DialogBoxMorph, fontHeight, AlignmentMorph,
  FrameMorph, PushButtonMorph, Color, SymbolMorph, newCanvas, Morph, TextMorph,
  CostumeIconMorph, IDE_Morph, Costume, SpriteMorph, nop, Image, WardrobeMorph,
@@ -60,9 +59,7 @@
  ToggleMorph, ToggleButtonMorph, BoxMorph, modules, radians,
  MorphicPreferences, getDocumentPositionOf
  */
-
 // Global stuff ////////////////////////////////////////////////////////
-
 modules.paint = '2013-September-8';
 
 // Declarations
@@ -104,7 +101,9 @@ PaintEditorMorph.prototype.init = function () {
 PaintEditorMorph.prototype.buildContents = function () {
     var myself = this;
 
-    this.paper = new PaintCanvasMorph(function () {return myself.shift; });
+    this.paper = new PaintCanvasMorph(function () {
+        return myself.shift;
+    });
     this.paper.setExtent(new Point(480, 360));
 
     this.addBody(new AlignmentMorph('row', this.padding));
@@ -150,42 +149,32 @@ PaintEditorMorph.prototype.buildContents = function () {
 
 PaintEditorMorph.prototype.buildToolbox = function () {
     var tools = {
-        brush:
-        "Paintbrush tool\n(free draw)",
-        rectangle:
-        "Stroked Rectangle\n(shift: square)",
-        circle:
-        "Stroked Ellipse\n(shift: circle)",
-        eraser:
-        "Eraser tool",
-        crosshairs:
-        "Set the rotation center",
+        brush: "Paintbrush tool\n(free draw)",
+        rectangle: "Stroked Rectangle\n(shift: square)",
+        circle: "Stroked Ellipse\n(shift: circle)",
+        eraser: "Eraser tool",
+        crosshairs: "Set the rotation center",
 
-        line:
-        "Line tool\n(shift: vertical/horizontal)",
-        rectangleSolid:
-        "Filled Rectangle\n(shift: square)",
-        circleSolid:
-        "Filled Ellipse\n(shift: circle)",
-        paintbucket:
-        "Fill a region",
-        pipette:
-        "Pipette tool\n(pick a color anywhere)"
+        line: "Line tool\n(shift: vertical/horizontal)",
+        rectangleSolid: "Filled Rectangle\n(shift: square)",
+        circleSolid: "Filled Ellipse\n(shift: circle)",
+        paintbucket: "Fill a region",
+        pipette: "Pipette tool\n(pick a color anywhere)"
     },
-    myself = this,
-    left = this.toolbox.left(),
-    top = this.toolbox.top(),
-    padding = 2,
-    inset = 5,
-    x = 0,
-    y = 0;
+        myself = this,
+        left = this.toolbox.left(),
+        top = this.toolbox.top(),
+        padding = 2,
+        inset = 5,
+        x = 0,
+        y = 0;
 
     Object.keys(tools).forEach(function (tool) {
         var btn = myself.toolButton(tool, tools[tool]);
         btn.setPosition(new Point(
             left + x,
             top + y
-            ));
+        ));
         x += btn.width() + padding;
         if (tool === "crosshairs") {
             x = 0;
@@ -205,13 +194,17 @@ PaintEditorMorph.prototype.buildEdits = function () {
 
     this.edits.add(this.pushButton(
         "undo",
-        function () {paper.undo(); }
-        ));
+        function () {
+            paper.undo();
+        }
+    ));
 
     this.edits.add(this.pushButton(
         "clear",
-        function () {paper.clearCanvas(); }
-        ));
+        function () {
+            paper.clearCanvas();
+        }
+    ));
     this.edits.fixLayout();
 };
 
@@ -235,12 +228,11 @@ PaintEditorMorph.prototype.openIn = function (world, oldim, oldrc, callback) {
     if (this.oldim) {
         this.paper.centermerge(this.oldim, this.paper.paper);
         this.paper.rotationCenter =
-        this.oldrc.add(
-            new Point(
-                (this.paper.paper.width - this.oldim.width) / 2,
-                (this.paper.paper.height - this.oldim.height) / 2
+            this.oldrc.add(
+                new Point(
+                    (this.paper.paper.width - this.oldim.width) / 2, (this.paper.paper.height - this.oldim.height) / 2
                 )
-            );
+        );
         this.paper.drawNew();
     }
 
@@ -259,8 +251,12 @@ PaintEditorMorph.prototype.fixLayout = function () {
         this.paper.buildContents();
         this.paper.drawNew();
     }
-    if (this.controls) {this.controls.fixLayout(); }
-    if (this.body) {this.body.fixLayout(); }
+    if (this.controls) {
+        this.controls.fixLayout();
+    }
+    if (this.body) {
+        this.body.fixLayout();
+    }
     PaintEditorMorph.uber.fixLayout.call(this);
 
     Morph.prototype.trackChanges = oldFlag;
@@ -277,20 +273,22 @@ PaintEditorMorph.prototype.ok = function () {
     this.callback(
         this.paper.paper,
         this.paper.rotationCenter
-        );
+    );
     this.destroy();
 };
 
 PaintEditorMorph.prototype.cancel = function () {
-    if (this.oncancel) {this.oncancel(); }
+    if (this.oncancel) {
+        this.oncancel();
+    }
     this.destroy();
 };
 
 PaintEditorMorph.prototype.populatePropertiesMenu = function () {
     var c = this.controls,
-    myself = this,
-    pc = this.propertiesControls,
-    alpen = new AlignmentMorph("row", this.padding);
+        myself = this,
+        pc = this.propertiesControls,
+        alpen = new AlignmentMorph("row", this.padding);
 
     pc.primaryColorViewer = new Morph();
     pc.primaryColorViewer.setExtent(new Point(180, 50));
@@ -299,17 +297,17 @@ PaintEditorMorph.prototype.populatePropertiesMenu = function () {
         new Point(180, 100),
         function (color) {
             var ni = newCanvas(pc.primaryColorViewer.extent()),
-            ctx = ni.getContext("2d"),
-            i,
-            j;
+                ctx = ni.getContext("2d"),
+                i,
+                j;
             myself.paper.settings.primarycolor = color;
             if (color === "transparent") {
                 for (i = 0; i < 180; i += 5) {
                     for (j = 0; j < 15; j += 5) {
                         ctx.fillStyle =
-                        ((j + i) / 5) % 2 === 0 ?
-                        "rgba(0, 0, 0, 0.2)" :
-                        "rgba(0, 0, 0, 0.5)";
+                            ((j + i) / 5) % 2 === 0 ?
+                            "rgba(0, 0, 0, 0.2)" :
+                            "rgba(0, 0, 0, 0.5)";
                         ctx.fillRect(i, j, 5, 5);
 
                     }
@@ -328,46 +326,50 @@ PaintEditorMorph.prototype.populatePropertiesMenu = function () {
             pc.primaryColorViewer.image = ni;
             pc.primaryColorViewer.changed();
         }
-        );
-pc.colorpicker.action(new Color(0, 0, 0));
-
-pc.penSizeSlider = new SliderMorph(0, 20, 5, 5);
-pc.penSizeSlider.orientation = "horizontal";
-pc.penSizeSlider.setHeight(15);
-pc.penSizeSlider.setWidth(150);
-pc.penSizeSlider.action = function (num) {
-    if (pc.penSizeField) {
-        pc.penSizeField.setContents(num);
-    }
-    myself.paper.settings.linewidth = num;
-    pc.colorpicker.action(myself.paper.settings.primarycolor);
-};
-pc.penSizeField = new InputFieldMorph("5", true, null, false);
-pc.penSizeField.contents().minWidth = 20;
-pc.penSizeField.setWidth(25);
-pc.penSizeField.accept = function () {
-    var val = parseFloat(pc.penSizeField.getValue());
-    pc.penSizeSlider.value = val;
-    pc.penSizeSlider.drawNew();
-    pc.penSizeSlider.updateValue();
-    this.setContents(val);
-    myself.paper.settings.linewidth = val;
-    this.world().keyboardReceiver = myself;
-    pc.colorpicker.action(myself.paper.settings.primarycolor);
-};
-alpen.add(pc.penSizeSlider);
-alpen.add(pc.penSizeField);
-alpen.color = myself.color;
-alpen.fixLayout();
-pc.penSizeField.drawNew();
-pc.constrain = new ToggleMorph(
-    "checkbox",
-    this,
-    function () {myself.shift = !myself.shift; },
-    "Constrain proportions of shapes?\n(you can also hold shift)",
-    function () {return myself.shift; }
     );
-c.add(pc.colorpicker);
+    pc.colorpicker.action(new Color(0, 0, 0));
+
+    pc.penSizeSlider = new SliderMorph(0, 20, 5, 5);
+    pc.penSizeSlider.orientation = "horizontal";
+    pc.penSizeSlider.setHeight(15);
+    pc.penSizeSlider.setWidth(150);
+    pc.penSizeSlider.action = function (num) {
+        if (pc.penSizeField) {
+            pc.penSizeField.setContents(num);
+        }
+        myself.paper.settings.linewidth = num;
+        pc.colorpicker.action(myself.paper.settings.primarycolor);
+    };
+    pc.penSizeField = new InputFieldMorph("5", true, null, false);
+    pc.penSizeField.contents().minWidth = 20;
+    pc.penSizeField.setWidth(25);
+    pc.penSizeField.accept = function () {
+        var val = parseFloat(pc.penSizeField.getValue());
+        pc.penSizeSlider.value = val;
+        pc.penSizeSlider.drawNew();
+        pc.penSizeSlider.updateValue();
+        this.setContents(val);
+        myself.paper.settings.linewidth = val;
+        this.world().keyboardReceiver = myself;
+        pc.colorpicker.action(myself.paper.settings.primarycolor);
+    };
+    alpen.add(pc.penSizeSlider);
+    alpen.add(pc.penSizeField);
+    alpen.color = myself.color;
+    alpen.fixLayout();
+    pc.penSizeField.drawNew();
+    pc.constrain = new ToggleMorph(
+        "checkbox",
+        this,
+        function () {
+            myself.shift = !myself.shift;
+        },
+        "Constrain proportions of shapes?\n(you can also hold shift)",
+        function () {
+            return myself.shift;
+        }
+    );
+    c.add(pc.colorpicker);
     //c.add(pc.primaryColorButton);
     c.add(pc.primaryColorViewer);
     c.add(new TextMorph("Brush size"));
@@ -390,8 +392,10 @@ PaintEditorMorph.prototype.toolButton = function (icon, hint) {
             }
         },
         new SymbolMorph(icon, 18),
-        function () {return myself.paper.currentTool === icon; }
-        );
+        function () {
+            return myself.paper.currentTool === icon;
+        }
+    );
 
     button.hint = hint;
     button.drawNew();
@@ -406,24 +410,24 @@ PaintEditorMorph.prototype.pushButton = function (title, action, hint) {
         title,
         null,
         hint
-        );
+    );
 };
 
 PaintEditorMorph.prototype.getUserColor = function () {
     var myself = this,
-    world = this.world(),
-    hand = world.hand,
-    posInDocument = getDocumentPositionOf(world.worldCanvas),
-    mouseMoveBak = hand.processMouseMove,
-    mouseDownBak = hand.processMouseDown,
-    mouseUpBak = hand.processMouseUp;
+        world = this.world(),
+        hand = world.hand,
+        posInDocument = getDocumentPositionOf(world.worldCanvas),
+        mouseMoveBak = hand.processMouseMove,
+        mouseDownBak = hand.processMouseDown,
+        mouseUpBak = hand.processMouseUp;
 
     hand.processMouseMove = function (event) {
         var color;
         hand.setPosition(new Point(
             event.pageX - posInDocument.x,
             event.pageY - posInDocument.y
-            ));
+        ));
         color = world.getGlobalPixelColor(hand.position());
         color.a = 255;
         myself.propertiesControls.colorpicker.action(color);
@@ -461,11 +465,11 @@ PaintColorPickerMorph.prototype.init = function (extent, action) {
 
 PaintColorPickerMorph.prototype.drawNew = function () {
     var x = 0,
-    y = 0,
-    can = newCanvas(this.extent()),
-    ctx = can.getContext("2d"),
-    colorselection,
-    r;
+        y = 0,
+        can = newCanvas(this.extent()),
+        ctx = can.getContext("2d"),
+        colorselection,
+        r;
     for (x = 0; x < this.width(); x += 1) {
         for (y = 0; y < this.height() - 20; y += 1) {
             ctx.fillStyle = "hsl(" +
@@ -474,46 +478,46 @@ PaintColorPickerMorph.prototype.drawNew = function () {
                 "100%," +
                 (y * 100 / (this.height() - 20)) +
                 "%)";
-ctx.fillRect(x, y, 1, 1);
-}
-}
-for (x = 0; x < this.width(); x += 1) {
-    r = Math.floor(255 * x / this.width());
-    ctx.fillStyle = "rgb(" + r + ", " + r + ", " + r + ")";
-    ctx.fillRect(x, this.height() - 20, 1, 10);
-}
-colorselection = ["black", "white", "gray"];
-for (x = 0; x < colorselection.length; x += 1) {
-    ctx.fillStyle = colorselection[x];
-    ctx.fillRect(
-        x * this.width() / colorselection.length,
-        this.height() - 10,
-        this.width() / colorselection.length,
-        10
-        );
-}
-for (x = this.width() * 2 / 3; x < this.width(); x += 2) {
-    for (y = this.height() - 10; y < this.height(); y += 2) {
-        if ((x + y) / 2 % 2 === 0) {
-            ctx.fillStyle = "#DDD";
-            ctx.fillRect(x, y, 2, 2);
+            ctx.fillRect(x, y, 1, 1);
         }
     }
-}
-this.image = can;
+    for (x = 0; x < this.width(); x += 1) {
+        r = Math.floor(255 * x / this.width());
+        ctx.fillStyle = "rgb(" + r + ", " + r + ", " + r + ")";
+        ctx.fillRect(x, this.height() - 20, 1, 10);
+    }
+    colorselection = ["black", "white", "gray"];
+    for (x = 0; x < colorselection.length; x += 1) {
+        ctx.fillStyle = colorselection[x];
+        ctx.fillRect(
+            x * this.width() / colorselection.length,
+            this.height() - 10,
+            this.width() / colorselection.length,
+            10
+        );
+    }
+    for (x = this.width() * 2 / 3; x < this.width(); x += 2) {
+        for (y = this.height() - 10; y < this.height(); y += 2) {
+            if ((x + y) / 2 % 2 === 0) {
+                ctx.fillStyle = "#DDD";
+                ctx.fillRect(x, y, 2, 2);
+            }
+        }
+    }
+    this.image = can;
 };
 
 PaintColorPickerMorph.prototype.mouseDownLeft = function (pos) {
     if ((pos.subtract(this.position()).x > this.width() * 2 / 3) &&
         (pos.subtract(this.position()).y > this.height() - 10)) {
         this.action("transparent");
-} else {
-    this.action(this.getPixelColor(pos));
-}
+    } else {
+        this.action(this.getPixelColor(pos));
+    }
 };
 
 PaintColorPickerMorph.prototype.mouseMove =
-PaintColorPickerMorph.prototype.mouseDownLeft;
+    PaintColorPickerMorph.prototype.mouseDownLeft;
 
 // PaintCanvasMorph ///////////////////////////
 /*
@@ -521,20 +525,20 @@ PaintColorPickerMorph.prototype.mouseDownLeft;
     modify its image, based on a 'tool' property.
     */
 
-    PaintCanvasMorph.prototype = new Morph();
-    PaintCanvasMorph.prototype.constructor = PaintCanvasMorph;
-    PaintCanvasMorph.uber = Morph.prototype;
+PaintCanvasMorph.prototype = new Morph();
+PaintCanvasMorph.prototype.constructor = PaintCanvasMorph;
+PaintCanvasMorph.uber = Morph.prototype;
 
-    function PaintCanvasMorph(shift) {
-        this.init(shift);
-    }
+function PaintCanvasMorph(shift) {
+    this.init(shift);
+}
 
-    PaintCanvasMorph.prototype.init = function (shift) {
-        this.rotationCenter = new Point(240, 180);
-        this.dragRect = null;
-        this.previousDragPoint = null;
-        this.currentTool = "brush";
-        this.dragRect = new Rectangle();
+PaintCanvasMorph.prototype.init = function (shift) {
+    this.rotationCenter = new Point(240, 180);
+    this.dragRect = null;
+    this.previousDragPoint = null;
+    this.currentTool = "brush";
+    this.dragRect = new Rectangle();
     // rectangle with origin being the starting drag position and
     // corner being the current drag position
     this.mask = newCanvas(this.extent()); // Temporary canvas
@@ -577,10 +581,8 @@ PaintCanvasMorph.prototype.merge = function (a, b) {
 
 PaintCanvasMorph.prototype.centermerge = function (a, b) {
     b.getContext("2d").drawImage(
-        a,
-        (b.width - a.width) / 2,
-        (b.height - a.height) / 2
-        );
+        a, (b.width - a.width) / 2, (b.height - a.height) / 2
+    );
 };
 
 PaintCanvasMorph.prototype.clearCanvas = function () {
@@ -600,7 +602,7 @@ PaintCanvasMorph.prototype.toolChanged = function (tool) {
 
 PaintCanvasMorph.prototype.drawcrosshair = function (context) {
     var ctx = context || this.mask.getContext("2d"),
-    rp = this.rotationCenter;
+        rp = this.rotationCenter;
 
     ctx.lineWidth = 1;
     ctx.strokeStyle = 'black';
@@ -619,7 +621,7 @@ PaintCanvasMorph.prototype.drawcrosshair = function (context) {
         radians(0),
         radians(360),
         false
-        );
+    );
     ctx.closePath();
     ctx.fill();
     ctx.stroke();
@@ -632,7 +634,7 @@ PaintCanvasMorph.prototype.drawcrosshair = function (context) {
         radians(0),
         radians(360),
         false
-        );
+    );
     ctx.stroke();
 
     // horizontal line:
@@ -653,15 +655,15 @@ PaintCanvasMorph.prototype.drawcrosshair = function (context) {
 
 PaintCanvasMorph.prototype.floodfill = function (sourcepoint) {
     var width = this.paper.width,
-    height = this.paper.height,
-    ctx = this.paper.getContext("2d"),
-    img = ctx.getImageData(0, 0, width, height),
-    data = img.data,
-    stack = [Math.round(sourcepoint.y) * width + sourcepoint.x],
-    currentpoint,
-    read,
-    sourcecolor,
-    checkpoint;
+        height = this.paper.height,
+        ctx = this.paper.getContext("2d"),
+        img = ctx.getImageData(0, 0, width, height),
+        data = img.data,
+        stack = [Math.round(sourcepoint.y) * width + sourcepoint.x],
+        currentpoint,
+        read,
+        sourcecolor,
+        checkpoint;
 
     read = function (p) {
         var d = p * 4;
@@ -672,43 +674,47 @@ PaintCanvasMorph.prototype.floodfill = function (sourcepoint) {
 
     checkpoint = function (p) {
         return p[0] === sourcecolor[0] &&
-        p[1] === sourcecolor[1] &&
-        p[2] === sourcecolor[2] &&
-        p[3] === sourcecolor[3];
+            p[1] === sourcecolor[1] &&
+            p[2] === sourcecolor[2] &&
+            p[3] === sourcecolor[3];
     };
-    if (sourcecolor[3] === 0 && this.settings.primarycolor === "transparent") {return; }
+    if (sourcecolor[3] === 0 && this.settings.primarycolor === "transparent") {
+        return;
+    }
     if (sourcecolor[0] === this.settings.primarycolor.r &&
         sourcecolor[1] === this.settings.primarycolor.g &&
         sourcecolor[2] === this.settings.primarycolor.b &&
         sourcecolor[3] === this.settings.primarycolor.a) {
         return;
-}
-if (sourcecolor[3] === 0 && this.settings.primarycolor.a === 0) {return; }
+    }
+    if (sourcecolor[3] === 0 && this.settings.primarycolor.a === 0) {
+        return;
+    }
 
-while (stack.length > 0) {
-    currentpoint = stack.pop();
-    if (checkpoint(read(currentpoint))) {
-        if (currentpoint % 480 > 1) {
-            stack.push(currentpoint + 1);
-            stack.push(currentpoint - 1);
+    while (stack.length > 0) {
+        currentpoint = stack.pop();
+        if (checkpoint(read(currentpoint))) {
+            if (currentpoint % 480 > 1) {
+                stack.push(currentpoint + 1);
+                stack.push(currentpoint - 1);
+            }
+            if (currentpoint > 0 && currentpoint < 360 * 480) {
+                stack.push(currentpoint + width);
+                stack.push(currentpoint - width);
+            }
         }
-        if (currentpoint > 0 && currentpoint < 360 * 480) {
-            stack.push(currentpoint + width);
-            stack.push(currentpoint - width);
+        if (this.settings.primarycolor === "transparent") {
+            data[currentpoint * 4 + 3] = 0;
+        } else {
+            data[currentpoint * 4] = this.settings.primarycolor.r;
+            data[currentpoint * 4 + 1] = this.settings.primarycolor.g;
+            data[currentpoint * 4 + 2] = this.settings.primarycolor.b;
+            data[currentpoint * 4 + 3] = this.settings.primarycolor.a;
         }
     }
-    if (this.settings.primarycolor === "transparent") {
-        data[currentpoint * 4 + 3] = 0;
-    } else {
-        data[currentpoint * 4] = this.settings.primarycolor.r;
-        data[currentpoint * 4 + 1] = this.settings.primarycolor.g;
-        data[currentpoint * 4 + 2] = this.settings.primarycolor.b;
-        data[currentpoint * 4 + 3] = this.settings.primarycolor.a;
-    }
-}
-ctx.putImageData(img, 0, 0);
-this.drawNew();
-this.changed();
+    ctx.putImageData(img, 0, 0);
+    this.drawNew();
+    this.changed();
 };
 
 PaintCanvasMorph.prototype.mouseDownLeft = function (pos) {
@@ -727,8 +733,8 @@ PaintCanvasMorph.prototype.mouseDownLeft = function (pos) {
     if (this.settings.primarycolor === "transparent" &&
         this.currentTool !== "crosshairs") {
         this.erasermask = newCanvas(this.extent());
-    this.merge(this.paper, this.erasermask);
-}
+        this.merge(this.paper, this.erasermask);
+    }
 };
 
 PaintCanvasMorph.prototype.mouseMove = function (pos) {
@@ -737,24 +743,26 @@ PaintCanvasMorph.prototype.mouseMove = function (pos) {
     }
 
     var relpos = pos.subtract(this.bounds.origin),
-    mctx = this.mask.getContext("2d"),
-    pctx = this.paper.getContext("2d"),
+        mctx = this.mask.getContext("2d"),
+        pctx = this.paper.getContext("2d"),
         x = this.dragRect.origin.x, // original drag X
         y = this.dragRect.origin.y, // original drag y
-        p = relpos.x,               // current drag x
-        q = relpos.y,               // current drag y
-        w = (p - x) / 2,            // half the rect width
-        h = (q - y) / 2,            // half the rect height
-        i;                          // iterator number
-        mctx.save();
-        function newW() {
-            return Math.max(Math.abs(w), Math.abs(h)) * (w / Math.abs(w));
-        }
-        function newH() {
-            return Math.max(Math.abs(w), Math.abs(h)) * (h / Math.abs(h));
-        }
-        this.brushBuffer.push([p, q]);
-        mctx.lineWidth = this.settings.linewidth;
+        p = relpos.x, // current drag x
+        q = relpos.y, // current drag y
+        w = (p - x) / 2, // half the rect width
+        h = (q - y) / 2, // half the rect height
+        i; // iterator number
+    mctx.save();
+
+    function newW() {
+        return Math.max(Math.abs(w), Math.abs(h)) * (w / Math.abs(w));
+    }
+
+    function newH() {
+        return Math.max(Math.abs(w), Math.abs(h)) * (h / Math.abs(h));
+    }
+    this.brushBuffer.push([p, q]);
+    mctx.lineWidth = this.settings.linewidth;
     mctx.clearRect(0, 0, this.bounds.width(), this.bounds.height()); // mask
 
     this.dragRect.corner = relpos.subtract(this.dragRect.origin); // reset crn
@@ -762,117 +770,115 @@ PaintCanvasMorph.prototype.mouseMove = function (pos) {
     if (this.settings.primarycolor === "transparent" &&
         this.currentTool !== "crosshairs") {
         this.merge(this.erasermask, this.mask);
-    pctx.clearRect(0, 0, this.bounds.width(), this.bounds.height());
-    mctx.globalCompositeOperation = "destination-out";
-} else {
-    mctx.fillStyle = this.settings.primarycolor.toString();
-    mctx.strokeStyle = this.settings.primarycolor.toString();
-}
-switch (this.currentTool) {
+        pctx.clearRect(0, 0, this.bounds.width(), this.bounds.height());
+        mctx.globalCompositeOperation = "destination-out";
+    } else {
+        mctx.fillStyle = this.settings.primarycolor.toString();
+        mctx.strokeStyle = this.settings.primarycolor.toString();
+    }
+    switch (this.currentTool) {
     case "rectangle":
-    if (this.isShiftPressed()) {
-        mctx.strokeRect(x, y, newW() * 2, newH() * 2);
-    } else {
-        mctx.strokeRect(x, y, w * 2, h * 2);
-    }
-    break;
-    case "rectangleSolid":
-    if (this.isShiftPressed()) {
-        mctx.fillRect(x, y, newW() * 2, newH() * 2);
-    } else {
-        mctx.fillRect(x, y, w * 2, h * 2);
-    }
-    break;
-    case "brush":
-    mctx.lineCap = "round";
-    mctx.lineJoin = "round";
-    mctx.beginPath();
-    mctx.moveTo(this.brushBuffer[0][0], this.brushBuffer[0][1]);
-    for (i = 0; i < this.brushBuffer.length; i += 1) {
-        mctx.lineTo(this.brushBuffer[i][0], this.brushBuffer[i][1]);
-    }
-    mctx.stroke();
-    break;
-    case "line":
-    mctx.beginPath();
-    mctx.moveTo(x, y);
-    if (this.isShiftPressed()) {
-        if (Math.abs(h) > Math.abs(w)) {
-            mctx.lineTo(x, q);
+        if (this.isShiftPressed()) {
+            mctx.strokeRect(x, y, newW() * 2, newH() * 2);
         } else {
-            mctx.lineTo(p, y);
+            mctx.strokeRect(x, y, w * 2, h * 2);
         }
-    } else {
-        mctx.lineTo(p, q);
-    }
-    mctx.stroke();
-    break;
+        break;
+    case "rectangleSolid":
+        if (this.isShiftPressed()) {
+            mctx.fillRect(x, y, newW() * 2, newH() * 2);
+        } else {
+            mctx.fillRect(x, y, w * 2, h * 2);
+        }
+        break;
+    case "brush":
+        mctx.lineCap = "round";
+        mctx.lineJoin = "round";
+        mctx.beginPath();
+        mctx.moveTo(this.brushBuffer[0][0], this.brushBuffer[0][1]);
+        for (i = 0; i < this.brushBuffer.length; i += 1) {
+            mctx.lineTo(this.brushBuffer[i][0], this.brushBuffer[i][1]);
+        }
+        mctx.stroke();
+        break;
+    case "line":
+        mctx.beginPath();
+        mctx.moveTo(x, y);
+        if (this.isShiftPressed()) {
+            if (Math.abs(h) > Math.abs(w)) {
+                mctx.lineTo(x, q);
+            } else {
+                mctx.lineTo(p, y);
+            }
+        } else {
+            mctx.lineTo(p, q);
+        }
+        mctx.stroke();
+        break;
     case "circle":
     case "circleSolid":
-    mctx.beginPath();
-    if (this.isShiftPressed()) {
-        mctx.arc(
-            x,
-            y,
-            new Point(x, y).distanceTo(new Point(p, q)),
-            0,
-            Math.PI * 2,
-            false
+        mctx.beginPath();
+        if (this.isShiftPressed()) {
+            mctx.arc(
+                x,
+                y,
+                new Point(x, y).distanceTo(new Point(p, q)),
+                0,
+                Math.PI * 2,
+                false
             );
-    } else {
-        for (i = 0; i < 480; i += 1) {
-            mctx.lineTo(
-                i,
-                (2 * h) * Math.sqrt(2 - Math.pow(
-                    (i - x) / (2 * w),
-                    2
+        } else {
+            for (i = 0; i < 480; i += 1) {
+                mctx.lineTo(
+                    i, (2 * h) * Math.sqrt(2 - Math.pow(
+                        (i - x) / (2 * w),
+                        2
                     )) + y
                 );
-        }
-        for (i = 480; i > 0; i -= 1) {
-            mctx.lineTo(
-                i,
-                -1 * (2 * h) * Math.sqrt(2 - Math.pow(
-                    (i - x) / (2 * w),
-                    2
+            }
+            for (i = 480; i > 0; i -= 1) {
+                mctx.lineTo(
+                    i, -1 * (2 * h) * Math.sqrt(2 - Math.pow(
+                        (i - x) / (2 * w),
+                        2
                     )) + y
                 );
+            }
         }
-    }
-    mctx.closePath();
-    if (this.currentTool === "circleSolid") {
-        mctx.fill();
-    } else {
-        if (this.currentTool === "circle") {
-            mctx.stroke();
+        mctx.closePath();
+        if (this.currentTool === "circleSolid") {
+            mctx.fill();
+        } else {
+            if (this.currentTool === "circle") {
+                mctx.stroke();
+            }
         }
-    }
-    break;
+        break;
     case "crosshairs":
-    this.rotationCenter = relpos.copy();
-    this.drawcrosshair(mctx);
-    break;
+        this.rotationCenter = relpos.copy();
+        this.drawcrosshair(mctx);
+        break;
     case "eraser":
-    this.merge(this.paper, this.mask);
-    mctx.save();
-    mctx.globalCompositeOperation = "destination-out";
-    mctx.beginPath();
-    mctx.moveTo(this.brushBuffer[0][0], this.brushBuffer[0][1]);
-    for (i = 0; i < this.brushBuffer.length; i += 1) {
-        mctx.lineTo(this.brushBuffer[i][0], this.brushBuffer[i][1]);
-    }
-    mctx.stroke();
-    mctx.restore();
-    this.paper = newCanvas(this.extent());
-    this.merge(this.mask, this.paper);
-    break;
+        this.merge(this.paper, this.mask);
+        mctx.save();
+        mctx.globalCompositeOperation = "destination-out";
+        mctx.beginPath();
+        mctx.moveTo(this.brushBuffer[0][0], this.brushBuffer[0][1]);
+        for (i = 0; i < this.brushBuffer.length; i += 1) {
+            mctx.lineTo(this.brushBuffer[i][0], this.brushBuffer[i][1]);
+        }
+        mctx.stroke();
+        mctx.restore();
+        this.paper = newCanvas(this.extent());
+        this.merge(this.mask, this.paper);
+        break;
     default:
-    nop();
-}
-this.previousDragPoint = relpos;
-this.drawNew();
-this.changed();
-mctx.restore();
+        nop();
+    }
+    this.previousDragPoint = relpos;
+    this.drawNew();
+    this.changed();
+    mctx.restore();
 };
 
 PaintCanvasMorph.prototype.mouseClickLeft = function () {
@@ -924,22 +930,22 @@ PaintCanvasMorph.prototype.drawFrame = function () {
     // cache my border colors
     this.cachedClr = borderColor.toString();
     this.cachedClrBright = borderColor.lighter(this.contrast)
-    .toString();
+        .toString();
     this.cachedClrDark = borderColor.darker(this.contrast).toString();
     this.drawRectBorder(context);
 };
 
 PaintCanvasMorph.prototype.drawRectBorder
-= InputFieldMorph.prototype.drawRectBorder;
+    = InputFieldMorph.prototype.drawRectBorder;
 
 PaintCanvasMorph.prototype.edge
-= InputFieldMorph.prototype.edge;
+    = InputFieldMorph.prototype.edge;
 
 PaintCanvasMorph.prototype.fontSize
-= InputFieldMorph.prototype.fontSize;
+    = InputFieldMorph.prototype.fontSize;
 
 PaintCanvasMorph.prototype.typeInPadding
-= InputFieldMorph.prototype.typeInPadding;
+    = InputFieldMorph.prototype.typeInPadding;
 
 PaintCanvasMorph.prototype.contrast
-= InputFieldMorph.prototype.contrast;
+    = InputFieldMorph.prototype.contrast;
