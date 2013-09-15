@@ -178,27 +178,27 @@ IDE_Morph.prototype.createCorral = function()
     valueLabel.drawNew();
     this.stageBottomBar.add(valueLabel);
 	
-	var flowField;
-	flowField = new InputFieldMorph(this.stage.strokeFlow.toString());
-    flowField.corner = 12;
-    flowField.padding = 0;
-    flowField.contrast = this.buttonContrast;
-    flowField.hint = "brush flow";
-	flowField.contents().minWidth = 0;
-    flowField.setCenter(this.stageBottomBar.center());
-    flowField.setWidth(32); // fixed dimensions
-    flowField.setLeft(valueLabel.right() + padding);
-    flowField.drawNew();
-    flowField.accept = function () {
-		var value = Number(flowField.getValue());
+	var valueField;
+	valueField = new InputFieldMorph(this.stage.strokeValue.toString());
+    valueField.corner = 12;
+    valueField.padding = 0;
+    valueField.contrast = this.buttonContrast;
+    valueField.hint = "brush value";
+	valueField.contents().minWidth = 0;
+    valueField.setCenter(this.stageBottomBar.center());
+    valueField.setWidth(32); // fixed dimensions
+    valueField.setLeft(valueLabel.right() + padding);
+    valueField.drawNew();
+    valueField.accept = function () {
+		var value = Number(valueField.getValue());
 		if (isNaN(value))
 		{
-			flowField.setContents(10);
+			valueField.setContents(10);
 			return;
 		}
-        myself.stage.strokeFlow = value;
+        myself.stage.strokeValue = value;
     };
-    this.stageBottomBar.add(flowField);
+    this.stageBottomBar.add(valueField);
 	
 	var gridSizer = new InputFieldMorph(
             "40x30", false, // numeric?
@@ -215,14 +215,21 @@ IDE_Morph.prototype.createCorral = function()
     gridSizer.contrast = this.buttonContrast;
     gridSizer.hint = "grid size";
     gridSizer.setCenter(this.stageBottomBar.center());
-    gridSizer.setLeft(flowField.right() + padding);
+    gridSizer.setLeft(valueField.right() + padding);
 	gridSizer.contents().minWidth = 0;
 	gridSizer.bounds.setTo(gridSizer.bounds.left(), gridSizer.bounds.top(), (gridSizer.left() + 54), gridSizer.bounds.bottom());
     gridSizer.drawNew();
     gridSizer.fixLayout();
     this.stageBottomBar.add(gridSizer);
 	
-	var attributeSelector = new InputFieldMorph("", false, { }, true );
+	var attributeSelector = new InputFieldMorph("", false, function() { 
+		var retn = {};
+		for (var i=0; i<Cell.attributes.length; i++)
+		{
+			retn[Cell.attributes[i]] = Cell.attributes[i];
+		}
+		return retn;
+	}, true );
     attributeSelector.corner = 12;
     attributeSelector.padding = 0;
     attributeSelector.contrast = this.buttonContrast;
@@ -231,28 +238,45 @@ IDE_Morph.prototype.createCorral = function()
     attributeSelector.setLeft(gridSizer.right() + padding);
     attributeSelector.drawNew();
     attributeSelector.fixLayout();
+	this.attributeSelector = attributeSelector;
     this.stageBottomBar.add(attributeSelector);
 	
 	this.stageBottomBar.reactToChoice = function(choice)
 	{
+		var gridSizeChoice = gridSizer.getValue();
 		var choiceInt = 40;
-		switch (choice)
+		switch (gridSizeChoice)
 		{
 			case "16x12": choiceInt = 16; break;
 			case "20x15": choiceInt = 20; break;
 			case "40x30": choiceInt = 40; break;
 			case "80x60": choiceInt = 80; break;
 		}
-		myself.stage.cellsX = choiceInt;
-		myself.stage.cellsY = choiceInt * 3 / 4;
-		myself.stage.updateCells();
+		if (myself.stage.cellsX != choiceInt || myself.stage.cellsY != choiceInt * 3 / 4)
+		{
+			myself.stage.cellsX = choiceInt;
+			myself.stage.cellsY = choiceInt * 3 / 4;
+			myself.stage.updateCells();
+		}
 	}
 	
     this.stageBottomBar.reactToEdit = function () {
 		sizeField.accept();
-		flowField.accept();
+		valueField.accept();
 	}
 };
+
+/*********************************************************************/
+/************************** IMPLEMENTATION ***************************/
+/*********************************************************************/
+
+IDE_Morph.prototype.refreshCellAttributes = function()
+{
+	if (!Cell.hasAttribute(this.attributeSelector.getValue()))
+	{
+		this.attributeSelector.setChoice(null);
+	}
+}
 
 /*********************************************************************/
 /*************************** BUTTON LOGIC ****************************/

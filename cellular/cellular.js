@@ -24,3 +24,32 @@ Cell.prototype.setAttribute = function(attribute, value, dirty)
 }
 
 Cell.attributes = ['testAttribute'];
+Cell.attributeColours = {testAttribute: new Color(255,0,255)};
+Cell.attributeDrawRange = {testAttribute: [0,10]};
+
+Cell.hasAttribute = function (name)
+{
+	for (var i=0; i<Cell.attributes.length; i++)
+	{
+		if (Cell.attributes[i] == name)
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
+Cell.addAttribute = function (name)
+{
+	//Ensure it does not exist already
+	for (var i=0; i<Cell.attributes.length; i++)
+	{
+		if (Cell.attributes[i] == name)
+			return false;
+	};
+	//Create the attribute
+	Cell.attributes.push(name);
+	Cell.attributeColours[name] = new Color(100,100,100);
+	Cell.attributeDrawRange[name] = [0,10];
+	return true;
+}

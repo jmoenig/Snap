@@ -2012,8 +2012,10 @@ SpriteMorph.prototype.freshPalette = function (category) {
             }
             block.setPosition(new Point(x, y));
             palette.addContents(block);
-            if (block instanceof ToggleMorph
-                    || (block instanceof RingMorph)) {
+            if (((block instanceof ToggleMorph
+                    || (block instanceof RingMorph)
+					/* SNAPAPPS: Enable specific views to be inline unless otherwise indicated */
+					) && block.nextIsRight == undefined) || (block.nextIsRight != undefined && block.nextIsRight)) {
                 x = block.right() + unit / 2;
                 ry = block.bottom();
             } else {

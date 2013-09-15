@@ -24,16 +24,13 @@ SpriteMorph.prototype.snapappsHookBlockTemplates = function(blocks, block, cat, 
 					null,
 					function (pair) {
 						if (pair) {
-							for (var i=0; i<Cell.attributes.length; i++)
-							{
-								var name = Cell.attributes[i];
-								if (name == pair[0])
-									return;
-							};
-							Cell.attributes.push(pair[0]);
+							if (!Cell.addAttribute(pair[0]))
+								return;
+							//Reset the cells pallette so it makes the new attribute appear
 							myself.blocksCache[cat] = null;
 							myself.paletteCache[cat] = null;
 							myself.parentThatIsA(IDE_Morph).refreshPalette();
+							myself.parentThatIsA(IDE_Morph).refreshCellAttributes();
 						}
 					},
 					myself
@@ -55,7 +52,7 @@ SpriteMorph.prototype.snapappsHookBlockTemplates = function(blocks, block, cat, 
 				null,
 				function () {
 					var menu = new MenuMorph(
-						myself.deleteCellAttribute,
+						myself.deleteCellAttribute, /*Callback: SpriteMorph.prototype.deleteCellAttribute*/
 						null,
 						myself
 					);
@@ -79,23 +76,84 @@ SpriteMorph.prototype.snapappsHookBlockTemplates = function(blocks, block, cat, 
 		if (Cell.attributes.length > 0) {
 			for (var i=0; i<Cell.attributes.length; i++)
 			{
-				var cellAttribute = Cell.attributes[i];
 				var toggle = new ToggleMorph(
 					'checkbox',
-					this,
+					{cellAttribute: Cell.attributes[i]},
 					function () {
-						myself.parentThatIsA(IDE_Morph).stage.toggleCellAttributeVisibility(cellAttribute);
+						myself.parentThatIsA(IDE_Morph).stage.toggleCellAttributeVisibility(this.cellAttribute);
 					},
 					null,
 					function () {
-						return myself.parentThatIsA(IDE_Morph).stage.getCellAttributeVisibility(cellAttribute);
+						return myself.parentThatIsA(IDE_Morph).stage.getCellAttributeVisibility(this.cellAttribute);
 					},
 					null
 				);
+				toggle.nextIsRight = true;
 				blocks.push(toggle);
-				var txt = new TextMorph(cellAttribute);
+				
+				var colour = new ColorSlotMorph();
+				colour.isStatic = true;
+				colour.setColor(new Color(100,100,100));
+				colour.cellAttribute = Cell.attributes[i];
+				colour.oldSetColour = colour.setColor;
+				colour.setColor = function(col)
+				{
+					Cell.attributeColours[this.cellAttribute] = col;
+					myself.parentThatIsA(IDE_Morph).stage.dirtyEntireStage();
+					return this.oldSetColour(col);
+				}
+				colour.oldSetColour(Cell.attributeColours[Cell.attributes[i]]);
+				colour.nextIsRight = true;
+				blocks.push(colour);
+				
+				var fromField;
+				fromField = new InputFieldMorph(Cell.attributeDrawRange[Cell.attributes[i]][0].toString());
+				fromField.corner = 12;
+				fromField.padding = 0;
+				fromField.contrast = this.buttonContrast;
+				fromField.hint = "from value";
+				fromField.contents().minWidth = 0;
+				fromField.setWidth(32); // fixed dimensions
+				fromField.drawNew();
+				fromField.cellAttribute = Cell.attributes[i];
+				fromField.accept = function () {
+					var value = Number(fromField.getValue());
+					if (isNaN(value))
+					{
+						fromField.setContents(0);
+						return;
+					}
+					Cell.attributeDrawRange[this.cellAttribute][0] = value;
+					myself.parentThatIsA(IDE_Morph).stage.dirtyEntireStage();
+				};
+				fromField.nextIsRight = true;
+				blocks.push(fromField);
+				
+				var toField;
+				toField = new InputFieldMorph(Cell.attributeDrawRange[Cell.attributes[i]][1].toString());
+				toField.corner = 12;
+				toField.padding = 0;
+				toField.contrast = this.buttonContrast;
+				toField.hint = "from value";
+				toField.contents().minWidth = 0;
+				toField.setWidth(32); // fixed dimensions
+				toField.drawNew();
+				toField.cellAttribute = Cell.attributes[i];
+				toField.accept = function () {
+					var value = Number(toField.getValue());
+					if (isNaN(value))
+					{
+						toField.setContents(0);
+						return;
+					}
+					Cell.attributeDrawRange[this.cellAttribute][1] = value;
+					myself.parentThatIsA(IDE_Morph).stage.dirtyEntireStage();
+				};
+				blocks.push(toField);
+				
+				var txt = new TextMorph(toggle.target.cellAttribute);
 				txt.fontSize = 12;
-				txt.setLeft(toggle.right());
+				txt.setLeft(toField.right());
 				txt.setColor(this.paletteTextColor);
 				blocks.push(txt);
 			}
@@ -117,6 +175,7 @@ SpriteMorph.prototype.deleteCellAttribute = function(name)
 			this.blocksCache["cells"] = null;
 			this.paletteCache["cells"] = null;
 			this.parentThatIsA(IDE_Morph).refreshPalette();
+			this.parentThatIsA(IDE_Morph).refreshCellAttributes();
 			return;
 		}
 	}
@@ -212,7 +271,21 @@ function cellInterpolate(resultCell, cellArray, cellArrayWidth, cellArrayHeight,
 
 StageMorph.prototype.updateCells = function ()
 {
+	var oldCells = null;
+	var oldCellsX = 0;
+	var oldCellsY = 0;
+	if (this.cells != undefined && this.cells != null && this.cells.length > 0)
+	{
+		oldCells = this.cells;
+		oldCellsY = oldCells.length;
+		oldCellsX = oldCells[0].length;
+	}
+	
 	var newCellsX = this.cellsX, newCellsY = this.cellsY;
+	if (oldCellsY == newCellsY && oldCellsX == newCellsX) {
+		return;
+	}
+	
 	var newCells = [];
 	for (var y=0; y<newCellsY; y++)
 	{
@@ -224,10 +297,8 @@ StageMorph.prototype.updateCells = function ()
 		newCells.push(newRow);
 	}
 	
-	if (this.cells != undefined && this.cells != null && this.cells.length > 0)
+	if (oldCells != null)
 	{
-		var oldCells = this.cells;
-		var oldCellsY = oldCells.length, oldCellsX = oldCells[0].length;
 		for (var y=0; y<newCellsY; y++)
 		{
 			for (var x=0; x<newCellsX; x++)
@@ -250,7 +321,7 @@ StageMorph.prototype.init = function (globals) {
 	this.cells = [];
 	this.strokeSize = 2;
 	this.strokeHardness = 0.5;
-	this.strokeFlow = 10;
+	this.strokeValue = 10;
 	this.updateCells();
 }
 
@@ -281,6 +352,35 @@ StageMorph.prototype.dirtyEntireStage = function()
 	if (world.broken == null)
 		return;
     world.broken.push(this.bounds.spread());
+}
+
+StageMorph.prototype.visibleAttributes = ['testAttribute'];
+
+StageMorph.prototype.toggleCellAttributeVisibility = function(name)
+{
+	this.dirtyEntireStage();
+	
+	for (var i=0; i<this.visibleAttributes.length; i++)
+	{
+		if (this.visibleAttributes[i] == name)
+		{
+			this.visibleAttributes.splice(i, 1);
+			return;
+		}
+	}
+	this.visibleAttributes.push(name);
+}
+
+StageMorph.prototype.getCellAttributeVisibility = function(name)
+{
+	for (var i=0; i<this.visibleAttributes.length; i++)
+	{
+		if (this.visibleAttributes[i] == name)
+		{
+			return true;
+		}
+	}
+	return false;
 }
 
 StageMorph.prototype.getCellPositionAt = function(pointOrX, y)
@@ -316,7 +416,7 @@ StageMorph.prototype.getCellAt = function(pointOrX, y)
 StageMorph.prototype.superDrawOn = StageMorph.prototype.drawOn;
 StageMorph.prototype.drawOn = function (aCanvas, aRect) {
 	var retnVal = this.superDrawOn(aCanvas, aRect);
-    if (this.drawGrid)
+    if (this.visibleAttributes.length > 0 && this.drawGrid)
 	{
 		var rectangle, area;
 		if (!this.isVisible) {
@@ -355,13 +455,18 @@ StageMorph.prototype.drawOn = function (aCanvas, aRect) {
 						var cell = cellRow[x];
 						if (cell == null || cell == undefined)
 							break;
-						var value = cell.getAttribute(Cell.attributes[0]);
-						if (value > 0)
+						
+						for (var i=0; i<this.visibleAttributes.length; i++)
 						{
-							ctx.beginPath();
-							ctx.rect(x*cellWidth + this.bounds.left() + 1, y*cellHeight + this.bounds.top() + 1, cellWidth - 1, cellHeight - 1);
-							ctx.fillStyle = 'rgba(255,0,0,' + (value / 255).toFixed(4) + ')';
-							ctx.fill();
+							var value = cell.getAttribute(this.visibleAttributes[i]);
+							if (value > 0)
+							{
+								ctx.beginPath();
+								ctx.rect(x*cellWidth + this.bounds.left() + 1, y*cellHeight + this.bounds.top() + 1, cellWidth - 1, cellHeight - 1);
+								var col = Cell.attributeColours[this.visibleAttributes[i]];
+								ctx.fillStyle = 'rgba('+Math.round(col.r)+','+Math.round(col.g)+','+Math.round(col.b)+',' + (value / 255).toFixed(4) + ')';
+								ctx.fill();
+							}
 						}
 					}
 				}
@@ -441,6 +546,7 @@ StageMorph.prototype.mouseMove = function(point)
         {
 			var strokeDecayWidth = Math.max(0, this.strokeSize);
 			var strokeFullWidth = strokeDecayWidth * Math.max(0, Math.min(1, this.strokeHardness));
+			var drawAttribute = this.parentThatIsA(IDE_Morph).attributeSelector.getValue();
 			
 			if (strokeDecayWidth < strokeFullWidth)
 				strokeFullWidth = strokeDecayWidth;
@@ -498,8 +604,8 @@ StageMorph.prototype.mouseMove = function(point)
 					}
 		            if (alpha > 0 && cell != null)
 		            {
-						var newValue = cell.getAttribute(Cell.attributes[0]) * (1 - alpha) + this.strokeFlow * alpha;
-						cell.setAttribute(Cell.attributes[0], newValue);
+						var newValue = cell.getAttribute(drawAttribute) * (1 - alpha) + this.strokeValue * alpha;
+						cell.setAttribute(drawAttribute, newValue);
 		            }
                 }
             }

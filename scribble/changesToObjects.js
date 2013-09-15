@@ -37,12 +37,12 @@ SpriteMorph.prototype.snapappsHookBlockTemplates = function(blocks, block, cat, 
         blocks.push(block('changeShapeBrightness'));
         blocks.push(block('setShapeBrightness'));
         blocks.push('-');
-        blocks.push(block('changeShapeGhosting'));
-        blocks.push(block('setShapeGhosting'));
+        blocks.push(block('changeShapeAlpha'));
+        blocks.push(block('setShapeAlpha'));
         blocks.push('-');
         blocks.push(block('getShapeHue'));
         blocks.push(block('getShapeBrightness'));
-        blocks.push(block('getShapeGhosting'));
+        blocks.push(block('getShapeAlpha'));
         blocks.push(block('getFillNumber'));
         blocks.push('-');
         blocks.push(block('drawCircle'));
@@ -63,19 +63,19 @@ SpriteMorph.prototype.snapappsHookBlockTemplates = function(blocks, block, cat, 
         blocks.push(block('changeTextBrightness'));
         blocks.push(block('setTextBrightness'));
         blocks.push('-');
-        blocks.push(block('changeTextGhosting'));
-        blocks.push(block('setTextGhosting'));
+        blocks.push(block('changeTextAlpha'));
+        blocks.push(block('setTextAlpha'));
         blocks.push('-');
         blocks.push(block('getTextHue'));
         blocks.push(block('getTextBrightness'));
-        blocks.push(block('getTextGhosting'));
+        blocks.push(block('getTextAlpha'));
         blocks.push(block('getTextFillNumber'));
     }
     if (cat === 'pen') { 
         blocks.push('-');
-        blocks.push(block('getPenGhosting'));
-        blocks.push(block('changePenGhosting'));
-        blocks.push(block('setPenGhosting'));
+        blocks.push(block('getPenAlpha'));
+        blocks.push(block('changePenAlpha'));
+        blocks.push(block('setPenAlpha'));
         blocks.push('-');
         blocks.push(block('getPenNumber'));
         blocks.push(block('setPenNumber'));
@@ -167,23 +167,23 @@ SpriteMorph.prototype.addScribbleBlocks = function () {
         defaults: [100]
     };
     
-    SpriteMorph.prototype.blocks.changeShapeGhosting = {
+    SpriteMorph.prototype.blocks.changeShapeAlpha = {
         type: 'command',
         category: 'shapes',
-        spec: 'change fill ghosting by %n',
+        spec: 'change fill alpha by %n',
         defaults: [10]
     };
     
-    SpriteMorph.prototype.blocks.getShapeGhosting = {
+    SpriteMorph.prototype.blocks.getShapeAlpha = {
         type: 'reporter',
         category: 'shapes',
-        spec: 'get fill ghosting'
+        spec: 'get fill alpha'
     };
     
-    SpriteMorph.prototype.blocks.setShapeGhosting = {
+    SpriteMorph.prototype.blocks.setShapeAlpha = {
         type: 'command',
         category: 'shapes',
-        spec: 'set fill ghosting to %n',
+        spec: 'set fill alpha to %n',
         defaults: [100]
     };
     
@@ -221,23 +221,23 @@ SpriteMorph.prototype.addScribbleBlocks = function () {
         spec: 'go to random location'
     };
     
-    SpriteMorph.prototype.blocks.changePenGhosting = {
+    SpriteMorph.prototype.blocks.changePenAlpha = {
         type: 'command',
         category: 'pen',
-        spec: 'change pen ghosting by %n',
+        spec: 'change pen alpha by %n',
         defaults: [10]
     };
     
-    SpriteMorph.prototype.blocks.getPenGhosting = {
+    SpriteMorph.prototype.blocks.getPenAlpha = {
         type: 'reporter',
         category: 'pen',
-        spec: 'get pen ghosting'
+        spec: 'get pen alpha'
     };
     
-    SpriteMorph.prototype.blocks.setPenGhosting = {
+    SpriteMorph.prototype.blocks.setPenAlpha = {
         type: 'command',
         category: 'pen',
-        spec: 'set pen ghosting to %n',
+        spec: 'set pen alpha to %n',
         defaults: [100]
     };
     
@@ -363,23 +363,23 @@ SpriteMorph.prototype.addScribbleBlocks = function () {
         defaults: [100]
     };
     
-    SpriteMorph.prototype.blocks.changeTextGhosting = {
+    SpriteMorph.prototype.blocks.changeTextAlpha = {
         type: 'command',
         category: 'text',
-        spec: 'change text ghosting by %n',
+        spec: 'change text alpha by %n',
         defaults: [10]
     };
     
-    SpriteMorph.prototype.blocks.getTextGhosting = {
+    SpriteMorph.prototype.blocks.getTextAlpha = {
         type: 'reporter',
         category: 'text',
-        spec: 'get text ghosting'
+        spec: 'get text alpha'
     };
     
-    SpriteMorph.prototype.blocks.setTextGhosting = {
+    SpriteMorph.prototype.blocks.setTextAlpha = {
         type: 'command',
         category: 'text',
-        spec: 'set text ghosting to %n',
+        spec: 'set text alpha to %n',
         defaults: [100]
     };
 }
@@ -618,31 +618,31 @@ SpriteMorph.prototype.changeShapeBrightness = function (delta) {
 };
 
 /*
- * SpriteMorph.setShapeGhosting
+ * SpriteMorph.setShapeAlpha
  * 
- * Implements block logic that sets the ghosting(alpha) of the shape
+ * Implements block logic that sets the alpha(alpha) of the shape
  */
-SpriteMorph.prototype.setShapeGhosting = function (num) {
+SpriteMorph.prototype.setShapeAlpha = function (num) {
     this.fillColor.a = Math.max(0,Math.min(num, 100)) / 100;
 };
 
 /*
- * SpriteMorph.getShapeGhosting
+ * SpriteMorph.getShapeAlpha
  * 
- * Implements block logic that gets the ghosting(alpha) of the shape
+ * Implements block logic that gets the alpha(alpha) of the shape
  */
-SpriteMorph.prototype.getShapeGhosting = function () {
+SpriteMorph.prototype.getShapeAlpha = function () {
     return this.fillColor.a * 100;
 };
       
 /*
  * SpriteMorph.getShapeBrightness
  * 
- * Implements block logic that changes the ghosting(alpha) of the shape
+ * Implements block logic that changes the alpha(alpha) of the shape
  * relative to its previous value
  */
-SpriteMorph.prototype.changeShapeGhosting = function (delta) {
-    this.setShapeGhosting(this.getShapeGhosting() + (+delta || 0));
+SpriteMorph.prototype.changeShapeAlpha = function (delta) {
+    this.setShapeAlpha(this.getShapeAlpha() + (+delta || 0));
 };
 
 /*
@@ -732,29 +732,29 @@ SpriteMorph.prototype.endShape = function () {
 };
 
 /*
- * SpriteMorph.getPenGhosting
+ * SpriteMorph.getPenAlpha
  * 
  * Implements block logic that gets the alpha of the pen
  */
-SpriteMorph.prototype.getPenGhosting = function () {
+SpriteMorph.prototype.getPenAlpha = function () {
     return this.color.a * 100;
 };
 
 /*
- * SpriteMorph.getPenGhosting
+ * SpriteMorph.getPenAlpha
  * 
  * Implements block logic that adds to the alpha of the pen
  */
-SpriteMorph.prototype.changePenGhosting = function (delta) {
-    this.setPenGhosting(this.getPenGhosting() + (+delta || 0));
+SpriteMorph.prototype.changePenAlpha = function (delta) {
+    this.setPenAlpha(this.getPenAlpha() + (+delta || 0));
 };
     
 /*
- * SpriteMorph.getPenGhosting
+ * SpriteMorph.getPenAlpha
  * 
  * Implements block logic that sets the alpha of the pen
  */
-SpriteMorph.prototype.setPenGhosting = function (num) {
+SpriteMorph.prototype.setPenAlpha = function (num) {
     var x = this.xPosition(),
         y = this.yPosition();
         
@@ -767,7 +767,7 @@ SpriteMorph.prototype.setPenGhosting = function (num) {
 };
     
 /*
- * SpriteMorph.getPenGhosting
+ * SpriteMorph.getPenAlpha
  * 
  * Implements block logic that tells if the pen is down
  */
@@ -1216,31 +1216,31 @@ SpriteMorph.prototype.changeTextBrightness = function (delta) {
 };
 
 /*
- * SpriteMorph.setTextGhosting
+ * SpriteMorph.setTextAlpha
  * 
- * Implements block logic that sets the ghosting(alpha) of the text
+ * Implements block logic that sets the alpha(alpha) of the text
  */
-SpriteMorph.prototype.setTextGhosting = function (num) {
+SpriteMorph.prototype.setTextAlpha = function (num) {
     this.textColor.a = Math.max(0,Math.min(num, 100)) / 100;
 };
 
 /*
- * SpriteMorph.getTextGhosting
+ * SpriteMorph.getTextAlpha
  * 
- * Implements block logic that gets the ghosting(alpha) of the text
+ * Implements block logic that gets the alpha(alpha) of the text
  */
-SpriteMorph.prototype.getTextGhosting = function () {
+SpriteMorph.prototype.getTextAlpha = function () {
     return this.textColor.a * 100;
 };
       
 /*
- * SpriteMorph.changeTextGhosting
+ * SpriteMorph.changeTextAlpha
  * 
- * Implements block logic that changes the ghosting(alpha) of the text
+ * Implements block logic that changes the alpha(alpha) of the text
  * relative to its previous value
  */
-SpriteMorph.prototype.changeTextGhosting = function (delta) {
-    this.setTextGhosting(this.getTextGhosting() + (+delta || 0));
+SpriteMorph.prototype.changeTextAlpha = function (delta) {
+    this.setTextAlpha(this.getTextAlpha() + (+delta || 0));
 };
 
 /*
