@@ -124,7 +124,7 @@ PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.objects = '2013-August-12';
+modules.objects = '2013-September-16';
 
 var SpriteMorph;
 var StageMorph;
@@ -926,6 +926,12 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'operators',
             spec: 'is %s identical to %s ?'
         },
+        reportTextSplit: {
+            type: 'reporter',
+            category: 'operators',
+            spec: 'split %s by %delim',
+            defaults: [localize('hello') + ' ' + localize('world'), " "]
+        },
         reportTypeOf: { // only in dev mode for debugging
             type: 'reporter',
             category: 'operators',
@@ -937,12 +943,6 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'operators',
             spec: '%txtfun of %s',
             defaults: [null, "Abelson & Sussman"]
-        },
-        reportTextSplit: { // only in dev mode - experimental
-            type: 'reporter',
-            category: 'operators',
-            spec: 'split %s by %delim',
-            defaults: ["foo bar baz", " "]
         },
 
     /*
@@ -1722,6 +1722,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('reportFalse'));
         blocks.push('-');
         blocks.push(block('reportJoinWords'));
+        blocks.push(block('reportTextSplit'));
         blocks.push(block('reportLetter'));
         blocks.push(block('reportStringSize'));
         blocks.push('-');
@@ -1744,7 +1745,6 @@ SpriteMorph.prototype.blockTemplates = function (category) {
             blocks.push('-');
             blocks.push(block('reportTypeOf'));
             blocks.push(block('reportTextFunction'));
-            blocks.push(block('reportTextSplit'));
         }
 
     /////////////////////////////////
@@ -4359,6 +4359,7 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('reportFalse'));
         blocks.push('-');
         blocks.push(block('reportJoinWords'));
+        blocks.push(block('reportTextSplit'));
         blocks.push(block('reportLetter'));
         blocks.push(block('reportStringSize'));
         blocks.push('-');
@@ -4381,7 +4382,6 @@ StageMorph.prototype.blockTemplates = function (category) {
             blocks.push('-');
             blocks.push(block('reportTypeOf'));
             blocks.push(block('reportTextFunction'));
-            blocks.push(block('reportTextSplit'));
         }
 
     //////////////////////////////////
