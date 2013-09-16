@@ -83,7 +83,7 @@ ArgLabelMorph, localize, XML_Element, hex_sha512*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.threads = '2013-August-12';
+modules.threads = '2013-September-16';
 
 var ThreadManager;
 var Process;
@@ -990,7 +990,8 @@ Process.prototype.evaluateCustomBlock = function () {
     if (!context) {return null; }
     outer = new Context();
     outer.receiver = this.context.receiver; // || this.homeContext.receiver;
-    outer.variables.parentFrame = outer.receiver.variables;
+    outer.variables.parentFrame = outer.receiver ?
+            outer.receiver.variables : null;
 
     runnable = new Context(
         this.context.parentContext,
