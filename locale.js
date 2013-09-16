@@ -149,7 +149,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org',
     'last_changed':
-        '2013-08-10'
+        '2013-09-16'
 };
 
 SnapTranslator.dict.it = {
@@ -209,7 +209,7 @@ SnapTranslator.dict.pt = {
     'translator_e-mail':
         'mmsequeira@gmail.com',
     'last_changed':
-        '2013-04-08'
+        '2013-09-16'
 };
 
 SnapTranslator.dict.cs = {
@@ -257,7 +257,7 @@ SnapTranslator.dict.fr = {
     'translator_e-mail':
         'i.scool@mac.com',
     'last_changed':
-        '2012-11-27'
+        '2013-09-16'
 };
 
 SnapTranslator.dict.si = {
@@ -334,5 +334,27 @@ SnapTranslator.dict.no = {
     'translator_e-mail':
         'mattebananer@gmail.com',
     'last_changed':
-        '2013-08-17'
+        '2013-09-16'
+};
+
+SnapTranslator.dict.dk = {
+    'language_name':
+        'Dansk',
+    'language_translator':
+        'FAB',
+    'translator_e-mail':
+        'fab@nielsen.mail.dk',
+    'last_changed':
+        '2013-09-16'
+};
+
+SnapTranslator.dict.el = {
+    'language_name':
+        'Ελληνικά',
+    'language_translator':
+        'Ino Samaras',
+    'translator_e-mail':
+        'ino.samaras@berkeley.edu',
+    'last_changed':
+        '2013-09-16'
 };
