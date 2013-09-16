@@ -428,7 +428,7 @@ SnapTranslator.dict.pt = {
     'Message name':
         'Qual o nome da mensagem?',
     'message':
-        'mensagem',
+        'a mensagem',
     'any message':
         'qualquer mensagem',
     'wait %n secs':
@@ -540,6 +540,8 @@ SnapTranslator.dict.pt = {
         'falso',
     'join %words':
         'a junção de %words',
+    'split %s by %delim':
+        'uma lista com os troços de %s entre %delim',
     'hello':
         'Olá',
     'world':
@@ -1206,6 +1208,16 @@ SnapTranslator.dict.pt = {
         'o logaritmo natural',
     'e^':
         'a exponencial',
+
+    // delimiters
+    'whitespace':
+        'espaços em branco',
+    'line':
+        'avanços de linha',
+    'tab':
+        'tabuladores',
+    'cr':
+        'retornos',
 
     // tipos de dados
     'number':
