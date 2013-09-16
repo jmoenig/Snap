@@ -1889,3 +1889,18 @@ ______
 ------
 * Norwegian translation, yay!! thanks, Olav Marschall!
 * "Dynamic" library list, thanks, Brian
+
+130916
+------
+* new Danish translation, yay!! thanks, Morten and Hanne!
+* new Greek translation, yay!! thanks, Ino!
+* Portuguese translation update, thanks, Manuel!
+* French translation update,
+* Norwegian translation update
+* threads: minor custom block evaluation scope fix
+* paint: flood fill freeze fix, thanks for the contribution, Kartik!
+* objects: new SPLIT primitive reporter
+* German translation update for new SPLIT primitive and delimiter options
+* GUI: getPublicProject adjustments (lowercase username)
+* GUI: prompt() - invocation fixes (null-choices)
+* GUI: synchronous URL fetching simplifications for libraries and example projects
