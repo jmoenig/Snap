@@ -185,7 +185,7 @@ SnapTranslator.dict.pt = {
     'translator_e-mail':
         'mmsequeira@gmail.com',
     'last_changed':
-        '2013-08-28',
+        '2013-09-16',
 
     // GUI
     // control bar:
@@ -1253,5 +1253,5 @@ SnapTranslator.dict.pt = {
     'Saving project to the cloud...':
         'Guardando o projecto na nuvem…',
     'saved.':
-        'guardado.',
+        'guardado.'
 };
