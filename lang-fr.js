@@ -435,7 +435,7 @@ SnapTranslator.dict.fr = {
     'repeat %n %c':
         'r\u00E9p\u00E9ter %n fois %c',
     'repeat until %b %c':
-        'r\u00E9p\u00E9ter ind\u00E9finiment si %b %c',
+        'r\u00E9p\u00E9ter jusqu\u0027\u00E0 %b %c',
     'if %b %c':
         'si %b  %c',
     'if %b %c else %c':
