@@ -1904,3 +1904,4 @@ ______
 * GUI: getPublicProject adjustments (lowercase username)
 * GUI: prompt() - invocation fixes (null-choices)
 * GUI: synchronous URL fetching simplifications for libraries and example projects
+* GUI: fixed #115 - prevent loading several instances of the same block definition

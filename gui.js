@@ -2808,6 +2808,7 @@ IDE_Morph.prototype.rawOpenBlocksString = function (str, name, silently) {
         blocks.forEach(function (def) {
             def.receiver = myself.stage;
             myself.stage.globalBlocks.push(def);
+            myself.stage.replaceDoubleDefinitionsFor(def);
         });
         this.flushPaletteCache();
         this.refreshPalette();
