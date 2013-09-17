@@ -29,7 +29,7 @@
 
 /*global modules, IDE_Morph, SnapSerializer, hex_sha512, alert, nop*/
 
-modules.cloud = '2013-May-10';
+modules.cloud = '2013-September-17';
 
 // Global stuff
 
@@ -579,6 +579,18 @@ Cloud.prototype.parseResponse = function (src) {
     return ans;
 };
 
+Cloud.prototype.parseDict = function (src) {
+    var dict = {};
+    if (!src) {return dict; }
+    src.split("&").forEach(function (entry) {
+        var pair = entry.split("="),
+            key = decodeURIComponent(pair[0]),
+            val = decodeURIComponent(pair[1]);
+        dict[key] = val;
+    });
+    return dict;
+};
+
 Cloud.prototype.encodeDict = function (dict) {
     var str = '',
         pair,
@@ -589,7 +601,7 @@ Cloud.prototype.encodeDict = function (dict) {
             pair = encodeURIComponent(key)
                 + '='
                 + encodeURIComponent(dict[key]);
-            if (pair.length > 0) {
+            if (str.length > 0) {
                 str += '&';
             }
             str += pair;

@@ -1905,3 +1905,8 @@ ______
 * GUI: prompt() - invocation fixes (null-choices)
 * GUI: synchronous URL fetching simplifications for libraries and example projects
 * GUI: fixed #115 - prevent loading several instances of the same block definition
+
+130917
+------
+* Cloud: encodeDict() fix and new parseDict() method - used for accessing shared projects
+* GUI: fixed #119, #149 (accessing a shared projects requires lowercasing the username)
