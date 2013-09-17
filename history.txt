@@ -1910,3 +1910,5 @@ ______
 ------
 * Cloud: encodeDict() fix and new parseDict() method - used for accessing shared projects
 * GUI: fixed #119, #149 (accessing a shared projects requires lowercasing the username)
+* Portuguese translation update for SPLIT block, thanks, Manuel!
+* Store, Objects: prevent costumes from being drawn while they are loading, fixes parts of #154
