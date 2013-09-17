@@ -124,7 +124,7 @@ PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.objects = '2013-September-16';
+modules.objects = '2013-September-17';
 
 var SpriteMorph;
 var StageMorph;
@@ -1248,6 +1248,8 @@ SpriteMorph.prototype.drawNew = function () {
         currentCenter = this.center(),
         facing, // actual costume heading based on my rotation style
         isFlipped,
+        isLoadingCostume = this.costume &&
+            typeof this.costume.loaded === 'function',
         pic, // (flipped copy of) actual costume based on my rotation style
         stageScale = this.parent instanceof StageMorph ?
                 this.parent.scale : 1,
@@ -1257,7 +1259,8 @@ SpriteMorph.prototype.drawNew = function () {
         shift,
         corner,
         costumeExtent,
-        ctx;
+        ctx,
+        handle;
 
     if (this.isWarped) {
         this.wantsRedraw = true;
@@ -1271,7 +1274,7 @@ SpriteMorph.prototype.drawNew = function () {
             isFlipped = true;
         }
     }
-    if (this.costume) {
+    if (this.costume && !isLoadingCostume) {
         pic = isFlipped ? this.costume.flipped() : this.costume;
 
         // determine the rotated costume's bounding box
@@ -1328,6 +1331,17 @@ SpriteMorph.prototype.drawNew = function () {
         this.setCenter(currentCenter, true); // just me
         SpriteMorph.uber.drawNew.call(this, facing);
         this.rotationOffset = this.extent().divideBy(2);
+        if (isLoadingCostume) { // retry until costume is done loading
+            handle = setInterval(
+                function () {
+                    myself.changed();
+                    myself.drawNew();
+                    myself.changed();
+                    clearInterval(handle);
+                },
+                100
+            );
+        }
     }
     this.version = Date.now();
 };
