@@ -68,7 +68,7 @@ sb, CommentMorph, CommandBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2013-September-16';
+modules.gui = '2013-September-17';
 
 // Declarations
 
@@ -298,6 +298,7 @@ IDE_Morph.prototype.openIn = function (world) {
     */
 
     function interpretUrlAnchors() {
+        var dict;
         if (location.hash.substr(0, 6) === '#open:') {
             hash = location.hash.substr(6);
             if (hash.charAt(0) === '%'
@@ -335,8 +336,13 @@ IDE_Morph.prototype.openIn = function (world) {
             this.shield.setExtent(this.parent.extent());
             this.parent.add(this.shield);
             myself.showMessage('Fetching project\nfrom the cloud...');
+
+            // make sure to lowercase the username
+            dict = SnapCloud.parseDict(location.hash.substr(9));
+            dict.Username = dict.Username.toLowerCase();
+
             SnapCloud.getPublicProject(
-                location.hash.substr(9),
+                SnapCloud.encodeDict(dict),
                 function (projectData) {
                     var msg;
                     myself.nextSteps([
@@ -3735,7 +3741,7 @@ IDE_Morph.prototype.setCloudURL = function () {
                 'https://snapcloud.miosoft.com/miocon/app/' +
                     'login?_app=SnapCloud',
             'local network lab' :
-                '192.168.2.110:8087/miocon/app/login?_app=SnapCloud',
+                '192.168.2.107:8087/miocon/app/login?_app=SnapCloud',
             'local network office' :
                 '192.168.186.167:8087/miocon/app/login?_app=SnapCloud',
             'localhost dev' :
