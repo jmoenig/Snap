@@ -105,7 +105,7 @@ CommentMorph, localize, CSlotMorph, SpeechBubbleMorph, MorphicPreferences*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2013-July-04';
+modules.byob = '2013-September-18';
 
 // Declarations
 
@@ -1602,10 +1602,35 @@ BlockEditorMorph.prototype.cancel = function () {
 };
 
 BlockEditorMorph.prototype.close = function () {
-    // allow me to disappear only when name collisions
-    // have been resolved
     var doubles, block,
         myself = this;
+
+    // assert that no scope conflicts exists, i.e. that a global
+    // definition doesn't contain any local custom blocks, as they
+    // will be rendered "Obsolete!" when reloading the project
+    if (this.definition.isGlobal) {
+        block = detect(
+            this.body.contents.allChildren(),
+            function (morph) {
+                return morph.definition && !morph.definition.isGlobal;
+            }
+        );
+        if (block) {
+            block = block.definition.blockInstance();
+            block.addShadow();
+            new DialogBoxMorph().inform(
+                'Local Block(s) in Global Definition',
+                'This global block definition contains one or more\n'
+                    + 'local custom blocks which must be removed first.',
+                myself.world(),
+                block.fullImage()
+            );
+            return;
+        }
+    }
+
+    // allow me to disappear only when name collisions
+    // have been resolved
     doubles = this.target.doubleDefinitionsFor(this.definition);
     if (doubles.length > 0) {
         block = doubles[0].blockInstance();
@@ -1619,6 +1644,7 @@ BlockEditorMorph.prototype.close = function () {
         );
         return;
     }
+
     this.destroy();
 };
 
