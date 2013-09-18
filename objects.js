@@ -124,7 +124,7 @@ PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.objects = '2013-September-17';
+modules.objects = '2013-September-18';
 
 var SpriteMorph;
 var StageMorph;
@@ -5244,6 +5244,24 @@ Costume.prototype.thumbnail = function (extentPoint) {
         Math.floor(yOffset / scale)
     );
     return trg;
+};
+
+// Costume catching "tainted" canvases
+
+Costume.prototype.isTainted = function () {
+    // find out whether the canvas has been tainted by cross-origin data
+    // assumes that if reading image data throws an error it is tainted
+    try {
+        this.contents.getContext('2d').getImageData(
+            0,
+            0,
+            this.contents.width,
+            this.contents.height
+        );
+    } catch (err) {
+        return true;
+    }
+    return false;
 };
 
 // SVG_Costume /////////////////////////////////////////////////////////////
