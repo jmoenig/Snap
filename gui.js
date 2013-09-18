@@ -68,7 +68,7 @@ sb, CommentMorph, CommandBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2013-September-17';
+modules.gui = '2013-September-18';
 
 // Declarations
 
@@ -1488,6 +1488,19 @@ IDE_Morph.prototype.droppedImage = function (aCanvas, name) {
         aCanvas,
         name ? name.split('.')[0] : '' // up to period
     );
+
+    if (costume.isTainted()) {
+        this.inform(
+            'Unable to import this image',
+            'The picture you wish to import has been\n' +
+                'tainted by a restrictive cross-origin policy\n' +
+                'making it unusable for costumes in Snap!. \n\n' +
+                'Try downloading this picture first to your\n' +
+                'computer, and import it from there.'
+        );
+        return;
+    }
+
     this.currentSprite.addCostume(costume);
     this.currentSprite.wearCostume(costume);
     this.spriteBar.tabBar.tabTo('costumes');
