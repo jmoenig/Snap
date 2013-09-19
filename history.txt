@@ -1917,3 +1917,6 @@ ______
 ------
 * Objects, GUI: prevent costumes with CORS-tainted canvases, expected to fix #155, #154, #151, #148, #147, #127 for future projects
 * BYOB: Prevent local custom blocks in global custom block definitions, fixes #167 for future projects
+
+130919
+* Objects: fixed #169 (sprites are sometimes off-placed when the project is loaded)
