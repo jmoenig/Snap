@@ -1920,3 +1920,4 @@ ______
 
 130919
 * Objects: fixed #169 (sprites are sometimes off-placed when the project is loaded)
+* Objects, GUI: fixed #146 (filter out empty costumes)
