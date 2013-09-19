@@ -68,7 +68,7 @@ sb, CommentMorph, CommandBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2013-September-18';
+modules.gui = '2013-September-19';
 
 // Declarations
 
@@ -4889,7 +4889,7 @@ SpriteIconMorph.prototype.step = function () {
 // SpriteIconMorph layout
 
 SpriteIconMorph.prototype.fixLayout = function () {
-    if (!this.thumbnail) {return null; }
+    if (!this.thumbnail || !this.label) {return null; }
 
     this.setWidth(
         this.thumbnail.width()

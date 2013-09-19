@@ -5239,6 +5239,7 @@ Costume.prototype.thumbnail = function (extentPoint) {
         trg = newCanvas(extentPoint),
         ctx = trg.getContext('2d');
 
+    if (!src || src.width + src.height === 0) {return trg; }
     ctx.scale(scale, scale);
     ctx.drawImage(
         src,
