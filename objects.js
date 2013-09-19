@@ -124,7 +124,7 @@ PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.objects = '2013-September-18';
+modules.objects = '2013-September-19';
 
 var SpriteMorph;
 var StageMorph;
@@ -1250,6 +1250,7 @@ SpriteMorph.prototype.drawNew = function () {
         isFlipped,
         isLoadingCostume = this.costume &&
             typeof this.costume.loaded === 'function',
+        cst,
         pic, // (flipped copy of) actual costume based on my rotation style
         stageScale = this.parent instanceof StageMorph ?
                 this.parent.scale : 1,
@@ -1332,15 +1333,16 @@ SpriteMorph.prototype.drawNew = function () {
         SpriteMorph.uber.drawNew.call(this, facing);
         this.rotationOffset = this.extent().divideBy(2);
         if (isLoadingCostume) { // retry until costume is done loading
+            cst = this.costume;
             handle = setInterval(
                 function () {
-                    myself.changed();
-                    myself.drawNew();
-                    myself.changed();
+                    myself.wearCostume(cst);
                     clearInterval(handle);
                 },
                 100
             );
+            return myself.wearCostume(null);
+
         }
     }
     this.version = Date.now();
