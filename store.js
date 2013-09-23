@@ -903,16 +903,25 @@ SnapSerializer.prototype.loadComment = function (model) {
 SnapSerializer.prototype.loadBlock = function (model, isReporter) {
     // private
     var block, info, inputs, isGlobal, rm, receiver;
+    var isVisible = true;
+    if (Object.prototype.hasOwnProperty.call(
+            model.attributes,
+            'visible'
+        )) {
+        isVisible = model.attributes['visible'];
+    }
     if (model.tag === 'block') {
         if (Object.prototype.hasOwnProperty.call(
                 model.attributes,
                 'var'
             )) {
-            return SpriteMorph.prototype.variableBlock(
-                model.attributes['var']
-            );
+            var block = SpriteMorph.prototype.variableBlock(
+                model.attributes['var']);
+            block.isVisible = isVisible === "true";
+            return block;
         }
         block = SpriteMorph.prototype.blockForSelector(model.attributes.s);
+        block.isVisible = isVisible === "true";
     } else if (model.tag === 'custom-block') {
         isGlobal = model.attributes.scope ? false : true;
         receiver = isGlobal ? this.project.stage
@@ -954,6 +963,7 @@ SnapSerializer.prototype.loadBlock = function (model, isReporter) {
             info.type === 'predicate',
             false
         );
+        block.isVisible = isVisible === "true";
     }
     if (block === null) {
         block = this.obsoleteBlock(isReporter);
@@ -1289,6 +1299,14 @@ SnapSerializer.prototype.openProject = function (project, ide) {
     ide.selectSprite(sprite);
     ide.fixLayout();
     ide.world().keyboardReceiver = project.stage;
+
+    world.children.forEach(function (morph) {
+                if (morph instanceof BlockMorph) {
+                    morph.changed();
+                    morph.drawNew();
+                    morph.changed();
+                }
+            });
 };
 
 // SnapSerializer XML-representation of objects:
@@ -1573,8 +1591,9 @@ BlockMorph.prototype.toXML = BlockMorph.prototype.toScriptXML = function (
 
 BlockMorph.prototype.toBlockXML = function (serializer) {
     return serializer.format(
-        '<block s="@">%%</block>',
+        '<block s="@" visible="@">%%</block>',
         this.selector,
+        this.isVisible,
         serializer.store(this.inputs()),
         this.comment ? this.comment.toXML(serializer) : ''
     );
