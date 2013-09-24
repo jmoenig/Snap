@@ -124,7 +124,7 @@ PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.objects = '2013-August-12';
+modules.objects = '2013-September-19';
 
 var SpriteMorph;
 var StageMorph;
@@ -926,6 +926,12 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'operators',
             spec: 'is %s identical to %s ?'
         },
+        reportTextSplit: {
+            type: 'reporter',
+            category: 'operators',
+            spec: 'split %s by %delim',
+            defaults: [localize('hello') + ' ' + localize('world'), " "]
+        },
         reportTypeOf: { // only in dev mode for debugging
             type: 'reporter',
             category: 'operators',
@@ -937,12 +943,6 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'operators',
             spec: '%txtfun of %s',
             defaults: [null, "Abelson & Sussman"]
-        },
-        reportTextSplit: { // only in dev mode - experimental
-            type: 'reporter',
-            category: 'operators',
-            spec: 'split %s by %delim',
-            defaults: ["foo bar baz", " "]
         },
 
     /*
@@ -1248,6 +1248,9 @@ SpriteMorph.prototype.drawNew = function () {
         currentCenter = this.center(),
         facing, // actual costume heading based on my rotation style
         isFlipped,
+        isLoadingCostume = this.costume &&
+            typeof this.costume.loaded === 'function',
+        cst,
         pic, // (flipped copy of) actual costume based on my rotation style
         stageScale = this.parent instanceof StageMorph ?
                 this.parent.scale : 1,
@@ -1257,7 +1260,8 @@ SpriteMorph.prototype.drawNew = function () {
         shift,
         corner,
         costumeExtent,
-        ctx;
+        ctx,
+        handle;
 
     if (this.isWarped) {
         this.wantsRedraw = true;
@@ -1271,7 +1275,7 @@ SpriteMorph.prototype.drawNew = function () {
             isFlipped = true;
         }
     }
-    if (this.costume) {
+    if (this.costume && !isLoadingCostume) {
         pic = isFlipped ? this.costume.flipped() : this.costume;
 
         // determine the rotated costume's bounding box
@@ -1328,6 +1332,18 @@ SpriteMorph.prototype.drawNew = function () {
         this.setCenter(currentCenter, true); // just me
         SpriteMorph.uber.drawNew.call(this, facing);
         this.rotationOffset = this.extent().divideBy(2);
+        if (isLoadingCostume) { // retry until costume is done loading
+            cst = this.costume;
+            handle = setInterval(
+                function () {
+                    myself.wearCostume(cst);
+                    clearInterval(handle);
+                },
+                100
+            );
+            return myself.wearCostume(null);
+
+        }
     }
     this.version = Date.now();
 };
@@ -1722,6 +1738,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('reportFalse'));
         blocks.push('-');
         blocks.push(block('reportJoinWords'));
+        blocks.push(block('reportTextSplit'));
         blocks.push(block('reportLetter'));
         blocks.push(block('reportStringSize'));
         blocks.push('-');
@@ -1744,7 +1761,6 @@ SpriteMorph.prototype.blockTemplates = function (category) {
             blocks.push('-');
             blocks.push(block('reportTypeOf'));
             blocks.push(block('reportTextFunction'));
-            blocks.push(block('reportTextSplit'));
         }
 
     /////////////////////////////////
@@ -4359,6 +4375,7 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('reportFalse'));
         blocks.push('-');
         blocks.push(block('reportJoinWords'));
+        blocks.push(block('reportTextSplit'));
         blocks.push(block('reportLetter'));
         blocks.push(block('reportStringSize'));
         blocks.push('-');
@@ -4381,7 +4398,6 @@ StageMorph.prototype.blockTemplates = function (category) {
             blocks.push('-');
             blocks.push(block('reportTypeOf'));
             blocks.push(block('reportTextFunction'));
-            blocks.push(block('reportTextSplit'));
         }
 
     //////////////////////////////////
@@ -5223,6 +5239,7 @@ Costume.prototype.thumbnail = function (extentPoint) {
         trg = newCanvas(extentPoint),
         ctx = trg.getContext('2d');
 
+    if (!src || src.width + src.height === 0) {return trg; }
     ctx.scale(scale, scale);
     ctx.drawImage(
         src,
@@ -5230,6 +5247,24 @@ Costume.prototype.thumbnail = function (extentPoint) {
         Math.floor(yOffset / scale)
     );
     return trg;
+};
+
+// Costume catching "tainted" canvases
+
+Costume.prototype.isTainted = function () {
+    // find out whether the canvas has been tainted by cross-origin data
+    // assumes that if reading image data throws an error it is tainted
+    try {
+        this.contents.getContext('2d').getImageData(
+            0,
+            0,
+            this.contents.width,
+            this.contents.height
+        );
+    } catch (err) {
+        return true;
+    }
+    return false;
 };
 
 // SVG_Costume /////////////////////////////////////////////////////////////

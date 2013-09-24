@@ -68,7 +68,7 @@ sb, CommentMorph, CommandBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2013-August-17';
+modules.gui = '2013-September-19';
 
 // Declarations
 
@@ -298,6 +298,7 @@ IDE_Morph.prototype.openIn = function (world) {
     */
 
     function interpretUrlAnchors() {
+        var dict;
         if (location.hash.substr(0, 6) === '#open:') {
             hash = location.hash.substr(6);
             if (hash.charAt(0) === '%'
@@ -335,8 +336,13 @@ IDE_Morph.prototype.openIn = function (world) {
             this.shield.setExtent(this.parent.extent());
             this.parent.add(this.shield);
             myself.showMessage('Fetching project\nfrom the cloud...');
+
+            // make sure to lowercase the username
+            dict = SnapCloud.parseDict(location.hash.substr(9));
+            dict.Username = dict.Username.toLowerCase();
+
             SnapCloud.getPublicProject(
-                location.hash.substr(9),
+                SnapCloud.encodeDict(dict),
                 function (projectData) {
                     var msg;
                     myself.nextSteps([
@@ -1482,6 +1488,19 @@ IDE_Morph.prototype.droppedImage = function (aCanvas, name) {
         aCanvas,
         name ? name.split('.')[0] : '' // up to period
     );
+
+    if (costume.isTainted()) {
+        this.inform(
+            'Unable to import this image',
+            'The picture you wish to import has been\n' +
+                'tainted by a restrictive cross-origin policy\n' +
+                'making it unusable for costumes in Snap!. \n\n' +
+                'Try downloading this picture first to your\n' +
+                'computer, and import it from there.'
+        );
+        return;
+    }
+
     this.currentSprite.addCostume(costume);
     this.currentSprite.wearCostume(costume);
     this.spriteBar.tabBar.tabTo('costumes');
@@ -1965,7 +1984,7 @@ IDE_Morph.prototype.cloudMenu = function () {
                 myself.prompt('Author name…', function (usr) {
                     myself.prompt('Project name...', function (prj) {
                         var id = 'Username=' +
-                            encodeURIComponent(usr) +
+                            encodeURIComponent(usr.toLowerCase()) +
                             '&ProjectName=' +
                             encodeURIComponent(prj);
                         myself.showMessage(
@@ -1999,8 +2018,8 @@ IDE_Morph.prototype.cloudMenu = function () {
                             myself.cloudError()
                         );
 
-                    }, 'project');
-                }, 'project');
+                    }, null, 'project');
+                }, null, 'project');
             },
             null,
             new Color(100, 0, 0)
@@ -2222,6 +2241,9 @@ IDE_Morph.prototype.projectMenu = function () {
     menu.addItem(
         'Save',
         function () {
+            if (myself.source === 'examples') {
+                myself.source = 'local'; // cannot save to examples
+            }
             if (myself.projectName) {
                 if (myself.source === 'local') { // as well as 'examples'
                     myself.saveProject(myself.projectName);
@@ -2303,16 +2325,12 @@ IDE_Morph.prototype.projectMenu = function () {
     menu.addItem(
         'Import tools',
         function () {
-
-            var url = 'http://snap.berkeley.edu/snapsource/tools.xml',
-                request = new XMLHttpRequest();
-            request.open('GET', url, false);
-            request.send();
-            if (request.status === 200) {
-                return myself.droppedText(request.responseText, 'tools');
-            }
-            throw new Error('unable to retrieve ' + url);
-
+            myself.droppedText(
+                myself.getURL(
+                    'http://snap.berkeley.edu/snapsource/tools.xml'
+                ),
+                'tools'
+            );
         },
         'load the official library of\npowerful blocks'
     );
@@ -2320,45 +2338,30 @@ IDE_Morph.prototype.projectMenu = function () {
         'Libraries...',
         function () {
             // read a list of libraries from an external file,
-            // this has turned out to be profoundly ugly
-            // we should pull it all apart into meaningful selectors
-            // at some time
             var libMenu = new MenuMorph(this, 'Import library'),
                 libUrl = 'http://snap.berkeley.edu/snapsource/libraries/' +
-                    'LIBRARIES',
-                lRequest = new XMLHttpRequest();
+                    'LIBRARIES';
 
             function loadLib(name) {
                 var url = 'http://snap.berkeley.edu/snapsource/libraries/'
                         + name
-                        + '.xml',
-                    request = new XMLHttpRequest();
-                request.open('GET', url, false);
-                request.send();
-                if (request.status === 200) {
-                    return myself.droppedText(request.responseText, name);
-                }
-                throw new Error('unable to retrieve ' + url);
+                        + '.xml';
+                myself.droppedText(myself.getURL(url), name);
             }
 
-            lRequest.open('GET', libUrl, false);
-            lRequest.send();
-            if (lRequest.status === 200) {
-                lRequest.responseText.split('\n').forEach(function (line) {
-                    if (line.length > 0) {
-                        libMenu.addItem(
-                            line.substring(line.indexOf('\t') + 1),
-                            function () {
-                                loadLib(
-                                    line.substring(0, line.indexOf('\t'))
-                                );
-                            }
-                        );
-                    }
-                });
-            } else {
-                throw new Error('unable to retrieve ' + libUrl);
-            }
+            myself.getURL(libUrl).split('\n').forEach(function (line) {
+                if (line.length > 0) {
+                    libMenu.addItem(
+                        line.substring(line.indexOf('\t') + 1),
+                        function () {
+                            loadLib(
+                                line.substring(0, line.indexOf('\t'))
+                            );
+                        }
+                    );
+                }
+            });
+
             libMenu.popup(world, pos);
         },
         'Select categories of additional blocks to add to this project.'
@@ -2824,6 +2827,7 @@ IDE_Morph.prototype.rawOpenBlocksString = function (str, name, silently) {
         blocks.forEach(function (def) {
             def.receiver = myself.stage;
             myself.stage.globalBlocks.push(def);
+            myself.stage.replaceDoubleDefinitionsFor(def);
         });
         this.flushPaletteCache();
         this.refreshPalette();
@@ -2887,7 +2891,6 @@ IDE_Morph.prototype.openProject = function (name) {
         location.hash = '#open:' + str;
     }
 };
-
 
 IDE_Morph.prototype.switchToUserMode = function () {
     var world = this.world();
@@ -3164,6 +3167,9 @@ IDE_Morph.prototype.openProjectsBrowser = function () {
 };
 
 IDE_Morph.prototype.saveProjectsBrowser = function () {
+    if (this.source === 'examples') {
+        this.source = 'local'; // cannot save to examples
+    }
     new ProjectDialogMorph(this, 'save').popUp();
 };
 
@@ -3748,13 +3754,31 @@ IDE_Morph.prototype.setCloudURL = function () {
                 'https://snapcloud.miosoft.com/miocon/app/' +
                     'login?_app=SnapCloud',
             'local network lab' :
-                '192.168.2.110:8087/miocon/app/login?_app=SnapCloud',
+                '192.168.2.107:8087/miocon/app/login?_app=SnapCloud',
             'local network office' :
                 '192.168.186.167:8087/miocon/app/login?_app=SnapCloud',
             'localhost dev' :
                 'localhost/miocon/app/login?_app=SnapCloud'
         }
     );
+};
+
+// IDE_Morph synchronous Http data fetching
+
+IDE_Morph.prototype.getURL = function (url) {
+    var request = new XMLHttpRequest(),
+        myself = this;
+    try {
+        request.open('GET', url, false);
+        request.send();
+        if (request.status === 200) {
+            return request.responseText;
+        }
+        throw new Error('unable to retrieve ' + url);
+    } catch (err) {
+        myself.showMessage(err);
+        return;
+    }
 };
 
 // IDE_Morph user dialog shortcuts
@@ -4126,11 +4150,11 @@ ProjectDialogMorph.prototype.setSource = function (source) {
             }
         );
         return;
+    case 'examples':
+        this.projectList = this.getExamplesProjectList();
+        break;
     case 'local':
         this.projectList = this.getLocalProjectList();
-        break;
-    case 'examples':
-        this.projectList = [];
         break;
     }
 
@@ -4180,23 +4204,29 @@ ProjectDialogMorph.prototype.setSource = function (source) {
         };
     } else { // 'examples', 'cloud' is initialized elsewhere
         this.listField.action = function (item) {
+            var src, xml;
             if (item === undefined) {return; }
             if (myself.nameField) {
                 myself.nameField.setContents(item.name || '');
             }
-            if (myself.task === 'open') {
-                myself.notesText.text = item.notes || '';
-                myself.notesText.drawNew();
-                myself.notesField.contents.adjustBounds();
-                myself.preview.texture = item.thumb || null;
-                myself.preview.cachedTexture = null;
-                myself.preview.drawNew();
-            }
+            src = myself.ide.getURL(
+                'http://snap.berkeley.edu/snapsource/Examples/' +
+                    item.name + '.xml'
+            );
+
+            xml = myself.ide.serializer.parse(src);
+            myself.notesText.text = xml.childNamed('notes').contents
+                || '';
+            myself.notesText.drawNew();
+            myself.notesField.contents.adjustBounds();
+            myself.preview.texture = xml.childNamed('thumbnail').contents
+                || null;
+            myself.preview.cachedTexture = null;
+            myself.preview.drawNew();
             myself.edit();
         };
     }
     this.body.add(this.listField);
-
     this.shareButton.hide();
     this.unshareButton.hide();
     if (this.source === 'local') {
@@ -4226,6 +4256,35 @@ ProjectDialogMorph.prototype.getLocalProjectList = function () {
             projects.push(dta);
         }
     }
+    projects.sort(function (x, y) {
+        return x.name < y.name ? -1 : 1;
+    });
+    return projects;
+};
+
+ProjectDialogMorph.prototype.getExamplesProjectList = function () {
+    var dir,
+        projects = [];
+
+    dir = this.ide.getURL('http://snap.berkeley.edu/snapsource/Examples/');
+    dir.split('\n').forEach(
+        function (line) {
+            var startIdx = line.search(new RegExp('href=".*xml"')),
+                endIdx,
+                name,
+                dta;
+            if (startIdx > 0) {
+                endIdx = line.search(new RegExp('.xml'));
+                name = line.substring(startIdx + 6, endIdx);
+                dta = {
+                    name: name,
+                    thumb: null,
+                    notes: null
+                };
+                projects.push(dta);
+            }
+        }
+    );
     projects.sort(function (x, y) {
         return x.name < y.name ? -1 : 1;
     });
@@ -4308,13 +4367,20 @@ ProjectDialogMorph.prototype.clearDetails = function () {
 };
 
 ProjectDialogMorph.prototype.openProject = function () {
-    var myself = this,
-        proj = this.listField.selected;
+    var proj = this.listField.selected,
+        src;
     if (!proj) {return; }
+    this.ide.source = this.source;
     if (this.source === 'cloud') {
         this.openCloudProject(proj);
-    } else { // 'local, examples'
-        myself.ide.source = 'local';
+    } else if (this.source === 'examples') {
+        src = this.ide.getURL(
+            'http://snap.berkeley.edu/snapsource/Examples/' +
+                proj.name + '.xml'
+        );
+        this.ide.openProjectString(src);
+        this.destroy();
+    } else { // 'local'
         this.ide.openProject(proj.name);
         this.destroy();
     }
@@ -4823,7 +4889,7 @@ SpriteIconMorph.prototype.step = function () {
 // SpriteIconMorph layout
 
 SpriteIconMorph.prototype.fixLayout = function () {
-    if (!this.thumbnail) {return null; }
+    if (!this.thumbnail || !this.label) {return null; }
 
     this.setWidth(
         this.thumbnail.width()

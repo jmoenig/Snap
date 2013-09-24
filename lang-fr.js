@@ -185,7 +185,7 @@ SnapTranslator.dict.fr = {
     'translator_e-mail':
         'i.scool@mac.com', // optional
     'last_changed':
-        '2012-11-27', // this, too, will appear in the Translators tab
+        '2013-09-16', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -292,9 +292,9 @@ SnapTranslator.dict.fr = {
     'move %n steps':
         'avancer de %n pas',
     'turn %clockwise %n degrees':
-        'tourner de %n degr\u00E9s  %clockwise' ,
+        'tourner de %n degr\u00E9s %clockwise',
     'turn %counterclockwise %n degrees':
-        'tourner de %n degr\u00E9s  %counterclockwise',
+        'tourner de %n degr\u00E9s %counterclockwise',
     'point in direction %dir':
         'se diriger en faisant un angle de %dir',
     'point towards %dst':
@@ -435,7 +435,7 @@ SnapTranslator.dict.fr = {
     'repeat %n %c':
         'r\u00E9p\u00E9ter %n fois %c',
     'repeat until %b %c':
-        'r\u00E9p\u00E9ter ind\u00E9finiment si %b %c',
+        'r\u00E9p\u00E9ter jusqu\u0027\u00E0 %b %c',
     'if %b %c':
         'si %b  %c',
     'if %b %c else %c':

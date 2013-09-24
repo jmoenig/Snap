@@ -61,7 +61,7 @@ SyntaxElementMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2013-August-10';
+modules.store = '2013-September-17';
 
 
 // XML_Serializer ///////////////////////////////////////////////////////
@@ -673,6 +673,7 @@ SnapSerializer.prototype.loadCostumes = function (object, model) {
             } else {
                 costume.loaded = function () {
                     object.wearCostume(costume);
+                    this.loaded = true;
                 };
             }
         }
