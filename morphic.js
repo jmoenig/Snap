@@ -1035,7 +1035,7 @@
 /*global window, HTMLCanvasElement, getMinimumFontHeight, FileReader, Audio,
 FileList, getBlurredShadowSupport*/
 
-var morphicVersion = '2013-August-06';
+var morphicVersion = '2013-September-20';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = getBlurredShadowSupport(); // check for Chrome-bug
 
@@ -1928,7 +1928,7 @@ Rectangle.prototype.amountToTranslateWithin = function (aRect) {
     aRectangle. when all of me cannot be made to fit, prefer to keep
     my topLeft inside. Taken from Squeak.
 */
-    var dx, dy;
+    var dx = 0, dy = 0;
 
     if (this.right() > aRect.right()) {
         dx = aRect.right() - this.right();
@@ -1937,7 +1937,7 @@ Rectangle.prototype.amountToTranslateWithin = function (aRect) {
         dy = aRect.bottom() - this.bottom();
     }
     if ((this.left() + dx) < aRect.left()) {
-        dx = aRect.left() - this.right();
+        dx = aRect.left() - this.left();
     }
     if ((this.top() + dy) < aRect.top()) {
         dy = aRect.top() - this.top();

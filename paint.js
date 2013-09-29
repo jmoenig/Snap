@@ -49,6 +49,7 @@
     May 14 - bugfixes, Snap integration (Jens)
     May 16 - flat design adjustments (Jens)
     July 12 - pipette tool, code formatting adjustments (Jens)
+    September 16 - flood fill freeze fix (Kartik)
 
  */
 
@@ -62,7 +63,7 @@
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.paint = '2013-July-13';
+modules.paint = '2013-September-16';
 
 // Declarations
 
@@ -672,6 +673,22 @@ PaintCanvasMorph.prototype.floodfill = function (sourcepoint) {
             p[2] === sourcecolor[2] &&
             p[3] === sourcecolor[3];
     };
+
+    // if already filled, abort
+    if (sourcecolor[3] === 0 &&
+            this.settings.primarycolor === "transparent") {
+        return;
+    }
+    if (sourcecolor[0] === this.settings.primarycolor.r &&
+            sourcecolor[1] === this.settings.primarycolor.g &&
+            sourcecolor[2] === this.settings.primarycolor.b &&
+            sourcecolor[3] === this.settings.primarycolor.a) {
+        return;
+    }
+    if (sourcecolor[3] === 0 && this.settings.primarycolor.a === 0) {
+        return;
+    }
+
     while (stack.length > 0) {
         currentpoint = stack.pop();
         if (checkpoint(read(currentpoint))) {

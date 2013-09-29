@@ -83,7 +83,7 @@ ArgLabelMorph, localize, XML_Element, hex_sha512*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.threads = '2013-August-02';
+modules.threads = '2013-September-16';
 
 var ThreadManager;
 var Process;
@@ -997,7 +997,8 @@ Process.prototype.evaluateCustomBlock = function () {
     if (!context) {return null; }
     outer = new Context();
     outer.receiver = this.context.receiver; // || this.homeContext.receiver;
-    outer.variables.parentFrame = outer.receiver.variables;
+    outer.variables.parentFrame = outer.receiver ?
+            outer.receiver.variables : null;
 
     runnable = new Context(
         this.context.parentContext,
@@ -2168,32 +2169,69 @@ Process.prototype.createClone = function (name) {
 // Process sensing primitives
 
 Process.prototype.reportTouchingObject = function (name) {
-    // also check for temparary clones, as in Scratch 2.0
-    var thisObj = this.homeContext.receiver,
+    var thisObj = this.homeContext.receiver;
+
+    if (thisObj) {
+        return this.objectTouchingObject(thisObj, name);
+    }
+    return false;
+};
+
+Process.prototype.objectTouchingObject = function (thisObj, name) {
+    // helper function for reportTouchingObject()
+    // also check for temparary clones, as in Scratch 2.0,
+    // and for any parts (subsprites)
+    var myself = this,
         those,
         stage,
         mouse;
 
-    if (thisObj) {
-        if (this.inputOption(name) === 'mouse-pointer') {
-            mouse = thisObj.world().hand.position();
-            if (thisObj.bounds.containsPoint(mouse)) {
-                return !thisObj.isTransparentAt(mouse);
-            }
-            return false;
+    if (this.inputOption(name) === 'mouse-pointer') {
+        mouse = thisObj.world().hand.position();
+        if (thisObj.bounds.containsPoint(mouse) &&
+                !thisObj.isTransparentAt(mouse)) {
+            return true;
         }
+    } else {
         stage = thisObj.parentThatIsA(StageMorph);
         if (stage) {
-            if (this.inputOption(name) === 'edge') {
-                return !stage.bounds.containsRectangle(thisObj.bounds);
+            if (this.inputOption(name) === 'edge' &&
+                    !stage.bounds.containsRectangle(thisObj.bounds)) {
+                return true;
             }
-            if (this.inputOption(name) === 'pen trails') {
-                return thisObj.isTouching(stage.penTrailsMorph());
+            if (this.inputOption(name) === 'pen trails' &&
+                    thisObj.isTouching(stage.penTrailsMorph())) {
+                return true;
             }
             those = this.getObjectsNamed(name, thisObj, stage); // clones
-            return those.some(
-                function (any) {
+            if (those.some(function (any) {
                     return thisObj.isTouching(any);
+                })) {
+                return true;
+            }
+        }
+    }
+    return thisObj.parts.some(
+        function (any) {
+            return myself.objectTouchingObject(any, name);
+        }
+    );
+};
+
+Process.prototype.reportTouchingColor = function (aColor) {
+    // also check for any parts (subsprites)
+    var thisObj = this.homeContext.receiver,
+        stage;
+
+    if (thisObj) {
+        stage = thisObj.parentThatIsA(StageMorph);
+        if (stage) {
+            if (thisObj.isTouching(stage.colorFiltered(aColor, thisObj))) {
+                return true;
+            }
+            return thisObj.parts.some(
+                function (any) {
+                    return any.isTouching(stage.colorFiltered(aColor, any));
                 }
             );
         }
@@ -2201,28 +2239,25 @@ Process.prototype.reportTouchingObject = function (name) {
     return false;
 };
 
-Process.prototype.reportTouchingColor = function (aColor) {
-    var thisObj = this.homeContext.receiver,
-        stage;
-
-    if (thisObj) {
-        stage = thisObj.parentThatIsA(StageMorph);
-        if (stage) {
-            return thisObj.isTouching(stage.colorFiltered(aColor, thisObj));
-        }
-    }
-    return false;
-};
-
 Process.prototype.reportColorIsTouchingColor = function (color1, color2) {
+    // also check for any parts (subsprites)
     var thisObj = this.homeContext.receiver,
         stage;
 
     if (thisObj) {
         stage = thisObj.parentThatIsA(StageMorph);
         if (stage) {
-            return thisObj.colorFiltered(color1).isTouching(
-                stage.colorFiltered(color2, thisObj)
+            if (thisObj.colorFiltered(color1).isTouching(
+                    stage.colorFiltered(color2, thisObj)
+                )) {
+                return true;
+            }
+            return thisObj.parts.some(
+                function (any) {
+                    return any.colorFiltered(color1).isTouching(
+                        stage.colorFiltered(color2, any)
+                    );
+                }
             );
         }
     }

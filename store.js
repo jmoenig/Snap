@@ -61,7 +61,7 @@ SyntaxElementMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2013-July-08';
+modules.store = '2013-September-17';
 
 
 // XML_Serializer ///////////////////////////////////////////////////////
@@ -426,6 +426,26 @@ SnapSerializer.prototype.loadProjectModel = function (xmlNode) {
         myself.loadValue(model);
     });
 
+    // restore nesting associations
+    myself.project.stage.children.forEach(function (sprite) {
+        var anchor;
+        if (sprite.nestingInfo) { // only sprites may have nesting info
+            anchor = myself.project.sprites[sprite.nestingInfo.anchor];
+            if (anchor) {
+                anchor.attachPart(sprite);
+            }
+            sprite.rotatesWithAnchor = (sprite.nestingInfo.synch === 'true');
+        }
+    });
+    myself.project.stage.children.forEach(function (sprite) {
+        if (sprite.nestingInfo) { // only sprites may have nesting info
+            sprite.nestingScale = +(sprite.nestingInfo.scale || sprite.scale);
+            delete sprite.nestingInfo;
+        }
+    });
+
+    this.objects = {};
+
     /* Global Variables */
 
     if (model.globalVariables) {
@@ -618,12 +638,21 @@ SnapSerializer.prototype.loadMediaModel = function (xmlNode) {
 SnapSerializer.prototype.loadObject = function (object, model) {
     // private
     var blocks = model.require('blocks');
+    this.loadNestingInfo(object, model);
     this.loadCostumes(object, model);
     this.loadSounds(object, model);
     this.loadCustomBlocks(object, blocks);
     this.populateCustomBlocks(object, blocks);
     this.loadVariables(object.variables, model.require('variables'));
     this.loadScripts(object.scripts, model.require('scripts'));
+};
+
+SnapSerializer.prototype.loadNestingInfo = function (object, model) {
+    // private
+    var info = model.childNamed('nest');
+    if (info) {
+        object.nestingInfo = info.attributes;
+    }
 };
 
 SnapSerializer.prototype.loadCostumes = function (object, model) {
@@ -644,6 +673,7 @@ SnapSerializer.prototype.loadCostumes = function (object, model) {
             } else {
                 costume.loaded = function () {
                     object.wearCostume(costume);
+                    this.loaded = true;
                 };
             }
         }
@@ -1240,6 +1270,7 @@ SnapSerializer.prototype.openProject = function (project, ide) {
     sprites.sort(function (x, y) {
         return x.idx - y.idx;
     });
+
     ide.sprites = new List(sprites);
     sprite = sprites[0] || project.stage;
 
@@ -1359,6 +1390,7 @@ SpriteMorph.prototype.toXML = function (serializer) {
             ' draggable="@"' +
             '%' +
             ' costume="@" color="@,@,@" pen="@" ~>' +
+            '%' + // nesting info
             '<costumes>%</costumes>' +
             '<sounds>%</sounds>' +
             '<variables>%</variables>' +
@@ -1379,6 +1411,21 @@ SpriteMorph.prototype.toXML = function (serializer) {
         this.color.g,
         this.color.b,
         this.penPoint,
+
+        // nesting info
+        this.anchor
+            ? '<nest anchor="' +
+                    this.anchor.name +
+                    '" synch="'
+                    + this.rotatesWithAnchor
+                    + (this.scale === this.nestingScale ? '' :
+                            '"'
+                            + ' scale="'
+                            + this.nestingScale)
+
+                    + '"/>'
+            : '',
+
         serializer.store(this.costumes, this.name + '_cst'),
         serializer.store(this.sounds, this.name + '_snd'),
         serializer.store(this.variables),

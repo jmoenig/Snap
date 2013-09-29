@@ -42,7 +42,7 @@
 
 /*global modules, contains*/
 
-modules.locale = '2013-August-06';
+modules.locale = '2013-August-17';
 
 // Global stuff
 
@@ -149,7 +149,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org',
     'last_changed':
-        '2013-08-02'
+        '2013-09-16'
 };
 
 SnapTranslator.dict.it = {
@@ -209,7 +209,7 @@ SnapTranslator.dict.pt = {
     'translator_e-mail':
         'mmsequeira@gmail.com',
     'last_changed':
-        '2013-04-08'
+        '2013-09-16'
 };
 
 SnapTranslator.dict.cs = {
@@ -257,7 +257,7 @@ SnapTranslator.dict.fr = {
     'translator_e-mail':
         'i.scool@mac.com',
     'last_changed':
-        '2012-11-27'
+        '2013-09-16'
 };
 
 SnapTranslator.dict.si = {
@@ -297,11 +297,11 @@ SnapTranslator.dict.nl = {
     'language_name':
         'Nederlands',
     'language_translator':
-        'Frank Sierens',
+        'Frank Sierens, Sjoerd Dirk Meijer',
     'translator_e-mail':
-        'frank.sierens@telenet.be',
+        'frank.sierens@telenet.be, sjoerddirk@fromScratchEd.nl',
     'last_changed':
-        '2013-07-24'
+        '2013-08-12'
 };
 
 SnapTranslator.dict.pl = {
@@ -313,4 +313,48 @@ SnapTranslator.dict.pl = {
         'witek@oeiizk.waw.pl',
     'last_changed':
         '2013-08-05'
+};
+
+SnapTranslator.dict.tw = {
+    'language_name':
+        '繁體中文',
+    'language_translator':
+        'cch',
+    'translator_e-mail':
+        'cchuang2009@gmail.com',
+    'last_changed':
+        '2013-8-14'
+};
+
+SnapTranslator.dict.no = {
+    'language_name':
+        'Norsk',
+    'language_translator':
+        'Olav A Marschall',
+    'translator_e-mail':
+        'mattebananer@gmail.com',
+    'last_changed':
+        '2013-09-16'
+};
+
+SnapTranslator.dict.dk = {
+    'language_name':
+        'Dansk',
+    'language_translator':
+        'FAB',
+    'translator_e-mail':
+        'fab@nielsen.mail.dk',
+    'last_changed':
+        '2013-09-16'
+};
+
+SnapTranslator.dict.el = {
+    'language_name':
+        'Ελληνικά',
+    'language_translator':
+        'Ino Samaras',
+    'translator_e-mail':
+        'ino.samaras@berkeley.edu',
+    'last_changed':
+        '2013-09-16'
 };

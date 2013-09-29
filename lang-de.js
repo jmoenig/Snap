@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org', // optional
     'last_changed':
-        '2013-08-02', // this, too, will appear in the Translators tab
+        '2013-09-16', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -540,6 +540,8 @@ SnapTranslator.dict.de = {
         'falsch',
     'join %words':
         'verbinde %words',
+    'split %s by %delim':
+        'trenne %s nach %delim',
     'hello':
         'Hallo',
     'world':
@@ -803,6 +805,10 @@ SnapTranslator.dict.de = {
     // sprites:
     'edit':
         'Bearbeiten',
+    'detach from':
+        'Abtrennen von',
+    'detach all parts':
+        'Alle Teile abtrennen',
     'export...':
         'Exportieren...',
 
@@ -1202,6 +1208,16 @@ SnapTranslator.dict.de = {
         'ln',
     'e^':
         'e^',
+
+    // delimiters
+    'whitespace':
+        'Leerraum',
+    'line':
+        'Zeilenvorschub',
+    'tab':
+        'Tabulator',
+    'cr':
+        'Wagenr\u00fccklauf',
 
     // data types
     'number':

@@ -1851,3 +1851,77 @@ ______
 ------
 * Polish translation, yay!! Thanks, Witek Kranas!
 * Morphic: mouseEnterDragging fix
+
+130807
+------
+* Objects, GUI: Sprite Nesting preliminaries
+* Objects: Fixed stage costume scaling & misplacing bug. Thanks, Josh, for the report!
+* Objects, GUI: Sprite Nesting GUI
+* Objects: Nested Sprite Motion
+
+130808
+------
+* Objects: Nested Sprite Scaling
+* Objects: Nested Sprite Rotation
+* Objects: Nested Sprite synchronous / independent rotation
+* Dutch translation update, thanks, Sjoerd Dirk Meijer!
+
+130809
+------
+* GUI: Nested Sprite Rotation style buttons on corral icons
+* Store, Objects: Nested Sprite saving / loading
+
+130810
+------
+* Objects, GUI: Nestable Sprites fixes
+* German translation update
+
+130812
+------
+* Objects, Threads: Nestable Sprites Collision Detection & fixes
+* Dutch translation update
+
+130814
+------
+* Traditional Chinese translation, yay!! thanks, Chu-Ching-Huang!
+
+130817
+------
+* Norwegian translation, yay!! thanks, Olav Marschall!
+* "Dynamic" library list, thanks, Brian
+
+130916
+------
+* new Danish translation, yay!! thanks, Morten and Hanne!
+* new Greek translation, yay!! thanks, Ino!
+* Portuguese translation update, thanks, Manuel!
+* French translation update,
+* Norwegian translation update
+* threads: minor custom block evaluation scope fix
+* paint: flood fill freeze fix, thanks for the contribution, Kartik!
+* objects: new SPLIT primitive reporter
+* German translation update for new SPLIT primitive and delimiter options
+* GUI: getPublicProject adjustments (lowercase username)
+* GUI: prompt() - invocation fixes (null-choices)
+* GUI: synchronous URL fetching simplifications for libraries and example projects
+* GUI: fixed #115 - prevent loading several instances of the same block definition
+
+130917
+------
+* Cloud: encodeDict() fix and new parseDict() method - used for accessing shared projects
+* GUI: fixed #119, #149 (accessing a shared projects requires lowercasing the username)
+* Portuguese translation update for SPLIT block, thanks, Manuel!
+* Store, Objects: prevent costumes from being drawn while they are loading, fixes parts of #154
+
+130918
+------
+* Objects, GUI: prevent costumes with CORS-tainted canvases, expected to fix #155, #154, #151, #148, #147, #127 for future projects
+* BYOB: Prevent local custom blocks in global custom block definitions, fixes #167 for future projects
+
+130919
+* Objects: fixed #169 (sprites are sometimes off-placed when the project is loaded)
+* Objects, GUI: fixed #146 (filter out empty costumes)
+
+130920
+------
+* Morphic: fixed #172, Rectangle.amountToTranslateWithin() for IF ON EDGE, BOUNCE

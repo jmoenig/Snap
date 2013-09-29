@@ -68,7 +68,7 @@ sb, CommentMorph, CommandBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2013-July-30';
+modules.gui = '2013-September-19';
 
 // Declarations
 
@@ -298,6 +298,7 @@ IDE_Morph.prototype.openIn = function (world) {
     */
 
     function interpretUrlAnchors() {
+        var dict;
         if (location.hash.substr(0, 6) === '#open:') {
             hash = location.hash.substr(6);
             if (hash.charAt(0) === '%'
@@ -335,8 +336,13 @@ IDE_Morph.prototype.openIn = function (world) {
             this.shield.setExtent(this.parent.extent());
             this.parent.add(this.shield);
             myself.showMessage('Fetching project\nfrom the cloud...');
+
+            // make sure to lowercase the username
+            dict = SnapCloud.parseDict(location.hash.substr(9));
+            dict.Username = dict.Username.toLowerCase();
+
             SnapCloud.getPublicProject(
-                location.hash.substr(9),
+                SnapCloud.encodeDict(dict),
                 function (projectData) {
                     var msg;
                     myself.nextSteps([
@@ -1506,6 +1512,19 @@ IDE_Morph.prototype.droppedImage = function (aCanvas, name) {
         aCanvas,
         name ? name.split('.')[0] : '' // up to period
     );
+
+    if (costume.isTainted()) {
+        this.inform(
+            'Unable to import this image',
+            'The picture you wish to import has been\n' +
+                'tainted by a restrictive cross-origin policy\n' +
+                'making it unusable for costumes in Snap!. \n\n' +
+                'Try downloading this picture first to your\n' +
+                'computer, and import it from there.'
+        );
+        return;
+    }
+
     this.currentSprite.addCostume(costume);
     this.currentSprite.wearCostume(costume);
     this.spriteBar.tabBar.tabTo('costumes');
@@ -1999,7 +2018,7 @@ IDE_Morph.prototype.cloudMenu = function () {
                 myself.prompt('Author name…', function (usr) {
                     myself.prompt('Project name...', function (prj) {
                         var id = 'Username=' +
-                            encodeURIComponent(usr) +
+                            encodeURIComponent(usr.toLowerCase()) +
                             '&ProjectName=' +
                             encodeURIComponent(prj);
                         myself.showMessage(
@@ -2033,8 +2052,8 @@ IDE_Morph.prototype.cloudMenu = function () {
                             myself.cloudError()
                         );
 
-                    }, 'project');
-                }, 'project');
+                    }, null, 'project');
+                }, null, 'project');
             },
             null,
             new Color(100, 0, 0)
@@ -2187,6 +2206,17 @@ IDE_Morph.prototype.settingsMenu = function () {
         'check for alternative\nGUI design',
         false
     );
+    addPreference(
+        'Sprite Nesting',
+        function () {
+            SpriteMorph.prototype.enableNesting =
+                !SpriteMorph.prototype.enableNesting;
+        },
+        SpriteMorph.prototype.enableNesting,
+        'uncheck to disable\nsprite composition',
+        'check to enable\nsprite composition',
+        true
+    );
     menu.addLine(); // everything below this line is stored in the project
     addPreference(
         'Thread safe scripts',
@@ -2245,6 +2275,9 @@ IDE_Morph.prototype.projectMenu = function () {
     menu.addItem(
         'Save',
         function () {
+            if (myself.source === 'examples') {
+                myself.source = 'local'; // cannot save to examples
+            }
             if (myself.projectName) {
                 if (myself.source === 'local') { // as well as 'examples'
                     myself.saveProject(myself.projectName);
@@ -2326,63 +2359,46 @@ IDE_Morph.prototype.projectMenu = function () {
     menu.addItem(
         'Import tools',
         function () {
-
-            var url = 'http://snap.berkeley.edu/snapsource/tools.xml',
-                request = new XMLHttpRequest();
-            request.open('GET', url, false);
-            request.send();
-            if (request.status === 200) {
-                return myself.droppedText(request.responseText, 'tools');
-            }
-            throw new Error('unable to retrieve ' + url);
-
+            myself.droppedText(
+                myself.getURL(
+                    'http://snap.berkeley.edu/snapsource/tools.xml'
+                ),
+                'tools'
+            );
         },
         'load the official library of\npowerful blocks'
     );
     menu.addItem(
         'Libraries...',
         function () {
-            var libMenu = new MenuMorph(this, 'Import library');
+            // read a list of libraries from an external file,
+            var libMenu = new MenuMorph(this, 'Import library'),
+                libUrl = 'http://snap.berkeley.edu/snapsource/libraries/' +
+                    'LIBRARIES';
 
             function loadLib(name) {
                 var url = 'http://snap.berkeley.edu/snapsource/libraries/'
                         + name
-                        + '.xml',
-                    request = new XMLHttpRequest();
-                request.open('GET', url, false);
-                request.send();
-                if (request.status === 200) {
-                    return myself.droppedText(request.responseText, name);
-                }
-                throw new Error('unable to retrieve ' + url);
+                        + '.xml';
+                myself.droppedText(myself.getURL(url), name);
             }
 
-            libMenu.addItem(
-                'Iteration, composition',
-                function () {
-                    loadLib('iteration-composition');
+            myself.getURL(libUrl).split('\n').forEach(function (line) {
+                if (line.length > 0) {
+                    libMenu.addItem(
+                        line.substring(line.indexOf('\t') + 1),
+                        function () {
+                            loadLib(
+                                line.substring(0, line.indexOf('\t'))
+                            );
+                        }
+                    );
                 }
-            );
-            libMenu.addItem(
-                'List utilities',
-                function () {
-                    loadLib('list-utilities');
-                }
-            );
-            libMenu.addItem(
-                'Variadic reporters',
-                function () {
-                    loadLib('variadic-reporters');
-                }
-            );
-            libMenu.addItem(
-                'Words, sentences',
-                function () {
-                    loadLib('word-sentence');
-                }
-            );
+            });
+
             libMenu.popup(world, pos);
-        }
+        },
+        'Select categories of additional blocks to add to this project.'
     );
 
     menu.popup(world, pos);
@@ -2848,6 +2864,7 @@ IDE_Morph.prototype.rawOpenBlocksString = function (str, name, silently) {
         blocks.forEach(function (def) {
             def.receiver = myself.stage;
             myself.stage.globalBlocks.push(def);
+            myself.stage.replaceDoubleDefinitionsFor(def);
         });
         this.flushPaletteCache();
         this.refreshPalette();
@@ -2911,7 +2928,6 @@ IDE_Morph.prototype.openProject = function (name) {
         location.hash = '#open:' + str;
     }
 };
-
 
 IDE_Morph.prototype.switchToUserMode = function () {
     var world = this.world();
@@ -3188,6 +3204,9 @@ IDE_Morph.prototype.openProjectsBrowser = function () {
 };
 
 IDE_Morph.prototype.saveProjectsBrowser = function () {
+    if (this.source === 'examples') {
+        this.source = 'local'; // cannot save to examples
+    }
     new ProjectDialogMorph(this, 'save').popUp();
 };
 
@@ -3772,13 +3791,31 @@ IDE_Morph.prototype.setCloudURL = function () {
                 'https://snapcloud.miosoft.com/miocon/app/' +
                     'login?_app=SnapCloud',
             'local network lab' :
-                '192.168.2.110:8087/miocon/app/login?_app=SnapCloud',
+                '192.168.2.107:8087/miocon/app/login?_app=SnapCloud',
             'local network office' :
                 '192.168.186.167:8087/miocon/app/login?_app=SnapCloud',
             'localhost dev' :
                 'localhost/miocon/app/login?_app=SnapCloud'
         }
     );
+};
+
+// IDE_Morph synchronous Http data fetching
+
+IDE_Morph.prototype.getURL = function (url) {
+    var request = new XMLHttpRequest(),
+        myself = this;
+    try {
+        request.open('GET', url, false);
+        request.send();
+        if (request.status === 200) {
+            return request.responseText;
+        }
+        throw new Error('unable to retrieve ' + url);
+    } catch (err) {
+        myself.showMessage(err);
+        return;
+    }
 };
 
 // IDE_Morph user dialog shortcuts
@@ -4150,11 +4187,11 @@ ProjectDialogMorph.prototype.setSource = function (source) {
             }
         );
         return;
+    case 'examples':
+        this.projectList = this.getExamplesProjectList();
+        break;
     case 'local':
         this.projectList = this.getLocalProjectList();
-        break;
-    case 'examples':
-        this.projectList = [];
         break;
     }
 
@@ -4204,23 +4241,29 @@ ProjectDialogMorph.prototype.setSource = function (source) {
         };
     } else { // 'examples', 'cloud' is initialized elsewhere
         this.listField.action = function (item) {
+            var src, xml;
             if (item === undefined) {return; }
             if (myself.nameField) {
                 myself.nameField.setContents(item.name || '');
             }
-            if (myself.task === 'open') {
-                myself.notesText.text = item.notes || '';
-                myself.notesText.drawNew();
-                myself.notesField.contents.adjustBounds();
-                myself.preview.texture = item.thumb || null;
-                myself.preview.cachedTexture = null;
-                myself.preview.drawNew();
-            }
+            src = myself.ide.getURL(
+                'http://snap.berkeley.edu/snapsource/Examples/' +
+                    item.name + '.xml'
+            );
+
+            xml = myself.ide.serializer.parse(src);
+            myself.notesText.text = xml.childNamed('notes').contents
+                || '';
+            myself.notesText.drawNew();
+            myself.notesField.contents.adjustBounds();
+            myself.preview.texture = xml.childNamed('thumbnail').contents
+                || null;
+            myself.preview.cachedTexture = null;
+            myself.preview.drawNew();
             myself.edit();
         };
     }
     this.body.add(this.listField);
-
     this.shareButton.hide();
     this.unshareButton.hide();
     if (this.source === 'local') {
@@ -4250,6 +4293,35 @@ ProjectDialogMorph.prototype.getLocalProjectList = function () {
             projects.push(dta);
         }
     }
+    projects.sort(function (x, y) {
+        return x.name < y.name ? -1 : 1;
+    });
+    return projects;
+};
+
+ProjectDialogMorph.prototype.getExamplesProjectList = function () {
+    var dir,
+        projects = [];
+
+    dir = this.ide.getURL('http://snap.berkeley.edu/snapsource/Examples/');
+    dir.split('\n').forEach(
+        function (line) {
+            var startIdx = line.search(new RegExp('href=".*xml"')),
+                endIdx,
+                name,
+                dta;
+            if (startIdx > 0) {
+                endIdx = line.search(new RegExp('.xml'));
+                name = line.substring(startIdx + 6, endIdx);
+                dta = {
+                    name: name,
+                    thumb: null,
+                    notes: null
+                };
+                projects.push(dta);
+            }
+        }
+    );
     projects.sort(function (x, y) {
         return x.name < y.name ? -1 : 1;
     });
@@ -4332,13 +4404,20 @@ ProjectDialogMorph.prototype.clearDetails = function () {
 };
 
 ProjectDialogMorph.prototype.openProject = function () {
-    var myself = this,
-        proj = this.listField.selected;
+    var proj = this.listField.selected,
+        src;
     if (!proj) {return; }
+    this.ide.source = this.source;
     if (this.source === 'cloud') {
         this.openCloudProject(proj);
-    } else { // 'local, examples'
-        myself.ide.source = 'local';
+    } else if (this.source === 'examples') {
+        src = this.ide.getURL(
+            'http://snap.berkeley.edu/snapsource/Examples/' +
+                proj.name + '.xml'
+        );
+        this.ide.openProjectString(src);
+        this.destroy();
+    } else { // 'local'
         this.ide.openProject(proj.name);
         this.destroy();
     }
@@ -4725,6 +4804,7 @@ SpriteIconMorph.prototype.init = function (aSprite, aTemplate) {
     this.object = aSprite || new SpriteMorph(); // mandatory, actually
     this.version = this.object.version;
     this.thumbnail = null;
+    this.rotationButton = null; // synchronous rotation of nested sprites
 
     // initialize inherited properties:
     SpriteIconMorph.uber.init.call(
@@ -4755,7 +4835,12 @@ SpriteIconMorph.prototype.createThumbnail = function () {
 
     this.thumbnail = new Morph();
     this.thumbnail.setExtent(this.thumbSize);
-    this.thumbnail.image = this.object.thumbnail(this.thumbSize);
+    if (this.object instanceof SpriteMorph) { // support nested sprites
+        this.thumbnail.image = this.object.fullThumbnail(this.thumbSize);
+        this.createRotationButton();
+    } else {
+        this.thumbnail.image = this.object.thumbnail(this.thumbSize);
+    }
     this.add(this.thumbnail);
 };
 
@@ -4786,6 +4871,46 @@ SpriteIconMorph.prototype.createLabel = function () {
     this.add(this.label);
 };
 
+SpriteIconMorph.prototype.createRotationButton = function () {
+    var button, myself = this;
+
+    if (this.rotationButton) {
+        this.rotationButton.destroy();
+        this.roationButton = null;
+    }
+    if (!this.object.anchor) {
+        return;
+    }
+
+    button = new ToggleButtonMorph(
+        null, // colors,
+        null, // target
+        function () {
+            myself.object.rotatesWithAnchor =
+                !myself.object.rotatesWithAnchor;
+        },
+        [
+            '\u2192',
+            '\u21BB'
+        ],
+        function () {  // query
+            return myself.object.rotatesWithAnchor;
+        }
+    );
+
+    button.corner = 8;
+    button.labelMinExtent = new Point(11, 11);
+    button.padding = 0;
+    button.pressColor = button.color;
+    button.drawNew();
+    // button.hint = 'rotate synchronously\nwith anchor';
+    button.fixLayout();
+    button.refresh();
+    button.changed();
+    this.rotationButton = button;
+    this.add(this.rotationButton);
+};
+
 // SpriteIconMorph stepping
 
 SpriteIconMorph.prototype.step = function () {
@@ -4801,7 +4926,7 @@ SpriteIconMorph.prototype.step = function () {
 // SpriteIconMorph layout
 
 SpriteIconMorph.prototype.fixLayout = function () {
-    if (!this.thumbnail) {return null; }
+    if (!this.thumbnail || !this.label) {return null; }
 
     this.setWidth(
         this.thumbnail.width()
@@ -4822,6 +4947,11 @@ SpriteIconMorph.prototype.fixLayout = function () {
     this.thumbnail.setTop(
         this.top() + this.outline + this.edge + this.padding
     );
+
+    if (this.rotationButton) {
+        this.rotationButton.setTop(this.top());
+        this.rotationButton.setRight(this.right());
+    }
 
     this.label.setWidth(
         Math.min(
@@ -4856,6 +4986,18 @@ SpriteIconMorph.prototype.userMenu = function () {
     menu.addItem("duplicate", 'duplicateSprite');
     menu.addItem("delete", 'removeSprite');
     menu.addLine();
+    if (this.object.anchor) {
+        menu.addItem(
+            localize('detach from') + ' ' + this.object.anchor.name,
+            function () {myself.object.detachFromAnchor(); }
+        );
+    }
+    if (this.object.parts.length) {
+        menu.addItem(
+            'detach all parts',
+            function () {myself.object.detachAllParts(); }
+        );
+    }
     menu.addItem("export...", 'exportSprite');
     return menu;
 };
