@@ -1925,3 +1925,7 @@ ______
 130920
 ------
 * Morphic: fixed #172, Rectangle.amountToTranslateWithin() for IF ON EDGE, BOUNCE
+
+130930
+------
+* Blocks: fixed #186 (can't duplicate blocks with anchored comments)
