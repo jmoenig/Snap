@@ -155,7 +155,7 @@ DialogBoxMorph, BlockInputFragmentMorph, PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2013-August-02';
+modules.blocks = '2013-September-30';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -2910,10 +2910,10 @@ BlockMorph.prototype.situation = function () {
 
 // BlockMorph sticky comments
 
-BlockMorph.prototype.prepareToBeGrabbed = function () {
+BlockMorph.prototype.prepareToBeGrabbed = function (hand) {
     var myself = this;
     this.allComments().forEach(function (comment) {
-        comment.startFollowing(myself);
+        comment.startFollowing(myself, hand.world);
     });
 };
 
@@ -10133,7 +10133,7 @@ CommentMorph.prototype.userMenu = function () {
     menu.addItem(
         "duplicate",
         function () {
-            this.fullCopy().pickUp(this.world());
+            myself.fullCopy().pickUp(myself.world());
         },
         'make a copy\nand pick it up'
     );
@@ -10252,14 +10252,13 @@ CommentMorph.prototype.align = function (topBlock, ignoreLayer) {
     }
 };
 
-CommentMorph.prototype.startFollowing = function (topBlock) {
-    var myself = this;
+CommentMorph.prototype.startFollowing = function (topBlock, world) {
     this.align(topBlock);
-    this.world().add(this);
+    world.add(this);
     this.addShadow();
     this.stickyOffset = this.position().subtract(this.block.position());
     this.step = function () {
-        myself.setPosition(this.block.position().add(myself.stickyOffset));
+        this.setPosition(this.block.position().add(this.stickyOffset));
     };
 };
 
