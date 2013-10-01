@@ -1929,3 +1929,7 @@ ______
 130930
 ------
 * Blocks: fixed #186 (can't duplicate blocks with anchored comments)
+
+131001
+------
+* Objects: smooth numerical values displayed in watchers
