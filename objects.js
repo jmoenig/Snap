@@ -124,7 +124,7 @@ PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.objects = '2013-September-19';
+modules.objects = '2013-October-01';
 
 var SpriteMorph;
 var StageMorph;
@@ -5986,13 +5986,16 @@ WatcherMorph.prototype.update = function () {
         } else {
             newValue = this.target[this.getter]();
         }
+        num = parseFloat(newValue);
+        if (!isNaN(num)) {
+            newValue = Math.round(newValue * 1000000000) / 1000000000;
+        }
         if (newValue !== this.currentValue) {
             this.changed();
             this.cellMorph.contents = newValue;
             this.cellMorph.drawNew();
-            num = parseFloat(newValue);
-            if (!isNaN(num)) {
-                this.sliderMorph.value = num;
+            if (!isNaN(newValue)) {
+                this.sliderMorph.value = newValue;
                 this.sliderMorph.drawNew();
             }
             this.fixLayout();
