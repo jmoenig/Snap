@@ -10131,6 +10131,7 @@ WorldMorph.prototype.initEventListeners = function () {
         "mousedown",
         function (event) {
             event.preventDefault();
+            alert("1");
             canvas.focus();
             myself.hand.processMouseDown(event);
         },
@@ -10670,6 +10671,7 @@ WorldMorph.prototype.edit = function (aStringOrTextMorph) {
             && MorphicPreferences.useVirtualKeyboard) {
         this.virtualKeyboard.style.top = this.cursor.top() + pos.y + "px";
         this.virtualKeyboard.style.left = this.cursor.left() + pos.x + "px";
+        alert("2");
         this.virtualKeyboard.focus();
     }
 
@@ -10734,6 +10736,7 @@ WorldMorph.prototype.stopEditing = function () {
         document.body.removeChild(this.virtualKeyboard);
         this.virtualKeyboard = null;
     }
+    alert("3");
     this.worldCanvas.focus();
 };
 
