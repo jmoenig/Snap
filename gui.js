@@ -64,11 +64,11 @@ standardSettings, Sound, BlockMorph, ToggleMorph, InputSlotDialogMorph,
 ScriptsMorph, isNil, SymbolMorph, BlockExportDialogMorph,
 BlockImportDialogMorph, SnapTranslator, localize, List, InputSlotMorph,
 SnapCloud, Uint8Array, HandleMorph, SVG_Costume, fontHeight, hex_sha512,
-sb, CommentMorph, CommandBlockMorph*/
+sb, CommentMorph, CommandBlockMorph, BlockLabelPlaceHolderMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2013-September-19';
+modules.gui = '2013-October-04';
 
 // Declarations
 
@@ -1701,7 +1701,8 @@ IDE_Morph.prototype.applySavedSettings = function () {
         zoom = this.getSetting('zoom'),
         language = this.getSetting('language'),
         click = this.getSetting('click'),
-        longform = this.getSetting('longform');
+        longform = this.getSetting('longform'),
+        plainprototype = this.getSetting('plainprototype');
 
     // design
     if (design === 'flat') {
@@ -1732,6 +1733,11 @@ IDE_Morph.prototype.applySavedSettings = function () {
     // long form
     if (longform) {
         InputSlotDialogMorph.prototype.isLaunchingExpanded = true;
+    }
+
+    // plain prototype labels
+    if (plainprototype) {
+        BlockLabelPlaceHolderMorph.prototype.plainLabel = true;
     }
 };
 
@@ -2094,6 +2100,13 @@ IDE_Morph.prototype.settingsMenu = function () {
         InputSlotDialogMorph.prototype.isLaunchingExpanded,
         'uncheck to use the input\ndialog in short form',
         'check to always show slot\ntypes in the input dialog'
+    );
+    addPreference(
+        'Plain prototype labels',
+        'togglePlainPrototypeLabels',
+        BlockLabelPlaceHolderMorph.prototype.plainLabel,
+        'uncheck to always show (+) symbols\nin block prototype labels',
+        'check to hide (+) symbols\nin block prototype labels'
     );
     addPreference(
         'Virtual keyboard',
@@ -3040,6 +3053,16 @@ IDE_Morph.prototype.toggleLongFormInputDialog = function () {
         this.saveSetting('longform', true);
     } else {
         this.removeSetting('longform');
+    }
+};
+
+IDE_Morph.prototype.togglePlainPrototypeLabels = function () {
+    BlockLabelPlaceHolderMorph.prototype.plainLabel =
+        !BlockLabelPlaceHolderMorph.prototype.plainLabel;
+    if (BlockLabelPlaceHolderMorph.prototype.plainLabel) {
+        this.saveSetting('plainprototype', true);
+    } else {
+        this.removeSetting('plainprototype');
     }
 };
 
