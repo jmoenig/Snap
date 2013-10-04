@@ -83,7 +83,7 @@ ArgLabelMorph, localize, XML_Element, hex_sha512*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.threads = '2013-September-16';
+modules.threads = '2013-October-04';
 
 var ThreadManager;
 var Process;
@@ -2002,8 +2002,18 @@ Process.prototype.reportUnicodeAsLetter = function (num) {
 };
 
 Process.prototype.reportTextSplit = function (string, delimiter) {
-    var str = (string || '').toString(),
+    var types = ['text', 'number'],
+        strType = this.reportTypeOf(string),
+        delType = this.reportTypeOf(this.inputOption(delimiter)),
+        str,
         del;
+    if (!contains(types, strType)) {
+        throw new Error('expecting a text instad of a ' + strType);
+    }
+    if (!contains(types, delType)) {
+        throw new Error('expecting a text delimiter instad of a ' + delType);
+    }
+    str = (string || '').toString();
     switch (this.inputOption(delimiter)) {
     case 'line':
         del = '\n';

@@ -1933,3 +1933,7 @@ ______
 131001
 ------
 * Objects: smooth numerical values displayed in watchers
+
+131004
+------
+* Threads: Type-check the SPLIT block's input before eval'ing it
