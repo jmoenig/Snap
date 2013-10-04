@@ -124,7 +124,7 @@ PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.objects = '2013-October-01';
+modules.objects = '2013-October-04';
 
 var SpriteMorph;
 var StageMorph;
@@ -5720,7 +5720,8 @@ CellMorph.prototype.drawNew = function () {
     this.silentSetWidth(Math.max(
         this.contentsMorph.width() + this.edge * 2,
         (this.contents instanceof Context ||
-            this.contents instanceof List ? 0 : this.height() * 2)
+            this.contents instanceof List ? 0 :
+                    SyntaxElementMorph.prototype.fontSize * 3.5)
     ));
 
     // draw my outline
