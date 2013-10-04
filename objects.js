@@ -3056,6 +3056,7 @@ SpriteMorph.prototype.toggleVariableWatcher = function (varName, isGlobal) {
         } else {
             watcher.show();
             watcher.fixLayout(); // re-hide hidden parts
+            watcher.keepWithin(stage);
         }
         return;
     }
@@ -3074,6 +3075,7 @@ SpriteMorph.prototype.toggleVariableWatcher = function (varName, isGlobal) {
     }
     stage.add(watcher);
     watcher.fixLayout();
+    watcher.keepWithin(stage);
 };
 
 SpriteMorph.prototype.showingVariableWatcher = function (varName) {
@@ -3115,6 +3117,7 @@ SpriteMorph.prototype.toggleWatcher = function (selector, label, color) {
         } else {
             watcher.show();
             watcher.fixLayout(); // re-hide hidden parts
+            watcher.keepWithin(stage);
         }
         return;
     }
@@ -3133,6 +3136,7 @@ SpriteMorph.prototype.toggleWatcher = function (selector, label, color) {
     }
     stage.add(watcher);
     watcher.fixLayout();
+    watcher.keepWithin(stage);
 };
 
 SpriteMorph.prototype.showingWatcher = function (selector) {
