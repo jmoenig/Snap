@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org', // optional
     'last_changed':
-        '2013-09-16', // this, too, will appear in the Translators tab
+        '2013-10-04', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -705,6 +705,12 @@ SnapTranslator.dict.de = {
             + 'zu erm\u00f6glichen',
     'Long form input dialog':
         'Ausf\u00fchrlicher Input-Dialog',
+    'Plain prototype labels':
+        'Einfache Prototyp-Beschriftung',
+    'uncheck to always show (+) symbols\nin block prototype labels':
+        'ausschalten, um (+) Zeichen\nim Blockeditor zu verbergen',
+    'check to hide (+) symbols\nin block prototype labels':
+        'einschalten, um (+) Zeichen\nim Blockeditor immer anzuzeigen',
     'check to always show slot\ntypes in the input dialog':
         'einschalten, um immer die Datentypen\nim Input-Dialog zu sehen',
     'uncheck to use the input\ndialog in short form':

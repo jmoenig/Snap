@@ -1925,3 +1925,18 @@ ______
 130920
 ------
 * Morphic: fixed #172, Rectangle.amountToTranslateWithin() for IF ON EDGE, BOUNCE
+
+130930
+------
+* Blocks: fixed #186 (can't duplicate blocks with anchored comments)
+
+131001
+------
+* Objects: smooth numerical values displayed in watchers
+
+131004
+------
+* Threads: Type-check the SPLIT block's input before eval'ing it
+* Objects: Prevent watcher cells from growing wider as their contents becomes taller
+* Objects: Keep watchers onstage when hiding/showing them, fixes #195
+* BYOB, GUI, locale: New preference setting for plain block prototype labels
