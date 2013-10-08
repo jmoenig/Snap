@@ -1779,6 +1779,9 @@ IDE_Morph.prototype.removeSetting = function (key) {
 };
 
 // IDE_Morph sprite list access
+IDE_Morph.prototype.snapAppsHookAddSprite = function (sprite) { 
+    this.stage.add(sprite);
+};
 
 IDE_Morph.prototype.addNewSprite = function () {
     var sprite = new SpriteMorph(this.globalVariables),
@@ -1787,7 +1790,8 @@ IDE_Morph.prototype.addNewSprite = function () {
     sprite.name = sprite.name
         + (this.corral.frame.contents.children.length + 1);
     sprite.setCenter(this.stage.center());
-    this.stage.add(sprite);
+	
+	this.snapAppsHookAddSprite(sprite);
 
     // randomize sprite properties
     sprite.setHue(rnd.call(this, 0, 100));
@@ -1809,7 +1813,7 @@ IDE_Morph.prototype.paintNewSprite = function () {
     sprite.name = sprite.name +
         (this.corral.frame.contents.children.length + 1);
     sprite.setCenter(this.stage.center());
-    this.stage.add(sprite);
+	this.snapAppsHookAddSprite(sprite);
     this.sprites.add(sprite);
     this.corral.addSprite(sprite);
     this.selectSprite(sprite);
@@ -1830,7 +1834,7 @@ IDE_Morph.prototype.duplicateSprite = function (sprite) {
 
     duplicate.name = sprite.name + '(2)';
     duplicate.setPosition(this.world().hand.position());
-    this.stage.add(duplicate);
+	this.snapAppsHookAddSprite(duplicate);
     duplicate.keepWithin(this.stage);
     this.sprites.add(duplicate);
     this.corral.addSprite(duplicate);

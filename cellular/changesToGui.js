@@ -285,3 +285,136 @@ IDE_Morph.prototype.refreshCellAttributes = function()
 IDE_Morph.prototype.scribble = function () {
     this.stage.drawTool = !this.stage.drawTool;
 };
+
+SpriteIconMorph.prototype.uberInit = SpriteIconMorph.prototype.init;
+SpriteIconMorph.prototype.init = function (aSprite, aTemplate) {
+	this.uberInit(aSprite, aTemplate);
+	this.createDuplicator();
+	this.fixLayout();
+}
+
+/*SpriteIconMorph.prototype.uberStep = SpriteIconMorph.prototype.step;
+SpriteIconMorph.prototype.step = function () {
+	return this.uberStep();
+};*/
+
+//This just creates the text box in the icon area
+SpriteIconMorph.prototype.createDuplicator = function () {
+    if (this.duplicator) {
+        this.duplicator.destroy();
+    }
+	var myself = this;
+	var duplicator;
+	duplicator = new InputFieldMorph("0");
+    duplicator.corner = 12;
+    duplicator.padding = 0;
+    duplicator.contrast = this.buttonContrast;
+    duplicator.hint = "clones";
+	duplicator.contents().minWidth = 0;
+    duplicator.setCenter(this.center());
+    duplicator.setWidth(32); // fixed dimensions
+    duplicator.drawNew();
+    duplicator.accept = function () {
+		var value = Number(duplicator.getValue());
+		var rnd = Process.prototype.reportRandom;
+		
+		if (isNaN(value))
+		{
+			value = 1;
+			duplicator.setContents(1);
+		}
+		
+		//Go through every object and remove everyone that is based off this sprite
+		var ide = myself.parentThatIsA(IDE_Morph);
+		for (var i = 0; i<ide.stage.children.length; i++)
+		{
+			var child = ide.stage.children[i];
+			if (child.parentSprite == myself.object)
+			{
+				//Remove it if it is a clone of this sprite
+				ide.stage.removeChild(child);
+				i--;
+			}
+		}
+		
+		//Now we make the clones
+		for (var i = 0; i<value; i++)
+		{
+			var clone = myself.object.createCellularClone();
+			ide.stage.add(clone);
+			clone.setCenter(ide.stage.center());
+			clone.turn(rnd.call(this, 1, 360));
+			clone.setXPosition(rnd.call(this, -220, 220));
+			clone.setYPosition(rnd.call(this, -160, 160));
+		}
+		
+		ide.stage.dirtyEntireStage();
+    };
+    this.add(duplicator);
+	this.duplicator = duplicator;
+};
+
+// SpriteIconMorph layout (we need to change it so we can add room for the text box)
+SpriteIconMorph.prototype.fixLayout = function () {
+    if (!this.thumbnail || !this.label || !this.duplicator) {return null; }
+
+    this.setWidth(
+        this.thumbnail.width()
+            + this.outline * 2
+            + this.edge * 2
+            + this.padding * 2
+    );
+
+    this.setHeight(
+        this.thumbnail.height()
+            + this.outline * 2
+            + this.edge * 2
+            + this.padding * 3
+			+ (this.object instanceof StageMorph ? 0 : 
+			  this.padding * 2
+            + this.duplicator.height())
+            + this.label.height()
+    );
+
+    this.thumbnail.setCenter(this.center());
+    this.thumbnail.setTop(
+        this.top() + this.outline + this.edge + this.padding
+    );
+
+    if (this.rotationButton) {
+        this.rotationButton.setTop(this.top());
+        this.rotationButton.setRight(this.right());
+    }
+
+	var nextY;
+    if (this.object instanceof StageMorph) {
+		if (this.duplicator != undefined)
+		{
+			this.duplicator.destroy();
+			this.duplicator = undefined;
+		}
+		nextY = this.thumbnail.bottom();
+	} else {
+		this.duplicator.setCenter(this.center());
+		this.duplicator.setTop(
+			this.thumbnail.bottom() + this.padding
+		);
+		nextY = this.duplicator.bottom();
+	}
+	
+    this.label.setWidth(
+        Math.min(
+            this.label.children[0].width(), // the actual text
+            this.thumbnail.width()
+        )
+    );
+    this.label.setCenter(this.center());
+    this.label.setTop(
+        nextY + this.padding
+    );
+};
+
+//This overrides the additition of a sprite to the stage. 
+/*IDE_Morph.prototype.snapAppsHookAddSprite = function (sprite) { 
+	this.stage.add(sprite);
+};*/

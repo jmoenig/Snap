@@ -29,8 +29,11 @@ SpriteMorph.prototype.snapappsHookBlockTemplates = function(blocks, block, cat, 
 							//Reset the cells pallette so it makes the new attribute appear
 							myself.blocksCache[cat] = null;
 							myself.paletteCache[cat] = null;
-							myself.parentThatIsA(IDE_Morph).refreshPalette();
-							myself.parentThatIsA(IDE_Morph).refreshCellAttributes();
+							var ide = myself.parentThatIsA(IDE_Morph);
+							ide.stage.setCellAttributeVisibility(pair[0], true);
+							ide.refreshPalette();
+							ide.refreshCellAttributes();
+							ide.attributeSelector.setChoice(pair[0]);
 						}
 					},
 					myself
@@ -174,8 +177,11 @@ SpriteMorph.prototype.deleteCellAttribute = function(name)
 			Cell.attributes.splice(i, 1);
 			this.blocksCache["cells"] = null;
 			this.paletteCache["cells"] = null;
-			this.parentThatIsA(IDE_Morph).refreshPalette();
-			this.parentThatIsA(IDE_Morph).refreshCellAttributes();
+			var ide = this.parentThatIsA(IDE_Morph);
+			ide.refreshPalette();
+			ide.refreshCellAttributes();
+			ide.stage.setCellAttributeVisibility(name, false);
+			ide.stage.dirtyEntireStage();
 			return;
 		}
 	}
@@ -371,6 +377,26 @@ StageMorph.prototype.toggleCellAttributeVisibility = function(name)
 	this.visibleAttributes.push(name);
 }
 
+StageMorph.prototype.setCellAttributeVisibility = function(name, val)
+{
+	for (var i=0; i<this.visibleAttributes.length; i++)
+	{
+		if (this.visibleAttributes[i] == name)
+		{
+			if (!val)
+			{
+				this.visibleAttributes.splice(i, 1);
+			}
+			return;
+		}
+	}
+	if (val)
+	{
+		this.visibleAttributes.push(name);
+	}
+	return false;
+}
+
 StageMorph.prototype.getCellAttributeVisibility = function(name)
 {
 	for (var i=0; i<this.visibleAttributes.length; i++)
@@ -416,7 +442,7 @@ StageMorph.prototype.getCellAt = function(pointOrX, y)
 StageMorph.prototype.superDrawOn = StageMorph.prototype.drawOn;
 StageMorph.prototype.drawOn = function (aCanvas, aRect) {
 	var retnVal = this.superDrawOn(aCanvas, aRect);
-    if (this.visibleAttributes.length > 0 && this.drawGrid)
+    if (this.drawGrid)
 	{
 		var rectangle, area;
 		if (!this.isVisible) {
@@ -464,7 +490,11 @@ StageMorph.prototype.drawOn = function (aCanvas, aRect) {
 								ctx.beginPath();
 								ctx.rect(x*cellWidth + this.bounds.left() + 1, y*cellHeight + this.bounds.top() + 1, cellWidth - 1, cellHeight - 1);
 								var col = Cell.attributeColours[this.visibleAttributes[i]];
-								ctx.fillStyle = 'rgba('+Math.round(col.r)+','+Math.round(col.g)+','+Math.round(col.b)+',' + (value / 255).toFixed(4) + ')';
+								var dr = Cell.attributeDrawRange[this.visibleAttributes[i]];
+								var alp = (value - dr[0]) / (dr[1] - dr[0]);
+								if (alp > 1) alp = 1;
+								if (alp < 0) alp = 0;
+								ctx.fillStyle = 'rgba('+Math.round(col.r)+','+Math.round(col.g)+','+Math.round(col.b)+',' + alp.toFixed(4) + ')';
 								ctx.fill();
 							}
 						}
@@ -614,6 +644,65 @@ StageMorph.prototype.mouseMove = function(point)
     
     this.previousPoint = new Point(point.x, point.y);
 }
+
+SpriteMorph.prototype.createCellularClone = function()
+{
+	var clone = this.fullCopy();
+	clone.parentSprite = this;
+	clone.scripts = this.scripts;
+	return clone;
+}
+
+//By default every sprite is a prototype
+//When we make a clone, we set this field 
+//to the parent sprite so we can tell who came from where
+SpriteMorph.prototype.parentSprite = null;
+
+//We need to override EVERY attempt to start a set of blocks
+//running in the process queue so that we can force the use of
+//the same blocks on many objects.
+
+//Green flag override:
+// Main issues here are 
+StageMorph.prototype.fireGreenFlagEvent = function () {
+    var procs = [],
+        hats = [],
+        ide = this.parentThatIsA(IDE_Morph),
+        myself = this;
+
+    this.children.concat(this).forEach(function (morph) {
+        if (morph instanceof SpriteMorph || morph instanceof StageMorph) {
+			var myHats = morph.allHatBlocksFor('__shout__go__');
+			for (var i=0; i<myHats.length; i++)
+			{
+				var hat = {};
+				hat.hat = myHats[i];
+				hat.object = morph;
+				hats = hats.concat(hat);
+			}
+        }
+    });
+    hats.forEach(function (hat) {
+		//If it is a prototype, dont let it do anything.
+		if (hat.object.parentSprite == null)
+			return;
+		//Create the process as if the hat's receiver is this object so that all the variables for the process are correctly assigned
+		//A process never updates its receiver once it is set here, so we can feel free to change it later whenever.
+		var preReceiver = hat.hat.receiver;
+		hat.hat.receiver = function () { return hat.object };
+		var process = myself.threads.startProcess(
+            hat.hat,
+            myself.isThreadSafe
+        );
+		process.receiver = hat.object;
+		hat.hat.receiver = preReceiver;
+        procs.push(process);
+    });
+    if (ide) {
+        ide.controlBar.pauseButton.refresh();
+    }
+    return procs;
+};
 
 /*********************************************************************/
 /****************************** STATICS ******************************/
