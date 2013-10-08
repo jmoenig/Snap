@@ -124,7 +124,7 @@ PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.objects = '2013-October-04';
+modules.objects = '2013-October-08';
 
 var SpriteMorph;
 var StageMorph;
@@ -1045,6 +1045,13 @@ SpriteMorph.prototype.initBlocks = function () {
             defaults: [1, null, localize('thing')]
         },
 
+        // MAP - experimental
+        reportMap: {
+            type: 'reporter',
+            category: 'lists',
+            spec: 'map %repRing over %l'
+        },
+
         // Code mapping - experimental
         doMapCodeOrHeader: { // experimental
             type: 'command',
@@ -1849,6 +1856,22 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('doDeleteFromList'));
         blocks.push(block('doInsertInList'));
         blocks.push(block('doReplaceInList'));
+
+    // for debugging: ///////////////
+
+        if (this.world().isDevMode) {
+            blocks.push('-');
+            txt = new TextMorph(localize(
+                'development mode \ndebugging primitives:'
+            ));
+            txt.fontSize = 9;
+            txt.setColor(this.paletteTextColor);
+            blocks.push(txt);
+            blocks.push('-');
+            blocks.push(block('reportMap'));
+        }
+
+    /////////////////////////////////
 
         blocks.push('=');
 
@@ -4484,6 +4507,22 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('doDeleteFromList'));
         blocks.push(block('doInsertInList'));
         blocks.push(block('doReplaceInList'));
+
+    // for debugging: ///////////////
+
+        if (this.world().isDevMode) {
+            blocks.push('-');
+            txt = new TextMorph(localize(
+                'development mode \ndebugging primitives:'
+            ));
+            txt.fontSize = 9;
+            txt.setColor(this.paletteTextColor);
+            blocks.push(txt);
+            blocks.push('-');
+            blocks.push(block('reportMap'));
+        }
+
+    /////////////////////////////////
 
         blocks.push('=');
 

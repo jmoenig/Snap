@@ -83,7 +83,7 @@ ArgLabelMorph, localize, XML_Element, hex_sha512*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.threads = '2013-October-04';
+modules.threads = '2013-October-08';
 
 var ThreadManager;
 var Process;
@@ -778,7 +778,7 @@ Process.prototype.evaluate = function (
     runnable.isImplicitLambda = context.isImplicitLambda;
     runnable.isCustomBlock = false;
 
-    // assing parameters if any were passed
+    // assign parameters if any were passed
     if (parms.length > 0) {
 
         // assign formal parameters
@@ -1513,6 +1513,18 @@ Process.prototype.doWaitUntil = function (goalCondition) {
     this.context.inputs = [];
     this.pushContext('doYield');
     this.pushContext();
+};
+
+Process.prototype.reportMap = function (reporter, list) {
+    if (this.context.inputs.length - 2 === list.length()) {
+        this.returnValueToParentContext(
+            new List(this.context.inputs.slice(2))
+        );
+        return;
+    }
+    var next = list.at(this.context.inputs.length - 1);
+    this.pushContext();
+    this.evaluate(reporter, new List([next]));
 };
 
 // Process interpolated primitives
