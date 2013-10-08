@@ -1944,3 +1944,4 @@ ______
 131008
 ------
 * Lists: fixed type-issue for linked list indices (thanks, Nate, for reporting it!)
+* Threads, Objects: experimental MAP primitive reporter in lists category, visible in dev mode
