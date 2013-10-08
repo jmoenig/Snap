@@ -155,7 +155,7 @@ DialogBoxMorph, BlockInputFragmentMorph, PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2013-September-30';
+modules.blocks = '2013-October-08';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -3931,7 +3931,8 @@ ReporterBlockMorph.prototype.mouseClickLeft = function (pos) {
 // ReporterBlockMorph deleting
 
 ReporterBlockMorph.prototype.userDestroy = function () {
-    this.prepareToBeGrabbed(); // restore default slot of parent block
+    // make sure to restore default slot of parent block
+    this.prepareToBeGrabbed(this.world().hand);
     this.destroy();
 };
 
