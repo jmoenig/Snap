@@ -1940,3 +1940,7 @@ ______
 * Objects: Prevent watcher cells from growing wider as their contents becomes taller
 * Objects: Keep watchers onstage when hiding/showing them, fixes #195
 * BYOB, GUI, locale: New preference setting for plain block prototype labels
+
+131008
+------
+* Lists: fixed type-issue for linked list indices (thanks, Nate, for reporting it!)
