@@ -1946,3 +1946,7 @@ ______
 * Lists: fixed type-issue for linked list indices (thanks, Nate, for reporting it!)
 * Threads, Objects: experimental MAP primitive reporter in lists category, visible in dev mode
 * Blocks: fixed #199 (can't delete reporter with attached comment via context menu)
+
+131009
+------
+* Theads: added a variant for linked lists to the experimental MAP primitive reporter
