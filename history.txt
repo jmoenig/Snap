@@ -1950,3 +1950,7 @@ ______
 131009
 ------
 * Theads: added a variant for linked lists to the experimental MAP primitive reporter
+
+131010
+------
+* Cloud: added "sanity check" to cloud-saving mechanism that errors if the serialized project data is corrupt and cannot be parsed as XML, addresses #203, #200, #171
