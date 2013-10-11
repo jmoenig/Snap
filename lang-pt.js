@@ -708,7 +708,7 @@ SnapTranslator.dict.pt = {
     'Plain prototype labels':
         'Texto dos protótipos simples',
     'uncheck to always show (+) symbols\nin block prototype labels':
-        'Desssinalar para mostrar sempre os símbolos (+)\nno texto dos protótipos dos blocos',
+        'Desassinalar para mostrar sempre os símbolos (+)\nno texto dos protótipos dos blocos',
     'check to hide (+) symbols\nin block prototype labels':
         'Assinalar para esconder os símbolos (+)\nno texto dos protótipos dos blocos',
     'check to always show slot\ntypes in the input dialog':
