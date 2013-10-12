@@ -105,7 +105,7 @@ CommentMorph, localize, CSlotMorph, SpeechBubbleMorph, MorphicPreferences*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2013-September-18';
+modules.byob = '2013-October-04';
 
 // Declarations
 
@@ -2081,6 +2081,10 @@ BlockLabelPlaceHolderMorph.prototype = new StringMorph();
 BlockLabelPlaceHolderMorph.prototype.constructor = BlockLabelPlaceHolderMorph;
 BlockLabelPlaceHolderMorph.uber = StringMorph.prototype;
 
+// BlockLabelPlaceHolderMorph preferences settings
+
+BlockLabelPlaceHolderMorph.prototype.plainLabel = false; // always show (+)
+
 // BlockLabelPlaceHolderMorph instance creation:
 
 function BlockLabelPlaceHolderMorph() {
@@ -2100,6 +2104,11 @@ BlockLabelPlaceHolderMorph.prototype.init = function () {
 
 BlockLabelPlaceHolderMorph.prototype.drawNew = function () {
     var context, width, x, y, cx, cy;
+
+    // set my text contents depending on the "plainLabel" flag
+    if (this.plainLabel) {
+        this.text = this.isHighlighted ? ' + ' : '';
+    }
 
     // initialize my surface property
     this.image = newCanvas();

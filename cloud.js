@@ -29,7 +29,7 @@
 
 /*global modules, IDE_Morph, SnapSerializer, hex_sha512, alert, nop*/
 
-modules.cloud = '2013-September-17';
+modules.cloud = '2013-October-10';
 
 // Global stuff
 
@@ -353,6 +353,24 @@ Cloud.prototype.saveProject = function (ide, callBack, errorCall) {
     pdata = ide.serializer.serialize(ide.stage);
     media = ide.hasChangedMedia ?
             ide.serializer.mediaXML(ide.projectName) : null;
+    ide.serializer.isCollectingMedia = false;
+    ide.serializer.flushMedia();
+
+    // check if serialized data can be parsed back again
+    try {
+        ide.serializer.parse(pdata);
+    } catch (err) {
+        ide.showMessage('Serialization of program data failed:\n' + err);
+        throw new Error('Serialization of program data failed:\n' + err);
+    }
+    if (media !== null) {
+        try {
+            ide.serializer.parse(media);
+        } catch (err) {
+            ide.showMessage('Serialization of media failed:\n' + err);
+            throw new Error('Serialization of media failed:\n' + err);
+        }
+    }
     ide.serializer.isCollectingMedia = false;
     ide.serializer.flushMedia();
 
