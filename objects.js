@@ -124,7 +124,7 @@ PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.objects = '2013-September-19';
+modules.objects = '2013-October-01';
 
 var SpriteMorph;
 var StageMorph;
@@ -2331,7 +2331,7 @@ SpriteMorph.prototype.createClone = function () {
         stage.add(clone);
         hats = clone.allHatBlocksFor('__clone__init__');
         hats.forEach(function (block) {
-            stage.threads.startProcess(block, stage.isThreadSafe);
+            stage.threads.startProcess(block, clone, stage.isThreadSafe);
         });
     }
 };
@@ -2984,10 +2984,11 @@ SpriteMorph.prototype.allHatBlocksForKey = function (key) {
 SpriteMorph.prototype.mouseClickLeft = function () {
     var stage = this.parentThatIsA(StageMorph),
         hats = this.allHatBlocksFor('__click__'),
-        procs = [];
+        procs = [],
+		myself = this;
 
     hats.forEach(function (block) {
-        procs.push(stage.threads.startProcess(block, stage.isThreadSafe));
+        procs.push(stage.threads.startProcess(block, myself, stage.isThreadSafe));
     });
     return procs;
 };
@@ -4068,14 +4069,23 @@ StageMorph.prototype.fireKeyEvent = function (key) {
     if (evt === 'esc') {
         return this.fireStopAllEvent();
     }
-    this.children.concat(this).forEach(function (morph) {
-        if (morph instanceof SpriteMorph || morph instanceof StageMorph) {
-            hats = hats.concat(morph.allHatBlocksForKey(evt));
-        }
-    });
-    hats.forEach(function (block) {
-        procs.push(myself.threads.startProcess(block, myself.isThreadSafe));
-    });
+	
+	this.children.concat(this).forEach(function (morph) {
+		if (morph instanceof SpriteMorph || morph instanceof StageMorph) {
+			var morphHats = morph.allHatBlocksForKey(evt);
+			for (var i=0; i<morphHats.length; i++)
+			{
+				var hatAndReceiver = {};
+				hatAndReceiver.hat = morphHats[i];
+				hatAndReceiver.receiver = morph;
+				hats.push(hatAndReceiver);
+			}
+		}
+	});
+	
+	hats.forEach(function (morphHat) {
+		procs.push(myself.threads.startProcess(morphHat.hat, morphHat.receiver, myself.isThreadSafe));
+	});
     return procs;
 };
 
@@ -4095,18 +4105,27 @@ StageMorph.prototype.fireGreenFlagEvent = function () {
         hats = [],
         ide = this.parentThatIsA(IDE_Morph),
         myself = this;
-
-    this.children.concat(this).forEach(function (morph) {
-        if (morph instanceof SpriteMorph || morph instanceof StageMorph) {
-            hats = hats.concat(morph.allHatBlocksFor('__shout__go__'));
-        }
-    });
-    hats.forEach(function (block) {
-        procs.push(myself.threads.startProcess(
-            block,
-            myself.isThreadSafe
-        ));
-    });
+		
+	this.children.concat(this).forEach(function (morph) {
+		if (morph instanceof SpriteMorph || morph instanceof StageMorph) {
+			var morphHats = morph.allHatBlocksFor('__shout__go__');
+			for (var i=0; i<morphHats.length; i++)
+			{
+				var hatAndReceiver = {};
+				hatAndReceiver.hat = morphHats[i];
+				hatAndReceiver.receiver = morph;
+				hats.push(hatAndReceiver);
+			}
+		}
+	});
+	
+	hats.forEach(function (morphHat) {
+		procs.push(myself.threads.startProcess(
+			morphHat.hat, 
+			morphHat.receiver, 
+			myself.isThreadSafe));
+	});
+	
     if (ide) {
         ide.controlBar.pauseButton.refresh();
     }
@@ -5991,13 +6010,16 @@ WatcherMorph.prototype.update = function () {
         } else {
             newValue = this.target[this.getter]();
         }
+        num = parseFloat(newValue);
+        if (!isNaN(num)) {
+            newValue = Math.round(newValue * 1000000000) / 1000000000;
+        }
         if (newValue !== this.currentValue) {
             this.changed();
             this.cellMorph.contents = newValue;
             this.cellMorph.drawNew();
-            num = parseFloat(newValue);
-            if (!isNaN(num)) {
-                this.sliderMorph.value = num;
+            if (!isNaN(newValue)) {
+                this.sliderMorph.value = newValue;
                 this.sliderMorph.drawNew();
             }
             this.fixLayout();
