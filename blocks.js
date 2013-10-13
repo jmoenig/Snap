@@ -2554,6 +2554,7 @@ BlockMorph.prototype.addHighlight = function (oldHighlight) {
         highlight;
 
     if (isHidden) {this.show(); }
+    this.removeHighlight();
     highlight = this.highlight(
         oldHighlight ? oldHighlight.color : this.activeHighlight,
         this.activeBlur,

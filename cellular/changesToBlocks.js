@@ -21,8 +21,14 @@ BlockMorph.prototype.mouseClickLeft = function () {
     }
     if (receiver) {
         stage = receiver.parentThatIsA(StageMorph);
-        if (stage) {
-            stage.threads.toggleProcess(top);
-        }
+		if (stage) {
+			stage.children.forEach(function (child)
+			{
+				if (child instanceof SpriteMorph && child.parentSprite == receiver)
+				{
+					stage.threads.toggleProcess(top, child);
+				}
+			});
+		}
     }
 };

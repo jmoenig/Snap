@@ -526,10 +526,8 @@ StageMorph.prototype.drawOn = function (aCanvas, aRect) {
 
 //This is the cell attribute draw tool
 StageMorph.prototype.drawTool = false;
-StageMorph.prototype.mouseClickLeft = function()
-{
-}
 
+StageMorph.prototype.uberMouseDownLeft = StageMorph.prototype.mouseDownLeft;
 StageMorph.prototype.mouseDownLeft = function()
 {
     if (this.drawTool)
@@ -537,6 +535,8 @@ StageMorph.prototype.mouseDownLeft = function()
         var worldhand = this.world().hand;
         this.previousPoint = new Point(worldhand.bounds.origin.x, worldhand.bounds.origin.y);
     }
+	if (this.uberMouseDownLeft)
+		return this.uberMouseDownLeft();
 }
 
 /*
@@ -650,6 +650,7 @@ SpriteMorph.prototype.createCellularClone = function()
 	var clone = this.fullCopy();
 	clone.parentSprite = this;
 	clone.scripts = this.scripts;
+	clone.name = '';
 	return clone;
 }
 
@@ -657,52 +658,66 @@ SpriteMorph.prototype.createCellularClone = function()
 //When we make a clone, we set this field 
 //to the parent sprite so we can tell who came from where
 SpriteMorph.prototype.parentSprite = null;
+SpriteMorph.prototype.shouldPerformEvents = function() { return this.parentSprite != null; };
 
-//We need to override EVERY attempt to start a set of blocks
-//running in the process queue so that we can force the use of
-//the same blocks on many objects.
+//Prevent any events from being called on sprites that should not perform events.
+//We have a final check being done in the ThreadManager, but this shouldn't be the first
+//defence since it returns null in a function that previously did not.
 
-//Green flag override:
-// Main issues here are 
-StageMorph.prototype.fireGreenFlagEvent = function () {
-    var procs = [],
-        hats = [],
-        ide = this.parentThatIsA(IDE_Morph),
-        myself = this;
-
-    this.children.concat(this).forEach(function (morph) {
-        if (morph instanceof SpriteMorph || morph instanceof StageMorph) {
-			var myHats = morph.allHatBlocksFor('__shout__go__');
-			for (var i=0; i<myHats.length; i++)
-			{
-				var hat = {};
-				hat.hat = myHats[i];
-				hat.object = morph;
-				hats = hats.concat(hat);
-			}
-        }
-    });
-    hats.forEach(function (hat) {
-		//If it is a prototype, dont let it do anything.
-		if (hat.object.parentSprite == null)
-			return;
-		//Create the process as if the hat's receiver is this object so that all the variables for the process are correctly assigned
-		//A process never updates its receiver once it is set here, so we can feel free to change it later whenever.
-		var preReceiver = hat.hat.receiver;
-		hat.hat.receiver = function () { return hat.object };
-		var process = myself.threads.startProcess(
-            hat.hat,
-            myself.isThreadSafe
-        );
-		process.receiver = hat.object;
-		hat.hat.receiver = preReceiver;
-        procs.push(process);
-    });
-    if (ide) {
-        ide.controlBar.pauseButton.refresh();
-    }
-    return procs;
+//We override double check at the start of the following functions:
+SpriteMorph.prototype.uberMouseClickLeft = SpriteMorph.prototype.mouseClickLeft;
+SpriteMorph.prototype.mouseClickLeft = function() {
+	if (!this.shouldPerformEvents())
+		return [];
+	return this.uberMouseClickLeft();
 };
+
+function removeNulls(array)
+{
+	if (array instanceof Array)
+	{
+		for (var i=0; i<array.length; i++)
+		{
+			if (array[i] == null)
+			{
+				array.splice(i,1);
+				i--;
+			}
+		}
+	}
+	return array;
+};
+
+//Here, we just remove the null processes from what uberX returns, to avoid copy/paste.
+StageMorph.prototype.uberFireKeyEvent = StageMorph.prototype.fireKeyEvent;
+StageMorph.prototype.fireKeyEvent = function (key) {
+	return removeNulls(this.uberFireKeyEvent(key));
+};
+
+StageMorph.prototype.uberFireGreenFlagEvent = StageMorph.prototype.fireGreenFlagEvent;
+StageMorph.prototype.fireGreenFlagEvent = function () {
+	return removeNulls(this.uberFireGreenFlagEvent(key));
+};
+
+//This ones a bit more complex, since we want to override that functionality anyway.
+SpriteMorph.prototype.createClone = function () {
+    var stage = this.parentThatIsA(StageMorph);
+    if (stage) {
+        var clone = this.createCellularClone();
+        var hats = clone.allHatBlocksFor('__clone__init__');
+        hats.forEach(function (block) {
+            stage.threads.startProcess(block, clone, stage.isThreadSafe);
+        });
+    }
+};
+
+Process.prototype.uberDoBroadcast = Process.prototype.doBroadcast;
+Process.prototype.doBroadcast = function (message) {
+	return removeNulls(this.uberDoBroadcast(message));
+};
+
+//InputSlotMorph.prototype.reactToSliderEdit also runs blocks but does not use the
+//return value of startProcess so we will not deal with it here.
 
 /*********************************************************************/
 /****************************** STATICS ******************************/

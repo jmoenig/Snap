@@ -3005,11 +3005,11 @@ SpriteMorph.prototype.allHatBlocksForKey = function (key) {
 // SpriteMorph events
 
 SpriteMorph.prototype.mouseClickLeft = function () {
-    var stage = this.parentThatIsA(StageMorph),
+	var stage = this.parentThatIsA(StageMorph),
         hats = this.allHatBlocksFor('__click__'),
         procs = [],
 		myself = this;
-
+	
     hats.forEach(function (block) {
         procs.push(stage.threads.startProcess(block, myself, stage.isThreadSafe));
     });

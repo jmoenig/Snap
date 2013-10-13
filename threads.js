@@ -129,6 +129,7 @@ ThreadManager.prototype.startProcess = function (block, receiver, isThreadSafe) 
     var active = this.findProcess(block, receiver),
         top = block.topBlock(),
         newProc;
+	
     if (active) {
         if (isThreadSafe) {
             return active;
