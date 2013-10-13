@@ -116,17 +116,17 @@ function ThreadManager() {
     this.processes = [];
 }
 
-ThreadManager.prototype.toggleProcess = function (block) {
-    var active = this.findProcess(block);
+ThreadManager.prototype.toggleProcess = function (block, receiver) {
+    var active = this.findProcess(block, receiver);
     if (active) {
         active.stop();
     } else {
-        return this.startProcess(block);
+        return this.startProcess(block, receiver);
     }
 };
 
-ThreadManager.prototype.startProcess = function (block, isThreadSafe) {
-    var active = this.findProcess(block),
+ThreadManager.prototype.startProcess = function (block, receiver, isThreadSafe) {
+    var active = this.findProcess(block, receiver),
         top = block.topBlock(),
         newProc;
     if (active) {
@@ -137,7 +137,7 @@ ThreadManager.prototype.startProcess = function (block, isThreadSafe) {
         this.removeTerminatedProcesses();
     }
     top.addHighlight();
-    newProc = new Process(block.topBlock());
+    newProc = new Process(block.topBlock(), receiver);
     this.processes.push(newProc);
     return newProc;
 };
@@ -159,8 +159,8 @@ ThreadManager.prototype.stopAllForReceiver = function (rcvr) {
     });
 };
 
-ThreadManager.prototype.stopProcess = function (block) {
-    var active = this.findProcess(block);
+ThreadManager.prototype.stopProcess = function (block, receiver) {
+    var active = this.findProcess(block, receiver);
     if (active) {
         active.stop();
     }
@@ -233,12 +233,12 @@ ThreadManager.prototype.removeTerminatedProcesses = function () {
     this.processes = remaining;
 };
 
-ThreadManager.prototype.findProcess = function (block) {
+ThreadManager.prototype.findProcess = function (block, receiver) {
     var top = block.topBlock();
     return detect(
         this.processes,
         function (each) {
-            return each.topBlock === top;
+            return each.topBlock === top && each.homeContext.receiver == receiver;
         }
     );
 };
@@ -296,7 +296,7 @@ Process.prototype.contructor = Process;
 Process.prototype.timeout = 500; // msecs after which to force yield
 Process.prototype.isCatchingErrors = true;
 
-function Process(topBlock) {
+function Process(topBlock, receiver) {
     this.topBlock = topBlock || null;
 
     this.readyToYield = false;
@@ -314,7 +314,7 @@ function Process(topBlock) {
     this.frameCount = 0;
 
     if (topBlock) {
-        this.homeContext.receiver = topBlock.receiver();
+        this.homeContext.receiver = receiver;
         this.homeContext.variables.parentFrame =
             this.homeContext.receiver.variables;
         this.context = new Context(
@@ -1740,11 +1740,18 @@ Process.prototype.doBroadcast = function (message) {
         stage.lastMessage = message;
         stage.children.concat(stage).forEach(function (morph) {
             if (morph instanceof SpriteMorph || morph instanceof StageMorph) {
-                hats = hats.concat(morph.allHatBlocksFor(message));
+				var morphHats = morph.allHatBlocksFor(message);
+				for (var i=0; i<morphHats.length; i++)
+				{
+					var hatAndReceiver = {};
+					hatAndReceiver.hat = morphHats[i];
+					hatAndReceiver.receiver = morph;
+					hats.push(hatAndReceiver);
+				}
             }
         });
-        hats.forEach(function (block) {
-            procs.push(stage.threads.startProcess(block, stage.isThreadSafe));
+        hats.forEach(function (morphHat) {
+            procs.push(stage.threads.startProcess(morphHat.hat, morphHat.receiver, stage.isThreadSafe));
         });
     }
     return procs;

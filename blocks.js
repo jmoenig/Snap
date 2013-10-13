@@ -2814,7 +2814,7 @@ BlockMorph.prototype.mouseClickLeft = function () {
     if (receiver) {
         stage = receiver.parentThatIsA(StageMorph);
         if (stage) {
-            stage.threads.toggleProcess(top);
+            stage.threads.toggleProcess(top, receiver);
         }
     }
 };
@@ -6666,7 +6666,7 @@ InputSlotMorph.prototype.reactToSliderEdit = function () {
         if (receiver) {
             stage = receiver.parentThatIsA(StageMorph);
             if (stage && stage.isThreadSafe) {
-                stage.threads.startProcess(top, stage.isThreadSafe);
+                stage.threads.startProcess(top, receiver, stage.isThreadSafe);
             } else {
                 top.mouseClickLeft();
             }
