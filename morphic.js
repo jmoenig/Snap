@@ -1035,7 +1035,7 @@
 /*global window, HTMLCanvasElement, getMinimumFontHeight, FileReader, Audio,
 FileList, getBlurredShadowSupport*/
 
-var morphicVersion = '2013-September-20';
+var morphicVersion = '2013-October-14';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = getBlurredShadowSupport(); // check for Chrome-bug
 
@@ -1911,6 +1911,12 @@ Rectangle.prototype.merge = function (aRect) {
     result.origin = this.origin.min(aRect.origin);
     result.corner = this.corner.max(aRect.corner);
     return result;
+};
+
+Rectangle.prototype.mergeWith = function (aRect) {
+    // mutates myself
+    this.origin = this.origin.min(aRect.origin);
+    this.corner = this.corner.max(aRect.corner);
 };
 
 Rectangle.prototype.round = function () {
@@ -9950,12 +9956,41 @@ WorldMorph.prototype.fullDrawOn = function (aCanvas, aRect) {
 
 WorldMorph.prototype.updateBroken = function () {
     var myself = this;
+    this.condenseDamages();
     this.broken.forEach(function (rect) {
         if (rect.extent().gt(new Point(0, 0))) {
             myself.fullDrawOn(myself.worldCanvas, rect);
         }
     });
     this.broken = [];
+};
+
+WorldMorph.prototype.condenseDamages = function () {
+    // collapse overlapping damaged rectangles into their unions,
+    // thereby reducing the array of brokens to a manageable size
+
+    function condense(src) {
+        var trgt = [], hit;
+        src.forEach(function (rect) {
+            hit = detect(
+                trgt,
+                function (each) {return each.intersects(rect); }
+            );
+            if (hit) {
+                hit.mergeWith(rect);
+            } else {
+                trgt.push(rect);
+            }
+        });
+        return trgt;
+    }
+
+    var again = true, size = this.broken.length;
+    while (again) {
+        this.broken = condense(this.broken);
+        again = (this.broken.length < size);
+        size = this.broken.length;
+    }
 };
 
 WorldMorph.prototype.doOneCycle = function () {
