@@ -1958,3 +1958,4 @@ ______
 131014
 ------
 * Morphic: Condense damage list by merging overlapping dirty rectangles
+* Objects: Increase maximum clone count from 128 to 300
