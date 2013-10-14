@@ -1957,5 +1957,6 @@ ______
 
 131014
 ------
-* Morphic: Condense damage list by merging overlapping dirty rectangles
+* Morphic: Condense damage list by merging overlapping dirty rectangles, thanks, Craxic!
 * Objects: Increase maximum clone count from 128 to 300
+* Portuguese translation update, thanks, Manuel!!
