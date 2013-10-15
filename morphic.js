@@ -1035,7 +1035,7 @@
 /*global window, HTMLCanvasElement, getMinimumFontHeight, FileReader, Audio,
 FileList, getBlurredShadowSupport*/
 
-var morphicVersion = '2013-October-14';
+var morphicVersion = '2013-October-15';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = getBlurredShadowSupport(); // check for Chrome-bug
 
@@ -1968,6 +1968,14 @@ Rectangle.prototype.intersects = function (aRect) {
         (rc.y >= this.origin.y) &&
         (ro.x <= this.corner.x) &&
         (ro.y <= this.corner.y);
+};
+
+Rectangle.prototype.isNearTo = function (aRect, threshold) {
+    var ro = aRect.origin, rc = aRect.corner, border = threshold || 0;
+    return (rc.x + border >= this.origin.x) &&
+        (rc.y  + border >= this.origin.y) &&
+        (ro.x - border <= this.corner.x) &&
+        (ro.y - border <= this.corner.y);
 };
 
 // Rectangle transforming:
@@ -9966,7 +9974,7 @@ WorldMorph.prototype.updateBroken = function () {
 };
 
 WorldMorph.prototype.condenseDamages = function () {
-    // collapse overlapping damaged rectangles into their unions,
+    // collapse clustered damaged rectangles into their unions,
     // thereby reducing the array of brokens to a manageable size
 
     function condense(src) {
@@ -9974,7 +9982,7 @@ WorldMorph.prototype.condenseDamages = function () {
         src.forEach(function (rect) {
             hit = detect(
                 trgt,
-                function (each) {return each.intersects(rect); }
+                function (each) {return each.isNearTo(rect, 20); }
             );
             if (hit) {
                 hit.mergeWith(rect);
