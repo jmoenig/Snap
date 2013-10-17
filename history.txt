@@ -1964,3 +1964,7 @@ ______
 131015
 ------
 * Morphic: further condense damage list by merging nearby rectangles, thanks, Craxic!
+
+131017
+------
+* Threads: fixed #213 - Empty else block breaks return to caller
