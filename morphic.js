@@ -9964,28 +9964,7 @@ WorldMorph.prototype.fullDrawOn = function (aCanvas, aRect) {
 
 WorldMorph.prototype.updateBroken = function () {
     var myself = this;
-<<<<<<< HEAD
-	if (this.broken.length > 1)
-	{
-		var broken = this.broken;
-		var maxBounds = broken[0];
-		for (var i=1; i<broken.length; i++)
-		{
-			if (broken[i].origin.x < maxBounds.origin.x)
-				maxBounds.origin.x = broken[i].origin.x;
-			if (broken[i].origin.y < maxBounds.origin.y)
-				maxBounds.origin.y = broken[i].origin.y;
-				
-			if (broken[i].corner.x > maxBounds.corner.x)
-				maxBounds.corner.x = broken[i].corner.x;
-			if (broken[i].corner.y > maxBounds.corner.y)
-				maxBounds.corner.y = broken[i].corner.y;
-		}
-		broken.splice(1, broken.length-1);
-	}
-=======
     this.condenseDamages();
->>>>>>> 3c209e84218262dc78024f8ea696605c2384a6ea
     this.broken.forEach(function (rect) {
         if (rect.extent().gt(new Point(0, 0))) {
             myself.fullDrawOn(myself.worldCanvas, rect);
