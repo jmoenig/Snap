@@ -185,7 +185,7 @@ SnapTranslator.dict.pt = {
     'translator_e-mail':
         'mmsequeira@gmail.com',
     'last_changed':
-        '2013-09-16',
+        '2013-10-14',
 
     // GUI
     // control bar:
@@ -705,6 +705,12 @@ SnapTranslator.dict.pt = {
             + 'desalojem outros.',
     'Long form input dialog':
         'Forma longa da caixa de diálogo dos parâmetros',
+    'Plain prototype labels':
+        'Texto dos protótipos simples',
+    'uncheck to always show (+) symbols\nin block prototype labels':
+        'Desassinalar para mostrar sempre os símbolos (+)\nno texto dos protótipos dos blocos',
+    'check to hide (+) symbols\nin block prototype labels':
+        'Assinalar para esconder os símbolos (+)\nno texto dos protótipos dos blocos',
     'check to always show slot\ntypes in the input dialog':
         'Assinalar para mostrar sempre\no tipo das ranhuras na caixa\nde diálogo dos parâmetros.',
     'uncheck to use the input\ndialog in short form':

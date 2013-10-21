@@ -83,7 +83,7 @@ ArgLabelMorph, localize, XML_Element, hex_sha512*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.threads = '2013-October-09';
+modules.threads = '2013-October-17';
 
 var ThreadManager;
 var Process;
@@ -1326,6 +1326,8 @@ Process.prototype.doIfElse = function () {
     } else {
         if (args[2]) {
             this.pushContext(args[2].blockSequence(), outer);
+        } else {
+            this.pushContext('doYield');
         }
     }
     if (this.context) {

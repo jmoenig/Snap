@@ -124,7 +124,7 @@ PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.objects = '2013-October-08';
+modules.objects = '2013-October-14';
 
 var SpriteMorph;
 var StageMorph;
@@ -2344,7 +2344,7 @@ SpriteMorph.prototype.createClone = function () {
         hats,
         stage = this.parentThatIsA(StageMorph);
     if (stage) {
-        if (stage.cloneCount > 128) {return; }
+        if (stage.cloneCount > 300) {return; }
         stage.cloneCount += 1;
         clone = this.fullCopy();
         clone.isClone = true;

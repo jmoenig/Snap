@@ -1954,3 +1954,17 @@ ______
 131010
 ------
 * Cloud: added "sanity check" to cloud-saving mechanism that errors if the serialized project data is corrupt and cannot be parsed as XML, addresses #203, #200, #171
+
+131014
+------
+* Morphic: Condense damage list by merging overlapping dirty rectangles, thanks, Craxic!
+* Objects: Increase maximum clone count from 128 to 300
+* Portuguese translation update, thanks, Manuel!!
+
+131015
+------
+* Morphic: further condense damage list by merging nearby rectangles, thanks, Craxic!
+
+131017
+------
+* Threads: fixed #213 - Empty else block breaks return to caller
