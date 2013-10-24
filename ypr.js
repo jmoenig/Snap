@@ -1185,7 +1185,6 @@ var sb = (function (sb) {
 				case 'append:toList:':
 				case 'deleteLine:ofList:':
 				case 'setLine:ofList:to:':
-				case 'getLine:ofList:':
 				case 'insert:at:ofList:':
 				case 'lineCountOfList:':
 				case 'list:contains:':
