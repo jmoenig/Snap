@@ -61,7 +61,7 @@ PushButtonMorph, SyntaxElementMorph, Color, Point, WatcherMorph,
 StringMorph, SpriteMorph, ScrollFrameMorph, CellMorph, ArrowMorph,
 MenuMorph, snapEquals, Morph, isNil, localize, MorphicPreferences*/
 
-modules.lists = '2013-June-20';
+modules.lists = '2013-October-08';
 
 var List;
 var ListWatcherMorph;
@@ -200,11 +200,11 @@ List.prototype.length = function () {
 };
 
 List.prototype.at = function (index) {
-    var value;
+    var value, idx = +index;
     if (this.isLinked) {
-        return index === 1 ? this.first : this.rest.at(index - 1);
+        return idx === 1 ? this.first : this.rest.at(idx - 1);
     }
-    value = this.contents[index - 1];
+    value = this.contents[idx - 1];
     return isNil(value) ? '' : value;
 };
 

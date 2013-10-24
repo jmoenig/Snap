@@ -1035,7 +1035,7 @@
 /*global window, HTMLCanvasElement, getMinimumFontHeight, FileReader, Audio,
 FileList, getBlurredShadowSupport*/
 
-var morphicVersion = '2013-September-20';
+var morphicVersion = '2013-October-15';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = getBlurredShadowSupport(); // check for Chrome-bug
 
@@ -1913,6 +1913,12 @@ Rectangle.prototype.merge = function (aRect) {
     return result;
 };
 
+Rectangle.prototype.mergeWith = function (aRect) {
+    // mutates myself
+    this.origin = this.origin.min(aRect.origin);
+    this.corner = this.corner.max(aRect.corner);
+};
+
 Rectangle.prototype.round = function () {
     return this.origin.round().corner(this.corner.round());
 };
@@ -1962,6 +1968,14 @@ Rectangle.prototype.intersects = function (aRect) {
         (rc.y >= this.origin.y) &&
         (ro.x <= this.corner.x) &&
         (ro.y <= this.corner.y);
+};
+
+Rectangle.prototype.isNearTo = function (aRect, threshold) {
+    var ro = aRect.origin, rc = aRect.corner, border = threshold || 0;
+    return (rc.x + border >= this.origin.x) &&
+        (rc.y  + border >= this.origin.y) &&
+        (ro.x - border <= this.corner.x) &&
+        (ro.y - border <= this.corner.y);
 };
 
 // Rectangle transforming:
@@ -9950,12 +9964,41 @@ WorldMorph.prototype.fullDrawOn = function (aCanvas, aRect) {
 
 WorldMorph.prototype.updateBroken = function () {
     var myself = this;
+    this.condenseDamages();
     this.broken.forEach(function (rect) {
         if (rect.extent().gt(new Point(0, 0))) {
             myself.fullDrawOn(myself.worldCanvas, rect);
         }
     });
     this.broken = [];
+};
+
+WorldMorph.prototype.condenseDamages = function () {
+    // collapse clustered damaged rectangles into their unions,
+    // thereby reducing the array of brokens to a manageable size
+
+    function condense(src) {
+        var trgt = [], hit;
+        src.forEach(function (rect) {
+            hit = detect(
+                trgt,
+                function (each) {return each.isNearTo(rect, 20); }
+            );
+            if (hit) {
+                hit.mergeWith(rect);
+            } else {
+                trgt.push(rect);
+            }
+        });
+        return trgt;
+    }
+
+    var again = true, size = this.broken.length;
+    while (again) {
+        this.broken = condense(this.broken);
+        again = (this.broken.length < size);
+        size = this.broken.length;
+    }
 };
 
 WorldMorph.prototype.doOneCycle = function () {
