@@ -1975,3 +1975,4 @@ ______
 * BYOB: Symbol selection menu for BlockLabelFragmentMorphs
 * Portuguese translation update
 * Widgets: enable Symbols in InputField drop down menus
+* BYOB: enable Symbols in InputSlotDialog Morph’s drop down menu
