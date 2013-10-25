@@ -420,7 +420,7 @@ SnapTranslator.dict.pt = {
     'when I am clicked':
         'Quando alguém clicar em ti',
     'when I receive %msgHat':
-        'Quando receberes %msgHat',
+        'Quando receberes a mensagem %msgHat',
     'broadcast %msg':
         'difunde a mensagem %msg',
     'broadcast %msg and wait':
@@ -1095,9 +1095,9 @@ SnapTranslator.dict.pt = {
 
     // trajes
     'Turtle':
-        'Seta',
+        'seta',
     'Empty':
-        'Vazio',
+        'vazio',
 
     // efeitos gráficos
     'ghost':
