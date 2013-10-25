@@ -1971,4 +1971,5 @@ ______
 
 131025
 ———
-* Blocks: - enable Costumes as Symbols and Symbols as custom block label parts
+* Blocks: enable Costumes as Symbols and Symbols as custom block label parts
+* BYOB: Symbol selection menu for BlockLabelFragmentMorphs
