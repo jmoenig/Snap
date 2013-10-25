@@ -1968,3 +1968,7 @@ ______
 131017
 ------
 * Threads: fixed #213 - Empty else block breaks return to caller
+
+131025
+———
+* Blocks: - enable Costumes as Symbols and Symbols as custom block label parts
