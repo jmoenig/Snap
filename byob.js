@@ -101,11 +101,12 @@ Context, StringMorph, nop, newCanvas, radians, BoxMorph,
 ArrowMorph, PushButtonMorph, contains, InputSlotMorph, ShadowMorph,
 ToggleButtonMorph, IDE_Morph, MenuMorph, copy, ToggleElementMorph,
 Morph, fontHeight, StageMorph, SyntaxElementMorph, SnapSerializer,
-CommentMorph, localize, CSlotMorph, SpeechBubbleMorph, MorphicPreferences*/
+CommentMorph, localize, CSlotMorph, SpeechBubbleMorph, MorphicPreferences,
+SymbolMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2013-October-04';
+modules.byob = '2013-October-25';
 
 // Declarations
 
@@ -2065,6 +2066,33 @@ BlockLabelFragmentMorph.prototype.updateBlockLabel = function (newFragment) {
     if (prot) {
         prot.refreshPrototype();
     }
+};
+
+BlockLabelFragmentMorph.prototype.userMenu = function () {
+    // show a menu of built-in special symbols
+    var myself = this,
+        symbolColor = new Color(100, 100, 130),
+        menu = new MenuMorph(
+            function (string) {
+                var tuple = myself.text.split('-');
+                myself.changed();
+                tuple[0] = '$' + string;
+                myself.text = tuple.join('-');
+                myself.fragment.labelString = myself.text;
+                myself.drawNew();
+                myself.changed();
+            },
+            null,
+            this,
+            this.fontSize
+        );
+    SymbolMorph.prototype.names.forEach(function (name) {
+        menu.addItem(
+            [new SymbolMorph(name, menu.fontSize, symbolColor), name],
+            name
+        );
+    });
+    return menu;
 };
 
 // BlockLabelPlaceHolderMorph ///////////////////////////////////////////////
