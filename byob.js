@@ -2296,6 +2296,7 @@ InputSlotDialogMorph.prototype.init = function (
 
     // additional properties:
     this.fragment = fragment || new BlockLabelFragment();
+    this.textfield = null;
     this.types = null;
     this.slots = null;
     this.isExpanded = false;
@@ -2397,6 +2398,8 @@ InputSlotDialogMorph.prototype.addBlockTypeButton
     = BlockDialogMorph.prototype.addBlockTypeButton;
 
 InputSlotDialogMorph.prototype.setType = function (fragmentType) {
+    this.textfield.choices = fragmentType ? null : this.symbolMenu;
+    this.textfield.drawNew();
     this.fragment.type = fragmentType || null;
     this.types.children.forEach(function (c) {
         c.refresh();
@@ -2487,6 +2490,7 @@ InputSlotDialogMorph.prototype.open = function (
     var txt = new InputFieldMorph(defaultString),
         oldFlag = Morph.prototype.trackChanges;
 
+    txt.choices = this.symbolMenu;
     Morph.prototype.trackChanges = false;
     this.isExpanded = this.isLaunchingExpanded;
     txt.setWidth(250);
@@ -2495,6 +2499,7 @@ InputSlotDialogMorph.prototype.open = function (
     if (pic) {this.setPicture(pic); }
     this.addBody(txt);
     txt.drawNew();
+    this.textfield = txt;
     this.addButton('ok', 'OK');
     if (!noDeleteButton) {
         this.addButton('deleteFragment', 'Delete');
@@ -2507,6 +2512,19 @@ InputSlotDialogMorph.prototype.open = function (
     this.add(this.types); // make the types come to front
     Morph.prototype.trackChanges = oldFlag;
     this.changed();
+};
+
+InputSlotDialogMorph.prototype.symbolMenu = function () {
+    var symbols = [],
+        symbolColor = new Color(100, 100, 130),
+        myself = this;
+    SymbolMorph.prototype.names.forEach(function (symbol) {
+        symbols.push([
+            [new SymbolMorph(symbol, myself.fontSize, symbolColor), symbol],
+            '$' + symbol
+        ]);
+    });
+    return symbols;
 };
 
 InputSlotDialogMorph.prototype.deleteFragment = function () {
