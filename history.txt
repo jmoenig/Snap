@@ -1974,3 +1974,4 @@ ______
 * Blocks: enable Costumes as Symbols and Symbols as custom block label parts
 * BYOB: Symbol selection menu for BlockLabelFragmentMorphs
 * Portuguese translation update
+* Widgets: enable Symbols in InputField drop down menus

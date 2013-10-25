@@ -74,7 +74,7 @@ HTMLCanvasElement, fontHeight, SymbolMorph, localize, SpeechBubbleMorph,
 ArrowMorph, MenuMorph, isString, isNil, SliderMorph, MorphicPreferences,
 ScrollFrameMorph*/
 
-modules.widgets = '2013-July-04';
+modules.widgets = '2013-October-25';
 
 var PushButtonMorph;
 var ToggleButtonMorph;
@@ -2965,12 +2965,18 @@ InputFieldMorph.prototype.dropDownMenu = function () {
         return null;
     }
     menu.addItem(' ', null);
-    for (key in choices) {
-        if (Object.prototype.hasOwnProperty.call(choices, key)) {
-            if (key[0] === '~') {
-                menu.addLine();
-            } else {
-                menu.addItem(key, choices[key]);
+    if (choices instanceof Array) {
+        choices.forEach(function (choice) {
+            menu.addItem(choice[0], choice[1]);
+        });
+    } else { // assuming a dictionary
+        for (key in choices) {
+            if (Object.prototype.hasOwnProperty.call(choices, key)) {
+                if (key[0] === '~') {
+                    menu.addLine();
+                } else {
+                    menu.addItem(key, choices[key]);
+                }
             }
         }
     }
