@@ -1095,9 +1095,9 @@ SnapTranslator.dict.pt = {
 
     // trajes
     'Turtle':
-        'Seta',
+        'seta',
     'Empty':
-        'Vazio',
+        'vazio',
 
     // efeitos gráficos
     'ghost':
