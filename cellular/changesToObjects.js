@@ -190,11 +190,11 @@ SpriteMorph.prototype.deleteCellAttribute = function(name)
 SpriteMorph.prototype.addCellularBlocks = function () {
 	//We add the cells palette
     
-    SpriteMorph.prototype.blocks.testCell = {
+  /*  SpriteMorph.prototype.blocks.setCellAttribute = {
         type: 'command',
         category: 'cells',
-        spec: 'a test cell block',
-    };
+        spec: 'set  of my cell to',
+    };*/
 }
 
 /*********************************************************************/
@@ -648,11 +648,15 @@ StageMorph.prototype.mouseMove = function(point)
 SpriteMorph.prototype.createCellularClone = function()
 {
 	var clone = this.fullCopy();
-	clone.parentSprite = this;
+	clone.parentSprite = this.parentSprite || this;
 	clone.scripts = this.scripts;
 	clone.name = '';
 	return clone;
 }
+SpriteMorph.prototype.uberDrawOn = SpriteMorph.prototype.drawOn;
+SpriteMorph.prototype.drawOn = function (aCanvas, aRect) { if (this.parentSprite != null) { return this.uberDrawOn(aCanvas, aRect); } };
+SpriteMorph.prototype.uberDrawNew = SpriteMorph.prototype.drawNew;
+SpriteMorph.prototype.drawNew = function () { if (this.parentSprite != null) { return this.uberDrawNew(); } };
 
 //By default every sprite is a prototype
 //When we make a clone, we set this field 
@@ -704,11 +708,17 @@ SpriteMorph.prototype.createClone = function () {
     var stage = this.parentThatIsA(StageMorph);
     if (stage) {
         var clone = this.createCellularClone();
+		stage.add(clone);
         var hats = clone.allHatBlocksFor('__clone__init__');
         hats.forEach(function (block) {
             stage.threads.startProcess(block, clone, stage.isThreadSafe);
         });
     }
+};
+
+SpriteMorph.prototype.removeClone = function () {
+	this.parent.threads.stopAllForReceiver(this);
+	this.destroy();
 };
 
 Process.prototype.uberDoBroadcast = Process.prototype.doBroadcast;

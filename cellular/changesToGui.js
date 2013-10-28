@@ -333,6 +333,7 @@ SpriteIconMorph.prototype.createDuplicator = function () {
 			{
 				//Remove it if it is a clone of this sprite
 				ide.stage.removeChild(child);
+				ide.stage.threads.stopAllForReceiver(child);
 				i--;
 			}
 		}
