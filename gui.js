@@ -159,7 +159,7 @@ IDE_Morph.prototype.setFlatDesign = function () {
     ];
     IDE_Morph.prototype.appModeColor = IDE_Morph.prototype.frameColor;
     IDE_Morph.prototype.scriptsPaneTexture = null;
-    IDE_Morph.prototype.padding = 3;
+    IDE_Morph.prototype.padding = 1;
 
     SpriteIconMorph.prototype.labelColor
         = IDE_Morph.prototype.buttonLabelColor;
@@ -691,6 +691,28 @@ IDE_Morph.prototype.createControlBar = function () {
     this.controlBar.add(cloudButton);
     this.controlBar.cloudButton = cloudButton; // for menu positioning
 
+    // reportBugButton
+    button = new PushButtonMorph(
+        this,
+        'reportNewBug',
+        new SymbolMorph('bug', 16)
+    );
+    button.corner = 12;
+    button.color = colors[0];
+    button.highlightColor = colors[1];
+    button.pressColor = colors[2];
+    button.labelMinExtent = new Point(36, 18);
+    button.padding = 0;
+    button.labelShadowOffset = new Point(-1, -1);
+    button.labelShadowColor = colors[1];
+    button.labelColor = this.buttonLabelColor;
+    button.contrast = this.buttonContrast;
+    button.drawNew();
+    button.fixLayout();
+    reportBugButton = button;
+    this.controlBar.add(reportBugButton);
+    this.controlBar.reportBugButton = reportBugButton; // for menu positioning
+
     this.controlBar.fixLayout = function () {
         x = this.right() - padding;
         [stopButton, pauseButton, startButton].forEach(
@@ -723,6 +745,9 @@ IDE_Morph.prototype.createControlBar = function () {
         projectButton.setCenter(myself.controlBar.center());
         projectButton.setRight(cloudButton.left() - padding);
 
+        reportBugButton.setCenter(myself.controlBar.center());
+        reportBugButton.setLeft(settingsButton.right() + padding);
+
         this.updateLabel();
     };
 
@@ -751,7 +776,7 @@ IDE_Morph.prototype.createControlBar = function () {
         this.label.drawNew();
         this.add(this.label);
         this.label.setCenter(this.center());
-        this.label.setLeft(this.settingsButton.right() + padding);
+        this.label.setLeft(this.reportBugButton.right() + padding);
     };
 };
 
@@ -1898,6 +1923,10 @@ IDE_Morph.prototype.snapMenu = function () {
     }
     menu.popup(world, this.logo.bottomLeft());
 };
+
+IDE_Morph.prototype.reportBug = function () {
+    new reportBugMorph(this).popUp();
+}
 
 IDE_Morph.prototype.cloudMenu = function () {
     var menu,
@@ -6024,4 +6053,87 @@ JukeboxMorph.prototype.reactToDropOf = function (icon) {
     });
     this.sprite.sounds.add(costume, idx);
     this.updateList();
+};
+
+// Window to handle bug reports in Snap!
+IDE_Morph.prototype.reportNewBug = function () {
+    var dialog = new DialogBoxMorph().withKey('reportBug'),
+        frame = new ScrollFrameMorph(),
+        text = new TextMorph(''),
+        email = new InputFieldMorph(''),
+        ok = dialog.ok,
+        myself = this,
+        size = 250,
+        world = this.world();
+
+    frame.padding = 6;
+    frame.setWidth(size);
+    frame.acceptsDrops = false;
+    frame.contents.acceptsDrops = false;
+
+    text.setWidth(size - frame.padding * 2);
+    text.setPosition(frame.topLeft().add(frame.padding));
+    text.enableSelecting();
+    text.isEditable = true;
+
+    email.setWidth(size - frame.padding * 2); // fixed dimensions
+    email.contrast = 90;
+    email.setPosition(frame.bottomLeft());
+    email.isEditable = true;
+
+    frame.setHeight(size - 50);
+    frame.fixLayout = nop;
+    frame.edge = InputFieldMorph.prototype.edge;
+    frame.fontSize = InputFieldMorph.prototype.fontSize;
+    frame.typeInPadding = InputFieldMorph.prototype.typeInPadding;
+    frame.contrast = InputFieldMorph.prototype.contrast;
+    frame.drawNew = InputFieldMorph.prototype.drawNew;
+    frame.drawRectBorder = InputFieldMorph.prototype.drawRectBorder;
+
+    frame.addContents(text);
+
+    dialog.ok = function () {
+        postGitIssue("https://api.github.com/repos/cs10/snapinex/issues",
+                        email.children[0].children[0].text, text.text);
+        ok.call(this);
+    };
+
+    dialog.justDropped = function () {
+        text.edit();
+    };
+
+    dialog.labelString = 'Bug Details';
+    dialog.createLabel();
+    dialog.addHead(email);
+    dialog.addBody(frame);
+    title = email.children[0].children[0];
+    title.text = "Replace with a title of your bug";
+    text.text = "Replace this with a description of your bug, along with "
+                    + "your email.";
+    text.drawNew();
+    email.drawNew();
+    frame.drawNew();
+    dialog.addButton('ok', 'Send');
+    dialog.addButton('cancel', 'Cancel');
+    dialog.fixLayout();
+    dialog.drawNew();
+    dialog.popUp(world);
+    dialog.setCenter(world.center());
+    text.edit();
+};
+
+// Creates an issue on the specified github url with TITLE and BODY
+var postGitIssue = function(url, title, body) {
+    var jsonData = {
+                    "title": title,
+                    "body": body,
+    };
+
+    xmlhttp = new XMLHttpRequest();
+    xmlhttp.open("POST",url,true);
+    xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+    xmlhttp.setRequestHeader('Authorization',
+           'Basic ' + Base64.encode('snapinator' + ':' + '$nap&ugs!?4096')
+           );
+    xmlhttp.send(JSON.stringify(jsonData));
 };
