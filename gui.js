@@ -6107,9 +6107,11 @@ IDE_Morph.prototype.reportNewBug = function () {
     dialog.addHead(email);
     dialog.addBody(frame);
     title = email.children[0].children[0];
-    title.text = "Replace with a title of your bug";
-    text.text = "Replace this with a description of your bug, along with "
-                    + "your email.";
+    title.text = "Please enter a bug title";
+    text.text = "Please give a description of your bug so that we can try to "
+                + "solve the problem.\nYou may provide contact info, if you'd "
+                + "like, but please be aware that we cannot respond to all "
+                + "bug reports.\n\n\nThanks for helping improve Snap!";
     text.drawNew();
     email.drawNew();
     frame.drawNew();
@@ -6124,9 +6126,15 @@ IDE_Morph.prototype.reportNewBug = function () {
 
 // Creates an issue on the specified github url with TITLE and BODY
 var postGitIssue = function(url, title, body) {
+    var info = "\n\n====================================\n\n";
+    info += ("User Agent String:\t" + navigator.userAgent);
+    info += ("OS:\t" + navigator.platform);
+    
     var jsonData = {
                     "title": title,
-                    "body": body,
+                    "body": body + info,
+                    "labels": [ navigator.appName, 
+                                navigator.platform, ]
     };
 
     xmlhttp = new XMLHttpRequest();
