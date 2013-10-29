@@ -557,6 +557,7 @@ CustomCommandBlockMorph.prototype.mouseClickLeft = function () {
     this.edit();
 };
 
+CustomCommandBlockMorph.prototype.snapAppsCanEdit = function () { return true; }
 CustomCommandBlockMorph.prototype.edit = function () {
     var myself = this, block, hat;
 
@@ -583,7 +584,10 @@ CustomCommandBlockMorph.prototype.edit = function () {
             myself.isInUse()
         );
     } else {
-        new BlockEditorMorph(this.definition, this.receiver()).popUp();
+		this.snapAppsCanEdit(function()
+		{
+			new BlockEditorMorph(myself.definition, myself.receiver()).popUp();
+		});
     }
 };
 
@@ -1483,6 +1487,8 @@ function BlockEditorMorph(definition, target) {
     this.init(definition, target);
 }
 
+BlockEditorMorph.prototype.snapAppsModify = function () {};
+
 BlockEditorMorph.prototype.init = function (definition, target) {
     var scripts, proto, scriptsFrame, block, comment, myself = this;
 
@@ -1552,6 +1558,8 @@ BlockEditorMorph.prototype.init = function (definition, target) {
     this.addButton('ok', 'OK');
     this.addButton('updateDefinition', 'Apply');
     this.addButton('cancel', 'Cancel');
+	
+	this.snapAppsModify();
 
     this.setExtent(new Point(375, 300));
     this.fixLayout();

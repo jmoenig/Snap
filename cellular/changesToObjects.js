@@ -163,7 +163,7 @@ SpriteMorph.prototype.snapappsHookBlockTemplates = function(blocks, block, cat, 
 			blocks.push('-');
 		}
 		
-		blocks.push(block('testCell'));
+		//blocks.push(block('setCellAttribute'));
 	}
     return this.scribbleHookBlockTemplates(blocks, block, cat);
 }
@@ -190,7 +190,7 @@ SpriteMorph.prototype.deleteCellAttribute = function(name)
 SpriteMorph.prototype.addCellularBlocks = function () {
 	//We add the cells palette
     
-  /*  SpriteMorph.prototype.blocks.setCellAttribute = {
+    /*SpriteMorph.prototype.blocks.setCellAttribute = {
         type: 'command',
         category: 'cells',
         spec: 'set  of my cell to',
