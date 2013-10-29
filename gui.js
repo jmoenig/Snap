@@ -6126,22 +6126,36 @@ IDE_Morph.prototype.reportNewBug = function () {
 
 // Creates an issue on the specified github url with TITLE and BODY
 var postGitIssue = function(url, title, body) {
-    var info = "\n\n====================================\n\n";
+    var info = "\n\n=================\n\n";
     info += ("User Agent String:\t" + navigator.userAgent);
     info += ("OS:\t" + navigator.platform);
-    
+    info += "\n\n=================\n\n";
+    info += "data:text/xml;" + IDE_Morph.prototype.exportProject("bug");
+    app = (navigator.appName === "Netscape" ? "Safari" : navigator.appName);
     var jsonData = {
                     "title": title,
                     "body": body + info,
-                    "labels": [ navigator.appName, 
-                                navigator.platform, ]
+                    "labels": [ app, 
+                                navigator.platform, 
+                                navigator.vendor, ]
     };
 
     xmlhttp = new XMLHttpRequest();
     xmlhttp.open("POST",url,true);
     xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
     xmlhttp.setRequestHeader('Authorization',
-           'Basic ' + Base64.encode('snapinator' + ':' + '$nap&ugs!?4096')
-           );
+           'Basic ' + "c25hcGluYXRvcjokbmFwJnVncyE/NDA5Ng==");
     xmlhttp.send(JSON.stringify(jsonData));
+};
+
+IDE_Morph.prototype.exportProject = function (name, plain) {
+    var menu, str;
+    if (name) {
+        this.setProjectName(name);
+        str = encodeURIComponent(
+            this.serializer.serialize(this.stage)
+        );
+        return ('data:text/'
+            + (plain ? 'plain,' + str : 'xml,' + str));
+    }
 };
