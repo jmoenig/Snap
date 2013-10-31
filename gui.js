@@ -159,7 +159,7 @@ IDE_Morph.prototype.setFlatDesign = function () {
     ];
     IDE_Morph.prototype.appModeColor = IDE_Morph.prototype.frameColor;
     IDE_Morph.prototype.scriptsPaneTexture = null;
-    IDE_Morph.prototype.padding = 1;
+    IDE_Morph.prototype.padding = 3;
 
     SpriteIconMorph.prototype.labelColor
         = IDE_Morph.prototype.buttonLabelColor;
