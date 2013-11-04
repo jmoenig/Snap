@@ -1981,3 +1981,4 @@ ______
 ———
 * GUI: filter quotation marks from project names (for backend index)
 * BYOB: only show symbol menu for label fragments
+* BYOB: customizable drop-down menus for input slots (experimental, commented out)
