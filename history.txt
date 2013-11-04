@@ -1980,3 +1980,4 @@ ______
 131104
 ———
 * GUI: filter quotation marks from project names (for backend index)
+* BYOB: only show symbol menu for label fragments

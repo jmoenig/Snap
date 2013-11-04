@@ -106,7 +106,7 @@ SymbolMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2013-October-25';
+modules.byob = '2013-November-04';
 
 // Declarations
 
@@ -2490,7 +2490,9 @@ InputSlotDialogMorph.prototype.open = function (
     var txt = new InputFieldMorph(defaultString),
         oldFlag = Morph.prototype.trackChanges;
 
-    txt.choices = this.symbolMenu;
+    if (!this.fragment.type) {
+        txt.choices = this.symbolMenu;
+    }
     Morph.prototype.trackChanges = false;
     this.isExpanded = this.isLaunchingExpanded;
     txt.setWidth(250);
