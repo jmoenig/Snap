@@ -1976,3 +1976,7 @@ ______
 * Portuguese translation update
 * Widgets: enable Symbols in InputField drop down menus
 * BYOB: enable Symbols in InputSlotDialog Morph’s drop down menu
+
+131104
+———
+* GUI: filter quotation marks from project names (for backend index)
