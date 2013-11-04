@@ -383,6 +383,48 @@ CustomCommandBlockMorph.prototype.refreshDefaults = function () {
     });
 };
 
+/*
+custom drop down menus, still incomplete, commented out for now
+
+CustomCommandBlockMorph.prototype.refreshDefaults = function () {
+    // fill my editable slots with the defaults specified in my definition
+    var inputs = this.inputs(), idx = 0, myself = this, dflt;
+
+    inputs.forEach(function (inp) {
+        if (inp instanceof InputSlotMorph) {
+            dflt = myself.parseDefault(
+                myself.definition.defaultValueOfInputIdx(idx)
+            );
+            inp.choices = dflt.menu;
+            inp.setContents(dflt.value);
+        }
+        idx += 1;
+    });
+};
+
+CustomCommandBlockMorph.prototype.parseDefault = function (str) {
+    // experimental shot at custom drop downs for input slots,
+    // answer an object of form: {value: 'bar', menu: {key: val, ...}}
+    var ans = {},
+        menu = {},
+        tokens;
+    if (str.indexOf('&') !== -1) {
+        tokens = str.split('&');
+        ans.value = tokens[0];
+        if (tokens[1]) {
+            tokens[1].split(',').forEach(function (entry) {
+                var pair = entry.split('=');
+                if (pair[0]) {
+                    menu[pair[0]] = pair[1] || pair[0];
+                }
+            });
+            ans.menu = menu;
+        }
+    }
+    return ans;
+};
+*/
+
 CustomCommandBlockMorph.prototype.refreshPrototype = function () {
     // create my label parts from my (edited) fragments only
     var hat,
