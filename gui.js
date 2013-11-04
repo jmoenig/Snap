@@ -68,7 +68,7 @@ sb, CommentMorph, CommandBlockMorph, BlockLabelPlaceHolderMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2013-October-04';
+modules.gui = '2013-November-04';
 
 // Declarations
 
@@ -1439,7 +1439,7 @@ IDE_Morph.prototype.fixLayout = function (situation) {
 };
 
 IDE_Morph.prototype.setProjectName = function (string) {
-    this.projectName = string;
+    this.projectName = string.replace(/['"]/g, ''); // filter quotation marks
     this.hasChangedMedia = true;
     this.controlBar.updateLabel();
 };
