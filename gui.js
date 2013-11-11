@@ -2266,6 +2266,7 @@ IDE_Morph.prototype.settingsMenu = function () {
     menu.popup(world, pos);
 };
 
+IDE_Morph.prototype.projectMenuSnapAppsModifier = function (menu) { };
 IDE_Morph.prototype.projectMenu = function () {
     var menu,
         myself = this,
@@ -2417,6 +2418,8 @@ IDE_Morph.prototype.projectMenu = function () {
         },
         'Select categories of additional blocks to add to this project.'
     );
+    
+    this.projectMenuSnapAppsModifier(menu);
 
     menu.popup(world, pos);
 };
