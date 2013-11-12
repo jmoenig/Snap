@@ -185,7 +185,7 @@ SnapTranslator.dict.pt = {
     'translator_e-mail':
         'mmsequeira@gmail.com',
     'last_changed':
-        '2013-10-25',
+        '2013-11-12',
 
     // GUI
     // control bar:
@@ -450,7 +450,7 @@ SnapTranslator.dict.pt = {
     'stop block':
         'pára este guião de bloco',
     'stop script':
-        'pára este guião de actor',
+        'pára este guião de objecto',
     'stop all %stop':
         'pára tudo %stop',
     'pause all %pause':
@@ -470,9 +470,9 @@ SnapTranslator.dict.pt = {
     'when I start as a clone':
         'Quando fores criado como clone',
     'create a clone of %cln':
-        'clona o actor %cln',
+        'clona %cln',
     'myself':
-        'tu próprio',
+        '-te',
     'delete this clone':
         'remove-te',
 
