@@ -101,11 +101,12 @@ Context, StringMorph, nop, newCanvas, radians, BoxMorph,
 ArrowMorph, PushButtonMorph, contains, InputSlotMorph, ShadowMorph,
 ToggleButtonMorph, IDE_Morph, MenuMorph, copy, ToggleElementMorph,
 Morph, fontHeight, StageMorph, SyntaxElementMorph, SnapSerializer,
-CommentMorph, localize, CSlotMorph, SpeechBubbleMorph, MorphicPreferences*/
+CommentMorph, localize, CSlotMorph, SpeechBubbleMorph, MorphicPreferences,
+SymbolMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2013-October-04';
+modules.byob = '2013-November-04';
 
 // Declarations
 
@@ -381,6 +382,48 @@ CustomCommandBlockMorph.prototype.refreshDefaults = function () {
         idx += 1;
     });
 };
+
+/*
+custom drop down menus, still incomplete, commented out for now
+
+CustomCommandBlockMorph.prototype.refreshDefaults = function () {
+    // fill my editable slots with the defaults specified in my definition
+    var inputs = this.inputs(), idx = 0, myself = this, dflt;
+
+    inputs.forEach(function (inp) {
+        if (inp instanceof InputSlotMorph) {
+            dflt = myself.parseDefault(
+                myself.definition.defaultValueOfInputIdx(idx)
+            );
+            inp.choices = dflt.menu;
+            inp.setContents(dflt.value);
+        }
+        idx += 1;
+    });
+};
+
+CustomCommandBlockMorph.prototype.parseDefault = function (str) {
+    // experimental shot at custom drop downs for input slots,
+    // answer an object of form: {value: 'bar', menu: {key: val, ...}}
+    var ans = {},
+        menu = {},
+        tokens;
+    if (str.indexOf('&') !== -1) {
+        tokens = str.split('&');
+        ans.value = tokens[0];
+        if (tokens[1]) {
+            tokens[1].split(',').forEach(function (entry) {
+                var pair = entry.split('=');
+                if (pair[0]) {
+                    menu[pair[0]] = pair[1] || pair[0];
+                }
+            });
+            ans.menu = menu;
+        }
+    }
+    return ans;
+};
+*/
 
 CustomCommandBlockMorph.prototype.refreshPrototype = function () {
     // create my label parts from my (edited) fragments only
@@ -2067,6 +2110,33 @@ BlockLabelFragmentMorph.prototype.updateBlockLabel = function (newFragment) {
     }
 };
 
+BlockLabelFragmentMorph.prototype.userMenu = function () {
+    // show a menu of built-in special symbols
+    var myself = this,
+        symbolColor = new Color(100, 100, 130),
+        menu = new MenuMorph(
+            function (string) {
+                var tuple = myself.text.split('-');
+                myself.changed();
+                tuple[0] = '$' + string;
+                myself.text = tuple.join('-');
+                myself.fragment.labelString = myself.text;
+                myself.drawNew();
+                myself.changed();
+            },
+            null,
+            this,
+            this.fontSize
+        );
+    SymbolMorph.prototype.names.forEach(function (name) {
+        menu.addItem(
+            [new SymbolMorph(name, menu.fontSize, symbolColor), name],
+            name
+        );
+    });
+    return menu;
+};
+
 // BlockLabelPlaceHolderMorph ///////////////////////////////////////////////
 
 /*
@@ -2268,6 +2338,7 @@ InputSlotDialogMorph.prototype.init = function (
 
     // additional properties:
     this.fragment = fragment || new BlockLabelFragment();
+    this.textfield = null;
     this.types = null;
     this.slots = null;
     this.isExpanded = false;
@@ -2369,6 +2440,8 @@ InputSlotDialogMorph.prototype.addBlockTypeButton
     = BlockDialogMorph.prototype.addBlockTypeButton;
 
 InputSlotDialogMorph.prototype.setType = function (fragmentType) {
+    this.textfield.choices = fragmentType ? null : this.symbolMenu;
+    this.textfield.drawNew();
     this.fragment.type = fragmentType || null;
     this.types.children.forEach(function (c) {
         c.refresh();
@@ -2459,6 +2532,9 @@ InputSlotDialogMorph.prototype.open = function (
     var txt = new InputFieldMorph(defaultString),
         oldFlag = Morph.prototype.trackChanges;
 
+    if (!this.fragment.type) {
+        txt.choices = this.symbolMenu;
+    }
     Morph.prototype.trackChanges = false;
     this.isExpanded = this.isLaunchingExpanded;
     txt.setWidth(250);
@@ -2467,6 +2543,7 @@ InputSlotDialogMorph.prototype.open = function (
     if (pic) {this.setPicture(pic); }
     this.addBody(txt);
     txt.drawNew();
+    this.textfield = txt;
     this.addButton('ok', 'OK');
     if (!noDeleteButton) {
         this.addButton('deleteFragment', 'Delete');
@@ -2479,6 +2556,19 @@ InputSlotDialogMorph.prototype.open = function (
     this.add(this.types); // make the types come to front
     Morph.prototype.trackChanges = oldFlag;
     this.changed();
+};
+
+InputSlotDialogMorph.prototype.symbolMenu = function () {
+    var symbols = [],
+        symbolColor = new Color(100, 100, 130),
+        myself = this;
+    SymbolMorph.prototype.names.forEach(function (symbol) {
+        symbols.push([
+            [new SymbolMorph(symbol, myself.fontSize, symbolColor), symbol],
+            '$' + symbol
+        ]);
+    });
+    return symbols;
 };
 
 InputSlotDialogMorph.prototype.deleteFragment = function () {

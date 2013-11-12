@@ -29,7 +29,7 @@
 
 /*global modules, IDE_Morph, SnapSerializer, hex_sha512, alert, nop*/
 
-modules.cloud = '2013-October-10';
+modules.cloud = '2013-November-07';
 
 // Global stuff
 
@@ -38,7 +38,7 @@ var Cloud;
 var SnapCloud = new Cloud(
     'https://snapcloud.miosoft.com/miocon/app/login?_app=SnapCloud'
     //'192.168.2.110:8087/miocon/app/login?_app=SnapCloud'
-    //'192.168.186.167:8087/miocon/app/login?_app=SnapCloud'
+    //'192.168.186.146:8087/miocon/app/login?_app=SnapCloud'
     // 'localhost/miocon/app/login?_app=SnapCloud'
 );
 
@@ -384,7 +384,13 @@ Cloud.prototype.saveProject = function (ide, callBack, errorCall) {
                     ide.hasChangedMedia = false;
                 },
                 errorCall,
-                [ide.projectName, pdata, media]
+                [
+                    ide.projectName,
+                    pdata,
+                    media,
+                    pdata.length,
+                    media ? media.length : 0
+                ]
             );
         },
         errorCall

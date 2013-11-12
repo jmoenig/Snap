@@ -68,7 +68,7 @@ sb, CommentMorph, CommandBlockMorph, BlockLabelPlaceHolderMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2013-October-04';
+modules.gui = '2013-November-07';
 
 // Declarations
 
@@ -1439,7 +1439,7 @@ IDE_Morph.prototype.fixLayout = function (situation) {
 };
 
 IDE_Morph.prototype.setProjectName = function (string) {
-    this.projectName = string;
+    this.projectName = string.replace(/['"]/g, ''); // filter quotation marks
     this.hasChangedMedia = true;
     this.controlBar.updateLabel();
 };
@@ -3779,7 +3779,7 @@ IDE_Morph.prototype.setCloudURL = function () {
             'local network lab' :
                 '192.168.2.107:8087/miocon/app/login?_app=SnapCloud',
             'local network office' :
-                '192.168.186.167:8087/miocon/app/login?_app=SnapCloud',
+                '192.168.186.146:8087/miocon/app/login?_app=SnapCloud',
             'localhost dev' :
                 'localhost/miocon/app/login?_app=SnapCloud'
         }
