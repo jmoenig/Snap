@@ -1970,7 +1970,7 @@ ______
 * Threads: fixed #213 - Empty else block breaks return to caller
 
 131025
-———
+------
 * Blocks: enable Costumes as Symbols and Symbols as custom block label parts
 * BYOB: Symbol selection menu for BlockLabelFragmentMorphs
 * Portuguese translation update
@@ -1978,11 +1978,15 @@ ______
 * BYOB: enable Symbols in InputSlotDialog Morph’s drop down menu
 
 131104
-———
+------
 * GUI: filter quotation marks from project names (for backend index)
 * BYOB: only show symbol menu for label fragments
 * BYOB: customizable drop-down menus for input slots (experimental, commented out)
 
 131107
-———
+------
 * GUI, Cloud: transmission integrity check
+
+131112
+------
+* Blocks, BYOB, Store: customizable drop-down menus for input slots
