@@ -1603,38 +1603,22 @@ SyntaxElementMorph.prototype.showBubble = function (value) {
         txt  = value.length > 500 ? value.slice(0, 500) + '...' : value;
         morphToShow = new TextMorph(
             txt,
-            this.fontSize,
-            null,
-            false,
-            false,
-            'center'
+            this.fontSize
         );
     } else if (value === null) {
         morphToShow = new TextMorph(
             '',
-            this.fontSize,
-            null,
-            false,
-            false,
-            'center'
+            this.fontSize
         );
     } else if (value === 0) {
         morphToShow = new TextMorph(
             '0',
-            this.fontSize,
-            null,
-            false,
-            false,
-            'center'
+            this.fontSize
         );
     } else if (value.toString) {
         morphToShow = new TextMorph(
             value.toString(),
-            this.fontSize,
-            null,
-            false,
-            false,
-            'center'
+            this.fontSize
         );
     }
     bubble = new SpeechBubbleMorph(
