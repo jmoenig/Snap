@@ -1990,3 +1990,4 @@ ______
 131112
 ------
 * Blocks, BYOB, Store: customizable drop-down menus for input slots
+* Objects: fixed wrong NaN display for variable watchers
