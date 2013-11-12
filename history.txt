@@ -1992,3 +1992,4 @@ ______
 * Blocks, BYOB, Store: customizable drop-down menus for input slots
 * Objects: fixed wrong NaN display for variable watchers
 * Blocks: left-align multi-line text in value-bubbles
+* Portuguese translation update, thanks, Manuel!
