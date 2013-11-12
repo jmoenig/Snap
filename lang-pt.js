@@ -470,9 +470,9 @@ SnapTranslator.dict.pt = {
     'when I start as a clone':
         'Quando fores criado como clone',
     'create a clone of %cln':
-        'clona o actor %cln',
+        'clona %cln',
     'myself':
-        'tu próprio',
+        '-te',
     'delete this clone':
         'remove-te',
 
