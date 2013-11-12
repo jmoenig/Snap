@@ -450,7 +450,7 @@ SnapTranslator.dict.pt = {
     'stop block':
         'pára este guião de bloco',
     'stop script':
-        'pára este guião de actor',
+        'pára este guião de objecto',
     'stop all %stop':
         'pára tudo %stop',
     'pause all %pause':
