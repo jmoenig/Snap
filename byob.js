@@ -102,11 +102,11 @@ ArrowMorph, PushButtonMorph, contains, InputSlotMorph, ShadowMorph,
 ToggleButtonMorph, IDE_Morph, MenuMorph, copy, ToggleElementMorph,
 Morph, fontHeight, StageMorph, SyntaxElementMorph, SnapSerializer,
 CommentMorph, localize, CSlotMorph, SpeechBubbleMorph, MorphicPreferences,
-SymbolMorph*/
+SymbolMorph, isNil*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2013-November-04';
+modules.byob = '2013-November-12';
 
 // Declarations
 
@@ -137,7 +137,7 @@ function CustomBlockDefinition(spec, receiver) {
     this.isGlobal = false;
     this.type = 'command';
     this.spec = spec || '';
-    this.declarations = {}; // {'inputName' : [type, default]}
+    this.declarations = {}; // {'inputName' : [type, default, options]}
     this.comment = null;
     this.codeMapping = null; // experimental, generate text code
     this.codeHeader = null; // experimental, generate text code
@@ -192,6 +192,7 @@ CustomBlockDefinition.prototype.prototypeInstance = function () {
             if (slot) {
                 part.fragment.type = slot[0];
                 part.fragment.defaultValue = slot[1];
+                part.fragment.options = slot[2];
             }
         }
     });
@@ -265,6 +266,23 @@ CustomBlockDefinition.prototype.defaultValueOfInputIdx = function (idx) {
     return this.defaultValueOf(inputName);
 };
 
+CustomBlockDefinition.prototype.dropDownMenuOfInputIdx = function (idx) {
+    var inputName = this.inputNames()[idx];
+    return this.dropDownMenuOf(inputName);
+};
+
+CustomBlockDefinition.prototype.dropDownMenuOf = function (inputName) {
+    var dict = {};
+    if (this.declarations[inputName] && this.declarations[inputName][2]) {
+        this.declarations[inputName][2].split('\n').forEach(function (line) {
+            var pair = line.split('=');
+            dict[pair[0]] = isNil(pair[1]) ? pair[0] : pair[1];
+        });
+        return dict;
+    }
+    return null;
+};
+
 CustomBlockDefinition.prototype.inputNames = function () {
     var vNames = [],
         parts = this.parseSpec(this.spec);
@@ -334,6 +352,13 @@ CustomCommandBlockMorph.prototype.refresh = function () {
         this.fixBlockColor();
         this.fixLabelColor();
         this.restoreInputs(oldInputs);
+    } else { // update all input slots' drop-downs
+        this.inputs().forEach(function (inp, i) {
+            if (inp instanceof InputSlotMorph) {
+                inp.choices = def.dropDownMenuOfInputIdx(i);
+                inp.fixLayout();
+            }
+        });
     }
 
     // find unnahmed upvars and label them
@@ -382,48 +407,6 @@ CustomCommandBlockMorph.prototype.refreshDefaults = function () {
         idx += 1;
     });
 };
-
-/*
-custom drop down menus, still incomplete, commented out for now
-
-CustomCommandBlockMorph.prototype.refreshDefaults = function () {
-    // fill my editable slots with the defaults specified in my definition
-    var inputs = this.inputs(), idx = 0, myself = this, dflt;
-
-    inputs.forEach(function (inp) {
-        if (inp instanceof InputSlotMorph) {
-            dflt = myself.parseDefault(
-                myself.definition.defaultValueOfInputIdx(idx)
-            );
-            inp.choices = dflt.menu;
-            inp.setContents(dflt.value);
-        }
-        idx += 1;
-    });
-};
-
-CustomCommandBlockMorph.prototype.parseDefault = function (str) {
-    // experimental shot at custom drop downs for input slots,
-    // answer an object of form: {value: 'bar', menu: {key: val, ...}}
-    var ans = {},
-        menu = {},
-        tokens;
-    if (str.indexOf('&') !== -1) {
-        tokens = str.split('&');
-        ans.value = tokens[0];
-        if (tokens[1]) {
-            tokens[1].split(',').forEach(function (entry) {
-                var pair = entry.split('=');
-                if (pair[0]) {
-                    menu[pair[0]] = pair[1] || pair[0];
-                }
-            });
-            ans.menu = menu;
-        }
-    }
-    return ans;
-};
-*/
 
 CustomCommandBlockMorph.prototype.refreshPrototype = function () {
     // create my label parts from my (edited) fragments only
@@ -579,8 +562,11 @@ CustomCommandBlockMorph.prototype.declarationsFromFragments = function () {
 
     this.parts().forEach(function (part) {
         if (part instanceof BlockInputFragmentMorph) {
-            ans[part.fragment.labelString] =
-                [part.fragment.type, part.fragment.defaultValue];
+            ans[part.fragment.labelString] = [
+                part.fragment.type,
+                part.fragment.defaultValue,
+                part.fragment.options
+            ];
         }
     });
     return ans;
@@ -1901,6 +1887,7 @@ function BlockLabelFragment(labelString) {
     this.labelString = labelString || '';
     this.type = '%s';    // null for label, a spec for an input
     this.defaultValue = '';
+    this.options = '';
     this.isDeleted = false;
 }
 
@@ -1950,6 +1937,7 @@ BlockLabelFragment.prototype.copy = function () {
     var ans = new BlockLabelFragment(this.labelString);
     ans.type = this.type;
     ans.defaultValue = this.defaultValue;
+    ans.options = this.options;
     return ans;
 };
 
@@ -2364,6 +2352,7 @@ InputSlotDialogMorph.prototype.init = function (
     this.add(this.slots);
     this.createSlotTypeButtons();
     this.fixSlotsLayout();
+    this.addSlotsMenu();
     this.createTypeButtons();
     this.fixLayout();
 };
@@ -2836,6 +2825,38 @@ InputSlotDialogMorph.prototype.fixSlotsLayout = function () {
     );
     Morph.prototype.trackChanges = oldFlag;
     this.slots.changed();
+};
+
+InputSlotDialogMorph.prototype.addSlotsMenu = function () {
+    var myself = this;
+
+    this.slots.userMenu = function () {
+        if (contains(['%s', '%n', '%txt', '%anyUE'], myself.fragment.type)) {
+            var menu = new MenuMorph(myself);
+            menu.addItem('options...', 'editSlotOptions');
+            return menu;
+        }
+        return Morph.prototype.userMenu.call(myself);
+    };
+};
+
+InputSlotDialogMorph.prototype.editSlotOptions = function () {
+    var myself = this;
+    new DialogBoxMorph(
+        myself,
+        function (options) {
+            myself.fragment.options = options;
+        },
+        myself
+    ).promptCode(
+        'Input Slot Options',
+        myself.fragment.options,
+        myself.world(),
+        null,
+        'Enter one option per line.' +
+            'Optionally use "=" as key/value delimiter\n' +
+            'e.g.\n   the answer=42'
+    );
 };
 
 // InputSlotDialogMorph hiding and showing:

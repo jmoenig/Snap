@@ -49,7 +49,7 @@
 
 */
 
-/*global modules, XML_Element, XML_Serializer, VariableFrame, StageMorph,
+/*global modules, XML_Element, VariableFrame, StageMorph,
 SpriteMorph, WatcherMorph, Point, CustomBlockDefinition, Context,
 ReporterBlockMorph, CommandBlockMorph, HatBlockMorph, RingMorph, contains,
 detect, CustomCommandBlockMorph, CustomReporterBlockMorph, Color, List,
@@ -61,7 +61,7 @@ SyntaxElementMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2013-September-17';
+modules.store = '2013-November-12';
 
 
 // XML_Serializer ///////////////////////////////////////////////////////
@@ -741,12 +741,16 @@ SnapSerializer.prototype.loadCustomBlocks = function (
         if (inputs) {
             i = -1;
             inputs.children.forEach(function (child) {
+                var options = child.childNamed('options');
                 if (child.tag !== 'input') {
                     return;
                 }
                 i += 1;
-                definition.declarations[names[i]]
-                    = [child.attributes.type, child.contents];
+                definition.declarations[names[i]] = [
+                    child.attributes.type,
+                    child.contents,
+                    options ? options.contents : undefined
+                ];
             });
         }
 
@@ -1479,8 +1483,6 @@ VariableFrame.prototype.toXML = function (serializer) {
     }, '');
 };
 
-
-
 // Watchers
 
 WatcherMorph.prototype.toXML = function (serializer) {
@@ -1661,9 +1663,13 @@ CustomBlockDefinition.prototype.toXML = function (serializer) {
         this.codeMapping || '',
         Object.keys(this.declarations).reduce(function (xml, decl) {
                 return xml + serializer.format(
-                    '<input type="@">$</input>',
+                    '<input type="@">$%</input>',
                     myself.declarations[decl][0],
-                    myself.declarations[decl][1]
+                    myself.declarations[decl][1],
+                    myself.declarations[decl][2] ?
+                                '<options>' + myself.declarations[decl][2] +
+                                    '</options>'
+                                    : ''
                 );
             }, ''),
         this.body ? serializer.store(this.body.expression) : '',
