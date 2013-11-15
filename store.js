@@ -61,7 +61,7 @@ SyntaxElementMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2013-November-12';
+modules.store = '2013-November-15';
 
 
 // XML_Serializer ///////////////////////////////////////////////////////
@@ -749,7 +749,8 @@ SnapSerializer.prototype.loadCustomBlocks = function (
                 definition.declarations[names[i]] = [
                     child.attributes.type,
                     child.contents,
-                    options ? options.contents : undefined
+                    options ? options.contents : undefined,
+                    child.attributes.readonly === 'true'
                 ];
             });
         }
@@ -1663,13 +1664,15 @@ CustomBlockDefinition.prototype.toXML = function (serializer) {
         this.codeMapping || '',
         Object.keys(this.declarations).reduce(function (xml, decl) {
                 return xml + serializer.format(
-                    '<input type="@">$%</input>',
+                    '<input type="@"$>$%</input>',
                     myself.declarations[decl][0],
+                    myself.declarations[decl][3] ?
+                            ' readonly="true"' : '',
                     myself.declarations[decl][1],
                     myself.declarations[decl][2] ?
-                                '<options>' + myself.declarations[decl][2] +
-                                    '</options>'
-                                    : ''
+                            '<options>' + myself.declarations[decl][2] +
+                                '</options>'
+                                : ''
                 );
             }, ''),
         this.body ? serializer.store(this.body.expression) : '',

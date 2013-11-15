@@ -106,7 +106,7 @@ SymbolMorph, isNil*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2013-November-12';
+modules.byob = '2013-November-15';
 
 // Declarations
 
@@ -137,7 +137,8 @@ function CustomBlockDefinition(spec, receiver) {
     this.isGlobal = false;
     this.type = 'command';
     this.spec = spec || '';
-    this.declarations = {}; // {'inputName' : [type, default, options]}
+    // format: {'inputName' : [type, default, options, readonly]}
+    this.declarations = {};
     this.comment = null;
     this.codeMapping = null; // experimental, generate text code
     this.codeHeader = null; // experimental, generate text code
@@ -193,6 +194,7 @@ CustomBlockDefinition.prototype.prototypeInstance = function () {
                 part.fragment.type = slot[0];
                 part.fragment.defaultValue = slot[1];
                 part.fragment.options = slot[2];
+                part.fragment.isReadonly = slot[3] || false;
             }
         }
     });
@@ -271,6 +273,16 @@ CustomBlockDefinition.prototype.dropDownMenuOfInputIdx = function (idx) {
     return this.dropDownMenuOf(inputName);
 };
 
+CustomBlockDefinition.prototype.isReadOnlyInputIdx = function (idx) {
+    var inputName = this.inputNames()[idx];
+    return this.isReadOnlyInput(inputName);
+};
+
+CustomBlockDefinition.prototype.inputOptionsOfIdx = function (idx) {
+    var inputName = this.inputNames()[idx];
+    return this.inputOptionsOf(inputName);
+};
+
 CustomBlockDefinition.prototype.dropDownMenuOf = function (inputName) {
     var dict = {};
     if (this.declarations[inputName] && this.declarations[inputName][2]) {
@@ -281,6 +293,18 @@ CustomBlockDefinition.prototype.dropDownMenuOf = function (inputName) {
         return dict;
     }
     return null;
+};
+
+CustomBlockDefinition.prototype.isReadOnlyInput = function (inputName) {
+    return this.declarations[inputName] &&
+        this.declarations[inputName][3] === true;
+};
+
+CustomBlockDefinition.prototype.inputOptionsOf = function (inputName) {
+    return [
+        this.dropDownMenuOf(inputName),
+        this.isReadOnlyInput(inputName)
+    ];
 };
 
 CustomBlockDefinition.prototype.inputNames = function () {
@@ -355,8 +379,7 @@ CustomCommandBlockMorph.prototype.refresh = function () {
     } else { // update all input slots' drop-downs
         this.inputs().forEach(function (inp, i) {
             if (inp instanceof InputSlotMorph) {
-                inp.choices = def.dropDownMenuOfInputIdx(i);
-                inp.fixLayout();
+                inp.setChoices.apply(inp, def.inputOptionsOfIdx(i));
             }
         });
     }
@@ -565,7 +588,8 @@ CustomCommandBlockMorph.prototype.declarationsFromFragments = function () {
             ans[part.fragment.labelString] = [
                 part.fragment.type,
                 part.fragment.defaultValue,
-                part.fragment.options
+                part.fragment.options,
+                part.fragment.isReadOnly
             ];
         }
     });
@@ -1888,6 +1912,7 @@ function BlockLabelFragment(labelString) {
     this.type = '%s';    // null for label, a spec for an input
     this.defaultValue = '';
     this.options = '';
+    this.isReadOnly = false; // for input slots
     this.isDeleted = false;
 }
 
@@ -1938,6 +1963,7 @@ BlockLabelFragment.prototype.copy = function () {
     ans.type = this.type;
     ans.defaultValue = this.defaultValue;
     ans.options = this.options;
+    ans.isReadOnly = this.isReadOnly;
     return ans;
 };
 
@@ -2832,8 +2858,17 @@ InputSlotDialogMorph.prototype.addSlotsMenu = function () {
 
     this.slots.userMenu = function () {
         if (contains(['%s', '%n', '%txt', '%anyUE'], myself.fragment.type)) {
-            var menu = new MenuMorph(myself);
+            var menu = new MenuMorph(myself),
+                on = '\u2611 ',
+                off = '\u2610 ';
             menu.addItem('options...', 'editSlotOptions');
+            menu.addItem(
+                (myself.fragment.isReadOnly ? on : off) +
+                    localize('read-only'),
+                function () {myself.fragment.isReadOnly =
+                         !myself.fragment.isReadOnly;
+                         }
+            );
             return menu;
         }
         return Morph.prototype.userMenu.call(myself);
