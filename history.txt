@@ -1993,3 +1993,8 @@ ______
 * Objects: fixed wrong NaN display for variable watchers
 * Blocks: left-align multi-line text in value-bubbles
 * Portuguese translation update, thanks, Manuel!
+
+131115
+------
+* Blocks, BYOB, Store: „read-only“ option for editable custom block input slots
+* BYOB, Blocks: custom block input slots reverting to default now show their default value
