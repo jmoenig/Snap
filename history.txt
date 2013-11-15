@@ -1998,3 +1998,4 @@ ______
 ------
 * Blocks, BYOB, Store: „read-only“ option for editable custom block input slots
 * BYOB, Blocks: custom block input slots reverting to default now show their default value
+* Blocks: fixed read-only input slot coloring glitch, thanks Bernat, for reporting it!
