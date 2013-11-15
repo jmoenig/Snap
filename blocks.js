@@ -6862,7 +6862,6 @@ InputSlotMorph.prototype.drawNew = function () {
         }
     } else {
         r = (this.height() - (this.edge * 2)) / 2;
-        context.fillStyle = this.color.toString();
         context.beginPath();
         context.arc(
             r + this.edge,
