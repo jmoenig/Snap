@@ -2004,3 +2004,4 @@ ______
 131122
 ------
 * Morphic: Don’t trigger events for eclipsed morphs (whose parent-chain contains a hidden morph)
+* Blocks: Prevent „hide“ menu option for non-palette template blocks
