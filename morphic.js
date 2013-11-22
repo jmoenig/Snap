@@ -1035,7 +1035,7 @@
 /*global window, HTMLCanvasElement, getMinimumFontHeight, FileReader, Audio,
 FileList, getBlurredShadowSupport*/
 
-var morphicVersion = '2013-October-15';
+var morphicVersion = '2013-November-22';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = getBlurredShadowSupport(); // check for Chrome-bug
 
@@ -9321,7 +9321,10 @@ HandMorph.prototype.morphAtPointer = function () {
                 m.isVisible &&
                 (m.noticesTransparentClick ||
                     (!m.isTransparentAt(myself.bounds.origin))) &&
-                (!(m instanceof ShadowMorph))) {
+                (!(m instanceof ShadowMorph)) &&
+                m.allParents().every(function (each) {
+                    return each.isVisible;
+                })) {
             result = m;
         }
     });

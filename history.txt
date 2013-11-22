@@ -2000,3 +2000,7 @@ ______
 * BYOB, Blocks: custom block input slots reverting to default now show their default value
 * Blocks: fixed read-only input slot coloring glitch, thanks Bernat, for reporting it!
 * Objects: fixed #231 (watcher-display of Booleans)
+
+131122
+------
+* Morphic: Don’t trigger events for eclipsed morphs (whose parent-chain contains a hidden morph)
