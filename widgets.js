@@ -1795,7 +1795,7 @@ DialogBoxMorph.prototype.promptCredentials = function (
 
     function labelText(string) {
         return new TextMorph(
-            string,
+            localize(string),
             10,
             null, // style
             false, // bold
@@ -1884,7 +1884,7 @@ DialogBoxMorph.prototype.promptCredentials = function (
     for (currentYear; currentYear > firstYear; currentYear -= 1) {
         years[currentYear.toString() + ' '] = currentYear;
     }
-    years[firstYear + ' or before'] = '< ' + currentYear;
+    years[firstYear + localize(' or before')] = '< ' + currentYear;
     byr = new InputFieldMorph(
         null, // text
         false, // numeric?
@@ -2052,33 +2052,33 @@ DialogBoxMorph.prototype.promptCredentials = function (
             }
         );
         if (empty) {
-            indicate(empty, 'please fill out\nthis field');
+            indicate(empty, localize('please fill out\nthis field'));
             return false;
         }
         if (purpose === 'signup') {
             if (usr.getValue().length < 4) {
-                indicate(usr, 'User name must be four\ncharacters or longer');
+                indicate(usr, localize('User name must be four\ncharacters or longer'));
                 return false;
             }
             if (em.indexOf(' ') > -1 || em.indexOf('@') === -1
                     || em.indexOf('.') === -1) {
-                indicate(eml, 'please provide a valid\nemail address');
+                indicate(eml, localize('please provide a valid\nemail address'));
                 return false;
             }
         }
         if (purpose === 'changePassword') {
             if (pw1.getValue().length < 6) {
-                indicate(pw1, 'password must be six\ncharacters or longer');
+                indicate(pw1, localize('password must be six\ncharacters or longer'));
                 return false;
             }
             if (pw1.getValue() !== pw2.getValue()) {
-                indicate(pw2, 'passwords do\nnot match');
+                indicate(pw2, localize('passwords do\nnot match'));
                 return false;
             }
         }
         if (purpose === 'signup') {
             if (!agree) {
-                indicate(chk, 'please agree to\nthe TOS');
+                indicate(chk, localize('please agree to\nthe TOS'));
                 return false;
             }
         }
@@ -2113,8 +2113,8 @@ DialogBoxMorph.prototype.promptCredentials = function (
         if (purpose === 'signup') {
             emlLabel.changed();
             emlLabel.text = age() <= 13 ?
-                    'E-mail address of parent or guardian:'
-                        : 'E-mail address:';
+                    localize('E-mail address of parent or guardian:')
+                        : localize('E-mail address:');
             emlLabel.drawNew();
             emlLabel.changed();
         }
