@@ -1969,23 +1969,25 @@ BlockMorph.prototype.userMenu = function () {
         "help...",
         'showHelp'
     );
-    if (this.isTemplate && !(this.parent instanceof SyntaxElementMorph)) {
-        if (this.selector !== 'evaluateCustomBlock') {
-            menu.addItem(
-                "hide",
-                'hidePrimitive'
-            );
-        }
-        if (StageMorph.prototype.enableCodeMapping) {
-            menu.addLine();
-            menu.addItem(
-                'header mapping...',
-                'mapToHeader'
-            );
-            menu.addItem(
-                'code mapping...',
-                'mapToCode'
-            );
+    if (this.isTemplate) {
+        if (!(this.parent instanceof SyntaxElementMorph)) {
+            if (this.selector !== 'evaluateCustomBlock') {
+                menu.addItem(
+                    "hide",
+                    'hidePrimitive'
+                );
+            }
+            if (StageMorph.prototype.enableCodeMapping) {
+                menu.addLine();
+                menu.addItem(
+                    'header mapping...',
+                    'mapToHeader'
+                );
+                menu.addItem(
+                    'code mapping...',
+                    'mapToCode'
+                );
+            }
         }
         return menu;
     }
