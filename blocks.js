@@ -155,7 +155,7 @@ DialogBoxMorph, BlockInputFragmentMorph, PrototypeHatBlockMorph, Costume*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2013-November-15';
+modules.blocks = '2013-November-22';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -1969,7 +1969,7 @@ BlockMorph.prototype.userMenu = function () {
         "help...",
         'showHelp'
     );
-    if (this.isTemplate) {
+    if (this.isTemplate && !(this.parent instanceof SyntaxElementMorph)) {
         if (this.selector !== 'evaluateCustomBlock') {
             menu.addItem(
                 "hide",
