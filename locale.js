@@ -42,7 +42,7 @@
 
 /*global modules, contains*/
 
-modules.locale = '2013-November-12';
+modules.locale = '2013-November-22';
 
 // Global stuff
 
@@ -357,4 +357,15 @@ SnapTranslator.dict.el = {
         'ino.samaras@berkeley.edu',
     'last_changed':
         '2013-09-16'
+};
+
+SnapTranslator.dict.ca = {
+    'language_name':
+        'Català',
+    'language_translator':
+        'Bernat Romagosa Carrasquer',
+    'translator_e-mail':
+        'tibabenfortlapalanca@gmail.com',
+    'last_changed':
+        '2013-11-22'
 };
