@@ -1367,5 +1367,17 @@ SnapTranslator.dict.pt = {
     'Paint a new costume':
         'Pintar um novo traje.',
     'add a new Turtle sprite':
-        'Adicionar um novo actor.'
+        'Adicionar um novo actor.',
+    'Flat design':
+        'Design plano',
+    'check for alternative\nGUI design':
+        'Assinalar para um design alternativo\nda interface gráfica com o utilizador.',
+    'Rasterize SVGs':
+        'Transformar SVG em mapas de bits',
+    'check to rasterize\nSVGs on import':
+        'Assinalar para transformar os arquivos SVG\nem mapas de bits durante a importação.',
+    'comment pic...':
+        'fotografia do comentário…',
+    'open a new window\nwith a picture of this comment':
+        'Abrir uma nova janela com\numa fotografia deste comentário.'
 };
