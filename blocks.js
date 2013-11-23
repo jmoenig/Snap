@@ -10533,7 +10533,7 @@ CommentMorph.prototype.userMenu = function () {
     );
     menu.addItem("delete", 'destroy');
     menu.addItem(
-        "picture...",
+        "comment pic...",
         function () {
             window.open(myself.fullImage().toDataURL());
         },
