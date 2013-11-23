@@ -6,6 +6,7 @@ function Cell(x,y,stageMorph)
 	this.y = y;
 	this.stageMorph = stageMorph;
 	this.attributeValues = {};
+	this.spriteMorphs = [];
 }
 
 Cell.prototype.getAttribute = function(attribute)
@@ -21,6 +22,19 @@ Cell.prototype.setAttribute = function(attribute, value, dirty)
 	this.attributeValues[attribute] = value;
 	if (dirty == undefined || dirty == true)
 		this.stageMorph.dirtyCellAt(this.x, this.y);
+}
+
+Cell.prototype.removeSpriteMorph = function(morph)
+{
+	var index = this.spriteMorphs.indexOf(morph);
+	if (index > -1) {
+		this.spriteMorphs.splice(index, 1);
+	}
+}
+
+Cell.prototype.addSpriteMorph = function(morph)
+{
+	this.spriteMorphs.push(morph);
 }
 
 Cell.attributes = ['testAttribute'];

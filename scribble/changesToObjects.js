@@ -14,7 +14,7 @@ SpriteMorph.prototype.snapappsHookBlockTemplates = function(blocks, block, cat, 
 {
     if (cat === 'motion')
     {
-        blocks.splice(blocks.length - 7, 0, '-', block('gotoRandomLocation'));
+        blocks.splice(16, 0, '-', block('gotoRandomLocation'));
     }
     if (cat === 'operators')
     {
