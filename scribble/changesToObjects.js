@@ -14,7 +14,7 @@ SpriteMorph.prototype.snapappsHookBlockTemplates = function(blocks, block, cat, 
 {
     if (cat === 'motion')
     {
-        blocks.splice(16, 0, '-', block('gotoRandomLocation'));
+        blocks.splice(16, 0, '-', block('gotoRandomLocation'), block('faceToXY'), block('setDirection'));
     }
     if (cat === 'operators')
     {
@@ -109,6 +109,19 @@ SpriteMorph.prototype.initBlocks = function () {
 }
 
 SpriteMorph.prototype.addScribbleBlocks = function () {
+
+    SpriteMorph.prototype.blocks.setDirection = {
+        type: 'command',
+        category: 'motion',
+        spec: 'set direction to %n'
+    };
+	
+    SpriteMorph.prototype.blocks.faceToXY = {
+        type: 'command',
+        category: 'motion',
+        spec: 'face to x: %n y: %n'
+    };
+
     SpriteMorph.prototype.blocks.startShape = {
         type: 'command',
         category: 'shapes',
@@ -539,6 +552,15 @@ SpriteMorph.prototype.reportExpression = function (str) {
         this.lambdas[str] = found = eval("(function(spritemorph){return ("+evalMe+");})");
     }
     return found(this);
+};
+
+/*
+ * SpriteMorph.setDirection
+ * 
+ * Implements block logic that turns to an absolute direction
+ */
+SpriteMorph.prototype.setDirection = function (num) {
+    this.setHeading(num);
 };
 
 /*

@@ -169,8 +169,11 @@ SpriteMorph.prototype.snapappsHookBlockTemplates = function(blocks, block, cat, 
 		blocks.push(block('cellX'));
 		blocks.push(block('cellY'));
 		blocks.push('-');
+		blocks.push(block('moveToCell'));
 		blocks.push(block('moveToNbrCell'));
 		blocks.push(block('moveToEmptyNbrCell'));
+		blocks.push(block('moveToAnyCell'));
+		blocks.push(block('moveToAnyEmptyCell'));
 	}
     return this.scribbleHookBlockTemplates(blocks, block, cat);
 }
@@ -216,6 +219,21 @@ SpriteMorph.prototype.addCellularBlocks = function () {
         type: 'command',
         category: 'motion',
         spec: 'move to empty nbr cell',
+    };
+    SpriteMorph.prototype.blocks.moveToAnyCell = {
+        type: 'command',
+        category: 'motion',
+        spec: 'move to any cell',
+    };
+    SpriteMorph.prototype.blocks.moveToAnyEmptyCell = {
+        type: 'command',
+        category: 'motion',
+        spec: 'move to any empty cell',
+    };
+    SpriteMorph.prototype.blocks.moveToCell = {
+        type: 'command',
+        category: 'motion',
+        spec: 'move to cell at x: %n y: %n',
     };
 }
 
@@ -304,6 +322,64 @@ SpriteMorph.prototype.moveToEmptyNbrCell = function()
 	});
 }
 
+SpriteMorph.prototype.moveToCell = function(cellX, cellY)
+{
+    var stage = this.parentThatIsA(StageMorph);
+	var cellsX = stage.cellsX;
+	var cellsY = stage.cellsY;
+	var cellW = stage.cellWidth();
+	var cellH = stage.cellHeight();
+	
+	this.gotoXY((cellX + 0.5) * cellW - 240, 180 - (cellY + 0.5) * cellH);
+}
+
+SpriteMorph.prototype.moveToAnyCell = function()
+{
+    var stage = this.parentThatIsA(StageMorph);
+	var cellsX = stage.cellsX;
+	var cellsY = stage.cellsY;
+	
+	this.moveToCell(Math.floor(Math.random() * cellsX), Math.floor(Math.random() * cellsY));
+}
+
+var getTimestamp;
+if (window.performance.now) {
+    getTimestamp = function() { return window.performance.now(); };
+} else {
+    if (window.performance.webkitNow) {
+        getTimestamp = function() { return window.performance.webkitNow(); };
+    } else {
+        getTimestamp = function() { return new Date().getTime(); };
+    }
+}
+
+SpriteMorph.prototype.moveToAnyEmptyCell = function()
+{
+	//Also experemented with keeping an up-to-date list of empty cells.
+	//It runs in about 0.40 ticks no matter the grid size. However
+	//updateCurrentCell increases by 0.02 ticks to 0.04 ticks: 
+	//doubling the time of a function run very frequently.
+	//Thus, I opted for this approach. On the largest grid size, 
+	//this runs in about 0.77 ticks.
+	
+	//On Chrome, none of this matters, of course. Also, the timer is too
+	//low resolution to be of any use, so I can't tell what speed gains 
+	//I'm getting.
+	
+    var stage = this.parentThatIsA(StageMorph);
+	var cellsX = stage.cellsX;
+	var cellsY = stage.cellsY;
+	
+	var cell = Process.prototype.reportRandom.call(this, 0, stage.emptyCells - 1);
+	for (var i=0; i<cellsX; i++)
+		for (var j=0; j<cellsY; j++)
+		{
+			var thisCell = stage.cells[j][i];
+			if (thisCell.spriteMorphs.length == 0 && (cell--) == 0)
+				this.moveToCell(thisCell.x, thisCell.y);
+		}
+}
+
 /*********************************************************************/
 /***************************** OVERRIDES *****************************/
 /*********************************************************************/
@@ -329,13 +405,21 @@ SpriteMorph.prototype.updateCurrentCell = function()
 	
 	//Otherwise, remove from old cell:
 	if (this.currentCell)
+	{
 		this.currentCell.removeSpriteMorph(this);
+		if (this.currentCell.spriteMorphs.length == 0)
+			stage.emptyCells++;
+	}
 	
 	this.currentCell = newCell;
 	
 	//... and add to new one
 	if (this.currentCell)
+	{
+		if (this.currentCell.spriteMorphs.length == 0)
+			stage.emptyCells--;
 		this.currentCell.addSpriteMorph(this);
+	}
 }
 
 SpriteMorph.prototype.uberMoveBy = SpriteMorph.prototype.moveBy;
@@ -368,6 +452,8 @@ StageMorph.prototype.removeChild = function (aNode) {
 		if (aNode.currentCell)
 		{
 			aNode.currentCell.removeSpriteMorph(aNode);
+			if (aNode.currentCell.spriteMorphs.length == 0)
+				this.emptyCells++;
 			aNode.currentCell = null;
 		}
 	}
@@ -488,6 +574,8 @@ StageMorph.prototype.updateCells = function ()
 	}
 	
 	this.cells = newCells;
+	
+	this.emptyCells = this.cellsX * this.cellsY;
 	
 	for (var i=0; i<this.children.length; i++)
 	{
@@ -716,6 +804,7 @@ StageMorph.prototype.drawOn = function (aCanvas, aRect) {
 			ctx.restore();
 		}
 	}
+	
 	return retnVal;
 };
 
@@ -895,7 +984,7 @@ StageMorph.prototype.fireKeyEvent = function (key) {
 
 StageMorph.prototype.uberFireGreenFlagEvent = StageMorph.prototype.fireGreenFlagEvent;
 StageMorph.prototype.fireGreenFlagEvent = function () {
-	return removeNulls(this.uberFireGreenFlagEvent(key));
+	return removeNulls(this.uberFireGreenFlagEvent());
 };
 
 //This ones a bit more complex, since we want to override that functionality anyway.
