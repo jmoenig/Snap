@@ -2006,3 +2006,7 @@ ______
 * Morphic: Don’t trigger events for eclipsed morphs (whose parent-chain contains a hidden morph)
 * Blocks: Prevent „hide“ menu option for non-palette template blocks
 * new Catalan translation! Yay, thanks, Bernat Romagosa Carrasquer!!
+
+132226
+------
+* Cloud: fixed #125 (encode email address when signing up), thanks, Nathan!
