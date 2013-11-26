@@ -2256,6 +2256,9 @@ BlockMorph.prototype.restoreInputs = function (oldInputs) {
         if (old instanceof ReporterBlockMorph) {
             myself.silentReplaceInput(inp, old.fullCopy());
         } else if (old && inp instanceof InputSlotMorph) {
+            // original - turns empty numberslots to 0:
+            // inp.setContents(old.evaluate());
+            // "fix" may be wrong b/c constants
             inp.setContents(old.contents().text);
         }
         i += 1;
