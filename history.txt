@@ -2010,3 +2010,4 @@ ______
 132226
 ------
 * Cloud: fixed #125 (encode email address when signing up), thanks, Nathan!
+* Threads: fixed #207 (stricter comparison of strings vs. numbers). Some edge cases remain, such as empty string equals zero and disregarding trailing / leading blanks. These are intentional. Please don’t nitpick and spare me the fundamentalism :-)
