@@ -5262,7 +5262,7 @@ CommandSlotMorph.prototype.evaluate = function () {
 };
 
 CommandSlotMorph.prototype.isEmptySlot = function () {
-    return this.nestedBlock() === null;
+    return !this.isStatic && (this.nestedBlock() === null);
 };
 
 // CommandSlotMorph context menu ops
