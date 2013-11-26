@@ -83,7 +83,7 @@ ArgLabelMorph, localize, XML_Element, hex_sha512*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.threads = '2013-October-17';
+modules.threads = '2013-November-26';
 
 var ThreadManager;
 var Process;
@@ -98,8 +98,8 @@ function snapEquals(a, b) {
         }
         return false;
     }
-    var x = parseFloat(a),
-        y = parseFloat(b);
+    var x = +a;
+        y = +b;
     if (isNaN(x) || isNaN(y)) {
         x = a;
         y = b;
