@@ -185,7 +185,7 @@ SnapTranslator.dict.pt = {
     'translator_e-mail':
         'mmsequeira@gmail.com',
     'last_changed':
-        '2013-11-12',
+        '2013-11-22',
 
     // GUI
     // control bar:
@@ -1258,18 +1258,126 @@ SnapTranslator.dict.pt = {
         'Nuvem',
     'Browser':
         'Navegador',
+    'Sign up':
+        'Registar nova conta',
+    'Sign in':
+        'Entrar',
+    'now connected.':
+        'entrou.',
+    'disconnected.':
+        'saiu.',
+    'Reset password':
+        'Recuperar palavra-passe',
+    'Reset Password...':
+        'Recuperar palavra-passe…',
+    'User name:':
+        'Nome de utilizador:',
+    'Password:':
+        'Palavra-passe:',
+    'Birth date:':
+        'Data de nascimento:',
+    'January':
+        'Janeiro',
+    'February':
+        'Fevereiro',
+    'March':
+        'Março',
+    'April':
+        'Abril',
+    'May':
+        'Maio',
+    'June':
+        'Junho',
+    'July':
+        'Julho',
+    'August':
+        'Agosto',
+    'September':
+        'Setembro',
+    'October':
+        'Outubro',
+    'November':
+        'Novembro',
+    'December':
+        'Dezembro',
+    'year:':
+        'ano:',
+    ' or before':
+        ' ou antes',
+    'E-mail address:':
+        'Endereço de correio electrónico:',
+    'E-mail address of parent or guardian:':
+        'Endereço de encarregado de educação:',
+    'Terms of Service...':
+        'Termos do Serviço…',
+    'Privacy...':
+        'Privacidade…',
+    'I have read and agree\nto the Terms of Service':
+        'Li e declaro concordar\ncom os Termos do Serviço',
+    'stay signed in on this computer\nuntil logging out':
+        'manter-me autenticado neste\ncomputador até que saia',
+    'please fill out\nthis field':
+        'Por favor preencha\neste campo.',
+    'User name must be four\ncharacters or longer':
+        'O nome de utilizador tem de ter\npelo menos quatro caracteres.',
+    'please provide a valid\nemail address':
+        'Por favor indique um endereço\nde correio electrónico válido.',
+    'password must be six\ncharacters or longer':
+        'A palavra-passe tem de ter\npelo menos seis caracteres.',
+    'passwords do\nnot match':
+        'As palavras-passe\nnão correspondem.',
+    'please agree to\nthe TOS':
+        'Por favor concorde com\nos Termos do Serviço.',
     'Examples':
         'Exemplos',
     'You are not logged in':
         'Ainda não se autenticou',
-    'Updating project list...':
-        'Actualizando a lista de projectos…',
+    'Updating\nproject list...':
+        'Actualizando a\nlista de projectos…',
     'Opening project...':
         'Abrindo o projecto…',
     'Fetching project from the cloud...':
         'Obtendo o projecto da nuvem…',
     'Saving project to the cloud...':
         'Guardando o projecto na nuvem…',
+    'Sprite Nesting':
+        'Actores compostos',
+    'uncheck to disable\nsprite composition':
+        'Desassinalar para desactivar\na composição de actores.',
+    'Codification support':
+        'Suportar produção de código',
+    'check for block\nto text mapping features':
+        'Assinalar para funcionalidades\nde mapeamento entre blocos e texto.',
+    'Save to disk':
+        'Guardar no disco',
+    'experimental - store this project\nin your downloads folder':
+        'Experimental - Guardar este projecto\nna sua pasta de descargas.',
     'saved.':
-        'guardado.'
+        'guardado.',
+    'options...':
+        'opções…',
+    'read-only':
+        'apenas leitura',
+    'Input Slot Options':
+        'Opções de Ranhura de Entrada',
+    'Enter one option per line.Optionally use "=" as key/value delimiter\ne.g.\n   the answer=42':
+        'Introduza uma opção por linha. Opcionalmente, use "=" como separador\nentre chave e valor, e.g.\n   a resposta=42',
+    'paint a new sprite':
+        'Pintar um novo actor.',
+    'Paint a new costume':
+        'Pintar um novo traje.',
+    'add a new Turtle sprite':
+        'Adicionar um novo actor.',
+    'Flat design':
+        'Design plano',
+    'check for alternative\nGUI design':
+        'Assinalar para um design alternativo\nda interface gráfica com o utilizador.',
+    'Rasterize SVGs':
+        'Transformar SVG em mapas de bits',
+    'check to rasterize\nSVGs on import':
+        'Assinalar para transformar os arquivos SVG\nem mapas de bits durante a importação.',
+    'comment pic...':
+        'fotografia do comentário…',
+    'open a new window\nwith a picture of this comment':
+        'Abrir uma nova janela com\numa fotografia deste comentário.'
 };
