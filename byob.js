@@ -2888,9 +2888,9 @@ InputSlotDialogMorph.prototype.editSlotOptions = function () {
         myself.fragment.options,
         myself.world(),
         null,
-        'Enter one option per line.' +
+        localize('Enter one option per line.' +
             'Optionally use "=" as key/value delimiter\n' +
-            'e.g.\n   the answer=42'
+            'e.g.\n   the answer=42')
     );
 };
 
