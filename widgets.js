@@ -74,7 +74,7 @@ HTMLCanvasElement, fontHeight, SymbolMorph, localize, SpeechBubbleMorph,
 ArrowMorph, MenuMorph, isString, isNil, SliderMorph, MorphicPreferences,
 ScrollFrameMorph*/
 
-modules.widgets = '2013-October-25';
+modules.widgets = '2013-November-26';
 
 var PushButtonMorph;
 var ToggleButtonMorph;
@@ -1694,7 +1694,7 @@ DialogBoxMorph.prototype.promptCode = function (
 
     function remarkText(string) {
         return new TextMorph(
-            string,
+            localize(string),
             10,
             null, // style
             false, // bold
@@ -1884,7 +1884,7 @@ DialogBoxMorph.prototype.promptCredentials = function (
     for (currentYear; currentYear > firstYear; currentYear -= 1) {
         years[currentYear.toString() + ' '] = currentYear;
     }
-    years[firstYear + localize(' or before')] = '< ' + currentYear;
+    years[firstYear + ' ' + localize('or before')] = '< ' + currentYear;
     byr = new InputFieldMorph(
         null, // text
         false, // numeric?
@@ -2023,7 +2023,7 @@ DialogBoxMorph.prototype.promptCredentials = function (
             em = eml.getValue();
 
         function indicate(morph, string) {
-            var bubble = new SpeechBubbleMorph(string);
+            var bubble = new SpeechBubbleMorph(localize(string));
             bubble.isPointingRight = false;
             bubble.drawNew();
             bubble.popUp(
@@ -2052,33 +2052,33 @@ DialogBoxMorph.prototype.promptCredentials = function (
             }
         );
         if (empty) {
-            indicate(empty, localize('please fill out\nthis field'));
+            indicate(empty, 'please fill out\nthis field');
             return false;
         }
         if (purpose === 'signup') {
             if (usr.getValue().length < 4) {
-                indicate(usr, localize('User name must be four\ncharacters or longer'));
+                indicate(usr, 'User name must be four\ncharacters or longer');
                 return false;
             }
             if (em.indexOf(' ') > -1 || em.indexOf('@') === -1
                     || em.indexOf('.') === -1) {
-                indicate(eml, localize('please provide a valid\nemail address'));
+                indicate(eml, 'please provide a valid\nemail address');
                 return false;
             }
         }
         if (purpose === 'changePassword') {
             if (pw1.getValue().length < 6) {
-                indicate(pw1, localize('password must be six\ncharacters or longer'));
+                indicate(pw1, 'password must be six\ncharacters or longer');
                 return false;
             }
             if (pw1.getValue() !== pw2.getValue()) {
-                indicate(pw2, localize('passwords do\nnot match'));
+                indicate(pw2, 'passwords do\nnot match');
                 return false;
             }
         }
         if (purpose === 'signup') {
             if (!agree) {
-                indicate(chk, localize('please agree to\nthe TOS'));
+                indicate(chk, 'please agree to\nthe TOS');
                 return false;
             }
         }
@@ -2113,8 +2113,9 @@ DialogBoxMorph.prototype.promptCredentials = function (
         if (purpose === 'signup') {
             emlLabel.changed();
             emlLabel.text = age() <= 13 ?
-                    localize('E-mail address of parent or guardian:')
-                        : localize('E-mail address:');
+                    'E-mail address of parent or guardian:'
+                        : 'E-mail address:';
+            emlLabel.text = localize(emlLabel.text);
             emlLabel.drawNew();
             emlLabel.changed();
         }
@@ -2485,6 +2486,7 @@ DialogBoxMorph.prototype.processKeyDown = function (event) {
         this.cancel();
         break;
     default:
+        nop();
         // this.inspectKeyEvent(event);
     }
 };

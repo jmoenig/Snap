@@ -155,7 +155,7 @@ DialogBoxMorph, BlockInputFragmentMorph, PrototypeHatBlockMorph, Costume*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2013-November-22';
+modules.blocks = '2013-November-26';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -1239,7 +1239,7 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             part.drawNew();
             break;
         default:
-            // nop();
+            nop();
         }
     } else if (spec[0] === '$' &&
             spec.length > 1 &&
