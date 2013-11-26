@@ -2013,3 +2013,4 @@ ______
 * Threads: fixed #207 (stricter comparison of strings vs. numbers). Some edge cases remain, such as empty string equals zero and disregarding trailing / leading blanks. These are intentional. Please don’t nitpick and spare me the fundamentalism :-)
 * Threads: fixed #245 (consistently auto-convert empty strings to zeroes)
 * Localization and Portuguese translation updates, thanks, Manuel!
+* Catalan translation update, thanks, Bernat!!
