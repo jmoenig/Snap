@@ -2017,3 +2017,4 @@ ______
 * Threads: Text comparisons are now case-sensitive („fixes“ #175)
 * Threads: fixed #179 - don’t identify primitive (static) C-Slots as implicit formal parameters
 * Threads: fixed #249 - preserve variable value types with edge cases (empty string, Boolean false)
+* Threads: fixed #133 - preserve edge-cased argument types (empty string, Boolean false)

@@ -789,7 +789,7 @@ Process.prototype.evaluate = function (
         // assign formal parameters
         for (i = 0; i < context.inputs.length; i += 1) {
             value = 0;
-            if (parms[i]) {
+            if (!isNil(parms[i])) {
                 value = parms[i];
             }
             outer.variables.addVar(context.inputs[i], value);
@@ -858,7 +858,7 @@ Process.prototype.fork = function (context, args) {
         // assign formal parameters
         for (i = 0; i < context.inputs.length; i += 1) {
             value = 0;
-            if (parms[i]) {
+            if (!isNil(parms[i])) {
                 value = parms[i];
             }
             outer.variables.addVar(context.inputs[i], value);
@@ -1018,7 +1018,7 @@ Process.prototype.evaluateCustomBlock = function () {
         // assign formal parameters
         for (i = 0; i < context.inputs.length; i += 1) {
             value = 0;
-            if (parms[i]) {
+            if (!isNil(parms[i])) {
                 value = parms[i];
             }
             outer.variables.addVar(context.inputs[i], value);
