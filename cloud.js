@@ -29,7 +29,7 @@
 
 /*global modules, IDE_Morph, SnapSerializer, hex_sha512, alert, nop*/
 
-modules.cloud = '2013-November-07';
+modules.cloud = '2013-November-26';
 
 // Global stuff
 
@@ -82,7 +82,7 @@ Cloud.prototype.signup = function (
                 + '&Username='
                 + encodeURIComponent(username)
                 + '&Email='
-                + email,
+                + encodeURIComponent(email),
             true
         );
         request.setRequestHeader(
