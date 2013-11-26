@@ -2954,7 +2954,9 @@ VariableFrame.prototype.getVar = function (name, upvars) {
 };
 
 VariableFrame.prototype.addVar = function (name, value) {
-    this.vars[name] = (value === 0 ? 0 : value || null);
+    this.vars[name] = (value === 0 ? 0
+              : value === false ? false
+                       : value === '' ? '' : value || null);
 };
 
 VariableFrame.prototype.deleteVar = function (name) {
