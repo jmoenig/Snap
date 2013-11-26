@@ -104,9 +104,14 @@ function snapEquals(a, b) {
         x = a;
         y = b;
     }
+    /*
+      // handle text comparision text-insensitive.
+      // I think this is a pedagogical feature for novices,
+      // but some teachers disagree. Commented out for now.
     if (isString(x) && isString(y)) {
         return x.toLowerCase() === y.toLowerCase();
     }
+    */
     return x === y;
 }
 
