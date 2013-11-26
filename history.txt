@@ -2014,3 +2014,4 @@ ______
 * Threads: fixed #245 (consistently auto-convert empty strings to zeroes)
 * Localization and Portuguese translation updates, thanks, Manuel!
 * Catalan translation update, thanks, Bernat!!
+* Threads: Text comparisons are now case-sensitive („fixes“ #175)
