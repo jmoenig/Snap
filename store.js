@@ -903,7 +903,7 @@ SnapSerializer.prototype.loadComment = function (model) {
 SnapSerializer.prototype.loadBlock = function (model, isReporter) {
     // private
     var block, info, inputs, isGlobal, rm, receiver;
-    var isVisible = true;
+    var isVisible = "true";
     if (Object.prototype.hasOwnProperty.call(
             model.attributes,
             'visible'
