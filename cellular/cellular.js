@@ -13,14 +13,14 @@ function Cell(x,y,stageMorph)
 Cell.prototype.getAttribute = function(attribute)
 {
 	value = this.attributeValues[attribute];
-	if (value == undefined)
+	if (!value)
 		return 0;
-	return value;
+	return Number(value);
 }
 
 Cell.prototype.setAttribute = function(attribute, value, dirty)
 {
-	this.attributeValues[attribute] = value;
+	this.attributeValues[attribute] = Number(value);
 	if (dirty == undefined || dirty == true)
 		this.stageMorph.dirtyCellAt(this.x, this.y);
 }

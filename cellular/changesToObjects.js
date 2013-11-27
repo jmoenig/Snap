@@ -1,8 +1,26 @@
-modules.cellularObjects = '2013-August-23';
+modules.cellularObjects = '2013-November-28';
+
+/*********************************************************************/
+/***************************** HELPERS *******************************/
+/*********************************************************************/
+
+/*
+** Defines getTimestamp. Thanks to 
+** http://stackoverflow.com/questions/6875625/does-javascript-provide-a-high-resolution-timer
+*/
+var getTimestamp;
+if (window.performance.now) {
+	getTimestamp = function() { return window.performance.now(); };
+} else {
+	if (window.performance.webkitNow) {
+		getTimestamp = function() { return window.performance.webkitNow(); };
+	} else {
+		getTimestamp = function() { return new Date().getTime(); };
+	}
+}
 
 /*********************************************************************/
 /******************************* HOOKS *******************************/
-/*********because sometimes you HAVE to mod the original file*********/
 /*********************************************************************/
 
 /*
@@ -17,6 +35,7 @@ SpriteMorph.prototype.snapappsHookBlockTemplates = function(blocks, block, cat, 
 	var myself = this;
 	if (cat == "cells")
 	{
+		//First we add the "add Attribute" button
 		button = new PushButtonMorph(
 			null,
 			function () {
@@ -55,7 +74,7 @@ SpriteMorph.prototype.snapappsHookBlockTemplates = function(blocks, block, cat, 
 				null,
 				function () {
 					var menu = new MenuMorph(
-						myself.deleteCellAttribute, /*Callback: SpriteMorph.prototype.deleteCellAttribute*/
+						myself.deleteCellAttribute,
 						null,
 						myself
 					);
@@ -161,6 +180,23 @@ SpriteMorph.prototype.snapappsHookBlockTemplates = function(blocks, block, cat, 
 				blocks.push(txt);
 			}
 			blocks.push('-');
+			blocks.push(block('cellsX'));
+			blocks.push(block('cellsY'));
+			blocks.push('-');
+			blocks.push(block('showCellAttribute'));
+			blocks.push(block('hideCellAttribute'));
+			blocks.push('-');
+			blocks.push(block('getCellAttribute'));
+			blocks.push(block('getCellAttributeCell'));
+			blocks.push(block('getCellAttributeHere'));
+			blocks.push('-');
+			blocks.push(block('setCellAttribute'));
+			blocks.push(block('setCellAttributeCell'));
+			blocks.push(block('setCellAttributeHere'));
+			blocks.push('-');
+			blocks.push(block('changeCellAttribute'));
+			blocks.push(block('changeCellAttributeCell'));
+			blocks.push(block('changeCellAttributeHere'));
 		}
 	}
 	else if (cat == 'motion')
@@ -191,7 +227,6 @@ SpriteMorph.prototype.deleteCellAttribute = function(name)
 			ide.refreshPalette();
 			ide.refreshCellAttributes();
 			ide.stage.setCellAttributeVisibility(name, false);
-			ide.stage.dirtyEntireStage();
 			return;
 		}
 	}
@@ -235,6 +270,176 @@ SpriteMorph.prototype.addCellularBlocks = function () {
         category: 'motion',
         spec: 'move to cell at x: %n y: %n',
     };
+	
+    SpriteMorph.prototype.blocks.cellsX = {
+        type: 'reporter',
+        category: 'cells',
+        spec: 'cells X',
+    };
+	
+    SpriteMorph.prototype.blocks.cellsY = {
+        type: 'reporter',
+        category: 'cells',
+        spec: 'cells Y',
+    };
+	
+    SpriteMorph.prototype.blocks.showCellAttribute = {
+        type: 'command',
+        category: 'cells',
+        spec: 'show cell attribute %clat',
+    };
+	
+    SpriteMorph.prototype.blocks.hideCellAttribute = {
+        type: 'command',
+        category: 'cells',
+        spec: 'hide cell attribute %clat',
+    };
+	
+    SpriteMorph.prototype.blocks.getCellAttribute = {
+        type: 'reporter',
+        category: 'cells',
+        spec: 'value of %clat at x: %n y: %n',
+    };
+	
+    SpriteMorph.prototype.blocks.getCellAttributeCell = {
+        type: 'reporter',
+        category: 'cells',
+        spec: 'value of %clat at cell x: %n cell y: %n',
+    };
+	
+    SpriteMorph.prototype.blocks.getCellAttributeHere = {
+        type: 'reporter',
+        category: 'cells',
+        spec: 'value of %clat here',
+    };
+	
+    SpriteMorph.prototype.blocks.setCellAttribute = {
+        type: 'command',
+        category: 'cells',
+        spec: 'set %clat at x: %n y: %n to %n',
+    };
+	
+    SpriteMorph.prototype.blocks.setCellAttributeCell = {
+        type: 'command',
+        category: 'cells',
+        spec: 'set %clat at cell x: %n cell y: %n to %n',
+    };
+	
+    SpriteMorph.prototype.blocks.setCellAttributeHere = {
+        type: 'command',
+        category: 'cells',
+        spec: 'set %clat here to %n',
+    };
+	
+    SpriteMorph.prototype.blocks.changeCellAttribute = {
+        type: 'command',
+        category: 'cells',
+        spec: 'change %clat at x: %n y: %n by %n',
+    };
+	
+    SpriteMorph.prototype.blocks.changeCellAttributeCell = {
+        type: 'command',
+        category: 'cells',
+        spec: 'change %clat at cell x: %n cell y: %n by %n',
+    };
+	
+    SpriteMorph.prototype.blocks.changeCellAttributeHere = {
+        type: 'command',
+        category: 'cells',
+        spec: 'change %clat here by %n',
+    };
+}
+
+SpriteMorph.prototype.changeCellAttributeCell = function(attribute, cx, cy, value)
+{
+	var cell = this.parentThatIsA(StageMorph).getCellAtCellCoords(cx,cy);
+	if (!cell)
+		return;
+	cell.setAttribute(attribute, cell.getAttribute(attribute) + value);
+}
+
+SpriteMorph.prototype.changeCellAttribute = function(attribute, x, y, value)
+{
+	var cell = this.parentThatIsA(StageMorph).getCellAtStageCoords(x,y);
+	if (!cell)
+		return;
+	cell.setAttribute(attribute, cell.getAttribute(attribute) + value);
+}
+
+SpriteMorph.prototype.changeCellAttributeHere = function(attribute, value) {
+    var rotCentre = this.rotationCenter();
+	var cell = this.parentThatIsA(StageMorph).getCellAt(rotCentre.x, rotCentre.y);
+	if (!cell)
+		return;
+	cell.setAttribute(attribute, cell.getAttribute(attribute) + value);
+}
+
+SpriteMorph.prototype.setCellAttributeCell = function(attribute, cx, cy, value)
+{
+	var cell = this.parentThatIsA(StageMorph).getCellAtCellCoords(cx,cy);
+	if (!cell)
+		return;
+	cell.setAttribute(attribute, value);
+}
+
+SpriteMorph.prototype.setCellAttribute = function(attribute, x, y, value)
+{
+	var cell = this.parentThatIsA(StageMorph).getCellAtStageCoords(x,y);
+	if (!cell)
+		return;
+	cell.setAttribute(attribute, value);
+}
+
+SpriteMorph.prototype.setCellAttributeHere = function(attribute, value) {
+    var rotCentre = this.rotationCenter();
+	var cell = this.parentThatIsA(StageMorph).getCellAt(rotCentre.x, rotCentre.y);
+	if (!cell)
+		return;
+	cell.setAttribute(attribute, value);
+}
+
+SpriteMorph.prototype.getCellAttributeCell = function(attribute, cx, cy)
+{
+	var cell = this.parentThatIsA(StageMorph).getCellAtCellCoords(cx, cy);
+	if (!cell)
+		return 0;
+	return cell.getAttribute(attribute);
+}
+
+SpriteMorph.prototype.getCellAttribute = function(attribute, x, y)
+{
+	var cell = this.parentThatIsA(StageMorph).getCellAtStageCoords(x,y);
+	if (!cell)
+		return 0;
+	return cell.getAttribute(attribute);
+}
+
+SpriteMorph.prototype.getCellAttributeHere = function(attribute) {
+    var rotCentre = this.rotationCenter();
+	var cell = this.parentThatIsA(StageMorph).getCellAt(rotCentre.x, rotCentre.y);
+	if (!cell)
+		return 0;
+	return cell.getAttribute(attribute);
+}
+
+SpriteMorph.prototype.showCellAttribute = function(attribute)
+{
+	return this.parentThatIsA(StageMorph).setCellAttributeVisibility(attribute, true);
+}
+
+SpriteMorph.prototype.hideCellAttribute = function(attribute)
+{
+	return this.parentThatIsA(StageMorph).setCellAttributeVisibility(attribute, false);
+}
+
+SpriteMorph.prototype.cellsX = function()
+{
+	return this.parentThatIsA(StageMorph).cellsX;
+}
+
+SpriteMorph.prototype.cellsY = function()
+{
+	return this.parentThatIsA(StageMorph).cellsY;
 }
 
 SpriteMorph.prototype.cellX = function()
@@ -342,17 +547,6 @@ SpriteMorph.prototype.moveToAnyCell = function()
 	this.moveToCell(Math.floor(Math.random() * cellsX), Math.floor(Math.random() * cellsY));
 }
 
-var getTimestamp;
-if (window.performance.now) {
-    getTimestamp = function() { return window.performance.now(); };
-} else {
-    if (window.performance.webkitNow) {
-        getTimestamp = function() { return window.performance.webkitNow(); };
-    } else {
-        getTimestamp = function() { return new Date().getTime(); };
-    }
-}
-
 StageMorph.prototype.getEmptyCell = function(tree, n)
 {
     if (tree.leafNode)
@@ -381,20 +575,6 @@ StageMorph.prototype.getEmptyCell = function(tree, n)
 
 SpriteMorph.prototype.moveToAnyEmptyCell = function()
 {
-	//Also experemented with keeping an up-to-date list of empty cells.
-	//It runs in about 0.40 ticks no matter the grid size. However
-	//updateCurrentCell increases by 0.02 ticks to 0.04 ticks: 
-	//doubling the time of a function run very frequently.
-	//Thus, I opted for this approach. On the largest grid size, 
-	//this runs in about 0.77 ticks.
-	
-	//On Chrome, none of this matters, of course. Also, the timer is too
-	//low resolution to be of any use, so I can't tell what speed gains 
-	//I'm getting.
-	
-	//On chrome this function runs in 0.05 ticks using the O(n) algorithm
-	
-var start = getTimestamp();
     var stage = this.parentThatIsA(StageMorph);
 	var cellsX = stage.cellsX;
 	var cellsY = stage.cellsY;
@@ -405,15 +585,6 @@ var start = getTimestamp();
         var cell = stage.getEmptyCell(stage.emptyCellTree, cellNum);
 		this.moveToCell(cell.x, cell.y);
     }
-	/*for (var i=0; i<cellsX; i++)
-		for (var j=0; j<cellsY; j++)
-		{
-			var thisCell = stage.cells[j][i];
-			if (thisCell.spriteMorphs.length == 0 && (cellNum--) == 0)
-				this.moveToCell(thisCell.x, thisCell.y);
-		}*/
-var end = getTimestamp();
-console.log("moveToAnyEmptyCell " + (end - start) + " ticks");
 }
 
 /*********************************************************************/
@@ -426,9 +597,6 @@ console.log("moveToAnyEmptyCell " + (end - start) + " ticks");
 SpriteMorph.prototype.currentCell = null;
 SpriteMorph.prototype.updateCurrentCell = function()
 {
-    //0.003 ticks
-var start = getTimestamp();
-
 	if (!this.parentSprite)
 		return; //No parent, thus this is a prototype sprite morph and is 'sposed to be invisible.
 		
@@ -463,9 +631,6 @@ var start = getTimestamp();
 		}
 		this.currentCell.addSpriteMorph(this);
 	}
-	
-    var end = getTimestamp();
-    console.log("updateCurrentCell " + (end - start) + " ticks");
 }
 
 SpriteMorph.prototype.uberMoveBy = SpriteMorph.prototype.moveBy;
@@ -721,10 +886,12 @@ StageMorph.prototype.toggleCellAttributeVisibility = function(name)
 		if (this.visibleAttributes[i] == name)
 		{
 			this.visibleAttributes.splice(i, 1);
+			this.dirtyEntireStage();
 			return;
 		}
 	}
 	this.visibleAttributes.push(name);
+	this.dirtyEntireStage();
 }
 
 StageMorph.prototype.setCellAttributeVisibility = function(name, val)
@@ -736,6 +903,7 @@ StageMorph.prototype.setCellAttributeVisibility = function(name, val)
 			if (!val)
 			{
 				this.visibleAttributes.splice(i, 1);
+				this.dirtyEntireStage();
 			}
 			return;
 		}
@@ -743,8 +911,8 @@ StageMorph.prototype.setCellAttributeVisibility = function(name, val)
 	if (val)
 	{
 		this.visibleAttributes.push(name);
+		this.dirtyEntireStage();
 	}
-	return false;
 }
 
 StageMorph.prototype.getCellAttributeVisibility = function(name)
@@ -773,6 +941,51 @@ StageMorph.prototype.getCellPositionAt = function(pointOrX, y)
 			return new Point(cellX, cellY);
 		return null;
 	}
+}
+
+/*
+** Converts annoying stage coordinates ([-240,240],[-180,180]) to normal screen coordinates 
+*/
+StageMorph.prototype.normalizeCoordinates = function(pointOrX, y)
+{
+	var x;
+	if (pointOrX instanceof Point) 
+	{
+		x = pointOrX.x;
+		y = pointOrX.y;
+	}
+	else
+	{
+		x = pointOrX;
+	}
+	return new Point(
+		(x / 240 / 2 + 0.5) * this.width() + this.left(),
+		(-y / 180 / 2 + 0.5) * this.height() + this.top());
+}
+
+
+StageMorph.prototype.getCellAtCellCoords = function(pointOrCX, cy)
+{
+	var cx;
+	if (pointOrCX instanceof Point) 
+	{
+		cx = pointOrCX.x;
+		cy = pointOrCX.y;
+	}
+	else
+	{
+		cx = pointOrCX;
+	}
+	cx = Math.floor(cx);
+	cy = Math.floor(cy);
+	if (cx < 0 || cx >= this.cellsX || cy < 0 || cy >= this.cellsY)
+		return null;
+	return this.cells[cy][cx];
+}
+
+StageMorph.prototype.getCellAtStageCoords = function(pointOrX, y)
+{
+	return this.getCellAt(this.normalizeCoordinates(pointOrX, y));
 }
 
 StageMorph.prototype.getCellAt = function(pointOrX, y)

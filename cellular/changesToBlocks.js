@@ -8,7 +8,7 @@ modules.cellularBlocks = '2013-August-2';
 SyntaxElementMorph.prototype.labelPartScribble = SyntaxElementMorph.prototype.labelPartSnapapps
 SyntaxElementMorph.prototype.labelPartSnapapps = function (spec) 
 {
-/*	if (spec == "%clat")
+	if (spec == "%clat")
 	{
 		return new InputSlotMorph(
 			null,
@@ -16,7 +16,7 @@ SyntaxElementMorph.prototype.labelPartSnapapps = function (spec)
 			'cellAttributesMenu',
 			true
 		);
-	}*/
+	}
     return this.labelPartScribble(spec);
 }
 
