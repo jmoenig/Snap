@@ -353,6 +353,32 @@ if (window.performance.now) {
     }
 }
 
+StageMorph.prototype.getEmptyCell = function(tree, n)
+{
+    if (tree.leafNode)
+    {
+        if (n == 1)
+        {
+            return tree.childB;
+        }
+        else
+        {
+            return tree.childA.spriteMorphs.length == 0 ? tree.childA : tree.childB;
+        }
+    }
+    else
+    {
+        if (n < tree.childA.nEmpty)
+        {
+            return this.getEmptyCell(tree.childA, n);
+        }
+        else
+        {
+            return this.getEmptyCell(tree.childB, n - tree.childA.nEmpty);
+        }
+    }
+}
+
 SpriteMorph.prototype.moveToAnyEmptyCell = function()
 {
 	//Also experemented with keeping an up-to-date list of empty cells.
@@ -366,18 +392,28 @@ SpriteMorph.prototype.moveToAnyEmptyCell = function()
 	//low resolution to be of any use, so I can't tell what speed gains 
 	//I'm getting.
 	
+	//On chrome this function runs in 0.05 ticks using the O(n) algorithm
+	
+var start = getTimestamp();
     var stage = this.parentThatIsA(StageMorph);
 	var cellsX = stage.cellsX;
 	var cellsY = stage.cellsY;
 	
-	var cell = Process.prototype.reportRandom.call(this, 0, stage.emptyCells - 1);
-	for (var i=0; i<cellsX; i++)
+	if (stage.emptyCellTree.nEmpty != 0)
+	{
+        var cellNum = Process.prototype.reportRandom.call(this, 0, stage.emptyCellTree.nEmpty - 1);
+        var cell = stage.getEmptyCell(stage.emptyCellTree, cellNum);
+		this.moveToCell(cell.x, cell.y);
+    }
+	/*for (var i=0; i<cellsX; i++)
 		for (var j=0; j<cellsY; j++)
 		{
 			var thisCell = stage.cells[j][i];
-			if (thisCell.spriteMorphs.length == 0 && (cell--) == 0)
+			if (thisCell.spriteMorphs.length == 0 && (cellNum--) == 0)
 				this.moveToCell(thisCell.x, thisCell.y);
-		}
+		}*/
+var end = getTimestamp();
+console.log("moveToAnyEmptyCell " + (end - start) + " ticks");
 }
 
 /*********************************************************************/
@@ -390,6 +426,9 @@ SpriteMorph.prototype.moveToAnyEmptyCell = function()
 SpriteMorph.prototype.currentCell = null;
 SpriteMorph.prototype.updateCurrentCell = function()
 {
+    //0.003 ticks
+var start = getTimestamp();
+
 	if (!this.parentSprite)
 		return; //No parent, thus this is a prototype sprite morph and is 'sposed to be invisible.
 		
@@ -408,7 +447,9 @@ SpriteMorph.prototype.updateCurrentCell = function()
 	{
 		this.currentCell.removeSpriteMorph(this);
 		if (this.currentCell.spriteMorphs.length == 0)
-			stage.emptyCells++;
+		{
+    		this.currentCell.parentECT.cellMadeEmpty();
+	    }
 	}
 	
 	this.currentCell = newCell;
@@ -417,9 +458,14 @@ SpriteMorph.prototype.updateCurrentCell = function()
 	if (this.currentCell)
 	{
 		if (this.currentCell.spriteMorphs.length == 0)
-			stage.emptyCells--;
+		{
+    		this.currentCell.parentECT.cellFilled();
+		}
 		this.currentCell.addSpriteMorph(this);
 	}
+	
+    var end = getTimestamp();
+    console.log("updateCurrentCell " + (end - start) + " ticks");
 }
 
 SpriteMorph.prototype.uberMoveBy = SpriteMorph.prototype.moveBy;
@@ -453,7 +499,7 @@ StageMorph.prototype.removeChild = function (aNode) {
 		{
 			aNode.currentCell.removeSpriteMorph(aNode);
 			if (aNode.currentCell.spriteMorphs.length == 0)
-				this.emptyCells++;
+                aNode.currentCell.parentECT.cellMadeEmpty();
 			aNode.currentCell = null;
 		}
 	}
@@ -534,6 +580,36 @@ function cellInterpolate(resultCell, cellArray, cellArrayWidth, cellArrayHeight,
 	}
 }
 
+StageMorph.prototype.getCellFromNumber = function(n)
+{
+    return this.cells[Math.floor(n / this.cellsX)][n % this.cellsX];
+}
+
+StageMorph.prototype.createECT = function(from, to)
+{
+    //To & From are inclusive bounds.
+    if (to - from > 1)
+    {
+        var midpoint = Math.floor((from + to) / 2);
+        return new EmptyCellTree(
+            this.createECT(from, midpoint),
+            this.createECT(midpoint + 1, to));
+    }
+    else
+    {
+        if (from == to)
+            return new EmptyCellTree(
+                this.getCellFromNumber(from),
+                null
+            );
+        else
+            return new EmptyCellTree(
+                this.getCellFromNumber(from),
+                this.getCellFromNumber(to)
+            );
+    }
+}
+
 StageMorph.prototype.updateCells = function ()
 {
 	var oldCells = null;
@@ -574,8 +650,7 @@ StageMorph.prototype.updateCells = function ()
 	}
 	
 	this.cells = newCells;
-	
-	this.emptyCells = this.cellsX * this.cellsY;
+	this.emptyCellTree = this.createECT(0, this.cellsX * this.cellsY - 1);
 	
 	for (var i=0; i<this.children.length; i++)
 	{
