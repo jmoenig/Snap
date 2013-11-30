@@ -2379,53 +2379,6 @@ IDE_Morph.prototype.projectMenu = function () {
         },
         'Select categories of additional blocks to add to this project.'
     );
-
-
-    menu.addLine();
-    menu.addItem(
-        'Import tools',
-        function () {
-            myself.droppedText(
-                myself.getURL(
-                    'http://snap.berkeley.edu/snapsource/tools.xml'
-                ),
-                'tools'
-            );
-        },
-        'load the official library of\npowerful blocks'
-    );
-    menu.addItem(
-        'Libraries...',
-        function () {
-            // read a list of libraries from an external file,
-            var libMenu = new MenuMorph(this, 'Import library'),
-                libUrl = 'http://snap.berkeley.edu/snapsource/libraries/' +
-                    'LIBRARIES';
-
-            function loadLib(name) {
-                var url = 'http://snap.berkeley.edu/snapsource/libraries/'
-                        + name
-                        + '.xml';
-                myself.droppedText(myself.getURL(url), name);
-            }
-
-            myself.getURL(libUrl).split('\n').forEach(function (line) {
-                if (line.length > 0) {
-                    libMenu.addItem(
-                        line.substring(line.indexOf('\t') + 1),
-                        function () {
-                            loadLib(
-                                line.substring(0, line.indexOf('\t'))
-                            );
-                        }
-                    );
-                }
-            });
-
-            libMenu.popup(world, pos);
-        },
-        'Select categories of additional blocks to add to this project.'
-    );
     menu.popup(world, pos);
 };
 
