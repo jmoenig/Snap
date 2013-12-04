@@ -181,11 +181,11 @@ SnapTranslator.dict.fr = {
     'language_name':
         'Fran\u00E7ais', // the name as it should appear in the language menu
     'language_translator':
-        'Jean-Jacques Valliet - Mark Rafter', // your name for the Translators tab
+        'Jean-Jacques Valliet, Mark Rafter, Martin Quinson', // your name for the Translators tab
     'translator_e-mail':
         'i.scool@mac.com', // optional
     'last_changed':
-        '2013-09-16', // this, too, will appear in the Translators tab
+        '2013-12-04', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:

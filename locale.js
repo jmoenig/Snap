@@ -42,7 +42,7 @@
 
 /*global modules, contains*/
 
-modules.locale = '2013-November-26';
+modules.locale = '2013-December-04';
 
 // Global stuff
 
@@ -253,11 +253,11 @@ SnapTranslator.dict.fr = {
     'language_name':
         'Fran\u00E7ais',
     'language_translator':
-        'Jean-Jacques Valliet - Mark Rafter',
+        'Jean-Jacques Valliet, Mark Rafter, Martin Quinson',
     'translator_e-mail':
         'i.scool@mac.com',
     'last_changed':
-        '2013-09-16'
+        '2013-12-04'
 };
 
 SnapTranslator.dict.si = {
