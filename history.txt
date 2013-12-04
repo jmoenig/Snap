@@ -2007,7 +2007,7 @@ ______
 * Blocks: Prevent „hide“ menu option for non-palette template blocks
 * new Catalan translation! Yay, thanks, Bernat Romagosa Carrasquer!!
 
-132226
+131126
 ------
 * Cloud: fixed #125 (encode email address when signing up), thanks, Nathan!
 * Threads: fixed #207 (stricter comparison of strings vs. numbers). Some edge cases remain, such as empty string equals zero and disregarding trailing / leading blanks. These are intentional. Please don’t nitpick and spare me the fundamentalism :-)
@@ -2018,3 +2018,9 @@ ______
 * Threads: fixed #179 - don’t identify primitive (static) C-Slots as implicit formal parameters
 * Threads: fixed #249 - preserve variable value types with edge cases (empty string, Boolean false)
 * Threads: fixed #133 - preserve edge-cased argument types (empty string, Boolean false)
+* Fixed issue #244 (relabelling now preserves empty input slots), thanks, Nathan!
+
+131204
+------
+* Threads: handle text comparisons case-insensitive (again)
+
