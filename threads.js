@@ -83,7 +83,7 @@ ArgLabelMorph, localize, XML_Element, hex_sha512*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.threads = '2013-November-26';
+modules.threads = '2013-December-04';
 
 var ThreadManager;
 var Process;
@@ -104,14 +104,12 @@ function snapEquals(a, b) {
         x = a;
         y = b;
     }
-    /*
-      // handle text comparision text-insensitive.
-      // I think this is a pedagogical feature for novices,
-      // but some teachers disagree. Commented out for now.
+
+    // handle text comparision text-insensitive.
     if (isString(x) && isString(y)) {
         return x.toLowerCase() === y.toLowerCase();
     }
-    */
+
     return x === y;
 }
 
