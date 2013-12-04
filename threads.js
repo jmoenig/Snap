@@ -106,7 +106,7 @@ function snapEquals(a, b) {
     // check for special values before coercing to numbers
     if (isNaN(x) || isNaN(y) ||
             [a, b].some(function (any) {return contains(specials, any) ||
-                  (any.indexOf(' ') > -1); })) {
+                  (isString(any) && (any.indexOf(' ') > -1)); })) {
         x = a;
         y = b;
     }
