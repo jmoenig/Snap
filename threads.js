@@ -98,9 +98,15 @@ function snapEquals(a, b) {
         }
         return false;
     }
+
     var x = +a,
-        y = +b;
-    if (isNaN(x) || isNaN(y)) {
+        y = +b,
+        specials = [true, false, '', 0];
+
+    // check for special values before coercing to numbers
+    if (isNaN(x) || isNaN(y) ||
+            [a, b].some(function (any) {return contains(specials, any) ||
+                  (any.indexOf(' ') > -1); })) {
         x = a;
         y = b;
     }
