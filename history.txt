@@ -2024,3 +2024,4 @@ ______
 ------
 * Threads: handle text comparisons case-insensitive (again)
 * Lists: harmonize equality testing and List CONTAINS testing
+* French translation update, thanks, Martin!
