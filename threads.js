@@ -83,7 +83,7 @@ ArgLabelMorph, localize, XML_Element, hex_sha512*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.threads = '2013-December-04';
+modules.threads = '2013-December-05';
 
 var ThreadManager;
 var Process;
@@ -101,7 +101,7 @@ function snapEquals(a, b) {
 
     var x = +a,
         y = +b,
-        specials = [true, false, '', 0];
+        specials = [true, false, ''];
 
     // check for special values before coercing to numbers
     if (isNaN(x) || isNaN(y) ||
