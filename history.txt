@@ -2026,3 +2026,7 @@ ______
 * Lists: harmonize equality testing and List CONTAINS testing
 * French translation update, thanks, Martin!
 * Threads: fixed #261 (less tolerant null-value-to-number-coercion)
+
+131205
+------
+* Threads: fixed literal-to-non-literal zero-value comparison bug
