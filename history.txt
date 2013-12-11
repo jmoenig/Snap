@@ -2030,4 +2030,8 @@ ______
 131205
 ------
 * Threads: fixed literal-to-non-literal zero-value comparison bug
-* Objects: fixed #264 (mapped <ctrl-enter> to green-flag instead of <enter>
+* Objects: fixed #264 (mapped <ctrl-enter> to green-flag instead of <enter>)
+
+131211
+------
+* Threads: accept lists as inputs to the green (text) LENGTH OF reporter

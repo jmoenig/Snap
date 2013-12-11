@@ -83,7 +83,7 @@ ArgLabelMorph, localize, XML_Element, hex_sha512*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.threads = '2013-December-05';
+modules.threads = '2013-December-11';
 
 var ThreadManager;
 var Process;
@@ -2058,6 +2058,9 @@ Process.prototype.reportLetter = function (idx, string) {
 };
 
 Process.prototype.reportStringSize = function (string) {
+    if (string instanceof List) { // catch a common user error
+        return string.length();
+    }
     var str = (string || '').toString();
     return str.length;
 };
