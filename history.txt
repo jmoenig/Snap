@@ -2035,3 +2035,7 @@ ______
 131211
 ------
 * Threads: accept lists as inputs to the green (text) LENGTH OF reporter
+
+131212
+------
+* Objects, Morphic: fixed #277, #279 (blitting null-canvasses fails)

@@ -124,7 +124,7 @@ PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.objects = '2013-December-04';
+modules.objects = '2013-December-12';
 
 var SpriteMorph;
 var StageMorph;
@@ -3373,12 +3373,14 @@ SpriteMorph.prototype.thumbnail = function (extentPoint) {
         ctx = trg.getContext('2d');
 
     ctx.save();
-    ctx.scale(scale, scale);
-    ctx.drawImage(
-        src,
-        Math.floor(xOffset / scale),
-        Math.floor(yOffset / scale)
-    );
+    if (scale !== Infinity) {
+        ctx.scale(scale, scale);
+        ctx.drawImage(
+            src,
+            Math.floor(xOffset / scale),
+            Math.floor(yOffset / scale)
+        );
+    }
     return trg;
 };
 
@@ -4662,11 +4664,13 @@ StageMorph.prototype.thumbnail = function (extentPoint, excludedSprite) {
     this.children.forEach(function (morph) {
         if (morph !== excludedSprite) {
             fb = morph.fullBounds();
-            ctx.drawImage(
-                morph.fullImage(),
-                fb.origin.x - myself.bounds.origin.x,
-                fb.origin.y - myself.bounds.origin.y
-            );
+            if (fb.extent().gt(new Point())) {
+                ctx.drawImage(
+                    morph.fullImage(),
+                    fb.origin.x - myself.bounds.origin.x,
+                    fb.origin.y - myself.bounds.origin.y
+                );
+            }
         }
     });
     return trg;

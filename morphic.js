@@ -1035,7 +1035,7 @@
 /*global window, HTMLCanvasElement, getMinimumFontHeight, FileReader, Audio,
 FileList, getBlurredShadowSupport*/
 
-var morphicVersion = '2013-November-22';
+var morphicVersion = '2013-December-12';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = getBlurredShadowSupport(); // check for Chrome-bug
 
@@ -2735,11 +2735,13 @@ Morph.prototype.fullImage = function () {
     this.allChildren().forEach(function (morph) {
         if (morph.isVisible) {
             ctx.globalAlpha = morph.alpha;
-            ctx.drawImage(
-                morph.image,
-                morph.bounds.origin.x - fb.origin.x,
-                morph.bounds.origin.y - fb.origin.y
-            );
+            if (morph.extent().gt(new Point())) {
+                ctx.drawImage(
+                    morph.image,
+                    morph.bounds.origin.x - fb.origin.x,
+                    morph.bounds.origin.y - fb.origin.y
+                );
+            }
         }
     });
     return img;
@@ -4581,6 +4583,7 @@ CursorMorph.prototype.processKeyDown = function (event) {
         this.keyDownEventUsed = true;
         break;
     default:
+        nop();
         // this.inspectKeyEvent(event);
     }
     // notify target's parent of key event
