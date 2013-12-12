@@ -3373,7 +3373,7 @@ SpriteMorph.prototype.thumbnail = function (extentPoint) {
         ctx = trg.getContext('2d');
 
     ctx.save();
-    if (scale !== Infinity) {
+    if (src.width && src.height) {
         ctx.scale(scale, scale);
         ctx.drawImage(
             src,
@@ -4646,7 +4646,8 @@ StageMorph.prototype.thumbnail = function (extentPoint, excludedSprite) {
         ),
         trg = newCanvas(extentPoint),
         ctx = trg.getContext('2d'),
-        fb;
+        fb,
+        fimg;
 
     ctx.scale(scale, scale);
     ctx.drawImage(
@@ -4664,7 +4665,8 @@ StageMorph.prototype.thumbnail = function (extentPoint, excludedSprite) {
     this.children.forEach(function (morph) {
         if (morph !== excludedSprite) {
             fb = morph.fullBounds();
-            if (fb.extent().gt(new Point())) {
+            fimg = morph.fullImage();
+            if (fimg.width && fimg.height) {
                 ctx.drawImage(
                     morph.fullImage(),
                     fb.origin.x - myself.bounds.origin.x,
