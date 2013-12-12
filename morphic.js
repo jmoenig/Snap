@@ -2735,7 +2735,7 @@ Morph.prototype.fullImage = function () {
     this.allChildren().forEach(function (morph) {
         if (morph.isVisible) {
             ctx.globalAlpha = morph.alpha;
-            if (morph.extent().gt(new Point())) {
+            if (morph.image.width && morph.image.height) {
                 ctx.drawImage(
                     morph.image,
                     morph.bounds.origin.x - fb.origin.x,
