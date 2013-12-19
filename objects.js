@@ -124,7 +124,7 @@ PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.objects = '2013-December-18';
+modules.objects = '2013-December-19';
 
 var SpriteMorph;
 var StageMorph;
@@ -3972,7 +3972,7 @@ StageMorph.prototype.getLastMessage = function () {
 // StageMorph Mouse Corridnates
 
 StageMorph.prototype.reportMouseX = function () {
-   var world = this.world();
+    var world = this.world();
     if (world) {
         return (world.hand.position().x - this.center().x) / this.scale;
     }
@@ -6045,7 +6045,7 @@ WatcherMorph.prototype.object = function () {
 WatcherMorph.prototype.isGlobal = function (selector) {
     return contains(
         ['getLastAnswer', 'getLastMessage', 'getTempo', 'getTimer',
-             'reportMouseX', 'reportMouseY'],        
+             'reportMouseX', 'reportMouseY'],
         selector
     );
 };

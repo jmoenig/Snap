@@ -2039,3 +2039,8 @@ ______
 131212
 ------
 * Objects, Morphic: fixed #277, #279 (blitting null-canvasses fails)
+
+131219
+------
+* Objects: stage watchers for „mouse x“ and „mouse y“ sensing reporters. Thanks, Michael!
+* Store: fixed saving/loading/localisation of new mouse coordinate stage watchers
