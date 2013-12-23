@@ -168,6 +168,17 @@ ThreadManager.prototype.stopAllForReceiver = function (rcvr) {
     });
 };
 
+ThreadManager.prototype.stopAllForReceiverExcept = function (rcvr, excpt) {
+    this.processes.forEach(function (proc) {
+        if (proc.homeContext.receiver === rcvr && proc != excpt) {
+            proc.stop();
+            if (rcvr.isClone) {
+                proc.isDead = true;
+            }
+        }
+    });
+};
+
 ThreadManager.prototype.stopProcess = function (block) {
     var active = this.findProcess(block);
     if (active) {
@@ -1365,6 +1376,16 @@ Process.prototype.doStopAll = function () {
         }
         ide = stage.parentThatIsA(IDE_Morph);
         if (ide) {ide.controlBar.pauseButton.refresh(); }
+    }
+};
+
+Process.prototype.doStopOthers = function () {
+    var stage, ide;
+    if (this.homeContext.receiver) {
+        stage = this.homeContext.receiver.parentThatIsA(StageMorph);
+        if (stage) {
+            stage.threads.stopAllForReceiverExcept(this.homeContext.receiver, this);
+        }
     }
 };
 
