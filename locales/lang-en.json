@@ -1,0 +1,581 @@
+{
+    "language_name": "English",
+    "language_translator": "Jens M\u00F6nig",
+    "translator_e-mail": "jens@moenig.org",
+    "last_changed": "2013-10-04",
+
+
+    "untitled": "untitled",
+    "development mode": "development mode",
+
+
+    "Motion": "Motion",
+    "Looks": "Looks",
+    "Sound": "Sound",
+    "Pen": "Pen",
+    "Control": "Control",
+    "Sensing": "Sensing",
+    "Operators": "Operators",
+    "Variables": "Variables",
+    "Lists": "Lists",
+    "Other": "Other",
+
+
+    "draggable": "draggable",
+
+
+    "Scripts": "Scripts",
+    "Costumes": "Costumes",
+    "Sounds": "Sounds",
+
+
+    "Sprite": "Sprite",
+    "Stage": "Stage",
+
+
+    "don't rotate": "don't rotate",
+    "can rotate": "can rotate",
+    "only face left/right": "only face left/right",
+
+
+    "add a new sprite": "add a new sprite",
+
+
+    "costumes tab help": "costumes tab help",
+    "import a sound from your computer\nby dragging it into here": "import a sound from your computer\nby dragging it into here",
+
+
+
+
+    "Stage selected:\nno motion primitives": "Stage selected:\nno motion primitives",
+
+    "move %n steps": "move %n steps",
+    "turn %clockwise %n degrees": "turn %clockwise %n degrees",
+    "turn %counterclockwise %n degrees": "turn %counterclockwise %n degrees",
+    "point in direction %dir": "point in direction %dir",
+    "point towards %dst": "point towards %dst",
+    "go to x: %n y: %n": "go to x: %n y: %n",
+    "go to %dst": "go to %dst",
+    "glide %n secs to x: %n y: %n": "glide %n secs to x: %n y: %n",
+    "change x by %n": "change x by %n",
+    "set x to %n": "set x to %n",
+    "change y by %n": "change y by %n",
+    "set y to %n": "set y to %n",
+    "if on edge, bounce": "if on edge, bounce",
+    "x position": "x position",
+    "y position": "y position",
+    "direction": "direction",
+
+
+    "switch to costume %cst": "switch to costume %cst",
+    "next costume": "next costume",
+    "costume #": "costume #",
+    "say %s for %n secs": "say %s for %n secs",
+    "say %s": "say %s",
+    "think %s for %n secs": "think %s for %n secs",
+    "think %s": "think %s",
+    "Hello!": "Hello!",
+    "Hmm...": "Hmm...",
+    "change %eff effect by %n": "change %eff effect by %n",
+    "set %eff effect to %n": "set %eff effect to %n",
+    "clear graphic effects": "clear graphic effects",
+    "change size by %n": "change size by %n",
+    "set size to %n %": "set size to %n %",
+    "size": "size",
+    "show": "show",
+    "hide": "hide",
+    "go to front": "go to front",
+    "go back %n layers": "go back %n layers",
+
+    "development mode \ndebugging primitives:": "development mode \ndebugging primitives:",
+    "console log %mult%s": "console log %mult%s",
+    "alert %mult%s": "alert %mult%s",
+
+
+    "play sound %snd": "play sound %snd",
+    "play sound %snd until done": "play sound %snd until done",
+    "stop all sounds": "stop all sounds",
+    "rest for %n beats": "rest for %n beats",
+    "play note %n for %n beats": "play note %n for %n beats",
+    "change tempo by %n": "change tempo by %n",
+    "set tempo to %n bpm": "set tempo to %n bpm",
+    "tempo": "tempo",
+
+
+    "clear": "clear",
+    "pen down": "pen down",
+    "pen up": "pen up",
+    "set pen color to %clr": "set pen color to %clr",
+    "change pen color by %n": "change pen color by %n",
+    "set pen color to %n": "set pen color to %n",
+    "change pen shade by %n": "change pen shade by %n",
+    "set pen shade to %n": "set pen shade to %n",
+    "change pen size by %n": "change pen size by %n",
+    "set pen size to %n": "set pen size to %n",
+    "stamp": "stamp",
+
+
+    "when %greenflag clicked": "when %greenflag clicked",
+    "when %keyHat key pressed": "when %keyHat key pressed",
+    "when I am clicked": "when I am clicked",
+    "when I receive %msgHat": "when I receive %msgHat",
+    "broadcast %msg": "broadcast %msg",
+    "broadcast %msg and wait": "broadcast %msg and wait",
+    "Message name": "Message name",
+    "message": "message",
+    "any message": "any message",
+    "wait %n secs": "wait %n secs",
+    "wait until %b": "wait until %b",
+    "forever %c": "forever %c",
+    "repeat %n %c": "repeat %n %c",
+    "repeat until %b %c": "repeat until %b %c",
+    "if %b %c": "if %b %c",
+    "if %b %c else %c": "if %b %c else %c",
+    "report %s": "report %s",
+    "stop block": "stop block",
+    "stop script": "stop script",
+    "stop all %stop": "stop all %stop",
+    "pause all %pause": "pause all %pause",
+    "run %cmdRing %inputs": "run %cmdRing %inputs",
+    "launch %cmdRing %inputs": "launch %cmdRing %inputs",
+    "call %repRing %inputs": "call %repRing %inputs",
+    "run %cmdRing w/continuation": "run %cmdRing w/continuation",
+    "call %cmdRing w/continuation": "call %cmdRing w/continuation",
+    "warp %c": "warp %c",
+    "when I start as a clone": "when I start as a clone",
+    "create a clone of %cln": "create a clone of %cln",
+    "myself": "myself",
+    "delete this clone": "delete this clone",
+
+
+    "touching %col ?": "touching %col ?",
+    "touching %clr ?": "touching %clr ?",
+    "color %clr is touching %clr ?": "color %clr is touching %clr ?",
+    "ask %s and wait": "ask %s and wait",
+    "what's your name?": "what's your name?",
+    "answer": "answer",
+    "mouse x": "mouse x",
+    "mouse y": "mouse y",
+    "mouse down?": "mouse down?",
+    "key %key pressed?": "key %key pressed?",
+    "distance to %dst": "distance to %dst",
+    "reset timer": "reset timer",
+    "timer": "timer",
+    "%att of %spr": "%att of %spr",
+    "http:// %s": "http:// %s",
+    "turbo mode?": "turbo mode?",
+    "set turbo mode to %b": "set turbo mode to %b",
+
+    "filtered for %clr": "filtered for %clr",
+    "stack size": "stack size",
+    "frames": "frames",
+
+
+    "%n mod %n": "%n mod %n",
+    "round %n": "round %n",
+    "%fun of %n": "%fun of %n",
+    "pick random %n to %n": "pick random %n to %n",
+    "%b and %b": "%b and %b",
+    "%b or %b": "%b or %b",
+    "not %b": "not %b",
+    "true": "true",
+    "false": "false",
+    "join %words": "join %words",
+    "split %s by %delim": "split %s by %delim",
+    "hello": "hello",
+    "world": "world",
+    "letter %n of %s": "letter %n of %s",
+    "length of %s": "length of %s",
+    "unicode of %s": "unicode of %s",
+    "unicode %n as letter": "unicode %n as letter",
+    "is %s a %typ ?": "is %s a %typ ?",
+    "is %s identical to %s ?": "is %s identical to %s ?",
+
+    "type of %s": "type of %s",
+
+
+    "Make a variable": "Make a variable",
+    "Variable name": "Variable name",
+    "Script variable name": "Script variable name",
+    "Delete a variable": "Delete a variable",
+
+    "set %var to %s": "set %var to %s",
+    "change %var by %n": "change %var by %n",
+    "show variable %var": "show variable %var",
+    "hide variable %var": "hide variable %var",
+    "script variables %scriptVars": "script variables %scriptVars",
+
+
+    "list %exp": "list %exp",
+    "%s in front of %l": "%s in front of %l",
+    "item %idx of %l": "item %idx of %l",
+    "all but first of %l": "all but first of %l",
+    "length of %l": "length of %l",
+    "%l contains %s": "%l contains %s",
+    "thing": "thing",
+    "add %s to %l": "add %s to %l",
+    "delete %ida of %l": "delete %ida of %l",
+    "insert %s at %idx of %l": "insert %s at %idx of %l",
+    "replace item %idx of %l with %s": "replace item %idx of %l with %s",
+
+
+    "Make a block": "Make a block",
+
+
+
+    "About...": "About...",
+    "Reference manual": "Reference manual",
+    "Snap! website": "Snap! website",
+    "Download source": "Download source",
+    "Switch back to user mode": "Switch back to user mode",
+    "disable deep-Morphic\ncontext menus\nand show user-friendly ones": "disable deep-Morphic\ncontext menus\nand show user-friendly ones",
+    "Switch to dev mode": "Switch to dev mode",
+    "enable Morphic\ncontext menus\nand inspectors,\nnot user-friendly!": "enable Morphic\ncontext menus\nand inspectors,\nnot user-friendly!",
+
+
+    "Project notes...": "Project notes...",
+    "New": "New",
+    "Open...": "Open...",
+    "Save": "Save",
+    "Save As...": "Save As...",
+    "Import...": "Import...",
+    "file menu import hint": "file menu import hint",
+    "Export project as plain text...": "Export project as plain text...",
+    "Export project...": "Export project...",
+    "show project data as XML\nin a new browser window": "show project data as XML\nin a new browser window",
+    "Export blocks...": "Export blocks...",
+    "show global custom block definitions as XML\nin a new browser window": "show global custom block definitions as XML\nin a new browser window",
+    "Import tools": "Import tools",
+    "load the official library of\npowerful blocks": "load the official library of\npowerful blocks",
+    "Libraries...": "Libraries...",
+    "Import library": "Import library",
+
+
+    "Login...": "Login...",
+    "Signup...": "Signup...",
+
+
+    "Language...": "Language...",
+    "Zoom blocks...": "Zoom blocks...",
+    "Blurred shadows": "Blurred shadows",
+    "uncheck to use solid drop\nshadows and highlights": "uncheck to use solid drop\nshadows and highlights",
+    "check to use blurred drop\nshadows and highlights": "check to use blurred drop\nshadows and highlights",
+    "Zebra coloring": "Zebra coloring",
+    "check to enable alternating\ncolors for nested blocks": "check to enable alternating\ncolors for nested blocks",
+    "uncheck to disable alternating\ncolors for nested block": "uncheck to disable alternating\ncolors for nested block",
+    "Dynamic input labels": "Dynamic input labels",
+    "uncheck to disable dynamic\nlabels for variadic inputs": "uncheck to disable dynamic\nlabels for variadic inputs",
+    "check to enable dynamic\nlabels for variadic inputs": "check to enable dynamic\nlabels for variadic inputs",
+    "Prefer empty slot drops": "Prefer empty slot drops",
+    "settings menu prefer empty slots hint": "settings menu prefer empty slots hint",
+    "uncheck to allow dropped\nreporters to kick out others": "uncheck to allow dropped\nreporters to kick out others",
+    "Long form input dialog": "Long form input dialog",
+    "Plain prototype labels": "Plain prototype labels",
+    "uncheck to always show (+) symbols\nin block prototype labels": "uncheck to always show (+) symbols\nin block prototype labels",
+    "check to hide (+) symbols\nin block prototype labels": "check to hide (+) symbols\nin block prototype labels",
+    "check to always show slot\ntypes in the input dialog": "check to always show slot\ntypes in the input dialog",
+    "uncheck to use the input\ndialog in short form": "uncheck to use the input\ndialog in short form",
+    "Virtual keyboard": "Virtual keyboard",
+    "uncheck to disable\nvirtual keyboard support\nfor mobile devices": "uncheck to disable\nvirtual keyboard support\nfor mobile devices",
+    "check to enable\nvirtual keyboard support\nfor mobile devices": "check to enable\nvirtual keyboard support\nfor mobile devices",
+    "Input sliders": "Input sliders",
+    "uncheck to disable\ninput sliders for\nentry fields": "uncheck to disable\ninput sliders for\nentry fields",
+    "check to enable\ninput sliders for\nentry fields": "check to enable\ninput sliders for\nentry fields",
+    "Clicking sound": "Clicking sound",
+    "uncheck to turn\nblock clicking\nsound off": "uncheck to turn\nblock clicking\nsound off",
+    "check to turn\nblock clicking\nsound on": "check to turn\nblock clicking\nsound on",
+    "Animations": "Animations",
+    "uncheck to disable\nIDE animations": "uncheck to disable\nIDE animations",
+    "Turbo mode": "Turbo mode",
+    "check to prioritize\nscript execution": "check to prioritize\nscript execution",
+    "uncheck to run scripts\nat normal speed": "uncheck to run scripts\nat normal speed",
+    "check to enable\nIDE animations": "check to enable\nIDE animations",
+    "Thread safe scripts": "Thread safe scripts",
+    "uncheck to allow\nscript reentrance": "uncheck to allow\nscript reentrance",
+    "check to disallow\nscript reentrance": "check to disallow\nscript reentrance",
+    "Prefer smooth animations": "Prefer smooth animations",
+    "uncheck for greater speed\nat variable frame rates": "uncheck for greater speed\nat variable frame rates",
+    "check for smooth, predictable\nanimations across computers": "check for smooth, predictable\nanimations across computers",
+
+
+    "with inputs": "with inputs",
+    "input names:": "input names:",
+    "Input Names:": "Input Names:",
+    "input list:": "input list:",
+
+
+    "help": "help",
+
+
+    "hide primitives": "hide primitives",
+    "show primitives": "show primitives",
+
+
+    "help...": "help...",
+    "relabel...": "relabel...",
+    "duplicate": "duplicate",
+    "make a copy\nand pick it up": "make a copy\nand pick it up",
+    "only duplicate this block": "only duplicate this block",
+    "delete": "delete",
+    "script pic...": "script pic...",
+    "open a new window\nwith a picture of this script": "open a new window\nwith a picture of this script",
+    "ringify": "ringify",
+    "unringify": "unringify",
+
+
+    "delete block definition...": "delete block definition...",
+    "edit...": "edit...",
+
+
+    "edit": "edit",
+    "detach from": "detach from",
+    "detach all parts": "detach all parts",
+    "export...": "export...",
+
+
+    "show all": "show all",
+    "pic...": "pic...",
+    "open a new window\nwith a picture of the stage": "open a new window\nwith a picture of the stage",
+
+
+    "clean up": "clean up",
+    "arrange scripts\nvertically": "arrange scripts\nvertically",
+    "add comment": "add comment",
+    "undrop": "undrop",
+    "undo the last\nblock drop\nin this pane": "undo the last\nblock drop\nin this pane",
+    "scripts pic...": "scripts pic...",
+    "open a new window\nwith a picture of all scripts": "open a new window\nwith a picture of all scripts",
+    "make a block...": "make a block...",
+
+
+    "rename": "rename",
+    "export": "export",
+    "rename costume": "rename costume",
+
+
+    "Play sound": "Play sound",
+    "Stop sound": "Stop sound",
+    "Stop": "Stop",
+    "Play": "Play",
+    "rename sound": "rename sound",
+
+
+
+    "OK": "OK",
+    "Ok": "Ok",
+    "Cancel": "Cancel",
+    "Yes": "Yes",
+    "No": "No",
+
+
+    "Help": "Help",
+
+
+    "Zoom blocks": "Zoom blocks",
+    "build": "build",
+    "your own": "your own",
+    "blocks": "blocks",
+    "normal (1x)": "normal (1x)",
+    "demo (1.2x)": "demo (1.2x)",
+    "presentation (1.4x)": "presentation (1.4x)",
+    "big (2x)": "big (2x)",
+    "huge (4x)": "huge (4x)",
+    "giant (8x)": "giant (8x)",
+    "monstrous (10x)": "monstrous (10x)",
+
+
+    "Untitled": "Untitled",
+    "Open Project": "Open Project",
+    "(empty)": "(empty)",
+    "Saved!": "Saved!",
+    "Delete Project": "Delete Project",
+    "Are you sure you want to delete": "Are you sure you want to delete",
+    "rename...": "rename...",
+
+
+    "Costume Editor": "Costume Editor",
+    "click or drag crosshairs to move the rotation center": "click or drag crosshairs to move the rotation center",
+
+
+    "Project Notes": "Project Notes",
+
+
+    "New Project": "New Project",
+    "Replace the current project with a new one?": "Replace the current project with a new one?",
+
+
+    "Save Project As...": "Save Project As...",
+
+
+    "Export blocks": "Export blocks",
+    "Import blocks": "Import blocks",
+    "this project doesn't have any\ncustom global blocks yet": "this project doesn't have any\ncustom global blocks yet",
+    "select": "select",
+    "all": "all",
+    "none": "none",
+
+
+    "for all sprites": "for all sprites",
+    "for this sprite only": "for this sprite only",
+
+
+    "Change block": "Change block",
+    "Command": "Command",
+    "Reporter": "Reporter",
+    "Predicate": "Predicate",
+
+
+    "Block Editor": "Block Editor",
+    "Apply": "Apply",
+
+
+    "Delete Custom Block": "Delete Custom Block",
+    "block deletion dialog text": "block deletion dialog text",
+
+
+    "Create input name": "Create input name",
+    "Edit input name": "Edit input name",
+    "Edit label fragment": "Edit label fragment",
+    "Title text": "Title text",
+    "Input name": "Input name",
+    "Delete": "Delete",
+    "Object": "Object",
+    "Number": "Number",
+    "Text": "Text",
+    "List": "List",
+    "Any type": "Any type",
+    "Boolean (T/F)": "Boolean (T/F)",
+    "Command\n(inline)": "Command\n(inline)",
+    "Command\n(C-shape)": "Command\n(C-shape)",
+    "Any\n(unevaluated)": "Any\n(unevaluated)",
+    "Boolean\n(unevaluated)": "Boolean\n(unevaluated)",
+    "Single input.": "Single input.",
+    "Default Value:": "Default Value:",
+    "Multiple inputs (value is list of inputs)": "Multiple inputs (value is list of inputs)",
+    "Upvar - make internal variable visible to caller": "Upvar - make internal variable visible to caller",
+
+
+    "About Snap": "About Snap",
+    "Back...": "Back...",
+    "License...": "License...",
+    "Modules...": "Modules...",
+    "Credits...": "Credits...",
+    "Translators...": "Translators...",
+    "License": "License",
+    "current module versions:": "current module versions:",
+    "Contributors": "Contributors",
+    "Translations": "Translations",
+
+
+    "normal": "normal",
+    "large": "large",
+    "slider": "slider",
+    "slider min...": "slider min...",
+    "slider max...": "slider max...",
+    "import...": "import...",
+    "Slider minimum value": "Slider minimum value",
+    "Slider maximum value": "Slider maximum value",
+
+
+    "length: ": "length: ",
+
+
+    "add comment here...": "add comment here...",
+
+
+
+    "(90) right": "(90) right",
+    "(-90) left": "(-90) left",
+    "(0) up": "(0) up",
+    "(180) down": "(180) down",
+
+
+    "mouse-pointer": "mouse-pointer",
+    "edge": "edge",
+    "pen trails": "pen trails",
+
+
+    "Turtle": "Turtle",
+    "Empty": "Empty",
+
+
+    "ghost": "ghost",
+
+
+    "space": "space",
+    "up arrow": "up arrow",
+    "down arrow": "down arrow",
+    "right arrow": "right arrow",
+    "left arrow": "left arrow",
+    "a": "a",
+    "b": "b",
+    "c": "c",
+    "d": "d",
+    "e": "e",
+    "f": "f",
+    "g": "g",
+    "h": "h",
+    "i": "i",
+    "j": "j",
+    "k": "k",
+    "l": "l",
+    "m": "m",
+    "n": "n",
+    "o": "o",
+    "p": "p",
+    "q": "q",
+    "r": "r",
+    "s": "s",
+    "t": "t",
+    "u": "u",
+    "v": "v",
+    "w": "w",
+    "x": "x",
+    "y": "y",
+    "z": "z",
+    "0": "0",
+    "1": "1",
+    "2": "2",
+    "3": "3",
+    "4": "4",
+    "5": "5",
+    "6": "6",
+    "7": "7",
+    "8": "8",
+    "9": "9",
+
+
+    "new...": "new...",
+
+
+    "abs": "abs",
+    "floor": "floor",
+    "sqrt": "sqrt",
+    "sin": "sin",
+    "cos": "cos",
+    "tan": "tan",
+    "asin": "asin",
+    "acos": "acos",
+    "atan": "atan",
+    "ln": "ln",
+    "e^": "e^",
+
+
+    "whitespace": "whitespace",
+    "line": "line",
+    "tab": "tab",
+    "cr": "cr",
+
+
+    "number": "number",
+    "text": "text",
+    "Boolean": "Boolean",
+    "list": "list",
+    "command": "command",
+    "reporter": "reporter",
+    "predicate": "predicate",
+
+
+    "last": "last",
+    "any": "any"
+}
