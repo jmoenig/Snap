@@ -77,6 +77,10 @@ Localizer.prototype.languages = function () {
     return arr.sort();
 };
 
+Localizer.prototype.load = function (lang, translation) {
+    this.dict[lang] = translation || {};
+}
+
 Localizer.prototype.languageName = function (lang) {
     return this.dict[lang].language_name || lang;
 };
@@ -124,20 +128,6 @@ SnapTranslator.dict.en = {
         'jens@moenig.org',
     'last_changed':
         '2012-10-16',
-
-    // long strings look-up only
-    'file menu import hint':
-        'load an exported project file\nor block library, a costume\n'
-            + 'or a sound',
-    'settings menu prefer empty slots hint':
-        'check to focus on empty slots\nwhen dragging & '
-                + 'dropping reporters',
-    'costumes tab help':
-        'import a picture from another web page or from\n'
-            + 'a file on your computer by dropping it here\n',
-    'block deletion dialog text':
-        'Are you sure you want to delete this\n'
-            + 'custom block and all its instances?'
 };
 
 SnapTranslator.dict.de = {

@@ -3214,23 +3214,30 @@ IDE_Morph.prototype.languageMenu = function () {
 };
 
 IDE_Morph.prototype.setLanguage = function (lang, callback) {
-    var translation = document.getElementById('language'),
-        src = 'lang-' + lang + '.js',
-        myself = this;
-    SnapTranslator.unload();
+
+    function getURL(url) {
+        try {
+            var request = new XMLHttpRequest();
+            request.open('GET', url, false);
+            request.send();
+            if (request.readyState == 4 && (request.status == 200 || request.status == 0)) {
+                return request.responseText;
+            }
+            throw new Error('unable to retrieve ' + url);
+        } catch (err) {
+            return;
+        }
+    }
+
+    var myself = this;
+    var translation = getURL('locales/lang-' + lang + '.json');
     if (translation) {
-        document.head.removeChild(translation);
-    }
-    if (lang === 'en') {
-        return this.reflectLanguage('en', callback);
-    }
-    translation = document.createElement('script');
-    translation.id = 'language';
-    translation.onload = function () {
+        SnapTranslator.unload();
+        SnapTranslator.load(lang, JSON.parse(translation));
         myself.reflectLanguage(lang, callback);
-    };
-    document.head.appendChild(translation);
-    translation.src = src;
+    } else {
+        myself.showMessage('Set language failed: ' + SnapTranslator.languageName(lang));
+    }
 };
 
 IDE_Morph.prototype.reflectLanguage = function (lang, callback) {
