@@ -1,0 +1,8 @@
+[main]
+host = https://www.transifex.com
+
+[snap-build-your-own-blocks.lang]
+file_filter = locales/lang-<lang>.json
+source_file = locales/lang-en.json
+source_lang = en
+type = KEYVALUEJSON

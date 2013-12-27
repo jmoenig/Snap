@@ -3,12 +3,8 @@
     "language_translator": "Jens M\u00F6nig",
     "translator_e-mail": "jens@moenig.org",
     "last_changed": "2013-10-04",
-
-
     "untitled": "untitled",
     "development mode": "development mode",
-
-
     "Motion": "Motion",
     "Looks": "Looks",
     "Sound": "Sound",
@@ -19,37 +15,19 @@
     "Variables": "Variables",
     "Lists": "Lists",
     "Other": "Other",
-
-
     "draggable": "draggable",
-
-
     "Scripts": "Scripts",
     "Costumes": "Costumes",
     "Sounds": "Sounds",
-
-
     "Sprite": "Sprite",
     "Stage": "Stage",
-
-
     "don't rotate": "don't rotate",
     "can rotate": "can rotate",
     "only face left/right": "only face left/right",
-
-
     "add a new sprite": "add a new sprite",
-
-
     "costumes tab help": "costumes tab help",
     "import a sound from your computer\nby dragging it into here": "import a sound from your computer\nby dragging it into here",
-
-
-
-
-    "Stage selected:\nno motion primitives": "Stage selected:\nno motion primitives",
-
-    "move %n steps": "move %n steps",
+    "Stage selected:\nno motion primitives": "Stage selected:\nno motion primitives",    "move %n steps": "move %n steps",
     "turn %clockwise %n degrees": "turn %clockwise %n degrees",
     "turn %counterclockwise %n degrees": "turn %counterclockwise %n degrees",
     "point in direction %dir": "point in direction %dir",
@@ -65,8 +43,6 @@
     "x position": "x position",
     "y position": "y position",
     "direction": "direction",
-
-
     "switch to costume %cst": "switch to costume %cst",
     "next costume": "next costume",
     "costume #": "costume #",
@@ -85,13 +61,9 @@
     "show": "show",
     "hide": "hide",
     "go to front": "go to front",
-    "go back %n layers": "go back %n layers",
-
-    "development mode \ndebugging primitives:": "development mode \ndebugging primitives:",
+    "go back %n layers": "go back %n layers",    "development mode \ndebugging primitives:": "development mode \ndebugging primitives:",
     "console log %mult%s": "console log %mult%s",
     "alert %mult%s": "alert %mult%s",
-
-
     "play sound %snd": "play sound %snd",
     "play sound %snd until done": "play sound %snd until done",
     "stop all sounds": "stop all sounds",
@@ -100,8 +72,6 @@
     "change tempo by %n": "change tempo by %n",
     "set tempo to %n bpm": "set tempo to %n bpm",
     "tempo": "tempo",
-
-
     "clear": "clear",
     "pen down": "pen down",
     "pen up": "pen up",
@@ -113,8 +83,6 @@
     "change pen size by %n": "change pen size by %n",
     "set pen size to %n": "set pen size to %n",
     "stamp": "stamp",
-
-
     "when %greenflag clicked": "when %greenflag clicked",
     "when %keyHat key pressed": "when %keyHat key pressed",
     "when I am clicked": "when I am clicked",
@@ -146,8 +114,6 @@
     "create a clone of %cln": "create a clone of %cln",
     "myself": "myself",
     "delete this clone": "delete this clone",
-
-
     "touching %col ?": "touching %col ?",
     "touching %clr ?": "touching %clr ?",
     "color %clr is touching %clr ?": "color %clr is touching %clr ?",
@@ -164,13 +130,9 @@
     "%att of %spr": "%att of %spr",
     "http:// %s": "http:// %s",
     "turbo mode?": "turbo mode?",
-    "set turbo mode to %b": "set turbo mode to %b",
-
-    "filtered for %clr": "filtered for %clr",
+    "set turbo mode to %b": "set turbo mode to %b",    "filtered for %clr": "filtered for %clr",
     "stack size": "stack size",
     "frames": "frames",
-
-
     "%n mod %n": "%n mod %n",
     "round %n": "round %n",
     "%fun of %n": "%fun of %n",
@@ -189,23 +151,15 @@
     "unicode of %s": "unicode of %s",
     "unicode %n as letter": "unicode %n as letter",
     "is %s a %typ ?": "is %s a %typ ?",
-    "is %s identical to %s ?": "is %s identical to %s ?",
-
-    "type of %s": "type of %s",
-
-
+    "is %s identical to %s ?": "is %s identical to %s ?",    "type of %s": "type of %s",
     "Make a variable": "Make a variable",
     "Variable name": "Variable name",
     "Script variable name": "Script variable name",
-    "Delete a variable": "Delete a variable",
-
-    "set %var to %s": "set %var to %s",
+    "Delete a variable": "Delete a variable",    "set %var to %s": "set %var to %s",
     "change %var by %n": "change %var by %n",
     "show variable %var": "show variable %var",
     "hide variable %var": "hide variable %var",
     "script variables %scriptVars": "script variables %scriptVars",
-
-
     "list %exp": "list %exp",
     "%s in front of %l": "%s in front of %l",
     "item %idx of %l": "item %idx of %l",
@@ -217,13 +171,7 @@
     "delete %ida of %l": "delete %ida of %l",
     "insert %s at %idx of %l": "insert %s at %idx of %l",
     "replace item %idx of %l with %s": "replace item %idx of %l with %s",
-
-
-    "Make a block": "Make a block",
-
-
-
-    "About...": "About...",
+    "Make a block": "Make a block",    "About...": "About...",
     "Reference manual": "Reference manual",
     "Snap! website": "Snap! website",
     "Download source": "Download source",
@@ -231,8 +179,6 @@
     "disable deep-Morphic\ncontext menus\nand show user-friendly ones": "disable deep-Morphic\ncontext menus\nand show user-friendly ones",
     "Switch to dev mode": "Switch to dev mode",
     "enable Morphic\ncontext menus\nand inspectors,\nnot user-friendly!": "enable Morphic\ncontext menus\nand inspectors,\nnot user-friendly!",
-
-
     "Project notes...": "Project notes...",
     "New": "New",
     "Open...": "Open...",
@@ -249,12 +195,8 @@
     "load the official library of\npowerful blocks": "load the official library of\npowerful blocks",
     "Libraries...": "Libraries...",
     "Import library": "Import library",
-
-
     "Login...": "Login...",
     "Signup...": "Signup...",
-
-
     "Language...": "Language...",
     "Zoom blocks...": "Zoom blocks...",
     "Blurred shadows": "Blurred shadows",
@@ -296,21 +238,13 @@
     "Prefer smooth animations": "Prefer smooth animations",
     "uncheck for greater speed\nat variable frame rates": "uncheck for greater speed\nat variable frame rates",
     "check for smooth, predictable\nanimations across computers": "check for smooth, predictable\nanimations across computers",
-
-
     "with inputs": "with inputs",
     "input names:": "input names:",
     "Input Names:": "Input Names:",
     "input list:": "input list:",
-
-
     "help": "help",
-
-
     "hide primitives": "hide primitives",
     "show primitives": "show primitives",
-
-
     "help...": "help...",
     "relabel...": "relabel...",
     "duplicate": "duplicate",
@@ -321,23 +255,15 @@
     "open a new window\nwith a picture of this script": "open a new window\nwith a picture of this script",
     "ringify": "ringify",
     "unringify": "unringify",
-
-
     "delete block definition...": "delete block definition...",
     "edit...": "edit...",
-
-
     "edit": "edit",
     "detach from": "detach from",
     "detach all parts": "detach all parts",
     "export...": "export...",
-
-
     "show all": "show all",
     "pic...": "pic...",
     "open a new window\nwith a picture of the stage": "open a new window\nwith a picture of the stage",
-
-
     "clean up": "clean up",
     "arrange scripts\nvertically": "arrange scripts\nvertically",
     "add comment": "add comment",
@@ -346,31 +272,19 @@
     "scripts pic...": "scripts pic...",
     "open a new window\nwith a picture of all scripts": "open a new window\nwith a picture of all scripts",
     "make a block...": "make a block...",
-
-
     "rename": "rename",
     "export": "export",
     "rename costume": "rename costume",
-
-
     "Play sound": "Play sound",
     "Stop sound": "Stop sound",
     "Stop": "Stop",
     "Play": "Play",
-    "rename sound": "rename sound",
-
-
-
-    "OK": "OK",
+    "rename sound": "rename sound",    "OK": "OK",
     "Ok": "Ok",
     "Cancel": "Cancel",
     "Yes": "Yes",
     "No": "No",
-
-
     "Help": "Help",
-
-
     "Zoom blocks": "Zoom blocks",
     "build": "build",
     "your own": "your own",
@@ -382,8 +296,6 @@
     "huge (4x)": "huge (4x)",
     "giant (8x)": "giant (8x)",
     "monstrous (10x)": "monstrous (10x)",
-
-
     "Untitled": "Untitled",
     "Open Project": "Open Project",
     "(empty)": "(empty)",
@@ -391,48 +303,28 @@
     "Delete Project": "Delete Project",
     "Are you sure you want to delete": "Are you sure you want to delete",
     "rename...": "rename...",
-
-
     "Costume Editor": "Costume Editor",
     "click or drag crosshairs to move the rotation center": "click or drag crosshairs to move the rotation center",
-
-
     "Project Notes": "Project Notes",
-
-
     "New Project": "New Project",
     "Replace the current project with a new one?": "Replace the current project with a new one?",
-
-
     "Save Project As...": "Save Project As...",
-
-
     "Export blocks": "Export blocks",
     "Import blocks": "Import blocks",
     "this project doesn't have any\ncustom global blocks yet": "this project doesn't have any\ncustom global blocks yet",
     "select": "select",
     "all": "all",
     "none": "none",
-
-
     "for all sprites": "for all sprites",
     "for this sprite only": "for this sprite only",
-
-
     "Change block": "Change block",
     "Command": "Command",
     "Reporter": "Reporter",
     "Predicate": "Predicate",
-
-
     "Block Editor": "Block Editor",
     "Apply": "Apply",
-
-
     "Delete Custom Block": "Delete Custom Block",
     "block deletion dialog text": "block deletion dialog text",
-
-
     "Create input name": "Create input name",
     "Edit input name": "Edit input name",
     "Edit label fragment": "Edit label fragment",
@@ -453,8 +345,6 @@
     "Default Value:": "Default Value:",
     "Multiple inputs (value is list of inputs)": "Multiple inputs (value is list of inputs)",
     "Upvar - make internal variable visible to caller": "Upvar - make internal variable visible to caller",
-
-
     "About Snap": "About Snap",
     "Back...": "Back...",
     "License...": "License...",
@@ -465,8 +355,6 @@
     "current module versions:": "current module versions:",
     "Contributors": "Contributors",
     "Translations": "Translations",
-
-
     "normal": "normal",
     "large": "large",
     "slider": "slider",
@@ -475,33 +363,17 @@
     "import...": "import...",
     "Slider minimum value": "Slider minimum value",
     "Slider maximum value": "Slider maximum value",
-
-
     "length: ": "length: ",
-
-
-    "add comment here...": "add comment here...",
-
-
-
-    "(90) right": "(90) right",
+    "add comment here...": "add comment here...",    "(90) right": "(90) right",
     "(-90) left": "(-90) left",
     "(0) up": "(0) up",
     "(180) down": "(180) down",
-
-
     "mouse-pointer": "mouse-pointer",
     "edge": "edge",
     "pen trails": "pen trails",
-
-
     "Turtle": "Turtle",
     "Empty": "Empty",
-
-
     "ghost": "ghost",
-
-
     "space": "space",
     "up arrow": "up arrow",
     "down arrow": "down arrow",
@@ -543,11 +415,7 @@
     "7": "7",
     "8": "8",
     "9": "9",
-
-
     "new...": "new...",
-
-
     "abs": "abs",
     "floor": "floor",
     "sqrt": "sqrt",
@@ -559,14 +427,10 @@
     "atan": "atan",
     "ln": "ln",
     "e^": "e^",
-
-
     "whitespace": "whitespace",
     "line": "line",
     "tab": "tab",
     "cr": "cr",
-
-
     "number": "number",
     "text": "text",
     "Boolean": "Boolean",
@@ -574,8 +438,6 @@
     "command": "command",
     "reporter": "reporter",
     "predicate": "predicate",
-
-
     "last": "last",
     "any": "any"
 }
