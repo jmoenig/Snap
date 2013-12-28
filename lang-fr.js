@@ -1173,36 +1173,36 @@ SnapTranslator.dict.fr = {
     'March':
         'mars',
     'April':
-        'avril';
+        'avril',
     'May':
         'mai',
     'June':
         'juin',
     'July':
-        'juillet';
+        'juillet',
     'August':
         'août',
     'September':
         'septembre',
     'October':
-        'octobre';
+        'octobre',
     'November':
         'novembre',
     'December':
         'decembre',
     'Sunday':
-        'dimanche';
+        'dimanche',
     'Monday':
         'lundi',
     'Tuesday':
         'mardi',
     'Wednesday':
-        'mercredi';
+        'mercredi',
     'Thursday':
         'jedui',
     'Friday':
         'vendredi',
     'Saturday':
-        'samedi';
+        'samedi',
 
 };

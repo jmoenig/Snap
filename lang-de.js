@@ -1245,7 +1245,7 @@ SnapTranslator.dict.de = {
     'last':
         'letztes',
     'any':
-        'beliebiges'
+        'beliebiges',
 
     // Date reporter dropdowns
     'Month':
@@ -1258,35 +1258,35 @@ SnapTranslator.dict.de = {
     'March':
         'März',
     'April':
-        'April';
+        'April',
     'May':
         'Mai',
     'June':
         'Juni',
     'July':
-        'Juli';
+        'Juli',
     'August':
         'August',
     'September':
         'September',
     'October':
-        'Oktober';
+        'Oktober',
     'November':
         'November',
     'December':
         'Dezember',
     'Sunday':
-        'Sonntag';
+        'Sonntag',
     'Monday':
         'Montag',
     'Tuesday':
         'Dienstag',
     'Wednesday':
-        'Mittwoch';
+        'Mittwoch',
     'Thursday':
         'Donnerstag',
     'Friday':
         'Freitag',
     'Saturday':
-        'Samstag';
+        'Samstag',
 };
