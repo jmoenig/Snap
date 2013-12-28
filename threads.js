@@ -2474,6 +2474,34 @@ Process.prototype.reportTimer = function () {
     return 0;
 };
 
+// Process Dates and times in Snap
+
+Process.prototype.reportDate = function (datefn) {
+    // Map block options to built-in functions
+    var dateMap = { 'Date' : 'toLocaleDateString',
+        'Time' : 'toLocaleTimeString',
+        'Month' : 'getMonthName', // return a name, not a number
+        'Day of Week' : 'getDayName', // return a name, not a number
+        'Day of Month': 'getDate',
+        'Year' : 'getFullYear',
+        'Hour' : 'getHours',
+        'Minute' : 'getMinutes',
+        'Second' : 'getSeconds',
+        'Milliseconds' : 'getMilliseconds',
+        'Time in Milliseconds' : 'getTime',
+        'UTC Time' : 'toUTCString' };
+
+    if (!dateMap[datefn]) {
+        return '';
+    }
+
+    currDate = new Date();
+    func = dateMap[datefn]
+
+    return currDate[func]();
+
+}
+
 // Process code mapping
 
 /*
@@ -3068,3 +3096,33 @@ UpvarReference.prototype.toString = function () {
 UpvarReference.prototype.names = VariableFrame.prototype.names;
 UpvarReference.prototype.allNames = VariableFrame.prototype.allNames;
 UpvarReference.prototype.allNamesDict = VariableFrame.prototype.allNamesDict;
+
+// Date Utilities (for the 'reportDate' block)
+
+Date.prototype.getMonthName = function () {
+    mons = ['January',
+            'February',
+            'March',
+            'April',
+            'May',
+            'June',
+            'July',
+            'August',
+            'September',
+            'October',
+            'November',
+            'December'];
+    return localize(mons[this.getMonth()]);
+}
+
+Date.prototype.getDayName = function () {
+    days = ['Sunday',
+            'Monday',
+            'Tuesday',
+            'Wednesday',
+            'Thursday',
+            'Friday',
+            'Saturday'];
+    return localize(days[this.getDay()]);
+}
+

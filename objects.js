@@ -124,7 +124,7 @@ PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.objects = '2013-December-19';
+modules.objects = '2013-December-27';
 
 var SpriteMorph;
 var StageMorph;
@@ -785,6 +785,12 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'command',
             category: 'sensing',
             spec: 'set turbo mode to %b'
+        },
+        reportDate: {
+            type: 'reporter',
+            category: 'sensing',
+            spec: 'get current %dates',
+
         },
 
         // Operators
@@ -1700,6 +1706,8 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push('-');
         blocks.push(block('reportIsFastTracking'));
         blocks.push(block('doSetFastTracking'));
+        blocks.push('-');
+        blocks.push(block('reportDate'));
 
     // for debugging: ///////////////
 
@@ -4398,6 +4406,8 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push('-');
         blocks.push(block('reportIsFastTracking'));
         blocks.push(block('doSetFastTracking'));
+        blocks.push('-');
+        blocks.push(block('reportDate'));
 
     // for debugging: ///////////////
 
@@ -5147,7 +5157,7 @@ Costume.prototype.shrinkWrap = function () {
 };
 
 Costume.prototype.boundingBox = function () {
-    // answer the rectangle surrounding my contents' non-transparent pixels 
+    // answer the rectangle surrounding my contents' non-transparent pixels
     var row,
         col,
         pic = this.contents,

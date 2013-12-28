@@ -155,7 +155,7 @@ DialogBoxMorph, BlockInputFragmentMorph, PrototypeHatBlockMorph, Costume*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2013-November-26';
+modules.blocks = '2013-December-27';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -812,6 +812,27 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                 true // read-only
             );
             break;
+        case '%dates':
+            part = new InputSlotMorph(
+                null, // text
+                false, // non-numeric
+                {
+                    'Date' : ['Date'],
+                    'Month' : ['Month'],
+                    'Day of Month' : ['Day of Month'],
+                    'Year' : ['Year'],
+                    'Day of Week' : ['Day of Week'],
+                    'Time' : ['Time'],
+                    'Hour' : ['Hour'],
+                    'Minute' : ['Minute'],
+                    'Second' : ['Second'],
+                    'Time in Milliseconds' : ['Time in Milliseconds'],
+                    'UTC Time' : ['UTC Time'],
+                },
+                true // read-only
+            );
+            part.setContents('Date')
+            break;
         case '%delim':
             part = new InputSlotMorph(
                 null, // text
@@ -1165,7 +1186,6 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                 true // read-only
             );
             break;
-
 
     // symbols:
 
@@ -6147,7 +6167,7 @@ CSlotMorph.prototype.drawBottomEdge = function (context) {
     I am an editable text input slot. I can be either rectangular or
     rounded, and can have an optional drop-down menu. If I'm set to
     read-only I must have a drop-down menu and will assume a darker
-    shade of my    parent's color.
+    shade of my parent's color.
 
     my most important public attributes and accessors are:
 
