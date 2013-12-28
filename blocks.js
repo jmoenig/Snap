@@ -817,21 +817,21 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                 null, // text
                 false, // non-numeric
                 {
-                    'Date' : ['Date'],
-                    'Month' : ['Month'],
-                    'Day of Month' : ['Day of Month'],
-                    'Year' : ['Year'],
-                    'Day of Week' : ['Day of Week'],
-                    'Time' : ['Time'],
-                    'Hour' : ['Hour'],
-                    'Minute' : ['Minute'],
-                    'Second' : ['Second'],
-                    'Time in Milliseconds' : ['Time in Milliseconds'],
-                    'UTC Time' : ['UTC Time'],
+                    'date' : ['date'],
+                    'month' : ['month'],
+                    'year' : ['year'],
+                    'day of month' : ['day of month'],
+                    'day of week' : ['day of week'],
+                    'time' : ['time'],
+                    'hour' : ['hour'],
+                    'minute' : ['minute'],
+                    'second' : ['second'],
+                    'time in milliseconds' : ['time in milliseconds'],
+                    'UTC time' : ['UTC time'],
                 },
                 true // read-only
             );
-            part.setContents('Date')
+            part.setContents('date');
             break;
         case '%delim':
             part = new InputSlotMorph(

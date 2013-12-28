@@ -83,7 +83,7 @@ ArgLabelMorph, localize, XML_Element, hex_sha512*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.threads = '2013-December-11';
+modules.threads = '2013-December-28';
 
 var ThreadManager;
 var Process;
@@ -2475,31 +2475,28 @@ Process.prototype.reportTimer = function () {
 };
 
 // Process Dates and times in Snap
+// Map block options to built-in functions
+var dateMap = {
+    'date' : 'toLocaleDateString',
+    'time' : 'toLocaleTimeString',
+    'month' : 'getMonthName', // return a name, not a number
+    'year' : 'getFullYear',
+    'day of week' : 'getDayName', // return a name, not a number
+    'day of month': 'getDate',
+    'hour' : 'getHours',
+    'minute' : 'getMinutes',
+    'second' : 'getSeconds',
+    'milliseconds' : 'getMilliseconds',
+    'time in milliseconds' : 'getTime',
+    'UTC time' : 'toUTCString' };
 
 Process.prototype.reportDate = function (datefn) {
-    // Map block options to built-in functions
-    var dateMap = { 'Date' : 'toLocaleDateString',
-        'Time' : 'toLocaleTimeString',
-        'Month' : 'getMonthName', // return a name, not a number
-        'Day of Week' : 'getDayName', // return a name, not a number
-        'Day of Month': 'getDate',
-        'Year' : 'getFullYear',
-        'Hour' : 'getHours',
-        'Minute' : 'getMinutes',
-        'Second' : 'getSeconds',
-        'Milliseconds' : 'getMilliseconds',
-        'Time in Milliseconds' : 'getTime',
-        'UTC Time' : 'toUTCString' };
-
-    if (!dateMap[datefn]) {
-        return '';
-    }
+    if (!dateMap[datefn]) { return ''; }
 
     currDate = new Date();
-    func = dateMap[datefn]
+    func = dateMap[datefn];
 
     return currDate[func]();
-
 }
 
 // Process code mapping
