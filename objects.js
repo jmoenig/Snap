@@ -1429,7 +1429,7 @@ SpriteMorph.prototype.blockForSelector = function (selector, setDefaults) {
             inputs[0].setContents(defaults);
             inputs[0].defaults = defaults;
         } else {
-            for (i = 0; i < defaults.length; i += 1) {
+            for (i = 0; i < inputs.length; i += 1) {
                 if (defaults[i] !== null) {
                     inputs[i].setContents(defaults[i]);
                 }
@@ -5147,7 +5147,7 @@ Costume.prototype.shrinkWrap = function () {
 };
 
 Costume.prototype.boundingBox = function () {
-    // answer the rectangle surrounding my contents' non-transparent pixels 
+    // answer the rectangle surrounding my contents' non-transparent pixels
     var row,
         col,
         pic = this.contents,

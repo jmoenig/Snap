@@ -78,6 +78,21 @@ Localizer.prototype.languages = function () {
 };
 
 Localizer.prototype.load = function (lang, translation) {
+    if (this.dict[lang].language_name === 'Translation') {
+        var crowdin = document.createElement('script');
+        crowdin.id = 'crowdin';
+        crowdin.src = 'jipt.js'
+        translation.onload = function () {
+            jipt();
+        };
+        document.head.insertBefore(crowdin, document.head.firstChild);
+    } else {
+        var crowdin = document.getElementById('crowdin')
+        if (crowdin) {
+            // TODO stop jipt()
+            document.head.removeChild(crowdin);
+        }
+    }
     this.dict[lang] = translation || {};
 }
 
@@ -128,6 +143,18 @@ SnapTranslator.dict.en = {
         'jens@moenig.org',
     'last_changed':
         '2012-10-16',
+};
+
+SnapTranslator.dict.af = {
+    // meta information
+    'language_name':
+        'Translation',
+    'language_translator':
+        'Simon Claessens',
+    'translator_e-mail':
+        'gagalago@gmail.com',
+    'last_changed':
+        '2013-12-29',
 };
 
 SnapTranslator.dict.de = {

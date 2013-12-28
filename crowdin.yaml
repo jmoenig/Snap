@@ -1,0 +1,8 @@
+project_identifier: snap
+api_key: 772bb9e72c748f150f647e41e2722dba
+#base_path: /absolute/path/to/snap/directory
+
+files:
+  -
+    source: 'locales/lang-en.json'
+    translation: 'locales/lang-%two_letters_code%.json'
