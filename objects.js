@@ -124,7 +124,7 @@ PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.objects = '2013-December-27';
+modules.objects = '2013-December-28';
 
 var SpriteMorph;
 var StageMorph;
@@ -789,8 +789,7 @@ SpriteMorph.prototype.initBlocks = function () {
         reportDate: {
             type: 'reporter',
             category: 'sensing',
-            spec: 'get current %dates',
-
+            spec: 'get current %dates'
         },
 
         // Operators
