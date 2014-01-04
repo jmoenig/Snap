@@ -170,7 +170,12 @@ PaintEditorMorph.prototype.buildToolbox = function () {
             paintbucket:
                 "Fill a region",
             pipette:
-                "Pipette tool\n(pick a color anywhere)"
+                "Pipette tool\n(pick a color anywhere)",
+
+            grow:
+                "Increase the size of the costume.",
+            shrink:
+                "Decrease the size of the costume."
         },
         myself = this,
         left = this.toolbox.left(),
@@ -885,6 +890,8 @@ PaintCanvasMorph.prototype.mouseClickLeft = function () {
     }
     this.brushBuffer = [];
 };
+
+PaintCanvasMorph.prototype.mouseLeaveDragging = PaintCanvasMorph.prototype.mouseClickLeft;
 
 PaintCanvasMorph.prototype.buildContents = function () {
     this.background = newCanvas(this.extent());
