@@ -5664,13 +5664,15 @@ WardrobeMorph.prototype.paintNew = function () {
     var cos = new Costume(newCanvas(), "Untitled"),
         ide = this.parentThatIsA(IDE_Morph),
         myself = this;
-    cos.edit(this.world(), ide, true, null, function () {
-        myself.sprite.addCostume(cos);
-        myself.updateList();
-        if (ide) {
-            ide.currentSprite.wearCostume(cos);
+    cos.edit(this.world(), ide, true, null,
+        function () {
+            myself.sprite.addCostume(cos);
+            myself.updateList();
+            if (ide) {
+                ide.currentSprite.wearCostume(cos);
+            }
         }
-    });
+    );
 };
 
 // Wardrobe drag & drop

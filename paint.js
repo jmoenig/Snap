@@ -170,12 +170,7 @@ PaintEditorMorph.prototype.buildToolbox = function () {
             paintbucket:
                 "Fill a region",
             pipette:
-                "Pipette tool\n(pick a color anywhere)",
-
-            grow:
-                "Increase the size of the costume.",
-            shrink:
-                "Decrease the size of the costume."
+                "Pipette tool\n(pick a color anywhere)"
         },
         myself = this,
         left = this.toolbox.left(),
@@ -215,6 +210,15 @@ PaintEditorMorph.prototype.buildEdits = function () {
 
     this.edits.add(this.pushButton(
         "clear",
+        function () {paper.clearCanvas(); }
+    ));
+
+    this.edits.add(this.pushButton(
+        "grow",
+        function () {paper.clearCanvas(); }
+    ));
+    this.edits.add(this.pushButton(
+        "shrink",
         function () {paper.clearCanvas(); }
     ));
     this.edits.fixLayout();
