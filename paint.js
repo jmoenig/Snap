@@ -212,7 +212,7 @@ PaintEditorMorph.prototype.buildEdits = function () {
         "clear",
         function () {paper.clearCanvas(); }
     ));
-
+    /*
     this.edits.add(this.pushButton(
         "grow",
         function () {paper.clearCanvas(); }
@@ -220,7 +220,7 @@ PaintEditorMorph.prototype.buildEdits = function () {
     this.edits.add(this.pushButton(
         "shrink",
         function () {paper.clearCanvas(); }
-    ));
+    ));*/
     this.edits.fixLayout();
 };
 
