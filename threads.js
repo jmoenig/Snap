@@ -1730,6 +1730,9 @@ Process.prototype.reportURL = function (url) {
     if (!this.httpRequest) {
         this.httpRequest = new XMLHttpRequest();
         this.httpRequest.open("GET", 'http://' + url, true);
+        this.httpRequest.setRequestHeader("X-Requested-With",
+                                          "XMLHttpRequest");
+        this.httpRequest.setRequestHeader("X-Application", "Snap! 4.0");
         this.httpRequest.send(null);
     } else if (this.httpRequest.readyState === 4) {
         response = this.httpRequest.responseText;
