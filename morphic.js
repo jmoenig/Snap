@@ -10345,7 +10345,7 @@ WorldMorph.prototype.initEventListeners = function () {
         },
         false
     );
-    /** SCRIBBLE **/
+	
     window.onbeforeunload = function (evt) {
         var e = evt || window.event,
             msg = "Are you sure you want to leave?";

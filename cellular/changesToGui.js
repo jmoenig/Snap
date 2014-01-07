@@ -401,6 +401,21 @@ SpriteIconMorph.prototype.fixLayout = function () {
 			this.thumbnail.bottom() + this.padding
 		);
 		nextY = this.duplicator.bottom();
+		
+		if (this.object)
+		{
+			var stage = this.object.parentThatIsA(StageMorph);
+			if (stage && stage.children)
+			{
+				var numClones = 0;
+				var stageChildren = stage.children;
+				for (var i=0; i<stageChildren.length; i++)
+					if (stageChildren[i] instanceof SpriteMorph 
+						&& stageChildren[i].parentSprite == this.object)
+						numClones++;
+				this.duplicator.setContents(numClones);
+			}
+		}
 	}
 	
     this.label.setWidth(
