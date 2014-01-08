@@ -2044,3 +2044,7 @@ ______
 ------
 * Objects: stage watchers for „mouse x“ and „mouse y“ sensing reporters. Thanks, Michael!
 * Store: fixed saving/loading/localisation of new mouse coordinate stage watchers
+
+140108
+------
+* Threads, Blocks, Objects: The FOR reporter’s first input now also accepts blocks and scripts („rings“), and reports a copy that is bound to the sprite indicated by the second input. This lets you „zombify“ (or remote-control) sprites (and create custom TELL and ASK blocks)

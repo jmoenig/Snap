@@ -155,7 +155,7 @@ DialogBoxMorph, BlockInputFragmentMorph, PrototypeHatBlockMorph, Costume*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2013-November-26';
+modules.blocks = '2014-January-08';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -996,7 +996,6 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                 'attributesMenu',
                 true
             );
-            part.isStatic = true;
             break;
         case '%fun':
             part = new InputSlotMorph(
