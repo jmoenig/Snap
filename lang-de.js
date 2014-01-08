@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org', // optional
     'last_changed':
-        '2013-10-04', // this, too, will appear in the Translators tab
+        '2018-01-08', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -453,6 +453,12 @@ SnapTranslator.dict.de = {
         'stoppe dieses Skript',
     'stop all %stop':
         'stoppe alles %stop',
+    'stop %stopOthersChoices':
+        'stoppe %stopOthersChoices',
+    'all but this script':
+        'alles au\u00dfer diesem Skript',
+    'other scripts in sprite':
+        'andere Skripte in diesem Objekt',
     'pause all %pause':
         'pausiere alles %pause',
     'run %cmdRing %inputs':

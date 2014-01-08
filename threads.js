@@ -151,26 +151,19 @@ ThreadManager.prototype.startProcess = function (block, isThreadSafe) {
     return newProc;
 };
 
-ThreadManager.prototype.stopAll = function () {
+ThreadManager.prototype.stopAll = function (excpt) {
+    // excpt is optional
     this.processes.forEach(function (proc) {
-        proc.stop();
-    });
-};
-
-ThreadManager.prototype.stopAllForReceiver = function (rcvr) {
-    this.processes.forEach(function (proc) {
-        if (proc.homeContext.receiver === rcvr) {
+        if (proc !== excpt) {
             proc.stop();
-            if (rcvr.isClone) {
-                proc.isDead = true;
-            }
         }
     });
 };
 
-ThreadManager.prototype.stopAllForReceiverExcept = function (rcvr, excpt) {
+ThreadManager.prototype.stopAllForReceiver = function (rcvr, excpt) {
+    // excpt is optional
     this.processes.forEach(function (proc) {
-        if (proc.homeContext.receiver === rcvr && proc != excpt) {
+        if (proc.homeContext.receiver === rcvr && proc !== excpt) {
             proc.stop();
             if (rcvr.isClone) {
                 proc.isDead = true;
@@ -1379,12 +1372,25 @@ Process.prototype.doStopAll = function () {
     }
 };
 
-Process.prototype.doStopOthers = function () {
-    var stage, ide;
+Process.prototype.doStopOthers = function (choice) {
+    var stage;
     if (this.homeContext.receiver) {
         stage = this.homeContext.receiver.parentThatIsA(StageMorph);
         if (stage) {
-            stage.threads.stopAllForReceiverExcept(this.homeContext.receiver, this);
+
+            switch (this.inputOption(choice)) {
+            case 'all but this script':
+                stage.threads.stopAll(this);
+                break;
+            case 'other scripts in sprite':
+                stage.threads.stopAllForReceiver(
+                    this.homeContext.receiver,
+                    this
+                );
+                break;
+            default:
+                nop();
+            }
         }
     }
 };
@@ -1751,8 +1757,10 @@ Process.prototype.reportURL = function (url) {
     if (!this.httpRequest) {
         this.httpRequest = new XMLHttpRequest();
         this.httpRequest.open("GET", 'http://' + url, true);
-        this.httpRequest.setRequestHeader("X-Requested-With",
-                                          "XMLHttpRequest");
+        this.httpRequest.setRequestHeader(
+            "X-Requested-With",
+            "XMLHttpRequest"
+        );
         this.httpRequest.setRequestHeader("X-Application", "Snap! 4.0");
         this.httpRequest.send(null);
     } else if (this.httpRequest.readyState === 4) {

@@ -594,7 +594,7 @@ SpriteMorph.prototype.initBlocks = function () {
         doStopOthers: {
             type: 'command',
             category: 'control',
-            spec: 'stop other scripts in sprite'
+            spec: 'stop %stopOthersChoices'
         },
         doRun: {
             type: 'command',
@@ -4361,6 +4361,7 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('doStopBlock'));
         blocks.push(block('doStop'));
         blocks.push(block('doStopAll'));
+        blocks.push(block('doStopOthers'));
         blocks.push('-');
         blocks.push(block('doRun'));
         blocks.push(block('fork'));
