@@ -1037,6 +1037,19 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             );
             part.setContents(['encode URI']);
             break;
+        case '%stopOthersChoices':
+            part = new InputSlotMorph(
+                null,
+                false,
+                {
+                    'all but this script' : ['all but this script'],
+                    'other scripts in sprite' : ['other scripts in sprite']
+                },
+                true
+            );
+            part.setContents(['all but this script']);
+            part.isStatic = true;
+            break;
         case '%typ':
             part = new InputSlotMorph(
                 null,
