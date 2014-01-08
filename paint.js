@@ -212,6 +212,15 @@ PaintEditorMorph.prototype.buildEdits = function () {
         "clear",
         function () {paper.clearCanvas(); }
     ));
+    /*
+    this.edits.add(this.pushButton(
+        "grow",
+        function () {paper.clearCanvas(); }
+    ));
+    this.edits.add(this.pushButton(
+        "shrink",
+        function () {paper.clearCanvas(); }
+    ));*/
     this.edits.fixLayout();
 };
 
@@ -885,6 +894,8 @@ PaintCanvasMorph.prototype.mouseClickLeft = function () {
     }
     this.brushBuffer = [];
 };
+
+PaintCanvasMorph.prototype.mouseLeaveDragging = PaintCanvasMorph.prototype.mouseClickLeft;
 
 PaintCanvasMorph.prototype.buildContents = function () {
     this.background = newCanvas(this.extent());
