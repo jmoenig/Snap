@@ -2050,3 +2050,4 @@ ______
 * Threads, Blocks, Objects: The FOR reporter’s first input now also accepts blocks and scripts („rings“), and reports a copy that is bound to the sprite indicated by the second input. This lets you „zombify“ (or remote-control) sprites (and create custom TELL and ASK blocks)
 * Blocks: initial support for „sensing“ sprite-only custom block definitions, commented out for now
 * Paint: Add mouseLeaveDragging() event behavior, thanks, Kartik, for this fix!
+* Objects: Only shrink-wrap sprite costumes, thanks, Kartik, for this fix!
