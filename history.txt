@@ -2051,3 +2051,7 @@ ______
 * Blocks: initial support for „sensing“ sprite-only custom block definitions, commented out for now
 * Paint: Add mouseLeaveDragging() event behavior, thanks, Kartik, for this fix!
 * Objects: Only shrink-wrap sprite costumes, thanks, Kartik, for this fix!
+* Threads: Added xhr-headers to HTTP block, thanks, Tim!
+* Threads, Blocks, Objects: Added StopOthers primitive, thanks, Kartik!
+* Added „all but this option“ to StopOthers primitive, fixed the implementation
+* Updated German translation with new strings
