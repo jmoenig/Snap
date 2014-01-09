@@ -5,7 +5,7 @@
     inspired by the Scratch paint editor.
  
     written by Kartik Chandra
-    Copyright (C) 2013 by Kartik Chandra
+    Copyright (C) 2014 by Kartik Chandra
   
     This file is part of Snap!.
  
@@ -64,7 +64,7 @@
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.paint = '2014-January-08';
+modules.paint = '2014-January-09';
 
 // Declarations
 
