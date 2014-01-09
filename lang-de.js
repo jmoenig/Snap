@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org', // optional
     'last_changed':
-        '2018-01-08', // this, too, will appear in the Translators tab
+        '2014-01-09', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -447,12 +447,14 @@ SnapTranslator.dict.de = {
         'falls %b %c sonst %c',
     'report %s':
         'berichte %s',
-    'stop block':
-        'stoppe diesen Block',
-    'stop script':
-        'stoppe dieses Skript',
-    'stop all %stop':
-        'stoppe alles %stop',
+    'stop %stopChoices':
+        'stoppe %stopChoices',
+    'all':
+        'alles',
+    'this script':
+        'dieses Skript',
+    'this block':
+        'diesen Block',
     'stop %stopOthersChoices':
         'stoppe %stopOthersChoices',
     'all but this script':
@@ -956,8 +958,6 @@ SnapTranslator.dict.de = {
         'in diesem Projekt gibt es noch keine\nglobalen Bl\u00f6cke',
     'select':
         'ausw\u00e4hlen',
-    'all':
-        'alles',
     'none':
         'nichts',
 

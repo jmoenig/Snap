@@ -2060,3 +2060,4 @@ ______
 ------
 * Objects: Mechanism for migrating blocks in existing projects to newer versions
 * Blocks, Objects, Threads: Collapse old STOP primitives into a single one with a dropdown of options
+* German translation update for new (migrated) STOP block
