@@ -83,7 +83,7 @@ ArgLabelMorph, localize, XML_Element, hex_sha512*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.threads = '2014-January-08';
+modules.threads = '2014-January-09';
 
 var ThreadManager;
 var Process;
@@ -1372,12 +1372,27 @@ Process.prototype.doStopAll = function () {
     }
 };
 
+Process.prototype.doStopThis = function (choice) {
+    switch (this.inputOption(choice)) {
+    case 'all':
+        this.doStopAll();
+        break;
+    case 'this script':
+        this.doStop();
+        break;
+    case 'this block':
+        this.doStopBlock();
+        break;
+    default:
+        nop();
+    }
+};
+
 Process.prototype.doStopOthers = function (choice) {
     var stage;
     if (this.homeContext.receiver) {
         stage = this.homeContext.receiver.parentThatIsA(StageMorph);
         if (stage) {
-
             switch (this.inputOption(choice)) {
             case 'all but this script':
                 stage.threads.stopAll(this);

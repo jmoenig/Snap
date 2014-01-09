@@ -155,7 +155,7 @@ DialogBoxMorph, BlockInputFragmentMorph, PrototypeHatBlockMorph, Costume*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2014-January-08';
+modules.blocks = '2014-January-09';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -1036,6 +1036,20 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                 true
             );
             part.setContents(['encode URI']);
+            break;
+        case '%stopChoices':
+            part = new InputSlotMorph(
+                null,
+                false,
+                {
+                    'all' : ['all'],
+                    'this script' : ['this script'],
+                    'this block' : ['this block']
+                },
+                true
+            );
+            part.setContents(['all']);
+            part.isStatic = true;
             break;
         case '%stopOthersChoices':
             part = new InputSlotMorph(
@@ -3279,6 +3293,7 @@ CommandBlockMorph.prototype.snap = function () {
 
 CommandBlockMorph.prototype.isStop = function () {
     return ([
+        'doStopThis',
         'doStop',
         'doStopBlock',
         'doStopAll',
