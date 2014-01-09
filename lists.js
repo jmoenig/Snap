@@ -7,7 +7,7 @@
     written by Jens Mönig and Brian Harvey
     jens@moenig.org, bh@cs.berkeley.edu
 
-    Copyright (C) 2013 by Jens Mönig and Brian Harvey
+    Copyright (C) 2014 by Jens Mönig and Brian Harvey
 
     This file is part of Snap!.
 
@@ -61,7 +61,7 @@ PushButtonMorph, SyntaxElementMorph, Color, Point, WatcherMorph,
 StringMorph, SpriteMorph, ScrollFrameMorph, CellMorph, ArrowMorph,
 MenuMorph, snapEquals, Morph, isNil, localize, MorphicPreferences*/
 
-modules.lists = '2013-December-04';
+modules.lists = '2014-January-09';
 
 var List;
 var ListWatcherMorph;

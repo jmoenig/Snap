@@ -2062,4 +2062,5 @@ ______
 * Blocks, Objects, Threads: Collapse old STOP primitives into a single one with a dropdown of options
 * German translation update for new (migrated) STOP block
 * Morphic: Fixed updateReferences() (how could nobody notice so long?!)
-* Store: resolved unexpected assignment expressions (conform to the latest JSLint quibbles)
+* XML: resolved unexpected assignment expressions (conform to the latest JSLint quibbles)
+* validated all source files against the latest JSLint version
