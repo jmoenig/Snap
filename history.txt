@@ -2055,3 +2055,8 @@ ______
 * Threads, Blocks, Objects: Added StopOthers primitive, thanks, Kartik!
 * Added „all but this option“ to StopOthers primitive, fixed the implementation
 * Updated German translation with new strings
+
+140109
+------
+* Objects: Mechanism for migrating blocks in existing projects to newer versions
+* Blocks, Objects, Threads: Collapse old STOP primitives into a single one with a dropdown of options
