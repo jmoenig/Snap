@@ -2064,3 +2064,7 @@ ______
 * Morphic: Fixed updateReferences() (how could nobody notice so long?!)
 * XML: resolved unexpected assignment expressions (conform to the latest JSLint quibbles)
 * validated all source files against the latest JSLint version
+
+140110
+------
+* Threads: Revert pull request #295 (xhr-headers), breaks existing installations

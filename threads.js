@@ -83,7 +83,7 @@ ArgLabelMorph, localize, XML_Element, hex_sha512*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.threads = '2014-January-09';
+modules.threads = '2014-January-10';
 
 var ThreadManager;
 var Process;
@@ -1772,11 +1772,6 @@ Process.prototype.reportURL = function (url) {
     if (!this.httpRequest) {
         this.httpRequest = new XMLHttpRequest();
         this.httpRequest.open("GET", 'http://' + url, true);
-        this.httpRequest.setRequestHeader(
-            "X-Requested-With",
-            "XMLHttpRequest"
-        );
-        this.httpRequest.setRequestHeader("X-Application", "Snap! 4.0");
         this.httpRequest.send(null);
     } else if (this.httpRequest.readyState === 4) {
         response = this.httpRequest.responseText;
