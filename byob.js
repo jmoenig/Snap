@@ -194,7 +194,7 @@ CustomBlockDefinition.prototype.prototypeInstance = function () {
                 part.fragment.type = slot[0];
                 part.fragment.defaultValue = slot[1];
                 part.fragment.options = slot[2];
-                part.fragment.isReadonly = slot[3] || false;
+                part.fragment.isReadOnly = slot[3] || false;
             }
         }
     });
