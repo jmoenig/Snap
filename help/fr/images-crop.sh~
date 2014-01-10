@@ -1,0 +1,10 @@
+#!/bin/bash
+mkdir png
+touch tmp
+for file in *.gif
+do
+    $file > tmp
+    convert $file ./png/`cut -d . -f 1 tmp`.png
+    echo $file
+done
+rm tmp

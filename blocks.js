@@ -2330,7 +2330,11 @@ BlockMorph.prototype.showHelp = function () {
             block.fullImage()
         );
     } else {
-        pic.src = 'help/' + spec + '.png';
+        pic.src = 'help/' + SnapTranslator.language + '/' + spec + '.png';
+        // Back to English if no picture
+        pic.onerror = function () {
+            pic.src = 'help/en/' + spec + '.png';
+        }
     }
 };
 
