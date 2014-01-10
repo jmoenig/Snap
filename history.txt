@@ -2068,3 +2068,4 @@ ______
 140110
 ------
 * Threads: Revert pull request #295 (xhr-headers), breaks existing installations
+* BYOB: Fixed #292 (pulldowns loose lines when exported as library)
