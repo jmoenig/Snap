@@ -2069,3 +2069,4 @@ ______
 ------
 * Threads: Revert pull request #295 (xhr-headers), breaks existing installations
 * BYOB: Fixed #292 (pulldowns loose lines when exported as library)
+* BYOB: Fixed #291 (readonly custom menus become non-readonly when block is edited)
