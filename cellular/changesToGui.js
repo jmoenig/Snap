@@ -334,6 +334,7 @@ SpriteIconMorph.prototype.createDuplicator = function () {
 				//Remove it if it is a clone of this sprite
 				ide.stage.removeChild(child);
 				ide.stage.threads.stopAllForReceiver(child);
+				child.parentSprite.cloneDestroyed();
 				i--;
 			}
 		}
@@ -353,7 +354,14 @@ SpriteIconMorph.prototype.createDuplicator = function () {
     };
     this.add(duplicator);
 	this.duplicator = duplicator;
+	
+	myself.object.spriteIconMorph = this;
 };
+
+SpriteIconMorph.prototype.updateDuplicator = function()
+{
+	this.duplicator.setContents(this.object.cloneCount);
+}
 
 // SpriteIconMorph layout (we need to change it so we can add room for the text box)
 SpriteIconMorph.prototype.fixLayout = function () {
@@ -413,6 +421,7 @@ SpriteIconMorph.prototype.fixLayout = function () {
 					if (stageChildren[i] instanceof SpriteMorph 
 						&& stageChildren[i].parentSprite == this.object)
 						numClones++;
+						
 				this.duplicator.setContents(numClones);
 			}
 		}

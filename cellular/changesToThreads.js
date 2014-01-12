@@ -12,3 +12,21 @@ ThreadManager.prototype.startProcess = function (block, receiver, isThreadSafe) 
 	}
 	return this.uberStartProcess(block, receiver, isThreadSafe);
 };
+
+Process.prototype.instanceCount = function(countThese)
+{
+    var thisObj = this.homeContext.receiver;
+		
+    if (thisObj) {
+        if (this.inputOption(countThese) === 'myself') {
+			while(thisObj.parentSprite)
+				thisObj = thisObj.parentSprite;
+			return thisObj.cloneCount;
+        } else {
+            var thatObj = this.getOtherObject(name, thisObj);
+            if (thatObj) {
+                return thatObj.cloneCount;
+            }
+        }
+    }
+}

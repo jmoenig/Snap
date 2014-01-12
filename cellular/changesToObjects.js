@@ -190,13 +190,19 @@ SpriteMorph.prototype.snapappsHookBlockTemplates = function(blocks, block, cat, 
 			blocks.push(block('getCellAttributeCell'));
 			blocks.push(block('getCellAttributeHere'));
 			blocks.push('-');
+			blocks.push(block('getCellAttributeAverage'));
+			blocks.push(block('getCellAttributeMaximum'));
+			blocks.push(block('getCellAttributeMinimum'));
+			blocks.push('-');
 			blocks.push(block('setCellAttribute'));
 			blocks.push(block('setCellAttributeCell'));
 			blocks.push(block('setCellAttributeHere'));
+			blocks.push(block('setCellAttributeEverywhere'));
 			blocks.push('-');
 			blocks.push(block('changeCellAttribute'));
 			blocks.push(block('changeCellAttributeCell'));
 			blocks.push(block('changeCellAttributeHere'));
+			blocks.push(block('changeCellAttributeEverywhere'));
 		}
 	}
 	else if (cat == 'motion')
@@ -210,6 +216,23 @@ SpriteMorph.prototype.snapappsHookBlockTemplates = function(blocks, block, cat, 
 		blocks.push(block('moveToEmptyNbrCell'));
 		blocks.push(block('moveToAnyCell'));
 		blocks.push(block('moveToAnyEmptyCell'));
+	}
+	else if (cat == 'control')
+	{
+		blocks.push('-');
+		blocks.push(block('instanceCount'));
+	}
+	else if (cat == 'objects')
+	{
+		blocks.push(block('reportNobody'));
+		blocks.push(block('reportThis'));
+		blocks.push('-');
+		blocks.push(block('isNobody'));
+		blocks.push(block('isThis'));
+		blocks.push('-');
+		blocks.push(block('setVariable'));
+		blocks.push(block('getVariable'));
+		blocks.push(block('changeVariable'));
 	}
     return this.scribbleHookBlockTemplates(blocks, block, cat);
 }
@@ -232,9 +255,22 @@ SpriteMorph.prototype.deleteCellAttribute = function(name)
 	}
 }
 
+SpriteMorph.prototype.categories.push("cells");
+SpriteMorph.prototype.categories.push("objects");
+
+SpriteMorph.prototype.blockColor.cells = new Color(150, 200, 150);
+SpriteMorph.prototype.blockColor.objects = new Color(150, 150, 200);
+
 SpriteMorph.prototype.addCellularBlocks = function () {
-	//We add the cells palette
-    
+
+	//control
+    SpriteMorph.prototype.blocks.instanceCount = {
+        type: 'reporter',
+        category: 'control',
+        spec: 'instance count of %cln',
+    };
+	
+	//motion
     SpriteMorph.prototype.blocks.cellX = {
         type: 'reporter',
         category: 'motion',
@@ -271,6 +307,7 @@ SpriteMorph.prototype.addCellularBlocks = function () {
         spec: 'move to cell at x: %n y: %n',
     };
 	
+	//cells
     SpriteMorph.prototype.blocks.cellsX = {
         type: 'reporter',
         category: 'cells',
@@ -313,6 +350,24 @@ SpriteMorph.prototype.addCellularBlocks = function () {
         spec: 'value of %clat here',
     };
 	
+    SpriteMorph.prototype.blocks.getCellAttributeAverage = {
+        type: 'reporter',
+        category: 'cells',
+        spec: 'average value of %clat',
+    };
+	
+    SpriteMorph.prototype.blocks.getCellAttributeMinimum = {
+        type: 'reporter',
+        category: 'cells',
+        spec: 'minimum value of %clat',
+    };
+	
+    SpriteMorph.prototype.blocks.getCellAttributeMaximum = {
+        type: 'reporter',
+        category: 'cells',
+        spec: 'maximum value of %clat',
+    };
+	
     SpriteMorph.prototype.blocks.setCellAttribute = {
         type: 'command',
         category: 'cells',
@@ -329,6 +384,12 @@ SpriteMorph.prototype.addCellularBlocks = function () {
         type: 'command',
         category: 'cells',
         spec: 'set %clat here to %n',
+    };
+	
+    SpriteMorph.prototype.blocks.setCellAttributeEverywhere = {
+        type: 'command',
+        category: 'cells',
+        spec: 'set %clat everywhere to %n',
     };
 	
     SpriteMorph.prototype.blocks.changeCellAttribute = {
@@ -348,6 +409,94 @@ SpriteMorph.prototype.addCellularBlocks = function () {
         category: 'cells',
         spec: 'change %clat here by %n',
     };
+	
+    SpriteMorph.prototype.blocks.changeCellAttributeEverywhere = {
+        type: 'command',
+        category: 'cells',
+        spec: 'change %clat everywhere by %n',
+    };
+	
+	//objects
+    SpriteMorph.prototype.blocks.reportNobody = {
+        type: 'reporter',
+        category: 'objects',
+        spec: 'nobody',
+    };
+    SpriteMorph.prototype.blocks.reportThis = {
+        type: 'reporter',
+        category: 'objects',
+        spec: 'this',
+    };
+    SpriteMorph.prototype.blocks.isThis = {
+        type: 'predicate',
+        category: 'objects',
+        spec: '%s is this',
+    };
+    SpriteMorph.prototype.blocks.isNobody = {
+        type: 'predicate',
+        category: 'objects',
+        spec: '%s is nobody',
+    };
+    SpriteMorph.prototype.blocks.setVariable = {
+        type: 'command',
+        category: 'objects',
+        spec: 'set var %s to %s in %s',
+    };
+    SpriteMorph.prototype.blocks.getVariable = {
+        type: 'reporter',
+        category: 'objects',
+        spec: 'get var %s in %s',
+    };
+    SpriteMorph.prototype.blocks.changeVariable = {
+        type: 'reporter',
+        category: 'objects',
+        spec: 'change var %s by %s in %s',
+    };
+}
+
+SpriteMorph.prototype.reportNobody = function()
+{
+	return null;
+}
+
+SpriteMorph.prototype.reportThis = function()
+{
+	return this;
+}
+
+SpriteMorph.prototype.isThis = function(x)
+{
+	return x == this;
+}
+
+SpriteMorph.prototype.isNobody = function(x)
+{
+	return x == null;
+}
+
+SpriteMorph.prototype.setVariable = function(n,v,x)
+{
+	if (x instanceof SpriteMorph)
+	{
+		x.variables.setVar(n, v);
+	}
+}
+
+SpriteMorph.prototype.getVariable = function(n,x)
+{
+	if (x instanceof SpriteMorph)
+	{
+		return x.variables.getVar(n);
+	}
+	return 42;
+}
+
+SpriteMorph.prototype.changeVariable = function(n,v,x)
+{
+	if (x instanceof SpriteMorph)
+	{
+		return x.variables.setVar(n, v + x.variables.getVar(n));
+	}
 }
 
 SpriteMorph.prototype.changeCellAttributeCell = function(attribute, cx, cy, value)
@@ -356,6 +505,19 @@ SpriteMorph.prototype.changeCellAttributeCell = function(attribute, cx, cy, valu
 	if (!cell)
 		return;
 	cell.setAttribute(attribute, cell.getAttribute(attribute) + value);
+}
+
+SpriteMorph.prototype.changeCellAttributeEverywhere = function(attribute, value)
+{
+	var cells = this.parentThatIsA(StageMorph).cells;
+	
+	for (var i=0; i<cells.length; i++)
+	{
+		for (var j=0; j<cells[i].length; j++)
+		{
+			cells[i][j].setAttribute(attribute, cells[i][j].getAttribute(attribute) + value);
+		}
+	}
 }
 
 SpriteMorph.prototype.changeCellAttribute = function(attribute, x, y, value)
@@ -398,6 +560,18 @@ SpriteMorph.prototype.setCellAttributeHere = function(attribute, value) {
 	cell.setAttribute(attribute, value);
 }
 
+SpriteMorph.prototype.setCellAttributeEverywhere = function(attribute, value)
+{
+	var cells = this.parentThatIsA(StageMorph).cells;
+	for (var i=0; i<cells.length; i++)
+	{
+		for (var j=0; j<cells[i].length; j++)
+		{
+			cells[i][j].setAttribute(attribute, value);
+		}
+	}
+}
+
 SpriteMorph.prototype.getCellAttributeCell = function(attribute, cx, cy)
 {
 	var cell = this.parentThatIsA(StageMorph).getCellAtCellCoords(cx, cy);
@@ -420,6 +594,65 @@ SpriteMorph.prototype.getCellAttributeHere = function(attribute) {
 	if (!cell)
 		return 0;
 	return cell.getAttribute(attribute);
+}
+
+SpriteMorph.prototype.getCellAttributeAverage = function(attribute)
+{
+	var stage = this.parentThatIsA(StageMorph);
+	var cells = stage.cells;
+	var total = 0;
+	for (var i=0; i<stage.cellsY; i++)
+	{
+		for (var j=0; j<stage.cellsX; j++)
+		{
+			total += cells[i][j].getAttribute(attribute);
+		}
+	}
+	return total / (stage.cellsX * stage.cellsY);
+}
+
+SpriteMorph.prototype.getCellAttributeMinimum = function(attribute)
+{
+	var stage = this.parentThatIsA(StageMorph);
+	var cells = stage.cells;
+	var minimum = 0;
+	for (var i=0; i<stage.cellsY; i++)
+	{
+		for (var j=0; j<stage.cellsX; j++)
+		{
+			if (i == 0 && j == 0)
+			{
+				minimum = cells[i][j].getAttribute(attribute);
+			}
+			else
+			{
+				minimum = Math.min(cells[i][j].getAttribute(attribute), minimum);
+			}
+		}
+	}
+	return minimum;
+}
+
+SpriteMorph.prototype.getCellAttributeMaximum = function(attribute)
+{
+	var stage = this.parentThatIsA(StageMorph);
+	var cells = stage.cells;
+	var maximum = 0;
+	for (var i=0; i<stage.cellsY; i++)
+	{
+		for (var j=0; j<stage.cellsX; j++)
+		{
+			if (i == 0 && j == 0)
+			{
+				maximum = cells[i][j].getAttribute(attribute);
+			}
+			else
+			{
+				maximum = Math.max(cells[i][j].getAttribute(attribute), maximum);
+			}
+		}
+	}
+	return maximum;
 }
 
 SpriteMorph.prototype.showCellAttribute = function(attribute)
@@ -670,9 +903,6 @@ StageMorph.prototype.removeChild = function (aNode) {
 	}
     return this.uberRemoveChild(aNode);
 };
-
-SpriteMorph.prototype.blockColor.cells = new Color(100, 180, 180);
-SpriteMorph.prototype.categories.push("cells");
 
 /*
 ** Super simple linear interpol
@@ -1223,8 +1453,24 @@ SpriteMorph.prototype.createCellularClone = function()
 	clone.parentSprite = this.parentSprite || this;
 	clone.scripts = this.scripts;
 	clone.name = '';
+	clone.parentSprite.cloneCreated();
 	return clone;
 }
+SpriteMorph.prototype.cloneCount = 0;
+SpriteMorph.prototype.cloneCreated = function()
+{
+	this.cloneCount++;
+	if (this.spriteIconMorph)
+		this.spriteIconMorph.updateDuplicator();
+}
+
+SpriteMorph.prototype.cloneDestroyed = function()
+{
+	this.cloneCount--;
+	if (this.spriteIconMorph)
+		this.spriteIconMorph.updateDuplicator();
+}
+
 SpriteMorph.prototype.uberDrawOn = SpriteMorph.prototype.drawOn;
 SpriteMorph.prototype.drawOn = function (aCanvas, aRect) { if (this.parentSprite != null) { return this.uberDrawOn(aCanvas, aRect); } };
 SpriteMorph.prototype.uberDrawNew = SpriteMorph.prototype.drawNew;
@@ -1290,6 +1536,7 @@ SpriteMorph.prototype.createClone = function () {
 
 SpriteMorph.prototype.removeClone = function () {
 	this.parent.threads.stopAllForReceiver(this);
+	this.parentSprite.cloneDestroyed();
 	this.destroy();
 };
 

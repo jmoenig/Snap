@@ -38,9 +38,9 @@ Cell.prototype.addSpriteMorph = function(morph)
 	this.spriteMorphs.push(morph);
 }
 
-Cell.attributes = ['testAttribute'];
-Cell.attributeColours = {testAttribute: new Color(255,0,255)};
-Cell.attributeDrawRange = {testAttribute: [0,10]};
+Cell.attributes = [];
+Cell.attributeColours = {};
+Cell.attributeDrawRange = {};
 
 Cell.hasAttribute = function (name)
 {

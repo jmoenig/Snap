@@ -14,7 +14,8 @@ SpriteMorph.prototype.snapappsHookBlockTemplates = function(blocks, block, cat, 
 {
     if (cat === 'motion')
     {
-        blocks.splice(16, 0, '-', block('gotoRandomLocation'), block('faceToXY'), block('setDirection'));
+        blocks.splice(6, 0, block('faceToXY'), block('setDirection'));
+        blocks.splice(11, 0, block('gotoRandomLocation'));
     }
     if (cat === 'operators')
     {
@@ -113,13 +114,13 @@ SpriteMorph.prototype.addScribbleBlocks = function () {
     SpriteMorph.prototype.blocks.setDirection = {
         type: 'command',
         category: 'motion',
-        spec: 'set direction to %n'
+        spec: 'point in direction %n'
     };
 	
     SpriteMorph.prototype.blocks.faceToXY = {
         type: 'command',
         category: 'motion',
-        spec: 'face to x: %n y: %n'
+        spec: 'point to x: %n y: %n'
     };
 
     SpriteMorph.prototype.blocks.startShape = {
