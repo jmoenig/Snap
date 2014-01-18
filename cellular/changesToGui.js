@@ -25,7 +25,7 @@ function getSnapAppsAboutText()
 
 function getSnapAppsLogoExtent()
 {
-    return new Point(170, 28);
+    return new Point(210, 28);
 }
 
 /*********************************************************************/

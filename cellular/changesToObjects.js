@@ -23,11 +23,15 @@ if (window.performance.now) {
 /******************************* HOOKS *******************************/
 /*********************************************************************/
 
-/*
- * Hooks into SpriteMorph.blockTemplates
- * 
- * Adds the blocks to the UI
- */
+SpriteMorph.prototype.uberBlockForSelector = SpriteMorph.prototype.blockForSelector;
+SpriteMorph.prototype.blockForSelector = function (selector, setDefaults) {
+	var block = this.uberBlockForSelector(selector, setDefaults);
+	if (block instanceof ReporterBlockMorph)
+	{
+		block.isArrow = this.blocks[selector].type === 'arrow';
+	}
+	return block;
+};
  
 SpriteMorph.prototype.scribbleHookBlockTemplates = SpriteMorph.prototype.snapappsHookBlockTemplates;
 SpriteMorph.prototype.snapappsHookBlockTemplates = function(blocks, block, cat, helpMenu)
@@ -222,6 +226,11 @@ SpriteMorph.prototype.snapappsHookBlockTemplates = function(blocks, block, cat, 
 		blocks.push('-');
 		blocks.push(block('instanceCount'));
 	}
+	else if (cat == 'looks')
+	{
+		blocks.push('-');
+		blocks.push(block('getCostumeName'));
+	}
 	else if (cat == 'objects')
 	{
 		blocks.push(block('reportNobody'));
@@ -233,6 +242,9 @@ SpriteMorph.prototype.snapappsHookBlockTemplates = function(blocks, block, cat, 
 		blocks.push(block('setVariable'));
 		blocks.push(block('getVariable'));
 		blocks.push(block('changeVariable'));
+		blocks.push('-');
+		blocks.push(block('getCostumeNameObject'));
+		blocks.push(block('getTypeName'));
 	}
     return this.scribbleHookBlockTemplates(blocks, block, cat);
 }
@@ -260,6 +272,12 @@ SpriteMorph.prototype.categories.push("objects");
 
 SpriteMorph.prototype.blockColor.cells = new Color(150, 200, 150);
 SpriteMorph.prototype.blockColor.objects = new Color(150, 150, 200);
+
+SpriteMorph.prototype.uberInitBlocks = SpriteMorph.prototype.initBlocks;
+SpriteMorph.prototype.initBlocks = function () {
+    this.uberInitBlocks();
+    this.addCellularBlocks();
+}
 
 SpriteMorph.prototype.addCellularBlocks = function () {
 
@@ -418,40 +436,81 @@ SpriteMorph.prototype.addCellularBlocks = function () {
 	
 	//objects
     SpriteMorph.prototype.blocks.reportNobody = {
-        type: 'reporter',
+        type: 'arrow',
         category: 'objects',
         spec: 'nobody',
     };
     SpriteMorph.prototype.blocks.reportThis = {
-        type: 'reporter',
+        type: 'arrow',
         category: 'objects',
         spec: 'this',
     };
     SpriteMorph.prototype.blocks.isThis = {
         type: 'predicate',
         category: 'objects',
-        spec: '%s is this',
+        spec: '%obj is this',
     };
     SpriteMorph.prototype.blocks.isNobody = {
         type: 'predicate',
         category: 'objects',
-        spec: '%s is nobody',
+        spec: '%obj is nobody',
     };
     SpriteMorph.prototype.blocks.setVariable = {
         type: 'command',
         category: 'objects',
-        spec: 'set var %s to %s in %s',
+        spec: 'set var %s to %s in %obj',
     };
     SpriteMorph.prototype.blocks.getVariable = {
         type: 'reporter',
         category: 'objects',
-        spec: 'get var %s in %s',
+        spec: 'get var %s in %obj',
     };
     SpriteMorph.prototype.blocks.changeVariable = {
         type: 'reporter',
         category: 'objects',
-        spec: 'change var %s by %s in %s',
+        spec: 'change var %s by %s in %obj',
     };
+    SpriteMorph.prototype.blocks.getCostumeName = {
+        type: 'reporter',
+        category: 'looks',
+        spec: 'costume name',
+    };
+    SpriteMorph.prototype.blocks.getCostumeNameObject = {
+        type: 'reporter',
+        category: 'objects',
+        spec: 'costume name of %obj',
+    };
+    SpriteMorph.prototype.blocks.getTypeName = {
+        type: 'reporter',
+        category: 'objects',
+        spec: 'type of %obj',
+    };
+}
+
+SpriteMorph.prototype.getTypeName = function(otherObject)
+{
+	if (otherObject instanceof SpriteMorph)
+	{
+		if (otherObject.parentSprite)
+			return otherObject.name;
+		else
+			return otherObject.parentSprite.name;
+	}
+	else
+		return "";
+}
+
+SpriteMorph.prototype.getCostumeNameObject = function(otherObject)
+{
+	if (otherObject instanceof SpriteMorph)
+		return otherObject.getCostumeName();
+	else
+		return "";
+}
+
+SpriteMorph.prototype.getCostumeName = function()
+{
+	return this.costume ? this.costume.name : "";
 }
 
 SpriteMorph.prototype.reportNobody = function()
@@ -1274,15 +1333,7 @@ StageMorph.prototype.drawOn = function (aCanvas, aRect) {
 						var cell = cellRow[x];
 						if (cell == null || cell == undefined)
 							break;
-						
-						//debug
-						if (cell.spriteMorphs.length != 0)
-						{
-							ctx.fillStyle = "blue";
-							ctx.font = "bold 16px Arial";
-							ctx.fillText(cell.spriteMorphs.length, x*cellWidth + this.bounds.left(), (y + 1)*cellHeight + this.bounds.top());
-						}
-						
+							
 						for (var i=0; i<this.visibleAttributes.length; i++)
 						{
 							var value = cell.getAttribute(this.visibleAttributes[i]);
@@ -1305,7 +1356,7 @@ StageMorph.prototype.drawOn = function (aCanvas, aRect) {
 			
 			//Draw grid
 			ctx.lineWidth = 1;
-			ctx.strokeStyle = "rgb(0,0,0)";
+			ctx.strokeStyle = "rgba(0,0,0,0.25)";
 			ctx.beginPath();
 			for (var x=startX; x<area.right(); x+=cellWidth)
 			{
@@ -1454,6 +1505,11 @@ SpriteMorph.prototype.createCellularClone = function()
 	clone.scripts = this.scripts;
 	clone.name = '';
 	clone.parentSprite.cloneCreated();
+	
+    clone.customBlocks = this.customBlocks;
+    clone.costumes = this.costumes;
+	clone.sounds = this.sounds;
+	
 	return clone;
 }
 SpriteMorph.prototype.cloneCount = 0;
@@ -1472,9 +1528,22 @@ SpriteMorph.prototype.cloneDestroyed = function()
 }
 
 SpriteMorph.prototype.uberDrawOn = SpriteMorph.prototype.drawOn;
-SpriteMorph.prototype.drawOn = function (aCanvas, aRect) { if (this.parentSprite != null) { return this.uberDrawOn(aCanvas, aRect); } };
+SpriteMorph.prototype.drawOn =
+function (aCanvas, aRect) 
+	{
+	if (this.parentSprite != null) {
+		return this.uberDrawOn(aCanvas, aRect); 
+	}
+};
 SpriteMorph.prototype.uberDrawNew = SpriteMorph.prototype.drawNew;
-SpriteMorph.prototype.drawNew = function () { if (this.parentSprite != null) { return this.uberDrawNew(); } };
+SpriteMorph.prototype.drawNew = 
+function ()
+{
+	if (this.parentSprite != null)
+	{
+		return this.uberDrawNew();
+	}
+};
 
 //By default every sprite is a prototype
 //When we make a clone, we set this field 
@@ -1551,5 +1620,6 @@ Process.prototype.doBroadcast = function (message) {
 /*********************************************************************/
 /****************************** STATICS ******************************/
 /*********************************************************************/
-//Snap calls this after initBlocks is defined. We call addCellularBlocks to add the new blocks.
+//Snap has already called initBlocks before we had a chance to modify it. We call addCellularBlocks 
+//to add the new blocks.
 SpriteMorph.prototype.addCellularBlocks();
