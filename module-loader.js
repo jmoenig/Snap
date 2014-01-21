@@ -27,6 +27,13 @@ ModuleLoader.prototype.open = function(blob, options) {
     
     this.ide.refreshPalette()
     this.ide.refreshIDE();
-    //alert("Have zip file!");
+    
+    // Check to see if there is a demo script in the zip
+    //  If so, load it
+    var demo = zip.file("stage.xml");
+    if(demo != null) {
+        this.ide.openProjectString(demo.asText());
+    }
+    
     return zip;
 }
