@@ -13,7 +13,7 @@ ModuleLoader.prototype.open = function(blob, options) {
     var blockJSON = JSON.parse(f_text);
     for(var block in blockJSON) {
         SpriteMorph.prototype._blocks[block] = blockJSON[block];
-        SpriteMorph.prototype[block] = eval('(' + zip.file("blocks/" + block + ".js").asText() + ')');
+        SpriteMorph.prototype[block] = eval(zip.file("blocks/" + block + ".js").asText());
         
         var b = blockJSON[block]
         
