@@ -1,5 +1,3 @@
-modules.module_loader = '2014-January-16'
-
 function ModuleLoader(IDE) {
     this.serializer = new SnapSerializer();
     this.ide = IDE;
