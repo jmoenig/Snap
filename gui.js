@@ -376,6 +376,26 @@ IDE_Morph.prototype.openIn = function (world) {
             this.loadNewProject = true;
         } else if (location.hash.substr(0, 7) === '#signup') {
             this.createCloudAccount();
+        } else if (location.hash.substr(0, 7) === "#import") {
+            var myself = this;
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", location.hash.substr(8), true);
+            xhr.responseType = "arraybuffer";
+            xhr.onload = function () {
+                console.log("here");
+                if(this.status === 200) {
+                    var blob = this.response;
+                    var mdl = new ModuleLoader(myself);
+                    mdl.open(blob, {base64: false});
+                } else {
+                    console.log("Failed to import module, error " + this.status);
+                }
+            };
+            xhr.onerror = function() {
+                console.log("Error!");
+            }
+            
+            xhr.send();
         }
     }
 

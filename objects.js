@@ -197,6 +197,9 @@ SpriteMorph.prototype.bubbleBorder = 3;
 SpriteMorph.prototype.bubbleBorderColor = new Color(190, 190, 190);
 SpriteMorph.prototype.bubbleMaxTextWidth = 130;
 
+SpriteMorph.prototype._blocks = {};
+SpriteMorph.prototype._blockTemplates = {};
+
 SpriteMorph.prototype.initBlocks = function () {
     SpriteMorph.prototype.blocks = {
 
@@ -1098,6 +1101,10 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: 'code of %cmdRing'
         }
     };
+    
+    for(block in SpriteMorph.prototype._blocks) {
+        SpriteMorph.prototype.blocks[block] = SpriteMorph.prototype._blocks[block];
+    }
 };
 
 SpriteMorph.prototype.initBlocks();
@@ -1965,6 +1972,14 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         button.showHelp = BlockMorph.prototype.showHelp;
         blocks.push(button);
     }
+    
+    if(typeof SpriteMorph.prototype._blockTemplates[cat] !== 'undefined') {
+        for(var i=0; i < SpriteMorph.prototype._blockTemplates[cat].length; i += 1) {
+            var bb = SpriteMorph.prototype._blockTemplates[cat][i]
+            blocks.push(block(bb));
+        }
+    }
+    
     return blocks;
 };
 
