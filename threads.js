@@ -2479,16 +2479,14 @@ Process.prototype.reportTimer = function () {
 var dateMap = {
     'date' : 'toLocaleDateString',
     'time' : 'toLocaleTimeString',
-    'month' : 'getMonthName', // return a name, not a number
     'year' : 'getFullYear',
+    'month' : 'getMonthName', // return a name, not a number
+    'date': 'getDate',
     'day of week' : 'getDayName', // return a name, not a number
-    'day of month': 'getDate',
     'hour' : 'getHours',
     'minute' : 'getMinutes',
     'second' : 'getSeconds',
-    'milliseconds' : 'getMilliseconds',
-    'time in milliseconds' : 'getTime',
-    'UTC time' : 'toUTCString' };
+    'time in milliseconds' : 'getTime' };
 
 Process.prototype.reportDate = function (datefn) {
     if (!dateMap[datefn]) { return ''; }
