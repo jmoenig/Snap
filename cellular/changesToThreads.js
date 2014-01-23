@@ -30,3 +30,30 @@ Process.prototype.instanceCount = function(countThese)
         }
     }
 }
+
+Process.prototype.lastCreatedClone = null;
+
+//When a clone is created, we need to note down the last created clone
+Process.prototype.getLastClone = function () {
+    return this.lastCreatedClone;
+};
+
+//When a clone is created, we need to note down the last created clone
+Process.prototype.createClone = function (name) {
+    var thisObj = this.homeContext.receiver,
+        thatObj;
+		
+	this.lastCreatedClone = null;
+
+    if (!name) {return; }
+    if (thisObj) {
+        if (this.inputOption(name) === 'myself') {
+            this.lastCreatedClone = thisObj.createClone();
+        } else {
+            thatObj = this.getOtherObject(name, thisObj);
+            if (thatObj) {
+                this.lastCreatedClone = thatObj.createClone();
+            }
+        }
+    }
+};

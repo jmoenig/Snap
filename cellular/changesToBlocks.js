@@ -96,9 +96,9 @@ ReporterBlockMorph.prototype.drawArrow = function (context) {
 
     context.moveTo(r2, h2);
     context.lineTo(0, 0);
-    context.lineTo(w - r, 0);
+    context.lineTo(w - r2 , 0);
     context.lineTo(w, h2);
-    context.lineTo(w - r, h);
+    context.lineTo(w - r2 , h);
     context.lineTo(0, h);
 
     context.closePath();
@@ -114,9 +114,9 @@ ReporterBlockMorph.prototype.drawArrow = function (context) {
     // half-tone edges
     // bottom left corner
     gradient = context.createLinearGradient(
-        -r,
+        -r2,
         0,
-        r,
+        r2,
         0
     );
     gradient.addColorStop(1, this.cachedClr);
@@ -130,9 +130,9 @@ ReporterBlockMorph.prototype.drawArrow = function (context) {
 
     // top right corner
     gradient = context.createLinearGradient(
-        w - r,
+        w - r2,
         0,
-        w + r,
+        w + r2,
         0
     );
     gradient.addColorStop(0, this.cachedClr);
@@ -140,7 +140,7 @@ ReporterBlockMorph.prototype.drawArrow = function (context) {
     context.strokeStyle = gradient;
     context.beginPath();
     context.moveTo(w - shift, h2);
-    context.lineTo(w - r, shift);
+    context.lineTo(w - r2, shift);
     context.closePath();
     context.stroke();
 
@@ -149,7 +149,7 @@ ReporterBlockMorph.prototype.drawArrow = function (context) {
     gradient = context.createLinearGradient(
         0,
         0,
-        r,
+        r2,
         0
     );
     gradient.addColorStop(0, this.cachedClrBright);
@@ -173,13 +173,13 @@ ReporterBlockMorph.prototype.drawArrow = function (context) {
     context.strokeStyle = gradient;
     context.beginPath();
     context.moveTo(0, shift);
-    context.lineTo(w - r, shift);
+    context.lineTo(w - r2, shift);
     context.closePath();
     context.stroke();
 
     // bottom edge: right corner
     gradient = context.createLinearGradient(
-        w - r,
+        w - r2,
         0,
         w,
         0
@@ -188,7 +188,7 @@ ReporterBlockMorph.prototype.drawArrow = function (context) {
     gradient.addColorStop(1, this.cachedClrDark);
     context.strokeStyle = gradient;
     context.beginPath();
-    context.moveTo(w - r, h - shift);
+    context.moveTo(w - r2, h - shift);
     context.lineTo(w - shift, h2);
     context.closePath();
     context.stroke();
@@ -205,7 +205,7 @@ ReporterBlockMorph.prototype.drawArrow = function (context) {
     context.strokeStyle = gradient;
     context.beginPath();
     context.moveTo(shift, h - shift);
-    context.lineTo(w - r - shift, h - shift);
+    context.lineTo(w - r2 - shift, h - shift);
     context.closePath();
     context.stroke();
 };

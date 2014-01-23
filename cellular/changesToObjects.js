@@ -223,6 +223,7 @@ SpriteMorph.prototype.snapappsHookBlockTemplates = function(blocks, block, cat, 
 	}
 	else if (cat == 'control')
 	{
+		blocks.splice(blocks.length - 3, 0, block('getLastClone'));
 		blocks.push('-');
 		blocks.push(block('instanceCount'));
 	}
@@ -245,6 +246,10 @@ SpriteMorph.prototype.snapappsHookBlockTemplates = function(blocks, block, cat, 
 		blocks.push('-');
 		blocks.push(block('getCostumeNameObject'));
 		blocks.push(block('getTypeName'));
+		blocks.push(block('objectIsA'));
+		blocks.push(block('obliterate'));
+		blocks.push('-');
+		blocks.push(block('listOfAllClones'));
 	}
     return this.scribbleHookBlockTemplates(blocks, block, cat);
 }
@@ -282,6 +287,11 @@ SpriteMorph.prototype.initBlocks = function () {
 SpriteMorph.prototype.addCellularBlocks = function () {
 
 	//control
+    SpriteMorph.prototype.blocks.getLastClone = {
+        type: 'arrow',
+        category: 'control',
+        spec: 'last created clone',
+    };
     SpriteMorph.prototype.blocks.instanceCount = {
         type: 'reporter',
         category: 'control',
@@ -485,6 +495,63 @@ SpriteMorph.prototype.addCellularBlocks = function () {
         category: 'objects',
         spec: 'type of %obj',
     };
+    SpriteMorph.prototype.blocks.objectIsA = {
+        type: 'predicate',
+        category: 'objects',
+        spec: '%obj is a %spr',
+    };
+    SpriteMorph.prototype.blocks.obliterate = {
+        type: 'command',
+        category: 'objects',
+        spec: 'obliterate %obj',
+    };
+    SpriteMorph.prototype.blocks.listOfAllClones = {
+        type: 'reporter',
+        category: 'objects',
+        spec: 'list of all %cln',
+    };
+}
+
+var NOT_AN_OBJECT = "Not an object!";
+var NOBODY = "Nobody";
+
+SpriteMorph.prototype.listOfAllClones = function(otherObjectName)
+{
+	if (!otherObjectName) { return null; }
+	if (otherObjectName == "myself")
+		otherObjectName = this.parentSprite ? this.parentSprite.name : this.name;
+	var arrayToReturn = [];
+	this.parentThatIsA(StageMorph).children.forEach(function (x) {
+		if (x instanceof SpriteMorph && x.parentSprite && x.parentSprite.name == otherObjectName)
+		{
+			arrayToReturn.push(x);
+		}
+	});
+	
+	return new List(arrayToReturn);
+}
+
+SpriteMorph.prototype.obliterate = function(otherObject)
+{
+	if (otherObject instanceof SpriteMorph)
+	{
+		otherObject.removeClone();
+	}
+}
+
+SpriteMorph.prototype.objectIsA = function(otherObject, spriteMorph)
+{
+	if (otherObject instanceof SpriteMorph)
+	{
+		if (otherObject.parentSprite)
+			return spriteMorph === otherObject.parentSprite.name;
+		else
+			return spriteMorph === otherObject.name;
+	}
+	else
+	{
+		return false;
+	}
 }
 
 SpriteMorph.prototype.getTypeName = function(otherObject)
@@ -492,20 +559,30 @@ SpriteMorph.prototype.getTypeName = function(otherObject)
 	if (otherObject instanceof SpriteMorph)
 	{
 		if (otherObject.parentSprite)
-			return otherObject.name;
-		else
 			return otherObject.parentSprite.name;
+		else
+			return otherObject.name;
 	}
-	else
-		return "";
+	else if (otherObject === null)
+	{
+		return NOBODY;
+	}
+	else 
+		return NOT_AN_OBJECT;
 }
 
 SpriteMorph.prototype.getCostumeNameObject = function(otherObject)
 {
 	if (otherObject instanceof SpriteMorph)
+	{
 		return otherObject.getCostumeName();
-	else
-		return "";
+	}
+	else if (otherObject === null)
+	{
+		return NOBODY;
+	}
+	else 
+		return NOT_AN_OBJECT;
 }
 
 SpriteMorph.prototype.getCostumeName = function()
@@ -1600,6 +1677,7 @@ SpriteMorph.prototype.createClone = function () {
         hats.forEach(function (block) {
             stage.threads.startProcess(block, clone, stage.isThreadSafe);
         });
+		return clone;
     }
 };
 
