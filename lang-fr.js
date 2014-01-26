@@ -469,7 +469,9 @@ SnapTranslator.dict.fr = {
         'moi-m\u00EAme',
     'delete this clone':
         'supprime ce clone',
-
+    'pause all':
+        'mettre en pause',
+        
      // sensing:
     'touching %col ?':
         ' %col touch\u00E9?',
