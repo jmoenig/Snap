@@ -817,17 +817,14 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                 null, // text
                 false, // non-numeric
                 {
-                    'date' : ['date'],
-                    'month' : ['month'],
                     'year' : ['year'],
-                    'day of month' : ['day of month'],
+                    'month' : ['month'],
+                    'date' : ['date'],
                     'day of week' : ['day of week'],
-                    'time' : ['time'],
                     'hour' : ['hour'],
                     'minute' : ['minute'],
                     'second' : ['second'],
                     'time in milliseconds' : ['time in milliseconds'],
-                    'UTC time' : ['UTC time'],
                 },
                 true // read-only
             );
