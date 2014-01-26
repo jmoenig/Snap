@@ -83,7 +83,7 @@ ArgLabelMorph, localize, XML_Element, hex_sha512*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.threads = '2013-December-28';
+modules.threads = '2014-January-26';
 
 var ThreadManager;
 var Process;
@@ -111,7 +111,7 @@ function snapEquals(a, b) {
         y = b;
     }
 
-    // handle text comparision text-insensitive.
+    // handle text comparision case-insensitive.
     if (isString(x) && isString(y)) {
         return x.toLowerCase() === y.toLowerCase();
     }
@@ -2477,12 +2477,10 @@ Process.prototype.reportTimer = function () {
 // Process Dates and times in Snap
 // Map block options to built-in functions
 var dateMap = {
-    'date' : 'toLocaleDateString',
-    'time' : 'toLocaleTimeString',
     'year' : 'getFullYear',
-    'month' : 'getMonthName', // return a name, not a number
+    'month' : 'getMonth',
     'date': 'getDate',
-    'day of week' : 'getDayName', // return a name, not a number
+    'day of week' : 'getDay',
     'hour' : 'getHours',
     'minute' : 'getMinutes',
     'second' : 'getSeconds',
@@ -2493,8 +2491,14 @@ Process.prototype.reportDate = function (datefn) {
 
     currDate = new Date();
     func = dateMap[datefn];
-
-    return currDate[func]();
+    result = currDate[func]();
+    
+    // Show months as 1-12 and days as 1-7
+    if (datefn === 'month' || datefn === 'day of week') {
+        result += 1;
+    }
+    
+    return result;
 }
 
 // Process code mapping
@@ -3091,33 +3095,3 @@ UpvarReference.prototype.toString = function () {
 UpvarReference.prototype.names = VariableFrame.prototype.names;
 UpvarReference.prototype.allNames = VariableFrame.prototype.allNames;
 UpvarReference.prototype.allNamesDict = VariableFrame.prototype.allNamesDict;
-
-// Date Utilities (for the 'reportDate' block)
-
-Date.prototype.getMonthName = function () {
-    mons = ['January',
-            'February',
-            'March',
-            'April',
-            'May',
-            'June',
-            'July',
-            'August',
-            'September',
-            'October',
-            'November',
-            'December'];
-    return localize(mons[this.getMonth()]);
-}
-
-Date.prototype.getDayName = function () {
-    days = ['Sunday',
-            'Monday',
-            'Tuesday',
-            'Wednesday',
-            'Thursday',
-            'Friday',
-            'Saturday'];
-    return localize(days[this.getDay()]);
-}
-
