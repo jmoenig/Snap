@@ -5710,7 +5710,16 @@ CellMorph.prototype.drawNew = function () {
     }
 
     if (!isSameList) {
-        if (this.contents instanceof Morph) {
+		//CELLULAR MODIFICATION
+		if (this.contents instanceof SpriteMorph) {
+			var img = this.contents.fullImage();
+			this.contentsMorph = new Morph();
+			this.contentsMorph.silentSetWidth(img.width);
+			this.contentsMorph.silentSetHeight(img.height);
+			this.contentsMorph.image = img;
+        } else 
+		//END CELLULAR MODIFICATION
+		if (this.contents instanceof Morph) {
             this.contentsMorph = this.contents;
         } else if (isString(this.contents)) {
             txt  = this.contents.length > 500 ?
