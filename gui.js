@@ -2402,8 +2402,8 @@ IDE_Morph.prototype.projectMenu = function () {
 	
 	menu.addLine();
 	menu.addItem(
-        'Load Demos',
-        function () {},
+        'Load Demos...',
+        function () { new ProjectDialogMorph(this, 'demos').popUp();},
         'show different default scripts'
     );
 
@@ -3891,7 +3891,7 @@ ProjectDialogMorph.prototype.init = function (ide, task) {
 
     // additional properties:
     this.ide = ide;
-    this.task = task || 'open'; // String describing what do do (open, save)
+    this.task = task || 'open'; // String describing what do do (open, save, or demos)
     this.source = ide.source || 'local'; // or 'cloud' or 'examples'
     this.projectList = []; // [{name: , thumb: , notes:}]
 
@@ -3915,7 +3915,15 @@ ProjectDialogMorph.prototype.init = function (ide, task) {
     );
 
     // override inherited properites:
-    this.labelString = this.task === 'save' ? 'Save Project' : 'Open Project';
+	if(this.task === 'save'){
+		this.labelString = 'Save Project';
+	}
+	else if(this.task === 'open'){
+		this.labelString = 'Open Project';
+	}
+	else if(this.task === 'demos'){
+		this.labelString = 'Demos List';
+	}
     this.createLabel();
     this.key = 'project' + task;
 
@@ -4039,6 +4047,9 @@ ProjectDialogMorph.prototype.buildContents = function () {
 
     if (this.task === 'open') {
         this.addButton('openProject', 'Open');
+        this.action = 'openProject';
+	} else if (this.task === 'demos'){
+		this.addButton('openProject', 'Open');
         this.action = 'openProject';
     } else { // 'save'
         this.addButton('saveProject', 'Save');
@@ -4478,7 +4489,7 @@ ProjectDialogMorph.prototype.saveProject = function () {
     var name = this.nameField.contents().text.text,
         notes = this.notesText.text,
         myself = this;
-
+	
     this.ide.projectNotes = notes || this.ide.projectNotes;
     if (name) {
         if (this.source === 'cloud') {
