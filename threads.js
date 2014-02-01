@@ -2701,7 +2701,10 @@ function Context(
     this.variables = new VariableFrame();
     if (this.outerContext) {
         this.variables.parentFrame = this.outerContext.variables;
-        this.receiver = this.outerContext.receiver;
+		if (!receiver) //CELLULAR: Added this check.
+		{
+			this.receiver = this.outerContext.receiver;
+		}
     }
     this.upvars = null; // set to an UpvarReference in custom blocks
     this.inputs = [];

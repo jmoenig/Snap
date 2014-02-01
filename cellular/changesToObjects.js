@@ -220,6 +220,8 @@ SpriteMorph.prototype.snapappsHookBlockTemplates = function(blocks, block, cat, 
 		blocks.push(block('moveToEmptyNbrCell'));
 		blocks.push(block('moveToAnyCell'));
 		blocks.push(block('moveToAnyEmptyCell'));
+		blocks.push('-');
+		blocks.push(block('snapToCell'));
 	}
 	else if (cat == 'control')
 	{
@@ -250,6 +252,17 @@ SpriteMorph.prototype.snapappsHookBlockTemplates = function(blocks, block, cat, 
 		blocks.push(block('obliterate'));
 		blocks.push('-');
 		blocks.push(block('listOfAllClones'));
+		blocks.push('-');
+		blocks.push(block('getObjectX'));
+		blocks.push(block('getObjectY'));
+		blocks.push(block('setObjectPosition'));
+		blocks.push('-');
+		blocks.push(block('getObjectCellX'));
+		blocks.push(block('getObjectCellY'));
+		blocks.push(block('setObjectCellPosition'));
+		blocks.push('-');
+		blocks.push(block('asObject'));
+		blocks.push(block('nearestObject'));
 	}
     return this.scribbleHookBlockTemplates(blocks, block, cat);
 }
@@ -332,7 +345,12 @@ SpriteMorph.prototype.addCellularBlocks = function () {
     SpriteMorph.prototype.blocks.moveToCell = {
         type: 'command',
         category: 'motion',
-        spec: 'move to cell at x: %n y: %n',
+        spec: 'move to cell at cell x: %n cell y: %n',
+    };
+    SpriteMorph.prototype.blocks.snapToCell = {
+        type: 'command',
+        category: 'motion',
+        spec: 'snap to centre of cell',
     };
 	
 	//cells
@@ -510,10 +528,98 @@ SpriteMorph.prototype.addCellularBlocks = function () {
         category: 'objects',
         spec: 'list of all %cln',
     };
+    SpriteMorph.prototype.blocks.getObjectX = {
+        type: 'reporter',
+        category: 'objects',
+        spec: 'x position of %obj',
+    };
+    SpriteMorph.prototype.blocks.getObjectY = {
+        type: 'reporter',
+        category: 'objects',
+        spec: 'y position of %obj',
+    };
+    SpriteMorph.prototype.blocks.getObjectCellX = {
+        type: 'reporter',
+        category: 'objects',
+        spec: 'cell x position of %obj',
+    };
+    SpriteMorph.prototype.blocks.getObjectCellY = {
+        type: 'reporter',
+        category: 'objects',
+        spec: 'cell y position of %obj',
+    };
+    SpriteMorph.prototype.blocks.setObjectPosition = {
+        type: 'command',
+        category: 'objects',
+        spec: 'move %obj to x: %n y: %n',
+    };
+    SpriteMorph.prototype.blocks.setObjectCellPosition = {
+        type: 'command',
+        category: 'objects',
+        spec: 'move %obj to cell x: %n cell y: %n',
+    };
+    SpriteMorph.prototype.blocks.nearestObject = {
+        type: 'command',
+        category: 'objects',
+        spec: 'nearest %cln to x: %n y: %n where %b',
+    };
+    SpriteMorph.prototype.blocks.asObject = {
+        type: 'command',
+        category: 'objects',
+        spec: 'as %obj %c',
+    };
 }
 
 var NOT_AN_OBJECT = "Not an object!";
 var NOBODY = "Nobody";
+
+SpriteMorph.prototype.setObjectPosition = function(otherObject, x, y)
+{
+	if (otherObject instanceof SpriteMorph)
+		otherObject.gotoXY(x, y);
+}
+
+SpriteMorph.prototype.setObjectCellPosition = function(otherObject, x, y)
+{
+	if (otherObject instanceof SpriteMorph)
+		otherObject.moveToCell(x, y);
+}
+
+SpriteMorph.prototype.getObjectCellX = function(otherObject)
+{
+	if (otherObject instanceof SpriteMorph)
+		return otherObject.cellX();
+	if (otherObject === null)
+		return NOBODY;
+	return NOT_AN_OBJECT;
+}
+
+SpriteMorph.prototype.getObjectCellY = function(otherObject)
+{
+	if (otherObject instanceof SpriteMorph)
+		return otherObject.cellY();
+	if (otherObject === null)
+		return NOBODY;
+	return NOT_AN_OBJECT;
+}
+
+SpriteMorph.prototype.getObjectX = function(otherObject)
+{
+	if (otherObject instanceof SpriteMorph)
+		return otherObject.xPosition();
+	if (otherObject === null)
+		return NOBODY;
+	return NOT_AN_OBJECT;
+}
+
+SpriteMorph.prototype.getObjectY = function(otherObject)
+{
+	if (otherObject instanceof SpriteMorph)
+		return otherObject.yPosition();
+	if (otherObject === null)
+		return NOBODY;
+	return NOT_AN_OBJECT;
+}
 
 SpriteMorph.prototype.listOfAllClones = function(otherObjectName)
 {
@@ -905,6 +1011,11 @@ SpriteMorph.prototype.moveToCell = function(cellX, cellY)
 	var cellH = stage.cellHeight();
 	
 	this.gotoXY((cellX + 0.5) * cellW - 240, 180 - (cellY + 0.5) * cellH);
+}
+
+SpriteMorph.prototype.snapToCell = function()
+{
+    this.moveToCell(this.cellX(), this.cellY());
 }
 
 SpriteMorph.prototype.moveToAnyCell = function()
