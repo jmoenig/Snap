@@ -83,7 +83,7 @@ ArgLabelMorph, localize, XML_Element, hex_sha512*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.threads = '2014-January-10';
+modules.threads = '2014-Feb-03';
 
 var ThreadManager;
 var Process;
@@ -1643,15 +1643,15 @@ Process.prototype.doGlide = function (secs, endX, endY) {
     if (!this.context.startTime) {
         this.context.startTime = Date.now();
         this.context.startValue = new Point(
-            this.homeContext.receiver.xPosition(),
-            this.homeContext.receiver.yPosition()
+            this.blockReceiver().xPosition(),
+            this.blockReceiver().yPosition()
         );
     }
     if ((Date.now() - this.context.startTime) >= (secs * 1000)) {
-        this.homeContext.receiver.gotoXY(endX, endY);
+        this.blockReceiver().gotoXY(endX, endY);
         return null;
     }
-    this.homeContext.receiver.glide(
+    this.blockReceiver().glide(
         secs * 1000,
         endX,
         endY,
@@ -1666,10 +1666,10 @@ Process.prototype.doGlide = function (secs, endX, endY) {
 Process.prototype.doSayFor = function (data, secs) {
     if (!this.context.startTime) {
         this.context.startTime = Date.now();
-        this.homeContext.receiver.bubble(data);
+        this.blockReceiver().bubble(data);
     }
     if ((Date.now() - this.context.startTime) >= (secs * 1000)) {
-        this.homeContext.receiver.stopTalking();
+        this.blockReceiver().stopTalking();
         return null;
     }
     this.pushContext('doYield');
@@ -1679,14 +1679,19 @@ Process.prototype.doSayFor = function (data, secs) {
 Process.prototype.doThinkFor = function (data, secs) {
     if (!this.context.startTime) {
         this.context.startTime = Date.now();
-        this.homeContext.receiver.doThink(data);
+        this.blockReceiver().doThink(data);
     }
     if ((Date.now() - this.context.startTime) >= (secs * 1000)) {
-        this.homeContext.receiver.stopTalking();
+        this.blockReceiver().stopTalking();
         return null;
     }
     this.pushContext('doYield');
     this.pushContext();
+};
+
+Process.prototype.blockReceiver = function () {
+    return this.context ? this.context.receiver || this.homeContext.receiver
+            : this.homeContext.receiver;
 };
 
 // Process sound primitives (interpolated)
@@ -1723,7 +1728,7 @@ Process.prototype.doStopAllSounds = function () {
 
 Process.prototype.doAsk = function (data) {
     var stage = this.homeContext.receiver.parentThatIsA(StageMorph),
-        isStage = this.homeContext.receiver instanceof StageMorph,
+        isStage = this.blockReceiver() instanceof StageMorph,
         activePrompter;
 
     if (!this.prompter) {
@@ -1733,7 +1738,7 @@ Process.prototype.doAsk = function (data) {
         );
         if (!activePrompter) {
             if (!isStage) {
-                this.homeContext.receiver.bubble(data, false, true);
+                this.blockReceiver().bubble(data, false, true);
             }
             this.prompter = new StagePrompterMorph(isStage ? data : null);
             if (stage.scale < 1) {
@@ -1753,7 +1758,7 @@ Process.prototype.doAsk = function (data) {
             stage.lastAnswer = this.prompter.inputField.getValue();
             this.prompter.destroy();
             this.prompter = null;
-            if (!isStage) {this.homeContext.receiver.stopTalking(); }
+            if (!isStage) {this.blockReceiver().stopTalking(); }
             return null;
         }
     }
@@ -2288,7 +2293,7 @@ Process.prototype.createClone = function (name) {
 // Process sensing primitives
 
 Process.prototype.reportTouchingObject = function (name) {
-    var thisObj = this.homeContext.receiver;
+    var thisObj = this.blockReceiver();
 
     if (thisObj) {
         return this.objectTouchingObject(thisObj, name);
@@ -2384,7 +2389,7 @@ Process.prototype.reportColorIsTouchingColor = function (color1, color2) {
 };
 
 Process.prototype.reportDistanceTo = function (name) {
-    var thisObj = this.homeContext.receiver,
+    var thisObj = this.blockReceiver(),
         thatObj,
         stage,
         rc,
@@ -2407,7 +2412,7 @@ Process.prototype.reportDistanceTo = function (name) {
 };
 
 Process.prototype.reportAttributeOf = function (attribute, name) {
-    var thisObj = this.homeContext.receiver,
+    var thisObj = this.blockReceiver(),
         thatObj,
         stage;
 
