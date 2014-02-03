@@ -1035,7 +1035,7 @@
 /*global window, HTMLCanvasElement, getMinimumFontHeight, FileReader, Audio,
 FileList, getBlurredShadowSupport*/
 
-var morphicVersion = '2014-January-09';
+var morphicVersion = '2014-February-03';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = getBlurredShadowSupport(); // check for Chrome-bug
 
@@ -10029,13 +10029,14 @@ WorldMorph.prototype.fillPage = function () {
         this.worldCanvas.style.top = "0px";
         pos.y = 0;
     }
-    if (document.body.scrollTop) { // scrolled down b/c of viewport scaling
+    if (document.documentElement.scrollTop) {
+        // scrolled down b/c of viewport scaling
         clientHeight = document.documentElement.clientHeight;
     }
-    if (document.body.scrollLeft) { // scrolled left b/c of viewport scaling
+    if (document.documentElement.scrollLeft) {
+        // scrolled left b/c of viewport scaling
         clientWidth = document.documentElement.clientWidth;
     }
-
     if (this.worldCanvas.width !== clientWidth) {
         this.worldCanvas.width = clientWidth;
         this.setWidth(clientWidth);

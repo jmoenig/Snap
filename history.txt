@@ -2074,3 +2074,4 @@ ______
 140203
 ------
 * Threads: Fixed #313. “Block of sprite” now works for interpolated (“timed”) blocks and for reporters (i.e. SAY FOR, THINK FOR, GLIDE, ASK etc.)
+* Morphic: replace deprecated DOM “body” references with “documentElement”
