@@ -68,7 +68,7 @@ sb, CommentMorph, CommandBlockMorph, BlockLabelPlaceHolderMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2014-January-09';
+modules.gui = '2014-February-04';
 
 // Declarations
 
@@ -2233,6 +2233,8 @@ IDE_Morph.prototype.projectMenu = function () {
         myself = this,
         world = this.world(),
         pos = this.controlBar.projectButton.bottomLeft(),
+        graphicsName = this.currentSprite instanceof SpriteMorph ?
+                'Costumes' : 'Backgrounds',
         shiftClicked = (world.currentKey === 16);
 
     menu = new MenuMorph(this);
@@ -2380,7 +2382,66 @@ IDE_Morph.prototype.projectMenu = function () {
         'Select categories of additional blocks to add to this project.'
     );
 
+    menu.addItem(
+        localize(graphicsName) + '...',
+        function () {
+            var dir = graphicsName,
+                names = myself.getCostumesList(dir),
+                libMenu = new MenuMorph(
+                    myself,
+                    localize('Import') + ' ' + localize(dir)
+                );
+
+            function loadCostume(name) {
+                var url = dir + '/' + name,
+                    img = new Image();
+                img.onload = function () {
+                    var canvas = newCanvas(new Point(img.width, img.height));
+                    canvas.getContext('2d').drawImage(img, 0, 0);
+                    myself.droppedImage(canvas, name);
+                };
+                img.src = url;
+            }
+
+            names.forEach(function (line) {
+                if (line.length > 0) {
+                    libMenu.addItem(
+                        line,
+                        function () {loadCostume(line); }
+                    );
+                }
+            });
+            libMenu.popup(world, pos);
+        },
+        'Select a costume from the media library'
+    );
+
     menu.popup(world, pos);
+};
+
+IDE_Morph.prototype.getCostumesList = function (dirname) {
+    var dir,
+        costumes = [];
+
+    dir = this.getURL(dirname);
+    dir.split('\n').forEach(
+        function (line) {
+            var startIdx = line.search(new RegExp('href="[^./?].*"')),
+                endIdx,
+                name;
+
+            if (startIdx > 0) {
+                name = line.substring(startIdx + 6);
+                endIdx = name.search(new RegExp('"'));
+                name = name.substring(0, endIdx);
+                costumes.push(name);
+            }
+        }
+    );
+    costumes.sort(function (x, y) {
+        return x < y ? -1 : 1;
+    });
+    return costumes;
 };
 
 // IDE_Morph menu actions
