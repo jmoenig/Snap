@@ -2080,3 +2080,4 @@ ______
 ------
 * GUI: Import costumes and backgrounds from the project menu, thanks, Brian, for the changeset!
 * GUI: Import sounds from the project menu, thanks, Brian, for the changeset!
+* Objects, Store, GUI: Flat line end option in the settings menu, saved with the project

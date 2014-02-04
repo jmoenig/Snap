@@ -2212,6 +2212,16 @@ IDE_Morph.prototype.settingsMenu = function () {
         'check for smooth, predictable\nanimations across computers'
     );
     addPreference(
+        'Flat line ends',
+        function () {
+            SpriteMorph.prototype.useFlatLineEnds =
+                !SpriteMorph.prototype.useFlatLineEnds;
+        },
+        SpriteMorph.prototype.useFlatLineEnds,
+        'uncheck for round ends of lines',
+        'check for flat ends of lines'
+    );
+    addPreference(
         'Codification support',
         function () {
             StageMorph.prototype.enableCodeMapping =
@@ -2689,6 +2699,7 @@ IDE_Morph.prototype.newProject = function () {
     StageMorph.prototype.codeMappings = {};
     StageMorph.prototype.codeHeaders = {};
     StageMorph.prototype.enableCodeMapping = false;
+    SpriteMorph.prototype.useFlatLineEnds = false;
     this.setProjectName('');
     this.projectNotes = '';
     this.createStage();

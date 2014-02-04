@@ -124,7 +124,7 @@ PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.objects = '2014-January-09';
+modules.objects = '2014-February-04';
 
 var SpriteMorph;
 var StageMorph;
@@ -186,6 +186,7 @@ SpriteMorph.prototype.sliderColor
 SpriteMorph.prototype.isCachingPrimitives = true;
 
 SpriteMorph.prototype.enableNesting = true;
+SpriteMorph.prototype.useFlatLineEnds = false;
 SpriteMorph.prototype.highlightColor = new Color(250, 200, 130);
 SpriteMorph.prototype.highlightBorder = 8;
 
@@ -2717,8 +2718,13 @@ SpriteMorph.prototype.drawLine = function (start, dest) {
     if (this.isDown) {
         context.lineWidth = this.size;
         context.strokeStyle = this.color.toString();
-        context.lineCap = 'round';
-        context.lineJoin = 'round';
+        if (this.useFlatLineEnds) {
+            context.lineCap = 'butt';
+            context.lineJoin = 'miter';
+        } else {
+            context.lineCap = 'round';
+            context.lineJoin = 'round';
+        }
         context.beginPath();
         context.moveTo(from.x, from.y);
         context.lineTo(to.x, to.y);
