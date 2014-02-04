@@ -185,7 +185,7 @@ SnapTranslator.dict.pt = {
     'translator_e-mail':
         'mmsequeira@gmail.com',
     'last_changed':
-        '2013-11-22',
+        '2014-01-12',
 
     // GUI
     // control bar:
@@ -447,12 +447,20 @@ SnapTranslator.dict.pt = {
         'se %b , então %c senão, %c',
     'report %s':
         'reporta %s',
-    'stop block':
-        'pára este guião de bloco',
-    'stop script':
-        'pára este guião de objecto',
-    'stop all %stop':
-        'pára tudo %stop',
+    'stop %stopChoices':
+        'pára %stopChoices',
+    'all':
+        'tudo',
+    'this script':
+        'este guião de objecto',
+    'this block':
+        'este guião de bloco',
+    'stop %stopOthersChoices':
+        'pára %stopOthersChoices',
+    'all but this script':
+        'todos os guiões de objecto excepto este',
+    'other scripts in sprite':
+        'os outros guiões deste objecto',
     'pause all %pause':
         'faz pausa em tudo %pause',
     'run %cmdRing %inputs':
@@ -950,8 +958,6 @@ SnapTranslator.dict.pt = {
         'Este projecto ainda não tem\nnenhum bloco personalizado global.',
     'select':
         'seleccionar',
-    'all':
-        'todos',
     'none':
         'nenhum',
 
@@ -1215,7 +1221,7 @@ SnapTranslator.dict.pt = {
     'e^':
         'a exponencial',
 
-    // delimiters
+    // delimitadores
     'whitespace':
         'espaços em branco',
     'line':
