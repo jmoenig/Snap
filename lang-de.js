@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org', // optional
     'last_changed':
-        '2014-01-09', // this, too, will appear in the Translators tab
+        '2014-02-04', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -767,6 +767,12 @@ SnapTranslator.dict.de = {
         'ausschalten, um Animationen \ndynamischer auszuf\u00fchren',
     'check for smooth, predictable\nanimations across computers':
         'einschalten, damit Animationen\n\u00fcberall gleich laufen',
+    'Flat line ends':
+        'Flache Pinselstriche',
+    'check for flat ends of lines':
+        'einschalten f\u00fcr flache\nPinselstrichenden',
+    'uncheck for round ends of lines':
+        'auschalten f\u00fcr runde\nPinselstrichenden',
 
     // inputs
     'with inputs':
