@@ -2082,3 +2082,4 @@ ______
 * GUI: Import sounds from the project menu, thanks, Brian, for the changeset!
 * Objects, Store, GUI: Flat line end option in the settings menu, saved with the project
 * German translation update
+* Objects: Enable playing sounds and notes on Firefox, thanks, Dean Brettle, for this fix!!

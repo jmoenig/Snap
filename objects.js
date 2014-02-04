@@ -5658,8 +5658,9 @@ Note.prototype.setupContext = function () {
             window.msAudioContext ||
             window.oAudioContext ||
             window.webkitAudioContext;
-        if (!ctx.prototype.hasOwnProperty('createGain'))
+        if (!ctx.prototype.hasOwnProperty('createGain')) {
             ctx.prototype.createGain = ctx.prototype.createGainNode;
+        }
         return ctx;
     }());
     if (!AudioContext) {
@@ -5674,10 +5675,12 @@ Note.prototype.setupContext = function () {
 
 Note.prototype.play = function () {
     this.oscillator = this.audioContext.createOscillator();
-    if (!this.oscillator.start)
+    if (!this.oscillator.start) {
         this.oscillator.start = this.oscillator.noteOn;
-    if (!this.oscillator.stop)
+    }
+    if (!this.oscillator.stop) {
         this.oscillator.stop = this.oscillator.noteOff;
+    }
     this.oscillator.type = 0;
     this.oscillator.frequency.value =
         Math.pow(2, (this.pitch - 69) / 12) * 440;
