@@ -2078,4 +2078,5 @@ ______
 
 140204
 ------
-* GUI: Import costumes and background from the project menu, thanks, Brian, for the changeset!
+* GUI: Import costumes and backgrounds from the project menu, thanks, Brian, for the changeset!
+* GUI: Import sounds from the project menu, thanks, Brian, for the changeset!
