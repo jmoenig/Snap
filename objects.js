@@ -9,7 +9,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2013 by Jens Mönig
+    Copyright (C) 2014 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -124,7 +124,7 @@ PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.objects = '2013-December-28';
+modules.objects = '2014-February-04';
 
 var SpriteMorph;
 var StageMorph;
@@ -186,6 +186,7 @@ SpriteMorph.prototype.sliderColor
 SpriteMorph.prototype.isCachingPrimitives = true;
 
 SpriteMorph.prototype.enableNesting = true;
+SpriteMorph.prototype.useFlatLineEnds = false;
 SpriteMorph.prototype.highlightColor = new Color(250, 200, 130);
 SpriteMorph.prototype.highlightBorder = 8;
 
@@ -581,6 +582,9 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'control',
             spec: 'if %b %c else %c'
         },
+
+    /* migrated to a newer block version:
+
         doStop: {
             type: 'command',
             category: 'control',
@@ -590,6 +594,18 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'command',
             category: 'control',
             spec: 'stop all %stop'
+        },
+    */
+
+        doStopThis: {
+            type: 'command',
+            category: 'control',
+            spec: 'stop %stopChoices'
+        },
+        doStopOthers: {
+            type: 'command',
+            category: 'control',
+            spec: 'stop %stopOthersChoices'
         },
         doRun: {
             type: 'command',
@@ -630,11 +646,13 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'control',
             spec: 'report %s'
         },
-        doStopBlock: {
+    /*
+        doStopBlock: { // migrated to a newer block version
             type: 'command',
             category: 'control',
             spec: 'stop block'
         },
+    */
         doCallCC: {
             type: 'command',
             category: 'control',
@@ -1084,6 +1102,25 @@ SpriteMorph.prototype.initBlocks = function () {
 
 SpriteMorph.prototype.initBlocks();
 
+SpriteMorph.prototype.initBlockMigrations = function () {
+    SpriteMorph.prototype.blockMigrations = {
+        doStopAll: {
+            selector: 'doStopThis',
+            inputs: [['all']]
+        },
+        doStop: {
+            selector: 'doStopThis',
+            inputs: [['this script']]
+        },
+        doStopBlock: {
+            selector: 'doStopThis',
+            inputs: [['this block']]
+        }
+    };
+};
+
+SpriteMorph.prototype.initBlockMigrations();
+
 SpriteMorph.prototype.blockAlternatives = {
     // motion:
     turn: ['turnLeft'],
@@ -1130,9 +1167,6 @@ SpriteMorph.prototype.blockAlternatives = {
     receiveClick: ['receiveGo'],
     doBroadcast: ['doBroadcastAndWait'],
     doBroadcastAndWait: ['doBroadcast'],
-    doStopBlock: ['doStop', 'doStopAll'],
-    doStop: ['doStopBlock', 'doStopAll'],
-    doStopAll: ['doStopBlock', 'doStop'],
 
     // sensing:
     getLastAnswer: ['getTimer'],
@@ -1412,8 +1446,9 @@ SpriteMorph.prototype.colorFiltered = function (aColor) {
 // SpriteMorph block instantiation
 
 SpriteMorph.prototype.blockForSelector = function (selector, setDefaults) {
-    var info, block, defaults, inputs, i;
-    info = this.blocks[selector];
+    var migration, info, block, defaults, inputs, i;
+    migration = this.blockMigrations[selector];
+    info = this.blocks[migration ? migration.selector : selector];
     if (!info) {return null; }
     block = info.type === 'command' ? new CommandBlockMorph()
         : info.type === 'hat' ? new HatBlockMorph()
@@ -1426,8 +1461,8 @@ SpriteMorph.prototype.blockForSelector = function (selector, setDefaults) {
         block.isStatic = true;
     }
     block.setSpec(localize(info.spec));
-    if (setDefaults && info.defaults) {
-        defaults = info.defaults;
+    if ((setDefaults && info.defaults) || (migration && migration.inputs)) {
+        defaults = migration ? migration.inputs : info.defaults;
         block.defaults = defaults;
         inputs = block.inputs();
         if (inputs[0] instanceof MultiArgMorph) {
@@ -1651,9 +1686,14 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push('-');
         blocks.push(block('doReport'));
         blocks.push('-');
+    /*
+    // old STOP variants, migrated to a newer version, now redundant
         blocks.push(block('doStopBlock'));
         blocks.push(block('doStop'));
         blocks.push(block('doStopAll'));
+    */
+        blocks.push(block('doStopThis'));
+        blocks.push(block('doStopOthers'));
         blocks.push('-');
         blocks.push(block('doRun'));
         blocks.push(block('fork'));
@@ -2685,8 +2725,13 @@ SpriteMorph.prototype.drawLine = function (start, dest) {
     if (this.isDown) {
         context.lineWidth = this.size;
         context.strokeStyle = this.color.toString();
-        context.lineCap = 'round';
-        context.lineJoin = 'round';
+        if (this.useFlatLineEnds) {
+            context.lineCap = 'butt';
+            context.lineJoin = 'miter';
+        } else {
+            context.lineCap = 'round';
+            context.lineJoin = 'round';
+        }
         context.beginPath();
         context.moveTo(from.x, from.y);
         context.lineTo(to.x, to.y);
@@ -4359,9 +4404,14 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push('-');
         blocks.push(block('doReport'));
         blocks.push('-');
+    /*
+    // old STOP variants, migrated to a newer version, now redundant
         blocks.push(block('doStopBlock'));
         blocks.push(block('doStop'));
         blocks.push(block('doStopAll'));
+    */
+        blocks.push(block('doStopThis'));
+        blocks.push(block('doStopOthers'));
         blocks.push('-');
         blocks.push(block('doRun'));
         blocks.push(block('fork'));
@@ -5272,7 +5322,10 @@ Costume.prototype.edit = function (aWorld, anIDE, isnew, oncancel, onsubmit) {
         function (img, rc) {
             myself.contents = img;
             myself.rotationCenter = rc;
-            myself.shrinkWrap();
+            if (anIDE.currentSprite instanceof SpriteMorph) {
+                // don't shrinkwrap stage costumes
+                myself.shrinkWrap();
+            }
             myself.version = Date.now();
             aWorld.changed();
             if (anIDE) {
@@ -5609,17 +5662,21 @@ Note.prototype.setupContext = function () {
     if (this.audioContext) { return; }
     var AudioContext = (function () {
         // cross browser some day?
-        return window.AudioContext ||
+        var ctx = window.AudioContext ||
             window.mozAudioContext ||
             window.msAudioContext ||
             window.oAudioContext ||
             window.webkitAudioContext;
+        if (!ctx.prototype.hasOwnProperty('createGain')) {
+            ctx.prototype.createGain = ctx.prototype.createGainNode;
+        }
+        return ctx;
     }());
     if (!AudioContext) {
         throw new Error('Web Audio API is not supported\nin this browser');
     }
     Note.prototype.audioContext = new AudioContext();
-    Note.prototype.gainNode = Note.prototype.audioContext.createGainNode();
+    Note.prototype.gainNode = Note.prototype.audioContext.createGain();
     Note.prototype.gainNode.gain.value = 0.25; // reduce volume by 1/4
 };
 
@@ -5627,17 +5684,23 @@ Note.prototype.setupContext = function () {
 
 Note.prototype.play = function () {
     this.oscillator = this.audioContext.createOscillator();
+    if (!this.oscillator.start) {
+        this.oscillator.start = this.oscillator.noteOn;
+    }
+    if (!this.oscillator.stop) {
+        this.oscillator.stop = this.oscillator.noteOff;
+    }
     this.oscillator.type = 0;
     this.oscillator.frequency.value =
         Math.pow(2, (this.pitch - 69) / 12) * 440;
     this.oscillator.connect(this.gainNode);
     this.gainNode.connect(this.audioContext.destination);
-    this.oscillator.noteOn(0); // deprecated, renamed to start()
+    this.oscillator.start(0);
 };
 
 Note.prototype.stop = function () {
     if (this.oscillator) {
-        this.oscillator.noteOff(0); // deprecated, renamed to stop()
+        this.oscillator.stop(0);
         this.oscillator = null;
     }
 };

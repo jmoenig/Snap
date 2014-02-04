@@ -9,7 +9,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2013 by Jens Mönig
+    Copyright (C) 2014 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -106,7 +106,7 @@ SymbolMorph, isNil*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2013-November-26';
+modules.byob = '2014-January-10';
 
 // Declarations
 
@@ -194,7 +194,7 @@ CustomBlockDefinition.prototype.prototypeInstance = function () {
                 part.fragment.type = slot[0];
                 part.fragment.defaultValue = slot[1];
                 part.fragment.options = slot[2];
-                part.fragment.isReadonly = slot[3] || false;
+                part.fragment.isReadOnly = slot[3] || false;
             }
         }
     });
@@ -3189,13 +3189,13 @@ BlockExportDialogMorph.prototype.selectNone = function () {
 BlockExportDialogMorph.prototype.exportBlocks = function () {
     var str = this.serializer.serialize(this.blocks);
     if (this.blocks.length > 0) {
-        window.open('data:text/xml,<blocks app="'
+        window.open(encodeURI('data:text/xml,<blocks app="'
             + this.serializer.app
             + '" version="'
             + this.serializer.version
             + '">'
             + str
-            + '</blocks>');
+            + '</blocks>'));
     } else {
         new DialogBoxMorph().inform(
             'Export blocks',

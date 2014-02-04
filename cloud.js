@@ -6,7 +6,7 @@
 
     written by Jens Mönig
 
-    Copyright (C) 2013 by Jens Mönig
+    Copyright (C) 2014 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -29,7 +29,7 @@
 
 /*global modules, IDE_Morph, SnapSerializer, hex_sha512, alert, nop*/
 
-modules.cloud = '2013-November-26';
+modules.cloud = '2014-January-09';
 
 // Global stuff
 
@@ -37,9 +37,6 @@ var Cloud;
 
 var SnapCloud = new Cloud(
     'https://snapcloud.miosoft.com/miocon/app/login?_app=SnapCloud'
-    //'192.168.2.110:8087/miocon/app/login?_app=SnapCloud'
-    //'192.168.186.146:8087/miocon/app/login?_app=SnapCloud'
-    // 'localhost/miocon/app/login?_app=SnapCloud'
 );
 
 // Cloud /////////////////////////////////////////////////////////////

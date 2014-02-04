@@ -6,7 +6,7 @@
 
     written by Jens Mönig
 
-    Copyright (C) 2013 by Jens Mönig
+    Copyright (C) 2014 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org', // optional
     'last_changed':
-        '2013-10-04', // this, too, will appear in the Translators tab
+        '2014-02-04', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -447,12 +447,20 @@ SnapTranslator.dict.de = {
         'falls %b %c sonst %c',
     'report %s':
         'berichte %s',
-    'stop block':
-        'stoppe diesen Block',
-    'stop script':
-        'stoppe dieses Skript',
-    'stop all %stop':
-        'stoppe alles %stop',
+    'stop %stopChoices':
+        'stoppe %stopChoices',
+    'all':
+        'alles',
+    'this script':
+        'dieses Skript',
+    'this block':
+        'diesen Block',
+    'stop %stopOthersChoices':
+        'stoppe %stopOthersChoices',
+    'all but this script':
+        'alles au\u00dfer diesem Skript',
+    'other scripts in sprite':
+        'andere Skripte in diesem Objekt',
     'pause all %pause':
         'pausiere alles %pause',
     'run %cmdRing %inputs':
@@ -759,6 +767,12 @@ SnapTranslator.dict.de = {
         'ausschalten, um Animationen \ndynamischer auszuf\u00fchren',
     'check for smooth, predictable\nanimations across computers':
         'einschalten, damit Animationen\n\u00fcberall gleich laufen',
+    'Flat line ends':
+        'Flache Pinselstriche',
+    'check for flat ends of lines':
+        'einschalten f\u00fcr flache\nPinselstrichenden',
+    'uncheck for round ends of lines':
+        'auschalten f\u00fcr runde\nPinselstrichenden',
 
     // inputs
     'with inputs':
@@ -950,8 +964,6 @@ SnapTranslator.dict.de = {
         'in diesem Projekt gibt es noch keine\nglobalen Bl\u00f6cke',
     'select':
         'ausw\u00e4hlen',
-    'all':
-        'alles',
     'none':
         'nichts',
 

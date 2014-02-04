@@ -2044,3 +2044,44 @@ ______
 ------
 * Objects: stage watchers for „mouse x“ and „mouse y“ sensing reporters. Thanks, Michael!
 * Store: fixed saving/loading/localisation of new mouse coordinate stage watchers
+
+140108
+------
+* Threads, Blocks, Objects: The FOR reporter’s first input now also accepts blocks and scripts („rings“), and reports a copy that is bound to the sprite indicated by the second input. This lets you „zombify“ (or remote-control) sprites (and create custom TELL and ASK blocks)
+* Blocks: initial support for „sensing“ sprite-only custom block definitions, commented out for now
+* Paint: Add mouseLeaveDragging() event behavior, thanks, Kartik, for this fix!
+* Objects: Only shrink-wrap sprite costumes, thanks, Kartik, for this fix!
+* Threads: Added xhr-headers to HTTP block, thanks, Tim!
+* Threads, Blocks, Objects: Added StopOthers primitive, thanks, Kartik!
+* Added „all but this option“ to StopOthers primitive, fixed the implementation
+* Updated German translation with new strings
+
+140109
+------
+* Objects: Mechanism for migrating blocks in existing projects to newer versions
+* Blocks, Objects, Threads: Collapse old STOP primitives into a single one with a dropdown of options
+* German translation update for new (migrated) STOP block
+* Morphic: Fixed updateReferences() (how could nobody notice so long?!)
+* XML: resolved unexpected assignment expressions (conform to the latest JSLint quibbles)
+* validated all source files against the latest JSLint version
+
+140110
+------
+* Threads: Revert pull request #295 (xhr-headers), breaks existing installations
+* BYOB: Fixed #292 (pulldowns loose lines when exported as library)
+* BYOB: Fixed #291 (readonly custom menus become non-readonly when block is edited)
+
+140203
+------
+* Threads: Fixed #313. “Block of sprite” now works for interpolated (“timed”) blocks and for reporters (i.e. SAY FOR, THINK FOR, GLIDE, ASK etc.)
+* Morphic: replace deprecated DOM “body” references with “documentElement”
+
+140204
+------
+* GUI: Import costumes and backgrounds from the project menu, thanks, Brian, for the changeset!
+* GUI: Import sounds from the project menu, thanks, Brian, for the changeset!
+* Objects, Store, GUI: Flat line end option in the settings menu, saved with the project
+* German translation update
+* Objects: Enable playing sounds and notes on Firefox, thanks, Dean Brettle, for this fix!!
+* Update Portuguese translation, thanks, Manuel!
+* Update French translation, thanks, grego!

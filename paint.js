@@ -5,7 +5,7 @@
     inspired by the Scratch paint editor.
  
     written by Kartik Chandra
-    Copyright (C) 2013 by Kartik Chandra
+    Copyright (C) 2014 by Kartik Chandra
   
     This file is part of Snap!.
  
@@ -50,6 +50,7 @@
     May 16 - flat design adjustments (Jens)
     July 12 - pipette tool, code formatting adjustments (Jens)
     September 16 - flood fill freeze fix (Kartik)
+    Jan 08 - mouse leave dragging fix (Kartik)
 
  */
 
@@ -63,7 +64,7 @@
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.paint = '2013-September-16';
+modules.paint = '2014-January-09';
 
 // Declarations
 
@@ -885,6 +886,9 @@ PaintCanvasMorph.prototype.mouseClickLeft = function () {
     }
     this.brushBuffer = [];
 };
+
+PaintCanvasMorph.prototype.mouseLeaveDragging
+    = PaintCanvasMorph.prototype.mouseClickLeft;
 
 PaintCanvasMorph.prototype.buildContents = function () {
     this.background = newCanvas(this.extent());
