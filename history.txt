@@ -2083,3 +2083,5 @@ ______
 * Objects, Store, GUI: Flat line end option in the settings menu, saved with the project
 * German translation update
 * Objects: Enable playing sounds and notes on Firefox, thanks, Dean Brettle, for this fix!!
+* Update Portuguese translation, thanks, Manuel!
+* Update French translation, thanks, grego!
