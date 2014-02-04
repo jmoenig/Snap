@@ -185,7 +185,7 @@ SnapTranslator.dict.fr = {
     'translator_e-mail':
         'i.scool@mac.com', // optional
     'last_changed':
-        '2013-12-04', // this, too, will appear in the Translators tab
+        '2014-02-04', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
