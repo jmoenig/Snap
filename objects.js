@@ -124,7 +124,7 @@ PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.objects = '2014-February-04';
+modules.objects = '2014-February-05';
 
 var SpriteMorph;
 var StageMorph;
@@ -5305,7 +5305,7 @@ Costume.prototype.edit = function (aWorld, anIDE, isnew, oncancel, onsubmit) {
     editor.openIn(
         aWorld,
         isnew ?
-                newCanvas(new Point(480, 360)) :
+                newCanvas(StageMorph.prototype.dimensions) :
                 this.contents,
         isnew ?
                 new Point(240, 180) :
@@ -6557,7 +6557,7 @@ StagePrompterMorph.prototype.init = function (question) {
     if (this.label) {this.add(this.label); }
     this.add(this.inputField);
     this.add(this.button);
-    this.setWidth(480 - 20);
+    this.setWidth(StageMorph.prototype.dimensions.x - 20);
     this.fixLayout();
 };
 
