@@ -2399,6 +2399,13 @@ IDE_Morph.prototype.projectMenu = function () {
         },
         'Select categories of additional blocks to add to this project.'
     );
+	
+	menu.addLine();
+	menu.addItem(
+        'Load Demos',
+        function () {},
+        'show different default scripts'
+    );
 
     menu.popup(world, pos);
 };
