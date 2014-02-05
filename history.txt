@@ -2085,3 +2085,7 @@ ______
 * Objects: Enable playing sounds and notes on Firefox, thanks, Dean Brettle, for this fix!!
 * Update Portuguese translation, thanks, Manuel!
 * Update French translation, thanks, grego!
+
+140205
+------
+* Objects, Paint: One-stop-shopping for stage dimensions (changing the stage dimensions in line 3720 of objects.js takes care of everything)
