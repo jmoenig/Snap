@@ -49,6 +49,17 @@ SpriteMorph.prototype.snapappsHookBlockTemplates = function(blocks, block, cat, 
         blocks.push(block('drawCircle'));
         blocks.push(block('drawOval'));
         blocks.push(block('drawRectangle'));
+        blocks.push('-');
+		
+		var txt = new TextMorph(
+			'Drawn shapes and pen strokes are\ncleared with the same block. It is\nadded here for convenience:'
+		);
+		txt.fontSize = 12;
+		txt.setColor(this.paletteTextColor);
+        blocks.push(txt);
+		
+        blocks.push('-');
+        blocks.push(block('clear'));
     }
     if (cat === 'text') { 
         blocks.push(block('setFont'));
