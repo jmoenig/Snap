@@ -4276,7 +4276,7 @@ ProjectDialogMorph.prototype.setSource = function (source) {
                 myself.nameField.setContents(item.name || '');
             }
             src = myself.ide.getURL(
-                'http://snap.berkeley.edu/snapsource/Examples/' +
+                'https://github.com/GK-12/Snap--Build-Your-Own-Blocks/tree/LoadDemos/examples/' +
                     item.name + '.xml'
             );
 
@@ -4331,9 +4331,10 @@ ProjectDialogMorph.prototype.getLocalProjectList = function () {
 ProjectDialogMorph.prototype.getExamplesProjectList = function () {
     var dir,
         projects = [];
-
-    dir = this.ide.getURL('http://snap.berkeley.edu/snapsource/Examples/');
-    dir.split('\n').forEach(
+	
+    dir = this.ide.getURL("https://github.com/GK-12/Snap--Build-Your-Own-Blocks/tree/LoadDemos/examples/");
+	window.alert(dir);
+	dir.split('\n').forEach(
         function (line) {
             var startIdx = line.search(new RegExp('href=".*xml"')),
                 endIdx,
