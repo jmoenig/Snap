@@ -441,6 +441,21 @@ SpriteMorph.prototype.init = function(globals)
     this.textColor = new Color(0,0,0);
 }
 
+/*
+ * Override for the default implementation of SpriteMorph.doStamp
+ * 
+ * Adds the alpha effect to stamped copies.
+ */
+SpriteMorph.prototype.uberDoStamp = SpriteMorph.prototype.doStamp;
+SpriteMorph.prototype.doStamp = function () {
+    var context = this.parent.penTrails().getContext('2d');
+	var preGlobalAlpha = context.globalAlpha;
+	context.globalAlpha = this.alpha;
+	var retnVal = this.uberDoStamp();
+	context.globalAlpha = preGlobalAlpha;
+	return retnVal;
+};
+
 /*********************************************************************/
 /****************************** OBJECTS ******************************/
 /*********************************************************************/
