@@ -894,20 +894,24 @@ SpriteMorph.prototype.drawOval = function (radiusX, radiusY)
     //so we must scale the real coordinates down to it.
     context.scale(1 / stage.scale, 1 / stage.scale);
     context.translate(-stage.left(), -stage.top());
+    context.translate(x, y);
+	context.rotate(this.heading * Math.PI / 180);
     var rxS = radiusX * stage.scale, ryS = radiusY * stage.scale;
     
     var stringy = "rgba("+Math.round(fillColor.r)+","+Math.round(fillColor.g)+","+Math.round(fillColor.b)+","+fillColor.a+")";
     context.fillStyle = stringy;
-    pathEllipse(context, x - rxS, y - ryS, 2 * rxS, 2 * ryS);
+    pathEllipse(context, -rxS, -ryS, 2 * rxS, 2 * ryS);
     context.fill();
     
     //Restore transform
     context.restore();
     
-    var minX = x - rxS,
-        maxX = x + rxS,
-        minY = y - ryS,
-        maxY = y + ryS;
+	var circleRadius = Math.SQRT2 * Math.max(rxS, ryS);
+	
+    var minX = x - circleRadius,
+        maxX = x + circleRadius,
+        minY = y - circleRadius,
+        maxY = y + circleRadius;
     
     //Dirty area
     this.world().broken.push(
@@ -939,21 +943,25 @@ SpriteMorph.prototype.drawRectangle = function (w, h)
     //so we must scale the real coordinates down to it.
     context.scale(1 / stage.scale, 1 / stage.scale);
     context.translate(-stage.left(), -stage.top());
+    context.translate(x, y);
+	context.rotate(this.heading * Math.PI / 180);
     var wS = w * stage.scale, hS = h * stage.scale;
     
     var stringy = "rgba("+Math.round(fillColor.r)+","+Math.round(fillColor.g)+","+Math.round(fillColor.b)+","+fillColor.a+")";
     context.fillStyle = stringy;
     context.beginPath();
-    context.rect(x - wS, y - hS, 2 * wS, 2 * hS);
+    context.rect(-wS, -hS, 2 * wS, 2 * hS);
     context.fill();
     
     //Restore transform
     context.restore();
     
-    var minX = x - wS,
-        maxX = x + wS,
-        minY = y - hS,
-        maxY = y + hS;
+	var circleRadius = Math.SQRT2 * Math.max(wS, hS);
+	
+    var minX = x - circleRadius,
+        maxX = x + circleRadius,
+        minY = y - circleRadius,
+        maxY = y + circleRadius;
     
     //Dirty area
     this.world().broken.push(
