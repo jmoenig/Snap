@@ -83,7 +83,7 @@ ArgLabelMorph, localize, XML_Element, hex_sha512*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.threads = '2014-Feb-03';
+modules.threads = '2014-Feb-10';
 
 var ThreadManager;
 var Process;
@@ -2549,14 +2549,16 @@ var dateMap = {
     'time in milliseconds' : 'getTime' };
 
 Process.prototype.reportDate = function (datefn) {
-    if (!dateMap[datefn]) { return ''; }
+    inputFn = this.inputOption(datefn);
+
+    if (!dateMap[inputFn]) { return ''; }
 
     currDate = new Date();
-    func = dateMap[datefn];
+    func = dateMap[inputFn];
     result = currDate[func]();
 
     // Show months as 1-12 and days as 1-7
-    if (datefn === 'month' || datefn === 'day of week') {
+    if (inputFn === 'month' || inputFn === 'day of week') {
         result += 1;
     }
 
