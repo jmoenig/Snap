@@ -1257,10 +1257,5 @@ SnapTranslator.dict.de = {
     'last':
         'letztes',
     'any':
-        'beliebiges',
-
-    // Date reporter dropdowns
-    'month':
-        'monat',
-
+        'beliebiges'
 };
