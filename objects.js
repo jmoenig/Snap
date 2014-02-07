@@ -807,7 +807,7 @@ SpriteMorph.prototype.initBlocks = function () {
         reportDate: {
             type: 'reporter',
             category: 'sensing',
-            spec: 'get current %dates'
+            spec: 'current %dates'
         },
 
         // Operators

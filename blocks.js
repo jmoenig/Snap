@@ -829,7 +829,7 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                 },
                 true // read-only
             );
-            part.setContents('date');
+            part.setContents(['date']);
             break;
         case '%delim':
             part = new InputSlotMorph(
