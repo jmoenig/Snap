@@ -456,6 +456,84 @@ SpriteMorph.prototype.doStamp = function () {
 	return retnVal;
 };
 
+/*
+ * Override for the default implementation of StageMorph.userMenu
+ * 
+ * Adds the ability to replace the background
+ */
+StageMorph.prototype.uberUserMenu = StageMorph.prototype.userMenu;
+StageMorph.prototype.userMenu = function () {
+	var retn = this.uberUserMenu();
+    retn.addItem("replace pic...", 'replacePic');
+	return retn;
+}
+
+StageMorph.prototype.replacePic = function () {
+	//This code heaertlessly ripped from objects.js (WatcherMorph.prototype.userMenu)
+	//and morphic.js (HandMorph.prototype.processDrop)
+
+	var inp = document.createElement('input'),
+		ide = this.parentThatIsA(IDE_Morph);
+		myself = this;
+	if (ide.filePicker) {
+		document.body.removeChild(ide.filePicker);
+		ide.filePicker = null;
+	}
+	inp.type = 'file';
+	inp.style.color = "transparent";
+	inp.style.backgroundColor = "transparent";
+	inp.style.border = "none";
+	inp.style.outline = "none";
+	inp.style.position = "absolute";
+	inp.style.top = "0px";
+	inp.style.left = "0px";
+	inp.style.width = "0px";
+	inp.style.height = "0px";
+	inp.addEventListener(
+		"change",
+		function () {
+			var file, i;
+
+			function readImage(aFile) {
+				var pic = new Image(),
+					frd = new FileReader();
+				pic.onload = function () {
+					//Draw image onto stage. Make it centered if it is too big
+					var ctx = myself.penTrails().getContext('2d');
+					if (pic.width / pic.height > ctx.canvas.width / ctx.canvas.height) {
+						var height = ctx.canvas.width / pic.width * pic.height;
+						ctx.drawImage(pic, 0, (ctx.canvas.height - height) / 2, ctx.canvas.width, height);
+					} else {
+						var width = ctx.canvas.height / pic.height * pic.width;
+						ctx.drawImage(pic, (ctx.canvas.width - width) / 2, 0, width, ctx.canvas.height);
+					}
+					myself.world().broken.push(myself.visibleBounds());
+				};
+				frd = new FileReader();
+				frd.onloadend = function (e) {
+					pic.src = e.target.result;
+				};
+				frd.readAsDataURL(aFile);
+			}
+			
+			document.body.removeChild(inp);
+			ide.filePicker = null;
+			if (inp.files.length > 0) {
+				for (i = 0; i < inp.files.length; i += 1) {
+					file = inp.files[i];
+					if (file.type.indexOf("image") === 0) {
+						readImage(file);
+					}
+				}
+			}
+		},
+		false
+	);
+	document.body.appendChild(inp);
+	ide.filePicker = inp;
+	inp.click();
+}
+
 /*********************************************************************/
 /****************************** OBJECTS ******************************/
 /*********************************************************************/
