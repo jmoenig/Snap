@@ -3891,7 +3891,7 @@ ProjectDialogMorph.prototype.init = function (ide, task) {
 
     // additional properties:
     this.ide = ide;
-    this.task = task || 'open'; // String describing what do do (open, save, or demos)
+    this.task = task || 'open'; // String describing what do do (open, save)
     this.source = ide.source || 'local'; // or 'cloud' or 'examples'
     this.projectList = []; // [{name: , thumb: , notes:}]
 
@@ -3915,15 +3915,7 @@ ProjectDialogMorph.prototype.init = function (ide, task) {
     );
 
     // override inherited properites:
-	if(this.task === 'save'){
-		this.labelString = 'Save Project';
-	}
-	else if(this.task === 'open'){
-		this.labelString = 'Open Project';
-	}
-	else if(this.task === 'demos'){
-		this.labelString = 'Demos List';
-	}
+    this.labelString = this.task === 'save' ? 'Save Project' : 'Open Project';
     this.createLabel();
     this.key = 'project' + task;
 
@@ -3958,17 +3950,12 @@ ProjectDialogMorph.prototype.buildContents = function () {
         notification.refresh = nop;
         this.srcBar.add(notification);
     }
-	
-	if(this.task === 'demos'){
-		this.addSourceButton('examples', localize('Examples'), 'poster');
-	}
-	else{
-		this.addSourceButton('cloud', localize('Cloud'), 'cloud');
-		this.addSourceButton('local', localize('Browser'), 'storage');
-		if (this.task === 'open') {
-			this.addSourceButton('examples', localize('Examples'), 'poster');
-		}
-	}
+
+    this.addSourceButton('cloud', localize('Cloud'), 'cloud');
+    this.addSourceButton('local', localize('Browser'), 'storage');
+    if (this.task === 'open') {
+        this.addSourceButton('examples', localize('Examples'), 'poster');
+    }
     this.srcBar.fixLayout();
     this.body.add(this.srcBar);
 
@@ -4052,9 +4039,6 @@ ProjectDialogMorph.prototype.buildContents = function () {
 
     if (this.task === 'open') {
         this.addButton('openProject', 'Open');
-        this.action = 'openProject';
-	} else if (this.task === 'demos'){
-		this.addButton('openProject', 'Open');
         this.action = 'openProject';
     } else { // 'save'
         this.addButton('saveProject', 'Save');
@@ -4276,7 +4260,7 @@ ProjectDialogMorph.prototype.setSource = function (source) {
                 myself.nameField.setContents(item.name || '');
             }
             src = myself.ide.getURL(
-                'https://github.com/GK-12/Snap--Build-Your-Own-Blocks/tree/LoadDemos/examples/' +
+                'http://snap.berkeley.edu/snapsource/Examples/' +
                     item.name + '.xml'
             );
 
@@ -4331,10 +4315,9 @@ ProjectDialogMorph.prototype.getLocalProjectList = function () {
 ProjectDialogMorph.prototype.getExamplesProjectList = function () {
     var dir,
         projects = [];
-	
-    dir = this.ide.getURL("https://github.com/GK-12/Snap--Build-Your-Own-Blocks/tree/LoadDemos/examples/");
-	window.alert(dir);
-	dir.split('\n').forEach(
+
+    dir = this.ide.getURL('http://snap.berkeley.edu/snapsource/Examples/');
+    dir.split('\n').forEach(
         function (line) {
             var startIdx = line.search(new RegExp('href=".*xml"')),
                 endIdx,
@@ -4495,7 +4478,7 @@ ProjectDialogMorph.prototype.saveProject = function () {
     var name = this.nameField.contents().text.text,
         notes = this.notesText.text,
         myself = this;
-	
+
     this.ide.projectNotes = notes || this.ide.projectNotes;
     if (name) {
         if (this.source === 'cloud') {

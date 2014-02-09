@@ -1,8 +1,0 @@
-{
-    "translate_percent": {
-                "type": "command",
-                "category": "motion",
-                "spec": "translate by %n percent",
-                "defaults": [100]
-    }
-}
