@@ -6,10 +6,10 @@
     based on morphic.js, blocks.js, threads.js and objects.js
     inspired by Scratch
 
-    written by Jens Mönig
+    written by Jens MÃ¶nig
     jens@moenig.org
 
-    Copyright (C) 2014 by Jens Mönig
+    Copyright (C) 2014 by Jens MÃ¶nig
 
     This file is part of Snap!.
 
@@ -2007,7 +2007,7 @@ IDE_Morph.prototype.cloudMenu = function () {
         menu.addItem(
             'open shared project from cloud...',
             function () {
-                myself.prompt('Author name…', function (usr) {
+                myself.prompt('Author nameâ€¦', function (usr) {
                     myself.prompt('Project name...', function (prj) {
                         var id = 'Username=' +
                             encodeURIComponent(usr.toLowerCase()) +
