@@ -8,7 +8,7 @@ modules.cellularBlocks = '2013-August-2';
 SyntaxElementMorph.prototype.labelPartScribble = SyntaxElementMorph.prototype.labelPartSnapapps
 SyntaxElementMorph.prototype.labelPartSnapapps = function (spec) 
 {
-/*	if (spec == "%clat")
+	if (spec == "%clat")
 	{
 		return new InputSlotMorph(
 			null,
@@ -16,7 +16,16 @@ SyntaxElementMorph.prototype.labelPartSnapapps = function (spec)
 			'cellAttributesMenu',
 			true
 		);
-	}*/
+	}
+	if (spec == "%ntci") //No typing circle input
+	{
+		return new InputSlotMorph(
+			null,
+			false,
+			'cellAttributesMenu',
+			true
+		);
+	}
     return this.labelPartScribble(spec);
 }
 
@@ -40,13 +49,179 @@ BlockMorph.prototype.mouseClickLeft = function () {
     if (receiver) {
         stage = receiver.parentThatIsA(StageMorph);
 		if (stage) {
-			stage.children.forEach(function (child)
-			{
-				if (child instanceof SpriteMorph && child.parentSprite == receiver)
+			if (this instanceof ReporterBlockMorph)
+			{				
+				stage.children.some(function (child)
 				{
-					stage.threads.toggleProcess(top, child);
-				}
-			});
+					if (child instanceof SpriteMorph && child.parentSprite == receiver)
+					{
+						stage.threads.toggleProcess(top, child);
+						return true;
+					}
+					return false;
+				});
+
+			}
+			else
+			{
+				stage.children.forEach(function (child)
+				{
+					if (child instanceof SpriteMorph && child.parentSprite == receiver)
+					{
+						stage.threads.toggleProcess(top, child);
+					}
+				});
+			}
 		}
     }
+};
+
+ReporterBlockMorph.prototype.drawNew = function () {
+    var context;
+    this.cachedClr = this.color.toString();
+    this.cachedClrBright = this.bright();
+    this.cachedClrDark = this.dark();
+    this.image = newCanvas(this.extent());
+    context = this.image.getContext('2d');
+    context.fillStyle = this.cachedClr;
+
+    if (this.isPredicate) {
+        this.drawDiamond(context);
+    } else if (this.isArrow) {
+        this.drawArrow(context);
+	} else {
+        this.drawRounded(context);
+    }
+
+    // erase CommandSlots
+    this.eraseHoles(context);
+};
+
+ReporterBlockMorph.prototype.drawArrow = function (context) {
+    var w = this.width(),
+        h = this.height(),
+        h2 = Math.floor(h / 2),
+        r = this.rounding,
+        r2 = Math.floor(this.rounding / 2),
+        shift = this.edge / 2,
+        gradient;
+
+    // draw the 'flat' shape:
+    context.fillStyle = this.cachedClr;
+    context.beginPath();
+
+    context.moveTo(r2, h2);
+    context.lineTo(0, 0);
+    context.lineTo(w - r2 , 0);
+    context.lineTo(w, h2);
+    context.lineTo(w - r2 , h);
+    context.lineTo(0, h);
+
+    context.closePath();
+    context.fill();
+
+    if (MorphicPreferences.isFlat) {return; }
+
+    // add 3D-Effect:
+    context.lineWidth = this.edge;
+    context.lineJoin = 'round';
+    context.lineCap = 'round';
+
+    // half-tone edges
+    // bottom left corner
+    gradient = context.createLinearGradient(
+        -r2,
+        0,
+        r2,
+        0
+    );
+    gradient.addColorStop(1, this.cachedClr);
+    gradient.addColorStop(0, this.cachedClrBright);
+    context.strokeStyle = gradient;
+    context.beginPath();
+    context.moveTo(shift, 0);
+    context.lineTo(r2, h2 - shift);
+    context.closePath();
+    context.stroke();
+
+    // top right corner
+    gradient = context.createLinearGradient(
+        w - r2,
+        0,
+        w + r2,
+        0
+    );
+    gradient.addColorStop(0, this.cachedClr);
+    gradient.addColorStop(1, this.cachedClrDark);
+    context.strokeStyle = gradient;
+    context.beginPath();
+    context.moveTo(w - shift, h2);
+    context.lineTo(w - r2, shift);
+    context.closePath();
+    context.stroke();
+
+    // normal gradient edges
+    // top edge: left corner
+    gradient = context.createLinearGradient(
+        0,
+        0,
+        r2,
+        0
+    );
+    gradient.addColorStop(0, this.cachedClrBright);
+    gradient.addColorStop(1, this.cachedClr);
+    context.strokeStyle = gradient;
+    context.beginPath();
+    context.moveTo(shift, h);
+    context.lineTo(r2, h2 + shift);
+    context.closePath();
+    context.stroke();
+
+    // top edge: straight line
+    gradient = context.createLinearGradient(
+        0,
+        0,
+        0,
+        this.edge
+    );
+    gradient.addColorStop(0, this.cachedClrBright);
+    gradient.addColorStop(1, this.cachedClr);
+    context.strokeStyle = gradient;
+    context.beginPath();
+    context.moveTo(0, shift);
+    context.lineTo(w - r2, shift);
+    context.closePath();
+    context.stroke();
+
+    // bottom edge: right corner
+    gradient = context.createLinearGradient(
+        w - r2,
+        0,
+        w,
+        0
+    );
+    gradient.addColorStop(0, this.cachedClr);
+    gradient.addColorStop(1, this.cachedClrDark);
+    context.strokeStyle = gradient;
+    context.beginPath();
+    context.moveTo(w - r2, h - shift);
+    context.lineTo(w - shift, h2);
+    context.closePath();
+    context.stroke();
+
+    // bottom edge: straight line
+    gradient = context.createLinearGradient(
+        0,
+        h - this.edge,
+        0,
+        h
+    );
+    gradient.addColorStop(0, this.cachedClr);
+    gradient.addColorStop(1, this.cachedClrDark);
+    context.strokeStyle = gradient;
+    context.beginPath();
+    context.moveTo(shift, h - shift);
+    context.lineTo(w - r2 - shift, h - shift);
+    context.closePath();
+    context.stroke();
 };

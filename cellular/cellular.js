@@ -6,26 +6,41 @@ function Cell(x,y,stageMorph)
 	this.y = y;
 	this.stageMorph = stageMorph;
 	this.attributeValues = {};
+	this.spriteMorphs = [];
+	this.parentECT = null;
 }
 
 Cell.prototype.getAttribute = function(attribute)
 {
 	value = this.attributeValues[attribute];
-	if (value == undefined)
+	if (!value)
 		return 0;
-	return value;
+	return Number(value);
 }
 
 Cell.prototype.setAttribute = function(attribute, value, dirty)
 {
-	this.attributeValues[attribute] = value;
+	this.attributeValues[attribute] = Number(value);
 	if (dirty == undefined || dirty == true)
 		this.stageMorph.dirtyCellAt(this.x, this.y);
 }
 
-Cell.attributes = ['testAttribute'];
-Cell.attributeColours = {testAttribute: new Color(255,0,255)};
-Cell.attributeDrawRange = {testAttribute: [0,10]};
+Cell.prototype.removeSpriteMorph = function(morph)
+{
+	var index = this.spriteMorphs.indexOf(morph);
+	if (index > -1) {
+		this.spriteMorphs.splice(index, 1);
+	}
+}
+
+Cell.prototype.addSpriteMorph = function(morph)
+{
+	this.spriteMorphs.push(morph);
+}
+
+Cell.attributes = [];
+Cell.attributeColours = {};
+Cell.attributeDrawRange = {};
 
 Cell.hasAttribute = function (name)
 {
@@ -52,4 +67,48 @@ Cell.addAttribute = function (name)
 	Cell.attributeColours[name] = new Color(100,100,100);
 	Cell.attributeDrawRange[name] = [0,10];
 	return true;
+}
+
+function EmptyCellTree(childA, childB)
+{
+    var myself = this;
+    
+    function attachChild(child)
+    {
+	    if (child instanceof EmptyCellTree)
+	    {
+            child.parent = myself;
+            myself.nEmpty += child.nEmpty;
+        }
+        else if (child instanceof Cell)
+        {
+            myself.leafNode = true;
+            child.parentECT = myself;
+            myself.nEmpty += child.spriteMorphs.length == 0 ? 1 : 0;
+        }
+    }
+
+    this.parent = null;
+    this.nEmpty = 0;
+    this.leafNode = false;
+    
+	this.childA = childA;
+	attachChild(childA);
+        
+	this.childB = childB;
+	attachChild(childB);
+}
+
+EmptyCellTree.prototype.cellMadeEmpty = function()
+{
+    this.nEmpty++;
+    if (this.parent != null)
+        this.parent.cellMadeEmpty();
+}
+
+EmptyCellTree.prototype.cellFilled = function()
+{
+    this.nEmpty--;
+    if (this.parent != null)
+        this.parent.cellFilled();
 }

@@ -25,7 +25,7 @@ function getSnapAppsAboutText()
 
 function getSnapAppsLogoExtent()
 {
-    return new Point(170, 28);
+    return new Point(210, 28);
 }
 
 /*********************************************************************/
@@ -334,6 +334,7 @@ SpriteIconMorph.prototype.createDuplicator = function () {
 				//Remove it if it is a clone of this sprite
 				ide.stage.removeChild(child);
 				ide.stage.threads.stopAllForReceiver(child);
+				child.parentSprite.cloneDestroyed();
 				i--;
 			}
 		}
@@ -353,7 +354,14 @@ SpriteIconMorph.prototype.createDuplicator = function () {
     };
     this.add(duplicator);
 	this.duplicator = duplicator;
+	
+	myself.object.spriteIconMorph = this;
 };
+
+SpriteIconMorph.prototype.updateDuplicator = function()
+{
+	this.duplicator.setContents(this.object.cloneCount);
+}
 
 // SpriteIconMorph layout (we need to change it so we can add room for the text box)
 SpriteIconMorph.prototype.fixLayout = function () {
@@ -401,6 +409,22 @@ SpriteIconMorph.prototype.fixLayout = function () {
 			this.thumbnail.bottom() + this.padding
 		);
 		nextY = this.duplicator.bottom();
+		
+		if (this.object)
+		{
+			var stage = this.object.parentThatIsA(StageMorph);
+			if (stage && stage.children)
+			{
+				var numClones = 0;
+				var stageChildren = stage.children;
+				for (var i=0; i<stageChildren.length; i++)
+					if (stageChildren[i] instanceof SpriteMorph 
+						&& stageChildren[i].parentSprite == this.object)
+						numClones++;
+						
+				this.duplicator.setContents(numClones);
+			}
+		}
 	}
 	
     this.label.setWidth(

@@ -422,9 +422,11 @@ SnapSerializer.prototype.loadProjectModel = function (xmlNode) {
     model.sprites = model.stage.require('sprites');
     project.sprites[project.stage.name] = project.stage;
 
+	var tempSprites = [];
     model.sprites.childrenNamed('sprite').forEach(function (model) {
-        myself.loadValue(model);
+        tempSprites.push(myself.loadValue(model));
     });
+	this.spritesLoaded(myself.project.stage, tempSprites);
 
     // restore nesting associations
     myself.project.stage.children.forEach(function (sprite) {
@@ -576,35 +578,13 @@ SnapSerializer.prototype.loadSprites = function (xmlString, ide) {
     if (+model.attributes.version > this.version) {
         throw 'Module uses newer version of Serializer';
     }
+	
+	var tempSprites = [];
     model.childrenNamed('sprite').forEach(function (model) {
-        var sprite  = new SpriteMorph(project.globalVariables);
-
-        if (model.attributes.id) {
-            myself.objects[model.attributes.id] = sprite;
-        }
-        if (model.attributes.name) {
-            sprite.name = model.attributes.name;
-            project.sprites[model.attributes.name] = sprite;
-        }
-        if (model.attributes.color) {
-            sprite.color = myself.loadColor(model.attributes.color);
-        }
-        if (model.attributes.pen) {
-            sprite.penPoint = model.attributes.pen;
-        }
-        project.stage.add(sprite);
-        ide.sprites.add(sprite);
-        sprite.scale = parseFloat(model.attributes.scale || '1');
-        sprite.rotationStyle = parseFloat(
-            model.attributes.rotation || '1'
-        );
-        sprite.isDraggable = model.attributes.draggable !== 'false';
-        sprite.isVisible = model.attributes.hidden !== 'true';
-        sprite.heading = parseFloat(model.attributes.heading) || 0;
-        sprite.drawNew();
-        sprite.gotoXY(+model.attributes.x || 0, +model.attributes.y || 0);
-        myself.loadObject(sprite, model);
+		tempSprites.push(myself.loadSprite(model, project));
     });
+	this.spritesLoaded(ide.stage, tempSprites);
+	
     this.objects = {};
     this.project = {};
     this.mediaDict = {};
@@ -1020,6 +1000,47 @@ SnapSerializer.prototype.loadInput = function (model, input, block) {
     }
 };
 
+SnapSerializer.prototype.spritesLoaded = function(stage, spriteList)
+{
+	//This function is a no-op here, but in cellular it is used to resolve some intersprite 
+	//dependancies and so it is important all sprites are loaded
+}
+
+SnapSerializer.prototype.loadSprite = function (model, project) {
+	var v  = new SpriteMorph(project.globalVariables);
+	
+	if (model.attributes.id) {
+		this.objects[model.attributes.id] = v;
+	}
+	if (model.attributes.name) {
+		v.name = model.attributes.name;
+		project.sprites[model.attributes.name] = v;
+	}
+	if (model.attributes.idx) {
+		v.idx = +model.attributes.idx;
+	}
+	if (model.attributes.color) {
+		v.color = this.loadColor(model.attributes.color);
+	}
+	if (model.attributes.pen) {
+		v.penPoint = model.attributes.pen;
+	}
+	project.stage.add(v);
+	
+	v.scale = parseFloat(model.attributes.scale || '1');
+	v.rotationStyle = parseFloat(
+		model.attributes.rotation || '1'
+	);
+	v.isDraggable = model.attributes.draggable !== 'false';
+	v.isVisible = model.attributes.hidden !== 'true';
+	v.heading = parseFloat(model.attributes.heading) || 0;
+	v.drawNew();
+	v.gotoXY(+model.attributes.x || 0, +model.attributes.y || 0);
+	this.loadObject(v, model);
+	
+	return v;
+}
+
 SnapSerializer.prototype.loadValue = function (model) {
     // private
     var v, items, el, center, image, name, audio, option,
@@ -1092,34 +1113,7 @@ SnapSerializer.prototype.loadValue = function (model) {
         });
         return v;
     case 'sprite':
-        v  = new SpriteMorph(myself.project.globalVariables);
-        if (model.attributes.id) {
-            myself.objects[model.attributes.id] = v;
-        }
-        if (model.attributes.name) {
-            v.name = model.attributes.name;
-            myself.project.sprites[model.attributes.name] = v;
-        }
-        if (model.attributes.idx) {
-            v.idx = +model.attributes.idx;
-        }
-        if (model.attributes.color) {
-            v.color = myself.loadColor(model.attributes.color);
-        }
-        if (model.attributes.pen) {
-            v.penPoint = model.attributes.pen;
-        }
-        myself.project.stage.add(v);
-        v.scale = parseFloat(model.attributes.scale || '1');
-        v.rotationStyle = parseFloat(
-            model.attributes.rotation || '1'
-        );
-        v.isDraggable = model.attributes.draggable !== 'false';
-        v.isVisible = model.attributes.hidden !== 'true';
-        v.heading = parseFloat(model.attributes.heading) || 0;
-        v.drawNew();
-        v.gotoXY(+model.attributes.x || 0, +model.attributes.y || 0);
-        myself.loadObject(v, model);
+		var v = this.loadSprite(model, myself.project);
         return v;
     case 'context':
         v = new Context(null);

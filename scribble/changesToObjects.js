@@ -14,7 +14,8 @@ SpriteMorph.prototype.snapappsHookBlockTemplates = function(blocks, block, cat, 
 {
     if (cat === 'motion')
     {
-        blocks.splice(blocks.length - 7, 0, '-', block('gotoRandomLocation'));
+        blocks.splice(6, 0, block('faceToXY'), block('setDirection'));
+        blocks.splice(11, 0, block('gotoRandomLocation'));
     }
     if (cat === 'operators')
     {
@@ -48,6 +49,17 @@ SpriteMorph.prototype.snapappsHookBlockTemplates = function(blocks, block, cat, 
         blocks.push(block('drawCircle'));
         blocks.push(block('drawOval'));
         blocks.push(block('drawRectangle'));
+        blocks.push('-');
+		
+		var txt = new TextMorph(
+			'Drawn shapes and pen strokes are\ncleared with the same block. It is\nadded here for convenience:'
+		);
+		txt.fontSize = 12;
+		txt.setColor(this.paletteTextColor);
+        blocks.push(txt);
+		
+        blocks.push('-');
+        blocks.push(block('clear'));
     }
     if (cat === 'text') { 
         blocks.push(block('setFont'));
@@ -109,6 +121,19 @@ SpriteMorph.prototype.initBlocks = function () {
 }
 
 SpriteMorph.prototype.addScribbleBlocks = function () {
+
+    SpriteMorph.prototype.blocks.setDirection = {
+        type: 'command',
+        category: 'motion',
+        spec: 'point in direction %n'
+    };
+	
+    SpriteMorph.prototype.blocks.faceToXY = {
+        type: 'command',
+        category: 'motion',
+        spec: 'point to x: %n y: %n'
+    };
+
     SpriteMorph.prototype.blocks.startShape = {
         type: 'command',
         category: 'shapes',
@@ -416,6 +441,99 @@ SpriteMorph.prototype.init = function(globals)
     this.textColor = new Color(0,0,0);
 }
 
+/*
+ * Override for the default implementation of SpriteMorph.doStamp
+ * 
+ * Adds the alpha effect to stamped copies.
+ */
+SpriteMorph.prototype.uberDoStamp = SpriteMorph.prototype.doStamp;
+SpriteMorph.prototype.doStamp = function () {
+    var context = this.parent.penTrails().getContext('2d');
+	var preGlobalAlpha = context.globalAlpha;
+	context.globalAlpha = this.alpha;
+	var retnVal = this.uberDoStamp();
+	context.globalAlpha = preGlobalAlpha;
+	return retnVal;
+};
+
+/*
+ * Override for the default implementation of StageMorph.userMenu
+ * 
+ * Adds the ability to replace the background
+ */
+StageMorph.prototype.uberUserMenu = StageMorph.prototype.userMenu;
+StageMorph.prototype.userMenu = function () {
+	var retn = this.uberUserMenu();
+    retn.addItem("replace pic...", 'replacePic');
+	return retn;
+}
+
+StageMorph.prototype.replacePic = function () {
+	//This code heaertlessly ripped from objects.js (WatcherMorph.prototype.userMenu)
+	//and morphic.js (HandMorph.prototype.processDrop)
+
+	var inp = document.createElement('input'),
+		ide = this.parentThatIsA(IDE_Morph);
+		myself = this;
+	if (ide.filePicker) {
+		document.body.removeChild(ide.filePicker);
+		ide.filePicker = null;
+	}
+	inp.type = 'file';
+	inp.style.color = "transparent";
+	inp.style.backgroundColor = "transparent";
+	inp.style.border = "none";
+	inp.style.outline = "none";
+	inp.style.position = "absolute";
+	inp.style.top = "0px";
+	inp.style.left = "0px";
+	inp.style.width = "0px";
+	inp.style.height = "0px";
+	inp.addEventListener(
+		"change",
+		function () {
+			var file, i;
+
+			function readImage(aFile) {
+				var pic = new Image(),
+					frd = new FileReader();
+				pic.onload = function () {
+					//Draw image onto stage. Make it centered if it is too big
+					var ctx = myself.penTrails().getContext('2d');
+					if (pic.width / pic.height > ctx.canvas.width / ctx.canvas.height) {
+						var height = ctx.canvas.width / pic.width * pic.height;
+						ctx.drawImage(pic, 0, (ctx.canvas.height - height) / 2, ctx.canvas.width, height);
+					} else {
+						var width = ctx.canvas.height / pic.height * pic.width;
+						ctx.drawImage(pic, (ctx.canvas.width - width) / 2, 0, width, ctx.canvas.height);
+					}
+					myself.world().broken.push(myself.visibleBounds());
+				};
+				frd = new FileReader();
+				frd.onloadend = function (e) {
+					pic.src = e.target.result;
+				};
+				frd.readAsDataURL(aFile);
+			}
+			
+			document.body.removeChild(inp);
+			ide.filePicker = null;
+			if (inp.files.length > 0) {
+				for (i = 0; i < inp.files.length; i += 1) {
+					file = inp.files[i];
+					if (file.type.indexOf("image") === 0) {
+						readImage(file);
+					}
+				}
+			}
+		},
+		false
+	);
+	document.body.appendChild(inp);
+	ide.filePicker = inp;
+	inp.click();
+}
+
 /*********************************************************************/
 /****************************** OBJECTS ******************************/
 /*********************************************************************/
@@ -539,6 +657,15 @@ SpriteMorph.prototype.reportExpression = function (str) {
         this.lambdas[str] = found = eval("(function(spritemorph){return ("+evalMe+");})");
     }
     return found(this);
+};
+
+/*
+ * SpriteMorph.setDirection
+ * 
+ * Implements block logic that turns to an absolute direction
+ */
+SpriteMorph.prototype.setDirection = function (num) {
+    this.setHeading(num);
 };
 
 /*
@@ -860,20 +987,24 @@ SpriteMorph.prototype.drawOval = function (radiusX, radiusY)
     //so we must scale the real coordinates down to it.
     context.scale(1 / stage.scale, 1 / stage.scale);
     context.translate(-stage.left(), -stage.top());
+    context.translate(x, y);
+	context.rotate(this.heading * Math.PI / 180);
     var rxS = radiusX * stage.scale, ryS = radiusY * stage.scale;
     
     var stringy = "rgba("+Math.round(fillColor.r)+","+Math.round(fillColor.g)+","+Math.round(fillColor.b)+","+fillColor.a+")";
     context.fillStyle = stringy;
-    pathEllipse(context, x - rxS, y - ryS, 2 * rxS, 2 * ryS);
+    pathEllipse(context, -rxS, -ryS, 2 * rxS, 2 * ryS);
     context.fill();
     
     //Restore transform
     context.restore();
     
-    var minX = x - rxS,
-        maxX = x + rxS,
-        minY = y - ryS,
-        maxY = y + ryS;
+	var circleRadius = Math.SQRT2 * Math.max(rxS, ryS);
+	
+    var minX = x - circleRadius,
+        maxX = x + circleRadius,
+        minY = y - circleRadius,
+        maxY = y + circleRadius;
     
     //Dirty area
     this.world().broken.push(
@@ -905,21 +1036,25 @@ SpriteMorph.prototype.drawRectangle = function (w, h)
     //so we must scale the real coordinates down to it.
     context.scale(1 / stage.scale, 1 / stage.scale);
     context.translate(-stage.left(), -stage.top());
+    context.translate(x, y);
+	context.rotate(this.heading * Math.PI / 180);
     var wS = w * stage.scale, hS = h * stage.scale;
     
     var stringy = "rgba("+Math.round(fillColor.r)+","+Math.round(fillColor.g)+","+Math.round(fillColor.b)+","+fillColor.a+")";
     context.fillStyle = stringy;
     context.beginPath();
-    context.rect(x - wS, y - hS, 2 * wS, 2 * hS);
+    context.rect(-wS, -hS, 2 * wS, 2 * hS);
     context.fill();
     
     //Restore transform
     context.restore();
     
-    var minX = x - wS,
-        maxX = x + wS,
-        minY = y - hS,
-        maxY = y + hS;
+	var circleRadius = Math.SQRT2 * Math.max(wS, hS);
+	
+    var minX = x - circleRadius,
+        maxX = x + circleRadius,
+        minY = y - circleRadius,
+        maxY = y + circleRadius;
     
     //Dirty area
     this.world().broken.push(
