@@ -2546,16 +2546,16 @@ var dateMap = {
     'hour' : 'getHours',
     'minute' : 'getMinutes',
     'second' : 'getSeconds',
-    'time in milliseconds' : 'getTime' };
+    'time in milliseconds' : 'getTime'
+};
 
 Process.prototype.reportDate = function (datefn) {
-    inputFn = this.inputOption(datefn);
+    var inputFn = this.inputOption(datefn),
+        currDate = new Date(),
+        func = dateMap[inputFn],
+        result = currDate[func]();
 
     if (!dateMap[inputFn]) { return ''; }
-
-    currDate = new Date();
-    func = dateMap[inputFn];
-    result = currDate[func]();
 
     // Show months as 1-12 and days as 1-7
     if (inputFn === 'month' || inputFn === 'day of week') {
@@ -2563,7 +2563,7 @@ Process.prototype.reportDate = function (datefn) {
     }
 
     return result;
-}
+};
 
 // Process code mapping
 
