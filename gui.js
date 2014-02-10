@@ -3923,6 +3923,7 @@ ProjectDialogMorph.prototype.init = function (ide, task) {
 	}
 	else if(this.task === 'demos'){
 		this.labelString = 'Demos List';
+		this.source = 'examples';
 	}
     this.createLabel();
     this.key = 'project' + task;
@@ -4223,7 +4224,6 @@ ProjectDialogMorph.prototype.setSource = function (source) {
         this.projectList = this.getLocalProjectList();
         break;
     }
-
     this.listField.destroy();
     this.listField = new ListMorph(
         this.projectList,
@@ -4276,7 +4276,7 @@ ProjectDialogMorph.prototype.setSource = function (source) {
                 myself.nameField.setContents(item.name || '');
             }
             src = myself.ide.getURL(
-                'https://github.com/GK-12/Snap--Build-Your-Own-Blocks/tree/LoadDemos/examples/' +
+                'examples/' +
                     item.name + '.xml'
             );
 
@@ -4331,24 +4331,33 @@ ProjectDialogMorph.prototype.getLocalProjectList = function () {
 ProjectDialogMorph.prototype.getExamplesProjectList = function () {
     var dir,
         projects = [];
-	
-    dir = this.ide.getURL("https://github.com/GK-12/Snap--Build-Your-Own-Blocks/tree/LoadDemos/examples/");
-	window.alert(dir);
-	dir.split('\n').forEach(
+    dir = this.ide.getURL("examples/");
+	dir.split('HREF').forEach(
         function (line) {
-            var startIdx = line.search(new RegExp('href=".*xml"')),
+            var startIdx = line.search(new RegExp('.xml')),
                 endIdx,
                 name,
                 dta;
             if (startIdx > 0) {
-                endIdx = line.search(new RegExp('.xml'));
-                name = line.substring(startIdx + 6, endIdx);
-                dta = {
-                    name: name,
-                    thumb: null,
-                    notes: null
-                };
-                projects.push(dta);
+				var mybool = new Boolean();
+				mybool = false;
+				while(mybool === false || startIdx === 0){
+					if(line.charAt(startIdx) === '/'){
+						mybool = true;
+					}else{
+						startIdx--;
+					}
+				}
+				if(startIdx > 0){
+					endIdx = line.search(new RegExp('.xml'));
+					name = line.substring(startIdx+1, endIdx);
+					dta = {
+						name: name,
+						thumb: null,
+						notes: null
+					};
+					projects.push(dta);
+				}
             }
         }
     );
@@ -4442,7 +4451,7 @@ ProjectDialogMorph.prototype.openProject = function () {
         this.openCloudProject(proj);
     } else if (this.source === 'examples') {
         src = this.ide.getURL(
-            'http://snap.berkeley.edu/snapsource/Examples/' +
+            'examples/' +
                 proj.name + '.xml'
         );
         this.ide.openProjectString(src);
