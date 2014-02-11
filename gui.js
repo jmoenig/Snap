@@ -68,7 +68,7 @@ sb, CommentMorph, CommandBlockMorph, BlockLabelPlaceHolderMorph, Audio*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2014-February-04';
+modules.gui = '2014-February-11';
 
 // Declarations
 
@@ -2061,6 +2061,20 @@ IDE_Morph.prototype.settingsMenu = function () {
         'Zoom blocks...',
         'userSetBlocksScale'
     );
+    if (shiftClicked) {
+        menu.addItem(
+            'Stage width...',
+            'userSetStageWidth',
+            null,
+            new Color(100, 0, 0)
+        );
+        menu.addItem(
+            'Stage height...',
+            'userSetStageHeight',
+            null,
+            new Color(100, 0, 0)
+        );
+    }
     menu.addLine();
     addPreference(
         'Blurred shadows',
@@ -2695,6 +2709,7 @@ IDE_Morph.prototype.newProject = function () {
     this.globalVariables = new VariableFrame();
     this.currentSprite = new SpriteMorph(this.globalVariables);
     this.sprites = new List([this.currentSprite]);
+    StageMorph.prototype.dimensions = new Point(480, 360);
     StageMorph.prototype.hiddenPrimitives = {};
     StageMorph.prototype.codeMappings = {};
     StageMorph.prototype.codeHeaders = {};
@@ -3462,6 +3477,89 @@ IDE_Morph.prototype.setBlocksScale = function (num) {
     this.fixLayout();
     this.openProjectString(projectData);
     this.saveSetting('zoom', num);
+};
+
+// IDE_Morph stage size manipulation
+
+IDE_Morph.prototype.userSetStageWidth = function () {
+    new DialogBoxMorph(
+        this,
+        this.setStageWidth,
+        this
+    ).prompt(
+        "Stage width",
+        StageMorph.prototype.dimensions.x.toString(),
+        this.world(),
+        null, // pic
+        null, // choices
+        null, // read only
+        true // numeric
+    );
+};
+
+IDE_Morph.prototype.userSetStageHeight = function () {
+    new DialogBoxMorph(
+        this,
+        this.setStageHeight,
+        this
+    ).prompt(
+        "Stage height",
+        StageMorph.prototype.dimensions.y.toString(),
+        this.world(),
+        null, // pic
+        null, // choices
+        null, // read only
+        true // numeric
+    );
+};
+
+IDE_Morph.prototype.setStageWidth = function (num) {
+    this.setStageExtent(new Point(
+        Math.max(num, 240),
+        (StageMorph.prototype.dimensions.y)
+    ));
+};
+
+IDE_Morph.prototype.setStageHeight = function (num) {
+    this.setStageExtent(new Point(
+        (StageMorph.prototype.dimensions.x),
+        Math.max(num, 180)
+    ));
+};
+
+IDE_Morph.prototype.setStageExtent = function (aPoint) {
+    var myself = this;
+
+    function zoom() {
+        myself.step = function () {
+            var delta = aPoint.subtract(
+                StageMorph.prototype.dimensions
+            ).divideBy(2);
+            if (delta.abs().lt(new Point(5, 5))) {
+                StageMorph.prototype.dimensions = aPoint;
+                delete myself.step;
+            } else {
+                StageMorph.prototype.dimensions =
+                    StageMorph.prototype.dimensions.add(delta);
+            }
+            myself.stage.setExtent(StageMorph.prototype.dimensions);
+            myself.stage.clearPenTrails();
+            myself.fixLayout();
+        };
+    }
+
+    this.stageRatio = 1;
+    this.isSmallStage = false;
+    this.controlBar.stageSizeButton.refresh();
+    this.setExtent(this.world().extent());
+    if (this.isAnimating) {
+        zoom();
+    } else {
+        StageMorph.prototype.dimensions = aPoint;
+        this.stage.setExtent(StageMorph.prototype.dimensions);
+        this.stage.clearPenTrails();
+        this.fixLayout();
+    }
 };
 
 // IDE_Morph cloud interface

@@ -51,7 +51,7 @@
     July 12 - pipette tool, code formatting adjustments (Jens)
     September 16 - flood fill freeze fix (Kartik)
     Jan 08 - mouse leave dragging fix (Kartik)
-    Feb 04 - dynamically adjust to stage dimensions (Jens)
+    Feb 11 - dynamically adjust to stage dimensions (Jens)
 
  */
 
@@ -65,7 +65,7 @@
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.paint = '2014-February-05';
+modules.paint = '2014-February-11';
 
 // Declarations
 
