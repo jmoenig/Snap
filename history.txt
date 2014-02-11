@@ -2089,3 +2089,7 @@ ______
 140205
 ------
 * Objects, Paint: One-stop-shopping for stage dimensions (changing the stage dimensions in line 3720 of objects.js takes care of everything)
+
+140211
+------
+* GUI: Set stage dimensions arbitrarily (new entries in the settings menu when holding shift)
