@@ -61,7 +61,7 @@ SyntaxElementMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2014-February-04';
+modules.store = '2014-February-11';
 
 
 // XML_Serializer ///////////////////////////////////////////////////////
@@ -377,6 +377,15 @@ SnapSerializer.prototype.loadProjectModel = function (xmlNode) {
         project.pentrails.src = model.pentrails.contents;
     }
     project.stage.setTempo(model.stage.attributes.tempo);
+    StageMorph.prototype.dimensions = new Point(480, 360);
+    if (model.stage.attributes.width) {
+        StageMorph.prototype.dimensions.x =
+            +model.stage.attributes.width;
+    }
+    if (model.stage.attributes.height) {
+        StageMorph.prototype.dimensions.y =
+            +model.stage.attributes.height;
+    }
     project.stage.setExtent(StageMorph.prototype.dimensions);
     SpriteMorph.prototype.useFlatLineEnds =
         model.stage.attributes.lines === 'flat';
@@ -1341,7 +1350,8 @@ StageMorph.prototype.toXML = function (serializer) {
         '<project name="@" app="@" version="@">' +
             '<notes>$</notes>' +
             '<thumbnail>$</thumbnail>' +
-            '<stage name="@" costume="@" tempo="@" threadsafe="@" ' +
+            '<stage name="@" width="@" height="@" ' +
+            'costume="@" tempo="@" threadsafe="@" ' +
             'lines="@" ' +
             'codify="@" ' +
             'scheduled="@" ~>' +
@@ -1364,6 +1374,8 @@ StageMorph.prototype.toXML = function (serializer) {
         (ide && ide.projectNotes) ? ide.projectNotes : '',
         thumbdata,
         this.name,
+        StageMorph.prototype.dimensions.x,
+        StageMorph.prototype.dimensions.y,
         this.getCostumeIdx(),
         this.getTempo(),
         this.isThreadSafe,
