@@ -83,7 +83,7 @@ ArgLabelMorph, localize, XML_Element, hex_sha512*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.threads = '2014-Feb-03';
+modules.threads = '2014-Feb-10';
 
 var ThreadManager;
 var Process;
@@ -111,7 +111,7 @@ function snapEquals(a, b) {
         y = b;
     }
 
-    // handle text comparision text-insensitive.
+    // handle text comparision case-insensitive.
     if (isString(x) && isString(y)) {
         return x.toLowerCase() === y.toLowerCase();
     }
@@ -2534,6 +2534,35 @@ Process.prototype.reportTimer = function () {
         }
     }
     return 0;
+};
+
+// Process Dates and times in Snap
+// Map block options to built-in functions
+var dateMap = {
+    'year' : 'getFullYear',
+    'month' : 'getMonth',
+    'date': 'getDate',
+    'day of week' : 'getDay',
+    'hour' : 'getHours',
+    'minute' : 'getMinutes',
+    'second' : 'getSeconds',
+    'time in milliseconds' : 'getTime'
+};
+
+Process.prototype.reportDate = function (datefn) {
+    var inputFn = this.inputOption(datefn),
+        currDate = new Date(),
+        func = dateMap[inputFn],
+        result = currDate[func]();
+
+    if (!dateMap[inputFn]) { return ''; }
+
+    // Show months as 1-12 and days as 1-7
+    if (inputFn === 'month' || inputFn === 'day of week') {
+        result += 1;
+    }
+
+    return result;
 };
 
 // Process code mapping
