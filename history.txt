@@ -2101,3 +2101,4 @@ ______
 * GUI, Store: constrain minimum stage size to 480 x 180
 * GUI: Fixed #322, #324
 * Widgets: new “promptVector” dialog box feature
+* GUI: Use new vector prompter for stage dimensions

@@ -2067,20 +2067,10 @@ IDE_Morph.prototype.settingsMenu = function () {
         'Zoom blocks...',
         'userSetBlocksScale'
     );
-    if (shiftClicked) {
-        menu.addItem(
-            'Stage width...',
-            'userSetStageWidth',
-            null,
-            new Color(100, 0, 0)
-        );
-        menu.addItem(
-            'Stage height...',
-            'userSetStageHeight',
-            null,
-            new Color(100, 0, 0)
-        );
-    }
+    menu.addItem(
+        'Stage size...',
+        'userSetStageSize'
+    );
     menu.addLine();
     addPreference(
         'Blurred shadows',
@@ -3487,50 +3477,21 @@ IDE_Morph.prototype.setBlocksScale = function (num) {
 
 // IDE_Morph stage size manipulation
 
-IDE_Morph.prototype.userSetStageWidth = function () {
+IDE_Morph.prototype.userSetStageSize = function () {
     new DialogBoxMorph(
         this,
-        this.setStageWidth,
+        this.setStageExtent,
         this
-    ).prompt(
-        "Stage width",
-        StageMorph.prototype.dimensions.x.toString(),
+    ).promptVector(
+        "Stage size",
+        StageMorph.prototype.dimensions,
+        new Point(480, 360),
+        'Stage width',
+        'Stage height',
         this.world(),
         null, // pic
-        null, // choices
-        null, // read only
-        true // numeric
+        null // msg
     );
-};
-
-IDE_Morph.prototype.userSetStageHeight = function () {
-    new DialogBoxMorph(
-        this,
-        this.setStageHeight,
-        this
-    ).prompt(
-        "Stage height",
-        StageMorph.prototype.dimensions.y.toString(),
-        this.world(),
-        null, // pic
-        null, // choices
-        null, // read only
-        true // numeric
-    );
-};
-
-IDE_Morph.prototype.setStageWidth = function (num) {
-    this.setStageExtent(new Point(
-        num,
-        (StageMorph.prototype.dimensions.y)
-    ));
-};
-
-IDE_Morph.prototype.setStageHeight = function (num) {
-    this.setStageExtent(new Point(
-        (StageMorph.prototype.dimensions.x),
-        num
-    ));
 };
 
 IDE_Morph.prototype.setStageExtent = function (aPoint) {
