@@ -2102,3 +2102,4 @@ ______
 * GUI: Fixed #322, #324
 * Widgets: new “promptVector” dialog box feature
 * GUI: Use new vector prompter for stage dimensions
+* German translation update
