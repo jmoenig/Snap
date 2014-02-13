@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org', // optional
     'last_changed':
-        '2014-02-04', // this, too, will appear in the Translators tab
+        '2014-02-13', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -685,6 +685,16 @@ SnapTranslator.dict.de = {
         'Sprache...',
     'Zoom blocks...':
         'Bl\u00f6cke vergr\u00f6\u00dfern...',
+    'Stage size...':
+        'B\u00fchnengr\u00f6\u00dfe...',
+    'Stage size':
+        'B\u00fchnengr\u00f6\u00dfe',
+    'Stage width':
+        'B\u00fchnenbreite',
+    'Stage height':
+        'B\u00fchnenh\u00f6he',
+    'Default':
+        'Normal',
     'Blurred shadows':
         'Weiche Schatten',
     'uncheck to use solid drop\nshadows and highlights':
