@@ -74,7 +74,7 @@ HTMLCanvasElement, fontHeight, SymbolMorph, localize, SpeechBubbleMorph,
 ArrowMorph, MenuMorph, isString, isNil, SliderMorph, MorphicPreferences,
 ScrollFrameMorph*/
 
-modules.widgets = '2014-January-09';
+modules.widgets = '2014-February-13';
 
 var PushButtonMorph;
 var ToggleButtonMorph;
@@ -1758,6 +1758,113 @@ DialogBoxMorph.prototype.promptCode = function (
     this.fixLayout();
     this.popUp(world);
     text.edit();
+};
+
+DialogBoxMorph.prototype.promptVector = function (
+    title,
+    point,
+    deflt,
+    xLabel,
+    yLabel,
+    world,
+    pic,
+    msg
+) {
+    var vec = new AlignmentMorph('row', 4),
+        xInp = new InputFieldMorph(point.x.toString(), true),
+        yInp = new InputFieldMorph(point.y.toString(), true),
+        xCol = new AlignmentMorph('column', 2),
+        yCol = new AlignmentMorph('column', 2),
+        inp = new AlignmentMorph('column', 2),
+        bdy = new AlignmentMorph('column', this.padding);
+
+    function labelText(string) {
+        return new TextMorph(
+            localize(string),
+            10,
+            null, // style
+            false, // bold
+            null, // italic
+            null, // alignment
+            null, // width
+            null, // font name
+            MorphicPreferences.isFlat ? null : new Point(1, 1),
+            new Color(255, 255, 255) // shadowColor
+        );
+    }
+
+    inp.alignment = 'left';
+    inp.setColor(this.color);
+    bdy.setColor(this.color);
+    xCol.alignment = 'left';
+    xCol.setColor(this.color);
+    yCol.alignment = 'left';
+    yCol.setColor(this.color);
+
+    xCol.add(labelText(xLabel));
+    xCol.add(xInp);
+    yCol.add(labelText(yLabel));
+    yCol.add(yInp);
+    vec.add(xCol);
+    vec.add(yCol);
+    inp.add(vec);
+
+    if (msg) {
+        bdy.add(labelText(msg));
+    }
+
+    bdy.add(inp);
+
+    vec.fixLayout();
+    xCol.fixLayout();
+    yCol.fixLayout();
+    inp.fixLayout();
+    bdy.fixLayout();
+
+    this.labelString = title;
+    this.createLabel();
+    if (pic) {this.setPicture(pic); }
+
+    this.addBody(bdy);
+
+    vec.drawNew();
+    xCol.drawNew();
+    xInp.drawNew();
+    yCol.drawNew();
+    yInp.drawNew();
+    bdy.fixLayout();
+
+    this.addButton('ok', 'OK');
+
+    if (deflt instanceof Point) {
+        this.addButton(
+            function () {
+                xInp.setContents(deflt.x.toString());
+                yInp.setContents(deflt.y.toString());
+            },
+            'Default'
+
+        );
+    }
+
+    this.addButton('cancel', 'Cancel');
+    this.fixLayout();
+    this.drawNew();
+    this.fixLayout();
+
+    this.edit = function () {
+        xInp.edit();
+    };
+
+    this.getInput = function () {
+        return new Point(xInp.getValue(), yInp.getValue());
+    };
+
+    if (!this.key) {
+        this.key = 'vector' + title;
+    }
+
+    this.popUp(world);
 };
 
 DialogBoxMorph.prototype.promptCredentials = function (
