@@ -2099,3 +2099,4 @@ ______
 140213
 ------
 * GUI, Store: constrain minimum stage size to 480 x 180
+* GUI: Fixed #322, #324
