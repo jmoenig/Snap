@@ -68,7 +68,7 @@ sb, CommentMorph, CommandBlockMorph, BlockLabelPlaceHolderMorph, Audio*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2014-February-11';
+modules.gui = '2014-February-13';
 
 // Declarations
 
@@ -3515,7 +3515,7 @@ IDE_Morph.prototype.userSetStageHeight = function () {
 
 IDE_Morph.prototype.setStageWidth = function (num) {
     this.setStageExtent(new Point(
-        Math.max(num, 240),
+        num,
         (StageMorph.prototype.dimensions.y)
     ));
 };
@@ -3523,20 +3523,21 @@ IDE_Morph.prototype.setStageWidth = function (num) {
 IDE_Morph.prototype.setStageHeight = function (num) {
     this.setStageExtent(new Point(
         (StageMorph.prototype.dimensions.x),
-        Math.max(num, 180)
+        num
     ));
 };
 
 IDE_Morph.prototype.setStageExtent = function (aPoint) {
-    var myself = this;
+    var myself = this,
+        ext = aPoint.max(new Point(480, 180));
 
     function zoom() {
         myself.step = function () {
-            var delta = aPoint.subtract(
+            var delta = ext.subtract(
                 StageMorph.prototype.dimensions
             ).divideBy(2);
             if (delta.abs().lt(new Point(5, 5))) {
-                StageMorph.prototype.dimensions = aPoint;
+                StageMorph.prototype.dimensions = ext;
                 delete myself.step;
             } else {
                 StageMorph.prototype.dimensions =
@@ -3555,7 +3556,7 @@ IDE_Morph.prototype.setStageExtent = function (aPoint) {
     if (this.isAnimating) {
         zoom();
     } else {
-        StageMorph.prototype.dimensions = aPoint;
+        StageMorph.prototype.dimensions = ext;
         this.stage.setExtent(StageMorph.prototype.dimensions);
         this.stage.clearPenTrails();
         this.fixLayout();
