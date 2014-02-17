@@ -1,0 +1,12 @@
+[
+	{
+		"name": "animal-game", 
+		"description": "Snap demo", 
+		"project_url": "/examples/animal-game.xml" 
+	},
+	{
+		"name": "copter",
+		"description": "Snap demo",
+		"project_url": "/examples/copter.xml"
+	}
+]

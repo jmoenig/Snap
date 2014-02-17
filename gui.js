@@ -4331,6 +4331,13 @@ ProjectDialogMorph.prototype.getLocalProjectList = function () {
 ProjectDialogMorph.prototype.getExamplesProjectList = function () {
     var dir,
         projects = [];
+	var request = new XMLHttpRequest();
+	request.open("GET", "demo.xml", false);
+	request.send();
+	var JSON_object = JSON.parse(request.responseText);
+	for (var i = 0; i < JSON_object.length; i++){
+	  window.alert(JSON_object[i]["name"]);
+	}
     dir = this.ide.getURL("examples/");
 	dir.split('HREF').forEach(
         function (line) {
