@@ -4336,8 +4336,9 @@ ProjectDialogMorph.prototype.getExamplesProjectList = function () {
 	request.send();
 	var JSON_object = JSON.parse(request.responseText);
 	for (var i = 0; i < JSON_object.length; i++){
-	  window.alert(JSON_object[i]["name"]);
+	  //window.alert(JSON_object[i]["name"]);
 	}
+	//For each JSON_object name, add to projects array -- this requires that the demos be in /examples
     dir = this.ide.getURL("examples/");
 	dir.split('HREF').forEach(
         function (line) {
