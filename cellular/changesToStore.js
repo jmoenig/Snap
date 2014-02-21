@@ -227,3 +227,137 @@ SpriteMorph.prototype.toXML = function (serializer) {
         this.parentSprite ? undefined : serializer.store(this.scripts)
     );
 };
+
+StageMorph.prototype.toXML = function (serializer) {
+	
+	var cellAttributesString = "<cellsX>" + this.cellsX + '</cellsX><cellsY>' + this.cellsY + '</cellsY>';
+	
+	for (var i=0; i<Cell.attributes.length; i++)
+	{
+		var ii = Cell.attributes[i];
+		cellAttributesString += '<attribute>';
+		cellAttributesString += '<name>';
+		cellAttributesString += XML_Serializer.prototype.format(String(ii));
+		cellAttributesString += '</name>';
+		cellAttributesString += '<drawFrom>';
+		cellAttributesString += XML_Serializer.prototype.format(String(Cell.attributeDrawRange[ii][0]));
+		cellAttributesString += '</drawFrom>';
+		cellAttributesString += '<drawTo>';
+		cellAttributesString += XML_Serializer.prototype.format(String(Cell.attributeDrawRange[ii][1]));
+		cellAttributesString += '</drawTo>';
+		cellAttributesString += '<colour>';
+		cellAttributesString += serializer.store(Cell.attributeColours[ii]);
+		cellAttributesString += '</colour>';
+		cellAttributesString += '</attribute>';
+	}
+	
+	var cellArray = new Float64Array(this.cellsX * this.cellsY * Cell.attributes.length);
+	var cai = 0;
+	for (var i=0; i<this.cells.length; i++)
+	{
+		for (var j=0; j<this.cells[i].length; j++)
+		{
+			for (var k=0; k<Cell.attributes.length; k++)
+			{
+				cellArray[cai] = this.cells[i][j].getAttribute(Cell.attributes[k]);
+				cai++;
+			}
+		}
+	}
+	
+	var asciiView = new Uint8Array(cellArray);
+	var cellString64 = UTF8ArrToStr(asciiView);
+
+    var thumbnail = this.thumbnail(SnapSerializer.prototype.thumbnailSize),
+        thumbdata,
+        ide = this.parentThatIsA(IDE_Morph);
+
+    // catch cross-origin tainting exception when using SVG costumes
+    try {
+        thumbdata = thumbnail.toDataURL('image/png');
+    } catch (error) {
+        thumbdata = null;
+    }
+
+    function code(key) {
+        var str = '';
+        Object.keys(StageMorph.prototype[key]).forEach(
+            function (selector) {
+                str += (
+                    '<' + selector + '>' +
+                        XML_Element.prototype.escape(
+                            StageMorph.prototype[key][selector]
+                        ) +
+                        '</' + selector + '>'
+                );
+            }
+        );
+        return str;
+    }
+	
+    this.removeAllClones();
+    return serializer.format(
+        '<project name="@" app="@" version="@">' +
+            '<notes>$</notes>' +
+            '<thumbnail>$</thumbnail>' +
+            '<stage name="@" costume="@" tempo="@" threadsafe="@" ' +
+            'codify="@" ' +
+            'scheduled="@" ~>' +
+            '<pentrails>$</pentrails>' +
+            '<costumes>%</costumes>' +
+            '<sounds>%</sounds>' +
+            '<variables>%</variables>' +
+            '<blocks>%</blocks>' +
+            '<scripts>%</scripts><sprites>%</sprites>' +
+            '</stage>' +
+            '<hidden>$</hidden>' +
+            '<headers>%</headers>' +
+            '<code>%</code>' +
+            '<blocks>%</blocks>' +
+            '<variables>%</variables>' +
+			'<cellAttributes>%</cellAttributes>' +
+			'<cells>%</cells>' +
+            '</project>',
+        (ide && ide.projectName) ? ide.projectName : 'Untitled',
+        serializer.app,
+        serializer.version,
+        (ide && ide.projectNotes) ? ide.projectNotes : '',
+        thumbdata,
+        this.name,
+        this.getCostumeIdx(),
+        this.getTempo(),
+        this.isThreadSafe,
+        this.enableCodeMapping,
+        StageMorph.prototype.frameRate !== 0,
+        this.trailsCanvas.toDataURL('image/png'),
+        serializer.store(this.costumes, this.name + '_cst'),
+        serializer.store(this.sounds, this.name + '_snd'),
+        serializer.store(this.variables),
+        serializer.store(this.customBlocks),
+        serializer.store(this.scripts),
+        serializer.store(this.children),
+        Object.keys(StageMorph.prototype.hiddenPrimitives).reduce(
+                function (a, b) {return a + ' ' + b; },
+                ''
+            ),
+        code('codeHeaders'),
+        code('codeMappings'),
+        serializer.store(this.globalBlocks),
+        (ide && ide.globalVariables) ?
+                    serializer.store(ide.globalVariables) : '',
+		cellAttributesString,
+		cellString64
+    );
+};
+
+SnapSerializer.prototype.uberLoadProjectModel = SnapSerializer.prototype.loadProjectModel;
+SnapSerializer.prototype.loadProjectModel = function (xmlNode) {
+	var retn = this.uberLoadProjectModel(xmlNode);
+    retn.cells = xmlNode.project.childNamed('cells');
+	retn.cellAttributes = xmlNode.project.childNamed('cells');
+	return retn;
+};
+
+SnapSerializer.prototype.openProject = function (project, ide) {
+	Cell.attributes = project.cellAttributes;
+}

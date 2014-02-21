@@ -1352,7 +1352,7 @@ StageMorph.prototype.dirtyEntireStage = function()
     world.broken.push(this.bounds.spread());
 }
 
-StageMorph.prototype.visibleAttributes = ['testAttribute'];
+StageMorph.prototype.visibleAttributes = [];
 
 StageMorph.prototype.toggleCellAttributeVisibility = function(name)
 {
