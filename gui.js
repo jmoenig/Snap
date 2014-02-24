@@ -4336,39 +4336,15 @@ ProjectDialogMorph.prototype.getExamplesProjectList = function () {
 	request.send();
 	var JSON_object = JSON.parse(request.responseText);
 	for (var i = 0; i < JSON_object.length; i++){
-	  //window.alert(JSON_object[i]["name"]);
+		dir = this.ide.getURL(JSON_object[i]["project_url"]);
+		//For each JSON_object name, add to projects array -- this requires that the demos be in /examples
+		dta = {
+			name: JSON_object[i]["name"],
+			thumb: null,
+			notes: null
+		};
+		projects.push(dta);
 	}
-	//For each JSON_object name, add to projects array -- this requires that the demos be in /examples
-    dir = this.ide.getURL("examples/");
-	dir.split('HREF').forEach(
-        function (line) {
-            var startIdx = line.search(new RegExp('.xml')),
-                endIdx,
-                name,
-                dta;
-            if (startIdx > 0) {
-				var mybool = new Boolean();
-				mybool = false;
-				while(mybool === false || startIdx === 0){
-					if(line.charAt(startIdx) === '/'){
-						mybool = true;
-					}else{
-						startIdx--;
-					}
-				}
-				if(startIdx > 0){
-					endIdx = line.search(new RegExp('.xml'));
-					name = line.substring(startIdx+1, endIdx);
-					dta = {
-						name: name,
-						thumb: null,
-						notes: null
-					};
-					projects.push(dta);
-				}
-            }
-        }
-    );
     projects.sort(function (x, y) {
         return x.name < y.name ? -1 : 1;
     });
