@@ -8,5 +8,10 @@
 		"name": "copter",
 		"description": "Snap demo",
 		"project_url": "/examples/copter.xml"
+	},
+	{
+		"name": "lotus",
+		"description": "Saya Woolfalk demo",
+		"project_url": "/examples/lotus.xml"
 	}
 ]

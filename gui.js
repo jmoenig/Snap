@@ -4275,10 +4275,15 @@ ProjectDialogMorph.prototype.setSource = function (source) {
             if (myself.nameField) {
                 myself.nameField.setContents(item.name || '');
             }
-            src = myself.ide.getURL(
-                'examples/' +
-                    item.name + '.xml'
-            );
+			var request = new XMLHttpRequest();
+			request.open("GET", config.urls.demos_url, false);
+			request.send();
+			var JSON_object = JSON.parse(request.responseText);
+			for (var i = 0; i < JSON_object.length; i++){
+				if(JSON_object[i]["name"] === item.name){
+					src = myself.ide.getURL(JSON_object[i]["project_url"]);
+				}
+			}
 
             xml = myself.ide.serializer.parse(src);
             myself.notesText.text = xml.childNamed('notes').contents
@@ -4332,12 +4337,11 @@ ProjectDialogMorph.prototype.getExamplesProjectList = function () {
     var dir,
         projects = [];
 	var request = new XMLHttpRequest();
-	request.open("GET", "demo.xml", false);
+	request.open("GET", config.urls.demos_url, false);
 	request.send();
 	var JSON_object = JSON.parse(request.responseText);
 	for (var i = 0; i < JSON_object.length; i++){
-		dir = this.ide.getURL(JSON_object[i]["project_url"]);
-		//For each JSON_object name, add to projects array -- this requires that the demos be in /examples
+		//window.alert(JSON_object[i]["name"]);
 		dta = {
 			name: JSON_object[i]["name"],
 			thumb: null,
@@ -4434,10 +4438,15 @@ ProjectDialogMorph.prototype.openProject = function () {
     if (this.source === 'cloud') {
         this.openCloudProject(proj);
     } else if (this.source === 'examples') {
-        src = this.ide.getURL(
-            'examples/' +
-                proj.name + '.xml'
-        );
+		var request = new XMLHttpRequest();
+		request.open("GET", config.urls.demos_url, false);
+		request.send();
+		var JSON_object = JSON.parse(request.responseText);
+		for (var i = 0; i < JSON_object.length; i++){
+				if(JSON_object[i]["name"] === proj.name){
+					src = this.ide.getURL(JSON_object[i]["project_url"]);
+				}
+		}
         this.ide.openProjectString(src);
         this.destroy();
     } else { // 'local'
