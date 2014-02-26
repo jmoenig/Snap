@@ -809,6 +809,11 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'sensing',
             spec: 'current %dates'
         },
+        doScreenshot: {
+            type: 'command',
+            category: 'sensing',
+            spec: 'save a screenshot to'
+        },
 
         // Operators
         reifyScript: {
@@ -1746,6 +1751,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('reportIsFastTracking'));
         blocks.push(block('doSetFastTracking'));
         blocks.push('-');
+        blocks.push(block('doScreenshot'));
         blocks.push(block('reportDate'));
 
     // for debugging: ///////////////
@@ -3696,6 +3702,12 @@ SpriteMorph.prototype.reactToDropOf = function (morph, hand) {
     morph.slideBackTo(hand.grabOrigin);
 };
 
+SpriteMorph.prototype.doScreenshot = function() {
+    console.log('Testing screenshot');
+    var parent = this.parentThatIsA(StageMorph);
+    var image = parent.fullImageClassic();
+};
+
 // SpriteHighlightMorph /////////////////////////////////////////////////
 
 // SpriteHighlightMorph inherits from Morph:
@@ -3775,7 +3787,7 @@ StageMorph.prototype.init = function (globals) {
     this.blocksCache = {}; // not to be serialized (!)
     this.paletteCache = {}; // not to be serialized (!)
     this.lastAnswer = null; // last user input, do not persist
-    this.activeSounds = []; // do not persist
+    this.active = []; // do not persist
 
     this.trailsCanvas = null;
     this.isThreadSafe = false;
@@ -4694,6 +4706,7 @@ StageMorph.prototype.userMenu = function () {
     menu.addItem(
         "pic...",
         function () {
+            //console.log(myself.fullImageClassic().toDataURL());
             window.open(myself.fullImageClassic().toDataURL());
         },
         'open a new window\nwith a picture of the stage'
