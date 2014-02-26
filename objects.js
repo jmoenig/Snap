@@ -3703,12 +3703,11 @@ SpriteMorph.prototype.reactToDropOf = function (morph, hand) {
 };
 
 SpriteMorph.prototype.doScreenshot = function() {
-    console.log('Testing screenshot');
-    var parent = this.parentThatIsA(StageMorph);
-    var image = parent.fullImageClassic();
+    var stage = this.parentThatIsA(StageMorph);
+    var canvas = stage.fullImageClassic();
     var ide = this.parentThatIsA(IDE_Morph);
-    var costume = new Costume(image);
-    ide.currentSprite.addCostume(image);
+    var costume = new Costume(canvas, "");
+    ide.currentSprite.addCostume(costume);
 };
 
 // SpriteHighlightMorph /////////////////////////////////////////////////
