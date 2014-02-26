@@ -3706,6 +3706,9 @@ SpriteMorph.prototype.doScreenshot = function() {
     console.log('Testing screenshot');
     var parent = this.parentThatIsA(StageMorph);
     var image = parent.fullImageClassic();
+    var ide = this.parentThatIsA(IDE_Morph);
+    var costume = new Costume(image);
+    ide.currentSprite.addCostume(image);
 };
 
 // SpriteHighlightMorph /////////////////////////////////////////////////
