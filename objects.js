@@ -812,7 +812,8 @@ SpriteMorph.prototype.initBlocks = function () {
         doScreenshot: {
             type: 'command',
             category: 'sensing',
-            spec: 'save a screenshot to'
+            spec: 'save screenshot as costume named %s',
+            defaults: ['screenshot']
         },
 
         // Operators
@@ -3702,11 +3703,11 @@ SpriteMorph.prototype.reactToDropOf = function (morph, hand) {
     morph.slideBackTo(hand.grabOrigin);
 };
 
-SpriteMorph.prototype.doScreenshot = function() {
+SpriteMorph.prototype.doScreenshot = function(data) {
     var stage = this.parentThatIsA(StageMorph);
     var canvas = stage.fullImageClassic();
     var ide = this.parentThatIsA(IDE_Morph);
-    var costume = new Costume(canvas, "");
+    var costume = new Costume(canvas, data);
     ide.currentSprite.addCostume(costume);
 };
 
