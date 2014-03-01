@@ -1,5 +1,3 @@
-// random change
-
 /*
 
     objects.js
