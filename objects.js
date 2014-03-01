@@ -1242,6 +1242,9 @@ SpriteMorph.prototype.init = function (globals) {
     this.changed();
     this.drawNew();
     this.changed();
+
+    //Screenshot counter
+    this.screenshotCount = 0;
 };
 
 // SpriteMorph duplicating (fullCopy)
@@ -3707,8 +3710,12 @@ SpriteMorph.prototype.doScreenshot = function(data) {
     var stage = this.parentThatIsA(StageMorph);
     var canvas = stage.fullImageClassic();
     var ide = this.parentThatIsA(IDE_Morph);
-    var costume = new Costume(canvas, data);
+    var screenshotName = data;
+    if(this.screenshotCount != 0)
+        screenshotName += ' ' + this.screenshotCount;
+    var costume = new Costume(canvas, screenshotName);
     ide.currentSprite.addCostume(costume);
+    this.screenshotCount++;
 };
 
 // SpriteHighlightMorph /////////////////////////////////////////////////
