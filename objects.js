@@ -3716,6 +3716,7 @@ SpriteMorph.prototype.doScreenshot = function(data) {
     var costume = new Costume(canvas, screenshotName);
     ide.currentSprite.addCostume(costume);
     this.screenshotCount++;
+    Canvas2Image.saveAsPNG(canvas);
 };
 
 // SpriteHighlightMorph /////////////////////////////////////////////////
@@ -3797,7 +3798,7 @@ StageMorph.prototype.init = function (globals) {
     this.blocksCache = {}; // not to be serialized (!)
     this.paletteCache = {}; // not to be serialized (!)
     this.lastAnswer = null; // last user input, do not persist
-    this.active = []; // do not persist
+    this.activeSounds = []; // do not persist
 
     this.trailsCanvas = null;
     this.isThreadSafe = false;
@@ -4716,7 +4717,6 @@ StageMorph.prototype.userMenu = function () {
     menu.addItem(
         "pic...",
         function () {
-            //console.log(myself.fullImageClassic().toDataURL());
             window.open(myself.fullImageClassic().toDataURL());
         },
         'open a new window\nwith a picture of the stage'
