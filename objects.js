@@ -3716,7 +3716,6 @@ SpriteMorph.prototype.doScreenshot = function(data) {
     var costume = new Costume(canvas, screenshotName);
     ide.currentSprite.addCostume(costume);
     this.screenshotCount++;
-    Canvas2Image.saveAsPNG(canvas);
 };
 
 // SpriteHighlightMorph /////////////////////////////////////////////////
