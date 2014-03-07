@@ -1243,8 +1243,7 @@ SpriteMorph.prototype.init = function (globals) {
     this.drawNew();
     this.changed();
 
-    //Screenshot counter
-    this.screenshotCount = 0;
+    this.screenshotNames = {}; // Keeps track of stage image names
 };
 
 // SpriteMorph duplicating (fullCopy)
@@ -3706,16 +3705,19 @@ SpriteMorph.prototype.reactToDropOf = function (morph, hand) {
     morph.slideBackTo(hand.grabOrigin);
 };
 
-SpriteMorph.prototype.doScreenshot = function(data) {
-    var stage = this.parentThatIsA(StageMorph);
-    var canvas = stage.fullImageClassic();
-    var ide = this.parentThatIsA(IDE_Morph);
-    var screenshotName = data;
-    if(this.screenshotCount != 0)
-        screenshotName += ' ' + this.screenshotCount;
-    var costume = new Costume(canvas, screenshotName);
+SpriteMorph.prototype.doScreenshot = function (data) {
+    if (this.screenshotNames.hasOwnProperty(data)) {
+        this.screenshotNames[data] += 1;
+        data += '(' + this.screenshotNames[data] + ')';
+    } else {
+        this.screenshotNames[data] = 0;
+    }
+    var stage = this.parentThatIsA(StageMorph),
+        canvas = stage.fullImageClassic(),
+        ide = this.parentThatIsA(IDE_Morph),
+        screenshotName = data,
+        costume = new Costume(canvas, screenshotName);
     ide.currentSprite.addCostume(costume);
-    this.screenshotCount++;
 };
 
 // SpriteHighlightMorph /////////////////////////////////////////////////
