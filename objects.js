@@ -812,7 +812,7 @@ SpriteMorph.prototype.initBlocks = function () {
         doScreenshot: {
             type: 'command',
             category: 'sensing',
-            spec: 'save screenshot as costume named %s',
+            spec: 'save stage image as costume named %s',
             defaults: ['screenshot']
         },
 
