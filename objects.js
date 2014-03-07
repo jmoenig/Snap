@@ -3714,9 +3714,7 @@ SpriteMorph.prototype.doScreenshot = function (data) {
     }
     var stage = this.parentThatIsA(StageMorph),
         canvas = stage.fullImageClassic(),
-        ide = this.parentThatIsA(IDE_Morph),
-        screenshotName = data,
-        costume = new Costume(canvas, screenshotName);
+        costume = new Costume(canvas, data);
     this.addCostume(costume);
 };
 
