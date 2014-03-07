@@ -3717,7 +3717,7 @@ SpriteMorph.prototype.doScreenshot = function (data) {
         ide = this.parentThatIsA(IDE_Morph),
         screenshotName = data,
         costume = new Costume(canvas, screenshotName);
-    ide.currentSprite.addCostume(costume);
+    this.addCostume(costume);
 };
 
 // SpriteHighlightMorph /////////////////////////////////////////////////
