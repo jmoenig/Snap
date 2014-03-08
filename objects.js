@@ -3807,6 +3807,8 @@ StageMorph.prototype.init = function (globals) {
     this.acceptsDrops = false;
     this.setColor(new Color(255, 255, 255));
     this.fps = this.frameRate;
+
+    this.screenshotNames = {}; // Keeps track of stage image names
 };
 
 // StageMorph scaling
@@ -4479,6 +4481,8 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('doSetFastTracking'));
         blocks.push('-');
         blocks.push(block('reportDate'));
+        blocks.push('-');
+        blocks.push(block('doScreenshot'))
 
     // for debugging: ///////////////
 
@@ -4816,6 +4820,9 @@ StageMorph.prototype.addVariable = SpriteMorph.prototype.addVariable;
 StageMorph.prototype.deleteVariable = SpriteMorph.prototype.deleteVariable;
 
 // StageMorph block rendering
+
+StageMorph.prototype.doScreenshot
+  = SpriteMorph.prototype.doScreenshot;
 
 StageMorph.prototype.blockForSelector
     = SpriteMorph.prototype.blockForSelector;
