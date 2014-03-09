@@ -371,7 +371,7 @@ PaintEditorMorph.prototype.populatePropertiesMenu = function () {
     c.add(pc.colorpicker);
     //c.add(pc.primaryColorButton);
     c.add(pc.primaryColorViewer);
-    c.add(new TextMorph("Brush size"));
+    c.add(new TextMorph(localize("Brush size")));
     c.add(alpen);
     c.add(pc.constrain);
 };
