@@ -2579,7 +2579,7 @@ InputSlotDialogMorph.prototype.symbolMenu = function () {
         myself = this;
     SymbolMorph.prototype.names.forEach(function (symbol) {
         symbols.push([
-            [new SymbolMorph(symbol, myself.fontSize, symbolColor), symbol],
+            [new SymbolMorph(symbol, myself.fontSize, symbolColor), localize(symbol)],
             '$' + symbol
         ]);
     });
