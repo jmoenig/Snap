@@ -812,8 +812,8 @@ SpriteMorph.prototype.initBlocks = function () {
         doScreenshot: {
             type: 'command',
             category: 'sensing',
-            spec: 'save stage image as costume named %s',
-            defaults: ['screenshot']
+            spec: 'save %imgsource as costume named %s',
+            defaults: ['pen trails', 'screenshot']
         },
 
         // Operators
@@ -1755,6 +1755,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('doSetFastTracking'));
         blocks.push('-');
         blocks.push(block('doScreenshot'));
+        blocks.push('-');
         blocks.push(block('reportDate'));
 
     // for debugging: ///////////////
@@ -3705,16 +3706,23 @@ SpriteMorph.prototype.reactToDropOf = function (morph, hand) {
     morph.slideBackTo(hand.grabOrigin);
 };
 
-SpriteMorph.prototype.doScreenshot = function (data) {
-    if (this.screenshotNames.hasOwnProperty(data)) {
+SpriteMorph.prototype.doScreenshot = function (imgSource, data) {
+    var canvas,
+        stage,
+        costume;
+    if (this.screenshotNames.hasOwnProperty(data)) { // Screenshot naming
         this.screenshotNames[data] += 1;
         data += '(' + this.screenshotNames[data] + ')';
     } else {
         this.screenshotNames[data] = 0;
     }
-    var stage = this.parentThatIsA(StageMorph),
-        canvas = stage.fullImageClassic(),
-        costume = new Costume(canvas, data);
+    if (imgSource[0] === "pen trails") {
+        canvas = this.trailsCanvas;
+    } else if (imgSource[0] === "stage image") {
+        stage = this.parentThatIsA(StageMorph);
+        canvas = stage.fullImageClassic();
+    }
+    costume = new Costume(canvas, data);
     this.addCostume(costume);
 };
 
@@ -4482,7 +4490,7 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push('-');
         blocks.push(block('reportDate'));
         blocks.push('-');
-        blocks.push(block('doScreenshot'))
+        blocks.push(block('doScreenshot'));
 
     // for debugging: ///////////////
 
@@ -4822,7 +4830,7 @@ StageMorph.prototype.deleteVariable = SpriteMorph.prototype.deleteVariable;
 // StageMorph block rendering
 
 StageMorph.prototype.doScreenshot
-  = SpriteMorph.prototype.doScreenshot;
+    = SpriteMorph.prototype.doScreenshot;
 
 StageMorph.prototype.blockForSelector
     = SpriteMorph.prototype.blockForSelector;
