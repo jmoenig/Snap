@@ -3717,11 +3717,11 @@ SpriteMorph.prototype.doScreenshot = function (imgSource, data) {
         this.screenshotNames[data] = 0;
     }
     if (imgSource[0] === "pen trails") {
-        canvas = stage.penTrails();
+        canvas = stage.trailsCanvas;
     } else if (imgSource[0] === "stage image") {
         canvas = stage.fullImageClassic();
     }
-    costume = new Costume(canvas, data);
+    costume = new Costume(canvas, data).copy();
     this.addCostume(costume);
 };
 
