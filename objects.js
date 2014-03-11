@@ -3718,10 +3718,11 @@ SpriteMorph.prototype.doScreenshot = function (imgSource, data) {
     }
     if (imgSource[0] === "pen trails") {
         canvas = stage.trailsCanvas;
+        costume = new Costume(canvas, data).copy(); // Copy is required to prevent mutation
     } else if (imgSource[0] === "stage image") {
         canvas = stage.fullImageClassic();
+        costume = new Costume(canvas, data);
     }
-    costume = new Costume(canvas, data).copy();
     this.addCostume(costume);
 };
 
@@ -4734,7 +4735,7 @@ StageMorph.prototype.userMenu = function () {
     if (shiftClicked) {
         menu.addLine();
         menu.addItem(
-            " trails into new costume...",
+            "turn pen trails into new costume...",
             function () {
                 var costume = new Costume(
                     myself.trailsCanvas,
