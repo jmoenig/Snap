@@ -813,7 +813,7 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'command',
             category: 'sensing',
             spec: 'save %imgsource as costume named %s',
-            defaults: ['pen trails', 'screenshot']
+            defaults: [['pen trails'], 'screenshot']
         },
 
         // Operators
