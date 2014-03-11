@@ -3708,7 +3708,7 @@ SpriteMorph.prototype.reactToDropOf = function (morph, hand) {
 
 SpriteMorph.prototype.doScreenshot = function (imgSource, data) {
     var canvas,
-        stage,
+        stage = this.parentThatIsA(StageMorph),
         costume;
     if (this.screenshotNames.hasOwnProperty(data)) { // Screenshot naming
         this.screenshotNames[data] += 1;
@@ -3717,9 +3717,8 @@ SpriteMorph.prototype.doScreenshot = function (imgSource, data) {
         this.screenshotNames[data] = 0;
     }
     if (imgSource[0] === "pen trails") {
-        canvas = this.trailsCanvas;
+        canvas = stage.penTrails();
     } else if (imgSource[0] === "stage image") {
-        stage = this.parentThatIsA(StageMorph);
         canvas = stage.fullImageClassic();
     }
     costume = new Costume(canvas, data);
@@ -4735,7 +4734,7 @@ StageMorph.prototype.userMenu = function () {
     if (shiftClicked) {
         menu.addLine();
         menu.addItem(
-            "turn pen trails into new costume...",
+            " trails into new costume...",
             function () {
                 var costume = new Costume(
                     myself.trailsCanvas,
