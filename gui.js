@@ -297,6 +297,30 @@ IDE_Morph.prototype.openIn = function (world) {
     }
     */
 
+    // Check and see what modules need to be loaded, and load them
+    for(var i=0; i < config.modules.length; i += 1) {
+      var myself = this;
+      var xhr = new XMLHttpRequest();
+      xhr.open("GET", config.modules[i], true);
+      xhr.responseType = "arraybuffer";
+      xhr.onload = function () {
+        console.log("here");
+        if(this.status === 200) {
+          var blob = this.response;
+          var mdl = new ModuleLoader(myself);
+          mdl.open(blob, {base64: false});
+        } else {
+          console.log("Failed to import module, error " + this.status);
+        }
+      };
+      xhr.onerror = function() {
+        console.log("Error!");
+      }
+      xhr.send();
+    }
+
+
+
     function interpretUrlAnchors() {
         var dict;
         if (location.hash.substr(0, 6) === '#open:') {
