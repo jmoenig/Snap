@@ -3706,16 +3706,53 @@ SpriteMorph.prototype.reactToDropOf = function (morph, hand) {
     morph.slideBackTo(hand.grabOrigin);
 };
 
+SpriteMorph.prototype.newCostumeNameCached = function (data) {
+  if (this.screenshotNames.hasOwnProperty(data)) { // Screenshot naming
+      this.screenshotNames[data] += 1;
+      data += '(' + this.screenshotNames[data] + ')';
+  } else {
+      this.screenshotNames[data] = 0;
+  }
+  return data;
+};
+
+SpriteMorph.prototype.newCostumeNameFn = function (name) {
+  var costume,
+      foundSameName = false,
+      foundIndex = false,
+      lastIndex = 0,
+      re;
+  for(i = 1; i <= this.costumes.length(); i++) { // Find a costume with the same name
+    costume = this.costumes.at(i); // Get the ith costume
+    if (costume != undefined) {
+      if (costume.name === name) { // Same name exists
+        foundSameName = true;
+      }
+      if (foundSameName) { // Scan for indexes
+        re = new RegExp(name + '\\(\\d+\\)'); // Reg Exp to check for digits
+        if (re.test(costume.name)) { // The costume name matches
+          lastIndex = parseInt(costume.name.match(/\d+/)[0]);
+          foundIndex = true;
+        }
+      }
+    }
+  }
+  if (foundSameName) {
+    if (foundIndex) {
+      lastIndex += 1;
+      return name + '(' + lastIndex + ')'; // New index with a +1
+    }
+    return name + '(1)'; // No indexing has started so start it off with a (1)
+  }
+  return name;
+};
+
 SpriteMorph.prototype.doScreenshot = function (imgSource, data) {
     var canvas,
         stage = this.parentThatIsA(StageMorph),
         costume;
-    if (this.screenshotNames.hasOwnProperty(data)) { // Screenshot naming
-        this.screenshotNames[data] += 1;
-        data += '(' + this.screenshotNames[data] + ')';
-    } else {
-        this.screenshotNames[data] = 0;
-    }
+    //data = this.newCostumeNameFn(data);
+    data = this.newCostumeNameCached(data); // Uncomment to profile
     if (imgSource[0] === "pen trails") {
         canvas = stage.trailsCanvas;
         costume = new Costume(canvas, data).copy(); // Copy is required to prevent mutation
