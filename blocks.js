@@ -676,7 +676,6 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                 true
             );
             part.setContents(['pen trails']);
-            part.canBeEmpty = false;
             break;
         case '%inputs':
             part = new MultiArgMorph('%s', 'with inputs');
