@@ -3716,22 +3716,21 @@ SpriteMorph.prototype.newCostumeNameCached = function (data) {
   return data;
 };
 
+var re = /\((\d+)\)$/;
 SpriteMorph.prototype.newCostumeNameFn = function (name) {
-  var costume,
-      foundSameName = false,
+  var foundSameName = false,
       foundIndex = false,
-      lastIndex = 0,
-      re;
-  for(i = 1; i <= this.costumes.length(); i++) { // Find a costume with the same name
-    costume = this.costumes.at(i); // Get the ith costume
-    if (costume != undefined) {
-      if (costume.name === name) { // Same name exists
+      lastIndex = 0;
+  for (i = 1; i <= this.costumes.length(); i++) {
+    var costume = this.costumes.at(i);
+    if (costume != null) {
+      if (costume.name === name) {
         foundSameName = true;
       }
-      if (foundSameName) { // Scan for indexes
-        re = new RegExp(name + '\\(\\d+\\)'); // Reg Exp to check for digits
-        if (re.test(costume.name)) { // The costume name matches
-          lastIndex = parseInt(costume.name.match(/\d+/)[0]);
+      if (foundSameName) {
+        var p = re.exec(costume.name);
+        if (p) {
+          lastIndex = Number(p[1]);
           foundIndex = true;
         }
       }
@@ -3751,8 +3750,8 @@ SpriteMorph.prototype.doScreenshot = function (imgSource, data) {
     var canvas,
         stage = this.parentThatIsA(StageMorph),
         costume;
-    //data = this.newCostumeNameFn(data);
-    data = this.newCostumeNameCached(data); // Uncomment to profile
+    data = this.newCostumeNameFn(data);
+    //data = this.newCostumeNameCached(data); // Uncomment to profile
     if (imgSource[0] === "pen trails") {
         canvas = stage.trailsCanvas;
         costume = new Costume(canvas, data).copy(); // Copy is required to prevent mutation
