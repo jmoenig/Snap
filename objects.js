@@ -508,6 +508,11 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'pen',
             spec: 'stamp'
         },
+        doStampText: {
+            type: 'command',
+            category: 'pen',
+            spec: 'stamp text %s font %s size %n'
+        },
 
         // Control
         receiveGo: {
@@ -1659,6 +1664,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('setSize'));
         blocks.push('-');
         blocks.push(block('doStamp'));
+        blocks.push(block('doStampText'));
 
     } else if (cat === 'control') {
 
@@ -2539,9 +2545,54 @@ SpriteMorph.prototype.doStamp = function () {
     }
 };
 
+// Text Stamping
+
+SpriteMorph.prototype.doStampText = function (string, font, size) {
+    // TODO: Use Pen Color for Font Color
+    // TODO: Text should be angled along sprite direction.
+    var stage = this.parent,
+        context = stage.penTrails().getContext('2d'),
+        isWarped = this.isWarped;
+    var ide = stage.parent; // FIXME
+        
+    if (isWarped) {
+        this.endWarp();
+    }
+
+    var text = string,
+        metrics = context.measureText(text),
+        textWidth = metrics.width,
+        textHeight = metrics.height;
+
+    // c = context;
+    
+    context.save();
+    context.font = size + 'pt ' + font;
+    // context.translate(this.center().x, this.center().y);
+    // context.rotate( (Math.PI / 180) * -45);
+    // context.scale(1 / stage.scale, 1 / stage.scale);
+    context.textAlign = "left";
+
+    context.fillText(string, (this.center().x - stage.left()),
+        (this.center().y - stage.top()));
+    
+    console.log("um22mm");
+    context.restore();
+    
+    this.changed();
+    
+    if (isWarped) {
+        this.startWarp();
+    }
+
+    ide.fixLayout();
+};
+
 SpriteMorph.prototype.clear = function () {
     this.parent.clearPenTrails();
 };
+
+
 
 // SpriteMorph pen size
 
