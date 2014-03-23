@@ -2550,6 +2550,8 @@ SpriteMorph.prototype.doStamp = function () {
 SpriteMorph.prototype.doStampText = function (string, font, size) {
     // TODO: Use Pen Color for Font Color
     // TODO: Text should be angled along sprite direction.
+    // TODO: Make a Fonts Menu
+    
     var stage = this.parent,
         context = stage.penTrails().getContext('2d'),
         isWarped = this.isWarped;
@@ -2558,13 +2560,6 @@ SpriteMorph.prototype.doStampText = function (string, font, size) {
     if (isWarped) {
         this.endWarp();
     }
-
-    var text = string,
-        metrics = context.measureText(text),
-        textWidth = metrics.width,
-        textHeight = metrics.height;
-
-    // c = context;
     
     context.save();
     context.font = size + 'pt ' + font;
@@ -2573,10 +2568,9 @@ SpriteMorph.prototype.doStampText = function (string, font, size) {
     // context.scale(1 / stage.scale, 1 / stage.scale);
     context.textAlign = "left";
 
-    context.fillText(string, (this.center().x - stage.left()),
+    context.fillText(text, (this.center().x - stage.left()),
         (this.center().y - stage.top()));
     
-    console.log("um22mm");
     context.restore();
     
     this.changed();
@@ -2591,8 +2585,6 @@ SpriteMorph.prototype.doStampText = function (string, font, size) {
 SpriteMorph.prototype.clear = function () {
     this.parent.clearPenTrails();
 };
-
-
 
 // SpriteMorph pen size
 
