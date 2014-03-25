@@ -61,7 +61,7 @@ SyntaxElementMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2014-January-09';
+modules.store = '2014-February-13';
 
 
 // XML_Serializer ///////////////////////////////////////////////////////
@@ -377,7 +377,18 @@ SnapSerializer.prototype.loadProjectModel = function (xmlNode) {
         project.pentrails.src = model.pentrails.contents;
     }
     project.stage.setTempo(model.stage.attributes.tempo);
+    StageMorph.prototype.dimensions = new Point(480, 360);
+    if (model.stage.attributes.width) {
+        StageMorph.prototype.dimensions.x =
+            Math.max(+model.stage.attributes.width, 480);
+    }
+    if (model.stage.attributes.height) {
+        StageMorph.prototype.dimensions.y =
+            Math.max(+model.stage.attributes.height, 180);
+    }
     project.stage.setExtent(StageMorph.prototype.dimensions);
+    SpriteMorph.prototype.useFlatLineEnds =
+        model.stage.attributes.lines === 'flat';
     project.stage.isThreadSafe =
         model.stage.attributes.threadsafe === 'true';
     StageMorph.prototype.enableCodeMapping =
@@ -1339,7 +1350,9 @@ StageMorph.prototype.toXML = function (serializer) {
         '<project name="@" app="@" version="@">' +
             '<notes>$</notes>' +
             '<thumbnail>$</thumbnail>' +
-            '<stage name="@" costume="@" tempo="@" threadsafe="@" ' +
+            '<stage name="@" width="@" height="@" ' +
+            'costume="@" tempo="@" threadsafe="@" ' +
+            'lines="@" ' +
             'codify="@" ' +
             'scheduled="@" ~>' +
             '<pentrails>$</pentrails>' +
@@ -1361,9 +1374,12 @@ StageMorph.prototype.toXML = function (serializer) {
         (ide && ide.projectNotes) ? ide.projectNotes : '',
         thumbdata,
         this.name,
+        StageMorph.prototype.dimensions.x,
+        StageMorph.prototype.dimensions.y,
         this.getCostumeIdx(),
         this.getTempo(),
         this.isThreadSafe,
+        SpriteMorph.prototype.useFlatLineEnds ? 'flat' : 'round',
         this.enableCodeMapping,
         StageMorph.prototype.frameRate !== 0,
         this.trailsCanvas.toDataURL('image/png'),

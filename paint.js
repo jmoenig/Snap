@@ -51,6 +51,7 @@
     July 12 - pipette tool, code formatting adjustments (Jens)
     September 16 - flood fill freeze fix (Kartik)
     Jan 08 - mouse leave dragging fix (Kartik)
+    Feb 11 - dynamically adjust to stage dimensions (Jens)
 
  */
 
@@ -59,12 +60,12 @@
  CostumeIconMorph, IDE_Morph, Costume, SpriteMorph, nop, Image, WardrobeMorph,
  TurtleIconMorph, localize, MenuMorph, InputFieldMorph, SliderMorph,
  ToggleMorph, ToggleButtonMorph, BoxMorph, modules, radians,
- MorphicPreferences, getDocumentPositionOf
+ MorphicPreferences, getDocumentPositionOf, StageMorph
  */
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.paint = '2014-January-09';
+modules.paint = '2014-February-11';
 
 // Declarations
 
@@ -106,7 +107,7 @@ PaintEditorMorph.prototype.buildContents = function () {
     var myself = this;
 
     this.paper = new PaintCanvasMorph(function () {return myself.shift; });
-    this.paper.setExtent(new Point(480, 360));
+    this.paper.setExtent(StageMorph.prototype.dimensions);
 
     this.addBody(new AlignmentMorph('row', this.padding));
     this.controls = new AlignmentMorph('column', this.padding);
@@ -693,11 +694,11 @@ PaintCanvasMorph.prototype.floodfill = function (sourcepoint) {
     while (stack.length > 0) {
         currentpoint = stack.pop();
         if (checkpoint(read(currentpoint))) {
-            if (currentpoint % 480 > 1) {
+            if (currentpoint % width > 1) {
                 stack.push(currentpoint + 1);
                 stack.push(currentpoint - 1);
             }
-            if (currentpoint > 0 && currentpoint < 360 * 480) {
+            if (currentpoint > 0 && currentpoint < height * width) {
                 stack.push(currentpoint + width);
                 stack.push(currentpoint - width);
             }
@@ -750,7 +751,9 @@ PaintCanvasMorph.prototype.mouseMove = function (pos) {
         q = relpos.y,               // current drag y
         w = (p - x) / 2,            // half the rect width
         h = (q - y) / 2,            // half the rect height
-        i;                          // iterator number
+        i,                          // iterator number
+        width = this.paper.width;
+
     mctx.save();
     function newW() {
         return Math.max(Math.abs(w), Math.abs(h)) * (w / Math.abs(w));
@@ -825,7 +828,7 @@ PaintCanvasMorph.prototype.mouseMove = function (pos) {
                 false
             );
         } else {
-            for (i = 0; i < 480; i += 1) {
+            for (i = 0; i < width; i += 1) {
                 mctx.lineTo(
                     i,
                     (2 * h) * Math.sqrt(2 - Math.pow(
@@ -834,7 +837,7 @@ PaintCanvasMorph.prototype.mouseMove = function (pos) {
                     )) + y
                 );
             }
-            for (i = 480; i > 0; i -= 1) {
+            for (i = width; i > 0; i -= 1) {
                 mctx.lineTo(
                     i,
                     -1 * (2 * h) * Math.sqrt(2 - Math.pow(

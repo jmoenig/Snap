@@ -2070,3 +2070,36 @@ ______
 * Threads: Revert pull request #295 (xhr-headers), breaks existing installations
 * BYOB: Fixed #292 (pulldowns loose lines when exported as library)
 * BYOB: Fixed #291 (readonly custom menus become non-readonly when block is edited)
+
+140203
+------
+* Threads: Fixed #313. “Block of sprite” now works for interpolated (“timed”) blocks and for reporters (i.e. SAY FOR, THINK FOR, GLIDE, ASK etc.)
+* Morphic: replace deprecated DOM “body” references with “documentElement”
+
+140204
+------
+* GUI: Import costumes and backgrounds from the project menu, thanks, Brian, for the changeset!
+* GUI: Import sounds from the project menu, thanks, Brian, for the changeset!
+* Objects, Store, GUI: Flat line end option in the settings menu, saved with the project
+* German translation update
+* Objects: Enable playing sounds and notes on Firefox, thanks, Dean Brettle, for this fix!!
+* Update Portuguese translation, thanks, Manuel!
+* Update French translation, thanks, grego!
+
+140205
+------
+* Objects, Paint: One-stop-shopping for stage dimensions (changing the stage dimensions in line 3720 of objects.js takes care of everything)
+
+140211
+------
+* GUI: Set stage dimensions arbitrarily (new entries in the settings menu when holding shift)
+* Store: Saving & Loading for arbitrary stage dimensions in the project data
+* new Date block, thanks, Michael!!!
+
+140213
+------
+* GUI, Store: constrain minimum stage size to 480 x 180
+* GUI: Fixed #322, #324
+* Widgets: new “promptVector” dialog box feature
+* GUI: Use new vector prompter for stage dimensions
+* German translation update

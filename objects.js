@@ -124,7 +124,7 @@ PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.objects = '2014-January-09';
+modules.objects = '2014-February-11';
 
 var SpriteMorph;
 var StageMorph;
@@ -186,6 +186,7 @@ SpriteMorph.prototype.sliderColor
 SpriteMorph.prototype.isCachingPrimitives = true;
 
 SpriteMorph.prototype.enableNesting = true;
+SpriteMorph.prototype.useFlatLineEnds = false;
 SpriteMorph.prototype.highlightColor = new Color(250, 200, 130);
 SpriteMorph.prototype.highlightBorder = 8;
 
@@ -805,6 +806,11 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'command',
             category: 'sensing',
             spec: 'set turbo mode to %b'
+        },
+        reportDate: {
+            type: 'reporter',
+            category: 'sensing',
+            spec: 'current %dates'
         },
 
         // Operators
@@ -1746,6 +1752,8 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push('-');
         blocks.push(block('reportIsFastTracking'));
         blocks.push(block('doSetFastTracking'));
+        blocks.push('-');
+        blocks.push(block('reportDate'));
 
     // for debugging: ///////////////
 
@@ -2732,8 +2740,13 @@ SpriteMorph.prototype.drawLine = function (start, dest) {
     if (this.isDown) {
         context.lineWidth = this.size;
         context.strokeStyle = this.color.toString();
-        context.lineCap = 'round';
-        context.lineJoin = 'round';
+        if (this.useFlatLineEnds) {
+            context.lineCap = 'butt';
+            context.lineJoin = 'miter';
+        } else {
+            context.lineCap = 'round';
+            context.lineJoin = 'round';
+        }
         context.beginPath();
         context.moveTo(from.x, from.y);
         context.lineTo(to.x, to.y);
@@ -4458,6 +4471,8 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push('-');
         blocks.push(block('reportIsFastTracking'));
         blocks.push(block('doSetFastTracking'));
+        blocks.push('-');
+        blocks.push(block('reportDate'));
 
     // for debugging: ///////////////
 
@@ -5214,7 +5229,7 @@ Costume.prototype.shrinkWrap = function () {
 };
 
 Costume.prototype.boundingBox = function () {
-    // answer the rectangle surrounding my contents' non-transparent pixels 
+    // answer the rectangle surrounding my contents' non-transparent pixels
     var row,
         col,
         pic = this.contents,
@@ -5322,7 +5337,7 @@ Costume.prototype.edit = function (aWorld, anIDE, isnew, oncancel, onsubmit) {
     editor.openIn(
         aWorld,
         isnew ?
-                newCanvas(new Point(480, 360)) :
+                newCanvas(StageMorph.prototype.dimensions) :
                 this.contents,
         isnew ?
                 new Point(240, 180) :
@@ -5670,17 +5685,21 @@ Note.prototype.setupContext = function () {
     if (this.audioContext) { return; }
     var AudioContext = (function () {
         // cross browser some day?
-        return window.AudioContext ||
+        var ctx = window.AudioContext ||
             window.mozAudioContext ||
             window.msAudioContext ||
             window.oAudioContext ||
             window.webkitAudioContext;
+        if (!ctx.prototype.hasOwnProperty('createGain')) {
+            ctx.prototype.createGain = ctx.prototype.createGainNode;
+        }
+        return ctx;
     }());
     if (!AudioContext) {
         throw new Error('Web Audio API is not supported\nin this browser');
     }
     Note.prototype.audioContext = new AudioContext();
-    Note.prototype.gainNode = Note.prototype.audioContext.createGainNode();
+    Note.prototype.gainNode = Note.prototype.audioContext.createGain();
     Note.prototype.gainNode.gain.value = 0.25; // reduce volume by 1/4
 };
 
@@ -5688,17 +5707,23 @@ Note.prototype.setupContext = function () {
 
 Note.prototype.play = function () {
     this.oscillator = this.audioContext.createOscillator();
+    if (!this.oscillator.start) {
+        this.oscillator.start = this.oscillator.noteOn;
+    }
+    if (!this.oscillator.stop) {
+        this.oscillator.stop = this.oscillator.noteOff;
+    }
     this.oscillator.type = 0;
     this.oscillator.frequency.value =
         Math.pow(2, (this.pitch - 69) / 12) * 440;
     this.oscillator.connect(this.gainNode);
     this.gainNode.connect(this.audioContext.destination);
-    this.oscillator.noteOn(0); // deprecated, renamed to start()
+    this.oscillator.start(0);
 };
 
 Note.prototype.stop = function () {
     if (this.oscillator) {
-        this.oscillator.noteOff(0); // deprecated, renamed to stop()
+        this.oscillator.stop(0);
         this.oscillator = null;
     }
 };
@@ -6564,7 +6589,7 @@ StagePrompterMorph.prototype.init = function (question) {
     if (this.label) {this.add(this.label); }
     this.add(this.inputField);
     this.add(this.button);
-    this.setWidth(480 - 20);
+    this.setWidth(StageMorph.prototype.dimensions.x - 20);
     this.fixLayout();
 };
 
