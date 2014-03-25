@@ -5174,11 +5174,18 @@ Costume.prototype.width = function () {
 };
 
 Costume.prototype.height = function () {
-    return this.contents.height;
+	return this.contents.height;
 };
 
 Costume.prototype.bounds = function () {
-    return new Rectangle(0, 0, this.width(), this.height());
+	if(this.contents.height >= 360){
+		alert('Image objects must have a height less than 360 pixels', 'looks', 'alert %mult%s');
+		//this.removeCostume();
+		return new Rectangle(0, 0, 0, 0);
+	}
+	else{
+		return new Rectangle(0, 0, this.width(), this.height());
+	}
 };
 
 // Costume shrink-wrapping

@@ -118,7 +118,7 @@ IDE_Morph.prototype.setDefaultDesign = function () {
     ];
     IDE_Morph.prototype.rotationStyleColors = IDE_Morph.prototype.tabColors;
     IDE_Morph.prototype.appModeColor = new Color();
-    IDE_Morph.prototype.scriptsPaneTexture = 'scriptsPaneTexture.gif';
+    IDE_Morph.prototype.scriptsPaneTexture = config.asset_path + 'scriptsPaneTexture.gif';
     IDE_Morph.prototype.padding = 5;
 
     SpriteIconMorph.prototype.labelColor
@@ -296,6 +296,30 @@ IDE_Morph.prototype.openIn = function (world) {
         this.inform('Snap!', motd);
     }
     */
+
+    // Check and see what modules need to be loaded, and load them
+    for(var i=0; i < config.modules.length; i += 1) {
+      var myself = this;
+      var xhr = new XMLHttpRequest();
+      xhr.open("GET", config.modules[i], true);
+      xhr.responseType = "arraybuffer";
+      xhr.onload = function () {
+        console.log("here");
+        if(this.status === 200) {
+          var blob = this.response;
+          var mdl = new ModuleLoader(myself);
+          mdl.open(blob, {base64: false});
+        } else {
+          console.log("Failed to import module, error " + this.status);
+        }
+      };
+      xhr.onerror = function() {
+        console.log("Error!");
+      }
+      xhr.send();
+    }
+
+
 
     function interpretUrlAnchors() {
         var dict;
