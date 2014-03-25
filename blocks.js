@@ -909,6 +909,18 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             );
             part.setContents(['ghost']);
             break;
+        case '%drc':
+            part = new InputSlotMorph(
+              'width',
+              false,
+              {
+                  width: ['width'],
+                  height: ['height']
+              },
+              true
+            );
+            part.setContents(['width']);
+            break;
         case '%snd':
             part = new InputSlotMorph(
                 null,
@@ -1751,6 +1763,7 @@ SyntaxElementMorph.prototype.endLayout = function () {
     %dst    - chameleon colored rectangular drop-down for distances
     %cst    - chameleon colored rectangular drop-down for costume-names
     %eff    - chameleon colored rectangular drop-down for graphic effects
+    %drc    - chameleon colored rectangular drop-down for width/height selection
     %snd    - chameleon colored rectangular drop-down for sound names
     %key    - chameleon colored rectangular drop-down for keyboard keys
     %msg    - chameleon colored rectangular drop-down for messages
