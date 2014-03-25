@@ -428,7 +428,7 @@ IDE_Morph.prototype.createLogo = function () {
     }
 
     this.logo = new Morph();
-    this.logo.texture = 'snap_logo_sm.png';
+    this.logo.texture = config.asset_path + 'snap_logo_sm.png';
     this.logo.drawNew = function () {
         this.image = newCanvas(this.extent());
         var context = this.image.getContext('2d'),
