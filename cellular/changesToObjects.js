@@ -1697,6 +1697,7 @@ SpriteMorph.prototype.createCellularClone = function()
     clone.customBlocks = this.customBlocks;
     clone.costumes = this.costumes;
 	clone.sounds = this.sounds;
+	clone.isDraggable = true;
 	
 	return clone;
 }
@@ -1797,6 +1798,13 @@ SpriteMorph.prototype.removeClone = function () {
 	this.parentSprite.cloneDestroyed();
 	this.destroy();
 };
+
+SpriteMorph.prototype.uberInit = SpriteMorph.prototype.init;
+SpriteMorph.prototype.init = function(globals)
+{
+	this.uberInit(globals);
+	this.isDraggable = false;
+}
 
 Process.prototype.uberDoBroadcast = Process.prototype.doBroadcast;
 Process.prototype.doBroadcast = function (message) {
