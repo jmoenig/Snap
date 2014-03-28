@@ -69,23 +69,38 @@ Process.prototype.asObject = function (object, commandBlock) {
 			this.pushContext();
 		}
 	}
-	/*
-    var args = this.context.inputs,
-        isLambda = this.context.isLambda,
-        isImplicitLambda = this.context.isImplicitLambda,
-        isCustomBlock = this.context.isCustomBlock,
-        upvars = this.context.upvars;
-
-    this.pushContext('doYield');
-    if (object instanceof SpriteMorph) {
-        if (args[1]) {
-            this.pushContext(args[1].blockSequence(), this.context);
-			this.context.receiver = object;
-            this.context.isLambda = isLambda;
-            this.context.isImplicitLambda = isImplicitLambda;
-            this.context.isCustomBlock = isCustomBlock;
-            this.context.upvars = new UpvarReference(upvars);
-        }
-    }
-    this.pushContext();*/
 };
+
+Process.prototype.nearestObject = function (object, x, y, predicate) {
+	//This function is run many times
+	
+	if (!this.context.nearestObjectState)
+	{
+		//This is the first call
+		this.context.nearestObjectState = 1;
+		
+		//This will get the value of the predicate and put it in this.inputs[4]
+		if (predicate instanceof Context) {
+			predicate.outerContext =  predicate.parentContext = this.context;
+			predicate.receiver = this.context ? this.context.receiver : this.homeContext.receiver;
+			
+			//Manipulate the predicate "upvars" here.
+			
+			this.context = predicate;
+			this.pushContext();
+		}
+		
+		//this.inputs[4] will be calculated once we return...
+	}
+	else
+	{
+		//This call is not the first call
+		//We asked for the value of the predicate in the last call: this.inputs[4] is that! Remove it and use it here somehow
+		
+		//Continue calculations using this.context.nearestObjectState...
+		
+		//Return a result for the block
+		return "Hello";
+	}
+};
+

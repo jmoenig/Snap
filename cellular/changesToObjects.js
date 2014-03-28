@@ -559,9 +559,9 @@ SpriteMorph.prototype.addCellularBlocks = function () {
         spec: 'move %obj to cell x: %n cell y: %n',
     };
     SpriteMorph.prototype.blocks.nearestObject = {
-        type: 'command',
+        type: 'reporter',
         category: 'objects',
-        spec: 'nearest %cln to x: %n y: %n where %b',
+        spec: 'nearest %cln to x: %n y: %n where %predRing',
     };
     SpriteMorph.prototype.blocks.asObject = {
         type: 'command',
