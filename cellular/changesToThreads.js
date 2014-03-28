@@ -59,17 +59,27 @@ Process.prototype.createClone = function (name) {
 };
 
 Process.prototype.asObject = function (object, commandBlock) {
+    var args = this.context.inputs;
+    if (object instanceof SpriteMorph) {
+        if (args[1]) {
+			this.popContext();
+			this.pushContext('doYield');
+			this.context.receiver = object;
+			this.pushContext(args[1].blockSequence(), this.context);
+			this.pushContext();
+		}
+	}
+	/*
     var args = this.context.inputs,
-        outer = this.context.outerContext, // for tail call elimination
         isLambda = this.context.isLambda,
         isImplicitLambda = this.context.isImplicitLambda,
         isCustomBlock = this.context.isCustomBlock,
         upvars = this.context.upvars;
 
-    this.popContext();
+    this.pushContext('doYield');
     if (object instanceof SpriteMorph) {
         if (args[1]) {
-            this.pushContext(args[1].blockSequence(), outer);
+            this.pushContext(args[1].blockSequence(), this.context);
 			this.context.receiver = object;
             this.context.isLambda = isLambda;
             this.context.isImplicitLambda = isImplicitLambda;
@@ -77,5 +87,5 @@ Process.prototype.asObject = function (object, commandBlock) {
             this.context.upvars = new UpvarReference(upvars);
         }
     }
-    this.pushContext();
+    this.pushContext();*/
 };

@@ -1794,6 +1794,9 @@ SpriteMorph.prototype.createClone = function () {
 };
 
 SpriteMorph.prototype.removeClone = function () {
+	if (this.removed)
+		return;
+	this.removed = true;
 	this.parent.threads.stopAllForReceiver(this);
 	this.parentSprite.cloneDestroyed();
 	this.destroy();

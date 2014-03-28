@@ -251,7 +251,7 @@ StageMorph.prototype.toXML = function (serializer) {
 		cellAttributesString += '</attribute>';
 	}
 	
-	var cellArray = new Float64Array(this.cellsX * this.cellsY * Cell.attributes.length);
+	/*var cellArray = new Float64Array(this.cellsX * this.cellsY * Cell.attributes.length);
 	var cai = 0;
 	for (var i=0; i<this.cells.length; i++)
 	{
@@ -266,7 +266,7 @@ StageMorph.prototype.toXML = function (serializer) {
 	}
 	
 	var asciiView = new Uint8Array(cellArray);
-	var cellString64 = UTF8ArrToStr(asciiView);
+	var cellString64 = UTF8ArrToStr(asciiView);*/
 
     var thumbnail = this.thumbnail(SnapSerializer.prototype.thumbnailSize),
         thumbdata,
@@ -316,7 +316,6 @@ StageMorph.prototype.toXML = function (serializer) {
             '<blocks>%</blocks>' +
             '<variables>%</variables>' +
 			'<cellAttributes>%</cellAttributes>' +
-			'<cells>%</cells>' +
             '</project>',
         (ide && ide.projectName) ? ide.projectName : 'Untitled',
         serializer.app,
@@ -345,11 +344,10 @@ StageMorph.prototype.toXML = function (serializer) {
         serializer.store(this.globalBlocks),
         (ide && ide.globalVariables) ?
                     serializer.store(ide.globalVariables) : '',
-		cellAttributesString,
-		cellString64
+		cellAttributesString
     );
 };
-
+/*
 SnapSerializer.prototype.uberLoadProjectModel = SnapSerializer.prototype.loadProjectModel;
 SnapSerializer.prototype.loadProjectModel = function (xmlNode) {
 	var retn = this.uberLoadProjectModel(xmlNode);
@@ -360,4 +358,4 @@ SnapSerializer.prototype.loadProjectModel = function (xmlNode) {
 
 SnapSerializer.prototype.openProject = function (project, ide) {
 	Cell.attributes = project.cellAttributes;
-}
+}*/
