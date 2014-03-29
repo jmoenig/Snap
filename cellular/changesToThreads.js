@@ -71,36 +71,91 @@ Process.prototype.asObject = function (object, commandBlock) {
 	}
 };
 
-Process.prototype.nearestObject = function (object, x, y, predicate) {
+Process.prototype.nearestObject = function (otherObjectName, x, y, predicate) {
+	function eraseInputs(block)
+	{
+		block.inputs = [];
+		if (block.outerInputs)
+			eraseInputs(block.outerInputs);
+	}
+
 	//This function is run many times
+	if (!(predicate instanceof Context)) {
+		throw { name: "NoPredicateError", message: "Please supply a predicate (the last thing) to the nearestObject block!" };
+	}
 	
 	if (!this.context.nearestObjectState)
 	{
 		//This is the first call
-		this.context.nearestObjectState = 1;
 		
-		//This will get the value of the predicate and put it in this.inputs[4]
-		if (predicate instanceof Context) {
-			predicate.outerContext =  predicate.parentContext = this.context;
-			predicate.receiver = this.context ? this.context.receiver : this.homeContext.receiver;
-			
-			//Manipulate the predicate "upvars" here.
-			
-			this.context = predicate;
-			this.pushContext();
+		//Get a list of all objects of the type "otherObjectName"
+		
+		if (!otherObjectName) 
+		{ 
+			return null; 
 		}
+		if (otherObjectName == "myself")
+			otherObjectName = this.parentSprite ? this.parentSprite.name : this.name;
+			
+		var objects = [];
+		this.context.receiver.parentThatIsA(StageMorph).children.forEach(function (x) {
+			if (x instanceof SpriteMorph && x.parentSprite && x.parentSprite.name == otherObjectName)
+			{
+				objects.push(x);
+			}
+		});
+		
+		this.context.nearestObjectState = { 
+			objects: objects,
+			lastObject: null, 
+			minSqDist: -1, 
+			minObject: null 
+		};
+	}
+	
+	var state = this.context.nearestObjectState,
+		objects = state.objects,
+		lastResult = this.context.inputs[4];
+	
+	//Remove last input
+	if (this.context.inputs.length > 4)
+		this.context.inputs.pop();
+	
+	if (lastResult)
+	{
+		//Calculate square distance to object
+		var dx = state.lastObject.xPosition() - x;
+		var dy = state.lastObject.yPosition() - y;
+		var sqDist = dx * dx + dy * dy;
+		
+		//Set minimum if neccessary
+		if (state.minSqDist < 0 || sqDist < state.minSqDist)
+		{
+			state.minSqDist = sqDist;
+			state.minObject = state.lastObject;
+		}
+	}
+	
+	//Pop from the list
+	state.lastObject = objects.pop();
+	
+	if (state.lastObject)
+	{
+		//This will get the value of the predicate and put it in this.inputs[4]
+		eraseInputs(predicate);
+		predicate.outerContext =  predicate.parentContext = this.context;
+		predicate.receiver = state.lastObject;
+		this.context = predicate;
+		this.pushContext();
 		
 		//this.inputs[4] will be calculated once we return...
+		return;
 	}
 	else
 	{
-		//This call is not the first call
-		//We asked for the value of the predicate in the last call: this.inputs[4] is that! Remove it and use it here somehow
-		
-		//Continue calculations using this.context.nearestObjectState...
-		
-		//Return a result for the block
-		return "Hello";
+		//No more objects! Clean up and return minimum.
+		delete this.context.nearestObjectState;
+		return state.minObject;
 	}
 };
 
