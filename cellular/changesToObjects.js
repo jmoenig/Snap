@@ -264,6 +264,19 @@ SpriteMorph.prototype.snapappsHookBlockTemplates = function(blocks, block, cat, 
 		blocks.push(block('asObject'));
 		blocks.push(block('nearestObject'));
 	}
+	else if (cat == 'neighbours')
+	{
+		blocks.push(block("objectInCellDir"));
+		blocks.push(block("objectInCellCell"));
+		blocks.push(block("objectInCellReal"));
+		blocks.push('-');
+		blocks.push(block("allObjectsInCellDir"));
+		blocks.push(block("allObjectsInCellCell"));
+		blocks.push(block("allObjectsInCellReal"));
+		blocks.push('-');
+		blocks.push(block("allObjectsInNbrCells"));
+		blocks.push(block("numFilledNbrCells"));
+	}
     return this.scribbleHookBlockTemplates(blocks, block, cat);
 }
 
@@ -287,9 +300,11 @@ SpriteMorph.prototype.deleteCellAttribute = function(name)
 
 SpriteMorph.prototype.categories.push("cells");
 SpriteMorph.prototype.categories.push("objects");
+SpriteMorph.prototype.categories.push("neighbours");
 
 SpriteMorph.prototype.blockColor.cells = new Color(150, 200, 150);
 SpriteMorph.prototype.blockColor.objects = new Color(150, 150, 200);
+SpriteMorph.prototype.blockColor.neighbours = new Color(200, 150, 150);
 
 SpriteMorph.prototype.uberInitBlocks = SpriteMorph.prototype.initBlocks;
 SpriteMorph.prototype.initBlocks = function () {
@@ -567,6 +582,48 @@ SpriteMorph.prototype.addCellularBlocks = function () {
         type: 'command',
         category: 'objects',
         spec: 'as %obj %c',
+    };
+	
+	//neighbours
+    SpriteMorph.prototype.blocks.objectInCellDir = {
+        type: 'arrow',
+        category: 'neighbours',
+        spec: 'object in cell %celldir',
+    };
+    SpriteMorph.prototype.blocks.objectInCellCell = {
+        type: 'arrow',
+        category: 'neighbours',
+        spec: 'object in cell cellX: %n cellY: %n',
+    };
+    SpriteMorph.prototype.blocks.objectInCellReal = {
+        type: 'arrow',
+        category: 'neighbours',
+        spec: 'object in cell x: %n y: %n',
+    };
+    SpriteMorph.prototype.blocks.allObjectsInCellDir = {
+        type: 'reporter',
+        category: 'neighbours',
+        spec: 'objects in cell %celldir',
+    };
+    SpriteMorph.prototype.blocks.allObjectsInCellCell = {
+        type: 'reporter',
+        category: 'neighbours',
+        spec: 'objects in cell cellX: %n cellY: %n',
+    };
+    SpriteMorph.prototype.blocks.allObjectsInCellReal = {
+        type: 'reporter',
+        category: 'neighbours',
+        spec: 'objects in cell x: %n y: %n',
+    };
+    SpriteMorph.prototype.blocks.allObjectsInNbrCells = {
+        type: 'reporter',
+        category: 'neighbours',
+        spec: 'objects in nbr cells',
+    };
+    SpriteMorph.prototype.blocks.numFilledNbrCells = {
+        type: 'reporter',
+        category: 'neighbours',
+        spec: 'num filled nbr cells',
     };
 }
 
@@ -1067,6 +1124,147 @@ SpriteMorph.prototype.moveToAnyEmptyCell = function()
     }
 }
 
+var cellDirX = 
+{
+	'top left': -1,
+	'above': 0,
+	'top right': 1,
+	'left': -1,
+	'right': 1,
+	'bottom left': -1,
+	'below': 0,
+	'bottom right': 1,
+}
+
+var cellDirY = 
+{
+	'top left': -1,
+	'above': -1,
+	'top right': -1,
+	'left': 0,
+	'right': 0,
+	'bottom left': 1,
+	'below': 1,
+	'bottom right': 1,
+}
+
+SpriteMorph.prototype.objectInCellDir = function(cellDir)
+{
+	if (!cellDir || !cellDir[0])
+		return null;
+    var stage = this.parentThatIsA(StageMorph),
+		cellPos = stage.getCellPositionAt(this.rotationCenter());
+	
+	cellPos.x += cellDirX[cellDir[0]];
+	cellPos.y += cellDirY[cellDir[0]];
+	
+	var cell = stage.getCellAtCellCoords(cellPos);
+	if (!cell)
+		return null;
+	if (cell.spriteMorphs.length == 0)
+		return null;
+	return cell.spriteMorphs[0];
+}
+
+SpriteMorph.prototype.objectInCellCell = function(cx, cy)
+{
+    var stage = this.parentThatIsA(StageMorph);
+	var cell = stage.getCellAtCellCoords(cx, cy);
+	if (!cell)
+		return null;
+	if (cell.spriteMorphs.length == 0)
+		return null;
+	return cell.spriteMorphs[0];
+}
+
+SpriteMorph.prototype.objectInCellReal = function(x, y)
+{
+    var stage = this.parentThatIsA(StageMorph);
+	var cell = stage.getCellAt(stage.normalizeCoordinates(x, y));
+	if (!cell)
+		return null;
+	if (cell.spriteMorphs.length == 0)
+		return null;
+	return cell.spriteMorphs[0];
+}
+
+SpriteMorph.prototype.allObjectsInCellDir = function(cellDir)
+{
+	if (!cellDir || !cellDir[0])
+		return null;
+    var stage = this.parentThatIsA(StageMorph),
+		cellPos = stage.getCellPositionAt(this.rotationCenter());
+	
+	cellPos.x += cellDirX[cellDir[0]];
+	cellPos.y += cellDirY[cellDir[0]];
+	
+	var cell = stage.getCellAtCellCoords(cellPos);
+	if (!cell)
+		return null;
+	return new List(cell.spriteMorphs);
+}
+
+SpriteMorph.prototype.allObjectsInCellCell = function(cx, cy)
+{
+    var stage = this.parentThatIsA(StageMorph);
+	var cell = stage.getCellAtCellCoords(cx, cy);
+	if (!cell)
+		return null;
+	return new List(cell.spriteMorphs);
+}
+
+SpriteMorph.prototype.allObjectsInCellReal = function(x, y)
+{
+    var stage = this.parentThatIsA(StageMorph);
+	var cell = stage.getCellAt(stage.normalizeCoordinates(x, y));
+	if (!cell)
+		return null;
+	return new List(cell.spriteMorphs);
+}
+
+SpriteMorph.prototype.allObjectsInNbrCells = function()
+{
+    var stage = this.parentThatIsA(StageMorph),
+		cellPos = stage.getCellPositionAt(this.rotationCenter()),
+		objects = [];
+	
+	for (var i=-1; i<=1; i++)
+	{
+		for (var j=-1; j<=1; j++)
+		{
+			if (i == 0 && j == 0)
+				continue;
+			var cell = stage.getCellAtCellCoords(cellPos.x + i, cellPos.y + j);
+			if (!cell)
+				continue;
+			objects = objects.concat(cell.spriteMorphs);
+		}
+	}
+	return new List(objects);
+}
+
+SpriteMorph.prototype.numFilledNbrCells = function()
+{
+    var stage = this.parentThatIsA(StageMorph),
+		cellPos = stage.getCellPositionAt(this.rotationCenter()),
+		numFilled = 0;
+	
+	for (var i=-1; i<=1; i++)
+	{
+		for (var j=-1; j<=1; j++)
+		{
+			if (i == 0 && j == 0)
+				continue;
+			var cell = stage.getCellAtCellCoords(cellPos.x + i, cellPos.y + j);
+			if (!cell)
+				continue;
+			if (cell.spriteMorphs.length != 0)
+				numFilled++;
+		}
+	}
+	return numFilled;
+}
+
 /*********************************************************************/
 /***************************** OVERRIDES *****************************/
 /*********************************************************************/
@@ -1451,6 +1649,8 @@ StageMorph.prototype.getCellAtCellCoords = function(pointOrCX, cy)
 	}
 	else
 	{
+		if (!pointOrCX)
+			return null;
 		cx = pointOrCX;
 	}
 	cx = Math.floor(cx);

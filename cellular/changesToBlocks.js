@@ -26,6 +26,26 @@ SyntaxElementMorph.prototype.labelPartSnapapps = function (spec)
 			true
 		);
 	}
+	if (spec == "%celldir") //No typing circle input
+	{
+		var part = new InputSlotMorph(
+                null,
+                false,
+                {
+                    'top left': ['top left'],
+					'above': ['above'],
+					'top right': ['top right'],
+                    'left': ['left'],
+					'right': ['right'],
+                    'bottom left': ['bottom left'],
+					'below': ['below'],
+					'bottom right': ['bottom right'],
+                },
+                true
+            );
+            part.setContents(['above']);
+        return part;
+	}
     return this.labelPartScribble(spec);
 }
 
