@@ -2291,6 +2291,11 @@ SpriteMorph.prototype.doWearPreviousCostume = function () {
 };
 
 SpriteMorph.prototype.doSwitchToCostume = function (id) {
+    if (id instanceof Costume) { // allow first-class costumes
+        this.wearCostume(id);
+        return;
+    }
+
     var num,
         arr = this.costumes.asArray(),
         costume;
