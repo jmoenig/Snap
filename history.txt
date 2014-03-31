@@ -2103,3 +2103,7 @@ ______
 * Widgets: new “promptVector” dialog box feature
 * GUI: Use new vector prompter for stage dimensions
 * German translation update
+
+140331
+------
+* Objects: experimental “wardrobe” and “jukebox” reporters in dev mode
