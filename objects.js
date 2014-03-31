@@ -5058,6 +5058,12 @@ SpriteBubbleMorph.prototype.dataAsMorph = function (data) {
         contents.silentSetWidth(img.width);
         contents.silentSetHeight(img.height);
         contents.image = img;
+    } else if (data instanceof Costume) {
+        img = data.thumbnail(new Point(40, 40));
+        contents = new Morph();
+        contents.silentSetWidth(img.width);
+        contents.silentSetHeight(img.height);
+        contents.image = img;
     } else if (data instanceof HTMLCanvasElement) {
         contents = new Morph();
         contents.silentSetWidth(data.width);
@@ -5896,6 +5902,12 @@ CellMorph.prototype.drawNew = function () {
             this.contentsMorph.image = this.contents;
         } else if (this.contents instanceof Context) {
             img = this.contents.image();
+            this.contentsMorph = new Morph();
+            this.contentsMorph.silentSetWidth(img.width);
+            this.contentsMorph.silentSetHeight(img.height);
+            this.contentsMorph.image = img;
+        } else if (this.contents instanceof Costume) {
+            img = this.contents.thumbnail(new Point(40, 40));
             this.contentsMorph = new Morph();
             this.contentsMorph.silentSetWidth(img.width);
             this.contentsMorph.silentSetHeight(img.height);

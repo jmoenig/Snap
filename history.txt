@@ -2107,3 +2107,4 @@ ______
 140331
 ------
 * Objects: experimental “wardrobe” and “jukebox” reporters in dev mode
+* Blocks, Objects: display costume thumbnails in speech/thought/value bubbles and watcher cells
