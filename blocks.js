@@ -155,7 +155,7 @@ DialogBoxMorph, BlockInputFragmentMorph, PrototypeHatBlockMorph, Costume*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2014-March-31';
+modules.blocks = '2014-April-04';
 
 
 var SyntaxElementMorph;
@@ -4917,7 +4917,8 @@ ScriptsMorph.prototype.userMenu = function () {
                             new BlockEditorMorph(definition, obj).popUp();
                         }
                     },
-                    myself
+                    myself,
+                    ide.currentCategory
                 ).prompt(
                     'Make a block',
                     null,
