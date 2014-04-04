@@ -106,7 +106,7 @@ SymbolMorph, isNil*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2014-January-10';
+modules.byob = '2014-April-4';
 
 // Declarations
 
@@ -1086,13 +1086,18 @@ BlockDialogMorph.uber = DialogBoxMorph.prototype;
 // BlockDialogMorph instance creation:
 
 function BlockDialogMorph(target, action, environment) {
-    this.init(target, action, environment);
+    this.init(target, action, environment, 'other');
+    // Other is a default category when none is supplied
 }
 
-BlockDialogMorph.prototype.init = function (target, action, environment) {
+function BlockDialogMorph(target, action, environment, category) {
+    this.init(target, action, environment, category);
+}
+
+BlockDialogMorph.prototype.init = function (target, action, environment, category) {
     // additional properties:
     this.blockType = 'command';
-    this.category = 'other';
+    this.category = category || 'other';
     this.isGlobal = true;
     this.types = null;
     this.categories = null;
