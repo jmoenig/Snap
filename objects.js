@@ -1601,12 +1601,6 @@ SpriteMorph.prototype.blockTemplates = function (category) {
     button.userMenu = helpMenu;
     button.selector = 'addCustomBlock';
     button.showHelp = BlockMorph.prototype.showHelp;
-    button.labelColor = new Color(255, 255, 255);
-    button.color = SpriteMorph.prototype.blockColor[cat];
-    button.pressColor = new Color(115, 180, 240);
-    button.highlightColor = button.pressColor.lighter(20);
-    button.labelShadowColor = new Color(50, 50, 50);
-    button.labelShadowOffset = new Point(-1, -1);
     blocks.push(button);
     blocks.push('-');
 
