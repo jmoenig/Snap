@@ -124,7 +124,7 @@ PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.objects = '2014-February-11';
+modules.objects = '2014-March-31';
 
 var SpriteMorph;
 var StageMorph;
@@ -389,6 +389,12 @@ SpriteMorph.prototype.initBlocks = function () {
         },
 
         // Looks - Debugging primitives for development mode
+        reportCostumes: {
+            type: 'reporter',
+            category: 'looks',
+            spec: 'wardrobe'
+        },
+
         alert: {
             type: 'command',
             category: 'looks',
@@ -444,6 +450,13 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'reporter',
             category: 'sound',
             spec: 'tempo'
+        },
+
+        // Sound - Debugging primitives for development mode
+        reportSounds: {
+            type: 'reporter',
+            category: 'sound',
+            spec: 'jukebox'
         },
 
         // Pen
@@ -1625,6 +1638,8 @@ SpriteMorph.prototype.blockTemplates = function (category) {
             txt.setColor(this.paletteTextColor);
             blocks.push(txt);
             blocks.push('-');
+            blocks.push(block('reportCostumes'));
+            blocks.push('-');
             blocks.push(block('log'));
             blocks.push(block('alert'));
         }
@@ -1645,6 +1660,20 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('doSetTempo'));
         blocks.push(watcherToggle('getTempo'));
         blocks.push(block('getTempo'));
+
+    // for debugging: ///////////////
+
+        if (this.world().isDevMode) {
+            blocks.push('-');
+            txt = new TextMorph(localize(
+                'development mode \ndebugging primitives:'
+            ));
+            txt.fontSize = 9;
+            txt.setColor(this.paletteTextColor);
+            blocks.push(txt);
+            blocks.push('-');
+            blocks.push(block('reportSounds'));
+        }
 
     } else if (cat === 'pen') {
 
@@ -2268,6 +2297,11 @@ SpriteMorph.prototype.doWearPreviousCostume = function () {
 };
 
 SpriteMorph.prototype.doSwitchToCostume = function (id) {
+    if (id instanceof Costume) { // allow first-class costumes
+        this.wearCostume(id);
+        return;
+    }
+
     var num,
         arr = this.costumes.asArray(),
         costume;
@@ -2298,6 +2332,10 @@ SpriteMorph.prototype.doSwitchToCostume = function (id) {
     this.wearCostume(costume);
 };
 
+SpriteMorph.prototype.reportCostumes = function () {
+    return this.costumes;
+};
+
 // SpriteMorph sound management
 
 SpriteMorph.prototype.addSound = function (audio, name) {
@@ -2321,6 +2359,10 @@ SpriteMorph.prototype.playSound = function (name) {
         }
         return active;
     }
+};
+
+SpriteMorph.prototype.reportSounds = function () {
+    return this.sounds;
 };
 
 // SpriteMorph user menu
@@ -4396,6 +4438,8 @@ StageMorph.prototype.blockTemplates = function (category) {
             txt.setColor(this.paletteTextColor);
             blocks.push(txt);
             blocks.push('-');
+            blocks.push(block('reportCostumes'));
+            blocks.push('-');
             blocks.push(block('log'));
             blocks.push(block('alert'));
         }
@@ -4416,6 +4460,20 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('doSetTempo'));
         blocks.push(watcherToggle('getTempo'));
         blocks.push(block('getTempo'));
+
+    // for debugging: ///////////////
+
+        if (this.world().isDevMode) {
+            blocks.push('-');
+            txt = new TextMorph(localize(
+                'development mode \ndebugging primitives:'
+            ));
+            txt.fontSize = 9;
+            txt.setColor(this.paletteTextColor);
+            blocks.push(txt);
+            blocks.push('-');
+            blocks.push(block('reportSounds'));
+        }
 
     } else if (cat === 'pen') {
 
@@ -4875,6 +4933,9 @@ StageMorph.prototype.doWearPreviousCostume
 StageMorph.prototype.doSwitchToCostume
     = SpriteMorph.prototype.doSwitchToCostume;
 
+StageMorph.prototype.reportCostumes
+    = SpriteMorph.prototype.reportCostumes;
+
 // StageMorph graphic effects
 
 StageMorph.prototype.setEffect
@@ -4915,6 +4976,9 @@ StageMorph.prototype.resumeAllActiveSounds = function () {
         audio.play();
     });
 };
+
+StageMorph.prototype.reportSounds
+    = SpriteMorph.prototype.reportSounds;
 
 // StageMorph non-variable watchers
 
@@ -5038,6 +5102,12 @@ SpriteBubbleMorph.prototype.dataAsMorph = function (data) {
         );
     } else if (typeof data === 'boolean') {
         img = sprite.booleanMorph(data).fullImage();
+        contents = new Morph();
+        contents.silentSetWidth(img.width);
+        contents.silentSetHeight(img.height);
+        contents.image = img;
+    } else if (data instanceof Costume) {
+        img = data.thumbnail(new Point(40, 40));
         contents = new Morph();
         contents.silentSetWidth(img.width);
         contents.silentSetHeight(img.height);
@@ -5880,6 +5950,12 @@ CellMorph.prototype.drawNew = function () {
             this.contentsMorph.image = this.contents;
         } else if (this.contents instanceof Context) {
             img = this.contents.image();
+            this.contentsMorph = new Morph();
+            this.contentsMorph.silentSetWidth(img.width);
+            this.contentsMorph.silentSetHeight(img.height);
+            this.contentsMorph.image = img;
+        } else if (this.contents instanceof Costume) {
+            img = this.contents.thumbnail(new Point(40, 40));
             this.contentsMorph = new Morph();
             this.contentsMorph.silentSetWidth(img.width);
             this.contentsMorph.silentSetHeight(img.height);
