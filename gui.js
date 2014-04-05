@@ -1130,6 +1130,7 @@ IDE_Morph.prototype.createSpriteBar = function () {
 IDE_Morph.prototype.createSpriteEditor = function () {
     // assumes that the logo pane and the stage have already been created
     var scripts = this.currentSprite.scripts,
+        ide = this.parentThatIsA(IDE_Morph),
         myself = this;
 
     if (this.spriteEditor) {
@@ -1156,6 +1157,46 @@ IDE_Morph.prototype.createSpriteEditor = function () {
         this.add(this.spriteEditor);
         this.spriteEditor.scrollX(this.spriteEditor.padding);
         this.spriteEditor.scrollY(this.spriteEditor.padding);
+        
+        // Place the "Make a block" button in the top right corner.
+        var button = new PushButtonMorph(
+            null,
+            function () {
+                var stage = myself.parentThatIsA(StageMorph);
+                new BlockDialogMorph(
+                    null,
+                    function (definition) {
+                        if (definition.spec !== '') {
+                            if (definition.isGlobal) {
+                                stage.globalBlocks.push(definition);
+                            } else {
+                                myself.customBlocks.push(definition);
+                            }
+                            ide.flushPaletteCache();
+                            ide.refreshPalette();
+                            new BlockEditorMorph(definition, myself).popUp();
+                        }
+                    },
+                    myself,
+                    ide.currentCategory
+                ).prompt(
+                    'Make a block',
+                    null,
+                    myself.world()
+                );
+            },
+            'Make a block'
+        );
+        button.userMenu = function() {
+            var menu = new MenuMorph(this);
+            menu.addItem('help...', 'showHelp');
+            return menu;
+        }
+        button.selector = 'addCustomBlock';
+        button.showHelp = BlockMorph.prototype.showHelp;
+        button.setTop(10);
+        button.setRight(this.spriteEditor.right() - 10);
+        this.spriteEditor.add(button);
     } else if (this.currentTab === 'costumes') {
         this.spriteEditor = new WardrobeMorph(
             this.currentSprite,
