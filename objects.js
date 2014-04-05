@@ -2382,7 +2382,7 @@ SpriteMorph.prototype.duplicate = function () {
 };
 
 SpriteMorph.prototype.remove = function () {
-    var ide = this.parentThatIsA(IDE_Morph);
+	var ide = this.parentThatIsA(IDE_Morph);
     if (ide) {
         ide.removeSprite(this);
     }
@@ -5178,14 +5178,16 @@ Costume.prototype.height = function () {
 };
 
 Costume.prototype.bounds = function () {
-	if(this.contents.height >= 360){
-		alert('Image objects must have a height less than 360 pixels', 'looks', 'alert %mult%s');
-		//this.removeCostume();
+	/*if(this.contents.height >= 360){
+		//this.showMessage('Image objects must have a height less than 360 pixels', 1);
+		//alert('Image objects must have a height less than 360 pixels', 'looks', 'alert %mult%s');
+		//var ide = this.contents.parentThatIsA(IDE_Morph);
+		//SpriteMorph.prototype.removeCostume();
 		return new Rectangle(0, 0, 0, 0);
-	}
-	else{
+	}*/
+	//else{
 		return new Rectangle(0, 0, this.width(), this.height());
-	}
+	//}
 };
 
 // Costume shrink-wrapping
