@@ -235,23 +235,22 @@ StageMorph.prototype.toXML = function (serializer) {
 	for (var i=0; i<Cell.attributes.length; i++)
 	{
 		var ii = Cell.attributes[i];
+		
 		cellAttributesString += '<attribute>';
-		cellAttributesString += '<name>';
-		cellAttributesString += XML_Serializer.prototype.format(String(ii));
-		cellAttributesString += '</name>';
-		cellAttributesString += '<drawFrom>';
-		cellAttributesString += XML_Serializer.prototype.format(String(Cell.attributeDrawRange[ii][0]));
-		cellAttributesString += '</drawFrom>';
-		cellAttributesString += '<drawTo>';
-		cellAttributesString += XML_Serializer.prototype.format(String(Cell.attributeDrawRange[ii][1]));
-		cellAttributesString += '</drawTo>';
-		cellAttributesString += '<colour>';
-		cellAttributesString += serializer.store(Cell.attributeColours[ii]);
-		cellAttributesString += '</colour>';
+		var attributeObject = {
+			name: String(ii),
+			drawFrom: String(Cell.attributeDrawRange[ii][0]),
+			drawTo: String(Cell.attributeDrawRange[ii][1]),
+			r: Cell.attributeColours[ii].r,
+			g: Cell.attributeColours[ii].g,
+			b: Cell.attributeColours[ii].b
+		}
+		cellAttributesString += XML_Serializer.prototype.format(JSON.stringify(attributeObject));
 		cellAttributesString += '</attribute>';
 	}
 	
-	/*var cellArray = new Float64Array(this.cellsX * this.cellsY * Cell.attributes.length);
+	var arrayBuffer = new ArrayBuffer(this.cellsX * this.cellsY * Cell.attributes.length * (64 / 8));
+	var cellArray = new Float64Array(arrayBuffer);
 	var cai = 0;
 	for (var i=0; i<this.cells.length; i++)
 	{
@@ -264,9 +263,10 @@ StageMorph.prototype.toXML = function (serializer) {
 			}
 		}
 	}
+	var byteView = new Uint8Array(arrayBuffer, 0);
+	var cellString64 = base64EncArr(byteView);
 	
-	var asciiView = new Uint8Array(cellArray);
-	var cellString64 = UTF8ArrToStr(asciiView);*/
+	var visibleAttributes = XML_Serializer.prototype.format(JSON.stringify(this.visibleAttributes));
 
     var thumbnail = this.thumbnail(SnapSerializer.prototype.thumbnailSize),
         thumbdata,
@@ -308,7 +308,8 @@ StageMorph.prototype.toXML = function (serializer) {
             '<sounds>%</sounds>' +
             '<variables>%</variables>' +
             '<blocks>%</blocks>' +
-            '<scripts>%</scripts><sprites>%</sprites>' +
+            '<scripts>%</scripts>' +
+			'<sprites>%</sprites>' +
             '</stage>' +
             '<hidden>$</hidden>' +
             '<headers>%</headers>' +
@@ -316,6 +317,8 @@ StageMorph.prototype.toXML = function (serializer) {
             '<blocks>%</blocks>' +
             '<variables>%</variables>' +
 			'<cellAttributes>%</cellAttributes>' +
+			'<cellData>%</cellData>' +
+			'<visibleAttributes>%</visibleAttributes>' +
             '</project>',
         (ide && ide.projectName) ? ide.projectName : 'Untitled',
         serializer.app,
@@ -344,18 +347,66 @@ StageMorph.prototype.toXML = function (serializer) {
         serializer.store(this.globalBlocks),
         (ide && ide.globalVariables) ?
                     serializer.store(ide.globalVariables) : '',
-		cellAttributesString
+		cellAttributesString,
+		cellString64,
+		visibleAttributes
     );
 };
-/*
+
 SnapSerializer.prototype.uberLoadProjectModel = SnapSerializer.prototype.loadProjectModel;
 SnapSerializer.prototype.loadProjectModel = function (xmlNode) {
 	var retn = this.uberLoadProjectModel(xmlNode);
-    retn.cells = xmlNode.project.childNamed('cells');
-	retn.cellAttributes = xmlNode.project.childNamed('cells');
+	
+    var cellAttributes = xmlNode.childNamed('cellAttributes');
+	retn.cellAttributes = [];
+	retn.cellAttributeColours = {};
+	retn.cellAttributeDrawRange = {};
+	cellAttributes.childrenNamed('attribute').forEach(function (model) {
+		var attribute = JSON.parse(model.contents);
+		retn.cellAttributes.push(attribute.name);
+		retn.cellAttributeDrawRange[attribute.name] = [attribute.drawFrom, attribute.drawTo];
+		retn.cellAttributeColours[attribute.name] = new Color(attribute.r, attribute.g, attribute.b);
+    });
+	
+	var cellData = xmlNode.childNamed('cellData');
+	var byteView = base64DecToArr(cellData.contents, 8);
+	var cellArray = new Float64Array(byteView.buffer,0);
+	var cai = 0;
+	
+	retn.stage.cellsX = Number(cellAttributes.childNamed('cellsX').contents); 
+	retn.stage.cellsY = Number(cellAttributes.childNamed('cellsY').contents);
+	retn.stage.updateCells();
+	
+	for (var i=0; i<retn.stage.cellsY; i++)
+	{
+		for (var j=0; j<retn.stage.cellsX; j++)
+		{
+			var cell = retn.stage.cells[i][j]
+			if (cell)
+			{
+				for (var k=0; k<retn.cellAttributes.length; k++)
+				{
+					cell.setAttribute(retn.cellAttributes[k], cellArray[cai], false);
+					cai++;
+				}
+			}
+		}
+	}
+	
+	retn.stage.visibleAttributes = JSON.parse(xmlNode.childNamed('visibleAttributes').contents);
+	
 	return retn;
 };
 
+SnapSerializer.prototype.uberOpenProject = SnapSerializer.prototype.openProject;
 SnapSerializer.prototype.openProject = function (project, ide) {
+	var retn = this.uberOpenProject(project, ide);
+	
 	Cell.attributes = project.cellAttributes;
-}*/
+	Cell.attributeColours = project.cellAttributeColours;
+	Cell.attributeDrawRange = project.cellAttributeDrawRange;
+	
+
+	//Cell.attributes = project.cellAttributes;
+	return retn;
+}

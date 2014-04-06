@@ -1888,18 +1888,33 @@ StageMorph.prototype.mouseMove = function(point)
 
 SpriteMorph.prototype.createCellularClone = function()
 {
-	var clone = this.fullCopy();
-	clone.parentSprite = this.parentSprite || this;
-	clone.scripts = this.scripts;
-	clone.name = '';
-	clone.parentSprite.cloneCreated();
+    var c = SpriteMorph.uber.fullCopy.call(this),
+        arr = [],
+        cb;
+
+    c.stopTalking();
+    c.color = this.color.copy();
+    c.blocksCache = {};
+    c.paletteCache = {};
+    c.scripts = this.scripts;
+    c.variables = this.variables.copy();
+    c.variables.owner = c;
+    c.parts = [];
+    c.anchor = null;
+    c.nestingScale = 1;
+    c.rotatesWithAnchor = true;
 	
-    clone.customBlocks = this.customBlocks;
-    clone.costumes = this.costumes;
-	clone.sounds = this.sounds;
-	clone.isDraggable = true;
+	c.parentSprite = this.parentSprite || this;
+	c.name = '';
 	
-	return clone;
+    c.customBlocks = this.customBlocks;
+    c.costumes = this.costumes;
+	c.sounds = this.sounds;
+	c.isDraggable = true;
+	
+	c.parentSprite.cloneCreated();
+	
+	return c;
 }
 SpriteMorph.prototype.cloneCount = 0;
 SpriteMorph.prototype.cloneCreated = function()
