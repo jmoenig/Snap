@@ -1544,7 +1544,10 @@ IDE_Morph.prototype.droppedImage = function (aCanvas, name) {
         );
         return;
     }
-
+	
+	if(costume.contents.height >= 360){
+		this.showMessage("Using an image greater than 360 will cause inaccuracies in the 'translate by width/height' block");
+	}
     this.currentSprite.addCostume(costume);
     this.currentSprite.wearCostume(costume);
     this.spriteBar.tabBar.tabTo('costumes');

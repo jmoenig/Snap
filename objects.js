@@ -5178,16 +5178,7 @@ Costume.prototype.height = function () {
 };
 
 Costume.prototype.bounds = function () {
-	/*if(this.contents.height >= 360){
-		//this.showMessage('Image objects must have a height less than 360 pixels', 1);
-		//alert('Image objects must have a height less than 360 pixels', 'looks', 'alert %mult%s');
-		//var ide = this.contents.parentThatIsA(IDE_Morph);
-		//SpriteMorph.prototype.removeCostume();
-		return new Rectangle(0, 0, 0, 0);
-	}*/
-	//else{
-		return new Rectangle(0, 0, this.width(), this.height());
-	//}
+	return new Rectangle(0, 0, this.width(), this.height());
 };
 
 // Costume shrink-wrapping
@@ -6386,7 +6377,6 @@ WatcherMorph.prototype.userMenu = function () {
                             };
                             frd.readAsText(aFile);
                         }
-
                         document.body.removeChild(inp);
                         ide.filePicker = null;
                         if (inp.files.length > 0) {
