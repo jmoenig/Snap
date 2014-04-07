@@ -227,3 +227,186 @@ SpriteMorph.prototype.toXML = function (serializer) {
         this.parentSprite ? undefined : serializer.store(this.scripts)
     );
 };
+
+StageMorph.prototype.toXML = function (serializer) {
+	
+	var cellAttributesString = "<cellsX>" + this.cellsX + '</cellsX><cellsY>' + this.cellsY + '</cellsY>';
+	
+	for (var i=0; i<Cell.attributes.length; i++)
+	{
+		var ii = Cell.attributes[i];
+		
+		cellAttributesString += '<attribute>';
+		var attributeObject = {
+			name: String(ii),
+			drawFrom: String(Cell.attributeDrawRange[ii][0]),
+			drawTo: String(Cell.attributeDrawRange[ii][1]),
+			r: Cell.attributeColours[ii].r,
+			g: Cell.attributeColours[ii].g,
+			b: Cell.attributeColours[ii].b
+		}
+		cellAttributesString += XML_Serializer.prototype.format(JSON.stringify(attributeObject));
+		cellAttributesString += '</attribute>';
+	}
+	
+	var arrayBuffer = new ArrayBuffer(this.cellsX * this.cellsY * Cell.attributes.length * (64 / 8));
+	var cellArray = new Float64Array(arrayBuffer);
+	var cai = 0;
+	for (var i=0; i<this.cells.length; i++)
+	{
+		for (var j=0; j<this.cells[i].length; j++)
+		{
+			for (var k=0; k<Cell.attributes.length; k++)
+			{
+				cellArray[cai] = this.cells[i][j].getAttribute(Cell.attributes[k]);
+				cai++;
+			}
+		}
+	}
+	var byteView = new Uint8Array(arrayBuffer, 0);
+	var cellString64 = base64EncArr(byteView);
+	
+	var visibleAttributes = XML_Serializer.prototype.format(JSON.stringify(this.visibleAttributes));
+
+    var thumbnail = this.thumbnail(SnapSerializer.prototype.thumbnailSize),
+        thumbdata,
+        ide = this.parentThatIsA(IDE_Morph);
+
+    // catch cross-origin tainting exception when using SVG costumes
+    try {
+        thumbdata = thumbnail.toDataURL('image/png');
+    } catch (error) {
+        thumbdata = null;
+    }
+
+    function code(key) {
+        var str = '';
+        Object.keys(StageMorph.prototype[key]).forEach(
+            function (selector) {
+                str += (
+                    '<' + selector + '>' +
+                        XML_Element.prototype.escape(
+                            StageMorph.prototype[key][selector]
+                        ) +
+                        '</' + selector + '>'
+                );
+            }
+        );
+        return str;
+    }
+	
+    this.removeAllClones();
+    return serializer.format(
+        '<project name="@" app="@" version="@">' +
+            '<notes>$</notes>' +
+            '<thumbnail>$</thumbnail>' +
+            '<stage name="@" costume="@" tempo="@" threadsafe="@" ' +
+            'codify="@" ' +
+            'scheduled="@" ~>' +
+            '<pentrails>$</pentrails>' +
+            '<costumes>%</costumes>' +
+            '<sounds>%</sounds>' +
+            '<variables>%</variables>' +
+            '<blocks>%</blocks>' +
+            '<scripts>%</scripts>' +
+			'<sprites>%</sprites>' +
+            '</stage>' +
+            '<hidden>$</hidden>' +
+            '<headers>%</headers>' +
+            '<code>%</code>' +
+            '<blocks>%</blocks>' +
+            '<variables>%</variables>' +
+			'<cellAttributes>%</cellAttributes>' +
+			'<cellData>%</cellData>' +
+			'<visibleAttributes>%</visibleAttributes>' +
+            '</project>',
+        (ide && ide.projectName) ? ide.projectName : 'Untitled',
+        serializer.app,
+        serializer.version,
+        (ide && ide.projectNotes) ? ide.projectNotes : '',
+        thumbdata,
+        this.name,
+        this.getCostumeIdx(),
+        this.getTempo(),
+        this.isThreadSafe,
+        this.enableCodeMapping,
+        StageMorph.prototype.frameRate !== 0,
+        this.trailsCanvas.toDataURL('image/png'),
+        serializer.store(this.costumes, this.name + '_cst'),
+        serializer.store(this.sounds, this.name + '_snd'),
+        serializer.store(this.variables),
+        serializer.store(this.customBlocks),
+        serializer.store(this.scripts),
+        serializer.store(this.children),
+        Object.keys(StageMorph.prototype.hiddenPrimitives).reduce(
+                function (a, b) {return a + ' ' + b; },
+                ''
+            ),
+        code('codeHeaders'),
+        code('codeMappings'),
+        serializer.store(this.globalBlocks),
+        (ide && ide.globalVariables) ?
+                    serializer.store(ide.globalVariables) : '',
+		cellAttributesString,
+		cellString64,
+		visibleAttributes
+    );
+};
+
+SnapSerializer.prototype.uberLoadProjectModel = SnapSerializer.prototype.loadProjectModel;
+SnapSerializer.prototype.loadProjectModel = function (xmlNode) {
+	var retn = this.uberLoadProjectModel(xmlNode);
+	
+    var cellAttributes = xmlNode.childNamed('cellAttributes');
+	retn.cellAttributes = [];
+	retn.cellAttributeColours = {};
+	retn.cellAttributeDrawRange = {};
+	cellAttributes.childrenNamed('attribute').forEach(function (model) {
+		var attribute = JSON.parse(model.contents);
+		retn.cellAttributes.push(attribute.name);
+		retn.cellAttributeDrawRange[attribute.name] = [attribute.drawFrom, attribute.drawTo];
+		retn.cellAttributeColours[attribute.name] = new Color(attribute.r, attribute.g, attribute.b);
+    });
+	
+	var cellData = xmlNode.childNamed('cellData');
+	var byteView = base64DecToArr(cellData.contents, 8);
+	var cellArray = new Float64Array(byteView.buffer,0);
+	var cai = 0;
+	
+	retn.stage.cellsX = Number(cellAttributes.childNamed('cellsX').contents); 
+	retn.stage.cellsY = Number(cellAttributes.childNamed('cellsY').contents);
+	retn.stage.updateCells();
+	
+	for (var i=0; i<retn.stage.cellsY; i++)
+	{
+		for (var j=0; j<retn.stage.cellsX; j++)
+		{
+			var cell = retn.stage.cells[i][j]
+			if (cell)
+			{
+				for (var k=0; k<retn.cellAttributes.length; k++)
+				{
+					cell.setAttribute(retn.cellAttributes[k], cellArray[cai], false);
+					cai++;
+				}
+			}
+		}
+	}
+	
+	retn.stage.visibleAttributes = JSON.parse(xmlNode.childNamed('visibleAttributes').contents);
+	
+	return retn;
+};
+
+SnapSerializer.prototype.uberOpenProject = SnapSerializer.prototype.openProject;
+SnapSerializer.prototype.openProject = function (project, ide) {
+	var retn = this.uberOpenProject(project, ide);
+	
+	Cell.attributes = project.cellAttributes;
+	Cell.attributeColours = project.cellAttributeColours;
+	Cell.attributeDrawRange = project.cellAttributeDrawRange;
+	
+
+	//Cell.attributes = project.cellAttributes;
+	return retn;
+}

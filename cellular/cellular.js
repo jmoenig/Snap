@@ -41,6 +41,7 @@ Cell.prototype.addSpriteMorph = function(morph)
 Cell.attributes = [];
 Cell.attributeColours = {};
 Cell.attributeDrawRange = {};
+// For visible attributes, see StageMorph.visibleAttributes. In retrospect, I have no idea why I put it there.
 
 Cell.hasAttribute = function (name)
 {

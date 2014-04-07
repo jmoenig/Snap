@@ -41,6 +41,7 @@ function jsEscape(str)
     return ret;
 }
 
+//loadLocalFile From JSZip
 function loadLocalFile(filename, success, error) {
     try {
 
