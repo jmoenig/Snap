@@ -1459,6 +1459,10 @@ IDE_Morph.prototype.fixLayout = function (situation) {
                 this.spriteBar.width(),
                 this.bottom() - this.spriteEditor.top()
             ));
+            // Fix the Layout of the Make a Block Button
+            blockButton = this.spriteEditor.children[3];
+            blockButton.setTop(this.spriteEditor.top() + 10);
+            blockButton.setRight(this.spriteEditor.right() - 10);
         }
 
         // corralBar
