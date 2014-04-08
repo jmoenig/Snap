@@ -739,6 +739,11 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'sensing',
             spec: 'frames'
         },
+		reportIsDevMode: {
+            type: 'predicate',
+            category: 'sensing',
+            spec: 'dev mode?'
+        },
         doAsk: {
             type: 'command',
             category: 'sensing',
@@ -1792,6 +1797,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
             blocks.push(block('colorFiltered'));
             blocks.push(block('reportStackSize'));
             blocks.push(block('reportFrameCount'));
+			blocks.push(block('reportIsDevMode'));
         }
 
     } else if (cat === 'operators') {
@@ -3159,6 +3165,11 @@ SpriteMorph.prototype.reportMouseY = function () {
     }
     return 0;
 };
+
+// If dev mode is chosen
+SpriteMorph.prototype.reportIsDevMode = function () {
+	return this.world().isDevMode;
+}
 
 // SpriteMorph variable watchers (for palette checkbox toggling)
 
@@ -4531,6 +4542,7 @@ StageMorph.prototype.blockTemplates = function (category) {
             blocks.push(block('colorFiltered'));
             blocks.push(block('reportStackSize'));
             blocks.push(block('reportFrameCount'));
+			blocks.push(block('reportIsDevMode'));
         }
 
     /////////////////////////////////
