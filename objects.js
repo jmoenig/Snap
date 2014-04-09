@@ -140,6 +140,7 @@ var StagePrompterMorph;
 var Note;
 var SpriteHighlightMorph;
 
+
 // SpriteMorph /////////////////////////////////////////////////////////
 
 // I am a scriptable object
@@ -464,7 +465,7 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'pen',
             spec: 'pen up'
         },
-        setColor: {
+		setColor: {
             type: 'command',
             category: 'pen',
             spec: 'set pen color to %clr'
@@ -1206,9 +1207,9 @@ SpriteMorph.prototype.init = function (globals) {
     this.variables = new VariableFrame(globals || null, this);
     this.scripts = new ScriptsMorph(this);
     this.customBlocks = [];
-    this.costumes = new List();
+    this.costumes = new List();	
     this.costume = null;
-    this.sounds = new List();
+	this.sounds = new List();
     this.normalExtent = new Point(60, 60); // only for costume-less situation
     this.scale = 1;
     this.rotationStyle = 1; // 1 = full, 2 = left/right, 0 = off
@@ -1309,7 +1310,8 @@ SpriteMorph.prototype.drawNew = function () {
         costumeExtent,
         ctx,
         handle;
-
+		
+	
     if (this.isWarped) {
         this.wantsRedraw = true;
         return;
@@ -1392,6 +1394,8 @@ SpriteMorph.prototype.drawNew = function () {
 
         }
     }
+	this.originalPixels = this.image.getContext('2d').createImageData(this.width(), this.height());
+	this.originalPixels = this.image.getContext('2d').getImageData(0, 0, this.width(), this.height());
     this.version = Date.now();
 };
 
@@ -2208,7 +2212,7 @@ SpriteMorph.prototype.addCostume = function (costume) {
     if (!costume.name) {
         costume.name = 'costume' + (this.costumes.length() + 1);
     }
-    this.costumes.add(costume);
+	this.costumes.add(costume);
 };
 
 SpriteMorph.prototype.wearCostume = function (costume) {
@@ -2450,6 +2454,42 @@ SpriteMorph.prototype.setHue = function (num) {
         this.changed();
     }
     this.gotoXY(x, y);
+	
+	var currentPixels = this.image.getContext('2d').getImageData(0, 0, this.width(), this.height());
+	
+	var h = hsv[0], s = hsv[1], v = hsv[2];
+	var r, g, b, i, f, p, q, t;
+	if (h && s === undefined && v === undefined) {
+		s = h.s, v = h.v, h = h.h;
+	}
+	i = Math.floor(h * 6);
+	f = h * 6 - i;
+	p = v * (1 - s);
+	q = v * (1 - f * s);
+	t = v * (1 - (1 - f) * s);
+	switch (i % 6) {
+		case 0: r = v, g = t, b = p; break;
+		case 1: r = q, g = v, b = p; break;
+		case 2: r = p, g = v, b = t; break;
+		case 3: r = p, g = q, b = v; break;
+		case 4: r = t, g = p, b = v; break;
+		case 5: r = v, g = p, b = q; break;
+	}
+	r = Math.floor(r * 255);
+	g = Math.floor(g * 255);
+	b = Math.floor(b * 255);
+	
+	for(var I = 0, L = this.originalPixels.data.length; I < L; I += 4)
+        {
+            if(currentPixels.data[I + 3] > 0) // If it's not a transparent pixel
+            {
+                currentPixels.data[I] = this.originalPixels.data[I] / 255 * r;
+                currentPixels.data[I + 1] = this.originalPixels.data[I + 1] / 255 * g;
+                currentPixels.data[I + 2] = this.originalPixels.data[I + 2] / 255 * b;
+            }
+        }
+	this.image.getContext('2d').putImageData(currentPixels, 0, 0);
+	this.changed();
 };
 
 SpriteMorph.prototype.changeHue = function (delta) {
@@ -5500,6 +5540,7 @@ CostumeEditorMorph.prototype.init = function (costume) {
     this.margin = new Point(0, 0);
     CostumeEditorMorph.uber.init.call(this);
     this.noticesTransparentClick = true;
+
 };
 
 // CostumeEditorMorph edit ops
