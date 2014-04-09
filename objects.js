@@ -306,6 +306,12 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'looks',
             spec: 'next costume'
         },
+		changeCostumeColor: {
+			type: 'command',
+			category: 'looks',
+			spec: 'set costume color to %n',
+			defaults: [0]
+		},
         getCostumeIdx: {
             type: 'reporter',
             category: 'looks',
@@ -1591,6 +1597,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
 
         blocks.push(block('doSwitchToCostume'));
         blocks.push(block('doWearNextCostume'));
+		blocks.push(block('changeCostumeColor'));
         blocks.push(watcherToggle('getCostumeIdx'));
         blocks.push(block('getCostumeIdx'));
         blocks.push('-');
@@ -2441,21 +2448,13 @@ SpriteMorph.prototype.getHue = function () {
     return this.color.hsv()[0] * 100;
 };
 
-SpriteMorph.prototype.setHue = function (num) {
-    var hsv = this.color.hsv(),
-        x = this.xPosition(),
-        y = this.yPosition();
-
-    hsv[0] = Math.max(Math.min(+num || 0, 100), 0) / 100;
+SpriteMorph.prototype.changeCostumeColor = function(num){
+	var hsv = this.color.hsv();
+	var currentPixels = this.image.getContext('2d').getImageData(0, 0, this.width(), this.height());
+	
+	hsv[0] = Math.max(Math.min(+num || 0, 100), 0) / 100;
     hsv[1] = 1; // we gotta fix this at some time
     this.color.set_hsv.apply(this.color, hsv);
-    if (!this.costume) {
-        this.drawNew();
-        this.changed();
-    }
-    this.gotoXY(x, y);
-	
-	var currentPixels = this.image.getContext('2d').getImageData(0, 0, this.width(), this.height());
 	
 	var h = hsv[0], s = hsv[1], v = hsv[2];
 	var r, g, b, i, f, p, q, t;
@@ -2490,6 +2489,21 @@ SpriteMorph.prototype.setHue = function (num) {
         }
 	this.image.getContext('2d').putImageData(currentPixels, 0, 0);
 	this.changed();
+}
+
+SpriteMorph.prototype.setHue = function (num) {
+    var hsv = this.color.hsv(),
+        x = this.xPosition(),
+        y = this.yPosition();
+
+    hsv[0] = Math.max(Math.min(+num || 0, 100), 0) / 100;
+    hsv[1] = 1; // we gotta fix this at some time
+    this.color.set_hsv.apply(this.color, hsv);
+    if (!this.costume) {
+        this.drawNew();
+        this.changed();
+    }
+    this.gotoXY(x, y);
 };
 
 SpriteMorph.prototype.changeHue = function (delta) {
