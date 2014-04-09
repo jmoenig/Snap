@@ -2524,10 +2524,11 @@ SpriteMorph.prototype.changeBrightness = function (delta) {
 // Text Stamping
 
 SpriteMorph.prototype.doStampText = function (text, font, size) {
-    var stage = this.parent,
+    var stage = this.parent, 
         context = stage.penTrails().getContext('2d'),
-        isWarped = this.isWarped;
-        
+        isWarped = this.isWarped,
+        ide = this.parentThatIsA(IDE_Morph);
+    
     if (isWarped) {
         this.endWarp();
     }
@@ -2547,6 +2548,9 @@ SpriteMorph.prototype.doStampText = function (text, font, size) {
     if (isWarped) {
         this.startWarp();
     }
+    
+    // Refresh layout to guarnatee all text shows
+    ide.fixLayout();
 };
 
 // SpriteMorph layers
