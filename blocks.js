@@ -928,6 +928,19 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             );
             part.setContents(['ghost']);
             break;
+        case '%font':
+            part = new InputSlotMorph(
+                null,
+                false,
+                {
+                    monospace : ['monospace'],
+                    'sans-serif' : ['sans-serif'],
+                    serif : ['serif']
+                },
+                false
+            );
+            part.setContents(['sans-serif']);
+            break;
         case '%snd':
             part = new InputSlotMorph(
                 null,
@@ -1781,6 +1794,8 @@ SyntaxElementMorph.prototype.endLayout = function () {
     %att    - chameleon colored rectangular drop-down for attributes
     %fun    - chameleon colored rectangular drop-down for math functions
     %typ    - chameleon colored rectangular drop-down for data types
+    %dates  - chameleon colored rectangular drop-down for date options
+    %font   - chameleon colored rectangular drop-down for font selection
     %var - chameleon colored rectangular drop-down for variable names
     %lst    - chameleon colored rectangular drop-down for list names
     %b        - chameleon colored hexagonal slot (for predicates)

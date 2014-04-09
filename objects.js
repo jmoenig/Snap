@@ -124,7 +124,7 @@ PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.objects = '2014-March-31';
+modules.objects = '2014-April-09';
 
 var SpriteMorph;
 var StageMorph;
@@ -524,7 +524,8 @@ SpriteMorph.prototype.initBlocks = function () {
         doStampText: {
             type: 'command',
             category: 'pen',
-            spec: 'stamp text %s font %s size %n'
+            spec: 'stamp text %txt with font %font of size %n',
+            defaults: [[localize('Hello!')], ['sans-serif'], [12]]
         },
 
         // Control
@@ -2520,6 +2521,34 @@ SpriteMorph.prototype.changeBrightness = function (delta) {
     this.setBrightness(this.getBrightness() + (+delta || 0));
 };
 
+// Text Stamping
+
+SpriteMorph.prototype.doStampText = function (text, font, size) {
+    var stage = this.parent,
+        context = stage.penTrails().getContext('2d'),
+        isWarped = this.isWarped;
+        
+    if (isWarped) {
+        this.endWarp();
+    }
+    
+    context.save();
+    context.font = size + 'pt ' + font;
+    context.fillStyle = this.color.toString();
+    context.textAlign = "left";
+
+    context.fillText(text, (this.center().x - stage.left()),
+        (this.center().y - stage.top()));
+    
+    context.restore();
+    
+    this.changed();
+    
+    if (isWarped) {
+        this.startWarp();
+    }
+};
+
 // SpriteMorph layers
 
 SpriteMorph.prototype.comeToFront = function () {
@@ -2585,43 +2614,6 @@ SpriteMorph.prototype.doStamp = function () {
     if (isWarped) {
         this.startWarp();
     }
-};
-
-// Text Stamping
-
-SpriteMorph.prototype.doStampText = function (string, font, size) {
-    // TODO: Use Pen Color for Font Color
-    // TODO: Text should be angled along sprite direction.
-    // TODO: Make a Fonts Menu
-    
-    var stage = this.parent,
-        context = stage.penTrails().getContext('2d'),
-        isWarped = this.isWarped;
-    var ide = stage.parent; // FIXME
-        
-    if (isWarped) {
-        this.endWarp();
-    }
-    
-    context.save();
-    context.font = size + 'pt ' + font;
-    // context.translate(this.center().x, this.center().y);
-    // context.rotate( (Math.PI / 180) * -45);
-    // context.scale(1 / stage.scale, 1 / stage.scale);
-    context.textAlign = "left";
-
-    context.fillText(text, (this.center().x - stage.left()),
-        (this.center().y - stage.top()));
-    
-    context.restore();
-    
-    this.changed();
-    
-    if (isWarped) {
-        this.startWarp();
-    }
-
-    ide.fixLayout();
 };
 
 SpriteMorph.prototype.clear = function () {
