@@ -312,6 +312,12 @@ SpriteMorph.prototype.initBlocks = function () {
 			spec: 'set costume color to %n',
 			defaults: [0]
 		},
+		changeCostumeShade: {
+			type: 'command',
+			category: 'looks',
+			spec: 'set costume shade to %n',
+			defaults: [100]
+		},
         getCostumeIdx: {
             type: 'reporter',
             category: 'looks',
@@ -1598,6 +1604,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('doSwitchToCostume'));
         blocks.push(block('doWearNextCostume'));
 		blocks.push(block('changeCostumeColor'));
+		blocks.push(block('changeCostumeShade'));
         blocks.push(watcherToggle('getCostumeIdx'));
         blocks.push(block('getCostumeIdx'));
         blocks.push('-');
@@ -2449,47 +2456,35 @@ SpriteMorph.prototype.getHue = function () {
 };
 
 SpriteMorph.prototype.changeCostumeColor = function(num){
-	var hsv = this.color.hsv();
 	var currentPixels = this.image.getContext('2d').getImageData(0, 0, this.width(), this.height());
-	
-	hsv[0] = Math.max(Math.min(+num || 0, 100), 0) / 100;
+	var hsv = this.color.hsv();
+
+    hsv[0] = Math.max(Math.min(+num || 0, 100), 0) / 100;
     hsv[1] = 1; // we gotta fix this at some time
     this.color.set_hsv.apply(this.color, hsv);
-	
-	var h = hsv[0], s = hsv[1], v = hsv[2];
-	var r, g, b, i, f, p, q, t;
-	if (h && s === undefined && v === undefined) {
-		s = h.s, v = h.v, h = h.h;
-	}
-	i = Math.floor(h * 6);
-	f = h * 6 - i;
-	p = v * (1 - s);
-	q = v * (1 - f * s);
-	t = v * (1 - (1 - f) * s);
-	switch (i % 6) {
-		case 0: r = v, g = t, b = p; break;
-		case 1: r = q, g = v, b = p; break;
-		case 2: r = p, g = v, b = t; break;
-		case 3: r = p, g = q, b = v; break;
-		case 4: r = t, g = p, b = v; break;
-		case 5: r = v, g = p, b = q; break;
-	}
-	r = Math.floor(r * 255);
-	g = Math.floor(g * 255);
-	b = Math.floor(b * 255);
 	
 	for(var I = 0, L = this.originalPixels.data.length; I < L; I += 4)
         {
             if(currentPixels.data[I + 3] > 0) // If it's not a transparent pixel
             {
-                currentPixels.data[I] = this.originalPixels.data[I] / 255 * r;
-                currentPixels.data[I + 1] = this.originalPixels.data[I + 1] / 255 * g;
-                currentPixels.data[I + 2] = this.originalPixels.data[I + 2] / 255 * b;
+                currentPixels.data[I] = this.originalPixels.data[I] / 255 * this.color.r;
+                currentPixels.data[I + 1] = this.originalPixels.data[I + 1] / 255 * this.color.g;
+                currentPixels.data[I + 2] = this.originalPixels.data[I + 2] / 255 * this.color.b;
             }
         }
 	this.image.getContext('2d').putImageData(currentPixels, 0, 0);
 	this.changed();
-}
+};
+
+SpriteMorph.prototype.changeCostumeShade = function (num) {
+	var hsv = this.color.hsv(),
+        x = this.xPosition(),
+        y = this.yPosition();
+
+    hsv[1] = 1; // we gotta fix this at some time
+    hsv[2] = Math.max(Math.min(+num || 0, 100), 0) / 100;
+    this.color.set_hsv.apply(this.color, hsv);
+};
 
 SpriteMorph.prototype.setHue = function (num) {
     var hsv = this.color.hsv(),
