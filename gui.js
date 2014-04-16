@@ -1550,7 +1550,10 @@ IDE_Morph.prototype.droppedImage = function (aCanvas, name) {
         );
         return;
     }
-
+	
+	if(costume.contents.height >= 360){
+		this.showMessage("Using an image greater than 360 will cause inaccuracies in the 'translate by width/height' block");
+	}
     this.currentSprite.addCostume(costume);
     this.currentSprite.wearCostume(costume);
     this.spriteBar.tabBar.tabTo('costumes');
@@ -2791,7 +2794,7 @@ IDE_Morph.prototype.rawSaveProject = function (name) {
             try {
                 localStorage['-snap-project-' + name]
                     = str = this.serializer.serialize(this.stage);
-                location.hash = '#open:' + str;
+                //location.hash = '#open:' + str;
                 this.showMessage('Saved!', 1);
             } catch (err) {
                 this.showMessage('Save failed: ' + err);
@@ -2799,7 +2802,7 @@ IDE_Morph.prototype.rawSaveProject = function (name) {
         } else {
             localStorage['-snap-project-' + name]
                 = str = this.serializer.serialize(this.stage);
-            location.hash = '#open:' + str;
+            //location.hash = '#open:' + str;
             this.showMessage('Saved!', 1);
         }
     }
@@ -2840,7 +2843,7 @@ IDE_Morph.prototype.exportProject = function (name, plain) {
                 str = encodeURIComponent(
                     this.serializer.serialize(this.stage)
                 );
-                location.hash = '#open:' + str;
+                //location.hash = '#open:' + str;
                 window.open('data:text/'
                     + (plain ? 'plain,' + str : 'xml,' + str));
                 menu.destroy();
@@ -2853,7 +2856,7 @@ IDE_Morph.prototype.exportProject = function (name, plain) {
             str = encodeURIComponent(
                 this.serializer.serialize(this.stage)
             );
-            location.hash = '#open:' + str;
+            //location.hash = '#open:' + str;
             window.open('data:text/'
                 + (plain ? 'plain,' + str : 'xml,' + str));
             menu.destroy();
@@ -3061,7 +3064,7 @@ IDE_Morph.prototype.openProject = function (name) {
         this.setProjectName(name);
         str = localStorage['-snap-project-' + name];
         this.openProjectString(str);
-        location.hash = '#open:' + str;
+        //location.hash = '#open:' + str;
     }
 };
 
@@ -4532,7 +4535,6 @@ ProjectDialogMorph.prototype.getExamplesProjectList = function () {
 	request.send();
 	var JSON_object = JSON.parse(request.responseText);
 	for (var i = 0; i < JSON_object.length; i++){
-		//window.alert(JSON_object[i]["name"]);
 		dta = {
 			name: JSON_object[i]["name"],
 			thumb: null,
@@ -5539,7 +5541,7 @@ CostumeIconMorph.prototype.duplicateCostume = function () {
 };
 
 CostumeIconMorph.prototype.removeCostume = function () {
-    var wardrobe = this.parentThatIsA(WardrobeMorph),
+	var wardrobe = this.parentThatIsA(WardrobeMorph),
         idx = this.parent.children.indexOf(this),
         ide = this.parentThatIsA(IDE_Morph);
     wardrobe.removeCostumeAt(idx - 2);

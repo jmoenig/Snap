@@ -140,6 +140,7 @@ var StagePrompterMorph;
 var Note;
 var SpriteHighlightMorph;
 
+
 // SpriteMorph /////////////////////////////////////////////////////////
 
 // I am a scriptable object
@@ -465,7 +466,7 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'pen',
             spec: 'pen up'
         },
-        setColor: {
+		setColor: {
             type: 'command',
             category: 'pen',
             spec: 'set pen color to %clr'
@@ -1212,9 +1213,9 @@ SpriteMorph.prototype.init = function (globals) {
     this.variables = new VariableFrame(globals || null, this);
     this.scripts = new ScriptsMorph(this);
     this.customBlocks = [];
-    this.costumes = new List();
+    this.costumes = new List();	
     this.costume = null;
-    this.sounds = new List();
+	this.sounds = new List();
     this.normalExtent = new Point(60, 60); // only for costume-less situation
     this.scale = 1;
     this.rotationStyle = 1; // 1 = full, 2 = left/right, 0 = off
@@ -1315,7 +1316,8 @@ SpriteMorph.prototype.drawNew = function () {
         costumeExtent,
         ctx,
         handle;
-
+		
+	
     if (this.isWarped) {
         this.wantsRedraw = true;
         return;
@@ -1398,6 +1400,8 @@ SpriteMorph.prototype.drawNew = function () {
 
         }
     }
+	this.originalPixels = this.image.getContext('2d').createImageData(this.width(), this.height());
+	this.originalPixels = this.image.getContext('2d').getImageData(0, 0, this.width(), this.height());
     this.version = Date.now();
 };
 
@@ -2216,7 +2220,7 @@ SpriteMorph.prototype.addCostume = function (costume) {
     if (!costume.name) {
         costume.name = 'costume' + (this.costumes.length() + 1);
     }
-    this.costumes.add(costume);
+	this.costumes.add(costume);
 };
 
 SpriteMorph.prototype.wearCostume = function (costume) {
@@ -2390,7 +2394,7 @@ SpriteMorph.prototype.duplicate = function () {
 };
 
 SpriteMorph.prototype.remove = function () {
-    var ide = this.parentThatIsA(IDE_Morph);
+	var ide = this.parentThatIsA(IDE_Morph);
     if (ide) {
         ide.removeSprite(this);
     }
@@ -5193,14 +5197,7 @@ Costume.prototype.height = function () {
 };
 
 Costume.prototype.bounds = function () {
-	if(this.contents.height >= 360){
-		alert('Image objects must have a height less than 360 pixels', 'looks', 'alert %mult%s');
-		//this.removeCostume();
-		return new Rectangle(0, 0, 0, 0);
-	}
-	else{
-		return new Rectangle(0, 0, this.width(), this.height());
-	}
+	return new Rectangle(0, 0, this.width(), this.height());
 };
 
 // Costume shrink-wrapping
@@ -5522,6 +5519,7 @@ CostumeEditorMorph.prototype.init = function (costume) {
     this.margin = new Point(0, 0);
     CostumeEditorMorph.uber.init.call(this);
     this.noticesTransparentClick = true;
+
 };
 
 // CostumeEditorMorph edit ops
@@ -6409,7 +6407,6 @@ WatcherMorph.prototype.userMenu = function () {
                             };
                             frd.readAsText(aFile);
                         }
-
                         document.body.removeChild(inp);
                         ide.filePicker = null;
                         if (inp.files.length > 0) {
