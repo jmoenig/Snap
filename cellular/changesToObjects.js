@@ -2214,7 +2214,49 @@ Process.prototype.doBroadcast = function (message) {
 };
 
 //InputSlotMorph.prototype.reactToSliderEdit also runs blocks but does not use the
-//return value of startProcess so we will not deal with it here.
+//return value of startProcess so we will not deal with it here..
+
+SpriteMorph.prototype.addVariable = function (name, isGlobal) {
+    var ide = this.parentThatIsA(IDE_Morph);
+    if (isGlobal) {
+        this.variables.parentFrame.addVar(name);
+        if (ide) {
+            ide.flushBlocksCache('variables');
+        }
+    } else {
+		this.variables.addVar(name);
+		this.blocksCache.variables = null;
+				
+		var myself = this;
+		this.parentThatIsA(StageMorph).children.forEach(function (x) {
+			if (x instanceof SpriteMorph && x.parentSprite == myself)
+			{
+				x.variables.addVar(name);
+				x.blocksCache.variables = null;
+			}
+		});
+    }
+};
+
+SpriteMorph.prototype.deleteVariable = function (varName) {
+    var ide = this.parentThatIsA(IDE_Morph);
+    this.deleteVariableWatcher(varName);
+    this.variables.deleteVar(varName);
+	
+	var myself = this;
+	this.parentThatIsA(StageMorph).children.forEach(function (x) {
+		if (x instanceof SpriteMorph && x.parentSprite == myself)
+		{
+			x.deleteVariableWatcher(varName);
+			x.variables.deleteVar(varName);
+		}
+	});
+	
+    if (ide) {
+        ide.flushBlocksCache('variables'); // b/c the var could be global
+        ide.refreshPalette();
+    }
+};
 
 /*********************************************************************/
 /****************************** STATICS ******************************/
