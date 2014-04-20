@@ -69,28 +69,34 @@ BlockMorph.prototype.mouseClickLeft = function () {
     if (receiver) {
         stage = receiver.parentThatIsA(StageMorph);
 		if (stage) {
-			if (this instanceof ReporterBlockMorph)
-			{				
-				stage.children.some(function (child)
-				{
-					if (child instanceof SpriteMorph && child.parentSprite == receiver)
-					{
-						stage.threads.toggleProcess(top, child);
-						return true;
-					}
-					return false;
-				});
-
+			if (receiver === stage)
+			{
+				stage.threads.toggleProcess(top, stage);
 			}
 			else
 			{
-				stage.children.forEach(function (child)
+				if (this instanceof ReporterBlockMorph)
 				{
-					if (child instanceof SpriteMorph && child.parentSprite == receiver)
+					stage.children.some(function (child)
 					{
-						stage.threads.toggleProcess(top, child);
-					}
-				});
+						if (child instanceof SpriteMorph && child.parentSprite == receiver)
+						{
+							stage.threads.toggleProcess(top, child);
+							return true;
+						}
+						return false;
+					});
+				}
+				else
+				{
+					stage.children.forEach(function (child)
+					{
+						if (child instanceof SpriteMorph && child.parentSprite == receiver)
+						{
+							stage.threads.toggleProcess(top, child);
+						}
+					});
+				}
 			}
 		}
     }

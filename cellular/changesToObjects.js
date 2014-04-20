@@ -23,6 +23,21 @@ if (window.performance.now) {
 /******************************* HOOKS *******************************/
 /*********************************************************************/
 
+function destroyPalletteCache(stage, cat)
+{
+	for (var i=0; i<stage.children.length; i++)
+	{
+		var ii = stage.children[i];
+		if (ii instanceof SpriteMorph)
+		{
+			ii.blocksCache[cat] = null;
+			ii.paletteCache[cat] = null;
+		}
+	}
+	stage.blocksCache[cat] = null;
+	stage.paletteCache[cat] = null;
+}
+
 SpriteMorph.prototype.uberBlockForSelector = SpriteMorph.prototype.blockForSelector;
 SpriteMorph.prototype.blockForSelector = function (selector, setDefaults) {
 	var block = this.uberBlockForSelector(selector, setDefaults);
@@ -32,6 +47,156 @@ SpriteMorph.prototype.blockForSelector = function (selector, setDefaults) {
 	}
 	return block;
 };
+
+function addCellAttributeButtons(blocks, block, cat, helpMenu)
+{
+	var myself = this;
+	
+	//First we add the "add Attribute" button
+	button = new PushButtonMorph(
+		null,
+		function () {
+			new CellAttributeDialogMorph(
+				null,
+				function (pair) {
+					if (pair) {
+						if (!Cell.addAttribute(pair[0]))
+							return;
+						//Reset the cells pallette so it makes the new attribute appear
+						
+						destroyPalletteCache(myself instanceof StageMorph ? myself : myself.parentThatIsA(StageMorph), cat);
+						
+						var ide = myself.parentThatIsA(IDE_Morph);
+						ide.stage.setCellAttributeVisibility(pair[0], true);
+						ide.refreshPalette();
+						ide.refreshCellAttributes();
+						ide.attributeSelector.setChoice(pair[0]);
+					}
+				},
+				myself
+			).prompt(
+				'Cell attribute name',
+				null,
+				myself.world()
+			);
+		},
+		'Make a cell attribute'
+	);
+	button.userMenu = helpMenu;
+	button.selector = 'addCellAttribute';
+	button.showHelp = BlockMorph.prototype.showHelp;
+	blocks.push(button);
+
+	if (Cell.attributes.length > 0) {
+		button = new PushButtonMorph(
+			null,
+			function () {
+				var menu = new MenuMorph(
+					myself.deleteCellAttribute,
+					null,
+					myself
+				);
+				for (var i=0; i<Cell.attributes.length; i++)
+				{
+					var name = Cell.attributes[i];
+					menu.addItem(name, name);
+				};
+				menu.popUpAtHand(myself.world());
+			},
+			'Delete a cell attribute'
+		);
+		button.userMenu = helpMenu;
+		button.selector = 'deleteCellAttribute';
+		button.showHelp = BlockMorph.prototype.showHelp;
+		blocks.push(button);
+	}
+
+	blocks.push('-');
+
+	for (var i=0; i<Cell.attributes.length; i++)
+	{
+		var toggle = new ToggleMorph(
+			'checkbox',
+			{cellAttribute: Cell.attributes[i]},
+			function () {
+				myself.parentThatIsA(IDE_Morph).stage.toggleCellAttributeVisibility(this.cellAttribute);
+			},
+			null,
+			function () {
+				return myself.parentThatIsA(IDE_Morph).stage.getCellAttributeVisibility(this.cellAttribute);
+			},
+			null
+		);
+		toggle.nextIsRight = true;
+		blocks.push(toggle);
+		
+		var colour = new ColorSlotMorph();
+		colour.isStatic = true;
+		colour.setColor(new Color(100,100,100));
+		colour.cellAttribute = Cell.attributes[i];
+		colour.oldSetColour = colour.setColor;
+		colour.setColor = function(col)
+		{
+			Cell.attributeColours[this.cellAttribute] = col;
+			myself.parentThatIsA(IDE_Morph).stage.dirtyEntireStage();
+			return this.oldSetColour(col);
+		}
+		colour.oldSetColour(Cell.attributeColours[Cell.attributes[i]]);
+		colour.nextIsRight = true;
+		blocks.push(colour);
+		
+		var fromField;
+		fromField = new InputFieldMorph(Cell.attributeDrawRange[Cell.attributes[i]][0].toString());
+		fromField.corner = 12;
+		fromField.padding = 0;
+		fromField.contrast = this.buttonContrast;
+		fromField.hint = "from value";
+		fromField.contents().minWidth = 0;
+		fromField.setWidth(32); // fixed dimensions
+		fromField.drawNew();
+		fromField.cellAttribute = Cell.attributes[i];
+		fromField.accept = function () {
+			var value = Number(fromField.getValue());
+			if (isNaN(value))
+			{
+				fromField.setContents(0);
+				return;
+			}
+			Cell.attributeDrawRange[this.cellAttribute][0] = value;
+			myself.parentThatIsA(IDE_Morph).stage.dirtyEntireStage();
+		};
+		fromField.nextIsRight = true;
+		blocks.push(fromField);
+		
+		var toField;
+		toField = new InputFieldMorph(Cell.attributeDrawRange[Cell.attributes[i]][1].toString());
+		toField.corner = 12;
+		toField.padding = 0;
+		toField.contrast = this.buttonContrast;
+		toField.hint = "from value";
+		toField.contents().minWidth = 0;
+		toField.setWidth(32); // fixed dimensions
+		toField.drawNew();
+		toField.cellAttribute = Cell.attributes[i];
+		toField.accept = function () {
+			var value = Number(toField.getValue());
+			if (isNaN(value))
+			{
+				toField.setContents(0);
+				return;
+			}
+			Cell.attributeDrawRange[this.cellAttribute][1] = value;
+			myself.parentThatIsA(IDE_Morph).stage.dirtyEntireStage();
+		};
+		blocks.push(toField);
+		
+		var txt = new TextMorph(toggle.target.cellAttribute);
+		txt.fontSize = 12;
+		txt.setLeft(toField.right());
+		txt.setColor(this.paletteTextColor);
+		blocks.push(txt);
+	}
+}
  
 SpriteMorph.prototype.scribbleHookBlockTemplates = SpriteMorph.prototype.snapappsHookBlockTemplates;
 SpriteMorph.prototype.snapappsHookBlockTemplates = function(blocks, block, cat, helpMenu)
@@ -39,153 +204,13 @@ SpriteMorph.prototype.snapappsHookBlockTemplates = function(blocks, block, cat, 
 	var myself = this;
 	if (cat == "cells")
 	{
-		//First we add the "add Attribute" button
-		button = new PushButtonMorph(
-			null,
-			function () {
-				new CellAttributeDialogMorph(
-					null,
-					function (pair) {
-						if (pair) {
-							if (!Cell.addAttribute(pair[0]))
-								return;
-							//Reset the cells pallette so it makes the new attribute appear
-							myself.blocksCache[cat] = null;
-							myself.paletteCache[cat] = null;
-							var ide = myself.parentThatIsA(IDE_Morph);
-							ide.stage.setCellAttributeVisibility(pair[0], true);
-							ide.refreshPalette();
-							ide.refreshCellAttributes();
-							ide.attributeSelector.setChoice(pair[0]);
-						}
-					},
-					myself
-				).prompt(
-					'Cell attribute name',
-					null,
-					myself.world()
-				);
-			},
-			'Make a cell attribute'
-		);
-		button.userMenu = helpMenu;
-		button.selector = 'addCellAttribute';
-		button.showHelp = BlockMorph.prototype.showHelp;
-		blocks.push(button);
-
-		if (Cell.attributes.length > 0) {
-			button = new PushButtonMorph(
-				null,
-				function () {
-					var menu = new MenuMorph(
-						myself.deleteCellAttribute,
-						null,
-						myself
-					);
-					for (var i=0; i<Cell.attributes.length; i++)
-					{
-						var name = Cell.attributes[i];
-						menu.addItem(name, name);
-					};
-					menu.popUpAtHand(myself.world());
-				},
-				'Delete a cell attribute'
-			);
-			button.userMenu = helpMenu;
-			button.selector = 'deleteCellAttribute';
-			button.showHelp = BlockMorph.prototype.showHelp;
-			blocks.push(button);
-		}
-
+		addCellAttributeButtons.call(this, blocks, block, cat, helpMenu);
+		
 		blocks.push('-');
-
+		blocks.push(block('reportCellsX'));
+		blocks.push(block('reportCellsY'));
+		
 		if (Cell.attributes.length > 0) {
-			for (var i=0; i<Cell.attributes.length; i++)
-			{
-				var toggle = new ToggleMorph(
-					'checkbox',
-					{cellAttribute: Cell.attributes[i]},
-					function () {
-						myself.parentThatIsA(IDE_Morph).stage.toggleCellAttributeVisibility(this.cellAttribute);
-					},
-					null,
-					function () {
-						return myself.parentThatIsA(IDE_Morph).stage.getCellAttributeVisibility(this.cellAttribute);
-					},
-					null
-				);
-				toggle.nextIsRight = true;
-				blocks.push(toggle);
-				
-				var colour = new ColorSlotMorph();
-				colour.isStatic = true;
-				colour.setColor(new Color(100,100,100));
-				colour.cellAttribute = Cell.attributes[i];
-				colour.oldSetColour = colour.setColor;
-				colour.setColor = function(col)
-				{
-					Cell.attributeColours[this.cellAttribute] = col;
-					myself.parentThatIsA(IDE_Morph).stage.dirtyEntireStage();
-					return this.oldSetColour(col);
-				}
-				colour.oldSetColour(Cell.attributeColours[Cell.attributes[i]]);
-				colour.nextIsRight = true;
-				blocks.push(colour);
-				
-				var fromField;
-				fromField = new InputFieldMorph(Cell.attributeDrawRange[Cell.attributes[i]][0].toString());
-				fromField.corner = 12;
-				fromField.padding = 0;
-				fromField.contrast = this.buttonContrast;
-				fromField.hint = "from value";
-				fromField.contents().minWidth = 0;
-				fromField.setWidth(32); // fixed dimensions
-				fromField.drawNew();
-				fromField.cellAttribute = Cell.attributes[i];
-				fromField.accept = function () {
-					var value = Number(fromField.getValue());
-					if (isNaN(value))
-					{
-						fromField.setContents(0);
-						return;
-					}
-					Cell.attributeDrawRange[this.cellAttribute][0] = value;
-					myself.parentThatIsA(IDE_Morph).stage.dirtyEntireStage();
-				};
-				fromField.nextIsRight = true;
-				blocks.push(fromField);
-				
-				var toField;
-				toField = new InputFieldMorph(Cell.attributeDrawRange[Cell.attributes[i]][1].toString());
-				toField.corner = 12;
-				toField.padding = 0;
-				toField.contrast = this.buttonContrast;
-				toField.hint = "from value";
-				toField.contents().minWidth = 0;
-				toField.setWidth(32); // fixed dimensions
-				toField.drawNew();
-				toField.cellAttribute = Cell.attributes[i];
-				toField.accept = function () {
-					var value = Number(toField.getValue());
-					if (isNaN(value))
-					{
-						toField.setContents(0);
-						return;
-					}
-					Cell.attributeDrawRange[this.cellAttribute][1] = value;
-					myself.parentThatIsA(IDE_Morph).stage.dirtyEntireStage();
-				};
-				blocks.push(toField);
-				
-				var txt = new TextMorph(toggle.target.cellAttribute);
-				txt.fontSize = 12;
-				txt.setLeft(toField.right());
-				txt.setColor(this.paletteTextColor);
-				blocks.push(txt);
-			}
-			blocks.push('-');
-			blocks.push(block('cellsX'));
-			blocks.push(block('cellsY'));
 			blocks.push('-');
 			blocks.push(block('showCellAttribute'));
 			blocks.push(block('hideCellAttribute'));
@@ -280,15 +305,102 @@ SpriteMorph.prototype.snapappsHookBlockTemplates = function(blocks, block, cat, 
     return this.scribbleHookBlockTemplates(blocks, block, cat);
 }
 
+
+StageMorph.prototype.scribbleHookBlockTemplates = StageMorph.prototype.snapappsHookBlockTemplates;
+StageMorph.prototype.snapappsHookBlockTemplates = function(blocks, block, cat, helpMenu)
+{
+	var myself = this;
+	if (cat == "cells")
+	{
+		addCellAttributeButtons.call(this, blocks, block, cat, helpMenu);
+		
+		blocks.push('-');
+		blocks.push(block('reportCellsX'));
+		blocks.push(block('reportCellsY'));
+		
+		if (Cell.attributes.length > 0) {
+			blocks.push('-');
+			blocks.push(block('showCellAttribute'));
+			blocks.push(block('hideCellAttribute'));
+			blocks.push('-');
+			blocks.push(block('getCellAttribute'));
+			blocks.push(block('getCellAttributeCell'));
+			blocks.push('-');
+			blocks.push(block('getCellAttributeAverage'));
+			blocks.push(block('getCellAttributeMaximum'));
+			blocks.push(block('getCellAttributeMinimum'));
+			blocks.push('-');
+			blocks.push(block('setCellAttribute'));
+			blocks.push(block('setCellAttributeCell'));
+			blocks.push(block('setCellAttributeEverywhere'));
+			blocks.push('-');
+			blocks.push(block('changeCellAttribute'));
+			blocks.push(block('changeCellAttributeCell'));
+			blocks.push(block('changeCellAttributeEverywhere'));
+		}
+	}
+	else if (cat == 'control')
+	{
+		blocks.splice(blocks.length - 3, 0, block('getLastClone'));
+		blocks.push('-');
+		blocks.push(block('instanceCount'));
+	}
+	else if (cat == 'objects')
+	{
+		blocks.push(block('reportNobody'));
+		blocks.push('-');
+		blocks.push(block('isNobody'));
+		blocks.push('-');
+		blocks.push(block('setVariable'));
+		blocks.push(block('getVariable'));
+		blocks.push(block('changeVariable'));
+		blocks.push('-');
+		blocks.push(block('getCostumeNameObject'));
+		blocks.push(block('getTypeName'));
+		blocks.push(block('objectIsA'));
+		blocks.push(block('obliterate'));
+		blocks.push('-');
+		blocks.push(block('listOfAllClones'));
+		blocks.push('-');
+		blocks.push(block('getObjectX'));
+		blocks.push(block('getObjectY'));
+		blocks.push(block('setObjectPosition'));
+		blocks.push('-');
+		blocks.push(block('getObjectCellX'));
+		blocks.push(block('getObjectCellY'));
+		blocks.push(block('setObjectCellPosition'));
+		blocks.push('-');
+		blocks.push(block('asObject'));
+		blocks.push(block('nearestObject'));
+	}
+	else if (cat == 'neighbours')
+	{
+		blocks.push(block("objectInCellCell"));
+		blocks.push(block("objectInCellReal"));
+		blocks.push('-');
+		blocks.push(block("allObjectsInCellCell"));
+		blocks.push(block("allObjectsInCellReal"));
+	}
+	
+	if (this.scribbleHookBlockTemplates)
+		return this.scribbleHookBlockTemplates(blocks, block, cat);
+}
+
 SpriteMorph.prototype.deleteCellAttribute = function(name)
+{
+	this.parentThatIsA(StageMorph).deleteCellAttribute(name);
+}
+
+StageMorph.prototype.deleteCellAttribute = function(name)
 {
 	for (var i=0; i<Cell.attributes.length; i++)
 	{
 		if (Cell.attributes[i] == name)
 		{
 			Cell.attributes.splice(i, 1);
-			this.blocksCache["cells"] = null;
-			this.paletteCache["cells"] = null;
+			
+			destroyPalletteCache(this, "cells");
+			
 			var ide = this.parentThatIsA(IDE_Morph);
 			ide.refreshPalette();
 			ide.refreshCellAttributes();
@@ -369,13 +481,13 @@ SpriteMorph.prototype.addCellularBlocks = function () {
     };
 	
 	//cells
-    SpriteMorph.prototype.blocks.cellsX = {
+    SpriteMorph.prototype.blocks.reportCellsX = {
         type: 'reporter',
         category: 'cells',
         spec: 'cells X',
     };
 	
-    SpriteMorph.prototype.blocks.cellsY = {
+    SpriteMorph.prototype.blocks.reportCellsY = {
         type: 'reporter',
         category: 'cells',
         spec: 'cells Y',
@@ -630,19 +742,28 @@ SpriteMorph.prototype.addCellularBlocks = function () {
 var NOT_AN_OBJECT = "Not an object!";
 var NOBODY = "Nobody";
 
-SpriteMorph.prototype.setObjectPosition = function(otherObject, x, y)
+SpriteMorph.prototype.setObjectPosition = function(otherObject, x, y) { 
+	return this.parentThatIsA(StageMorph).setObjectPosition(otherObject, x, y); 
+}
+StageMorph.prototype.setObjectPosition = function(otherObject, x, y)
 {
 	if (otherObject instanceof SpriteMorph)
 		otherObject.gotoXY(x, y);
 }
 
-SpriteMorph.prototype.setObjectCellPosition = function(otherObject, x, y)
+SpriteMorph.prototype.setObjectCellPosition = function(otherObject, x, y) { 
+	return this.parentThatIsA(StageMorph).setObjectCellPosition(otherObject, x, y); 
+}
+StageMorph.prototype.setObjectCellPosition = function(otherObject, x, y)
 {
 	if (otherObject instanceof SpriteMorph)
 		otherObject.moveToCell(x, y);
 }
 
-SpriteMorph.prototype.getObjectCellX = function(otherObject)
+SpriteMorph.prototype.getObjectCellX = function(otherObject) { 
+	return this.parentThatIsA(StageMorph).getObjectCellX(otherObject); 
+}
+StageMorph.prototype.getObjectCellX = function(otherObject)
 {
 	if (otherObject instanceof SpriteMorph)
 		return otherObject.cellX();
@@ -651,7 +772,10 @@ SpriteMorph.prototype.getObjectCellX = function(otherObject)
 	return NOT_AN_OBJECT;
 }
 
-SpriteMorph.prototype.getObjectCellY = function(otherObject)
+SpriteMorph.prototype.getObjectCellY = function(otherObject) { 
+	return this.parentThatIsA(StageMorph).getObjectCellY(otherObject); 
+}
+StageMorph.prototype.getObjectCellY = function(otherObject)
 {
 	if (otherObject instanceof SpriteMorph)
 		return otherObject.cellY();
@@ -660,7 +784,10 @@ SpriteMorph.prototype.getObjectCellY = function(otherObject)
 	return NOT_AN_OBJECT;
 }
 
-SpriteMorph.prototype.getObjectX = function(otherObject)
+SpriteMorph.prototype.getObjectX = function(otherObject) { 
+	return this.parentThatIsA(StageMorph).getObjectX(otherObject); 
+}
+StageMorph.prototype.getObjectX = function(otherObject)
 {
 	if (otherObject instanceof SpriteMorph)
 		return otherObject.xPosition();
@@ -669,7 +796,10 @@ SpriteMorph.prototype.getObjectX = function(otherObject)
 	return NOT_AN_OBJECT;
 }
 
-SpriteMorph.prototype.getObjectY = function(otherObject)
+SpriteMorph.prototype.getObjectY = function(otherObject) { 
+	return this.parentThatIsA(StageMorph).getObjectY(otherObject); 
+}
+StageMorph.prototype.getObjectY = function(otherObject)
 {
 	if (otherObject instanceof SpriteMorph)
 		return otherObject.yPosition();
@@ -678,7 +808,10 @@ SpriteMorph.prototype.getObjectY = function(otherObject)
 	return NOT_AN_OBJECT;
 }
 
-SpriteMorph.prototype.listOfAllClones = function(otherObjectName)
+SpriteMorph.prototype.obliterate = function(otherObject) { 
+	return this.parentThatIsA(StageMorph).obliterate(otherObject); 
+}
+StageMorph.prototype.listOfAllClones = function(otherObjectName)
 {
 	if (!otherObjectName) { return null; }
 	if (otherObjectName == "myself")
@@ -694,7 +827,10 @@ SpriteMorph.prototype.listOfAllClones = function(otherObjectName)
 	return new List(arrayToReturn);
 }
 
-SpriteMorph.prototype.obliterate = function(otherObject)
+SpriteMorph.prototype.obliterate = function(otherObject) { 
+	return this.parentThatIsA(StageMorph).obliterate(otherObject); 
+}
+StageMorph.prototype.obliterate = function(otherObject)
 {
 	if (otherObject instanceof SpriteMorph)
 	{
@@ -702,7 +838,10 @@ SpriteMorph.prototype.obliterate = function(otherObject)
 	}
 }
 
-SpriteMorph.prototype.objectIsA = function(otherObject, spriteMorph)
+SpriteMorph.prototype.objectIsA = function(otherObject) { 
+	return this.parentThatIsA(StageMorph).objectIsA(otherObject); 
+}
+StageMorph.prototype.objectIsA = function(otherObject, spriteMorph)
 {
 	if (otherObject instanceof SpriteMorph)
 	{
@@ -717,7 +856,10 @@ SpriteMorph.prototype.objectIsA = function(otherObject, spriteMorph)
 	}
 }
 
-SpriteMorph.prototype.getTypeName = function(otherObject)
+SpriteMorph.prototype.getTypeName = function(otherObject) { 
+	return this.parentThatIsA(StageMorph).getTypeName(otherObject); 
+}
+StageMorph.prototype.getTypeName = function(otherObject)
 {
 	if (otherObject instanceof SpriteMorph)
 	{
@@ -734,7 +876,10 @@ SpriteMorph.prototype.getTypeName = function(otherObject)
 		return NOT_AN_OBJECT;
 }
 
-SpriteMorph.prototype.getCostumeNameObject = function(otherObject)
+SpriteMorph.prototype.getCostumeNameObject = function(otherObject) { 
+	return this.parentThatIsA(StageMorph).getCostumeNameObject(otherObject); 
+}
+StageMorph.prototype.getCostumeNameObject = function(otherObject)
 {
 	if (otherObject instanceof SpriteMorph)
 	{
@@ -753,7 +898,10 @@ SpriteMorph.prototype.getCostumeName = function()
 	return this.costume ? this.costume.name : "";
 }
 
-SpriteMorph.prototype.reportNobody = function()
+SpriteMorph.prototype.reportNobody = function() { 
+	return this.parentThatIsA(StageMorph).reportNobody(); 
+}
+StageMorph.prototype.reportNobody = function()
 {
 	return null;
 }
@@ -768,12 +916,18 @@ SpriteMorph.prototype.isThis = function(x)
 	return x == this;
 }
 
-SpriteMorph.prototype.isNobody = function(x)
+SpriteMorph.prototype.isNobody = function(x) { 
+	return this.parentThatIsA(StageMorph).isNobody(x); 
+}
+StageMorph.prototype.isNobody = function(x)
 {
 	return x == null;
 }
 
-SpriteMorph.prototype.setVariable = function(n,v,x)
+SpriteMorph.prototype.setVariable = function(n,v,x) { 
+	return this.parentThatIsA(StageMorph).getVariable(n,v,x); 
+}
+StageMorph.prototype.setVariable = function(n,v,x)
 {
 	if (x instanceof SpriteMorph)
 	{
@@ -781,7 +935,10 @@ SpriteMorph.prototype.setVariable = function(n,v,x)
 	}
 }
 
-SpriteMorph.prototype.getVariable = function(n,x)
+SpriteMorph.prototype.getVariable = function(n,x) { 
+	return this.parentThatIsA(StageMorph).getVariable(n,x); 
+}
+StageMorph.prototype.getVariable = function(n,x)
 {
 	if (x instanceof SpriteMorph)
 	{
@@ -790,7 +947,10 @@ SpriteMorph.prototype.getVariable = function(n,x)
 	return 42;
 }
 
-SpriteMorph.prototype.changeVariable = function(n,v,x)
+SpriteMorph.prototype.changeVariable = function(n,v,x) { 
+	return this.parentThatIsA(StageMorph).changeVariable(n,v,x); 
+}
+StageMorph.prototype.changeVariable = function(n,v,x)
 {
 	if (x instanceof SpriteMorph)
 	{
@@ -798,17 +958,19 @@ SpriteMorph.prototype.changeVariable = function(n,v,x)
 	}
 }
 
-SpriteMorph.prototype.changeCellAttributeCell = function(attribute, cx, cy, value)
+SpriteMorph.prototype.changeCellAttributeCell = function(attribute, cx, cy, value) { return this.parentThatIsA(StageMorph).changeCellAttributeCell(attribute, cx, cy, value); }
+StageMorph.prototype.changeCellAttributeCell = function(attribute, cx, cy, value)
 {
-	var cell = this.parentThatIsA(StageMorph).getCellAtCellCoords(cx,cy);
+	var cell = this.getCellAtCellCoords(cx,cy);
 	if (!cell)
 		return;
 	cell.setAttribute(attribute, cell.getAttribute(attribute) + value);
 }
 
-SpriteMorph.prototype.changeCellAttributeEverywhere = function(attribute, value)
+SpriteMorph.prototype.changeCellAttributeEverywhere = function(attribute, value) { return this.parentThatIsA(StageMorph).changeCellAttributeEverywhere(attribute, value); }
+StageMorph.prototype.changeCellAttributeEverywhere = function(attribute, value)
 {
-	var cells = this.parentThatIsA(StageMorph).cells;
+	var cells = this.cells;
 	
 	for (var i=0; i<cells.length; i++)
 	{
@@ -819,9 +981,10 @@ SpriteMorph.prototype.changeCellAttributeEverywhere = function(attribute, value)
 	}
 }
 
-SpriteMorph.prototype.changeCellAttribute = function(attribute, x, y, value)
+SpriteMorph.prototype.changeCellAttribute = function(attribute, x, y, value) { return this.parentThatIsA(StageMorph).changeCellAttribute(attribute, x, y, value); }
+StageMorph.prototype.changeCellAttribute = function(attribute, x, y, value)
 {
-	var cell = this.parentThatIsA(StageMorph).getCellAtStageCoords(x,y);
+	var cell = this.getCellAtStageCoords(x,y);
 	if (!cell)
 		return;
 	cell.setAttribute(attribute, cell.getAttribute(attribute) + value);
@@ -835,17 +998,19 @@ SpriteMorph.prototype.changeCellAttributeHere = function(attribute, value) {
 	cell.setAttribute(attribute, cell.getAttribute(attribute) + value);
 }
 
-SpriteMorph.prototype.setCellAttributeCell = function(attribute, cx, cy, value)
+SpriteMorph.prototype.setCellAttributeCell = function(attribute, cx, cy, value) { return this.parentThatIsA(StageMorph).setCellAttributeCell(attribute, cx, cy, value); }
+StageMorph.prototype.setCellAttributeCell = function(attribute, cx, cy, value)
 {
-	var cell = this.parentThatIsA(StageMorph).getCellAtCellCoords(cx,cy);
+	var cell = this.getCellAtCellCoords(cx,cy);
 	if (!cell)
 		return;
 	cell.setAttribute(attribute, value);
 }
 
-SpriteMorph.prototype.setCellAttribute = function(attribute, x, y, value)
+SpriteMorph.prototype.setCellAttribute = function(attribute, x, y, value) { return this.parentThatIsA(StageMorph).setCellAttribute(attribute, x, y, value); }
+StageMorph.prototype.setCellAttribute = function(attribute, x, y, value)
 {
-	var cell = this.parentThatIsA(StageMorph).getCellAtStageCoords(x,y);
+	var cell = this.getCellAtStageCoords(x,y);
 	if (!cell)
 		return;
 	cell.setAttribute(attribute, value);
@@ -859,9 +1024,10 @@ SpriteMorph.prototype.setCellAttributeHere = function(attribute, value) {
 	cell.setAttribute(attribute, value);
 }
 
-SpriteMorph.prototype.setCellAttributeEverywhere = function(attribute, value)
+SpriteMorph.prototype.setCellAttributeEverywhere = function(attribute, value) { return this.parentThatIsA(StageMorph).setCellAttributeEverywhere(attribute, value); }
+StageMorph.prototype.setCellAttributeEverywhere = function(attribute, value)
 {
-	var cells = this.parentThatIsA(StageMorph).cells;
+	var cells = this.cells;
 	for (var i=0; i<cells.length; i++)
 	{
 		for (var j=0; j<cells[i].length; j++)
@@ -871,17 +1037,19 @@ SpriteMorph.prototype.setCellAttributeEverywhere = function(attribute, value)
 	}
 }
 
-SpriteMorph.prototype.getCellAttributeCell = function(attribute, cx, cy)
+SpriteMorph.prototype.getCellAttributeCell = function(attribute, cx, cy) { return this.parentThatIsA(StageMorph).getCellAttributeCell(attribute, cx, cy); }
+StageMorph.prototype.getCellAttributeCell = function(attribute, cx, cy)
 {
-	var cell = this.parentThatIsA(StageMorph).getCellAtCellCoords(cx, cy);
+	var cell = this.getCellAtCellCoords(cx, cy);
 	if (!cell)
 		return 0;
 	return cell.getAttribute(attribute);
 }
 
-SpriteMorph.prototype.getCellAttribute = function(attribute, x, y)
+SpriteMorph.prototype.getCellAttribute = function(attribute, x, y) { return this.parentThatIsA(StageMorph).getCellAttribute(attribute, x, y); }
+StageMorph.prototype.getCellAttribute = function(attribute, x, y)
 {
-	var cell = this.parentThatIsA(StageMorph).getCellAtStageCoords(x,y);
+	var cell = this.getCellAtStageCoords(x,y);
 	if (!cell)
 		return 0;
 	return cell.getAttribute(attribute);
@@ -895,29 +1063,29 @@ SpriteMorph.prototype.getCellAttributeHere = function(attribute) {
 	return cell.getAttribute(attribute);
 }
 
-SpriteMorph.prototype.getCellAttributeAverage = function(attribute)
+SpriteMorph.prototype.getCellAttributeAverage = function(attribute) { return this.parentThatIsA(StageMorph).getCellAttributeAverage(attribute); }
+StageMorph.prototype.getCellAttributeAverage = function(attribute)
 {
-	var stage = this.parentThatIsA(StageMorph);
-	var cells = stage.cells;
+	var cells = this.cells;
 	var total = 0;
-	for (var i=0; i<stage.cellsY; i++)
+	for (var i=0; i<this.cellsY; i++)
 	{
-		for (var j=0; j<stage.cellsX; j++)
+		for (var j=0; j<this.cellsX; j++)
 		{
 			total += cells[i][j].getAttribute(attribute);
 		}
 	}
-	return total / (stage.cellsX * stage.cellsY);
+	return total / (this.cellsX * this.cellsY);
 }
 
-SpriteMorph.prototype.getCellAttributeMinimum = function(attribute)
+SpriteMorph.prototype.getCellAttributeMinimum = function(attribute) { return this.parentThatIsA(StageMorph).getCellAttributeMinimum(attribute); }
+StageMorph.prototype.getCellAttributeMinimum = function(attribute)
 {
-	var stage = this.parentThatIsA(StageMorph);
-	var cells = stage.cells;
+	var cells = this.cells;
 	var minimum = 0;
-	for (var i=0; i<stage.cellsY; i++)
+	for (var i=0; i<this.cellsY; i++)
 	{
-		for (var j=0; j<stage.cellsX; j++)
+		for (var j=0; j<this.cellsX; j++)
 		{
 			if (i == 0 && j == 0)
 			{
@@ -932,14 +1100,14 @@ SpriteMorph.prototype.getCellAttributeMinimum = function(attribute)
 	return minimum;
 }
 
-SpriteMorph.prototype.getCellAttributeMaximum = function(attribute)
+SpriteMorph.prototype.getCellAttributeMaximum = function(attribute) { return this.parentThatIsA(StageMorph).getCellAttributeMaximum(attribute); }
+StageMorph.prototype.getCellAttributeMaximum = function(attribute)
 {
-	var stage = this.parentThatIsA(StageMorph);
-	var cells = stage.cells;
+	var cells = this.cells;
 	var maximum = 0;
-	for (var i=0; i<stage.cellsY; i++)
+	for (var i=0; i<this.cellsY; i++)
 	{
-		for (var j=0; j<stage.cellsX; j++)
+		for (var j=0; j<this.cellsX; j++)
 		{
 			if (i == 0 && j == 0)
 			{
@@ -954,24 +1122,27 @@ SpriteMorph.prototype.getCellAttributeMaximum = function(attribute)
 	return maximum;
 }
 
-SpriteMorph.prototype.showCellAttribute = function(attribute)
+SpriteMorph.prototype.showCellAttribute = function(attribute) { return this.parentThatIsA(StageMorph).showCellAttribute(attribute); }
+StageMorph.prototype.showCellAttribute = function(attribute)
 {
-	return this.parentThatIsA(StageMorph).setCellAttributeVisibility(attribute, true);
+	return this.setCellAttributeVisibility(attribute, true);
 }
 
-SpriteMorph.prototype.hideCellAttribute = function(attribute)
+SpriteMorph.prototype.hideCellAttribute = function(attribute) { return this.parentThatIsA(StageMorph).hideCellAttribute(attribute); }
+StageMorph.prototype.hideCellAttribute = function(attribute)
 {
-	return this.parentThatIsA(StageMorph).setCellAttributeVisibility(attribute, false);
+	return this.setCellAttributeVisibility(attribute, false);
 }
 
-SpriteMorph.prototype.cellsX = function()
-{
-	return this.parentThatIsA(StageMorph).cellsX;
+SpriteMorph.prototype.reportCellsX = function() { return this.parentThatIsA(StageMorph).reportCellsX(); }
+StageMorph.prototype.reportCellsX = function() {
+	return this.cellsX;
 }
 
-SpriteMorph.prototype.cellsY = function()
+SpriteMorph.prototype.reportCellsY = function() { return this.parentThatIsA(StageMorph).reportCellsY(); }
+StageMorph.prototype.reportCellsY = function()
 {
-	return this.parentThatIsA(StageMorph).cellsY;
+	return this.cellsY;
 }
 
 SpriteMorph.prototype.cellX = function()
@@ -1166,7 +1337,11 @@ SpriteMorph.prototype.objectInCellDir = function(cellDir)
 	return cell.spriteMorphs[0];
 }
 
-SpriteMorph.prototype.objectInCellCell = function(cx, cy)
+
+SpriteMorph.prototype.objectInCellCell = function(cx, cy) { 
+	return this.parentThatIsA(StageMorph).objectInCellCell(cx, cy); 
+}
+StageMorph.prototype.objectInCellCell = function(cx, cy)
 {
     var stage = this.parentThatIsA(StageMorph);
 	var cell = stage.getCellAtCellCoords(cx, cy);
@@ -1177,7 +1352,10 @@ SpriteMorph.prototype.objectInCellCell = function(cx, cy)
 	return cell.spriteMorphs[0];
 }
 
-SpriteMorph.prototype.objectInCellReal = function(x, y)
+SpriteMorph.prototype.objectInCellReal = function(x, y) { 
+	return this.parentThatIsA(StageMorph).objectInCellReal(x, y); 
+}
+StageMorph.prototype.objectInCellReal = function(x, y)
 {
     var stage = this.parentThatIsA(StageMorph);
 	var cell = stage.getCellAt(stage.normalizeCoordinates(x, y));
@@ -1204,7 +1382,10 @@ SpriteMorph.prototype.allObjectsInCellDir = function(cellDir)
 	return new List(cell.spriteMorphs);
 }
 
-SpriteMorph.prototype.allObjectsInCellCell = function(cx, cy)
+SpriteMorph.prototype.allObjectsInCellCell = function(cx, cy) { 
+	return this.parentThatIsA(StageMorph).allObjectsInCellCell(cx, cy); 
+}
+StageMorph.prototype.allObjectsInCellCell = function(cx, cy)
 {
     var stage = this.parentThatIsA(StageMorph);
 	var cell = stage.getCellAtCellCoords(cx, cy);
@@ -1213,7 +1394,10 @@ SpriteMorph.prototype.allObjectsInCellCell = function(cx, cy)
 	return new List(cell.spriteMorphs);
 }
 
-SpriteMorph.prototype.allObjectsInCellReal = function(x, y)
+SpriteMorph.prototype.allObjectsInCellReal = function(x, y) { 
+	return this.parentThatIsA(StageMorph).allObjectsInCellReal(x, y); 
+}
+StageMorph.prototype.allObjectsInCellReal = function(x, y)
 {
     var stage = this.parentThatIsA(StageMorph);
 	var cell = stage.getCellAt(stage.normalizeCoordinates(x, y));

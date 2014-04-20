@@ -159,3 +159,19 @@ Process.prototype.nearestObject = function (otherObjectName, x, y, predicate) {
 	}
 };
 
+Process.prototype.uberDoFaceTowards = Process.prototype.doFaceTowards;
+Process.prototype.doFaceTowards = function (name) {
+	if (name instanceof SpriteMorph)
+	{
+		var thisObj = this.homeContext.receiver;
+		thisObj.faceToXY(
+			name.xPosition(),
+			name.yPosition()
+		);
+	}
+	else
+	{
+		return this.uberDoFaceTowards(name);
+	}
+};
+

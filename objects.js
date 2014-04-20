@@ -4588,6 +4588,17 @@ StageMorph.prototype.blockTemplates = function (category) {
         );
         blocks.push(button);
     }
+
+    function helpMenu() {
+        var menu = new MenuMorph(this);
+        menu.addItem('help...', 'showHelp');
+        return menu;
+    }
+	
+    /* SNAPAPPS HOOK*/
+	if (this.snapappsHookBlockTemplates)
+		this.snapappsHookBlockTemplates(blocks, block, cat, helpMenu);
+    /* END SNAPAPPS HOOK*/
     return blocks;
 };
 
