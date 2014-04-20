@@ -2258,6 +2258,25 @@ SpriteMorph.prototype.deleteVariable = function (varName) {
     }
 };
 
+SpriteMorph.prototype.uberWearCostume = SpriteMorph.prototype.wearCostume;
+SpriteMorph.prototype.wearCostume = function (costume) 
+{
+	if (!this.parentSprite)
+	{
+		//I am a prototype sprite (since I don't have a parent)
+		//Wear the costume for all my children.
+		var myself = this;
+		this.parentThatIsA(StageMorph).children.forEach(function (x) {
+			if (x instanceof SpriteMorph && x.parentSprite == myself)
+			{
+				x.uberWearCostume(costume);
+			}
+		});
+	}
+	//Wear this costume regardless
+	return this.uberWearCostume(costume);
+};
+
 /*********************************************************************/
 /****************************** STATICS ******************************/
 /*********************************************************************/
