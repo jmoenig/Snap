@@ -1968,14 +1968,6 @@ IDE_Morph.prototype.cloudMenu = function () {
             'Login...',
             'initializeCloud'
         );
-        menu.addItem(
-            'Signup...',
-            'createCloudAccount'
-        );
-        menu.addItem(
-            'Reset Password...',
-            'resetCloudPassword'
-        );
     } else {
         menu.addItem(
             'Logout',
