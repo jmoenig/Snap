@@ -304,7 +304,6 @@ IDE_Morph.prototype.openIn = function (world) {
       xhr.open("GET", config.modules[i], true);
       xhr.responseType = "arraybuffer";
       xhr.onload = function () {
-        console.log("here");
         if(this.status === 200) {
           var blob = this.response;
           var mdl = new ModuleLoader(myself);
@@ -319,7 +318,16 @@ IDE_Morph.prototype.openIn = function (world) {
       xhr.send();
     }
 
-
+    // If there is a project specified in the config, open it
+    if(config.project !== undefined) {
+        SnapCloud.openProject(config.project,
+            function (response) {
+                console.log("Here");
+                myself.source = 'cloud';
+                myself.droppedText(response);
+            },
+            myself.cloudError());
+    }
 
     function interpretUrlAnchors() {
         var dict;
@@ -3424,21 +3432,13 @@ IDE_Morph.prototype.initializeCloud = function () {
                 str;
             SnapCloud.login(
                 user.username,
-                pwh,
+                user.password,
                 function () {
-                    if (user.choice) {
-                        str = SnapCloud.encodeDict(
-                            {
-                                username: user.username,
-                                password: pwh
-                            }
-                        );
-                        localStorage['-snap-user'] = str;
-                    }
-                    myself.source = 'cloud';
                     myself.showMessage('now connected.', 2);
                 },
-                myself.cloudError()
+                function () {
+                    myself.shoeMessage("Error connecting to cloud", 2);
+                }
             );
         }
     ).withKey('cloudlogin').promptCredentials(
@@ -4377,20 +4377,21 @@ ProjectDialogMorph.prototype.installCloudProjectList = function (pl) {
     var myself = this;
     this.projectList = pl || [];
     this.projectList.sort(function (x, y) {
-        return x.ProjectName < y.ProjectName ? -1 : 1;
+        return x.name < y.name ? -1 : 1;
     });
+    console.log(this.projectList);
 
     this.listField.destroy();
     this.listField = new ListMorph(
         this.projectList,
         this.projectList.length > 0 ?
                 function (element) {
-                    return element.ProjectName;
+                    return element.name;
                 } : null,
         [ // format: display shared project names bold
             [
                 'bold',
-                function (proj) {return proj.Public === 'true'; }
+                function (proj) {return proj.approved === true; }
             ]
         ],
         function () {myself.ok(); }
@@ -4417,21 +4418,14 @@ ProjectDialogMorph.prototype.installCloudProjectList = function (pl) {
             myself.preview.cachedTexture = null;
             myself.preview.drawNew();
         }
-        if (item.Public === 'true') {
-            myself.shareButton.hide();
-            myself.unshareButton.show();
-        } else {
-            myself.unshareButton.hide();
-            myself.shareButton.show();
-        }
         myself.buttons.fixLayout();
         myself.fixLayout();
         myself.edit();
     };
     this.body.add(this.listField);
-    this.shareButton.show();
+    this.shareButton.hide();
     this.unshareButton.hide();
-    this.deleteButton.show();
+    this.deleteButton.hide();
     this.buttons.fixLayout();
     this.fixLayout();
     if (this.task === 'open') {
@@ -4486,25 +4480,12 @@ ProjectDialogMorph.prototype.openCloudProject = function (project) {
 };
 
 ProjectDialogMorph.prototype.rawOpenCloudProject = function (proj) {
+    console.log(proj);
     var myself = this;
-    SnapCloud.reconnect(
-        function () {
-            SnapCloud.callService(
-                'getProject',
-                function (response) {
-                    SnapCloud.disconnect();
-                    myself.ide.source = 'cloud';
-                    myself.ide.droppedText(response[0].SourceCode);
-                    if (proj.Public === 'true') {
-                        location.hash = '#present:Username=' +
-                            encodeURIComponent(SnapCloud.username) +
-                            '&ProjectName=' +
-                            encodeURIComponent(proj.ProjectName);
-                    }
-                },
-                myself.ide.cloudError(),
-                [proj.ProjectName]
-            );
+    SnapCloud.openProject(proj,
+        function (response) {
+            myself.ide.source = 'cloud';
+            myself.ide.droppedText(response);
         },
         myself.ide.cloudError()
     );
