@@ -1229,6 +1229,8 @@ SpriteMorph.prototype.init = function (globals) {
     this.isClone = false; // indicate a "temporary" Scratch-style clone
     this.cloneOriginName = '';
 	this.originalPixels = null;
+	this.currentPixels = null;
+	this.costumeColor = null;
 
     // sprite nesting properties
     this.parts = []; // not serialized, only anchor (name)
@@ -1370,7 +1372,7 @@ SpriteMorph.prototype.drawNew = function () {
         ctx.scale(this.scale * stageScale, this.scale * stageScale);
         ctx.translate(shift.x, shift.y);
         ctx.rotate(radians(facing - 90));
-        ctx.drawImage(pic.contents, 0, 0);
+		ctx.drawImage(pic.contents, 0, 0);
 
         // adjust my position to the rotation
         this.setCenter(currentCenter, true); // just me
@@ -2473,26 +2475,38 @@ SpriteMorph.prototype.setHue = function (num) {
 
 
 SpriteMorph.prototype.changeCostumeColor = function (num) {
-	currentPixels = this.image.getContext('2d')
+	this.costumeColor = num;
+	this.currentPixels = this.image.getContext('2d')
 		.getImageData(0, 0, this.width(), this.height());
 	var hsv = this.color.hsv();
-
+	
 	hsv[0] = Math.max(Math.min(+num || 0, 100), 0) / 100;
 	hsv[1] = 1; // we gotta fix this at some time
 	this.color.set_hsv.apply(this.color, hsv);
 	
 	for(var I = 0, L = this.originalPixels.data.length; I < L; I += 4){
-		if(currentPixels.data[I + 3] > 0){
+		if(this.currentPixels.data[I + 3] > 0){
 			// If it's not a transparent pixel
-			currentPixels.data[I] = this.originalPixels.
+			this.currentPixels.data[I] = this.originalPixels.
 				data[I] / 255 * this.color.r;
-			currentPixels.data[I + 1] = this.originalPixels.
+			this.currentPixels.data[I + 1] = this.originalPixels.
 				data[I + 1] / 255 * this.color.g;
-			currentPixels.data[I + 2] = this.originalPixels.
+			this.currentPixels.data[I + 2] = this.originalPixels.
 				data[I + 2] / 255 * this.color.b;
 		}
 	}
-	this.image.getContext('2d').putImageData(currentPixels, 0, 0);
+	this.image.getContext('2d').putImageData(this.currentPixels, 0, 0);
+	// create a new, adequately dimensioned canvas
+    // and draw the costume on it
+	
+	/*var canvas = newCanvas(this.extent());
+	var ctx = canvas.getContext('2d');
+	ctx.putImageData(currentPixels, 0, 0);
+	var newColor = new Costume(canvas, this.name ? copy(this.name) : null);
+	this.changed();
+	this.costume = newColor;
+	this.addCostume(newColor);
+	this.wearCostume(newColor);*/
 	this.changed();
 };
 
@@ -2909,6 +2923,10 @@ SpriteMorph.prototype.setHeading = function (degrees) {
         }
         part.gotoXY(trg.x, trg.y);
     });
+	
+	if(this.currentPixels){
+		this.changeCostumeColor(this.costumeColor);
+	}
 };
 
 SpriteMorph.prototype.faceToXY = function (x, y) {
