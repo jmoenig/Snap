@@ -2674,6 +2674,11 @@ SpriteMorph.prototype.setScale = function (percentage) {
             y + (yDist * growth)
         );
     });
+	
+	//Temporary
+	if(this.currentPixels){
+		this.changeCostumeColor(this.costumeColor);
+	}
 };
 
 SpriteMorph.prototype.changeScale = function (delta) {
@@ -2924,6 +2929,7 @@ SpriteMorph.prototype.setHeading = function (degrees) {
         part.gotoXY(trg.x, trg.y);
     });
 	
+	//Temporary
 	if(this.currentPixels){
 		this.changeCostumeColor(this.costumeColor);
 	}
