@@ -124,7 +124,7 @@ PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.objects = '2014-February-11';
+modules.objects = '2014-January-09';
 
 var SpriteMorph;
 var StageMorph;
@@ -186,7 +186,6 @@ SpriteMorph.prototype.sliderColor
 SpriteMorph.prototype.isCachingPrimitives = true;
 
 SpriteMorph.prototype.enableNesting = true;
-SpriteMorph.prototype.useFlatLineEnds = false;
 SpriteMorph.prototype.highlightColor = new Color(250, 200, 130);
 SpriteMorph.prototype.highlightBorder = 8;
 
@@ -804,11 +803,6 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'sensing',
             spec: 'set turbo mode to %b'
         },
-        reportDate: {
-            type: 'reporter',
-            category: 'sensing',
-            spec: 'current %dates'
-        },
 
         // Operators
         reifyScript: {
@@ -1232,6 +1226,21 @@ SpriteMorph.prototype.init = function (globals) {
     this.isDraggable = true;
     this.isDown = false;
 
+    this.graphicsValues = { 'color': 0, 
+                            'fisheye': 0, 
+                            'whirl': 0, 
+                            'pixelate': 0, 
+                            'mosaic': 0, 
+                            'brightness': 0,
+                            'negative' : 0,
+                            'comic' : 0,
+                            'clone' : 0,
+                            'confetti' : 0
+                         }
+
+
+    this.graphicsChanged = false;
+
     this.heading = 90;
     this.changed();
     this.drawNew();
@@ -1355,6 +1364,9 @@ SpriteMorph.prototype.drawNew = function () {
         ctx.translate(shift.x, shift.y);
         ctx.rotate(radians(facing - 90));
         ctx.drawImage(pic.contents, 0, 0);
+
+        // apply graphics effects to image
+        this.image = this.applyGraphicsEffects(this.image);
 
         // adjust my position to the rotation
         this.setCenter(currentCenter, true); // just me
@@ -1745,8 +1757,6 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push('-');
         blocks.push(block('reportIsFastTracking'));
         blocks.push(block('doSetFastTracking'));
-        blocks.push('-');
-        blocks.push(block('reportDate'));
 
     // for debugging: ///////////////
 
@@ -2607,26 +2617,328 @@ SpriteMorph.prototype.changeScale = function (delta) {
 
 // SpriteMorph graphic effects
 
+
+
+SpriteMorph.prototype.applyGraphicsEffects = function (canvas) {
+
+    // for every effect:
+    // apply transform of that effect(canvas, stored value)
+ 
+function transform_whirl (p, value) {
+    if (value != 0) {
+            //p is also the transformed pixels
+            width = canvas.width;
+            height = canvas.height;
+            centerX = Math.floor(width / 2);
+            centerY = Math.floor(height / 2);
+            size = width < height ? width : height;
+            radius = Math.floor(size / 2) //refers to the circle of the picture
+ for (y = -radius; y < radius; ++y) {
+        for (x = -radius; x < radius; ++x) {
+            if (x * x + y * y <= radius * radius) { 
+                // Calculate the pixel array position
+                destPosition = (y + centerY) * width + x + centerX;
+                destPosition *= 4;
+                // Transform the pixel cartesian coordinates (x, y) to polar coordinates (r, alpha)
+                r = Math.sqrt(x * x + y * y); //refers to the calcuating radius
+                alpha = Math.atan2(y, x) //returns the arctan of y/x. returns the angle. 
+                alphaNew = (value / 180) * alpha*(Math.pow((1 - (Math.sqrt((x * x) + (y * y)) / radius)), 2)) 
+                // degrees = ((alpha * 180.0) / Math.PI); //change it to degrees because the value will specify degrees better. easier to mess with than radians
+                // degrees += (value/12) * r //degree is based on radius. the shift will depend on how far the radius is.
+                // alpha = (degrees * Math.PI) / 180.0;// Transform back from polar coordinates to cartesian to it matches with the function
+               //this is where transformation happens 
+                newY = Math.floor(r * Math.sin(alphaNew)); 
+                newX = Math.floor(r * Math.cos(alphaNew)); 
+                // Get the new pixel location 
+                sourcePosition = (newY + centerY) * width + (newX + centerX);
+                sourcePosition *= 4;
+                p[destPosition + 0] = p[sourcePosition + 0];
+                p[destPosition + 1] = p[sourcePosition + 1];
+                p[destPosition + 2] = p[sourcePosition + 2];
+                p[destPosition + 3] = p[sourcePosition + 3]; 
+                };    
+            };
+            }
+            }
+            return p; //should return p regardless
+        };
+
+
+
+function transform_fisheye (p, value) {
+    if (value != 0) {
+            //p is also the transformed pixels
+            width = canvas.width;
+            height = canvas.height;
+            centerX = Math.floor(width / 2);
+            centerY = Math.floor(height / 2);
+            size = width < height ? width : height;
+            radius = Math.floor(size/2)
+
+/*var spherize = function(px,py) {
+    var x = px-width/2;
+    var y = py-height/2;
+    var r = Math.sqrt(x*x+y*y);
+    var maxr = width/2;
+    if (r>maxr) return {
+        'x':px,
+        'y':py
+    }
+    var a = Math.atan2(y,x);
+    var k = (r/maxr)*(r/maxr)*0.5+0.5;
+    var dx = Math.cos(a)*r*k;
+    var dy = Math.sin(a)*r*k;
+    return {
+        'x': dx+width/2,
+        'y': dy+height/2
+    }
+}
+*/
+for (y = -radius; y < radius; ++y) {
+        for (x = -radius; x < radius; ++x) {
+        if (x * x + y * y <= radius * radius) {            
+                destPosition = (y + centerY) * width + x + centerX;
+                destPosition *= 4;
+ 
+                r = Math.sqrt(x * x + y * y);
+                a= Math.atan2(y, x);
+                k = (r/centerX)*(r/centerX)*0.5+0.5;
+                dx = Math.cos(a)*r*k;
+                dy = Math.sin(a)*r*k;
+
+                newY = dy+height/2;
+                newX = dx+width/2
+  
+                // Get the new pixel location 
+                sourcePosition = (newY + centerY) * width + (newX + centerX);
+                sourcePosition *= 4;
+
+                p[destPosition + 0] = p[sourcePosition + 0];
+                p[destPosition + 1] = p[sourcePosition + 1];
+                p[destPosition + 2] = p[sourcePosition + 2];
+                p[destPosition + 3] = p[sourcePosition + 3]; 
+                };    
+            };
+            }
+            }
+            return p;
+        };
+
+function transform_negative(p, value) { 
+    if (value !== 0) {
+        for (i = 0; i < p.length; i = i + 4) {
+            var rcom = 255 - p[i+0]
+            var gcom = 255 - p[i+1]
+            var bcom = 255 - p[i+2] 
+
+            if (p[i+0] < rcom) { //check if current number less than the complement. if so, then
+                p[i+0] = p[i+0] + value
+               
+            } else  if (p[i+0] > rcom){ 
+                p[i+0] = p[i+0] - value //or else decrease towards it
+
+            }
+            if (p[i+1] < gcom) {
+                p[i+1] = p[i+1] + value  
+               
+            } else if (p[i+1] > gcom) {
+               p[i+1] = p[i+1] - value  
+            }
+            if (p[i+2] < bcom) {
+               p[i+2] = p[i+2] + value 
+               
+            } else if (p[i+2] > bcom) {
+                p[i+2] = p[i+2] - value
+           }  
+        };
+    };
+    return p;
+};
+
+function transform_brightness (p, value) {
+    if (value !== 0) {
+        for (i=0; i<p.length; i+=4) {
+              p[i+0] = p[i+0] + value; //255 = 100% of this color. 255 everything = white.  
+              p[i+1] = p[i+1] + value; //if value is negative, add more value to p. if value is positive, subtract value from p
+              p[i+2] = p[i+2] + value;
+              p[i+3] = p[i+3];
+        };
+    };
+    return p;
+};
+
+function transform_comic (p, value) {
+    if (value !== 0) {
+        for (i=0; i<p.length; i+=4) {
+                var frequency = value;
+               
+                    p[i+0] = p[i+0] + Math.sin(i*frequency) * 127 + 128
+                    p[i+1] = p[i+1] + Math.sin(i*frequency) * 127 + 128
+                    p[i+2] = p[i+2] + Math.sin(i*frequency) * 127 + 128
+                    p[i+3] = p[i+3];
+                
+        };
+    };
+    return p;  
+}; 
+
+function transform_pixelate(p, value) {
+
+    var srcWidth = canvas.width
+        srcHeight = canvas.height
+        sourceX = 0
+        sourceY = 0
+        data = p
+        pixelation = Math.abs(value)
+    if (value !== 0){
+        for (var y = 0; y < srcHeight; y += pixelation) {
+            for (var x = 0; x < srcWidth; x += pixelation) {
+                var red = data[((srcWidth * y) + x) * 4],
+                    green = data[((srcWidth * y) + x) * 4 + 1],
+                    blue = data[((srcWidth * y) + x) * 4 + 2];
+                for (var n = 0; n < pixelation; n++) {
+                    for (var m = 0; m < pixelation; m++) {
+                        if (x + m < srcWidth) {
+                            data[((srcWidth * (y + n)) + (x + m)) * 4] = red;
+                            data[((srcWidth * (y + n)) + (x + m)) * 4 + 1] = green;
+                            data[((srcWidth * (y + n)) + (x + m)) * 4 + 2] = blue;
+                        };
+                    };
+                };
+            };
+        };
+    };
+return p; 
+};
+
+function transform_clone (p, value){
+  if (value !== 0) {
+        for (i=0; i<p.length; i+=4) {
+              p[i+0] = p[i* value + 0]
+              p[i+1] = p[i* value + 1] 
+              p[i+2] = p[i* value + 2]
+              p[i+3] = p[i* value + 3];
+        };
+    };
+    return p;
+}; 
+
+function transform_color (p, value) {
+     if (value !== 0) {
+      
+
+
+        for (i=0; i<p.length; i+=4) {
+            if (p[i] < 255) {
+                p[i] - value
+                p[i+1] + value
+            };
+        };
+    
+        for (i=0; i<p.length; i+=4) {    
+            if (p[i+1] < 255) {
+                p[i+1] - value
+                p[i+2] + value
+            };
+        };
+        for (i=0; i<p.length; i+=4) {
+            if (p[i+2] < 255) {
+                p[i+2] - value
+                p[i] + value
+            };
+        };
+    }
+
+    
+        return p;
+};
+//check the red, then check the gree, then chcek the blue. until red hits 255, don't move on to the green yet. but not a while loop because then it's looping
+/*function transform_color (p, value) {
+     if (value !== 0) {
+        for (i=0; i<p.length; i+=4) {
+                frequency=value
+                 p[i] = (p[i+3])*(Math.sin(frequency*i + 0) * 127 + 128);
+                 p[i+1] = (p[i+3])*(Math.sin(frequency*i + 2) * 127 + 128);
+                 p[i+2] = (p[i+3])*(Math.sin(frequency*i + 4) * 127 + 128);
+        };
+    
+    };
+    return p;
+}*/
+
+function transform_confetti (p, value) {
+     if (value !== 0) {
+        for (i=0; i<p.length; i++) {
+              p[i] = Math.sin(value*p[i]) * 127 + p[i]
+        };
+    };
+    return p;
+}
+
+        //todo: write a bunch more transform_?? functions.
+
+        if (this.graphicsChanged) {
+            ctx = canvas.getContext("2d"); 
+            imagedata = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            pixels = imagedata.data;
+            
+
+           // for each effect, do a transform. at any given time, a sprite should wear all 7 effects
+                pixels = transform_whirl(pixels, this.graphicsValues['whirl']);
+                pixels = transform_negative(pixels, this.graphicsValues['negative']);
+                pixels = transform_brightness(pixels, this.graphicsValues['brightness']);
+                pixels = transform_comic(pixels, this.graphicsValues['comic']);
+                pixels = transform_pixelate(pixels, this.graphicsValues['pixelate']);
+                pixels = transform_clone(pixels, this.graphicsValues['clone']);
+                pixels = transform_color(pixels, this.graphicsValues['color']);
+                pixels = transform_fisheye(pixels, this.graphicsValues['fisheye']);
+                pixels = transform_confetti(pixels, this.graphicsValues['confetti']);
+                //... and so on
+
+
+            //the last object will have all the transformations done on it
+            newimagedata = ctx.createImageData(imagedata); //make new imgdata object
+            newimagedata.data.set(pixels);                  //add transformed pixels
+            ctx.putImageData(newimagedata, 0, 0);
+            this.graphicsChanged = false;
+        }
+
+    return canvas;
+
+    //for each effect, apply the transformation on the image we receive
+
+}
+
 SpriteMorph.prototype.setEffect = function (effect, value) {
     var eff = effect instanceof Array ? effect[0] : null;
     if (eff === 'ghost') {
         this.alpha = 1 - Math.min(Math.max(+value || 0, 0), 100) / 100;
-        this.changed();
+    } else {
+        this.graphicsValues[eff] = value;
     }
+    this.graphicsChanged = true;
+    this.drawNew();
+    this.changed();
 };
 
 SpriteMorph.prototype.getGhostEffect = function () {
     return (1 - this.alpha) * 100;
 };
 
+
 SpriteMorph.prototype.changeEffect = function (effect, value) {
     var eff = effect instanceof Array ? effect[0] : null;
     if (eff === 'ghost') {
         this.setEffect(effect, this.getGhostEffect() + (+value || 0));
+    } else {
+        this.setEffect(effect, this.graphicsValues[eff] + value);
     }
 };
 
 SpriteMorph.prototype.clearEffects = function () {
+    for (var effect in this.graphicsValues) {
+        this.setEffect([effect], 0);
+    };
     this.setEffect(['ghost'], 0);
 };
 
@@ -2725,13 +3037,8 @@ SpriteMorph.prototype.drawLine = function (start, dest) {
     if (this.isDown) {
         context.lineWidth = this.size;
         context.strokeStyle = this.color.toString();
-        if (this.useFlatLineEnds) {
-            context.lineCap = 'butt';
-            context.lineJoin = 'miter';
-        } else {
-            context.lineCap = 'round';
-            context.lineJoin = 'round';
-        }
+        context.lineCap = 'round';
+        context.lineJoin = 'round';
         context.beginPath();
         context.moveTo(from.x, from.y);
         context.lineTo(to.x, to.y);
@@ -4455,8 +4762,6 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push('-');
         blocks.push(block('reportIsFastTracking'));
         blocks.push(block('doSetFastTracking'));
-        blocks.push('-');
-        blocks.push(block('reportDate'));
 
     // for debugging: ///////////////
 
@@ -5206,7 +5511,7 @@ Costume.prototype.shrinkWrap = function () {
 };
 
 Costume.prototype.boundingBox = function () {
-    // answer the rectangle surrounding my contents' non-transparent pixels
+    // answer the rectangle surrounding my contents' non-transparent pixels 
     var row,
         col,
         pic = this.contents,
@@ -5289,9 +5594,7 @@ Costume.prototype.flipped = function () {
     SpriteMorph's rotation style type 2
 */
     var canvas = newCanvas(this.extent()),
-        ctx = canvas.getContext('2d'),
-        flipped;
-
+        ctx = canvas.getContext('2d');
     ctx.translate(this.width(), 0);
     ctx.scale(-1, 1);
     ctx.drawImage(this.contents, 0, 0);
@@ -5314,7 +5617,7 @@ Costume.prototype.edit = function (aWorld, anIDE, isnew, oncancel, onsubmit) {
     editor.openIn(
         aWorld,
         isnew ?
-                newCanvas(StageMorph.prototype.dimensions) :
+                newCanvas(new Point(480, 360)) :
                 this.contents,
         isnew ?
                 new Point(240, 180) :
@@ -5662,21 +5965,17 @@ Note.prototype.setupContext = function () {
     if (this.audioContext) { return; }
     var AudioContext = (function () {
         // cross browser some day?
-        var ctx = window.AudioContext ||
+        return window.AudioContext ||
             window.mozAudioContext ||
             window.msAudioContext ||
             window.oAudioContext ||
             window.webkitAudioContext;
-        if (!ctx.prototype.hasOwnProperty('createGain')) {
-            ctx.prototype.createGain = ctx.prototype.createGainNode;
-        }
-        return ctx;
     }());
     if (!AudioContext) {
         throw new Error('Web Audio API is not supported\nin this browser');
     }
     Note.prototype.audioContext = new AudioContext();
-    Note.prototype.gainNode = Note.prototype.audioContext.createGain();
+    Note.prototype.gainNode = Note.prototype.audioContext.createGainNode();
     Note.prototype.gainNode.gain.value = 0.25; // reduce volume by 1/4
 };
 
@@ -5684,23 +5983,17 @@ Note.prototype.setupContext = function () {
 
 Note.prototype.play = function () {
     this.oscillator = this.audioContext.createOscillator();
-    if (!this.oscillator.start) {
-        this.oscillator.start = this.oscillator.noteOn;
-    }
-    if (!this.oscillator.stop) {
-        this.oscillator.stop = this.oscillator.noteOff;
-    }
     this.oscillator.type = 0;
     this.oscillator.frequency.value =
         Math.pow(2, (this.pitch - 69) / 12) * 440;
     this.oscillator.connect(this.gainNode);
     this.gainNode.connect(this.audioContext.destination);
-    this.oscillator.start(0);
+    this.oscillator.noteOn(0); // deprecated, renamed to start()
 };
 
 Note.prototype.stop = function () {
     if (this.oscillator) {
-        this.oscillator.stop(0);
+        this.oscillator.noteOff(0); // deprecated, renamed to stop()
         this.oscillator = null;
     }
 };
@@ -6566,7 +6859,7 @@ StagePrompterMorph.prototype.init = function (question) {
     if (this.label) {this.add(this.label); }
     this.add(this.inputField);
     this.add(this.button);
-    this.setWidth(StageMorph.prototype.dimensions.x - 20);
+    this.setWidth(480 - 20);
     this.fixLayout();
 };
 

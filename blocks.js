@@ -914,15 +914,18 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                 null,
                 false,
                 {
-                /*
-                    color : 'color',
-                    fisheye : 'fisheye',
-                    whirl : 'whirl',
-                    pixelate : 'pixelate',
-                    mosaic : 'mosaic',
-                    brightness : 'brightness',
-                */
-                    ghost : ['ghost']
+              
+                    color : ['color'],
+                    fisheye : ['fisheye'],
+                    whirl : ['whirl'],
+                    pixelate : ['pixelate'],
+                    mosaic : ['mosaic'],
+                    brightness : ['brightness'],
+                    ghost : ['ghost'],
+                    negative : ['negative'],
+                    comic: ['comic'],
+                    clone: ['clone'],
+                    confetti: ['confetti'],
                 },
                 true
             );
