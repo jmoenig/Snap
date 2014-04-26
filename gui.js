@@ -900,6 +900,9 @@ IDE_Morph.prototype.createSearchbar = function () {
     this.searchbar.accept = function () {
         var searchstring = myself.searchbar.getValue();
         myself.currentCategory = 'search';
+        myself.categories.children.forEach(function (each) {
+            each.refresh();
+        });
         list = myself.searchbar.createlist(searchstring);
         myself.searchbar.updatePallete(list);
     }
