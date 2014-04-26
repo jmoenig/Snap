@@ -162,6 +162,7 @@ SpriteMorph.prototype.categories =
         'operators',
         'pen',
         'variables',
+        'search',
         'lists',
         'other'
     ];
@@ -175,6 +176,7 @@ SpriteMorph.prototype.blockColor = {
     sensing : new Color(4, 148, 220),
     operators : new Color(98, 194, 19),
     variables : new Color(243, 118, 29),
+    search : new Color(0, 0, 0),
     lists : new Color(217, 77, 17),
     other: new Color(150, 150, 150)
 };
@@ -1504,7 +1506,8 @@ SpriteMorph.prototype.variableBlock = function (varName) {
 
 // SpriteMorph block templates
 
-SpriteMorph.prototype.blockTemplates = function (category) {
+SpriteMorph.prototype.blockTemplates = function (category, list) {
+    list = list || {};
     var blocks = [], myself = this, varNames, button,
         cat = category || 'motion', txt;
 
@@ -1994,18 +1997,26 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         button.selector = 'addCustomBlock';
         button.showHelp = BlockMorph.prototype.showHelp;
         blocks.push(button);
+
+    } else if (cat === 'search') {
+        for (var i = 0; i < list.length; i++) {
+            blocks.push(list[i]);
+        }
     }
+
     return blocks;
 };
 
-SpriteMorph.prototype.palette = function (category) {
-    if (!this.paletteCache[category]) {
-        this.paletteCache[category] = this.freshPalette(category);
+SpriteMorph.prototype.palette = function (category, list) {
+    list = list || {};
+    if (!this.paletteCache[category] || category === 'search') {
+        this.paletteCache[category] = this.freshPalette(category, list);
     }
     return this.paletteCache[category];
 };
 
-SpriteMorph.prototype.freshPalette = function (category) {
+SpriteMorph.prototype.freshPalette = function (category, list) {
+    list = list || {};
     var palette = new ScrollFrameMorph(null, null, this.sliderColor),
         unit = SyntaxElementMorph.prototype.fontSize,
         x = 0,
@@ -2111,43 +2122,45 @@ SpriteMorph.prototype.freshPalette = function (category) {
     // primitives:
 
     blocks = this.blocksCache[category];
-    if (!blocks) {
-        blocks = myself.blockTemplates(category);
+    if (!blocks || category === 'search') {
+        blocks = myself.blockTemplates(category, list);
         if (this.isCachingPrimitives) {
             myself.blocksCache[category] = blocks;
         }
     }
 
     blocks.forEach(function (block) {
-        if (block === null) {
-            return;
-        }
-        if (block === '-') {
-            if (hideNextSpace) {return; }
-            y += unit * 0.8;
-            hideNextSpace = true;
-        } else if (block === '=') {
-            if (hideNextSpace) {return; }
-            y += unit * 1.6;
-            hideNextSpace = true;
-        } else if (block === '#') {
-            x = 0;
-            y = ry;
-        } else {
-            hideNextSpace = false;
-            if (x === 0) {
-                y += unit * 0.3;
+        if (!(block instanceof CustomBlockDefinition)) {
+            if (block === null) {
+                return;
             }
-            block.setPosition(new Point(x, y));
-            palette.addContents(block);
-            if (block instanceof ToggleMorph
-                    || (block instanceof RingMorph)) {
-                x = block.right() + unit / 2;
-                ry = block.bottom();
-            } else {
-                if (block.fixLayout) {block.fixLayout(); }
+            if (block === '-') {
+                if (hideNextSpace) {return; }
+                y += unit * 0.8;
+                hideNextSpace = true;
+            } else if (block === '=') {
+                if (hideNextSpace) {return; }
+                y += unit * 1.6;
+                hideNextSpace = true;
+            } else if (block === '#') {
                 x = 0;
-                y += block.height();
+                y = ry;
+            } else {
+                hideNextSpace = false;
+                if (x === 0) {
+                    y += unit * 0.3;
+                }
+                block.setPosition(new Point(x, y));
+                palette.addContents(block);
+                if (block instanceof ToggleMorph
+                        || (block instanceof RingMorph)) {
+                    x = block.right() + unit / 2;
+                    ry = block.bottom();
+                } else {
+                    if (block.fixLayout) {block.fixLayout(); }
+                    x = 0;
+                    y += block.height();
+                }
             }
         }
     });
@@ -2164,7 +2177,7 @@ SpriteMorph.prototype.freshPalette = function (category) {
                         && contains(
                             ['lists', 'other'],
                             definition.category
-                        ))) {
+                        )) || (blocks.indexOf(definition) !== -1)) {
                 block = definition.templateInstance();
                 y += unit * 0.3;
                 block.setPosition(new Point(x, y));
@@ -2185,7 +2198,7 @@ SpriteMorph.prototype.freshPalette = function (category) {
                     && contains(
                         ['lists', 'other'],
                         definition.category
-                    ))) {
+                    )) || (blocks.indexOf(definition) !== -1)) {
             block = definition.templateInstance();
             y += unit * 0.3;
             block.setPosition(new Point(x, y));
@@ -4306,7 +4319,8 @@ StageMorph.prototype.removeAllClones = function () {
 
 // StageMorph block templates
 
-StageMorph.prototype.blockTemplates = function (category) {
+StageMorph.prototype.blockTemplates = function (category, list) {
+    list = list || {};
     var blocks = [], myself = this, varNames, button,
         cat = category || 'motion', txt;
 
@@ -4725,6 +4739,10 @@ StageMorph.prototype.blockTemplates = function (category) {
             'Make a block'
         );
         blocks.push(button);
+    } else if (cat === 'search') {
+        for (var i = 0; i < list.length; i++) {
+            blocks.push(list[i]);
+        }
     }
     return blocks;
 };

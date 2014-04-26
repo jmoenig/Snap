@@ -1170,7 +1170,9 @@ BlockDialogMorph.prototype.createCategoryButtons = function () {
 
     Morph.prototype.trackChanges = false;
     SpriteMorph.prototype.categories.forEach(function (cat) {
-        myself.addCategoryButton(cat);
+        if (cat !== 'search') {
+            myself.addCategoryButton(cat);
+        }
     });
     Morph.prototype.trackChanges = oldFlag;
 };

@@ -203,6 +203,7 @@ IDE_Morph.prototype.init = function (isAutoFill) {
     this.logo = null;
     this.controlBar = null;
     this.categories = null;
+    this.searchbar = null;
     this.palette = null;
     this.spriteBar = null;
     this.spriteEditor = null;
@@ -392,6 +393,7 @@ IDE_Morph.prototype.buildPanes = function () {
     this.createLogo();
     this.createControlBar();
     this.createCategories();
+    this.createSearchbar();
     this.createPalette();
     this.createStage();
     this.createSpriteBar();
@@ -783,6 +785,7 @@ IDE_Morph.prototype.createCategories = function () {
                 myself.categories.children.forEach(function (each) {
                     each.refresh();
                 });
+                this.createSearchbar();
                 myself.refreshPalette(true);
             },
             category[0].toUpperCase().concat(category.slice(1)), // label
@@ -811,7 +814,7 @@ IDE_Morph.prototype.createCategories = function () {
         var buttonWidth = myself.categories.children[0].width(),
             buttonHeight = myself.categories.children[0].height(),
             border = 3,
-            rows =  Math.ceil((myself.categories.children.length) / 2),
+            rows = Math.ceil((myself.categories.children.length) / 2),
             xPadding = (myself.categories.width()
                 - border
                 - buttonWidth * 2) / 3,
@@ -833,14 +836,14 @@ IDE_Morph.prototype.createCategories = function () {
         });
 
         myself.categories.setHeight(
-            (rows + 1) * yPadding
-                + rows * buttonHeight
+            (rows) * yPadding
+                + (rows) * buttonHeight
                 + 2 * border
         );
     }
 
     SpriteMorph.prototype.categories.forEach(function (cat) {
-        if (!contains(['lists', 'other'], cat)) {
+        if (!contains(['lists', 'other', 'search'], cat)) {
             addCategoryButton(cat);
         }
     });
@@ -848,16 +851,144 @@ IDE_Morph.prototype.createCategories = function () {
     this.add(this.categories);
 };
 
-IDE_Morph.prototype.createPalette = function () {
+IDE_Morph.prototype.createSearchbar = function () {
+    var myself = this;
+
+    if (this.searchbar) {
+        this.searchbar.destroy();
+    }
+    if (this.searchButton) {
+        this.searchButton.destroy();
+    }
+
+    var defaulttext = 'Search';
+    var colors = [this.groupColor, 
+                  this.frameColor.darker(50), 
+                  this.frameColor.darker(50)
+                  ];
+
+    this.searchbar = new InputFieldMorph();
+    this.searchbar.isDraggable = false;
+    this.searchbar.acceptsDrops = false;
+    this.searchbar.contents.acceptsDrops = false;
+    
+    this.searchButton = new PushButtonMorph(null, 
+                                            function () 
+                                                {myself.searchbar.accept()}, 
+                                            defaulttext);
+    this.searchButton.setHeight(this.searchbar.height() - 2);
+    this.searchButton.corner = 0;
+    this.searchButton.color = colors[0];
+    this.searchButton.highlightColor = colors[1];
+    this.searchButton.pressColor = colors[2];
+    this.searchButton.labelShadowOffset = new Point(-1, -1);
+    this.searchButton.labelShadowColor = colors[1];
+    this.searchButton.labelColor = this.buttonLabelColor;
+    this.searchButton.contrast = this.buttonContrast;
+    
+    this.searchbar.setWidth(this.logo.width() - this.searchButton.width());
+    
+    this.add(this.searchbar);
+    this.add(this.searchButton);
+
+    // These functions could be used to allow for autofill functionality
+    // this.searchbar.reactToKeyStroke = function (event) {
+    // }
+    // this.searchbar.reactToEdit = function (string) {
+    // }
+
+    this.searchbar.accept = function () {
+        var searchstring = myself.searchbar.getValue().toLowerCase();
+        myself.currentCategory = 'search';
+        myself.categories.children.forEach(function (each) {
+            each.refresh();
+        });
+        var list = myself.searchbar.createlist(searchstring);
+        myself.searchbar.updatePallete(list);
+    }
+
+    this.searchbar.createlist = function (string) {
+        // Creates a list of blocks that match the input String
+
+        var list = new Array();
+        var count = 0;
+        SpriteMorph.prototype.categories.forEach(function (cat) {
+            myself.currentSprite.palette(cat);      
+        })
+        var allCategories = myself.currentSprite.blocksCache;
+        var customBlocks = myself.currentSprite.customBlocks;
+        var globalCustomBlocks = myself.stage.globalBlocks;
+
+        //Adding Local Custom Blocks
+        for (var i = 0; i < customBlocks.length; i++) {
+            var current = (customBlocks[i]);
+            if (current.spec.toLowerCase().indexOf(string) !== -1) {
+                list[count] = current;
+                count++;
+            }
+        }
+        //Adding Global Custom Blocks 
+        for (var i = 0; i < globalCustomBlocks.length; i++) {
+            var current = (globalCustomBlocks[i]);
+            if (current.spec.toLowerCase().indexOf(string) !== -1) {
+                list[count] = current;
+                count++;
+            }
+        }
+        //Adding all standard blocks
+        for (key in allCategories) {
+            for (var i = 0; i < allCategories[key].length; i++) {
+                var current = (allCategories[key][i]);
+                //Allows knowledge of the next block
+                if (i !== allCategories[key].length) {
+                    var next = (allCategories[key][i + 1]);
+                }
+                if (current !== "-" && current !== "#" && current !== "=") {
+                    //Adds toggleMorphs
+                    if (current instanceof ToggleMorph) {
+                        if (next.blockSpec.toLowerCase().indexOf(string) !== -1) {
+                            list[count] = current.fullCopy();
+                            list[count].refresh();
+                            count++;
+                            list[count] = next.fullCopy(false);
+                            count++;
+                            i++;
+                        }
+                    //Adds PushButtonMorphs
+                    } else if (current instanceof PushButtonMorph) {
+                        if (current.children[0].text.toLowerCase().indexOf(string) !== -1) {
+                            list[count] = current.fullCopy(false);
+                            count++;
+                        }
+                    //Adds the rest
+                    } else {
+                        if (current.blockSpec.toLowerCase().indexOf(string) !== -1) {
+                            list[count] = current.fullCopy(false);
+                            count++;
+                        }
+                    }
+                }
+            }
+        }
+        return list;
+    }
+
+    this.searchbar.updatePallete = function (list) {
+        myself.refreshPalette(true, list);
+    }
+
+}
+IDE_Morph.prototype.createPalette = function (list) {
     // assumes that the logo pane has already been created
     // needs the categories pane for layout
     var myself = this;
+    list = list || {};
 
     if (this.palette) {
         this.palette.destroy();
     }
 
-    this.palette = this.currentSprite.palette(this.currentCategory);
+    this.palette = this.currentSprite.palette(this.currentCategory, list);
     this.palette.isDraggable = false;
     this.palette.acceptsDrops = true;
     this.palette.contents.acceptsDrops = false;
@@ -1381,11 +1512,17 @@ IDE_Morph.prototype.fixLayout = function (situation) {
         this.categories.setLeft(this.logo.left());
         this.categories.setTop(this.logo.bottom());
     }
+    //searchbar
+    this.searchbar.setLeft(this.logo.left());
+    this.searchbar.setTop(this.categories.bottom());
+    this.searchButton.setLeft(this.searchbar.right());
+    this.searchButton.setTop(this.categories.bottom() + 1);
 
     // palette
     this.palette.setLeft(this.logo.left());
-    this.palette.setTop(this.categories.bottom());
+    this.palette.setTop(this.searchbar.bottom());
     this.palette.setHeight(this.bottom() - this.palette.top());
+
 
     if (situation !== 'refreshPalette') {
         // stage
@@ -1580,10 +1717,11 @@ IDE_Morph.prototype.droppedBinary = function (anArrayBuffer, name) {
 
 // IDE_Morph button actions
 
-IDE_Morph.prototype.refreshPalette = function (shouldIgnorePosition) {
+IDE_Morph.prototype.refreshPalette = function (shouldIgnorePosition, list) {
     var oldTop = this.palette.contents.top();
+    list = list || {};
 
-    this.createPalette();
+    this.createPalette(list);
     this.fixLayout('refreshPalette');
     if (!shouldIgnorePosition) {
         this.palette.contents.setTop(oldTop);
@@ -3473,6 +3611,7 @@ IDE_Morph.prototype.setBlocksScale = function (num) {
     this.fixLayout();
     this.openProjectString(projectData);
     this.saveSetting('zoom', num);
+    pa
 };
 
 // IDE_Morph stage size manipulation
@@ -6150,7 +6289,7 @@ JukeboxMorph.prototype.updateList = function () {
 
 JukeboxMorph.prototype.updateSelection = function () {
     this.contents.children.forEach(function (morph) {
-        if (morph.refresh) {morph.refresh(); }
+        if (morph.refresh) {morph.refresh(); }contents.children
     });
     this.spriteVersion = this.sprite.version;
 };
