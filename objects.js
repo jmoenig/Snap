@@ -1226,11 +1226,11 @@ SpriteMorph.prototype.init = function (globals) {
     this.isDraggable = true;
     this.isDown = false;
 
-    this.graphicsValues = { 'color': 0, 
+    this.graphicsValues = { /*'color': 0, 
                             'fisheye': 0, 
                             'whirl': 0, 
                             'pixelate': 0, 
-                            'mosaic': 0, 
+                            'mosaic': 0, */
                             'brightness': 0,
                             'negative' : 0,
                             'comic' : 0,
@@ -2624,7 +2624,7 @@ SpriteMorph.prototype.applyGraphicsEffects = function (canvas) {
     // for every effect:
     // apply transform of that effect(canvas, stored value)
  
-function transform_whirl (p, value) {
+/*function transform_whirl (p, value) {
     if (value != 0) {
             //p is also the transformed pixels
             width = canvas.width;
@@ -2675,7 +2675,7 @@ function transform_fisheye (p, value) {
             size = width < height ? width : height;
             radius = Math.floor(size/2)
 
-/*var spherize = function(px,py) {
+var spherize = function(px,py) {
     var x = px-width/2;
     var y = py-height/2;
     var r = Math.sqrt(x*x+y*y);
@@ -2693,7 +2693,7 @@ function transform_fisheye (p, value) {
         'y': dy+height/2
     }
 }
-*/
+
 for (y = -radius; y < radius; ++y) {
         for (x = -radius; x < radius; ++x) {
         if (x * x + y * y <= radius * radius) {            
@@ -2723,7 +2723,7 @@ for (y = -radius; y < radius; ++y) {
             }
             return p;
         };
-
+*/
 function transform_negative(p, value) { 
     if (value !== 0) {
         for (i = 0; i < p.length; i = i + 4) {
@@ -2782,7 +2782,7 @@ function transform_comic (p, value) {
     return p;  
 }; 
 
-function transform_pixelate(p, value) {
+/*function transform_pixelate(p, value) {
 
     var srcWidth = canvas.width
         srcHeight = canvas.height
@@ -2809,7 +2809,7 @@ function transform_pixelate(p, value) {
         };
     };
 return p; 
-};
+};*/
 
 function transform_clone (p, value){
   if (value !== 0) {
@@ -2823,7 +2823,7 @@ function transform_clone (p, value){
     return p;
 }; 
 
-function transform_color (p, value) {
+/*function transform_color (p, value) {
      if (value !== 0) {
       
 
@@ -2851,7 +2851,7 @@ function transform_color (p, value) {
 
     
         return p;
-};
+};*/
 //check the red, then check the gree, then chcek the blue. until red hits 255, don't move on to the green yet. but not a while loop because then it's looping
 /*function transform_color (p, value) {
      if (value !== 0) {
@@ -2884,16 +2884,15 @@ function transform_confetti (p, value) {
             
 
            // for each effect, do a transform. at any given time, a sprite should wear all 7 effects
-                pixels = transform_whirl(pixels, this.graphicsValues['whirl']);
+                // pixels = transform_whirl(pixels, this.graphicsValues['whirl']);
                 pixels = transform_negative(pixels, this.graphicsValues['negative']);
                 pixels = transform_brightness(pixels, this.graphicsValues['brightness']);
                 pixels = transform_comic(pixels, this.graphicsValues['comic']);
                 pixels = transform_pixelate(pixels, this.graphicsValues['pixelate']);
                 pixels = transform_clone(pixels, this.graphicsValues['clone']);
-                pixels = transform_color(pixels, this.graphicsValues['color']);
-                pixels = transform_fisheye(pixels, this.graphicsValues['fisheye']);
+                // pixels = transform_color(pixels, this.graphicsValues['color']);
+                // pixels = transform_fisheye(pixels, this.graphicsValues['fisheye']);
                 pixels = transform_confetti(pixels, this.graphicsValues['confetti']);
-                //... and so on
 
 
             //the last object will have all the transformations done on it
