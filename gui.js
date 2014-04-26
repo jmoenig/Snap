@@ -898,7 +898,7 @@ IDE_Morph.prototype.createSearchbar = function () {
     // }
 
     this.searchbar.accept = function () {
-        var searchstring = myself.searchbar.getValue();
+        var searchstring = myself.searchbar.getValue().toLowerCase();
         myself.currentCategory = 'search';
         myself.categories.children.forEach(function (each) {
             each.refresh();
@@ -922,7 +922,7 @@ IDE_Morph.prototype.createSearchbar = function () {
         //Adding Local Custom Blocks
         for (var i = 0; i < customBlocks.length; i++) {
             var current = (customBlocks[i]);
-            if (current.spec.indexOf(string) !== -1) {
+            if (current.spec.toLowerCase().indexOf(string) !== -1) {
                 list[count] = current;
                 count++;
             }
@@ -930,7 +930,7 @@ IDE_Morph.prototype.createSearchbar = function () {
         //Adding Global Custom Blocks 
         for (var i = 0; i < globalCustomBlocks.length; i++) {
             var current = (globalCustomBlocks[i]);
-            if (current.spec.indexOf(string) !== -1) {
+            if (current.spec.toLowerCase().indexOf(string) !== -1) {
                 list[count] = current;
                 count++;
             }
@@ -946,7 +946,7 @@ IDE_Morph.prototype.createSearchbar = function () {
                 if (current !== "-" && current !== "#" && current !== "=") {
                     //Adds toggleMorphs
                     if (current instanceof ToggleMorph) {
-                        if (next.blockSpec.indexOf(string) !== -1) {
+                        if (next.blockSpec.toLowerCase().indexOf(string) !== -1) {
                             list[count] = current.fullCopy();
                             list[count].refresh();
                             count++;
@@ -956,13 +956,13 @@ IDE_Morph.prototype.createSearchbar = function () {
                         }
                     //Adds PushButtonMorphs
                     } else if (current instanceof PushButtonMorph) {
-                        if (current.children[0].text.indexOf(string) !== -1) {
+                        if (current.children[0].text.toLowerCase().indexOf(string) !== -1) {
                             list[count] = current.fullCopy(false);
                             count++;
                         }
                     //Adds the rest
                     } else {
-                        if ((current.blockSpec).indexOf(string) !== -1) {
+                        if (current.blockSpec.toLowerCase().indexOf(string) !== -1) {
                             list[count] = current.fullCopy(false);
                             count++;
                         }
