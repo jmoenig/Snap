@@ -2892,7 +2892,7 @@ BlockMorph.prototype.fullCopy = function (draggable) {
     if (draggable === false) {
         ans.isDraggable = false;
     } else {
-        ans.isDraggable = draggable;
+        ans.isDraggable = true;
     }
     if (this.instantiationSpec) {
         ans.setSpec(this.instantiationSpec);
