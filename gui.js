@@ -956,7 +956,7 @@ IDE_Morph.prototype.createSearchbar = function () {
                         }
                     //Adds PushButtonMorphs
                     } else if (current instanceof PushButtonMorph) {
-                        if (current.labelString.indexOf(string) !== -1) {
+                        if (current.children[0].text.indexOf(string) !== -1) {
                             list[count] = current.fullCopy(false);
                             count++;
                         }
