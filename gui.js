@@ -903,7 +903,7 @@ IDE_Morph.prototype.createSearchbar = function () {
         myself.categories.children.forEach(function (each) {
             each.refresh();
         });
-        list = myself.searchbar.createlist(searchstring);
+        var list = myself.searchbar.createlist(searchstring);
         myself.searchbar.updatePallete(list);
     }
 
