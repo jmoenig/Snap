@@ -68,7 +68,7 @@ sb, CommentMorph, CommandBlockMorph, BlockLabelPlaceHolderMorph, Audio*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2014-February-13';
+modules.gui = '2014-April-27';
 
 // Declarations
 
@@ -871,10 +871,12 @@ IDE_Morph.prototype.createSearchbar = function () {
     this.searchbar.isDraggable = false;
     this.searchbar.acceptsDrops = false;
     this.searchbar.contents.acceptsDrops = false;
+    this.searchbar.message = null;
     
     this.searchButton = new PushButtonMorph(null, 
-                                            function () 
-                                                {myself.searchbar.accept()}, 
+                                            function () {
+                                                myself.searchbar.accept()
+                                            }, 
                                             defaulttext);
     this.searchButton.setHeight(this.searchbar.height() - 2);
     this.searchButton.corner = 0;
@@ -903,7 +905,7 @@ IDE_Morph.prototype.createSearchbar = function () {
         myself.categories.children.forEach(function (each) {
             each.refresh();
         });
-        var list = myself.searchbar.createlist(searchstring);
+        list = myself.searchbar.createlist(searchstring);
         myself.searchbar.updatePallete(list);
     }
 
@@ -962,7 +964,7 @@ IDE_Morph.prototype.createSearchbar = function () {
                         }
                     //Adds the rest
                     } else {
-                        if (current.blockSpec.toLowerCase().indexOf(string) !== -1) {
+                        if ((current.blockSpec.toLowerCase()).indexOf(string) !== -1) {
                             list[count] = current.fullCopy(false);
                             count++;
                         }
@@ -2205,10 +2207,20 @@ IDE_Morph.prototype.settingsMenu = function () {
         'Zoom blocks...',
         'userSetBlocksScale'
     );
-    menu.addItem(
-        'Stage size...',
-        'userSetStageSize'
-    );
+    if (shiftClicked) {
+        menu.addItem(
+            'Stage width...',
+            'userSetStageSizeWidth',
+            null,
+            new Color(100, 0, 0)
+        );
+        menu.addItem(
+            'Stage height...',
+            'userSetStageHeight',
+            null,
+            new Color(100, 0, 0)
+        );
+    }
     menu.addLine();
     addPreference(
         'Blurred shadows',
@@ -3611,40 +3623,66 @@ IDE_Morph.prototype.setBlocksScale = function (num) {
     this.fixLayout();
     this.openProjectString(projectData);
     this.saveSetting('zoom', num);
-    pa
 };
 
 // IDE_Morph stage size manipulation
 
-IDE_Morph.prototype.userSetStageSize = function () {
+IDE_Morph.prototype.userSetStageWidth = function () {
     new DialogBoxMorph(
         this,
-        this.setStageExtent,
+        this.setStageWidth,
         this
     ).promptVector(
-        "Stage size",
-        StageMorph.prototype.dimensions,
-        new Point(480, 360),
-        'Stage width',
-        'Stage height',
+        "Stage width",
+        StageMorph.prototype.dimensions.x.toString(),
         this.world(),
         null, // pic
-        null // msg
+        null, // choices
+        null, // read only
+        true // numeric
     );
 };
 
+IDE_Morph.prototype.userSetStageHeight = function () {
+    new DialogBoxMorph(
+        this,
+        this.setStageHeight,
+        this
+    ).prompt(
+        "Stage height",
+        StageMorph.prototype.dimensions.y.toString(),
+        this.world(),
+        null, // pic
+        null, // choices
+        null, // read only
+        true // numeric
+    );
+};
+
+IDE_Morph.prototype.setStageWidth = function (num) {
+    this.setStageExtent(new Point(
+        Math.max(num, 240),
+        (StageMorph.prototype.dimensions.y)
+    ));
+};
+
+IDE_Morph.prototype.setStageHeight = function (num) {
+    this.setStageExtent(new Point(
+        (StageMorph.prototype.dimensions.x),
+        Math.max(num, 180)
+    ));
+};
+
 IDE_Morph.prototype.setStageExtent = function (aPoint) {
-    var myself = this,
-        world = this.world(),
-        ext = aPoint.max(new Point(480, 180));
+    var myself = this;
 
     function zoom() {
         myself.step = function () {
-            var delta = ext.subtract(
+            var delta = aPoint.subtract(
                 StageMorph.prototype.dimensions
             ).divideBy(2);
             if (delta.abs().lt(new Point(5, 5))) {
-                StageMorph.prototype.dimensions = ext;
+                StageMorph.prototype.dimensions = aPoint;
                 delete myself.step;
             } else {
                 StageMorph.prototype.dimensions =
@@ -3653,22 +3691,20 @@ IDE_Morph.prototype.setStageExtent = function (aPoint) {
             myself.stage.setExtent(StageMorph.prototype.dimensions);
             myself.stage.clearPenTrails();
             myself.fixLayout();
-            this.setExtent(world.extent());
         };
     }
 
     this.stageRatio = 1;
     this.isSmallStage = false;
     this.controlBar.stageSizeButton.refresh();
-    this.setExtent(world.extent());
+    this.setExtent(this.world().extent());
     if (this.isAnimating) {
         zoom();
     } else {
-        StageMorph.prototype.dimensions = ext;
+        StageMorph.prototype.dimensions = aPoint;
         this.stage.setExtent(StageMorph.prototype.dimensions);
         this.stage.clearPenTrails();
         this.fixLayout();
-        this.setExtent(world.extent());
     }
 };
 
@@ -6289,7 +6325,7 @@ JukeboxMorph.prototype.updateList = function () {
 
 JukeboxMorph.prototype.updateSelection = function () {
     this.contents.children.forEach(function (morph) {
-        if (morph.refresh) {morph.refresh(); }contents.children
+        if (morph.refresh) {morph.refresh(); }
     });
     this.spriteVersion = this.sprite.version;
 };
