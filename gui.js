@@ -2207,6 +2207,10 @@ IDE_Morph.prototype.settingsMenu = function () {
         'Zoom blocks...',
         'userSetBlocksScale'
     );
+    menu.addItem(
+        'Stage size...',
+        'userSetStageSize'
+        );
     if (shiftClicked) {
         menu.addItem(
             'Stage width...',
@@ -3626,6 +3630,23 @@ IDE_Morph.prototype.setBlocksScale = function (num) {
 };
 
 // IDE_Morph stage size manipulation
+
+IDE_Morph.prototype.userSetStageSize = function () {
+    new DialogBoxMorph(
+        this,
+        this.setStageExtent,
+        this
+    ).promptVector(
+        "Stage size",
+        StageMorph.prototype.dimensions,
+        new Point(480, 360),
+        'Stage width',
+        'Stage height',
+        this.world(),
+        null, // pic
+        null // msg
+    );
+};
 
 IDE_Morph.prototype.userSetStageWidth = function () {
     new DialogBoxMorph(
