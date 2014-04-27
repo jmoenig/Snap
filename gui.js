@@ -900,13 +900,21 @@ IDE_Morph.prototype.createSearchbar = function () {
     // }
 
     this.searchbar.accept = function () {
-        var searchstring = myself.searchbar.getValue().toLowerCase();
-        myself.currentCategory = 'search';
-        myself.categories.children.forEach(function (each) {
-            each.refresh();
-        });
-        list = myself.searchbar.createlist(searchstring);
-        myself.searchbar.updatePallete(list);
+        var searchString = myself.searchbar.getValue().toLowerCase();
+        if (searchString === '') {
+            myself.showMessage('Please enter a Search term');
+        } else {
+            myself.currentCategory = 'search';
+            myself.categories.children.forEach(function (each) {
+                each.refresh();
+            });
+            list = myself.searchbar.createlist(searchString);
+            if (list.length === 0) {
+                myself.showMessage('Did not find any results for "' + searchString + '"');
+            } else {
+                myself.searchbar.updatePallete(list);
+            }
+        }
     }
 
     this.searchbar.createlist = function (string) {
@@ -2211,20 +2219,6 @@ IDE_Morph.prototype.settingsMenu = function () {
         'Stage size...',
         'userSetStageSize'
         );
-    if (shiftClicked) {
-        menu.addItem(
-            'Stage width...',
-            'userSetStageSizeWidth',
-            null,
-            new Color(100, 0, 0)
-        );
-        menu.addItem(
-            'Stage height...',
-            'userSetStageHeight',
-            null,
-            new Color(100, 0, 0)
-        );
-    }
     menu.addLine();
     addPreference(
         'Blurred shadows',
@@ -3645,38 +3639,6 @@ IDE_Morph.prototype.userSetStageSize = function () {
         this.world(),
         null, // pic
         null // msg
-    );
-};
-
-IDE_Morph.prototype.userSetStageWidth = function () {
-    new DialogBoxMorph(
-        this,
-        this.setStageWidth,
-        this
-    ).promptVector(
-        "Stage width",
-        StageMorph.prototype.dimensions.x.toString(),
-        this.world(),
-        null, // pic
-        null, // choices
-        null, // read only
-        true // numeric
-    );
-};
-
-IDE_Morph.prototype.userSetStageHeight = function () {
-    new DialogBoxMorph(
-        this,
-        this.setStageHeight,
-        this
-    ).prompt(
-        "Stage height",
-        StageMorph.prototype.dimensions.y.toString(),
-        this.world(),
-        null, // pic
-        null, // choices
-        null, // read only
-        true // numeric
     );
 };
 
