@@ -742,6 +742,8 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             part = new InputSlotMorph();
             part.isUnevaluated = true;
             break;
+        case '%textOption': // FIXME -- temp settings block.
+        case '%textValue':
         case '%txt':
             part = new InputSlotMorph();
             part.minWidth = part.height() * 1.7; // "landscape"
@@ -928,19 +930,6 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             );
             part.setContents(['ghost']);
             break;
-        case '%font':
-            part = new InputSlotMorph(
-                null,
-                false,
-                {
-                    monospace : ['monospace'],
-                    'sans-serif' : ['sans-serif'],
-                    serif : ['serif']
-                },
-                false
-            );
-            part.setContents(['sans-serif']);
-            break;
         case '%snd':
             part = new InputSlotMorph(
                 null,
@@ -948,6 +937,18 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                 'soundsMenu',
                 true
             );
+            break;
+        case '%xy':
+            part = new InputSlotMorph(
+                null, 
+                false, // numeric?
+                {
+                    'x' : 'x',
+                    'y' : 'y',
+                },
+                true // read-only?
+            );
+            part.setContents('x');
             break;
         case '%key':
             part = new InputSlotMorph(
@@ -1298,6 +1299,7 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
         default:
             nop();
         }
+        
     } else if (spec[0] === '$' &&
             spec.length > 1 &&
             this.selector !== 'reportGetVar') {
@@ -6561,9 +6563,11 @@ InputSlotMorph.prototype.attributesMenu = function () {
             }
         );
     }
+    
     if (!obj) {
         return dict;
     }
+    
     if (obj instanceof SpriteMorph) {
         dict = {
             'x position' : ['x position'],
@@ -6573,6 +6577,11 @@ InputSlotMorph.prototype.attributesMenu = function () {
             'costume name' : ['costume name'],
             'size' : ['size']
         };
+        // FIXME -- for font properties.
+        dict['~'] = null
+        for (var attrname in obj.fontProperties) { 
+            dict[attrname] = attrname; 
+        }
     } else { // the stage
         dict = {
             'costume #' : ['costume #'],

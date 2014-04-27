@@ -524,10 +524,20 @@ SpriteMorph.prototype.initBlocks = function () {
         doStampText: {
             type: 'command',
             category: 'pen',
-            spec: 'stamp text %txt with font %font of size %n',
-            defaults: [[localize('Hello!')], ['sans-serif'], [12]]
+            spec: 'stamp text %txt',
+            defaults: [[localize('Hello!')]]
         },
-
+        doSetTextOption: {
+            type: 'command',
+            category: 'pen',
+            spec: 'set text option %textOption to %textValue',
+        },
+        reportMeasureText: {
+            type: 'reporter',
+            category: 'pen',
+            spec: 'measure %xy direction of %txt',
+        },
+        
         // Control
         receiveGo: {
             type: 'hat',
@@ -1468,7 +1478,7 @@ SpriteMorph.prototype.blockForSelector = function (selector, setDefaults) {
     var migration, info, block, defaults, inputs, i;
     migration = this.blockMigrations[selector];
     info = this.blocks[migration ? migration.selector : selector];
-    if (!info) {return null; }
+    if (!info) { return null; }
     block = info.type === 'command' ? new CommandBlockMorph()
         : info.type === 'hat' ? new HatBlockMorph()
             : info.type === 'ring' ? new RingMorph()
@@ -1694,7 +1704,10 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('setSize'));
         blocks.push('-');
         blocks.push(block('doStamp'));
+        blocks.push('-');
+        blocks.push(block('doSetTextOption'));
         blocks.push(block('doStampText'));
+        blocks.push(block('reportMeasureText'));
 
     } else if (cat === 'control') {
 
@@ -2521,12 +2534,36 @@ SpriteMorph.prototype.changeBrightness = function (delta) {
     this.setBrightness(this.getBrightness() + (+delta || 0));
 };
 
-// Text Stamping
+// Text Stamping and Font Properties
 
-SpriteMorph.prototype.doStampText = function (text, font, size) {
+// This holds the current font options for the sprite
+SpriteMorph.prototype.fontProperties = {
+    // CSS Style Font Options (work for Canvas)
+    'font-size' : '12pt',
+    'font-family' : 'Helvetica',
+    'font-variant' : 'normal',
+    'font-weight' : '300',
+    'font-style' : 'normal',
+    'line-height' : '1', // current not exposed
+    // Canvas Font Options
+    'textAlign' : 'left',
+    'textBaseline' : 'Alphabetic', // current not exposed
+    // Custon Snap Font Options
+    // Controls whether the sprite moves after stamping
+    'moveToFontEnd' : false // current not exposed
+}
+
+SpriteMorph.prototype.doSetTextOption = function (option, value) {
+    if (this.fontProperties[option]) {
+        this.fontProperties[option] = value;
+    }
+}
+
+SpriteMorph.prototype.doStampText = function (text) {
     var stage = this.parent, 
         context = stage.penTrails().getContext('2d'),
         isWarped = this.isWarped,
+        options = this.fontProperties,
         ide = this.parentThatIsA(IDE_Morph);
     
     if (isWarped) {
@@ -2534,9 +2571,9 @@ SpriteMorph.prototype.doStampText = function (text, font, size) {
     }
     
     context.save();
-    context.font = size + 'pt ' + font;
+    context.font = options['font-size'] + ' ' + options['font-family'];
     context.fillStyle = this.color.toString();
-    context.textAlign = "left";
+    context.textAlign = options['textAlign'];
 
     context.fillText(text, (this.center().x - stage.left()),
         (this.center().y - stage.top()));
@@ -2552,6 +2589,12 @@ SpriteMorph.prototype.doStampText = function (text, font, size) {
     // Refresh layout to guarnatee all text shows
     ide.fixLayout();
 };
+
+// Measure the input text based on the current text options.
+
+SpriteMorph.prototype.reportMeasureText = function (direction, text) {
+    return 0;
+}
 
 // SpriteMorph layers
 

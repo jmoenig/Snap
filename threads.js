@@ -2416,6 +2416,7 @@ Process.prototype.reportAttributeOf = function (attribute, name) {
         thatObj,
         stage;
 
+    // FIXME -- refactor
     if (thisObj) {
         stage = thisObj.parentThatIsA(StageMorph);
         if (stage.name === name) {
@@ -2447,6 +2448,7 @@ Process.prototype.reportAttributeOf = function (attribute, name) {
                 return thatObj.getScale ? thatObj.getScale() : '';
             }
         }
+        // FIXME -- TEXT OPTION SETTINGS
     }
     return '';
 };
