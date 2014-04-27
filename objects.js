@@ -2106,7 +2106,9 @@ SpriteMorph.prototype.freshPalette = function (category, list) {
                 return;
             }
             if (block === '-') {
-                if (hideNextSpace) {return; }
+                if (hideNextSpace) {
+                    return; 
+                }
                 y += unit * 0.8;
                 hideNextSpace = true;
             } else if (block === '=') {
