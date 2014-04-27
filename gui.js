@@ -3642,30 +3642,18 @@ IDE_Morph.prototype.userSetStageSize = function () {
     );
 };
 
-IDE_Morph.prototype.setStageWidth = function (num) {
-    this.setStageExtent(new Point(
-        Math.max(num, 240),
-        (StageMorph.prototype.dimensions.y)
-    ));
-};
-
-IDE_Morph.prototype.setStageHeight = function (num) {
-    this.setStageExtent(new Point(
-        (StageMorph.prototype.dimensions.x),
-        Math.max(num, 180)
-    ));
-};
-
 IDE_Morph.prototype.setStageExtent = function (aPoint) {
-    var myself = this;
+    var myself = this,
+    world = this.world(),
+    ext = aPoint.max(new Point(480, 180));
 
     function zoom() {
         myself.step = function () {
-            var delta = aPoint.subtract(
+            var delta = ext.subtract(
                 StageMorph.prototype.dimensions
             ).divideBy(2);
             if (delta.abs().lt(new Point(5, 5))) {
-                StageMorph.prototype.dimensions = aPoint;
+                StageMorph.prototype.dimensions = ext;
                 delete myself.step;
             } else {
                 StageMorph.prototype.dimensions =
@@ -3674,6 +3662,7 @@ IDE_Morph.prototype.setStageExtent = function (aPoint) {
             myself.stage.setExtent(StageMorph.prototype.dimensions);
             myself.stage.clearPenTrails();
             myself.fixLayout();
+            this.setExtent(world.extent());
         };
     }
 
@@ -3688,6 +3677,7 @@ IDE_Morph.prototype.setStageExtent = function (aPoint) {
         this.stage.setExtent(StageMorph.prototype.dimensions);
         this.stage.clearPenTrails();
         this.fixLayout();
+        this.setExtent(world.extent());
     }
 };
 
