@@ -531,11 +531,13 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'command',
             category: 'pen',
             spec: 'set text option %fontOption to %fontValue',
+            defaults: [['font size'], 12]
         },
-        reportMeasureText: {
+        reportTextWidth: {
             type: 'reporter',
             category: 'pen',
-            spec: 'measure %xy direction of %txt',
+            spec: 'measure width of %txt',
+            defaults: [localize('Hello!')]
         },
         
         // Control
@@ -1707,7 +1709,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push('-');
         blocks.push(block('doSetTextOption'));
         blocks.push(block('doStampText'));
-        blocks.push(block('reportMeasureText'));
+        blocks.push(block('reportTextWidth'));
 
     } else if (cat === 'control') {
 
@@ -2538,50 +2540,60 @@ SpriteMorph.prototype.changeBrightness = function (delta) {
 
 // This holds the current font options for the sprite
 SpriteMorph.prototype.fontProperties = {
-    // CSS Style Font Options (work for Canvas)
-    'font-size' : '12',
-    'font-family' : 'Helvetica',
-    'font-variant' : 'normal',
-    'font-weight' : '300',
-    'font-style' : 'normal',
+    // CSS Style Font Options (which work for Canvas)
+    'font size' : '12', // measured in 'px'
+    'font family' : 'Helvetica',
+    'font variant' : 'normal',
+    'font weight' : '300',
+    'font style' : 'normal',
     // 'line-height' : '1', // currently not exposed
     // Canvas Font Options
-    'textAlign' : 'left',
-    // 'textBaseline' : 'Alphabetic', // currently not exposed
-    // Custon Snap Font Options
-    // Controls whether the sprite moves after stamping
-    // 'moveToFontEnd' : false // currently not exposed
+    'text align' : 'left',
+    'text baseline' : 'aphabetic',
+    // Custom Snap! Options
+    'move with text' : 'false'
 }
 
 SpriteMorph.prototype.doSetTextOption = function (option, value) {
-    if (this.fontProperties[option]) {
-        this.fontProperties[option] = value;
+    var stage = this.parent, 
+        context = stage.penTrails().getContext('2d'),
+        fonts = this.fontProperties;
+        
+    if (fonts[option]) {
+        fonts[option] = value;
     }
+    // Coerce option to be a boolean
+    fonts['move with text'] = fonts['move with text'] === 'true';
+    
+    context.font = fonts['font style'] + ' ' + fonts['font variant'] + ' ' +
+            fonts['font weight'] + ' ' + fonts['font size'] + 'px ' +
+            fonts['font family'];
+    context.textAlign = fonts['text align'];
+    context.textBaseline = fonts['text baseline'];
 }
 
 SpriteMorph.prototype.doStampText = function (text) {
     var stage = this.parent, 
         context = stage.penTrails().getContext('2d'),
         isWarped = this.isWarped,
-        options = this.fontProperties,
         ide = this.parentThatIsA(IDE_Morph);
     
     if (isWarped) {
         this.endWarp();
     }
     
-    // FIXME -- check for sprite movement
     context.save();
-    context.font = options['font-style'] + ' ' + options['font-variant'] + ' ' +
-        options['font-weight'] + ' ' + options['font-size'] + 'pt ' +
-        options['font-family'];
+
     context.fillStyle = this.color.toString();
-    context.textAlign = options['textAlign'];
 
     context.fillText(text, (this.center().x - stage.left()),
         (this.center().y - stage.top()));
     
     context.restore();
+    
+    if (this.fontProperties['move with text']) {
+        this.changeXPosition(context.measureText(text).width);
+    }
     
     this.changed();
     
@@ -2593,10 +2605,13 @@ SpriteMorph.prototype.doStampText = function (text) {
     ide.fixLayout();
 };
 
-// Measure the input text based on the current text options.
+// Measure the input text width based on the current text options.
 
-SpriteMorph.prototype.reportMeasureText = function (direction, text) {
-    return 0;
+SpriteMorph.prototype.reportTextWidth = function (text) {
+    var stage = this.parent, 
+        context = stage.penTrails().getContext('2d');
+    
+    return context.measureText(text).width;
 }
 
 // SpriteMorph layers

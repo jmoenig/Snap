@@ -936,18 +936,6 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                 true
             );
             break;
-        case '%xy':
-            part = new InputSlotMorph(
-                null, 
-                false, // numeric?
-                {
-                    'x' : 'x',
-                    'y' : 'y',
-                },
-                true // read-only?
-            );
-            part.setContents('x');
-            break;
         case '%key':
             part = new InputSlotMorph(
                 null,
@@ -1051,25 +1039,27 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             );
             part.setContents(['sqrt']);
             break;
-        case '%fontOption': // FIXME -- temp settings block.
+        case '%fontOption':
             fontOption = {};
             for (key in SpriteMorph.prototype.fontProperties) {
                 fontOption[key] = [ key ];
             }
+            
             part = new InputSlotMorph(
-                null,
-                false,
+                null, // text?
+                false, // numeric?
                 fontOption,
-                true
+                true // read-only?
             );
-            part.setContents(['font-size']);
             break;
         case '%fontValue':
+            // These defaults are for the font size option
+            // Menu options will be adjusted based on the %fontOption selection
             part = new InputSlotMorph(
-                null,
-                false,
+                null, // text?
+                true, // numeric?
                 'fontValuesMenu',
-                true
+                false // read-only?
             );
             break;
         case '%txtfun':
@@ -6651,42 +6641,53 @@ InputSlotMorph.prototype.fontValuesMenu = function () {
         option = option[0],
         dict = {};
     
+    menu = this;
+    b = block;
+    
     if (!option) {
         return dict;
     }
     
     // These options are defined in SpriteMorph.prototype.fontProperties
     switch (option) {
-    case 'font-size':
+    case 'font size':
         this.isNumeric = true;
         this.isReadOnly = false;
+        // Fix for when user switches between editable and non-editable menus
+        this.contents().shadowOffset = new Point();
+        this.contents().shadowColor = null;
+        this.contents().setColor(new Color(0, 0, 0));
         dict = { '10' : '10',
                  '12' : '12',
                  '14' : '14',
                  '16' : '16',
                  '18' : '18',
                  '20' : '20'
-                }
+                };
         break;
-    case 'font-family':
+    case 'font family':
         this.isNumeric = false;
         this.isReadOnly = false;
+        // Fix for odd looks, see above.
+        this.contents().shadowOffset = new Point();
+        this.contents().shadowColor = null;
+        this.contents().setColor(new Color(0, 0, 0));
         dict = { 'cursive' : 'cursive',
                  'fantasy' : 'fantasy',
                  'Helvetica' : 'Helvetica',
                  'monospace' : 'monospace',
                  'sans-serif' : 'sans-serif',
                  'serif' : 'serif'
-                }
+                };
         break;
-    case 'font-variant':
+    case 'font variant':
         this.isNumeric = false;
         this.isReadOnly = true;
         dict = { 'normal' : 'normal',
                  'small-caps' : 'small-caps'
-                }
+                };
         break;
-    case 'font-weight':
+    case 'font weight':
         this.isNumeric = true;
         this.isReadOnly = true;
         dict = { '100' : '100',
@@ -6698,24 +6699,39 @@ InputSlotMorph.prototype.fontValuesMenu = function () {
                  '700' : '700',
                  '800' : '800',
                  '900' : '900'
-                }
+                };
         break;
-    case 'font-style':
+    case 'font style':
         this.isNumeric = false;
         this.isReadOnly = true;
         dict = { 'normal' : 'normal',
                  'italic' : 'italic',
                  'oblique' : 'oblique',
-                }
+                };
         break;
-    case 'textAlign':
+    case 'text align':
         this.isNumeric = false;
         this.isReadOnly = true;
         dict = { 'left' : 'left',
                  'right' : 'right',
                  'center' : 'center',
-                }
+                };
         break;
+    case 'text baseline':
+        this.isNumeric = false;
+        this.isReadOnly = true;
+        dict = { 'alphabetic' : 'alphabetic',
+                 'bottom' : 'bottom',
+                 'middle' : 'middle',
+                 'top' : 'top'
+                };
+        break;
+    case 'move with text':
+        this.isNumeric = false;
+        this.isReadOnly = true;
+        dict = { 'false' : 'false',
+                 'true' : 'true'
+                };
     }
 
     return dict;
