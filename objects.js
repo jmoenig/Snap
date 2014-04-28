@@ -301,18 +301,6 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'looks',
             spec: 'switch to costume %cst'
         },
-		changeCostumeColor: {
-			type: 'command',
-			category: 'looks',
-			spec: 'change costume color to %n',
-			defaults: [0]
-		},
-		changeCostumeShade: {
-			type: 'command',
-			category: 'looks',
-			spec: 'change costume shade to %n',
-			defaults: [100]
-		},
         doWearNextCostume: {
             type: 'command',
             category: 'looks',
@@ -1229,7 +1217,7 @@ SpriteMorph.prototype.init = function (globals) {
     this.isClone = false; // indicate a "temporary" Scratch-style clone
     this.cloneOriginName = '';
 	this.originalPixels = null;
-	this.currentPixels = null;
+	this.colorChange = false; //Flag to check if color change has been applied
 	this.costumeColor = null;
 
     // sprite nesting properties
@@ -1409,9 +1397,15 @@ SpriteMorph.prototype.drawNew = function () {
 
         }
     }
+    this.version = Date.now();
+	
 	this.originalPixels = this.image.getContext('2d').createImageData(this.width(), this.height());
 	this.originalPixels = this.image.getContext('2d').getImageData(0, 0, this.width(), this.height());
-    this.version = Date.now();
+	
+	//Check if color change has been applied earlier in script
+	if(this.colorChange){
+		this.changeCostumeColor(this.costumeColor);
+	}
 };
 
 SpriteMorph.prototype.endWarp = function () {
@@ -1606,8 +1600,6 @@ SpriteMorph.prototype.blockTemplates = function (category) {
 
         blocks.push(block('doSwitchToCostume'));
         blocks.push(block('doWearNextCostume'));
-		blocks.push(block('changeCostumeColor'));
-		blocks.push(block('changeCostumeShade'));
         blocks.push(watcherToggle('getCostumeIdx'));
         blocks.push(block('getCostumeIdx'));
         blocks.push('-');
@@ -2473,53 +2465,6 @@ SpriteMorph.prototype.setHue = function (num) {
     this.gotoXY(x, y);
 };
 
-
-SpriteMorph.prototype.changeCostumeColor = function (num) {
-	this.costumeColor = num;
-	this.currentPixels = this.image.getContext('2d')
-		.getImageData(0, 0, this.width(), this.height());
-	var hsv = this.color.hsv();
-	
-	hsv[0] = Math.max(Math.min(+num || 0, 100), 0) / 100;
-	hsv[1] = 1; // we gotta fix this at some time
-	this.color.set_hsv.apply(this.color, hsv);
-	
-	for(var I = 0, L = this.originalPixels.data.length; I < L; I += 4){
-		if(this.currentPixels.data[I + 3] > 0){
-			// If it's not a transparent pixel
-			this.currentPixels.data[I] = this.originalPixels.
-				data[I] / 255 * this.color.r;
-			this.currentPixels.data[I + 1] = this.originalPixels.
-				data[I + 1] / 255 * this.color.g;
-			this.currentPixels.data[I + 2] = this.originalPixels.
-				data[I + 2] / 255 * this.color.b;
-		}
-	}
-	this.image.getContext('2d').putImageData(this.currentPixels, 0, 0);
-	// create a new, adequately dimensioned canvas
-    // and draw the costume on it
-	
-	/*var canvas = newCanvas(this.extent());
-	var ctx = canvas.getContext('2d');
-	ctx.putImageData(currentPixels, 0, 0);
-	var newColor = new Costume(canvas, this.name ? copy(this.name) : null);
-	this.changed();
-	this.costume = newColor;
-	this.addCostume(newColor);
-	this.wearCostume(newColor);*/
-	this.changed();
-};
-
-SpriteMorph.prototype.changeCostumeShade = function (num) {
-	var hsv = this.color.hsv(),
-	x = this.xPosition(),
-	y = this.yPosition();
-
-	hsv[1] = 1; 
-	hsv[2] = Math.max(Math.min(+num || 0, 100), 0) / 100;
-	this.color.set_hsv.apply(this.color, hsv);
-};
-
 SpriteMorph.prototype.changeHue = function (delta) {
     this.setHue(this.getHue() + (+delta || 0));
 };
@@ -2674,11 +2619,6 @@ SpriteMorph.prototype.setScale = function (percentage) {
             y + (yDist * growth)
         );
     });
-	
-	//Temporary
-	if(this.currentPixels){
-		this.changeCostumeColor(this.costumeColor);
-	}
 };
 
 SpriteMorph.prototype.changeScale = function (delta) {
@@ -2928,11 +2868,6 @@ SpriteMorph.prototype.setHeading = function (degrees) {
         }
         part.gotoXY(trg.x, trg.y);
     });
-	
-	//Temporary
-	if(this.currentPixels){
-		this.changeCostumeColor(this.costumeColor);
-	}
 };
 
 SpriteMorph.prototype.faceToXY = function (x, y) {
@@ -3100,6 +3035,9 @@ SpriteMorph.prototype.allMessageNames = function () {
 };
 
 SpriteMorph.prototype.allHatBlocksFor = function (message) {
+	if(this instanceof SpriteMorph){
+		this.colorChange = false;
+	}
     return this.scripts.children.filter(function (morph) {
         var event;
         if (morph.selector) {
