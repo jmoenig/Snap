@@ -1806,7 +1806,6 @@ SyntaxElementMorph.prototype.endLayout = function () {
     %fun    - chameleon colored rectangular drop-down for math functions
     %typ    - chameleon colored rectangular drop-down for data types
     %dates  - chameleon colored rectangular drop-down for date options
-    %font   - chameleon colored rectangular drop-down for font selection
     %var - chameleon colored rectangular drop-down for variable names
     %lst    - chameleon colored rectangular drop-down for list names
     %b        - chameleon colored hexagonal slot (for predicates)
@@ -6586,10 +6585,10 @@ InputSlotMorph.prototype.attributesMenu = function () {
             'costume name' : ['costume name'],
             'size' : ['size']
         };
-        // FIXME -- for font properties.
+
         dict['~'] = null
         for (var attrname in obj.fontProperties) { 
-            dict[attrname] = attrname; 
+            dict[attrname] = [ attrname ]; 
         }
     } else { // the stage
         dict = {

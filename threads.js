@@ -83,7 +83,7 @@ ArgLabelMorph, localize, XML_Element, hex_sha512*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.threads = '2014-Feb-10';
+modules.threads = '2014-April-28';
 
 var ThreadManager;
 var Process;
@@ -1499,7 +1499,7 @@ Process.prototype.doPauseAll = function () {
             stage.threads.pauseAll(stage);
         }
         ide = stage.parentThatIsA(IDE_Morph);
-        if (ide) {gide.controlBar.pauseButton.refresh(); }
+        if (ide) {ide.controlBar.pauseButton.refresh(); }
     }
 };
 

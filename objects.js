@@ -2549,7 +2549,7 @@ SpriteMorph.prototype.fontProperties = {
     // 'line-height' : '1', // currently not exposed
     // Canvas Font Options
     'text align' : 'left',
-    'text baseline' : 'aphabetic',
+    'text baseline' : 'alphabetic',
     // Custom Snap! Options
     'move with text' : 'false'
 }
