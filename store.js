@@ -61,7 +61,7 @@ SyntaxElementMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2014-February-13';
+modules.store = '2014-April-28';
 
 
 // XML_Serializer ///////////////////////////////////////////////////////
@@ -605,6 +605,7 @@ SnapSerializer.prototype.loadSprites = function (xmlString, ide) {
         if (model.attributes.pen) {
             sprite.penPoint = model.attributes.pen;
         }
+        
         project.stage.add(sprite);
         ide.sprites.add(sprite);
         sprite.scale = parseFloat(model.attributes.scale || '1');
@@ -616,6 +617,37 @@ SnapSerializer.prototype.loadSprites = function (xmlString, ide) {
         sprite.heading = parseFloat(model.attributes.heading) || 0;
         sprite.drawNew();
         sprite.gotoXY(+model.attributes.x || 0, +model.attributes.y || 0);
+        
+        font = {};
+        if (model.attributes['font-size']) {
+            font['font size'] = model.attributes['font-size'];
+        }
+        if (model.attributes['font-variant']) {
+            font['font variant'] = model.attributes['font-variant'];
+        }
+        if (model.attributes['font-family']) {
+            font['font family'] = model.attributes['font-family'];
+        }
+        if (model.attributes['font-weight']) {
+            font['font weight'] = model.attributes['font-weight'];
+        }
+        if (model.attributes['font-style']) {
+            font['font style'] = model.attributes['font-style'];
+        }
+        if (model.attributes['text-align']) {
+            font['text align'] = model.attributes['text-align'];
+        }
+        if (model.attributes['text-baseline']) {
+            font['text baseline'] = model.attributes['text-baseline'];
+        }
+        if (model.attributes['move-with-text']) {
+            // make sure option is a boolean
+            font['move with text'] = (
+                model.attributes['move-with-text'] === 'true');
+        }
+        // FIXME -- does this reset properties for older projects?
+        sprite.fontProperties = font;
+        
         myself.loadObject(sprite, model);
     });
     this.objects = {};
@@ -1401,7 +1433,6 @@ StageMorph.prototype.toXML = function (serializer) {
     );
 };
 
-// FIXME -- font options storage
 SpriteMorph.prototype.toXML = function (serializer) {
     var stage = this.parentThatIsA(StageMorph),
         ide = stage ? stage.parentThatIsA(IDE_Morph) : null,
@@ -1412,6 +1443,14 @@ SpriteMorph.prototype.toXML = function (serializer) {
             ' scale="@"' +
             ' rotation="@"' +
             ' draggable="@"' +
+            ' font-size="@"' +
+            ' font-family="@"' +
+            ' font-variant="@"' +
+            ' font-weight="@"' +
+            ' font-style="@"' +
+            ' text-align="@"' +
+            ' text-baseline="@"' +
+            ' move-with-text="@"' +
             '%' +
             ' costume="@" color="@,@,@" pen="@" ~>' +
             '%' + // nesting info
@@ -1429,6 +1468,14 @@ SpriteMorph.prototype.toXML = function (serializer) {
         this.scale,
         this.rotationStyle,
         this.isDraggable,
+        this.fontProperties['font size'],
+        this.fontProperties['font family'],
+        this.fontProperties['font variant'],
+        this.fontProperties['font weight'],
+        this.fontProperties['font style'],
+        this.fontProperties['text align'],
+        this.fontProperties['text baseline'],
+        this.fontProperties['move with text'],
         this.isVisible ? '' : ' hidden="true"',
         this.getCostumeIdx(),
         this.color.r,

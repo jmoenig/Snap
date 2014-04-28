@@ -2562,8 +2562,10 @@ SpriteMorph.prototype.doSetTextOption = function (option, value) {
     if (fonts[option]) {
         fonts[option] = value;
     }
-    // Coerce option to be a boolean
-    fonts['move with text'] = fonts['move with text'] === 'true';
+    // Coerce move with text to be a boolean
+    if (option === 'move with text') {
+        fonts['move with text'] = (option === 'true');
+    }
     
     context.font = fonts['font style'] + ' ' + fonts['font variant'] + ' ' +
             fonts['font weight'] + ' ' + fonts['font size'] + 'px ' +
