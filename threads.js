@@ -1499,7 +1499,7 @@ Process.prototype.doPauseAll = function () {
             stage.threads.pauseAll(stage);
         }
         ide = stage.parentThatIsA(IDE_Morph);
-        if (ide) {ide.controlBar.pauseButton.refresh(); }
+        if (ide) {gide.controlBar.pauseButton.refresh(); }
     }
 };
 
@@ -2416,39 +2416,47 @@ Process.prototype.reportAttributeOf = function (attribute, name) {
         thatObj,
         stage;
 
-    // FIXME -- refactor
-    if (thisObj) {
-        stage = thisObj.parentThatIsA(StageMorph);
-        if (stage.name === name) {
-            thatObj = stage;
-        } else {
-            thatObj = this.getOtherObject(name, thisObj, stage);
+    if (!thisObj) {
+        return '';
+    }
+    
+    stage = thisObj.parentThatIsA(StageMorph);
+    if (stage.name === name) {
+        thatObj = stage;
+    } else {
+        thatObj = this.getOtherObject(name, thisObj, stage);
+    }
+    
+    if (thatObj) {
+        if (attribute instanceof Context) {
+            return this.reportContextFor(attribute, thatObj);
         }
-        if (thatObj) {
-            if (attribute instanceof Context) {
-                return this.reportContextFor(attribute, thatObj);
+        if (isString(attribute)) {
+            // Font Options are stored in a separate object of each sprite
+            fontOptions = Object.keys(thatObj.fontProperties);
+            if (fontOptions.indexOf(attribute) > -1) {
+                return thatObj.fontProperties[attribute];
             }
-            if (isString(attribute)) {
-                return thatObj.variables.getVar(attribute);
-            }
-            switch (this.inputOption(attribute)) {
-            case 'x position':
-                return thatObj.xPosition ? thatObj.xPosition() : '';
-            case 'y position':
-                return thatObj.yPosition ? thatObj.yPosition() : '';
-            case 'direction':
-                return thatObj.direction ? thatObj.direction() : '';
-            case 'costume #':
-                return thatObj.getCostumeIdx();
-            case 'costume name':
-                return thatObj.costume ? thatObj.costume.name
-                        : thatObj instanceof SpriteMorph ? localize('Turtle')
-                                : localize('Empty');
-            case 'size':
-                return thatObj.getScale ? thatObj.getScale() : '';
-            }
+            
+            return thatObj.variables.getVar(attribute);
         }
-        // FIXME -- TEXT OPTION SETTINGS
+        
+        switch (this.inputOption(attribute)) {
+        case 'x position':
+            return thatObj.xPosition ? thatObj.xPosition() : '';
+        case 'y position':
+            return thatObj.yPosition ? thatObj.yPosition() : '';
+        case 'direction':
+            return thatObj.direction ? thatObj.direction() : '';
+        case 'costume #':
+            return thatObj.getCostumeIdx();
+        case 'costume name':
+            return thatObj.costume ? thatObj.costume.name
+                    : thatObj instanceof SpriteMorph ? localize('Turtle')
+                            : localize('Empty');
+        case 'size':
+            return thatObj.getScale ? thatObj.getScale() : '';
+        }
     }
     return '';
 };

@@ -525,12 +525,12 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'command',
             category: 'pen',
             spec: 'stamp text %txt',
-            defaults: [[localize('Hello!')]]
+            defaults: [localize('Hello!')]
         },
         doSetTextOption: {
             type: 'command',
             category: 'pen',
-            spec: 'set text option %textOption to %textValue',
+            spec: 'set text option %fontOption to %fontValue',
         },
         reportMeasureText: {
             type: 'reporter',
@@ -2539,18 +2539,18 @@ SpriteMorph.prototype.changeBrightness = function (delta) {
 // This holds the current font options for the sprite
 SpriteMorph.prototype.fontProperties = {
     // CSS Style Font Options (work for Canvas)
-    'font-size' : '12pt',
+    'font-size' : '12',
     'font-family' : 'Helvetica',
     'font-variant' : 'normal',
     'font-weight' : '300',
     'font-style' : 'normal',
-    'line-height' : '1', // current not exposed
+    // 'line-height' : '1', // currently not exposed
     // Canvas Font Options
     'textAlign' : 'left',
-    'textBaseline' : 'Alphabetic', // current not exposed
+    // 'textBaseline' : 'Alphabetic', // currently not exposed
     // Custon Snap Font Options
     // Controls whether the sprite moves after stamping
-    'moveToFontEnd' : false // current not exposed
+    // 'moveToFontEnd' : false // currently not exposed
 }
 
 SpriteMorph.prototype.doSetTextOption = function (option, value) {
@@ -2570,8 +2570,11 @@ SpriteMorph.prototype.doStampText = function (text) {
         this.endWarp();
     }
     
+    // FIXME -- check for sprite movement
     context.save();
-    context.font = options['font-size'] + ' ' + options['font-family'];
+    context.font = options['font-style'] + ' ' + options['font-variant'] + ' ' +
+        options['font-weight'] + ' ' + options['font-size'] + 'pt ' +
+        options['font-family'];
     context.fillStyle = this.color.toString();
     context.textAlign = options['textAlign'];
 

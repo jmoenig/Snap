@@ -742,8 +742,6 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             part = new InputSlotMorph();
             part.isUnevaluated = true;
             break;
-        case '%textOption': // FIXME -- temp settings block.
-        case '%textValue':
         case '%txt':
             part = new InputSlotMorph();
             part.minWidth = part.height() * 1.7; // "landscape"
@@ -1052,6 +1050,27 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                 true
             );
             part.setContents(['sqrt']);
+            break;
+        case '%fontOption': // FIXME -- temp settings block.
+            fontOption = {};
+            for (key in SpriteMorph.prototype.fontProperties) {
+                fontOption[key] = [ key ];
+            }
+            part = new InputSlotMorph(
+                null,
+                false,
+                fontOption,
+                true
+            );
+            part.setContents(['font-size']);
+            break;
+        case '%fontValue':
+            part = new InputSlotMorph(
+                null,
+                false,
+                'fontValuesMenu',
+                true
+            );
             break;
         case '%txtfun':
             part = new InputSlotMorph(
@@ -6621,6 +6640,84 @@ InputSlotMorph.prototype.costumesMenu = function () {
             dict[name] = name;
         });
     }
+    return dict;
+};
+
+// Controls the options avilable for the set font option block
+InputSlotMorph.prototype.fontValuesMenu = function () {
+    var block = this.parentThatIsA(BlockMorph),
+        option = block.inputs()[0].evaluate(),
+        // get the string from evaluation list
+        option = option[0],
+        dict = {};
+    
+    if (!option) {
+        return dict;
+    }
+    
+    // These options are defined in SpriteMorph.prototype.fontProperties
+    switch (option) {
+    case 'font-size':
+        this.isNumeric = true;
+        this.isReadOnly = false;
+        dict = { '10' : '10',
+                 '12' : '12',
+                 '14' : '14',
+                 '16' : '16',
+                 '18' : '18',
+                 '20' : '20'
+                }
+        break;
+    case 'font-family':
+        this.isNumeric = false;
+        this.isReadOnly = false;
+        dict = { 'cursive' : 'cursive',
+                 'fantasy' : 'fantasy',
+                 'Helvetica' : 'Helvetica',
+                 'monospace' : 'monospace',
+                 'sans-serif' : 'sans-serif',
+                 'serif' : 'serif'
+                }
+        break;
+    case 'font-variant':
+        this.isNumeric = false;
+        this.isReadOnly = true;
+        dict = { 'normal' : 'normal',
+                 'small-caps' : 'small-caps'
+                }
+        break;
+    case 'font-weight':
+        this.isNumeric = true;
+        this.isReadOnly = true;
+        dict = { '100' : '100',
+                 '200' : '200',
+                 '300' : '300',
+                 '400' : '400',
+                 '500' : '500',
+                 '600' : '600',
+                 '700' : '700',
+                 '800' : '800',
+                 '900' : '900'
+                }
+        break;
+    case 'font-style':
+        this.isNumeric = false;
+        this.isReadOnly = true;
+        dict = { 'normal' : 'normal',
+                 'italic' : 'italic',
+                 'oblique' : 'oblique',
+                }
+        break;
+    case 'textAlign':
+        this.isNumeric = false;
+        this.isReadOnly = true;
+        dict = { 'left' : 'left',
+                 'right' : 'right',
+                 'center' : 'center',
+                }
+        break;
+    }
+
     return dict;
 };
 

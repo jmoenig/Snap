@@ -1401,6 +1401,7 @@ StageMorph.prototype.toXML = function (serializer) {
     );
 };
 
+// FIXME -- font options storage
 SpriteMorph.prototype.toXML = function (serializer) {
     var stage = this.parentThatIsA(StageMorph),
         ide = stage ? stage.parentThatIsA(IDE_Morph) : null,
