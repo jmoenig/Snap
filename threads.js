@@ -2416,6 +2416,7 @@ Process.prototype.reportAttributeOf = function (attribute, name) {
         thatObj,
         stage;
 
+    console.log(attribute);
     if (!thisObj) {
         return '';
     }
@@ -2428,19 +2429,18 @@ Process.prototype.reportAttributeOf = function (attribute, name) {
     }
     
     if (thatObj) {
+        var fonts = Object.keys(thatObj.fontProperties);
+
         if (attribute instanceof Context) {
             return this.reportContextFor(attribute, thatObj);
         }
         if (isString(attribute)) {
-            // Font Options are stored in a separate object of each sprite
-            fontOptions = Object.keys(thatObj.fontProperties);
-            if (fontOptions.indexOf(attribute) > -1) {
-                return thatObj.fontProperties[attribute];
+            console.log("THIS");
+            if (fonts.indexOf(attr) > -1) {
+                return thatObj.fontProperties[attr];
             }
-            
             return thatObj.variables.getVar(attribute);
         }
-        
         switch (this.inputOption(attribute)) {
         case 'x position':
             return thatObj.xPosition ? thatObj.xPosition() : '';
@@ -2456,8 +2456,15 @@ Process.prototype.reportAttributeOf = function (attribute, name) {
                             : localize('Empty');
         case 'size':
             return thatObj.getScale ? thatObj.getScale() : '';
+        default:
+            // Sprite Font Properties 
+            var attr = this.inputOption(attribute);
+            if (fonts.indexOf(attr) > -1) {
+                return thatObj.fontProperties[attr];
+            }
         }
     }
+    console.log(4)
     return '';
 };
 

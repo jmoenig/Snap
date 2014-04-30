@@ -6586,7 +6586,7 @@ InputSlotMorph.prototype.attributesMenu = function () {
             'size' : ['size']
         };
 
-        dict['~'] = null
+        dict['~'] = null;
         for (var attrname in obj.fontProperties) { 
             dict[attrname] = [ attrname ]; 
         }

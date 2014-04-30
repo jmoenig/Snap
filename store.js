@@ -590,8 +590,10 @@ SnapSerializer.prototype.loadSprites = function (xmlString, ide) {
         throw 'Module uses newer version of Serializer';
     }
     model.childrenNamed('sprite').forEach(function (model) {
-        var sprite  = new SpriteMorph(project.globalVariables);
+        var sprite  = new SpriteMorph(project.globalVariables),    
+            font = {}; // object to store font properties
 
+        console.log(model.attributes);
         if (model.attributes.id) {
             myself.objects[model.attributes.id] = sprite;
         }
@@ -618,35 +620,51 @@ SnapSerializer.prototype.loadSprites = function (xmlString, ide) {
         sprite.drawNew();
         sprite.gotoXY(+model.attributes.x || 0, +model.attributes.y || 0);
         
-        font = {};
         if (model.attributes['font-size']) {
+            console.log(model.attributes['font-size']);
             font['font size'] = model.attributes['font-size'];
         }
         if (model.attributes['font-variant']) {
+            console.log(model.attributes['font-variant']);
             font['font variant'] = model.attributes['font-variant'];
         }
         if (model.attributes['font-family']) {
+            console.log(model.attributes['font-family']);
             font['font family'] = model.attributes['font-family'];
         }
         if (model.attributes['font-weight']) {
+            console.log(model.attributes['font-weight']);
+            
             font['font weight'] = model.attributes['font-weight'];
         }
         if (model.attributes['font-style']) {
+            console.log(model.attributes['font-style']);
+            
             font['font style'] = model.attributes['font-style'];
         }
         if (model.attributes['text-align']) {
+            console.log(model.attributes['text-align']);
+            
             font['text align'] = model.attributes['text-align'];
         }
         if (model.attributes['text-baseline']) {
+            console.log(model.attributes['text-baseline']);
+            
             font['text baseline'] = model.attributes['text-baseline'];
         }
         if (model.attributes['move-with-text']) {
+            console.log(model.attributes['move-with-text']);
+            
             // make sure option is a boolean
             font['move with text'] = (
                 model.attributes['move-with-text'] === 'true');
         }
-        // FIXME -- does this reset properties for older projects?
-        sprite.fontProperties = font;
+
+        if (Object.keys(font).length > 0) {
+            console.log(font);
+            sprite['fontProperties'] = font;
+        }
+        
         
         myself.loadObject(sprite, model);
     });
@@ -1169,6 +1187,39 @@ SnapSerializer.prototype.loadValue = function (model) {
         v.heading = parseFloat(model.attributes.heading) || 0;
         v.drawNew();
         v.gotoXY(+model.attributes.x || 0, +model.attributes.y || 0);
+        
+        var font = {};
+        if (model.attributes['font-size']) {
+            font['font size'] = model.attributes['font-size'];
+        }
+        if (model.attributes['font-variant']) {
+            font['font variant'] = model.attributes['font-variant'];
+        }
+        if (model.attributes['font-family']) {
+            font['font family'] = model.attributes['font-family'];
+        }
+        if (model.attributes['font-weight']) {            
+            font['font weight'] = model.attributes['font-weight'];
+        }
+        if (model.attributes['font-style']) {            
+            font['font style'] = model.attributes['font-style'];
+        }
+        if (model.attributes['text-align']) {            
+            font['text align'] = model.attributes['text-align'];
+        }
+        if (model.attributes['text-baseline']) {            
+            font['text baseline'] = model.attributes['text-baseline'];
+        }
+        if (model.attributes['move-with-text']) {            
+            // make sure option is a boolean
+            font['move with text'] = (
+                model.attributes['move-with-text'] === 'true');
+        }
+
+        if (Object.keys(font).length > 0) {
+            v['fontProperties'] = font;
+        }
+        
         myself.loadObject(v, model);
         return v;
     case 'context':
