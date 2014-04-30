@@ -52,6 +52,7 @@
     September 16 - flood fill freeze fix (Kartik)
     Jan 08 - mouse leave dragging fix (Kartik)
     Feb 11 - dynamically adjust to stage dimensions (Jens)
+    Apr 30 - localizations (Manuel)
 
  */
 
@@ -65,7 +66,7 @@
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.paint = '2014-February-11';
+modules.paint = '2014-April-30';
 
 // Declarations
 
