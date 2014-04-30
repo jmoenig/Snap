@@ -2114,4 +2114,9 @@ ______
 ------
 * new Finnish translation, yay! Thanks, Jouni!
 * new Brazilian Portuguese translation, yay! Thanks, Aldo!
+* Russian translation update
+* Portuguese translation update
+* additional localisations, thanks, Manuel!
+* text-encoding fix for exporting variable contents, thanks, Blob!
+* set turbo mode block fix, thanks, Michael and Nathan!
 * enable storage and retrieval of first-class costumes in both file formats
