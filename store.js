@@ -61,7 +61,7 @@ SyntaxElementMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2014-February-13';
+modules.store = '2014-April-30';
 
 
 // XML_Serializer ///////////////////////////////////////////////////////
@@ -457,8 +457,6 @@ SnapSerializer.prototype.loadProjectModel = function (xmlNode) {
         }
     });
 
-    this.objects = {};
-
     /* Global Variables */
 
     if (model.globalVariables) {
@@ -467,6 +465,8 @@ SnapSerializer.prototype.loadProjectModel = function (xmlNode) {
             model.globalVariables
         );
     }
+
+    this.objects = {};
 
     /* Watchers */
 
@@ -521,7 +521,7 @@ SnapSerializer.prototype.loadProjectModel = function (xmlNode) {
             ))
         );
         project.stage.add(watcher);
-        watcher.update();
+        watcher.onNextStep = function () {this.currentValue = null; };
 
         // set watcher's contentsMorph's extent if it is showing a list and
         // its monitor dimensions are given
@@ -1302,6 +1302,12 @@ SnapSerializer.prototype.openProject = function (project, ide) {
     ide.createCorral();
     ide.selectSprite(sprite);
     ide.fixLayout();
+
+    // force watchers to update
+    //project.stage.watchers().forEach(function (watcher) {
+    //  watcher.onNextStep = function () {this.currentValue = null;};
+    //})
+
     ide.world().keyboardReceiver = project.stage;
 };
 
