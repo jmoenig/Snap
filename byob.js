@@ -167,6 +167,9 @@ CustomBlockDefinition.prototype.templateInstance = function () {
     var block;
     block = this.blockInstance();
     block.refreshDefaults();
+    if (!block.zebraContrast) {
+        block.forceNormalColoring(); // label still is wrong
+    }
     block.isDraggable = false;
     block.isTemplate = true;
     return block;
