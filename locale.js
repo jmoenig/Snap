@@ -42,7 +42,7 @@
 
 /*global modules, contains*/
 
-modules.locale = '2014-February-13';
+modules.locale = '2014-April-30';
 
 // Global stuff
 
@@ -381,3 +381,16 @@ SnapTranslator.dict.fi = {
     'last_changed':
         '2014-04-18'
 };
+
+SnapTranslator.dict.pt_BR = {
+    // meta information
+    'language_name':
+        'Português do Brasil',
+    'language_translator':
+        'Aldo von Wangenheim',
+    'translator_e-mail':
+        'awangenh@inf.ufsc.br',
+    'last_changed':
+        '2014-04-20'
+};
+
