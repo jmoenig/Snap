@@ -2109,3 +2109,9 @@ ______
 * Objects: experimental “wardrobe” and “jukebox” reporters in dev mode
 * Blocks, Objects: display costume thumbnails in speech/thought/value bubbles and watcher cells
 * Objects: let “switch to costume” block accept actual costume objects (in addition to names and numbers)
+
+140430
+------
+* new Finnish translation, yay! Thanks, Jouni!
+* new Brazilian Portuguese translation, yay! Thanks, Aldo!
+* enable storage and retrieval of first-class costumes in both file formats
