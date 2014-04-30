@@ -369,3 +369,15 @@ SnapTranslator.dict.ca = {
     'last_changed':
         '2013-11-26'
 };
+
+SnapTranslator.dict.fi = {
+    // meta information
+    'language_name':
+        'suomi',
+    'language_translator':
+        'Jouni K. Sepp\u00e4nen',
+    'translator_e-mail':
+        'jks@iki.fi',
+    'last_changed':
+        '2014-04-18'
+};
