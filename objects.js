@@ -6487,7 +6487,7 @@ WatcherMorph.prototype.userMenu = function () {
                 'export...',
                 function () {
                     window.open(
-                        'data:text/plain,' +
+                        'data:text/plain;charset=utf-8,' +
                             encodeURIComponent(this.currentValue.toString())
                     );
                 }
