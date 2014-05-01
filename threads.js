@@ -2413,8 +2413,7 @@ Process.prototype.reportDistanceTo = function (name) {
 
 Process.prototype.reportAttributeOf = function (attribute, name) {
     var thisObj = this.blockReceiver(),
-        thatObj,
-        stage;
+        thatObj, attr, fonts, stage;
 
     if (!thisObj) {
         return '';
@@ -2428,7 +2427,7 @@ Process.prototype.reportAttributeOf = function (attribute, name) {
     }
     
     if (thatObj) {
-        var fonts = Object.keys(thatObj.fontProperties);
+        fonts = Object.keys(thatObj.fontProperties);
 
         if (attribute instanceof Context) {
             return this.reportContextFor(attribute, thatObj);
@@ -2453,7 +2452,7 @@ Process.prototype.reportAttributeOf = function (attribute, name) {
             return thatObj.getScale ? thatObj.getScale() : '';
         default:
             // Sprite Font Properties 
-            var attr = this.inputOption(attribute);
+            attr = this.inputOption(attribute);
             if (fonts.indexOf(attr) > -1) {
                 return thatObj.fontProperties[attr];
             }

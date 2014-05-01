@@ -2559,8 +2559,9 @@ SpriteMorph.prototype.doSetTextOption = function (option, value) {
         context = stage.penTrails().getContext('2d'),
         fonts = this.fontProperties;
 
-    if (fonts[option]) {
-        fonts[option] = value;
+    fonts[option] = value;
+    if (option === 'move with text') {
+        fonts[option] = value === 'true' || value;
     }
 
     context.font = fonts['font style'] + ' ' + fonts['font variant'] + ' ' +
