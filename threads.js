@@ -2416,7 +2416,6 @@ Process.prototype.reportAttributeOf = function (attribute, name) {
         thatObj,
         stage;
 
-    console.log(attribute);
     if (!thisObj) {
         return '';
     }
@@ -2435,10 +2434,6 @@ Process.prototype.reportAttributeOf = function (attribute, name) {
             return this.reportContextFor(attribute, thatObj);
         }
         if (isString(attribute)) {
-            console.log("THIS");
-            if (fonts.indexOf(attr) > -1) {
-                return thatObj.fontProperties[attr];
-            }
             return thatObj.variables.getVar(attribute);
         }
         switch (this.inputOption(attribute)) {
@@ -2464,7 +2459,6 @@ Process.prototype.reportAttributeOf = function (attribute, name) {
             }
         }
     }
-    console.log(4)
     return '';
 };
 

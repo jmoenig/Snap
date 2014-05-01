@@ -539,7 +539,7 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: 'measure width of %txt',
             defaults: [localize('Hello!')]
         },
-        
+
         // Control
         receiveGo: {
             type: 'hat',
@@ -2551,22 +2551,18 @@ SpriteMorph.prototype.fontProperties = {
     'text align' : 'left',
     'text baseline' : 'alphabetic',
     // Custom Snap! Options
-    'move with text' : 'false'
+    'move with text' : false
 }
 
 SpriteMorph.prototype.doSetTextOption = function (option, value) {
-    var stage = this.parent, 
+    var stage = this.parent,
         context = stage.penTrails().getContext('2d'),
         fonts = this.fontProperties;
-        
+
     if (fonts[option]) {
         fonts[option] = value;
     }
-    // Coerce move with text to be a boolean
-    if (option === 'move with text') {
-        fonts['move with text'] = (option === 'true');
-    }
-    
+
     context.font = fonts['font style'] + ' ' + fonts['font variant'] + ' ' +
             fonts['font weight'] + ' ' + fonts['font size'] + 'px ' +
             fonts['font family'];
@@ -2575,34 +2571,34 @@ SpriteMorph.prototype.doSetTextOption = function (option, value) {
 }
 
 SpriteMorph.prototype.doStampText = function (text) {
-    var stage = this.parent, 
+    var stage = this.parent,
         context = stage.penTrails().getContext('2d'),
         isWarped = this.isWarped,
         ide = this.parentThatIsA(IDE_Morph);
-    
+
     if (isWarped) {
         this.endWarp();
     }
-    
+
     context.save();
 
     context.fillStyle = this.color.toString();
 
     context.fillText(text, (this.center().x - stage.left()),
         (this.center().y - stage.top()));
-    
+
     context.restore();
-    
+
     if (this.fontProperties['move with text']) {
         this.changeXPosition(context.measureText(text).width);
     }
-    
+
     this.changed();
-    
+
     if (isWarped) {
         this.startWarp();
     }
-    
+
     // Refresh layout to guarnatee all text shows
     ide.fixLayout();
 };
@@ -2610,9 +2606,9 @@ SpriteMorph.prototype.doStampText = function (text) {
 // Measure the input text width based on the current text options.
 
 SpriteMorph.prototype.reportTextWidth = function (text) {
-    var stage = this.parent, 
+    var stage = this.parent,
         context = stage.penTrails().getContext('2d');
-    
+
     return context.measureText(text).width;
 }
 

@@ -6728,8 +6728,8 @@ InputSlotMorph.prototype.fontValuesMenu = function () {
     case 'move with text':
         this.isNumeric = false;
         this.isReadOnly = true;
-        dict = { 'false' : 'false',
-                 'true' : 'true'
+        dict = { 'false' : false,
+                 'true' : true
                 };
     }
 

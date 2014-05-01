@@ -590,10 +590,8 @@ SnapSerializer.prototype.loadSprites = function (xmlString, ide) {
         throw 'Module uses newer version of Serializer';
     }
     model.childrenNamed('sprite').forEach(function (model) {
-        var sprite  = new SpriteMorph(project.globalVariables),    
-            font = {}; // object to store font properties
+        var sprite  = new SpriteMorph(project.globalVariables);
 
-        console.log(model.attributes);
         if (model.attributes.id) {
             myself.objects[model.attributes.id] = sprite;
         }
@@ -621,48 +619,36 @@ SnapSerializer.prototype.loadSprites = function (xmlString, ide) {
         sprite.gotoXY(+model.attributes.x || 0, +model.attributes.y || 0);
         
         if (model.attributes['font-size']) {
-            console.log(model.attributes['font-size']);
-            font['font size'] = model.attributes['font-size'];
+            sprite.fontProperties['font size'] = model.attributes['font-size'];
         }
         if (model.attributes['font-variant']) {
-            console.log(model.attributes['font-variant']);
-            font['font variant'] = model.attributes['font-variant'];
+            sprite.fontProperties['font variant'] =
+             model.attributes['font-variant'];
         }
         if (model.attributes['font-family']) {
-            console.log(model.attributes['font-family']);
-            font['font family'] = model.attributes['font-family'];
+            sprite.fontProperties['font family'] =
+             model.attributes['font-family'];
         }
         if (model.attributes['font-weight']) {
-            console.log(model.attributes['font-weight']);
-            
-            font['font weight'] = model.attributes['font-weight'];
+            sprite.fontProperties['font weight'] =
+             model.attributes['font-weight'];
         }
-        if (model.attributes['font-style']) {
-            console.log(model.attributes['font-style']);
-            
-            font['font style'] = model.attributes['font-style'];
+        if (model.attributes['font-style']) {            
+            sprite.fontProperties['font style'] =
+             model.attributes['font-style'];
         }
-        if (model.attributes['text-align']) {
-            console.log(model.attributes['text-align']);
-            
-            font['text align'] = model.attributes['text-align'];
+        if (model.attributes['text-align']) {            
+            sprite.fontProperties['text align'] =
+             model.attributes['text-align'];
         }
-        if (model.attributes['text-baseline']) {
-            console.log(model.attributes['text-baseline']);
-            
-            font['text baseline'] = model.attributes['text-baseline'];
+        if (model.attributes['text-baseline']) {            
+            sprite.fontProperties['text baseline'] =
+             model.attributes['text-baseline'];
         }
-        if (model.attributes['move-with-text']) {
-            console.log(model.attributes['move-with-text']);
-            
+        if (model.attributes['move-with-text']) {            
             // make sure option is a boolean
-            font['move with text'] = (
-                model.attributes['move-with-text'] === 'true');
-        }
-
-        if (Object.keys(font).length > 0) {
-            console.log(font);
-            sprite['fontProperties'] = font;
+            sprite.fontProperties['move with text'] =
+                model.attributes['move-with-text'] === 'true';
         }
         
         
@@ -1090,7 +1076,7 @@ SnapSerializer.prototype.loadInput = function (model, input, block) {
 
 SnapSerializer.prototype.loadValue = function (model) {
     // private
-    var v, items, el, center, image, name, audio, option,
+    var v, items, el, center, image, name, audio, option, font,
         myself = this;
 
     function record() {
@@ -1188,36 +1174,32 @@ SnapSerializer.prototype.loadValue = function (model) {
         v.drawNew();
         v.gotoXY(+model.attributes.x || 0, +model.attributes.y || 0);
         
-        var font = {};
         if (model.attributes['font-size']) {
-            font['font size'] = model.attributes['font-size'];
+            v.fontProperties['font size'] = model.attributes['font-size'];
         }
         if (model.attributes['font-variant']) {
-            font['font variant'] = model.attributes['font-variant'];
+            v.fontProperties['font variant'] = model.attributes['font-variant'];
         }
         if (model.attributes['font-family']) {
-            font['font family'] = model.attributes['font-family'];
+            v.fontProperties['font family'] = model.attributes['font-family'];
         }
         if (model.attributes['font-weight']) {            
-            font['font weight'] = model.attributes['font-weight'];
+            v.fontProperties['font weight'] = model.attributes['font-weight'];
         }
         if (model.attributes['font-style']) {            
-            font['font style'] = model.attributes['font-style'];
+            v.fontProperties['font style'] = model.attributes['font-style'];
         }
         if (model.attributes['text-align']) {            
-            font['text align'] = model.attributes['text-align'];
+            v.fontProperties['text align'] = model.attributes['text-align'];
         }
         if (model.attributes['text-baseline']) {            
-            font['text baseline'] = model.attributes['text-baseline'];
+            v.fontProperties['text baseline'] =
+             model.attributes['text-baseline'];
         }
         if (model.attributes['move-with-text']) {            
             // make sure option is a boolean
-            font['move with text'] = (
-                model.attributes['move-with-text'] === 'true');
-        }
-
-        if (Object.keys(font).length > 0) {
-            v['fontProperties'] = font;
+            v.fontProperties['move with text'] =
+                model.attributes['move-with-text'] === 'true';
         }
         
         myself.loadObject(v, model);
