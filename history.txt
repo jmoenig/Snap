@@ -2124,3 +2124,4 @@ ______
 140502
 ------
 * error message when trying to import a non-text file into a variable, thanks, Nate!
+* fixed #407 (custom-block coloring w/ zebra off)

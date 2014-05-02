@@ -106,7 +106,7 @@ SymbolMorph, isNil*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2014-April-30';
+modules.byob = '2014-May-02';
 
 // Declarations
 
@@ -167,9 +167,6 @@ CustomBlockDefinition.prototype.templateInstance = function () {
     var block;
     block = this.blockInstance();
     block.refreshDefaults();
-    if (!block.zebraContrast) {
-        block.forceNormalColoring(); // label still is wrong
-    }
     block.isDraggable = false;
     block.isTemplate = true;
     return block;
@@ -375,8 +372,12 @@ CustomCommandBlockMorph.prototype.refresh = function () {
     this.setCategory(def.category);
     if (this.blockSpec !== newSpec) {
         oldInputs = this.inputs();
+        if (!this.zebraContrast) {
+            this.forceNormalColoring();
+        } else {
+            this.fixBlockColor();
+        }
         this.setSpec(newSpec);
-        this.fixBlockColor();
         this.fixLabelColor();
         this.restoreInputs(oldInputs);
     } else { // update all input slots' drop-downs
