@@ -2120,3 +2120,7 @@ ______
 * text-encoding fix for exporting variable contents, thanks, Blob!
 * set turbo mode block fix, thanks, Michael and Nathan!
 * enable storage and retrieval of first-class costumes in both file formats
+
+140502
+------
+* error message when trying to import a non-text file into a variable, thanks, Nate!

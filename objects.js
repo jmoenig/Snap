@@ -124,7 +124,7 @@ PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.objects = '2014-April-30';
+modules.objects = '2014-May-02';
 
 var SpriteMorph;
 var StageMorph;
@@ -6450,7 +6450,17 @@ WatcherMorph.prototype.userMenu = function () {
                 inp.addEventListener(
                     "change",
                     function () {
-                        var file, i;
+                        var file;
+
+                        function txtOnlyMsg(ftype) {
+                            ide.inform(
+                                'Unable to import',
+                                'Snap! can only import "text" files.\n' +
+                                    'You selected a file of type "' +
+                                    ftype +
+                                    '".'
+                            );
+                        }
 
                         function readText(aFile) {
                             var frd = new FileReader();
@@ -6460,18 +6470,19 @@ WatcherMorph.prototype.userMenu = function () {
                                     e.target.result
                                 );
                             };
-                            frd.readAsText(aFile);
+
+                            if (aFile.type.indexOf("text") === 0) {
+                                frd.readAsText(aFile);
+                            } else {
+                                txtOnlyMsg(aFile.type);
+                            }
                         }
 
                         document.body.removeChild(inp);
                         ide.filePicker = null;
                         if (inp.files.length > 0) {
                             file = inp.files[inp.files.length - 1];
-                            if (file.type.indexOf("text") === 0) {
-                                readText(file);
-                            } else {
-                            	ide.inform("Unable to import", "Snap! can only import \"text\" files.\n You selected a file of type \"" + file.type + "\".");
-                            }
+                            readText(file);
                         }
                     },
                     false
