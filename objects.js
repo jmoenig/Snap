@@ -6466,11 +6466,11 @@ WatcherMorph.prototype.userMenu = function () {
                         document.body.removeChild(inp);
                         ide.filePicker = null;
                         if (inp.files.length > 0) {
-                            for (i = 0; i < inp.files.length; i += 1) {
-                                file = inp.files[i];
-                                if (file.type.indexOf("text") === 0) {
-                                    readText(file);
-                                }
+                            file = inp.files[inp.files.length - 1];
+                            if (file.type.indexOf("text") === 0) {
+                                readText(file);
+                            } else {
+                            	ide.inform("Unable to import", "Snap! can only import \"text\" files.\n You selected a file of type \"" + file.type + "\".");
                             }
                         }
                     },
