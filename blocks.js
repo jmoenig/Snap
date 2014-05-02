@@ -6633,6 +6633,60 @@ InputSlotMorph.prototype.costumesMenu = function () {
 };
 
 // Controls the options avilable for the set font option block
+// The dict sets up menu values, which are dependant on the selected option
+// Available options are defined in SpriteMorph.prototype.fontProperties
+InputSlotMorph.prototype.fontValuesDict = {
+    'font size' : { 
+        '10' : '10',
+        '12' : '12',
+        '14' : '14',
+        '16' : '16',
+        '18' : '18',
+        '20' : '20'
+    },
+    'font family' : { // Contains standard CSS font families + example
+        'cursive' : 'cursive',
+        'Helvetica' : 'Helvetica',
+        'monospace' : 'monospace',
+        'sans-serif' : 'sans-serif',
+        'serif' : 'serif'
+    },
+    'font variant' : { // Standard CSS variants
+         'normal' : 'normal',
+         'small-caps' : 'small-caps'
+    },
+    'font weight' : { // Only the numeric weight values (no dupes with bold)
+        '100' : '100',
+        '200' : '200',
+        '300' : '300',
+        '400' : '400',
+        '500' : '500',
+        '600' : '600',
+        '700' : '700',
+        '800' : '800',
+        '900' : '900'
+    },
+    'text align' : { // All Canvas text align options
+        'left' : 'left',
+        'right' : 'right',
+        'center' : 'center'
+    },
+    'text baseline' : { // Basic baseline options
+        'alphabetic' : 'alphabetic',
+        'bottom' : 'bottom',
+        'middle' : 'middle',
+        'top' : 'top'
+    },
+    'move with text' : {
+        'false' : 'false',
+        'true' : 'true'
+    },
+    'rotate with sprite' : {
+        'false' : 'false',
+        'true' : 'true'
+    }
+};
+
 InputSlotMorph.prototype.fontValuesMenu = function () {
     var block = this.parentThatIsA(BlockMorph),
         option = block.inputs()[0].evaluate(),
@@ -6644,92 +6698,37 @@ InputSlotMorph.prototype.fontValuesMenu = function () {
         return dict;
     }
     
-    // These options are defined in SpriteMorph.prototype.fontProperties
-    switch (option) {
-    case 'font size':
-        this.isNumeric  = true;
-        this.isReadOnly = false;
+    dict = this.fontValuesDict[option];
+    
+    if (option === 'font size' || option === 'font wright') {
         // Fix for when user switches between editable and non-editable menus
         this.contents().shadowOffset = new Point();
         this.contents().shadowColor = null;
-        this.contents().setColor(new Color(0, 0, 0));
-        dict = { '10' : '10',
-                 '12' : '12',
-                 '14' : '14',
-                 '16' : '16',
-                 '18' : '18',
-                 '20' : '20'
-                };
-        break;
+        this.contents().setColor(new Color(0, 0, 0))
+    }
+    
+    // Set the style of the dropdown based on what values make sense.
+    switch (option) {
     case 'font family':
         this.isNumeric  = false;
         this.isReadOnly = false;
-        // Fix for odd looks, see above.
-        this.contents().shadowOffset = new Point();
-        this.contents().shadowColor = null;
-        this.contents().setColor(new Color(0, 0, 0));
-        dict = { 'cursive' : 'cursive',
-                 'fantasy' : 'fantasy',
-                 'Helvetica' : 'Helvetica',
-                 'monospace' : 'monospace',
-                 'sans-serif' : 'sans-serif',
-                 'serif' : 'serif'
-                };
         break;
-    case 'font variant':
-        this.isNumeric  = false;
-        this.isReadOnly = true;
-        dict = { 'normal' : 'normal',
-                 'small-caps' : 'small-caps'
-                };
-        break;
+    case 'font size': // Falls Through
     case 'font weight':
         this.isNumeric  = true;
         this.isReadOnly = true;
-        dict = { '100' : '100',
-                 '200' : '200',
-                 '300' : '300',
-                 '400' : '400',
-                 '500' : '500',
-                 '600' : '600',
-                 '700' : '700',
-                 '800' : '800',
-                 '900' : '900'
-                };
         break;
+    case 'font variant': // Falls through
     case 'font style':
-        this.isNumeric  = false;
-        this.isReadOnly = true;
-        dict = { 'normal' : 'normal',
-                 'italic' : 'italic',
-                 'oblique' : 'oblique',
-                };
-        break;
     case 'text align':
-        this.isNumeric  = false;
-        this.isReadOnly = true;
-        dict = { 'left' : 'left',
-                 'right' : 'right',
-                 'center' : 'center',
-                };
-        break;
     case 'text baseline':
-        this.isNumeric  = false;
-        this.isReadOnly = true;
-        dict = { 'alphabetic' : 'alphabetic',
-                 'bottom' : 'bottom',
-                 'middle' : 'middle',
-                 'top' : 'top'
-                };
-        break;
     case 'move with text':
+    case 'rotate with sprite':
         this.isNumeric  = false;
         this.isReadOnly = true;
-        dict = { 'false' : false,
-                 'true' : true
-                };
+        break;
     }
-
+    
     return dict;
 };
 

@@ -2551,7 +2551,8 @@ SpriteMorph.prototype.fontProperties = {
     'text align' : 'left',
     'text baseline' : 'alphabetic',
     // Custom Snap! Options
-    'move with text' : false
+    'move with text' : false,
+    'rotate with sprite' : false
 }
 
 SpriteMorph.prototype.doSetTextOption = function (option, value) {
@@ -2561,7 +2562,10 @@ SpriteMorph.prototype.doSetTextOption = function (option, value) {
 
     fonts[option] = value;
     if (option === 'move with text') {
-        fonts[option] = value === 'true' || value;
+        fonts[option] = (value === 'true' || value);
+    }
+    if (option === 'rotate with sprite') {
+        fonts[option] = (value === 'true' || value);
     }
 
     context.font = fonts['font style'] + ' ' + fonts['font variant'] + ' ' +
@@ -2572,22 +2576,26 @@ SpriteMorph.prototype.doSetTextOption = function (option, value) {
 }
 
 SpriteMorph.prototype.doStampText = function (text) {
-    var stage = this.parent,
-        context = stage.penTrails().getContext('2d'),
+    var stage    = this.parent,
+        context  = stage.penTrails().getContext('2d'),
         isWarped = this.isWarped,
-        ide = this.parentThatIsA(IDE_Morph);
+        trans    = new Point(this.center().x - stage.left(), 
+                             this.center().y - stage.top()),
+        ide      = this.parentThatIsA(IDE_Morph);
+
 
     if (isWarped) {
         this.endWarp();
     }
 
     context.save();
-
+    context.translate(trans.x, trans.y);
+    if (this.fontProperties['rotate with sprite']) {
+        context.rotate(this.direction() * Math.PI / 180);
+    }
     context.fillStyle = this.color.toString();
-
-    context.fillText(text, (this.center().x - stage.left()),
-        (this.center().y - stage.top()));
-
+    context.fillText(text, 0, 0);
+    context.translate(-trans.x, -trans.y);
     context.restore();
 
     if (this.fontProperties['move with text']) {

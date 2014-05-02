@@ -650,7 +650,11 @@ SnapSerializer.prototype.loadSprites = function (xmlString, ide) {
             sprite.fontProperties['move with text'] =
                 model.attributes['move-with-text'] === 'true';
         }
-        
+        if (model.attributes['rotate-with-sprite']) {            
+            // make sure option is a boolean
+            sprite.fontProperties['rotate with sprite'] =
+                model.attributes['rotate-with-sprite'] === 'true';
+        }
         
         myself.loadObject(sprite, model);
     });
@@ -1200,6 +1204,11 @@ SnapSerializer.prototype.loadValue = function (model) {
             // make sure option is a boolean
             v.fontProperties['move with text'] =
                 model.attributes['move-with-text'] === 'true';
+        }
+        if (model.attributes['rotate-with-sprite']) {            
+            // make sure option is a boolean
+            v.fontProperties['rotate with sprite'] =
+                model.attributes['rotate-with-sprite'] === 'true';
         }
         
         myself.loadObject(v, model);
