@@ -66,7 +66,7 @@
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.paint = '2014-April-30';
+modules.paint = '2014-May-02';
 
 // Declarations
 
