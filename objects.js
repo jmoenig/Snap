@@ -124,7 +124,7 @@ PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.objects = '2014-April-28';
+modules.objects = '2014-May-02';
 
 var SpriteMorph;
 var StageMorph;
@@ -2544,7 +2544,7 @@ SpriteMorph.prototype.fontProperties = {
     'font size' : '12', // measured in 'px'
     'font family' : 'Helvetica',
     'font variant' : 'normal',
-    'font weight' : '300',
+    'font weight' : '400',
     'font style' : 'normal',
     // 'line-height' : '1', // currently not exposed
     // Canvas Font Options
@@ -2561,50 +2561,55 @@ SpriteMorph.prototype.doSetTextOption = function (option, value) {
         fonts = this.fontProperties;
 
     fonts[option] = value;
-    if (option === 'move with text') {
-        fonts[option] = (value === 'true' || value);
+    
+    // These items should be coerced to booleans
+    if (option === 'move with text' || option === 'rotate with sprite') {
+        fonts[option] = value === 'true' || value && value !== 'false';
     }
-    if (option === 'rotate with sprite') {
-        fonts[option] = (value === 'true' || value);
-    }
-
-    context.font = fonts['font style'] + ' ' + fonts['font variant'] + ' ' +
-            fonts['font weight'] + ' ' + fonts['font size'] + 'px ' +
-            fonts['font family'];
-    context.textAlign = fonts['text align'];
-    context.textBaseline = fonts['text baseline'];
 }
 
 SpriteMorph.prototype.doStampText = function (text) {
     var stage    = this.parent,
         context  = stage.penTrails().getContext('2d'),
-        isWarped = this.isWarped,
-        trans    = new Point(this.center().x - stage.left(), 
+        fonts    = this.fontProperties,
+        rotation = radians(this.direction() - 90),
+        trans    = new Point(this.center().x - stage.left(),
                              this.center().y - stage.top()),
         ide      = this.parentThatIsA(IDE_Morph);
 
-
-    if (isWarped) {
+    if (this.isWarped) {
         this.endWarp();
     }
 
     context.save();
+    context.font = fonts['font style'] + ' ' + fonts['font variant'] + ' ' +
+                   fonts['font weight'] + ' ' + fonts['font size'] + 'px ' +
+                   fonts['font family'];
+    context.textAlign = fonts['text align'];
+    context.textBaseline = fonts['text baseline'];
     context.translate(trans.x, trans.y);
-    if (this.fontProperties['rotate with sprite']) {
-        context.rotate(this.direction() * Math.PI / 180);
+    if (fonts['rotate with sprite']) {
+        context.rotate(rotation);
     }
     context.fillStyle = this.color.toString();
     context.fillText(text, 0, 0);
     context.translate(-trans.x, -trans.y);
     context.restore();
 
-    if (this.fontProperties['move with text']) {
-        this.changeXPosition(context.measureText(text).width);
+    if (fonts['move with text']) {
+        var len = this.reportTextWidth(text),
+            pos = new Point(len, 0);
+        if (fonts['rotate with sprite']) {
+            pos = new Point(len * Math.sin(radians(this.direction())), 
+                            len * Math.cos(radians(this.direction())));
+        }
+        pos.add(new Point(this.xPosition(), this.yPosition()));
+        this.gotoXY(pos.x, pos.y, false);
     }
 
     this.changed();
 
-    if (isWarped) {
+    if (this.isWarped) {
         this.startWarp();
     }
 
@@ -2615,9 +2620,14 @@ SpriteMorph.prototype.doStampText = function (text) {
 // Measure the input text width based on the current text options.
 
 SpriteMorph.prototype.reportTextWidth = function (text) {
-    var stage = this.parent,
+    var stage   = this.parent,
+        fonts   = this.fontProperties,
         context = stage.penTrails().getContext('2d');
 
+    context.font = fonts['font style'] + ' ' + fonts['font variant'] + ' ' +
+                   fonts['font weight'] + ' ' + fonts['font size'] + 'px ' +
+                   fonts['font family'];
+    
     return context.measureText(text).width;
 }
 

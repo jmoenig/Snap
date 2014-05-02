@@ -6700,34 +6700,17 @@ InputSlotMorph.prototype.fontValuesMenu = function () {
     
     dict = this.fontValuesDict[option];
     
-    if (option === 'font size' || option === 'font wright') {
-        // Fix for when user switches between editable and non-editable menus
+    // Fix for when user switches between editable and non-editable menus
+    if (option === 'font size' || option === 'font weight') {
         this.contents().shadowOffset = new Point();
         this.contents().shadowColor = null;
         this.contents().setColor(new Color(0, 0, 0))
     }
     
-    // Set the style of the dropdown based on what values make sense.
-    switch (option) {
-    case 'font family':
-        this.isNumeric  = false;
-        this.isReadOnly = false;
-        break;
-    case 'font size': // Falls Through
-    case 'font weight':
-        this.isNumeric  = true;
-        this.isReadOnly = true;
-        break;
-    case 'font variant': // Falls through
-    case 'font style':
-    case 'text align':
-    case 'text baseline':
-    case 'move with text':
-    case 'rotate with sprite':
-        this.isNumeric  = false;
-        this.isReadOnly = true;
-        break;
-    }
+    // Only Weight and Size have numeric values
+    this.isNumeric  = option === 'font size' || option === 'font weight';
+    // Only size and family are not read only
+    this.isReadOnly = option !== 'font size' && option !== 'font family';
     
     return dict;
 };

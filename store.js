@@ -61,7 +61,7 @@ SyntaxElementMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2014-April-28';
+modules.store = '2014-May-02';
 
 
 // XML_Serializer ///////////////////////////////////////////////////////
@@ -1493,6 +1493,7 @@ SpriteMorph.prototype.toXML = function (serializer) {
             ' text-align="@"' +
             ' text-baseline="@"' +
             ' move-with-text="@"' +
+            ' rotate-with-sprite="@"' +
             '%' +
             ' costume="@" color="@,@,@" pen="@" ~>' +
             '%' + // nesting info
@@ -1518,6 +1519,7 @@ SpriteMorph.prototype.toXML = function (serializer) {
         this.fontProperties['text align'],
         this.fontProperties['text baseline'],
         this.fontProperties['move with text'],
+        this.fontProperties['rotate with sprite'],
         this.isVisible ? '' : ' hidden="true"',
         this.getCostumeIdx(),
         this.color.r,
