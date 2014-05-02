@@ -6567,7 +6567,17 @@ WatcherMorph.prototype.userMenu = function () {
                 inp.addEventListener(
                     "change",
                     function () {
-                        var file, i;
+                        var file;
+
+                        function txtOnlyMsg(ftype) {
+                            ide.inform(
+                                'Unable to import',
+                                'Snap! can only import "text" files.\n' +
+                                    'You selected a file of type "' +
+                                    ftype +
+                                    '".'
+                            );
+                        }
 
                         function readText(aFile) {
                             var frd = new FileReader();
@@ -6577,18 +6587,19 @@ WatcherMorph.prototype.userMenu = function () {
                                     e.target.result
                                 );
                             };
-                            frd.readAsText(aFile);
+
+                            if (aFile.type.indexOf("text") === 0) {
+                                frd.readAsText(aFile);
+                            } else {
+                                txtOnlyMsg(aFile.type);
+                            }
                         }
 
                         document.body.removeChild(inp);
                         ide.filePicker = null;
                         if (inp.files.length > 0) {
-                            for (i = 0; i < inp.files.length; i += 1) {
-                                file = inp.files[i];
-                                if (file.type.indexOf("text") === 0) {
-                                    readText(file);
-                                }
-                            }
+                            file = inp.files[inp.files.length - 1];
+                            readText(file);
                         }
                     },
                     false
@@ -6604,7 +6615,7 @@ WatcherMorph.prototype.userMenu = function () {
                 'export...',
                 function () {
                     window.open(
-                        'data:text/plain,' +
+                        'data:text/plain;charset=utf-8,' +
                             encodeURIComponent(this.currentValue.toString())
                     );
                 }

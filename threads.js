@@ -1482,10 +1482,10 @@ Process.prototype.doSetFastTracking = function (bool) {
     if (this.homeContext.receiver) {
         ide = this.homeContext.receiver.parentThatIsA(IDE_Morph);
         if (ide) {
-            if (ide.stage.isFastTracked) {
-                ide.stopFastTracking();
-            } else {
+            if (bool) {
                 ide.startFastTracking();
+            } else {
+                ide.stopFastTracking();
             }
         }
     }
