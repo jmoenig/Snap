@@ -885,6 +885,7 @@ IDE_Morph.prototype.createSearchbar = function () {
     this.searchbar.isDraggable = false;
     this.searchbar.acceptsDrops = false;
     this.searchbar.contents.acceptsDrops = false;
+    this.searchbar.contrast = 90;
     
     this.searchButton = new PushButtonMorph(null, 
                                             function () {
@@ -905,6 +906,8 @@ IDE_Morph.prototype.createSearchbar = function () {
 
     this.categories.add(this.searchbar);
     this.categories.add(this.searchButton);
+    
+    this.searchbar.drawNew();
 
     // These functions could be used to allow for autofill functionality
     // this.searchbar.reactToKeyStroke = function (event) {
@@ -986,7 +989,7 @@ IDE_Morph.prototype.createSearchbar = function () {
                             count++;
                         }
                     //Adds the rest
-                    } else if (current !== null) {
+                    } else if (current !== null && !(current instanceof TextMorph)) {
                         if ((current.blockSpec.toLowerCase()).indexOf(string) !== -1) {
                             list[count] = current.fullCopy(false);
                             count++;
