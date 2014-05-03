@@ -986,7 +986,7 @@ IDE_Morph.prototype.createSearchbar = function () {
                             count++;
                         }
                     //Adds the rest
-                    } else {
+                    } else if (current !== null) {
                         if ((current.blockSpec.toLowerCase()).indexOf(string) !== -1) {
                             list[count] = current.fullCopy(false);
                             count++;
