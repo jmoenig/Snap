@@ -203,7 +203,7 @@ IDE_Morph.prototype.init = function (isAutoFill) {
     this.logo = null;
     this.controlBar = null;
     this.categories = null;
-    this.searchbar = null;
+    // this.searchbar = null;
     this.palette = null;
     this.spriteBar = null;
     this.spriteEditor = null;
@@ -393,7 +393,6 @@ IDE_Morph.prototype.buildPanes = function () {
     this.createLogo();
     this.createControlBar();
     this.createCategories();
-    this.createSearchbar();
     this.createPalette();
     this.createStage();
     this.createSpriteBar();
@@ -783,9 +782,12 @@ IDE_Morph.prototype.createCategories = function () {
             function () {
                 myself.currentCategory = category;
                 myself.categories.children.forEach(function (each) {
-                    each.refresh();
+                    if (each instanceof ToggleButtonMorph) {
+                        each.refresh();
+                    }
                 });
-                this.createSearchbar();
+                this.createSearchbar();  // Clears the searchbar
+                fixCategoriesLayout();   // Clears the searchbar
                 myself.refreshPalette(true);
             },
             category[0].toUpperCase().concat(category.slice(1)), // label
@@ -826,19 +828,30 @@ IDE_Morph.prototype.createCategories = function () {
             col;
 
         myself.categories.children.forEach(function (button) {
-            i += 1;
-            row = Math.ceil(i / 2);
-            col = 2 - (i % 2);
-            button.setPosition(new Point(
-                l + (col * xPadding + ((col - 1) * buttonWidth)),
-                t + (row * yPadding + ((row - 1) * buttonHeight) + border)
-            ));
+            if (button instanceof ToggleButtonMorph || button instanceof InputFieldMorph) {
+                i += 1;
+                row = Math.ceil(i / 2);
+                col = 2 - (i % 2);
+                button.setPosition(new Point(
+                    l + (col * xPadding + ((col - 1) * buttonWidth)),
+                    t + (row * yPadding + ((row - 1) * buttonHeight) + border)
+                ));
+            } else {
+                i += 1;
+                row = Math.ceil(i / 2);
+                col = 2 - (i % 2);
+                button.setPosition(new Point(
+                    l + (col * xPadding + ((col - 1) * buttonWidth) + buttonWidth - button.width()),
+                    t + (row * yPadding + ((row - 1) * buttonHeight) + border)
+                )); 
+            }
         });
 
         myself.categories.setHeight(
             (rows) * yPadding
                 + (rows) * buttonHeight
                 + 2 * border
+                + 8
         );
     }
 
@@ -847,6 +860,7 @@ IDE_Morph.prototype.createCategories = function () {
             addCategoryButton(cat);
         }
     });
+    this.createSearchbar();
     fixCategoriesLayout();
     this.add(this.categories);
 };
@@ -871,14 +885,13 @@ IDE_Morph.prototype.createSearchbar = function () {
     this.searchbar.isDraggable = false;
     this.searchbar.acceptsDrops = false;
     this.searchbar.contents.acceptsDrops = false;
-    this.searchbar.message = null;
     
     this.searchButton = new PushButtonMorph(null, 
                                             function () {
                                                 myself.searchbar.accept()
                                             }, 
                                             defaulttext);
-    this.searchButton.setHeight(this.searchbar.height() - 2);
+    //this.searchButton.setHeight(this.searchbar.height() - 2);
     this.searchButton.corner = 0;
     this.searchButton.color = colors[0];
     this.searchButton.highlightColor = colors[1];
@@ -887,11 +900,12 @@ IDE_Morph.prototype.createSearchbar = function () {
     this.searchButton.labelShadowColor = colors[1];
     this.searchButton.labelColor = this.buttonLabelColor;
     this.searchButton.contrast = this.buttonContrast;
+    this.searchButton.padding = 5;
     
-    this.searchbar.setWidth(this.logo.width() - this.searchButton.width());
-    
-    this.add(this.searchbar);
-    this.add(this.searchButton);
+    this.searchbar.setWidth(this.logo.width() - (1.60 * this.searchButton.width()));
+
+    this.categories.add(this.searchbar);
+    this.categories.add(this.searchButton);
 
     // These functions could be used to allow for autofill functionality
     // this.searchbar.reactToKeyStroke = function (event) {
@@ -904,14 +918,16 @@ IDE_Morph.prototype.createSearchbar = function () {
         if (searchString === '') {
             myself.showMessage('Please enter a Search term');
         } else {
-            myself.currentCategory = 'search';
-            myself.categories.children.forEach(function (each) {
-                each.refresh();
-            });
             list = myself.searchbar.createlist(searchString);
             if (list.length === 0) {
                 myself.showMessage('Did not find any results for "' + searchString + '"');
             } else {
+                myself.currentCategory = 'search';
+                myself.categories.children.forEach(function (each) {
+                    if (each instanceof ToggleButtonMorph) {
+                        each.refresh();
+                    }
+                });
                 myself.searchbar.updatePallete(list);
             }
         }
@@ -1522,15 +1538,15 @@ IDE_Morph.prototype.fixLayout = function (situation) {
         this.categories.setLeft(this.logo.left());
         this.categories.setTop(this.logo.bottom());
     }
-    //searchbar
-    this.searchbar.setLeft(this.logo.left());
-    this.searchbar.setTop(this.categories.bottom());
-    this.searchButton.setLeft(this.searchbar.right());
-    this.searchButton.setTop(this.categories.bottom() + 1);
+    // //searchbar
+    // this.searchbar.setLeft(this.logo.left());
+    // this.searchbar.setTop(this.categories.bottom() + 5);
+    // this.searchButton.setLeft(this.searchbar.right());
+    // this.searchButton.setTop(this.categories.bottom() + 5);
 
     // palette
     this.palette.setLeft(this.logo.left());
-    this.palette.setTop(this.searchbar.bottom());
+    this.palette.setTop(this.categories.bottom());
     this.palette.setHeight(this.bottom() - this.palette.top());
 
 
