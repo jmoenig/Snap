@@ -203,7 +203,7 @@ IDE_Morph.prototype.init = function (isAutoFill) {
     this.logo = null;
     this.controlBar = null;
     this.categories = null;
-    // this.searchbar = null;
+    this.searchbar = null;
     this.palette = null;
     this.spriteBar = null;
     this.spriteEditor = null;
@@ -891,7 +891,6 @@ IDE_Morph.prototype.createSearchbar = function () {
                                                 myself.searchbar.accept()
                                             }, 
                                             defaulttext);
-    //this.searchButton.setHeight(this.searchbar.height() - 2);
     this.searchButton.corner = 0;
     this.searchButton.color = colors[0];
     this.searchButton.highlightColor = colors[1];
@@ -1538,7 +1537,7 @@ IDE_Morph.prototype.fixLayout = function (situation) {
         this.categories.setLeft(this.logo.left());
         this.categories.setTop(this.logo.bottom());
     }
-    // //searchbar
+    // If searchbar is below the categories menu
     // this.searchbar.setLeft(this.logo.left());
     // this.searchbar.setTop(this.categories.bottom() + 5);
     // this.searchButton.setLeft(this.searchbar.right());
@@ -1548,7 +1547,6 @@ IDE_Morph.prototype.fixLayout = function (situation) {
     this.palette.setLeft(this.logo.left());
     this.palette.setTop(this.categories.bottom());
     this.palette.setHeight(this.bottom() - this.palette.top());
-
 
     if (situation !== 'refreshPalette') {
         // stage
