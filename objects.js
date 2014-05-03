@@ -2544,7 +2544,7 @@ SpriteMorph.prototype.fontProperties = {
     'font size' : '12', // measured in 'px'
     'font family' : 'Helvetica',
     'font variant' : 'normal',
-    'font weight' : '400',
+    'font weight' : 'normal',
     'font style' : 'normal',
     // 'line-height' : '1', // currently not exposed
     // Canvas Font Options

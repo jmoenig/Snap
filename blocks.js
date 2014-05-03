@@ -6655,16 +6655,11 @@ InputSlotMorph.prototype.fontValuesDict = {
          'normal' : 'normal',
          'small-caps' : 'small-caps'
     },
-    'font weight' : { // Only the numeric weight values (no dupes with bold)
-        '100' : '100',
-        '200' : '200',
-        '300' : '300',
-        '400' : '400',
-        '500' : '500',
-        '600' : '600',
-        '700' : '700',
-        '800' : '800',
-        '900' : '900'
+    'font weight' : {  // Textual values are more clear
+        'normal' : 'normal',
+        'bold' : 'bold',
+        'bolder' : 'bolder',
+        'lighter' : 'lighter'
     },
     'text align' : { // All Canvas text align options
         'left' : 'left',
@@ -6701,15 +6696,15 @@ InputSlotMorph.prototype.fontValuesMenu = function () {
     dict = this.fontValuesDict[option];
     
     // Fix for when user switches between editable and non-editable menus
-    if (option === 'font size' || option === 'font weight') {
+    if (option === 'font size' || option === 'font family') {
         this.contents().shadowOffset = new Point();
         this.contents().shadowColor = null;
         this.contents().setColor(new Color(0, 0, 0))
     }
     
-    // Only Weight and Size have numeric values
-    this.isNumeric  = option === 'font size' || option === 'font weight';
-    // Only size and family are not read only
+    // Only font size has numeric values
+    this.isNumeric  = option === 'font size';
+    // Only size and family are _not_ read only
     this.isReadOnly = option !== 'font size' && option !== 'font family';
     
     return dict;
