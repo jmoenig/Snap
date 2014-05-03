@@ -2157,7 +2157,11 @@ BlockMorph.prototype.hidePrimitive = function () {
     }[this.selector] || this.category;
     if (cat === 'lists') {cat = 'variables'; }
     ide.flushBlocksCache(cat);
-    ide.refreshPalette();
+    if (ide.currentCategory === 'search') {
+        ide.searchbar.accept();
+    } else {
+        ide.refreshPalette();
+    }
 };
 
 BlockMorph.prototype.deleteBlock = function () {
