@@ -6668,8 +6668,8 @@ InputSlotMorph.prototype.fontValuesDict = {
     },
     'text align' : { // All Canvas text align options
         'left' : 'left',
-        'right' : 'right',
-        'center' : 'center'
+        'center' : 'center',
+        'right' : 'right'
     },
     'text baseline' : { // Basic baseline options
         'alphabetic' : 'alphabetic',

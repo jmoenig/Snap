@@ -2413,7 +2413,7 @@ Process.prototype.reportDistanceTo = function (name) {
 
 Process.prototype.reportAttributeOf = function (attribute, name) {
     var thisObj = this.blockReceiver(),
-        thatObj, atr, stage;
+        thatObj, attr, stage;
 
     if (!thisObj) {
         return '';
@@ -2436,8 +2436,8 @@ Process.prototype.reportAttributeOf = function (attribute, name) {
             return thatObj.variables.getVar(attribute);
         }
         
-        atr = this.inputOption(attribute);
-        switch (atr) {
+        attr = this.inputOption(attribute);
+        switch (attr) {
         case 'x position':
             return thatObj.xPosition ? thatObj.xPosition() : '';
         case 'y position':
@@ -2454,12 +2454,8 @@ Process.prototype.reportAttributeOf = function (attribute, name) {
             return thatObj.getScale ? thatObj.getScale() : '';
         default:
             // Sprite Font Properties 
-            if (fonts.indexOf(atr) > -1) {
-                if (atr === 'move with text' || atr === 'rotate with sprite') {
-                    return (thatObj.fontProperties[atr] === 'true' ||
-                            thatObj.fontProperties[atr]);
-                }
-                return thatObj.fontProperties[atr];
+            if (fonts.indexOf(attr) > -1) {
+                return thatObj.fontProperties[attr];
             }
         }
     }

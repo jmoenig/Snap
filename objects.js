@@ -2560,6 +2560,7 @@ SpriteMorph.prototype.doSetTextOption = function (option, value) {
         context = stage.penTrails().getContext('2d'),
         fonts = this.fontProperties;
 
+    option = option[0];
     fonts[option] = value;
     
     // These items should be coerced to booleans
@@ -2598,12 +2599,15 @@ SpriteMorph.prototype.doStampText = function (text) {
 
     if (fonts['move with text']) {
         var len = this.reportTextWidth(text),
-            pos = new Point(len, 0);
+            pos = new Point(len, 0); // Move right, for text align left
         if (fonts['rotate with sprite']) {
+            // Note sin is X and cos is Y due to Logo coordinate system
             pos = new Point(len * Math.sin(radians(this.direction())), 
                             len * Math.cos(radians(this.direction())));
         }
-        pos.add(new Point(this.xPosition(), this.yPosition()));
+        // TODO handle text alignment correctly.
+        
+        pos = pos.add(new Point(this.xPosition(), this.yPosition()));
         this.gotoXY(pos.x, pos.y, false);
     }
 
