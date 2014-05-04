@@ -1111,6 +1111,8 @@ ToggleMorph.prototype.fullCopy = function () {
                                     this.element,
                                     this.builder,
                                     this);
+    newToggle.children[0] = newToggle.children[1];
+    newToggle.children[1].destroy();
     return newToggle;
 }
 
