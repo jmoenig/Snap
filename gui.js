@@ -828,21 +828,23 @@ IDE_Morph.prototype.createCategories = function () {
             col;
 
         myself.categories.children.forEach(function (button) {
-            if (button instanceof ToggleButtonMorph || button instanceof InputFieldMorph) {
-                i += 1;
-                row = Math.ceil(i / 2);
-                col = 2 - (i % 2);
+            i += 1;
+            row = Math.ceil(i / 2);
+            col = 2 - (i % 2);
+            if (button instanceof ToggleButtonMorph) {
                 button.setPosition(new Point(
                     l + (col * xPadding + ((col - 1) * buttonWidth)),
                     t + (row * yPadding + ((row - 1) * buttonHeight) + border)
                 ));
+            } else if (button instanceof InputFieldMorph) {
+                button.setPosition(new Point(
+                    l + (col * xPadding + ((col - 1) * buttonWidth)),
+                    t + (row * yPadding + ((row - 1) * buttonHeight) + border + 3)
+                ));
             } else {
-                i += 1;
-                row = Math.ceil(i / 2);
-                col = 2 - (i % 2);
                 button.setPosition(new Point(
                     l + (col * xPadding + ((col - 1) * buttonWidth) + buttonWidth - button.width()),
-                    t + (row * yPadding + ((row - 1) * buttonHeight) + border)
+                    t + (row * yPadding + ((row - 1) * buttonHeight) + border + 3)
                 )); 
             }
         });
@@ -851,7 +853,7 @@ IDE_Morph.prototype.createCategories = function () {
             (rows) * yPadding
                 + (rows) * buttonHeight
                 + 2 * border
-                + 8
+                + 11
         );
     }
 
