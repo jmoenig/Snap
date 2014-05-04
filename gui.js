@@ -905,7 +905,7 @@ IDE_Morph.prototype.createSearchbar = function () {
     this.searchButton.contrast = this.buttonContrast;
     this.searchButton.padding = 5;
     
-    this.searchbar.setWidth(this.logo.width() - (1.60 * this.searchButton.width()));
+    this.searchbar.setWidth(this.logo.width() - this.searchButton.width() - 30);
 
     this.categories.add(this.searchbar);
     this.categories.add(this.searchButton);
@@ -918,14 +918,19 @@ IDE_Morph.prototype.createSearchbar = function () {
     // this.searchbar.reactToEdit = function (string) {
     // }
 
-    this.searchbar.accept = function () {
+    this.searchbar.accept = function (hidden) {
+        var hidden = hidden || null;
         var searchString = myself.searchbar.getValue().toLowerCase();
         if (searchString === '') {
             myself.showMessage('Please enter a Search term');
         } else {
             list = myself.searchbar.createlist(searchString);
             if (list.length === 0) {
-                myself.showMessage('Did not find any results for "' + searchString + '"');
+                if (hidden) {
+                    myself.searchbar.updatePallete(list);
+                } else {
+                    myself.showMessage('Did not find any results');
+                }
             } else {
                 myself.currentCategory = 'search';
                 myself.categories.children.forEach(function (each) {
