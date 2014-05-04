@@ -1080,7 +1080,7 @@ SnapSerializer.prototype.loadInput = function (model, input, block) {
 
 SnapSerializer.prototype.loadValue = function (model) {
     // private
-    var v, items, el, center, image, name, audio, option, font,
+    var v, items, el, center, image, name, audio, option,
         myself = this;
 
     function record() {
