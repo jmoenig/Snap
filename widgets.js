@@ -1038,7 +1038,8 @@ function ToggleMorph(
     hint,
     template,
     element, // optional Morph or Canvas to display
-    builder // method which constructs the element (only for Morphs)
+    builder, // method which constructs the element (only for Morphs)
+    givenParent  // optional Morph that should have the same state as this at all times
 ) {
     this.init(
         style,
@@ -1050,7 +1051,8 @@ function ToggleMorph(
         hint,
         template,
         element,
-        builder
+        builder,
+        givenParent
     );
 }
 
@@ -1064,7 +1066,8 @@ ToggleMorph.prototype.init = function (
     hint,
     template,
     element,
-    builder
+    builder,
+    givenParent
 ) {
     // additional properties:
     this.padding = 1;
@@ -1079,6 +1082,7 @@ ToggleMorph.prototype.init = function (
     this.element = element || null;
     this.builder = builder || null;
     this.toggleElement = null;
+    this.givenParent = givenParent || null;
 
     // initialize inherited properties:
     ToggleMorph.uber.init.call(
@@ -1093,6 +1097,22 @@ ToggleMorph.prototype.init = function (
     this.refresh();
     this.drawNew();
 };
+
+// Creates a copy of a ToggleMorph that will update the ToggleMorph it is a copy of.
+ToggleMorph.prototype.fullCopy = function () {
+    var newToggle = new ToggleMorph(this.style,
+                                    this.target,
+                                    this.action,
+                                    this.labelString,
+                                    this.query,
+                                    this.environment,
+                                    this.hint,
+                                    this.template,
+                                    this.element,
+                                    this.builder,
+                                    this);
+    return newToggle;
+}
 
 // ToggleMorph layout:
 
@@ -1216,8 +1236,14 @@ ToggleMorph.prototype.refresh = function () {
         this.state = this.target[this.query]();
     }
     if (this.state) {
+        if (this.givenParent instanceof ToggleMorph) {
+            this.givenParent.tick.show();
+        }
         this.tick.show();
     } else {
+        if (this.givenParent instanceof ToggleMorph) {
+            this.givenParent.tick.hide();
+        }
         this.tick.hide();
     }
     if (this.toggleElement && this.toggleElement.refresh) {
