@@ -2158,7 +2158,7 @@ BlockMorph.prototype.hidePrimitive = function () {
     if (cat === 'lists') {cat = 'variables'; }
     ide.flushBlocksCache(cat);
     if (ide.currentCategory === 'search') {
-        ide.searchbar.accept();
+        ide.searchbar.accept(true);
     } else {
         ide.refreshPalette();
     }
