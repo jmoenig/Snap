@@ -106,7 +106,7 @@ SymbolMorph, isNil*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2014-January-10';
+modules.byob = '2014-May-02';
 
 // Declarations
 
@@ -372,8 +372,12 @@ CustomCommandBlockMorph.prototype.refresh = function () {
     this.setCategory(def.category);
     if (this.blockSpec !== newSpec) {
         oldInputs = this.inputs();
+        if (!this.zebraContrast) {
+            this.forceNormalColoring();
+        } else {
+            this.fixBlockColor();
+        }
         this.setSpec(newSpec);
-        this.fixBlockColor();
         this.fixLabelColor();
         this.restoreInputs(oldInputs);
     } else { // update all input slots' drop-downs
@@ -2579,7 +2583,10 @@ InputSlotDialogMorph.prototype.symbolMenu = function () {
         myself = this;
     SymbolMorph.prototype.names.forEach(function (symbol) {
         symbols.push([
-            [new SymbolMorph(symbol, myself.fontSize, symbolColor), symbol],
+            [
+                new SymbolMorph(symbol, myself.fontSize, symbolColor),
+                localize(symbol)
+            ],
             '$' + symbol
         ]);
     });

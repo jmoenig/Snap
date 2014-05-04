@@ -1093,15 +1093,15 @@ SnapTranslator.dict.pt = {
 
     // detecção de colisões
     'mouse-pointer':
-        'ponteiro do rato',
+        'o ponteiro do rato',
     'edge':
-        'borda',
+        'a borda',
     'pen trails':
         'traços da caneta',
 
     // trajes
     'Turtle':
-        'seta',
+        'tartaruga',
     'Empty':
         'vazio',
 
@@ -1225,7 +1225,7 @@ SnapTranslator.dict.pt = {
     'whitespace':
         'espaços em branco',
     'line':
-        'avanços de linha',
+        'linha',
     'tab':
         'tabuladores',
     'cr':
@@ -1385,5 +1385,117 @@ SnapTranslator.dict.pt = {
     'comment pic...':
         'fotografia do comentário…',
     'open a new window\nwith a picture of this comment':
-        'Abrir uma nova janela com\numa fotografia deste comentário.'
+        'Abrir uma nova janela com\numa fotografia deste comentário.',
+    'undo':
+        'desfazer',
+    'Brush size':
+        'Espessura do pincel',
+    'Constrain proportions of shapes?\n(you can also hold shift)':
+        'Preservar proporções das formas?\n(também pode pressionar shift)',
+    'Eraser tool':
+        'Borracha',
+    'Paintbrush tool\n(free draw)':
+        'Pincel\n(desenho livre)',
+    'Line tool\n(shift: vertical/horizontal)':
+        'Segmento de recta\n(shift: vertical/horizontal)',
+    'Stroked Rectangle\n(shift: square)':
+        'Rectângulo\n(shift: quadrado)',
+    'Filled Rectangle\n(shift: square)':
+        'Rectângulo preenchido\n(shift: quadrado)',
+    'Stroked Ellipse\n(shift: circle)':
+        'Elipse\n(shift: circunferência)',
+    'Filled Ellipse\n(shift: circle)':
+        'Elipse preenchida\n(shift: círculo)',
+    'Fill a region':
+        'Balde de tinta',
+    'Set the rotation center':
+        'Estabelecer centro de rotação',
+    'Pipette tool\n(pick a color anywhere)':
+        'Pipeta\n(recolher uma cor em qualquer lado)',
+    'Paint Editor':
+        'Editor de Pintura',
+    'square':
+        'quadrado',
+    'pointRight':
+        'triângulo para a direita',
+    'gears':
+        'roda dentada',
+    'file':
+        'arquivo',
+    'fullScreen':
+        'ecrã inteiro',
+    'normalScreen':
+        'ecrã normal',
+    'smallStage':
+        'palco pequeno',
+    'normalStage':
+        'palco normal',
+    'turtle':
+        'tartaruga',
+    'stage':
+        'palco',
+    'turtleOutline':
+        'contorno de tartaruga',
+    'pause':
+        'pausa',
+    'flag':
+        'bandeira',
+    'octagon':
+        'octógono',
+    'cloud':
+        'nuvem',
+    'cloudOutline':
+        'contorno de nuvem',
+    'cloudGradient':
+        'nuvem com gradiente',
+    'turnRight':
+        'girar à direita',
+    'turnLeft':
+        'girar à esquerda',
+    'storage':
+        'armazenagem',
+    'poster':
+        'póster',
+    'flash':
+        'relâmpago',
+    'brush':
+        'pincel',
+    'rectangle':
+        'rectângulo',
+    'rectangleSolid':
+        'rectângulo preenchido',
+    'circle':
+        'circunferência',
+    'circleSolid':
+        'círculo',
+    'crosshairs':
+        'mira',
+    'paintbucket':
+        'balde de tinta',
+    'eraser':
+        'borracha',
+    'pipette':
+        'pipeta',
+    'speechBubble':
+        'balão de fala',
+    'speechBubbleOutline':
+        'contorno de balão de fala',
+    'arrowUp':
+        'seta para cima',
+    'arrowUpOutline':
+        'contorno de seta para cima',
+    'arrowLeft':
+        'seta para a esquerda',
+    'arrowLeftOutline':
+        'contorno de seta para a esquerda',
+    'arrowDown':
+        'seta para baixo',
+    'arrowDownOutline':
+        'contorno de seta para baixo',
+    'arrowRight':
+        'seta para a direita',
+    'arrowRightOutline':
+        'contorno de seta para a direita',
+    'robot':
+        'robot'
 };

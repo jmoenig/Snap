@@ -168,7 +168,8 @@ SnapTranslator.dict.ru = {
     Special characters: (see <http://0xcc.net/jsescape/>)
 
     ,    \u00c4, \u00e4
-,    \u00d6, \u00f6
+
+,    \u00d6, \u00f6
     ,    \u00dc, \u00fc
     §      \u00df
 */
@@ -186,15 +187,15 @@ SnapTranslator.dict.ru = {
     // GUI
     // control bar:
     'untitled':
-        'неозаглавленный',
+        'Безымянный',
     'development mode':
-        'разрабатываемая версия',
+        'Разрабатываемая версия',
 
     // categories:
     'Motion':
         'Движение',
     'Looks':
-        'Изображение',
+        'Внешность',
     'Sound':
         'Звук',
     'Pen':
@@ -202,7 +203,7 @@ SnapTranslator.dict.ru = {
     'Control':
         'Управление',
     'Sensing':
-        'Состояние',
+        'Сенсоры',
     'Operators':
         'Операторы',
     'Variables':
@@ -220,13 +221,13 @@ SnapTranslator.dict.ru = {
     'Scripts':
         'Скрипты',
     'Costumes':
-        'Маски',
+        'Костюмы',
     'Sounds':
-        'Звучания',
+        'Звуки',
 
     // names:
     'Sprite':
-        'Образ',
+        'Спрайт',
     'Stage':
         'Сцена',
 
@@ -236,17 +237,17 @@ SnapTranslator.dict.ru = {
     'can rotate':
         'вращаемый',
     'only face left/right':
-        'вращаемый только слева направо',
+        'вращаемый только на лево и направо',
 
     // new sprite button:
     'add a new sprite':
-        'Добавить новый Образ',
+        'Добавить новый спрайт',
 
     // tab help
     'costumes tab help':
-        'импорт изображение с другого веб-сайта\nили со своего компьютера скопировав его сюда',
+        'импортируйте изображение с другого веб-сайта\nили со своего компьютера скопировав его сюда',
     'import a sound from your computer\nby dragging it into here':
-        'импорт звук со своего компьютера\nскопировав его сюда',
+        'импортируйте звук со своего компьютера\nскопировав его сюда',
 
     // primitive blocks:
 
@@ -282,7 +283,7 @@ SnapTranslator.dict.ru = {
 
     // motion:
     'Stage selected:\nno motion primitives':
-        'Сцена-клавиша нажата:\nДвижение-примитивы отключены',
+        'Выбрана сцена:\nнет блоков движения',
 
     'move %n steps':
         'передвинуть на %n шагов',
@@ -291,7 +292,7 @@ SnapTranslator.dict.ru = {
     'turn %counterclockwise %n degrees':
         'повернуть %counterclockwise на %n градусов',
     'point in direction %dir':
-        'указывать в направл. %dir',
+        'указывать в направлении %dir',
     'point towards %dst':
         'указывать на %dst',
     'go to x: %n y: %n':
@@ -319,17 +320,17 @@ SnapTranslator.dict.ru = {
 
     // looks:
     'switch to costume %cst':
-        'измен. маску на %cst',
+        'изменить костюм на %cst',
     'next costume':
-        'следующая маска',
+        'следующий костюм',
     'costume #':
-        'маска #',
+        'костюм №',
     'say %s for %n secs':
-        'произн. %s в теч. %n сек.',
+        'говорить %s в течение %n сек',
     'say %s':
-        'произнести %s',
+        'говорить %s',
     'think %s for %n secs':
-        'думать %s в теч. %n сек.',
+        'думать %s в течение %n сек',
     'think %s':
         'думать %s',
     'Hello!':
@@ -337,25 +338,25 @@ SnapTranslator.dict.ru = {
     'Hmm...':
         'Хмм...',
     'change %eff effect by %n':
-        'измен. %eff эфф. на %n',
+        'изменить эффект %eff на %n',
     'set %eff effect to %n':
-        'устан. %eff эфф. %n',
+        'установить эффект %eff в %n',
     'clear graphic effects':
-        'аннулировать графич. эфф-ты',
+        'убрать эффекты',
     'change size by %n':
         'изменить размер на %n',
     'set size to %n %':
-        'установить размер %n %',
+        'установить размер в %n',
     'size':
         'размер',
     'show':
-        'показывать',
+        'показаться',
     'hide':
-        'прятать',
+        'спрятаться',
     'go to front':
-        'переместить вперед',
+        'переместиться на слой вперед',
     'go back %n layers':
-        'перемест. на %n уровня назад',
+        'переместиться на %n слоёв назад',
 
     'development mode \ndebugging primitives:':
         'Разрабатываемая версия \nотладка примитивов:',
@@ -913,7 +914,7 @@ SnapTranslator.dict.ru = {
 
     // About Snap
     'About Snap':
-        'Snap!  Реквизиты',
+        'О Snap!',
     'Back...':
         'Bозврат...',
     'License...':
@@ -957,7 +958,7 @@ SnapTranslator.dict.ru = {
 
     // coments
     'add comment here...':
-        'добавить комментарий сюда...',
+        'добавьте комментарий сюда...',
 
     // drow downs
     // directions
@@ -974,17 +975,17 @@ SnapTranslator.dict.ru = {
     'mouse-pointer':
         'курсор мышки',
     'edge':
-        'грань',
+        'край',
     'pen trails':
         'линии пера',
 
     // costumes
     'Turtle':
-        'Горлица',
+        'Черепашка',
 
     // graphical effects
     'ghost':
-        'прозрачн.',
+        'прозрачность',
 
     // keys
     'space':
@@ -1117,4 +1118,8 @@ SnapTranslator.dict.ru = {
         'последний',
     'any':
         'любой'
+    'now connected':
+        'вы вошли в систему'
+    'undo':
+        'отменить'
 };

@@ -155,7 +155,7 @@ DialogBoxMorph, BlockInputFragmentMorph, PrototypeHatBlockMorph, Costume*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2014-February-11';
+modules.blocks = '2014-May-02';
 
 
 var SyntaxElementMorph;
@@ -1631,6 +1631,12 @@ SyntaxElementMorph.prototype.showBubble = function (value) {
         isClickable = true;
     } else if (value instanceof Morph) {
         img = value.fullImage();
+        morphToShow = new Morph();
+        morphToShow.silentSetWidth(img.width);
+        morphToShow.silentSetHeight(img.height);
+        morphToShow.image = img;
+    } else if (value instanceof Costume) {
+        img = value.thumbnail(new Point(40, 40));
         morphToShow = new Morph();
         morphToShow.silentSetWidth(img.width);
         morphToShow.silentSetHeight(img.height);
