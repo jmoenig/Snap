@@ -1303,6 +1303,9 @@ SnapSerializer.prototype.openProject = function (project, ide) {
     ide.selectSprite(sprite);
     ide.fixLayout();
     ide.world().keyboardReceiver = project.stage;
+    if (ide.currentCategory === 'search') {
+        ide.searchbar.accept();
+    }
 };
 
 // SnapSerializer XML-representation of objects:
