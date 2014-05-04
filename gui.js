@@ -204,6 +204,7 @@ IDE_Morph.prototype.init = function (isAutoFill) {
     this.controlBar = null;
     this.categories = null;
     this.searchbar = null;
+    this.searchButton = null;
     this.palette = null;
     this.spriteBar = null;
     this.spriteEditor = null;
