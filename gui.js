@@ -3641,7 +3641,7 @@ IDE_Morph.prototype.setBlocksScale = function (num) {
     CommentMorph.prototype.refreshScale();
     SpriteMorph.prototype.initBlocks();
     this.spriteBar.tabBar.tabTo('scripts');
-    this.createCategories();
+    //this.createCategories();  // needed to be able to reperform the search after the after fixing the block size
     this.createCorralBar();
     this.fixLayout();
     this.openProjectString(projectData);
