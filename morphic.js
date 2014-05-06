@@ -2571,7 +2571,6 @@ Morph.prototype.drawNew = function () {
     } else if (this.texture) {
         this.drawTexture(this.texture);
     } else if (source != undefined && this.isIcon){
-		//alert(source.width);
 		context.drawImage(source, 0, 0);
 	}
 };
@@ -6778,7 +6777,8 @@ MenuMorph.prototype.drawNew = function () {
 			var m = new Morph();
 			m.isIcon = true;
 			m.image = tuple[0];	
-			m.addShadow();			
+			m.addShadow();
+			m.drawNew();
 			
 			item = new MenuItemMorph(
                 myself.target,
