@@ -1855,7 +1855,8 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         button = new PushButtonMorph(
             null,
             function () {
-                var stage = myself.parentThatIsA(StageMorph);
+                var stage = myself.parentThatIsA(StageMorph),
+                    ide = myself.parentThatIsA(IDE_Morph);
                 new BlockDialogMorph(
                     null,
                     function (definition) {
@@ -1879,14 +1880,11 @@ SpriteMorph.prototype.blockTemplates = function (category) {
             },
             'Make a block'
         );
-        button.userMenu = function() {
-            var menu = new MenuMorph(this);
-            menu.addItem('help...', 'showHelp');
-            return menu;
-        }
+        button.userMenu = helpMenu;
         button.selector = 'addCustomBlock';
         button.showHelp = BlockMorph.prototype.showHelp;
         blocks.push(button);
+        blocks.push('-');
         
         // Make a Variable button
         button = new PushButtonMorph(
@@ -4369,6 +4367,12 @@ StageMorph.prototype.blockTemplates = function (category) {
         );
     }
 
+    function helpMenu() {
+        var menu = new MenuMorph(this);
+        menu.addItem('help...', 'showHelp');
+        return menu;
+    }
+    
     if (cat === 'motion') {
 
         txt = new TextMorph(localize(
@@ -4601,7 +4605,8 @@ StageMorph.prototype.blockTemplates = function (category) {
         button = new PushButtonMorph(
             null,
             function () {
-                var stage = myself.parentThatIsA(StageMorph);
+                var stage = myself.parentThatIsA(StageMorph),
+                    ide   = myself.parentThatIsA(IDE_Morph);
                 new BlockDialogMorph(
                     null,
                     function (definition) {
@@ -4625,14 +4630,11 @@ StageMorph.prototype.blockTemplates = function (category) {
             },
             'Make a block'
         );
-        button.userMenu = function() {
-            var menu = new MenuMorph(this);
-            menu.addItem('help...', 'showHelp');
-            return menu;
-        }
+        button.userMenu = helpMenu;
         button.selector = 'addCustomBlock';
         button.showHelp = BlockMorph.prototype.showHelp;
         blocks.push(button);
+        blocks.push('-');
         
         // Make a Variable button
         button = new PushButtonMorph(
@@ -4658,6 +4660,9 @@ StageMorph.prototype.blockTemplates = function (category) {
             },
             'Make a variable'
         );
+        button.userMenu = helpMenu;
+        button.selector = 'addVariable';
+        button.showHelp = BlockMorph.prototype.showHelp;
         blocks.push(button);
 
         if (this.variables.allNames().length > 0) {
@@ -4676,6 +4681,9 @@ StageMorph.prototype.blockTemplates = function (category) {
                 },
                 'Delete a variable'
             );
+            button.userMenu = helpMenu;
+            button.selector = 'deleteVariable';
+            button.showHelp = BlockMorph.prototype.showHelp;
             blocks.push(button);
         }
 
