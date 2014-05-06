@@ -1851,7 +1851,44 @@ SpriteMorph.prototype.blockTemplates = function (category) {
     /////////////////////////////////
 
     } else if (cat === 'variables') {
-
+        // Make a block button
+        button = new PushButtonMorph(
+            null,
+            function () {
+                var stage = myself.parentThatIsA(StageMorph);
+                new BlockDialogMorph(
+                    null,
+                    function (definition) {
+                        if (definition.spec !== '') {
+                            if (definition.isGlobal) {
+                                stage.globalBlocks.push(definition);
+                            } else {
+                                myself.customBlocks.push(definition);
+                            }
+                            ide.flushPaletteCache();
+                            ide.refreshPalette();
+                            new BlockEditorMorph(definition, myself).popUp();
+                        }
+                    },
+                    myself
+                ).prompt(
+                    'Make a block',
+                    null,
+                    myself.world()
+                );
+            },
+            'Make a block'
+        );
+        button.userMenu = function() {
+            var menu = new MenuMorph(this);
+            menu.addItem('help...', 'showHelp');
+            return menu;
+        }
+        button.selector = 'addCustomBlock';
+        button.showHelp = BlockMorph.prototype.showHelp;
+        blocks.push(button);
+        
+        // Make a Variable button
         button = new PushButtonMorph(
             null,
             function () {
@@ -4560,7 +4597,44 @@ StageMorph.prototype.blockTemplates = function (category) {
     //////////////////////////////////
 
     } else if (cat === 'variables') {
-
+        // Make a block button
+        button = new PushButtonMorph(
+            null,
+            function () {
+                var stage = myself.parentThatIsA(StageMorph);
+                new BlockDialogMorph(
+                    null,
+                    function (definition) {
+                        if (definition.spec !== '') {
+                            if (definition.isGlobal) {
+                                stage.globalBlocks.push(definition);
+                            } else {
+                                myself.customBlocks.push(definition);
+                            }
+                            ide.flushPaletteCache();
+                            ide.refreshPalette();
+                            new BlockEditorMorph(definition, myself).popUp();
+                        }
+                    },
+                    myself
+                ).prompt(
+                    'Make a block',
+                    null,
+                    myself.world()
+                );
+            },
+            'Make a block'
+        );
+        button.userMenu = function() {
+            var menu = new MenuMorph(this);
+            menu.addItem('help...', 'showHelp');
+            return menu;
+        }
+        button.selector = 'addCustomBlock';
+        button.showHelp = BlockMorph.prototype.showHelp;
+        blocks.push(button);
+        
+        // Make a Variable button
         button = new PushButtonMorph(
             null,
             function () {
