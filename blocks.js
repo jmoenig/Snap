@@ -155,7 +155,7 @@ DialogBoxMorph, BlockInputFragmentMorph, PrototypeHatBlockMorph, Costume*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2014-May-02';
+modules.blocks = '2014-May-05';
 
 
 var SyntaxElementMorph;
@@ -1040,11 +1040,11 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             part.setContents(['sqrt']);
             break;
         case '%fontOption':
-            fontOption = {};
-            for (key in SpriteMorph.prototype.fontProperties) {
+            var fontOption = {};
+            for (var key in SpriteMorph.prototype.fontProperties) {
                 fontOption[key] = [ key ];
             }
-            
+
             part = new InputSlotMorph(
                 null, // text?
                 false, // numeric?
@@ -1057,7 +1057,7 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             // Menu options will be adjusted based on the %fontOption selection
             part = new InputSlotMorph(
                 null, // text?
-                true, // numeric?
+                false, // numeric?
                 'fontValuesMenu',
                 false // read-only?
             );
@@ -1308,7 +1308,7 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
         default:
             nop();
         }
-        
+
     } else if (spec[0] === '$' &&
             spec.length > 1 &&
             this.selector !== 'reportGetVar') {
@@ -6571,11 +6571,11 @@ InputSlotMorph.prototype.attributesMenu = function () {
             }
         );
     }
-    
+
     if (!obj) {
         return dict;
     }
-    
+
     if (obj instanceof SpriteMorph) {
         dict = {
             'x position' : ['x position'],
@@ -6587,8 +6587,8 @@ InputSlotMorph.prototype.attributesMenu = function () {
         };
 
         dict['~~'] = null; // ~~ prevent conflict with ~ below.
-        for (var attrname in obj.fontProperties) { 
-            dict[attrname] = [ attrname ]; 
+        for (var attrname in obj.fontProperties) {
+            dict[attrname] = [ attrname ];
         }
     } else { // the stage
         dict = {
@@ -6636,7 +6636,7 @@ InputSlotMorph.prototype.costumesMenu = function () {
 // The dict sets up menu values, which are dependant on the selected option
 // Available options are defined in SpriteMorph.prototype.fontProperties
 InputSlotMorph.prototype.fontValuesDict = {
-    'font size' : { 
+    'font size' : {
         '10' : '10',
         '12' : '12',
         '14' : '14',
@@ -6646,7 +6646,6 @@ InputSlotMorph.prototype.fontValuesDict = {
     },
     'font family' : { // Contains standard CSS font families + example
         'cursive' : 'cursive',
-        'Helvetica' : 'Helvetica',
         'monospace' : 'monospace',
         'sans-serif' : 'sans-serif',
         'serif' : 'serif'
@@ -6655,10 +6654,9 @@ InputSlotMorph.prototype.fontValuesDict = {
          'normal' : 'normal',
          'small-caps' : 'small-caps'
     },
-    'font weight' : {  // Textual values are more clear
+    'font weight' : {  // Text options are clearer than 100-900 values
         'normal' : 'normal',
         'bold' : 'bold',
-        'bolder' : 'bolder',
         'lighter' : 'lighter'
     },
     'text align' : { // All Canvas text align options
@@ -6672,11 +6670,11 @@ InputSlotMorph.prototype.fontValuesDict = {
         'middle' : 'middle',
         'top' : 'top'
     },
-    'move with text' : {
+    'move sprite after text' : {
         'false' : 'false',
         'true' : 'true'
     },
-    'rotate with sprite' : {
+    'show text using sprite\'s direction' : {
         'false' : 'false',
         'true' : 'true'
     }
@@ -6685,28 +6683,31 @@ InputSlotMorph.prototype.fontValuesDict = {
 InputSlotMorph.prototype.fontValuesMenu = function () {
     var block = this.parentThatIsA(BlockMorph),
         option = block.inputs()[0].evaluate(),
-        // get the string from evaluation list
-        option = option[0],
         dict = {};
-    
+
     if (!option) {
         return dict;
     }
-    
+
+    if (!isString(option)) {
+        // get the string from evaluation list
+        option = option[0];
+    }
+
     dict = this.fontValuesDict[option];
-    
+
     // Fix for when user switches between editable and non-editable menus
     if (option === 'font size' || option === 'font family') {
         this.contents().shadowOffset = new Point();
         this.contents().shadowColor = null;
-        this.contents().setColor(new Color(0, 0, 0))
+        this.contents().setColor(new Color(0, 0, 0));
     }
-    
+
     // Only font size has numeric values
     this.isNumeric  = option === 'font size';
     // Only size and family are _not_ read only
     this.isReadOnly = option !== 'font size' && option !== 'font family';
-    
+
     return dict;
 };
 

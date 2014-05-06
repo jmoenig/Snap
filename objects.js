@@ -124,7 +124,7 @@ PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.objects = '2014-May-02';
+modules.objects = '2014-May-05';
 
 var SpriteMorph;
 var StageMorph;
@@ -531,12 +531,12 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'command',
             category: 'pen',
             spec: 'set text option %fontOption to %fontValue',
-            defaults: [['font size'], 12]
+            defaults: [['font family'], 'Helvetica']
         },
         reportTextWidth: {
             type: 'reporter',
             category: 'pen',
-            spec: 'measure width of %txt',
+            spec: 'pixel width of %txt',
             defaults: [localize('Hello!')]
         },
 
@@ -1707,8 +1707,8 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push('-');
         blocks.push(block('doStamp'));
         blocks.push('-');
-        blocks.push(block('doSetTextOption'));
         blocks.push(block('doStampText'));
+        blocks.push(block('doSetTextOption'));
         blocks.push(block('reportTextWidth'));
 
     } else if (cat === 'control') {
@@ -2551,23 +2551,27 @@ SpriteMorph.prototype.fontProperties = {
     'text align' : 'left',
     'text baseline' : 'alphabetic',
     // Custom Snap! Options
-    'move with text' : false,
-    'rotate with sprite' : false
-}
+    'move sprite after text' : false,
+    'show text using sprite\'s direction' : false
+};
 
 SpriteMorph.prototype.doSetTextOption = function (option, value) {
     var stage = this.parent,
         context = stage.penTrails().getContext('2d'),
         fonts = this.fontProperties;
 
-    option = option[0];
+    if (!isString(option)) {
+        option = option[0];
+    }
+    
     fonts[option] = value;
     
     // These items should be coerced to booleans
-    if (option === 'move with text' || option === 'rotate with sprite') {
+    if (option === 'move sprite after text' || 
+        option === 'show text using sprite\'s direction') {
         fonts[option] = value === 'true' || value && value !== 'false';
     }
-}
+};
 
 SpriteMorph.prototype.doStampText = function (text) {
     var stage    = this.parent,
@@ -2589,7 +2593,7 @@ SpriteMorph.prototype.doStampText = function (text) {
     context.textAlign = fonts['text align'];
     context.textBaseline = fonts['text baseline'];
     context.translate(trans.x, trans.y);
-    if (fonts['rotate with sprite']) {
+    if (fonts['show text using sprite\'s direction']) {
         context.rotate(rotation);
     }
     context.fillStyle = this.color.toString();
@@ -2597,15 +2601,22 @@ SpriteMorph.prototype.doStampText = function (text) {
     context.translate(-trans.x, -trans.y);
     context.restore();
 
-    if (fonts['move with text']) {
+    if (fonts['move sprite after text']) {
         var len = this.reportTextWidth(text),
             pos = new Point(len, 0); // Move right, for text align left
-        if (fonts['rotate with sprite']) {
+            
+        // Adjust alignment position for Right and Center text alignment
+        if (fonts['text align'] === 'right') {
+            len = -len;
+        } else if (fonts['text align'] === 'center') {
+            len = 0;
+        }
+        
+        if (fonts['show text using sprite\'s direction']) {
             // Note sin is X and cos is Y due to Logo coordinate system
             pos = new Point(len * Math.sin(radians(this.direction())), 
                             len * Math.cos(radians(this.direction())));
         }
-        // TODO handle text alignment correctly.
         
         pos = pos.add(new Point(this.xPosition(), this.yPosition()));
         this.gotoXY(pos.x, pos.y, false);
@@ -2633,7 +2644,7 @@ SpriteMorph.prototype.reportTextWidth = function (text) {
                    fonts['font family'];
     
     return context.measureText(text).width;
-}
+};
 
 // SpriteMorph layers
 

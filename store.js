@@ -61,7 +61,7 @@ SyntaxElementMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2014-May-02';
+modules.store = '2014-May-05';
 
 
 // XML_Serializer ///////////////////////////////////////////////////////
@@ -645,15 +645,15 @@ SnapSerializer.prototype.loadSprites = function (xmlString, ide) {
             sprite.fontProperties['text baseline'] =
              model.attributes['text-baseline'];
         }
-        if (model.attributes['move-with-text']) {            
+        if (model.attributes['move-sprite-after-text']) {            
             // make sure option is a boolean
-            sprite.fontProperties['move with text'] =
-                model.attributes['move-with-text'] === 'true';
+            sprite.fontProperties['move sprite after text'] =
+                model.attributes['move-sprite-after-text'] === 'true';
         }
-        if (model.attributes['rotate-with-sprite']) {            
+        if (model.attributes['show-text-direction']) {            
             // make sure option is a boolean
-            sprite.fontProperties['rotate with sprite'] =
-                model.attributes['rotate-with-sprite'] === 'true';
+            sprite.fontProperties['show text using sprite\'s direction'] =
+                model.attributes['show-text-direction'] === 'true';
         }
         
         myself.loadObject(sprite, model);
@@ -1200,15 +1200,15 @@ SnapSerializer.prototype.loadValue = function (model) {
             v.fontProperties['text baseline'] =
              model.attributes['text-baseline'];
         }
-        if (model.attributes['move-with-text']) {            
+        if (model.attributes['move-sprite-after-text']) {            
             // make sure option is a boolean
-            v.fontProperties['move with text'] =
-                model.attributes['move-with-text'] === 'true';
+            v.fontProperties['move sprite after text'] =
+                model.attributes['move-sprite-after-text'] === 'true';
         }
-        if (model.attributes['rotate-with-sprite']) {            
+        if (model.attributes['show-text-direction']) {            
             // make sure option is a boolean
-            v.fontProperties['rotate with sprite'] =
-                model.attributes['rotate-with-sprite'] === 'true';
+            v.fontProperties['show text using sprite\'s direction'] =
+                model.attributes['show-text-direction'] === 'true';
         }
         
         myself.loadObject(v, model);
@@ -1498,8 +1498,8 @@ SpriteMorph.prototype.toXML = function (serializer) {
             ' font-style="@"' +
             ' text-align="@"' +
             ' text-baseline="@"' +
-            ' move-with-text="@"' +
-            ' rotate-with-sprite="@"' +
+            ' move-sprite-after-text="@"' +
+            ' show-text-direction="@"' +
             '%' +
             ' costume="@" color="@,@,@" pen="@" ~>' +
             '%' + // nesting info
@@ -1524,8 +1524,8 @@ SpriteMorph.prototype.toXML = function (serializer) {
         this.fontProperties['font style'],
         this.fontProperties['text align'],
         this.fontProperties['text baseline'],
-        this.fontProperties['move with text'],
-        this.fontProperties['rotate with sprite'],
+        this.fontProperties['move sprite after text'],
+        this.fontProperties['show text using sprite\'s direction'],
         this.isVisible ? '' : ' hidden="true"',
         this.getCostumeIdx(),
         this.color.r,

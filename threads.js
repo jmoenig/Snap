@@ -83,7 +83,7 @@ ArgLabelMorph, localize, XML_Element, hex_sha512*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.threads = '2014-May-02';
+modules.threads = '2014-May-05';
 
 var ThreadManager;
 var Process;
@@ -2413,7 +2413,7 @@ Process.prototype.reportDistanceTo = function (name) {
 
 Process.prototype.reportAttributeOf = function (attribute, name) {
     var thisObj = this.blockReceiver(),
-        thatObj, attr, stage;
+        thatObj, attr, fonts, stage;
 
     if (!thisObj) {
         return '';
@@ -2453,7 +2453,7 @@ Process.prototype.reportAttributeOf = function (attribute, name) {
         case 'size':
             return thatObj.getScale ? thatObj.getScale() : '';
         default:
-            // Sprite Font Properties 
+            // Sprite Font Properties
             if (fonts.indexOf(attr) > -1) {
                 return thatObj.fontProperties[attr];
             }
