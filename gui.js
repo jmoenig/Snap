@@ -500,6 +500,7 @@ IDE_Morph.prototype.createControlBar = function () {
         startButton,
         projectButton,
         settingsButton,
+		goalImagesButton,
         stageSizeButton,
         appModeButton,
         cloudButton,
@@ -712,6 +713,27 @@ IDE_Morph.prototype.createControlBar = function () {
     this.controlBar.add(settingsButton);
     this.controlBar.settingsButton = settingsButton; // for menu positioning
 
+	// goalImagesButton
+    button = new PushButtonMorph(
+        this,
+        'goalImagesMenu', ' Goals  '
+    );
+    button.corner = 12;
+    button.color = colors[0];
+    button.highlightColor = colors[1];
+    button.pressColor = colors[2];
+    button.labelMinExtent = new Point(36, 18);
+    button.padding = 0;
+    button.labelShadowOffset = new Point(-1, -1);
+    button.labelShadowColor = colors[1];
+    button.labelColor = this.buttonLabelColor;
+    button.contrast = this.buttonContrast;
+    button.drawNew();
+    button.fixLayout();
+    goalImagesButton = button;
+    this.controlBar.add(goalImagesButton);
+    this.controlBar.goalImagesButton = goalImagesButton; // for menu positioning
+	
     // cloudButton
     button = new PushButtonMorph(
         this,
@@ -757,16 +779,19 @@ IDE_Morph.prototype.createControlBar = function () {
                 x += button.width();
             }
         );
-
+		
+		goalImagesButton.setCenter(myself.controlBar.center());
+		goalImagesButton.setLeft(this.left());
+		
         settingsButton.setCenter(myself.controlBar.center());
-        settingsButton.setLeft(this.left());
+        settingsButton.setLeft(goalImagesButton.left() - padding - 40);
 
         cloudButton.setCenter(myself.controlBar.center());
         cloudButton.setRight(settingsButton.left() - padding);
 
         projectButton.setCenter(myself.controlBar.center());
         projectButton.setRight(cloudButton.left() - padding);
-
+		
         this.updateLabel();
     };
 
@@ -795,7 +820,7 @@ IDE_Morph.prototype.createControlBar = function () {
         this.label.drawNew();
         this.add(this.label);
         this.label.setCenter(this.center());
-        this.label.setLeft(this.settingsButton.right() + padding);
+        this.label.setLeft(this.goalImagesButton.right() + padding);
     };
 };
 
@@ -2081,6 +2106,30 @@ IDE_Morph.prototype.cloudMenu = function () {
     menu.popup(world, pos);
 };
 
+IDE_Morph.prototype.goalImagesMenu = function() {
+	var menu,
+        stage = this.stage,
+        world = this.world(),
+        myself = this,
+        pos = this.controlBar.goalImagesButton.bottomLeft(),
+        shiftClicked = (world.currentKey === 16);
+		
+		function addPreference(label, toggle, test, onHint, offHint, hide) {
+        var on = '\u2611 ',
+            off = '\u2610 ';
+        if (!hide || shiftClicked) {
+            menu.addItem(
+                (test ? on : off) + localize(label),
+                toggle,
+                test ? onHint : offHint,
+                hide ? new Color(100, 0, 0) : null
+            );
+        }
+    }
+	
+	new ProjectDialogMorph(this, 'goals').popUp();
+};
+
 IDE_Morph.prototype.settingsMenu = function () {
     var menu,
         stage = this.stage,
@@ -3147,6 +3196,7 @@ IDE_Morph.prototype.toggleAppMode = function (appMode) {
             this.controlBar.cloudButton,
             this.controlBar.projectButton,
             this.controlBar.settingsButton,
+			this.controlBar.goalImagesButton,
             this.controlBar.stageSizeButton,
             this.corral,
             this.corralBar,
@@ -3918,7 +3968,7 @@ ProjectDialogMorph.prototype.init = function (ide, task) {
 
     // additional properties:
     this.ide = ide;
-    this.task = task || 'open'; // String describing what do do (open, save, or demos)
+    this.task = task || 'open'; // String describing what do do (open, save, demos, or goals)
     this.source = ide.source || 'local'; // or 'cloud' or 'examples'
     this.projectList = []; // [{name: , thumb: , notes:}]
 
@@ -3951,6 +4001,10 @@ ProjectDialogMorph.prototype.init = function (ide, task) {
 	else if(this.task === 'demos'){
 		this.labelString = 'Demos List';
 		this.source = 'examples';
+	}
+	else if(this.task === 'goals'){
+		this.labelString = 'Goals';
+		this.source = 'goals';
 	}
     this.createLabel();
     this.key = 'project' + task;
@@ -3989,6 +4043,9 @@ ProjectDialogMorph.prototype.buildContents = function () {
 	
 	if(this.task === 'demos'){
 		this.addSourceButton('examples', localize('Examples'), 'poster');
+	}
+	else if(this.task === 'goals'){
+		//no source button needed
 	}
 	else{
 		this.addSourceButton('cloud', localize('Cloud'), 'cloud');
@@ -4035,9 +4092,13 @@ ProjectDialogMorph.prototype.buildContents = function () {
         this.changed();
     };
     this.preview.drawRectBorder = InputFieldMorph.prototype.drawRectBorder;
-    this.preview.setExtent(
-        this.ide.serializer.thumbnailSize.add(this.preview.edge * 2)
-    );
+	if(this.task === 'goals'){
+		this.preview.setExtent(new Point(250, 250));
+	} else{
+		this.preview.setExtent(
+			this.ide.serializer.thumbnailSize.add(this.preview.edge * 2)
+		);
+	}
 
     this.body.add(this.preview);
     this.preview.drawNew();
@@ -4084,6 +4145,9 @@ ProjectDialogMorph.prototype.buildContents = function () {
 	} else if (this.task === 'demos'){
 		this.addButton('openProject', 'Open');
         this.action = 'openProject';
+	} else if (this.task === 'goals'){
+		this.addButton('ok', 'Ok');
+		//action needed?
     } else { // 'save'
         this.addButton('saveProject', 'Save');
         this.action = 'saveProject';
@@ -4100,6 +4164,7 @@ ProjectDialogMorph.prototype.buildContents = function () {
     } else {
         this.setExtent(new Point(455, 335));
     }
+
     this.fixLayout();
 
 };
@@ -4247,20 +4312,37 @@ ProjectDialogMorph.prototype.setSource = function (source) {
     case 'examples':
         this.projectList = this.getExamplesProjectList();
         break;
+	case 'goals':
+		this.projectList = this.getGoalProjectList();
+		break;
     case 'local':
         this.projectList = this.getLocalProjectList();
         break;
     }
     this.listField.destroy();
-    this.listField = new ListMorph(
-        this.projectList,
-        this.projectList.length > 0 ?
-                function (element) {
-                    return element.name;
-                } : null,
-        null,
-        function () {myself.ok(); }
-    );
+	
+	if(this.source === 'goals'){
+		this.listField = new ListMorph(
+			this.projectList, 
+			this.projectList.length > 0 ?
+					function (element) {
+						return element.thumb;
+					} : null,
+			null,
+			function () {myself.ok();}
+		);
+	}
+	else{
+		this.listField = new ListMorph(
+			this.projectList,
+			this.projectList.length > 0 ?
+					function (element) {
+						return element.name;
+					} : null,
+			null,
+			function () {myself.ok(); }
+		);
+	}
 
     this.fixListFieldItemColors();
     this.listField.fixLayout = nop;
@@ -4294,6 +4376,31 @@ ProjectDialogMorph.prototype.setSource = function (source) {
                 myself.preview.drawNew();
             }
             myself.edit();
+        };	
+	} else if (this.source === 'goals'){
+		this.listField.action = function (item) {
+            var img, desc;
+            if (item === undefined) {return; }
+            if (myself.nameField) {
+               myself.nameField.setContents(item.name || '');
+            }
+			var request = new XMLHttpRequest();
+			request.open("GET", config.urls.goals_url, false);
+			request.send();
+			var JSON_object = JSON.parse(request.responseText);
+			for (var i = 0; i < JSON_object.goals.length; i++){
+				if(JSON_object.goals[i].name === item.name){
+					img = JSON_object.goals[i].img_url;
+					desc = JSON_object.goals[i].description;
+					myself.notesText.text = desc || '';
+					myself.notesText.drawNew();
+					myself.notesField.contents.adjustBounds();
+					myself.preview.texture = img || null;
+					myself.preview.cachedTexture = img;
+					myself.preview.drawNew();
+					myself.edit();
+				}
+			}
         };
     } else { // 'examples', 'cloud' is initialized elsewhere
         this.listField.action = function (item) {
@@ -4354,6 +4461,31 @@ ProjectDialogMorph.prototype.getLocalProjectList = function () {
             projects.push(dta);
         }
     }
+    projects.sort(function (x, y) {
+        return x.name < y.name ? -1 : 1;
+    });
+    return projects;
+};
+
+ProjectDialogMorph.prototype.getGoalProjectList = function () {
+	var dir, dta,
+        projects = [], thumbnail;
+	var request = new XMLHttpRequest();
+	request.open("GET", config.urls.goals_url, false);
+	request.send();
+	var JSON_object = JSON.parse(request.responseText);
+	for (var i = 0; i < JSON_object.goals.length; i++){
+		//preload images
+		thumbnail = new Image();
+		thumbnail.src = JSON_object.goals[i].thumb_url
+		dta = {
+			name: JSON_object.goals[i].name,
+			img: JSON_object.goals[i].img_url,
+			thumb: thumbnail,
+			notes: JSON_object.goals[i].description
+		};
+		projects.push(dta);
+	}
     projects.sort(function (x, y) {
         return x.name < y.name ? -1 : 1;
     });
@@ -4725,6 +4857,10 @@ ProjectDialogMorph.prototype.fixLayout = function () {
     var th = fontHeight(this.titleFontSize) + this.titlePadding * 2,
         thin = this.padding / 2,
         oldFlag = Morph.prototype.trackChanges;
+		
+	if(this.task === 'goals'){
+		this.setExtent(new Point(550, 450));
+	}
 
     Morph.prototype.trackChanges = false;
 

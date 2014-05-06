@@ -2200,6 +2200,7 @@ function Morph() {
 Morph.prototype.init = function () {
     Morph.uber.init.call(this);
     this.isMorph = true;
+	this.isIcon = false;
     this.bounds = new Rectangle(0, 0, 50, 40);
     this.color = new Color(80, 80, 80);
     this.texture = null; // optional url of a fill-image
@@ -2560,6 +2561,7 @@ Morph.prototype.setColor = function (aColor) {
 
 Morph.prototype.drawNew = function () {
     // initialize my surface property
+	var source = this.image;
     this.image = newCanvas(this.extent());
     var context = this.image.getContext('2d');
     context.fillStyle = this.color.toString();
@@ -2568,7 +2570,10 @@ Morph.prototype.drawNew = function () {
         this.drawCachedTexture();
     } else if (this.texture) {
         this.drawTexture(this.texture);
-    }
+    } else if (source != undefined && this.isIcon){
+		//alert(source.width);
+		context.drawImage(source, 0, 0);
+	}
 };
 
 Morph.prototype.drawTexture = function (url) {
@@ -2736,7 +2741,7 @@ Morph.prototype.fullImage = function () {
         if (morph.isVisible) {
             ctx.globalAlpha = morph.alpha;
             if (morph.image.width && morph.image.height) {
-                ctx.drawImage(
+				ctx.drawImage(
                     morph.image,
                     morph.bounds.origin.x - fb.origin.x,
                     morph.bounds.origin.y - fb.origin.y
@@ -6659,6 +6664,7 @@ MenuMorph.prototype.addItem = function (
         * an icon (either a Morph or a Canvas)
         * a tuple of format: [icon, string]
     */
+	
     this.items.push([
         localize(labelString || 'close'),
         action || nop,
@@ -6708,7 +6714,8 @@ MenuMorph.prototype.drawNew = function () {
         fb,
         x,
         y,
-        isLine = false;
+        isLine = false,
+		count;
 
     this.children.forEach(function (m) {
         m.destroy();
@@ -6735,18 +6742,75 @@ MenuMorph.prototype.drawNew = function () {
         }
     }
     y += 1;
+	count = 0;
     this.items.forEach(function (tuple) {
         isLine = false;
         if (tuple instanceof StringFieldMorph ||
                 tuple instanceof ColorPickerMorph ||
                 tuple instanceof SliderMorph) {
             item = tuple;
+			
+			if (isLine) {
+				y += 1;
+			}
+			item.setPosition(new Point(x, y));
+			myself.add(item);
+			y = y + item.height();
+			if (isLine) {
+				y += 1;
+			}
         } else if (tuple[0] === 0) {
             isLine = true;
             item = new Morph();
             item.color = myself.borderColor;
             item.setHeight(tuple[1]);
-        } else {
+			
+			if (isLine) {
+				y += 1;
+			}
+			item.setPosition(new Point(x, y));
+			myself.add(item);
+			y = y + item.height();
+			if (isLine) {
+				y += 1;
+			}
+        } else if(tuple[0] instanceof Image && tuple[0].src.indexOf("goals") != -1){	
+			var m = new Morph();
+			m.isIcon = true;
+			m.image = tuple[0];	
+			m.addShadow();			
+			
+			item = new MenuItemMorph(
+                myself.target,
+                tuple[1],
+                m,
+                myself.fontSize || MorphicPreferences.menuFontSize,
+                MorphicPreferences.menuFontName,
+                myself.environment,
+                tuple[2], // bubble help hint
+                tuple[3], // color
+                tuple[4], // bold
+                tuple[5], // italic
+                tuple[6] // doubleclick action
+            );
+			
+			if (isLine) {
+				y += 1;
+			}
+			count += 1;
+			item.setPosition(new Point(x, y));			
+			myself.add(item);
+			if(count < 3){
+				x = x + item.width();
+			} else{
+				count = 0;
+				y = y + item.height();
+				x = myself.left() + 4;
+			}
+			if (isLine) {
+				y += 1;
+			}
+		}else {			
             item = new MenuItemMorph(
                 myself.target,
                 tuple[1],
@@ -6759,19 +6823,20 @@ MenuMorph.prototype.drawNew = function () {
                 tuple[4], // bold
                 tuple[5], // italic
                 tuple[6] // doubleclick action
-            );
-        }
-        if (isLine) {
-            y += 1;
-        }
-        item.setPosition(new Point(x, y));
-        myself.add(item);
-        y = y + item.height();
-        if (isLine) {
-            y += 1;
-        }
+            );	
+			
+			if (isLine) {
+				y += 1;
+			}
+			item.setPosition(new Point(x, y));
+			myself.add(item);
+			y = y + item.height();
+			if (isLine) {
+				y += 1;
+			}
+		}
     });
-
+	
     fb = this.fullBounds();
     this.silentSetExtent(fb.extent().add(4));
     this.adjustWidths();
@@ -8031,12 +8096,12 @@ TriggerMorph.prototype.createBackgrounds = function () {
     this.highlightImage = newCanvas(ext);
     context = this.highlightImage.getContext('2d');
     context.fillStyle = this.highlightColor.toString();
-    context.fillRect(0, 0, ext.x, ext.y);
+    context.fillRect(0, 0, this.image.width, this.image.height);
 
     this.pressImage = newCanvas(ext);
     context = this.pressImage.getContext('2d');
     context.fillStyle = this.pressColor.toString();
-    context.fillRect(0, 0, ext.x, ext.y);
+    context.fillRect(0, 0, this.image.width, this.image.height);
 
     this.image = this.normalImage;
 };
@@ -8273,10 +8338,10 @@ MenuItemMorph.prototype.createIcon = function (source) {
     // source can be either a Morph or an HTMLCanvasElement
     var icon = new Morph(),
         src;
-    icon.image = source instanceof Morph ? source.fullImage() : source;
-    // adjust shadow dimensions
+	icon.image = source instanceof Morph ? source.fullImage() : source;
+	// adjust shadow dimensions
     if (source instanceof Morph && source.getShadow()) {
-        src = icon.image;
+		src = icon.image;
         icon.image = newCanvas(
             source.fullBounds().extent().subtract(
                 this.shadowBlur * (useBlurredShadows ? 1 : 2)
@@ -8284,8 +8349,8 @@ MenuItemMorph.prototype.createIcon = function (source) {
         );
         icon.image.getContext('2d').drawImage(src, 0, 0);
     }
-    icon.silentSetWidth(icon.image.width);
-    icon.silentSetHeight(icon.image.height);
+	icon.silentSetWidth(icon.image.width);
+	icon.silentSetHeight(icon.image.height);
     return icon;
 };
 
@@ -9014,6 +9079,10 @@ ListMorph.prototype.buildListContents = function () {
         this.elements = ['(empty)'];
     }
     this.elements.forEach(function (element) {
+		
+		/*if(element instanceof HTMLImageElement){
+			myself.drawTexture(element.src);
+		}*/
         var color = null,
             bold = false,
             italic = false;
