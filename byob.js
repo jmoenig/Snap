@@ -106,7 +106,7 @@ SymbolMorph, isNil*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2014-January-10';
+modules.byob = '2014-May-7';
 
 // Declarations
 
