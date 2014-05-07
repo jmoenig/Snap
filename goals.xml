@@ -1,130 +1,128 @@
-{ "goals" : 
-	[ 
-		{ 
-			"description" : "The Yoruba name for this style is 'lpako Elede,' which means the nape of the neck of a boar",
-			"name" : "image1",
-			"thumb_url" : "goals/image1thumb.jpg",
-			"img_url" : "goals/image1.jpg"
-		  },
-		{ 
-			"description" : "Goal Image",
-			"name" : "image10",
-			"thumb_url" : "goals/image10thumb.jpg",
-			"img_url" : "goals/image10.jpg"
-		  },
-		{
-			"description" : "Goal Image",
-			"name" : "image2",
-			"thumb_url" : "goals/image2thumb.jpg",
-			"img_url" : "goals/image2.jpg"
-		  },
-		{
-			"description" : "Goal Image",
-			"name" : "image3",
-			"thumb_url" : "goals/image3thumb.jpg",
-			"img_url" : "goals/image3.jpg"
-		  },
-		{
-			"description" : "Goal Image",
-			"name" : "image4",
-			"thumb_url" : "goals/image4thumb.jpg",
-			"img_url" : "goals/image4.jpg"
-		  },
-		{
-			"description" : "Goal Image",
-			"name" : "image5",
-			"thumb_url" : "goals/image5thumb.jpg",
-			"img_url" : "goals/image5.jpg"
-		  },
-		{
-			"description" : "Goal Image",
-			"name" : "image6",
-			"thumb_url" : "goals/image6thumb.jpg",
-			"img_url" : "goals/image6.jpg"
-		  },
-		{
-			"description" : "Goal Image",
-			"name" : "image7",
-			"thumb_url" : "goals/image7thumb.jpg",
-			"img_url" : "goals/image7.jpg"
-		  },
-		{
-			"description" : "Goal Image",
-			"name" : "image8",
-			"thumb_url" : "goals/image8thumb.jpg",
-			"img_url" : "goals/image8.jpg"
-		  },
-		{
-			"description" : "Goal Image",
-			"name" : "image9",
-			"thumb_url" : "goals/image9thumb.jpg",
-			"img_url" : "goals/image9.jpg"
-		  },
-		{
-			"description" : "Goal Image",
-			"name" : "image11",
-			"thumb_url" : "goals/image11thumb.jpg",
-			"img_url" : "goals/image11.jpg"
-		  },
-		{
-			"description" : "Goal Image",
-			"name" : "image12",
-			"thumb_url" : "goals/image12thumb.jpg",
-			"img_url" : "goals/image12.jpg"
-		  },
-		{
-			"description" : "Goal Image",
-			"name" : "image13",
-			"thumb_url" : "goals/image13thumb.jpg",
-			"img_url" : "goals/image13.jpg"
-		  },
-		{
-			"description" : "Goal Image",
-			"name" : "image14",
-			"thumb_url" : "goals/image14thumb.jpg",
-			"img_url" : "goals/image14.jpg"
-		  },
-		{
-			"description" : "Goal Image",
-			"name" : "image15",
-			"thumb_url" : "goals/image15thumb.jpg",
-			"img_url" : "goals/image15.jpg"
-		  },
-		{
-			"description" : "Goal Image",
-			"name" : "image16",
-			"thumb_url" : "goals/image16thumb.jpg",
-			"img_url" : "goals/image16.jpg"
-		  },
-		{
-			"description" : "Goal Image",
-			"name" : "image17",
-			"thumb_url" : "goals/image17thumb.jpg",
-			"img_url" : "goals/image17.jpg"
-		  },
-		{
-			"description" : "Goal Image",
-			"name" : "image18",
-			"thumb_url" : "goals/image18thumb.jpg",
-			"img_url" : "goals/image18.jpg"
-		  },
-		{
-			"description" : "Goal Image",
-			"name" : "image19",
-			"thumb_url" : "goals/image19thumb.jpg",
-			"img_url" : "goals/image19.jpg"
-		  },
-		{
-			"description" : "Goal Image",
-			"name" : "image20",
-			"thumb_url" : "goals/image20thumb.jpg",
-			"img_url" : "goals/image20.jpg"
-		  },
-		{
-			"description" : "Goal Image",
-			"name" : "image21",
-			"thumb_url" : "goals/image21thumb.jpg",
-			"img_url" : "goals/image21.jpg"
-		  }
-    ] 
-}
+[ 
+	{ 
+		"description" : "The Yoruba name for this style is 'lpako Elede,' which means the nape of the neck of a boar",
+		"name" : "image1",
+		"thumb_url" : "goals/image1thumb.jpg",
+		"img_url" : "goals/image1.jpg"
+	  },
+	{ 
+		"description" : "Goal Image",
+		"name" : "image10",
+		"thumb_url" : "goals/image10thumb.jpg",
+		"img_url" : "goals/image10.jpg"
+	  },
+	{
+		"description" : "Goal Image",
+		"name" : "image2",
+		"thumb_url" : "goals/image2thumb.jpg",
+		"img_url" : "goals/image2.jpg"
+	  },
+	{
+		"description" : "Goal Image",
+		"name" : "image3",
+		"thumb_url" : "goals/image3thumb.jpg",
+		"img_url" : "goals/image3.jpg"
+	  },
+	{
+		"description" : "Goal Image",
+		"name" : "image4",
+		"thumb_url" : "goals/image4thumb.jpg",
+		"img_url" : "goals/image4.jpg"
+	  },
+	{
+		"description" : "Goal Image",
+		"name" : "image5",
+		"thumb_url" : "goals/image5thumb.jpg",
+		"img_url" : "goals/image5.jpg"
+	  },
+	{
+		"description" : "Goal Image",
+		"name" : "image6",
+		"thumb_url" : "goals/image6thumb.jpg",
+		"img_url" : "goals/image6.jpg"
+	  },
+	{
+		"description" : "Goal Image",
+		"name" : "image7",
+		"thumb_url" : "goals/image7thumb.jpg",
+		"img_url" : "goals/image7.jpg"
+	  },
+	{
+		"description" : "Goal Image",
+		"name" : "image8",
+		"thumb_url" : "goals/image8thumb.jpg",
+		"img_url" : "goals/image8.jpg"
+	  },
+	{
+		"description" : "Goal Image",
+		"name" : "image9",
+		"thumb_url" : "goals/image9thumb.jpg",
+		"img_url" : "goals/image9.jpg"
+	  },
+	{
+		"description" : "Goal Image",
+		"name" : "image11",
+		"thumb_url" : "goals/image11thumb.jpg",
+		"img_url" : "goals/image11.jpg"
+	  },
+	{
+		"description" : "Goal Image",
+		"name" : "image12",
+		"thumb_url" : "goals/image12thumb.jpg",
+		"img_url" : "goals/image12.jpg"
+	  },
+	{
+		"description" : "Goal Image",
+		"name" : "image13",
+		"thumb_url" : "goals/image13thumb.jpg",
+		"img_url" : "goals/image13.jpg"
+	  },
+	{
+		"description" : "Goal Image",
+		"name" : "image14",
+		"thumb_url" : "goals/image14thumb.jpg",
+		"img_url" : "goals/image14.jpg"
+	  },
+	{
+		"description" : "Goal Image",
+		"name" : "image15",
+		"thumb_url" : "goals/image15thumb.jpg",
+		"img_url" : "goals/image15.jpg"
+	  },
+	{
+		"description" : "Goal Image",
+		"name" : "image16",
+		"thumb_url" : "goals/image16thumb.jpg",
+		"img_url" : "goals/image16.jpg"
+	  },
+	{
+		"description" : "Goal Image",
+		"name" : "image17",
+		"thumb_url" : "goals/image17thumb.jpg",
+		"img_url" : "goals/image17.jpg"
+	  },
+	{
+		"description" : "Goal Image",
+		"name" : "image18",
+		"thumb_url" : "goals/image18thumb.jpg",
+		"img_url" : "goals/image18.jpg"
+	  },
+	{
+		"description" : "Goal Image",
+		"name" : "image19",
+		"thumb_url" : "goals/image19thumb.jpg",
+		"img_url" : "goals/image19.jpg"
+	  },
+	{
+		"description" : "Goal Image",
+		"name" : "image20",
+		"thumb_url" : "goals/image20thumb.jpg",
+		"img_url" : "goals/image20.jpg"
+	  },
+	{
+		"description" : "Goal Image",
+		"name" : "image21",
+		"thumb_url" : "goals/image21thumb.jpg",
+		"img_url" : "goals/image21.jpg"
+	  }
+] 

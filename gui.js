@@ -4388,10 +4388,10 @@ ProjectDialogMorph.prototype.setSource = function (source) {
 			request.open("GET", config.urls.goals_url, false);
 			request.send();
 			var JSON_object = JSON.parse(request.responseText);
-			for (var i = 0; i < JSON_object.goals.length; i++){
-				if(JSON_object.goals[i].name === item.name){
-					img = JSON_object.goals[i].img_url;
-					desc = JSON_object.goals[i].description;
+			for (var i = 0; i < JSON_object.length; i++){
+				if(JSON_object[i].name === item.name){
+					img = JSON_object[i].img_url;
+					desc = JSON_object[i].description;
 					myself.notesText.text = desc || '';
 					myself.notesText.drawNew();
 					myself.notesField.contents.adjustBounds();
@@ -4474,15 +4474,15 @@ ProjectDialogMorph.prototype.getGoalProjectList = function () {
 	request.open("GET", config.urls.goals_url, false);
 	request.send();
 	var JSON_object = JSON.parse(request.responseText);
-	for (var i = 0; i < JSON_object.goals.length; i++){
+	for (var i = 0; i < JSON_object.length; i++){
 		//preload images
 		thumbnail = new Image();
-		thumbnail.src = JSON_object.goals[i].thumb_url
+		thumbnail.src = JSON_object[i].thumb_url
 		dta = {
-			name: JSON_object.goals[i].name,
-			img: JSON_object.goals[i].img_url,
+			name: JSON_object[i].name,
+			img: JSON_object[i].img_url,
 			thumb: thumbnail,
-			notes: JSON_object.goals[i].description
+			notes: JSON_object[i].description
 		};
 		projects.push(dta);
 	}
