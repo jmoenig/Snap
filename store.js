@@ -1265,10 +1265,11 @@ SnapSerializer.prototype.loadColor = function (colorString) {
     );
 };
 
-SnapSerializer.prototype.openProject = function (project, ide) {
+SnapSerializer.prototype.openProject = function (project, ide, zoom) {
     var stage = ide.stage,
         sprites = [],
-        sprite;
+        sprite,
+        zoomed = zoom || null;
     if (!project || !project.stage) {
         return;
     }
@@ -1303,7 +1304,7 @@ SnapSerializer.prototype.openProject = function (project, ide) {
     ide.selectSprite(sprite);
     ide.fixLayout();
     ide.world().keyboardReceiver = project.stage;
-    if (ide.currentCategory === 'search') {
+    if (ide.currentCategory === 'search' && zoomed === true) {
         ide.searchbar.accept();
     }
 };
