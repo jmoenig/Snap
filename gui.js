@@ -68,7 +68,7 @@ sb, CommentMorph, CommandBlockMorph, BlockLabelPlaceHolderMorph, Audio*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2014-April-27';
+modules.gui = '2014-May-7';
 
 // Declarations
 
@@ -203,8 +203,7 @@ IDE_Morph.prototype.init = function (isAutoFill) {
     this.logo = null;
     this.controlBar = null;
     this.categories = null;
-    this.searchbar = null;
-    this.searchButton = null;
+    // this.searchbar = null;
     this.palette = null;
     this.spriteBar = null;
     this.spriteEditor = null;
@@ -846,13 +845,13 @@ IDE_Morph.prototype.createCategories = function () {
                 button.setPosition(new Point(
                     l + (col * xPadding + ((col - 1) * buttonWidth) + buttonWidth - button.width()),
                     t + (row * yPadding + ((row - 1) * buttonHeight) + border + 3)
-                )); 
+                ));
             }
         });
 
         myself.categories.setHeight(
-            (rows) * yPadding
-                + (rows) * buttonHeight
+            rows * yPadding
+                + rows * buttonHeight
                 + 2 * border
                 + 11
         );
@@ -869,7 +868,12 @@ IDE_Morph.prototype.createCategories = function () {
 };
 
 IDE_Morph.prototype.createSearchbar = function () {
-    var myself = this;
+    var myself = this,
+        defaulttext = 'Search',
+        colors = [this.groupColor,
+                  this.frameColor.darker(50),
+                  this.frameColor.darker(50)
+                  ];
 
     if (this.searchbar) {
         this.searchbar.destroy();
@@ -878,22 +882,16 @@ IDE_Morph.prototype.createSearchbar = function () {
         this.searchButton.destroy();
     }
 
-    var defaulttext = 'Search';
-    var colors = [this.groupColor, 
-                  this.frameColor.darker(50), 
-                  this.frameColor.darker(50)
-                  ];
-
     this.searchbar = new InputFieldMorph();
     this.searchbar.isDraggable = false;
     this.searchbar.acceptsDrops = false;
     this.searchbar.contents.acceptsDrops = false;
     this.searchbar.contrast = 90;
-    
-    this.searchButton = new PushButtonMorph(null, 
+
+    this.searchButton = new PushButtonMorph(null,
                                             function () {
-                                                myself.searchbar.accept()
-                                            }, 
+                                                myself.searchbar.accept();
+                                            },
                                             defaulttext);
     this.searchButton.corner = 0;
     this.searchButton.color = colors[0];
@@ -904,12 +902,12 @@ IDE_Morph.prototype.createSearchbar = function () {
     this.searchButton.labelColor = this.buttonLabelColor;
     this.searchButton.contrast = this.buttonContrast;
     this.searchButton.padding = 5;
-    
-    this.searchbar.setWidth(this.logo.width() - this.searchButton.width() - 30);
+
+    this.searchbar.setWidth(this.logo.width() - (this.searchButton.width()) - 30);
 
     this.categories.add(this.searchbar);
     this.categories.add(this.searchButton);
-    
+
     this.searchbar.drawNew();
 
     // These functions could be used to allow for autofill functionality
@@ -919,14 +917,15 @@ IDE_Morph.prototype.createSearchbar = function () {
     // }
 
     this.searchbar.accept = function (hidden) {
-        var hidden = hidden || null;
-        var searchString = myself.searchbar.getValue().toLowerCase();
+        var searchString = myself.searchbar.getValue().toLowerCase(),
+            list,
+            isHidden = hidden || null;
         if (searchString === '') {
             myself.showMessage('Please enter a Search term');
         } else {
             list = myself.searchbar.createlist(searchString);
             if (list.length === 0) {
-                if (hidden) {
+                if (isHidden) {
                     myself.searchbar.updatePallete(list);
                 } else {
                     myself.showMessage('Did not find any results');
@@ -941,43 +940,48 @@ IDE_Morph.prototype.createSearchbar = function () {
                 myself.searchbar.updatePallete(list);
             }
         }
-    }
+    };
 
     this.searchbar.createlist = function (string) {
         // Creates a list of blocks that match the input String
+        //console.log(myself);
+        var list = [],
+            count = 0,
+            counter,
+            current,
+            next,
+            key,
+            allCategories = myself.currentSprite.blocksCache,
+            customBlocks = myself.currentSprite.customBlocks,
+            globalCustomBlocks = myself.stage.globalBlocks;
 
-        var list = new Array();
-        var count = 0;
         SpriteMorph.prototype.categories.forEach(function (cat) {
-            myself.currentSprite.palette(cat);      
-        })
-        var allCategories = myself.currentSprite.blocksCache;
-        var customBlocks = myself.currentSprite.customBlocks;
-        var globalCustomBlocks = myself.stage.globalBlocks;
+            myself.currentSprite.palette(cat);
+        });
 
         //Adding Local Custom Blocks
-        for (var i = 0; i < customBlocks.length; i++) {
-            var current = (customBlocks[i]);
+        for (counter = 0; counter < customBlocks.length; counter += 1) {
+            current = (customBlocks[counter]);
             if (current.spec.toLowerCase().indexOf(string) !== -1) {
                 list[count] = current;
-                count++;
+                count += 1;
             }
         }
         //Adding Global Custom Blocks 
-        for (var i = 0; i < globalCustomBlocks.length; i++) {
-            var current = (globalCustomBlocks[i]);
+        for (counter = 0; counter < globalCustomBlocks.length; counter += 1) {
+            current = (globalCustomBlocks[counter]);
             if (current.spec.toLowerCase().indexOf(string) !== -1) {
                 list[count] = current;
-                count++;
+                count += 1;
             }
         }
         //Adding all standard blocks
         for (key in allCategories) {
-            for (var i = 0; i < allCategories[key].length; i++) {
-                var current = (allCategories[key][i]);
+            for (counter = 0; counter < allCategories[key].length; counter += 1) {
+                current = (allCategories[key][counter]);
                 //Allows knowledge of the next block
-                if (i !== allCategories[key].length) {
-                    var next = (allCategories[key][i + 1]);
+                if (counter !== allCategories[key].length) {
+                    next = (allCategories[key][counter + 1]);
                 }
                 if (current !== "-" && current !== "#" && current !== "=") {
                     //Adds toggleMorphs
@@ -985,35 +989,36 @@ IDE_Morph.prototype.createSearchbar = function () {
                         if (next.blockSpec.toLowerCase().indexOf(string) !== -1) {
                             list[count] = current.fullCopy();
                             list[count].refresh();
-                            count++;
+                            count += 1;
                             list[count] = next.fullCopy(false);
-                            count++;
-                            i++;
+                            count += 1;
+                            counter += 1;
                         }
                     //Adds PushButtonMorphs
                     } else if (current instanceof PushButtonMorph) {
                         if (current.children[0].text.toLowerCase().indexOf(string) !== -1) {
                             list[count] = current.fullCopy(false);
-                            count++;
+                            count += 1;
                         }
                     //Adds the rest
                     } else if (current !== null && !(current instanceof TextMorph)) {
                         if ((current.blockSpec.toLowerCase()).indexOf(string) !== -1) {
                             list[count] = current.fullCopy(false);
-                            count++;
+                            count += 1;
                         }
                     }
                 }
             }
         }
         return list;
-    }
+    };
 
     this.searchbar.updatePallete = function (list) {
         myself.refreshPalette(true, list);
-    }
+    };
 
-}
+};
+
 IDE_Morph.prototype.createPalette = function (list) {
     // assumes that the logo pane has already been created
     // needs the categories pane for layout
@@ -1548,7 +1553,7 @@ IDE_Morph.prototype.fixLayout = function (situation) {
         this.categories.setLeft(this.logo.left());
         this.categories.setTop(this.logo.bottom());
     }
-    // If searchbar is below the categories menu
+    // //searchbar
     // this.searchbar.setLeft(this.logo.left());
     // this.searchbar.setTop(this.categories.bottom() + 5);
     // this.searchButton.setLeft(this.searchbar.right());
@@ -1558,6 +1563,7 @@ IDE_Morph.prototype.fixLayout = function (situation) {
     this.palette.setLeft(this.logo.left());
     this.palette.setTop(this.categories.bottom());
     this.palette.setHeight(this.bottom() - this.palette.top());
+
 
     if (situation !== 'refreshPalette') {
         // stage
@@ -2243,7 +2249,7 @@ IDE_Morph.prototype.settingsMenu = function () {
     menu.addItem(
         'Stage size...',
         'userSetStageSize'
-        );
+    );
     menu.addLine();
     addPreference(
         'Blurred shadows',
@@ -3641,7 +3647,7 @@ IDE_Morph.prototype.setBlocksScale = function (num) {
     CommentMorph.prototype.refreshScale();
     SpriteMorph.prototype.initBlocks();
     this.spriteBar.tabBar.tabTo('scripts');
-    //this.createCategories();  // needed to be able to reperform the search after the after fixing the block size
+    //this.createCategories();
     this.createCorralBar();
     this.fixLayout();
     this.openProjectString(projectData);
@@ -3669,8 +3675,8 @@ IDE_Morph.prototype.userSetStageSize = function () {
 
 IDE_Morph.prototype.setStageExtent = function (aPoint) {
     var myself = this,
-    world = this.world(),
-    ext = aPoint.max(new Point(480, 180));
+        world = this.world(),
+        ext = aPoint.max(new Point(480, 180));
 
     function zoom() {
         myself.step = function () {
