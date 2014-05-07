@@ -3647,7 +3647,7 @@ IDE_Morph.prototype.setBlocksScale = function (num) {
     //this.createCategories();
     this.createCorralBar();
     this.fixLayout();
-    this.openProjectString(projectData);
+    this.openProjectString(projectData, null, true);
     this.saveSetting('zoom', num);
 };
 
