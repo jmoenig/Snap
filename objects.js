@@ -124,7 +124,7 @@ PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.objects = '2014-February-11';
+modules.objects = '2014-May-7';
 
 var SpriteMorph;
 var StageMorph;
@@ -1496,7 +1496,7 @@ SpriteMorph.prototype.variableBlock = function (varName) {
 SpriteMorph.prototype.blockTemplates = function (category, list) {
     list = list || {};
     var blocks = [], myself = this, varNames, button,
-        cat = category || 'motion', txt;
+        cat = category || 'motion', txt, counter;
 
     function block(selector) {
         if (StageMorph.prototype.hiddenPrimitives[selector]) {
@@ -1970,11 +1970,10 @@ SpriteMorph.prototype.blockTemplates = function (category, list) {
         blocks.push(button);
 
     } else if (cat === 'search') {
-        for (var i = 0; i < list.length; i++) {
-            blocks.push(list[i]);
+        for (counter = 0; counter < list.length; counter += 1) {
+            blocks.push(list[counter]);
         }
     }
-
     return blocks;
 };
 
@@ -2107,7 +2106,7 @@ SpriteMorph.prototype.freshPalette = function (category, list) {
             }
             if (block === '-') {
                 if (hideNextSpace) {
-                    return; 
+                    return;
                 }
                 y += unit * 0.8;
                 hideNextSpace = true;
@@ -4282,7 +4281,7 @@ StageMorph.prototype.removeAllClones = function () {
 StageMorph.prototype.blockTemplates = function (category, list) {
     list = list || {};
     var blocks = [], myself = this, varNames, button,
-        cat = category || 'motion', txt;
+        cat = category || 'motion', txt, counter;
 
     function block(selector) {
         if (myself.hiddenPrimitives[selector]) {
@@ -4684,8 +4683,8 @@ StageMorph.prototype.blockTemplates = function (category, list) {
         );
         blocks.push(button);
     } else if (cat === 'search') {
-        for (var i = 0; i < list.length; i++) {
-            blocks.push(list[i]);
+        for (counter = 0; counter < list.length; counter += 1) {
+            blocks.push(list[counter]);
         }
     }
     return blocks;
