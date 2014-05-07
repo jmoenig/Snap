@@ -1992,6 +1992,7 @@ SpriteMorph.prototype.freshPalette = function (category, list) {
         x = 0,
         y = 5,
         ry = 0,
+        rings = 0,
         blocks,
         hideNextSpace = false,
         myself = this,
@@ -2128,6 +2129,14 @@ SpriteMorph.prototype.freshPalette = function (category, list) {
                         || (block instanceof RingMorph)) {
                     x = block.right() + unit / 2;
                     ry = block.bottom();
+                    if (block instanceof RingMorph) {
+                        rings += 1;
+                        if (rings >= 3) {
+                            x = 0;
+                            y += block.height();
+                            rings = 0;
+                        }
+                    }
                 } else {
                     if (block.fixLayout) {block.fixLayout(); }
                     x = 0;
