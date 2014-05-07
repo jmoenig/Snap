@@ -888,11 +888,13 @@ IDE_Morph.prototype.createSearchbar = function () {
     this.searchbar.contents.acceptsDrops = false;
     this.searchbar.contrast = 90;
 
-    this.searchButton = new PushButtonMorph(null,
-                                            function () {
-                                                myself.searchbar.accept();
-                                            },
-                                            defaulttext);
+    this.searchButton = new PushButtonMorph(
+        null,
+        function () {
+            myself.searchbar.accept();
+        },
+        defaulttext
+    );
     this.searchButton.corner = 0;
     this.searchButton.color = colors[0];
     this.searchButton.highlightColor = colors[1];
