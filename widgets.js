@@ -74,7 +74,7 @@ HTMLCanvasElement, fontHeight, SymbolMorph, localize, SpeechBubbleMorph,
 ArrowMorph, MenuMorph, isString, isNil, SliderMorph, MorphicPreferences,
 ScrollFrameMorph*/
 
-modules.widgets = '2014-January-09';
+modules.widgets = '2014-May-7';
 
 var PushButtonMorph;
 var ToggleButtonMorph;
@@ -1114,7 +1114,7 @@ ToggleMorph.prototype.fullCopy = function () {
     newToggle.children[0] = newToggle.children[1];
     newToggle.children[1].destroy();
     return newToggle;
-}
+};
 
 // ToggleMorph layout:
 
@@ -1674,7 +1674,7 @@ DialogBoxMorph.prototype.prompt = function (
         }
     };
 
-    txt.reactToKeystroke = function () {
+    txt.reactTKeystroke = function () {
         var inp = txt.getValue();
         if (sld) {
             inp = Math.max(inp, sliderMin);
@@ -1787,7 +1787,6 @@ DialogBoxMorph.prototype.promptCode = function (
     this.popUp(world);
     text.edit();
 };
-
 
 DialogBoxMorph.prototype.promptVector = function (
     title,
