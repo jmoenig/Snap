@@ -61,7 +61,7 @@ SyntaxElementMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2014-February-11';
+modules.store = '2014-May-7';
 
 
 // XML_Serializer ///////////////////////////////////////////////////////
@@ -380,11 +380,11 @@ SnapSerializer.prototype.loadProjectModel = function (xmlNode) {
     StageMorph.prototype.dimensions = new Point(480, 360);
     if (model.stage.attributes.width) {
         StageMorph.prototype.dimensions.x =
-            +model.stage.attributes.width;
+            Math.max(+model.stage.attributes.width, 480);
     }
     if (model.stage.attributes.height) {
         StageMorph.prototype.dimensions.y =
-            +model.stage.attributes.height;
+            Math.max(+model.stage.attributes.height, 180);
     }
     project.stage.setExtent(StageMorph.prototype.dimensions);
     SpriteMorph.prototype.useFlatLineEnds =
