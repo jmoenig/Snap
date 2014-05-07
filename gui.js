@@ -1555,12 +1555,7 @@ IDE_Morph.prototype.fixLayout = function (situation) {
         this.categories.setLeft(this.logo.left());
         this.categories.setTop(this.logo.bottom());
     }
-    // //searchbar
-    // this.searchbar.setLeft(this.logo.left());
-    // this.searchbar.setTop(this.categories.bottom() + 5);
-    // this.searchButton.setLeft(this.searchbar.right());
-    // this.searchButton.setTop(this.categories.bottom() + 5);
-
+    
     // palette
     this.palette.setLeft(this.logo.left());
     this.palette.setTop(this.categories.bottom());
@@ -1587,7 +1582,7 @@ IDE_Morph.prototype.fixLayout = function (situation) {
         this.spriteBar.setPosition(this.logo.bottomRight().add(padding));
         this.spriteBar.setExtent(new Point(
             Math.max(0, this.stage.left() - padding - this.spriteBar.left()),
-            this.categories.bottom() - this.spriteBar.top() - padding
+            this.searchbar.top() - this.spriteBar.top() - padding
         ));
         this.spriteBar.fixLayout();
 
