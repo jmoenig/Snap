@@ -1328,6 +1328,7 @@ IDE_Morph.prototype.createCorralBar = function () {
     paintbutton.setLeft(
         this.corralBar.left() + padding + newbutton.width() + padding
     );
+	
     this.corralBar.add(paintbutton);
 };
 
@@ -2492,21 +2493,14 @@ IDE_Morph.prototype.aboutSnap = function () {
     var dlg, aboutTxt, noticeTxt, creditsTxt, versions = '', translations,
         module, btn1, btn2, btn3, btn4, licenseBtn, translatorsBtn,
         world = this.world();
+		
 
-    aboutTxt = 'Snap! 4.0\nBuild Your Own Blocks\n\n--- beta ---\n\n'
-        + 'Copyright \u24B8 2014 Jens M\u00F6nig and '
-        + 'Brian Harvey\n'
-        + 'jens@moenig.org, bh@cs.berkeley.edu\n\n'
-
-        + 'Snap! is developed by the University of California, Berkeley\n'
-        + '          with support from the National Science Foundation '
-        + 'and MioSoft.   \n'
-
-        + 'The design of Snap! is influenced and inspired by Scratch,\n'
-        + 'from the Lifelong Kindergarten group at the MIT Media Lab\n\n'
-
-        + 'for more information see http://snap.berkeley.edu\n'
-        + 'and http://scratch.mit.edu';
+    aboutTxt = 'C-Snap 1.0\nCSDTs with Snap!\n\n'
+        + 'Culturally Situated Design Tools (CSDTs) were developed at RPI with support from the\n'
+        + 'National Science Foundation. In 2014 the Java versions were ported to the Snap!\n'
+        + 'codebase created by Jens Mönig, which is based on the Scratch interface from MIT.\n\n'
+        + 'For more information on CSDTs see http://csdt.rpi.edu\n';
+		//+ '____________________________________________________'
 
     noticeTxt = localize('License')
         + '\n\n'
@@ -2524,7 +2518,7 @@ IDE_Morph.prototype.aboutSnap = function () {
         + 'GNU Affero General Public License along with this program.\n'
         + 'If not, see http://www.gnu.org/licenses/';
 
-    creditsTxt = localize('Contributors')
+    /*creditsTxt = localize('Contributors')
         + '\n\nNathan Dinsmore: Saving/Loading, Snap-Logo Design, '
         + 'countless bugfixes'
         + '\nKartik Chandra: Paint Editor'
@@ -2533,7 +2527,7 @@ IDE_Morph.prototype.aboutSnap = function () {
         + '\nIvan Motyashov: Initial Squeak Porting'
         + '\nDavide Della Casa: Morphic Optimizations'
         + '\nAchal Dave: Web Audio'
-        + '\nJoe Otto: Morphic Testing and Debugging';
+        + '\nJoe Otto: Morphic Testing and Debugging';*/
 
     for (module in modules) {
         if (Object.prototype.hasOwnProperty.call(modules, module)) {
@@ -2549,7 +2543,7 @@ IDE_Morph.prototype.aboutSnap = function () {
     translations = localize('Translations') + '\n' + SnapTranslator.credits();
 
     dlg = new DialogBoxMorph();
-    dlg.inform('About Snap', aboutTxt, world);
+    dlg.inform('About C-Snap', aboutTxt, world);
     btn1 = dlg.buttons.children[0];
     translatorsBtn = dlg.addButton(
         function () {
