@@ -1222,6 +1222,9 @@ SpriteMorph.prototype.init = function (globals) {
     this.version = Date.now(); // for observer optimization
     this.isClone = false; // indicate a "temporary" Scratch-style clone
     this.cloneOriginName = '';
+	this.originalPixels = null;
+	this.colorChange = false; //Flag to check if color change has been applied
+	this.costumeColor = null;
 
     // sprite nesting properties
     this.parts = []; // not serialized, only anchor (name)
@@ -1363,7 +1366,7 @@ SpriteMorph.prototype.drawNew = function () {
         ctx.scale(this.scale * stageScale, this.scale * stageScale);
         ctx.translate(shift.x, shift.y);
         ctx.rotate(radians(facing - 90));
-        ctx.drawImage(pic.contents, 0, 0);
+		ctx.drawImage(pic.contents, 0, 0);
 
         // adjust my position to the rotation
         this.setCenter(currentCenter, true); // just me
@@ -1400,9 +1403,15 @@ SpriteMorph.prototype.drawNew = function () {
 
         }
     }
+    this.version = Date.now();
+	
 	this.originalPixels = this.image.getContext('2d').createImageData(this.width(), this.height());
 	this.originalPixels = this.image.getContext('2d').getImageData(0, 0, this.width(), this.height());
-    this.version = Date.now();
+	
+	//Check if color change has been applied earlier in script
+	if(this.colorChange){
+		this.changeCostumeColor(this.costumeColor);
+	}
 };
 
 SpriteMorph.prototype.endWarp = function () {
@@ -3039,6 +3048,9 @@ SpriteMorph.prototype.allMessageNames = function () {
 };
 
 SpriteMorph.prototype.allHatBlocksFor = function (message) {
+	if(this instanceof SpriteMorph){
+		this.colorChange = false;
+	}
     return this.scripts.children.filter(function (morph) {
         var event;
         if (morph.selector) {
