@@ -124,7 +124,7 @@ PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.objects = '2014-January-09';
+modules.objects = '2014-May-02';
 
 var SpriteMorph;
 var StageMorph;
@@ -187,6 +187,7 @@ SpriteMorph.prototype.sliderColor
 SpriteMorph.prototype.isCachingPrimitives = true;
 
 SpriteMorph.prototype.enableNesting = true;
+SpriteMorph.prototype.useFlatLineEnds = false;
 SpriteMorph.prototype.highlightColor = new Color(250, 200, 130);
 SpriteMorph.prototype.highlightBorder = 8;
 
@@ -392,6 +393,12 @@ SpriteMorph.prototype.initBlocks = function () {
         },
 
         // Looks - Debugging primitives for development mode
+        reportCostumes: {
+            type: 'reporter',
+            category: 'looks',
+            spec: 'wardrobe'
+        },
+
         alert: {
             type: 'command',
             category: 'looks',
@@ -447,6 +454,13 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'reporter',
             category: 'sound',
             spec: 'tempo'
+        },
+
+        // Sound - Debugging primitives for development mode
+        reportSounds: {
+            type: 'reporter',
+            category: 'sound',
+            spec: 'jukebox'
         },
 
         // Pen
@@ -806,6 +820,11 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'command',
             category: 'sensing',
             spec: 'set turbo mode to %b'
+        },
+        reportDate: {
+            type: 'reporter',
+            category: 'sensing',
+            spec: 'current %dates'
         },
 
         // Operators
@@ -1634,6 +1653,8 @@ SpriteMorph.prototype.blockTemplates = function (category) {
             txt.setColor(this.paletteTextColor);
             blocks.push(txt);
             blocks.push('-');
+            blocks.push(block('reportCostumes'));
+            blocks.push('-');
             blocks.push(block('log'));
             blocks.push(block('alert'));
         }
@@ -1654,6 +1675,20 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('doSetTempo'));
         blocks.push(watcherToggle('getTempo'));
         blocks.push(block('getTempo'));
+
+    // for debugging: ///////////////
+
+        if (this.world().isDevMode) {
+            blocks.push('-');
+            txt = new TextMorph(localize(
+                'development mode \ndebugging primitives:'
+            ));
+            txt.fontSize = 9;
+            txt.setColor(this.paletteTextColor);
+            blocks.push(txt);
+            blocks.push('-');
+            blocks.push(block('reportSounds'));
+        }
 
     } else if (cat === 'pen') {
 
@@ -1759,6 +1794,8 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push('-');
         blocks.push(block('reportIsFastTracking'));
         blocks.push(block('doSetFastTracking'));
+        blocks.push('-');
+        blocks.push(block('reportDate'));
 
     // for debugging: ///////////////
 
@@ -2282,6 +2319,11 @@ SpriteMorph.prototype.doWearPreviousCostume = function () {
 };
 
 SpriteMorph.prototype.doSwitchToCostume = function (id) {
+    if (id instanceof Costume) { // allow first-class costumes
+        this.wearCostume(id);
+        return;
+    }
+
     var num,
         arr = this.costumes.asArray(),
         costume;
@@ -2312,6 +2354,10 @@ SpriteMorph.prototype.doSwitchToCostume = function (id) {
     this.wearCostume(costume);
 };
 
+SpriteMorph.prototype.reportCostumes = function () {
+    return this.costumes;
+};
+
 // SpriteMorph sound management
 
 SpriteMorph.prototype.addSound = function (audio, name) {
@@ -2335,6 +2381,10 @@ SpriteMorph.prototype.playSound = function (name) {
         }
         return active;
     }
+};
+
+SpriteMorph.prototype.reportSounds = function () {
+    return this.sounds;
 };
 
 // SpriteMorph user menu
@@ -2745,8 +2795,13 @@ SpriteMorph.prototype.drawLine = function (start, dest) {
     if (this.isDown) {
         context.lineWidth = this.size;
         context.strokeStyle = this.color.toString();
-        context.lineCap = 'round';
-        context.lineJoin = 'round';
+        if (this.useFlatLineEnds) {
+            context.lineCap = 'butt';
+            context.lineJoin = 'miter';
+        } else {
+            context.lineCap = 'round';
+            context.lineJoin = 'round';
+        }
         context.beginPath();
         context.moveTo(from.x, from.y);
         context.lineTo(to.x, to.y);
@@ -4372,6 +4427,8 @@ StageMorph.prototype.blockTemplates = function (category) {
             txt.setColor(this.paletteTextColor);
             blocks.push(txt);
             blocks.push('-');
+            blocks.push(block('reportCostumes'));
+            blocks.push('-');
             blocks.push(block('log'));
             blocks.push(block('alert'));
         }
@@ -4392,6 +4449,20 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('doSetTempo'));
         blocks.push(watcherToggle('getTempo'));
         blocks.push(block('getTempo'));
+
+    // for debugging: ///////////////
+
+        if (this.world().isDevMode) {
+            blocks.push('-');
+            txt = new TextMorph(localize(
+                'development mode \ndebugging primitives:'
+            ));
+            txt.fontSize = 9;
+            txt.setColor(this.paletteTextColor);
+            blocks.push(txt);
+            blocks.push('-');
+            blocks.push(block('reportSounds'));
+        }
 
     } else if (cat === 'pen') {
 
@@ -4474,6 +4545,8 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push('-');
         blocks.push(block('reportIsFastTracking'));
         blocks.push(block('doSetFastTracking'));
+        blocks.push('-');
+        blocks.push(block('reportDate'));
 
     // for debugging: ///////////////
 
@@ -4849,6 +4922,9 @@ StageMorph.prototype.doWearPreviousCostume
 StageMorph.prototype.doSwitchToCostume
     = SpriteMorph.prototype.doSwitchToCostume;
 
+StageMorph.prototype.reportCostumes
+    = SpriteMorph.prototype.reportCostumes;
+
 // StageMorph graphic effects
 
 StageMorph.prototype.setEffect
@@ -4889,6 +4965,9 @@ StageMorph.prototype.resumeAllActiveSounds = function () {
         audio.play();
     });
 };
+
+StageMorph.prototype.reportSounds
+    = SpriteMorph.prototype.reportSounds;
 
 // StageMorph non-variable watchers
 
@@ -5012,6 +5091,12 @@ SpriteBubbleMorph.prototype.dataAsMorph = function (data) {
         );
     } else if (typeof data === 'boolean') {
         img = sprite.booleanMorph(data).fullImage();
+        contents = new Morph();
+        contents.silentSetWidth(img.width);
+        contents.silentSetHeight(img.height);
+        contents.image = img;
+    } else if (data instanceof Costume) {
+        img = data.thumbnail(new Point(40, 40));
         contents = new Morph();
         contents.silentSetWidth(img.width);
         contents.silentSetHeight(img.height);
@@ -5223,7 +5308,7 @@ Costume.prototype.shrinkWrap = function () {
 };
 
 Costume.prototype.boundingBox = function () {
-    // answer the rectangle surrounding my contents' non-transparent pixels 
+    // answer the rectangle surrounding my contents' non-transparent pixels
     var row,
         col,
         pic = this.contents,
@@ -5331,7 +5416,7 @@ Costume.prototype.edit = function (aWorld, anIDE, isnew, oncancel, onsubmit) {
     editor.openIn(
         aWorld,
         isnew ?
-                newCanvas(new Point(480, 360)) :
+                newCanvas(StageMorph.prototype.dimensions) :
                 this.contents,
         isnew ?
                 new Point(240, 180) :
@@ -5680,17 +5765,21 @@ Note.prototype.setupContext = function () {
     if (this.audioContext) { return; }
     var AudioContext = (function () {
         // cross browser some day?
-        return window.AudioContext ||
+        var ctx = window.AudioContext ||
             window.mozAudioContext ||
             window.msAudioContext ||
             window.oAudioContext ||
             window.webkitAudioContext;
+        if (!ctx.prototype.hasOwnProperty('createGain')) {
+            ctx.prototype.createGain = ctx.prototype.createGainNode;
+        }
+        return ctx;
     }());
     if (!AudioContext) {
         throw new Error('Web Audio API is not supported\nin this browser');
     }
     Note.prototype.audioContext = new AudioContext();
-    Note.prototype.gainNode = Note.prototype.audioContext.createGainNode();
+    Note.prototype.gainNode = Note.prototype.audioContext.createGain();
     Note.prototype.gainNode.gain.value = 0.25; // reduce volume by 1/4
 };
 
@@ -5698,17 +5787,23 @@ Note.prototype.setupContext = function () {
 
 Note.prototype.play = function () {
     this.oscillator = this.audioContext.createOscillator();
+    if (!this.oscillator.start) {
+        this.oscillator.start = this.oscillator.noteOn;
+    }
+    if (!this.oscillator.stop) {
+        this.oscillator.stop = this.oscillator.noteOff;
+    }
     this.oscillator.type = 0;
     this.oscillator.frequency.value =
         Math.pow(2, (this.pitch - 69) / 12) * 440;
     this.oscillator.connect(this.gainNode);
     this.gainNode.connect(this.audioContext.destination);
-    this.oscillator.noteOn(0); // deprecated, renamed to start()
+    this.oscillator.start(0);
 };
 
 Note.prototype.stop = function () {
     if (this.oscillator) {
-        this.oscillator.noteOff(0); // deprecated, renamed to stop()
+        this.oscillator.stop(0);
         this.oscillator = null;
     }
 };
@@ -5845,6 +5940,12 @@ CellMorph.prototype.drawNew = function () {
             this.contentsMorph.image = this.contents;
         } else if (this.contents instanceof Context) {
             img = this.contents.image();
+            this.contentsMorph = new Morph();
+            this.contentsMorph.silentSetWidth(img.width);
+            this.contentsMorph.silentSetHeight(img.height);
+            this.contentsMorph.image = img;
+        } else if (this.contents instanceof Costume) {
+            img = this.contents.thumbnail(new Point(40, 40));
             this.contentsMorph = new Morph();
             this.contentsMorph.silentSetWidth(img.width);
             this.contentsMorph.silentSetHeight(img.height);
@@ -6382,7 +6483,17 @@ WatcherMorph.prototype.userMenu = function () {
                 inp.addEventListener(
                     "change",
                     function () {
-                        var file, i;
+                        var file;
+
+                        function txtOnlyMsg(ftype) {
+                            ide.inform(
+                                'Unable to import',
+                                'Snap! can only import "text" files.\n' +
+                                    'You selected a file of type "' +
+                                    ftype +
+                                    '".'
+                            );
+                        }
 
                         function readText(aFile) {
                             var frd = new FileReader();
@@ -6392,17 +6503,18 @@ WatcherMorph.prototype.userMenu = function () {
                                     e.target.result
                                 );
                             };
-                            frd.readAsText(aFile);
+
+                            if (aFile.type.indexOf("text") === 0) {
+                                frd.readAsText(aFile);
+                            } else {
+                                txtOnlyMsg(aFile.type);
+                            }
                         }
                         document.body.removeChild(inp);
                         ide.filePicker = null;
                         if (inp.files.length > 0) {
-                            for (i = 0; i < inp.files.length; i += 1) {
-                                file = inp.files[i];
-                                if (file.type.indexOf("text") === 0) {
-                                    readText(file);
-                                }
-                            }
+                            file = inp.files[inp.files.length - 1];
+                            readText(file);
                         }
                     },
                     false
@@ -6418,7 +6530,7 @@ WatcherMorph.prototype.userMenu = function () {
                 'export...',
                 function () {
                     window.open(
-                        'data:text/plain,' +
+                        'data:text/plain;charset=utf-8,' +
                             encodeURIComponent(this.currentValue.toString())
                     );
                 }
@@ -6573,7 +6685,7 @@ StagePrompterMorph.prototype.init = function (question) {
     if (this.label) {this.add(this.label); }
     this.add(this.inputField);
     this.add(this.button);
-    this.setWidth(480 - 20);
+    this.setWidth(StageMorph.prototype.dimensions.x - 20);
     this.fixLayout();
 };
 

@@ -42,7 +42,7 @@
 
 /*global modules, contains*/
 
-modules.locale = '2014-January-09';
+modules.locale = '2014-May-02';
 
 // Global stuff
 
@@ -149,7 +149,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org',
     'last_changed':
-        '2014-01-09'
+        '2014-02-13'
 };
 
 SnapTranslator.dict.it = {
@@ -209,7 +209,7 @@ SnapTranslator.dict.pt = {
     'translator_e-mail':
         'mmsequeira@gmail.com',
     'last_changed':
-        '2013-11-22'
+        '2014-01-12'
 };
 
 SnapTranslator.dict.cs = {
@@ -257,7 +257,7 @@ SnapTranslator.dict.fr = {
     'translator_e-mail':
         'i.scool@mac.com',
     'last_changed':
-        '2013-12-04'
+        '2014-02-04'
 };
 
 SnapTranslator.dict.si = {
@@ -369,3 +369,28 @@ SnapTranslator.dict.ca = {
     'last_changed':
         '2013-11-26'
 };
+
+SnapTranslator.dict.fi = {
+    // meta information
+    'language_name':
+        'suomi',
+    'language_translator':
+        'Jouni K. Sepp\u00e4nen',
+    'translator_e-mail':
+        'jks@iki.fi',
+    'last_changed':
+        '2014-04-18'
+};
+
+SnapTranslator.dict.pt_BR = {
+    // meta information
+    'language_name':
+        'Português do Brasil',
+    'language_translator':
+        'Aldo von Wangenheim',
+    'translator_e-mail':
+        'awangenh@inf.ufsc.br',
+    'last_changed':
+        '2014-04-20'
+};
+
