@@ -387,6 +387,12 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: 'go back %n layers',
             defaults: [1]
         },
+        doScreenshot: {
+            type: 'command',
+            category: 'looks',
+            spec: 'save %imgsource as costume named %s',
+            defaults: [['pen trails'], 'screenshot']
+        },
 
         // Looks - Debugging primitives for development mode
         alert: {
@@ -808,12 +814,6 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'reporter',
             category: 'sensing',
             spec: 'current %dates'
-        },
-        doScreenshot: {
-            type: 'command',
-            category: 'sensing',
-            spec: 'save %imgsource as costume named %s',
-            defaults: [['pen trails'], 'screenshot']
         },
 
         // Operators
@@ -1616,6 +1616,8 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push('-');
         blocks.push(block('comeToFront'));
         blocks.push(block('goBack'));
+        blocks.push('-');
+        blocks.push(block('doScreenshot'));
 
     // for debugging: ///////////////
 
@@ -1753,8 +1755,6 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push('-');
         blocks.push(block('reportIsFastTracking'));
         blocks.push(block('doSetFastTracking'));
-        blocks.push('-');
-        blocks.push(block('doScreenshot'));
         blocks.push('-');
         blocks.push(block('reportDate'));
 
@@ -4409,6 +4409,8 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('changeEffect'));
         blocks.push(block('setEffect'));
         blocks.push(block('clearEffects'));
+        blocks.push('-');
+        blocks.push(block('doScreenshot'));
 
     // for debugging: ///////////////
 
@@ -4525,8 +4527,6 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('doSetFastTracking'));
         blocks.push('-');
         blocks.push(block('reportDate'));
-        blocks.push('-');
-        blocks.push(block('doScreenshot'));
 
     // for debugging: ///////////////
 
