@@ -191,6 +191,7 @@ IDE_Morph.prototype.init = function (isAutoFill) {
     this.cloudMsg = null;
     this.source = 'local';
     this.serializer = new SnapSerializer();
+    this.quicksearch = false;
 
     this.globalVariables = new VariableFrame();
     this.currentSprite = new SpriteMorph(this.globalVariables);
@@ -2390,6 +2391,20 @@ IDE_Morph.prototype.settingsMenu = function () {
         this.stage.isThreadSafe,
         'uncheck to allow\nscript reentrance',
         'check to disallow\nscript reentrance'
+    );
+    addPreference(
+        'Quick search',
+        function () {
+            this.quicksearch = 
+                !this.quicksearch;
+            //this.createSearchbar();
+            //this.createCategories();
+            this.fixLayout();
+        },
+        this.searchbar.quicksearch,
+        'uncheck to disable\nautomatic results when searching',
+        'check to enable\nautomatic results when searching',
+        false
     );
     addPreference(
         'Prefer smooth animations',
