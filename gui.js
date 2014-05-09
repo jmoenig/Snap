@@ -912,11 +912,12 @@ IDE_Morph.prototype.createSearchbar = function () {
 
     this.searchbar.drawNew();
 
-    // These functions could be used to allow for autofill functionality
-    // this.searchbar.reactToKeyStroke = function (event) {
-    // }
-    // this.searchbar.reactToEdit = function (string) {
-    // }
+    // This function provides Quick Search Functionality
+    this.searchbar.reactToKeystroke = function (event) {
+        if (myself.searchbar.getValue().length > 0 && event.keyCode !== 8) {
+            myself.searchbar.accept();
+        }
+    };
 
     this.searchbar.accept = function (hidden) {
         var searchString = myself.searchbar.getValue().toLowerCase(),
