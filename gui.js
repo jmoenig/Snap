@@ -2401,7 +2401,7 @@ IDE_Morph.prototype.settingsMenu = function () {
             //this.createCategories();
             this.fixLayout();
         },
-        this.searchbar.quicksearch,
+        this.quicksearch,
         'uncheck to disable\nautomatic results when searching',
         'check to enable\nautomatic results when searching',
         false
