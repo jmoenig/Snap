@@ -391,7 +391,7 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'command',
             category: 'looks',
             spec: 'save %imgsource as costume named %s',
-            defaults: [['pen trails'], 'screenshot']
+            defaults: [['pen trails'], localize('screenshot')]
         },
 
         // Looks - Debugging primitives for development mode
