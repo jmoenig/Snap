@@ -6556,12 +6556,19 @@ InputSlotMorph.prototype.attributesMenu = function () {
             'direction' : ['direction'],
             'costume #' : ['costume #'],
             'costume name' : ['costume name'],
-            'size' : ['size']
+            'size' : ['size'],
+            '~~' : null, // ~~ prevents conflicts below
+            'pen size' : ['pen size'],
+            'pen color' : ['pen color'],
+            'pen shade' : ['pen shade'],
         };
     } else { // the stage
         dict = {
             'costume #' : ['costume #'],
-            'costume name' : ['costume name']
+            'costume name' : ['costume name'],
+            '~~' : null,
+            'stage height' : ['stage height'],
+            'stage width' : ['stage width']
         };
     }
     varNames = obj.variables.names();

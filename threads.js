@@ -2445,6 +2445,16 @@ Process.prototype.reportAttributeOf = function (attribute, name) {
                                 : localize('Empty');
             case 'size':
                 return thatObj.getScale ? thatObj.getScale() : '';
+            case 'pen size':
+                return thatObj.penSize ? thatObj.penSize() : '';
+            case 'pen color':
+                return thatObj.getHue ? thatObj.getHue() : '';
+            case 'pen shade':
+                return thatObj.getBrightness ? thatObj.getBrightness() : '';
+            case 'stage width':
+                return thatObj.width ? thatObj.width() : '';
+            case 'stage height':
+                return thatObj.height ? thatObj.height() : '';
             }
         }
     }
