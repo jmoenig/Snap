@@ -60,6 +60,10 @@ function Cloud() {
         if(config.urls.user_detail_url !== undefined) {
             this.user_detail_url = config.urls.user_detail_url;
         }
+        this.user_api_detail_url = config.urls.user_api_detail_url;
+        if(config.urls.project_url_root !== undefined) {
+            this.project_url_root = config.urls.project_url_root;
+        }
     }
     this.user_id = config.user_id;
     this.application_id = config.application_id;
@@ -73,10 +77,25 @@ Cloud.prototype.login = function (
     callBack,
     errorCall
 ) {
-    $.post(this.login_url, {'username': username, 'password': password}, callBack).fail(errorCall);
+    var myself=this;
+    var myCallBack = function(data, textStatus, jqXHR) {
+        // Update user
+         $.ajax({
+            dataType: "json",
+            url: myself.user_api_detail_url,
+            success: function(data) {
+                myself.user_id = data.id;
+            }
+         });
+        callBack(data, textStatus);
+    };
+    $.post(this.login_url, {'username': username, 'password': password}, myCallBack).fail(errorCall);
 };
 
 Cloud.prototype.saveProject = function (ide, callBack, errorCall) {
+    if(!this.loggedIn()) {
+        return;
+    }
     // Helper function, kindly donated by http://stackoverflow.com/questions/4998908/convert-data-uri-to-file-then-append-to-formdata
     function dataURItoBlob(dataURI, type) {
         var binary;
@@ -161,11 +180,13 @@ Cloud.prototype.saveProject = function (ide, callBack, errorCall) {
                     name: ide.projectName,
                     description: '',
                     application: myself.application_id,
-                    owner: myself.user_id,
                     project: xml_id,
                     screenshot: image_id
                 }, 
-                success: callBack, 
+                success: function(data, stuff) {
+                  callBack(data, stuff);
+                  myself.updateURL(myself.project_url_root + data.id);
+                },
                 dataType: 'json'
             }).fail(errorCall);
         } else {
@@ -173,10 +194,12 @@ Cloud.prototype.saveProject = function (ide, callBack, errorCall) {
                 name: ide.projectName,
                 description: '',
                 application: myself.application_id,
-                owner: myself.user_id,
                 project: xml_id,
                 screenshot: image_id
-            }, callBack, 'json').fail(errorCall);
+            }, function(data, stuff) {
+                myself.updateURL(myself.project_url_root + data.id);
+                callBack(data, stuff);
+              }, 'json').fail(errorCall);
         }
         myself.name = ide.projectName;
     }
@@ -189,26 +212,37 @@ Cloud.prototype.openProject = function(project, callBack, errorCall) {
     $.get(project.project_url, null, function(data) {
         myself.project_id = project.id;
         myself.name = project.name;
+        myself.updateURL(myself.project_url_root+project.id);
         callBack(data);
     }).fail(errorCall);
 }
 
-Cloud.prototype.changePassword = function (
-    oldPW,
-    newPW,
-    callBack,
-    errorCall
-) {
-};
-
-Cloud.prototype.logout = function (callBack, errorCall) {
-};
-
 Cloud.prototype.getProjectList = function(callBack, errorCall) {
-    $.get(this.list_project_url+"?user="+this.user_id, null, function(data) {
+    if(!this.loggedIn())
+      return;
+    $.get(this.list_project_url+"?owner="+this.user_id, null, function(data) {
         callBack(data);
     }, "json").fail(errorCall);
 };
+
+Cloud.prototype.loggedIn = function() {
+    if(this.user_id === undefined) {
+        this.message("You are not logged in");
+        return false;
+    }
+    return true;
+};
+
+Cloud.prototype.message = function (string) {
+    alert(string);
+};
+
+Cloud.prototype.updateURL = function(URL) {
+    if(window.history !== undefined && window.history.pushState !== undefined) {
+        window.history.pushState({}, "", URL);
+    }
+};
+
 
 // Cloud: backend communication
 
