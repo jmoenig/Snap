@@ -4,7 +4,7 @@ modules.cellularGui = '2013-August-2';
 /******************************* HOOKS *******************************/
 /*********because sometimes you HAVE to mod the original file*********/
 /*********************************************************************/
-
+s
 function getSnapLogoImage()
 {
     return 'cellular/cellular_logo_sm.png';
@@ -32,6 +32,9 @@ function getSnapAppsLogoExtent()
 /***************************** OVERRIDES *****************************/
 /*********************************************************************/
 
+/*
+** This is what creates the cell brush tools GUI.
+*/
 IDE_Morph.prototype.createCorralSnap = IDE_Morph.prototype.createCorral;
 IDE_Morph.prototype.createCorral = function()
 {
@@ -298,7 +301,10 @@ SpriteIconMorph.prototype.step = function () {
 	return this.uberStep();
 };*/
 
-//This just creates the text box in the icon area
+/*
+** This creates the text box in which the number of clones is stored for each sprite.
+** You can see it below every sprite icon on the bottom right of the screen.
+*/
 SpriteIconMorph.prototype.createDuplicator = function () {
     if (this.duplicator) {
         this.duplicator.destroy();

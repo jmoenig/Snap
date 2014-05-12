@@ -4,6 +4,9 @@ modules.cellularThreads = '2013-October-13';
 /***************************** OVERRIDES *****************************/
 /*********************************************************************/
 
+/*
+** Ensures the parent SpriteMorph doesn't perform any actions.
+*/
 ThreadManager.prototype.uberStartProcess = ThreadManager.prototype.startProcess;	
 ThreadManager.prototype.startProcess = function (block, receiver, isThreadSafe) {
 	//Final chance to prevent the prototype SpriteMorphs from doing shit.
@@ -13,6 +16,9 @@ ThreadManager.prototype.startProcess = function (block, receiver, isThreadSafe) 
 	return this.uberStartProcess(block, receiver, isThreadSafe);
 };
 
+/*
+** Returns the number of instances of a particular object
+*/
 Process.prototype.instanceCount = function(countThese)
 {
     var thisObj = this.homeContext.receiver;
@@ -31,6 +37,9 @@ Process.prototype.instanceCount = function(countThese)
     }
 }
 
+/*
+** This stores the last created clone for this thread.
+*/
 Process.prototype.lastCreatedClone = null;
 
 //When a clone is created, we need to note down the last created clone

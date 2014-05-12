@@ -1,5 +1,8 @@
 modules.cellular = '2013-August-16';
 
+/*
+** The Cell type. Holds cell attributes and objects that are present in this cell.
+*/
 function Cell(x,y,stageMorph)
 {
 	this.x = x;
@@ -10,6 +13,9 @@ function Cell(x,y,stageMorph)
 	this.parentECT = null;
 }
 
+/*
+** Gets the value of some attribute.
+*/
 Cell.prototype.getAttribute = function(attribute)
 {
 	value = this.attributeValues[attribute];
@@ -18,13 +24,22 @@ Cell.prototype.getAttribute = function(attribute)
 	return Number(value);
 }
 
+/*
+** Sets the value of an attribute in this cell.
+**
+** The dirty parameter is true unless otherwise specified, 
+** and if true, this cell is queued for re-drawing.
+*/
 Cell.prototype.setAttribute = function(attribute, value, dirty)
 {
 	this.attributeValues[attribute] = Number(value);
-	if (dirty == undefined || dirty == true)
+	if (dirty)
 		this.stageMorph.dirtyCellAt(this.x, this.y);
 }
 
+/*
+** Removes a SpriteMorph that is present in the cell.
+*/
 Cell.prototype.removeSpriteMorph = function(morph)
 {
 	var index = this.spriteMorphs.indexOf(morph);
@@ -33,16 +48,30 @@ Cell.prototype.removeSpriteMorph = function(morph)
 	}
 }
 
+/*
+** Adds a SpriteMorph that is present in the cell.
+*/
 Cell.prototype.addSpriteMorph = function(morph)
 {
 	this.spriteMorphs.push(morph);
 }
 
+/*
+** A list of attribute names
+*/
 Cell.attributes = [];
-Cell.attributeColours = {};
-Cell.attributeDrawRange = {};
-// For visible attributes, see StageMorph.visibleAttributes. In retrospect, I have no idea why I put it there.
 
+/*
+** A list of attribute colours. Uses the Snap! colour object.
+*/
+Cell.attributeColours = {};
+
+/*
+** A list of 2 element arrays corresponding to the start and end of the draw range for this attribute.
+*/
+Cell.attributeDrawRange = {};
+
+// For visible attributes, see StageMorph.visibleAttributes.
 Cell.hasAttribute = function (name)
 {
 	for (var i=0; i<Cell.attributes.length; i++)
@@ -70,6 +99,9 @@ Cell.addAttribute = function (name)
 	return true;
 }
 
+/*
+** The EmptyCellTree is uesd to find the nth empty cell in log(N) time.
+*/
 function EmptyCellTree(childA, childB)
 {
     var myself = this;

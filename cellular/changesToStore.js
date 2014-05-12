@@ -1,10 +1,17 @@
 modules.cellularStore = '2013-December-1';
 
+/*
+** This file handles saving and loading the cell attributes and the clones.
+*/
+
 /*********************************************************************/
 /******************************* HOOKS *******************************/
 /*********because sometimes you HAVE to mod the original file*********/
 /*********************************************************************/
 
+/*
+** Creates a clone or a parent sprite depending.
+*/
 SnapSerializer.prototype.loadSprite = function (model, project) {
 	var v;
 	
@@ -63,6 +70,9 @@ SnapSerializer.prototype.loadSprite = function (model, project) {
 	return v;
 }
 
+/*
+** Connects parent sprite to the clone sprites.
+*/
 SnapSerializer.prototype.spritesLoaded = function(stage, spriteList)
 {
 	var sprites = {};
