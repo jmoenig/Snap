@@ -1418,11 +1418,10 @@ SpriteMorph.prototype.drawNew = function () {
     }
     this.version = Date.now();
 	
-	this.originalPixels = this.image.getContext('2d').createImageData(this.width(), this.height());
-	this.originalPixels = this.image.getContext('2d').getImageData(0, 0, this.width(), this.height());
-	
 	//Check if color change has been applied earlier in script
 	if(this.colorChange){
+		this.originalPixels = this.image.getContext('2d').createImageData(this.width(), this.height());
+		this.originalPixels = this.image.getContext('2d').getImageData(0, 0, this.width(), this.height());
 		this.changeCostumeColor(this.costumeColor);
 	}
 };
