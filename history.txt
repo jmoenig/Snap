@@ -2131,3 +2131,5 @@ ______
 * Morphic: Prevent default action for ctrl-/cmd-key event
 * Snap.html: Focus the world canvas on startup, so Snap reacts to keyboard events right away
 * Threads: new Variable data structure, for refactoring upvar references, not yet used anywhere
+* Objects, GUI: Search Blocks, feature. Thanks, Kyle, for architecting and designing this!!!
+* Objects, GUI: Keyboard-shortcuts for opening (cmd-o), saving (cmd-s) projects and for finding blocks (cmd-f)
