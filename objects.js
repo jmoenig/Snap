@@ -124,7 +124,7 @@ PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.objects = '2014-May-02';
+modules.objects = '2014-May-20';
 
 var SpriteMorph;
 var StageMorph;
@@ -203,90 +203,106 @@ SpriteMorph.prototype.initBlocks = function () {
 
         // Motion
         forward: {
+            only: SpriteMorph,
             type: 'command',
             category: 'motion',
             spec: 'move %n steps',
             defaults: [10]
         },
         turn: {
+            only: SpriteMorph,
             type: 'command',
             category: 'motion',
             spec: 'turn %clockwise %n degrees',
             defaults: [15]
         },
         turnLeft: {
+            only: SpriteMorph,
             type: 'command',
             category: 'motion',
             spec: 'turn %counterclockwise %n degrees',
             defaults: [15]
         },
         setHeading: {
+            only: SpriteMorph,
             type: 'command',
             category: 'motion',
             spec: 'point in direction %dir'
         },
         doFaceTowards: {
+            only: SpriteMorph,
             type: 'command',
             category: 'motion',
             spec: 'point towards %dst'
         },
         gotoXY: {
+            only: SpriteMorph,
             type: 'command',
             category: 'motion',
             spec: 'go to x: %n y: %n',
             defaults: [0, 0]
         },
         doGotoObject: {
+            only: SpriteMorph,
             type: 'command',
             category: 'motion',
             spec: 'go to %dst'
         },
         doGlide: {
+            only: SpriteMorph,
             type: 'command',
             category: 'motion',
             spec: 'glide %n secs to x: %n y: %n',
             defaults: [1, 0, 0]
         },
         changeXPosition: {
+            only: SpriteMorph,
             type: 'command',
             category: 'motion',
             spec: 'change x by %n',
             defaults: [10]
         },
         setXPosition: {
+            only: SpriteMorph,
             type: 'command',
             category: 'motion',
             spec: 'set x to %n',
             defaults: [0]
         },
         changeYPosition: {
+            only: SpriteMorph,
             type: 'command',
             category: 'motion',
             spec: 'change y by %n',
             defaults: [10]
         },
         setYPosition: {
+            only: SpriteMorph,
             type: 'command',
             category: 'motion',
             spec: 'set y to %n',
             defaults: [0]
         },
         bounceOffEdge: {
+            only: SpriteMorph,
             type: 'command',
             category: 'motion',
             spec: 'if on edge, bounce'
         },
         xPosition: {
+            only: SpriteMorph,
             type: 'reporter',
             category: 'motion',
             spec: 'x position'
         },
         yPosition: {
+            only: SpriteMorph,
             type: 'reporter',
             category: 'motion',
             spec: 'y position'
         },
         direction: {
+            only: SpriteMorph,
             type: 'reporter',
             category: 'motion',
             spec: 'direction'
@@ -309,24 +325,28 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: 'costume #'
         },
         doSayFor: {
+            only: SpriteMorph,
             type: 'command',
             category: 'looks',
             spec: 'say %s for %n secs',
             defaults: [localize('Hello!'), 2]
         },
         bubble: {
+            only: SpriteMorph,
             type: 'command',
             category: 'looks',
             spec: 'say %s',
             defaults: [localize('Hello!')]
         },
         doThinkFor: {
+            only: SpriteMorph,
             type: 'command',
             category: 'looks',
             spec: 'think %s for %n secs',
             defaults: [localize('Hmm...'), 2]
         },
         doThink: {
+            only: SpriteMorph,
             type: 'command',
             category: 'looks',
             spec: 'think %s',
@@ -350,38 +370,45 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: 'clear graphic effects'
         },
         changeScale: {
+            only: SpriteMorph,
             type: 'command',
             category: 'looks',
             spec: 'change size by %n',
             defaults: [10]
         },
         setScale: {
+            only: SpriteMorph,
             type: 'command',
             category: 'looks',
             spec: 'set size to %n %',
             defaults: [100]
         },
         getScale: {
+            only: SpriteMorph,
             type: 'reporter',
             category: 'looks',
             spec: 'size'
         },
         show: {
+            only: SpriteMorph,
             type: 'command',
             category: 'looks',
             spec: 'show'
         },
         hide: {
+            only: SpriteMorph,
             type: 'command',
             category: 'looks',
             spec: 'hide'
         },
         comeToFront: {
+            only: SpriteMorph,
             type: 'command',
             category: 'looks',
             spec: 'go to front'
         },
         goBack: {
+            only: SpriteMorph,
             type: 'command',
             category: 'looks',
             spec: 'go back %n layers',
@@ -390,17 +417,20 @@ SpriteMorph.prototype.initBlocks = function () {
 
         // Looks - Debugging primitives for development mode
         reportCostumes: {
+            dev: true,
             type: 'reporter',
             category: 'looks',
             spec: 'wardrobe'
         },
 
         alert: {
+            dev: true,
             type: 'command',
             category: 'looks',
             spec: 'alert %mult%s'
         },
         log: {
+            dev: true,
             type: 'command',
             category: 'looks',
             spec: 'console log %mult%s'
@@ -454,6 +484,7 @@ SpriteMorph.prototype.initBlocks = function () {
 
         // Sound - Debugging primitives for development mode
         reportSounds: {
+            dev: true,
             type: 'reporter',
             category: 'sound',
             spec: 'jukebox'
@@ -466,57 +497,67 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: 'clear'
         },
         down: {
+            only: SpriteMorph,
             type: 'command',
             category: 'pen',
             spec: 'pen down'
         },
         up: {
+            only: SpriteMorph,
             type: 'command',
             category: 'pen',
             spec: 'pen up'
         },
         setColor: {
+            only: SpriteMorph,
             type: 'command',
             category: 'pen',
             spec: 'set pen color to %clr'
         },
         changeHue: {
+            only: SpriteMorph,
             type: 'command',
             category: 'pen',
             spec: 'change pen color by %n',
             defaults: [10]
         },
         setHue: {
+            only: SpriteMorph,
             type: 'command',
             category: 'pen',
             spec: 'set pen color to %n',
             defaults: [0]
         },
         changeBrightness: {
+            only: SpriteMorph,
             type: 'command',
             category: 'pen',
             spec: 'change pen shade by %n',
             defaults: [10]
         },
         setBrightness: {
+            only: SpriteMorph,
             type: 'command',
             category: 'pen',
             spec: 'set pen shade to %n',
             defaults: [100]
         },
         changeSize: {
+            only: SpriteMorph,
             type: 'command',
             category: 'pen',
             spec: 'change pen size by %n',
             defaults: [1]
         },
         setSize: {
+            only: SpriteMorph,
             type: 'command',
             category: 'pen',
             spec: 'set pen size to %n',
             defaults: [1]
         },
         doStamp: {
+            only: SpriteMorph,
             type: 'command',
             category: 'pen',
             spec: 'stamp'
@@ -710,31 +751,37 @@ SpriteMorph.prototype.initBlocks = function () {
         // Sensing
 
         reportTouchingObject: {
+            only: SpriteMorph,
             type: 'predicate',
             category: 'sensing',
             spec: 'touching %col ?'
         },
         reportTouchingColor: {
+            only: SpriteMorph,
             type: 'predicate',
             category: 'sensing',
             spec: 'touching %clr ?'
         },
         reportColorIsTouchingColor: {
+            only: SpriteMorph,
             type: 'predicate',
             category: 'sensing',
             spec: 'color %clr is touching %clr ?'
         },
         colorFiltered: {
+            dev: true,
             type: 'reporter',
             category: 'sensing',
             spec: 'filtered for %clr'
         },
         reportStackSize: {
+            dev: true,
             type: 'reporter',
             category: 'sensing',
             spec: 'stack size'
         },
         reportFrameCount: {
+            dev: true,
             type: 'reporter',
             category: 'sensing',
             spec: 'frames'
@@ -746,6 +793,7 @@ SpriteMorph.prototype.initBlocks = function () {
             defaults: [localize('what\'s your name?')]
         },
         reportLastAnswer: { // retained for legacy compatibility
+            dev: true,
             type: 'reporter',
             category: 'sensing',
             spec: 'answer'
@@ -786,6 +834,7 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: 'reset timer'
         },
         reportTimer: { // retained for legacy compatibility
+            dev: true,
             type: 'reporter',
             category: 'sensing',
             spec: 'timer'
@@ -969,12 +1018,14 @@ SpriteMorph.prototype.initBlocks = function () {
             defaults: [localize('hello') + ' ' + localize('world'), " "]
         },
         reportTypeOf: { // only in dev mode for debugging
+            dev: true,
             type: 'reporter',
             category: 'operators',
             spec: 'type of %s',
             defaults: [5]
         },
         reportTextFunction: { // only in dev mode - experimental
+            dev: true,
             type: 'reporter',
             category: 'operators',
             spec: '%txtfun of %s',
@@ -1083,6 +1134,7 @@ SpriteMorph.prototype.initBlocks = function () {
 
         // MAP - experimental
         reportMap: {
+            dev: true,
             type: 'reporter',
             category: 'lists',
             spec: 'map %repRing over %l'
@@ -2068,6 +2120,7 @@ SpriteMorph.prototype.freshPalette = function (category) {
             });
         }
 
+        menu.addItem('find blocks...', function () {myself.searchBlocks(); });
         if (canHidePrimitives()) {
             menu.addItem(
                 'hide primitives',
@@ -2197,6 +2250,139 @@ SpriteMorph.prototype.freshPalette = function (category) {
 
     Morph.prototype.trackChanges = oldFlag;
     return palette;
+};
+
+// SpriteMorph blocks searching
+
+SpriteMorph.prototype.blocksMatching = function (searchString, strictly) {
+    // answer an array of block templates whose spec contains
+    // the given search string, ordered by descending relevance
+    var blocks = [],
+        blocksDict,
+        myself = this,
+        search = searchString.toLowerCase(),
+        stage = this.parentThatIsA(StageMorph);
+
+    function labelOf(aBlockSpec) {
+        var words = (BlockMorph.prototype.parseSpec(aBlockSpec)),
+            filtered = words.filter(
+                function (each) {return (each.indexOf('%') !== 0); }
+            );
+        return filtered.join(' ');
+    }
+
+    function fillDigits(anInt, totalDigits, fillChar) {
+        var ans = String(anInt);
+        while (ans.length < totalDigits) {ans = fillChar + ans; }
+        return ans;
+    }
+
+    function relevance(aBlockLabel, aSearchString) {
+        var lbl = ' ' + aBlockLabel,
+            idx = lbl.indexOf(aSearchString),
+            atWord;
+        if (idx === -1) {return -1; }
+        atWord = (lbl.charAt(idx - 1) === ' ');
+        if (strictly && !atWord) {return -1; }
+        return (atWord ? '1' : '2') + fillDigits(idx, 4, '0');
+    }
+
+    function primitive(selector) {
+        var newBlock = SpriteMorph.prototype.blockForSelector(selector, true);
+        newBlock.isTemplate = true;
+        return newBlock;
+    }
+
+    // custom blocks
+    [this.customBlocks, stage.globalBlocks].forEach(function (blocksList) {
+        blocksList.forEach(function (definition) {
+            var spec = localize(definition.blockSpec()).toLowerCase(),
+                rel = relevance(labelOf(spec), search);
+            if (rel !== -1) {
+                blocks.push([definition.templateInstance(), rel + '1']);
+            }
+        });
+    });
+    // primitives
+    blocksDict = SpriteMorph.prototype.blocks;
+    Object.keys(blocksDict).forEach(function (selector) {
+        if (!StageMorph.prototype.hiddenPrimitives[selector]) {
+            var block = blocksDict[selector],
+                spec = localize(block.spec).toLowerCase(),
+                rel = relevance(labelOf(spec), search);
+            if (
+                (rel !== -1) &&
+                    (!block.dev) &&
+                    (!block.only || (block.only === myself.constructor))
+            ) {
+                blocks.push([primitive(selector), rel + '2']);
+            }
+        }
+    });
+    blocks.sort(function (x, y) {return x[1] < y[1] ? -1 : 1; });
+    return blocks.map(function (each) {return each[0]; });
+};
+
+SpriteMorph.prototype.searchBlocks = function () {
+    var myself = this,
+        unit = SyntaxElementMorph.prototype.fontSize,
+        ide = this.parentThatIsA(IDE_Morph),
+        oldSearch = '',
+        searchBar = new InputFieldMorph(''),
+        searchPane = ide.createPalette('forSearch');
+
+    function show(blocks) {
+        var oldFlag = Morph.prototype.trackChanges,
+            x = searchPane.contents.left() + 5,
+            y = (searchBar.bottom() + unit);
+        Morph.prototype.trackChanges = false;
+        searchPane.contents.children = [searchPane.contents.children[0]];
+        blocks.forEach(function (block) {
+            block.setPosition(new Point(x, y));
+            searchPane.addContents(block);
+            y += block.height();
+            y += unit * 0.3;
+        });
+        Morph.prototype.trackChanges = oldFlag;
+        searchPane.changed();
+    }
+
+    searchPane.owner = this;
+    searchPane.padding = unit / 2;
+    searchPane.color = myself.paletteColor;
+    searchPane.contents.color = myself.paletteColor;
+    searchPane.growth = new Point(0, MorphicPreferences.scrollBarSize);
+    searchPane.addContents(searchBar);
+    searchBar.drawNew();
+    searchBar.setWidth(ide.logo.width() - 20);
+    searchBar.contrast = 90;
+    searchBar.setPosition(
+        searchPane.contents.topLeft().add(new Point(10, 10))
+    );
+    searchBar.drawNew();
+
+    searchPane.accept = function () {
+        var search = searchBar.getValue();
+        if (search.length > 0) {
+            show(myself.blocksMatching(search));
+        }
+    };
+
+    searchPane.reactToKeystroke = function () {
+        var search = searchBar.getValue();
+        if (search !== oldSearch) {
+            oldSearch = search;
+            show(myself.blocksMatching(search, search.length < 2));
+        }
+    };
+
+    searchBar.cancel = function () {
+        ide.refreshPalette();
+        ide.palette.adjustScrollBars();
+    };
+
+    ide.fixLayout('refreshPalette');
+    searchBar.edit();
 };
 
 // SpriteMorph variable management
@@ -4210,6 +4396,9 @@ StageMorph.prototype.processKeyEvent = function (event, action) {
         break;
     default:
         keyName = String.fromCharCode(event.keyCode || event.charCode);
+        if (event.ctrlKey || event.metaKey) {
+            keyName = 'ctrl ' + keyName;
+        }
     }
     action.call(this, keyName);
 };
@@ -4223,6 +4412,15 @@ StageMorph.prototype.fireKeyEvent = function (key) {
     this.keysPressed[evt] = true;
     if (evt === 'ctrl enter') {
         return this.fireGreenFlagEvent();
+    }
+    if (evt === 'ctrl f') {
+        return this.parentThatIsA(IDE_Morph).currentSprite.searchBlocks();
+    }
+    if (evt === 'ctrl o') {
+        return this.parentThatIsA(IDE_Morph).openProjectsBrowser();
+    }
+    if (evt === 'ctrl s') {
+        return this.parentThatIsA(IDE_Morph).save();
     }
     if (evt === 'esc') {
         return this.fireStopAllEvent();
@@ -4847,6 +5045,8 @@ StageMorph.prototype.paletteColor = SpriteMorph.prototype.paletteColor;
 StageMorph.prototype.setName = SpriteMorph.prototype.setName;
 StageMorph.prototype.palette = SpriteMorph.prototype.palette;
 StageMorph.prototype.freshPalette = SpriteMorph.prototype.freshPalette;
+StageMorph.prototype.blocksMatching = SpriteMorph.prototype.blocksMatching;
+StageMorph.prototype.searchBlocks = SpriteMorph.prototype.searchBlocks;
 StageMorph.prototype.showingWatcher = SpriteMorph.prototype.showingWatcher;
 StageMorph.prototype.addVariable = SpriteMorph.prototype.addVariable;
 StageMorph.prototype.deleteVariable = SpriteMorph.prototype.deleteVariable;
