@@ -2125,3 +2125,7 @@ ______
 ------
 * error message when trying to import a non-text file into a variable, thanks, Nate!
 * fixed #407 (custom-block coloring w/ zebra off)
+
+140520
+------
+* Morphic: Prevent default action for ctrl-/cmd-key events

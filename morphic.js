@@ -1035,7 +1035,7 @@
 /*global window, HTMLCanvasElement, getMinimumFontHeight, FileReader, Audio,
 FileList, getBlurredShadowSupport*/
 
-var morphicVersion = '2014-February-03';
+var morphicVersion = '2014-April-20';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = getBlurredShadowSupport(); // check for Chrome-bug
 
@@ -10266,6 +10266,9 @@ WorldMorph.prototype.initEventListeners = function () {
                 if (myself.keyboardReceiver) {
                     myself.keyboardReceiver.processKeyPress(event);
                 }
+                event.preventDefault();
+            }
+            if (event.ctrlKey || event.metaKey) {
                 event.preventDefault();
             }
         },
