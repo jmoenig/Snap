@@ -2128,4 +2128,5 @@ ______
 
 140520
 ------
-* Morphic: Prevent default action for ctrl-/cmd-key events
+* Morphic: Prevent default action for ctrl-/cmd-key event
+* Snap.html: Focus the world canvas on startup, so Snap reacts to keyboard events right away
