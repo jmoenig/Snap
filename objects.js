@@ -124,8 +124,7 @@ PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-
-modules.objects = '2014-May-02';
+modules.objects = '2014-January-09';
 
 var SpriteMorph;
 var StageMorph;
@@ -389,12 +388,6 @@ SpriteMorph.prototype.initBlocks = function () {
         },
 
         // Looks - Debugging primitives for development mode
-        reportCostumes: {
-            type: 'reporter',
-            category: 'looks',
-            spec: 'wardrobe'
-        },
-
         alert: {
             type: 'command',
             category: 'looks',
@@ -450,13 +443,6 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'reporter',
             category: 'sound',
             spec: 'tempo'
-        },
-
-        // Sound - Debugging primitives for development mode
-        reportSounds: {
-            type: 'reporter',
-            category: 'sound',
-            spec: 'jukebox'
         },
 
         // Pen
@@ -1240,15 +1226,15 @@ SpriteMorph.prototype.init = function (globals) {
     this.isDraggable = true;
     this.isDown = false;
 
-    this.graphicsValues = { /*'color': 0, 
+    this.graphicsValues = { 'color': 0, 
                             'fisheye': 0, 
                             'whirl': 0, 
                             'pixelate': 0, 
-                            'mosaic': 0, */
+                            'mosaic': 0, 
                             'brightness': 0,
                             'negative' : 0,
                             'comic' : 0,
-                            'clone' : 0,
+                            'duplicate' : 0,
                             'confetti' : 0
                          }
 
@@ -1646,8 +1632,6 @@ SpriteMorph.prototype.blockTemplates = function (category) {
             txt.setColor(this.paletteTextColor);
             blocks.push(txt);
             blocks.push('-');
-            blocks.push(block('reportCostumes'));
-            blocks.push('-');
             blocks.push(block('log'));
             blocks.push(block('alert'));
         }
@@ -1668,20 +1652,6 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('doSetTempo'));
         blocks.push(watcherToggle('getTempo'));
         blocks.push(block('getTempo'));
-
-    // for debugging: ///////////////
-
-        if (this.world().isDevMode) {
-            blocks.push('-');
-            txt = new TextMorph(localize(
-                'development mode \ndebugging primitives:'
-            ));
-            txt.fontSize = 9;
-            txt.setColor(this.paletteTextColor);
-            blocks.push(txt);
-            blocks.push('-');
-            blocks.push(block('reportSounds'));
-        }
 
     } else if (cat === 'pen') {
 
@@ -2302,11 +2272,6 @@ SpriteMorph.prototype.doWearPreviousCostume = function () {
 };
 
 SpriteMorph.prototype.doSwitchToCostume = function (id) {
-    if (id instanceof Costume) { // allow first-class costumes
-        this.wearCostume(id);
-        return;
-    }
-
     var num,
         arr = this.costumes.asArray(),
         costume;
@@ -2337,10 +2302,6 @@ SpriteMorph.prototype.doSwitchToCostume = function (id) {
     this.wearCostume(costume);
 };
 
-SpriteMorph.prototype.reportCostumes = function () {
-    return this.costumes;
-};
-
 // SpriteMorph sound management
 
 SpriteMorph.prototype.addSound = function (audio, name) {
@@ -2364,10 +2325,6 @@ SpriteMorph.prototype.playSound = function (name) {
         }
         return active;
     }
-};
-
-SpriteMorph.prototype.reportSounds = function () {
-    return this.sounds;
 };
 
 // SpriteMorph user menu
@@ -2667,106 +2624,6 @@ SpriteMorph.prototype.applyGraphicsEffects = function (canvas) {
     // for every effect:
     // apply transform of that effect(canvas, stored value)
  
-/*function transform_whirl (p, value) {
-    if (value != 0) {
-            //p is also the transformed pixels
-            width = canvas.width;
-            height = canvas.height;
-            centerX = Math.floor(width / 2);
-            centerY = Math.floor(height / 2);
-            size = width < height ? width : height;
-            radius = Math.floor(size / 2) //refers to the circle of the picture
- for (y = -radius; y < radius; ++y) {
-        for (x = -radius; x < radius; ++x) {
-            if (x * x + y * y <= radius * radius) { 
-                // Calculate the pixel array position
-                destPosition = (y + centerY) * width + x + centerX;
-                destPosition *= 4;
-                // Transform the pixel cartesian coordinates (x, y) to polar coordinates (r, alpha)
-                r = Math.sqrt(x * x + y * y); //refers to the calcuating radius
-                alpha = Math.atan2(y, x) //returns the arctan of y/x. returns the angle. 
-                alphaNew = (value / 180) * alpha*(Math.pow((1 - (Math.sqrt((x * x) + (y * y)) / radius)), 2)) 
-                // degrees = ((alpha * 180.0) / Math.PI); //change it to degrees because the value will specify degrees better. easier to mess with than radians
-                // degrees += (value/12) * r //degree is based on radius. the shift will depend on how far the radius is.
-                // alpha = (degrees * Math.PI) / 180.0;// Transform back from polar coordinates to cartesian to it matches with the function
-               //this is where transformation happens 
-                newY = Math.floor(r * Math.sin(alphaNew)); 
-                newX = Math.floor(r * Math.cos(alphaNew)); 
-                // Get the new pixel location 
-                sourcePosition = (newY + centerY) * width + (newX + centerX);
-                sourcePosition *= 4;
-                p[destPosition + 0] = p[sourcePosition + 0];
-                p[destPosition + 1] = p[sourcePosition + 1];
-                p[destPosition + 2] = p[sourcePosition + 2];
-                p[destPosition + 3] = p[sourcePosition + 3]; 
-                };    
-            };
-            }
-            }
-            return p; //should return p regardless
-        };
-
-
-
-function transform_fisheye (p, value) {
-    if (value != 0) {
-            //p is also the transformed pixels
-            width = canvas.width;
-            height = canvas.height;
-            centerX = Math.floor(width / 2);
-            centerY = Math.floor(height / 2);
-            size = width < height ? width : height;
-            radius = Math.floor(size/2)
-
-var spherize = function(px,py) {
-    var x = px-width/2;
-    var y = py-height/2;
-    var r = Math.sqrt(x*x+y*y);
-    var maxr = width/2;
-    if (r>maxr) return {
-        'x':px,
-        'y':py
-    }
-    var a = Math.atan2(y,x);
-    var k = (r/maxr)*(r/maxr)*0.5+0.5;
-    var dx = Math.cos(a)*r*k;
-    var dy = Math.sin(a)*r*k;
-    return {
-        'x': dx+width/2,
-        'y': dy+height/2
-    }
-}
-
-for (y = -radius; y < radius; ++y) {
-        for (x = -radius; x < radius; ++x) {
-        if (x * x + y * y <= radius * radius) {            
-                destPosition = (y + centerY) * width + x + centerX;
-                destPosition *= 4;
- 
-                r = Math.sqrt(x * x + y * y);
-                a= Math.atan2(y, x);
-                k = (r/centerX)*(r/centerX)*0.5+0.5;
-                dx = Math.cos(a)*r*k;
-                dy = Math.sin(a)*r*k;
-
-                newY = dy+height/2;
-                newX = dx+width/2
-  
-                // Get the new pixel location 
-                sourcePosition = (newY + centerY) * width + (newX + centerX);
-                sourcePosition *= 4;
-
-                p[destPosition + 0] = p[sourcePosition + 0];
-                p[destPosition + 1] = p[sourcePosition + 1];
-                p[destPosition + 2] = p[sourcePosition + 2];
-                p[destPosition + 3] = p[sourcePosition + 3]; 
-                };    
-            };
-            }
-            }
-            return p;
-        };
-*/
 function transform_negative(p, value) { 
     if (value !== 0) {
         for (i = 0; i < p.length; i = i + 4) {
@@ -2825,36 +2682,8 @@ function transform_comic (p, value) {
     return p;  
 }; 
 
-/*function transform_pixelate(p, value) {
 
-    var srcWidth = canvas.width
-        srcHeight = canvas.height
-        sourceX = 0
-        sourceY = 0
-        data = p
-        pixelation = Math.abs(value)
-    if (value !== 0){
-        for (var y = 0; y < srcHeight; y += pixelation) {
-            for (var x = 0; x < srcWidth; x += pixelation) {
-                var red = data[((srcWidth * y) + x) * 4],
-                    green = data[((srcWidth * y) + x) * 4 + 1],
-                    blue = data[((srcWidth * y) + x) * 4 + 2];
-                for (var n = 0; n < pixelation; n++) {
-                    for (var m = 0; m < pixelation; m++) {
-                        if (x + m < srcWidth) {
-                            data[((srcWidth * (y + n)) + (x + m)) * 4] = red;
-                            data[((srcWidth * (y + n)) + (x + m)) * 4 + 1] = green;
-                            data[((srcWidth * (y + n)) + (x + m)) * 4 + 2] = blue;
-                        };
-                    };
-                };
-            };
-        };
-    };
-return p; 
-};*/
-
-function transform_clone (p, value){
+function transform_duplicate (p, value){
   if (value !== 0) {
         for (i=0; i<p.length; i+=4) {
               p[i+0] = p[i* value + 0]
@@ -2866,48 +2695,7 @@ function transform_clone (p, value){
     return p;
 }; 
 
-/*function transform_color (p, value) {
-     if (value !== 0) {
-      
 
-
-        for (i=0; i<p.length; i+=4) {
-            if (p[i] < 255) {
-                p[i] - value
-                p[i+1] + value
-            };
-        };
-    
-        for (i=0; i<p.length; i+=4) {    
-            if (p[i+1] < 255) {
-                p[i+1] - value
-                p[i+2] + value
-            };
-        };
-        for (i=0; i<p.length; i+=4) {
-            if (p[i+2] < 255) {
-                p[i+2] - value
-                p[i] + value
-            };
-        };
-    }
-
-    
-        return p;
-};*/
-//check the red, then check the gree, then chcek the blue. until red hits 255, don't move on to the green yet. but not a while loop because then it's looping
-/*function transform_color (p, value) {
-     if (value !== 0) {
-        for (i=0; i<p.length; i+=4) {
-                frequency=value
-                 p[i] = (p[i+3])*(Math.sin(frequency*i + 0) * 127 + 128);
-                 p[i+1] = (p[i+3])*(Math.sin(frequency*i + 2) * 127 + 128);
-                 p[i+2] = (p[i+3])*(Math.sin(frequency*i + 4) * 127 + 128);
-        };
-    
-    };
-    return p;
-}*/
 
 function transform_confetti (p, value) {
      if (value !== 0) {
@@ -2927,15 +2715,16 @@ function transform_confetti (p, value) {
             
 
            // for each effect, do a transform. at any given time, a sprite should wear all 7 effects
-                // pixels = transform_whirl(pixels, this.graphicsValues['whirl']);
+                /*pixels = transform_whirl(pixels, this.graphicsValues['whirl']);*/
                 pixels = transform_negative(pixels, this.graphicsValues['negative']);
                 pixels = transform_brightness(pixels, this.graphicsValues['brightness']);
                 pixels = transform_comic(pixels, this.graphicsValues['comic']);
-                pixels = transform_pixelate(pixels, this.graphicsValues['pixelate']);
-                pixels = transform_clone(pixels, this.graphicsValues['clone']);
-                // pixels = transform_color(pixels, this.graphicsValues['color']);
-                // pixels = transform_fisheye(pixels, this.graphicsValues['fisheye']);
+                /*pixels = transform_pixelate(pixels, this.graphicsValues['pixelate']);*/
+                pixels = transform_duplicate(pixels, this.graphicsValues['duplicate']);
+                /*pixels = transform_color(pixels, this.graphicsValues['color']);*/
+                /*pixels = transform_fisheye(pixels, this.graphicsValues['fisheye']);*/
                 pixels = transform_confetti(pixels, this.graphicsValues['confetti']);
+                //... and so on
 
 
             //the last object will have all the transformations done on it
@@ -4702,8 +4491,6 @@ StageMorph.prototype.blockTemplates = function (category) {
             txt.setColor(this.paletteTextColor);
             blocks.push(txt);
             blocks.push('-');
-            blocks.push(block('reportCostumes'));
-            blocks.push('-');
             blocks.push(block('log'));
             blocks.push(block('alert'));
         }
@@ -4724,20 +4511,6 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('doSetTempo'));
         blocks.push(watcherToggle('getTempo'));
         blocks.push(block('getTempo'));
-
-    // for debugging: ///////////////
-
-        if (this.world().isDevMode) {
-            blocks.push('-');
-            txt = new TextMorph(localize(
-                'development mode \ndebugging primitives:'
-            ));
-            txt.fontSize = 9;
-            txt.setColor(this.paletteTextColor);
-            blocks.push(txt);
-            blocks.push('-');
-            blocks.push(block('reportSounds'));
-        }
 
     } else if (cat === 'pen') {
 
@@ -5195,9 +4968,6 @@ StageMorph.prototype.doWearPreviousCostume
 StageMorph.prototype.doSwitchToCostume
     = SpriteMorph.prototype.doSwitchToCostume;
 
-StageMorph.prototype.reportCostumes
-    = SpriteMorph.prototype.reportCostumes;
-
 // StageMorph graphic effects
 
 StageMorph.prototype.setEffect
@@ -5238,9 +5008,6 @@ StageMorph.prototype.resumeAllActiveSounds = function () {
         audio.play();
     });
 };
-
-StageMorph.prototype.reportSounds
-    = SpriteMorph.prototype.reportSounds;
 
 // StageMorph non-variable watchers
 
@@ -5364,12 +5131,6 @@ SpriteBubbleMorph.prototype.dataAsMorph = function (data) {
         );
     } else if (typeof data === 'boolean') {
         img = sprite.booleanMorph(data).fullImage();
-        contents = new Morph();
-        contents.silentSetWidth(img.width);
-        contents.silentSetHeight(img.height);
-        contents.image = img;
-    } else if (data instanceof Costume) {
-        img = data.thumbnail(new Point(40, 40));
         contents = new Morph();
         contents.silentSetWidth(img.width);
         contents.silentSetHeight(img.height);
@@ -6204,12 +5965,6 @@ CellMorph.prototype.drawNew = function () {
             this.contentsMorph.silentSetWidth(img.width);
             this.contentsMorph.silentSetHeight(img.height);
             this.contentsMorph.image = img;
-        } else if (this.contents instanceof Costume) {
-            img = this.contents.thumbnail(new Point(40, 40));
-            this.contentsMorph = new Morph();
-            this.contentsMorph.silentSetWidth(img.width);
-            this.contentsMorph.silentSetHeight(img.height);
-            this.contentsMorph.image = img;
         } else if (this.contents instanceof List) {
             if (this.isCircular()) {
                 this.contentsMorph = new TextMorph(
@@ -6743,17 +6498,7 @@ WatcherMorph.prototype.userMenu = function () {
                 inp.addEventListener(
                     "change",
                     function () {
-                        var file;
-
-                        function txtOnlyMsg(ftype) {
-                            ide.inform(
-                                'Unable to import',
-                                'Snap! can only import "text" files.\n' +
-                                    'You selected a file of type "' +
-                                    ftype +
-                                    '".'
-                            );
-                        }
+                        var file, i;
 
                         function readText(aFile) {
                             var frd = new FileReader();
@@ -6763,19 +6508,18 @@ WatcherMorph.prototype.userMenu = function () {
                                     e.target.result
                                 );
                             };
-
-                            if (aFile.type.indexOf("text") === 0) {
-                                frd.readAsText(aFile);
-                            } else {
-                                txtOnlyMsg(aFile.type);
-                            }
+                            frd.readAsText(aFile);
                         }
 
                         document.body.removeChild(inp);
                         ide.filePicker = null;
                         if (inp.files.length > 0) {
-                            file = inp.files[inp.files.length - 1];
-                            readText(file);
+                            for (i = 0; i < inp.files.length; i += 1) {
+                                file = inp.files[i];
+                                if (file.type.indexOf("text") === 0) {
+                                    readText(file);
+                                }
+                            }
                         }
                     },
                     false
@@ -6791,7 +6535,7 @@ WatcherMorph.prototype.userMenu = function () {
                 'export...',
                 function () {
                     window.open(
-                        'data:text/plain;charset=utf-8,' +
+                        'data:text/plain,' +
                             encodeURIComponent(this.currentValue.toString())
                     );
                 }
