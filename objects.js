@@ -1956,7 +1956,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
 
         blocks.push('-');
 
-        varNames = this.variables.allNames();
+        varNames = this.variables.localNames();
         if (varNames.length > 0) {
             varNames.forEach(function (name) {
                 blocks.push(variableWatcherToggle(name));
@@ -1964,6 +1964,15 @@ SpriteMorph.prototype.blockTemplates = function (category) {
             });
             blocks.push('-');
         }
+        varNames = this.variables.globalNames();
+        if (varNames.length > 0) {
+            varNames.forEach(function (name) {
+                blocks.push(variableWatcherToggle(name));
+                blocks.push(variableBlock(name));
+            });
+            blocks.push('-');
+        }
+        varnames = this.variables.allNames();
 
         blocks.push(block('doSetVar'));
         blocks.push(block('doChangeVar'));
@@ -4837,7 +4846,7 @@ StageMorph.prototype.blockTemplates = function (category) {
 
         blocks.push('-');
 
-        varNames = this.variables.allNames();
+        varNames = this.variables.localNames();
         if (varNames.length > 0) {
             varNames.forEach(function (name) {
                 blocks.push(variableWatcherToggle(name));
@@ -4845,7 +4854,16 @@ StageMorph.prototype.blockTemplates = function (category) {
             });
             blocks.push('-');
         }
-
+        varNames = this.variables.globalNames();
+        if (varNames.length > 0) {
+            varNames.forEach(function (name) {
+                blocks.push(variableWatcherToggle(name));
+                blocks.push(variableBlock(name));
+            });
+            blocks.push('-');
+        }
+        varnames = this.variables.allNames();
+        
         blocks.push(block('doSetVar'));
         blocks.push(block('doChangeVar'));
         blocks.push(block('doShowVar'));
