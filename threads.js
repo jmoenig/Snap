@@ -83,7 +83,7 @@ ArgLabelMorph, localize, XML_Element, hex_sha512*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.threads = '2014-May-02';
+modules.threads = '2014-May-20';
 
 var ThreadManager;
 var Process;
@@ -3108,6 +3108,20 @@ VariableFrame.prototype.allNames = function () {
         }
     }
     return answer;
+};
+
+// Variable /////////////////////////////////////////////////////////////////
+
+function Variable(value) {
+    this.value = value;
+}
+
+Variable.prototype.toString = function () {
+    return 'a Variable [' + this.value + ']';
+};
+
+Variable.prototype.copy = function () {
+    return new Variable(this.value);
 };
 
 // UpvarReference ///////////////////////////////////////////////////////////
