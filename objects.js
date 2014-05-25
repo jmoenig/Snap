@@ -415,8 +415,6 @@ SpriteMorph.prototype.initBlocks = function () {
         },
 
         // Looks - Debugging primitives for development mode
-<<<<<<< HEAD
-=======
         reportCostumes: {
             dev: true,
             type: 'reporter',
@@ -424,7 +422,6 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: 'wardrobe'
         },
 
->>>>>>> 089d1500b41f00611603de936a65093d0dbb15ec
         alert: {
             dev: true,
             type: 'command',
@@ -484,8 +481,6 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: 'tempo'
         },
 
-<<<<<<< HEAD
-=======
         // Sound - Debugging primitives for development mode
         reportSounds: {
             dev: true,
@@ -494,7 +489,6 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: 'jukebox'
         },
 
->>>>>>> 089d1500b41f00611603de936a65093d0dbb15ec
         // Pen
         clear: {
             type: 'command',
