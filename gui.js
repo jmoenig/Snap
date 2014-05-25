@@ -68,7 +68,7 @@ sb, CommentMorph, CommandBlockMorph, BlockLabelPlaceHolderMorph, Audio*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2014-February-13';
+modules.gui = '2014-May-20';
 
 // Declarations
 
@@ -848,7 +848,7 @@ IDE_Morph.prototype.createCategories = function () {
     this.add(this.categories);
 };
 
-IDE_Morph.prototype.createPalette = function () {
+IDE_Morph.prototype.createPalette = function (forSearching) {
     // assumes that the logo pane has already been created
     // needs the categories pane for layout
     var myself = this;
@@ -857,7 +857,15 @@ IDE_Morph.prototype.createPalette = function () {
         this.palette.destroy();
     }
 
-    this.palette = this.currentSprite.palette(this.currentCategory);
+    if (forSearching) {
+        this.palette = new ScrollFrameMorph(
+            null,
+            null,
+            this.currentSprite.sliderColor
+        );
+    } else {
+        this.palette = this.currentSprite.palette(this.currentCategory);
+    }
     this.palette.isDraggable = false;
     this.palette.acceptsDrops = true;
     this.palette.contents.acceptsDrops = false;
@@ -882,6 +890,7 @@ IDE_Morph.prototype.createPalette = function () {
     this.add(this.palette);
     this.palette.scrollX(this.palette.padding);
     this.palette.scrollY(this.palette.padding);
+    return this.palette;
 };
 
 IDE_Morph.prototype.createStage = function () {
@@ -2273,23 +2282,7 @@ IDE_Morph.prototype.projectMenu = function () {
         }
     );
     menu.addItem('Open...', 'openProjectsBrowser');
-    menu.addItem(
-        'Save',
-        function () {
-            if (myself.source === 'examples') {
-                myself.source = 'local'; // cannot save to examples
-            }
-            if (myself.projectName) {
-                if (myself.source === 'local') { // as well as 'examples'
-                    myself.saveProject(myself.projectName);
-                } else { // 'cloud'
-                    myself.saveProjectToCloud(myself.projectName);
-                }
-            } else {
-                myself.saveProjectsBrowser();
-            }
-        }
-    );
+    menu.addItem('Save', "save");
     if (shiftClicked) {
         menu.addItem(
             'Save to disk',
@@ -2719,6 +2712,22 @@ IDE_Morph.prototype.newProject = function () {
     this.selectSprite(this.stage.children[0]);
     this.fixLayout();
 };
+
+IDE_Morph.prototype.save = function () {
+    if (this.source === 'examples') {
+        this.source = 'local'; // cannot save to examples
+    }
+    if (this.projectName) {
+        if (this.source === 'local') { // as well as 'examples'
+            this.saveProject(this.projectName);
+        } else { // 'cloud'
+            this.saveProjectToCloud(this.projectName);
+        }
+    } else {
+        this.saveProjectsBrowser();
+    }
+};
+
 
 IDE_Morph.prototype.saveProject = function (name) {
     var myself = this;
