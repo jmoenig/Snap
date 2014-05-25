@@ -3138,7 +3138,7 @@ VariableFrame.prototype.globalNames = function() {
   return this.getNames("global");
 };
 
-VariableFrames.prototype.localNames = function() {
+VariableFrame.prototype.localNames = function() {
   return this.getNames("local");
 };
 
