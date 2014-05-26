@@ -2133,3 +2133,7 @@ ______
 * Threads: new Variable data structure, for refactoring upvar references, not yet used anywhere
 * Objects, GUI: Search Blocks, feature. Thanks, Kyle, for architecting and designing this!!!
 * Objects, GUI: Keyboard-shortcuts for opening (cmd-o), saving (cmd-s) projects and for finding blocks (cmd-f)
+
+140526
+------
+* Objects: Fixed #445 (minor search + zoom issues)

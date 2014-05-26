@@ -124,7 +124,7 @@ PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.objects = '2014-May-20';
+modules.objects = '2014-May-26';
 
 var SpriteMorph;
 var StageMorph;
@@ -2348,13 +2348,11 @@ SpriteMorph.prototype.searchBlocks = function () {
     }
 
     searchPane.owner = this;
-    searchPane.padding = unit / 2;
     searchPane.color = myself.paletteColor;
     searchPane.contents.color = myself.paletteColor;
-    searchPane.growth = new Point(0, MorphicPreferences.scrollBarSize);
     searchPane.addContents(searchBar);
     searchBar.drawNew();
-    searchBar.setWidth(ide.logo.width() - 20);
+    searchBar.setWidth(ide.logo.width() - 30);
     searchBar.contrast = 90;
     searchBar.setPosition(
         searchPane.contents.topLeft().add(new Point(10, 10))
