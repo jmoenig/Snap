@@ -186,7 +186,6 @@ SpriteMorph.prototype.sliderColor
 SpriteMorph.prototype.isCachingPrimitives = true;
 
 SpriteMorph.prototype.enableNesting = true;
-SpriteMorph.prototype.useFlatLineEnds = false;
 SpriteMorph.prototype.highlightColor = new Color(250, 200, 130);
 SpriteMorph.prototype.highlightBorder = 8;
 
@@ -866,11 +865,6 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'sensing',
             spec: 'set turbo mode to %b'
         },
-        reportDate: {
-            type: 'reporter',
-            category: 'sensing',
-            spec: 'current %dates'
-        },
 
         // Operators
         reifyScript: {
@@ -1297,6 +1291,21 @@ SpriteMorph.prototype.init = function (globals) {
     this.isDraggable = true;
     this.isDown = false;
 
+    this.graphicsValues = { 'color': 0, 
+                            'fisheye': 0, 
+                            'whirl': 0, 
+                            'pixelate': 0, 
+                            'mosaic': 0, 
+                            'brightness': 0,
+                            'negative' : 0,
+                            'comic' : 0,
+                            'duplicate' : 0,
+                            'confetti' : 0
+                         }
+
+
+    this.graphicsChanged = false;
+
     this.heading = 90;
     this.changed();
     this.drawNew();
@@ -1420,6 +1429,9 @@ SpriteMorph.prototype.drawNew = function () {
         ctx.translate(shift.x, shift.y);
         ctx.rotate(radians(facing - 90));
         ctx.drawImage(pic.contents, 0, 0);
+
+        // apply graphics effects to image
+        this.image = this.applyGraphicsEffects(this.image);
 
         // adjust my position to the rotation
         this.setCenter(currentCenter, true); // just me
@@ -1685,8 +1697,6 @@ SpriteMorph.prototype.blockTemplates = function (category) {
             txt.setColor(this.paletteTextColor);
             blocks.push(txt);
             blocks.push('-');
-            blocks.push(block('reportCostumes'));
-            blocks.push('-');
             blocks.push(block('log'));
             blocks.push(block('alert'));
         }
@@ -1707,20 +1717,6 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('doSetTempo'));
         blocks.push(watcherToggle('getTempo'));
         blocks.push(block('getTempo'));
-
-    // for debugging: ///////////////
-
-        if (this.world().isDevMode) {
-            blocks.push('-');
-            txt = new TextMorph(localize(
-                'development mode \ndebugging primitives:'
-            ));
-            txt.fontSize = 9;
-            txt.setColor(this.paletteTextColor);
-            blocks.push(txt);
-            blocks.push('-');
-            blocks.push(block('reportSounds'));
-        }
 
     } else if (cat === 'pen') {
 
@@ -1826,8 +1822,6 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push('-');
         blocks.push(block('reportIsFastTracking'));
         blocks.push(block('doSetFastTracking'));
-        blocks.push('-');
-        blocks.push(block('reportDate'));
 
     // for debugging: ///////////////
 
@@ -2475,11 +2469,6 @@ SpriteMorph.prototype.doWearPreviousCostume = function () {
 };
 
 SpriteMorph.prototype.doSwitchToCostume = function (id) {
-    if (id instanceof Costume) { // allow first-class costumes
-        this.wearCostume(id);
-        return;
-    }
-
     var num,
         arr = this.costumes.asArray(),
         costume;
@@ -2510,10 +2499,6 @@ SpriteMorph.prototype.doSwitchToCostume = function (id) {
     this.wearCostume(costume);
 };
 
-SpriteMorph.prototype.reportCostumes = function () {
-    return this.costumes;
-};
-
 // SpriteMorph sound management
 
 SpriteMorph.prototype.addSound = function (audio, name) {
@@ -2537,10 +2522,6 @@ SpriteMorph.prototype.playSound = function (name) {
         }
         return active;
     }
-};
-
-SpriteMorph.prototype.reportSounds = function () {
-    return this.sounds;
 };
 
 // SpriteMorph user menu
@@ -2833,26 +2814,159 @@ SpriteMorph.prototype.changeScale = function (delta) {
 
 // SpriteMorph graphic effects
 
+
+
+SpriteMorph.prototype.applyGraphicsEffects = function (canvas) {
+
+    // for every effect:
+    // apply transform of that effect(canvas, stored value)
+ 
+function transform_negative(p, value) { 
+    if (value !== 0) {
+        for (i = 0; i < p.length; i = i + 4) {
+            var rcom = 255 - p[i+0]
+            var gcom = 255 - p[i+1]
+            var bcom = 255 - p[i+2] 
+
+            if (p[i+0] < rcom) { //check if current number less than the complement. if so, then
+                p[i+0] = p[i+0] + value
+               
+            } else  if (p[i+0] > rcom){ 
+                p[i+0] = p[i+0] - value //or else decrease towards it
+
+            }
+            if (p[i+1] < gcom) {
+                p[i+1] = p[i+1] + value  
+               
+            } else if (p[i+1] > gcom) {
+               p[i+1] = p[i+1] - value  
+            }
+            if (p[i+2] < bcom) {
+               p[i+2] = p[i+2] + value 
+               
+            } else if (p[i+2] > bcom) {
+                p[i+2] = p[i+2] - value
+           }  
+        };
+    };
+    return p;
+};
+
+function transform_brightness (p, value) {
+    if (value !== 0) {
+        for (i=0; i<p.length; i+=4) {
+              p[i+0] = p[i+0] + value; //255 = 100% of this color. 255 everything = white.  
+              p[i+1] = p[i+1] + value; //if value is negative, add more value to p. if value is positive, subtract value from p
+              p[i+2] = p[i+2] + value;
+              p[i+3] = p[i+3];
+        };
+    };
+    return p;
+};
+
+function transform_comic (p, value) {
+    if (value !== 0) {
+        for (i=0; i<p.length; i+=4) {
+                var frequency = value;
+               
+                    p[i+0] = p[i+0] + Math.sin(i*frequency) * 127 + 128
+                    p[i+1] = p[i+1] + Math.sin(i*frequency) * 127 + 128
+                    p[i+2] = p[i+2] + Math.sin(i*frequency) * 127 + 128
+                    p[i+3] = p[i+3];
+                
+        };
+    };
+    return p;  
+}; 
+
+
+function transform_duplicate (p, value){
+  if (value !== 0) {
+        for (i=0; i<p.length; i+=4) {
+              p[i+0] = p[i* value + 0]
+              p[i+1] = p[i* value + 1] 
+              p[i+2] = p[i* value + 2]
+              p[i+3] = p[i* value + 3];
+        };
+    };
+    return p;
+}; 
+
+
+
+function transform_confetti (p, value) {
+     if (value !== 0) {
+        for (i=0; i<p.length; i++) {
+              p[i] = Math.sin(value*p[i]) * 127 + p[i]
+        };
+    };
+    return p;
+}
+
+        //todo: write a bunch more transform_?? functions.
+
+        if (this.graphicsChanged) {
+            ctx = canvas.getContext("2d"); 
+            imagedata = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            pixels = imagedata.data;
+            
+
+           // for each effect, do a transform. at any given time, a sprite should wear all 7 effects
+                /*pixels = transform_whirl(pixels, this.graphicsValues['whirl']);*/
+                pixels = transform_negative(pixels, this.graphicsValues['negative']);
+                pixels = transform_brightness(pixels, this.graphicsValues['brightness']);
+                pixels = transform_comic(pixels, this.graphicsValues['comic']);
+                /*pixels = transform_pixelate(pixels, this.graphicsValues['pixelate']);*/
+                pixels = transform_duplicate(pixels, this.graphicsValues['duplicate']);
+                /*pixels = transform_color(pixels, this.graphicsValues['color']);*/
+                /*pixels = transform_fisheye(pixels, this.graphicsValues['fisheye']);*/
+                pixels = transform_confetti(pixels, this.graphicsValues['confetti']);
+                //... and so on
+
+
+            //the last object will have all the transformations done on it
+            newimagedata = ctx.createImageData(imagedata); //make new imgdata object
+            newimagedata.data.set(pixels);                  //add transformed pixels
+            ctx.putImageData(newimagedata, 0, 0);
+            this.graphicsChanged = false;
+        }
+
+    return canvas;
+
+    //for each effect, apply the transformation on the image we receive
+
+}
+
 SpriteMorph.prototype.setEffect = function (effect, value) {
     var eff = effect instanceof Array ? effect[0] : null;
     if (eff === 'ghost') {
         this.alpha = 1 - Math.min(Math.max(+value || 0, 0), 100) / 100;
-        this.changed();
+    } else {
+        this.graphicsValues[eff] = value;
     }
+    this.graphicsChanged = true;
+    this.drawNew();
+    this.changed();
 };
 
 SpriteMorph.prototype.getGhostEffect = function () {
     return (1 - this.alpha) * 100;
 };
 
+
 SpriteMorph.prototype.changeEffect = function (effect, value) {
     var eff = effect instanceof Array ? effect[0] : null;
     if (eff === 'ghost') {
         this.setEffect(effect, this.getGhostEffect() + (+value || 0));
+    } else {
+        this.setEffect(effect, this.graphicsValues[eff] + value);
     }
 };
 
 SpriteMorph.prototype.clearEffects = function () {
+    for (var effect in this.graphicsValues) {
+        this.setEffect([effect], 0);
+    };
     this.setEffect(['ghost'], 0);
 };
 
@@ -2951,13 +3065,8 @@ SpriteMorph.prototype.drawLine = function (start, dest) {
     if (this.isDown) {
         context.lineWidth = this.size;
         context.strokeStyle = this.color.toString();
-        if (this.useFlatLineEnds) {
-            context.lineCap = 'butt';
-            context.lineJoin = 'miter';
-        } else {
-            context.lineCap = 'round';
-            context.lineJoin = 'round';
-        }
+        context.lineCap = 'round';
+        context.lineJoin = 'round';
         context.beginPath();
         context.moveTo(from.x, from.y);
         context.lineTo(to.x, to.y);
@@ -4591,8 +4700,6 @@ StageMorph.prototype.blockTemplates = function (category) {
             txt.setColor(this.paletteTextColor);
             blocks.push(txt);
             blocks.push('-');
-            blocks.push(block('reportCostumes'));
-            blocks.push('-');
             blocks.push(block('log'));
             blocks.push(block('alert'));
         }
@@ -4613,20 +4720,6 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('doSetTempo'));
         blocks.push(watcherToggle('getTempo'));
         blocks.push(block('getTempo'));
-
-    // for debugging: ///////////////
-
-        if (this.world().isDevMode) {
-            blocks.push('-');
-            txt = new TextMorph(localize(
-                'development mode \ndebugging primitives:'
-            ));
-            txt.fontSize = 9;
-            txt.setColor(this.paletteTextColor);
-            blocks.push(txt);
-            blocks.push('-');
-            blocks.push(block('reportSounds'));
-        }
 
     } else if (cat === 'pen') {
 
@@ -4709,8 +4802,6 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push('-');
         blocks.push(block('reportIsFastTracking'));
         blocks.push(block('doSetFastTracking'));
-        blocks.push('-');
-        blocks.push(block('reportDate'));
 
     // for debugging: ///////////////
 
@@ -5088,9 +5179,6 @@ StageMorph.prototype.doWearPreviousCostume
 StageMorph.prototype.doSwitchToCostume
     = SpriteMorph.prototype.doSwitchToCostume;
 
-StageMorph.prototype.reportCostumes
-    = SpriteMorph.prototype.reportCostumes;
-
 // StageMorph graphic effects
 
 StageMorph.prototype.setEffect
@@ -5131,9 +5219,6 @@ StageMorph.prototype.resumeAllActiveSounds = function () {
         audio.play();
     });
 };
-
-StageMorph.prototype.reportSounds
-    = SpriteMorph.prototype.reportSounds;
 
 // StageMorph non-variable watchers
 
@@ -5257,12 +5342,6 @@ SpriteBubbleMorph.prototype.dataAsMorph = function (data) {
         );
     } else if (typeof data === 'boolean') {
         img = sprite.booleanMorph(data).fullImage();
-        contents = new Morph();
-        contents.silentSetWidth(img.width);
-        contents.silentSetHeight(img.height);
-        contents.image = img;
-    } else if (data instanceof Costume) {
-        img = data.thumbnail(new Point(40, 40));
         contents = new Morph();
         contents.silentSetWidth(img.width);
         contents.silentSetHeight(img.height);
@@ -5474,7 +5553,7 @@ Costume.prototype.shrinkWrap = function () {
 };
 
 Costume.prototype.boundingBox = function () {
-    // answer the rectangle surrounding my contents' non-transparent pixels
+    // answer the rectangle surrounding my contents' non-transparent pixels 
     var row,
         col,
         pic = this.contents,
@@ -5557,9 +5636,7 @@ Costume.prototype.flipped = function () {
     SpriteMorph's rotation style type 2
 */
     var canvas = newCanvas(this.extent()),
-        ctx = canvas.getContext('2d'),
-        flipped;
-
+        ctx = canvas.getContext('2d');
     ctx.translate(this.width(), 0);
     ctx.scale(-1, 1);
     ctx.drawImage(this.contents, 0, 0);
@@ -5582,7 +5659,7 @@ Costume.prototype.edit = function (aWorld, anIDE, isnew, oncancel, onsubmit) {
     editor.openIn(
         aWorld,
         isnew ?
-                newCanvas(StageMorph.prototype.dimensions) :
+                newCanvas(new Point(480, 360)) :
                 this.contents,
         isnew ?
                 new Point(240, 180) :
@@ -5930,21 +6007,17 @@ Note.prototype.setupContext = function () {
     if (this.audioContext) { return; }
     var AudioContext = (function () {
         // cross browser some day?
-        var ctx = window.AudioContext ||
+        return window.AudioContext ||
             window.mozAudioContext ||
             window.msAudioContext ||
             window.oAudioContext ||
             window.webkitAudioContext;
-        if (!ctx.prototype.hasOwnProperty('createGain')) {
-            ctx.prototype.createGain = ctx.prototype.createGainNode;
-        }
-        return ctx;
     }());
     if (!AudioContext) {
         throw new Error('Web Audio API is not supported\nin this browser');
     }
     Note.prototype.audioContext = new AudioContext();
-    Note.prototype.gainNode = Note.prototype.audioContext.createGain();
+    Note.prototype.gainNode = Note.prototype.audioContext.createGainNode();
     Note.prototype.gainNode.gain.value = 0.25; // reduce volume by 1/4
 };
 
@@ -5952,23 +6025,17 @@ Note.prototype.setupContext = function () {
 
 Note.prototype.play = function () {
     this.oscillator = this.audioContext.createOscillator();
-    if (!this.oscillator.start) {
-        this.oscillator.start = this.oscillator.noteOn;
-    }
-    if (!this.oscillator.stop) {
-        this.oscillator.stop = this.oscillator.noteOff;
-    }
     this.oscillator.type = 0;
     this.oscillator.frequency.value =
         Math.pow(2, (this.pitch - 69) / 12) * 440;
     this.oscillator.connect(this.gainNode);
     this.gainNode.connect(this.audioContext.destination);
-    this.oscillator.start(0);
+    this.oscillator.noteOn(0); // deprecated, renamed to start()
 };
 
 Note.prototype.stop = function () {
     if (this.oscillator) {
-        this.oscillator.stop(0);
+        this.oscillator.noteOff(0); // deprecated, renamed to stop()
         this.oscillator = null;
     }
 };
@@ -6105,12 +6172,6 @@ CellMorph.prototype.drawNew = function () {
             this.contentsMorph.image = this.contents;
         } else if (this.contents instanceof Context) {
             img = this.contents.image();
-            this.contentsMorph = new Morph();
-            this.contentsMorph.silentSetWidth(img.width);
-            this.contentsMorph.silentSetHeight(img.height);
-            this.contentsMorph.image = img;
-        } else if (this.contents instanceof Costume) {
-            img = this.contents.thumbnail(new Point(40, 40));
             this.contentsMorph = new Morph();
             this.contentsMorph.silentSetWidth(img.width);
             this.contentsMorph.silentSetHeight(img.height);
@@ -6648,17 +6709,7 @@ WatcherMorph.prototype.userMenu = function () {
                 inp.addEventListener(
                     "change",
                     function () {
-                        var file;
-
-                        function txtOnlyMsg(ftype) {
-                            ide.inform(
-                                'Unable to import',
-                                'Snap! can only import "text" files.\n' +
-                                    'You selected a file of type "' +
-                                    ftype +
-                                    '".'
-                            );
-                        }
+                        var file, i;
 
                         function readText(aFile) {
                             var frd = new FileReader();
@@ -6668,19 +6719,18 @@ WatcherMorph.prototype.userMenu = function () {
                                     e.target.result
                                 );
                             };
-
-                            if (aFile.type.indexOf("text") === 0) {
-                                frd.readAsText(aFile);
-                            } else {
-                                txtOnlyMsg(aFile.type);
-                            }
+                            frd.readAsText(aFile);
                         }
 
                         document.body.removeChild(inp);
                         ide.filePicker = null;
                         if (inp.files.length > 0) {
-                            file = inp.files[inp.files.length - 1];
-                            readText(file);
+                            for (i = 0; i < inp.files.length; i += 1) {
+                                file = inp.files[i];
+                                if (file.type.indexOf("text") === 0) {
+                                    readText(file);
+                                }
+                            }
                         }
                     },
                     false
@@ -6696,7 +6746,7 @@ WatcherMorph.prototype.userMenu = function () {
                 'export...',
                 function () {
                     window.open(
-                        'data:text/plain;charset=utf-8,' +
+                        'data:text/plain,' +
                             encodeURIComponent(this.currentValue.toString())
                     );
                 }
@@ -6851,7 +6901,7 @@ StagePrompterMorph.prototype.init = function (question) {
     if (this.label) {this.add(this.label); }
     this.add(this.inputField);
     this.add(this.button);
-    this.setWidth(StageMorph.prototype.dimensions.x - 20);
+    this.setWidth(480 - 20);
     this.fixLayout();
 };
 
