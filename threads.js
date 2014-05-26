@@ -3080,7 +3080,7 @@ VariableFrame.prototype.getNamesDict = function(dict, scope) {
     var current = this;
     
     if (scope == "global") {
-      current = this.parentFrame;
+        current = this.parentFrame;
     }
     
     function addKeysToDict(srcDict, trgtDict) {
