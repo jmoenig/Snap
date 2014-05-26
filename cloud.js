@@ -27,9 +27,10 @@
 
 // Global settings /////////////////////////////////////////////////////
 
-/*global modules, IDE_Morph, SnapSerializer, hex_sha512, alert, nop*/
+/*global modules, IDE_Morph, SnapSerializer, hex_sha512, alert, nop,
+localize*/
 
-modules.cloud = '2014-January-09';
+modules.cloud = '2014-May-26';
 
 // Global stuff
 
