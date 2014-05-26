@@ -2137,3 +2137,4 @@ ______
 140526
 ------
 * Objects: Fixed #445 (minor search + zoom issues)
+* Localization additions and Portuguese translation update, thanks, Manuel!
