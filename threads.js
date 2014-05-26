@@ -3097,11 +3097,11 @@ VariableFrame.prototype.getNamesDict = function(dict, scope) {
 };
 
 VariableFrame.prototype.localNamesDict = function() {
-  return this.getNamesDict({}, "local");
+    return this.getNamesDict({}, "local");
 };
 
 VariableFrame.prototype.globalNamesDict = function() {
-  return this.getNamesDict({}, "global");
+    return this.getNamesDict({}, "global");
 }
 
 VariableFrame.prototype.allNamesDict = function () {
@@ -3131,15 +3131,15 @@ VariableFrame.prototype.getNames = function (scope) {
 };
 
 VariableFrame.prototype.allNames = function() {
-  return this.getNames("all");
+    return this.getNames("all");
 };
 
 VariableFrame.prototype.globalNames = function() {
-  return this.getNames("global");
+    return this.getNames("global");
 };
 
 VariableFrame.prototype.localNames = function() {
-  return this.getNames("local");
+    return this.getNames("local");
 };
 
 // Variable /////////////////////////////////////////////////////////////////
