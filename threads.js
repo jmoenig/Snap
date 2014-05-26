@@ -3117,9 +3117,9 @@ VariableFrame.prototype.getNames = function (scope) {
     var answer = [], each, dict = this.allNamesDict();
     
     if (scope == "local") {
-      dict = this.localNamesDict();
+        dict = this.localNamesDict();
     } else if (scope == "global") {
-      dict = this.globalNamesDict();
+        dict = this.globalNamesDict();
     }
     
     for (each in dict) {
