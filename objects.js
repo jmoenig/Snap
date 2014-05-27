@@ -1297,6 +1297,19 @@ SpriteMorph.prototype.init = function (globals) {
     this.isDraggable = true;
     this.isDown = false;
 
+    this.graphicsValues = { 'color': 0,  //dictionary of all the orignal values
+                            'fisheye': 0, 
+                            'whirl': 0, 
+                            'pixelate': 0, 
+                            'mosaic': 0, 
+                            'brightness': 0,
+                            'negative': 0,
+                            'comic': 0,
+                            'duplicate': 0,
+                            'confetti': 0
+                         };
+    this.graphicsChanged = false; 
+
     this.heading = 90;
     this.changed();
     this.drawNew();
@@ -1421,6 +1434,9 @@ SpriteMorph.prototype.drawNew = function () {
         ctx.rotate(radians(facing - 90));
         ctx.drawImage(pic.contents, 0, 0);
 
+        // apply graphics effects to image
+        this.image = this.applyGraphicsEffects(this.image);
+
         // adjust my position to the rotation
         this.setCenter(currentCenter, true); // just me
 
@@ -1443,6 +1459,7 @@ SpriteMorph.prototype.drawNew = function () {
         this.setCenter(currentCenter, true); // just me
         SpriteMorph.uber.drawNew.call(this, facing);
         this.rotationOffset = this.extent().divideBy(2);
+        this.image = this.applyGraphicsEffects(this.image);
         if (isLoadingCostume) { // retry until costume is done loading
             cst = this.costume;
             handle = setInterval(
@@ -2833,12 +2850,118 @@ SpriteMorph.prototype.changeScale = function (delta) {
 
 // SpriteMorph graphic effects
 
+SpriteMorph.prototype.applyGraphicsEffects = function (canvas) {
+// For every effect: apply transform of that effect(canvas, stored value)
+// The future: write more effects here
+
+    function transform_negative(p, value) {
+        if (value !== 0) {
+            for (i = 0; i < p.length; i = i + 4) {
+                var rcom = 255 - p[i + 0]
+                var gcom = 255 - p[i + 1]
+                var bcom = 255 - p[i + 2]
+
+                if (p[i + 0] < rcom) { //check if current number less than the complement. if so, then
+                    p[i + 0] = p[i + 0] + value
+                } else if (p[i + 0] > rcom) { 
+                    p[i + 0] = p[i + 0] - value //or else decrease towards it
+                }
+                if (p[i + 1] < gcom) {
+                    p[i + 1] = p[i + 1] + value 
+                } else if (p[i + 1] > gcom) {
+                   p[i + 1] = p[i + 1] - value  
+                }
+                if (p[i + 2] < bcom) {
+                    p[i + 2] = p[i + 2] + value 
+                } else if (p[i + 2] > bcom) {
+                    p[i + 2] = p[i + 2] - value
+                };  
+            };
+        };
+        return p;
+    };
+
+    function transform_brightness(p, value) {
+        if (value !== 0) {
+            for (i = 0; i < p.length; i += 4) {
+                p[i+0] = p[i+0] + value; //255 = 100% of this color. 255 everything = white.  
+                p[i+1] = p[i+1] + value; //if value is negative, add more value to p. if value is positive, subtract value from p
+                p[i+2] = p[i+2] + value;
+                p[i+3] = p[i+3];
+            };
+        };
+        return p;
+    };
+
+    function transform_comic(p, value) {
+        if (value !== 0) {
+            for (i = 0; i < p.length; i += 4) {
+                var frequency = value;
+                p[i + 0] = p[i + 0] + Math.sin(i * frequency) * 127 + 128
+                p[i + 1] = p[i + 1] + Math.sin(i * frequency) * 127 + 128
+                p[i + 2] = p[i + 2] + Math.sin(i * frequency) * 127 + 128
+                p[i + 3] = p[i + 3];
+            };
+        };
+        return p;  
+    }; 
+
+    function transform_duplicate(p, value) {
+        if (value !== 0) {
+            for (i = 0; i < p.length; i += 4) {
+                p[i + 0] = p[i * value + 0]
+                p[i + 1] = p[i * value + 1] 
+                p[i + 2] = p[i * value + 2]
+                p[i + 3] = p[i * value + 3];
+            };
+        };
+        return p;
+    }; 
+
+    function transform_confetti(p, value) {
+        if (value !== 0) {
+            for (i = 0; i < p.length; i++) {
+                p[i] = Math.sin(value * p[i]) * 127 + p[i]
+            };
+        };
+        return p;
+    };
+
+    if (this.graphicsChanged) { 
+        ctx = canvas.getContext("2d"); 
+        imagedata = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        pixels = imagedata.data;
+
+        // for each effect, do a transform. at any given time, a sprite should wear all 7 effects
+        /*pixels = transform_whirl(pixels, this.graphicsValues['whirl']);*/
+        pixels = transform_negative(pixels, this.graphicsValues['negative']);
+        pixels = transform_brightness(pixels, this.graphicsValues['brightness']);
+        pixels = transform_comic(pixels, this.graphicsValues['comic']);
+        /*pixels = transform_pixelate(pixels, this.graphicsValues['pixelate']);*/
+        pixels = transform_duplicate(pixels, this.graphicsValues['duplicate']);
+        /*pixels = transform_color(pixels, this.graphicsValues['color']);*/
+        /*pixels = transform_fisheye(pixels, this.graphicsValues['fisheye']);*/
+        pixels = transform_confetti(pixels, this.graphicsValues['confetti']);
+         
+        //the last object will have all the transformations done on it
+        newimagedata = ctx.createImageData(imagedata); //make new imgdata object
+        newimagedata.data.set(pixels);                  //add transformed pixels
+        ctx.putImageData(newimagedata, 0, 0);
+    };
+
+    return canvas; //for each effect, apply the transformation on the image we receive 
+};
+
 SpriteMorph.prototype.setEffect = function (effect, value) {
     var eff = effect instanceof Array ? effect[0] : null;
     if (eff === 'ghost') {
         this.alpha = 1 - Math.min(Math.max(+value || 0, 0), 100) / 100;
-        this.changed();
-    }
+    } else {
+        this.graphicsValues[eff] = value;
+    };
+    this.graphicsChanged = true;
+    this.drawNew();
+    this.changed();
 };
 
 SpriteMorph.prototype.getGhostEffect = function () {
@@ -2848,11 +2971,16 @@ SpriteMorph.prototype.getGhostEffect = function () {
 SpriteMorph.prototype.changeEffect = function (effect, value) {
     var eff = effect instanceof Array ? effect[0] : null;
     if (eff === 'ghost') {
-        this.setEffect(effect, this.getGhostEffect() + (+value || 0));
-    }
+        this.setEffect(effect, this.getGhostEffect() + (+value || 0)); //special for ghost because its value is the alpha value
+    } else {
+        this.setEffect(effect, this.graphicsValues[eff] + value);
+    };
 };
 
 SpriteMorph.prototype.clearEffects = function () {
+    for (var effect in this.graphicsValues) {
+        this.setEffect([effect], 0);
+    };
     this.setEffect(['ghost'], 0);
 };
 
