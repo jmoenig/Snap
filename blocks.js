@@ -913,8 +913,7 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             part = new InputSlotMorph(
                 null,
                 false,
-                {
-                    brightness : ['brightness'],
+                {   brightness : ['brightness'],
                     ghost : ['ghost'],
                     negative : ['negative'],
                     comic: ['comic'],
