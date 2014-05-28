@@ -1292,23 +1292,22 @@ SpriteMorph.prototype.init = function (globals) {
     this.idx = 0; // not to be serialized (!) - used for de-serialization
     this.wasWarped = false; // not to be serialized, used for fast-tracking
 
-    SpriteMorph.uber.init.call(this);
-
-    this.isDraggable = true;
-    this.isDown = false;
-
-    this.graphicsValues = { 'color': 0,  //dictionary of all the orignal values
+    this.graphicsValues = { 'negative': 0,  //dictionary of all the orignal values
                             'fisheye': 0, 
                             'whirl': 0, 
                             'pixelate': 0, 
                             'mosaic': 0, 
                             'brightness': 0,
-                            'negative': 0,
+                            'color': 0,
                             'comic': 0,
                             'duplicate': 0,
                             'confetti': 0
                          };
-    this.graphicsChanged = false; 
+
+    SpriteMorph.uber.init.call(this);
+
+    this.isDraggable = true;
+    this.isDown = false;
 
     this.heading = 90;
     this.changed();
@@ -2848,7 +2847,16 @@ SpriteMorph.prototype.changeScale = function (delta) {
     this.setScale(this.getScale() + (+delta || 0));
 };
 
-// SpriteMorph graphic effects
+//spritemorph graphics effects
+
+SpriteMorph.prototype.graphicsChanged = function () {
+    var myself = this;
+    return Object.keys(this.graphicsValues).some(
+        function(any) {
+            return myself.graphicsValues[any] < 0 || myself.graphicsValues[any] > 0;
+        }
+    );
+};
 
 SpriteMorph.prototype.applyGraphicsEffects = function (canvas) {
 // For every effect: apply transform of that effect(canvas, stored value)
@@ -2927,7 +2935,7 @@ SpriteMorph.prototype.applyGraphicsEffects = function (canvas) {
         return p;
     };
 
-    if (this.graphicsChanged) { 
+    if (this.graphicsChanged()) { //operates image pixel manipulation if graphicschanged = true.
         ctx = canvas.getContext("2d"); 
         imagedata = ctx.getImageData(0, 0, canvas.width, canvas.height);
         pixels = imagedata.data;
@@ -2957,9 +2965,8 @@ SpriteMorph.prototype.setEffect = function (effect, value) {
     if (eff === 'ghost') {
         this.alpha = 1 - Math.min(Math.max(+value || 0, 0), 100) / 100;
     } else {
-        this.graphicsValues[eff] = value;
+        this.graphicsValues[eff] = value; //changes the value of the dictionary
     };
-    this.graphicsChanged = true;
     this.drawNew();
     this.changed();
 };
@@ -4134,6 +4141,18 @@ StageMorph.prototype.init = function (globals) {
     this.trailsCanvas = null;
     this.isThreadSafe = false;
 
+    this.graphicsValues = { 'negative': 0,  //dictionary of all the orignal values
+                            'fisheye': 0, 
+                            'whirl': 0, 
+                            'pixelate': 0, 
+                            'mosaic': 0, 
+                            'brightness': 0,
+                            'color': 0,
+                            'comic': 0,
+                            'duplicate': 0,
+                            'confetti': 0
+                         };
+
     StageMorph.uber.init.call(this);
 
     this.acceptsDrops = false;
@@ -4189,8 +4208,8 @@ StageMorph.prototype.setScale = function (number) {
 
 StageMorph.prototype.drawNew = function () {
     var ctx;
-    StageMorph.uber.drawNew.call(this);
-    if (this.costume) {
+    StageMorph.uber.drawNew.call(this); //call drawNew from framemorph
+    if (this.costume) { //if it's wearing a costume
         ctx = this.image.getContext('2d');
         ctx.scale(this.scale, this.scale);
         ctx.drawImage(
