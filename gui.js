@@ -327,6 +327,25 @@ IDE_Morph.prototype.openIn = function (world) {
             },
             myself.cloudError());
     }
+  
+    if(config.demo !== undefined) {
+
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", config.demo.project_url, true);
+        xhr.responseType = "arraybuffer";
+        xhr.onload = function () {
+          if(this.status === 200) {
+            var blob = this.response;
+            var zip = new JSZip(blob, {base64: false})
+            var demo = zip.file("stage.xml");
+            if(demo != null) {
+              myself.openProjectString(demo.asText());
+            }
+         }
+      }
+      xhr.send()
+    }
+ 
 
     function interpretUrlAnchors() {
         var dict;
@@ -4533,9 +4552,9 @@ ProjectDialogMorph.prototype.getExamplesProjectList = function () {
 		};
 		projects.push(dta);
 	}
-    projects.sort(function (x, y) {
+    /*projects.sort(function (x, y) {
         return x.name < y.name ? -1 : 1;
-    });
+    });*/
     return projects;
 };
 
@@ -4609,21 +4628,26 @@ ProjectDialogMorph.prototype.clearDetails = function () {
 
 ProjectDialogMorph.prototype.openProject = function () {
     var proj = this.listField.selected,
-        src;
+        src,
+        demoId;
     if (!proj) {return; }
     this.ide.source = this.source;
     if (this.source === 'cloud') {
         this.openCloudProject(proj);
     } else if (this.source === 'examples') {
-		var request = new XMLHttpRequest();
-		request.open("GET", config.urls.demos_url, false);
-		request.send();
-		var JSON_object = JSON.parse(request.responseText);
-		for (var i = 0; i < JSON_object.length; i++){
-				if(JSON_object[i]["name"] === proj.name){
-					src = this.ide.getURL(JSON_object[i]["project_url"]);
-				}
-		}
+		    var request = new XMLHttpRequest();
+		    request.open("GET", config.urls.demos_url, false);
+        request.send();
+        var JSON_object = JSON.parse(request.responseText);
+        for (var i = 0; i < JSON_object.length; i++){
+            if(JSON_object[i]["name"] === proj.name){
+              demoId = JSON_object[i]["id"];
+              src = this.ide.getURL(JSON_object[i]["project_url"]);
+            }
+        }
+        if(config.urls.demo_detail_url) {
+          SnapCloud.updateURL(config.urls.demo_detail_url + demoId);
+        }
         this.ide.openProjectString(src);
         this.destroy();
     } else { // 'local'
