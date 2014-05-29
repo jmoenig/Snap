@@ -2847,7 +2847,7 @@ SpriteMorph.prototype.changeScale = function (delta) {
     this.setScale(this.getScale() + (+delta || 0));
 };
 
-//spritemorph graphics effects
+// Spritemorph graphics effects
 
 SpriteMorph.prototype.graphicsChanged = function () {
     var myself = this;
@@ -4209,13 +4209,13 @@ StageMorph.prototype.setScale = function (number) {
 StageMorph.prototype.drawNew = function () {
     var ctx;
     StageMorph.uber.drawNew.call(this);
-    if (this.costume) { //if wearing a costume    
+    if (this.costume) {     
         ctx = this.image.getContext('2d');
         ctx.scale(this.scale, this.scale);
-        ctx.drawImage( //drawimage on this new 2d canvas with these inputs: image, x and y
-            this.costume.contents, //this is the image
-            (this.width() / this.scale - this.costume.width()) / 2, //width = canvas wdith - costume width/2
-            (this.height() / this.scale - this.costume.height()) / 2 //this is the y
+        ctx.drawImage( 
+            this.costume.contents, 
+            (this.width() / this.scale - this.costume.width()) / 2,
+            (this.height() / this.scale - this.costume.height()) / 2 
         );
         this.image = this.applyGraphicsEffects(this.image) //apply graphics effects to this image. 
     }
