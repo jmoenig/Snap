@@ -1431,7 +1431,7 @@ SpriteMorph.prototype.drawNew = function () {
         ctx.scale(this.scale * stageScale, this.scale * stageScale);
         ctx.translate(shift.x, shift.y);
         ctx.rotate(radians(facing - 90));
-        ctx.drawImage(pic.contents, 0, 0);
+        ctx.drawImage(pic.contents, 0, 0); 
 
         // apply graphics effects to image
         this.image = this.applyGraphicsEffects(this.image);
@@ -2978,7 +2978,7 @@ SpriteMorph.prototype.getGhostEffect = function () {
 SpriteMorph.prototype.changeEffect = function (effect, value) {
     var eff = effect instanceof Array ? effect[0] : null;
     if (eff === 'ghost') {
-        this.setEffect(effect, this.getGhostEffect() + (+value || 0)); //special for ghost because its value is the alpha value
+        this.setEffect(effect, this.getGhostEffect() + (+value || 0)); //special for ghost because of alpha value
     } else {
         this.setEffect(effect, this.graphicsValues[eff] + value);
     };
@@ -4141,7 +4141,7 @@ StageMorph.prototype.init = function (globals) {
     this.trailsCanvas = null;
     this.isThreadSafe = false;
 
-    this.graphicsValues = { 'negative': 0,  //dictionary of all the orignal values
+    this.graphicsValues = { 'negative': 0,  //dictionary of all the original values
                             'fisheye': 0, 
                             'whirl': 0, 
                             'pixelate': 0, 
@@ -4208,15 +4208,16 @@ StageMorph.prototype.setScale = function (number) {
 
 StageMorph.prototype.drawNew = function () {
     var ctx;
-    StageMorph.uber.drawNew.call(this); //call drawNew from framemorph
-    if (this.costume) { //if it's wearing a costume
+    StageMorph.uber.drawNew.call(this);
+    if (this.costume) { //if wearing a costume    
         ctx = this.image.getContext('2d');
         ctx.scale(this.scale, this.scale);
-        ctx.drawImage(
-            this.costume.contents,
-            (this.width() / this.scale - this.costume.width()) / 2,
-            (this.height() / this.scale - this.costume.height()) / 2
+        ctx.drawImage( //drawimage on this new 2d canvas with these inputs: image, x and y
+            this.costume.contents, //this is the image
+            (this.width() / this.scale - this.costume.width()) / 2, //width = canvas wdith - costume width/2
+            (this.height() / this.scale - this.costume.height()) / 2 //this is the y
         );
+        this.image = this.applyGraphicsEffects(this.image) //apply graphics effects to this image. 
     }
 };
 
@@ -5239,6 +5240,12 @@ StageMorph.prototype.reportCostumes
     = SpriteMorph.prototype.reportCostumes;
 
 // StageMorph graphic effects
+
+StageMorph.prototype.graphicsChanged
+    = SpriteMorph.prototype.graphicsChanged;
+
+StageMorph.prototype.applyGraphicsEffects
+    = SpriteMorph.prototype.applyGraphicsEffects;
 
 StageMorph.prototype.setEffect
     = SpriteMorph.prototype.setEffect;
