@@ -4858,11 +4858,8 @@ StageMorph.prototype.deleteVariable = SpriteMorph.prototype.deleteVariable;
 StageMorph.prototype.doScreenshot
     = SpriteMorph.prototype.doScreenshot;
 
-StageMorph.prototype.newCostumeNameCached
-    = SpriteMorph.prototype.newCostumeNameCached;
-
-StageMorph.prototype.newCostumeNameFn
-    = SpriteMorph.prototype.newCostumeNameFn;
+StageMorph.prototype.newCostumeName
+    = SpriteMorph.prototype.newCostumeName;
 
 StageMorph.prototype.blockForSelector
     = SpriteMorph.prototype.blockForSelector;
