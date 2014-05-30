@@ -3706,18 +3706,8 @@ SpriteMorph.prototype.reactToDropOf = function (morph, hand) {
     morph.slideBackTo(hand.grabOrigin);
 };
 
-SpriteMorph.prototype.newCostumeNameCached = function (data) {
-    if (this.screenshotNames.hasOwnProperty(data)) { // Screenshot naming
-        this.screenshotNames[data] += 1;
-        data += '(' + this.screenshotNames[data] + ')';
-    } else {
-        this.screenshotNames[data] = 0;
-    }
-    return data;
-};
-
-var re = /\((\d+)\)$/;
-SpriteMorph.prototype.newCostumeNameFn = function (name) {
+var re = /\((\d+)\)$/; // RegExp to match costume names
+SpriteMorph.prototype.newCostumeName = function (name) {
   var foundSameName = false,
       foundIndex = false,
       lastIndex = 0;
@@ -3741,7 +3731,7 @@ SpriteMorph.prototype.newCostumeNameFn = function (name) {
       lastIndex += 1;
       return name + '(' + lastIndex + ')'; // New index with a +1
     }
-    return name + '(1)'; // No indexing has started so start it off with a (1)
+    return name + '(2)'; // No indexing has started so start it off with a (1)
   }
   return name;
 };
@@ -3750,7 +3740,7 @@ SpriteMorph.prototype.doScreenshot = function (imgSource, data) {
     var canvas,
         stage = this.parentThatIsA(StageMorph),
         costume;
-    data = this.newCostumeNameFn(data);
+    data = this.newCostumeName(data);
     //data = this.newCostumeNameCached(data); // Uncomment to profile
     if (imgSource[0] === "pen trails") {
         canvas = stage.trailsCanvas;
