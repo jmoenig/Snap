@@ -3741,7 +3741,9 @@ SpriteMorph.prototype.doScreenshot = function (imgSource, data) {
         stage = this.parentThatIsA(StageMorph),
         costume;
     data = this.newCostumeName(data);
-    //data = this.newCostumeNameCached(data); // Uncomment to profile
+    if (imgSource[0] === undefined) {
+        return;
+    }
     if (imgSource[0] === "pen trails") {
         canvas = stage.trailsCanvas;
         costume = new Costume(canvas, data).copy(); // Copy is required to prevent mutation
