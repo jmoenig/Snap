@@ -3707,13 +3707,13 @@ SpriteMorph.prototype.reactToDropOf = function (morph, hand) {
 };
 
 SpriteMorph.prototype.newCostumeNameCached = function (data) {
-  if (this.screenshotNames.hasOwnProperty(data)) { // Screenshot naming
-      this.screenshotNames[data] += 1;
-      data += '(' + this.screenshotNames[data] + ')';
-  } else {
-      this.screenshotNames[data] = 0;
-  }
-  return data;
+    if (this.screenshotNames.hasOwnProperty(data)) { // Screenshot naming
+        this.screenshotNames[data] += 1;
+        data += '(' + this.screenshotNames[data] + ')';
+    } else {
+        this.screenshotNames[data] = 0;
+    }
+    return data;
 };
 
 var re = /\((\d+)\)$/;
