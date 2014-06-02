@@ -918,8 +918,8 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                     negative : ['negative'],
                     comic: ['comic'],
                     duplicate: ['duplicate'],
-                    confetti: ['confetti'],
-                },
+                    confetti: ['confetti']
+                    },
                 true
             );
             part.setContents(['ghost']);
