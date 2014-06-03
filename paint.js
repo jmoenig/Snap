@@ -53,6 +53,7 @@
     Jan 08 - mouse leave dragging fix (Kartik)
     Feb 11 - dynamically adjust to stage dimensions (Jens)
     Apr 30 - localizations (Manuel)
+    June 3 - transformations (Kartik)
 
  */
 
@@ -66,7 +67,7 @@
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.paint = '2014-May-02';
+modules.paint = '2014-June-3';
 
 // Declarations
 
@@ -233,11 +234,11 @@ PaintEditorMorph.prototype.buildScaleBox = function () {
         function () {paper.scale(-0.05, -0.05); }
     ));
     this.scaleBox.add(this.pushButton(
-        "flipX",
+        "flip ↔",
         function () {paper.scale(-2, 0); }
     ));
     this.scaleBox.add(this.pushButton(
-        "flipY",
+        "flip ↕",
         function () {paper.scale(0, -2); }
     ));
     this.scaleBox.fixLayout();
