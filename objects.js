@@ -4550,7 +4550,7 @@ StageMorph.prototype.processKeyEvent = function (event, action) {
     default:
         keyName = String.fromCharCode(event.keyCode || event.charCode);
         if (event.ctrlKey || event.metaKey) {
-            keyName = 'ctrl ' + keyName;
+            keyName = 'ctrl ' + (event.shiftKey ? 'shift ' : '') + keyName;
         }
     }
     action.call(this, keyName);
@@ -4574,6 +4574,9 @@ StageMorph.prototype.fireKeyEvent = function (key) {
     }
     if (evt === 'ctrl s') {
         return this.parentThatIsA(IDE_Morph).save();
+    }
+    if (evt === 'ctrl shift s') {
+        return this.parentThatIsA(IDE_Morph).saveProjectsBrowser();
     }
     if (evt === 'esc') {
         return this.fireStopAllEvent();
