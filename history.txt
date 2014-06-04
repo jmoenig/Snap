@@ -2145,3 +2145,6 @@ ______
 * Blocks: refactor “script pics” feature
 * BYOB: new scriptsPicture() method for custom block definitions
 * GUI: new (hidden) feature: “Export all scripts as pic” (including custom block refs)
+* Graphic effects!!! Yay, thanks, Yuan!
+* Bug fixes from Nathan, yay, thank, Nathan!!
+* German translation update

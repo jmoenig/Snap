@@ -61,6 +61,7 @@
     sound handling
     Achal Dave contributed research and prototyping for creating music
     using the Web Audio API
+    Yuan Yuan contributed graphic effects for costumes
 
 */
 
@@ -124,7 +125,7 @@ PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.objects = '2014-May-26';
+modules.objects = '2014-Jun-04';
 
 var SpriteMorph;
 var StageMorph;
