@@ -1122,8 +1122,16 @@ SnapTranslator.dict.pt = {
         'vazio',
 
     // efeitos gráficos
+    'brightness':
+        'brilho',
     'ghost':
         'fantasma',
+    'negative':
+        'negativo',
+    'comic':
+        'ondeado',
+    'confetti':
+        'cor',
 
     // teclas
     'space':
@@ -1270,6 +1278,18 @@ SnapTranslator.dict.pt = {
         'um item ao acaso',
 
     // em falta no ficheiro lang-de.js
+    'grow':
+        'aumentar',
+    'shrink':
+        'reduzir',
+    'flip ↔':
+        'inverter ↔',
+    'flip ↕':
+        'inverter ↕',
+    'Export all scripts as pic...':
+        'Exportar todos os guiões como fotografia…',
+    'show a picture of all scripts\nand block definitions':
+        'Mostra uma imagem com todos\nos guiões e definições de blocos',
     'current %dates':
         '%dates corrente',
     'year':
