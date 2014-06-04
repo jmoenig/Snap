@@ -54,6 +54,7 @@
     Feb 11 - dynamically adjust to stage dimensions (Jens)
     Apr 30 - localizations (Manuel)
     June 3 - transformations (Kartik)
+    June 4 - tweaks (Jens)
 
  */
 
@@ -67,7 +68,7 @@
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.paint = '2014-June-3';
+modules.paint = '2014-June-4';
 
 // Declarations
 
@@ -112,10 +113,10 @@ PaintEditorMorph.prototype.buildContents = function () {
     this.paper.setExtent(StageMorph.prototype.dimensions);
 
     this.addBody(new AlignmentMorph('row', this.padding));
-    this.controls = new AlignmentMorph('column', this.padding);
+    this.controls = new AlignmentMorph('column', this.padding / 2);
     this.controls.alignment = 'left';
 
-    this.edits = new AlignmentMorph('row', this.padding);
+    this.edits = new AlignmentMorph('row', this.padding / 2);
     this.buildEdits();
     this.controls.add(this.edits);
 
@@ -134,7 +135,7 @@ PaintEditorMorph.prototype.buildContents = function () {
     this.buildToolbox();
     this.controls.add(this.toolbox);
 
-    this.scaleBox = new AlignmentMorph('row', this.padding);
+    this.scaleBox = new AlignmentMorph('row', this.padding / 2);
     this.buildScaleBox();
     this.controls.add(this.scaleBox);
 
@@ -584,13 +585,20 @@ PaintCanvasMorph.prototype.init = function (shift) {
     this.buildContents();
 };
 
-PaintCanvasMorph.prototype.scale = function(x, y) {
+PaintCanvasMorph.prototype.scale = function (x, y) {
     this.mask = newCanvas(this.extent());
     var c = newCanvas(this.extent());
     c.getContext("2d").save();
-    c.getContext("2d").translate(this.rotationCenter.x, this.rotationCenter.y);
+    c.getContext("2d").translate(
+        this.rotationCenter.x,
+        this.rotationCenter.y
+    );
     c.getContext("2d").scale(1 + x, 1 + y);
-    c.getContext("2d").drawImage(this.paper, -this.rotationCenter.x, -this.rotationCenter.y);
+    c.getContext("2d").drawImage(
+        this.paper,
+        -this.rotationCenter.x,
+        -this.rotationCenter.y
+    );
     c.getContext("2d").restore();
     this.paper = c;
     this.drawNew();
