@@ -69,7 +69,7 @@ SpeechBubbleMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2014-May-26';
+modules.gui = '2014-Jun-04';
 
 // Declarations
 
@@ -2350,6 +2350,15 @@ IDE_Morph.prototype.projectMenu = function () {
         'show global custom block definitions as XML\nin a new browser window'
     );
 
+    if (shiftClicked) {
+        menu.addItem(
+            'Export all scripts as pic...',
+            function () {myself.exportScriptsPicture(); },
+            'show a picture of all scripts\nand block definitions',
+            new Color(100, 0, 0)
+        );
+    }
+
     menu.addLine();
     menu.addItem(
         'Import tools',
@@ -2845,6 +2854,56 @@ IDE_Morph.prototype.exportSprite = function (sprite) {
         + '">'
         + str
         + '</sprites>');
+};
+
+IDE_Morph.prototype.exportScriptsPicture = function () {
+    var pics = [],
+        pic,
+        padding = 20,
+        w = 0,
+        h = 0,
+        y = 0,
+        ctx;
+
+    // collect all script pics
+    this.sprites.asArray().forEach(function (sprite) {
+        pics.push(sprite.image);
+        pics.push(sprite.scripts.scriptsPicture());
+        sprite.customBlocks.forEach(function (def) {
+            pics.push(def.scriptsPicture());
+        });
+    });
+    pics.push(this.stage.image);
+    pics.push(this.stage.scripts.scriptsPicture());
+    this.stage.customBlocks.forEach(function (def) {
+        pics.push(def.scriptsPicture());
+    });
+
+    // collect global block pics
+    this.stage.globalBlocks.forEach(function (def) {
+        pics.push(def.scriptsPicture());
+    });
+
+    pics = pics.filter(function (each) {return !isNil(each); });
+
+    // determine dimensions of composite
+    pics.forEach(function (each) {
+        w = Math.max(w, each.width);
+        h += (each.height);
+        h += padding;
+    });
+    h -= padding;
+    pic = newCanvas(new Point(w, h));
+    ctx = pic.getContext('2d');
+
+    // draw all parts
+    pics.forEach(function (each) {
+        ctx.drawImage(each, 0, y);
+        y += padding;
+        y += each.height;
+    });
+
+    window.open(pic.toDataURL());
 };
 
 IDE_Morph.prototype.openProjectString = function (str) {
