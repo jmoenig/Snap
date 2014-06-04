@@ -155,7 +155,7 @@ DialogBoxMorph, BlockInputFragmentMorph, PrototypeHatBlockMorph, Costume*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2014-May-02';
+modules.blocks = '2014-June-04';
 
 
 var SyntaxElementMorph;
@@ -4957,6 +4957,14 @@ ScriptsMorph.prototype.cleanUp = function () {
 };
 
 ScriptsMorph.prototype.exportScriptsPicture = function () {
+    var pic = this.scriptsPicture();
+    if (pic) {
+        window.open(pic.toDataURL());
+    }
+};
+
+ScriptsMorph.prototype.scriptsPicture = function () {
+    // private - answer a canvas containing the pictures of all scripts
     var boundingBox, pic, ctx;
     if (this.children.length === 0) {return; }
     boundingBox = this.children[0].fullBounds();
@@ -4977,7 +4985,7 @@ ScriptsMorph.prototype.exportScriptsPicture = function () {
             );
         }
     });
-    window.open(pic.toDataURL());
+    return pic;
 };
 
 ScriptsMorph.prototype.addComment = function () {
