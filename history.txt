@@ -2139,3 +2139,9 @@ ______
 * Objects: Fixed #445 (minor search + zoom issues)
 * Localization additions and Portuguese translation update, thanks, Manuel!
 * GUI, cloud: Show last-changed-timestamp when opening cloud projects
+
+140604
+------
+* Blocks: refactor “script pics” feature
+* BYOB: new scriptsPicture() method for custom block definitions
+* GUI: new (hidden) feature: “Export all scripts as pic” (including custom block refs)
