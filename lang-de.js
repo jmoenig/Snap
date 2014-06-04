@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org', // optional
     'last_changed':
-        '2014-02-13', // this, too, will appear in the Translators tab
+        '2014-06-04', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -1122,8 +1122,16 @@ SnapTranslator.dict.de = {
         'Leer',
 
     // graphical effects
+    'brightness':
+        'Helligeit',
     'ghost':
         'Durchsichtigkeit',
+    'negative':
+        'Farbumkehr',
+    'comic':
+        'Moire',
+    'confetti':
+        'Farbverschiebung',
 
     // keys
     'space':
