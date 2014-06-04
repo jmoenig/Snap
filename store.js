@@ -1032,7 +1032,7 @@ SnapSerializer.prototype.loadInput = function (model, input, block) {
         input.setColor(this.loadColor(model.contents));
     } else {
         val = this.loadValue(model);
-        if (val) {
+        if (val !== undefined && val !== null && input.setContents) {
             input.setContents(this.loadValue(model));
         }
     }
