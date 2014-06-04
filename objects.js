@@ -1292,6 +1292,18 @@ SpriteMorph.prototype.init = function (globals) {
     this.idx = 0; // not to be serialized (!) - used for de-serialization
     this.wasWarped = false; // not to be serialized, used for fast-tracking
 
+    this.graphicsValues = { 'negative': 0,
+                            'fisheye': 0,
+                            'whirl': 0,
+                            'pixelate': 0,
+                            'mosaic': 0,
+                            'brightness': 0,
+                            'color': 0,
+                            'comic': 0,
+                            'duplicate': 0,
+                            'confetti': 0
+                         };
+
     SpriteMorph.uber.init.call(this);
 
     this.isDraggable = true;
@@ -1421,6 +1433,9 @@ SpriteMorph.prototype.drawNew = function () {
         ctx.rotate(radians(facing - 90));
         ctx.drawImage(pic.contents, 0, 0);
 
+        // apply graphics effects to image
+        this.image = this.applyGraphicsEffects(this.image);
+
         // adjust my position to the rotation
         this.setCenter(currentCenter, true); // just me
 
@@ -1443,6 +1458,7 @@ SpriteMorph.prototype.drawNew = function () {
         this.setCenter(currentCenter, true); // just me
         SpriteMorph.uber.drawNew.call(this, facing);
         this.rotationOffset = this.extent().divideBy(2);
+        this.image = this.applyGraphicsEffects(this.image);
         if (isLoadingCostume) { // retry until costume is done loading
             cst = this.costume;
             handle = setInterval(
@@ -2831,14 +2847,132 @@ SpriteMorph.prototype.changeScale = function (delta) {
     this.setScale(this.getScale() + (+delta || 0));
 };
 
-// SpriteMorph graphic effects
+// Spritemorph graphic effects
+
+SpriteMorph.prototype.graphicsChanged = function () {
+    var myself = this;
+    return Object.keys(this.graphicsValues).some(
+        function (any) {
+            return myself.graphicsValues[any] < 0 ||
+                    myself.graphicsValues[any] > 0;
+        }
+    );
+};
+
+SpriteMorph.prototype.applyGraphicsEffects = function (canvas) {
+// For every effect: apply transform of that effect(canvas, stored value)
+// The future: write more effects here
+    var ctx, imagedata, pixels, newimagedata;
+
+    function transform_negative(p, value) {
+        var i, rcom, gcom, bcom;
+        if (value !== 0) {
+            for (i = 0; i < p.length; i += 4) {
+                rcom = 255 - p[i];
+                gcom = 255 - p[i + 1];
+                bcom = 255 - p[i + 2];
+
+                if (p[i] < rcom) { //compare to the complement
+                    p[i] += value;
+                } else if (p[i] > rcom) {
+                    p[i] -= value;
+                }
+                if (p[i + 1] < gcom) {
+                    p[i + 1] += value;
+                } else if (p[i + 1] > gcom) {
+                    p[i + 1] -= value;
+                }
+                if (p[i + 2] < bcom) {
+                    p[i + 2] += value;
+                } else if (p[i + 2] > bcom) {
+                    p[i + 2] -= value;
+                }
+            }
+        }
+        return p;
+    }
+
+    function transform_brightness(p, value) {
+        var i;
+        if (value !== 0) {
+            for (i = 0; i < p.length; i += 4) {
+                p[i] += value; //255 = 100% of this color 
+                p[i + 1] += value;
+                p[i + 2] += value;
+            }
+        }
+        return p;
+    }
+
+    function transform_comic(p, value) {
+        var i;
+        if (value !== 0) {
+            for (i = 0; i < p.length; i += 4) {
+                p[i] += Math.sin(i * value) * 127 + 128;
+                p[i + 1] += Math.sin(i * value) * 127 + 128;
+                p[i + 2] += Math.sin(i * value) * 127 + 128;
+            }
+        }
+        return p;
+    }
+
+    function transform_duplicate(p, value) {
+        var i;
+        if (value !== 0) {
+            for (i = 0; i < p.length; i += 4) {
+                p[i] = p[i * value];
+                p[i + 1] = p[i * value + 1];
+                p[i + 2] = p[i * value + 2];
+                p[i + 3] = p[i * value + 3];
+            }
+        }
+        return p;
+    }
+
+    function transform_confetti(p, value) {
+        var i;
+        if (value !== 0) {
+            for (i = 0; i < p.length; i += 1) {
+                p[i] = Math.sin(value * p[i]) * 127 + p[i];
+            }
+        }
+        return p;
+    }
+
+    if (this.graphicsChanged()) {
+        ctx = canvas.getContext("2d");
+        imagedata = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        pixels = imagedata.data;
+
+        //A sprite should wear all 7 effects at once
+        /*pixels = transform_whirl(pixels, this.graphicsValues.whirl);*/
+        pixels = transform_negative(pixels, this.graphicsValues.negative);
+        pixels = transform_brightness(pixels, this.graphicsValues.brightness);
+        pixels = transform_comic(pixels, this.graphicsValues.comic);
+        /*pixels = transform_pixelate(pixels, this.graphicsValues.pixelate);*/
+        pixels = transform_duplicate(pixels, this.graphicsValues.duplicate);
+        /*pixels = transform_color(pixels, this.graphicsValues.color);*/
+        /*pixels = transform_fisheye(pixels, this.graphicsValues.fisheye);*/
+        pixels = transform_confetti(pixels, this.graphicsValues.confetti);
+
+        //the last object will have all the transformations done on it
+        newimagedata = ctx.createImageData(imagedata); //make imgdata object
+        newimagedata.data.set(pixels); //add transformed pixels
+        ctx.putImageData(newimagedata, 0, 0);
+    }
+
+    return canvas;
+};
 
 SpriteMorph.prototype.setEffect = function (effect, value) {
     var eff = effect instanceof Array ? effect[0] : null;
     if (eff === 'ghost') {
         this.alpha = 1 - Math.min(Math.max(+value || 0, 0), 100) / 100;
-        this.changed();
+    } else {
+        this.graphicsValues[eff] = value;
     }
+    this.drawNew();
+    this.changed();
 };
 
 SpriteMorph.prototype.getGhostEffect = function () {
@@ -2849,10 +2983,18 @@ SpriteMorph.prototype.changeEffect = function (effect, value) {
     var eff = effect instanceof Array ? effect[0] : null;
     if (eff === 'ghost') {
         this.setEffect(effect, this.getGhostEffect() + (+value || 0));
+    } else {
+        this.setEffect(effect, this.graphicsValues[eff] + value);
     }
 };
 
 SpriteMorph.prototype.clearEffects = function () {
+    var effect;
+    for (effect in this.graphicsValues) {
+        if (this.graphicsValues.hasOwnProperty(effect)) {
+            this.setEffect([effect], 0);
+        }
+    }
     this.setEffect(['ghost'], 0);
 };
 
@@ -4006,6 +4148,18 @@ StageMorph.prototype.init = function (globals) {
     this.trailsCanvas = null;
     this.isThreadSafe = false;
 
+    this.graphicsValues = { 'negative': 0,
+                            'fisheye': 0,
+                            'whirl': 0,
+                            'pixelate': 0,
+                            'mosaic': 0,
+                            'brightness': 0,
+                            'color': 0,
+                            'comic': 0,
+                            'duplicate': 0,
+                            'confetti': 0
+                        };
+
     StageMorph.uber.init.call(this);
 
     this.acceptsDrops = false;
@@ -4070,6 +4224,7 @@ StageMorph.prototype.drawNew = function () {
             (this.width() / this.scale - this.costume.width()) / 2,
             (this.height() / this.scale - this.costume.height()) / 2
         );
+        this.image = this.applyGraphicsEffects(this.image);
     }
 };
 
@@ -5092,6 +5247,12 @@ StageMorph.prototype.reportCostumes
     = SpriteMorph.prototype.reportCostumes;
 
 // StageMorph graphic effects
+
+StageMorph.prototype.graphicsChanged
+    = SpriteMorph.prototype.graphicsChanged;
+
+StageMorph.prototype.applyGraphicsEffects
+    = SpriteMorph.prototype.applyGraphicsEffects;
 
 StageMorph.prototype.setEffect
     = SpriteMorph.prototype.setEffect;
