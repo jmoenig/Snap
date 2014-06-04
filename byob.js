@@ -106,7 +106,7 @@ SymbolMorph, isNil*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2014-May-02';
+modules.byob = '2014-Jun-04';
 
 // Declarations
 
@@ -334,6 +334,43 @@ CustomBlockDefinition.prototype.parseSpec = function (spec) {
     }
     parts.push(word);
     return parts;
+};
+
+// CustomBlockDefinition picturing
+
+CustomBlockDefinition.prototype.scriptsPicture = function () {
+    var scripts, proto, block, comment;
+
+    scripts = new ScriptsMorph();
+    scripts.cleanUpMargin = 10;
+    proto = new PrototypeHatBlockMorph(this);
+    proto.setPosition(scripts.position().add(10));
+    if (this.comment !== null) {
+        comment = this.comment.fullCopy();
+        proto.comment = comment;
+        comment.block = proto;
+    }
+    if (this.body !== null) {
+        proto.nextBlock(this.body.expression.fullCopy());
+    }
+    scripts.add(proto);
+    proto.fixBlockColor(null, true);
+    this.scripts.forEach(function (element) {
+        block = element.fullCopy();
+        block.setPosition(scripts.position().add(element.position()));
+        scripts.add(block);
+        if (block instanceof BlockMorph) {
+            block.allComments().forEach(function (comment) {
+                comment.align(block);
+            });
+        }
+    });
+    proto.allComments().forEach(function (comment) {
+        comment.align(proto);
+    });
+    proto.children[0].fixLayout();
+    scripts.fixMultiArgs();
+    return scripts.scriptsPicture();
 };
 
 // CustomCommandBlockMorph /////////////////////////////////////////////
