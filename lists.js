@@ -305,7 +305,7 @@ List.prototype.equalTo = function (other) {
     if (this.length() !== other.length()) {
         return false;
     }
-    for (i = 0; i < this.length(); i += 1) {
+    for (i = 1; i <= this.length(); i += 1) {
         if (!snapEquals(this.at(i), other.at(i))) {
             return false;
         }
