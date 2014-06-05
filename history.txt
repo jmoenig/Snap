@@ -2154,3 +2154,4 @@ ______
 ------
 * Objects: stop replacing the empty string with the number zero in watchers
 * Threads: initialize new variables with zero (instead of null)
+* Objects: fixed #465

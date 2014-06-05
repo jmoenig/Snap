@@ -3204,11 +3204,12 @@ SpriteMorph.prototype.forward = function (steps) {
 SpriteMorph.prototype.setHeading = function (degrees) {
     var x = this.xPosition(),
         y = this.yPosition(),
-        turn = degrees - this.heading;
+        dir = (+degrees || 90),
+        turn = dir - this.heading;
 
     // apply to myself
     this.changed();
-    SpriteMorph.uber.setHeading.call(this, degrees);
+    SpriteMorph.uber.setHeading.call(this, dir);
     this.silentGotoXY(x, y, true); // just me
     this.positionTalkBubble();
 
