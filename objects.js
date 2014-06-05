@@ -4144,7 +4144,7 @@ StageMorph.prototype.init = function (globals) {
     this.keysPressed = {}; // for handling keyboard events, do not persist
     this.blocksCache = {}; // not to be serialized (!)
     this.paletteCache = {}; // not to be serialized (!)
-    this.lastAnswer = null; // last user input, do not persist
+    this.lastAnswer = ''; // last user input, do not persist
     this.activeSounds = []; // do not persist
 
     this.trailsCanvas = null;
