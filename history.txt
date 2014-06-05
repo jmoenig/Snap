@@ -2149,3 +2149,7 @@ ______
 * Bug fixes from Nathan, yay, thanks, Nathan!!
 * German translation update
 * Paint Editor transforms, yay, thanks, Kartik!!
+
+140605
+------
+* Objects: stop replacing the empty string with the number zero in watchers
