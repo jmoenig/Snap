@@ -3204,7 +3204,7 @@ SpriteMorph.prototype.forward = function (steps) {
 SpriteMorph.prototype.setHeading = function (degrees) {
     var x = this.xPosition(),
         y = this.yPosition(),
-        dir = (+degrees || 90),
+        dir = (+degrees || 0),
         turn = dir - this.heading;
 
     // apply to myself
