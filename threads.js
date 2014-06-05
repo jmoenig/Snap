@@ -83,7 +83,7 @@ ArgLabelMorph, localize, XML_Element, hex_sha512*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.threads = '2014-May-20';
+modules.threads = '2014-Jun-05';
 
 var ThreadManager;
 var Process;
@@ -3054,7 +3054,7 @@ VariableFrame.prototype.getVar = function (name, upvars) {
 VariableFrame.prototype.addVar = function (name, value) {
     this.vars[name] = (value === 0 ? 0
               : value === false ? false
-                       : value === '' ? '' : value || null);
+                       : value === '' ? '' : value || 0);
 };
 
 VariableFrame.prototype.deleteVar = function (name) {
