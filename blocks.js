@@ -155,7 +155,7 @@ DialogBoxMorph, BlockInputFragmentMorph, PrototypeHatBlockMorph, Costume*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2014-June-04';
+modules.blocks = '2014-June-06';
 
 
 var SyntaxElementMorph;
@@ -2295,6 +2295,7 @@ BlockMorph.prototype.restoreInputs = function (oldInputs) {
     // try to restore my previous inputs when my spec has been changed
     var i = 0,
         old,
+        nb,
         myself = this;
 
     this.inputs().forEach(function (inp) {
@@ -2305,7 +2306,14 @@ BlockMorph.prototype.restoreInputs = function (oldInputs) {
             // original - turns empty numberslots to 0:
             // inp.setContents(old.evaluate());
             // "fix" may be wrong b/c constants
-            inp.setContents(old.contents().text);
+            if (old.contents) {
+                inp.setContents(old.contents().text);
+            }
+        } else if (old instanceof CSlotMorph && inp instanceof CSlotMorph) {
+            nb = old.nestedBlock();
+            if (nb) {
+                inp.nestedBlock(nb.fullCopy());
+            }
         }
         i += 1;
     });

@@ -1233,6 +1233,10 @@ SpriteMorph.prototype.blockAlternatives = {
     receiveClick: ['receiveGo'],
     doBroadcast: ['doBroadcastAndWait'],
     doBroadcastAndWait: ['doBroadcast'],
+    doIf: ['doIfElse', 'doUntil'],
+    doIfElse: ['doIf', 'doUntil'],
+    doRepeat: ['doUntil'],
+    doUntil: ['doRepeat', 'doIf'],
 
     // sensing:
     getLastAnswer: ['getTimer'],
