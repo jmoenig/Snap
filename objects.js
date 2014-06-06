@@ -125,7 +125,7 @@ PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.objects = '2014-Jun-05';
+modules.objects = '2014-Jun-06';
 
 var SpriteMorph;
 var StageMorph;
@@ -5189,6 +5189,23 @@ StageMorph.prototype.thumbnail = function (extentPoint, excludedSprite) {
         }
     });
     return trg;
+};
+
+// StageMorph hiding and showing:
+
+/*
+    override the inherited behavior to recursively hide/show all
+    children.
+*/
+
+StageMorph.prototype.hide = function () {
+    this.isVisible = false;
+    this.changed();
+};
+
+StageMorph.prototype.show = function () {
+    this.isVisible = true;
+    this.changed();
 };
 
 // StageMorph cloning overrice
