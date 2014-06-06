@@ -2161,3 +2161,4 @@ ______
 ------
 * Objects: gracefully hide & show the stage, fixed #281
 * Objects: add hide and show blocks to the stage’s “looks” category
+* Objects: added more relabelling options to SAY and THINK variants

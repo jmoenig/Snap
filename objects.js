@@ -1199,10 +1199,10 @@ SpriteMorph.prototype.blockAlternatives = {
     yPosition: ['xPosition'],
 
     // looks:
-    doSayFor: ['doThinkFor'],
-    doThinkFor: ['doSayFor'],
-    bubble: ['doThink'],
-    doThink: ['bubble'],
+    doSayFor: ['doThinkFor', 'bubble', 'doThink'],
+    doThinkFor: ['doSayFor', 'doThink', 'bubble'],
+    bubble: ['doThink', 'doSayFor', 'doThinkFor'],
+    doThink: ['bubble', 'doSayFor', 'doThinkFor'],
     show: ['hide'],
     hide: ['show'],
     changeEffect: ['setEffect'],
