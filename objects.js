@@ -4739,6 +4739,9 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('changeEffect'));
         blocks.push(block('setEffect'));
         blocks.push(block('clearEffects'));
+        blocks.push('-');
+        blocks.push(block('show'));
+        blocks.push(block('hide'));
 
     // for debugging: ///////////////
 
