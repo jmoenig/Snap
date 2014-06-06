@@ -106,7 +106,7 @@ SymbolMorph, isNil*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2014-Jun-04';
+modules.byob = '2014-Jun-06';
 
 // Declarations
 
@@ -745,6 +745,7 @@ CustomCommandBlockMorph.prototype.userMenu = function () {
         } else {
             menu.addLine();
         }
+
         // menu.addItem("export definition...", 'exportBlockDefinition');
         menu.addItem("delete block definition...", 'deleteBlockDefinition');
     }
@@ -844,6 +845,44 @@ CustomCommandBlockMorph.prototype.popUpbubbleHelp = function (
         null,
         1
     ).popUp(this.world(), this.rightCenter().add(new Point(-8, 0)));
+};
+
+// CustomCommandBlockMorph relabelling
+
+CustomCommandBlockMorph.prototype.relabel = function (alternatives) {
+    var menu = new MenuMorph(this),
+        oldInputs = this.inputs().map(
+            function (each) {return each.fullCopy(); }
+        ),
+        myself = this;
+    alternatives.forEach(function (def) {
+        var block = def.blockInstance();
+        block.restoreInputs(oldInputs);
+        block.fixBlockColor(null, true);
+        block.addShadow(new Point(3, 3));
+        menu.addItem(
+            block,
+            function () {
+                myself.definition = def;
+                myself.refresh();
+            }
+        );
+    });
+    menu.popup(this.world(), this.bottomLeft().subtract(new Point(
+        8,
+        this instanceof CommandBlockMorph ? this.corner : 0
+    )));
+};
+
+CustomCommandBlockMorph.prototype.alternatives = function () {
+    var rcvr = this.receiver(),
+        stage = rcvr.parentThatIsA(StageMorph),
+        allDefs = rcvr.customBlocks.concat(stage.globalBlocks),
+        myself = this;
+    return allDefs.filter(function (each) {
+        return each !== myself.definition &&
+            each.type === myself.definition.type;
+    });
 };
 
 // CustomReporterBlockMorph ////////////////////////////////////////////
@@ -960,6 +999,14 @@ CustomReporterBlockMorph.prototype.bubbleHelp
 
 CustomReporterBlockMorph.prototype.popUpbubbleHelp
     = CustomCommandBlockMorph.prototype.popUpbubbleHelp;
+
+// CustomReporterBlockMorph relabelling
+
+CustomReporterBlockMorph.prototype.relabel
+    = CustomCommandBlockMorph.prototype.relabel;
+
+CustomReporterBlockMorph.prototype.alternatives
+    = CustomCommandBlockMorph.prototype.alternatives;
 
 // JaggedBlockMorph ////////////////////////////////////////////////////
 
