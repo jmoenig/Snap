@@ -2268,6 +2268,7 @@ BlockMorph.prototype.relabel = function (alternativeSelectors) {
         menu.addItem(
             block,
             function () {
+                myself.setCategory(SpriteMorph.prototype.blocks[sel].category);
                 myself.setSelector(sel);
             }
         );

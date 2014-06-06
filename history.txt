@@ -2163,3 +2163,4 @@ ______
 * Objects: add hide and show blocks to the stage’s “looks” category
 * Objects: added more relabelling options to SAY and THINK variants
 * Blocks, objects: enable relabelling blocks with C-Slots
+* Blocks: enable relabelling blocks across categories
