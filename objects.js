@@ -1199,10 +1199,10 @@ SpriteMorph.prototype.blockAlternatives = {
     yPosition: ['xPosition'],
 
     // looks:
-    doSayFor: ['doThinkFor', 'bubble', 'doThink'],
-    doThinkFor: ['doSayFor', 'doThink', 'bubble'],
-    bubble: ['doThink', 'doSayFor', 'doThinkFor'],
-    doThink: ['bubble', 'doSayFor', 'doThinkFor'],
+    doSayFor: ['doThinkFor', 'bubble', 'doThink', 'doAsk'],
+    doThinkFor: ['doSayFor', 'doThink', 'bubble', 'doAsk'],
+    bubble: ['doThink', 'doAsk', 'doSayFor', 'doThinkFor'],
+    doThink: ['bubble', 'doAsk', 'doSayFor', 'doThinkFor'],
     show: ['hide'],
     hide: ['show'],
     changeEffect: ['setEffect'],
@@ -1239,6 +1239,7 @@ SpriteMorph.prototype.blockAlternatives = {
     doUntil: ['doRepeat', 'doIf'],
 
     // sensing:
+    doAsk: ['bubble', 'doThink', 'doSayFor', 'doThinkFor'],
     getLastAnswer: ['getTimer'],
     getTimer: ['getLastAnswer'],
     reportMouseX: ['reportMouseY'],

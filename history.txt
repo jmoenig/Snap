@@ -2164,3 +2164,4 @@ ______
 * Objects: added more relabelling options to SAY and THINK variants
 * Blocks, objects: enable relabelling blocks with C-Slots
 * Blocks: enable relabelling blocks across categories
+* Objects: more relabelling options for SAY, THINK, ASK
