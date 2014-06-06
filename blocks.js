@@ -2268,7 +2268,6 @@ BlockMorph.prototype.relabel = function (alternativeSelectors) {
         menu.addItem(
             block,
             function () {
-                myself.setCategory(SpriteMorph.prototype.blocks[sel].category);
                 myself.setSelector(sel);
             }
         );
@@ -2284,7 +2283,7 @@ BlockMorph.prototype.setSelector = function (aSelector) {
     var oldInputs = this.inputs(),
         info;
     info = SpriteMorph.prototype.blocks[aSelector];
-    this.category = info.category;
+    this.setCategory(info.category);
     this.selector = aSelector;
     this.setSpec(localize(info.spec));
     this.restoreInputs(oldInputs);
