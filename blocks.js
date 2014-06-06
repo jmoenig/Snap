@@ -2264,6 +2264,7 @@ BlockMorph.prototype.relabel = function (alternativeSelectors) {
     alternativeSelectors.forEach(function (sel) {
         var block = SpriteMorph.prototype.blockForSelector(sel);
         block.restoreInputs(oldInputs);
+        block.fixBlockColor(null, true);
         block.addShadow(new Point(3, 3));
         menu.addItem(
             block,
