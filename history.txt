@@ -2165,3 +2165,4 @@ ______
 * Blocks, objects: enable relabelling blocks with C-Slots
 * Blocks: enable relabelling blocks across categories
 * Objects: more relabelling options for SAY, THINK, ASK
+* BYOB, Blocks: relabelling custom blocks (experimental)

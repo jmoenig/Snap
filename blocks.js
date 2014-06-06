@@ -2009,6 +2009,7 @@ BlockMorph.prototype.userMenu = function () {
     var menu = new MenuMorph(this),
         world = this.world(),
         myself = this,
+        alternatives,
         blck;
 
     menu.addItem(
@@ -2066,6 +2067,14 @@ BlockMorph.prototype.userMenu = function () {
                 );
             }
         );
+    } else if (this.definition && this.alternatives) { // custom block
+        alternatives = this.alternatives();
+        if (alternatives.length > 0) {
+            menu.addItem(
+                'relabel...',
+                function () {myself.relabel(alternatives); }
+            );
+        }
     }
 
     menu.addItem(
