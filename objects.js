@@ -61,6 +61,7 @@
     sound handling
     Achal Dave contributed research and prototyping for creating music
     using the Web Audio API
+    Yuan Yuan contributed graphic effects for costumes
 
 */
 
@@ -124,7 +125,7 @@ PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.objects = '2014-May-20';
+modules.objects = '2014-Jun-06';
 
 var SpriteMorph;
 var StageMorph;
@@ -1198,10 +1199,10 @@ SpriteMorph.prototype.blockAlternatives = {
     yPosition: ['xPosition'],
 
     // looks:
-    doSayFor: ['doThinkFor'],
-    doThinkFor: ['doSayFor'],
-    bubble: ['doThink'],
-    doThink: ['bubble'],
+    doSayFor: ['doThinkFor', 'bubble', 'doThink', 'doAsk'],
+    doThinkFor: ['doSayFor', 'doThink', 'bubble', 'doAsk'],
+    bubble: ['doThink', 'doAsk', 'doSayFor', 'doThinkFor'],
+    doThink: ['bubble', 'doAsk', 'doSayFor', 'doThinkFor'],
     show: ['hide'],
     hide: ['show'],
     changeEffect: ['setEffect'],
@@ -1232,8 +1233,13 @@ SpriteMorph.prototype.blockAlternatives = {
     receiveClick: ['receiveGo'],
     doBroadcast: ['doBroadcastAndWait'],
     doBroadcastAndWait: ['doBroadcast'],
+    doIf: ['doIfElse', 'doUntil'],
+    doIfElse: ['doIf', 'doUntil'],
+    doRepeat: ['doUntil'],
+    doUntil: ['doRepeat', 'doIf'],
 
     // sensing:
+    doAsk: ['bubble', 'doThink', 'doSayFor', 'doThinkFor'],
     getLastAnswer: ['getTimer'],
     getTimer: ['getLastAnswer'],
     reportMouseX: ['reportMouseY'],
@@ -1291,6 +1297,18 @@ SpriteMorph.prototype.init = function (globals) {
     this.rotationOffset = new Point(); // not to be serialized (!)
     this.idx = 0; // not to be serialized (!) - used for de-serialization
     this.wasWarped = false; // not to be serialized, used for fast-tracking
+
+    this.graphicsValues = { 'negative': 0,
+                            'fisheye': 0,
+                            'whirl': 0,
+                            'pixelate': 0,
+                            'mosaic': 0,
+                            'brightness': 0,
+                            'color': 0,
+                            'comic': 0,
+                            'duplicate': 0,
+                            'confetti': 0
+                         };
 
     SpriteMorph.uber.init.call(this);
 
@@ -1421,6 +1439,9 @@ SpriteMorph.prototype.drawNew = function () {
         ctx.rotate(radians(facing - 90));
         ctx.drawImage(pic.contents, 0, 0);
 
+        // apply graphics effects to image
+        this.image = this.applyGraphicsEffects(this.image);
+
         // adjust my position to the rotation
         this.setCenter(currentCenter, true); // just me
 
@@ -1443,6 +1464,7 @@ SpriteMorph.prototype.drawNew = function () {
         this.setCenter(currentCenter, true); // just me
         SpriteMorph.uber.drawNew.call(this, facing);
         this.rotationOffset = this.extent().divideBy(2);
+        this.image = this.applyGraphicsEffects(this.image);
         if (isLoadingCostume) { // retry until costume is done loading
             cst = this.costume;
             handle = setInterval(
@@ -2348,13 +2370,11 @@ SpriteMorph.prototype.searchBlocks = function () {
     }
 
     searchPane.owner = this;
-    searchPane.padding = unit / 2;
     searchPane.color = myself.paletteColor;
     searchPane.contents.color = myself.paletteColor;
-    searchPane.growth = new Point(0, MorphicPreferences.scrollBarSize);
     searchPane.addContents(searchBar);
     searchBar.drawNew();
-    searchBar.setWidth(ide.logo.width() - 20);
+    searchBar.setWidth(ide.logo.width() - 30);
     searchBar.contrast = 90;
     searchBar.setPosition(
         searchPane.contents.topLeft().add(new Point(10, 10))
@@ -2833,14 +2853,132 @@ SpriteMorph.prototype.changeScale = function (delta) {
     this.setScale(this.getScale() + (+delta || 0));
 };
 
-// SpriteMorph graphic effects
+// Spritemorph graphic effects
+
+SpriteMorph.prototype.graphicsChanged = function () {
+    var myself = this;
+    return Object.keys(this.graphicsValues).some(
+        function (any) {
+            return myself.graphicsValues[any] < 0 ||
+                    myself.graphicsValues[any] > 0;
+        }
+    );
+};
+
+SpriteMorph.prototype.applyGraphicsEffects = function (canvas) {
+// For every effect: apply transform of that effect(canvas, stored value)
+// The future: write more effects here
+    var ctx, imagedata, pixels, newimagedata;
+
+    function transform_negative(p, value) {
+        var i, rcom, gcom, bcom;
+        if (value !== 0) {
+            for (i = 0; i < p.length; i += 4) {
+                rcom = 255 - p[i];
+                gcom = 255 - p[i + 1];
+                bcom = 255 - p[i + 2];
+
+                if (p[i] < rcom) { //compare to the complement
+                    p[i] += value;
+                } else if (p[i] > rcom) {
+                    p[i] -= value;
+                }
+                if (p[i + 1] < gcom) {
+                    p[i + 1] += value;
+                } else if (p[i + 1] > gcom) {
+                    p[i + 1] -= value;
+                }
+                if (p[i + 2] < bcom) {
+                    p[i + 2] += value;
+                } else if (p[i + 2] > bcom) {
+                    p[i + 2] -= value;
+                }
+            }
+        }
+        return p;
+    }
+
+    function transform_brightness(p, value) {
+        var i;
+        if (value !== 0) {
+            for (i = 0; i < p.length; i += 4) {
+                p[i] += value; //255 = 100% of this color 
+                p[i + 1] += value;
+                p[i + 2] += value;
+            }
+        }
+        return p;
+    }
+
+    function transform_comic(p, value) {
+        var i;
+        if (value !== 0) {
+            for (i = 0; i < p.length; i += 4) {
+                p[i] += Math.sin(i * value) * 127 + 128;
+                p[i + 1] += Math.sin(i * value) * 127 + 128;
+                p[i + 2] += Math.sin(i * value) * 127 + 128;
+            }
+        }
+        return p;
+    }
+
+    function transform_duplicate(p, value) {
+        var i;
+        if (value !== 0) {
+            for (i = 0; i < p.length; i += 4) {
+                p[i] = p[i * value];
+                p[i + 1] = p[i * value + 1];
+                p[i + 2] = p[i * value + 2];
+                p[i + 3] = p[i * value + 3];
+            }
+        }
+        return p;
+    }
+
+    function transform_confetti(p, value) {
+        var i;
+        if (value !== 0) {
+            for (i = 0; i < p.length; i += 1) {
+                p[i] = Math.sin(value * p[i]) * 127 + p[i];
+            }
+        }
+        return p;
+    }
+
+    if (this.graphicsChanged()) {
+        ctx = canvas.getContext("2d");
+        imagedata = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        pixels = imagedata.data;
+
+        //A sprite should wear all 7 effects at once
+        /*pixels = transform_whirl(pixels, this.graphicsValues.whirl);*/
+        pixels = transform_negative(pixels, this.graphicsValues.negative);
+        pixels = transform_brightness(pixels, this.graphicsValues.brightness);
+        pixels = transform_comic(pixels, this.graphicsValues.comic);
+        /*pixels = transform_pixelate(pixels, this.graphicsValues.pixelate);*/
+        pixels = transform_duplicate(pixels, this.graphicsValues.duplicate);
+        /*pixels = transform_color(pixels, this.graphicsValues.color);*/
+        /*pixels = transform_fisheye(pixels, this.graphicsValues.fisheye);*/
+        pixels = transform_confetti(pixels, this.graphicsValues.confetti);
+
+        //the last object will have all the transformations done on it
+        newimagedata = ctx.createImageData(imagedata); //make imgdata object
+        newimagedata.data.set(pixels); //add transformed pixels
+        ctx.putImageData(newimagedata, 0, 0);
+    }
+
+    return canvas;
+};
 
 SpriteMorph.prototype.setEffect = function (effect, value) {
     var eff = effect instanceof Array ? effect[0] : null;
     if (eff === 'ghost') {
         this.alpha = 1 - Math.min(Math.max(+value || 0, 0), 100) / 100;
-        this.changed();
+    } else {
+        this.graphicsValues[eff] = value;
     }
+    this.drawNew();
+    this.changed();
 };
 
 SpriteMorph.prototype.getGhostEffect = function () {
@@ -2851,10 +2989,18 @@ SpriteMorph.prototype.changeEffect = function (effect, value) {
     var eff = effect instanceof Array ? effect[0] : null;
     if (eff === 'ghost') {
         this.setEffect(effect, this.getGhostEffect() + (+value || 0));
+    } else {
+        this.setEffect(effect, this.graphicsValues[eff] + value);
     }
 };
 
 SpriteMorph.prototype.clearEffects = function () {
+    var effect;
+    for (effect in this.graphicsValues) {
+        if (this.graphicsValues.hasOwnProperty(effect)) {
+            this.setEffect([effect], 0);
+        }
+    }
     this.setEffect(['ghost'], 0);
 };
 
@@ -3063,11 +3209,12 @@ SpriteMorph.prototype.forward = function (steps) {
 SpriteMorph.prototype.setHeading = function (degrees) {
     var x = this.xPosition(),
         y = this.yPosition(),
-        turn = degrees - this.heading;
+        dir = (+degrees || 0),
+        turn = dir - this.heading;
 
     // apply to myself
     this.changed();
-    SpriteMorph.uber.setHeading.call(this, degrees);
+    SpriteMorph.uber.setHeading.call(this, dir);
     this.silentGotoXY(x, y, true); // just me
     this.positionTalkBubble();
 
@@ -4002,11 +4149,23 @@ StageMorph.prototype.init = function (globals) {
     this.keysPressed = {}; // for handling keyboard events, do not persist
     this.blocksCache = {}; // not to be serialized (!)
     this.paletteCache = {}; // not to be serialized (!)
-    this.lastAnswer = null; // last user input, do not persist
+    this.lastAnswer = ''; // last user input, do not persist
     this.activeSounds = []; // do not persist
 
     this.trailsCanvas = null;
     this.isThreadSafe = false;
+
+    this.graphicsValues = { 'negative': 0,
+                            'fisheye': 0,
+                            'whirl': 0,
+                            'pixelate': 0,
+                            'mosaic': 0,
+                            'brightness': 0,
+                            'color': 0,
+                            'comic': 0,
+                            'duplicate': 0,
+                            'confetti': 0
+                        };
 
     StageMorph.uber.init.call(this);
 
@@ -4072,6 +4231,7 @@ StageMorph.prototype.drawNew = function () {
             (this.width() / this.scale - this.costume.width()) / 2,
             (this.height() / this.scale - this.costume.height()) / 2
         );
+        this.image = this.applyGraphicsEffects(this.image);
     }
 };
 
@@ -4397,7 +4557,7 @@ StageMorph.prototype.processKeyEvent = function (event, action) {
     default:
         keyName = String.fromCharCode(event.keyCode || event.charCode);
         if (event.ctrlKey || event.metaKey) {
-            keyName = 'ctrl ' + keyName;
+            keyName = 'ctrl ' + (event.shiftKey ? 'shift ' : '') + keyName;
         }
     }
     action.call(this, keyName);
@@ -4421,6 +4581,9 @@ StageMorph.prototype.fireKeyEvent = function (key) {
     }
     if (evt === 'ctrl s') {
         return this.parentThatIsA(IDE_Morph).save();
+    }
+    if (evt === 'ctrl shift s') {
+        return this.parentThatIsA(IDE_Morph).saveProjectsBrowser();
     }
     if (evt === 'esc') {
         return this.fireStopAllEvent();
@@ -4581,6 +4744,9 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('changeEffect'));
         blocks.push(block('setEffect'));
         blocks.push(block('clearEffects'));
+        blocks.push('-');
+        blocks.push(block('show'));
+        blocks.push(block('hide'));
 
     // for debugging: ///////////////
 
@@ -5033,6 +5199,23 @@ StageMorph.prototype.thumbnail = function (extentPoint, excludedSprite) {
     return trg;
 };
 
+// StageMorph hiding and showing:
+
+/*
+    override the inherited behavior to recursively hide/show all
+    children.
+*/
+
+StageMorph.prototype.hide = function () {
+    this.isVisible = false;
+    this.changed();
+};
+
+StageMorph.prototype.show = function () {
+    this.isVisible = true;
+    this.changed();
+};
+
 // StageMorph cloning overrice
 
 StageMorph.prototype.createClone = nop;
@@ -5094,6 +5277,12 @@ StageMorph.prototype.reportCostumes
     = SpriteMorph.prototype.reportCostumes;
 
 // StageMorph graphic effects
+
+StageMorph.prototype.graphicsChanged
+    = SpriteMorph.prototype.graphicsChanged;
+
+StageMorph.prototype.applyGraphicsEffects
+    = SpriteMorph.prototype.applyGraphicsEffects;
 
 StageMorph.prototype.setEffect
     = SpriteMorph.prototype.setEffect;
@@ -6428,9 +6617,11 @@ WatcherMorph.prototype.update = function () {
         } else {
             newValue = this.target[this.getter]();
         }
-        num = +newValue;
-        if (typeof newValue !== 'boolean' && !isNaN(num)) {
-            newValue = Math.round(newValue * 1000000000) / 1000000000;
+        if (newValue !== '' && !isNil(newValue)) {
+            num = +newValue;
+            if (typeof newValue !== 'boolean' && !isNaN(num)) {
+                newValue = Math.round(newValue * 1000000000) / 1000000000;
+            }
         }
         if (newValue !== this.currentValue) {
             this.changed();

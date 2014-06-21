@@ -2133,3 +2133,36 @@ ______
 * Threads: new Variable data structure, for refactoring upvar references, not yet used anywhere
 * Objects, GUI: Search Blocks, feature. Thanks, Kyle, for architecting and designing this!!!
 * Objects, GUI: Keyboard-shortcuts for opening (cmd-o), saving (cmd-s) projects and for finding blocks (cmd-f)
+
+140526
+------
+* Objects: Fixed #445 (minor search + zoom issues)
+* Localization additions and Portuguese translation update, thanks, Manuel!
+* GUI, cloud: Show last-changed-timestamp when opening cloud projects
+
+140604
+------
+* Blocks: refactor “script pics” feature
+* BYOB: new scriptsPicture() method for custom block definitions
+* GUI: new (hidden) feature: “Export all scripts as pic” (including custom block refs)
+* Graphic effects!!! Yay, thanks, Yuan!
+* Bug fixes from Nathan, yay, thanks, Nathan!!
+* German translation update
+* Paint Editor transforms, yay, thanks, Kartik!!
+
+140605
+------
+* Objects: stop replacing the empty string with the number zero in watchers
+* Threads: initialize new variables with zero (instead of null)
+* Objects: fixed #465
+* Objects: fixed #457
+
+140605
+------
+* Objects: gracefully hide & show the stage, fixed #281
+* Objects: add hide and show blocks to the stage’s “looks” category
+* Objects: added more relabelling options to SAY and THINK variants
+* Blocks, objects: enable relabelling blocks with C-Slots
+* Blocks: enable relabelling blocks across categories
+* Objects: more relabelling options for SAY, THINK, ASK
+* BYOB, Blocks: relabelling custom blocks (experimental)
