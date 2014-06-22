@@ -4836,9 +4836,13 @@ ProjectDialogMorph.prototype.shareProject = function () {
                             function () {
                                 SnapCloud.disconnect();
                                 proj.Public = 'true';
+                                myself.unshareButton.show();
+                                myself.shareButton.hide();
                                 entry.label.isBold = true;
                                 entry.label.drawNew();
                                 entry.label.changed();
+                                myself.buttons.fixLayout();
+                                myself.drawNew();
                                 myself.ide.showMessage('shared.', 2);
                             },
                             myself.ide.cloudError(),
@@ -4873,9 +4877,13 @@ ProjectDialogMorph.prototype.unshareProject = function () {
                             function () {
                                 SnapCloud.disconnect();
                                 proj.Public = 'false';
+                                myself.shareButton.show();
+                                myself.unshareButton.hide();
                                 entry.label.isBold = false;
                                 entry.label.drawNew();
                                 entry.label.changed();
+                                myself.buttons.fixLayout();
+                                myself.drawNew();
                                 myself.ide.showMessage('unshared.', 2);
                             },
                             myself.ide.cloudError(),
