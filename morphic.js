@@ -6205,7 +6205,6 @@ InspectorMorph.prototype.updateCurrentSelection = function () {
 
     if (isNil(sel)) {return; }
     val = this.target[sel];
-    if (this.currentProperty === val) {return; }
     this.currentProperty = val;
     if (isNil(val)) {
         txt = 'NULL';
@@ -6214,6 +6213,7 @@ InspectorMorph.prototype.updateCurrentSelection = function () {
     } else {
         txt = val.toString();
     }
+    if (this.detail.contents.children[0].text === txt) {return; }
     cnts = new TextMorph(txt);
     cnts.isEditable = true;
     cnts.enableSelecting();
@@ -6610,8 +6610,12 @@ InspectorMorph.prototype.removeProperty = function () {
 // InspectorMorph stepping
 
 InspectorMorph.prototype.step = function () {
-    if (!isObject(this.currentProperty)) {return; }
     this.updateCurrentSelection();
+    var lbl = this.target.toString();
+    if (this.label.text === lbl) {return; }
+    this.label.text = lbl;
+    this.label.drawNew();
+    this.fixLayout();
 };
 
 // MenuMorph ///////////////////////////////////////////////////////////
@@ -9078,6 +9082,7 @@ ListMorph.prototype.buildListContents = function () {
 };
 
 ListMorph.prototype.select = function (item, trigger) {
+    if (isNil(item)) {return; }
     this.selected = item;
     this.active = trigger;
     if (this.action) {
