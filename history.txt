@@ -2170,3 +2170,4 @@ ______
 140623
 ------
 * Morphic: Inspector enhancements (dynamic property update, keyboard shortcuts)
+* GUI: update visibility of share/unshare buttons, Thanks, Kunal!
