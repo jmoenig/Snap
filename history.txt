@@ -2166,3 +2166,7 @@ ______
 * Blocks: enable relabelling blocks across categories
 * Objects: more relabelling options for SAY, THINK, ASK
 * BYOB, Blocks: relabelling custom blocks (experimental)
+
+140623
+------
+* Morphic: Inspector enhancements (dynamic property update, keyboard shortcuts)
