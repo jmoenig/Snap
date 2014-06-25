@@ -1390,6 +1390,9 @@ IDE_Morph.prototype.fixLayout = function (situation) {
         // categories
         this.categories.setLeft(this.logo.left());
         this.categories.setTop(this.logo.bottom());
+    } else {
+        this.palette.scrollX(-1);
+        this.palette.scrollY(-5);
     }
 
     // palette
