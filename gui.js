@@ -889,8 +889,6 @@ IDE_Morph.prototype.createPalette = function (forSearching) {
 
     this.palette.setWidth(this.logo.width());
     this.add(this.palette);
-    this.palette.scrollX(this.palette.padding);
-    this.palette.scrollY(this.palette.padding);
     return this.palette;
 };
 
@@ -1390,9 +1388,6 @@ IDE_Morph.prototype.fixLayout = function (situation) {
         // categories
         this.categories.setLeft(this.logo.left());
         this.categories.setTop(this.logo.bottom());
-    } else {
-        this.palette.scrollX(-1);
-        this.palette.scrollY(-5);
     }
 
     // palette
@@ -1401,6 +1396,10 @@ IDE_Morph.prototype.fixLayout = function (situation) {
     this.palette.setHeight(this.bottom() - this.palette.top());
 
     if (situation !== 'refreshPalette') {
+        // palette
+        this.palette.scrollX(padding);
+        this.palette.scrollY(padding);
+
         // stage
         if (this.isAppMode) {
             this.stage.setScale(Math.floor(Math.min(
