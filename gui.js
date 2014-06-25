@@ -1396,10 +1396,6 @@ IDE_Morph.prototype.fixLayout = function (situation) {
     this.palette.setHeight(this.bottom() - this.palette.top());
 
     if (situation !== 'refreshPalette') {
-        // palette
-        this.palette.scrollX(padding);
-        this.palette.scrollY(padding);
-
         // stage
         if (this.isAppMode) {
             this.stage.setScale(Math.floor(Math.min(
