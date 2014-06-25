@@ -3642,9 +3642,6 @@ Morph.prototype.evaluateString = function (code) {
 // Morph collision detection:
 
 Morph.prototype.isTouching = function (otherMorph) {
-    if (otherMorph.isVisible == false) {
-        return false;
-    }
     var oImg = this.overlappingImage(otherMorph),
         data = oImg.getContext('2d')
             .getImageData(1, 1, oImg.width, oImg.height)

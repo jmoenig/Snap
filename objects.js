@@ -3370,6 +3370,15 @@ SpriteMorph.prototype.bounceOffEdge = function () {
     this.positionTalkBubble();
 };
 
+// SpriteMorph touching
+
+SpriteMorph.prototype.isTouching = function (otherMorph) {
+    if (otherMorph.isVisible === false) {
+        return false;
+    }
+    return SpriteMorph.uber.isTouching.call(this, otherMorph);
+}
+
 // SpriteMorph message broadcasting
 
 SpriteMorph.prototype.allMessageNames = function () {
