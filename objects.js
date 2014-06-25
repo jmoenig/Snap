@@ -2270,6 +2270,11 @@ SpriteMorph.prototype.freshPalette = function (category) {
         }
     });
 
+    //layout
+
+    palette.scrollX(palette.padding);
+    palette.scrollY(palette.padding);
+
     Morph.prototype.trackChanges = oldFlag;
     return palette;
 };
