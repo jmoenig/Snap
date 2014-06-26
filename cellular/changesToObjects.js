@@ -9,7 +9,7 @@ modules.cellularObjects = '2013-November-28';
 ** http://stackoverflow.com/questions/6875625/does-javascript-provide-a-high-resolution-timer
 */
 var getTimestamp;
-if (window.performance.now) {
+if (window && window.performance && window.performance.now) {
 	getTimestamp = function() { return window.performance.now(); };
 } else {
 	if (window.performance.webkitNow) {
