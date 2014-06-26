@@ -6,7 +6,7 @@
 
     written by Jens Mönig
 
-    Copyright (C) 2013 by Jens Mönig
+    Copyright (C) 2014 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org', // optional
     'last_changed':
-        '2013-05-14', // this, too, will appear in the Translators tab
+        '2014-06-04', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -447,12 +447,22 @@ SnapTranslator.dict.de = {
         'falls %b %c sonst %c',
     'report %s':
         'berichte %s',
-    'stop block':
-        'stoppe diesen Block',
-    'stop script':
-        'stoppe dieses Skript',
-    'stop all %stop':
-        'stoppe alles %stop',
+    'stop %stopChoices':
+        'stoppe %stopChoices',
+    'all':
+        'alles',
+    'this script':
+        'dieses Skript',
+    'this block':
+        'diesen Block',
+    'stop %stopOthersChoices':
+        'stoppe %stopOthersChoices',
+    'all but this script':
+        'alles au\u00dfer diesem Skript',
+    'other scripts in sprite':
+        'andere Skripte in diesem Objekt',
+    'pause all %pause':
+        'pausiere alles %pause',
     'run %cmdRing %inputs':
         'f\u00fchre %cmdRing aus %inputs',
     'launch %cmdRing %inputs':
@@ -538,6 +548,8 @@ SnapTranslator.dict.de = {
         'falsch',
     'join %words':
         'verbinde %words',
+    'split %s by %delim':
+        'trenne %s nach %delim',
     'hello':
         'Hallo',
     'world':
@@ -657,6 +669,10 @@ SnapTranslator.dict.de = {
         'Tools laden',
     'load the official library of\npowerful blocks':
         'das offizielle Modul mit\nm\u00e4chtigen Bl\u00f6cken laden',
+    'Libraries...':
+        'Module...',
+    'Import library':
+        'Modul laden',
 
     // cloud menu
     'Login...':
@@ -669,6 +685,16 @@ SnapTranslator.dict.de = {
         'Sprache...',
     'Zoom blocks...':
         'Bl\u00f6cke vergr\u00f6\u00dfern...',
+    'Stage size...':
+        'B\u00fchnengr\u00f6\u00dfe...',
+    'Stage size':
+        'B\u00fchnengr\u00f6\u00dfe',
+    'Stage width':
+        'B\u00fchnenbreite',
+    'Stage height':
+        'B\u00fchnenh\u00f6he',
+    'Default':
+        'Normal',
     'Blurred shadows':
         'Weiche Schatten',
     'uncheck to use solid drop\nshadows and highlights':
@@ -697,6 +723,12 @@ SnapTranslator.dict.de = {
             + 'zu erm\u00f6glichen',
     'Long form input dialog':
         'Ausf\u00fchrlicher Input-Dialog',
+    'Plain prototype labels':
+        'Einfache Prototyp-Beschriftung',
+    'uncheck to always show (+) symbols\nin block prototype labels':
+        'ausschalten, um (+) Zeichen\nim Blockeditor zu verbergen',
+    'check to hide (+) symbols\nin block prototype labels':
+        'einschalten, um (+) Zeichen\nim Blockeditor immer anzuzeigen',
     'check to always show slot\ntypes in the input dialog':
         'einschalten, um immer die Datentypen\nim Input-Dialog zu sehen',
     'uncheck to use the input\ndialog in short form':
@@ -745,6 +777,12 @@ SnapTranslator.dict.de = {
         'ausschalten, um Animationen \ndynamischer auszuf\u00fchren',
     'check for smooth, predictable\nanimations across computers':
         'einschalten, damit Animationen\n\u00fcberall gleich laufen',
+    'Flat line ends':
+        'Flache Pinselstriche',
+    'check for flat ends of lines':
+        'einschalten f\u00fcr flache\nPinselstrichenden',
+    'uncheck for round ends of lines':
+        'auschalten f\u00fcr runde\nPinselstrichenden',
 
     // inputs
     'with inputs':
@@ -797,6 +835,10 @@ SnapTranslator.dict.de = {
     // sprites:
     'edit':
         'Bearbeiten',
+    'detach from':
+        'Abtrennen von',
+    'detach all parts':
+        'Alle Teile abtrennen',
     'export...':
         'Exportieren...',
 
@@ -815,6 +857,10 @@ SnapTranslator.dict.de = {
         'Skripte der Reihe nach\nanordnen',
     'add comment':
         'Anmerkung hinzuf\u00fcgen',
+    'undrop':
+        'R\u00fcckg\u00e4ngig',
+    'undo the last\nblock drop\nin this pane':
+        'Setzen des letzten Blocks\nwiderrufen',
     'scripts pic...':
         'Bild aller Scripte...',
     'open a new window\nwith a picture of all scripts':
@@ -928,8 +974,6 @@ SnapTranslator.dict.de = {
         'in diesem Projekt gibt es noch keine\nglobalen Bl\u00f6cke',
     'select':
         'ausw\u00e4hlen',
-    'all':
-        'alles',
     'none':
         'nichts',
 
@@ -1078,8 +1122,16 @@ SnapTranslator.dict.de = {
         'Leer',
 
     // graphical effects
+    'brightness':
+        'Helligeit',
     'ghost':
         'Durchsichtigkeit',
+    'negative':
+        'Farbumkehr',
+    'comic':
+        'Moire',
+    'confetti':
+        'Farbverschiebung',
 
     // keys
     'space':
@@ -1172,6 +1224,8 @@ SnapTranslator.dict.de = {
     // math functions
     'abs':
         'Betrag',
+    'floor':
+        'Abgerundet',
     'sqrt':
         'Wurzel',
     'sin':
@@ -1190,6 +1244,16 @@ SnapTranslator.dict.de = {
         'ln',
     'e^':
         'e^',
+
+    // delimiters
+    'whitespace':
+        'Leerraum',
+    'line':
+        'Zeilenvorschub',
+    'tab':
+        'Tabulator',
+    'cr':
+        'Wagenr\u00fccklauf',
 
     // data types
     'number':

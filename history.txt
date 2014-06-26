@@ -1715,3 +1715,459 @@ ______
 130516
 ------
 * "flat" GUI design preference (in the settings menu)
+
+130517
+------
+* GUI: user preferences (settings) are now made persistent in localStorage
+
+130604
+------
+* Morphic: Prevent undesired native dragstart events (introduced in Chrome 27)
+
+130605
+------
+* Objects: fix for hiding 'getLastAnswer' and 'getTimer' primitives 
+
+130606
+------
+* BYOB: Newly created custom reporters now have an initial default REPORT block as definition body
+
+* Morphic: focus World canvas on mouse down (otherwise prevent default)
+
+130618
+------
+* Code mapping (generating textual code from blocks), first iteration
+
+130619
+------
+* Store: persisting code mappings in project and block library files
+
+130620
+------
+* GUI: add code mapping preference to persistent settings
+* Blocks, BYOB, Lists, Objects: "flat" design enhancements for blocks and watchers
+* Blocks: Multi-line input slots (TextSlotMorphs - %mlt)
+* Objects: doMapCode() primitive now uses a multi-line input slot
+
+130621
+------
+* Morphic, Blocks: "flat" design fix: Handle manually "unshadowed" StringMorphs
+* Objects, Blocks: %code input slot - multi-line, monospaced, type-in slot for code mappings
+
+130624
+------
+* Objects, Blocks: pretty printing for mapped code, now supporting Python mappings
+
+130625
+------
+* Widgets, Blocks: code mapping dialog input is now multi-line monospaced
+
+130626
+------
+* GUI: fixed #100 saving costumes to the cloud
+
+130627
+------
+* Objects: fixed speech bubble scaling when sprite is not onstage (reported in the forums)
+
+130628
+------
+* Morphic, GUI: improved importing costumes by dragging in pictures from other web pages
+
+130702
+------
+* Objects: took out "security margin" in Costume's shrinkWrap() method b/c Chrome no longer needs it -> fixed empty costume bug when drawing over the paint editor's bounds
+* GUI: Import libraries feature (in the project menu)
+
+130704
+------
+* Codification (text code mapping and block header support)
+
+130705
+------
+* Blocks: fixed CommentMorph hiding/showing bug when switching to / from presentation mode
+
+130708
+------
+* Store: fixed serialization placement-bug for sprites
+
+130709
+------
+* Objects, Blocks, Threads: Collapsed codification primitives (code, header) into a single block
+* Blocks: Added isEmptySlot() to BooleanArgMorph (thanks, Brian, for the bug report!)
+
+130710
+------
+* GUI: Reset hidden primitives and code mappings upon loading a new project
+
+130711
+------
+* Blocks: fixed occasional flickering in scripting areas (caused by deleted feedback morphs, a bug that surfaced in Chrome 28 on OSX and may be due to a possible Chrome GC issue)
+* Blocks: preserve nested blocks in the scripting area when replacing a variadic input list with another input ("kick out" the nested blocks instead of "swallowing" them)
+* Blocks, Threads: new floor() function in monadic math reporter's drop-down
+
+130712
+------
+* Blocks: Pipette symbol
+* Paint: Pipette tool
+
+130713
+------
+* Paint: fixed pipette tool for floodfill
+
+130715
+------
+* Objects: increased palette's vertical growth by scrollBarSize
+* Objects, Blocks, Threads: experimental text-function primitive (hidden, shown only in dev mode)
+
+130724
+------
+* Dutch translation, yay!! Thanks, Frank Sierens
+
+130730
+------
+* Blocks: Made it harder to drop reporters on the variadic input per se (as opposed to into one of its slots) in (default) "prefer empty slot drops" setting
+* Blocks, Threads, Objects: PAUSE primitive command block
+* GUI: fixed #104 (storing a cloud project under another name causes media loss)
+
+130731
+------
+* Blocks, Threads, Objects: experimental text SPLIT primitive in the operators category
+
+130801
+------
+* Blocks, Threads: "whitespace" & other options in SPLIT reporter's dropdown
+* Blocks: Italicize editable input options (e.g. for the SPLT block) 
+* Blocks: Undrop Reporters feature (in script areas' context menus)
+
+130802
+------
+* Blocks: Undrop Reporters feature tweaks
+* Blocks: Undrop Comments feature
+* Blocks: Undrop Commands feature
+* German translation update (for Undrop feature)
+
+130805
+------
+* Polish translation, yay!! Thanks, Witek Kranas!
+* Morphic: mouseEnterDragging fix
+
+130807
+------
+* Objects, GUI: Sprite Nesting preliminaries
+* Objects: Fixed stage costume scaling & misplacing bug. Thanks, Josh, for the report!
+* Objects, GUI: Sprite Nesting GUI
+* Objects: Nested Sprite Motion
+
+130808
+------
+* Objects: Nested Sprite Scaling
+* Objects: Nested Sprite Rotation
+* Objects: Nested Sprite synchronous / independent rotation
+* Dutch translation update, thanks, Sjoerd Dirk Meijer!
+
+130809
+------
+* GUI: Nested Sprite Rotation style buttons on corral icons
+* Store, Objects: Nested Sprite saving / loading
+
+130810
+------
+* Objects, GUI: Nestable Sprites fixes
+* German translation update
+
+130812
+------
+* Objects, Threads: Nestable Sprites Collision Detection & fixes
+* Dutch translation update
+
+130814
+------
+* Traditional Chinese translation, yay!! thanks, Chu-Ching-Huang!
+
+130817
+------
+* Norwegian translation, yay!! thanks, Olav Marschall!
+* "Dynamic" library list, thanks, Brian
+
+130916
+------
+* new Danish translation, yay!! thanks, Morten and Hanne!
+* new Greek translation, yay!! thanks, Ino!
+* Portuguese translation update, thanks, Manuel!
+* French translation update,
+* Norwegian translation update
+* threads: minor custom block evaluation scope fix
+* paint: flood fill freeze fix, thanks for the contribution, Kartik!
+* objects: new SPLIT primitive reporter
+* German translation update for new SPLIT primitive and delimiter options
+* GUI: getPublicProject adjustments (lowercase username)
+* GUI: prompt() - invocation fixes (null-choices)
+* GUI: synchronous URL fetching simplifications for libraries and example projects
+* GUI: fixed #115 - prevent loading several instances of the same block definition
+
+130917
+------
+* Cloud: encodeDict() fix and new parseDict() method - used for accessing shared projects
+* GUI: fixed #119, #149 (accessing a shared projects requires lowercasing the username)
+* Portuguese translation update for SPLIT block, thanks, Manuel!
+* Store, Objects: prevent costumes from being drawn while they are loading, fixes parts of #154
+
+130918
+------
+* Objects, GUI: prevent costumes with CORS-tainted canvases, expected to fix #155, #154, #151, #148, #147, #127 for future projects
+* BYOB: Prevent local custom blocks in global custom block definitions, fixes #167 for future projects
+
+130919
+* Objects: fixed #169 (sprites are sometimes off-placed when the project is loaded)
+* Objects, GUI: fixed #146 (filter out empty costumes)
+
+130920
+------
+* Morphic: fixed #172, Rectangle.amountToTranslateWithin() for IF ON EDGE, BOUNCE
+
+130930
+------
+* Blocks: fixed #186 (can't duplicate blocks with anchored comments)
+
+131001
+------
+* Objects: smooth numerical values displayed in watchers
+
+131004
+------
+* Threads: Type-check the SPLIT block's input before eval'ing it
+* Objects: Prevent watcher cells from growing wider as their contents becomes taller
+* Objects: Keep watchers onstage when hiding/showing them, fixes #195
+* BYOB, GUI, locale: New preference setting for plain block prototype labels
+
+131008
+------
+* Lists: fixed type-issue for linked list indices (thanks, Nate, for reporting it!)
+* Threads, Objects: experimental MAP primitive reporter in lists category, visible in dev mode
+* Blocks: fixed #199 (can't delete reporter with attached comment via context menu)
+
+131009
+------
+* Theads: added a variant for linked lists to the experimental MAP primitive reporter
+
+131010
+------
+* Cloud: added "sanity check" to cloud-saving mechanism that errors if the serialized project data is corrupt and cannot be parsed as XML, addresses #203, #200, #171
+
+131014
+------
+* Morphic: Condense damage list by merging overlapping dirty rectangles, thanks, Craxic!
+* Objects: Increase maximum clone count from 128 to 300
+* Portuguese translation update, thanks, Manuel!!
+
+131015
+------
+* Morphic: further condense damage list by merging nearby rectangles, thanks, Craxic!
+
+131017
+------
+* Threads: fixed #213 - Empty else block breaks return to caller
+
+131025
+------
+* Blocks: enable Costumes as Symbols and Symbols as custom block label parts
+* BYOB: Symbol selection menu for BlockLabelFragmentMorphs
+* Portuguese translation update
+* Widgets: enable Symbols in InputField drop down menus
+* BYOB: enable Symbols in InputSlotDialog Morph’s drop down menu
+
+131104
+------
+* GUI: filter quotation marks from project names (for backend index)
+* BYOB: only show symbol menu for label fragments
+* BYOB: customizable drop-down menus for input slots (experimental, commented out)
+
+131107
+------
+* GUI, Cloud: transmission integrity check
+
+131112
+------
+* Blocks, BYOB, Store: customizable drop-down menus for input slots
+* Objects: fixed wrong NaN display for variable watchers
+* Blocks: left-align multi-line text in value-bubbles
+* Portuguese translation update, thanks, Manuel!
+
+131115
+------
+* Blocks, BYOB, Store: „read-only“ option for editable custom block input slots
+* BYOB, Blocks: custom block input slots reverting to default now show their default value
+* Blocks: fixed read-only input slot coloring glitch, thanks Bernat, for reporting it!
+* Objects: fixed #231 (watcher-display of Booleans)
+
+131122
+------
+* Morphic: Don’t trigger events for eclipsed morphs (whose parent-chain contains a hidden morph)
+* Blocks: Prevent „hide“ menu option for non-palette template blocks
+* new Catalan translation! Yay, thanks, Bernat Romagosa Carrasquer!!
+
+131126
+------
+* Cloud: fixed #125 (encode email address when signing up), thanks, Nathan!
+* Threads: fixed #207 (stricter comparison of strings vs. numbers). Some edge cases remain, such as empty string equals zero and disregarding trailing / leading blanks. These are intentional. Please don’t nitpick and spare me the fundamentalism :-)
+* Threads: fixed #245 (consistently auto-convert empty strings to zeroes)
+* Localization and Portuguese translation updates, thanks, Manuel!
+* Catalan translation update, thanks, Bernat!!
+* Threads: Text comparisons are now case-sensitive („fixes“ #175)
+* Threads: fixed #179 - don’t identify primitive (static) C-Slots as implicit formal parameters
+* Threads: fixed #249 - preserve variable value types with edge cases (empty string, Boolean false)
+* Threads: fixed #133 - preserve edge-cased argument types (empty string, Boolean false)
+* Fixed issue #244 (relabelling now preserves empty input slots), thanks, Nathan!
+
+131204
+------
+* Threads: handle text comparisons case-insensitive (again)
+* Lists: harmonize equality testing and List CONTAINS testing
+* French translation update, thanks, Martin!
+* Threads: fixed #261 (less tolerant null-value-to-number-coercion)
+
+131205
+------
+* Threads: fixed literal-to-non-literal zero-value comparison bug
+* Objects: fixed #264 (mapped <ctrl-enter> to green-flag instead of <enter>)
+
+131211
+------
+* Threads: accept lists as inputs to the green (text) LENGTH OF reporter
+
+131212
+------
+* Objects, Morphic: fixed #277, #279 (blitting null-canvasses fails)
+
+131219
+------
+* Objects: stage watchers for „mouse x“ and „mouse y“ sensing reporters. Thanks, Michael!
+* Store: fixed saving/loading/localisation of new mouse coordinate stage watchers
+
+140108
+------
+* Threads, Blocks, Objects: The FOR reporter’s first input now also accepts blocks and scripts („rings“), and reports a copy that is bound to the sprite indicated by the second input. This lets you „zombify“ (or remote-control) sprites (and create custom TELL and ASK blocks)
+* Blocks: initial support for „sensing“ sprite-only custom block definitions, commented out for now
+* Paint: Add mouseLeaveDragging() event behavior, thanks, Kartik, for this fix!
+* Objects: Only shrink-wrap sprite costumes, thanks, Kartik, for this fix!
+* Threads: Added xhr-headers to HTTP block, thanks, Tim!
+* Threads, Blocks, Objects: Added StopOthers primitive, thanks, Kartik!
+* Added „all but this option“ to StopOthers primitive, fixed the implementation
+* Updated German translation with new strings
+
+140109
+------
+* Objects: Mechanism for migrating blocks in existing projects to newer versions
+* Blocks, Objects, Threads: Collapse old STOP primitives into a single one with a dropdown of options
+* German translation update for new (migrated) STOP block
+* Morphic: Fixed updateReferences() (how could nobody notice so long?!)
+* XML: resolved unexpected assignment expressions (conform to the latest JSLint quibbles)
+* validated all source files against the latest JSLint version
+
+140110
+------
+* Threads: Revert pull request #295 (xhr-headers), breaks existing installations
+* BYOB: Fixed #292 (pulldowns loose lines when exported as library)
+* BYOB: Fixed #291 (readonly custom menus become non-readonly when block is edited)
+
+140203
+------
+* Threads: Fixed #313. “Block of sprite” now works for interpolated (“timed”) blocks and for reporters (i.e. SAY FOR, THINK FOR, GLIDE, ASK etc.)
+* Morphic: replace deprecated DOM “body” references with “documentElement”
+
+140204
+------
+* GUI: Import costumes and backgrounds from the project menu, thanks, Brian, for the changeset!
+* GUI: Import sounds from the project menu, thanks, Brian, for the changeset!
+* Objects, Store, GUI: Flat line end option in the settings menu, saved with the project
+* German translation update
+* Objects: Enable playing sounds and notes on Firefox, thanks, Dean Brettle, for this fix!!
+* Update Portuguese translation, thanks, Manuel!
+* Update French translation, thanks, grego!
+
+140205
+------
+* Objects, Paint: One-stop-shopping for stage dimensions (changing the stage dimensions in line 3720 of objects.js takes care of everything)
+
+140211
+------
+* GUI: Set stage dimensions arbitrarily (new entries in the settings menu when holding shift)
+* Store: Saving & Loading for arbitrary stage dimensions in the project data
+* new Date block, thanks, Michael!!!
+
+140213
+------
+* GUI, Store: constrain minimum stage size to 480 x 180
+* GUI: Fixed #322, #324
+* Widgets: new “promptVector” dialog box feature
+* GUI: Use new vector prompter for stage dimensions
+* German translation update
+
+140331
+------
+* Objects: experimental “wardrobe” and “jukebox” reporters in dev mode
+* Blocks, Objects: display costume thumbnails in speech/thought/value bubbles and watcher cells
+* Objects: let “switch to costume” block accept actual costume objects (in addition to names and numbers)
+
+140430
+------
+* new Finnish translation, yay! Thanks, Jouni!
+* new Brazilian Portuguese translation, yay! Thanks, Aldo!
+* Russian translation update
+* Portuguese translation update
+* additional localisations, thanks, Manuel!
+* text-encoding fix for exporting variable contents, thanks, Blob!
+* set turbo mode block fix, thanks, Michael and Nathan!
+* enable storage and retrieval of first-class costumes in both file formats
+
+140502
+------
+* error message when trying to import a non-text file into a variable, thanks, Nate!
+* fixed #407 (custom-block coloring w/ zebra off)
+
+140520
+------
+* Morphic: Prevent default action for ctrl-/cmd-key event
+* Snap.html: Focus the world canvas on startup, so Snap reacts to keyboard events right away
+* Threads: new Variable data structure, for refactoring upvar references, not yet used anywhere
+* Objects, GUI: Search Blocks, feature. Thanks, Kyle, for architecting and designing this!!!
+* Objects, GUI: Keyboard-shortcuts for opening (cmd-o), saving (cmd-s) projects and for finding blocks (cmd-f)
+
+140526
+------
+* Objects: Fixed #445 (minor search + zoom issues)
+* Localization additions and Portuguese translation update, thanks, Manuel!
+* GUI, cloud: Show last-changed-timestamp when opening cloud projects
+
+140604
+------
+* Blocks: refactor “script pics” feature
+* BYOB: new scriptsPicture() method for custom block definitions
+* GUI: new (hidden) feature: “Export all scripts as pic” (including custom block refs)
+* Graphic effects!!! Yay, thanks, Yuan!
+* Bug fixes from Nathan, yay, thanks, Nathan!!
+* German translation update
+* Paint Editor transforms, yay, thanks, Kartik!!
+
+140605
+------
+* Objects: stop replacing the empty string with the number zero in watchers
+* Threads: initialize new variables with zero (instead of null)
+* Objects: fixed #465
+* Objects: fixed #457
+
+140605
+------
+* Objects: gracefully hide & show the stage, fixed #281
+* Objects: add hide and show blocks to the stage’s “looks” category
+* Objects: added more relabelling options to SAY and THINK variants
+* Blocks, objects: enable relabelling blocks with C-Slots
+* Blocks: enable relabelling blocks across categories
+* Objects: more relabelling options for SAY, THINK, ASK
+* BYOB, Blocks: relabelling custom blocks (experimental)
+
+140623
+------
+* Morphic: Inspector enhancements (dynamic property update, keyboard shortcuts)
+* GUI: update visibility of share/unshare buttons, Thanks, Kunal!

@@ -6,7 +6,7 @@
 
     written by Jens Mönig
 
-    Copyright (C) 2013 by Jens Mönig
+    Copyright (C) 2014 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -42,7 +42,7 @@
 
 /*global modules, contains*/
 
-modules.locale = '2013-May-14';
+modules.locale = '2014-Jun-04';
 
 // Global stuff
 
@@ -149,7 +149,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org',
     'last_changed':
-        '2013-05-14'
+        '2014-06-04'
 };
 
 SnapTranslator.dict.it = {
@@ -209,7 +209,7 @@ SnapTranslator.dict.pt = {
     'translator_e-mail':
         'mmsequeira@gmail.com',
     'last_changed':
-        '2013-04-08'
+        '2014-05-26'
 };
 
 SnapTranslator.dict.cs = {
@@ -253,11 +253,11 @@ SnapTranslator.dict.fr = {
     'language_name':
         'Fran\u00E7ais',
     'language_translator':
-        'Jean-Jacques Valliet - Mark Rafter',
+        'Jean-Jacques Valliet, Mark Rafter, Martin Quinson',
     'translator_e-mail':
         'i.scool@mac.com',
     'last_changed':
-        '2012-11-27'
+        '2014-02-04'
 };
 
 SnapTranslator.dict.si = {
@@ -292,3 +292,105 @@ SnapTranslator.dict.es = {
     'last_changed':
         '2013-03-25'
 };
+
+SnapTranslator.dict.nl = {
+    'language_name':
+        'Nederlands',
+    'language_translator':
+        'Frank Sierens, Sjoerd Dirk Meijer',
+    'translator_e-mail':
+        'frank.sierens@telenet.be, sjoerddirk@fromScratchEd.nl',
+    'last_changed':
+        '2013-08-12'
+};
+
+SnapTranslator.dict.pl = {
+    'language_name':
+        'Polski',
+    'language_translator':
+        'Witek Kranas',
+    'translator_e-mail':
+        'witek@oeiizk.waw.pl',
+    'last_changed':
+        '2013-08-05'
+};
+
+SnapTranslator.dict.tw = {
+    'language_name':
+        '繁體中文',
+    'language_translator':
+        'cch',
+    'translator_e-mail':
+        'cchuang2009@gmail.com',
+    'last_changed':
+        '2013-8-14'
+};
+
+SnapTranslator.dict.no = {
+    'language_name':
+        'Norsk',
+    'language_translator':
+        'Olav A Marschall',
+    'translator_e-mail':
+        'mattebananer@gmail.com',
+    'last_changed':
+        '2013-09-16'
+};
+
+SnapTranslator.dict.dk = {
+    'language_name':
+        'Dansk',
+    'language_translator':
+        'FAB',
+    'translator_e-mail':
+        'fab@nielsen.mail.dk',
+    'last_changed':
+        '2013-09-16'
+};
+
+SnapTranslator.dict.el = {
+    'language_name':
+        'Ελληνικά',
+    'language_translator':
+        'Ino Samaras',
+    'translator_e-mail':
+        'ino.samaras@berkeley.edu',
+    'last_changed':
+        '2013-09-16'
+};
+
+SnapTranslator.dict.ca = {
+    'language_name':
+        'Català',
+    'language_translator':
+        'Bernat Romagosa Carrasquer',
+    'translator_e-mail':
+        'tibabenfortlapalanca@gmail.com',
+    'last_changed':
+        '2013-11-26'
+};
+
+SnapTranslator.dict.fi = {
+    // meta information
+    'language_name':
+        'suomi',
+    'language_translator':
+        'Jouni K. Sepp\u00e4nen',
+    'translator_e-mail':
+        'jks@iki.fi',
+    'last_changed':
+        '2014-04-18'
+};
+
+SnapTranslator.dict.pt_BR = {
+    // meta information
+    'language_name':
+        'Português do Brasil',
+    'language_translator':
+        'Aldo von Wangenheim',
+    'translator_e-mail':
+        'awangenh@inf.ufsc.br',
+    'last_changed':
+        '2014-04-20'
+};
+

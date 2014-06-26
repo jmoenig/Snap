@@ -9,7 +9,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2013 by Jens Mönig
+    Copyright (C) 2014 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -61,7 +61,7 @@ ReporterBlockMorph, ScriptsMorph, ShadowMorph, StringMorph,
 SyntaxElementMorph, TextMorph, WorldMorph, blocksVersion, contains,
 degrees, detect, getDocumentPositionOf, newCanvas, nop, radians,
 useBlurredShadows, ReporterSlotMorph, CSlotMorph, RingMorph, IDE_Morph,
-ArgLabelMorph, localize*/
+ArgLabelMorph, localize, XML_Element, hex_sha512*/
 
 // globals from objects.js:
 
@@ -83,7 +83,7 @@ ArgLabelMorph, localize*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.threads = '2013-May-14';
+modules.threads = '2014-Jun-05';
 
 var ThreadManager;
 var Process;
@@ -98,15 +98,24 @@ function snapEquals(a, b) {
         }
         return false;
     }
-    var x = parseFloat(a),
-        y = parseFloat(b);
-    if (isNaN(x) || isNaN(y)) {
+
+    var x = +a,
+        y = +b,
+        specials = [true, false, ''];
+
+    // check for special values before coercing to numbers
+    if (isNaN(x) || isNaN(y) ||
+            [a, b].some(function (any) {return contains(specials, any) ||
+                  (isString(any) && (any.indexOf(' ') > -1)); })) {
         x = a;
         y = b;
     }
+
+    // handle text comparision case-insensitive.
     if (isString(x) && isString(y)) {
         return x.toLowerCase() === y.toLowerCase();
     }
+
     return x === y;
 }
 
@@ -142,15 +151,19 @@ ThreadManager.prototype.startProcess = function (block, isThreadSafe) {
     return newProc;
 };
 
-ThreadManager.prototype.stopAll = function () {
+ThreadManager.prototype.stopAll = function (excpt) {
+    // excpt is optional
     this.processes.forEach(function (proc) {
-        proc.stop();
+        if (proc !== excpt) {
+            proc.stop();
+        }
     });
 };
 
-ThreadManager.prototype.stopAllForReceiver = function (rcvr) {
+ThreadManager.prototype.stopAllForReceiver = function (rcvr, excpt) {
+    // excpt is optional
     this.processes.forEach(function (proc) {
-        if (proc.homeContext.receiver === rcvr) {
+        if (proc.homeContext.receiver === rcvr && proc !== excpt) {
             proc.stop();
             if (rcvr.isClone) {
                 proc.isDead = true;
@@ -339,7 +352,7 @@ Process.prototype.runStep = function () {
     a step is an an uninterruptable 'atom', it can consist
     of several contexts, even of several blocks
 */
-    if (this.isPaused) {
+    if (this.isPaused) { // allow pausing in between atomic steps:
         return this.pauseStep();
     }
     this.readyToYield = false;
@@ -348,6 +361,10 @@ Process.prototype.runStep = function () {
             && (this.isAtomic ?
                     (Date.now() - this.lastYield < this.timeout) : true)
                 ) {
+        // also allow pausing inside atomic steps - for PAUSE block primitive:
+        if (this.isPaused) {
+            return this.pauseStep();
+        }
         this.evaluateContext();
     }
     this.lastYield = Date.now();
@@ -774,13 +791,13 @@ Process.prototype.evaluate = function (
     runnable.isImplicitLambda = context.isImplicitLambda;
     runnable.isCustomBlock = false;
 
-    // assing parameters if any were passed
+    // assign parameters if any were passed
     if (parms.length > 0) {
 
         // assign formal parameters
         for (i = 0; i < context.inputs.length; i += 1) {
             value = 0;
-            if (parms[i]) {
+            if (!isNil(parms[i])) {
                 value = parms[i];
             }
             outer.variables.addVar(context.inputs[i], value);
@@ -849,7 +866,7 @@ Process.prototype.fork = function (context, args) {
         // assign formal parameters
         for (i = 0; i < context.inputs.length; i += 1) {
             value = 0;
-            if (parms[i]) {
+            if (!isNil(parms[i])) {
                 value = parms[i];
             }
             outer.variables.addVar(context.inputs[i], value);
@@ -986,7 +1003,8 @@ Process.prototype.evaluateCustomBlock = function () {
     if (!context) {return null; }
     outer = new Context();
     outer.receiver = this.context.receiver; // || this.homeContext.receiver;
-    outer.variables.parentFrame = outer.receiver.variables;
+    outer.variables.parentFrame = outer.receiver ?
+            outer.receiver.variables : null;
 
     runnable = new Context(
         this.context.parentContext,
@@ -1008,7 +1026,7 @@ Process.prototype.evaluateCustomBlock = function () {
         // assign formal parameters
         for (i = 0; i < context.inputs.length; i += 1) {
             value = 0;
-            if (parms[i]) {
+            if (!isNil(parms[i])) {
                 value = parms[i];
             }
             outer.variables.addVar(context.inputs[i], value);
@@ -1313,6 +1331,8 @@ Process.prototype.doIfElse = function () {
     } else {
         if (args[2]) {
             this.pushContext(args[2].blockSequence(), outer);
+        } else {
+            this.pushContext('doYield');
         }
     }
     if (this.context) {
@@ -1349,6 +1369,44 @@ Process.prototype.doStopAll = function () {
         }
         ide = stage.parentThatIsA(IDE_Morph);
         if (ide) {ide.controlBar.pauseButton.refresh(); }
+    }
+};
+
+Process.prototype.doStopThis = function (choice) {
+    switch (this.inputOption(choice)) {
+    case 'all':
+        this.doStopAll();
+        break;
+    case 'this script':
+        this.doStop();
+        break;
+    case 'this block':
+        this.doStopBlock();
+        break;
+    default:
+        nop();
+    }
+};
+
+Process.prototype.doStopOthers = function (choice) {
+    var stage;
+    if (this.homeContext.receiver) {
+        stage = this.homeContext.receiver.parentThatIsA(StageMorph);
+        if (stage) {
+            switch (this.inputOption(choice)) {
+            case 'all but this script':
+                stage.threads.stopAll(this);
+                break;
+            case 'other scripts in sprite':
+                stage.threads.stopAllForReceiver(
+                    this.homeContext.receiver,
+                    this
+                );
+                break;
+            default:
+                nop();
+            }
+        }
     }
 };
 
@@ -1424,12 +1482,24 @@ Process.prototype.doSetFastTracking = function (bool) {
     if (this.homeContext.receiver) {
         ide = this.homeContext.receiver.parentThatIsA(IDE_Morph);
         if (ide) {
-            if (ide.stage.isFastTracked) {
-                ide.stopFastTracking();
-            } else {
+            if (bool) {
                 ide.startFastTracking();
+            } else {
+                ide.stopFastTracking();
             }
         }
+    }
+};
+
+Process.prototype.doPauseAll = function () {
+    var stage, ide;
+    if (this.homeContext.receiver) {
+        stage = this.homeContext.receiver.parentThatIsA(StageMorph);
+        if (stage) {
+            stage.threads.pauseAll(stage);
+        }
+        ide = stage.parentThatIsA(IDE_Morph);
+        if (ide) {ide.controlBar.pauseButton.refresh(); }
     }
 };
 
@@ -1498,6 +1568,64 @@ Process.prototype.doWaitUntil = function (goalCondition) {
     this.pushContext();
 };
 
+Process.prototype.reportMap = function (reporter, list) {
+    // answer a new list containing the results of the reporter applied
+    // to each value of the given list. Distinguish between linked and
+    // arrayed lists.
+    // Note: This method utilizes the current context's inputs array to
+    // manage temporary variables, whose allocation to which slot are
+    // documented in each of the variants' code (linked or arrayed) below
+
+    var next;
+    if (list.isLinked) {
+        // this.context.inputs:
+        // [0] - reporter
+        // [1] - list (original source)
+        // -----------------------------
+        // [2] - result list (target)
+        // [3] - currently last element of result list
+        // [4] - current source list (what's left to map)
+        // [5] - current value of last function call
+
+        if (this.context.inputs.length < 3) {
+            this.context.addInput(new List());
+            this.context.inputs[2].isLinked = true;
+            this.context.addInput(this.context.inputs[2]);
+            this.context.addInput(list);
+        }
+        if (this.context.inputs[4].length() === 0) {
+            this.context.inputs[3].rest = list.cons(this.context.inputs[5]);
+            this.returnValueToParentContext(this.context.inputs[2].cdr());
+            return;
+        }
+        if (this.context.inputs.length > 5) {
+            this.context.inputs[3].rest = list.cons(this.context.inputs[5]);
+            this.context.inputs[3] = this.context.inputs[3].rest;
+            this.context.inputs.splice(5);
+        }
+        next = this.context.inputs[4].at(1);
+        this.context.inputs[4] = this.context.inputs[4].cdr();
+        this.pushContext();
+        this.evaluate(reporter, new List([next]));
+    } else { // arrayed
+        // this.context.inputs:
+        // [0] - reporter
+        // [1] - list (original source)
+        // -----------------------------
+        // [2..n] - result values (target)
+
+        if (this.context.inputs.length - 2 === list.length()) {
+            this.returnValueToParentContext(
+                new List(this.context.inputs.slice(2))
+            );
+            return;
+        }
+        next = list.at(this.context.inputs.length - 1);
+        this.pushContext();
+        this.evaluate(reporter, new List([next]));
+    }
+};
+
 // Process interpolated primitives
 
 Process.prototype.doWait = function (secs) {
@@ -1515,15 +1643,15 @@ Process.prototype.doGlide = function (secs, endX, endY) {
     if (!this.context.startTime) {
         this.context.startTime = Date.now();
         this.context.startValue = new Point(
-            this.homeContext.receiver.xPosition(),
-            this.homeContext.receiver.yPosition()
+            this.blockReceiver().xPosition(),
+            this.blockReceiver().yPosition()
         );
     }
     if ((Date.now() - this.context.startTime) >= (secs * 1000)) {
-        this.homeContext.receiver.gotoXY(endX, endY);
+        this.blockReceiver().gotoXY(endX, endY);
         return null;
     }
-    this.homeContext.receiver.glide(
+    this.blockReceiver().glide(
         secs * 1000,
         endX,
         endY,
@@ -1538,10 +1666,10 @@ Process.prototype.doGlide = function (secs, endX, endY) {
 Process.prototype.doSayFor = function (data, secs) {
     if (!this.context.startTime) {
         this.context.startTime = Date.now();
-        this.homeContext.receiver.bubble(data);
+        this.blockReceiver().bubble(data);
     }
     if ((Date.now() - this.context.startTime) >= (secs * 1000)) {
-        this.homeContext.receiver.stopTalking();
+        this.blockReceiver().stopTalking();
         return null;
     }
     this.pushContext('doYield');
@@ -1551,14 +1679,19 @@ Process.prototype.doSayFor = function (data, secs) {
 Process.prototype.doThinkFor = function (data, secs) {
     if (!this.context.startTime) {
         this.context.startTime = Date.now();
-        this.homeContext.receiver.doThink(data);
+        this.blockReceiver().doThink(data);
     }
     if ((Date.now() - this.context.startTime) >= (secs * 1000)) {
-        this.homeContext.receiver.stopTalking();
+        this.blockReceiver().stopTalking();
         return null;
     }
     this.pushContext('doYield');
     this.pushContext();
+};
+
+Process.prototype.blockReceiver = function () {
+    return this.context ? this.context.receiver || this.homeContext.receiver
+            : this.homeContext.receiver;
 };
 
 // Process sound primitives (interpolated)
@@ -1595,7 +1728,7 @@ Process.prototype.doStopAllSounds = function () {
 
 Process.prototype.doAsk = function (data) {
     var stage = this.homeContext.receiver.parentThatIsA(StageMorph),
-        isStage = this.homeContext.receiver instanceof StageMorph,
+        isStage = this.blockReceiver() instanceof StageMorph,
         activePrompter;
 
     if (!this.prompter) {
@@ -1605,7 +1738,7 @@ Process.prototype.doAsk = function (data) {
         );
         if (!activePrompter) {
             if (!isStage) {
-                this.homeContext.receiver.bubble(data, false, true);
+                this.blockReceiver().bubble(data, false, true);
             }
             this.prompter = new StagePrompterMorph(isStage ? data : null);
             if (stage.scale < 1) {
@@ -1625,7 +1758,7 @@ Process.prototype.doAsk = function (data) {
             stage.lastAnswer = this.prompter.inputField.getValue();
             this.prompter.destroy();
             this.prompter = null;
-            if (!isStage) {this.homeContext.receiver.stopTalking(); }
+            if (!isStage) {this.blockReceiver().stopTalking(); }
             return null;
         }
     }
@@ -1765,30 +1898,30 @@ Process.prototype.reportTypeOf = function (thing) {
 // Process math primtives
 
 Process.prototype.reportSum = function (a, b) {
-    return parseFloat(a) + parseFloat(b);
+    return +a + (+b);
 };
 
 Process.prototype.reportDifference = function (a, b) {
-    return parseFloat(a) - parseFloat(b);
+    return +a - +b;
 };
 
 Process.prototype.reportProduct = function (a, b) {
-    return parseFloat(a) * parseFloat(b);
+    return +a * +b;
 };
 
 Process.prototype.reportQuotient = function (a, b) {
-    return parseFloat(a) / parseFloat(b);
+    return +a / +b;
 };
 
 Process.prototype.reportModulus = function (a, b) {
-    var x = parseFloat(a),
-        y = parseFloat(b);
+    var x = +a,
+        y = +b;
     return ((x % y) + y) % y;
 };
 
 Process.prototype.reportRandom = function (min, max) {
-    var floor = parseFloat(min),
-        ceil = parseFloat(max);
+    var floor = +min,
+        ceil = +max;
     if ((floor % 1 !== 0) || (ceil % 1 !== 0)) {
         return Math.random() * (ceil - floor) + floor;
     }
@@ -1796,8 +1929,8 @@ Process.prototype.reportRandom = function (min, max) {
 };
 
 Process.prototype.reportLessThan = function (a, b) {
-    var x = parseFloat(a),
-        y = parseFloat(b);
+    var x = +a,
+        y = +b;
     if (isNaN(x) || isNaN(y)) {
         x = a;
         y = b;
@@ -1810,8 +1943,8 @@ Process.prototype.reportNot = function (bool) {
 };
 
 Process.prototype.reportGreaterThan = function (a, b) {
-    var x = parseFloat(a),
-        y = parseFloat(b);
+    var x = +a,
+        y = +b;
     if (isNaN(x) || isNaN(y)) {
         x = a;
         y = b;
@@ -1865,16 +1998,19 @@ Process.prototype.reportFalse = function () {
 };
 
 Process.prototype.reportRound = function (n) {
-    return Math.round(parseFloat(n));
+    return Math.round(+n);
 };
 
 Process.prototype.reportMonadic = function (fname, n) {
-    var x = parseFloat(n),
+    var x = +n,
         result = 0;
 
     switch (this.inputOption(fname)) {
     case 'abs':
         result = Math.abs(x);
+        break;
+    case 'floor':
+        result = Math.floor(x);
         break;
     case 'sqrt':
         result = Math.sqrt(x);
@@ -1910,6 +2046,39 @@ Process.prototype.reportMonadic = function (fname, n) {
         result = 0;
         break;
     default:
+        nop();
+    }
+    return result;
+};
+
+Process.prototype.reportTextFunction = function (fname, string) {
+    var x = (isNil(string) ? '' : string).toString(),
+        result = '';
+
+    switch (this.inputOption(fname)) {
+    case 'encode URI':
+        result = encodeURI(x);
+        break;
+    case 'decode URI':
+        result = decodeURI(x);
+        break;
+    case 'encode URI component':
+        result = encodeURIComponent(x);
+        break;
+    case 'decode URI component':
+        result = decodeURIComponent(x);
+        break;
+    case 'XML escape':
+        result = new XML_Element().escape(x);
+        break;
+    case 'XML unescape':
+        result = new XML_Element().unescape(x);
+        break;
+    case 'hex sha512 hash':
+        result = hex_sha512(x);
+        break;
+    default:
+        nop();
     }
     return result;
 };
@@ -1930,12 +2099,15 @@ Process.prototype.reportJoinWords = function (aList) {
 // Process string ops
 
 Process.prototype.reportLetter = function (idx, string) {
-    var i = parseFloat(idx || 0),
+    var i = +(idx || 0),
         str = (string || '').toString();
     return str[i - 1] || '';
 };
 
 Process.prototype.reportStringSize = function (string) {
+    if (string instanceof List) { // catch a common user error
+        return string.length();
+    }
     var str = (string || '').toString();
     return str.length;
 };
@@ -1946,8 +2118,39 @@ Process.prototype.reportUnicode = function (string) {
 };
 
 Process.prototype.reportUnicodeAsLetter = function (num) {
-    var code = parseFloat(num || 0);
+    var code = +(num || 0);
     return String.fromCharCode(code);
+};
+
+Process.prototype.reportTextSplit = function (string, delimiter) {
+    var types = ['text', 'number'],
+        strType = this.reportTypeOf(string),
+        delType = this.reportTypeOf(this.inputOption(delimiter)),
+        str,
+        del;
+    if (!contains(types, strType)) {
+        throw new Error('expecting a text instad of a ' + strType);
+    }
+    if (!contains(types, delType)) {
+        throw new Error('expecting a text delimiter instad of a ' + delType);
+    }
+    str = (string || '').toString();
+    switch (this.inputOption(delimiter)) {
+    case 'line':
+        del = '\n';
+        break;
+    case 'tab':
+        del = '\t';
+        break;
+    case 'cr':
+        del = '\r';
+        break;
+    case 'whitespace':
+        return new List(str.trim().split(/[\t\r\n ]+/));
+    default:
+        del = (delimiter || '').toString();
+    }
+    return new List(str.split(del));
 };
 
 // Process debugging
@@ -2090,32 +2293,69 @@ Process.prototype.createClone = function (name) {
 // Process sensing primitives
 
 Process.prototype.reportTouchingObject = function (name) {
-    // also check for temparary clones, as in Scratch 2.0
-    var thisObj = this.homeContext.receiver,
+    var thisObj = this.blockReceiver();
+
+    if (thisObj) {
+        return this.objectTouchingObject(thisObj, name);
+    }
+    return false;
+};
+
+Process.prototype.objectTouchingObject = function (thisObj, name) {
+    // helper function for reportTouchingObject()
+    // also check for temparary clones, as in Scratch 2.0,
+    // and for any parts (subsprites)
+    var myself = this,
         those,
         stage,
         mouse;
 
-    if (thisObj) {
-        if (this.inputOption(name) === 'mouse-pointer') {
-            mouse = thisObj.world().hand.position();
-            if (thisObj.bounds.containsPoint(mouse)) {
-                return !thisObj.isTransparentAt(mouse);
-            }
-            return false;
+    if (this.inputOption(name) === 'mouse-pointer') {
+        mouse = thisObj.world().hand.position();
+        if (thisObj.bounds.containsPoint(mouse) &&
+                !thisObj.isTransparentAt(mouse)) {
+            return true;
         }
+    } else {
         stage = thisObj.parentThatIsA(StageMorph);
         if (stage) {
-            if (this.inputOption(name) === 'edge') {
-                return !stage.bounds.containsRectangle(thisObj.bounds);
+            if (this.inputOption(name) === 'edge' &&
+                    !stage.bounds.containsRectangle(thisObj.bounds)) {
+                return true;
             }
-            if (this.inputOption(name) === 'pen trails') {
-                return thisObj.isTouching(stage.penTrailsMorph());
+            if (this.inputOption(name) === 'pen trails' &&
+                    thisObj.isTouching(stage.penTrailsMorph())) {
+                return true;
             }
             those = this.getObjectsNamed(name, thisObj, stage); // clones
-            return those.some(
-                function (any) {
+            if (those.some(function (any) {
                     return thisObj.isTouching(any);
+                })) {
+                return true;
+            }
+        }
+    }
+    return thisObj.parts.some(
+        function (any) {
+            return myself.objectTouchingObject(any, name);
+        }
+    );
+};
+
+Process.prototype.reportTouchingColor = function (aColor) {
+    // also check for any parts (subsprites)
+    var thisObj = this.homeContext.receiver,
+        stage;
+
+    if (thisObj) {
+        stage = thisObj.parentThatIsA(StageMorph);
+        if (stage) {
+            if (thisObj.isTouching(stage.colorFiltered(aColor, thisObj))) {
+                return true;
+            }
+            return thisObj.parts.some(
+                function (any) {
+                    return any.isTouching(stage.colorFiltered(aColor, any));
                 }
             );
         }
@@ -2123,28 +2363,25 @@ Process.prototype.reportTouchingObject = function (name) {
     return false;
 };
 
-Process.prototype.reportTouchingColor = function (aColor) {
-    var thisObj = this.homeContext.receiver,
-        stage;
-
-    if (thisObj) {
-        stage = thisObj.parentThatIsA(StageMorph);
-        if (stage) {
-            return thisObj.isTouching(stage.colorFiltered(aColor, thisObj));
-        }
-    }
-    return false;
-};
-
 Process.prototype.reportColorIsTouchingColor = function (color1, color2) {
+    // also check for any parts (subsprites)
     var thisObj = this.homeContext.receiver,
         stage;
 
     if (thisObj) {
         stage = thisObj.parentThatIsA(StageMorph);
         if (stage) {
-            return thisObj.colorFiltered(color1).isTouching(
-                stage.colorFiltered(color2, thisObj)
+            if (thisObj.colorFiltered(color1).isTouching(
+                    stage.colorFiltered(color2, thisObj)
+                )) {
+                return true;
+            }
+            return thisObj.parts.some(
+                function (any) {
+                    return any.colorFiltered(color1).isTouching(
+                        stage.colorFiltered(color2, any)
+                    );
+                }
             );
         }
     }
@@ -2152,7 +2389,7 @@ Process.prototype.reportColorIsTouchingColor = function (color1, color2) {
 };
 
 Process.prototype.reportDistanceTo = function (name) {
-    var thisObj = this.homeContext.receiver,
+    var thisObj = this.blockReceiver(),
         thatObj,
         stage,
         rc,
@@ -2175,7 +2412,7 @@ Process.prototype.reportDistanceTo = function (name) {
 };
 
 Process.prototype.reportAttributeOf = function (attribute, name) {
-    var thisObj = this.homeContext.receiver,
+    var thisObj = this.blockReceiver(),
         thatObj,
         stage;
 
@@ -2187,6 +2424,9 @@ Process.prototype.reportAttributeOf = function (attribute, name) {
             thatObj = this.getOtherObject(name, thisObj, stage);
         }
         if (thatObj) {
+            if (attribute instanceof Context) {
+                return this.reportContextFor(attribute, thatObj);
+            }
             if (isString(attribute)) {
                 return thatObj.variables.getVar(attribute);
             }
@@ -2209,6 +2449,18 @@ Process.prototype.reportAttributeOf = function (attribute, name) {
         }
     }
     return '';
+};
+
+Process.prototype.reportContextFor = function (context, otherObj) {
+    // Private - return a copy of the context
+    // and bind it to another receiver
+    var result = copy(context);
+    result.receiver = otherObj;
+    if (result.outerContext) {
+        result.outerContext = copy(result.outerContext);
+        result.outerContext.receiver = otherObj;
+    }
+    return result;
 };
 
 Process.prototype.reportMouseX = function () {
@@ -2282,6 +2534,102 @@ Process.prototype.reportTimer = function () {
         }
     }
     return 0;
+};
+
+// Process Dates and times in Snap
+// Map block options to built-in functions
+var dateMap = {
+    'year' : 'getFullYear',
+    'month' : 'getMonth',
+    'date': 'getDate',
+    'day of week' : 'getDay',
+    'hour' : 'getHours',
+    'minute' : 'getMinutes',
+    'second' : 'getSeconds',
+    'time in milliseconds' : 'getTime'
+};
+
+Process.prototype.reportDate = function (datefn) {
+    var inputFn = this.inputOption(datefn),
+        currDate = new Date(),
+        func = dateMap[inputFn],
+        result = currDate[func]();
+
+    if (!dateMap[inputFn]) { return ''; }
+
+    // Show months as 1-12 and days as 1-7
+    if (inputFn === 'month' || inputFn === 'day of week') {
+        result += 1;
+    }
+
+    return result;
+};
+
+// Process code mapping
+
+/*
+    for generating textual source code using
+    blocks - not needed to run or debug Snap
+*/
+
+Process.prototype.doMapCodeOrHeader = function (aContext, anOption, aString) {
+    if (this.inputOption(anOption) === 'code') {
+        return this.doMapCode(aContext, aString);
+    }
+    if (this.inputOption(anOption) === 'header') {
+        return this.doMapHeader(aContext, aString);
+    }
+    throw new Error(
+        ' \'' + anOption + '\'\nis not a valid option'
+    );
+};
+
+Process.prototype.doMapHeader = function (aContext, aString) {
+    if (aContext instanceof Context) {
+        if (aContext.expression instanceof SyntaxElementMorph) {
+            return aContext.expression.mapHeader(aString || '');
+        }
+    }
+};
+
+Process.prototype.doMapCode = function (aContext, aString) {
+    if (aContext instanceof Context) {
+        if (aContext.expression instanceof SyntaxElementMorph) {
+            return aContext.expression.mapCode(aString || '');
+        }
+    }
+};
+
+Process.prototype.doMapStringCode = function (aString) {
+    StageMorph.prototype.codeMappings.string = aString || '<#1>';
+};
+
+Process.prototype.doMapListCode = function (part, kind, aString) {
+    var key1 = '',
+        key2 = 'delim';
+
+    if (this.inputOption(kind) === 'parameters') {
+        key1 = 'parms_';
+    } else if (this.inputOption(kind) === 'variables') {
+        key1 = 'tempvars_';
+    }
+
+    if (this.inputOption(part) === 'list') {
+        key2 = 'list';
+    } else if (this.inputOption(part) === 'item') {
+        key2 = 'item';
+    }
+
+    StageMorph.prototype.codeMappings[key1 + key2] = aString || '';
+};
+
+Process.prototype.reportMappedCode = function (aContext) {
+    if (aContext instanceof Context) {
+        if (aContext.expression instanceof SyntaxElementMorph) {
+            return aContext.expression.mappedCode();
+        }
+    }
+    return '';
 };
 
 // Process music primitives
@@ -2730,7 +3078,9 @@ VariableFrame.prototype.getVar = function (name, upvars) {
 };
 
 VariableFrame.prototype.addVar = function (name, value) {
-    this.vars[name] = (value === 0 ? 0 : value || null);
+    this.vars[name] = (value === 0 ? 0
+              : value === false ? false
+                       : value === '' ? '' : value || 0);
 };
 
 VariableFrame.prototype.deleteVar = function (name) {
@@ -2784,6 +3134,20 @@ VariableFrame.prototype.allNames = function () {
         }
     }
     return answer;
+};
+
+// Variable /////////////////////////////////////////////////////////////////
+
+function Variable(value) {
+    this.value = value;
+}
+
+Variable.prototype.toString = function () {
+    return 'a Variable [' + this.value + ']';
+};
+
+Variable.prototype.copy = function () {
+    return new Variable(this.value);
 };
 
 // UpvarReference ///////////////////////////////////////////////////////////
