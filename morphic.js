@@ -1310,7 +1310,8 @@ Color.prototype.eq = function (aColor) {
     return aColor &&
         this.r === aColor.r &&
         this.g === aColor.g &&
-        this.b === aColor.b;
+        this.b === aColor.b &&
+		this.a === aColor.a;
 };
 
 // Color conversion (hsv):

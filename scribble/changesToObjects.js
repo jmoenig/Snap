@@ -30,7 +30,7 @@ SpriteMorph.prototype.snapappsHookBlockTemplates = function(blocks, block, cat, 
         blocks.push(block('endShape'));
         blocks.push('-');
         blocks.push(block('setShapeColor'));
-        blocks.push(block('setFillNumber'));
+        blocks.push(block('setFillString'));
         blocks.push('-');
         blocks.push(block('changeShapeHue'));
         blocks.push(block('setShapeHue'));
@@ -44,7 +44,7 @@ SpriteMorph.prototype.snapappsHookBlockTemplates = function(blocks, block, cat, 
         blocks.push(block('getShapeHue'));
         blocks.push(block('getShapeBrightness'));
         blocks.push(block('getShapeAlpha'));
-        blocks.push(block('getFillNumber'));
+        blocks.push(block('getFillString'));
         blocks.push('-');
         blocks.push(block('drawCircle'));
         blocks.push(block('drawOval'));
@@ -67,7 +67,7 @@ SpriteMorph.prototype.snapappsHookBlockTemplates = function(blocks, block, cat, 
         blocks.push(block('drawText'));
         blocks.push('-');
         blocks.push(block('setTextColor'));
-        blocks.push(block('setTextFillNumber'));
+        blocks.push(block('setTextFillString'));
         blocks.push('-');
         blocks.push(block('changeTextHue'));
         blocks.push(block('setTextHue'));
@@ -81,7 +81,7 @@ SpriteMorph.prototype.snapappsHookBlockTemplates = function(blocks, block, cat, 
         blocks.push(block('getTextHue'));
         blocks.push(block('getTextBrightness'));
         blocks.push(block('getTextAlpha'));
-        blocks.push(block('getTextFillNumber'));
+        blocks.push(block('getTextFillString'));
     }
     if (cat === 'pen') { 
         blocks.push('-');
@@ -89,8 +89,8 @@ SpriteMorph.prototype.snapappsHookBlockTemplates = function(blocks, block, cat, 
         blocks.push(block('changePenAlpha'));
         blocks.push(block('setPenAlpha'));
         blocks.push('-');
-        blocks.push(block('getPenNumber'));
-        blocks.push(block('setPenNumber'));
+        blocks.push(block('getPenString'));
+        blocks.push(block('setPenString'));
         blocks.push('-');
         blocks.push(block('reportPenDown'));
     }
@@ -272,28 +272,28 @@ SpriteMorph.prototype.addScribbleBlocks = function () {
         spec: 'pen down?'
     };
     
-    SpriteMorph.prototype.blocks.getPenNumber = {
+    SpriteMorph.prototype.blocks.getPenString = {
         type: 'reporter',
         category: 'pen',
-        spec: 'get pen number'
+        spec: 'get pen color string'
     };
     
-    SpriteMorph.prototype.blocks.setPenNumber = {
+    SpriteMorph.prototype.blocks.setPenString = {
         type: 'command',
         category: 'pen',
-        spec: 'set pen number %n'
+        spec: 'set pen color string %s'
     };
     
-    SpriteMorph.prototype.blocks.getFillNumber = {
+    SpriteMorph.prototype.blocks.getFillString = {
         type: 'reporter',
         category: 'shapes',
-        spec: 'get fill color number'
+        spec: 'get fill color string'
     };
     
-    SpriteMorph.prototype.blocks.setFillNumber = {
+    SpriteMorph.prototype.blocks.setFillString = {
         type: 'command',
         category: 'shapes',
-        spec: 'set fill color number %n'
+        spec: 'set fill color string %s'
     };
     
     SpriteMorph.prototype.blocks.reportCopyList = {
@@ -330,16 +330,16 @@ SpriteMorph.prototype.addScribbleBlocks = function () {
         spec: 'set font size to %n'
     };
     
-    SpriteMorph.prototype.blocks.getTextFillNumber = {
+    SpriteMorph.prototype.blocks.getTextFillString = {
         type: 'reporter',
         category: 'text',
-        spec: 'get text color number'
+        spec: 'get text color string'
     };
     
-    SpriteMorph.prototype.blocks.setTextFillNumber = {
+    SpriteMorph.prototype.blocks.setTextFillString = {
         type: 'command',
         category: 'text',
-        spec: 'set text color number %n'
+        spec: 'set text color string %n'
     };
     
     SpriteMorph.prototype.blocks.setTextColor = {
@@ -404,7 +404,7 @@ SpriteMorph.prototype.addScribbleBlocks = function () {
     SpriteMorph.prototype.blocks.setTextAlpha = {
         type: 'command',
         category: 'text',
-        spec: 'set text alpha to %n',
+        spec: 'set text alpha to %s',
         defaults: [100]
     };
 }
@@ -1065,75 +1065,77 @@ SpriteMorph.prototype.drawRectangle = function (w, h)
     this.changed();
 }
 
-function getNumberFromColor(col)
-{
-    //RRR_GGG_BBB.AAA in DECIMAL so it is easier for newbz!!1!!1111
-    var rv = 
-     + (Math.round(col.r / 255 * 999) *    100000000.000)
-    /*///////////////////////////////////RRR GGG BBB.AAA*/
-     + (Math.round(col.g / 255 * 999) *        10000.000)
-    /*///////////////////////////////////RRR GGG BBB.AAA*/
-     + (Math.round(col.b / 255 * 999) *            1.000)
-    /*///////////////////////////////////RRR GGG BBB.AAA*/
-     + (Math.round(col.a       * 999) *            0.001);
-    /*///////////////////////////////////RRR GGG BBB.AAA*/
-    return rv;
+function capToByte(number) 
+{ 
+	return Math.floor(Math.max(0, Math.min(255, number))); 
 }
 
-function getColorFromNumber(num)
+function getStringFromColor(col)
 {
-    function firstThreeDecimalDigits(bob)
-    {
-        bob = bob - Math.floor(bob); //Truncate everything above the decimal point
-        bob = bob * 1000; //Move everything up 3 digits
-        return Math.floor(bob); //Trucate everything below the decimal point
-    }
-    
-    var color = new Color();
-    color.a = firstThreeDecimalDigits(num) / 999.0;
-    num /= 1000; //Move blue into the decimal part
-    color.b = firstThreeDecimalDigits(num) / 999.0 * 255;
-    num /= 10000; //Move green into the decimal part
-    color.g = firstThreeDecimalDigits(num) / 999.0 * 255;
-    num /= 10000; //Move red into the decimal part
-    color.r = firstThreeDecimalDigits(num) / 999.0 * 255;
-    return color;
+    return "R("+capToByte(col.r)+") G("+capToByte(col.g)+") B("+capToByte(col.b)+") A("+capToByte(col.a*255)+")";
+}
+
+function getColorFromString(string)
+{
+	var regex = /([RGBA])\(([0-9]{1,3})\)/gi;
+	var a=255,r=0,g=0,b=0;
+	var result;
+	var displ = [];
+	while (result = regex.exec(string))
+	{
+		var edit = result[1].toUpperCase();
+		var value = parseInt(result[2]);
+		displ.push(edit, value);
+		if (!value || !edit)
+			continue;
+		
+		if (edit == "R")
+		   r = value;
+		else if (edit == "G")
+		   g = value;
+		else if (edit == "B")
+		   b = value;
+		else if (edit == "A")
+		   a = value;
+	};
+
+	return new Color(capToByte(r), capToByte(g), capToByte(b), Math.max(0, Math.min(1, a / 255.0)));
 }
 
 /*
- * SpriteMorph.getPenNumber
+ * SpriteMorph.getPenString
  * 
- * Implements block logic that gets the number of the pen
+ * Implements block logic that gets the string of the pen
  */
-SpriteMorph.prototype.getPenNumber = function () {
-    return getNumberFromColor(this.color);
+SpriteMorph.prototype.getPenString = function () {
+    return getStringFromColor(this.color);
 };
 
 /*
- * SpriteMorph.getPenNumber
+ * SpriteMorph.getPenString
  * 
- * Implements block logic that sets the number of the pen
+ * Implements block logic that sets the string of the pen
  */
-SpriteMorph.prototype.setPenNumber = function (num) {
-    this.setColor(getColorFromNumber(num));
+SpriteMorph.prototype.setPenString = function (string) {
+    this.setColor(getColorFromString(string));
 };
 
 /*
- * SpriteMorph.getFillNumber
+ * SpriteMorph.getFillString
  * 
- * Implements block logic that gets the number of the fill
+ * Implements block logic that gets the string of the fill
  */
-SpriteMorph.prototype.getFillNumber = function () {
-    return getNumberFromColor(this.fillColor);
+SpriteMorph.prototype.getFillString = function () {
+    return getStringFromColor(this.fillColor);
 };
 
 /*
- * SpriteMorph.getFillNumber
+ * SpriteMorph.setFillString
  * 
- * Implements block logic that sets the number of the fill
+ * Implements block logic that sets the string of the fill
  */
-SpriteMorph.prototype.getFillNumber = function (num) {
-    this.setShapeColor(getColorFromNumber(num));
+SpriteMorph.prototype.setFillString = function (string) {
+    this.setShapeColor(getColorFromString(string));
 };
 
 /*
@@ -1388,21 +1390,21 @@ SpriteMorph.prototype.setTextColor = function (col) {
 };
 
 /*
- * SpriteMorph.getTextFillNumber
+ * SpriteMorph.getTextFillString
  * 
- * Implements block logic that gets the number of the text fill
+ * Implements block logic that gets the string of the text fill
  */
-SpriteMorph.prototype.getTextFillNumber = function () {
-    return getNumberFromColor(this.textColor);
+SpriteMorph.prototype.getTextFillString = function () {
+    return getStringFromColor(this.textColor);
 };
 
 /*
- * SpriteMorph.getTextFillNumber
+ * SpriteMorph.getTextFillString
  * 
- * Implements block logic that sets the number of the text fill
+ * Implements block logic that sets the string of the text fill
  */
-SpriteMorph.prototype.getTextFillNumber = function (num) {
-    this.setTextColor(getColorFromNumber(num));
+SpriteMorph.prototype.setTextFillString = function (string) {
+    this.setTextColor(getColorFromString(string));
 };
 
 /*********************************************************************/

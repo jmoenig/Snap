@@ -5,6 +5,9 @@ modules.cellularBlocks = '2013-August-2';
 /*********because sometimes you HAVE to mod the original file*********/
 /*********************************************************************/
 
+/*
+** Deals with some additional argument types that blocks can have in cellular.
+*/
 SyntaxElementMorph.prototype.labelPartScribble = SyntaxElementMorph.prototype.labelPartSnapapps
 SyntaxElementMorph.prototype.labelPartSnapapps = function (spec) 
 {
@@ -49,6 +52,9 @@ SyntaxElementMorph.prototype.labelPartSnapapps = function (spec)
     return this.labelPartScribble(spec);
 }
 
+/*
+** Returns a menu of all the cell attributes.
+*/
 InputSlotMorph.prototype.cellAttributesMenu = function () {
     var dict = {};
 	for (var i=0; i<Cell.attributes.length; i++)
@@ -58,7 +64,12 @@ InputSlotMorph.prototype.cellAttributesMenu = function () {
     return dict;
 };
 
-// BlockMorph events
+/*
+** This overrides the default execution of a block when clicked.
+**
+** If the block is a ReporterBlockMorph, it is only run once.
+** Otherwise, the block is run for all clones.
+*/
 BlockMorph.prototype.mouseClickLeft = function () {
     var top = this.topBlock(),
         receiver = top.receiver(),
@@ -69,33 +80,42 @@ BlockMorph.prototype.mouseClickLeft = function () {
     if (receiver) {
         stage = receiver.parentThatIsA(StageMorph);
 		if (stage) {
-			if (this instanceof ReporterBlockMorph)
-			{				
-				stage.children.some(function (child)
-				{
-					if (child instanceof SpriteMorph && child.parentSprite == receiver)
-					{
-						stage.threads.toggleProcess(top, child);
-						return true;
-					}
-					return false;
-				});
-
+			if (receiver === stage)
+			{
+				stage.threads.toggleProcess(top, stage);
 			}
 			else
 			{
-				stage.children.forEach(function (child)
+				if (this instanceof ReporterBlockMorph)
 				{
-					if (child instanceof SpriteMorph && child.parentSprite == receiver)
+					stage.children.some(function (child)
 					{
-						stage.threads.toggleProcess(top, child);
-					}
-				});
+						if (child instanceof SpriteMorph && child.parentSprite == receiver)
+						{
+							stage.threads.toggleProcess(top, child);
+							return true;
+						}
+						return false;
+					});
+				}
+				else
+				{
+					stage.children.forEach(function (child)
+					{
+						if (child instanceof SpriteMorph && child.parentSprite == receiver)
+						{
+							stage.threads.toggleProcess(top, child);
+						}
+					});
+				}
 			}
 		}
     }
 };
 
+/*
+** Deals with the new arrow shape for the ReporterBlockMorph
+*/
 ReporterBlockMorph.prototype.drawNew = function () {
     var context;
     this.cachedClr = this.color.toString();
@@ -117,6 +137,9 @@ ReporterBlockMorph.prototype.drawNew = function () {
     this.eraseHoles(context);
 };
 
+/*
+** Draws the arrow shape for this reporter block.
+*/
 ReporterBlockMorph.prototype.drawArrow = function (context) {
     var w = this.width(),
         h = this.height(),
