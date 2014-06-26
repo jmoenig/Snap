@@ -5070,7 +5070,6 @@ function GuitarString(pitch, duration) {
     this.N = Math.round(AudioContext.sampleRate / this.frequency);
     this.node = AudioContext.createJavaScriptNode(4096, 1, 1);
     this.playing = false;
-    this.timeoutId = null;
 
     /*
      * The decay after the n^th pass through delay + low pass is
@@ -5122,8 +5121,6 @@ GuitarString.prototype.play = function() {
         i = 0;
 
     this.numIterations = 0;
-    this.timeoutId = setTimeout(function() { myself.stop(); },
-                                1000 * myself.duration);
 
     this.node.onaudioprocess = function(e) {
         var output = e.outputBuffer.getChannelData(0);
@@ -5147,7 +5144,6 @@ GuitarString.prototype.play = function() {
 };
 
 GuitarString.prototype.stop = function() {
-    clearTimeout(this.timeoutId);
     this.node.disconnect(AudioContext.destination);
     this.playing = false;
 };

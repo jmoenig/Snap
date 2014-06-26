@@ -2357,14 +2357,19 @@ Process.prototype.doPlayGuitarString = function(pitch, beats) {
 }
 
 Process.prototype.doPlayGuitarStringForSecs = function(pitch, secs) {
-    if (!this.context.activeNote) {
+    if (!this.context.startTime) {
+        this.context.startTime = Date.now();
         this.context.activeNote = new GuitarString(pitch, secs);
         this.context.activeNote.play();
     }
-    if (this.context.activeNote && !this.context.activeNote.playing) {
-      this.context.activeNote = null;
-      return null;
+    if ((Date.now() - this.context.startTime) >= (secs * 1000)) {
+        if (this.context.activeNote) {
+            this.context.activeNote.stop();
+            this.context.activeNote = null;
+        }
+        return null;
     }
+
     this.pushContext('doYield');
     this.pushContext();
 }
