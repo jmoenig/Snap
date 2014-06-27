@@ -490,7 +490,17 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'sound',
             spec: 'tempo'
         },
-
+        doSetInstrument: {
+            type: 'command',
+            category: 'sound',
+            spec: 'set instrument to %inst',
+            defaults: [129]
+        },
+        getInstrument: {
+            type: 'reporter',
+            category: 'sound',
+            spec: 'instrument'
+        },
         // Sound - Debugging primitives for development mode
         reportSounds: {
             dev: true,
@@ -1293,6 +1303,7 @@ SpriteMorph.prototype.init = function (globals) {
     this.version = Date.now(); // for observer optimization
     this.isClone = false; // indicate a "temporary" Scratch-style clone
     this.cloneOriginName = '';
+    this.instrument = 129; // last set instrument, default is sine wave
 
     // sprite nesting properties
     this.parts = []; // not serialized, only anchor (name)
@@ -1730,6 +1741,10 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('doStopAllSounds'));
         blocks.push('-');
         blocks.push(block('doRest'));
+        blocks.push('-');
+        blocks.push(block('doSetInstrument'));
+        blocks.push(watcherToggle('getInstrument'));
+        blocks.push(block('getInstrument'));
         blocks.push('-');
         blocks.push(block('doPlayNote'));
         blocks.push(block('doPlayGuitarString'));
@@ -3468,6 +3483,16 @@ SpriteMorph.prototype.getTempo = function () {
     return 0;
 };
 
+// SpriteMorph instrument
+
+SpriteMorph.prototype.setInstrument = function (inst) {
+    this.instrument = inst;
+}
+
+SpriteMorph.prototype.getInstrument = function () {
+    return +this.instrument; // unary + converts to number if needed
+}
+
 // SpriteMorph last message
 
 SpriteMorph.prototype.getLastMessage = function () {
@@ -4149,6 +4174,7 @@ StageMorph.prototype.init = function (globals) {
     this.timerStart = Date.now();
     this.tempo = 60; // bpm
     this.lastMessage = '';
+    this.instrument = 129; // last set instrument, default is sine wave
 
     this.watcherUpdateFrequency = 2;
     this.lastWatcherUpdate = Date.now();
@@ -4411,6 +4437,16 @@ StageMorph.prototype.changeTempo = function (delta) {
 StageMorph.prototype.getTempo = function () {
     return +this.tempo;
 };
+
+// StageMorph instrument
+
+StageMorph.prototype.setInstrument = function (inst) {
+    this.instrument = inst;
+}
+
+StageMorph.prototype.getInstrument = function () {
+    return +this.instrument; // unary + converts to number if needed
+}
 
 // StageMorph messages
 
@@ -4783,6 +4819,10 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('doStopAllSounds'));
         blocks.push('-');
         blocks.push(block('doRest'));
+        blocks.push('-');
+        blocks.push(block('doSetInstrument'));
+        blocks.push(watcherToggle('getInstrument'));
+        blocks.push(block('getInstrument'));
         blocks.push('-');
         blocks.push(block('doPlayNote'));
         blocks.push(block('doPlayGuitarString'));
@@ -6128,15 +6168,18 @@ AudioContext = (function() {
 
 // Note instance creation
 
-function Note(pitch) {
+function Note(pitch, instrument) {
     this.ensureAudioContext();
     this.pitch = pitch === 0 ? 0 : pitch || 69;
     this.oscillator = null;
+    //this.amplitude = amplitude;  //unused. todo: local volume, add as parameter to Note
+    this.instrument = instrument;
 
     if (!Note.prototype.gainNode) {
         Note.prototype.gainNode = AudioContext.createGainNode();
-        Note.prototype.gainNode.gain.value = 0.25; // reduce volume by 1/4
+        Note.prototype.gainNode.gain.value = 0.25; // reduce volume to 1/4
     }
+
 }
 
 // Note playing
@@ -6149,7 +6192,7 @@ Note.prototype.play = function () {
     if (!this.oscillator.stop) {
         this.oscillator.stop = this.oscillator.noteOff;
     }
-    this.oscillator.type = 0;
+    this.oscillator.type = this.instrument - 129; // 0=sin, 1=square, 2=sawtooth, 3=triangle, 4=custom
     this.oscillator.frequency.value =
         Math.pow(2, (this.pitch - 69) / 12) * 440;
     this.oscillator.connect(this.gainNode);

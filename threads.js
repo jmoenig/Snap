@@ -2670,6 +2670,26 @@ Process.prototype.doSetTempo = function (bpm) {
     }
 };
 
+Process.prototype.reportInstrument = function () {
+    var sprite;
+    if (this.homeContext.receiver) {
+        sprite = this.homeContext.receiver.parentThatIsA(SpriteMorph);
+        if (sprite) {
+            return sprite.getInstrument();
+        }
+    }
+}
+
+Process.prototype.doSetInstrument = function (inst) {
+    var sprite;
+    if (this.homeContext.receiver) {
+        sprite = this.homeContext.receiver.parentThatIsA(SpriteMorph);
+        if (sprite) {
+            return sprite.setInstrument(inst);
+        }
+    }
+}
+
 Process.prototype.doPlayNote = function (pitch, beats) {
     var tempo = this.reportTempo();
     this.doPlayNoteForSecs(
@@ -2681,8 +2701,13 @@ Process.prototype.doPlayNote = function (pitch, beats) {
 Process.prototype.doPlayNoteForSecs = function (pitch, secs) {
     // interpolated
     if (!this.context.startTime) {
+        this.context.instrument = this.reportInstrument();
         this.context.startTime = Date.now();
-        this.context.activeNote = new Note(pitch);
+        if (this.context.instrument == 26) { // Guitar
+            this.context.activeNote = new GuitarString(pitch);
+        } else {
+            this.context.activeNote = new Note(pitch, this.context.instrument);
+        }
         this.context.activeNote.play();
     }
     if ((Date.now() - this.context.startTime) >= (secs * 1000)) {
@@ -2829,6 +2854,8 @@ function Context(
     this.isImplicitLambda = false; // marks the end of a C-shaped slot
     this.isCustomBlock = false; // marks the end of a custom block's stack
     this.emptySlots = 0; // used for block reification
+    this.instrument = 129; // current instrument, default is sine wave
+
 }
 
 Context.prototype.toString = function () {
