@@ -1747,7 +1747,6 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('getInstrument'));
         blocks.push('-');
         blocks.push(block('doPlayNote'));
-        blocks.push(block('doPlayGuitarString'));
         blocks.push('-');
         blocks.push(block('doChangeTempo'));
         blocks.push(block('doSetTempo'));
@@ -4825,7 +4824,6 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('getInstrument'));
         blocks.push('-');
         blocks.push(block('doPlayNote'));
-        blocks.push(block('doPlayGuitarString'));
         blocks.push('-');
         blocks.push(block('doChangeTempo'));
         blocks.push(block('doSetTempo'));
@@ -6172,9 +6170,9 @@ function Note(pitch, instrument) {
     this.ensureAudioContext();
     this.pitch = pitch === 0 ? 0 : pitch || 69;
     this.oscillator = null;
-    //this.amplitude = amplitude;  //unused. todo: local volume, add as parameter to Note
     this.instrument = instrument;
 
+    //this.amplitude = amplitude;  //unused. todo: local volume, add as parameter to Note
     if (!Note.prototype.gainNode) {
         Note.prototype.gainNode = AudioContext.createGainNode();
         Note.prototype.gainNode.gain.value = 0.25; // reduce volume to 1/4
