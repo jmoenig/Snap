@@ -1420,15 +1420,6 @@ SpriteMorph.prototype.toXML = function (serializer) {
             ' scale="@"' +
             ' rotation="@"' +
             ' draggable="@"' +
-            ' font-size="@"' +
-            ' font-family="@"' +
-            ' font-variant="@"' +
-            ' font-weight="@"' +
-            ' font-style="@"' +
-            ' text-align="@"' +
-            ' text-baseline="@"' +
-            ' move-sprite-after-text="@"' +
-            ' show-text-direction="@"' +
             '%' +
             ' costume="@" color="@,@,@" pen="@" ~>' +
             '%' + // nesting info
@@ -1446,15 +1437,6 @@ SpriteMorph.prototype.toXML = function (serializer) {
         this.scale,
         this.rotationStyle,
         this.isDraggable,
-        this.fontProperties['font size'],
-        this.fontProperties['font family'],
-        this.fontProperties['font variant'],
-        this.fontProperties['font weight'],
-        this.fontProperties['font style'],
-        this.fontProperties['text align'],
-        this.fontProperties['text baseline'],
-        this.fontProperties['move sprite after text'],
-        this.fontProperties['show text using sprite\'s direction'],
         this.isVisible ? '' : ' hidden="true"',
         this.getCostumeIdx(),
         this.color.r,

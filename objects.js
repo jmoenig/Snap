@@ -2526,11 +2526,12 @@ SpriteMorph.prototype.changeBrightness = function (delta) {
 SpriteMorph.prototype.doLabelText = function (text, size) {
     var stage    = this.parent,
         context  = stage.penTrails().getContext('2d'),
-        fonts    = this.fontProperties,
         rotation = radians(this.direction() - 90),
         trans    = new Point(this.center().x - stage.left(),
                              this.center().y - stage.top()),
-        ide      = this.parentThatIsA(IDE_Morph);
+        ide      = this.parentThatIsA(IDE_Morph),
+        len,
+        pos;
 
     if (this.isWarped) {
         this.endWarp();
@@ -2538,10 +2539,11 @@ SpriteMorph.prototype.doLabelText = function (text, size) {
 
     // Set font properties
     context.save();
-    context.font =  size 'pt sans-serif';
+    context.font =  size + 'pt sans-serif';
     context.textAlign = 'left';
     context.textBaseline = 'alphabetic';
     context.fillStyle = this.color.toString();
+    len = context.measureText(text).width;
     // Translate canvas for proper rotations
     context.translate(trans.x, trans.y);
     context.rotate(rotation);
@@ -2552,13 +2554,12 @@ SpriteMorph.prototype.doLabelText = function (text, size) {
     // Handle movement of sprite to text end
     // Currently this only handles LTR text correctly.
     // RTL would require negating the length.
-    var len = context.measureText(text).width,
-        // Note sin is X and cos is Y due to Logo coordinate system
-        pos = new Point(len * Math.sin(radians(this.direction())), 
-                        len * Math.cos(radians(this.direction())));
-        
+    // Note sin is X and cos is Y due to Logo based coordinate system
+    pos = new Point(len * Math.sin(radians(this.direction())), 
+                    len * Math.cos(radians(this.direction())));
+
     pos = pos.add(new Point(this.xPosition(), this.yPosition()));
-    
+
     this.gotoXY(pos.x, pos.y, false);
 
     this.changed();

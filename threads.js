@@ -2413,52 +2413,44 @@ Process.prototype.reportDistanceTo = function (name) {
 
 Process.prototype.reportAttributeOf = function (attribute, name) {
     var thisObj = this.blockReceiver(),
-        thatObj, attr, fonts, stage;
+        thatObj,
+        stage;
 
-    if (!thisObj) {
-        return '';
-    }
-    
-    stage = thisObj.parentThatIsA(StageMorph);
-    if (stage.name === name) {
-        thatObj = stage;
-    } else {
-        thatObj = this.getOtherObject(name, thisObj, stage);
-    }
-    
-    if (thatObj) {
-        fonts = Object.keys(thatObj.fontProperties);
+    if (thisObj) {
+        stage = thisObj.parentThatIsA(StageMorph);
+        if (stage.name === name) {
+            thatObj = stage;
+        } else {
+            thatObj = this.getOtherObject(name, thisObj, stage);
+        }
 
-        if (attribute instanceof Context) {
-            return this.reportContextFor(attribute, thatObj);
-        }
-        if (isString(attribute)) {
-            return thatObj.variables.getVar(attribute);
-        }
-        
-        attr = this.inputOption(attribute);
-        switch (attr) {
-        case 'x position':
-            return thatObj.xPosition ? thatObj.xPosition() : '';
-        case 'y position':
-            return thatObj.yPosition ? thatObj.yPosition() : '';
-        case 'direction':
-            return thatObj.direction ? thatObj.direction() : '';
-        case 'costume #':
-            return thatObj.getCostumeIdx();
-        case 'costume name':
-            return thatObj.costume ? thatObj.costume.name
-                    : thatObj instanceof SpriteMorph ? localize('Turtle')
-                            : localize('Empty');
-        case 'size':
-            return thatObj.getScale ? thatObj.getScale() : '';
-        default:
-            // Sprite Font Properties
-            if (fonts.indexOf(attr) > -1) {
-                return thatObj.fontProperties[attr];
+        if (thatObj) {
+            if (attribute instanceof Context) {
+                return this.reportContextFor(attribute, thatObj);
+            }
+            if (isString(attribute)) {
+                return thatObj.variables.getVar(attribute);
+            }
+
+            switch (this.inputOption(attribute)) {
+            case 'x position':
+                return thatObj.xPosition ? thatObj.xPosition() : '';
+            case 'y position':
+                return thatObj.yPosition ? thatObj.yPosition() : '';
+            case 'direction':
+                return thatObj.direction ? thatObj.direction() : '';
+            case 'costume #':
+                return thatObj.getCostumeIdx();
+            case 'costume name':
+                return thatObj.costume ? thatObj.costume.name
+                        : thatObj instanceof SpriteMorph ? localize('Turtle')
+                                : localize('Empty');
+            case 'size':
+                return thatObj.getScale ? thatObj.getScale() : '';
             }
         }
     }
+
     return '';
 };
 

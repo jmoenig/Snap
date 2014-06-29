@@ -6562,11 +6562,6 @@ InputSlotMorph.prototype.attributesMenu = function () {
             'costume name' : ['costume name'],
             'size' : ['size']
         };
-
-        dict['~~'] = null; // ~~ prevent conflict with ~ below.
-        for (var attrname in obj.fontProperties) {
-            dict[attrname] = [ attrname ];
-        }
     } else { // the stage
         dict = {
             'costume #' : ['costume #'],
