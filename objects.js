@@ -569,7 +569,7 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'pen',
             spec: 'label %txt of size %n',
             defaults: [localize('Hello!'), 12]
-        }
+        },
         
         // Control
         receiveGo: {
@@ -2763,7 +2763,7 @@ SpriteMorph.prototype.doLabelText = function (text, size) {
     // Currently this only handles LTR text correctly.
     // RTL would require negating the length.
     // Note sin is X and cos is Y due to Logo based coordinate system
-    pos = new Point(len * Math.sin(radians(this.direction())), 
+    pos = new Point(len * Math.sin(radians(this.direction())),
                     len * Math.cos(radians(this.direction())));
 
     pos = pos.add(new Point(this.xPosition(), this.yPosition()));
