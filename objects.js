@@ -563,7 +563,14 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'pen',
             spec: 'stamp'
         },
-
+        doLabelText: {
+            only: SpriteMorph,
+            type: 'command',
+            category: 'pen',
+            spec: 'label %txt of size %n',
+            defaults: [localize('Hello!'), 12]
+        }
+        
         // Control
         receiveGo: {
             type: 'hat',
@@ -1762,6 +1769,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('setSize'));
         blocks.push('-');
         blocks.push(block('doStamp'));
+        blocks.push(block('doLabelText'));
 
     } else if (cat === 'control') {
 
