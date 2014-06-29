@@ -618,44 +618,6 @@ SnapSerializer.prototype.loadSprites = function (xmlString, ide) {
         sprite.drawNew();
         sprite.gotoXY(+model.attributes.x || 0, +model.attributes.y || 0);
         
-        if (model.attributes['font-size']) {
-            sprite.fontProperties['font size'] = model.attributes['font-size'];
-        }
-        if (model.attributes['font-variant']) {
-            sprite.fontProperties['font variant'] =
-             model.attributes['font-variant'];
-        }
-        if (model.attributes['font-family']) {
-            sprite.fontProperties['font family'] =
-             model.attributes['font-family'];
-        }
-        if (model.attributes['font-weight']) {
-            sprite.fontProperties['font weight'] =
-             model.attributes['font-weight'];
-        }
-        if (model.attributes['font-style']) {            
-            sprite.fontProperties['font style'] =
-             model.attributes['font-style'];
-        }
-        if (model.attributes['text-align']) {            
-            sprite.fontProperties['text align'] =
-             model.attributes['text-align'];
-        }
-        if (model.attributes['text-baseline']) {            
-            sprite.fontProperties['text baseline'] =
-             model.attributes['text-baseline'];
-        }
-        if (model.attributes['move-sprite-after-text']) {            
-            // make sure option is a boolean
-            sprite.fontProperties['move sprite after text'] =
-                model.attributes['move-sprite-after-text'] === 'true';
-        }
-        if (model.attributes['show-text-direction']) {            
-            // make sure option is a boolean
-            sprite.fontProperties['show text using sprite\'s direction'] =
-                model.attributes['show-text-direction'] === 'true';
-        }
-        
         myself.loadObject(sprite, model);
     });
     this.objects = {};
@@ -1177,39 +1139,6 @@ SnapSerializer.prototype.loadValue = function (model) {
         v.heading = parseFloat(model.attributes.heading) || 0;
         v.drawNew();
         v.gotoXY(+model.attributes.x || 0, +model.attributes.y || 0);
-        
-        if (model.attributes['font-size']) {
-            v.fontProperties['font size'] = model.attributes['font-size'];
-        }
-        if (model.attributes['font-variant']) {
-            v.fontProperties['font variant'] = model.attributes['font-variant'];
-        }
-        if (model.attributes['font-family']) {
-            v.fontProperties['font family'] = model.attributes['font-family'];
-        }
-        if (model.attributes['font-weight']) {            
-            v.fontProperties['font weight'] = model.attributes['font-weight'];
-        }
-        if (model.attributes['font-style']) {            
-            v.fontProperties['font style'] = model.attributes['font-style'];
-        }
-        if (model.attributes['text-align']) {            
-            v.fontProperties['text align'] = model.attributes['text-align'];
-        }
-        if (model.attributes['text-baseline']) {            
-            v.fontProperties['text baseline'] =
-             model.attributes['text-baseline'];
-        }
-        if (model.attributes['move-sprite-after-text']) {            
-            // make sure option is a boolean
-            v.fontProperties['move sprite after text'] =
-                model.attributes['move-sprite-after-text'] === 'true';
-        }
-        if (model.attributes['show-text-direction']) {            
-            // make sure option is a boolean
-            v.fontProperties['show text using sprite\'s direction'] =
-                model.attributes['show-text-direction'] === 'true';
-        }
         
         myself.loadObject(v, model);
         return v;

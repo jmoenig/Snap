@@ -521,23 +521,11 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'pen',
             spec: 'stamp'
         },
-        doStampText: {
+        doLabelText: {
             type: 'command',
             category: 'pen',
-            spec: 'stamp text %txt',
-            defaults: [localize('Hello!')]
-        },
-        doSetTextOption: {
-            type: 'command',
-            category: 'pen',
-            spec: 'set text option %fontOption to %fontValue',
-            defaults: [['font family'], 'Helvetica']
-        },
-        reportTextWidth: {
-            type: 'reporter',
-            category: 'pen',
-            spec: 'pixel width of %txt',
-            defaults: [localize('Hello!')]
+            spec: 'stamp text %txt of size %n',
+            defaults: [localize('Hello!'), 12]
         },
 
         // Control
@@ -1707,9 +1695,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push('-');
         blocks.push(block('doStamp'));
         blocks.push('-');
-        blocks.push(block('doStampText'));
-        blocks.push(block('doSetTextOption'));
-        blocks.push(block('reportTextWidth'));
+        blocks.push(block('doLabelText'));
 
     } else if (cat === 'control') {
 
@@ -2536,44 +2522,8 @@ SpriteMorph.prototype.changeBrightness = function (delta) {
     this.setBrightness(this.getBrightness() + (+delta || 0));
 };
 
-// Text Stamping and Font Properties
 
-// This holds the current font options for the sprite
-SpriteMorph.prototype.fontProperties = {
-    // CSS Style Font Options (which work for Canvas)
-    'font size' : '12', // measured in 'px'
-    'font family' : 'Helvetica',
-    'font variant' : 'normal',
-    'font weight' : 'normal',
-    'font style' : 'normal',
-    // 'line-height' : '1', // currently not exposed
-    // Canvas Font Options
-    'text align' : 'left',
-    'text baseline' : 'alphabetic',
-    // Custom Snap! Options
-    'move sprite after text' : false,
-    'show text using sprite\'s direction' : false
-};
-
-SpriteMorph.prototype.doSetTextOption = function (option, value) {
-    var stage = this.parent,
-        context = stage.penTrails().getContext('2d'),
-        fonts = this.fontProperties;
-
-    if (!isString(option)) {
-        option = option[0];
-    }
-    
-    fonts[option] = value;
-    
-    // These items should be coerced to booleans
-    if (option === 'move sprite after text' || 
-        option === 'show text using sprite\'s direction') {
-        fonts[option] = value === 'true' || value && value !== 'false';
-    }
-};
-
-SpriteMorph.prototype.doStampText = function (text) {
+SpriteMorph.prototype.doLabelText = function (text, size) {
     var stage    = this.parent,
         context  = stage.penTrails().getContext('2d'),
         fonts    = this.fontProperties,
@@ -2586,41 +2536,30 @@ SpriteMorph.prototype.doStampText = function (text) {
         this.endWarp();
     }
 
+    // Set font properties
     context.save();
-    context.font = fonts['font style'] + ' ' + fonts['font variant'] + ' ' +
-                   fonts['font weight'] + ' ' + fonts['font size'] + 'px ' +
-                   fonts['font family'];
-    context.textAlign = fonts['text align'];
-    context.textBaseline = fonts['text baseline'];
-    context.translate(trans.x, trans.y);
-    if (fonts['show text using sprite\'s direction']) {
-        context.rotate(rotation);
-    }
+    context.font =  size 'pt sans-serif';
+    context.textAlign = 'left';
+    context.textBaseline = 'alphabetic';
     context.fillStyle = this.color.toString();
+    // Translate canvas for proper rotations
+    context.translate(trans.x, trans.y);
+    context.rotate(rotation);
     context.fillText(text, 0, 0);
     context.translate(-trans.x, -trans.y);
     context.restore();
 
-    if (fonts['move sprite after text']) {
-        var len = this.reportTextWidth(text),
-            pos = new Point(len, 0); // Move right, for text align left
-            
-        // Adjust alignment position for Right and Center text alignment
-        if (fonts['text align'] === 'right') {
-            len = -len;
-        } else if (fonts['text align'] === 'center') {
-            len = 0;
-        }
+    // Handle movement of sprite to text end
+    // Currently this only handles LTR text correctly.
+    // RTL would require negating the length.
+    var len = context.measureText(text).width,
+        // Note sin is X and cos is Y due to Logo coordinate system
+        pos = new Point(len * Math.sin(radians(this.direction())), 
+                        len * Math.cos(radians(this.direction())));
         
-        if (fonts['show text using sprite\'s direction']) {
-            // Note sin is X and cos is Y due to Logo coordinate system
-            pos = new Point(len * Math.sin(radians(this.direction())), 
-                            len * Math.cos(radians(this.direction())));
-        }
-        
-        pos = pos.add(new Point(this.xPosition(), this.yPosition()));
-        this.gotoXY(pos.x, pos.y, false);
-    }
+    pos = pos.add(new Point(this.xPosition(), this.yPosition()));
+    
+    this.gotoXY(pos.x, pos.y, false);
 
     this.changed();
 
@@ -2630,20 +2569,6 @@ SpriteMorph.prototype.doStampText = function (text) {
 
     // Refresh layout to guarnatee all text shows
     ide.fixLayout();
-};
-
-// Measure the input text width based on the current text options.
-
-SpriteMorph.prototype.reportTextWidth = function (text) {
-    var stage   = this.parent,
-        fonts   = this.fontProperties,
-        context = stage.penTrails().getContext('2d');
-
-    context.font = fonts['font style'] + ' ' + fonts['font variant'] + ' ' +
-                   fonts['font weight'] + ' ' + fonts['font size'] + 'px ' +
-                   fonts['font family'];
-    
-    return context.measureText(text).width;
 };
 
 // SpriteMorph layers

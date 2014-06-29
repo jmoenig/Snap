@@ -1039,29 +1039,6 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             );
             part.setContents(['sqrt']);
             break;
-        case '%fontOption':
-            var fontOption = {};
-            for (var key in SpriteMorph.prototype.fontProperties) {
-                fontOption[key] = [ key ];
-            }
-
-            part = new InputSlotMorph(
-                null, // text?
-                false, // numeric?
-                fontOption,
-                true // read-only?
-            );
-            break;
-        case '%fontValue':
-            // These defaults are for the font size option
-            // Menu options will be adjusted based on the %fontOption selection
-            part = new InputSlotMorph(
-                null, // text?
-                false, // numeric?
-                'fontValuesMenu',
-                false // read-only?
-            );
-            break;
         case '%txtfun':
             part = new InputSlotMorph(
                 null,
@@ -6629,85 +6606,6 @@ InputSlotMorph.prototype.costumesMenu = function () {
             dict[name] = name;
         });
     }
-    return dict;
-};
-
-// Controls the options avilable for the set font option block
-// The dict sets up menu values, which are dependant on the selected option
-// Available options are defined in SpriteMorph.prototype.fontProperties
-InputSlotMorph.prototype.fontValuesDict = {
-    'font size' : {
-        '10' : '10',
-        '12' : '12',
-        '14' : '14',
-        '16' : '16',
-        '18' : '18',
-        '20' : '20'
-    },
-    'font family' : { // Contains standard CSS font families + example
-        'cursive' : 'cursive',
-        'monospace' : 'monospace',
-        'sans-serif' : 'sans-serif',
-        'serif' : 'serif'
-    },
-    'font variant' : { // Standard CSS variants
-         'normal' : 'normal',
-         'small-caps' : 'small-caps'
-    },
-    'font weight' : {  // Text options are clearer than 100-900 values
-        'normal' : 'normal',
-        'bold' : 'bold',
-        'lighter' : 'lighter'
-    },
-    'text align' : { // All Canvas text align options
-        'left' : 'left',
-        'center' : 'center',
-        'right' : 'right'
-    },
-    'text baseline' : { // Basic baseline options
-        'alphabetic' : 'alphabetic',
-        'bottom' : 'bottom',
-        'middle' : 'middle',
-        'top' : 'top'
-    },
-    'move sprite after text' : {
-        'false' : 'false',
-        'true' : 'true'
-    },
-    'show text using sprite\'s direction' : {
-        'false' : 'false',
-        'true' : 'true'
-    }
-};
-
-InputSlotMorph.prototype.fontValuesMenu = function () {
-    var block = this.parentThatIsA(BlockMorph),
-        option = block.inputs()[0].evaluate(),
-        dict = {};
-
-    if (!option) {
-        return dict;
-    }
-
-    if (!isString(option)) {
-        // get the string from evaluation list
-        option = option[0];
-    }
-
-    dict = this.fontValuesDict[option];
-
-    // Fix for when user switches between editable and non-editable menus
-    if (option === 'font size' || option === 'font family') {
-        this.contents().shadowOffset = new Point();
-        this.contents().shadowColor = null;
-        this.contents().setColor(new Color(0, 0, 0));
-    }
-
-    // Only font size has numeric values
-    this.isNumeric  = option === 'font size';
-    // Only size and family are _not_ read only
-    this.isReadOnly = option !== 'font size' && option !== 'font family';
-
     return dict;
 };
 
