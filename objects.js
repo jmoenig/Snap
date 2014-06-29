@@ -6172,7 +6172,7 @@ function Note(pitch, instrument) {
     this.oscillator = null;
     this.instrument = instrument;
 
-    //this.amplitude = amplitude;  //unused. todo: local volume, add as parameter to Note
+   // this.amplitude = 0.25; // todo: local volume, add as parameter to Note
     if (!Note.prototype.gainNode) {
         Note.prototype.gainNode = AudioContext.createGainNode();
         Note.prototype.gainNode.gain.value = 0.25; // reduce volume to 1/4
@@ -6211,11 +6211,66 @@ Note.prototype.ensureAudioContext = function() {
     }
 };
 
+// ADSRNote ///////////////////////////////////////////////////////
+
+// I am a single Note with an ADSR envelope that inherits from Note
+ADSRNote.prototype = new Note();
+ADSRNote.prototype.constructor = ADSRNote;
+ADSRNote.uber = Note.prototype;
+
+// ADSRNote instance creation
+
+function ADSRNote(pitch, instrument, duration) {
+    Note.call(this, pitch, instrument);
+    this.duration = duration;
+    this.noteGain = null;
+}
+
+ADSRNote.prototype.play = function () {
+    this.oscillator = AudioContext.createOscillator();
+    if (!this.oscillator.start) {
+        this.oscillator.start = this.oscillator.noteOn;
+    }
+    if (!this.oscillator.stop) {
+        this.oscillator.stop = this.oscillator.noteOff;
+    }
+
+    // gain for this *specific* note (used to implement envelope)
+    this.noteGain = AudioContext.createGainNode();
+    this.noteGain.gain.value = 0.0;
+    this.oscillator.start(0); // deprecated, renamed to start()
+
+    var now = AudioContext.currentTime;
+    this.noteGain.gain.cancelScheduledValues( now );
+    
+    // Anchor beginning of ramp at current value.
+    this.noteGain.gain.setValueAtTime(0, now);
+
+    this.oscillator.type = this.instrument - 129; // 0=sin, 1=square, 2=sawtooth, 3=triangle, 4=custom
+
+    this.oscillator.frequency.value =
+        Math.pow(2, (this.pitch - 69) / 12) * 440; // should be 440
+    this.oscillator.connect(this.noteGain);
+    this.noteGain.connect(this.gainNode);
+    this.gainNode.connect(AudioContext.destination);
+
+}
+
+
+ADSRNote.prototype.stop = function() {
+    Note.call(this);
+    if (this.noteGain) {
+        this.noteGain = null; // facilitate garbage collection   
+        this.gainNode.disconnect(AudioContext.destination);       
+    }
+};
+
 // GuitarString ///////////////////////////////////////////////////////
 
 // I am a single guitar string that inherits from Note
 GuitarString.prototype = new Note();
 GuitarString.prototype.constructor = GuitarString;
+GuitarString.uber = Note.prototype;
 
 // GuitarString instance creation
 
@@ -6226,7 +6281,6 @@ function GuitarString(pitch, duration) {
     this.frequency = Math.pow(2, (this.pitch - 69) / 12) * 440;
     this.N = Math.round(AudioContext.sampleRate / this.frequency);
     this.node = AudioContext.createJavaScriptNode(4096, 1, 1);
-    this.playing = false;
 
     /*
      * The decay after the n^th pass through delay + low pass is
@@ -6297,12 +6351,10 @@ GuitarString.prototype.play = function() {
     };
 
     this.node.connect(AudioContext.destination);
-    this.playing = true;
 };
 
 GuitarString.prototype.stop = function() {
     this.node.disconnect(AudioContext.destination);
-    this.playing = false;
 };
 
 

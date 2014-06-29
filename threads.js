@@ -2704,12 +2704,42 @@ Process.prototype.doPlayNoteForSecs = function (pitch, secs) {
         this.context.instrument = this.reportInstrument();
         this.context.startTime = Date.now();
         if (this.context.instrument == 26) { // Guitar
-            this.context.activeNote = new GuitarString(pitch);
+            this.context.activeNote = new GuitarString(pitch, secs);
         } else {
-            this.context.activeNote = new Note(pitch, this.context.instrument);
+            this.context.activeNote = new ADSRNote(pitch, this.context.instrument, secs);
         }
         this.context.activeNote.play();
     }
+
+    // Ramp up and down.
+    // These values are "arbitrary choices"--later plans are to 
+    // choose suitable defaults, then put them under direct user control
+    // (either on a per sprite, per instrument, or per note level, TBD)
+
+
+    // First steps - should be implemented as ADSRNote functions...
+    // bug: guitarstring doesn't work right now (just call another function or make an adsrnote function)
+    // bug: changing instrument not working?
+    
+    var amplitude = 0.25;
+    var attack = 0.01;
+    var decay = 0.01;
+    var sustainLevel = 0.75;
+    var release = 0.01;
+
+    if ((Date.now() - this.context.startTime) < attack) {
+        percent = (Date.now() - this.context.startTime) / attack;
+        this.context.activeNote.noteGain.gain.setValueAtTime(amplitude * percent, AudioContext.currentTime);
+    } else if ((Date.now() - this.context.startTime) < attack + decay) {
+        percent = (Date.now() - this.context.startTime - attack) / decay;
+        this.context.activeNote.noteGain.gain.setValueAtTime(amplitude + amplitude * (sustainLevel - 1) * percent, AudioContext.currentTime);
+    } else if ((Date.now() - this.context.startTime) < 1000*secs - release) {
+        this.context.activeNote.noteGain.gain.setValueAtTime(sustainLevel * amplitude, AudioContext.currentTime);
+    } else if ((Date.now() - this.context.startTime) < 1000*secs) {
+        percent = (1000*secs - (Date.now() - this.context.startTime)) / release;
+        this.context.activeNote.noteGain.gain.setValueAtTime(sustainLevel * amplitude * percent, AudioContext.currentTime);
+    }
+
     if ((Date.now() - this.context.startTime) >= (secs * 1000)) {
         if (this.context.activeNote) {
             this.context.activeNote.stop();
