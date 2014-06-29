@@ -2674,8 +2674,11 @@ Process.prototype.reportInstrument = function () {
     var sprite;
     if (this.homeContext.receiver) {
         sprite = this.homeContext.receiver.parentThatIsA(SpriteMorph);
+        stage = this.homeContext.receiver.parentThatIsA(StageMorph);
         if (sprite) {
             return sprite.getInstrument();
+        } else if (stage) {
+            return stage.getInstrument();
         }
     }
 }
@@ -2684,61 +2687,60 @@ Process.prototype.doSetInstrument = function (inst) {
     var sprite;
     if (this.homeContext.receiver) {
         sprite = this.homeContext.receiver.parentThatIsA(SpriteMorph);
+        stage = this.homeContext.receiver.parentThatIsA(StageMorph);
         if (sprite) {
             return sprite.setInstrument(inst);
+        } else if (stage) {
+            return stage.setInstrument(inst);
         }
     }
 }
 
 Process.prototype.doPlayNote = function (pitch, beats) {
     var tempo = this.reportTempo();
-    this.doPlayNoteForSecs(
-        parseFloat(pitch || '0'),
-        60 / tempo * parseFloat(beats || '0')
-    );
-};
+    var pitch = parseFloat(pitch || '0');
+    var secs = 60 / tempo * parseFloat(beats || '0');
 
-Process.prototype.doPlayNoteForSecs = function (pitch, secs) {
-    // interpolated
     if (!this.context.startTime) {
         this.context.instrument = this.reportInstrument();
         this.context.startTime = Date.now();
+
         if (this.context.instrument == 26) { // Guitar
             this.context.activeNote = new GuitarString(pitch, secs);
+        } else if ([129,130,131,132].indexOf(this.context.instrument) > -1) { // ADSR
+            this.context.activeNote = new ADSRNote(pitch, this.context.instrument, secs);
         } else {
             this.context.activeNote = new ADSRNote(pitch, this.context.instrument, secs);
         }
         this.context.activeNote.play();
-    }
 
-    // Ramp up and down.
-    // These values are "arbitrary choices"--later plans are to 
-    // choose suitable defaults, then put them under direct user control
-    // (either on a per sprite, per instrument, or per note level, TBD)
+    } else if (([129,130,131,132].indexOf(this.context.instrument) > -1) && this.context.activeNote) { // ADSR 
+        //above array could be implemented as * isADSRNote(inst) *
 
 
-    // First steps - should be implemented as ADSRNote functions...
-    // bug: guitarstring doesn't work right now (just call another function or make an adsrnote function)
-    // bug: changing instrument not working?
-    
-    var amplitude = 0.25;
-    var attack = 0.01;
-    var decay = 0.01;
-    var sustainLevel = 0.75;
-    var release = 0.01;
-
-    if ((Date.now() - this.context.startTime) < attack) {
-        percent = (Date.now() - this.context.startTime) / attack;
-        this.context.activeNote.noteGain.gain.setValueAtTime(amplitude * percent, AudioContext.currentTime);
-    } else if ((Date.now() - this.context.startTime) < attack + decay) {
-        percent = (Date.now() - this.context.startTime - attack) / decay;
-        this.context.activeNote.noteGain.gain.setValueAtTime(amplitude + amplitude * (sustainLevel - 1) * percent, AudioContext.currentTime);
-    } else if ((Date.now() - this.context.startTime) < 1000*secs - release) {
-        this.context.activeNote.noteGain.gain.setValueAtTime(sustainLevel * amplitude, AudioContext.currentTime);
-    } else if ((Date.now() - this.context.startTime) < 1000*secs) {
-        percent = (1000*secs - (Date.now() - this.context.startTime)) / release;
-        this.context.activeNote.noteGain.gain.setValueAtTime(sustainLevel * amplitude * percent, AudioContext.currentTime);
-    }
+        // Ramp up and down.
+        // These values are "arbitrary choices"--later plans are to 
+        // choose suitable defaults, then put them under direct user control
+        // (either on a per sprite, per instrument, or per note level, TBD)
+        var amplitude = 0.25;
+        var attack = 0.01;
+        var decay = 0.01;
+        var sustainLevel = 0.75;
+        var release = 0.01;
+        // First steps - should be implemented as ADSRNote functions...
+        if ((Date.now() - this.context.startTime) < attack) {
+            percent = (Date.now() - this.context.startTime) / attack;
+            this.context.activeNote.noteGain.gain.setValueAtTime(amplitude * percent, AudioContext.currentTime);
+        } else if ((Date.now() - this.context.startTime) < attack + decay) {
+            percent = (Date.now() - this.context.startTime - attack) / decay;
+            this.context.activeNote.noteGain.gain.setValueAtTime(amplitude + amplitude * (sustainLevel - 1) * percent, AudioContext.currentTime);
+        } else if ((Date.now() - this.context.startTime) < 1000*secs - release) {
+            this.context.activeNote.noteGain.gain.setValueAtTime(sustainLevel * amplitude, AudioContext.currentTime);
+        } else if ((Date.now() - this.context.startTime) < 1000*secs) {
+            percent = (1000*secs - (Date.now() - this.context.startTime)) / release;
+            this.context.activeNote.noteGain.gain.setValueAtTime(sustainLevel * amplitude * percent, AudioContext.currentTime);
+        }
+   }
 
     if ((Date.now() - this.context.startTime) >= (secs * 1000)) {
         if (this.context.activeNote) {
@@ -2747,35 +2749,10 @@ Process.prototype.doPlayNoteForSecs = function (pitch, secs) {
         }
         return null;
     }
+
     this.pushContext('doYield');
     this.pushContext();
 };
-
-Process.prototype.doPlayGuitarString = function(pitch, beats) {
-    var tempo = this.reportTempo();
-    this.doPlayGuitarStringForSecs(
-        parseFloat(pitch || '0'),
-        60 / tempo * parseFloat(beats || '0')
-    );
-}
-
-Process.prototype.doPlayGuitarStringForSecs = function(pitch, secs) {
-    if (!this.context.startTime) {
-        this.context.startTime = Date.now();
-        this.context.activeNote = new GuitarString(pitch, secs);
-        this.context.activeNote.play();
-    }
-    if ((Date.now() - this.context.startTime) >= (secs * 1000)) {
-        if (this.context.activeNote) {
-            this.context.activeNote.stop();
-            this.context.activeNote = null;
-        }
-        return null;
-    }
-
-    this.pushContext('doYield');
-    this.pushContext();
-}
 
 // Process constant input options
 

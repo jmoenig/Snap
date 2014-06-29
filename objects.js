@@ -6240,11 +6240,8 @@ ADSRNote.prototype.play = function () {
     this.noteGain.gain.value = 0.0;
     this.oscillator.start(0); // deprecated, renamed to start()
 
-    var now = AudioContext.currentTime;
-    this.noteGain.gain.cancelScheduledValues( now );
-    
     // Anchor beginning of ramp at current value.
-    this.noteGain.gain.setValueAtTime(0, now);
+    this.noteGain.gain.setValueAtTime(0, AudioContext.currentTime);
 
     this.oscillator.type = this.instrument - 129; // 0=sin, 1=square, 2=sawtooth, 3=triangle, 4=custom
 
@@ -6260,6 +6257,7 @@ ADSRNote.prototype.play = function () {
 ADSRNote.prototype.stop = function() {
     Note.call(this);
     if (this.noteGain) {
+        this.noteGain.gain.setValueAtTime(0, AudioContext.currentTime);
         this.noteGain = null; // facilitate garbage collection   
         this.gainNode.disconnect(AudioContext.destination);       
     }
