@@ -2710,16 +2710,16 @@ Process.prototype.doPlayNote = function (pitch, beats) {
         } else if ([129,130,131,132].indexOf(this.context.instrument) > -1) { // ADSR
             this.context.activeNote = new ADSRNote(pitch, this.context.instrument, secs);
         } else {
-            this.context.activeNote = new ADSRNote(pitch, this.context.instrument, secs);
+            this.context.activeNote = new Note(pitch, this.context.instrument);
         }
         this.context.activeNote.play();
 
-    } else if (([129,130,131,132].indexOf(this.context.instrument) > -1) && this.context.activeNote) { // ADSR 
+    } else if (([129,130,131,132].indexOf(this.context.instrument) > -1) && this.context.activeNote) { // ADSR
         //above array could be implemented as * isADSRNote(inst) *
 
 
         // Ramp up and down.
-        // These values are "arbitrary choices"--later plans are to 
+        // These values are "arbitrary choices"--later plans are to
         // choose suitable defaults, then put them under direct user control
         // (either on a per sprite, per instrument, or per note level, TBD)
         var amplitude = 0.25;

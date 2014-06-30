@@ -6190,7 +6190,7 @@ Note.prototype.play = function () {
     if (!this.oscillator.stop) {
         this.oscillator.stop = this.oscillator.noteOff;
     }
-    this.oscillator.type = this.instrument - 129; // 0=sin, 1=square, 2=sawtooth, 3=triangle, 4=custom
+    this.oscillator.type = 0; // 0=sin, 1=square, 2=sawtooth, 3=triangle, 4=custom
     this.oscillator.frequency.value =
         Math.pow(2, (this.pitch - 69) / 12) * 440;
     this.oscillator.connect(this.gainNode);
