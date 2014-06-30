@@ -4425,6 +4425,33 @@ ProjectDialogMorph.prototype.setSource = function (source) {
 			null,
 			function () {myself.ok();}
 		);
+    
+    //We need action declaration here to select default
+		this.listField.action = function (item) {
+            var img, desc;
+            if (item === undefined) {return; }
+            if (myself.nameField) {
+               myself.nameField.setContents(item.name || '');
+            }
+			var request = new XMLHttpRequest();
+			request.open("GET", config.urls.goals_url, false);
+			request.send();
+			var JSON_object = JSON.parse(request.responseText);
+			for (var i = 0; i < JSON_object.length; i++){
+				if(JSON_object[i].name === item.name){
+					img = JSON_object[i].img_url;
+					desc = JSON_object[i].description;
+					myself.notesText.text = desc || '';
+					myself.notesText.drawNew();
+					myself.notesField.contents.adjustBounds();
+					myself.preview.texture = img || null;
+					myself.preview.cachedTexture = img;
+					myself.preview.drawNew();
+					myself.edit();
+				}
+			}
+    };
+    this.listField.action(this.listField.elements[0]);
 	}
 	else{
 		this.listField = new ListMorph(
@@ -4471,31 +4498,7 @@ ProjectDialogMorph.prototype.setSource = function (source) {
             }
             myself.edit();
         };	
-	} else if (this.source === 'goals'){
-		this.listField.action = function (item) {
-            var img, desc;
-            if (item === undefined) {return; }
-            if (myself.nameField) {
-               myself.nameField.setContents(item.name || '');
-            }
-			var request = new XMLHttpRequest();
-			request.open("GET", config.urls.goals_url, false);
-			request.send();
-			var JSON_object = JSON.parse(request.responseText);
-			for (var i = 0; i < JSON_object.length; i++){
-				if(JSON_object[i].name === item.name){
-					img = JSON_object[i].img_url;
-					desc = JSON_object[i].description;
-					myself.notesText.text = desc || '';
-					myself.notesText.drawNew();
-					myself.notesField.contents.adjustBounds();
-					myself.preview.texture = img || null;
-					myself.preview.cachedTexture = img;
-					myself.preview.drawNew();
-					myself.edit();
-				}
-			}
-        };
+	} else if (this.source === 'goals'){ //Goals action moved above.
     } else { // 'examples', 'cloud' is initialized elsewhere
         this.listField.action = function (item) {
             var src, xml;
