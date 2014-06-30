@@ -453,6 +453,9 @@ IDE_Morph.prototype.openIn = function (world) {
     } else {
         interpretUrlAnchors.call(this);
     }
+
+    //Precache thumbnails
+    ProjectDialogMorph.prototype.getGoalProjectList();
 };
 
 // IDE_Morph construction
