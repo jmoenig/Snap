@@ -2925,7 +2925,7 @@ SpriteMorph.prototype.applyGraphicsEffects = function (canvas) {
         var i;
         if (value !== 0) {
             for (i = 0; i < p.length; i += 4) {
-                p[i] += value; //255 = 100% of this color 
+                p[i] += value; //255 = 100% of this color
                 p[i + 1] += value;
                 p[i + 2] += value;
             }
@@ -6258,8 +6258,8 @@ ADSRNote.prototype.stop = function() {
     Note.call(this);
     if (this.noteGain) {
         this.noteGain.gain.setValueAtTime(0, AudioContext.currentTime);
-        this.noteGain = null; // facilitate garbage collection   
-        this.gainNode.disconnect(AudioContext.destination);       
+        this.noteGain.disconnect(this.gainNode);
+        this.noteGain = null;
     }
 };
 
@@ -6283,13 +6283,13 @@ function GuitarString(pitch, duration) {
     /*
      * The decay after the n^th pass through delay + low pass is
      *    (cos(pi * f * T_f)*decay)^n
-     * where T_f is the inverse of the sample rate. 
-     * 
+     * where T_f is the inverse of the sample rate.
+     *
      * We care about the decay per time t, since we want to be able to play a
      * string for a particular duration. With a sampling rate of s, we go
      * through n samples in time t = n / s. Furthermore, in one pass, we go
      * through N + 1/2 samples (the 1/2 comes about as the phase delay from
-     * the averaging low pass). 
+     * the averaging low pass).
      *
      * The number of seconds until the magnitude is below audible levels
      * (generally -60dB) can then be calculated (or rather approximated as):
@@ -6302,8 +6302,8 @@ function GuitarString(pitch, duration) {
      *
      * We can use this to get a decay given the user input duration:
      *  decay = e^{(-(N + 0.5) * ln(1000)) / (dur * s)} / cos(pi * freq / s);
-     *    
-     * Derivations from 
+     *
+     * Derivations from
      *   Jaffe and Smith "Extensions of the Karplus-Strong Plucked-String
      *   Algorithm"
      */
@@ -6345,7 +6345,7 @@ GuitarString.prototype.play = function() {
             // wrap around if necessary
             signalIndex = (signalIndex + 1) % N;
         }
-        // after about 1500 low pass filter passes later, the 
+        // after about 1500 low pass filter passes later, the
     };
 
     this.node.connect(AudioContext.destination);
