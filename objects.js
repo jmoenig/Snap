@@ -137,6 +137,7 @@ var Sound;
 
 var AudioContext;
 var GuitarString;
+var ADSRNote;
 var Note;
 var CellMorph;
 var WatcherMorph;
@@ -3486,11 +3487,11 @@ SpriteMorph.prototype.getTempo = function () {
 
 SpriteMorph.prototype.setInstrument = function (inst) {
     this.instrument = inst;
-}
+};
 
 SpriteMorph.prototype.getInstrument = function () {
     return +this.instrument; // unary + converts to number if needed
-}
+};
 
 // SpriteMorph last message
 
@@ -4441,11 +4442,11 @@ StageMorph.prototype.getTempo = function () {
 
 StageMorph.prototype.setInstrument = function (inst) {
     this.instrument = inst;
-}
+};
 
 StageMorph.prototype.getInstrument = function () {
     return +this.instrument; // unary + converts to number if needed
-}
+};
 
 // StageMorph messages
 
@@ -6148,7 +6149,7 @@ Sound.prototype.toDataURL = function () {
 
 // AudioContext /////////////////////////////////////////////////
 
-AudioContext = (function() {
+AudioContext = (function () {
     var AudioContextCreator = (function () {
         // cross browser some day?
         return window.AudioContext ||
@@ -6180,6 +6181,10 @@ function Note(pitch, instrument) {
 
 }
 
+// Note types
+Note.ADSRNotes = [129, 130, 131, 132];
+Note.guitarNotes = [26];
+
 // Note playing
 
 Note.prototype.play = function () {
@@ -6190,7 +6195,8 @@ Note.prototype.play = function () {
     if (!this.oscillator.stop) {
         this.oscillator.stop = this.oscillator.noteOff;
     }
-    this.oscillator.type = 0; // 0=sin, 1=square, 2=sawtooth, 3=triangle, 4=custom
+    this.oscillator.type = 0;
+    // 0=sin, 1=square, 2=sawtooth, 3=triangle, 4=custom
     this.oscillator.frequency.value =
         Math.pow(2, (this.pitch - 69) / 12) * 440;
     this.oscillator.connect(this.gainNode);
@@ -6205,7 +6211,7 @@ Note.prototype.stop = function () {
     }
 };
 
-Note.prototype.ensureAudioContext = function() {
+Note.prototype.ensureAudioContext = function () {
     if (AudioContext === undefined) {
         throw new Error('Web Audio API is not supported\nin this browser');
     }
@@ -6243,18 +6249,18 @@ ADSRNote.prototype.play = function () {
     // Anchor beginning of ramp at current value.
     this.noteGain.gain.setValueAtTime(0, AudioContext.currentTime);
 
-    this.oscillator.type = this.instrument - 129; // 0=sin, 1=square, 2=sawtooth, 3=triangle, 4=custom
+    this.oscillator.type = this.instrument - 129;
+    // 0=sin, 1=square, 2=sawtooth, 3=triangle, 4=custom
 
     this.oscillator.frequency.value =
         Math.pow(2, (this.pitch - 69) / 12) * 440; // should be 440
     this.oscillator.connect(this.noteGain);
     this.noteGain.connect(this.gainNode);
     this.gainNode.connect(AudioContext.destination);
+};
 
-}
 
-
-ADSRNote.prototype.stop = function() {
+ADSRNote.prototype.stop = function () {
     Note.call(this);
     if (this.noteGain) {
         this.noteGain.gain.setValueAtTime(0, AudioContext.currentTime);
@@ -6312,7 +6318,7 @@ function GuitarString(pitch, duration) {
     var f = this.frequency,
         s = AudioContext.sampleRate,
         pi = Math.PI,
-        powE = function(x) { return Math.pow(Math.E, x); },
+        powE = function (x) { return Math.pow(Math.E, x); },
         cos = Math.cos,
         dur = this.duration,
         N = this.N;
@@ -6321,7 +6327,7 @@ function GuitarString(pitch, duration) {
     this.decay = powE((-(N + 0.5) * 6.908) / (dur * s)) / cos(pi * f / s);
 }
 
-GuitarString.prototype.play = function() {
+GuitarString.prototype.play = function () {
     var myself = this,
         N = this.N,
         signal = new Float32Array(N),
@@ -6331,7 +6337,7 @@ GuitarString.prototype.play = function() {
 
     this.numIterations = 0;
 
-    this.node.onaudioprocess = function(e) {
+    this.node.onaudioprocess = function (e) {
         var output = e.outputBuffer.getChannelData(0);
         for (i = 0; i < e.outputBuffer.length; i += 1) {
             if (noise < N) {
@@ -6351,7 +6357,7 @@ GuitarString.prototype.play = function() {
     this.node.connect(AudioContext.destination);
 };
 
-GuitarString.prototype.stop = function() {
+GuitarString.prototype.stop = function () {
     this.node.disconnect(AudioContext.destination);
 };
 
