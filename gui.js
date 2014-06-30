@@ -1396,14 +1396,33 @@ IDE_Morph.prototype.createCorralBar = function () {
   
     this.corralBar.add(ylabel)
     
-    this.step = function() {
-      this.corralBar.children[2].text = "X: " + this.stage.reportMouseX();
-      this.corralBar.children[3].text = "Y: " + this.stage.reportMouseY();
-      this.corralBar.children[2].drawNew();
-      this.corralBar.children[3].drawNew();
-      this.fixLayout();
+    this.corralBar.step = function() {
+      this.parent.updateCorralBar();
     }
     
+};
+
+IDE_Morph.prototype.updateCorralBar = function () {
+   
+   var MouseX = this.stage.reportMouseX();
+   var MouseY = this.stage.reportMouseY();
+   if(this.isSmallStage ||
+      MouseX > StageMorph.prototype.dimensions.x / 2 ||
+      MouseY > StageMorph.prototype.dimensions.y / 2 ||
+      MouseX < StageMorph.prototype.dimensions.x / -2 ||
+      MouseY < StageMorph.prototype.dimensions.y / -2) 
+   {
+     this.corralBar.children[2].text = "";
+     this.corralBar.children[3].text = "";     
+   } else {
+     this.corralBar.children[2].text = "X: " + this.stage.reportMouseX();
+     this.corralBar.children[3].text = "Y: " + this.stage.reportMouseY();
+   }
+
+   this.corralBar.children[2].drawNew();
+   this.corralBar.children[3].drawNew();
+   this.fixLayout();
+  
 };
 
 IDE_Morph.prototype.createCorral = function () {
