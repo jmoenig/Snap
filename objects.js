@@ -2902,7 +2902,7 @@ SpriteMorph.prototype.applyGraphicsEffects = function (canvas) {
         var i;
         if (value !== 0) {
             for (i = 0; i < p.length; i += 4) {
-                p[i] += value; //255 = 100% of this color 
+                p[i] += value; //255 = 100% of this color
                 p[i + 1] += value;
                 p[i + 2] += value;
             }
@@ -3373,10 +3373,10 @@ SpriteMorph.prototype.bounceOffEdge = function () {
 // SpriteMorph touching
 
 SpriteMorph.prototype.isTouching = function (otherMorph) {
-    if (otherMorph.isVisible === false) {
-        return false;
+    if (this.isVisible && otherMorph.isVisible) {
+        return SpriteMorph.uber.isTouching.call(this, otherMorph);
     }
-    return SpriteMorph.uber.isTouching.call(this, otherMorph);
+    return false;
 }
 
 // SpriteMorph message broadcasting
