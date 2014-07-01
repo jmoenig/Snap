@@ -2746,7 +2746,7 @@ SpriteMorph.prototype.doLabelText = function (text, size) {
 
     // Set font properties
     context.save();
-    context.font =  size + 'pt sans-serif';
+    context.font =  size + 'pt monospace';
     context.textAlign = 'left';
     context.textBaseline = 'alphabetic';
     context.fillStyle = this.color.toString();
