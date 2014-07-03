@@ -2365,7 +2365,7 @@ IDE_Morph.prototype.projectMenu = function () {
         function () {
             myself.droppedText(
                 myself.getURL(
-                    'http://snap.berkeley.edu/snapsource/tools.xml'
+                    'tools.xml'
                 ),
                 'tools'
             );
