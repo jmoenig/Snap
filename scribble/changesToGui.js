@@ -18,7 +18,7 @@ IDE_Morph.prototype.getRightHandButtons = function(stopButton)
 
 function getSnapLogoImage()
 {
-    return 'scribble/scribble_logo_sm.png';
+    return 'scribble_logo_sm.png';
 }
 
 function getSnapAppsName()

@@ -1,0 +1,22 @@
+extends layout
+
+block append head
+  script(type='text/javascript', src='/dronestream/nodecopter-client.js')
+
+-# for developing the client, use those url:s
+-# script(type='text/javascript', src='/dronestream/vendor/broadway/sylvester.js')
+-# script(type='text/javascript', src='/dronestream/vendor/broadway/glUtils.js')
+-# script(type='text/javascript', src='/dronestream/vendor/broadway/util.js')
+-# script(type='text/javascript', src='/dronestream/vendor/broadway/avc-codec.js')
+-# script(type='text/javascript', src='/dronestream/vendor/broadway/avc.js')
+-# script(type='text/javascript', src='/dronestream/vendor/broadway/canvas.js')
+-# script(type='text/javascript', src='/dronestream/nodecopter-stream.js')
+-# concatenated version of client
+
+
+block append bodyscripts
+  script.
+    var copterStream = new NodecopterStream(document.querySelector('#dronestream'));
+
+block content
+  div#dronestream(width=640, height=360)

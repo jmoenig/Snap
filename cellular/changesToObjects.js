@@ -82,7 +82,7 @@ function addCellAttributeButtons(blocks, block, cat, helpMenu)
 	var myself = this;
 	
 	//First we add the "add Attribute" button
-	button = new PushButtonMorph(
+	var button = new PushButtonMorph(
 		null,
 		function () {
 			new CellAttributeDialogMorph(
@@ -2181,13 +2181,15 @@ StageMorph.prototype.mouseMove = function(point)
 		            if (alpha > 0 && cell != null)
 		            {
 						var newValue = cell.getAttribute(drawAttribute) * (1 - alpha) + this.strokeValue * alpha;
-						cell.setAttribute(drawAttribute, newValue);
+						cell.setAttribute(drawAttribute, newValue, false);
 		            }
                 }
             }
+			
+			this.dirtyEntireStage();
         }
     }
-    
+	
     this.previousPoint = new Point(point.x, point.y);
 }
 

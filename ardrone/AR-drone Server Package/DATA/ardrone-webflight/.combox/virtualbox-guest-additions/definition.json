@@ -1,0 +1,80 @@
+{
+    "canPull": false,
+    "canPush": false,
+    "description": "Install virtual box guest additions and configure mount points.",
+    "directories": [
+        {
+            "group": "root",
+            "mode": "755",
+            "name": "ComodIT Logs",
+            "owner": "root",
+            "path": "/var/log/comodit/virtualbox/"
+        }
+    ],
+    "documentation": "",
+    "files": [
+        {
+            "group": "root",
+            "mode": "755",
+            "name": "install.sh",
+            "owner": "root",
+            "path": "/var/lib/comodit/applications/virtualbox/install.sh",
+            "template": {
+                "delimiter": {
+                    "end": "}",
+                    "start": "${"
+                },
+                "name": "install.sh"
+            }
+        }
+    ],
+    "groups": [],
+    "handlers": [
+        {
+            "do": [
+                {
+                    "action": "execute",
+                    "resource": "file://install.sh"
+                }
+            ],
+            "on": [
+                "_install"
+            ]
+        }
+    ],
+    "name": "virtualbox-guest-additions",
+    "packages": [],
+    "parameters": [
+        {
+            "description": "",
+            "key": "shares",
+            "name": "Shares",
+            "schema": {
+                "items": {
+                    "properties": {
+                        "mount": {
+                            "description": "Share mount point",
+                            "pretty": "Mount point",
+                            "required": true,
+                            "type": "string"
+                        },
+                        "name": {
+                            "description": "Share name",
+                            "pretty": "Name",
+                            "required": true,
+                            "type": "string"
+                        }
+                    },
+                    "type": "object"
+                },
+                "type": "array"
+            },
+            "version": 1
+        }
+    ],
+    "price": "0.00",
+    "repositories": [],
+    "services": [],
+    "url": "https://www.virtualbox.org/",
+    "users": []
+}

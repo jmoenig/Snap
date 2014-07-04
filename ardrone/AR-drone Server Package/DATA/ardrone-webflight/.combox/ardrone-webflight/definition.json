@@ -1,0 +1,45 @@
+{
+    "actions": [],
+    "canPull": false,
+    "canPush": false,
+    "compatibility": [],
+    "description": "Combox recipe for ardrone-webflight development.",
+    "directories": [],
+    "documentation": "",
+    "files": [
+        {
+            "group": "root",
+            "mode": "755",
+            "name": "install.sh",
+            "owner": "root",
+            "path": "/var/lib/comodit/webflight/install.sh",
+            "template": {
+                "delimiter": {
+                    "end": "}",
+                    "start": "${"
+                },
+                "name": "install.sh"
+            }
+        }
+    ],
+    "groups": [],
+    "handlers": [],
+    "name": "ardrone-webflight",
+    "organization": "Eschnou",
+    "packages": [
+        {
+            "name": "git"
+        },
+        {
+            "name": "nodejs"
+        }
+    ],
+    "parameters": [],
+    "price": "0.00",
+    "repositories": [],
+    "services": [],
+    "url": "",
+    "users": [],
+    "uuid": "B72AD380C2E611E2B891B16EAC1F0212",
+    "version": 10
+}

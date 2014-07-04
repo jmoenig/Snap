@@ -1,0 +1,40 @@
+<html>
+<head>
+<title>AR-Drone server setup</title>
+</head>
+<body style="font-family: 'Segoe UI', 'Calibri', 'Tahoma', sans-serif">
+<h1>How to setup an AR-Drone server</h1>
+<h2>Step 1</h2>
+Connect to the drone's wireless network. Your computer will need to have wireless functionality.
+This may take some doing. If you just cannot connect to the drone, try holding down the reset
+button on the bottom for a few seconds before trying again.
+<h2>Step 2</h2>
+Extract the entire .ZIP archive to any directory
+<h2>Step 3</h2>
+<i>If you're using Windows:</i> Run "START.bat". Either double click it, or run it using command prompt.<br/>
+<i>If you're using Mac:</i> Run "START.sh". Either double click it, or run it using terminal.<br/>
+<h2>Step 4</h2>
+By this point a server should be running. 
+If you want computers over the network to be able to control the drone, you may need to setup 
+port-forwarding to allow other computers to access this one. Contact the network administrator if
+you can't or don't know how to do this.<br/>
+N.B: If you are using the version 1 AR-Drone, you will receive errors regarding the video stream:
+<div style="font-family:monospace; width: 500px; padding: 8px;display: block; margin: 8px auto 8px auto; background-color: #AAAAAA">
+TcpVideoStream error: connect ECONNREFUSED<br/>
+Attempting to reconnect to TcpVideoStream...
+</div>
+Don't worry! This is normal for the version 1 drone, since the library where the server is from does not fully support the version 1.
+<h2>Step 5</h2>
+Use the special AR-Drone version of <i>"Snap!"</i> to program the drone! <br/>
+To connect to the server:
+<ol>
+<li>Select the stage in the bottom right</li>
+<li>Select the "Ardrone" block set in the top left</li>
+<li>Drag in the "Connect to ardrone-webflight server with hostname []" block</li>
+<li>Write the hostname in, or leave it as default if the server is running on the same computer.</li>
+<li>Click the block just once to initiate the connection</li>
+<li>Drag in the "Connection status" block</li>
+<li>Click the "Connection status" block to test the connection. If it says "Connection Succeeded!", you're ready to use the other blocks!</li>
+</ol>
+</body>
+</html>

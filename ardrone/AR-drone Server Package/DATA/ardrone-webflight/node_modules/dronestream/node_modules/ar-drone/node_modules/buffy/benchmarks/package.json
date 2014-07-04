@@ -1,0 +1,15 @@
+{
+  "author": "Felix Geisendörfer <felix@debuggable.com> (http://debuggable.com/)",
+  "name": "buffy-benchmarks",
+  "private": true,
+  "version": "0.0.0",
+  "dependencies": {
+    "binary": "~0.3.0",
+    "lorem-ipsum": "0.0.7"
+  },
+  "devDependencies": {},
+  "optionalDependencies": {},
+  "engines": {
+    "node": "*"
+  }
+}
