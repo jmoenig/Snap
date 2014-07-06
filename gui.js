@@ -613,7 +613,8 @@ IDE_Morph.prototype.createControlBar = function () {
     button.fixLayout();
     button.refresh();
     appModeButton = button;
-    this.controlBar.add(appModeButton);
+    if (!config.presentation)
+    { this.controlBar.add(appModeButton); }
     this.controlBar.appModeButton = appModeButton; // for refreshing
 
     // stopButton
@@ -3030,6 +3031,10 @@ IDE_Morph.prototype.openProjectString = function (str) {
         },
         function () {
             msg.destroy();
+        },
+        function () {
+            if (config.presentation)
+            { myself.toggleAppMode(true); }
         }
     ]);
 };
