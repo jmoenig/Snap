@@ -2171,3 +2171,7 @@ ______
 ------
 * Morphic: Inspector enhancements (dynamic property update, keyboard shortcuts)
 * GUI: update visibility of share/unshare buttons, Thanks, Kunal!
+
+* 140706
+--------
+* Blocks: add “ringify” to every context menu that already has “unringify”
