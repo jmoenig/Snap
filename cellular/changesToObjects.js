@@ -1598,9 +1598,42 @@ StageMorph.prototype.getCellAttributeVisibility = function(name)
 	return false;
 }
 
+SpriteMorph.prototype.cellularScaler = 1.0;
+
+SpriteMorph.prototype.uberGetScale = SpriteMorph.prototype.getScale;
+SpriteMorph.prototype.getScale = function () {
+    return this.uberGetScale() / this.cellularScaler;
+};
+
+SpriteMorph.prototype.uberSetScale = SpriteMorph.prototype.setScale;
+SpriteMorph.prototype.setScale = function (percentage) {
+	return this.uberSetScale(percentage * this.cellularScaler);
+};
+
+SpriteMorph.prototype.uberChangeScale = SpriteMorph.prototype.changeScale;
+SpriteMorph.prototype.changeScale = function (delta) {
+    return this.uberChangeScale(delta * this.cellularScaler);
+};
+
 /*********************************************************************/
 /****************************** BACKEND ******************************/
 /*********************************************************************/
+
+/*
+** Basic initialisation. 
+*/
+StageMorph.prototype.superInit = StageMorph.prototype.init;
+StageMorph.prototype.init = function (globals) {
+	this.superInit(globals);
+	this.cellsX = 40;
+	this.cellsY = 30;
+	this.drawGrid = true;
+	this.cells = [];
+	this.strokeSize = 2;
+	this.strokeHardness = 0.5;
+	this.strokeValue = 10;
+	this.updateCells();
+}
 
 /*
 ** This keeps the cell data structures up to date when a sprite moves.
@@ -1852,19 +1885,11 @@ StageMorph.prototype.updateCells = function ()
 }
 
 /*
-** Basic initialisation. 
+** Gets the size that the default sprite morph sprite should be scaled by
 */
-StageMorph.prototype.superInit = StageMorph.prototype.init;
-StageMorph.prototype.init = function (globals) {
-	this.superInit(globals);
-	this.cellsX = 40;
-	this.cellsY = 30;
-	this.drawGrid = true;
-	this.cells = [];
-	this.strokeSize = 2;
-	this.strokeHardness = 0.5;
-	this.strokeValue = 10;
-	this.updateCells();
+StageMorph.prototype.getScaleFactor = function()
+{
+	return 40 / this.cellsX * 0.5;
 }
 
 /*
@@ -2258,6 +2283,17 @@ SpriteMorph.prototype.drawOn = function (aCanvas, aRect)
 {
 	if (this.parentSprite != null) 
 	{
+		var stage = this.parentThatIsA(StageMorph);
+		if (stage)
+		{
+			if (this.cellularScaler != stage.getScaleFactor())
+			{
+				var preScale = this.getScale();
+				this.cellularScaler = stage.getScaleFactor();
+				this.setScale(preScale);
+			}
+		}
+		
 		return this.uberDrawOn(aCanvas, aRect); 
 	}
 };
