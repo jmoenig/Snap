@@ -95,10 +95,10 @@ Process.prototype.nearestObject = function (otherObjectName, x, y, predicate) {
 	
 	if (!this.context.nearestObjectState)
 	{
+		//Make this process atomic until the final object is checked
+        this.isAtomic = true;
 		//This is the first call
-		
-		//Get a list of all objects of the type "otherObjectName"
-		
+		//Get a list of all objects of the type "otherObjectName".
 		if (!otherObjectName) 
 		{ 
 			return null; 
@@ -126,7 +126,7 @@ Process.prototype.nearestObject = function (otherObjectName, x, y, predicate) {
 		objects = state.objects,
 		lastResult = this.context.inputs[4];
 	
-	//Remove last input
+	//Remove last input (This is where the result of the predicate goes)
 	if (this.context.inputs.length > 4)
 		this.context.inputs.pop();
 	
@@ -162,6 +162,8 @@ Process.prototype.nearestObject = function (otherObjectName, x, y, predicate) {
 	}
 	else
 	{
+		//Remove atomicity
+        this.isAtomic = false;
 		//No more objects! Clean up and return minimum.
 		delete this.context.nearestObjectState;
 		return state.minObject;
