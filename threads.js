@@ -83,7 +83,7 @@ ArgLabelMorph, localize, XML_Element, hex_sha512*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.threads = '2014-Jun-05';
+modules.threads = '2014-July-08';
 
 var ThreadManager;
 var Process;
@@ -673,11 +673,13 @@ Process.prototype.doYield = function () {
 // Process Exception Handling
 
 Process.prototype.handleError = function (error, element) {
+    var m = element;
     this.stop();
     this.errorFlag = true;
     this.topBlock.addErrorHighlight();
-    (element || this.topBlock).showBubble(
-        (element ? '' : 'Inside: ')
+    if (isNil(m) || isNil(m.world())) {m = this.topBlock; }
+    m.showBubble(
+        (m === element ? '' : 'Inside: ')
             + error.name
             + '\n'
             + error.message
@@ -996,6 +998,8 @@ Process.prototype.evaluateCustomBlock = function () {
         runnable,
         extra,
         i,
+        inp,
+        decs,
         value,
         upvars,
         outer;
@@ -1029,17 +1033,19 @@ Process.prototype.evaluateCustomBlock = function () {
             if (!isNil(parms[i])) {
                 value = parms[i];
             }
-            outer.variables.addVar(context.inputs[i], value);
+            inp = context.inputs[i];
+            outer.variables.addVar(inp, value);
 
             // if the parameter is an upvar,
             // create an UpvarReference to it
-            if (declarations[context.inputs[i]][0] === '%upvar') {
+            decs = declarations[inp];
+            if (decs[0] === '%upvar') {
                 if (!upvars) { // lazy initialization
                     upvars = new UpvarReference(this.context.upvars);
                 }
                 upvars.addReference(
                     value,
-                    context.inputs[i],
+                    inp,
                     outer.variables
                 );
             }
@@ -3156,8 +3162,9 @@ UpvarReference.prototype.find = function (name) {
 };
 
 UpvarReference.prototype.getVar = function (name) {
-    var varName = this.vars[name][0],
-        varFrame = this.vars[name][1],
+    var tuple = this.vars[name],
+        varName = tuple[0],
+        varFrame = tuple[1],
         value = varFrame.vars[varName];
     return (value === 0 ? 0 : value || 0); // don't return null
 };
