@@ -2183,3 +2183,4 @@ ______
 * Threads: adjust to Doug Crockford’s latest infuriating nitpickings in JSLint
 * GUI: show username in ‘logout’ entry of cloud menu
 * GUI, Objects: fixed scrolling glitch in the palette, thanks, Kunal!
+* GUI, Objects: add keyboard shortcut for “new project”: ctr-n

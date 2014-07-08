@@ -2266,18 +2266,7 @@ IDE_Morph.prototype.projectMenu = function () {
     menu = new MenuMorph(this);
     menu.addItem('Project notes...', 'editProjectNotes');
     menu.addLine();
-    menu.addItem(
-        'New',
-        function () {
-            myself.confirm(
-                'Replace the current project with a new one?',
-                'New Project',
-                function () {
-                    myself.newProject();
-                }
-            );
-        }
-    );
+    menu.addItem('New', 'createNewProject');
     menu.addItem('Open...', 'openProjectsBrowser');
     menu.addItem('Save', "save");
     if (shiftClicked) {
@@ -3358,6 +3347,15 @@ IDE_Morph.prototype.toggleStageSize = function (isSmall) {
         if (this.isSmallStage) {this.stageRatio = 0.5; }
         this.setExtent(world.extent());
     }
+};
+
+IDE_Morph.prototype.createNewProject = function () {
+    var myself = this;
+    this.confirm(
+        'Replace the current project with a new one?',
+        'New Project',
+        function () {myself.newProject(); }
+    );
 };
 
 IDE_Morph.prototype.openProjectsBrowser = function () {

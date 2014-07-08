@@ -4581,6 +4581,9 @@ StageMorph.prototype.fireKeyEvent = function (key) {
     if (evt === 'ctrl f') {
         return this.parentThatIsA(IDE_Morph).currentSprite.searchBlocks();
     }
+    if (evt === 'ctrl n') {
+        return this.parentThatIsA(IDE_Morph).createNewProject();
+    }
     if (evt === 'ctrl o') {
         return this.parentThatIsA(IDE_Morph).openProjectsBrowser();
     }
