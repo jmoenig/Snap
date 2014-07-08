@@ -570,7 +570,7 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: 'label %txt of size %n',
             defaults: [localize('Hello!'), 12]
         },
-        
+
         // Control
         receiveGo: {
             type: 'hat',
@@ -2731,7 +2731,7 @@ SpriteMorph.prototype.changeBrightness = function (delta) {
 // Write text (an image) to the stage
 
 SpriteMorph.prototype.doLabelText = function (text, size) {
-    var stage    = this.parent,
+    var stage    = this.parentThatIsA(StageMorph),
         context  = stage.penTrails().getContext('2d'),
         rotation = radians(this.direction() - 90),
         trans    = new Point(this.center().x - stage.left(),
@@ -2742,9 +2742,16 @@ SpriteMorph.prototype.doLabelText = function (text, size) {
         pos;
 
     if (isWarped) {
-        console.log('warp off');
         this.endWarp();
     }
+
+    trans = trans.multiplyBy(stage.scale);
+    console.log('STAGE SIZE: ' + stage.scale);
+    console.log('TRANS X: ' + trans.x);
+    console.log('THIS CENTER X: ' + this.center().x);
+    console.log('STAGE LEFT: ' + stage.left());
+    console.log('STAGE TOP: ' + stage.top());
+
 
     // Set font properties
     context.save();
@@ -2752,8 +2759,10 @@ SpriteMorph.prototype.doLabelText = function (text, size) {
     context.textAlign = 'left';
     context.textBaseline = 'alphabetic';
     context.fillStyle = this.color.toString();
+    context.scale(1, 1);
     // Make sure length is calculated with correct canvas properties
     len = context.measureText(text).width;
+    len *= stage.scale;
     // Translate canvas for proper rotations
     context.translate(trans.x, trans.y);
     context.rotate(rotation);
@@ -2772,10 +2781,9 @@ SpriteMorph.prototype.doLabelText = function (text, size) {
 
     this.gotoXY(pos.x, pos.y, false);
 
-    this.changed();
+    this.fullChanged();
 
     if (isWarped) {
-        console.log('warp on');
         this.startWarp();
     }
 
@@ -2965,7 +2973,7 @@ SpriteMorph.prototype.applyGraphicsEffects = function (canvas) {
         var i;
         if (value !== 0) {
             for (i = 0; i < p.length; i += 4) {
-                p[i] += value; //255 = 100% of this color 
+                p[i] += value; //255 = 100% of this color
                 p[i + 1] += value;
                 p[i + 2] += value;
             }
