@@ -155,7 +155,7 @@ DialogBoxMorph, BlockInputFragmentMorph, PrototypeHatBlockMorph, Costume*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2014-July-06';
+modules.blocks = '2014-July-08';
 
 
 var SyntaxElementMorph;
@@ -2157,16 +2157,18 @@ BlockMorph.prototype.developersMenu = function () {
 
 BlockMorph.prototype.hidePrimitive = function () {
     var ide = this.parentThatIsA(IDE_Morph),
+        dict,
         cat;
     if (!ide) {return; }
     StageMorph.prototype.hiddenPrimitives[this.selector] = true;
-    cat = {
+    dict = {
         doWarp: 'control',
         reifyScript: 'operators',
         reifyReporter: 'operators',
         reifyPredicate: 'operators',
         doDeclareVariables: 'variables'
-    }[this.selector] || this.category;
+    };
+    cat = dict[this.selector] || this.category;
     if (cat === 'lists') {cat = 'variables'; }
     ide.flushBlocksCache(cat);
     ide.refreshPalette();
@@ -3345,9 +3347,44 @@ CommandBlockMorph.prototype.isStop = function () {
 // CommandBlockMorph deleting
 
 CommandBlockMorph.prototype.userDestroy = function () {
+    if (this.nextBlock()) {
+        this.userDestroyJustThis();
+        return;
+    }
     var cslot = this.parentThatIsA(CSlotMorph);
     this.destroy();
     if (cslot) {
+        cslot.fixLayout();
+    }
+};
+
+CommandBlockMorph.prototype.userDestroyJustThis = function () {
+    // delete just this one block, reattach next block to the previous one,
+    var scripts = this.parentThatIsA(ScriptsMorph),
+        cs = this.parentThatIsA(CommandSlotMorph),
+        pb,
+        nb = this.nextBlock(),
+        above,
+        cslot = this.parentThatIsA(CSlotMorph);
+
+    if (this.parent) {
+        pb = this.parent.parentThatIsA(CommandBlockMorph);
+    }
+    if (pb && (pb.nextBlock() === this)) {
+        above = pb;
+    } else if (cs && (cs.nestedBlock() === this)) {
+        above = cs;
+    }
+    this.destroy();
+    if (nb) {
+        if (above instanceof CommandSlotMorph) {
+            above.nestedBlock(nb);
+        } else if (above instanceof CommandBlockMorph) {
+            above.nextBlock(nb);
+        } else {
+            scripts.add(nb);
+        }
+    } else if (cslot) {
         cslot.fixLayout();
     }
 };
