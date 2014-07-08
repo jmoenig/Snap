@@ -125,7 +125,7 @@ PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.objects = '2014-Jun-06';
+modules.objects = '2014-July-08';
 
 var SpriteMorph;
 var StageMorph;

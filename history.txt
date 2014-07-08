@@ -2181,4 +2181,5 @@ ______
 ------
 * Threads: show error messages for custom blocks (propagating to the script’s top block)
 * Threads: adjust to Doug Crockford’s latest infuriating nitpickings in JSLint
-* GUI: show username in ‘logout’ entry of cloud menu 
+* GUI: show username in ‘logout’ entry of cloud menu
+* GUI, Objects: fixed scrolling glitch in the palette, thanks, Kunal!
