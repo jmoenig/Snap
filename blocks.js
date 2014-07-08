@@ -6504,7 +6504,7 @@ InputSlotMorph.prototype.collidablesMenu = function () {
         allNames = [];
 
     stage.children.forEach(function (morph) {
-        if (morph instanceof SpriteMorph) {
+        if (morph instanceof SpriteMorph && !morph.isClone) {
             if (morph.name !== rcvr.name) {
                 allNames = allNames.concat(morph.name);
             }
