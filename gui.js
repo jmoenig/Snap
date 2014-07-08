@@ -889,8 +889,6 @@ IDE_Morph.prototype.createPalette = function (forSearching) {
 
     this.palette.setWidth(this.logo.width());
     this.add(this.palette);
-    this.palette.scrollX(this.palette.padding);
-    this.palette.scrollY(this.palette.padding);
     return this.palette;
 };
 
