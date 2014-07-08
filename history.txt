@@ -2172,6 +2172,12 @@ ______
 * Morphic: Inspector enhancements (dynamic property update, keyboard shortcuts)
 * GUI: update visibility of share/unshare buttons, Thanks, Kunal!
 
-* 140706
---------
+140706
+------
 * Blocks: add “ringify” to every context menu that already has “unringify”
+
+
+140708
+------
+* Threads: show error messages for custom blocks (propagating to the script’s top block)
+* Threads: adjust to Doug Crockford’s latest infuriating nitpickings in JSLint
