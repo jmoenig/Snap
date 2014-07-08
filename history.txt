@@ -2184,3 +2184,4 @@ ______
 * GUI: show username in ‘logout’ entry of cloud menu
 * GUI, Objects: fixed scrolling glitch in the palette, thanks, Kunal!
 * GUI, Objects: add keyboard shortcut for “new project”: ctr-n
+* revert changes made for JSLint’s sake after the issue was fixed in JSLint

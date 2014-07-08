@@ -998,8 +998,6 @@ Process.prototype.evaluateCustomBlock = function () {
         runnable,
         extra,
         i,
-        inp,
-        decs,
         value,
         upvars,
         outer;
@@ -1033,19 +1031,17 @@ Process.prototype.evaluateCustomBlock = function () {
             if (!isNil(parms[i])) {
                 value = parms[i];
             }
-            inp = context.inputs[i];
-            outer.variables.addVar(inp, value);
+            outer.variables.addVar(context.inputs[i], value);
 
             // if the parameter is an upvar,
             // create an UpvarReference to it
-            decs = declarations[inp];
-            if (decs[0] === '%upvar') {
+            if (declarations[context.inputs[i]][0] === '%upvar') {
                 if (!upvars) { // lazy initialization
                     upvars = new UpvarReference(this.context.upvars);
                 }
                 upvars.addReference(
                     value,
-                    inp,
+                    context.inputs[i],
                     outer.variables
                 );
             }
@@ -1062,7 +1058,6 @@ Process.prototype.evaluateCustomBlock = function () {
         runnable.expression = runnable.expression.blockSequence();
     }
 };
-
 
 // Process variables primitives
 
@@ -3162,9 +3157,8 @@ UpvarReference.prototype.find = function (name) {
 };
 
 UpvarReference.prototype.getVar = function (name) {
-    var tuple = this.vars[name],
-        varName = tuple[0],
-        varFrame = tuple[1],
+    var varName = this.vars[name][0],
+        varFrame = this.vars[name][1],
         value = varFrame.vars[varName];
     return (value === 0 ? 0 : value || 0); // don't return null
 };
