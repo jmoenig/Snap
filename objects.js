@@ -2737,10 +2737,12 @@ SpriteMorph.prototype.doLabelText = function (text, size) {
         trans    = new Point(this.center().x - stage.left(),
                              this.center().y - stage.top()),
         ide      = this.parentThatIsA(IDE_Morph),
+        isWarped = this.isWarped,
         len,
         pos;
 
-    if (this.isWarped) {
+    if (isWarped) {
+        console.log('warp off');
         this.endWarp();
     }
 
@@ -2772,7 +2774,8 @@ SpriteMorph.prototype.doLabelText = function (text, size) {
 
     this.changed();
 
-    if (this.isWarped) {
+    if (isWarped) {
+        console.log('warp on');
         this.startWarp();
     }
 
