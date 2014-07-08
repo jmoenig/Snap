@@ -69,7 +69,7 @@ SpeechBubbleMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2014-Jun-23';
+modules.gui = '2014-July-08';
 
 // Declarations
 
@@ -924,6 +924,8 @@ IDE_Morph.prototype.createSpriteBar = function () {
         tabColors = this.tabColors,
         tabBar = new AlignmentMorph('row', -tabCorner * 2),
         tab,
+        symbols = ['\u2192', '\u21BB', '\u2194'],
+        labels = ['don\'t rotate', 'can rotate', 'only face left/right'],
         myself = this;
 
     if (this.spriteBar) {
@@ -952,17 +954,13 @@ IDE_Morph.prototype.createSpriteBar = function () {
                     each.refresh();
                 });
             },
-            ['\u2192', '\u21BB', '\u2194'][rotationStyle], // label
+            symbols[rotationStyle], // label
             function () {  // query
                 return myself.currentSprite instanceof SpriteMorph
                     && myself.currentSprite.rotationStyle === rotationStyle;
             },
             null, // environment
-            localize(
-                [
-                    'don\'t rotate', 'can rotate', 'only face left/right'
-                ][rotationStyle]
-            )
+            localize(labels[rotationStyle])
         );
 
         button.corner = 8;
@@ -1947,7 +1945,7 @@ IDE_Morph.prototype.cloudMenu = function () {
         );
     } else {
         menu.addItem(
-            'Logout',
+            localize('Logout') + ' ' + SnapCloud.username,
             'logout'
         );
         menu.addItem(
