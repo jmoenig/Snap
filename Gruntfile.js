@@ -133,7 +133,7 @@ module.exports = function(grunt) {
 		  {
 		  expand: true, 
 		  cwd: 'ardrone/',
-		  src: 'AR-drone Server Package/**'
+		  src: 'ardrone-server/**'
 		  },
 		]
 	  },
