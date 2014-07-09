@@ -83,7 +83,7 @@ ArgLabelMorph, localize, XML_Element, hex_sha512*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.threads = '2014-May-20';
+modules.threads = '2014-July-08';
 
 var ThreadManager;
 var Process;
@@ -673,11 +673,13 @@ Process.prototype.doYield = function () {
 // Process Exception Handling
 
 Process.prototype.handleError = function (error, element) {
+    var m = element;
     this.stop();
     this.errorFlag = true;
     this.topBlock.addErrorHighlight();
-    (element || this.topBlock).showBubble(
-        (element ? '' : 'Inside: ')
+    if (isNil(m) || isNil(m.world())) {m = this.topBlock; }
+    m.showBubble(
+        (m === element ? '' : 'Inside: ')
             + error.name
             + '\n'
             + error.message
@@ -1056,7 +1058,6 @@ Process.prototype.evaluateCustomBlock = function () {
         runnable.expression = runnable.expression.blockSequence();
     }
 };
-
 
 // Process variables primitives
 
@@ -3054,7 +3055,7 @@ VariableFrame.prototype.getVar = function (name, upvars) {
 VariableFrame.prototype.addVar = function (name, value) {
     this.vars[name] = (value === 0 ? 0
               : value === false ? false
-                       : value === '' ? '' : value || null);
+                       : value === '' ? '' : value || 0);
 };
 
 VariableFrame.prototype.deleteVar = function (name) {

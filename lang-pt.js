@@ -185,7 +185,7 @@ SnapTranslator.dict.pt = {
     'translator_e-mail':
         'mmsequeira@gmail.com',
     'last_changed':
-        '2014-01-12',
+        '2014-05-26',
 
     // GUI
     // control bar:
@@ -685,6 +685,16 @@ SnapTranslator.dict.pt = {
         'Língua…',
     'Zoom blocks...':
         'Ampliação dos blocos…',
+    'Stage size...':
+        'Tamanho do palco…',
+    'Stage size':
+        'Tamanho do palco',
+    'Stage width':
+        'Largura do palco',
+    'Stage height':
+        'Altura do palco',
+    'Default':
+        'Normal',
     'Blurred shadows':
         'Sombras desfocadas',
     'uncheck to use solid drop\nshadows and highlights':
@@ -767,6 +777,12 @@ SnapTranslator.dict.pt = {
         'Desassinalar para aumentar a velocidade\npermitindo ritmos variáveis das tramas.',
     'check for smooth, predictable\nanimations across computers':
         'Assinalar para obter animações mais suaves\ne previsíveis de computador para computador.',
+    'Flat line ends':
+        'Extremos das linhas planos',
+    'check for flat ends of lines':
+        'Assinalar para que os extremos das linhas\ndesenhadas pela caneta sejam planos.',
+    'uncheck for round ends of lines':
+        'Desassinalar para que os extremos das linhas\ndesenhadas pela caneta sejam redondos.',
 
     // entradas
     'with inputs':
@@ -1106,8 +1122,16 @@ SnapTranslator.dict.pt = {
         'vazio',
 
     // efeitos gráficos
+    'brightness':
+        'brilho',
     'ghost':
         'fantasma',
+    'negative':
+        'negativo',
+    'comic':
+        'ondeado',
+    'confetti':
+        'cor',
 
     // teclas
     'space':
@@ -1254,20 +1278,74 @@ SnapTranslator.dict.pt = {
         'um item ao acaso',
 
     // em falta no ficheiro lang-de.js
+    'grow':
+        'aumentar',
+    'shrink':
+        'reduzir',
+    'flip ↔':
+        'inverter ↔',
+    'flip ↕':
+        'inverter ↕',
+    'Export all scripts as pic...':
+        'Exportar todos os guiões como fotografia…',
+    'show a picture of all scripts\nand block definitions':
+        'Mostra uma imagem com todos\nos guiões e definições de blocos',
+    'current %dates':
+        '%dates corrente',
+    'year':
+        'ano',
+    'month':
+        'mês',
+    'date':
+        'dia',
+    'day of week':
+        'dia da semana',
+    'hour':
+        'hora',
+    'minute':
+        'minuto',
+    'second':
+        'segundo',
+    'time in milliseconds':
+        'tempo (em milisegundos)',
+    'find blocks...':
+        'procurar blocos…',
     'costume name':
         'o nome do traje',
     'Open':
         'Abrir',
     'Share':
         'Partilhar',
+    'Snap!Cloud':
+        'Snap!Nuvem',
     'Cloud':
         'Nuvem',
+    'could not connect to:':
+        'Não foi possível ligar a:',
+    'Service:':
+        'Serviço:',
+    'login':
+        'autenticação',
+    'ERROR: INVALID PASSWORD':
+        'ERRO: PALAVRA-PASSE INVÁLIDA',
     'Browser':
         'Navegador',
     'Sign up':
         'Registar nova conta',
+    'Signup':
+        'Registo de nova conta',
     'Sign in':
         'Entrar',
+    'Logout':
+        'Sair',
+    'Change Password...':
+        'Alterar palavra-passe…',
+    'Change Password':
+        'Alterar palavra-passe',
+    'Account created.':
+        'Conta criada.',
+    'An e-mail with your password\nhas been sent to the address provided':
+        'Foi enviada uma mensagem para\no endereço disponibilizado\ncontendo a sua palavra-passe.',
     'now connected.':
         'entrou.',
     'disconnected.':
@@ -1280,6 +1358,12 @@ SnapTranslator.dict.pt = {
         'Nome de utilizador:',
     'Password:':
         'Palavra-passe:',
+    'Old password:':
+        'Palavra-passe actual:',
+    'New password:':
+        'Nova palavra-passe:',
+    'Repeat new password:':
+        'Repita a nova palavra-passe:',
     'Birth date:':
         'Data de nascimento:',
     'January':

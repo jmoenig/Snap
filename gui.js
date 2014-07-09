@@ -64,11 +64,12 @@ standardSettings, Sound, BlockMorph, ToggleMorph, InputSlotDialogMorph,
 ScriptsMorph, isNil, SymbolMorph, BlockExportDialogMorph,
 BlockImportDialogMorph, SnapTranslator, localize, List, InputSlotMorph,
 SnapCloud, Uint8Array, HandleMorph, SVG_Costume, fontHeight, hex_sha512,
-sb, CommentMorph, CommandBlockMorph, BlockLabelPlaceHolderMorph, Audio*/
+sb, CommentMorph, CommandBlockMorph, BlockLabelPlaceHolderMorph, Audio,
+SpeechBubbleMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2014-May-20';
+modules.gui = '2014-July-08';
 
 // Declarations
 
@@ -888,8 +889,6 @@ IDE_Morph.prototype.createPalette = function (forSearching) {
 
     this.palette.setWidth(this.logo.width());
     this.add(this.palette);
-    this.palette.scrollX(this.palette.padding);
-    this.palette.scrollY(this.palette.padding);
     return this.palette;
 };
 
@@ -923,6 +922,8 @@ IDE_Morph.prototype.createSpriteBar = function () {
         tabColors = this.tabColors,
         tabBar = new AlignmentMorph('row', -tabCorner * 2),
         tab,
+        symbols = ['\u2192', '\u21BB', '\u2194'],
+        labels = ['don\'t rotate', 'can rotate', 'only face left/right'],
         myself = this;
 
     if (this.spriteBar) {
@@ -951,17 +952,13 @@ IDE_Morph.prototype.createSpriteBar = function () {
                     each.refresh();
                 });
             },
-            ['\u2192', '\u21BB', '\u2194'][rotationStyle], // label
+            symbols[rotationStyle], // label
             function () {  // query
                 return myself.currentSprite instanceof SpriteMorph
                     && myself.currentSprite.rotationStyle === rotationStyle;
             },
             null, // environment
-            localize(
-                [
-                    'don\'t rotate', 'can rotate', 'only face left/right'
-                ][rotationStyle]
-            )
+            localize(labels[rotationStyle])
         );
 
         button.corner = 8;
@@ -1946,7 +1943,7 @@ IDE_Morph.prototype.cloudMenu = function () {
         );
     } else {
         menu.addItem(
-            'Logout',
+            localize('Logout') + ' ' + SnapCloud.username,
             'logout'
         );
         menu.addItem(
@@ -2269,18 +2266,7 @@ IDE_Morph.prototype.projectMenu = function () {
     menu = new MenuMorph(this);
     menu.addItem('Project notes...', 'editProjectNotes');
     menu.addLine();
-    menu.addItem(
-        'New',
-        function () {
-            myself.confirm(
-                'Replace the current project with a new one?',
-                'New Project',
-                function () {
-                    myself.newProject();
-                }
-            );
-        }
-    );
+    menu.addItem('New', 'createNewProject');
     menu.addItem('Open...', 'openProjectsBrowser');
     menu.addItem('Save', "save");
     if (shiftClicked) {
@@ -2348,6 +2334,15 @@ IDE_Morph.prototype.projectMenu = function () {
         function () {myself.exportGlobalBlocks(); },
         'show global custom block definitions as XML\nin a new browser window'
     );
+
+    if (shiftClicked) {
+        menu.addItem(
+            'Export all scripts as pic...',
+            function () {myself.exportScriptsPicture(); },
+            'show a picture of all scripts\nand block definitions',
+            new Color(100, 0, 0)
+        );
+    }
 
     menu.addLine();
     menu.addItem(
@@ -2525,6 +2520,7 @@ IDE_Morph.prototype.aboutSnap = function () {
         + '\n\nNathan Dinsmore: Saving/Loading, Snap-Logo Design, '
         + 'countless bugfixes'
         + '\nKartik Chandra: Paint Editor'
+        + '\nYuan Yuan: Graphic Effects'
         + '\nIan Reynolds: UI Design, Event Bindings, '
         + 'Sound primitives'
         + '\nIvan Motyashov: Initial Squeak Porting'
@@ -2844,6 +2840,56 @@ IDE_Morph.prototype.exportSprite = function (sprite) {
         + '">'
         + str
         + '</sprites>');
+};
+
+IDE_Morph.prototype.exportScriptsPicture = function () {
+    var pics = [],
+        pic,
+        padding = 20,
+        w = 0,
+        h = 0,
+        y = 0,
+        ctx;
+
+    // collect all script pics
+    this.sprites.asArray().forEach(function (sprite) {
+        pics.push(sprite.image);
+        pics.push(sprite.scripts.scriptsPicture());
+        sprite.customBlocks.forEach(function (def) {
+            pics.push(def.scriptsPicture());
+        });
+    });
+    pics.push(this.stage.image);
+    pics.push(this.stage.scripts.scriptsPicture());
+    this.stage.customBlocks.forEach(function (def) {
+        pics.push(def.scriptsPicture());
+    });
+
+    // collect global block pics
+    this.stage.globalBlocks.forEach(function (def) {
+        pics.push(def.scriptsPicture());
+    });
+
+    pics = pics.filter(function (each) {return !isNil(each); });
+
+    // determine dimensions of composite
+    pics.forEach(function (each) {
+        w = Math.max(w, each.width);
+        h += (each.height);
+        h += padding;
+    });
+    h -= padding;
+    pic = newCanvas(new Point(w, h));
+    ctx = pic.getContext('2d');
+
+    // draw all parts
+    pics.forEach(function (each) {
+        ctx.drawImage(each, 0, y);
+        y += padding;
+        y += each.height;
+    });
+
+    window.open(pic.toDataURL());
 };
 
 IDE_Morph.prototype.openProjectString = function (str) {
@@ -3301,6 +3347,15 @@ IDE_Morph.prototype.toggleStageSize = function (isSmall) {
         if (this.isSmallStage) {this.stageRatio = 0.5; }
         this.setExtent(world.extent());
     }
+};
+
+IDE_Morph.prototype.createNewProject = function () {
+    var myself = this;
+    this.confirm(
+        'Replace the current project with a new one?',
+        'New Project',
+        function () {myself.newProject(); }
+    );
 };
 
 IDE_Morph.prototype.openProjectsBrowser = function () {
@@ -4533,6 +4588,17 @@ ProjectDialogMorph.prototype.installCloudProjectList = function (pl) {
             myself.preview.texture = item.Thumbnail || null;
             myself.preview.cachedTexture = null;
             myself.preview.drawNew();
+            (new SpeechBubbleMorph(new TextMorph(
+                localize('last changed') + '\n' + item.Updated,
+                null,
+                null,
+                null,
+                null,
+                'center'
+            ))).popUp(
+                myself.world(),
+                myself.preview.rightCenter().add(new Point(2, 0))
+            );
         }
         if (item.Public === 'true') {
             myself.shareButton.hide();
@@ -4764,9 +4830,13 @@ ProjectDialogMorph.prototype.shareProject = function () {
                             function () {
                                 SnapCloud.disconnect();
                                 proj.Public = 'true';
+                                myself.unshareButton.show();
+                                myself.shareButton.hide();
                                 entry.label.isBold = true;
                                 entry.label.drawNew();
                                 entry.label.changed();
+                                myself.buttons.fixLayout();
+                                myself.drawNew();
                                 myself.ide.showMessage('shared.', 2);
                             },
                             myself.ide.cloudError(),
@@ -4801,9 +4871,13 @@ ProjectDialogMorph.prototype.unshareProject = function () {
                             function () {
                                 SnapCloud.disconnect();
                                 proj.Public = 'false';
+                                myself.shareButton.show();
+                                myself.unshareButton.hide();
                                 entry.label.isBold = false;
                                 entry.label.drawNew();
                                 entry.label.changed();
+                                myself.buttons.fixLayout();
+                                myself.drawNew();
                                 myself.ide.showMessage('unshared.', 2);
                             },
                             myself.ide.cloudError(),
