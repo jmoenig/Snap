@@ -692,6 +692,28 @@ IDE_Morph.prototype.createControlBar = function () {
     this.controlBar.add(cloudButton);
     this.controlBar.cloudButton = cloudButton; // for menu positioning
 
+    // reportBugButton
+    button = new PushButtonMorph(
+        this,
+        'reportNewBug',
+        new SymbolMorph('bug', 16)
+    );
+    button.corner = 12;
+    button.color = colors[0];
+    button.highlightColor = colors[1];
+    button.pressColor = colors[2];
+    button.labelMinExtent = new Point(36, 18);
+    button.padding = 0;
+    button.labelShadowOffset = new Point(-1, -1);
+    button.labelShadowColor = colors[1];
+    button.labelColor = this.buttonLabelColor;
+    button.contrast = this.buttonContrast;
+    button.drawNew();
+    button.fixLayout();
+    reportBugButton = button;
+    this.controlBar.add(reportBugButton);
+    this.controlBar.reportBugButton = reportBugButton; // for menu positioning
+
     this.controlBar.fixLayout = function () {
         x = this.right() - padding;
         [stopButton, pauseButton, startButton].forEach(
@@ -724,6 +746,9 @@ IDE_Morph.prototype.createControlBar = function () {
         projectButton.setCenter(myself.controlBar.center());
         projectButton.setRight(cloudButton.left() - padding);
 
+        reportBugButton.setCenter(myself.controlBar.center());
+        reportBugButton.setLeft(settingsButton.right() + padding);
+
         this.updateLabel();
     };
 
@@ -752,7 +777,7 @@ IDE_Morph.prototype.createControlBar = function () {
         this.label.drawNew();
         this.add(this.label);
         this.label.setCenter(this.center());
-        this.label.setLeft(this.settingsButton.right() + padding);
+        this.label.setLeft(this.reportBugButton.right() + padding);
     };
 };
 
@@ -1910,6 +1935,10 @@ IDE_Morph.prototype.snapMenu = function () {
     }
     menu.popup(world, this.logo.bottomLeft());
 };
+
+IDE_Morph.prototype.reportBug = function () {
+    new reportBugMorph(this).popUp();
+}
 
 IDE_Morph.prototype.cloudMenu = function () {
     var menu,
@@ -6274,4 +6303,120 @@ JukeboxMorph.prototype.reactToDropOf = function (icon) {
     });
     this.sprite.sounds.add(costume, idx);
     this.updateList();
+};
+
+// Window to handle feedback reports in Snap!
+IDE_Morph.prototype.reportNewBug = function () {
+    var dialog = new DialogBoxMorph().withKey('reportBug'),
+        frame = new ScrollFrameMorph(),
+        text = new TextMorph(''),
+        email = new InputFieldMorph(''),
+        ok = dialog.ok,
+        size = 250,
+        world = this.world();
+
+    frame.padding = 6;
+    frame.setWidth(size);
+    frame.acceptsDrops = false;
+    frame.contents.acceptsDrops = false;
+
+    text.setWidth(size - frame.padding * 2);
+    text.setPosition(frame.topLeft().add(frame.padding));
+    text.enableSelecting();
+    text.isEditable = true;
+
+    email.setWidth(size - frame.padding * 2); // fixed dimensions
+    email.contrast = 90;
+    email.setPosition(frame.bottomLeft());
+    email.isEditable = true;
+
+    frame.setHeight(size - 50);
+    frame.fixLayout = nop;
+    frame.edge = InputFieldMorph.prototype.edge;
+    frame.fontSize = InputFieldMorph.prototype.fontSize;
+    frame.typeInPadding = InputFieldMorph.prototype.typeInPadding;
+    frame.contrast = InputFieldMorph.prototype.contrast;
+    frame.drawNew = InputFieldMorph.prototype.drawNew;
+    frame.drawRectBorder = InputFieldMorph.prototype.drawRectBorder;
+
+    frame.addContents(text);
+
+    dialog.ok = function () {
+        // Fix for Safari name... assuming no one uses netscape today...
+        app = (navigator.appName === "Netscape" ? "Safari" : navigator.appName);
+        postGitIssue( email.children[0].children[0].text,
+                      (text.text + appendDetails(true)),
+                      [ app,
+                        navigator.platform,
+                        navigator.vendor, ]
+                      );
+        ok.call(this);
+    };
+    
+    var appendDetails = function(getProj) {
+        var str = "No Project",
+            br  = "\n\n=================\n";
+            
+        if (getProj) {
+            try {
+                str = ide.serializer.serialize(ide.stage);
+            } catch(err) {
+                str = "ERROR GETTING PROJECT";
+            }
+        }
+
+        var info = br;
+        for (var property in navigator) {
+            info += "\n";
+            info += property + ":\t" + navigator[property];
+        }
+        info += br;
+        info += ("Submission Time:\t" + Date());
+        info += "";
+        info += br;
+        info += str;
+        return info;
+    }
+
+    dialog.justDropped = function () {
+        text.edit();
+    };
+
+    dialog.labelString = 'Submit A Problem';
+    dialog.createLabel();
+    dialog.addHead(email);
+    dialog.addBody(frame);
+    // Add checkboxes
+    title = email.children[0].children[0];
+    title.text = "Please enter a short title";
+    text.text = "Please give a description of your problem so that we can try to "
+                + "solve it.\nYou may provide contact info, if you'd "
+                + "like, but please be aware that we cannot respond to all "
+                + "bug reports.\n\n\nThanks for helping improve Snap!";
+    text.drawNew();
+    email.drawNew();
+    frame.drawNew();
+    dialog.addButton('ok', 'Send');
+    dialog.addButton('cancel', 'Cancel');
+    dialog.fixLayout();
+    dialog.drawNew();
+    dialog.popUp(world);
+    dialog.setCenter(world.center());
+    text.edit();
+};
+
+// Creates an issue on github with TITLE and BODY and LABELS
+var postGitIssue = function(title, body, labels) {
+    var GH_URL = "https://api.github.com/repos/cs10/snapinex/issues";
+    
+    var jsonData = { "title" : title,
+                    "body" : body,
+                    "labels" : labels };
+
+    xhr = new XMLHttpRequest();
+    xhr.open("POST", GH_URL, true);
+    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xhr.setRequestHeader('Authorization',
+        'Basic c25hcGluYXRvcjokbmFwJnVncyE/NDA5Ng=='); //GH token
+    xhr.send(JSON.stringify(jsonData));
 };

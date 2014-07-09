@@ -7761,6 +7761,8 @@ SymbolMorph.prototype.symbolCanvasColored = function (aColor) {
         return this.drawSymbolPointRight(canvas, aColor);
     case 'gears':
         return this.drawSymbolGears(canvas, aColor);
+    case 'bug':
+        return this.drawSymbolBug(canvas, aColor);
     case 'file':
         return this.drawSymbolFile(canvas, aColor);
     case 'fullScreen':
@@ -7884,6 +7886,74 @@ SymbolMorph.prototype.drawSymbolStop = function (canvas, color) {
 
     ctx.fillStyle = color.toString();
     ctx.fillRect(0, 0, canvas.width, canvas.height);
+    return canvas;
+};
+
+//Sean Scofield
+SymbolMorph.prototype.drawSymbolBug = function(canvas, color) {
+    var ctx = canvas.getContext('2d'),
+        w = canvas.width;
+        h = canvas.height,
+        l = Math.max(w / 20, 0.5);
+
+    ctx.strokeStyle = color.toString();
+
+    ctx.lineWidth = l * 2;
+    ctx.arc(w / 2, w / 2, w / 2.6 - l, radians(0), radians(360), false);
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.arc(w / 3, w / 10, w / 10 - l, radians(0), radians(360), false);
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.arc(2 * w / 3, w / 10, w / 10 - l, radians(0), radians(360), false);
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.moveTo(w / 2, h * 2 / 5);
+    ctx.lineTo(w / 2, 0.8 * h);
+    ctx.stroke();
+
+    ctx.moveTo(0, h * 2 / 5);
+    ctx.lineTo(w * 1.5, h * 2 / 5);
+    ctx.stroke();
+    ctx.moveTo(w / 4, h / 6);
+
+    ctx.beginPath();
+    ctx.moveTo(0, h / 3);
+    ctx.lineTo(w / 5, h / 3);
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.moveTo(0, 5 * h / 9);
+    ctx.lineTo(w / 5, 5 * h / 9);
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.moveTo(0, h / 3);
+    ctx.lineTo(w / 5, h / 3);
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.moveTo(0, 7 * h / 9);
+    ctx.lineTo(w / 5, 7 * h / 9);
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.moveTo(w, 5 * h / 9);
+    ctx.lineTo(4 * w / 5, 5 * h / 9);
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.moveTo(w, h / 3);
+    ctx.lineTo(4 * w / 5, h / 3);
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.moveTo(w, 7 * h / 9);
+    ctx.lineTo(4 * w / 5, 7 * h / 9);
+    ctx.stroke();
     return canvas;
 };
 
