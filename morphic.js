@@ -6893,6 +6893,9 @@ MenuMorph.prototype.popup = function (world, pos) {
     if (world.activeMenu) {
         world.activeMenu.destroy();
     }
+    if (this.items.length < 1 && !this.title) { // don't show empty menus
+        return;
+    }
     world.add(this);
     world.activeMenu = this;
     this.fullChanged();
