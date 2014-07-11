@@ -3484,7 +3484,7 @@ IDE_Morph.prototype.userSetBlocksScale = function () {
         c.nestedBlock(scrpt);
     */
         scrpt.blockSequence().forEach(function (block) {
-            block.setScale(num);
+            block.setScale(num < 12 ? num : 12);
             block.drawNew();
             block.setSpec(block.blockSpec);
         });
@@ -3493,7 +3493,8 @@ IDE_Morph.prototype.userSetBlocksScale = function () {
     new DialogBoxMorph(
         null,
         function (num) {
-            myself.setBlocksScale(num);
+            // Ensure BlocksScale is always < 12 to prevent crashes
+            myself.setBlocksScale(num < 12 ? num : 12);
         }
     ).withKey('zoomBlocks').prompt(
         'Zoom blocks',
