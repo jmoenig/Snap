@@ -1725,7 +1725,7 @@ IDE_Morph.prototype.applySavedSettings = function () {
 
     // blocks zoom
     if (zoom) {
-        SyntaxElementMorph.prototype.setScale(zoom);
+        SyntaxElementMorph.prototype.setScale(Math.min(zoom, 12));
         CommentMorph.prototype.refreshScale();
         SpriteMorph.prototype.initBlocks();
     }
