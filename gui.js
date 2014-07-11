@@ -3493,7 +3493,7 @@ IDE_Morph.prototype.userSetBlocksScale = function () {
     new DialogBoxMorph(
         null,
         function (num) {
-            myself.setBlocksScale(num);
+            myself.setBlocksScale(Math.min(num, 12));
         }
     ).withKey('zoomBlocks').prompt(
         'Zoom blocks',

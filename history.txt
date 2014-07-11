@@ -2195,3 +2195,4 @@ ______
 * Blocks: change the color of the %pause symbol to be more yellowish
 * Threads: fixed #506, thanks @haritop, for both the report and for providing the fix!!
 * GUI: fixed #412 (incomplete sprite-removal)
+* GUI: fixed #507 (limit persistent block zoom to 12x), thanks Michael!
