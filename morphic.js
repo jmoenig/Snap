@@ -4508,7 +4508,7 @@ CursorMorph.prototype.processKeyPress = function (event) {
         if (event.ctrlKey) {
             this.ctrl(event.charCode, event.shiftKey);
         } else if (event.metaKey) {
-            this.cmd(event.keyCode, event.shiftKey);
+            this.cmd(event.charCode, event.shiftKey);
         } else {
             this.insert(
                 String.fromCharCode(event.charCode),
