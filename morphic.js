@@ -6160,6 +6160,7 @@ InspectorMorph.prototype.init = function (target) {
     this.currentProperty = null;
     this.showing = 'attributes';
     this.markOwnProperties = false;
+    this.hasUserEditedDetails = false;
 
     // initialize inherited properties:
     InspectorMorph.uber.init.call(this);
@@ -6203,9 +6204,17 @@ InspectorMorph.prototype.setTarget = function (target) {
 
 InspectorMorph.prototype.updateCurrentSelection = function () {
     var val, txt, cnts,
-        sel = this.list.selected;
+        sel = this.list.selected,
+        currentTxt = this.detail.contents.children[0],
+        root = this.root();
 
-    if (isNil(sel)) {return; }
+    if (root &&
+            (root.keyboardReceiver instanceof CursorMorph) &&
+            (root.keyboardReceiver.target === currentTxt)) {
+        this.hasUserEditedDetails = true;
+        return;
+    }
+    if (isNil(sel) || this.hasUserEditedDetails) {return; }
     val = this.target[sel];
     this.currentProperty = val;
     if (isNil(val)) {
@@ -6215,7 +6224,7 @@ InspectorMorph.prototype.updateCurrentSelection = function () {
     } else {
         txt = val.toString();
     }
-    if (this.detail.contents.children[0].text === txt) {return; }
+    if (currentTxt.text === txt) {return; }
     cnts = new TextMorph(txt);
     cnts.isEditable = true;
     cnts.enableSelecting();
@@ -6291,6 +6300,7 @@ InspectorMorph.prototype.buildPanes = function () {
     );
 
     this.list.action = function () {
+        myself.hasUserEditedDetails = false;
         myself.updateCurrentSelection();
     };
 
@@ -6539,6 +6549,7 @@ InspectorMorph.prototype.save = function () {
     try {
         // this.target[prop] = evaluate(txt);
         this.target.evaluateString('this.' + prop + ' = ' + txt);
+        this.hasUserEditedDetails = false;
         if (this.target.drawNew) {
             this.target.changed();
             this.target.drawNew();

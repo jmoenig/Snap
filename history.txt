@@ -2190,4 +2190,5 @@ ______
 
 140711
 ------
-* Morphic: keyboard shortcut ctrl/cmd-shift-a for @
+* Morphic: keyboard shortcut ctrl/cmd-shift-a for ‘@‘
+* Morphic: allow directly editing properties in inspector widgets
