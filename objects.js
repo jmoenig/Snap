@@ -2577,7 +2577,7 @@ SpriteMorph.prototype.userMenu = function () {
         menu = new MenuMorph(this);
 
     if (ide && ide.isAppMode) {
-        menu.addItem('help', 'nop');
+        // menu.addItem('help', 'nop');
         return menu;
     }
     menu.addItem("duplicate", 'duplicate');
@@ -5116,7 +5116,7 @@ StageMorph.prototype.userMenu = function () {
         myself = this;
 
     if (ide && ide.isAppMode) {
-        menu.addItem('help', 'nop');
+        // menu.addItem('help', 'nop');
         return menu;
     }
     menu.addItem("edit", 'edit');
