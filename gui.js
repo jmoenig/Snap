@@ -2349,8 +2349,9 @@ IDE_Morph.prototype.projectMenu = function () {
         'Import tools',
         function () {
             myself.droppedText(
-                myself.getURL(
-                    'tools.xml'
+                myself.getURL2(
+                    'tools.xml',
+                    'http://snap.berkeley.edu/snapsource/tools.xml'
                 ),
                 'tools'
             );
@@ -4029,6 +4030,22 @@ IDE_Morph.prototype.getURL = function (url) {
             return request.responseText;
         }
         throw new Error('unable to retrieve ' + url);
+    } catch (err) {
+        myself.showMessage(err);
+        return;
+    }
+};
+
+IDE_Morph.prototype.getURL2 = function (url, url2) {
+    var request = new XMLHttpRequest(),
+        myself = this;
+    try {
+        request.open('GET', url, false);
+        request.send();
+        if (request.status === 200) {
+            return request.responseText;
+        }
+        return myself.getURL(url2);
     } catch (err) {
         myself.showMessage(err);
         return;
