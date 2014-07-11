@@ -83,7 +83,7 @@ ArgLabelMorph, localize, XML_Element, hex_sha512*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.threads = '2014-July-08';
+modules.threads = '2014-July-11';
 
 var ThreadManager;
 var Process;
@@ -2235,14 +2235,14 @@ Process.prototype.getObjectsNamed = function (name, thisObj, stageObj) {
 };
 
 Process.prototype.doFaceTowards = function (name) {
-    var thisObj = this.homeContext.receiver,
+    var thisObj = this.blockReceiver(),
         thatObj;
 
     if (thisObj) {
         if (this.inputOption(name) === 'mouse-pointer') {
             thisObj.faceToXY(this.reportMouseX(), this.reportMouseY());
         } else {
-            thatObj = this.getOtherObject(name, thisObj);
+            thatObj = this.getOtherObject(name, this.homeContext.receiver);
             if (thatObj) {
                 thisObj.faceToXY(
                     thatObj.xPosition(),
@@ -2254,14 +2254,14 @@ Process.prototype.doFaceTowards = function (name) {
 };
 
 Process.prototype.doGotoObject = function (name) {
-    var thisObj = this.homeContext.receiver,
+    var thisObj = this.blockReceiver(),
         thatObj;
 
     if (thisObj) {
         if (this.inputOption(name) === 'mouse-pointer') {
             thisObj.gotoXY(this.reportMouseX(), this.reportMouseY());
         } else {
-            thatObj = this.getOtherObject(name, thisObj);
+            thatObj = this.getOtherObject(name, this.homeContext.receiver);
             if (thatObj) {
                 thisObj.gotoXY(
                     thatObj.xPosition(),

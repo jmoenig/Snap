@@ -2193,3 +2193,4 @@ ______
 * Morphic: keyboard shortcut ctrl/cmd-shift-a for ‘@‘
 * Morphic: allow directly editing properties in inspector widgets
 * Blocks: change the color of the %pause symbol to be more yellowish
+* Threads: fixed #506, thanks @haritop, for both the report and for providing the fix!!
