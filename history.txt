@@ -2187,3 +2187,7 @@ ______
 * revert changes made for JSLint’s sake after the issue was fixed in JSLint
 * Blocks: change “delete” behavior in context menus to only delete this particular blocks (and reconnect the next block to the previous one)
 * fixed #490
+
+140711
+------
+* Morphic: keyboard shortcut ctrl/cmd-shift-a for @

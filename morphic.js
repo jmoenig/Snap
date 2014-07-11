@@ -1035,7 +1035,7 @@
 /*global window, HTMLCanvasElement, getMinimumFontHeight, FileReader, Audio,
 FileList, getBlurredShadowSupport*/
 
-var morphicVersion = '2014-June-23';
+var morphicVersion = '2014-July-11';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = getBlurredShadowSupport(); // check for Chrome-bug
 
@@ -4495,9 +4495,9 @@ CursorMorph.prototype.processKeyPress = function (event) {
     }
     if (event.keyCode) { // Opera doesn't support charCode
         if (event.ctrlKey) {
-            this.ctrl(event.keyCode);
+            this.ctrl(event.keyCode, event.shiftKey);
         } else if (event.metaKey) {
-            this.cmd(event.keyCode);
+            this.cmd(event.keyCode, event.shiftKey);
         } else {
             this.insert(
                 String.fromCharCode(event.keyCode),
@@ -4506,9 +4506,9 @@ CursorMorph.prototype.processKeyPress = function (event) {
         }
     } else if (event.charCode) { // all other browsers
         if (event.ctrlKey) {
-            this.ctrl(event.charCode);
+            this.ctrl(event.charCode, event.shiftKey);
         } else if (event.metaKey) {
-            this.cmd(event.keyCode);
+            this.cmd(event.keyCode, event.shiftKey);
         } else {
             this.insert(
                 String.fromCharCode(event.charCode),
@@ -4525,13 +4525,13 @@ CursorMorph.prototype.processKeyDown = function (event) {
     var shift = event.shiftKey;
     this.keyDownEventUsed = false;
     if (event.ctrlKey) {
-        this.ctrl(event.keyCode);
+        this.ctrl(event.keyCode, event.shiftKey);
         // notify target's parent of key event
         this.target.escalateEvent('reactToKeystroke', event);
         return;
     }
     if (event.metaKey) {
-        this.cmd(event.keyCode);
+        this.cmd(event.keyCode, event.shiftKey);
         // notify target's parent of key event
         this.target.escalateEvent('reactToKeystroke', event);
         return;
@@ -4746,8 +4746,10 @@ CursorMorph.prototype.insert = function (aChar, shiftKey) {
     }
 };
 
-CursorMorph.prototype.ctrl = function (aChar) {
-    if ((aChar === 97) || (aChar === 65)) {
+CursorMorph.prototype.ctrl = function (aChar, shiftKey) {
+    if (aChar === 64 || (aChar === 65 && shiftKey)) {
+        this.insert('@');
+    } else if (aChar === 65) {
         this.target.selectAll();
     } else if (aChar === 90) {
         this.undo();
@@ -4759,8 +4761,6 @@ CursorMorph.prototype.ctrl = function (aChar) {
         this.insert('[');
     } else if (aChar === 93) {
         this.insert(']');
-    } else if (aChar === 64) {
-        this.insert('@');
     } else if (!isNil(this.target.receiver)) {
         if (aChar === 68) {
             this.target.doIt();
@@ -4774,8 +4774,10 @@ CursorMorph.prototype.ctrl = function (aChar) {
 
 };
 
-CursorMorph.prototype.cmd = function (aChar) {
-    if (aChar === 65) {
+CursorMorph.prototype.cmd = function (aChar, shiftKey) {
+    if (aChar === 64 || (aChar === 65 && shiftKey)) {
+        this.insert('@');
+    } else if (aChar === 65) {
         this.target.selectAll();
     } else if (aChar === 90) {
         this.undo();
