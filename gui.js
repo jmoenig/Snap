@@ -69,7 +69,7 @@ SpeechBubbleMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2014-July-08';
+modules.gui = '2014-July-11';
 
 // Declarations
 
@@ -1833,23 +1833,23 @@ IDE_Morph.prototype.duplicateSprite = function (sprite) {
 
 IDE_Morph.prototype.removeSprite = function (sprite) {
     var idx = this.sprites.asArray().indexOf(sprite) + 1;
-
+    this.stage.threads.stopAllForReceiver(sprite);
     sprite.destroy();
     this.stage.watchers().forEach(function (watcher) {
         if (watcher.object() === sprite) {
             watcher.destroy();
         }
     });
-
-    if (idx < 1) {return; }
-
+    if (idx > 0) {
+        this.sprites.remove(idx);
+    }
+    this.createCorral();
+    this.fixLayout();
     this.currentSprite = detect(
         this.stage.children,
         function (morph) {return morph instanceof SpriteMorph; }
     ) || this.stage;
-    this.sprites.remove(this.sprites.asArray().indexOf(sprite) + 1);
-    this.createCorral();
-    this.fixLayout();
+
     this.selectSprite(this.currentSprite);
 };
 
