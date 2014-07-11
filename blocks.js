@@ -6616,17 +6616,13 @@ InputSlotMorph.prototype.attributesMenu = function () {
             'direction' : ['direction'],
             'costume #' : ['costume #'],
             'costume name' : ['costume name'],
-            'size' : ['size'],
-            '~~' : null, // ~~ prevents conflicts below
-            'pen size' : ['pen size'],
-            'pen color' : ['pen color'],
-            'pen shade' : ['pen shade'],
+            'size' : ['size']
         };
     } else { // the stage
         dict = {
             'costume #' : ['costume #'],
             'costume name' : ['costume name'],
-            '~~' : null,
+            '~~' : null, // ~~ prevents conflicts with ~ below.
             'stage height' : ['stage height'],
             'stage width' : ['stage width']
         };
