@@ -520,6 +520,11 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: 'set pen size to %n',
             defaults: [1]
         },
+        penSize: {
+            type: 'reporter',
+            category: 'pen',
+            spec: 'get pen size',
+        },        
         doStamp: {
             type: 'command',
             category: 'pen',
@@ -1703,6 +1708,8 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push('-');
         blocks.push(block('changeSize'));
         blocks.push(block('setSize'));
+        blocks.push(watcherToggle('penSize'));
+        blocks.push(block('penSize'))
         blocks.push('-');
         blocks.push(block('doStamp'));
 
