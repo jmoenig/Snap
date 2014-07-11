@@ -61,7 +61,7 @@ SyntaxElementMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2014-May-02';
+modules.store = '2014-Jun-04';
 
 
 // XML_Serializer ///////////////////////////////////////////////////////
@@ -1032,7 +1032,7 @@ SnapSerializer.prototype.loadInput = function (model, input, block) {
         input.setColor(this.loadColor(model.contents));
     } else {
         val = this.loadValue(model);
-        if (val) {
+        if (!isNil(val) && input.setContents) {
             input.setContents(this.loadValue(model));
         }
     }

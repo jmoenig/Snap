@@ -1035,7 +1035,7 @@
 /*global window, HTMLCanvasElement, getMinimumFontHeight, FileReader, Audio,
 FileList, getBlurredShadowSupport*/
 
-var morphicVersion = '2014-February-03';
+var morphicVersion = '2014-July-11';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = getBlurredShadowSupport(); // check for Chrome-bug
 
@@ -4495,9 +4495,9 @@ CursorMorph.prototype.processKeyPress = function (event) {
     }
     if (event.keyCode) { // Opera doesn't support charCode
         if (event.ctrlKey) {
-            this.ctrl(event.keyCode);
+            this.ctrl(event.keyCode, event.shiftKey);
         } else if (event.metaKey) {
-            this.cmd(event.keyCode);
+            this.cmd(event.keyCode, event.shiftKey);
         } else {
             this.insert(
                 String.fromCharCode(event.keyCode),
@@ -4506,9 +4506,9 @@ CursorMorph.prototype.processKeyPress = function (event) {
         }
     } else if (event.charCode) { // all other browsers
         if (event.ctrlKey) {
-            this.ctrl(event.charCode);
+            this.ctrl(event.charCode, event.shiftKey);
         } else if (event.metaKey) {
-            this.cmd(event.keyCode);
+            this.cmd(event.charCode, event.shiftKey);
         } else {
             this.insert(
                 String.fromCharCode(event.charCode),
@@ -4525,13 +4525,13 @@ CursorMorph.prototype.processKeyDown = function (event) {
     var shift = event.shiftKey;
     this.keyDownEventUsed = false;
     if (event.ctrlKey) {
-        this.ctrl(event.keyCode);
+        this.ctrl(event.keyCode, event.shiftKey);
         // notify target's parent of key event
         this.target.escalateEvent('reactToKeystroke', event);
         return;
     }
     if (event.metaKey) {
-        this.cmd(event.keyCode);
+        this.cmd(event.keyCode, event.shiftKey);
         // notify target's parent of key event
         this.target.escalateEvent('reactToKeystroke', event);
         return;
@@ -4746,8 +4746,10 @@ CursorMorph.prototype.insert = function (aChar, shiftKey) {
     }
 };
 
-CursorMorph.prototype.ctrl = function (aChar) {
-    if ((aChar === 97) || (aChar === 65)) {
+CursorMorph.prototype.ctrl = function (aChar, shiftKey) {
+    if (aChar === 64 || (aChar === 65 && shiftKey)) {
+        this.insert('@');
+    } else if (aChar === 65) {
         this.target.selectAll();
     } else if (aChar === 90) {
         this.undo();
@@ -4759,17 +4761,34 @@ CursorMorph.prototype.ctrl = function (aChar) {
         this.insert('[');
     } else if (aChar === 93) {
         this.insert(']');
-    } else if (aChar === 64) {
-        this.insert('@');
+    } else if (!isNil(this.target.receiver)) {
+        if (aChar === 68) {
+            this.target.doIt();
+        } else if (aChar === 73) {
+            this.target.inspectIt();
+        } else if (aChar === 80) {
+            this.target.showIt();
+        }
     }
+
 
 };
 
-CursorMorph.prototype.cmd = function (aChar) {
-    if (aChar === 65) {
+CursorMorph.prototype.cmd = function (aChar, shiftKey) {
+    if (aChar === 64 || (aChar === 65 && shiftKey)) {
+        this.insert('@');
+    } else if (aChar === 65) {
         this.target.selectAll();
     } else if (aChar === 90) {
         this.undo();
+    } else if (!isNil(this.target.receiver)) {
+        if (aChar === 68) {
+            this.target.doIt();
+        } else if (aChar === 73) {
+            this.target.inspectIt();
+        } else if (aChar === 80) {
+            this.target.showIt();
+        }
     }
 };
 
@@ -6157,6 +6176,7 @@ InspectorMorph.prototype.init = function (target) {
     this.edge = MorphicPreferences.isFlat ? 1 : 5;
     this.color = new Color(60, 60, 60);
     this.borderColor = new Color(95, 95, 95);
+    this.fps = 25;
     this.drawNew();
 
     // panes:
@@ -6179,6 +6199,28 @@ InspectorMorph.prototype.setTarget = function (target) {
     this.target = target;
     this.currentProperty = null;
     this.buildPanes();
+};
+
+InspectorMorph.prototype.updateCurrentSelection = function () {
+    var val, txt, cnts,
+        sel = this.list.selected;
+
+    if (isNil(sel)) {return; }
+    val = this.target[sel];
+    this.currentProperty = val;
+    if (isNil(val)) {
+        txt = 'NULL';
+    } else if (isString(val)) {
+        txt = val;
+    } else {
+        txt = val.toString();
+    }
+    if (this.detail.contents.children[0].text === txt) {return; }
+    cnts = new TextMorph(txt);
+    cnts.isEditable = true;
+    cnts.enableSelecting();
+    cnts.setReceiver(this.target);
+    this.detail.setContents(cnts);
 };
 
 InspectorMorph.prototype.buildPanes = function () {
@@ -6248,23 +6290,8 @@ InspectorMorph.prototype.buildPanes = function () {
         doubleClickAction
     );
 
-    this.list.action = function (selected) {
-        var val, txt, cnts;
-        if (selected === undefined) {return; }
-        val = myself.target[selected];
-        myself.currentProperty = val;
-        if (val === null) {
-            txt = 'NULL';
-        } else if (isString(val)) {
-            txt = val;
-        } else {
-            txt = val.toString();
-        }
-        cnts = new TextMorph(txt);
-        cnts.isEditable = true;
-        cnts.enableSelecting();
-        cnts.setReceiver(myself.target);
-        myself.detail.setContents(cnts);
+    this.list.action = function () {
+        myself.updateCurrentSelection();
     };
 
     this.list.hBar.alpha = 0.6;
@@ -6580,6 +6607,17 @@ InspectorMorph.prototype.removeProperty = function () {
     } catch (err) {
         this.inform(err);
     }
+};
+
+// InspectorMorph stepping
+
+InspectorMorph.prototype.step = function () {
+    this.updateCurrentSelection();
+    var lbl = this.target.toString();
+    if (this.label.text === lbl) {return; }
+    this.label.text = lbl;
+    this.label.drawNew();
+    this.fixLayout();
 };
 
 // MenuMorph ///////////////////////////////////////////////////////////
@@ -7924,7 +7962,7 @@ TextMorph.prototype.inspectIt = function () {
     var result = this.receiver.evaluateString(this.selection()),
         world = this.world(),
         inspector;
-    if (result !== null) {
+    if (isObject(result)) {
         inspector = new InspectorMorph(result);
         inspector.setPosition(world.hand.position());
         inspector.keepWithin(world);
@@ -9046,6 +9084,7 @@ ListMorph.prototype.buildListContents = function () {
 };
 
 ListMorph.prototype.select = function (item, trigger) {
+    if (isNil(item)) {return; }
     this.selected = item;
     this.active = trigger;
     if (this.action) {
@@ -10266,6 +10305,9 @@ WorldMorph.prototype.initEventListeners = function () {
                 if (myself.keyboardReceiver) {
                     myself.keyboardReceiver.processKeyPress(event);
                 }
+                event.preventDefault();
+            }
+            if (event.ctrlKey || event.metaKey) {
                 event.preventDefault();
             }
         },

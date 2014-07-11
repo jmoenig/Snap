@@ -155,7 +155,7 @@ DialogBoxMorph, BlockInputFragmentMorph, PrototypeHatBlockMorph, Costume*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2014-May-02';
+modules.blocks = '2014-July-08';
 
 
 var SyntaxElementMorph;
@@ -913,17 +913,13 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             part = new InputSlotMorph(
                 null,
                 false,
-                {
-                /*
-                    color : 'color',
-                    fisheye : 'fisheye',
-                    whirl : 'whirl',
-                    pixelate : 'pixelate',
-                    mosaic : 'mosaic',
-                    brightness : 'brightness',
-                */
-                    ghost : ['ghost']
-                },
+                {   brightness : ['brightness'],
+                    ghost : ['ghost'],
+                    negative : ['negative'],
+                    comic: ['comic'],
+                    duplicate: ['duplicate'],
+                    confetti: ['confetti']
+                    },
                 true
             );
             part.setContents(['ghost']);
@@ -2013,6 +2009,7 @@ BlockMorph.prototype.userMenu = function () {
     var menu = new MenuMorph(this),
         world = this.world(),
         myself = this,
+        alternatives,
         blck;
 
     menu.addItem(
@@ -2070,6 +2067,14 @@ BlockMorph.prototype.userMenu = function () {
                 );
             }
         );
+    } else if (this.definition && this.alternatives) { // custom block
+        alternatives = this.alternatives();
+        if (alternatives.length > 0) {
+            menu.addItem(
+                'relabel...',
+                function () {myself.relabel(alternatives); }
+            );
+        }
     }
 
     menu.addItem(
@@ -2105,6 +2110,7 @@ BlockMorph.prototype.userMenu = function () {
     if (this.parentThatIsA(RingMorph)) {
         menu.addLine();
         menu.addItem("unringify", 'unringify');
+        menu.addItem("ringify", 'ringify');
         return menu;
     }
     if (this.parent instanceof ReporterSlotMorph
@@ -2151,16 +2157,18 @@ BlockMorph.prototype.developersMenu = function () {
 
 BlockMorph.prototype.hidePrimitive = function () {
     var ide = this.parentThatIsA(IDE_Morph),
+        dict,
         cat;
     if (!ide) {return; }
     StageMorph.prototype.hiddenPrimitives[this.selector] = true;
-    cat = {
+    dict = {
         doWarp: 'control',
         reifyScript: 'operators',
         reifyReporter: 'operators',
         reifyPredicate: 'operators',
         doDeclareVariables: 'variables'
-    }[this.selector] || this.category;
+    };
+    cat = dict[this.selector] || this.category;
     if (cat === 'lists') {cat = 'variables'; }
     ide.flushBlocksCache(cat);
     ide.refreshPalette();
@@ -2268,6 +2276,7 @@ BlockMorph.prototype.relabel = function (alternativeSelectors) {
     alternativeSelectors.forEach(function (sel) {
         var block = SpriteMorph.prototype.blockForSelector(sel);
         block.restoreInputs(oldInputs);
+        block.fixBlockColor(null, true);
         block.addShadow(new Point(3, 3));
         menu.addItem(
             block,
@@ -2287,7 +2296,7 @@ BlockMorph.prototype.setSelector = function (aSelector) {
     var oldInputs = this.inputs(),
         info;
     info = SpriteMorph.prototype.blocks[aSelector];
-    this.category = info.category;
+    this.setCategory(info.category);
     this.selector = aSelector;
     this.setSpec(localize(info.spec));
     this.restoreInputs(oldInputs);
@@ -2299,6 +2308,7 @@ BlockMorph.prototype.restoreInputs = function (oldInputs) {
     // try to restore my previous inputs when my spec has been changed
     var i = 0,
         old,
+        nb,
         myself = this;
 
     this.inputs().forEach(function (inp) {
@@ -2309,7 +2319,14 @@ BlockMorph.prototype.restoreInputs = function (oldInputs) {
             // original - turns empty numberslots to 0:
             // inp.setContents(old.evaluate());
             // "fix" may be wrong b/c constants
-            inp.setContents(old.contents().text);
+            if (old.contents) {
+                inp.setContents(old.contents().text);
+            }
+        } else if (old instanceof CSlotMorph && inp instanceof CSlotMorph) {
+            nb = old.nestedBlock();
+            if (nb) {
+                inp.nestedBlock(nb.fullCopy());
+            }
         }
         i += 1;
     });
@@ -3330,9 +3347,44 @@ CommandBlockMorph.prototype.isStop = function () {
 // CommandBlockMorph deleting
 
 CommandBlockMorph.prototype.userDestroy = function () {
+    if (this.nextBlock()) {
+        this.userDestroyJustThis();
+        return;
+    }
     var cslot = this.parentThatIsA(CSlotMorph);
     this.destroy();
     if (cslot) {
+        cslot.fixLayout();
+    }
+};
+
+CommandBlockMorph.prototype.userDestroyJustThis = function () {
+    // delete just this one block, reattach next block to the previous one,
+    var scripts = this.parentThatIsA(ScriptsMorph),
+        cs = this.parentThatIsA(CommandSlotMorph),
+        pb,
+        nb = this.nextBlock(),
+        above,
+        cslot = this.parentThatIsA(CSlotMorph);
+
+    if (this.parent) {
+        pb = this.parent.parentThatIsA(CommandBlockMorph);
+    }
+    if (pb && (pb.nextBlock() === this)) {
+        above = pb;
+    } else if (cs && (cs.nestedBlock() === this)) {
+        above = cs;
+    }
+    this.destroy();
+    if (nb) {
+        if (above instanceof CommandSlotMorph) {
+            above.nestedBlock(nb);
+        } else if (above instanceof CommandBlockMorph) {
+            above.nextBlock(nb);
+        } else {
+            scripts.add(nb);
+        }
+    } else if (cslot) {
         cslot.fixLayout();
     }
 };
@@ -4957,6 +5009,14 @@ ScriptsMorph.prototype.cleanUp = function () {
 };
 
 ScriptsMorph.prototype.exportScriptsPicture = function () {
+    var pic = this.scriptsPicture();
+    if (pic) {
+        window.open(pic.toDataURL());
+    }
+};
+
+ScriptsMorph.prototype.scriptsPicture = function () {
+    // private - answer a canvas containing the pictures of all scripts
     var boundingBox, pic, ctx;
     if (this.children.length === 0) {return; }
     boundingBox = this.children[0].fullBounds();
@@ -4977,7 +5037,7 @@ ScriptsMorph.prototype.exportScriptsPicture = function () {
             );
         }
     });
-    window.open(pic.toDataURL());
+    return pic;
 };
 
 ScriptsMorph.prototype.addComment = function () {
@@ -6444,7 +6504,7 @@ InputSlotMorph.prototype.collidablesMenu = function () {
         allNames = [];
 
     stage.children.forEach(function (morph) {
-        if (morph instanceof SpriteMorph) {
+        if (morph instanceof SpriteMorph && !morph.isClone) {
             if (morph.name !== rcvr.name) {
                 allNames = allNames.concat(morph.name);
             }
