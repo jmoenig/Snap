@@ -4083,32 +4083,36 @@ SpriteMorph.prototype.reactToDropOf = function (morph, hand) {
 
 var re = /\((\d+)\)$/; // RegExp to match costume names
 SpriteMorph.prototype.newCostumeName = function (name) {
-  var foundSameName = false,
-      foundIndex = false,
-      lastIndex = 0;
-  for (i = 1; i <= this.costumes.length(); i++) {
-    var costume = this.costumes.at(i);
-    if (costume != null) {
-      if (costume.name === name) {
-        foundSameName = true;
-      }
-      if (foundSameName) {
-        var p = re.exec(costume.name);
-        if (p) {
-          lastIndex = Number(p[1]);
-          foundIndex = true;
+    var foundSameName = false,
+        foundIndex = false,
+        lastIndex = 0,
+        i = 1,
+        p = null,
+        costume = null;
+
+    for (i = 1; i <= this.costumes.length(); i++) {
+        costume = this.costumes.at(i);
+        if (costume !== null) {
+            if (costume.name === name) {
+                foundSameName = true;
+            }
+            if (foundSameName) {
+                p = re.exec(costume.name);
+                if (p) {
+                    lastIndex = Number(p[1]);
+                    foundIndex = true;
+                }
+            }
         }
-      }
     }
-  }
-  if (foundSameName) {
-    if (foundIndex) {
-      lastIndex += 1;
-      return name + '(' + lastIndex + ')'; // New index with a +1
+    if (foundSameName) {
+        if (foundIndex) {
+            lastIndex += 1;
+            return name + '(' + lastIndex + ')'; // New index with a +1
+        }
+        return name + '(2)'; // No indexing has started so start it off with a (1)
     }
-    return name + '(2)'; // No indexing has started so start it off with a (1)
-  }
-  return name;
+    return name;
 };
 
 SpriteMorph.prototype.doScreenshot = function (imgSource, data) {
@@ -4805,12 +4809,10 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('setEffect'));
         blocks.push(block('clearEffects'));
         blocks.push('-');
-<<<<<<< HEAD
         blocks.push(block('doScreenshot'));
-=======
+        blocks.push('-');
         blocks.push(block('show'));
         blocks.push(block('hide'));
->>>>>>> master
 
     // for debugging: ///////////////
 
