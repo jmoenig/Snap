@@ -4234,8 +4234,6 @@ StageMorph.prototype.init = function (globals) {
     this.acceptsDrops = false;
     this.setColor(new Color(255, 255, 255));
     this.fps = this.frameRate;
-
-    this.screenshotNames = {}; // Keeps track of stage image names
 };
 
 // StageMorph scaling
