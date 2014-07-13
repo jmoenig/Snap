@@ -1,10 +1,10 @@
 /*
 
-    lang-de.js
+    lang-fi.js
 
-    German translation for SNAP!
+    Finnish translation for SNAP!
 
-    written by Jens Mönig
+    written by Jouni K. Seppänen
 
     Copyright (C) 2014 by Jens Mönig
 
@@ -166,92 +166,93 @@
 
 /*global SnapTranslator*/
 
-SnapTranslator.dict.de = {
+SnapTranslator.dict.fi = {
 
 /*
     Special characters: (see <http://0xcc.net/jsescape/>)
 
     Ä, ä   \u00c4, \u00e4
     Ö, ö   \u00d6, \u00f6
-    Ü, ü   \u00dc, \u00fc
-    ß      \u00df
+    →     \u2192
+    \u200B zero-width space, useful to escape % at the beginning of words
 */
 
     // translations meta information
     'language_name':
-        'Deutsch', // the name as it should appear in the language menu
+        'suomi', // the name as it should appear in the language menu
     'language_translator':
-        'Jens M\u00F6nig', // your name for the Translators tab
+        'Jouni K. Sepp\u00e4nen', // your name for the Translators tab
     'translator_e-mail':
-        'jens@moenig.org', // optional
+        'jks@iki.fi', // optional
     'last_changed':
-        '2014-06-04', // this, too, will appear in the Translators tab
+        '2014-04-18', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
     'untitled':
-        'Unbenannt',
+        'nimet\u00f6n',
     'development mode':
-        'Hackermodus',
+        'kehitysmoodi',
 
     // categories:
     'Motion':
-        'Bewegung',
+        'Liike',
     'Looks':
-        'Aussehen',
+        'Ulkon\u00e4k\u00f6',
     'Sound':
-        'Klang',
+        '\u00c4\u00e4ni',
     'Pen':
-        'Stift',
+        'Kyn\u00e4',
     'Control':
-        'Steuerung',
+        'Ohjaus',
     'Sensing':
-        'F\u00fchlen',
+        'Tuntoaisti',
     'Operators':
-        'Operatoren',
+        'Laskenta',
     'Variables':
-        'Variablen',
+        'Muuttujat',
     'Lists':
-        'Listen',
+        'Listat',
     'Other':
-        'Andere',
+        'Muut',
 
     // editor:
     'draggable':
-        'greifbar',
+        'hiirell\u00e4 liikuteltava',
 
     // tabs:
     'Scripts':
-        'Skripte',
+        'Skriptit',
     'Costumes':
-        'Kost\u00fcme',
+        'Asut',
     'Sounds':
-        'Kl\u00e4nge',
+        '\u00c4\u00e4net',
 
     // names:
     'Sprite':
-        'Objekt',
+        'Hahmo',
     'Stage':
-        'B\u00fchne',
+        'Esiintymislava',
 
     // rotation styles:
     'don\'t rotate':
-        'nicht drehbar',
+        'ei py\u00f6ri',
     'can rotate':
-        'frei drehbar',
+        'py\u00f6rii vapaasti',
     'only face left/right':
-        'kann sich nur nach\nlinks/rechts drehen',
+        'k\u00e4\u00e4ntyy vain vasemmalle ja oikealle',
 
     // new sprite button:
     'add a new sprite':
-        'ein neues Objekt\nhinzuf\u00fcgen',
+        'lis\u00e4\u00e4 uusi hahmo',
 
     // tab help
     'costumes tab help':
-        'Bilder durch hereinziehen von einer anderen\n'
-            + 'Webseite or vom Computer importieren',
+        'Tuo kuva verkosta tai koneeltasi\n'
+            + 'siirt\u00e4m\u00e4ll\u00e4 se hiirell\u00e4 t\u00e4h\u00e4n',
     'import a sound from your computer\nby dragging it into here':
-        'Kl\u00e4nge durch hereinziehen importieren',
+        'Tuo \u00e4\u00e4ni koneeltasi\n'
+            + 'siirt\u00e4m\u00e4ll\u00e4 se hiirell\u00e4 t\u00e4h\u00e4n',
 
     // primitive blocks:
 
@@ -287,606 +288,611 @@ SnapTranslator.dict.de = {
 
     // motion:
     'Stage selected:\nno motion primitives':
-        'B\u00fchne ausgew\u00e4hlt:\nkeine Standardbewegungsbl\u00f6cke\n'
-            + 'vorhanden',
+        'Esiintymislava valittuna\nei liikekomentoja',
 
     'move %n steps':
-        'gehe %n Schritte',
+        'liiku %n askelta',
     'turn %clockwise %n degrees':
-        'drehe %clockwise %n Grad',
+        'k\u00e4\u00e4nny %clockwise %n astetta',
     'turn %counterclockwise %n degrees':
-        'drehe %counterclockwise %n Grad',
+        'k\u00e4\u00e4nny %counterclockwise %n astetta',
     'point in direction %dir':
-        'zeige Richtung %dir',
+        'osoita suuntaan %dir',
     'point towards %dst':
-        'zeige auf %dst',
+        'osoita hahmoa %dst kohti',
     'go to x: %n y: %n':
-        'gehe zu x: %n y: %n',
+        'mene paikkaan x: %n y: %n',
     'go to %dst':
-        'gehe zu %dst',
+        'mene hahmon %dst luo',
     'glide %n secs to x: %n y: %n':
-        'gleite %n Sek. zu x: %n y: %n',
+        'liu\'u %n s \u2192 x: %n y: %n',
     'change x by %n':
-        '\u00e4ndere x um %n',
+        'muuta x:\u00e4\u00e4 %n askelta',
     'set x to %n':
-        'setze x auf %n',
+        'aseta x:ksi %n',
     'change y by %n':
-        '\u00e4ndere y um %n',
+        'muuta y:t\u00e4 %n askelta',
     'set y to %n':
-        'setze y auf %n',
+        'aseta y:ksi %n',
     'if on edge, bounce':
-        'pralle vom Rand ab',
+        'kimpoa reunasta',
     'x position':
-        'x-Position',
+        'x-paikka',
     'y position':
-        'y-Position',
+        'y-paikka',
     'direction':
-        'Richtung',
+        'suunta',
 
     // looks:
     'switch to costume %cst':
-        'ziehe Kost\u00fcm %cst an',
+        'vaihda asuun %cst',
     'next costume':
-        'n\u00e4chstes Kost\u00fcm',
+        'seuraava asu',
     'costume #':
-        'Kost\u00fcm Nr.',
+        'asun nro',
     'say %s for %n secs':
-        'sage %s f\u00fcr %n Sek.',
+        'sano %s %n sekunnin ajan',
     'say %s':
-        'sage %s',
+        'sano %s',
     'think %s for %n secs':
-        'denke %s f\u00fcr %n Sek.',
+        'ajattele %s %n sekunnin ajan',
     'think %s':
-        'denke %s',
+        'ajattele %s',
     'Hello!':
-        'Hallo!',
+        'Hei!',
     'Hmm...':
         'Hmm...',
     'change %eff effect by %n':
-        '\u00e4ndere %eff -Effekt um %n',
+        'muuta efekti\u00e4 %eff %n yksikk\u00f6\u00e4',
     'set %eff effect to %n':
-        'setze %eff -Effekt auf %n',
+        'aseta efektin %eff m\u00e4\u00e4r\u00e4ksi %n',
     'clear graphic effects':
-        'schalte Grafikeffekte aus',
+        'poista efektit',
     'change size by %n':
-        '\u00e4ndere Gr\u00f6\u00dfe um %n',
+        // using a zero-width space to hide % at word beginning
+        'muuta kokoa %n \u200B%-yksikk\u00f6\u00e4',
     'set size to %n %':
-        'setze Gr\u00f6\u00dfe auf %n %',
+        'aseta kooksi %n %',
     'size':
-        'Gr\u00f6\u00dfe',
+        'koko',
     'show':
-        'anzeigen',
+        'n\u00e4yt\u00e4',
     'hide':
-        'verstecken',
+        'piilota',
     'go to front':
-        'komme nach vorn',
+        'tule etualalle',
     'go back %n layers':
-        'gehe %n Ebenen zur\u00fcck',
+        'siirry %n kerrosta taakse',
 
     'development mode \ndebugging primitives:':
-        'Hackermodus \nDebugging-Bl\u00f6cke',
+        'Kehitysmoodin \ndebuggauskomennot:',
     'console log %mult%s':
-        'schreibe in die Konsole: %mult%s',
+        'kirjoita konsoliin: %mult%s',
     'alert %mult%s':
-        'Pop-up: %mult%s',
+        'ponnahdusikkuna: %mult%s',
 
     // sound:
     'play sound %snd':
-        'spiele Klang %snd',
+        'soita \u00e4\u00e4ni %snd',
     'play sound %snd until done':
-        'spiele Klang %snd ganz',
+        'soita \u00e4\u00e4ni %snd kokonaan',
     'stop all sounds':
-        'stoppe alle Kl\u00e4nge',
+        'pys\u00e4yt\u00e4 kaikki \u00e4\u00e4net',
     'rest for %n beats':
-        'spiele Pause f\u00fcr %n Schl\u00e4ge',
+        'tauko %n iskua',
     'play note %n for %n beats':
-        'spiele Note %n f\u00fcr %n Schl\u00e4ge',
+        'nuotti %n %n iskua',
     'change tempo by %n':
-        '\u00e4ndere Tempo um %n',
+        'vaihda tempoa %n iskulla/min',
     'set tempo to %n bpm':
-        'setze Tempo auf %n Schl\u00e4ge/Min.',
+        'aseta tempoksi %n iskua/min',
     'tempo':
-        'Tempo',
+        'tempo',
 
     // pen:
     'clear':
-        'wische',
+        'tyhjenn\u00e4',
     'pen down':
-        'Stift runter',
+        'kyn\u00e4 alas',
     'pen up':
-        'Stift hoch',
+        'kyn\u00e4 yl\u00f6s',
     'set pen color to %clr':
-        'setze Stiftfarbe auf %clr',
+        'aseta kyn\u00e4n v\u00e4riksi %clr',
     'change pen color by %n':
-        '\u00e4ndere Stiftfarbe um %n',
+        'vaihda kyn\u00e4n v\u00e4ri\u00e4 m\u00e4\u00e4r\u00e4ll\u00e4 %n',
     'set pen color to %n':
-        'setze Stiftfarbe auf %n',
+        'aseta kyn\u00e4n v\u00e4riksi %n',
     'change pen shade by %n':
-        '\u00e4ndere Farbst\u00e4rke um %n',
+        // using a zero-width space to hide % at word beginning
+        'muuta kirkkautta %n \u200b%-yks.',
     'set pen shade to %n':
-        'setze Farbst\u00e4rke auf %n',
+        'aseta kirkkaudeksi %n %',
     'change pen size by %n':
-        '\u00e4ndere Stiftdicke um %n',
+        'muuta paksuutta m\u00e4\u00e4r\u00e4ll\u00e4 %n',
     'set pen size to %n':
-        'setze Stiftdicke auf %n',
+        'aseta kyn\u00e4n paksuudeksi %n',
     'stamp':
-        'stemple',
+        'leimaa',
 
     // control:
     'when %greenflag clicked':
-        'Wenn %greenflag angeklickt',
+        'kun klikataan %greenflag',
     'when %keyHat key pressed':
-        'Wenn Taste %keyHat gedr\u00fcckt',
+        'kun painetaan %keyHat',
     'when I am clicked':
-        'Wenn ich angeklickt werde',
+        'kun minua klikataan',
     'when I receive %msgHat':
-        'Wenn ich %msgHat empfange',
+        'kun vastaanotan sanoman %msgHat',
     'broadcast %msg':
-        'sende %msg an alle',
+        'l\u00e4het\u00e4 sanoma %msg',
     'broadcast %msg and wait':
-        'sende %msg an alle und warte',
+        'l\u00e4het\u00e4 sanoma %msg ja odota',
     'Message name':
-        'Nachricht',
+        'Sanoma',
     'message':
-        'Nachricht',
+        'sanoma',
     'any message':
-        'eine beliebige Nachricht',
+        'mik\u00e4 tahansa',
     'wait %n secs':
-        'warte %n Sek.',
+        'odota %n sekuntia',
     'wait until %b':
-        'warte bis %b',
+        'odota kunnes %b',
     'forever %c':
-        'fortlaufend %c',
+        'ikuisesti %c',
     'repeat %n %c':
-        'wiederhole %n mal %c',
+        'toista %n kertaa %c',
     'repeat until %b %c':
-        'wiederhole bis %b %c',
+        'toista kunnes %b %c',
     'if %b %c':
-        'falls %b %c',
+        'jos %b %c',
     'if %b %c else %c':
-        'falls %b %c sonst %c',
+        'jos %b %c muuten %c',
     'report %s':
-        'berichte %s',
+        'vastaa %s',
     'stop %stopChoices':
-        'stoppe %stopChoices',
+        'pys\u00e4yt\u00e4 %stopChoices',
     'all':
-        'alles',
+        'kaikki',
     'this script':
-        'dieses Skript',
+        't\u00e4m\u00e4 skripti',
     'this block':
-        'diesen Block',
+        't\u00e4m\u00e4 palikka',
     'stop %stopOthersChoices':
-        'stoppe %stopOthersChoices',
+        'pys\u00e4yt\u00e4 %stopOthersChoices',
     'all but this script':
-        'alles au\u00dfer diesem Skript',
+        'kaikki paitsi t\u00e4m\u00e4 skripti',
     'other scripts in sprite':
-        'andere Skripte in diesem Objekt',
+        'hahmon muut skriptit',
     'pause all %pause':
-        'pausiere alles %pause',
+        'keskeyt\u00e4 kaikki %pause',
     'run %cmdRing %inputs':
-        'f\u00fchre %cmdRing aus %inputs',
+        'suorita %cmdRing %inputs',
     'launch %cmdRing %inputs':
-        'starte %cmdRing %inputs',
+        'k\u00e4ynnist\u00e4 %cmdRing %inputs',
     'call %repRing %inputs':
-        'rufe %repRing auf %inputs',
+        'kutsu %repRing %inputs',
     'run %cmdRing w/continuation':
-        'f\u00fchre %cmdRing mit Continuation aus',
+        'suorita %cmdRing kontinuaatiolla',
     'call %cmdRing w/continuation':
-        'rufe %cmdRing mit Continuation auf',
+        'kutsu %cmdRing kontinuaatiolla',
     'warp %c':
-        'Warp %c',
+        'supernopeasti %c',
     'when I start as a clone':
-        'Wenn ich geklont werde',
+        'Kun aloitan kloonina',
     'create a clone of %cln':
-        'klone %cln',
+        'kloonaa %cln',
     'myself':
-        'mich',
+        'minut',
     'delete this clone':
-        'entferne diesen Klon',
+        'poista t\u00e4m\u00e4 klooni',
 
     // sensing:
     'touching %col ?':
-        'ber\u00fchre %col ?',
+        'koskettaa hahmoa %col ?',
     'touching %clr ?':
-        'ber\u00fchre %clr ?',
+        'koskettaa v\u00e4ri\u00e4 %clr ?',
     'color %clr is touching %clr ?':
-        'Farbe %clr ber\u00fchrt %clr ?',
+        'v\u00e4ri %clr koskettaa v\u00e4ri\u00e4 %clr ?',
     'ask %s and wait':
-        'frage %s und warte',
+        'kysy %s ja odota',
     'what\'s your name?':
-        'Wie hei\u00dft Du?',
+        'Mik\u00e4 sinun nimesi on?',
     'answer':
-        'Antwort',
+        'vastaus',
     'mouse x':
-        'Maus x-Position',
+        'hiiren x-paikka',
     'mouse y':
-        'Maus y-Position',
+        'hiiren y-paikka',
     'mouse down?':
-        'Maustaste gedr\u00fcckt?',
+        'hiiren n\u00e4pp\u00e4in painettuna?',
     'key %key pressed?':
-        'Taste %key gedr\u00fcckt?',
+        'n\u00e4pp\u00e4in %key painettuna?',
     'distance to %dst':
-        'Entfernung von %dst',
+        'et\u00e4isyys hahmoon %dst',
     'reset timer':
-        'starte Stoppuhr neu',
+        'nollaa ajastin',
     'timer':
-        'Stoppuhr',
+        'ajastin',
     '%att of %spr':
-        '%att von %spr',
+        '%att hahmolla %spr',
     'http:// %s':
         'http:// %s',
     'turbo mode?':
-        'Turbomodus?',
+        'turbonopeus?',
     'set turbo mode to %b':
-        'setze Turbomodus auf %b',
+        'kytke turbonopeus p\u00e4\u00e4lle jos %b',
 
     'filtered for %clr':
-        'nach %clr gefiltert',
+        'suodatettuna v\u00e4ri %clr',
     'stack size':
-        'Stapelgr\u00f6\u00dfe',
+        'pinon koko',
     'frames':
-        'Rahmenz\u00e4hler',
+        'ruutuja',
 
     // operators:
     '%n mod %n':
-        '%n modulo %n',
+        'jakoj\u00e4\u00e4nn\u00f6s laskusta %n / %n',
     'round %n':
-        '%n gerundet',
+        'py\u00f6rist\u00e4 %n',
     '%fun of %n':
-        '%fun von %n',
+        '%fun %n',
     'pick random %n to %n':
-        'Zufallszahl von %n bis %n',
+        'arvo satunnaisluku %n .. %n',
     '%b and %b':
-        '%b und %b',
+        '%b ja %b',
     '%b or %b':
-        '%b oder %b',
+        '%b tai %b',
     'not %b':
-        'nicht %b',
+        'ei %b',
     'true':
-        'wahr',
+        'tosi',
     'false':
-        'falsch',
+        'ep\u00e4tosi',
     'join %words':
-        'verbinde %words',
+        'yhdist\u00e4 %words',
     'split %s by %delim':
-        'trenne %s nach %delim',
+        'pilko %s %delim kohdalta',
     'hello':
-        'Hallo',
+        'Hei',
     'world':
-        'Welt',
+        'maailma',
     'letter %n of %s':
-        'Zeichen %n von %s',
+        'kirjain nro %n tekstist\u00e4 %s',
     'length of %s':
-        'L\u00e4nge von %s',
+        'tekstin %s pituus',
     'unicode of %s':
-        'Unicode Wert von %s',
+        'merkin %s Unicode-arvo',
     'unicode %n as letter':
-        'Unicode %n als Buchstabe',
+        'Unicode-arvoa %n vastaava merkki',
     'is %s a %typ ?':
-        'ist %s ein(e) %typ ?',
+        'onko %s %typ ?',
     'is %s identical to %s ?':
-        'ist %s identisch mit %s ?',
+        'onko %s sama kuin %s ?',
 
     'type of %s':
-        'Typ von %s',
+        '%s:n tyyppi',
 
     // variables:
     'Make a variable':
-        'Neue Variable',
+        'Uusi muuttuja',
     'Variable name':
-        'Variablenname',
+        'Muuttujan nimi',
     'Script variable name':
-        'Skriptvariablenname',
+        'Skriptimuuttujan nimi',
     'Delete a variable':
-        'Variable l\u00f6schen',
+        'poista muuttuja',
 
     'set %var to %s':
-        'setze %var auf %s',
+        'aseta muuttujan %var arvoksi %s',
     'change %var by %n':
-        '\u00e4ndere %var um %n',
+        'muuta muuttujaa %var m\u00e4\u00e4r\u00e4ll\u00e4 %n',
     'show variable %var':
-        'zeige Variable %var',
+        'n\u00e4yt\u00e4 muuttuja %var',
     'hide variable %var':
-        'verstecke Variable %var',
+        'piilota muuttuja %var',
     'script variables %scriptVars':
-        'Skriptvariablen %scriptVars',
+        'skriptimuuttujat %scriptVars',
 
     // lists:
     'list %exp':
-        'Liste %exp',
+        'lista %exp',
     '%s in front of %l':
-        '%s am Anfang von %l',
+        '%s listan %l aluksi',
     'item %idx of %l':
-        'Element %idx von %l',
+        'alkio kohdassa %idx listassa %l',
     'all but first of %l':
-        'alles au\u00dfer dem ersten von %l',
+        'kaikki paitsi ensimm\u00e4inen alkio listasta %l',
     'length of %l':
-        'L\u00e4nge von %l',
+        'listan %l pituus',
     '%l contains %s':
-        '%l enth\u00e4lt %s',
+        'lista %l sis\u00e4lt\u00e4\u00e4 %s',
     'thing':
-        'etwas',
+        'alkio',
     'add %s to %l':
-        'f\u00fcge %s zu %l hinzu',
+        'lis\u00e4\u00e4 %s listaan %l',
     'delete %ida of %l':
-        'entferne %ida aus %l',
+        'poista %ida listasta %l',
     'insert %s at %idx of %l':
-        'f\u00fcge %s als %idx in %l ein',
+        'lis\u00e4\u00e4 %s kohtaan %idx listassa %l',
     'replace item %idx of %l with %s':
-        'ersetze Element %idx in %l durch %s',
+        'vaihda kohtaan %idx listassa %l alkio %s',
 
     // other
     'Make a block':
-        'Neuer Block',
+        'Uusi palikka',
 
     // menus
     // snap menu
     'About...':
-        '\u00dcber Snap!...',
+        'Tietoa Snapista...',
     'Reference manual':
-        'Handbuch lesen',
+        'K\u00e4ytt\u00f6ohje',
     'Snap! website':
-        'Snap! Webseite',
+        'Snapin kotisivu',
     'Download source':
-        'Quellcode runterladen',
+        'Lataa l\u00e4hdekoodi',
     'Switch back to user mode':
-        'zur\u00fcck zum Benutzermodus',
+        'Palaa k\u00e4ytt\u00e4j\u00e4moodiin',
     'disable deep-Morphic\ncontext menus\nand show user-friendly ones':
-        'verl\u00e4sst Morphic',
+        'poista Morphic-valikot k\u00e4yt\u00f6st\u00e4\n'
+            + 'ja n\u00e4yt\u00e4 helpot valikot',
     'Switch to dev mode':
-        'zum Hackermodus wechseln',
+        'vaihda kehitysmoodiin',
     'enable Morphic\ncontext menus\nand inspectors,\nnot user-friendly!':
-        'erm\u00f6glicht Morphic Funktionen',
+        'n\u00e4yt\u00e4 Morphic-toiminnot,\n'
+            + 'ei kovin helppok\u00e4ytt\u00f6isi\u00e4',
 
     // project menu
     'Project notes...':
-        'Projektanmerkungen...',
+        'Projektimerkint\u00f6j\u00e4...',
     'New':
-        'Neu',
+        'Uusi',
     'Open...':
-        '\u00d6ffnen...',
+        'Avaa...',
     'Save':
-        'Sichern',
+        'Tallenna',
     'Save As...':
-        'Sichern als...',
+        'Tallenna nimell\u00e4...',
     'Import...':
-        'Importieren...',
+        'Tuo...',
     'file menu import hint':
-        'l\u00e4dt ein exportiertes Projekt,\neine Bibliothek mit '
-            + 'Bl\u00f6cken\n'
-            + 'ein Kost\u00fcm oder einen Klang',
+        'lataa viety projekti,\npalikkakirjasto, asu\ntai \u00e4\u00e4ni',
     'Export project as plain text...':
-        'Projekt als normalen Text exportieren...',
+        'Vie projekti tekstin\u00e4...',
     'Export project...':
-        'Projekt exportieren...',
+        'Vie projekti...',
     'show project data as XML\nin a new browser window':
-        'zeigt das Projekt als XML\nin einem neuen Browserfenster an',
+        'n\u00e4yt\u00e4 projekti XML-muodossa\nuudessa selainikkunassa',
     'Export blocks...':
-        'Bl\u00f6cke exportieren...',
+        'Vie palikoita...',
     'show global custom block definitions as XML\nin a new browser window':
-        'zeigt globale Benutzerblockdefinitionen\nals XML im Browser an',
+        'n\u00e4yt\u00e4 yhteiset palikkam\u00e4\u00e4rittelyt\n'
+            + 'XML-muodossa uudessa selainikkunassa',
     'Import tools':
-        'Tools laden',
+        'Tuo ty\u00f6kaluja',
     'load the official library of\npowerful blocks':
-        'das offizielle Modul mit\nm\u00e4chtigen Bl\u00f6cken laden',
+        'lataa virallinen tehopalikoiden kirjasto',
     'Libraries...':
-        'Module...',
+        'Kirjastot...',
     'Import library':
-        'Modul laden',
+        'Tuo kirjasto',
 
     // cloud menu
     'Login...':
-        'Anmelden...',
+        'Kirjaudu...',
     'Signup...':
-        'Benutzerkonto einrichten...',
+        'Luo k\u00e4ytt\u00e4j\u00e4tili...',
 
     // settings menu
     'Language...':
-        'Sprache...',
+        'Kieli...',
     'Zoom blocks...':
-        'Bl\u00f6cke vergr\u00f6\u00dfern...',
+        'Suurenna palikoita...',
     'Stage size...':
-        'B\u00fchnengr\u00f6\u00dfe...',
+        'Esiintymislavan koko...',
     'Stage size':
-        'B\u00fchnengr\u00f6\u00dfe',
+        'Esiintymislavan koko',
     'Stage width':
-        'B\u00fchnenbreite',
+        'Esiintymislavan leveys',
     'Stage height':
-        'B\u00fchnenh\u00f6he',
+        'Esiintymislavan korkeus',
     'Default':
-        'Normal',
+        'Tavallinen',
     'Blurred shadows':
-        'Weiche Schatten',
+        'Sumeat varjot',
     'uncheck to use solid drop\nshadows and highlights':
-        'abschalten f\u00fcr harte Schatten\nund Beleuchtung',
+        'poistamalla saat kiinte\u00e4t varjot\nja korostukset',
     'check to use blurred drop\nshadows and highlights':
-        'einschalten f\u00fcr harte Schatten\nund Beleuchtung',
+        'asettamalla saat sumeat varjot\nja korostukset',
     'Zebra coloring':
-        'Zebrafarben',
+        'Seeprav\u00e4ritys',
     'check to enable alternating\ncolors for nested blocks':
-        'einschalten \u00fcr abwechselnde Farbnuancen\nin Bl\u00f6cken',
+        'asettamalla saat vaihtuvat v\u00e4rit\nsis\u00e4kk\u00e4isille palikoille',
     'uncheck to disable alternating\ncolors for nested block':
-        'ausschalten verhindert abwechselnde\nFarbnuancen in Bl\u00f6cken',
+        'poistamalla saat samat v\u00e4rit\nsis\u00e4kk\u00e4isille palikoille',
     'Dynamic input labels':
-        'Eingabenbeschriftung',
+        'Vaihtuvat sy\u00f6tetunnukset',
     'uncheck to disable dynamic\nlabels for variadic inputs':
-        'ausschalten verhindert Beschriftung\nvon Mehrfacheingaben',
+        'poistamalla est\u00e4t vaihtuvien\nsy\u00f6tteiden vaihtuvat tunnukset',
     'check to enable dynamic\nlabels for variadic inputs':
-        'einschalten um Mehrfacheingabefelder\nautomatisch zu beschriften',
+        'asettamalla saat vaihtuville\nsy\u00f6tteille vaihtuvat tunnukset',
     'Prefer empty slot drops':
-        'Leere Platzhalter bevorzugen',
+        'Suosi asettamista tyhjiin aukkoihin',
     'settings menu prefer empty slots hint':
-        'einschalten um leere Platzhalter\nbeim Platzieren von Bl\u00f6cken'
-            + 'zu bevorzugen',
+        'asettamalla saat asetettavat\npalikat osumaan tyhjiin aukkoihin',
     'uncheck to allow dropped\nreporters to kick out others':
-        'ausschalten um das "Rauskicken"\nvon platzierten Bl\u00f6cken\n'
-            + 'zu erm\u00f6glichen',
+        'poistamalla sallit asetettujen\npalikoiden pois potkimisen',
     'Long form input dialog':
-        'Ausf\u00fchrlicher Input-Dialog',
+        'Yksityiskohtainen sy\u00f6tevalinta',
     'Plain prototype labels':
-        'Einfache Prototyp-Beschriftung',
+        'Yksinkertaiset palikkatunnisteet',
     'uncheck to always show (+) symbols\nin block prototype labels':
-        'ausschalten, um (+) Zeichen\nim Blockeditor zu verbergen',
+        'poistamalla saat (+)-merkit\nn\u00e4kym\u00e4\u00e4n aina\n'
+            + 'palikan muokkauksessa',
     'check to hide (+) symbols\nin block prototype labels':
-        'einschalten, um (+) Zeichen\nim Blockeditor immer anzuzeigen',
+        'asettamalla piilotat (+)-merkit\npalikan muokkauksessa',
     'check to always show slot\ntypes in the input dialog':
-        'einschalten, um immer die Datentypen\nim Input-Dialog zu sehen',
+        'asettamalla n\u00e4et aina\ntietotyyppivalinnat\n'
+            + 'palikan sy\u00f6tteit\u00e4 lis\u00e4tess\u00e4',
     'uncheck to use the input\ndialog in short form':
-        'ausschalten f\u00fcr kurzen\nInput-Dialog',
+        'poistamalla teet palikan\nsy\u00f6tteiden lis\u00e4\u00e4misikkunasta\n'
+            + 'yksinkertaisen',
     'Virtual keyboard':
-        'Virtuelle Tastatur',
+        'Virtuaalin\u00e4pp\u00e4imist\u00f6',
     'uncheck to disable\nvirtual keyboard support\nfor mobile devices':
-        'ausschalten um die virtuelle\nTastatur auf mobilen Ger\u00e4ten\n'
-            + 'zu sperren',
+        'poistamalla est\u00e4t mobiililaitteiden\n'
+            + 'virtuaalin\u00e4pp\u00e4imist\u00f6n k\u00e4yt\u00f6n',
     'check to enable\nvirtual keyboard support\nfor mobile devices':
-        'einschalten um die virtuelle\nTastatur auf mobilen Ger\u00e4ten\n'
-            + 'zu erm\u00f6glichen',
+        'asettamalla sallit mobiililaitteiden\n'
+            + 'virtuaalin\u00e4pp\u00e4imist\u00f6n k\u00e4yt\u00f6n',
     'Input sliders':
-        'Eingabeschieber',
+        'Liukus\u00e4\u00e4timet',
     'uncheck to disable\ninput sliders for\nentry fields':
-        'ausschalten um Schieber\nin Eingabefeldern zu verhindern',
+        'poistamalla piilotat\nliukus\u00e4\u00e4timet sy\u00f6tekentist\u00e4\n',
     'check to enable\ninput sliders for\nentry fields':
-        'einschalten um Schieber\nin Eingabefeldern zu aktivieren',
+        'asettamalla saat\nsy\u00f6tekenttiin liukus\u00e4\u00e4timet',
     'Clicking sound':
-        'Akustisches Klicken',
+        'Klikkaus\u00e4\u00e4ni',
     'uncheck to turn\nblock clicking\nsound off':
-        'ausschalten um akustisches\nKlicken zu deaktivieren',
+        'poistamalla hiljenn\u00e4t\npalikoiden klikkaus\u00e4\u00e4nen',
     'check to turn\nblock clicking\nsound on':
-        'einschalten um akustisches\nKlicken zu aktivieren',
+        'asettamalla kytket p\u00e4\u00e4lle\npalikoiden klikkaus\u00e4\u00e4nen',
     'Animations':
-        'Animationen',
+        'Animaatiot',
     'uncheck to disable\nIDE animations':
-        'ausschalten um IDE-\nAnimationen zu verhindern',
+        'poistamalla piilotat\nk\u00e4ytt\u00f6liittym\u00e4n animaatiot',
     'Turbo mode':
-        'Turbomodus',
+        'Turbonopeus',
     'check to prioritize\nscript execution':
-        'einschalten, um Skripte\nzu priorisieren',
+        'asettamalla nostat\nskriptien prioriteettia',
     'uncheck to run scripts\nat normal speed':
-        'ausschalten, um Skripte\nnormal auszuf\u00fchren',
+        'poistamalla ajat\nskriptit normaalinopeudella',
     'check to enable\nIDE animations':
-        'einschalten um IDE-\nAnimationen zu erlauben',
+        'asettamalla kytket p\u00e4\u00e4lle\n'
+            + 'k\u00e4ytt\u00f6liittym\u00e4n animaatiot',
     'Thread safe scripts':
-        'Threadsicherheit',
+        'S\u00e4ieturvalliset skriptit',
     'uncheck to allow\nscript reentrance':
-        'verhindert, dass unvollendete\nSkripte erneut gestartet werden',
+        'poistamalla sallit skriptin\nk\u00e4ynnistymisen vaikka se on ajossa',
     'check to disallow\nscript reentrance':
-        'verhindert, dass unvollendete\nSkripte erneut gestartet werden',
+        'asettamalla est\u00e4t skriptin\nk\u00e4ynnistymisen jos se on jo ajossa',
     'Prefer smooth animations':
-        'Fixe Framerate',
+        'Pyri sulaviin animaatioihin',
     'uncheck for greater speed\nat variable frame rates':
-        'ausschalten, um Animationen \ndynamischer auszuf\u00fchren',
+        'poistamalla saat lis\u00e4\u00e4 nopeutta\n'
+            + 'mutta p\u00e4ivitystaajuus vaihtelee',
     'check for smooth, predictable\nanimations across computers':
-        'einschalten, damit Animationen\n\u00fcberall gleich laufen',
+        'asettamalla saat sulavat\nanimaatiot eri tietokoneilla',
     'Flat line ends':
-        'Flache Pinselstriche',
+        'Tasaiset viivanp\u00e4\u00e4t',
     'check for flat ends of lines':
-        'einschalten f\u00fcr flache\nPinselstrichenden',
+        'asettamalla saat viivan p\u00e4ist\u00e4 suorat',
     'uncheck for round ends of lines':
-        'auschalten f\u00fcr runde\nPinselstrichenden',
+        'poistamalla saat viivan p\u00e4ist\u00e4 py\u00f6ristetyt',
 
     // inputs
     'with inputs':
-        'mit Eingaben',
+        'sy\u00f6tteill\u00e4',
     'input names:':
-        'Eingaben:',
+        'sy\u00f6tteet:',
     'Input Names:':
-        'Eingaben:',
+        'Sy\u00f6tteet:',
     'input list:':
-        'Eingabeliste:',
+        'sy\u00f6telista:',
 
     // context menus:
     'help':
-        'Hilfe',
+        'apua',
 
     // palette:
     'hide primitives':
-        'Basisbl\u00f6cke ausblenden',
+        'piilota peruspalikat',
     'show primitives':
-        'Basisbl\u00f6cke anzeigen',
+        'n\u00e4yt\u00e4 peruspalikat',
 
     // blocks:
     'help...':
-        'Hilfe...',
+        'apua...',
     'relabel...':
-        'Umbenennen...',
+        'nime\u00e4 uudestaan...',
     'duplicate':
-        'Duplizieren',
+        'kopioi',
     'make a copy\nand pick it up':
-        'eine Kopie aufnehmen',
+        'ota kopio mukaan',
     'only duplicate this block':
-        'nur diesen Block duplizieren',
+        'kopioi vain t\u00e4m\u00e4 palikka',
     'delete':
-        'L\u00f6schen',
+        'poista',
     'script pic...':
-        'Skriptbild...',
+        'kuva skriptist\u00e4...',
     'open a new window\nwith a picture of this script':
-        'ein neues Browserfenster mit einem\nBild dieses Skripts \u00f6ffnen',
+        'avaa kuva t\u00e4st\u00e4 skriptist\u00e4\nuudessa selainikkunassa',
     'ringify':
-        'Umringen',
+        'ympyr\u00f6i',
     'unringify':
-        'Entringen',
+        'poista ympyr\u00f6inti',
 
     // custom blocks:
     'delete block definition...':
-        'Blockdefinition l\u00f6schen',
+        'poista palikkam\u00e4\u00e4rittely',
     'edit...':
-        'Bearbeiten...',
+        'muokkaa...',
 
     // sprites:
     'edit':
-        'Bearbeiten',
+        'muokkaa',
     'detach from':
-        'Abtrennen von',
+        'irrota',
     'detach all parts':
-        'Alle Teile abtrennen',
+        'irrota kaikki osat',
     'export...':
-        'Exportieren...',
+        'Vie...',
 
     // stage:
     'show all':
-        'Alles zeigen',
+        'N\u00e4yt\u00e4 kaikki',
     'pic...':
-        'Bild exportieren...',
+        'Vie kuva...',
     'open a new window\nwith a picture of the stage':
-        'ein neues Browserfenster mit einem\nBild der B\u00fchne \u00f6ffnen',
+        'Avaa esiintymislavan kuva\nuuteen selainikkunaan',
 
     // scripting area
     'clean up':
-        'Aufr\u00e4umen',
+        'siivoa',
     'arrange scripts\nvertically':
-        'Skripte der Reihe nach\nanordnen',
+        'j\u00e4rjest\u00e4 pystysuorasti',
     'add comment':
-        'Anmerkung hinzuf\u00fcgen',
+        'lis\u00e4\u00e4 kommentti',
     'undrop':
-        'R\u00fcckg\u00e4ngig',
+        'peruuta asetus',
     'undo the last\nblock drop\nin this pane':
-        'Setzen des letzten Blocks\nwiderrufen',
+        'peruuta viimeisin\npalikan asetus',
     'scripts pic...':
-        'Bild aller Scripte...',
+        'kuva skripteist\u00e4...',
     'open a new window\nwith a picture of all scripts':
-        'ein neues Browserfenster mit einem\nBild aller Skripte \u00f6ffnen',
+        'avaa kuva\nkaikista skripteist\u00e4\nuudessa selainikkunassa',
     'make a block...':
-        'Neuen Block bauen...',
+        'tee uusi palikka...',
 
     // costumes
     'rename':
-        'Umbenennen',
+        'nime\u00e4 uudestaan',
     'export':
-        'Exportieren',
+        'vie',
     'rename costume':
-        'Kost\u00fcm umbenennen',
+        'nime\u00e4 asu uudestaan',
 
     // sounds
     'Play sound':
-        'Klang\nabspielen',
+        'Soita \u00e4\u00e4ni',
     'Stop sound':
-        'Klang\nanhalten',
+        'Pys\u00e4yt\u00e4 \u00e4\u00e4ni',
     'Stop':
-        'Halt',
+        'Pys\u00e4yt\u00e4',
     'Play':
-        'Los',
+        'Soita',
     'rename sound':
-        'Klang umbenennen',
+        'nime\u00e4 \u00e4\u00e4ni uudestaan',
 
     // dialogs
     // buttons
@@ -895,255 +901,250 @@ SnapTranslator.dict.de = {
     'Ok':
         'OK',
     'Cancel':
-        'Abbrechen',
+        'Peruuta',
     'Yes':
-        'Ja',
+        'Kyll\u00e4',
     'No':
-        'Nein',
+        'Ei',
 
     // help
     'Help':
-        'Hilfe',
+        'Apua',
 
     // zoom blocks
     'Zoom blocks':
-        'Bl\u00f6cke vergr\u00f6\u00dfern',
+        'Suurenna palikoita',
     'build':
-        'baue',
+        'rakenna',
     'your own':
-        'eigene',
+        'omia',
     'blocks':
-        'Bl\u00f6cke',
+        'palikoita',
     'normal (1x)':
-        'normal (1x)',
+        'normaali (1x)',
     'demo (1.2x)':
-        'Demo (1.2x)',
+        'demo (1.2x)',
     'presentation (1.4x)':
-        'Pr\u00e4sentation (1.4x)',
+        'esitys (1.4x)',
     'big (2x)':
-        'gro\u00df (2x)',
+        'iso (2x)',
     'huge (4x)':
-        'riesig (4x)',
+        'valtava (4x)',
     'giant (8x)':
-        'gigantisch (8x)',
+        'j\u00e4ttim\u00e4inen (8x)',
     'monstrous (10x)':
-        'ungeheuerlich (10x)',
+        'hirvi\u00f6m\u00e4inen (10x)',
 
     // Project Manager
     'Untitled':
-        'Unbenannt',
+        'Nimet\u00f6n',
     'Open Project':
-        'Project \u00f6ffnen',
+        'Avaa projekti',
     '(empty)':
-        '(leer)',
+        '(tyhj\u00e4)',
     'Saved!':
-        'Gesichert!',
+        'Tallennettu!',
     'Delete Project':
-        'Projekt l\u00f6schen',
+        'Poista projekti',
     'Are you sure you want to delete':
-        'Wirklich l\u00f6schen?',
+        'Poistetaanko varmasti?',
     'rename...':
-        'Umbenennen...',
+        'nime\u00e4 uusiksi...',
 
     // costume editor
     'Costume Editor':
-        'Kost\u00fcmeditor',
+        'Asun muokkaus',
     'click or drag crosshairs to move the rotation center':
-        'Fadenkreuz anklicken oder bewegen um den Drehpunkt zu setzen',
+        'siirr\u00e4 kiertokeskusta klikkaamalla\n'
+            + 'tai pit\u00e4m\u00e4ll\u00e4 hiirt\u00e4 '
+            + 'painettuna ja liikuttamalla',
 
     // project notes
     'Project Notes':
-        'Projektanmerkungen',
+        'Projektin muistiinpanot',
 
     // new project
     'New Project':
-        'Neues Projekt',
+        'Uusi projekti',
     'Replace the current project with a new one?':
-        'Das aktuelle Projekt durch ein neues ersetzen?',
+        'Korvataanko nykyinen projekti uudella?',
 
     // save project
     'Save Project As...':
-        'Projekt Sichern Als...',
+        'Tallenna projekti nimell\u00e4...',
 
     // export blocks
     'Export blocks':
-        'Bl\u00f6cke exportieren',
+        'Vie palikoita',
     'Import blocks':
-        'Bl\u00f6cke importieren',
+        'Tuo palikoita',
     'this project doesn\'t have any\ncustom global blocks yet':
-        'in diesem Projekt gibt es noch keine\nglobalen Bl\u00f6cke',
+        'projektilla ei ole viel\u00e4\nyht\u00e4\u00e4n yhteist\u00e4\n'
+            + 'muokattua palikkaa',
     'select':
-        'ausw\u00e4hlen',
+        'valitse',
     'none':
-        'nichts',
+        'ei mit\u00e4\u00e4n',
 
     // variable dialog
     'for all sprites':
-        'f\u00fcr alle',
+        'kaikille hahmoille',
     'for this sprite only':
-        'nur f\u00fcr dieses Objekt',
+        'vain t\u00e4lle hahmolle',
 
     // block dialog
     'Change block':
-        'Block ver\u00e4ndern',
+        'Muuta palikkaa',
     'Command':
-        'Befehl',
+        'Komento',
     'Reporter':
-        'Funktion',
+        'Funktio',
     'Predicate':
-        'Pr\u00e4dikat',
+        'Predikaatti',
 
     // block editor
     'Block Editor':
-        'Blockeditor',
+        'Palikan muokkaus',
     'Apply':
-        'Anwenden',
+        'Tee muutokset',
 
     // block deletion dialog
     'Delete Custom Block':
-        'Block L\u00f6schen',
+        'Poista palikka',
     'block deletion dialog text':
-        'Soll dieser Block mit allen seinen Exemplare\n' +
-            'wirklich gel\u00f6scht werden?',
+        'Poistetaanko t\u00e4m\u00e4 palikka\n ja kaikki sen esiintym\u00e4t?',
+
 
     // input dialog
     'Create input name':
-        'Eingabe erstellen',
+        'Nime\u00e4 sy\u00f6te',
     'Edit input name':
-        'Eingabe bearbeiten',
+        'Muokkaa sy\u00f6tteen nime\u00e4',
     'Edit label fragment':
-        'Beschriftung bearbeiten',
+        'Muokkaa otsikkoa',
     'Title text':
-        'Beschriftung',
+        'Otsikko',
     'Input name':
-        'Eingabe',
+        'Sy\u00f6te',
     'Delete':
-        'L\u00f6schen',
+        'Poista',
     'Object':
-        'Objekt',
+        'Objekti',
     'Number':
-        'Zahl',
+        'Luku',
     'Text':
-        'Text',
+        'Teksti',
     'List':
-        'Liste',
+        'Lista',
     'Any type':
-        'Beliebig',
+        'Mik\u00e4 vain',
     'Boolean (T/F)':
-        'Boolsch (W/F)',
+        'Totuusarvo',
     'Command\n(inline)':
-        'Befehl',
+        'Komento',
     'Command\n(C-shape)':
-        'Befehl\n(C-Form)',
+        'Komento\n(C-muoto)',
     'Any\n(unevaluated)':
-        'Beliebig\n(zitiert)',
+        'Mik\u00e4 vain\n(sitaatti)',
     'Boolean\n(unevaluated)':
-        'Boolsch\n(zitiert)',
+        'Totuusarvo\n(sitaatti)',
     'Single input.':
-        'Einzeleingabe.',
+        'Yksi sy\u00f6te.',
     'Default Value:':
-        'Standardwert:',
+        'Oletusarvo:',
     'Multiple inputs (value is list of inputs)':
-        'Mehrere Eingaben (als Liste)',
+        'Useita sy\u00f6tteit\u00e4 (listana)',
     'Upvar - make internal variable visible to caller':
-        'Interne Variable au\u00dfen sichtbar machen',
+        'Paljasta sis\u00e4inen muuttuja ulkopuolelle',
 
     // About Snap
     'About Snap':
-        '\u00dcber Snap',
+        'Tietoa Snapista',
     'Back...':
-        'Zur\u00fcck...',
+        'Takaisin...',
     'License...':
-        'Lizenz...',
+        'Tekij\u00e4noikeudet...',
     'Modules...':
-        'Komponenten...',
+        'Osat...',
     'Credits...':
-        'Mitwirkende...',
+        'Kiitokset...',
     'Translators...':
-        '\u00dcbersetzer',
+        'K\u00e4\u00e4nt\u00e4j\u00e4t...',
     'License':
-        'Lizenz',
+        'Tekij\u00e4noikeudet',
     'current module versions:':
-        'Komponenten-Versionen',
+        'Osien versiot:',
     'Contributors':
-        'Mitwirkende',
+        'Osallistujat',
     'Translations':
-        '\u00dcbersetzungen',
+        'K\u00e4\u00e4nn\u00f6kset',
 
     // variable watchers
     'normal':
-        'normal',
+        'tavallinen',
     'large':
-        'gro\u00df',
+        'suuri',
     'slider':
-        'Regler',
+        'liukus\u00e4\u00e4din',
     'slider min...':
-        'Minimalwert...',
+        'minimiarvo...',
     'slider max...':
-        'Maximalwert...',
+        'maksimiarvo...',
     'import...':
-        'Importieren...',
+        'tuo...',
     'Slider minimum value':
-        'Minimalwert des Reglers',
+        'Liukus\u00e4\u00e4timen minimiarvo',
     'Slider maximum value':
-        'Maximalwert des Reglers',
+        'Liukus\u00e4\u00e4timen maksimiarvo',
 
     // list watchers
     'length: ':
-        'L\u00e4nge: ',
+        'pituus: ',
 
     // coments
     'add comment here...':
-        'Anmerkung hier hinzuf\u00fcgen',
+        'Kirjoita kommentti t\u00e4h\u00e4n...',
 
     // drow downs
     // directions
     '(90) right':
-        '(90) rechts',
+        '(90) oikealle',
     '(-90) left':
-        '(-90) links',
+        '(-90) vasemmalle',
     '(0) up':
-        '(0) oben',
+        '(0) yl\u00f6s',
     '(180) down':
-        '(180) unten',
+        '(180) alas',
 
     // collision detection
     'mouse-pointer':
-        'Mauszeiger',
+        'hiiren osoitin',
     'edge':
-        'Kante',
+        'reuna',
     'pen trails':
-        'Malspuren',
+        'kyn\u00e4n j\u00e4lki',
 
     // costumes
     'Turtle':
-        'Richtungszeiger',
+        'Osoitin',
     'Empty':
-        'Leer',
+        'Tyhj\u00e4',
 
     // graphical effects
-    'brightness':
-        'Helligeit',
     'ghost':
-        'Durchsichtigkeit',
-    'negative':
-        'Farbumkehr',
-    'comic':
-        'Moire',
-    'confetti':
-        'Farbverschiebung',
+        'l\u00e4pin\u00e4kyvyys',
 
     // keys
     'space':
-        'Leertaste',
+        'v\u00e4lily\u00f6nti',
     'up arrow':
-        'Pfeil nach oben',
+        'nuoli yl\u00f6s',
     'down arrow':
-        'Pfeil nach unten',
+        'nuoli alas',
     'right arrow':
-        'Pfeil nach rechts',
+        'nuoli oikealle',
     'left arrow':
-        'Pfeil nach links',
+        'nuoli vasemmalle',
     'a':
         'a',
     'b':
@@ -1219,15 +1220,15 @@ SnapTranslator.dict.de = {
 
     // messages
     'new...':
-        'Neu...',
+        'uusi...',
 
     // math functions
     'abs':
-        'Betrag',
+        'itseisarvo',
     'floor':
-        'Abgerundet',
+        'py\u00f6ristys alas',
     'sqrt':
-        'Wurzel',
+        'neli\u00f6juuri',
     'sin':
         'sin',
     'cos':
@@ -1247,33 +1248,33 @@ SnapTranslator.dict.de = {
 
     // delimiters
     'whitespace':
-        'Leerraum',
+        'tyhjien v\u00e4lien',
     'line':
-        'Zeilenvorschub',
+        'rivinvaihtojen (lf)',
     'tab':
-        'Tabulator',
+        'sarkaimien (tab)',
     'cr':
-        'Wagenr\u00fccklauf',
+        'vaununpalautusten (cr)',
 
     // data types
     'number':
-        'Zahl',
+        'luku',
     'text':
-        'Text',
+        'teksti',
     'Boolean':
-        'Boole',
+        'totuusarvo',
     'list':
-        'Liste',
+        'lista',
     'command':
-        'Befehlsblock',
+        'komentopalikka',
     'reporter':
-        'Funktionsblock',
+        'funktiopalikka',
     'predicate':
-        'Pr\u00e4dikat',
+        'predikaatti',
 
     // list indices
     'last':
-        'letztes',
+        'viimeinen',
     'any':
-        'beliebiges'
+        'mik\u00e4 tahansa'
 };

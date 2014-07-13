@@ -64,11 +64,12 @@ standardSettings, Sound, BlockMorph, ToggleMorph, InputSlotDialogMorph,
 ScriptsMorph, isNil, SymbolMorph, BlockExportDialogMorph,
 BlockImportDialogMorph, SnapTranslator, localize, List, InputSlotMorph,
 SnapCloud, Uint8Array, HandleMorph, SVG_Costume, fontHeight, hex_sha512,
-sb, CommentMorph, CommandBlockMorph, BlockLabelPlaceHolderMorph, Audio*/
+sb, CommentMorph, CommandBlockMorph, BlockLabelPlaceHolderMorph, Audio,
+SpeechBubbleMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2014-February-13';
+modules.gui = '2014-Jun-04';
 
 // Declarations
 
@@ -848,7 +849,7 @@ IDE_Morph.prototype.createCategories = function () {
     this.add(this.categories);
 };
 
-IDE_Morph.prototype.createPalette = function () {
+IDE_Morph.prototype.createPalette = function (forSearching) {
     // assumes that the logo pane has already been created
     // needs the categories pane for layout
     var myself = this;
@@ -857,7 +858,15 @@ IDE_Morph.prototype.createPalette = function () {
         this.palette.destroy();
     }
 
-    this.palette = this.currentSprite.palette(this.currentCategory);
+    if (forSearching) {
+        this.palette = new ScrollFrameMorph(
+            null,
+            null,
+            this.currentSprite.sliderColor
+        );
+    } else {
+        this.palette = this.currentSprite.palette(this.currentCategory);
+    }
     this.palette.isDraggable = false;
     this.palette.acceptsDrops = true;
     this.palette.contents.acceptsDrops = false;
@@ -882,6 +891,7 @@ IDE_Morph.prototype.createPalette = function () {
     this.add(this.palette);
     this.palette.scrollX(this.palette.padding);
     this.palette.scrollY(this.palette.padding);
+    return this.palette;
 };
 
 IDE_Morph.prototype.createStage = function () {
@@ -2273,23 +2283,7 @@ IDE_Morph.prototype.projectMenu = function () {
         }
     );
     menu.addItem('Open...', 'openProjectsBrowser');
-    menu.addItem(
-        'Save',
-        function () {
-            if (myself.source === 'examples') {
-                myself.source = 'local'; // cannot save to examples
-            }
-            if (myself.projectName) {
-                if (myself.source === 'local') { // as well as 'examples'
-                    myself.saveProject(myself.projectName);
-                } else { // 'cloud'
-                    myself.saveProjectToCloud(myself.projectName);
-                }
-            } else {
-                myself.saveProjectsBrowser();
-            }
-        }
-    );
+    menu.addItem('Save', "save");
     if (shiftClicked) {
         menu.addItem(
             'Save to disk',
@@ -2355,6 +2349,15 @@ IDE_Morph.prototype.projectMenu = function () {
         function () {myself.exportGlobalBlocks(); },
         'show global custom block definitions as XML\nin a new browser window'
     );
+
+    if (shiftClicked) {
+        menu.addItem(
+            'Export all scripts as pic...',
+            function () {myself.exportScriptsPicture(); },
+            'show a picture of all scripts\nand block definitions',
+            new Color(100, 0, 0)
+        );
+    }
 
     menu.addLine();
     menu.addItem(
@@ -2532,6 +2535,7 @@ IDE_Morph.prototype.aboutSnap = function () {
         + '\n\nNathan Dinsmore: Saving/Loading, Snap-Logo Design, '
         + 'countless bugfixes'
         + '\nKartik Chandra: Paint Editor'
+        + '\nYuan Yuan: Graphic Effects'
         + '\nIan Reynolds: UI Design, Event Bindings, '
         + 'Sound primitives'
         + '\nIvan Motyashov: Initial Squeak Porting'
@@ -2720,6 +2724,22 @@ IDE_Morph.prototype.newProject = function () {
     this.fixLayout();
 };
 
+IDE_Morph.prototype.save = function () {
+    if (this.source === 'examples') {
+        this.source = 'local'; // cannot save to examples
+    }
+    if (this.projectName) {
+        if (this.source === 'local') { // as well as 'examples'
+            this.saveProject(this.projectName);
+        } else { // 'cloud'
+            this.saveProjectToCloud(this.projectName);
+        }
+    } else {
+        this.saveProjectsBrowser();
+    }
+};
+
+
 IDE_Morph.prototype.saveProject = function (name) {
     var myself = this;
     this.nextSteps([
@@ -2835,6 +2855,56 @@ IDE_Morph.prototype.exportSprite = function (sprite) {
         + '">'
         + str
         + '</sprites>');
+};
+
+IDE_Morph.prototype.exportScriptsPicture = function () {
+    var pics = [],
+        pic,
+        padding = 20,
+        w = 0,
+        h = 0,
+        y = 0,
+        ctx;
+
+    // collect all script pics
+    this.sprites.asArray().forEach(function (sprite) {
+        pics.push(sprite.image);
+        pics.push(sprite.scripts.scriptsPicture());
+        sprite.customBlocks.forEach(function (def) {
+            pics.push(def.scriptsPicture());
+        });
+    });
+    pics.push(this.stage.image);
+    pics.push(this.stage.scripts.scriptsPicture());
+    this.stage.customBlocks.forEach(function (def) {
+        pics.push(def.scriptsPicture());
+    });
+
+    // collect global block pics
+    this.stage.globalBlocks.forEach(function (def) {
+        pics.push(def.scriptsPicture());
+    });
+
+    pics = pics.filter(function (each) {return !isNil(each); });
+
+    // determine dimensions of composite
+    pics.forEach(function (each) {
+        w = Math.max(w, each.width);
+        h += (each.height);
+        h += padding;
+    });
+    h -= padding;
+    pic = newCanvas(new Point(w, h));
+    ctx = pic.getContext('2d');
+
+    // draw all parts
+    pics.forEach(function (each) {
+        ctx.drawImage(each, 0, y);
+        y += padding;
+        y += each.height;
+    });
+
+    window.open(pic.toDataURL());
 };
 
 IDE_Morph.prototype.openProjectString = function (str) {
@@ -4524,6 +4594,17 @@ ProjectDialogMorph.prototype.installCloudProjectList = function (pl) {
             myself.preview.texture = item.Thumbnail || null;
             myself.preview.cachedTexture = null;
             myself.preview.drawNew();
+            (new SpeechBubbleMorph(new TextMorph(
+                localize('last changed') + '\n' + item.Updated,
+                null,
+                null,
+                null,
+                null,
+                'center'
+            ))).popUp(
+                myself.world(),
+                myself.preview.rightCenter().add(new Point(2, 0))
+            );
         }
         if (item.Public === 'true') {
             myself.shareButton.hide();
