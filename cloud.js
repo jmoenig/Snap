@@ -27,9 +27,10 @@
 
 // Global settings /////////////////////////////////////////////////////
 
-/*global modules, IDE_Morph, SnapSerializer, hex_sha512, alert, nop*/
+/*global modules, IDE_Morph, SnapSerializer, hex_sha512, alert, nop,
+localize*/
 
-modules.cloud = '2014-January-09';
+modules.cloud = '2014-May-26';
 
 // Global stuff
 
@@ -107,7 +108,7 @@ Cloud.prototype.signup = function (
                     errorCall.call(
                         null,
                         myself.url + 'SignUp',
-                        'could not connect to:'
+                        localize('could not connect to:')
                     );
                 }
             }
@@ -164,7 +165,7 @@ Cloud.prototype.getPublicProject = function (
                     errorCall.call(
                         null,
                         myself.url + 'Public',
-                        'could not connect to:'
+                        localize('could not connect to:')
                     );
                 }
             }
@@ -217,7 +218,7 @@ Cloud.prototype.resetPassword = function (
                     errorCall.call(
                         null,
                         myself.url + 'ResetPW',
-                        'could not connect to:'
+                        localize('could not connect to:')
                     );
                 }
             }
@@ -264,7 +265,7 @@ Cloud.prototype.connect = function (
                     errorCall.call(
                         null,
                         myself.url,
-                        'could not connect to:'
+                        localize('could not connect to:')
                     );
                 }
             }
@@ -533,7 +534,7 @@ Cloud.prototype.callService = function (
                     errorCall.call(
                         this,
                         request.responseText,
-                        'Service: ' + serviceName
+                        localize('Service:') + ' ' + localize(serviceName)
                     );
                     return;
                 }

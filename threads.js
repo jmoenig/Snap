@@ -83,7 +83,7 @@ ArgLabelMorph, localize, XML_Element, hex_sha512*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.threads = '2014-Feb-10';
+modules.threads = '2014-Jun-05';
 
 var ThreadManager;
 var Process;
@@ -1482,10 +1482,10 @@ Process.prototype.doSetFastTracking = function (bool) {
     if (this.homeContext.receiver) {
         ide = this.homeContext.receiver.parentThatIsA(IDE_Morph);
         if (ide) {
-            if (ide.stage.isFastTracked) {
-                ide.stopFastTracking();
-            } else {
+            if (bool) {
                 ide.startFastTracking();
+            } else {
+                ide.stopFastTracking();
             }
         }
     }
@@ -3054,7 +3054,7 @@ VariableFrame.prototype.getVar = function (name, upvars) {
 VariableFrame.prototype.addVar = function (name, value) {
     this.vars[name] = (value === 0 ? 0
               : value === false ? false
-                       : value === '' ? '' : value || null);
+                       : value === '' ? '' : value || 0);
 };
 
 VariableFrame.prototype.deleteVar = function (name) {
@@ -3108,6 +3108,20 @@ VariableFrame.prototype.allNames = function () {
         }
     }
     return answer;
+};
+
+// Variable /////////////////////////////////////////////////////////////////
+
+function Variable(value) {
+    this.value = value;
+}
+
+Variable.prototype.toString = function () {
+    return 'a Variable [' + this.value + ']';
+};
+
+Variable.prototype.copy = function () {
+    return new Variable(this.value);
 };
 
 // UpvarReference ///////////////////////////////////////////////////////////

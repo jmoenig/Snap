@@ -3,12 +3,12 @@
 
     a paint editor for Snap!
     inspired by the Scratch paint editor.
- 
+
     written by Kartik Chandra
     Copyright (C) 2014 by Kartik Chandra
-  
+
     This file is part of Snap!.
- 
+
     Snap! is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
     published by the Free Software Foundation, either version 3 of
@@ -52,6 +52,9 @@
     September 16 - flood fill freeze fix (Kartik)
     Jan 08 - mouse leave dragging fix (Kartik)
     Feb 11 - dynamically adjust to stage dimensions (Jens)
+    Apr 30 - localizations (Manuel)
+    June 3 - transformations (Kartik)
+    June 4 - tweaks (Jens)
 
  */
 
@@ -65,7 +68,7 @@
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.paint = '2014-February-11';
+modules.paint = '2014-June-4';
 
 // Declarations
 
@@ -110,10 +113,10 @@ PaintEditorMorph.prototype.buildContents = function () {
     this.paper.setExtent(StageMorph.prototype.dimensions);
 
     this.addBody(new AlignmentMorph('row', this.padding));
-    this.controls = new AlignmentMorph('column', this.padding);
+    this.controls = new AlignmentMorph('column', this.padding / 2);
     this.controls.alignment = 'left';
 
-    this.edits = new AlignmentMorph('row', this.padding);
+    this.edits = new AlignmentMorph('row', this.padding / 2);
     this.buildEdits();
     this.controls.add(this.edits);
 
@@ -131,6 +134,10 @@ PaintEditorMorph.prototype.buildContents = function () {
 
     this.buildToolbox();
     this.controls.add(this.toolbox);
+
+    this.scaleBox = new AlignmentMorph('row', this.padding / 2);
+    this.buildScaleBox();
+    this.controls.add(this.scaleBox);
 
     this.propertiesControls = {
         colorpicker: null,
@@ -215,6 +222,27 @@ PaintEditorMorph.prototype.buildEdits = function () {
         function () {paper.clearCanvas(); }
     ));
     this.edits.fixLayout();
+};
+
+PaintEditorMorph.prototype.buildScaleBox = function () {
+    var paper = this.paper;
+    this.scaleBox.add(this.pushButton(
+        "grow",
+        function () {paper.scale(0.05, 0.05); }
+    ));
+    this.scaleBox.add(this.pushButton(
+        "shrink",
+        function () {paper.scale(-0.05, -0.05); }
+    ));
+    this.scaleBox.add(this.pushButton(
+        "flip ↔",
+        function () {paper.scale(-2, 0); }
+    ));
+    this.scaleBox.add(this.pushButton(
+        "flip ↕",
+        function () {paper.scale(0, -2); }
+    ));
+    this.scaleBox.fixLayout();
 };
 
 PaintEditorMorph.prototype.openIn = function (world, oldim, oldrc, callback) {
@@ -372,7 +400,7 @@ PaintEditorMorph.prototype.populatePropertiesMenu = function () {
     c.add(pc.colorpicker);
     //c.add(pc.primaryColorButton);
     c.add(pc.primaryColorViewer);
-    c.add(new TextMorph("Brush size"));
+    c.add(new TextMorph(localize("Brush size")));
     c.add(alpen);
     c.add(pc.constrain);
 };
@@ -555,6 +583,26 @@ PaintCanvasMorph.prototype.init = function (shift) {
         return (key === 16);
     };
     this.buildContents();
+};
+
+PaintCanvasMorph.prototype.scale = function (x, y) {
+    this.mask = newCanvas(this.extent());
+    var c = newCanvas(this.extent());
+    c.getContext("2d").save();
+    c.getContext("2d").translate(
+        this.rotationCenter.x,
+        this.rotationCenter.y
+    );
+    c.getContext("2d").scale(1 + x, 1 + y);
+    c.getContext("2d").drawImage(
+        this.paper,
+        -this.rotationCenter.x,
+        -this.rotationCenter.y
+    );
+    c.getContext("2d").restore();
+    this.paper = c;
+    this.drawNew();
+    this.changed();
 };
 
 PaintCanvasMorph.prototype.cacheUndo = function () {

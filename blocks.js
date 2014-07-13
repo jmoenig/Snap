@@ -155,7 +155,7 @@ DialogBoxMorph, BlockInputFragmentMorph, PrototypeHatBlockMorph, Costume*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2014-February-11';
+modules.blocks = '2014-June-06';
 
 
 var SyntaxElementMorph;
@@ -925,17 +925,13 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             part = new InputSlotMorph(
                 null,
                 false,
-                {
-                /*
-                    color : 'color',
-                    fisheye : 'fisheye',
-                    whirl : 'whirl',
-                    pixelate : 'pixelate',
-                    mosaic : 'mosaic',
-                    brightness : 'brightness',
-                */
-                    ghost : ['ghost']
-                },
+                {   brightness : ['brightness'],
+                    ghost : ['ghost'],
+                    negative : ['negative'],
+                    comic: ['comic'],
+                    duplicate: ['duplicate'],
+                    confetti: ['confetti']
+                    },
                 true
             );
             part.setContents(['ghost']);
@@ -1647,6 +1643,12 @@ SyntaxElementMorph.prototype.showBubble = function (value) {
         morphToShow.silentSetWidth(img.width);
         morphToShow.silentSetHeight(img.height);
         morphToShow.image = img;
+    } else if (value instanceof Costume) {
+        img = value.thumbnail(new Point(40, 40));
+        morphToShow = new Morph();
+        morphToShow.silentSetWidth(img.width);
+        morphToShow.silentSetHeight(img.height);
+        morphToShow.image = img;
     } else if (value instanceof Context) {
         img = value.image();
         morphToShow = new Morph();
@@ -2019,6 +2021,7 @@ BlockMorph.prototype.userMenu = function () {
     var menu = new MenuMorph(this),
         world = this.world(),
         myself = this,
+        alternatives,
         blck;
 
     menu.addItem(
@@ -2076,6 +2079,14 @@ BlockMorph.prototype.userMenu = function () {
                 );
             }
         );
+    } else if (this.definition && this.alternatives) { // custom block
+        alternatives = this.alternatives();
+        if (alternatives.length > 0) {
+            menu.addItem(
+                'relabel...',
+                function () {myself.relabel(alternatives); }
+            );
+        }
     }
 
     menu.addItem(
@@ -2274,6 +2285,7 @@ BlockMorph.prototype.relabel = function (alternativeSelectors) {
     alternativeSelectors.forEach(function (sel) {
         var block = SpriteMorph.prototype.blockForSelector(sel);
         block.restoreInputs(oldInputs);
+        block.fixBlockColor(null, true);
         block.addShadow(new Point(3, 3));
         menu.addItem(
             block,
@@ -2293,7 +2305,7 @@ BlockMorph.prototype.setSelector = function (aSelector) {
     var oldInputs = this.inputs(),
         info;
     info = SpriteMorph.prototype.blocks[aSelector];
-    this.category = info.category;
+    this.setCategory(info.category);
     this.selector = aSelector;
     this.setSpec(localize(info.spec));
     this.restoreInputs(oldInputs);
@@ -2305,6 +2317,7 @@ BlockMorph.prototype.restoreInputs = function (oldInputs) {
     // try to restore my previous inputs when my spec has been changed
     var i = 0,
         old,
+        nb,
         myself = this;
 
     this.inputs().forEach(function (inp) {
@@ -2315,7 +2328,14 @@ BlockMorph.prototype.restoreInputs = function (oldInputs) {
             // original - turns empty numberslots to 0:
             // inp.setContents(old.evaluate());
             // "fix" may be wrong b/c constants
-            inp.setContents(old.contents().text);
+            if (old.contents) {
+                inp.setContents(old.contents().text);
+            }
+        } else if (old instanceof CSlotMorph && inp instanceof CSlotMorph) {
+            nb = old.nestedBlock();
+            if (nb) {
+                inp.nestedBlock(nb.fullCopy());
+            }
         }
         i += 1;
     });
@@ -4963,6 +4983,14 @@ ScriptsMorph.prototype.cleanUp = function () {
 };
 
 ScriptsMorph.prototype.exportScriptsPicture = function () {
+    var pic = this.scriptsPicture();
+    if (pic) {
+        window.open(pic.toDataURL());
+    }
+};
+
+ScriptsMorph.prototype.scriptsPicture = function () {
+    // private - answer a canvas containing the pictures of all scripts
     var boundingBox, pic, ctx;
     if (this.children.length === 0) {return; }
     boundingBox = this.children[0].fullBounds();
@@ -4983,7 +5011,7 @@ ScriptsMorph.prototype.exportScriptsPicture = function () {
             );
         }
     });
-    window.open(pic.toDataURL());
+    return pic;
 };
 
 ScriptsMorph.prototype.addComment = function () {

@@ -106,7 +106,7 @@ SymbolMorph, isNil*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2014-January-10';
+modules.byob = '2014-Jun-06';
 
 // Declarations
 
@@ -336,6 +336,43 @@ CustomBlockDefinition.prototype.parseSpec = function (spec) {
     return parts;
 };
 
+// CustomBlockDefinition picturing
+
+CustomBlockDefinition.prototype.scriptsPicture = function () {
+    var scripts, proto, block, comment;
+
+    scripts = new ScriptsMorph();
+    scripts.cleanUpMargin = 10;
+    proto = new PrototypeHatBlockMorph(this);
+    proto.setPosition(scripts.position().add(10));
+    if (this.comment !== null) {
+        comment = this.comment.fullCopy();
+        proto.comment = comment;
+        comment.block = proto;
+    }
+    if (this.body !== null) {
+        proto.nextBlock(this.body.expression.fullCopy());
+    }
+    scripts.add(proto);
+    proto.fixBlockColor(null, true);
+    this.scripts.forEach(function (element) {
+        block = element.fullCopy();
+        block.setPosition(scripts.position().add(element.position()));
+        scripts.add(block);
+        if (block instanceof BlockMorph) {
+            block.allComments().forEach(function (comment) {
+                comment.align(block);
+            });
+        }
+    });
+    proto.allComments().forEach(function (comment) {
+        comment.align(proto);
+    });
+    proto.children[0].fixLayout();
+    scripts.fixMultiArgs();
+    return scripts.scriptsPicture();
+};
+
 // CustomCommandBlockMorph /////////////////////////////////////////////
 
 // CustomCommandBlockMorph inherits from CommandBlockMorph:
@@ -372,8 +409,12 @@ CustomCommandBlockMorph.prototype.refresh = function () {
     this.setCategory(def.category);
     if (this.blockSpec !== newSpec) {
         oldInputs = this.inputs();
+        if (!this.zebraContrast) {
+            this.forceNormalColoring();
+        } else {
+            this.fixBlockColor();
+        }
         this.setSpec(newSpec);
-        this.fixBlockColor();
         this.fixLabelColor();
         this.restoreInputs(oldInputs);
     } else { // update all input slots' drop-downs
@@ -704,6 +745,7 @@ CustomCommandBlockMorph.prototype.userMenu = function () {
         } else {
             menu.addLine();
         }
+
         // menu.addItem("export definition...", 'exportBlockDefinition');
         menu.addItem("delete block definition...", 'deleteBlockDefinition');
     }
@@ -803,6 +845,44 @@ CustomCommandBlockMorph.prototype.popUpbubbleHelp = function (
         null,
         1
     ).popUp(this.world(), this.rightCenter().add(new Point(-8, 0)));
+};
+
+// CustomCommandBlockMorph relabelling
+
+CustomCommandBlockMorph.prototype.relabel = function (alternatives) {
+    var menu = new MenuMorph(this),
+        oldInputs = this.inputs().map(
+            function (each) {return each.fullCopy(); }
+        ),
+        myself = this;
+    alternatives.forEach(function (def) {
+        var block = def.blockInstance();
+        block.restoreInputs(oldInputs);
+        block.fixBlockColor(null, true);
+        block.addShadow(new Point(3, 3));
+        menu.addItem(
+            block,
+            function () {
+                myself.definition = def;
+                myself.refresh();
+            }
+        );
+    });
+    menu.popup(this.world(), this.bottomLeft().subtract(new Point(
+        8,
+        this instanceof CommandBlockMorph ? this.corner : 0
+    )));
+};
+
+CustomCommandBlockMorph.prototype.alternatives = function () {
+    var rcvr = this.receiver(),
+        stage = rcvr.parentThatIsA(StageMorph),
+        allDefs = rcvr.customBlocks.concat(stage.globalBlocks),
+        myself = this;
+    return allDefs.filter(function (each) {
+        return each !== myself.definition &&
+            each.type === myself.definition.type;
+    });
 };
 
 // CustomReporterBlockMorph ////////////////////////////////////////////
@@ -919,6 +999,14 @@ CustomReporterBlockMorph.prototype.bubbleHelp
 
 CustomReporterBlockMorph.prototype.popUpbubbleHelp
     = CustomCommandBlockMorph.prototype.popUpbubbleHelp;
+
+// CustomReporterBlockMorph relabelling
+
+CustomReporterBlockMorph.prototype.relabel
+    = CustomCommandBlockMorph.prototype.relabel;
+
+CustomReporterBlockMorph.prototype.alternatives
+    = CustomCommandBlockMorph.prototype.alternatives;
 
 // JaggedBlockMorph ////////////////////////////////////////////////////
 
@@ -2579,7 +2667,10 @@ InputSlotDialogMorph.prototype.symbolMenu = function () {
         myself = this;
     SymbolMorph.prototype.names.forEach(function (symbol) {
         symbols.push([
-            [new SymbolMorph(symbol, myself.fontSize, symbolColor), symbol],
+            [
+                new SymbolMorph(symbol, myself.fontSize, symbolColor),
+                localize(symbol)
+            ],
             '$' + symbol
         ]);
     });
