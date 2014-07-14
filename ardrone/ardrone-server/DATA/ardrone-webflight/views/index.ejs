@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/fonts.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/jquery.notifyBar.css">
+    <% for(var i=0; i<styles.length; i++) {%>
+    <link rel="stylesheet" href="<%= styles[i] %>"><% } %>
+  </head>
+  <script>
+    var options = <%- JSON.stringify(options) %>;
+  </script>
+  <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+  <script type="text/javascript" src="/components/jquery/jquery.js"></script>
+  <script type="text/javascript" src="/js/jquery.fullscreen-min.js"></script>
+  <script type="text/javascript" src="/js/polyfills.js"></script>
+  <script type="text/javascript" src="/js/cockpit.js"></script>
+  <script type="text/javascript" src="/js/jquery.notifyBar.js"></script>
+  <% for(var i=0; i<scripts.length; i++) {%>
+  <script type="text/javascript" src="<%= scripts[i] %>"></script><% } %>
+
+  <body>
+    <div class="header-container">
+      <span id="controls">
+      </span>
+      <header class="wrapper clearfix">
+        <span class="brand">WebFlight</span>
+      </header>
+    </div>
+    <div class="main-container">
+      <div class="main wrapper clearfix">
+        <div id="glasspane">
+          <div id="cockpit">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-container">
+      <footer class="wrapper">
+      </footer>
+    </div>
+    <script>
+      var cockpit = new Cockpit();
+    </script>
+  </body>
+</html>

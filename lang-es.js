@@ -565,7 +565,7 @@ SnapTranslator.dict.es = {
     '%s in front of %l':
         '%s en frente de %l',
     'item %idx of %l':
-        'elemento %idx de %l,
+        'elemento %idx de %l',
     'all but first of %l':
         'todo menos la primera de %l',
     'length of %l':

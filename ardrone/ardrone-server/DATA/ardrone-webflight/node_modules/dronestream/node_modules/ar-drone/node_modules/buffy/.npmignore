@@ -1,0 +1,4 @@
+*.un~
+/node_modules
+/benchmarks/fixtures/*.bin
+/benchmarks/node_modules

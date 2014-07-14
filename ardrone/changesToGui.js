@@ -7,7 +7,7 @@ modules.ardroneGui = '2014-June-1';
 
 function getSnapLogoImage()
 {
-    return 'cellular/cellular_logo_sm.png';
+    return 'ardrone_logo_sm.png';
 }
 
 function getSnapAppsName()
@@ -25,5 +25,5 @@ function getSnapAppsAboutText()
 
 function getSnapAppsLogoExtent()
 {
-    return new Point(210, 28);
+    return new Point(218, 28);
 }

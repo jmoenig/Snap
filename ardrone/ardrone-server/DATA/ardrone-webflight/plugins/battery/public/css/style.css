@@ -1,0 +1,11 @@
+#battery {
+    display: block;
+    float: right;
+}
+
+#battery .level {
+    vertical-align: 70%;
+    margin-left: -35px;
+    font-family: Arial;
+    font-size: 12px;
+}

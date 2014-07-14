@@ -1,0 +1,85 @@
+/*
+*  Notify Bar - jQuery plugin
+*
+*  Copyright (c) 2009-2013 Dmitri Smirnov
+*
+*  Licensed under the MIT license:
+*  http://www.opensource.org/licenses/mit-license.php
+*  
+*  Version: 1.4
+*
+*  Project home:
+*  http://www.whoop.ee/posts/2013-04-05-the-resurrection-of-jquery-notify-bar/
+*/
+
+/* Default bars' style */
+.jquery-notify-bar {
+  width:100%;
+  position:fixed;
+  top:0;
+  left:0;
+  z-index:32768;
+  background-color:#efefef;
+  font-size:18px;
+  color:#000;
+  text-align:center;
+  font-family: Arial, Verdana, sans-serif;
+  padding:20px 0px;
+  cursor: pointer;
+  border-bottom:1px solid #ddd;
+  -webkit-box-shadow: inset 0 -1px 0 0 #fff;
+     -moz-box-shadow: inset 0 -1px 0 0 #fff;
+          box-shadow: inset 0 -1px 0 0 #fff;
+background-image: -webkit-gradient(linear, 0 0, 0 100%, from(rgba(255, 255, 255, 0.5)), to(rgba(255, 255, 255, 0)));
+background-image: -webkit-linear-gradient(rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0) 100%);
+background-image: -moz-linear-gradient(rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0) 100%);
+background-image: -o-linear-gradient(rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0) 100%);
+background-image: linear-gradient(rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0) 100%);
+}
+.jquery-notify-bar.bottom {
+  bottom:0;
+  top:auto;
+  border-top:1px solid #ddd;
+  border-bottom:0;
+  -webkit-box-shadow: inset 0 1px 0 0 #fff;
+     -moz-box-shadow: inset 0 1px 0 0 #fff;
+          box-shadow: inset 0 1px 0 0 #fff;
+}
+.jquery-notify-bar.top {}
+
+/* Style for errors */
+.jquery-notify-bar.error {
+  color:#f00;
+  background-color:#fdd;
+}
+.jquery-notify-bar.error .notify-bar-text-wrapper {
+  background: transparent url("../images/cross.png") no-repeat center left;
+  padding-left:20px;
+}
+
+/* Style for warning */
+.jquery-notify-bar.warning {
+  color:#000;
+  background-color:#fffaaa;
+}
+.jquery-notify-bar.warning .notify-bar-text-wrapper {
+  background: transparent url("../images/error.png") no-repeat center left;
+  padding-left:20px;
+}
+
+/* Style for success (notice) */
+.jquery-notify-bar.success {
+  color:#060;
+  background-color:#BBFFB6;
+}
+.jquery-notify-bar.success .notify-bar-text-wrapper {
+  background: transparent url("../images/tick.png") no-repeat center left;
+  padding-left:20px;
+}
+
+/* Style for close button */
+.notify-bar-close {
+  position:absolute;
+  left:95%;
+  font-size:11px;
+}

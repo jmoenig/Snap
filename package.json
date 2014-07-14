@@ -1,0 +1,12 @@
+{
+  "name": "snapapps",
+  "description": "this package just requires grunt to minify everything",
+  "version": "1.0.0",
+  "devDependencies": {
+    "grunt": "~0.4.5",
+    "grunt-contrib-uglify": "~0.4.0",
+    "grunt-contrib-copy": "~0.5.0",
+    "rimraf": "~2.2.8",
+    "grunt-contrib-compress": "~0.9.1"
+  }
+}

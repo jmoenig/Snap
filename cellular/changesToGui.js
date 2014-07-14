@@ -4,10 +4,10 @@ modules.cellularGui = '2013-August-2';
 /******************************* HOOKS *******************************/
 /*********because sometimes you HAVE to mod the original file*********/
 /*********************************************************************/
-s
+
 function getSnapLogoImage()
 {
-    return 'cellular/cellular_logo_sm.png';
+    return 'cellular_logo_sm.png';
 }
 
 function getSnapAppsName()
@@ -25,7 +25,7 @@ function getSnapAppsAboutText()
 
 function getSnapAppsLogoExtent()
 {
-    return new Point(210, 28);
+    return new Point(218, 28);
 }
 
 /*********************************************************************/
