@@ -69,7 +69,7 @@ SpeechBubbleMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2014-July-11';
+modules.gui = '2014-July-14';
 
 // Declarations
 
@@ -1498,7 +1498,9 @@ IDE_Morph.prototype.reactToWorldResize = function (rect) {
 IDE_Morph.prototype.droppedImage = function (aCanvas, name) {
     var costume = new Costume(
         aCanvas,
-        name ? name.split('.')[0] : '' // up to period
+        this.currentSprite.newCostumeName(
+            name ? name.split('.')[0] : '' // up to period
+        )
     );
 
     if (costume.isTainted()) {
