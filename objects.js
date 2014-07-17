@@ -4084,7 +4084,10 @@ SpriteMorph.prototype.reactToDropOf = function (morph, hand) {
     morph.slideBackTo(hand.grabOrigin);
 };
 
-var re = /\((\d+)\)$/; // RegExp to match costume names
+// SpriteMorph screenshots
+
+SpriteMorph.prototype.re = /\((\d+)\)$/; // RegExp to match costume names
+
 SpriteMorph.prototype.newCostumeName = function (name) {
     var foundSameName = false,
         foundIndex = false,
@@ -4100,7 +4103,7 @@ SpriteMorph.prototype.newCostumeName = function (name) {
                 foundSameName = true;
             }
             if (foundSameName) {
-                p = re.exec(costume.name);
+                p = this.re.exec(costume.name);
                 if (p) {
                     lastIndex = Number(p[1]);
                     foundIndex = true;
