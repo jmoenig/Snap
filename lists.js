@@ -61,7 +61,7 @@ PushButtonMorph, SyntaxElementMorph, Color, Point, WatcherMorph,
 StringMorph, SpriteMorph, ScrollFrameMorph, CellMorph, ArrowMorph,
 MenuMorph, snapEquals, Morph, isNil, localize, MorphicPreferences*/
 
-modules.lists = '2014-Jun-04';
+modules.lists = '2014-July-14';
 
 var List;
 var ListWatcherMorph;
@@ -281,8 +281,8 @@ List.prototype.becomeArray = function () {
             this.contents.push(next.at(i));
         }
         this.isLinked = false;
-	this.first = null;
-	this.rest = null;
+        this.first = null;
+        this.rest = null;
     }
 };
 
@@ -304,43 +304,43 @@ List.prototype.becomeLinked = function () {
 // List testing
 
 List.prototype.equalTo = function (other) {
-    var me = this, it = other, i, j, loopcount;
+    var myself = this, it = other, i, j, loopcount;
     if (!(other instanceof List)) {
         return false;
     }
 
-    while (me.isLinked && it.isLinked) {
-        if (!snapEquals(me.first, it.first)) {
+    while (myself.isLinked && it.isLinked) {
+        if (!snapEquals(myself.first, it.first)) {
             return false;
         }
-        me = me.rest;
+        myself = myself.rest;
         it = it.rest;
     }
 
     if (it.isLinked) {
         i = it;
-        it = me;
-        me = i;
+        it = myself;
+        myself = i;
     }
 
     j = 0;
-    while (me.isLinked) {
-        if (!snapEquals(me.first, it.contents[j])) {
+    while (myself.isLinked) {
+        if (!snapEquals(myself.first, it.contents[j])) {
             return false;
         }
-        me = me.rest;
+        myself = myself.rest;
         j += 1;
     }
 
     i = 0;
-    if (me.contents.length !== (it.contents.length - j)) {
+    if (myself.contents.length !== (it.contents.length - j)) {
         return false;
     }
 
-    loopcount = me.contents.length;
+    loopcount = myself.contents.length;
     while (loopcount > 0) {
         loopcount -= 1;
-        if (!snapEquals(me.contents[i], it.contents[j])) {
+        if (!snapEquals(myself.contents[i], it.contents[j])) {
             return false;
         }
         i += 1;
