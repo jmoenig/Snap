@@ -665,6 +665,18 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
 
         // single-arg and specialized multi-arg slots:
         switch (spec) {
+        case '%imgsource':
+            part = new InputSlotMorph(
+                null, // text
+                false, // non-numeric
+                {
+                    'pen trails': ['pen trails'],
+                    'stage image': ['stage image']
+                },
+                true
+            );
+            part.setContents(['pen trails']);
+            break;
         case '%inputs':
             part = new MultiArgMorph('%s', 'with inputs');
             part.isStatic = false;

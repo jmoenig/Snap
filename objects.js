@@ -415,6 +415,12 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: 'go back %n layers',
             defaults: [1]
         },
+        doScreenshot: {
+            type: 'command',
+            category: 'looks',
+            spec: 'save %imgsource as costume named %s',
+            defaults: [['pen trails'], localize('screenshot')]
+        },
 
         // Looks - Debugging primitives for development mode
         reportCostumes: {
@@ -1319,6 +1325,8 @@ SpriteMorph.prototype.init = function (globals) {
     this.changed();
     this.drawNew();
     this.changed();
+
+    this.screenshotNames = {}; // Keeps track of stage image names
 };
 
 // SpriteMorph duplicating (fullCopy)
@@ -1695,6 +1703,8 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push('-');
         blocks.push(block('comeToFront'));
         blocks.push(block('goBack'));
+        blocks.push('-');
+        blocks.push(block('doScreenshot'));
 
     // for debugging: ///////////////
 
@@ -4076,6 +4086,58 @@ SpriteMorph.prototype.reactToDropOf = function (morph, hand) {
     morph.slideBackTo(hand.grabOrigin);
 };
 
+var re = /\((\d+)\)$/; // RegExp to match costume names
+SpriteMorph.prototype.newCostumeName = function (name) {
+    var foundSameName = false,
+        foundIndex = false,
+        lastIndex = 0,
+        i = 1,
+        p = null,
+        costume = null;
+
+    for (i = 1; i <= this.costumes.length(); i++) {
+        costume = this.costumes.at(i);
+        if (costume !== null) {
+            if (costume.name === name) {
+                foundSameName = true;
+            }
+            if (foundSameName) {
+                p = re.exec(costume.name);
+                if (p) {
+                    lastIndex = Number(p[1]);
+                    foundIndex = true;
+                }
+            }
+        }
+    }
+    if (foundSameName) {
+        if (foundIndex) {
+            lastIndex += 1;
+            return name + '(' + lastIndex + ')'; // New index with a +1
+        }
+        return name + '(2)'; // No indexing has started so start it off with a (1)
+    }
+    return name;
+};
+
+SpriteMorph.prototype.doScreenshot = function (imgSource, data) {
+    var canvas,
+        stage = this.parentThatIsA(StageMorph),
+        costume;
+    data = this.newCostumeName(data);
+    if (imgSource[0] === undefined) {
+        return;
+    }
+    if (imgSource[0] === "pen trails") {
+        canvas = stage.trailsCanvas;
+        costume = new Costume(canvas, data).copy(); // Copy is required to prevent mutation
+    } else if (imgSource[0] === "stage image") {
+        canvas = stage.fullImageClassic();
+        costume = new Costume(canvas, data);
+    }
+    this.addCostume(costume);
+};
+
 // SpriteHighlightMorph /////////////////////////////////////////////////
 
 // SpriteHighlightMorph inherits from Morph:
@@ -4753,6 +4815,8 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('setEffect'));
         blocks.push(block('clearEffects'));
         blocks.push('-');
+        blocks.push(block('doScreenshot'));
+        blocks.push('-');
         blocks.push(block('show'));
         blocks.push(block('hide'));
 
@@ -5243,6 +5307,12 @@ StageMorph.prototype.addVariable = SpriteMorph.prototype.addVariable;
 StageMorph.prototype.deleteVariable = SpriteMorph.prototype.deleteVariable;
 
 // StageMorph block rendering
+
+StageMorph.prototype.doScreenshot
+    = SpriteMorph.prototype.doScreenshot;
+
+StageMorph.prototype.newCostumeName
+    = SpriteMorph.prototype.newCostumeName;
 
 StageMorph.prototype.blockForSelector
     = SpriteMorph.prototype.blockForSelector;
