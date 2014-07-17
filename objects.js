@@ -4086,39 +4086,20 @@ SpriteMorph.prototype.reactToDropOf = function (morph, hand) {
 
 // SpriteMorph screenshots
 
-SpriteMorph.prototype.re = /\((\d+)\)$/; // RegExp to match costume names
-
 SpriteMorph.prototype.newCostumeName = function (name) {
-    var foundSameName = false,
-        foundIndex = false,
-        lastIndex = 0,
-        i = 1,
-        p = null,
-        costume = null;
 
-    for (i = 1; i <= this.costumes.length(); i += 1) {
-        costume = this.costumes.at(i);
-        if (costume !== null) {
-            if (costume.name === name) {
-                foundSameName = true;
-            }
-            if (foundSameName) {
-                p = this.re.exec(costume.name);
-                if (p) {
-                    lastIndex = Number(p[1]);
-                    foundIndex = true;
-                }
-            }
-        }
+    function stemOf(aName) {
+        var ix = aName.indexOf('(');
+        if (ix < 0) {return aName; }
+        return aName.substring(0, ix);
     }
-    if (foundSameName) {
-        if (foundIndex) {
-            lastIndex += 1;
-            return name + '(' + lastIndex + ')'; // New index with a +1
-        }
-        return name + '(2)'; // start off indexing with (1)
-    }
-    return name;
+
+    var stem = stemOf(name),
+        similar = this.costumes.asArray().filter(function (eachCostume) {
+            return stemOf(eachCostume.name) === stem;
+        }).length;
+
+    return stem + (similar ? '(' + (similar + 1) + ')' : '');
 };
 
 SpriteMorph.prototype.doScreenshot = function (imgSource, data) {
