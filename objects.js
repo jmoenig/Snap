@@ -125,7 +125,7 @@ PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.objects = '2014-July-11';
+modules.objects = '2014-July-14';
 
 var SpriteMorph;
 var StageMorph;
@@ -1325,8 +1325,6 @@ SpriteMorph.prototype.init = function (globals) {
     this.changed();
     this.drawNew();
     this.changed();
-
-    this.screenshotNames = {}; // Keeps track of stage image names
 };
 
 // SpriteMorph duplicating (fullCopy)
@@ -4095,7 +4093,7 @@ SpriteMorph.prototype.newCostumeName = function (name) {
         p = null,
         costume = null;
 
-    for (i = 1; i <= this.costumes.length(); i++) {
+    for (i = 1; i <= this.costumes.length(); i += 1) {
         costume = this.costumes.at(i);
         if (costume !== null) {
             if (costume.name === name) {
@@ -4115,7 +4113,7 @@ SpriteMorph.prototype.newCostumeName = function (name) {
             lastIndex += 1;
             return name + '(' + lastIndex + ')'; // New index with a +1
         }
-        return name + '(2)'; // No indexing has started so start it off with a (1)
+        return name + '(2)'; // start off indexing with (1)
     }
     return name;
 };
@@ -4130,7 +4128,7 @@ SpriteMorph.prototype.doScreenshot = function (imgSource, data) {
     }
     if (imgSource[0] === "pen trails") {
         canvas = stage.trailsCanvas;
-        costume = new Costume(canvas, data).copy(); // Copy is required to prevent mutation
+        costume = new Costume(canvas, data).copy(); // prevent mutation
     } else if (imgSource[0] === "stage image") {
         canvas = stage.fullImageClassic();
         costume = new Costume(canvas, data);
