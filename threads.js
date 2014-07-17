@@ -2148,6 +2148,9 @@ Process.prototype.reportTextSplit = function (string, delimiter) {
         break;
     case 'whitespace':
         return new List(str.trim().split(/[\t\r\n ]+/));
+    case 'character':
+        del = '';
+        break
     default:
         del = (delimiter || '').toString();
     }
