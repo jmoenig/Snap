@@ -1701,8 +1701,6 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push('-');
         blocks.push(block('comeToFront'));
         blocks.push(block('goBack'));
-        blocks.push('-');
-        blocks.push(block('doScreenshot'));
 
     // for debugging: ///////////////
 
@@ -1719,6 +1717,8 @@ SpriteMorph.prototype.blockTemplates = function (category) {
             blocks.push('-');
             blocks.push(block('log'));
             blocks.push(block('alert'));
+            blocks.push('-');
+            blocks.push(block('doScreenshot'));
         }
 
     /////////////////////////////////
@@ -4813,8 +4813,6 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('setEffect'));
         blocks.push(block('clearEffects'));
         blocks.push('-');
-        blocks.push(block('doScreenshot'));
-        blocks.push('-');
         blocks.push(block('show'));
         blocks.push(block('hide'));
 
@@ -4833,6 +4831,8 @@ StageMorph.prototype.blockTemplates = function (category) {
             blocks.push('-');
             blocks.push(block('log'));
             blocks.push(block('alert'));
+            blocks.push('-');
+            blocks.push(block('doScreenshot'));
         }
 
     /////////////////////////////////
