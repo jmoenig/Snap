@@ -2150,7 +2150,7 @@ Process.prototype.reportTextSplit = function (string, delimiter) {
         return new List(str.trim().split(/[\t\r\n ]+/));
     case 'character':
         del = '';
-        break
+        break;
     default:
         del = (delimiter || '').toString();
     }
