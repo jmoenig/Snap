@@ -2196,3 +2196,8 @@ ______
 * Threads: fixed #506, thanks @haritop, for both the report and for providing the fix!!
 * GUI: fixed #412 (incomplete sprite-removal)
 * GUI: fixed #507 (limit persistent block zoom to 12x), thanks Michael!
+* Morphic, GUI, Objects: fixed #508 (don’t popup empty menus), thanks Michael!
+
+140714
+------
+* Lists: make internal list ops iterative (instead of recursive), thanks, Brian!

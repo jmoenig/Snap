@@ -195,11 +195,11 @@ List.prototype.length = function () {
     if (this.isLinked) {
         var pair = this,
             result = 0;
-        while (pair.isLinked) {
+        while (pair && pair.isLinked) {
             result += 1;
             pair = pair.rest;
         }
-        return result + pair.contents.length;
+        return result + (pair ? pair.contents.length : 0);
     }
     return this.contents.length;
 };
