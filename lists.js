@@ -132,19 +132,19 @@ List.prototype.cons = function (car, cdr) {
 };
 
 List.prototype.cdr = function () {
-    function helper(i) {
-        if (i > this.contents.length) {
-            return new List();
-        }
-        return this.cons(this.at(i), helper.call(this, i + 1));
-    }
+    var result, i;
     if (this.isLinked) {
         return this.rest || new List();
     }
     if (this.contents.length < 2) {
         return new List();
     }
-    return helper.call(this, 2);
+
+    result = new List();
+    for (i = this.contents.length; i > 1; i -= 1) {
+        result = this.cons(this.at(i), result);
+    }
+    return result;
 };
 
 // List array setters:
@@ -193,32 +193,41 @@ List.prototype.clear = function () {
 
 List.prototype.length = function () {
     if (this.isLinked) {
-        return (this.first === undefined ? 0 : 1)
-            + (this.rest ? this.rest.length() : 0);
+        var pair = this,
+            result = 0;
+        while (pair.isLinked) {
+            result += 1;
+            pair = pair.rest;
+        }
+        return result + pair.contents.length;
     }
     return this.contents.length;
 };
 
 List.prototype.at = function (index) {
-    var value, idx = +index;
-    if (this.isLinked) {
-        return idx === 1 ? this.first : this.rest.at(idx - 1);
+    var value, idx = +index, pair = this;
+    while (pair.isLinked) {
+        if (idx > 1) {
+            pair = pair.rest;
+            idx -= 1;
+        } else {
+            return pair.first;
+        }
     }
-    value = this.contents[idx - 1];
+    value = pair.contents[idx - 1];
     return isNil(value) ? '' : value;
 };
 
 List.prototype.contains = function (element) {
-    if (this.isLinked) {
+    var pair = this;
+    while (pair.isLinked) {
         if (snapEquals(this.first, element)) {
             return true;
         }
-        if (this.rest instanceof List) {
-            return this.rest.contains(element);
-        }
+        pair = pair.rest;
     }
     // in case I'm arrayed
-    return this.contents.some(function (any) {
+    return pair.contents.some(function (any) {
         return snapEquals(any, element);
     });
 };
@@ -233,11 +242,23 @@ List.prototype.asArray = function () {
 
 List.prototype.asText = function () {
     var result = '',
-        length = this.length(),
+        length,
         element,
+        pair = this,
         i;
+    while (pair.isLinked) {
+        element = this.first;
+        if (element instanceof List) {
+            result = result.concat(element.asText());
+        } else {
+            element = isNil(element) ? '' : element.toString();
+            result = result.concat(element);
+        }
+        pair = pair.rest;
+    }
+    length = pair.length();
     for (i = 1; i <= length; i += 1) {
-        element = this.at(i);
+        element = pair.at(i);
         if (element instanceof List) {
             result = result.concat(element.asText());
         } else {
@@ -250,13 +271,18 @@ List.prototype.asText = function () {
 
 List.prototype.becomeArray = function () {
     if (this.isLinked) {
-        var next = this;
+        var next = this, i;
         this.contents = [];
-        while (next instanceof List && (next.length() > 0)) {
-            this.contents.push(next.at(1));
-            next = next.cdr();
+        while (next.isLinked) {
+            this.contents.push(next.first);
+            next = next.rest;
+        }
+        for (i = 1; i <= next.contents.length; i += 1) {
+            this.contents.push(next.at(i));
         }
         this.isLinked = false;
+	this.first = null;
+	this.rest = null;
     }
 };
 
@@ -278,37 +304,47 @@ List.prototype.becomeLinked = function () {
 // List testing
 
 List.prototype.equalTo = function (other) {
-    var i;
+    var me = this, it = other, i, j, loopcount;
     if (!(other instanceof List)) {
         return false;
     }
-    if ((!this.isLinked) && (!other.isLinked)) {
-        if (this.length() === 0 && (other.length() === 0)) {
-            return true;
-        }
-        if (this.length() !== other.length()) {
+
+    while (me.isLinked && it.isLinked) {
+        if (!snapEquals(me.first, it.first)) {
             return false;
         }
-        for (i = 0; i < this.length(); i += 1) {
-            if (!snapEquals(this.contents[i], other.contents[i])) {
-                return false;
-            }
-        }
-        return true;
+        me = me.rest;
+        it = it.rest;
     }
-    if ((this.isLinked) && (other.isLinked)) {
-        if (snapEquals(this.at(1), other.at(1))) {
-            return this.cdr().equalTo(other.cdr());
-        }
-        return false;
+
+    if (it.isLinked) {
+        i = it;
+        it = me;
+        me = i;
     }
-    if (this.length() !== other.length()) {
-        return false;
-    }
-    for (i = 1; i <= this.length(); i += 1) {
-        if (!snapEquals(this.at(i), other.at(i))) {
+
+    j = 0;
+    while (me.isLinked) {
+        if (!snapEquals(me.first, it.contents[j])) {
             return false;
         }
+        me = me.rest;
+        j += 1;
+    }
+
+    i = 0;
+    if (me.contents.length !== (it.contents.length - j)) {
+        return false;
+    }
+
+    loopcount = me.contents.length;
+    while (loopcount > 0) {
+        loopcount -= 1;
+        if (!snapEquals(me.contents[i], it.contents[j])) {
+            return false;
+        }
+        i += 1;
+        j += 1;
     }
     return true;
 };
