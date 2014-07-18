@@ -83,7 +83,7 @@ ArgLabelMorph, localize, XML_Element, hex_sha512*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.threads = '2014-July-11';
+modules.threads = '2014-July-18';
 
 var ThreadManager;
 var Process;
@@ -2148,7 +2148,7 @@ Process.prototype.reportTextSplit = function (string, delimiter) {
         break;
     case 'whitespace':
         return new List(str.trim().split(/[\t\r\n ]+/));
-    case 'character':
+    case 'letter':
         del = '';
         break;
     default:
