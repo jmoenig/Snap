@@ -5533,12 +5533,13 @@ CostumeIconMorph.prototype.editRotationPointOnly = function () {
 
 CostumeIconMorph.prototype.renameCostume = function () {
     var costume = this.object,
+        wardrobe = this.parentThatIsA(WardrobeMorph),
         ide = this.parentThatIsA(IDE_Morph);
     new DialogBoxMorph(
         null,
         function (answer) {
             if (answer && (answer !== costume.name)) {
-                costume.name = answer;
+                costume.name = wardrobe.sprite.newCostumeName(answer);
                 costume.version = Date.now();
                 ide.hasChangedMedia = true;
             }
