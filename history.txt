@@ -2208,4 +2208,4 @@ ______
 140718
 ------
 * Lists: incorporate Brian’s adhoc fixes, thanks, Brian!
-* GUI: Use new mechanism for unique costume names on the paint editor, renamed costumes
+* GUI: Use new mechanism for unique costume names on the paint editor, renamed costumes and costumes dragged and dropped onto sprite icons
