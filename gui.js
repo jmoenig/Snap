@@ -5374,6 +5374,7 @@ SpriteIconMorph.prototype.copyStack = function (block) {
 
 SpriteIconMorph.prototype.copyCostume = function (costume) {
     var dup = costume.copy();
+    dup.name = this.object.newCostumeName(dup.name);
     this.object.addCostume(dup);
     this.object.wearCostume(dup);
 };
