@@ -2198,9 +2198,14 @@ ______
 * GUI: fixed #507 (limit persistent block zoom to 12x), thanks Michael!
 * Morphic, GUI, Objects: fixed #508 (don’t popup empty menus), thanks Michael!
 
-140714
+140717
 ------
 * new translation into Bangla (Bengali)!!! Yay, thanks, Mokter!!
 * Lists: make internal list ops iterative (instead of recursive), thanks, Brian!
 * Objects, Blocks: new feature (hidden in dev mode): Save screenshot, thanks, Viraj!
 * GUI: Use new mechanism for unique costume names on imported costumes as well
+
+140718
+------
+* Lists: incorporate Brian’s adhoc fixes, thanks, Brian!
+* GUI: Use new mechanism for unique costume names on the paint editor
