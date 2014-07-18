@@ -69,7 +69,7 @@ SpeechBubbleMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2014-July-17';
+modules.gui = '2014-July-18';
 
 // Declarations
 
@@ -5930,7 +5930,10 @@ WardrobeMorph.prototype.removeCostumeAt = function (idx) {
 };
 
 WardrobeMorph.prototype.paintNew = function () {
-    var cos = new Costume(newCanvas(), "Untitled"),
+    var cos = new Costume(
+            newCanvas(),
+            this.sprite.newCostumeName('Untitled')
+        ),
         ide = this.parentThatIsA(IDE_Morph),
         myself = this;
     cos.edit(this.world(), ide, true, null, function () {
