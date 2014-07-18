@@ -61,7 +61,7 @@ PushButtonMorph, SyntaxElementMorph, Color, Point, WatcherMorph,
 StringMorph, SpriteMorph, ScrollFrameMorph, CellMorph, ArrowMorph,
 MenuMorph, snapEquals, Morph, isNil, localize, MorphicPreferences*/
 
-modules.lists = '2014-July-14';
+modules.lists = '2014-July-17';
 
 var List;
 var ListWatcherMorph;
@@ -221,7 +221,7 @@ List.prototype.at = function (index) {
 List.prototype.contains = function (element) {
     var pair = this;
     while (pair.isLinked) {
-        if (snapEquals(this.first, element)) {
+        if (snapEquals(pair.first, element)) {
             return true;
         }
         pair = pair.rest;
@@ -247,7 +247,7 @@ List.prototype.asText = function () {
         pair = this,
         i;
     while (pair.isLinked) {
-        element = this.first;
+        element = pair.first;
         if (element instanceof List) {
             result = result.concat(element.asText());
         } else {

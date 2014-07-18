@@ -69,7 +69,7 @@ SpeechBubbleMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2014-July-14';
+modules.gui = '2014-July-17';
 
 // Declarations
 
