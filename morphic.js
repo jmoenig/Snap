@@ -2884,7 +2884,7 @@ Morph.prototype.fullChanged = function () {
 };
 
 Morph.prototype.childChanged = function () {
-    // react to a  change in one of my children,
+    // react to a change in one of my children,
     // default is to just pass this message on upwards
     // override this method for Morphs that need to adjust accordingly
     if (this.parent) {

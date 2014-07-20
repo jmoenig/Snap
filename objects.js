@@ -2786,14 +2786,14 @@ SpriteMorph.prototype.doLabelText = function (text, size) {
 
     this.gotoXY(pos.x, pos.y, false);
 
-    this.fullChanged();
+    this.changed();
 
     if (isWarped) {
         this.startWarp();
     }
 
-    // Refresh layout to guarnatee all text shows
-    ide.fixLayout();
+    // Explicity redraw the entire stage so all text shows.
+    stage.changed();
 };
 
 // SpriteMorph layers
