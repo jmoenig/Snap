@@ -2751,32 +2751,24 @@ SpriteMorph.prototype.doLabelText = function (text, size) {
                              this.center().y - stage.top()),
         ide      = this.parentThatIsA(IDE_Morph),
         isWarped = this.isWarped,
-        len,
-        pos;
+        len, pos;
 
     if (isWarped) {
         this.endWarp();
     }
 
-    trans = trans.multiplyBy(stage.scale);
-    console.log('STAGE SIZE: ' + stage.scale);
-    console.log('TRANS X: ' + trans.x);
-    console.log('THIS CENTER X: ' + this.center().x);
-    console.log('STAGE LEFT: ' + stage.left());
-    console.log('STAGE TOP: ' + stage.top());
-
-
-    // Set font properties
     context.save();
+    // Set font properties
     context.font =  size + 'pt monospace';
     context.textAlign = 'left';
     context.textBaseline = 'alphabetic';
     context.fillStyle = this.color.toString();
-    context.scale(1, 1);
+
     // Make sure length is calculated with correct canvas properties
     len = context.measureText(text).width;
-    len *= stage.scale;
     // Translate canvas for proper rotations
+    // Note: the translation point is shifted inversely to the stage scale
+    trans = trans.multiplyBy(1 / stage.scale);
     context.translate(trans.x, trans.y);
     context.rotate(rotation);
     context.fillText(text, 0, 0);
