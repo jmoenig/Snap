@@ -2171,3 +2171,43 @@ ______
 ------
 * Morphic: Inspector enhancements (dynamic property update, keyboard shortcuts)
 * GUI: update visibility of share/unshare buttons, Thanks, Kunal!
+
+140706
+------
+* Blocks: add “ringify” to every context menu that already has “unringify”
+
+
+140708
+------
+* Threads: show error messages for custom blocks (propagating to the script’s top block)
+* Threads: adjust to Doug Crockford’s latest infuriating nitpickings in JSLint
+* GUI: show username in ‘logout’ entry of cloud menu
+* GUI, Objects: fixed scrolling glitch in the palette, thanks, Kunal!
+* GUI, Objects: add keyboard shortcut for “new project”: ctr-n
+* revert changes made for JSLint’s sake after the issue was fixed in JSLint
+* Blocks: change “delete” behavior in context menus to only delete this particular blocks (and reconnect the next block to the previous one)
+* fixed #490
+
+140711
+------
+* Morphic: keyboard shortcut ctrl/cmd-shift-a for ‘@‘
+* Morphic: allow directly editing properties in inspector widgets
+* Blocks: change the color of the %pause symbol to be more yellowish
+* Threads: fixed #506, thanks @haritop, for both the report and for providing the fix!!
+* GUI: fixed #412 (incomplete sprite-removal)
+* GUI: fixed #507 (limit persistent block zoom to 12x), thanks Michael!
+* Morphic, GUI, Objects: fixed #508 (don’t popup empty menus), thanks Michael!
+
+140717
+------
+* new translation into Bangla (Bengali)!!! Yay, thanks, Mokter!!
+* Lists: make internal list ops iterative (instead of recursive), thanks, Brian!
+* Objects, Blocks: new feature (hidden in dev mode): Save screenshot, thanks, Viraj!
+* GUI: Use new mechanism for unique costume names on imported costumes as well
+
+140718
+------
+* Lists: incorporate Brian’s adhoc fixes, thanks, Brian!
+* GUI: Use new mechanism for unique costume names on the paint editor, renamed costumes and costumes dragged and dropped onto sprite icons
+* add “letter” option to the split block’s list of delimiters, Thanks, Michael!
+* update German translation

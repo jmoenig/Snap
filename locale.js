@@ -42,7 +42,7 @@
 
 /*global modules, contains*/
 
-modules.locale = '2014-Jun-04';
+modules.locale = '2014-July-18';
 
 // Global stuff
 
@@ -149,7 +149,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org',
     'last_changed':
-        '2014-06-04'
+        '2014-07-18'
 };
 
 SnapTranslator.dict.it = {
@@ -225,7 +225,7 @@ SnapTranslator.dict.cs = {
 };
 
 SnapTranslator.dict.zh = {
-    // translations meta information
+    // meta information
     'language_name':
         '简体中文',
     'language_translator':
@@ -237,7 +237,7 @@ SnapTranslator.dict.zh = {
 };
 
 SnapTranslator.dict.eo = {
-    // translations meta information
+    // meta information
     'language_name':
         'Esperanto',
     'language_translator':
@@ -249,7 +249,7 @@ SnapTranslator.dict.eo = {
 };
 
 SnapTranslator.dict.fr = {
-    // translations meta information
+    // meta information
     'language_name':
         'Fran\u00E7ais',
     'language_translator':
@@ -261,6 +261,7 @@ SnapTranslator.dict.fr = {
 };
 
 SnapTranslator.dict.si = {
+    // meta information
     'language_name':
         'Sloven\u0161\u010Dina',
     'language_translator':
@@ -272,6 +273,7 @@ SnapTranslator.dict.si = {
 };
 
 SnapTranslator.dict.ru = {
+    // meta information
     'language_name':
         'Русский',
     'language_translator':
@@ -283,6 +285,7 @@ SnapTranslator.dict.ru = {
 };
 
 SnapTranslator.dict.es = {
+    // meta information
     'language_name':
         'Espa\u00F1ol',
     'language_translator':
@@ -294,6 +297,7 @@ SnapTranslator.dict.es = {
 };
 
 SnapTranslator.dict.nl = {
+    // meta information
     'language_name':
         'Nederlands',
     'language_translator':
@@ -305,6 +309,7 @@ SnapTranslator.dict.nl = {
 };
 
 SnapTranslator.dict.pl = {
+    // meta information
     'language_name':
         'Polski',
     'language_translator':
@@ -316,6 +321,7 @@ SnapTranslator.dict.pl = {
 };
 
 SnapTranslator.dict.tw = {
+    // meta information
     'language_name':
         '繁體中文',
     'language_translator':
@@ -327,6 +333,7 @@ SnapTranslator.dict.tw = {
 };
 
 SnapTranslator.dict.no = {
+    // meta information
     'language_name':
         'Norsk',
     'language_translator':
@@ -338,6 +345,7 @@ SnapTranslator.dict.no = {
 };
 
 SnapTranslator.dict.dk = {
+    // meta information
     'language_name':
         'Dansk',
     'language_translator':
@@ -349,6 +357,7 @@ SnapTranslator.dict.dk = {
 };
 
 SnapTranslator.dict.el = {
+    // meta information
     'language_name':
         'Ελληνικά',
     'language_translator':
@@ -360,6 +369,7 @@ SnapTranslator.dict.el = {
 };
 
 SnapTranslator.dict.ca = {
+    // meta information
     'language_name':
         'Català',
     'language_translator':
@@ -394,3 +404,14 @@ SnapTranslator.dict.pt_BR = {
         '2014-04-20'
 };
 
+SnapTranslator.dict.bn = {
+    // meta information
+    'language_name':
+        'বাংলা',
+    'language_translator':
+        'Dr. Mokter Hossain',
+    'translator_e-mail':
+        'mokter@gmail.com',
+    'last_changed':
+        '2014-07-02'
+};

@@ -83,7 +83,7 @@ ArgLabelMorph, localize, XML_Element, hex_sha512*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.threads = '2014-Jun-05';
+modules.threads = '2014-July-18';
 
 var ThreadManager;
 var Process;
@@ -673,11 +673,13 @@ Process.prototype.doYield = function () {
 // Process Exception Handling
 
 Process.prototype.handleError = function (error, element) {
+    var m = element;
     this.stop();
     this.errorFlag = true;
     this.topBlock.addErrorHighlight();
-    (element || this.topBlock).showBubble(
-        (element ? '' : 'Inside: ')
+    if (isNil(m) || isNil(m.world())) {m = this.topBlock; }
+    m.showBubble(
+        (m === element ? '' : 'Inside: ')
             + error.name
             + '\n'
             + error.message
@@ -1056,7 +1058,6 @@ Process.prototype.evaluateCustomBlock = function () {
         runnable.expression = runnable.expression.blockSequence();
     }
 };
-
 
 // Process variables primitives
 
@@ -2147,6 +2148,9 @@ Process.prototype.reportTextSplit = function (string, delimiter) {
         break;
     case 'whitespace':
         return new List(str.trim().split(/[\t\r\n ]+/));
+    case 'letter':
+        del = '';
+        break;
     default:
         del = (delimiter || '').toString();
     }
@@ -2234,14 +2238,14 @@ Process.prototype.getObjectsNamed = function (name, thisObj, stageObj) {
 };
 
 Process.prototype.doFaceTowards = function (name) {
-    var thisObj = this.homeContext.receiver,
+    var thisObj = this.blockReceiver(),
         thatObj;
 
     if (thisObj) {
         if (this.inputOption(name) === 'mouse-pointer') {
             thisObj.faceToXY(this.reportMouseX(), this.reportMouseY());
         } else {
-            thatObj = this.getOtherObject(name, thisObj);
+            thatObj = this.getOtherObject(name, this.homeContext.receiver);
             if (thatObj) {
                 thisObj.faceToXY(
                     thatObj.xPosition(),
@@ -2253,14 +2257,14 @@ Process.prototype.doFaceTowards = function (name) {
 };
 
 Process.prototype.doGotoObject = function (name) {
-    var thisObj = this.homeContext.receiver,
+    var thisObj = this.blockReceiver(),
         thatObj;
 
     if (thisObj) {
         if (this.inputOption(name) === 'mouse-pointer') {
             thisObj.gotoXY(this.reportMouseX(), this.reportMouseY());
         } else {
-            thatObj = this.getOtherObject(name, thisObj);
+            thatObj = this.getOtherObject(name, this.homeContext.receiver);
             if (thatObj) {
                 thisObj.gotoXY(
                     thatObj.xPosition(),
