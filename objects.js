@@ -814,7 +814,7 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'reporter',
             category: 'sensing',
             spec: 'http:// %s',
-            defaults: ['snap.berkeley.edu']
+            defaults: ['community.csdt.rpi.edu']
         },
         reportIsFastTracking: {
             type: 'predicate',

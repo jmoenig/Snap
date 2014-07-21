@@ -698,7 +698,7 @@ IDE_Morph.prototype.createControlBar = function () {
     button = new PushButtonMorph(
         this,
         'projectMenu',
-        new SymbolMorph('file', 14)
+        'File'
         //'\u270E'
     );
     button.corner = 12;
