@@ -496,6 +496,11 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: 'set pen color to %n',
             defaults: [0]
         },
+		penColor: {
+            type: 'reporter',
+            category: 'pen',
+            spec: 'pen color'
+        },
         changeBrightness: {
             type: 'command',
             category: 'pen',
@@ -523,7 +528,7 @@ SpriteMorph.prototype.initBlocks = function () {
         penSize: {
             type: 'reporter',
             category: 'pen',
-            spec: 'get pen size',
+            spec: 'pen size',
         },        
         doStamp: {
             type: 'command',
@@ -1702,6 +1707,8 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('setColor'));
         blocks.push(block('changeHue'));
         blocks.push(block('setHue'));
+        blocks.push(watcherToggle('penColor'));
+        blocks.push(block('penColor'));
         blocks.push('-');
         blocks.push(block('changeBrightness'));
         blocks.push(block('setBrightness'));
@@ -2974,6 +2981,10 @@ SpriteMorph.prototype.yPosition = function () {
 
 SpriteMorph.prototype.direction = function () {
     return this.heading;
+};
+
+SpriteMorph.prototype.penColor = function() {
+    return this.color.hsv()[0]*100;
 };
 
 SpriteMorph.prototype.penSize = function () {
