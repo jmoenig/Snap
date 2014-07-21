@@ -605,6 +605,7 @@ SnapSerializer.prototype.loadSprites = function (xmlString, ide) {
         if (model.attributes.pen) {
             sprite.penPoint = model.attributes.pen;
         }
+        
         project.stage.add(sprite);
         ide.sprites.add(sprite);
         sprite.scale = parseFloat(model.attributes.scale || '1');
@@ -616,6 +617,7 @@ SnapSerializer.prototype.loadSprites = function (xmlString, ide) {
         sprite.heading = parseFloat(model.attributes.heading) || 0;
         sprite.drawNew();
         sprite.gotoXY(+model.attributes.x || 0, +model.attributes.y || 0);
+        
         myself.loadObject(sprite, model);
     });
     this.objects = {};
@@ -1137,6 +1139,7 @@ SnapSerializer.prototype.loadValue = function (model) {
         v.heading = parseFloat(model.attributes.heading) || 0;
         v.drawNew();
         v.gotoXY(+model.attributes.x || 0, +model.attributes.y || 0);
+        
         myself.loadObject(v, model);
         return v;
     case 'context':

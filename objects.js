@@ -125,7 +125,7 @@ PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.objects = '2014-July-17';
+modules.objects = '2014-July-19';
 
 var SpriteMorph;
 var StageMorph;
@@ -568,6 +568,13 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'command',
             category: 'pen',
             spec: 'stamp'
+        },
+        doLabelText: {
+            only: SpriteMorph,
+            type: 'command',
+            category: 'pen',
+            spec: 'label %txt of size %n',
+            defaults: [localize('Hello!'), 12]
         },
 
         // Control
@@ -1770,6 +1777,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('setSize'));
         blocks.push('-');
         blocks.push(block('doStamp'));
+        blocks.push(block('doLabelText'));
 
     } else if (cat === 'control') {
 
@@ -2733,6 +2741,61 @@ SpriteMorph.prototype.changeBrightness = function (delta) {
     this.setBrightness(this.getBrightness() + (+delta || 0));
 };
 
+// Write text (an image) to the stage
+
+SpriteMorph.prototype.doLabelText = function (text, size) {
+    var stage    = this.parentThatIsA(StageMorph),
+        context  = stage.penTrails().getContext('2d'),
+        rotation = radians(this.direction() - 90),
+        trans    = new Point(this.center().x - stage.left(),
+                             this.center().y - stage.top()),
+        ide      = this.parentThatIsA(IDE_Morph),
+        isWarped = this.isWarped,
+        len, pos;
+
+    if (isWarped) {
+        this.endWarp();
+    }
+
+    context.save();
+    // Set font properties
+    context.font =  size + 'pt monospace';
+    context.textAlign = 'left';
+    context.textBaseline = 'alphabetic';
+    context.fillStyle = this.color.toString();
+
+    // Make sure length is calculated with correct canvas properties
+    len = context.measureText(text).width;
+    // Translate canvas for proper rotations
+    // Note: the translation point is shifted inversely to the stage scale
+    trans = trans.multiplyBy(1 / stage.scale);
+    context.translate(trans.x, trans.y);
+    context.rotate(rotation);
+    context.fillText(text, 0, 0);
+    context.translate(-trans.x, -trans.y);
+    context.restore();
+
+    // Handle movement of sprite to text end
+    // Currently this only handles LTR text correctly.
+    // RTL would require negating the length.
+    // Note sin is X and cos is Y due to Logo based coordinate system
+    pos = new Point(len * Math.sin(radians(this.direction())),
+                    len * Math.cos(radians(this.direction())));
+
+    pos = pos.add(new Point(this.xPosition(), this.yPosition()));
+
+    this.gotoXY(pos.x, pos.y, false);
+
+    this.changed();
+
+    if (isWarped) {
+        this.startWarp();
+    }
+
+    // Explicity redraw the entire stage so all text shows.
+    stage.changed();
+};
+
 // SpriteMorph layers
 
 SpriteMorph.prototype.comeToFront = function () {
@@ -2915,7 +2978,7 @@ SpriteMorph.prototype.applyGraphicsEffects = function (canvas) {
         var i;
         if (value !== 0) {
             for (i = 0; i < p.length; i += 4) {
-                p[i] += value; //255 = 100% of this color 
+                p[i] += value; //255 = 100% of this color
                 p[i + 1] += value;
                 p[i + 2] += value;
             }

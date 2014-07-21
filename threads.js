@@ -2427,6 +2427,7 @@ Process.prototype.reportAttributeOf = function (attribute, name) {
         } else {
             thatObj = this.getOtherObject(name, thisObj, stage);
         }
+
         if (thatObj) {
             if (attribute instanceof Context) {
                 return this.reportContextFor(attribute, thatObj);
@@ -2434,6 +2435,7 @@ Process.prototype.reportAttributeOf = function (attribute, name) {
             if (isString(attribute)) {
                 return thatObj.variables.getVar(attribute);
             }
+
             switch (this.inputOption(attribute)) {
             case 'x position':
                 return thatObj.xPosition ? thatObj.xPosition() : '';
@@ -2452,6 +2454,7 @@ Process.prototype.reportAttributeOf = function (attribute, name) {
             }
         }
     }
+
     return '';
 };
 

@@ -157,7 +157,6 @@ DialogBoxMorph, BlockInputFragmentMorph, PrototypeHatBlockMorph, Costume*/
 
 modules.blocks = '2014-July-18';
 
-
 var SyntaxElementMorph;
 var BlockMorph;
 var CommandBlockMorph;
@@ -1294,6 +1293,7 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
         default:
             nop();
         }
+
     } else if (spec[0] === '$' &&
             spec.length > 1 &&
             this.selector !== 'reportGetVar') {
@@ -1790,6 +1790,7 @@ SyntaxElementMorph.prototype.endLayout = function () {
     %att    - chameleon colored rectangular drop-down for attributes
     %fun    - chameleon colored rectangular drop-down for math functions
     %typ    - chameleon colored rectangular drop-down for data types
+    %dates  - chameleon colored rectangular drop-down for date options
     %var - chameleon colored rectangular drop-down for variable names
     %lst    - chameleon colored rectangular drop-down for list names
     %b        - chameleon colored hexagonal slot (for predicates)
@@ -6619,9 +6620,11 @@ InputSlotMorph.prototype.attributesMenu = function () {
             }
         );
     }
+
     if (!obj) {
         return dict;
     }
+
     if (obj instanceof SpriteMorph) {
         dict = {
             'x position' : ['x position'],
