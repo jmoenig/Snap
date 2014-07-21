@@ -83,7 +83,7 @@ ArgLabelMorph, localize, XML_Element, hex_sha512*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.threads = '2014-July-18';
+modules.threads = '2014-July-21';
 
 var ThreadManager;
 var Process;
@@ -2871,7 +2871,8 @@ Context.prototype.continuation = function () {
 Context.prototype.copyForContinuation = function () {
     var cpy = copy(this),
         cur = cpy,
-        isReporter = !(this.expression instanceof Array);
+        isReporter = !(this.expression instanceof Array ||
+            isString(this.expression));
     if (isReporter) {
         cur.prepareContinuationForBinding();
         while (cur.parentContext) {
@@ -2886,7 +2887,8 @@ Context.prototype.copyForContinuation = function () {
 Context.prototype.copyForContinuationCall = function () {
     var cpy = copy(this),
         cur = cpy,
-        isReporter = !(this.expression instanceof Array);
+        isReporter = !(this.expression instanceof Array ||
+            isString(this.expression));
     if (isReporter) {
         this.expression = this.expression.fullCopy();
         this.inputs = [];

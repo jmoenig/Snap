@@ -2176,7 +2176,6 @@ ______
 ------
 * Blocks: add “ringify” to every context menu that already has “unringify”
 
-
 140708
 ------
 * Threads: show error messages for custom blocks (propagating to the script’s top block)
@@ -2211,3 +2210,7 @@ ______
 * GUI: Use new mechanism for unique costume names on the paint editor, renamed costumes and costumes dragged and dropped onto sprite icons
 * add “letter” option to the split block’s list of delimiters, Thanks, Michael!
 * update German translation
+
+140721
+------
+* fixed #518
