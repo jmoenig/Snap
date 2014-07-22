@@ -83,7 +83,7 @@ ArgLabelMorph, localize, XML_Element, hex_sha512*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.threads = '2014-July-21';
+modules.threads = '2014-July-22';
 
 var ThreadManager;
 var Process;
@@ -1109,6 +1109,7 @@ Process.prototype.doShowVar = function (varName) {
         target,
         label,
         others,
+        isGlobal,
         name = varName;
 
     if (name instanceof Context) {
@@ -1135,7 +1136,11 @@ Process.prototype.doShowVar = function (varName) {
                 return;
             }
             // if no watcher exists, create a new one
-            if (target.owner) {
+            isGlobal = contains(
+                this.homeContext.receiver.variables.parentFrame.names(),
+                varName
+            );
+            if (isGlobal || target.owner) {
                 label = name;
             } else {
                 label = name + ' (temporary)';

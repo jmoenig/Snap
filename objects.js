@@ -125,7 +125,7 @@ PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.objects = '2014-July-17';
+modules.objects = '2014-July-22';
 
 var SpriteMorph;
 var StageMorph;
@@ -3545,6 +3545,9 @@ SpriteMorph.prototype.toggleVariableWatcher = function (varName, isGlobal) {
     }
 
     // if no watcher exists, create a new one
+    if (isNil(isGlobal)) {
+        isGlobal = contains(this.variables.parentFrame.names(), varName);
+    }
     watcher = new WatcherMorph(
         varName,
         this.blockColor.variables,

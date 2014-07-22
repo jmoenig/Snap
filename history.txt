@@ -2214,3 +2214,7 @@ ______
 140721
 ------
 * fixed #518
+
+140722
+------
+* Objects, Threads: fixed #521 (deleting variable watchers by dropping them on the palette results in wrong ones to be created when showing them again)
