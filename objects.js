@@ -125,7 +125,7 @@ PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.objects = '2014-July-22';
+modules.objects = '2014-July-23';
 
 var SpriteMorph;
 var StageMorph;
@@ -5667,14 +5667,16 @@ SpriteBubbleMorph.prototype.fixLayout = function () {
 
 function Costume(canvas, name, rotationCenter) {
     this.contents = canvas || newCanvas();
-    this.shrinkToFit(this.maxExtent);
+    this.shrinkToFit(this.maxExtent());
     this.name = name || null;
     this.rotationCenter = rotationCenter || this.center();
     this.version = Date.now(); // for observer optimization
     this.loaded = null; // for de-serialization only
 }
 
-Costume.prototype.maxExtent = StageMorph.prototype.dimensions;
+Costume.prototype.maxExtent = function () {
+    return StageMorph.prototype.dimensions;
+};
 
 Costume.prototype.toString = function () {
     return 'a Costume(' + this.name + ')';
@@ -5959,7 +5961,7 @@ SVG_Costume.uber = Costume.prototype;
 
 function SVG_Costume(svgImage, name, rotationCenter) {
     this.contents = svgImage;
-    this.shrinkToFit(this.maxExtent);
+    this.shrinkToFit(this.maxExtent());
     this.name = name || null;
     this.rotationCenter = rotationCenter || this.center();
     this.version = Date.now(); // for observer optimization
@@ -6007,7 +6009,7 @@ CostumeEditorMorph.prototype.constructor = CostumeEditorMorph;
 CostumeEditorMorph.uber = Morph.prototype;
 
 // CostumeEditorMorph preferences settings:
-CostumeEditorMorph.prototype.size = Costume.prototype.maxExtent;
+CostumeEditorMorph.prototype.size = Costume.prototype.maxExtent();
 
 // CostumeEditorMorph instance creation
 
