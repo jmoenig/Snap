@@ -2222,3 +2222,7 @@ ______
 140723
 ------
 * Objects: Scale down oversized images to current stage dimensions. Thanks, Dan, for reporting this!
+
+140724
+------
+* Objects: fixed “lost sprites bug” - ensure duplicated sprites keep wearing their current costume through save and re-load
