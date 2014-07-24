@@ -2227,3 +2227,4 @@ ______
 ------
 * Objects: fixed “lost sprites bug” - ensure duplicated sprites keep wearing their current costume through save and re-load
 * GUI, Objects: improve unique sprite- and costume names
+* Threads: Display “empty” Contexts (e.g. continuations) as empty rings
