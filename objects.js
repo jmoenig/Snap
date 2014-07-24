@@ -125,7 +125,7 @@ PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.objects = '2014-July-23';
+modules.objects = '2014-July-24';
 
 var SpriteMorph;
 var StageMorph;
@@ -1331,6 +1331,7 @@ SpriteMorph.prototype.init = function (globals) {
 
 SpriteMorph.prototype.fullCopy = function () {
     var c = SpriteMorph.uber.fullCopy.call(this),
+        myself = this,
         arr = [],
         cb;
 
@@ -1352,7 +1353,11 @@ SpriteMorph.prototype.fullCopy = function () {
         });
     });
     this.costumes.asArray().forEach(function (costume) {
-        arr.push(costume.copy());
+        var cst = costume.copy();
+        arr.push(cst);
+        if (costume === myself.costume) {
+            c.costume = cst;
+        }
     });
     c.costumes = new List(arr);
     arr = [];
