@@ -4094,20 +4094,21 @@ SpriteMorph.prototype.reactToDropOf = function (morph, hand) {
 
 // SpriteMorph screenshots
 
-SpriteMorph.prototype.newCostumeName = function (name) {
-
-    function stemOf(aName) {
-        var ix = aName.indexOf('(');
-        if (ix < 0) {return aName; }
-        return aName.substring(0, ix);
+SpriteMorph.prototype.newCostumeName = function (name, ignoredCostume) {
+    var ix = name.indexOf('('),
+        stem = (ix < 0) ? name : name.substring(0, ix),
+        count = 1,
+        newName = stem,
+        all = this.costumes.asArray().filter(
+            function (each) {return each !== ignoredCostume; }
+        ).map(
+            function (each) {return each.name; }
+        );
+    while (contains(all, newName)) {
+        count += 1;
+        newName = stem + '(' + count + ')';
     }
-
-    var stem = stemOf(name),
-        similar = this.costumes.asArray().filter(function (eachCostume) {
-            return stemOf(eachCostume.name) === stem;
-        }).length;
-
-    return stem + (similar ? '(' + (similar + 1) + ')' : '');
+    return newName;
 };
 
 SpriteMorph.prototype.doScreenshot = function (imgSource, data) {

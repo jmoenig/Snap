@@ -2226,3 +2226,4 @@ ______
 140724
 ------
 * Objects: fixed “lost sprites bug” - ensure duplicated sprites keep wearing their current costume through save and re-load
+* GUI, Objects: improve unique sprite- and costume names
