@@ -83,7 +83,7 @@ ArgLabelMorph, localize, XML_Element, hex_sha512*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.threads = '2014-July-22';
+modules.threads = '2014-July-24';
 
 var ThreadManager;
 var Process;
@@ -2854,7 +2854,18 @@ Context.prototype.image = function () {
         ring.embed(block, this.isContinuation ? [] : this.inputs);
         return ring.fullImage();
     }
-    return newCanvas();
+
+    // otherwise show an empty ring
+    ring.color = SpriteMorph.prototype.blockColor.other;
+    ring.setSpec('%rc %ringparms');
+
+    // also show my inputs, unless I'm a continuation
+    if (!this.isContinuation) {
+        this.inputs.forEach(function (inp) {
+            ring.parts()[1].addInput(inp);
+        });
+    }
+    return ring.fullImage();
 };
 
 // Context continuations:
