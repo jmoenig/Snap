@@ -125,7 +125,7 @@ PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.objects = '2014-July-24';
+modules.objects = '2014-July-25';
 
 var SpriteMorph;
 var StageMorph;
@@ -1024,6 +1024,11 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: 'split %s by %delim',
             defaults: [localize('hello') + ' ' + localize('world'), " "]
         },
+        reportJSFunction: { // experimental
+            type: 'reporter',
+            category: 'operators',
+            spec: 'JavaScript function ( %mult%s ) { %code }'
+        },
         reportTypeOf: { // only in dev mode for debugging
             dev: true,
             type: 'reporter',
@@ -1919,6 +1924,8 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push('-');
         blocks.push(block('reportIsA'));
         blocks.push(block('reportIsIdentical'));
+        blocks.push('-');
+        blocks.push(block('reportJSFunction'));
 
     // for debugging: ///////////////
 
@@ -5000,6 +5007,8 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push('-');
         blocks.push(block('reportIsA'));
         blocks.push(block('reportIsIdentical'));
+        blocks.push('-');
+        blocks.push(block('reportJSFunction'));
 
     // for debugging: ///////////////
 
