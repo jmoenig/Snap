@@ -2232,3 +2232,4 @@ ______
 140725
 ------
 * Objects, Threads: new “JavaScript function” primitive. Go figure…
+* GUI: updated Credits
