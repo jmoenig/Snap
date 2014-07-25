@@ -69,7 +69,7 @@ SpeechBubbleMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2014-July-24';
+modules.gui = '2014-July-25';
 
 // Declarations
 
@@ -2539,7 +2539,9 @@ IDE_Morph.prototype.aboutSnap = function () {
         + '\n\nNathan Dinsmore: Saving/Loading, Snap-Logo Design, '
         + 'countless bugfixes'
         + '\nKartik Chandra: Paint Editor'
-        + '\nYuan Yuan: Graphic Effects'
+        + '\nMichael Ball: Time/Date UI, many bugfixes'
+        + '\n"Ava" Yuan Yuan: Graphic Effects'
+        + '\nKyle Hotchkiss: Block search design'
         + '\nIan Reynolds: UI Design, Event Bindings, '
         + 'Sound primitives'
         + '\nIvan Motyashov: Initial Squeak Porting'
