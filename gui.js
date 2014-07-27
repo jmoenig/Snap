@@ -5516,7 +5516,7 @@ CostumeIconMorph.prototype.fixLayout
 CostumeIconMorph.prototype.userMenu = function () {
     var menu = new MenuMorph(this);
     if (!(this.object instanceof Costume)) {return null; }
-    menu.addItem("edit", "editCostume");
+    menu.addItem("edit...", "editCostume");
     if (this.world().currentKey === 16) { // shift clicked
         menu.addItem(
             'edit rotation point only...',
@@ -5525,12 +5525,12 @@ CostumeIconMorph.prototype.userMenu = function () {
             new Color(100, 0, 0)
         );
     }
-    menu.addItem("rename", "renameCostume");
+    menu.addItem("rename...", "renameCostume");
     menu.addLine();
     menu.addItem("duplicate", "duplicateCostume");
     menu.addItem("delete", "removeCostume");
     menu.addLine();
-    menu.addItem("export", "exportCostume");
+    menu.addItem("export...", "exportCostume");
     return menu;
 };
 
@@ -6146,7 +6146,7 @@ SoundIconMorph.prototype.fixLayout
 SoundIconMorph.prototype.userMenu = function () {
     var menu = new MenuMorph(this);
     if (!(this.object instanceof Sound)) { return null; }
-    menu.addItem('rename', 'renameSound');
+    menu.addItem('rename...', 'renameSound');
     menu.addItem('delete', 'removeSound');
     return menu;
 };
