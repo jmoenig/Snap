@@ -112,7 +112,7 @@ function List(array) {
 }
 
 List.prototype.toString = function () {
-    return 'a List [' + this.asArray + ']';
+    return 'a List [' + this.asArray() + ']';
 };
 
 // List updating:
