@@ -83,7 +83,7 @@ ArgLabelMorph, localize, XML_Element, hex_sha512*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.threads = '2014-July-25';
+modules.threads = '2014-July-27';
 
 var ThreadManager;
 var Process;
@@ -743,7 +743,7 @@ Process.prototype.reifyPredicate = function (topBlock, parameterNames) {
 
 Process.prototype.reportJSFunction = function (parmNames, body) {
     return Function.apply(
-        Object.create(Function.prototype),
+        Object.create(null),
         parmNames.asArray().concat([body])
     );
 };
