@@ -1616,5 +1616,22 @@ SnapTranslator.dict.pt = {
     'code':
         'código',
     'header':
-        'cabeçalho'
+        'cabeçalho',
+    'header mapping...':
+        'mapeamento para cabeçalho…',
+    'code mapping...':
+        'mapeamento para código…',
+    'Code mapping':
+        'Mapeamento para código',
+    'Header mapping':
+        'Mapeamento para cabeçalho',
+    'Enter code that corresponds to the block\'s definition. Use the formal parameter\nnames as shown and <body> to reference the definition body\'s generated text code.':
+        'Introduza o código correspondente à definição do bloco. Use os nomes dos parâmetros\n'
+            + 'tal como mostrados e use <body> para referenciar o código gerado da definição do corpo',
+    'Enter code that corresponds to the block\'s definition. Choose your own\nformal parameter names (ignoring the ones shown).':
+        'Introduza o código correspondente à definição do bloco. Escolha os seus próprios\n'
+            + 'nomes para os parâmetros (ignorando os nomes mostrados).',
+    'Enter code that corresponds to the block\'s operation (usually a single\nfunction invocation). Use <#n> to reference actual arguments as shown.':
+        'Introduza o código que corresponda à operação do bloco (normalmente uma simples\n'
+            + 'invocação de rotina). Use <#n> para referenciar os argumentos tal como mostrado'
 };
