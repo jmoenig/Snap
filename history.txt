@@ -2233,3 +2233,8 @@ ______
 ------
 * Objects, Threads: new “JavaScript function” primitive. Go figure…
 * GUI: updated Credits
+
+140728
+------
+* Lists: fixed "Load Failed Type Error Cannot read property 'isLinked' of null"
+* Threads: enable “JS function” block to create custom control structures and HOFs
