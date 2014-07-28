@@ -501,6 +501,28 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'pen',
             spec: 'pen color'
         },
+  		setBorderColor: {
+            type: 'command',
+            category: 'pen',
+            spec: 'set border color to %clr'
+        },
+        changeBorderHue: {
+            type: 'command',
+            category: 'pen',
+            spec: 'change border color by %n',
+            defaults: [10]
+        },
+        setBorderHue: {
+            type: 'command',
+            category: 'pen',
+            spec: 'set border color to %n',
+            defaults: [0]
+        },
+        penBorderColor: {
+            type: 'reporter',
+            category: 'pen',
+            spec: 'get border color'
+        },
         changeBrightness: {
             type: 'command',
             category: 'pen',
@@ -511,6 +533,18 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'command',
             category: 'pen',
             spec: 'set pen shade to %n',
+            defaults: [100]
+        },
+        changeBorderBrightness: {
+            type: 'command',
+            category: 'pen',
+            spec: 'change border shade by %n',
+            defaults: [10]
+        },
+        setBorderBrightness: {
+            type: 'command',
+            category: 'pen',
+            spec: 'set border shade to %n',
             defaults: [100]
         },
         changeSize: {
@@ -530,6 +564,23 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'pen',
             spec: 'pen size',
         },        
+        changeBorderSize: {
+            type: 'command',
+            category: 'pen',
+            spec: 'change border size by %n',
+            defaults: [1]
+        },
+        setBorderSize: {
+            type: 'command',
+            category: 'pen',
+            spec: 'set border size to %n',
+            defaults: [0]
+        },
+        penBorderSize: {
+            type: 'reporter',
+            category: 'pen',
+            spec: 'get border size',
+        },
         doStamp: {
             type: 'command',
             category: 'pen',
@@ -1248,6 +1299,8 @@ SpriteMorph.prototype.init = function (globals) {
 	this.originalPixels = null;
 	this.colorChange = false; //Flag to check if color change has been applied
 	this.costumeColor = null;
+    this.borderColor = new Color(255,0,0);
+    this.borderSize = 0;
 
     // sprite nesting properties
     this.parts = []; // not serialized, only anchor (name)
@@ -1707,16 +1760,30 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('setColor'));
         blocks.push(block('changeHue'));
         blocks.push(block('setHue'));
-        blocks.push(watcherToggle('penColor'));
-        blocks.push(block('penColor'));
+        blocks.push(watcherToggle('penColor'))
+        blocks.push(block('penColor'))
+        blocks.push('-');
+        blocks.push(block('setBorderColor'));
+        blocks.push(block('changeBorderHue'));
+        blocks.push(block('setBorderHue'));
+        blocks.push(watcherToggle('penBorderColor'))
+        blocks.push(block('penBorderColor'))
         blocks.push('-');
         blocks.push(block('changeBrightness'));
         blocks.push(block('setBrightness'));
+        blocks.push('-');
+        blocks.push(block('changeBorderBrightness'));
+        blocks.push(block('setBorderBrightness'));
         blocks.push('-');
         blocks.push(block('changeSize'));
         blocks.push(block('setSize'));
         blocks.push(watcherToggle('penSize'));
         blocks.push(block('penSize'))
+        blocks.push('-');
+        blocks.push(block('changeBorderSize'));
+        blocks.push(block('setBorderSize'));
+        blocks.push(watcherToggle('penBorderSize'));
+        blocks.push(block('penBorderSize'))
         blocks.push('-');
         blocks.push(block('doStamp'));
 
@@ -2530,6 +2597,39 @@ SpriteMorph.prototype.changeHue = function (delta) {
     this.setHue(this.getHue() + (+delta || 0));
 };
 
+SpriteMorph.prototype.setBorderColor = function (aColor) {
+    var x = this.xPosition(),
+        y = this.yPosition();
+    if (!this.borderColor.eq(aColor)) {
+        this.borderColor = aColor;
+        this.drawNew();
+        this.gotoXY(x, y);
+    }
+};
+
+SpriteMorph.prototype.getBorderHue = function () {
+    return this.borderColor.hsv()[0] * 100;
+};
+
+SpriteMorph.prototype.setBorderHue = function (num) {
+    var hsv = this.borderColor.hsv(),
+        x = this.xPosition(),
+        y = this.yPosition();
+
+    hsv[0] = Math.max(Math.min(+num || 0, 100), 0) / 100;
+    hsv[1] = 1; // we gotta fix this at some time
+    this.borderColor.set_hsv.apply(this.borderColor, hsv);
+    if (!this.costume) {
+        this.drawNew();
+        this.changed();
+    }
+    this.gotoXY(x, y);
+};
+
+SpriteMorph.prototype.changeBorderHue = function (delta) {
+    this.setBorderHue(this.getBorderHue() + (+delta || 0));
+};
+
 SpriteMorph.prototype.getBrightness = function () {
     return this.color.hsv()[2] * 100;
 };
@@ -2551,6 +2651,29 @@ SpriteMorph.prototype.setBrightness = function (num) {
 
 SpriteMorph.prototype.changeBrightness = function (delta) {
     this.setBrightness(this.getBrightness() + (+delta || 0));
+};
+
+SpriteMorph.prototype.getBorderBrightness = function () {
+    return this.borderColor.hsv()[2] * 100;
+};
+
++SpriteMorph.prototype.setBorderBrightness = function (num) {
+    var hsv = this.borderColor.hsv(),
+        x = this.xPosition(),
+        y = this.yPosition();
+
+    hsv[1] = 1; // we gotta fix this at some time
+    hsv[2] = Math.max(Math.min(+num || 0, 100), 0) / 100;
+    this.borderColor.set_hsv.apply(this.borderColor, hsv);
+    if (!this.costume) {
+        this.drawNew();
+        this.changed();
+    }
+    this.gotoXY(x, y);
+};
+
+SpriteMorph.prototype.changeBorderBrightness = function (delta) {
+    this.setBorderBrightness(this.getBorderBrightness() + (+delta || 0));
 };
 
 // SpriteMorph layers
@@ -2635,6 +2758,17 @@ SpriteMorph.prototype.setSize = function (size) {
 
 SpriteMorph.prototype.changeSize = function (delta) {
     this.setSize(this.size + (+delta || 0));
+};
+
+SpriteMorph.prototype.setBorderSize = function (size) {
+    // pen size
+    if (!isNaN(size)) {
+        this.borderSize = Math.min(Math.max(+size, 0.0001), 1000);
+    }
+};
+
+SpriteMorph.prototype.changeBorderSize = function (delta) {
+    this.setBorderSize(this.borderSize + (+delta || 0));
 };
 
 // SpriteMorph scale
@@ -2804,8 +2938,8 @@ SpriteMorph.prototype.drawLine = function (start, dest) {
         ).intersect(this.parent.visibleBounds()).spread();
 
     if (this.isDown) {
-        context.lineWidth = this.size;
-        context.strokeStyle = this.color.toString();
+        context.lineWidth = this.size + this.borderSize;
+        context.strokeStyle = this.borderColor.toString();
         if (this.useFlatLineEnds) {
             context.lineCap = 'butt';
             context.lineJoin = 'miter';
@@ -2814,6 +2948,12 @@ SpriteMorph.prototype.drawLine = function (start, dest) {
             context.lineJoin = 'round';
         }
         context.beginPath();
+        context.moveTo(from.x, from.y); //Draw the border
+        context.lineTo(to.x, to.y);
+        context.stroke();
+
+        context.lineWidth = this.size; //Draw the line
+        context.strokeStyle = this.color.toString();
         context.moveTo(from.x, from.y);
         context.lineTo(to.x, to.y);
         context.stroke();
@@ -2989,6 +3129,14 @@ SpriteMorph.prototype.penColor = function() {
 
 SpriteMorph.prototype.penSize = function () {
     return this.size;
+};
+
+SpriteMorph.prototype.penBorderColor = function() {
+   return this.borderColor.hsv()[0]*100;
+}
+
+SpriteMorph.prototype.penBorderSize = function () {
+    return this.borderSize;
 };
 
 SpriteMorph.prototype.gotoXY = function (x, y, justMe) {
