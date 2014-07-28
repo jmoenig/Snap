@@ -1246,6 +1246,8 @@ SnapTranslator.dict.pt = {
         'a exponencial',
 
     // delimitadores
+    'letter':
+        'letra',
     'whitespace':
         'espaços em branco',
     'line':
@@ -1581,5 +1583,38 @@ SnapTranslator.dict.pt = {
     'arrowRightOutline':
         'contorno de seta para a direita',
     'robot':
-        'robot'
+        'robot',
+    'turn pen trails into new costume...':
+        'transformar traços da caneta em novo traje…',
+    'turn all pen trails and stamps\ninto a new costume for the\ncurrently selected sprite':
+        'Transforma todos os traços da caneta\ne carimbagens num novo traje\n'
+            + 'do actor seleccionado neste momento',
+    'pen':
+        'caneta',
+    'tip':
+        'ponta',
+    'middle':
+        'meio',
+
+    // produção de código
+    'map %cmdRing to %codeKind %code':
+        'mapear %cmdRing no %codeKind %code',
+    'map String to code %code':
+        'mapear texto no código %code',
+    'map %codeListPart of %codeListKind to code %code':
+        'mapear %codeListPart de %codeListKind no código %code',
+    'code of %cmdRing':
+        'o código de %cmdRing',
+    'delimiter':
+        'delimitador',
+    'collection':
+        'colecção',
+    'variables':
+        'variáveis',
+    'parameters':
+        'parâmetros',
+    'code':
+        'código',
+    'header':
+        'cabeçalho'
 };
