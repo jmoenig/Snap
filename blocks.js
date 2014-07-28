@@ -1626,7 +1626,7 @@ SyntaxElementMorph.prototype.showBubble = function (value) {
         txt,
         img,
         morphToShow,
-        isClickable = false,
+        isClickable = false || this.world().isDevMode,
         wrrld = this.world();
 
     if ((value === undefined) || !wrrld) {
