@@ -83,7 +83,7 @@ ArgLabelMorph, localize, XML_Element, hex_sha512*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.threads = '2014-July-27';
+modules.threads = '2014-July-28';
 
 var ThreadManager;
 var Process;
@@ -743,7 +743,7 @@ Process.prototype.reifyPredicate = function (topBlock, parameterNames) {
 
 Process.prototype.reportJSFunction = function (parmNames, body) {
     return Function.apply(
-        Object.create(null),
+        null,
         parmNames.asArray().concat([body])
     );
 };
@@ -759,7 +759,10 @@ Process.prototype.evaluate = function (
 ) {
     if (!context) {return null; }
     if (context instanceof Function) {
-        return context.apply(this.homeContext.receiver, args.asArray());
+        return context.apply(
+            this.homeContext.receiver,
+            args.asArray().concat([this])
+        );
     }
     if (context.isContinuation) {
         return this.runContinuation(context, args);
