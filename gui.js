@@ -1890,19 +1890,19 @@ IDE_Morph.prototype.snapMenu = function () {
     menu.addItem(
         'Reference manual',
         function () {
-            window.open('help/SnapManual.pdf', 'SnapReferenceManual');
+            openURI('help/SnapManual.pdf', 'SnapReferenceManual');
         }
     );
     menu.addItem(
         'Snap! website',
         function () {
-            window.open('http://snap.berkeley.edu/', 'SnapWebsite');
+            openURI('http://snap.berkeley.edu/', 'SnapWebsite');
         }
     );
     menu.addItem(
         'Download source',
         function () {
-            window.open(
+            openURI(
                 'http://snap.berkeley.edu/snapsource/snap.zip',
                 'SnapSource'
             );
@@ -2032,7 +2032,7 @@ IDE_Morph.prototype.cloudMenu = function () {
                             function (projectData) {
                                 var msg;
                                 if (!Process.prototype.isCatchingErrors) {
-                                    window.open(
+                                    openURI(
                                         'data:text/xml,' + projectData
                                     );
                                 }
@@ -2710,7 +2710,7 @@ IDE_Morph.prototype.newProject = function () {
         this.stage.destroy();
     }
     if (location.hash.substr(0, 6) !== '#lang:') {
-        location.hash = '';
+        setLocationHash('');
     }
     this.globalVariables = new VariableFrame();
     this.currentSprite = new SpriteMorph(this.globalVariables);
@@ -2766,7 +2766,7 @@ IDE_Morph.prototype.rawSaveProject = function (name) {
             try {
                 localStorage['-snap-project-' + name]
                     = str = this.serializer.serialize(this.stage);
-                location.hash = '#open:' + str;
+                setLocationHash('#open:' + str);
                 this.showMessage('Saved!', 1);
             } catch (err) {
                 this.showMessage('Save failed: ' + err);
@@ -2774,7 +2774,7 @@ IDE_Morph.prototype.rawSaveProject = function (name) {
         } else {
             localStorage['-snap-project-' + name]
                 = str = this.serializer.serialize(this.stage);
-            location.hash = '#open:' + str;
+            setLocationHash('#open:' + str);
             this.showMessage('Saved!', 1);
         }
     }
@@ -2815,8 +2815,8 @@ IDE_Morph.prototype.exportProject = function (name, plain) {
                 str = encodeURIComponent(
                     this.serializer.serialize(this.stage)
                 );
-                location.hash = '#open:' + str;
-                window.open('data:text/'
+                setLocationHash('#open:' + str);
+                openURI('data:text/'
                     + (plain ? 'plain,' + str : 'xml,' + str));
                 menu.destroy();
                 this.showMessage('Exported!', 1);
@@ -2828,8 +2828,8 @@ IDE_Morph.prototype.exportProject = function (name, plain) {
             str = encodeURIComponent(
                 this.serializer.serialize(this.stage)
             );
-            location.hash = '#open:' + str;
-            window.open('data:text/'
+            setLocationHash('#open:' + str);
+            openURI('data:text/'
                 + (plain ? 'plain,' + str : 'xml,' + str));
             menu.destroy();
             this.showMessage('Exported!', 1);
@@ -2854,7 +2854,7 @@ IDE_Morph.prototype.exportGlobalBlocks = function () {
 
 IDE_Morph.prototype.exportSprite = function (sprite) {
     var str = this.serializer.serialize(sprite);
-    window.open('data:text/xml,<sprites app="'
+    openURI('data:text/xml,<sprites app="'
         + this.serializer.app
         + '" version="'
         + this.serializer.version
@@ -2910,7 +2910,7 @@ IDE_Morph.prototype.exportScriptsPicture = function () {
         y += each.height;
     });
 
-    window.open(pic.toDataURL());
+    openURI(pic.toDataURL());
 };
 
 IDE_Morph.prototype.openProjectString = function (str) {
@@ -3086,7 +3086,7 @@ IDE_Morph.prototype.openProject = function (name) {
         this.setProjectName(name);
         str = localStorage['-snap-project-' + name];
         this.openProjectString(str);
-        location.hash = '#open:' + str;
+        setLocationHash('#open:' + str);
     }
 };
 
@@ -3815,7 +3815,7 @@ IDE_Morph.prototype.exportProjectMedia = function (name) {
                 media = encodeURIComponent(
                     this.serializer.mediaXML(name)
                 );
-                window.open('data:text/xml,' + media);
+                openURI('data:text/xml,' + media);
                 menu.destroy();
                 this.showMessage('Exported!', 1);
             } catch (err) {
@@ -3830,7 +3830,7 @@ IDE_Morph.prototype.exportProjectMedia = function (name) {
             media = encodeURIComponent(
                 this.serializer.mediaXML()
             );
-            window.open('data:text/xml,' + media);
+            openURI('data:text/xml,' + media);
             menu.destroy();
             this.showMessage('Exported!', 1);
         }
@@ -3851,7 +3851,7 @@ IDE_Morph.prototype.exportProjectNoMedia = function (name) {
                 str = encodeURIComponent(
                     this.serializer.serialize(this.stage)
                 );
-                window.open('data:text/xml,' + str);
+                openURI('data:text/xml,' + str);
                 menu.destroy();
                 this.showMessage('Exported!', 1);
             } catch (err) {
@@ -3863,7 +3863,7 @@ IDE_Morph.prototype.exportProjectNoMedia = function (name) {
             str = encodeURIComponent(
                 this.serializer.serialize(this.stage)
             );
-            window.open('data:text/xml,' + str);
+            openURI('data:text/xml,' + str);
             menu.destroy();
             this.showMessage('Exported!', 1);
         }
@@ -3890,7 +3890,7 @@ IDE_Morph.prototype.exportProjectAsCloudData = function (name) {
                     + str
                     + media
                     + encodeURIComponent('</snapdata>');
-                window.open('data:text/xml,' + dta);
+                openURI('data:text/xml,' + dta);
                 menu.destroy();
                 this.showMessage('Exported!', 1);
             } catch (err) {
@@ -3909,7 +3909,7 @@ IDE_Morph.prototype.exportProjectAsCloudData = function (name) {
                 + str
                 + media
                 + encodeURIComponent('</snapdata>');
-            window.open('data:text/xml,' + dta);
+            openURI('data:text/xml,' + dta);
             menu.destroy();
             this.showMessage('Exported!', 1);
         }
@@ -4712,10 +4712,10 @@ ProjectDialogMorph.prototype.rawOpenCloudProject = function (proj) {
                     myself.ide.source = 'cloud';
                     myself.ide.droppedText(response[0].SourceCode);
                     if (proj.Public === 'true') {
-                        location.hash = '#present:Username=' +
+                        setLocationHash('#present:Username=' +
                             encodeURIComponent(SnapCloud.username) +
                             '&ProjectName=' +
-                            encodeURIComponent(proj.ProjectName);
+                            encodeURIComponent(proj.ProjectName));
                     }
                 },
                 myself.ide.cloudError(),
@@ -5248,7 +5248,7 @@ SpriteIconMorph.prototype.userMenu = function () {
         menu.addItem(
             'pic...',
             function () {
-                window.open(myself.object.fullImageClassic().toDataURL());
+                openURI(myself.object.fullImageClassic().toDataURL());
             },
             'open a new window\nwith a picture of the stage'
         );
@@ -5598,9 +5598,9 @@ CostumeIconMorph.prototype.removeCostume = function () {
 
 CostumeIconMorph.prototype.exportCostume = function () {
     if (this.object instanceof SVG_Costume) {
-        window.open(this.object.contents.src);
+        openURI(this.object.contents.src);
     } else { // rastered Costume
-        window.open(this.object.contents.toDataURL());
+        openURI(this.object.contents.toDataURL());
     }
 };
 
