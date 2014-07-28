@@ -716,9 +716,9 @@ SnapTranslator.dict.fr = {
     'Flat design':
         'Style al\u00E9g\u00E9',
     'check for alternative\nGUI design':
-        'Cocher pour un style d\interface alternatif',
+        'Cocher pour un style d\'interface alternatif',
     'uncheck for default\nGUI design':
-	'D\u00E9cocher pour le style classique d\interface',		
+	'D\u00E9cocher pour le style classique d\'interface',		
     'Thread safe scripts':
         'Scripts réentrants',
     'check to disallow\nscript reentrance':
