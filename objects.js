@@ -2642,7 +2642,7 @@ SpriteMorph.prototype.exportSprite = function () {
 
 SpriteMorph.prototype.edit = function () {
     var ide = this.parentThatIsA(IDE_Morph);
-    if (ide) {
+    if (ide && !ide.isAppMode) {
         ide.selectSprite(this);
     }
 };
@@ -3482,6 +3482,10 @@ SpriteMorph.prototype.mouseClickLeft = function () {
         procs.push(stage.threads.startProcess(block, stage.isThreadSafe));
     });
     return procs;
+};
+
+SpriteMorph.prototype.mouseDoubleClick = function () {
+    this.edit();
 };
 
 // SpriteMorph timer
