@@ -185,7 +185,7 @@ SnapTranslator.dict.pt = {
     'translator_e-mail':
         'mmsequeira@gmail.com',
     'last_changed':
-        '2014-05-26',
+        '2014-07-29',
 
     // GUI
     // control bar:
