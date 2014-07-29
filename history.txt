@@ -2249,3 +2249,4 @@ ______
 * updated Portuguese translation, thanks, Manuel!
 * updated German translation
 * Morphic: fixed #497 (prevent bubble shadows from getting cut-off)
+* Blocks: keep result-bubbles within the enclosing scripting pane
