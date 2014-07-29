@@ -2850,7 +2850,7 @@ IDE_Morph.prototype.exportGlobalBlocks = function () {
 };
 
 IDE_Morph.prototype.exportSprite = function (sprite) {
-    var str = this.serializer.serialize(sprite);
+    var str = this.serializer.serialize(sprite.allParts());
     window.open('data:text/xml,<sprites app="'
         + this.serializer.app
         + '" version="'
