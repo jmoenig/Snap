@@ -2248,3 +2248,4 @@ ______
 * Objects: added ‘move’ option to the sprite context menu, lets the user move (nested) sprites in edit mode without changing their layering, and also sprites marked “undraggable” 
 * updated Portuguese translation, thanks, Manuel!
 * updated German translation
+* Morphic: fixed #497 (prevent bubble shadows from getting cut-off)
