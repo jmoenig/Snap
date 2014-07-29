@@ -1035,7 +1035,7 @@
 /*global window, HTMLCanvasElement, getMinimumFontHeight, FileReader, Audio,
 FileList, getBlurredShadowSupport*/
 
-var morphicVersion = '2014-July-11';
+var morphicVersion = '2014-July-29';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = getBlurredShadowSupport(); // check for Chrome-bug
 
@@ -5120,7 +5120,7 @@ SpeechBubbleMorph.prototype.popUp = function (world, pos, isClickable) {
     this.addShadow(new Point(2, 2), 80);
     this.keepWithin(world);
     world.add(this);
-    this.changed();
+    this.fullChanged();
     world.hand.destroyTemporaries();
     world.hand.temporaries.push(this);
 
