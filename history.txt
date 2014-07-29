@@ -2242,3 +2242,4 @@ ______
 140729
 ------
 * fixed #526, thanks, Bernat, for reporting it!
+* Objects, GUI: duplicate and clone nested sprites
