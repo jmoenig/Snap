@@ -2243,3 +2243,4 @@ ______
 ------
 * fixed #526, thanks, Bernat, for reporting it!
 * Objects, GUI: duplicate and clone nested sprites
+* GUI, Store: export and import nested sprites
