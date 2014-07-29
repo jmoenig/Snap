@@ -1246,6 +1246,8 @@ SnapTranslator.dict.pt = {
         'a exponencial',
 
     // delimitadores
+    'letter':
+        'letra',
     'whitespace':
         'espaços em branco',
     'line':
@@ -1581,5 +1583,55 @@ SnapTranslator.dict.pt = {
     'arrowRightOutline':
         'contorno de seta para a direita',
     'robot':
-        'robot'
+        'robot',
+    'turn pen trails into new costume...':
+        'transformar traços da caneta em novo traje…',
+    'turn all pen trails and stamps\ninto a new costume for the\ncurrently selected sprite':
+        'Transforma todos os traços da caneta\ne carimbagens num novo traje\n'
+            + 'do actor seleccionado neste momento',
+    'pen':
+        'caneta',
+    'tip':
+        'ponta',
+    'middle':
+        'meio',
+
+    // produção de código
+    'map %cmdRing to %codeKind %code':
+        'mapear %cmdRing no %codeKind %code',
+    'map String to code %code':
+        'mapear texto no código %code',
+    'map %codeListPart of %codeListKind to code %code':
+        'mapear %codeListPart de %codeListKind no código %code',
+    'code of %cmdRing':
+        'o código de %cmdRing',
+    'delimiter':
+        'delimitador',
+    'collection':
+        'colecção',
+    'variables':
+        'variáveis',
+    'parameters':
+        'parâmetros',
+    'code':
+        'código',
+    'header':
+        'cabeçalho',
+    'header mapping...':
+        'mapeamento para cabeçalho…',
+    'code mapping...':
+        'mapeamento para código…',
+    'Code mapping':
+        'Mapeamento para código',
+    'Header mapping':
+        'Mapeamento para cabeçalho',
+    'Enter code that corresponds to the block\'s definition. Use the formal parameter\nnames as shown and <body> to reference the definition body\'s generated text code.':
+        'Introduza o código correspondente à definição do bloco. Use os nomes dos parâmetros\n'
+            + 'tal como mostrados e use <body> para referenciar o código gerado da definição do corpo',
+    'Enter code that corresponds to the block\'s definition. Choose your own\nformal parameter names (ignoring the ones shown).':
+        'Introduza o código correspondente à definição do bloco. Escolha os seus próprios\n'
+            + 'nomes para os parâmetros (ignorando os nomes mostrados).',
+    'Enter code that corresponds to the block\'s operation (usually a single\nfunction invocation). Use <#n> to reference actual arguments as shown.':
+        'Introduza o código que corresponda à operação do bloco (normalmente uma simples\n'
+            + 'invocação de rotina). Use <#n> para referenciar os argumentos tal como mostrado'
 };
