@@ -2238,3 +2238,7 @@ ______
 ------
 * Lists: fixed "Load Failed Type Error Cannot read property 'isLinked' of null"
 * Threads: enable “JS function” block to create custom control structures and HOFs
+
+140729
+------
+* fixed #526, thanks, Bernat, for reporting it!

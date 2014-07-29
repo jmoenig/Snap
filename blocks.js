@@ -155,7 +155,7 @@ DialogBoxMorph, BlockInputFragmentMorph, PrototypeHatBlockMorph, Costume*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2014-July-18';
+modules.blocks = '2014-July-29';
 
 
 var SyntaxElementMorph;
@@ -2093,7 +2093,15 @@ BlockMorph.prototype.userMenu = function () {
     menu.addItem(
         "duplicate",
         function () {
-            this.fullCopy().pickUp(world);
+            var dup = myself.fullCopy(),
+                ide = myself.parentThatIsA(IDE_Morph);
+            dup.pickUp(world);
+            if (ide) {
+                world.hand.grabOrigin = {
+                    origin: ide.palette,
+                    position: ide.palette.center()
+                };
+            }
         },
         'make a copy\nand pick it up'
     );
