@@ -2618,6 +2618,7 @@ SpriteMorph.prototype.userMenu = function () {
     }
     menu.addItem("duplicate", 'duplicate');
     menu.addItem("delete", 'remove');
+    menu.addItem("move", 'move');
     menu.addItem("edit", 'edit');
     menu.addLine();
     if (this.anchor) {
