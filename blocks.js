@@ -1627,6 +1627,7 @@ SyntaxElementMorph.prototype.showBubble = function (value) {
         img,
         morphToShow,
         isClickable = false,
+        sf = this.parentThatIsA(ScrollFrameMorph),
         wrrld = this.world();
 
     if ((value === undefined) || !wrrld) {
@@ -1694,6 +1695,9 @@ SyntaxElementMorph.prototype.showBubble = function (value) {
         this.rightCenter().add(new Point(2, 0)),
         isClickable
     );
+    if (sf) {
+        bubble.keepWithin(sf);
+    }
 };
 
 // SyntaxElementMorph code mapping
