@@ -69,7 +69,7 @@ SpeechBubbleMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2014-July-29';
+modules.gui = '2014-July-30';
 
 // Declarations
 
@@ -243,8 +243,8 @@ IDE_Morph.prototype.openIn = function (world) {
         if (usr) {
             usr = SnapCloud.parseResponse(usr)[0];
             if (usr) {
-                SnapCloud.username = usr.username || null;
-                SnapCloud.password = usr.password || null;
+                SnapCloud.login(usr.username, usr.password, 
+                        function() {}, myself.cloudError());
             }
         }
     }
@@ -338,12 +338,11 @@ IDE_Morph.prototype.openIn = function (world) {
             this.parent.add(this.shield);
             myself.showMessage('Fetching project\nfrom the cloud...');
 
-            // make sure to lowercase the username
             dict = SnapCloud.parseDict(location.hash.substr(9));
-            dict.Username = dict.Username.toLowerCase();
+            dict.Username = dict.Username;
 
             SnapCloud.getPublicProject(
-                SnapCloud.encodeDict(dict),
+                dict,
                 function (projectData) {
                     var msg;
                     myself.nextSteps([
@@ -375,8 +374,6 @@ IDE_Morph.prototype.openIn = function (world) {
             urlLanguage = location.hash.substr(6);
             this.setLanguage(urlLanguage);
             this.loadNewProject = true;
-        } else if (location.hash.substr(0, 7) === '#signup') {
-            this.createCloudAccount();
         }
     }
 
@@ -1935,36 +1932,15 @@ IDE_Morph.prototype.cloudMenu = function () {
         shiftClicked = (world.currentKey === 16);
 
     menu = new MenuMorph(this);
-    if (shiftClicked) {
-        menu.addItem(
-            'url...',
-            'setCloudURL',
-            null,
-            new Color(100, 0, 0)
-        );
-        menu.addLine();
-    }
     if (!SnapCloud.username) {
         menu.addItem(
             'Login...',
             'initializeCloud'
         );
-        menu.addItem(
-            'Signup...',
-            'createCloudAccount'
-        );
-        menu.addItem(
-            'Reset Password...',
-            'resetCloudPassword'
-        );
     } else {
         menu.addItem(
             localize('Logout') + ' ' + SnapCloud.username,
             'logout'
-        );
-        menu.addItem(
-            'Change Password...',
-            'changeCloudPassword'
         );
     }
     if (shiftClicked) {
@@ -2007,53 +1983,6 @@ IDE_Morph.prototype.cloudMenu = function () {
                         myself.exportProjectAsCloudData(name);
                     }, null, 'exportProject');
                 }
-            },
-            null,
-            new Color(100, 0, 0)
-        );
-        menu.addLine();
-        menu.addItem(
-            'open shared project from cloud...',
-            function () {
-                myself.prompt('Author name…', function (usr) {
-                    myself.prompt('Project name...', function (prj) {
-                        var id = 'Username=' +
-                            encodeURIComponent(usr.toLowerCase()) +
-                            '&ProjectName=' +
-                            encodeURIComponent(prj);
-                        myself.showMessage(
-                            'Fetching project\nfrom the cloud...'
-                        );
-                        SnapCloud.getPublicProject(
-                            id,
-                            function (projectData) {
-                                var msg;
-                                if (!Process.prototype.isCatchingErrors) {
-                                    window.open(
-                                        'data:text/xml,' + projectData
-                                    );
-                                }
-                                myself.nextSteps([
-                                    function () {
-                                        msg = myself.showMessage(
-                                            'Opening project...'
-                                        );
-                                    },
-                                    function () {
-                                        myself.rawOpenCloudDataString(
-                                            projectData
-                                        );
-                                    },
-                                    function () {
-                                        msg.destroy();
-                                    }
-                                ]);
-                            },
-                            myself.cloudError()
-                        );
-
-                    }, null, 'project');
-                }, null, 'project');
             },
             null,
             new Color(100, 0, 0)
@@ -3623,17 +3552,17 @@ IDE_Morph.prototype.initializeCloud = function () {
     new DialogBoxMorph(
         null,
         function (user) {
-            var pwh = hex_sha512(user.password),
+            var pw = user.password,
                 str;
             SnapCloud.login(
                 user.username,
-                pwh,
+                pw,
                 function () {
                     if (user.choice) {
                         str = SnapCloud.encodeDict(
                             {
                                 username: user.username,
-                                password: pwh
+                                password: pw
                             }
                         );
                         localStorage['-snap-user'] = str;
@@ -3658,128 +3587,14 @@ IDE_Morph.prototype.initializeCloud = function () {
     );
 };
 
-IDE_Morph.prototype.createCloudAccount = function () {
-    var myself = this,
-        world = this.world();
-/*
-    // force-logout, commented out for now:
-    delete localStorage['-snap-user'];
-    SnapCloud.clear();
-*/
-    new DialogBoxMorph(
-        null,
-        function (user) {
-            SnapCloud.signup(
-                user.username,
-                user.email,
-                function (txt, title) {
-                    new DialogBoxMorph().inform(
-                        title,
-                        txt +
-                            '.\n\nAn e-mail with your password\n' +
-                            'has been sent to the address provided',
-                        world,
-                        myself.cloudIcon(null, new Color(0, 180, 0))
-                    );
-                },
-                myself.cloudError()
-            );
-        }
-    ).withKey('cloudsignup').promptCredentials(
-        'Sign up',
-        'signup',
-        'http://snap.berkeley.edu/tos.html',
-        'Terms of Service...',
-        'http://snap.berkeley.edu/privacy.html',
-        'Privacy...',
-        'I have read and agree\nto the Terms of Service',
-        world,
-        myself.cloudIcon(),
-        myself.cloudMsg
-    );
-};
-
-IDE_Morph.prototype.resetCloudPassword = function () {
-    var myself = this,
-        world = this.world();
-/*
-    // force-logout, commented out for now:
-    delete localStorage['-snap-user'];
-    SnapCloud.clear();
-*/
-    new DialogBoxMorph(
-        null,
-        function (user) {
-            SnapCloud.resetPassword(
-                user.username,
-                function (txt, title) {
-                    new DialogBoxMorph().inform(
-                        title,
-                        txt +
-                            '.\n\nAn e-mail with a link to\n' +
-                            'reset your password\n' +
-                            'has been sent to the address provided',
-                        world,
-                        myself.cloudIcon(null, new Color(0, 180, 0))
-                    );
-                },
-                myself.cloudError()
-            );
-        }
-    ).withKey('cloudresetpassword').promptCredentials(
-        'Reset password',
-        'resetPassword',
-        null,
-        null,
-        null,
-        null,
-        null,
-        world,
-        myself.cloudIcon(),
-        myself.cloudMsg
-    );
-};
-
-IDE_Morph.prototype.changeCloudPassword = function () {
-    var myself = this,
-        world = this.world();
-    new DialogBoxMorph(
-        null,
-        function (user) {
-            SnapCloud.changePassword(
-                user.oldpassword,
-                user.password,
-                function () {
-                    myself.logout();
-                    myself.showMessage('password has been changed.', 2);
-                },
-                myself.cloudError()
-            );
-        }
-    ).withKey('cloudpassword').promptCredentials(
-        'Change Password',
-        'changePassword',
-        null,
-        null,
-        null,
-        null,
-        null,
-        world,
-        myself.cloudIcon(),
-        myself.cloudMsg
-    );
-};
-
 IDE_Morph.prototype.logout = function () {
     var myself = this;
     delete localStorage['-snap-user'];
     SnapCloud.logout(
         function () {
-            SnapCloud.clear();
             myself.showMessage('disconnected.', 2);
         },
         function () {
-            SnapCloud.clear();
             myself.showMessage('disconnected.', 2);
         }
     );
@@ -4010,31 +3825,6 @@ IDE_Morph.prototype.cloudIcon = function (height, color) {
     return icon;
 };
 
-IDE_Morph.prototype.setCloudURL = function () {
-    new DialogBoxMorph(
-        null,
-        function (url) {
-            SnapCloud.url = url;
-        }
-    ).withKey('cloudURL').prompt(
-        'Cloud URL',
-        SnapCloud.url,
-        this.world(),
-        null,
-        {
-            'Snap!Cloud' :
-                'https://snapcloud.miosoft.com/miocon/app/' +
-                    'login?_app=SnapCloud',
-            'local network lab' :
-                '192.168.2.107:8087/miocon/app/login?_app=SnapCloud',
-            'local network office' :
-                '192.168.186.146:8087/miocon/app/login?_app=SnapCloud',
-            'localhost dev' :
-                'localhost/miocon/app/login?_app=SnapCloud'
-        }
-    );
-};
-
 // IDE_Morph synchronous Http data fetching
 
 IDE_Morph.prototype.getURL = function (url) {
@@ -4142,8 +3932,6 @@ ProjectDialogMorph.prototype.init = function (ide, task) {
     this.notesText = null;
     this.notesField = null;
     this.deleteButton = null;
-    this.shareButton = null;
-    this.unshareButton = null;
 
     // initialize inherited properties:
     ProjectDialogMorph.uber.init.call(
@@ -4283,10 +4071,6 @@ ProjectDialogMorph.prototype.buildContents = function () {
         this.addButton('saveProject', 'Save');
         this.action = 'saveProject';
     }
-    this.shareButton = this.addButton('shareProject', 'Share');
-    this.unshareButton = this.addButton('unshareProject', 'Unshare');
-    this.shareButton.hide();
-    this.unshareButton.hide();
     this.deleteButton = this.addButton('deleteProject', 'Delete');
     this.addButton('cancel', 'Cancel');
 
@@ -4516,8 +4300,6 @@ ProjectDialogMorph.prototype.setSource = function (source) {
         };
     }
     this.body.add(this.listField);
-    this.shareButton.hide();
-    this.unshareButton.hide();
     if (this.source === 'local') {
         this.deleteButton.show();
     } else { // examples
@@ -4594,12 +4376,7 @@ ProjectDialogMorph.prototype.installCloudProjectList = function (pl) {
                 function (element) {
                     return element.ProjectName;
                 } : null,
-        [ // format: display shared project names bold
-            [
-                'bold',
-                function (proj) {return proj.Public === 'true'; }
-            ]
-        ],
+        [],
         function () {myself.ok(); }
     );
     this.fixListFieldItemColors();
@@ -4635,20 +4412,11 @@ ProjectDialogMorph.prototype.installCloudProjectList = function (pl) {
                 myself.preview.rightCenter().add(new Point(2, 0))
             );
         }
-        if (item.Public === 'true') {
-            myself.shareButton.hide();
-            myself.unshareButton.show();
-        } else {
-            myself.unshareButton.hide();
-            myself.shareButton.show();
-        }
         myself.buttons.fixLayout();
         myself.fixLayout();
         myself.edit();
     };
     this.body.add(this.listField);
-    this.shareButton.show();
-    this.unshareButton.hide();
     this.deleteButton.show();
     this.buttons.fixLayout();
     this.fixLayout();
@@ -4700,24 +4468,12 @@ ProjectDialogMorph.prototype.openCloudProject = function (project) {
 
 ProjectDialogMorph.prototype.rawOpenCloudProject = function (proj) {
     var myself = this;
-    SnapCloud.reconnect(
-        function () {
-            SnapCloud.callService(
-                'getProject',
-                function (response) {
-                    SnapCloud.disconnect();
-                    myself.ide.source = 'cloud';
-                    myself.ide.droppedText(response[0].SourceCode);
-                    if (proj.Public === 'true') {
-                        location.hash = '#present:Username=' +
-                            encodeURIComponent(SnapCloud.username) +
-                            '&ProjectName=' +
-                            encodeURIComponent(proj.ProjectName);
-                    }
-                },
-                myself.ide.cloudError(),
-                [proj.ProjectName]
-            );
+    SnapCloud.getProject(
+        {'projectname': proj.ProjectName, 'username': SnapCloud.username},
+        function (code, media) {
+            myself.ide.source = 'cloud';
+            myself.ide.droppedText(media);
+            myself.ide.droppedText(code);
         },
         myself.ide.cloudError()
     );
@@ -4789,141 +4545,6 @@ ProjectDialogMorph.prototype.saveCloudProject = function () {
         this.ide.cloudError()
     );
     this.destroy();
-};
-
-ProjectDialogMorph.prototype.deleteProject = function () {
-    var myself = this,
-        proj,
-        idx,
-        name;
-
-    if (this.source === 'cloud') {
-        proj = this.listField.selected;
-        if (proj) {
-            this.ide.confirm(
-                localize(
-                    'Are you sure you want to delete'
-                ) + '\n"' + proj.ProjectName + '"?',
-                'Delete Project',
-                function () {
-                    SnapCloud.reconnect(
-                        function () {
-                            SnapCloud.callService(
-                                'deleteProject',
-                                function () {
-                                    SnapCloud.disconnect();
-                                    myself.ide.hasChangedMedia = true;
-                                    idx = myself.projectList.indexOf(proj);
-                                    myself.projectList.splice(idx, 1);
-                                    myself.installCloudProjectList(
-                                        myself.projectList
-                                    ); // refresh list
-                                },
-                                myself.ide.cloudError(),
-                                [proj.ProjectName]
-                            );
-                        },
-                        myself.ide.cloudError()
-                    );
-                }
-            );
-        }
-    } else { // 'local, examples'
-        if (this.listField.selected) {
-            name = this.listField.selected.name;
-            this.ide.confirm(
-                localize(
-                    'Are you sure you want to delete'
-                ) + '\n"' + name + '"?',
-                'Delete Project',
-                function () {
-                    delete localStorage['-snap-project-' + name];
-                    myself.setSource(myself.source); // refresh list
-                }
-            );
-        }
-    }
-};
-
-ProjectDialogMorph.prototype.shareProject = function () {
-    var myself = this,
-        proj = this.listField.selected,
-        entry = this.listField.active;
-
-    if (proj) {
-        this.ide.confirm(
-            localize(
-                'Are you sure you want to publish'
-            ) + '\n"' + proj.ProjectName + '"?',
-            'Share Project',
-            function () {
-                myself.ide.showMessage('sharing\nproject...');
-                SnapCloud.reconnect(
-                    function () {
-                        SnapCloud.callService(
-                            'publishProject',
-                            function () {
-                                SnapCloud.disconnect();
-                                proj.Public = 'true';
-                                myself.unshareButton.show();
-                                myself.shareButton.hide();
-                                entry.label.isBold = true;
-                                entry.label.drawNew();
-                                entry.label.changed();
-                                myself.buttons.fixLayout();
-                                myself.drawNew();
-                                myself.ide.showMessage('shared.', 2);
-                            },
-                            myself.ide.cloudError(),
-                            [proj.ProjectName]
-                        );
-                    },
-                    myself.ide.cloudError()
-                );
-            }
-        );
-    }
-};
-
-ProjectDialogMorph.prototype.unshareProject = function () {
-    var myself = this,
-        proj = this.listField.selected,
-        entry = this.listField.active;
-
-
-    if (proj) {
-        this.ide.confirm(
-            localize(
-                'Are you sure you want to unpublish'
-            ) + '\n"' + proj.ProjectName + '"?',
-            'Unshare Project',
-            function () {
-                myself.ide.showMessage('unsharing\nproject...');
-                SnapCloud.reconnect(
-                    function () {
-                        SnapCloud.callService(
-                            'unpublishProject',
-                            function () {
-                                SnapCloud.disconnect();
-                                proj.Public = 'false';
-                                myself.shareButton.show();
-                                myself.unshareButton.hide();
-                                entry.label.isBold = false;
-                                entry.label.drawNew();
-                                entry.label.changed();
-                                myself.buttons.fixLayout();
-                                myself.drawNew();
-                                myself.ide.showMessage('unshared.', 2);
-                            },
-                            myself.ide.cloudError(),
-                            [proj.ProjectName]
-                        );
-                    },
-                    myself.ide.cloudError()
-                );
-            }
-        );
-    }
 };
 
 ProjectDialogMorph.prototype.edit = function () {
