@@ -1188,24 +1188,6 @@ SnapTranslator.dict.zh = {
         '任意',
 
     // missing entries
-    'Untitled':
-        '无标题',
-    'Open Project':
-        '打开项目',
-    'Open':
-        '打开',
-    '(empty)':
-        '(空)',
-    'Saved!':
-        '已保存！',
-    'Delete Project':
-        '删除项目',
-    'Are you sure you want to delete':
-        '你确定要删除吗？',
-    'unringify':
-        '删除环',
-    'rename...':
-        '重命名为...',
     '(180) down':
         '(180) 下',
     'Ok':

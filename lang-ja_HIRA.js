@@ -1204,12 +1204,6 @@ SnapTranslator.dict.ja_HIRA = {
         'ログアウトするまでこのコンピューターに\nサインインしたままにする',
     'Sign up':
         'サインアップ',
-    'User name:':
-        'ユーザーめい:',
-    'Password:':
-        'パスワード:',
-    'Birth date:':
-        'たんじょうづき:',
     'Birth date:':
         'とし:',
     'January':

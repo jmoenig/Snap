@@ -1188,24 +1188,6 @@ SnapTranslator.dict.tw = {
         '任意',
 
     // missing entries
-    'Untitled':
-        '無標題',
-    'Open Project':
-        '打開專案',
-    'Open':
-        '打開',
-    '(empty)':
-        '(空)',
-    'Saved!':
-        '已保存！',
-    'Delete Project':
-        '刪除項目',
-    'Are you sure you want to delete':
-        '確定要刪除嗎？',
-    'unringify':
-        '刪除環',
-    'rename...':
-        '重命名為...',
     '(180) down':
         '(180) 下',
     'Ok':

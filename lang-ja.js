@@ -1204,12 +1204,6 @@ SnapTranslator.dict.ja = {
         'ログアウトするまでこのコンピューターに\nサインインしたままにする',
     'Sign up':
         'サインアップ',
-    'User name:':
-        'ユーザー名:',
-    'Password:':
-        'パスワード:',
-    'Birth date:':
-        '誕生月:',
     'Birth date:':
         '年:',
     'January':
