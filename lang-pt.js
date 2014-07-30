@@ -1597,6 +1597,10 @@ SnapTranslator.dict.pt = {
         'ponta',
     'middle':
         'meio',
+    'script pic with result...':
+        'fotografia do guião com o seu resultado…',
+    'open a new window\nwith a picture of both\nthis script and its result':
+        'Abrir uma nova janela com\numa fotografia deste guião\ne do seu resultado.',
 
     // produção de código
     'map %cmdRing to %codeKind %code':
