@@ -2238,3 +2238,21 @@ ______
 ------
 * Lists: fixed "Load Failed Type Error Cannot read property 'isLinked' of null"
 * Threads: enable “JS function” block to create custom control structures and HOFs
+
+140729
+------
+* fixed #526, thanks, Bernat, for reporting it!
+* Objects, GUI: duplicate and clone nested sprites
+* GUI, Store: export and import nested sprites
+* Objects: double clicking on a sprite in the stage selects it in the IDE
+* Objects: added ‘move’ option to the sprite context menu, lets the user move (nested) sprites in edit mode without changing their layering, and also sprites marked “undraggable” 
+* updated Portuguese translation, thanks, Manuel!
+* updated German translation
+* Morphic: fixed #497 (prevent bubble shadows from getting cut-off)
+* Blocks: keep result-bubbles within the enclosing scripting pane
+
+140730
+------
+* Objects: propagate HIDE and SHOW to nested sprite parts
+* GUI: propagate DELETE to nested sprite parts
+* Blocks, Threads: export script pic with result bubble (shift-context-menu of reporter scripts)
