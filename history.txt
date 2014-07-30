@@ -2254,3 +2254,4 @@ ______
 140730
 ------
 * Objects: propagate HIDE and SHOW to nested sprite parts
+* GUI: propagate DELETE to nested sprite parts
