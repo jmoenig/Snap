@@ -2255,3 +2255,4 @@ ______
 ------
 * Objects: propagate HIDE and SHOW to nested sprite parts
 * GUI: propagate DELETE to nested sprite parts
+* Blocks, Threads: export script pic with result bubble (shift-context-menu of reporter scripts)
