@@ -835,6 +835,8 @@ SnapTranslator.dict.pt = {
     // actores:
     'edit':
         'editar',
+    'move':
+        'mover',
     'detach from':
         'soltar de',
     'detach all parts':

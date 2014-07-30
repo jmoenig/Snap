@@ -2250,3 +2250,9 @@ ______
 * updated German translation
 * Morphic: fixed #497 (prevent bubble shadows from getting cut-off)
 * Blocks: keep result-bubbles within the enclosing scripting pane
+
+140730
+------
+* Objects: propagate HIDE and SHOW to nested sprite parts
+* GUI: propagate DELETE to nested sprite parts
+* Blocks, Threads: export script pic with result bubble (shift-context-menu of reporter scripts)

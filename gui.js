@@ -1828,7 +1828,9 @@ IDE_Morph.prototype.duplicateSprite = function (sprite) {
 };
 
 IDE_Morph.prototype.removeSprite = function (sprite) {
-    var idx = this.sprites.asArray().indexOf(sprite) + 1;
+    var idx, myself = this;
+    sprite.parts.forEach(function (part) {myself.removeSprite(part); });
+    idx = this.sprites.asArray().indexOf(sprite) + 1;
     this.stage.threads.stopAllForReceiver(sprite);
     sprite.destroy();
     this.stage.watchers().forEach(function (watcher) {
