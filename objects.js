@@ -125,7 +125,7 @@ PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.objects = '2014-July-29';
+modules.objects = '2014-July-30';
 
 var SpriteMorph;
 var StageMorph;
@@ -2707,6 +2707,23 @@ SpriteMorph.prototype.removeClone = function () {
 };
 
 // SpriteMorph primitives
+
+// SpriteMorph hiding and showing:
+
+/*
+    override the inherited behavior to also hide/show all
+    nested parts.
+*/
+
+SpriteMorph.prototype.hide = function () {
+    SpriteMorph.uber.hide.call(this);
+    this.parts.forEach(function (part) {part.hide(); });
+};
+
+SpriteMorph.prototype.show = function () {
+    SpriteMorph.uber.show.call(this);
+    this.parts.forEach(function (part) {part.show(); });
+};
 
 // SpriteMorph pen color
 
