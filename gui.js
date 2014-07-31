@@ -245,6 +245,7 @@ IDE_Morph.prototype.openIn = function (world) {
             if (usr) {
                 SnapCloud.username = usr.username || null;
                 SnapCloud.password = usr.password || null;
+                myself.source = 'cloud';
             }
         }
     }
