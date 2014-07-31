@@ -459,6 +459,17 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'sound',
             spec: 'stop all sounds'
         },
+        doSetVolume: {
+            type: 'command',
+            category: 'sound',
+            spec: 'set volume to %n',
+            defaults: [100]
+        },
+        reportVolume: {
+            type: 'reporter',
+            category: 'sound',
+            spec: 'volume'
+        },
         doRest: {
             type: 'command',
             category: 'sound',
@@ -1296,6 +1307,7 @@ SpriteMorph.prototype.init = function (globals) {
     this.version = Date.now(); // for observer optimization
     this.isClone = false; // indicate a "temporary" Scratch-style clone
     this.cloneOriginName = '';
+    this.volume = 100;
 
     // sprite nesting properties
     this.parts = []; // not serialized, only anchor (name)
@@ -1754,6 +1766,8 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('playSound'));
         blocks.push(block('doPlaySoundUntilDone'));
         blocks.push(block('doStopAllSounds'));
+        blocks.push(block('doSetVolume'));
+        blocks.push(block('reportVolume'));
         blocks.push('-');
         blocks.push(block('doRest'));
         blocks.push('-');
@@ -2580,7 +2594,8 @@ SpriteMorph.prototype.reportCostumes = function () {
 // SpriteMorph sound management
 
 SpriteMorph.prototype.addSound = function (audio, name) {
-    this.sounds.add(new Sound(audio, name));
+    var volume = this.parentThatIsA(StageMorph).volume;
+    this.sounds.add(new Sound(audio, name, volume));
 };
 
 SpriteMorph.prototype.playSound = function (name) {
@@ -2591,6 +2606,7 @@ SpriteMorph.prototype.playSound = function (name) {
         ),
         active;
     if (sound) {
+        sound.volume = stage.volume;
         active = sound.play();
         if (stage) {
             stage.activeSounds.push(active);
@@ -2601,6 +2617,22 @@ SpriteMorph.prototype.playSound = function (name) {
         return active;
     }
 };
+
+SpriteMorph.prototype.doSetVolume = function(val) {
+    var stage = this.parentThatIsA(StageMorph);
+
+    stage.volume = val;
+    stage.sounds.asArray().forEach(function (snd) {
+        if (snd.audio !== undefined) {
+            snd.audio.volume = Math.min(Math.max(0, stage.volume), 100) / 100;
+        }
+    });
+};
+
+SpriteMorph.prototype.reportVolume = function() {
+    var stage = this.parentThatIsA(StageMorph);
+    return stage.volume;
+}
 
 SpriteMorph.prototype.reportSounds = function () {
     return this.sounds;
@@ -4884,6 +4916,8 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('playSound'));
         blocks.push(block('doPlaySoundUntilDone'));
         blocks.push(block('doStopAllSounds'));
+        blocks.push(block('doSetVolume'));
+        blocks.push(block('reportVolume'));
         blocks.push('-');
         blocks.push(block('doRest'));
         blocks.push('-');
@@ -5423,6 +5457,12 @@ StageMorph.prototype.addSound
 
 StageMorph.prototype.playSound
     = SpriteMorph.prototype.playSound;
+
+StageMorph.prototype.doSetVolume
+    = SpriteMorph.prototype.doSetVolume;
+
+StageMorph.prototype.reportVolume
+    = SpriteMorph.prototype.reportVolume;
 
 StageMorph.prototype.stopAllActiveSounds = function () {
     this.activeSounds.forEach(function (audio) {
@@ -6193,9 +6233,10 @@ CostumeEditorMorph.prototype.mouseMove
 
 // Sound instance creation
 
-function Sound(audio, name) {
+function Sound(audio, name, volume) {
     this.audio = audio; // mandatory
     this.name = name || "Sound";
+    this.volume = volume || 100;
 }
 
 Sound.prototype.play = function () {
@@ -6203,6 +6244,7 @@ Sound.prototype.play = function () {
     // externally (i.e. by the stage)
     var aud = document.createElement('audio');
     aud.src = this.audio.src;
+    aud.volume = Math.min(Math.max(0, this.volume), 100) / 100;
     aud.play();
     return aud;
 };
@@ -6212,7 +6254,8 @@ Sound.prototype.copy = function () {
         cpy;
 
     snd.src = this.audio.src;
-    cpy = new Sound(snd, this.name ? copy(this.name) : null);
+    snd.volume = this.volume;
+    cpy = new Sound(snd, this.name ? copy(this.name) : null, this.volume ? copy(this.volume) : null);
     return cpy;
 };
 
