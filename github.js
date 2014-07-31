@@ -218,8 +218,14 @@ GitHubBackend.prototype.saveProject = function (ide, callBack, errorCall) {
 GitHubBackend.prototype.getProjectList = function (callBack, errorCall) {
     var myself = this;
 
-    if (myself.gh !== null) {
-        myself.gh.getUser().getRepos().then(
+    if (myself.gh !== null){
+        var user = myself.gh.getUser();
+
+        if (user === null) {
+            errorCall.call(myself, localize('Please login'), 'GitHub');
+        }
+
+        user.getRepos().then(
                 function (repos) {
                     var snapProjects = [];
 
