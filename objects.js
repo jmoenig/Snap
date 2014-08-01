@@ -1307,7 +1307,6 @@ SpriteMorph.prototype.init = function (globals) {
     this.version = Date.now(); // for observer optimization
     this.isClone = false; // indicate a "temporary" Scratch-style clone
     this.cloneOriginName = '';
-    this.volume = 100;
 
     // sprite nesting properties
     this.parts = []; // not serialized, only anchor (name)
@@ -4275,6 +4274,7 @@ StageMorph.prototype.init = function (globals) {
     this.version = Date.now(); // for observers
     this.isFastTracked = false;
     this.cloneCount = 0;
+    this.volume = 100;
 
     this.timerStart = Date.now();
     this.tempo = 60; // bpm
