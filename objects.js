@@ -1313,6 +1313,8 @@ SpriteMorph.prototype.init = function (globals) {
     this.version = Date.now(); // for observer optimization
     this.isClone = false; // indicate a "temporary" Scratch-style clone
     this.cloneOriginName = '';
+    this.volume = 100;
+    this.activeSounds = [];
 
     // sprite nesting properties
     this.parts = []; // not serialized, only anchor (name)
@@ -2602,7 +2604,7 @@ SpriteMorph.prototype.reportCostumes = function () {
 // SpriteMorph sound management
 
 SpriteMorph.prototype.addSound = function (audio, name) {
-    var volume = this.parentThatIsA(StageMorph).volume;
+    var volume = this.volume;
     this.sounds.add(new Sound(audio, name, volume));
 };
 
@@ -2614,8 +2616,14 @@ SpriteMorph.prototype.playSound = function (name) {
         ),
         active;
     if (sound) {
-        sound.volume = stage.volume;
+        sound.volume = this.volume;
         active = sound.play();
+
+        this.activeSounds.push(active);
+        this.activeSounds = this.activeSounds.filter(function (aud) {
+            return !aud.ended && !aud.terminated;
+        });
+
         if (stage) {
             stage.activeSounds.push(active);
             stage.activeSounds = stage.activeSounds.filter(function (aud) {
@@ -2627,23 +2635,20 @@ SpriteMorph.prototype.playSound = function (name) {
 };
 
 SpriteMorph.prototype.doSetVolume = function (val) {
-    var stage = this.parentThatIsA(StageMorph);
+    var myself = this;
 
-    stage.volume = Math.min(Math.max(0, val), 100);
-
-    stage.activeSounds.forEach(function (snd) {
-        snd.volume = stage.volume / 100; // 'audio' objects
+    myself.volume = val;
+    myself.activeSounds.forEach(function (snd) {
+        snd.volume = Math.min(Math.max(0, myself.volume), 100) / 100; // 'audio' objects
     });
 };
 
 SpriteMorph.prototype.doChangeVolume = function (val) {
-    var stage = this.parentThatIsA(StageMorph);
-    this.doSetVolume(stage.volume + val);
+    this.doSetVolume(this.volume + val);
 };
 
 SpriteMorph.prototype.reportVolume = function () {
-    var stage = this.parentThatIsA(StageMorph);
-    return stage.volume;
+    return this.volume;
 }
 
 SpriteMorph.prototype.reportSounds = function () {
@@ -4929,7 +4934,10 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('playSound'));
         blocks.push(block('doPlaySoundUntilDone'));
         blocks.push(block('doStopAllSounds'));
+        blocks.push('-');
         blocks.push(block('doSetVolume'));
+        blocks.push(block('doChangeVolume'));
+        blocks.push(watcherToggle('reportVolume'));
         blocks.push(block('reportVolume'));
         blocks.push('-');
         blocks.push(block('doRest'));
@@ -5473,6 +5481,9 @@ StageMorph.prototype.playSound
 
 StageMorph.prototype.doSetVolume
     = SpriteMorph.prototype.doSetVolume;
+
+StageMorph.prototype.doChangeVolume
+    = SpriteMorph.prototype.doChangeVolume;
 
 StageMorph.prototype.reportVolume
     = SpriteMorph.prototype.reportVolume;
