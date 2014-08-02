@@ -1731,15 +1731,18 @@ Process.prototype.blockReceiver = function () {
 
 Process.prototype.doPlaySoundUntilDone = function (name) {
     var sprite = this.homeContext.receiver;
-    if (this.context.activeAudio === null) {
-        this.context.activeAudio = sprite.playSound(name);
+
+    if (name !== '') {
+        if (this.context.activeAudio === null) {
+            this.context.activeAudio = sprite.playSound(name);
+        }
+        if (this.context.activeAudio.ended
+                || this.context.activeAudio.terminated) {
+            return null;
+        }
+        this.pushContext('doYield');
+        this.pushContext();
     }
-    if (this.context.activeAudio.ended
-            || this.context.activeAudio.terminated) {
-        return null;
-    }
-    this.pushContext('doYield');
-    this.pushContext();
 };
 
 Process.prototype.doStopAllSounds = function () {
