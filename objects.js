@@ -1765,6 +1765,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('playSound'));
         blocks.push(block('doPlaySoundUntilDone'));
         blocks.push(block('doStopAllSounds'));
+        blocks.push('-');
         blocks.push(block('doSetVolume'));
         blocks.push(watcherToggle('reportVolume'));
         blocks.push(block('reportVolume'));
