@@ -222,7 +222,8 @@ GitHubBackend.prototype.getProjectList = function (callBack, errorCall) {
         var user = myself.gh.getUser();
 
         if (user === null) {
-            errorCall.call(myself, localize('Please login'), 'GitHub');
+            myself.message('You are not logged in');
+            return;
         }
 
         user.getRepos().then(
@@ -270,10 +271,17 @@ GitHubBackend.prototype.getProjectList = function (callBack, errorCall) {
                 }
         );
     } else {
-        errorCall.call(myself, localize('Please login'), 'GitHub');
+        myself.message('You are not logged in');
+        return;
     }
 };
 
 GitHubBackend.prototype.logout = function (callBack) {
     this.clear();
+};
+
+// GitHub: user messages (to be overridden)
+
+GitHubBackend.prototype.message = function (string) {
+    alert(string);
 };

@@ -268,6 +268,16 @@ IDE_Morph.prototype.openIn = function (world) {
         }, 2000);
     };
 
+    GitHub.message = function (string) {
+        var m = new MenuMorph(null, string),
+            intervalHandle;
+        m.popUpCenteredInWorld(world);
+        intervalHandle = setInterval(function () {
+            m.destroy();
+            clearInterval(intervalHandle);
+        }, 2000);
+    };
+
     // prevent non-DialogBoxMorphs from being dropped
     // onto the World in user-mode
     world.reactToDropOf = function (morph) {
