@@ -462,7 +462,7 @@ SpriteMorph.prototype.initBlocks = function () {
         doSetVolume: {
             type: 'command',
             category: 'sound',
-            spec: 'set volume to %n',
+            spec: 'set volume to %n %',
             defaults: [100]
         },
         reportVolume: {
@@ -1766,6 +1766,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('doPlaySoundUntilDone'));
         blocks.push(block('doStopAllSounds'));
         blocks.push(block('doSetVolume'));
+        blocks.push(watcherToggle('reportVolume'));
         blocks.push(block('reportVolume'));
         blocks.push('-');
         blocks.push(block('doRest'));
