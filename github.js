@@ -68,21 +68,12 @@ GitHubBackend.prototype.getProject = function (
 
     var repo = myself.gh.getRepo(userName, projectName);
     var branch = repo.getBranch(); // master (default)
-    var media, pdata;
 
     branch.read('snap.xml', false).then(
         function (sourceContent) {
-            branch.read('media.xml', false).then( // true for binary
-                function (mediaContent) {
-                    callBack.call(
-                        null,
-                        sourceContent.content,
-                        mediaContent.content
-                    );
-                },
-                function (error) {
-                    errorCall.call(this, error, 'GitHub');
-                }
+            callBack.call(
+                null,
+                sourceContent.content
             );
         },
         function (error) {
@@ -133,16 +124,15 @@ GitHubBackend.prototype.login = function (
 
 GitHubBackend.prototype.saveProject = function (commitMessage, ide, callBack, errorCall) {
     var myself = this,
-        pdata,
-        media;
+        data;
+    var pdata, media;
     var repoName = ide.projectName.replace(/[^\w-]/g, ''); // TODO validation of project name
 
     ide.serializer.isCollectingMedia = true;
     pdata = ide.serializer.serialize(ide.stage);
     media = ide.hasChangedMedia ?
             ide.serializer.mediaXML(ide.projectName) : null;
-    ide.serializer.isCollectingMedia = false;
-    ide.serializer.flushMedia();
+    data = '<snapdata>' + pdata + media + '</snapdata>';
 
     // check if serialized data can be parsed back again
     try {
@@ -194,8 +184,7 @@ GitHubBackend.prototype.saveProject = function (commitMessage, ide, callBack, er
                     var message = commitMessage;
 
                     var contents = {
-                        'snap.xml': pdata,
-                        'media.xml': media, // may be binary
+                        'snap.xml': data,
                         'README.md': ide.projectNotes
                     };
 

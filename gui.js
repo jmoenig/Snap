@@ -401,20 +401,14 @@ IDE_Morph.prototype.openIn = function (world) {
             GitHub.getProject(
                 dict.Username,
                 dict.projectName,
-                function (projectData) {
+                function (code) {
                     var msg;
                     myself.nextSteps([
                         function () {
                             msg = myself.showMessage('Opening GitHub project...');
                         },
                         function () {
-                            if (projectData.indexOf('<snapdata') === 0) {
-                                myself.rawOpenCloudDataString(projectData);
-                            } else if (
-                                projectData.indexOf('<project') === 0
-                            ) {
-                                myself.rawOpenProjectString(projectData);
-                            }
+                            myself.rawOpenCloudDataString(code);
                             myself.hasChangedMedia = true;
                         },
                         function () {
@@ -3937,7 +3931,7 @@ IDE_Morph.prototype.saveProjectToCloud = function (name) {
 IDE_Morph.prototype.saveProjectToGitHub = function (name, commitMessage) {
     var myself = this;
     if (name) {
-        this.showMessage('Saving project\nto GitHub...');
+        this.showMessage('Comitting project\nto GitHub...');
         this.setProjectName(name);
         GitHub.saveProject(
             commitMessage,
@@ -5020,14 +5014,19 @@ ProjectDialogMorph.prototype.openCloudProject = function (project) {
     ]);
 };
 
-ProjectDialogMorph.prototype.openGitHubProject = function (project) {
+ProjectDialogMorph.prototype.openGitHubProject = function (project, user) {
     var myself = this;
+    
+    if (user == null) {
+        user = GitHub.username;
+    }
+
     myself.ide.nextSteps([
         function () {
             myself.ide.showMessage('Fetching project\nfrom GitHub...');
         },
         function () {
-            myself.rawOpenGitHubProject(project);
+            myself.rawOpenGitHubProject(project, user);
         }
     ]);
 };
@@ -5058,14 +5057,13 @@ ProjectDialogMorph.prototype.rawOpenCloudProject = function (proj) {
     this.destroy();
 };
 
-ProjectDialogMorph.prototype.rawOpenGitHubProject = function (proj) {
+ProjectDialogMorph.prototype.rawOpenGitHubProject = function (proj, user) {
     var myself = this;
     GitHub.getProject(
-        GitHub.username,
+        user,
         proj.ProjectName, 
-        function (code, media) {
+        function (code) {
             myself.ide.source = 'github';
-            myself.ide.droppedText(media);
             myself.ide.droppedText(code);
         },
         myself.ide.githubError()
@@ -5162,6 +5160,7 @@ ProjectDialogMorph.prototype.saveGitHubProject = function () {
     var myself = this;
     this.ide.showMessage('Committing project\nto GitHub...');
     GitHub.saveProject(
+        null,
         this.ide,
         function () {
             myself.ide.source = 'github';
