@@ -5518,9 +5518,16 @@ StageMorph.prototype.pauseAllActiveSounds = function () {
 };
 
 StageMorph.prototype.resumeAllActiveSounds = function () {
+    var newSounds = []; // remove Sounds that have been played so they do not resume
+
     this.activeSounds.forEach(function (audio) {
-        audio.play();
+        if (audio.ended === false) {
+            newSounds.push(audio);
+            audio.play();
+        }
     });
+
+    this.activeSounds = newSounds;
 };
 
 StageMorph.prototype.muteAllSounds = function () {
