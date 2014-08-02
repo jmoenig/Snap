@@ -465,6 +465,12 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: 'set volume to %n %',
             defaults: [100]
         },
+        doChangeVolume: {
+            type: 'command',
+            category: 'sound',
+            spec: 'change volume by %n',
+            defaults: [-10]
+        },
         reportVolume: {
             type: 'reporter',
             category: 'sound',
@@ -1767,6 +1773,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('doStopAllSounds'));
         blocks.push('-');
         blocks.push(block('doSetVolume'));
+        blocks.push(block('doChangeVolume'));
         blocks.push(watcherToggle('reportVolume'));
         blocks.push(block('reportVolume'));
         blocks.push('-');
@@ -2622,11 +2629,16 @@ SpriteMorph.prototype.playSound = function (name) {
 SpriteMorph.prototype.doSetVolume = function (val) {
     var stage = this.parentThatIsA(StageMorph);
 
-    stage.volume = val;
+    stage.volume = Math.min(Math.max(0, val), 100);
 
     stage.activeSounds.forEach(function (snd) {
-        snd.volume = Math.min(Math.max(0, stage.volume), 100) / 100; // 'audio' objects
+        snd.volume = stage.volume / 100; // 'audio' objects
     });
+};
+
+SpriteMorph.prototype.doChangeVolume = function (val) {
+    var stage = this.parentThatIsA(StageMorph);
+    this.doSetVolume(stage.volume + val);
 };
 
 SpriteMorph.prototype.reportVolume = function () {
