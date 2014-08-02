@@ -131,7 +131,7 @@ GitHubBackend.prototype.login = function (
     }
 };
 
-GitHubBackend.prototype.saveProject = function (ide, callBack, errorCall) {
+GitHubBackend.prototype.saveProject = function (commitMessage, ide, callBack, errorCall) {
     var myself = this,
         pdata,
         media;
@@ -191,7 +191,7 @@ GitHubBackend.prototype.saveProject = function (ide, callBack, errorCall) {
                 if (myself.gh !== null) {
                     var repo = myself.gh.getRepo(myself.username, ide.projectName);
                     var branch = repo.getBranch(); // master (default)
-                    var message = ''; // TODO optional: specify message
+                    var message = commitMessage;
 
                     var contents = {
                         'snap.xml': pdata,

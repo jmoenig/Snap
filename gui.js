@@ -2356,6 +2356,9 @@ IDE_Morph.prototype.projectMenu = function () {
     menu.addItem('New', 'createNewProject');
     menu.addItem('Open...', 'openProjectsBrowser');
     menu.addItem('Save', "save");
+    if (GitHub.username) {
+        menu.addItem('Save with commit message', 'commitProjectToGitHub');
+    }
     if (shiftClicked) {
         menu.addItem(
             'Save to disk',
@@ -3931,12 +3934,13 @@ IDE_Morph.prototype.saveProjectToCloud = function (name) {
     }
 };
 
-IDE_Morph.prototype.saveProjectToGitHub = function (name) {
+IDE_Morph.prototype.saveProjectToGitHub = function (name, commitMessage) {
     var myself = this;
     if (name) {
         this.showMessage('Saving project\nto GitHub...');
         this.setProjectName(name);
         GitHub.saveProject(
+            commitMessage,
             this,
             function () {myself.showMessage('saved.', 2); },
             this.githubError()
@@ -3944,6 +3948,62 @@ IDE_Morph.prototype.saveProjectToGitHub = function (name) {
     }
 };
 
+IDE_Morph.prototype.commitProjectToGitHub = function () {
+    var dialog = new DialogBoxMorph().withKey('commitMessage'),
+        frame = new ScrollFrameMorph(),
+        text = new TextMorph(''),
+        ok = dialog.ok,
+        myself = this,
+        size = 120,
+        world = this.world();
+
+    frame.padding = 6;
+    frame.setWidth(size);
+    frame.acceptsDrops = false;
+    frame.contents.acceptsDrops = false;
+
+    text.setWidth(size - frame.padding * 2);
+    text.setPosition(frame.topLeft().add(frame.padding));
+    text.enableSelecting();
+    text.isEditable = true;
+
+    frame.setHeight(size);
+    frame.fixLayout = nop;
+    frame.edge = InputFieldMorph.prototype.edge;
+    frame.fontSize = InputFieldMorph.prototype.fontSize;
+    frame.typeInPadding = InputFieldMorph.prototype.typeInPadding;
+    frame.contrast = InputFieldMorph.prototype.contrast;
+    frame.drawNew = InputFieldMorph.prototype.drawNew;
+    frame.drawRectBorder = InputFieldMorph.prototype.drawRectBorder;
+
+    frame.addContents(text);
+    text.drawNew();
+
+    dialog.ok = function () {
+        myself.saveProjectToGitHub(
+            myself.projectName,
+            text.text
+        );
+
+        ok.call(this);
+    };
+
+    dialog.justDropped = function () {
+        text.edit();
+    };
+
+    dialog.labelString = 'Commit message';
+    dialog.createLabel();
+    dialog.addBody(frame);
+    frame.drawNew();
+    dialog.addButton('ok', 'OK');
+    dialog.addButton('cancel', 'Cancel');
+    dialog.fixLayout();
+    dialog.drawNew();
+    dialog.popUp(world);
+    dialog.setCenter(world.center());
+    text.edit();
+};
 IDE_Morph.prototype.exportProjectMedia = function (name) {
     var menu, media;
     this.serializer.isCollectingMedia = true;
