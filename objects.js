@@ -557,6 +557,17 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'pen',
             spec: 'stamp'
         },
+        defineBorderedPolygon: {
+            type: 'command',
+            category: 'pen',
+            spec: 'set polygon point at x: %n y: %n',
+            defaults: [0, 0]
+        },
+        drawBorderedPolygon: {
+            type: 'command',
+            category: 'pen',
+            spec: 'draw polygon'
+        },
 
         // Control
         receiveGo: {
@@ -1272,6 +1283,7 @@ SpriteMorph.prototype.init = function (globals) {
 	this.costumeColor = null;
     this.borderColor = new Color(255,0,0);
     this.borderSize = 0;
+    this.polygonPoints = [];
 
     // sprite nesting properties
     this.parts = []; // not serialized, only anchor (name)
@@ -1749,6 +1761,9 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('setBorderSize'));
         blocks.push(watcherToggle('penBorderSize'));
         blocks.push(block('penBorderSize'))
+        blocks.push('-');
+        blocks.push(block('defineBorderedPolygon'));
+        blocks.push(block('drawBorderedPolygon'));
         blocks.push('-');
         blocks.push(block('doStamp'));
 
@@ -2849,7 +2864,7 @@ SpriteMorph.prototype.justDropped = function () {
 
 // SpriteMorph drawing:
 
-SpriteMorph.prototype.drawLine = function (start, dest) {
+SpriteMorph.prototype.drawLine = function (start, dest, isBorder) {
     var stagePos = this.parent.bounds.origin,
         stageScale = this.parent.scale,
         context = this.parent.penTrails().getContext('2d'),
@@ -2862,8 +2877,13 @@ SpriteMorph.prototype.drawLine = function (start, dest) {
         ).intersect(this.parent.visibleBounds()).spread();
 
     if (this.isDown) {
-        context.lineWidth = this.size + this.borderSize;
-        context.strokeStyle = this.borderColor.toString();
+        if(isBorder) {
+            context.lineWidth = this.size + this.borderSize;
+            context.strokeStyle = this.borderColor.toString();
+        } else {
+            context.lineWidth = this.size;
+            context.strokeStyle = this.color.toString();
+        }
         if (this.useFlatLineEnds) {
             context.lineCap = 'butt';
             context.lineJoin = 'miter';
@@ -2872,19 +2892,57 @@ SpriteMorph.prototype.drawLine = function (start, dest) {
             context.lineJoin = 'round';
         }
         context.beginPath();
-        context.moveTo(from.x, from.y); //Draw the border
+        context.moveTo(from.x, from.y); //Draw a line
         context.lineTo(to.x, to.y);
         context.stroke();
 
-        context.lineWidth = this.size; //Draw the line
-        context.strokeStyle = this.color.toString();
-        context.moveTo(from.x, from.y);
-        context.lineTo(to.x, to.y);
-        context.stroke();
         if (this.isWarped === false) {
             this.world().broken.push(damaged);
         }
     }
+};
+
+SpriteMorph.prototype.drawBorderedLine = function(start,dest) { //drawLine wrapper to draw line and border in one go
+    this.drawLine(start,dest,true);
+    this.drawLine(start,dest,false);
+};
+
+// Bordered Polygon functions
+
+SpriteMorph.prototype.defineBorderedPolygon = function(x, y) {
+    this.polygonPoints[this.polygonPoints.length] = [x,y];
+};
+
+SpriteMorph.prototype.drawPolygon = function(isBorder) {
+  
+    if(this.polygonPoints.length < 2) return; //Need at least 2 points for a line
+  
+    var downState = this.isDown; //Make sure we draw
+    this.isDown = true;
+  
+    var stage = this.parentThatIsA(StageMorph);
+    var start = new Point(this.polygonPoints[0][0],this.polygonPoints[0][1]);
+    start.x = stage.center().x + (+start.x || 0) * stage.scale; //Normalize point
+    start.y = stage.center().y - (+start.y || 0) * stage.scale;
+  
+    for(point = 1; point < this.polygonPoints.length; point++) {
+        var dest = new Point(this.polygonPoints[point][0],this.polygonPoints[point][1]);
+        dest.x = stage.center().x + (+dest.x || 0) * stage.scale; //Normalize point
+        dest.y = stage.center().y - (+dest.y || 0) * stage.scale;
+        this.drawLine(start,dest, isBorder);
+        start=dest;
+    }
+  
+    this.isDown = downState;
+};
+
+SpriteMorph.prototype.drawBorderedPolygon = function() {
+    if(this.polygonPoints.length < 2) return; //Need at least 2 points for a line
+  
+    this.drawPolygon(true);
+    this.drawPolygon(false);
+  
+    this.polygonPoints = [];
 };
 
 // SpriteMorph motion - adjustments due to nesting
@@ -2896,7 +2954,7 @@ SpriteMorph.prototype.moveBy = function (delta, justMe) {
             this.rotationCenter() : null;
     SpriteMorph.uber.moveBy.call(this, delta);
     if (start) {
-        this.drawLine(start, this.rotationCenter());
+        this.drawBorderedLine(start, this.rotationCenter());
     }
     if (!justMe) {
         this.parts.forEach(function (part) {
@@ -3048,7 +3106,7 @@ SpriteMorph.prototype.direction = function () {
 };
 
 SpriteMorph.prototype.penColor = function() {
-    return this.color.hsv()[0]*100;
+   return this.color.hsv()[0]*100;
 };
 
 SpriteMorph.prototype.penSize = function () {
@@ -4852,6 +4910,7 @@ StageMorph.prototype.blockTemplates = function (category) {
 
 StageMorph.prototype.clear = function () {
     this.clearPenTrails();
+    this.polygonPoints = [];
 };
 
 // StageMorph user menu
