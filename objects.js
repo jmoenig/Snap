@@ -2617,18 +2617,17 @@ SpriteMorph.prototype.playSound = function (name) {
     }
 };
 
-SpriteMorph.prototype.doSetVolume = function(val) {
+SpriteMorph.prototype.doSetVolume = function (val) {
     var stage = this.parentThatIsA(StageMorph);
 
     stage.volume = val;
-    stage.sounds.asArray().forEach(function (snd) {
-        if (snd.audio !== undefined) {
-            snd.audio.volume = Math.min(Math.max(0, stage.volume), 100) / 100;
-        }
+
+    stage.activeSounds.forEach(function (snd) {
+        snd.volume = Math.min(Math.max(0, stage.volume), 100) / 100; // 'audio' objects
     });
 };
 
-SpriteMorph.prototype.reportVolume = function() {
+SpriteMorph.prototype.reportVolume = function () {
     var stage = this.parentThatIsA(StageMorph);
     return stage.volume;
 }
