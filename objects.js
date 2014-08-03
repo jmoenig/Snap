@@ -2637,9 +2637,9 @@ SpriteMorph.prototype.playSound = function (name) {
 SpriteMorph.prototype.doSetVolume = function (val) {
     var myself = this;
 
-    myself.volume = val;
+    myself.volume = Math.min(Math.max(0, val), 100);
     myself.activeSounds.forEach(function (snd) {
-        snd.volume = Math.min(Math.max(0, myself.volume), 100) / 100; // 'audio' objects
+        snd.volume = myself.volume / 100; // 'audio' objects
     });
 };
 
