@@ -4853,6 +4853,11 @@ ProjectDialogMorph.prototype.shareProject = function () {
         proj = this.listField.selected,
         entry = this.listField.active;
 
+    if (!proj) {
+        this.ide.saveProjectToCloud(this.ide.projectName);
+        proj = this.projectName;
+    }
+
     if (proj) {
         this.ide.confirm(
             localize(
