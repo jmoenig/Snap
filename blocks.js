@@ -7714,7 +7714,7 @@ SymbolMorph.prototype.names = [
     'pointRight',
     'gears',
     'file',
-	'mutedSounds',
+    'mutedSounds',
     'unmutedSounds',
     'fullScreen',
     'normalScreen',
@@ -7840,9 +7840,9 @@ SymbolMorph.prototype.symbolCanvasColored = function (aColor) {
         return this.drawSymbolGears(canvas, aColor);
     case 'file':
         return this.drawSymbolFile(canvas, aColor);
-	case 'mutedSounds':
+    case 'mutedSounds':
         return this.drawSymbolMutedSounds(canvas, aColor);
-	case 'unmutedSounds':
+    case 'unmutedSounds':
         return this.drawSymbolUnmutedSounds(canvas, aColor);
     case 'fullScreen':
         return this.drawSymbolFullScreen(canvas, aColor);

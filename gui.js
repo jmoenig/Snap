@@ -212,7 +212,7 @@ IDE_Morph.prototype.init = function (isAutoFill) {
     this.corral = null;
 
     this.isAutoFill = isAutoFill || true;
-	this.isMuted = false;
+    this.isMuted = false;
     this.isAppMode = false;
     this.isSmallStage = false;
     this.filePicker = null;
@@ -456,7 +456,7 @@ IDE_Morph.prototype.createControlBar = function () {
         stopButton,
         pauseButton,
         startButton,
-		muteSoundsButton,
+        muteSoundsButton,
         projectButton,
         settingsButton,
         stageSizeButton,
@@ -546,7 +546,7 @@ IDE_Morph.prototype.createControlBar = function () {
     this.controlBar.add(appModeButton);
     this.controlBar.appModeButton = appModeButton; // for refreshing
 
-	//muteSoundsButton
+    //muteSoundsButton
     button = new ToggleButtonMorph(
         null, //colors,
         myself, // the IDE is the target
@@ -3404,14 +3404,13 @@ IDE_Morph.prototype.toggleStageSize = function (isSmall) {
 };
 
 IDE_Morph.prototype.toggleMuteSounds = function (isMuted) {
-	this.isMuted = isNil(isMuted) ? !this.isMuted : isMuted;
-	this.controlBar.muteSoundsButton.refresh();
+    this.isMuted = isNil(isMuted) ? !this.isMuted : isMuted;
+    this.controlBar.muteSoundsButton.refresh();
 	
     this.sprites.asArray().forEach(function (sprt) {
-		sprt.refreshVolumeOfAllActiveSounds();
+        sprt.refreshVolumeOfAllActiveSounds();
     });
-	this.stage.refreshVolumeOfAllActiveSounds();
-	
+    this.stage.refreshVolumeOfAllActiveSounds();
 };
 
 IDE_Morph.prototype.createNewProject = function () {
