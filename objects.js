@@ -2640,8 +2640,12 @@ SpriteMorph.prototype.playSound = function (name) {
 
 SpriteMorph.prototype.doSetVolume = function (val) {
     var myself = this;
-
     myself.volume = Math.min(Math.max(0, val), 100);
+
+    if (myself.parentThatIsA(StageMorph).muted === true) {
+        return;
+    }
+
     myself.activeSounds.forEach(function (snd) {
         snd.volume = myself.volume / 100; // 'audio' objects
     });
