@@ -2619,6 +2619,10 @@ SpriteMorph.prototype.playSound = function (name) {
         sound.volume = this.volume;
         active = sound.play();
 
+        if (stage.muted === true) {
+            active.volume = 0;
+        }
+
         this.activeSounds.push(active);
         this.activeSounds = this.activeSounds.filter(function (aud) {
             return !aud.ended && !aud.terminated;
@@ -2650,6 +2654,13 @@ SpriteMorph.prototype.doChangeVolume = function (val) {
 SpriteMorph.prototype.reportVolume = function () {
     return this.volume;
 }
+
+SpriteMorph.prototype.unmuteAllSounds = function () {
+    var stage = this.parentThatIsA(StageMorph);
+    stage.muted = false;
+
+    this.doSetVolume(this.volume);
+};
 
 SpriteMorph.prototype.reportSounds = function () {
     return this.sounds;
@@ -4293,6 +4304,7 @@ StageMorph.prototype.init = function (globals) {
     this.isFastTracked = false;
     this.cloneCount = 0;
     this.volume = 100;
+    this.muted = false;
 
     this.timerStart = Date.now();
     this.tempo = 60; // bpm
@@ -5506,6 +5518,17 @@ StageMorph.prototype.resumeAllActiveSounds = function () {
         audio.play();
     });
 };
+
+StageMorph.prototype.muteAllSounds = function () {
+    this.muted = true;
+
+    this.activeSounds.forEach(function (audio) {
+        audio.volume = 0;
+    });
+};
+
+StageMorph.prototype.unmuteAllSounds
+    = SpriteMorph.prototype.unmuteAllSounds;
 
 StageMorph.prototype.reportSounds
     = SpriteMorph.prototype.reportSounds;

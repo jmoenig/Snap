@@ -3407,10 +3407,21 @@ IDE_Morph.prototype.toggleMuteSounds = function (isMuted) {
     this.isMuted = isNil(isMuted) ? !this.isMuted : isMuted;
     this.controlBar.muteSoundsButton.refresh();
 	
-    this.sprites.asArray().forEach(function (sprt) {
-        sprt.refreshVolumeOfAllActiveSounds();
-    });
-    this.stage.refreshVolumeOfAllActiveSounds();
+    /* stage.activeSounds holds all active sounds
+     * a sprite's .activeSounds holds just its own
+     * so you have to use the stage to mute
+     * and the sprite to unmute, because the stage's volume
+     * overrides the sprite's one.
+     */
+
+    if (this.isMuted === false) {
+        this.stage.unmuteAllSounds();
+        this.sprites.asArray().forEach(function (sprt) {
+            sprt.unmuteAllSounds();
+        });
+    } else {
+        this.stage.muteAllSounds();
+    }
 };
 
 IDE_Morph.prototype.createNewProject = function () {
