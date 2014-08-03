@@ -1,0 +1,3 @@
+[submodule "octokit.js"]
+	path = octokit.js
+	url = https://github.com/philschatz/octokit.js
