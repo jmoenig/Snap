@@ -2717,6 +2717,12 @@ Process.prototype.doPlayNote = function (pitch, beats) {
 Process.prototype.doPlayNoteForSecs = function (pitch, secs) {
     // interpolated
     var volume = this.homeContext.receiver.volume;
+    var muted = this.homeContext.receiver.parentThatIsA(StageMorph).muted;
+
+    if (muted === true) {
+        volume = 0;
+    }
+
     if (!this.context.startTime) {
         this.context.startTime = Date.now();
         this.context.activeNote = new Note(pitch);
