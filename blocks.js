@@ -2052,6 +2052,7 @@ BlockMorph.prototype.userMenu = function () {
         "help...",
         'showHelp'
     );
+    menu.addItem('add comment', 'addComment');
     if (shiftClicked) {
         top = this.topBlock();
         if (top instanceof ReporterBlockMorph) {
@@ -2431,6 +2432,12 @@ BlockMorph.prototype.showHelp = function () {
     } else {
         pic.src = 'help/' + spec + '.png';
     }
+};
+
+BlockMorph.prototype.addComment = function () {
+    var cM = new CommentMorph();
+    cM.pickUp(this.world());
+    cM.world().hand.drop();
 };
 
 // BlockMorph code mapping
