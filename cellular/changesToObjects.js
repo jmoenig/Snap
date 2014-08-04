@@ -1889,7 +1889,7 @@ StageMorph.prototype.updateCells = function ()
 */
 StageMorph.prototype.getScaleFactor = function()
 {
-	return 40 / this.cellsX * 0.5;
+	return 40 / this.cellsX * 0.4;
 }
 
 /*

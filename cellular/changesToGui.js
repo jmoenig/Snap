@@ -269,6 +269,47 @@ IDE_Morph.prototype.createCorral = function()
 	}
 };
 
+//Add cellular centre.
+TurtleIconMorph.prototype.userMenu = function () {
+    var myself = this,
+        menu = new MenuMorph(this, 'pen'),
+        on = '\u25CF',
+        off = '\u25CB';
+    if (this.object instanceof StageMorph) {
+        return null;
+    }
+    menu.addItem(
+        (this.object.penPoint === 'cellular-center' ? on : off) + ' ' + localize('actual center'),
+        function () {
+            myself.object.penPoint = 'cellular-center';
+            myself.object.changed();
+            myself.object.drawNew();
+            myself.object.changed();
+        }
+    );
+    menu.addItem(
+        (this.object.penPoint === 'tip' ? on : off) + ' ' + localize('tip'),
+        function () {
+            myself.object.penPoint = 'tip';
+            myself.object.changed();
+            myself.object.drawNew();
+            myself.object.changed();
+        }
+    );
+    menu.addItem(
+        (this.object.penPoint === 'middle' ? on : off) + ' ' + localize(
+            'stupid middle'
+        ),
+        function () {
+            myself.object.penPoint = 'middle';
+            myself.object.changed();
+            myself.object.drawNew();
+            myself.object.changed();
+        }
+    );
+    return menu;
+};
+
 /*********************************************************************/
 /************************** IMPLEMENTATION ***************************/
 /*********************************************************************/

@@ -4014,6 +4014,20 @@ PenMorph.prototype.drawNew = function (facing) {
         dest = start.distanceAngle(len * 0.75, direction - 180);
         left = start.distanceAngle(len, direction + 195);
         right = start.distanceAngle(len, direction - 195);
+    } else if (this.penPoint === 'cellular-center') { //CELLULAR MODIFICATION
+    
+        var zero = new Point(0,0);
+        
+        dest = zero.distanceAngle(len * 0.75, direction - 180);
+        left = zero.distanceAngle(len, direction + 195);
+        right = zero.distanceAngle(len, direction - 195);
+        
+        start = start.distanceAngle(len * 0.5, direction);
+        
+        dest = start.add(dest);
+        left = start.add(left);
+        right = start.add(right);
+        
     } else { // 'middle'
         dest = start.distanceAngle(len * 0.75, direction);
         left = start.distanceAngle(len * 0.33, direction + 230);
