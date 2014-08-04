@@ -6352,12 +6352,13 @@ Note.prototype.setupContext = function () {
     }
     Note.prototype.audioContext = new AudioContext();
     Note.prototype.gainNode = Note.prototype.audioContext.createGain();
-    Note.prototype.gainNode.gain.value = 0.25; // reduce volume by 1/4
 };
 
 // Note playing
 
-Note.prototype.play = function () {
+Note.prototype.play = function (volume) {
+    this.gainNode.gain.value = 0.25 * volume / 100; // reduce volume by 1/4
+
     this.oscillator = this.audioContext.createOscillator();
     if (!this.oscillator.start) {
         this.oscillator.start = this.oscillator.noteOn;

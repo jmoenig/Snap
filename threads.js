@@ -2716,10 +2716,11 @@ Process.prototype.doPlayNote = function (pitch, beats) {
 
 Process.prototype.doPlayNoteForSecs = function (pitch, secs) {
     // interpolated
+    var volume = this.homeContext.receiver.volume;
     if (!this.context.startTime) {
         this.context.startTime = Date.now();
         this.context.activeNote = new Note(pitch);
-        this.context.activeNote.play();
+        this.context.activeNote.play(volume);
     }
     if ((Date.now() - this.context.startTime) >= (secs * 1000)) {
         if (this.context.activeNote) {
