@@ -418,11 +418,17 @@ Process.prototype.pause = function () {
     if (this.context && this.context.startTime) {
         this.pauseOffset = Date.now() - this.context.startTime;
     }
+    if (this.context.activeNote) {
+        this.context.activeNote.stop();
+    }
 };
 
 Process.prototype.resume = function () {
     this.isPaused = false;
     this.pauseOffset = null;
+    if (this.context.activeNote) {
+        this.context.activeNote.play();
+    }
 };
 
 Process.prototype.pauseStep = function () {
