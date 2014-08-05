@@ -2716,8 +2716,9 @@ Process.prototype.doPlayNote = function (pitch, beats) {
 
 Process.prototype.doPlayNoteForSecs = function (pitch, secs) {
     // interpolated
-    var volume = this.homeContext.receiver.volume;
-    var muted = this.homeContext.receiver.parentThatIsA(StageMorph).muted;
+    var receiver = this.homeContext.receiver;
+    var volume = receiver.volume;
+    var muted = receiver.parentThatIsA(StageMorph).muted;
 
     if (muted === true) {
         volume = 0;
@@ -2725,16 +2726,22 @@ Process.prototype.doPlayNoteForSecs = function (pitch, secs) {
 
     if (!this.context.startTime) {
         this.context.startTime = Date.now();
-        this.context.activeNote = new Note(pitch);
-        this.context.activeNote.play(volume);
+        this.context.activeNote = new Note(pitch, volume);
+        this.context.activeNote.play();
     }
+
     if ((Date.now() - this.context.startTime) >= (secs * 1000)) {
         if (this.context.activeNote) {
             this.context.activeNote.stop();
             this.context.activeNote = null;
         }
         return null;
+    } else if (this.context.activeNote) {
+        if (this.context.activeNote.volume !== volume) {
+            this.context.activeNote.setVolume(volume);
+        }
     }
+
     this.pushContext('doYield');
     this.pushContext();
 };

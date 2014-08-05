@@ -6320,8 +6320,9 @@ Sound.prototype.toDataURL = function () {
 
 // Note instance creation
 
-function Note(pitch) {
+function Note(pitch, volume) {
     this.pitch = pitch === 0 ? 0 : pitch || 69;
+    this.volume = volume;
     this.setupContext();
     this.oscillator = null;
 }
@@ -6356,8 +6357,8 @@ Note.prototype.setupContext = function () {
 
 // Note playing
 
-Note.prototype.play = function (volume) {
-    this.gainNode.gain.value = 0.25 * volume / 100; // reduce volume by 1/4
+Note.prototype.play = function () {
+    this.gainNode.gain.value = 0.25 * this.volume / 100; // reduce volume by 1/4
 
     this.oscillator = this.audioContext.createOscillator();
     if (!this.oscillator.start) {
@@ -6373,6 +6374,12 @@ Note.prototype.play = function (volume) {
     this.gainNode.connect(this.audioContext.destination);
     this.oscillator.start(0);
 };
+
+Note.prototype.setVolume = function (volume) {
+    this.stop();
+    this.volume = volume;
+    this.play();
+}
 
 Note.prototype.stop = function () {
     if (this.oscillator) {
