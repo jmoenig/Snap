@@ -4811,7 +4811,7 @@ StageMorph.prototype.fireGreenFlagEvent = function () {
 
 StageMorph.prototype.fireStopAllEvent = function () {
     var ide = this.parentThatIsA(IDE_Morph);
-    this.threads.resumeAll(this.stage);
+    //this.threads.resumeAll(this.stage); // leads to a strange Note bug
     this.keysPressed = {};
     this.threads.stopAll();
     this.stopAllActiveSounds();

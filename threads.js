@@ -1395,7 +1395,7 @@ Process.prototype.doStopAll = function () {
     if (this.homeContext.receiver) {
         stage = this.homeContext.receiver.parentThatIsA(StageMorph);
         if (stage) {
-            stage.threads.resumeAll(stage);
+            //stage.threads.resumeAll(stage); // leads to a strange Note bug
             stage.keysPressed = {};
             stage.threads.stopAll();
             stage.stopAllActiveSounds();
