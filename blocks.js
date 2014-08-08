@@ -2048,6 +2048,7 @@ BlockMorph.prototype.userMenu = function () {
         top,
         blck;
 
+    if (this.parent.parent instanceof WatcherMorph) {return; }
     menu.addItem(
         "help...",
         'showHelp'
