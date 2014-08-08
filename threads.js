@@ -427,7 +427,10 @@ Process.prototype.resume = function () {
     this.isPaused = false;
     this.pauseOffset = null;
     if (this.context.activeNote) {
-        this.context.activeNote.play();
+        if (this.context.activeNote.oscillator === null) {
+            // prevents Note from resuming twice
+            this.context.activeNote.play();
+        }
     }
 };
 
