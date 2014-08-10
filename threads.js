@@ -1,5 +1,5 @@
 /*
-
+ 
     threads.js
 
     a tail call optimized blocks-based programming language interpreter
@@ -2732,6 +2732,73 @@ Process.prototype.doPlayNoteForSecs = function (pitch, secs) {
     this.pushContext();
 };
 
+// Process camera streaming primitives
+
+Process.prototype.doStreamCamera = function () {
+    var myself = this;
+    var video = this.context.activeStream || null;
+
+    var stage = this.homeContext.receiver.parentThatIsA(StageMorph);
+    if (!stage.trailsCanvas) {
+        stage.trailsCanvas = newCanvas(stage.dimensions);
+    }
+
+    if (video === null) {
+        video = document.createElement('video');
+        video.width = stage.dimensions.x;
+        video.height = stage.dimensions.y;
+
+        this.context.activeStream = video;
+
+        var videoObject = {'video': true, 'audio': false};
+
+        if (navigator.getUserMedia) {
+            navigator.getUserMedia(videoObject, function (stream) {
+                video.src = stream;
+                video.play();
+            }, this.handleError); // TODO: improve error handling
+        } else if (navigator.webkitGetUserMedia) {
+            navigator.webkitGetUserMedia(videoObject, function (stream) {
+                video.src = window.webkitURL.createObjectURL(stream);
+                video.play();
+            }, this.handleError);
+        } else if (navigator.mozGetUserMedia) {
+            navigator.mozGetUserMedia(videoObject, function (stream) {
+                video.src = window.URL.createObjectURL(stream);
+                video.play();
+            }, this.handleError);
+        }
+    } else {
+        var canvas = stage.trailsCanvas;
+        var context = canvas.getContext('2d');
+
+        if (video.readyState !== 0) {
+            try {
+                context.drawImage(video, 0, 0, video.width, video.height);
+                stage.changed();
+            } catch (e) {
+                if (e.name !== 'NS_ERROR_NOT_AVAILABLE') {
+                    // https://bugzilla.mozilla.org/show_bug.cgi?id=879717
+                    throw e;
+                }
+            }
+        }
+    }
+    this.pushContext('doYield');
+    this.pushContext();
+};
+
+Process.prototype.doStopCamera = function () {
+    var stage = this.homeContext.receiver.parentThatIsA(StageMorph);
+    if (stage) {
+        stage.threads.processes.forEach(function (thread) {
+            if (thread.context.activeStream) {
+                thread.popContext();
+            }
+        });
+    }
+};
+
 // Process constant input options
 
 Process.prototype.inputOption = function (dta) {
@@ -2808,6 +2875,7 @@ Process.prototype.reportFrameCount = function () {
     startValue        initial value for interpolated operations
     activeAudio     audio buffer for interpolated operations, don't persist
     activeNote      audio oscillator for interpolated ops, don't persist
+    activeStream    video element for camera streaming, don't persist
     isLambda        marker for return ops
     isImplicitLambda    marker for return ops
     isCustomBlock   marker for return ops
@@ -2835,6 +2903,7 @@ function Context(
     this.startTime = null;
     this.activeAudio = null;
     this.activeNote = null;
+    this.activeStream = null;
     this.isLambda = false; // marks the end of a lambda
     this.isImplicitLambda = false; // marks the end of a C-shaped slot
     this.isCustomBlock = false; // marks the end of a custom block's stack

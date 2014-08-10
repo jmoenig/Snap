@@ -569,6 +569,16 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'pen',
             spec: 'stamp'
         },
+        doStreamCamera: {
+            type: 'command',
+            category: 'pen',
+            spec: 'start streaming from the camera'
+        },
+        doStopCamera: {
+            type: 'command',
+            category: 'pen',
+            spec: 'stop streaming from the camera'
+        },
 
         // Control
         receiveGo: {
@@ -4911,6 +4921,9 @@ StageMorph.prototype.blockTemplates = function (category) {
     } else if (cat === 'pen') {
 
         blocks.push(block('clear'));
+        blocks.push('-');
+        blocks.push(block('doStreamCamera'));
+        blocks.push(block('doStopCamera'));
 
     } else if (cat === 'control') {
 
