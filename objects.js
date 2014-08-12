@@ -4268,6 +4268,7 @@ StageMorph.prototype.init = function (globals) {
     this.paletteCache = {}; // not to be serialized (!)
     this.lastAnswer = ''; // last user input, do not persist
     this.activeSounds = []; // do not persist
+    this.lastCameraCanvas = null;
 
     this.trailsCanvas = null;
     this.isThreadSafe = false;

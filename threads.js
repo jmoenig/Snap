@@ -2355,6 +2355,24 @@ Process.prototype.objectTouchingObject = function (thisObj, name) {
     } else {
         stage = thisObj.parentThatIsA(StageMorph);
         if (stage) {
+            if (this.inputOption(name) === 'camera motion') {
+                var motionCanvas = this.getCameraMotion();
+
+                var x = thisObj.xPosition() + 210, y = 170 - thisObj.yPosition();
+                // ouch! hardcoded             ^        ^
+                var motionData = motionCanvas.getContext('2d').getImageData(
+                        x, y, thisObj.width(), thisObj.height());
+                var i = 0, average = 0;
+                while (i < (motionData.data.length * 0.25)) {
+                    average += (motionData.data[i*4] + motionData.data[i*4+1]
+                                + motionData.data[i*4+2]) / 3;
+                    ++i;
+                }
+                average = Math.round(average / (motionData.data.length * 0.25));
+                if (average > 10) {
+                    return true;
+                }
+            }
             if (this.inputOption(name) === 'edge' &&
                     !stage.bounds.containsRectangle(thisObj.bounds)) {
                 return true;
@@ -2768,12 +2786,29 @@ Process.prototype.doStreamCamera = function () {
                 video.play();
             }, this.handleError);
         }
+        stage.lastCameraCanvas = newCanvas(stage.dimensions);
     } else {
         var canvas = stage.trailsCanvas;
         var context = canvas.getContext('2d');
 
-        if (video.readyState !== 0) {
+        if (video.readyState == 4) {
             try {
+    // https://stackoverflow.com/questions/23840880/check-whether-canvas-is-black
+    // check whether lastCameraCanvas is white -> copy video canvas
+    // otherwise you would have a 'motion' when the first camera picture is loaded
+                var tmp = document.createElement('canvas'),
+                    ctx = tmp.getContext('2d'), result;
+                tmp.width = tmp.height = 1;
+                ctx.drawImage(stage.lastCameraCanvas, 0, 0, 1, 1);
+                result = ctx.getImageData(0, 0, 1, 1);
+                if (result.data[0] + result.data[1] + result.data[2]
+                        + result.data[3] === 0) {
+                    stage.lastCameraCanvas.getContext('2d').
+                        drawImage(video, 0, 0, video.width, video.height);
+                } else {
+                    var dest = stage.lastCameraCanvas.getContext('2d');
+                    dest.drawImage(stage.trailsCanvas, 0, 0);
+                }
                 context.drawImage(video, 0, 0, video.width, video.height);
                 stage.changed();
             } catch (e) {
@@ -2797,6 +2832,51 @@ Process.prototype.doStopCamera = function () {
             }
         });
     }
+};
+
+Process.prototype.getCameraMotion = function () {
+    // see https://www.adobe.com/devnet/html5/articles/javascript-motion-detection.html
+    fastAbs = function (value) // faster, but less acurate
+    { return (value ^ (value >> 31)) - (value >> 31); };
+
+    threshold = function (value)
+    { return (value > 0x15) ? 0xFF : 0; };
+
+    diff = function (target, data1, data2) {
+        if (data1.length != data2.length) return null;
+        var i = 0;
+        while (i < (data1.length * 0.25)) {
+            var average1 = (data1[4*i] + data1[4*i+1] + data1[4*i+2]) / 3;
+            var average2 = (data2[4*i] + data2[4*i+1] + data2[4*i+2]) / 3;
+            var diff = threshold(fastAbs(average1 - average2));
+            target[4*i] = diff;
+            target[4*i+1] = diff;
+            target[4*i+2] = diff;
+            target[4*i+3] = 0xFF;
+            ++i;
+        }
+    };
+
+    var stage = this.homeContext.receiver.parentThatIsA(StageMorph);
+    if (!stage.trailsCanvas || !stage.lastCameraCanvas) {
+        var canv = newCanvas(stage.dimensions);
+        var ctx = canv.getContext('2d');
+        ctx.fill();
+        return canv;
+    }
+
+    var canvasSource = stage.trailsCanvas;
+    var contextSource = canvasSource.getContext('2d');
+    var width = canvasSource.width,
+        height = canvasSource.height;
+    var sourceData = contextSource.getImageData(0, 0, width, height);
+    var lastImageData =
+        stage.lastCameraCanvas.getContext('2d').getImageData(0, 0, width, height);
+    var blendedData = contextSource.createImageData(width, height);
+    var blendedCanvas = newCanvas(stage.dimensions);
+    diff(blendedData.data, sourceData.data, lastImageData.data);
+    blendedCanvas.getContext('2d').putImageData(blendedData, 0, 0);
+    return blendedCanvas;
 };
 
 // Process constant input options
