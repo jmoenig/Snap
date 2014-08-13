@@ -155,7 +155,7 @@ DialogBoxMorph, BlockInputFragmentMorph, PrototypeHatBlockMorph, Costume*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2014-July-30';
+modules.blocks = '2014-August-13';
 
 
 var SyntaxElementMorph;
@@ -396,10 +396,11 @@ SyntaxElementMorph.prototype.allInputs = function () {
 SyntaxElementMorph.prototype.allEmptySlots = function () {
 /*
     answer empty input slots of all children excluding myself,
-    but omit those in nested rings (lambdas)
+    but omit those in nested rings (lambdas) and JS-Function primitives
 */
     var empty = [];
-    if (!(this instanceof RingMorph)) {
+    if (!(this instanceof RingMorph) &&
+            (this.selector !== 'reportJSFunction')) {
         this.children.forEach(function (morph) {
             if (morph.isEmptySlot && morph.isEmptySlot()) {
                 empty.push(morph);
