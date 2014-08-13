@@ -785,6 +785,18 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'sensing',
             spec: 'color %clr is touching %clr ?'
         },
+        reportCameraMotion: {
+            only: SpriteMorph,
+            type: 'predicate',
+            category: 'sensing',
+            spec: 'camera motion at my position?'
+        },
+        reportCameraDirection: {
+            only: SpriteMorph,
+            type: 'reporter',
+            category: 'sensing',
+            spec: 'camera motion direction'
+        },
         colorFiltered: {
             dev: true,
             type: 'reporter',
@@ -1867,6 +1879,9 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('reportTouchingObject'));
         blocks.push(block('reportTouchingColor'));
         blocks.push(block('reportColorIsTouchingColor'));
+        blocks.push('-');
+        blocks.push(block('reportCameraMotion'));
+        blocks.push(block('reportCameraDirection'));
         blocks.push('-');
         blocks.push(block('doAsk'));
         blocks.push(watcherToggle('getLastAnswer'));
@@ -4269,6 +4284,7 @@ StageMorph.prototype.init = function (globals) {
     this.lastAnswer = ''; // last user input, do not persist
     this.activeSounds = []; // do not persist
     this.lastCameraCanvas = null;
+    this.lastCameraMotion = new Point(0, 0);
 
     this.trailsCanvas = null;
     this.isThreadSafe = false;

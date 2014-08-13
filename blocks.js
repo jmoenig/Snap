@@ -6571,7 +6571,6 @@ InputSlotMorph.prototype.messagesReceivedMenu = function () {
 InputSlotMorph.prototype.collidablesMenu = function () {
     var dict = {
             'mouse-pointer' : ['mouse-pointer'],
-            'camera motion' : ['camera motion'],
             edge : ['edge'],
             'pen trails' : ['pen trails']
         },

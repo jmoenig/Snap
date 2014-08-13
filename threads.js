@@ -2355,24 +2355,6 @@ Process.prototype.objectTouchingObject = function (thisObj, name) {
     } else {
         stage = thisObj.parentThatIsA(StageMorph);
         if (stage) {
-            if (this.inputOption(name) === 'camera motion') {
-                var motionCanvas = this.getCameraMotion();
-
-                var x = thisObj.xPosition() + 210, y = 170 - thisObj.yPosition();
-                // ouch! hardcoded             ^        ^
-                var motionData = motionCanvas.getContext('2d').getImageData(
-                        x, y, thisObj.width(), thisObj.height());
-                var i = 0, average = 0;
-                while (i < (motionData.data.length * 0.25)) {
-                    average += (motionData.data[i*4] + motionData.data[i*4+1]
-                                + motionData.data[i*4+2]) / 3;
-                    ++i;
-                }
-                average = Math.round(average / (motionData.data.length * 0.25));
-                if (average > 10) {
-                    return true;
-                }
-            }
             if (this.inputOption(name) === 'edge' &&
                     !stage.bounds.containsRectangle(thisObj.bounds)) {
                 return true;
@@ -2440,6 +2422,62 @@ Process.prototype.reportColorIsTouchingColor = function (color1, color2) {
         }
     }
     return false;
+};
+
+Process.prototype.reportCameraMotion = function () {
+    var thisObj = this.blockReceiver();
+    var motionCanvas = this.getCameraMotion();
+
+    var x = thisObj.xPosition() + 210, y = 170 - thisObj.yPosition();
+    // ouch! hardcoded             ^        ^
+    var motionData = motionCanvas.getContext('2d').getImageData(
+        x, y, thisObj.width(), thisObj.height());
+    var i = 0, average = 0;
+    while (i < (motionData.data.length * 0.25)) {
+        average += (motionData.data[i*4] + 
+                motionData.data[i*4+1] + motionData.data[i*4+2]) / 3;
+        ++i;
+    }
+    average = Math.round(average / (motionData.data.length * 0.25));
+    if (average > 10) {
+        return true;
+    } else {
+        return false;
+    }
+};
+
+Process.prototype.reportCameraDirection = function () {
+    var stage = this.homeContext.receiver.parentThatIsA(StageMorph);
+    var motionCanvas = this.getCameraMotion();
+    var canv = document.createElement('canvas'),
+        ctx = canv.getContext('2d');
+    var data = motionCanvas.getContext('2d')
+        .getImageData(0, 0, motionCanvas.width, motionCanvas.height);
+    // scale, saves some time
+    canv.width = motionCanvas.width / 10;
+    canv.height = motionCanvas.height / 10;
+    ctx.drawImage(motionCanvas, 0, 0, canv.width, canv.height);
+    var yval = 0, xval = 0, cnt = 0;
+    var motion, imageData = ctx.getImageData(0, 0, canv.width, canv.height);
+    // find the geometric center of the moving object
+    for (var j = 0; j < canv.height; j++) {
+        for (var k = 0; k < canv.width; k++) {
+            motion = imageData.data[(j*canv.width+k)*4];
+            yval += j * motion;
+            xval += k * motion;
+            cnt += motion;
+        }
+    }
+    // calculate the angle between this center and the last one
+    var resultX = Math.round(xval / cnt / 1) * 1;
+    var resultY = Math.round(yval / cnt / 1) * 1;
+    var diff = (resultX + resultY) -
+        (stage.lastCameraMotion.x - stage.lastCameraMotion.y);
+    var deg = 0;
+    deg = degrees(Math.atan2(resultX - stage.lastCameraMotion.x,
+                stage.lastCameraMotion.y - resultY));
+    stage.lastCameraMotion = new Point(resultX, resultY);
+    return deg;
 };
 
 Process.prototype.reportDistanceTo = function (name) {
@@ -2753,6 +2791,12 @@ Process.prototype.doPlayNoteForSecs = function (pitch, secs) {
 // Process camera streaming primitives
 
 Process.prototype.doStreamCamera = function () {
+    if ((Date.now() - this.context.startTime) < 3000) {
+        // 20 FPS is enough
+        this.pushContext('doYield');
+        this.pushContext();
+        return;
+    }
     var myself = this;
     var video = this.context.activeStream || null;
 
