@@ -2424,26 +2424,33 @@ Process.prototype.reportColorIsTouchingColor = function (color1, color2) {
     return false;
 };
 
+Process.prototype.reportStreamingCamera = function () {
+    var stage = this.homeContext.receiver.parentThatIsA(StageMorph);
+    return stage.streamingCamera;
+};
+
 Process.prototype.reportCameraMotion = function () {
-    var thisObj = this.blockReceiver();
-    var motionCanvas = this.getCameraMotionCanvas();
-    var motion = this.getCameraMotion(motionCanvas, thisObj);
-    if (motion > 10) {
-        return true;
-    } else {
-        return false;
+    if (this.reportStreamingCamera()) {
+        var thisObj = this.blockReceiver();
+        var motionCanvas = this.getCameraMotionCanvas();
+        var motion = this.getCameraMotion(motionCanvas, thisObj);
+        if (motion > 10) {
+            return true;
+        }
     }
+    return false;
 };
 
 Process.prototype.reportCameraDirection = function () {
-    var thisObj = this.blockReceiver();
-    var motionCanvas = this.getCameraMotionCanvas();
-    var motion = this.getCameraMotion(motionCanvas, thisObj);
-    if (motion > 10) {
-        return this.getCameraDirection(motionCanvas);
-    } else {
-        return 0;
+    if (this.reportStreamingCamera()) {
+        var thisObj = this.blockReceiver();
+        var motionCanvas = this.getCameraMotionCanvas();
+        var motion = this.getCameraMotion(motionCanvas, thisObj);
+        if (motion > 10) {
+            return this.getCameraDirection(motionCanvas);
+        }
     }
+    return 0;
 };
 
 Process.prototype.reportDistanceTo = function (name) {
@@ -2771,6 +2778,8 @@ Process.prototype.doStreamCamera = function () {
         stage.trailsCanvas = newCanvas(stage.dimensions);
     }
 
+    stage.streamingCamera = false;
+
     if (video === null) {
         video = document.createElement('video');
         video.width = stage.dimensions.x;
@@ -2817,6 +2826,7 @@ Process.prototype.doStreamCamera = function () {
                 }
                 context.drawImage(video, 0, 0, video.width, video.height);
                 stage.changed();
+                stage.streamingCamera = true;
             } catch (e) {
                 if (e.name !== 'NS_ERROR_NOT_AVAILABLE') {
                     // https://bugzilla.mozilla.org/show_bug.cgi?id=879717
@@ -2832,6 +2842,7 @@ Process.prototype.doStreamCamera = function () {
 Process.prototype.doStopCamera = function () {
     var stage = this.homeContext.receiver.parentThatIsA(StageMorph);
     if (stage) {
+        stage.streamingCamera = false;
         stage.threads.processes.forEach(function (thread) {
             if (thread.context) {
                 if (thread.context.activeStream) {
