@@ -2426,20 +2426,9 @@ Process.prototype.reportColorIsTouchingColor = function (color1, color2) {
 
 Process.prototype.reportCameraMotion = function () {
     var thisObj = this.blockReceiver();
-    var motionCanvas = this.getCameraMotion();
-
-    var x = thisObj.xPosition() + 210, y = 170 - thisObj.yPosition();
-    // ouch! hardcoded             ^        ^
-    var motionData = motionCanvas.getContext('2d').getImageData(
-        x, y, thisObj.width(), thisObj.height());
-    var i = 0, average = 0;
-    while (i < (motionData.data.length * 0.25)) {
-        average += (motionData.data[i*4] + 
-                motionData.data[i*4+1] + motionData.data[i*4+2]) / 3;
-        ++i;
-    }
-    average = Math.round(average / (motionData.data.length * 0.25));
-    if (average > 10) {
+    var motionCanvas = this.getCameraMotionCanvas();
+    var motion = this.getCameraMotion(motionCanvas, thisObj);
+    if (motion > 10) {
         return true;
     } else {
         return false;
@@ -2447,37 +2436,14 @@ Process.prototype.reportCameraMotion = function () {
 };
 
 Process.prototype.reportCameraDirection = function () {
-    var stage = this.homeContext.receiver.parentThatIsA(StageMorph);
-    var motionCanvas = this.getCameraMotion();
-    var canv = document.createElement('canvas'),
-        ctx = canv.getContext('2d');
-    var data = motionCanvas.getContext('2d')
-        .getImageData(0, 0, motionCanvas.width, motionCanvas.height);
-    // scale, saves some time
-    canv.width = motionCanvas.width / 10;
-    canv.height = motionCanvas.height / 10;
-    ctx.drawImage(motionCanvas, 0, 0, canv.width, canv.height);
-    var yval = 0, xval = 0, cnt = 0;
-    var motion, imageData = ctx.getImageData(0, 0, canv.width, canv.height);
-    // find the geometric center of the moving object
-    for (var j = 0; j < canv.height; j++) {
-        for (var k = 0; k < canv.width; k++) {
-            motion = imageData.data[(j*canv.width+k)*4];
-            yval += j * motion;
-            xval += k * motion;
-            cnt += motion;
-        }
+    var thisObj = this.blockReceiver();
+    var motionCanvas = this.getCameraMotionCanvas();
+    var motion = this.getCameraMotion(motionCanvas, thisObj);
+    if (motion > 10) {
+        return this.getCameraDirection(motionCanvas);
+    } else {
+        return 0;
     }
-    // calculate the angle between this center and the last one
-    var resultX = Math.round(xval / cnt / 1) * 1;
-    var resultY = Math.round(yval / cnt / 1) * 1;
-    var diff = (resultX + resultY) -
-        (stage.lastCameraMotion.x - stage.lastCameraMotion.y);
-    var deg = 0;
-    deg = degrees(Math.atan2(resultX - stage.lastCameraMotion.x,
-                stage.lastCameraMotion.y - resultY));
-    stage.lastCameraMotion = new Point(resultX, resultY);
-    return deg;
 };
 
 Process.prototype.reportDistanceTo = function (name) {
@@ -2855,6 +2821,10 @@ Process.prototype.doStreamCamera = function () {
                 }
                 context.drawImage(video, 0, 0, video.width, video.height);
                 stage.changed();
+
+                var motionCanvas = this.getCameraMotionCanvas();
+                this.getCameraDirection(motionCanvas);
+                // dry-run to update lastCameraMotion
             } catch (e) {
                 if (e.name !== 'NS_ERROR_NOT_AVAILABLE') {
                     // https://bugzilla.mozilla.org/show_bug.cgi?id=879717
@@ -2878,7 +2848,7 @@ Process.prototype.doStopCamera = function () {
     }
 };
 
-Process.prototype.getCameraMotion = function () {
+Process.prototype.getCameraMotionCanvas = function () {
     // see https://www.adobe.com/devnet/html5/articles/javascript-motion-detection.html
     fastAbs = function (value) // faster, but less acurate
     { return (value ^ (value >> 31)) - (value >> 31); };
@@ -2921,6 +2891,54 @@ Process.prototype.getCameraMotion = function () {
     diff(blendedData.data, sourceData.data, lastImageData.data);
     blendedCanvas.getContext('2d').putImageData(blendedData, 0, 0);
     return blendedCanvas;
+};
+
+Process.prototype.getCameraMotion = function (motionCanvas, thisObj) {
+    var x = thisObj.xPosition() + 210, y = 170 - thisObj.yPosition();
+    // ouch! hardcoded             ^        ^
+    var motionData = motionCanvas.getContext('2d').getImageData(
+        x, y, thisObj.width(), thisObj.height());
+    var i = 0, average = 0;
+    while (i < (motionData.data.length * 0.25)) {
+        average += (motionData.data[i*4] +
+                motionData.data[i*4+1] + motionData.data[i*4+2]) / 3;
+        ++i;
+    }
+    average = Math.round(average / (motionData.data.length * 0.25));
+    return average;
+};
+
+Process.prototype.getCameraDirection = function (motionCanvas) {
+    var stage = this.homeContext.receiver.parentThatIsA(StageMorph);
+    var canv = document.createElement('canvas'),
+        ctx = canv.getContext('2d');
+    var data = motionCanvas.getContext('2d')
+        .getImageData(0, 0, motionCanvas.width, motionCanvas.height);
+    // scale, saves some time
+    canv.width = motionCanvas.width / 10;
+    canv.height = motionCanvas.height / 10;
+    ctx.drawImage(motionCanvas, 0, 0, canv.width, canv.height);
+    var yval = 0, xval = 0, cnt = 0;
+    var motion, imageData = ctx.getImageData(0, 0, canv.width, canv.height);
+    // find the geometric center of the moving object
+    for (var j = 0; j < canv.height; j++) {
+        for (var k = 0; k < canv.width; k++) {
+            motion = imageData.data[(j*canv.width+k)*4];
+            yval += j * motion;
+            xval += k * motion;
+            cnt += motion;
+        }
+    }
+    // calculate the angle between this center and the last one
+    var resultX = Math.round(xval / cnt);
+    var resultY = Math.round(yval / cnt);
+    var diff = (resultX + resultY) -
+        (stage.lastCameraMotion.x - stage.lastCameraMotion.y);
+    var deg = 0;
+    deg = degrees(Math.atan2(resultX - stage.lastCameraMotion.x,
+                stage.lastCameraMotion.y - resultY));
+    stage.lastCameraMotion = new Point(resultX, resultY);
+    return deg;
 };
 
 // Process constant input options
