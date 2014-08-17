@@ -2572,6 +2572,17 @@ Process.prototype.reportTimer = function () {
     return 0;
 };
 
+Process.prototype.reportLanguage = function () {
+    var ide = this.homeContext.receiver.parentThatIsA(IDE_Morph);
+    if (ide) {
+        var lang = ide.userLanguage;
+        if (lang) {
+            return lang;
+        }
+    }
+    return 'en';
+};
+
 // Process Dates and times in Snap
 // Map block options to built-in functions
 var dateMap = {
