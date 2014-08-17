@@ -2780,21 +2780,17 @@ Process.prototype.doStreamCamera = function () {
 
         var videoObject = {'video': true, 'audio': false};
 
-        if (navigator.getUserMedia) {
-            navigator.getUserMedia(videoObject, function (stream) {
-                video.src = stream;
+        navigator.getUserMedia_ = (navigator.getUserMedia ||
+                navigator.webkitGetUserMedia ||
+                navigator.mozGetUserMedia ||
+                navigator.msGetUserMedia);
+
+        if (!! navigator.getUserMedia_) {
+            navigator.getUserMedia_(videoObject, function (stream) {
+                window.URL_ = window.URL || window.webkitURL;
+                video.src = window.URL_.createObjectURL(stream);
                 video.play();
             }, this.handleError); // TODO: improve error handling
-        } else if (navigator.webkitGetUserMedia) {
-            navigator.webkitGetUserMedia(videoObject, function (stream) {
-                video.src = window.webkitURL.createObjectURL(stream);
-                video.play();
-            }, this.handleError);
-        } else if (navigator.mozGetUserMedia) {
-            navigator.mozGetUserMedia(videoObject, function (stream) {
-                video.src = window.URL.createObjectURL(stream);
-                video.play();
-            }, this.handleError);
         }
         stage.lastCameraCanvas = newCanvas(stage.dimensions);
     } else {
