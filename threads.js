@@ -2778,6 +2778,11 @@ Process.prototype.doStreamCamera = function () {
         stage.trailsCanvas = newCanvas(stage.dimensions);
     }
 
+    error = function (msg) {
+       var err = { name: 'Camera', message: msg };
+       myself.handleError(err);
+    };
+
     stage.streamingCamera = false;
 
     if (video === null) {
@@ -2799,7 +2804,9 @@ Process.prototype.doStreamCamera = function () {
                 window.URL_ = window.URL || window.webkitURL;
                 video.src = window.URL_.createObjectURL(stream);
                 video.play();
-            }, this.handleError); // TODO: improve error handling
+            }, error);
+        } else {
+            error('getUserMedia not supported');
         }
         stage.lastCameraCanvas = newCanvas(stage.dimensions);
     } else {
