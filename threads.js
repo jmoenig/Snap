@@ -2821,10 +2821,6 @@ Process.prototype.doStreamCamera = function () {
                 }
                 context.drawImage(video, 0, 0, video.width, video.height);
                 stage.changed();
-
-                var motionCanvas = this.getCameraMotionCanvas();
-                this.getCameraDirection(motionCanvas);
-                // dry-run to update lastCameraMotion
             } catch (e) {
                 if (e.name !== 'NS_ERROR_NOT_AVAILABLE') {
                     // https://bugzilla.mozilla.org/show_bug.cgi?id=879717
@@ -2841,8 +2837,10 @@ Process.prototype.doStopCamera = function () {
     var stage = this.homeContext.receiver.parentThatIsA(StageMorph);
     if (stage) {
         stage.threads.processes.forEach(function (thread) {
-            if (thread.context.activeStream) {
-                thread.popContext();
+            if (thread.context) {
+                if (thread.context.activeStream) {
+                    thread.popContext();
+                }
             }
         });
     }
