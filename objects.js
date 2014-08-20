@@ -557,7 +557,11 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'pen',
             spec: 'stamp'
         },
-
+        smoothBorders: {
+            type: 'command',
+            category: 'pen',
+            spec: 'fix borders'
+        },
         // Control
         receiveGo: {
             type: 'hat',
@@ -1272,6 +1276,7 @@ SpriteMorph.prototype.init = function (globals) {
 	this.costumeColor = null;
     this.borderColor = new Color(255,0,0);
     this.borderSize = 0;
+    this.lineList = [];
 
     // sprite nesting properties
     this.parts = []; // not serialized, only anchor (name)
@@ -1751,6 +1756,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('penBorderSize'))
         blocks.push('-');
         blocks.push(block('doStamp'));
+        blocks.push(block('smoothBorders'));
 
     } else if (cat === 'control') {
 
@@ -2673,6 +2679,7 @@ SpriteMorph.prototype.doStamp = function () {
 
 SpriteMorph.prototype.clear = function () {
     this.parent.clearPenTrails();
+    this.lineList = [];
 };
 
 // SpriteMorph pen size
@@ -2849,7 +2856,7 @@ SpriteMorph.prototype.justDropped = function () {
 
 // SpriteMorph drawing:
 
-SpriteMorph.prototype.drawLine = function (start, dest) {
+SpriteMorph.prototype.drawLine = function (start, dest, isBorder) {
     var stagePos = this.parent.bounds.origin,
         stageScale = this.parent.scale,
         context = this.parent.penTrails().getContext('2d'),
@@ -2864,6 +2871,13 @@ SpriteMorph.prototype.drawLine = function (start, dest) {
     if (this.isDown) {
         context.lineWidth = this.size + this.borderSize;
         context.strokeStyle = this.borderColor.toString();
+        if(isBorder) {
+            context.lineWidth = this.size + this.borderSize;
+            context.strokeStyle = this.borderColor.toString();
+        } else {
+            context.lineWidth = this.size;
+            context.strokeStyle = this.color.toString();
+        }
         if (this.useFlatLineEnds) {
             context.lineCap = 'butt';
             context.lineJoin = 'miter';
@@ -2872,19 +2886,37 @@ SpriteMorph.prototype.drawLine = function (start, dest) {
             context.lineJoin = 'round';
         }
         context.beginPath();
-        context.moveTo(from.x, from.y); //Draw the border
+        context.moveTo(from.x, from.y); //Draw a line
         context.lineTo(to.x, to.y);
         context.stroke();
 
-        context.lineWidth = this.size; //Draw the line
-        context.strokeStyle = this.color.toString();
-        context.moveTo(from.x, from.y);
-        context.lineTo(to.x, to.y);
-        context.stroke();
         if (this.isWarped === false) {
             this.world().broken.push(damaged);
         }
     }
+};
+
+SpriteMorph.prototype.drawBorderedLine = function(start,dest) { //drawLine wrapper to draw line and border in one go
+    this.drawLine(start,dest,true);
+    this.drawLine(start,dest,false);
+
+    if(this.isDown) {
+    this.lineList[this.lineList.length] = [start, dest, this.size, this.color];
+    }
+};
+
+SpriteMorph.prototype.smoothBorders = function(start, dest) {
+    var tempSize = this.size,
+        tempColor = this.color;
+    for(line = 0; line  < this.lineList.length; line++) {
+      this.size = this.lineList[line][2];
+      this.color = this.lineList[line][3];
+      this.drawLine(this.lineList[line][0], this.lineList[line][1], false);
+                                                                        
+    }
+    this.size = tempSize;
+    this.color = tempColor;
+    this.lineList = [];
 };
 
 // SpriteMorph motion - adjustments due to nesting
@@ -2896,7 +2928,7 @@ SpriteMorph.prototype.moveBy = function (delta, justMe) {
             this.rotationCenter() : null;
     SpriteMorph.uber.moveBy.call(this, delta);
     if (start) {
-        this.drawLine(start, this.rotationCenter());
+        this.drawBorderedLine(start, this.rotationCenter());
     }
     if (!justMe) {
         this.parts.forEach(function (part) {
@@ -4852,6 +4884,7 @@ StageMorph.prototype.blockTemplates = function (category) {
 
 StageMorph.prototype.clear = function () {
     this.clearPenTrails();
+    this.lineList = [];
 };
 
 // StageMorph user menu
