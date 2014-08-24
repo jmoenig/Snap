@@ -49,13 +49,13 @@
     May 14 - bugfixes, Snap integration (Jens)
     May 16 - flat design adjustments (Jens)
     July 12 - pipette tool, code formatting adjustments (Jens)
-    September 16 - flood fill freeze fix (Kartik)
+    Sept 16 - flood fill freeze fix (Kartik)
     Jan 08 - mouse leave dragging fix (Kartik)
     Feb 11 - dynamically adjust to stage dimensions (Jens)
     Apr 30 - localizations (Manuel)
     June 3 - transformations (Kartik)
     June 4 - tweaks (Jens)
-
+    Aug 24 - floodfill alpha-integer issue (Kartik)
  */
 
 /*global Point, Rectangle, DialogBoxMorph, fontHeight, AlignmentMorph,
