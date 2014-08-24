@@ -754,10 +754,11 @@ PaintCanvasMorph.prototype.floodfill = function (sourcepoint) {
         if (this.settings.primarycolor === "transparent") {
             data[currentpoint * 4 + 3] = 0;
         } else {
+            console.log(this.settings.primarycolor);
             data[currentpoint * 4] = this.settings.primarycolor.r;
             data[currentpoint * 4 + 1] = this.settings.primarycolor.g;
             data[currentpoint * 4 + 2] = this.settings.primarycolor.b;
-            data[currentpoint * 4 + 3] = this.settings.primarycolor.a;
+            data[currentpoint * 4 + 3] = this.settings.primarycolor.a*255;
         }
     }
     ctx.putImageData(img, 0, 0);
