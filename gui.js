@@ -2852,13 +2852,8 @@ IDE_Morph.prototype.exportGlobalBlocks = function () {
 };
 
 IDE_Morph.prototype.exportSprite = function (sprite) {
-<<<<<<< HEAD
-    var str = this.serializer.serialize(sprite);
-    openURI('data:text/xml,<sprites app="'
-=======
     var str = this.serializer.serialize(sprite.allParts());
-    window.open('data:text/xml,<sprites app="'
->>>>>>> master
+    openURI('data:text/xml,<sprites app="'
         + this.serializer.app
         + '" version="'
         + this.serializer.version
