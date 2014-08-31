@@ -83,7 +83,7 @@ ArgLabelMorph, localize, XML_Element, hex_sha512*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.threads = '2014-July-27';
+modules.threads = '2014-August-13';
 
 var ThreadManager;
 var Process;
@@ -134,7 +134,11 @@ ThreadManager.prototype.toggleProcess = function (block) {
     }
 };
 
-ThreadManager.prototype.startProcess = function (block, isThreadSafe) {
+ThreadManager.prototype.startProcess = function (
+    block,
+    isThreadSafe,
+    exportResult
+) {
     var active = this.findProcess(block),
         top = block.topBlock(),
         newProc;
@@ -147,6 +151,7 @@ ThreadManager.prototype.startProcess = function (block, isThreadSafe) {
     }
     top.addHighlight();
     newProc = new Process(block.topBlock());
+    newProc.exportResult = exportResult;
     this.processes.push(newProc);
     return newProc;
 };
@@ -232,11 +237,17 @@ ThreadManager.prototype.removeTerminatedProcesses = function () {
 
             if (proc.topBlock instanceof ReporterBlockMorph) {
                 if (proc.homeContext.inputs[0] instanceof List) {
-                    proc.topBlock.showBubble(new ListWatcherMorph(
-                        proc.homeContext.inputs[0]
-                    ));
+                    proc.topBlock.showBubble(
+                        new ListWatcherMorph(
+                            proc.homeContext.inputs[0]
+                        ),
+                        proc.exportResult
+                    );
                 } else {
-                    proc.topBlock.showBubble(proc.homeContext.inputs[0]);
+                    proc.topBlock.showBubble(
+                        proc.homeContext.inputs[0],
+                        proc.exportResult
+                    );
                 }
             }
         } else {
@@ -302,6 +313,8 @@ ThreadManager.prototype.findProcess = function (block) {
     httpRequest         active instance of an HttpRequest or null
     pauseOffset         msecs between the start of an interpolated operation
                         and when the process was paused
+    exportResult        boolean flag indicating whether a picture of the top
+                        block along with the result bubble shoud be exported
 */
 
 Process.prototype = {};
@@ -325,6 +338,7 @@ function Process(topBlock) {
     this.isPaused = false;
     this.pauseOffset = null;
     this.frameCount = 0;
+    this.exportResult = false;
 
     if (topBlock) {
         this.homeContext.receiver = topBlock.receiver();
@@ -743,7 +757,7 @@ Process.prototype.reifyPredicate = function (topBlock, parameterNames) {
 
 Process.prototype.reportJSFunction = function (parmNames, body) {
     return Function.apply(
-        Object.create(null),
+        null,
         parmNames.asArray().concat([body])
     );
 };
@@ -759,7 +773,10 @@ Process.prototype.evaluate = function (
 ) {
     if (!context) {return null; }
     if (context instanceof Function) {
-        return context.apply(this.homeContext.receiver, args.asArray());
+        return context.apply(
+            this.blockReceiver(),
+            args.asArray().concat([this])
+        );
     }
     if (context.isContinuation) {
         return this.runContinuation(context, args);

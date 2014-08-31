@@ -61,7 +61,7 @@ PushButtonMorph, SyntaxElementMorph, Color, Point, WatcherMorph,
 StringMorph, SpriteMorph, ScrollFrameMorph, CellMorph, ArrowMorph,
 MenuMorph, snapEquals, Morph, isNil, localize, MorphicPreferences*/
 
-modules.lists = '2014-July-27';
+modules.lists = '2014-July-28';
 
 var List;
 var ListWatcherMorph;
@@ -273,12 +273,14 @@ List.prototype.becomeArray = function () {
     if (this.isLinked) {
         var next = this, i;
         this.contents = [];
-        while (next.isLinked) {
+        while (next && next.isLinked) {
             this.contents.push(next.first);
             next = next.rest;
         }
-        for (i = 1; i <= next.contents.length; i += 1) {
-            this.contents.push(next.at(i));
+        if (next) {
+            for (i = 1; i <= next.contents.length; i += 1) {
+                this.contents.push(next.at(i));
+            }
         }
         this.isLinked = false;
         this.first = null;

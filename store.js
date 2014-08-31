@@ -61,7 +61,7 @@ SyntaxElementMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2014-Jun-04';
+modules.store = '2014-July-29';
 
 
 // XML_Serializer ///////////////////////////////////////////////////////
@@ -618,6 +618,25 @@ SnapSerializer.prototype.loadSprites = function (xmlString, ide) {
         sprite.gotoXY(+model.attributes.x || 0, +model.attributes.y || 0);
         myself.loadObject(sprite, model);
     });
+
+    // restore nesting associations
+    project.stage.children.forEach(function (sprite) {
+        var anchor;
+        if (sprite.nestingInfo) { // only sprites may have nesting info
+            anchor = project.sprites[sprite.nestingInfo.anchor];
+            if (anchor) {
+                anchor.attachPart(sprite);
+            }
+            sprite.rotatesWithAnchor = (sprite.nestingInfo.synch === 'true');
+        }
+    });
+    project.stage.children.forEach(function (sprite) {
+        if (sprite.nestingInfo) { // only sprites may have nesting info
+            sprite.nestingScale = +(sprite.nestingInfo.scale || sprite.scale);
+            delete sprite.nestingInfo;
+        }
+    });
+
     this.objects = {};
     this.project = {};
     this.mediaDict = {};

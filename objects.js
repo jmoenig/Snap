@@ -125,7 +125,7 @@ PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.objects = '2014-July-25';
+modules.objects = '2014-July-30';
 
 var SpriteMorph;
 var StageMorph;
@@ -1338,6 +1338,7 @@ SpriteMorph.prototype.fullCopy = function () {
     var c = SpriteMorph.uber.fullCopy.call(this),
         myself = this,
         arr = [],
+        dp,
         cb;
 
     c.stopTalking();
@@ -1348,7 +1349,6 @@ SpriteMorph.prototype.fullCopy = function () {
     c.scripts.owner = c;
     c.variables = this.variables.copy();
     c.variables.owner = c;
-
     c.customBlocks = [];
     this.customBlocks.forEach(function (def) {
         cb = def.copyAndBindTo(c);
@@ -1370,13 +1370,29 @@ SpriteMorph.prototype.fullCopy = function () {
         arr.push(sound);
     });
     c.sounds = new List(arr);
-
-    c.parts = [];
-    c.anchor = null;
     c.nestingScale = 1;
     c.rotatesWithAnchor = true;
+    c.anchor = null;
+    c.parts = [];
+    this.parts.forEach(function (part) {
+        dp = part.fullCopy();
+        dp.nestingScale = part.nestingScale;
+        dp.rotatesWithAnchor = part.rotatesWithAnchor;
+        c.attachPart(dp);
+    });
 
     return c;
+};
+
+SpriteMorph.prototype.appearIn = function (ide) {
+    // private - used in IDE_Morph.duplicateSprite()
+    this.name = ide.newSpriteName(this.name);
+    ide.stage.add(this);
+    ide.sprites.add(this);
+    ide.corral.addSprite(this);
+    this.parts.forEach(function (part) {
+        part.appearIn(ide);
+    });
 };
 
 // SpriteMorph versioning
@@ -2602,6 +2618,7 @@ SpriteMorph.prototype.userMenu = function () {
     }
     menu.addItem("duplicate", 'duplicate');
     menu.addItem("delete", 'remove');
+    menu.addItem("move", 'move');
     menu.addItem("edit", 'edit');
     menu.addLine();
     if (this.anchor) {
@@ -2626,7 +2643,7 @@ SpriteMorph.prototype.exportSprite = function () {
 
 SpriteMorph.prototype.edit = function () {
     var ide = this.parentThatIsA(IDE_Morph);
-    if (ide) {
+    if (ide && !ide.isAppMode) {
         ide.selectSprite(this);
     }
 };
@@ -2657,23 +2674,27 @@ SpriteMorph.prototype.remove = function () {
 // SpriteMorph cloning (experimental)
 
 SpriteMorph.prototype.createClone = function () {
-    var clone,
-        hats,
-        stage = this.parentThatIsA(StageMorph);
-    if (stage) {
-        if (stage.cloneCount > 300) {return; }
-        stage.cloneCount += 1;
-        clone = this.fullCopy();
-        clone.isClone = true;
-        clone.name = '';
-        clone.cloneOriginName = this.isClone ?
-                this.cloneOriginName : this.name;
-        stage.add(clone);
-        hats = clone.allHatBlocksFor('__clone__init__');
-        hats.forEach(function (block) {
-            stage.threads.startProcess(block, stage.isThreadSafe);
-        });
+    var stage = this.parentThatIsA(StageMorph);
+    if (stage && stage.cloneCount <= 300) {
+        this.fullCopy().clonify(stage);
     }
+};
+
+SpriteMorph.prototype.clonify = function (stage) {
+    var hats;
+    this.parts.forEach(function (part) {
+        part.clonify(stage);
+    });
+    stage.cloneCount += 1;
+    this.cloneOriginName = this.isClone ?
+            this.cloneOriginName : this.name;
+    this.isClone = true;
+    this.name = '';
+    stage.add(this);
+    hats = this.allHatBlocksFor('__clone__init__');
+    hats.forEach(function (block) {
+        stage.threads.startProcess(block, stage.isThreadSafe);
+    });
 };
 
 SpriteMorph.prototype.removeClone = function () {
@@ -2686,6 +2707,23 @@ SpriteMorph.prototype.removeClone = function () {
 };
 
 // SpriteMorph primitives
+
+// SpriteMorph hiding and showing:
+
+/*
+    override the inherited behavior to also hide/show all
+    nested parts.
+*/
+
+SpriteMorph.prototype.hide = function () {
+    SpriteMorph.uber.hide.call(this);
+    this.parts.forEach(function (part) {part.hide(); });
+};
+
+SpriteMorph.prototype.show = function () {
+    SpriteMorph.uber.show.call(this);
+    this.parts.forEach(function (part) {part.show(); });
+};
 
 // SpriteMorph pen color
 
@@ -3462,6 +3500,10 @@ SpriteMorph.prototype.mouseClickLeft = function () {
         procs.push(stage.threads.startProcess(block, stage.isThreadSafe));
     });
     return procs;
+};
+
+SpriteMorph.prototype.mouseDoubleClick = function () {
+    this.edit();
 };
 
 // SpriteMorph timer

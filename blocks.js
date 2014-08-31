@@ -155,7 +155,7 @@ DialogBoxMorph, BlockInputFragmentMorph, PrototypeHatBlockMorph, Costume*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2014-July-18';
+modules.blocks = '2014-August-13';
 
 
 var SyntaxElementMorph;
@@ -396,10 +396,11 @@ SyntaxElementMorph.prototype.allInputs = function () {
 SyntaxElementMorph.prototype.allEmptySlots = function () {
 /*
     answer empty input slots of all children excluding myself,
-    but omit those in nested rings (lambdas)
+    but omit those in nested rings (lambdas) and JS-Function primitives
 */
     var empty = [];
-    if (!(this instanceof RingMorph)) {
+    if (!(this instanceof RingMorph) &&
+            (this.selector !== 'reportJSFunction')) {
         this.children.forEach(function (morph) {
             if (morph.isEmptySlot && morph.isEmptySlot()) {
                 empty.push(morph);
@@ -1621,12 +1622,13 @@ SyntaxElementMorph.prototype.isEmptySlot = function () {
 
 // SyntaxElementMorph speech bubble feedback:
 
-SyntaxElementMorph.prototype.showBubble = function (value) {
+SyntaxElementMorph.prototype.showBubble = function (value, exportPic) {
     var bubble,
         txt,
         img,
         morphToShow,
         isClickable = false,
+        sf = this.parentThatIsA(ScrollFrameMorph),
         wrrld = this.world();
 
     if ((value === undefined) || !wrrld) {
@@ -1694,6 +1696,26 @@ SyntaxElementMorph.prototype.showBubble = function (value) {
         this.rightCenter().add(new Point(2, 0)),
         isClickable
     );
+    if (exportPic) {
+        this.exportPictureWithResult(bubble);
+    }
+    if (sf) {
+        bubble.keepWithin(sf);
+    }
+};
+
+SyntaxElementMorph.prototype.exportPictureWithResult = function (aBubble) {
+    var scr = this.fullImage(),
+        bub = aBubble.fullImageClassic(),
+        taller = Math.max(0, bub.height - scr.height),
+        pic = newCanvas(new Point(
+            scr.width + bub.width + 2,
+            scr.height + taller
+        )),
+        ctx = pic.getContext('2d');
+    ctx.drawImage(scr, 0, pic.height - scr.height);
+    ctx.drawImage(bub, scr.width + 2, 0);
+    window.open(pic.toDataURL());
 };
 
 // SyntaxElementMorph code mapping
@@ -2022,13 +2044,29 @@ BlockMorph.prototype.userMenu = function () {
     var menu = new MenuMorph(this),
         world = this.world(),
         myself = this,
+        shiftClicked = world.currentKey === 16,
         alternatives,
+        top,
         blck;
 
     menu.addItem(
         "help...",
         'showHelp'
     );
+    if (shiftClicked) {
+        top = this.topBlock();
+        if (top instanceof ReporterBlockMorph) {
+            menu.addItem(
+                "script pic with result...",
+                function () {
+                    top.ExportResultPic();
+                },
+                'open a new window\n' +
+                    'with a picture of both\nthis script and its result',
+                new Color(100, 0, 0)
+            );
+        }
+    }
     if (this.isTemplate) {
         if (!(this.parent instanceof SyntaxElementMorph)) {
             if (this.selector !== 'evaluateCustomBlock') {
@@ -2093,7 +2131,15 @@ BlockMorph.prototype.userMenu = function () {
     menu.addItem(
         "duplicate",
         function () {
-            this.fullCopy().pickUp(world);
+            var dup = myself.fullCopy(),
+                ide = myself.parentThatIsA(IDE_Morph);
+            dup.pickUp(world);
+            if (ide) {
+                world.hand.grabOrigin = {
+                    origin: ide.palette,
+                    position: ide.palette.center()
+                };
+            }
         },
         'make a copy\nand pick it up'
     );
@@ -4102,6 +4148,23 @@ ReporterBlockMorph.prototype.mouseClickLeft = function (pos) {
         ReporterBlockMorph.uber.mouseClickLeft.call(this, pos);
     }
 };
+
+// ReporterBlock exporting picture with result bubble
+
+ReporterBlockMorph.prototype.ExportResultPic = function () {
+    var top = this.topBlock(),
+        receiver = top.receiver(),
+        stage;
+    if (top !== this) {return; }
+    if (receiver) {
+        stage = receiver.parentThatIsA(StageMorph);
+        if (stage) {
+            stage.threads.stopProcess(top);
+            stage.threads.startProcess(top, false, true);
+        }
+    }
+};
+
 
 // ReporterBlockMorph deleting
 
