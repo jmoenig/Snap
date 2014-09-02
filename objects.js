@@ -1459,7 +1459,7 @@ SpriteMorph.prototype.drawNew = function () {
 	
 	//Check if color change has been applied earlier in script
 	if(this.colorChange){
-		this.changeCostumeColor(this.costumeColor);
+		this.changeCostumeColor(this.costumeColor.hsv()[0]*100);
 	}
 };
 
