@@ -1,4 +1,11 @@
 #!/bin/bash
+
+# Requirements:
+# git, nodejs, android SDK / other platform(s)
+# cordova (https://cordova.apache.org/)
+
+# binaries are in platform/android/ant-build/Snap-debug.apk
+
 cordova create Snap-Mobile edu.berkeley.snap "Snap\!"
 cd Snap-Mobile
 rm -rf www config.xml
