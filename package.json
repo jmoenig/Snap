@@ -1,0 +1,8 @@
+{
+    "name": "Snap!",
+    "version": "4.0",
+    "main": "snap.html",
+    "window": {
+        "toolbar": false
+    }
+}
