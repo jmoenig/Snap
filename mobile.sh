@@ -13,4 +13,5 @@ git clone https://github.com/Gubolin/snap.git www
 cd www
 git checkout mobileapp
 cordova platform add android
+cordova plugin add org.apache.cordova.vibration
 cordova build android

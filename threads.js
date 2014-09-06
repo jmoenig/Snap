@@ -2601,6 +2601,12 @@ Process.prototype.reportDate = function (datefn) {
     return result;
 };
 
+Process.prototype.doVibrate = function (seconds) {
+    if ("vibrate" in navigator) {
+        window.navigator.vibrate(seconds * 1000);
+    }
+};
+
 // Process code mapping
 
 /*
