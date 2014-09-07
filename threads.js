@@ -2601,6 +2601,108 @@ Process.prototype.reportDate = function (datefn) {
     return result;
 };
 
+Process.prototype.getCompassHeading = function (dest) {
+    var stage = this.homeContext.receiver.parentThatIsA(StageMorph);
+
+    stage.compassHeading = null;
+    if (navigator.compass) {
+        navigator.compass.getCurrentHeading(
+            function (result) {
+                stage.compassHeading = result;
+            },
+            function () {
+                stage.compassHeading =
+                    {'magneticHeading': 0, 'trueHeading': 0,
+                        'headingAccuracy': 0, 'timestamp': 0};
+            }
+        );
+    } else {
+        stage.compassHeading =
+            {'magneticHeading': 0, 'trueHeading': 0,
+                'headingAccuracy': 0, 'timestamp': 0};
+    }
+};
+
+Process.prototype.reportCompassHeading = function () {
+    var stage = this.homeContext.receiver.parentThatIsA(StageMorph);
+
+    if (this.context.wait) {
+        if (stage.compassHeading !== null) {
+            return stage.compassHeading.magneticHeading;
+        }
+    } else {
+        this.context.wait = true;
+        this.getCompassHeading();
+    }
+    this.pushContext('doYield');
+    this.pushContext();
+};
+
+Process.prototype.getAcceleration = function (dest) {
+    var stage = this.homeContext.receiver.parentThatIsA(StageMorph);
+
+    stage.acceleration = null;
+    if (navigator.accelerometer) {
+        navigator.accelerometer.getCurrentAcceleration(
+            function (result) {
+                stage.acceleration = result;
+            },
+            function () {
+                stage.acceleration =
+                    {'timestamp': 0, 'z': 0, 'y': 0, 'x': 0};
+            }
+        );
+    } else {
+        stage.acceleration =
+            {'timestamp': 0, 'z': 0, 'y': 0, 'x': 0};
+    }
+};
+
+Process.prototype.reportAccelerationX = function () {
+    var stage = this.homeContext.receiver.parentThatIsA(StageMorph);
+
+    if (this.context.wait) {
+        if (stage.acceleration !== null) {
+            return stage.acceleration.x;
+        }
+    } else {
+        this.context.wait = true;
+        this.getAcceleration();
+    }
+    this.pushContext('doYield');
+    this.pushContext();
+};
+
+Process.prototype.reportAccelerationY = function () {
+    var stage = this.homeContext.receiver.parentThatIsA(StageMorph);
+
+    if (this.context.wait) {
+        if (stage.acceleration !== null) {
+            return stage.acceleration.y;
+        }
+    } else {
+        this.context.wait = true;
+        this.getAcceleration();
+    }
+    this.pushContext('doYield');
+    this.pushContext();
+};
+
+Process.prototype.reportAccelerationZ = function () {
+    var stage = this.homeContext.receiver.parentThatIsA(StageMorph);
+
+    if (this.context.wait) {
+        if (stage.acceleration !== null) {
+            return stage.acceleration.z;
+        }
+    } else {
+        this.context.wait = true;
+        this.getAcceleration();
+    }
+    this.pushContext('doYield');
+    this.pushContext();
+};
+
 Process.prototype.doVibrate = function (seconds) {
     if ("vibrate" in navigator) {
         window.navigator.vibrate(seconds * 1000);
