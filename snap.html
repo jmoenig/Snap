@@ -19,15 +19,13 @@
 		<script type="text/javascript" src="cloud.js"></script>
 		<script type="text/javascript" src="sha512.js"></script>
 
-                <!-- packaged mobile app library -->
-                <script type="text/javascript" src="cordova.js"></script>
-
 		<script type="text/javascript">
 			var world;
 			window.onload = function () {
 				world = new WorldMorph(document.getElementById('world'));
                 world.worldCanvas.focus();
-				new IDE_Morph().openIn(world);
+				var ide = new IDE_Morph()
+                                ide.openIn(world);
 				setInterval(loop, 1);
 			};
 			function loop() {
