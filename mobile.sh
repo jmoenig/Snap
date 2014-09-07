@@ -17,4 +17,5 @@ cordova plugin add org.apache.cordova.plugin.softkeyboard
 cordova plugin add org.apache.cordova.vibration
 cordova plugin add org.apache.cordova.device-motion
 cordova plugin add org.apache.cordova.device-orientation
+cordova plugin add org.apache.cordova.geolocation
 cordova build android
