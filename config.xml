@@ -11,5 +11,5 @@
     <content src="snap.html" />
     <access origin="*" />
     <preference name="Fullscreen" value="true" />
-    <icon src="www/snap_logo_sm.png" platform="android" />
+    <icon src="www/snap_logo_sm.png" />
 </widget>
