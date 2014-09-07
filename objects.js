@@ -1910,6 +1910,8 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push('-');
         blocks.push(block('reportDate'));
         blocks.push('-');
+        blocks.push(block('doVibrate'));
+        blocks.push('-');
         blocks.push(block('reportCompassHeading'));
         blocks.push('-');
         blocks.push(block('reportAccelerationX'));
