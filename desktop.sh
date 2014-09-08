@@ -6,20 +6,27 @@ then
     exit 0
 fi
 
+scriptdir=$(readlink -e ".")
+
 # Requirements:
 # git, zip, nodejs
 # node-webkit (https://github.com/rogerwang/node-webkit), node-webkit-builder (https://github.com/mllrsohn/node-webkit-builder)
 
-# binaries are in snap/build/Snap!
+builddir=$(mktemp -d)
 
 if [[ $2 == "" ]]
 then
-    git clone https://github.com/Gubolin/snap.git www
-    cd www/
+    git clone https://github.com/Gubolin/snap.git $builddir
+    cd $builddir/
     git checkout mobileapp
 else
-    cp -R "$2" www
-    cd www/
+    mv "$2" $builddir
+    cd $builddir/
 fi
 
+# remove mobile config
+rm config.xml
+
 nwbuild -p "$1" .
+
+mv build/* $scriptdir/

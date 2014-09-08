@@ -16,6 +16,8 @@ then
     exit 0
 fi
 
+scriptdir=$(readlink -e ".")
+
 # Requirements:
 # git
 # UglifyJS2 (https://github.com/mishoo/UglifyJS2)
@@ -23,6 +25,7 @@ fi
 ide=true
 platform=$2
 
+# presentation mode
 if [[ "$3" != "" ]]
 then
     ide=false
@@ -32,40 +35,55 @@ if [ $ide == false ]
 then
    if [ -f "$3" ]
     then
-        content=$(cat "$3")
+        content=$(cat $3)
     else
         ide=true
     fi
 fi
 
-git clone "https://github.com/Gubolin/snap.git"
-cd "snap"
+buildsource=$(mktemp -d)
+git clone "https://github.com/Gubolin/snap.git" $buildsource
+cd "$buildsource"
 git checkout mobileapp
 
 rm -rf .git/
 
 if [ $ide == false ]
 then
+    # minimize everything
     rm lang* ypr.js paint.js cloud.js gui.js
 
     sed -i '/paint\.js"/d' snap.html
     sed -i '/cloud\.js"/d' snap.html
     sed -i 's/gui\.js"/binary\.js"/' snap.html
 
+    # load custom project from file
+    sed -i '/sha512\.js"/a\
+            <script type="text/javascript" src="code.js"></script> ' snap.html
+
+    echo "var code =" > code.js
+    echo "'$content'" >> code.js
+    echo ";" >> code.js
+
     sed -i "/ide\.openIn/a\
-        ide.droppedText(\'$content\'); " snap.html
+        ide.droppedText(code); " snap.html
 fi
 
+# compress all js files
 find . -name '*.js' | xargs -I {} uglifyjs {} -o {} -c
 
-find . \( \! -name '*.js' \! -name 'snap.html' \! -name 'mobile.sh' \! -name 'desktop.sh' \! -name 'snap_logo_sm.png' \! -name 'config.xml' \! -name 'package.json' -type f \) -print0 | xargs -0 rm
+# delete everything that is not html/js/logo/config
+find . \( \! -name '*.js' \! -name 'snap.html' \! -name 'snap_logo_sm.png' \! -name 'config.xml' \! -name 'package.json' -type f \) -print0 | xargs -0 rm
 find . -type d -empty -print0 | xargs -0 rm -r
 
-cd ..
+# return to the directory where the script was called from
+cd "$scriptdir"
+
+# run helper scripts for building
 
 if [[ $1 == "-m" ]]
 then
-    ./mobile.sh "$2" "snap"
+    ./mobile.sh "$2" "$buildsource"
 else
-    ./desktop.sh "$2" "snap"
+    ./desktop.sh "$2" "$buildsource"
 fi
