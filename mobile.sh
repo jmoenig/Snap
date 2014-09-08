@@ -47,6 +47,14 @@ cordova plugin add org.apache.cordova.vibration
 cordova plugin add org.apache.cordova.device-motion
 cordova plugin add org.apache.cordova.device-orientation
 cordova plugin add org.apache.cordova.geolocation
+
+if [[ $1 == "android" ]]
+then
+    # Remove default icons
+    cd "$builddir/platforms/android"
+    find -name '*.png' | xargs rm
+fi
+
 cordova build "$1"
 
 cd $builddir

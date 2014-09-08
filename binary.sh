@@ -67,6 +67,8 @@ then
 
     sed -i "/ide\.openIn/a\
         ide.droppedText(code); " snap.html
+else
+    rm binary.js
 fi
 
 # compress all js files
