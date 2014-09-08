@@ -415,6 +415,11 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: 'go back %n layers',
             defaults: [1]
         },
+        doNotify: {
+            type: 'command',
+            category: 'looks',
+            spec: 'notification with title %s and content %s'
+        },
         doScreenshot: {
             type: 'command',
             category: 'looks',
@@ -1762,6 +1767,8 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push('-');
         blocks.push(block('comeToFront'));
         blocks.push(block('goBack'));
+        blocks.push('-');
+        blocks.push(block('doNotify'));
 
     // for debugging: ///////////////
 
@@ -4905,6 +4912,8 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push('-');
         blocks.push(block('show'));
         blocks.push(block('hide'));
+        blocks.push('-');
+        blocks.push(block('doNotify'));
 
     // for debugging: ///////////////
 

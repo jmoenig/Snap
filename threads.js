@@ -2189,6 +2189,20 @@ Process.prototype.reportTextSplit = function (string, delimiter) {
     return new List(str.split(del));
 };
 
+// Process notification operations
+
+Process.prototype.doNotify = function (title, content) {
+    // TODO webkitNotification
+    if (window.plugin) {
+        if (window.plugin.notification) {
+            window.plugin.notification.local.add({
+                message:    content,
+                title:      title
+            });
+        }
+    }
+};
+
 // Process debugging
 
 Process.prototype.alert = function (data) {

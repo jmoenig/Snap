@@ -47,6 +47,7 @@ cordova plugin add org.apache.cordova.vibration
 cordova plugin add org.apache.cordova.device-motion
 cordova plugin add org.apache.cordova.device-orientation
 cordova plugin add org.apache.cordova.geolocation
+cordova plugin add de.appplant.cordova.plugin.local-notification
 
 if [[ $1 == "android" ]]
 then
