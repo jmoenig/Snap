@@ -2688,12 +2688,40 @@ Process.prototype.reportDate = function (datefn) {
 };
 
 // Process File access
+// http://www.html5rocks.com/en/tutorials/file/filesystem/
+Process.prototype.fileErrorHandler = function (e) {
+    var msg = '';
+
+    switch (e.code) {
+        case FileError.QUOTA_EXCEEDED_ERR:
+            msg = localize('no space left');
+            break;
+        case FileError.NOT_FOUND_ERR:
+            msg = localize('not found');
+            break;
+        case FileError.SECURITY_ERR:
+            msg = localize('access denied');
+            break;
+        case FileError.INVALID_MODIFICATION_ERR:
+            msg = 'INVALID_MODIFICATION_ERR';
+            break;
+        case FileError.INVALID_STATE_ERR:
+            msg = 'INVALID_STATE_ERR';
+            break;
+        default:
+            msg = localize('unknown error');
+        break;
+    }
+
+    this.handleError(msg);
+};
+
 Process.prototype.reportFileOrDirectoryContent = function (typeInput, filepath) {
     var myself = this;
     var type = myself.inputOption(typeInput);
 
-    if (myself.context.result == null) {
-        myself.context.result = 'wait';
+    if (myself.context.result === null) {
+        myself.context.result = false;
 
         if (window.resolveLocalFileSystemURL) {
             window.resolveLocalFileSystemURL(filepath,
@@ -2709,9 +2737,7 @@ Process.prototype.reportFileOrDirectoryContent = function (typeInput, filepath) 
 
                                 reader.readAsText(file);
                             },
-                            function (error) {
-                                myself.context.result = error.toString();
-                            }
+                            myself.fileErrorHandler
                         );
                     } else {
                         var dirReader = entry.createReader();
@@ -2725,19 +2751,15 @@ Process.prototype.reportFileOrDirectoryContent = function (typeInput, filepath) 
                                 );
                                 myself.context.result = new List(items);
                             },
-                            function (error) {
-                                myself.context.result = error.toString();
-                            }
+                            myself.fileErrorHandler
                         );
                     }
                 },
-                function (error) {
-                    myself.context.result = error.toString();
-                }
+                myself.fileErrorHandler
             );
         }
     } else {
-        if (myself.context.result !== 'wait') {
+        if (myself.context.result !== false) {
             return myself.context.result;
         }
     }
@@ -2782,11 +2804,14 @@ Process.prototype.doSetFileContent = function (content, filepath) {
                                 }
 
                                 fileWriter.write(blob);
-                            }
+                            },
+                            myself.fileErrorHandler
                         );
-                    }
+                    },
+                    myself.fileErrorHandler
                 );
-            }
+            },
+            myself.fileErrorHandler
         );
     }
 };
@@ -2801,7 +2826,13 @@ Process.prototype.createFileOrDirectory = function (typeInput, filepath) {
                 if (folders.length === 1) {
                     if (type === 'file') {
                         dirEntry.getFile(folders.slice(1),
-                            {create: true, exclusive: false});
+                            {create: true, exclusive: false},
+                            function (fileEntry) {
+                                return;
+                            },
+                            myself.fileErrorHandler
+                        );
+
                         return;
                     }
                 }
@@ -2809,14 +2840,16 @@ Process.prototype.createFileOrDirectory = function (typeInput, filepath) {
                 if (folders.length) {
                     createDir(dirEntry, folders.slice(1));
                 }
-            }
+            },
+            myself.fileErrorHandler
         );
-    };
+    }
 
     window.requestFileSystem(window.PERSISTENT, 0,
         function (fileSystem) {
             createDir(fileSystem.root, path.split('/'));
-        }
+        },
+        myself.fileErrorHandler
     );
 };
 
@@ -2824,7 +2857,7 @@ Process.prototype.reportFileOrDirectoryExists = function (typeInput, filepath) {
     var myself = this;
     var type = myself.inputOption(typeInput);
 
-    if (myself.context.result == null) {
+    if (myself.context.result === null) {
         myself.context.result = 'wait';
 
         if (window.resolveLocalFileSystemURL) {
@@ -2836,9 +2869,7 @@ Process.prototype.reportFileOrDirectoryExists = function (typeInput, filepath) {
                         myself.context.result = entry.isDirectory;
                     }
                 },
-                function (error) {
-                    myself.context.result = false;
-                }
+                myself.fileErrorHandler
             );
         }
     } else {
@@ -2856,7 +2887,8 @@ Process.prototype.doDeleteFileOrDirectory = function (typeInput, filepath) {
         window.resolveLocalFileSystemURL(filepath,
             function (entry) {
                 entry.remove();
-            }
+            },
+            myself.fileErrorHandler
         );
     }
 };
@@ -2870,7 +2902,7 @@ Process.prototype.reportHomeDirectory = function () {
     return '';
 };
 
-Process.prototype.getCompassHeading = function (dest) {
+Process.prototype.getCompassHeading = function () {
     var stage = this.homeContext.receiver.parentThatIsA(StageMorph);
 
     stage.compassHeading = null;
@@ -2907,7 +2939,7 @@ Process.prototype.reportCompassHeading = function () {
     this.pushContext();
 };
 
-Process.prototype.getAcceleration = function (dest) {
+Process.prototype.getAcceleration = function () {
     var stage = this.homeContext.receiver.parentThatIsA(StageMorph);
 
     stage.acceleration = null;
