@@ -883,6 +883,36 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'sensing',
             spec: 'current %dates'
         },
+        reportFileOrDirectoryContent: {
+            type: 'reporter',
+            category: 'sensing',
+            spec: 'content of the %fileOrDir %s'
+        },
+        doSetFileContent: {
+            type: 'command',
+            category: 'sensing',
+            spec: 'write %s to the file %s'
+        },
+        doCreateFileOrDirectory: {
+            type: 'command',
+            category: 'sensing',
+            spec: 'create %fileOrDir %s'
+        },
+        reportFileOrDirectoryExists: {
+            type: 'predicate',
+            category: 'sensing',
+            spec: '%fileOrDir %s exists'
+        },
+        doDeleteFileOrDirectory: {
+            type: 'command',
+            category: 'sensing',
+            spec: 'delete the %fileOrDir %s'
+        },
+        reportHomeDirectory: {
+            type: 'reporter',
+            category: 'sensing',
+            spec: 'home directory'
+        },
         doVibrate: {
             type: 'command',
             category: 'sensing',
@@ -1926,6 +1956,13 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('doSetFastTracking'));
         blocks.push('-');
         blocks.push(block('reportDate'));
+        blocks.push('-');
+        blocks.push(block('reportFileOrDirectoryContent'));
+        blocks.push(block('doSetFileContent'));
+        blocks.push(block('doCreateFileOrDirectory'));
+        blocks.push(block('reportFileOrDirectoryExists'));
+        blocks.push(block('doDeleteFileOrDirectory'));
+        blocks.push(block('reportHomeDirectory'));
         blocks.push('-');
         blocks.push(block('reportLanguage'));
         blocks.push(block('reportLocation'));
@@ -5048,6 +5085,13 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('doSetFastTracking'));
         blocks.push('-');
         blocks.push(block('reportDate'));
+        blocks.push('-');
+        blocks.push(block('reportFileOrDirectoryContent'));
+        blocks.push(block('doSetFileContent'));
+        blocks.push(block('doCreateFileOrDirectory'));
+        blocks.push(block('reportFileOrDirectoryExists'));
+        blocks.push(block('doDeleteFileOrDirectory'));
+        blocks.push(block('reportHomeDirectory'));
         blocks.push('-');
         blocks.push(block('reportLanguage'));
         blocks.push(block('reportLocation'));

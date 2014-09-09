@@ -2687,6 +2687,189 @@ Process.prototype.reportDate = function (datefn) {
     return result;
 };
 
+// Process File access
+Process.prototype.reportFileOrDirectoryContent = function (typeInput, filepath) {
+    var myself = this;
+    var type = myself.inputOption(typeInput);
+
+    if (myself.context.result == null) {
+        myself.context.result = 'wait';
+
+        if (window.resolveLocalFileSystemURL) {
+            window.resolveLocalFileSystemURL(filepath,
+                function (entry) {
+                    if (type === 'file') {
+                        entry.file(
+                            function (file) {
+                                var reader = new FileReader();
+
+                                reader.onloadend = function (e) {
+                                    myself.context.result = this.result;
+                                };
+
+                                reader.readAsText(file);
+                            },
+                            function (error) {
+                                myself.context.result = error.toString();
+                            }
+                        );
+                    } else {
+                        var dirReader = entry.createReader();
+                        dirReader.readEntries(
+                            function (results) {
+                                var items = [];
+                                results.forEach(
+                                    function (item) {
+                                        items.push(item.name);
+                                    }
+                                );
+                                myself.context.result = new List(items);
+                            },
+                            function (error) {
+                                myself.context.result = error.toString();
+                            }
+                        );
+                    }
+                },
+                function (error) {
+                    myself.context.result = error.toString();
+                }
+            );
+        }
+    } else {
+        if (myself.context.result !== 'wait') {
+            return myself.context.result;
+        }
+    }
+
+    this.pushContext('doYield');
+    this.pushContext();
+};
+
+Process.prototype.doSetFileContent = function (content, filepath) {
+    var dirpath = filepath.substring(0,
+        filepath.lastIndexOf('/'));
+    var filename = filepath.substring(
+        filepath.lastIndexOf('/') + 1);
+
+    if (window.resolveLocalFileSystemURL) {
+        window.resolveLocalFileSystemURL(dirpath,
+            function (dirEntry) {
+                dirEntry.getFile(filename,
+                    {create: true, exclusive: false},
+                    function (fileEntry) {
+                        fileEntry.createWriter(
+                            function (fileWriter) {
+                                var blob;
+
+                                try {
+                                    blob = new Blob([content],
+                                        {type: 'text/plain'});
+                                    // No `new Blob` for Android
+                                } catch (e) {
+                                    window.BlobBuilder =
+                                        window.BlobBuilder ||
+                                        window.WebKitBlobBuilder ||
+                                        window.MozBlobBuilder ||
+                                        window.MSBlobBuilder;
+
+                                    if (e.name == 'TypeError'
+                                            && window.BlobBuilder) {
+                                        var bb = new BlobBuilder();
+                                        bb.append(content);
+                                        blob = bb.getBlob('text/plain');
+                                    }
+                                }
+
+                                fileWriter.write(blob);
+                            }
+                        );
+                    }
+                );
+            }
+        );
+    }
+};
+
+Process.prototype.createFileOrDirectory = function (typeInput, filepath) {
+    var myself = this;
+    var type = myself.inputOption(typeInput);
+    
+    function createDir(rootDirEntry, folders) {
+        rootDirEntry.getDirectory(folders[0], {create: true},
+            function (dirEntry) {
+                if (folders.length === 1) {
+                    if (type === 'file') {
+                        dirEntry.getFile(folders.slice(1),
+                            {create: true, exclusive: false});
+                        return;
+                    }
+                }
+
+                if (folders.length) {
+                    createDir(dirEntry, folders.slice(1));
+                }
+            }
+        );
+    };
+
+    window.requestFileSystem(window.PERSISTENT, 0,
+        function (fileSystem) {
+            createDir(fileSystem.root, path.split('/'));
+        }
+    );
+};
+
+Process.prototype.reportFileOrDirectoryExists = function (typeInput, filepath) {
+    var myself = this;
+    var type = myself.inputOption(typeInput);
+
+    if (myself.context.result == null) {
+        myself.context.result = 'wait';
+
+        if (window.resolveLocalFileSystemURL) {
+            window.resolveLocalFileSystemURL(filepath,
+                function (entry) {
+                    if (type === 'file') {
+                        myself.context.result = !entry.isDirectory;
+                    } else {
+                        myself.context.result = entry.isDirectory;
+                    }
+                },
+                function (error) {
+                    myself.context.result = false;
+                }
+            );
+        }
+    } else {
+        if (myself.context.result !== 'wait') {
+            return myself.context.result;
+        }
+    }
+
+    this.pushContext('doYield');
+    this.pushContext();
+};
+
+Process.prototype.doDeleteFileOrDirectory = function (typeInput, filepath) {
+    if (window.resolveLocalFileSystemURL) {
+        window.resolveLocalFileSystemURL(filepath,
+            function (entry) {
+                entry.remove();
+            }
+        );
+    }
+};
+
+Process.prototype.reportHomeDirectory = function () {
+    if (cordova) {
+        if (cordova.file) {
+            return cordova.file.dataDirectory;
+        }
+    }
+    return '';
+};
+
 Process.prototype.getCompassHeading = function (dest) {
     var stage = this.homeContext.receiver.parentThatIsA(StageMorph);
 
