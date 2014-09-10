@@ -1273,7 +1273,7 @@ SpriteMorph.prototype.init = function (globals) {
     this.cloneOriginName = '';
 	this.originalPixels = null;
 	this.colorChange = false; //Flag to check if color change has been applied
-	this.costumeColor = null;
+	this.costumeColor = [];
     this.borderColor = new Color(255,0,0);
     this.borderSize = 0;
     this.lineList = [];
@@ -1457,10 +1457,6 @@ SpriteMorph.prototype.drawNew = function () {
     }
     this.version = Date.now();
 	
-	//Check if color change has been applied earlier in script
-	if(this.colorChange){
-		this.changeCostumeColor(this.costumeColor);
-	}
 };
 
 SpriteMorph.prototype.endWarp = function () {
