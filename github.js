@@ -27,8 +27,7 @@
 
 // Global settings /////////////////////////////////////////////////////
 
-/*global modules, IDE_Morph, SnapSerializer, nop,
-localize*/
+/*global modules, localize*/
 
 modules.github = '2014-July-31';
 
@@ -40,7 +39,7 @@ var GitHub = new GitHubBackend();
 
 // GitHubBackend /////////////////////////////////////////////////////////////
 
-function GitHubBackend(url) {
+function GitHubBackend() {
     this.gh = null;
     this.username = null;
     this.password = null; // TODO saved as plain text
@@ -163,40 +162,45 @@ GitHubBackend.prototype.saveProject = function (commitMessage, ide, callBack, er
                     }
                 });
 
+                function pushChanges () {
+                    if (myself.gh !== null) {
+                        var repo = myself.gh.getRepo(myself.username, ide.projectName);
+                        var branch = repo.getBranch(); // master (default)
+                        var message = commitMessage;
+
+                        var contents = {
+                            'snap.xml': data,
+                            'README.md': ide.projectNotes
+                        };
+
+                        branch.writeMany(contents, message).then(
+                            function () {
+                                callBack.call();
+                            },
+                            function (error) {
+                                errorCall.call(this, error, 'GitHub');
+                            }
+                        );
+                    }
+                }
+
                 if (exists === false){
                     myself.gh.getUser().createRepo(repoName, { // these should be discussed
-                        'description': 'Snap! Project - http://snap.berkeley.edu/snapsource/snap.html#github:Username=' + myself.username + '&projectName=' + repoName,
+                        'description': 'Snap! Project - http://gubolin.github.io/snap/index.html#github:Username=' + myself.username + '&projectName=' + repoName,
                         'has_wiki': 'false',
                         'has_downloads': 'false',
                         'auto_init': true,
                         'license_template': 'mit' // discuss
                     }).then(
-                        function () {},
+                        pushChanges,
                         function (error) {
                             errorCall.call(this, error, 'GitHub');
                         }
                     );
+                } else {
+                    pushChanges();
                 }
 
-                if (myself.gh !== null) {
-                    var repo = myself.gh.getRepo(myself.username, ide.projectName);
-                    var branch = repo.getBranch(); // master (default)
-                    var message = commitMessage;
-
-                    var contents = {
-                        'snap.xml': data,
-                        'README.md': ide.projectNotes
-                    };
-
-                    branch.writeMany(contents, message).then(
-                        function () {
-                            callBack.call();
-                        },
-                        function (error) {
-                            errorCall.call(this, error, 'GitHub');
-                        }
-                    );
-                }
             },
             function (error) {
                 errorCall.call(null, error, 'GitHub');
