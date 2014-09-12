@@ -4,3 +4,6 @@
 [submodule "vkBeautify"]
 	path = vkBeautify
 	url = https://github.com/vkiryukhin/vkBeautify
+[submodule "diff-merge"]
+	path = diff-merge
+	url = https://github.com/nighca/diff-merge

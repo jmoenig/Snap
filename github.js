@@ -57,7 +57,8 @@ GitHubBackend.prototype.getProject = function (
     userName,
     projectName,
     callBack,
-    errorCall
+    errorCall,
+    commitSha
 ) {
     var myself = this;
 
@@ -67,12 +68,19 @@ GitHubBackend.prototype.getProject = function (
 
     var repo = myself.gh.getRepo(userName, projectName);
     var branch = repo.getBranch(); // master (default)
-
-    branch.read('snap.xml', false).then(
-        function (sourceContent) {
-            callBack.call(
-                null,
-                sourceContent.content
+    branch.getCommits({}).then(
+        function (commits) {
+            branch.read('snap.xml', false).then(
+                function (sourceContent) {
+                    callBack.call(
+                        null,
+                        sourceContent.content,
+                        commits[0].sha
+                    );
+                },
+                function (error) {
+                    errorCall.call(this, error, 'GitHub');
+                }
             );
         },
         function (error) {
@@ -100,7 +108,7 @@ GitHubBackend.prototype.login = function (
         me = myself.gh.getUser();
         if (me !== null) {
             me.getInfo().then(
-                function(info) {
+                function() {
                     myself.username = username;
                     myself.password = password;
 
@@ -121,7 +129,7 @@ GitHubBackend.prototype.login = function (
     }
 };
 
-GitHubBackend.prototype.saveProject = function (commitMessage, ide, callBack, errorCall) {
+GitHubBackend.prototype.saveProject = function (commitMessage, parentCommitSha, lastCommit, ide, callBack, errorCall) {
     var myself = this,
         data;
     var pdata, media;
@@ -162,27 +170,46 @@ GitHubBackend.prototype.saveProject = function (commitMessage, ide, callBack, er
                     }
                 });
 
-                function pushChanges () {
+                pushChanges = function () {
                     if (myself.gh !== null) {
                         var repo = myself.gh.getRepo(myself.username, ide.projectName);
                         var branch = repo.getBranch(); // master (default)
                         var message = commitMessage;
 
-                        var contents = {
-                            'snap.xml': data,
-                            'README.md': ide.projectNotes
+                        writeChanges = function (code, pcSha) {
+                            if (pcSha !== parentCommitSha && data !== code) {
+                                var compareResult = window.diff.compare(lastCommit, data, '\n'); // get diff from last push
+                                data = window.diff.merge(code, compareResult); // apply it to the latest code
+                                console.log(data);
+                            }
+
+                            var contents = {
+                                'snap.xml': data,
+                                'README.md': ide.projectNotes
+                            };
+
+                            branch.writeMany(contents, message, pcSha).then(
+                                function () {
+                                    callBack.call();
+                                },
+                                function (error) {
+                                    errorCall.call(this, error, 'GitHub');
+                                }
+                            );
                         };
 
-                        branch.writeMany(contents, message).then(
-                            function () {
-                                callBack.call();
-                            },
-                            function (error) {
-                                errorCall.call(this, error, 'GitHub');
-                            }
-                        );
+                        if (parentCommitSha !== null) { // repo was just created
+                            myself.getProject(myself.username, ide.projectName,
+                                writeChanges,
+                                function (error) {
+                                    errorCall.call(this, error, 'GitHub');
+                                }
+                            );
+                        } else {
+                            writeChanges(data, parentCommitSha);
+                        }
                     }
-                }
+                };
 
                 if (exists === false){
                     myself.gh.getUser().createRepo(repoName, { // these should be discussed
