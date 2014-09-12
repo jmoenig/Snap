@@ -1,3 +1,6 @@
 [submodule "octokit.js"]
 	path = octokit.js
 	url = https://github.com/philschatz/octokit.js
+[submodule "vkBeautify"]
+	path = vkBeautify
+	url = https://github.com/vkiryukhin/vkBeautify
