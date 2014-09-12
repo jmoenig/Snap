@@ -1,0 +1,3 @@
+[submodule "vkBeautify"]
+	path = vkBeautify
+	url = https://github.com/vkiryukhin/vkBeautify
