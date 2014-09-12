@@ -3936,7 +3936,17 @@ IDE_Morph.prototype.saveProjectToGitHub = function (name, commitMessage) {
         GitHub.saveProject(
             commitMessage,
             this,
-            function () {myself.showMessage('saved.', 2); },
+            function () {
+                GitHub.getProject(
+                    GitHub.username,
+                    name, 
+                    function (code) {
+                        myself.source = 'github';
+                        myself.droppedText(code);
+                    },
+                    myself.githubError()
+                );
+            },
             this.githubError()
         );
     }
@@ -5017,7 +5027,7 @@ ProjectDialogMorph.prototype.openCloudProject = function (project) {
 ProjectDialogMorph.prototype.openGitHubProject = function (project, user) {
     var myself = this;
     
-    if (user == null) {
+    if (user == null) { // jshint ignore:line
         user = GitHub.username;
     }
 
