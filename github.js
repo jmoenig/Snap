@@ -259,6 +259,10 @@ GitHubBackend.prototype.getProjectList = function (callBack, errorCall) {
                         };
                     })();
 
+                    if (repos.length === 0) {
+                        callBack.call(myself, snapProjects);
+                    }
+
                     repos.forEach(function (repo) {
                         if (repo.description.indexOf('Snap! Project') > -1) { // TODO nicer detection
                             var project, ghrepo, branch;
