@@ -135,6 +135,7 @@ GitHubBackend.prototype.saveProject = function (commitMessage, parentCommitSha, 
     var pdata, media;
     var repoName = ide.projectName.replace(/[^\w-]/g, ''); // TODO validation of project name
 
+    ide.stage.fireStopAllEvent();
     ide.serializer.isCollectingMedia = true;
     pdata = ide.serializer.serialize(ide.stage);
     media = ide.hasChangedMedia ?
