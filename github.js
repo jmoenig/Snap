@@ -139,7 +139,7 @@ GitHubBackend.prototype.saveProject = function (commitMessage, parentCommitSha, 
     pdata = ide.serializer.serialize(ide.stage);
     media = ide.hasChangedMedia ?
             ide.serializer.mediaXML(ide.projectName) : null;
-    data = '<snapdata>' + pdata + media + '</snapdata>';
+    data = '<snapdata>\n' + pdata + '\n' + media + '\n</snapdata>';
 
     // check if serialized data can be parsed back again
     try {
