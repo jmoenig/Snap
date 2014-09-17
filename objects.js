@@ -125,7 +125,7 @@ PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.objects = '2014-July-30';
+modules.objects = '2014-September-17';
 
 var SpriteMorph;
 var StageMorph;
@@ -6735,7 +6735,8 @@ WatcherMorph.prototype.update = function () {
     if (this.target && this.getter) {
         this.updateLabel();
         if (this.target instanceof VariableFrame) {
-            newValue = this.target.vars[this.getter];
+            newValue = this.target.vars[this.getter] ?
+                    this.target.vars[this.getter].value : undefined;
         } else {
             newValue = this.target[this.getter]();
         }
@@ -6820,7 +6821,7 @@ WatcherMorph.prototype.fixLayout = function () {
         this.sliderMorph.button.pressColor.b += 100;
         this.sliderMorph.setHeight(fontSize);
         this.sliderMorph.action = function (num) {
-            myself.target.vars[myself.getter] = Math.round(num);
+            myself.target.vars[myself.getter].value = Math.round(num);
         };
         this.add(this.sliderMorph);
     }

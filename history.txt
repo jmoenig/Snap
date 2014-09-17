@@ -2262,3 +2262,7 @@ ______
 ------
 * Threads, Blocks: enable Zombiefication of JS-Functions
 * Morphic: Fix #563 (Paste into Chrome), thanks, @Muon, for the hint!
+
+140917
+------
+* Threads, Objects, Store: Refactor variables handling, introducing Variable objects, all functionality stays the same
