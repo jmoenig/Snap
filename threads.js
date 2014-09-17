@@ -83,7 +83,7 @@ ArgLabelMorph, localize, XML_Element, hex_sha512*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.threads = '2014-August-13';
+modules.threads = '2014-September-17';
 
 var ThreadManager;
 var Process;
@@ -2982,6 +2982,20 @@ Context.prototype.stackSize = function () {
     return 1 + this.parentContext.stackSize();
 };
 
+// Variable /////////////////////////////////////////////////////////////////
+
+function Variable(value) {
+    this.value = value;
+}
+
+Variable.prototype.toString = function () {
+    return 'a Variable [' + this.value + ']';
+};
+
+Variable.prototype.copy = function () {
+    return new Variable(this.value);
+};
+
 // VariableFrame ///////////////////////////////////////////////////////
 
 function VariableFrame(parentFrame, owner) {
@@ -3049,7 +3063,7 @@ VariableFrame.prototype.setVar = function (name, value) {
 */
     var frame = this.find(name);
     if (frame) {
-        frame.vars[name] = value;
+        frame.vars[name].value = value;
     }
 };
 
@@ -3063,11 +3077,11 @@ VariableFrame.prototype.changeVar = function (name, delta) {
     var frame = this.find(name),
         value;
     if (frame) {
-        value = parseFloat(frame.vars[name]);
+        value = parseFloat(frame.vars[name].value);
         if (isNaN(value)) {
-            frame.vars[name] = delta;
+            frame.vars[name].value = delta;
         } else {
-            frame.vars[name] = value + parseFloat(delta);
+            frame.vars[name].value = value + parseFloat(delta);
         }
     }
 };
@@ -3077,7 +3091,7 @@ VariableFrame.prototype.getVar = function (name, upvars) {
         value,
         upvarReference;
     if (frame) {
-        value = frame.vars[name];
+        value = frame.vars[name].value;
         return (value === 0 ? 0
                 : value === false ? false
                         : value === '' ? ''
@@ -3101,7 +3115,7 @@ VariableFrame.prototype.getVar = function (name, upvars) {
 };
 
 VariableFrame.prototype.addVar = function (name, value) {
-    this.vars[name] = (value === 0 ? 0
+    this.vars[name] = new Variable(value === 0 ? 0
               : value === false ? false
                        : value === '' ? '' : value || 0);
 };
@@ -3159,23 +3173,11 @@ VariableFrame.prototype.allNames = function () {
     return answer;
 };
 
-// Variable /////////////////////////////////////////////////////////////////
-
-function Variable(value) {
-    this.value = value;
-}
-
-Variable.prototype.toString = function () {
-    return 'a Variable [' + this.value + ']';
-};
-
-Variable.prototype.copy = function () {
-    return new Variable(this.value);
-};
-
 // UpvarReference ///////////////////////////////////////////////////////////
 
 // ... quasi-inherits some features from VariableFrame
+// current variable refactoring efforts will make the upvar reference
+// mechanism obsolete
 
 function UpvarReference(parent) {
     this.vars = {}; // structure: {upvarName : [varName, varFrame]}
@@ -3207,7 +3209,7 @@ UpvarReference.prototype.find = function (name) {
 UpvarReference.prototype.getVar = function (name) {
     var varName = this.vars[name][0],
         varFrame = this.vars[name][1],
-        value = varFrame.vars[varName];
+        value = varFrame.vars[varName].value;
     return (value === 0 ? 0 : value || 0); // don't return null
 };
 

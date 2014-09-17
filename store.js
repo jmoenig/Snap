@@ -57,11 +57,11 @@ newCanvas, Costume, Sound, Audio, IDE_Morph, ScriptsMorph, BlockMorph,
 ArgMorph, InputSlotMorph, TemplateSlotMorph, CommandSlotMorph,
 FunctionSlotMorph, MultiArgMorph, ColorSlotMorph, nop, CommentMorph, isNil,
 localize, sizeOf, ArgLabelMorph, SVG_Costume, MorphicPreferences,
-SyntaxElementMorph*/
+SyntaxElementMorph, Variable*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2014-July-29';
+modules.store = '2014-September-17';
 
 
 // XML_Serializer ///////////////////////////////////////////////////////
@@ -730,8 +730,8 @@ SnapSerializer.prototype.loadVariables = function (varFrame, element) {
             return;
         }
         value = child.children[0];
-        varFrame.vars[child.attributes.name] = value ?
-                myself.loadValue(value) : 0;
+        varFrame.vars[child.attributes.name] = new Variable(value ?
+                myself.loadValue(value) : 0);
     });
 };
 
@@ -1509,7 +1509,7 @@ Sound.prototype.toXML = function (serializer) {
 VariableFrame.prototype.toXML = function (serializer) {
     var myself = this;
     return Object.keys(this.vars).reduce(function (vars, v) {
-        var val = myself.vars[v],
+        var val = myself.vars[v].value,
             dta;
         if (val === undefined || val === null) {
             dta = serializer.format('<variable name="@"/>', v);
