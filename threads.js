@@ -40,8 +40,8 @@
         ThreadManager
         Process
         Context
+        Variable
         VariableFrame
-        UpvarReference
 
 
     credits
@@ -83,13 +83,12 @@ ArgLabelMorph, localize, XML_Element, hex_sha512*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.threads = '2014-September-17';
+modules.threads = '2014-September-18';
 
 var ThreadManager;
 var Process;
 var Context;
 var VariableFrame;
-var UpvarReference;
 
 function snapEquals(a, b) {
     if (a instanceof List || (b instanceof List)) {
@@ -600,8 +599,7 @@ Process.prototype.evaluateSequence = function (arr) {
         outer = this.context.outerContext,
         isLambda = this.context.isLambda,
         isImplicitLambda = this.context.isImplicitLambda,
-        isCustomBlock = this.context.isCustomBlock,
-        upvars = this.context.upvars;
+        isCustomBlock = this.context.isCustomBlock;
     if (pc === (arr.length - 1)) { // tail call elimination
         this.context = new Context(
             this.context.parentContext,
@@ -612,9 +610,6 @@ Process.prototype.evaluateSequence = function (arr) {
         this.context.isLambda = isLambda;
         this.context.isImplicitLambda = isImplicitLambda;
         this.context.isCustomBlock = isCustomBlock;
-        if (upvars) {
-            this.context.upvars = new UpvarReference(upvars);
-        }
     } else {
         if (pc >= arr.length) {
             this.popContext();
@@ -860,9 +855,6 @@ Process.prototype.evaluate = function (
             }
         }
     }
-    if (this.context.upvars) {
-        runnable.upvars = new UpvarReference(this.context.upvars);
-    }
 
     if (runnable.expression instanceof CommandBlockMorph) {
         runnable.expression = runnable.expression.blockSequence();
@@ -1026,7 +1018,6 @@ Process.prototype.evaluateCustomBlock = function () {
         extra,
         i,
         value,
-        upvars,
         outer;
 
     if (!context) {return null; }
@@ -1061,24 +1052,12 @@ Process.prototype.evaluateCustomBlock = function () {
             outer.variables.addVar(context.inputs[i], value);
 
             // if the parameter is an upvar,
-            // create an UpvarReference to it
+            // create a reference to the variable it points to
             if (declarations[context.inputs[i]][0] === '%upvar') {
-                if (!upvars) { // lazy initialization
-                    upvars = new UpvarReference(this.context.upvars);
-                }
-                upvars.addReference(
-                    value,
-                    context.inputs[i],
-                    outer.variables
-                );
+                this.context.outerContext.variables.vars[value] =
+                    outer.variables.vars[context.inputs[i]];
             }
         }
-    }
-
-    if (upvars) {
-        runnable.upvars = upvars;
-    } else if (this.context.upvars) {
-        runnable.upvars = new UpvarReference(this.context.upvars);
     }
 
     if (runnable.expression instanceof CommandBlockMorph) {
@@ -1121,11 +1100,8 @@ Process.prototype.doChangeVar = function (varName, value) {
 
 Process.prototype.reportGetVar = function () {
     // assumes a getter block whose blockSpec is a variable name
-    var varName = this.context.expression.blockSpec;
-
     return this.context.variables.getVar(
-        varName,
-        this.context.upvars
+        this.context.expression.blockSpec
     );
 };
 
@@ -1332,8 +1308,7 @@ Process.prototype.doIf = function () {
         outer = this.context.outerContext, // for tail call elimination
         isLambda = this.context.isLambda,
         isImplicitLambda = this.context.isImplicitLambda,
-        isCustomBlock = this.context.isCustomBlock,
-        upvars = this.context.upvars;
+        isCustomBlock = this.context.isCustomBlock;
 
     this.popContext();
     if (args[0]) {
@@ -1342,7 +1317,6 @@ Process.prototype.doIf = function () {
             this.context.isLambda = isLambda;
             this.context.isImplicitLambda = isImplicitLambda;
             this.context.isCustomBlock = isCustomBlock;
-            this.context.upvars = new UpvarReference(upvars);
         }
     }
     this.pushContext();
@@ -1353,8 +1327,7 @@ Process.prototype.doIfElse = function () {
         outer = this.context.outerContext, // for tail call elimination
         isLambda = this.context.isLambda,
         isImplicitLambda = this.context.isImplicitLambda,
-        isCustomBlock = this.context.isCustomBlock,
-        upvars = this.context.upvars;
+        isCustomBlock = this.context.isCustomBlock;
 
     this.popContext();
     if (args[0]) {
@@ -1372,7 +1345,6 @@ Process.prototype.doIfElse = function () {
         this.context.isLambda = isLambda;
         this.context.isImplicitLambda = isImplicitLambda;
         this.context.isCustomBlock = isCustomBlock;
-        this.context.upvars = new UpvarReference(upvars);
     }
 
     this.pushContext();
@@ -1551,8 +1523,7 @@ Process.prototype.doRepeat = function (counter, body) {
         outer = this.context.outerContext, // for tail call elimination
         isLambda = this.context.isLambda,
         isImplicitLambda = this.context.isImplicitLambda,
-        isCustomBlock = this.context.isCustomBlock,
-        upvars = this.context.upvars;
+        isCustomBlock = this.context.isCustomBlock;
 
     if (counter < 1) { // was '=== 0', which caused infinite loops on non-ints
         return null;
@@ -1564,7 +1535,6 @@ Process.prototype.doRepeat = function (counter, body) {
     this.context.isLambda = isLambda;
     this.context.isImplicitLambda = isImplicitLambda;
     this.context.isCustomBlock = isCustomBlock;
-    this.context.upvars = new UpvarReference(upvars);
 
     this.context.addInput(counter - 1);
 
@@ -2742,7 +2712,6 @@ Process.prototype.inputOption = function (dta) {
 // Process stack
 
 Process.prototype.pushContext = function (expression, outerContext) {
-    var upvars = this.context ? this.context.upvars : null;
     this.context = new Context(
         this.context,
         expression,
@@ -2751,9 +2720,6 @@ Process.prototype.pushContext = function (expression, outerContext) {
         this.context ? // check needed due to tail call elimination
                 this.context.receiver : this.homeContext.receiver
     );
-    if (upvars) {
-        this.context.upvars = new UpvarReference(upvars);
-    }
 };
 
 Process.prototype.popContext = function () {
@@ -2799,7 +2765,6 @@ Process.prototype.reportFrameCount = function () {
                     null or a String denoting a selector, e.g. 'doYield'
     receiver        the object to which the expression applies, if any
     variables        the current VariableFrame, if any
-    upvars          the current UpvarReference, if any (default: null)
     inputs            an array of input values computed so far
                     (if expression is a    BlockMorph)
     pc                the index of the next block to evaluate
@@ -2829,7 +2794,6 @@ function Context(
         this.variables.parentFrame = this.outerContext.variables;
         this.receiver = this.outerContext.receiver;
     }
-    this.upvars = null; // set to an UpvarReference in custom blocks
     this.inputs = [];
     this.pc = 0;
     this.startTime = null;
@@ -3086,10 +3050,9 @@ VariableFrame.prototype.changeVar = function (name, delta) {
     }
 };
 
-VariableFrame.prototype.getVar = function (name, upvars) {
+VariableFrame.prototype.getVar = function (name) {
     var frame = this.silentFind(name),
-        value,
-        upvarReference;
+        value;
     if (frame) {
         value = frame.vars[name].value;
         return (value === 0 ? 0
@@ -3100,12 +3063,6 @@ VariableFrame.prototype.getVar = function (name, upvars) {
     if (typeof name === 'number') {
         // empty input with a Binding-ID called without an argument
         return '';
-    }
-    if (upvars) {
-        upvarReference = upvars.find(name);
-        if (upvarReference) {
-            return upvarReference.getVar(name);
-        }
     }
     throw new Error(
         'a variable of name \''
@@ -3172,55 +3129,3 @@ VariableFrame.prototype.allNames = function () {
     }
     return answer;
 };
-
-// UpvarReference ///////////////////////////////////////////////////////////
-
-// ... quasi-inherits some features from VariableFrame
-// current variable refactoring efforts will make the upvar reference
-// mechanism obsolete
-
-function UpvarReference(parent) {
-    this.vars = {}; // structure: {upvarName : [varName, varFrame]}
-    this.parentFrame = parent || null;
-}
-
-UpvarReference.prototype.addReference = function (
-    upvarName,
-    varName,
-    varFrame
-) {
-    this.vars[upvarName] = [varName, varFrame];
-};
-
-UpvarReference.prototype.find = function (name) {
-/*
-    answer the closest upvar reference containing
-    the specified variable, or answer null.
-*/
-    if (this.vars[name] !== undefined) {
-        return this;
-    }
-    if (this.parentFrame) {
-        return this.parentFrame.find(name);
-    }
-    return null;
-};
-
-UpvarReference.prototype.getVar = function (name) {
-    var varName = this.vars[name][0],
-        varFrame = this.vars[name][1],
-        value = varFrame.vars[varName].value;
-    return (value === 0 ? 0 : value || 0); // don't return null
-};
-
-// UpvarReference tools
-
-UpvarReference.prototype.toString = function () {
-    return 'an UpvarReference {' + this.names() + '}';
-};
-
-// UpvarReference quasi-inheritance from VariableFrame
-
-UpvarReference.prototype.names = VariableFrame.prototype.names;
-UpvarReference.prototype.allNames = VariableFrame.prototype.allNames;
-UpvarReference.prototype.allNamesDict = VariableFrame.prototype.allNamesDict;
