@@ -2266,3 +2266,7 @@ ______
 140917
 ------
 * Threads, Objects, Store: Refactor variables handling, introducing Variable objects, all functionality stays the same
+
+140918
+------
+* Threads: fixed #174, replace UpvarReferences with references to Variable objects, fixes upvar scope issues
