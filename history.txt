@@ -2274,3 +2274,4 @@ ______
 140922
 ------
 * Blocks: Make upvars mutable
+* GUI: fixed #585 (sprite name conflict with stage). Thanks, Michael, for the report!
