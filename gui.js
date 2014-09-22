@@ -69,7 +69,7 @@ SpeechBubbleMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2014-July-30';
+modules.gui = '2014-September-22';
 
 // Declarations
 
@@ -1859,7 +1859,7 @@ IDE_Morph.prototype.newSpriteName = function (name, ignoredSprite) {
         stem = (ix < 0) ? name : name.substring(0, ix),
         count = 1,
         newName = stem,
-        all = this.sprites.asArray().filter(
+        all = this.sprites.asArray().concat(this.stage).filter(
             function (each) {return each !== ignoredSprite; }
         ).map(
             function (each) {return each.name; }
