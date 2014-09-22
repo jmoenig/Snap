@@ -2270,3 +2270,7 @@ ______
 140918
 ------
 * Threads: fixed #174, replace UpvarReferences with references to Variable objects, fixes upvar scope issues
+
+140922
+------
+* Blocks: Make upvars mutable
