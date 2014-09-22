@@ -5639,6 +5639,46 @@ Costume.prototype.isTainted = function () {
     return false;
 };
 
+Costume.prototype.setColor = function(col) {
+
+         if(!this.originalPixels) {
+            this.originalPixels = this.contents.getContext('2d')
+               .getImageData(0, 0, this.contents.width,
+                  this.contents.height);
+         }
+         if(!this.costumeColor) {
+            this.costumeColor = new Color(0,0,0);
+         }
+
+         currentPixels = this.contents.getContext('2d')
+            .getImageData(0, 0,
+               this.contents.width, this.contents.height);
+
+         if(col instanceof Color) {
+            this.costumeColor = col;
+         }
+         else {
+            var hsv = this.costumeColor.hsv();
+            hsv[0] = Math.max(Math.min(+col || 0, 100), 0) / 100;
+            hsv[1] = 1; // we gotta fix this at some time
+            this.costumeColor.set_hsv.apply(this.costumeColor, hsv);
+         }
+
+         for(var I = 0, L = this.originalPixels.data.length; I < L; I += 4){
+            if(currentPixels.data[I + 3] > 0){
+               // If it's not a transparent pixel
+               currentPixels.data[I] = this.originalPixels.
+                  data[I] / 255 * this.costumeColor.r;
+               currentPixels.data[I + 1] = this.originalPixels.
+                  data[I + 1] / 255 * this.costumeColor.g;
+               currentPixels.data[I + 2] = this.originalPixels.
+                  data[I + 2] / 255 * this.costumeColor.b;
+            }
+         }
+         this.contents.getContext('2d')
+            .putImageData(currentPixels, 0, 0);
+};
+
 // SVG_Costume /////////////////////////////////////////////////////////////
 
 /*

@@ -1201,6 +1201,12 @@ SnapSerializer.prototype.loadValue = function (model) {
             )) {
             name = model.attributes.name;
         }
+        if (model.attributes['costume-color']) {
+            costumeColor = myself.loadColor(model.attributes['costume-color']);
+        }
+        else {
+            costumeColor = new Color(0,0,0);
+        }
         if (Object.prototype.hasOwnProperty.call(
                 model.attributes,
                 'image'
@@ -1211,6 +1217,8 @@ SnapSerializer.prototype.loadValue = function (model) {
                 v = new SVG_Costume(null, name, center);
                 image.onload = function () {
                     v.contents = image;
+                    v.costumeColor = costumeColor;
+                    v.setColor(costumeColor);
                     v.version = +new Date();
                     if (typeof v.loaded === 'function') {
                         v.loaded();
@@ -1227,6 +1235,8 @@ SnapSerializer.prototype.loadValue = function (model) {
                         context = canvas.getContext('2d');
                     context.drawImage(image, 0, 0);
                     v.contents = canvas;
+                    v.costumeColor = costumeColor;
+                    v.setColor(costumeColor);
                     v.version = +new Date();
                     if (typeof v.loaded === 'function') {
                         v.loaded();
@@ -1467,11 +1477,17 @@ SpriteMorph.prototype.toXML = function (serializer) {
 Costume.prototype[XML_Serializer.prototype.mediaDetectionProperty] = true;
 
 Costume.prototype.toXML = function (serializer) {
+    if(this.originalPixels) {
+        this.contents.getContext('2d').putImageData(this.originalPixels, 0, 0);
+    }
     return serializer.format(
-        '<costume name="@" center-x="@" center-y="@" image="@" ~/>',
+        '<costume name="@" center-x="@" center-y="@" costume-color="@,@,@" image="@" ~/>',
         this.name,
         this.rotationCenter.x,
         this.rotationCenter.y,
+        this.costumeColor.r,
+        this.costumeColor.g,
+        this.costumeColor.b,
         this instanceof SVG_Costume ?
                 this.contents.src : this.contents.toDataURL('image/png')
     );
