@@ -2765,7 +2765,6 @@ IDE_Morph.prototype.rawSaveProject = function (name) {
             try {
                 localStorage['-snap-project-' + name]
                     = str = this.serializer.serialize(this.stage);
-                location.hash = '#open:' + str;
                 this.showMessage('Saved!', 1);
             } catch (err) {
                 this.showMessage('Save failed: ' + err);
@@ -2773,7 +2772,6 @@ IDE_Morph.prototype.rawSaveProject = function (name) {
         } else {
             localStorage['-snap-project-' + name]
                 = str = this.serializer.serialize(this.stage);
-            location.hash = '#open:' + str;
             this.showMessage('Saved!', 1);
         }
     }
@@ -2814,7 +2812,6 @@ IDE_Morph.prototype.exportProject = function (name, plain) {
                 str = encodeURIComponent(
                     this.serializer.serialize(this.stage)
                 );
-                location.hash = '#open:' + str;
                 window.open('data:text/'
                     + (plain ? 'plain,' + str : 'xml,' + str));
                 menu.destroy();
@@ -2827,7 +2824,6 @@ IDE_Morph.prototype.exportProject = function (name, plain) {
             str = encodeURIComponent(
                 this.serializer.serialize(this.stage)
             );
-            location.hash = '#open:' + str;
             window.open('data:text/'
                 + (plain ? 'plain,' + str : 'xml,' + str));
             menu.destroy();
@@ -3085,7 +3081,6 @@ IDE_Morph.prototype.openProject = function (name) {
         this.setProjectName(name);
         str = localStorage['-snap-project-' + name];
         this.openProjectString(str);
-        location.hash = '#open:' + str;
     }
 };
 
