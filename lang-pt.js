@@ -1616,7 +1616,7 @@ SnapTranslator.dict.pt = {
     'unshared.':
         'deixado de partilhar.',
     'Unshare':
-        'Deixar de Partilhar'
+        'Deixar de Partilhar',
 
     // produção de código
     'map %cmdRing to %codeKind %code':
