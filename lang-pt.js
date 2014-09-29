@@ -943,7 +943,7 @@ SnapTranslator.dict.pt = {
     'Delete Project':
         'Remover Projecto',
     'Are you sure you want to delete':
-        'Quer mesmo remover?',
+        'Quer mesmo remover',
     'rename...':
         'alterar o nome…',
 
@@ -1430,10 +1430,10 @@ SnapTranslator.dict.pt = {
         'Actualizando a\nlista de projectos…',
     'Opening project...':
         'Abrindo o projecto…',
-    'Fetching project from the cloud...':
-        'Obtendo o projecto da nuvem…',
-    'Saving project to the cloud...':
-        'Guardando o projecto na nuvem…',
+    'Fetching project\nfrom the cloud...':
+        'Obtendo o projecto\nda nuvem…',
+    'Saving project\nto the cloud...':
+        'Guardando o projecto\nna nuvem…',
     'Sprite Nesting':
         'Actores compostos',
     'uncheck to disable\nsprite composition':
@@ -1597,6 +1597,26 @@ SnapTranslator.dict.pt = {
         'ponta',
     'middle':
         'meio',
+    'last changed':
+        'alterado pela última vez em',
+    'Are you sure you want to publish':
+        'Quer mesmo publicar',
+    'Are you sure you want to unpublish':
+        'Quer mesmo deixar de publicar',
+    'Share Project':
+        'Partilhar Projecto',
+    'Unshare Project':
+        'Deixar de Partilhar Projecto',
+    'sharing\nproject...':
+        'partilhando\nprojecto…',
+    'unsharing\nproject...':
+        'deixando de partilhar\nprojecto…',
+    'shared.':
+        'partilhado.',
+    'unshared.':
+        'deixado de partilhar.',
+    'Unshare':
+        'Deixar de Partilhar'
 
     // produção de código
     'map %cmdRing to %codeKind %code':
