@@ -182,7 +182,7 @@ SnapTranslator.dict.ru = {
     'translator_e-mail':
         'svetlanap@berkeley.edu', // optional
     'last_changed':
-        '2013-03-19', // this, too, will appear in the Translators tab
+        '2014-09-29', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -1117,9 +1117,9 @@ SnapTranslator.dict.ru = {
     'last':
         'последний',
     'any':
-        'любой'
+        'любой',
     'now connected':
-        'вы вошли в систему'
+        'вы вошли в систему',
     'undo':
         'отменить'
 };

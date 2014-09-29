@@ -281,7 +281,7 @@ SnapTranslator.dict.ru = {
     'translator_e-mail':
         'svetlanap@berkeley.edu',
     'last_changed':
-        '2013-03-19'
+        '2014-09-29'
 };
 
 SnapTranslator.dict.es = {
