@@ -2280,3 +2280,4 @@ ______
 ------
 * Threads: fixed #591 fully copy local variables for sprite duplicates and (Scratch-like) clones
 * Portuguese translation update, thanks, Manuel!
+* fixed #590 (Russian translation syntax glitches) Thanks @alexf2000 !
