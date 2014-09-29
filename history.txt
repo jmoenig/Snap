@@ -2275,3 +2275,7 @@ ______
 ------
 * Blocks: Make upvars mutable
 * GUI: fixed #585 (sprite name conflict with stage). Thanks, Michael, for the report!
+
+140929
+------
+* Threads: fixed #591 fully copy local variables for sprite duplicates and (Scratch-like) clones
