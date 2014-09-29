@@ -83,7 +83,7 @@ ArgLabelMorph, localize, XML_Element, hex_sha512*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.threads = '2014-September-18';
+modules.threads = '2014-September-29';
 
 var ThreadManager;
 var Process;
@@ -2973,8 +2973,11 @@ VariableFrame.prototype.toString = function () {
 };
 
 VariableFrame.prototype.copy = function () {
-    var frame = new VariableFrame(this.parentFrame);
-    frame.vars = copy(this.vars);
+    var frame = new VariableFrame(this.parentFrame),
+        myself = this;
+    this.names().forEach(function (vName) {
+        frame.addVar(vName, myself.getVar(vName));
+    });
     return frame;
 };
 
