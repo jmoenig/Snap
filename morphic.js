@@ -5916,14 +5916,14 @@ SliderMorph.prototype.setStart = function (num) {
     var newStart;
     if (typeof num === 'number') {
         this.start = Math.min(
-            Math.max(num, 0),
+            num,
             this.stop - this.size
         );
     } else {
         newStart = parseFloat(num);
         if (!isNaN(newStart)) {
             this.start = Math.min(
-                Math.max(newStart, 0),
+                newStart,
                 this.stop - this.size
             );
         }
