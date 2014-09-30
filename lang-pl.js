@@ -439,7 +439,7 @@ SnapTranslator.dict.pl = {
         'czekaj %n s',
     'wait until %b':
         'czekaj a\u017C %b',
-    'forever %c':
+    'repeat forever %c':
         'zawsze %c',
     'repeat %n %c':
         'powt\u00F3rz %n razy %c',

@@ -422,7 +422,7 @@ SnapTranslator.dict.si = {
         '\u010Dakaj %n sekund.',
     'wait until %b':
         '\u010Dakaj, dokler %b',
-    'forever %c':
+    'repeat forever %c':
         'za vedno %c',
     'repeat %n %c':
         'ponovi %n krat %c',

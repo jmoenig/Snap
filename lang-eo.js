@@ -423,7 +423,7 @@ SnapTranslator.dict.eo = {
         'atendi %n sek.',
     'wait until %b':
         'atendi ĝis %b',
-    'forever %c':
+    'repeat forever %c':
         'ripeti eterne %c',
     'repeat %n %c':
         'ripeti %n -foje %c',

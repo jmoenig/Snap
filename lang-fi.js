@@ -437,7 +437,7 @@ SnapTranslator.dict.fi = {
         'odota %n sekuntia',
     'wait until %b':
         'odota kunnes %b',
-    'forever %c':
+    'repeat forever %c':
         'ikuisesti %c',
     'repeat %n %c':
         'toista %n kertaa %c',

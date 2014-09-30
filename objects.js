@@ -620,7 +620,7 @@ SpriteMorph.prototype.initBlocks = function () {
         doForever: {
             type: 'command',
             category: 'control',
-            spec: 'forever %c'
+            spec: 'repeat forever %c'
         },
         doRepeat: {
             type: 'command',

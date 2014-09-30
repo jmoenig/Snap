@@ -431,7 +431,7 @@ SnapTranslator.dict.fr = {
         'attendre %n sec.',
     'wait until %b':
         'attendre jusqu\u0027\u00E0 %b',
-    'forever %c':
+    'repeat forever %c':
         'r\u00E9p\u00E9ter ind\u00E9finiment %c',
     'repeat %n %c':
         'r\u00E9p\u00E9ter %n fois %c',

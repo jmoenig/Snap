@@ -430,7 +430,7 @@ SnapTranslator.dict.cs = {
         'čekej %n sekund',
     'wait until %b':
         'čekej dokud nenastane %b',
-    'forever %c':
+    'repeat forever %c':
         'stále opakuj %c',
     'repeat %n %c':
         'opakuj %n krát %c',

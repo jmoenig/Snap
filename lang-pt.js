@@ -435,7 +435,7 @@ SnapTranslator.dict.pt = {
         'espera %n s',
     'wait until %b':
         'espera até que %b',
-    'forever %c':
+    'repeat forever %c':
         'repete %c para sempre',
     'repeat %n %c':
         'repete %n vezes %c',

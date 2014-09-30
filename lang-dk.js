@@ -435,7 +435,7 @@ SnapTranslator.dict.dk = {
         'Vent i %n sek.',
     'wait until %b':
         'Vent indtid %b',
-    'forever %c':
+    'repeat forever %c':
         'Altid %c',
     'repeat %n %c':
         'Gentag %n mal %c',
