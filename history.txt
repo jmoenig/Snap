@@ -2288,4 +2288,5 @@ ______
 * Objects: fixed #593 match broadcast numbers with event hat blocks containing strings that can be parsed as numbers 
 * BYOB: allow percent symbols in custom block texts (fix #361), thanks, @Gubolin!!
 * Morphic: allow negative min/max values for sliders (fix #285), thanks, @Gubolin!!
+* Objects: fixed #378 (disable context menus for boolean representations)
 
