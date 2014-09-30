@@ -389,8 +389,8 @@ SnapTranslator.dict.de = {
         'Tempo',
 
     // pen:
-    'clear':
-        'wische',
+    'clear pen trails':
+        'wische alle Malspuren weg',
     'pen down':
         'Stift runter',
     'pen up':

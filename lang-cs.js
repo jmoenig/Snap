@@ -388,7 +388,7 @@ SnapTranslator.dict.cs = {
             'tempo',
 
     // pen:
-    'clear':
+    'clear pen trails':
         'smaž',
     'pen down':
         'pero dolů',

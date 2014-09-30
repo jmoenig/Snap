@@ -381,7 +381,7 @@ SnapTranslator.dict.nl = {
         'tempo',
 
     // pen:
-    'clear':
+    'clear pen trails':
         'wissen',
     'pen down':
         'pen neer',

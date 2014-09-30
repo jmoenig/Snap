@@ -389,7 +389,7 @@ SnapTranslator.dict.ko = {
 
 
     // pen:
-    'clear':
+    'clear pen trails':
         '지우기',
     'pen down':
         '펜 내리기',

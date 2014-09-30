@@ -388,7 +388,7 @@ SnapTranslator.dict.ja_HIRA = {
         'テンポ',
 
     // pen:
-    'clear':
+    'clear pen trails':
         'けす',
     'pen down':
         'ペンをおろす',

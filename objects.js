@@ -501,7 +501,7 @@ SpriteMorph.prototype.initBlocks = function () {
         clear: {
             type: 'command',
             category: 'pen',
-            spec: 'clear'
+            spec: 'clear pen trails'
         },
         down: {
             only: SpriteMorph,

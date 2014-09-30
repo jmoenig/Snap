@@ -389,7 +389,7 @@ SnapTranslator.dict.fr = {
         'tempo',
 
     // pen:
-    'clear':
+    'clear pen trails':
         'effacer tout',
     'pen down':
         'stylo en position d\u0027\u00EAcriture',

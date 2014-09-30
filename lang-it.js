@@ -388,7 +388,7 @@ SnapTranslator.dict.it = {
         'tempo',
 
     // pen:
-    'clear':
+    'clear pen trails':
         'pulisci',
     'pen down':
         'penna gi\u00F9',

@@ -389,7 +389,7 @@ SnapTranslator.dict.tw = {
         '節奏',
 
     // pen:
-    'clear':
+    'clear pen trails':
         '清除所有畫筆',
     'pen down':
         '落筆',

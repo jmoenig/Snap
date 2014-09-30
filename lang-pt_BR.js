@@ -389,7 +389,7 @@ SnapTranslator.dict.pt_BR = {
         'andamento',
 
     // Caneta:
-    'clear':
+    'clear pen trails':
         'apague tudo',
     'pen down':
         'use a caneta',

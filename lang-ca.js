@@ -389,7 +389,7 @@ SnapTranslator.dict.ca = {
         'tempo',
 
     // pen:
-    'clear':
+    'clear pen trails':
         'neteja',
     'pen down':
         'baixa el llapis',

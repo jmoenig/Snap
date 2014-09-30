@@ -388,7 +388,7 @@ SnapTranslator.dict.ja = {
         'テンポ',
 
     // pen:
-    'clear':
+    'clear pen trails':
         '消す',
     'pen down':
         'ペンを下ろす',

@@ -393,7 +393,7 @@ SnapTranslator.dict.pl = {
         'tempo',
 
     // pisak:
-    'clear':
+    'clear pen trails':
         'wyczy\u015B\u0107',
     'pen down':
         'przy\u0142\u00F3\u017C pisak',

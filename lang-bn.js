@@ -390,7 +390,7 @@ SnapTranslator.dict.bn = {
         'শব্দের কম্পনমাত্রা',
 
     // pen:
-    'clear':
+    'clear pen trails':
         'পরিচ্ছদ পরিষ্কার কর',
     'pen down':
         'লেখনী নিম্নগামী কর',

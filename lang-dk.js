@@ -393,7 +393,7 @@ SnapTranslator.dict.dk = {
         'Tempo',
 
     // pen:
-    'clear':
+    'clear pen trails':
         'Ryd',
     'pen down':
         'Pensel op',

@@ -389,7 +389,7 @@ SnapTranslator.dict.zh = {
         '节奏',
 
     // pen:
-    'clear':
+    'clear pen trails':
         '清除所有画笔',
     'pen down':
         '落笔',

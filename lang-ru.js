@@ -384,7 +384,7 @@ SnapTranslator.dict.ru = {
         'темп',
 
     // pen:
-    'clear':
+    'clear pen trails':
         'убрать все',
     'pen down':
         'опустить перо',

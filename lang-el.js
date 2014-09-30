@@ -388,7 +388,7 @@ SnapTranslator.dict.el = {
         'ταχύτητα του ρυθμού',
 
     // pen:
-    'clear':
+    'clear pen trails':
         'καθαρισμός',
     'pen down':
         'στυλό κάτω',

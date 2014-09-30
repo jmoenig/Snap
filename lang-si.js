@@ -380,7 +380,7 @@ SnapTranslator.dict.si = {
         'ustavi vse zvoke',
 
     // pen:
-    'clear':
+    'clear pen trails':
         'zbri\u0161i',
     'pen down':
         'svin\u010Dnik spu\u0161\u010Den',

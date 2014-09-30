@@ -381,7 +381,7 @@ SnapTranslator.dict.eo = {
         'finigi ĉiujn sonojn',
 
     // pen:
-    'clear':
+    'clear pen trails':
         'forigi desegnaĵon',
     'pen down':
         'malsuprenigi skribilon',

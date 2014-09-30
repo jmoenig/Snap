@@ -390,7 +390,7 @@ SnapTranslator.dict.fi = {
         'tempo',
 
     // pen:
-    'clear':
+    'clear pen trails':
         'tyhjenn\u00e4',
     'pen down':
         'kyn\u00e4 alas',

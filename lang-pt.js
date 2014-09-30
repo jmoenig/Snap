@@ -389,7 +389,7 @@ SnapTranslator.dict.pt = {
         'o andamento',
 
     // caneta:
-    'clear':
+    'clear pen trails':
         'apaga tudo do palco',
     'pen down':
         'baixa a tua caneta',
