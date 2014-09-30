@@ -6408,10 +6408,14 @@ CellMorph.prototype.drawNew = function () {
             }
             this.contentsMorph.setColor(new Color(255, 255, 255));
         } else if (typeof this.contents === 'boolean') {
-            this.contentsMorph = SpriteMorph.prototype.booleanMorph.call(
+            img = SpriteMorph.prototype.booleanMorph.call(
                 null,
                 this.contents
-            );
+            ).fullImage();
+            this.contentsMorph = new Morph();
+            this.contentsMorph.silentSetWidth(img.width);
+            this.contentsMorph.silentSetHeight(img.height);
+            this.contentsMorph.image = img;
         } else if (this.contents instanceof HTMLCanvasElement) {
             this.contentsMorph = new Morph();
             this.contentsMorph.silentSetWidth(this.contents.width);
