@@ -211,6 +211,7 @@ IDE_Morph.prototype.init = function (isAutoFill) {
     this.corral = null;
 
     this.isAutoFill = isAutoFill || true;
+    this.isMuted = false;
     this.isAppMode = false;
     this.isSmallStage = false;
     this.filePicker = null;
@@ -526,6 +527,7 @@ IDE_Morph.prototype.createControlBar = function () {
         stopButton,
         pauseButton,
         startButton,
+        muteSoundsButton,
         projectButton,
         settingsButton,
 		goalImagesButton,
@@ -617,6 +619,38 @@ IDE_Morph.prototype.createControlBar = function () {
     { this.controlBar.add(appModeButton); }
     this.controlBar.appModeButton = appModeButton; // for refreshing
 
+    //muteSoundsButton
+    button = new ToggleButtonMorph(
+        null, //colors,
+        myself, // the IDE is the target
+        'toggleMuteSounds',
+        [
+            new SymbolMorph('mutedSounds', 14),
+            new SymbolMorph('unmutedSounds', 14)
+        ],
+        function () {  // query
+            return myself.isMuted;
+        }
+    );
+
+    button.corner = 12;
+    button.color = colors[0];
+    button.highlightColor = colors[1];
+    button.pressColor = colors[2];
+    button.labelMinExtent = new Point(36, 18);
+    button.padding = 0;
+    button.labelShadowOffset = new Point(-1, -1);
+    button.labelShadowColor = colors[1];
+    button.labelColor = this.buttonLabelColor;
+    button.contrast = this.buttonContrast;
+    button.drawNew();
+    // button.hint = 'sounds\nmuted & unmuted';
+    button.fixLayout();
+    button.refresh();
+    muteSoundsButton = button;
+    this.controlBar.add(muteSoundsButton);
+    this.controlBar.muteSoundsButton = button; // for refreshing
+	
     // stopButton
     button = new PushButtonMorph(
         this,
@@ -800,7 +834,7 @@ IDE_Morph.prototype.createControlBar = function () {
         x = myself.right() - (StageMorph.prototype.dimensions.x
             * (myself.isSmallStage ? myself.stageRatio : 1));
 
-        [stageSizeButton, appModeButton].forEach(
+        [stageSizeButton, appModeButton, muteSoundsButton].forEach(
             function (button) {
                 x += padding;
                 button.setCenter(myself.controlBar.center());
@@ -3478,6 +3512,27 @@ IDE_Morph.prototype.toggleStageSize = function (isSmall) {
     } else {
         if (this.isSmallStage) {this.stageRatio = 0.5; }
         this.setExtent(world.extent());
+    }
+};
+
+IDE_Morph.prototype.toggleMuteSounds = function (isMuted) {
+    this.isMuted = isNil(isMuted) ? !this.isMuted : isMuted;
+    this.controlBar.muteSoundsButton.refresh();
+
+    /* stage.activeSounds holds all active sounds
+     * a sprite's .activeSounds holds just its own
+     * so you have to use the stage to mute
+     * and the sprite to unmute, because the stage's volume
+     * overrides the sprite's one.
+     */
+
+    if (this.isMuted === false) {
+        this.stage.unmuteAllSounds();
+        this.sprites.asArray().forEach(function (sprt) {
+            sprt.unmuteAllSounds();
+        });
+    } else {
+        this.stage.muteAllSounds();
     }
 };
 
