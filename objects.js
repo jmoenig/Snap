@@ -125,7 +125,7 @@ PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.objects = '2014-September-17';
+modules.objects = '2014-September-30';
 
 var SpriteMorph;
 var StageMorph;
@@ -3457,6 +3457,7 @@ SpriteMorph.prototype.allMessageNames = function () {
 };
 
 SpriteMorph.prototype.allHatBlocksFor = function (message) {
+    if (typeof message === 'number') {message = message.toString(); }
     return this.scripts.children.filter(function (morph) {
         var event;
         if (morph.selector) {
