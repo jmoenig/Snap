@@ -2289,4 +2289,5 @@ ______
 * BYOB: allow percent symbols in custom block texts (fix #361), thanks, @Gubolin!!
 * Morphic: allow negative min/max values for sliders (fix #285), thanks, @Gubolin!!
 * Objects: fixed #378 (disable context menus for boolean representations)
+* Blocks: fixed #584
 
