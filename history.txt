@@ -2282,3 +2282,7 @@ ______
 * Portuguese translation update, thanks, Manuel!
 * fixed #590 (Russian translation syntax glitches) Thanks @alexf2000 !
 * Paint: flood fill issue fixed, thanks, Kartik!
+
+140930
+------
+* Objects: fixed #593 match broadcast numbers with event hat blocks containing strings that can be parsed as numbers 
