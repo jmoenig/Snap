@@ -2286,3 +2286,5 @@ ______
 140930
 ------
 * Objects: fixed #593 match broadcast numbers with event hat blocks containing strings that can be parsed as numbers 
+* BYOB: allow percent symbols in custom block texts (fix #361), thanks, @Gubolin!!
+
