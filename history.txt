@@ -2291,3 +2291,6 @@ ______
 * Objects: fixed #378 (disable context menus for boolean representations)
 * Blocks: fixed #584
 
+140930
+------
+* Threads: workaround for some REPORT issues
