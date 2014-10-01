@@ -672,7 +672,7 @@ SnapTranslator.dict.pt = {
     'Libraries...':
         'Bibliotecas...',
     'Import library':
-        'Biblioteca a importar',
+        'Importar biblioteca',
 
     // menu da nuvem
     'Login...':
@@ -1617,6 +1617,30 @@ SnapTranslator.dict.pt = {
         'deixado de partilhar.',
     'Unshare':
         'Deixar de Partilhar',
+    'password has been changed.':
+        'a sua palavra-passe foi alterada.',
+    'SVG costumes are\nnot yet fully supported\nin every browser':
+        'trajes SVG ainda não\nsão totalmente suportados\nem todos os navegadores',
+    'Save Project':
+        'Guardar Projecto',
+    'script pic with result...':
+        'fotografia do guião incluindo resultado…',
+    'open a new window\nwith a picture of both\nthis script and its result':
+        'Abrir uma nova janela com\numa fotografia tanto deste guião\ncomo do seu resultado.',
+    'JavaScript function ( %mult%s ) { %code }':
+        'função JavaScript ( %mult%s ) { %code }',
+    'Select categories of additional blocks to add to this project.':
+        'Seleccionar categorias de blocos adicionais a acrescentar a este projecto.',
+    'Import sound':
+        'Importar som',
+    'Select a sound from the media library':
+        'Seleccionar um som da biblioteca de média.',
+    'Import':
+        'Importar',
+    'Select a costume from the media library':
+        'Seleccionar um traje da biblioteca de média.',
+    'edit rotation point only...':
+        'editar apenas ponto de rotação…',
 
     // produção de código
     'map %cmdRing to %codeKind %code':
