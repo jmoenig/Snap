@@ -49,13 +49,14 @@
     May 14 - bugfixes, Snap integration (Jens)
     May 16 - flat design adjustments (Jens)
     July 12 - pipette tool, code formatting adjustments (Jens)
-    September 16 - flood fill freeze fix (Kartik)
+    Sept 16 - flood fill freeze fix (Kartik)
     Jan 08 - mouse leave dragging fix (Kartik)
     Feb 11 - dynamically adjust to stage dimensions (Jens)
     Apr 30 - localizations (Manuel)
     June 3 - transformations (Kartik)
     June 4 - tweaks (Jens)
-
+    Aug 24 - floodfill alpha-integer issue (Kartik)
+    Sep 29 - tweaks (Jens)
  */
 
 /*global Point, Rectangle, DialogBoxMorph, fontHeight, AlignmentMorph,
@@ -68,7 +69,7 @@
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.paint = '2014-June-4';
+modules.paint = '2014-September-29';
 
 // Declarations
 
@@ -757,7 +758,7 @@ PaintCanvasMorph.prototype.floodfill = function (sourcepoint) {
             data[currentpoint * 4] = this.settings.primarycolor.r;
             data[currentpoint * 4 + 1] = this.settings.primarycolor.g;
             data[currentpoint * 4 + 2] = this.settings.primarycolor.b;
-            data[currentpoint * 4 + 3] = this.settings.primarycolor.a;
+            data[currentpoint * 4 + 3] = this.settings.primarycolor.a * 255;
         }
     }
     ctx.putImageData(img, 0, 0);
