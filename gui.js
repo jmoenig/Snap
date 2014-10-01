@@ -5947,7 +5947,7 @@ WardrobeMorph.prototype.removeCostumeAt = function (idx) {
 WardrobeMorph.prototype.paintNew = function () {
     var cos = new Costume(
             newCanvas(),
-            this.sprite.newCostumeName('Untitled')
+            this.sprite.newCostumeName(localize('Untitled'))
         ),
         ide = this.parentThatIsA(IDE_Morph),
         myself = this;
