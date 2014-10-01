@@ -106,7 +106,7 @@ SymbolMorph, isNil*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2014-Jun-06';
+modules.byob = '2014-September-30';
 
 // Declarations
 
@@ -227,7 +227,7 @@ CustomBlockDefinition.prototype.blockSpec = function () {
         parts = this.parseSpec(this.spec),
         spec;
     parts.forEach(function (part) {
-        if (part[0] === '%') {
+        if (part[0] === '%' && part.length > 1) {
             spec = myself.typeOf(part.slice(1));
         } else {
             spec = part;
@@ -311,7 +311,7 @@ CustomBlockDefinition.prototype.inputNames = function () {
     var vNames = [],
         parts = this.parseSpec(this.spec);
     parts.forEach(function (part) {
-        if (part[0] === '%') {
+        if (part[0] === '%' && part.length > 1) {
             vNames.push(part.slice(1));
         }
     });

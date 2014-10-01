@@ -155,7 +155,7 @@ DialogBoxMorph, BlockInputFragmentMorph, PrototypeHatBlockMorph, Costume*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2014-August-13';
+modules.blocks = '2014-September-30';
 
 
 var SyntaxElementMorph;
@@ -2148,9 +2148,16 @@ BlockMorph.prototype.userMenu = function () {
             this.thumbnail(0.5, 60, false),
             function () {
                 var cpy = this.fullCopy(),
-                    nb = cpy.nextBlock();
+                    nb = cpy.nextBlock(),
+                    ide = myself.parentThatIsA(IDE_Morph);
                 if (nb) {nb.destroy(); }
                 cpy.pickUp(world);
+                if (ide) {
+                    world.hand.grabOrigin = {
+                        origin: ide.palette,
+                        position: ide.palette.center()
+                    };
+                }
             },
             'only duplicate this block'
         );
@@ -6755,9 +6762,6 @@ InputSlotMorph.prototype.soundsMenu = function () {
 InputSlotMorph.prototype.getVarNamesDict = function () {
     var block = this.parentThatIsA(BlockMorph),
         rcvr,
-        proto,
-        rings,
-        declarations,
         tempVars = [],
         dict;
 
@@ -6765,28 +6769,26 @@ InputSlotMorph.prototype.getVarNamesDict = function () {
         return {};
     }
     rcvr = block.receiver();
-
-    proto = detect(block.allParents(), function (morph) {
-        return morph instanceof PrototypeHatBlockMorph;
+    block.allParents().forEach(function (morph) {
+        if (morph instanceof PrototypeHatBlockMorph) {
+            tempVars.push.apply(
+                tempVars,
+                morph.inputs()[0].inputFragmentNames()
+            );
+        } else if (morph instanceof BlockMorph) {
+            morph.inputs().forEach(function (inp) {
+                if (inp instanceof TemplateSlotMorph) {
+                    tempVars.push(inp.contents());
+                } else if (inp instanceof MultiArgMorph) {
+                    inp.children.forEach(function (m) {
+                        if (m instanceof TemplateSlotMorph) {
+                            tempVars.push(m.contents());
+                        }
+                    });
+                }
+            });
+        }
     });
-    if (proto) {
-        tempVars = proto.inputs()[0].inputFragmentNames();
-    }
-
-    rings = block.allParents().filter(function (block) {
-        return block instanceof RingMorph;
-    });
-    rings.forEach(function (block) {
-        tempVars = tempVars.concat(block.inputs()[1].evaluate());
-    });
-
-    declarations = block.allParents().filter(function (block) {
-        return block.selector === 'doDeclareVariables';
-    });
-    declarations.forEach(function (block) {
-        tempVars = tempVars.concat(block.inputs()[0].evaluate());
-    });
-
     if (rcvr) {
         dict = rcvr.variables.allNamesDict();
         tempVars.forEach(function (name) {

@@ -1035,7 +1035,7 @@
 /*global window, HTMLCanvasElement, getMinimumFontHeight, FileReader, Audio,
 FileList, getBlurredShadowSupport*/
 
-var morphicVersion = '2014-August-13';
+var morphicVersion = '2014-September-30';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = getBlurredShadowSupport(); // check for Chrome-bug
 
@@ -5916,14 +5916,14 @@ SliderMorph.prototype.setStart = function (num) {
     var newStart;
     if (typeof num === 'number') {
         this.start = Math.min(
-            Math.max(num, 0),
+            num,
             this.stop - this.size
         );
     } else {
         newStart = parseFloat(num);
         if (!isNaN(newStart)) {
             this.start = Math.min(
-                Math.max(newStart, 0),
+                newStart,
                 this.stop - this.size
             );
         }

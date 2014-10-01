@@ -125,7 +125,7 @@ PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.objects = '2014-September-17';
+modules.objects = '2014-September-30';
 
 var SpriteMorph;
 var StageMorph;
@@ -3457,6 +3457,7 @@ SpriteMorph.prototype.allMessageNames = function () {
 };
 
 SpriteMorph.prototype.allHatBlocksFor = function (message) {
+    if (typeof message === 'number') {message = message.toString(); }
     return this.scripts.children.filter(function (morph) {
         var event;
         if (morph.selector) {
@@ -6407,10 +6408,14 @@ CellMorph.prototype.drawNew = function () {
             }
             this.contentsMorph.setColor(new Color(255, 255, 255));
         } else if (typeof this.contents === 'boolean') {
-            this.contentsMorph = SpriteMorph.prototype.booleanMorph.call(
+            img = SpriteMorph.prototype.booleanMorph.call(
                 null,
                 this.contents
-            );
+            ).fullImage();
+            this.contentsMorph = new Morph();
+            this.contentsMorph.silentSetWidth(img.width);
+            this.contentsMorph.silentSetHeight(img.height);
+            this.contentsMorph.image = img;
         } else if (this.contents instanceof HTMLCanvasElement) {
             this.contentsMorph = new Morph();
             this.contentsMorph.silentSetWidth(this.contents.width);
