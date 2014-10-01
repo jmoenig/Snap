@@ -2294,3 +2294,4 @@ ______
 140930
 ------
 * Threads: workaround for some REPORT issues
+* Objects: fixed #599 (disable IDE keyboard shortcuts in presentation mode)
