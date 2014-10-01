@@ -1495,7 +1495,7 @@ Costume.prototype.toXML = function (serializer) {
                 this.contents.src : this.contents.toDataURL('image/png')
     );
     if(this.originalPixels) {
-        this.setColor(costumeColor);
+        this.setColor(this.costumeColor);
     }
     return serialized;
 };
