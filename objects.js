@@ -125,7 +125,7 @@ PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.objects = '2014-September-30';
+modules.objects = '2014-October-01';
 
 var SpriteMorph;
 var StageMorph;
@@ -4675,6 +4675,7 @@ StageMorph.prototype.fireKeyEvent = function (key) {
     var evt = key.toLowerCase(),
         hats = [],
         procs = [],
+        ide = this.parentThatIsA(IDE_Morph),
         myself = this;
 
     this.keysPressed[evt] = true;
@@ -4682,19 +4683,24 @@ StageMorph.prototype.fireKeyEvent = function (key) {
         return this.fireGreenFlagEvent();
     }
     if (evt === 'ctrl f') {
-        return this.parentThatIsA(IDE_Morph).currentSprite.searchBlocks();
+        if (!ide.isAppMode) {ide.currentSprite.searchBlocks(); }
+        return;
     }
     if (evt === 'ctrl n') {
-        return this.parentThatIsA(IDE_Morph).createNewProject();
+        if (!ide.isAppMode) {ide.createNewProject(); }
+        return;
     }
     if (evt === 'ctrl o') {
-        return this.parentThatIsA(IDE_Morph).openProjectsBrowser();
+        if (!ide.isAppMode) {ide.openProjectsBrowser(); }
+        return;
     }
     if (evt === 'ctrl s') {
-        return this.parentThatIsA(IDE_Morph).save();
+        if (!ide.isAppMode) {ide.save(); }
+        return;
     }
     if (evt === 'ctrl shift s') {
-        return this.parentThatIsA(IDE_Morph).saveProjectsBrowser();
+        if (!ide.isAppMode) {return ide.saveProjectsBrowser(); }
+        return;
     }
     if (evt === 'esc') {
         return this.fireStopAllEvent();
