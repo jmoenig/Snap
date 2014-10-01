@@ -83,7 +83,7 @@ ArgLabelMorph, localize, XML_Element, hex_sha512*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.threads = '2014-September-29';
+modules.threads = '2014-October-01';
 
 var ThreadManager;
 var Process;
@@ -955,7 +955,9 @@ Process.prototype.doReport = function (value, isCSlot) {
         this.context.pc = this.context.expression.length - 1;
     }
     if (isCSlot) {
-        if (this.context.parentContext.expression instanceof Array) {
+        if (this.context &&
+                this.context.parentContext &&
+                this.context.parentContext.expression instanceof Array) {
             this.popContext();
         }
     }
