@@ -2296,3 +2296,4 @@ ______
 * Threads: workaround for some REPORT issues
 * Objects: fixed #599 (disable IDE keyboard shortcuts in presentation mode)
 * Objects: correctly display symbol for %obj type input slots in the prototype template
+* Portuguese translation update, thanks, Manuel!
