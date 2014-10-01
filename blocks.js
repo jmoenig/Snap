@@ -155,7 +155,7 @@ DialogBoxMorph, BlockInputFragmentMorph, PrototypeHatBlockMorph, Costume*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2014-September-30';
+modules.blocks = '2014-October-01';
 
 
 var SyntaxElementMorph;
@@ -656,7 +656,9 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
     var part, tokens;
     if (spec[0] === '%' &&
             spec.length > 1 &&
-            this.selector !== 'reportGetVar') {
+            (this.selector !== 'reportGetVar' ||
+                (spec === '%turtleOutline' && this.isObjInputFragment()))) {
+
         // check for variable multi-arg-slot:
         if ((spec.length > 5) && (spec.slice(0, 5) === '%mult')) {
             part = new MultiArgMorph(spec.slice(5));
@@ -1359,6 +1361,13 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
         part.drawNew();
     }
     return part;
+};
+
+SyntaxElementMorph.prototype.isObjInputFragment = function () {
+    // private - for displaying a symbol in a variable block template
+    return (this.selector === 'reportGetVar') &&
+        (this.getSlotSpec() === '%t') &&
+        (this.parent.fragment.type === '%obj');
 };
 
 // SyntaxElementMorph layout:
