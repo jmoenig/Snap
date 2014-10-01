@@ -1205,7 +1205,7 @@ SnapSerializer.prototype.loadValue = function (model) {
             costumeColor = myself.loadColor(model.attributes['costume-color']);
         }
         else {
-            costumeColor = new Color(0,0,0);
+            costumeColor = new Color(255,255,255);
         }
         if (Object.prototype.hasOwnProperty.call(
                 model.attributes,
@@ -1480,7 +1480,10 @@ Costume.prototype.toXML = function (serializer) {
     if(this.originalPixels) {
         this.contents.getContext('2d').putImageData(this.originalPixels, 0, 0);
     }
-    return serializer.format(
+    if(!this.costumeColor) {
+        this.costumeColor = new Color(255,255,255);
+    }
+    serialized = serializer.format(
         '<costume name="@" center-x="@" center-y="@" costume-color="@,@,@" image="@" ~/>',
         this.name,
         this.rotationCenter.x,
@@ -1491,6 +1494,10 @@ Costume.prototype.toXML = function (serializer) {
         this instanceof SVG_Costume ?
                 this.contents.src : this.contents.toDataURL('image/png')
     );
+    if(this.originalPixels) {
+        this.setColor(costumeColor);
+    }
+    return serialized;
 };
 
 Sound.prototype[XML_Serializer.prototype.mediaDetectionProperty] = true;

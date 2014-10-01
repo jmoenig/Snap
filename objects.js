@@ -5745,7 +5745,7 @@ Costume.prototype.setColor = function(col) {
                   this.contents.height);
          }
          if(!this.costumeColor) {
-            this.costumeColor = new Color(0,0,0);
+            this.costumeColor = new Color(255,255,255);
          }
 
          currentPixels = this.contents.getContext('2d')
