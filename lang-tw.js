@@ -389,7 +389,7 @@ SnapTranslator.dict.tw = {
         '節奏',
 
     // pen:
-    'clear':
+    'clear pen trails':
         '清除所有畫筆',
     'pen down':
         '落筆',
@@ -431,7 +431,7 @@ SnapTranslator.dict.tw = {
         '等待 %n 秒',
     'wait until %b':
         '直到 %b 前都等待闐',
-    'forever %c':
+    'repeat forever %c':
         '重複執行 %c',
     'repeat %n %c':
         '重複執行 %n  %c',

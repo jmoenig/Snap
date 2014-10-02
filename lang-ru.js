@@ -384,7 +384,7 @@ SnapTranslator.dict.ru = {
         'темп',
 
     // pen:
-    'clear':
+    'clear pen trails':
         'убрать все',
     'pen down':
         'опустить перо',
@@ -426,7 +426,7 @@ SnapTranslator.dict.ru = {
         'ждать %n сек.',
     'wait until %b':
         'ждать пока %b',
-    'forever %c':
+    'repeat forever %c':
         'непрерывно %c',
     'repeat %n %c':
         'повторять %n %c',

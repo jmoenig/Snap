@@ -501,7 +501,7 @@ SpriteMorph.prototype.initBlocks = function () {
         clear: {
             type: 'command',
             category: 'pen',
-            spec: 'clear'
+            spec: 'clear pen trails'
         },
         down: {
             only: SpriteMorph,
@@ -620,7 +620,7 @@ SpriteMorph.prototype.initBlocks = function () {
         doForever: {
             type: 'command',
             category: 'control',
-            spec: 'forever %c'
+            spec: 'repeat forever %c'
         },
         doRepeat: {
             type: 'command',

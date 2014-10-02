@@ -389,8 +389,8 @@ SnapTranslator.dict.de = {
         'Tempo',
 
     // pen:
-    'clear':
-        'wische',
+    'clear pen trails':
+        'wische alle Malspuren weg',
     'pen down':
         'Stift runter',
     'pen up':
@@ -435,8 +435,8 @@ SnapTranslator.dict.de = {
         'warte %n Sek.',
     'wait until %b':
         'warte bis %b',
-    'forever %c':
-        'fortlaufend %c',
+    'repeat forever %c':
+        'wiederhole fortlaufend %c',
     'repeat %n %c':
         'wiederhole %n mal %c',
     'repeat until %b %c':

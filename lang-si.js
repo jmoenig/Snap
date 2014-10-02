@@ -380,7 +380,7 @@ SnapTranslator.dict.si = {
         'ustavi vse zvoke',
 
     // pen:
-    'clear':
+    'clear pen trails':
         'zbri\u0161i',
     'pen down':
         'svin\u010Dnik spu\u0161\u010Den',
@@ -422,7 +422,7 @@ SnapTranslator.dict.si = {
         '\u010Dakaj %n sekund.',
     'wait until %b':
         '\u010Dakaj, dokler %b',
-    'forever %c':
+    'repeat forever %c':
         'za vedno %c',
     'repeat %n %c':
         'ponovi %n krat %c',

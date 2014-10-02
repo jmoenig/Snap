@@ -388,7 +388,7 @@ SnapTranslator.dict.ja = {
         'テンポ',
 
     // pen:
-    'clear':
+    'clear pen trails':
         '消す',
     'pen down':
         'ペンを下ろす',
@@ -430,7 +430,7 @@ SnapTranslator.dict.ja = {
         '%n 秒待つ',
     'wait until %b':
         '%b まで待つ',
-    'forever %c':
+    'repeat forever %c':
         'ずっと %c',
     'repeat %n %c':
         '%n 回繰り返す %c',

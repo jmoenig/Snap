@@ -389,7 +389,7 @@ SnapTranslator.dict.es = {
         'tempo',
 
     // pen:
-    'clear':
+    'clear pen trails':
         'borrar',
     'pen down':
         'bajar l\u00E1piz',
@@ -431,7 +431,7 @@ SnapTranslator.dict.es = {
         'esperar %n segs',
     'wait until %b':
         'esperar hasta que %b',
-    'forever %c':
+    'repeat forever %c':
         'por siempre %c',
     'repeat %n %c':
         'repetir %n %c',

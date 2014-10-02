@@ -388,7 +388,7 @@ SnapTranslator.dict.el = {
         'ταχύτητα του ρυθμού',
 
     // pen:
-    'clear':
+    'clear pen trails':
         'καθαρισμός',
     'pen down':
         'στυλό κάτω',
@@ -434,7 +434,7 @@ SnapTranslator.dict.el = {
         'περίμενε %n δευτ.',
     'wait until %b':
         'περίμενε μέχρι %b',
-    'forever %c':
+    'repeat forever %c':
         'για πάντα %c',
     'repeat %n %c':
         'επανέλαβε %n %c',

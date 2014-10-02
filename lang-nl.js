@@ -381,7 +381,7 @@ SnapTranslator.dict.nl = {
         'tempo',
 
     // pen:
-    'clear':
+    'clear pen trails':
         'wissen',
     'pen down':
         'pen neer',
@@ -427,7 +427,7 @@ SnapTranslator.dict.nl = {
         'wacht %n sec.',
     'wait until %b':
         'wacht tot %b',
-    'forever %c':
+    'repeat forever %c':
         'herhaal %c',
     'repeat %n %c':
         'herhaal %n keer %c',

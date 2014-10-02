@@ -388,7 +388,7 @@ SnapTranslator.dict.cs = {
             'tempo',
 
     // pen:
-    'clear':
+    'clear pen trails':
         'smaž',
     'pen down':
         'pero dolů',
@@ -430,7 +430,7 @@ SnapTranslator.dict.cs = {
         'čekej %n sekund',
     'wait until %b':
         'čekej dokud nenastane %b',
-    'forever %c':
+    'repeat forever %c':
         'stále opakuj %c',
     'repeat %n %c':
         'opakuj %n krát %c',

@@ -389,7 +389,7 @@ SnapTranslator.dict.ko = {
 
 
     // pen:
-    'clear':
+    'clear pen trails':
         '지우기',
     'pen down':
         '펜 내리기',
@@ -431,7 +431,7 @@ SnapTranslator.dict.ko = {
         '%n 초 기다리기',
     'wait until %b':
         '%b 까지 기다리기',
-    'forever %c':
+    'repeat forever %c':
         '무한반복 %c',
     'repeat %n %c':
         '반복 %n 회 %c',

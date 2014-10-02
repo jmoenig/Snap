@@ -390,7 +390,7 @@ SnapTranslator.dict.bn = {
         'শব্দের কম্পনমাত্রা',
 
     // pen:
-    'clear':
+    'clear pen trails':
         'পরিচ্ছদ পরিষ্কার কর',
     'pen down':
         'লেখনী নিম্নগামী কর',
@@ -443,7 +443,7 @@ SnapTranslator.dict.bn = {
         'অপেক্ষা কর   %n সেকেণড',
     'wait until %b':
         'অপেক্ষা কর  %b যতক্ষণ না',
-    'forever %c':
+    'repeat forever %c':
         'অনন্তকাল কর %c',
     'repeat %n %c':
         'পুনরাবৃত্তি কর  %n বার  %c ',

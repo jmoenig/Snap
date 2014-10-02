@@ -389,7 +389,7 @@ SnapTranslator.dict.pt_BR = {
         'andamento',
 
     // Caneta:
-    'clear':
+    'clear pen trails':
         'apague tudo',
     'pen down':
         'use a caneta',
@@ -435,7 +435,7 @@ SnapTranslator.dict.pt_BR = {
         'espere %n segundos',
     'wait until %b':
         'espere até que %b',
-    'forever %c':
+    'repeat forever %c':
         'sempre %c',
     'repeat %n %c':
         'repita %n vezes %c',
