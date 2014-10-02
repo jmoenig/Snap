@@ -69,7 +69,7 @@ SpeechBubbleMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2014-October-01';
+modules.gui = '2014-October-02';
 
 // Declarations
 
@@ -703,9 +703,11 @@ IDE_Morph.prototype.createControlBar = function () {
             }
         );
 
-        x = myself.right() - (StageMorph.prototype.dimensions.x
-            * (myself.isSmallStage ? myself.stageRatio : 1));
-
+        x = Math.min(
+            startButton.left() - (3 * padding + 2 * stageSizeButton.width()),
+            myself.right() - StageMorph.prototype.dimensions.x *
+                (myself.isSmallStage ? myself.stageRatio : 1)
+        );
         [stageSizeButton, appModeButton].forEach(
             function (button) {
                 x += padding;
@@ -3326,15 +3328,20 @@ IDE_Morph.prototype.toggleAppMode = function (appMode) {
 
 IDE_Morph.prototype.toggleStageSize = function (isSmall) {
     var myself = this,
-        world = this.world();
+        smallRatio = 0.5,
+        world = this.world(),
+        shiftClicked = (world.currentKey === 16);
+
+    function toggle() {
+        myself.isSmallStage = isNil(isSmall) ? !myself.isSmallStage : isSmall;
+    }
 
     function zoomIn() {
-        myself.stageRatio = 1;
         myself.step = function () {
-            myself.stageRatio -= (myself.stageRatio - 0.5) / 2;
+            myself.stageRatio -= (myself.stageRatio - smallRatio) / 2;
             myself.setExtent(world.extent());
-            if (myself.stageRatio < 0.6) {
-                myself.stageRatio = 0.5;
+            if (myself.stageRatio < (smallRatio + 0.1)) {
+                myself.stageRatio = smallRatio;
                 myself.setExtent(world.extent());
                 delete myself.step;
             }
@@ -3343,7 +3350,6 @@ IDE_Morph.prototype.toggleStageSize = function (isSmall) {
 
     function zoomOut() {
         myself.isSmallStage = true;
-        myself.stageRatio = 0.5;
         myself.step = function () {
             myself.stageRatio += (1 - myself.stageRatio) / 2;
             myself.setExtent(world.extent());
@@ -3356,7 +3362,15 @@ IDE_Morph.prototype.toggleStageSize = function (isSmall) {
         };
     }
 
-    this.isSmallStage = isNil(isSmall) ? !this.isSmallStage : isSmall;
+    if (shiftClicked) {
+        smallRatio = SpriteIconMorph.prototype.thumbSize.x * 3 /
+            this.stage.dimensions.x;
+        if (!this.isSmallStage || (smallRatio === this.stageRatio)) {
+            toggle();
+        }
+    } else {
+        toggle();
+    }
     if (this.isAnimating) {
         if (this.isSmallStage) {
             zoomIn();
@@ -3364,7 +3378,7 @@ IDE_Morph.prototype.toggleStageSize = function (isSmall) {
             zoomOut();
         }
     } else {
-        if (this.isSmallStage) {this.stageRatio = 0.5; }
+        if (this.isSmallStage) {this.stageRatio = smallRatio; }
         this.setExtent(world.extent());
     }
 };
