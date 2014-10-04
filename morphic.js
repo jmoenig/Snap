@@ -4097,7 +4097,6 @@ PenMorph.prototype.forward = function (steps) {
 
 PenMorph.prototype.down = function () {
     this.isDown = true;
-    this.drawLine(this.center(), this.center());
 };
 
 PenMorph.prototype.up = function () {
