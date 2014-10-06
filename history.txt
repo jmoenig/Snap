@@ -2301,3 +2301,7 @@ ______
 141002
 ------
 * GUI: New feature - minimal stage mode (shift-click on small-stage button)
+
+141006
+------
+* GUI, Objects: fixed #604. Thanks, @Gubolin!
