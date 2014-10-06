@@ -69,7 +69,7 @@ SpeechBubbleMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2014-October-02';
+modules.gui = '2014-October-06';
 
 // Declarations
 
@@ -3354,6 +3354,7 @@ IDE_Morph.prototype.toggleStageSize = function (isSmall) {
             myself.stageRatio += (1 - myself.stageRatio) / 2;
             myself.setExtent(world.extent());
             if (myself.stageRatio > 0.9) {
+                myself.stageRatio = 1;
                 myself.isSmallStage = false;
                 myself.setExtent(world.extent());
                 myself.controlBar.stageSizeButton.refresh();

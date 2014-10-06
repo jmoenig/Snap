@@ -125,7 +125,7 @@ PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.objects = '2014-October-01';
+modules.objects = '2014-October-06';
 
 var SpriteMorph;
 var StageMorph;
@@ -4378,8 +4378,12 @@ StageMorph.prototype.drawOn = function (aCanvas, aRect) {
         );
 
         // pen trails
-        ws = w / this.scale;
-        hs = h / this.scale;
+        ws = Math.floor(
+            Math.min(w / this.scale, this.image.width * this.scale)
+        );
+        hs = Math.floor(
+            Math.min(h / this.scale, this.image.height * this.scale)
+        );
         context.save();
         context.scale(this.scale, this.scale);
         context.drawImage(
