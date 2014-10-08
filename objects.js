@@ -125,7 +125,7 @@ PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.objects = '2014-October-06';
+modules.objects = '2014-October-08';
 
 var SpriteMorph;
 var StageMorph;
@@ -4378,25 +4378,37 @@ StageMorph.prototype.drawOn = function (aCanvas, aRect) {
         );
 
         // pen trails
-        ws = Math.floor(
-            Math.min(w / this.scale, this.image.width * this.scale)
-        );
-        hs = Math.floor(
-            Math.min(h / this.scale, this.image.height * this.scale)
-        );
+        ws = w / this.scale;
+        hs = h / this.scale;
         context.save();
         context.scale(this.scale, this.scale);
-        context.drawImage(
-            this.penTrails(),
-            src.left() / this.scale,
-            src.top() / this.scale,
-            ws,
-            hs,
-            area.left() / this.scale,
-            area.top() / this.scale,
-            ws,
-            hs
-        );
+        try {
+            context.drawImage(
+                this.penTrails(),
+                src.left() / this.scale,
+                src.top() / this.scale,
+                ws,
+                hs,
+                area.left() / this.scale,
+                area.top() / this.scale,
+                ws,
+                hs
+            );
+        } catch (err) { // sometimes triggered only by Firefox
+            // console.log(err);
+            context.restore();
+            context.drawImage(
+                this.penTrails(),
+                0,
+                0,
+                this.dimensions.x,
+                this.dimensions.y,
+                this.left(),
+                this.top(),
+                this.dimensions.x * this.scale,
+                this.dimensions.y * this.scale
+            );
+        }
         context.restore();
     }
 };
