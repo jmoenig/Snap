@@ -5754,7 +5754,7 @@ SliderMorph.prototype.rangeSize = function () {
 };
 
 SliderMorph.prototype.ratio = function () {
-    return this.size / this.rangeSize();
+    return this.size / (this.rangeSize() + 1);
 };
 
 SliderMorph.prototype.unitSize = function () {
