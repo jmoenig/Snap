@@ -3003,9 +3003,9 @@ VariableFrame.prototype.find = function (name) {
     var frame = this.silentFind(name);
     if (frame) {return frame; }
     throw new Error(
-        'a variable of name \''
+        localize('a variable of name \'')
             + name
-            + '\'\ndoes not exist in this context'
+            + localize('\'\ndoes not exist in this context')    
     );
 };
 
@@ -3070,9 +3070,9 @@ VariableFrame.prototype.getVar = function (name) {
         return '';
     }
     throw new Error(
-        'a variable of name \''
+        localize('a variable of name \'')
             + name
-            + '\'\ndoes not exist in this context'
+            + localize('\'\ndoes not exist in this context')
     );
 };
 
