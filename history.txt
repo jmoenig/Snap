@@ -2305,3 +2305,7 @@ ______
 141006
 ------
 * GUI, Objects: fixed #604. Thanks, @Gubolin!
+
+141008
+------
+* Objects: fixed #608, #610
