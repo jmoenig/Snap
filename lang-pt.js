@@ -1616,7 +1616,7 @@ SnapTranslator.dict.pt = {
     'unshared.':
         'deixado de partilhar.',
     'Unshare':
-        'Deixar de Partilhar',
+        'Não Partilhar',
     'password has been changed.':
         'a sua palavra-passe foi alterada.',
     'SVG costumes are\nnot yet fully supported\nin every browser':
@@ -1641,6 +1641,12 @@ SnapTranslator.dict.pt = {
         'Seleccionar um traje da biblioteca de média.',
     'edit rotation point only...':
         'editar apenas ponto de rotação…',
+    'Export Project As...':
+        'Exportar Projecto Como…',
+    'a variable of name \'':
+        'não existe uma variável «',
+    '\'\ndoes not exist in this context':
+        '»\nneste contexto',
 
     // produção de código
     'map %cmdRing to %codeKind %code':
