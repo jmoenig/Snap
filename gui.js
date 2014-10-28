@@ -190,7 +190,7 @@ IDE_Morph.prototype.init = function (isAutoFill) {
 
     // additional properties:
     this.cloudMsg = null;
-    this.source = 'local';
+    this.source = SnapCloud.username ? 'cloud' : 'local';
     this.serializer = new SnapSerializer();
 
     this.globalVariables = new VariableFrame();
