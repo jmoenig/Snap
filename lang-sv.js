@@ -734,7 +734,7 @@ SnapTranslator.dict.sv = {
     'check to disallow\nscript reentrancy':
         'kryss av for \u00E5 sl\u00E5 av gjenbruk av p\u00E5begynte skripter',
     'Prefer smooth animations':
-        'Föredra jämna animeringar',
+        'Jämna animeringar',
     'uncheck for greater speed\nat variable frame rates':
         'kryss bort for st¯rre fart ved variabel frame rate',
     'check for smooth, predictable\nanimations across computers':
@@ -898,9 +898,9 @@ SnapTranslator.dict.sv = {
     'Change block':
         'Ändra block',
     'Command':
-        'Styring',
+        'Kommando',
     'Reporter':
-        'Funksjon',
+        'Funktion',
     'Predicate':
         'Predikat',
 
@@ -912,52 +912,52 @@ SnapTranslator.dict.sv = {
 
     // block deletion dialog
     'Delete Custom Block':
-        'Slett custom blokk',
+        'Radera custom blokk',
     'block deletion dialog text':
         'Skal denne blokken med alle dens instanser\n' +
             'bli slettet?',
 
     // input dialog
     'Create input name':
-        'Lag inndata navn',
+        'Skapa indata-namn',
     'Edit input name':
-        'Rediger inndata navn',
+        'Redigera indata-namn',
     'Edit label fragment':
-        'Rediger label fragment',
+        'Redigera etikettdel',
     'Title text':
-        'Tittel',
+        'Titel',
     'Input name':
-        'Inndata navn',
+        'Indata-namn',
     'Delete':
-        'Slett',
+        'Radera',
     'Object':
         'Objekt',
     'Number':
-        'Tall',
+        'Nummer',
     'Text':
-        'Tekst',
+        'Text',
     'List':
-        'Liste',
+        'Lista',
     'Any type':
-        'Type valgfritt',
+        'Valfri typ',
     'Boolean (T/F)':
-        'Boolsk (S/U)',
+        'Boolean (S/F)',
     'Command\n(inline)':
         'Kommando\n(inline)',
     'Command\n(C-shape)':
         'Kommando\n(C-Form)',
     'Any\n(unevaluated)':
-        'Hvilken som helst\n(uevaluert)',
+        'Vilken som helst\n(oevaluerad)',
     'Boolean\n(unevaluated)':
-        'Boolsk\n(uevaluert)',
+        'Boolean\n(oevaluerad)',
     'Single input.':
-        'Singel inndata.',
+        'Enkel indata.',
     'Default Value:':
-        'Standardverdi:',
+        'Standardvärde:',
     'Multiple inputs (value is list of inputs)':
-        'Fler-inndata (verdi er liste over inndata)',
+        'Flera indata (värdet är en lista av indata)',
     'Upvar - make internal variable visible to caller':
-        'Upvar - gj\u00F8r interne variable synlig for den som kaller',
+        'Upvar - gör internal variabel synlig för anroparen',
 
     // About Snap
     'About Snap':
@@ -1146,7 +1146,7 @@ SnapTranslator.dict.sv = {
 
     // data types
     'number':
-        'tal',
+        'nummer',
     'text':
         'text',
     'Boolean':
