@@ -187,12 +187,12 @@ SnapTranslator.dict.sv = {
     'translator_e-mail':
         'eolsson@gmail.com', // optional
     'last_changed':
-        '2013-09-16', // this, too, will appear in the Translators tab
+        '2014-11-01', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
     'untitled':
-        'inget namn',
+        'namnlös',
     'development mode':
         'utvecklareläge',
 
@@ -605,7 +605,7 @@ SnapTranslator.dict.sv = {
 
     // other
     'Make a block':
-        'Ny block',
+        'Skapa nytt block',
 
     // menus
     // snap menu
@@ -616,17 +616,17 @@ SnapTranslator.dict.sv = {
     'Download source':
         'Ladda ner källkoden',
     'Switch back to user mode':
-        'Byt tillbaka till användarläge',
+        'Tillbaka till användarläge',
     'disable deep-Morphic\ncontext menus\nand show user-friendly ones':
-        'ut av Morphic\nkontekst menyer\nog vis kun brukervennlige',
+        'stäng av Morphic\nmenyeroch visa \nanvändarvänliga istället',
     'Switch to dev mode':
         'Byt till utvecklarläge',
     'enable Morphic\ncontext menus\nand inspectors,\nnot user-friendly!':
-        'inn i Morphic funksjoner\nog inspektorer,\nikke brukervennlig',
+        'aktivera Morphic menyer\noch inspektorer,\ninte användarvänligt!',
 
     // project menu
     'Project notes...':
-        'Projektannoteringar...',
+        'Annoteringar...',
     'New':
         'Ny',
     'Open...':
@@ -642,58 +642,57 @@ SnapTranslator.dict.sv = {
             + 'blokker\n'
             + 'et kostym eller en lyd',
     'Export project as plain text ...':
-        'Eksporter prosjekt som ren tekst...',
+        'Exportera projektet som vanlig text...',
     'Export project...':
-        'Eksporter prosjekt...',
+        'Exportera projekt...',
     'show project data as XML\nin a new browser window':
-        'vis prosjektdata som XML\ni et nytt nettleser vindu',
+        'visa projektdata som XML\ni ett ny fönster',
     'Export blocks...':
-        'Eksporter blokker...',
+        'Exportera block...',
     'show global custom block definitions as XML\nin a new browser window':
-        'viser globale blokkdefinisjoner fra bruker\nsom XML i et nytt nettleser vindu',
+        'visa globala anpassade blockdefinitioner som XML\ni ett nytt fönster',
     'Import tools...':
-        'Importer verkt\u00F8y...',
+        'Importverktyg...',
     'load the official library of\npowerful blocks':
-        'last ned snap-bibliotek med ekstra blokker',
+        'ladda ner det officiella\nsuperblock biblioteket ',
     'Libraries...':
         'Biblioteker...',
     'Import library':
-        'Importer biblioteker',
+        'Importera bibliotek',
 
  // cloud menu
     'Login...':
-        'Logg inn...',
+        'Logga in...',
     'Registrer deg...':
-        'Registrering...',
+        'Registrera dig...',
 
     // settings menu
     'Language...':
-        'Spr\u00E5k...',
+        'Språk...',
     'Zoom blocks...':
-        'Zoom blokkene...',
+        'Förstora blocken...',
     'Blurred shadows':
-        'Mjuke skygger (blurred)',
+        'Suddade skuggor',
     'uncheck to use solid drop\nshadows and highlights':
-        'fjern kryss for hard skygge\nog lyssetting',
+        'bocka av för att använda\nfasta skuggor och belysningar',
     'check to use blurred drop\nshadows and highlights':
-        'kryss av for hard skygge\nog lyssetting',
+        'bocka i för att använda\nsuddiga skuggor och belysningar',
     'Zebra coloring':
-        'Zebra farget',
+        'Zebrafärgning',
     'check to enable alternating\ncolors for nested blocks':
-        'kryss av for vekslende fargenyanser\ni nestede blokker',
+        'bocka i för att växla blockfärger\nför nestlade block',
     'uncheck to disable alternating\ncolors for nested block':
-        'fjern kryss for \u00E5 hindre vekslende\nfargenyanser i nestede blokker',
+        'bocka av för inaktivera växlade\nfärger för nestlade block',
     'Dynamic input labels':
-        'Dynamisk inndata navn',
+        'Dynamisk namn för indata',
     'uncheck to disable dynamic\nlabels for variadic inputs':
-        'fjern kryss for \u00E5 hindre dynamisk benevning\nav inndata med flere variabelfelt',
+        'bocka av för att inaktivera \ndynamiska namn för indata \nmed flera variabelfält',
     'check to enable dynamic\nlabels for variadic inputs':
-        'kryss av for\ndynamisk benevning av inndata med flere variabelfelt',
+        'bocka i för att aktivera \ndynamiska namn för indata \nmed flera variabelfält',
     'Prefer empty slot drops':
-        'Preferanse for tomme variabelfelt',
+        'Föredra släpp på tomma utrymmen',
     'settings menu prefer empty slots hint':
-        'Valg meny\ntomme variabelfelt'
-            + 'preferanse',
+        'Inställningar\nföredra tomma utrymmen',
     'uncheck to allow dropped\nreporters to kick out others':
         'kryss vekk for at flyttede reportere vil ta plassen til andre\n',
     'Long form input dialog':
@@ -709,118 +708,118 @@ SnapTranslator.dict.sv = {
     'check to enable\nvirtual keyboard support\nfor mobile devices':
         'kryss av for \u00E5 sl\u00E5 p\u00E5 virtuelt\ntastatur p\u00E5 mobile enheter',
     'Input sliders':
-        'Skyveknapp inndata ',
+        'Volymkontroll för indata',
     'uncheck to disable\ninput sliders for\nentry fields':
         'kryss vekk for \u00E5 sl\u00E5 av\nskyveknapper i inndatafelt',
     'check to enable\ninput sliders for\nentry fields':
         'kryss av for \u00E5 sl\u00E5 p\u00E5 skyveknapper\ni inndatafelt',
     'Clicking sound':
-        'Klikkelyd',
+        'Klickljud',
     'uncheck to turn\nblock clicking\nsound off':
         'kryss vekk for sl\u00E5 av klikkelyd',
     'check to turn\nblock clicking\nsound on':
         'kryss av for \u00E5 sl\u00E5 p\u00E5 klikkelyd',
     'Animations':
-        'Animasjoner',
+        'Animationer',
     'uncheck to disable\nIDE animations':
         'kryss vekk for \u00E5 sl\u00E5 av IDE-animasjoner',
     'Turbo mode':
-        'Turbo modus',
+        'Turboläge',
     'check to enable\nIDE animations':
         'kryss av for \u00E5 sl\u00E5 p\u00E5 IDE-animasjoner',
     'Thread safe scripts':
-        'Tr\u00E5dsikker skripting',
+        'Trådsäker skripting',
     'uncheck to allow\nscript reentrancy':
         'kryss vekk for \u00E5 sl\u00E5 p\u00E5 gjenbruk av p\u00E5begynte skripter',
     'check to disallow\nscript reentrancy':
         'kryss av for \u00E5 sl\u00E5 av gjenbruk av p\u00E5begynte skripter',
     'Prefer smooth animations':
-        'Jevnere animasjoner',
+        'Föredra jämna animeringar',
     'uncheck for greater speed\nat variable frame rates':
         'kryss bort for st¯rre fart ved variabel frame rate',
     'check for smooth, predictable\nanimations across computers':
         'kryss av for jevne animasjoner pÂ alle maskinplattformer',
 // inputs
     'with inputs':
-        'med inndata',
+        'med indata',
     'input names:':
-        'inndata navn:',
+        'indatanamn:',
     'Input Names:':
-        'Inndata navn:',
+        'Indatanamn:',
     'input list:':
-        'inndata liste:',
+        'indata lista:',
 
     // context menus:
     'help':
-        'hjelp',
+        'hjälp',
 
     // blocks:
     'hjelp...':
-        'hjelp...',
+        'hjälp...',
     'relabel...':
-        'gi nytt navn...',
+        'döp om...',
     'duplicate':
-        'dupliser',
+        'duplicera',
     'make a copy\nand pick it up':
-        'lag kopi\n og plukk opp',
+        'gör en kopia\noch plocka upp den',
     'only duplicate this block':
-        'dupliser kun denne blokk',
+        'duplicera endast detta block',
     'delete':
-        'slette',
+        'radera',
     'script pic...':
-        'skript bilde...',
+        'skript bild...',
     'open a new window\nwith a picture of this script':
-        '\u00E5pne nytt vindu med bildet av dette skriptet',
+        'öppna ett nytt fönster\nmed en bild av detta skript',
     'ringify':
-        'ring rundt',
+        'ring runt',
     'unringify':
-        'fjerne ringen rundt',
+        'radera ringen runt',
 
     // custom blocks:
     'delete block definition...':
-        'slett blokk definisjoner',
+        'radera blockdefinition...',
     'edit...':
-        'rediger...',
+        'redigera...',
 
     // sprites:
     'edit':
-        'redigere',
+        'redigera',
     'export...':
-        'eksporter...',
+        'exportera...',
 
     // stage:
     'show all':
-        'vis alt',
+        'visa allt',
 
     // scripting area
     'clean up':
-        'rydd',
+        'städa',
     'arrange scripts\nvertically':
-        'sett opp skriptene\nvertikalt',
+        'organisera skript\nvertikalt',
     'add comment':
-        'legg til kommentar',
+        'lägg till kommentar',
     'make a block...':
-        'lag ny blokk...',
+        'skapa nytt block...',
 
     // costumes
     'rename':
-        'nytt navn',
+        'döp om',
     'export':
-        'eksportere',
+        'exportera',
     'rename costume':
-        'nytt navn for drakt',
+        'döp om kostymen',
 
     // sounds
     'Play sound':
-        'Spill lyd',
+        'Spela ljud',
     'Stop sound':
-        'Stop lyd',
+        'Stoppa ljud',
     'Stop':
-        'Stop',
+        'Stoppa',
     'Play':
-        'Start',
+        'Starta',
     'rename sound':
-        'nytt navn lyd',
+        'döp om ljud',
 
     // dialogs
     // buttons
@@ -833,11 +832,11 @@ SnapTranslator.dict.sv = {
     'Yes':
         'Ja',
     'No':
-        'Nei',
+        'Nej',
 
     // help
     'Help':
-        'Hjelp',
+        'Hjälp',
 
     // Project Manager
     'Untitled':
@@ -853,51 +852,51 @@ SnapTranslator.dict.sv = {
     'Are you sure you want to delete':
         'Är du säker på att du vill radera',
     'rename...':
-        'nytt namn...',
+        'döp om...',
 
     // costume editor
     'Costume Editor':
-        'Drakt editor',
+        'Kostym redigerare',
     'click or drag crosshairs to move the rotation center':
-        'Klikk p\u00E5 kors for \u00E5 flytte rotasjonssenteret',
+        'Klicka eller dra krysset för att marker mitten',
 
     // project notes
     'Project Notes':
-        'Prosjekt notater',
+        'Annoteringar',
 
     // new project
     'New Project':
-        'Nytt prosjekt',
+        'Nytt projekt',
     'Replace the current project with a new one?':
-        'Erstatt n\u00E5v\u00E6rende prosjekt med nytt prosjekt?',
+        'Ersätt aktuella projektet med ett nytt?',
 
     // save project
     'Save Project As...':
-        'Lagre prosjekt som...',
+        'Spara projekt som...',
 
     // export blocks
     'Export blocks':
-        'Eksporter blokker',
+        'Exportera block',
     'Import blocks':
-        'Importer blokker',
+        'Importera block',
     'this project doesn\'t have any\ncustom global blocks yet':
-        'dette prosjektet har s\u00E5langt ingen\nglobale blokker fra bruker',
+        'detta projekt har inte ännu\nnågra egna globala block',
     'select':
-        'velg',
+        'välj',
     'all':
-        'alt',
+        'allt',
     'none':
         'ingenting',
 
     // variable dialog
     'for all sprites':
-        'for alle objekter',
+        'för alla sprites',
     'for this sprite only':
-        'kun for dette objektet',
+        'bara för denna sprite',
 
     // block dialog
     'Change block':
-        'Endre blokker',
+        'Ändra block',
     'Command':
         'Styring',
     'Reporter':
@@ -907,9 +906,9 @@ SnapTranslator.dict.sv = {
 
     // block editor
     'Block Editor':
-        'Blokk editor',
+        'Blockredigerare',
     'Apply':
-        'Gj\u00F8r gjeldende',
+        'Verkställ',
 
     // block deletion dialog
     'Delete Custom Block':
@@ -964,23 +963,23 @@ SnapTranslator.dict.sv = {
     'About Snap':
         'Om Snap',
     'Back...':
-        'Tilbake...',
+        'Tillbaka...',
     'License...':
-        'Lisens...',
+        'Licens...',
     'Modules...':
         'Moduler...',
     'Credits...':
-        'Takk til...',
+        'Tack till...',
     'Translators...':
-        'Oversettere',
+        'Översättare',
     'License':
-        'Lisens',
+        'Licens',
     'current module versions:':
-        'Komponent-versjoner',
+        'Modulversioner',
     'Contributors':
-        'Bidragsytere',
+        'Bidragsgivare',
     'Translations':
-        'Oversettelser',
+        'Översättningar',
 
     // variable watchers
     'normal':
@@ -988,64 +987,64 @@ SnapTranslator.dict.sv = {
     'large':
         'stor',
     'slider':
-        'skyveknapp',
+        'volymkontroll',
     'slider min...':
-        'skyveknapp min...',
+        'volymkontroll min...',
     'slider max...':
-        'skyveknapp max...',
+        'volymkontroll max...',
     'import...':
-        'importer...',
+        'importera...',
     'Slider minimum value':
-        'Skyveknapp - minimumsverdi',
+        'Volymkontroll - minsta värde',
     'Slider maximum value':
-        'Skyveknapp - maksimumsverdi',
+        'volymkontroll - högsta värde',
 
     // list watchers
     'length: ':
-        'lengde: ',
+        'längd: ',
 
     // coments
     'add comment here...':
-        'legg til kommentar her...',
+        'lägg till kommentar här...',
 
     // drow downs
     // directions
-    '(90) h\u00F8yre':
-        '(90) h\u00F8yre',
-    '(-90) venstre':
-        '(-90) venstre',
-    '(0) opp':
-        '(0) oppe',
-    '(180) ned':
-        '(180) nede',
+    '(90) right':
+        '(90) höger',
+    '(-90) left':
+        '(-90) vänster',
+    '(0) up':
+        '(0) upp',
+    '(180) down':
+        '(180) ned',
 
     // collision detection
     'mouse-pointer':
-        'musepeker',
+        'muspekare',
     'edge':
         'kant',
     'pen trails':
-        'pennspor',
+        'pennspår',
 
     // costumes
     'Turtle':
-        'Objekt',
+        'Sköldpadda',
 
     // graphical effects
     'ghost':
-        'gjennomsiktig',
+        'genomskinligt',
 
     // keys
     'space':
-        'mellomrom',
+        'mellanslag',
     'up arrow':
-        'pil opp',
+        'pil upp',
     'down arrow':
         'pil ned',
     'right arrow':
-        'pil h\u00F8yre',
+        'pil höger',
     'left arrow':
-        'pil',
+        'pil vänster',
     'a':
         'a',
     'b':
@@ -1127,7 +1126,7 @@ SnapTranslator.dict.sv = {
     'abs':
         'abs',
     'sqrt':
-        'kvardrat',
+        'kvadrat',
     'sin':
         'sin',
     'cos':
@@ -1147,23 +1146,23 @@ SnapTranslator.dict.sv = {
 
     // data types
     'number':
-        'tall',
+        'tal',
     'text':
-        'tekst',
+        'text',
     'Boolean':
-        'boolsk',
+        'boolean',
     'list':
-        'liste',
+        'lista',
     'command':
         'kommando',
     'reporter':
-        'funksjonsblokk',
+        'funktionsblock',
     'predicate':
         'predikat',
 
     // list indices
     'last':
-        'siste',
+        'sista',
     'any':
-        'hvilken som helst'
+        'vilken som helst'
 };
