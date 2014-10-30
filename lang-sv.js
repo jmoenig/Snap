@@ -342,7 +342,7 @@ SnapTranslator.dict.sv = {
     'Hello!':
         'Hej!',
     'Hmm...':
-        'Oj...',
+        'Hmm...',
     'change %eff effect by %n':
         'ändra %eff -effekt med %n',
     'set %eff effect to %n':
@@ -373,104 +373,104 @@ SnapTranslator.dict.sv = {
 
     // sound:
     'play sound %snd':
-        'spill lyd %snd',
+        'spela ljud %snd',
     'play sound %snd until done':
-        'spill lyd %snd ferdig',
+        'spela ljud %snd tills färdig',
     'stop all sounds':
-        'stopp all lyd',
+        'stoppa alla ljud',
     'rest for %n beats':
-        'pause i %n slag',
+        'pausa %n slag',
     'play note %n for %n beats':
-        'spill note %n i %n slag',
+        'spela ton %n i %n slag',
     'change tempo by %n':
-        'endre tempo med %n',
+        'ändra tempo med %n',
     'set tempo to %n bpm':
-        'sett tempo til %n bpm',
+        'sätt tempo till %n bpm',
     'tempo':
         'tempo',
 
     // pen:
     'clear':
-        'slett',
+        'rensa',
     'pen down':
-        'penn ned',
+        'penna ned',
     'pen up':
-        'penn opp',
+        'penna upp',
     'set pen color to %clr':
-        'sett pennfargen til %clr',
+        'sätt pennfärg till %clr',
     'change pen color by %n':
-        'endre pennfargen med %n',
+        'ändra pennfärg till %n',
     'set pen color to %n':
-        'sett penfargen til %n',
+        'sätt penfärg till %n',
     'change pen shade by %n':
-        'endre pennintensitet med %n',
+        'ändra pennstyrka med %n',
     'set pen shade to %n':
-        'sett pennintensitet til %n',
+        'sätt pennstyrka till %n',
     'change pen size by %n':
-        'endre pennbredde med %n',
+        'ändra penntjocklek med %n',
     'set pen size to %n':
-        'sett pennbredde til %n',
+        'sätt penntjocklek til %n',
     'stamp':
-        'stemple',
+        'stämpla',
 
     // control:
     'when %greenflag clicked':
-        'N\u00E5r %greenflag klikkes',
+        'när %greenflag klickas på',
     'when %key key pressed':
-        'N\u00E5r tast %key trykkes',
+        'när tangent %key trycks ned',
     'when I am clicked':
-        'N\u00E5r jeg klikkes',
+        'när jag klickas',
     'when I receive %msg':
-        'N\u00E5r jeg %msg mottar',
+        'när jag tar emot meddelande %msg',
     'broadcast %msg':
-        'send melding %msg',
+        'skicka meddelande %msg',
     'broadcast %msg and wait':
-        'send melding %msg og vent',
+        'skicka meddelande %msg och vänta',
     'Message name':
-        'Meldingens navn',
+        'Meddelandets namn',
     'wait %n secs':
-        'vent i %n sek',
+        'vänta %n sek',
     'wait until %b':
-        'vent til %b',
+        'vänta tills %b',
     'forever %c':
-        'for alltid %c',
+        'för alltid %c',
     'repeat %n %c':
-        'gjenta %n ganger %c',
+        'upprepa %n gånger %c',
     'repeat until %b %c':
-        'gjenta til %b %c',
+        'upprepa tills %b %c',
     'if %b %c':
-        'hvis %b %c',
+        'om %b %c',
     'if %b %c else %c':
-        'hvis %b %c ellers %c',
+        'om %b %c då %c',
     'report %s':
-        'returner %s',
+        'returnera %s',
     'stop block':
-        'stopp denne blokk',
+        'stoppa block',
     'stop script':
-        'stopp dette skript',
+        'stoppa skript',
     'stop all %stop':
-        'stopp alt %stop',
+        'stoppa alla %stop',
     'pause all %pause':
-        'pause (alle) %pause',
+        'pausa alla %pause',
 
     'run %cmdRing %inputs':
-        'kj\u00F8r %cmdRing fra %inputs',
+        'kör %cmdRing med %inputs',
     'launch %cmdRing %inputs':
-        'start %cmdRing %inputs',
+        'starta %cmdRing med %inputs',
     'call %repRing %inputs':
-        'kall %repRing fra %inputs',
+        'anropa %repRing med %inputs',
     'run %cmdRing w/continuation':
-        'kj\u00F8r %cmdRing med kontinuering',
+        'kör %cmdRing och fortsätt',
     'call %cmdRing w/continuation':
-        'kall %cmdRing med kontinuering',
+        'anropa %cmdRing och fortsätt',
     'when I start as a clone':
-        'n\u00E5r klon startes',
+        'när jag startar som klon',
     'create a clone of %cln':
-        'opprett %cln',
+        'skapa klon av %cln',
     'myself':
-        'meg',
+        'mig själv',
     'delete this clone':
-        'slett klon',
+        'radera klon',
 
 
     'warp %c':
@@ -478,72 +478,72 @@ SnapTranslator.dict.sv = {
 
     // sensing:
     'touching %col ?':
-        'ber\u00F8rer %col ?',
+        'rör %col ?',
     'touching %clr ?':
-        'ber\u00F8rer %clr ?',
+        'rör %clr ?',
     'color %clr is touching %clr ?':
-        'farge %clr ber\u00F8rer %clr ?',
+        'färgen %clr rör %clr ?',
     'ask %s and wait':
-        'sp\u00F8r %s og vent',
+        'fråga %s och vänta',
     'what\'s your name?':
-        'hva heter du?',
+        'vad heter du?',
     'answer':
         'svar',
     'mouse x':
-        'mus x-posisjon',
+        'mus x-pos',
     'mouse y':
-        'mus y-posisjon',
+        'mus y-pos',
     'mouse down?':
-        'mustast trykket?',
+        'musknapp nedtryckt?',
     'key %key pressed?':
-        'tast %key trykket?',
+        'tangent %key nedtryckt?',
     'distance to %dst':
-        'avstand til %dst',
+        'avstånd till %dst',
     'reset timer':
-        'start stoppeklokke',
+        'nollställ stoppur',
     'timer':
-        'stoppeklokke',
+        'stoppur',
     'http:// %s':
         'http:// %s',
 
     'turbo mode?':
-        'turbo modus?',
+        'turboläge?',
     'set turbo mode to %b':
-        'sett turbo modus til %b',
+        'sätt turboläge till %b',
 
 
     'filtered for %clr':
-        'filter %clr',
+        'filtrera på %clr',
     'stack size':
-        'stack-st\u00F8rrelse',
+        'stack-storlek',
     'frames':
-        'rammer',
+        'ramar',
 
     // operators:
     '%n mod %n':
         '%n mod %n',
     'round %n':
-        'rund av %n',
+        'avrunda %n',
     '%fun av %n':
         '%fun von %n',
     'pick random %n to %n':
-        'tilfeldig fra %n til %n',
+        'slumptal från %n till %n',
     '%b and %b':
-        '%b OG %b',
+        '%b och %b',
     '%b or %b':
-        '%b ELLER %b',
+        '%b eller %b',
     'not %b':
-        'IKKE %b',
+        'inte %b',
     'true':
-        'SANN',
+        'sant',
     'false':
-        'USANN',
+        'falskt',
     'join %words':
-        'skj\u00F8t %words',
+        'slå ihop %words',
     'hello':
-        'hei',
+        'hej',
     'world':
-        'verden',
+        'världen',
     'letter %n of %s':
         'bokstav %n av %s',
     'length of %s':
@@ -553,7 +553,7 @@ SnapTranslator.dict.sv = {
     'unicode %n as letter':
         'unicode %n som bokstav',
     'is %s a %typ ?':
-        '%s er %typ ?',
+        '%s är %typ ?',
     'is %s identical to %s ?':
         '%s identisk med %s ?',
 
@@ -564,79 +564,79 @@ SnapTranslator.dict.sv = {
     'Make a variable':
         'Ny variabel',
     'Variable name':
-        'Variabelnavn',
+        'Variabelnamn',
     'Delete a variable':
-        'Slett variabel',
+        'Radera variabel',
 
     'set %var to %s':
-        'sett %var til %s',
+        'sätt %var till %s',
     'change %var by %n':
-        'endre %var med %n',
+        'ändra %var med %n',
     'show variable %var':
-        'vis variabel %var',
+        'visa variabel %var',
     'hide variable %var':
-        'skjul variabel %var',
+        'göm variabel %var',
     'script variables %scriptVars':
-        'skriptvariable %scriptVars',
+        'skriptvariabel %scriptVars',
 
     // lists:
     'list %exp':
-        'liste %exp',
+        'lista %exp',
     '%s in front of %l':
-        '%s framfor %l',
+        '%s främst i %l',
     'item %idx of %l':
-        'element %idx av %l',
+        'element %idx i %l',
     'all but first of %l':
-        'alt utenom f\u00F8rste av %l',
+        'allt utom första i %l',
     'length of %l':
-        'lengde av %l',
+        'längd av %l',
     '%l contains %s':
-        '%l inneholder %s',
+        '%l innehåller %s',
     'thing':
-        'noe',
+        'sak',
     'add %s to %l':
-        'legg %s til %l',
+        'lägg %s till %l',
     'delete %ida of %l':
-        'fjern %ida fra %l',
+        'radera %ida från %l',
     'insert %s at %idx of %l':
-        'sett inn %s ved %idx i %l ein',
+        'lägg in %s på plats %idx i lista %l',
     'replace item %idx of %l with %s':
-        'erstatt element %idx i %l med %s',
+        'ersätt element %idx i %l med %s',
 
     // other
     'Make a block':
-        'Ny blokk',
+        'Ny block',
 
     // menus
     // snap menu
     'About...':
         'Om Snap!...',
     'Snap! website':
-        'Snap! websiden',
+        'Snap! webbsida',
     'Download source':
-        'Last ned kildekoden',
+        'Ladda ner källkoden',
     'Switch back to user mode':
-        'Tilbake til brukermodus',
+        'Byt tillbaka till användarläge',
     'disable deep-Morphic\ncontext menus\nand show user-friendly ones':
         'ut av Morphic\nkontekst menyer\nog vis kun brukervennlige',
     'Switch to dev mode':
-        'inn i utviklermodus',
+        'Byt till utvecklarläge',
     'enable Morphic\ncontext menus\nand inspectors,\nnot user-friendly!':
         'inn i Morphic funksjoner\nog inspektorer,\nikke brukervennlig',
 
     // project menu
     'Project notes...':
-        'Prosjektnotater...',
+        'Projektannoteringar...',
     'New':
-        'Nytt',
+        'Ny',
     'Open...':
-        '\u00C5pne...',
+        'Öppna...',
     'Save':
-        'Lagre',
+        'Spara',
     'Save As...':
-        'Lagre som...',
+        'Spara som...',
     'Import...':
-        'Importer...',
+        'Importera...',
     'file menu import hint':
         'laster inn eksportertes prosjekt,\net bibliotek med '
             + 'blokker\n'
@@ -841,19 +841,19 @@ SnapTranslator.dict.sv = {
 
     // Project Manager
     'Untitled':
-        'Uten navn',
+        'Namnlös',
     'Open Project':
-        '≈pne prosjekt',
+        'Öppna projekt',
     '(empty)':
         '(tomt)',
     'Saved!':
-        'Lagret!',
+        'Sparat!',
     'Delete Project':
-        'Slett prosjekt',
+        'Radera projekt',
     'Are you sure you want to delete':
-        'Vil du virkelig slette?',
+        'Är du säker på att du vill radera',
     'rename...':
-        'nytt navn...',
+        'nytt namn...',
 
     // costume editor
     'Costume Editor':
