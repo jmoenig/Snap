@@ -1079,6 +1079,20 @@ var touchScreenSettings = {
 
 var MorphicPreferences = standardSettings;
 
+var PIXEL_RATIO = (function () {
+    // Get the window's pixel ratio for canvas elements.
+    // See: http://www.html5rocks.com/en/tutorials/canvas/hidpi/
+    var ctx = document.createElement("canvas").getContext("2d"),
+        dpr = window.devicePixelRatio || 1,
+        bsr = ctx.webkitBackingStorePixelRatio ||
+              ctx.mozBackingStorePixelRatio ||
+              ctx.msBackingStorePixelRatio ||
+              ctx.oBackingStorePixelRatio ||
+              ctx.backingStorePixelRatio || 1;
+
+    return dpr / bsr;
+})();
+
 // Global Functions ////////////////////////////////////////////////////
 
 function nop() {
@@ -1147,6 +1161,20 @@ function fontHeight(height) {
     return minHeight * 1.2; // assuming 1/5 font size for ascenders
 }
 
+function retinaScale(canvas) {
+    // Scale a canvas element by the display pixel ratio
+    var width  = canvas.width,
+        height = canvas.height,
+        ratio  = PIXEL_RATIO || 1,
+        ctx    = canvas.getContext('2d');
+
+        canvas.style.width  = width + 'px';
+        canvas.style.height = height + 'px';
+        canvas.height = height * ratio;
+        canvas.width  = width * ratio;
+        ctx.scale(ratio, ratio);
+};
+
 function newCanvas(extentPoint) {
     // answer a new empty instance of Canvas, don't display anywhere
     var canvas, ext;
@@ -1154,6 +1182,8 @@ function newCanvas(extentPoint) {
     canvas = document.createElement('canvas');
     canvas.width = ext.x;
     canvas.height = ext.y;
+    // Do Not Enable this or too many morphs will be wrongly sized.
+    // retinaScale(canvas);
     return canvas;
 }
 
