@@ -2737,22 +2737,22 @@ Process.prototype.doPlayNote = function (ptch, beats) {
 
         if ((Date.now() - st) < attack) {
             percent = (Date.now() - st) / attack;
-            ng.setValueAtTime(amplitude * percent,
-                                AudioContext.currentTime);
+            ng.setTargetAtTime(amplitude * percent,
+                                AudioContext.currentTime, 0);
 
         } else if ((Date.now() - st) < attack + decay) {
             percent = (Date.now() - st - attack) / decay;
-            ng.setValueAtTime(amplitude * (1 - (sustainLevel - 1) * percent),
-                                AudioContext.currentTime);
+            ng.setTargetAtTime(amplitude * (1 - (sustainLevel - 1) * percent),
+                                AudioContext.currentTime, 0);
 
         } else if ((Date.now() - st) < 1000 * secs - release) {
-            ng.setValueAtTime(sustainLevel * amplitude,
-                                AudioContext.currentTime);
+            ng.setTargetAtTime(sustainLevel * amplitude,
+                                AudioContext.currentTime, 0);
 
         } else if ((Date.now() - st) < 1000 * secs) {
             percent = (1000 * secs - Date.now() + st) / release;
-            ng.setValueAtTime(sustainLevel * amplitude * percent,
-                                AudioContext.currentTime);
+            ng.setTargetAtTime(sustainLevel * amplitude * percent,
+                                AudioContext.currentTime, 0);
         }
     }
 

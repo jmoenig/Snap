@@ -6175,7 +6175,7 @@ function Note(pitch, instrument) {
 
    // this.amplitude = 0.25; // todo: local volume, add as parameter to Note
     if (!Note.prototype.gainNode) {
-        Note.prototype.gainNode = AudioContext.createGainNode();
+        Note.prototype.gainNode = AudioContext.createGain();
         Note.prototype.gainNode.gain.value = 0.25; // reduce volume to 1/4
     }
 
@@ -6223,6 +6223,7 @@ Note.prototype.ensureAudioContext = function () {
 ADSRNote.prototype = new Note();
 ADSRNote.prototype.constructor = ADSRNote;
 ADSRNote.uber = Note.prototype;
+ADSRNote.oscMap = {129: "sine", 130: "square", 131: "triangle", 132: "sawtooth"};
 
 // ADSRNote instance creation
 
@@ -6242,14 +6243,14 @@ ADSRNote.prototype.play = function () {
     }
 
     // gain for this *specific* note (used to implement envelope)
-    this.noteGain = AudioContext.createGainNode();
+    this.noteGain = AudioContext.createGain();
     this.noteGain.gain.value = 0.0;
     this.oscillator.start(0); // deprecated, renamed to start()
 
     // Anchor beginning of ramp at current value.
-    this.noteGain.gain.setValueAtTime(0, AudioContext.currentTime);
+    this.noteGain.gain.setTargetAtTime(0.5, AudioContext.currentTime, 0);
 
-    this.oscillator.type = this.instrument - 129;
+    this.oscillator.type = ADSRNote.oscMap[this.instrument];
     // 0=sin, 1=square, 2=sawtooth, 3=triangle, 4=custom
 
     this.oscillator.frequency.value =
@@ -6263,7 +6264,7 @@ ADSRNote.prototype.play = function () {
 ADSRNote.prototype.stop = function () {
     Note.call(this);
     if (this.noteGain) {
-        this.noteGain.gain.setValueAtTime(0, AudioContext.currentTime);
+        this.noteGain.gain.setTargetAtTime(0, AudioContext.currentTime, 0);
         this.noteGain.disconnect(this.gainNode);
         this.noteGain = null;
     }
@@ -6284,7 +6285,7 @@ function GuitarString(pitch, duration) {
     this.duration = duration === undefined ? 2 : duration;
     this.frequency = Math.pow(2, (this.pitch - 69) / 12) * 440;
     this.N = Math.round(AudioContext.sampleRate / this.frequency);
-    this.node = AudioContext.createJavaScriptNode(4096, 1, 1);
+    this.node = AudioContext.createScriptProcessor(4096, 1, 1);
 
     /*
      * The decay after the n^th pass through delay + low pass is
