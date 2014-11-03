@@ -581,6 +581,11 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'control',
             spec: 'when %keyHat key pressed'
         },
+        getLastKey: {
+            type: 'reporter',
+            category: 'control',
+            spec: 'last key pressed'
+        },
         receiveClick: {
             type: 'hat',
             category: 'control',
@@ -1801,6 +1806,8 @@ SpriteMorph.prototype.blockTemplates = function (category) {
 
         blocks.push(block('receiveGo'));
         blocks.push(block('receiveKey'));
+        blocks.push(watcherToggle('getLastKey'));
+        blocks.push(block('getLastKey'));
         blocks.push(block('receiveClick'));
         blocks.push(block('receiveMessage'));
         blocks.push('-');
@@ -3539,6 +3546,16 @@ SpriteMorph.prototype.getTempo = function () {
     return 0;
 };
 
+// SpriteMorph last key
+
+SpriteMorph.prototype.getLastKey = function () {
+    var stage = this.parentThatIsA(StageMorph);
+    if (stage) {
+        return stage.getLastKey();
+    }
+    return '';
+};
+
 // SpriteMorph last message
 
 SpriteMorph.prototype.getLastMessage = function () {
@@ -4259,6 +4276,7 @@ StageMorph.prototype.init = function (globals) {
 
     this.timerStart = Date.now();
     this.tempo = 60; // bpm
+    this.lastKey = '';
     this.lastMessage = '';
 
     this.watcherUpdateFrequency = 2;
@@ -4539,6 +4557,12 @@ StageMorph.prototype.getTempo = function () {
     return +this.tempo;
 };
 
+// StageMorph keys
+
+StageMorph.prototype.getLastKey = function () {
+    return this.lastKey || '';
+};
+
 // StageMorph messages
 
 StageMorph.prototype.getLastMessage = function () {
@@ -4733,6 +4757,7 @@ StageMorph.prototype.fireKeyEvent = function (key) {
     if (evt === 'esc') {
         return this.fireStopAllEvent();
     }
+    this.lastKey = evt;
     this.children.concat(this).forEach(function (morph) {
         if (morph instanceof SpriteMorph || morph instanceof StageMorph) {
             hats = hats.concat(morph.allHatBlocksForKey(evt));
@@ -4951,6 +4976,8 @@ StageMorph.prototype.blockTemplates = function (category) {
 
         blocks.push(block('receiveGo'));
         blocks.push(block('receiveKey'));
+        blocks.push(watcherToggle('getLastKey'));
+        blocks.push(block('getLastKey'));
         blocks.push(block('receiveClick'));
         blocks.push(block('receiveMessage'));
         blocks.push('-');
@@ -6742,7 +6769,7 @@ WatcherMorph.prototype.object = function () {
 
 WatcherMorph.prototype.isGlobal = function (selector) {
     return contains(
-        ['getLastAnswer', 'getLastMessage', 'getTempo', 'getTimer',
+        ['getLastAnswer', 'getLastKey', 'getLastMessage', 'getTempo', 'getTimer',
              'reportMouseX', 'reportMouseY'],
         selector
     );
