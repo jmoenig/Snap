@@ -954,6 +954,7 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                 false,
                 {
                     'any key': ['any key'],
+                    'number key': ['number key'],
                     'up arrow': ['up arrow'],
                     'down arrow': ['down arrow'],
                     'right arrow': ['right arrow'],

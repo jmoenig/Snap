@@ -3488,6 +3488,10 @@ SpriteMorph.prototype.allHatBlocksForKey = function (key) {
                 if (selectedOption === 'any key') {
                     return true;
                 }
+                if (selectedOption === 'number key' &&
+                        (key >= '0' && key <= '9')) {
+                    return true;
+                }
                 if (selectedOption === key) {
                     return true;
                 }
