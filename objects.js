@@ -3483,7 +3483,15 @@ SpriteMorph.prototype.allHatBlocksForKey = function (key) {
     return this.scripts.children.filter(function (morph) {
         if (morph.selector) {
             if (morph.selector === 'receiveKey') {
-                return morph.inputs()[0].evaluate()[0] === key;
+                var selectedOption = morph.inputs()[0].evaluate()[0];
+
+                if (selectedOption === 'any key') {
+                    return true;
+                }
+                if (selectedOption === key) {
+                    return true;
+                }
+                return false;
             }
         }
         return false;
