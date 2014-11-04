@@ -683,8 +683,6 @@ Process.prototype.doYield = function () {
 
 Process.prototype.checkIfList = function (maybeList) {
     if (!(maybeList instanceof List)) {
-        var error = {name: 'list error', message: 'expecting a list'};
-        this.handleError(error);
         maybeList = new List();
     }
     return maybeList;
