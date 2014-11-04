@@ -4618,7 +4618,7 @@ StageMorph.prototype.step = function () {
         world.keyboardReceiver = this;
     }
     if (world.currentKey === null) {
-        this.keyPressed = null;
+        this.keysPressed = {};
     }
 
     // manage threads
