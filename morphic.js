@@ -4496,6 +4496,9 @@ CursorMorph.prototype.processKeyPress = function (event) {
     if (event.keyCode) { // Opera doesn't support charCode
         if (event.ctrlKey) {
             this.ctrl(event.keyCode, event.shiftKey);
+            if (event.keyCode !== 86) { // allow pasting-in
+                event.preventDefault();
+            }
         } else if (event.metaKey) {
             this.cmd(event.keyCode, event.shiftKey);
         } else {
@@ -4507,6 +4510,9 @@ CursorMorph.prototype.processKeyPress = function (event) {
     } else if (event.charCode) { // all other browsers
         if (event.ctrlKey) {
             this.ctrl(event.charCode, event.shiftKey);
+            if (event.charCode !== 86) { // allow pasting-in
+                event.preventDefault();
+            }
         } else if (event.metaKey) {
             this.cmd(event.charCode, event.shiftKey);
         } else {
@@ -4526,6 +4532,9 @@ CursorMorph.prototype.processKeyDown = function (event) {
     this.keyDownEventUsed = false;
     if (event.ctrlKey) {
         this.ctrl(event.keyCode, event.shiftKey);
+        if (event.keyCode !== 86) { // allow pasting-in
+            event.preventDefault();
+        }
         // notify target's parent of key event
         this.target.escalateEvent('reactToKeystroke', event);
         return;
@@ -10319,10 +10328,6 @@ WorldMorph.prototype.initEventListeners = function () {
                 if (myself.keyboardReceiver) {
                     myself.keyboardReceiver.processKeyPress(event);
                 }
-                event.preventDefault();
-            }
-            if ((event.ctrlKey || event.metaKey) &&
-                    (event.keyIdentifier !== 'U+0056')) { // allow pasting-in
                 event.preventDefault();
             }
         },
