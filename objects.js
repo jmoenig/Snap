@@ -581,11 +581,6 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'control',
             spec: 'when %keyHat key pressed'
         },
-        getLastKey: {
-            type: 'reporter',
-            category: 'control',
-            spec: 'last key pressed'
-        },
         receiveClick: {
             type: 'hat',
             category: 'control',
@@ -834,6 +829,11 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'predicate',
             category: 'sensing',
             spec: 'key %key pressed?'
+        },
+        getKeysPressed: {
+            type: 'reporter',
+            category: 'sensing',
+            spec: 'keys pressed'
         },
         reportDistanceTo: {
             type: 'reporter',
@@ -1806,8 +1806,6 @@ SpriteMorph.prototype.blockTemplates = function (category) {
 
         blocks.push(block('receiveGo'));
         blocks.push(block('receiveKey'));
-        blocks.push(watcherToggle('getLastKey'));
-        blocks.push(block('getLastKey'));
         blocks.push(block('receiveClick'));
         blocks.push(block('receiveMessage'));
         blocks.push('-');
@@ -1876,6 +1874,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('reportMouseDown'));
         blocks.push('-');
         blocks.push(block('reportKeyPressed'));
+        blocks.push(block('getKeysPressed'));
         blocks.push('-');
         blocks.push(block('reportDistanceTo'));
         blocks.push('-');
@@ -3548,10 +3547,10 @@ SpriteMorph.prototype.getTempo = function () {
 
 // SpriteMorph last key
 
-SpriteMorph.prototype.getLastKey = function () {
+SpriteMorph.prototype.getKeysPressed = function () {
     var stage = this.parentThatIsA(StageMorph);
     if (stage) {
-        return stage.getLastKey();
+        return stage.getKeysPressed();
     }
     return '';
 };
@@ -4276,7 +4275,6 @@ StageMorph.prototype.init = function (globals) {
 
     this.timerStart = Date.now();
     this.tempo = 60; // bpm
-    this.lastKey = '';
     this.lastMessage = '';
 
     this.watcherUpdateFrequency = 2;
@@ -4559,8 +4557,12 @@ StageMorph.prototype.getTempo = function () {
 
 // StageMorph keys
 
-StageMorph.prototype.getLastKey = function () {
-    return this.lastKey || '';
+StageMorph.prototype.getKeysPressed = function () {
+    var keys = [];
+    for (var key in this.keysPressed) {
+        keys.push(key);
+    }
+    return new List(keys);
 };
 
 // StageMorph messages
@@ -4757,7 +4759,6 @@ StageMorph.prototype.fireKeyEvent = function (key) {
     if (evt === 'esc') {
         return this.fireStopAllEvent();
     }
-    this.lastKey = evt;
     this.children.concat(this).forEach(function (morph) {
         if (morph instanceof SpriteMorph || morph instanceof StageMorph) {
             hats = hats.concat(morph.allHatBlocksForKey(evt));
@@ -4976,8 +4977,6 @@ StageMorph.prototype.blockTemplates = function (category) {
 
         blocks.push(block('receiveGo'));
         blocks.push(block('receiveKey'));
-        blocks.push(watcherToggle('getLastKey'));
-        blocks.push(block('getLastKey'));
         blocks.push(block('receiveClick'));
         blocks.push(block('receiveMessage'));
         blocks.push('-');
@@ -5040,6 +5039,7 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('reportMouseDown'));
         blocks.push('-');
         blocks.push(block('reportKeyPressed'));
+        blocks.push(block('getKeysPressed'));
         blocks.push('-');
         blocks.push(block('doResetTimer'));
         blocks.push(watcherToggle('getTimer'));
@@ -6769,7 +6769,7 @@ WatcherMorph.prototype.object = function () {
 
 WatcherMorph.prototype.isGlobal = function (selector) {
     return contains(
-        ['getLastAnswer', 'getLastKey', 'getLastMessage', 'getTempo', 'getTimer',
+        ['getLastAnswer', 'getKeysPressed', 'getLastMessage', 'getTempo', 'getTimer',
              'reportMouseX', 'reportMouseY'],
         selector
     );
