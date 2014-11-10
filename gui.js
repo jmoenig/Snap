@@ -455,8 +455,6 @@ IDE_Morph.prototype.openIn = function (world) {
         interpretUrlAnchors.call(this);
     }
 
-    //Precache thumbnails
-    ProjectDialogMorph.prototype.getGoalProjectList();
 };
 
 // IDE_Morph construction
@@ -519,6 +517,18 @@ IDE_Morph.prototype.createLogo = function () {
     this.logo.setExtent(new Point(200, 28)); // dimensions are fixed
     this.add(this.logo);
 };
+
+IDE_Morph.prototype.precacheGoals = function() {
+    //Precache thumbnails
+    try {
+        ProjectDialogMorph.prototype.getGoalProjectList();
+    }
+    catch(e) {
+        return false;
+    }
+
+    return true;
+}
 
 IDE_Morph.prototype.createControlBar = function () {
     // assumes the logo has already been created
@@ -776,26 +786,30 @@ IDE_Morph.prototype.createControlBar = function () {
     this.controlBar.add(settingsButton);
     this.controlBar.settingsButton = settingsButton; // for menu positioning
 
-	// goalImagesButton
-    button = new PushButtonMorph(
-        this,
-        'goalImagesMenu', ' Goals  '
-    );
-    button.corner = 12;
-    button.color = colors[0];
-    button.highlightColor = colors[1];
-    button.pressColor = colors[2];
-    button.labelMinExtent = new Point(36, 18);
-    button.padding = 0;
-    button.labelShadowOffset = new Point(-1, -1);
-    button.labelShadowColor = colors[1];
-    button.labelColor = this.buttonLabelColor;
-    button.contrast = this.buttonContrast;
-    button.drawNew();
-    button.fixLayout();
-    goalImagesButton = button;
-    this.controlBar.add(goalImagesButton);
-    this.controlBar.goalImagesButton = goalImagesButton; // for menu positioning
+ 	 // goalImagesButton
+    var goals = this.precacheGoals();
+   
+    if(goals) {
+       button = new PushButtonMorph(
+           this,
+           'goalImagesMenu', ' Goals  '
+       );
+       button.corner = 12;
+       button.color = colors[0];
+       button.highlightColor = colors[1];
+       button.pressColor = colors[2];
+       button.labelMinExtent = new Point(36, 18);
+       button.padding = 0;
+       button.labelShadowOffset = new Point(-1, -1);
+       button.labelShadowColor = colors[1];
+       button.labelColor = this.buttonLabelColor;
+       button.contrast = this.buttonContrast;
+       button.drawNew();
+       button.fixLayout();
+       goalImagesButton = button;
+       this.controlBar.add(goalImagesButton);
+       this.controlBar.goalImagesButton = goalImagesButton; // for menu positioning
+    }
 	
     // cloudButton
     button = new PushButtonMorph(
@@ -843,11 +857,18 @@ IDE_Morph.prototype.createControlBar = function () {
             }
         );
 		
-		goalImagesButton.setCenter(myself.controlBar.center());
-		goalImagesButton.setLeft(this.left());
-		
-        settingsButton.setCenter(myself.controlBar.center());
-        settingsButton.setLeft(goalImagesButton.left() - padding - 40);
+        if(goals) {
+           goalImagesButton.setCenter(myself.controlBar.center());
+           goalImagesButton.setLeft(this.left());
+         
+           settingsButton.setCenter(myself.controlBar.center());
+           settingsButton.setLeft(goalImagesButton.left() - padding - 40);
+        }
+      
+        else {
+           settingsButton.setCenter(myself.controlBar.center());
+           settingsButton.setLeft(this.left() - 40);
+        }         
 
         cloudButton.setCenter(myself.controlBar.center());
         cloudButton.setRight(settingsButton.left() - padding);
@@ -883,7 +904,12 @@ IDE_Morph.prototype.createControlBar = function () {
         this.label.drawNew();
         this.add(this.label);
         this.label.setCenter(this.center());
-        this.label.setLeft(this.goalImagesButton.right() + padding);
+        if(goals) {
+            this.label.setLeft(this.goalImagesButton.right() + padding);
+        }
+        else {
+            this.label.setLeft(this.settingsButton.right() + padding);
+        }
     };
 };
 
@@ -4672,23 +4698,28 @@ ProjectDialogMorph.prototype.getGoalProjectList = function () {
 };
 
 ProjectDialogMorph.prototype.getExamplesProjectList = function () {
-    var dir,
-        projects = [];
-	var request = new XMLHttpRequest();
-	request.open("GET", config.urls.demos_url, false);
-	request.send();
-	var JSON_object = JSON.parse(request.responseText);
-	for (var i = 0; i < JSON_object.length; i++){
-		dta = {
-			name: JSON_object[i]["name"],
-			thumb: null,
-			notes: null
-		};
-		projects.push(dta);
-	}
-    /*projects.sort(function (x, y) {
-        return x.name < y.name ? -1 : 1;
-    });*/
+   var dir,
+       projects = [];
+   try {
+      var request = new XMLHttpRequest();
+      request.open("GET", config.urls.demos_url, false);
+      request.send();
+      var JSON_object = JSON.parse(request.responseText);
+      for (var i = 0; i < JSON_object.length; i++){
+         dta = {
+            name: JSON_object[i]["name"],
+            thumb: null,
+            notes: null
+         };
+         projects.push(dta);
+      }
+       /*projects.sort(function (x, y) {
+           return x.name < y.name ? -1 : 1;
+       });*/
+    }
+    catch(e) {
+        this.ide.showMessage("Failed to load examples.");
+    }
     return projects;
 };
 
