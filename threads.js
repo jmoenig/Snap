@@ -1139,7 +1139,7 @@ Process.prototype.doShowVar = function (varName) {
             if (isGlobal || target.owner) {
                 label = name;
             } else {
-                label = name + ' (temporary)';
+                label = name + ' (' + localize('temporary') + ')';
             }
             watcher = new WatcherMorph(
                 label,
