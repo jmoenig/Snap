@@ -61,7 +61,7 @@ SyntaxElementMorph, Variable*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2014-October-01';
+modules.store = '2014-November-14';
 
 
 // XML_Serializer ///////////////////////////////////////////////////////
@@ -1824,9 +1824,8 @@ Context.prototype.toXML = function (serializer) {
         return '';
     }
     return serializer.format(
-        '<context% ~><inputs>%</inputs><variables>%</variables>' +
+        '<context ~><inputs>%</inputs><variables>%</variables>' +
             '%<receiver>%</receiver>%</context>',
-        this.isLambda ? ' lambda="lambda"' : '',
         this.inputs.reduce(
                 function (xml, input) {
                     return xml + serializer.format('<input>$</input>', input);
