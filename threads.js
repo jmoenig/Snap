@@ -225,7 +225,9 @@ ThreadManager.prototype.removeTerminatedProcesses = function () {
     var remaining = [];
     this.processes.forEach(function (proc) {
         if (!proc.isRunning() && !proc.errorFlag && !proc.isDead) {
-            proc.topBlock.removeHighlight();
+            if (proc.topBlock instanceof BlockMorph) {
+                proc.topBlock.removeHighlight();
+            }
 
             if (proc.prompter) {
                 proc.prompter.destroy();
