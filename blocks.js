@@ -155,7 +155,7 @@ DialogBoxMorph, BlockInputFragmentMorph, PrototypeHatBlockMorph, Costume*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2014-October-01';
+modules.blocks = '2014-November-17';
 
 
 var SyntaxElementMorph;
@@ -394,10 +394,8 @@ SyntaxElementMorph.prototype.allInputs = function () {
 };
 
 SyntaxElementMorph.prototype.allEmptySlots = function () {
-/*
-    answer empty input slots of all children excluding myself,
-    but omit those in nested rings (lambdas) and JS-Function primitives
-*/
+    // answer empty input slots of all children excluding myself,
+    // but omit those in nested rings (lambdas) and JS-Function primitives
     var empty = [];
     if (!(this instanceof RingMorph) &&
             (this.selector !== 'reportJSFunction')) {
@@ -410,6 +408,21 @@ SyntaxElementMorph.prototype.allEmptySlots = function () {
         });
     }
     return empty;
+};
+
+SyntaxElementMorph.prototype.allReportBlocks = function () {
+    // answer report blocks of all children including myself,
+    // but omit those in nested rings (lambdas)
+    if (this.selector === 'doReport') {return [this]; }
+    var reports = [];
+    if (!(this instanceof RingMorph)) {
+        this.children.forEach(function (morph) {
+            if (morph.allReportBlocks) {
+                reports = reports.concat(morph.allReportBlocks());
+            }
+        });
+    }
+    return reports;
 };
 
 SyntaxElementMorph.prototype.replaceInput = function (oldArg, newArg) {
@@ -3169,9 +3182,13 @@ BlockMorph.prototype.snap = function () {
     I inherit from BlockMorph adding the following most important
     public accessors:
 
-    nextBlock()        - set / get the block attached to my bottom
-    bottomBlock()    - answer the bottom block of my stack
-    blockSequence()    - answer an array of blocks starting with myself
+        nextBlock()       - set / get the block attached to my bottom
+        bottomBlock()     - answer the bottom block of my stack
+        blockSequence()   - answer an array of blocks starting with myself
+
+    and the following "lexical awareness" indicator:
+
+        partOfCustomCommand - temporary bool set by the evaluator
 */
 
 // CommandBlockMorph inherits from BlockMorph:

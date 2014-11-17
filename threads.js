@@ -83,7 +83,7 @@ ArgLabelMorph, localize, XML_Element, hex_sha512*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.threads = '2014-November-15';
+modules.threads = '2014-November-17';
 
 var ThreadManager;
 var Process;
@@ -945,6 +945,9 @@ Process.prototype.fork = function (context, args) {
 };
 
 Process.prototype.doReport = function (value) {
+    if (this.context.expression.partOfCustomCommand) {
+        return this.doStopBlock();
+    }
     while (this.context && this.context.expression !== 'exitReporter') {
         if (this.context.expression === 'doStopWarping') {
             this.doStopWarping();
@@ -1042,8 +1045,6 @@ Process.prototype.evaluateCustomBlock = function () {
     }
 
     if (runnable.expression instanceof CommandBlockMorph) {
-        runnable.expression = runnable.expression.blockSequence();
-
         // insert a reporter exit tag for the
         // CALL SCRIPT primitive variant
         if (this.context.expression.definition.type !== 'command') {
@@ -1054,7 +1055,12 @@ Process.prototype.evaluateCustomBlock = function () {
                 outer.receiver
             );
             runnable.parentContext = exit;
+        } else { // mark all REPORT blocks as being part of a custom command
+            runnable.expression.allReportBlocks().forEach(function (rb) {
+                rb.partOfCustomCommand = true;
+            });
         }
+        runnable.expression = runnable.expression.blockSequence();
     }
 };
 
