@@ -849,8 +849,8 @@ Process.prototype.evaluate = function (
 
             } else if (context.emptySlots !== 1) {
                 throw new Error(
-                    'expecting ' + context.emptySlots + ' input(s), '
-                        + 'but getting ' + parms.length
+                    localize('expecting') + ' ' + context.emptySlots + ' ' 
+                        + localize('input(s), but getting') + ' ' + parms.length
                 );
             }
         }
@@ -915,8 +915,8 @@ Process.prototype.fork = function (context, args) {
 
             } else if (context.emptySlots !== 1) {
                 throw new Error(
-                    'expecting ' + context.emptySlots + ' input(s), '
-                        + 'but getting ' + parms.length
+                    localize('expecting') + ' ' + context.emptySlots + ' ' 
+                        + localize('input(s), but getting') + ' ' + parms.length
                 );
             }
         }
@@ -1148,7 +1148,7 @@ Process.prototype.doShowVar = function (varName) {
             if (isGlobal || target.owner) {
                 label = name;
             } else {
-                label = name + ' (temporary)';
+                label = name + ' ' + localize('(temporary)');
             }
             watcher = new WatcherMorph(
                 label,
