@@ -650,11 +650,12 @@ SnapTranslator.dict.pt = {
     'Save As...':
         'Guardar este projecto como…',
     'Import...':
-        'Importar para este projecto…',
+        'Importar…',
     'file menu import hint':
-        'Importar para este projecto\num projecto exportado,\n'
-            + 'uma biblioteca de blocos,\n'
-            + 'um traje ou um som.',
+        'Abrir um projecto exportado,\n'
+            + 'substitundo o projecto corrente, ou\n'
+            + 'importar uma biblioteca de blocos, um\n'
+            + 'traje ou um som para o projecto corrente.',
     'Export project as plain text...':
         'Exportar este projecto como texto simples…',
     'Export project...':
@@ -1647,6 +1648,12 @@ SnapTranslator.dict.pt = {
         'não existe uma variável «',
     '\'\ndoes not exist in this context':
         '»\nneste contexto',
+    '(temporary)':
+        '(temporária)',
+    'expecting':
+        'esperavam-se',
+    'input(s), but getting':
+        'argumento(s), mas foram passados',
 
     // produção de código
     'map %cmdRing to %codeKind %code':
