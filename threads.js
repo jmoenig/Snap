@@ -137,7 +137,7 @@ ThreadManager.prototype.startProcess = function (
     block,
     isThreadSafe,
     exportResult,
-	callback
+    callback
 ) {
     var active = this.findProcess(block),
         top = block.topBlock(),
@@ -236,18 +236,22 @@ ThreadManager.prototype.removeTerminatedProcesses = function () {
             }
 
             if (proc.topBlock instanceof ReporterBlockMorph) {
-                if (proc.homeContext.inputs[0] instanceof List) {
-                    proc.topBlock.showBubble(
-                        new ListWatcherMorph(
-                            proc.homeContext.inputs[0]
-                        ),
-                        proc.exportResult
-                    );
+                if (proc.callback) {
+                    proc.callback(proc.homeContext.inputs[0])
                 } else {
-                    proc.topBlock.showBubble(
-                        proc.homeContext.inputs[0],
-                        proc.exportResult
-                    );
+                    if (proc.homeContext.inputs[0] instanceof List) {
+                        proc.topBlock.showBubble(
+                            new ListWatcherMorph(
+                                proc.homeContext.inputs[0]
+                            ),
+                            proc.exportResult
+                        );
+                    } else {
+                        proc.topBlock.showBubble(
+                            proc.homeContext.inputs[0],
+                            proc.exportResult
+                        );
+                    }
                 }
             }
         } else {
@@ -315,7 +319,7 @@ ThreadManager.prototype.findProcess = function (block) {
                         and when the process was paused
     exportResult        boolean flag indicating whether a picture of the top
                         block along with the result bubble shoud be exported
-	callback 			a function to be executed when the process is done
+    callback             a function to be executed when the process is done
 */
 
 Process.prototype = {};
@@ -340,7 +344,7 @@ function Process(topBlock, callback) {
     this.pauseOffset = null;
     this.frameCount = 0;
     this.exportResult = false;
-	this.callback = callback;
+    this.callback = callback;
 
     if (topBlock) {
         this.homeContext.receiver = topBlock.receiver();
@@ -439,7 +443,7 @@ Process.prototype.pauseStep = function () {
 Process.prototype.evaluateContext = function () {
     var exp = this.context.expression;
     this.frameCount += 1;
-	
+    
     if (exp instanceof Array) {
         return this.evaluateSequence(exp);
     }
@@ -479,9 +483,7 @@ Process.prototype.evaluateBlock = function (block, argCount) {
         }
         if (this.isCatchingErrors) {
             try {
-				var result = rcvr[block.selector].apply(rcvr, inputs);
-				if (this.callback) { this.callback(result) };
-                this.returnValueToParentContext(result);
+                this.returnValueToParentContext(rcvr[block.selector].apply(rcvr, inputs));
                 this.popContext();
             } catch (error) {
                 this.handleError(error, block);
