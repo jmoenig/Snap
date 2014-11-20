@@ -2326,3 +2326,4 @@ ______
 ------
 * Lists: Fixed #642 avoid “freezing” when calling CONS on non-list/null
 * Threads: Fixed #364 avoid “freezing” when calling LAUNCH on empty ring
+* Threads: Added optional “onComplete” callback to Process, thanks, @bromagosa!
