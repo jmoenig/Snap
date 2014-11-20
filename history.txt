@@ -2331,3 +2331,4 @@ ______
 * GUI: Updated the “About” Dialog with a mention of support from CDG (SAP Labs)
 * BYOB: Percent sign fix for block labels, thanks, @natashasandy!
 * Threads: fix ‘line’ option in ‘split’ block for Windows files, thanks, @brianharvey!
+* Morphic: fix slider range 1, thanks, @tonychenr !
