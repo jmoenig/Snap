@@ -2324,4 +2324,5 @@ ______
 
 141120
 ------
-* Lists: Fixed #642, avoid “freezing” when calling CONS on non-list/null
+* Lists: Fixed #642 avoid “freezing” when calling CONS on non-list/null
+* Threads: Fixed #364 avoid “freezing” when calling LAUNCH on empty ring
