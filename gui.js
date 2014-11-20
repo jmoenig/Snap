@@ -245,6 +245,7 @@ IDE_Morph.prototype.openIn = function (world) {
             if (usr) {
                 SnapCloud.username = usr.username || null;
                 SnapCloud.password = usr.password || null;
+                myself.source = 'cloud';
             }
         }
     }
@@ -4867,6 +4868,11 @@ ProjectDialogMorph.prototype.shareProject = function () {
     var myself = this,
         proj = this.listField.selected,
         entry = this.listField.active;
+
+    if (!proj) {
+        this.ide.saveProjectToCloud(this.ide.projectName);
+        proj = this.projectName;
+    }
 
     if (proj) {
         this.ide.confirm(
