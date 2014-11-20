@@ -688,7 +688,8 @@ CustomCommandBlockMorph.prototype.labelPart = function (spec) {
         return CustomCommandBlockMorph.uber.labelPart.call(this, spec);
     }
     if ((spec[0] === '%') && (spec.length > 1)) {
-        part = new BlockInputFragmentMorph(spec.slice(1));
+        var label = spec.replace(/%/g, '');
+        part = new BlockInputFragmentMorph(label);
     } else {
         part = new BlockLabelFragmentMorph(spec);
         part.fontSize = this.fontSize;
