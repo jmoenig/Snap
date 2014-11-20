@@ -61,7 +61,7 @@ PushButtonMorph, SyntaxElementMorph, Color, Point, WatcherMorph,
 StringMorph, SpriteMorph, ScrollFrameMorph, CellMorph, ArrowMorph,
 MenuMorph, snapEquals, Morph, isNil, localize, MorphicPreferences*/
 
-modules.lists = '2014-July-28';
+modules.lists = '2014-November-20';
 
 var List;
 var ListWatcherMorph;
@@ -125,6 +125,9 @@ List.prototype.changed = function () {
 
 List.prototype.cons = function (car, cdr) {
     var answer = new List();
+    if (!(cdr instanceof List || isNil(cdr))) {
+        throw new Error("cdr isn't a list: " + cdr);
+    }
     answer.first = isNil(car) ? null : car;
     answer.rest = cdr || null;
     answer.isLinked = true;
