@@ -2126,7 +2126,7 @@ Process.prototype.reportTextSplit = function (string, delimiter) {
     str = (string || '').toString();
     switch (this.inputOption(delimiter)) {
     case 'line':
-        del = '\n';
+        del = '\r?\n';
         break;
     case 'tab':
         del = '\t';
