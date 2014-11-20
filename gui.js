@@ -69,7 +69,7 @@ SpeechBubbleMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2014-October-06';
+modules.gui = '2014-November-20';
 
 // Declarations
 
@@ -2511,8 +2511,9 @@ IDE_Morph.prototype.aboutSnap = function () {
         + 'jens@moenig.org, bh@cs.berkeley.edu\n\n'
 
         + 'Snap! is developed by the University of California, Berkeley\n'
-        + '          with support from the National Science Foundation '
-        + 'and MioSoft.   \n'
+        + '          with support from the National Science Foundation, '
+        + 'MioSoft,     \n'
+        + 'and the Communications Design Group at SAP Labs. \n'
 
         + 'The design of Snap! is influenced and inspired by Scratch,\n'
         + 'from the Lifelong Kindergarten group at the MIT Media Lab\n\n'

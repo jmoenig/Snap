@@ -2327,3 +2327,5 @@ ______
 * Lists: Fixed #642 avoid “freezing” when calling CONS on non-list/null
 * Threads: Fixed #364 avoid “freezing” when calling LAUNCH on empty ring
 * Threads: Added optional “onComplete” callback to Process, thanks, @bromagosa!
+* GUI: Set Default Save location to Cloud on load, thanks, @cycomachead!
+* GUI: Updated the “About” Dialog with a mention of support from CDG (SAP Labs) 
