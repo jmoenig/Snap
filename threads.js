@@ -83,7 +83,7 @@ ArgLabelMorph, localize, XML_Element, hex_sha512*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.threads = '2014-November-17';
+modules.threads = '2014-November-20';
 
 var ThreadManager;
 var Process;
@@ -225,8 +225,9 @@ ThreadManager.prototype.removeTerminatedProcesses = function () {
     var remaining = [];
     this.processes.forEach(function (proc) {
         if (!proc.isRunning() && !proc.errorFlag && !proc.isDead) {
-            proc.topBlock.removeHighlight();
-
+            if (proc.topBlock instanceof BlockMorph) {
+                proc.topBlock.removeHighlight();
+            }
             if (proc.prompter) {
                 proc.prompter.destroy();
                 if (proc.homeContext.receiver.stopTalking) {
@@ -879,6 +880,9 @@ Process.prototype.fork = function (context, args) {
         throw new Error(
             'continuations cannot be forked'
         );
+    }
+    if (!(context instanceof Context)) {
+        throw new Error('expecting a ring but getting ' + context);
     }
 
     var outer = new Context(null, null, context.outerContext),
