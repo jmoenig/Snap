@@ -858,8 +858,9 @@ Process.prototype.evaluate = function (
 
             } else if (context.emptySlots !== 1) {
                 throw new Error(
-                    localize('expecting') + ' ' + context.emptySlots + ' ' 
-                        + localize('input(s), but getting') + ' ' + parms.length
+                    localize('expecting') + ' ' + context.emptySlots + ' '
+                        + localize('input(s), but getting') + ' '
+                        + parms.length
                 );
             }
         }
@@ -937,8 +938,9 @@ Process.prototype.fork = function (context, args) {
 
             } else if (context.emptySlots !== 1) {
                 throw new Error(
-                    localize('expecting') + ' ' + context.emptySlots + ' ' 
-                        + localize('input(s), but getting') + ' ' + parms.length
+                    localize('expecting') + ' ' + context.emptySlots + ' '
+                        + localize('input(s), but getting') + ' '
+                        + parms.length
                 );
             }
         }
@@ -2986,7 +2988,7 @@ VariableFrame.prototype.find = function (name) {
     throw new Error(
         localize('a variable of name \'')
             + name
-            + localize('\'\ndoes not exist in this context')    
+            + localize('\'\ndoes not exist in this context')
     );
 };
 
