@@ -2321,3 +2321,7 @@ ______
 141117
 ------
 * Threads, Blocks: Treat REPORT blocks inside custom command definitions as STOP THIS BLOCK / IGNORE INPUTS
+
+141120
+------
+* Lists: Fixed #642, avoid “freezing” when calling CONS on non-list/null
