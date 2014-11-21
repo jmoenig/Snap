@@ -134,11 +134,14 @@ var Costume;
 var SVG_Costume;
 var CostumeEditorMorph;
 var Sound;
+
+var AudioContext;
+var GuitarString;
+var ADSRNote;
 var Note;
 var CellMorph;
 var WatcherMorph;
 var StagePrompterMorph;
-var Note;
 var SpriteHighlightMorph;
 
 // SpriteMorph /////////////////////////////////////////////////////////
@@ -471,6 +474,12 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: 'play note %n for %n beats',
             defaults: [60, 0.5]
         },
+        doPlayGuitarString: {
+            type: 'command',
+            category: 'sound',
+            spec: 'play guitar string %n for %n beats',
+            defaults: [60, 0.5]
+        },
         doChangeTempo: {
             type: 'command',
             category: 'sound',
@@ -488,7 +497,17 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'sound',
             spec: 'tempo'
         },
-
+        doSetInstrument: {
+            type: 'command',
+            category: 'sound',
+            spec: 'set instrument to %inst',
+            defaults: [129]
+        },
+        getInstrument: {
+            type: 'reporter',
+            category: 'sound',
+            spec: 'instrument'
+        },
         // Sound - Debugging primitives for development mode
         reportSounds: {
             dev: true,
@@ -1296,6 +1315,7 @@ SpriteMorph.prototype.init = function (globals) {
     this.version = Date.now(); // for observer optimization
     this.isClone = false; // indicate a "temporary" Scratch-style clone
     this.cloneOriginName = '';
+    this.instrument = 129; // last set instrument, default is sine wave
 
     // sprite nesting properties
     this.parts = []; // not serialized, only anchor (name)
@@ -1756,6 +1776,10 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('doStopAllSounds'));
         blocks.push('-');
         blocks.push(block('doRest'));
+        blocks.push('-');
+        blocks.push(block('doSetInstrument'));
+        blocks.push(watcherToggle('getInstrument'));
+        blocks.push(block('getInstrument'));
         blocks.push('-');
         blocks.push(block('doPlayNote'));
         blocks.push('-');
@@ -2965,7 +2989,7 @@ SpriteMorph.prototype.applyGraphicsEffects = function (canvas) {
         var i;
         if (value !== 0) {
             for (i = 0; i < p.length; i += 4) {
-                p[i] += value; //255 = 100% of this color 
+                p[i] += value; //255 = 100% of this color
                 p[i + 1] += value;
                 p[i + 2] += value;
             }
@@ -3525,6 +3549,16 @@ SpriteMorph.prototype.getTempo = function () {
         return stage.getTempo();
     }
     return 0;
+};
+
+// SpriteMorph instrument
+
+SpriteMorph.prototype.setInstrument = function (inst) {
+    this.instrument = inst;
+};
+
+SpriteMorph.prototype.getInstrument = function () {
+    return +this.instrument; // unary + converts to number if needed
 };
 
 // SpriteMorph last message
@@ -4248,6 +4282,7 @@ StageMorph.prototype.init = function (globals) {
     this.timerStart = Date.now();
     this.tempo = 60; // bpm
     this.lastMessage = '';
+    this.instrument = 129; // last set instrument, default is sine wave
 
     this.watcherUpdateFrequency = 2;
     this.lastWatcherUpdate = Date.now();
@@ -4525,6 +4560,16 @@ StageMorph.prototype.changeTempo = function (delta) {
 
 StageMorph.prototype.getTempo = function () {
     return +this.tempo;
+};
+
+// StageMorph instrument
+
+StageMorph.prototype.setInstrument = function (inst) {
+    this.instrument = inst;
+};
+
+StageMorph.prototype.getInstrument = function () {
+    return +this.instrument; // unary + converts to number if needed
 };
 
 // StageMorph messages
@@ -4909,6 +4954,10 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('doStopAllSounds'));
         blocks.push('-');
         blocks.push(block('doRest'));
+        blocks.push('-');
+        blocks.push(block('doSetInstrument'));
+        blocks.push(watcherToggle('getInstrument'));
+        blocks.push(block('getInstrument'));
         blocks.push('-');
         blocks.push(block('doPlayNote'));
         blocks.push('-');
@@ -6243,51 +6292,48 @@ Sound.prototype.toDataURL = function () {
     return this.audio.src;
 };
 
+// AudioContext /////////////////////////////////////////////////
+
+AudioContext = (function () {
+    var AudioContextCreator = (function () {
+        // cross browser some day?
+        return window.AudioContext ||
+            window.mozAudioContext ||
+            window.msAudioContext ||
+            window.oAudioContext ||
+            window.webkitAudioContext;
+    }());
+    return new AudioContextCreator();
+}());
+
 // Note /////////////////////////////////////////////////////////
 
 // I am a single musical note
 
 // Note instance creation
 
-function Note(pitch) {
+function Note(pitch, instrument) {
+    this.ensureAudioContext();
     this.pitch = pitch === 0 ? 0 : pitch || 69;
-    this.setupContext();
     this.oscillator = null;
+    this.instrument = instrument;
+
+   // this.amplitude = 0.25; // todo: local volume, add as parameter to Note
+    if (!Note.prototype.gainNode) {
+        Note.prototype.gainNode = AudioContext.createGain();
+        Note.prototype.gainNode.gain.value = 0.25; // reduce volume to 1/4
+    }
+
 }
 
-// Note shared properties
-
-Note.prototype.audioContext = null;
-Note.prototype.gainNode = null;
-
-// Note audio context
-
-Note.prototype.setupContext = function () {
-    if (this.audioContext) { return; }
-    var AudioContext = (function () {
-        // cross browser some day?
-        var ctx = window.AudioContext ||
-            window.mozAudioContext ||
-            window.msAudioContext ||
-            window.oAudioContext ||
-            window.webkitAudioContext;
-        if (!ctx.prototype.hasOwnProperty('createGain')) {
-            ctx.prototype.createGain = ctx.prototype.createGainNode;
-        }
-        return ctx;
-    }());
-    if (!AudioContext) {
-        throw new Error('Web Audio API is not supported\nin this browser');
-    }
-    Note.prototype.audioContext = new AudioContext();
-    Note.prototype.gainNode = Note.prototype.audioContext.createGain();
-    Note.prototype.gainNode.gain.value = 0.25; // reduce volume by 1/4
-};
+// Note types
+Note.ADSRNotes = [129, 130, 131, 132];
+Note.guitarNotes = [26];
 
 // Note playing
 
 Note.prototype.play = function () {
-    this.oscillator = this.audioContext.createOscillator();
+    this.oscillator = AudioContext.createOscillator();
     if (!this.oscillator.start) {
         this.oscillator.start = this.oscillator.noteOn;
     }
@@ -6295,10 +6341,11 @@ Note.prototype.play = function () {
         this.oscillator.stop = this.oscillator.noteOff;
     }
     this.oscillator.type = 0;
+    // 0=sin, 1=square, 2=sawtooth, 3=triangle, 4=custom
     this.oscillator.frequency.value =
         Math.pow(2, (this.pitch - 69) / 12) * 440;
     this.oscillator.connect(this.gainNode);
-    this.gainNode.connect(this.audioContext.destination);
+    this.gainNode.connect(AudioContext.destination);
     this.oscillator.start(0);
 };
 
@@ -6308,6 +6355,158 @@ Note.prototype.stop = function () {
         this.oscillator = null;
     }
 };
+
+Note.prototype.ensureAudioContext = function () {
+    if (AudioContext === undefined) {
+        throw new Error('Web Audio API is not supported\nin this browser');
+    }
+};
+
+// ADSRNote ///////////////////////////////////////////////////////
+
+// I am a single Note with an ADSR envelope that inherits from Note
+ADSRNote.prototype = new Note();
+ADSRNote.prototype.constructor = ADSRNote;
+ADSRNote.uber = Note.prototype;
+ADSRNote.oscMap = {129: "sine", 130: "square", 131: "triangle", 132: "sawtooth"};
+
+// ADSRNote instance creation
+
+function ADSRNote(pitch, instrument, duration) {
+    Note.call(this, pitch, instrument);
+    this.duration = duration;
+    this.noteGain = null;
+}
+
+ADSRNote.prototype.play = function () {
+    this.oscillator = AudioContext.createOscillator();
+    if (!this.oscillator.start) {
+        this.oscillator.start = this.oscillator.noteOn;
+    }
+    if (!this.oscillator.stop) {
+        this.oscillator.stop = this.oscillator.noteOff;
+    }
+
+    // gain for this *specific* note (used to implement envelope)
+    this.noteGain = AudioContext.createGain();
+    this.noteGain.gain.value = 0.0;
+    this.oscillator.start(0); // deprecated, renamed to start()
+
+    // Anchor beginning of ramp at current value.
+    this.noteGain.gain.setTargetAtTime(0.5, AudioContext.currentTime, 0);
+
+    this.oscillator.type = ADSRNote.oscMap[this.instrument];
+    // 0=sin, 1=square, 2=sawtooth, 3=triangle, 4=custom
+
+    this.oscillator.frequency.value =
+        Math.pow(2, (this.pitch - 69) / 12) * 440; // should be 440
+    this.oscillator.connect(this.noteGain);
+    this.noteGain.connect(this.gainNode);
+    this.gainNode.connect(AudioContext.destination);
+};
+
+
+ADSRNote.prototype.stop = function () {
+    Note.call(this);
+    if (this.noteGain) {
+        this.noteGain.gain.setTargetAtTime(0, AudioContext.currentTime, 0);
+        this.noteGain.disconnect(this.gainNode);
+        this.noteGain = null;
+    }
+};
+
+// GuitarString ///////////////////////////////////////////////////////
+
+// I am a single guitar string that inherits from Note
+GuitarString.prototype = new Note();
+GuitarString.prototype.constructor = GuitarString;
+GuitarString.uber = Note.prototype;
+
+// GuitarString instance creation
+
+function GuitarString(pitch, duration) {
+    this.ensureAudioContext();
+    this.pitch = pitch === 0 ? 0 : pitch || 69;
+    this.duration = duration === undefined ? 2 : duration;
+    this.frequency = Math.pow(2, (this.pitch - 69) / 12) * 440;
+    this.N = Math.round(AudioContext.sampleRate / this.frequency);
+    this.node = AudioContext.createScriptProcessor(4096, 1, 1);
+
+    /*
+     * The decay after the n^th pass through delay + low pass is
+     *    (cos(pi * f * T_f)*decay)^n
+     * where T_f is the inverse of the sample rate.
+     *
+     * We care about the decay per time t, since we want to be able to play a
+     * string for a particular duration. With a sampling rate of s, we go
+     * through n samples in time t = n / s. Furthermore, in one pass, we go
+     * through N + 1/2 samples (the 1/2 comes about as the phase delay from
+     * the averaging low pass).
+     *
+     * The number of seconds until the magnitude is below audible levels
+     * (generally -60dB) can then be calculated (or rather approximated as):
+     * ln(1000) * t_f where t_f is the "time constant" (time until the
+     * magnitude reaches 1/e the initial value).
+     *
+     * The duration for a given decay then comes out to:
+     *  dur = -(N + 0.5) * ln(1000) / (ln(decay*cos(pi * freq / s)) * s);
+     * where s is the sampleRate
+     *
+     * We can use this to get a decay given the user input duration:
+     *  decay = e^{(-(N + 0.5) * ln(1000)) / (dur * s)} / cos(pi * freq / s);
+     *
+     * Derivations from
+     *   Jaffe and Smith "Extensions of the Karplus-Strong Plucked-String
+     *   Algorithm"
+     */
+
+    // variables to make equation more readable
+    var f = this.frequency,
+        s = AudioContext.sampleRate,
+        pi = Math.PI,
+        powE = function (x) { return Math.pow(Math.E, x); },
+        cos = Math.cos,
+        dur = this.duration,
+        N = this.N;
+
+    // 6.908 ~= ln(1000);
+    this.decay = powE((-(N + 0.5) * 6.908) / (dur * s)) / cos(pi * f / s);
+}
+
+GuitarString.prototype.play = function () {
+    var myself = this,
+        N = this.N,
+        signal = new Float32Array(N),
+        signalIndex = 0,
+        noise = 0,
+        i = 0;
+
+    this.numIterations = 0;
+
+    this.node.onaudioprocess = function (e) {
+        var output = e.outputBuffer.getChannelData(0);
+        for (i = 0; i < e.outputBuffer.length; i += 1) {
+            if (noise < N) {
+                output[i] = signal[signalIndex] = 2 * (Math.random() - 0.5);
+                noise += 1;
+            } else {
+                output[i] = myself.decay *
+                    (signal[signalIndex] + signal[(signalIndex + 1) % N]) / 2;
+                signal[signalIndex] = output[i];
+            }
+            // wrap around if necessary
+            signalIndex = (signalIndex + 1) % N;
+        }
+        // after about 1500 low pass filter passes later, the
+    };
+
+    this.node.connect(AudioContext.destination);
+};
+
+GuitarString.prototype.stop = function () {
+    this.node.disconnect(AudioContext.destination);
+};
+
 
 // CellMorph //////////////////////////////////////////////////////////
 

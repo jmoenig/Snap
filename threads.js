@@ -65,7 +65,8 @@ ArgLabelMorph, localize, XML_Element, hex_sha512*/
 
 // globals from objects.js:
 
-/*global StageMorph, SpriteMorph, StagePrompterMorph, Note*/
+/*global StageMorph, SpriteMorph, StagePrompterMorph, Note, ADSRNote,
+GuitarString, AudioContext*/
 
 // globals from morphic.js:
 
@@ -2664,21 +2665,91 @@ Process.prototype.doSetTempo = function (bpm) {
     }
 };
 
-Process.prototype.doPlayNote = function (pitch, beats) {
-    var tempo = this.reportTempo();
-    this.doPlayNoteForSecs(
-        parseFloat(pitch || '0'),
-        60 / tempo * parseFloat(beats || '0')
-    );
+Process.prototype.reportInstrument = function () {
+    var sprite, stage;
+    if (this.homeContext.receiver) {
+        sprite = this.homeContext.receiver.parentThatIsA(SpriteMorph);
+        stage = this.homeContext.receiver.parentThatIsA(StageMorph);
+        if (sprite) {
+            return sprite.getInstrument();
+        }
+        if (stage) {
+            return stage.getInstrument();
+        }
+    }
 };
 
-Process.prototype.doPlayNoteForSecs = function (pitch, secs) {
-    // interpolated
-    if (!this.context.startTime) {
-        this.context.startTime = Date.now();
-        this.context.activeNote = new Note(pitch);
-        this.context.activeNote.play();
+Process.prototype.doSetInstrument = function (inst) {
+    var sprite, stage;
+    if (this.homeContext.receiver) {
+        sprite = this.homeContext.receiver.parentThatIsA(SpriteMorph);
+        stage = this.homeContext.receiver.parentThatIsA(StageMorph);
+        if (sprite) {
+            return sprite.setInstrument(inst);
+        }
+        if (stage) {
+            return stage.setInstrument(inst);
+        }
     }
+};
+
+Process.prototype.doPlayNote = function (ptch, beats) {
+    var tempo = this.reportTempo(),
+        pitch = parseFloat(ptch || '0'),
+        secs = 60 / tempo * parseFloat(beats || '0');
+
+    if (!this.context.startTime) {
+        this.context.instrument = this.reportInstrument();
+        this.context.startTime = Date.now();
+
+        if (contains(Note.guitarNotes, this.context.instrument)) {
+            this.context.activeNote = new GuitarString(pitch, secs);
+        } else if (contains(Note.ADSRNotes, this.context.instrument)) {
+            this.context.activeNote
+                = new ADSRNote(pitch, this.context.instrument, secs);
+        } else {
+            this.context.activeNote
+                = new Note(pitch, this.context.instrument);
+        }
+        this.context.activeNote.play();
+
+    } else if (contains(Note.ADSRNotes, this.context.instrument)
+                && this.context.activeNote) { // ADSR
+
+        // Ramp up and down.
+        // These values are "arbitrary choices"--later plans are to
+        // choose suitable defaults, then put them under direct user control
+        // (either on a per sprite, per instrument, or per note level, TBD)
+        var amplitude = 0.25,
+            attack = 0.01,
+            decay = 0.01,
+            sustainLevel = 0.75,
+            release = 0.01,
+            percent,
+            ng = this.context.activeNote.noteGain.gain,
+            st = this.context.startTime;
+
+        if ((Date.now() - st) < attack) {
+            percent = (Date.now() - st) / attack;
+            ng.setTargetAtTime(amplitude * percent,
+                                AudioContext.currentTime, 0);
+
+        } else if ((Date.now() - st) < attack + decay) {
+            percent = (Date.now() - st - attack) / decay;
+            ng.setTargetAtTime(amplitude * (1 - (sustainLevel - 1) * percent),
+                                AudioContext.currentTime, 0);
+
+        } else if ((Date.now() - st) < 1000 * secs - release) {
+            ng.setTargetAtTime(sustainLevel * amplitude,
+                                AudioContext.currentTime, 0);
+
+        } else if ((Date.now() - st) < 1000 * secs) {
+            percent = (1000 * secs - Date.now() + st) / release;
+            ng.setTargetAtTime(sustainLevel * amplitude * percent,
+                                AudioContext.currentTime, 0);
+        }
+    }
+
     if ((Date.now() - this.context.startTime) >= (secs * 1000)) {
         if (this.context.activeNote) {
             this.context.activeNote.stop();
@@ -2686,6 +2757,7 @@ Process.prototype.doPlayNoteForSecs = function (pitch, secs) {
         }
         return null;
     }
+
     this.pushContext('doYield');
     this.pushContext();
 };
@@ -2787,6 +2859,8 @@ function Context(
     this.activeNote = null;
     this.isCustomBlock = false; // marks the end of a custom block's stack
     this.emptySlots = 0; // used for block reification
+    this.instrument = 129; // current instrument, default is sine wave
+
 }
 
 Context.prototype.toString = function () {
