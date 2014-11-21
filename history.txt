@@ -2309,3 +2309,27 @@ ______
 141008
 ------
 * Objects: fixed #608, #610
+
+141106
+------
+* Morphic: Enable mouseMove events with right button pressed
+
+141114
+------
+* Threads, Store: Fix reporting out of nested custom C-shaped blocks
+
+141117
+------
+* Threads, Blocks: Treat REPORT blocks inside custom command definitions as STOP THIS BLOCK / IGNORE INPUTS
+
+141120
+------
+* Lists: Fixed #642 avoid “freezing” when calling CONS on non-list/null
+* Threads: Fixed #364 avoid “freezing” when calling LAUNCH on empty ring
+* Threads: Added optional “onComplete” callback to Process, thanks, @bromagosa!
+* GUI: Set Default Save location to Cloud on load, thanks, @cycomachead!
+* GUI: Updated the “About” Dialog with a mention of support from CDG (SAP Labs)
+* BYOB: Percent sign fix for block labels, thanks, @natashasandy!
+* Threads: fix ‘line’ option in ‘split’ block for Windows files, thanks, @brianharvey!
+* Morphic: fix slider range 1, thanks, @tonychenr !
+* translation update, thanks, Manuel!
