@@ -83,7 +83,7 @@ ArgLabelMorph, localize, XML_Element, hex_sha512*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.threads = '2014-November-20';
+modules.threads = '2014-November-21';
 
 var ThreadManager;
 var Process;
@@ -322,6 +322,9 @@ ThreadManager.prototype.findProcess = function (block) {
                         block along with the result bubble shoud be exported
     onComplete          an optional callback function to be executed when
                         the process is done
+    procedureCount      number counting procedure call entries,
+                        used to tag custom block calls, so "stop block"
+                        invocations can catch them
 */
 
 Process.prototype = {};
@@ -347,6 +350,7 @@ function Process(topBlock, onComplete) {
     this.frameCount = 0;
     this.exportResult = false;
     this.onComplete = onComplete || null;
+    this.procedureCount = 0;
 
     if (topBlock) {
         this.homeContext.receiver = topBlock.receiver();
@@ -765,12 +769,6 @@ Process.prototype.reportJSFunction = function (parmNames, body) {
     );
 };
 
-/*
-Process.prototype.doRun = function (context, args, isCustomBlock) {
-    return this.evaluate(context, args, true, isCustomBlock);
-};
-*/
-
 Process.prototype.doRun = function (context, args) {
     return this.evaluate(context, args, true);
 };
@@ -957,9 +955,11 @@ Process.prototype.fork = function (context, args) {
     stage.threads.processes.push(proc);
 };
 
+// Process "return" primitives
+
 Process.prototype.doReport = function (value) {
     if (this.context.expression.partOfCustomCommand) {
-        return this.doStopBlock();
+        return this.doStopCustomBlock();
     }
     while (this.context && this.context.expression !== 'exitReporter') {
         if (this.context.expression === 'doStopWarping') {
@@ -972,6 +972,22 @@ Process.prototype.doReport = function (value) {
 };
 
 Process.prototype.doStopBlock = function () {
+    var target = this.context.expression.exitTag;
+    if (isNil(target)) {
+        return this.doStopCustomBlock();
+    }
+    while (this.context && this.context.tag !== target) {
+        if (this.context.expression === 'doStopWarping') {
+            this.doStopWarping();
+        } else {
+            this.popContext();
+        }
+    }
+};
+
+Process.prototype.doStopCustomBlock = function () {
+    // fallback solution for "report" blocks inside
+    // custom command definitions and untagged "stop" blocks
     while (this.context && !this.context.isCustomBlock) {
         if (this.context.expression === 'doStopWarping') {
             this.doStopWarping();
@@ -1022,6 +1038,7 @@ Process.prototype.evaluateCustomBlock = function () {
         outer;
 
     if (!context) {return null; }
+    this.procedureCount += 1;
     outer = new Context();
     outer.receiver = this.context.receiver;
     outer.variables.parentFrame = outer.receiver ?
@@ -1068,10 +1085,15 @@ Process.prototype.evaluateCustomBlock = function () {
                 outer.receiver
             );
             runnable.parentContext = exit;
-        } else { // mark all REPORT blocks as being part of a custom command
-            runnable.expression.allReportBlocks().forEach(function (rb) {
-                rb.partOfCustomCommand = true;
-            });
+        } else {
+            // tag all "stop this block" blocks with the current
+            // procedureCount as exitTag, and mark all "report" blocks
+            // as being inside a custom command definition
+            runnable.expression.tagExitBlocks(this.procedureCount, true);
+
+            // tag runnable with the current procedure count, so
+            // "stop this block" blocks can catch it
+            runnable.tag = this.procedureCount;
         }
         runnable.expression = runnable.expression.blockSequence();
     }
@@ -2746,23 +2768,25 @@ Process.prototype.reportFrameCount = function () {
 
     structure:
 
-    parentContext    the Context to return to when this one has
+    parentContext   the Context to return to when this one has
                     been evaluated.
     outerContext    the Context holding my lexical scope
-    expression        SyntaxElementMorph, an array of blocks to evaluate,
+    expression      SyntaxElementMorph, an array of blocks to evaluate,
                     null or a String denoting a selector, e.g. 'doYield'
     receiver        the object to which the expression applies, if any
-    variables        the current VariableFrame, if any
-    inputs            an array of input values computed so far
+    variables       the current VariableFrame, if any
+    inputs          an array of input values computed so far
                     (if expression is a    BlockMorph)
-    pc                the index of the next block to evaluate
+    pc              the index of the next block to evaluate
                     (if expression is an array)
-    startTime        time when the context was first evaluated
-    startValue        initial value for interpolated operations
+    startTime       time when the context was first evaluated
+    startValue      initial value for interpolated operations
     activeAudio     audio buffer for interpolated operations, don't persist
     activeNote      audio oscillator for interpolated ops, don't persist
     isCustomBlock   marker for return ops
-    emptySlots        caches the number of empty slots for reification
+    emptySlots      caches the number of empty slots for reification
+    tag             string or number to optionally identify the Context,
+                    as a "return" target (for the "stop block" primitive)
 */
 
 function Context(
@@ -2787,6 +2811,7 @@ function Context(
     this.activeNote = null;
     this.isCustomBlock = false; // marks the end of a custom block's stack
     this.emptySlots = 0; // used for block reification
+    this.tag = null;  // lexical catch-tag for custom blocks
 }
 
 Context.prototype.toString = function () {

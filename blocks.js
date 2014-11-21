@@ -155,7 +155,7 @@ DialogBoxMorph, BlockInputFragmentMorph, PrototypeHatBlockMorph, Costume*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2014-November-17';
+modules.blocks = '2014-November-21';
 
 
 var SyntaxElementMorph;
@@ -395,7 +395,9 @@ SyntaxElementMorph.prototype.allInputs = function () {
 
 SyntaxElementMorph.prototype.allEmptySlots = function () {
     // answer empty input slots of all children excluding myself,
-    // but omit those in nested rings (lambdas) and JS-Function primitives
+    // but omit those in nested rings (lambdas) and JS-Function primitives.
+    // Used by the evaluator when binding implicit formal parameters
+    // to empty input slots
     var empty = [];
     if (!(this instanceof RingMorph) &&
             (this.selector !== 'reportJSFunction')) {
@@ -410,19 +412,24 @@ SyntaxElementMorph.prototype.allEmptySlots = function () {
     return empty;
 };
 
-SyntaxElementMorph.prototype.allReportBlocks = function () {
-    // answer report blocks of all children including myself,
-    // but omit those in nested rings (lambdas)
-    if (this.selector === 'doReport') {return [this]; }
-    var reports = [];
-    if (!(this instanceof RingMorph)) {
-        this.children.forEach(function (morph) {
-            if (morph.allReportBlocks) {
-                reports = reports.concat(morph.allReportBlocks());
-            }
-        });
+SyntaxElementMorph.prototype.tagExitBlocks = function (stopTag, isCommand) {
+    // tag 'report' and 'stop this block' blocks of all children including
+    // myself, with either a stopTag (for "stop" blocks) or an indicator of
+    // being inside a command block definition, but omit those in nested
+    // rings (lambdas. Used by the evaluator when entering a procedure
+    if (this.selector === 'doReport') {
+        this.partOfCustomCommand = isCommand;
+    } else if (this.selector === 'doStopThis') {
+        this.exitTag = stopTag;
+    } else {
+        if (!(this instanceof RingMorph)) {
+            this.children.forEach(function (morph) {
+                if (morph.tagExitBlocks) {
+                    morph.tagExitBlocks(stopTag, isCommand);
+                }
+            });
+        }
     }
-    return reports;
 };
 
 SyntaxElementMorph.prototype.replaceInput = function (oldArg, newArg) {
@@ -3186,9 +3193,10 @@ BlockMorph.prototype.snap = function () {
         bottomBlock()     - answer the bottom block of my stack
         blockSequence()   - answer an array of blocks starting with myself
 
-    and the following "lexical awareness" indicator:
+    and the following "lexical awareness" indicators:
 
         partOfCustomCommand - temporary bool set by the evaluator
+        exitTag           - temporary string or number set by the evaluator
 */
 
 // CommandBlockMorph inherits from BlockMorph:
@@ -3206,6 +3214,8 @@ function CommandBlockMorph() {
 CommandBlockMorph.prototype.init = function () {
     CommandBlockMorph.uber.init.call(this);
     this.setExtent(new Point(200, 100));
+    this.partOfCustomCommand = false;
+    this.exitTag = null;
 };
 
 // CommandBlockMorph enumerating:
