@@ -83,7 +83,7 @@ ArgLabelMorph, localize, XML_Element, hex_sha512*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.threads = '2014-November-21';
+modules.threads = '2014-November-23';
 
 var ThreadManager;
 var Process;
@@ -976,13 +976,15 @@ Process.prototype.doStopBlock = function () {
     if (isNil(target)) {
         return this.doStopCustomBlock();
     }
-    while (this.context && this.context.tag !== target) {
+    while (this.context &&
+            (isNil(this.context.tag) || (this.context.tag > target))) {
         if (this.context.expression === 'doStopWarping') {
             this.doStopWarping();
         } else {
             this.popContext();
         }
     }
+    this.pushContext();
 };
 
 Process.prototype.doStopCustomBlock = function () {
@@ -1026,7 +1028,8 @@ Process.prototype.runContinuation = function (aContext, args) {
 // Process custom block primitives
 
 Process.prototype.evaluateCustomBlock = function () {
-    var context = this.context.expression.definition.body,
+    var caller = this.context.parentContext,
+        context = this.context.expression.definition.body,
         declarations = this.context.expression.definition.declarations,
         args = new List(this.context.inputs),
         parms = args.asArray(),
@@ -1091,9 +1094,12 @@ Process.prototype.evaluateCustomBlock = function () {
             // as being inside a custom command definition
             runnable.expression.tagExitBlocks(this.procedureCount, true);
 
-            // tag runnable with the current procedure count, so
-            // "stop this block" blocks can catch it
-            runnable.tag = this.procedureCount;
+            // tag the caller with the current procedure count, so
+            // "stop this block" blocks can catch it, but only
+            // if the caller hasn't been tagged already
+            if (caller && !caller.tag) {
+                caller.tag = this.procedureCount;
+            }
         }
         runnable.expression = runnable.expression.blockSequence();
     }
