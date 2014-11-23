@@ -2337,3 +2337,7 @@ ______
 141121
 ------
 * Threads, Blocks: Fix STOP THIS BLOCK’s lexical awareness
+
+1411213
+-------
+* Threads: Fix “stop this block” primitive for tail-call-elimination
