@@ -83,7 +83,7 @@ ArgLabelMorph, localize, XML_Element, hex_sha512*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.threads = '2014-November-23';
+modules.threads = '2014-November-24';
 
 var ThreadManager;
 var Process;
@@ -100,7 +100,17 @@ function snapEquals(a, b) {
 
     var x = +a,
         y = +b,
+        i,
         specials = [true, false, ''];
+
+    // "zum Schneckengang verdorben, was Adlerflug geworden wäre"
+    // collecting edge-cases that somebody complained about
+    // on Github. Folks, take it easy and keep it fun, okay?
+    // Shit like this is patently ugly and slows Snap down. Tnx!
+    for (i = 9; i <= 13; i += 1) {
+        specials.push(String.fromCharCode(i));
+    }
+    specials.push(String.fromCharCode(160));
 
     // check for special values before coercing to numbers
     if (isNaN(x) || isNaN(y) ||
@@ -110,7 +120,7 @@ function snapEquals(a, b) {
         y = b;
     }
 
-    // handle text comparision case-insensitive.
+    // handle text comparison case-insensitive.
     if (isString(x) && isString(y)) {
         return x.toLowerCase() === y.toLowerCase();
     }
