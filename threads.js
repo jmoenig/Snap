@@ -1307,7 +1307,7 @@ Process.prototype.doInsertInList = function (element, index, list) {
         return null;
     }
     if (this.inputOption(index) === 'any') {
-        idx = this.reportRandom(1, list.length());
+        idx = this.reportRandom(1, list.length() + 1);
     }
     if (this.inputOption(index) === 'last') {
         idx = list.length() + 1;
