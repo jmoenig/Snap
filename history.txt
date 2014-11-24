@@ -2350,3 +2350,5 @@ ______
 * Threads: Fixed #644
 * Store: Fixed #34
 * Threads: Fixed #131
+* snap.html, favicon.ico: new Favicon, thanks, Michael!
+* Threads: improved whitespace detection for “split” primitive, thanks, Michael!
