@@ -2349,3 +2349,4 @@ ______
 * Objects: Fixed #372
 * Threads: Fixed #644
 * Store: Fixed #34
+* Threads: Fixed #131
