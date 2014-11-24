@@ -2352,3 +2352,4 @@ ______
 * Threads: Fixed #131
 * snap.html, favicon.ico: new Favicon, thanks, Michael!
 * Threads: improved whitespace detection for “split” primitive, thanks, Michael!
+* Threads: tail-call-elimination for reporters experiment (commented out, under construction)

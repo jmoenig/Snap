@@ -548,6 +548,34 @@ Process.prototype.reportAnd = function (block) {
     }
 };
 
+/* 
+    tail-call-elimination for reporters
+    -----------------------------------
+    currently under construction, commented out for now
+    to activate add 'doReport' to the list of special forms
+    selectors in evaluateBlock() and comment out / remove
+    the current 'doReport' primitive in the "return"
+    section of the code
+
+Process.prototype.doReport = function (block) {
+
+//    if (this.context.expression.partOfCustomCommand) {
+//        return this.doStopCustomBlock();
+//    }
+
+    var outer = this.context.outerContext;
+    while (this.context && this.context.expression !== 'exitReporter') {
+        if (this.context.expression === 'doStopWarping') {
+            this.doStopWarping();
+        } else {
+            this.popContext();
+        }
+    }
+    this.popContext();
+    this.pushContext(block.inputs()[0], outer);
+};
+*/
+
 // Process: Non-Block evaluation
 
 Process.prototype.evaluateMultiSlot = function (multiSlot, argCount) {
