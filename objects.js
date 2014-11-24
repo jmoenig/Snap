@@ -2170,8 +2170,8 @@ SpriteMorph.prototype.freshPalette = function (category) {
             var defs = SpriteMorph.prototype.blocks,
                 hiddens = StageMorph.prototype.hiddenPrimitives;
             return Object.keys(hiddens).some(function (any) {
-                return defs[any].category === category ||
-                    contains((more[category] || []), any);
+                return !isNil(defs[any]) && (defs[any].category === category
+                    || contains((more[category] || []), any));
             });
         }
 
@@ -2210,7 +2210,7 @@ SpriteMorph.prototype.freshPalette = function (category) {
                     var hiddens = StageMorph.prototype.hiddenPrimitives,
                         defs = SpriteMorph.prototype.blocks;
                     Object.keys(hiddens).forEach(function (sel) {
-                        if (defs[sel].category === category) {
+                        if (defs[sel] && (defs[sel].category === category)) {
                             delete StageMorph.prototype.hiddenPrimitives[sel];
                         }
                     });
