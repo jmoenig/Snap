@@ -4865,7 +4865,7 @@ ProjectDialogMorph.prototype.deleteProject = function () {
 
 ProjectDialogMorph.prototype.shareProject = function () {
     var myself = this,
-        ide = this.siblings()[0],
+        ide = this.ide,
         proj = this.listField.selected,
         entry = this.listField.active;
 
@@ -4902,7 +4902,7 @@ ProjectDialogMorph.prototype.shareProject = function () {
                                 projectId = 'Username=' +
                                 encodeURIComponent(usr.toLowerCase()) +
                                 '&ProjectName=' +
-                                encodeURIComponent(ide.projectName);
+                                encodeURIComponent(proj.projectName);
                             location.hash = projectId;
                         }
                     },
@@ -4915,7 +4915,7 @@ ProjectDialogMorph.prototype.shareProject = function () {
 
 ProjectDialogMorph.prototype.unshareProject = function () {
     var myself = this,
-        ide = this.siblings()[0],
+        ide = this.ide,
         proj = this.listField.selected,
         entry = this.listField.active;
 
