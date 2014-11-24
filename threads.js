@@ -2159,15 +2159,17 @@ Process.prototype.reportTextSplit = function (string, delimiter) {
         str,
         del;
     if (!contains(types, strType)) {
-        throw new Error('expecting a text instad of a ' + strType);
+        throw new Error('expecting text instead of a ' + strType);
     }
     if (!contains(types, delType)) {
-        throw new Error('expecting a text delimiter instad of a ' + delType);
+        throw new Error('expecting a text delimiter instead of a ' + delType);
     }
     str = (string || '').toString();
     switch (this.inputOption(delimiter)) {
     case 'line':
-        del = '\r?\n';
+        // Unicode Compliant Line Splitting (Platform independent)
+        // http://www.unicode.org/reports/tr18/#Line_Boundaries
+        del = /\r\n|[\n\v\f\r\x85\u2028\u2029]/;
         break;
     case 'tab':
         del = '\t';
@@ -2176,7 +2178,9 @@ Process.prototype.reportTextSplit = function (string, delimiter) {
         del = '\r';
         break;
     case 'whitespace':
-        return new List(str.trim().split(/[\t\r\n ]+/));
+        str = str.trim();
+        del = /\s+/;
+        break;
     case 'letter':
         del = '';
         break;
