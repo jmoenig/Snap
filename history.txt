@@ -2341,3 +2341,8 @@ ______
 1411213
 -------
 * Threads: Fix “stop this block” primitive for tail-call-elimination
+
+1411214
+-------
+* Threads: Fixed #318
+
