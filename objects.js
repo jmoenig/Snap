@@ -125,7 +125,7 @@ PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.objects = '2014-October-08';
+modules.objects = '2014-November-24';
 
 var SpriteMorph;
 var StageMorph;
@@ -1674,6 +1674,20 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         return menu;
     }
 
+    function addVar(pair) {
+        if (pair) {
+            if (myself.variables.silentFind(pair[0])) {
+                myself.inform('that name is already in use');
+            } else {
+                myself.addVariable(pair[0], pair[1]);
+                myself.toggleVariableWatcher(pair[0], pair[1]);
+                myself.blocksCache[cat] = null;
+                myself.paletteCache[cat] = null;
+                myself.parentThatIsA(IDE_Morph).refreshPalette();
+            }
+        }
+    }
+
     if (cat === 'motion') {
 
         blocks.push(block('forward'));
@@ -1967,15 +1981,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
             function () {
                 new VariableDialogMorph(
                     null,
-                    function (pair) {
-                        if (pair && !myself.variables.silentFind(pair[0])) {
-                            myself.addVariable(pair[0], pair[1]);
-                            myself.toggleVariableWatcher(pair[0], pair[1]);
-                            myself.blocksCache[cat] = null;
-                            myself.paletteCache[cat] = null;
-                            myself.parentThatIsA(IDE_Morph).refreshPalette();
-                        }
-                    },
+                    addVar,
                     myself
                 ).prompt(
                     'Variable name',
@@ -2164,8 +2170,8 @@ SpriteMorph.prototype.freshPalette = function (category) {
             var defs = SpriteMorph.prototype.blocks,
                 hiddens = StageMorph.prototype.hiddenPrimitives;
             return Object.keys(hiddens).some(function (any) {
-                return defs[any].category === category ||
-                    contains((more[category] || []), any);
+                return !isNil(defs[any]) && (defs[any].category === category
+                    || contains((more[category] || []), any));
             });
         }
 
@@ -2204,7 +2210,7 @@ SpriteMorph.prototype.freshPalette = function (category) {
                     var hiddens = StageMorph.prototype.hiddenPrimitives,
                         defs = SpriteMorph.prototype.blocks;
                     Object.keys(hiddens).forEach(function (sel) {
-                        if (defs[sel].category === category) {
+                        if (defs[sel] && (defs[sel].category === category)) {
                             delete StageMorph.prototype.hiddenPrimitives[sel];
                         }
                     });
@@ -4858,6 +4864,20 @@ StageMorph.prototype.blockTemplates = function (category) {
         );
     }
 
+    function addVar(pair) {
+        if (pair) {
+            if (myself.variables.silentFind(pair[0])) {
+                myself.inform('that name is already in use');
+            } else {
+                myself.addVariable(pair[0], pair[1]);
+                myself.toggleVariableWatcher(pair[0], pair[1]);
+                myself.blocksCache[cat] = null;
+                myself.paletteCache[cat] = null;
+                myself.parentThatIsA(IDE_Morph).refreshPalette();
+            }
+        }
+    }
+
     if (cat === 'motion') {
 
         txt = new TextMorph(localize(
@@ -5099,15 +5119,7 @@ StageMorph.prototype.blockTemplates = function (category) {
             function () {
                 new VariableDialogMorph(
                     null,
-                    function (pair) {
-                        if (pair && !myself.variables.silentFind(pair[0])) {
-                            myself.addVariable(pair[0], pair[1]);
-                            myself.toggleVariableWatcher(pair[0], pair[1]);
-                            myself.blocksCache[cat] = null;
-                            myself.paletteCache[cat] = null;
-                            myself.parentThatIsA(IDE_Morph).refreshPalette();
-                        }
-                    },
+                    addVar,
                     myself
                 ).prompt(
                     'Variable name',

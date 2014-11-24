@@ -61,7 +61,7 @@ SyntaxElementMorph, Variable*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2014-October-01';
+modules.store = '2014-November-24';
 
 
 // XML_Serializer ///////////////////////////////////////////////////////
@@ -261,7 +261,9 @@ SnapSerializer.prototype.watcherLabels = {
     yPosition: 'y position',
     direction: 'direction',
     getScale: 'size',
+    getTempo: 'tempo',
     getLastAnswer: 'answer',
+    getLastMessage: 'message',
     getTimer: 'timer',
     getCostumeIdx: 'costume #',
     reportMouseX: 'mouse x',
@@ -1824,9 +1826,8 @@ Context.prototype.toXML = function (serializer) {
         return '';
     }
     return serializer.format(
-        '<context% ~><inputs>%</inputs><variables>%</variables>' +
+        '<context ~><inputs>%</inputs><variables>%</variables>' +
             '%<receiver>%</receiver>%</context>',
-        this.isLambda ? ' lambda="lambda"' : '',
         this.inputs.reduce(
                 function (xml, input) {
                     return xml + serializer.format('<input>$</input>', input);
