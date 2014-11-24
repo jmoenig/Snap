@@ -1098,7 +1098,6 @@ Process.prototype.evaluateCustomBlock = function () {
                 outer.receiver
             );
             runnable.parentContext = exit;
-            this.popContext(); // don't yield when done
         } else {
             // tag all "stop this block" blocks with the current
             // procedureCount as exitTag, and mark all "report" blocks
