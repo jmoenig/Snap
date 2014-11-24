@@ -2345,4 +2345,5 @@ ______
 1411214
 -------
 * Threads: Fixed #318
+* Objects: Fixed #416
 
