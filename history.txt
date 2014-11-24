@@ -2347,3 +2347,4 @@ ______
 * Threads: Fixed #318
 * Objects: Fixed #416
 * Objects: Fixed #372
+* Threads: Fixed #644
