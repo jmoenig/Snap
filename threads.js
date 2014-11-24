@@ -698,7 +698,7 @@ Process.prototype.doYield = function () {
 
 Process.prototype.exitReporter = function () {
     // catch-tag for REPORT and STOP BLOCK primitives
-    this.popContext();
+    this.handleError(new Error("missing 'report' statement in reporter"));
 };
 
 // Process Exception Handling
@@ -1098,6 +1098,7 @@ Process.prototype.evaluateCustomBlock = function () {
                 outer.receiver
             );
             runnable.parentContext = exit;
+            this.popContext(); // don't yield when done
         } else {
             // tag all "stop this block" blocks with the current
             // procedureCount as exitTag, and mark all "report" blocks
