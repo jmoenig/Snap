@@ -564,12 +564,14 @@ Process.prototype.doReport = function (block) {
             this.popContext();
         }
     }
-    if (this.context.expression === 'expectReport') {
-        // pop off inserted top-level exit context
-        this.popContext();
-    } else {
-        // un-tag and preserve original caller
-        this.context.tag = null;
+    if (this.context) {
+        if (this.context.expression === 'expectReport') {
+            // pop off inserted top-level exit context
+            this.popContext();
+        } else {
+            // un-tag and preserve original caller
+            this.context.tag = null;
+        }
     }
     this.pushContext(block.inputs()[0], outer);
 };
@@ -831,7 +833,6 @@ Process.prototype.evaluate = function (
         caller = this.context.parentContext,
         exit,
         runnable,
-        extra,
         parms = args.asArray(),
         i,
         value;
@@ -845,17 +846,11 @@ Process.prototype.evaluate = function (
         outer,
         context.receiver
     );
-    extra = new Context(runnable, 'doYield');
-
-        // Note: if the context's expression is a ReporterBlockMorph,
-        // the extra context gets popped off immediately without taking
-        // effect (i.e. it doesn't yield within evaluating a stack of
-        // nested reporters)
+    this.context.parentContext = runnable;
 
     if (context.expression instanceof ReporterBlockMorph) {
-        this.context.parentContext = extra;
-    } else {
-        this.context.parentContext = runnable;
+        // auto-"warp" nested reporters
+        this.readyToYield = (Date.now() - this.lastYield > this.timeout);
     }
 
     // assign parameters if any were passed
@@ -1062,7 +1057,6 @@ Process.prototype.evaluateCustomBlock = function () {
         parms = args.asArray(),
         runnable,
         exit,
-        extra,
         i,
         value,
         outer;
@@ -1081,8 +1075,7 @@ Process.prototype.evaluateCustomBlock = function () {
         outer.receiver
     );
     runnable.isCustomBlock = true;
-    extra = new Context(runnable, 'doYield');
-    this.context.parentContext = extra;
+    this.context.parentContext = runnable;
 
     // passing parameters if any were passed
     if (parms.length > 0) {
@@ -1104,40 +1097,43 @@ Process.prototype.evaluateCustomBlock = function () {
         }
     }
 
-    if (runnable.expression instanceof CommandBlockMorph) {
-        // insert a reporter exit tag for the
-        // CALL SCRIPT primitive variant
-        if (this.context.expression.definition.type !== 'command') {
-            if (caller) {
-                // tag caller, so "report" can catch it later
-                caller.tag = 'exit';
-            } else {
-                // top-level context, insert a tagged exit context
-                // which "report" can catch later
-                exit = new Context(
-                    runnable.parentContext,
-                    'expectReport',
-                    outer,
-                    outer.receiver
-                );
-                exit.tag = 'exit';
-                runnable.parentContext = exit;
-            }
+    // tag return target
+    if (this.context.expression.definition.type !== 'command') {
+        if (caller) {
+            // tag caller, so "report" can catch it later
+            caller.tag = 'exit';
         } else {
-            // tag all "stop this block" blocks with the current
-            // procedureCount as exitTag, and mark all "report" blocks
-            // as being inside a custom command definition
-            runnable.expression.tagExitBlocks(this.procedureCount, true);
-
-            // tag the caller with the current procedure count, so
-            // "stop this block" blocks can catch it, but only
-            // if the caller hasn't been tagged already
-            if (caller && !caller.tag) {
-                caller.tag = this.procedureCount;
-            }
+            // top-level context, insert a tagged exit context
+            // which "report" can catch later
+            exit = new Context(
+                runnable.parentContext,
+                'expectReport',
+                outer,
+                outer.receiver
+            );
+            exit.tag = 'exit';
+            runnable.parentContext = exit;
         }
-        runnable.expression = runnable.expression.blockSequence();
+        // auto-"warp" nested reporters
+        this.readyToYield = (Date.now() - this.lastYield > this.timeout);
+    } else {
+        // tag all "stop this block" blocks with the current
+        // procedureCount as exitTag, and mark all "report" blocks
+        // as being inside a custom command definition
+        runnable.expression.tagExitBlocks(this.procedureCount, true);
+
+        // tag the caller with the current procedure count, so
+        // "stop this block" blocks can catch it, but only
+        // if the caller hasn't been tagged already
+        if (caller && !caller.tag) {
+            caller.tag = this.procedureCount;
+        }
+        // yield commands unless explicitly "warped"
+        if (!this.isAtomic) {
+            this.readyToYield = true;
+        }
     }
+    runnable.expression = runnable.expression.blockSequence();
 };
 
 // Process variables primitives
@@ -2920,12 +2916,10 @@ Context.prototype.continuation = function () {
     } else if (this.parentContext) {
         cont = this.parentContext;
     } else {
-        return new Context(null, 'doStop');
-    }
-    if (cont.expression === 'expectReport') {
-        return cont.continuation();
+        return new Context(null, 'doYield');
     }
     cont = cont.copyForContinuation();
+    cont.tag = null;
     cont.isContinuation = true;
     return cont;
 };
