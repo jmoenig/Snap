@@ -2342,7 +2342,7 @@ ______
 -------
 * Threads: Fix “stop this block” primitive for tail-call-elimination
 
-1411214
+1411224
 -------
 * Threads: Fixed #318
 * Objects: Fixed #416
@@ -2353,3 +2353,7 @@ ______
 * snap.html, favicon.ico: new Favicon, thanks, Michael!
 * Threads: improved whitespace detection for “split” primitive, thanks, Michael!
 * Threads: tail-call-elimination for reporters experiment (commented out, under construction)
+
+1411225
+-------
+* Threads: Evaluator optimizations (reducing the stack size for reporters)
