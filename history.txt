@@ -2358,3 +2358,7 @@ ______
 -------
 * Threads: Evaluator optimizations (reducing the stack size for reporters)
 * Threads: Full TCO (tail-call-elimination), now Snap! *is* Scheme :-)
+
+1411225
+-------
+* Threads: Fixed #656

@@ -83,7 +83,7 @@ ArgLabelMorph, localize, XML_Element, hex_sha512*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.threads = '2014-November-25';
+modules.threads = '2014-November-26';
 
 var ThreadManager;
 var Process;
@@ -551,28 +551,31 @@ Process.prototype.reportAnd = function (block) {
 };
 
 Process.prototype.doReport = function (block) {
+    var outer = this.context.outerContext;
     if (this.context.expression.partOfCustomCommand) {
         this.doStopCustomBlock();
         this.popContext();
-        return;
-    }
-    var outer = this.context.outerContext;
-    while (this.context && this.context.tag !== 'exit') {
-        if (this.context.expression === 'doStopWarping') {
-            this.doStopWarping();
-        } else {
-            this.popContext();
+    } else {
+        while (this.context && this.context.tag !== 'exit') {
+            if (this.context.expression === 'doStopWarping') {
+                this.doStopWarping();
+            } else {
+                this.popContext();
+            }
+        }
+        if (this.context) {
+            if (this.context.expression === 'expectReport') {
+                // pop off inserted top-level exit context
+                this.popContext();
+            } else {
+                // un-tag and preserve original caller
+                this.context.tag = null;
+            }
         }
     }
-    if (this.context) {
-        if (this.context.expression === 'expectReport') {
-            // pop off inserted top-level exit context
-            this.popContext();
-        } else {
-            // un-tag and preserve original caller
-            this.context.tag = null;
-        }
-    }
+    // in any case evaluate (and ignore)
+    // the input, because it could be
+    // and HTTP Request for a hardware extension
     this.pushContext(block.inputs()[0], outer);
 };
 
