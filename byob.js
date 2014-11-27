@@ -6,10 +6,10 @@
     based on morphic.js, widgets.js blocks.js, threads.js and objects.js
     inspired by Scratch
 
-    written by Jens MÃ¶nig
+    written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2014 by Jens MÃ¶nig
+    Copyright (C) 2014 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -137,9 +137,9 @@ function CustomBlockDefinition(spec, receiver) {
     this.isGlobal = false;
     this.type = 'command';
     this.spec = spec || '';
-	// SF: MOD:
+    // SF: MOD: added option variable list (if any) to slot declaration
     // OLD: format: {'inputName' : [type, default, options, readonly]}
-    // NEW: format: {'inputName' : [type, default, options, readonly, listVarName]}
+    // format: {'inputName' : [type, default, options, readonly, listVarName]}
 
     this.declarations = {};
     this.comment = null;
@@ -198,7 +198,8 @@ CustomBlockDefinition.prototype.prototypeInstance = function () {
                 part.fragment.defaultValue = slot[1];
                 part.fragment.options = slot[2];
                 part.fragment.isReadOnly = slot[3] || false;
-                // SF: MOD: added name of option list when options are from a Snap list
+                // SF: MOD: added name of option list when options are
+                // SF: MOD: from a Snap list
                 part.fragment.listVarName = slot[4];
 
             }
@@ -291,16 +292,20 @@ CustomBlockDefinition.prototype.inputOptionsOfIdx = function (idx) {
 
 CustomBlockDefinition.prototype.dropDownMenuOf = function (inputName) {
     var dict = {};
-	// SF: MOD: declarations[inputName][4] is the name of the option LIST variable (if any) associated with the "inputName" slot of the custom block
+    // SF: MOD: declarations[inputName][4] is the name of the option LIST
+    // SF: MOD: variable (if any) associated with the "inputName" slot
+    // SF: MOD: of the custom block
     var ide = world.children[0];
     if (this.declarations[inputName] && this.declarations[inputName][4]) {
-		// SF: vars can now refer to objects and objects (inputs of custom blocks) can now refer to vars; so we defer the link between block inputs and option lists
-		if( Object.keys(ide.globalVariables.vars).length == 0) {
-	        return dict;
-		}
-		// SF: use values of global list variabile declarations[inputName][4]
-		var listVarName = this.declarations[inputName][4],
-			listValues = ide.globalVariables.getVar(listVarName).contents;
+        // SF: vars can now refer to objects and objects (inputs of custom
+        // SF: blocks) can now refer to vars; so we defer the link between
+        // SF: block inputs and option lists
+        if (Object.keys(ide.globalVariables.vars).length == 0) {
+            return dict;
+        }
+        // SF: use values of global list variabile declarations[inputName][4]
+        var listVarName = this.declarations[inputName][4],
+            listValues = ide.globalVariables.getVar(listVarName).contents;
         listValues.forEach(function (option) {
             // SF: dict values are the values of the list
             dict[option] = option;
@@ -2080,7 +2085,7 @@ BlockLabelFragment.prototype.copy = function () {
     ans.defaultValue = this.defaultValue;
     ans.options = this.options;
     ans.isReadOnly = this.isReadOnly;
-	// SF: MOD: handle list var for input options (if any)
+    // SF: MOD: handle list var for input options (if any)
     ans.listVarName = this.listVarName;
 
     return ans;
@@ -2984,7 +2989,7 @@ InputSlotDialogMorph.prototype.addSlotsMenu = function () {
                 on = '\u2611 ',
                 off = '\u2610 ';
             menu.addItem('options...', 'editSlotOptions');
-			// SF: MOD:
+            // SF: MOD:
             menu.addItem('option list...', 'addSlotOptionsList');
 
             menu.addItem(
@@ -3024,20 +3029,20 @@ InputSlotDialogMorph.prototype.addSlotOptionsList = function () {
     var ide = this.parentThatIsA(WorldMorph).children[0];
     var myself = this;
 
-	new DialogBoxMorph(
-		myself,
+    new DialogBoxMorph(
+        myself,
         function (listVarName) {
             myself.fragment.listVarName = listVarName;
         },
-		myself
-	).prompt(
-		"Select a global list for Option values",
-		myself.fragment.listVarName,
-		myself.world(),
-		null, // pic
-		ide.globalVariables.allNamesDict(), // only global lists
-		true // read-only list
-	);
+        myself
+    ).prompt(
+        "Select a global list for Option values",
+        myself.fragment.listVarName,
+        myself.world(),
+        null, // pic
+        ide.globalVariables.allNamesDict(), // only global lists
+        true // read-only list
+    );
 
 };
 
