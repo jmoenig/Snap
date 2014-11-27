@@ -4,10 +4,10 @@
 
     saving and loading Snap! projects
 
-    written by Jens MÃ¶nig
+    written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2014 by Jens MÃ¶nig
+    Copyright (C) 2014 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -784,7 +784,7 @@ SnapSerializer.prototype.loadCustomBlocks = function (
                     child.attributes.type,
                     child.contents,
                     options ? options.contents : undefined,
-					// SF: MOD: read name of option list variable (if any)
+                    // SF: MOD: read name of option list variable (if any)
                     // child.attributes.readonly === 'true'
                     child.attributes.readonly === 'true',
                     child.attributes.listvarname
@@ -1713,20 +1713,22 @@ CustomBlockDefinition.prototype.toXML = function (serializer) {
         this.codeMapping || '',
         Object.keys(this.declarations).reduce(function (xml, decl) {
                 return xml + serializer.format(
-					// SF: MOD: output name of option list variable too (if any)
+                    // SF: MOD: output the name of option list variable
+                    // SF: MOD too (if any)
                     // '<input type="@"$>$%</input>',
                     '<input type="@"$$>$%</input>',
 
                     myself.declarations[decl][0],
                     myself.declarations[decl][3] ?
                             ' readonly="true"' : '',
-					// SF: MOD: output name of option list var (if any)
+                    // SF: MOD: output name of option list var (if any)
                     myself.declarations[decl][4] ?
-                            ' listvarname="' + myself.declarations[decl][4] + '"' : '',
+                                ' listvarname="' +
+                                myself.declarations[decl][4] + '"' : '',
 
                     myself.declarations[decl][1],
                     myself.declarations[decl][2] ?
-                            '<options>' + myself.declarations[decl][2] +
+                                '<options>' + myself.declarations[decl][2] +
                                 '</options>'
                                 : ''
                 );
