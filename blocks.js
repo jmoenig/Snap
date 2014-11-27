@@ -6,10 +6,10 @@
     based on morphic.js
     inspired by Scratch
 
-    written by Jens Mönig
+    written by Jens MÃ¶nig
     jens@moenig.org
 
-    Copyright (C) 2014 by Jens Mönig
+    Copyright (C) 2014 by Jens MÃ¶nig
 
     This file is part of Snap!.
 
@@ -6509,6 +6509,41 @@ InputSlotMorph.prototype.setContents = function (aStringOrFloat) {
 
 // InputSlotMorph drop-down menu:
 
+// SF: MOD: look for index of slot as an input of the block
+InputSlotMorph.prototype.inputIndex = function () {
+    var children = this.parent.children,
+    	idx = 0,
+    	myself = this,
+    	index;
+
+    children.forEach(function (child) {
+        if( child == myself) {
+        	index = idx;
+		} else if( child instanceof InputSlotMorph) {
+			idx += 1;
+		}
+    });
+
+	return index;
+};
+
+// SF: MOD: look for corresponding declaration
+InputSlotMorph.prototype.declaration = function () {
+    var declarations,
+    	index = this.inputIndex(),
+    	varname,
+    	declaration;
+
+	if(!this.parent.definition || !this.parent.definition.declarations) {
+		return null;
+	}
+	declarations = this.parent.definition.declarations;
+    varname = Object.keys(declarations)[index];
+    declaration = declarations[varname];
+
+	return declaration;
+};
+
 InputSlotMorph.prototype.dropDownMenu = function () {
     var choices = this.choices,
         key,
@@ -6518,6 +6553,22 @@ InputSlotMorph.prototype.dropDownMenu = function () {
             this,
             this.fontSize
         );
+
+	// SF: MOD: dinamically load list of options if defined by a list var
+	declaration = this.declaration();
+    var dict = {};
+	// SF: MOD: declaration[4] is the name of the option LIST (if any) associated with the this slot of the custom block
+    var ide = this.parentThatIsA(IDE_Morph);
+    if (declaration && declaration[4]) {
+		// SF: use values of global list variabile declaration[4]
+		var listVarName = declaration[4],
+			listValues = ide.globalVariables.getVar(listVarName).contents;
+        listValues.forEach(function (option) {
+            // SF: the list of "dict" values is given by the values of the list
+            dict[option] = option;
+        });
+        choices = dict;
+    }
 
     if (choices instanceof Function) {
         choices = choices.call(this);
@@ -6532,7 +6583,7 @@ InputSlotMorph.prototype.dropDownMenu = function () {
         if (Object.prototype.hasOwnProperty.call(choices, key)) {
             if (key[0] === '~') {
                 menu.addLine();
-            // } else if (key.indexOf('§_def') === 0) {
+            // } else if (key.indexOf('Â§_def') === 0) {
             //     menu.addItem(choices[key].blockInstance(), choices[key]);
             } else {
                 menu.addItem(key, choices[key]);
@@ -6752,7 +6803,7 @@ InputSlotMorph.prototype.attributesMenu = function () {
     }
     /*
     obj.customBlocks.forEach(function (def, i) {
-        dict['§_def' + i] = def
+        dict['Â§_def' + i] = def
     });
     */
     return dict;
