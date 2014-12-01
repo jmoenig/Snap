@@ -2366,3 +2366,5 @@ ______
 141201
 ------
 * Objects: Hide hidden elements in the project thumbnail
+* GUI: Point project dialog to cloud if already signed in, thanks, Michael!
+* favicon: Transparent background, thanks, Michael!
