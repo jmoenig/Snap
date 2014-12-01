@@ -2362,3 +2362,7 @@ ______
 1411225
 -------
 * Threads: Fixed #656
+
+141201
+------
+* Objects: Hide hidden elements in the project thumbnail

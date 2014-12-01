@@ -125,7 +125,7 @@ PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.objects = '2014-November-24';
+modules.objects = '2014-December-01';
 
 var SpriteMorph;
 var StageMorph;
@@ -5333,7 +5333,7 @@ StageMorph.prototype.thumbnail = function (extentPoint, excludedSprite) {
         this.dimensions.y * this.scale
     );
     this.children.forEach(function (morph) {
-        if (morph !== excludedSprite) {
+        if (morph.isVisible && (morph !== excludedSprite)) {
             fb = morph.fullBounds();
             fimg = morph.fullImage();
             if (fimg.width && fimg.height) {
