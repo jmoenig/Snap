@@ -233,10 +233,6 @@ IDE_Morph.prototype.init = function (isAutoFill) {
 IDE_Morph.prototype.openIn = function (world) {
     var hash, usr, myself = this, urlLanguage = null;
 
-    this.buildPanes();
-    world.add(this);
-    world.userMenu = this.userMenu;
-
     // get persistent user data, if any
     if (localStorage) {
         usr = localStorage['-snap-user'];
@@ -248,6 +244,10 @@ IDE_Morph.prototype.openIn = function (world) {
             }
         }
     }
+
+    this.buildPanes();
+    world.add(this);
+    world.userMenu = this.userMenu;
 
     // override SnapCloud's user message with Morphic
     SnapCloud.message = function (string) {
