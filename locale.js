@@ -42,7 +42,7 @@
 
 /*global modules, contains*/
 
-modules.locale = '2014-October-01';
+modules.locale = '2014-December-02';
 
 // Global stuff
 
@@ -414,4 +414,16 @@ SnapTranslator.dict.bn = {
         'mokter@gmail.com',
     'last_changed':
         '2014-07-02'
+};
+
+SnapTranslator.dict.kn = {
+    // translations meta information
+    'language_name':
+        '\u0C95\u0CA8\u0CCD\u0CA8\u0CA1',
+    'language_translator':
+        'Vinayakumar R',
+    'translator_e-mail':
+        'vnkmr7620@gmail.com',
+    'last_changed':
+        '2014-12-02'
 };

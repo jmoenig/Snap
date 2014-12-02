@@ -2368,3 +2368,7 @@ ______
 * Objects: Hide hidden elements in the project thumbnail
 * GUI: Point project dialog to cloud if already signed in, thanks, Michael!
 * favicon: Transparent background, thanks, Michael!
+
+141202
+------
+* New Kannada translation. Yay!! Thanks, Vinayakumar R!!
