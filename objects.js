@@ -125,7 +125,7 @@ PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.objects = '2014-December-01';
+modules.objects = '2014-December-03';
 
 var SpriteMorph;
 var StageMorph;
@@ -3238,8 +3238,11 @@ SpriteMorph.prototype.setCenter = function (aPoint, justMe) {
 
 SpriteMorph.prototype.nestingBounds = function () {
     // same as fullBounds(), except that it uses "parts" instead of children
-    var result;
-    result = this.bounds;
+    // and special cases the costume-less "arrow" shape's bounding box
+    var result = this.bounds;
+    if (!this.costume && this.penBounds) {
+        result = this.penBounds.translateBy(this.position());
+    }
     this.parts.forEach(function (part) {
         if (part.isVisible) {
             result = result.merge(part.nestingBounds());

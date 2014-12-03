@@ -2372,3 +2372,8 @@ ______
 141202
 ------
 * New Kannada translation. Yay!! Thanks, Vinayakumar R!!
+
+141203
+------
+* Morphic: Cache actual bounding box of the Pen arrow shape
+* Threads, Objects: Improve edge-collision detection of default sprite “arrow” shape

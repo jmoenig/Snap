@@ -83,7 +83,7 @@ ArgLabelMorph, localize, XML_Element, hex_sha512*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.threads = '2014-November-26';
+modules.threads = '2014-December-03';
 
 var ThreadManager;
 var Process;
@@ -2368,6 +2368,7 @@ Process.prototype.objectTouchingObject = function (thisObj, name) {
     var myself = this,
         those,
         stage,
+        box,
         mouse;
 
     if (this.inputOption(name) === 'mouse-pointer') {
@@ -2379,9 +2380,14 @@ Process.prototype.objectTouchingObject = function (thisObj, name) {
     } else {
         stage = thisObj.parentThatIsA(StageMorph);
         if (stage) {
-            if (this.inputOption(name) === 'edge' &&
-                    !stage.bounds.containsRectangle(thisObj.bounds)) {
-                return true;
+            if (this.inputOption(name) === 'edge') {
+                box = thisObj.bounds;
+                if (!thisObj.costume && thisObj.penBounds) {
+                    box = thisObj.penBounds.translateBy(thisObj.position());
+                }
+                if (!stage.bounds.containsRectangle(box)) {
+                    return true;
+                }
             }
             if (this.inputOption(name) === 'pen trails' &&
                     thisObj.isTouching(stage.penTrailsMorph())) {
