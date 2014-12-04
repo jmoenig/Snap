@@ -69,7 +69,7 @@ SpeechBubbleMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2014-December-01';
+modules.gui = '2014-December-04';
 
 // Declarations
 
@@ -241,7 +241,7 @@ IDE_Morph.prototype.openIn = function (world) {
             if (usr) {
                 SnapCloud.username = usr.username || null;
                 SnapCloud.password = usr.password || null;
-                if (SnapCould.username) {
+                if (SnapCloud.username) {
                     this.source = 'cloud';
                 }
             }
