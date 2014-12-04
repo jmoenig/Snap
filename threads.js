@@ -83,7 +83,7 @@ ArgLabelMorph, localize, XML_Element, hex_sha512*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.threads = '2014-December-03';
+modules.threads = '2014-December-04';
 
 var ThreadManager;
 var Process;
@@ -1677,6 +1677,26 @@ Process.prototype.reportMap = function (reporter, list) {
         this.pushContext();
         this.evaluate(reporter, new List([next]));
     }
+};
+
+Process.prototype.doForEach = function (upvar, list, script) {
+    // perform a script for each element of a list, assigning the
+    // current iteration's element to a variable with the name
+    // specified in the "upvar" parameter, so it can be referenced
+    // within the script. Uses the context's - unused - fourth
+    // element as temporary storage for the current list index
+
+    if (isNil(this.context.inputs[3])) {this.context.inputs[3] = 1; }
+    var index = this.context.inputs[3];
+    this.context.outerContext.variables.addVar(upvar);
+    this.context.outerContext.variables.setVar(
+        upvar,
+        list.at(index)
+    );
+    if (index > list.length()) {return; }
+    this.context.inputs[3] += 1;
+    this.pushContext();
+    this.evaluate(script, new List(), true);
 };
 
 // Process interpolated primitives

@@ -125,7 +125,7 @@ PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.objects = '2014-December-03';
+modules.objects = '2014-December-04';
 
 var SpriteMorph;
 var StageMorph;
@@ -1151,6 +1151,13 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'lists',
             spec: 'map %repRing over %l'
         },
+        doForEach: {
+            dev: true,
+            type: 'command',
+            category: 'lists',
+            spec: 'for %upvar in %l %cs',
+            defaults: [localize('each item')]
+        },
 
         // Code mapping - experimental
         doMapCodeOrHeader: { // experimental
@@ -2063,6 +2070,8 @@ SpriteMorph.prototype.blockTemplates = function (category) {
             blocks.push(txt);
             blocks.push('-');
             blocks.push(block('reportMap'));
+            blocks.push('-');
+            blocks.push(block('doForEach'));
         }
 
     /////////////////////////////////
@@ -5198,6 +5207,8 @@ StageMorph.prototype.blockTemplates = function (category) {
             blocks.push(txt);
             blocks.push('-');
             blocks.push(block('reportMap'));
+            blocks.push('-');
+            blocks.push(block('doForEach'));
         }
 
     /////////////////////////////////
