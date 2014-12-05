@@ -1317,7 +1317,7 @@ SpriteMorph.prototype.init = function (globals) {
     this.wasWarped = false; // not to be serialized, used for fast-tracking
 
     this.graphicsValues = { 'ghost': 0,
-							'negative': 0,
+                            'negative': 0,
                             'fisheye': 0,
                             'whirl': 0,
                             'pixelate': 0,
@@ -4280,9 +4280,8 @@ StageMorph.prototype.init = function (globals) {
     this.trailsCanvas = null;
     this.isThreadSafe = false;
 
-    this.graphicsValues = { 
-							'ghost': 0,
-							'negative': 0,
+    this.graphicsValues = { 'ghost': 0,
+                            'negative': 0,
                             'fisheye': 0,
                             'whirl': 0,
                             'pixelate': 0,
