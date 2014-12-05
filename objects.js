@@ -1316,7 +1316,8 @@ SpriteMorph.prototype.init = function (globals) {
     this.idx = 0; // not to be serialized (!) - used for de-serialization
     this.wasWarped = false; // not to be serialized, used for fast-tracking
 
-    this.graphicsValues = { 'negative': 0,
+    this.graphicsValues = { 'ghost': 0,
+							'negative': 0,
                             'fisheye': 0,
                             'whirl': 0,
                             'pixelate': 0,
@@ -2948,6 +2949,16 @@ SpriteMorph.prototype.applyGraphicsEffects = function (canvas) {
 // The future: write more effects here
     var ctx, imagedata, pixels, newimagedata;
 
+    function transform_ghost(p, value) {
+        var i;
+        if (value !== 0) {
+            for (i = 0; i < p.length; i += 4) {
+                p[i + 3] -= value;
+            }
+        }
+		return p;
+	}
+
     function transform_negative(p, value) {
         var i, rcom, gcom, bcom;
         if (value !== 0) {
@@ -3030,6 +3041,7 @@ SpriteMorph.prototype.applyGraphicsEffects = function (canvas) {
 
         //A sprite should wear all 7 effects at once
         /*pixels = transform_whirl(pixels, this.graphicsValues.whirl);*/
+        pixels = transform_ghost(pixels, this.graphicsValues.ghost);
         pixels = transform_negative(pixels, this.graphicsValues.negative);
         pixels = transform_brightness(pixels, this.graphicsValues.brightness);
         pixels = transform_comic(pixels, this.graphicsValues.comic);
@@ -3050,26 +3062,14 @@ SpriteMorph.prototype.applyGraphicsEffects = function (canvas) {
 
 SpriteMorph.prototype.setEffect = function (effect, value) {
     var eff = effect instanceof Array ? effect[0] : null;
-    if (eff === 'ghost') {
-        this.alpha = 1 - Math.min(Math.max(+value || 0, 0), 100) / 100;
-    } else {
-        this.graphicsValues[eff] = value;
-    }
+	this.graphicsValues[eff] = value;
     this.drawNew();
     this.changed();
 };
 
-SpriteMorph.prototype.getGhostEffect = function () {
-    return (1 - this.alpha) * 100;
-};
-
 SpriteMorph.prototype.changeEffect = function (effect, value) {
     var eff = effect instanceof Array ? effect[0] : null;
-    if (eff === 'ghost') {
-        this.setEffect(effect, this.getGhostEffect() + (+value || 0));
-    } else {
-        this.setEffect(effect, this.graphicsValues[eff] + value);
-    }
+	this.setEffect(effect, this.graphicsValues[eff] + value);
 };
 
 SpriteMorph.prototype.clearEffects = function () {
@@ -3079,7 +3079,6 @@ SpriteMorph.prototype.clearEffects = function () {
             this.setEffect([effect], 0);
         }
     }
-    this.setEffect(['ghost'], 0);
 };
 
 // SpriteMorph talk bubble
@@ -4281,7 +4280,9 @@ StageMorph.prototype.init = function (globals) {
     this.trailsCanvas = null;
     this.isThreadSafe = false;
 
-    this.graphicsValues = { 'negative': 0,
+    this.graphicsValues = { 
+							'ghost': 0,
+							'negative': 0,
                             'fisheye': 0,
                             'whirl': 0,
                             'pixelate': 0,
