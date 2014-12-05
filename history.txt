@@ -2382,3 +2382,7 @@ ______
 ------
 * Threads, Objects: Experimental “ForEach” primitive (hidden in dev mode)
 * GUI: Another attempt at pointing the project dialog to the cloud if signed in
+
+141205
+------
+* Morphic: Avoid auto-scaling artefacts in Safari on retina displays (resulting in “traces” when dragging items)
