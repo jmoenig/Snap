@@ -291,10 +291,10 @@ IDE_Morph.prototype.openIn = function (world) {
     // dynamic notifications from non-source text files
     // has some issues, commented out for now
     /*
-    this.cloudMsg = getURL('http://snap.berkeley.edu/cloudmsg.txt');
-    motd = getURL('http://snap.berkeley.edu/motd.txt');
+    this.cloudMsg = getURL('http://community.csdt.rpi.edu/cloudmsg.txt');
+    motd = getURL('http://community.csdt.rpi.edu/motd.txt');
     if (motd) {
-        this.inform('Snap!', motd);
+        this.inform('CSnap', motd);
     }
     */
 
@@ -2090,29 +2090,32 @@ IDE_Morph.prototype.snapMenu = function () {
         world = this.world();
 
     menu = new MenuMorph(this);
-    menu.addItem('About...', 'aboutSnap');
+    menu.addItem('About...', 'aboutCSnap');
     menu.addLine();
     menu.addItem(
         'Reference manual',
         function () {
-            window.open('help/SnapManual.pdf', 'SnapReferenceManual');
+            window.open('help/SnapManual.pdf', 'CSnapReferenceManual');
         }
     );
     menu.addItem(
-        'Snap! website',
+        'CSnap website',
         function () {
-            window.open('http://snap.berkeley.edu/', 'SnapWebsite');
+            window.open('http://community.csdt.rpi.edu/', 'CSnapWebsite');
         }
     );
-    menu.addItem(
-        'Download source',
-        function () {
-            window.open(
-                'http://snap.berkeley.edu/snapsource/snap.zip',
-                'SnapSource'
-            );
-        }
-    );
+/* XXX: If we really need this in the future, we should link to the CSnap GitHub page.
+ *
+ *   menu.addItem(
+ *       'Download source',
+ *       function () {
+ *           window.open(
+ *               'http://snap.berkeley.edu/snapsource/snap.zip',
+ *               'CSnapSource'
+ *           );
+ *       }
+ *   );
+ */
     if (world.isDevMode) {
         menu.addLine();
         menu.addItem(
@@ -2604,7 +2607,7 @@ IDE_Morph.prototype.projectMenu = function () {
         function () {
             myself.droppedText(
                 myself.getURL(
-                    'http://snap.berkeley.edu/snapsource/tools.xml'
+                    'http://community.csdt.rpi.edu/csnapsource/tools.xml'
                 ),
                 'tools'
             );
@@ -2616,11 +2619,11 @@ IDE_Morph.prototype.projectMenu = function () {
         function () {
             // read a list of libraries from an external file,
             var libMenu = new MenuMorph(this, 'Import library'),
-                libUrl = 'http://snap.berkeley.edu/snapsource/libraries/' +
+                libUrl = 'http://community.csdt.rpi.edu/csnapsource/libraries/' +
                     'LIBRARIES';
 
             function loadLib(name) {
-                var url = 'http://snap.berkeley.edu/snapsource/libraries/'
+                var url = 'http://community.csdt.rpi.edu/csnapsource/libraries/'
                         + name
                         + '.xml';
                 myself.droppedText(myself.getURL(url), name);
@@ -2741,22 +2744,22 @@ IDE_Morph.prototype.getCostumesList = function (dirname) {
 
 // IDE_Morph menu actions
 
-IDE_Morph.prototype.aboutSnap = function () {
+IDE_Morph.prototype.aboutCSnap = function () {
     var dlg, aboutTxt, noticeTxt, creditsTxt, versions = '', translations,
         module, btn1, btn2, btn3, btn4, licenseBtn, translatorsBtn,
         world = this.world();
 		
 
-    aboutTxt = 'C-Snap 1.0\nCSDTs with Snap!\n\n'
+    aboutTxt = 'CSnap 1.0\nCSDTs with Snap!\n\n'
         + 'Culturally Situated Design Tools (CSDTs) were developed at RPI with support from the\n'
         + 'National Science Foundation. In 2014 the Java versions were ported to the Snap!\n'
         + 'codebase created by Jens Mönig, which is based on the Scratch interface from MIT.\n\n'
-        + 'For more information on CSDTs see http://csdt.rpi.edu\n';
+        + 'For more information on CSDTs see http://community.csdt.rpi.edu\n';
 		//+ '____________________________________________________'
 
     noticeTxt = localize('License')
         + '\n\n'
-        + 'Snap! is free software: you can redistribute it and/or modify\n'
+        + 'CSnap is free software: you can redistribute it and/or modify\n'
         + 'it under the terms of the GNU Affero General Public License as\n'
         + 'published by the Free Software Foundation, either version 3 of\n'
         + 'the License, or (at your option) any later version.\n\n'
@@ -2795,7 +2798,7 @@ IDE_Morph.prototype.aboutSnap = function () {
     translations = localize('Translations') + '\n' + SnapTranslator.credits();
 
     dlg = new DialogBoxMorph();
-    dlg.inform('About C-Snap', aboutTxt, world);
+    dlg.inform('About CSnap', aboutTxt, world);
     btn1 = dlg.buttons.children[0];
     translatorsBtn = dlg.addButton(
         function () {
@@ -4029,7 +4032,7 @@ IDE_Morph.prototype.cloudError = function () {
         // and notify the user about it,
         // if none is found, show an error dialog box
         var response = responseText,
-            explanation = getURL('http://snap.berkeley.edu/cloudmsg.txt');
+            explanation = getURL('http://community.csdt.rpi.edu/cloudmsg.txt');
         if (myself.shield) {
             myself.shield.destroy();
             myself.shield = null;
