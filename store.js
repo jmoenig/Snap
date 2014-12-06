@@ -61,7 +61,7 @@ SyntaxElementMorph, Variable*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2014-November-24';
+modules.store = '2014-December-06';
 
 
 // XML_Serializer ///////////////////////////////////////////////////////
@@ -1200,6 +1200,10 @@ SnapSerializer.prototype.loadValue = function (model) {
         el = model.childNamed('context');
         if (el) {
             v.outerContext = this.loadValue(el);
+        }
+        if (v.outerContext && v.receiver &&
+                !v.outerContext.variables.parentFrame) {
+            v.outerContext.variables.parentFrame = v.receiver.variables;
         }
         return v;
     case 'costume':

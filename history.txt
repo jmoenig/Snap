@@ -2386,3 +2386,7 @@ ______
 141205
 ------
 * Morphic: Avoid auto-scaling artefacts in Safari on retina displays (resulting in “traces” when dragging items)
+
+141206
+------
+* Store: Fixed #668
