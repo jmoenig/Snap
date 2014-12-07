@@ -1,5 +1,5 @@
 
-CSnap: Brining Culture and Social Justice to Programming
+CSnap: Bringing Culture and Social Justice to Programming
 
 http://community.csdt.rpi.edu
 
