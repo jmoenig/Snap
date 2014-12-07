@@ -155,7 +155,7 @@ DialogBoxMorph, BlockInputFragmentMorph, PrototypeHatBlockMorph, Costume*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2014-July-30';
+modules.blocks = '2014-November-21';
 
 
 var SyntaxElementMorph;
@@ -394,12 +394,13 @@ SyntaxElementMorph.prototype.allInputs = function () {
 };
 
 SyntaxElementMorph.prototype.allEmptySlots = function () {
-/*
-    answer empty input slots of all children excluding myself,
-    but omit those in nested rings (lambdas)
-*/
+    // answer empty input slots of all children excluding myself,
+    // but omit those in nested rings (lambdas) and JS-Function primitives.
+    // Used by the evaluator when binding implicit formal parameters
+    // to empty input slots
     var empty = [];
-    if (!(this instanceof RingMorph)) {
+    if (!(this instanceof RingMorph) &&
+            (this.selector !== 'reportJSFunction')) {
         this.children.forEach(function (morph) {
             if (morph.isEmptySlot && morph.isEmptySlot()) {
                 empty.push(morph);
@@ -409,6 +410,26 @@ SyntaxElementMorph.prototype.allEmptySlots = function () {
         });
     }
     return empty;
+};
+
+SyntaxElementMorph.prototype.tagExitBlocks = function (stopTag, isCommand) {
+    // tag 'report' and 'stop this block' blocks of all children including
+    // myself, with either a stopTag (for "stop" blocks) or an indicator of
+    // being inside a command block definition, but omit those in nested
+    // rings (lambdas. Used by the evaluator when entering a procedure
+    if (this.selector === 'doReport') {
+        this.partOfCustomCommand = isCommand;
+    } else if (this.selector === 'doStopThis') {
+        this.exitTag = stopTag;
+    } else {
+        if (!(this instanceof RingMorph)) {
+            this.children.forEach(function (morph) {
+                if (morph.tagExitBlocks) {
+                    morph.tagExitBlocks(stopTag, isCommand);
+                }
+            });
+        }
+    }
 };
 
 SyntaxElementMorph.prototype.replaceInput = function (oldArg, newArg) {
@@ -655,7 +676,9 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
     var part, tokens;
     if (spec[0] === '%' &&
             spec.length > 1 &&
-            this.selector !== 'reportGetVar') {
+            (this.selector !== 'reportGetVar' ||
+                (spec === '%turtleOutline' && this.isObjInputFragment()))) {
+
         // check for variable multi-arg-slot:
         if ((spec.length > 5) && (spec.slice(0, 5) === '%mult')) {
             part = new MultiArgMorph(spec.slice(5));
@@ -1358,6 +1381,13 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
         part.drawNew();
     }
     return part;
+};
+
+SyntaxElementMorph.prototype.isObjInputFragment = function () {
+    // private - for displaying a symbol in a variable block template
+    return (this.selector === 'reportGetVar') &&
+        (this.getSlotSpec() === '%t') &&
+        (this.parent.fragment.type === '%obj');
 };
 
 // SyntaxElementMorph layout:
@@ -2147,9 +2177,16 @@ BlockMorph.prototype.userMenu = function () {
             this.thumbnail(0.5, 60, false),
             function () {
                 var cpy = this.fullCopy(),
-                    nb = cpy.nextBlock();
+                    nb = cpy.nextBlock(),
+                    ide = myself.parentThatIsA(IDE_Morph);
                 if (nb) {nb.destroy(); }
                 cpy.pickUp(world);
+                if (ide) {
+                    world.hand.grabOrigin = {
+                        origin: ide.palette,
+                        position: ide.palette.center()
+                    };
+                }
             },
             'only duplicate this block'
         );
@@ -3152,9 +3189,14 @@ BlockMorph.prototype.snap = function () {
     I inherit from BlockMorph adding the following most important
     public accessors:
 
-    nextBlock()        - set / get the block attached to my bottom
-    bottomBlock()    - answer the bottom block of my stack
-    blockSequence()    - answer an array of blocks starting with myself
+        nextBlock()       - set / get the block attached to my bottom
+        bottomBlock()     - answer the bottom block of my stack
+        blockSequence()   - answer an array of blocks starting with myself
+
+    and the following "lexical awareness" indicators:
+
+        partOfCustomCommand - temporary bool set by the evaluator
+        exitTag           - temporary string or number set by the evaluator
 */
 
 // CommandBlockMorph inherits from BlockMorph:
@@ -3172,6 +3214,8 @@ function CommandBlockMorph() {
 CommandBlockMorph.prototype.init = function () {
     CommandBlockMorph.uber.init.call(this);
     this.setExtent(new Point(200, 100));
+    this.partOfCustomCommand = false;
+    this.exitTag = null;
 };
 
 // CommandBlockMorph enumerating:
@@ -6754,9 +6798,6 @@ InputSlotMorph.prototype.soundsMenu = function () {
 InputSlotMorph.prototype.getVarNamesDict = function () {
     var block = this.parentThatIsA(BlockMorph),
         rcvr,
-        proto,
-        rings,
-        declarations,
         tempVars = [],
         dict;
 
@@ -6764,28 +6805,26 @@ InputSlotMorph.prototype.getVarNamesDict = function () {
         return {};
     }
     rcvr = block.receiver();
-
-    proto = detect(block.allParents(), function (morph) {
-        return morph instanceof PrototypeHatBlockMorph;
+    block.allParents().forEach(function (morph) {
+        if (morph instanceof PrototypeHatBlockMorph) {
+            tempVars.push.apply(
+                tempVars,
+                morph.inputs()[0].inputFragmentNames()
+            );
+        } else if (morph instanceof BlockMorph) {
+            morph.inputs().forEach(function (inp) {
+                if (inp instanceof TemplateSlotMorph) {
+                    tempVars.push(inp.contents());
+                } else if (inp instanceof MultiArgMorph) {
+                    inp.children.forEach(function (m) {
+                        if (m instanceof TemplateSlotMorph) {
+                            tempVars.push(m.contents());
+                        }
+                    });
+                }
+            });
+        }
     });
-    if (proto) {
-        tempVars = proto.inputs()[0].inputFragmentNames();
-    }
-
-    rings = block.allParents().filter(function (block) {
-        return block instanceof RingMorph;
-    });
-    rings.forEach(function (block) {
-        tempVars = tempVars.concat(block.inputs()[1].evaluate());
-    });
-
-    declarations = block.allParents().filter(function (block) {
-        return block.selector === 'doDeclareVariables';
-    });
-    declarations.forEach(function (block) {
-        tempVars = tempVars.concat(block.inputs()[0].evaluate());
-    });
-
     if (rcvr) {
         dict = rcvr.variables.allNamesDict();
         tempVars.forEach(function (name) {
