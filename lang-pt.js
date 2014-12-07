@@ -185,7 +185,7 @@ SnapTranslator.dict.pt = {
     'translator_e-mail':
         'mmsequeira@gmail.com',
     'last_changed':
-        '2014-07-29',
+        '2014-10-01',
 
     // GUI
     // control bar:
@@ -650,11 +650,12 @@ SnapTranslator.dict.pt = {
     'Save As...':
         'Guardar este projecto como…',
     'Import...':
-        'Importar para este projecto…',
+        'Importar…',
     'file menu import hint':
-        'Importar para este projecto\num projecto exportado,\n'
-            + 'uma biblioteca de blocos,\n'
-            + 'um traje ou um som.',
+        'Abrir um projecto exportado,\n'
+            + 'substitundo o projecto corrente, ou\n'
+            + 'importar uma biblioteca de blocos, um\n'
+            + 'traje ou um som para o projecto corrente.',
     'Export project as plain text...':
         'Exportar este projecto como texto simples…',
     'Export project...':
@@ -672,7 +673,7 @@ SnapTranslator.dict.pt = {
     'Libraries...':
         'Bibliotecas...',
     'Import library':
-        'Biblioteca a importar',
+        'Importar biblioteca',
 
     // menu da nuvem
     'Login...':
@@ -943,7 +944,7 @@ SnapTranslator.dict.pt = {
     'Delete Project':
         'Remover Projecto',
     'Are you sure you want to delete':
-        'Quer mesmo remover?',
+        'Quer mesmo remover',
     'rename...':
         'alterar o nome…',
 
@@ -1430,10 +1431,10 @@ SnapTranslator.dict.pt = {
         'Actualizando a\nlista de projectos…',
     'Opening project...':
         'Abrindo o projecto…',
-    'Fetching project from the cloud...':
-        'Obtendo o projecto da nuvem…',
-    'Saving project to the cloud...':
-        'Guardando o projecto na nuvem…',
+    'Fetching project\nfrom the cloud...':
+        'Obtendo o projecto\nda nuvem…',
+    'Saving project\nto the cloud...':
+        'Guardando o projecto\nna nuvem…',
     'Sprite Nesting':
         'Actores compostos',
     'uncheck to disable\nsprite composition':
@@ -1597,6 +1598,62 @@ SnapTranslator.dict.pt = {
         'ponta',
     'middle':
         'meio',
+    'last changed':
+        'alterado pela última vez em',
+    'Are you sure you want to publish':
+        'Quer mesmo publicar',
+    'Are you sure you want to unpublish':
+        'Quer mesmo deixar de publicar',
+    'Share Project':
+        'Partilhar Projecto',
+    'Unshare Project':
+        'Deixar de Partilhar Projecto',
+    'sharing\nproject...':
+        'partilhando\nprojecto…',
+    'unsharing\nproject...':
+        'deixando de partilhar\nprojecto…',
+    'shared.':
+        'partilhado.',
+    'unshared.':
+        'deixado de partilhar.',
+    'Unshare':
+        'Não Partilhar',
+    'password has been changed.':
+        'a sua palavra-passe foi alterada.',
+    'SVG costumes are\nnot yet fully supported\nin every browser':
+        'trajes SVG ainda não\nsão totalmente suportados\nem todos os navegadores',
+    'Save Project':
+        'Guardar Projecto',
+    'script pic with result...':
+        'fotografia do guião incluindo resultado…',
+    'open a new window\nwith a picture of both\nthis script and its result':
+        'Abrir uma nova janela com\numa fotografia tanto deste guião\ncomo do seu resultado.',
+    'JavaScript function ( %mult%s ) { %code }':
+        'função JavaScript ( %mult%s ) { %code }',
+    'Select categories of additional blocks to add to this project.':
+        'Seleccionar categorias de blocos adicionais a acrescentar a este projecto.',
+    'Import sound':
+        'Importar som',
+    'Select a sound from the media library':
+        'Seleccionar um som da biblioteca de média.',
+    'Import':
+        'Importar',
+    'Select a costume from the media library':
+        'Seleccionar um traje da biblioteca de média.',
+    'edit rotation point only...':
+        'editar apenas ponto de rotação…',
+    'Export Project As...':
+        'Exportar Projecto Como…',
+    'a variable of name \'':
+        'não existe uma variável «',
+    '\'\ndoes not exist in this context':
+        '»\nneste contexto',
+    '(temporary)':
+        '(temporária)',
+    'expecting':
+        'esperavam-se',
+    'input(s), but getting':
+        'argumento(s), mas foram passados',
 
     // produção de código
     'map %cmdRing to %codeKind %code':
