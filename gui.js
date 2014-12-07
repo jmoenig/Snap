@@ -69,7 +69,7 @@ SpeechBubbleMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2014-July-31';
+modules.gui = '2014-December-04';
 
 // Declarations
 
@@ -235,10 +235,6 @@ IDE_Morph.prototype.init = function (isAutoFill) {
 IDE_Morph.prototype.openIn = function (world) {
     var hash, usr, myself = this, urlLanguage = null;
 
-    this.buildPanes();
-    world.add(this);
-    world.userMenu = this.userMenu;
-
     // get persistent user data, if any
     if (localStorage) {
         usr = localStorage['-snap-user'];
@@ -246,8 +242,11 @@ IDE_Morph.prototype.openIn = function (world) {
         if (usr) {
             usr = SnapCloud.parseResponse(usr)[0];
             if (usr) {
-                SnapCloud.login(usr.username, usr.password, 
-                        function() {}, myself.cloudError());
+                SnapCloud.username = usr.username || null;
+                SnapCloud.password = usr.password || null;
+                if (SnapCloud.username) {
+                    this.source = 'cloud';
+                }
             }
         }
         if (ghusr) {
@@ -258,6 +257,10 @@ IDE_Morph.prototype.openIn = function (world) {
             }
         }
     }
+
+    this.buildPanes();
+    world.add(this);
+    world.userMenu = this.userMenu;
 
     // override SnapCloud's user message with Morphic
     SnapCloud.message = function (string) {
@@ -758,9 +761,11 @@ IDE_Morph.prototype.createControlBar = function () {
             }
         );
 
-        x = myself.right() - (StageMorph.prototype.dimensions.x
-            * (myself.isSmallStage ? myself.stageRatio : 1));
-
+        x = Math.min(
+            startButton.left() - (3 * padding + 2 * stageSizeButton.width()),
+            myself.right() - StageMorph.prototype.dimensions.x *
+                (myself.isSmallStage ? myself.stageRatio : 1)
+        );
         [stageSizeButton, appModeButton].forEach(
             function (button) {
                 x += padding;
@@ -1914,7 +1919,7 @@ IDE_Morph.prototype.newSpriteName = function (name, ignoredSprite) {
         stem = (ix < 0) ? name : name.substring(0, ix),
         count = 1,
         newName = stem,
-        all = this.sprites.asArray().filter(
+        all = this.sprites.asArray().concat(this.stage).filter(
             function (each) {return each !== ignoredSprite; }
         ).map(
             function (each) {return each.name; }
@@ -1993,9 +1998,9 @@ IDE_Morph.prototype.cloudMenu = function () {
 
     menu = new MenuMorph(this);
     if (shiftClicked) {
-         menu.addItem(
-           'url...',
-           'setCloudURL',
+        menu.addItem(
+            'url...',
+            'setCloudURL',
             null,
             new Color(100, 0, 0)
         );
@@ -2080,8 +2085,8 @@ IDE_Morph.prototype.cloudMenu = function () {
             null,
             new Color(100, 0, 0)
         );
-    menu.addLine();
-    menu.addItem(
+        menu.addLine();
+        menu.addItem(
             'open shared project from cloud...',
             function () {
                 myself.prompt('Author name…', function (usr) {
@@ -2579,8 +2584,9 @@ IDE_Morph.prototype.aboutSnap = function () {
         + 'jens@moenig.org, bh@cs.berkeley.edu\n\n'
 
         + 'Snap! is developed by the University of California, Berkeley\n'
-        + '          with support from the National Science Foundation '
-        + 'and MioSoft.   \n'
+        + '          with support from the National Science Foundation, '
+        + 'MioSoft,     \n'
+        + 'and the Communications Design Group at SAP Labs. \n'
 
         + 'The design of Snap! is influenced and inspired by Scratch,\n'
         + 'from the Lifelong Kindergarten group at the MIT Media Lab\n\n'
@@ -2774,14 +2780,7 @@ IDE_Morph.prototype.editProjectNotes = function () {
 };
 
 IDE_Morph.prototype.newProject = function () {
-    if (SnapCloud.username) {
-        this.source = 'cloud';
-    } else if (GitHub.username) {
-        this.source = 'github';
-    } else {
-        this.source = 'local';
-    }
-
+    this.source = SnapCloud.username ? 'cloud' : 'local';
     if (this.stage) {
         this.stage.destroy();
     }
@@ -3405,15 +3404,20 @@ IDE_Morph.prototype.toggleAppMode = function (appMode) {
 
 IDE_Morph.prototype.toggleStageSize = function (isSmall) {
     var myself = this,
-        world = this.world();
+        smallRatio = 0.5,
+        world = this.world(),
+        shiftClicked = (world.currentKey === 16);
+
+    function toggle() {
+        myself.isSmallStage = isNil(isSmall) ? !myself.isSmallStage : isSmall;
+    }
 
     function zoomIn() {
-        myself.stageRatio = 1;
         myself.step = function () {
-            myself.stageRatio -= (myself.stageRatio - 0.5) / 2;
+            myself.stageRatio -= (myself.stageRatio - smallRatio) / 2;
             myself.setExtent(world.extent());
-            if (myself.stageRatio < 0.6) {
-                myself.stageRatio = 0.5;
+            if (myself.stageRatio < (smallRatio + 0.1)) {
+                myself.stageRatio = smallRatio;
                 myself.setExtent(world.extent());
                 delete myself.step;
             }
@@ -3422,11 +3426,11 @@ IDE_Morph.prototype.toggleStageSize = function (isSmall) {
 
     function zoomOut() {
         myself.isSmallStage = true;
-        myself.stageRatio = 0.5;
         myself.step = function () {
             myself.stageRatio += (1 - myself.stageRatio) / 2;
             myself.setExtent(world.extent());
             if (myself.stageRatio > 0.9) {
+                myself.stageRatio = 1;
                 myself.isSmallStage = false;
                 myself.setExtent(world.extent());
                 myself.controlBar.stageSizeButton.refresh();
@@ -3435,7 +3439,15 @@ IDE_Morph.prototype.toggleStageSize = function (isSmall) {
         };
     }
 
-    this.isSmallStage = isNil(isSmall) ? !this.isSmallStage : isSmall;
+    if (shiftClicked) {
+        smallRatio = SpriteIconMorph.prototype.thumbSize.x * 3 /
+            this.stage.dimensions.x;
+        if (!this.isSmallStage || (smallRatio === this.stageRatio)) {
+            toggle();
+        }
+    } else {
+        toggle();
+    }
     if (this.isAnimating) {
         if (this.isSmallStage) {
             zoomIn();
@@ -3443,7 +3455,7 @@ IDE_Morph.prototype.toggleStageSize = function (isSmall) {
             zoomOut();
         }
     } else {
-        if (this.isSmallStage) {this.stageRatio = 0.5; }
+        if (this.isSmallStage) {this.stageRatio = smallRatio; }
         this.setExtent(world.extent());
     }
 };
@@ -3898,9 +3910,11 @@ IDE_Morph.prototype.logout = function () {
     delete localStorage['-snap-user'];
     SnapCloud.logout(
         function () {
+            SnapCloud.clear();
             myself.showMessage('disconnected.', 2);
         },
         function () {
+            SnapCloud.clear();
             myself.showMessage('disconnected.', 2);
         }
     );
@@ -4385,7 +4399,7 @@ ProjectDialogMorph.prototype.init = function (ide, task) {
     // additional properties:
     this.ide = ide;
     this.task = task || 'open'; // String describing what do do (open, save)
-    this.source = ide.source || 'local'; // 'or 'cloud' or 'github' or 'examples'
+    this.source = ide.source || 'local'; // or 'cloud' or 'github' or 'examples'
     this.projectList = []; // [{name: , thumb: , notes:}]
 
     this.handle = null;
@@ -5205,7 +5219,8 @@ ProjectDialogMorph.prototype.deleteProject = function () {
         proj = this.listField.selected;
         if (proj) {
             this.ide.confirm(
-                localize( 'Are you sure you want to delete'
+                localize(
+                    'Are you sure you want to delete'
                 ) + '\n"' + proj.ProjectName + '"?',
                 'Delete Project',
                 function () {
@@ -6348,7 +6363,7 @@ WardrobeMorph.prototype.removeCostumeAt = function (idx) {
 WardrobeMorph.prototype.paintNew = function () {
     var cos = new Costume(
             newCanvas(),
-            this.sprite.newCostumeName('Untitled')
+            this.sprite.newCostumeName(localize('Untitled'))
         ),
         ide = this.parentThatIsA(IDE_Morph),
         myself = this;
