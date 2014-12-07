@@ -252,7 +252,7 @@ SnapSerializer.uber = XML_Serializer.prototype;
 
 // SnapSerializer constants:
 
-SnapSerializer.prototype.app = 'Snap! 4.0, http://snap.berkeley.edu';
+SnapSerializer.prototype.app = 'CSnap! 1.0, https://community.csdt.rpi.edu';
 
 SnapSerializer.prototype.thumbnailSize = new Point(160, 120);
 
