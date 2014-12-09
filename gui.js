@@ -299,25 +299,7 @@ IDE_Morph.prototype.openIn = function (world) {
     */
 
     // Check and see what modules need to be loaded, and load them
-    for(var i=0; i < config.modules.length; i += 1) {
-      var myself = this;
-      var xhr = new XMLHttpRequest();
-      xhr.open("GET", config.modules[i], true);
-      xhr.responseType = "arraybuffer";
-      xhr.onload = function () {
-        if(this.status === 200) {
-          var blob = this.response;
-          var mdl = new ModuleLoader(myself);
-          mdl.open(blob, {base64: false});
-        } else {
-          console.log("Failed to import module, error " + this.status);
-        }
-      };
-      xhr.onerror = function() {
-        console.log("Error!");
-      }
-      xhr.send();
-    }
+    this.loadAll(config.modules);
 
     // If there is a project specified in the config, open it
     if(config.project !== undefined) {
@@ -456,6 +438,31 @@ IDE_Morph.prototype.openIn = function (world) {
     }
 
 };
+
+IDE_Morph.prototype.loadAll = function(modules) {
+      var myself = this;
+      var xhr = new XMLHttpRequest();
+      xhr.open("GET", modules[0], true);
+      xhr.responseType = "arraybuffer";
+      xhr.onload = function () {
+        if(this.status === 200) {
+          var blob = this.response;
+          var mdl = new ModuleLoader(myself);
+         mdl.open(blob, {base64: false});
+          modules.shift();
+          if(modules.length > 0) {
+             myself.loadAll(modules);
+          }
+        } else {
+          console.log("Failed to import module, error " + this.status);
+        }
+      };
+      xhr.onerror = function() {
+        console.log("Error!");
+      }
+      xhr.send();  
+}
+
 
 // IDE_Morph construction
 
