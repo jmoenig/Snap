@@ -304,12 +304,15 @@ CustomBlockDefinition.prototype.dropDownMenuOf = function (inputName) {
             return dict;
         }
         // SF: use values of global list variabile declarations[inputName][4]
-        var listVarName = this.declarations[inputName][4],
-            listValues = ide.globalVariables.getVar(listVarName).contents;
-        listValues.forEach(function (option) {
-            // SF: dict values are the values of the list
-            dict[option] = option;
-        });
+        var listVarName = this.declarations[inputName][4];
+        // SF: if the global var has been deleted the option list is left empty
+		if (ide.globalVariables.silentFind(listVarName)) {
+            var listValues = ide.globalVariables.getVar(listVarName).contents;
+            listValues.forEach(function (option) {
+                // SF: dict values are the values of the list
+                dict[option] = option;
+            });
+	    }
         return dict;
     }
 
