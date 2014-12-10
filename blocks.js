@@ -6568,12 +6568,15 @@ InputSlotMorph.prototype.dropDownMenu = function () {
     if (declaration && declaration[4]) {
         // SF: use values from global list variabile declaration[4]
         listVarName = declaration[4];
-        listValues = ide.globalVariables.getVar(listVarName).contents;
-        listValues.forEach(function (option) {
-            // SF: the list of "dict" values is given by the values
-            // SF: of the list
-            dict[option] = option;
-        });
+        // SF: if the global var has been deleted the option list is left empty
+		if (ide.globalVariables.silentFind(listVarName)) {
+            listValues = ide.globalVariables.getVar(listVarName).contents;
+            listValues.forEach(function (option) {
+                // SF: the list of "dict" values is given by the values
+                // SF: of the list
+                dict[option] = option;
+            });
+	    }
         choices = dict;
     }
 
