@@ -306,7 +306,7 @@ CustomBlockDefinition.prototype.dropDownMenuOf = function (inputName) {
         // SF: use values of global list variabile declarations[inputName][4]
         var listVarName = this.declarations[inputName][4];
         // SF: if the global var has been deleted the option list is left empty
-		if (ide.globalVariables.silentFind(listVarName)) {
+		if (ide.globalVariables.silentFind(listVarName) && ide.globalVariables.getVar(listVarName)) {
             var listValues = ide.globalVariables.getVar(listVarName).contents;
             listValues.forEach(function (option) {
                 // SF: dict values are the values of the list
