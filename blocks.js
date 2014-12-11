@@ -6569,7 +6569,7 @@ InputSlotMorph.prototype.dropDownMenu = function () {
         // SF: use values from global list variabile declaration[4]
         listVarName = declaration[4];
         // SF: if the global var has been deleted the option list is left empty
-		if (ide.globalVariables.silentFind(listVarName)) {
+		if (ide.globalVariables.silentFind(listVarName) && ide.globalVariables.getVar(listVarName)) {
             listValues = ide.globalVariables.getVar(listVarName).contents;
             listValues.forEach(function (option) {
                 // SF: the list of "dict" values is given by the values
@@ -10965,5 +10965,4 @@ CommentMorph.prototype.destroy = function () {
 };
 
 CommentMorph.prototype.stackHeight = function () {
-    return this.height();
-};
+    return this.height();;
