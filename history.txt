@@ -2390,3 +2390,7 @@ ______
 141206
 ------
 * Store: Fixed #668
+
+141211
+------
+* Threads: yield after each cycle in the experimental “forEach” primitive
