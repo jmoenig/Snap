@@ -1,12 +1,12 @@
 [
 	{
 		"name": "animal-game", 
-		"description": "Snap demo", 
+		"description": "CSnap demo", 
 		"project_url": "/examples/animal-game.xml" 
 	},
 	{
 		"name": "copter",
-		"description": "Snap demo",
+		"description": "CSnap demo",
 		"project_url": "/examples/copter.xml"
 	},
 	{
