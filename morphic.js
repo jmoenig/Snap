@@ -464,9 +464,15 @@
 
         MyMorph.prototype.mouseMove = function(pos) {};
 
-    The only optional parameter of such a method is a Point object
+    All of these methods have as optional parameter a Point object
     indicating the current position of the Hand inside the World's
-    coordinate system.
+    coordinate system. The
+
+        mouseMove(pos, button)
+
+    event method has an additional optional parameter indicating the
+    currently pressed mouse button, which is either 'left' or 'right'.
+    You can use this to let users interact with 3D environments.
 
     Events may be "bubbled" up a morph's owner chain by calling
 
@@ -1035,7 +1041,7 @@
 /*global window, HTMLCanvasElement, getMinimumFontHeight, FileReader, Audio,
 FileList, getBlurredShadowSupport*/
 
-var morphicVersion = '2014-September-30';
+var morphicVersion = '2014-December-05';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = getBlurredShadowSupport(); // check for Chrome-bug
 
@@ -1925,7 +1931,9 @@ Rectangle.prototype.round = function () {
 
 Rectangle.prototype.spread = function () {
     // round me by applying floor() to my origin and ceil() to my corner
-    return this.origin.floor().corner(this.corner.ceil());
+    // expand by 1 to be on the safe side, this eliminates rounding
+    // artefacts caused by Safari's auto-scaling on retina displays
+    return this.origin.floor().corner(this.corner.ceil()).expandBy(1);
 };
 
 Rectangle.prototype.amountToTranslateWithin = function (aRect) {
@@ -3972,6 +3980,7 @@ PenMorph.prototype.init = function () {
     this.size = 1;
     this.wantsRedraw = false;
     this.penPoint = 'tip'; // or 'center"
+    this.penBounds = null; // rect around the visible arrow shape
 
     HandleMorph.uber.init.call(this);
     this.setExtent(new Point(size, size));
@@ -3994,11 +4003,9 @@ PenMorph.prototype.changed = function () {
 // PenMorph display:
 
 PenMorph.prototype.drawNew = function (facing) {
-/*
-    my orientation can be overridden with the "facing" parameter to
-    implement Scratch-style rotation styles
+    // my orientation can be overridden with the "facing" parameter to
+    // implement Scratch-style rotation styles
 
-*/
     var context, start, dest, left, right, len,
         direction = facing || this.heading;
 
@@ -4021,6 +4028,15 @@ PenMorph.prototype.drawNew = function (facing) {
         right = start.distanceAngle(len * 0.33, direction - 230);
     }
 
+    // cache penBounds
+    this.penBounds = new Rectangle(
+        Math.min(start.x, dest.x, left.x, right.x),
+        Math.min(start.y, dest.y, left.y, right.y),
+        Math.max(start.x, dest.x, left.x, right.x),
+        Math.max(start.y, dest.y, left.y, right.y)
+    );
+
+    // draw arrow shape
     context.fillStyle = this.color.toString();
     context.beginPath();
 
@@ -4037,7 +4053,6 @@ PenMorph.prototype.drawNew = function (facing) {
     context.lineWidth = 1;
     context.stroke();
     context.fill();
-
 };
 
 // PenMorph access:
@@ -5754,7 +5769,7 @@ SliderMorph.prototype.rangeSize = function () {
 };
 
 SliderMorph.prototype.ratio = function () {
-    return this.size / this.rangeSize();
+    return this.size / (this.rangeSize() + 1);
 };
 
 SliderMorph.prototype.unitSize = function () {
@@ -9346,11 +9361,11 @@ HandMorph.prototype.init = function (aWorld) {
     this.world = aWorld;
     this.mouseButton = null;
     this.mouseOverList = [];
-    this.mouseDownMorph = null;
     this.morphToGrab = null;
     this.grabOrigin = null;
     this.temporaries = [];
     this.touchHoldTimeout = null;
+    this.contextMenuEnabled = false;
 };
 
 HandMorph.prototype.changed = function () {
@@ -9494,9 +9509,10 @@ HandMorph.prototype.drop = function () {
 */
 
 HandMorph.prototype.processMouseDown = function (event) {
-    var morph, expectedClick, actualClick;
+    var morph, actualClick;
 
     this.destroyTemporaries();
+    this.contextMenuEnabled = true;
     this.morphToGrab = null;
     if (this.children.length !== 0) {
         this.drop();
@@ -9529,15 +9545,9 @@ HandMorph.prototype.processMouseDown = function (event) {
         if (event.button === 2 || event.ctrlKey) {
             this.mouseButton = 'right';
             actualClick = 'mouseDownRight';
-            expectedClick = 'mouseClickRight';
         } else {
             this.mouseButton = 'left';
             actualClick = 'mouseDownLeft';
-            expectedClick = 'mouseClickLeft';
-        }
-        this.mouseDownMorph = morph;
-        while (!this.mouseDownMorph[expectedClick]) {
-            this.mouseDownMorph = this.mouseDownMorph.parent;
         }
         while (!morph[actualClick]) {
             morph = morph.parent;
@@ -9596,7 +9606,7 @@ HandMorph.prototype.processMouseUp = function () {
             expectedClick = 'mouseClickLeft';
         } else {
             expectedClick = 'mouseClickRight';
-            if (this.mouseButton) {
+            if (this.mouseButton && this.contextMenuEnabled) {
                 context = morph;
                 contextMenu = context.contextMenu();
                 while ((!contextMenu) &&
@@ -9654,16 +9664,18 @@ HandMorph.prototype.processMouseMove = function (event) {
     // mouseOverNew = this.allMorphsAtPointer();
     mouseOverNew = this.morphAtPointer().allParents();
 
-    if ((this.children.length === 0) &&
-            (this.mouseButton === 'left')) {
+    if (!this.children.length && this.mouseButton) {
         topMorph = this.morphAtPointer();
         morph = topMorph.rootForGrab();
         if (topMorph.mouseMove) {
-            topMorph.mouseMove(pos);
+            topMorph.mouseMove(pos, this.mouseButton);
+            if (this.mouseButton === 'right') {
+                this.contextMenuEnabled = false;
+            }
         }
 
         // if a morph is marked for grabbing, just grab it
-        if (this.morphToGrab) {
+        if (this.mouseButton === 'left' && this.morphToGrab) {
             if (this.morphToGrab.isDraggable) {
                 morph = this.morphToGrab;
                 this.grab(morph);
