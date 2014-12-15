@@ -392,6 +392,18 @@ SnapTranslator.dict.fi = {
         '2014-04-18'
 };
 
+SnapTranslator.dict.sv = {
+    // meta information
+    'language_name':
+        'svenska',
+    'language_translator':
+        'Erik A. Olsson',
+    'translator_e-mail':
+        'eolsson@gmail.com',
+    'last_changed':
+        '2014-12-14'
+};
+
 SnapTranslator.dict.pt_BR = {
     // meta information
     'language_name':
