@@ -2402,3 +2402,4 @@ ______
 141217
 ------
 * Objects, Store: Experimental “processes” count watcher (hidden in dev mode)
+* Threads: Remove terminated processes from expired clones
