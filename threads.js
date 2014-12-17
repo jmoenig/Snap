@@ -2546,6 +2546,7 @@ Process.prototype.reportContextFor = function (context, otherObj) {
     if (result.outerContext) {
         result.outerContext = copy(result.outerContext);
         result.outerContext.receiver = otherObj;
+        result.outerContext.variables.parentFrame = otherObj.variables;
     }
     return result;
 };
