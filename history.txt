@@ -2398,3 +2398,7 @@ ______
 141215
 ------
 * New Swedish translation! Yay!! Thanks, Erik A Olsson!
+
+141217
+------
+* Objects, Store: Experimental “processes” count watcher (hidden in dev mode)
