@@ -179,13 +179,13 @@ SnapTranslator.dict.ko = {
 
     // translations meta information
     'language_name':
-        'Korean', // the name as it should appear in the language menu
+        '한국어', // the name as it should appear in the language menu
     'language_translator':
         'Yunjae Jang', // your name for the Translators tab
     'translator_e-mail':
-        'yunjae.jang@inc.korea.ac.kr', // optional
+        'janggoons@gmail.com', // optional
     'last_changed':
-        '2012-11-18', // this, too, will appear in the Translators tab
+        '2014-11-07', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -218,7 +218,7 @@ SnapTranslator.dict.ko = {
 
     // editor:
     'draggable':
-        '드래그 가능?',
+        '마우스로 직접 움직이기',
 
     // tabs:
     'Scripts':
@@ -243,8 +243,16 @@ SnapTranslator.dict.ko = {
         '왼쪽에서 오른쪽으로만',
 
     // new sprite button:
-    'add a new sprite':
-        '새로운 스프라이트 추가',
+    'add a new Turtle sprite':
+        '새로운 스프라이트 추가하기',
+
+    // new paint sprite button:
+    'paint a new sprite':
+        '새로운 스프라이트 그리기',
+
+    // new paint costume button:
+    'Paint a new costume':
+        '새로운 모양 그리기',
 
     // tab help
     'costumes tab help':
@@ -300,19 +308,19 @@ SnapTranslator.dict.ko = {
     'point towards %dst':
         '%dst 쪽 보기',
     'go to x: %n y: %n':
-        'x: %n 、y: %n 쪽으로 가기',
+        'x: %n 、y: %n 쪽으로 이동하기',
     'go to %dst':
-        '%dst 위치로 가기',
+        '%dst 위치로 이동하기',
     'glide %n secs to x: %n y: %n':
-        '%n 초 동안 x: %n 、y: %n 쪽으로 움직이기',
+        '%n 초 동안 x: %n 、y: %n 쪽으로 이동하기',
     'change x by %n':
         'x좌표 %n 만큼 바꾸기',
     'set x to %n':
-        'x좌표 %n 로 정하기',
+        'x좌표 %n (으)로 정하기',
     'change y by %n':
         'y좌표 %n 만큼 바꾸기',
     'set y to %n':
-        'y좌표 %n 로 정하기',
+        'y좌표 %n (으)로 정하기',
     'if on edge, bounce':
         '벽에 닿으면 튕기기',
     'x position':
@@ -328,13 +336,13 @@ SnapTranslator.dict.ko = {
     'next costume':
         '다음 모양',
     'costume #':
-        '모양 #',
+        '모양 번호',
     'say %s for %n secs':
-        '%s %n 초 동안 말하기',
+        '%s 을(를) %n 초 동안 말하기',
     'say %s':
         '%s 말하기',
     'think %s for %n secs':
-        '%s %n 초간 생각하기',
+        '%s 을(를) %n 초 동안 생각하기',
     'think %s':
         '%s 생각하기',
     'Hello!':
@@ -342,15 +350,15 @@ SnapTranslator.dict.ko = {
     'Hmm...':
         '흠…',
     'change %eff effect by %n':
-        '%eff 효과 %n 만큼 바꾸기',
+        '%eff 효과를 %n 만큼 바꾸기',
     'set %eff effect to %n':
-        '%eff 효과 %n 만큼 주기',
+        '%eff 효과를 %n 만큼 정하기',
     'clear graphic effects':
         '그래픽 효과 지우기',
     'change size by %n':
-        '크기 %n 만큼 바꾸기',
+        '크기를 %n 만큼 바꾸기',
     'set size to %n %':
-        '크기 %n % 로 정하기',
+        '크기를 %n % 로 정하기',
     'size':
         '크기',
     'show':
@@ -373,82 +381,96 @@ SnapTranslator.dict.ko = {
     'play sound %snd':
         '%snd 소리내기',
     'play sound %snd until done':
-        '끝날때까지 %snd 소리내기',
+        '%snd 을(를) 끝까지 소리내기',
     'stop all sounds':
         '모든 소리 끄기',
     'rest for %n beats':
-        '%n 비트 동안 쉬기',
+        '%n 박자 동안 쉬기',
     'play note %n for %n beats':
-        '%n 음을 %n 비트로 연주하기',
+        '%n 음을 %n 박자로 연주하기',
     'change tempo by %n':
-        '템포를 %n 만큼 바꾸기',
+        '빠르기를 %n 만큼 바꾸기',
     'set tempo to %n bpm':
-        '템포를 %n bpm으로 맞추기',
+        '빠르기를 %n bpm으로 정하기',
     'tempo':
-        '템포',
+        '빠르기',
 
 
     // pen:
     'clear':
-        '지우기',
+        '펜 자국 지우기',
     'pen down':
         '펜 내리기',
     'pen up':
         '펜 올리기',
     'set pen color to %clr':
-        '펜의 색 %clr 으로 정하기',
+        '펜 색깔을 %clr 으로 정하기',
     'change pen color by %n':
-        '펜의 색 %n 만큼 바꾸기',
+        '펜 색깔을 %n 만큼 바꾸기',
     'set pen color to %n':
-        '펜의 색 %n 으로 정하기',
+        '펜 색깔을 %n (으)로 정하기',
     'change pen shade by %n':
-        '펜의 그림자 %n 만큼 바꾸기',
+        '펜 음영을 %n 만큼 바꾸기',
     'set pen shade to %n':
-        '펜의 그림자 %n 으로 정하기',
+        '펜 음영을 %n 으로 정하기',
     'change pen size by %n':
-        '펜의 크기 %n 만큼 바꾸기',
+        '펜 굵기를 %n 만큼 바꾸기',
     'set pen size to %n':
-        '펜의 크기 %n 으로 정하기',
+        '펜 굵기를 %n (으)로 정하기',
     'stamp':
-        '스탬프',
+        '도장찍기',
 
     // control:
     'when %greenflag clicked':
-        '%greenflag 클릭되었을 때',
+        '%greenflag 클릭했을 때',
     'when %keyHat key pressed':
-        '%keyHat 키 눌렀을 때',
+        '%keyHat 키를 눌렀을 때',
     'when I am clicked':
-        '자신이 클릭되었을 때',
+        '이 스프라이트를 클릭했을 때',
     'when I receive %msgHat':
-        '%msgHat 받을 때',
+        '%msgHat 을(를) 받았을 때',
     'broadcast %msg':
         '%msg 방송하기',
     'broadcast %msg and wait':
         '%msg 방송하고 기다리기',
     'Message name':
-        '메세지 이름',
+        '메시지 이름',
+    'message':
+        '메시지',
+    'any message':
+        '어떤 메시지',
     'wait %n secs':
         '%n 초 기다리기',
     'wait until %b':
         '%b 까지 기다리기',
     'forever %c':
-        '무한반복 %c',
+        '무한 반복하기 %c',
     'repeat %n %c':
-        '반복 %n 회 %c',
+        '%n 번 반복하기 %c',
     'repeat until %b %c':
-        '반복 %b 계속 확인 %c',
+        '%b 까지 반복하기 %c',
     'if %b %c':
         '만약 %b 라면 %c',
     'if %b %c else %c':
         '만약 %b 라면 %c 아니면 %c',
     'report %s':
         '%s 출력하기',
-    'stop block':
-        '블록 멈추기',
-    'stop script':
-        '스크립트 멈추기',
-    'stop all %stop':
-        '모두 멈추기 %stop',
+    'stop %stopChoices':
+        '%stopChoices 멈추기',
+    'all':
+        '모두',
+    'this script':
+        '이 스크립트',
+    'this block':
+        '이 블록',    
+    'stop %stopOthersChoices':
+        '%stopOthersChoices 멈추기',
+    'all but this script':
+        '이 스크립트를 제외한 모두',
+    'other scripts in sprite':
+        '이 스프라이트에 있는 다른 스크립트',    
+    'pause all %pause':
+        '모두 잠시 멈추기 %pause',
     'run %cmdRing %inputs':
         '%cmdRing 을(를) %inputs 으로 실행하기',
     'launch %cmdRing %inputs':
@@ -461,14 +483,23 @@ SnapTranslator.dict.ko = {
         '반복해서 %cmdRing 을(를) 호출하기',
     'warp %c':
         '워프 %c',
+    'when I start as a clone':
+        '복제되었을 때',
+    'create a clone of %cln':
+        '%cln 을(를) 복제하기',
+    'myself':
+        '나 자신',
+    'delete this clone':
+        '이 복제본 삭제하기',
+
 
     // sensing:
     'touching %col ?':
-        '%col 에 닿기?',
+        '%col 에 닿았는가?',
     'touching %clr ?':
-        '%clr 색에 닿기?',
+        '%clr 색에 닿았는가?',
     'color %clr is touching %clr ?':
-        '%clr 색이 %clr 색에 닿기?',
+        '%clr 색이 %clr 색에 닿았는가?',
     'ask %s and wait':
         '%s 을(를) 묻고 기다리기',
     'what\'s your name?':
@@ -476,36 +507,59 @@ SnapTranslator.dict.ko = {
     'answer':
         '대답',
     'mouse x':
-        '마우스 x좌표',
+        '마우스의 x좌표',
     'mouse y':
-        '마우스 y좌표',
+        '마우스의 y좌표',
     'mouse down?':
-        '마우스 클릭하기?',
+        '마우스를 클릭했는가?',
     'key %key pressed?':
-        '%key 키 클릭하기?',
+        '%key 키를 눌렀는가?',
     'distance to %dst':
         '%dst 까지 거리',
     'reset timer':
         '타이머 초기화',
     'timer':
         '타이머',
+    '%att of %spr':
+        '%att ( %spr 에 대한)',
     'http:// %s':
         'http:// %s',
-
+    'turbo mode?':
+        '터보 모드인가?',
+    'set turbo mode to %b':
+        '터보 모드 %b 으로 설정하기',
     'filtered for %clr':
         '%clr 색 추출하기',
     'stack size':
         '스택 크기',
     'frames':
         '프레임',
+    'current %dates':
+        '현재 %dates',
+    'year':
+        '연도',
+    'month':
+        '월',
+    'date':
+        '일',
+    'day of week':
+        '요일(1~7)',
+    'hour':
+        '시간',
+    'minute':
+        '분',
+    'second':
+        '초',
+    'time in milliseconds':
+        '밀리세컨드초',
 
     // operators:
     '%n mod %n':
-        '%n 나누기 %n 의 나머지',
+        '( %n / %n ) 의 나머지',
     'round %n':
         '%n 반올림',
     '%fun of %n':
-        '%n 의 %fun',
+        '%fun ( %n 에 대한)',
     'pick random %n to %n':
         '%n 부터 %n 사이의 난수',
     '%b and %b':
@@ -520,12 +574,14 @@ SnapTranslator.dict.ko = {
         '거짓',
     'join %words':
         '%words 결합하기',
+    'split %s by %delim':
+        '%s 를 %delim 기준으로 나누기',
     'hello':
         '안녕',
     'world':
-        '세계',
+        '세상',
     'letter %n of %s':
-        '%n 의 %s 번째 글자',
+        '%n 번째 글자 ( %s 에 대한)',
     'length of %s':
         '%s 의 길이',
     'unicode of %s':
@@ -533,9 +589,11 @@ SnapTranslator.dict.ko = {
     'unicode %n as letter':
         '유니코드 %n 에 대한 문자',
     'is %s a %typ ?':
-        '%s 이(가) %typ 인가요?',
+        '%s 이(가) %typ 인가?',
+    'is %s identical to %s ?':
+        '%s 와(과) %s 가 동일한가?',
     'type of %s':
-        '%s 타입',
+        '%s 의 타입',
 
     // variables:
     'Make a variable':
@@ -543,12 +601,12 @@ SnapTranslator.dict.ko = {
     'Variable name':
         '변수 이름',
     'Delete a variable':
-        '변수 삭제',
+        '변수 삭제하기',
 
     'set %var to %s':
-        '%var 을(를) %s 로 저장',
+        '변수 %var 에 %s 저장하기',
     'change %var by %n':
-        '%var 에 %n 씩 누적하기',
+        '변수 %var 을(를) %n 만큼 바꾸기',
     'show variable %var':
         '변수 %var 보이기',
     'hide variable %var':
@@ -560,38 +618,78 @@ SnapTranslator.dict.ko = {
     'list %exp':
         '리스트 %exp',
     '%s in front of %l':
-        '%s 을(를) %l 처음에 추가하기 ',
+        '%s 을(를) 리스트 %l 의 맨 앞에 추가하기 ',
     'item %idx of %l':
-        '%idx 항목 %l',
+        '%idx 번째 항목 (리스트 %l 에 대한)',
     'all but first of %l':
-        '%l 첫번째 아이템 제외한 모든 아이템',
+        '리스트 %l 에서 첫 번째 항목 제외하기',
     'length of %l':
-        '%l 의 크기',
+        '리스트 %l 의 항목 갯수',
     '%l contains %s':
-        '%l 에 %s 포함?',
+        '리스트 %l 에 %s 포함되었는가?',
     'thing':
-        '아이템',
+        '어떤 것',
     'add %s to %l':
-        '%s 을(를) %l 마지막에 추가하기 ',
+        '%s 을(를) 리스트 %l 의 마지막에 추가하기 ',
     'delete %ida of %l':
-        '%ida 을(를) %l 에서 삭제하기 ',
+        '%ida 번째 항목 삭제하기 (리스트 %l 에 대한)',
     'insert %s at %idx of %l':
-        '%s 을(를) %idx 위치에 추가하기 %l',
+        '%s 을(를) %idx 위치에 추가하기 (리스트 %l 에 대한)',
     'replace item %idx of %l with %s':
-        '%idx 항목 %l 에 %s 로 교체하기',
+        '%idx 번째 (리스트 %l 에 대한) 를 %s (으)로 바꾸기',
 
     // other
     'Make a block':
         '블록 만들기',
 
+    // Paint Editor
+    'Paint Editor':
+        '그림 편집기',
+    'undo':
+        '되돌리기',
+    'grow':
+        '확대',
+    'shrink':
+        '축소',
+    'flip ↔':
+        '↔ 반전',
+    'flip ↕':
+        '↕ 반전',
+    'Brush size':
+        '펜 크기',
+    'Constrain proportions of shapes?\n(you can also hold shift)':
+        '도형 크기 비율을 고정하는가?\n(shift 키를 눌러서 사용할 수 있습니다.)',
+    'Paintbrush tool\n(free draw)':
+        '붓 도구',
+    'Stroked Rectangle\n(shift: square)':
+        '사각형 그리기 도구\n(shift: 정사각형)',
+    'Stroked Ellipse\n(shift: circle)':
+        '타원 그리기 도구\n(shift: 원)',
+    'Eraser tool':
+        '지우개 도구',
+    'Set the rotation center':
+        '회전축 설정하기',
+    'Line tool\n(shift: vertical/horizontal)':
+        '선 그리기 도구\n(shift: 수평/수직)',
+    'Filled Rectangle\n(shift: square)':
+        '채워진 사각형 그리기 도구\n(shift: 정사각형)',
+    'Filled Ellipse\n(shift: circle)':
+        '채워진 타원 그리기 도구\n(shift: 원)',
+    'Fill a region':
+        '색 채우기',
+    'Pipette tool\n(pick a color anywhere)':
+        '스포이드 도구\n(원하는 색 선택하기)',
+
     // menus
     // snap menu
     'About...':
         'Snap! 에 대해서...',
+    'Reference manual':
+        '참고자료 다운로드',
     'Snap! website':
         'Snap! 웹사이트',
     'Download source':
-        '소스 다운로드',
+        '소스코드 다운로드',
     'Switch back to user mode':
         '사용자 모드로 전환',
     'disable deep-Morphic\ncontext menus\nand show user-friendly ones':
@@ -609,15 +707,18 @@ SnapTranslator.dict.ko = {
     'Open...':
         '열기...',
     'Save':
-        '저장',
+        '저장하기',
+    'Save to disk':
+        '내 컴퓨터에 저장하기',
+    'experimental - store this project\nin your downloads folder':
+        '실험적 - 이 프로젝트를\n 다운로드 폴더에 저장합니다.',
     'Save As...':
-        '다른 이름으로 저장...',
+        '다른 이름으로 저장하기...',
     'Import...':
         '가져오기...',
     'file menu import hint':
         '내보낸 프로젝트 파일, 블록 라이브러리\n'
-		+ '스프라이트 모양 또는 소리를 가져옵니다.\n\n'
-		+ '일부 웹브라우저에서는 지원되지 않습니다.',
+		+ '스프라이트 모양 또는 소리를 가져옵니다.',
     'Export project as plain text...':
         '프로젝트를 텍스트 파일로 내보내기...',
     'Export project...':
@@ -628,58 +729,171 @@ SnapTranslator.dict.ko = {
         '블록 내보내기...',
     'show global custom block definitions as XML\nin a new browser window':
         '새롭게 정의한 전역 블록 데이터를\n새로운 윈도우에 XML 형태로 보여주기',
+    'Export all scripts as pic...':
+        '모든 스크립트를 그림파일로 내보내기',
+    'show a picture of all scripts\nand block definitions':
+        '모든 스크립트와 정의된 블록을 그림파일로 보여줍니다.',
+    'Import tools':
+        '추가 도구 가져오기',
+    'load the official library of\npowerful blocks':
+        '강력한 기능을 제공하는\n 블록들을 가져옵니다.',
+    'Libraries...':
+        '라이브러리...',
+    'Select categories of additional blocks to add to this project.':
+        '추가적인 블록을 선택해서\n 사용할 수 있습니다.',
+    'Import library':
+        '라이브러리 가져오기',
+
+    // cloud menu
+    'Login...':
+        '로그인...',
+    'Signup...':
+        '계정만들기...',
+    'Reset Password...':
+        '비밀번호 재설정...',
+    'url...':
+        'url...',
+    'export project media only...':
+        'export project media only...',
+    'export project without media...':
+        'export project without media...',
+    'export project as cloud data...':
+        'export project as cloud data...',
+    'open shared project from cloud...':
+        'open shared project from cloud...',
 
     // settings menu
     'Language...':
         '언어선택...',
+    'Zoom blocks...':
+        '블록 크기 설정...',
+    'Stage size...':
+        '무대 크기 설정...',
+    'Stage size':
+        '무대 크기',
+    'Stage width':
+        '가로(너비)',
+    'Stage height':
+        '세로(높이)',
+    'Default':
+        '기본설정',
+    
     'Blurred shadows':
         '반투명 그림자',
     'uncheck to use solid drop\nshadows and highlights':
         '체크해제하면, 그림자와 하이라이트가\n불투명 상태로 됩니다.',
     'check to use blurred drop\nshadows and highlights':
         '체크하면, 그림자와 하이라이트가\n반투명 상태로 됩니다.',
+    
     'Zebra coloring':
         '중첩 블록 구분하기',
     'check to enable alternating\ncolors for nested blocks':
         '체크하면, 중첩된 블록을\n다른 색으로 구분할 수 있습니다.',
     'uncheck to disable alternating\ncolors for nested block':
         '체크해제하면, 중첩된 블록을\n다른 색으로 구분할 수 없습니다.',
+    
+    'Dynamic input labels':
+        'Dynamic input labels',
+    'uncheck to disable dynamic\nlabels for variadic inputs':
+        'uncheck to disable dynamic\nlabels for variadic inputs',
+    'check to enable dynamic\nlabels for variadic inputs':
+        'check to enable dynamic\nlabels for variadic inputs',
+    
     'Prefer empty slot drops':
         '빈 슬롯에 입력 가능',
     'settings menu prefer empty slots hint':
         '설정 메뉴에 빈 슬롯의\n힌트를 사용할 수 있습니다.',
     'uncheck to allow dropped\nreporters to kick out others':
         '체크해제하면, 기존 리포터 블록에\n새로운 리포터 블록으로 대체할 수 있습니다.',
+    
     'Long form input dialog':
         '긴 형태의 입력 대화창',
     'check to always show slot\ntypes in the input dialog':
         '체크하면, 입력 대화창에\n항상 슬롯의 형태를 보여줍니다.',
     'uncheck to use the input\ndialog in short form':
         '체크해제하면, 입력 대화창을\n짧은 형태로 사용합니다.',
+    
+    'Plain prototype labels':
+        '새로 만든 블록 인수 설정',
+    'uncheck to always show (+) symbols\nin block prototype labels':
+        '체크해제하면, 블록 편집기에서\n 블록 인수 추가 버튼(+)을\n 보입니다.',
+    'check to hide (+) symbols\nin block prototype labels':
+        '체크하면, 블록 편집기에서\n 블록 인수 추가 버튼(+)을\n 숨깁니다.',
+    
     'Virtual keyboard':
         '가상 키보드',
     'uncheck to disable\nvirtual keyboard support\nfor mobile devices':
         '체크해제하면, 모바일 기기에서\n가상 키보드를 사용할 수 없습니다.',
     'check to enable\nvirtual keyboard support\nfor mobile devices':
         '체크하면, 모바일 기기에서\n가상 키보드를 사용할 수 있습니다.',
+    
     'Input sliders':
         '입력창에서 슬라이더 사용',
     'uncheck to disable\ninput sliders for\nentry fields':
         '체크해제하면, 입력창에서\n슬라이더를 사용할 수 없습니다.',
     'check to enable\ninput sliders for\nentry fields':
         '체크하면, 입력창에서\n슬라이더를 사용할 수 있습니다.',
+    
     'Clicking sound':
         '블록 클릭시 소리',
     'uncheck to turn\nblock clicking\nsound off':
         '체크해제하면, 블록 클릭시\n소리가 꺼집니다.',
     'check to turn\nblock clicking\nsound on':
         '체크하면, 블록 클릭시\n소리가 켜집니다.',
+    
+    'Animations':
+        '애니메이션',
+    'uncheck to disable\nIDE animations':
+        '체크해제하면, IDE 애니메이션을\n 사용할 수 없습니다.',
+    
+    'Turbo mode':
+        '터보 모드',
+    'check to prioritize\nscript execution':
+        '체크하면, 스크립트를\n 빠르게 실행합니다.',
+    'uncheck to run scripts\nat normal speed':
+        '체크해제하면, 스크립트 실행 속도를\n 보통으로 합니다.',
+    
+    'Flat design':
+        '플랫(Flat) 디자인',
+    'uncheck for default\nGUI design':
+        '체크해제하면,\n 기본 GUI 디자인으로\n 변경합니다.',
+    'check for alternative\nGUI design':
+        '체크하면, 플랫(Flat)\n 디자인으로 변경합니다.',
+    
+    'Sprite Nesting':
+        'Sprite Nesting',
+    'uncheck to disable\nsprite composition':
+        'uncheck to disable\nsprite composition',
+    'check to enable\nsprite composition':
+        'check to enable\nsprite composition',
+
     'Thread safe scripts':
         '스레드 안전 스크립트',
-    'uncheck to allow\nscript reentrancy':
+    'uncheck to allow\nscript reentrance':
         '체크해제하면, 스크립트\n재진입성을 허락합니다.',
-    'check to disallow\nscript reentrancy':
+    'check to disallow\nscript reentrance':
         '체크하면, 스크립트\n재진입성을 허락하지 않습니다.',
+    
+    'Prefer smooth animations':
+        '자연스러운 애니메이션',
+    'uncheck for greater speed\nat variable frame rates':
+        '체크해제하면, 프레임\n 전환 비율이 빨라집니다.',
+    'check for smooth, predictable\nanimations across computers':
+        '체크하면, 애니메이션이\n 자연스러워 집니다.',
+    
+    'Flat line ends':
+        '선 끝을 평평하게 만들기',
+    'check for flat ends of lines':
+        '체크하면, 선 끝을\n 평평하게 만듭니다.',
+    'uncheck for round ends of lines':
+        '체크해제하면, 선 끝을\n 둥글게 만듭니다.',
+    
+    'Codification support':
+        '체계화 지원',
+    'uncheck to disable\nblock to text mapping features':
+        'uncheck to disable\nblock to text mapping features',    
+    'check for block\nto text mapping features':
+        '체크하면, check for block\nto text mapping features', 
 
     // inputs
     'with inputs':
@@ -692,34 +906,54 @@ SnapTranslator.dict.ko = {
     // context menus:
     'help':
         '도움말',
+    
+    // palette:
+    'find blocks...':
+        '블록 찾기...',
+    'hide primitives':
+        '기본 블록 숨기기',
+    'show primitives':
+        '기본 블록 보이기',
 
     // blocks:
     'help...':
         '블록 도움말...',
+    'relabel...':
+        '블록 바꾸기...',
     'duplicate':
-        '복사',
+        '복사하기',
     'make a copy\nand pick it up':
-        '복사해서\n그 블록을 들고 있습니다.',
+        '복사해서\n들고 있습니다.',
     'delete':
-        '삭제',
+        '삭제하기',
     'script pic...':
-        '스크립트 그림...',
+        '이 스크립트를 그림파일로 내보내기...',
     'open a new window\nwith a picture of this script':
         '이 스크립트 그림을\n새로운 윈도우에서 엽니다.',
     'ringify':
-        '형태변환',
+        '블록형태 변환하기',
+    'unringify':
+        'unringify',
 
     // custom blocks:
     'delete block definition...':
-        '블록 삭제',
+        '블록 삭제하기',
     'edit...':
         '편집…',
 
     // sprites:
     'edit':
-        '편집',
+        '스크립트 편집하기',
     'export...':
         '내보내기...',
+
+    // stage:
+    'show all':
+        '모든 스프라이트 나타내기',
+    'pic...':
+        '그림파일로 내보내기...',
+    'open a new window\nwith a picture of the stage':
+        '새로운 창을 열고\n무대의 화면을\n그림파일로 저장한다.',
 
     // scripting area
     'clean up':
@@ -728,12 +962,20 @@ SnapTranslator.dict.ko = {
         '스크립트를\n수직으로 정렬한다.',
     'add comment':
         '주석 추가하기',
+    'undrop':
+        '마지막으로 가져온 블록',
+    'undo the last\nblock drop\nin this pane':
+        '마지막으로\n 가져온 블록을\n 확인한다.',
+    'scripts pic...':
+        '모든 스크립트를 그림파일로 내보내기...',
+    'open a new window\nwith a picture of all scripts':
+        '새로운 창을 열어서\n 모든 스크립트를\n 그림으로 저장한다.',
     'make a block...':
         '블록 만들기...',
 
     // costumes
     'rename':
-        '이름수정',
+        '이름 수정하기',
     'export':
         '내보내기',
 
@@ -750,7 +992,9 @@ SnapTranslator.dict.ko = {
     // dialogs
     // buttons
     'OK':
-        'OK',
+        '확인',
+    'Ok':
+        '확인',    
     'Cancel':
         '취소',
     'Yes':
@@ -761,6 +1005,31 @@ SnapTranslator.dict.ko = {
     // help
     'Help':
         '도움말',
+
+    // zoom blocks
+    'Zoom blocks':
+        '블록 크기 설정',
+    'build':
+        '만들기',
+    'your own':
+        '나만의',
+    'blocks':
+        '블록',
+    'normal (1x)':
+        '기본 크기 (1x)',
+    'demo (1.2x)':
+        '데모 크기 (1.2x)',
+    'presentation (1.4x)':
+        '발표용 크기 (1.4x)',
+    'big (2x)':
+        '큰 크기 (2x)',
+    'huge (4x)':
+        '매우 큰 크기(4x)',
+    'giant (8x)':
+        '정말 큰 크기 (8x)',
+    'monstrous (10x)':
+        '믿을 수 없는 크기 (10x)',
+
 
     // costume editor
     'Costume Editor':
@@ -822,7 +1091,7 @@ SnapTranslator.dict.ko = {
 
     // block deletion dialog
     'Delete Custom Block':
-        '블록 삭제',
+        '블록 삭제하기',
     'block deletion dialog text':
         '이 블록과 모든 인스턴스를\n 삭제해도 괜찮습니까?',
 
@@ -911,6 +1180,8 @@ SnapTranslator.dict.ko = {
     // coments
     'add comment here...':
         '여기에 주석 추가…',
+    'comment pic...':
+        '주석을 그림파일로 내보내기...',
 
     // drow downs
     // directions
@@ -933,11 +1204,22 @@ SnapTranslator.dict.ko = {
 
     // costumes
     'Turtle':
-        '터틀',
+        '화살표',
+    'Empty':
+        'Leer',
 
-    // graphical effects
+        // graphical effects
+    'brightness':
+        '밝기',
     'ghost':
         '유령',
+    'negative':
+        '반전',
+    'comic':
+        '코믹',
+    'confetti':
+        '색종이',
+
 
     // keys
     'space':
@@ -1029,9 +1311,11 @@ SnapTranslator.dict.ko = {
 
     // math functions
     'abs':
-        '절대값',
+        '절대값(abs)',
     'sqrt':
-        '제곱근',
+        '제곱근(sqrt)',
+    'floor':
+        '바닥(floor)',
     'sin':
         'sin',
     'cos':
@@ -1049,11 +1333,23 @@ SnapTranslator.dict.ko = {
     'e^':
         'e^',
 
+    // delimiters
+    'letter':
+        '글자',
+    'whitespace':
+        '빈칸',
+    'line':
+        '줄',
+    'tab':
+        '탭',
+    'cr':
+        '새줄(cr)',
+
     // data types
     'number':
         '숫자',
     'text':
-        '텍스트',
+        '문자',
     'Boolean':
         '불리언',
     'list':
@@ -1087,12 +1383,12 @@ SnapTranslator.dict.ko = {
     'Are you sure you want to delete':
         '정말로 삭제합니까?',
     'unringify':
-        '형태변환취소',
+        '블록형태변환 취소하기',
     'rename...':
         '이름수정...',
     '(180) down':
         '(180) 아래',
     'Ok':
-        'OK'
+        '확인'
 
 };
