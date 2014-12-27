@@ -657,6 +657,13 @@ PaintCanvasMorph.prototype.drawcrosshair = function (context) {
     ctx.strokeStyle = 'black';
     ctx.clearRect(0, 0, this.mask.width, this.mask.height);
 
+	//draw rotation center coordinates near crosshairs
+	ctx.globalAlpha = 1;
+	ctx.fillStyle = "blue";
+	ctx.font = "bold 10px Arial";
+	var coordinates = -Math.floor((this.mask.width/2 - rp.x)) + ', ' + Math.floor((this.mask.height/2 - rp.y));
+	ctx.fillText(coordinates, rp.x + 20, rp.y - 20);
+
     // draw crosshairs:
     ctx.globalAlpha = 0.5;
 
