@@ -1015,7 +1015,7 @@ SnapSerializer.prototype.obsoleteBlock = function (isReporter) {
             : new CommandBlockMorph();
     block.selector = 'nop';
     block.color = new Color(200, 0, 20);
-	block.setSpec(localize('Obsolete!'));
+    block.setSpec(localize('Obsolete!'));
     block.isDraggable = true;
     return block;
 };
