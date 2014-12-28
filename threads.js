@@ -1864,13 +1864,23 @@ Process.prototype.reportURL = function (url) {
 // Process event messages primitives
 
 Process.prototype.doBroadcast = function (message) {
+    return this.doMessageTo(message, '');
+}
+
+Process.prototype.doBroadcastAndWait = function (message) {
+    return this.doMessageToAndWait(message, '');
+}
+
+Process.prototype.doMessageTo = function (message, morphName) {
     var stage = this.homeContext.receiver.parentThatIsA(StageMorph),
         hats = [],
         procs = [];
-
+        morphs = [];
     if (message !== '') {
         stage.lastMessage = message;
-        stage.children.concat(stage).forEach(function (morph) {
+        morphs = morphName != '' ? this.getObjectsNamed(morphName, this, stage) :
+                                    stage.children.concat(stage);
+        morphs.forEach(function (morph) {
             if (morph instanceof SpriteMorph || morph instanceof StageMorph) {
                 hats = hats.concat(morph.allHatBlocksFor(message));
             }
@@ -1880,11 +1890,11 @@ Process.prototype.doBroadcast = function (message) {
         });
     }
     return procs;
-};
+}
 
-Process.prototype.doBroadcastAndWait = function (message) {
+Process.prototype.doMessageToAndWait = function (message, morphName) {
     if (!this.context.activeSends) {
-        this.context.activeSends = this.doBroadcast(message);
+        this.context.activeSends = this.doMessageTo(message, morphName);
     }
     this.context.activeSends = this.context.activeSends.filter(
         function (proc) {
@@ -1896,7 +1906,7 @@ Process.prototype.doBroadcastAndWait = function (message) {
     }
     this.pushContext('doYield');
     this.pushContext();
-};
+}
 
 Process.prototype.getLastMessage = function () {
     var stage;
