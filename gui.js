@@ -69,7 +69,7 @@ SpeechBubbleMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2014-October-06';
+modules.gui = '2014-December-04';
 
 // Declarations
 
@@ -233,10 +233,6 @@ IDE_Morph.prototype.init = function (isAutoFill) {
 IDE_Morph.prototype.openIn = function (world) {
     var hash, usr, myself = this, urlLanguage = null;
 
-    this.buildPanes();
-    world.add(this);
-    world.userMenu = this.userMenu;
-
     // get persistent user data, if any
     if (localStorage) {
         usr = localStorage['-snap-user'];
@@ -245,9 +241,16 @@ IDE_Morph.prototype.openIn = function (world) {
             if (usr) {
                 SnapCloud.username = usr.username || null;
                 SnapCloud.password = usr.password || null;
+                if (SnapCloud.username) {
+                    this.source = 'cloud';
+                }
             }
         }
     }
+
+    this.buildPanes();
+    world.add(this);
+    world.userMenu = this.userMenu;
 
     // override SnapCloud's user message with Morphic
     SnapCloud.message = function (string) {
@@ -2511,8 +2514,9 @@ IDE_Morph.prototype.aboutSnap = function () {
         + 'jens@moenig.org, bh@cs.berkeley.edu\n\n'
 
         + 'Snap! is developed by the University of California, Berkeley\n'
-        + '          with support from the National Science Foundation '
-        + 'and MioSoft.   \n'
+        + '          with support from the National Science Foundation, '
+        + 'MioSoft,     \n'
+        + 'and the Communications Design Group at SAP Labs. \n'
 
         + 'The design of Snap! is influenced and inspired by Scratch,\n'
         + 'from the Lifelong Kindergarten group at the MIT Media Lab\n\n'
