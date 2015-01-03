@@ -844,18 +844,6 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             );
             part.setContents(['date']);
             break;
-        case '%fileOrDir':
-            part = new InputSlotMorph(
-                null, // text
-                false, // non-numeric
-                {
-                    'file': ['file'],
-                    'directory': ['directory']
-                },
-                true // read-only
-            );
-            part.setContents(['file']);
-            break;
         case '%locations':
             part = new InputSlotMorph(
                 null, // text
