@@ -1,5 +1,10 @@
 #!/bin/bash
 
+if [[ "$snapsource" == "" ]]
+then
+    export snapsource="https://github.com/Gubolin/snap.git"
+fi
+
 if [[ $1 = "" ]]
 then
     echo "Usage: mobile.sh PLATFORM [BUILDSOURCE]"
@@ -25,7 +30,7 @@ rm -rf www config.xml
 
 if [[ $2 == "" ]]
 then
-    git clone https://github.com/Gubolin/snap.git www
+    git clone "$snapsource" www
     cd www/
     git checkout mobileapp
 else

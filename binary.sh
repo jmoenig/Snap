@@ -1,5 +1,10 @@
 #!/bin/bash
 
+if [[ "$snapsource" == "" ]]
+then
+    export snapsource="https://github.com/Gubolin/snap.git"
+fi
+
 if [[ $# < 2 ]]
 then
     echo "Usage: binary.sh OPTION PLATFORM [FILE]"
@@ -42,7 +47,7 @@ then
 fi
 
 buildsource=$(mktemp -d)
-git clone "https://github.com/Gubolin/snap.git" $buildsource
+git clone $snapsource $buildsource
 cd "$buildsource"
 git checkout mobileapp
 
