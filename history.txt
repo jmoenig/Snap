@@ -2262,3 +2262,135 @@ ______
 ------
 * Threads, Blocks: enable Zombiefication of JS-Functions
 * Morphic: Fix #563 (Paste into Chrome), thanks, @Muon, for the hint!
+
+140917
+------
+* Threads, Objects, Store: Refactor variables handling, introducing Variable objects, all functionality stays the same
+
+140918
+------
+* Threads: fixed #174, replace UpvarReferences with references to Variable objects, fixes upvar scope issues
+
+140922
+------
+* Blocks: Make upvars mutable
+* GUI: fixed #585 (sprite name conflict with stage). Thanks, Michael, for the report!
+
+140929
+------
+* Threads: fixed #591 fully copy local variables for sprite duplicates and (Scratch-like) clones
+* Portuguese translation update, thanks, Manuel!
+* fixed #590 (Russian translation syntax glitches) Thanks @alexf2000 !
+* Paint: flood fill issue fixed, thanks, Kartik!
+
+140930
+------
+* Objects: fixed #593 match broadcast numbers with event hat blocks containing strings that can be parsed as numbers 
+* BYOB: allow percent symbols in custom block texts (fix #361), thanks, @Gubolin!!
+* Morphic: allow negative min/max values for sliders (fix #285), thanks, @Gubolin!!
+* Objects: fixed #378 (disable context menus for boolean representations)
+* Blocks: fixed #584
+
+141001
+------
+* Threads: workaround for some REPORT issues
+* Objects: fixed #599 (disable IDE keyboard shortcuts in presentation mode)
+* Blocks: correctly display symbol for %obj type input slots in the prototype template
+* Portuguese translation update, thanks, Manuel!
+
+141002
+------
+* GUI: New feature - minimal stage mode (shift-click on small-stage button)
+
+141006
+------
+* GUI, Objects: fixed #604. Thanks, @Gubolin!
+
+141008
+------
+* Objects: fixed #608, #610
+
+141106
+------
+* Morphic: Enable mouseMove events with right button pressed
+
+141114
+------
+* Threads, Store: Fix reporting out of nested custom C-shaped blocks
+
+141117
+------
+* Threads, Blocks: Treat REPORT blocks inside custom command definitions as STOP THIS BLOCK / IGNORE INPUTS
+
+141120
+------
+* Lists: Fixed #642 avoid “freezing” when calling CONS on non-list/null
+* Threads: Fixed #364 avoid “freezing” when calling LAUNCH on empty ring
+* Threads: Added optional “onComplete” callback to Process, thanks, @bromagosa!
+* GUI: Set Default Save location to Cloud on load, thanks, @cycomachead!
+* GUI: Updated the “About” Dialog with a mention of support from CDG (SAP Labs)
+* BYOB: Percent sign fix for block labels, thanks, @natashasandy!
+* Threads: fix ‘line’ option in ‘split’ block for Windows files, thanks, @brianharvey!
+* Morphic: fix slider range 1, thanks, @tonychenr !
+* translation update, thanks, Manuel!
+
+141121
+------
+* Threads, Blocks: Fix STOP THIS BLOCK’s lexical awareness
+
+1411213
+-------
+* Threads: Fix “stop this block” primitive for tail-call-elimination
+
+1411224
+-------
+* Threads: Fixed #318
+* Objects: Fixed #416
+* Objects: Fixed #372
+* Threads: Fixed #644
+* Store: Fixed #34
+* Threads: Fixed #131
+* snap.html, favicon.ico: new Favicon, thanks, Michael!
+* Threads: improved whitespace detection for “split” primitive, thanks, Michael!
+* Threads: tail-call-elimination for reporters experiment (commented out, under construction)
+
+1411225
+-------
+* Threads: Evaluator optimizations (reducing the stack size for reporters)
+* Threads: Full TCO (tail-call-elimination), now Snap! *is* Scheme :-)
+
+1411225
+-------
+* Threads: Fixed #656
+
+141201
+------
+* Objects: Hide hidden elements in the project thumbnail
+* GUI: Point project dialog to cloud if already signed in, thanks, Michael!
+* favicon: Transparent background, thanks, Michael!
+
+141202
+------
+* New Kannada translation. Yay!! Thanks, Vinayakumar R!!
+
+141203
+------
+* Morphic: Cache actual bounding box of the Pen arrow shape
+* Threads, Objects: Improve edge-collision detection of default sprite “arrow” shape
+
+141204
+------
+* Threads, Objects: Experimental “ForEach” primitive (hidden in dev mode)
+* GUI: Another attempt at pointing the project dialog to the cloud if signed in
+
+141205
+------
+* Morphic: Avoid auto-scaling artefacts in Safari on retina displays (resulting in “traces” when dragging items)
+
+141206
+------
+* Store: Fixed #668
+
+141211
+------
+* Threads: yield after each cycle in the experimental “forEach” primitive

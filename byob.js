@@ -106,7 +106,7 @@ SymbolMorph, isNil*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2014-Jun-06';
+modules.byob = '2014-November-20';
 
 // Declarations
 
@@ -227,7 +227,7 @@ CustomBlockDefinition.prototype.blockSpec = function () {
         parts = this.parseSpec(this.spec),
         spec;
     parts.forEach(function (part) {
-        if (part[0] === '%') {
+        if (part[0] === '%' && part.length > 1) {
             spec = myself.typeOf(part.slice(1));
         } else {
             spec = part;
@@ -311,7 +311,7 @@ CustomBlockDefinition.prototype.inputNames = function () {
     var vNames = [],
         parts = this.parseSpec(this.spec);
     parts.forEach(function (part) {
-        if (part[0] === '%') {
+        if (part[0] === '%' && part.length > 1) {
             vNames.push(part.slice(1));
         }
     });
@@ -688,7 +688,8 @@ CustomCommandBlockMorph.prototype.labelPart = function (spec) {
         return CustomCommandBlockMorph.uber.labelPart.call(this, spec);
     }
     if ((spec[0] === '%') && (spec.length > 1)) {
-        part = new BlockInputFragmentMorph(spec.slice(1));
+        // part = new BlockInputFragmentMorph(spec.slice(1));
+        part = new BlockInputFragmentMorph(spec.replace(/%/g, ''));
     } else {
         part = new BlockLabelFragmentMorph(spec);
         part.fontSize = this.fontSize;
