@@ -1,4 +1,4 @@
-# [Snap<i>!</i> Build Your Own Blocks][snapsite]
+# Snap<i>!</i> Build Your Own Blocks
 _[http://snap.berkeley.edu][snapsite]_
 
 a visual, blocks based programming language inspired by [Scratch][scratchsite]
@@ -11,13 +11,15 @@ jens@moenig.org, bh@cs.berkeley.edu
 ## Getting Started With Snap<i>!</i>
 To start using Snap<i>!</i> we recommend you just jump in! There is also a very handy [manual][manual] available.
 
-To get started with development, you should take a look at the [contributing][contrb] file, though it is currently a bit out of date.  Each file in the Snap<i>!</i> source is well documented with comments and a beginning introduction. You may also find [this discussion][overview] helpful. If you are interested in fixing a particular issue, feel free to comment on that thread. 
+To get started with development, you should take a look at the [contributing][contrib] file, though it is currently a bit out of date.  Each file in the Snap<i>!</i> source is well documented with comments and a beginning introduction. You may also find [this discussion][overview] helpful. If you are interested in fixing a particular issue, feel free to comment on that thread.
+
+Snap<i>!</i> is currently available in **26** different languages! If you'd like to help translate Snap<i>!</i> to a new language, or improve an existing translation, please take a look at the [translations guide][translation].
 
 ## Getting In Touch
-There are a few main places the Snap<i>!</i> team hangs around. 
+There are a few main places the Snap<i>!</i> team hangs around.
 
 * The [Github Issues Tracker][gh-issues] is used for bugs, and support questions. If you have encountered a bug, please search here to see if others have had similar experiences.
-* There is a user-centered [discussion thread][user-thread] on the Scratch forums. 
+* There is a user-centered [discussion thread][user-thread] on the Scratch forums.
 * There is also a [development thread][dev-thread] on the forums.
 
 ## License
@@ -46,3 +48,4 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 [manual]: help/SnapManual.pdf
 [contrib]: CONTRIBUTING.md
 [overview]: https://github.com/jmoenig/Snap--Build-Your-Own-Blocks/issues/613
+[translation]: help/translating%20Snap.txt
