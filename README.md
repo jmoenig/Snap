@@ -48,4 +48,4 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 [manual]: help/SnapManual.pdf
 [contrib]: CONTRIBUTING.md
 [overview]: https://github.com/jmoenig/Snap--Build-Your-Own-Blocks/issues/613
-[translation]: help/translating%20Snap.txt
+[translation]: docs/translating.md

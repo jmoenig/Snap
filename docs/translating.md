@@ -1,13 +1,14 @@
 *****************************
-Translating BYOB4 / Snap!
+Translating Snap<i>!</i>
+
 by Jens Moenig
-last changed: 12/10/16
+
 *****************************
 
-At this stage of development, Snap! can be translated to any LTR language
+At this stage of development, Snap<i>!</i> can be translated to any LTR language
 maintaining the current order of inputs (formal parameters in blocks).
 
-Translating Snap! is easy:
+Translating Snap<i>!</i> is easy:
 
 
 1. Download
@@ -15,9 +16,9 @@ Translating Snap! is easy:
 Download the sources and extract them into a local folder on your
 computer:
 
-    <http://snap.berkeley.edu/snapsource/snap.zip>
+https://github.com/jmoenig/Snap--Build-Your-Own-Blocks/archive/master.zip
 
-Use the German translation file (named 'lang-de.js') as template for your
+Use the German translation [file](../lang-de.js) (named `lang-de.js`) as template for your
 own translations. Start with editing the original file, because that way
 you will be able to immediately check the results in your browsers while
 you're working on your translation (keep the local copy of snap.html open
@@ -122,10 +123,10 @@ filename with the two-letter ISO 639-1 code for your language, e.g.
     es - Spanish => lang-es.js
     el - Greek => => lang-el.js
 
-and send it to me for inclusion in the official Snap! distribution.
+and send it to me for inclusion in the official Snap<i>!</i> distribution.
 Once your translation has been included, Your name will the shown in the
-"Translators" tab in the "About Snap!" dialog box, and you will be able to
-directly launch a translated version of Snap! in your browser by appending
+"Translators" tab in the "About Snap<i>!</i>" dialog box, and you will be able to
+directly launch a translated version of Snap<i>!</i> in your browser by appending
 
     lang:xx
 
