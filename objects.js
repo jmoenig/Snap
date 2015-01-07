@@ -4796,19 +4796,23 @@ StageMorph.prototype.fireKeyEvent = function (key) {
         return;
     }
     if (evt === 'ctrl c') { 
-        var toCopy = ide.spriteEditor.contents.lastDroppedBlock; 
-        var copy = function (input) {
-            var dup = input.fullCopy(),
-                ide = input.parentThatIsA(IDE_Morph);
-            dup.pickUp(world);
-            if (ide) {
-                    world.hand.grabOrigin = {
-                    origin: ide.palette,
-                    position: ide.palette.center()
-                };
+        if (!ide.isAppMode) {
+            var toCopy = ide.spriteEditor.contents.lastDroppedBlock; 
+            var copy = function (input) {
+                var dup = input.fullCopy(),
+                    ide = input.parentThatIsA(IDE_Morph);
+                dup.pickUp(world);
+                if (ide) {
+                        world.hand.grabOrigin = {
+                        origin: ide.palette,
+                        position: ide.palette.center()
+                    };
+                }
             }
+            return copy(toCopy);
+        } else {
+            return;
         }
-        return copy(toCopy);
     }
 
     if (evt === 'ctrl l') {
@@ -4843,7 +4847,8 @@ StageMorph.prototype.fireKeyEvent = function (key) {
             });
         libMenu.popup(world, pos);
         }
-        return libraries();
+        if (!ide.isAppMode) {return libraries(); }
+        return;
     }
     if (evt === 'ctrl i') {
         var import_tools = function () {
@@ -4854,7 +4859,8 @@ StageMorph.prototype.fireKeyEvent = function (key) {
                 'tools'
             );
         };
-        return import_tools();
+        if (!ide.isAppMode) {return import_tools(); }
+        return;
     }
 
     if (evt === 'ctrl b') {
@@ -4880,7 +4886,8 @@ StageMorph.prototype.fireKeyEvent = function (key) {
                 myself.world()
             );
         }
-        return new_block();
+        if (!ide.isAppMode) {return new_block(); }
+        return;
     }
 
     this.children.concat(this).forEach(function (morph) {
