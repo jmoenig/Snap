@@ -4735,59 +4735,68 @@ StageMorph.prototype.fireKeyEvent = function (key) {
         return this.fireGreenFlagEvent();
     }
     if (evt === 'ctrl f') {
-        return this.parentThatIsA(IDE_Morph).currentSprite.searchBlocks();
+        if (!ide.isAppMode) {ide.currentSprite.searchBlocks(); }
+        return;
     }
     if (evt === 'ctrl n') {
-        return this.parentThatIsA(IDE_Morph).createNewProject();
+        if (!ide.isAppMode) {ide.createNewProject(); }
+        return;
     }
     if (evt === 'ctrl o') {
-        return this.parentThatIsA(IDE_Morph).openProjectsBrowser();
+        if (!ide.isAppMode) {ide.openProjectsBrowser(); }
+        return;
     }
     if (evt === 'ctrl s') {
-        return this.parentThatIsA(IDE_Morph).save();
+        if (!ide.isAppMode) {ide.save(); }
+        return;
     }
     if (evt === 'ctrl shift s') {
-        return this.parentThatIsA(IDE_Morph).saveProjectsBrowser();
+        if (!ide.isAppMode) {return ide.saveProjectsBrowser(); }
+        return;
     }
     if (evt === 'ctrl esc') {
         return this.fireStopAllEvent();
     }
     if (evt === 'ctrl q') { 
-        return myself.parentThatIsA(IDE_Morph).spriteEditor.contents
-        .addComment();
+        if (!ide.isAppMode) {return ide.spriteEditor.contents.addComment(); }
+        return;
         
     }
     if (evt === 'ctrl y') { 
-        return myself.parentThatIsA(IDE_Morph).spriteEditor.contents
-            .cleanUp();
+        if (!ide.isAppMode) {return ide.spriteEditor.contents.cleanUp(); }
+        return;
     }
     if (evt === 'ctrl u') { 
-        return myself.parentThatIsA(IDE_Morph).spriteEditor.contents
-            .undrop();
+        if (!ide.isAppMode) {return ide.spriteEditor.contents.undrop(); }
+        return;
     }
     if (evt === 'ctrl d') {
-        myself.parentThatIsA(IDE_Morph).spriteEditor.contents
-            .lastDroppedBlock.destroy();
-        myself.parentThatIsA(IDE_Morph).spriteEditor.contents
-            .lastDroppedBlock = null;
+        if (!ide.isAppMode) {
+            ide.spriteEditor.contents.lastDroppedBlock.destroy();
+            ide.spriteEditor.contents.lastDroppedBlock = null;
+        }
+        return;
     }
     if (evt === 'ctrl r') {
-        myself.parentThatIsA(IDE_Morph).spriteEditor.contents
-            .lastDroppedBlock.ringify();
+        if (!ide.isAppMode) {
+            ide.spriteEditor.contents.lastDroppedBlock.ringify(); 
+        }
+        return;
     }
     if (evt === 'ctrl e') {
         var block = myself.parentThatIsA(IDE_Morph).spriteEditor.contents
             .lastDroppedBlock;
-        if (block.parentThatIsA(RingMorph)) {
+        if (block.parentThatIsA(RingMorph) && (!ide.isAppMode)) {
             block.unringify();
         }
+        return;
     }
     if (evt === 'esc') {
-        myself.parentThatIsA(IDE_Morph).controlBar.appModeButton.trigger();
+        if (ide.isAppMode) {ide.controlBar.appModeButton.trigger(); }
+        return;
     }
     if (evt === 'ctrl c') { 
-        var toCopy = myself.parentThatIsA(IDE_Morph).spriteEditor.contents
-            .lastDroppedBlock; 
+        var toCopy = ide.spriteEditor.contents.lastDroppedBlock; 
         var copy = function (input) {
             var dup = input.fullCopy(),
                 ide = input.parentThatIsA(IDE_Morph);
@@ -4799,13 +4808,13 @@ StageMorph.prototype.fireKeyEvent = function (key) {
                 };
             }
         }
-        copy(toCopy);
+        return copy(toCopy);
     }
 
     if (evt === 'ctrl l') {
         var libraries = function () {
             // read a list of libraries from an external file,
-            var world = myself.parentThatIsA(IDE_Morph).world();
+            var world = ide.world();
             var pos = myself.parentThatIsA(IDE_Morph).controlBar
                 .projectButton.bottomLeft();
             var libMenu = new MenuMorph(this, 'Import library'),
