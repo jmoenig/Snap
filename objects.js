@@ -4735,28 +4735,145 @@ StageMorph.prototype.fireKeyEvent = function (key) {
         return this.fireGreenFlagEvent();
     }
     if (evt === 'ctrl f') {
-        if (!ide.isAppMode) {ide.currentSprite.searchBlocks(); }
-        return;
+        return this.parentThatIsA(IDE_Morph).currentSprite.searchBlocks();
     }
     if (evt === 'ctrl n') {
-        if (!ide.isAppMode) {ide.createNewProject(); }
-        return;
+        return this.parentThatIsA(IDE_Morph).createNewProject();
     }
     if (evt === 'ctrl o') {
-        if (!ide.isAppMode) {ide.openProjectsBrowser(); }
-        return;
+        return this.parentThatIsA(IDE_Morph).openProjectsBrowser();
     }
     if (evt === 'ctrl s') {
-        if (!ide.isAppMode) {ide.save(); }
-        return;
+        return this.parentThatIsA(IDE_Morph).save();
     }
     if (evt === 'ctrl shift s') {
-        if (!ide.isAppMode) {return ide.saveProjectsBrowser(); }
-        return;
+        return this.parentThatIsA(IDE_Morph).saveProjectsBrowser();
     }
-    if (evt === 'esc') {
+    if (evt === 'ctrl esc') {
         return this.fireStopAllEvent();
     }
+    if (evt === 'ctrl q') { 
+        return myself.parentThatIsA(IDE_Morph).spriteEditor.contents
+        .addComment();
+        
+    }
+    if (evt === 'ctrl y') { 
+        return myself.parentThatIsA(IDE_Morph).spriteEditor.contents
+            .cleanUp();
+    }
+    if (evt === 'ctrl u') { 
+        return myself.parentThatIsA(IDE_Morph).spriteEditor.contents
+            .undrop();
+    }
+    if (evt === 'ctrl d') {
+        myself.parentThatIsA(IDE_Morph).spriteEditor.contents
+            .lastDroppedBlock.destroy();
+        myself.parentThatIsA(IDE_Morph).spriteEditor.contents
+            .lastDroppedBlock = null;
+    }
+    if (evt === 'ctrl r') {
+        myself.parentThatIsA(IDE_Morph).spriteEditor.contents
+            .lastDroppedBlock.ringify();
+    }
+    if (evt === 'ctrl e') {
+        var block = myself.parentThatIsA(IDE_Morph).spriteEditor.contents
+            .lastDroppedBlock;
+        if (block.parentThatIsA(RingMorph)) {
+            block.unringify();
+        }
+    }
+    if (evt === 'esc') {
+        myself.parentThatIsA(IDE_Morph).controlBar.appModeButton.trigger();
+    }
+    if (evt === 'ctrl c') { 
+        var toCopy = myself.parentThatIsA(IDE_Morph).spriteEditor.contents
+            .lastDroppedBlock; 
+        var copy = function (input) {
+            var dup = input.fullCopy(),
+                ide = input.parentThatIsA(IDE_Morph);
+            dup.pickUp(world);
+            if (ide) {
+                    world.hand.grabOrigin = {
+                    origin: ide.palette,
+                    position: ide.palette.center()
+                };
+            }
+        }
+        copy(toCopy);
+    }
+
+    if (evt === 'ctrl l') {
+        var libraries = function () {
+            // read a list of libraries from an external file,
+            var world = myself.parentThatIsA(IDE_Morph).world();
+            var pos = myself.parentThatIsA(IDE_Morph).controlBar
+                .projectButton.bottomLeft();
+            var libMenu = new MenuMorph(this, 'Import library'),
+                libUrl = 'http://snap.berkeley.edu/snapsource/libraries/' +
+                    'LIBRARIES';
+
+            function loadLib(name) {
+                var url = 'http://snap.berkeley.edu/snapsource/libraries/'
+                        + name
+                        + '.xml';
+                myself.parentThatIsA(IDE_Morph).droppedText(myself.getURL(url), name);
+            }
+
+            myself.parentThatIsA(IDE_Morph).getURL(libUrl).split('\n')
+                .forEach(function (line) {
+                if (line.length > 0) {
+                    libMenu.addItem(
+                        line.substring(line.indexOf('\t') + 1),
+                        function () {
+                            loadLib(
+                                line.substring(0, line.indexOf('\t'))
+                            );
+                        }
+                    );
+                }
+            });
+        libMenu.popup(world, pos);
+        }
+        return libraries();
+    }
+    if (evt === 'ctrl i') {
+        var import_tools = function () {
+            myself.parentThatIsA(IDE_Morph).droppedText(
+                myself.parentThatIsA(IDE_Morph).getURLsbeOrRelative(
+                    'tools.xml'
+                ),
+                'tools'
+            );
+        };
+        return import_tools();
+    }
+
+    if (evt === 'ctrl b') {
+        var new_block = function () {
+            new BlockDialogMorph(
+                null,
+                function (definition) {
+                    if (definition.spec !== '') {
+                        if (definition.isGlobal) {
+                            myself.globalBlocks.push(definition);
+                        } else {
+                            myself.customBlocks.push(definition);
+                        }
+                        myself.parentThatIsA(IDE_Morph).flushPaletteCache();
+                        myself.parentThatIsA(IDE_Morph).refreshPalette();
+                        new BlockEditorMorph(definition, myself).popUp();
+                    }
+                },
+                myself
+            ).prompt(
+                'Make a block',
+                null,
+                myself.world()
+            );
+        }
+        return new_block();
+    }
+
     this.children.concat(this).forEach(function (morph) {
         if (morph instanceof SpriteMorph || morph instanceof StageMorph) {
             hats = hats.concat(morph.allHatBlocksForKey(evt));
