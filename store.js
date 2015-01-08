@@ -61,7 +61,7 @@ SyntaxElementMorph, Variable*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2014-December-06';
+modules.store = '2014-December-17';
 
 
 // XML_Serializer ///////////////////////////////////////////////////////
@@ -267,7 +267,8 @@ SnapSerializer.prototype.watcherLabels = {
     getTimer: 'timer',
     getCostumeIdx: 'costume #',
     reportMouseX: 'mouse x',
-    reportMouseY: 'mouse y'
+    reportMouseY: 'mouse y',
+    reportThreadCount: 'processes'
 };
 
 // SnapSerializer instance creation:

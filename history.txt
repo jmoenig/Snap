@@ -2394,3 +2394,13 @@ ______
 141211
 ------
 * Threads: yield after each cycle in the experimental “forEach” primitive
+
+141215
+------
+* New Swedish translation! Yay!! Thanks, Erik A Olsson!
+
+141217
+------
+* Objects, Store: Experimental “processes” count watcher (hidden in dev mode)
+* Threads: Remove terminated processes from expired clones
+* Threads: Let “zombifying” scripts access receivers’ local vars

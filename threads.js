@@ -83,7 +83,7 @@ ArgLabelMorph, localize, XML_Element, hex_sha512*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.threads = '2014-December-11';
+modules.threads = '2014-December-17';
 
 var ThreadManager;
 var Process;
@@ -234,7 +234,7 @@ ThreadManager.prototype.removeTerminatedProcesses = function () {
     // and un-highlight their scripts
     var remaining = [];
     this.processes.forEach(function (proc) {
-        if (!proc.isRunning() && !proc.errorFlag && !proc.isDead) {
+        if ((!proc.isRunning() && !proc.errorFlag) || proc.isDead) {
             if (proc.topBlock instanceof BlockMorph) {
                 proc.topBlock.removeHighlight();
             }
@@ -2589,6 +2589,7 @@ Process.prototype.reportContextFor = function (context, otherObj) {
     if (result.outerContext) {
         result.outerContext = copy(result.outerContext);
         result.outerContext.receiver = otherObj;
+        result.outerContext.variables.parentFrame = otherObj.variables;
     }
     return result;
 };
