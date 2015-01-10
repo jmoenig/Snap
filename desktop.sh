@@ -29,9 +29,6 @@ else
     cd $builddir/
 fi
 
-# remove mobile config
-rm config.xml
-
 nwbuild -p "$1" .
 
 mv build/* $scriptdir/

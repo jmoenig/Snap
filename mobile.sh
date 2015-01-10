@@ -38,9 +38,6 @@ else
     cd www
 fi
 
-# remove configs for desktop, it is not needed
-rm package.json
-
 # add mobile-specific library; it's made available at runtime
 sed -i '/link rel="shortcut icon"/a\
         <script type="text/javascript" src="cordova.js"></script>' snap.html
