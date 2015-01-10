@@ -79,10 +79,6 @@ fi
 # compress all js files
 find . -name '*.js' | xargs -I {} uglifyjs {} -o {} -c
 
-# delete everything that is not html/js/logo/config
-find . \( \! -name '*.js' \! -name 'snap.html' \! -name 'snap_logo_sm.png' \! -name 'config.xml' \! -name 'package.json' -type f \) -print0 | xargs -0 rm
-find . -type d -empty -print0 | xargs -0 rm -r
-
 # return to the directory where the script was called from
 cd "$scriptdir"
 
