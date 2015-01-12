@@ -2412,3 +2412,4 @@ ______
 * Threads: Don’t highlight scripts running inside clones (boosts performance), Thanks, @aranlunzer, for the hint!
 * Objects: Disable clones from being edited via their context menus or double-click
 * Italian translation update, thanks, Alberto Firpo!
+* GUI: add additional yields to nextSteps() (work around a bug in Chrome)
