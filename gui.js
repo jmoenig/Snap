@@ -9,7 +9,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2014 by Jens Mönig
+    Copyright (C) 2015 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -69,7 +69,7 @@ SpeechBubbleMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2014-December-04';
+modules.gui = '2015-January-12';
 
 // Declarations
 
@@ -300,7 +300,6 @@ IDE_Morph.prototype.openIn = function (world) {
         this.inform('Snap!', motd);
     }
     */
-
     function interpretUrlAnchors() {
         var dict;
         if (location.hash.substr(0, 6) === '#open:') {
@@ -2509,7 +2508,7 @@ IDE_Morph.prototype.aboutSnap = function () {
         world = this.world();
 
     aboutTxt = 'Snap! 4.0\nBuild Your Own Blocks\n\n--- beta ---\n\n'
-        + 'Copyright \u24B8 2014 Jens M\u00F6nig and '
+        + 'Copyright \u24B8 2015 Jens M\u00F6nig and '
         + 'Brian Harvey\n'
         + 'jens@moenig.org, bh@cs.berkeley.edu\n\n'
 
@@ -2943,12 +2942,18 @@ IDE_Morph.prototype.rawOpenProjectString = function (str) {
     StageMorph.prototype.enableCodeMapping = false;
     if (Process.prototype.isCatchingErrors) {
         try {
-            this.serializer.openProject(this.serializer.load(str), this);
+            this.serializer.openProject(
+                this.serializer.load(str, this),
+                this
+            );
         } catch (err) {
             this.showMessage('Load failed: ' + err);
         }
     } else {
-        this.serializer.openProject(this.serializer.load(str), this);
+        this.serializer.openProject(
+            this.serializer.load(str, this),
+            this
+        );
     }
     this.stopFastTracking();
 };
@@ -2980,7 +2985,10 @@ IDE_Morph.prototype.rawOpenCloudDataString = function (str) {
             model = this.serializer.parse(str);
             this.serializer.loadMediaModel(model.childNamed('media'));
             this.serializer.openProject(
-                this.serializer.loadProjectModel(model.childNamed('project')),
+                this.serializer.loadProjectModel(
+                    model.childNamed('project'),
+                    this
+                ),
                 this
             );
         } catch (err) {
@@ -2990,7 +2998,10 @@ IDE_Morph.prototype.rawOpenCloudDataString = function (str) {
         model = this.serializer.parse(str);
         this.serializer.loadMediaModel(model.childNamed('media'));
         this.serializer.openProject(
-            this.serializer.loadProjectModel(model.childNamed('project')),
+            this.serializer.loadProjectModel(
+                model.childNamed('project'),
+                this
+            ),
             this
         );
     }
@@ -3974,6 +3985,9 @@ IDE_Morph.prototype.cloudResponse = function () {
 IDE_Morph.prototype.cloudError = function () {
     var myself = this;
 
+    // try finding an eplanation what's going on
+    // has some issues, commented out for now
+    /*
     function getURL(url) {
         try {
             var request = new XMLHttpRequest();
@@ -3987,13 +4001,15 @@ IDE_Morph.prototype.cloudError = function () {
             return null;
         }
     }
+    */
 
     return function (responseText, url) {
         // first, try to find out an explanation for the error
         // and notify the user about it,
         // if none is found, show an error dialog box
         var response = responseText,
-            explanation = getURL('http://snap.berkeley.edu/cloudmsg.txt');
+            // explanation = getURL('http://snap.berkeley.edu/cloudmsg.txt'),
+            explanation = null;
         if (myself.shield) {
             myself.shield.destroy();
             myself.shield = null;
@@ -4044,14 +4060,7 @@ IDE_Morph.prototype.setCloudURL = function () {
         null,
         {
             'Snap!Cloud' :
-                'https://snapcloud.miosoft.com/miocon/app/' +
-                    'login?_app=SnapCloud',
-            'local network lab' :
-                '192.168.2.107:8087/miocon/app/login?_app=SnapCloud',
-            'local network office' :
-                '192.168.186.146:8087/miocon/app/login?_app=SnapCloud',
-            'localhost dev' :
-                'localhost/miocon/app/login?_app=SnapCloud'
+                'https://snap.apps.miosoft.com/SnapCloud'
         }
     );
 };
