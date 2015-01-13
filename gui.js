@@ -69,7 +69,7 @@ SpeechBubbleMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2015-January-12';
+modules.gui = '2015-January-13';
 
 // Declarations
 
@@ -3343,6 +3343,15 @@ IDE_Morph.prototype.toggleAppMode = function (appMode) {
         }).forEach(function (s) {
             s.adjustScrollBars();
         });
+        // prevent rotation and draggability controls from
+        // showing for the stage
+        if (this.currentSprite === this.stage) {
+            this.spriteBar.children.forEach(function (child) {
+                if (child instanceof PushButtonMorph) {
+                    child.hide();
+                }
+            });
+        }
     }
     this.setExtent(this.world().extent()); // resume trackChanges
 };
