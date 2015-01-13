@@ -9,7 +9,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2014 by Jens Mönig
+    Copyright (C) 2015 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -106,7 +106,7 @@ SymbolMorph, isNil*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2014-November-20';
+modules.byob = '2015-January-13';
 
 // Declarations
 
@@ -209,12 +209,14 @@ CustomBlockDefinition.prototype.copyAndBindTo = function (sprite) {
 
     c.receiver = sprite; // only for (kludgy) serialization
     c.declarations = copy(this.declarations); // might have to go deeper
-    c.body = Process.prototype.reify.call(
-        null,
-        this.body.expression,
-        new List(this.inputNames())
-    );
-    c.body.outerContext = null;
+    if (c.body) {
+        c.body = Process.prototype.reify.call(
+            null,
+            this.body.expression,
+            new List(this.inputNames())
+        );
+        c.body.outerContext = null;
+    }
 
     return c;
 };
