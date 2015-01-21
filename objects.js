@@ -3155,14 +3155,11 @@ SpriteMorph.prototype.positionTalkBubble = function () {
     bubble.changed();
 };
 
-// dragging and dropping adjustments b/c of talk bubbles
+// dragging and dropping adjustments b/c of talk bubbles and parts
 
 SpriteMorph.prototype.prepareToBeGrabbed = function (hand) {
-    var bubble = this.talkBubble();
-    this.recordLayers();
-    if (!bubble) {return null; }
     this.removeShadow();
-    bubble.hide();
+    this.recordLayers();
     if (!this.bounds.containsPoint(hand.position())) {
         this.setCenter(hand.position());
     }
@@ -4055,6 +4052,10 @@ SpriteMorph.prototype.recordLayers = function () {
         return;
     }
     this.layers = this.allParts();
+    this.layers.forEach(function (part) {
+        var bubble = part.talkBubble();
+        if (bubble) {bubble.hide(); }
+    });
     this.layers.sort(function (x, y) {
         return stage.children.indexOf(x) < stage.children.indexOf(y) ?
                 -1 : 1;
@@ -4065,6 +4066,7 @@ SpriteMorph.prototype.restoreLayers = function () {
     if (this.layers && this.layers.length > 1) {
         this.layers.forEach(function (sprite) {
             sprite.comeToFront();
+            sprite.positionTalkBubble();
         });
     }
     this.layers = null;
