@@ -2423,3 +2423,4 @@ ______
 ------
 * Objects: Keep layering of nested sprites thru drag & drop
 * GUI, Store, BYOB: Generate ScriptsPaneTexture programmatically
+* GUI: Fix Zoom Dialog’s sample background in “flat” design
