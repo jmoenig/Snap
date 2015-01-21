@@ -61,7 +61,7 @@ SyntaxElementMorph, Variable*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2015-January-12';
+modules.store = '2015-January-21';
 
 
 // XML_Serializer ///////////////////////////////////////////////////////
@@ -861,7 +861,7 @@ SnapSerializer.prototype.loadScripts = function (scripts, model) {
     // private
     var myself = this,
         scale = SyntaxElementMorph.prototype.scale;
-    scripts.texture = 'scriptsPaneTexture.gif';
+    scripts.cachedTexture = IDE_Morph.prototype.scriptsPaneTexture;
     model.children.forEach(function (child) {
         var element;
         if (child.tag === 'script') {

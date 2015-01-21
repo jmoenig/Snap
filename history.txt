@@ -2422,3 +2422,4 @@ ______
 150121
 ------
 * Objects: Keep layering of nested sprites thru drag & drop
+* GUI, Store, BYOB: Generate ScriptsPaneTexture programmatically

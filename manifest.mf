@@ -10,5 +10,4 @@ threads.js
 widgets.js
 store.js
 xml.js
-scriptsPaneTexture.gif
-snap_logo_sm.gif
+snap_logo_sm.png

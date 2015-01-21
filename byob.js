@@ -106,7 +106,7 @@ SymbolMorph, isNil*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2015-January-13';
+modules.byob = '2015-January-21';
 
 // Declarations
 
@@ -1651,7 +1651,7 @@ BlockEditorMorph.prototype.init = function (definition, target) {
     scripts = new ScriptsMorph(target);
     scripts.isDraggable = false;
     scripts.color = IDE_Morph.prototype.groupColor;
-    scripts.texture = IDE_Morph.prototype.scriptsPaneTexture;
+    scripts.cachedTexture = IDE_Morph.prototype.scriptsPaneTexture;
     scripts.cleanUpMargin = 10;
 
     proto = new PrototypeHatBlockMorph(this.definition);

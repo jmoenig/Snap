@@ -69,7 +69,7 @@ SpeechBubbleMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2015-January-13';
+modules.gui = '2015-January-21';
 
 // Declarations
 
@@ -119,7 +119,7 @@ IDE_Morph.prototype.setDefaultDesign = function () {
     ];
     IDE_Morph.prototype.rotationStyleColors = IDE_Morph.prototype.tabColors;
     IDE_Morph.prototype.appModeColor = new Color();
-    IDE_Morph.prototype.scriptsPaneTexture = 'scriptsPaneTexture.gif';
+    IDE_Morph.prototype.scriptsPaneTexture = this.scriptsTexture();
     IDE_Morph.prototype.padding = 5;
 
     SpriteIconMorph.prototype.labelColor
@@ -170,6 +170,22 @@ IDE_Morph.prototype.setFlatDesign = function () {
         = IDE_Morph.prototype.buttonLabelColor;
     TurtleIconMorph.prototype.labelColor
         = IDE_Morph.prototype.buttonLabelColor;
+};
+
+IDE_Morph.prototype.scriptsTexture = function () {
+    var pic = newCanvas(new Point(100, 100)), // bigger scales faster
+        ctx = pic.getContext('2d'),
+        i;
+    for (i = 0; i < 100; i += 4) {
+        ctx.fillStyle = this.frameColor.toString();
+        ctx.fillRect(i, 0, 1, 100);
+        ctx.fillStyle = this.groupColor.lighter(6).toString();
+        ctx.fillRect(i + 1, 0, 1, 100);
+        ctx.fillRect(i + 3, 0, 1, 100);
+        ctx.fillStyle = this.groupColor.toString();
+        ctx.fillRect(i + 2, 0, 1, 100);
+    }
+    return pic;
 };
 
 IDE_Morph.prototype.setDefaultDesign();
@@ -1152,7 +1168,7 @@ IDE_Morph.prototype.createSpriteEditor = function () {
     if (this.currentTab === 'scripts') {
         scripts.isDraggable = false;
         scripts.color = this.groupColor;
-        scripts.texture = this.scriptsPaneTexture;
+        scripts.cachedTexture = this.scriptsPaneTexture;
 
         this.spriteEditor = new ScrollFrameMorph(
             scripts,
@@ -3527,7 +3543,7 @@ IDE_Morph.prototype.userSetBlocksScale = function () {
 
     sample = new FrameMorph();
     sample.acceptsDrops = false;
-    sample.texture = this.scriptsPaneTexture;
+    sample.cachedTexture = this.scriptsPaneTexture;
     sample.setExtent(new Point(250, 180));
     scrpt.setPosition(sample.position().add(10));
     sample.add(scrpt);
