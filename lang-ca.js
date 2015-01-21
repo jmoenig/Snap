@@ -185,7 +185,7 @@ SnapTranslator.dict.ca = {
     'translator_e-mail':
         'bromagosa@citilab.eu', // optional
     'last_changed':
-        '2014-01-16', // this, too, will appear in the Translators tab
+        '2015-01-21', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:

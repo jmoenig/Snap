@@ -185,7 +185,7 @@ SnapTranslator.dict.ko = {
     'translator_e-mail':
         'janggoons@gmail.com', // optional
     'last_changed':
-        '2014-11-07', // this, too, will appear in the Translators tab
+        '2015-01-21', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
