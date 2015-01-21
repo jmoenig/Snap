@@ -1225,17 +1225,17 @@ SnapTranslator.dict.ca = {
     'sqrt':
         'arrel quadrada',
     'sin':
-        'sinus',
+        'sin',
     'cos':
-        'cosinus',
+        'cos',
     'tan':
-        'tangent',
+        'tan',
     'asin':
-        'arcsinus',
+        'asin',
     'acos':
-        'arccosinus',
+        'acos',
     'atan':
-        'arctangent',
+        'atan',
     'ln':
         'ln',
     'e^':
