@@ -2418,3 +2418,7 @@ ______
 ------
 * BYOB: fixed #702
 * GUI: fixed #680
+
+150121
+------
+* Objects: Keep layering of nested sprites thru drag & drop

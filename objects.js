@@ -125,7 +125,7 @@ PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.objects = '2015-January-12';
+modules.objects = '2015-January-21';
 
 var SpriteMorph;
 var StageMorph;
@@ -1315,6 +1315,7 @@ SpriteMorph.prototype.init = function (globals) {
     this.anchor = null;
     this.nestingScale = 1;
     this.rotatesWithAnchor = true;
+    this.layers = null; // cache for dragging nested sprites, don't serialize
 
     this.blocksCache = {}; // not to be serialized (!)
     this.paletteCache = {}; // not to be serialized (!)
@@ -3158,6 +3159,7 @@ SpriteMorph.prototype.positionTalkBubble = function () {
 
 SpriteMorph.prototype.prepareToBeGrabbed = function (hand) {
     var bubble = this.talkBubble();
+    this.recordLayers();
     if (!bubble) {return null; }
     this.removeShadow();
     bubble.hide();
@@ -3168,6 +3170,7 @@ SpriteMorph.prototype.prepareToBeGrabbed = function (hand) {
 };
 
 SpriteMorph.prototype.justDropped = function () {
+    this.restoreLayers();
     this.positionTalkBubble();
 };
 
@@ -4043,6 +4046,28 @@ SpriteMorph.prototype.allAnchors = function () {
         result = result.concat(this.anchor.allAnchors());
     }
     return result;
+};
+
+SpriteMorph.prototype.recordLayers = function () {
+    var stage = this.parentThatIsA(StageMorph);
+    if (!stage) {
+        this.layerCache = null;
+        return;
+    }
+    this.layers = this.allParts();
+    this.layers.sort(function (x, y) {
+        return stage.children.indexOf(x) < stage.children.indexOf(y) ?
+                -1 : 1;
+    });
+};
+
+SpriteMorph.prototype.restoreLayers = function () {
+    if (this.layers && this.layers.length > 1) {
+        this.layers.forEach(function (sprite) {
+            sprite.comeToFront();
+        });
+    }
+    this.layers = null;
 };
 
 // SpriteMorph highlighting
