@@ -15,7 +15,7 @@ then
     echo ""
     echo "PLATFORMS:"
     echo "  Mobile      amazon-fireos android blackberry10 firefoxos ios ubuntu wp8 win8 tizen"
-    echo "  Desktop     win osx linux32 linux64"
+    echo "  Desktop     win32 win64 osx linux32 linux64"
     echo ""
     echo "If FILE/URL is given, it will be #open-ed inside Snap\! immediately. URL will be loaded at runtime."
     exit 0
