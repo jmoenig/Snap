@@ -2404,3 +2404,25 @@ ______
 * Objects, Store: Experimental “processes” count watcher (hidden in dev mode)
 * Threads: Remove terminated processes from expired clones
 * Threads: Let “zombifying” scripts access receivers’ local vars
+
+150112
+------
+* Cloud, GUI: Backend load balancing support, eliminate now obsolete authentication roundtrip, Cloud error message tweaks
+* Store: notify users of potential incompatibilities when opening projects created in other forks (e.g. BeetleBlocks)
+* Threads: Don’t highlight scripts running inside clones (boosts performance), Thanks, @aranlunzer, for the hint!
+* Objects: Disable clones from being edited via their context menus or double-click
+* Italian translation update, thanks, Alberto Firpo!
+* GUI: add additional yields to nextSteps() (work around a bug in Chrome)
+
+150113
+------
+* BYOB: fixed #702
+* GUI: fixed #680
+
+150121
+------
+* Objects: Keep layering of nested sprites thru drag & drop
+* GUI, Store, BYOB: Generate ScriptsPaneTexture programmatically
+* GUI: Fix Zoom Dialog’s sample background in “flat” design
+* Updated Korean and Catalan translations, thanks, Yunjae Jang and Bernat Romagosa!
+* Objects: Fix speech bubbles of dragged nested sprites

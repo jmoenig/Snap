@@ -7,7 +7,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2014 by Jens Mönig
+    Copyright (C) 2015 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -61,7 +61,7 @@ SyntaxElementMorph, Variable*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2014-December-17';
+modules.store = '2015-January-21';
 
 
 // XML_Serializer ///////////////////////////////////////////////////////
@@ -306,16 +306,33 @@ XML_Serializer.prototype.mediaXML = function (name) {
     return xml + '</media>';
 };
 
-
 // SnapSerializer loading:
 
-SnapSerializer.prototype.load = function (xmlString) {
+SnapSerializer.prototype.load = function (xmlString, ide) {
     // public - answer a new Project represented by the given XML String
-    return this.loadProjectModel(this.parse(xmlString));
+    return this.loadProjectModel(this.parse(xmlString), ide);
 };
 
-SnapSerializer.prototype.loadProjectModel = function (xmlNode) {
+SnapSerializer.prototype.loadProjectModel = function (xmlNode, ide) {
     // public - answer a new Project represented by the given XML top node
+    // show a warning if the origin apps differ
+
+    var appInfo = xmlNode.attributes.app,
+        app = appInfo ? appInfo.split(' ')[0] : null;
+
+    if (ide && app !== this.app.split(' ')[0]) {
+        ide.inform(
+            app + ' Project',
+            'This project has been created by a different app:\n\n' +
+                app +
+                '\n\nand may be incompatible or fail to load here.'
+        );
+    }
+    return this.rawLoadProjectModel(xmlNode);
+};
+
+SnapSerializer.prototype.rawLoadProjectModel = function (xmlNode) {
+    // private
     var myself = this,
         project = {sprites: {}},
         model,
@@ -844,7 +861,7 @@ SnapSerializer.prototype.loadScripts = function (scripts, model) {
     // private
     var myself = this,
         scale = SyntaxElementMorph.prototype.scale;
-    scripts.texture = 'scriptsPaneTexture.gif';
+    scripts.cachedTexture = IDE_Morph.prototype.scriptsPaneTexture;
     model.children.forEach(function (child) {
         var element;
         if (child.tag === 'script') {

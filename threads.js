@@ -9,7 +9,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2014 by Jens Mönig
+    Copyright (C) 2015 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -83,7 +83,7 @@ ArgLabelMorph, localize, XML_Element, hex_sha512*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.threads = '2014-December-17';
+modules.threads = '2015-January-12';
 
 var ThreadManager;
 var Process;
@@ -159,9 +159,11 @@ ThreadManager.prototype.startProcess = function (
         active.stop();
         this.removeTerminatedProcesses();
     }
-    top.addHighlight();
     newProc = new Process(block.topBlock(), callback);
     newProc.exportResult = exportResult;
+    if (!newProc.homeContext.receiver.isClone) {
+        top.addHighlight();
+    }
     this.processes.push(newProc);
     return newProc;
 };

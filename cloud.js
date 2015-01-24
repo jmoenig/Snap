@@ -6,7 +6,7 @@
 
     written by Jens Mönig
 
-    Copyright (C) 2014 by Jens Mönig
+    Copyright (C) 2015 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -30,14 +30,13 @@
 /*global modules, IDE_Morph, SnapSerializer, hex_sha512, alert, nop,
 localize*/
 
-modules.cloud = '2014-May-26';
+modules.cloud = '2015-January-12';
 
 // Global stuff
 
 var Cloud;
-
 var SnapCloud = new Cloud(
-    'https://snapcloud.miosoft.com/miocon/app/login?_app=SnapCloud'
+    'https://snap.apps.miosoft.com/SnapCloud'
 );
 
 // Cloud /////////////////////////////////////////////////////////////
@@ -47,6 +46,8 @@ function Cloud(url) {
     this.password = null; // hex_sha512 hashed
     this.url = url;
     this.session = null;
+    this.limo = null;
+    this.route = null;
     this.api = {};
 }
 
@@ -54,11 +55,27 @@ Cloud.prototype.clear = function () {
     this.username = null;
     this.password = null;
     this.session = null;
+    this.limo = null;
+    this.route = null;
     this.api = {};
 };
 
 Cloud.prototype.hasProtocol = function () {
     return this.url.toLowerCase().indexOf('http') === 0;
+};
+
+Cloud.prototype.setRoute = function (username) {
+    var routes = 10,
+        userNum = 0,
+        i;
+
+    for (i = 0; i < username.length; i += 1) {
+        userNum += username.charCodeAt(i);
+    }
+    userNum = userNum % routes + 1;
+    this.route = '.sc1m' +
+        (userNum < 10 ? '0' : '') +
+        userNum;
 };
 
 // Cloud: Snap! API
@@ -77,7 +94,7 @@ Cloud.prototype.signup = function (
             "GET",
             (this.hasProtocol() ? '' : 'http://')
                 + this.url + 'SignUp'
-                + '&Username='
+                + '?Username='
                 + encodeURIComponent(username)
                 + '&Email='
                 + encodeURIComponent(email),
@@ -135,7 +152,7 @@ Cloud.prototype.getPublicProject = function (
             "GET",
             (this.hasProtocol() ? '' : 'http://')
                 + this.url + 'Public'
-                + '&'
+                + '?'
                 + id,
             true
         );
@@ -189,7 +206,7 @@ Cloud.prototype.resetPassword = function (
             "GET",
             (this.hasProtocol() ? '' : 'http://')
                 + this.url + 'ResetPW'
-                + '&Username='
+                + '?Username='
                 + encodeURIComponent(username),
             true
         );
@@ -229,23 +246,32 @@ Cloud.prototype.resetPassword = function (
     }
 };
 
-Cloud.prototype.connect = function (
+Cloud.prototype.login = function (
+    username,
+    password,
     callBack,
     errorCall
 ) {
     // both callBack and errorCall are two-argument functions
     var request = new XMLHttpRequest(),
+        usr = JSON.stringify({'__h': password, '__u': username}),
         myself = this;
+    this.setRoute(username);
     try {
         request.open(
-            "GET",
-            (this.hasProtocol() ? '' : 'http://') + this.url,
+            "POST",
+            (this.hasProtocol() ? '' : 'http://') +
+                this.url +
+                '?SESSIONGLUE=' +
+                this.route,
             true
         );
         request.setRequestHeader(
             "Content-Type",
-            "application/x-www-form-urlencoded"
+            "application/json; charset=utf-8"
         );
+        // glue this session to a route:
+        request.setRequestHeader('SESSIONGLUE', this.route);
         request.withCredentials = true;
         request.onreadystatechange = function () {
             if (request.readyState === 4) {
@@ -253,11 +279,20 @@ Cloud.prototype.connect = function (
                     myself.api = myself.parseAPI(request.responseText);
                     myself.session = request.getResponseHeader('MioCracker')
                         .split(';')[0];
-                    if (myself.api.login) {
+                    // set the cookie identifier:
+                    myself.limo = this.getResponseHeader("miocracker")
+                        .substring(
+                            9,
+                            this.getResponseHeader("miocracker").indexOf("=")
+                        );
+                    if (myself.api.logout) {
+                        myself.username = username;
+                        myself.password = password;
                         callBack.call(null, myself.api, 'Snap!Cloud');
                     } else {
                         errorCall.call(
                             null,
+                            request.responseText,
                             'connection failed'
                         );
                     }
@@ -270,60 +305,10 @@ Cloud.prototype.connect = function (
                 }
             }
         };
-        request.send(null);
+        request.send(usr);
     } catch (err) {
         errorCall.call(this, err.toString(), 'Snap!Cloud');
     }
-};
-
-
-Cloud.prototype.login = function (
-    username,
-    password,
-    callBack,
-    errorCall
-) {
-    var myself = this;
-    this.connect(
-        function () {
-            myself.rawLogin(username, password, callBack, errorCall);
-            myself.disconnect();
-        },
-        errorCall
-    );
-};
-
-Cloud.prototype.rawLogin = function (
-    username,
-    password,
-    callBack,
-    errorCall
-) {
-    // both callBack and errorCall are two-argument functions
-    var myself = this,
-        pwHash = hex_sha512("miosoft%20miocon,"
-            + this.session.split('=')[1] + ","
-            + encodeURIComponent(username.toLowerCase()) + ","
-            + password // alreadey hex_sha512 hashed
-            );
-    this.callService(
-        'login',
-        function (response, url) {
-            if (myself.api.logout) {
-                myself.username = username;
-                myself.password = password;
-                callBack.call(null, response, url);
-            } else {
-                errorCall.call(
-                    null,
-                    'Service catalog is not available,\nplease retry',
-                    'Connection Error:'
-                );
-            }
-        },
-        errorCall,
-        [username, pwHash]
-    );
 };
 
 Cloud.prototype.reconnect = function (
@@ -428,7 +413,7 @@ Cloud.prototype.changePassword = function (
                     myself.disconnect();
                 },
                 errorCall,
-                [oldPW, newPW]
+                [hex_sha512(oldPW), hex_sha512(newPW)]
             );
         },
         errorCall
@@ -457,15 +442,24 @@ Cloud.prototype.disconnect = function () {
 Cloud.prototype.callURL = function (url, callBack, errorCall) {
     // both callBack and errorCall are optional two-argument functions
     var request = new XMLHttpRequest(),
+        stickyUrl,
         myself = this;
     try {
-        request.open('GET', url, true);
+        // set the Limo. Also set the glue as a query paramter for backup.
+        stickyUrl = url +
+            '&SESSIONGLUE=' +
+            this.route +
+            '&_Limo=' +
+            this.limo;
+        request.open('GET', stickyUrl, true);
         request.withCredentials = true;
         request.setRequestHeader(
             "Content-Type",
             "application/x-www-form-urlencoded"
         );
         request.setRequestHeader('MioCracker', this.session);
+        // Set the glue as a request header.
+        request.setRequestHeader('SESSIONGLUE', this.route);
         request.onreadystatechange = function () {
             if (request.readyState === 4) {
                 if (request.responseText) {
@@ -498,6 +492,7 @@ Cloud.prototype.callService = function (
     var request = new XMLHttpRequest(),
         service = this.api[serviceName],
         myself = this,
+        stickyUrl,
         postDict;
 
     if (!this.session) {
@@ -519,13 +514,21 @@ Cloud.prototype.callService = function (
         });
     }
     try {
-        request.open(service.method, service.url, true);
+        stickyUrl = this.url +
+            '/' +
+            service.url +
+            '&SESSIONGLUE=' +
+            this.route +
+            '&_Limo=' +
+            this.limo;
+        request.open(service.method, stickyUrl, true);
         request.withCredentials = true;
         request.setRequestHeader(
             "Content-Type",
             "application/x-www-form-urlencoded"
         );
         request.setRequestHeader('MioCracker', this.session);
+        request.setRequestHeader('SESSIONGLUE', this.route);
         request.onreadystatechange = function () {
             if (request.readyState === 4) {
                 var responseList = [];
