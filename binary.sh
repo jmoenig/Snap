@@ -7,7 +7,7 @@ fi
 
 if [[ $# < 2 ]]
 then
-    echo "Usage: binary.sh OPTION PLATFORM [FILE]"
+    echo "Usage: binary.sh OPTION PLATFORM [FILE/URL]"
     echo ""
     echo "OPTIONS:"
     echo "  -m      Mobile"
@@ -17,7 +17,7 @@ then
     echo "  Mobile      amazon-fireos android blackberry10 firefoxos ios ubuntu wp8 win8 tizen"
     echo "  Desktop     win osx linux32 linux64"
     echo ""
-    echo "If FILE is given, it will be #open-ed inside Snap\! immediately"
+    echo "If FILE/URL is given, it will be #open-ed inside Snap\! immediately. URL will be loaded at runtime."
     exit 0
 fi
 
@@ -28,6 +28,7 @@ scriptdir=$(readlink -e ".")
 # UglifyJS2 (https://github.com/mishoo/UglifyJS2)
 
 ide=true
+url=false
 platform=$2
 
 # presentation mode
@@ -40,9 +41,9 @@ if [ $ide == false ]
 then
    if [ -f "$3" ]
     then
-        content=$(cat $3)
+        content="'$(cat $3)'"
     else
-        ide=true
+        url=true
     fi
 fi
 
@@ -63,16 +64,23 @@ then
     sed -i '/cloud\.js"/d' snap.html
     sed -i 's/gui\.js"/binary\.js"/' snap.html
 
-    # load custom project from file
-    sed -i '/sha512\.js"/a\
-            <script type="text/javascript" src="code.js"></script> ' snap.html
+    # load custom project from file or url
+    if [ $url == false ]
+    then
+        sed -i '/sha512\.js"/a\
+                <script type="text/javascript" src="code.js"></script> ' snap.html
 
-    echo "var code =" > code.js
-    echo "'$content'" >> code.js
-    echo ";" >> code.js
+        echo "var code =" > code.js
+        echo "$content" >> code.js
+        echo ";" >> code.js
 
-    sed -i "/ide\.openIn/a\
-        ide.droppedText(code); " snap.html
+        sed -i "/ide\.openIn/a\
+            ide.droppedText(code); " snap.html
+    else
+        sed -i "/ide\.openIn/a\
+            ide.droppedText(ide.getURL('$3')); " snap.html
+    fi
+
 else
     rm binary.js
 fi
