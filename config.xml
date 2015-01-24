@@ -11,5 +11,6 @@
     <content src="snap.html" />
     <access origin="*" />
     <preference name="Fullscreen" value="true" />
+    <preference name="Orientation" value="landscape" />
     <icon src="www/snap_logo_sm.png" />
 </widget>
