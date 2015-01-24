@@ -57,6 +57,7 @@ if [ $ide == false ]
 then
     # minimize everything
     rm lang* ypr.js paint.js cloud.js gui.js
+    rm -r help/
 
     sed -i '/paint\.js"/d' snap.html
     sed -i '/cloud\.js"/d' snap.html
