@@ -2426,3 +2426,7 @@ ______
 * GUI: Fix Zoom Dialog’s sample background in “flat” design
 * Updated Korean and Catalan translations, thanks, Yunjae Jang and Bernat Romagosa!
 * Objects: Fix speech bubbles of dragged nested sprites
+
+150128
+------
+* Objects: Fixed #710
