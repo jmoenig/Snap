@@ -2198,7 +2198,7 @@ BlockMorph.prototype.userMenu = function () {
     menu.addItem(
         "script pic...",
         function () {
-            window.open(myself.topBlock().fullImage().toDataURL());
+            openURI(myself.topBlock().fullImage().toDataURL());
         },
         'open a new window\nwith a picture of this script'
     );
@@ -5130,7 +5130,7 @@ ScriptsMorph.prototype.cleanUp = function () {
 ScriptsMorph.prototype.exportScriptsPicture = function () {
     var pic = this.scriptsPicture();
     if (pic) {
-        window.open(pic.toDataURL());
+        openURI(pic.toDataURL());
     }
 };
 
@@ -10770,7 +10770,7 @@ CommentMorph.prototype.userMenu = function () {
     menu.addItem(
         "comment pic...",
         function () {
-            window.open(myself.fullImage().toDataURL());
+            openURI(myself.fullImage().toDataURL());
         },
         'open a new window\nwith a picture of this comment'
     );

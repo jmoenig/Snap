@@ -5330,7 +5330,7 @@ StageMorph.prototype.userMenu = function () {
     menu.addItem(
         "pic...",
         function () {
-            window.open(myself.fullImageClassic().toDataURL());
+            openURI(myself.fullImageClassic().toDataURL());
         },
         'open a new window\nwith a picture of the stage'
     );
@@ -7118,7 +7118,7 @@ WatcherMorph.prototype.userMenu = function () {
             menu.addItem(
                 'export...',
                 function () {
-                    window.open(
+                    openURI(
                         'data:text/plain;charset=utf-8,' +
                             encodeURIComponent(this.currentValue.toString())
                     );

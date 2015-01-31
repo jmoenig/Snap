@@ -1276,6 +1276,43 @@ function copy(target) {
     return c;
 }
 
+/* These are a workaround for a limitation of Chrome which only supports
+ * URLs less than 2.09 characters long (~2.09MB). In in such cases Chrome
+ * will display an "Aw, snap" page.
+ *
+ *  hasChromeBug merely checks for Chrome and the length of the resource
+ *  setLocationHash prevents the URL of the current page from being set.
+ *      If set on a URL too long, all the user's work could be lost.
+ *  openURI simply warns when an item won't export as expected.
+ *      The error message is generic because projects, blocks, images, etc.
+ *      could be exported via this method.
+ */
+
+var hasChromeBug = function(resource) {
+    var isChrome  = navigator.userAgent.indexOf('Chrome') !== -1,
+        isTooLong = resource.length > 2.08e6;
+
+    return isChrome && isTooLong;
+}
+
+function setLocationHash(hash) {
+    if (hasChromeBug(hash)) {
+        location.hash = '';
+    } else {
+        location.hash = hash;
+    }
+}
+
+function openURI(resource, title) {
+    if (hasChromeBug(resource)) {
+        throw new Error('Sorry, this item cannot be exported from Chrome.' +
+        '\nPlease try a different browser.');
+    }
+
+    window.open(resource, title);
+}
+
+
 // Colors //////////////////////////////////////////////////////////////
 
 // Color instance creation:
@@ -3447,7 +3484,7 @@ Morph.prototype.developersMenu = function () {
     menu.addItem(
         "pic...",
         function () {
-            window.open(this.fullImageClassic().toDataURL());
+            openURI(this.fullImageClassic().toDataURL());
         },
         'open a new window\nwith a picture of this morph'
     );

@@ -1919,7 +1919,7 @@ DialogBoxMorph.prototype.promptCredentials = function (
         var btn = new PushButtonMorph(
             myself,
             function () {
-                window.open(url);
+                openURI(url);
             },
             '  ' + localize(label) + '  '
         );
