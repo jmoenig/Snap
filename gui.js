@@ -201,7 +201,7 @@ IDE_Morph.prototype.init = function (isAutoFill) {
     MorphicPreferences.globalFontFamily = 'Helvetica, Arial';
 
     // restore saved user preferences
-    this.userLanguage = null; // user language preference for startup
+    this.userLanguage = null;
     this.applySavedSettings();
 
     // additional properties:
@@ -3478,6 +3478,7 @@ IDE_Morph.prototype.setLanguage = function (lang, callback) {
     if (lang === 'en') {
         return this.reflectLanguage('en', callback);
     }
+    myself.userLanguage = lang;
     translation = document.createElement('script');
     translation.id = 'language';
     translation.onload = function () {

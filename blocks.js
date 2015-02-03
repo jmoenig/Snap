@@ -866,6 +866,25 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             );
             part.setContents(['date']);
             break;
+        case '%locations':
+            part = new InputSlotMorph(
+                null, // text
+                false, // non-numeric
+                {
+                    'all' : ['all'],
+                    'country' : ['country'],
+                    'state' : ['state'],
+                    'state district' : ['state district'],
+                    'suburb' : ['suburb'],
+                    'city' : ['city'],
+                    'road' : ['road'],
+                    'house number' : ['house number'],
+                    'licence': ['licence']
+                },
+                true // read-only
+            );
+            part.setContents(['all']);
+            break;
         case '%delim':
             part = new InputSlotMorph(
                 null, // text
