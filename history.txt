@@ -2430,3 +2430,8 @@ ______
 150128
 ------
 * Objects: Fixed #710
+
+150206
+------
+* GUI: Added url switch #cloud: to open a shared project in edit mode
+
