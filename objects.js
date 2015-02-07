@@ -601,6 +601,16 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'control',
             spec: 'broadcast %msg and wait'
         },
+        doMessageTo: {
+            type: 'command',
+            category: 'control',
+            spec: 'message %msg to %col'
+        },
+        doMessageToAndWait: {
+            type: 'command',
+            category: 'control',
+            spec: 'message %msg to %col and wait'
+        },
         getLastMessage: {
             type: 'reporter',
             category: 'control',
@@ -1255,8 +1265,10 @@ SpriteMorph.prototype.blockAlternatives = {
     // control:
     receiveGo: ['receiveClick'],
     receiveClick: ['receiveGo'],
-    doBroadcast: ['doBroadcastAndWait'],
-    doBroadcastAndWait: ['doBroadcast'],
+    doBroadcast: ['doBroadcastAndWait', 'doMessageTo', 'doMessageToAndWait'],
+    doBroadcastAndWait: ['doBroadcast', 'doMessageTo', 'doMessageToAndWait'],
+    doMessageTo: ['doMessageToAndWait', 'doBroadcast', 'doBroadcastAndWait'],
+    doMessageToAndWait: ['doMessageTo', 'doBroadcast', 'doBroadcastAndWait'],
     doIf: ['doIfElse', 'doUntil'],
     doIfElse: ['doIf', 'doUntil'],
     doRepeat: ['doUntil'],
@@ -1834,6 +1846,8 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push('-');
         blocks.push(block('doBroadcast'));
         blocks.push(block('doBroadcastAndWait'));
+        blocks.push(block('doMessageTo'));
+        blocks.push(block('doMessageToAndWait'));
         blocks.push(watcherToggle('getLastMessage'));
         blocks.push(block('getLastMessage'));
         blocks.push('-');
@@ -5025,6 +5039,8 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push('-');
         blocks.push(block('doBroadcast'));
         blocks.push(block('doBroadcastAndWait'));
+        blocks.push(block('doMessageTo'));
+        blocks.push(block('doMessageToAndWait'));
         blocks.push(watcherToggle('getLastMessage'));
         blocks.push(block('getLastMessage'));
         blocks.push('-');
