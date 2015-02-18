@@ -1796,6 +1796,10 @@ Process.prototype.reportURL = function (url) {
     this.pushContext();
 };
 
+Process.prototype.openWebsite = function(url) {
+   window.open(url);
+};
+
 // Process event messages primitives
 
 Process.prototype.doBroadcast = function (message) {

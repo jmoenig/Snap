@@ -299,26 +299,11 @@ IDE_Morph.prototype.openIn = function (world) {
     */
 
     // Check and see what modules need to be loaded, and load them
-    for(var i=0; i < config.modules.length; i += 1) {
-      var myself = this;
-      var xhr = new XMLHttpRequest();
-      xhr.open("GET", config.modules[i], true);
-      xhr.responseType = "arraybuffer";
-      xhr.onload = function () {
-        if(this.status === 200) {
-          var blob = this.response;
-          var mdl = new ModuleLoader(myself);
-          mdl.open(blob, {base64: false});
-        } else {
-          console.log("Failed to import module, error " + this.status);
-        }
-      };
-      xhr.onerror = function() {
-        console.log("Error!");
-      }
-      xhr.send();
-    }
-
+    this.numModules = 1
+    this.modules = [[config.modules.module,">0.0.0"]]
+    this.module_list = new Object();
+    this.loadModules(config.modules.module,">0.0.0");
+  
     // If there is a project specified in the config, open it
     if(config.project !== undefined) {
         SnapCloud.openProject(config.project,
@@ -458,6 +443,108 @@ IDE_Morph.prototype.openIn = function (world) {
     //Precache thumbnails
     ProjectDialogMorph.prototype.getGoalProjectList();
 };
+
+
+
+//Thanks to Mathew Byrne
+//https://gist.github.com/mathewbyrne/1280286
+IDE_Morph.prototype.slugify = function(text) {
+  return text.toString().toLowerCase()
+    .replace(/\s+/g, '-')           // Replace spaces with -
+    .replace(/[^\w\-]+/g, '')       // Remove all non-word chars
+    .replace(/\-\-+/g, '-')         // Replace multiple - with single -
+    .replace(/^-+/, '')             // Trim - from start of text
+    .replace(/-+$/, '');            // Trim - from end of text
+}
+
+//Gets the location of the module from an API
+IDE_Morph.prototype.getModuleURL = function(moduleName) {
+      var myself = this;
+      this.module_list[moduleName] = ""
+      var xhr = new XMLHttpRequest();
+      xhr.open("GET", config.urls.module_api + this.slugify(moduleName) + "/?format=json", false);
+      xhr.onload = function () {
+        if(this.status === 200) {   
+            myself.module_list[moduleName] = "/media/" + JSON.parse(this.response).module_file;
+        } else {
+          console.log("Failed to import module, error " + this.status);
+        }
+      };
+      xhr.onerror = function() {
+        console.log("Error!");
+      }
+      xhr.send();
+  
+      return this.module_list[moduleName]
+}
+
+//Loads every module and determines application order
+IDE_Morph.prototype.loadModules = function(newModuleName, version) {
+      var myself = this;
+      newModuleName = this.slugify(newModuleName)
+      var newModuleURL = this.getModuleURL(newModuleName)
+      var xhr = new XMLHttpRequest();
+      xhr.open("GET", newModuleURL, true);
+      xhr.responseType = "arraybuffer";
+      xhr.onload = function () {
+        if(this.status === 200) {
+          myself.module_list[newModuleName] = this.response;
+          var blob = this.response;
+          var mdl = new ModuleLoader(myself);
+          var parents = mdl.checkModule(blob, version, {base64: false});
+
+          for(var parent in parents) {
+             myself.modules.unshift([myself.slugify(parent), parents[parent]]);
+             myself.loadModules(parent, parents[parent]);
+             myself.numModules += 1;
+          }
+          myself.numModules -= 1;
+          if (myself.numModules === 0) {
+            myself.applyModules();
+          }
+        } else {
+          myself.numModules -= 1;
+          console.log("Failed to import module, error " + this.status);
+        }
+      };
+      xhr.onerror = function() {
+        console.log("Error!");
+      }
+      xhr.send();  
+}
+
+//Applies loaded modules
+IDE_Morph.prototype.applyModules = function() {
+      //Apply the modules
+      var mdl = new ModuleLoader(this);
+      while(this.modules.length > 0) {
+        if(this.modules[0][0] in this.module_list) {
+          mdl.open(this.module_list[this.modules[0][0]], {base64: false});
+          delete this.module_list[this.modules[0][0]];
+        }
+        this.modules.shift();
+      }
+  
+      //Now apply the stage
+    if(config.modules.stage) {
+      var myself = this;
+      var xhr = new XMLHttpRequest();
+      xhr.open("GET", config.modules.stage, true);
+      xhr.responseType = "arraybuffer";
+      xhr.onload = function () {
+        if(this.status === 200) {
+          var blob = this.response;
+          var mdl = new ModuleLoader(myself);
+          mdl.open(blob, {base64: false});
+        } else {
+          console.log("Failed to import module, error " + this.status);
+        }
+      };
+      xhr.onerror = function() {
+        console.log("Error!");
+      }
+      xhr.send();
+    }}
 
 // IDE_Morph construction
 
@@ -1331,8 +1418,6 @@ IDE_Morph.prototype.createCorralBar = function () {
     var padding = 5,
         newbutton,
         paintbutton,
-        xlabel,
-        ylabel,
         colors = [
             this.groupColor,
             this.frameColor.darker(50),
@@ -1396,70 +1481,6 @@ IDE_Morph.prototype.createCorralBar = function () {
 	
     this.corralBar.add(paintbutton);
   
-  
-    xlabel = new StringMorph(
-            "X: 0",
-            24,
-            'sans-serif',
-            true,
-            false,
-            false,
-            MorphicPreferences.isFlat ? null : new Point(2, 1),
-            this.frameColor.darker(this.buttonContrast)
-        );
-  
-    xlabel.color = this.buttonLabelColor;
-    xlabel.drawNew();
-    xlabel.setLeft(
-        this.corralBar.left() + padding + (newbutton.width() + padding)*2
-    );
-  
-    this.corralBar.add(xlabel)
-
-    ylabel = new StringMorph(
-            "Y: 0",
-            24,
-            'sans-serif',
-            true,
-            false,
-            false,
-            MorphicPreferences.isFlat ? null : new Point(2, 1),
-            this.frameColor.darker(this.buttonContrast)
-        );
-    ylabel.color = this.buttonLabelColor;
-    ylabel.drawNew();
-    ylabel.setLeft(
-        this.corralBar.left() + padding + (newbutton.width() + padding)*2 + 100
-    );
-  
-    this.corralBar.add(ylabel)
-    
-    this.corralBar.step = function() {
-      this.parent.updateCorralBar();
-    }
-    
-};
-
-IDE_Morph.prototype.updateCorralBar = function () {
-   
-   var MouseX = this.stage.reportMouseX();
-   var MouseY = this.stage.reportMouseY();
-   if(this.isSmallStage ||
-      MouseX > StageMorph.prototype.dimensions.x / 2 ||
-      MouseY > StageMorph.prototype.dimensions.y / 2 ||
-      MouseX < StageMorph.prototype.dimensions.x / -2 ||
-      MouseY < StageMorph.prototype.dimensions.y / -2) 
-   {
-     this.corralBar.children[2].text = "";
-     this.corralBar.children[3].text = "";     
-   } else {
-     this.corralBar.children[2].text = "X: " + this.stage.reportMouseX();
-     this.corralBar.children[3].text = "Y: " + this.stage.reportMouseY();
-   }
-
-   this.corralBar.children[2].drawNew();
-   this.corralBar.children[3].drawNew();
-   this.fixLayout();
   
 };
 

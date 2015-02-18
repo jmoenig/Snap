@@ -212,7 +212,7 @@ Cloud.prototype.openProject = function(project, callBack, errorCall) {
     $.get(project.project_url, null, function(data) {
         myself.project_id = project.id;
         myself.name = project.name;
-        myself.updateURL(myself.project_url_root+project.id);
+        myself.updateURL(myself.project_url_root+project.id+"/run");
         callBack(data);
     }).fail(errorCall);
 }

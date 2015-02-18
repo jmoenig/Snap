@@ -763,6 +763,16 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'control',
             spec: 'pause all %pause'
         },
+      
+        // Open website
+      
+        openWebsite: {
+          type: 'command',
+          category: 'control',
+          spec: 'open website: %s',
+          defaults: ['http://']
+        
+        },
 
         // Sensing
 
@@ -1832,6 +1842,8 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('removeClone'));
         blocks.push('-');
         blocks.push(block('doPauseAll'));
+        blocks.push('-');
+        blocks.push(block('openWebsite'));
 
     } else if (cat === 'sensing') {
 
@@ -4706,6 +4718,8 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('createClone'));
         blocks.push('-');
         blocks.push(block('doPauseAll'));
+        blocks.push('-');
+        blocks.push(block('openWebsite'));
 
     } else if (cat === 'sensing') {
 
