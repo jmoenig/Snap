@@ -252,7 +252,7 @@ SnapSerializer.uber = XML_Serializer.prototype;
 
 // SnapSerializer constants:
 
-SnapSerializer.prototype.app = 'TEST ABCDE';
+SnapSerializer.prototype.app = 'CSnap 1.0, https://community.csdt.rpi.edu';
 
 SnapSerializer.prototype.thumbnailSize = new Point(160, 120);
 
@@ -1215,10 +1215,10 @@ SnapSerializer.prototype.loadValue = function (model) {
             if (model.attributes.image.indexOf('data:image/svg+xml') === 0
                     && !MorphicPreferences.rasterizeSVGs) {
                 v = new SVG_Costume(null, name, center);
+                v.costumeColor = costumeColor;
                 image.onload = function () {
                     v.contents = image;
-                    v.costumeColor = costumeColor;
-                    v.setColor(costumeColor);
+                    v.setColor(v.costumeColor);
                     v.version = +new Date();
                     if (typeof v.loaded === 'function') {
                         v.loaded();
@@ -1228,6 +1228,7 @@ SnapSerializer.prototype.loadValue = function (model) {
                 };
             } else {
                 v = new Costume(null, name, center);
+                v.costumeColor = costumeColor;
                 image.onload = function () {
                     var canvas = newCanvas(
                             new Point(image.width, image.height)
@@ -1235,8 +1236,7 @@ SnapSerializer.prototype.loadValue = function (model) {
                         context = canvas.getContext('2d');
                     context.drawImage(image, 0, 0);
                     v.contents = canvas;
-                    v.costumeColor = costumeColor;
-                    v.setColor(costumeColor);
+                    v.setColor(v.costumeColor);
                     v.version = +new Date();
                     if (typeof v.loaded === 'function') {
                         v.loaded();
@@ -1495,7 +1495,7 @@ Costume.prototype.toXML = function (serializer) {
                 this.contents.src : this.contents.toDataURL('image/png')
     );
     if(this.originalPixels) {
-        this.setColor(costumeColor);
+        this.setColor(this.costumeColor);
     }
     return serialized;
 };

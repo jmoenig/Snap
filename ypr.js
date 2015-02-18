@@ -1407,7 +1407,7 @@ var sb = (function (sb) {
 			});
 			xml = n('project', {
 				name: projectName,
-				app: 'cSnap, http://community.csdt.rpi.edu; serialized by yprxml, http://dl.dropbox.com/u/10715865/Web/snap/app/yprxml.html',
+				app: 'CSnap 1.0, http://community.csdt.rpi.edu; serialized by yprxml, http://dl.dropbox.com/u/10715865/Web/snap/app/yprxml.html',
 				version: '1'
 			}, [
 				n('notes', {}, [t(project.info.get('comment') || '')]),

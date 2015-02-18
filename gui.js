@@ -291,10 +291,10 @@ IDE_Morph.prototype.openIn = function (world) {
     // dynamic notifications from non-source text files
     // has some issues, commented out for now
     /*
-    this.cloudMsg = getURL('http://snap.berkeley.edu/cloudmsg.txt');
-    motd = getURL('http://snap.berkeley.edu/motd.txt');
+    this.cloudMsg = getURL('http://community.csdt.rpi.edu/cloudmsg.txt');
+    motd = getURL('http://community.csdt.rpi.edu/motd.txt');
     if (motd) {
-        this.inform('Snap!', motd);
+        this.inform('CSnap', motd);
     }
     */
 
@@ -303,8 +303,8 @@ IDE_Morph.prototype.openIn = function (world) {
     this.modules = [[config.modules.module,">0.0.0"]]
     this.module_list = new Object();
     this.loadModules(config.modules.module,">0.0.0");
-  
-    // If there is a project specified in the config, open it
+
+  // If there is a project specified in the config, open it
     if(config.project !== undefined) {
         SnapCloud.openProject(config.project,
             function (response) {
@@ -440,11 +440,7 @@ IDE_Morph.prototype.openIn = function (world) {
         interpretUrlAnchors.call(this);
     }
 
-    //Precache thumbnails
-    ProjectDialogMorph.prototype.getGoalProjectList();
 };
-
-
 
 //Thanks to Mathew Byrne
 //https://gist.github.com/mathewbyrne/1280286
@@ -606,6 +602,18 @@ IDE_Morph.prototype.createLogo = function () {
     this.logo.setExtent(new Point(200, 28)); // dimensions are fixed
     this.add(this.logo);
 };
+
+IDE_Morph.prototype.precacheGoals = function() {
+    //Precache thumbnails
+    try {
+        ProjectDialogMorph.prototype.getGoalProjectList();
+    }
+    catch(e) {
+        return false;
+    }
+
+    return true;
+}
 
 IDE_Morph.prototype.createControlBar = function () {
     // assumes the logo has already been created
@@ -863,26 +871,30 @@ IDE_Morph.prototype.createControlBar = function () {
     this.controlBar.add(settingsButton);
     this.controlBar.settingsButton = settingsButton; // for menu positioning
 
-	// goalImagesButton
-    button = new PushButtonMorph(
-        this,
-        'goalImagesMenu', ' Goals  '
-    );
-    button.corner = 12;
-    button.color = colors[0];
-    button.highlightColor = colors[1];
-    button.pressColor = colors[2];
-    button.labelMinExtent = new Point(36, 18);
-    button.padding = 0;
-    button.labelShadowOffset = new Point(-1, -1);
-    button.labelShadowColor = colors[1];
-    button.labelColor = this.buttonLabelColor;
-    button.contrast = this.buttonContrast;
-    button.drawNew();
-    button.fixLayout();
-    goalImagesButton = button;
-    this.controlBar.add(goalImagesButton);
-    this.controlBar.goalImagesButton = goalImagesButton; // for menu positioning
+ 	 // goalImagesButton
+    var goals = this.precacheGoals();
+   
+    if(goals) {
+       button = new PushButtonMorph(
+           this,
+           'goalImagesMenu', ' Goals  '
+       );
+       button.corner = 12;
+       button.color = colors[0];
+       button.highlightColor = colors[1];
+       button.pressColor = colors[2];
+       button.labelMinExtent = new Point(36, 18);
+       button.padding = 0;
+       button.labelShadowOffset = new Point(-1, -1);
+       button.labelShadowColor = colors[1];
+       button.labelColor = this.buttonLabelColor;
+       button.contrast = this.buttonContrast;
+       button.drawNew();
+       button.fixLayout();
+       goalImagesButton = button;
+       this.controlBar.add(goalImagesButton);
+       this.controlBar.goalImagesButton = goalImagesButton; // for menu positioning
+    }
 	
     // cloudButton
     button = new PushButtonMorph(
@@ -930,11 +942,18 @@ IDE_Morph.prototype.createControlBar = function () {
             }
         );
 		
-		goalImagesButton.setCenter(myself.controlBar.center());
-		goalImagesButton.setLeft(this.left());
-		
-        settingsButton.setCenter(myself.controlBar.center());
-        settingsButton.setLeft(goalImagesButton.left() - padding - 40);
+        if(goals) {
+           goalImagesButton.setCenter(myself.controlBar.center());
+           goalImagesButton.setLeft(this.left());
+         
+           settingsButton.setCenter(myself.controlBar.center());
+           settingsButton.setLeft(goalImagesButton.left() - padding - 40);
+        }
+      
+        else {
+           settingsButton.setCenter(myself.controlBar.center());
+           settingsButton.setLeft(this.left() - 40);
+        }         
 
         cloudButton.setCenter(myself.controlBar.center());
         cloudButton.setRight(settingsButton.left() - padding);
@@ -970,7 +989,12 @@ IDE_Morph.prototype.createControlBar = function () {
         this.label.drawNew();
         this.add(this.label);
         this.label.setCenter(this.center());
-        this.label.setLeft(this.goalImagesButton.right() + padding);
+        if(goals) {
+            this.label.setLeft(this.goalImagesButton.right() + padding);
+        }
+        else {
+            this.label.setLeft(this.settingsButton.right() + padding);
+        }
     };
 };
 
@@ -2085,29 +2109,32 @@ IDE_Morph.prototype.snapMenu = function () {
         world = this.world();
 
     menu = new MenuMorph(this);
-    menu.addItem('About...', 'aboutSnap');
+    menu.addItem('About...', 'aboutCSnap');
     menu.addLine();
     menu.addItem(
         'Reference manual',
         function () {
-            window.open('help/SnapManual.pdf', 'SnapReferenceManual');
+            window.open('help/SnapManual.pdf', 'CSnapReferenceManual');
         }
     );
     menu.addItem(
-        'Snap! website',
+        'CSnap website',
         function () {
-            window.open('http://snap.berkeley.edu/', 'SnapWebsite');
+            window.open('http://community.csdt.rpi.edu/', 'CSnapWebsite');
         }
     );
-    menu.addItem(
-        'Download source',
-        function () {
-            window.open(
-                'http://snap.berkeley.edu/snapsource/snap.zip',
-                'SnapSource'
-            );
-        }
-    );
+/* XXX: If we really need this in the future, we should link to the CSnap GitHub page.
+ *
+ *   menu.addItem(
+ *       'Download source',
+ *       function () {
+ *           window.open(
+ *               'http://snap.berkeley.edu/snapsource/snap.zip',
+ *               'CSnapSource'
+ *           );
+ *       }
+ *   );
+ */
     if (world.isDevMode) {
         menu.addLine();
         menu.addItem(
@@ -2599,7 +2626,7 @@ IDE_Morph.prototype.projectMenu = function () {
         function () {
             myself.droppedText(
                 myself.getURL(
-                    'http://snap.berkeley.edu/snapsource/tools.xml'
+                    'http://community.csdt.rpi.edu/csnapsource/tools.xml'
                 ),
                 'tools'
             );
@@ -2611,11 +2638,11 @@ IDE_Morph.prototype.projectMenu = function () {
         function () {
             // read a list of libraries from an external file,
             var libMenu = new MenuMorph(this, 'Import library'),
-                libUrl = 'http://snap.berkeley.edu/snapsource/libraries/' +
+                libUrl = 'http://community.csdt.rpi.edu/csnapsource/libraries/' +
                     'LIBRARIES';
 
             function loadLib(name) {
-                var url = 'http://snap.berkeley.edu/snapsource/libraries/'
+                var url = 'http://community.csdt.rpi.edu/csnapsource/libraries/'
                         + name
                         + '.xml';
                 myself.droppedText(myself.getURL(url), name);
@@ -2736,22 +2763,22 @@ IDE_Morph.prototype.getCostumesList = function (dirname) {
 
 // IDE_Morph menu actions
 
-IDE_Morph.prototype.aboutSnap = function () {
+IDE_Morph.prototype.aboutCSnap = function () {
     var dlg, aboutTxt, noticeTxt, creditsTxt, versions = '', translations,
         module, btn1, btn2, btn3, btn4, licenseBtn, translatorsBtn,
         world = this.world();
 		
 
-    aboutTxt = 'C-Snap 1.0\nCSDTs with Snap!\n\n'
+    aboutTxt = 'CSnap 1.0\nCSDTs with Snap!\n\n'
         + 'Culturally Situated Design Tools (CSDTs) were developed at RPI with support from the\n'
         + 'National Science Foundation. In 2014 the Java versions were ported to the Snap!\n'
         + 'codebase created by Jens Mönig, which is based on the Scratch interface from MIT.\n\n'
-        + 'For more information on CSDTs see http://csdt.rpi.edu\n';
+        + 'For more information on CSDTs see http://community.csdt.rpi.edu\n';
 		//+ '____________________________________________________'
 
     noticeTxt = localize('License')
         + '\n\n'
-        + 'Snap! is free software: you can redistribute it and/or modify\n'
+        + 'CSnap is free software: you can redistribute it and/or modify\n'
         + 'it under the terms of the GNU Affero General Public License as\n'
         + 'published by the Free Software Foundation, either version 3 of\n'
         + 'the License, or (at your option) any later version.\n\n'
@@ -2790,7 +2817,7 @@ IDE_Morph.prototype.aboutSnap = function () {
     translations = localize('Translations') + '\n' + SnapTranslator.credits();
 
     dlg = new DialogBoxMorph();
-    dlg.inform('About C-Snap', aboutTxt, world);
+    dlg.inform('About CSnap', aboutTxt, world);
     btn1 = dlg.buttons.children[0];
     translatorsBtn = dlg.addButton(
         function () {
@@ -4024,7 +4051,7 @@ IDE_Morph.prototype.cloudError = function () {
         // and notify the user about it,
         // if none is found, show an error dialog box
         var response = responseText,
-            explanation = getURL('http://snap.berkeley.edu/cloudmsg.txt');
+            explanation = getURL('http://community.csdt.rpi.edu/cloudmsg.txt');
         if (myself.shield) {
             myself.shield.destroy();
             myself.shield = null;
@@ -4693,23 +4720,28 @@ ProjectDialogMorph.prototype.getGoalProjectList = function () {
 };
 
 ProjectDialogMorph.prototype.getExamplesProjectList = function () {
-    var dir,
-        projects = [];
-	var request = new XMLHttpRequest();
-	request.open("GET", config.urls.demos_url, false);
-	request.send();
-	var JSON_object = JSON.parse(request.responseText);
-	for (var i = 0; i < JSON_object.length; i++){
-		dta = {
-			name: JSON_object[i]["name"],
-			thumb: null,
-			notes: null
-		};
-		projects.push(dta);
-	}
-    /*projects.sort(function (x, y) {
-        return x.name < y.name ? -1 : 1;
-    });*/
+   var dir,
+       projects = [];
+   try {
+      var request = new XMLHttpRequest();
+      request.open("GET", config.urls.demos_url, false);
+      request.send();
+      var JSON_object = JSON.parse(request.responseText);
+      for (var i = 0; i < JSON_object.length; i++){
+         dta = {
+            name: JSON_object[i]["name"],
+            thumb: null,
+            notes: null
+         };
+         projects.push(dta);
+      }
+       /*projects.sort(function (x, y) {
+           return x.name < y.name ? -1 : 1;
+       });*/
+    }
+    catch(e) {
+        this.ide.showMessage("Failed to load examples.");
+    }
     return projects;
 };
 
