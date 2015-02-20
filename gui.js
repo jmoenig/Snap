@@ -69,7 +69,7 @@ SpeechBubbleMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2015-February-06';
+modules.gui = '2015-February-20';
 
 // Declarations
 
@@ -2349,14 +2349,11 @@ IDE_Morph.prototype.projectMenu = function () {
     menu.addItem('New', 'createNewProject');
     menu.addItem('Open...', 'openProjectsBrowser');
     menu.addItem('Save', "save");
-    if (shiftClicked) {
-        menu.addItem(
-            'Save to disk',
-            'saveProjectToDisk',
-            'experimental - store this project\nin your downloads folder',
-            new Color(100, 0, 0)
-        );
-    }
+    menu.addItem(
+        'Save to disk',
+        'saveProjectToDisk',
+        'store this project\nin your downloads folder\n(not supported by all browsers)'
+    );
     menu.addItem('Save As...', 'saveProjectsBrowser');
     menu.addLine();
     menu.addItem(
