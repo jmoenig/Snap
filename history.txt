@@ -2435,3 +2435,6 @@ ______
 ------
 * GUI: Added url switch #cloud: to open a shared project in edit mode
 
+150220
+------
+* Malayam, Tamil and Telagu translations, thanks, Vinay Kumar!!
