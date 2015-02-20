@@ -202,6 +202,7 @@ IDE_Morph.prototype.init = function (isAutoFill) {
 
     // restore saved user preferences
     this.userLanguage = null; // user language preference for startup
+    this.projectsInURLs = false;
     this.applySavedSettings();
 
     // additional properties:
@@ -1779,6 +1780,7 @@ IDE_Morph.prototype.applySavedSettings = function () {
         language = this.getSetting('language'),
         click = this.getSetting('click'),
         longform = this.getSetting('longform'),
+        longurls = this.getSetting('longurls'),
         plainprototype = this.getSetting('plainprototype');
 
     // design
@@ -1810,6 +1812,13 @@ IDE_Morph.prototype.applySavedSettings = function () {
     // long form
     if (longform) {
         InputSlotDialogMorph.prototype.isLaunchingExpanded = true;
+    }
+
+    // project data in URLs
+    if (longurls) {
+        this.projectsInURLs = true;
+    } else {
+        this.projectsInURLs = false;
     }
 
     // plain prototype labels
@@ -2282,6 +2291,21 @@ IDE_Morph.prototype.settingsMenu = function () {
         false
     );
     addPreference(
+        'Project URLs',
+        function () {
+            myself.projectsInURLs = !myself.projectsInURLs;
+            if (myself.projectsInURLs) {
+                myself.saveSetting('longurls', true);
+            } else {
+                myself.removeSetting('longurls');
+            }
+        },
+        myself.projectsInURLs,
+        'uncheck to disable\nproject data in URLs',
+        'check to enable\nproject data in URLs',
+        true
+    );
+    addPreference(
         'Sprite Nesting',
         function () {
             SpriteMorph.prototype.enableNesting =
@@ -2352,7 +2376,8 @@ IDE_Morph.prototype.projectMenu = function () {
     menu.addItem(
         'Save to disk',
         'saveProjectToDisk',
-        'store this project\nin your downloads folder\n(not supported by all browsers)'
+        'store this project\nin your downloads folder\n'
+            + '(not supported by all browsers)'
     );
     menu.addItem('Save As...', 'saveProjectsBrowser');
     menu.addLine();
@@ -2825,7 +2850,7 @@ IDE_Morph.prototype.rawSaveProject = function (name) {
             try {
                 localStorage['-snap-project-' + name]
                     = str = this.serializer.serialize(this.stage);
-                location.hash = '#open:' + str;
+                this.setURL('#open:' + str);
                 this.showMessage('Saved!', 1);
             } catch (err) {
                 this.showMessage('Save failed: ' + err);
@@ -2833,7 +2858,7 @@ IDE_Morph.prototype.rawSaveProject = function (name) {
         } else {
             localStorage['-snap-project-' + name]
                 = str = this.serializer.serialize(this.stage);
-            location.hash = '#open:' + str;
+            this.setURL('#open:' + str);
             this.showMessage('Saved!', 1);
         }
     }
@@ -2874,7 +2899,7 @@ IDE_Morph.prototype.exportProject = function (name, plain) {
                 str = encodeURIComponent(
                     this.serializer.serialize(this.stage)
                 );
-                location.hash = '#open:' + str;
+                this.setURL('#open:' + str);
                 window.open('data:text/'
                     + (plain ? 'plain,' + str : 'xml,' + str));
                 menu.destroy();
@@ -2887,7 +2912,7 @@ IDE_Morph.prototype.exportProject = function (name, plain) {
             str = encodeURIComponent(
                 this.serializer.serialize(this.stage)
             );
-            location.hash = '#open:' + str;
+            this.setURL('#open:' + str);
             window.open('data:text/'
                 + (plain ? 'plain,' + str : 'xml,' + str));
             menu.destroy();
@@ -3161,7 +3186,13 @@ IDE_Morph.prototype.openProject = function (name) {
         this.setProjectName(name);
         str = localStorage['-snap-project-' + name];
         this.openProjectString(str);
-        location.hash = '#open:' + str;
+        this.setURL('#open:' + str);
+    }
+};
+
+IDE_Morph.prototype.setURL = function (str) {
+    if (this.projectsInURLs) {
+        location.hash = str;
     }
 };
 

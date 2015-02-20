@@ -2440,3 +2440,4 @@ ______
 * Malayam, Tamil and Telagu translations, thanks, Vinay Kumar!!
 * Un-hide “Save to disk” feature (currently supported by both Chrome and Firefox, but not by Safari)
 * Update German translation
+* GUI: Make “project data in URLs” a hidden dev option (prevent long urls per default)
