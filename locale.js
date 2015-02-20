@@ -149,7 +149,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org',
     'last_changed':
-        '2014-07-29'
+        '2015-02-20'
 };
 
 SnapTranslator.dict.it = {

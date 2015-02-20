@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org', // optional
     'last_changed':
-        '2014-07-29', // this, too, will appear in the Translators tab
+        '2015-02-20', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -647,6 +647,10 @@ SnapTranslator.dict.de = {
         '\u00d6ffnen...',
     'Save':
         'Sichern',
+    'Save to disk':
+        'Abpeichern',
+    'store this project\nin your downloads folder\n(not supported by all browsers)':
+        'dieses Projekt herunterladen\nund lokal speichern\n(nicht von allen Browsern unters\u00fctzt)',
     'Save As...':
         'Sichern als...',
     'Import...':
