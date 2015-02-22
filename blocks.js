@@ -155,7 +155,7 @@ DialogBoxMorph, BlockInputFragmentMorph, PrototypeHatBlockMorph, Costume*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2014-November-21';
+modules.blocks = '2015-January-25';
 
 
 var SyntaxElementMorph;
@@ -3870,6 +3870,13 @@ CommandBlockMorph.prototype.drawBottomRightEdge = function (context) {
     );
     context.stroke();
 };
+
+// This method was added by luis140219 (Luís Câmara)
+CommandBlockMorph.prototype.allReportBlocks = function() {
+    return this.children.filter(function(child) {
+        return child instanceof BlockMorph && child.blockSpec === "report %s";
+    });
+}
 
 // HatBlockMorph ///////////////////////////////////////////////////////
 
