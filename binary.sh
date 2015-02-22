@@ -80,7 +80,7 @@ else
 fi
 
 # compress all js files
-find . -name '*.js' | xargs -I {} uglifyjs {} -o {} -c
+find . -name '*.js' | xargs -I {} uglifyjs {} -o {} -c 2> /dev/null
 
 # return to the directory where the script was called from
 cd "$scriptdir"
