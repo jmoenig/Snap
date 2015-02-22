@@ -17,7 +17,15 @@ then
     echo "  Mobile      amazon-fireos android blackberry10 firefoxos ios ubuntu wp8 win8 tizen"
     echo "  Desktop     win32 win64 osx linux32 linux64"
     echo ""
-    echo "If FILE/URL is given, it will be #open-ed inside Snap\! immediately. URL will be loaded at runtime."
+    echo "If FILE/URL is given, it will be #open-ed inside Snap! immediately. URL will be loaded at runtime."
+    echo ""
+    echo ""
+    echo "The following environment variables will be used, if available:"
+    echo "  snapsource  Path or URL to the Snap! git repository. This repository must contain the branch"
+    echo "              mobileapp with the configuration files! Default: https://github.com/Gubolin/snap.git"
+    echo "  crosswalk   Path to a crosswalk-cordova directory. Download \"Cordova Android\" here:"
+    echo "              https://crosswalk-project.org/documentation/downloads.html"
+    echo "              If omitted, standard cordova will be used."
     exit 0
 fi
 

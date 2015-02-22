@@ -16,6 +16,7 @@ scriptdir=$(readlink -e ".")
 # Requirements:
 # git, nodejs, android SDK / other platform(s)
 # cordova (https://cordova.apache.org/)
+# optional: crosswalk-cordova (https://github.com/crosswalk-project/crosswalk-cordova-android)
 
 if [[ $2 != "" ]]
 then
@@ -44,18 +45,39 @@ sed -i '/link rel="shortcut icon"/a\
 
 # add everything needed and build for $device
 cordova platform add "$1"
-cordova plugin add org.apache.cordova.plugin.softkeyboard
-cordova plugin add org.apache.cordova.vibration
-cordova plugin add org.apache.cordova.device-motion
-cordova plugin add org.apache.cordova.device-orientation
-cordova plugin add org.apache.cordova.geolocation
-cordova plugin add de.appplant.cordova.plugin.local-notification
+cordova plugin add org.apache.cordova.plugin.softkeyboard \
+    org.apache.cordova.vibration \
+    org.apache.cordova.device-motion \
+    org.apache.cordova.device-orientation \
+    org.apache.cordova.geolocation \
+    de.appplant.cordova.plugin.local-notification \
 
 if [[ $1 == "android" ]]
 then
     # Remove default icons
     cd "$builddir/platforms/android"
     find -name '*.png' | xargs rm
+
+    if [[ $crosswalk != "" ]]
+    then
+        # adapted from https://crosswalk-project.org/documentation/cordova/migrate_an_application.html#migrate
+        echo "Building with Crosswalk"
+        rm -Rf "$builddir/platforms/android/CordovaLib/*"
+        cp -a $crosswalk/framework/* "$builddir/platforms/android/CordovaLib/"
+        cp -a "$crosswalk/VERSION" "$builddir/platforms/android/"
+        export ANDROID_HOME=$(dirname $(dirname $(which android)))
+        cd "$builddir/platforms/android/CordovaLib/"
+        android update project --subprojects --target android-21 --path .
+        ant debug
+        cd "$builddir"
+        # prepend permissions to end of manifest
+        sed -i "s,\</manifest\>,\
+                <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />\
+                <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />\
+                <uses-permission android:name="android.permission.INTERACT_ACROSS_USERS" />\
+            </manifest>,g" \
+            "$builddir/platforms/android/AndroidManifest.xml"
+    fi
 fi
 
 cordova build "$1"
