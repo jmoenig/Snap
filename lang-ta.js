@@ -166,7 +166,7 @@
 
 /*global SnapTranslator*/
 
-SnapTranslator.dict.de = {
+SnapTranslator.dict.ta = {
 
 /*
     Special characters: (see <http://0xcc.net/jsescape/>)
@@ -179,11 +179,11 @@ SnapTranslator.dict.de = {
 
     // translations meta information
     'language_name':
-        'Deutsch', // the name as it should appear in the language menu
+        'Tamil', // the name as it should appear in the language menu
     'language_translator':
-        'Jens M\u00F6nig', // your name for the Translators tab
+        'vinayakumar R', // your name for the Translators tab
     'translator_e-mail':
-        'jens@moenig.org', // optional
+        'vnkmr7620@gmail.com', // optional
     'last_changed':
         '2015-02-20', // this, too, will appear in the Translators tab
 
@@ -196,23 +196,23 @@ SnapTranslator.dict.de = {
 
     // categories:
     'Motion':
-        'Bewegung',
+        'நகர்ச்ச',
     'Looks':
-        'Aussehen',
+        'தோற்றம்',
     'Sound':
-        'Klang',
+        'ஒல',
     'Pen':
-        'Stift',
+        'பேனா',
     'Control':
-        'Steuerung',
+        'கன்ட்ரொல்',
     'Sensing':
-        'F\u00fchlen',
+        'உணருதல்',
     'Operators':
-        'Operatoren',
+        'ஆபரேட்டர்கள்',
     'Variables':
-        'Variablen',
+        'வேரியபில்கள்',
     'Lists':
-        'Listen',
+        'பட்டியல்',
     'Other':
         'Andere',
 
@@ -224,21 +224,21 @@ SnapTranslator.dict.de = {
     'Scripts':
         'Skripte',
     'Costumes':
-        'Kost\u00fcme',
+        'உடைகள்',
     'Sounds':
-        'Kl\u00e4nge',
+        'ஒலஒல',
 
     // names:
     'Sprite':
         'Objekt',
     'Stage':
-        'B\u00fchne',
+        'மேட',
 
     // rotation styles:
     'don\'t rotate':
-        'nicht drehbar',
+        'சுழற்றாத',
     'can rotate':
-        'frei drehbar',
+        'சுழற்ற முடியும்',
     'only face left/right':
         'kann sich nur nach\nlinks/rechts drehen',
 
@@ -291,55 +291,55 @@ SnapTranslator.dict.de = {
             + 'vorhanden',
 
     'move %n steps':
-        'gehe %n Schritte',
+        '%n அடிகள் நகரவும்',
     'turn %clockwise %n degrees':
         'drehe %clockwise %n Grad',
     'turn %counterclockwise %n degrees':
         'drehe %counterclockwise %n Grad',
     'point in direction %dir':
-        'zeige Richtung %dir',
+        '%dir திசையை சுட்டிக்கட்டவும்',
     'point towards %dst':
-        'zeige auf %dst',
+        '%dst நோக்கி சுட்டிக்கட்டவும்',
     'go to x: %n y: %n':
-        'gehe zu x: %n y: %n',
+        'x: %n y: %n க்கு செல்லவும்',
     'go to %dst':
-        'gehe zu %dst',
+        '%dst க்கு செல்லவும்',
     'glide %n secs to x: %n y: %n':
         'gleite %n Sek. zu x: %n y: %n',
     'change x by %n':
-        '\u00e4ndere x um %n',
+        'x %n அளவு மாற்றவும்',
     'set x to %n':
-        'setze x auf %n',
+        'x %n ஆக்கவும்',
     'change y by %n':
-        '\u00e4ndere y um %n',
+        'y %n அளவு மாற்றவும்',
     'set y to %n':
-        'setze y auf %n',
+        'y %n ஆக்கவும்',
     'if on edge, bounce':
         'pralle vom Rand ab',
     'x position':
-        'x-Position',
+        'x இடம்',
     'y position':
-        'y-Position',
+        'y இடம்',
     'direction':
-        'Richtung',
+        'திச',
 
     // looks:
     'switch to costume %cst':
-        'ziehe Kost\u00fcm %cst an',
+        '%cst உடைக்கு மாற்ற',
     'next costume':
-        'n\u00e4chstes Kost\u00fcm',
+        'அடுத்த உட',
     'costume #':
-        'Kost\u00fcm Nr.',
+        'உட #',
     'say %s for %n secs':
-        'sage %s f\u00fcr %n Sek.',
+        '%n விநாடிகள் %s சொல்',
     'say %s':
-        'sage %s',
+        '%s சொல்',
     'think %s for %n secs':
-        'denke %s f\u00fcr %n Sek.',
+        '%n விநாடிகள் %s யோச',
     'think %s':
-        'denke %s',
+        '%s யோச',
     'Hello!':
-        'Hallo!',
+        'வணக்கம்!',
     'Hmm...':
         'Hmm...',
     'change %eff effect by %n':
@@ -347,21 +347,21 @@ SnapTranslator.dict.de = {
     'set %eff effect to %n':
         'setze %eff -Effekt auf %n',
     'clear graphic effects':
-        'schalte Grafikeffekte aus',
+        'க்ராபிக்ஸ் எபெக்ட்டை அழித்து விடு',
     'change size by %n':
-        '\u00e4ndere Gr\u00f6\u00dfe um %n',
+        'கன அளவை %n அளவு மாற்றவும்',
     'set size to %n %':
-        'setze Gr\u00f6\u00dfe auf %n %',
+        'கனம் %n % ஆக்கவும்',
     'size':
-        'Gr\u00f6\u00dfe',
+        'பரிமாணம்',
     'show':
-        'anzeigen',
+        'காண்ப',
     'hide':
-        'verstecken',
+        'மறைக்கவும்',
     'go to front':
-        'komme nach vorn',
+        'முன் செல்லவும்',
     'go back %n layers':
-        'gehe %n Ebenen zur\u00fcck',
+        '%n அடுக்குகள் பின்னால் செல்லவும்',
 
     'development mode \ndebugging primitives:':
         'Hackermodus \nDebugging-Bl\u00f6cke',
@@ -372,59 +372,59 @@ SnapTranslator.dict.de = {
 
     // sound:
     'play sound %snd':
-        'spiele Klang %snd',
+        '%snd ஒலிக்கவும்',
     'play sound %snd until done':
-        'spiele Klang %snd ganz',
+        'நிற்க்கும் வரை %snd ஒலிக்கவும்',
     'stop all sounds':
-        'stoppe alle Kl\u00e4nge',
+        'எல்லா ஒலிகளையும் நிருத்த',
     'rest for %n beats':
-        'spiele Pause f\u00fcr %n Schl\u00e4ge',
+        '%n தாள தட்டு காத்திருக்கவும்',
     'play note %n for %n beats':
-        'spiele Note %n f\u00fcr %n Schl\u00e4ge',
+        '%n ஸ்வரம் %n தாள தட்டு வாசிக்கவும்',
     'change tempo by %n':
-        '\u00e4ndere Tempo um %n',
+        '%n அளவு தாளத்தை மாற்றவும்',
     'set tempo to %n bpm':
-        'setze Tempo auf %n Schl\u00e4ge/Min.',
+        'தாளம் %n bpm ஆக்கவும்',
     'tempo':
-        'Tempo',
+        'தாளம்',
 
     // pen:
     'clear':
-        'wische',
+        'அழ',
     'pen down':
-        'Stift runter',
+        'பேனா கீழே',
     'pen up':
-        'Stift hoch',
+        'பேனா மேல',
     'set pen color to %clr':
-        'setze Stiftfarbe auf %clr',
+        'பேனா நிரம் %clr ஆக்கவும்',
     'change pen color by %n':
-        '\u00e4ndere Stiftfarbe um %n',
+        'பேனா நிறத்தை %n அளவு மாற்றவும்',
     'set pen color to %n':
-        'setze Stiftfarbe auf %n',
+        'பேனா நிரம் %n ஆக்கவும்',
     'change pen shade by %n':
-        '\u00e4ndere Farbst\u00e4rke um %n',
+        'பேனா ஷெடை %n அளவு மாற்றவும்',
     'set pen shade to %n':
-        'setze Farbst\u00e4rke auf %n',
+        'பேனா ஷேட் %n ஆக்கவும்',
     'change pen size by %n':
-        '\u00e4ndere Stiftdicke um %n',
+        'பேனா கன அளவை %n அளவு மாற்றவும்',
     'set pen size to %n':
-        'setze Stiftdicke auf %n',
+        'பேனா கனம் %n ஆக்கவும்',
     'stamp':
-        'stemple',
+        'அச்சு',
 
     // control:
     'when %greenflag clicked':
-        'Wenn %greenflag angeklickt',
+        '%greenflag அழுத்தும்பொழுது',
     'when %keyHat key pressed':
-        'Wenn Taste %keyHat gedr\u00fcckt',
+        '%keyHat கீ அழுத்தும்பொழுது',
     'when I am clicked':
         'Wenn ich angeklickt werde',
     'when I receive %msgHat':
-        'Wenn ich %msgHat empfange',
+        '%msgHat பெறுகையில்',
     'broadcast %msg':
-        'sende %msg an alle',
+        '%msg செலித்தி',
     'broadcast %msg and wait':
-        'sende %msg an alle und warte',
+        '%msg செலித்தி காத்திருக்கவும்',
     'Message name':
         'Nachricht',
     'message':
@@ -432,27 +432,27 @@ SnapTranslator.dict.de = {
     'any message':
         'eine beliebige Nachricht',
     'wait %n secs':
-        'warte %n Sek.',
+        '%n விநாடிகள் காத்திருக்கவும்',
     'wait until %b':
-        'warte bis %b',
+        '%b வரை காத்திருக்கவும்',
     'forever %c':
-        'fortlaufend %c',
+        'எப்போதும் %c',
     'repeat %n %c':
-        'wiederhole %n mal %c',
+        'திரும்பச்செய் %n %c',
     'repeat until %b %c':
-        'wiederhole bis %b %c',
+        '%b %c வரை திரும்பச்செய்',
     'if %b %c':
-        'falls %b %c',
+        '%b %c என்றால்',
     'if %b %c else %c':
-        'falls %b %c sonst %c',
+        '%b என்றால் அல்லது %c',
     'report %s':
         'berichte %s',
     'stop %stopChoices':
-        'stoppe %stopChoices',
+        'நிருத்து %stopChoices',
     'all':
         'alles',
     'this script':
-        'dieses Skript',
+        'இந்த ச்கிரிப்ட்ட',
     'this block':
         'diesen Block',
     'stop %stopOthersChoices':
@@ -486,31 +486,31 @@ SnapTranslator.dict.de = {
 
     // sensing:
     'touching %col ?':
-        'ber\u00fchre %col ?',
+        'தொடுகிரதா %col ?',
     'touching %clr ?':
-        'ber\u00fchre %clr ?',
+        'தொடுகிரதா %clr ?',
     'color %clr is touching %clr ?':
-        'Farbe %clr ber\u00fchrt %clr ?',
+        '%clr கலர் %clr யை தொடுகிரதா?',
     'ask %s and wait':
-        'frage %s und warte',
+        '%s காத்திருக்க சொல்',
     'what\'s your name?':
-        'Wie hei\u00dft Du?',
+        'உங்கள் பெயர் என்ன ?',
     'answer':
-        'Antwort',
+        'பதில்',
     'mouse x':
-        'Maus x-Position',
+        'மவுஸ் x',
     'mouse y':
-        'Maus y-Position',
+        'மவுஸ் y',
     'mouse down?':
         'Maustaste gedr\u00fcckt?',
     'key %key pressed?':
-        'Taste %key gedr\u00fcckt?',
+        '%key கீ அழுத்தி இருக்கிரதா',
     'distance to %dst':
-        'Entfernung von %dst',
+        '%dst வரை தூரம்',
     'reset timer':
-        'starte Stoppuhr neu',
+        'டைமெர் ரீசெட்',
     'timer':
-        'Stoppuhr',
+        'டைமெர்',
     '%att of %spr':
         '%att von %spr',
     'http:// %s':
@@ -529,35 +529,35 @@ SnapTranslator.dict.de = {
 
     // operators:
     '%n mod %n':
-        '%n modulo %n',
+        '%n மாட் %n',
     'round %n':
         '%n gerundet',
     '%fun of %n':
-        '%fun von %n',
+        '%fun ன் %n',
     'pick random %n to %n':
         'Zufallszahl von %n bis %n',
     '%b and %b':
-        '%b und %b',
+        '%b மற்றும் %b',
     '%b or %b':
-        '%b oder %b',
+        '%b அல்லத %b',
     'not %b':
-        'nicht %b',
+        'இல்ல %b',
     'true':
-        'wahr',
+        'சர',
     'false':
-        'falsch',
+        'தவறு',
     'join %words':
-        'verbinde %words',
+        'சேர்க்கவும் %words',
     'split %s by %delim':
         'trenne %s nach %delim',
     'hello':
-        'Hallo',
+        'வணக்கம்',
     'world':
-        'Welt',
+        'உலகம்',
     'letter %n of %s':
-        'Zeichen %n von %s',
+        '%s ன் %n வது எழுத்து',
     'length of %s':
-        'L\u00e4nge von %s',
+        '%s ன் நீளம்',
     'unicode of %s':
         'Unicode Wert von %s',
     'unicode %n as letter':
@@ -572,22 +572,22 @@ SnapTranslator.dict.de = {
 
     // variables:
     'Make a variable':
-        'Neue Variable',
+        'வேரியபில் செய்',
     'Variable name':
-        'Variablenname',
+        'மாறிழியின் பெயர்',
     'Script variable name':
-        'Skriptvariablenname',
+        'ச்கிரிப்ட்ட மாறிழியின் பெயர்',
     'Delete a variable':
-        'Variable l\u00f6schen',
+        'வேரியபில் அழி',
 
     'set %var to %s':
-        'setze %var auf %s',
+        '%var %n ஆக்கவும்',
     'change %var by %n':
-        '\u00e4ndere %var um %n',
+        '%var %n அளவு மாற்றவும்',
     'show variable %var':
-        'zeige Variable %var',
+        '%var வேரியபிலை காண்பி',
     'hide variable %var':
-        'verstecke Variable %var',
+        '%var வேரியபிலை மறைக்கவும்',
     'script variables %scriptVars':
         'Skriptvariablen %scriptVars',
 
@@ -642,17 +642,13 @@ SnapTranslator.dict.de = {
     'Project notes...':
         'Projektanmerkungen...',
     'New':
-        'Neu',
+        'புதிய புதிய பின்னணி',
     'Open...':
-        '\u00d6ffnen...',
+        'திறக்க...',
     'Save':
-        'Sichern',
-    'Save to disk':
-        'Abpeichern',
-    'store this project\nin your downloads folder\n(not supported by all browsers)':
-        'dieses Projekt herunterladen\nund lokal speichern\n(nicht von allen Browsern unters\u00fctzt)',
+        'சேம',
     'Save As...':
-        'Sichern als...',
+        'எனச் சேம...',
     'Import...':
         'Importieren...',
     'file menu import hint':
@@ -686,7 +682,7 @@ SnapTranslator.dict.de = {
 
     // settings menu
     'Language...':
-        'Sprache...',
+        'மொழ...',
     'Zoom blocks...':
         'Bl\u00f6cke vergr\u00f6\u00dfern...',
     'Stage size...':
@@ -810,17 +806,17 @@ SnapTranslator.dict.de = {
 
     // blocks:
     'help...':
-        'Hilfe...',
+        'உதவ...',
     'relabel...':
         'Umbenennen...',
     'duplicate':
-        'Duplizieren',
+        'நகல் செய்',
     'make a copy\nand pick it up':
         'eine Kopie aufnehmen',
     'only duplicate this block':
         'nur diesen Block duplizieren',
     'delete':
-        'L\u00f6schen',
+        'அழ',
     'script pic...':
         'Skriptbild...',
     'open a new window\nwith a picture of this script':
@@ -838,9 +834,9 @@ SnapTranslator.dict.de = {
 
     // sprites:
     'edit':
-        'Bearbeiten',
+        'திருத்த',
     'move':
-        'Verschieben',
+        'நகர்த்து',
     'detach from':
         'Abtrennen von',
     'detach all parts':
@@ -858,7 +854,7 @@ SnapTranslator.dict.de = {
 
     // scripting area
     'clean up':
-        'Aufr\u00e4umen',
+        'சுத்தம் செய்',
     'arrange scripts\nvertically':
         'Skripte der Reihe nach\nanordnen',
     'add comment':
@@ -888,7 +884,7 @@ SnapTranslator.dict.de = {
     'Stop sound':
         'Klang\nanhalten',
     'Stop':
-        'Halt',
+        'நிறுத்த',
     'Play':
         'Los',
     'rename sound':
@@ -897,19 +893,19 @@ SnapTranslator.dict.de = {
     // dialogs
     // buttons
     'OK':
-        'OK',
+        'சர',
     'Ok':
-        'OK',
+        'சர',
     'Cancel':
-        'Abbrechen',
+        'கென்செல்',
     'Yes':
-        'Ja',
+        'ஆம்',
     'No':
-        'Nein',
+        'இல்ல',
 
     // help
     'Help':
-        'Hilfe',
+        'உதவ',
 
     // zoom blocks
     'Zoom blocks':
@@ -1141,13 +1137,13 @@ SnapTranslator.dict.de = {
 
     // keys
     'space':
-        'Leertaste',
+        'இடைவெள',
     'up arrow':
-        'Pfeil nach oben',
+        'மேல் அம்புக்குற',
     'down arrow':
         'Pfeil nach unten',
     'right arrow':
-        'Pfeil nach rechts',
+        'வலது அம்புக்குற',
     'left arrow':
         'Pfeil nach links',
     'a':

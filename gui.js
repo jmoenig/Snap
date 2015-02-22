@@ -69,7 +69,7 @@ SpeechBubbleMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2015-January-21';
+modules.gui = '2015-February-20';
 
 // Declarations
 
@@ -201,7 +201,8 @@ IDE_Morph.prototype.init = function (isAutoFill) {
     MorphicPreferences.globalFontFamily = 'Helvetica, Arial';
 
     // restore saved user preferences
-    this.userLanguage = null;
+    this.userLanguage = null; // user language preference for startup
+    this.projectsInURLs = false;
     this.applySavedSettings();
 
     // additional properties:
@@ -385,6 +386,46 @@ IDE_Morph.prototype.openIn = function (world) {
                             msg.destroy();
                             myself.toggleAppMode(true);
                             myself.runScripts();
+                        }
+                    ]);
+                },
+                this.cloudError()
+            );
+        } else if (location.hash.substr(0, 7) === '#cloud:') {
+            this.shield = new Morph();
+            this.shield.alpha = 0;
+            this.shield.setExtent(this.parent.extent());
+            this.parent.add(this.shield);
+            myself.showMessage('Fetching project\nfrom the cloud...');
+
+            // make sure to lowercase the username
+            dict = SnapCloud.parseDict(location.hash.substr(7));
+            dict.Username = dict.Username.toLowerCase();
+
+            SnapCloud.getPublicProject(
+                SnapCloud.encodeDict(dict),
+                function (projectData) {
+                    var msg;
+                    myself.nextSteps([
+                        function () {
+                            msg = myself.showMessage('Opening project...');
+                        },
+                        function () {nop(); }, // yield (bug in Chrome)
+                        function () {
+                            if (projectData.indexOf('<snapdata') === 0) {
+                                myself.rawOpenCloudDataString(projectData);
+                            } else if (
+                                projectData.indexOf('<project') === 0
+                            ) {
+                                myself.rawOpenProjectString(projectData);
+                            }
+                            myself.hasChangedMedia = true;
+                        },
+                        function () {
+                            myself.shield.destroy();
+                            myself.shield = null;
+                            msg.destroy();
+                            myself.toggleAppMode(false);
                         }
                     ]);
                 },
@@ -1739,6 +1780,7 @@ IDE_Morph.prototype.applySavedSettings = function () {
         language = this.getSetting('language'),
         click = this.getSetting('click'),
         longform = this.getSetting('longform'),
+        longurls = this.getSetting('longurls'),
         plainprototype = this.getSetting('plainprototype');
 
     // design
@@ -1770,6 +1812,13 @@ IDE_Morph.prototype.applySavedSettings = function () {
     // long form
     if (longform) {
         InputSlotDialogMorph.prototype.isLaunchingExpanded = true;
+    }
+
+    // project data in URLs
+    if (longurls) {
+        this.projectsInURLs = true;
+    } else {
+        this.projectsInURLs = false;
     }
 
     // plain prototype labels
@@ -2242,6 +2291,21 @@ IDE_Morph.prototype.settingsMenu = function () {
         false
     );
     addPreference(
+        'Project URLs',
+        function () {
+            myself.projectsInURLs = !myself.projectsInURLs;
+            if (myself.projectsInURLs) {
+                myself.saveSetting('longurls', true);
+            } else {
+                myself.removeSetting('longurls');
+            }
+        },
+        myself.projectsInURLs,
+        'uncheck to disable\nproject data in URLs',
+        'check to enable\nproject data in URLs',
+        true
+    );
+    addPreference(
         'Sprite Nesting',
         function () {
             SpriteMorph.prototype.enableNesting =
@@ -2309,14 +2373,12 @@ IDE_Morph.prototype.projectMenu = function () {
     menu.addItem('New', 'createNewProject');
     menu.addItem('Open...', 'openProjectsBrowser');
     menu.addItem('Save', "save");
-    if (shiftClicked) {
-        menu.addItem(
-            'Save to disk',
-            'saveProjectToDisk',
-            'experimental - store this project\nin your downloads folder',
-            new Color(100, 0, 0)
-        );
-    }
+    menu.addItem(
+        'Save to disk',
+        'saveProjectToDisk',
+        'store this project\nin your downloads folder\n'
+            + '(not supported by all browsers)'
+    );
     menu.addItem('Save As...', 'saveProjectsBrowser');
     menu.addLine();
     menu.addItem(
@@ -2788,7 +2850,7 @@ IDE_Morph.prototype.rawSaveProject = function (name) {
             try {
                 localStorage['-snap-project-' + name]
                     = str = this.serializer.serialize(this.stage);
-                location.hash = '#open:' + str;
+                this.setURL('#open:' + str);
                 this.showMessage('Saved!', 1);
             } catch (err) {
                 this.showMessage('Save failed: ' + err);
@@ -2796,7 +2858,7 @@ IDE_Morph.prototype.rawSaveProject = function (name) {
         } else {
             localStorage['-snap-project-' + name]
                 = str = this.serializer.serialize(this.stage);
-            location.hash = '#open:' + str;
+            this.setURL('#open:' + str);
             this.showMessage('Saved!', 1);
         }
     }
@@ -2837,7 +2899,7 @@ IDE_Morph.prototype.exportProject = function (name, plain) {
                 str = encodeURIComponent(
                     this.serializer.serialize(this.stage)
                 );
-                location.hash = '#open:' + str;
+                this.setURL('#open:' + str);
                 window.open('data:text/'
                     + (plain ? 'plain,' + str : 'xml,' + str));
                 menu.destroy();
@@ -2850,7 +2912,7 @@ IDE_Morph.prototype.exportProject = function (name, plain) {
             str = encodeURIComponent(
                 this.serializer.serialize(this.stage)
             );
-            location.hash = '#open:' + str;
+            this.setURL('#open:' + str);
             window.open('data:text/'
                 + (plain ? 'plain,' + str : 'xml,' + str));
             menu.destroy();
@@ -3124,7 +3186,13 @@ IDE_Morph.prototype.openProject = function (name) {
         this.setProjectName(name);
         str = localStorage['-snap-project-' + name];
         this.openProjectString(str);
-        location.hash = '#open:' + str;
+        this.setURL('#open:' + str);
+    }
+};
+
+IDE_Morph.prototype.setURL = function (str) {
+    if (this.projectsInURLs) {
+        location.hash = str;
     }
 };
 
