@@ -1219,7 +1219,7 @@ SpriteMorph.prototype.initBlockMigrations = function () {
         },
         receiveClick: {
             selector: 'receiveInteraction',
-            inputs: [['I am clicked']]
+            inputs: [['clicked']]
         }
     };
 };
@@ -1602,7 +1602,7 @@ SpriteMorph.prototype.blockForSelector = function (selector, setDefaults) {
                 : new ReporterBlockMorph(info.type === 'predicate');
     block.color = this.blockColor[info.category];
     block.category = info.category;
-    block.selector = selector;
+    block.selector = migration ? migration.selector : selector;
     if (contains(['reifyReporter', 'reifyPredicate'], block.selector)) {
         block.isStatic = true;
     }
