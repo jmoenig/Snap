@@ -69,7 +69,7 @@ SpeechBubbleMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2015-February-20';
+modules.gui = '2015-February-23';
 
 // Declarations
 
@@ -2376,8 +2376,8 @@ IDE_Morph.prototype.projectMenu = function () {
     menu.addItem(
         'Save to disk',
         'saveProjectToDisk',
-        'store this project\nin your downloads folder\n'
-            + '(not supported by all browsers)'
+        'store this project\nin the downloads folder\n'
+            + '(in supporting browsers)'
     );
     menu.addItem('Save As...', 'saveProjectsBrowser');
     menu.addLine();
