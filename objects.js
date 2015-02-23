@@ -125,7 +125,7 @@ PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.objects = '2015-January-28';
+modules.objects = '2015-February-23';
 
 var SpriteMorph;
 var StageMorph;
@@ -581,10 +581,21 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'control',
             spec: 'when %keyHat key pressed'
         },
+
+    /* migrated to a newer block version:
+  
         receiveClick: {
             type: 'hat',
             category: 'control',
             spec: 'when I am clicked'
+        },
+    */
+
+        receiveInteraction: {
+            type: 'hat',
+            category: 'control',
+            spec: 'when I am %interaction',
+            defaults: ['clicked']
         },
         receiveMessage: {
             type: 'hat',
@@ -1205,6 +1216,10 @@ SpriteMorph.prototype.initBlockMigrations = function () {
         doStopBlock: {
             selector: 'doStopThis',
             inputs: [['this block']]
+        },
+        receiveClick: {
+            selector: 'receiveInteraction',
+            inputs: [['I am clicked']]
         }
     };
 };
@@ -1253,8 +1268,6 @@ SpriteMorph.prototype.blockAlternatives = {
     setSize: ['changeSize'],
 
     // control:
-    receiveGo: ['receiveClick'],
-    receiveClick: ['receiveGo'],
     doBroadcast: ['doBroadcastAndWait'],
     doBroadcastAndWait: ['doBroadcast'],
     doIf: ['doIfElse', 'doUntil'],
@@ -1829,7 +1842,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
 
         blocks.push(block('receiveGo'));
         blocks.push(block('receiveKey'));
-        blocks.push(block('receiveClick'));
+        blocks.push(block('receiveInteraction'));
         blocks.push(block('receiveMessage'));
         blocks.push('-');
         blocks.push(block('doBroadcast'));
@@ -3169,6 +3182,7 @@ SpriteMorph.prototype.prepareToBeGrabbed = function (hand) {
 SpriteMorph.prototype.justDropped = function () {
     this.restoreLayers();
     this.positionTalkBubble();
+    this.receiveUserInteraction('dropped');
 };
 
 // SpriteMorph drawing:
@@ -3500,9 +3514,6 @@ SpriteMorph.prototype.allHatBlocksFor = function (message) {
             if (morph.selector === 'receiveOnClone') {
                 return message === '__clone__init__';
             }
-            if (morph.selector === 'receiveClick') {
-                return message === '__click__';
-            }
         }
         return false;
     });
@@ -3519,13 +3530,37 @@ SpriteMorph.prototype.allHatBlocksForKey = function (key) {
     });
 };
 
+SpriteMorph.prototype.allHatBlocksForInteraction = function (interaction) {
+    return this.scripts.children.filter(function (morph) {
+        if (morph.selector) {
+            if (morph.selector === 'receiveInteraction') {
+                return morph.inputs()[0].evaluate()[0] === interaction;
+            }
+        }
+        return false;
+    });
+};
+
 // SpriteMorph events
 
 SpriteMorph.prototype.mouseClickLeft = function () {
-    var stage = this.parentThatIsA(StageMorph),
-        hats = this.allHatBlocksFor('__click__'),
-        procs = [];
+    return this.receiveUserInteraction('clicked');
+};
 
+SpriteMorph.prototype.mouseEnter = function () {
+    return this.receiveUserInteraction('mouse-entered');
+};
+
+SpriteMorph.prototype.mouseDownLeft = function () {
+    return this.receiveUserInteraction('pressed');
+};
+
+SpriteMorph.prototype.receiveUserInteraction = function (interaction) {
+    var stage = this.parentThatIsA(StageMorph),
+        procs = [],
+        hats;
+    if (!stage) {return; } // currently dragged
+    hats = this.allHatBlocksForInteraction(interaction);
     hats.forEach(function (block) {
         procs.push(stage.threads.startProcess(block, stage.isThreadSafe));
     });
@@ -4190,6 +4225,7 @@ SpriteMorph.prototype.mouseEnterDragging = function () {
 };
 
 SpriteMorph.prototype.mouseLeave = function () {
+    this.receiveUserInteraction('mouse-departed');
     if (!this.enableNesting) {return; }
     this.removeHighlight();
 };
@@ -5020,7 +5056,7 @@ StageMorph.prototype.blockTemplates = function (category) {
 
         blocks.push(block('receiveGo'));
         blocks.push(block('receiveKey'));
-        blocks.push(block('receiveClick'));
+        blocks.push(block('receiveInteraction'));
         blocks.push(block('receiveMessage'));
         blocks.push('-');
         blocks.push(block('doBroadcast'));
@@ -5574,10 +5610,26 @@ StageMorph.prototype.allHatBlocksFor
 StageMorph.prototype.allHatBlocksForKey
     = SpriteMorph.prototype.allHatBlocksForKey;
 
+StageMorph.prototype.allHatBlocksForInteraction
+    = SpriteMorph.prototype.allHatBlocksForInteraction;
+
 // StageMorph events
 
 StageMorph.prototype.mouseClickLeft
     = SpriteMorph.prototype.mouseClickLeft;
+
+StageMorph.prototype.mouseEnter
+    = SpriteMorph.prototype.mouseEnter;
+
+StageMorph.prototype.mouseLeave = function () {
+    this.receiveUserInteraction('mouse-departed');
+};
+
+StageMorph.prototype.mouseDownLeft
+    = SpriteMorph.prototype.mouseDownLeft;
+
+StageMorph.prototype.receiveUserInteraction
+    = SpriteMorph.prototype.receiveUserInteraction;
 
 // StageMorph custom blocks
 
