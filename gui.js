@@ -9,7 +9,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2014 by Jens Mönig
+    Copyright (C) 2015 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -69,7 +69,7 @@ SpeechBubbleMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2014-December-04';
+modules.gui = '2015-January-21';
 
 // Declarations
 
@@ -119,7 +119,7 @@ IDE_Morph.prototype.setDefaultDesign = function () {
     ];
     IDE_Morph.prototype.rotationStyleColors = IDE_Morph.prototype.tabColors;
     IDE_Morph.prototype.appModeColor = new Color();
-    IDE_Morph.prototype.scriptsPaneTexture = 'scriptsPaneTexture.gif';
+    IDE_Morph.prototype.scriptsPaneTexture = this.scriptsTexture();
     IDE_Morph.prototype.padding = 5;
 
     SpriteIconMorph.prototype.labelColor
@@ -170,6 +170,22 @@ IDE_Morph.prototype.setFlatDesign = function () {
         = IDE_Morph.prototype.buttonLabelColor;
     TurtleIconMorph.prototype.labelColor
         = IDE_Morph.prototype.buttonLabelColor;
+};
+
+IDE_Morph.prototype.scriptsTexture = function () {
+    var pic = newCanvas(new Point(100, 100)), // bigger scales faster
+        ctx = pic.getContext('2d'),
+        i;
+    for (i = 0; i < 100; i += 4) {
+        ctx.fillStyle = this.frameColor.toString();
+        ctx.fillRect(i, 0, 1, 100);
+        ctx.fillStyle = this.groupColor.lighter(6).toString();
+        ctx.fillRect(i + 1, 0, 1, 100);
+        ctx.fillRect(i + 3, 0, 1, 100);
+        ctx.fillStyle = this.groupColor.toString();
+        ctx.fillRect(i + 2, 0, 1, 100);
+    }
+    return pic;
 };
 
 IDE_Morph.prototype.setDefaultDesign();
@@ -320,7 +336,6 @@ IDE_Morph.prototype.openIn = function (world) {
         this.inform('Snap!', motd);
     }
     */
-
     function interpretUrlAnchors() {
         var dict;
         if (location.hash.substr(0, 6) === '#open:') {
@@ -373,6 +388,7 @@ IDE_Morph.prototype.openIn = function (world) {
                         function () {
                             msg = myself.showMessage('Opening project...');
                         },
+                        function () {nop(); }, // yield (bug in Chrome)
                         function () {
                             if (projectData.indexOf('<snapdata') === 0) {
                                 myself.rawOpenCloudDataString(projectData);
@@ -1207,7 +1223,7 @@ IDE_Morph.prototype.createSpriteEditor = function () {
     if (this.currentTab === 'scripts') {
         scripts.isDraggable = false;
         scripts.color = this.groupColor;
-        scripts.texture = this.scriptsPaneTexture;
+        scripts.cachedTexture = this.scriptsPaneTexture;
 
         this.spriteEditor = new ScrollFrameMorph(
             scripts,
@@ -2113,6 +2129,7 @@ IDE_Morph.prototype.cloudMenu = function () {
                                             'Opening project...'
                                         );
                                     },
+                                    function () {nop(); }, // yield (Chrome)
                                     function () {
                                         myself.rawOpenCloudDataString(
                                             projectData
@@ -2579,7 +2596,7 @@ IDE_Morph.prototype.aboutSnap = function () {
         world = this.world();
 
     aboutTxt = 'Snap! 4.0\nBuild Your Own Blocks\n\n--- beta ---\n\n'
-        + 'Copyright \u24B8 2014 Jens M\u00F6nig and '
+        + 'Copyright \u24B8 2015 Jens M\u00F6nig and '
         + 'Brian Harvey\n'
         + 'jens@moenig.org, bh@cs.berkeley.edu\n\n'
 
@@ -2997,6 +3014,7 @@ IDE_Morph.prototype.openProjectString = function (str) {
         function () {
             msg = myself.showMessage('Opening project...');
         },
+        function () {nop(); }, // yield (bug in Chrome)
         function () {
             myself.rawOpenProjectString(str);
         },
@@ -3015,12 +3033,18 @@ IDE_Morph.prototype.rawOpenProjectString = function (str) {
     StageMorph.prototype.enableCodeMapping = false;
     if (Process.prototype.isCatchingErrors) {
         try {
-            this.serializer.openProject(this.serializer.load(str), this);
+            this.serializer.openProject(
+                this.serializer.load(str, this),
+                this
+            );
         } catch (err) {
             this.showMessage('Load failed: ' + err);
         }
     } else {
-        this.serializer.openProject(this.serializer.load(str), this);
+        this.serializer.openProject(
+            this.serializer.load(str, this),
+            this
+        );
     }
     this.stopFastTracking();
 };
@@ -3032,6 +3056,7 @@ IDE_Morph.prototype.openCloudDataString = function (str) {
         function () {
             msg = myself.showMessage('Opening project...');
         },
+        function () {nop(); }, // yield (bug in Chrome)
         function () {
             myself.rawOpenCloudDataString(str);
         },
@@ -3052,7 +3077,10 @@ IDE_Morph.prototype.rawOpenCloudDataString = function (str) {
             model = this.serializer.parse(str);
             this.serializer.loadMediaModel(model.childNamed('media'));
             this.serializer.openProject(
-                this.serializer.loadProjectModel(model.childNamed('project')),
+                this.serializer.loadProjectModel(
+                    model.childNamed('project'),
+                    this
+                ),
                 this
             );
         } catch (err) {
@@ -3062,7 +3090,10 @@ IDE_Morph.prototype.rawOpenCloudDataString = function (str) {
         model = this.serializer.parse(str);
         this.serializer.loadMediaModel(model.childNamed('media'));
         this.serializer.openProject(
-            this.serializer.loadProjectModel(model.childNamed('project')),
+            this.serializer.loadProjectModel(
+                model.childNamed('project'),
+                this
+            ),
             this
         );
     }
@@ -3076,6 +3107,7 @@ IDE_Morph.prototype.openBlocksString = function (str, name, silently) {
         function () {
             msg = myself.showMessage('Opening blocks...');
         },
+        function () {nop(); }, // yield (bug in Chrome)
         function () {
             myself.rawOpenBlocksString(str, name, silently);
         },
@@ -3122,6 +3154,7 @@ IDE_Morph.prototype.openSpritesString = function (str) {
         function () {
             msg = myself.showMessage('Opening sprite...');
         },
+        function () {nop(); }, // yield (bug in Chrome)
         function () {
             myself.rawOpenSpritesString(str);
         },
@@ -3398,6 +3431,15 @@ IDE_Morph.prototype.toggleAppMode = function (appMode) {
         }).forEach(function (s) {
             s.adjustScrollBars();
         });
+        // prevent rotation and draggability controls from
+        // showing for the stage
+        if (this.currentSprite === this.stage) {
+            this.spriteBar.children.forEach(function (child) {
+                if (child instanceof PushButtonMorph) {
+                    child.hide();
+                }
+            });
+        }
     }
     this.setExtent(this.world().extent()); // resume trackChanges
 };
@@ -3573,7 +3615,8 @@ IDE_Morph.prototype.userSetBlocksScale = function () {
 
     sample = new FrameMorph();
     sample.acceptsDrops = false;
-    sample.texture = this.scriptsPaneTexture;
+    sample.color = IDE_Morph.prototype.groupColor;
+    sample.cachedTexture = this.scriptsPaneTexture;
     sample.setExtent(new Point(250, 180));
     scrpt.setPosition(sample.position().add(10));
     sample.add(scrpt);
@@ -4185,6 +4228,9 @@ IDE_Morph.prototype.cloudResponse = function () {
 IDE_Morph.prototype.cloudError = function () {
     var myself = this;
 
+    // try finding an eplanation what's going on
+    // has some issues, commented out for now
+    /*
     function getURL(url) {
         try {
             var request = new XMLHttpRequest();
@@ -4198,13 +4244,15 @@ IDE_Morph.prototype.cloudError = function () {
             return null;
         }
     }
+    */
 
     return function (responseText, url) {
         // first, try to find out an explanation for the error
         // and notify the user about it,
         // if none is found, show an error dialog box
         var response = responseText,
-            explanation = getURL('http://snap.berkeley.edu/cloudmsg.txt');
+            // explanation = getURL('http://snap.berkeley.edu/cloudmsg.txt'),
+            explanation = null;
         if (myself.shield) {
             myself.shield.destroy();
             myself.shield = null;
@@ -4291,14 +4339,7 @@ IDE_Morph.prototype.setCloudURL = function () {
         null,
         {
             'Snap!Cloud' :
-                'https://snapcloud.miosoft.com/miocon/app/' +
-                    'login?_app=SnapCloud',
-            'local network lab' :
-                '192.168.2.107:8087/miocon/app/login?_app=SnapCloud',
-            'local network office' :
-                '192.168.186.146:8087/miocon/app/login?_app=SnapCloud',
-            'localhost dev' :
-                'localhost/miocon/app/login?_app=SnapCloud'
+                'https://snap.apps.miosoft.com/SnapCloud'
         }
     );
 };

@@ -9,7 +9,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2014 by Jens Mönig
+    Copyright (C) 2015 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -83,7 +83,7 @@ ArgLabelMorph, localize, XML_Element, hex_sha512*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.threads = '2014-December-04';
+modules.threads = '2015-January-12';
 
 var ThreadManager;
 var Process;
@@ -159,9 +159,11 @@ ThreadManager.prototype.startProcess = function (
         active.stop();
         this.removeTerminatedProcesses();
     }
-    top.addHighlight();
     newProc = new Process(block.topBlock(), callback);
     newProc.exportResult = exportResult;
+    if (!newProc.homeContext.receiver.isClone) {
+        top.addHighlight();
+    }
     this.processes.push(newProc);
     return newProc;
 };
@@ -234,7 +236,7 @@ ThreadManager.prototype.removeTerminatedProcesses = function () {
     // and un-highlight their scripts
     var remaining = [];
     this.processes.forEach(function (proc) {
-        if (!proc.isRunning() && !proc.errorFlag && !proc.isDead) {
+        if ((!proc.isRunning() && !proc.errorFlag) || proc.isDead) {
             if (proc.topBlock instanceof BlockMorph) {
                 proc.topBlock.removeHighlight();
             }
@@ -1695,6 +1697,7 @@ Process.prototype.doForEach = function (upvar, list, script) {
     );
     if (index > list.length()) {return; }
     this.context.inputs[3] += 1;
+    this.pushContext('doYield');
     this.pushContext();
     this.evaluate(script, new List(), true);
 };
@@ -2545,6 +2548,7 @@ Process.prototype.reportContextFor = function (context, otherObj) {
     if (result.outerContext) {
         result.outerContext = copy(result.outerContext);
         result.outerContext.receiver = otherObj;
+        result.outerContext.variables.parentFrame = otherObj.variables;
     }
     return result;
 };
