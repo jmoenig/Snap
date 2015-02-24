@@ -166,7 +166,7 @@
 
 /*global SnapTranslator*/
 
-SnapTranslator.dict.de = {
+SnapTranslator.dict.te = {
 
 /*
     Special characters: (see <http://0xcc.net/jsescape/>)
@@ -179,11 +179,11 @@ SnapTranslator.dict.de = {
 
     // translations meta information
     'language_name':
-        'Deutsch', // the name as it should appear in the language menu
+        'Telagu', // the name as it should appear in the language menu
     'language_translator':
-        'Jens M\u00F6nig', // your name for the Translators tab
+        'vinayakumar R', // your name for the Translators tab
     'translator_e-mail':
-        'jens@moenig.org', // optional
+        'vnkmr7620@gmail.com', // optional
     'last_changed':
         '2015-02-20', // this, too, will appear in the Translators tab
 
@@ -196,23 +196,23 @@ SnapTranslator.dict.de = {
 
     // categories:
     'Motion':
-        'Bewegung',
+        'చలన',
     'Looks':
-        'Aussehen',
+        'కనబడ',
     'Sound':
-        'Klang',
+        'శబ్దమ',
     'Pen':
-        'Stift',
+        'పెన్',
     'Control':
-        'Steuerung',
+        'నియంత్రణ',
     'Sensing':
-        'F\u00fchlen',
+        'స్పర్శించుట',
     'Operators':
-        'Operatoren',
+        'చేసేవి',
     'Variables':
-        'Variablen',
+        'చరరాశులు',
     'Lists':
-        'Listen',
+        'జాబితా',
     'Other':
         'Andere',
 
@@ -222,25 +222,25 @@ SnapTranslator.dict.de = {
 
     // tabs:
     'Scripts':
-        'Skripte',
+        'ఆజ్ఞ',
     'Costumes':
-        'Kost\u00fcme',
+        'వేషధారణ',
     'Sounds':
-        'Kl\u00e4nge',
+        'శబ్దాల',
 
     // names:
     'Sprite':
-        'Objekt',
+        'రూపమ',
     'Stage':
-        'B\u00fchne',
+        'వేదిక',
 
     // rotation styles:
     'don\'t rotate':
-        'nicht drehbar',
+        'తిరుగవద్',
     'can rotate':
-        'frei drehbar',
+        'తిరుగ గలద',
     'only face left/right':
-        'kann sich nur nach\nlinks/rechts drehen',
+        'ముఖం ఎడమ-కుడి వైపు మాత్రమే',
 
     // new sprite button:
     'add a new sprite':
@@ -291,77 +291,77 @@ SnapTranslator.dict.de = {
             + 'vorhanden',
 
     'move %n steps':
-        'gehe %n Schritte',
+        '%n అడుగులు జరుగ',
     'turn %clockwise %n degrees':
         'drehe %clockwise %n Grad',
     'turn %counterclockwise %n degrees':
         'drehe %counterclockwise %n Grad',
     'point in direction %dir':
-        'zeige Richtung %dir',
+        'బిందువు %dir దిశలో',
     'point towards %dst':
-        'zeige auf %dst',
+        'బిందువు %dst వైపునక',
     'go to x: %n y: %n':
-        'gehe zu x: %n y: %n',
+        'x: %n y: %n కు వెళ్',
     'go to %dst':
-        'gehe zu %dst',
+        '%dst కు వెళ్',
     'glide %n secs to x: %n y: %n':
-        'gleite %n Sek. zu x: %n y: %n',
+        '%n సెకన్లకు x: %n y: %n జరుగున',
     'change x by %n':
-        '\u00e4ndere x um %n',
+        'x విలువ %n కి మార్',
     'set x to %n':
-        'setze x auf %n',
+        'x విలువకు  %n పెట్',
     'change y by %n':
-        '\u00e4ndere y um %n',
+        'y విలువ %n కి మార్',
     'set y to %n':
-        'setze y auf %n',
+        'y విలువకు %n పెట్',
     'if on edge, bounce':
-        'pralle vom Rand ab',
+        'అంచున ఉంటే, దూక',
     'x position':
-        'x-Position',
+        'x స్థానం',
     'y position':
-        'y-Position',
+        'y స్థానం',
     'direction':
-        'Richtung',
+        'దిక్',
 
     // looks:
     'switch to costume %cst':
-        'ziehe Kost\u00fcm %cst an',
+        'వేషధారణ %cst కు బదలాయించు',
     'next costume':
-        'n\u00e4chstes Kost\u00fcm',
+        'తదుపరి వేషధారణ',
     'costume #':
-        'Kost\u00fcm Nr.',
+        'వేషధారణ #',
     'say %s for %n secs':
-        'sage %s f\u00fcr %n Sek.',
+        '%n సెకన్ల కోసం %s అని చెప్',
     'say %s':
-        'sage %s',
+        '%s అని చెప్',
     'think %s for %n secs':
-        'denke %s f\u00fcr %n Sek.',
+        '%n సెకన్ల కోసం %s ఆలోచించ',
     'think %s':
-        'denke %s',
+        '%s ఆలోచించ',
     'Hello!':
-        'Hallo!',
+        '"హలో!',
     'Hmm...':
-        'Hmm...',
+        'హమ్.మ్..',
     'change %eff effect by %n':
-        '\u00e4ndere %eff -Effekt um %n',
+        '%n ప్రభావంతో %eff మారున',
     'set %eff effect to %n':
-        'setze %eff -Effekt auf %n',
+        '%n ప్రయోజనంతో %eff పెట్',
     'clear graphic effects':
-        'schalte Grafikeffekte aus',
+        'గ్రాఫిక్ ప్రయోజనాలు తొలగించుట',
     'change size by %n':
-        '\u00e4ndere Gr\u00f6\u00dfe um %n',
+        'పరిమాణంను %n కి మార్',
     'set size to %n %':
-        'setze Gr\u00f6\u00dfe auf %n %',
+        '%n % కు పరిమాణాన్ని పెట్',
     'size':
         'Gr\u00f6\u00dfe',
     'show':
-        'anzeigen',
+        'చూపించ',
     'hide':
-        'verstecken',
+        'దాచిపెట్',
     'go to front':
-        'komme nach vorn',
+        'ముందుకు వెళ్',
     'go back %n layers':
-        'gehe %n Ebenen zur\u00fcck',
+        '%n లేయర్లు తిరిగి వెళ్ళుట',
 
     'development mode \ndebugging primitives:':
         'Hackermodus \nDebugging-Bl\u00f6cke',
@@ -372,91 +372,91 @@ SnapTranslator.dict.de = {
 
     // sound:
     'play sound %snd':
-        'spiele Klang %snd',
+        '%snd శబ్దం వాయించ',
     'play sound %snd until done':
-        'spiele Klang %snd ganz',
+        '%snd ఆగువరకు శబ్దం వాయించ',
     'stop all sounds':
-        'stoppe alle Kl\u00e4nge',
+        'అన్నీ శబ్దాలు నిలుప',
     'rest for %n beats':
         'spiele Pause f\u00fcr %n Schl\u00e4ge',
     'play note %n for %n beats':
-        'spiele Note %n f\u00fcr %n Schl\u00e4ge',
+        '%n సంజ్ఞను వాయించు %n బీట్స్ కోస',
     'change tempo by %n':
-        '\u00e4ndere Tempo um %n',
+        'కదలికలోని తీవ్రతను %n మార్',
     'set tempo to %n bpm':
-        'setze Tempo auf %n Schl\u00e4ge/Min.',
+        '%n బి.పి.యం.కు కదలికలోని తీవ్రతను పెట్',
     'tempo':
-        'Tempo',
+        'కదలికలోని తీవ్రత',
 
     // pen:
     'clear':
-        'wische',
+        'తొలగించుట',
     'pen down':
-        'Stift runter',
+        'పెన్ను క్రిందకి',
     'pen up':
-        'Stift hoch',
+        'పెన్ను పైకి',
     'set pen color to %clr':
-        'setze Stiftfarbe auf %clr',
+        'పెన్ను రంగును %clr కు పెట్',
     'change pen color by %n':
-        '\u00e4ndere Stiftfarbe um %n',
+        'పెన్ను రంగు %n కు మార్',
     'set pen color to %n':
-        'setze Stiftfarbe auf %n',
+        'పెన్ను రంగును %n కు  పెట్',
     'change pen shade by %n':
-        '\u00e4ndere Farbst\u00e4rke um %n',
+        'పెన్ను రంగు షేడ్ %n కు మార్',
     'set pen shade to %n':
-        'setze Farbst\u00e4rke auf %n',
+        'పెన్ను రంగు షేడ్ %n కు పెట్',
     'change pen size by %n':
-        '\u00e4ndere Stiftdicke um %n',
+        'న్ను పరిమాణం మార్చేందుకు %n',
     'set pen size to %n':
-        'setze Stiftdicke auf %n',
+        'పెన్ను పరిమాణం %n కు పెట్టు',
     'stamp':
-        'stemple',
+        'ముద్',
 
     // control:
     'when %greenflag clicked':
-        'Wenn %greenflag angeklickt',
+        '%greenflag ఒత్తినప్పుడ',
     'when %keyHat key pressed':
-        'Wenn Taste %keyHat gedr\u00fcckt',
+        '%keyHat కీ ఒత్తినప్పుడ',
     'when I am clicked':
         'Wenn ich angeklickt werde',
     'when I receive %msgHat':
-        'Wenn ich %msgHat empfange',
+        '%msgHat  నేను స్వీకరించినప్పుడు',
     'broadcast %msg':
-        'sende %msg an alle',
+        'ప్రసార %msg',
     'broadcast %msg and wait':
-        'sende %msg an alle und warte',
+        '%msg ని ప్రసారం చేసి,  వేచివుండు',
     'Message name':
-        'Nachricht',
+        'సందేశం పేర',
     'message':
-        'Nachricht',
+        'సందేశ',
     'any message':
-        'eine beliebige Nachricht',
+        'ఏదైనా సందేశ',
     'wait %n secs':
-        'warte %n Sek.',
+        '%n  సెకన్లు వేచియుండ',
     'wait until %b':
-        'warte bis %b',
+        '%b వరకూ వేచియుండ',
     'forever %c':
-        'fortlaufend %c',
+        'ఎప్పటికి %c',
     'repeat %n %c':
-        'wiederhole %n mal %c',
+        '%n %c పునరావృత',
     'repeat until %b %c':
-        'wiederhole bis %b %c',
+        '%b %c పునరావృతం అయ్యేంతవరక',
     'if %b %c':
-        'falls %b %c',
+        'ఒకవేళ %b %c',
     'if %b %c else %c':
-        'falls %b %c sonst %c',
+        'ఒకవేళ %b %c ఇంకా %c',
     'report %s':
         'berichte %s',
     'stop %stopChoices':
-        'stoppe %stopChoices',
+        'నిలుపు %stopChoices',
     'all':
-        'alles',
+        'అన్',
     'this script':
-        'dieses Skript',
+        'ఈ ఆజ్',
     'this block':
         'diesen Block',
     'stop %stopOthersChoices':
-        'stoppe %stopOthersChoices',
+        'నిలుప %stopOthersChoices',
     'all but this script':
         'alles au\u00dfer diesem Skript',
     'other scripts in sprite':
@@ -486,33 +486,33 @@ SnapTranslator.dict.de = {
 
     // sensing:
     'touching %col ?':
-        'ber\u00fchre %col ?',
+        '%col తాకుతుందా?',
     'touching %clr ?':
-        'ber\u00fchre %clr ?',
+        '%clr రంగును తాకుతుందా?',
     'color %clr is touching %clr ?':
-        'Farbe %clr ber\u00fchrt %clr ?',
+        '%clr రంగు %clr తాకుతుందా?',
     'ask %s and wait':
-        'frage %s und warte',
+        '%s అడిగి, వేచియుండ',
     'what\'s your name?':
-        'Wie hei\u00dft Du?',
+        'నీ పేరు ఏమిటి?',
     'answer':
-        'Antwort',
+        'సమాధాన',
     'mouse x':
-        'Maus x-Position',
+        'మౌస్ x',
     'mouse y':
-        'Maus y-Position',
+        'మౌస్ y',
     'mouse down?':
-        'Maustaste gedr\u00fcckt?',
+        'మౌస్ ఒత్తారా?',
     'key %key pressed?':
-        'Taste %key gedr\u00fcckt?',
+        '%key కీ ఒత్తారా?',
     'distance to %dst':
-        'Entfernung von %dst',
+        '%dst కు దూరం',
     'reset timer':
-        'starte Stoppuhr neu',
+        'సమయసూచిని మళ్ళీ పెట్',
     'timer':
-        'Stoppuhr',
+        'సమయసూచి',
     '%att of %spr':
-        '%att von %spr',
+        '%att లో %spr',
     'http:// %s':
         'http:// %s',
     'turbo mode?':
@@ -529,31 +529,31 @@ SnapTranslator.dict.de = {
 
     // operators:
     '%n mod %n':
-        '%n modulo %n',
+        '%n శేష %n',
     'round %n':
-        '%n gerundet',
+        '%n గుండ్రమ',
     '%fun of %n':
-        '%fun von %n',
+        '%fun లో %n',
     'pick random %n to %n':
-        'Zufallszahl von %n bis %n',
+        '%n నుండి %n ను యాదృచ్ఛికంగా ఎంచుకోండి',
     '%b and %b':
-        '%b und %b',
+        '%b మరియ %b',
     '%b or %b':
-        '%b oder %b',
+        '%b లేదా %b',
     'not %b':
-        'nicht %b',
+        'లేద %b',
     'true':
-        'wahr',
+        'సత్',
     'false':
-        'falsch',
+        'తప్',
     'join %words':
-        'verbinde %words',
+        'కలుప %words',
     'split %s by %delim':
         'trenne %s nach %delim',
     'hello':
-        'Hallo',
+        'హలో',
     'world':
-        'Welt',
+        'ప్రపంచం',
     'letter %n of %s':
         'Zeichen %n von %s',
     'length of %s':
@@ -572,22 +572,22 @@ SnapTranslator.dict.de = {
 
     // variables:
     'Make a variable':
-        'Neue Variable',
+        'చరరాశిని కల్పించు',
     'Variable name':
-        'Variablenname',
+        'చరరాశి పేరు ?',
     'Script variable name':
         'Skriptvariablenname',
     'Delete a variable':
-        'Variable l\u00f6schen',
+        'చరరాశిని తొలగించ',
 
     'set %var to %s':
-        'setze %var auf %s',
+        '%var లో %s ను పెట్',
     'change %var by %n':
-        '\u00e4ndere %var um %n',
+        '%var మార్చడానికి %n',
     'show variable %var':
-        'zeige Variable %var',
+        'చరరాశి %var ను చూప',
     'hide variable %var':
-        'verstecke Variable %var',
+        '%var చరరాశిని దాచు',
     'script variables %scriptVars':
         'Skriptvariablen %scriptVars',
 
@@ -640,21 +640,17 @@ SnapTranslator.dict.de = {
 
     // project menu
     'Project notes...':
-        'Projektanmerkungen...',
+        'రాజెక్ట్ గమనికల...',
     'New':
-        'Neu',
+        'కొత్',
     'Open...':
-        '\u00d6ffnen...',
+        'తెరువ...',
     'Save':
-        'Sichern',
-    'Save to disk':
-        'Abpeichern',
-    'store this project\nin your downloads folder\n(not supported by all browsers)':
-        'dieses Projekt herunterladen\nund lokal speichern\n(nicht von allen Browsern unters\u00fctzt)',
+        'సేవ్ చేయ',
     'Save As...':
-        'Sichern als...',
+        'వదిలేయడానికి ముందు మార్పులను సేవ్ చేయ...',
     'Import...':
-        'Importieren...',
+        'దిగుమతి...',
     'file menu import hint':
         'l\u00e4dt ein exportiertes Projekt,\neine Bibliothek mit '
             + 'Bl\u00f6cken\n'
@@ -686,7 +682,7 @@ SnapTranslator.dict.de = {
 
     // settings menu
     'Language...':
-        'Sprache...',
+        'భాష...',
     'Zoom blocks...':
         'Bl\u00f6cke vergr\u00f6\u00dfern...',
     'Stage size...':
@@ -758,7 +754,7 @@ SnapTranslator.dict.de = {
     'check to turn\nblock clicking\nsound on':
         'einschalten um akustisches\nKlicken zu aktivieren',
     'Animations':
-        'Animationen',
+        'ఆనిమేషన్ (సజీవత్వము)',
     'uncheck to disable\nIDE animations':
         'ausschalten um IDE-\nAnimationen zu verhindern',
     'Turbo mode':
@@ -800,7 +796,7 @@ SnapTranslator.dict.de = {
 
     // context menus:
     'help':
-        'Hilfe',
+        'సహాయ',
 
     // palette:
     'hide primitives':
@@ -810,17 +806,17 @@ SnapTranslator.dict.de = {
 
     // blocks:
     'help...':
-        'Hilfe...',
+        'సహాయ...',
     'relabel...':
         'Umbenennen...',
     'duplicate':
-        'Duplizieren',
+        'నకల',
     'make a copy\nand pick it up':
         'eine Kopie aufnehmen',
     'only duplicate this block':
         'nur diesen Block duplizieren',
     'delete':
-        'L\u00f6schen',
+        'తొలగించ',
     'script pic...':
         'Skriptbild...',
     'open a new window\nwith a picture of this script':
@@ -834,19 +830,19 @@ SnapTranslator.dict.de = {
     'delete block definition...':
         'Blockdefinition l\u00f6schen',
     'edit...':
-        'Bearbeiten...',
+        'సవరించ...',
 
     // sprites:
     'edit':
-        'Bearbeiten',
+        'సవరించ',
     'move':
-        'Verschieben',
+        'జరుగ',
     'detach from':
         'Abtrennen von',
     'detach all parts':
         'Alle Teile abtrennen',
     'export...':
-        'Exportieren...',
+        'ఎగుమతి...',
 
     // stage:
     'show all':
@@ -858,11 +854,11 @@ SnapTranslator.dict.de = {
 
     // scripting area
     'clean up':
-        'Aufr\u00e4umen',
+        'శుభ్రం చేయ',
     'arrange scripts\nvertically':
         'Skripte der Reihe nach\nanordnen',
     'add comment':
-        'Anmerkung hinzuf\u00fcgen',
+        'వ్యాఖ్యానించ',
     'undrop':
         'R\u00fcckg\u00e4ngig',
     'undo the last\nblock drop\nin this pane':
@@ -878,38 +874,38 @@ SnapTranslator.dict.de = {
     'rename':
         'Umbenennen',
     'export':
-        'Exportieren',
+        'ఎగుమతి',
     'rename costume':
         'Kost\u00fcm umbenennen',
 
     // sounds
     'Play sound':
-        'Klang\nabspielen',
+        'శబ్దం వాయించ',
     'Stop sound':
         'Klang\nanhalten',
     'Stop':
-        'Halt',
+        'ఆప',
     'Play':
-        'Los',
+        'ఆడ',
     'rename sound':
         'Klang umbenennen',
 
     // dialogs
     // buttons
     'OK':
-        'OK',
+        'సరే',
     'Ok':
-        'OK',
+        'సరే',
     'Cancel':
-        'Abbrechen',
+        'రద్',
     'Yes':
-        'Ja',
+        'అవున',
     'No':
-        'Nein',
+        'లేద',
 
     // help
     'Help':
-        'Hilfe',
+        'సహాయ',
 
     // zoom blocks
     'Zoom blocks':
@@ -959,7 +955,7 @@ SnapTranslator.dict.de = {
 
     // project notes
     'Project Notes':
-        'Projektanmerkungen',
+        '"ప్రాజెక్ట్ గమనికల',
 
     // new project
     'New Project':

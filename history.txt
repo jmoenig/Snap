@@ -2426,3 +2426,18 @@ ______
 * GUI: Fix Zoom Dialog’s sample background in “flat” design
 * Updated Korean and Catalan translations, thanks, Yunjae Jang and Bernat Romagosa!
 * Objects: Fix speech bubbles of dragged nested sprites
+
+150128
+------
+* Objects: Fixed #710
+
+150206
+------
+* GUI: Added url switch #cloud: to open a shared project in edit mode
+
+150220
+------
+* Malayam, Tamil and Telagu translations, thanks, Vinay Kumar!!
+* Un-hide “Save to disk” feature (currently supported by both Chrome and Firefox, but not by Safari)
+* Update German translation
+* GUI: Make “project data in URLs” a hidden dev option (prevent long urls per default)

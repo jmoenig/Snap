@@ -125,7 +125,7 @@ PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.objects = '2015-January-21';
+modules.objects = '2015-January-28';
 
 var SpriteMorph;
 var StageMorph;
@@ -2758,7 +2758,7 @@ SpriteMorph.prototype.setColor = function (aColor) {
     var x = this.xPosition(),
         y = this.yPosition();
     if (!this.color.eq(aColor)) {
-        this.color = aColor;
+        this.color = aColor.copy();
         this.drawNew();
         this.gotoXY(x, y);
     }
