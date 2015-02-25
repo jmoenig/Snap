@@ -2874,7 +2874,10 @@ IDE_Morph.prototype.saveProjectToDisk = function () {
             link.setAttribute('href', 'data:text/xml,' + data);
             link.setAttribute('download', this.projectName + '.xml');
             document.body.appendChild(link);
+            console.log('URL Created...');
+            console.log(link);
             link.click();
+            console.log('Did Chrome error?');
             document.body.removeChild(link);
         } catch (err) {
             this.showMessage('Saving failed: ' + err);
@@ -2884,7 +2887,10 @@ IDE_Morph.prototype.saveProjectToDisk = function () {
         link.setAttribute('href', 'data:text/xml,' + data);
         link.setAttribute('download', this.projectName + '.xml');
         document.body.appendChild(link);
+        console.log('URL Created...');
+        console.log(link);
         link.click();
+        console.log('Did Chrome error?');
         document.body.removeChild(link);
     }
 };
@@ -2900,8 +2906,10 @@ IDE_Morph.prototype.exportProject = function (name, plain) {
                     this.serializer.serialize(this.stage)
                 );
                 this.setURL('#open:' + str);
+                console.log('URL Not Set... error?');
                 window.open('data:text/'
                     + (plain ? 'plain,' + str : 'xml,' + str));
+                console.log('error?');
                 menu.destroy();
                 this.showMessage('Exported!', 1);
             } catch (err) {
@@ -2913,8 +2921,10 @@ IDE_Morph.prototype.exportProject = function (name, plain) {
                 this.serializer.serialize(this.stage)
             );
             this.setURL('#open:' + str);
+            console.log('URL Not Set... error?');
             window.open('data:text/'
                 + (plain ? 'plain,' + str : 'xml,' + str));
+            console.log('error??');
             menu.destroy();
             this.showMessage('Exported!', 1);
         }
