@@ -128,6 +128,15 @@ function snapEquals(a, b) {
     return x === y;
 }
 
+// stricter alternative to parseFloat
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/parseFloat/
+function filterFloat(value) {
+    if(/^(\-|\+)?([0-9]+(\.[0-9]+)?|Infinity)$/
+        .test(value))
+        return Number(value);
+    return NaN;
+}
+
 // ThreadManager ///////////////////////////////////////////////////////
 
 function ThreadManager() {
@@ -1920,13 +1929,14 @@ Process.prototype.reportIsA = function (thing, typeString) {
 Process.prototype.reportTypeOf = function (thing) {
     // answer a string denoting the argument's type
     var exp;
+
     if (thing === null || (thing === undefined)) {
         return 'nothing';
     }
     if (thing === true || (thing === false)) {
         return 'Boolean';
     }
-    if (!isNaN(parseFloat(thing))) {
+    if (!isNaN(filterFloat(thing))) {
         return 'number';
     }
     if (isString(thing)) {
