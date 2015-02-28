@@ -155,7 +155,7 @@ DialogBoxMorph, BlockInputFragmentMorph, PrototypeHatBlockMorph, Costume*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2015-February-23';
+modules.blocks = '2015-February-28';
 
 
 var SyntaxElementMorph;
@@ -340,6 +340,7 @@ SyntaxElementMorph.prototype.setScale = function (num) {
 };
 
 SyntaxElementMorph.prototype.setScale(1);
+SyntaxElementMorph.prototype.isCachingInputs = true;
 
 // SyntaxElementMorph instance creation:
 
@@ -356,6 +357,7 @@ SyntaxElementMorph.prototype.init = function () {
     SyntaxElementMorph.uber.init.call(this);
 
     this.defaults = [];
+    this.cachedInputs = null;
 };
 
 // SyntaxElementMorph accessing:
@@ -375,10 +377,12 @@ SyntaxElementMorph.prototype.parts = function () {
 
 SyntaxElementMorph.prototype.inputs = function () {
     // answer my arguments and nested reporters
-    return this.parts().filter(function (part) {
-        return part instanceof SyntaxElementMorph;
-    });
-
+    if (isNil(this.cachedInputs) || !this.isCachingInputs) {
+        this.cachedInputs = this.parts().filter(function (part) {
+            return part instanceof SyntaxElementMorph;
+        });
+    }
+    return this.cachedInputs;
 };
 
 SyntaxElementMorph.prototype.allInputs = function () {
@@ -494,6 +498,7 @@ SyntaxElementMorph.prototype.replaceInput = function (oldArg, newArg) {
         replacement.drawNew();
         this.fixLayout();
     }
+    this.cachedInputs = null;
     this.endLayout();
 };
 
@@ -529,6 +534,7 @@ SyntaxElementMorph.prototype.silentReplaceInput = function (oldArg, newArg) {
         replacement.drawNew();
         this.fixLayout();
     }
+    this.cachedInputs = null;
 };
 
 SyntaxElementMorph.prototype.revertToDefaultInput = function (arg, noValues) {
@@ -571,6 +577,7 @@ SyntaxElementMorph.prototype.revertToDefaultInput = function (arg, noValues) {
     } else if (deflt instanceof RingMorph) {
         deflt.fixBlockColor();
     }
+    this.cachedInputs = null;
 };
 
 SyntaxElementMorph.prototype.isLocked = function () {
@@ -1942,6 +1949,7 @@ BlockMorph.prototype.init = function () {
 
     BlockMorph.uber.init.call(this);
     this.color = new Color(0, 17, 173);
+    this.cashedInputs = null;
 };
 
 BlockMorph.prototype.receiver = function () {
@@ -2047,6 +2055,7 @@ BlockMorph.prototype.setSpec = function (spec) {
     });
     this.blockSpec = spec;
     this.fixLayout();
+    this.cachedInputs = null;
 };
 
 BlockMorph.prototype.buildSpec = function () {
@@ -2439,6 +2448,7 @@ BlockMorph.prototype.restoreInputs = function (oldInputs) {
         }
         i += 1;
     });
+    this.cachedInputs = null;
 };
 
 BlockMorph.prototype.showHelp = function () {
@@ -3034,6 +3044,7 @@ BlockMorph.prototype.fullCopy = function () {
         //block.comment = null;
 
     });
+    ans.cachedInputs = null;
     return ans;
 };
 
@@ -9186,6 +9197,10 @@ MultiArgMorph.prototype = new ArgMorph();
 MultiArgMorph.prototype.constructor = MultiArgMorph;
 MultiArgMorph.uber = ArgMorph.prototype;
 
+// MultiArgMorph preferences settings
+
+MultiArgMorph.prototype.isCachingInputs = false;
+
 // MultiArgMorph instance creation:
 
 function MultiArgMorph(
@@ -9615,6 +9630,10 @@ MultiArgMorph.prototype.isEmptySlot = function () {
 ArgLabelMorph.prototype = new ArgMorph();
 ArgLabelMorph.prototype.constructor = ArgLabelMorph;
 ArgLabelMorph.uber = ArgMorph.prototype;
+
+// ArgLabelMorph preferences settings
+
+ArgLabelMorph.prototype.isCachingInputs = false;
 
 // MultiArgMorph instance creation:
 

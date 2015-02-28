@@ -2451,3 +2451,7 @@ ______
 150224
 ------
 * Store: fixed #725
+
+150228
+------
+* Blocks, Store, GUI: Cache inputs, accelerates evaluating recursive reporters and warped / turbo recursive commands by up to 40%

@@ -61,7 +61,7 @@ SyntaxElementMorph, Variable*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2015-February-24';
+modules.store = '2015-February-28';
 
 
 // XML_Serializer ///////////////////////////////////////////////////////
@@ -1027,6 +1027,7 @@ SnapSerializer.prototype.loadBlock = function (model, isReporter) {
             this.loadInput(child, inputs[i], block);
         }
     }, this);
+    block.cachedInputs = null;
     return block;
 };
 
