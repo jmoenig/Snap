@@ -2455,3 +2455,4 @@ ______
 150228
 ------
 * Blocks, Store, GUI: Cache inputs, accelerates evaluating recursive reporters and warped / turbo recursive commands by up to 40%
+* Objects: slightly optimize warped / turbo execution 
