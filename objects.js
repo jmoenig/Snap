@@ -125,7 +125,7 @@ PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.objects = '2015-February-23';
+modules.objects = '2015-February-28';
 
 var SpriteMorph;
 var StageMorph;
@@ -1433,15 +1433,13 @@ SpriteMorph.prototype.setName = function (string) {
 
 SpriteMorph.prototype.drawNew = function () {
     var myself = this,
-        currentCenter = this.center(),
+        currentCenter,
         facing, // actual costume heading based on my rotation style
         isFlipped,
-        isLoadingCostume = this.costume &&
-            typeof this.costume.loaded === 'function',
+        isLoadingCostume,
         cst,
         pic, // (flipped copy of) actual costume based on my rotation style
-        stageScale = this.parent instanceof StageMorph ?
-                this.parent.scale : 1,
+        stageScale,
         newX,
         corners = [],
         origin,
@@ -1455,6 +1453,11 @@ SpriteMorph.prototype.drawNew = function () {
         this.wantsRedraw = true;
         return;
     }
+    currentCenter = this.center();
+    isLoadingCostume = this.costume &&
+        typeof this.costume.loaded === 'function';
+    stageScale = this.parent instanceof StageMorph ?
+            this.parent.scale : 1;
     facing = this.rotationStyle ? this.heading : 90;
     if (this.rotationStyle === 2) {
         facing = 90;

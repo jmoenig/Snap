@@ -106,7 +106,7 @@ SymbolMorph, isNil*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2015-January-21';
+modules.byob = '2015-February-28';
 
 // Declarations
 
@@ -2974,7 +2974,7 @@ InputSlotDialogMorph.prototype.editSlotOptions = function () {
     new DialogBoxMorph(
         myself,
         function (options) {
-            myself.fragment.options = options;
+            myself.fragment.options = options.trim();
         },
         myself
     ).promptCode(

@@ -69,7 +69,7 @@ SpeechBubbleMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2015-February-23';
+modules.gui = '2015-February-28';
 
 // Declarations
 
@@ -2265,6 +2265,17 @@ IDE_Morph.prototype.settingsMenu = function () {
         this.stage.isFastTracked,
         'uncheck to run scripts\nat normal speed',
         'check to prioritize\nscript execution'
+    );
+    addPreference(
+        'Cache Inputs',
+        function () {
+            SyntaxElementMorph.prototype.isCachingInputs =
+                !SyntaxElementMorph.prototype.isCachingInputs;
+        },
+        SyntaxElementMorph.prototype.isCachingInputs,
+        'uncheck to stop caching\ninputs (for debugging the evaluator)',
+        'check to cache inputs\nboosts recursion',
+        true
     );
     addPreference(
         'Rasterize SVGs',
