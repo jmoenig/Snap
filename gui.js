@@ -69,7 +69,7 @@ SpeechBubbleMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2015-February-20';
+modules.gui = '2015-February-28';
 
 // Declarations
 
@@ -2267,6 +2267,17 @@ IDE_Morph.prototype.settingsMenu = function () {
         'check to prioritize\nscript execution'
     );
     addPreference(
+        'Cache Inputs',
+        function () {
+            SyntaxElementMorph.prototype.isCachingInputs =
+                !SyntaxElementMorph.prototype.isCachingInputs;
+        },
+        SyntaxElementMorph.prototype.isCachingInputs,
+        'uncheck to stop caching\ninputs (for debugging the evaluator)',
+        'check to cache inputs\nboosts recursion',
+        true
+    );
+    addPreference(
         'Rasterize SVGs',
         function () {
             MorphicPreferences.rasterizeSVGs =
@@ -2376,8 +2387,8 @@ IDE_Morph.prototype.projectMenu = function () {
     menu.addItem(
         'Save to disk',
         'saveProjectToDisk',
-        'store this project\nin your downloads folder\n'
-            + '(not supported by all browsers)'
+        'store this project\nin the downloads folder\n'
+            + '(in supporting browsers)'
     );
     menu.addItem('Save As...', 'saveProjectsBrowser');
     menu.addLine();
