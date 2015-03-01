@@ -3546,7 +3546,6 @@ IDE_Morph.prototype.setLanguage = function (lang, callback) {
     if (lang === 'en') {
         return this.reflectLanguage('en', callback);
     }
-    myself.userLanguage = lang;
     translation = document.createElement('script');
     translation.id = 'language';
     translation.onload = function () {

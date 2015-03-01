@@ -941,16 +941,6 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'sensing',
             spec: 'current acceleration along the z axes'
         },
-        reportLanguage: {
-            type: 'reporter',
-            category: 'sensing',
-            spec: 'language'
-        },
-        reportLocation: {
-            type: 'reporter',
-            category: 'sensing',
-            spec: 'location %locations'
-        },
 
         // Operators
         reifyScript: {
@@ -1985,9 +1975,6 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('doSetFastTracking'));
         blocks.push('-');
         blocks.push(block('reportDate'));
-        blocks.push('-');
-        blocks.push(block('reportLanguage'));
-        blocks.push(block('reportLocation'));
         blocks.push('-');
         blocks.push(block('doVibrate'));
         blocks.push('-');
@@ -5191,9 +5178,6 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('doSetFastTracking'));
         blocks.push('-');
         blocks.push(block('reportDate'));
-        blocks.push('-');
-        blocks.push(block('reportLanguage'));
-        blocks.push(block('reportLocation'));
         blocks.push('-');
         blocks.push(block('doVibrate'));
         blocks.push('-');
