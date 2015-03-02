@@ -2458,3 +2458,7 @@ ______
 * Objects: slightly optimize warped / turbo execution
 * Threads: fixed #715
 * BYOB: fixed #716
+
+150302
+------
+* BYOB: fixed #730
