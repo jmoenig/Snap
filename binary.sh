@@ -18,6 +18,8 @@ then
     echo "  Desktop     win32 win64 osx linux32 linux64"
     echo ""
     echo "If FILE/URL is given, it will be #open-ed inside Snap! immediately. URL will be loaded at runtime."
+    echo "If URL starts with a hash ('#'), it will be used as initial base url suffix"
+    echo " (for example '#present:UserName=foo\&ProjectName=bar', escape the '&')."
     echo ""
     echo ""
     echo "The following environment variables will be used, if available:"
@@ -65,11 +67,17 @@ then
         url=$3
     fi
 
-    # load custom project from url
-    sed -i "/ide\.openIn/a\
-        ide.droppedText(ide.getURL('$url'));" snap.html
-    sed -i "/this.toggleAppMode(false)/d" gui.js
-    sed -i "s/snap.html/snap.html#run:/g" config.xml package.json
+    if [[ $url == \#* ]]
+    then
+        # load custom project from cloud or string
+        sed -i "s/snap.html/snap.html${url}/g" config.xml package.json
+    else
+        # load custom project from url
+        sed -i "/ide\.openIn/a\
+            ide.droppedText(ide.getURL('$url'));" snap.html
+        sed -i "/this.toggleAppMode(false)/d" gui.js
+        sed -i "s/snap.html/snap.html#run:/g" config.xml package.json
+    fi
 fi
 
 # compress all js files
