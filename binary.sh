@@ -49,8 +49,6 @@ git clone $snapsource $buildsource
 cd "$buildsource"
 git checkout mobileapp
 
-rm -rf .git/
-
 if [ $ide == false ]
 then
     # minimize everything
