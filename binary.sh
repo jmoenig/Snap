@@ -52,12 +52,8 @@ git checkout mobileapp
 if [ $ide == false ]
 then
     # minimize everything
-    rm lang* ypr.js paint.js cloud.js gui.js *.sh *.pdf *.txt
+    rm *.sh *.pdf *.txt
     rm -r help/ Costumes/ Backgrounds/ Sounds/
-
-    sed -i '/paint\.js"/d' snap.html
-    sed -i '/cloud\.js"/d' snap.html
-    sed -i 's/gui\.js"/binary\.js"/' snap.html
 
     # if a file was given, move it to "project.xml"
     # it will be loaded like an URL then
@@ -71,10 +67,9 @@ then
 
     # load custom project from url
     sed -i "/ide\.openIn/a\
-        ide.droppedText(ide.getURL('$url')); " snap.html
-
-else
-    rm binary.js
+        ide.droppedText(ide.getURL('$url'));" snap.html
+    sed -i "/this.toggleAppMode(false)/d" gui.js
+    sed -i "s/snap.html/snap.html#run:/g" config.xml package.json
 fi
 
 # compress all js files
