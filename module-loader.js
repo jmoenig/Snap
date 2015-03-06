@@ -201,7 +201,8 @@ ModuleLoader.prototype.getApplicationURL = function(module, api_url) {
 }
 
 ModuleLoader.prototype.slugify = function(text) {
-  // From https://gist.github.com/mathewbyrne/1280286
+  //Thanks to Mathew Byrne
+  //https://gist.github.com/mathewbyrne/1280286
   return text.toString().toLowerCase()
     .replace(/\s+/g, '-')           // Replace spaces with -
     .replace(/[^\w\-]+/g, '')       // Remove all non-word chars
