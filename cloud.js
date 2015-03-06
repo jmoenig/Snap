@@ -31,12 +31,6 @@
 
 modules.cloud = '2014-January-09';
 
-// Global stuff
-
-var Cloud;
-
-var SnapCloud = new Cloud();
-
 // Cloud /////////////////////////////////////////////////////////////
 
 function Cloud() {
@@ -172,7 +166,8 @@ Cloud.prototype.saveProject = function (ide, callBack, errorCall) {
     var create_project_url = this.create_project_url;
     var myself = this;
     upload_project = function() {
-        if(myself.name == ide.projectName) {
+        var update_cloud_settings;
+        if(myself.project_id !== undefined) {
             $.ajax({
                 type: 'PUT',
                 url: create_project_url+myself.project_id, 
@@ -184,8 +179,7 @@ Cloud.prototype.saveProject = function (ide, callBack, errorCall) {
                     screenshot: image_id
                 }, 
                 success: function(data, stuff) {
-                  callBack(data, stuff);
-                  myself.updateURL(myself.project_url_root + data.id);
+                  update_cloud_settings(data, stuff);
                 },
                 dataType: 'json'
             }).fail(errorCall);
@@ -197,11 +191,15 @@ Cloud.prototype.saveProject = function (ide, callBack, errorCall) {
                 project: xml_id,
                 screenshot: image_id
             }, function(data, stuff) {
-                myself.updateURL(myself.project_url_root + data.id);
-                callBack(data, stuff);
+                update_cloud_settings(data, stuff);
               }, 'json').fail(errorCall);
         }
-        myself.name = ide.projectName;
+        update_cloud_settings = function(data, stuff) {
+            myself.project_id = data['id'];
+            myself.name = data['name'];
+            myself.updateURL(myself.project_url_root + data['id']+'/run');
+            callBack(data, stuff);
+        }
     }
 
     // Alert user
@@ -253,3 +251,7 @@ Cloud.prototype.updateURL = function(URL) {
 Cloud.prototype.message = function (string) {
     alert(string);
 };
+
+var Cloud;
+
+var SnapCloud = new Cloud();
