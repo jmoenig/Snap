@@ -299,39 +299,42 @@ IDE_Morph.prototype.openIn = function (world) {
     */
 
     // Check and see what modules need to be loaded, and load them
-    this.numModules = 1
-    this.modules = [[config.modules.module,">0.0.0"]]
-    this.module_list = new Object();
-    this.loadModules(config.modules.module,">0.0.0");
+    // Load the module, if needed, and call back
+    // If no module, just load the project
+    var load_project = function() {
+        if(config.project !== undefined) {
+            SnapCloud.openProject(config.project,
+                function(response) {
+                    myself.source = 'cloud';
+                    myself.droppedText(response);
+            }, myself.cloudError());
+        }
 
-  // If there is a project specified in the config, open it
-    if(config.project !== undefined) {
-        SnapCloud.openProject(config.project,
-            function (response) {
-                myself.source = 'cloud';
-                myself.droppedText(response);
-            },
-            myself.cloudError());
+        if(config.demo !== undefined) {
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", config.demo.project_url, true);
+            xhr.responseType = "arraybuffer";
+            xhr.onload = function () {
+              if(this.status === 200) {
+                var blob = this.response;
+                var zip = new JSZip(blob, {base64: false})
+                var demo = zip.file("stage.xml");
+                if(demo != null) {
+                  myself.openProjectString(demo.asText());
+                }
+             }
+          }
+          xhr.send()
+        }
     }
-  
-    if(config.demo !== undefined) {
 
-        var xhr = new XMLHttpRequest();
-        xhr.open("GET", config.demo.project_url, true);
-        xhr.responseType = "arraybuffer";
-        xhr.onload = function () {
-          if(this.status === 200) {
-            var blob = this.response;
-            var zip = new JSZip(blob, {base64: false})
-            var demo = zip.file("stage.xml");
-            if(demo != null) {
-              myself.openProjectString(demo.asText());
-            }
-         }
-      }
-      xhr.send()
+    if(config.modules !== undefined && config.modules.module !== undefined ) {
+        var mdl = new ModuleLoader(myself);
+        mdl.loadModule(config.modules.module, config.urls.module_api, load_project);
+    } else {
+        load_project();
     }
- 
+
 
     function interpretUrlAnchors() {
         var dict;
@@ -429,7 +432,7 @@ IDE_Morph.prototype.openIn = function (world) {
             xhr.onerror = function() {
                 console.log("Error!");
             }
-            
+
             xhr.send();
         }
     }
@@ -441,106 +444,6 @@ IDE_Morph.prototype.openIn = function (world) {
     }
 
 };
-
-//Thanks to Mathew Byrne
-//https://gist.github.com/mathewbyrne/1280286
-IDE_Morph.prototype.slugify = function(text) {
-  return text.toString().toLowerCase()
-    .replace(/\s+/g, '-')           // Replace spaces with -
-    .replace(/[^\w\-]+/g, '')       // Remove all non-word chars
-    .replace(/\-\-+/g, '-')         // Replace multiple - with single -
-    .replace(/^-+/, '')             // Trim - from start of text
-    .replace(/-+$/, '');            // Trim - from end of text
-}
-
-//Gets the location of the module from an API
-IDE_Morph.prototype.getModuleURL = function(moduleName) {
-      var myself = this;
-      this.module_list[moduleName] = ""
-      var xhr = new XMLHttpRequest();
-      xhr.open("GET", config.urls.module_api + this.slugify(moduleName) + "/?format=json", false);
-      xhr.onload = function () {
-        if(this.status === 200) {   
-            myself.module_list[moduleName] = "/media/" + JSON.parse(this.response).module_file;
-        } else {
-          console.log("Failed to import module, error " + this.status);
-        }
-      };
-      xhr.onerror = function() {
-        console.log("Error!");
-      }
-      xhr.send();
-  
-      return this.module_list[moduleName]
-}
-
-//Loads every module and determines application order
-IDE_Morph.prototype.loadModules = function(newModuleName, version) {
-      var myself = this;
-      newModuleName = this.slugify(newModuleName)
-      var newModuleURL = this.getModuleURL(newModuleName)
-      var xhr = new XMLHttpRequest();
-      xhr.open("GET", newModuleURL, true);
-      xhr.responseType = "arraybuffer";
-      xhr.onload = function () {
-        if(this.status === 200) {
-          myself.module_list[newModuleName] = this.response;
-          var blob = this.response;
-          var mdl = new ModuleLoader(myself);
-          var parents = mdl.checkModule(blob, version, {base64: false});
-
-          for(var parent in parents) {
-             myself.modules.unshift([myself.slugify(parent), parents[parent]]);
-             myself.loadModules(parent, parents[parent]);
-             myself.numModules += 1;
-          }
-          myself.numModules -= 1;
-          if (myself.numModules === 0) {
-            myself.applyModules();
-          }
-        } else {
-          myself.numModules -= 1;
-          console.log("Failed to import module, error " + this.status);
-        }
-      };
-      xhr.onerror = function() {
-        console.log("Error!");
-      }
-      xhr.send();  
-}
-
-//Applies loaded modules
-IDE_Morph.prototype.applyModules = function() {
-      //Apply the modules
-      var mdl = new ModuleLoader(this);
-      while(this.modules.length > 0) {
-        if(this.modules[0][0] in this.module_list) {
-          mdl.open(this.module_list[this.modules[0][0]], {base64: false});
-          delete this.module_list[this.modules[0][0]];
-        }
-        this.modules.shift();
-      }
-  
-      //Now apply the stage
-    if(config.modules.stage) {
-      var myself = this;
-      var xhr = new XMLHttpRequest();
-      xhr.open("GET", config.modules.stage, true);
-      xhr.responseType = "arraybuffer";
-      xhr.onload = function () {
-        if(this.status === 200) {
-          var blob = this.response;
-          var mdl = new ModuleLoader(myself);
-          mdl.open(blob, {base64: false});
-        } else {
-          console.log("Failed to import module, error " + this.status);
-        }
-      };
-      xhr.onerror = function() {
-        console.log("Error!");
-      }
-      xhr.send();
-    }}
 
 // IDE_Morph construction
 
@@ -745,7 +648,7 @@ IDE_Morph.prototype.createControlBar = function () {
     muteSoundsButton = button;
     this.controlBar.add(muteSoundsButton);
     this.controlBar.muteSoundsButton = button; // for refreshing
-	
+
     // stopButton
     button = new PushButtonMorph(
         this,
@@ -873,7 +776,7 @@ IDE_Morph.prototype.createControlBar = function () {
 
  	 // goalImagesButton
     var goals = this.precacheGoals();
-   
+
     if(goals) {
        button = new PushButtonMorph(
            this,
@@ -895,7 +798,7 @@ IDE_Morph.prototype.createControlBar = function () {
        this.controlBar.add(goalImagesButton);
        this.controlBar.goalImagesButton = goalImagesButton; // for menu positioning
     }
-	
+
     // cloudButton
     button = new PushButtonMorph(
         this,
@@ -941,26 +844,26 @@ IDE_Morph.prototype.createControlBar = function () {
                 x += button.width();
             }
         );
-		
+
         if(goals) {
            goalImagesButton.setCenter(myself.controlBar.center());
            goalImagesButton.setLeft(this.left());
-         
+
            settingsButton.setCenter(myself.controlBar.center());
            settingsButton.setLeft(goalImagesButton.left() - padding - 40);
         }
-      
+
         else {
            settingsButton.setCenter(myself.controlBar.center());
            settingsButton.setLeft(this.left() - 40);
-        }         
+        }
 
         cloudButton.setCenter(myself.controlBar.center());
         cloudButton.setRight(settingsButton.left() - padding);
 
         projectButton.setCenter(myself.controlBar.center());
         projectButton.setRight(cloudButton.left() - padding);
-		
+
         this.updateLabel();
     };
 
@@ -1502,10 +1405,10 @@ IDE_Morph.prototype.createCorralBar = function () {
     paintbutton.setLeft(
         this.corralBar.left() + padding + newbutton.width() + padding
     );
-	
+
     this.corralBar.add(paintbutton);
-  
-  
+
+
 };
 
 IDE_Morph.prototype.createCorral = function () {
@@ -1752,7 +1655,7 @@ IDE_Morph.prototype.droppedImage = function (aCanvas, name) {
         );
         return;
     }
-	
+
 	if(costume.contents.height >= 360){
 		this.showMessage("Using an image greater than 360 will cause inaccuracies in the 'translate by width/height' block");
 	}
@@ -2287,7 +2190,7 @@ IDE_Morph.prototype.goalImagesMenu = function() {
         myself = this,
         pos = this.controlBar.goalImagesButton.bottomLeft(),
         shiftClicked = (world.currentKey === 16);
-		
+
 		function addPreference(label, toggle, test, onHint, offHint, hide) {
         var on = '\u2611 ',
             off = '\u2610 ';
@@ -2300,7 +2203,7 @@ IDE_Morph.prototype.goalImagesMenu = function() {
             );
         }
     }
-	
+
 	new ProjectDialogMorph(this, 'goals').popUp();
 };
 
@@ -2665,7 +2568,7 @@ IDE_Morph.prototype.projectMenu = function () {
         },
         'Select categories of additional blocks to add to this project.'
     );
-	
+
 	menu.addLine();
 	menu.addItem(
         'Load Demos...',
@@ -2767,7 +2670,7 @@ IDE_Morph.prototype.aboutCSnap = function () {
     var dlg, aboutTxt, noticeTxt, creditsTxt, versions = '', translations,
         module, btn1, btn2, btn3, btn4, licenseBtn, translatorsBtn,
         world = this.world();
-		
+
 
     aboutTxt = 'CSnap 1.0\nCSDTs with Snap!\n\n'
         + 'Culturally Situated Design Tools (CSDTs) were developed at RPI with support from the\n'
@@ -4264,7 +4167,7 @@ ProjectDialogMorph.prototype.buildContents = function () {
         notification.refresh = nop;
         this.srcBar.add(notification);
     }
-	
+
 	if(this.task === 'demos'){
 		this.addSourceButton('examples', localize('Examples'), 'poster');
 	}
@@ -4544,10 +4447,10 @@ ProjectDialogMorph.prototype.setSource = function (source) {
         break;
     }
     this.listField.destroy();
-	
+
 	if(this.source === 'goals'){
 		this.listField = new ListMorph(
-			this.projectList, 
+			this.projectList,
 			this.projectList.length > 0 ?
 					function (element) {
 						return element.thumb;
@@ -4555,7 +4458,7 @@ ProjectDialogMorph.prototype.setSource = function (source) {
 			null,
 			function () {myself.ok();}
 		);
-    
+
     //We need action declaration here to select default
 		this.listField.action = function (item) {
             var img, desc;
@@ -4627,7 +4530,7 @@ ProjectDialogMorph.prototype.setSource = function (source) {
                 myself.preview.drawNew();
             }
             myself.edit();
-        };	
+        };
 	} else if (this.source === 'goals'){ //Goals action moved above.
     } else { // 'examples', 'cloud' is initialized elsewhere
         this.listField.action = function (item) {
@@ -4871,7 +4774,7 @@ ProjectDialogMorph.prototype.saveProject = function () {
     var name = this.nameField.contents().text.text,
         notes = this.notesText.text,
         myself = this;
-	
+
     this.ide.projectNotes = notes || this.ide.projectNotes;
     if (name) {
         if (this.source === 'cloud') {
@@ -5073,7 +4976,7 @@ ProjectDialogMorph.prototype.fixLayout = function () {
     var th = fontHeight(this.titleFontSize) + this.titlePadding * 2,
         thin = this.padding / 2,
         oldFlag = Morph.prototype.trackChanges;
-		
+
 	if(this.task === 'goals'){
 		this.setExtent(new Point(550, 450));
 	}
