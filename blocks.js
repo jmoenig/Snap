@@ -155,7 +155,7 @@ DialogBoxMorph, BlockInputFragmentMorph, PrototypeHatBlockMorph, Costume*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2015-March-06';
+modules.blocks = '2015-March-09';
 
 
 var SyntaxElementMorph;
@@ -400,10 +400,14 @@ SyntaxElementMorph.prototype.debugCachedInputs = function () {
     }
     for (i = 0; i < realInputs.length; i += 1) {
         if (this.cachedInputs[i] !== realInputs[i]) {
-            throw new Error('cached input does not match ' +
+            throw new Error('cached input does not match: ' +
                 this.constructor.name +
+                ' #' +
+                i +
                 ' ' +
-                i);
+                this.cachedInputs[i].constructor.name +
+                ' != ' +
+                realInputs[i].constructor.name);
         }
     }
 };
@@ -3059,6 +3063,9 @@ BlockMorph.prototype.fullCopy = function () {
         ans.setSpec(this.instantiationSpec);
     }
     ans.allChildren().filter(function (block) {
+        if (block instanceof SyntaxElementMorph) {
+            block.cachedInputs = null;
+        }
         return !isNil(block.comment);
     }).forEach(function (block) {
         var cmnt = block.comment.fullCopy();
