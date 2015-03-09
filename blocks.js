@@ -340,7 +340,7 @@ SyntaxElementMorph.prototype.setScale = function (num) {
 };
 
 SyntaxElementMorph.prototype.setScale(1);
-SyntaxElementMorph.prototype.isCachingInputs = true;
+SyntaxElementMorph.prototype.isCachingInputs = false;
 
 // SyntaxElementMorph instance creation:
 
@@ -1943,6 +1943,7 @@ BlockMorph.uber = SyntaxElementMorph.prototype;
 
 // BlockMorph preferences settings:
 
+BlockMorph.prototype.isCachingInputs = true;
 BlockMorph.prototype.zebraContrast = 40; // alternating color brightness
 
 // BlockMorph sound feedback:
@@ -9228,10 +9229,6 @@ MultiArgMorph.prototype = new ArgMorph();
 MultiArgMorph.prototype.constructor = MultiArgMorph;
 MultiArgMorph.uber = ArgMorph.prototype;
 
-// MultiArgMorph preferences settings
-
-MultiArgMorph.prototype.isCachingInputs = false;
-
 // MultiArgMorph instance creation:
 
 function MultiArgMorph(
@@ -9661,10 +9658,6 @@ MultiArgMorph.prototype.isEmptySlot = function () {
 ArgLabelMorph.prototype = new ArgMorph();
 ArgLabelMorph.prototype.constructor = ArgLabelMorph;
 ArgLabelMorph.uber = ArgMorph.prototype;
-
-// ArgLabelMorph preferences settings
-
-ArgLabelMorph.prototype.isCachingInputs = false;
 
 // MultiArgMorph instance creation:
 
