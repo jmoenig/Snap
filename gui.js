@@ -1407,8 +1407,71 @@ IDE_Morph.prototype.createCorralBar = function () {
     );
 
     this.corralBar.add(paintbutton);
+  
+    xlabel = new StringMorph(
+            "X: 0",
+            24,
+            'sans-serif',
+            true,
+            false,
+            false,
+            MorphicPreferences.isFlat ? null : new Point(2, 1),
+            this.frameColor.darker(this.buttonContrast)
+        );
+  
+    xlabel.color = this.buttonLabelColor;
+    xlabel.drawNew();
+    xlabel.setLeft(
+        this.corralBar.left() + padding + (newbutton.width() + padding)*2
+    );
+  
+    this.corralBar.add(xlabel)
 
+    ylabel = new StringMorph(
+            "Y: 0",
+            24,
+            'sans-serif',
+            true,
+            false,
+            false,
+            MorphicPreferences.isFlat ? null : new Point(2, 1),
+            this.frameColor.darker(this.buttonContrast)
+        );
+    ylabel.color = this.buttonLabelColor;
+    ylabel.drawNew();
+    ylabel.setLeft(
+        this.corralBar.left() + padding + (newbutton.width() + padding)*2 + 100
+    );
+  
+    this.corralBar.add(ylabel)
+    
+    this.corralBar.step = function() {
+      this.parent.updateCorralBar();
+    }
+    
+};
 
+IDE_Morph.prototype.updateCorralBar = function () {
+   
+   var MouseX = this.stage.reportMouseX();
+   var MouseY = this.stage.reportMouseY();
+   if(this.isSmallStage ||
+      MouseX > StageMorph.prototype.dimensions.x / 2 ||
+      MouseY > StageMorph.prototype.dimensions.y / 2 ||
+      MouseX < StageMorph.prototype.dimensions.x / -2 ||
+      MouseY < StageMorph.prototype.dimensions.y / -2) 
+   {
+     this.corralBar.children[2].text = "";
+     this.corralBar.children[3].text = "";     
+   } else {
+     this.corralBar.children[2].text = "X: " + this.stage.reportMouseX();
+     this.corralBar.children[3].text = "Y: " + this.stage.reportMouseY();
+   }
+
+   this.corralBar.children[2].drawNew();
+   this.corralBar.children[3].drawNew();
+   this.fixLayout();
+    
 };
 
 IDE_Morph.prototype.createCorral = function () {
@@ -1655,7 +1718,7 @@ IDE_Morph.prototype.droppedImage = function (aCanvas, name) {
         );
         return;
     }
-
+	
 	if(costume.contents.height >= 360){
 		this.showMessage("Using an image greater than 360 will cause inaccuracies in the 'translate by width/height' block");
 	}
@@ -2190,7 +2253,7 @@ IDE_Morph.prototype.goalImagesMenu = function() {
         myself = this,
         pos = this.controlBar.goalImagesButton.bottomLeft(),
         shiftClicked = (world.currentKey === 16);
-
+		
 		function addPreference(label, toggle, test, onHint, offHint, hide) {
         var on = '\u2611 ',
             off = '\u2610 ';
@@ -2203,7 +2266,7 @@ IDE_Morph.prototype.goalImagesMenu = function() {
             );
         }
     }
-
+	
 	new ProjectDialogMorph(this, 'goals').popUp();
 };
 
@@ -2568,7 +2631,7 @@ IDE_Morph.prototype.projectMenu = function () {
         },
         'Select categories of additional blocks to add to this project.'
     );
-
+	
 	menu.addLine();
 	menu.addItem(
         'Load Demos...',
@@ -2670,7 +2733,7 @@ IDE_Morph.prototype.aboutCSnap = function () {
     var dlg, aboutTxt, noticeTxt, creditsTxt, versions = '', translations,
         module, btn1, btn2, btn3, btn4, licenseBtn, translatorsBtn,
         world = this.world();
-
+		
 
     aboutTxt = 'CSnap 1.0\nCSDTs with Snap!\n\n'
         + 'Culturally Situated Design Tools (CSDTs) were developed at RPI with support from the\n'
@@ -4167,7 +4230,7 @@ ProjectDialogMorph.prototype.buildContents = function () {
         notification.refresh = nop;
         this.srcBar.add(notification);
     }
-
+	
 	if(this.task === 'demos'){
 		this.addSourceButton('examples', localize('Examples'), 'poster');
 	}
@@ -4447,10 +4510,10 @@ ProjectDialogMorph.prototype.setSource = function (source) {
         break;
     }
     this.listField.destroy();
-
+	
 	if(this.source === 'goals'){
 		this.listField = new ListMorph(
-			this.projectList,
+			this.projectList, 
 			this.projectList.length > 0 ?
 					function (element) {
 						return element.thumb;
@@ -4458,7 +4521,7 @@ ProjectDialogMorph.prototype.setSource = function (source) {
 			null,
 			function () {myself.ok();}
 		);
-
+    
     //We need action declaration here to select default
 		this.listField.action = function (item) {
             var img, desc;
@@ -4530,7 +4593,7 @@ ProjectDialogMorph.prototype.setSource = function (source) {
                 myself.preview.drawNew();
             }
             myself.edit();
-        };
+        };	
 	} else if (this.source === 'goals'){ //Goals action moved above.
     } else { // 'examples', 'cloud' is initialized elsewhere
         this.listField.action = function (item) {
@@ -4774,7 +4837,7 @@ ProjectDialogMorph.prototype.saveProject = function () {
     var name = this.nameField.contents().text.text,
         notes = this.notesText.text,
         myself = this;
-
+	
     this.ide.projectNotes = notes || this.ide.projectNotes;
     if (name) {
         if (this.source === 'cloud') {
@@ -4976,7 +5039,7 @@ ProjectDialogMorph.prototype.fixLayout = function () {
     var th = fontHeight(this.titleFontSize) + this.titlePadding * 2,
         thin = this.padding / 2,
         oldFlag = Morph.prototype.trackChanges;
-
+		
 	if(this.task === 'goals'){
 		this.setExtent(new Point(550, 450));
 	}
