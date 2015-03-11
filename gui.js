@@ -69,7 +69,7 @@ SpeechBubbleMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2015-February-28';
+modules.gui = '2015-March-09';
 
 // Declarations
 
@@ -2269,10 +2269,10 @@ IDE_Morph.prototype.settingsMenu = function () {
     addPreference(
         'Cache Inputs',
         function () {
-            SyntaxElementMorph.prototype.isCachingInputs =
-                !SyntaxElementMorph.prototype.isCachingInputs;
+            BlockMorph.prototype.isCachingInputs =
+                !BlockMorph.prototype.isCachingInputs;
         },
-        SyntaxElementMorph.prototype.isCachingInputs,
+        BlockMorph.prototype.isCachingInputs,
         'uncheck to stop caching\ninputs (for debugging the evaluator)',
         'check to cache inputs\nboosts recursion',
         true
