@@ -156,15 +156,17 @@ SpriteMorph.uber = PenMorph.prototype;
 SpriteMorph.prototype.categories =
     [
         'motion',
-        'control',
+        'events',
         'looks',
-        'sensing',
+        'control',
         'sound',
-        'operators',
+        'sensing',
         'pen',
+        'operators',
         'variables',
+        'other',
         'lists',
-        'other'
+        'obsolete'
     ];
 
 SpriteMorph.prototype.blockColor = {
@@ -172,12 +174,14 @@ SpriteMorph.prototype.blockColor = {
     looks : new Color(143, 86, 227),
     sound : new Color(207, 74, 217),
     pen : new Color(0, 161, 120),
+    events : new Color(198, 130, 47),
     control : new Color(230, 168, 34),
     sensing : new Color(4, 148, 220),
     operators : new Color(98, 194, 19),
     variables : new Color(243, 118, 29),
     lists : new Color(217, 77, 17),
-    other: new Color(150, 150, 150)
+    other : new Color(98, 44, 153),
+    obsolete : new Color(255, 0, 0)
 };
 
 SpriteMorph.prototype.paletteColor = new Color(55, 55, 55);
@@ -573,37 +577,37 @@ SpriteMorph.prototype.initBlocks = function () {
         // Control
         receiveGo: {
             type: 'hat',
-            category: 'control',
+            category: 'events',
             spec: 'when %greenflag clicked'
         },
         receiveKey: {
             type: 'hat',
-            category: 'control',
+            category: 'events',
             spec: 'when %keyHat key pressed'
         },
         receiveClick: {
             type: 'hat',
-            category: 'control',
+            category: 'events',
             spec: 'when I am clicked'
         },
         receiveMessage: {
             type: 'hat',
-            category: 'control',
+            category: 'events',
             spec: 'when I receive %msgHat'
         },
         doBroadcast: {
             type: 'command',
-            category: 'control',
+            category: 'events',
             spec: 'broadcast %msg'
         },
         doBroadcastAndWait: {
             type: 'command',
-            category: 'control',
+            category: 'events',
             spec: 'broadcast %msg and wait'
         },
         getLastMessage: {
             type: 'reporter',
-            category: 'control',
+            category: 'events',
             spec: 'message'
         },
         doWait: {
