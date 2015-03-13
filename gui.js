@@ -862,7 +862,7 @@ IDE_Morph.prototype.createCategories = function () {
     }
 
     SpriteMorph.prototype.categories.forEach(function (cat) {
-        if (!contains(['lists', 'other'], cat)) {
+        if (!contains(['lists', 'obsolete'], cat)) {
             addCategoryButton(cat);
         }
     });
