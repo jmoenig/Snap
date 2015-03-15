@@ -2475,3 +2475,4 @@ ______
 150315
 ------
 * Store: fixed #743
+* GUI, html: switch from beta to release candidate
