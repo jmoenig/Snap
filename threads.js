@@ -83,7 +83,15 @@ ArgLabelMorph, localize, XML_Element, hex_sha512*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
+<<<<<<< HEAD
+<<<<<<< HEAD
 modules.threads = '2015-January-12';
+=======
+modules.threads = '2015-March-25';
+>>>>>>> fb00d37... new parameters for embedding projects
+=======
+modules.threads = '2015-March-25';
+>>>>>>> 5bf3820... fixed #752 and #745
 
 var ThreadManager;
 var Process;
@@ -1153,13 +1161,16 @@ Process.prototype.doDeclareVariables = function (varNames) {
 Process.prototype.doSetVar = function (varName, value) {
     var varFrame = this.context.variables,
         name = varName;
-
     if (name instanceof Context) {
         if (name.expression.selector === 'reportGetVar') {
-            name = name.expression.blockSpec;
+            name.variables.setVar(
+                name.expression.blockSpec,
+                value
+            );
+            return;
         }
     }
-    varFrame.setVar(name, value);
+    varFrame.setVar(name, value, this.blockReceiver());
 };
 
 Process.prototype.doChangeVar = function (varName, value) {
@@ -1168,10 +1179,14 @@ Process.prototype.doChangeVar = function (varName, value) {
 
     if (name instanceof Context) {
         if (name.expression.selector === 'reportGetVar') {
-            name = name.expression.blockSpec;
+            name.variables.changeVar(
+                name.expression.blockSpec,
+                value
+            );
+            return;
         }
     }
-    varFrame.changeVar(name, value);
+    varFrame.changeVar(name, value, this.blockReceiver());
 };
 
 Process.prototype.reportGetVar = function () {
@@ -1323,6 +1338,8 @@ Process.prototype.doDeleteFromList = function (index, list) {
     }
     if (this.inputOption(index) === 'last') {
         idx = list.length();
+    } else if (isNaN(+this.inputOption(index))) {
+        return null;
     }
     list.remove(idx);
 };

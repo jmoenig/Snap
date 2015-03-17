@@ -2455,4 +2455,35 @@ ______
 150228
 ------
 * Blocks, Store, GUI: Cache inputs, accelerates evaluating recursive reporters and warped / turbo recursive commands by up to 40%
+<<<<<<< HEAD
 * Objects: slightly optimize warped / turbo execution 
+=======
+* Objects: slightly optimize warped / turbo execution
+* Threads: fixed #715
+* BYOB: fixed #716
+
+150302
+------
+* BYOB: fixed #730
+
+150306
+------
+* Blocks: fixed #736
+
+150309
+------
+* Blocks: fixed #738
+* GUI, Blocks: Only enable input caching for blocks
+
+150315
+------
+* Store: fixed #743
+* GUI, html: switch from beta to release candidate
+
+150325
+------
+* Threads: fixed #752
+<<<<<<< HEAD
+>>>>>>> fb00d37... new parameters for embedding projects
+=======
+>>>>>>> 5bf3820... fixed #752 and #745
