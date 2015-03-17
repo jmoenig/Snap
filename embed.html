@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<title>Snap! Build Your Own Blocks</title>
+		<link rel="shortcut icon" href="http://snap.berkeley.edu/fav3.gif" type="image/gif">
+
+		<h1 style="font-family: sans-serif; text-align: center">Loading...</h1>
+		<script type="text/javascript" src="morphic.js"></script>
+		<script type="text/javascript" src="widgets.js"></script>
+		<script type="text/javascript" src="blocks.js"></script>
+		<script type="text/javascript" src="threads.js"></script>
+		<script type="text/javascript" src="objects.js"></script>
+		<script type="text/javascript" src="gui.js"></script>
+		<script type="text/javascript" src="lists.js"></script>
+		<script type="text/javascript" src="byob.js"></script>
+		<script type="text/javascript" src="xml.js"></script>
+		<script type="text/javascript" src="store.js"></script>
+		<script type="text/javascript" src="cloud.js"></script>
+		<script type="text/javascript">
+			var world,
+			    ide, 
+			    started = false;
+
+			window.onload = function () {
+				world = new WorldMorph(document.getElementById('world'));
+				world.worldCanvas.focus();
+				world.hide();
+				ide = new IDE_Morph();
+				ide.openIn(world);
+				setInterval(loop, 10);
+			};
+
+			function loop() {
+				world.doOneCycle();
+				if (ide.projectName && !started) {
+					started = true;
+					world.show();
+
+					if (!ide.isAppMode) {
+						ide.toggleAppMode();
+					}
+
+					if (location.hash.indexOf('hidecontrols') > 0) { 
+						ide.controlBar.hide() 
+					} else {
+						ide.controlBar.appModeButton.hide();
+						ide.controlBar.startButton.setLeft(ide.controlBar.pauseButton.left());
+						ide.controlBar.pauseButton.hide();
+					}
+
+					ide.pressStart();
+				}
+			}
+		</script>
+	</head>
+	<body style="margin: 0;">
+		<canvas id="world" tabindex="1" style="position: absolute;" />
+	</body>
+</html>
