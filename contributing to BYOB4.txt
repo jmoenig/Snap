@@ -16,32 +16,32 @@ Working with changesets
 You'll often want to change or add code in existing JS files. Please don't. Instead
 use a changeset. The way I always do it myself is to copy the empty
 
-	changeset.js
+        changeset.js
 
 file and rename it to something like
 
-	JensChangesToMorphic.js
+        JensChangesToMorphic.js
 
 Into this file I write all the functions I want to add to Morphic. If I want to
 change a function in Morphic.js I copy it to the changeset and edit it there. Then
 I always validate the changeset with
 
-	JSLint.com
+        JSLint.com
 
 Please check your code frequently with JSLint!
 
 For our Snap code set JSLint's settings to:
 
-	assume a browser
-	tolerate missing 'use strict' pragma
+        assume a browser
+        tolerate missing 'use strict' pragma
 
-	[4] indentation
-	[78] maximum line length
+        [4] indentation
+        [78] maximum line length
 
 If you're working on the core Morphic library you can also
 
-	tolerate eval
-	tolerate unfiltered for in
+        tolerate eval
+        tolerate unfiltered for in
 
 although you'll probably not ever going to need either EVAL or FORIN in your
 changesets anyway.
