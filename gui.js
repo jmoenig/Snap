@@ -308,10 +308,11 @@ IDE_Morph.prototype.openIn = function (world) {
         }
     }
 
+    // This function returns the value of a parameter given its key
     function getParameterByName(name) {
         var param = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]'),
-        	regex = new RegExp('[\\?&]' + param + '=([^&#]*)'),
-        results = regex.exec(location.search);
+            regex = new RegExp('[\\?&]' + param + '=([^&#]*)'),
+        results = regex.exec(location.href);
         return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
     }
 
@@ -344,21 +345,6 @@ IDE_Morph.prototype.openIn = function (world) {
             } else {
                 this.droppedText(getURL(hash));
             }
-			console.log(getParameterByName('open'));
-
-							if (getParameterByName('editMode')) {
-								myself.toggleAppMode(false); 
-							} else {
-								myself.toggleAppMode(true); 
-							}
-
-							if (!getParameterByName('noRun')) {
-	                            myself.runScripts();
-							}
-
-							if (getParameterByName('hideControls')) {
-								myself.controlBar.hide();
-							}
         } else if (location.hash.substr(0, 5) === '#run:') {
             hash = location.hash.substr(5);
             if (hash.charAt(0) === '%'
@@ -407,20 +393,19 @@ IDE_Morph.prototype.openIn = function (world) {
                             myself.shield = null;
                             msg.destroy();
 
-							// Parameter parsing
-							if (getParameterByName('editMode')) {
-								myself.toggleAppMode(false); 
-							} else {
-								myself.toggleAppMode(true); 
-							}
+                            if (getParameterByName('editMode')) {
+                                myself.toggleAppMode(false); 
+                            } else {
+                                myself.toggleAppMode(true); 
+                            }
 
-							if (!getParameterByName('noRun')) {
-	                            myself.runScripts();
-							}
+                            if (!getParameterByName('noRun')) {
+                                myself.runScripts();
+                            }
 
-							if (getParameterByName('hideControls')) {
-								myself.controlBar.hide();
-							}
+                            if (getParameterByName('hideControls')) {
+                                myself.controlBar.hide();
+                            }
                         }
                     ]);
                 },
