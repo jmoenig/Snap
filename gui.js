@@ -308,6 +308,13 @@ IDE_Morph.prototype.openIn = function (world) {
         }
     }
 
+    function getParameterByName(name) {
+        var param = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]'),
+        	regex = new RegExp('[\\?&]' + param + '=([^&#]*)'),
+        results = regex.exec(location.search);
+        return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+    }
+
     // dynamic notifications from non-source text files
     // has some issues, commented out for now
     /*
@@ -337,6 +344,21 @@ IDE_Morph.prototype.openIn = function (world) {
             } else {
                 this.droppedText(getURL(hash));
             }
+			console.log(getParameterByName('open'));
+
+							if (getParameterByName('editMode')) {
+								myself.toggleAppMode(false); 
+							} else {
+								myself.toggleAppMode(true); 
+							}
+
+							if (!getParameterByName('noRun')) {
+	                            myself.runScripts();
+							}
+
+							if (getParameterByName('hideControls')) {
+								myself.controlBar.hide();
+							}
         } else if (location.hash.substr(0, 5) === '#run:') {
             hash = location.hash.substr(5);
             if (hash.charAt(0) === '%'
@@ -384,8 +406,21 @@ IDE_Morph.prototype.openIn = function (world) {
                             myself.shield.destroy();
                             myself.shield = null;
                             msg.destroy();
-                            myself.toggleAppMode(true);
-                            myself.runScripts();
+
+							// Parameter parsing
+							if (getParameterByName('editMode')) {
+								myself.toggleAppMode(false); 
+							} else {
+								myself.toggleAppMode(true); 
+							}
+
+							if (!getParameterByName('noRun')) {
+	                            myself.runScripts();
+							}
+
+							if (getParameterByName('hideControls')) {
+								myself.controlBar.hide();
+							}
                         }
                     ]);
                 },
