@@ -1,4 +1,4 @@
-/*
+﻿/*
 
     objects.js
 
@@ -597,7 +597,7 @@ SpriteMorph.prototype.initBlocks = function () {
 
         receiveInteraction: {
             type: 'hat',
-            category: 'control',
+            category: 'events',
             spec: 'when I am %interaction',
             defaults: ['clicked']
         },
@@ -1845,7 +1845,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push('-');
         blocks.push(block('doStamp'));
 
-    } else if (cat === 'control') {
+    } else if (cat === 'events') {
 
         blocks.push(block('receiveGo'));
         blocks.push(block('receiveKey'));
@@ -1856,20 +1856,21 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('doBroadcastAndWait'));
         blocks.push(watcherToggle('getLastMessage'));
         blocks.push(block('getLastMessage'));
-        blocks.push('-');
-        blocks.push(block('doWarp'));
-        blocks.push('-');
+    } else if (cat === 'control') {
         blocks.push(block('doWait'));
-        blocks.push(block('doWaitUntil'));
         blocks.push('-');
-        blocks.push(block('doForever'));
         blocks.push(block('doRepeat'));
+        blocks.push(block('doForever'));
         blocks.push(block('doUntil'));
         blocks.push('-');
         blocks.push(block('doIf'));
         blocks.push(block('doIfElse'));
         blocks.push('-');
-        blocks.push(block('doReport'));
+        blocks.push(block('doWaitUntil'));
+        blocks.push('-');
+        blocks.push(block('receiveOnClone'));
+        blocks.push(block('createClone'));
+        blocks.push(block('removeClone'));
         blocks.push('-');
     /*
     // old STOP variants, migrated to a newer version, now redundant
@@ -1879,10 +1880,14 @@ SpriteMorph.prototype.blockTemplates = function (category) {
     */
         blocks.push(block('doStopThis'));
         blocks.push(block('doStopOthers'));
+        blocks.push(block('doReport'));
+        blocks.push('-');
         blocks.push('-');
         blocks.push(block('doRun'));
         blocks.push(block('fork'));
         blocks.push(block('evaluate'));
+        blocks.push('-');
+        blocks.push(block('doWarp'));
         blocks.push('-');
     /*
     // list variants commented out for now (redundant)
@@ -1893,10 +1898,6 @@ SpriteMorph.prototype.blockTemplates = function (category) {
     */
         blocks.push(block('doCallCC'));
         blocks.push(block('reportCallCC'));
-        blocks.push('-');
-        blocks.push(block('receiveOnClone'));
-        blocks.push(block('createClone'));
-        blocks.push(block('removeClone'));
         blocks.push('-');
         blocks.push(block('doPauseAll'));
 
@@ -2240,8 +2241,7 @@ SpriteMorph.prototype.freshPalette = function (category) {
                     ide.refreshPalette();
                 }
             );
-        }
-        if (hasHiddenPrimitives()) {
+        } else {
             menu.addItem(
                 'show primitives',
                 function () {
