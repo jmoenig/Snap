@@ -42,7 +42,7 @@
 
 /*global modules, contains*/
 
-modules.locale = '2015-January-21';
+modules.locale = '2015-February-23';
 
 // Global stuff
 
@@ -149,7 +149,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org',
     'last_changed':
-        '2014-07-29'
+        '2015-02-23'
 };
 
 SnapTranslator.dict.it = {
@@ -438,4 +438,40 @@ SnapTranslator.dict.kn = {
         'vnkmr7620@gmail.com',
     'last_changed':
         '2014-12-02'
+};
+
+SnapTranslator.dict.ml = {
+    // translations meta information
+    'language_name':
+        'Malayalam',
+    'language_translator':
+        'vinayakumar R',
+    'translator_e-mail':
+        'vnkmr7620@gmail.com',
+    'last_changed':
+        '2015-02-20'
+};
+
+SnapTranslator.dict.ta = {
+    // translations meta information
+    'language_name':
+        'Tamil',
+    'language_translator':
+        'vinayakumar R',
+    'translator_e-mail':
+        'vnkmr7620@gmail.com',
+    'last_changed':
+        '2015-02-20'
+};
+
+SnapTranslator.dict.te = {
+    // translations meta information
+    'language_name':
+        'Telagu', // the name as it should appear in the language menu
+    'language_translator':
+        'vinayakumar R', // your name for the Translators tab
+    'translator_e-mail':
+        'vnkmr7620@gmail.com', // optional
+    'last_changed':
+        '2015-02-20'
 };
