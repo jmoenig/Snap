@@ -61,7 +61,7 @@ SyntaxElementMorph, Variable*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2015-March-15';
+modules.store = '2015-March-21';
 
 
 // XML_Serializer ///////////////////////////////////////////////////////
@@ -459,9 +459,17 @@ SnapSerializer.prototype.rawLoadProjectModel = function (xmlNode) {
         myself.loadValue(model);
     });
 
-    // restore nesting associations
+    // restore inheritance and nesting associations
     myself.project.stage.children.forEach(function (sprite) {
-        var anchor;
+        var exemplar, anchor;
+        if (sprite.inheritanceInfo) { // only sprites can inherit
+            exemplar = myself.project.sprites[
+                sprite.inheritanceInfo.exemplar
+            ];
+            if (exemplar) {
+                sprite.setExemplar(exemplar);
+            }
+        }
         if (sprite.nestingInfo) { // only sprites may have nesting info
             anchor = myself.project.sprites[sprite.nestingInfo.anchor];
             if (anchor) {
@@ -471,6 +479,7 @@ SnapSerializer.prototype.rawLoadProjectModel = function (xmlNode) {
         }
     });
     myself.project.stage.children.forEach(function (sprite) {
+        delete sprite.inheritanceInfo;
         if (sprite.nestingInfo) { // only sprites may have nesting info
             sprite.nestingScale = +(sprite.nestingInfo.scale || sprite.scale);
             delete sprite.nestingInfo;
@@ -639,9 +648,17 @@ SnapSerializer.prototype.loadSprites = function (xmlString, ide) {
         myself.loadObject(sprite, model);
     });
 
-    // restore nesting associations
+    // restore inheritance and nesting associations
     project.stage.children.forEach(function (sprite) {
-        var anchor;
+        var exemplar, anchor;
+        if (sprite.inheritanceInfo) { // only sprites can inherit
+            exemplar = project.sprites[
+                sprite.inheritanceInfo.exemplar
+            ];
+            if (exemplar) {
+                sprite.setExemplar(exemplar);
+            }
+        }
         if (sprite.nestingInfo) { // only sprites may have nesting info
             anchor = project.sprites[sprite.nestingInfo.anchor];
             if (anchor) {
@@ -651,6 +668,7 @@ SnapSerializer.prototype.loadSprites = function (xmlString, ide) {
         }
     });
     project.stage.children.forEach(function (sprite) {
+        delete sprite.inheritanceInfo;
         if (sprite.nestingInfo) { // only sprites may have nesting info
             sprite.nestingScale = +(sprite.nestingInfo.scale || sprite.scale);
             delete sprite.nestingInfo;
@@ -690,6 +708,7 @@ SnapSerializer.prototype.loadMediaModel = function (xmlNode) {
 SnapSerializer.prototype.loadObject = function (object, model) {
     // private
     var blocks = model.require('blocks');
+    this.loadInheritanceInfo(object, model);
     this.loadNestingInfo(object, model);
     this.loadCostumes(object, model);
     this.loadSounds(object, model);
@@ -697,6 +716,14 @@ SnapSerializer.prototype.loadObject = function (object, model) {
     this.populateCustomBlocks(object, blocks);
     this.loadVariables(object.variables, model.require('variables'));
     this.loadScripts(object.scripts, model.require('scripts'));
+};
+
+SnapSerializer.prototype.loadInheritanceInfo = function (object, model) {
+    // private
+    var info = model.childNamed('inherit');
+    if (info) {
+        object.inheritanceInfo = info.attributes;
+    }
 };
 
 SnapSerializer.prototype.loadNestingInfo = function (object, model) {
@@ -1467,6 +1494,7 @@ SpriteMorph.prototype.toXML = function (serializer) {
             ' draggable="@"' +
             '%' +
             ' costume="@" color="@,@,@" pen="@" ~>' +
+            '%' + // inheritance info
             '%' + // nesting info
             '<costumes>%</costumes>' +
             '<sounds>%</sounds>' +
@@ -1488,6 +1516,13 @@ SpriteMorph.prototype.toXML = function (serializer) {
         this.color.g,
         this.color.b,
         this.penPoint,
+
+        // inheritance info
+        this.exemplar
+            ? '<inherit exemplar="' +
+                    this.exemplar.name
+                    + '"/>'
+            : '',
 
         // nesting info
         this.anchor

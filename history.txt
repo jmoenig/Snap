@@ -2476,3 +2476,7 @@ ______
 ------
 * Store: fixed #743
 * GUI, html: switch from beta to release candidate
+
+150321
+------
+* OOP: Prototypal inheritance of sprite-local variables

@@ -155,7 +155,7 @@ DialogBoxMorph, BlockInputFragmentMorph, PrototypeHatBlockMorph, Costume*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2015-March-09';
+modules.blocks = '2015-March-21';
 
 
 var SyntaxElementMorph;
@@ -3016,6 +3016,12 @@ BlockMorph.prototype.alternateBlockColor = function () {
     this.fixChildrensBlockColor(true); // has issues if not forced
 };
 
+BlockMorph.prototype.ghost = function () {
+    this.setColor(
+        SpriteMorph.prototype.blockColor[this.category].lighter(35)
+    );
+};
+
 BlockMorph.prototype.fixLabelColor = function () {
     if (this.zebraContrast > 0 && this.category) {
         var clr = SpriteMorph.prototype.blockColor[this.category];
@@ -3094,6 +3100,10 @@ BlockMorph.prototype.mouseClickLeft = function () {
             stage.threads.toggleProcess(top);
         }
     }
+};
+
+BlockMorph.prototype.reactToTemplateCopy = function () {
+    this.forceNormalColoring();
 };
 
 // BlockMorph thumbnail
