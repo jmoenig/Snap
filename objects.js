@@ -1807,6 +1807,11 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push('-');
         blocks.push(block('doPlayNote'));
         blocks.push('-');
+        blocks.push(block('doChangeVolume'));
+        blocks.push(block('doSetVolume'));
+        blocks.push(watcherToggle('getVolume'));
+        blocks.push(block('getVolume'));
+        blocks.push('-');
         blocks.push(block('doChangeTempo'));
         blocks.push(block('doSetTempo'));
         blocks.push(watcherToggle('getTempo'));
@@ -5036,6 +5041,11 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push('-');
         blocks.push(block('doPlayNote'));
         blocks.push('-');
+        blocks.push(block('doChangeVolume'));
+        blocks.push(block('doSetVolume'));
+        blocks.push(watcherToggle('getVolume'));
+        blocks.push(block('getVolume'));
+        blocks.push('-');
         blocks.push(block('doChangeTempo'));
         blocks.push(block('doSetTempo'));
         blocks.push(watcherToggle('getTempo'));
@@ -6388,10 +6398,11 @@ Sound.prototype.toDataURL = function () {
 
 // Note instance creation
 
-function Note(pitch) {
+function Note(pitch, volume) {
     this.pitch = pitch === 0 ? 0 : pitch || 69;
     this.setupContext();
     this.oscillator = null;
+    this.volume = volume;
 }
 
 // Note shared properties
@@ -6420,7 +6431,6 @@ Note.prototype.setupContext = function () {
     }
     Note.prototype.audioContext = new AudioContext();
     Note.prototype.gainNode = Note.prototype.audioContext.createGain();
-    Note.prototype.gainNode.gain.value = 0.25; // reduce volume by 1/4
 };
 
 // Note playing
@@ -6438,6 +6448,7 @@ Note.prototype.play = function () {
         Math.pow(2, (this.pitch - 69) / 12) * 440;
     this.oscillator.connect(this.gainNode);
     this.gainNode.connect(this.audioContext.destination);
+    this.gainNode.gain = (100 - this.volume) / 100;
     this.oscillator.start(0);
 };
 
