@@ -2941,9 +2941,7 @@ SpriteMorph.prototype.drawLine = function (start, dest, isBorder) {
         ).intersect(this.parent.visibleBounds()).spread();
 
     if (this.isDown) {
-        context.lineWidth = this.size + this.borderSize;
-        context.strokeStyle = this.borderColor.toString();
-        if(isBorder) {
+        if(isBorder && this.borderSize > 0) {
             context.lineWidth = this.size + this.borderSize;
             context.strokeStyle = this.borderColor.toString();
         } else {
