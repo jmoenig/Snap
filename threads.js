@@ -1216,7 +1216,7 @@ Process.prototype.doShowVar = function (varName) {
             }
             // if no watcher exists, create a new one
             isGlobal = contains(
-                this.homeContext.receiver.variables.parentFrame.names(),
+                this.homeContext.receiver.globalVariables().names(),
                 varName
             );
             if (isGlobal || target.owner) {
