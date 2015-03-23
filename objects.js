@@ -7161,7 +7161,11 @@ WatcherMorph.prototype.fixLayout = function () {
         this.sliderMorph.button.pressColor.b += 100;
         this.sliderMorph.setHeight(fontSize);
         this.sliderMorph.action = function (num) {
-            myself.target.vars[myself.getter].value = Math.round(num);
+            myself.target.setVar(
+                myself.getter,
+                Math.round(num),
+                myself.target.owner
+            );
         };
         this.add(this.sliderMorph);
     }
