@@ -3436,7 +3436,7 @@ IDE_Morph.prototype.toggleAppMode = function (appMode) {
             this.controlBar.cloudButton,
             this.controlBar.projectButton,
             this.controlBar.settingsButton,
-			this.controlBar.goalImagesButton,
+            this.controlBar.goalImagesButton,
             this.controlBar.stageSizeButton,
             this.corral,
             this.corralBar,
@@ -3454,7 +3454,9 @@ IDE_Morph.prototype.toggleAppMode = function (appMode) {
         this.controlBar.setColor(this.color);
         this.controlBar.appModeButton.refresh();
         elements.forEach(function (e) {
-            e.hide();
+            if(e) {
+                e.hide();
+            }
         });
         world.children.forEach(function (morph) {
             if (morph instanceof DialogBoxMorph) {
@@ -3465,7 +3467,9 @@ IDE_Morph.prototype.toggleAppMode = function (appMode) {
         this.setColor(this.backgroundColor);
         this.controlBar.setColor(this.frameColor);
         elements.forEach(function (e) {
-            e.show();
+            if(e) {
+                e.show();
+            }
         });
         this.stage.setScale(1);
         // show all hidden dialogs
