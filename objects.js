@@ -125,7 +125,7 @@ PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.objects = '2015-March-21';
+modules.objects = '2015-March-23';
 
 var SpriteMorph;
 var StageMorph;
@@ -1107,7 +1107,7 @@ SpriteMorph.prototype.initBlocks = function () {
         doDeleteAttr: {
             type: 'command',
             category: 'variables',
-            spec: 'delete %var'
+            spec: 'delete %shd'
         },
 
         // Lists
@@ -1720,12 +1720,14 @@ SpriteMorph.prototype.blockTemplates = function (category) {
     function addVar(pair) {
         var ide;
         if (pair) {
-            if (myself.isVariableNameInUse(pair[0])) {
+            if (myself.isVariableNameInUse(pair[0], pair[1])) {
                 myself.inform('that name is already in use');
             } else {
                 ide = myself.parentThatIsA(IDE_Morph);
                 myself.addVariable(pair[0], pair[1]);
-                myself.toggleVariableWatcher(pair[0], pair[1]);
+                if (!myself.showingVariableWatcher(pair[0])) {
+                    myself.toggleVariableWatcher(pair[0], pair[1]);
+                }
                 ide.flushBlocksCache('variables'); // b/c of inheritance
                 ide.refreshPalette();
             }
@@ -4203,7 +4205,10 @@ SpriteMorph.prototype.allSpecimens = function () {
 
 // SpriteMorph inheritance - variables
 
-SpriteMorph.prototype.isVariableNameInUse = function (vName) {
+SpriteMorph.prototype.isVariableNameInUse = function (vName, isGlobal) {
+    if (isGlobal) {
+        return contains(this.variables.allNames(), vName);
+    }
     if (contains(this.variables.names(), vName)) {return true; }
     return contains(this.globalVariables().names(), vName);
 };
@@ -4243,8 +4248,14 @@ SpriteMorph.prototype.inheritedVariableNames = function (shadowedOnly) {
 };
 
 SpriteMorph.prototype.deletableVariableNames = function () {
-    return this.variables.names().concat(
-        this.globalVariables().names()
+    var locals = this.variables.names(),
+        inherited = this.inheritedVariableNames();
+    return locals.concat(
+        this.globalVariables().names().filter(
+            function (each) {
+                return !contains(locals, each) && !contains(inherited, each);
+            }
+        )
     );
 };
 
@@ -5406,16 +5417,7 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('doShowVar'));
         blocks.push(block('doHideVar'));
         blocks.push(block('doDeclareVariables'));
-
-    // inheritance:
-
-        blocks.push('-');
-        blocks.push(block('doDeleteAttr'));
-
-    ///////////////////////////////
-
         blocks.push('=');
-
         blocks.push(block('reportNewList'));
         blocks.push('-');
         blocks.push(block('reportCONS'));
@@ -5812,6 +5814,10 @@ StageMorph.prototype.isVariableNameInUse
 
 StageMorph.prototype.globalVariables
     = SpriteMorph.prototype.globalVariables;
+
+StageMorph.prototype.inheritedVariableNames = function () {
+    return [];
+};
 
 // SpriteBubbleMorph ////////////////////////////////////////////////////////
 

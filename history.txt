@@ -2480,3 +2480,7 @@ ______
 150321
 ------
 * OOP: Prototypal inheritance of sprite-local variables
+
+150321
+------
+* OOP: Objects, Blocks, Threads - tweaks

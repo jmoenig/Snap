@@ -155,7 +155,7 @@ DialogBoxMorph, BlockInputFragmentMorph, PrototypeHatBlockMorph, Costume*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2015-March-21';
+modules.blocks = '2015-March-23';
 
 
 var SyntaxElementMorph;
@@ -1191,6 +1191,15 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             );
             part.isStatic = true;
             break;
+        case '%shd':
+            part = new InputSlotMorph(
+                null,
+                false,
+                'shadowedVariablesMenu',
+                true
+            );
+            part.isStatic = true;
+            break;
         case '%lst':
             part = new InputSlotMorph(
                 null,
@@ -1889,7 +1898,8 @@ SyntaxElementMorph.prototype.endLayout = function () {
     %att    - chameleon colored rectangular drop-down for attributes
     %fun    - chameleon colored rectangular drop-down for math functions
     %typ    - chameleon colored rectangular drop-down for data types
-    %var - chameleon colored rectangular drop-down for variable names
+    %var    - chameleon colored rectangular drop-down for variable names
+    %shd    - Chameleon colored rectuangular drop-down for shadowed var names
     %lst    - chameleon colored rectangular drop-down for list names
     %b        - chameleon colored hexagonal slot (for predicates)
     %l        - list icon
@@ -6900,6 +6910,21 @@ InputSlotMorph.prototype.getVarNamesDict = function () {
         return dict;
     }
     return {};
+};
+
+InputSlotMorph.prototype.shadowedVariablesMenu = function () {
+    var block = this.parentThatIsA(BlockMorph),
+        rcvr,
+        dict = {};
+
+    if (!block) {return dict; }
+    rcvr = block.receiver();
+    if (rcvr) {
+        rcvr.inheritedVariableNames(true).forEach(function (name) {
+            dict[name] = name;
+        });
+    }
+    return dict;
 };
 
 InputSlotMorph.prototype.setChoices = function (dict, readonly) {

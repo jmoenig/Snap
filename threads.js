@@ -83,7 +83,7 @@ ArgLabelMorph, localize, XML_Element, hex_sha512*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.threads = '2015-March-21';
+modules.threads = '2015-March-23';
 
 var ThreadManager;
 var Process;
@@ -1299,14 +1299,17 @@ Process.prototype.doRemoveTemporaries = function () {
 
 Process.prototype.doDeleteAttr = function (attrName) {
     // currently only variables are deletable
-    var name = attrName;
+    var name = attrName,
+        rcvr = this.blockReceiver();
 
     if (name instanceof Context) {
         if (name.expression.selector === 'reportGetVar') {
             name = name.expression.blockSpec;
         }
     }
-    this.blockReceiver().deleteVariable(name);
+    if (contains(rcvr.inheritedVariableNames(true), name)) {
+        rcvr.deleteVariable(name);
+    }
 };
 
 // Process lists primitives
