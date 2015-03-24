@@ -1048,7 +1048,7 @@
 /*global window, HTMLCanvasElement, getMinimumFontHeight, FileReader, Audio,
 FileList, getBlurredShadowSupport*/
 
-var morphicVersion = '2015-March-21';
+var morphicVersion = '2015-March-24';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = getBlurredShadowSupport(); // check for Chrome-bug
 
@@ -5933,7 +5933,7 @@ SliderMorph.prototype.userSetStart = function (num) {
     this.start = Math.max(num, this.stop);
 };
 
-SliderMorph.prototype.setStart = function (num) {
+SliderMorph.prototype.setStart = function (num, noUpdate) {
     // for context menu demo purposes
     var newStart;
     if (typeof num === 'number') {
@@ -5951,12 +5951,12 @@ SliderMorph.prototype.setStart = function (num) {
         }
     }
     this.value = Math.max(this.value, this.start);
-    this.updateTarget();
+    if (!noUpdate) {this.updateTarget(); }
     this.drawNew();
     this.changed();
 };
 
-SliderMorph.prototype.setStop = function (num) {
+SliderMorph.prototype.setStop = function (num, noUpdate) {
     // for context menu demo purposes
     var newStop;
     if (typeof num === 'number') {
@@ -5968,12 +5968,12 @@ SliderMorph.prototype.setStop = function (num) {
         }
     }
     this.value = Math.min(this.value, this.stop);
-    this.updateTarget();
+    if (!noUpdate) {this.updateTarget(); }
     this.drawNew();
     this.changed();
 };
 
-SliderMorph.prototype.setSize = function (num) {
+SliderMorph.prototype.setSize = function (num, noUpdate) {
     // for context menu demo purposes
     var newSize;
     if (typeof num === 'number') {
@@ -5991,7 +5991,7 @@ SliderMorph.prototype.setSize = function (num) {
         }
     }
     this.value = Math.min(this.value, this.stop - this.size);
-    this.updateTarget();
+    if (!noUpdate) {this.updateTarget(); }
     this.drawNew();
     this.changed();
 };

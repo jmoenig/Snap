@@ -61,7 +61,7 @@ SyntaxElementMorph, Variable*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2015-March-21';
+modules.store = '2015-March-24';
 
 
 // XML_Serializer ///////////////////////////////////////////////////////
@@ -540,8 +540,8 @@ SnapSerializer.prototype.rawLoadProjectModel = function (xmlNode) {
         }
         watcher.setStyle(model.attributes.style || 'normal');
         if (watcher.style === 'slider') {
-            watcher.setSliderMin(model.attributes.min || '1');
-            watcher.setSliderMax(model.attributes.max || '100');
+            watcher.setSliderMin(model.attributes.min || '1', true);
+            watcher.setSliderMax(model.attributes.max || '100', true);
         }
         watcher.setPosition(
             project.stage.topLeft().add(new Point(

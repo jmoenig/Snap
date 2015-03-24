@@ -125,7 +125,7 @@ PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.objects = '2015-March-23';
+modules.objects = '2015-March-24';
 
 var SpriteMorph;
 var StageMorph;
@@ -4224,8 +4224,10 @@ SpriteMorph.prototype.globalVariables = function () {
 SpriteMorph.prototype.shadowVar = function (name, value) {
     var ide = this.parentThatIsA(IDE_Morph);
     this.variables.addVar(name, value);
-    ide.flushBlocksCache('variables');
-    ide.refreshPalette();
+    if (ide) {
+        ide.flushBlocksCache('variables');
+        ide.refreshPalette();
+    }
 };
 
 SpriteMorph.prototype.inheritedVariableNames = function (shadowedOnly) {
@@ -7032,19 +7034,19 @@ WatcherMorph.prototype.isGlobal = function (selector) {
 
 // WatcherMorph slider accessing:
 
-WatcherMorph.prototype.setSliderMin = function (num) {
+WatcherMorph.prototype.setSliderMin = function (num, noUpdate) {
     if (this.target instanceof VariableFrame) {
-        this.sliderMorph.setSize(1);
-        this.sliderMorph.setStart(num);
-        this.sliderMorph.setSize(this.sliderMorph.rangeSize() / 5);
+        this.sliderMorph.setSize(1, noUpdate);
+        this.sliderMorph.setStart(num, noUpdate);
+        this.sliderMorph.setSize(this.sliderMorph.rangeSize() / 5, noUpdate);
     }
 };
 
-WatcherMorph.prototype.setSliderMax = function (num) {
+WatcherMorph.prototype.setSliderMax = function (num, noUpdate) {
     if (this.target instanceof VariableFrame) {
-        this.sliderMorph.setSize(1);
-        this.sliderMorph.setStop(num);
-        this.sliderMorph.setSize(this.sliderMorph.rangeSize() / 5);
+        this.sliderMorph.setSize(1, noUpdate);
+        this.sliderMorph.setStop(num, noUpdate);
+        this.sliderMorph.setSize(this.sliderMorph.rangeSize() / 5, noUpdate);
     }
 };
 

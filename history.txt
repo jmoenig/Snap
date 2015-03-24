@@ -2481,6 +2481,10 @@ ______
 ------
 * OOP: Prototypal inheritance of sprite-local variables
 
-150321
+150323
 ------
 * OOP: Objects, Blocks, Threads - tweaks
+
+150323
+------
+* OOP: Morphic, Objects, Store - tweak inherited variable watcher slider deserialization
