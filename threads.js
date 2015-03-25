@@ -83,7 +83,7 @@ ArgLabelMorph, localize, XML_Element, hex_sha512*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.threads = '2015-March-23';
+modules.threads = '2015-March-25';
 
 var ThreadManager;
 var Process;
@@ -1153,10 +1153,14 @@ Process.prototype.doDeclareVariables = function (varNames) {
 Process.prototype.doSetVar = function (varName, value) {
     var varFrame = this.context.variables,
         name = varName;
-
     if (name instanceof Context) {
         if (name.expression.selector === 'reportGetVar') {
-            name = name.expression.blockSpec;
+            name.variables.setVar(
+                name.expression.blockSpec,
+                value,
+                this.blockReceiver()
+            );
+            return;
         }
     }
     varFrame.setVar(name, value, this.blockReceiver());
@@ -1168,7 +1172,12 @@ Process.prototype.doChangeVar = function (varName, value) {
 
     if (name instanceof Context) {
         if (name.expression.selector === 'reportGetVar') {
-            name = name.expression.blockSpec;
+            name.variables.changeVar(
+                name.expression.blockSpec,
+                value,
+                this.blockReceiver()
+            );
+            return;
         }
     }
     varFrame.changeVar(name, value, this.blockReceiver());
@@ -1340,6 +1349,8 @@ Process.prototype.doDeleteFromList = function (index, list) {
     }
     if (this.inputOption(index) === 'last') {
         idx = list.length();
+    } else if (isNaN(+this.inputOption(index))) {
+        return null;
     }
     list.remove(idx);
 };
