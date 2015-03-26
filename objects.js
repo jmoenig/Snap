@@ -602,6 +602,25 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'control',
             spec: 'when I receive %msgHat'
         },
+        // Add the socket communication blocks
+        // These include "doRegisterClient", "doSocketMessage" and "doSocketDisconnect
+        // TODO
+        doRegisterClient: {
+            type: 'command',
+            category: 'control',
+            spec: 'register as %msg'
+        },
+        doSocketMessage: {
+            type: 'command',
+            category: 'control',
+            spec: 'remote broadcast %msg'
+        },
+        doSocketDisconnect: {
+            type: 'command',
+            category: 'control',
+            spec: 'unregister'
+        },
+
         doBroadcast: {
             type: 'command',
             category: 'control',
@@ -3478,6 +3497,11 @@ SpriteMorph.prototype.bounceOffEdge = function () {
     ));
     this.positionTalkBubble();
 };
+
+// SpriteMorph socket messaging
+// Could I use the message broadcasting infrastructure?
+// I need to have a sender id as well
+// TODO
 
 // SpriteMorph message broadcasting
 

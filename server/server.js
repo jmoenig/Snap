@@ -14,6 +14,7 @@ var onMsgReceived = function() {
 };
 
 io.sockets.on('connection', function(socket) {
+    console.log('WebSocket connection established!');
     // When the "register" block is used, the client
     // will send a message with:
     //      + gameId: GAME_UUID 
@@ -23,7 +24,9 @@ io.sockets.on('connection', function(socket) {
     // the given role filled
     socket.on('register', function(data) {
         var gameId = data.gameId,
-            role = data.gameId;
+            role = data.roleId;
+
+        console.log('Received registration message from '+role);
 
         // Add the socket to the given group
         // TODO
@@ -44,4 +47,6 @@ io.sockets.on('connection', function(socket) {
      * 
      */
     socket.on('message', function(data) {
+        console.log('Received message: ',data);
+    });
 });

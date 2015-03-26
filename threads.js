@@ -1872,6 +1872,26 @@ Process.prototype.reportURL = function (url) {
     this.pushContext();
 };
 
+// Process event websocket primitives
+Process.prototype.doSocketConnect = function (message) {
+    // Connect socket to the server
+    // TODO
+};
+
+Process.prototype.doSocketDisconnect = function () {
+    // Close the socket
+    // TODO
+};
+
+Process.prototype.doSocketMessage = function (message) {
+    // Handle socket not connected
+    // TODO
+
+    //Send message to the server
+    //TODO
+};
+
+
 // Process event messages primitives
 
 Process.prototype.doBroadcast = function (message) {
