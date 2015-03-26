@@ -405,7 +405,7 @@ IDE_Morph.prototype.openIn = function (world) {
 
                             if (getParameterByName('hideControls')) {
                                 myself.controlBar.hide();
-								window.onbeforeunload = function (evt) {};
+				window.onbeforeunload = function (evt) {};
                             }
                         }
                     ]);
