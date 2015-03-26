@@ -420,6 +420,7 @@ IDE_Morph.prototype.openIn = function (world) {
 
 							if (getParameterByName('hideControls')) {
 								myself.controlBar.hide();
+                                window.onbeforeunload = function (evt) {}; // Prevent the "are you sure you want to leave" dialog to popup
 							}
                         }
                     ]);
