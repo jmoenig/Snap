@@ -602,13 +602,19 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'control',
             spec: 'when I receive %msgHat'
         },
+        receiveSocketMessage: {
+            type: 'hat',
+            category: 'control',
+            //FIXME add roleId dropdown
+            spec: 'when I receive %msgHat from %roleIdHat'
+        },
         // Add the socket communication blocks
         // These include "doRegisterClient", "doSocketMessage" and "doSocketDisconnect
         // TODO
         doRegisterClient: {
             type: 'command',
             category: 'control',
-            spec: 'register as %msg'
+            spec: 'register as %roleId'
         },
         doSocketMessage: {
             type: 'command',
@@ -620,7 +626,6 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'control',
             spec: 'unregister'
         },
-
         doBroadcast: {
             type: 'command',
             category: 'control',
@@ -1866,11 +1871,16 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('receiveKey'));
         blocks.push(block('receiveInteraction'));
         blocks.push(block('receiveMessage'));
+        blocks.push(block('receiveSocketMessage'));
         blocks.push('-');
         blocks.push(block('doBroadcast'));
         blocks.push(block('doBroadcastAndWait'));
         blocks.push(watcherToggle('getLastMessage'));
         blocks.push(block('getLastMessage'));
+        blocks.push('-');
+        blocks.push(block('doRegisterClient'));
+        blocks.push(block('doSocketMessage'));
+        blocks.push(block('doSocketDisconnect'));
         blocks.push('-');
         blocks.push(block('doWarp'));
         blocks.push('-');
@@ -3531,15 +3541,22 @@ SpriteMorph.prototype.allHatBlocksFor = function (message) {
     return this.scripts.children.filter(function (morph) {
         var event;
         if (morph.selector) {
-            if (morph.selector === 'receiveMessage') {
-                event = morph.inputs()[0].evaluate();
-                return event === message || (event instanceof Array);
-            }
-            if (morph.selector === 'receiveGo') {
-                return message === '__shout__go__';
-            }
-            if (morph.selector === 'receiveOnClone') {
-                return message === '__clone__init__';
+            switch (morph.selector) {
+                case 'receiveMessage':
+                    event = morph.inputs()[0].evaluate();
+                    return event === message || (event instanceof Array);
+
+                case 'receiveGo':
+                    return message === '__shout__go__';
+
+                case 'receiveOnClone':
+                    return message === '__clone__init__';
+
+                case 'receiveSocketMessage':
+                    // Add socket message handling
+                    // TODO
+                    break;
+
             }
         }
         return false;
@@ -5085,11 +5102,16 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('receiveKey'));
         blocks.push(block('receiveInteraction'));
         blocks.push(block('receiveMessage'));
+        blocks.push(block('receiveSocketMessage'));  // FIXME Why do we have this twice? --> refactor!
         blocks.push('-');
         blocks.push(block('doBroadcast'));
         blocks.push(block('doBroadcastAndWait'));
         blocks.push(watcherToggle('getLastMessage'));
         blocks.push(block('getLastMessage'));
+        blocks.push('-');
+        blocks.push(block('doRegisterClient'));
+        blocks.push(block('doSocketMessage'));
+        blocks.push(block('doSocketDisconnect'));
         blocks.push('-');
         blocks.push(block('doWarp'));
         blocks.push('-');
