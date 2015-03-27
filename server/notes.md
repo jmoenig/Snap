@@ -68,6 +68,9 @@ I will probably want to have a couple methods for handling websocket communicati
 
     + Create custom messages that include `join` and `leave`
         + Done!
+    + Getting all message types should ignore 'join' and 'leave' for the event listener...
+      + I would like to store the network default messages in an enum somewhere... I am not sure where...
+      + FIXME
 
 + Create the functionality for the blocks
 

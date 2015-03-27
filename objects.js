@@ -3556,9 +3556,12 @@ SpriteMorph.prototype.allMessageNames = function () {
                     morph.selector
                 )) {
                 txt = morph.inputs()[0].evaluate();
-                if (isString(txt) && txt !== '') {
-                    if (!contains(msgs, txt)) {
-                        msgs.push(txt);
+                if (morph.selector !== 'receiveSocketMessage' ||  // Ignore 'join' and 'leave' from 
+                       (txt !== 'join' && txt !== 'leave')) {     // receiveSocketMessage
+                    if (isString(txt) && txt !== '') {
+                        if (!contains(msgs, txt)) {
+                            msgs.push(txt);
+                        }
                     }
                 }
             }

@@ -6682,12 +6682,23 @@ InputSlotMorph.prototype.rolesReceivedMenu = function () {
     return dict;
 };
 
-InputSlotMorph.prototype.socketMessagesMenu = function () {
-    var dict = {'enter': 'enter',
-                'exit': 'exit',
-                'any message': ['any message']},
-        myself = this;
+InputSlotMorph.prototype.socketMessagesReceivedMenu = function () {
+    var dict = {'join': 'join',
+                'leave': 'leave',
+                'any message': ['any message']};
+    return this.socketMessagesMenu(dict);
+};
 
+/**
+ * socketMessagesMenu
+ *
+ * @param {Dictionary} dict
+ * @return {Dictionary}
+ */
+InputSlotMorph.prototype.socketMessagesMenu = function (dict) {
+    var myself = this;
+
+    dict = dict || {};
     this._populateMenu(dict, 'allMessageNames'),
 
     dict['~'] = null;
