@@ -21,6 +21,11 @@ I will probably want to have a couple methods for handling websocket communicati
       + Currently, I am sharing them but I think this will be confusing since the user might use `receivedMessage` block thinking it can be used with `doSocketMessage`...
       + Change this? TODO
 
+      + Enter and Exit should be only added to the Hat block for socket messages and should be ignored if they are active for the Hat block...
+      + TODO
+
++ The `receiveMessage` block should also listen for network requests. That is, we should fire a message when we receive a socket message
+
 ## Automated Testing thoughts
 + I would like to do TDD with this but I need some way to test it... 
 + I might be able to build a little framework around the Javascript world object and interact with it programmatically
@@ -41,6 +46,12 @@ I will probably want to have a couple methods for handling websocket communicati
   + `messagesMenu` adds '~' as needed. 
   + Otherwise, they are the same -> lot of code duplication
 
+## Evaluating blocks
++ `Process` has a method called `evaluateBlock` on line 487 of `threads.js`
+  + Basically, it checks if the Process contains a method by the given name. If not, it will check `StageMorph`
+    + Add macro blocks on line 3510 (or so) of `object.js`
+    + How do we call the atomic process methods from the `SpriteMorph`?
+
 ## To Do
 + Create the visual blocks:
   + Create the visual blocks: (1876)
@@ -56,5 +67,12 @@ I will probably want to have a couple methods for handling websocket communicati
           + line 3514
 
     + Create custom messages that include `join` and `leave`
+        + Done!
+
++ Create the functionality for the blocks
+
++ Create server-side `match-making`
+
++ Create ping-pong game
 
 + Update `ypr.js` for new blocks (serialization)
