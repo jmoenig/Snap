@@ -5,6 +5,10 @@ var express = require('express'),
 
 app.use(express.static(__dirname + '/..'));
 
+app.get('/', function(req, res) {
+    res.redirect('/snap.html');
+});
+
 // Web Sockets
 var io = require('socket.io').listen(app.listen(port));
 
