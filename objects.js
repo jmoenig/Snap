@@ -606,7 +606,7 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'hat',
             category: 'control',
             //FIXME add roleId dropdown
-            spec: 'when I receive %msgHat from %roleIdHat'
+            spec: 'when I receive %msgHat from %roleHat'
         },
         // Add the socket communication blocks
         // These include "doRegisterClient", "doSocketMessage" and "doSocketDisconnect
@@ -614,7 +614,7 @@ SpriteMorph.prototype.initBlocks = function () {
         doRegisterClient: {
             type: 'command',
             category: 'control',
-            spec: 'register as %roleId'
+            spec: 'register as %role'
         },
         doSocketMessage: {
             type: 'command',
@@ -3508,13 +3508,36 @@ SpriteMorph.prototype.bounceOffEdge = function () {
     this.positionTalkBubble();
 };
 
-// SpriteMorph socket messaging
-// Could I use the message broadcasting infrastructure?
-// I need to have a sender id as well
-// TODO
-
 // SpriteMorph message broadcasting
 
+/**
+ * Search all child scripts for networking blocks and return all known roles.
+ *
+ * @return {Array} roles
+ */
+SpriteMorph.prototype.allRoleNames = function () {
+    var roles = {},
+        networkingBlocks = ['doRegisterClient', 'receiveSocketMessage'];
+    this.scripts.allChildren().forEach(function (morph) {
+        var txt;
+        if (morph.selector) {
+            var index = networkingBlocks.indexOf(morph.selector);
+            if (index > -1) {
+                txt = morph.inputs()[index].evaluate();
+                if (isString(txt) && txt !== '') {
+                    roles[txt] = true;
+                }
+            }
+        }
+    });
+    return Object.keys(roles);
+};
+
+/**
+ * Search all scripts for messaging blocks and return any message types they contain.
+ *
+ * @return {Array} msgs
+ */
 SpriteMorph.prototype.allMessageNames = function () {
     var msgs = [];
     this.scripts.allChildren().forEach(function (morph) {
@@ -5649,6 +5672,9 @@ StageMorph.prototype.reportThreadCount
     = SpriteMorph.prototype.reportThreadCount;
 
 // StageMorph message broadcasting
+
+StageMorph.prototype.allRoleNames
+    = SpriteMorph.prototype.allRoleNames;
 
 StageMorph.prototype.allMessageNames
     = SpriteMorph.prototype.allMessageNames;
