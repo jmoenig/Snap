@@ -1075,7 +1075,7 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             part = new InputSlotMorph(
                 null,
                 false,
-                'rolesMenu',  // FIXME
+                'rolesMenu',
                 true
             );
             break;
@@ -1083,7 +1083,16 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             part = new InputSlotMorph(
                 null,
                 false,
-                'rolesReceivedMenu',  // FIXME
+                'rolesReceivedMenu',
+                true
+            );
+            break;
+        case '%socketMsg':
+        case '%socketMsgHat':
+            part = new InputSlotMorph(
+                null,
+                false,
+                'socketMessagesMenu',
                 true
             );
             break;
@@ -6648,7 +6657,7 @@ InputSlotMorph.prototype.rolesMenu = function () {
 };
 
 /**
- * Populate the roles menus for event listening blocks (`Hat` blocks) pertaining to networking.
+ * Create dropdown menu for networking roles.
  *
  * @return {Dictionary} dict
  */
@@ -6673,28 +6682,29 @@ InputSlotMorph.prototype.rolesReceivedMenu = function () {
     return dict;
 };
 
-/**
- * Populate the given menu with the results of the `allEntryNamesFn` for all SpriteMorphs and StageMorphs
- *
- * @param {Dictionary} menu
- * @param {String} allEntryNamesFn
- * @return {Dictionary} menu
- */
-InputSlotMorph.prototype._populateMenu = function (menu, allEntryNamesFn) {
-    var rcvr = this.parentThatIsA(BlockMorph).receiver(),
-        stage = rcvr.parentThatIsA(StageMorph),
-        allNames = [];
+InputSlotMorph.prototype.socketMessagesMenu = function () {
+    var dict = {'enter': 'enter',
+                'exit': 'exit',
+                'any message': ['any message']},
+        myself = this;
 
-    stage.children.concat(stage).forEach(function (morph) {
-        if (morph instanceof SpriteMorph || morph instanceof StageMorph) {
-            allNames = allNames.concat(morph[allEntryNamesFn]());
-        }
-    });
-    allNames.forEach(function (name) {
-        menu[name] = name;
-    });
+    this._populateMenu(dict, 'allMessageNames'),
 
-    return menu;
+    dict['~'] = null;
+    dict['new...'] = function () {
+
+        new DialogBoxMorph(
+            myself,
+            myself.setContents,
+            myself
+        ).prompt(
+            'Message name',
+            null,
+            myself.world()
+        );
+    };
+
+    return dict;
 };
 
 /**
@@ -6749,6 +6759,30 @@ InputSlotMorph.prototype.messagesReceivedMenu = function () {
     };
 
     return dict;
+};
+
+/**
+ * Populate the given menu with the results of the `allEntryNamesFn` for all SpriteMorphs and StageMorphs
+ *
+ * @param {Dictionary} menu
+ * @param {String} allEntryNamesFn
+ * @return {Dictionary} menu
+ */
+InputSlotMorph.prototype._populateMenu = function (menu, allEntryNamesFn) {
+    var rcvr = this.parentThatIsA(BlockMorph).receiver(),
+        stage = rcvr.parentThatIsA(StageMorph),
+        allNames = [];
+
+    stage.children.concat(stage).forEach(function (morph) {
+        if (morph instanceof SpriteMorph || morph instanceof StageMorph) {
+            allNames = allNames.concat(morph[allEntryNamesFn]());
+        }
+    });
+    allNames.forEach(function (name) {
+        menu[name] = name;
+    });
+
+    return menu;
 };
 
 InputSlotMorph.prototype.collidablesMenu = function () {

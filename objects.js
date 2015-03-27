@@ -605,12 +605,9 @@ SpriteMorph.prototype.initBlocks = function () {
         receiveSocketMessage: {
             type: 'hat',
             category: 'control',
-            //FIXME add roleId dropdown
-            spec: 'when I receive %msgHat from %roleHat'
+            spec: 'when I receive %socketMsgHat from %roleHat'
         },
         // Add the socket communication blocks
-        // These include "doRegisterClient", "doSocketMessage" and "doSocketDisconnect
-        // TODO
         doRegisterClient: {
             type: 'command',
             category: 'control',
@@ -619,7 +616,7 @@ SpriteMorph.prototype.initBlocks = function () {
         doSocketMessage: {
             type: 'command',
             category: 'control',
-            spec: 'remote broadcast %msg'
+            spec: 'remote broadcast %socketMsg'
         },
         doSocketDisconnect: {
             type: 'command',
@@ -3544,7 +3541,7 @@ SpriteMorph.prototype.allMessageNames = function () {
         var txt;
         if (morph.selector) {
             if (contains(
-                    ['receiveMessage', 'doBroadcast', 'doBroadcastAndWait'],
+                    ['receiveMessage', 'doBroadcast', 'doBroadcastAndWait', 'doSocketMessage', 'receiveSocketMessage'],
                     morph.selector
                 )) {
                 txt = morph.inputs()[0].evaluate();

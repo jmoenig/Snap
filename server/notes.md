@@ -11,25 +11,50 @@ I will probably want to have a couple methods for handling websocket communicati
     + startProcess
 
 ## Misc Design Comments
-+ Added 3 primitives to the Process object: doSocketConnect, doSocketDisconnect and doSocketMessage
++ Added 3 primitives to the Process object: `doSocketConnect`, `doSocketDisconnect` and `doSocketMessage`
   + From this, I should be able to compose the functionality for the "register", "unregister" block and the "broadcast remote" block
   + For now, I will focus on "register" and "broadcast remote"
+
++ Should the message types be shared between 'remote broadcast' and 'broadcast'?
+  + Probably would be cleaner to not have them shared... Sharing them can create some funny, ambiguous situations
+  + Should I have the menu populated with all messages? I think I will to start anyway
+      + Currently, I am sharing them but I think this will be confusing since the user might use `receivedMessage` block thinking it can be used with `doSocketMessage`...
+      + Change this? TODO
+
+## Automated Testing thoughts
++ I would like to do TDD with this but I need some way to test it... 
++ I might be able to build a little framework around the Javascript world object and interact with it programmatically
++ This would be really nice to have...
 
 # Snap structure notes
 ## Spec
 + How are the spec things made?
-    + blocks.js :2059 "BlockMorph.prototype.setSpec"
-    + In blocks.js :1083, it creates the appropriate InputSlotMorph
-      + Maintain a 'choiceDict' name
-        + msgHat is mapped to 'messagesReceivedMenu'
+  + `blocks.js` :2059 `BlockMorph.prototype.setSpec`
+  + In `blocks.js` :1083, it creates the appropriate `InputSlotMorph`
+    + Maintain a `choiceDict` name
+      + msgHat is mapped to 'messagesReceivedMenu' :6640
+      + 'messagesReceivedMenu' collects all the messages from the other blocks (including the stage...)
+      + For now, I simply copy and pasted the 
+
++ `messagesReceivedMenu` vs `messagesMenu`
+  + `dict` is initialized to different values (one includes "any message")
+  + `messagesMenu` adds '~' as needed. 
+  + Otherwise, they are the same -> lot of code duplication
+
 ## To Do
 + Create the visual blocks:
-    + Create the visual blocks: (1876)
-      + register DONE!
-      + remoteBroadcast DONE!
-      + unregister DONE!
-      + receiveSocketMessage DONE!
-    + Create dropdown menu for clients
-        + Define my own %spec thing
+  + Create the visual blocks: (1876)
+    + register DONE!
+    + `remoteBroadcast` DONE!
+    + unregister DONE!
+    + `receiveSocketMessage` DONE!
+  + Create drop down menu for clients
+    + Define my own %spec drop down for roles
+      + Populate the drop down with custom `allMessageNames` equivalent
+        + `allRoleNames`?  --> only the register blocks will have anything...
+        + Add `allRoleNames` to `SpriteMorph` and `StageMorph` in `objects.js`
+          + line 3514
 
-+ Update ypr for new blocks
+    + Create custom messages that include `join` and `leave`
+
++ Update `ypr.js` for new blocks (serialization)
