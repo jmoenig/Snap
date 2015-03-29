@@ -3508,17 +3508,6 @@ SpriteMorph.prototype.bounceOffEdge = function () {
 // SpriteMorph message broadcasting
 
 /**
- * Send a registration message to the server to register as a role.
- *
- * @return {undefined}
- */
-SpriteMorph.prototype.doRegisterClient = function (role) {
-    // Send a 'register' websocket message to the server
-    // TODO
-    console.log('calling doRegisterClient');
-};
-
-/**
  * Search all child scripts for networking blocks and return all known roles.
  *
  * @return {Array} roles

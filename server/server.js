@@ -9,15 +9,19 @@ app.get('/', function(req, res) {
     res.redirect('/snap.html');
 });
 
+app.listen(port);
+
 // Web Sockets
-var io = require('socket.io').listen(app.listen(port));
+var WebSocketServer = require('ws').Server,
+    wss = new WebSocketServer({port: 5432,  // FIXME Put these on the same port
+                               path: ''});
 
 var onMsgReceived = function() {
     // Handle a WebSocket message from NetsBlocks
     // TODO
 };
 
-io.sockets.on('connection', function(socket) {
+wss.on('connection', function(socket) {
     console.log('WebSocket connection established!');
     // When the "register" block is used, the client
     // will send a message with:

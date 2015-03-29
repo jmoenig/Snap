@@ -355,6 +355,8 @@ function Process(topBlock, onComplete) {
     this.lastYield = Date.now();
     this.isAtomic = false;
     this.prompter = null;
+    this.websocket = null;
+    this.messages = [];
     this.httpRequest = null;
     this.isPaused = false;
     this.pauseOffset = null;
@@ -1873,22 +1875,51 @@ Process.prototype.reportURL = function (url) {
 };
 
 // Process event websocket primitives
-Process.prototype.doSocketConnect = function (message) {
+Process.prototype.verifySocketConnected = function () {
     // Connect socket to the server
-    // TODO
+    if (!this.websocket) {
+        var address = 'ws://'+window.location.hostname+':5432',
+            self = this;
+        this.websocket = new WebSocket(address);
+        this.websocket.onopen = function() {
+            while (self.messages.length) {
+                self.websocket.send(self.messages.shift());
+            }
+        };
+    }
+    return this.websocket.readyState;
+};
+
+/**
+ * sendSocketMessage
+ *
+ * @private
+ * @param {String} message
+ * @return {undefined}
+ */
+Process.prototype._sendSocketMessage = function (message) {
+    var state = this.verifySocketConnected();
+    if (state === 1) {
+        // Send registration message
+        this.websocket.send(message);
+    } else {
+        this.messages.push(message);
+    }
+};
+
+Process.prototype.doRegisterClient = function (message) {
+    this._sendSocketMessage('register ' + message);
 };
 
 Process.prototype.doSocketDisconnect = function () {
     // Close the socket
-    // TODO
+    if (!!this.websocket) {
+        // TODO
+    }
 };
 
 Process.prototype.doSocketMessage = function (message) {
-    // Handle socket not connected
-    // TODO
-
-    //Send message to the server
-    //TODO
+    this._sendSocketMessage('message ' + message);
 };
 
 
