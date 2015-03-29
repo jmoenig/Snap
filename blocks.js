@@ -1087,8 +1087,15 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                 true
             );
             break;
-        case '%socketMsg':
         case '%socketMsgHat':
+            part = new InputSlotMorph(
+                null,
+                false,
+                'socketMessagesReceivedMenu',
+                true
+            );
+            break;
+        case '%socketMsg':
             part = new InputSlotMorph(
                 null,
                 false,
