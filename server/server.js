@@ -16,12 +16,45 @@ var WebSocketServer = require('ws').Server,
     wss = new WebSocketServer({port: 5432,  // FIXME Put these on the same port
                                path: ''});
 
-var onMsgReceived = function() {
+// Create "rooms" or "groups"
+// TODO
+var socket2Role = {},
+    roles2Sockets = {};
+
+var onMsgReceived = function(socket, message) {
     // Handle a WebSocket message from NetsBlocks
-    // TODO
+    var msg = message.split(' '),
+        socketId = socket.id,  // FIXME
+        type = msg.shift(),
+        role;
+
+    // Handle the different request types
+    switch (type) {
+        case 'register':
+            role = msg.shift();  // record the roleId
+            socket2Role[socketId] = role;
+            roles2Sockets[role] = socket;
+            break;
+
+        case 'message':
+            // broadcast the message, role to all peers
+            var peers = Object.keys(roles2Sockets),
+                s;
+            role = socket2Role[socketId];
+            msg.push(role);
+            for (var i = peers.length; i--;) {
+                s = roles2Sockets[peers[i]];
+                console.log('Sending message to '+peers[i]);
+                s.send(msg.join(' '));
+            }
+            break;
+    }
 };
 
+var counter = 0;
 wss.on('connection', function(socket) {
+    // ID the socket
+    socket.id = ++counter;
     console.log('WebSocket connection established!');
     // When the "register" block is used, the client
     // will send a message with:
@@ -30,21 +63,6 @@ wss.on('connection', function(socket) {
     //
     // The server will then find a game that does not have 
     // the given role filled
-    socket.on('register', function(data) {
-        var gameId = data.gameId,
-            role = data.roleId;
-
-        console.log('Received registration message from '+role);
-
-        // Add the socket to the given group
-        // TODO
-
-        // Broadcast the join message to all the members of the given game 
-        // instance and broadcast a join message from all current members 
-        // to the new guy
-        // TODO
-    });
-
 
     /**
      * When the "broadcast" block is used, the server will receive 
@@ -56,5 +74,10 @@ wss.on('connection', function(socket) {
      */
     socket.on('message', function(data) {
         console.log('Received message: ',data);
+        onMsgReceived(socket, data);
     });
+});
+
+wss.on('close', function(socket) {
+    console.log('socket is closing...');
 });

@@ -3559,6 +3559,24 @@ SpriteMorph.prototype.allMessageNames = function () {
     return msgs;
 };
 
+SpriteMorph.prototype.allHatSocketBlocksFor = function (message, role) {
+    if (typeof message === 'number') {
+        message = message.toString(); 
+    }
+
+    var event,
+        r;  // receiver listened for by block
+    return this.scripts.children.filter(function (morph) {
+        if (morph.selector === 'receiveSocketMessage') {
+            event = morph.inputs()[0].evaluate();
+            r = morph.inputs()[1].evaluate();
+            return (event === message || (event instanceof Array)) &&
+                (r === role || (r instanceof Array));
+        }
+        return false;
+    });
+};
+
 SpriteMorph.prototype.allHatBlocksFor = function (message) {
     if (typeof message === 'number') {message = message.toString(); }
     return this.scripts.children.filter(function (morph) {
@@ -3576,6 +3594,8 @@ SpriteMorph.prototype.allHatBlocksFor = function (message) {
                     return message === '__clone__init__';
 
                 case 'receiveSocketMessage':
+                    event = morph.inputs()[0].evaluate();
+                    return ('__socket__'+event) === message || (event instanceof Array);
                     // Add socket message handling
                     // TODO
                     break;
@@ -5678,6 +5698,9 @@ StageMorph.prototype.allRoleNames
 
 StageMorph.prototype.allMessageNames
     = SpriteMorph.prototype.allMessageNames;
+
+StageMorph.prototype.allHatSocketBlocksFor 
+    = SpriteMorph.prototype.allHatSocketBlocksFor;
 
 StageMorph.prototype.allHatBlocksFor
     = SpriteMorph.prototype.allHatBlocksFor;

@@ -74,6 +74,10 @@ I will probably want to have a couple methods for handling websocket communicati
 
 + Create the functionality for the blocks
 
++ receiveSocketMessage support
+    + where is allHatBlocksFor called again?
+        + fireGreenFlagEvent
+
 + Create server-side `match-making`
 
 + Create ping-pong game

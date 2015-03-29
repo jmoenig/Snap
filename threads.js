@@ -1881,10 +1881,19 @@ Process.prototype.verifySocketConnected = function () {
         var address = 'ws://'+window.location.hostname+':5432',
             self = this;
         this.websocket = new WebSocket(address);
+        // Set up message firing queue
         this.websocket.onopen = function() {
             while (self.messages.length) {
                 self.websocket.send(self.messages.shift());
             }
+        };
+
+        // Set up message events
+        var data;
+        this.websocket.onmessage = function(message) {
+            data = message.data.split(' ');
+            console.log('received', data[0], 'from', data[1]);
+            self.onSocketMessageReceived(data[0], data[1]);
         };
     }
     return this.websocket.readyState;
@@ -1922,6 +1931,30 @@ Process.prototype.doSocketMessage = function (message) {
     this._sendSocketMessage('message ' + message);
 };
 
+/**
+ * Callback for receiving a websocket message.
+ *
+ * @param {String} message
+ * @return {undefined}
+ */
+Process.prototype.onSocketMessageReceived = function (message, role) {
+    var stage = this.homeContext.receiver.parentThatIsA(StageMorph),
+        hats = [],
+        procs = [];
+
+    if (message !== '') {
+        stage.lastMessage = message;
+        stage.children.concat(stage).forEach(function (morph) {
+            if (morph instanceof SpriteMorph || morph instanceof StageMorph) {
+                hats = hats.concat(morph.allHatSocketBlocksFor(message, role));
+            }
+        });
+        hats.forEach(function (block) {
+            procs.push(stage.threads.startProcess(block, stage.isThreadSafe));
+        });
+    }
+    return procs;
+};
 
 // Process event messages primitives
 
