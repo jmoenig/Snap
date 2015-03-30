@@ -53,9 +53,21 @@ I will probably want to have a couple methods for handling websocket communicati
     + How do we call the atomic process methods from the `SpriteMorph`?
 
 ## Fix me!
-+ websocket is created for each process... It should either be in the threadmanager or the sprite morph
++ Sending a message before a `register` message breaks the server...
+    + For now, I will probably put the `unregistered` users in a GLOBAL group
+    + FIXED
 
 ## To Do
++ Create a testing framework/hooks for Snap 
++ Add socket disconnect detection
++ I would like to store the network default messages in an enum somewhere... I am not sure where...
+  + FIXME
+
++ Create ping-pong game
+
++ Update `ypr.js` for new blocks (serialization)
+
+## Finished To do/Fix me!
 + Create the visual blocks:
   + Create the visual blocks: (1876)
     + register DONE!
@@ -72,17 +84,16 @@ I will probably want to have a couple methods for handling websocket communicati
     + Create custom messages that include `join` and `leave`
         + Done!
     + Getting all message types should ignore 'join' and 'leave' for the event listener...
-      + I would like to store the network default messages in an enum somewhere... I am not sure where...
-      + FIXME
 
 + Create the functionality for the blocks
+
++ Create server-side `match-making`
+    + DONE
 
 + receiveSocketMessage support
     + where is allHatBlocksFor called again?
         + fireGreenFlagEvent
+        + DONE
 
-+ Create server-side `match-making`
-
-+ Create ping-pong game
-
-+ Update `ypr.js` for new blocks (serialization)
++ websocket is created for each process... It should either be in the threadmanager or the sprite morph
+    + DONE
