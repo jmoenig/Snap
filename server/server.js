@@ -56,6 +56,21 @@ var unregisterSocket = function(socket) {
     }
 };
 
+var notifyGroupJoin = function(group, socket) {
+    var roles = Object.keys(group),
+        role = socket2Role[socket.id];
+
+    // Send 'join' messages to peers in the 'group'
+    broadcast('join '+role, group);
+
+    // Send new member join messages from everyone else
+    for (var i = roles.length; i--;) {
+        if (roles[i] !== role) {
+            socket.send('join '+roles[i]);
+        }
+    }
+};
+
 /**
  * Add a client to a group that doesn't have that role filled. Create a
  * new group if needed.
@@ -71,7 +86,7 @@ var addClientToGroup = function(socket, role) {
             groups[i][role] = socket;
             socket2Group[socket.id] = groups[i];
             console.log('Adding socket #'+socket.id+' ('+role+') to '+i);
-            return;
+            return notifyGroupJoin(groups[i], socket);
         }
     }
 
@@ -81,9 +96,7 @@ var addClientToGroup = function(socket, role) {
     groups.push(group);
     socket2Group[socket.id] = group;
     console.log('Adding socket #'+socket.id+' ('+role+') to '+(groups.length-1));
-
-    // Send new member join messages from everyone else
-    //socket.send('join '+role);
+    return notifyGroupJoin(group, socket);
 };
 
 /**
@@ -110,8 +123,6 @@ var onMsgReceived = function(socket, message) {
             roles2Sockets[role] = socket;
             // Add client to group
             addClientToGroup(socket, role);
-            // Send 'join' messages to peers in the 'group'
-            broadcast('join '+role, socket2Group[socketId]);
             break;
 
         case 'message':
