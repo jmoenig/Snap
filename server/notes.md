@@ -53,9 +53,7 @@ I will probably want to have a couple methods for handling websocket communicati
     + How do we call the atomic process methods from the `SpriteMorph`?
 
 ## Fix me!
-+ Sending a message before a `register` message breaks the server...
-    + For now, I will probably put the `unregistered` users in a GLOBAL group
-    + FIXED
++ Crashes when broadcasting to group with closed socket
 
 ## To Do
 + Create a testing framework/hooks for Snap 
@@ -68,6 +66,10 @@ I will probably want to have a couple methods for handling websocket communicati
 + Update `ypr.js` for new blocks (serialization)
 
 ## Finished To do/Fix me!
++ Sending a message before a `register` message breaks the server...
+    + For now, I will probably put the `unregistered` users in a GLOBAL group
+    + FIXED
+
 + Create the visual blocks:
   + Create the visual blocks: (1876)
     + register DONE!

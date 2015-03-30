@@ -54,8 +54,29 @@ NetsBlocksServer.prototype.broadcast = function(message, group) {
         s = group[peers[i]];
         // Check if the socket is open
         // TODO
-        s.send(message);
+        console.log('s:', Object.keys(s));
+        if (this.updateSocket(s)) {
+            s.send(message);
+        }
     }
+};
+
+/**
+ * Check if the socket is still open. If not, clean up the groups and broadcast updates.
+ *
+ * @param {WebSocket} socket
+ * @return {Boolean} connected?
+ */
+NetsBlocksServer.prototype.updateSocket = function(socket) {
+    if (socket.readyState !== socket.OPEN) {
+        // Update the groups as necessary
+        // TODO
+
+        // Broadcast the leave message
+        // TODO
+        return false;
+    }
+    return true;
 };
 
 NetsBlocksServer.prototype.unregisterSocket = function(socket) {
@@ -90,6 +111,16 @@ NetsBlocksServer.prototype.notifyGroupJoin = function(group, socket, isSilent) {
             }
         }
     }
+};
+
+/**
+ * Notify remaining members of client leaving.
+ *
+ * @param {Group} group
+ * @param {WebSocket} socket
+ * @return {undefined}
+ */
+NetsBlocksServer.prototype.notifyGroupLeave = function(group, socket) {
 };
 
 NetsBlocksServer.prototype.addClientToGroup = function(socket, group, isSilent) {
@@ -142,20 +173,26 @@ NetsBlocksServer.prototype.canSwitchRolesInCurrentGroup = function(socket, newRo
 NetsBlocksServer.prototype.onMsgReceived = function(socket, message) {
     // Handle a WebSocket message from NetsBlocks
     var msg = message.split(' '),
-        socketId = socket.id,  // FIXME
+        socketId = socket.id,
         type = msg.shift(),
         role;
 
     // Handle the different request types
     switch (type) {
         case 'register':
-            var group;
-            role = msg.shift();  // record the roleId
-            if (this.canSwitchRolesInCurrentGroup(socket, role)) {
-                group = this.socket2Group[socket.id];
-                var oldRole = this.socket2Role[socket.id];
-                delete group[oldRole];
+            var group,
+                oldRole;
 
+            role = msg.shift();  // record the roleId
+            // Update old group of leaving...
+            group = this.socket2Group[socket.id];
+            oldRole = this.socket2Role[socket.id];
+            if (!!group && !!oldRole) {
+                this.broadcast('leave '+oldRole, group);
+            }
+
+            if (this.canSwitchRolesInCurrentGroup(socket, role)) {
+                delete group[oldRole];
                 this.socket2Role[socket.id] = role;
                 this.addClientToGroup(socket, group, true);
                 
