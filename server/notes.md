@@ -52,6 +52,9 @@ I will probably want to have a couple methods for handling websocket communicati
     + Add macro blocks on line 3510 (or so) of `object.js`
     + How do we call the atomic process methods from the `SpriteMorph`?
 
+## Fix me!
++ websocket is created for each process... It should either be in the threadmanager or the sprite morph
+
 ## To Do
 + Create the visual blocks:
   + Create the visual blocks: (1876)

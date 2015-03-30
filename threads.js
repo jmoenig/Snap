@@ -132,6 +132,8 @@ function snapEquals(a, b) {
 
 function ThreadManager() {
     this.processes = [];
+    // At least for now, the ThreadManager manages the websocket as well
+    this.websocket = null;  //FIXME
 }
 
 ThreadManager.prototype.toggleProcess = function (block) {
@@ -355,8 +357,6 @@ function Process(topBlock, onComplete) {
     this.lastYield = Date.now();
     this.isAtomic = false;
     this.prompter = null;
-    this.websocket = null;
-    this.messages = [];
     this.httpRequest = null;
     this.isPaused = false;
     this.pauseOffset = null;
@@ -1875,49 +1875,11 @@ Process.prototype.reportURL = function (url) {
 };
 
 // Process event websocket primitives
-Process.prototype.verifySocketConnected = function () {
-    // Connect socket to the server
-    if (!this.websocket) {
-        var address = 'ws://'+window.location.hostname+':5432',
-            self = this;
-        this.websocket = new WebSocket(address);
-        // Set up message firing queue
-        this.websocket.onopen = function() {
-            while (self.messages.length) {
-                self.websocket.send(self.messages.shift());
-            }
-        };
-
-        // Set up message events
-        var data;
-        this.websocket.onmessage = function(message) {
-            data = message.data.split(' ');
-            console.log('received', data[0], 'from', data[1]);
-            self.onSocketMessageReceived(data[0], data[1]);
-        };
-    }
-    return this.websocket.readyState;
-};
-
-/**
- * sendSocketMessage
- *
- * @private
- * @param {String} message
- * @return {undefined}
- */
-Process.prototype._sendSocketMessage = function (message) {
-    var state = this.verifySocketConnected();
-    if (state === 1) {
-        // Send registration message
-        this.websocket.send(message);
-    } else {
-        this.messages.push(message);
-    }
-};
 
 Process.prototype.doRegisterClient = function (message) {
-    this._sendSocketMessage('register ' + message);
+    // Get the websocket manager
+    var stage = this.homeContext.receiver.parentThatIsA(StageMorph);
+    stage.sockets.sendMessage('register ' + message);
 };
 
 Process.prototype.doSocketDisconnect = function () {
@@ -1928,32 +1890,10 @@ Process.prototype.doSocketDisconnect = function () {
 };
 
 Process.prototype.doSocketMessage = function (message) {
-    this._sendSocketMessage('message ' + message);
-};
+    // Get the websocket manager
+    var stage = this.homeContext.receiver.parentThatIsA(StageMorph);
 
-/**
- * Callback for receiving a websocket message.
- *
- * @param {String} message
- * @return {undefined}
- */
-Process.prototype.onSocketMessageReceived = function (message, role) {
-    var stage = this.homeContext.receiver.parentThatIsA(StageMorph),
-        hats = [],
-        procs = [];
-
-    if (message !== '') {
-        stage.lastMessage = message;
-        stage.children.concat(stage).forEach(function (morph) {
-            if (morph instanceof SpriteMorph || morph instanceof StageMorph) {
-                hats = hats.concat(morph.allHatSocketBlocksFor(message, role));
-            }
-        });
-        hats.forEach(function (block) {
-            procs.push(stage.threads.startProcess(block, stage.isThreadSafe));
-        });
-    }
-    return procs;
+    stage.sockets.sendMessage('message ' + message);
 };
 
 // Process event messages primitives

@@ -4424,6 +4424,7 @@ function StageMorph(globals) {
 StageMorph.prototype.init = function (globals) {
     this.name = localize('Stage');
     this.threads = new ThreadManager();
+    this.sockets = new WebSocketManager(this);
     this.variables = new VariableFrame(globals || null, this);
     this.scripts = new ScriptsMorph(this);
     this.customBlocks = [];
