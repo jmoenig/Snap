@@ -1,6 +1,6 @@
 // NetsBlocks Server
 // Handles the groups and websocket communication 
-//
+
 'use strict';
 
 // Web Sockets
@@ -15,6 +15,7 @@ var NetsBlocksServer = function(opts) {
     // -> group (Array)
     // -> Dictionary<roles>
     this.groups = [];
+    this.sockets = [];
     this.socket2Role = {};
     this.socket2Group = {};
 };
@@ -24,9 +25,12 @@ NetsBlocksServer.prototype.start = function(opts) {
 
     var self = this;
     this._wss.on('connection', function(socket) {
+        console.log('WebSocket connection established! ('+counter+')');
+
         // ID the socket
         socket.id = ++counter;
-        console.log('WebSocket connection established! ('+counter+')');
+        self.sockets.push(socket);
+
         // Add the client to the global group
         self.addClientToGroup(socket, globalGroup);
 
@@ -44,6 +48,11 @@ NetsBlocksServer.prototype.start = function(opts) {
         });
     });
 
+    // Check if the sockets are alive
+    setInterval(function() {
+        self.updateSockets();
+    }, 1000);
+
 };
 
 NetsBlocksServer.prototype.broadcast = function(message, group) {
@@ -53,11 +62,15 @@ NetsBlocksServer.prototype.broadcast = function(message, group) {
     for (var i = peers.length; i--;) {
         s = group[peers[i]];
         // Check if the socket is open
-        // TODO
-        console.log('s:', Object.keys(s));
         if (this.updateSocket(s)) {
             s.send(message);
         }
+    }
+};
+
+NetsBlocksServer.prototype.updateSockets = function() {
+    for (var i = this.sockets.length; i--;) {
+        this.updateSocket(this.sockets[i]);
     }
 };
 
@@ -69,11 +82,19 @@ NetsBlocksServer.prototype.broadcast = function(message, group) {
  */
 NetsBlocksServer.prototype.updateSocket = function(socket) {
     if (socket.readyState !== socket.OPEN) {
+        console.log('Removing disconnected socket');
         // Update the groups as necessary
-        // TODO
+        var group = this.socket2Group[socket.id],
+            role = this.socket2Role[socket.id],
+            index = this.sockets.indexOf(socket);
+
+        delete group[role];
+        delete this.socket2Role[socket.id];
+        delete this.socket2Group[socket.id];
+        this.sockets.splice(index,1);
 
         // Broadcast the leave message
-        // TODO
+        this.broadcast('leave '+role, group);
         return false;
     }
     return true;
@@ -86,11 +107,10 @@ NetsBlocksServer.prototype.unregisterSocket = function(socket) {
         group = this.socket2Group[socket.id];
 
     if (group !== undefined) {
-        this.broadcast('leave '+role, group);
         console.log('removing '+role+' from group');
-        // Remove socket from group
+        // Remove role from group
         delete this.socket2Group[socket.id][role];
-        // Remove group registry
+        // Remove group registry for socket
         console.log('group now contains', Object.keys(this.socket2Group[socket.id]));
         delete this.socket2Group[socket.id];
     }
@@ -124,7 +144,10 @@ NetsBlocksServer.prototype.notifyGroupLeave = function(group, socket) {
 };
 
 NetsBlocksServer.prototype.addClientToGroup = function(socket, group, isSilent) {
-    var role = this.socket2Role[socket.id];
+    var role = this.socket2Role[socket.id] || 'default';
+
+    // REMOVE
+    console.assert(!!group);
 
     group[role] = socket;
     this.socket2Group[socket.id] = group;
@@ -225,10 +248,3 @@ NetsBlocksServer.prototype.onMsgReceived = function(socket, message) {
 };
 
 module.exports = NetsBlocksServer;
-
-//wss.on('close', function(socket) {
-    //// TODO send 'leave' messages to everyone in the socket group
-    //var role = self.socket2Role[socket.id];
-    //self.broadcast('leave '+role, self.socket2Group[socket.id]);
-    //console.log('socket is closing...');
-//});
