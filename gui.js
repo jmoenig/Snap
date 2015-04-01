@@ -2563,6 +2563,48 @@ IDE_Morph.prototype.projectMenu = function () {
         },
         'file menu import hint' // looks up the actual text in the translator
     );
+    
+    menu.addItem(
+        'Import module...',
+        function () {
+            var inp = document.createElement('input');
+            if (myself.filePicker) {
+                document.body.removeChild(myself.filePicker);
+                myself.filePicker = null;
+            }
+            inp.type = 'file';
+            inp.style.color = "transparent";
+            inp.style.backgroundColor = "transparent";
+            inp.style.border = "none";
+            inp.style.outline = "none";
+            inp.style.position = "absolute";
+            inp.style.top = "0px";
+            inp.style.left = "0px";
+            inp.style.width = "0px";
+            inp.style.height = "0px";
+            inp.addEventListener(
+                "change",
+                function () {
+                    document.body.removeChild(inp);
+                    myself.filePicker = null;
+                    
+                    var freader = new FileReader();
+                    freader.onloadend = function () {
+                        var zip = new JSZip(freader.result); //get the module
+                        var mdl = new ModuleLoader(myself);
+                        mdl.open(zip);
+                    };
+                    freader.readAsArrayBuffer(inp.files[0]);
+                    
+                },
+                false
+            );
+            document.body.appendChild(inp);
+            myself.filePicker = inp;
+            inp.click();
+        },
+        'import a module zip file'
+    );
 
     menu.addItem(
         shiftClicked ?

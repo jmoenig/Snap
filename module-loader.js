@@ -142,7 +142,7 @@ ModuleLoader.prototype.checkModule = function(blob, version, options) {
 }
 
 ModuleLoader.prototype.open = function(zip, options) {
-    var meta = zip.file("meta.json");
+    var meta = zip.file("package.json");
     if(meta != null) {
       var meta_text = meta.asText();
       var libJSON = JSON.parse(meta_text);
