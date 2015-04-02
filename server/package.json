@@ -5,7 +5,8 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "nodemon server.js",
+    "test": "node node_modules/mocha/bin/mocha --recursive test"
   },
   "repository": {
     "type": "git",
@@ -20,6 +21,8 @@
   "dependencies": {
     "express": "^4.12.3",
     "jade": "^1.9.2",
+    "mocha": "^2.2.1",
+    "ramda": "^0.13.0",
     "socket.io": "^1.3.5",
     "ws": "^0.7.1"
   }

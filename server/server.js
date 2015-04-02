@@ -12,5 +12,8 @@ app.get('/', function(req, res) {
 
 app.listen(port);
 
+// Parse cmd line options for group manager?
+// TODO
+
 var nbApp = new NetsBlocksServer();
 nbApp.start({port: 5432, path: ''});

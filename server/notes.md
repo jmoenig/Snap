@@ -56,12 +56,20 @@ I will probably want to have a couple methods for handling websocket communicati
 + Crashes when broadcasting to group with closed socket
 
 ## To Do
-+ Create a testing framework/hooks for Snap 
-+ Add socket disconnect detection
-+ I would like to store the network default messages in an enum somewhere... I am not sure where...
-  + FIXME
++ Refactor GroupManagement to be modular
+    + They need a common interface...
+        + Event listeners
+            + onConnect(id)
+            + onMessage(id, message) // message is optional
+            + onDisconnect(id)
 
-+ Create ping-pong game
+        + Group API
+            + getGroupMembers(id)
+
++ Create a testing framework/hooks for Snap 
+    + Created one for the server-side logic
+
++ Create ping-pong/tic-tac-toe game
 
 + Update `ypr.js` for new blocks (serialization)
 
@@ -99,3 +107,8 @@ I will probably want to have a couple methods for handling websocket communicati
 
 + websocket is created for each process... It should either be in the threadmanager or the sprite morph
     + DONE
+
++ Add socket disconnect detection
++ I would like to store the network default messages in an enum somewhere... I am not sure where...
+  + DONE
+

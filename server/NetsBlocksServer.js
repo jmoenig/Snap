@@ -5,8 +5,8 @@
 
 // Web Sockets
 var WebSocketServer = require('ws').Server,
-    globalGroup = {},  // For all unregistered clients
-    counter = 0;
+    counter = 0,
+    GenericManager = require('./GroupManagers/GenericManager');
 
 var NetsBlocksServer = function(opts) {
     // Create "rooms" or "groups"
@@ -14,10 +14,10 @@ var NetsBlocksServer = function(opts) {
     // project ids Dictionary<project_ids>
     // -> group (Array)
     // -> Dictionary<roles>
-    this.groups = [];
     this.sockets = [];
     this.socket2Role = {};
-    this.socket2Group = {};
+
+    this.groupManager = new GenericManager();
 };
 
 NetsBlocksServer.prototype.start = function(opts) {
@@ -30,9 +30,12 @@ NetsBlocksServer.prototype.start = function(opts) {
         // ID the socket
         socket.id = ++counter;
         self.sockets.push(socket);
+        self.socket2Role[socket.id] = 'default_'+socket.id;
 
         // Add the client to the global group
-        self.addClientToGroup(socket, globalGroup);
+        self.groupManager.onConnect(socket);
+        // Broadcast 'join' on connect
+        self.notifyGroupJoin(socket);
 
         /**
          * When the "broadcast" block is used, the server will receive 
@@ -51,16 +54,15 @@ NetsBlocksServer.prototype.start = function(opts) {
     // Check if the sockets are alive
     setInterval(function() {
         self.updateSockets();
-    }, 1000);
+    }, 500);
 
 };
 
-NetsBlocksServer.prototype.broadcast = function(message, group) {
-    console.log('broadcasting '+message);
-    var peers = Object.keys(group),
-        s;
+NetsBlocksServer.prototype.broadcast = function(message, peers) {
+    console.log('broadcasting '+message,'to', peers.map(function(r){return r.id;}));
+    var s;
     for (var i = peers.length; i--;) {
-        s = group[peers[i]];
+        s = peers[i];
         // Check if the socket is open
         if (this.updateSocket(s)) {
             s.send(message);
@@ -84,106 +86,39 @@ NetsBlocksServer.prototype.updateSocket = function(socket) {
     if (socket.readyState !== socket.OPEN) {
         console.log('Removing disconnected socket');
         // Update the groups as necessary
-        var group = this.socket2Group[socket.id],
-            role = this.socket2Role[socket.id],
-            index = this.sockets.indexOf(socket);
+        var index = this.sockets.indexOf(socket),
+            role = this.socket2Role[socket.id];
 
-        delete group[role];
+        //console.log('Global group is', globalGroup);
         delete this.socket2Role[socket.id];
-        delete this.socket2Group[socket.id];
         this.sockets.splice(index,1);
 
-        // Broadcast the leave message
-        this.broadcast('leave '+role, group);
+        // Broadcast the leave message to peers of the given socket
+        var peers = this.groupManager.getGroupMembers(socket);
+
+        this.broadcast('leave '+role, peers);
+
+        this.groupManager.onDisconnect(socket);
         return false;
     }
     return true;
 };
 
-NetsBlocksServer.prototype.unregisterSocket = function(socket) {
-    console.log('unregistering '+socket.id);
-    // Update the groups
+NetsBlocksServer.prototype.notifyGroupJoin = function(socket, isSilent) {
     var role = this.socket2Role[socket.id],
-        group = this.socket2Group[socket.id];
-
-    if (group !== undefined) {
-        console.log('removing '+role+' from group');
-        // Remove role from group
-        delete this.socket2Group[socket.id][role];
-        // Remove group registry for socket
-        console.log('group now contains', Object.keys(this.socket2Group[socket.id]));
-        delete this.socket2Group[socket.id];
-    }
-};
-
-NetsBlocksServer.prototype.notifyGroupJoin = function(group, socket, isSilent) {
-    var roles = Object.keys(group),
-        role = this.socket2Role[socket.id];
+        peers = this.groupManager.getGroupMembers(socket);
 
     // Send 'join' messages to peers in the 'group'
-    this.broadcast('join '+role, group);
+    this.broadcast('join '+role, peers);
 
     // Send new member join messages from everyone else
     if (!isSilent) {
-        for (var i = roles.length; i--;) {
-            if (roles[i] !== role) {
-                socket.send('join '+roles[i]);
+        for (var i = peers.length; i--;) {
+            if (peers[i] !== socket.id) {
+                socket.send('join '+this.socket2Role[peers[i]]);
             }
         }
     }
-};
-
-/**
- * Notify remaining members of client leaving.
- *
- * @param {Group} group
- * @param {WebSocket} socket
- * @return {undefined}
- */
-NetsBlocksServer.prototype.notifyGroupLeave = function(group, socket) {
-};
-
-NetsBlocksServer.prototype.addClientToGroup = function(socket, group, isSilent) {
-    var role = this.socket2Role[socket.id] || 'default';
-
-    // REMOVE
-    console.assert(!!group);
-
-    group[role] = socket;
-    this.socket2Group[socket.id] = group;
-    console.log('Adding socket #'+socket.id+' ('+role+')');
-    return this.notifyGroupJoin(group, socket, isSilent);
-};
-
-/**
- * Find a group for the client that doesn't have that role filled. Create a
- * new group if needed.
- *
- * @param {WebSocket} socket
- * @param {String} role
- * @return {undefined}
- */
-NetsBlocksServer.prototype.findGroupForClient = function(socket) {
-    var role = this.socket2Role[socket.id];
-    // Add client to group based on it's role
-    for (var i = 0; i < this.groups.length; i++) {
-        if (!this.groups[i][role]) {  // If not in the group, add it
-            return this.groups[i];
-        }
-    }
-
-    return null;
-};
-
-NetsBlocksServer.prototype.canSwitchRolesInCurrentGroup = function(socket, newRole) {
-    var group = this.socket2Group[socket.id],
-        oldRole = this.socket2Role[socket.id];
-
-    if (!group) {
-        return false;
-    }
-
-    return !group[newRole] || newRole === oldRole;
 };
 
 /**
@@ -198,42 +133,20 @@ NetsBlocksServer.prototype.onMsgReceived = function(socket, message) {
     var msg = message.split(' '),
         socketId = socket.id,
         type = msg.shift(),
+        oldRole = this.socket2Role[socket.id],
+        peers,
+        group,
         role;
 
     // Handle the different request types
+    console.log(new Array(20).join('- '));
+    console.log('Received msg:', message, 'from',socket.id);
+    var leftMembers = this.groupManager.onMessage(socket, message);
     switch (type) {
         case 'register':
-            var group,
-                oldRole;
 
             role = msg.shift();  // record the roleId
-            // Update old group of leaving...
-            group = this.socket2Group[socket.id];
-            oldRole = this.socket2Role[socket.id];
-            if (!!group && !!oldRole) {
-                this.broadcast('leave '+oldRole, group);
-            }
-
-            if (this.canSwitchRolesInCurrentGroup(socket, role)) {
-                delete group[oldRole];
-                this.socket2Role[socket.id] = role;
-                this.addClientToGroup(socket, group, true);
-                
-            } else {
-                // Remove from previous group
-                this.unregisterSocket(socket);
-                this.socket2Role[socketId] = role;
-                // Add client to group
-                group = this.findGroupForClient(socket, role);
-
-                // Create a new group
-                if (group === null) {
-                    group = {};
-                    this.groups.push(group);
-                }
-
-                this.addClientToGroup(socket, group);
-            }
+            this.socket2Role[socket.id] = role;
             break;
 
         case 'message':
@@ -242,8 +155,25 @@ NetsBlocksServer.prototype.onMsgReceived = function(socket, message) {
             msg.push(role);
             console.log('About to broadcast '+msg.join(' ')+
                         ' from socket #'+socketId+' ('+role+')');
-            this.broadcast(msg.join(' '), this.socket2Group[socketId]);
+            peers = this.groupManager.getGroupMembers(socket);
+            peers.push(socket);
+            this.broadcast(msg.join(' '), peers);
             break;
+
+        default:
+            break;
+    }
+
+    if (leftMembers) { // Update group change
+        var k,
+            r;
+
+        // Broadcast 'leave' to old peers
+        k = leftMembers.indexOf(socket);
+        leftMembers.splice(k,1);
+        this.broadcast('leave '+oldRole, leftMembers);
+
+        this.notifyGroupJoin(socket);
     }
 };
 
