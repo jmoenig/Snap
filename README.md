@@ -3,7 +3,7 @@ CSnap: Bringing Culture and Social Justice to Programming
 
 http://community.csdt.rpi.edu
 
-Copyright (C) 2014 by Rensselaer Polytechnic Institute
+Copyright (C) 2014-2015 by Rensselaer Polytechnic Institute
 
 CSnap is free software: you can redistribute it and/or modify
 it under the terms of the GNU Affero General Public License as
