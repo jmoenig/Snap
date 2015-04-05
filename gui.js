@@ -2369,6 +2369,38 @@ IDE_Morph.prototype.settingsMenu = function () {
     menu.popup(world, pos);
 };
 
+IDE_Morph.prototype.showImportSoundMenu = function(parentDirectory) {
+    var world = this.world(),
+        myself = this,
+        pos = this.controlBar.settingsButton.bottomLeft();
+    libMenu = new MenuMorph(this, 'Import ' + parentDirectory);
+    function loadSound(parent, name) {
+        var url = parent + name,
+            audio = new Audio();
+        audio.src = url;
+        audio.load();
+        myself.droppedAudio(audio, name);
+    }
+    function loadSoundDirectory(parent) {
+        var names = myself.getCostumesList(parent);
+        names.forEach(function (line) {
+            if (line.length > 0) {
+		if( line[line.length-1]=="/") {
+	    	    libMenu.addItem(line, function () {
+		      myself.showImportSoundMenu(parent + line);
+		    });
+		} else {
+	            libMenu.addItem(
+    	            line,
+        	    function () {loadSound(parent, line); });
+		}
+    	    }
+	});
+    }
+    loadSoundDirectory(parentDirectory);
+    libMenu.popup(world, pos);
+}
+
 IDE_Morph.prototype.projectMenu = function () {
     var menu,
         myself = this,
@@ -2539,26 +2571,7 @@ IDE_Morph.prototype.projectMenu = function () {
     menu.addItem(
         localize('Sounds') + '...',
         function () {
-            var names = this.getCostumesList('Sounds'),
-                libMenu = new MenuMorph(this, 'Import sound');
-
-            function loadSound(name) {
-                var url = 'Sounds/' + name,
-                    audio = new Audio();
-                audio.src = url;
-                audio.load();
-                myself.droppedAudio(audio, name);
-            }
-
-            names.forEach(function (line) {
-                if (line.length > 0) {
-                    libMenu.addItem(
-                        line,
-                        function () {loadSound(line); }
-                    );
-                }
-            });
-            libMenu.popup(world, pos);
+	    this.showImportSoundMenu('Sounds/');
         },
         'Select a sound from the media library'
     );
