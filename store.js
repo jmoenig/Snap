@@ -320,7 +320,7 @@ SnapSerializer.prototype.loadProjectModel = function (xmlNode, ide) {
     var appInfo = xmlNode.attributes.app,
         app = appInfo ? appInfo.split(' ')[0] : null;
 
-    if (ide && app && app !== this.app.split(' ')[0]) {
+    if (ide && app && app !== this.app.split(' ')[0] && app !== 'Snapin8r') {
         ide.inform(
             app + ' Project',
             'This project has been created by a different app:\n\n' +
