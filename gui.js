@@ -2384,12 +2384,13 @@ IDE_Morph.prototype.projectMenu = function () {
     menu.addItem('New', 'createNewProject');
     menu.addItem('Open...', 'openProjectsBrowser');
     menu.addItem('Save', "save");
-    menu.addItem(
-        'Save to disk',
-        'saveProjectToDisk',
-        'store this project\nin the downloads folder\n'
-            + '(in supporting browsers)'
-    );
+    if ('download' in document.createElement('a')) {
+        menu.addItem(
+            'Save to disk',
+            'saveProjectToDisk',
+            'store this project\nin the downloads folder'
+        );
+    }
     menu.addItem('Save As...', 'saveProjectsBrowser');
     menu.addLine();
     menu.addItem(
