@@ -1358,6 +1358,7 @@ SpriteMorph.prototype.fullCopy = function () {
         arr.push(costume.copy());
     });
     c.costumes = new List(arr);
+    c.costume = c.costumes.asArray()[this.getCostumeIdx() - 1];
     arr = [];
     this.sounds.asArray().forEach(function (sound) {
         arr.push(sound);

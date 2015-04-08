@@ -1259,6 +1259,7 @@ SnapSerializer.prototype.loadValue = function (model) {
             )) {
             myself.mediaDict[model.attributes.mediaID] = v;
         }
+        record();
         return v;
     }
     return undefined;
