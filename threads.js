@@ -461,6 +461,8 @@ Process.prototype.evaluateContext = function () {
     var exp = this.context.expression;
     this.frameCount += 1;
     if (this.context.tag === 'exit') {
+        console.log('error?');
+        console.log(this);
         this.expectReport();
     }
     if (exp instanceof Array) {
@@ -741,6 +743,9 @@ Process.prototype.handleError = function (error, element) {
     this.errorFlag = true;
     this.topBlock.addErrorHighlight();
     if (isNil(m) || isNil(m.world())) {m = this.topBlock; }
+    console.log(m);
+    console.log(error);
+    console.log(this);
     m.showBubble(
         (m === element ? '' : 'Inside: ')
             + error.name
