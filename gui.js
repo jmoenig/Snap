@@ -69,11 +69,7 @@ SpeechBubbleMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-<<<<<<< HEAD
-modules.gui = '2015-February-28';
-=======
 modules.gui = '2015-March-15';
->>>>>>> 7e8c631... removed the leave confirmation prompt when hideControls is active
 
 // Declarations
 
@@ -312,14 +308,6 @@ IDE_Morph.prototype.openIn = function (world) {
         }
     }
 
-    // This function returns the value of a parameter given its key
-    function getParameterByName(name) {
-        var param = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]'),
-            regex = new RegExp('[\\?&]' + param + '=([^&#]*)'),
-        results = regex.exec(location.href);
-        return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
-    }
-
     // dynamic notifications from non-source text files
     // has some issues, commented out for now
     /*
@@ -397,82 +385,20 @@ IDE_Morph.prototype.openIn = function (world) {
                             myself.shield = null;
                             msg.destroy();
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
                             if (dict.editMode) {
-=======
-                            if (getParameterByName('editMode')) {
->>>>>>> 6e35ad6... parameter parsing working on #present: URLs
-=======
-                            if (getParameterByName('editMode')) {
->>>>>>> 7e8c631... removed the leave confirmation prompt when hideControls is active
                                 myself.toggleAppMode(false); 
                             } else {
                                 myself.toggleAppMode(true); 
                             }
-<<<<<<< HEAD
-<<<<<<< HEAD
 
                             if (!dict.noRun) {
                                 myself.runScripts();
                             }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-							if (getParameterByName('hideControls')) {
-								myself.controlBar.hide();
-                                window.onbeforeunload = function (evt) {}; // Prevent the "are you sure you want to leave" dialog to popup
-							}
-=======
-                            if (getParameterByName('hideControls')) {
-                                myself.controlBar.hide();
-                            }
->>>>>>> 6e35ad6... parameter parsing working on #present: URLs
-=======
-                            if (getParameterByName('hideControls')) {
-=======
                             if (dict.hideControls) {
->>>>>>> 06b7f6a... parameters were already being parsed, no need to parse them again
                                 myself.controlBar.hide();
                                 window.onbeforeunload = function (evt) {};
                             }
->>>>>>> 7e8c631... removed the leave confirmation prompt when hideControls is active
-=======
-							// Parameter parsing
-							if (getParameterByName('editMode')) {
-								myself.toggleAppMode(false); 
-							} else {
-								myself.toggleAppMode(true); 
-							}
-=======
->>>>>>> 6e35ad6... parameter parsing working on #present: URLs
-=======
->>>>>>> 7e8c631... removed the leave confirmation prompt when hideControls is active
-
-                            if (!getParameterByName('noRun')) {
-                                myself.runScripts();
-                            }
-
-<<<<<<< HEAD
-<<<<<<< HEAD
-							if (getParameterByName('hideControls')) {
-								myself.controlBar.hide();
-                                window.onbeforeunload = function (evt) {}; // Prevent the "are you sure you want to leave" dialog to popup
-							}
->>>>>>> f33cb75... trying to get params
-=======
-                            if (getParameterByName('hideControls')) {
-                                myself.controlBar.hide();
-                            }
->>>>>>> 6e35ad6... parameter parsing working on #present: URLs
-=======
-                            if (getParameterByName('hideControls')) {
-                                myself.controlBar.hide();
-				window.onbeforeunload = function (evt) {};
-                            }
->>>>>>> 7e8c631... removed the leave confirmation prompt when hideControls is active
                         }
                     ]);
                 },
