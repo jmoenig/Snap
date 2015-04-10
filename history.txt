@@ -2456,8 +2456,11 @@ ______
 ------
 * Blocks, Store, GUI: Cache inputs, accelerates evaluating recursive reporters and warped / turbo recursive commands by up to 40%
 <<<<<<< HEAD
+<<<<<<< HEAD
 * Objects: slightly optimize warped / turbo execution 
 =======
+=======
+>>>>>>> origin/contrib
 * Objects: slightly optimize warped / turbo execution
 * Threads: fixed #715
 * BYOB: fixed #716
@@ -2484,6 +2487,9 @@ ______
 ------
 * Threads: fixed #752
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> fb00d37... new parameters for embedding projects
 =======
 >>>>>>> 5bf3820... fixed #752 and #745
+=======
+>>>>>>> origin/contrib

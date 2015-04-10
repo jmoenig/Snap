@@ -9,7 +9,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2014 by Jens Mönig
+    Copyright (C) 2015 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -155,7 +155,7 @@ DialogBoxMorph, BlockInputFragmentMorph, PrototypeHatBlockMorph, Costume*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2015-February-28';
+modules.blocks = '2015-March-09';
 
 
 var SyntaxElementMorph;
@@ -340,7 +340,7 @@ SyntaxElementMorph.prototype.setScale = function (num) {
 };
 
 SyntaxElementMorph.prototype.setScale(1);
-SyntaxElementMorph.prototype.isCachingInputs = true;
+SyntaxElementMorph.prototype.isCachingInputs = false;
 
 // SyntaxElementMorph instance creation:
 
@@ -382,7 +382,34 @@ SyntaxElementMorph.prototype.inputs = function () {
             return part instanceof SyntaxElementMorph;
         });
     }
+    // this.debugCachedInputs();
     return this.cachedInputs;
+};
+
+SyntaxElementMorph.prototype.debugCachedInputs = function () {
+    // private - only used for manually debugging inputs caching
+    var realInputs, i;
+    if (!isNil(this.cachedInputs)) {
+        realInputs = this.parts().filter(function (part) {
+            return part instanceof SyntaxElementMorph;
+        });
+    }
+    if (this.cachedInputs.length !== realInputs.length) {
+        throw new Error('cached inputs size do not match: ' +
+            this.constructor.name);
+    }
+    for (i = 0; i < realInputs.length; i += 1) {
+        if (this.cachedInputs[i] !== realInputs[i]) {
+            throw new Error('cached input does not match: ' +
+                this.constructor.name +
+                ' #' +
+                i +
+                ' ' +
+                this.cachedInputs[i].constructor.name +
+                ' != ' +
+                realInputs[i].constructor.name);
+        }
+    }
 };
 
 SyntaxElementMorph.prototype.allInputs = function () {
@@ -1916,6 +1943,7 @@ BlockMorph.uber = SyntaxElementMorph.prototype;
 
 // BlockMorph preferences settings:
 
+BlockMorph.prototype.isCachingInputs = true;
 BlockMorph.prototype.zebraContrast = 40; // alternating color brightness
 
 // BlockMorph sound feedback:
@@ -3036,6 +3064,9 @@ BlockMorph.prototype.fullCopy = function () {
         ans.setSpec(this.instantiationSpec);
     }
     ans.allChildren().filter(function (block) {
+        if (block instanceof SyntaxElementMorph) {
+            block.cachedInputs = null;
+        }
         return !isNil(block.comment);
     }).forEach(function (block) {
         var cmnt = block.comment.fullCopy();
@@ -4614,6 +4645,7 @@ RingMorph.uber = ReporterBlockMorph.prototype;
 
 // RingMorph preferences settings:
 
+RingMorph.prototype.isCachingInputs = false;
 // RingMorph.prototype.edge = 2;
 // RingMorph.prototype.rounding = 9;
 // RingMorph.prototype.alpha = 0.8;
@@ -9197,10 +9229,6 @@ MultiArgMorph.prototype = new ArgMorph();
 MultiArgMorph.prototype.constructor = MultiArgMorph;
 MultiArgMorph.uber = ArgMorph.prototype;
 
-// MultiArgMorph preferences settings
-
-MultiArgMorph.prototype.isCachingInputs = false;
-
 // MultiArgMorph instance creation:
 
 function MultiArgMorph(
@@ -9630,10 +9658,6 @@ MultiArgMorph.prototype.isEmptySlot = function () {
 ArgLabelMorph.prototype = new ArgMorph();
 ArgLabelMorph.prototype.constructor = ArgLabelMorph;
 ArgLabelMorph.uber = ArgMorph.prototype;
-
-// ArgLabelMorph preferences settings
-
-ArgLabelMorph.prototype.isCachingInputs = false;
 
 // MultiArgMorph instance creation:
 

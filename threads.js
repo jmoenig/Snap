@@ -85,6 +85,7 @@ ArgLabelMorph, localize, XML_Element, hex_sha512*/
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 modules.threads = '2015-January-12';
 =======
 modules.threads = '2015-March-25';
@@ -92,6 +93,9 @@ modules.threads = '2015-March-25';
 =======
 modules.threads = '2015-March-25';
 >>>>>>> 5bf3820... fixed #752 and #745
+=======
+modules.threads = '2015-March-25';
+>>>>>>> origin/contrib
 
 var ThreadManager;
 var Process;
@@ -1943,7 +1947,7 @@ Process.prototype.reportTypeOf = function (thing) {
     if (thing === true || (thing === false)) {
         return 'Boolean';
     }
-    if (!isNaN(parseFloat(thing))) {
+    if (!isNaN(+thing)) {
         return 'number';
     }
     if (isString(thing)) {
