@@ -384,8 +384,21 @@ IDE_Morph.prototype.openIn = function (world) {
                             myself.shield.destroy();
                             myself.shield = null;
                             msg.destroy();
-                            myself.toggleAppMode(true);
-                            myself.runScripts();
+
+                            if (dict.editMode) {
+                                myself.toggleAppMode(false); 
+                            } else {
+                                myself.toggleAppMode(true); 
+                            }
+
+                            if (!dict.noRun) {
+                                myself.runScripts();
+                            }
+
+                            if (dict.hideControls) {
+                                myself.controlBar.hide();
+                                window.onbeforeunload = function (evt) {};
+                            }
                         }
                     ]);
                 },
