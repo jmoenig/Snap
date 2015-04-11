@@ -2021,6 +2021,7 @@ IDE_Morph.prototype.cloudMenu = function () {
             'Login...',
             'initializeCloud'
         );
+        if (SnapSettings.gui_type != 'student') { 
         menu.addItem(
             'Signup...',
             'createCloudAccount'
@@ -2029,16 +2030,19 @@ IDE_Morph.prototype.cloudMenu = function () {
             'Reset Password...',
             'resetCloudPassword'
         );
+    }
     } else {
         menu.addItem(
             localize('Logout') + ' ' + SnapCloud.username,
             'logout'
         );
+        if (SnapSettings.gui_type != 'student') { 
         menu.addItem(
             'Change Password...',
             'changeCloudPassword'
         );
     }
+    }    
     if (shiftClicked) {
         menu.addLine();
         menu.addItem(
@@ -2415,6 +2419,7 @@ IDE_Morph.prototype.projectMenu = function () {
     menu.addLine();
     menu.addItem('New', 'createNewProject');
     menu.addItem('Open...', 'openProjectsBrowser');
+    if (SnapSettings.gui_type != 'student') { 
     menu.addItem('Save', "save");
     menu.addItem(
         'Save to disk',
@@ -2422,6 +2427,7 @@ IDE_Morph.prototype.projectMenu = function () {
         'store this project\nin the downloads folder\n'
             + '(in supporting browsers)'
     );
+    }
     menu.addItem('Save As...', 'saveProjectsBrowser');
     menu.addLine();
     menu.addItem(
@@ -4345,7 +4351,9 @@ ProjectDialogMorph.prototype.buildContents = function () {
     }
 
     this.addSourceButton('cloud', localize('Cloud'), 'cloud');
+    if (SnapSettings.gui_type != 'student') { 
     this.addSourceButton('local', localize('Browser'), 'storage');
+    }
     if (this.task === 'open') {
         this.addSourceButton('examples', localize('Examples'), 'poster');
     }

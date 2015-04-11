@@ -36,7 +36,7 @@ modules.cloud = '2015-January-12';
 
 var Cloud;
 var SnapCloud = new Cloud(
-    'https://snap.apps.miosoft.com/SnapCloud'
+  SnapSettings.cloud_url
 );
 
 // Cloud /////////////////////////////////////////////////////////////
@@ -332,7 +332,7 @@ Cloud.prototype.saveProject = function (ide, callBack, errorCall) {
         pdata,
         media;
 
-    ide.serializer.isCollectingMedia = true;
+    ide.serializer.isCollectingMedia = SnapSettings.gui_type != 'student';
     pdata = ide.serializer.serialize(ide.stage);
     media = ide.hasChangedMedia ?
             ide.serializer.mediaXML(ide.projectName) : null;
