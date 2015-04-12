@@ -4353,9 +4353,9 @@ ProjectDialogMorph.prototype.buildContents = function () {
     this.addSourceButton('cloud', localize('Cloud'), 'cloud');
     if (SnapSettings.gui_type != 'student') { 
     this.addSourceButton('local', localize('Browser'), 'storage');
-    }
     if (this.task === 'open') {
         this.addSourceButton('examples', localize('Examples'), 'poster');
+    }
     }
     this.srcBar.fixLayout();
     this.body.add(this.srcBar);
