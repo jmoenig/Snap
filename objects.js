@@ -125,7 +125,7 @@ PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.objects = '2015-March-24';
+modules.objects = '2015-April-15';
 
 var SpriteMorph;
 var StageMorph;
@@ -2369,6 +2369,29 @@ SpriteMorph.prototype.freshPalette = function (category) {
         }
     });
 
+    // inherited custom blocks: (under construction...)
+
+    // y += unit * 1.6;
+    if (this.exemplar) {
+        this.exemplar.customBlocks.forEach(function (definition) {
+            var block;
+            if (definition.category === category ||
+                    (category === 'variables'
+                        && contains(
+                            ['lists', 'other'],
+                            definition.category
+                        ))) {
+                block = definition.templateInstance();
+                y += unit * 0.3;
+                block.setPosition(new Point(x, y));
+                palette.addContents(block);
+                block.ghost();
+                x = 0;
+                y += block.height();
+            }
+        });
+    }
+
     //layout
 
     palette.scrollX(palette.padding);
@@ -3107,7 +3130,7 @@ SpriteMorph.prototype.setEffect = function (effect, value) {
     if (eff === 'ghost') {
         this.alpha = 1 - Math.min(Math.max(+value || 0, 0), 100) / 100;
     } else {
-        this.graphicsValues[eff] = value;
+        this.graphicsValues[eff] = +value;
     }
     this.drawNew();
     this.changed();
@@ -3122,7 +3145,7 @@ SpriteMorph.prototype.changeEffect = function (effect, value) {
     if (eff === 'ghost') {
         this.setEffect(effect, this.getGhostEffect() + (+value || 0));
     } else {
-        this.setEffect(effect, this.graphicsValues[eff] + value);
+        this.setEffect(effect, +this.graphicsValues[eff] + (+value));
     }
 };
 
