@@ -2480,3 +2480,7 @@ ______
 150325
 ------
 * Threads: fixed #752
+
+150415
+------
+* Threads: flush Stage>>keysPressed when prompting the user
