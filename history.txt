@@ -2493,3 +2493,8 @@ ______
 ------
 * Threads: fixed #752
 * OOP: integrated and adjusted fix for #752
+
+150415
+------
+* Threads: flush Stage>>keysPressed when prompting the user
+

@@ -83,7 +83,7 @@ ArgLabelMorph, localize, XML_Element, hex_sha512*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.threads = '2015-March-25';
+modules.threads = '2015-April-15';
 
 var ThreadManager;
 var Process;
@@ -1835,6 +1835,7 @@ Process.prototype.doAsk = function (data) {
         isStage = this.blockReceiver() instanceof StageMorph,
         activePrompter;
 
+    stage.keysPressed = {};
     if (!this.prompter) {
         activePrompter = detect(
             stage.children,
