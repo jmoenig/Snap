@@ -125,7 +125,7 @@ PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.objects = '2015-February-28';
+modules.objects = '2015-April-15';
 
 var SpriteMorph;
 var StageMorph;
@@ -3107,7 +3107,7 @@ SpriteMorph.prototype.setEffect = function (effect, value) {
     if (eff === 'ghost') {
         this.alpha = 1 - Math.min(Math.max(+value || 0, 0), 100) / 100;
     } else {
-        this.graphicsValues[eff] = value;
+        this.graphicsValues[eff] = +value;
     }
     this.drawNew();
     this.changed();
@@ -3122,7 +3122,7 @@ SpriteMorph.prototype.changeEffect = function (effect, value) {
     if (eff === 'ghost') {
         this.setEffect(effect, this.getGhostEffect() + (+value || 0));
     } else {
-        this.setEffect(effect, this.graphicsValues[eff] + value);
+        this.setEffect(effect, +this.graphicsValues[eff] + (+value));
     }
 };
 
