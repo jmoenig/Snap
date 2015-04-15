@@ -12,6 +12,8 @@ app.get('/', function(req, res) {
 
 app.listen(port);
 
+console.log('NetsBlocks server listening on port '+port);
+
 // Parse cmd line options for group manager?
 // TODO
 

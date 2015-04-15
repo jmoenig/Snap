@@ -6,26 +6,35 @@
 // Web Sockets
 var WebSocketServer = require('ws').Server,
     counter = 0,
-    GenericManager = require('./GroupManagers/GenericManager');
+    GenericManager = require('./GroupManagers/GenericManager'),
+    R = require('ramda'),
+    Utils = require('./Utils'),
+    debug = require('debug'),
+    log = debug('NetsBlocks:log'),
+    info = debug('NetsBlocks:info');
 
 var NetsBlocksServer = function(opts) {
-    // Create "rooms" or "groups"
-    // records of 
-    // project ids Dictionary<project_ids>
-    // -> group (Array)
-    // -> Dictionary<roles>
+    opts = opts || {};
     this.sockets = [];
     this.socket2Role = {};
 
-    this.groupManager = new GenericManager();
+    var GroupManager = opts.GroupManager || GenericManager;
+    this.groupManager = new GroupManager();
+    info('Using GroupManager: '+this.groupManager.getName());
 };
 
+/**
+ * Start the WebSocket server and start the socket updating interval.
+ *
+ * @param {Object} opts
+ * @return {undefined}
+ */
 NetsBlocksServer.prototype.start = function(opts) {
     this._wss = new WebSocketServer(opts);
 
     var self = this;
     this._wss.on('connection', function(socket) {
-        console.log('WebSocket connection established! ('+counter+')');
+        log('WebSocket connection established! ('+counter+')');
 
         // ID the socket
         socket.id = ++counter;
@@ -37,16 +46,8 @@ NetsBlocksServer.prototype.start = function(opts) {
         // Broadcast 'join' on connect
         self.notifyGroupJoin(socket);
 
-        /**
-         * When the "broadcast" block is used, the server will receive 
-         * a message labeled 'message' from the client.
-         *
-         * On receiving this message, the server will then broadcast this
-         * message to all the other members in the group.
-         * 
-         */
         socket.on('message', function(data) {
-            console.log('Received message: ',data);
+            log('Received message: ',data);
             self.onMsgReceived(socket, data);
         });
     });
@@ -58,8 +59,19 @@ NetsBlocksServer.prototype.start = function(opts) {
 
 };
 
+NetsBlocksServer.prototype.stop = function(opts) {
+    this._wss.close();
+};
+
+/**
+ * Broadcast the given message to the given peers.
+ *
+ * @param {String} message
+ * @param {WebSocket} peers
+ * @return {undefined}
+ */
 NetsBlocksServer.prototype.broadcast = function(message, peers) {
-    console.log('broadcasting '+message,'to', peers.map(function(r){return r.id;}));
+    log('broadcasting '+message,'to', peers.map(function(r){return r.id;}));
     var s;
     for (var i = peers.length; i--;) {
         s = peers[i];
@@ -70,9 +82,19 @@ NetsBlocksServer.prototype.broadcast = function(message, peers) {
     }
 };
 
+/**
+ * Check if the sockets are still active and remove any stale sockets.
+ *
+ * @return {undefined}
+ */
 NetsBlocksServer.prototype.updateSockets = function() {
-    for (var i = this.sockets.length; i--;) {
-        this.updateSocket(this.sockets[i]);
+    var groups = this.groupManager.getAllGroups(),
+        open;
+    for (var i = groups.length; i--;) {
+        open = true;
+        while (groups[i].length && open) {
+            open = this.updateSocket(groups[i].pop());
+        }
     }
 };
 
@@ -84,27 +106,30 @@ NetsBlocksServer.prototype.updateSockets = function() {
  */
 NetsBlocksServer.prototype.updateSocket = function(socket) {
     if (socket.readyState !== socket.OPEN) {
-        console.log('Removing disconnected socket');
+        log('Removing disconnected socket');
         // Update the groups as necessary
         var index = this.sockets.indexOf(socket),
             role = this.socket2Role[socket.id];
 
-        //console.log('Global group is', globalGroup);
         delete this.socket2Role[socket.id];
         this.sockets.splice(index,1);
 
         // Broadcast the leave message to peers of the given socket
         var peers = this.groupManager.getGroupMembers(socket);
-
-        this.broadcast('leave '+role, peers);
-
         this.groupManager.onDisconnect(socket);
+        this.broadcast('leave '+role, peers);
         return false;
     }
     return true;
 };
 
-NetsBlocksServer.prototype.notifyGroupJoin = function(socket, isSilent) {
+/**
+ * Broadcast a JOIN message to the other members in the group.
+ *
+ * @param {WebSocket} socket
+ * @return {undefined}
+ */
+NetsBlocksServer.prototype.notifyGroupJoin = function(socket) {
     var role = this.socket2Role[socket.id],
         peers = this.groupManager.getGroupMembers(socket);
 
@@ -112,39 +137,42 @@ NetsBlocksServer.prototype.notifyGroupJoin = function(socket, isSilent) {
     this.broadcast('join '+role, peers);
 
     // Send new member join messages from everyone else
-    if (!isSilent) {
-        for (var i = peers.length; i--;) {
-            if (peers[i] !== socket.id) {
-                socket.send('join '+this.socket2Role[peers[i]]);
-            }
+    for (var i = peers.length; i--;) {
+        if (peers[i] !== socket.id) {
+            socket.send('join '+this.socket2Role[peers[i]]);
         }
     }
 };
 
 /**
- * Handle a websocket message.
+ * Handle a WebSocket message from a client.
  *
  * @param {WebSocket} socket
  * @param {String} message
  * @return {undefined}
  */
 NetsBlocksServer.prototype.onMsgReceived = function(socket, message) {
-    // Handle a WebSocket message from NetsBlocks
     var msg = message.split(' '),
         socketId = socket.id,
         type = msg.shift(),
         oldRole = this.socket2Role[socket.id],
         peers,
         group,
+        oldMembers,
         role;
 
+    // Early return..
+    if (!this.groupManager.isMessageAllowed(socket, message)) {
+        return;
+    }
+
+    log('Received msg:', message, 'from',socket.id);
+
+    oldMembers = this.groupManager.onMessage(socket, message);
+
     // Handle the different request types
-    console.log(new Array(20).join('- '));
-    console.log('Received msg:', message, 'from',socket.id);
-    var leftMembers = this.groupManager.onMessage(socket, message);
     switch (type) {
         case 'register':
-
             role = msg.shift();  // record the roleId
             this.socket2Role[socket.id] = role;
             break;
@@ -153,7 +181,7 @@ NetsBlocksServer.prototype.onMsgReceived = function(socket, message) {
             // broadcast the message, role to all peers
             role = this.socket2Role[socketId];
             msg.push(role);
-            console.log('About to broadcast '+msg.join(' ')+
+            log('About to broadcast '+msg.join(' ')+
                         ' from socket #'+socketId+' ('+role+')');
             peers = this.groupManager.getGroupMembers(socket);
             peers.push(socket);
@@ -164,14 +192,14 @@ NetsBlocksServer.prototype.onMsgReceived = function(socket, message) {
             break;
     }
 
-    if (leftMembers) { // Update group change
+    if (oldMembers) { // Update group change
         var k,
             r;
 
         // Broadcast 'leave' to old peers
-        k = leftMembers.indexOf(socket);
-        leftMembers.splice(k,1);
-        this.broadcast('leave '+oldRole, leftMembers);
+        k = oldMembers.indexOf(socket);
+        oldMembers.splice(k,1);
+        this.broadcast('leave '+oldRole, oldMembers);
 
         this.notifyGroupJoin(socket);
     }
