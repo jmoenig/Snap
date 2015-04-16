@@ -2373,6 +2373,44 @@ IDE_Morph.prototype.settingsMenu = function () {
     menu.popup(world, pos);
 };
 
+IDE_Morph.prototype.showImportCostumeMenu = function(parentDirectory) {
+    var world = this.world(),
+        myself = this,
+        pos = this.controlBar.settingsButton.bottomLeft();
+    libMenu = new MenuMorph(
+        this,
+        localize('Import') + ' ' + parentDirectory
+    );
+    function loadCostume(parent, name) {
+        var url = parent + name,
+        img = new Image();
+        img.onload = function () {
+            var canvas = newCanvas(new Point(img.width, img.height));
+            canvas.getContext('2d').drawImage(img, 0, 0);
+            myself.droppedImage(canvas, name);
+        };
+        img.src = url;
+    }
+    function loadCostumeDirectory(parent) {
+        var names = myself.getCostumesList(parent);
+        names.forEach(function (line) {
+            if (line.length > 0) {
+		if( line[line.length-1]=="/") {
+	    	    libMenu.addItem(line, function () {
+		      myself.showImportCostumeMenu(parent + line);
+		    });
+		} else {
+	            libMenu.addItem(
+    	            line,
+        	    function () {loadCostume(parent, line); });
+		}
+    	    }
+	});
+    }
+    loadCostumeDirectory(parentDirectory);
+    libMenu.popup(world, pos);
+}
+
 IDE_Morph.prototype.showImportSoundMenu = function(parentDirectory) {
     var world = this.world(),
         myself = this,
@@ -2543,35 +2581,9 @@ IDE_Morph.prototype.projectMenu = function () {
 
     menu.addItem(
         localize(graphicsName) + '...',
-        function () {
-            var dir = graphicsName,
-                names = myself.getCostumesList(dir),
-                libMenu = new MenuMorph(
-                    myself,
-                    localize('Import') + ' ' + localize(dir)
-                );
-
-            function loadCostume(name) {
-                var url = dir + '/' + name,
-                    img = new Image();
-                img.onload = function () {
-                    var canvas = newCanvas(new Point(img.width, img.height));
-                    canvas.getContext('2d').drawImage(img, 0, 0);
-                    myself.droppedImage(canvas, name);
-                };
-                img.src = url;
-            }
-
-            names.forEach(function (line) {
-                if (line.length > 0) {
-                    libMenu.addItem(
-                        line,
-                        function () {loadCostume(line); }
-                    );
-                }
-            });
-            libMenu.popup(world, pos);
-        },
+	function () {
+	    this.showImportCostumeMenu('Costumes/');
+	},
         'Select a costume from the media library'
     );
     menu.addItem(
