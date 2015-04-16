@@ -63,7 +63,7 @@ Costume, CostumeEditorMorph, MorphicPreferences, touchScreenSettings,
 standardSettings, Sound, BlockMorph, ToggleMorph, InputSlotDialogMorph,
 ScriptsMorph, isNil, SymbolMorph, BlockExportDialogMorph,
 BlockImportDialogMorph, SnapTranslator, localize, List, InputSlotMorph,
-SnapCloud, Uint8Array, HandleMorph, SVG_Costume, fontHeight, hex_sha512,
+SnapCloud, GitHub, Uint8Array, HandleMorph, SVG_Costume, fontHeight, hex_sha512,
 sb, CommentMorph, CommandBlockMorph, BlockLabelPlaceHolderMorph, Audio,
 SpeechBubbleMorph*/
 
@@ -238,6 +238,8 @@ IDE_Morph.prototype.init = function (isAutoFill) {
     this.stageRatio = 1; // for IDE animations, e.g. when zooming
 
     this.loadNewProject = false; // flag when starting up translated
+    this.parentCommitSha = null; // for GitHub
+    this.lastCommit = null; // for GitHub
     this.shield = null;
 
     // initialize inherited properties:
@@ -253,6 +255,7 @@ IDE_Morph.prototype.openIn = function (world) {
     // get persistent user data, if any
     if (localStorage) {
         usr = localStorage['-snap-user'];
+        ghusr = localStorage['-snap-ghuser'];
         if (usr) {
             usr = SnapCloud.parseResponse(usr)[0];
             if (usr) {
@@ -263,6 +266,13 @@ IDE_Morph.prototype.openIn = function (world) {
                 }
             }
         }
+        if (ghusr) {
+            ghusr = SnapCloud.parseResponse(ghusr)[0];
+            if (ghusr) {
+                GitHub.login(ghusr.username, ghusr.password, false,
+                        function() {}, myself.githubError());
+            }
+        }
     }
 
     this.buildPanes();
@@ -271,6 +281,16 @@ IDE_Morph.prototype.openIn = function (world) {
 
     // override SnapCloud's user message with Morphic
     SnapCloud.message = function (string) {
+        var m = new MenuMorph(null, string),
+            intervalHandle;
+        m.popUpCenteredInWorld(world);
+        intervalHandle = setInterval(function () {
+            m.destroy();
+            clearInterval(intervalHandle);
+        }, 2000);
+    };
+
+    GitHub.message = function (string) {
         var m = new MenuMorph(null, string),
             intervalHandle;
         m.popUpCenteredInWorld(world);
@@ -390,6 +410,41 @@ IDE_Morph.prototype.openIn = function (world) {
                     ]);
                 },
                 this.cloudError()
+            );
+        } else if (location.hash.substr(0, 8) === '#github:') {
+            this.shield = new Morph();
+            this.shield.color = this.color;
+            this.shield.setExtent(this.parent.extent());
+            this.parent.add(this.shield);
+            myself.showMessage('Fetching project\nfrom GitHub...');
+
+            dict = SnapCloud.parseDict(location.hash.substr(8));
+
+            GitHub.getProject(
+                dict.Username,
+                dict.projectName,
+                function (code, pcSha) {
+                    var msg;
+                    myself.nextSteps([
+                        function () {
+                            msg = myself.showMessage('Opening GitHub project...');
+                        },
+                        function () {
+                            myself.parentCommitSha = pcSha;
+                            myself.lastCommit = code;
+                            myself.rawOpenCloudDataString(code);
+                             myself.hasChangedMedia = true;
+                        },
+                        function () {
+                            myself.shield.destroy();
+                            myself.shield = null;
+                            msg.destroy();
+                            myself.toggleAppMode(true);
+                            myself.runScripts();
+                        }
+                        ]);
+                },
+                this.githubError()
             );
         } else if (location.hash.substr(0, 7) === '#cloud:') {
             this.shield = new Morph();
@@ -2039,6 +2094,18 @@ IDE_Morph.prototype.cloudMenu = function () {
             'changeCloudPassword'
         );
     }
+
+    if (!GitHub.username) {
+        menu.addItem(
+            'Login via GitHub...',
+            'initializeGitHub'
+        );
+    } else {
+        menu.addItem(
+            localize('Logout') + ' ' + GitHub.username + ' ' + localize('from GitHub'),
+            'logoutGitHub'
+        );
+    }
     if (shiftClicked) {
         menu.addLine();
         menu.addItem(
@@ -2384,6 +2451,9 @@ IDE_Morph.prototype.projectMenu = function () {
     menu.addItem('New', 'createNewProject');
     menu.addItem('Open...', 'openProjectsBrowser');
     menu.addItem('Save', "save");
+    if (GitHub.username) {
+        menu.addItem('Save with commit message', 'commitProjectToGitHub');
+    }
     menu.addItem(
         'Save to disk',
         'saveProjectToDisk',
@@ -2832,8 +2902,10 @@ IDE_Morph.prototype.save = function () {
     if (this.projectName) {
         if (this.source === 'local') { // as well as 'examples'
             this.saveProject(this.projectName);
-        } else { // 'cloud'
+        } else if (this.source === 'cloud') { // 'cloud'
             this.saveProjectToCloud(this.projectName);
+        } else { // 'github'
+            this.saveProjectToGitHub(this.projectName);
         }
     } else {
         this.saveProjectsBrowser();
@@ -3801,6 +3873,48 @@ IDE_Morph.prototype.initializeCloud = function () {
     );
 };
 
+IDE_Morph.prototype.initializeGitHub = function () {
+    var myself = this,
+        world = this.world();
+    new DialogBoxMorph(
+        null,
+        function (user) {
+            var pw = user.password,
+                str;
+            GitHub.login(
+                user.username,
+                pw,
+                true,
+                function () {
+                    if (user.choice) {
+                        str = SnapCloud.encodeDict(
+                            {
+                                username: user.username,
+                                password: pw
+                            }
+                        );
+                        localStorage['-snap-ghuser'] = str;
+                    }
+                    myself.source = 'github';
+                    myself.showMessage('now connected.', 2);
+                },
+                myself.githubError()
+            );
+        }
+    ).withKey('cloudlogin').promptCredentials(
+        'Sign in with your GitHub account',
+        'login',
+        null,
+        null,
+        null,
+        null,
+        'stay signed in on this computer\nuntil logging out',
+        world,
+        myself.cloudIcon(),
+        myself.cloudMsg
+    );
+};
+
 IDE_Morph.prototype.createCloudAccount = function () {
     var myself = this,
         world = this.world();
@@ -3928,6 +4042,19 @@ IDE_Morph.prototype.logout = function () {
     );
 };
 
+IDE_Morph.prototype.logoutGitHub = function () {
+    var myself = this;
+    delete localStorage['-snap-ghuser'];
+    GitHub.logout(
+        function () {
+            myself.showMessage('disconnected.', 2);
+        },
+        function () {
+            myself.showMessage('disconnected.', 2);
+        }
+    );
+};
+
 IDE_Morph.prototype.saveProjectToCloud = function (name) {
     var myself = this;
     if (name) {
@@ -3941,6 +4068,90 @@ IDE_Morph.prototype.saveProjectToCloud = function (name) {
     }
 };
 
+IDE_Morph.prototype.saveProjectToGitHub = function (name, commitMessage) {
+    var myself = this;
+    if (name) {
+        this.showMessage('Comitting project\nto GitHub...');
+        this.setProjectName(name);
+        GitHub.saveProject(
+            commitMessage,
+            this.parentCommitSha,
+            this.lastCommit,
+            this,
+            function () {
+                GitHub.getProject(
+                    GitHub.username,
+                    name, 
+                    function (code, pcSha) {
+                        myself.source = 'github';
+                        myself.parentCommitSha = pcSha;
+                        myself.lastCommit = code;
+                        myself.droppedText(code);
+                    },
+                    myself.githubError()
+                );
+            },
+            this.githubError()
+        );
+    }
+};
+
+IDE_Morph.prototype.commitProjectToGitHub = function () {
+    var dialog = new DialogBoxMorph().withKey('commitMessage'),
+        frame = new ScrollFrameMorph(),
+        text = new TextMorph(''),
+        ok = dialog.ok,
+        myself = this,
+        size = 120,
+        world = this.world();
+
+    frame.padding = 6;
+    frame.setWidth(size);
+    frame.acceptsDrops = false;
+    frame.contents.acceptsDrops = false;
+
+    text.setWidth(size - frame.padding * 2);
+    text.setPosition(frame.topLeft().add(frame.padding));
+    text.enableSelecting();
+    text.isEditable = true;
+
+    frame.setHeight(size);
+    frame.fixLayout = nop;
+    frame.edge = InputFieldMorph.prototype.edge;
+    frame.fontSize = InputFieldMorph.prototype.fontSize;
+    frame.typeInPadding = InputFieldMorph.prototype.typeInPadding;
+    frame.contrast = InputFieldMorph.prototype.contrast;
+    frame.drawNew = InputFieldMorph.prototype.drawNew;
+    frame.drawRectBorder = InputFieldMorph.prototype.drawRectBorder;
+
+    frame.addContents(text);
+    text.drawNew();
+
+    dialog.ok = function () {
+        myself.saveProjectToGitHub(
+            myself.projectName,
+            text.text
+        );
+
+        ok.call(this);
+    };
+
+    dialog.justDropped = function () {
+        text.edit();
+    };
+
+    dialog.labelString = 'Commit message';
+    dialog.createLabel();
+    dialog.addBody(frame);
+    frame.drawNew();
+    dialog.addButton('ok', 'OK');
+    dialog.addButton('cancel', 'Cancel');
+    dialog.fixLayout();
+    dialog.drawNew();
+    dialog.popUp(world);
+    dialog.setCenter(world.center());
+    text.edit();
+};
 IDE_Morph.prototype.exportProjectMedia = function (name) {
     var menu, media;
     this.serializer.isCollectingMedia = true;
@@ -4142,6 +4353,42 @@ IDE_Morph.prototype.cloudError = function () {
     };
 };
 
+IDE_Morph.prototype.githubError = function () {
+    var myself = this;
+
+    function getURL(url) {
+        try {
+            var request = new XMLHttpRequest();
+            request.open('GET', url, false);
+            request.send();
+            if (request.status === 200) {
+                return request.responseText;
+            }
+            return null;
+        } catch (err) {
+            return null;
+        }
+    }
+
+    return function (responseText, url) {
+        var response = responseText;
+        if (myself.shield) {
+            myself.shield.destroy();
+            myself.shield = null;
+        }
+        if (response.length > 50) {
+            response = response.substring(0, 50) + '...';
+        }
+        new DialogBoxMorph().inform(
+            'GitHub',
+            (url ? url + '\n' : '')
+                + response,
+            myself.world(),
+            myself.cloudIcon(null, new Color(180, 0, 0))
+        );
+    };
+};
+
 IDE_Morph.prototype.cloudIcon = function (height, color) {
     var clr = color || DialogBoxMorph.prototype.titleBarColor,
         isFlat = MorphicPreferences.isFlat,
@@ -4272,7 +4519,7 @@ ProjectDialogMorph.prototype.init = function (ide, task) {
     // additional properties:
     this.ide = ide;
     this.task = task || 'open'; // String describing what do do (open, save)
-    this.source = ide.source || 'local'; // or 'cloud' or 'examples'
+    this.source = ide.source || 'local'; // or 'cloud' or 'github' or 'examples'
     this.projectList = []; // [{name: , thumb: , notes:}]
 
     this.handle = null;
@@ -4332,6 +4579,7 @@ ProjectDialogMorph.prototype.buildContents = function () {
     }
 
     this.addSourceButton('cloud', localize('Cloud'), 'cloud');
+    this.addSourceButton('github', localize('GitHub'), 'github');
     this.addSourceButton('local', localize('Browser'), 'storage');
     if (this.task === 'open') {
         this.addSourceButton('examples', localize('Examples'), 'poster');
@@ -4580,6 +4828,20 @@ ProjectDialogMorph.prototype.setSource = function (source) {
             }
         );
         return;
+    case 'github':
+        msg = myself.ide.showMessage('Updating\nproject list...');
+        this.projectList = [];
+        GitHub.getProjectList(
+            function (projectList) {
+                myself.installGitHubProjectList(projectList);
+                msg.destroy();
+            },
+            function (err, lbl) {
+                msg.destroy();
+                myself.ide.githubError().call(null, err, lbl);
+            }
+        );
+        return;
     case 'examples':
         this.projectList = this.getExamplesProjectList();
         break;
@@ -4632,7 +4894,7 @@ ProjectDialogMorph.prototype.setSource = function (source) {
             }
             myself.edit();
         };
-    } else { // 'examples', 'cloud' is initialized elsewhere
+    } else { // 'examples', 'cloud' and 'github' is initialized elsewhere
         this.listField.action = function (item) {
             var src, xml;
             if (item === undefined) {return; }
@@ -4798,6 +5060,69 @@ ProjectDialogMorph.prototype.installCloudProjectList = function (pl) {
     }
 };
 
+ProjectDialogMorph.prototype.installGitHubProjectList = function (pl) {
+    var myself = this;
+    this.projectList = pl || [];
+    this.projectList.sort(function (x, y) {
+        return x.ProjectName < y.ProjectName ? -1 : 1;
+    });
+
+    this.listField.destroy();
+    this.listField = new ListMorph(
+        this.projectList,
+        this.projectList.length > 0 ?
+                function (element) {
+                    return element.ProjectName;
+                } : null,
+        [],
+        function () {myself.ok(); }
+    );
+    this.fixListFieldItemColors();
+    this.listField.fixLayout = nop;
+    this.listField.edge = InputFieldMorph.prototype.edge;
+    this.listField.fontSize = InputFieldMorph.prototype.fontSize;
+    this.listField.typeInPadding = InputFieldMorph.prototype.typeInPadding;
+    this.listField.contrast = InputFieldMorph.prototype.contrast;
+    this.listField.drawNew = InputFieldMorph.prototype.drawNew;
+    this.listField.drawRectBorder = InputFieldMorph.prototype.drawRectBorder;
+
+    this.listField.action = function (item) {
+        if (item === undefined) {return; }
+        if (myself.nameField) {
+            myself.nameField.setContents(item.ProjectName || '');
+        }
+        if (myself.task === 'open') {
+            myself.notesText.text = item.Notes || '';
+            myself.notesText.drawNew();
+            myself.notesField.contents.adjustBounds();
+            myself.preview.texture = item.Thumbnail || null;
+            myself.preview.cachedTexture = null;
+            myself.preview.drawNew();
+            (new SpeechBubbleMorph(new TextMorph(
+                localize('last changed') + '\n' + item.Updated,
+                null,
+                null,
+                null,
+                null,
+                'center'
+            ))).popUp(
+                myself.world(),
+                myself.preview.rightCenter().add(new Point(2, 0))
+            );
+        }
+        myself.buttons.fixLayout();
+        myself.fixLayout();
+        myself.edit();
+    };
+    this.body.add(this.listField);
+    this.deleteButton.show();
+    this.buttons.fixLayout();
+    this.fixLayout();
+    if (this.task === 'open') {
+        this.clearDetails();
+    }
+};
+
 ProjectDialogMorph.prototype.clearDetails = function () {
     this.notesText.text = '';
     this.notesText.drawNew();
@@ -4814,6 +5139,8 @@ ProjectDialogMorph.prototype.openProject = function () {
     this.ide.source = this.source;
     if (this.source === 'cloud') {
         this.openCloudProject(proj);
+    } else if (this.source === 'github') {
+        this.openGitHubProject(proj);
     } else if (this.source === 'examples') {
         src = this.ide.getURL(
             'http://snap.berkeley.edu/snapsource/Examples/' +
@@ -4835,6 +5162,23 @@ ProjectDialogMorph.prototype.openCloudProject = function (project) {
         },
         function () {
             myself.rawOpenCloudProject(project);
+        }
+    ]);
+};
+
+ProjectDialogMorph.prototype.openGitHubProject = function (project, user) {
+    var myself = this;
+    
+    if (user == null) { // jshint ignore:line
+        user = GitHub.username;
+    }
+
+    myself.ide.nextSteps([
+        function () {
+            myself.ide.showMessage('Fetching project\nfrom GitHub...');
+        },
+        function () {
+            myself.rawOpenGitHubProject(project, user);
         }
     ]);
 };
@@ -4865,6 +5209,21 @@ ProjectDialogMorph.prototype.rawOpenCloudProject = function (proj) {
     this.destroy();
 };
 
+ProjectDialogMorph.prototype.rawOpenGitHubProject = function (proj, user) {
+    var myself = this;
+    GitHub.getProject(
+        user,
+        proj.ProjectName, 
+        function (code, pcSha) {
+            myself.ide.source = 'github';
+            myself.ide.parentCommitSha = pcSha;
+            myself.ide.lastCommit = code;
+            myself.ide.droppedText(code);
+        },
+        myself.ide.githubError()
+    );
+    this.destroy();
+};
 ProjectDialogMorph.prototype.saveProject = function () {
     var name = this.nameField.contents().text.text,
         notes = this.notesText.text,
@@ -4890,6 +5249,25 @@ ProjectDialogMorph.prototype.saveProject = function () {
             } else {
                 this.ide.setProjectName(name);
                 myself.saveCloudProject();
+            }
+        } else if (this.source === 'github') {
+            if (detect(
+                    this.projectList,
+                    function (item) {return item.ProjectName === name; }
+                )) {
+                this.ide.confirm(
+                    localize(
+                        'Are you sure you want to replace'
+                    ) + '\n"' + name + '"?',
+                    'Replace Project',
+                    function () {
+                        myself.ide.setProjectName(name);
+                        myself.saveGitHubProject();
+                    }
+                );
+            } else {
+                this.ide.setProjectName(name);
+                myself.saveGitHubProject();
             }
         } else { // 'local'
             if (detect(
@@ -4932,13 +5310,32 @@ ProjectDialogMorph.prototype.saveCloudProject = function () {
     this.destroy();
 };
 
+ProjectDialogMorph.prototype.saveGitHubProject = function () {
+    var myself = this;
+    this.ide.showMessage('Committing project\nto GitHub...');
+    GitHub.saveProject(
+        null,
+        this.ide.parentCommitSha,
+        this.ide.lastCommit,
+        this.ide,
+        function () {
+            myself.ide.source = 'github';
+            myself.ide.showMessage('saved.', 2);
+        },
+        this.ide.githubError()
+    );
+    this.destroy();
+};
+
 ProjectDialogMorph.prototype.deleteProject = function () {
     var myself = this,
         proj,
         idx,
         name;
 
-    if (this.source === 'cloud') {
+    if (this.source === 'github') {
+        // TODO: not implemented
+    } else if (this.source === 'cloud') {
         proj = this.listField.selected;
         if (proj) {
             this.ide.confirm(
