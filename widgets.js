@@ -1887,7 +1887,7 @@ DialogBoxMorph.prototype.promptCredentials = function (
         pw1 = new InputFieldMorph(),
         pw2 = new InputFieldMorph(),
         opw = new InputFieldMorph(),
-        agree = false,
+        agree = SnapSettings.gui_type == 'student',
         chk,
         dof = new AlignmentMorph('row', 4),
         mCol = new AlignmentMorph('column', 2),
