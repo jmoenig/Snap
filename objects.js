@@ -125,7 +125,7 @@ PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.objects = '2015-April-15';
+modules.objects = '2015-April-17';
 
 var SpriteMorph;
 var StageMorph;
@@ -2373,7 +2373,7 @@ SpriteMorph.prototype.freshPalette = function (category) {
 
     // y += unit * 1.6;
     if (this.exemplar) {
-        this.exemplar.customBlocks.forEach(function (definition) {
+        this.inheritedBlocks(true).forEach(function (definition) {
             var block;
             if (definition.category === category ||
                     (category === 'variables'
@@ -4282,6 +4282,48 @@ SpriteMorph.prototype.deletableVariableNames = function () {
             }
         )
     );
+};
+
+// SpriteMorph inheritance - custom blocks
+
+SpriteMorph.prototype.ownBlocks = function () {
+    var dict = {};
+    this.customBlocks.forEach(function (def) {
+        dict[def.blockSpec()] = def;
+    });
+    return dict;
+};
+
+SpriteMorph.prototype.allBlocks = function (valuesOnly) {
+    var dict = {};
+    this.allExemplars().reverse().forEach(function (sprite) {
+        sprite.customBlocks.forEach(function (def) {
+            dict[def.blockSpec()] = def;
+        });
+    });
+    if (valuesOnly) {
+        return Object.keys(dict).map(function (key) {return dict[key]; });
+    }
+    return dict;
+};
+
+SpriteMorph.prototype.inheritedBlocks = function (valuesOnly) {
+    var dict = {},
+        own = Object.keys(this.ownBlocks()),
+        others = this.allExemplars().reverse();
+    others.pop();
+    others.forEach(function (sprite) {
+        sprite.customBlocks.forEach(function (def) {
+            var spec = def.blockSpec();
+            if (!contains(own, spec)) {
+                dict[spec] = def;
+            }
+        });
+    });
+    if (valuesOnly) {
+        return Object.keys(dict).map(function (key) {return dict[key]; });
+    }
+    return dict;
 };
 
 // SpriteMorph highlighting

@@ -2498,3 +2498,7 @@ ______
 ------
 * Threads: flush Stage>>keysPressed when prompting the user
 * Objects: fixed #770
+
+150415
+------
+* OOP: Objects, Prototypal inheritance of sprite-local custom blocks (palette only)
