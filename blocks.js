@@ -811,6 +811,19 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             );
             part.setContents(90);
             break;
+        case '%note':
+            part = new InputSlotMorph(
+                null,
+                true,
+                {
+                    'C (60)' : 60,
+                    'C# (61)' : 61,
+                    'D (62)' : 62,
+                    'D# (63)' : 63,
+                    'A (69)' : 69
+                }
+            );
+            break;
         case '%inst':
             part = new InputSlotMorph(
                 null,
