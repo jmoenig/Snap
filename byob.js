@@ -106,7 +106,7 @@ SymbolMorph, isNil*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2015-January-21';
+modules.byob = '2015-March-02';
 
 // Declarations
 
@@ -429,6 +429,7 @@ CustomCommandBlockMorph.prototype.refresh = function () {
 
     // find unnahmed upvars and label them
     // to their internal definition (default)
+    this.cachedInputs = null;
     this.inputs().forEach(function (inp, idx) {
         if (inp instanceof TemplateSlotMorph && inp.contents() === '\u2191') {
             inp.setContents(def.inputNames()[idx]);
@@ -443,6 +444,7 @@ CustomCommandBlockMorph.prototype.restoreInputs = function (oldInputs) {
         myself = this;
 
     if (this.isPrototype) {return; }
+    this.cachedInputs = null;
     this.inputs().forEach(function (inp) {
         old = oldInputs[i];
         if (old instanceof ReporterBlockMorph &&
@@ -460,6 +462,7 @@ CustomCommandBlockMorph.prototype.restoreInputs = function (oldInputs) {
         }
         i += 1;
     });
+    this.cachedInputs = null;
 };
 
 CustomCommandBlockMorph.prototype.refreshDefaults = function () {
@@ -472,6 +475,7 @@ CustomCommandBlockMorph.prototype.refreshDefaults = function () {
         }
         idx += 1;
     });
+    this.cachedInputs = null;
 };
 
 CustomCommandBlockMorph.prototype.refreshPrototype = function () {
@@ -923,6 +927,9 @@ CustomReporterBlockMorph.prototype.refresh = function () {
     CustomCommandBlockMorph.prototype.refresh.call(this);
     if (!this.isPrototype) {
         this.isPredicate = (this.definition.type === 'predicate');
+    }
+    if (this.parent instanceof SyntaxElementMorph) {
+        this.parent.cachedInputs = null;
     }
     this.drawNew();
 };
@@ -1865,6 +1872,9 @@ BlockEditorMorph.prototype.context = function (prototypeHat) {
     if (topBlock === null) {
         return null;
     }
+    topBlock.allChildren().forEach(function (c) {
+        if (c instanceof BlockMorph) {c.cachedInputs = null; }
+    });
     stackFrame = Process.prototype.reify.call(
         null,
         topBlock,
@@ -2974,7 +2984,7 @@ InputSlotDialogMorph.prototype.editSlotOptions = function () {
     new DialogBoxMorph(
         myself,
         function (options) {
-            myself.fragment.options = options;
+            myself.fragment.options = options.trim();
         },
         myself
     ).promptCode(

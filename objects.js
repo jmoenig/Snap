@@ -125,7 +125,7 @@ PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.objects = '2015-February-23';
+modules.objects = '2015-April-15';
 
 var SpriteMorph;
 var StageMorph;
@@ -1433,15 +1433,13 @@ SpriteMorph.prototype.setName = function (string) {
 
 SpriteMorph.prototype.drawNew = function () {
     var myself = this,
-        currentCenter = this.center(),
+        currentCenter,
         facing, // actual costume heading based on my rotation style
         isFlipped,
-        isLoadingCostume = this.costume &&
-            typeof this.costume.loaded === 'function',
+        isLoadingCostume,
         cst,
         pic, // (flipped copy of) actual costume based on my rotation style
-        stageScale = this.parent instanceof StageMorph ?
-                this.parent.scale : 1,
+        stageScale,
         newX,
         corners = [],
         origin,
@@ -1455,6 +1453,11 @@ SpriteMorph.prototype.drawNew = function () {
         this.wantsRedraw = true;
         return;
     }
+    currentCenter = this.center();
+    isLoadingCostume = this.costume &&
+        typeof this.costume.loaded === 'function';
+    stageScale = this.parent instanceof StageMorph ?
+            this.parent.scale : 1;
     facing = this.rotationStyle ? this.heading : 90;
     if (this.rotationStyle === 2) {
         facing = 90;
@@ -3078,7 +3081,7 @@ SpriteMorph.prototype.setEffect = function (effect, value) {
     if (eff === 'ghost') {
         this.alpha = 1 - Math.min(Math.max(+value || 0, 0), 100) / 100;
     } else {
-        this.graphicsValues[eff] = value;
+        this.graphicsValues[eff] = +value;
     }
     this.drawNew();
     this.changed();
@@ -3093,7 +3096,7 @@ SpriteMorph.prototype.changeEffect = function (effect, value) {
     if (eff === 'ghost') {
         this.setEffect(effect, this.getGhostEffect() + (+value || 0));
     } else {
-        this.setEffect(effect, this.graphicsValues[eff] + value);
+        this.setEffect(effect, +this.graphicsValues[eff] + (+value));
     }
 };
 
