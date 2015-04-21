@@ -865,7 +865,7 @@ SnapTranslator.dict.es = {
 
     // block editor
     'Block Editor':
-        'Bloquear editor',
+        'Editor de bloques',
     'Apply':
         'Aplicar',
 
