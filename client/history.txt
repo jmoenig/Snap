@@ -2485,3 +2485,7 @@ ______
 ------
 * Threads: flush Stage>>keysPressed when prompting the user
 * Objects: fixed #770
+
+150426
+------
+* Store: fixed #784
