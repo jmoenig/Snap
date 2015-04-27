@@ -846,17 +846,7 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             part.setContents(90);
             break;
         case '%note':
-            part = new InputSlotMorph(
-                null,
-                true,
-                {
-                    'C (60)' : 60,
-                    'C# (61)' : 61,
-                    'D (62)' : 62,
-                    'D# (63)' : 63,
-                    'A (69)' : 69
-                }
-            );
+            part = new NoteInputMorph();
             break;
         case '%inst':
             part = new InputSlotMorph(
@@ -7385,6 +7375,10 @@ InputSlotMorph.prototype.drawRoundBorder = function (context) {
     context.stroke();
 };
 
+
+
+
+
 // TemplateSlotMorph ///////////////////////////////////////////////////
 
 /*
@@ -7719,6 +7713,141 @@ ArrowMorph.prototype.drawNew = function () {
     context.closePath();
     context.fill();
 };
+
+// PianoMenuMorph //////////////////////////////////////////////////////
+/* 
+    I am a menu that looks like a piano keyboard.
+*/
+
+// PianoMenuMorph inherits from MenuMorph
+
+PianoMenuMorph.prototype = new MenuMorph();
+PianoMenuMorph.prototype.constructor = PianoMenuMorph;
+PianoMenuMorph.uber = MenuMorph.prototype;
+
+// PianoMenuMorph instance creation:
+
+function PianoMenuMorph(target, title, environment, fontSize) {
+    this.init(target);
+}
+
+PianoMenuMorph.prototype.init = function(target, title, environment, fontSize) {
+    this.target = target;
+    this.title = title || null;
+    this.environment = environment || null;
+    this.fontSize = fontSize || null;
+    this.items = [];
+    this.label = null;
+    this.world = null;
+    this.isListContents = false;
+
+    // initialize inherited properties:
+    MenuMorph.uber.init.call(this);
+
+    // override inherited properties:
+    this.isDraggable = false;
+
+    // immutable properties:
+    this.border = null;
+    this.edge = null;
+};
+
+// NoteInputMorph //////////////////////////////////////////////////////
+/*
+    I am an inputslotmorph designed for selecting midi notes.
+    My block spec is
+
+    %note     - midi notes
+    
+    evaluate returns the integer value of the displayed midi note.
+*/
+
+// NoteInputMorph inherits from InputSlotMorph
+
+NoteInputMorph.prototype = new InputSlotMorph();
+NoteInputMorph.prototype.constructor = NoteInputMorph;
+NoteInputMorph.uber = InputSlotMorph.prototype;
+
+// NoteInputMorph instance creation:
+
+function NoteInputMorph() {
+    this.init();
+}
+
+NoteInputMorph.prototype.init = function() {
+    var contents = new StringMorph(''),
+        arrow = new ArrowMorph(
+            'down',
+            0,
+            Math.max(Math.floor(this.fontSize / 6), 1)
+        );
+
+    contents.fontSize = this.fontSize;
+    contents.isShowingBlanks = true;
+    contents.drawNew();
+
+    this.isUnevaluated = false;
+    this.choices = {
+                    'C (60)' : 60,
+                    'C# (61)' : 61,
+                    'D (62)' : 62,
+                    'D# (63)' : 63,
+                    'A (69)' : 69
+                    }; // object, function or selector
+    this.oldContentsExtent = contents.extent();
+    this.isNumeric = true;
+    this.isReadOnly = false;
+    this.minWidth = 0; // can be chaged for text-type inputs ("landscape")
+    this.constant = null;
+
+    InputSlotMorph.uber.init.call(this);
+    this.color = new Color(255, 255, 255);
+    this.add(contents);
+    this.add(arrow);
+    contents.isEditable = true;
+    contents.isDraggable = false;
+    contents.enableSelecting();
+    this.setContents(null);
+};
+
+NoteInputMorph.prototype.dropDownMenu = function () {
+    var choices = this.choices,
+        key,
+        menu = new PianoMenuMorph(
+            this.setContents,
+            null,
+            this,
+            this.fontSize
+        );
+
+    if (choices instanceof Function) {
+        choices = choices.call(this);
+    } else if (isString(choices)) {
+        choices = this[choices]();
+    }
+    if (!choices) {
+        return null;
+    }
+    menu.addItem(' ', null);
+    for (key in choices) {
+        if (Object.prototype.hasOwnProperty.call(choices, key)) {
+            if (key[0] === '~') {
+                menu.addLine();
+            // } else if (key.indexOf('§_def') === 0) {
+            //     menu.addItem(choices[key].blockInstance(), choices[key]);
+            } else {
+                menu.addItem(key, choices[key]);
+            }
+        }
+    }
+    if (menu.items.length > 0) {
+        menu.popUpAtHand(this.world());
+    } else {
+        return null;
+    }
+};
+
+
 
 // TextSlotMorph //////////////////////////////////////////////////////
 
