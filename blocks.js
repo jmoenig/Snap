@@ -7728,7 +7728,7 @@ PianoMenuMorph.uber = MenuMorph.prototype;
 // PianoMenuMorph instance creation:
 
 function PianoMenuMorph(target, title, environment, fontSize) {
-    this.init(target);
+    this.init(target, title, environment, fontSize);
 }
 
 PianoMenuMorph.prototype.init = function(target, title, environment, fontSize) {
@@ -7750,6 +7750,82 @@ PianoMenuMorph.prototype.init = function(target, title, environment, fontSize) {
     // immutable properties:
     this.border = null;
     this.edge = null;
+};
+
+PianoMenuMorph.prototype.drawNew = function () {
+    var myself = this,
+        item,
+        fb,
+        x,
+        y,
+        isLine = false;
+
+    this.children.forEach(function (m) {
+        m.destroy();
+    });
+    this.children = [];
+    if (!this.isListContents) {
+        this.edge = MorphicPreferences.isFlat ? 0 : 5;
+        this.border = MorphicPreferences.isFlat ? 1 : 2;
+    }
+    this.color = new Color(255, 255, 255);
+    this.borderColor = new Color(60, 60, 60);
+    this.silentSetExtent(new Point(0, 0));
+
+    y = 2;
+    x = this.left() + 4;
+    if (!this.isListContents) {
+        if (this.title) {
+            this.createLabel();
+            this.label.setPosition(this.bounds.origin.add(4));
+            this.add(this.label);
+            y = this.label.bottom();
+        } else {
+            y = this.top() + 4;
+        }
+    }
+    y += 1;
+    this.items.forEach(function (tuple) {
+        isLine = false;
+        if (tuple instanceof StringFieldMorph ||
+                tuple instanceof ColorPickerMorph ||
+                tuple instanceof SliderMorph) {
+            item = tuple;
+        } else if (tuple[0] === 0) {
+            isLine = true;
+            item = new Morph();
+            item.color = myself.borderColor;
+            item.setHeight(tuple[1]);
+        } else {
+            item = new MenuItemMorph(
+                myself.target,
+                tuple[1],
+                tuple[0],
+                myself.fontSize || MorphicPreferences.menuFontSize,
+                MorphicPreferences.menuFontName,
+                myself.environment,
+                tuple[2], // bubble help hint
+                tuple[3], // color
+                tuple[4], // bold
+                tuple[5], // italic
+                tuple[6] // doubleclick action
+            );
+        }
+        if (isLine) {
+            y += 1;
+        }
+        item.setPosition(new Point(x, y));
+        myself.add(item);
+        y = y + item.height();
+        if (isLine) {
+            y += 1;
+        }
+    });
+
+    fb = this.fullBounds();
+    this.silentSetExtent(fb.extent().add(4));
+    this.adjustWidths();
+    MenuMorph.uber.drawNew.call(this);
 };
 
 // NoteInputMorph //////////////////////////////////////////////////////
