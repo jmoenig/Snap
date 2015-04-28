@@ -7731,27 +7731,6 @@ function PianoMenuMorph(target, title, environment, fontSize) {
     this.init(target, title, environment, fontSize);
 }
 
-PianoMenuMorph.prototype.init = function(target, title, environment, fontSize) {
-    this.target = target;
-    this.title = title || null;
-    this.environment = environment || null;
-    this.fontSize = fontSize || null;
-    this.items = [];
-    this.label = null;
-    this.world = null;
-    this.isListContents = false;
-
-    // initialize inherited properties:
-    MenuMorph.uber.init.call(this);
-
-    // override inherited properties:
-    this.isDraggable = false;
-
-    // immutable properties:
-    this.border = null;
-    this.edge = null;
-};
-
 PianoMenuMorph.prototype.drawNew = function () {
     var myself = this,
         item,
@@ -7797,7 +7776,7 @@ PianoMenuMorph.prototype.drawNew = function () {
             item.color = myself.borderColor;
             item.setHeight(tuple[1]);
         } else {
-            item = new MenuItemMorph(
+            item = new KeyItemMorph(
                 myself.target,
                 tuple[1],
                 tuple[0],
@@ -7865,10 +7844,6 @@ NoteInputMorph.prototype.init = function() {
     this.isUnevaluated = false;
     this.choices = {
                     'C (60)' : 60,
-                    'C# (61)' : 61,
-                    'D (62)' : 62,
-                    'D# (63)' : 63,
-                    'A (69)' : 69
                     }; // object, function or selector
     this.oldContentsExtent = contents.extent();
     this.isNumeric = true;
@@ -7904,7 +7879,6 @@ NoteInputMorph.prototype.dropDownMenu = function () {
     if (!choices) {
         return null;
     }
-    menu.addItem(' ', null);
     for (key in choices) {
         if (Object.prototype.hasOwnProperty.call(choices, key)) {
             if (key[0] === '~') {
@@ -7922,6 +7896,44 @@ NoteInputMorph.prototype.dropDownMenu = function () {
         return null;
     }
 };
+
+// KeyItemMorph ///////////////////////////////////////////////////////
+
+KeyItemMorph.prototype = new MenuItemMorph();
+KeyItemMorph.prototype.constructor = KeyItemMorph;
+KeyItemMorph.uber = MenuItemMorph.prototype;
+
+function KeyItemMorph(
+    target,
+    action,
+    labelString, // can also be a Morph or a Canvas or a tuple: [icon, string]
+    fontSize,
+    fontStyle,
+    environment,
+    hint,
+    color,
+    bold,
+    italic,
+    doubleClickAction // optional when used as list morph item
+) {
+    key = new BoxMorph(1, 2);
+    key.setColor(new Color(255, 255, 255));
+    this.init(
+        target,
+        action,
+        [key, labelString],
+        fontSize,
+        fontStyle,
+        environment,
+        hint,
+        color,
+        bold,
+        italic,
+        doubleClickAction
+    );
+}
+
+
 
 
 
