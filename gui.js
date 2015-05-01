@@ -386,9 +386,9 @@ IDE_Morph.prototype.openIn = function (world) {
                             msg.destroy();
 
                             if (dict.editMode) {
-                                myself.toggleAppMode(false); 
+                                myself.toggleAppMode(false);
                             } else {
-                                myself.toggleAppMode(true); 
+                                myself.toggleAppMode(true);
                             }
 
                             if (!dict.noRun) {
@@ -397,7 +397,7 @@ IDE_Morph.prototype.openIn = function (world) {
 
                             if (dict.hideControls) {
                                 myself.controlBar.hide();
-                                window.onbeforeunload = function (evt) {};
+                                window.onbeforeunload = function () {nop(); };
                             }
                         }
                     ]);
