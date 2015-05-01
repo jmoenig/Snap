@@ -83,7 +83,7 @@ ArgLabelMorph, localize, XML_Element, hex_sha512*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.threads = '2015-April-15';
+modules.threads = '2015-May-01';
 
 var ThreadManager;
 var Process;
@@ -2185,6 +2185,9 @@ Process.prototype.reportJoinWords = function (aList) {
 // Process string ops
 
 Process.prototype.reportLetter = function (idx, string) {
+    if (string instanceof List) { // catch a common user error
+        return '';
+    }
     var i = +(idx || 0),
         str = (string || '').toString();
     return str[i - 1] || '';
