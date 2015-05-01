@@ -8,7 +8,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2014 by Jens Mönig
+    Copyright (C) 2015 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -527,6 +527,12 @@
     a duplicate of the template whose "isDraggable" flag is true and
     whose "isTemplate" flag is false, in other words: a non-template.
 
+    When creating a copy from a template, the copy's
+    
+        reactToTemplateCopy
+
+    is invoked, if it is present.
+
     Dragging is indicated by adding a drop shadow to the morph in hand.
     If a morph follows the hand without displaying a drop shadow it is
     merely being moved about without changing its parent (owner morph),
@@ -1020,9 +1026,10 @@
     programming hero.
 
     I have originally written morphic.js in Florian Balmer's Notepad2
-    editor for Windows and later switched to Apple's Dashcode. I've also
-    come to depend on both Douglas Crockford's JSLint, Mozilla's Firebug
-    and Google's Chrome to get it right.
+    editor for Windows, later switched to Apple's Dashcode and later
+    still to Apple's Xcode. I've also come to depend on both Douglas
+    Crockford's JSLint, Mozilla's Firebug and Google's Chrome to get
+    it right.
 
 
     IX. contributors
@@ -1041,7 +1048,7 @@
 /*global window, HTMLCanvasElement, getMinimumFontHeight, FileReader, Audio,
 FileList, getBlurredShadowSupport*/
 
-var morphicVersion = '2014-December-05';
+var morphicVersion = '2015-May-01';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = getBlurredShadowSupport(); // check for Chrome-bug
 
@@ -5926,7 +5933,7 @@ SliderMorph.prototype.userSetStart = function (num) {
     this.start = Math.max(num, this.stop);
 };
 
-SliderMorph.prototype.setStart = function (num) {
+SliderMorph.prototype.setStart = function (num, noUpdate) {
     // for context menu demo purposes
     var newStart;
     if (typeof num === 'number') {
@@ -5944,12 +5951,12 @@ SliderMorph.prototype.setStart = function (num) {
         }
     }
     this.value = Math.max(this.value, this.start);
-    this.updateTarget();
+    if (!noUpdate) {this.updateTarget(); }
     this.drawNew();
     this.changed();
 };
 
-SliderMorph.prototype.setStop = function (num) {
+SliderMorph.prototype.setStop = function (num, noUpdate) {
     // for context menu demo purposes
     var newStop;
     if (typeof num === 'number') {
@@ -5961,12 +5968,12 @@ SliderMorph.prototype.setStop = function (num) {
         }
     }
     this.value = Math.min(this.value, this.stop);
-    this.updateTarget();
+    if (!noUpdate) {this.updateTarget(); }
     this.drawNew();
     this.changed();
 };
 
-SliderMorph.prototype.setSize = function (num) {
+SliderMorph.prototype.setSize = function (num, noUpdate) {
     // for context menu demo purposes
     var newSize;
     if (typeof num === 'number') {
@@ -5984,7 +5991,7 @@ SliderMorph.prototype.setSize = function (num) {
         }
     }
     this.value = Math.min(this.value, this.stop - this.size);
-    this.updateTarget();
+    if (!noUpdate) {this.updateTarget(); }
     this.drawNew();
     this.changed();
 };
@@ -7447,6 +7454,8 @@ StringMorph.prototype.mouseClickLeft = function (pos) {
 
 StringMorph.prototype.enableSelecting = function () {
     this.mouseDownLeft = function (pos) {
+        var crs = this.root().cursor,
+            already = crs ? crs.target === this : false;
         this.clearSelection();
         if (this.isEditable && (!this.isDraggable)) {
             this.edit();
@@ -7454,6 +7463,7 @@ StringMorph.prototype.enableSelecting = function () {
             this.startMark = this.slotAt(pos);
             this.endMark = this.startMark;
             this.currentlySelecting = true;
+            if (!already) {this.escalateEvent('mouseDownLeft', pos); }
         }
     };
     this.mouseMove = function (pos) {
@@ -8060,7 +8070,7 @@ TriggerMorph.prototype.init = function (
     this.environment = environment || null;
     this.labelString = labelString || null;
     this.label = null;
-    this.hint = hint || null;
+    this.hint = hint || null; // null, String, or Function
     this.fontSize = fontSize || MorphicPreferences.menuFontSize;
     this.fontStyle = fontStyle || 'sans-serif';
     this.highlightColor = new Color(192, 192, 192);
@@ -8209,10 +8219,11 @@ TriggerMorph.prototype.triggerDoubleClick = function () {
 // TriggerMorph events:
 
 TriggerMorph.prototype.mouseEnter = function () {
+    var contents = this.hint instanceof Function ? this.hint() : this.hint;
     this.image = this.highlightImage;
     this.changed();
-    if (this.hint) {
-        this.bubbleHelp(this.hint);
+    if (contents) {
+        this.bubbleHelp(contents);
     }
 };
 
@@ -9683,6 +9694,9 @@ HandMorph.prototype.processMouseMove = function (event) {
                 morph = this.morphToGrab.fullCopy();
                 morph.isTemplate = false;
                 morph.isDraggable = true;
+                if (morph.reactToTemplateCopy) {
+                    morph.reactToTemplateCopy();
+                }
                 this.grab(morph);
                 this.grabOrigin = this.morphToGrab.situation();
             }
