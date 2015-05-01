@@ -155,7 +155,7 @@ DialogBoxMorph, BlockInputFragmentMorph, PrototypeHatBlockMorph, Costume*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2015-March-23';
+modules.blocks = '2015-May-01';
 
 
 var SyntaxElementMorph;
@@ -7021,6 +7021,15 @@ InputSlotMorph.prototype.fixLayout = function () {
 };
 
 // InputSlotMorph events:
+
+InputSlotMorph.prototype.mouseDownLeft = function (pos) {
+    if (this.isReadOnly || this.arrow().bounds.containsPoint(pos)) {
+        this.escalateEvent('mouseDownLeft', pos);
+    } else {
+        this.contents().edit();
+        this.contents().selectAll();
+    }
+};
 
 InputSlotMorph.prototype.mouseClickLeft = function (pos) {
     if (this.arrow().bounds.containsPoint(pos)) {
