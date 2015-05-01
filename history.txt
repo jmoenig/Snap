@@ -2489,3 +2489,11 @@ ______
 150426
 ------
 * Store: fixed #784
+
+150501
+------
+* Morphic, Blocks: select all text when first clicking an input slot
+* BYOB: indicate numeric inputs in the block prototype with the # sign
+* Threads: return empty string when querying first letter of a list
+* GUI: hide “save to disk” option behind shift-click again (has issues in Chrome)
+* GUI: parameters for embedding projects in iFrames, thanks, Bernat!
