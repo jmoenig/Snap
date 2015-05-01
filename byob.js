@@ -106,7 +106,7 @@ SymbolMorph, isNil*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2015-March-02';
+modules.byob = '2015-May-01';
 
 // Declarations
 
@@ -2049,7 +2049,13 @@ BlockLabelFragment.prototype.defTemplateSpecFragment = function () {
         )) {
         suff = ' \u03BB';
     } else if (this.defaultValue) {
-        suff = ' = ' + this.defaultValue.toString();
+        if (this.type === '%n') {
+            suff = ' # = ' + this.defaultValue.toString();
+        } else { // 'any' or 'text'
+            suff = ' = ' + this.defaultValue.toString();
+        }
+    } else if (this.type === '%n') {
+        suff = ' #';
     }
     return this.labelString + suff;
 };
