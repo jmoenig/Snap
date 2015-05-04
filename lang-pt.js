@@ -185,7 +185,7 @@ SnapTranslator.dict.pt = {
     'translator_e-mail':
         'mmsequeira@gmail.com',
     'last_changed':
-        '2014-10-01',
+        '2015-05-04',
 
     // GUI
     // control bar:
@@ -417,8 +417,18 @@ SnapTranslator.dict.pt = {
         'Quando alguém clicar em %greenflag',
     'when %keyHat key pressed':
         'Quando alguém pressionar a tecla %keyHat',
-    'when I am clicked':
-        'Quando alguém clicar em ti',
+    'when I am %interaction':
+        'Quando o rato %interaction',
+    'clicked':
+        'clicar em ti',
+    'pressed':
+        'pressionar em ti',
+    'dropped':
+        'te largar',
+    'mouse-entered':
+        'entrar em ti',
+    'mouse-departed':
+        'sair de ti',
     'when I receive %msgHat':
         'Quando receberes a mensagem %msgHat',
     'broadcast %msg':
@@ -647,13 +657,17 @@ SnapTranslator.dict.pt = {
         'Abrir um projecto…',
     'Save':
         'Guardar este projecto',
+    'Save to disk':
+        'Guardar no disco',
+    'store this project\nin the downloads folder\n(in supporting browsers)':
+        'Guardar este projecto\nna sua pasta de descargas\n'
+            + '(em navegadores que o suportem).',
     'Save As...':
         'Guardar este projecto como…',
     'Import...':
         'Importar…',
     'file menu import hint':
-        'Abrir um projecto exportado,\n'
-            + 'substitundo o projecto corrente, ou\n'
+        'Abrir um projecto exportado,\nsubstitundo o projecto corrente, ou\n'
             + 'importar uma biblioteca de blocos, um\n'
             + 'traje ou um som para o projecto corrente.',
     'Export project as plain text...':
@@ -1443,10 +1457,6 @@ SnapTranslator.dict.pt = {
         'Suportar produção de código',
     'check for block\nto text mapping features':
         'Assinalar para funcionalidades\nde mapeamento entre blocos e texto.',
-    'Save to disk':
-        'Guardar no disco',
-    'experimental - store this project\nin your downloads folder':
-        'Experimental - Guardar este projecto\nna sua pasta de descargas.',
     'saved.':
         'guardado.',
     'options...':
