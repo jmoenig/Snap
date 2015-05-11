@@ -83,7 +83,7 @@ ArgLabelMorph, localize, XML_Element, hex_sha512*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.threads = '2015-March-25';
+modules.threads = '2015-May-01';
 
 var ThreadManager;
 var Process;
@@ -1818,6 +1818,7 @@ Process.prototype.doAsk = function (data) {
         isStage = this.blockReceiver() instanceof StageMorph,
         activePrompter;
 
+    stage.keysPressed = {};
     if (!this.prompter) {
         activePrompter = detect(
             stage.children,
@@ -2208,6 +2209,9 @@ Process.prototype.reportJoinWords = function (aList) {
 // Process string ops
 
 Process.prototype.reportLetter = function (idx, string) {
+    if (string instanceof List) { // catch a common user error
+        return '';
+    }
     var i = +(idx || 0),
         str = (string || '').toString();
     return str[i - 1] || '';
