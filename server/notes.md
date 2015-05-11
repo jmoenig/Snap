@@ -53,7 +53,10 @@ I will probably want to have a couple methods for handling websocket communicati
     + How do we call the atomic process methods from the `SpriteMorph`?
 
 ## Fix me!
-+ Crashes when broadcasting to group with closed socket
++ Should I implement the DDP protocol?
+    + They have a library for it
++ I need server side grouping by project id
++ 'recieved join from undefined' on creating a new project
 
 ## To Do
 + Refactor GroupManagement to be modular
@@ -74,6 +77,9 @@ I will probably want to have a couple methods for handling websocket communicati
 + Update `ypr.js` for new blocks (serialization)
 
 ## Finished To do/Fix me!
++ Crashes when broadcasting to group with closed socket
+    + DONE
+
 + Sending a message before a `register` message breaks the server...
     + For now, I will probably put the `unregistered` users in a GLOBAL group
     + FIXED

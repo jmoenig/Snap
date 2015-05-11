@@ -43,14 +43,15 @@ NetsBlocksServer.prototype.start = function(opts) {
 
         // Add the client to the global group
         self.groupManager.onConnect(socket);
+        self.groupManager._printGroups();
         // Broadcast 'join' on connect
         self.notifyGroupJoin(socket);
 
         socket.on('message', function(data) {
             log('Received message: ',data);
             self.onMsgReceived(socket, data);
-        });
-    });
+        }.bind(this));
+    }.bind(this));
 
     // Check if the sockets are alive
     setInterval(function() {
@@ -71,7 +72,7 @@ NetsBlocksServer.prototype.stop = function(opts) {
  * @return {undefined}
  */
 NetsBlocksServer.prototype.broadcast = function(message, peers) {
-    log('broadcasting '+message,'to', peers.map(function(r){return r.id;}));
+    console.log('broadcasting '+message,'to', peers.map(function(r){return r.id;}));
     var s;
     for (var i = peers.length; i--;) {
         s = peers[i];
@@ -90,11 +91,35 @@ NetsBlocksServer.prototype.broadcast = function(message, peers) {
 NetsBlocksServer.prototype.updateSockets = function() {
     var groups = this.groupManager.getAllGroups(),
         open;
+
+    if (!this.sockets.length) {
+        return;
+    }
+
+    // Replace the next portion TODO
+    //
+    // We should find the sockets to remove from each group
+    // then broadcast to the remaining for all the removed sockets
+    var isOpen = R.pipe(R.partialRight(Utils.getAttribute, 'readyState'), 
+            Utils.not(R.eq.bind(R, this.sockets[0].OPEN))),
+        closed,
+        roles;
+
     for (var i = groups.length; i--;) {
-        open = true;
-        while (groups[i].length && open) {
-            open = this.updateSocket(groups[i].pop());
-        }
+        // Get the closed sockets
+        closed = Utils.extract(isOpen, groups[i]);
+
+        roles = closed.map(function(s) {
+            return this.socket2Role[s.id];
+        }.bind(this));
+
+        // Broadcast to remaining 'leave '+role
+        closed.forEach(R.pipe(this._removeFromRecords.bind(this), 
+                              this.groupManager.onDisconnect.bind(this.groupManager)));
+
+        roles.forEach(R.pipe(
+            R.partial(R.concat, 'leave '),  // Create 'leave '+role msg
+            R.partialRight(this.broadcast.bind(this), groups[i])));  // broadcast!
     }
 };
 
@@ -106,21 +131,27 @@ NetsBlocksServer.prototype.updateSockets = function() {
  */
 NetsBlocksServer.prototype.updateSocket = function(socket) {
     if (socket.readyState !== socket.OPEN) {
-        log('Removing disconnected socket');
-        // Update the groups as necessary
-        var index = this.sockets.indexOf(socket),
-            role = this.socket2Role[socket.id];
-
-        delete this.socket2Role[socket.id];
-        this.sockets.splice(index,1);
-
+        console.log('Removing disconnected socket ('+socket.id+')');
+        var role = this.socket2Role[socket.id];
+        this._removeFromRecords(socket);
         // Broadcast the leave message to peers of the given socket
         var peers = this.groupManager.getGroupMembers(socket);
+
+        console.log('socket', socket.id, 'is leaving');
         this.groupManager.onDisconnect(socket);
         this.broadcast('leave '+role, peers);
         return false;
     }
     return true;
+};
+
+NetsBlocksServer.prototype._removeFromRecords = function(socket) {
+    var index = this.sockets.indexOf(socket),
+        role = this.socket2Role[socket.id];
+
+    delete this.socket2Role[socket.id];
+    this.sockets.splice(index,1);
+    return socket;
 };
 
 /**
@@ -183,8 +214,7 @@ NetsBlocksServer.prototype.onMsgReceived = function(socket, message) {
             msg.push(role);
             log('About to broadcast '+msg.join(' ')+
                         ' from socket #'+socketId+' ('+role+')');
-            peers = this.groupManager.getGroupMembers(socket);
-            peers.push(socket);
+            peers = this.groupManager.getGroupMembersToMessage(socket);
             this.broadcast(msg.join(' '), peers);
             break;
 

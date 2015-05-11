@@ -110,6 +110,7 @@ describe('NetsBlocksServer tests', function() {
                     };
 
                 s2.on('message', function(msg) {
+                    console.log('<< Received:', msg);
                     if(msg.indexOf('leave leaveSocket') !== -1) {
                         done();
                     }
@@ -288,15 +289,16 @@ describe('GroupManager Testing', function() {
             });
         });
 
-        it('should group players into groups', function(done) {
+        it('should pass messages between 2 of 3 people', function(done) {
             var count = 0,
                 onStart = function() {
                     // Testing logic
-                    sockets[0].send('message hey');
+                    sockets[0].send('message hey!');
+                    sockets[1].send('message listen!');
                 },
                 onAllConnected = createOnStart(3, onStart),
                 checkReceive = function(msg) {
-                    if (msg.indexOf('hey') > -1) {
+                    if (msg.indexOf('hey') + msg.indexOf('listen') > -2) {
                         count++;
                     }
                 };
@@ -338,6 +340,7 @@ describe('GroupManager Testing', function() {
             });
         });
 
+        // Sometimes fails when run with all the other tests...
         it('should block multiple turns by same person', function(done) {
             var count = 0,
                 onStart = function() {
@@ -360,21 +363,33 @@ describe('GroupManager Testing', function() {
             sockets[1].on('message', checkReceive);
 
             setTimeout(function() {
-                assert.equal(count, 2);
+                assert.equal(count, 1);
                 done();
             }, 100);
         });
 
-        it.skip('should create a new group for 3rd person', function(done) {
-            // TODO
-        });
+        it('should receive join message from the other player', function(done) {
+            var counts = [0, 0],
+                checkFn = R.partial(assert.equal, 1),
+                onStart = function() {
+                    setTimeout(function() {
+                        counts.forEach(checkFn);
+                        done();
+                    }, 100);
+                },
+                onAllConnected = createOnStart(2, onStart),
+                checkReceive = function(index, msg) {
+                    console.log('\n\nReceived:', msg);
+                    counts[index]++;
+                };
 
-        it.skip('should pass messages between the two players', function(done) {
-            // TODO
-        });
+            refreshSockets(2);
+            sockets[0].on('open', onAllConnected);
+            sockets[1].on('open', onAllConnected);
 
-        it.skip('should pass messages between the two players', function(done) {
-            // TODO
+            sockets[0].on('message', checkReceive.bind(null, 0));
+            sockets[1].on('message', checkReceive.bind(null, 1));
+
         });
 
     });

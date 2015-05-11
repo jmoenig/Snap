@@ -22,6 +22,16 @@ BasicGroupManager.prototype.getAllGroups = function() {
     return globalGroup.slice();
 };
 
+/**
+ * Members to receive a message from the given socket
+ *
+ * @param socket
+ * @return {undefined}
+ */
+BasicGroupManager.prototype.getGroupMembersToMessage = function(socket) {
+    return globalGroup.slice();
+};
+
 BasicGroupManager.prototype.getGroupMembers = function(socket) {
     return globalGroup.filter(function(s) { 
         return s !== socket;

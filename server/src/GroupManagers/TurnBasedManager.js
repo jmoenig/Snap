@@ -27,6 +27,10 @@ TurnBasedManager.prototype.getAllGroups = function() {
     return R.clone(this.groups);
 };
 
+TurnBasedManager.prototype.getGroupMembersToMessage = function(socket) {
+    return this.getGroupMembers(socket);
+};
+
 TurnBasedManager.prototype.getGroupMembers = function(socket) {
     var group = this.id2Group[socket.id] || [],
         getId = R.partialRight(Utils.getAttribute, 'id'),

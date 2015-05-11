@@ -4,7 +4,7 @@ var express = require('express'),
     port = 8080,
     NetsBlocksServer = require('./NetsBlocksServer');
 
-app.use(express.static(__dirname + '/..'));
+app.use(express.static(__dirname + '/../..'));
 
 app.get('/', function(req, res) {
     res.redirect('/snap.html');
@@ -18,4 +18,7 @@ console.log('NetsBlocks server listening on port '+port);
 // TODO
 
 var nbApp = new NetsBlocksServer();
-nbApp.start({port: 5432, path: ''});
+var TwoPlayerTurn = require('./GroupManagers/TurnBasedManager');
+nbApp.start({port: 5432, 
+             path: '', 
+             GroupManager: TwoPlayerTurn});

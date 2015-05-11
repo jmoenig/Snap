@@ -35,6 +35,14 @@ GenericManager.prototype.getAllGroups = function() {
     return groups.map(this._getGroupSockets);
 };
 
+GenericManager.prototype.getGroupMembersToMessage = function(socket) {
+    var self = this,
+        group = this.id2Group[socket.id];
+
+    assert(group, 'Socket '+socket.id+' does not have a group');
+    return this._getGroupSockets(group);
+};
+
 /**
  * Get the peers of the given socket.
  *
@@ -42,13 +50,11 @@ GenericManager.prototype.getAllGroups = function() {
  * @return {Array<Id>}
  */
 GenericManager.prototype.getGroupMembers = function(socket) {
-    var self = this,
-        group = this.id2Group[socket.id],
+    var group = this.getGroupMembersToMessage(socket),
         getId = R.partialRight(Utils.getAttribute, 'id'),
         isSocketId = R.partial(R.eq, socket.id);
 
-    assert(group && socket, 'Invalid socket: '+socket.id);
-    return R.reject(R.pipe(getId, isSocketId), this._getGroupSockets(group));
+    return R.reject(R.pipe(getId, isSocketId), group);
 };
 
 /**
