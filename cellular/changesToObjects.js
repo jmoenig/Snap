@@ -1962,7 +1962,7 @@ StageMorph.prototype.dirtyEntireStage = function()
     world.broken.push(this.bounds.spread());
 }
 
-StageMorph.prototype.visibleAttributes = [];
+StageMorph.prototype.visibleAttributes = ["Default"];
 
 /*
 ** Converts annoying stage coordinates ([-240,240],[-180,180]) to normal screen coordinates 
