@@ -1682,6 +1682,31 @@ SpriteMorph.prototype.updateCurrentCell = function()
 ** ensure updateCurrentCell() is called.
 */
 
+SpriteMorph.prototype.uberExportSprite = SpriteMorph.prototype.exportSprite;
+SpriteMorph.prototype.exportSprite = function () {
+    if (this.isCoone) {return; }
+    var ide = this.parentThatIsA(IDE_Morph);
+    if (ide) {
+        ide.exportSprite(this.parentSprite || this);
+    }
+};
+
+SpriteMorph.prototype.uberEdit = SpriteMorph.prototype.edit;
+SpriteMorph.prototype.edit = function () {
+    var ide = this.parentThatIsA(IDE_Morph);
+    if (ide && !ide.isAppMode) {
+        ide.selectSprite(this.parentSprite || this);
+    }
+};
+
+SpriteMorph.prototype.uberDuplicate = SpriteMorph.prototype.duplicate;
+SpriteMorph.prototype.duplicate = function () {
+    var ide = this.parentThatIsA(IDE_Morph);
+    if (ide) {
+        ide.duplicateSprite(this.parentSprite || this);
+    }
+};
+
 SpriteMorph.prototype.uberMoveBy = SpriteMorph.prototype.moveBy;
 SpriteMorph.prototype.moveBy = function (delta, justMe) {
 	var ret = this.uberMoveBy(delta, justMe);
