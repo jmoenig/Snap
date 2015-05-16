@@ -3,6 +3,7 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 		<title>Scribble, Beta</title>
+		<link rel="shortcut icon" href="favicon.ico">
 		<script type="text/javascript" src="lambda.js"></script>
 		<script type="text/javascript" src="morphic.js"></script>
 		<script type="text/javascript" src="locale.js"></script>
@@ -30,6 +31,7 @@
 			var world;
 			window.onload = function () {
 				world = new WorldMorph(document.getElementById('world'));
+                world.worldCanvas.focus();
 				new IDE_Morph().openIn(world);
 				setInterval(loop, 1);
 			};
@@ -40,5 +42,5 @@
 	</head>
 	<body style="margin: 0;">
 		<canvas id="world" tabindex="1" style="position: absolute;" />
-    </body>
+	</body>
 </html>

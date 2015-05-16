@@ -7,7 +7,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2013 by Jens Mönig
+    Copyright (C) 2014 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -65,7 +65,7 @@
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.xml = '2013-April-19';
+modules.xml = '2014-January-09';
 
 // Declarations
 
@@ -90,13 +90,15 @@ ReadStream.prototype.space = /[\s]/;
 // ReadStream accessing:
 
 ReadStream.prototype.next = function (count) {
-    var element;
+    var element, start;
     if (count === undefined) {
         element = this.contents[this.index];
         this.index += 1;
         return element;
     }
-    return this.contents.slice(this.index, this.index += count);
+    start = this.index;
+    this.index += count;
+    return this.contents.slice(start, this.index);
 };
 
 ReadStream.prototype.peek = function () {
@@ -114,12 +116,15 @@ ReadStream.prototype.atEnd = function () {
 // ReadStream accessing String contents:
 
 ReadStream.prototype.upTo = function (regex) {
+    var i, start;
     if (!isString(this.contents)) {return ''; }
-    var i = this.contents.substr(this.index).search(regex);
+    i = this.contents.substr(this.index).search(regex);
     if (i === -1) {
         return '';
     }
-    return this.contents.substring(this.index, this.index += i);
+    start = this.index;
+    this.index += i;
+    return this.contents.substring(start, this.index);
 };
 
 ReadStream.prototype.peekUpTo = function (regex) {
@@ -133,19 +138,23 @@ ReadStream.prototype.peekUpTo = function (regex) {
 
 ReadStream.prototype.skipSpace = function () {
     if (!isString(this.contents)) {return ''; }
-    var ch;
-    while (this.space.test(ch = this.peek()) && ch !== '') {
+    var ch = this.peek();
+    while (this.space.test(ch) && ch !== '') {
         this.skip();
+        ch = this.peek();
     }
 };
 
 ReadStream.prototype.word = function () {
+    var i, start;
     if (!isString(this.contents)) {return ''; }
-    var i = this.contents.substr(this.index).search(/[\s\>\/\=]|$/);
+    i = this.contents.substr(this.index).search(/[\s\>\/\=]|$/);
     if (i === -1) {
         return '';
     }
-    return this.contents.substring(this.index, this.index += i);
+    start = this.index;
+    this.index += i;
+    return this.contents.substring(start, this.index);
 };
 
 // XML_Element ///////////////////////////////////////////////////////////
@@ -376,14 +385,16 @@ XML_Element.prototype.parseStream = function (stream) {
     stream.skipSpace();
 
     // attributes:
-    while ((ch = stream.peek()) !== '>' && ch !== '/') {
+    ch = stream.peek();
+    while (ch !== '>' && ch !== '/') {
         key = stream.word();
         stream.skipSpace();
         if (stream.next() !== '=') {
             throw new Error('Expected "=" after attribute name');
         }
         stream.skipSpace();
-        if ((ch = stream.next()) !== '"' && ch !== "'") {
+        ch = stream.next();
+        if (ch !== '"' && ch !== "'") {
             throw new Error(
                 'Expected single- or double-quoted attribute value'
             );
@@ -392,6 +403,7 @@ XML_Element.prototype.parseStream = function (stream) {
         stream.skip(1);
         stream.skipSpace();
         this.attributes[key] = this.unescape(value);
+        ch = stream.peek();
     }
 
     // empty tag:

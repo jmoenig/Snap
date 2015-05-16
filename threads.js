@@ -9,7 +9,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2013 by Jens Mönig
+    Copyright (C) 2015 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -40,8 +40,8 @@
         ThreadManager
         Process
         Context
+        Variable
         VariableFrame
-        UpvarReference
 
 
     credits
@@ -83,13 +83,12 @@ ArgLabelMorph, localize, XML_Element, hex_sha512*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.threads = '2013-October-17';
+modules.threads = '2015-May-01';
 
 var ThreadManager;
 var Process;
 var Context;
 var VariableFrame;
-var UpvarReference;
 
 function snapEquals(a, b) {
     if (a instanceof List || (b instanceof List)) {
@@ -98,15 +97,34 @@ function snapEquals(a, b) {
         }
         return false;
     }
-    var x = parseFloat(a),
-        y = parseFloat(b);
-    if (isNaN(x) || isNaN(y)) {
+
+    var x = +a,
+        y = +b,
+        i,
+        specials = [true, false, ''];
+
+    // "zum Schneckengang verdorben, was Adlerflug geworden wäre"
+    // collecting edge-cases that somebody complained about
+    // on Github. Folks, take it easy and keep it fun, okay?
+    // Shit like this is patently ugly and slows Snap down. Tnx!
+    for (i = 9; i <= 13; i += 1) {
+        specials.push(String.fromCharCode(i));
+    }
+    specials.push(String.fromCharCode(160));
+
+    // check for special values before coercing to numbers
+    if (isNaN(x) || isNaN(y) ||
+            [a, b].some(function (any) {return contains(specials, any) ||
+                  (isString(any) && (any.indexOf(' ') > -1)); })) {
         x = a;
         y = b;
     }
+
+    // handle text comparison case-insensitive.
     if (isString(x) && isString(y)) {
         return x.toLowerCase() === y.toLowerCase();
     }
+
     return x === y;
 }
 
@@ -125,7 +143,13 @@ ThreadManager.prototype.toggleProcess = function (block, receiver) {
     }
 };
 
-ThreadManager.prototype.startProcess = function (block, receiver, isThreadSafe) {
+ThreadManager.prototype.startProcess = function (
+    block,
+    isThreadSafe,
+    exportResult,
+    callback,
+    receiver
+) {
     var active = this.findProcess(block, receiver),
         top = block.topBlock(),
         newProc;
@@ -138,20 +162,28 @@ ThreadManager.prototype.startProcess = function (block, receiver, isThreadSafe) 
         this.removeTerminatedProcesses();
     }
     top.addHighlight();
-    newProc = new Process(block.topBlock(), receiver);
+    newProc = new Process(block.topBlock(), callback, receiver);
+    newProc.exportResult = exportResult;
+    if (!newProc.homeContext.receiver.isClone) {
+        top.addHighlight();
+    }
     this.processes.push(newProc);
     return newProc;
 };
 
-ThreadManager.prototype.stopAll = function () {
+ThreadManager.prototype.stopAll = function (excpt) {
+    // excpt is optional
     this.processes.forEach(function (proc) {
-        proc.stop();
+        if (proc !== excpt) {
+            proc.stop();
+        }
     });
 };
 
-ThreadManager.prototype.stopAllForReceiver = function (rcvr) {
+ThreadManager.prototype.stopAllForReceiver = function (rcvr, excpt) {
+    // excpt is optional
     this.processes.forEach(function (proc) {
-        if (proc.homeContext.receiver === rcvr) {
+        if (proc.homeContext.receiver === rcvr && proc !== excpt) {
             proc.stop();
             if (rcvr.isClone) {
                 proc.isDead = true;
@@ -191,11 +223,10 @@ ThreadManager.prototype.resumeAll = function (stage) {
 };
 
 ThreadManager.prototype.step = function () {
-/*
-    run each process until it gives up control, skipping processes
-    for sprites that are currently picked up, then filter out any
-    processes that have been terminated
-*/
+    // run each process until it gives up control, skipping processes
+    // for sprites that are currently picked up, then filter out any
+    // processes that have been terminated
+
     this.processes.forEach(function (proc) {
         if (!proc.homeContext.receiver.isPickedUp() && !proc.isDead) {
             proc.runStep();
@@ -208,9 +239,10 @@ ThreadManager.prototype.removeTerminatedProcesses = function () {
     // and un-highlight their scripts
     var remaining = [];
     this.processes.forEach(function (proc) {
-        if (!proc.isRunning() && !proc.errorFlag && !proc.isDead) {
-            proc.topBlock.removeHighlight();
-
+        if ((!proc.isRunning() && !proc.errorFlag) || proc.isDead) {
+            if (proc.topBlock instanceof BlockMorph) {
+                proc.topBlock.removeHighlight();
+            }
             if (proc.prompter) {
                 proc.prompter.destroy();
                 if (proc.homeContext.receiver.stopTalking) {
@@ -219,12 +251,22 @@ ThreadManager.prototype.removeTerminatedProcesses = function () {
             }
 
             if (proc.topBlock instanceof ReporterBlockMorph) {
-                if (proc.homeContext.inputs[0] instanceof List) {
-                    proc.topBlock.showBubble(new ListWatcherMorph(
-                        proc.homeContext.inputs[0]
-                    ));
+                if (proc.onComplete instanceof Function) {
+                    proc.onComplete(proc.homeContext.inputs[0]);
                 } else {
-                    proc.topBlock.showBubble(proc.homeContext.inputs[0]);
+                    if (proc.homeContext.inputs[0] instanceof List) {
+                        proc.topBlock.showBubble(
+                            new ListWatcherMorph(
+                                proc.homeContext.inputs[0]
+                            ),
+                            proc.exportResult
+                        );
+                    } else {
+                        proc.topBlock.showBubble(
+                            proc.homeContext.inputs[0],
+                            proc.exportResult
+                        );
+                    }
                 }
             }
         } else {
@@ -273,9 +315,9 @@ ThreadManager.prototype.findProcess = function (block, receiver) {
                         are children
     receiver            object (sprite) to which the process applies,
                         cached from the top block
-    context                the Context describing the current state
+    context             the Context describing the current state
                         of this process
-    homeContext            stores information relevant to the whole process,
+    homeContext         stores information relevant to the whole process,
                         i.e. its receiver, result etc.
     isPaused            boolean indicating whether to pause
     readyToYield        boolean indicating whether to yield control to
@@ -283,13 +325,20 @@ ThreadManager.prototype.findProcess = function (block, receiver) {
     readyToTerminate    boolean indicating whether the stop method has
                         been called
     isDead              boolean indicating a terminated clone process
-    timeout                msecs after which to force yield
-    lastYield            msecs when the process last yielded
-    errorFlag            boolean indicating whether an error was encountered
+    timeout             msecs after which to force yield
+    lastYield           msecs when the process last yielded
+    errorFlag           boolean indicating whether an error was encountered
     prompter            active instance of StagePrompterMorph
     httpRequest         active instance of an HttpRequest or null
     pauseOffset         msecs between the start of an interpolated operation
                         and when the process was paused
+    exportResult        boolean flag indicating whether a picture of the top
+                        block along with the result bubble shoud be exported
+    onComplete          an optional callback function to be executed when
+                        the process is done
+    procedureCount      number counting procedure call entries,
+                        used to tag custom block calls, so "stop block"
+                        invocations can catch them
 */
 
 Process.prototype = {};
@@ -297,7 +346,7 @@ Process.prototype.contructor = Process;
 Process.prototype.timeout = 500; // msecs after which to force yield
 Process.prototype.isCatchingErrors = true;
 
-function Process(topBlock, receiver) {
+function Process(topBlock, onComplete, receiver) {
     this.topBlock = topBlock || null;
 
     this.readyToYield = false;
@@ -313,6 +362,9 @@ function Process(topBlock, receiver) {
     this.isPaused = false;
     this.pauseOffset = null;
     this.frameCount = 0;
+    this.exportResult = false;
+    this.onComplete = onComplete || null;
+    this.procedureCount = 0;
 
     if (topBlock) {
         this.homeContext.receiver = receiver;
@@ -336,13 +388,13 @@ Process.prototype.isRunning = function () {
 // Process entry points
 
 Process.prototype.runStep = function () {
-/*
-    a step is an an uninterruptable 'atom', it can consist
-    of several contexts, even of several blocks
-*/
+    // a step is an an uninterruptable 'atom', it can consist
+    // of several contexts, even of several blocks
+
     if (this.isPaused) { // allow pausing in between atomic steps:
         return this.pauseStep();
     }
+
     this.readyToYield = false;
     while (!this.readyToYield
             && this.context
@@ -410,8 +462,10 @@ Process.prototype.pauseStep = function () {
 
 Process.prototype.evaluateContext = function () {
     var exp = this.context.expression;
-
     this.frameCount += 1;
+    if (this.context.tag === 'exit') {
+        this.expectReport();
+    }
     if (exp instanceof Array) {
         return this.evaluateSequence(exp);
     }
@@ -435,7 +489,7 @@ Process.prototype.evaluateContext = function () {
 
 Process.prototype.evaluateBlock = function (block, argCount) {
     // check for special forms
-    if (contains(['reportOr', 'reportAnd'], block.selector)) {
+    if (contains(['reportOr', 'reportAnd', 'doReport'], block.selector)) {
         return this[block.selector](block);
     }
 
@@ -508,6 +562,35 @@ Process.prototype.reportAnd = function (block) {
     }
 };
 
+Process.prototype.doReport = function (block) {
+    var outer = this.context.outerContext;
+    if (this.context.expression.partOfCustomCommand) {
+        this.doStopCustomBlock();
+        this.popContext();
+    } else {
+        while (this.context && this.context.tag !== 'exit') {
+            if (this.context.expression === 'doStopWarping') {
+                this.doStopWarping();
+            } else {
+                this.popContext();
+            }
+        }
+        if (this.context) {
+            if (this.context.expression === 'expectReport') {
+                // pop off inserted top-level exit context
+                this.popContext();
+            } else {
+                // un-tag and preserve original caller
+                this.context.tag = null;
+            }
+        }
+    }
+    // in any case evaluate (and ignore)
+    // the input, because it could be
+    // and HTTP Request for a hardware extension
+    this.pushContext(block.inputs()[0], outer);
+};
+
 // Process: Non-Block evaluation
 
 Process.prototype.evaluateMultiSlot = function (multiSlot, argCount) {
@@ -568,7 +651,6 @@ Process.prototype.evaluateInput = function (input) {
                 ) || (input instanceof CSlotMorph && !input.isStatic)) {
                 // I know, this still needs yet to be done right....
                 ans = this.reify(ans, new List());
-                ans.isImplicitLambda = true;
             }
         }
     }
@@ -579,10 +661,7 @@ Process.prototype.evaluateInput = function (input) {
 Process.prototype.evaluateSequence = function (arr) {
     var pc = this.context.pc,
         outer = this.context.outerContext,
-        isLambda = this.context.isLambda,
-        isImplicitLambda = this.context.isImplicitLambda,
-        isCustomBlock = this.context.isCustomBlock,
-        upvars = this.context.upvars;
+        isCustomBlock = this.context.isCustomBlock;
     if (pc === (arr.length - 1)) { // tail call elimination
         this.context = new Context(
             this.context.parentContext,
@@ -590,12 +669,7 @@ Process.prototype.evaluateSequence = function (arr) {
             this.context.outerContext,
             this.context.receiver
         );
-        this.context.isLambda = isLambda;
-        this.context.isImplicitLambda = isImplicitLambda;
         this.context.isCustomBlock = isCustomBlock;
-        if (upvars) {
-            this.context.upvars = new UpvarReference(upvars);
-        }
     } else {
         if (pc >= arr.length) {
             this.popContext();
@@ -612,8 +686,8 @@ Process.prototype.evaluateSequence = function (arr) {
 Caution: we cannot just revert to this version of the method, because to make
 tail call elimination work many tweaks had to be done to various primitives.
 For the most part these tweaks are about schlepping the outer context (for
-the variable bindings) and the isLambda flag along, and are indicated by a
-short comment in the code. But to really revert would take a good measure
+the variable bindings) and the isCustomBlock flag along, and are indicated
+by a short comment in the code. But to really revert would take a good measure
 of trial and error as well as debugging. In the developers file archive there
 is a version of threads.js dated 120119(2) which basically resembles the
 last version before introducing tail call optimization on 120123.
@@ -665,14 +739,20 @@ Process.prototype.doYield = function () {
     }
 };
 
+Process.prototype.expectReport = function () {
+    this.handleError(new Error("reporter didn't report"));
+};
+
 // Process Exception Handling
 
 Process.prototype.handleError = function (error, element) {
+    var m = element;
     this.stop();
     this.errorFlag = true;
     this.topBlock.addErrorHighlight();
-    (element || this.topBlock).showBubble(
-        (element ? '' : 'Inside: ')
+    if (isNil(m) || isNil(m.world())) {m = this.topBlock; }
+    m.showBubble(
+        (m === element ? '' : 'Inside: ')
             + error.name
             + '\n'
             + error.message
@@ -734,8 +814,15 @@ Process.prototype.reifyPredicate = function (topBlock, parameterNames) {
     return this.reify(topBlock, parameterNames);
 };
 
-Process.prototype.doRun = function (context, args, isCustomBlock) {
-    return this.evaluate(context, args, true, isCustomBlock);
+Process.prototype.reportJSFunction = function (parmNames, body) {
+    return Function.apply(
+        null,
+        parmNames.asArray().concat([body])
+    );
+};
+
+Process.prototype.doRun = function (context, args) {
+    return this.evaluate(context, args, true);
 };
 
 Process.prototype.evaluate = function (
@@ -744,6 +831,12 @@ Process.prototype.evaluate = function (
     isCommand
 ) {
     if (!context) {return null; }
+    if (context instanceof Function) {
+        return context.apply(
+            this.blockReceiver(),
+            args.asArray().concat([this])
+        );
+    }
     if (context.isContinuation) {
         return this.runContinuation(context, args);
     }
@@ -752,8 +845,9 @@ Process.prototype.evaluate = function (
     }
 
     var outer = new Context(null, null, context.outerContext),
+        caller = this.context.parentContext,
+        exit,
         runnable,
-        extra,
         parms = args.asArray(),
         i,
         value;
@@ -767,24 +861,12 @@ Process.prototype.evaluate = function (
         outer,
         context.receiver
     );
-    extra = new Context(runnable, 'doYield');
+    this.context.parentContext = runnable;
 
-    /*
-        Note: if the context's expression is a ReporterBlockMorph,
-        the extra context gets popped off immediately without taking
-        effect (i.e. it doesn't yield within evaluating a stack of
-        nested reporters)
-    */
-
-    if (isCommand || (context.expression instanceof ReporterBlockMorph)) {
-        this.context.parentContext = extra;
-    } else {
-        this.context.parentContext = runnable;
+    if (context.expression instanceof ReporterBlockMorph) {
+        // auto-"warp" nested reporters
+        this.readyToYield = (Date.now() - this.lastYield > this.timeout);
     }
-
-    runnable.isLambda = true;
-    runnable.isImplicitLambda = context.isImplicitLambda;
-    runnable.isCustomBlock = false;
 
     // assign parameters if any were passed
     if (parms.length > 0) {
@@ -792,7 +874,7 @@ Process.prototype.evaluate = function (
         // assign formal parameters
         for (i = 0; i < context.inputs.length; i += 1) {
             value = 0;
-            if (parms[i]) {
+            if (!isNil(parms[i])) {
                 value = parms[i];
             }
             outer.variables.addVar(context.inputs[i], value);
@@ -820,18 +902,33 @@ Process.prototype.evaluate = function (
 
             } else if (context.emptySlots !== 1) {
                 throw new Error(
-                    'expecting ' + context.emptySlots + ' input(s), '
-                        + 'but getting ' + parms.length
+                    localize('expecting') + ' ' + context.emptySlots + ' '
+                        + localize('input(s), but getting') + ' '
+                        + parms.length
                 );
             }
         }
     }
-    if (this.context.upvars) {
-        runnable.upvars = new UpvarReference(this.context.upvars);
-    }
 
     if (runnable.expression instanceof CommandBlockMorph) {
         runnable.expression = runnable.expression.blockSequence();
+        if (!isCommand) {
+            if (caller) {
+                // tag caller, so "report" can catch it later
+                caller.tag = 'exit';
+            } else {
+                // top-level context, insert a tagged exit context
+                // which "report" can catch later
+                exit = new Context(
+                    runnable.parentContext,
+                    'expectReport',
+                    outer,
+                    outer.receiver
+                );
+                exit.tag = 'exit';
+                runnable.parentContext = exit;
+            }
+        }
     }
 };
 
@@ -840,6 +937,9 @@ Process.prototype.fork = function (context, args) {
         throw new Error(
             'continuations cannot be forked'
         );
+    }
+    if (!(context instanceof Context)) {
+        throw new Error('expecting a ring but getting ' + context);
     }
 
     var outer = new Context(null, null, context.outerContext),
@@ -853,15 +953,13 @@ Process.prototype.fork = function (context, args) {
         stage = this.homeContext.receiver.parentThatIsA(StageMorph),
         proc = new Process();
 
-    runnable.isLambda = true;
-
     // assign parameters if any were passed
     if (parms.length > 0) {
 
         // assign formal parameters
         for (i = 0; i < context.inputs.length; i += 1) {
             value = 0;
-            if (parms[i]) {
+            if (!isNil(parms[i])) {
                 value = parms[i];
             }
             outer.variables.addVar(context.inputs[i], value);
@@ -889,8 +987,9 @@ Process.prototype.fork = function (context, args) {
 
             } else if (context.emptySlots !== 1) {
                 throw new Error(
-                    'expecting ' + context.emptySlots + ' input(s), '
-                        + 'but getting ' + parms.length
+                    localize('expecting') + ' ' + context.emptySlots + ' '
+                        + localize('input(s), but getting') + ' '
+                        + parms.length
                 );
             }
         }
@@ -907,66 +1006,48 @@ Process.prototype.fork = function (context, args) {
     stage.threads.processes.push(proc);
 };
 
-Process.prototype.doReport = function (value, isCSlot) {
-    while (this.context && !this.context.isLambda) {
-        if (this.context.expression === 'doStopWarping') {
-            this.doStopWarping();
-        } else {
-            this.popContext();
-        }
-    }
-    if (this.context && this.context.isImplicitLambda) {
-        if (this.context.expression === 'doStopWarping') {
-            this.doStopWarping();
-        } else {
-            this.popContext();
-        }
-        return this.doReport(value, true);
-    }
-    if (this.context && this.context.isCustomBlock) {
-        // now I'm back at the custom block sequence.
-        // advance my pc to my expression's length
-        this.context.pc = this.context.expression.length - 1;
-    }
-    if (isCSlot) {
-        if (this.context.parentContext.expression instanceof Array) {
-            this.popContext();
-        }
-    }
-    return value;
-};
+// Process stopping blocks primitives
 
 Process.prototype.doStopBlock = function () {
-    this.doReport();
+    var target = this.context.expression.exitTag;
+    if (isNil(target)) {
+        return this.doStopCustomBlock();
+    }
+    while (this.context &&
+            (isNil(this.context.tag) || (this.context.tag > target))) {
+        if (this.context.expression === 'doStopWarping') {
+            this.doStopWarping();
+        } else {
+            this.popContext();
+        }
+    }
+    this.pushContext();
 };
 
-// Process evaluation variants, commented out for now (redundant)
-
-/*
-Process.prototype.doRunWithInputList = function (context, args) {
-    // provide an extra selector for the palette
-    return this.doRun(context, args);
+Process.prototype.doStopCustomBlock = function () {
+    // fallback solution for "report" blocks inside
+    // custom command definitions and untagged "stop" blocks
+    while (this.context && !this.context.isCustomBlock) {
+        if (this.context.expression === 'doStopWarping') {
+            this.doStopWarping();
+        } else {
+            this.popContext();
+        }
+    }
 };
-
-Process.prototype.evaluateWithInputList = function (context, args) {
-    // provide an extra selector for the palette
-    return this.evaluate(context, args);
-};
-
-Process.prototype.forkWithInputList = function (context, args) {
-    // provide an extra selector for the palette
-    return this.fork(context, args);
-};
-*/
 
 // Process continuations primitives
 
-Process.prototype.doCallCC = function (aContext) {
-    this.evaluate(aContext, new List([this.context.continuation()]));
+Process.prototype.doCallCC = function (aContext, isReporter) {
+    this.evaluate(
+        aContext,
+        new List([this.context.continuation()]),
+        !isReporter
+    );
 };
 
 Process.prototype.reportCallCC = function (aContext) {
-    this.doCallCC(aContext);
+    this.doCallCC(aContext, true);
 };
 
 Process.prototype.runContinuation = function (aContext, args) {
@@ -984,20 +1065,21 @@ Process.prototype.runContinuation = function (aContext, args) {
 // Process custom block primitives
 
 Process.prototype.evaluateCustomBlock = function () {
-    var context = this.context.expression.definition.body,
+    var caller = this.context.parentContext,
+        context = this.context.expression.definition.body,
         declarations = this.context.expression.definition.declarations,
         args = new List(this.context.inputs),
         parms = args.asArray(),
         runnable,
-        extra,
+        exit,
         i,
         value,
-        upvars,
         outer;
 
     if (!context) {return null; }
+    this.procedureCount += 1;
     outer = new Context();
-    outer.receiver = this.context.receiver; // || this.homeContext.receiver;
+    outer.receiver = this.context.receiver;
     outer.variables.parentFrame = outer.receiver ?
             outer.receiver.variables : null;
 
@@ -1005,15 +1087,10 @@ Process.prototype.evaluateCustomBlock = function () {
         this.context.parentContext,
         context.expression,
         outer,
-        outer.receiver,
-        true // is custom block
+        outer.receiver
     );
-    extra = new Context(runnable, 'doYield');
-
-    this.context.parentContext = extra;
-
-    runnable.isLambda = true;
     runnable.isCustomBlock = true;
+    this.context.parentContext = runnable;
 
     // passing parameters if any were passed
     if (parms.length > 0) {
@@ -1021,37 +1098,58 @@ Process.prototype.evaluateCustomBlock = function () {
         // assign formal parameters
         for (i = 0; i < context.inputs.length; i += 1) {
             value = 0;
-            if (parms[i]) {
+            if (!isNil(parms[i])) {
                 value = parms[i];
             }
             outer.variables.addVar(context.inputs[i], value);
 
             // if the parameter is an upvar,
-            // create an UpvarReference to it
+            // create a reference to the variable it points to
             if (declarations[context.inputs[i]][0] === '%upvar') {
-                if (!upvars) { // lazy initialization
-                    upvars = new UpvarReference(this.context.upvars);
-                }
-                upvars.addReference(
-                    value,
-                    context.inputs[i],
-                    outer.variables
-                );
+                this.context.outerContext.variables.vars[value] =
+                    outer.variables.vars[context.inputs[i]];
             }
         }
     }
 
-    if (upvars) {
-        runnable.upvars = upvars;
-    } else if (this.context.upvars) {
-        runnable.upvars = new UpvarReference(this.context.upvars);
-    }
+    // tag return target
+    if (this.context.expression.definition.type !== 'command') {
+        if (caller) {
+            // tag caller, so "report" can catch it later
+            caller.tag = 'exit';
+        } else {
+            // top-level context, insert a tagged exit context
+            // which "report" can catch later
+            exit = new Context(
+                runnable.parentContext,
+                'expectReport',
+                outer,
+                outer.receiver
+            );
+            exit.tag = 'exit';
+            runnable.parentContext = exit;
+        }
+        // auto-"warp" nested reporters
+        this.readyToYield = (Date.now() - this.lastYield > this.timeout);
+    } else {
+        // tag all "stop this block" blocks with the current
+        // procedureCount as exitTag, and mark all "report" blocks
+        // as being inside a custom command definition
+        runnable.expression.tagExitBlocks(this.procedureCount, true);
 
-    if (runnable.expression instanceof CommandBlockMorph) {
-        runnable.expression = runnable.expression.blockSequence();
+        // tag the caller with the current procedure count, so
+        // "stop this block" blocks can catch it, but only
+        // if the caller hasn't been tagged already
+        if (caller && !caller.tag) {
+            caller.tag = this.procedureCount;
+        }
+        // yield commands unless explicitly "warped"
+        if (!this.isAtomic) {
+            this.readyToYield = true;
+        }
     }
+    runnable.expression = runnable.expression.blockSequence();
 };
-
 
 // Process variables primitives
 
@@ -1065,13 +1163,16 @@ Process.prototype.doDeclareVariables = function (varNames) {
 Process.prototype.doSetVar = function (varName, value) {
     var varFrame = this.context.variables,
         name = varName;
-
     if (name instanceof Context) {
         if (name.expression.selector === 'reportGetVar') {
-            name = name.expression.blockSpec;
+            name.variables.setVar(
+                name.expression.blockSpec,
+                value
+            );
+            return;
         }
     }
-    varFrame.setVar(name, value);
+    varFrame.setVar(name, value, this.blockReceiver());
 };
 
 Process.prototype.doChangeVar = function (varName, value) {
@@ -1080,19 +1181,20 @@ Process.prototype.doChangeVar = function (varName, value) {
 
     if (name instanceof Context) {
         if (name.expression.selector === 'reportGetVar') {
-            name = name.expression.blockSpec;
+            name.variables.changeVar(
+                name.expression.blockSpec,
+                value
+            );
+            return;
         }
     }
-    varFrame.changeVar(name, value);
+    varFrame.changeVar(name, value, this.blockReceiver());
 };
 
 Process.prototype.reportGetVar = function () {
     // assumes a getter block whose blockSpec is a variable name
-    var varName = this.context.expression.blockSpec;
-
     return this.context.variables.getVar(
-        varName,
-        this.context.upvars
+        this.context.expression.blockSpec
     );
 };
 
@@ -1103,6 +1205,7 @@ Process.prototype.doShowVar = function (varName) {
         target,
         label,
         others,
+        isGlobal,
         name = varName;
 
     if (name instanceof Context) {
@@ -1129,10 +1232,14 @@ Process.prototype.doShowVar = function (varName) {
                 return;
             }
             // if no watcher exists, create a new one
-            if (target.owner) {
+            isGlobal = contains(
+                this.homeContext.receiver.variables.parentFrame.names(),
+                varName
+            );
+            if (isGlobal || target.owner) {
                 label = name;
             } else {
-                label = name + ' (temporary)';
+                label = name + ' ' + localize('(temporary)');
             }
             watcher = new WatcherMorph(
                 label,
@@ -1233,6 +1340,8 @@ Process.prototype.doDeleteFromList = function (index, list) {
     }
     if (this.inputOption(index) === 'last') {
         idx = list.length();
+    } else if (isNaN(+this.inputOption(index))) {
+        return null;
     }
     list.remove(idx);
 };
@@ -1243,7 +1352,7 @@ Process.prototype.doInsertInList = function (element, index, list) {
         return null;
     }
     if (this.inputOption(index) === 'any') {
-        idx = this.reportRandom(1, list.length());
+        idx = this.reportRandom(1, list.length() + 1);
     }
     if (this.inputOption(index) === 'last') {
         idx = list.length() + 1;
@@ -1292,19 +1401,13 @@ Process.prototype.reportListContainsItem = function (list, element) {
 Process.prototype.doIf = function () {
     var args = this.context.inputs,
         outer = this.context.outerContext, // for tail call elimination
-        isLambda = this.context.isLambda,
-        isImplicitLambda = this.context.isImplicitLambda,
-        isCustomBlock = this.context.isCustomBlock,
-        upvars = this.context.upvars;
+        isCustomBlock = this.context.isCustomBlock;
 
     this.popContext();
     if (args[0]) {
         if (args[1]) {
             this.pushContext(args[1].blockSequence(), outer);
-            this.context.isLambda = isLambda;
-            this.context.isImplicitLambda = isImplicitLambda;
             this.context.isCustomBlock = isCustomBlock;
-            this.context.upvars = new UpvarReference(upvars);
         }
     }
     this.pushContext();
@@ -1313,10 +1416,7 @@ Process.prototype.doIf = function () {
 Process.prototype.doIfElse = function () {
     var args = this.context.inputs,
         outer = this.context.outerContext, // for tail call elimination
-        isLambda = this.context.isLambda,
-        isImplicitLambda = this.context.isImplicitLambda,
-        isCustomBlock = this.context.isCustomBlock,
-        upvars = this.context.upvars;
+        isCustomBlock = this.context.isCustomBlock;
 
     this.popContext();
     if (args[0]) {
@@ -1331,10 +1431,7 @@ Process.prototype.doIfElse = function () {
         }
     }
     if (this.context) {
-        this.context.isLambda = isLambda;
-        this.context.isImplicitLambda = isImplicitLambda;
         this.context.isCustomBlock = isCustomBlock;
-        this.context.upvars = new UpvarReference(upvars);
     }
 
     this.pushContext();
@@ -1367,11 +1464,47 @@ Process.prototype.doStopAll = function () {
     }
 };
 
+Process.prototype.doStopThis = function (choice) {
+    switch (this.inputOption(choice)) {
+    case 'all':
+        this.doStopAll();
+        break;
+    case 'this script':
+        this.doStop();
+        break;
+    case 'this block':
+        this.doStopBlock();
+        break;
+    default:
+        nop();
+    }
+};
+
+Process.prototype.doStopOthers = function (choice) {
+    var stage;
+    if (this.homeContext.receiver) {
+        stage = this.homeContext.receiver.parentThatIsA(StageMorph);
+        if (stage) {
+            switch (this.inputOption(choice)) {
+            case 'all but this script':
+                stage.threads.stopAll(this);
+                break;
+            case 'other scripts in sprite':
+                stage.threads.stopAllForReceiver(
+                    this.homeContext.receiver,
+                    this
+                );
+                break;
+            default:
+                nop();
+            }
+        }
+    }
+};
+
 Process.prototype.doWarp = function (body) {
     // execute my contents block atomically (more or less)
     var outer = this.context.outerContext, // for tail call elimination
-        isLambda = this.context.isLambda,
-        isImplicitLambda = this.context.isImplicitLambda,
         isCustomBlock = this.context.isCustomBlock,
         stage;
 
@@ -1388,13 +1521,8 @@ Process.prototype.doWarp = function (body) {
                 stage.fps = 0; // variable frame rate
             }
         }
-
         this.pushContext('doYield');
-
-        this.context.isLambda = isLambda;
-        this.context.isImplicitLambda = isImplicitLambda;
         this.context.isCustomBlock = isCustomBlock;
-
         if (!this.isAtomic) {
             this.pushContext('doStopWarping');
         }
@@ -1439,10 +1567,10 @@ Process.prototype.doSetFastTracking = function (bool) {
     if (this.homeContext.receiver) {
         ide = this.homeContext.receiver.parentThatIsA(IDE_Morph);
         if (ide) {
-            if (ide.stage.isFastTracked) {
-                ide.stopFastTracking();
-            } else {
+            if (bool) {
                 ide.startFastTracking();
+            } else {
+                ide.stopFastTracking();
             }
         }
     }
@@ -1473,30 +1601,19 @@ Process.prototype.doForever = function (body) {
 Process.prototype.doRepeat = function (counter, body) {
     var block = this.context.expression,
         outer = this.context.outerContext, // for tail call elimination
-        isLambda = this.context.isLambda,
-        isImplicitLambda = this.context.isImplicitLambda,
-        isCustomBlock = this.context.isCustomBlock,
-        upvars = this.context.upvars;
+        isCustomBlock = this.context.isCustomBlock;
 
     if (counter < 1) { // was '=== 0', which caused infinite loops on non-ints
         return null;
     }
     this.popContext();
-
     this.pushContext(block, outer);
-
-    this.context.isLambda = isLambda;
-    this.context.isImplicitLambda = isImplicitLambda;
     this.context.isCustomBlock = isCustomBlock;
-    this.context.upvars = new UpvarReference(upvars);
-
     this.context.addInput(counter - 1);
-
     this.pushContext('doYield');
     if (body) {
         this.pushContext(body.blockSequence());
     }
-
     this.pushContext();
 };
 
@@ -1583,6 +1700,27 @@ Process.prototype.reportMap = function (reporter, list) {
     }
 };
 
+Process.prototype.doForEach = function (upvar, list, script) {
+    // perform a script for each element of a list, assigning the
+    // current iteration's element to a variable with the name
+    // specified in the "upvar" parameter, so it can be referenced
+    // within the script. Uses the context's - unused - fourth
+    // element as temporary storage for the current list index
+
+    if (isNil(this.context.inputs[3])) {this.context.inputs[3] = 1; }
+    var index = this.context.inputs[3];
+    this.context.outerContext.variables.addVar(upvar);
+    this.context.outerContext.variables.setVar(
+        upvar,
+        list.at(index)
+    );
+    if (index > list.length()) {return; }
+    this.context.inputs[3] += 1;
+    this.pushContext('doYield');
+    this.pushContext();
+    this.evaluate(script, new List(), true);
+};
+
 // Process interpolated primitives
 
 Process.prototype.doWait = function (secs) {
@@ -1600,15 +1738,15 @@ Process.prototype.doGlide = function (secs, endX, endY) {
     if (!this.context.startTime) {
         this.context.startTime = Date.now();
         this.context.startValue = new Point(
-            this.homeContext.receiver.xPosition(),
-            this.homeContext.receiver.yPosition()
+            this.blockReceiver().xPosition(),
+            this.blockReceiver().yPosition()
         );
     }
     if ((Date.now() - this.context.startTime) >= (secs * 1000)) {
-        this.homeContext.receiver.gotoXY(endX, endY);
+        this.blockReceiver().gotoXY(endX, endY);
         return null;
     }
-    this.homeContext.receiver.glide(
+    this.blockReceiver().glide(
         secs * 1000,
         endX,
         endY,
@@ -1623,10 +1761,10 @@ Process.prototype.doGlide = function (secs, endX, endY) {
 Process.prototype.doSayFor = function (data, secs) {
     if (!this.context.startTime) {
         this.context.startTime = Date.now();
-        this.homeContext.receiver.bubble(data);
+        this.blockReceiver().bubble(data);
     }
     if ((Date.now() - this.context.startTime) >= (secs * 1000)) {
-        this.homeContext.receiver.stopTalking();
+        this.blockReceiver().stopTalking();
         return null;
     }
     this.pushContext('doYield');
@@ -1636,14 +1774,19 @@ Process.prototype.doSayFor = function (data, secs) {
 Process.prototype.doThinkFor = function (data, secs) {
     if (!this.context.startTime) {
         this.context.startTime = Date.now();
-        this.homeContext.receiver.doThink(data);
+        this.blockReceiver().doThink(data);
     }
     if ((Date.now() - this.context.startTime) >= (secs * 1000)) {
-        this.homeContext.receiver.stopTalking();
+        this.blockReceiver().stopTalking();
         return null;
     }
     this.pushContext('doYield');
     this.pushContext();
+};
+
+Process.prototype.blockReceiver = function () {
+    return this.context ? this.context.receiver || this.homeContext.receiver
+            : this.homeContext.receiver;
 };
 
 // Process sound primitives (interpolated)
@@ -1680,9 +1823,10 @@ Process.prototype.doStopAllSounds = function () {
 
 Process.prototype.doAsk = function (data) {
     var stage = this.homeContext.receiver.parentThatIsA(StageMorph),
-        isStage = this.homeContext.receiver instanceof StageMorph,
+        isStage = this.blockReceiver() instanceof StageMorph,
         activePrompter;
 
+    stage.keysPressed = {};
     if (!this.prompter) {
         activePrompter = detect(
             stage.children,
@@ -1690,7 +1834,7 @@ Process.prototype.doAsk = function (data) {
         );
         if (!activePrompter) {
             if (!isStage) {
-                this.homeContext.receiver.bubble(data, false, true);
+                this.blockReceiver().bubble(data, false, true);
             }
             this.prompter = new StagePrompterMorph(isStage ? data : null);
             if (stage.scale < 1) {
@@ -1710,7 +1854,7 @@ Process.prototype.doAsk = function (data) {
             stage.lastAnswer = this.prompter.inputField.getValue();
             this.prompter.destroy();
             this.prompter = null;
-            if (!isStage) {this.homeContext.receiver.stopTalking(); }
+            if (!isStage) {this.blockReceiver().stopTalking(); }
             return null;
         }
     }
@@ -1809,7 +1953,7 @@ Process.prototype.reportTypeOf = function (thing) {
     if (thing === true || (thing === false)) {
         return 'Boolean';
     }
-    if (!isNaN(parseFloat(thing))) {
+    if (!isNaN(+thing)) {
         return 'number';
     }
     if (isString(thing)) {
@@ -1857,30 +2001,30 @@ Process.prototype.reportTypeOf = function (thing) {
 // Process math primtives
 
 Process.prototype.reportSum = function (a, b) {
-    return parseFloat(a) + parseFloat(b);
+    return +a + (+b);
 };
 
 Process.prototype.reportDifference = function (a, b) {
-    return parseFloat(a) - parseFloat(b);
+    return +a - +b;
 };
 
 Process.prototype.reportProduct = function (a, b) {
-    return parseFloat(a) * parseFloat(b);
+    return +a * +b;
 };
 
 Process.prototype.reportQuotient = function (a, b) {
-    return parseFloat(a) / parseFloat(b);
+    return +a / +b;
 };
 
 Process.prototype.reportModulus = function (a, b) {
-    var x = parseFloat(a),
-        y = parseFloat(b);
+    var x = +a,
+        y = +b;
     return ((x % y) + y) % y;
 };
 
 Process.prototype.reportRandom = function (min, max) {
-    var floor = parseFloat(min),
-        ceil = parseFloat(max);
+    var floor = +min,
+        ceil = +max;
     if ((floor % 1 !== 0) || (ceil % 1 !== 0)) {
         return Math.random() * (ceil - floor) + floor;
     }
@@ -1888,8 +2032,8 @@ Process.prototype.reportRandom = function (min, max) {
 };
 
 Process.prototype.reportLessThan = function (a, b) {
-    var x = parseFloat(a),
-        y = parseFloat(b);
+    var x = +a,
+        y = +b;
     if (isNaN(x) || isNaN(y)) {
         x = a;
         y = b;
@@ -1902,8 +2046,8 @@ Process.prototype.reportNot = function (bool) {
 };
 
 Process.prototype.reportGreaterThan = function (a, b) {
-    var x = parseFloat(a),
-        y = parseFloat(b);
+    var x = +a,
+        y = +b;
     if (isNaN(x) || isNaN(y)) {
         x = a;
         y = b;
@@ -1957,11 +2101,11 @@ Process.prototype.reportFalse = function () {
 };
 
 Process.prototype.reportRound = function (n) {
-    return Math.round(parseFloat(n));
+    return Math.round(+n);
 };
 
 Process.prototype.reportMonadic = function (fname, n) {
-    var x = parseFloat(n),
+    var x = +n,
         result = 0;
 
     switch (this.inputOption(fname)) {
@@ -2005,6 +2149,7 @@ Process.prototype.reportMonadic = function (fname, n) {
         result = 0;
         break;
     default:
+        nop();
     }
     return result;
 };
@@ -2036,6 +2181,7 @@ Process.prototype.reportTextFunction = function (fname, string) {
         result = hex_sha512(x);
         break;
     default:
+        nop();
     }
     return result;
 };
@@ -2056,12 +2202,18 @@ Process.prototype.reportJoinWords = function (aList) {
 // Process string ops
 
 Process.prototype.reportLetter = function (idx, string) {
-    var i = parseFloat(idx || 0),
+    if (string instanceof List) { // catch a common user error
+        return '';
+    }
+    var i = +(idx || 0),
         str = (string || '').toString();
     return str[i - 1] || '';
 };
 
 Process.prototype.reportStringSize = function (string) {
+    if (string instanceof List) { // catch a common user error
+        return string.length();
+    }
     var str = (string || '').toString();
     return str.length;
 };
@@ -2072,7 +2224,7 @@ Process.prototype.reportUnicode = function (string) {
 };
 
 Process.prototype.reportUnicodeAsLetter = function (num) {
-    var code = parseFloat(num || 0);
+    var code = +(num || 0);
     return String.fromCharCode(code);
 };
 
@@ -2083,15 +2235,17 @@ Process.prototype.reportTextSplit = function (string, delimiter) {
         str,
         del;
     if (!contains(types, strType)) {
-        throw new Error('expecting a text instad of a ' + strType);
+        throw new Error('expecting text instead of a ' + strType);
     }
     if (!contains(types, delType)) {
-        throw new Error('expecting a text delimiter instad of a ' + delType);
+        throw new Error('expecting a text delimiter instead of a ' + delType);
     }
     str = (string || '').toString();
     switch (this.inputOption(delimiter)) {
     case 'line':
-        del = '\n';
+        // Unicode Compliant Line Splitting (Platform independent)
+        // http://www.unicode.org/reports/tr18/#Line_Boundaries
+        del = /\r\n|[\n\v\f\r\x85\u2028\u2029]/;
         break;
     case 'tab':
         del = '\t';
@@ -2100,7 +2254,12 @@ Process.prototype.reportTextSplit = function (string, delimiter) {
         del = '\r';
         break;
     case 'whitespace':
-        return new List(str.trim().split(/[\t\r\n ]+/));
+        str = str.trim();
+        del = /\s+/;
+        break;
+    case 'letter':
+        del = '';
+        break;
     default:
         del = (delimiter || '').toString();
     }
@@ -2188,14 +2347,14 @@ Process.prototype.getObjectsNamed = function (name, thisObj, stageObj) {
 };
 
 Process.prototype.doFaceTowards = function (name) {
-    var thisObj = this.homeContext.receiver,
+    var thisObj = this.blockReceiver(),
         thatObj;
 
     if (thisObj) {
         if (this.inputOption(name) === 'mouse-pointer') {
             thisObj.faceToXY(this.reportMouseX(), this.reportMouseY());
         } else {
-            thatObj = this.getOtherObject(name, thisObj);
+            thatObj = this.getOtherObject(name, this.homeContext.receiver);
             if (thatObj) {
                 thisObj.faceToXY(
                     thatObj.xPosition(),
@@ -2207,14 +2366,14 @@ Process.prototype.doFaceTowards = function (name) {
 };
 
 Process.prototype.doGotoObject = function (name) {
-    var thisObj = this.homeContext.receiver,
+    var thisObj = this.blockReceiver(),
         thatObj;
 
     if (thisObj) {
         if (this.inputOption(name) === 'mouse-pointer') {
             thisObj.gotoXY(this.reportMouseX(), this.reportMouseY());
         } else {
-            thatObj = this.getOtherObject(name, thisObj);
+            thatObj = this.getOtherObject(name, this.homeContext.receiver);
             if (thatObj) {
                 thisObj.gotoXY(
                     thatObj.xPosition(),
@@ -2247,7 +2406,7 @@ Process.prototype.createClone = function (name) {
 // Process sensing primitives
 
 Process.prototype.reportTouchingObject = function (name) {
-    var thisObj = this.homeContext.receiver;
+    var thisObj = this.blockReceiver();
 
     if (thisObj) {
         return this.objectTouchingObject(thisObj, name);
@@ -2262,6 +2421,7 @@ Process.prototype.objectTouchingObject = function (thisObj, name) {
     var myself = this,
         those,
         stage,
+        box,
         mouse;
 
     if (this.inputOption(name) === 'mouse-pointer') {
@@ -2273,9 +2433,14 @@ Process.prototype.objectTouchingObject = function (thisObj, name) {
     } else {
         stage = thisObj.parentThatIsA(StageMorph);
         if (stage) {
-            if (this.inputOption(name) === 'edge' &&
-                    !stage.bounds.containsRectangle(thisObj.bounds)) {
-                return true;
+            if (this.inputOption(name) === 'edge') {
+                box = thisObj.bounds;
+                if (!thisObj.costume && thisObj.penBounds) {
+                    box = thisObj.penBounds.translateBy(thisObj.position());
+                }
+                if (!stage.bounds.containsRectangle(box)) {
+                    return true;
+                }
             }
             if (this.inputOption(name) === 'pen trails' &&
                     thisObj.isTouching(stage.penTrailsMorph())) {
@@ -2343,7 +2508,7 @@ Process.prototype.reportColorIsTouchingColor = function (color1, color2) {
 };
 
 Process.prototype.reportDistanceTo = function (name) {
-    var thisObj = this.homeContext.receiver,
+    var thisObj = this.blockReceiver(),
         thatObj,
         stage,
         rc,
@@ -2366,7 +2531,7 @@ Process.prototype.reportDistanceTo = function (name) {
 };
 
 Process.prototype.reportAttributeOf = function (attribute, name) {
-    var thisObj = this.homeContext.receiver,
+    var thisObj = this.blockReceiver(),
         thatObj,
         stage;
 
@@ -2378,6 +2543,9 @@ Process.prototype.reportAttributeOf = function (attribute, name) {
             thatObj = this.getOtherObject(name, thisObj, stage);
         }
         if (thatObj) {
+            if (attribute instanceof Context) {
+                return this.reportContextFor(attribute, thatObj);
+            }
             if (isString(attribute)) {
                 return thatObj.variables.getVar(attribute);
             }
@@ -2400,6 +2568,19 @@ Process.prototype.reportAttributeOf = function (attribute, name) {
         }
     }
     return '';
+};
+
+Process.prototype.reportContextFor = function (context, otherObj) {
+    // Private - return a copy of the context
+    // and bind it to another receiver
+    var result = copy(context);
+    result.receiver = otherObj;
+    if (result.outerContext) {
+        result.outerContext = copy(result.outerContext);
+        result.outerContext.receiver = otherObj;
+        result.outerContext.variables.parentFrame = otherObj.variables;
+    }
+    return result;
 };
 
 Process.prototype.reportMouseX = function () {
@@ -2473,6 +2654,35 @@ Process.prototype.reportTimer = function () {
         }
     }
     return 0;
+};
+
+// Process Dates and times in Snap
+// Map block options to built-in functions
+var dateMap = {
+    'year' : 'getFullYear',
+    'month' : 'getMonth',
+    'date': 'getDate',
+    'day of week' : 'getDay',
+    'hour' : 'getHours',
+    'minute' : 'getMinutes',
+    'second' : 'getSeconds',
+    'time in milliseconds' : 'getTime'
+};
+
+Process.prototype.reportDate = function (datefn) {
+    var inputFn = this.inputOption(datefn),
+        currDate = new Date(),
+        func = dateMap[inputFn],
+        result = currDate[func]();
+
+    if (!dateMap[inputFn]) { return ''; }
+
+    // Show months as 1-12 and days as 1-7
+    if (inputFn === 'month' || inputFn === 'day of week') {
+        result += 1;
+    }
+
+    return result;
 };
 
 // Process code mapping
@@ -2616,7 +2826,6 @@ Process.prototype.inputOption = function (dta) {
 // Process stack
 
 Process.prototype.pushContext = function (expression, outerContext) {
-    var upvars = this.context ? this.context.upvars : null;
     this.context = new Context(
         this.context,
         expression,
@@ -2625,9 +2834,6 @@ Process.prototype.pushContext = function (expression, outerContext) {
         this.context ? // check needed due to tail call elimination
                 this.context.receiver : this.homeContext.receiver
     );
-    if (upvars) {
-        this.context.upvars = new UpvarReference(upvars);
-    }
 };
 
 Process.prototype.popContext = function () {
@@ -2666,26 +2872,25 @@ Process.prototype.reportFrameCount = function () {
 
     structure:
 
-    parentContext    the Context to return to when this one has
+    parentContext   the Context to return to when this one has
                     been evaluated.
     outerContext    the Context holding my lexical scope
-    expression        SyntaxElementMorph, an array of blocks to evaluate,
+    expression      SyntaxElementMorph, an array of blocks to evaluate,
                     null or a String denoting a selector, e.g. 'doYield'
     receiver        the object to which the expression applies, if any
-    variables        the current VariableFrame, if any
-    upvars          the current UpvarReference, if any (default: null)
-    inputs            an array of input values computed so far
+    variables       the current VariableFrame, if any
+    inputs          an array of input values computed so far
                     (if expression is a    BlockMorph)
-    pc                the index of the next block to evaluate
+    pc              the index of the next block to evaluate
                     (if expression is an array)
-    startTime        time when the context was first evaluated
-    startValue        initial value for interpolated operations
+    startTime       time when the context was first evaluated
+    startValue      initial value for interpolated operations
     activeAudio     audio buffer for interpolated operations, don't persist
     activeNote      audio oscillator for interpolated ops, don't persist
-    isLambda        marker for return ops
-    isImplicitLambda    marker for return ops
     isCustomBlock   marker for return ops
-    emptySlots        caches the number of empty slots for reification
+    emptySlots      caches the number of empty slots for reification
+    tag             string or number to optionally identify the Context,
+                    as a "return" target (for the "stop block" primitive)
 */
 
 function Context(
@@ -2706,28 +2911,24 @@ function Context(
 			this.receiver = this.outerContext.receiver;
 		}
     }
-    this.upvars = null; // set to an UpvarReference in custom blocks
     this.inputs = [];
     this.pc = 0;
     this.startTime = null;
     this.activeAudio = null;
     this.activeNote = null;
-    this.isLambda = false; // marks the end of a lambda
-    this.isImplicitLambda = false; // marks the end of a C-shaped slot
     this.isCustomBlock = false; // marks the end of a custom block's stack
     this.emptySlots = 0; // used for block reification
+    this.tag = null;  // lexical catch-tag for custom blocks
 }
 
 Context.prototype.toString = function () {
-    var pref = this.isLambda ? '\u03BB-' : '',
-        expr = this.expression;
-
+    var expr = this.expression;
     if (expr instanceof Array) {
         if (expr.length > 0) {
             expr = '[' + expr[0] + ']';
         }
     }
-    return pref + 'Context >> ' + expr + ' ' + this.variables;
+    return 'Context >> ' + expr + ' ' + this.variables;
 };
 
 Context.prototype.image = function () {
@@ -2758,7 +2959,18 @@ Context.prototype.image = function () {
         ring.embed(block, this.isContinuation ? [] : this.inputs);
         return ring.fullImage();
     }
-    return newCanvas();
+
+    // otherwise show an empty ring
+    ring.color = SpriteMorph.prototype.blockColor.other;
+    ring.setSpec('%rc %ringparms');
+
+    // also show my inputs, unless I'm a continuation
+    if (!this.isContinuation) {
+        this.inputs.forEach(function (inp) {
+            ring.parts()[1].addInput(inp);
+        });
+    }
+    return ring.fullImage();
 };
 
 // Context continuations:
@@ -2770,9 +2982,10 @@ Context.prototype.continuation = function () {
     } else if (this.parentContext) {
         cont = this.parentContext;
     } else {
-        return new Context(null, 'doStop');
+        return new Context(null, 'doYield');
     }
     cont = cont.copyForContinuation();
+    cont.tag = null;
     cont.isContinuation = true;
     return cont;
 };
@@ -2780,7 +2993,8 @@ Context.prototype.continuation = function () {
 Context.prototype.copyForContinuation = function () {
     var cpy = copy(this),
         cur = cpy,
-        isReporter = !(this.expression instanceof Array);
+        isReporter = !(this.expression instanceof Array ||
+            isString(this.expression));
     if (isReporter) {
         cur.prepareContinuationForBinding();
         while (cur.parentContext) {
@@ -2795,7 +3009,8 @@ Context.prototype.copyForContinuation = function () {
 Context.prototype.copyForContinuationCall = function () {
     var cpy = copy(this),
         cur = cpy,
-        isReporter = !(this.expression instanceof Array);
+        isReporter = !(this.expression instanceof Array ||
+            isString(this.expression));
     if (isReporter) {
         this.expression = this.expression.fullCopy();
         this.inputs = [];
@@ -2846,6 +3061,20 @@ Context.prototype.stackSize = function () {
     return 1 + this.parentContext.stackSize();
 };
 
+// Variable /////////////////////////////////////////////////////////////////
+
+function Variable(value) {
+    this.value = value;
+}
+
+Variable.prototype.toString = function () {
+    return 'a Variable [' + this.value + ']';
+};
+
+Variable.prototype.copy = function () {
+    return new Variable(this.value);
+};
+
 // VariableFrame ///////////////////////////////////////////////////////
 
 function VariableFrame(parentFrame, owner) {
@@ -2859,8 +3088,11 @@ VariableFrame.prototype.toString = function () {
 };
 
 VariableFrame.prototype.copy = function () {
-    var frame = new VariableFrame(this.parentFrame);
-    frame.vars = copy(this.vars);
+    var frame = new VariableFrame(this.parentFrame),
+        myself = this;
+    this.names().forEach(function (vName) {
+        frame.addVar(vName, myself.getVar(vName));
+    });
     return frame;
 };
 
@@ -2884,9 +3116,9 @@ VariableFrame.prototype.find = function (name) {
     var frame = this.silentFind(name);
     if (frame) {return frame; }
     throw new Error(
-        'a variable of name \''
+        localize('a variable of name \'')
             + name
-            + '\'\ndoes not exist in this context'
+            + localize('\'\ndoes not exist in this context')
     );
 };
 
@@ -2913,7 +3145,7 @@ VariableFrame.prototype.setVar = function (name, value) {
 */
     var frame = this.find(name);
     if (frame) {
-        frame.vars[name] = value;
+        frame.vars[name].value = value;
     }
 };
 
@@ -2927,21 +3159,20 @@ VariableFrame.prototype.changeVar = function (name, delta) {
     var frame = this.find(name),
         value;
     if (frame) {
-        value = parseFloat(frame.vars[name]);
+        value = parseFloat(frame.vars[name].value);
         if (isNaN(value)) {
-            frame.vars[name] = delta;
+            frame.vars[name].value = delta;
         } else {
-            frame.vars[name] = value + parseFloat(delta);
+            frame.vars[name].value = value + parseFloat(delta);
         }
     }
 };
 
-VariableFrame.prototype.getVar = function (name, upvars) {
+VariableFrame.prototype.getVar = function (name) {
     var frame = this.silentFind(name),
-        value,
-        upvarReference;
+        value;
     if (frame) {
-        value = frame.vars[name];
+        value = frame.vars[name].value;
         return (value === 0 ? 0
                 : value === false ? false
                         : value === '' ? ''
@@ -2951,21 +3182,17 @@ VariableFrame.prototype.getVar = function (name, upvars) {
         // empty input with a Binding-ID called without an argument
         return '';
     }
-    if (upvars) {
-        upvarReference = upvars.find(name);
-        if (upvarReference) {
-            return upvarReference.getVar(name);
-        }
-    }
     throw new Error(
-        'a variable of name \''
+        localize('a variable of name \'')
             + name
-            + '\'\ndoes not exist in this context'
+            + localize('\'\ndoes not exist in this context')
     );
 };
 
 VariableFrame.prototype.addVar = function (name, value) {
-    this.vars[name] = (value === 0 ? 0 : value || null);
+    this.vars[name] = new Variable(value === 0 ? 0
+              : value === false ? false
+                       : value === '' ? '' : value || 0);
 };
 
 VariableFrame.prototype.deleteVar = function (name) {
@@ -3020,53 +3247,3 @@ VariableFrame.prototype.allNames = function () {
     }
     return answer;
 };
-
-// UpvarReference ///////////////////////////////////////////////////////////
-
-// ... quasi-inherits some features from VariableFrame
-
-function UpvarReference(parent) {
-    this.vars = {}; // structure: {upvarName : [varName, varFrame]}
-    this.parentFrame = parent || null;
-}
-
-UpvarReference.prototype.addReference = function (
-    upvarName,
-    varName,
-    varFrame
-) {
-    this.vars[upvarName] = [varName, varFrame];
-};
-
-UpvarReference.prototype.find = function (name) {
-/*
-    answer the closest upvar reference containing
-    the specified variable, or answer null.
-*/
-    if (this.vars[name] !== undefined) {
-        return this;
-    }
-    if (this.parentFrame) {
-        return this.parentFrame.find(name);
-    }
-    return null;
-};
-
-UpvarReference.prototype.getVar = function (name) {
-    var varName = this.vars[name][0],
-        varFrame = this.vars[name][1],
-        value = varFrame.vars[varName];
-    return (value === 0 ? 0 : value || 0); // don't return null
-};
-
-// UpvarReference tools
-
-UpvarReference.prototype.toString = function () {
-    return 'an UpvarReference {' + this.names() + '}';
-};
-
-// UpvarReference quasi-inheritance from VariableFrame
-
-UpvarReference.prototype.names = VariableFrame.prototype.names;
-UpvarReference.prototype.allNames = VariableFrame.prototype.allNames;
-UpvarReference.prototype.allNamesDict = VariableFrame.prototype.allNamesDict;

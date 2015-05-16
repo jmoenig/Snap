@@ -181,11 +181,11 @@ SnapTranslator.dict.fr = {
     'language_name':
         'Fran\u00E7ais', // the name as it should appear in the language menu
     'language_translator':
-        'Jean-Jacques Valliet - Mark Rafter', // your name for the Translators tab
+        'Jean-Jacques Valliet, Mark Rafter, Martin Quinson', // your name for the Translators tab
     'translator_e-mail':
         'i.scool@mac.com', // optional
     'last_changed':
-        '2013-09-16', // this, too, will appear in the Translators tab
+        '2014-02-04', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -236,7 +236,7 @@ SnapTranslator.dict.fr = {
 
     // rotation styles:
     'don\'t rotate':
-        'le lutin ne pivote pas \nautour de son centre de rotation',
+        'le lutin ne pivote jamais',
     'can rotate':
         'le lutin pivote \nautour de son centre de rotation',
     'only face left/right':
@@ -245,6 +245,8 @@ SnapTranslator.dict.fr = {
     // new sprite button:
     'add a new sprite':
         'ajouter un nouveau lutin',
+    'add a new Turtle sprite':
+        'ajouter un nouveau lutin Tortue',
 
     // tab help
     'costumes tab help':
@@ -286,8 +288,7 @@ SnapTranslator.dict.fr = {
 
      // motion:
     'Stage selected:\nno motion primitives':
-        'Stage selected:\nno motion primitives'
-            + 'disponible',
+        'Sc\u00E8ne s\u00E9lectionn\u00E9e :\naucune brique de d\u00E9pla\u00E7ement',
 
     'move %n steps':
         'avancer de %n pas',
@@ -427,7 +428,7 @@ SnapTranslator.dict.fr = {
     'Message name':
         'Nom du message',
     'wait %n secs':
-        'attends %n sec.',
+        'attendre %n sec.',
     'wait until %b':
         'attendre jusqu\u0027\u00E0 %b',
     'forever %c':
@@ -455,12 +456,22 @@ SnapTranslator.dict.fr = {
     'call %repRing %inputs':
         'appelle %repRing  %inputs',
     'run %cmdRing w/continuation':
-        'run %cmdRing w/continuation',
+        'ex\u00E9cute %cmdRing avec continuation',
     'call %cmdRing w/continuation':
-        'call %cmdRing w/continuation',
+        'appelle %cmdRing avec continuation',
     'warp %c':
-        'Warp %c',
-
+        'Englobe %c',
+    'when I start as a clone':
+        'Quand je commence comme clone',
+    'create a clone of %cln':
+        'Clone %cln',
+    'myself':
+        'moi-m\u00EAme',
+    'delete this clone':
+        'supprime ce clone',
+    'pause all':
+        'mettre en pause',
+        
      // sensing:
     'touching %col ?':
         ' %col touch\u00E9?',
@@ -488,8 +499,14 @@ SnapTranslator.dict.fr = {
         'r\u00E9initialiser le chronom\u00E8tre',
     'timer':
         'chronom\u00E8tre',
+    '%att of %spr':
+        '%att de %spr',
     'http:// %s':
         'http:// %s',
+    'turbo mode?':
+        'turbo mode activ\u00E9?',
+    'set turbo mode to %b':
+        'turbo mode prend la valeur %b',
 
     'filtered for %clr':
         'filtr\u00E9 pour %clr ',
@@ -519,6 +536,8 @@ SnapTranslator.dict.fr = {
         'faux',
     'join %words':
         'regroupe %words',
+    'split %s by %delim':
+        'd\u00E9coupe %s entre les %delim',
     'hello':
         'Bonjour',
     'world':
@@ -533,6 +552,8 @@ SnapTranslator.dict.fr = {
         'unicode %n comme lettre',
     'is %s a %typ ?':
         'est %s un(e) %typ ?',
+    'is %s identical to %s ?':
+        '%s est identique \u00E0 %s',
 
     'type of %s':
         'type de %s',
@@ -554,7 +575,7 @@ SnapTranslator.dict.fr = {
     'hide variable %var':
         'cacher la variable %var',
     'script variables %scriptVars':
-        'script variables %scriptVars',
+        'variables du script %scriptVars',
 
     // lists:
     'list %exp':
@@ -628,6 +649,14 @@ SnapTranslator.dict.fr = {
         'Exporter les blocs ',
     'show global custom block definitions as XML\nin a new browser window':
         'montrer les d\u00E9finitions de bloc global personnalis\u00E9 au format XML \ndans une nouvelle fen\u00EAtre de navigateur',
+    'Import tools':
+        'Importer les outils',
+    'load the official library of\npowerful blocks':
+        'Importer la biblioth\u00E8que officielle\nd\'outils avanc\u00E9s',
+    'Libraries...':
+        'Biblioth\u00E8ques...',
+    'Import library':
+        'Importer une biblioth\u00E8que',
 
     // settings menu
     'Language...':
@@ -678,12 +707,33 @@ SnapTranslator.dict.fr = {
     'check to turn\nblock clicking\nsound on':
         'Cocher pour activer le cliquetis \n'
 		+'lors de l\u0027embo\u00EEtement des blocs',
+    'Turbo mode':
+        'Mode turbo',
+    'check to prioritize\nscript execution':
+        'Cocher pour favoriser l\'ex\u00E9cution du script',
+    'uncheck to run scripts\nat normal speed':
+        'D\u00E9cocher pour ex\u00E9cuter le script en vitesse normale',
+    'Flat design':
+        'Style al\u00E9g\u00E9',
+    'check for alternative\nGUI design':
+        'Cocher pour un style d\interface alternatif',
+    'uncheck for default\nGUI design':
+	'D\u00E9cocher pour le style classique d\interface',		
     'Thread safe scripts':
-        'Scripts thread-safe',
-    'uncheck to allow\nscript reentrancy':
-        'D\u00E9cocher pour permettre\n des scripts r\u00E9entrants',
-    'check to disallow\nscript reentrancy':
-        'Cocher pour interdire\n des scripts r\u00E9entrants',
+        'Scripts réentrants',
+    'check to disallow\nscript reentrance':
+        'Cocher pour interdire\n la r\u00E9entrance des scripts\n'
+	  +'et les ex\u00E9cuter s\u00E9par\u00E9ment',
+    'uncheck to allow\nscript reentrance':
+        'D\u00E9cocher pour permettre\n la r\u00E9entrance des scripts\n'
+	  +'o\u00F9 certains s\'ex\u00E9cutent en paral\u00E8lle',
+    'Prefer smooth animations':
+        'Vitesse d\'animation fixe',
+    'uncheck for greater speed\nat variable frame rates':
+        'D\u00E9cocher pour une vitesse\nd\'animation maximale (mais variable)',
+    'check for smooth, predictable\nanimations across computers':
+        'Cocher pour une vitesse d\'animation\nfixe et identique sur tous les ordinateurs',
+	
     // inputs
     'with inputs':
         'avec entr\u00E9es',
@@ -725,6 +775,8 @@ SnapTranslator.dict.fr = {
         '\u00E9diter',
     'export...':
         'exporter...',
+    'paint a new sprite':
+        'dessiner un nouveau lutin',
 
     // scripting area
     'clean up':
@@ -743,6 +795,8 @@ SnapTranslator.dict.fr = {
         'exporter',
     'rename costume':
         'renommer un costume',
+    'Paint a new costume':
+        'Dessiner un nouveau costume',
 
     // sounds
     'Play sound':
@@ -895,6 +949,16 @@ SnapTranslator.dict.fr = {
         'Entr\u00E9es multiples (la valeur est une liste des entr\u00E9es)',
     'Upvar - make internal variable visible to caller':
         'Upvar - Rendre la variable interne visible pour l\u0027appelant',
+    // delimiters
+    'whitespace':
+        'espaces blancs',
+    'line':
+        'lignes',
+    'tab':
+        'tabulations',
+    'cr':
+        'retours de ligne',
+	
   // About Snap
     'About Snap':
         'A propos de Snap',
@@ -949,7 +1013,7 @@ SnapTranslator.dict.fr = {
         '(-90) \u00E0 gauche',
     '(0) up':
         '(0) vers le haut',
-    '(180) right':
+    '(180) down':
         '(180) vers le bas',
 
     // collision detection
