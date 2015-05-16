@@ -4,16 +4,32 @@ modules.cellularThreads = '2013-October-13';
 /***************************** OVERRIDES *****************************/
 /*********************************************************************/
 
+VariableFrame.prototype.uberDeleteVar = VariableFrame.prototype.deleteVar;
+VariableFrame.prototype.deleteVar = function (name) {
+    try {
+        var frame = this.find(name);
+    } catch (e) {
+        return;
+    }
+    this.uberDeleteVar(name);
+};
+
 /*
 ** Ensures the parent SpriteMorph doesn't perform any actions.
 */
 ThreadManager.prototype.uberStartProcess = ThreadManager.prototype.startProcess;	
-ThreadManager.prototype.startProcess = function (block, receiver, isThreadSafe) {
+ThreadManager.prototype.startProcess = function (
+    block,
+    isThreadSafe,
+    exportResult,
+    callback,
+    receiver
+) {
 	//Final chance to prevent the prototype SpriteMorphs from doing shit.
 	if (receiver instanceof SpriteMorph && !receiver.shouldPerformEvents()) {
 		return null;
 	}
-	return this.uberStartProcess(block, receiver, isThreadSafe);
+	return this.uberStartProcess(block, isThreadSafe, exportResult, callback, receiver);
 };
 
 /*

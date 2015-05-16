@@ -139,7 +139,7 @@ ThreadManager.prototype.toggleProcess = function (block, receiver) {
     if (active) {
         active.stop();
     } else {
-        return this.startProcess(block, receiver);
+        return this.startProcess(block, undefined, undefined, undefined, receiver);
     }
 };
 
@@ -1905,7 +1905,7 @@ Process.prototype.doBroadcast = function (message) {
             }
         });
         hats.forEach(function (morphHat) {
-            procs.push(stage.threads.startProcess(morphHat.hat, morphHat.receiver, stage.isThreadSafe));
+            procs.push(stage.threads.startProcess(morphHat.hat, stage.isThreadSafe, undefined, undefined, morphHat.receiver));
         });
     }
     return procs;

@@ -1533,7 +1533,7 @@ SpriteMorph.prototype.createClone = function () {
 		stage.add(clone);
         var hats = clone.allHatBlocksFor('__clone__init__');
         hats.forEach(function (block) {
-            stage.threads.startProcess(block, clone, stage.isThreadSafe);
+            stage.threads.startProcess(block, stage.isThreadSafe, undefined, undefined, clone);
         });
 		return clone;
     }

@@ -2736,7 +2736,7 @@ SpriteMorph.prototype.createClone = function () {
         stage.add(clone);
         hats = clone.allHatBlocksFor('__clone__init__');
         hats.forEach(function (block) {
-            stage.threads.startProcess(block, clone, stage.isThreadSafe);
+            stage.threads.startProcess(block, stage.isThreadSafe, undefined, undefined, clone);
         });
     }
 };
@@ -2753,8 +2753,9 @@ SpriteMorph.prototype.clonify = function (stage) {
     this.name = '';
     stage.add(this);
     hats = this.allHatBlocksFor('__clone__init__');
+    var myself = this;
     hats.forEach(function (block) {
-        stage.threads.startProcess(block, stage.isThreadSafe);
+        stage.threads.startProcess(block, stage.isThreadSafe, undefined, undefined, myself);
     });
 };
 
@@ -3579,11 +3580,12 @@ SpriteMorph.prototype.mouseDownLeft = function () {
 SpriteMorph.prototype.receiveUserInteraction = function (interaction) {
     var stage = this.parentThatIsA(StageMorph),
         procs = [],
-        hats;
+        hats,
+        myself = this;
     if (!stage) {return; } // currently dragged
     hats = this.allHatBlocksForInteraction(interaction);
     hats.forEach(function (block) {
-        procs.push(stage.threads.startProcess(block, myself, stage.isThreadSafe));
+        procs.push(stage.threads.startProcess(block, stage.isThreadSafe, undefined, undefined, myself));
     });
     return procs;
 };
@@ -4860,7 +4862,7 @@ StageMorph.prototype.fireKeyEvent = function (key) {
 	});
 	
 	hats.forEach(function (morphHat) {
-		procs.push(myself.threads.startProcess(morphHat.hat, morphHat.receiver, myself.isThreadSafe));
+		procs.push(myself.threads.startProcess(morphHat.hat, myself.isThreadSafe, undefined, undefined, morphHat.receiver));
 	});
     return procs;
 };
@@ -4898,8 +4900,10 @@ StageMorph.prototype.fireGreenFlagEvent = function () {
 	hats.forEach(function (morphHat) {
 		procs.push(myself.threads.startProcess(
 			morphHat.hat, 
-			morphHat.receiver, 
-			myself.isThreadSafe));
+			myself.isThreadSafe,
+			undefined,
+			undefined,
+			morphHat.receiver));
 	});
 	
     if (ide) {

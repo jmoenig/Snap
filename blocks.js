@@ -4263,7 +4263,7 @@ ReporterBlockMorph.prototype.ExportResultPic = function () {
         stage = receiver.parentThatIsA(StageMorph);
         if (stage) {
             stage.threads.stopProcess(top);
-            stage.threads.startProcess(top, false, true);
+            stage.threads.startProcess(top, false, true, undefined, receiver);
         }
     }
 };
@@ -7044,7 +7044,7 @@ InputSlotMorph.prototype.reactToSliderEdit = function () {
         if (receiver) {
             stage = receiver.parentThatIsA(StageMorph);
             if (stage && stage.isThreadSafe) {
-                stage.threads.startProcess(top, receiver, stage.isThreadSafe);
+                stage.threads.startProcess(top, stage.isThreadSafe, undefined, undefined, receiver);
             } else {
                 top.mouseClickLeft();
             }
