@@ -118,7 +118,6 @@ IDE_Morph.prototype.exportProjectZip = function()
         }
         
         //And a few extras
-        filesToAddToZip.push("scriptsPaneTexture.gif");
         filesToAddToZip.push("agpl.txt");
         filesToAddToZip.push("click.wav");
     }
