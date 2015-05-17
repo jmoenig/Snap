@@ -1533,7 +1533,7 @@ SpriteMorph.prototype.createClone = function () {
 		stage.add(clone);
         var hats = clone.allHatBlocksFor('__clone__init__');
         hats.forEach(function (block) {
-            stage.threads.startProcess(block, clone, stage.isThreadSafe);
+            stage.threads.startProcess(block, stage.isThreadSafe, undefined, undefined, clone);
         });
 		return clone;
     }
@@ -1681,6 +1681,31 @@ SpriteMorph.prototype.updateCurrentCell = function()
 ** Below, we override some functions that deal with sprite movement in order to
 ** ensure updateCurrentCell() is called.
 */
+
+SpriteMorph.prototype.uberExportSprite = SpriteMorph.prototype.exportSprite;
+SpriteMorph.prototype.exportSprite = function () {
+    if (this.isCoone) {return; }
+    var ide = this.parentThatIsA(IDE_Morph);
+    if (ide) {
+        ide.exportSprite(this.parentSprite || this);
+    }
+};
+
+SpriteMorph.prototype.uberEdit = SpriteMorph.prototype.edit;
+SpriteMorph.prototype.edit = function () {
+    var ide = this.parentThatIsA(IDE_Morph);
+    if (ide && !ide.isAppMode) {
+        ide.selectSprite(this.parentSprite || this);
+    }
+};
+
+SpriteMorph.prototype.uberDuplicate = SpriteMorph.prototype.duplicate;
+SpriteMorph.prototype.duplicate = function () {
+    var ide = this.parentThatIsA(IDE_Morph);
+    if (ide) {
+        ide.duplicateSprite(this.parentSprite || this);
+    }
+};
 
 SpriteMorph.prototype.uberMoveBy = SpriteMorph.prototype.moveBy;
 SpriteMorph.prototype.moveBy = function (delta, justMe) {
@@ -1937,7 +1962,7 @@ StageMorph.prototype.dirtyEntireStage = function()
     world.broken.push(this.bounds.spread());
 }
 
-StageMorph.prototype.visibleAttributes = [];
+StageMorph.prototype.visibleAttributes = ["Default"];
 
 /*
 ** Converts annoying stage coordinates ([-240,240],[-180,180]) to normal screen coordinates 

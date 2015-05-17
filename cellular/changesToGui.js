@@ -99,7 +99,7 @@ IDE_Morph.prototype.createCorral = function()
 	sizeLabel = new TextMorph("radius (cells):");
     sizeLabel.corner = 12;
     sizeLabel.padding = 0;
-    sizeLabel.color = new Color(255, 255, 255);
+    sizeLabel.color = this.buttonLabelColor;
     sizeLabel.contrast = this.buttonContrast;
     sizeLabel.setCenter(this.stageBottomBar.center());
     sizeLabel.setLeft(scribbleButton.right() + padding);
@@ -108,6 +108,9 @@ IDE_Morph.prototype.createCorral = function()
 	
 	var sizeField;
 	sizeField = new InputFieldMorph(this.stage.strokeSize.toString());
+    if (MorphicPreferences.isFlat) {
+        sizeField.color = this.groupColor;
+    }
     sizeField.corner = 12;
     sizeField.padding = 0;
     sizeField.contrast = this.buttonContrast;
@@ -174,7 +177,7 @@ IDE_Morph.prototype.createCorral = function()
 	valueLabel = new TextMorph("value:");
     valueLabel.corner = 12;
     valueLabel.padding = 0;
-    valueLabel.color = new Color(255, 255, 255);
+    valueLabel.color = this.buttonLabelColor;
     valueLabel.contrast = this.buttonContrast;
     valueLabel.setCenter(this.stageBottomBar.center());
     valueLabel.setLeft(sizeField.right() + padding);
@@ -183,6 +186,9 @@ IDE_Morph.prototype.createCorral = function()
 	
 	var valueField;
 	valueField = new InputFieldMorph(this.stage.strokeValue.toString());
+    if (MorphicPreferences.isFlat) {
+        valueField.color = this.groupColor;
+    }
     valueField.corner = 12;
     valueField.padding = 0;
     valueField.contrast = this.buttonContrast;
@@ -213,6 +219,9 @@ IDE_Morph.prototype.createCorral = function()
 			}, // drop-down dict, optional
             true
         );
+    if (MorphicPreferences.isFlat) {
+        gridSizer.color = this.groupColor;
+    }
     gridSizer.corner = 12;
     gridSizer.padding = 0;
     gridSizer.contrast = this.buttonContrast;
@@ -233,6 +242,9 @@ IDE_Morph.prototype.createCorral = function()
 		}
 		return retn;
 	}, true );
+    if (MorphicPreferences.isFlat) {
+        attributeSelector.color = this.groupColor;
+    }
     attributeSelector.corner = 12;
     attributeSelector.padding = 0;
     attributeSelector.contrast = this.buttonContrast;
