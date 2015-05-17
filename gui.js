@@ -995,6 +995,14 @@ IDE_Morph.prototype.createStage = function () {
     this.add(this.stage);
 };
 
+IDE_Morph.prototype.snapAppsIsDraggableOverride = function () { 
+    myself.currentSprite.isDraggable = !myself.currentSprite.isDraggable;
+};
+
+IDE_Morph.prototype.snapAppsGetIsDraggableOverride = function () { 
+    return this.currentSprite.isDraggable;
+};
+
 IDE_Morph.prototype.createSpriteBar = function () {
     // assumes that the categories pane has already been created
     var rotationStyleButtons = [],
@@ -1108,12 +1116,11 @@ IDE_Morph.prototype.createSpriteBar = function () {
         'checkbox',
         null,
         function () {
-            myself.currentSprite.isDraggable =
-                !myself.currentSprite.isDraggable;
+            myself.snapAppsIsDraggableOverride();
         },
         localize('draggable'),
         function () {
-            return myself.currentSprite.isDraggable;
+            return myself.snapAppsGetIsDraggableOverride();
         }
     );
     padlock.label.isBold = false;

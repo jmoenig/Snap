@@ -2335,6 +2335,7 @@ SpriteMorph.prototype.init = function(globals)
 {
 	this.uberInit(globals);
 	this.isDraggable = false;
+	this.areClonesDraggable = true;
 }
 
 /*

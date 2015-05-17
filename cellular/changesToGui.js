@@ -32,6 +32,22 @@ function getSnapAppsLogoExtent()
 /***************************** OVERRIDES *****************************/
 /*********************************************************************/
 
+IDE_Morph.prototype.snapAppsGetIsDraggableOverride = function () { 
+    return this.currentSprite.areClonesDraggable;
+};
+
+IDE_Morph.prototype.snapAppsIsDraggableOverride = function () {
+    var currentSprite = this.currentSprite;
+    
+    currentSprite.areClonesDraggable = !currentSprite.areClonesDraggable;
+	this.stage.children.forEach(function (x) {
+		if (x instanceof SpriteMorph && x.parentSprite == currentSprite)
+		{
+			x.isDraggable = currentSprite.areClonesDraggable;
+		}
+	});
+};
+
 /*
 ** This is what creates the cell brush tools GUI.
 */
