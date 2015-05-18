@@ -101,10 +101,11 @@ IDE_Morph.prototype.exportProjectZip = function()
         html = rawHTML;
         //...replace the code that starts Snap with some that loads that project.
         html = html.replace("new IDE_Morph().openIn(world);\n",
-        "var ide = new IDE_Morph();\nide.openIn(world);\n"
-		+ "ide.rawOpenProjectString(\""
-        + escapedProject + "\");\nide.toggleAppMode(true);\n" + 
-		" window.onbeforeunload = function() { };");
+        "var ide = new IDE_Morph();\n" + 
+        "ide.openIn(world);\n" + 
+        "ide.rawOpenProjectString(\"" + escapedProject + "\");\n" + 
+        "ide.toggleAppMode(true);\n" + 
+		"window.onbeforeunload = function() { };");
     }
     
     //Next thing to do is to get all the files that we depend upon
