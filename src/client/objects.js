@@ -5442,6 +5442,11 @@ StageMorph.prototype.clear = function () {
     this.clearPenTrails();
 };
 
+StageMorph.prototype.destroy = function () {
+    console.log('Calling destroy on the stage morph!');
+    this.sockets.destroy();
+};
+
 // StageMorph user menu
 
 StageMorph.prototype.userMenu = function () {

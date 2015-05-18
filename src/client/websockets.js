@@ -69,3 +69,7 @@ WebSocketManager.prototype.onMessageReceived = function (message, role) {
     return procs;
 };
 
+WebSocketManager.prototype.destroy = function () {
+    console.log('Closing socket...');
+    this.websocket.close();
+};
