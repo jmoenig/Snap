@@ -183,6 +183,9 @@ var SymbolMorph;
 var CommentMorph;
 var ArgLabelMorph;
 var TextSlotMorph;
+var NoteInputMorph;
+var PianoMenuMorph;
+var KeyItemMorph;
 
 WorldMorph.prototype.customMorphs = function () {
     // add examples to the world's demo menu
@@ -7746,7 +7749,13 @@ PianoMenuMorph.prototype.drawNew = function () {
         fb,
         x,
         y,
-        isLine = false;
+        label,
+        blackkey,
+        key,
+        keycolor,
+        keywidth,
+        keyheight,
+        keyposition;
 
     this.children.forEach(function (m) {
         m.destroy();
@@ -7760,63 +7769,43 @@ PianoMenuMorph.prototype.drawNew = function () {
     this.borderColor = new Color(60, 60, 60);
     this.silentSetExtent(new Point(0, 0));
 
-    y = 2;
     x = this.left() + 4;
-    if (!this.isListContents) {
-        if (this.title) {
-            this.createLabel();
-            this.label.setPosition(this.bounds.origin.add(4));
-            this.add(this.label);
-            y = this.label.bottom();
-        } else {
-            y = this.top() + 4;
-        }
-    }
-    y += 1;
-    label = new StringMorph('                ');
+    y = this.top() + 5;
+    label = new StringMorph('');
     this.items.forEach(function (tuple) {
-        blackkey = tuple[0][1] != " ";
-        isLine = false;
+        blackkey = tuple[0][1] !== " ";
         key = new BoxMorph(1, 2);
         if (blackkey) {
             keycolor = new Color(0, 0, 0);
             keywidth = 9;
             keyheight = 25;
-            keyposition = new Point(x - 18, y);
-            newx = x;
+            keyposition = new Point(x - 17, y);
         } else {
             keycolor = new Color(255, 255, 255);
             keywidth = 15;
             keyheight = 40;
-            keyposition = new Point(x, y);
-            newx = x + keywidth - 1;
-        }   
+            keyposition = new Point(x + 1, y);
+            x = x + keywidth - 1;
+        }
         key.setColor(keycolor);
         key.setWidth(keywidth);
         key.setHeight(keyheight);
         item = new KeyItemMorph(
-                myself.target,
-                tuple[1],
-                [key, tuple[0]],
-                myself.fontSize || MorphicPreferences.menuFontSize,
-                MorphicPreferences.menuFontName,
-                myself.environment,
-                tuple[2], // bubble help hint
-                tuple[3], // color
-                tuple[4], // bold
-                tuple[5], // italic
-                tuple[6], // doubleclick action
-                label     // String to change
-            );
-        if (isLine) {
-            y += 1;
-        }
+            myself.target,
+            tuple[1],
+            [key, tuple[0]],
+            myself.fontSize || MorphicPreferences.menuFontSize,
+            MorphicPreferences.menuFontName,
+            myself.environment,
+            tuple[2], // bubble help hint
+            tuple[3], // color
+            tuple[4], // bold
+            tuple[5], // italic
+            tuple[6], // doubleclick action
+            label     // String to change
+        );
         item.setPosition(keyposition);
         myself.add(item);
-        x = newx;
-        if (isLine) {
-            y += 1;
-        }
     });
     label.setPosition(new Point(35, 45));
     this.add(label);
@@ -7829,7 +7818,8 @@ PianoMenuMorph.prototype.drawNew = function () {
 PianoMenuMorph.prototype.popUpAtHand = function (world) {
     var wrrld = world || this.world;
     this.drawNew();
-    this.popup(wrrld, wrrld.hand.position().subtract(new Point(this.extent().x/2, 0)));
+    this.popup(wrrld,
+        wrrld.hand.position().subtract(new Point(this.extent().x / 2, 0)));
 };
 
 
@@ -7855,47 +7845,23 @@ function NoteInputMorph() {
     this.init();
 }
 
-NoteInputMorph.prototype.init = function() {
-    var contents = new StringMorph(''),
-        arrow = new ArrowMorph(
-            'down',
-            0,
-            Math.max(Math.floor(this.fontSize / 6), 1)
-        );
-
-    contents.fontSize = this.fontSize;
-    contents.isShowingBlanks = true;
-    contents.drawNew();
-
-    this.isUnevaluated = false;
+NoteInputMorph.prototype.init = function () {
+    NoteInputMorph.uber.init.call(this);
     this.choices = {
-                    'C (60)' : 60,
-                    'D (62)' : 62,
-                    'C# (61)' : 61,
-                    'E (64)' : 64,
-                    'Eb (63)' : 63,
-                    'F (65)' : 65,
-                    'G (67)' : 67,
-                    'F# (66)' : 66,
-                    'A (69)' : 69,
-                    'G# (68)' : 68,
-                    'B (71)' : 71,
-                    'Bb (70)' : 70
-                    }; // object, function or selector
-    this.oldContentsExtent = contents.extent();
+        'C (60)' : 60,
+        'D (62)' : 62,
+        'C# (61)' : 61,
+        'E (64)' : 64,
+        'Eb (63)' : 63,
+        'F (65)' : 65,
+        'G (67)' : 67,
+        'F# (66)' : 66,
+        'A (69)' : 69,
+        'G# (68)' : 68,
+        'B (71)' : 71,
+        'Bb (70)' : 70
+    };
     this.isNumeric = true;
-    this.isReadOnly = false;
-    this.minWidth = 0; // can be chaged for text-type inputs ("landscape")
-    this.constant = null;
-
-    InputSlotMorph.uber.init.call(this);
-    this.color = new Color(255, 255, 255);
-    this.add(contents);
-    this.add(arrow);
-    contents.isEditable = true;
-    contents.isDraggable = false;
-    contents.enableSelecting();
-    this.setContents(null);
 };
 
 NoteInputMorph.prototype.dropDownMenu = function () {
@@ -7907,31 +7873,12 @@ NoteInputMorph.prototype.dropDownMenu = function () {
             this,
             this.fontSize
         );
-
-    // if (choices instanceof Function) {
-    //     choices = choices.call(this);
-    // } else if (isString(choices)) {
-    //     choices = this[choices]();
-    // }
-    // if (!choices) {
-    //     return null;
-    // }
     for (key in choices) {
         if (Object.prototype.hasOwnProperty.call(choices, key)) {
-            if (key[0] === '~') {
-                menu.addLine();
-            // } else if (key.indexOf('§_def') === 0) {
-            //     menu.addItem(choices[key].blockInstance(), choices[key]);
-            } else {
-                menu.addItem(key, choices[key]);
-            }
+            menu.addItem(key, choices[key]);
         }
     }
-    if (menu.items.length > 0) {
-        menu.popUpAtHand(this.world());
-    } else {
-        return null;
-    }
+    menu.popUpAtHand(this.world());
 };
 
 // KeyItemMorph ///////////////////////////////////////////////////////
@@ -7957,7 +7904,7 @@ function KeyItemMorph(
     this.init(
         target,
         action,
-        [key, labelString],
+        labelString,
         fontSize,
         fontStyle,
         environment,
@@ -7965,53 +7912,41 @@ function KeyItemMorph(
         color,
         bold,
         italic,
-        doubleClickAction
+        doubleClickAction,
+        label
     );
     this.feedback = label;
 }
 
 KeyItemMorph.prototype.createLabel = function () {
-    var icon, lbl, np;
+    var icon;
     if (this.label !== null) {
         this.label.destroy();
     }
-    if (isString(this.labelString)) {
-        this.label = this.createLabelString(this.labelString);
-    } else if (this.labelString instanceof Array) {
-        // assume its pattern is: [icon, string]
-        this.label = new Morph();
-        this.label.alpha = 0; // transparent
-        icon = this.createIcon(this.labelString[0]);
-        this.label.add(icon);
-        // lbl = this.createLabelString(this.labelString[1]);
-        // this.label.add(lbl);
-        // lbl.setCenter(icon.center());
-        // lbl.setLeft(icon.right() + 4);
-        // this.label.bounds = (icon.bounds.merge(lbl.bounds));
-        this.label.drawNew();
-    } else { // assume it's either a Morph or a Canvas
-        this.label = this.createIcon(this.labelString);
-    }
+    // assume its pattern is: [icon, string]
+    this.label = new Morph();
+    this.label.alpha = 0; // transparent
+    icon = this.createIcon(this.labelString[0]);
+    this.label.add(icon);
+    this.label.drawNew();
     this.silentSetExtent(icon.extent());
-    //this.silentSetExtent(this.label.extent().add(new Point(4, 0)));
-    np = this.position().add(new Point(0, 0));
-    this.label.bounds = np.extent(this.label.extent());
+    this.label.bounds = this.position().extent(this.label.extent());
     this.label.silentSetExtent(new Point(0, 0));
     this.add(this.label);
 };
 
 KeyItemMorph.prototype.mouseEnter = function () {
-    this.feedback.text = this.labelString[1][1];
+    this.feedback.text = this.labelString[1];
     this.feedback.changed();
     this.feedback.drawNew();
     this.feedback.changed();
-    if (!this.isListItem()) {
-        this.image = this.highlightImage;
-        this.changed();
-    }
-    if (this.hint) {
-        this.bubbleHelp(this.hint);
-    }
+    // if (!this.isListItem()) {
+    //     this.image = this.highlightImage;
+    //     this.changed();
+    // }
+    // if (this.hint) {
+    //     this.bubbleHelp(this.hint);
+    // }
 };
 
 
