@@ -206,6 +206,7 @@ NetsBlocksServer.prototype.onMsgReceived = function(socket, message) {
 
     // Early return..
     if (!this.groupManager.isMessageAllowed(socket, message)) {
+        info('GroupManager blocking message "'+message+'" from '+socket.id);
         return;
     }
 
