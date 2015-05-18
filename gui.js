@@ -69,7 +69,7 @@ SpeechBubbleMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2015-May-01';
+modules.gui = '2015-May-18';
 
 // Declarations
 
@@ -2964,7 +2964,9 @@ IDE_Morph.prototype.exportGlobalBlocks = function () {
 };
 
 IDE_Morph.prototype.exportSprite = function (sprite) {
-    var str = this.serializer.serialize(sprite.allParts());
+    var str = encodeURIComponent(
+        this.serializer.serialize(sprite.allParts())
+    );
     window.open('data:text/xml,<sprites app="'
         + this.serializer.app
         + '" version="'

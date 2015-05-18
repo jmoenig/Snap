@@ -2497,3 +2497,9 @@ ______
 * Threads: return empty string when querying first letter of a list
 * GUI: hide “save to disk” option behind shift-click again (has issues in Chrome)
 * GUI: parameters for embedding projects in iFrames, thanks, Bernat!
+
+=== Release v4.0 ===
+
+150518
+------
+* Objects, GUI: Fix encoding for exported sprites (esp. comments)

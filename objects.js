@@ -125,7 +125,7 @@ PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.objects = '2015-April-15';
+modules.objects = '2015-May-18';
 
 var SpriteMorph;
 var StageMorph;
@@ -2677,7 +2677,7 @@ SpriteMorph.prototype.userMenu = function () {
 };
 
 SpriteMorph.prototype.exportSprite = function () {
-    if (this.isCoone) {return; }
+    if (this.isClone) {return; }
     var ide = this.parentThatIsA(IDE_Morph);
     if (ide) {
         ide.exportSprite(this);
