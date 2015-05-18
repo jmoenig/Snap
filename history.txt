@@ -2503,3 +2503,4 @@ ______
 150518
 ------
 * Objects, GUI: Fix encoding for exported sprites (esp. comments)
+* Portuguese translation update, thanks, Manuel!!
