@@ -1,4 +1,4 @@
-/*globals SpriteMorph, StageMorph*/
+/*globals Context,VariableFrame,SpriteMorph, StageMorph*/
 // WebSocket Manager
 
 var WebSocketManager = function (stage) {
@@ -23,11 +23,13 @@ WebSocketManager.prototype._connectWebSocket = function() {
 
     // Set up message events
     // Where should I set this up now?
-    var data;
     this.websocket.onmessage = function(message) {
-        data = message.data.split(' ');
-        console.log('received', data[0], 'from', data[1]);
-        self.onMessageReceived(data[0], data[1]);
+        var data = message.data.split(' '),
+            type = data.shift(),
+            role = data.pop(),
+            content = JSON.parse(data.join(' ') || null);
+        console.log('received', type, 'from', role);
+        self.onMessageReceived(type, content, role);
     };
 };
 
@@ -36,7 +38,6 @@ WebSocketManager.prototype.sendMessage = function(message) {
     // FIXME
     var state = this.websocket.readyState;
     if (state === this.websocket.OPEN) {
-        console.log('sending message:', message);
         this.websocket.send(message);
     } else if (state !== this.websocket.CONNECTING) {
         this.messages.push(message);
@@ -50,11 +51,12 @@ WebSocketManager.prototype.sendMessage = function(message) {
  * @param {String} message
  * @return {undefined}
  */
-WebSocketManager.prototype.onMessageReceived = function (message, role) {
+WebSocketManager.prototype.onMessageReceived = function (message, content, role) {
     var self = this,
         hats = [],
         procs = [];
 
+    content = content || [];
     if (message !== '') {
         this.stage.lastMessage = message;
         this.stage.children.concat(this.stage).forEach(function (morph) {
@@ -62,10 +64,30 @@ WebSocketManager.prototype.onMessageReceived = function (message, role) {
                 hats = hats.concat(morph.allHatSocketBlocksFor(message, role));
             }
         });
+
         hats.forEach(function (block) {
-            procs.push(self.stage.threads.startProcess(block, self.stage.isThreadSafe));
+            // Initialize the variable frame with the message content for 
+            // receiveSocketMessage blocks
+            if (block.selector === 'receiveSocketMessage') {
+                // Create the network context
+                var context = new Context();
+                for (var i = content.length; i--;) {
+                    context.variables.addVar(i, content[i]);
+                }
+                procs.push(self.stage.threads.startProcess(
+                    block, 
+                    self.stage.isThreadSafe, 
+                    undefined,
+                    undefined,
+                    context));
+            } else {
+                procs.push(self.stage.threads.startProcess(block, self.stage.isThreadSafe));
+            }
         });
     }
     return procs;
 };
 
+WebSocketManager.prototype.destroy = function () {
+    this.websocket.close();
+};

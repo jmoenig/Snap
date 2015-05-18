@@ -372,6 +372,9 @@ SnapSerializer.prototype.rawLoadProjectModel = function (xmlNode) {
 
     model.stage = model.project.require('stage');
     StageMorph.prototype.frameRate = 0;
+    if (project.stage) {  // Clean up any previous stage
+        project.stage.destroy();
+    }
     project.stage = new StageMorph(project.globalVariables);
     if (Object.prototype.hasOwnProperty.call(
             model.stage.attributes,

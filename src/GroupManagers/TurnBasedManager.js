@@ -6,41 +6,28 @@
 
 'use strict';
 
-var BaseManager = require('./Basic.js'),
+var TwoPlayerManager = require('./TwoPlayerManager'),
     Utils = require('../Utils.js'),
+    assert = require('assert'),
+    _debug = require('debug'),
+    log = _debug('NetsBlocks:GroupManager:log'),
+    info = _debug('NetsBlocks:GroupManager:info'),
+    debug = _debug('NetsBlocks:GroupManager:debug'),
     R = require('ramda');
 
+var getId = R.partialRight(Utils.getAttribute, 'id');
 var TurnBasedManager = function() {
     this.groups = [];
+    info('Created '+this.getName());
 
     // Record keeping
     this.id2Group = {};
 };
 
-Utils.inherit(TurnBasedManager.prototype, BaseManager.prototype);
+Utils.inherit(TurnBasedManager.prototype, TwoPlayerManager.prototype);
 
 TurnBasedManager.prototype.getName = function() {
     return 'TurnBasedManager';
-};
-
-TurnBasedManager.prototype.getAllGroups = function() {
-    return R.clone(this.groups);
-};
-
-TurnBasedManager.prototype.getGroupMembersToMessage = function(socket) {
-    return this.getGroupMembers(socket);
-};
-
-TurnBasedManager.prototype.getGroupMembers = function(socket) {
-    var group = this.id2Group[socket.id] || [],
-        getId = R.partialRight(Utils.getAttribute, 'id'),
-        isSocketId = R.partial(R.eq, socket.id);
-
-    return R.reject(R.pipe(getId, isSocketId), group);
-};
-
-TurnBasedManager.prototype.onConnect = function(socket) {
-    this._addToGroup(socket);
 };
 
 TurnBasedManager.prototype.isMessageAllowed = function(socket, message) {
@@ -52,45 +39,6 @@ TurnBasedManager.prototype.isMessageAllowed = function(socket, message) {
         return true;
     }
     return false;
-};
-
-TurnBasedManager.prototype.onDisconnect = function(socket) {
-    var group = this.id2Group[socket.id],
-        index;
-
-    if (group.length === 2) {
-        index = group.indexOf(socket);
-        group.splice(index,1);
-    } else {
-        index = this.groups.indexOf(group);
-        this.groups.splice(group);
-    }
-
-    delete this.id2Group[socket.id];
-};
-
-TurnBasedManager.prototype._addToGroup = function(socket) {
-    for (var i = 0; i < this.groups.length; i++) {
-        if (this.groups[i].length < 2) {
-            this.groups[i].push(socket);
-            return this.id2Group[socket.id] = this.groups[i]; // jshint ignore:line
-        }
-    }
-
-    // Create a new group
-    var group = [];
-    group.push(socket);
-    this.groups.push(group);
-    return this.id2Group[socket.id] = group; //jshint ignore:line
-};
-
-// debugging
-TurnBasedManager.prototype._printGroups = function() {
-    console.log('Groups are', this.groups.map(function(group) {
-        return group.map(function(s) {
-            return s.id;
-        });
-    }), '(',this.groups.length,')');
 };
 
 module.exports = TurnBasedManager;

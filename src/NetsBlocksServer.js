@@ -14,6 +14,7 @@ var WebSocketServer = require('ws').Server,
     info = debug('NetsBlocks:info');
 
 var NetsBlocksServer = function(opts) {
+    console.log('opts:', opts);
     opts = opts || {};
     this.sockets = [];
     this.socket2Role = {};
@@ -43,7 +44,6 @@ NetsBlocksServer.prototype.start = function(opts) {
 
         // Add the client to the global group
         self.groupManager.onConnect(socket);
-        self.groupManager._printGroups();
         // Broadcast 'join' on connect
         self.notifyGroupJoin(socket);
 
@@ -51,13 +51,13 @@ NetsBlocksServer.prototype.start = function(opts) {
             log('Received message: ',data);
             self.onMsgReceived(socket, data);
         }.bind(this));
+
+        socket.on('close', function() {
+            this.updateSocket(socket);
+            info('socket #'+socket.id+' closed!');
+        }.bind(this));
+
     }.bind(this));
-
-    // Check if the sockets are alive
-    setInterval(function() {
-        self.updateSockets();
-    }, 500);
-
 };
 
 NetsBlocksServer.prototype.stop = function(opts) {
@@ -72,13 +72,15 @@ NetsBlocksServer.prototype.stop = function(opts) {
  * @return {undefined}
  */
 NetsBlocksServer.prototype.broadcast = function(message, peers) {
-    console.log('broadcasting '+message,'to', peers.map(function(r){return r.id;}));
+    log('Broadcasting '+message,'to', peers.map(function(r){return r.id;}));
     var s;
     for (var i = peers.length; i--;) {
         s = peers[i];
         // Check if the socket is open
         if (this.updateSocket(s)) {
+            info('Sending message "'+message+'" to socket #'+s.id);
             s.send(message);
+            console.log('Sent message "'+message+'" to '+s.id);
         }
     }
 };
@@ -103,15 +105,17 @@ NetsBlocksServer.prototype.updateSockets = function() {
     var isOpen = R.pipe(R.partialRight(Utils.getAttribute, 'readyState'), 
             Utils.not(R.eq.bind(R, this.sockets[0].OPEN))),
         closed,
+        getRole = function(s) {
+            log('Removing websocket: id: '+s.id+' role: '+this.socket2Role[s.id]);
+            return this.socket2Role[s.id];
+        }.bind(this),
         roles;
 
     for (var i = groups.length; i--;) {
         // Get the closed sockets
         closed = Utils.extract(isOpen, groups[i]);
 
-        roles = closed.map(function(s) {
-            return this.socket2Role[s.id];
-        }.bind(this));
+        roles = closed.map(getRole);
 
         // Broadcast to remaining 'leave '+role
         closed.forEach(R.pipe(this._removeFromRecords.bind(this), 
@@ -130,8 +134,9 @@ NetsBlocksServer.prototype.updateSockets = function() {
  * @return {Boolean} connected?
  */
 NetsBlocksServer.prototype.updateSocket = function(socket) {
+    info('Updating socket #'+socket.id+' ('+socket.readyState+')');
     if (socket.readyState !== socket.OPEN) {
-        console.log('Removing disconnected socket ('+socket.id+')');
+        info('Removing disconnected socket ('+socket.id+')');
         var role = this.socket2Role[socket.id];
         this._removeFromRecords(socket);
         // Broadcast the leave message to peers of the given socket
@@ -194,10 +199,11 @@ NetsBlocksServer.prototype.onMsgReceived = function(socket, message) {
 
     // Early return..
     if (!this.groupManager.isMessageAllowed(socket, message)) {
+        info('GroupManager blocking message "'+message+'" from '+socket.id);
         return;
     }
 
-    log('Received msg:', message, 'from',socket.id);
+    log('Received msg: '+ message+ ' from '+socket.id);
 
     oldMembers = this.groupManager.onMessage(socket, message);
 

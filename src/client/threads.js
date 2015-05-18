@@ -149,7 +149,8 @@ ThreadManager.prototype.startProcess = function (
     block,
     isThreadSafe,
     exportResult,
-    callback
+    callback,
+    context
 ) {
     var active = this.findProcess(block),
         top = block.topBlock(),
@@ -161,7 +162,7 @@ ThreadManager.prototype.startProcess = function (
         active.stop();
         this.removeTerminatedProcesses();
     }
-    newProc = new Process(block.topBlock(), callback);
+    newProc = new Process(block.topBlock(), callback, context);
     newProc.exportResult = exportResult;
     if (!newProc.homeContext.receiver.isClone) {
         top.addHighlight();
@@ -345,7 +346,16 @@ Process.prototype.contructor = Process;
 Process.prototype.timeout = 500; // msecs after which to force yield
 Process.prototype.isCatchingErrors = true;
 
-function Process(topBlock, onComplete) {
+/**
+ * Process
+ *
+ * @constructor
+ * @param {Block} topBlock - First block to execute
+ * @param {Function} [onComplete]
+ * @param {Context} [context] - Context to execute the process within
+ * @return {undefined}
+ */
+function Process(topBlock, onComplete, context) {
     this.topBlock = topBlock || null;
 
     this.readyToYield = false;
@@ -353,7 +363,7 @@ function Process(topBlock, onComplete) {
     this.isDead = false;
     this.errorFlag = false;
     this.context = null;
-    this.homeContext = new Context();
+    this.homeContext = context || new Context();
     this.lastYield = Date.now();
     this.isAtomic = false;
     this.prompter = null;
@@ -369,6 +379,7 @@ function Process(topBlock, onComplete) {
         this.homeContext.receiver = topBlock.receiver();
         this.homeContext.variables.parentFrame =
             this.homeContext.receiver.variables;
+
         this.context = new Context(
             null,
             topBlock.blockSequence(),
@@ -1886,15 +1897,45 @@ Process.prototype.doRegisterClient = function (message) {
 Process.prototype.doSocketDisconnect = function () {
     // Close the socket
     if (!!this.websocket) {
-        // TODO
+        // TODO: Should I close the socket or simply send an "exit"
+        // message to the server?
     }
 };
 
-Process.prototype.doSocketMessage = function (message) {
+Process.prototype.doSocketEvent = function (message) {
     // Get the websocket manager
     var stage = this.homeContext.receiver.parentThatIsA(StageMorph);
 
     stage.sockets.sendMessage('message ' + message);
+};
+
+Process.prototype.doSocketMessage = function (type, list) {
+    this.doSocketEvent(type+' '+JSON.stringify(list.contents));
+};
+
+/**
+ * On socket message, unpack the message content into the variables in 
+ * the list.
+ *
+ * @return {undefined}
+ */
+Process.prototype.receiveSocketMessage = function (type, list) {
+    var names = list.contents,
+        varFrame = this.context.outerContext.variables,
+        tmpNames = this.context.variables.parentFrame.names(),
+        len = Math.min(tmpNames.length, names.length),
+        value,
+        i;
+
+    for (i = 0; i < len; i++) {
+        value = this.context.variables.getVar(tmpNames[i]);
+        varFrame.addVar(names[i], value);
+        varFrame.deleteVar(tmpNames[i]);
+    }
+
+    while (i < names.length) {
+        varFrame.addVar(names[i++]);
+    }
 };
 
 // Process event messages primitives

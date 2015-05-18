@@ -6,6 +6,8 @@ I will probably want to have a couple methods for handling websocket communicati
 + Closing a socket (when not running the script)
 
 ## Thoughts on interrupts/websocket msg receiving
++ Add game "namespaces" to the server
+
 + I may need to queue it or create a new process and add it in
   + That is, the event listener for the web socket may need to queue or create a process for the event handling...
     + startProcess
@@ -29,7 +31,28 @@ I will probably want to have a couple methods for handling websocket communicati
 ## Automated Testing thoughts
 + I would like to do TDD with this but I need some way to test it... 
 + I might be able to build a little framework around the Javascript world object and interact with it programmatically
-+ This would be really nice to have...
+    + This would be really nice to have...
+
++ I could load projects from xml and simply run them
+
+# Additional Features
++ Blocks for Comments?
+
++ Creating Microservices and RPC's?
+
++ Creating a `Cordova` project
+    + GUI
+        + Create the small canvas on the mobile screen?
+    + Interactions
+        + Keyboard may still work...
+        + I believe touch is already supported
+    + Some methods may need to be overridden
+        + XMLHttpRequest?
+
++ Central repository for projects?
+    + Berkeley already hosts one
+
++ Currently open games/apps?
 
 # Snap structure notes
 ## Spec
@@ -55,10 +78,66 @@ I will probably want to have a couple methods for handling websocket communicati
 ## Fix me!
 + Should I implement the DDP protocol?
     + They have a library for it
+
 + I need server side grouping by project id
-+ 'recieved join from undefined' on creating a new project
+    + How can I get the project id on the client?
+        + Is it in the `globalVariables` variable?
+    + Should I move the Websocket manager?
 
 ## To Do
++ Create a testing framework/hooks for Snap 
+    + Created one for the server-side logic
+
++ Create network messages for Snap
+    + How can the `receiveSocketMessage` hat receive the content sent?
+        + Can I create a variable context and pass it with the block?
+            + Could I create a process where the variable frame is passed in?
+        + I could create temp variables that are deleted after assigning the desired things
+
+        + I am really just creating the context before the process...
+
+    + Do we know that the `process.homeContext.receiver` is what we think?
+        + It is the SpriteMorph --> Not what we want
+
++ X being played in the wrong spot
+
+## Finished To do/Fix me!
++ Filtering with socket msg blocks is broken
+    + Fixed 
+
++ Fix 'direction' not defined in this context
+    + startProcess seems to be being called continuous
+        + Fixed -> old block
+    + Only breaks after I send a network request. There must be a problem with returning to the correct context following a websocket request...
+
+    + Fixed... Old blocks?
+    + Almost the same problem again with 'x'
+        + Should I treat the context differently?
+        + Should I provide the user with message types?
+        +        OR
+        + Should I simply allow the user to send whatever he/she wants?
+            + This won't work with connection/disconnection stuff
+    + I am going to step through the code some and track the contexts
+        + x-cols and x-rows belong to the context above receiver ('opponent')
+        + They seem to be removed from the receiver.variables.allNames()
+        + FIXED: Changed allNames() to names()
+
++ 'received join from undefined' on creating a new project
+    + Fixed...
+
++ Create laser shooting game
+    + DONE
+
++ The second client is unresponsive...
+    + this.scripts.children is empty... objects.js :3610
+    + Turn based restriction - feature not a bug ;)
+
++ `doFaceTowards` not working as expected...
+    + Implemented in Process object
+    + The xPosition and yPosition don't seem to be correct
+        + threads.js :2360
+    + The image was too big and part of it was transparent. FIXED
+
 + Refactor GroupManagement to be modular
     + They need a common interface...
         + Event listeners
@@ -68,15 +147,8 @@ I will probably want to have a couple methods for handling websocket communicati
 
         + Group API
             + getGroupMembers(id)
+    + DONE
 
-+ Create a testing framework/hooks for Snap 
-    + Created one for the server-side logic
-
-+ Create ping-pong/tic-tac-toe game
-
-+ Update `ypr.js` for new blocks (serialization)
-
-## Finished To do/Fix me!
 + Crashes when broadcasting to group with closed socket
     + DONE
 
@@ -117,4 +189,8 @@ I will probably want to have a couple methods for handling websocket communicati
 + Add socket disconnect detection
 + I would like to store the network default messages in an enum somewhere... I am not sure where...
   + DONE
+
++ Close the web sockets when the project changes...
+    + Close the web sockets when the project changes...
+    DONE
 

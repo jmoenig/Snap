@@ -13,6 +13,10 @@ var globalGroup = [];
 var BasicGroupManager = function() {
 };
 
+BasicGroupManager.prototype.getName = function() {
+    return 'BasicGroupManager';
+};
+
 /**
  * Return arrays of sockets grouped by their groups.
  *
