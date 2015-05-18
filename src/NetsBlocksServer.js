@@ -59,12 +59,6 @@ NetsBlocksServer.prototype.start = function(opts) {
         }.bind(this));
 
     }.bind(this));
-
-    // Check if the sockets are alive
-    setInterval(function() {
-        self.updateSockets();
-    }, 500);
-
 };
 
 NetsBlocksServer.prototype.stop = function(opts) {
