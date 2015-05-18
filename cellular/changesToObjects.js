@@ -2455,11 +2455,6 @@ SpriteMorph.prototype.wearCostume = function (costume)
 				x.uberWearCostume(costume);
 			}
 		});
-		// And wear it myself (to update icon).
-		var result = this.uberWearCostume(costume);
-		// Force redraw too since prototypes don't redraw.
-		this.uberDrawNew();
-		return result;
 	}
 	//Wear this costume regardless
 	return this.uberWearCostume(costume);
