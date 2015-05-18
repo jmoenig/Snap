@@ -17,8 +17,9 @@ console.log('NetsBlocks server listening on port '+port);
 // Parse cmd line options for group manager?
 // TODO
 
-var nbApp = new NetsBlocksServer();
 var TwoPlayerTurn = require('./GroupManagers/TurnBasedManager');
-nbApp.start({port: 5432, 
+var opts = {port: 5432, 
              path: '', 
-             GroupManager: TwoPlayerTurn});
+             GroupManager: TwoPlayerTurn};
+var nbApp = new NetsBlocksServer(opts);
+nbApp.start(opts);
