@@ -34,7 +34,7 @@ function distToSegmentSquared(p, v, w) {
   if (t < 0) return dist2(p, v);
   if (t > 1) return dist2(p, w);
   return dist2(p, { x: v.x + t * (w.x - v.x),
-                    y: v.y + t * (w.y - v.y) });
+					y: v.y + t * (w.y - v.y) });
 }
 function distToSegment(p, v, w) { return Math.sqrt(distToSegmentSquared(p, v, w)); }
 /*
@@ -334,7 +334,7 @@ SpriteMorph.prototype.snapappsHookBlockTemplates = function(blocks, block, cat, 
 		blocks.push(block("allObjectsInNbrCells"));
 		blocks.push(block("numFilledNbrCells"));
 	}
-    return this.scribbleHookBlockTemplates(blocks, block, cat);
+	return this.scribbleHookBlockTemplates(blocks, block, cat);
 }
 
 /*
@@ -476,8 +476,8 @@ StageMorph.prototype.deleteCellAttribute = function(name)
 */
 SpriteMorph.prototype.uberInitBlocks = SpriteMorph.prototype.initBlocks;
 SpriteMorph.prototype.initBlocks = function () {
-    this.uberInitBlocks();
-    this.addCellularBlocks();
+	this.uberInitBlocks();
+	this.addCellularBlocks();
 }
 
 /*
@@ -486,316 +486,316 @@ SpriteMorph.prototype.initBlocks = function () {
 SpriteMorph.prototype.addCellularBlocks = function () {
 
 	//control
-    SpriteMorph.prototype.blocks.getLastClone = {
-        type: 'arrow',
-        category: 'control',
-        spec: 'last created clone',
-    };
-    SpriteMorph.prototype.blocks.instanceCount = {
-        type: 'reporter',
-        category: 'control',
-        spec: 'instance count of %cln',
-    };
+	SpriteMorph.prototype.blocks.getLastClone = {
+		type: 'arrow',
+		category: 'control',
+		spec: 'last created clone',
+	};
+	SpriteMorph.prototype.blocks.instanceCount = {
+		type: 'reporter',
+		category: 'control',
+		spec: 'instance count of %cln',
+	};
 	
 	//motion
-    SpriteMorph.prototype.blocks.cellX = {
-        type: 'reporter',
-        category: 'motion',
-        spec: 'cell X',
-    };
-    SpriteMorph.prototype.blocks.cellY = {
-        type: 'reporter',
-        category: 'motion',
-        spec: 'cell Y',
-    };
-    SpriteMorph.prototype.blocks.moveToNbrCell = {
-        type: 'command',
-        category: 'motion',
-        spec: 'move to nbr cell',
-    };
-    SpriteMorph.prototype.blocks.moveToEmptyNbrCell = {
-        type: 'command',
-        category: 'motion',
-        spec: 'move to empty nbr cell',
-    };
-    SpriteMorph.prototype.blocks.moveToAnyCell = {
-        type: 'command',
-        category: 'motion',
-        spec: 'move to any cell',
-    };
-    SpriteMorph.prototype.blocks.moveToAnyEmptyCell = {
-        type: 'command',
-        category: 'motion',
-        spec: 'move to any empty cell',
-    };
-    SpriteMorph.prototype.blocks.moveToCell = {
-        type: 'command',
-        category: 'motion',
-        spec: 'move to cell at cell x: %n cell y: %n',
-    };
-    SpriteMorph.prototype.blocks.snapToCell = {
-        type: 'command',
-        category: 'motion',
-        spec: 'snap to centre of cell',
-    };
+	SpriteMorph.prototype.blocks.cellX = {
+		type: 'reporter',
+		category: 'motion',
+		spec: 'cell X',
+	};
+	SpriteMorph.prototype.blocks.cellY = {
+		type: 'reporter',
+		category: 'motion',
+		spec: 'cell Y',
+	};
+	SpriteMorph.prototype.blocks.moveToNbrCell = {
+		type: 'command',
+		category: 'motion',
+		spec: 'move to nbr cell',
+	};
+	SpriteMorph.prototype.blocks.moveToEmptyNbrCell = {
+		type: 'command',
+		category: 'motion',
+		spec: 'move to empty nbr cell',
+	};
+	SpriteMorph.prototype.blocks.moveToAnyCell = {
+		type: 'command',
+		category: 'motion',
+		spec: 'move to any cell',
+	};
+	SpriteMorph.prototype.blocks.moveToAnyEmptyCell = {
+		type: 'command',
+		category: 'motion',
+		spec: 'move to any empty cell',
+	};
+	SpriteMorph.prototype.blocks.moveToCell = {
+		type: 'command',
+		category: 'motion',
+		spec: 'move to cell at cell x: %n cell y: %n',
+	};
+	SpriteMorph.prototype.blocks.snapToCell = {
+		type: 'command',
+		category: 'motion',
+		spec: 'snap to centre of cell',
+	};
 	
 	//cells
-    SpriteMorph.prototype.blocks.reportCellsX = {
-        type: 'reporter',
-        category: 'cells',
-        spec: 'cells X',
-    };
+	SpriteMorph.prototype.blocks.reportCellsX = {
+		type: 'reporter',
+		category: 'cells',
+		spec: 'cells X',
+	};
 	
-    SpriteMorph.prototype.blocks.reportCellsY = {
-        type: 'reporter',
-        category: 'cells',
-        spec: 'cells Y',
-    };
+	SpriteMorph.prototype.blocks.reportCellsY = {
+		type: 'reporter',
+		category: 'cells',
+		spec: 'cells Y',
+	};
 	
-    SpriteMorph.prototype.blocks.showCellAttribute = {
-        type: 'command',
-        category: 'cells',
-        spec: 'show cell attribute %clat',
-    };
+	SpriteMorph.prototype.blocks.showCellAttribute = {
+		type: 'command',
+		category: 'cells',
+		spec: 'show cell attribute %clat',
+	};
 	
-    SpriteMorph.prototype.blocks.hideCellAttribute = {
-        type: 'command',
-        category: 'cells',
-        spec: 'hide cell attribute %clat',
-    };
+	SpriteMorph.prototype.blocks.hideCellAttribute = {
+		type: 'command',
+		category: 'cells',
+		spec: 'hide cell attribute %clat',
+	};
 	
-    SpriteMorph.prototype.blocks.getCellAttribute = {
-        type: 'reporter',
-        category: 'cells',
-        spec: 'value of %clat at x: %n y: %n',
-    };
+	SpriteMorph.prototype.blocks.getCellAttribute = {
+		type: 'reporter',
+		category: 'cells',
+		spec: 'value of %clat at x: %n y: %n',
+	};
 	
-    SpriteMorph.prototype.blocks.getCellAttributeCell = {
-        type: 'reporter',
-        category: 'cells',
-        spec: 'value of %clat at cell x: %n cell y: %n',
-    };
+	SpriteMorph.prototype.blocks.getCellAttributeCell = {
+		type: 'reporter',
+		category: 'cells',
+		spec: 'value of %clat at cell x: %n cell y: %n',
+	};
 	
-    SpriteMorph.prototype.blocks.getCellAttributeHere = {
-        type: 'reporter',
-        category: 'cells',
-        spec: 'value of %clat here',
-    };
+	SpriteMorph.prototype.blocks.getCellAttributeHere = {
+		type: 'reporter',
+		category: 'cells',
+		spec: 'value of %clat here',
+	};
 	
-    SpriteMorph.prototype.blocks.getCellAttributeAverage = {
-        type: 'reporter',
-        category: 'cells',
-        spec: 'average value of %clat',
-    };
+	SpriteMorph.prototype.blocks.getCellAttributeAverage = {
+		type: 'reporter',
+		category: 'cells',
+		spec: 'average value of %clat',
+	};
 	
-    SpriteMorph.prototype.blocks.getCellAttributeMinimum = {
-        type: 'reporter',
-        category: 'cells',
-        spec: 'minimum value of %clat',
-    };
+	SpriteMorph.prototype.blocks.getCellAttributeMinimum = {
+		type: 'reporter',
+		category: 'cells',
+		spec: 'minimum value of %clat',
+	};
 	
-    SpriteMorph.prototype.blocks.getCellAttributeMaximum = {
-        type: 'reporter',
-        category: 'cells',
-        spec: 'maximum value of %clat',
-    };
+	SpriteMorph.prototype.blocks.getCellAttributeMaximum = {
+		type: 'reporter',
+		category: 'cells',
+		spec: 'maximum value of %clat',
+	};
 	
-    SpriteMorph.prototype.blocks.setCellAttribute = {
-        type: 'command',
-        category: 'cells',
-        spec: 'set %clat at x: %n y: %n to %n',
-    };
+	SpriteMorph.prototype.blocks.setCellAttribute = {
+		type: 'command',
+		category: 'cells',
+		spec: 'set %clat at x: %n y: %n to %n',
+	};
 	
-    SpriteMorph.prototype.blocks.setCellAttributeCell = {
-        type: 'command',
-        category: 'cells',
-        spec: 'set %clat at cell x: %n cell y: %n to %n',
-    };
+	SpriteMorph.prototype.blocks.setCellAttributeCell = {
+		type: 'command',
+		category: 'cells',
+		spec: 'set %clat at cell x: %n cell y: %n to %n',
+	};
 	
-    SpriteMorph.prototype.blocks.setCellAttributeHere = {
-        type: 'command',
-        category: 'cells',
-        spec: 'set %clat here to %n',
-    };
+	SpriteMorph.prototype.blocks.setCellAttributeHere = {
+		type: 'command',
+		category: 'cells',
+		spec: 'set %clat here to %n',
+	};
 	
-    SpriteMorph.prototype.blocks.setCellAttributeEverywhere = {
-        type: 'command',
-        category: 'cells',
-        spec: 'set %clat everywhere to %n',
-    };
+	SpriteMorph.prototype.blocks.setCellAttributeEverywhere = {
+		type: 'command',
+		category: 'cells',
+		spec: 'set %clat everywhere to %n',
+	};
 	
-    SpriteMorph.prototype.blocks.changeCellAttribute = {
-        type: 'command',
-        category: 'cells',
-        spec: 'change %clat at x: %n y: %n by %n',
-    };
+	SpriteMorph.prototype.blocks.changeCellAttribute = {
+		type: 'command',
+		category: 'cells',
+		spec: 'change %clat at x: %n y: %n by %n',
+	};
 	
-    SpriteMorph.prototype.blocks.changeCellAttributeCell = {
-        type: 'command',
-        category: 'cells',
-        spec: 'change %clat at cell x: %n cell y: %n by %n',
-    };
+	SpriteMorph.prototype.blocks.changeCellAttributeCell = {
+		type: 'command',
+		category: 'cells',
+		spec: 'change %clat at cell x: %n cell y: %n by %n',
+	};
 	
-    SpriteMorph.prototype.blocks.changeCellAttributeHere = {
-        type: 'command',
-        category: 'cells',
-        spec: 'change %clat here by %n',
-    };
+	SpriteMorph.prototype.blocks.changeCellAttributeHere = {
+		type: 'command',
+		category: 'cells',
+		spec: 'change %clat here by %n',
+	};
 	
-    SpriteMorph.prototype.blocks.changeCellAttributeEverywhere = {
-        type: 'command',
-        category: 'cells',
-        spec: 'change %clat everywhere by %n',
-    };
+	SpriteMorph.prototype.blocks.changeCellAttributeEverywhere = {
+		type: 'command',
+		category: 'cells',
+		spec: 'change %clat everywhere by %n',
+	};
 	
 	//objects
-    SpriteMorph.prototype.blocks.reportNobody = {
-        type: 'arrow',
-        category: 'objects',
-        spec: 'nobody',
-    };
-    SpriteMorph.prototype.blocks.reportThis = {
-        type: 'arrow',
-        category: 'objects',
-        spec: 'this',
-    };
-    SpriteMorph.prototype.blocks.isThis = {
-        type: 'predicate',
-        category: 'objects',
-        spec: '%obj is this',
-    };
-    SpriteMorph.prototype.blocks.isNobody = {
-        type: 'predicate',
-        category: 'objects',
-        spec: '%obj is nobody',
-    };
-    SpriteMorph.prototype.blocks.setVariable = {
-        type: 'command',
-        category: 'objects',
-        spec: 'set var %s to %s in %obj',
-    };
-    SpriteMorph.prototype.blocks.getVariable = {
-        type: 'reporter',
-        category: 'objects',
-        spec: 'get var %s in %obj',
-    };
-    SpriteMorph.prototype.blocks.changeVariable = {
-        type: 'reporter',
-        category: 'objects',
-        spec: 'change var %s by %s in %obj',
-    };
-    SpriteMorph.prototype.blocks.getCostumeName = {
-        type: 'reporter',
-        category: 'looks',
-        spec: 'costume name',
-    };
-    SpriteMorph.prototype.blocks.getCostumeNameObject = {
-        type: 'reporter',
-        category: 'objects',
-        spec: 'costume name of %obj',
-    };
-    SpriteMorph.prototype.blocks.getTypeName = {
-        type: 'reporter',
-        category: 'objects',
-        spec: 'type of %obj',
-    };
-    SpriteMorph.prototype.blocks.objectIsA = {
-        type: 'predicate',
-        category: 'objects',
-        spec: '%obj is a %spr',
-    };
-    SpriteMorph.prototype.blocks.obliterate = {
-        type: 'command',
-        category: 'objects',
-        spec: 'obliterate %obj',
-    };
-    SpriteMorph.prototype.blocks.listOfAllClones = {
-        type: 'reporter',
-        category: 'objects',
-        spec: 'list of all %cln',
-    };
-    SpriteMorph.prototype.blocks.getObjectX = {
-        type: 'reporter',
-        category: 'objects',
-        spec: 'x position of %obj',
-    };
-    SpriteMorph.prototype.blocks.getObjectY = {
-        type: 'reporter',
-        category: 'objects',
-        spec: 'y position of %obj',
-    };
-    SpriteMorph.prototype.blocks.getObjectCellX = {
-        type: 'reporter',
-        category: 'objects',
-        spec: 'cell x position of %obj',
-    };
-    SpriteMorph.prototype.blocks.getObjectCellY = {
-        type: 'reporter',
-        category: 'objects',
-        spec: 'cell y position of %obj',
-    };
-    SpriteMorph.prototype.blocks.setObjectPosition = {
-        type: 'command',
-        category: 'objects',
-        spec: 'move %obj to x: %n y: %n',
-    };
-    SpriteMorph.prototype.blocks.setObjectCellPosition = {
-        type: 'command',
-        category: 'objects',
-        spec: 'move %obj to cell x: %n cell y: %n',
-    };
-    SpriteMorph.prototype.blocks.nearestObject = {
-        type: 'reporter',
-        category: 'objects',
-        spec: 'nearest %cln to x: %n y: %n where %predRing',
-    };
-    SpriteMorph.prototype.blocks.asObject = {
-        type: 'command',
-        category: 'objects',
-        spec: 'as %obj %c',
-    };
+	SpriteMorph.prototype.blocks.reportNobody = {
+		type: 'arrow',
+		category: 'objects',
+		spec: 'nobody',
+	};
+	SpriteMorph.prototype.blocks.reportThis = {
+		type: 'arrow',
+		category: 'objects',
+		spec: 'this',
+	};
+	SpriteMorph.prototype.blocks.isThis = {
+		type: 'predicate',
+		category: 'objects',
+		spec: '%obj is this',
+	};
+	SpriteMorph.prototype.blocks.isNobody = {
+		type: 'predicate',
+		category: 'objects',
+		spec: '%obj is nobody',
+	};
+	SpriteMorph.prototype.blocks.setVariable = {
+		type: 'command',
+		category: 'objects',
+		spec: 'set var %s to %s in %obj',
+	};
+	SpriteMorph.prototype.blocks.getVariable = {
+		type: 'reporter',
+		category: 'objects',
+		spec: 'get var %s in %obj',
+	};
+	SpriteMorph.prototype.blocks.changeVariable = {
+		type: 'reporter',
+		category: 'objects',
+		spec: 'change var %s by %s in %obj',
+	};
+	SpriteMorph.prototype.blocks.getCostumeName = {
+		type: 'reporter',
+		category: 'looks',
+		spec: 'costume name',
+	};
+	SpriteMorph.prototype.blocks.getCostumeNameObject = {
+		type: 'reporter',
+		category: 'objects',
+		spec: 'costume name of %obj',
+	};
+	SpriteMorph.prototype.blocks.getTypeName = {
+		type: 'reporter',
+		category: 'objects',
+		spec: 'type of %obj',
+	};
+	SpriteMorph.prototype.blocks.objectIsA = {
+		type: 'predicate',
+		category: 'objects',
+		spec: '%obj is a %spr',
+	};
+	SpriteMorph.prototype.blocks.obliterate = {
+		type: 'command',
+		category: 'objects',
+		spec: 'obliterate %obj',
+	};
+	SpriteMorph.prototype.blocks.listOfAllClones = {
+		type: 'reporter',
+		category: 'objects',
+		spec: 'list of all %cln',
+	};
+	SpriteMorph.prototype.blocks.getObjectX = {
+		type: 'reporter',
+		category: 'objects',
+		spec: 'x position of %obj',
+	};
+	SpriteMorph.prototype.blocks.getObjectY = {
+		type: 'reporter',
+		category: 'objects',
+		spec: 'y position of %obj',
+	};
+	SpriteMorph.prototype.blocks.getObjectCellX = {
+		type: 'reporter',
+		category: 'objects',
+		spec: 'cell x position of %obj',
+	};
+	SpriteMorph.prototype.blocks.getObjectCellY = {
+		type: 'reporter',
+		category: 'objects',
+		spec: 'cell y position of %obj',
+	};
+	SpriteMorph.prototype.blocks.setObjectPosition = {
+		type: 'command',
+		category: 'objects',
+		spec: 'move %obj to x: %n y: %n',
+	};
+	SpriteMorph.prototype.blocks.setObjectCellPosition = {
+		type: 'command',
+		category: 'objects',
+		spec: 'move %obj to cell x: %n cell y: %n',
+	};
+	SpriteMorph.prototype.blocks.nearestObject = {
+		type: 'reporter',
+		category: 'objects',
+		spec: 'nearest %cln to x: %n y: %n where %predRing',
+	};
+	SpriteMorph.prototype.blocks.asObject = {
+		type: 'command',
+		category: 'objects',
+		spec: 'as %obj %c',
+	};
 	
 	//neighbours
-    SpriteMorph.prototype.blocks.objectInCellDir = {
-        type: 'arrow',
-        category: 'neighbours',
-        spec: 'object in cell %celldir',
-    };
-    SpriteMorph.prototype.blocks.objectInCellCell = {
-        type: 'arrow',
-        category: 'neighbours',
-        spec: 'object in cell cellX: %n cellY: %n',
-    };
-    SpriteMorph.prototype.blocks.objectInCellReal = {
-        type: 'arrow',
-        category: 'neighbours',
-        spec: 'object in cell x: %n y: %n',
-    };
-    SpriteMorph.prototype.blocks.allObjectsInCellDir = {
-        type: 'reporter',
-        category: 'neighbours',
-        spec: 'objects in cell %celldir',
-    };
-    SpriteMorph.prototype.blocks.allObjectsInCellCell = {
-        type: 'reporter',
-        category: 'neighbours',
-        spec: 'objects in cell cellX: %n cellY: %n',
-    };
-    SpriteMorph.prototype.blocks.allObjectsInCellReal = {
-        type: 'reporter',
-        category: 'neighbours',
-        spec: 'objects in cell x: %n y: %n',
-    };
-    SpriteMorph.prototype.blocks.allObjectsInNbrCells = {
-        type: 'reporter',
-        category: 'neighbours',
-        spec: 'objects in nbr cells',
-    };
-    SpriteMorph.prototype.blocks.numFilledNbrCells = {
-        type: 'reporter',
-        category: 'neighbours',
-        spec: 'num filled nbr cells',
-    };
+	SpriteMorph.prototype.blocks.objectInCellDir = {
+		type: 'arrow',
+		category: 'neighbours',
+		spec: 'object in cell %celldir',
+	};
+	SpriteMorph.prototype.blocks.objectInCellCell = {
+		type: 'arrow',
+		category: 'neighbours',
+		spec: 'object in cell cellX: %n cellY: %n',
+	};
+	SpriteMorph.prototype.blocks.objectInCellReal = {
+		type: 'arrow',
+		category: 'neighbours',
+		spec: 'object in cell x: %n y: %n',
+	};
+	SpriteMorph.prototype.blocks.allObjectsInCellDir = {
+		type: 'reporter',
+		category: 'neighbours',
+		spec: 'objects in cell %celldir',
+	};
+	SpriteMorph.prototype.blocks.allObjectsInCellCell = {
+		type: 'reporter',
+		category: 'neighbours',
+		spec: 'objects in cell cellX: %n cellY: %n',
+	};
+	SpriteMorph.prototype.blocks.allObjectsInCellReal = {
+		type: 'reporter',
+		category: 'neighbours',
+		spec: 'objects in cell x: %n y: %n',
+	};
+	SpriteMorph.prototype.blocks.allObjectsInNbrCells = {
+		type: 'reporter',
+		category: 'neighbours',
+		spec: 'objects in nbr cells',
+	};
+	SpriteMorph.prototype.blocks.numFilledNbrCells = {
+		type: 'reporter',
+		category: 'neighbours',
+		spec: 'num filled nbr cells',
+	};
 }
 
 
@@ -1059,7 +1059,7 @@ StageMorph.prototype.changeCellAttribute = function(attribute, x, y, value)
 }
 
 SpriteMorph.prototype.changeCellAttributeHere = function(attribute, value) {
-    var rotCentre = this.rotationCenter();
+	var rotCentre = this.rotationCenter();
 	var cell = this.parentThatIsA(StageMorph).getCellAt(rotCentre.x, rotCentre.y);
 	if (!cell)
 		return;
@@ -1085,7 +1085,7 @@ StageMorph.prototype.setCellAttribute = function(attribute, x, y, value)
 }
 
 SpriteMorph.prototype.setCellAttributeHere = function(attribute, value) {
-    var rotCentre = this.rotationCenter();
+	var rotCentre = this.rotationCenter();
 	var cell = this.parentThatIsA(StageMorph).getCellAt(rotCentre.x, rotCentre.y);
 	if (!cell)
 		return;
@@ -1124,7 +1124,7 @@ StageMorph.prototype.getCellAttribute = function(attribute, x, y)
 }
 
 SpriteMorph.prototype.getCellAttributeHere = function(attribute) {
-    var rotCentre = this.rotationCenter();
+	var rotCentre = this.rotationCenter();
 	var cell = this.parentThatIsA(StageMorph).getCellAt(rotCentre.x, rotCentre.y);
 	if (!cell)
 		return 0;
@@ -1215,16 +1215,16 @@ StageMorph.prototype.reportCellsY = function()
 
 SpriteMorph.prototype.cellX = function()
 {
-    var rotCentre = this.rotationCenter();
-    var stage = this.parentThatIsA(StageMorph);
+	var rotCentre = this.rotationCenter();
+	var stage = this.parentThatIsA(StageMorph);
 	
 	return Math.floor((rotCentre.x - stage.left()) / stage.width() * stage.cellsX);
 }
 
 SpriteMorph.prototype.cellY = function()
 {
-    var rotCentre = this.rotationCenter();
-    var stage = this.parentThatIsA(StageMorph);
+	var rotCentre = this.rotationCenter();
+	var stage = this.parentThatIsA(StageMorph);
 	
 	return Math.floor((rotCentre.y - stage.top()) / stage.height() * stage.cellsY);
 }
@@ -1233,7 +1233,7 @@ SpriteMorph.prototype.moveToNbrCellBase = function(open)
 {
 	var cellX = this.cellX();
 	var cellY = this.cellY();
-    var stage = this.parentThatIsA(StageMorph);
+	var stage = this.parentThatIsA(StageMorph);
 	var cellW = stage.cellWidth();
 	var cellH = stage.cellHeight();
 	
@@ -1264,7 +1264,7 @@ SpriteMorph.prototype.moveToNbrCellBase = function(open)
 
 SpriteMorph.prototype.moveToNbrCell = function()
 {
-    var stage = this.parentThatIsA(StageMorph);
+	var stage = this.parentThatIsA(StageMorph);
 	var cellX = this.cellX();
 	var cellY = this.cellY();
 	var cellsX = stage.cellsX;
@@ -1282,7 +1282,7 @@ SpriteMorph.prototype.moveToNbrCell = function()
 
 SpriteMorph.prototype.moveToEmptyNbrCell = function()
 {
-    var stage = this.parentThatIsA(StageMorph);
+	var stage = this.parentThatIsA(StageMorph);
 	var cellX = this.cellX();
 	var cellY = this.cellY();
 	var cellsX = stage.cellsX;
@@ -1300,7 +1300,7 @@ SpriteMorph.prototype.moveToEmptyNbrCell = function()
 
 SpriteMorph.prototype.moveToCell = function(cellX, cellY)
 {
-    var stage = this.parentThatIsA(StageMorph);
+	var stage = this.parentThatIsA(StageMorph);
 	var cellsX = stage.cellsX;
 	var cellsY = stage.cellsY;
 	var cellW = stage.cellWidth();
@@ -1311,12 +1311,12 @@ SpriteMorph.prototype.moveToCell = function(cellX, cellY)
 
 SpriteMorph.prototype.snapToCell = function()
 {
-    this.moveToCell(this.cellX(), this.cellY());
+	this.moveToCell(this.cellX(), this.cellY());
 }
 
 SpriteMorph.prototype.moveToAnyCell = function()
 {
-    var stage = this.parentThatIsA(StageMorph);
+	var stage = this.parentThatIsA(StageMorph);
 	var cellsX = stage.cellsX;
 	var cellsY = stage.cellsY;
 	
@@ -1329,42 +1329,42 @@ SpriteMorph.prototype.moveToAnyCell = function()
 */
 StageMorph.prototype.getEmptyCell = function(tree, n)
 {
-    if (tree.leafNode)
-    {
-        if (n == 1)
-        {
-            return tree.childB;
-        }
-        else
-        {
-            return tree.childA.spriteMorphs.length == 0 ? tree.childA : tree.childB;
-        }
-    }
-    else
-    {
-        if (n < tree.childA.nEmpty)
-        {
-            return this.getEmptyCell(tree.childA, n);
-        }
-        else
-        {
-            return this.getEmptyCell(tree.childB, n - tree.childA.nEmpty);
-        }
-    }
+	if (tree.leafNode)
+	{
+		if (n == 1)
+		{
+			return tree.childB;
+		}
+		else
+		{
+			return tree.childA.spriteMorphs.length == 0 ? tree.childA : tree.childB;
+		}
+	}
+	else
+	{
+		if (n < tree.childA.nEmpty)
+		{
+			return this.getEmptyCell(tree.childA, n);
+		}
+		else
+		{
+			return this.getEmptyCell(tree.childB, n - tree.childA.nEmpty);
+		}
+	}
 }
 
 SpriteMorph.prototype.moveToAnyEmptyCell = function()
 {
-    var stage = this.parentThatIsA(StageMorph);
+	var stage = this.parentThatIsA(StageMorph);
 	var cellsX = stage.cellsX;
 	var cellsY = stage.cellsY;
 	
 	if (stage.emptyCellTree.nEmpty != 0)
 	{
-        var cellNum = Process.prototype.reportRandom.call(this, 0, stage.emptyCellTree.nEmpty - 1);
-        var cell = stage.getEmptyCell(stage.emptyCellTree, cellNum);
+		var cellNum = Process.prototype.reportRandom.call(this, 0, stage.emptyCellTree.nEmpty - 1);
+		var cell = stage.getEmptyCell(stage.emptyCellTree, cellNum);
 		this.moveToCell(cell.x, cell.y);
-    }
+	}
 }
 
 /*
@@ -1400,7 +1400,7 @@ SpriteMorph.prototype.objectInCellDir = function(cellDir)
 {
 	if (!cellDir || !cellDir[0])
 		return null;
-    var stage = this.parentThatIsA(StageMorph),
+	var stage = this.parentThatIsA(StageMorph),
 		cellPos = stage.screenToCellSpace(this.rotationCenter());
 	
 	cellPos.x += cellDirX[cellDir[0]];
@@ -1420,7 +1420,7 @@ SpriteMorph.prototype.objectInCellCell = function(cx, cy) {
 }
 StageMorph.prototype.objectInCellCell = function(cx, cy)
 {
-    var stage = this.parentThatIsA(StageMorph);
+	var stage = this.parentThatIsA(StageMorph);
 	var cell = stage.getCellAtCellCoords(cx, cy);
 	if (!cell)
 		return null;
@@ -1434,7 +1434,7 @@ SpriteMorph.prototype.objectInCellReal = function(x, y) {
 }
 StageMorph.prototype.objectInCellReal = function(x, y)
 {
-    var stage = this.parentThatIsA(StageMorph);
+	var stage = this.parentThatIsA(StageMorph);
 	var cell = stage.getCellAt(stage.normalizeCoordinates(x, y));
 	if (!cell)
 		return null;
@@ -1447,7 +1447,7 @@ SpriteMorph.prototype.allObjectsInCellDir = function(cellDir)
 {
 	if (!cellDir || !cellDir[0])
 		return null;
-    var stage = this.parentThatIsA(StageMorph),
+	var stage = this.parentThatIsA(StageMorph),
 		cellPos = stage.screenToCellSpace(this.rotationCenter());
 	
 	cellPos.x += cellDirX[cellDir[0]];
@@ -1464,7 +1464,7 @@ SpriteMorph.prototype.allObjectsInCellCell = function(cx, cy) {
 }
 StageMorph.prototype.allObjectsInCellCell = function(cx, cy)
 {
-    var stage = this.parentThatIsA(StageMorph);
+	var stage = this.parentThatIsA(StageMorph);
 	var cell = stage.getCellAtCellCoords(cx, cy);
 	if (!cell)
 		return null;
@@ -1476,7 +1476,7 @@ SpriteMorph.prototype.allObjectsInCellReal = function(x, y) {
 }
 StageMorph.prototype.allObjectsInCellReal = function(x, y)
 {
-    var stage = this.parentThatIsA(StageMorph);
+	var stage = this.parentThatIsA(StageMorph);
 	var cell = stage.getCellAt(stage.normalizeCoordinates(x, y));
 	if (!cell)
 		return null;
@@ -1485,7 +1485,7 @@ StageMorph.prototype.allObjectsInCellReal = function(x, y)
 
 SpriteMorph.prototype.allObjectsInNbrCells = function()
 {
-    var stage = this.parentThatIsA(StageMorph),
+	var stage = this.parentThatIsA(StageMorph),
 		cellPos = stage.screenToCellSpace(this.rotationCenter()),
 		objects = [];
 	
@@ -1506,7 +1506,7 @@ SpriteMorph.prototype.allObjectsInNbrCells = function()
 
 SpriteMorph.prototype.numFilledNbrCells = function()
 {
-    var stage = this.parentThatIsA(StageMorph),
+	var stage = this.parentThatIsA(StageMorph),
 		cellPos = stage.screenToCellSpace(this.rotationCenter()),
 		numFilled = 0;
 	
@@ -1527,16 +1527,16 @@ SpriteMorph.prototype.numFilledNbrCells = function()
 }
 
 SpriteMorph.prototype.createClone = function () {
-    var stage = this.parentThatIsA(StageMorph);
-    if (stage) {
-        var clone = this.createCellularClone();
+	var stage = this.parentThatIsA(StageMorph);
+	if (stage) {
+		var clone = this.createCellularClone();
 		stage.add(clone);
-        var hats = clone.allHatBlocksFor('__clone__init__');
-        hats.forEach(function (block) {
-            stage.threads.startProcess(block, stage.isThreadSafe, undefined, undefined, clone);
-        });
+		var hats = clone.allHatBlocksFor('__clone__init__');
+		hats.forEach(function (block) {
+			stage.threads.startProcess(block, stage.isThreadSafe, undefined, undefined, clone);
+		});
 		return clone;
-    }
+	}
 };
 
 SpriteMorph.prototype.removeClone = function () {
@@ -1602,7 +1602,7 @@ SpriteMorph.prototype.cellularScaler = 1.0;
 
 SpriteMorph.prototype.uberGetScale = SpriteMorph.prototype.getScale;
 SpriteMorph.prototype.getScale = function () {
-    return this.uberGetScale() / this.cellularScaler;
+	return this.uberGetScale() / this.cellularScaler;
 };
 
 SpriteMorph.prototype.uberSetScale = SpriteMorph.prototype.setScale;
@@ -1612,7 +1612,7 @@ SpriteMorph.prototype.setScale = function (percentage) {
 
 SpriteMorph.prototype.uberChangeScale = SpriteMorph.prototype.changeScale;
 SpriteMorph.prototype.changeScale = function (delta) {
-    return this.uberChangeScale(delta * this.cellularScaler);
+	return this.uberChangeScale(delta * this.cellularScaler);
 };
 
 /*********************************************************************/
@@ -1644,7 +1644,7 @@ SpriteMorph.prototype.updateCurrentCell = function()
 	if (!this.parentSprite)
 		return; //No parent, thus this is a prototype sprite morph and is 'sposed to be invisible.
 		
-    var stage = this.parentThatIsA(StageMorph);
+	var stage = this.parentThatIsA(StageMorph);
 	if (!stage)
 		return; //No stage, can't go on!
 		
@@ -1660,8 +1660,8 @@ SpriteMorph.prototype.updateCurrentCell = function()
 		this.currentCell.removeSpriteMorph(this);
 		if (this.currentCell.spriteMorphs.length == 0)
 		{
-    		this.currentCell.parentECT.cellMadeEmpty();
-	    }
+			this.currentCell.parentECT.cellMadeEmpty();
+		}
 	}
 	
 	this.currentCell = newCell;
@@ -1671,7 +1671,7 @@ SpriteMorph.prototype.updateCurrentCell = function()
 	{
 		if (this.currentCell.spriteMorphs.length == 0)
 		{
-    		this.currentCell.parentECT.cellFilled();
+			this.currentCell.parentECT.cellFilled();
 		}
 		this.currentCell.addSpriteMorph(this);
 	}
@@ -1684,27 +1684,27 @@ SpriteMorph.prototype.updateCurrentCell = function()
 
 SpriteMorph.prototype.uberExportSprite = SpriteMorph.prototype.exportSprite;
 SpriteMorph.prototype.exportSprite = function () {
-    if (this.isCoone) {return; }
-    var ide = this.parentThatIsA(IDE_Morph);
-    if (ide) {
-        ide.exportSprite(this.parentSprite || this);
-    }
+	if (this.isCoone) {return; }
+	var ide = this.parentThatIsA(IDE_Morph);
+	if (ide) {
+		ide.exportSprite(this.parentSprite || this);
+	}
 };
 
 SpriteMorph.prototype.uberEdit = SpriteMorph.prototype.edit;
 SpriteMorph.prototype.edit = function () {
-    var ide = this.parentThatIsA(IDE_Morph);
-    if (ide && !ide.isAppMode) {
-        ide.selectSprite(this.parentSprite || this);
-    }
+	var ide = this.parentThatIsA(IDE_Morph);
+	if (ide && !ide.isAppMode) {
+		ide.selectSprite(this.parentSprite || this);
+	}
 };
 
 SpriteMorph.prototype.uberDuplicate = SpriteMorph.prototype.duplicate;
 SpriteMorph.prototype.duplicate = function () {
-    var ide = this.parentThatIsA(IDE_Morph);
-    if (ide) {
-        ide.duplicateSprite(this.parentSprite || this);
-    }
+	var ide = this.parentThatIsA(IDE_Morph);
+	if (ide) {
+		ide.duplicateSprite(this.parentSprite || this);
+	}
 };
 
 SpriteMorph.prototype.uberMoveBy = SpriteMorph.prototype.moveBy;
@@ -1716,7 +1716,7 @@ SpriteMorph.prototype.moveBy = function (delta, justMe) {
 
 StageMorph.prototype.uberAddChild = StageMorph.prototype.addChild;
 StageMorph.prototype.addChild = function (aNode) {
-    var ret = this.uberAddChild(aNode);
+	var ret = this.uberAddChild(aNode);
 	if (aNode instanceof SpriteMorph)
 		aNode.updateCurrentCell();
 	return ret;
@@ -1724,7 +1724,7 @@ StageMorph.prototype.addChild = function (aNode) {
 
 StageMorph.prototype.uberAddChildFirst = StageMorph.prototype.addChildFirst;
 StageMorph.prototype.addChildFirst = function (aNode) {
-    var ret = this.addChildFirst(aNode);
+	var ret = this.addChildFirst(aNode);
 	if (aNode instanceof SpriteMorph)
 		aNode.updateCurrentCell();
 	return ret;
@@ -1738,11 +1738,11 @@ StageMorph.prototype.removeChild = function (aNode) {
 		{
 			aNode.currentCell.removeSpriteMorph(aNode);
 			if (aNode.currentCell.spriteMorphs.length == 0)
-                aNode.currentCell.parentECT.cellMadeEmpty();
+				aNode.currentCell.parentECT.cellMadeEmpty();
 			aNode.currentCell = null;
 		}
 	}
-    return this.uberRemoveChild(aNode);
+	return this.uberRemoveChild(aNode);
 };
 
 /*
@@ -1772,7 +1772,7 @@ function cellInterpolate(resultCell, cellArray, cellArrayWidth, cellArrayHeight,
 	// 
 	//     . <--(u,v)
 	//
-    // X       X
+	// X       X
 	// ^       ^
 	// |       |
 	// |       (ceil(u), ceil(v))
@@ -1819,7 +1819,7 @@ function cellInterpolate(resultCell, cellArray, cellArrayWidth, cellArrayHeight,
 
 StageMorph.prototype.getCellFromNumber = function(n)
 {
-    return this.cells[Math.floor(n / this.cellsX)][n % this.cellsX];
+	return this.cells[Math.floor(n / this.cellsX)][n % this.cellsX];
 }
 
 /*
@@ -1827,27 +1827,27 @@ StageMorph.prototype.getCellFromNumber = function(n)
 */
 StageMorph.prototype.createECT = function(from, to)
 {
-    //To & From are inclusive bounds.
-    if (to - from > 1)
-    {
-        var midpoint = Math.floor((from + to) / 2);
-        return new EmptyCellTree(
-            this.createECT(from, midpoint),
-            this.createECT(midpoint + 1, to));
-    }
-    else
-    {
-        if (from == to)
-            return new EmptyCellTree(
-                this.getCellFromNumber(from),
-                null
-            );
-        else
-            return new EmptyCellTree(
-                this.getCellFromNumber(from),
-                this.getCellFromNumber(to)
-            );
-    }
+	//To & From are inclusive bounds.
+	if (to - from > 1)
+	{
+		var midpoint = Math.floor((from + to) / 2);
+		return new EmptyCellTree(
+			this.createECT(from, midpoint),
+			this.createECT(midpoint + 1, to));
+	}
+	else
+	{
+		if (from == to)
+			return new EmptyCellTree(
+				this.getCellFromNumber(from),
+				null
+			);
+		else
+			return new EmptyCellTree(
+				this.getCellFromNumber(from),
+				this.getCellFromNumber(to)
+			);
+	}
 }
 
 /*
@@ -1941,8 +1941,8 @@ StageMorph.prototype.dirtyCellAt = function(x, y)
 {
 	var cellWidth = this.cellWidth();
 	var cellHeight = this.cellHeight();
-    this.world().broken.push(
-        new Rectangle(
+	this.world().broken.push(
+		new Rectangle(
 			this.bounds.left() + cellWidth * x,
 			this.bounds.top() + cellHeight * y,
 			this.bounds.left() + cellWidth * (x+1),
@@ -1959,7 +1959,7 @@ StageMorph.prototype.dirtyEntireStage = function()
 		return;
 	if (world.broken == null)
 		return;
-    world.broken.push(this.bounds.spread());
+	world.broken.push(this.bounds.spread());
 }
 
 StageMorph.prototype.visibleAttributes = ["CellAttr1"];
@@ -2041,8 +2041,8 @@ StageMorph.prototype.getCellAtStageCoords = function(pointOrX, y)
 */
 StageMorph.prototype.getCellAt = function(pointOrX, y)
 {
-    var point = this.screenToCellSpace(pointOrX, y);
-    
+	var point = this.screenToCellSpace(pointOrX, y);
+	
 	if (point == null)
 	{
 		return null;
@@ -2059,7 +2059,7 @@ StageMorph.prototype.getCellAt = function(pointOrX, y)
 StageMorph.prototype.superDrawOn = StageMorph.prototype.drawOn;
 StageMorph.prototype.drawOn = function (aCanvas, aRect) {
 	var retnVal = this.superDrawOn(aCanvas, aRect);
-    if (this.drawGrid)
+	if (this.drawGrid)
 	{
 		var rectangle, area;
 		if (!this.isVisible) {
@@ -2150,11 +2150,11 @@ StageMorph.prototype.drawTool = false;
 StageMorph.prototype.uberMouseDownLeft = StageMorph.prototype.mouseDownLeft;
 StageMorph.prototype.mouseDownLeft = function()
 {
-    if (this.drawTool)
-    {
-        var worldhand = this.world().hand;
-        this.previousPoint = new Point(worldhand.bounds.origin.x, worldhand.bounds.origin.y);
-    }
+	if (this.drawTool)
+	{
+		var worldhand = this.world().hand;
+		this.previousPoint = new Point(worldhand.bounds.origin.x, worldhand.bounds.origin.y);
+	}
 	if (this.uberMouseDownLeft)
 		return this.uberMouseDownLeft();
 }
@@ -2164,12 +2164,12 @@ StageMorph.prototype.mouseDownLeft = function()
 */
 StageMorph.prototype.mouseMove = function(point)
 {
-    if (this.drawTool && this.world().hand.mouseButton === "left")
-    {
-        var previous = this.screenToCellSpace(this.previousPoint);
-        var next = this.screenToCellSpace(point);
-        if (previous != null && next != null)
-        {
+	if (this.drawTool && this.world().hand.mouseButton === "left")
+	{
+		var previous = this.screenToCellSpace(this.previousPoint);
+		var next = this.screenToCellSpace(point);
+		if (previous != null && next != null)
+		{
 			var strokeDecayWidth = Math.max(0, this.strokeSize);
 			var strokeFullWidth = strokeDecayWidth * Math.max(0, Math.min(1, this.strokeHardness));
 			var drawAttribute = this.parentThatIsA(IDE_Morph).attributeSelector.getValue();
@@ -2208,11 +2208,11 @@ StageMorph.prototype.mouseMove = function(point)
 			maxX = Math.max(0, Math.min(this.cellsX-1, maxX));
 			maxY = Math.max(0, Math.min(this.cellsY-1, maxY));
 			
-            for (var y=minY; y<=maxY; y++)
-            {
-                for (var x=minX; x<=maxX; x++)
-                {
-                    var cell = this.cells[y][x];
+			for (var y=minY; y<=maxY; y++)
+			{
+				for (var x=minX; x<=maxX; x++)
+				{
+					var cell = this.cells[y][x];
 					var lineWidth = previous.x - next.x;
 					var lineHeight = previous.y - next.y;
 					var distanceToLine = distToSegment({x: x + 0.5, y: y + 0.5}, previous, next); 
@@ -2228,19 +2228,19 @@ StageMorph.prototype.mouseMove = function(point)
 					{
 						alpha = Math.min(1, (distanceToLine - strokeXIntercept) * strokeGrad);
 					}
-		            if (alpha > 0 && cell != null)
-		            {
+					if (alpha > 0 && cell != null)
+					{
 						var newValue = cell.getAttribute(drawAttribute) * (1 - alpha) + this.strokeValue * alpha;
 						cell.setAttribute(drawAttribute, newValue, false);
-		            }
-                }
-            }
+					}
+				}
+			}
 			
 			this.dirtyEntireStage();
-        }
-    }
+		}
+	}
 	
-    this.previousPoint = new Point(point.x, point.y);
+	this.previousPoint = new Point(point.x, point.y);
 }
 
 /*
@@ -2251,27 +2251,27 @@ StageMorph.prototype.mouseMove = function(point)
 */
 SpriteMorph.prototype.createCellularClone = function()
 {
-    var c = SpriteMorph.uber.fullCopy.call(this),
-        arr = [],
-        cb;
+	var c = SpriteMorph.uber.fullCopy.call(this),
+		arr = [],
+		cb;
 
-    c.stopTalking();
-    c.color = this.color.copy();
-    c.blocksCache = {};
-    c.paletteCache = {};
-    c.scripts = this.scripts;
-    c.variables = this.variables.copy();
-    c.variables.owner = c;
-    c.parts = [];
-    c.anchor = null;
-    c.nestingScale = 1;
-    c.rotatesWithAnchor = true;
+	c.stopTalking();
+	c.color = this.color.copy();
+	c.blocksCache = {};
+	c.paletteCache = {};
+	c.scripts = this.scripts;
+	c.variables = this.variables.copy();
+	c.variables.owner = c;
+	c.parts = [];
+	c.anchor = null;
+	c.nestingScale = 1;
+	c.rotatesWithAnchor = true;
 	
 	c.parentSprite = this.parentSprite || this;
 	c.name = '';
 	
-    c.customBlocks = this.customBlocks;
-    c.costumes = this.costumes;
+	c.customBlocks = this.customBlocks;
+	c.costumes = this.costumes;
 	c.sounds = this.sounds;
 	c.isDraggable = true;
 	
@@ -2303,7 +2303,6 @@ SpriteMorph.prototype.cloneDestroyed = function()
 ** a parent sprite)
 */
 SpriteMorph.prototype.uberDrawOn = SpriteMorph.prototype.drawOn;
-SpriteMorph.prototype.uberDrawNew = SpriteMorph.prototype.drawNew;
 SpriteMorph.prototype.drawOn = function (aCanvas, aRect) 
 {
 	if (this.parentSprite != null) 
@@ -2320,13 +2319,6 @@ SpriteMorph.prototype.drawOn = function (aCanvas, aRect)
 		}
 		
 		return this.uberDrawOn(aCanvas, aRect); 
-	}
-};
-SpriteMorph.prototype.drawNew =  function ()
-{
-	if (this.parentSprite != null)
-	{
-		return this.uberDrawNew();
 	}
 };
 
@@ -2400,13 +2392,13 @@ Process.prototype.doBroadcast = function (message) {
 ** our own)
 */
 SpriteMorph.prototype.addVariable = function (name, isGlobal) {
-    var ide = this.parentThatIsA(IDE_Morph);
-    if (isGlobal) {
-        this.variables.parentFrame.addVar(name);
-        if (ide) {
-            ide.flushBlocksCache('variables');
-        }
-    } else {
+	var ide = this.parentThatIsA(IDE_Morph);
+	if (isGlobal) {
+		this.variables.parentFrame.addVar(name);
+		if (ide) {
+			ide.flushBlocksCache('variables');
+		}
+	} else {
 		this.variables.addVar(name);
 		this.blocksCache.variables = null;
 				
@@ -2418,16 +2410,16 @@ SpriteMorph.prototype.addVariable = function (name, isGlobal) {
 				x.blocksCache.variables = null;
 			}
 		});
-    }
+	}
 };
 
 /*
 ** Same as above, just with deleting objects.
 */
 SpriteMorph.prototype.deleteVariable = function (varName) {
-    var ide = this.parentThatIsA(IDE_Morph);
-    this.deleteVariableWatcher(varName);
-    this.variables.deleteVar(varName);
+	var ide = this.parentThatIsA(IDE_Morph);
+	this.deleteVariableWatcher(varName);
+	this.variables.deleteVar(varName);
 	
 	var myself = this;
 	this.parentThatIsA(StageMorph).children.forEach(function (x) {
@@ -2438,15 +2430,15 @@ SpriteMorph.prototype.deleteVariable = function (varName) {
 		}
 	});
 	
-    if (ide) {
-        ide.flushBlocksCache('variables'); // b/c the var could be global
-        ide.refreshPalette();
-    }
+	if (ide) {
+		ide.flushBlocksCache('variables'); // b/c the var could be global
+		ide.refreshPalette();
+	}
 };
 
 /*
 ** When the sprite is told to wear a costume, it should
-** wear it for all of the children too. This propogates
+** wear it for all of the children too. This propagates
 ** calls from the GUI to all of the clones.
 */
 SpriteMorph.prototype.uberWearCostume = SpriteMorph.prototype.wearCostume;
@@ -2463,6 +2455,11 @@ SpriteMorph.prototype.wearCostume = function (costume)
 				x.uberWearCostume(costume);
 			}
 		});
+		// And wear it myself (to update icon).
+		var result = this.uberWearCostume(costume);
+		// Force redraw too since prototypes don't redraw.
+		this.uberDrawNew();
+		return result;
 	}
 	//Wear this costume regardless
 	return this.uberWearCostume(costume);
