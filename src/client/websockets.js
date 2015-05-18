@@ -36,7 +36,6 @@ WebSocketManager.prototype.sendMessage = function(message) {
     // FIXME
     var state = this.websocket.readyState;
     if (state === this.websocket.OPEN) {
-        console.log('sending message:', message);
         this.websocket.send(message);
     } else if (state !== this.websocket.CONNECTING) {
         this.messages.push(message);
@@ -70,6 +69,5 @@ WebSocketManager.prototype.onMessageReceived = function (message, role) {
 };
 
 WebSocketManager.prototype.destroy = function () {
-    console.log('Closing socket...');
     this.websocket.close();
 };
