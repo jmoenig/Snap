@@ -150,7 +150,7 @@ ThreadManager.prototype.startProcess = function (
     isThreadSafe,
     exportResult,
     callback,
-    initVarFrame
+    context
 ) {
     var active = this.findProcess(block),
         top = block.topBlock(),
@@ -162,7 +162,7 @@ ThreadManager.prototype.startProcess = function (
         active.stop();
         this.removeTerminatedProcesses();
     }
-    newProc = new Process(block.topBlock(), callback, initVarFrame);
+    newProc = new Process(block.topBlock(), callback, context);
     newProc.exportResult = exportResult;
     if (!newProc.homeContext.receiver.isClone) {
         top.addHighlight();
@@ -346,7 +346,16 @@ Process.prototype.contructor = Process;
 Process.prototype.timeout = 500; // msecs after which to force yield
 Process.prototype.isCatchingErrors = true;
 
-function Process(topBlock, onComplete, varFrame) {
+/**
+ * Process
+ *
+ * @constructor
+ * @param {Block} topBlock - First block to execute
+ * @param {Function} [onComplete]
+ * @param {Context} [context] - Context to execute the process within
+ * @return {undefined}
+ */
+function Process(topBlock, onComplete, context) {
     this.topBlock = topBlock || null;
 
     this.readyToYield = false;
@@ -354,7 +363,7 @@ function Process(topBlock, onComplete, varFrame) {
     this.isDead = false;
     this.errorFlag = false;
     this.context = null;
-    this.homeContext = new Context();
+    this.homeContext = context || new Context();
     this.lastYield = Date.now();
     this.isAtomic = false;
     this.prompter = null;
@@ -368,9 +377,11 @@ function Process(topBlock, onComplete, varFrame) {
 
     if (topBlock) {
         this.homeContext.receiver = topBlock.receiver();
-        // TODO: Merge the varFrame's
         this.homeContext.variables.parentFrame =
-            this.homeContext.receiver.variables;
+            context || this.homeContext.receiver.variables;
+        if (context) {
+            context.variables.parentFrame = this.homeContext.receiver.variables;
+        }
         this.context = new Context(
             null,
             topBlock.blockSequence(),
@@ -1911,9 +1922,23 @@ Process.prototype.doSocketMessage = function (list, type) {
  *
  * @return {undefined}
  */
-Process.prototype.receiveSocketMessage = function (list, type) {
-    // TODO: Get the content?
-    console.log('Calling "receiveSocketMessage" with', arguments);
+Process.prototype.receiveSocketMessage = function (list) {
+    var names = list.contents,
+        varFrame = this.context.outerContext.variables,
+        tmpNames = this.context.variables.allNames(),
+        len = Math.min(tmpNames.length, names.length),
+        value,
+        i;
+
+    for (i = 0; i < len; i++) {
+        value = this.context.variables.getVar(tmpNames[i]);
+        varFrame.addVar(names[i], value);
+        varFrame.deleteVar(tmpNames[i]);
+    }
+
+    while (i < names.length) {
+        varFrame.addVar(names[i++]);
+    }
 };
 
 // Process event messages primitives

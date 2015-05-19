@@ -1,4 +1,4 @@
-/*globals VariableFrame,SpriteMorph, StageMorph*/
+/*globals Context,VariableFrame,SpriteMorph, StageMorph*/
 // WebSocket Manager
 
 var WebSocketManager = function (stage) {
@@ -27,7 +27,7 @@ WebSocketManager.prototype._connectWebSocket = function() {
         var data = message.data.split(' '),
             type = data.shift(),
             role = data.pop(),
-            content = JSON.parse(data.join(' '));
+            content = JSON.parse(data.join(' ') || null);
         console.log('received', type, 'from', role);
         self.onMessageReceived(type, content, role);
     };
@@ -54,9 +54,9 @@ WebSocketManager.prototype.sendMessage = function(message) {
 WebSocketManager.prototype.onMessageReceived = function (message, content, role) {
     var self = this,
         hats = [],
-        procs = [],
-        varFrame;
+        procs = [];
 
+    content = content || [];
     if (message !== '') {
         this.stage.lastMessage = message;
         this.stage.children.concat(this.stage).forEach(function (morph) {
@@ -64,20 +64,22 @@ WebSocketManager.prototype.onMessageReceived = function (message, content, role)
                 hats = hats.concat(morph.allHatSocketBlocksFor(message, role));
             }
         });
+
         hats.forEach(function (block) {
             // Initialize the variable frame with the message content for 
             // receiveSocketMessage blocks
             if (block.selector === 'receiveSocketMessage') {
-                varFrame = new VariableFrame();
+                // Create the network context
+                var context = new Context();
                 for (var i = content.length; i--;) {
-                    varFrame.addVar(i, content[i]);
+                    context.variables.addVar(i, content[i]);
                 }
                 procs.push(self.stage.threads.startProcess(
                     block, 
                     self.stage.isThreadSafe, 
                     undefined,
                     undefined,
-                    varFrame));
+                    context));
             } else {
                 procs.push(self.stage.threads.startProcess(block, self.stage.isThreadSafe));
             }

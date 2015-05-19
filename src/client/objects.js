@@ -3530,7 +3530,7 @@ SpriteMorph.prototype.bounceOffEdge = function () {
  */
 SpriteMorph.prototype.allRoleNames = function () {
     var roles = {},
-        networkingBlocks = ['doRegisterClient', 'receiveSocketEvent', 'receiveSocketMessage'];
+        networkingBlocks = ['doRegisterClient', 'receiveSocketEvent'];
     this.scripts.allChildren().forEach(function (morph) {
         var txt;
         if (morph.selector) {
