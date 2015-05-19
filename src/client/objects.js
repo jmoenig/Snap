@@ -602,26 +602,36 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'control',
             spec: 'when I receive %msgHat'
         },
-        receiveSocketMessage: {
-            type: 'hat',
-            category: 'control',
-            spec: 'when I receive %socketMsgHat from %roleHat'
-        },
-        // Add the socket communication blocks
-        doRegisterClient: {
+        // WebSockets
+        doRegisterClient: {  // for use with the generic group manager
             type: 'command',
             category: 'control',
             spec: 'register as %role'
-        },
-        doSocketMessage: {
-            type: 'command',
-            category: 'control',
-            spec: 'remote broadcast %socketMsg'
         },
         doSocketDisconnect: {
             type: 'command',
             category: 'control',
             spec: 'unregister'
+        },
+        receiveSocketEvent: {
+            type: 'hat',
+            category: 'control',
+            spec: 'when I receive %socketMsgHat from %roleHat'
+        },
+        doSocketEvent: {
+            type: 'command',
+            category: 'control',
+            spec: 'remote broadcast %socketMsg'
+        },
+        doSocketMessage: {
+            type: 'command',
+            category: 'control',
+            spec: 'remote broadcast %mult%s as %socketMsg'
+        },
+        receiveSocketMessage: {
+            type: 'hat',
+            category: 'control',
+            spec: 'when I receive %scriptVars as %socketMsg'
         },
         doBroadcast: {
             type: 'command',
@@ -1630,6 +1640,10 @@ SpriteMorph.prototype.blockForSelector = function (selector, setDefaults) {
     if (contains(['reifyReporter', 'reifyPredicate'], block.selector)) {
         block.isStatic = true;
     }
+    // Executable Hat Blocks
+    if (contains(['receiveSocketMessage'], block.selector)) {
+        block.blockSequence = CommandBlockMorph.prototype.blockSequence;
+    }
     block.setSpec(localize(info.spec));
     if ((setDefaults && info.defaults) || (migration && migration.inputs)) {
         defaults = migration ? migration.inputs : info.defaults;
@@ -1868,6 +1882,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('receiveKey'));
         blocks.push(block('receiveInteraction'));
         blocks.push(block('receiveMessage'));
+        blocks.push(block('receiveSocketEvent'));
         blocks.push(block('receiveSocketMessage'));
         blocks.push('-');
         blocks.push(block('doBroadcast'));
@@ -1876,8 +1891,9 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('getLastMessage'));
         blocks.push('-');
         blocks.push(block('doRegisterClient'));
-        blocks.push(block('doSocketMessage'));
+        blocks.push(block('doSocketEvent'));
         blocks.push(block('doSocketDisconnect'));
+        blocks.push(block('doSocketMessage'));
         blocks.push('-');
         blocks.push(block('doWarp'));
         blocks.push('-');
@@ -3514,7 +3530,7 @@ SpriteMorph.prototype.bounceOffEdge = function () {
  */
 SpriteMorph.prototype.allRoleNames = function () {
     var roles = {},
-        networkingBlocks = ['doRegisterClient', 'receiveSocketMessage'];
+        networkingBlocks = ['doRegisterClient', 'receiveSocketEvent', 'receiveSocketMessage'];
     this.scripts.allChildren().forEach(function (morph) {
         var txt;
         if (morph.selector) {
@@ -3538,15 +3554,26 @@ SpriteMorph.prototype.allRoleNames = function () {
 SpriteMorph.prototype.allMessageNames = function () {
     var msgs = [];
     this.scripts.allChildren().forEach(function (morph) {
-        var txt;
+        var txt,
+            index = 0;
         if (morph.selector) {
             if (contains(
-                    ['receiveMessage', 'doBroadcast', 'doBroadcastAndWait', 'doSocketMessage', 'receiveSocketMessage'],
+                    ['receiveMessage', 
+                     'doBroadcast', 
+                     'doBroadcastAndWait', 
+                     'doSocketEvent', 
+                     'receiveSocketEvent',
+                     'doSocketMessage', 
+                     'receiveSocketMessage'],
                     morph.selector
                 )) {
-                txt = morph.inputs()[0].evaluate();
-                if (morph.selector !== 'receiveSocketMessage' ||  // Ignore 'join' and 'leave' from 
-                       (txt !== 'join' && txt !== 'leave')) {     // receiveSocketMessage
+                if (morph.selector === 'receiveSocketMessage') {
+                    // This morph has the message name as the second input
+                    index = 1;
+                }
+                txt = morph.inputs()[index].evaluate();
+                if (morph.selector !== 'receiveSocketEvent' ||  // Ignore 'join' and 'leave' from 
+                       (txt !== 'join' && txt !== 'leave')) {     // receiveSocketEvent
                     if (isString(txt) && txt !== '') {
                         if (!contains(msgs, txt)) {
                             msgs.push(txt);
@@ -3567,11 +3594,14 @@ SpriteMorph.prototype.allHatSocketBlocksFor = function (message, role) {
     var event,
         r;  // receiver listened for by block
     return this.scripts.children.filter(function (morph) {
-        if (morph.selector === 'receiveSocketMessage') {
+        if (morph.selector === 'receiveSocketEvent') {
             event = morph.inputs()[0].evaluate();
             r = morph.inputs()[1].evaluate();
             return (event === message || (event instanceof Array)) &&
                 (r === role || (r instanceof Array));
+        } else if (morph.selector === 'receiveSocketMessage') {
+            event = morph.inputs()[1].evaluate();
+            return event === message || (event instanceof Array);
         }
         return false;
     });
@@ -3594,6 +3624,7 @@ SpriteMorph.prototype.allHatBlocksFor = function (message) {
                     return message === '__clone__init__';
 
                 case 'receiveSocketMessage':
+                case 'receiveSocketEvent':
                     event = morph.inputs()[0].evaluate();
                     return ('__socket__'+event) === message || (event instanceof Array);
                     // Add socket message handling
@@ -5146,7 +5177,8 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('receiveKey'));
         blocks.push(block('receiveInteraction'));
         blocks.push(block('receiveMessage'));
-        blocks.push(block('receiveSocketMessage'));  // FIXME Why do we have this twice? --> refactor!
+        blocks.push(block('receiveSocketEvent'));  // FIXME Why do we have this twice? --> refactor!
+        blocks.push(block('receiveSocketMessage'));
         blocks.push('-');
         blocks.push(block('doBroadcast'));
         blocks.push(block('doBroadcastAndWait'));
@@ -5154,8 +5186,9 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('getLastMessage'));
         blocks.push('-');
         blocks.push(block('doRegisterClient'));
-        blocks.push(block('doSocketMessage'));
+        blocks.push(block('doSocketEvent'));
         blocks.push(block('doSocketDisconnect'));
+        blocks.push(block('doSocketMessage'));
         blocks.push('-');
         blocks.push(block('doWarp'));
         blocks.push('-');

@@ -149,7 +149,8 @@ ThreadManager.prototype.startProcess = function (
     block,
     isThreadSafe,
     exportResult,
-    callback
+    callback,
+    initVarFrame
 ) {
     var active = this.findProcess(block),
         top = block.topBlock(),
@@ -161,7 +162,7 @@ ThreadManager.prototype.startProcess = function (
         active.stop();
         this.removeTerminatedProcesses();
     }
-    newProc = new Process(block.topBlock(), callback);
+    newProc = new Process(block.topBlock(), callback, initVarFrame);
     newProc.exportResult = exportResult;
     if (!newProc.homeContext.receiver.isClone) {
         top.addHighlight();
@@ -345,7 +346,7 @@ Process.prototype.contructor = Process;
 Process.prototype.timeout = 500; // msecs after which to force yield
 Process.prototype.isCatchingErrors = true;
 
-function Process(topBlock, onComplete) {
+function Process(topBlock, onComplete, varFrame) {
     this.topBlock = topBlock || null;
 
     this.readyToYield = false;
@@ -367,6 +368,7 @@ function Process(topBlock, onComplete) {
 
     if (topBlock) {
         this.homeContext.receiver = topBlock.receiver();
+        // TODO: Merge the varFrame's
         this.homeContext.variables.parentFrame =
             this.homeContext.receiver.variables;
         this.context = new Context(
@@ -1886,15 +1888,32 @@ Process.prototype.doRegisterClient = function (message) {
 Process.prototype.doSocketDisconnect = function () {
     // Close the socket
     if (!!this.websocket) {
-        // TODO
+        // TODO: Should I close the socket or simply send an "exit"
+        // message to the server?
     }
 };
 
-Process.prototype.doSocketMessage = function (message) {
+Process.prototype.doSocketEvent = function (message) {
     // Get the websocket manager
     var stage = this.homeContext.receiver.parentThatIsA(StageMorph);
 
     stage.sockets.sendMessage('message ' + message);
+};
+
+Process.prototype.doSocketMessage = function (list, type) {
+    console.log('Calling doSocketMessage with', arguments);  // REMOVE
+    this.doSocketEvent(type+' '+JSON.stringify(list.contents));
+};
+
+/**
+ * On socket message, unpack the message content into the variables in 
+ * the list.
+ *
+ * @return {undefined}
+ */
+Process.prototype.receiveSocketMessage = function (list, type) {
+    // TODO: Get the content?
+    console.log('Calling "receiveSocketMessage" with', arguments);
 };
 
 // Process event messages primitives
