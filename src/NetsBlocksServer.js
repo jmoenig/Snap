@@ -44,7 +44,6 @@ NetsBlocksServer.prototype.start = function(opts) {
 
         // Add the client to the global group
         self.groupManager.onConnect(socket);
-        self.groupManager._printGroups();
         // Broadcast 'join' on connect
         self.notifyGroupJoin(socket);
 
