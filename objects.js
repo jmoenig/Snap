@@ -2669,8 +2669,17 @@ SpriteMorph.prototype.setBrightness = function (num) {
         x = this.xPosition(),
         y = this.yPosition();
 
-    hsv[1] = 1; // we gotta fix this at some time
-    hsv[2] = Math.max(Math.min(+num || 0, 100), 0) / 100;
+    num = Math.max(Math.min(+num || 0, 200), 0) / 100;
+    hsv[1] = 1;
+    hsv[2] = 1;
+
+    if(num > 1) {
+        hsv[1] = (2 - num);
+    }
+    else {
+        hsv[2] = num;
+    }
+
     this.color.set_hsv.apply(this.color, hsv);
     if (!this.costume) {
         this.drawNew();
@@ -2678,6 +2687,7 @@ SpriteMorph.prototype.setBrightness = function (num) {
     }
     this.gotoXY(x, y);
 };
+
 
 SpriteMorph.prototype.changeBrightness = function (delta) {
     this.setBrightness(this.getBrightness() + (+delta || 0));
