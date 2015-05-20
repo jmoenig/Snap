@@ -1,4 +1,3 @@
-// TODO: Refactor this file 
 'use strict';
 var express = require('express'),
     app = express(),
