@@ -1922,7 +1922,7 @@ Process.prototype.doSocketMessage = function (type, list) {
 Process.prototype.receiveSocketMessage = function (type, list) {
     var names = list.contents,
         varFrame = this.context.outerContext.variables,
-        tmpNames = this.context.variables.allNames(),
+        tmpNames = this.context.variables.parentFrame.names(),
         len = Math.min(tmpNames.length, names.length),
         value,
         i;

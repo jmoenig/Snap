@@ -3595,7 +3595,7 @@ SpriteMorph.prototype.allHatSocketBlocksFor = function (message, role) {
             return (event === message || (event instanceof Array)) &&
                 (r === role || (r instanceof Array));
         } else if (morph.selector === 'receiveSocketMessage') {
-            event = morph.inputs()[1].evaluate();
+            event = morph.inputs()[0].evaluate();
             return event === message || (event instanceof Array);
         }
         return false;
