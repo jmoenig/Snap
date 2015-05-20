@@ -1909,8 +1909,7 @@ Process.prototype.doSocketEvent = function (message) {
     stage.sockets.sendMessage('message ' + message);
 };
 
-Process.prototype.doSocketMessage = function (list, type) {
-    console.log('Calling doSocketMessage with', arguments);  // REMOVE
+Process.prototype.doSocketMessage = function (type, list) {
     this.doSocketEvent(type+' '+JSON.stringify(list.contents));
 };
 
@@ -1920,7 +1919,7 @@ Process.prototype.doSocketMessage = function (list, type) {
  *
  * @return {undefined}
  */
-Process.prototype.receiveSocketMessage = function (list) {
+Process.prototype.receiveSocketMessage = function (type, list) {
     var names = list.contents,
         varFrame = this.context.outerContext.variables,
         tmpNames = this.context.variables.allNames(),

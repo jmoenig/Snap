@@ -621,17 +621,17 @@ SpriteMorph.prototype.initBlocks = function () {
         doSocketEvent: {
             type: 'command',
             category: 'control',
-            spec: 'remote broadcast %socketMsg'
+            spec: 'broadcast event %socketMsg'
         },
         doSocketMessage: {
             type: 'command',
             category: 'control',
-            spec: 'remote broadcast %mult%s as %socketMsg'
+            spec: 'broadcast msg %socketMsg %mult%s'
         },
         receiveSocketMessage: {
             type: 'hat',
             category: 'control',
-            spec: 'when I receive %scriptVars as %socketMsg'
+            spec: 'when I receive msg %socketMsg %scriptVars'
         },
         doBroadcast: {
             type: 'command',
@@ -3554,8 +3554,7 @@ SpriteMorph.prototype.allRoleNames = function () {
 SpriteMorph.prototype.allMessageNames = function () {
     var msgs = [];
     this.scripts.allChildren().forEach(function (morph) {
-        var txt,
-            index = 0;
+        var txt;
         if (morph.selector) {
             if (contains(
                     ['receiveMessage', 
@@ -3567,11 +3566,7 @@ SpriteMorph.prototype.allMessageNames = function () {
                      'receiveSocketMessage'],
                     morph.selector
                 )) {
-                if (morph.selector === 'receiveSocketMessage') {
-                    // This morph has the message name as the second input
-                    index = 1;
-                }
-                txt = morph.inputs()[index].evaluate();
+                txt = morph.inputs()[0].evaluate();
                 if (morph.selector !== 'receiveSocketEvent' ||  // Ignore 'join' and 'leave' from 
                        (txt !== 'join' && txt !== 'leave')) {     // receiveSocketEvent
                     if (isString(txt) && txt !== '') {
