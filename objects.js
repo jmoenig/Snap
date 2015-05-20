@@ -2674,10 +2674,8 @@ SpriteMorph.prototype.setBrightness = function (num) {
     hsv[2] = 1;
 
     if(num > 1) {
-        hsv[1] = (2 - num);
     }
     else {
-        hsv[2] = num;
     }
 
     this.color.set_hsv.apply(this.color, hsv);
@@ -2687,7 +2685,6 @@ SpriteMorph.prototype.setBrightness = function (num) {
     }
     this.gotoXY(x, y);
 };
-
 
 SpriteMorph.prototype.changeBrightness = function (delta) {
     this.setBrightness(this.getBrightness() + (+delta || 0));
