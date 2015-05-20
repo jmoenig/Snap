@@ -378,10 +378,8 @@ function Process(topBlock, onComplete, context) {
     if (topBlock) {
         this.homeContext.receiver = topBlock.receiver();
         this.homeContext.variables.parentFrame =
-            context || this.homeContext.receiver.variables;
-        if (context) {
-            context.variables.parentFrame = this.homeContext.receiver.variables;
-        }
+            this.homeContext.receiver.variables;
+
         this.context = new Context(
             null,
             topBlock.blockSequence(),
