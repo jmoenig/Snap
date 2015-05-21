@@ -2514,3 +2514,7 @@ ______
 150518
 ------
 * Objects, GUI: Fix encoding for exported sprites (esp. comments)
+
+150521
+------
+* BYOB: Fix encoding for exported libraries of global blocks
