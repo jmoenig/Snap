@@ -65,7 +65,7 @@ TwoPlayerManager.prototype.onDisconnect = function(socket) {
         index,
         peer;
 
-    info('Removing #'+socket.id+' from '+group);
+    info('Removing #'+socket.id+' from '+TwoPlayerManager._printGroup(group));
 
     // Remove the given group and add the other socket back to a group
     if (group.length === 2) {
@@ -100,11 +100,14 @@ TwoPlayerManager.prototype._addToGroup = function(socket) {
 
 // debugging
 TwoPlayerManager.prototype._printGroups = function() {
-    debug('Groups are', this.groups.map(function(group) {
-        return group.map(function(s) {
-            return s.id;
-        });
-    }), '(',this.groups.length,')');
+    debug('Groups are', this.groups.map(TwoPlayerManager._printGroup),
+        '(',this.groups.length,')');
+};
+
+TwoPlayerManager._printGroup = function(group) {
+    return group.map(function(s) {
+        return s.id;
+    });
 };
 
 module.exports = TwoPlayerManager;

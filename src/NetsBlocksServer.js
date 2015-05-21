@@ -77,10 +77,9 @@ NetsBlocksServer.prototype.broadcast = function(message, peers) {
     for (var i = peers.length; i--;) {
         s = peers[i];
         // Check if the socket is open
-        if (this.updateSocket(s)) {
+        if (s.readyState === s.OPEN) {
             info('Sending message "'+message+'" to socket #'+s.id);
             s.send(message);
-            console.log('Sent message "'+message+'" to '+s.id);
         }
     }
 };
@@ -98,8 +97,6 @@ NetsBlocksServer.prototype.updateSockets = function() {
         return;
     }
 
-    // Replace the next portion TODO
-    //
     // We should find the sockets to remove from each group
     // then broadcast to the remaining for all the removed sockets
     var isOpen = R.pipe(R.partialRight(Utils.getAttribute, 'readyState'), 
@@ -134,7 +131,6 @@ NetsBlocksServer.prototype.updateSockets = function() {
  * @return {Boolean} connected?
  */
 NetsBlocksServer.prototype.updateSocket = function(socket) {
-    info('Updating socket #'+socket.id+' ('+socket.readyState+')');
     if (socket.readyState !== socket.OPEN) {
         info('Removing disconnected socket ('+socket.id+')');
         var role = this.socket2Role[socket.id];
