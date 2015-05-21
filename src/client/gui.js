@@ -2054,6 +2054,10 @@ IDE_Morph.prototype.cloudMenu = function () {
             'Change Password...',
             'changeCloudPassword'
         );
+        menu.addItem(
+            'Cancel Account',
+            'cancelCloudAccount'
+        );
     }
     if (shiftClicked) {
         menu.addLine();
@@ -3929,6 +3933,21 @@ IDE_Morph.prototype.changeCloudPassword = function () {
         world,
         myself.cloudIcon(),
         myself.cloudMsg
+    );
+};
+
+IDE_Morph.prototype.cancelCloudAccount = function () {
+    var myself = this;
+    delete localStorage['-snap-user'];
+    SnapCloud.cancelAccount(
+        function () {
+            SnapCloud.clear();
+            myself.showMessage('account deleted!', 2);
+        },
+        function () {
+            SnapCloud.clear();
+            myself.showMessage('account deleted!', 2);
+        }
     );
 };
 

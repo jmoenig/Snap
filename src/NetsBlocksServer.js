@@ -9,13 +9,18 @@ var WebSocketServer = require('ws').Server,
     GenericManager = require('./GroupManagers/GenericManager'),
     R = require('ramda'),
     Utils = require('./Utils'),
+    _ = require('lodash'),
+    defOptions = {
+        wsPort: 5432,
+        GroupManager: require('./GroupManagers/Basic')
+    },
     debug = require('debug'),
     log = debug('NetsBlocks:log'),
     info = debug('NetsBlocks:info');
 
 var NetsBlocksServer = function(opts) {
-    console.log('opts:', opts);
-    opts = opts || {};
+    opts = _.extend({}, defOptions, opts);
+    this._wsPort = opts.wsPort;
     this.sockets = [];
     this.socket2Role = {};
 
@@ -30,26 +35,25 @@ var NetsBlocksServer = function(opts) {
  * @param {Object} opts
  * @return {undefined}
  */
-NetsBlocksServer.prototype.start = function(opts) {
-    this._wss = new WebSocketServer(opts);
+NetsBlocksServer.prototype.start = function() {
+    this._wss = new WebSocketServer({port: this._wsPort});
 
-    var self = this;
     this._wss.on('connection', function(socket) {
         log('WebSocket connection established! ('+counter+')');
 
         // ID the socket
         socket.id = ++counter;
-        self.sockets.push(socket);
-        self.socket2Role[socket.id] = 'default_'+socket.id;
+        this.sockets.push(socket);
+        this.socket2Role[socket.id] = 'default_'+socket.id;
 
         // Add the client to the global group
-        self.groupManager.onConnect(socket);
+        this.groupManager.onConnect(socket);
         // Broadcast 'join' on connect
-        self.notifyGroupJoin(socket);
+        this.notifyGroupJoin(socket);
 
         socket.on('message', function(data) {
             log('Received message: ',data);
-            self.onMsgReceived(socket, data);
+            this.onMsgReceived(socket, data);
         }.bind(this));
 
         socket.on('close', function() {
@@ -60,7 +64,7 @@ NetsBlocksServer.prototype.start = function(opts) {
     }.bind(this));
 };
 
-NetsBlocksServer.prototype.stop = function(opts) {
+NetsBlocksServer.prototype.stop = function() {
     this._wss.close();
 };
 
@@ -81,46 +85,6 @@ NetsBlocksServer.prototype.broadcast = function(message, peers) {
             info('Sending message "'+message+'" to socket #'+s.id);
             s.send(message);
         }
-    }
-};
-
-/**
- * Check if the sockets are still active and remove any stale sockets.
- *
- * @return {undefined}
- */
-NetsBlocksServer.prototype.updateSockets = function() {
-    var groups = this.groupManager.getAllGroups(),
-        open;
-
-    if (!this.sockets.length) {
-        return;
-    }
-
-    // We should find the sockets to remove from each group
-    // then broadcast to the remaining for all the removed sockets
-    var isOpen = R.pipe(R.partialRight(Utils.getAttribute, 'readyState'), 
-            Utils.not(R.eq.bind(R, this.sockets[0].OPEN))),
-        closed,
-        getRole = function(s) {
-            log('Removing websocket: id: '+s.id+' role: '+this.socket2Role[s.id]);
-            return this.socket2Role[s.id];
-        }.bind(this),
-        roles;
-
-    for (var i = groups.length; i--;) {
-        // Get the closed sockets
-        closed = Utils.extract(isOpen, groups[i]);
-
-        roles = closed.map(getRole);
-
-        // Broadcast to remaining 'leave '+role
-        closed.forEach(R.pipe(this._removeFromRecords.bind(this), 
-                              this.groupManager.onDisconnect.bind(this.groupManager)));
-
-        roles.forEach(R.pipe(
-            R.partial(R.concat, 'leave '),  // Create 'leave '+role msg
-            R.partialRight(this.broadcast.bind(this), groups[i])));  // broadcast!
     }
 };
 

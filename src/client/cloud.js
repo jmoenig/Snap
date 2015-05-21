@@ -36,7 +36,7 @@ modules.cloud = '2015-January-12';
 
 var Cloud;
 var SnapCloud = new Cloud(
-    'https://snap.apps.miosoft.com/SnapCloud'
+    'http://localhost:8080/api/'  // FIXME: Set this intelligently
 );
 
 // Cloud /////////////////////////////////////////////////////////////
@@ -108,7 +108,7 @@ Cloud.prototype.signup = function (
         request.onreadystatechange = function () {
             if (request.readyState === 4) {
                 if (request.responseText) {
-                    if (request.responseText.indexOf('ERROR') === 0) {
+                    if (request.status[0] !== '2') {
                         errorCall.call(
                             this,
                             request.responseText,
@@ -253,6 +253,7 @@ Cloud.prototype.login = function (
     errorCall
 ) {
     // both callBack and errorCall are two-argument functions
+    console.log('password:', password);
     var request = new XMLHttpRequest(),
         usr = JSON.stringify({'__h': password, '__u': username}),
         myself = this;
@@ -275,16 +276,17 @@ Cloud.prototype.login = function (
         request.withCredentials = true;
         request.onreadystatechange = function () {
             if (request.readyState === 4) {
-                if (request.responseText) {
+                if (request.status === 200) {
                     myself.api = myself.parseAPI(request.responseText);
-                    myself.session = request.getResponseHeader('MioCracker')
-                        .split(';')[0];
+                    // TODO: Update session info 
+                    myself.session = document.cookie;
                     // set the cookie identifier:
-                    myself.limo = this.getResponseHeader("miocracker")
-                        .substring(
-                            9,
-                            this.getResponseHeader("miocracker").indexOf("=")
-                        );
+                    myself.limo = myself.session.substring(0, myself.session.indexOf('='));
+                    //myself.limo = this.getResponseHeader("miocracker")
+                        //.substring(
+                            //9,
+                            //this.getResponseHeader("miocracker").indexOf("=")
+                        //);
                     if (myself.api.logout) {
                         myself.username = username;
                         myself.password = password;
@@ -296,6 +298,12 @@ Cloud.prototype.login = function (
                             'connection failed'
                         );
                     }
+                } else if (request.status === 403) {
+                    errorCall.call(
+                        null,
+                        '',
+                        localize('wrong username or password')
+                    );
                 } else {
                     errorCall.call(
                         null,
@@ -420,6 +428,15 @@ Cloud.prototype.changePassword = function (
     );
 };
 
+Cloud.prototype.cancelAccount = function (callBack, errorCall) {
+    this.clear();
+    this.callService(
+        'cancelAccount',
+        callBack,
+        errorCall
+    );
+};
+
 Cloud.prototype.logout = function (callBack, errorCall) {
     this.clear();
     this.callService(
@@ -515,23 +532,20 @@ Cloud.prototype.callService = function (
     }
     try {
         stickyUrl = this.url +
-            '/' +
-            service.url +
-            '&SESSIONGLUE=' +
-            this.route +
-            '&_Limo=' +
-            this.limo;
+            service.url;
+
         request.open(service.method, stickyUrl, true);
         request.withCredentials = true;
         request.setRequestHeader(
             "Content-Type",
             "application/x-www-form-urlencoded"
         );
-        request.setRequestHeader('MioCracker', this.session);
-        request.setRequestHeader('SESSIONGLUE', this.route);
+        //request.setRequestHeader('MioCracker', this.session);
+        //request.setRequestHeader('SESSIONGLUE', this.route);
         request.onreadystatechange = function () {
             if (request.readyState === 4) {
                 var responseList = [];
+                // FIXME: This should use error codes
                 if (request.responseText &&
                         request.responseText.indexOf('ERROR') === 0) {
                     errorCall.call(

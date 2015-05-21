@@ -1,9 +1,23 @@
 # Misc NetsBlocks/Snap notes
-## Adding websocket support
-I will probably want to have a couple methods for handling websocket communication:
-+ Registering/opening a socket
-+ Sending a message
-+ Closing a socket (when not running the script)
+## Snap cloud storage API
++ I am reverse engineering the Snap! server
+
++ API names
+    + saveProject
+    + cancelAccount
+    + changePassword
+    + deleteProject
+    + getProject
+    + getProjectList
+    + logout
+    + login
+    + publishProject
+    + unpublishProject
+
++ I need to update the "SnapCloud" name to "netsblox"
+
++ I need to add some tests for sign in, etc
+
 
 ## Thoughts on interrupts/websocket msg receiving
 + Add game "namespaces" to the server
@@ -28,13 +42,6 @@ I will probably want to have a couple methods for handling websocket communicati
 
 + The `receiveMessage` block should also listen for network requests. That is, we should fire a message when we receive a socket message
 
-## Automated Testing thoughts
-+ I would like to do TDD with this but I need some way to test it... 
-+ I might be able to build a little framework around the Javascript world object and interact with it programmatically
-    + This would be really nice to have...
-
-+ I could load projects from xml and simply run them
-
 # Additional Features
 + Blocks for Comments?
 
@@ -53,6 +60,15 @@ I will probably want to have a couple methods for handling websocket communicati
     + Berkeley already hosts one
 
 + Currently open games/apps?
+    + Should we be able to invite people to collaborate with us on projects?
+
+    + If you load a project from your browser, it should behave normally; if you are
+        working on a cloud hosted project, you should be able to share it with others.
+    + I should add my own cloud hosted location
+        + This should probably be easy to change... Should I add the requesting to the
+          server?
+
++ As a side note, I think I could hack into other people's accounts given access to their logged in machine... Maybe I could do it in text blocks...
 
 # Snap structure notes
 ## Spec
@@ -88,6 +104,17 @@ I will probably want to have a couple methods for handling websocket communicati
 + Create a testing framework/hooks for Snap 
     + Created one for the server-side logic
 
++ Create a testing framework/hooks for Snap 
+
++ Message type checking
+
+## Adding websocket support
+I will probably want to have a couple methods for handling websocket communication:
++ Registering/opening a socket
++ Sending a message
++ Closing a socket (when not running the script)
+
+## Finished To do/Fix me!
 + Create network messages for Snap
     + How can the `receiveSocketMessage` hat receive the content sent?
         + Can I create a variable context and pass it with the block?
@@ -100,8 +127,8 @@ I will probably want to have a couple methods for handling websocket communicati
         + It is the SpriteMorph --> Not what we want
 
 + X being played in the wrong spot
+    + DONE
 
-## Finished To do/Fix me!
 + Filtering with socket msg blocks is broken
     + Fixed 
 

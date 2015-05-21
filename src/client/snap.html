@@ -26,6 +26,7 @@
                 world.worldCanvas.focus();
 				new IDE_Morph().openIn(world);
 				setInterval(loop, 1);
+                loadSnapTestingHelpers(this);
 			};
 			function loop() {
 				world.doOneCycle();

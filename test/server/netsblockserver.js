@@ -1,8 +1,7 @@
 /*globals after,afterEach,describe,it,before,beforeEach*/
 'use strict';
 
-// 
-var NetsBlocks = require('../src/NetsBlocksServer'),
+var NetsBlocks = require('../../src/NetsBlocksServer'),
     WebSocket = require('ws'),  // jshint ignore:line
     R = require('ramda'),
     assert = require('assert'),
@@ -35,10 +34,10 @@ describe('NetsBlocksServer tests', function() {
         describe('Connection tests', function() {
             beforeEach(function() {
                 server = new NetsBlocks();
-                server.start(opts);
                 if (!socket || socket.readyState !== 1) {
                     socket = new WebSocket(host);
                 }
+                server.start();
             });
 
             afterEach(function() {
@@ -67,7 +66,7 @@ describe('NetsBlocksServer tests', function() {
 
             beforeEach(function() {
                 server = new NetsBlocks();
-                server.start(opts);
+                server.start();
                 if (!socket || socket.readyState !== 1) {
                     socket = new WebSocket(host);
                 }
@@ -182,9 +181,9 @@ describe('GroupManager Testing', function() {
 
     describe('N-player tests', function() {
         beforeEach(function() {
-            var GenericManager = require('../src/GroupManagers/GenericManager');
+            var GenericManager = require('../../src/GroupManagers/GenericManager');
             server = new NetsBlocks({GroupManager: GenericManager});
-            server.start(opts);
+            server.start();
             sockets = [];
 
             // Throw out all old sockets and start fresh!
@@ -192,10 +191,10 @@ describe('GroupManager Testing', function() {
         });
 
         afterEach(function() {
-            server.stop();
             sockets.forEach(function(s) {
                 s.close();
             });
+            server.stop();
         });
 
         it('should group players into groups by role name', function(done) {
@@ -276,17 +275,17 @@ describe('GroupManager Testing', function() {
 
     describe('2 player tests', function() {
         beforeEach(function() {
-            var TwoPlayerTurn = require('../src/GroupManagers/TurnBasedManager');
+            var TwoPlayerTurn = require('../../src/GroupManagers/TurnBasedManager');
             server = new NetsBlocks({GroupManager: TwoPlayerTurn});
-            server.start(opts);
+            server.start();
             sockets = [];
         });
 
         afterEach(function() {
-            server.stop();
             sockets.forEach(function(s) {
                 s.close();
             });
+            server.stop();
         });
 
         it('should pass messages between 2 of 3 people', function(done) {

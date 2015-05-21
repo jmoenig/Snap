@@ -1,3 +1,7 @@
+// These are general utils for more convenient functional programming
+// Basically, these are predominantly small functions that are convenient
+// for composing other useful functions (such as negating a function with
+// "not")
 'use strict';
 
 var inherit = function(child, parents) {
@@ -9,9 +13,6 @@ var inherit = function(child, parents) {
 };
 
 var getAttribute = function(object, attr) {
-    if (attr === 'id') {
-        console.log('Returning', object[attr]);
-    }
     return object[attr];
 };
 
@@ -44,9 +45,13 @@ var not = function(fn) {
     };
 };
 
+var nop = function() {
+};
+
 module.exports = {
     inherit: inherit,
     extract: extract,
     not: not,
+    nop: nop,
     getAttribute: getAttribute
 };

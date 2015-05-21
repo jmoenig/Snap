@@ -4,9 +4,11 @@
   "description": "Visual programming environment with networking support",
   "main": "server.js",
   "scripts": {
-    "start": "node src/server.js",
-    "dev": "nodemon src/server.js",
-    "test": "node node_modules/mocha/bin/mocha --recursive test"
+    "start": "node bin/netsblocks.js",
+    "dev": "node node_modules/nodemon/bin/nodemon src/server.js",
+    "testmon": "node node_modules/nodemon/bin/nodemon node_modules/mocha/bin/mocha --recursive test/server",
+    "test": "node node_modules/mocha/bin/mocha --recursive test/server",
+    "test-client": "node test/client/integration.js"
   },
   "repository": {
     "type": "git",
@@ -19,13 +21,25 @@
   },
   "homepage": "https://github.com/NetsBlocks/server",
   "dependencies": {
+    "body-parser": "^1.12.4",
+    "cookie-parser": "^1.3.5",
     "debug": "^2.1.3",
     "express": "^4.12.3",
+    "express-session": "^1.11.3",
     "jade": "^1.9.2",
-    "mocha": "^2.2.1",
+    "lodash": "^3.9.1",
+    "mongodb": "^2.0.33",
     "ramda": "^0.13.0",
     "socket.io": "^1.3.5",
     "ws": "^0.7.1",
+    "xml2js": "^0.4.10",
     "yargs": "^3.9.0"
+  },
+  "devDependencies": {
+    "expect": "^1.6.0",
+    "nodemon": "^1.3.7",
+    "mocha": "^2.2.1",
+    "mocha-phantomjs": "^3.5.3",
+    "supertest": "^1.0.1"
   }
 }
