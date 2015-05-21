@@ -15,13 +15,13 @@ var getAttribute = function(object, attr) {
     return object[attr];
 };
 
-    /**
-     * Remove passing values from the list (destructively).
-     *
-     * @param {Function} fn
-     * @param {Array} list
-     * @return {Array}
-     */
+/**
+* Remove passing values from the list (destructively).
+*
+* @param {Function} fn
+* @param {Array} list
+* @return {Array}
+*/
 var extract = function(fn, list) {
     var result = [];
     for (var i = list.length; i--;) {
@@ -32,17 +32,17 @@ var extract = function(fn, list) {
     return result;
 };
 
-    /**
-     * Return the negation of the given function.
-     *
-     * @param {Function} fn
-     * @return {Function}
-     */
-    var not = function(fn) {
-        return function() {
-            return !fn.apply(this, arguments);
-        };
+/**
+* Return the negation of the given function.
+*
+* @param {Function} fn
+* @return {Function}
+*/
+var not = function(fn) {
+    return function() {
+        return !fn.apply(this, arguments);
     };
+};
 
 module.exports = {
     inherit: inherit,
