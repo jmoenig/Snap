@@ -98,7 +98,7 @@ SnapSerializer.prototype.spritesLoaded = function(stage, spriteList)
 		stage.add(v);
 		v.penPoint = ii.penPoint;
 		v.color = ii.color;
-		v.setScale(ii.scale);
+		v.setScale(ii.scale * 100);
 		v.heading = ii.heading;
 		v.drawNew();
 		v.gotoXY(ii.x, ii.y);
@@ -205,7 +205,7 @@ SpriteMorph.prototype.toXML = function (serializer) {
         this.xPosition(),
         this.yPosition(),
         this.heading,
-        this.getScale(),
+        this.getScale() / 100.0,
         this.rotationStyle,
         this.isDraggable,
         (this.isVisible ? '' : ' hidden="true"'),
@@ -221,7 +221,7 @@ SpriteMorph.prototype.toXML = function (serializer) {
                     this.anchor.name +
                     '" synch="'
                     + this.rotatesWithAnchor
-                    + (this.getScale() === this.nestingScale ? '' :
+                    + (this.getScale() / 100.0 === this.nestingScale ? '' :
                             '"'
                             + ' scale="'
                             + this.nestingScale)
