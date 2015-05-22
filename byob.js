@@ -106,7 +106,7 @@ SymbolMorph, isNil*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2015-May-21';
+modules.byob = '2015-May-23';
 
 // Declarations
 
@@ -3301,13 +3301,13 @@ BlockExportDialogMorph.prototype.exportBlocks = function () {
         this.serializer.serialize(this.blocks)
     );
     if (this.blocks.length > 0) {
-        window.open(encodeURI('data:text/xml,<blocks app="'
+        window.open('data:text/xml,<blocks app="'
             + this.serializer.app
             + '" version="'
             + this.serializer.version
             + '">'
             + str
-            + '</blocks>'));
+            + '</blocks>');
     } else {
         new DialogBoxMorph().inform(
             'Export blocks',
