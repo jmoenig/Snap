@@ -32,6 +32,22 @@ function getSnapAppsLogoExtent()
 /***************************** OVERRIDES *****************************/
 /*********************************************************************/
 
+IDE_Morph.prototype.snapAppsGetIsDraggableOverride = function () { 
+    return this.currentSprite.areClonesDraggable;
+};
+
+IDE_Morph.prototype.snapAppsIsDraggableOverride = function () {
+    var currentSprite = this.currentSprite;
+    
+    currentSprite.areClonesDraggable = !currentSprite.areClonesDraggable;
+	this.stage.children.forEach(function (x) {
+		if (x instanceof SpriteMorph && x.parentSprite == currentSprite)
+		{
+			x.isDraggable = currentSprite.areClonesDraggable;
+		}
+	});
+};
+
 /*
 ** This is what creates the cell brush tools GUI.
 */
@@ -234,7 +250,11 @@ IDE_Morph.prototype.createCorral = function()
     gridSizer.fixLayout();
     this.stageBottomBar.add(gridSizer);
 	
-	var attributeSelector = new InputFieldMorph("", false, function() { 
+	var defaultSelection = "";
+	if (Cell.attributes.length > 0) {
+		defaultSelection = Cell.attributes[0];
+	}
+	var attributeSelector = new InputFieldMorph(defaultSelection, false, function() {
 		var retn = {};
 		for (var i=0; i<Cell.attributes.length; i++)
 		{
@@ -254,7 +274,7 @@ IDE_Morph.prototype.createCorral = function()
     attributeSelector.drawNew();
     attributeSelector.fixLayout();
 	this.attributeSelector = attributeSelector;
-    this.stageBottomBar.add(attributeSelector);
+	this.stageBottomBar.add(attributeSelector);
 	
 	this.stageBottomBar.reactToChoice = function(choice)
 	{
@@ -497,6 +517,12 @@ SpriteIconMorph.prototype.fixLayout = function () {
         nextY + this.padding
     );
 };
+
+IDE_Morph.prototype.uberNewProject = IDE_Morph.prototype.newProject;
+IDE_Morph.prototype.newProject = function() {
+    Cell.resetToDefault();
+    return this.uberNewProject();
+}
 
 //This overrides the additition of a sprite to the stage. 
 /*IDE_Morph.prototype.snapAppsHookAddSprite = function (sprite) { 

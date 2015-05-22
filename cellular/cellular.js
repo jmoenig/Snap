@@ -62,21 +62,31 @@ Cell.prototype.addSpriteMorph = function(morph)
 ** Attribute visibility is attached to the StageMorph. See changesToObjects.js, 
 ** StageMorph.prototype.visibleAttributes definition.
 */
-Cell.attributes = ["Default"];
+Cell.attributes = [];
 
 /*
 ** A list of attribute colours. Uses the Snap! colour object.
 */
-Cell.attributeColours = {
-    "Default": new Color(100, 100, 100)
-};
+Cell.attributeColours = {};
 
 /*
 ** A list of 2 element arrays corresponding to the start and end of the draw range for this attribute.
 */
-Cell.attributeDrawRange = {
-    "Default": [0, 10]
-};
+Cell.attributeDrawRange = {};
+
+/*
+** Sets the attributes to just one red attribute named "CellAttr1"
+*/
+Cell.resetToDefault = function() {
+    Cell.attributes = ["CellAttr1"];
+    Cell.attributeColours = {
+        "CellAttr1": new Color(255, 0, 0)
+    };
+    Cell.attributeDrawRange = {
+        "CellAttr1": [0, 10]
+    }
+}
+Cell.resetToDefault();
 
 // For visible attributes, see StageMorph.visibleAttributes.
 Cell.hasAttribute = function (name)

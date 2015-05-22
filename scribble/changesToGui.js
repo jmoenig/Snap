@@ -101,10 +101,11 @@ IDE_Morph.prototype.exportProjectZip = function()
         html = rawHTML;
         //...replace the code that starts Snap with some that loads that project.
         html = html.replace("new IDE_Morph().openIn(world);\n",
-        "var ide = new IDE_Morph();\nide.setFlatDesign();\nide.openIn(world);\n"
-		+ "ide.rawOpenProjectString(\""
-        + escapedProject + "\");\nide.toggleAppMode(true);\n" + 
-		" window.onbeforeunload = function() { };\nide.setFlatDesign();");
+        "var ide = new IDE_Morph();\n" + 
+        "ide.openIn(world);\n" + 
+        "ide.rawOpenProjectString(\"" + escapedProject + "\");\n" + 
+        "ide.toggleAppMode(true);\n" + 
+		"window.onbeforeunload = function() { };");
     }
     
     //Next thing to do is to get all the files that we depend upon
@@ -191,4 +192,29 @@ IDE_Morph.prototype.projectMenuSnapAppsModifier = function (menu)
 function getSnapAppsLogoExtent()
 {
     return new Point(210, 28);
+}
+
+// The following function adds the "snapAppsIndex" property to all costumes.
+WardrobeMorph.prototype.uberUpdateList = WardrobeMorph.prototype.updateList;
+WardrobeMorph.prototype.updateList = function () {
+    this.sprite.costumes.asArray().forEach(function (costume, index) {
+        costume.snapAppsIndex = index;
+    });
+    return this.uberUpdateList();
+}
+
+// This function returns a name including the index for some costume.
+CostumeIconMorph.prototype.makeNiceCostumeName = function (aCostume) {
+    return "#" + (aCostume.snapAppsIndex + 1) + ": " + aCostume.name
+}
+
+// The following function uses makeNiceCostumeName to update the costume name before the 
+// createLabel function runs. Afterwards, it swaps it back.
+CostumeIconMorph.prototype.uberCreateLabel = CostumeIconMorph.prototype.createLabel;
+CostumeIconMorph.prototype.createLabel = function() {
+    var oldName = this.object.name;
+    this.object.name = this.makeNiceCostumeName(this.object);
+    var result = this.uberCreateLabel();
+    this.object.name = oldName;
+    return result;
 }

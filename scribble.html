@@ -28,8 +28,16 @@
 			var world;
 			window.onload = function () {
 				world = new WorldMorph(document.getElementById('world'));
-                world.worldCanvas.focus();
-				new IDE_Morph().openIn(world);
+				var ide = new IDE_Morph();
+                ide.openIn(world);
+                window.onInteractiveLoad = function() {
+                    window.onbeforeunload = function() { };
+                    var project = getInteractiveParameter('project');
+                    if (project !== undefined) {
+                        ide.rawOpenProjectString(project);
+				        ide.toggleAppMode(true);
+                    }
+                }
 				setInterval(loop, 1);
 			};
 			function loop() {

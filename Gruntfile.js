@@ -27,7 +27,7 @@ module.exports = function(grunt) {
   //It simply sets the zip output name to 'build/xxx.zip' and includes all files from the base + 'xxx.html', 'xxx_logo_sm.png' and (if usesExtraJs) 'js/xxx.min.js'
   function makeCompressObject(name, usesExtraJs)
   {
-    var inputArray = ['help/*.png', 'scriptsPaneTexture.gif', 'click.wav', 'js/base.min.js', name + '.html', name + '_logo_sm.png'];
+    var inputArray = ['help/*.png', 'click.wav', 'js/base.min.js', name + '.html', name + '_logo_sm.png'];
 	if (usesExtraJs)
 	{
 		inputArray.push('js/' + name + '.min.js');
@@ -143,7 +143,6 @@ module.exports = function(grunt) {
   //Copy all the logo files into the output directory
   grunt.registerTask('copyLogos', 'Copy files', function() {
 	copyFiles = [
-		'scriptsPaneTexture.gif',
 		'cellular_logo_sm.png',
 		'scribble_logo_sm.png',
 		'ardrone_logo_sm.png',
