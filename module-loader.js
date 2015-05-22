@@ -1,3 +1,7 @@
+//Lots of this code was written by David Hughes and Charles Hathaway for the 3Helix fellowship.
+//No longer shall our people, the unappreciated software engineers, be subject to the persecution
+//of the HASS overlords. Computer scientists of the world unite, you have nothing to lose but your paychecks.  
+
 function ModuleLoader(IDE) {
     this.serializer = new SnapSerializer();
     this.ide = IDE;
@@ -142,7 +146,7 @@ ModuleLoader.prototype.checkModule = function(blob, version, options) {
 }
 
 ModuleLoader.prototype.open = function(zip, options) {
-    var meta = zip.file("meta.json");
+    var meta = zip.file("package.json");
     if(meta != null) {
       var meta_text = meta.asText();
       var libJSON = JSON.parse(meta_text);

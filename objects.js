@@ -2668,16 +2668,17 @@ SpriteMorph.prototype.setBrightness = function (num) {
     var hsv = this.color.hsv(),
         x = this.xPosition(),
         y = this.yPosition();
-
-    num = Math.max(Math.min(+num || 0, 200), 0) / 100;
+        
+    //Num goes in 0-100 range. 0 is black, 50 is the unchanged hue, 100 is white
+    num = Math.max(Math.min(+num || 0, 100), 0) / 50;
     hsv[1] = 1;
     hsv[2] = 1;
 
     if(num > 1) {
-        hsv[1] = (2 - num);
+        hsv[1] = (2 - num); //Make it more white
     }
     else {
-        hsv[2] = num;
+        hsv[2] = num; //Make it more black
     }
 
     this.color.set_hsv.apply(this.color, hsv);
@@ -2687,7 +2688,6 @@ SpriteMorph.prototype.setBrightness = function (num) {
     }
     this.gotoXY(x, y);
 };
-
 
 SpriteMorph.prototype.changeBrightness = function (delta) {
     this.setBrightness(this.getBrightness() + (+delta || 0));
