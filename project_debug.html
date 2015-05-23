@@ -1,0 +1,22 @@
+<!DOCTYPE HTML>
+<html lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <title>Javascript Local Storage Debugger</title>
+    </head>
+    <body>
+        <script>
+            window.onload = function() {
+                for (var i = 0; i < localStorage.length; i++) {
+                    var text = localStorage.key(0);
+                    var href = "data:text/plain;charset=utf-8," + encodeURIComponent(localStorage[text]);
+                    
+                    var a = document.createElement('a');
+                    a.href = href;
+                    a.text = "Download \"" + text + "\"";
+                    document.body.appendChild(a);
+                }
+            };
+        </script>
+    </body>
+</html>
