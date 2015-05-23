@@ -194,6 +194,22 @@ IDE_Morph.prototype.exportProjectZip = function()
     
     getIndexHtmlContentsWithEmbeddedProject(onGetHtmlSuccess, showError);
 }
+
+IDE_Morph.prototype.uberCreateControlBar = IDE_Morph.prototype.createControlBar;
+IDE_Morph.prototype.createControlBar = function () {
+    var me = this;
+    var returnValue = this.uberCreateControlBar();
+    this.controlBar.removeChild(this.controlBar.cloudButton);
+    
+    var uberFixLayout = this.controlBar.fixLayout;
+    this.controlBar.fixLayout = function () {
+        uberFixLayout.call(this);
+        me.controlBar.projectButton.setRight(me.controlBar.settingsButton.left() - 5);
+        this.updateLabel();
+    };
+    
+    return returnValue;
+}
    
 IDE_Morph.prototype.projectMenuSnapAppsModifier = function (menu)
 {
@@ -220,7 +236,7 @@ IDE_Morph.prototype.projectMenuSnapAppsModifier = function (menu)
 
 function getSnapAppsLogoExtent()
 {
-    return new Point(210, 28);
+    return new Point(190, 28);
 }
 
 // The following function adds the "snapAppsIndex" property to all costumes.

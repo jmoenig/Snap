@@ -25,7 +25,7 @@ function getSnapAppsAboutText()
 
 function getSnapAppsLogoExtent()
 {
-    return new Point(218, 28);
+    return new Point(190, 28);
 }
 
 IDE_Morph.prototype.exportIndex = "cellular.html";
