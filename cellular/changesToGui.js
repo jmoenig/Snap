@@ -427,6 +427,7 @@ SpriteIconMorph.prototype.createDuplicator = function () {
 			clone.turn(rnd.call(this, 1, 360));
 			clone.setXPosition(rnd.call(this, -220, 220));
 			clone.setYPosition(rnd.call(this, -160, 160));
+			clone.snapToCell();
 		}
 		
 		ide.stage.dirtyEntireStage();
