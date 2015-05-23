@@ -126,6 +126,7 @@ IDE_Morph.prototype.exportProjectZip = function()
     //Zip everything together.
     var zip = new JSZip();
     zip.file("index.html", html);
+    var filesLeft = filesToAddToZip.length;
     for (var i=0; i<filesToAddToZip.length; i++)
     {
         if (hadError)
@@ -136,14 +137,10 @@ IDE_Morph.prototype.exportProjectZip = function()
             loadLocalFile(scriptFile, function(data)
             {
                 zip.file(scriptFile, data);
-                filesToAddToZip[index] = "";
-                for (var j=0; j<filesToAddToZip.length; j++)
-                {
-                    if (filesToAddToZip[j] != "")
-                        return;
+                filesLeft--;
+                if (filesLeft == 0) {
+                    saveAs(zip.generate({type:"blob"}), "exported.zip");
                 }
-                var content = zip.generate();
-                window.open("data:application/zip;base64,"+content);
             }, 
             function(error){
                 if (!hadError)
