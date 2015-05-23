@@ -4734,7 +4734,7 @@ ProjectDialogMorph.prototype.getExamplesProjectList = function () {
         }
     );
     projects.sort(function (x, y) {
-        return x.name < y.name ? -1 : 1;
+        return x.name.toLowerCase() < y.name.toLowerCase() ? -1 : 1;
     });
     return projects;
 };
