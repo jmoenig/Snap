@@ -34,16 +34,13 @@ function getSnapAppsAboutText()
         + 'For more information visit http://flipt.org/';
 }
 
-function jsEscape(str)
-{
-    var ret = str.replace(new RegExp("\"", 'g'), "\\\"");
-    var ret = ret.replace(new RegExp("</script>", 'g'), "</scr\"+\"ipt>");
-    return ret;
-}
-
-//loadLocalFile From JSZip
-function loadLocalFile(filename, success, error) {
+//loadLocalFile From JSZip, with modifications.
+function loadLocalFile(filename, success, error, asString) {
     try {
+
+    if (asString === undefined) {
+        asString = false;
+    }
 
     var xhr = new XMLHttpRequest();
 
@@ -65,8 +62,11 @@ function loadLocalFile(filename, success, error) {
             if (xhr.status === 200 || window.location.protocol === "file:") {
                 try {
                     if (xhr.response) {
-                        JSZip.utils.transformTo("string", xhr.response);
-                        success(xhr.response);
+                        if (asString) {
+                            success(JSZip.utils.transformTo("string", xhr.response));
+                        } else { 
+                            success(xhr.response);
+                        }
                     } else {
                         success(xhr.responseText);
                     }
@@ -86,81 +86,113 @@ function loadLocalFile(filename, success, error) {
     }
 };
 
+function jsEscape(str)
+{
+    var ret = str.replace(new RegExp("\"", 'g'), "\\\"");
+    var ret = ret.replace(new RegExp("</script>", 'g'), "</scr\"+\"ipt>");
+    return ret;
+}
+
+IDE_Morph.prototype.exportIndex = "scribble.html";
+
 IDE_Morph.prototype.exportProjectZip = function()
 {
     var myself = this;
     var hadError = false;
     
-    //First thing to do is generate the HTML
-    var rawHTML = document.getElementsByTagName('html')[0].innerHTML;
-    var html;
+    function showError(error)
     {
-        //Save the project as XML, escape it as a JS string
-        var escapedProject = jsEscape(this.serializer.serialize(this.stage));
-        //Using the current document's HTML...
-        html = rawHTML;
-        //...replace the code that starts Snap with some that loads that project.
-        html = html.replace("new IDE_Morph().openIn(world);\n",
-        "var ide = new IDE_Morph();\n" + 
-        "ide.openIn(world);\n" + 
-        "ide.rawOpenProjectString(\"" + escapedProject + "\");\n" + 
-        "ide.toggleAppMode(true);\n" + 
-		"window.onbeforeunload = function() { };");
+        if (!hadError)
+        {
+            hadError = true;
+            var dlg = new DialogBoxMorph();
+            dlg.inform('Error', 
+                       'There was an error zipping the file:\n' + error + '\nThis could because of ' + 
+                       'the browser you are using.', myself.world());
+            dlg.fixLayout();
+            dlg.drawNew();
+        }
     }
     
-    //Next thing to do is to get all the files that we depend upon
-    var filesToAddToZip = [];
+    function getIndexHtmlContentsWithEmbeddedProject(success, fail)
     {
-        //We depend on all loaded scripts
+        return loadLocalFile(myself.exportIndex, function (data) {
+            //Save the project as XML, escape it as a JS string
+            var escapedProject = jsEscape(myself.serializer.serialize(myself.stage));
+            
+            //...replace the code that starts Snap with some that loads that project.
+            var replaceMe = "ide.openIn(world);\n";
+            if (data.indexOf(replaceMe) === -1) {
+                fail("replaceMe (\"" + needle + "\") not found in project HTML");
+                return;
+            }
+            
+            // Inject the project.
+            data = data.replace(replaceMe,
+                "ide.openIn(world);\n" + 
+                "ide.rawOpenProjectString(\"" + escapedProject + "\");\n" + 
+                "ide.toggleAppMode(true);\n" + 
+		        "window.onbeforeunload = function() { };");
+		        
+		    // Callback
+		    success(data);
+        }, fail, true);
+    }
+    
+    function getAllScripts(rawHTML) {
+        // We depend on all loaded scripts
         var regex = /<script type="text\/javascript" src="(.*?)">/g;
+        var filesToAddToZip = [];
         var pushThis;
         while (pushThis = regex.exec(rawHTML)) {
             filesToAddToZip.push(pushThis[1]);
         }
-        
-        //And a few extras
-        filesToAddToZip.push("agpl.txt");
-        filesToAddToZip.push("click.wav");
+        return filesToAddToZip;
+    };
+    
+    function saveZip(zip) {
+        var blob = zip.generate({type:"blob"});
+        var projectName = myself.projectName.replace(/[^A-Za-z0-9_]/g, "");
+        if (projectName == "") {
+            projectName = "untitled";
+        }
+        saveAs(blob, projectName + ".zip");
     }
     
-    //Zip everything together.
-    var zip = new JSZip();
-    zip.file("index.html", html);
-    var filesLeft = filesToAddToZip.length;
-    for (var i=0; i<filesToAddToZip.length; i++)
-    {
-        if (hadError)
-            break;
-        (function(){
-            var index = i;
-            var scriptFile = filesToAddToZip[i];
-            loadLocalFile(scriptFile, function(data)
-            {
-                zip.file(scriptFile, data);
+    function onGetHtmlSuccess(index) {
+        // Next thing to do is to get all the files that we depend upon
+        var filesToAddToZip = getAllScripts(index);
+        
+        // And a few extras
+        var extraFiles = [getSnapLogoImage(), "agpl.txt", "click.wav"];
+        Array.prototype.push.apply(filesToAddToZip, extraFiles);
+        
+        // Zip everything together.
+        var zip = new JSZip();
+        zip.file("index.html", index);
+        
+        var filesLeft = filesToAddToZip.length;
+        
+        filesToAddToZip.every(function (fileName) {
+            if (hadError)
+                return false;
+            
+            function onDownloadSuccess(data) {
+                zip.file(fileName, data);
                 filesLeft--;
                 if (filesLeft == 0) {
-                    saveAs(zip.generate({type:"blob"}), "exported.zip");
+                    saveZip(zip);
                 }
-            }, 
-            function(error){
-                if (!hadError)
-                {
-                    hadError = true;
-                    var dlg = new DialogBoxMorph();
-                    dlg.inform('Error', 'There was an error zipping the file:\n' + error + '\nThis could because of the browser you are using.\nYou may need to do this manually by selecting "Export to HTML" in the file menu,\n and zipping that together with all of Snap\'s files.', myself.world());
-                    dlg.addButton(
-                        function () {
-                            window.open("data:text/plain,"+html);
-                            dlg.close();
-                        },
-                        'Get just HTML'
-                    );
-                    dlg.fixLayout();
-                    dlg.drawNew();
-                }
-            });
-        })();
+            }
+            
+            loadLocalFile(fileName, onDownloadSuccess, showError);
+            
+            return true;
+        });
+        
     }
+    
+    getIndexHtmlContentsWithEmbeddedProject(onGetHtmlSuccess, showError);
 }
    
 IDE_Morph.prototype.projectMenuSnapAppsModifier = function (menu)

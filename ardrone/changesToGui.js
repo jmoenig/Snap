@@ -27,3 +27,5 @@ function getSnapAppsLogoExtent()
 {
     return new Point(218, 28);
 }
+
+IDE_Morph.prototype.exportIndex = "ardrone.html";
