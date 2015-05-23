@@ -5,21 +5,6 @@ modules.cellularObjects = '2013-November-28';
 /*********************************************************************/
 
 /*
-** Defines getTimestamp. Thanks to 
-** http://stackoverflow.com/questions/6875625/does-javascript-provide-a-high-resolution-timer
-*/
-var getTimestamp;
-if (window && window.performance && window.performance.now) {
-	getTimestamp = function() { return window.performance.now(); };
-} else {
-	if (window.performance.webkitNow) {
-		getTimestamp = function() { return window.performance.webkitNow(); };
-	} else {
-		getTimestamp = function() { return new Date().getTime(); };
-	}
-}
-
-/*
 ** Many thanks to Grumdrig (http://stackoverflow.com/users/167531/grumdrig) from StackOverflow.com for this snippet
 ** http://stackoverflow.com/questions/849211/shortest-distance-between-a-point-and-a-line-segment
 **
