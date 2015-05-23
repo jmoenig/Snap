@@ -96,6 +96,8 @@ SnapSerializer.prototype.spritesLoaded = function(stage, spriteList)
 			
 		var v = parentSprite.createCellularClone();
 		stage.add(v);
+		v.variables.parentFrame = v.variables;
+		v.variables = ii.variables;
 		v.penPoint = ii.penPoint;
 		v.color = ii.color;
 		v.setScale(ii.scale * 100);
