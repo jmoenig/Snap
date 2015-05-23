@@ -21,7 +21,6 @@ SnapSerializer.prototype.loadSprite = function (model, project) {
 		v = {};
 		
 		v.parentSpriteName = model.attributes.parentSprite;
-		v.variables = {};
 		
 		if (model.attributes.color) {
 			v.color = this.loadColor(model.attributes.color);
@@ -33,6 +32,7 @@ SnapSerializer.prototype.loadSprite = function (model, project) {
 		v.heading = parseFloat(model.attributes.heading) || 0;
 		v.x = +model.attributes.x || 0;
 		v.y = +model.attributes.y || 0;
+		v.variables = new VariableFrame();
 		this.loadVariables(v.variables, model.require('variables'));
 	}
 	else
@@ -96,6 +96,8 @@ SnapSerializer.prototype.spritesLoaded = function(stage, spriteList)
 			
 		var v = parentSprite.createCellularClone();
 		stage.add(v);
+		v.variables.parentFrame = v.variables;
+		v.variables = ii.variables;
 		v.penPoint = ii.penPoint;
 		v.color = ii.color;
 		v.setScale(ii.scale * 100);
