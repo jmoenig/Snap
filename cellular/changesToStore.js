@@ -140,6 +140,11 @@ SnapSerializer.prototype.openProject = function (project, ide) {
     } else {
         ide.hasChangedMedia = true;
     }
+    
+	Cell.attributes = project.cellAttributes;
+	Cell.attributeColours = project.cellAttributeColours;
+	Cell.attributeDrawRange = project.cellAttributeDrawRange;
+    
     project.stage.drawNew();
     ide.createCorral();
     ide.selectSprite(sprite);
@@ -409,16 +414,3 @@ SnapSerializer.prototype.loadProjectModel = function (xmlNode) {
 	
 	return retn;
 };
-
-SnapSerializer.prototype.uberOpenProject = SnapSerializer.prototype.openProject;
-SnapSerializer.prototype.openProject = function (project, ide) {
-	var retn = this.uberOpenProject(project, ide);
-	
-	Cell.attributes = project.cellAttributes;
-	Cell.attributeColours = project.cellAttributeColours;
-	Cell.attributeDrawRange = project.cellAttributeDrawRange;
-	
-
-	//Cell.attributes = project.cellAttributes;
-	return retn;
-}
