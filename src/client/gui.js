@@ -4659,7 +4659,7 @@ ProjectDialogMorph.prototype.setSource = function (source) {
                 myself.nameField.setContents(item.name || '');
             }
             src = myself.ide.getURL(
-                'http://snap.berkeley.edu/snapsource/Examples/' +
+                '/Examples/' +
                     item.name + '.xml'
             );
 

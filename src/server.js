@@ -22,7 +22,7 @@ app.get('/Examples', function(req, res) {
     res.json(files);
 });
 
-app.listen(port);
+var server = app.listen(port);
 
 console.log('NetsBlocks server listening on port '+port);
 
@@ -49,7 +49,7 @@ var GroupManagers = getGroupManagerDict(),
     manager = GroupManagers[group.toLowerCase()] || GroupManagers[def];
 
 // Set the group manager
-var opts = {port: wsPort,
+var opts = {server: server,
             path: '',
             GroupManager: manager};
 var nbApp = new NetsBlocksServer(opts);
