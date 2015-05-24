@@ -5,7 +5,9 @@ var express = require('express'),
     argv = require('yargs').argv,
     port = process.env.PORT || 8080,
     wsPort = process.env.WS_PORT || 5432,
-    NetsBlocksServer = require('./NetsBlocksServer');
+    NetsBlocksServer = require('./NetsBlocksServer'),
+    fs = require('fs'),
+    path = require('path');
 
 console.log('port:', port);
 app.use(express.static(__dirname + '/client/'));
@@ -14,13 +16,17 @@ app.get('/', function(req, res) {
     res.redirect('/snap.html');
 });
 
+app.get('/Examples', function(req, res) {
+    var files = fs.readdirSync(__dirname+'/client/Examples');
+    console.log('Received request for examples:', files);
+    res.json(files);
+});
+
 app.listen(port);
 
 console.log('NetsBlocks server listening on port '+port);
 
 // Parse cmd line options for group manager
-var fs = require('fs'),
-    path = require('path');
 
 var getGroupManagerDict = function() {
     var result = {},

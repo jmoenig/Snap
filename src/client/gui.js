@@ -4715,25 +4715,14 @@ ProjectDialogMorph.prototype.getExamplesProjectList = function () {
     var dir,
         projects = [];
 
-    dir = this.ide.getURL('http://snap.berkeley.edu/snapsource/Examples/');
-    dir.split('\n').forEach(
-        function (line) {
-            var startIdx = line.search(new RegExp('href=".*xml"')),
-                endIdx,
-                name,
-                dta;
-            if (startIdx > 0) {
-                endIdx = line.search(new RegExp('.xml'));
-                name = line.substring(startIdx + 6, endIdx);
-                dta = {
-                    name: name,
-                    thumb: null,
-                    notes: null
-                };
-                projects.push(dta);
-            }
-        }
-    );
+    projects = JSON.parse(this.ide.getURL('/Examples/'));
+    projects = projects.map(function(p) {
+        return {
+            name: p.replace('.xml', ''),
+            thumb: null,
+            notes: null
+        };
+    });
     projects.sort(function (x, y) {
         return x.name < y.name ? -1 : 1;
     });
@@ -4835,7 +4824,7 @@ ProjectDialogMorph.prototype.openProject = function () {
         this.openCloudProject(proj);
     } else if (this.source === 'examples') {
         src = this.ide.getURL(
-            'http://snap.berkeley.edu/snapsource/Examples/' +
+            '/Examples/' +
                 proj.name + '.xml'
         );
         this.ide.openProjectString(src);
