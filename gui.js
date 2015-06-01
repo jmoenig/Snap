@@ -2565,8 +2565,6 @@ IDE_Morph.prototype.projectMenu = function () {
         },
         'Select categories of additional blocks to add to this project.'
     );
-    
-    this.projectMenuSnapAppsModifier(menu);
 
     menu.addItem(
         localize(graphicsName) + '...',
@@ -2628,6 +2626,7 @@ IDE_Morph.prototype.projectMenu = function () {
         'Select a sound from the media library'
     );
 
+    this.projectMenuSnapAppsModifier(menu);
     menu.popup(world, pos);
 };
 
