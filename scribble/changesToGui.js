@@ -213,25 +213,29 @@ IDE_Morph.prototype.createControlBar = function () {
    
 IDE_Morph.prototype.projectMenuSnapAppsModifier = function (menu)
 {
-    var myself = this;
-    menu.addLine();
-    menu.addItem(
-        'Export to ZIP',
-        function () {
-            var msg;
-            myself.nextSteps([
-                function () {
-                    msg = myself.showMessage('Zipping project...');
-                },
-                function () {
-                    myself.exportProjectZip();
-                },
-                function () {
-                    msg.destroy();
-                }
-            ]);
-        }
-    );
+    if (world.currentKey === 16) { // Is Shift key down?
+        var myself = this;
+        menu.addLine();
+        menu.addItem(
+            'Export to ZIP',
+            function () {
+                var msg;
+                myself.nextSteps([
+                    function () {
+                        msg = myself.showMessage('Zipping project...');
+                    },
+                    function () {
+                        myself.exportProjectZip();
+                    },
+                    function () {
+                        msg.destroy();
+                    }
+                ]);
+            },
+            'Export project as ZIP file',
+            new Color(100, 0, 0)
+        );
+    }
 };
 
 function getSnapAppsLogoExtent()
