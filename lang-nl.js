@@ -179,7 +179,7 @@ SnapTranslator.dict.nl = {
     'translator_e-mail':
         'sjoerddirk@fromScratchEd.nl, frank.sierens@telenet.be', // optional
     'last_changed':
-        '2013-08-08', // this, too, will appear in the Translators tab
+        '2013-08-12', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:

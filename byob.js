@@ -9,7 +9,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2013 by Jens Mönig
+    Copyright (C) 2015 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -101,11 +101,12 @@ Context, StringMorph, nop, newCanvas, radians, BoxMorph,
 ArrowMorph, PushButtonMorph, contains, InputSlotMorph, ShadowMorph,
 ToggleButtonMorph, IDE_Morph, MenuMorph, copy, ToggleElementMorph,
 Morph, fontHeight, StageMorph, SyntaxElementMorph, SnapSerializer,
-CommentMorph, localize, CSlotMorph, SpeechBubbleMorph, MorphicPreferences*/
+CommentMorph, localize, CSlotMorph, SpeechBubbleMorph, MorphicPreferences,
+SymbolMorph, isNil*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2013-July-04';
+modules.byob = '2015-May-23';
 
 // Declarations
 
@@ -136,7 +137,8 @@ function CustomBlockDefinition(spec, receiver) {
     this.isGlobal = false;
     this.type = 'command';
     this.spec = spec || '';
-    this.declarations = {}; // {'inputName' : [type, default]}
+    // format: {'inputName' : [type, default, options, readonly]}
+    this.declarations = {};
     this.comment = null;
     this.codeMapping = null; // experimental, generate text code
     this.codeHeader = null; // experimental, generate text code
@@ -191,6 +193,8 @@ CustomBlockDefinition.prototype.prototypeInstance = function () {
             if (slot) {
                 part.fragment.type = slot[0];
                 part.fragment.defaultValue = slot[1];
+                part.fragment.options = slot[2];
+                part.fragment.isReadOnly = slot[3] || false;
             }
         }
     });
@@ -205,12 +209,14 @@ CustomBlockDefinition.prototype.copyAndBindTo = function (sprite) {
 
     c.receiver = sprite; // only for (kludgy) serialization
     c.declarations = copy(this.declarations); // might have to go deeper
-    c.body = Process.prototype.reify.call(
-        null,
-        this.body.expression,
-        new List(this.inputNames())
-    );
-    c.body.outerContext = null;
+    if (c.body) {
+        c.body = Process.prototype.reify.call(
+            null,
+            this.body.expression,
+            new List(this.inputNames())
+        );
+        c.body.outerContext = null;
+    }
 
     return c;
 };
@@ -223,7 +229,7 @@ CustomBlockDefinition.prototype.blockSpec = function () {
         parts = this.parseSpec(this.spec),
         spec;
     parts.forEach(function (part) {
-        if (part[0] === '%') {
+        if (part[0] === '%' && part.length > 1) {
             spec = myself.typeOf(part.slice(1));
         } else {
             spec = part;
@@ -264,11 +270,50 @@ CustomBlockDefinition.prototype.defaultValueOfInputIdx = function (idx) {
     return this.defaultValueOf(inputName);
 };
 
+CustomBlockDefinition.prototype.dropDownMenuOfInputIdx = function (idx) {
+    var inputName = this.inputNames()[idx];
+    return this.dropDownMenuOf(inputName);
+};
+
+CustomBlockDefinition.prototype.isReadOnlyInputIdx = function (idx) {
+    var inputName = this.inputNames()[idx];
+    return this.isReadOnlyInput(inputName);
+};
+
+CustomBlockDefinition.prototype.inputOptionsOfIdx = function (idx) {
+    var inputName = this.inputNames()[idx];
+    return this.inputOptionsOf(inputName);
+};
+
+CustomBlockDefinition.prototype.dropDownMenuOf = function (inputName) {
+    var dict = {};
+    if (this.declarations[inputName] && this.declarations[inputName][2]) {
+        this.declarations[inputName][2].split('\n').forEach(function (line) {
+            var pair = line.split('=');
+            dict[pair[0]] = isNil(pair[1]) ? pair[0] : pair[1];
+        });
+        return dict;
+    }
+    return null;
+};
+
+CustomBlockDefinition.prototype.isReadOnlyInput = function (inputName) {
+    return this.declarations[inputName] &&
+        this.declarations[inputName][3] === true;
+};
+
+CustomBlockDefinition.prototype.inputOptionsOf = function (inputName) {
+    return [
+        this.dropDownMenuOf(inputName),
+        this.isReadOnlyInput(inputName)
+    ];
+};
+
 CustomBlockDefinition.prototype.inputNames = function () {
     var vNames = [],
         parts = this.parseSpec(this.spec);
     parts.forEach(function (part) {
-        if (part[0] === '%') {
+        if (part[0] === '%' && part.length > 1) {
             vNames.push(part.slice(1));
         }
     });
@@ -291,6 +336,43 @@ CustomBlockDefinition.prototype.parseSpec = function (spec) {
     }
     parts.push(word);
     return parts;
+};
+
+// CustomBlockDefinition picturing
+
+CustomBlockDefinition.prototype.scriptsPicture = function () {
+    var scripts, proto, block, comment;
+
+    scripts = new ScriptsMorph();
+    scripts.cleanUpMargin = 10;
+    proto = new PrototypeHatBlockMorph(this);
+    proto.setPosition(scripts.position().add(10));
+    if (this.comment !== null) {
+        comment = this.comment.fullCopy();
+        proto.comment = comment;
+        comment.block = proto;
+    }
+    if (this.body !== null) {
+        proto.nextBlock(this.body.expression.fullCopy());
+    }
+    scripts.add(proto);
+    proto.fixBlockColor(null, true);
+    this.scripts.forEach(function (element) {
+        block = element.fullCopy();
+        block.setPosition(scripts.position().add(element.position()));
+        scripts.add(block);
+        if (block instanceof BlockMorph) {
+            block.allComments().forEach(function (comment) {
+                comment.align(block);
+            });
+        }
+    });
+    proto.allComments().forEach(function (comment) {
+        comment.align(proto);
+    });
+    proto.children[0].fixLayout();
+    scripts.fixMultiArgs();
+    return scripts.scriptsPicture();
 };
 
 // CustomCommandBlockMorph /////////////////////////////////////////////
@@ -329,14 +411,25 @@ CustomCommandBlockMorph.prototype.refresh = function () {
     this.setCategory(def.category);
     if (this.blockSpec !== newSpec) {
         oldInputs = this.inputs();
+        if (!this.zebraContrast) {
+            this.forceNormalColoring();
+        } else {
+            this.fixBlockColor();
+        }
         this.setSpec(newSpec);
-        this.fixBlockColor();
         this.fixLabelColor();
         this.restoreInputs(oldInputs);
+    } else { // update all input slots' drop-downs
+        this.inputs().forEach(function (inp, i) {
+            if (inp instanceof InputSlotMorph) {
+                inp.setChoices.apply(inp, def.inputOptionsOfIdx(i));
+            }
+        });
     }
 
     // find unnahmed upvars and label them
     // to their internal definition (default)
+    this.cachedInputs = null;
     this.inputs().forEach(function (inp, idx) {
         if (inp instanceof TemplateSlotMorph && inp.contents() === '\u2191') {
             inp.setContents(def.inputNames()[idx]);
@@ -351,6 +444,7 @@ CustomCommandBlockMorph.prototype.restoreInputs = function (oldInputs) {
         myself = this;
 
     if (this.isPrototype) {return; }
+    this.cachedInputs = null;
     this.inputs().forEach(function (inp) {
         old = oldInputs[i];
         if (old instanceof ReporterBlockMorph &&
@@ -368,6 +462,7 @@ CustomCommandBlockMorph.prototype.restoreInputs = function (oldInputs) {
         }
         i += 1;
     });
+    this.cachedInputs = null;
 };
 
 CustomCommandBlockMorph.prototype.refreshDefaults = function () {
@@ -380,6 +475,7 @@ CustomCommandBlockMorph.prototype.refreshDefaults = function () {
         }
         idx += 1;
     });
+    this.cachedInputs = null;
 };
 
 CustomCommandBlockMorph.prototype.refreshPrototype = function () {
@@ -536,8 +632,12 @@ CustomCommandBlockMorph.prototype.declarationsFromFragments = function () {
 
     this.parts().forEach(function (part) {
         if (part instanceof BlockInputFragmentMorph) {
-            ans[part.fragment.labelString] =
-                [part.fragment.type, part.fragment.defaultValue];
+            ans[part.fragment.labelString] = [
+                part.fragment.type,
+                part.fragment.defaultValue,
+                part.fragment.options,
+                part.fragment.isReadOnly
+            ];
         }
     });
     return ans;
@@ -594,7 +694,8 @@ CustomCommandBlockMorph.prototype.labelPart = function (spec) {
         return CustomCommandBlockMorph.uber.labelPart.call(this, spec);
     }
     if ((spec[0] === '%') && (spec.length > 1)) {
-        part = new BlockInputFragmentMorph(spec.slice(1));
+        // part = new BlockInputFragmentMorph(spec.slice(1));
+        part = new BlockInputFragmentMorph(spec.replace(/%/g, ''));
     } else {
         part = new BlockLabelFragmentMorph(spec);
         part.fontSize = this.fontSize;
@@ -651,6 +752,7 @@ CustomCommandBlockMorph.prototype.userMenu = function () {
         } else {
             menu.addLine();
         }
+
         // menu.addItem("export definition...", 'exportBlockDefinition');
         menu.addItem("delete block definition...", 'deleteBlockDefinition');
     }
@@ -752,6 +854,44 @@ CustomCommandBlockMorph.prototype.popUpbubbleHelp = function (
     ).popUp(this.world(), this.rightCenter().add(new Point(-8, 0)));
 };
 
+// CustomCommandBlockMorph relabelling
+
+CustomCommandBlockMorph.prototype.relabel = function (alternatives) {
+    var menu = new MenuMorph(this),
+        oldInputs = this.inputs().map(
+            function (each) {return each.fullCopy(); }
+        ),
+        myself = this;
+    alternatives.forEach(function (def) {
+        var block = def.blockInstance();
+        block.restoreInputs(oldInputs);
+        block.fixBlockColor(null, true);
+        block.addShadow(new Point(3, 3));
+        menu.addItem(
+            block,
+            function () {
+                myself.definition = def;
+                myself.refresh();
+            }
+        );
+    });
+    menu.popup(this.world(), this.bottomLeft().subtract(new Point(
+        8,
+        this instanceof CommandBlockMorph ? this.corner : 0
+    )));
+};
+
+CustomCommandBlockMorph.prototype.alternatives = function () {
+    var rcvr = this.receiver(),
+        stage = rcvr.parentThatIsA(StageMorph),
+        allDefs = rcvr.customBlocks.concat(stage.globalBlocks),
+        myself = this;
+    return allDefs.filter(function (each) {
+        return each !== myself.definition &&
+            each.type === myself.definition.type;
+    });
+};
+
 // CustomReporterBlockMorph ////////////////////////////////////////////
 
 // CustomReporterBlockMorph inherits from ReporterBlockMorph:
@@ -787,6 +927,9 @@ CustomReporterBlockMorph.prototype.refresh = function () {
     CustomCommandBlockMorph.prototype.refresh.call(this);
     if (!this.isPrototype) {
         this.isPredicate = (this.definition.type === 'predicate');
+    }
+    if (this.parent instanceof SyntaxElementMorph) {
+        this.parent.cachedInputs = null;
     }
     this.drawNew();
 };
@@ -866,6 +1009,14 @@ CustomReporterBlockMorph.prototype.bubbleHelp
 
 CustomReporterBlockMorph.prototype.popUpbubbleHelp
     = CustomCommandBlockMorph.prototype.popUpbubbleHelp;
+
+// CustomReporterBlockMorph relabelling
+
+CustomReporterBlockMorph.prototype.relabel
+    = CustomCommandBlockMorph.prototype.relabel;
+
+CustomReporterBlockMorph.prototype.alternatives
+    = CustomCommandBlockMorph.prototype.alternatives;
 
 // JaggedBlockMorph ////////////////////////////////////////////////////
 
@@ -1507,7 +1658,7 @@ BlockEditorMorph.prototype.init = function (definition, target) {
     scripts = new ScriptsMorph(target);
     scripts.isDraggable = false;
     scripts.color = IDE_Morph.prototype.groupColor;
-    scripts.texture = IDE_Morph.prototype.scriptsPaneTexture;
+    scripts.cachedTexture = IDE_Morph.prototype.scriptsPaneTexture;
     scripts.cleanUpMargin = 10;
 
     proto = new PrototypeHatBlockMorph(this.definition);
@@ -1602,10 +1753,35 @@ BlockEditorMorph.prototype.cancel = function () {
 };
 
 BlockEditorMorph.prototype.close = function () {
-    // allow me to disappear only when name collisions
-    // have been resolved
     var doubles, block,
         myself = this;
+
+    // assert that no scope conflicts exists, i.e. that a global
+    // definition doesn't contain any local custom blocks, as they
+    // will be rendered "Obsolete!" when reloading the project
+    if (this.definition.isGlobal) {
+        block = detect(
+            this.body.contents.allChildren(),
+            function (morph) {
+                return morph.definition && !morph.definition.isGlobal;
+            }
+        );
+        if (block) {
+            block = block.definition.blockInstance();
+            block.addShadow();
+            new DialogBoxMorph().inform(
+                'Local Block(s) in Global Definition',
+                'This global block definition contains one or more\n'
+                    + 'local custom blocks which must be removed first.',
+                myself.world(),
+                block.fullImage()
+            );
+            return;
+        }
+    }
+
+    // allow me to disappear only when name collisions
+    // have been resolved
     doubles = this.target.doubleDefinitionsFor(this.definition);
     if (doubles.length > 0) {
         block = doubles[0].blockInstance();
@@ -1619,6 +1795,7 @@ BlockEditorMorph.prototype.close = function () {
         );
         return;
     }
+
     this.destroy();
 };
 
@@ -1695,6 +1872,9 @@ BlockEditorMorph.prototype.context = function (prototypeHat) {
     if (topBlock === null) {
         return null;
     }
+    topBlock.allChildren().forEach(function (c) {
+        if (c instanceof BlockMorph) {c.cachedInputs = null; }
+    });
     stackFrame = Process.prototype.reify.call(
         null,
         topBlock,
@@ -1832,6 +2012,8 @@ function BlockLabelFragment(labelString) {
     this.labelString = labelString || '';
     this.type = '%s';    // null for label, a spec for an input
     this.defaultValue = '';
+    this.options = '';
+    this.isReadOnly = false; // for input slots
     this.isDeleted = false;
 }
 
@@ -1867,7 +2049,13 @@ BlockLabelFragment.prototype.defTemplateSpecFragment = function () {
         )) {
         suff = ' \u03BB';
     } else if (this.defaultValue) {
-        suff = ' = ' + this.defaultValue.toString();
+        if (this.type === '%n') {
+            suff = ' # = ' + this.defaultValue.toString();
+        } else { // 'any' or 'text'
+            suff = ' = ' + this.defaultValue.toString();
+        }
+    } else if (this.type === '%n') {
+        suff = ' #';
     }
     return this.labelString + suff;
 };
@@ -1881,6 +2069,8 @@ BlockLabelFragment.prototype.copy = function () {
     var ans = new BlockLabelFragment(this.labelString);
     ans.type = this.type;
     ans.defaultValue = this.defaultValue;
+    ans.options = this.options;
+    ans.isReadOnly = this.isReadOnly;
     return ans;
 };
 
@@ -2041,6 +2231,33 @@ BlockLabelFragmentMorph.prototype.updateBlockLabel = function (newFragment) {
     }
 };
 
+BlockLabelFragmentMorph.prototype.userMenu = function () {
+    // show a menu of built-in special symbols
+    var myself = this,
+        symbolColor = new Color(100, 100, 130),
+        menu = new MenuMorph(
+            function (string) {
+                var tuple = myself.text.split('-');
+                myself.changed();
+                tuple[0] = '$' + string;
+                myself.text = tuple.join('-');
+                myself.fragment.labelString = myself.text;
+                myself.drawNew();
+                myself.changed();
+            },
+            null,
+            this,
+            this.fontSize
+        );
+    SymbolMorph.prototype.names.forEach(function (name) {
+        menu.addItem(
+            [new SymbolMorph(name, menu.fontSize, symbolColor), name],
+            name
+        );
+    });
+    return menu;
+};
+
 // BlockLabelPlaceHolderMorph ///////////////////////////////////////////////
 
 /*
@@ -2054,6 +2271,10 @@ BlockLabelFragmentMorph.prototype.updateBlockLabel = function (newFragment) {
 BlockLabelPlaceHolderMorph.prototype = new StringMorph();
 BlockLabelPlaceHolderMorph.prototype.constructor = BlockLabelPlaceHolderMorph;
 BlockLabelPlaceHolderMorph.uber = StringMorph.prototype;
+
+// BlockLabelPlaceHolderMorph preferences settings
+
+BlockLabelPlaceHolderMorph.prototype.plainLabel = false; // always show (+)
 
 // BlockLabelPlaceHolderMorph instance creation:
 
@@ -2074,6 +2295,11 @@ BlockLabelPlaceHolderMorph.prototype.init = function () {
 
 BlockLabelPlaceHolderMorph.prototype.drawNew = function () {
     var context, width, x, y, cx, cy;
+
+    // set my text contents depending on the "plainLabel" flag
+    if (this.plainLabel) {
+        this.text = this.isHighlighted ? ' + ' : '';
+    }
 
     // initialize my surface property
     this.image = newCanvas();
@@ -2233,6 +2459,7 @@ InputSlotDialogMorph.prototype.init = function (
 
     // additional properties:
     this.fragment = fragment || new BlockLabelFragment();
+    this.textfield = null;
     this.types = null;
     this.slots = null;
     this.isExpanded = false;
@@ -2258,6 +2485,7 @@ InputSlotDialogMorph.prototype.init = function (
     this.add(this.slots);
     this.createSlotTypeButtons();
     this.fixSlotsLayout();
+    this.addSlotsMenu();
     this.createTypeButtons();
     this.fixLayout();
 };
@@ -2334,6 +2562,8 @@ InputSlotDialogMorph.prototype.addBlockTypeButton
     = BlockDialogMorph.prototype.addBlockTypeButton;
 
 InputSlotDialogMorph.prototype.setType = function (fragmentType) {
+    this.textfield.choices = fragmentType ? null : this.symbolMenu;
+    this.textfield.drawNew();
     this.fragment.type = fragmentType || null;
     this.types.children.forEach(function (c) {
         c.refresh();
@@ -2424,6 +2654,9 @@ InputSlotDialogMorph.prototype.open = function (
     var txt = new InputFieldMorph(defaultString),
         oldFlag = Morph.prototype.trackChanges;
 
+    if (!this.fragment.type) {
+        txt.choices = this.symbolMenu;
+    }
     Morph.prototype.trackChanges = false;
     this.isExpanded = this.isLaunchingExpanded;
     txt.setWidth(250);
@@ -2432,6 +2665,7 @@ InputSlotDialogMorph.prototype.open = function (
     if (pic) {this.setPicture(pic); }
     this.addBody(txt);
     txt.drawNew();
+    this.textfield = txt;
     this.addButton('ok', 'OK');
     if (!noDeleteButton) {
         this.addButton('deleteFragment', 'Delete');
@@ -2444,6 +2678,22 @@ InputSlotDialogMorph.prototype.open = function (
     this.add(this.types); // make the types come to front
     Morph.prototype.trackChanges = oldFlag;
     this.changed();
+};
+
+InputSlotDialogMorph.prototype.symbolMenu = function () {
+    var symbols = [],
+        symbolColor = new Color(100, 100, 130),
+        myself = this;
+    SymbolMorph.prototype.names.forEach(function (symbol) {
+        symbols.push([
+            [
+                new SymbolMorph(symbol, myself.fontSize, symbolColor),
+                localize(symbol)
+            ],
+            '$' + symbol
+        ]);
+    });
+    return symbols;
 };
 
 InputSlotDialogMorph.prototype.deleteFragment = function () {
@@ -2711,6 +2961,47 @@ InputSlotDialogMorph.prototype.fixSlotsLayout = function () {
     );
     Morph.prototype.trackChanges = oldFlag;
     this.slots.changed();
+};
+
+InputSlotDialogMorph.prototype.addSlotsMenu = function () {
+    var myself = this;
+
+    this.slots.userMenu = function () {
+        if (contains(['%s', '%n', '%txt', '%anyUE'], myself.fragment.type)) {
+            var menu = new MenuMorph(myself),
+                on = '\u2611 ',
+                off = '\u2610 ';
+            menu.addItem('options...', 'editSlotOptions');
+            menu.addItem(
+                (myself.fragment.isReadOnly ? on : off) +
+                    localize('read-only'),
+                function () {myself.fragment.isReadOnly =
+                         !myself.fragment.isReadOnly;
+                         }
+            );
+            return menu;
+        }
+        return Morph.prototype.userMenu.call(myself);
+    };
+};
+
+InputSlotDialogMorph.prototype.editSlotOptions = function () {
+    var myself = this;
+    new DialogBoxMorph(
+        myself,
+        function (options) {
+            myself.fragment.options = options.trim();
+        },
+        myself
+    ).promptCode(
+        'Input Slot Options',
+        myself.fragment.options,
+        myself.world(),
+        null,
+        localize('Enter one option per line.' +
+            'Optionally use "=" as key/value delimiter\n' +
+            'e.g.\n   the answer=42')
+    );
 };
 
 // InputSlotDialogMorph hiding and showing:
@@ -3006,7 +3297,9 @@ BlockExportDialogMorph.prototype.selectNone = function () {
 // BlockExportDialogMorph ops
 
 BlockExportDialogMorph.prototype.exportBlocks = function () {
-    var str = this.serializer.serialize(this.blocks);
+    var str = encodeURIComponent(
+        this.serializer.serialize(this.blocks)
+    );
     if (this.blocks.length > 0) {
         window.open('data:text/xml,<blocks app="'
             + this.serializer.app
