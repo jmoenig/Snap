@@ -82,6 +82,11 @@ var WardrobeMorph;
 var SoundIconMorph;
 var JukeboxMorph;
 
+// Get the full url without "snap.html"
+var baseUrl = document.URL.split('/');
+baseUrl.pop(baseUrl.length-1);
+baseUrl = baseUrl.join('/')+'/'; 
+
 // IDE_Morph ///////////////////////////////////////////////////////////
 
 // I am SNAP's top-level frame, the Editor window
@@ -2491,13 +2496,10 @@ IDE_Morph.prototype.projectMenu = function () {
         function () {
             // read a list of libraries from an external file,
             var libMenu = new MenuMorph(this, 'Import library'),
-                libUrl = 'http://snap.berkeley.edu/snapsource/libraries/' +
-                    'LIBRARIES';
+                libUrl = baseUrl + 'libraries/' + 'LIBRARIES';
 
             function loadLib(name) {
-                var url = 'http://snap.berkeley.edu/snapsource/libraries/'
-                        + name
-                        + '.xml';
+                var url = baseUrl + 'libraries/' + name + '.xml';
                 myself.droppedText(myself.getURL(url), name);
             }
 
@@ -4216,8 +4218,7 @@ IDE_Morph.prototype.getURLsbeOrRelative = function (url) {
     var request = new XMLHttpRequest(),
         myself = this;
     try {
-        request.open('GET', 'http://snap.berkeley.edu/snapsource/' +
-                                           url, false);
+        request.open('GET', baseUrl + url, false);
         request.send();
         if (request.status === 200) {
             return request.responseText;
@@ -4658,8 +4659,7 @@ ProjectDialogMorph.prototype.setSource = function (source) {
                 myself.nameField.setContents(item.name || '');
             }
             src = myself.ide.getURL(
-                'http://snap.berkeley.edu/snapsource/Examples/' +
-                    item.name + '.xml'
+                baseUrl + 'Examples/' + item.name + '.xml'
             );
 
             xml = myself.ide.serializer.parse(src);
@@ -4713,8 +4713,9 @@ ProjectDialogMorph.prototype.getLocalProjectList = function () {
 ProjectDialogMorph.prototype.getExamplesProjectList = function () {
     var dir,
         projects = [];
+        //alert(baseUrl);
 
-    dir = this.ide.getURL('http://snap.berkeley.edu/snapsource/Examples/');
+    dir = this.ide.getURL(baseUrl + 'Examples/');
     dir.split('\n').forEach(
         function (line) {
             var startIdx = line.search(new RegExp('href=".*xml"')),
@@ -4833,9 +4834,7 @@ ProjectDialogMorph.prototype.openProject = function () {
     if (this.source === 'cloud') {
         this.openCloudProject(proj);
     } else if (this.source === 'examples') {
-        src = this.ide.getURL(
-            'http://snap.berkeley.edu/snapsource/Examples/' +
-                proj.name + '.xml'
+        src = this.ide.getURL(baseUrl + 'Examples/' + proj.name + '.xml'
         );
         this.ide.openProjectString(src);
         this.destroy();
