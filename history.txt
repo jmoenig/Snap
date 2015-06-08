@@ -2512,3 +2512,7 @@ ______
 150523
 ------
 * BYOB: Fix encoding glitch
+
+150608
+------
+* Blocks: Fixed #820
