@@ -2445,6 +2445,37 @@ SpriteMorph.prototype.wearCostume = function (costume)
 	return this.uberWearCostume(costume);
 };
 
+// Returns the closest object that bases off of the object with that name. 
+// In the case when the nameOrObject parameter is an object, that is returned instead.
+StageMorph.prototype.getClosestCellularClone = function(x, y, nameOrObject) {
+    if (nameOrObject instanceof SpriteMorph) {
+        return nameOrObject;
+    }
+
+    // Find closest distance of specified type to this object.
+    var closestSquareDistance = Infinity;
+    var closestObject = null;
+    
+    this.children.forEach(function (o) {
+        // We have no cache of children sprites :( Potential improvement?
+	    if (o instanceof SpriteMorph && o.parentSprite
+	        && o.parentSprite.name == nameOrObject)
+	    {
+            //Calculate square distance to object
+            var dx = x - o.xPosition();
+            var dy = y - o.yPosition();
+            var sqDist = dx * dx + dy * dy;
+
+            if (sqDist < closestSquareDistance) {
+                closestSquareDistance = sqDist;
+                closestObject = o;
+            }
+	    }
+    });
+
+    return closestObject;
+}
+
 /*********************************************************************/
 /****************************** STATICS ******************************/
 /*********************************************************************/
