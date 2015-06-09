@@ -316,6 +316,9 @@ SpriteMorph.prototype.snapappsHookBlockTemplates = function(blocks, block, cat, 
 		blocks.push(block("allObjectsInCellCell"));
 		blocks.push(block("allObjectsInCellReal"));
 		blocks.push('-');
+		blocks.push(block("numObjectsInNbrCells"));
+		blocks.push(block("isObjectInCell"));
+		blocks.push('-');
 		blocks.push(block("allObjectsInNbrCells"));
 		blocks.push(block("numFilledNbrCells"));
 	}
@@ -323,7 +326,7 @@ SpriteMorph.prototype.snapappsHookBlockTemplates = function(blocks, block, cat, 
 }
 
 /*
-** This is where all the new blocks are added to the sprite pallette.
+** This is where all the new blocks are added to the STAGE pallette.
 */
 StageMorph.prototype.scribbleHookBlockTemplates = StageMorph.prototype.snapappsHookBlockTemplates;
 StageMorph.prototype.snapappsHookBlockTemplates = function(blocks, block, cat, helpMenu)
@@ -775,6 +778,16 @@ SpriteMorph.prototype.addCellularBlocks = function () {
 		type: 'reporter',
 		category: 'neighbours',
 		spec: 'objects in nbr cells',
+	};
+	SpriteMorph.prototype.blocks.numObjectsInNbrCells = {
+		type: 'reporter',
+		category: 'neighbours',
+		spec: '# %spr in nbr cells',
+	};
+	SpriteMorph.prototype.blocks.isObjectInCell = {
+		type: 'predicate',
+		category: 'neighbours',
+		spec: 'is %spr in cell %celldir',
 	};
 	SpriteMorph.prototype.blocks.numFilledNbrCells = {
 		type: 'reporter',
@@ -1489,6 +1502,52 @@ SpriteMorph.prototype.allObjectsInNbrCells = function()
 	return new List(objects);
 }
 
+SpriteMorph.prototype.numObjectsInNbrCells = function(name) {
+	var stage = this.parentThatIsA(StageMorph),
+		cellPos = stage.screenToCellSpace(this.rotationCenter()),
+		objects = 0;
+	
+	for (var i=-1; i<=1; i++)
+	{
+		for (var j=-1; j<=1; j++)
+		{
+			if (i == 0 && j == 0)
+				continue;
+			var cell = stage.getCellAtCellCoords(cellPos.x + i, cellPos.y + j);
+			if (!cell)
+				continue;
+			objects += cell.spriteMorphs.reduce(function(accumulator, i) {
+			    if (i.parentSprite && i.parentSprite.name == name) {
+			        return accumulator + 1;
+			    }
+                return accumulator;
+			}, 0);
+		}
+	}
+	return objects;
+};
+
+SpriteMorph.prototype.isObjectInCell = function(objectOrName, cellDir) {
+	if (!cellDir || !cellDir[0])
+		return null;
+	var stage = this.parentThatIsA(StageMorph),
+		cellPos = stage.screenToCellSpace(this.rotationCenter());
+	
+	cellPos.x += cellDirX[cellDir[0]];
+	cellPos.y += cellDirY[cellDir[0]];
+	
+	var cell = stage.getCellAtCellCoords(cellPos);
+    for (var i = 0; i < cell.spriteMorphs.length; i++) {
+        var ii = cell.spriteMorphs[i];
+        // Deal with both cases (object/name) for objectOrName
+        if (ii == objectOrName
+            || (ii.parentSprite && ii.parentSprite.name == objectOrName)) {
+            return true;
+        }
+    }
+    return false;
+};
+
 SpriteMorph.prototype.numFilledNbrCells = function()
 {
 	var stage = this.parentThatIsA(StageMorph),
@@ -1632,7 +1691,7 @@ SpriteMorph.prototype.updateCurrentCell = function()
 	var stage = this.parentThatIsA(StageMorph);
 	if (!stage)
 		return; //No stage, can't go on!
-		
+
 	var newCell = stage.getCellAt(this.rotationCenter());
 	
 	//If we haven't exited the cell, do nothing.
@@ -1697,6 +1756,17 @@ SpriteMorph.prototype.moveBy = function (delta, justMe) {
 	var ret = this.uberMoveBy(delta, justMe);
 	this.updateCurrentCell();
 	return ret;
+}
+
+SpriteMorph.prototype.uberDrawNew = SpriteMorph.prototype.drawNew;
+SpriteMorph.prototype.drawNew = function() {
+    var retn = this.uberDrawNew();    
+    // Issue where "drawNew" will change the position of the object, in such a way that the 
+    // "rotationCenter" property will be invalid during the call. In the call, updateCurrentCell is 
+    // called, and it makes use of this property, screwing up the cell structures. So just update it
+    // again here to avoid altering drawNew.
+    this.updateCurrentCell();
+    return retn;
 }
 
 StageMorph.prototype.uberAddChild = StageMorph.prototype.addChild;
