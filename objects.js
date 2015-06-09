@@ -3509,7 +3509,10 @@ SpriteMorph.prototype.allHatBlocksFor = function (message) {
         if (morph.selector) {
             if (morph.selector === 'receiveMessage') {
                 event = morph.inputs()[0].evaluate();
-                return event === message || (event instanceof Array);
+                return event === message 
+                    || (event instanceof Array 
+                        && message !== '__shout__go__' 
+                        && message !== '__clone__init__');
             }
             if (morph.selector === 'receiveGo') {
                 return message === '__shout__go__';
