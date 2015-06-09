@@ -202,3 +202,38 @@ Process.prototype.doFaceTowards = function (name) {
 	}
 };
 
+// Report distance to must be altered to use nearest object of other type.
+Process.prototype.reportDistanceTo = function (name) {
+    var thisObj = this.blockReceiver();
+    if (thisObj) {
+        // Deal with mouse pointer case.
+        if (this.inputOption(name) === 'mouse-pointer') {
+            var point = thisObj.world().hand.position();
+            return thisObj.rotationCenter().distanceTo(point) / stage.scale;
+        } else {
+            // Find closest distance of specified type to this object.
+            var stage = thisObj.parentThatIsA(StageMorph);
+            var thisX = thisObj.xPosition();
+            var thisY = thisObj.yPosition();
+
+            sqDistance = stage.children.reduce(function (lastSqDistance, o) {
+                // We have no cache of children sprites :( Potential improvement?
+			    if (o instanceof SpriteMorph && o.parentSprite
+			        && o.parentSprite.name == name)
+			    {
+		            //Calculate square distance to object
+		            var dx = thisX - o.xPosition();
+		            var dy = thisY - o.yPosition();
+		            var sqDist = dx * dx + dy * dy;
+
+		            return Math.min(sqDist, lastSqDistance);
+			    }
+			    return lastSqDistance;
+		    }, Infinity);
+
+		    return Math.sqrt(sqDistance);
+        }
+    }
+
+    return 0;
+};
