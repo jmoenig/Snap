@@ -186,19 +186,70 @@ Process.prototype.nearestObject = function (otherObjectName, x, y, predicate) {
 	}
 };
 
-Process.prototype.uberDoFaceTowards = Process.prototype.doFaceTowards;
-Process.prototype.doFaceTowards = function (name) {
-	if (name instanceof SpriteMorph)
-	{
-		var thisObj = this.homeContext.receiver;
-		thisObj.faceToXY(
-			name.xPosition(),
-			name.yPosition()
-		);
-	}
-	else
-	{
-		return this.uberDoFaceTowards(name);
-	}
+// Process motion primitives
+
+Process.prototype.getOtherObject = function (name, thisObj, stageObj) {
+    // private, find the sprite indicated by the given name
+    // either onstage or in the World's hand
+
+    var stage = isNil(stageObj) ?
+                thisObj.parentThatIsA(StageMorph) : stageObj,
+        thatObj = null;
+
+    if (stage) {
+        // find the corresponding sprite on the stage
+        thatObj = stage.getClosestCellularClone(thisObj.xPosition(), thisObj.yPosition(), name);
+        if (!thatObj) {
+            // check if the sprite in question is currently being
+            // dragged around
+            thatObj = detect(
+                stage.world().hand.children,
+                function (morph) {
+                    return morph instanceof SpriteMorph
+                        && morph.name === name;
+                }
+            );
+        }
+    }
+    return thatObj;
 };
 
+/*
+Process.prototype.uberDoFaceTowards = Process.prototype.doFaceTowards;
+Process.prototype.doFaceTowards = function (name) {
+    var thisObj = this.blockReceiver(),
+        thatObj;
+
+    if (thisObj) {
+        if (this.inputOption(name) === 'mouse-pointer') {
+            thisObj.faceToXY(this.reportMouseX(), this.reportMouseY());
+        } else {
+            thatObj = this.getOtherObject(name, this.homeContext.receiver);
+            if (thatObj) {
+                thisObj.faceToXY(
+                    thatObj.xPosition(),
+                    thatObj.yPosition()
+                );
+            }
+        }
+    }
+};
+
+// Report distance to must be altered to use nearest object of other type.
+Process.prototype.reportDistanceTo = function (name) {
+    var thisObj = this.blockReceiver();
+    if (!thisObj) {
+        return 0;
+    }
+    
+    // Deal with mouse pointer case.
+    if (this.inputOption(name) === 'mouse-pointer') {
+        var point = thisObj.world().hand.position();
+        return thisObj.rotationCenter().distanceTo(point) / stage.scale;
+    } else {
+        var object = getClosestCellularClone(name);
+        var dx = thisObj.xPosition() - object.xPosition();
+        var dy = thisObj.yPosition() - object.yPosition();
+        return Math.sqrt(dx * dx + dy * dy);
+    }
+};*/
