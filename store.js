@@ -1325,6 +1325,9 @@ SnapSerializer.prototype.loadValue = function (model) {
             myself.mediaDict[model.attributes.mediaID] = v;
         }
         return v;
+    case 'color':
+        v = this.loadColor(model.contents);
+        return v;
     }
     return undefined;
 };
@@ -1850,6 +1853,16 @@ ColorSlotMorph.prototype.toXML = function (serializer) {
 };
 
 // Values
+
+Color.prototype.toXML = function (serializer) {
+    return serializer.format(
+        '<color>$,$,$,$</color>',
+        this.r,
+        this.g,
+        this.b,
+        this.a
+    );
+};
 
 List.prototype.toXML = function (serializer, mediaContext) {
     // mediaContext is an optional name-stub
