@@ -1794,6 +1794,10 @@ SyntaxElementMorph.prototype.showBubble = function (value, exportPic) {
         morphToShow.silentSetWidth(img.width);
         morphToShow.silentSetHeight(img.height);
         morphToShow.image = img;
+    } else if (value instanceof Color) {
+        morphToShow = new Morph();
+        morphToShow.setColor(value);
+        morphToShow.step = value.update;
     } else if (typeof value === 'boolean') {
         morphToShow = SpriteMorph.prototype.booleanMorph.call(
             null,
