@@ -304,7 +304,8 @@ IDE_Morph.prototype.openIn = function (world) {
             }
             throw new Error('unable to retrieve ' + url);
         } catch (err) {
-            return;
+			myself.showMessage('unable to load\n' + url);
+            return '';
         }
     }
 
