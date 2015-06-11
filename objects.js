@@ -125,7 +125,7 @@ PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.objects = '2015-May-18';
+modules.objects = '2015-June-10';
 
 var SpriteMorph;
 var StageMorph;
@@ -520,6 +520,12 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'command',
             category: 'pen',
             spec: 'set pen color to %clr'
+        },
+        getPenColor: {
+            only: SpriteMorph,
+            type: 'reporter',
+            category: 'pen',
+            spec: 'pen color'
         },
         changeHue: {
             only: SpriteMorph,
@@ -1848,6 +1854,8 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('setColor'));
         blocks.push(block('changeHue'));
         blocks.push(block('setHue'));
+        blocks.push(watcherToggle('getPenColor'));
+        blocks.push(block('getPenColor'));
         blocks.push('-');
         blocks.push(block('changeBrightness'));
         blocks.push(block('setBrightness'));
@@ -2818,6 +2826,9 @@ SpriteMorph.prototype.show = function () {
 };
 
 // SpriteMorph pen color
+SpriteMorph.prototype.getPenColor = function () {
+    return this.color;
+}
 
 SpriteMorph.prototype.setColor = function (aColor) {
     var x = this.xPosition(),
@@ -5940,6 +5951,10 @@ SpriteBubbleMorph.prototype.dataAsMorph = function (data) {
 
     if (data instanceof Morph) {
         contents = data;
+    } else if (data instanceof Color) {
+        contents = new Morph();
+        contents.setColor(data);
+        contents.step = data.update;
     } else if (isString(data)) {
         isText = true;
         contents = new TextMorph(
@@ -6774,6 +6789,9 @@ CellMorph.prototype.drawNew = function () {
     if (!isSameList) {
         if (this.contents instanceof Morph) {
             this.contentsMorph = this.contents;
+        } else if (this.contents instanceof Color) {
+            this.contentsMorph = new Morph();
+            this.contentsMorph.setColor(this.contents);
         } else if (isString(this.contents)) {
             txt  = this.contents.length > 500 ?
                     this.contents.slice(0, 500) + '...' : this.contents;
