@@ -925,7 +925,7 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                     'tab' : ['tab'],
                     'cr' : ['cr']
                 },
-                false // read-only
+                false // read-only?
             );
             break;
         case '%ida':
@@ -997,13 +997,14 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             part = new InputSlotMorph(
                 null,
                 false,
-                {   brightness : ['brightness'],
+                {
+                    brightness : ['brightness'],
                     ghost : ['ghost'],
                     negative : ['negative'],
                     comic: ['comic'],
                     duplicate: ['duplicate'],
                     confetti: ['confetti']
-                    },
+                },
                 true
             );
             part.setContents(['ghost']);
@@ -1181,6 +1182,20 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                 true
             );
             part.setContents(['number']);
+            break;
+        case '%colorListType':
+            part = new InputSlotMorph(
+                null, // text?
+                false, // numeric?
+                {
+                    RGB : ['RGB'],
+                    RGBA : ['RGBA'],
+                    Scratch : ['Scratch'],
+                    'Scratch w/ shade' : ['Scratch w/ shade'],
+                },
+                true
+            );
+            part.setContents(['RGB']);
             break;
         case '%var':
             part = new InputSlotMorph(
