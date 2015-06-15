@@ -2572,6 +2572,76 @@ Process.prototype.reportAttributeOf = function (attribute, name) {
     return '';
 };
 
+// Process Color Primitives
+
+/*
+    This will intelligently convert a list of values to a native Snap! color.
+    The length of the list will determine the format of the color specified.
+    1 item: Scratch color
+    2 items: Scratch color w/ shade
+    3 items: RGB
+    4 items: RGBA
+
+    Note that in the RGBA spec we expect the Alpha values to be an int in the
+    range [0, 255] which is different than that float of [0, 1] expected by Morphic.
+ */
+Process.prototype.colorFromList = function (list) {
+    var color, hue, brightness, r, g, b, a;
+    switch (list.length()) {
+    case 1: // Scratch Format
+        hue = Math.max(Math.min(+list.at(1) || 0, 100), 0) / 100;
+        color = new Color();
+        // 1: ?
+        // 0.5: is default "shade" / brightness of 50.
+        color.set_hsv(hue, 1, 0.5);
+        break;
+    case 2: // Scratch format with shade
+        hue = Math.max(Math.min(+list.at(1) || 0, 100), 0) / 100;
+        brightness = Math.max(Math.min(+list.at(2) || 0, 100), 0) / 100;
+        color = new Color();
+        // 1: ?
+        color.set_hsv(hue, 1, brightness);
+        break;
+    case 3: // RGB format
+        color = new Color(+list.at(1), +list.at(2), +list.at(3));
+        break;
+     case 4: // RGBA format
+        color = new Color(+list.at(1), +list.at(2), +list.at(3),
+             +list.at(4) / 255); // Alpha value is scaled.
+        break;
+    default:
+        throw new Error('Cannot make a color from the input values');
+    }
+    return color;
+};
+
+Process.prototype.colorFromPicker = function (color) {
+    if (color instanceof List) {
+        return this.colorFromList(color);
+    } else if (color instanceof Color) {
+        return color;
+    } else {
+        throw new Error('The color block expects a color or a list as input');
+    }
+};
+
+Process.prototype.colorFromPickerAsList = function (color, type) {
+    // ensure color is the proper format
+    color = this.colorFromPicker(color);
+    switch (this.inputOption(type)) {
+    case 'RGB':
+        return new List([color.r, color.g, color.b]);
+    case 'RGBA': // Alpha value is in [0, 255]
+        return new List([color.r, color.g, color.b, color.a * 255]);
+    case 'Scratch': // hue
+        return new List([color.hsv()[0] * 100]);
+    case 'Scratch w/ shade': // hue, brightness
+        return new List([color.hsv()[0] * 100, color.hsv()[2] * 100]);
+    default:
+        throw new Error('The input color format is not supported');
+    }
+};
+
 Process.prototype.reportContextFor = function (context, otherObj) {
     // Private - return a copy of the context
     // and bind it to another receiver

@@ -575,6 +575,16 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'pen',
             spec: 'stamp'
         },
+        colorFromPicker: {
+            type: 'reporter',
+            category: 'pen',
+            spec: 'color %clr'
+        },
+        colorFromPickerAsList: {
+            type: 'reporter',
+            category: 'pen',
+            spec: 'color %clr $arrowRight %colorListType list'
+        },
 
         // Control
         receiveGo: {
@@ -589,7 +599,7 @@ SpriteMorph.prototype.initBlocks = function () {
         },
 
     /* migrated to a newer block version:
-  
+
         receiveClick: {
             type: 'hat',
             category: 'control',
@@ -1859,8 +1869,6 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('setColor'));
         blocks.push(block('changeHue'));
         blocks.push(block('setHue'));
-        blocks.push(watcherToggle('getPenColor'));
-        blocks.push(block('getPenColor'));
         blocks.push('-');
         blocks.push(block('changeBrightness'));
         blocks.push(block('setBrightness'));
@@ -1869,6 +1877,12 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('setSize'));
         blocks.push('-');
         blocks.push(block('doStamp'));
+        blocks.push('-');
+        blocks.push(watcherToggle('getPenColor'));
+        blocks.push(block('getPenColor'));
+        blocks.push('-')
+        blocks.push(block('colorFromPicker'));
+        blocks.push(block('colorFromPickerAsList'));
 
     } else if (cat === 'control') {
 
@@ -2308,6 +2322,7 @@ SpriteMorph.prototype.freshPalette = function (category) {
     }
 
     blocks.forEach(function (block) {
+        console.log('ADDING TO PALETTE: ', block);
         if (block === null) {
             return;
         }
@@ -2899,7 +2914,7 @@ SpriteMorph.prototype.show = function () {
 // SpriteMorph pen color
 SpriteMorph.prototype.getPenColor = function () {
     return this.color;
-}
+};
 
 SpriteMorph.prototype.setColor = function (aColor) {
     var x = this.xPosition(),
@@ -5410,6 +5425,9 @@ StageMorph.prototype.blockTemplates = function (category) {
     } else if (cat === 'pen') {
 
         blocks.push(block('clear'));
+        blocks.push('=');
+        blocks.push(block('colorFromPicker'));
+        blocks.push(block('colorFromPickerAsList'));
 
     } else if (cat === 'control') {
 
