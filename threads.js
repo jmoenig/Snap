@@ -2495,7 +2495,7 @@ Process.prototype.reportColorIsTouchingColor = function (color1, color2) {
     // Ensure color is a proper color object.
     color1 = this.colorFromPicker(color1);
     color2 = this.colorFromPicker(color2);
-    
+
     if (thisObj) {
         stage = thisObj.parentThatIsA(StageMorph);
         if (stage) {
@@ -2627,6 +2627,9 @@ Process.prototype.colorFromPicker = function (color) {
         return this.colorFromList(color);
     } else if (color instanceof Color) {
         return color;
+    } else if (!isNaN(+color)) {
+        // Handle numeric inputs as Scratch colors
+        return this.colorFromList([+color]);
     } else {
         var colorType = this.reportTypeOf(color);
         throw new Error('expecting a color or list instead of a ' + colorType);
