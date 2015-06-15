@@ -2315,7 +2315,6 @@ SpriteMorph.prototype.freshPalette = function (category) {
     }
 
     blocks.forEach(function (block) {
-        console.log('ADDING TO PALETTE: ', block);
         if (block === null) {
             return;
         }
@@ -2848,6 +2847,8 @@ SpriteMorph.prototype.getPenColor = function () {
 SpriteMorph.prototype.setColor = function (aColor) {
     var x = this.xPosition(),
         y = this.yPosition();
+
+    aColor = Process.prototype.colorFromPicker(aColor);
     if (!this.color.eq(aColor)) {
         this.color = aColor.copy();
         this.drawNew();

@@ -2468,6 +2468,9 @@ Process.prototype.reportTouchingColor = function (aColor) {
     var thisObj = this.homeContext.receiver,
         stage;
 
+    // Ensure color is a proper color object.
+    aColor = this.colorFromPicker(aColor);
+
     if (thisObj) {
         stage = thisObj.parentThatIsA(StageMorph);
         if (stage) {
@@ -2489,6 +2492,10 @@ Process.prototype.reportColorIsTouchingColor = function (color1, color2) {
     var thisObj = this.homeContext.receiver,
         stage;
 
+    // Ensure color is a proper color object.
+    color1 = this.colorFromPicker(color1);
+    color2 = this.colorFromPicker(color2);
+    
     if (thisObj) {
         stage = thisObj.parentThatIsA(StageMorph);
         if (stage) {
@@ -2610,7 +2617,7 @@ Process.prototype.colorFromList = function (list) {
              +list.at(4) / 255); // Alpha value is scaled.
         break;
     default:
-        throw new Error('Cannot make a color from the input values');
+        throw new Error('cannot make a color from the given list values');
     }
     return color;
 };
@@ -2621,7 +2628,8 @@ Process.prototype.colorFromPicker = function (color) {
     } else if (color instanceof Color) {
         return color;
     } else {
-        throw new Error('The color block expects a color or a list as input');
+        var colorType = this.reportTypeOf(color);
+        throw new Error('expecting a color or list instead of a ' + colorType);
     }
 };
 
@@ -2638,7 +2646,8 @@ Process.prototype.colorFromPickerAsList = function (color, type) {
     case 'Scratch w/ shade': // hue, brightness
         return new List([color.hsv()[0] * 100, color.hsv()[2] * 100]);
     default:
-        throw new Error('The input color format is not supported');
+        // Unknown option
+        return new List();
     }
 };
 

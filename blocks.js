@@ -1193,7 +1193,7 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                     Scratch : ['Scratch'],
                     'Scratch w/ shade' : ['Scratch w/ shade'],
                 },
-                true
+                true // read-only
             );
             part.setContents(['RGB']);
             break;
@@ -1270,7 +1270,6 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             break;
         case '%clr':
             part = new ColorSlotMorph();
-            part.isStatic = true;
             break;
         case '%t':
             part = new TemplateSlotMorph('a');
