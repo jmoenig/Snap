@@ -596,7 +596,7 @@ SnapTranslator.dict.pl = {
         'bez pierwszego z %l',
     'length of %l':
         'd\u0142ugo\u015B\u0107 %l',
-    '%l contains %s':
+    '%l contains %s ?':
         '%l zawiera %s',
     'thing':
         'co\u015B',

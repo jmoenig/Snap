@@ -625,7 +625,7 @@ SnapTranslator.dict.ko = {
         '리스트 %l 에서 첫 번째 항목 제외하기',
     'length of %l':
         '리스트 %l 의 항목 갯수',
-    '%l contains %s':
+    '%l contains %s ?':
         '리스트 %l 에 %s 포함되었는가?',
     'thing':
         '어떤 것',

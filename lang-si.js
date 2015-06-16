@@ -559,7 +559,7 @@ SnapTranslator.dict.si = {
         'vsi razen prvega od %l',
     'length of %l':
         'dol\u017Eina %l',
-    '%l contains %s':
+    '%l contains %s ?':
         '%l vsebuje %s',
     'thing':
         'stvar',

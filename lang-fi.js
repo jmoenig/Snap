@@ -604,7 +604,7 @@ SnapTranslator.dict.fi = {
         'kaikki paitsi ensimm\u00e4inen alkio listasta %l',
     'length of %l':
         'listan %l pituus',
-    '%l contains %s':
+    '%l contains %s ?':
         'lista %l sis\u00e4lt\u00e4\u00e4 %s',
     'thing':
         'alkio',

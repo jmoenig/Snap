@@ -596,7 +596,7 @@ SnapTranslator.dict.bn = {
     	'%l তালিকার সব কিন্তু প্রথমটি বাদে',
     'length of %l':
      	'%l তালিকার দৈর্ঘ্য',
-    '%l contains %s':
+    '%l contains %s ?':
     	'%l তালিকা  %s উপাদানটি ধারণ করে',
     'thing':
     	'বিষয়',

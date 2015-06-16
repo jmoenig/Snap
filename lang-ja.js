@@ -581,7 +581,7 @@ SnapTranslator.dict.ja = {
         '%l の先頭以外',
     'length of %l':
         '%l の長さ',
-    '%l contains %s':
+    '%l contains %s ?':
         '%l に %s が含まれているか',
     'thing':
         'なにか',

@@ -590,7 +590,7 @@ SnapTranslator.dict.sv = {
         'allt utom f\u00F6rsta i %l',
     'length of %l':
         'l\u00E4ngd av %l',
-    '%l contains %s':
+    '%l contains %s ?':
         '%l inneh\u00E5ller %s',
     'thing':
         'sak',

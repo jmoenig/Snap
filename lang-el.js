@@ -591,7 +591,7 @@ SnapTranslator.dict.el = {
         'όλα εκτός από το πρώτο του %l',
     'length of %l':
         'μήκος του %l',
-    '%l contains %s':
+    '%l contains %s ?':
         '%l περιέχει το %s',
     'thing':
         'πράγμα',

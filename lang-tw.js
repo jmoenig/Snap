@@ -582,7 +582,7 @@ SnapTranslator.dict.tw = {
         ' %l 中除第一項之外內容',
     'length of %l':
         ' %l 的大小',
-    '%l contains %s':
+    '%l contains %s ?':
         ' %l 包含 %s ',
     'thing':
         '事項',

@@ -602,7 +602,7 @@ SnapTranslator.dict.te = {
         'alles au\u00dfer dem ersten von %l',
     'length of %l':
         'L\u00e4nge von %l',
-    '%l contains %s':
+    '%l contains %s ?':
         '%l enth\u00e4lt %s',
     'thing':
         'etwas',

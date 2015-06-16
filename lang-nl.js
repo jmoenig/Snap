@@ -583,7 +583,7 @@ SnapTranslator.dict.nl = {
         'alles, behalve de eerste van %l',
     'length of %l':
         'lengte van %l',
-    '%l contains %s':
+    '%l contains %s ?':
         '%l bevat %s',
     'thing':
         'ding',

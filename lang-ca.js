@@ -603,7 +603,7 @@ SnapTranslator.dict.ca = {
         '%l sense el primer element',
     'length of %l':
         'longitud de %l',
-    '%l contains %s':
+    '%l contains %s ?':
         '%l conté %s',
     'thing':
         'cosa',

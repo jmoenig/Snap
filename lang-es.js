@@ -570,7 +570,7 @@ SnapTranslator.dict.es = {
         'todo menos la primera de %l',
     'length of %l':
         'longitud de %l',
-    '%l contains %s':
+    '%l contains %s ?':
         '%l contiene %s',
     'thing':
         'cosa',

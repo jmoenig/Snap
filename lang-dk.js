@@ -588,7 +588,7 @@ SnapTranslator.dict.dk = {
         'Alle, undtagen det f\u00F8rste af %l',
     'length of %l':
         'L\u00E6ngde af %l',
-    '%l contains %s':
+    '%l contains %s ?':
         '%l indeholder %s',
     'thing':
         'ting',

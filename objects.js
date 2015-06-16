@@ -1133,7 +1133,7 @@ SpriteMorph.prototype.initBlocks = function () {
         reportListContainsItem: {
             type: 'predicate',
             category: 'lists',
-            spec: '%l contains %s',
+            spec: '%l contains %s ?',
             defaults: [null, localize('thing')]
         },
         doAddToList: {

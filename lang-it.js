@@ -603,7 +603,7 @@ SnapTranslator.dict.it = {
         'tutto meno il primo elemento di %l',
     'length of %l':
         'lunghezza di %l',
-    '%l contains %s':
+    '%l contains %s ?':
         '%l contiene %s',
     'thing':
         'cosa',

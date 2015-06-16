@@ -594,7 +594,7 @@ SnapTranslator.dict.kn = {
         '\u0C8E\u0CB2\u0CCD\u0CB2\u0CBE\u0020\u0C86\u0CA6\u0CB0\u0CC6\u0020\u0CAE\u0CCA\u0CA6\u0CB2\u0CA8\u0CC6\u0CAF\u0CA6\u0CC1 %l',
     'length of %l':
         '\u0CA8\u0020\u0C89\u0CA6\u0CCD\u0CA6 %l',
-    '%l contains %s':
+    '%l contains %s ?':
         '%l \u0CB9\u0CCA\u0C82\u0CA6\u0CBF\u0CA6\u0CC6 %s',
     'thing':
         '\u0C85\u0C82\u0CB6',

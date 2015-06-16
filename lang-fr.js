@@ -588,7 +588,7 @@ SnapTranslator.dict.fr = {
         'tous sauf le premier de  %l',
     'length of %l':
         'longueur de %l',
-    '%l contains %s':
+    '%l contains %s ?':
         '%l contient %s',
     'thing':
         'qqchose',

@@ -582,7 +582,7 @@ SnapTranslator.dict.zh = {
         '链表 %l 除第一记录以外内容',
     'length of %l':
         '链表 %l 的长度',
-    '%l contains %s':
+    '%l contains %s ?':
         '链表 %l 包含 %s ',
     'thing':
         '东西',

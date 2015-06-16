@@ -581,7 +581,7 @@ SnapTranslator.dict.cs = {
         'vše, ale první z %l',
     'length of %l':
         'velikost %l',
-    '%l contains %s':
+    '%l contains %s ?':
         '%l obsahuje %s',
     'thing':
         'věc',

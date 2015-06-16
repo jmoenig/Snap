@@ -581,7 +581,7 @@ SnapTranslator.dict.ja_HIRA = {
         '%l のせんとういがい',
     'length of %l':
         '%l のながさ',
-    '%l contains %s':
+    '%l contains %s ?':
         '%l に %s がふくまれているか',
     'thing':
         'なにか',

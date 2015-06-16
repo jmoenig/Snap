@@ -612,7 +612,7 @@ SnapTranslator.dict.pt = {
         'uma lista com os itens de %l menos o primeiro',
     'length of %l':
         'o comprimento de %l',
-    '%l contains %s':
+    '%l contains %s ?':
         '%l contém %s',
     'thing':
         'um valor',

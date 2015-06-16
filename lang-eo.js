@@ -557,7 +557,7 @@ SnapTranslator.dict.eo = {
         'ĉiuj krom la unua el %l',
     'length of %l':
         'longeco de %l',
-    '%l contains %s':
+    '%l contains %s ?':
         '%l enhavas %s',
     'thing':
         'io',

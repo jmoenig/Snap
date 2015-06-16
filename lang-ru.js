@@ -565,7 +565,7 @@ SnapTranslator.dict.ru = {
         'все кроме первого из %l',
     'length of %l':
         'длина %l',
-    '%l contains %s':
+    '%l contains %s ?':
         '%l содержит %s',
     'thing':
         'что-либо',
