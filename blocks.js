@@ -1111,9 +1111,9 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                     acos : ['acos'],
                     atan : ['atan'],
                     ln : ['ln'],
-                    // log : 'log',
-                    'e^' : ['e^']
-                    // '10^' : '10^'
+                    log : ['log'],
+                    'e^' : ['e^'],
+                    '10^' : ['10^']
                 },
                 true
             );
