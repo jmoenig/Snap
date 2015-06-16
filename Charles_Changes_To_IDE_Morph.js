@@ -25,7 +25,8 @@ IDE_Morph.prototype.droppedBinary = function (anArrayBuffer, name) {
         }
     } else if (suffix.toLowerCase() === 'zip' ||
         suffix.toLowerCase() === 'smod') {
-        var mdl = new ModuleLoader(this);
-        mdl.open(anArrayBuffer, {base64: false});
+		var mdl = new ModuleLoader(this);
+		var zip = new JSZip(anArrayBuffer);
+        mdl.open(zip, {base64: false});
     }
 };
