@@ -4668,8 +4668,9 @@ ProjectDialogMorph.prototype.getGoalProjectList = function () {
 	var dir, dta,
         projects = [], thumbnail;
 	var request = new XMLHttpRequest();
-	request.open("GET", config.urls.goals_url, false);
+	if(request.open("GET", config.urls.goals_url, false)){
 	request.send();
+	}
 	var JSON_object = JSON.parse(request.responseText);
 	for (var i = 0; i < JSON_object.length; i++){
 		//preload images
