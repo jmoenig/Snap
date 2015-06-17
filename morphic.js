@@ -9392,28 +9392,27 @@ HandMorph.prototype.changed = function () {
 
 // HandMorph navigation:
 
-HandMorph.prototype.morphAtPointer = function () {
-    var morphs = this.world.allChildren().slice(0).reverse(),
-        myself = this,
-        result = null;
-
-    morphs.forEach(function (m) {
-        if (m.visibleBounds().containsPoint(myself.bounds.origin) &&
-                result === null &&
-                m.isVisible &&
-                (m.noticesTransparentClick ||
-                    (!m.isTransparentAt(myself.bounds.origin))) &&
-                (!(m instanceof ShadowMorph)) &&
-                m.allParents().every(function (each) {
-                    return each.isVisible;
-                })) {
-            result = m;
-        }
-    });
-    if (result !== null) {
-        return result;
+Morph.prototype.topMorphAt = function (p) {
+    if (!this.isVisible) return null;
+    for (var c = this.children, i = c.length; i--;) {
+        var result = c[i].topMorphAt(p);
+        if (result) return result;
     }
-    return this.world;
+    return this.bounds.containsPoint(p) ? this : null;
+};
+FrameMorph.prototype.topMorphAt = function (p) {
+    if (!(this.isVisible && this.bounds.containsPoint(p))) return null;
+    for (var c = this.children, i = c.length; i--;) {
+        var result = c[i].topMorphAt(p);
+        if (result) return result;
+    }
+    return this;
+};
+ShadowMorph.prototype.topMorphAt = function () {
+    return null;
+};
+HandMorph.prototype.morphAtPointer = function () {
+    return this.world.topMorphAt(this.bounds.origin);
 };
 
 /*
