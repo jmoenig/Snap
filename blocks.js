@@ -2225,7 +2225,7 @@ BlockMorph.prototype.userMenu = function () {
     );
     if (this instanceof CommandBlockMorph && this.nextBlock()) {
         menu.addItem(
-            this.thumbnail(0.5, 60, false),
+            this.thumbnail(0.5, 60),
             function () {
                 var cpy = this.fullCopy(),
                     nb = cpy.nextBlock(),
@@ -3103,38 +3103,34 @@ BlockMorph.prototype.mouseClickLeft = function () {
 
 // BlockMorph thumbnail
 
-BlockMorph.prototype.thumbnail = function (scale, clipWidth, noShadow) {
-    var block = this.fullCopy(),
-        nb = block.nextBlock(),
+BlockMorph.prototype.thumbnail = function (scale, clipWidth) {
+    var nb = this.nextBlock(),
         fadeout = 12,
         ext,
         trgt,
         ctx,
         gradient;
-    if (nb) {nb.destroy(); }
-    if (!noShadow) {block.addShadow(); }
-    ext = block.fullBounds().extent();
-    if (!noShadow) {
-        ext = ext.subtract(this.shadowBlur *
-            (useBlurredShadows && !MorphicPreferences.isFlat ? 1 : 2));
-    }
+
+    if (nb) {nb.isVisible = false; }
+    ext = this.fullBounds().extent();
     trgt = newCanvas(new Point(
-        Math.min(ext.x * scale, clipWidth || ext.x),
+        clipWidth ? Math.min(ext.x * scale, clipWidth) : ext.x * scale,
         ext.y * scale
     ));
     ctx = trgt.getContext('2d');
     ctx.scale(scale, scale);
-    ctx.drawImage(block.fullImage(), 0, 0);
+    ctx.drawImage(this.fullImage(), 0, 0);
     // draw fade-out
-    if (trgt.width === clipWidth) {
+    if (clipWidth && ext.x * scale > clipWidth) {
         gradient = ctx.createLinearGradient(
             trgt.width / scale - fadeout,
             0,
             trgt.width / scale,
             0
         );
-        gradient.addColorStop(0, new Color(255, 255, 255, 0).toString());
-        gradient.addColorStop(1, 'white');
+        gradient.addColorStop(0, 'transparent');
+        gradient.addColorStop(1, 'black');
+        ctx.globalCompositeOperation = 'destination-out';
         ctx.fillStyle = gradient;
         ctx.fillRect(
             trgt.width / scale - fadeout,
@@ -3143,6 +3139,7 @@ BlockMorph.prototype.thumbnail = function (scale, clipWidth, noShadow) {
             trgt.height / scale
         );
     }
+    if (nb) {nb.isVisible = true; }
     return trgt;
 };
 
