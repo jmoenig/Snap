@@ -829,12 +829,11 @@
         };
 
     If your new morph stores or references other morphs outside of the
-    submorph tree in other properties, be sure to also override the
-    default
+    submorph tree in other properties, you may need to override the default
 
-        copyRecordingReferences()
+        updateReferences()
 
-    method accordingly if you want it to support duplication.
+    method if you want it to support duplication.
 
 
     (6) development and user modes
@@ -1268,7 +1267,7 @@ function copy(target) {
             target.constructor !== Object) {
         c = Object.create(target.constructor.prototype);
         var keys = Object.keys(target);
-        for (var l = keys.length, i = 0; i < l; i++) {
+        for (var l = keys.length, i = 0; i < l; ++i) {
             property = keys[i];
             c[property] = target[property];
         }
@@ -3044,45 +3043,49 @@ Morph.prototype.fullCopy = function () {
     Other properties are also *shallow* copied, so you must override
     to deep copy Arrays and (complex) Objects
     */
-    var dict = {}, c;
-    c = this.copyRecordingReferences(dict);
+    var map = new Map(), c;
+    c = this.copyRecordingReferences(map);
     c.forAllChildren(function (m) {
-        m.updateReferences(dict);
+        m.updateReferences(map);
     });
     return c;
 };
 
-Morph.prototype.copyRecordingReferences = function (dict) {
+Morph.prototype.copyRecordingReferences = function (map) {
     /*
     Recursively copy this entire composite morph, recording the
     correspondence between old and new morphs in the given dictionary.
     This dictionary will be used to update intra-composite references
     in the copy. See updateReferences().
-    Note: This default implementation copies ONLY morphs in the
-    submorph hierarchy. If a morph stores morphs in other properties
-    that it wants to copy, then it should override this method to do so.
-    The same goes for morphs that contain other complex data that
-    should be copied when the morph is duplicated.
+
+    Note: This default implementation copies ONLY morphs. If a morph
+    stores morphs in other properties that it wants to copy, then it
+    should override this method to do so. The same goes for morphs that
+    contain other complex data that should be copied when the morph is
+    duplicated.
     */
     var c = this.copy();
-    dict[this] = c;
+    map.set(this, c);
     this.children.forEach(function (m) {
-        c.add(m.copyRecordingReferences(dict));
+        c.add(m.copyRecordingReferences(map));
     });
     return c;
 };
 
-Morph.prototype.updateReferences = function (dict) {
+Morph.prototype.updateReferences = function (map) {
     /*
     Update intra-morph references within a composite morph that has
     been copied. For example, if a button refers to morph X in the
     orginal composite then the copy of that button in the new composite
     should refer to the copy of X in new composite, not the original X.
     */
-    var property;
-    for (property in this) {
-        if (this[property] && this[property].isMorph && dict[property]) {
-            this[property] = dict[property];
+    var property, value, reference;
+    for (var properties = Object.keys(this), l = properties.length, i = 0; i < l; ++i) {
+        property = properties[i];
+        value = this[property];
+        if (value && value.isMorph) {
+            reference = map.get(value);
+            if (reference) this[property] = reference;
         }
     }
 };
@@ -3921,20 +3924,6 @@ HandleMorph.prototype.mouseLeave = function () {
     this.changed();
 };
 
-// HandleMorph duplicating:
-
-HandleMorph.prototype.copyRecordingReferences = function (dict) {
-    // inherited, see comment in Morph
-    var c = HandleMorph.uber.copyRecordingReferences.call(
-        this,
-        dict
-    );
-    if (c.target && dict[this.target]) {
-        c.target = (dict[this.target]);
-    }
-    return c;
-};
-
 // HandleMorph menu:
 
 HandleMorph.prototype.attach = function () {
@@ -4256,20 +4245,6 @@ ColorPaletteMorph.prototype.updateTarget = function () {
             this.target.changed();
         }
     }
-};
-
-// ColorPaletteMorph duplicating:
-
-ColorPaletteMorph.prototype.copyRecordingReferences = function (dict) {
-    // inherited, see comment in Morph
-    var c = ColorPaletteMorph.uber.copyRecordingReferences.call(
-        this,
-        dict
-    );
-    if (c.target && dict[this.target]) {
-        c.target = (dict[this.target]);
-    }
-    return c;
 };
 
 // ColorPaletteMorph menu:
@@ -5836,23 +5811,6 @@ SliderMorph.prototype.updateTarget = function () {
             this.target[this.action](this.value);
         }
     }
-};
-
-// SliderMorph duplicating:
-
-SliderMorph.prototype.copyRecordingReferences = function (dict) {
-    // inherited, see comment in Morph
-    var c = SliderMorph.uber.copyRecordingReferences.call(
-        this,
-        dict
-    );
-    if (c.target && dict[this.target]) {
-        c.target = (dict[this.target]);
-    }
-    if (c.button && dict[this.button]) {
-        c.button = (dict[this.button]);
-    }
-    return c;
 };
 
 // SliderMorph menu:
@@ -8140,20 +8098,6 @@ TriggerMorph.prototype.createLabel = function () {
     this.add(this.label);
 };
 
-// TriggerMorph duplicating:
-
-TriggerMorph.prototype.copyRecordingReferences = function (dict) {
-    // inherited, see comment in Morph
-    var c = TriggerMorph.uber.copyRecordingReferences.call(
-        this,
-        dict
-    );
-    if (c.label && dict[this.label]) {
-        c.label = (dict[this.label]);
-    }
-    return c;
-};
-
 // TriggerMorph action:
 
 TriggerMorph.prototype.trigger = function () {
@@ -8599,20 +8543,6 @@ FrameMorph.prototype.reactToGrabOf = function () {
     this.adjustBounds();
 };
 
-// FrameMorph duplicating:
-
-FrameMorph.prototype.copyRecordingReferences = function (dict) {
-    // inherited, see comment in Morph
-    var c = FrameMorph.uber.copyRecordingReferences.call(
-        this,
-        dict
-    );
-    if (c.frame && dict[this.scrollFrame]) {
-        c.frame = (dict[this.scrollFrame]);
-    }
-    return c;
-};
-
 // FrameMorph menus:
 
 FrameMorph.prototype.developersMenu = function () {
@@ -8957,32 +8887,22 @@ ScrollFrameMorph.prototype.mouseScroll = function (y, x) {
 
 // ScrollFrameMorph duplicating:
 
-ScrollFrameMorph.prototype.copyRecordingReferences = function (dict) {
-    // inherited, see comment in Morph
-    var c = ScrollFrameMorph.uber.copyRecordingReferences.call(
-        this,
-        dict
-    );
-    if (c.contents && dict[this.contents]) {
-        c.contents = (dict[this.contents]);
-    }
-    if (c.hBar && dict[this.hBar]) {
-        c.hBar = (dict[this.hBar]);
-        c.hBar.action = function (num) {
-            c.contents.setPosition(
-                new Point(c.left() - num, c.contents.position().y)
+ScrollFrameMorph.prototype.updateReferences = function () {
+    var self = this;
+    if (this.hBar) {
+        this.hBar.action = function (num) {
+            self.contents.setPosition(
+                new Point(self.left() - num, self.contents.position().y)
             );
         };
     }
-    if (c.vBar && dict[this.vBar]) {
-        c.vBar = (dict[this.vBar]);
-        c.vBar.action = function (num) {
-            c.contents.setPosition(
-                new Point(c.contents.position().x, c.top() - num)
+    if (this.vBar) {
+        this.vBar.action = function (num) {
+            self.contents.setPosition(
+                new Point(self.contents.position().x, self.top() - num)
             );
         };
     }
-    return c;
 };
 
 // ScrollFrameMorph menu:
@@ -9240,20 +9160,6 @@ StringFieldMorph.prototype.mouseClickLeft = function (pos) {
     } else {
         this.escalateEvent('mouseClickLeft', pos);
     }
-};
-
-// StringFieldMorph duplicating:
-
-StringFieldMorph.prototype.copyRecordingReferences = function (dict) {
-    // inherited, see comment in Morph
-    var c = StringFieldMorph.uber.copyRecordingReferences.call(
-        this,
-        dict
-    );
-    if (c.text && dict[this.text]) {
-        c.text = (dict[this.text]);
-    }
-    return c;
 };
 
 // BouncerMorph ////////////////////////////////////////////////////////
