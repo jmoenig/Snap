@@ -1266,18 +1266,16 @@ function copy(target) {
     }
     if (target instanceof target.constructor &&
             target.constructor !== Object) {
-        c = clone(target.constructor.prototype);
-        for (property in target) {
-            if (Object.prototype.hasOwnProperty.call(target, property)) {
-                c[property] = target[property];
-            }
+        c = Object.create(target.constructor.prototype);
+        var keys = Object.keys(target);
+        for (var l = keys.length, i = 0; i < l; i++) {
+            property = keys[i];
+            c[property] = target[property];
         }
     } else {
         c = {};
         for (property in target) {
-            if (!c[property]) {
-                c[property] = target[property];
-            }
+            c[property] = target[property];
         }
     }
     return c;
