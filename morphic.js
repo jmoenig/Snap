@@ -7402,6 +7402,7 @@ StringMorph.prototype.selectionStartSlot = function () {
 };
 
 StringMorph.prototype.clearSelection = function () {
+    if (!this.currentlySelecting && this.startMark === 0 && this.endMark === 0) return;
     this.currentlySelecting = false;
     this.startMark = 0;
     this.endMark = 0;
