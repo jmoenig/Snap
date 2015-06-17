@@ -274,6 +274,7 @@ SnapSerializer.prototype.watcherLabels = {
 // SnapSerializer instance creation:
 
 function SnapSerializer() {
+    XML_Serializer.call(this);
     this.init();
 }
 
