@@ -91,7 +91,7 @@ var InputFieldMorph;
 
 // PushButtonMorph inherits from TriggerMorph:
 
-PushButtonMorph.prototype = new TriggerMorph();
+PushButtonMorph.prototype = Object.create(TriggerMorph.prototype);
 PushButtonMorph.prototype.constructor = PushButtonMorph;
 PushButtonMorph.uber = TriggerMorph.prototype;
 
@@ -476,7 +476,7 @@ PushButtonMorph.prototype.createLabel = function () {
 
 // ToggleButtonMorph inherits from PushButtonMorph:
 
-ToggleButtonMorph.prototype = new PushButtonMorph();
+ToggleButtonMorph.prototype = Object.create(PushButtonMorph.prototype);
 ToggleButtonMorph.prototype.constructor = ToggleButtonMorph;
 ToggleButtonMorph.uber = PushButtonMorph.prototype;
 
@@ -900,7 +900,7 @@ ToggleButtonMorph.prototype.show = function () {
 
 // TabMorph inherits from ToggleButtonMorph:
 
-TabMorph.prototype = new ToggleButtonMorph();
+TabMorph.prototype = Object.create(ToggleButtonMorph.prototype);
 TabMorph.prototype.constructor = TabMorph;
 TabMorph.uber = ToggleButtonMorph.prototype;
 
@@ -1022,7 +1022,7 @@ TabMorph.prototype.drawEdges = function (
 
 // ToggleMorph inherits from PushButtonMorph:
 
-ToggleMorph.prototype = new PushButtonMorph();
+ToggleMorph.prototype = Object.create(PushButtonMorph.prototype);
 ToggleMorph.prototype.constructor = ToggleMorph;
 ToggleMorph.uber = PushButtonMorph.prototype;
 
@@ -1270,7 +1270,7 @@ ToggleMorph.prototype.show = ToggleButtonMorph.prototype.show;
 
 // ToggleElementMorph inherits from TriggerMorph:
 
-ToggleElementMorph.prototype = new TriggerMorph();
+ToggleElementMorph.prototype = Object.create(TriggerMorph.prototype);
 ToggleElementMorph.prototype.constructor = ToggleElementMorph;
 ToggleElementMorph.uber = TriggerMorph.prototype;
 
@@ -1440,7 +1440,7 @@ ToggleElementMorph.prototype.mouseClickLeft
 
 // DialogBoxMorph inherits from Morph:
 
-DialogBoxMorph.prototype = new Morph();
+DialogBoxMorph.prototype = Object.create(Morph.prototype);
 DialogBoxMorph.prototype.constructor = DialogBoxMorph;
 DialogBoxMorph.uber = Morph.prototype;
 
@@ -2866,7 +2866,7 @@ DialogBoxMorph.prototype.outlinePathBody = function (context, radius) {
 
 // AlignmentMorph inherits from Morph:
 
-AlignmentMorph.prototype = new Morph();
+AlignmentMorph.prototype = Object.create(Morph.prototype);
 AlignmentMorph.prototype.constructor = AlignmentMorph;
 AlignmentMorph.uber = Morph.prototype;
 
@@ -2940,7 +2940,7 @@ AlignmentMorph.prototype.fixLayout = function () {
 
 // InputFieldMorph inherits from Morph:
 
-InputFieldMorph.prototype = new Morph();
+InputFieldMorph.prototype = Object.create(Morph.prototype);
 InputFieldMorph.prototype.constructor = InputFieldMorph;
 InputFieldMorph.uber = Morph.prototype;
 

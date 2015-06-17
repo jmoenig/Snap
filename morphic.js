@@ -528,7 +528,7 @@
     whose "isTemplate" flag is false, in other words: a non-template.
 
     When creating a copy from a template, the copy's
-    
+
         reactToTemplateCopy
 
     is invoked, if it is present.
@@ -2171,7 +2171,7 @@ var TextMorph;
 
 // Morph inherits from Node:
 
-Morph.prototype = new Node();
+Morph.prototype = Object.create(Node.prototype);
 Morph.prototype.constructor = Morph;
 Morph.uber = Node.prototype;
 
@@ -3696,7 +3696,7 @@ Morph.prototype.overlappingImage = function (otherMorph) {
 
 // ShadowMorph inherits from Morph:
 
-ShadowMorph.prototype = new Morph();
+ShadowMorph.prototype = Object.create(Morph.prototype);
 ShadowMorph.prototype.constructor = ShadowMorph;
 ShadowMorph.uber = Morph.prototype;
 
@@ -3712,7 +3712,7 @@ function ShadowMorph() {
 
 // HandleMorph inherits from Morph:
 
-HandleMorph.prototype = new Morph();
+HandleMorph.prototype = Object.create(Morph.prototype);
 HandleMorph.prototype.constructor = HandleMorph;
 HandleMorph.uber = Morph.prototype;
 
@@ -3967,7 +3967,7 @@ var PenMorph;
 
 // PenMorph inherits from Morph:
 
-PenMorph.prototype = new Morph();
+PenMorph.prototype = Object.create(Morph.prototype);
 PenMorph.prototype.constructor = PenMorph;
 PenMorph.uber = Morph.prototype;
 
@@ -4199,7 +4199,7 @@ var ColorPaletteMorph;
 
 // ColorPaletteMorph inherits from Morph:
 
-ColorPaletteMorph.prototype = new Morph();
+ColorPaletteMorph.prototype = Object.create(Morph.prototype);
 ColorPaletteMorph.prototype.constructor = ColorPaletteMorph;
 ColorPaletteMorph.uber = Morph.prototype;
 
@@ -4331,7 +4331,7 @@ var GrayPaletteMorph;
 
 // GrayPaletteMorph inherits from ColorPaletteMorph:
 
-GrayPaletteMorph.prototype = new ColorPaletteMorph();
+GrayPaletteMorph.prototype = Object.create(ColorPaletteMorph.prototype);
 GrayPaletteMorph.prototype.constructor = GrayPaletteMorph;
 GrayPaletteMorph.uber = ColorPaletteMorph.prototype;
 
@@ -4362,7 +4362,7 @@ GrayPaletteMorph.prototype.drawNew = function () {
 
 // ColorPickerMorph inherits from Morph:
 
-ColorPickerMorph.prototype = new Morph();
+ColorPickerMorph.prototype = Object.create(Morph.prototype);
 ColorPickerMorph.prototype.constructor = ColorPickerMorph;
 ColorPickerMorph.uber = Morph.prototype;
 
@@ -4431,7 +4431,7 @@ var BlinkerMorph;
 
 // BlinkerMorph inherits from Morph:
 
-BlinkerMorph.prototype = new Morph();
+BlinkerMorph.prototype = Object.create(Morph.prototype);
 BlinkerMorph.prototype.constructor = BlinkerMorph;
 BlinkerMorph.uber = Morph.prototype;
 
@@ -4464,7 +4464,7 @@ var CursorMorph;
 
 // CursorMorph inherits from BlinkerMorph:
 
-CursorMorph.prototype = new BlinkerMorph();
+CursorMorph.prototype = Object.create(BlinkerMorph.prototype);
 CursorMorph.prototype.constructor = CursorMorph;
 CursorMorph.uber = BlinkerMorph.prototype;
 
@@ -4884,7 +4884,7 @@ var BoxMorph;
 
 // BoxMorph inherits from Morph:
 
-BoxMorph.prototype = new Morph();
+BoxMorph.prototype = Object.create(Morph.prototype);
 BoxMorph.prototype.constructor = BoxMorph;
 BoxMorph.uber = Morph.prototype;
 
@@ -5092,7 +5092,7 @@ var SpeechBubbleMorph;
 
 // SpeechBubbleMorph inherits from BoxMorph:
 
-SpeechBubbleMorph.prototype = new BoxMorph();
+SpeechBubbleMorph.prototype = Object.create(BoxMorph.prototype);
 SpeechBubbleMorph.prototype.constructor = SpeechBubbleMorph;
 SpeechBubbleMorph.uber = BoxMorph.prototype;
 
@@ -5392,7 +5392,7 @@ var CircleBoxMorph;
 
 // CircleBoxMorph inherits from Morph:
 
-CircleBoxMorph.prototype = new Morph();
+CircleBoxMorph.prototype = Object.create(Morph.prototype);
 CircleBoxMorph.prototype.constructor = CircleBoxMorph;
 CircleBoxMorph.uber = Morph.prototype;
 
@@ -5512,7 +5512,7 @@ var SliderButtonMorph;
 
 // SliderButtonMorph inherits from CircleBoxMorph:
 
-SliderButtonMorph.prototype = new CircleBoxMorph();
+SliderButtonMorph.prototype = Object.create(CircleBoxMorph.prototype);
 SliderButtonMorph.prototype.constructor = SliderButtonMorph;
 SliderButtonMorph.uber = CircleBoxMorph.prototype;
 
@@ -5724,7 +5724,7 @@ SliderButtonMorph.prototype.mouseMove = function () {
 
 // SliderMorph inherits from CircleBoxMorph:
 
-SliderMorph.prototype = new CircleBoxMorph();
+SliderMorph.prototype = Object.create(CircleBoxMorph.prototype);
 SliderMorph.prototype.constructor = SliderMorph;
 SliderMorph.uber = CircleBoxMorph.prototype;
 
@@ -6092,7 +6092,7 @@ var MouseSensorMorph;
 
 // MouseSensorMorph inherits from BoxMorph:
 
-MouseSensorMorph.prototype = new BoxMorph();
+MouseSensorMorph.prototype = Object.create(BoxMorph.prototype);
 MouseSensorMorph.prototype.constructor = MouseSensorMorph;
 MouseSensorMorph.uber = BoxMorph.prototype;
 
@@ -6166,7 +6166,7 @@ var TriggerMorph;
 
 // InspectorMorph inherits from BoxMorph:
 
-InspectorMorph.prototype = new BoxMorph();
+InspectorMorph.prototype = Object.create(BoxMorph.prototype);
 InspectorMorph.prototype.constructor = InspectorMorph;
 InspectorMorph.uber = BoxMorph.prototype;
 
@@ -6661,7 +6661,7 @@ var MenuItemMorph;
 
 // MenuMorph inherits from BoxMorph:
 
-MenuMorph.prototype = new BoxMorph();
+MenuMorph.prototype = Object.create(BoxMorph.prototype);
 MenuMorph.prototype.constructor = MenuMorph;
 MenuMorph.uber = BoxMorph.prototype;
 
@@ -6956,7 +6956,7 @@ MenuMorph.prototype.popUpCenteredInWorld = function (world) {
 
 // StringMorph inherits from Morph:
 
-StringMorph.prototype = new Morph();
+StringMorph.prototype = Object.create(Morph.prototype);
 StringMorph.prototype.constructor = StringMorph;
 StringMorph.uber = Morph.prototype;
 
@@ -7491,7 +7491,7 @@ StringMorph.prototype.disableSelecting = function () {
 
 // TextMorph inherits from Morph:
 
-TextMorph.prototype = new Morph();
+TextMorph.prototype = Object.create(Morph.prototype);
 TextMorph.prototype.constructor = TextMorph;
 TextMorph.uber = Morph.prototype;
 
@@ -8016,7 +8016,7 @@ TextMorph.prototype.inspectIt = function () {
 
 // TriggerMorph inherits from Morph:
 
-TriggerMorph.prototype = new Morph();
+TriggerMorph.prototype = Object.create(Morph.prototype);
 TriggerMorph.prototype.constructor = TriggerMorph;
 TriggerMorph.uber = Morph.prototype;
 
@@ -8285,7 +8285,7 @@ var MenuItemMorph;
 
 // MenuItemMorph inherits from TriggerMorph:
 
-MenuItemMorph.prototype = new TriggerMorph();
+MenuItemMorph.prototype = Object.create(TriggerMorph.prototype);
 MenuItemMorph.prototype.constructor = MenuItemMorph;
 MenuItemMorph.uber = TriggerMorph.prototype;
 
@@ -8444,7 +8444,7 @@ MenuItemMorph.prototype.isSelectedListItem = function () {
 
 // Frames inherit from Morph:
 
-FrameMorph.prototype = new Morph();
+FrameMorph.prototype = Object.create(Morph.prototype);
 FrameMorph.prototype.constructor = FrameMorph;
 FrameMorph.uber = Morph.prototype;
 
@@ -8638,7 +8638,7 @@ FrameMorph.prototype.keepAllSubmorphsWithin = function () {
 
 // ScrollFrameMorph ////////////////////////////////////////////////////
 
-ScrollFrameMorph.prototype = new FrameMorph();
+ScrollFrameMorph.prototype = Object.create(FrameMorph.prototype);
 ScrollFrameMorph.prototype.constructor = ScrollFrameMorph;
 ScrollFrameMorph.uber = FrameMorph.prototype;
 
@@ -9013,7 +9013,7 @@ ScrollFrameMorph.prototype.toggleTextLineWrapping = function () {
 
 // ListMorph ///////////////////////////////////////////////////////////
 
-ListMorph.prototype = new ScrollFrameMorph();
+ListMorph.prototype = Object.create(ScrollFrameMorph.prototype);
 ListMorph.prototype.constructor = ListMorph;
 ListMorph.uber = ScrollFrameMorph.prototype;
 
@@ -9151,7 +9151,7 @@ ListMorph.prototype.setExtent = function (aPoint) {
 
 // StringFieldMorph inherit from FrameMorph:
 
-StringFieldMorph.prototype = new FrameMorph();
+StringFieldMorph.prototype = Object.create(FrameMorph.prototype);
 StringFieldMorph.prototype.constructor = StringFieldMorph;
 StringFieldMorph.uber = FrameMorph.prototype;
 
@@ -9265,7 +9265,7 @@ var BouncerMorph;
 
 // Bouncers inherit from Morph:
 
-BouncerMorph.prototype = new Morph();
+BouncerMorph.prototype = Object.create(Morph.prototype);
 BouncerMorph.prototype.constructor = BouncerMorph;
 BouncerMorph.uber = Morph.prototype;
 
@@ -9352,7 +9352,7 @@ BouncerMorph.prototype.step = function () {
 
 // HandMorph inherits from Morph:
 
-HandMorph.prototype = new Morph();
+HandMorph.prototype = Object.create(Morph.prototype);
 HandMorph.prototype.constructor = HandMorph;
 HandMorph.uber = Morph.prototype;
 
@@ -9987,7 +9987,7 @@ HandMorph.prototype.moveBy = function (delta) {
 
 // WorldMorph inherits from FrameMorph:
 
-WorldMorph.prototype = new FrameMorph();
+WorldMorph.prototype = Object.create(FrameMorph.prototype);
 WorldMorph.prototype.constructor = WorldMorph;
 WorldMorph.uber = FrameMorph.prototype;
 

@@ -379,7 +379,7 @@ CustomBlockDefinition.prototype.scriptsPicture = function () {
 
 // CustomCommandBlockMorph inherits from CommandBlockMorph:
 
-CustomCommandBlockMorph.prototype = new CommandBlockMorph();
+CustomCommandBlockMorph.prototype = Object.create(CommandBlockMorph.prototype);
 CustomCommandBlockMorph.prototype.constructor = CustomCommandBlockMorph;
 CustomCommandBlockMorph.uber = CommandBlockMorph.prototype;
 
@@ -896,7 +896,7 @@ CustomCommandBlockMorph.prototype.alternatives = function () {
 
 // CustomReporterBlockMorph inherits from ReporterBlockMorph:
 
-CustomReporterBlockMorph.prototype = new ReporterBlockMorph();
+CustomReporterBlockMorph.prototype = Object.create(ReporterBlockMorph.prototype);
 CustomReporterBlockMorph.prototype.constructor = CustomReporterBlockMorph;
 CustomReporterBlockMorph.uber = ReporterBlockMorph.prototype;
 
@@ -1028,7 +1028,7 @@ CustomReporterBlockMorph.prototype.alternatives
 
 // JaggedBlockMorph inherits from ReporterBlockMorph:
 
-JaggedBlockMorph.prototype = new ReporterBlockMorph();
+JaggedBlockMorph.prototype = Object.create(ReporterBlockMorph.prototype);
 JaggedBlockMorph.prototype.constructor = JaggedBlockMorph;
 JaggedBlockMorph.uber = ReporterBlockMorph.prototype;
 
@@ -1177,7 +1177,7 @@ JaggedBlockMorph.prototype.drawEdges = function (context) {
 
 // BlockDialogMorph inherits from DialogBoxMorph:
 
-BlockDialogMorph.prototype = new DialogBoxMorph();
+BlockDialogMorph.prototype = Object.create(DialogBoxMorph.prototype);
 BlockDialogMorph.prototype.constructor = BlockDialogMorph;
 BlockDialogMorph.uber = DialogBoxMorph.prototype;
 
@@ -1624,7 +1624,7 @@ BlockDialogMorph.prototype.fixLayout = function () {
 
 // BlockEditorMorph inherits from DialogBoxMorph:
 
-BlockEditorMorph.prototype = new DialogBoxMorph();
+BlockEditorMorph.prototype = Object.create(DialogBoxMorph.prototype);
 BlockEditorMorph.prototype.constructor = BlockEditorMorph;
 BlockEditorMorph.uber = DialogBoxMorph.prototype;
 
@@ -1936,7 +1936,7 @@ BlockEditorMorph.prototype.fixLayout = function () {
 
 // PrototypeHatBlockMorph inherits from HatBlockMorph:
 
-PrototypeHatBlockMorph.prototype = new HatBlockMorph();
+PrototypeHatBlockMorph.prototype = Object.create(HatBlockMorph.prototype);
 PrototypeHatBlockMorph.prototype.constructor = PrototypeHatBlockMorph;
 PrototypeHatBlockMorph.uber = HatBlockMorph.prototype;
 
@@ -2146,7 +2146,7 @@ BlockLabelFragment.prototype.setSingleInputType = function (type) {
 
 // BlockLabelFragmentMorph inherits from StringMorph:
 
-BlockLabelFragmentMorph.prototype = new StringMorph();
+BlockLabelFragmentMorph.prototype = Object.create(StringMorph.prototype);
 BlockLabelFragmentMorph.prototype.constructor = BlockLabelFragmentMorph;
 BlockLabelFragmentMorph.uber = StringMorph.prototype;
 
@@ -2268,7 +2268,7 @@ BlockLabelFragmentMorph.prototype.userMenu = function () {
 
 // BlockLabelPlaceHolderMorph inherits from StringMorph:
 
-BlockLabelPlaceHolderMorph.prototype = new StringMorph();
+BlockLabelPlaceHolderMorph.prototype = Object.create(StringMorph.prototype);
 BlockLabelPlaceHolderMorph.prototype.constructor = BlockLabelPlaceHolderMorph;
 BlockLabelPlaceHolderMorph.uber = StringMorph.prototype;
 
@@ -2396,7 +2396,7 @@ BlockLabelPlaceHolderMorph.prototype.updateBlockLabel
 
 // BlockInputFragmentMorph inherits from TemplateSlotMorph:
 
-BlockInputFragmentMorph.prototype = new TemplateSlotMorph();
+BlockInputFragmentMorph.prototype = Object.create(TemplateSlotMorph.prototype);
 BlockInputFragmentMorph.prototype.constructor = BlockInputFragmentMorph;
 BlockInputFragmentMorph.uber = TemplateSlotMorph.prototype;
 
@@ -2426,7 +2426,7 @@ BlockInputFragmentMorph.prototype.updateBlockLabel
 
 // InputSlotDialogMorph inherits from DialogBoxMorph:
 
-InputSlotDialogMorph.prototype = new DialogBoxMorph();
+InputSlotDialogMorph.prototype = Object.create(DialogBoxMorph.prototype);
 InputSlotDialogMorph.prototype.constructor = InputSlotDialogMorph;
 InputSlotDialogMorph.uber = DialogBoxMorph.prototype;
 
@@ -3026,7 +3026,7 @@ InputSlotDialogMorph.prototype.show = function () {
 
 // VariableDialogMorph inherits from DialogBoxMorph:
 
-VariableDialogMorph.prototype = new DialogBoxMorph();
+VariableDialogMorph.prototype = Object.create(DialogBoxMorph.prototype);
 VariableDialogMorph.prototype.constructor = VariableDialogMorph;
 VariableDialogMorph.uber = DialogBoxMorph.prototype;
 
@@ -3145,7 +3145,7 @@ VariableDialogMorph.prototype.fixLayout = function () {
 
 // BlockExportDialogMorph inherits from DialogBoxMorph:
 
-BlockExportDialogMorph.prototype = new DialogBoxMorph();
+BlockExportDialogMorph.prototype = Object.create(DialogBoxMorph.prototype);
 BlockExportDialogMorph.prototype.constructor = BlockExportDialogMorph;
 BlockExportDialogMorph.uber = DialogBoxMorph.prototype;
 
@@ -3327,7 +3327,7 @@ BlockExportDialogMorph.prototype.fixLayout
 // BlockImportDialogMorph inherits from DialogBoxMorph
 // and pseudo-inherits from BlockExportDialogMorph:
 
-BlockImportDialogMorph.prototype = new DialogBoxMorph();
+BlockImportDialogMorph.prototype = Object.create(DialogBoxMorph.prototype);
 BlockImportDialogMorph.prototype.constructor = BlockImportDialogMorph;
 BlockImportDialogMorph.uber = DialogBoxMorph.prototype;
 

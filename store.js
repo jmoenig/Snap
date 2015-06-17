@@ -246,7 +246,7 @@ var SnapSerializer;
 
 // SnapSerializer inherits from XML_Serializer:
 
-SnapSerializer.prototype = new XML_Serializer();
+SnapSerializer.prototype = Object.create(XML_Serializer.prototype);
 SnapSerializer.prototype.constructor = SnapSerializer;
 SnapSerializer.uber = XML_Serializer.prototype;
 

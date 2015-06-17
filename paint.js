@@ -81,7 +81,7 @@ var PaintColorPickerMorph;
 
 // A complete paint editor
 
-PaintEditorMorph.prototype = new DialogBoxMorph();
+PaintEditorMorph.prototype = Object.create(DialogBoxMorph.prototype);
 PaintEditorMorph.prototype.constructor = PaintEditorMorph;
 PaintEditorMorph.uber = DialogBoxMorph.prototype;
 
@@ -476,7 +476,7 @@ PaintEditorMorph.prototype.getUserColor = function () {
 
 // A large hsl color picker
 
-PaintColorPickerMorph.prototype = new Morph();
+PaintColorPickerMorph.prototype = Object.create(Morph.prototype);
 PaintColorPickerMorph.prototype.constructor = PaintColorPickerMorph;
 PaintColorPickerMorph.uber = Morph.prototype;
 
@@ -552,7 +552,7 @@ PaintColorPickerMorph.prototype.mouseMove =
     modify its image, based on a 'tool' property.
 */
 
-PaintCanvasMorph.prototype = new Morph();
+PaintCanvasMorph.prototype = Object.create(Morph.prototype);
 PaintCanvasMorph.prototype.constructor = PaintCanvasMorph;
 PaintCanvasMorph.uber = Morph.prototype;
 

@@ -147,7 +147,7 @@ var SpriteHighlightMorph;
 
 // SpriteMorph inherits from PenMorph:
 
-SpriteMorph.prototype = new PenMorph();
+SpriteMorph.prototype = Object.create(PenMorph.prototype);
 SpriteMorph.prototype.constructor = SpriteMorph;
 SpriteMorph.uber = PenMorph.prototype;
 
@@ -583,7 +583,7 @@ SpriteMorph.prototype.initBlocks = function () {
         },
 
     /* migrated to a newer block version:
-  
+
         receiveClick: {
             type: 'hat',
             category: 'control',
@@ -3008,7 +3008,7 @@ SpriteMorph.prototype.applyGraphicsEffects = function (canvas) {
         var i;
         if (value !== 0) {
             for (i = 0; i < p.length; i += 4) {
-                p[i] += value; //255 = 100% of this color 
+                p[i] += value; //255 = 100% of this color
                 p[i + 1] += value;
                 p[i + 2] += value;
             }
@@ -4289,7 +4289,7 @@ SpriteMorph.prototype.doScreenshot = function (imgSource, data) {
 
 // SpriteHighlightMorph inherits from Morph:
 
-SpriteHighlightMorph.prototype = new Morph();
+SpriteHighlightMorph.prototype = Object.create(Morph.prototype);
 SpriteHighlightMorph.prototype.constructor = SpriteHighlightMorph;
 SpriteHighlightMorph.uber = Morph.prototype;
 
@@ -4307,7 +4307,7 @@ function SpriteHighlightMorph() {
 
 // StageMorph inherits from FrameMorph:
 
-StageMorph.prototype = new FrameMorph();
+StageMorph.prototype = Object.create(FrameMorph.prototype);
 StageMorph.prototype.constructor = StageMorph;
 StageMorph.uber = FrameMorph.prototype;
 
@@ -5669,7 +5669,7 @@ StageMorph.prototype.replaceDoubleDefinitionsFor
 
 // SpriteBubbleMorph inherits from SpeechBubbleMorph:
 
-SpriteBubbleMorph.prototype = new SpeechBubbleMorph();
+SpriteBubbleMorph.prototype = Object.create(SpeechBubbleMorph.prototype);
 SpriteBubbleMorph.prototype.constructor = SpriteBubbleMorph;
 SpriteBubbleMorph.uber = SpeechBubbleMorph.prototype;
 
@@ -6168,7 +6168,7 @@ Costume.prototype.isTainted = function () {
 
 // SVG_Costume inherits from Costume:
 
-SVG_Costume.prototype = new Costume();
+SVG_Costume.prototype = Object.create(Costume.prototype);
 SVG_Costume.prototype.constructor = SVG_Costume;
 SVG_Costume.uber = Costume.prototype;
 
@@ -6219,7 +6219,7 @@ SVG_Costume.prototype.shrinkToFit = function (extentPoint) {
 
 // CostumeEditorMorph inherits from Morph:
 
-CostumeEditorMorph.prototype = new Morph();
+CostumeEditorMorph.prototype = Object.create(Morph.prototype);
 CostumeEditorMorph.prototype.constructor = CostumeEditorMorph;
 CostumeEditorMorph.uber = Morph.prototype;
 
@@ -6454,7 +6454,7 @@ Note.prototype.stop = function () {
 
 // CellMorph inherits from BoxMorph:
 
-CellMorph.prototype = new BoxMorph();
+CellMorph.prototype = Object.create(BoxMorph.prototype);
 CellMorph.prototype.constructor = CellMorph;
 CellMorph.uber = BoxMorph.prototype;
 
@@ -6794,7 +6794,7 @@ CellMorph.prototype.mouseClickLeft = function (pos) {
 
 // WatcherMorph inherits from BoxMorph:
 
-WatcherMorph.prototype = new BoxMorph();
+WatcherMorph.prototype = Object.create(BoxMorph.prototype);
 WatcherMorph.prototype.constructor = WatcherMorph;
 WatcherMorph.uber = BoxMorph.prototype;
 
@@ -7281,7 +7281,7 @@ WatcherMorph.prototype.drawNew = function () {
 
 // StagePrompterMorph inherits from BoxMorph:
 
-StagePrompterMorph.prototype = new BoxMorph();
+StagePrompterMorph.prototype = Object.create(BoxMorph.prototype);
 StagePrompterMorph.prototype.constructor = StagePrompterMorph;
 StagePrompterMorph.uber = BoxMorph.prototype;
 

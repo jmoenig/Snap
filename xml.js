@@ -166,7 +166,7 @@ ReadStream.prototype.word = function () {
 
 // XML_Element inherits from Node:
 
-XML_Element.prototype = new Node();
+XML_Element.prototype = Object.create(Node.prototype);
 XML_Element.prototype.constructor = XML_Element;
 XML_Element.uber = Node.prototype;
 

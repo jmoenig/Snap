@@ -363,7 +363,7 @@ List.prototype.equalTo = function (other) {
 
 // ListWatcherMorph inherits from BoxMorph:
 
-ListWatcherMorph.prototype = new BoxMorph();
+ListWatcherMorph.prototype = Object.create(BoxMorph.prototype);
 ListWatcherMorph.prototype.constructor = ListWatcherMorph;
 ListWatcherMorph.uber = BoxMorph.prototype;
 
