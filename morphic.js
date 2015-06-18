@@ -2212,7 +2212,7 @@ Morph.prototype.init = function (noDraw) {
     this.isTemplate = false;
     this.acceptsDrops = false;
     this.noticesTransparentClick = false;
-    if (!noDraw) this.drawNew();
+    if (!noDraw) { this.drawNew(); }
     this.fps = 0;
     this.customContextMenu = null;
     this.lastTime = Date.now();
