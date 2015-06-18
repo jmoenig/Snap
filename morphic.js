@@ -3077,6 +3077,40 @@ Morph.prototype.updateReferences = function (map) {
     }
 };
 
+if (typeof Map === 'undefined') {
+    // use normal objects + stringification if Map doesn't exist
+
+    Morph.prototype.fullCopy = function () {
+        var dict = {}, c;
+        c = this.copyRecordingReferences(dict);
+        c.forAllChildren(function (m) {
+            m.updateReferences(dict);
+        });
+        return c;
+    };
+
+    Morph.prototype.copyRecordingReferences = function (dict) {
+        var c = this.copy();
+        dict[this] = c;
+        this.children.forEach(function (m) {
+            c.add(m.copyRecordingReferences(dict));
+        });
+        return c;
+    };
+
+    Morph.prototype.updateReferences = function (dict) {
+        var property, value, reference;
+        for (var properties = Object.keys(this), l = properties.length, i = 0; i < l; ++i) {
+            property = properties[i];
+            value = this[property];
+            if (value && value.isMorph) {
+                reference = dict[value];
+                if (reference) this[property] = reference;
+            }
+        }
+    };
+}
+
 // Morph dragging and dropping:
 
 Morph.prototype.rootForGrab = function () {
