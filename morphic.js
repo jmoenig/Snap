@@ -1244,7 +1244,7 @@ function getDocumentPositionOf(aDOMelement) {
 
 function copy(target) {
     // answer a shallow copy of target
-    var value, c, property;
+    var value, c, property, keys, l, i;
 
     if (typeof target !== 'object') {
         return target;
@@ -1256,8 +1256,8 @@ function copy(target) {
     if (target instanceof target.constructor &&
             target.constructor !== Object) {
         c = Object.create(target.constructor.prototype);
-        var keys = Object.keys(target);
-        for (var l = keys.length, i = 0; i < l; ++i) {
+        keys = Object.keys(target);
+        for (l = keys.length, i = 0; i < l; ++i) {
             property = keys[i];
             c[property] = target[property];
         }
