@@ -2199,7 +2199,7 @@ function Morph() {
 
 // Morph initialization:
 
-Morph.prototype.init = function () {
+Morph.prototype.init = function (noDraw) {
     Morph.uber.init.call(this);
     this.isMorph = true;
     this.bounds = new Rectangle(0, 0, 50, 40);
@@ -2212,7 +2212,7 @@ Morph.prototype.init = function () {
     this.isTemplate = false;
     this.acceptsDrops = false;
     this.noticesTransparentClick = false;
-    this.drawNew();
+    if (!noDraw) this.drawNew();
     this.fps = 0;
     this.customContextMenu = null;
     this.lastTime = Date.now();
@@ -6999,7 +6999,7 @@ StringMorph.prototype.init = function (
     this.markedBackgoundColor = new Color(60, 60, 120);
 
     // initialize inherited properties:
-    StringMorph.uber.init.call(this);
+    StringMorph.uber.init.call(this, true);
 
     // override inherited properites:
     this.color = color || new Color(0, 0, 0);

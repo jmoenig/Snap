@@ -1421,16 +1421,19 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                 new Point() : this.embossing;
         part.drawNew();
     } else {
-        part = new StringMorph(spec);
-        part.fontName = this.labelFontName;
-        part.fontStyle = this.labelFontStyle;
-        part.fontSize = this.fontSize;
-        part.color = new Color(255, 255, 255);
-        part.isBold = true;
-        part.shadowColor = this.color.darker(this.labelContrast);
-        part.shadowOffset = MorphicPreferences.isFlat ?
-                new Point() : this.embossing;
-        part.drawNew();
+        part = new StringMorph(
+            spec, // text
+            this.fontSize, // fontSize
+            this.labelFontStyle, // fontStyle
+            true, // bold
+            false, // italic
+            false, // isNumeric
+            MorphicPreferences.isFlat ?
+                new Point() : this.embossing, // shadowOffset
+            this.color.darker(this.labelContrast), // shadowColor
+            new Color(255, 255, 255), // color
+            this.labelFontName // fontName
+            );
     }
     return part;
 };
@@ -6918,7 +6921,8 @@ InputSlotMorph.prototype.setChoices = function (dict, readonly) {
 // InputSlotMorph layout:
 
 InputSlotMorph.prototype.fixLayout = function () {
-    var contents = this.contents(),
+    var width, height, arrowWidth,
+        contents = this.contents(),
         arrow = this.arrow();
 
     contents.isNumeric = this.isNumeric;
@@ -6935,32 +6939,29 @@ InputSlotMorph.prototype.fixLayout = function () {
         arrow.setSize(this.fontSize);
         arrow.show();
     } else {
-        arrow.setSize(0);
         arrow.hide();
     }
-    this.setHeight(
-        contents.height()
-            + this.edge * 2
-            // + this.typeInPadding * 2
-    );
+    arrowWidth = arrow.isVisible ? arrow.width() : 0;
+
+    height = contents.height() + this.edge * 2; // + this.typeInPadding * 2
     if (this.isNumeric) {
-        this.setWidth(contents.width()
-            + Math.floor(arrow.width() * 0.5)
+        width = contents.width()
+            + Math.floor(arrowWidth * 0.5)
             + this.height()
-            + this.typeInPadding * 2
-            );
+            + this.typeInPadding * 2;
     } else {
-        this.setWidth(Math.max(
+        width = Math.max(
             contents.width()
-                + arrow.width()
+                + arrowWidth
                 + this.edge * 2
                 + this.typeInPadding * 2,
             contents.rawHeight ? // single vs. multi-line contents
-                        contents.rawHeight() + arrow.width()
-                                : contents.height() / 1.2 + arrow.width(),
+                        contents.rawHeight() + arrowWidth
+                                : contents.height() / 1.2 + arrowWidth,
             this.minWidth // for text-type slots
-        ));
+        );
     }
+    this.setExtent(new Point(width, height));
     if (this.isNumeric) {
         contents.setPosition(new Point(
             Math.floor(this.height() / 2),
@@ -6973,10 +6974,12 @@ InputSlotMorph.prototype.fixLayout = function () {
         ).add(new Point(this.typeInPadding, 0)).add(this.position()));
     }
 
-    arrow.setPosition(new Point(
-        this.right() - arrow.width() - this.edge,
-        contents.top()
-    ));
+    if (arrow.isVisible) {
+        arrow.setPosition(new Point(
+            this.right() - arrowWidth - this.edge,
+            contents.top()
+        ));
+    }
 
     if (this.parent) {
         if (this.parent.fixLayout) {
