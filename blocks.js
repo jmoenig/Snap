@@ -621,6 +621,10 @@ SyntaxElementMorph.prototype.topBlock = function () {
     return this;
 };
 
+// SyntaxElementMorph stepping:
+
+SyntaxElementMorph.prototype.step = null;
+
 // SyntaxElementMorph drag & drop:
 
 SyntaxElementMorph.prototype.reactToGrabOf = function (grabbedMorph) {
