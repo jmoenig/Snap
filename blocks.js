@@ -2062,7 +2062,7 @@ BlockMorph.prototype.setSpec = function (spec) {
         }
         part = myself.labelPart(word);
         myself.add(part);
-        if (!(part instanceof CommandSlotMorph)) {
+        if (!(part instanceof CommandSlotMorph || part instanceof StringMorph)) {
             part.drawNew();
         }
         if (part instanceof RingMorph) {
