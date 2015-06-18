@@ -1242,16 +1242,6 @@ function getDocumentPositionOf(aDOMelement) {
     return pos;
 }
 
-function clone(target) {
-    // answer a new instance of target's type
-    if (typeof target === 'object') {
-        var Clone = function () {nop(); };
-        Clone.prototype = target;
-        return new Clone();
-    }
-    return target;
-}
-
 function copy(target) {
     // answer a shallow copy of target
     var value, c, property;
