@@ -9312,7 +9312,7 @@ Morph.prototype.topMorphAt = function (p) {
         var result = c[i].topMorphAt(p);
         if (result) return result;
     }
-    return this.bounds.containsPoint(p) ? this : null;
+    return this.bounds.containsPoint(p) && (this.noticesTransparentClick || !this.isTransparentAt(p)) ? this : null;
 };
 FrameMorph.prototype.topMorphAt = function (p) {
     if (!(this.isVisible && this.bounds.containsPoint(p))) return null;
@@ -9320,13 +9320,13 @@ FrameMorph.prototype.topMorphAt = function (p) {
         var result = c[i].topMorphAt(p);
         if (result) return result;
     }
-    return this;
+    return this.noticesTransparentClick || !this.isTransparentAt(p) ? this : null;
 };
 ShadowMorph.prototype.topMorphAt = function () {
     return null;
 };
 HandMorph.prototype.morphAtPointer = function () {
-    return this.world.topMorphAt(this.bounds.origin);
+    return this.world.topMorphAt(this.bounds.origin) || this.world;
 };
 
 /*
@@ -9913,6 +9913,7 @@ WorldMorph.prototype.init = function (aCanvas, fillPage) {
     this.isDraggable = false;
     this.currentKey = null; // currently pressed key code
     this.worldCanvas = aCanvas;
+    this.noticesTransparentClick = true;
 
     // additional properties:
     this.stamp = Date.now(); // reference in multi-world setups
