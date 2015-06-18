@@ -2398,19 +2398,16 @@ Morph.prototype.visibleBounds = function () {
 // Morph accessing - simple changes:
 
 Morph.prototype.moveBy = function (delta) {
-    this.changed();
-    this.bounds = this.bounds.translateBy(delta);
-    this.children.forEach(function (child) {
-        child.moveBy(delta);
-    });
-    this.changed();
+    this.fullChanged();
+    this.silentMoveBy(delta);
+    this.fullChanged();
 };
 
 Morph.prototype.silentMoveBy = function (delta) {
     this.bounds = this.bounds.translateBy(delta);
-    this.children.forEach(function (child) {
-        child.silentMoveBy(delta);
-    });
+    for (var children = this.children, i = children.length; i--;) {
+        children[i].silentMoveBy(delta);
+    }
 };
 
 Morph.prototype.setPosition = function (aPoint) {
@@ -3146,9 +3143,7 @@ Morph.prototype.slideBackTo = function (situation, inSteps) {
 
     this.fps = 0;
     this.step = function () {
-        myself.fullChanged();
-        myself.silentMoveBy(new Point(xStep, yStep));
-        myself.fullChanged();
+        myself.moveBy(new Point(xStep, yStep));
         stepCount += 1;
         if (stepCount === steps) {
             situation.origin.add(myself);
@@ -8433,17 +8428,6 @@ FrameMorph.prototype.fullDrawOn = function (aCanvas, aRect) {
     });
 };
 
-// FrameMorph scrolling optimization:
-
-FrameMorph.prototype.moveBy = function (delta) {
-    this.changed();
-    this.bounds = this.bounds.translateBy(delta);
-    this.children.forEach(function (child) {
-        child.silentMoveBy(delta);
-    });
-    this.changed();
-};
-
 // FrameMorph scrolling support:
 
 FrameMorph.prototype.submorphBounds = function () {
@@ -9274,7 +9258,8 @@ HandMorph.prototype.init = function (aWorld) {
     this.contextMenuEnabled = false;
 };
 
-HandMorph.prototype.changed = function () {
+HandMorph.prototype.changed =
+HandMorph.prototype.fullChanged = function () {
     var b;
     if (this.world !== null) {
         b = this.fullBounds();
@@ -9282,7 +9267,6 @@ HandMorph.prototype.changed = function () {
             this.world.broken.push(this.fullBounds().spread());
         }
     }
-
 };
 
 // HandMorph navigation:
@@ -9863,15 +9847,6 @@ HandMorph.prototype.destroyTemporaries = function () {
             myself.temporaries.splice(myself.temporaries.indexOf(morph), 1);
         }
     });
-};
-
-// HandMorph dragging optimization
-
-HandMorph.prototype.moveBy = function (delta) {
-    Morph.prototype.trackChanges = false;
-    HandMorph.uber.moveBy.call(this, delta);
-    Morph.prototype.trackChanges = true;
-    this.fullChanged();
 };
 
 

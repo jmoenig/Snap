@@ -3290,7 +3290,7 @@ SpriteMorph.prototype.nestingBounds = function () {
 
 // SpriteMorph motion primitives
 
-Morph.prototype.setPosition = function (aPoint, justMe) {
+SpriteMorph.prototype.setPosition = function (aPoint, justMe) {
     // override the inherited default to make sure my parts follow
     // unless it's justMe
     var delta = aPoint.subtract(this.topLeft());
