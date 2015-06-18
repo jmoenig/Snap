@@ -388,6 +388,13 @@ ListWatcherMorph.prototype.init = function (list, parentCell) {
     this.lastCell = null;
     this.parentCell = parentCell || null; // for circularity detection
 
+    ListWatcherMorph.uber.init.call(
+        this,
+        SyntaxElementMorph.prototype.rounding,
+        1.000001, // shadow bug in Chrome,
+        new Color(120, 120, 120)
+    );
+
     // elements declarations
     this.label = new StringMorph(
         localize('length: ') + this.list.length(),
@@ -435,13 +442,6 @@ ListWatcherMorph.prototype.init = function (list, parentCell) {
     this.plusButton.outlineColor = this.color;
     this.plusButton.drawNew();
     this.plusButton.fixLayout();
-
-    ListWatcherMorph.uber.init.call(
-        this,
-        SyntaxElementMorph.prototype.rounding,
-        1.000001, // shadow bug in Chrome,
-        new Color(120, 120, 120)
-    );
 
     this.color = new Color(220, 220, 220);
     this.isDraggable = true;
@@ -634,6 +634,7 @@ ListWatcherMorph.prototype.setStartIndex = function (index) {
 };
 
 ListWatcherMorph.prototype.fixLayout = function () {
+    if (!this.label) return;
     Morph.prototype.trackChanges = false;
     if (this.frame) {
         this.arrangeCells();
