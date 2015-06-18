@@ -8895,8 +8895,9 @@ ScrollFrameMorph.prototype.mouseScroll = function (y, x) {
 
 // ScrollFrameMorph duplicating:
 
-ScrollFrameMorph.prototype.updateReferences = function () {
+ScrollFrameMorph.prototype.updateReferences = function (map) {
     var self = this;
+    ScrollFrameMorph.uber.updateReferences.call(this, map);
     if (this.hBar) {
         this.hBar.action = function (num) {
             self.contents.setPosition(
