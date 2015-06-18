@@ -6947,7 +6947,7 @@ InputSlotMorph.prototype.fixLayout = function () {
     if (this.isNumeric) {
         width = contents.width()
             + Math.floor(arrowWidth * 0.5)
-            + this.height()
+            + height
             + this.typeInPadding * 2;
     } else {
         width = Math.max(
@@ -6964,7 +6964,7 @@ InputSlotMorph.prototype.fixLayout = function () {
     this.setExtent(new Point(width, height));
     if (this.isNumeric) {
         contents.setPosition(new Point(
-            Math.floor(this.height() / 2),
+            Math.floor(height / 2),
             this.edge
         ).add(new Point(this.typeInPadding, 0)).add(this.position()));
     } else {
