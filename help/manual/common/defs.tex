@@ -1,0 +1,23 @@
+\usepackage{baskervald}  % Default font
+\usepackage{cabin}  % Sans serif font
+\usepackage[T1]{fontenc}
+\usepackage{setspace} \onehalfspacing
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{hyperref}
+
+\newcommand{\Snap}{{\sf Snap{\it !}}}
+\newcommand{\code}[1]{\textsf{#1}}
+\newcommand{\defaultGraphicsScale}{0.6}
+
+\newcommand{\inlinepic}[1]{%
+	\raisebox{-4pt}{%
+		\includegraphics[scale=\defaultGraphicsScale]{#1}%
+	}%
+}
+
+\newcommand{\bigpic}[1]{
+	\begin{center}
+	\includegraphics[scale=\defaultGraphicsScale]{#1}
+	\end{center}
+}
