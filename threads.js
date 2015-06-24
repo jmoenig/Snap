@@ -98,6 +98,13 @@ function snapEquals(a, b) {
         return false;
     }
 
+    if (a instanceof Color || (b instanceof Color)) {
+        if (a instanceof Color && (b instanceof Color)) {
+            return a.eq(b);
+        }
+        return false;
+    }
+
     var x = +a,
         y = +b,
         i,
