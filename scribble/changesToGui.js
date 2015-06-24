@@ -267,3 +267,26 @@ CostumeIconMorph.prototype.createLabel = function() {
     this.object.name = oldName;
     return result;
 }
+
+// There is a glitch with this function in gui.js: the error catching code
+// does not deal with the exception properly
+IDE_Morph.prototype.getURL = function (url) {
+    var request = new XMLHttpRequest(),
+        myself = this;
+    try {
+        request.open('GET', url, false);
+        request.send();
+        if (request.status === 200) {
+            return request.responseText;
+        }
+        throw new Error('unable to retrieve ' + url);
+    } catch (err) {
+        myself.showMessage(err.toString());
+        return;
+    }
+};
+
+IDE_Morph.prototype.uberGetCostumesList = IDE_Morph.prototype.getCostumesList;
+IDE_Morph.prototype.getCostumesList = function (dirname) {
+    return this.uberGetCostumesList(dirname + "/index.html");
+}
