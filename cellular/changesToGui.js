@@ -303,6 +303,21 @@ IDE_Morph.prototype.createCorral = function()
 	}
 };
 
+IDE_Morph.prototype.killAllClones = function(prototypeObject) {
+	for (var i = 0; i<this.stage.children.length; i++)
+	{
+		var child = this.stage.children[i];
+		if (child.parentSprite == prototypeObject)
+		{
+			//Remove it if it is a clone of this sprite
+			this.stage.removeChild(child);
+			this.stage.threads.stopAllForReceiver(child);
+			child.parentSprite.cloneDestroyed();
+			i--;
+		}
+	}
+}
+
 //Add cellular centre.
 TurtleIconMorph.prototype.userMenu = function () {
     var myself = this,
@@ -371,11 +386,6 @@ SpriteIconMorph.prototype.init = function (aSprite, aTemplate) {
 	this.fixLayout();
 }
 
-/*SpriteIconMorph.prototype.uberStep = SpriteIconMorph.prototype.step;
-SpriteIconMorph.prototype.step = function () {
-	return this.uberStep();
-};*/
-
 /*
 ** This creates the text box in which the number of clones is stored for each sprite.
 ** You can see it below every sprite icon on the bottom right of the screen.
@@ -407,18 +417,7 @@ SpriteIconMorph.prototype.createDuplicator = function () {
 		
 		//Go through every object and remove everyone that is based off this sprite
 		var ide = myself.parentThatIsA(IDE_Morph);
-		for (var i = 0; i<ide.stage.children.length; i++)
-		{
-			var child = ide.stage.children[i];
-			if (child.parentSprite == myself.object)
-			{
-				//Remove it if it is a clone of this sprite
-				ide.stage.removeChild(child);
-				ide.stage.threads.stopAllForReceiver(child);
-				child.parentSprite.cloneDestroyed();
-				i--;
-			}
-		}
+		ide.killAllClones(myself.object);
 		
 		//Now we make the clones
 		for (var i = 0; i<value; i++)
@@ -531,3 +530,9 @@ IDE_Morph.prototype.newProject = function() {
 /*IDE_Morph.prototype.snapAppsHookAddSprite = function (sprite) { 
 	this.stage.add(sprite);
 };*/
+
+IDE_Morph.prototype.uberRemoveSprite = IDE_Morph.prototype.removeSprite;
+IDE_Morph.prototype.removeSprite = function (object) {
+    this.killAllClones(object);
+    return this.uberRemoveSprite(object);
+}
