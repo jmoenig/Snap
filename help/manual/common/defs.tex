@@ -11,16 +11,12 @@
 %
 % Note that in Polish (and other languages), nouns are inflected. The form "Snap!" with suffix looks plain stupid, so the macro takes a suffix as argument. If the suffix is non-empty, no exclamation mark is generated, and the suffix is used instead.
 \newcommand{\Snap}[1]{%
-	{%
-		\sf%
+	\textsf{%
 		Snap%
-		\ifx\\#1\\{\it !}%
+		\ifx\\#1\\\textit{!}%
 		\else #1%
 		\fi%
 	}%
-}
-\newcommand{\Foo}[1]{
-\ifx\\#1\\foo\else bar\fi
 }
 
 \newcommand{\code}[1]{\textsf{#1}}
