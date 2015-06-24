@@ -275,6 +275,7 @@ SpriteMorph.prototype.snapappsHookBlockTemplates = function(blocks, block, cat, 
 	{
 		blocks.push('-');
 		blocks.push(block('getCostumeName'));
+		blocks.push(block('scaleToCellSize'));
 	}
 	else if (cat == 'objects')
 	{
@@ -671,6 +672,11 @@ SpriteMorph.prototype.addCellularBlocks = function () {
 		type: 'reporter',
 		category: 'objects',
 		spec: 'change var %s by %s in %obj',
+	};
+	SpriteMorph.prototype.blocks.scaleToCellSize = {
+		type: 'command',
+		category: 'looks',
+		spec: 'scale to cell size',
 	};
 	SpriteMorph.prototype.blocks.getCostumeName = {
 		type: 'reporter',
@@ -2415,6 +2421,17 @@ function removeNulls(array)
 		}
 	}
 	return array;
+};
+
+
+
+//We override double check at the start of the following functions:
+SpriteMorph.prototype.scaleToCellSize = function() {
+	var stage = this.parentThatIsA(StageMorph);
+	var scaleX = stage.cellWidth() / this.width();
+	var scaleY = stage.cellHeight() / this.height();
+    var currentScale = this.getScale();
+    this.setScale(currentScale * Math.min(scaleX, scaleY));
 };
 
 //We override double check at the start of the following functions:
