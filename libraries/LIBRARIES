@@ -1,5 +1,6 @@
 iteration-composition	Iteration, composition
 list-utilities	List utilities
+colors	Color Reporters
 stream-tools	Streams (lazy lists)
 variadic-reporters	Variadic reporters
 word-sentence	Words, sentences
