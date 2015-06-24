@@ -1626,7 +1626,7 @@ ______
 
 130415
 ------
-* Blocks: place sticky comments on World layer on dragging their anchor block 
+* Blocks: place sticky comments on World layer on dragging their anchor block
 
 130416
 ------
@@ -1704,7 +1704,7 @@ ______
 130514
 ------
 * paint.js: Paint editor, first version, contributed by Kartik Chandra, Yay!!
-* Threads, Objects, Blocks: Broadcast & message enhancements: When I receive <any msg>, and getLastMessage reporter + watcher 
+* Threads, Objects, Blocks: Broadcast & message enhancements: When I receive <any msg>, and getLastMessage reporter + watcher
 
 130515
 ------
@@ -1726,7 +1726,7 @@ ______
 
 130605
 ------
-* Objects: fix for hiding 'getLastAnswer' and 'getTimer' primitives 
+* Objects: fix for hiding 'getLastAnswer' and 'getTimer' primitives
 
 130606
 ------
@@ -1837,7 +1837,7 @@ ______
 130801
 ------
 * Blocks, Threads: "whitespace" & other options in SPLIT reporter's dropdown
-* Blocks: Italicize editable input options (e.g. for the SPLT block) 
+* Blocks: Italicize editable input options (e.g. for the SPLT block)
 * Blocks: Undrop Reporters feature (in script areas' context menus)
 
 130802
@@ -2245,7 +2245,7 @@ ______
 * Objects, GUI: duplicate and clone nested sprites
 * GUI, Store: export and import nested sprites
 * Objects: double clicking on a sprite in the stage selects it in the IDE
-* Objects: added ‘move’ option to the sprite context menu, lets the user move (nested) sprites in edit mode without changing their layering, and also sprites marked “undraggable” 
+* Objects: added ‘move’ option to the sprite context menu, lets the user move (nested) sprites in edit mode without changing their layering, and also sprites marked “undraggable”
 * updated Portuguese translation, thanks, Manuel!
 * updated German translation
 * Morphic: fixed #497 (prevent bubble shadows from getting cut-off)
@@ -2285,7 +2285,7 @@ ______
 
 140930
 ------
-* Objects: fixed #593 match broadcast numbers with event hat blocks containing strings that can be parsed as numbers 
+* Objects: fixed #593 match broadcast numbers with event hat blocks containing strings that can be parsed as numbers
 * BYOB: allow percent symbols in custom block texts (fix #361), thanks, @Gubolin!!
 * Morphic: allow negative min/max values for sliders (fix #285), thanks, @Gubolin!!
 * Objects: fixed #378 (disable context menus for boolean representations)
@@ -2499,9 +2499,9 @@ ______
 * Threads: flush Stage>>keysPressed when prompting the user
 * Objects: fixed #770
 
-150415
+150426
 ------
-* OOP: Objects, Prototypal inheritance of sprite-local custom blocks (palette only)
+* Store: fixed #784
 
 150501
 ------
@@ -2511,17 +2511,16 @@ ______
 * GUI: hide “save to disk” option behind shift-click again (has issues in Chrome)
 * GUI: parameters for embedding projects in iFrames, thanks, Bernat!
 
+=== Release v4.0 ===
+
 150518
 ------
 * Objects, GUI: Fix encoding for exported sprites (esp. comments)
+* Portuguese translation update, thanks, Manuel!!
 
 150521
 ------
 * BYOB: Fix encoding for exported libraries of global blocks
-
-150521
-------
-* BYOB: Fix encoding glitch
 
 150608
 ------

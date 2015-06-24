@@ -61,7 +61,7 @@ SyntaxElementMorph, Variable*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2015-March-24';
+modules.store = '2015-April-26';
 
 
 // XML_Serializer ///////////////////////////////////////////////////////
@@ -500,7 +500,7 @@ SnapSerializer.prototype.rawLoadProjectModel = function (xmlNode) {
     /* Watchers */
 
     model.sprites.childrenNamed('watcher').forEach(function (model) {
-        var watcher, color, target, hidden, extX, extY;
+        var watcher, color, target, hidden, extX, extY, vFrame;
 
         color = myself.loadColor(model.attributes.color);
         target = Object.prototype.hasOwnProperty.call(
@@ -521,14 +521,20 @@ SnapSerializer.prototype.rawLoadProjectModel = function (xmlNode) {
                 model.attributes,
                 'var'
             )) {
-            watcher = new WatcherMorph(
-                model.attributes['var'],
-                color,
-                isNil(target) ? project.globalVariables
-                    : target.variables,
-                model.attributes['var'],
-                hidden
-            );
+            vFrame = isNil(target) ? project.globalVariables
+                    : target.variables;
+            if (Object.prototype.hasOwnProperty.call(
+                    vFrame.vars,
+                    model.attributes['var']
+                )) {
+                watcher = new WatcherMorph(
+                    model.attributes['var'],
+                    color,
+                    vFrame,
+                    model.attributes['var'],
+                    hidden
+                );
+            }
         } else {
             watcher = new WatcherMorph(
                 localize(myself.watcherLabels[model.attributes.s]),
@@ -559,12 +565,29 @@ SnapSerializer.prototype.rawLoadProjectModel = function (xmlNode) {
             if (extX) {
                 watcher.cellMorph.contentsMorph.setWidth(+extX);
             }
-            extY = model.attributes.extY;
-            if (extY) {
-                watcher.cellMorph.contentsMorph.setHeight(+extY);
+            watcher.setPosition(
+                project.stage.topLeft().add(new Point(
+                    +model.attributes.x || 0,
+                    +model.attributes.y || 0
+                ))
+            );
+            project.stage.add(watcher);
+            watcher.onNextStep = function () {this.currentValue = null; };
+
+            // set watcher's contentsMorph's extent if it is showing a list
+            // and if its monitor dimensions are given
+            if (watcher.currentValue instanceof List) {
+                extX = model.attributes.extX;
+                if (extX) {
+                    watcher.cellMorph.contentsMorph.setWidth(+extX);
+                }
+                extY = model.attributes.extY;
+                if (extY) {
+                    watcher.cellMorph.contentsMorph.setHeight(+extY);
+                }
+                // adjust my contentsMorph's handle position
+                watcher.cellMorph.contentsMorph.handle.drawNew();
             }
-            // adjust my contentsMorph's handle position
-            watcher.cellMorph.contentsMorph.handle.drawNew();
         }
     });
     this.objects = {};
