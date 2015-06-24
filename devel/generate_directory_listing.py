@@ -6,7 +6,7 @@ path = sys.argv[1]
 html = "<html><body>\n"
 for x in listdir(path):
     if x != "index.html":
-        html += "<a href=\"" + x + "\">" + x + "</a><br/>";
+        html += "<a href=\"" + x + "\">" + x + "</a><br/>\n";
 html += "</body></html>"
 
 with open(path + "/index.html", "w") as f:
