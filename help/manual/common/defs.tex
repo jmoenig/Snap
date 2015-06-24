@@ -1,14 +1,34 @@
 \usepackage{baskervald}  % Default font
 \usepackage{cabin}  % Sans serif font
 \usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
 \usepackage{setspace} \onehalfspacing
 \usepackage{graphicx}
 \usepackage{textcomp}
 \usepackage{hyperref}
 
-\newcommand{\Snap}{{\sf Snap{\it !}}}
+% This macro produces a "Snap!" logo.
+%
+% Note that in Polish (and other languages), nouns are inflected. The form "Snap!" with suffix looks plain stupid, so the macro takes a suffix as argument. If the suffix is non-empty, no exclamation mark is generated, and the suffix is used instead.
+\newcommand{\Snap}[1]{%
+	{%
+		\sf%
+		Snap%
+		\ifx\\#1\\{\it !}%
+		\else #1%
+		\fi%
+	}%
+}
+\newcommand{\Foo}[1]{
+\ifx\\#1\\foo\else bar\fi
+}
+
 \newcommand{\code}[1]{\textsf{#1}}
 \newcommand{\defaultGraphicsScale}{0.6}
+
+\renewcommand{\thechapter}{\Roman{chapter}}
+\renewcommand{\thesection}{\Alph{section}}
+\renewcommand{\thesubsection}{}
 
 \newcommand{\inlinepic}[1]{%
 	\raisebox{-4pt}{%

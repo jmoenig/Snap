@@ -4,7 +4,7 @@
 
 \begin{document}
 
-\title{\Snap{} Reference Manual}
+\title{\Snap{} \\ Podręcznik użytkownika}
 \author{Brian Harvey \and Jens M\"{o}nig}
 \date{}
 
@@ -15,21 +15,23 @@
 \chapter*{}
 \section*{Acknowledgements}
 
-We have been extremely lucky in our mentors. Jens cut his teeth in the company of the Smalltalk pioneers: Alan Kay, Dan Ingalls, and the rest of the gang who invented personal computing and object oriented programming in the great days of Xerox PARC. He worked with John Maloney, of the MIT Scratch Team, who developed the Morphic graphics framework that's still at the heart of \Snap{}. The brilliant design of Scratch, from the Lifelong Kindergarten Group at the MIT Media Lab, is crucial to \Snap{}.
+Mieliśmy ogromne szczęście do mentorów. Jens zdobył dużo doświadczenia pracując wśród pionierów Smalltalka: Alana Kaya, Dana Ingallsa i reszty ekipy, która wynalazła komputery osobiste i programowanie obiektowe w najlepszych dniach firmy Xerox PARC. Pracował z Johnem Maloneyem z zespołu Scratcha w MIT\footnote{Massachusetts Institute of Technology, amerykańska uczelnia techniczna --- przyp. tłum.} , autorem platformy graficznej Morphic, wciąż stanowiącej fundament \Snap{a}. Znakomity projekt języka Scratch, autorstwa Lifelong Kindergarten Group z MIT Media Lab, odgrywa w \Snap{ie} kluczową rolę.
 
-{\bf\em Our earlier version, BYOB, was a direct modification of the Scratch source code. \Snap{} is a complete rewrite, but its code structure and its user interface remain deeply indebted to Scratch. And the Scratch Team, who could have seen us as rivals, have been entirely supportive and welcoming to us.}
+{\bf\em Nasza poprzednia wersja, BYOB, była bezpośrednią modyfikacją kodu źródłowego Scratcha. \Snap{} został napisany od zera, lecz struktura jego kodu oraz interfejs użytkownika pozostają mocno zakorzenione w Scratchu. Z kolei zespół Scratcha, który mógłby widzieć w nas rywali, przyjął nas ciepło i okazał nam całkowite wsparcie.}
 
-Brian grew up at the MIT and Stanford Artificial Intelligence Labs, learning from Lisp inventor John McCarthy, Scheme inventors Gerald J. Sussman and Guy Steele, and the authors of the world's best computer science book, \textit{Structure and Interpretation of Computer Programs}, Hal Abelson and Gerald J. Sussman with Julie Sussman, among many other heroes of computer science.
+Brian zdobywał szlify w MIT oraz Stanford Artificial Intelligence Labs\footnote{Laboratorium sztucznej inteligencji na Uniwersytecie Stanforda --- przyp. tłum.}, gdzie uczył się pod okiem Johna McCarthy'ego, twórcy Lispa, oraz Geralda J. Sussmana i Guya Steele'a, twórców języka Scheme. Zdobywał również wiedzę od wielu innych wybitnych informatyków, w tym autorów najlepszej książki z zakresu informatyki --- \emph{Struktury i interpretacji programów komputerowych}: Hala Abelsona, Geralda J. Sussmana i Julie Sussman.
 
-{\bf\em In the glory days of the MIT Logo Lab, we used to say, ``Logo is Lisp disguised as BASIC.'' Now, with its first class procedures, lexical scope, and first class continuations, \Snap{} is Scheme disguised as Scratch.}
+{\bf\em Za starych dobrych czasów mawialiśmy w MIT Logo Lab: ,,Język Logo to Lisp w przebraniu BASIC-a''. Dziś, ze swoimi pierwszoklasowymi procedurami, zasięgami leksykalnymi i pierwszoklasowymi kontynuacjami, \Snap{} jest jak Scheme w przebraniu Scratcha.}
 
-We have been fortunate to get to know an amazing group of brilliant middle school (!\@) and high school students through the Scratch Advanced Topics forum, several of whom have contributed code to \Snap{}: Kartik Chandra, Nathan Dinsmore, Connor Hudson, and Ian Reynolds. Many more have contributed ideas and alpha-testing bug reports. UC Berkeley students who've contributed code include Michael Ball, Achal Dave, Kyle Hotchkiss, Ivan Motyashov, and Yuan Yuan. Contributors of translations are too numerous to list here, but they're in the ``About...'' box in \Snap{} itself. This work was supported in part by the National Science Foundation grant 1143566, and in part by MioSoft.
+Szczęśliwym zrządzeniem losu, poprzez forum Scratch Advanced Topics, poznaliśmy wspaniałą grupę błyskotliwych uczniów gimnazjów (!) i liceów. Kilku z nich wniosło swój wkład w kod \Snap{a}: Kartik Chandra, Nathan Dinsmore, Connor Hudson i Ian Reynolds. Ponadto, wielu zgłosiło pomysły i raporty błędów podczas testowania wersji alfa. Wśród studentów Uniwersytetu Kalifornijskiego w Berkeley, którzy przyczynili się do rozwoju kodu, znajdują się Michael Ball, Achal Dave, Kyle Hotchkiss, Ivan Motyashov i Yuan Yuan. Wymienianie wszystkich tłumaczy zajeło by zbyt wiele miejsca, ale można ich odnaleźć w okienku ,,O Snap!...'' dostępnym w programie. Niniejsze dzieło powstało częściowo w ramach grantu 1143566 udzielonego przez National Science Foundation, a częściowo przy wsparciu firmy MioSoft.
 
 \begin{titlepage}
 
 \begin{center}
-\bf \Huge \Snap{} Reference Manual \\ \huge Version 4.0 \vspace{40pt}
+\bf \Huge \Snap{} \\ Podręcznik użytkownika \\ \huge Wersja 4.0 \vspace{40pt}
 \end{center}
+
+\Snap{} (dawniej BYOB) to rozszerzona reimplementacja języka Scratch (\url{http://scratch.mit.edu}), która pozwala na tworzenie własnych bloków (ang. \textit{Build Your Own Blocks}). 
 
 \Snap{} (formerly BYOB) is an extended reimplementation of Scratch (\url{http://scratch.mit.edu}) that allows you to Build Your Own Blocks. It also features first class lists, first class procedures, and continuations. These added capabilities make it suitable for a serious introduction to computer science for high school or college students.  To run \Snap{}, open a browser window and connect to either \url{http://snap.berkeley.edu/run} to start with a minimal set of blocks or \url{http://snap.berkeley.edu/init} to load a small set of additional blocks (a little slower startup, but recommended for convenience and assumed in this manual).
 
