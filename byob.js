@@ -950,6 +950,9 @@ CustomReporterBlockMorph.prototype.placeHolder
 
 CustomReporterBlockMorph.prototype.parseSpec
     = CustomCommandBlockMorph.prototype.parseSpec;
+    
+CustomReporterBlockMorph.prototype.snapAppsCanEdit
+    = CustomCommandBlockMorph.prototype.snapAppsCanEdit;
 
 CustomReporterBlockMorph.prototype.edit
     = CustomCommandBlockMorph.prototype.edit;

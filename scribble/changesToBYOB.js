@@ -57,3 +57,9 @@ CustomCommandBlockMorph.prototype.recievePassword = function (password)
 			+'password entry.'));
 	}
 }
+
+CustomReporterBlockMorph.prototype.snapAppsCanEdit =
+    CustomCommandBlockMorph.prototype.snapAppsCanEdit;
+
+CustomReporterBlockMorph.prototype.recievePassword =
+    CustomCommandBlockMorph.prototype.recievePassword;
