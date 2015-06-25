@@ -83,7 +83,7 @@ ArgLabelMorph, localize, XML_Element, hex_sha512*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.threads = '2015-May-01';
+modules.threads = '2015-June-25';
 
 var ThreadManager;
 var Process;
@@ -2641,7 +2641,8 @@ Process.prototype.reportTimer = function () {
 
 // Process Dates and times in Snap
 Process.prototype.reportDate = function (datefn) {
-    var inputFn = this.inputOption(datefn),
+    var currDate, func, result,
+        inputFn = this.inputOption(datefn),
         // Map block options to built-in functions
         dateMap = {
             'year' : 'getFullYear',
@@ -2655,16 +2656,14 @@ Process.prototype.reportDate = function (datefn) {
         };
 
     if (!dateMap[inputFn]) { return ''; }
-
-    var currDate = new Date(),
-        func = dateMap[inputFn],
-        result = currDate[func]();
+    currDate = new Date();
+    func = dateMap[inputFn];
+    result = currDate[func]();
 
     // Show months as 1-12 and days as 1-7
     if (inputFn === 'month' || inputFn === 'day of week') {
         result += 1;
     }
-
     return result;
 };
 
