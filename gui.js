@@ -84,8 +84,8 @@ var JukeboxMorph;
 
 // Get the full url without "snap.html"
 var baseUrl = document.URL.split('/');
-baseUrl.pop(baseUrl.length-1);
-baseUrl = baseUrl.join('/')+'/'; 
+baseUrl.pop(baseUrl.length - 1);
+baseUrl = baseUrl.join('/') + '/';
 
 // IDE_Morph ///////////////////////////////////////////////////////////
 
@@ -4834,8 +4834,7 @@ ProjectDialogMorph.prototype.openProject = function () {
     if (this.source === 'cloud') {
         this.openCloudProject(proj);
     } else if (this.source === 'examples') {
-        src = this.ide.getURL(baseUrl + 'Examples/' + proj.name + '.xml'
-        );
+        src = this.ide.getURL(baseUrl + 'Examples/' + proj.name + '.xml');
         this.ide.openProjectString(src);
         this.destroy();
     } else { // 'local'
