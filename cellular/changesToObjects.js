@@ -317,7 +317,9 @@ SpriteMorph.prototype.snapappsHookBlockTemplates = function(blocks, block, cat, 
 		blocks.push(block("allObjectsInCellCell"));
 		blocks.push(block("allObjectsInCellReal"));
 		blocks.push('-');
+		blocks.push(block("numCostumeInNbrCells"));
 		blocks.push(block("numObjectsInNbrCells"));
+		blocks.push(block("isCostumeInCell"));
 		blocks.push(block("isObjectInCell"));
 		blocks.push('-');
 		blocks.push(block("allObjectsInNbrCells"));
@@ -788,12 +790,22 @@ SpriteMorph.prototype.addCellularBlocks = function () {
 	SpriteMorph.prototype.blocks.numObjectsInNbrCells = {
 		type: 'reporter',
 		category: 'neighbours',
-		spec: '# %spr in nbr cells',
+		spec: '# object %spr in nbr cells',
+	};
+	SpriteMorph.prototype.blocks.numCostumeInNbrCells = {
+		type: 'reporter',
+		category: 'neighbours',
+		spec: '# costume %cst in nbr cells',
 	};
 	SpriteMorph.prototype.blocks.isObjectInCell = {
 		type: 'predicate',
 		category: 'neighbours',
-		spec: 'is %spr in cell %celldir',
+		spec: 'is object %spr in cell %celldir',
+	};
+	SpriteMorph.prototype.blocks.isCostumeInCell = {
+		type: 'predicate',
+		category: 'neighbours',
+		spec: 'is costume %cst in cell %celldir',
 	};
 	SpriteMorph.prototype.blocks.numFilledNbrCells = {
 		type: 'reporter',
@@ -1548,6 +1560,59 @@ SpriteMorph.prototype.isObjectInCell = function(objectOrName, cellDir) {
         // Deal with both cases (object/name) for objectOrName
         if (ii == objectOrName
             || (ii.parentSprite && ii.parentSprite.name == objectOrName)) {
+            return true;
+        }
+    }
+    return false;
+};
+
+SpriteMorph.prototype.numCostumeInNbrCells = function(costumeName) {
+	var stage = this.parentThatIsA(StageMorph),
+		cellPos = stage.screenToCellSpace(this.rotationCenter()),
+		objects = 0,
+		myself = this;
+		
+	if (costumeName instanceof Array && costumeName[0] == "Turtle") {
+	    costumeName = "";
+	}
+	
+	for (var i=-1; i<=1; i++)
+	{
+		for (var j=-1; j<=1; j++)
+		{
+			if (i == 0 && j == 0)
+				continue;
+			var cell = stage.getCellAtCellCoords(cellPos.x + i, cellPos.y + j);
+			if (!cell)
+				continue;
+			objects += cell.spriteMorphs.reduce(function(accumulator, i) {
+			    if (i.parentSprite == myself.parentSprite && i.getCostumeName() == costumeName) {
+			        return accumulator + 1;
+			    }
+                return accumulator;
+			}, 0);
+		}
+	}
+	return objects;
+};
+
+SpriteMorph.prototype.isCostumeInCell = function(costumeName, cellDir) {
+	if (!cellDir || !cellDir[0])
+		return null;
+	var stage = this.parentThatIsA(StageMorph),
+		cellPos = stage.screenToCellSpace(this.rotationCenter());
+		
+	if (costumeName instanceof Array && costumeName[0] == "Turtle") {
+	    costumeName = "";
+	}
+	
+	cellPos.x += cellDirX[cellDir[0]];
+	cellPos.y += cellDirY[cellDir[0]];
+	
+	var cell = stage.getCellAtCellCoords(cellPos);
+    for (var i = 0; i < cell.spriteMorphs.length; i++) {
+        var ii = cell.spriteMorphs[i];
+        if (ii.parentSprite == this.parentSprite && ii.getCostumeName() == costumeName) {
             return true;
         }
     }

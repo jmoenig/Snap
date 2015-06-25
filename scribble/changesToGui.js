@@ -271,6 +271,9 @@ CostumeIconMorph.prototype.createLabel = function() {
 // There is a glitch with this function in gui.js: the error catching code
 // does not deal with the exception properly
 IDE_Morph.prototype.getURL = function (url) {
+    if (url == 'http://snap.berkeley.edu/snapsource/Examples/') {
+        url = 'Examples/index.html';
+    }
     var request = new XMLHttpRequest(),
         myself = this;
     try {
