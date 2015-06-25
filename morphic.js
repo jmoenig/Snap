@@ -3015,101 +3015,98 @@ Morph.prototype.isTransparentAt = function (aPoint) {
 
 // Morph duplicating:
 
-Morph.prototype.copy = function () {
-    var c = copy(this);
-    c.parent = null;
-    c.children = [];
-    c.bounds = this.bounds.copy();
-    return c;
-};
+(function () {
+    // don't overwrite the global Map with AssociativeMap
+    var Map = window.Map || AssociativeMap;
 
-Morph.prototype.fullCopy = function () {
-    /*
-    Produce a copy of me with my entire tree of submorphs. Morphs
-    mentioned more than once are all directed to a single new copy.
-    Other properties are also *shallow* copied, so you must override
-    to deep copy Arrays and (complex) Objects
-    */
-    var map = new Map(), c;
-    c = this.copyRecordingReferences(map);
-    c.forAllChildren(function (m) {
-        m.updateReferences(map);
-    });
-    return c;
-};
-
-Morph.prototype.copyRecordingReferences = function (map) {
-    /*
-    Recursively copy this entire composite morph, recording the
-    correspondence between old and new morphs in the given dictionary.
-    This dictionary will be used to update intra-composite references
-    in the copy. See updateReferences().
-
-    Note: This default implementation copies ONLY morphs. If a morph
-    stores morphs in other properties that it wants to copy, then it
-    should override this method to do so. The same goes for morphs that
-    contain other complex data that should be copied when the morph is
-    duplicated.
-    */
-    var c = this.copy();
-    map.set(this, c);
-    this.children.forEach(function (m) {
-        c.add(m.copyRecordingReferences(map));
-    });
-    return c;
-};
-
-Morph.prototype.updateReferences = function (map) {
-    /*
-    Update intra-morph references within a composite morph that has
-    been copied. For example, if a button refers to morph X in the
-    orginal composite then the copy of that button in the new composite
-    should refer to the copy of X in new composite, not the original X.
-    */
-    var property, value, reference;
-    for (var properties = Object.keys(this), l = properties.length, i = 0; i < l; ++i) {
-        property = properties[i];
-        value = this[property];
-        if (value && value.isMorph) {
-            reference = map.get(value);
-            if (reference) this[property] = reference;
-        }
-    }
-};
-
-if (typeof Map === 'undefined') {
-    // use normal objects + stringification if Map doesn't exist
+    Morph.prototype.copy = function () {
+        var c = copy(this);
+        c.parent = null;
+        c.children = [];
+        c.bounds = this.bounds.copy();
+        return c;
+    };
 
     Morph.prototype.fullCopy = function () {
-        var dict = {}, c;
-        c = this.copyRecordingReferences(dict);
+        /*
+        Produce a copy of me with my entire tree of submorphs. Morphs
+        mentioned more than once are all directed to a single new copy.
+        Other properties are also *shallow* copied, so you must override
+        to deep copy Arrays and (complex) Objects
+        */
+        var map = new Map(), c;
+        c = this.copyRecordingReferences(map);
         c.forAllChildren(function (m) {
-            m.updateReferences(dict);
+            m.updateReferences(map);
         });
         return c;
     };
 
-    Morph.prototype.copyRecordingReferences = function (dict) {
+    Morph.prototype.copyRecordingReferences = function (map) {
+        /*
+        Recursively copy this entire composite morph, recording the
+        correspondence between old and new morphs in the given dictionary.
+        This dictionary will be used to update intra-composite references
+        in the copy. See updateReferences().
+
+        Note: This default implementation copies ONLY morphs. If a morph
+        stores morphs in other properties that it wants to copy, then it
+        should override this method to do so. The same goes for morphs that
+        contain other complex data that should be copied when the morph is
+        duplicated.
+        */
         var c = this.copy();
-        dict[this] = c;
+        map.set(this, c);
         this.children.forEach(function (m) {
-            c.add(m.copyRecordingReferences(dict));
+            c.add(m.copyRecordingReferences(map));
         });
         return c;
     };
 
-    Morph.prototype.updateReferences = function (dict) {
+    Morph.prototype.updateReferences = function (map) {
+        /*
+        Update intra-morph references within a composite morph that has
+        been copied. For example, if a button refers to morph X in the
+        orginal composite then the copy of that button in the new composite
+        should refer to the copy of X in new composite, not the original X.
+        */
         var property, value, reference;
         for (var properties = Object.keys(this), l = properties.length, i = 0; i < l; ++i) {
             property = properties[i];
             value = this[property];
             if (value && value.isMorph) {
-                reference = dict[value];
+                reference = map.get(value);
                 if (reference) this[property] = reference;
             }
         }
     };
-}
+
+    // associative array fallback for Map
+
+    function AssociativeMap() {
+        this.keys = [];
+        this.values = [];
+    }
+
+    AssociativeMap.prototype.get = function(key) {
+        for (var keys = this.keys, i = keys.length; i--;) {
+            if (keys[i] === key) return this.values[i];
+        }
+        return undefined;
+    };
+
+    AssociativeMap.prototype.set = function(key, value) {
+        for (var keys = this.keys, i = keys.length; i--;) {
+            if (keys[i] === key) {
+                this.values[i] = value;
+                return;
+            }
+        }
+        keys.push(key);
+        this.values.push(value);
+    };
+
+}());
 
 // Morph dragging and dropping:
 
