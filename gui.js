@@ -5040,9 +5040,9 @@ ProjectDialogMorph.prototype.shareProject = function () {
                         if (proj.ProjectName === ide.projectName) {
                             var usr = SnapCloud.username,
                                 projectId = 'Username=' +
-                                encodeURIComponent(usr.toLowerCase()) +
-                                '&ProjectName=' +
-                                encodeURIComponent(proj.projectName);
+                                    encodeURIComponent(usr.toLowerCase()) +
+                                    '&ProjectName=' +
+                                    encodeURIComponent(proj.projectName);
                             location.hash = projectId;
                         }
                     },
