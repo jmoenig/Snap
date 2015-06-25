@@ -829,7 +829,8 @@
         };
 
     If your new morph stores or references other morphs outside of the
-    submorph tree in other properties, you may need to override the default
+    submorph tree in other properties, be sure to also override the
+    default
 
         updateReferences()
 
@@ -1035,7 +1036,7 @@
     ----------------------
     Joe Otto found and fixed many early bugs and taught me some tricks.
     Nathan Dinsmore contributed mouse wheel scrolling, cached
-    background texture handling and countless bug fixes.
+    background texture handling, countless bug fixes and optimizations.
     Ian Reynolds contributed backspace key handling for Chrome.
     Davide Della Casa contributed performance optimizations for Firefox.
 
@@ -1047,7 +1048,7 @@
 /*global window, HTMLCanvasElement, getMinimumFontHeight, FileReader, Audio,
 FileList, getBlurredShadowSupport*/
 
-var morphicVersion = '2015-May-01';
+var morphicVersion = '2015-June-25';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = getBlurredShadowSupport(); // check for Chrome-bug
 
@@ -1257,7 +1258,7 @@ function copy(target) {
             target.constructor !== Object) {
         c = Object.create(target.constructor.prototype);
         keys = Object.keys(target);
-        for (l = keys.length, i = 0; i < l; ++i) {
+        for (l = keys.length, i = 0; i < l; i += 1) {
             property = keys[i];
             c[property] = target[property];
         }
@@ -2158,7 +2159,7 @@ var TextMorph;
 
 // Morph inherits from Node:
 
-Morph.prototype = Object.create(Node.prototype);
+Morph.prototype = new Node();
 Morph.prototype.constructor = Morph;
 Morph.uber = Node.prototype;
 
@@ -2212,7 +2213,7 @@ Morph.prototype.init = function (noDraw) {
     this.isTemplate = false;
     this.acceptsDrops = false;
     this.noticesTransparentClick = false;
-    if (!noDraw) { this.drawNew(); }
+    if (!noDraw) {this.drawNew(); }
     this.fps = 0;
     this.customContextMenu = null;
     this.lastTime = Date.now();
@@ -2405,9 +2406,9 @@ Morph.prototype.moveBy = function (delta) {
 
 Morph.prototype.silentMoveBy = function (delta) {
     this.bounds = this.bounds.translateBy(delta);
-    for (var children = this.children, i = children.length; i--;) {
-        children[i].silentMoveBy(delta);
-    }
+    this.children.forEach(function (child) {
+        child.silentMoveBy(delta);
+    });
 };
 
 Morph.prototype.setPosition = function (aPoint) {
@@ -2920,6 +2921,18 @@ Morph.prototype.addBack = function (aMorph) {
     this.addChildFirst(aMorph);
 };
 
+Morph.prototype.topMorphAt = function (point) {
+    var i, result;
+    if (!this.isVisible) {return null; }
+    for (i = this.children.length - 1; i >= 0; i -= 1) {
+        result = this.children[i].topMorphAt(point);
+        if (result) {return result; }
+    }
+    return this.bounds.containsPoint(point) &&
+        (this.noticesTransparentClick || !this.isTransparentAt(point)) ? this
+              : null;
+};
+
 Morph.prototype.topMorphSuchThat = function (predicate) {
     var next;
     if (predicate.call(null, this)) {
@@ -2934,30 +2947,6 @@ Morph.prototype.topMorphSuchThat = function (predicate) {
     }
     return null;
 };
-
-Morph.prototype.morphAt = function (aPoint) {
-    var morphs = this.allChildren().slice(0).reverse(),
-        result = null;
-    morphs.forEach(function (m) {
-        if (m.fullBounds().containsPoint(aPoint) &&
-                (result === null)) {
-            result = m;
-        }
-    });
-    return result;
-};
-
-/*
-    alternative -  more elegant and possibly more
-    performant - solution for morphAt.
-    Has some issues, commented out for now
-
-Morph.prototype.morphAt = function (aPoint) {
-    return this.topMorphSuchThat(function (m) {
-        return m.fullBounds().containsPoint(aPoint);
-    });
-};
-*/
 
 Morph.prototype.overlappedMorphs = function () {
     //exclude the World
@@ -3015,98 +3004,72 @@ Morph.prototype.isTransparentAt = function (aPoint) {
 
 // Morph duplicating:
 
-(function () {
-    // don't overwrite the global Map with AssociativeMap
-    var Map = window.Map || AssociativeMap;
+Morph.prototype.copy = function () {
+    var c = copy(this);
+    c.parent = null;
+    c.children = [];
+    c.bounds = this.bounds.copy();
+    return c;
+};
 
-    Morph.prototype.copy = function () {
-        var c = copy(this);
-        c.parent = null;
-        c.children = [];
-        c.bounds = this.bounds.copy();
-        return c;
-    };
+Morph.prototype.fullCopy = function () {
+    /*
+    Produce a copy of me with my entire tree of submorphs. Morphs
+    mentioned more than once are all directed to a single new copy.
+    Other properties are also *shallow* copied, so you must override
+    to deep copy Arrays and (complex) Objects
+    */
+    var map = new Map(), c;
+    c = this.copyRecordingReferences(map);
+    c.forAllChildren(function (m) {
+        m.updateReferences(map);
+    });
+    return c;
+};
 
-    Morph.prototype.fullCopy = function () {
-        /*
-        Produce a copy of me with my entire tree of submorphs. Morphs
-        mentioned more than once are all directed to a single new copy.
-        Other properties are also *shallow* copied, so you must override
-        to deep copy Arrays and (complex) Objects
-        */
-        var map = new Map(), c;
-        c = this.copyRecordingReferences(map);
-        c.forAllChildren(function (m) {
-            m.updateReferences(map);
-        });
-        return c;
-    };
+Morph.prototype.copyRecordingReferences = function (map) {
+    /*
+    Recursively copy this entire composite morph, recording the
+    correspondence between old and new morphs in the given dictionary.
+    This dictionary will be used to update intra-composite references
+    in the copy. See updateReferences().
 
-    Morph.prototype.copyRecordingReferences = function (map) {
-        /*
-        Recursively copy this entire composite morph, recording the
-        correspondence between old and new morphs in the given dictionary.
-        This dictionary will be used to update intra-composite references
-        in the copy. See updateReferences().
+    Note: This default implementation copies ONLY morphs. If a morph
+    stores morphs in other properties that it wants to copy, then it
+    should override this method to do so. The same goes for morphs that
+    contain other complex data that should be copied when the morph is
+    duplicated.
+    */
+    var c = this.copy();
+    map.set(this, c);
+    this.children.forEach(function (m) {
+        c.add(m.copyRecordingReferences(map));
+    });
+    return c;
+};
 
-        Note: This default implementation copies ONLY morphs. If a morph
-        stores morphs in other properties that it wants to copy, then it
-        should override this method to do so. The same goes for morphs that
-        contain other complex data that should be copied when the morph is
-        duplicated.
-        */
-        var c = this.copy();
-        map.set(this, c);
-        this.children.forEach(function (m) {
-            c.add(m.copyRecordingReferences(map));
-        });
-        return c;
-    };
-
-    Morph.prototype.updateReferences = function (map) {
-        /*
-        Update intra-morph references within a composite morph that has
-        been copied. For example, if a button refers to morph X in the
-        orginal composite then the copy of that button in the new composite
-        should refer to the copy of X in new composite, not the original X.
-        */
-        var property, value, reference;
-        for (var properties = Object.keys(this), l = properties.length, i = 0; i < l; ++i) {
-            property = properties[i];
-            value = this[property];
-            if (value && value.isMorph) {
-                reference = map.get(value);
-                if (reference) this[property] = reference;
-            }
+Morph.prototype.updateReferences = function (map) {
+    /*
+    Update intra-morph references within a composite morph that has
+    been copied. For example, if a button refers to morph X in the
+    orginal composite then the copy of that button in the new composite
+    should refer to the copy of X in new composite, not the original X.
+    */
+    var properties = Object.keys(this),
+        l = properties.length,
+        property,
+        value,
+        reference,
+        i;
+    for (i = 0; i < l; i += 1) {
+        property = properties[i];
+        value = this[property];
+        if (value && value.isMorph) {
+            reference = map.get(value);
+            if (reference) { this[property] = reference; }
         }
-    };
-
-    // associative array fallback for Map
-
-    function AssociativeMap() {
-        this.keys = [];
-        this.values = [];
     }
-
-    AssociativeMap.prototype.get = function(key) {
-        for (var keys = this.keys, i = keys.length; i--;) {
-            if (keys[i] === key) return this.values[i];
-        }
-        return undefined;
-    };
-
-    AssociativeMap.prototype.set = function(key, value) {
-        for (var keys = this.keys, i = keys.length; i--;) {
-            if (keys[i] === key) {
-                this.values[i] = value;
-                return;
-            }
-        }
-        keys.push(key);
-        this.values.push(value);
-    };
-
-}());
+};
 
 // Morph dragging and dropping:
 
@@ -3713,7 +3676,7 @@ Morph.prototype.overlappingImage = function (otherMorph) {
 
 // ShadowMorph inherits from Morph:
 
-ShadowMorph.prototype = Object.create(Morph.prototype);
+ShadowMorph.prototype = new Morph();
 ShadowMorph.prototype.constructor = ShadowMorph;
 ShadowMorph.uber = Morph.prototype;
 
@@ -3723,13 +3686,17 @@ function ShadowMorph() {
     this.init();
 }
 
+ShadowMorph.prototype.topMorphAt = function () {
+    return null;
+};
+
 // HandleMorph ////////////////////////////////////////////////////////
 
 // I am a resize / move handle that can be attached to any Morph
 
 // HandleMorph inherits from Morph:
 
-HandleMorph.prototype = Object.create(Morph.prototype);
+HandleMorph.prototype = new Morph();
 HandleMorph.prototype.constructor = HandleMorph;
 HandleMorph.uber = Morph.prototype;
 
@@ -3970,7 +3937,7 @@ var PenMorph;
 
 // PenMorph inherits from Morph:
 
-PenMorph.prototype = Object.create(Morph.prototype);
+PenMorph.prototype = new Morph();
 PenMorph.prototype.constructor = PenMorph;
 PenMorph.uber = Morph.prototype;
 
@@ -4202,7 +4169,7 @@ var ColorPaletteMorph;
 
 // ColorPaletteMorph inherits from Morph:
 
-ColorPaletteMorph.prototype = Object.create(Morph.prototype);
+ColorPaletteMorph.prototype = new Morph();
 ColorPaletteMorph.prototype.constructor = ColorPaletteMorph;
 ColorPaletteMorph.uber = Morph.prototype;
 
@@ -4320,7 +4287,7 @@ var GrayPaletteMorph;
 
 // GrayPaletteMorph inherits from ColorPaletteMorph:
 
-GrayPaletteMorph.prototype = Object.create(ColorPaletteMorph.prototype);
+GrayPaletteMorph.prototype = new ColorPaletteMorph();
 GrayPaletteMorph.prototype.constructor = GrayPaletteMorph;
 GrayPaletteMorph.uber = ColorPaletteMorph.prototype;
 
@@ -4351,7 +4318,7 @@ GrayPaletteMorph.prototype.drawNew = function () {
 
 // ColorPickerMorph inherits from Morph:
 
-ColorPickerMorph.prototype = Object.create(Morph.prototype);
+ColorPickerMorph.prototype = new Morph();
 ColorPickerMorph.prototype.constructor = ColorPickerMorph;
 ColorPickerMorph.uber = Morph.prototype;
 
@@ -4420,7 +4387,7 @@ var BlinkerMorph;
 
 // BlinkerMorph inherits from Morph:
 
-BlinkerMorph.prototype = Object.create(Morph.prototype);
+BlinkerMorph.prototype = new Morph();
 BlinkerMorph.prototype.constructor = BlinkerMorph;
 BlinkerMorph.uber = Morph.prototype;
 
@@ -4453,7 +4420,7 @@ var CursorMorph;
 
 // CursorMorph inherits from BlinkerMorph:
 
-CursorMorph.prototype = Object.create(BlinkerMorph.prototype);
+CursorMorph.prototype = new BlinkerMorph();
 CursorMorph.prototype.constructor = CursorMorph;
 CursorMorph.uber = BlinkerMorph.prototype;
 
@@ -4873,7 +4840,7 @@ var BoxMorph;
 
 // BoxMorph inherits from Morph:
 
-BoxMorph.prototype = Object.create(Morph.prototype);
+BoxMorph.prototype = new Morph();
 BoxMorph.prototype.constructor = BoxMorph;
 BoxMorph.uber = Morph.prototype;
 
@@ -5081,7 +5048,7 @@ var SpeechBubbleMorph;
 
 // SpeechBubbleMorph inherits from BoxMorph:
 
-SpeechBubbleMorph.prototype = Object.create(BoxMorph.prototype);
+SpeechBubbleMorph.prototype = new BoxMorph();
 SpeechBubbleMorph.prototype.constructor = SpeechBubbleMorph;
 SpeechBubbleMorph.uber = BoxMorph.prototype;
 
@@ -5381,7 +5348,7 @@ var CircleBoxMorph;
 
 // CircleBoxMorph inherits from Morph:
 
-CircleBoxMorph.prototype = Object.create(Morph.prototype);
+CircleBoxMorph.prototype = new Morph();
 CircleBoxMorph.prototype.constructor = CircleBoxMorph;
 CircleBoxMorph.uber = Morph.prototype;
 
@@ -5501,7 +5468,7 @@ var SliderButtonMorph;
 
 // SliderButtonMorph inherits from CircleBoxMorph:
 
-SliderButtonMorph.prototype = Object.create(CircleBoxMorph.prototype);
+SliderButtonMorph.prototype = new CircleBoxMorph();
 SliderButtonMorph.prototype.constructor = SliderButtonMorph;
 SliderButtonMorph.uber = CircleBoxMorph.prototype;
 
@@ -5713,7 +5680,7 @@ SliderButtonMorph.prototype.mouseMove = function () {
 
 // SliderMorph inherits from CircleBoxMorph:
 
-SliderMorph.prototype = Object.create(CircleBoxMorph.prototype);
+SliderMorph.prototype = new CircleBoxMorph();
 SliderMorph.prototype.constructor = SliderMorph;
 SliderMorph.uber = CircleBoxMorph.prototype;
 
@@ -6064,7 +6031,7 @@ var MouseSensorMorph;
 
 // MouseSensorMorph inherits from BoxMorph:
 
-MouseSensorMorph.prototype = Object.create(BoxMorph.prototype);
+MouseSensorMorph.prototype = new BoxMorph();
 MouseSensorMorph.prototype.constructor = MouseSensorMorph;
 MouseSensorMorph.uber = BoxMorph.prototype;
 
@@ -6138,7 +6105,7 @@ var TriggerMorph;
 
 // InspectorMorph inherits from BoxMorph:
 
-InspectorMorph.prototype = Object.create(BoxMorph.prototype);
+InspectorMorph.prototype = new BoxMorph();
 InspectorMorph.prototype.constructor = InspectorMorph;
 InspectorMorph.uber = BoxMorph.prototype;
 
@@ -6633,7 +6600,7 @@ var MenuItemMorph;
 
 // MenuMorph inherits from BoxMorph:
 
-MenuMorph.prototype = Object.create(BoxMorph.prototype);
+MenuMorph.prototype = new BoxMorph();
 MenuMorph.prototype.constructor = MenuMorph;
 MenuMorph.uber = BoxMorph.prototype;
 
@@ -6928,7 +6895,7 @@ MenuMorph.prototype.popUpCenteredInWorld = function (world) {
 
 // StringMorph inherits from Morph:
 
-StringMorph.prototype = Object.create(Morph.prototype);
+StringMorph.prototype = new Morph();
 StringMorph.prototype.constructor = StringMorph;
 StringMorph.uber = Morph.prototype;
 
@@ -7374,7 +7341,11 @@ StringMorph.prototype.selectionStartSlot = function () {
 };
 
 StringMorph.prototype.clearSelection = function () {
-    if (!this.currentlySelecting && this.startMark === 0 && this.endMark === 0) return;
+    if (!this.currentlySelecting &&
+            this.startMark === 0 &&
+            this.endMark === 0) {
+        return;
+    }
     this.currentlySelecting = false;
     this.startMark = 0;
     this.endMark = 0;
@@ -7464,7 +7435,7 @@ StringMorph.prototype.disableSelecting = function () {
 
 // TextMorph inherits from Morph:
 
-TextMorph.prototype = Object.create(Morph.prototype);
+TextMorph.prototype = new Morph();
 TextMorph.prototype.constructor = TextMorph;
 TextMorph.uber = Morph.prototype;
 
@@ -7989,7 +7960,7 @@ TextMorph.prototype.inspectIt = function () {
 
 // TriggerMorph inherits from Morph:
 
-TriggerMorph.prototype = Object.create(Morph.prototype);
+TriggerMorph.prototype = new Morph();
 TriggerMorph.prototype.constructor = TriggerMorph;
 TriggerMorph.uber = Morph.prototype;
 
@@ -8244,7 +8215,7 @@ var MenuItemMorph;
 
 // MenuItemMorph inherits from TriggerMorph:
 
-MenuItemMorph.prototype = Object.create(TriggerMorph.prototype);
+MenuItemMorph.prototype = new TriggerMorph();
 MenuItemMorph.prototype.constructor = MenuItemMorph;
 MenuItemMorph.uber = TriggerMorph.prototype;
 
@@ -8403,7 +8374,7 @@ MenuItemMorph.prototype.isSelectedListItem = function () {
 
 // Frames inherit from Morph:
 
-FrameMorph.prototype = Object.create(Morph.prototype);
+FrameMorph.prototype = new Morph();
 FrameMorph.prototype.constructor = FrameMorph;
 FrameMorph.uber = Morph.prototype;
 
@@ -8457,6 +8428,21 @@ FrameMorph.prototype.fullDrawOn = function (aCanvas, aRect) {
             child.fullDrawOn(aCanvas, dirty);
         }
     });
+};
+
+// FrameMorph navigation:
+
+FrameMorph.prototype.topMorphAt = function (point) {
+    var i, result;
+    if (!(this.isVisible && this.bounds.containsPoint(point))) {
+        return null;
+    }
+    for (i = this.children.length - 1; i >= 0; i -= 1) {
+        result = this.children[i].topMorphAt(point);
+        if (result) {return result; }
+    }
+    return this.noticesTransparentClick ||
+        !this.isTransparentAt(point) ? this : null;
 };
 
 // FrameMorph scrolling support:
@@ -8572,7 +8558,7 @@ FrameMorph.prototype.keepAllSubmorphsWithin = function () {
 
 // ScrollFrameMorph ////////////////////////////////////////////////////
 
-ScrollFrameMorph.prototype = Object.create(FrameMorph.prototype);
+ScrollFrameMorph.prototype = new FrameMorph();
 ScrollFrameMorph.prototype.constructor = ScrollFrameMorph;
 ScrollFrameMorph.uber = FrameMorph.prototype;
 
@@ -8893,19 +8879,19 @@ ScrollFrameMorph.prototype.mouseScroll = function (y, x) {
 // ScrollFrameMorph duplicating:
 
 ScrollFrameMorph.prototype.updateReferences = function (map) {
-    var self = this;
+    var myself = this;
     ScrollFrameMorph.uber.updateReferences.call(this, map);
     if (this.hBar) {
         this.hBar.action = function (num) {
-            self.contents.setPosition(
-                new Point(self.left() - num, self.contents.position().y)
+            myself.contents.setPosition(
+                new Point(myself.left() - num, myself.contents.position().y)
             );
         };
     }
     if (this.vBar) {
         this.vBar.action = function (num) {
-            self.contents.setPosition(
-                new Point(self.contents.position().x, self.top() - num)
+            myself.contents.setPosition(
+                new Point(myself.contents.position().x, myself.top() - num)
             );
         };
     }
@@ -8938,7 +8924,7 @@ ScrollFrameMorph.prototype.toggleTextLineWrapping = function () {
 
 // ListMorph ///////////////////////////////////////////////////////////
 
-ListMorph.prototype = Object.create(ScrollFrameMorph.prototype);
+ListMorph.prototype = new ScrollFrameMorph();
 ListMorph.prototype.constructor = ListMorph;
 ListMorph.uber = ScrollFrameMorph.prototype;
 
@@ -9076,7 +9062,7 @@ ListMorph.prototype.setExtent = function (aPoint) {
 
 // StringFieldMorph inherit from FrameMorph:
 
-StringFieldMorph.prototype = Object.create(FrameMorph.prototype);
+StringFieldMorph.prototype = new FrameMorph();
 StringFieldMorph.prototype.constructor = StringFieldMorph;
 StringFieldMorph.uber = FrameMorph.prototype;
 
@@ -9176,7 +9162,7 @@ var BouncerMorph;
 
 // Bouncers inherit from Morph:
 
-BouncerMorph.prototype = Object.create(Morph.prototype);
+BouncerMorph.prototype = new Morph();
 BouncerMorph.prototype.constructor = BouncerMorph;
 BouncerMorph.uber = Morph.prototype;
 
@@ -9263,7 +9249,7 @@ BouncerMorph.prototype.step = function () {
 
 // HandMorph inherits from Morph:
 
-HandMorph.prototype = Object.create(Morph.prototype);
+HandMorph.prototype = new Morph();
 HandMorph.prototype.constructor = HandMorph;
 HandMorph.uber = Morph.prototype;
 
@@ -9290,58 +9276,23 @@ HandMorph.prototype.init = function (aWorld) {
     this.contextMenuEnabled = false;
 };
 
-HandMorph.prototype.changed =
-HandMorph.prototype.fullChanged = function () {
+HandMorph.prototype.changed = function () {
     var b;
     if (this.world !== null) {
         b = this.fullBounds();
         if (!b.extent().eq(new Point())) {
-            this.world.broken.push(this.fullBounds().spread());
+            this.world.broken.push(b.spread());
         }
     }
 };
 
+HandMorph.prototype.fullChanged = HandMorph.prototype.changed;
+
 // HandMorph navigation:
 
-Morph.prototype.topMorphAt = function (p) {
-    if (!this.isVisible) return null;
-    for (var c = this.children, i = c.length; i--;) {
-        var result = c[i].topMorphAt(p);
-        if (result) return result;
-    }
-    return this.bounds.containsPoint(p) && (this.noticesTransparentClick || !this.isTransparentAt(p)) ? this : null;
-};
-FrameMorph.prototype.topMorphAt = function (p) {
-    if (!(this.isVisible && this.bounds.containsPoint(p))) return null;
-    for (var c = this.children, i = c.length; i--;) {
-        var result = c[i].topMorphAt(p);
-        if (result) return result;
-    }
-    return this.noticesTransparentClick || !this.isTransparentAt(p) ? this : null;
-};
-ShadowMorph.prototype.topMorphAt = function () {
-    return null;
-};
 HandMorph.prototype.morphAtPointer = function () {
     return this.world.topMorphAt(this.bounds.origin) || this.world;
 };
-
-/*
-    alternative -  more elegant and possibly more
-    performant - solution for morphAtPointer.
-    Has some issues, commented out for now
-
-HandMorph.prototype.morphAtPointer = function () {
-    var myself = this;
-    return this.world.topMorphSuchThat(function (m) {
-        return m.visibleBounds().containsPoint(myself.bounds.origin) &&
-            m.isVisible &&
-            (m.noticesTransparentClick ||
-                (! m.isTransparentAt(myself.bounds.origin))) &&
-            (! (m instanceof ShadowMorph));
-    });
-};
-*/
 
 HandMorph.prototype.allMorphsAtPointer = function () {
     var morphs = this.world.allChildren(),
@@ -9881,14 +9832,13 @@ HandMorph.prototype.destroyTemporaries = function () {
     });
 };
 
-
 // WorldMorph //////////////////////////////////////////////////////////
 
 // I represent the <canvas> element
 
 // WorldMorph inherits from FrameMorph:
 
-WorldMorph.prototype = Object.create(FrameMorph.prototype);
+WorldMorph.prototype = new FrameMorph();
 WorldMorph.prototype.constructor = WorldMorph;
 WorldMorph.uber = FrameMorph.prototype;
 
