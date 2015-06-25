@@ -2,5 +2,6 @@
 *.log
 *.out
 *.toc
-*.pdf
+en/snap-manual.pdf
+pl/snap-podrecznik.pdf
 *.synctex.gz
