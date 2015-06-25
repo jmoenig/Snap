@@ -2640,25 +2640,25 @@ Process.prototype.reportTimer = function () {
 };
 
 // Process Dates and times in Snap
-// Map block options to built-in functions
-var dateMap = {
-    'year' : 'getFullYear',
-    'month' : 'getMonth',
-    'date': 'getDate',
-    'day of week' : 'getDay',
-    'hour' : 'getHours',
-    'minute' : 'getMinutes',
-    'second' : 'getSeconds',
-    'time in milliseconds' : 'getTime'
-};
-
 Process.prototype.reportDate = function (datefn) {
     var inputFn = this.inputOption(datefn),
-        currDate = new Date(),
-        func = dateMap[inputFn],
-        result = currDate[func]();
+        // Map block options to built-in functions
+        dateMap = {
+            'year' : 'getFullYear',
+            'month' : 'getMonth',
+            'date': 'getDate',
+            'day of week' : 'getDay',
+            'hour' : 'getHours',
+            'minute' : 'getMinutes',
+            'second' : 'getSeconds',
+            'time in milliseconds' : 'getTime'
+        };
 
     if (!dateMap[inputFn]) { return ''; }
+
+    var currDate = new Date(),
+        func = dateMap[inputFn],
+        result = currDate[func]();
 
     // Show months as 1-12 and days as 1-7
     if (inputFn === 'month' || inputFn === 'day of week') {
