@@ -528,7 +528,7 @@
     whose "isTemplate" flag is false, in other words: a non-template.
 
     When creating a copy from a template, the copy's
-    
+
         reactToTemplateCopy
 
     is invoked, if it is present.
@@ -829,12 +829,11 @@
         };
 
     If your new morph stores or references other morphs outside of the
-    submorph tree in other properties, be sure to also override the
-    default
+    submorph tree in other properties, you may need to override the default
 
-        copyRecordingReferences()
+        updateReferences()
 
-    method accordingly if you want it to support duplication.
+    method if you want it to support duplication.
 
 
     (6) development and user modes
@@ -1243,19 +1242,9 @@ function getDocumentPositionOf(aDOMelement) {
     return pos;
 }
 
-function clone(target) {
-    // answer a new instance of target's type
-    if (typeof target === 'object') {
-        var Clone = function () {nop(); };
-        Clone.prototype = target;
-        return new Clone();
-    }
-    return target;
-}
-
 function copy(target) {
     // answer a shallow copy of target
-    var value, c, property;
+    var value, c, property, keys, l, i;
 
     if (typeof target !== 'object') {
         return target;
@@ -1266,18 +1255,16 @@ function copy(target) {
     }
     if (target instanceof target.constructor &&
             target.constructor !== Object) {
-        c = clone(target.constructor.prototype);
-        for (property in target) {
-            if (Object.prototype.hasOwnProperty.call(target, property)) {
-                c[property] = target[property];
-            }
+        c = Object.create(target.constructor.prototype);
+        keys = Object.keys(target);
+        for (l = keys.length, i = 0; i < l; ++i) {
+            property = keys[i];
+            c[property] = target[property];
         }
     } else {
         c = {};
         for (property in target) {
-            if (!c[property]) {
-                c[property] = target[property];
-            }
+            c[property] = target[property];
         }
     }
     return c;
@@ -2171,7 +2158,7 @@ var TextMorph;
 
 // Morph inherits from Node:
 
-Morph.prototype = new Node();
+Morph.prototype = Object.create(Node.prototype);
 Morph.prototype.constructor = Morph;
 Morph.uber = Node.prototype;
 
@@ -2212,7 +2199,7 @@ function Morph() {
 
 // Morph initialization:
 
-Morph.prototype.init = function () {
+Morph.prototype.init = function (noDraw) {
     Morph.uber.init.call(this);
     this.isMorph = true;
     this.bounds = new Rectangle(0, 0, 50, 40);
@@ -2225,7 +2212,7 @@ Morph.prototype.init = function () {
     this.isTemplate = false;
     this.acceptsDrops = false;
     this.noticesTransparentClick = false;
-    this.drawNew();
+    if (!noDraw) { this.drawNew(); }
     this.fps = 0;
     this.customContextMenu = null;
     this.lastTime = Date.now();
@@ -2411,19 +2398,16 @@ Morph.prototype.visibleBounds = function () {
 // Morph accessing - simple changes:
 
 Morph.prototype.moveBy = function (delta) {
-    this.changed();
-    this.bounds = this.bounds.translateBy(delta);
-    this.children.forEach(function (child) {
-        child.moveBy(delta);
-    });
-    this.changed();
+    this.fullChanged();
+    this.silentMoveBy(delta);
+    this.fullChanged();
 };
 
 Morph.prototype.silentMoveBy = function (delta) {
     this.bounds = this.bounds.translateBy(delta);
-    this.children.forEach(function (child) {
-        child.silentMoveBy(delta);
-    });
+    for (var children = this.children, i = children.length; i--;) {
+        children[i].silentMoveBy(delta);
+    }
 };
 
 Morph.prototype.setPosition = function (aPoint) {
@@ -2899,7 +2883,7 @@ Morph.prototype.fullChanged = function () {
 };
 
 Morph.prototype.childChanged = function () {
-    // react to a  change in one of my children,
+    // react to a change in one of my children,
     // default is to just pass this message on upwards
     // override this method for Morphs that need to adjust accordingly
     if (this.parent) {
@@ -3031,63 +3015,98 @@ Morph.prototype.isTransparentAt = function (aPoint) {
 
 // Morph duplicating:
 
-Morph.prototype.copy = function () {
-    var c = copy(this);
-    c.parent = null;
-    c.children = [];
-    c.bounds = this.bounds.copy();
-    return c;
-};
+(function () {
+    // don't overwrite the global Map with AssociativeMap
+    var Map = window.Map || AssociativeMap;
 
-Morph.prototype.fullCopy = function () {
-    /*
-    Produce a copy of me with my entire tree of submorphs. Morphs
-    mentioned more than once are all directed to a single new copy.
-    Other properties are also *shallow* copied, so you must override
-    to deep copy Arrays and (complex) Objects
-    */
-    var dict = {}, c;
-    c = this.copyRecordingReferences(dict);
-    c.forAllChildren(function (m) {
-        m.updateReferences(dict);
-    });
-    return c;
-};
+    Morph.prototype.copy = function () {
+        var c = copy(this);
+        c.parent = null;
+        c.children = [];
+        c.bounds = this.bounds.copy();
+        return c;
+    };
 
-Morph.prototype.copyRecordingReferences = function (dict) {
-    /*
-    Recursively copy this entire composite morph, recording the
-    correspondence between old and new morphs in the given dictionary.
-    This dictionary will be used to update intra-composite references
-    in the copy. See updateReferences().
-    Note: This default implementation copies ONLY morphs in the
-    submorph hierarchy. If a morph stores morphs in other properties
-    that it wants to copy, then it should override this method to do so.
-    The same goes for morphs that contain other complex data that
-    should be copied when the morph is duplicated.
-    */
-    var c = this.copy();
-    dict[this] = c;
-    this.children.forEach(function (m) {
-        c.add(m.copyRecordingReferences(dict));
-    });
-    return c;
-};
+    Morph.prototype.fullCopy = function () {
+        /*
+        Produce a copy of me with my entire tree of submorphs. Morphs
+        mentioned more than once are all directed to a single new copy.
+        Other properties are also *shallow* copied, so you must override
+        to deep copy Arrays and (complex) Objects
+        */
+        var map = new Map(), c;
+        c = this.copyRecordingReferences(map);
+        c.forAllChildren(function (m) {
+            m.updateReferences(map);
+        });
+        return c;
+    };
 
-Morph.prototype.updateReferences = function (dict) {
-    /*
-    Update intra-morph references within a composite morph that has
-    been copied. For example, if a button refers to morph X in the
-    orginal composite then the copy of that button in the new composite
-    should refer to the copy of X in new composite, not the original X.
-    */
-    var property;
-    for (property in this) {
-        if (this[property] && this[property].isMorph && dict[property]) {
-            this[property] = dict[property];
+    Morph.prototype.copyRecordingReferences = function (map) {
+        /*
+        Recursively copy this entire composite morph, recording the
+        correspondence between old and new morphs in the given dictionary.
+        This dictionary will be used to update intra-composite references
+        in the copy. See updateReferences().
+
+        Note: This default implementation copies ONLY morphs. If a morph
+        stores morphs in other properties that it wants to copy, then it
+        should override this method to do so. The same goes for morphs that
+        contain other complex data that should be copied when the morph is
+        duplicated.
+        */
+        var c = this.copy();
+        map.set(this, c);
+        this.children.forEach(function (m) {
+            c.add(m.copyRecordingReferences(map));
+        });
+        return c;
+    };
+
+    Morph.prototype.updateReferences = function (map) {
+        /*
+        Update intra-morph references within a composite morph that has
+        been copied. For example, if a button refers to morph X in the
+        orginal composite then the copy of that button in the new composite
+        should refer to the copy of X in new composite, not the original X.
+        */
+        var property, value, reference;
+        for (var properties = Object.keys(this), l = properties.length, i = 0; i < l; ++i) {
+            property = properties[i];
+            value = this[property];
+            if (value && value.isMorph) {
+                reference = map.get(value);
+                if (reference) this[property] = reference;
+            }
         }
+    };
+
+    // associative array fallback for Map
+
+    function AssociativeMap() {
+        this.keys = [];
+        this.values = [];
     }
-};
+
+    AssociativeMap.prototype.get = function(key) {
+        for (var keys = this.keys, i = keys.length; i--;) {
+            if (keys[i] === key) return this.values[i];
+        }
+        return undefined;
+    };
+
+    AssociativeMap.prototype.set = function(key, value) {
+        for (var keys = this.keys, i = keys.length; i--;) {
+            if (keys[i] === key) {
+                this.values[i] = value;
+                return;
+            }
+        }
+        keys.push(key);
+        this.values.push(value);
+    };
+
+}());
 
 // Morph dragging and dropping:
 
@@ -3155,9 +3174,7 @@ Morph.prototype.slideBackTo = function (situation, inSteps) {
 
     this.fps = 0;
     this.step = function () {
-        myself.fullChanged();
-        myself.silentMoveBy(new Point(xStep, yStep));
-        myself.fullChanged();
+        myself.moveBy(new Point(xStep, yStep));
         stepCount += 1;
         if (stepCount === steps) {
             situation.origin.add(myself);
@@ -3696,7 +3713,7 @@ Morph.prototype.overlappingImage = function (otherMorph) {
 
 // ShadowMorph inherits from Morph:
 
-ShadowMorph.prototype = new Morph();
+ShadowMorph.prototype = Object.create(Morph.prototype);
 ShadowMorph.prototype.constructor = ShadowMorph;
 ShadowMorph.uber = Morph.prototype;
 
@@ -3712,7 +3729,7 @@ function ShadowMorph() {
 
 // HandleMorph inherits from Morph:
 
-HandleMorph.prototype = new Morph();
+HandleMorph.prototype = Object.create(Morph.prototype);
 HandleMorph.prototype.constructor = HandleMorph;
 HandleMorph.uber = Morph.prototype;
 
@@ -3923,20 +3940,6 @@ HandleMorph.prototype.mouseLeave = function () {
     this.changed();
 };
 
-// HandleMorph duplicating:
-
-HandleMorph.prototype.copyRecordingReferences = function (dict) {
-    // inherited, see comment in Morph
-    var c = HandleMorph.uber.copyRecordingReferences.call(
-        this,
-        dict
-    );
-    if (c.target && dict[this.target]) {
-        c.target = (dict[this.target]);
-    }
-    return c;
-};
-
 // HandleMorph menu:
 
 HandleMorph.prototype.attach = function () {
@@ -3967,7 +3970,7 @@ var PenMorph;
 
 // PenMorph inherits from Morph:
 
-PenMorph.prototype = new Morph();
+PenMorph.prototype = Object.create(Morph.prototype);
 PenMorph.prototype.constructor = PenMorph;
 PenMorph.uber = Morph.prototype;
 
@@ -4199,7 +4202,7 @@ var ColorPaletteMorph;
 
 // ColorPaletteMorph inherits from Morph:
 
-ColorPaletteMorph.prototype = new Morph();
+ColorPaletteMorph.prototype = Object.create(Morph.prototype);
 ColorPaletteMorph.prototype.constructor = ColorPaletteMorph;
 ColorPaletteMorph.uber = Morph.prototype;
 
@@ -4260,20 +4263,6 @@ ColorPaletteMorph.prototype.updateTarget = function () {
     }
 };
 
-// ColorPaletteMorph duplicating:
-
-ColorPaletteMorph.prototype.copyRecordingReferences = function (dict) {
-    // inherited, see comment in Morph
-    var c = ColorPaletteMorph.uber.copyRecordingReferences.call(
-        this,
-        dict
-    );
-    if (c.target && dict[this.target]) {
-        c.target = (dict[this.target]);
-    }
-    return c;
-};
-
 // ColorPaletteMorph menu:
 
 ColorPaletteMorph.prototype.developersMenu = function () {
@@ -4331,7 +4320,7 @@ var GrayPaletteMorph;
 
 // GrayPaletteMorph inherits from ColorPaletteMorph:
 
-GrayPaletteMorph.prototype = new ColorPaletteMorph();
+GrayPaletteMorph.prototype = Object.create(ColorPaletteMorph.prototype);
 GrayPaletteMorph.prototype.constructor = GrayPaletteMorph;
 GrayPaletteMorph.uber = ColorPaletteMorph.prototype;
 
@@ -4362,7 +4351,7 @@ GrayPaletteMorph.prototype.drawNew = function () {
 
 // ColorPickerMorph inherits from Morph:
 
-ColorPickerMorph.prototype = new Morph();
+ColorPickerMorph.prototype = Object.create(Morph.prototype);
 ColorPickerMorph.prototype.constructor = ColorPickerMorph;
 ColorPickerMorph.uber = Morph.prototype;
 
@@ -4431,7 +4420,7 @@ var BlinkerMorph;
 
 // BlinkerMorph inherits from Morph:
 
-BlinkerMorph.prototype = new Morph();
+BlinkerMorph.prototype = Object.create(Morph.prototype);
 BlinkerMorph.prototype.constructor = BlinkerMorph;
 BlinkerMorph.uber = Morph.prototype;
 
@@ -4464,7 +4453,7 @@ var CursorMorph;
 
 // CursorMorph inherits from BlinkerMorph:
 
-CursorMorph.prototype = new BlinkerMorph();
+CursorMorph.prototype = Object.create(BlinkerMorph.prototype);
 CursorMorph.prototype.constructor = CursorMorph;
 CursorMorph.uber = BlinkerMorph.prototype;
 
@@ -4884,7 +4873,7 @@ var BoxMorph;
 
 // BoxMorph inherits from Morph:
 
-BoxMorph.prototype = new Morph();
+BoxMorph.prototype = Object.create(Morph.prototype);
 BoxMorph.prototype.constructor = BoxMorph;
 BoxMorph.uber = Morph.prototype;
 
@@ -5092,7 +5081,7 @@ var SpeechBubbleMorph;
 
 // SpeechBubbleMorph inherits from BoxMorph:
 
-SpeechBubbleMorph.prototype = new BoxMorph();
+SpeechBubbleMorph.prototype = Object.create(BoxMorph.prototype);
 SpeechBubbleMorph.prototype.constructor = SpeechBubbleMorph;
 SpeechBubbleMorph.uber = BoxMorph.prototype;
 
@@ -5392,7 +5381,7 @@ var CircleBoxMorph;
 
 // CircleBoxMorph inherits from Morph:
 
-CircleBoxMorph.prototype = new Morph();
+CircleBoxMorph.prototype = Object.create(Morph.prototype);
 CircleBoxMorph.prototype.constructor = CircleBoxMorph;
 CircleBoxMorph.uber = Morph.prototype;
 
@@ -5512,7 +5501,7 @@ var SliderButtonMorph;
 
 // SliderButtonMorph inherits from CircleBoxMorph:
 
-SliderButtonMorph.prototype = new CircleBoxMorph();
+SliderButtonMorph.prototype = Object.create(CircleBoxMorph.prototype);
 SliderButtonMorph.prototype.constructor = SliderButtonMorph;
 SliderButtonMorph.uber = CircleBoxMorph.prototype;
 
@@ -5724,7 +5713,7 @@ SliderButtonMorph.prototype.mouseMove = function () {
 
 // SliderMorph inherits from CircleBoxMorph:
 
-SliderMorph.prototype = new CircleBoxMorph();
+SliderMorph.prototype = Object.create(CircleBoxMorph.prototype);
 SliderMorph.prototype.constructor = SliderMorph;
 SliderMorph.uber = CircleBoxMorph.prototype;
 
@@ -5838,23 +5827,6 @@ SliderMorph.prototype.updateTarget = function () {
             this.target[this.action](this.value);
         }
     }
-};
-
-// SliderMorph duplicating:
-
-SliderMorph.prototype.copyRecordingReferences = function (dict) {
-    // inherited, see comment in Morph
-    var c = SliderMorph.uber.copyRecordingReferences.call(
-        this,
-        dict
-    );
-    if (c.target && dict[this.target]) {
-        c.target = (dict[this.target]);
-    }
-    if (c.button && dict[this.button]) {
-        c.button = (dict[this.button]);
-    }
-    return c;
 };
 
 // SliderMorph menu:
@@ -6092,7 +6064,7 @@ var MouseSensorMorph;
 
 // MouseSensorMorph inherits from BoxMorph:
 
-MouseSensorMorph.prototype = new BoxMorph();
+MouseSensorMorph.prototype = Object.create(BoxMorph.prototype);
 MouseSensorMorph.prototype.constructor = MouseSensorMorph;
 MouseSensorMorph.uber = BoxMorph.prototype;
 
@@ -6166,7 +6138,7 @@ var TriggerMorph;
 
 // InspectorMorph inherits from BoxMorph:
 
-InspectorMorph.prototype = new BoxMorph();
+InspectorMorph.prototype = Object.create(BoxMorph.prototype);
 InspectorMorph.prototype.constructor = InspectorMorph;
 InspectorMorph.uber = BoxMorph.prototype;
 
@@ -6661,7 +6633,7 @@ var MenuItemMorph;
 
 // MenuMorph inherits from BoxMorph:
 
-MenuMorph.prototype = new BoxMorph();
+MenuMorph.prototype = Object.create(BoxMorph.prototype);
 MenuMorph.prototype.constructor = MenuMorph;
 MenuMorph.uber = BoxMorph.prototype;
 
@@ -6956,7 +6928,7 @@ MenuMorph.prototype.popUpCenteredInWorld = function (world) {
 
 // StringMorph inherits from Morph:
 
-StringMorph.prototype = new Morph();
+StringMorph.prototype = Object.create(Morph.prototype);
 StringMorph.prototype.constructor = StringMorph;
 StringMorph.uber = Morph.prototype;
 
@@ -7024,7 +6996,7 @@ StringMorph.prototype.init = function (
     this.markedBackgoundColor = new Color(60, 60, 120);
 
     // initialize inherited properties:
-    StringMorph.uber.init.call(this);
+    StringMorph.uber.init.call(this, true);
 
     // override inherited properites:
     this.color = color || new Color(0, 0, 0);
@@ -7402,6 +7374,7 @@ StringMorph.prototype.selectionStartSlot = function () {
 };
 
 StringMorph.prototype.clearSelection = function () {
+    if (!this.currentlySelecting && this.startMark === 0 && this.endMark === 0) return;
     this.currentlySelecting = false;
     this.startMark = 0;
     this.endMark = 0;
@@ -7491,7 +7464,7 @@ StringMorph.prototype.disableSelecting = function () {
 
 // TextMorph inherits from Morph:
 
-TextMorph.prototype = new Morph();
+TextMorph.prototype = Object.create(Morph.prototype);
 TextMorph.prototype.constructor = TextMorph;
 TextMorph.uber = Morph.prototype;
 
@@ -8016,7 +7989,7 @@ TextMorph.prototype.inspectIt = function () {
 
 // TriggerMorph inherits from Morph:
 
-TriggerMorph.prototype = new Morph();
+TriggerMorph.prototype = Object.create(Morph.prototype);
 TriggerMorph.prototype.constructor = TriggerMorph;
 TriggerMorph.uber = Morph.prototype;
 
@@ -8139,20 +8112,6 @@ TriggerMorph.prototype.createLabel = function () {
         )
     );
     this.add(this.label);
-};
-
-// TriggerMorph duplicating:
-
-TriggerMorph.prototype.copyRecordingReferences = function (dict) {
-    // inherited, see comment in Morph
-    var c = TriggerMorph.uber.copyRecordingReferences.call(
-        this,
-        dict
-    );
-    if (c.label && dict[this.label]) {
-        c.label = (dict[this.label]);
-    }
-    return c;
 };
 
 // TriggerMorph action:
@@ -8285,7 +8244,7 @@ var MenuItemMorph;
 
 // MenuItemMorph inherits from TriggerMorph:
 
-MenuItemMorph.prototype = new TriggerMorph();
+MenuItemMorph.prototype = Object.create(TriggerMorph.prototype);
 MenuItemMorph.prototype.constructor = MenuItemMorph;
 MenuItemMorph.uber = TriggerMorph.prototype;
 
@@ -8444,7 +8403,7 @@ MenuItemMorph.prototype.isSelectedListItem = function () {
 
 // Frames inherit from Morph:
 
-FrameMorph.prototype = new Morph();
+FrameMorph.prototype = Object.create(Morph.prototype);
 FrameMorph.prototype.constructor = FrameMorph;
 FrameMorph.uber = Morph.prototype;
 
@@ -8498,17 +8457,6 @@ FrameMorph.prototype.fullDrawOn = function (aCanvas, aRect) {
             child.fullDrawOn(aCanvas, dirty);
         }
     });
-};
-
-// FrameMorph scrolling optimization:
-
-FrameMorph.prototype.moveBy = function (delta) {
-    this.changed();
-    this.bounds = this.bounds.translateBy(delta);
-    this.children.forEach(function (child) {
-        child.silentMoveBy(delta);
-    });
-    this.changed();
 };
 
 // FrameMorph scrolling support:
@@ -8600,20 +8548,6 @@ FrameMorph.prototype.reactToGrabOf = function () {
     this.adjustBounds();
 };
 
-// FrameMorph duplicating:
-
-FrameMorph.prototype.copyRecordingReferences = function (dict) {
-    // inherited, see comment in Morph
-    var c = FrameMorph.uber.copyRecordingReferences.call(
-        this,
-        dict
-    );
-    if (c.frame && dict[this.scrollFrame]) {
-        c.frame = (dict[this.scrollFrame]);
-    }
-    return c;
-};
-
 // FrameMorph menus:
 
 FrameMorph.prototype.developersMenu = function () {
@@ -8638,7 +8572,7 @@ FrameMorph.prototype.keepAllSubmorphsWithin = function () {
 
 // ScrollFrameMorph ////////////////////////////////////////////////////
 
-ScrollFrameMorph.prototype = new FrameMorph();
+ScrollFrameMorph.prototype = Object.create(FrameMorph.prototype);
 ScrollFrameMorph.prototype.constructor = ScrollFrameMorph;
 ScrollFrameMorph.uber = FrameMorph.prototype;
 
@@ -8958,32 +8892,23 @@ ScrollFrameMorph.prototype.mouseScroll = function (y, x) {
 
 // ScrollFrameMorph duplicating:
 
-ScrollFrameMorph.prototype.copyRecordingReferences = function (dict) {
-    // inherited, see comment in Morph
-    var c = ScrollFrameMorph.uber.copyRecordingReferences.call(
-        this,
-        dict
-    );
-    if (c.contents && dict[this.contents]) {
-        c.contents = (dict[this.contents]);
-    }
-    if (c.hBar && dict[this.hBar]) {
-        c.hBar = (dict[this.hBar]);
-        c.hBar.action = function (num) {
-            c.contents.setPosition(
-                new Point(c.left() - num, c.contents.position().y)
+ScrollFrameMorph.prototype.updateReferences = function (map) {
+    var self = this;
+    ScrollFrameMorph.uber.updateReferences.call(this, map);
+    if (this.hBar) {
+        this.hBar.action = function (num) {
+            self.contents.setPosition(
+                new Point(self.left() - num, self.contents.position().y)
             );
         };
     }
-    if (c.vBar && dict[this.vBar]) {
-        c.vBar = (dict[this.vBar]);
-        c.vBar.action = function (num) {
-            c.contents.setPosition(
-                new Point(c.contents.position().x, c.top() - num)
+    if (this.vBar) {
+        this.vBar.action = function (num) {
+            self.contents.setPosition(
+                new Point(self.contents.position().x, self.top() - num)
             );
         };
     }
-    return c;
 };
 
 // ScrollFrameMorph menu:
@@ -9013,7 +8938,7 @@ ScrollFrameMorph.prototype.toggleTextLineWrapping = function () {
 
 // ListMorph ///////////////////////////////////////////////////////////
 
-ListMorph.prototype = new ScrollFrameMorph();
+ListMorph.prototype = Object.create(ScrollFrameMorph.prototype);
 ListMorph.prototype.constructor = ListMorph;
 ListMorph.uber = ScrollFrameMorph.prototype;
 
@@ -9151,7 +9076,7 @@ ListMorph.prototype.setExtent = function (aPoint) {
 
 // StringFieldMorph inherit from FrameMorph:
 
-StringFieldMorph.prototype = new FrameMorph();
+StringFieldMorph.prototype = Object.create(FrameMorph.prototype);
 StringFieldMorph.prototype.constructor = StringFieldMorph;
 StringFieldMorph.uber = FrameMorph.prototype;
 
@@ -9243,20 +9168,6 @@ StringFieldMorph.prototype.mouseClickLeft = function (pos) {
     }
 };
 
-// StringFieldMorph duplicating:
-
-StringFieldMorph.prototype.copyRecordingReferences = function (dict) {
-    // inherited, see comment in Morph
-    var c = StringFieldMorph.uber.copyRecordingReferences.call(
-        this,
-        dict
-    );
-    if (c.text && dict[this.text]) {
-        c.text = (dict[this.text]);
-    }
-    return c;
-};
-
 // BouncerMorph ////////////////////////////////////////////////////////
 
 // I am a Demo of a stepping custom Morph
@@ -9265,7 +9176,7 @@ var BouncerMorph;
 
 // Bouncers inherit from Morph:
 
-BouncerMorph.prototype = new Morph();
+BouncerMorph.prototype = Object.create(Morph.prototype);
 BouncerMorph.prototype.constructor = BouncerMorph;
 BouncerMorph.uber = Morph.prototype;
 
@@ -9352,7 +9263,7 @@ BouncerMorph.prototype.step = function () {
 
 // HandMorph inherits from Morph:
 
-HandMorph.prototype = new Morph();
+HandMorph.prototype = Object.create(Morph.prototype);
 HandMorph.prototype.constructor = HandMorph;
 HandMorph.uber = Morph.prototype;
 
@@ -9379,7 +9290,8 @@ HandMorph.prototype.init = function (aWorld) {
     this.contextMenuEnabled = false;
 };
 
-HandMorph.prototype.changed = function () {
+HandMorph.prototype.changed =
+HandMorph.prototype.fullChanged = function () {
     var b;
     if (this.world !== null) {
         b = this.fullBounds();
@@ -9387,33 +9299,31 @@ HandMorph.prototype.changed = function () {
             this.world.broken.push(this.fullBounds().spread());
         }
     }
-
 };
 
 // HandMorph navigation:
 
-HandMorph.prototype.morphAtPointer = function () {
-    var morphs = this.world.allChildren().slice(0).reverse(),
-        myself = this,
-        result = null;
-
-    morphs.forEach(function (m) {
-        if (m.visibleBounds().containsPoint(myself.bounds.origin) &&
-                result === null &&
-                m.isVisible &&
-                (m.noticesTransparentClick ||
-                    (!m.isTransparentAt(myself.bounds.origin))) &&
-                (!(m instanceof ShadowMorph)) &&
-                m.allParents().every(function (each) {
-                    return each.isVisible;
-                })) {
-            result = m;
-        }
-    });
-    if (result !== null) {
-        return result;
+Morph.prototype.topMorphAt = function (p) {
+    if (!this.isVisible) return null;
+    for (var c = this.children, i = c.length; i--;) {
+        var result = c[i].topMorphAt(p);
+        if (result) return result;
     }
-    return this.world;
+    return this.bounds.containsPoint(p) && (this.noticesTransparentClick || !this.isTransparentAt(p)) ? this : null;
+};
+FrameMorph.prototype.topMorphAt = function (p) {
+    if (!(this.isVisible && this.bounds.containsPoint(p))) return null;
+    for (var c = this.children, i = c.length; i--;) {
+        var result = c[i].topMorphAt(p);
+        if (result) return result;
+    }
+    return this.noticesTransparentClick || !this.isTransparentAt(p) ? this : null;
+};
+ShadowMorph.prototype.topMorphAt = function () {
+    return null;
+};
+HandMorph.prototype.morphAtPointer = function () {
+    return this.world.topMorphAt(this.bounds.origin) || this.world;
 };
 
 /*
@@ -9971,15 +9881,6 @@ HandMorph.prototype.destroyTemporaries = function () {
     });
 };
 
-// HandMorph dragging optimization
-
-HandMorph.prototype.moveBy = function (delta) {
-    Morph.prototype.trackChanges = false;
-    HandMorph.uber.moveBy.call(this, delta);
-    Morph.prototype.trackChanges = true;
-    this.fullChanged();
-};
-
 
 // WorldMorph //////////////////////////////////////////////////////////
 
@@ -9987,7 +9888,7 @@ HandMorph.prototype.moveBy = function (delta) {
 
 // WorldMorph inherits from FrameMorph:
 
-WorldMorph.prototype = new FrameMorph();
+WorldMorph.prototype = Object.create(FrameMorph.prototype);
 WorldMorph.prototype.constructor = WorldMorph;
 WorldMorph.uber = FrameMorph.prototype;
 
@@ -10009,6 +9910,7 @@ WorldMorph.prototype.init = function (aCanvas, fillPage) {
     this.isDraggable = false;
     this.currentKey = null; // currently pressed key code
     this.worldCanvas = aCanvas;
+    this.noticesTransparentClick = true;
 
     // additional properties:
     this.stamp = Date.now(); // reference in multi-world setups

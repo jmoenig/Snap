@@ -240,7 +240,7 @@ WorldMorph.prototype.customMorphs = function () {
 
 // SyntaxElementMorph inherits from Morph:
 
-SyntaxElementMorph.prototype = new Morph();
+SyntaxElementMorph.prototype = Object.create(Morph.prototype);
 SyntaxElementMorph.prototype.constructor = SyntaxElementMorph;
 SyntaxElementMorph.uber = Morph.prototype;
 
@@ -620,6 +620,10 @@ SyntaxElementMorph.prototype.topBlock = function () {
     }
     return this;
 };
+
+// SyntaxElementMorph stepping:
+
+SyntaxElementMorph.prototype.step = null;
 
 // SyntaxElementMorph drag & drop:
 
@@ -1417,16 +1421,19 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                 new Point() : this.embossing;
         part.drawNew();
     } else {
-        part = new StringMorph(spec);
-        part.fontName = this.labelFontName;
-        part.fontStyle = this.labelFontStyle;
-        part.fontSize = this.fontSize;
-        part.color = new Color(255, 255, 255);
-        part.isBold = true;
-        part.shadowColor = this.color.darker(this.labelContrast);
-        part.shadowOffset = MorphicPreferences.isFlat ?
-                new Point() : this.embossing;
-        part.drawNew();
+        part = new StringMorph(
+            spec, // text
+            this.fontSize, // fontSize
+            this.labelFontStyle, // fontStyle
+            true, // bold
+            false, // italic
+            false, // isNumeric
+            MorphicPreferences.isFlat ?
+                new Point() : this.embossing, // shadowOffset
+            this.color.darker(this.labelContrast), // shadowColor
+            new Color(255, 255, 255), // color
+            this.labelFontName // fontName
+            );
     }
     return part;
 };
@@ -1937,7 +1944,7 @@ SyntaxElementMorph.prototype.endLayout = function () {
 
 // BlockMorph inherits from SyntaxElementMorph:
 
-BlockMorph.prototype = new SyntaxElementMorph();
+BlockMorph.prototype = Object.create(SyntaxElementMorph.prototype);
 BlockMorph.prototype.constructor = BlockMorph;
 BlockMorph.uber = SyntaxElementMorph.prototype;
 
@@ -2058,7 +2065,7 @@ BlockMorph.prototype.setSpec = function (spec) {
         }
         part = myself.labelPart(word);
         myself.add(part);
-        if (!(part instanceof CommandSlotMorph)) {
+        if (!(part instanceof CommandSlotMorph || part instanceof StringMorph)) {
             part.drawNew();
         }
         if (part instanceof RingMorph) {
@@ -2225,7 +2232,7 @@ BlockMorph.prototype.userMenu = function () {
     );
     if (this instanceof CommandBlockMorph && this.nextBlock()) {
         menu.addItem(
-            this.thumbnail(0.5, 60, false),
+            this.thumbnail(0.5, 60),
             function () {
                 var cpy = this.fullCopy(),
                     nb = cpy.nextBlock(),
@@ -3103,38 +3110,34 @@ BlockMorph.prototype.mouseClickLeft = function () {
 
 // BlockMorph thumbnail
 
-BlockMorph.prototype.thumbnail = function (scale, clipWidth, noShadow) {
-    var block = this.fullCopy(),
-        nb = block.nextBlock(),
+BlockMorph.prototype.thumbnail = function (scale, clipWidth) {
+    var nb = this.nextBlock(),
         fadeout = 12,
         ext,
         trgt,
         ctx,
         gradient;
-    if (nb) {nb.destroy(); }
-    if (!noShadow) {block.addShadow(); }
-    ext = block.fullBounds().extent();
-    if (!noShadow) {
-        ext = ext.subtract(this.shadowBlur *
-            (useBlurredShadows && !MorphicPreferences.isFlat ? 1 : 2));
-    }
+
+    if (nb) {nb.isVisible = false; }
+    ext = this.fullBounds().extent();
     trgt = newCanvas(new Point(
-        Math.min(ext.x * scale, clipWidth || ext.x),
+        clipWidth ? Math.min(ext.x * scale, clipWidth) : ext.x * scale,
         ext.y * scale
     ));
     ctx = trgt.getContext('2d');
     ctx.scale(scale, scale);
-    ctx.drawImage(block.fullImage(), 0, 0);
+    ctx.drawImage(this.fullImage(), 0, 0);
     // draw fade-out
-    if (trgt.width === clipWidth) {
+    if (clipWidth && ext.x * scale > clipWidth) {
         gradient = ctx.createLinearGradient(
             trgt.width / scale - fadeout,
             0,
             trgt.width / scale,
             0
         );
-        gradient.addColorStop(0, new Color(255, 255, 255, 0).toString());
-        gradient.addColorStop(1, 'white');
+        gradient.addColorStop(0, 'transparent');
+        gradient.addColorStop(1, 'black');
+        ctx.globalCompositeOperation = 'destination-out';
         ctx.fillStyle = gradient;
         ctx.fillRect(
             trgt.width / scale - fadeout,
@@ -3143,6 +3146,7 @@ BlockMorph.prototype.thumbnail = function (scale, clipWidth, noShadow) {
             trgt.height / scale
         );
     }
+    if (nb) {nb.isVisible = true; }
     return trgt;
 };
 
@@ -3262,7 +3266,7 @@ BlockMorph.prototype.snap = function () {
 
 // CommandBlockMorph inherits from BlockMorph:
 
-CommandBlockMorph.prototype = new BlockMorph();
+CommandBlockMorph.prototype = Object.create(BlockMorph.prototype);
 CommandBlockMorph.prototype.constructor = CommandBlockMorph;
 CommandBlockMorph.uber = BlockMorph.prototype;
 
@@ -3942,7 +3946,7 @@ CommandBlockMorph.prototype.drawBottomRightEdge = function (context) {
 
 // HatBlockMorph inherits from CommandBlockMorph:
 
-HatBlockMorph.prototype = new CommandBlockMorph();
+HatBlockMorph.prototype = Object.create(CommandBlockMorph.prototype);
 HatBlockMorph.prototype.constructor = HatBlockMorph;
 HatBlockMorph.uber = CommandBlockMorph.prototype;
 
@@ -4120,7 +4124,7 @@ HatBlockMorph.prototype.drawTopLeftEdge = function (context) {
 
 // ReporterBlockMorph inherits from BlockMorph:
 
-ReporterBlockMorph.prototype = new BlockMorph();
+ReporterBlockMorph.prototype = Object.create(BlockMorph.prototype);
 ReporterBlockMorph.prototype.constructor = ReporterBlockMorph;
 ReporterBlockMorph.uber = BlockMorph.prototype;
 
@@ -4644,7 +4648,7 @@ ReporterBlockMorph.prototype.drawDiamond = function (context) {
 
 // RingMorph inherits from ReporterBlockMorph:
 
-RingMorph.prototype = new ReporterBlockMorph();
+RingMorph.prototype = Object.create(ReporterBlockMorph.prototype);
 RingMorph.prototype.constructor = RingMorph;
 RingMorph.uber = ReporterBlockMorph.prototype;
 
@@ -4781,7 +4785,7 @@ RingMorph.prototype.fixBlockColor = function (nearest, isForced) {
 
 // ScriptsMorph inherits from FrameMorph:
 
-ScriptsMorph.prototype = new FrameMorph();
+ScriptsMorph.prototype = Object.create(FrameMorph.prototype);
 ScriptsMorph.prototype.constructor = ScriptsMorph;
 ScriptsMorph.uber = FrameMorph.prototype;
 
@@ -5321,7 +5325,7 @@ ScriptsMorph.prototype.reactToDropOf = function (droppedMorph, hand) {
 
 // ArgMorph inherits from SyntaxElementMorph:
 
-ArgMorph.prototype = new SyntaxElementMorph();
+ArgMorph.prototype = Object.create(SyntaxElementMorph.prototype);
 ArgMorph.prototype.constructor = ArgMorph;
 ArgMorph.uber = SyntaxElementMorph.prototype;
 
@@ -5434,7 +5438,7 @@ ArgMorph.prototype.isEmptySlot = function () {
 
 // CommandSlotMorph inherits from ArgMorph:
 
-CommandSlotMorph.prototype = new ArgMorph();
+CommandSlotMorph.prototype = Object.create(ArgMorph.prototype);
 CommandSlotMorph.prototype.constructor = CommandSlotMorph;
 CommandSlotMorph.uber = ArgMorph.prototype;
 
@@ -5884,7 +5888,7 @@ CommandSlotMorph.prototype.drawEdges = function (context) {
 
 // RingCommandSlotMorph inherits from CommandSlotMorph:
 
-RingCommandSlotMorph.prototype = new CommandSlotMorph();
+RingCommandSlotMorph.prototype = Object.create(CommandSlotMorph.prototype);
 RingCommandSlotMorph.prototype.constructor = RingCommandSlotMorph;
 RingCommandSlotMorph.uber = CommandSlotMorph.prototype;
 
@@ -6040,7 +6044,7 @@ RingCommandSlotMorph.prototype.drawFlat = function (context) {
 
 // CSlotMorph inherits from CommandSlotMorph:
 
-CSlotMorph.prototype = new CommandSlotMorph();
+CSlotMorph.prototype = Object.create(CommandSlotMorph.prototype);
 CSlotMorph.prototype.constructor = CSlotMorph;
 CSlotMorph.uber = CommandSlotMorph.prototype;
 
@@ -6463,7 +6467,7 @@ CSlotMorph.prototype.drawBottomEdge = function (context) {
 
 // InputSlotMorph inherits from ArgMorph:
 
-InputSlotMorph.prototype = new ArgMorph();
+InputSlotMorph.prototype = Object.create(ArgMorph.prototype);
 InputSlotMorph.prototype.constructor = InputSlotMorph;
 InputSlotMorph.uber = ArgMorph.prototype;
 
@@ -6917,7 +6921,8 @@ InputSlotMorph.prototype.setChoices = function (dict, readonly) {
 // InputSlotMorph layout:
 
 InputSlotMorph.prototype.fixLayout = function () {
-    var contents = this.contents(),
+    var width, height, arrowWidth,
+        contents = this.contents(),
         arrow = this.arrow();
 
     contents.isNumeric = this.isNumeric;
@@ -6934,35 +6939,32 @@ InputSlotMorph.prototype.fixLayout = function () {
         arrow.setSize(this.fontSize);
         arrow.show();
     } else {
-        arrow.setSize(0);
         arrow.hide();
     }
-    this.setHeight(
-        contents.height()
-            + this.edge * 2
-            // + this.typeInPadding * 2
-    );
+    arrowWidth = arrow.isVisible ? arrow.width() : 0;
+
+    height = contents.height() + this.edge * 2; // + this.typeInPadding * 2
     if (this.isNumeric) {
-        this.setWidth(contents.width()
-            + Math.floor(arrow.width() * 0.5)
-            + this.height()
-            + this.typeInPadding * 2
-            );
+        width = contents.width()
+            + Math.floor(arrowWidth * 0.5)
+            + height
+            + this.typeInPadding * 2;
     } else {
-        this.setWidth(Math.max(
+        width = Math.max(
             contents.width()
-                + arrow.width()
+                + arrowWidth
                 + this.edge * 2
                 + this.typeInPadding * 2,
             contents.rawHeight ? // single vs. multi-line contents
-                        contents.rawHeight() + arrow.width()
-                                : contents.height() / 1.2 + arrow.width(),
+                        contents.rawHeight() + arrowWidth
+                                : contents.height() / 1.2 + arrowWidth,
             this.minWidth // for text-type slots
-        ));
+        );
     }
+    this.setExtent(new Point(width, height));
     if (this.isNumeric) {
         contents.setPosition(new Point(
-            Math.floor(this.height() / 2),
+            Math.floor(height / 2),
             this.edge
         ).add(new Point(this.typeInPadding, 0)).add(this.position()));
     } else {
@@ -6972,10 +6974,12 @@ InputSlotMorph.prototype.fixLayout = function () {
         ).add(new Point(this.typeInPadding, 0)).add(this.position()));
     }
 
-    arrow.setPosition(new Point(
-        this.right() - arrow.width() - this.edge,
-        contents.top()
-    ));
+    if (arrow.isVisible) {
+        arrow.setPosition(new Point(
+            this.right() - arrowWidth - this.edge,
+            contents.top()
+        ));
+    }
 
     if (this.parent) {
         if (this.parent.fixLayout) {
@@ -7399,7 +7403,7 @@ InputSlotMorph.prototype.drawRoundBorder = function (context) {
 
 // TemplateSlotMorph inherits from ArgMorph:
 
-TemplateSlotMorph.prototype = new ArgMorph();
+TemplateSlotMorph.prototype = Object.create(ArgMorph.prototype);
 TemplateSlotMorph.prototype.constructor = TemplateSlotMorph;
 TemplateSlotMorph.uber = ArgMorph.prototype;
 
@@ -7503,7 +7507,7 @@ TemplateSlotMorph.prototype.drawRounded = ReporterBlockMorph
 
 // BooleanSlotMorph inherits from ArgMorph:
 
-BooleanSlotMorph.prototype = new ArgMorph();
+BooleanSlotMorph.prototype = Object.create(ArgMorph.prototype);
 BooleanSlotMorph.prototype.constructor = BooleanSlotMorph;
 BooleanSlotMorph.uber = ArgMorph.prototype;
 
@@ -7660,7 +7664,7 @@ BooleanSlotMorph.prototype.isEmptySlot = function () {
 
 // ArrowMorph inherits from Morph:
 
-ArrowMorph.prototype = new Morph();
+ArrowMorph.prototype = Object.create(Morph.prototype);
 ArrowMorph.prototype.constructor = ArrowMorph;
 ArrowMorph.uber = Morph.prototype;
 
@@ -7730,7 +7734,7 @@ ArrowMorph.prototype.drawNew = function () {
 
 // TextSlotMorph inherits from InputSlotMorph:
 
-TextSlotMorph.prototype = new InputSlotMorph();
+TextSlotMorph.prototype = Object.create(InputSlotMorph.prototype);
 TextSlotMorph.prototype.constructor = TextSlotMorph;
 TextSlotMorph.uber = InputSlotMorph.prototype;
 
@@ -7813,7 +7817,7 @@ TextSlotMorph.prototype.layoutChanged = function () {
 
 // SymbolMorph inherits from Morph:
 
-SymbolMorph.prototype = new Morph();
+SymbolMorph.prototype = Object.create(Morph.prototype);
 SymbolMorph.prototype.constructor = SymbolMorph;
 SymbolMorph.uber = Morph.prototype;
 
@@ -9106,7 +9110,7 @@ SymbolMorph.prototype.drawSymbolRobot = function (canvas, color) {
 
 // ColorSlotMorph  inherits from ArgMorph:
 
-ColorSlotMorph.prototype = new ArgMorph();
+ColorSlotMorph.prototype = Object.create(ArgMorph.prototype);
 ColorSlotMorph.prototype.constructor = ColorSlotMorph;
 ColorSlotMorph.uber = ArgMorph.prototype;
 
@@ -9214,7 +9218,7 @@ ColorSlotMorph.prototype.drawRectBorder =
 
 // BlockHighlightMorph inherits from Morph:
 
-BlockHighlightMorph.prototype = new Morph();
+BlockHighlightMorph.prototype = Object.create(Morph.prototype);
 BlockHighlightMorph.prototype.constructor = BlockHighlightMorph;
 BlockHighlightMorph.uber = Morph.prototype;
 
@@ -9239,7 +9243,7 @@ function BlockHighlightMorph() {
 
 // MultiArgMorph  inherits from ArgMorph:
 
-MultiArgMorph.prototype = new ArgMorph();
+MultiArgMorph.prototype = Object.create(ArgMorph.prototype);
 MultiArgMorph.prototype.constructor = MultiArgMorph;
 MultiArgMorph.uber = ArgMorph.prototype;
 
@@ -9669,7 +9673,7 @@ MultiArgMorph.prototype.isEmptySlot = function () {
 
 // ArgLabelMorph  inherits from ArgMorph:
 
-ArgLabelMorph.prototype = new ArgMorph();
+ArgLabelMorph.prototype = Object.create(ArgMorph.prototype);
 ArgLabelMorph.prototype.constructor = ArgLabelMorph;
 ArgLabelMorph.uber = ArgMorph.prototype;
 
@@ -9799,7 +9803,7 @@ ArgLabelMorph.prototype.isEmptySlot = function () {
 
 // FunctionSlotMorph inherits from ArgMorph:
 
-FunctionSlotMorph.prototype = new ArgMorph();
+FunctionSlotMorph.prototype = Object.create(ArgMorph.prototype);
 FunctionSlotMorph.prototype.constructor = FunctionSlotMorph;
 FunctionSlotMorph.uber = ArgMorph.prototype;
 
@@ -10180,7 +10184,7 @@ FunctionSlotMorph.prototype.drawDiamond = function (context) {
 
 // ReporterSlotMorph inherits from FunctionSlotMorph:
 
-ReporterSlotMorph.prototype = new FunctionSlotMorph();
+ReporterSlotMorph.prototype = Object.create(FunctionSlotMorph.prototype);
 ReporterSlotMorph.prototype.constructor = ReporterSlotMorph;
 ReporterSlotMorph.uber = FunctionSlotMorph.prototype;
 
@@ -10263,7 +10267,7 @@ ReporterSlotMorph.prototype.fixLayout = function () {
 
 // ReporterSlotMorph inherits from FunctionSlotMorph:
 
-RingReporterSlotMorph.prototype = new ReporterSlotMorph();
+RingReporterSlotMorph.prototype = Object.create(ReporterSlotMorph.prototype);
 RingReporterSlotMorph.prototype.constructor = RingReporterSlotMorph;
 RingReporterSlotMorph.uber = ReporterSlotMorph.prototype;
 
@@ -10651,7 +10655,7 @@ RingReporterSlotMorph.prototype.drawDiamond = function (context) {
 
 // CommentMorph inherits from BoxMorph:
 
-CommentMorph.prototype = new BoxMorph();
+CommentMorph.prototype = Object.create(BoxMorph.prototype);
 CommentMorph.prototype.constructor = CommentMorph;
 CommentMorph.uber = BoxMorph.prototype;
 

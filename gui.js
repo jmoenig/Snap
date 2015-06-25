@@ -88,7 +88,7 @@ var JukeboxMorph;
 
 // IDE_Morph inherits from Morph:
 
-IDE_Morph.prototype = new Morph();
+IDE_Morph.prototype = Object.create(Morph.prototype);
 IDE_Morph.prototype.constructor = IDE_Morph;
 IDE_Morph.uber = Morph.prototype;
 
@@ -4274,7 +4274,7 @@ IDE_Morph.prototype.prompt = function (message, callback, choices, key) {
 
 // ProjectDialogMorph inherits from DialogBoxMorph:
 
-ProjectDialogMorph.prototype = new DialogBoxMorph();
+ProjectDialogMorph.prototype = Object.create(DialogBoxMorph.prototype);
 ProjectDialogMorph.prototype.constructor = ProjectDialogMorph;
 ProjectDialogMorph.uber = DialogBoxMorph.prototype;
 
@@ -5181,7 +5181,7 @@ ProjectDialogMorph.prototype.fixLayout = function () {
 
 // SpriteIconMorph inherits from ToggleButtonMorph (Widgets)
 
-SpriteIconMorph.prototype = new ToggleButtonMorph();
+SpriteIconMorph.prototype = Object.create(ToggleButtonMorph.prototype);
 SpriteIconMorph.prototype.constructor = SpriteIconMorph;
 SpriteIconMorph.uber = ToggleButtonMorph.prototype;
 
@@ -5571,7 +5571,7 @@ SpriteIconMorph.prototype.copySound = function (sound) {
 // CostumeIconMorph inherits from ToggleButtonMorph (Widgets)
 // ... and copies methods from SpriteIconMorph
 
-CostumeIconMorph.prototype = new ToggleButtonMorph();
+CostumeIconMorph.prototype = Object.create(ToggleButtonMorph.prototype);
 CostumeIconMorph.prototype.constructor = CostumeIconMorph;
 CostumeIconMorph.uber = ToggleButtonMorph.prototype;
 
@@ -5782,7 +5782,7 @@ CostumeIconMorph.prototype.prepareToBeGrabbed = function () {
 // TurtleIconMorph inherits from ToggleButtonMorph (Widgets)
 // ... and copies methods from SpriteIconMorph
 
-TurtleIconMorph.prototype = new ToggleButtonMorph();
+TurtleIconMorph.prototype = Object.create(ToggleButtonMorph.prototype);
 TurtleIconMorph.prototype.constructor = TurtleIconMorph;
 TurtleIconMorph.uber = ToggleButtonMorph.prototype;
 
@@ -5965,7 +5965,7 @@ TurtleIconMorph.prototype.userMenu = function () {
 
 // WardrobeMorph inherits from ScrollFrameMorph
 
-WardrobeMorph.prototype = new ScrollFrameMorph();
+WardrobeMorph.prototype = Object.create(ScrollFrameMorph.prototype);
 WardrobeMorph.prototype.constructor = WardrobeMorph;
 WardrobeMorph.uber = ScrollFrameMorph.prototype;
 
@@ -6148,7 +6148,7 @@ WardrobeMorph.prototype.reactToDropOf = function (icon) {
 // SoundIconMorph inherits from ToggleButtonMorph (Widgets)
 // ... and copies methods from SpriteIconMorph
 
-SoundIconMorph.prototype = new ToggleButtonMorph();
+SoundIconMorph.prototype = Object.create(ToggleButtonMorph.prototype);
 SoundIconMorph.prototype.constructor = SoundIconMorph;
 SoundIconMorph.uber = ToggleButtonMorph.prototype;
 
@@ -6356,7 +6356,7 @@ SoundIconMorph.prototype.prepareToBeGrabbed = function () {
 
 // JukeboxMorph instance creation
 
-JukeboxMorph.prototype = new ScrollFrameMorph();
+JukeboxMorph.prototype = Object.create(ScrollFrameMorph.prototype);
 JukeboxMorph.prototype.constructor = JukeboxMorph;
 JukeboxMorph.uber = ScrollFrameMorph.prototype;
 
