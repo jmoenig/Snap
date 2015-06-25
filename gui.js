@@ -2648,7 +2648,7 @@ IDE_Morph.prototype.aboutSnap = function () {
 
     creditsTxt = localize('Contributors')
         + '\n\nNathan Dinsmore: Saving/Loading, Snap-Logo Design, '
-        + 'countless bugfixes and optimizations'
+        + '\ncountless bugfixes and optimizations'
         + '\nKartik Chandra: Paint Editor'
         + '\nMichael Ball: Time/Date UI, many bugfixes'
         + '\n"Ava" Yuan Yuan: Graphic Effects'
