@@ -339,7 +339,7 @@ ThreadManager.prototype.findProcess = function (block) {
 */
 
 Process.prototype = {};
-Process.prototype.contructor = Process;
+Process.prototype.constructor = Process;
 Process.prototype.timeout = 500; // msecs after which to force yield
 Process.prototype.isCatchingErrors = true;
 
