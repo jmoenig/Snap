@@ -5,7 +5,7 @@
     inspired by the Scratch paint editor.
 
     written by Kartik Chandra
-    Copyright (C) 2014 by Kartik Chandra
+    Copyright (C) 2015 by Kartik Chandra
 
     This file is part of Snap!.
 
@@ -69,7 +69,7 @@
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.paint = '2014-September-29';
+modules.paint = '2015-June-25';
 
 // Declarations
 
@@ -81,7 +81,7 @@ var PaintColorPickerMorph;
 
 // A complete paint editor
 
-PaintEditorMorph.prototype = Object.create(DialogBoxMorph.prototype);
+PaintEditorMorph.prototype = new DialogBoxMorph();
 PaintEditorMorph.prototype.constructor = PaintEditorMorph;
 PaintEditorMorph.uber = DialogBoxMorph.prototype;
 
@@ -92,7 +92,6 @@ function PaintEditorMorph() {
 }
 
 PaintEditorMorph.prototype.init = function () {
-    PaintEditorMorph.uber.init.call(this);
     // additional properties:
     this.paper = null; // paint canvas
     this.oncancel = null;
@@ -477,7 +476,7 @@ PaintEditorMorph.prototype.getUserColor = function () {
 
 // A large hsl color picker
 
-PaintColorPickerMorph.prototype = Object.create(Morph.prototype);
+PaintColorPickerMorph.prototype = new Morph();
 PaintColorPickerMorph.prototype.constructor = PaintColorPickerMorph;
 PaintColorPickerMorph.uber = Morph.prototype;
 
@@ -486,7 +485,6 @@ function PaintColorPickerMorph(extent, action) {
 }
 
 PaintColorPickerMorph.prototype.init = function (extent, action) {
-    PaintColorPickerMorph.uber.init.call(this);
     this.setExtent(extent || new Point(200, 100));
     this.action = action || nop;
     this.drawNew();
@@ -554,7 +552,7 @@ PaintColorPickerMorph.prototype.mouseMove =
     modify its image, based on a 'tool' property.
 */
 
-PaintCanvasMorph.prototype = Object.create(Morph.prototype);
+PaintCanvasMorph.prototype = new Morph();
 PaintCanvasMorph.prototype.constructor = PaintCanvasMorph;
 PaintCanvasMorph.uber = Morph.prototype;
 
@@ -563,7 +561,6 @@ function PaintCanvasMorph(shift) {
 }
 
 PaintCanvasMorph.prototype.init = function (shift) {
-    PaintCanvasMorph.uber.init.call(this);
     this.rotationCenter = new Point(240, 180);
     this.dragRect = null;
     this.previousDragPoint = null;
@@ -964,7 +961,6 @@ PaintCanvasMorph.prototype.buildContents = function () {
 };
 
 PaintCanvasMorph.prototype.drawNew = function () {
-    if (!this.background) return;
     var can = newCanvas(this.extent());
     this.merge(this.background, can);
     this.merge(this.paper, can);

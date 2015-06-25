@@ -7,7 +7,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2014 by Jens Mönig
+    Copyright (C) 2015 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -57,7 +57,9 @@
     Nathan Dinsmore contributed to the design and implemented a first
     working version of a complete XMLSerializer. I have taken much of the
     overall design and many of the functions and methods in this file from
-    Nathan's fine original prototype.
+    Nathan's fine original prototype. Recently Nathan has once again
+    worked his magic on the parser and optimized it by an order of
+    magnitude.
 
 */
 
@@ -65,7 +67,7 @@
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.xml = '2014-January-09';
+modules.xml = '2015-June-25';
 
 // Declarations
 

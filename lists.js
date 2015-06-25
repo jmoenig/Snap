@@ -7,7 +7,7 @@
     written by Jens Mönig and Brian Harvey
     jens@moenig.org, bh@cs.berkeley.edu
 
-    Copyright (C) 2014 by Jens Mönig and Brian Harvey
+    Copyright (C) 2015 by Jens Mönig and Brian Harvey
 
     This file is part of Snap!.
 
@@ -61,7 +61,7 @@ PushButtonMorph, SyntaxElementMorph, Color, Point, WatcherMorph,
 StringMorph, SpriteMorph, ScrollFrameMorph, CellMorph, ArrowMorph,
 MenuMorph, snapEquals, Morph, isNil, localize, MorphicPreferences*/
 
-modules.lists = '2014-November-20';
+modules.lists = '2015-June-25';
 
 var List;
 var ListWatcherMorph;
@@ -363,7 +363,7 @@ List.prototype.equalTo = function (other) {
 
 // ListWatcherMorph inherits from BoxMorph:
 
-ListWatcherMorph.prototype = Object.create(BoxMorph.prototype);
+ListWatcherMorph.prototype = new BoxMorph();
 ListWatcherMorph.prototype.constructor = ListWatcherMorph;
 ListWatcherMorph.uber = BoxMorph.prototype;
 
@@ -387,13 +387,6 @@ ListWatcherMorph.prototype.init = function (list, parentCell) {
     this.lastUpdated = Date.now();
     this.lastCell = null;
     this.parentCell = parentCell || null; // for circularity detection
-
-    ListWatcherMorph.uber.init.call(
-        this,
-        SyntaxElementMorph.prototype.rounding,
-        1.000001, // shadow bug in Chrome,
-        new Color(120, 120, 120)
-    );
 
     // elements declarations
     this.label = new StringMorph(
@@ -442,6 +435,13 @@ ListWatcherMorph.prototype.init = function (list, parentCell) {
     this.plusButton.outlineColor = this.color;
     this.plusButton.drawNew();
     this.plusButton.fixLayout();
+
+    ListWatcherMorph.uber.init.call(
+        this,
+        SyntaxElementMorph.prototype.rounding,
+        1.000001, // shadow bug in Chrome,
+        new Color(120, 120, 120)
+    );
 
     this.color = new Color(220, 220, 220);
     this.isDraggable = true;
@@ -634,7 +634,7 @@ ListWatcherMorph.prototype.setStartIndex = function (index) {
 };
 
 ListWatcherMorph.prototype.fixLayout = function () {
-    if (!this.label) return;
+    if (!this.label) {return; }
     Morph.prototype.trackChanges = false;
     if (this.frame) {
         this.arrangeCells();

@@ -61,7 +61,7 @@ SyntaxElementMorph, Variable*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2015-April-26';
+modules.store = '2015-June-25';
 
 
 // XML_Serializer ///////////////////////////////////////////////////////
@@ -246,7 +246,7 @@ var SnapSerializer;
 
 // SnapSerializer inherits from XML_Serializer:
 
-SnapSerializer.prototype = Object.create(XML_Serializer.prototype);
+SnapSerializer.prototype = new XML_Serializer();
 SnapSerializer.prototype.constructor = SnapSerializer;
 SnapSerializer.uber = XML_Serializer.prototype;
 
@@ -274,7 +274,6 @@ SnapSerializer.prototype.watcherLabels = {
 // SnapSerializer instance creation:
 
 function SnapSerializer() {
-    XML_Serializer.call(this);
     this.init();
 }
 
