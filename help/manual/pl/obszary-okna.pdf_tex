@@ -1,0 +1,59 @@
+%% Creator: Inkscape inkscape 0.48.4, www.inkscape.org
+%% PDF/EPS/PS + LaTeX output extension by Johan Engelen, 2010
+%% Accompanies image file 'obszary-okna.pdf' (pdf, eps, ps)
+%%
+%% To include the image in your LaTeX document, write
+%%   \input{<filename>.pdf_tex}
+%%  instead of
+%%   \includegraphics{<filename>.pdf}
+%% To scale the image, write
+%%   \def\svgwidth{<desired width>}
+%%   \input{<filename>.pdf_tex}
+%%  instead of
+%%   \includegraphics[width=<desired width>]{<filename>.pdf}
+%%
+%% Images with a different path to the parent latex file can
+%% be accessed with the `import' package (which may need to be
+%% installed) using
+%%   \usepackage{import}
+%% in the preamble, and then including the image with
+%%   \import{<path to file>}{<filename>.pdf_tex}
+%% Alternatively, one can specify
+%%   \graphicspath{{<path to file>/}}
+%% 
+%% For more information, please see info/svg-inkscape on CTAN:
+%%   http://tug.ctan.org/tex-archive/info/svg-inkscape
+%%
+\begingroup%
+  \makeatletter%
+  \providecommand\color[2][]{%
+    \errmessage{(Inkscape) Color is used for the text in Inkscape, but the package 'color.sty' is not loaded}%
+    \renewcommand\color[2][]{}%
+  }%
+  \providecommand\transparent[1]{%
+    \errmessage{(Inkscape) Transparency is used (non-zero) for the text in Inkscape, but the package 'transparent.sty' is not loaded}%
+    \renewcommand\transparent[1]{}%
+  }%
+  \providecommand\rotatebox[2]{#2}%
+  \ifx\svgwidth\undefined%
+    \setlength{\unitlength}{855.2bp}%
+    \ifx\svgscale\undefined%
+      \relax%
+    \else%
+      \setlength{\unitlength}{\unitlength * \real{\svgscale}}%
+    \fi%
+  \else%
+    \setlength{\unitlength}{\svgwidth}%
+  \fi%
+  \global\let\svgwidth\undefined%
+  \global\let\svgscale\undefined%
+  \makeatother%
+  \begin{picture}(1,0.60243218)%
+    \put(0,0){\includegraphics[width=\unitlength]{obszary-okna.pdf}}%
+    \put(0.37031041,0.03597468){\color[rgb]{1,0,0}\makebox(0,0)[b]{\smash{\emph{\Large Obszar skryptów}}}}%
+    \put(0.42733084,0.57941921){\color[rgb]{1,0,0}\makebox(0,0)[b]{\smash{\emph{\small Pasek narzędzi}}}}%
+    \put(0.77489765,0.03597473){\color[rgb]{1,0,0}\makebox(0,0)[b]{\smash{\emph{\Large Zagroda duszków}}}}%
+    \put(0.09676227,0.03597473){\color[rgb]{1,0,0}\makebox(0,0)[b]{\smash{\emph{\Large Paleta}}}}%
+    \put(0.77708296,0.27919271){\color[rgb]{1,0,0}\makebox(0,0)[b]{\smash{\emph{\Large Scena}}}}%
+  \end{picture}%
+\endgroup%

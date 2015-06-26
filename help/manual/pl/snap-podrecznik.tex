@@ -1,0 +1,167 @@
+% !TeX spellcheck = pl
+
+\documentclass{report}
+
+\input{../common/defs.tex}
+
+\usepackage[polish]{babel}
+\usepackage{polski}
+\frenchspacing
+\usepackage{indentfirst}
+
+\begin{document}
+
+\title{\Snap{} \\ Podręcznik użytkownika}
+\author{Brian Harvey \and Jens M\"{o}nig}
+\date{}
+
+\maketitle
+
+\tableofcontents
+
+\chapter*{}
+\section*{Podziękowania}
+
+Mieliśmy ogromne szczęście do mentorów. Jens zdobył dużo doświadczenia pracując wśród pionierów Smalltalka: Alana Kaya, Dana Ingallsa i~reszty ekipy, która wynalazła komputery osobiste i~programowanie obiektowe w~najlepszych dniach firmy Xerox PARC. Pracował z~Johnem Maloneyem z~zespołu Scratcha w~MIT\footnote{Massachusetts Institute of Technology, amerykańska uczelnia techniczna --- przyp. tłum.}, autorem platformy graficznej Morphic, wciąż stanowiącej fundament \Snap{a}. Znakomity projekt języka Scratch, autorstwa Lifelong Kindergarten Group z~MIT Media Lab, odgrywa w~\Snap{ie} kluczową rolę.
+
+\textbf{\emph{Nasza poprzednia wersja, BYOB, była bezpośrednią modyfikacją kodu źródłowego Scratcha. \Snap{} został napisany od zera, lecz struktura jego kodu oraz interfejs użytkownika pozostają mocno zakorzenione w~Scratchu. Z~kolei zespół Scratcha, który mógłby widzieć w~nas rywali, przyjął nas ciepło i~okazał nam całkowite wsparcie.}}
+
+Brian zdobywał szlify w~MIT oraz Stanford Artificial Intelligence Labs\footnote{Laboratorium sztucznej inteligencji na Uniwersytecie Stanforda --- przyp. tłum.}, gdzie uczył się pod okiem Johna McCarthy'ego, twórcy Lispa, oraz Geralda~J. Suss\-mana i~Guya Steele'a, twórców języka Scheme. Zdobywał również wiedzę od wielu innych wybitnych informatyków, w~tym autorów najlepszej książki z zakresu informatyki --- \emph{Struktury i~interpretacji programów komputerowych}: Hala Abelsona, Geralda~J. Suss\-mana i~Julie Suss\-man.
+
+\textbf{\emph{Za starych dobrych czasów mawialiśmy w~MIT Logo Lab: ,,Język Logo to Lisp w przebraniu BASIC-a''. Dziś, ze swoimi pierwszoklasowymi procedurami, zasięgami leksykalnymi~i pierwszoklasowymi kontynuacjami, \Snap{} jest jak Scheme w~przebraniu Scratcha.}}
+
+Szczęśliwym zrządzeniem losu, poprzez forum Scratch Advanced Topics, poznaliśmy wspaniałą grupę błyskotliwych uczniów gimnazjów~(!\@) i liceów. Kilku z nich wniosło swój wkład w~kod \Snap{a}: Kartik Chandra, Nathan Dinsmore, Connor Hudson i~Ian Reynolds. Ponadto wielu zgłosiło pomysły i~raporty błędów podczas testowania wersji alfa. Wśród studentów Uniwersytetu Kalifornijskiego w~Berkeley, którzy przyczynili się do rozwoju kodu, znajdują się Michael Ball, Achal Dave, Kyle Hotchkiss, Ivan Motyashov i~Yuan Yuan. Wymienianie wszystkich tłumaczy zajęłoby zbyt wiele miejsca, ale można ich odnaleźć w~okienku ,,O Snap!...'' dostępnym w~programie. Niniejsze dzieło powstało częściowo w~ramach grantu nr~1143566 udzielonego przez National Science Foundation, a częściowo przy wsparciu firmy MioSoft.
+
+\clearpage
+
+\begin{center}
+\bf \Huge \Snap{} \\
+Podręcznik użytkownika \\
+\huge Wersja 4.0 \vspace{40pt}
+\end{center}
+
+\Snap{} to rozszerzona reimplementacja języka Scratch (\url{http://scratch.mit.edu}), która pozwala na tworzenie własnych bloków (ang.\ \textit{Build Your Own Blocks}; stąd dawna nazwa \Snap{a} --- BYOB). Opisywany tu język obsługuje pierwszoklasowe listy, procedury i~kontynuacje. Te dodatkowe możliwości sprawiają, że nadaje się on do przeprowadzenia poważnego wstępu do informatyki dla uczniów liceów i szkół wyższych. Aby uruchomić środowisko \Snap{}, wystarczy otworzyć przeglądarkę internetową i~wpisać adres \url{http://snap.berkeley.edu/run}, aby zacząć pracę z~minimalnym zestawem bloków. Można też użyć adresu \url{http://snap.berkeley.edu/init}, aby załadować niewielki zestaw dodatkowych bloków. Wiąże się to z~nieco wolniejszym ładowaniem, ale jest zalecane dla wygody użytkowników (w~dalszej części podręcznika będziemy zakładali korzystanie z~tej właśnie metody).
+
+\clearpage
+
+\chapter{Bloki, skrypty i duszki}
+
+W~tym rozdziale poznamy kilka cech języka \Snap{} odziedziczonych po Scratchu; doświadczeni użytkownicy Scratcha mogą przejść od razu do sekcji~\ref{sec:zagnieżdżanie-duszków}.
+
+\Snap{} jest językiem programowania --- notacją, przy pomocy której możemy powiedzieć komputerowi, co ma zrobić. Jednak w~odróżnieniu od większości innych, \Snap{} jest językiem wizualnym; programując w~nim, zamiast posługiwać się klawiaturą, używamy metody ,,przeciągnij i~upuść'', dobrze znanej użytkownikom komputerów.
+
+Uruchom teraz środowisko \Snap{}. Powinieneś zobaczyć ekran podzielony na kilka obszarów:
+
+\begin{center}
+\def\svgwidth{\textwidth}
+\input{obszary-okna.pdf_tex}
+\end{center}
+
+(Proporcje tych stref mogą się różnić, w~zależności od rozmiaru i~kształtu okna przeglądarki.)
+
+Program w~języku \Snap{} składa się z~jednego lub więcej \emph{skryptów}, te zaś z~kolei --- z~\emph{bloków}. Oto przykładowy skrypt:
+
+\label{fig:typowy-skrypt}
+\bigpic{typowy-skrypt}
+
+Na powyższy skrypt składa się pięć bloków w~trzech różnych kolorach, odpowiadających trzem z~ośmiu \emph{palet} z~blokami. Obszar palet, znajdujący się po lewej stronie okna, pokazuje jedną paletę na raz. Do zmiany widocznej palety służy osiem przycisków znajdujących się tuż nad tym obszarem. Bloki ciemnożółte, widoczne w~naszym skrypcie, pochodzą z~palety ,,Kontrola''; zielone z~palety ,,Pisak'', a~niebieskie --- z~palety ,,Ruch''. Aby złożyć taki skrypt, należy poprzeciągać odpowiednie bloki z~palet do \emph{obszaru skryptów}, umiejscowionego na środku okna. Kiedy układamy jeden blok pod drugim w~taki sposób, aby wcięcie dolnego bloku znalazło się w~pobliżu wypustki tego powyżej, bloki łączą się ze sobą (ang. \textit{snap together}; stąd nazwa języka \Snap{}):
+
+\bigpic{laczenie-blokow}
+
+Pozioma biała linia sygnalizuje, że jeśli puścimy zielony blok, połączy się on z~wypustką ciemnożółtego.
+
+\subsection{Bloki-czapki i bloki poleceń}
+
+Na górze skryptu znajduje się \emph{blok-czapka}, który określa, kiedy skrypt ma zostać wykonany. Nazwy bloków-czapek zazwyczaj zaczynają się słowem ,,\code{kiedy}''; nasz przykładowy skrypt powinien zostać uruchomiony w~momencie kliknięcia zielonej flagi, znajdującej się w pobliżu prawej strony paska narzędzi \Snap{a}. (Pasek ten jest częścią okna programu \Snap{}; nie chodzi tutaj o pasek menu przeglądarki lub systemu operacyjnego.) Skrypt nie musi posiadać czapki, jednak w~takim przypadku zostanie wykonany tylko wtedy, gdy użytkownik sam go kliknie. Skrypt nie może mieć więcej niż jednej czapki; jej charakterystyczny kształt służy łatwiejszemu zapamiętaniu tej szczególnej własności.
+
+Pozostałe bloki w naszym skrypcie to \emph{bloki poleceń}. Każdy z~nich oznacza jakąś akcję, którą \Snap{} potrafi wykonać. Na przykład blok \inlinepic{przesun-o-10-krokow} nakazuje duszkowi\footnote{W grafice komputerowej słowem ,,duszek'' (ang. \textit{sprite}) nazywa się ruchomy obiekt na ekranie --- przyp. tłum.}, czyli strzałce na \emph{scenie} po prawej stronie okna, aby przesunął się o~dziesięć kroków do przodu w~kierunku, w~którym jest zwrócony. Każdy krok to niewielka odległość na ekranie. Wkrótce przekonamy się, że na scenie może być więcej duszków, a~każdy z nich może mieć własne skrypty. Ponadto duszki nie muszą wyglądać jak strzałki; ich kostiumy mogą być dowolnymi obrazkami. Kształt bloku \code{przesuń} ma za zadanie przypominać klocek, skrypt zaś jest jak wieża z klocków. Słowa ,,blok'' będziemy używać dla oznaczenia zarówno graficznego symbolu na ekranie, jak i~procedury (akcji) jaką ten blok wykonuje.
+
+Liczbę 10 w powyższym bloku \code{przesuń} nazywamy jego \emph{parametrem}. Kliknąwszy na białym, zaokrąglonym polu, możemy wpisać w~jej miejsce dowolną inną. W przykładowym skrypcie ze strony \pageref{fig:typowy-skrypt} parametrem jest liczba 100. Jak się później okaże, pola parametrów mogą mieć kształty inne od zaokrąglonych; oznacza to wtedy, że akceptują one wartości inne niż liczby. Zobaczymy również, że zamiast wpisywać konkretne wartości w~pola, możemy nakazać komputerowi je obliczać. Ponadto blok może mieć więcej niż jeden parametr. Na przykład blok \code{leć}, znajdujący się mniej więcej w~połowie palety ,,Ruch'', przyjmuje trzy parametry.
+
+Większość bloków poleceń ma kształt klocków, lecz niektóre, jak \code{powtórz} z~tego samego przykładu, wyglądają jak \emph{klamry}. Większość bloków klamrowych można znaleźć na palecie ,,Kontrola'. Wnętrze klamry jest szczególnym rodzajem pola parametru, który przyjmuje \emph{skrypt} jako parametr. W~przykładowym skrypcie blok \code{powtórz} ma dwa parametry: liczbę 4 oraz skrypt
+
+\bigpic{typowy-skrypt-wnetrze}
+
+
+
+\section{Sprites and Parallelism}
+\subsection{Costumes and Sounds}
+\subsection{Inter-Sprite Communication with Broadcast}
+\section{Zagnieżdżanie duszków: kotwice i części}
+\label{sec:zagnieżdżanie-duszków}
+\section{Reporter Blocks and Expressions}
+\section{Predicates and Conditional Evaluation}
+\section{Variables}
+\subsection{Global Variables}
+\subsection{Script Variables}
+\section{Etcetera}
+\chapter{Saving and Loading Projects and Media}
+\section{Local Storage}
+\subsection{Localstore}
+\subsection{XML Export}
+\section{Cloud Storage}
+\section{Loading Saved Projects}
+\chapter{Building a Block}
+\section{Simple Blocks}
+\subsection{Custom Blocks with Inputs}
+\section{Recursion}
+\section{Block Libraries}
+\chapter{First Class Lists}
+\section{The list Block}
+\section{Lists of Lists}
+\section{Functional and Imperative List Programming}
+\section{Higher Order List Operations and Rings}
+\chapter{Typed Inputs}
+\section{Scratch's Type Notation}
+\section{The \Snap{} Input Type Dialog}
+\subsection{Procedure Types}
+\subsection{Pulldown inputs}
+\subsection{Input variants}
+\subsection{Prototype Hints}
+\subsection{Title Text and Symbols}
+\chapter{Procedures as Data}
+\section{Call and Run}
+\subsection{Call/Run with inputs}
+\subsection{Variables in Ring Slots}
+\section{Writing Higher Order Procedures}
+\subsection{Recursive Calls to Multiple-Input Blocks}
+\section{Formal Parameters}
+\section{Procedures as Data}
+\section{Special Forms}
+\subsection{Special Forms in Scratch}
+\chapter{Object Oriented Programming}
+\section{Local State with Script Variables}
+\section{Messages and Dispatch Procedures}
+\section{Inheritance via Delegation}
+\section{An Implementation of Prototyping OOP}
+\chapter{The Outside World}
+\section{The World Wide Web}
+\section{Hardware Devices}
+\section{Date and Time}
+\chapter{Continuations}
+\section{Continuation Passing Style}
+\section{Call/Run w/Continuation}
+\subsection{Nonlocal exit}
+\chapter{User Interface Elements}
+\section{Tool Bar Features}
+\subsection{The \Snap{} Logo Menu}
+\subsection{The File Menu}
+\subsection{The Cloud Menu}
+\subsection{The Settings Menu}
+\subsection{Stage Resizing Buttons}
+\subsection{Project Control Buttons}
+\section{The Palette Area}
+\subsection{Context Menus for Palette Blocks}
+\subsection{Context Menu for the Palette Background}
+\section{The Scripting Area}
+\subsection{Sprite Appearance and Behavior Controls}
+\subsection{Scripting Area Tabs}
+\subsection{Scripts and Blocks Within Scripts}
+\subsection{Scripting Area Background Context Menu}
+\subsection{Controls in the Costumes Tab}
+\subsection{The Paint Editor}
+\subsection{Controls in the Sounds Tab}
+\section{Controls on the Stage}
+\section{The Sprite Corral and Sprite Creation Buttons}
+
+\end{document}
