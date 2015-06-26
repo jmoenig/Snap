@@ -61,12 +61,12 @@ Uruchom teraz środowisko \Snap{}. Powinieneś zobaczyć ekran podzielony na kil
 
 Program w~języku \Snap{} składa się z~jednego lub więcej \emph{skryptów}, te zaś z~kolei --- z~\emph{bloków}. Oto przykładowy skrypt:
 
-\label{fig:typical-script}
-\bigpic{typical-script}
+\label{fig:typowy-skrypt}
+\bigpic{typowy-skrypt}
 
-Na powyższy skrypt składa się pięć bloków w~trzech różnych kolorach, odpowiadających trzem z~ośmiu \emph{palet} z~blokami. Obszar palet, znajdujący się po lewej stronie okna, pokazuje jedną paletę na raz. Do zmiany widocznej palety służy osiem przycisków znajdujących się tuż nad tym obszarem. Bloki ciemnożółte, widoczne w~naszym skrypcie, pochodzą z~palety Kontrola; zielone z~palety Pisak, a~niebieskie --- z~palety Ruch. Aby złożyć taki skrypt, należy poprzeciągać odpowiednie bloki z~palet do \emph{obszaru skryptów}, umiejscowionego na środku okna. Kiedy układamy jeden blok pod drugim w~taki sposób, aby wcięcie dolnego bloku znalazło się w~pobliżu wypustki tego powyżej, bloki łączą się ze sobą (ang. \textit{snap together}; stąd nazwa języka \Snap{}):
+Na powyższy skrypt składa się pięć bloków w~trzech różnych kolorach, odpowiadających trzem z~ośmiu \emph{palet} z~blokami. Obszar palet, znajdujący się po lewej stronie okna, pokazuje jedną paletę na raz. Do zmiany widocznej palety służy osiem przycisków znajdujących się tuż nad tym obszarem. Bloki ciemnożółte, widoczne w~naszym skrypcie, pochodzą z~palety ,,Kontrola''; zielone z~palety ,,Pisak'', a~niebieskie --- z~palety ,,Ruch''. Aby złożyć taki skrypt, należy poprzeciągać odpowiednie bloki z~palet do \emph{obszaru skryptów}, umiejscowionego na środku okna. Kiedy układamy jeden blok pod drugim w~taki sposób, aby wcięcie dolnego bloku znalazło się w~pobliżu wypustki tego powyżej, bloki łączą się ze sobą (ang. \textit{snap together}; stąd nazwa języka \Snap{}):
 
-\bigpic{snapping-blocks}
+\bigpic{laczenie-blokow}
 
 Pozioma biała linia sygnalizuje, że jeśli puścimy zielony blok, połączy się on z~wypustką ciemnożółtego.
 
@@ -74,13 +74,13 @@ Pozioma biała linia sygnalizuje, że jeśli puścimy zielony blok, połączy si
 
 Na górze skryptu znajduje się \emph{blok-czapka}, który określa, kiedy skrypt ma zostać wykonany. Nazwy bloków-czapek zazwyczaj zaczynają się słowem ,,\code{kiedy}''; nasz przykładowy skrypt powinien zostać uruchomiony w~momencie kliknięcia zielonej flagi, znajdującej się w pobliżu prawej strony paska narzędzi \Snap{a}. (Pasek ten jest częścią okna programu \Snap{}; nie chodzi tutaj o pasek menu przeglądarki lub systemu operacyjnego.) Skrypt nie musi posiadać czapki, jednak w~takim przypadku zostanie wykonany tylko wtedy, gdy użytkownik sam go kliknie. Skrypt nie może mieć więcej niż jednej czapki; jej charakterystyczny kształt służy łatwiejszemu zapamiętaniu tej szczególnej własności.
 
-Pozostałe bloki w naszym skrypcie to \emph{bloki poleceń}. Każdy z~nich oznacza jakąś akcję, którą \Snap{} potrafi wykonać. Na przykład blok \inlinepic{move-10-steps} nakazuje duszkowi\footnote{W grafice komputerowej słowem ,,duszek'' (ang. \textit{sprite}) nazywa się ruchomy obiekt na ekranie --- przyp. tłum.}, czyli strzałce na \emph{scenie} po prawej stronie okna, aby przesunął się o~dziesięć kroków do przodu w~kierunku, w~którym jest zwrócony. Każdy krok to niewielka odległość na ekranie. Wkrótce przekonamy się, że na scenie może być więcej duszków, a~każdy z nich może mieć własne skrypty. Ponadto duszki nie muszą wyglądać jak strzałki; ich kostiumy mogą być dowolnymi obrazkami. Kształt bloku \code{przesuń} ma za zadanie przypominać klocek, skrypt zaś jest jak wieża z klocków. Słowa ,,blok'' będziemy używać dla oznaczenia zarówno graficznego symbolu na ekranie, jak i~procedury (akcji) jaką ten blok wykonuje.
+Pozostałe bloki w naszym skrypcie to \emph{bloki poleceń}. Każdy z~nich oznacza jakąś akcję, którą \Snap{} potrafi wykonać. Na przykład blok \inlinepic{przesun-o-10-krokow} nakazuje duszkowi\footnote{W grafice komputerowej słowem ,,duszek'' (ang. \textit{sprite}) nazywa się ruchomy obiekt na ekranie --- przyp. tłum.}, czyli strzałce na \emph{scenie} po prawej stronie okna, aby przesunął się o~dziesięć kroków do przodu w~kierunku, w~którym jest zwrócony. Każdy krok to niewielka odległość na ekranie. Wkrótce przekonamy się, że na scenie może być więcej duszków, a~każdy z nich może mieć własne skrypty. Ponadto duszki nie muszą wyglądać jak strzałki; ich kostiumy mogą być dowolnymi obrazkami. Kształt bloku \code{przesuń} ma za zadanie przypominać klocek, skrypt zaś jest jak wieża z klocków. Słowa ,,blok'' będziemy używać dla oznaczenia zarówno graficznego symbolu na ekranie, jak i~procedury (akcji) jaką ten blok wykonuje.
 
-Liczbę 10 w powyższym bloku \code{przesuń} nazywamy jego \emph{parametrem}. Kliknąwszy na białym, zaokrąglonym polu, możemy wpisać w~jej miejsce dowolną inną. W przykładowym skrypcie ze strony \pageref{fig:typical-script} parametrem jest liczba 100. Jak się później okaże, pola parametrów mogą mieć kształty inne od zaokrąglonych; oznacza to wtedy, że akceptują one wartości inne niż liczby. Zobaczymy również, że zamiast wpisywać konkretne wartości w~pola, możemy nakazać komputerowi je obliczać. Ponadto blok może mieć więcej niż jeden parametr. Na przykład blok \code{leć}, znajdujący się mniej więcej w~połowie palety Ruch, przyjmuje trzy parametry.
+Liczbę 10 w powyższym bloku \code{przesuń} nazywamy jego \emph{parametrem}. Kliknąwszy na białym, zaokrąglonym polu, możemy wpisać w~jej miejsce dowolną inną. W przykładowym skrypcie ze strony \pageref{fig:typowy-skrypt} parametrem jest liczba 100. Jak się później okaże, pola parametrów mogą mieć kształty inne od zaokrąglonych; oznacza to wtedy, że akceptują one wartości inne niż liczby. Zobaczymy również, że zamiast wpisywać konkretne wartości w~pola, możemy nakazać komputerowi je obliczać. Ponadto blok może mieć więcej niż jeden parametr. Na przykład blok \code{leć}, znajdujący się mniej więcej w~połowie palety ,,Ruch'', przyjmuje trzy parametry.
 
-Większość bloków poleceń ma kształt klocków, lecz niektóre, jak \code{powtórz} z~tego samego przykładu, wyglądają jak \emph{klamry}. Większość bloków klamrowych można znaleźć na palecie Kontrola. Wnętrze klamry jest szczególnym rodzajem pola parametru, który przyjmuje \emph{skrypt} jako parametr. W~przykładowym skrypcie blok \code{powtórz} ma dwa parametry: liczbę 4 oraz skrypt
+Większość bloków poleceń ma kształt klocków, lecz niektóre, jak \code{powtórz} z~tego samego przykładu, wyglądają jak \emph{klamry}. Większość bloków klamrowych można znaleźć na palecie ,,Kontrola'. Wnętrze klamry jest szczególnym rodzajem pola parametru, który przyjmuje \emph{skrypt} jako parametr. W~przykładowym skrypcie blok \code{powtórz} ma dwa parametry: liczbę 4 oraz skrypt
 
-\bigpic{typical-script-inner}
+\bigpic{typowy-skrypt-wnetrze}
 
 
 
