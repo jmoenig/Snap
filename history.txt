@@ -2522,4 +2522,8 @@ ______
 * Morphic, Objects, Blocks, XML: Optimizations and dramatic speed-up. Thanks, Nathan!!
 * Objects: push maximum clone count up to 1000, tweak Note::play
 
-=== Release v4.0.1 ===
+=== Start with v4.0.1 ===
+
+150626
+------
+* Morphic: Fix Inspector duplication, update documentation
