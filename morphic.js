@@ -828,8 +828,8 @@
             // use context to paint stuff here
         };
 
-    If your new morph stores or references other morphs outside of the
-    submorph tree in other properties, be sure to also override the
+    If your new morph stores or references to other morphs outside of
+    the submorph tree in other properties, be sure to also override the
     default
 
         updateReferences()
@@ -1048,7 +1048,7 @@
 /*global window, HTMLCanvasElement, getMinimumFontHeight, FileReader, Audio,
 FileList, getBlurredShadowSupport*/
 
-var morphicVersion = '2015-June-25';
+var morphicVersion = '2015-June-26';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = getBlurredShadowSupport(); // check for Chrome-bug
 
@@ -2405,10 +2405,13 @@ Morph.prototype.moveBy = function (delta) {
 };
 
 Morph.prototype.silentMoveBy = function (delta) {
+    var children = this.children,
+        i = children.length;
     this.bounds = this.bounds.translateBy(delta);
-    this.children.forEach(function (child) {
-        child.silentMoveBy(delta);
-    });
+    // ugly optimization avoiding forEach()
+    for (i; i > 0; i -= 1) {
+        children[i - 1].silentMoveBy(delta);
+    }
 };
 
 Morph.prototype.setPosition = function (aPoint) {
@@ -6502,7 +6505,7 @@ InspectorMorph.prototype.setExtent = function (aPoint) {
     this.fixLayout();
 };
 
-//InspectorMorph editing ops:
+// InspectorMorph editing ops:
 
 InspectorMorph.prototype.save = function () {
     var txt = this.detail.contents.children[0].text.toString(),
@@ -6590,6 +6593,15 @@ InspectorMorph.prototype.step = function () {
     this.label.text = lbl;
     this.label.drawNew();
     this.fixLayout();
+};
+
+// InspectorMorph duplicating:
+
+InspectorMorph.prototype.updateReferences = function (map) {
+    var active = this.list.activeIndex();
+    InspectorMorph.uber.updateReferences.call(this, map);
+    this.buildPanes();
+    this.list.activateIndex(active);
 };
 
 // MenuMorph ///////////////////////////////////////////////////////////
@@ -9056,6 +9068,18 @@ ListMorph.prototype.setExtent = function (aPoint) {
         this.listContents.setBottom(nb.bottom());
     }
     ListMorph.uber.setExtent.call(this, aPoint);
+};
+
+ListMorph.prototype.activeIndex = function () {
+    return this.listContents.children.indexOf(this.active);
+};
+
+ListMorph.prototype.activateIndex = function (idx) {
+    var item = this.listContents.children[idx];
+    if (!item) {return; }
+    item.image = item.pressImage;
+    item.changed();
+    item.trigger();
 };
 
 // StringFieldMorph ////////////////////////////////////////////////////

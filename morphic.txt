@@ -7,9 +7,9 @@
 	written by Jens Mönig
 	jens@moenig.org
 
-	Copyright (C) 2012 by Jens Mönig
+	Copyright (C) 2015 by Jens Mönig
 
-	this documentation last changed: April 07, 2013
+	this documentation last changed: June 26, 2015
 
 	This file is part of Snap!.
 
@@ -465,9 +465,15 @@
 
         MyMorph.prototype.mouseMove = function(pos) {};
 
-    The only optional parameter of such a method is a Point object
+    All of these methods have as optional parameter a Point object
     indicating the current position of the Hand inside the World's
-    coordinate system.
+    coordinate system. The
+
+        mouseMove(pos, button)
+
+    event method has an additional optional parameter indicating the
+    currently pressed mouse button, which is either 'left' or 'right'.
+    You can use this to let users interact with 3D environments.
 
     Events may be "bubbled" up a morph's owner chain by calling
 
@@ -521,6 +527,12 @@
     turned off. When dragging such a Morph the hand will instead grab
     a duplicate of the template whose "isDraggable" flag is true and
     whose "isTemplate" flag is false, in other words: a non-template.
+
+    When creating a copy from a template, the copy's
+
+        reactToTemplateCopy
+
+    is invoked, if it is present.
 
     Dragging is indicated by adding a drop shadow to the morph in hand.
     If a morph follows the hand without displaying a drop shadow it is
@@ -817,13 +829,13 @@
             // use context to paint stuff here
         };
 
-    If your new morph stores or references other morphs outside of the
-    submorph tree in other properties, be sure to also override the
+    If your new morph stores or references to other morphs outside of
+    the submorph tree in other properties, be sure to also override the
     default
 
-        copyRecordingReferences()
+        updateReferences()
 
-    method accordingly if you want it to support duplication.
+    method if you want it to support duplication.
 
 
     (6) development and user modes
@@ -1015,16 +1027,17 @@
     programming hero.
 
     I have originally written morphic.js in Florian Balmer's Notepad2
-    editor for Windows and later switched to Apple's Dashcode. I've also
-    come to depend on both Douglas Crockford's JSLint, Mozilla's Firebug
-    and Google's Chrome to get it right.
+    editor for Windows, later switched to Apple's Dashcode and later
+    still to Apple's Xcode. I've also come to depend on both Douglas
+    Crockford's JSLint, Mozilla's Firebug and Google's Chrome to get
+    it right.
 
 
     IX. contributors
     ----------------------
     Joe Otto found and fixed many early bugs and taught me some tricks.
     Nathan Dinsmore contributed mouse wheel scrolling, cached
-    background texture handling and countless bug fixes.
+    background texture handling, countless bug fixes and optimizations.
     Ian Reynolds contributed backspace key handling for Chrome.
     Davide Della Casa contributed performance optimizations for Firefox.
 
