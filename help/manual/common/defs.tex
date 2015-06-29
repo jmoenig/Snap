@@ -6,6 +6,7 @@
 \usepackage{color}
 \usepackage{textcomp}
 \usepackage{hyperref}
+\usepackage{float}
 
 % This macro produces a "Snap!" logo.
 %
@@ -33,7 +34,8 @@
 }
 
 \newcommand{\bigpic}[1]{
-	\begin{center}
+	\begin{figure}[H]
+	\centering
 	\includegraphics[scale=\defaultGraphicsScale]{#1}
-	\end{center}
+	\end{figure}
 }

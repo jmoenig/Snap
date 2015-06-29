@@ -23,7 +23,7 @@ Brian grew up at the MIT and Stanford Artificial Intelligence Labs, learning fro
 
 \textbf{\emph{In the glory days of the MIT Logo Lab, we used to say, ``Logo is Lisp disguised as BASIC.'' Now, with its first class procedures, lexical scope, and first class continuations, \Snap{} is Scheme disguised as Scratch.}}
 
-We have been fortunate to get to know an amazing group of brilliant middle school (!\@) and high school students through the Scratch Advanced Topics forum, several of whom have contributed code to \Snap{}: Kartik Chandra, Nathan Dinsmore, Connor Hudson, and Ian Reynolds. Many more have contributed ideas and alpha-testing bug reports. UC Berkeley students who've contributed code include Michael Ball, Achal Dave, Kyle Hotchkiss, Ivan Motyashov, and Yuan Yuan. Contributors of translations are too numerous to list here, but they're in the ``About...'' box in \Snap{} itself. This work was supported in part by the National Science Foundation grant 1143566, and in part by MioSoft.
+We have been fortunate to get to know an amazing group of brilliant middle school (!\@) and high school students through the Scratch Advanced Topics forum, several of whom have contributed code to \Snap{}: Kartik Chandra, Nathan Dinsmore, Connor Hudson, and Ian Reynolds. Many more have contributed ideas and alpha-testing bug reports. UC Berkeley students who've contributed code include Michael Ball, Achal Dave, Kyle Hotchkiss, Ivan Motyashov, and Yuan Yuan. Contributors of translations are too numerous to list here, but they're in the ``About\ldots'' box in \Snap{} itself. This work was supported in part by the National Science Foundation grant 1143566, and in part by MioSoft.
 
 \clearpage
 
@@ -74,10 +74,46 @@ Most command blocks have that brick shape, but some, like the \code{repeat} bloc
 
 \bigpic{typical-script-inner}
 
-
-
 \section{Sprites and Parallelism}
+
+Just below the stage is the ``new sprite'' button \inlinepic{../common/btn-new-sprite}. Click the button to add a new sprite to the stage. The new sprite will appear in a random position on the stage, facing in a random direction, with a random color.
+
+Each sprite has its own scripts. To see the scripts for a particular sprite in the scripting area, click on the picture of that sprite in the \emph{sprite corral} in the bottom right corner of the window. Try putting one of the following scripts in each sprite's scripting area:
+
+\begin{figure}[H]
+\begin{minipage}{0.5\textwidth}
+\centering
+\includegraphics[scale=\defaultGraphicsScale]{sprites-and-parallelism-1}
+\end{minipage}
+\begin{minipage}{0.5\textwidth}
+\centering
+\includegraphics[scale=\defaultGraphicsScale]{sprites-and-parallelism-2}
+\end{minipage}
+\end{figure}
+
+When you click the green flag \inlinepic{../common/btn-start}, you should see one sprite rotate while the other moves back and forth. This experiment illustrates the way different scripts can run in parallel. The turning and the moving happen together. Parallelism can be seen with multiple scripts of a single sprite also. Try this example:
+
+\begin{figure}[H]
+\begin{minipage}{0.5\textwidth}
+\centering
+\includegraphics[scale=\defaultGraphicsScale]{sprites-and-parallelism-3}
+\end{minipage}
+\begin{minipage}{0.5\textwidth}
+\centering
+\includegraphics[scale=\defaultGraphicsScale]{sprites-and-parallelism-4}
+\end{minipage}
+\end{figure}
+
+When you press the space key, the sprite should turn forever in a circle, because the \code{move} and \code{turn} blocks are run in parallel. (To stop the program, click the red stop sign \inlinepic{../common/btn-stop} at the right end of the tool bar.)
+
 \subsection{Costumes and Sounds}
+
+To change the appearance of a sprite, import a new \emph{costume} for it. There are three ways to do this. First, select the desired sprite in the sprite corral. Then, one way is to click on the file icon \inlinepic{../common/btn-file} in the tool bar, then choose the ``\code{Costumes\ldots}'' menu item. You will see a list of costumes from the public media library, and can choose one. The second way, for a costume stored on your own computer, is too click on the file icon and choose the ``\code{Import\ldots}'' menu item. You can then select a file in any picture format (PNG, JPEG, etc.) supported by your browser. The third way is quicker if the file you want is visible on the desktop: Just drag the file onto the \Snap{} window. In any of these cases, the scripting area will be replaced by something like this:
+
+\bigpic{scripting-area-with-additional-costume}
+
+Just above this part of the window is a set of three tabs: Scripts, Costumes, and Sounds. You'll see that the Costumes tab is now selected. In this view, the sprite's \emph{wardrobe}, you can choose whether the sprite should wear its Turtle costume or its Alonzo costume. (Alonzo, the \Snap{} mascot, is named after Alonzo Church, a mathematician who invented the idea of procedures as data, the most important way in which \Snap{} is different from Scratch.) You can give a sprite as many costumes as you like, and then choose which it will wear either by clicking in its wardrobe or by using the \inlinepic{switch-to-costume-turtle} or \inlinepic{next-costume} block in a script. (Every costume has a number as well as a name. The \code{next costume} block selects the next costume by number; after the highest-numbered costume it switches to costume 1. The Turtle, costume 0, is never chosen by \code{next costume}.) The Turtle costume is the only one that changes color to match a change in the sprite's pen color.
+
 \subsection{Inter-Sprite Communication with Broadcast}
 \section{Nesting Sprites: Anchors and Parts}
 \label{sec:nesting-sprites}

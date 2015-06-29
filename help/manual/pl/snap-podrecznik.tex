@@ -30,7 +30,7 @@ Brian zdobywał szlify w~MIT oraz Stanford Artificial Intelligence Labs\footnote
 
 \textbf{\emph{Za starych dobrych czasów mawialiśmy w~MIT Logo Lab: ,,Język Logo to Lisp w przebraniu BASIC-a''. Dziś, ze swoimi pierwszoklasowymi procedurami, zasięgami leksykalnymi~i pierwszoklasowymi kontynuacjami, \Snap{} jest jak Scheme w~przebraniu Scratcha.}}
 
-Szczęśliwym zrządzeniem losu, poprzez forum Scratch Advanced Topics, poznaliśmy wspaniałą grupę błyskotliwych uczniów gimnazjów~(!\@) i liceów. Kilku z nich wniosło swój wkład w~kod \Snap{a}: Kartik Chandra, Nathan Dinsmore, Connor Hudson i~Ian Reynolds. Ponadto wielu zgłosiło pomysły i~raporty błędów podczas testowania wersji alfa. Wśród studentów Uniwersytetu Kalifornijskiego w~Berkeley, którzy przyczynili się do rozwoju kodu, znajdują się Michael Ball, Achal Dave, Kyle Hotchkiss, Ivan Motyashov i~Yuan Yuan. Wymienianie wszystkich tłumaczy zajęłoby zbyt wiele miejsca, ale można ich odnaleźć w~okienku ,,O Snap!...'' dostępnym w~programie. Niniejsze dzieło powstało częściowo w~ramach grantu nr~1143566 udzielonego przez National Science Foundation, a częściowo przy wsparciu firmy MioSoft.
+Szczęśliwym zrządzeniem losu, poprzez forum Scratch Advanced Topics, poznaliśmy wspaniałą grupę błyskotliwych uczniów gimnazjów~(!\@) i liceów. Kilku z nich wniosło swój wkład w~kod \Snap{a}: Kartik Chandra, Nathan Dinsmore, Connor Hudson i~Ian Reynolds. Ponadto wielu zgłosiło pomysły i~raporty błędów podczas testowania wersji alfa. Wśród studentów Uniwersytetu Kalifornijskiego w~Berkeley, którzy przyczynili się do rozwoju kodu, znajdują się Michael Ball, Achal Dave, Kyle Hotchkiss, Ivan Motyashov i~Yuan Yuan. Wymienianie wszystkich tłumaczy zajęłoby zbyt wiele miejsca, ale można ich odnaleźć w~okienku ,,O \Snap{}\ldots'' dostępnym w~programie. Niniejsze dzieło powstało częściowo w~ramach grantu nr~1143566 udzielonego przez National Science Foundation, a częściowo przy wsparciu firmy MioSoft.
 
 \clearpage
 
@@ -82,10 +82,48 @@ Większość bloków poleceń ma kształt klocków, lecz niektóre, jak \code{po
 
 \bigpic{typowy-skrypt-wnetrze}
 
+\section{Duszki i~współbieżność}
 
+Tuż pod sceną znajduje się przycisk ,,nowy duszek'' \inlinepic{../common/btn-new-sprite}. Kliknięcie go spowoduje dodanie nowego duszka do sceny. Pojawi się on w~losowym miejscu na scenie, skierowany w~losową stronę i~zabarwiony na losowy kolor.
 
-\section{Sprites and Parallelism}
+Każdy duszek ma swoje własne skrypty. Aby wyświetlić w~obszarze skryptów te należące do konkretnego duszka, należy kliknąć na jego obrazku w~\emph{zagrodzie duszków}, znajdującej się w~prawym dolnym rogu okna. Spróbuj umieścić następujące skrypty w~obszarze skryptów --- po jednym dla każdego duszka:
+
+\begin{figure}[H]
+\begin{minipage}{0.5\textwidth}
+\centering
+\includegraphics[scale=\defaultGraphicsScale]{duszki-i-wspolbieznosc-1}
+\end{minipage}
+\begin{minipage}{0.5\textwidth}
+\centering
+\includegraphics[scale=\defaultGraphicsScale]{duszki-i-wspolbieznosc-2}
+\end{minipage}
+\end{figure}
+
+Kiedy klikniemy zieloną flagę \inlinepic{../common/btn-start}, powinniśmy zobaczyć jak jeden duszek się obraca, podczas gdy drugi porusza się w~tę i~z~powrotem. Ten eksperyment pokazuje, jak różne skrypty mogą być wykonywane jednocześnie (\emph{współbieżnie}). Obracanie się dookoła i~ruch po linii prostej zachodzą jednocześnie. Współbieżność zachodzi również w~przypadku wielu skryptów należących do tego samego duszka. Spróbujmy tego przykładu:
+
+\begin{figure}[H]
+\begin{minipage}{0.5\textwidth}
+\centering
+\includegraphics[scale=\defaultGraphicsScale]{duszki-i-wspolbieznosc-3}
+\end{minipage}
+\begin{minipage}{0.5\textwidth}
+\centering
+\includegraphics[scale=\defaultGraphicsScale]{duszki-i-wspolbieznosc-4}
+\end{minipage}
+\end{figure}
+
+Po naciśnięciu spacji duszek powinien zacząć bez końca chodzić w kółko, ponieważ bloki \code{przesuń} i \code{obróć} są wykonywane współbieżnie. (Aby przerwać program, kliknij czerwony czerwony znak ,,stop'' \inlinepic{../common/btn-stop} na prawym brzegu paska narzędzi.)
+
 \subsection{Costumes and Sounds}
+
+Aby zmienić wygląd duszka, należy zaimportować dla niego nowy \emph{kostium}. Są na to trzy sposoby. Najpierw trzeba wybrać duszka z~zagrody. Następnie, w~pierwszej metodzie, klikamy na ikonie pliku \inlinepic{../common/btn-file} na pasku narzędzi, a~następnie wybieramy polecenie ,,\code{Kostiumy\ldots}''. Ukaże się lista kostiumów z~publicznej biblioteki multimediów, spośród których możemy dokonać wyboru. Drugą metodą jest wybór pliku ze swojego własnego kompuera. Należy w~tym celu kliknąć ikonę pliku, a~następnie polecenie ,,\code{Importuj\ldots}''. Można wtedy wybrać plik obrazu w~dowolnym formacie (PNG, JPEG itd.) obsługiwanym przez przeglądarkę. Trzeci sposób jest szybszy jeśli plik, którego chcemy użyć, jest widoczny na pulpicie: po prostu przeciągnij go do okna \Snap{a}. W~każdym z~tych przypadków obszar skryptów zacznie wyglądać mniej więcej tak:
+
+\bigpic{obszar-skryptow-z-dodatkowym-kostiumem}
+
+Tuż nad tą częścią okna znajdują się trzy zakładki: ,,Skrypty'', ,,Kostiumy'' i ,,Dźwięki''. W tym momencie aktywna jest karta ,,Kostiumy''. Widzimy na niej \emph{garderobę} duszka i możemy z jej poziomu wybrać dla niego kostium --- 
+
+Just above this part of the window is a set of three tabs: Scripts, Costumes, and Sounds. You'll see that the Costumes tab is now selected. In this view, the sprite's \emph{wardrobe}, you can choose whether the sprite should wear its Turtle costume or its Alonzo costume. (Alonzo, the \Snap{} mascot, is named after Alonzo Church, a mathematician who invented the idea of procedures as data, the most important way in which \Snap{} is different from Scratch.) You can give a sprite as many costumes as you like, and then choose which it will wear either by clicking in its wardrobe or by using the \inlinepic{switch-to-costume-turtle} or \inlinepic{next-costume} block in a script. (Every costume has a number as well as a name. The \code{next costume} block selects the next costume by number; after the highest-numbered costume it switches to costume 1. The Turtle, costume 0, is never chosen by \code{next costume}.) The Turtle costume is the only one that changes color to match a change in the sprite's pen color.
+
 \subsection{Inter-Sprite Communication with Broadcast}
 \section{Zagnieżdżanie duszków: kotwice i części}
 \label{sec:zagnieżdżanie-duszków}
