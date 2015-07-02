@@ -92,7 +92,7 @@ Każdy duszek ma swoje własne skrypty. Aby wyświetlić w~obszarze skryptów te
 \begin{minipage}{0.5\textwidth}
 \centering
 \includegraphics[scale=\defaultGraphicsScale]{duszki-i-wspolbieznosc-1}
-\end{minipage}
+\end{minipage}%
 \begin{minipage}{0.5\textwidth}
 \centering
 \includegraphics[scale=\defaultGraphicsScale]{duszki-i-wspolbieznosc-2}
@@ -105,7 +105,7 @@ Kiedy klikniemy zieloną flagę \inlinepic{../common/btn-start}, powinniśmy zob
 \begin{minipage}{0.5\textwidth}
 \centering
 \includegraphics[scale=\defaultGraphicsScale]{duszki-i-wspolbieznosc-3}
-\end{minipage}
+\end{minipage}%
 \begin{minipage}{0.5\textwidth}
 \centering
 \includegraphics[scale=\defaultGraphicsScale]{duszki-i-wspolbieznosc-4}
@@ -120,11 +120,42 @@ Aby zmienić wygląd duszka, należy zaimportować dla niego nowy \emph{kostium}
 
 \bigpic{obszar-skryptow-z-dodatkowym-kostiumem}
 
-Tuż nad tą częścią okna znajdują się trzy zakładki: ,,Skrypty'', ,,Kostiumy'' i ,,Dźwięki''. W tym momencie aktywna jest karta ,,Kostiumy''. Widzimy na niej \emph{garderobę} duszka i możemy z jej poziomu wybrać dla niego kostium --- 
+Tuż nad tą częścią okna znajdują się trzy zakładki: ,,Skrypty'', ,,Kostiumy'' i~,,Dźwię\-ki''. W~tym momencie aktywna jest karta ,,Kostiumy''. Widzimy na niej \emph{garderobę} duszka i~możemy z~jej poziomu wybrać dla niego kostium --- domyślny kostium żółwia\footnote{Z powodów historycznych, słowem ,,żółw'' nazywamy ruchomy obiekt, który porusza się wykonując program i~rysuje, zostawiając za sobą ślad} lub wybrany wcześniej kostium Alonzo. (Alonzo, maskotka \Snap{a}, został nazwany na cześć Alonzo Churcha, matematyka, który jako pierwszy wpadł na pomysł, aby procedury traktować na równi z~danymi, co jest najistotniejszą różnicą między \Snap{em} a~Scratchem.) Możemy przypisać duszkowi tyle kostiumów ile chcemy, a~potem wybierać, który z~nich założy, albo poprzez kliknięcie w~obrębie garderoby, albo używając w~skrypcie bloku \inlinepic{zmien-kostium-na-zolwia} lub \inlinepic{nastepny-kostium}. (Każdy kostium ma zarówno numer jak i~nazwę. Blok \code{następny kostium} wybiera następny w~kolejności kostium; po ostatnim wybiera z~powrotem kostium numer~1. Żółw, czyli kostium numer~0, jest przez blok \code{następny kostium} ignorowany.) Kostium ,,Żółw'' jest jedynym, który zmienia kolor zgodnie z~kolorem pisaka.
 
-Just above this part of the window is a set of three tabs: Scripts, Costumes, and Sounds. You'll see that the Costumes tab is now selected. In this view, the sprite's \emph{wardrobe}, you can choose whether the sprite should wear its Turtle costume or its Alonzo costume. (Alonzo, the \Snap{} mascot, is named after Alonzo Church, a mathematician who invented the idea of procedures as data, the most important way in which \Snap{} is different from Scratch.) You can give a sprite as many costumes as you like, and then choose which it will wear either by clicking in its wardrobe or by using the \inlinepic{switch-to-costume-turtle} or \inlinepic{next-costume} block in a script. (Every costume has a number as well as a name. The \code{next costume} block selects the next costume by number; after the highest-numbered costume it switches to costume 1. The Turtle, costume 0, is never chosen by \code{next costume}.) The Turtle costume is the only one that changes color to match a change in the sprite's pen color.
+Oprócz kostiumów, duszki mogą posiadać \emph{dźwięki}; dźwiękowy odpowiednik garderoby duszka nazywamy jego \emph{szafą grającą}. Można importować pliki dźwiękowe w~dowolnym formacie obsługiwanym przez przeglądarkę. Do odtwarzania dźwięków służą dwa rodzaje bloków. Jeśli skrypt ma się dalej wykonywać podczas odtwarzania, używamy bloku \inlinepic{zagraj-dzwiek-ratunku}. Za to aby poczekać, aż dźwięk się zakończy, zanim skrypt będzie kontynuowany, należy wykorzystać blok \inlinepic{zagraj-dzwiek-ratunku-i-czekaj}.
 
-\subsection{Inter-Sprite Communication with Broadcast}
+\subsection{Nadawanie i~odbieranie komunikatów}
+
+Widzieliśmy wcześniej przykład dwóch duszków poruszających się jednocześnie. Jednak w~bardziej interesującym programie duszki na scenie będą wchodzić w~interakcje, abyśmy mogli opowiedzieć przy ich pomocy jakąś historię, zagrać w~grę itd. Czasami jeden duszek będzie musiał nakazać innemu wykonanie jakiegoś skryptu. Oto prosty przykład:
+
+\begin{figure}[H]
+\begin{minipage}{0.5\textwidth}
+\centering
+\includegraphics[scale=0.4]{../common/boy1-walking}
+\end{minipage}%
+\begin{minipage}{0.5\textwidth}
+\centering
+\reflectbox{\includegraphics[scale=0.3]{../common/dog2-c}}
+\end{minipage}
+\vskip 3ex
+\begin{minipage}[t]{0.5\textwidth}
+\centering
+\vspace{0pt} % REALLY align to top
+\includegraphics[scale=\defaultGraphicsScale]{nadawanie-i-odbieranie-komunikatow-1}
+\end{minipage}%
+\begin{minipage}[t]{0.5\textwidth}
+\centering
+\vspace{0pt} % REALLY align to top
+\includegraphics[scale=\defaultGraphicsScale]{nadawanie-i-odbieranie-komunikatow-2}
+\end{minipage}
+\end{figure}
+
+Słowo ,,szczekaj'' występujące w~bloku \inlinepic{nadaj-szczekaj-do-wszystkich-i-czekaj} to pierwszy lepszy wyraz, który przyszedł mi do głowy. Jedną z~opcji, które ukazują się po kliknięciu strzałki w~dół obok tego pola parametru (i~jedyną początkowo dostępną), jest ,,\code{nowy}''. Po jej wybraniu \Snap{} pyta o~nazwę komunikatu. Kiedy wspomniany blok zostanie wykonany, wybrany komunikat zostaje wysłany do \emph{każdego} duszka --- stąd też określenie ,,nadaj do wszystkich''. Jednak w~naszym przykładzie tylko jeden duszek ma skrypt, który jest wywoływany w~momencie nadania tego komunikatu --- jest nim pies. Ponieważ skrypt chłopca wykorzystuje blok \code{nadaj do wszystkich i~czekaj} zamiast \code{nadaj do wszystkich}, chłopiec nie przechodzi do następującego po nim bloku \code{powiedz}, dopóki skrypt psa się nie skończy. Z~tej przyczyny dwa duszki mówią na zmianę, a~nie jednocześnie.
+
+Warto przy okazji zwrócić uwagę na to, że pierwsze pole parametru na bloku \code{powiedz} nie jest zaokrąglone, lecz prostokątne. Oznacza to, że parametr ten może być dowolnym łańcuchem znaków (tekstem), nie tylko liczbą. W~polach parametrów typu tekstowego spacje ukazują się jako brązowe kropki, abyśmy mogli policzyć liczbę odstępów między wyrazami. Co ważniejsze, możemy dzięki temu odróżnić pusty łańcuch od złożonego z~samych spacji. Brązowe kropki \emph{nie będą} widoczne na scenie, kiedy blok zostanie wykonany.
+
+Scena ma swój własny obszar skryptów. Możemy wyświetlić jej szczegóły klikając ikonę ,,Scena'' po lewej stronie zagrody duszków. W~przeciwieństwie do duszków scena się nie porusza. Zamiast kostiumów ma \emph{tła} --- obrazki wypełniające cały obszar sceny. Duszki rysowane są na aktualnym tle. W~skomplikowanych projektach często wygodnie jest użyć skryptu sceny do koordynacji działań poszczególnych części programu.
+
 \section{Zagnieżdżanie duszków: kotwice i części}
 \label{sec:zagnieżdżanie-duszków}
 \section{Reporter Blocks and Expressions}

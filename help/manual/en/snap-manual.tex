@@ -84,7 +84,7 @@ Each sprite has its own scripts. To see the scripts for a particular sprite in t
 \begin{minipage}{0.5\textwidth}
 \centering
 \includegraphics[scale=\defaultGraphicsScale]{sprites-and-parallelism-1}
-\end{minipage}
+\end{minipage}%
 \begin{minipage}{0.5\textwidth}
 \centering
 \includegraphics[scale=\defaultGraphicsScale]{sprites-and-parallelism-2}
@@ -97,7 +97,7 @@ When you click the green flag \inlinepic{../common/btn-start}, you should see on
 \begin{minipage}{0.5\textwidth}
 \centering
 \includegraphics[scale=\defaultGraphicsScale]{sprites-and-parallelism-3}
-\end{minipage}
+\end{minipage}%
 \begin{minipage}{0.5\textwidth}
 \centering
 \includegraphics[scale=\defaultGraphicsScale]{sprites-and-parallelism-4}
@@ -112,9 +112,42 @@ To change the appearance of a sprite, import a new \emph{costume} for it. There 
 
 \bigpic{scripting-area-with-additional-costume}
 
-Just above this part of the window is a set of three tabs: Scripts, Costumes, and Sounds. You'll see that the Costumes tab is now selected. In this view, the sprite's \emph{wardrobe}, you can choose whether the sprite should wear its Turtle costume or its Alonzo costume. (Alonzo, the \Snap{} mascot, is named after Alonzo Church, a mathematician who invented the idea of procedures as data, the most important way in which \Snap{} is different from Scratch.) You can give a sprite as many costumes as you like, and then choose which it will wear either by clicking in its wardrobe or by using the \inlinepic{switch-to-costume-turtle} or \inlinepic{next-costume} block in a script. (Every costume has a number as well as a name. The \code{next costume} block selects the next costume by number; after the highest-numbered costume it switches to costume 1. The Turtle, costume 0, is never chosen by \code{next costume}.) The Turtle costume is the only one that changes color to match a change in the sprite's pen color.
+Just above this part of the window is a set of three tabs: Scripts, Costumes, and Sounds. You'll see that the Costumes tab is now selected. In this view, the sprite's \emph{wardrobe}, you can choose whether the sprite should wear its Turtle costume or its Alonzo costume. (Alonzo, the \Snap{} mascot, is named after Alonzo Church, a mathematician who invented the idea of procedures as data, the most important way in which \Snap{} is different from Scratch.) You can give a sprite as many costumes as you like, and then choose which it will wear either by clicking in its wardrobe or by using the \inlinepic{switch-to-costume-turtle} or \inlinepic{next-costume} block in a script. (Every costume has a number as well as a name. The \code{next costume} block selects the next costume by number; after the highest-numbered costume it switches to costume~1. The Turtle, costume~0, is never chosen by \code{next costume}.) The Turtle costume is the only one that changes color to match a change in the sprite's pen color.
+
+In addition to its costumes, a sprite can have \emph{sounds}; the equivalent for sounds of the sprite's wardrobe is called its \emph{jukebox}. Sound files can be imported in any format (WAV, OGG, MP3, etc.) supported by your browser. Two blocks accomplish the task of playing sounds. If you would like a script to continue running while the sound is playing, use the block \inlinepic{play-sound-help}. In contrast, you can use the \inlinepic{play-sound-help-until-done} block to wait for the sound's completion before continuing the rest of the script.
 
 \subsection{Inter-Sprite Communication with Broadcast}
+
+Earlier we saw an example of two sprites moving at the same time. In a more interesting program, though, the sprites on stage will interact to tell a story, play a game, etc. Often one sprite will have to tell another sprite to run a script. Here's a simple example:
+
+\begin{figure}[H]
+\begin{minipage}{0.5\textwidth}
+\centering
+\includegraphics[scale=0.4]{../common/boy1-walking}
+\end{minipage}%
+\begin{minipage}{0.5\textwidth}
+\centering
+\reflectbox{\includegraphics[scale=0.3]{../common/dog2-c}}
+\end{minipage}
+\vskip 3ex
+\begin{minipage}[t]{0.5\textwidth}
+\centering
+\vspace{0pt} % REALLY align to top
+\includegraphics[scale=\defaultGraphicsScale]{inter-sprite-communication-1}
+\end{minipage}%
+\begin{minipage}[t]{0.5\textwidth}
+\centering
+\vspace{0pt} % REALLY align to top
+\includegraphics[scale=\defaultGraphicsScale]{inter-sprite-communication-2}
+\end{minipage}
+\end{figure}
+
+In the \inlinepic{broadcast-bark-and-wait} block, the word ``bark'' is just an arbitrary name I made up. When you click on the downward arrowhead in that input slot, one of the choices (the only choice, the first time) is ``\code{new},'' which then prompts you to enter a name for the new broadcast. When this block is run, the chosen message is sent to \emph{every} sprite, which is why the block is called ``broadcast.'' In this program, though, only one sprite has a script to run when that broadcast is sent, namely the dog. Because the boy's script uses \code{broadcast and wait} rather than just \code{broadcast}, the boy doesn't go on to his next \code{say} block until the dog's script finishes. That's why the two sprites take turns talking, instead of both talking at once.
+
+Notice, by the way, that the \code{say} block's first input slot is rectangular rather than oval. This means the input can be any text string, not only a number. In the text input slots, a space character is shown as a brown dot, so that you can count the number of spaces between words, and in particular you can tell the difference between an empty slot and one containing spaces. The brown dots are \emph{not} shown on the stage when the block is run.
+
+The stage has its own scripting area. It can be selected by clicking on the Stage icon at the left of the sprite corral. Unlike a sprite, though, the stage can't move. Instead of costumes, it has \emph{backgrounds}: pictures that fill the entire stage area. The sprites appear in front of the current background. In a complicated project, it's often convenient to use a script in the stage's scripting area as the overall director of the action.
+
 \section{Nesting Sprites: Anchors and Parts}
 \label{sec:nesting-sprites}
 \section{Reporter Blocks and Expressions}
