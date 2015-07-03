@@ -2512,3 +2512,18 @@ ______
 150523
 ------
 * BYOB: Fix encoding glitch
+
+150608
+------
+* Blocks: Fixed #820
+
+150625
+------
+* Morphic, Objects, Blocks, XML: Optimizations and dramatic speed-up. Thanks, Nathan!!
+* Objects: push maximum clone count up to 1000, tweak Note::play
+
+=== Start with v4.0.1 ===
+
+150626
+------
+* Morphic: Fix Inspector duplication, update documentation
