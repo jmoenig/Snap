@@ -7816,7 +7816,7 @@ PianoMenuMorph.prototype.drawNew = function () {
         item.setPosition(keyposition);
         myself.add(item);
     });
-    label.setPosition(new Point(35, 45));
+    label.setPosition(new Point(90, 45));
     this.add(label);
     fb = this.fullBounds();
     this.silentSetExtent(fb.extent().add(4));
@@ -7857,6 +7857,18 @@ function NoteInputMorph() {
 NoteInputMorph.prototype.init = function () {
     NoteInputMorph.uber.init.call(this);
     this.choices = {
+        'C (48)' : 48,
+        'D (50)' : 50,
+        'C# (49)' : 49,
+        'E (52)' : 52,
+        'Eb (51)' : 51,
+        'F (53)' : 53,
+        'G (55)' : 55,
+        'F# (54)' : 54,
+        'A (57)' : 57,
+        'G# (56)' : 56,
+        'B (59)' : 59,
+        'Bb (58)' : 58,
         'C (60)' : 60,
         'D (62)' : 62,
         'C# (61)' : 61,
@@ -7868,7 +7880,8 @@ NoteInputMorph.prototype.init = function () {
         'A (69)' : 69,
         'G# (68)' : 68,
         'B (71)' : 71,
-        'Bb (70)' : 70
+        'Bb (70)' : 70,
+        'C (72)' : 72
     };
     this.isNumeric = true;
 };
