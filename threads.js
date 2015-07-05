@@ -2600,7 +2600,7 @@ Process.prototype.reportAttributeOf = function (attribute, name) {
     [0, 255] which is different than a float of [0, 1] expected by Morphic.
  */
 Process.prototype.colorFromList = function (list) {
-    var color, hue, brightness, r, g, b, a;
+    var color, hue, brightness;
     switch (list.length()) {
     case 1: // Scratch Format
         hue = Math.max(Math.min(+list.at(1) || 0, 100), 0) / 100;
@@ -2619,12 +2619,12 @@ Process.prototype.colorFromList = function (list) {
     case 3: // RGB format
         color = new Color(+list.at(1), +list.at(2), +list.at(3));
         break;
-     case 4: // RGBA format
+    case 4: // RGBA format
         color = new Color(+list.at(1), +list.at(2), +list.at(3),
              +list.at(4) / 255); // Alpha value is scaled.
         break;
     default:
-        throw new Error('cannot make a color from a list of length ' + 
+        throw new Error('cannot make a color from a list of length ' +
                         list.length());
     }
     return color;
@@ -2636,18 +2636,21 @@ Process.prototype.colorFromList = function (list) {
     "named" colors, or even things like "hsl(x, y, z)"
  */
 Process.prototype.colorFromPicker = function (color) {
+    var tempElt, cssColor, list, colorType;
+
     if (color instanceof List) {
         return this.colorFromList(color);
-    } else if (color instanceof Color) {
+    }
+    if (color instanceof Color) {
         return color;
-    } else if (!isNaN(+color)) {
+    }
+    if (!isNaN(+color)) {
         // Handle numeric inputs as Scratch colors
         return this.colorFromList(new List([+color]));
-    } else if (isString(color)) {
+    }
+    if (isString(color)) {
         // To determine a CSS color from a string we must append a hidden
         // element to the DOM. It must have some text on the inside.
-        var tempElt, cssColor, list;
-        
         tempElt = document.createElement('div');
         tempElt.innerHTML = 'Temporary Text';
         tempElt.style.display = 'none'; // ensure it is hidden
@@ -2658,10 +2661,10 @@ Process.prototype.colorFromPicker = function (color) {
         // cssColor will be a string: rgb(x, y, z) or rgba(w, x, y, z)
         list = cssColor.match(/\d+(\.\d+)?/g);
         return new Color(list[0], list[1], list[2], list[3] || 1);
-    } else {
-        var colorType = this.reportTypeOf(color);
-        throw new Error('expecting a color instead of a ' + colorType);
     }
+
+    colorType = this.reportTypeOf(color);
+    throw new Error('expecting a color instead of a ' + colorType);
 };
 
 Process.prototype.colorFromPickerAsList = function (color, type) {
