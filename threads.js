@@ -2596,8 +2596,8 @@ Process.prototype.reportAttributeOf = function (attribute, name) {
     3 items: RGB
     4 items: RGBA
 
-    Note that in the RGBA spec we expect the Alpha values to be an int in the
-    range [0, 255] which is different than that float of [0, 1] expected by Morphic.
+    NOTE: that in the RGBA spec we expect the Alpha values to be an int in 
+    [0, 255] which is different than a float of [0, 1] expected by Morphic.
  */
 Process.prototype.colorFromList = function (list) {
     var color, hue, brightness, r, g, b, a;
@@ -2624,11 +2624,17 @@ Process.prototype.colorFromList = function (list) {
              +list.at(4) / 255); // Alpha value is scaled.
         break;
     default:
-        throw new Error('cannot make a color from the given list values');
+        throw new Error('cannot make a color from a list of length ' + 
+                        list.length());
     }
     return color;
 };
 
+/*  Handle colors in any defined format.
+    Colors that aren't an obvious color format, will try to use CSS to detmine
+    the format. This allows for a fairly flexible set of options including
+    "named" colors, or even things like "hsl(x, y, z)"
+ */
 Process.prototype.colorFromPicker = function (color) {
     if (color instanceof List) {
         return this.colorFromList(color);
@@ -2636,10 +2642,25 @@ Process.prototype.colorFromPicker = function (color) {
         return color;
     } else if (!isNaN(+color)) {
         // Handle numeric inputs as Scratch colors
-        return this.colorFromList([+color]);
+        return this.colorFromList(new List([+color]));
+    } else if (isString(color)) {
+        // To determine a CSS color from a string we must append a hidden
+        // element to the DOM. It must have some text on the inside.
+        var tempElt, cssColor, list;
+        
+        tempElt = document.createElement('div');
+        tempElt.innerHTML = 'Temporary Text';
+        tempElt.style.display = 'none'; // ensure it is hidden
+        tempElt.style.color = color;
+        document.body.appendChild(tempElt);
+        cssColor = window.getComputedStyle(tempElt).getPropertyValue('color');
+        document.body.removeChild(tempElt);
+        // cssColor will be a string: rgb(x, y, z) or rgba(w, x, y, z)
+        list = cssColor.match(/\d+(\.\d+)?/g);
+        return new Color(list[0], list[1], list[2], list[3] || 1);
     } else {
         var colorType = this.reportTypeOf(color);
-        throw new Error('expecting a color or list instead of a ' + colorType);
+        throw new Error('expecting a color instead of a ' + colorType);
     }
 };
 
@@ -2654,7 +2675,8 @@ Process.prototype.colorFromPickerAsList = function (color, type) {
     case 'Scratch': // hue
         return new List([color.hsv()[0] * 100]);
     case 'Scratch w/ shade': // hue, brightness
-        return new List([color.hsv()[0] * 100, color.hsv()[2] * 100]);
+        var hsv = color.hsv();
+        return new List([hsv[0] * 100, hsv[2] * 100]);
     default:
         // Unknown option
         return new List();
