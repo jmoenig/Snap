@@ -57,7 +57,7 @@ Uruchom teraz środowisko \Snap{}. Powinieneś zobaczyć ekran podzielony na kil
 \input{obszary-okna.pdf_tex}
 \end{center}
 
-(Proporcje tych stref mogą się różnić, w~zależności od rozmiaru i~kształtu okna przeglądarki.)
+(Proporcje tych stref mogą się różnić, w~zależności od rozmiaru i~kształtu okna przeglądarki).
 
 Program w~języku \Snap{} składa się z~jednego lub więcej \emph{skryptów}, te zaś z~kolei --- z~\emph{bloków}. Oto przykładowy skrypt:
 
@@ -70,15 +70,15 @@ Na powyższy skrypt składa się pięć bloków w~trzech różnych kolorach, odp
 
 Pozioma biała linia sygnalizuje, że jeśli puścimy zielony blok, połączy się on z~wypustką ciemnożółtego.
 
-\subsection{Bloki-czapki i bloki poleceń}
+\subsection{Bloki-czapki i bloki komend}
 
-Na górze skryptu znajduje się \emph{blok-czapka}, który określa, kiedy skrypt ma zostać wykonany. Nazwy bloków-czapek zazwyczaj zaczynają się słowem ,,\code{kiedy}''; nasz przykładowy skrypt powinien zostać uruchomiony w~momencie kliknięcia zielonej flagi, znajdującej się w pobliżu prawej strony paska narzędzi \Snap{a}. (Pasek ten jest częścią okna programu \Snap{}; nie chodzi tutaj o pasek menu przeglądarki lub systemu operacyjnego.) Skrypt nie musi posiadać czapki, jednak w~takim przypadku zostanie wykonany tylko wtedy, gdy użytkownik sam go kliknie. Skrypt nie może mieć więcej niż jednej czapki; jej charakterystyczny kształt służy łatwiejszemu zapamiętaniu tej szczególnej własności.
+Na górze skryptu znajduje się \emph{blok-czapka}, który określa, kiedy skrypt ma zostać wykonany. Nazwy bloków-czapek zazwyczaj zaczynają się słowem ,,\code{kiedy}''; nasz przykładowy skrypt powinien zostać uruchomiony w~momencie kliknięcia zielonej flagi, znajdującej się w pobliżu prawej strony paska narzędzi \Snap{a}. (Pasek ten jest częścią okna programu \Snap{}; nie chodzi tutaj o pasek menu przeglądarki lub systemu operacyjnego). Skrypt nie musi posiadać czapki, jednak w~takim przypadku zostanie wykonany tylko wtedy, gdy użytkownik sam go kliknie. Skrypt nie może mieć więcej niż jednej czapki; jej charakterystyczny kształt służy łatwiejszemu zapamiętaniu tej szczególnej własności.
 
-Pozostałe bloki w naszym skrypcie to \emph{bloki poleceń}. Każdy z~nich oznacza jakąś akcję, którą \Snap{} potrafi wykonać. Na przykład blok \inlinepic{przesun-o-10-krokow} nakazuje duszkowi\footnote{W grafice komputerowej słowem ,,duszek'' (ang. \textit{sprite}) nazywa się ruchomy obiekt na ekranie --- przyp. tłum.}, czyli strzałce na \emph{scenie} po prawej stronie okna, aby przesunął się o~dziesięć kroków do przodu w~kierunku, w~którym jest zwrócony. Każdy krok to niewielka odległość na ekranie. Wkrótce przekonamy się, że na scenie może być więcej duszków, a~każdy z nich może mieć własne skrypty. Ponadto duszki nie muszą wyglądać jak strzałki; ich kostiumy mogą być dowolnymi obrazkami. Kształt bloku \code{przesuń} ma za zadanie przypominać klocek, skrypt zaś jest jak wieża z klocków. Słowa ,,blok'' będziemy używać dla oznaczenia zarówno graficznego symbolu na ekranie, jak i~procedury (akcji) jaką ten blok wykonuje.
+Pozostałe bloki w naszym skrypcie to \emph{bloki komend}. Każdy z~nich oznacza jakąś akcję, którą \Snap{} potrafi wykonać. Na przykład blok \inlinepic{przesun-o-10-krokow} nakazuje duszkowi\footnote{W grafice komputerowej słowem ,,duszek'' (ang. \textit{sprite}) nazywa się ruchomy obiekt na ekranie --- przyp. tłum.}, czyli strzałce na \emph{scenie} po prawej stronie okna, aby przesunął się o~dziesięć kroków do przodu w~kierunku, w~którym jest zwrócony. Każdy krok to niewielka odległość na ekranie. Wkrótce przekonamy się, że na scenie może być więcej duszków, a~każdy z nich może mieć własne skrypty. Ponadto duszki nie muszą wyglądać jak strzałki; ich kostiumy mogą być dowolnymi obrazkami. Kształt bloku \code{przesuń} ma za zadanie przypominać klocek, skrypt zaś jest jak wieża z klocków. Słowa ,,blok'' będziemy używać dla oznaczenia zarówno graficznego symbolu na ekranie, jak i~procedury (akcji) jaką ten blok wykonuje.
 
 Liczbę 10 w powyższym bloku \code{przesuń} nazywamy jego \emph{parametrem}. Kliknąwszy na białym, zaokrąglonym polu, możemy wpisać w~jej miejsce dowolną inną. W przykładowym skrypcie ze strony \pageref{fig:typowy-skrypt} parametrem jest liczba 100. Jak się później okaże, pola parametrów mogą mieć kształty inne od zaokrąglonych; oznacza to wtedy, że akceptują one wartości inne niż liczby. Zobaczymy również, że zamiast wpisywać konkretne wartości w~pola, możemy nakazać komputerowi je obliczać. Ponadto blok może mieć więcej niż jeden parametr. Na przykład blok \code{leć}, znajdujący się mniej więcej w~połowie palety ,,Ruch'', przyjmuje trzy parametry.
 
-Większość bloków poleceń ma kształt klocków, lecz niektóre, jak \code{powtórz} z~tego samego przykładu, wyglądają jak \emph{klamry}. Większość bloków klamrowych można znaleźć na palecie ,,Kontrola'. Wnętrze klamry jest szczególnym rodzajem pola parametru, który przyjmuje \emph{skrypt} jako parametr. W~przykładowym skrypcie blok \code{powtórz} ma dwa parametry: liczbę 4 oraz skrypt
+Większość bloków komend ma kształt klocków, lecz niektóre, jak \code{powtórz} z~tego samego przykładu, wyglądają jak \emph{klamry}. Większość bloków klamrowych można znaleźć na palecie ,,Kontrola'. Wnętrze klamry jest szczególnym rodzajem pola parametru, który przyjmuje \emph{skrypt} jako parametr. W~przykładowym skrypcie blok \code{powtórz} ma dwa parametry: liczbę 4 oraz skrypt
 
 \bigpic{typowy-skrypt-wnetrze}
 
@@ -112,15 +112,15 @@ Kiedy klikniemy zieloną flagę \inlinepic{../common/btn-start}, powinniśmy zob
 \end{minipage}
 \end{figure}
 
-Po naciśnięciu spacji duszek powinien zacząć bez końca chodzić w kółko, ponieważ bloki \code{przesuń} i \code{obróć} są wykonywane współbieżnie. (Aby przerwać program, kliknij czerwony czerwony znak ,,stop'' \inlinepic{../common/btn-stop} na prawym brzegu paska narzędzi.)
+Po naciśnięciu spacji duszek powinien zacząć bez końca chodzić w kółko, ponieważ bloki \code{przesuń} i \code{obróć} są wykonywane współbieżnie. (Aby przerwać program, kliknij czerwony czerwony znak ,,stop'' \inlinepic{../common/btn-stop} na prawym brzegu paska narzędzi).
 
-\subsection{Costumes and Sounds}
+\subsection{Kostiumy i dźwięki}
 
 Aby zmienić wygląd duszka, należy zaimportować dla niego nowy \emph{kostium}. Są na to trzy sposoby. Najpierw trzeba wybrać duszka z~zagrody. Następnie, w~pierwszej metodzie, klikamy na ikonie pliku \inlinepic{../common/btn-file} na pasku narzędzi, a~następnie wybieramy polecenie ,,\code{Kostiumy\ldots}''. Ukaże się lista kostiumów z~publicznej biblioteki multimediów, spośród których możemy dokonać wyboru. Drugą metodą jest wybór pliku ze swojego własnego kompuera. Należy w~tym celu kliknąć ikonę pliku, a~następnie polecenie ,,\code{Importuj\ldots}''. Można wtedy wybrać plik obrazu w~dowolnym formacie (PNG, JPEG itd.) obsługiwanym przez przeglądarkę. Trzeci sposób jest szybszy jeśli plik, którego chcemy użyć, jest widoczny na pulpicie: po prostu przeciągnij go do okna \Snap{a}. W~każdym z~tych przypadków obszar skryptów zacznie wyglądać mniej więcej tak:
 
 \bigpic{obszar-skryptow-z-dodatkowym-kostiumem}
 
-Tuż nad tą częścią okna znajdują się trzy zakładki: ,,Skrypty'', ,,Kostiumy'' i~,,Dźwię\-ki''. W~tym momencie aktywna jest karta ,,Kostiumy''. Widzimy na niej \emph{garderobę} duszka i~możemy z~jej poziomu wybrać dla niego kostium --- domyślny kostium żółwia\footnote{Z powodów historycznych, słowem ,,żółw'' nazywamy ruchomy obiekt, który porusza się wykonując program i~rysuje, zostawiając za sobą ślad} lub wybrany wcześniej kostium Alonzo. (Alonzo, maskotka \Snap{a}, został nazwany na cześć Alonzo Churcha, matematyka, który jako pierwszy wpadł na pomysł, aby procedury traktować na równi z~danymi, co jest najistotniejszą różnicą między \Snap{em} a~Scratchem.) Możemy przypisać duszkowi tyle kostiumów ile chcemy, a~potem wybierać, który z~nich założy, albo poprzez kliknięcie w~obrębie garderoby, albo używając w~skrypcie bloku \inlinepic{zmien-kostium-na-zolwia} lub \inlinepic{nastepny-kostium}. (Każdy kostium ma zarówno numer jak i~nazwę. Blok \code{następny kostium} wybiera następny w~kolejności kostium; po ostatnim wybiera z~powrotem kostium numer~1. Żółw, czyli kostium numer~0, jest przez blok \code{następny kostium} ignorowany.) Kostium ,,Żółw'' jest jedynym, który zmienia kolor zgodnie z~kolorem pisaka.
+Tuż nad tą częścią okna znajdują się trzy zakładki: ,,Skrypty'', ,,Kostiumy'' i~,,Dźwię\-ki''. W~tym momencie aktywna jest karta ,,Kostiumy''. Widzimy na niej \emph{garderobę} duszka i~możemy z~jej poziomu wybrać dla niego kostium --- domyślny kostium żółwia\footnote{Z powodów historycznych, słowem ,,żółw'' nazywamy ruchomy obiekt, który porusza się wykonując program i~rysuje, zostawiając za sobą ślad} lub wybrany wcześniej kostium Alonza. (Alonzo, maskotka \Snap{a}, został nazwany na cześć Alonza Churcha, matematyka, który jako pierwszy wpadł na pomysł, aby procedury traktować na równi z~danymi, co jest najistotniejszą różnicą między \Snap{em} a~Scratchem). Możemy przypisać duszkowi tyle kostiumów ile chcemy, a~potem wybierać, który z~nich założy, albo poprzez kliknięcie w~obrębie garderoby, albo używając w~skrypcie bloku \inlinepic{zmien-kostium-na-zolwia} lub \inlinepic{nastepny-kostium}. (Każdy kostium ma zarówno numer jak i~nazwę. Blok \code{następny kostium} wybiera następny w~kolejności kostium; po ostatnim wybiera z~powrotem kostium numer~1. Żółw, czyli kostium numer~0, jest przez blok \code{następny kostium} ignorowany). Kostium ,,Żółw'' jest jedynym, który zmienia kolor zgodnie z~kolorem pisaka.
 
 Oprócz kostiumów, duszki mogą posiadać \emph{dźwięki}; dźwiękowy odpowiednik garderoby duszka nazywamy jego \emph{szafą grającą}. Można importować pliki dźwiękowe w~dowolnym formacie obsługiwanym przez przeglądarkę. Do odtwarzania dźwięków służą dwa rodzaje bloków. Jeśli skrypt ma się dalej wykonywać podczas odtwarzania, używamy bloku \inlinepic{zagraj-dzwiek-ratunku}. Za to aby poczekać, aż dźwięk się zakończy, zanim skrypt będzie kontynuowany, należy wykorzystać blok \inlinepic{zagraj-dzwiek-ratunku-i-czekaj}.
 
@@ -158,6 +158,24 @@ Scena ma swój własny obszar skryptów. Możemy wyświetlić jej szczegóły kl
 
 \section{Zagnieżdżanie duszków: kotwice i części}
 \label{sec:zagnieżdżanie-duszków}
+
+Czasem dobrze jest stworzyć swego rodzaju ,,nadduszka'', złożonego z~kawałków, które poruszają się razem, ale mogą być osobno względem siebie ustawiane. Klasycznym przykładem może być ciało człowieka złożone z~tułowia, kończyn i~głowy. \Snap{} pozwala nam uczynić jednego z~duszków \emph{kotwicą} złożonego obiektu, a~resztę --- jego \emph{częściami}. Aby zagnieździć w~ten sposób duszki, należy przeciągnąć z~zagrody ikonę duszka, który ma zostać \emph{częścią} złożonego obiektu na znajdującego się na scenie (nie w~zagrodzie!) duszka, który zostanie \emph{kotwicą}.
+
+Zagnieżdżone duszki --- zarówno kotwice jak i części --- mają w zagrodzie specjalne oznaczenia:
+
+\bigpic{zagniezdzone-duszki-w-zagrodzie}
+
+W~tym przypadku chcielibyśmy animować rękę Alonza. (Ręka została pokolorowana na zielono, aby uwypuklić zależność między dwoma duszkami, choć w~prawdziwym projekcie miałyby one raczej ten sam kolor). ,,Duszek1'', reprezentujący ciało Alonza, jest kotwicą; ,,Duszek2'' to ręka. Ikona duszka-kotwicy zawiera w~dolnej części do trzech miniatur doczepionych do niego duszków-części. Z~kolei na ikonie każdej z~części widać pomniejszony obrazek duszka-kotwicy w~lewym górnym rogu, w~prawym górnym zaś --- \emph{przełącznik synchronizacji obrotów}. Początkowo, jak widać na rysunku powyżej, jest on tak ustawiony, aby obrót kotwicy powodował zarówno orbitowanie części wokół niej, jak i~obrót części dookoła swojej własnej osi. Po kliknięciu przełącznik zmienia kształt z~okrągłej strzałki na prostą, co oznacza, że od tej pory obrót duszka-kotwicy będzie powodował jedynie zmianę pozycji przymocowanych do niego części, ale nie będą się one obracać wokół własnej osi. (Części mogą również obracać się niezależnie, przy pomocy bloków \code{obróć}). Każda zmiana pozycji lub rozmiaru kotwicy jest propagowana na wszystkie części.
+
+\begin{figure}[H]
+\begin{minipage}{0.3\textwidth}
+\includegraphics[scale=\defaultGraphicsScale]{komenda-machania-reka}
+\end{minipage}%
+\begin{minipage}{0.3\textwidth}
+\includegraphics[scale=0.4]{../common/alonzo-waving}
+\end{minipage}
+\end{figure}
+
 \section{Reporter Blocks and Expressions}
 \section{Predicates and Conditional Evaluation}
 \section{Variables}

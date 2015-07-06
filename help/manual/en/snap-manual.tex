@@ -149,7 +149,25 @@ Notice, by the way, that the \code{say} block's first input slot is rectangular 
 The stage has its own scripting area. It can be selected by clicking on the Stage icon at the left of the sprite corral. Unlike a sprite, though, the stage can't move. Instead of costumes, it has \emph{backgrounds}: pictures that fill the entire stage area. The sprites appear in front of the current background. In a complicated project, it's often convenient to use a script in the stage's scripting area as the overall director of the action.
 
 \section{Nesting Sprites: Anchors and Parts}
-\label{sec:nesting-sprites}
+\label{nesting-sprites}
+
+Sometimes it's desirable to make a sort of ``super-sprite'' composed of pieces that can move together but can also be separately articulated. The classic example is a person's body made up of a torso, limbs, and a head. \Snap{} allows one sprite to be designated as the \emph{anchor} of the combined shape, with other sprites as its \emph{parts}. To set up sprite nesting, drag the sprite corral icon of a \emph{part} sprite onto the stage display (not the sprite corral icon!) of the desired \emph{anchor} sprite.
+
+Sprite nesting is shown in the sprite corral icons of both anchors and parts:
+
+\bigpic{nested-sprites-in-corral}
+
+In this illustration, it is desired to animate Alonzo's arm. (The arm has been colored green in this picture to make the relationship of the two sprites clearer, but in a real project they'd be the same color, probably.) Sprite1, representing Alonzo's body, is the anchor; Sprite2 is the arm. The icon for the anchor shows small images of up to three attached parts at the bottom. The icon for each part shows a small image of the anchor in its top left corner, and a \emph{synchronous rotation flag} in the top right corner. In its initial setting, as shown above, it means that the when the anchor sprite rotates, the part sprite also rotates as well as revolving around the anchor. When clicked, it changes from a circular arrow to a straight arrow, and indicates that when the anchor sprite rotates, the part sprite revolves around it, but does not rotate, keeping its original orientation. (The part can also be rotated separately, using its \code{turn} blocks.) Any change in the position or size of the anchor is always extended to its parts.
+
+\begin{figure}[H]
+\begin{minipage}{0.3\textwidth}
+\includegraphics[scale=\defaultGraphicsScale]{hand-waving-command}
+\end{minipage}%
+\begin{minipage}{0.3\textwidth}
+\includegraphics[scale=0.4]{../common/alonzo-waving}
+\end{minipage}
+\end{figure}
+
 \section{Reporter Blocks and Expressions}
 \section{Predicates and Conditional Evaluation}
 \section{Variables}
