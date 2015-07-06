@@ -1,7 +1,10 @@
-
 CSnap: Bringing Culture and Social Justice to Programming
+=========================================================
 
 http://community.csdt.rpi.edu
+
+License
+-------
 
 Copyright (C) 2014-2015 by Rensselaer Polytechnic Institute
 
@@ -40,3 +43,8 @@ GNU Affero General Public License for more details.
 
 You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+Current Release
+---------------
+
+The current release is 20150705.
