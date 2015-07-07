@@ -169,6 +169,35 @@ In this illustration, it is desired to animate Alonzo's arm. (The arm has been c
 \end{figure}
 
 \section{Reporter Blocks and Expressions}
+
+So far, we've used two kinds of blocks: hat blocks and command blocks. Another kind is the \emph{reporter} block, which has an oval shape: \inlinereporterpic{x-position}. It's called a ``reporter'' because when it's run, instead of carrying out an action, it reports a value that can be used as an input to another block. If you drag a reporter into the scripting area by itself and click on it, the value it reports will appear in a speech balloon next to the block:
+
+\bigpic{x-position-returns-a-number}
+
+When you drag a reporter block over another block's input slot, a white ``halo'' appears around that input slot, analogous to the white line that appears when snapping command blocks together. Here's a simple script that uses a reporter block:
+
+\begin{figure}[H]
+\begin{minipage}{0.4\textwidth}
+\includegraphics[scale=\defaultGraphicsScale]{example-script-that-uses-a-reporter}
+\end{minipage}%
+\begin{minipage}{0.6\textwidth}
+\includegraphics{../common/turtle-says-its-position}
+\end{minipage}
+\end{figure}
+
+Here the \code{x position} reporter provides the first input to the \code{say} block. (The sprite's X position is its horizontal position, how far left (negative values) or right (positive values) it is compared to the center of the stage. Similarly, the Y position is measured vertically, in steps above (positive) or below (negative) the center.)
+
+You can do arithmetic using reporters in the Operators palette: 
+
+\begin{figure}[H]
+\begin{minipage}{0.6\textwidth}
+\includegraphics[scale=\defaultGraphicsScale]{using-reporters-for-arithmetic}
+\end{minipage}%
+\begin{minipage}{0.4\textwidth}
+\includegraphics{../common/turtle-says-its-rounded-position}
+\end{minipage}
+\end{figure}
+
 \section{Predicates and Conditional Evaluation}
 \section{Variables}
 \subsection{Global Variables}

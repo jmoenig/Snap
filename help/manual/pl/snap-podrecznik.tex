@@ -76,7 +76,7 @@ Na górze skryptu znajduje się \emph{blok-czapka}, który określa, kiedy skryp
 
 Pozostałe bloki w naszym skrypcie to \emph{bloki komend}. Każdy z~nich oznacza jakąś akcję, którą \Snap{} potrafi wykonać. Na przykład blok \inlinepic{przesun-o-10-krokow} nakazuje duszkowi\footnote{W grafice komputerowej słowem ,,duszek'' (ang. \textit{sprite}) nazywa się ruchomy obiekt na ekranie --- przyp. tłum.}, czyli strzałce na \emph{scenie} po prawej stronie okna, aby przesunął się o~dziesięć kroków do przodu w~kierunku, w~którym jest zwrócony. Każdy krok to niewielka odległość na ekranie. Wkrótce przekonamy się, że na scenie może być więcej duszków, a~każdy z nich może mieć własne skrypty. Ponadto duszki nie muszą wyglądać jak strzałki; ich kostiumy mogą być dowolnymi obrazkami. Kształt bloku \code{przesuń} ma za zadanie przypominać klocek, skrypt zaś jest jak wieża z klocków. Słowa ,,blok'' będziemy używać dla oznaczenia zarówno graficznego symbolu na ekranie, jak i~procedury (akcji) jaką ten blok wykonuje.
 
-Liczbę 10 w powyższym bloku \code{przesuń} nazywamy jego \emph{parametrem}. Kliknąwszy na białym, zaokrąglonym polu, możemy wpisać w~jej miejsce dowolną inną. W przykładowym skrypcie ze strony \pageref{fig:typowy-skrypt} parametrem jest liczba 100. Jak się później okaże, pola parametrów mogą mieć kształty inne od zaokrąglonych; oznacza to wtedy, że akceptują one wartości inne niż liczby. Zobaczymy również, że zamiast wpisywać konkretne wartości w~pola, możemy nakazać komputerowi je obliczać. Ponadto blok może mieć więcej niż jeden parametr. Na przykład blok \code{leć}, znajdujący się mniej więcej w~połowie palety ,,Ruch'', przyjmuje trzy parametry.
+Liczbę 10 w powyższym bloku \code{przesuń} nazywamy jego \emph{parametrem}. Kliknąwszy na białym, owalnym polu, możemy wpisać w~jej miejsce dowolną inną. W przykładowym skrypcie ze strony \pageref{fig:typowy-skrypt} parametrem jest liczba 100. Jak się później okaże, pola parametrów mogą mieć kształty inne od owalnych; oznacza to wtedy, że akceptują one wartości inne niż liczby. Zobaczymy również, że zamiast wpisywać konkretne wartości w~pola, możemy nakazać komputerowi je obliczać. Ponadto blok może mieć więcej niż jeden parametr. Na przykład blok \code{leć}, znajdujący się mniej więcej w~połowie palety ,,Ruch'', przyjmuje trzy parametry.
 
 Większość bloków komend ma kształt klocków, lecz niektóre, jak \code{powtórz} z~tego samego przykładu, wyglądają jak \emph{klamry}. Większość bloków klamrowych można znaleźć na palecie ,,Kontrola'. Wnętrze klamry jest szczególnym rodzajem pola parametru, który przyjmuje \emph{skrypt} jako parametr. W~przykładowym skrypcie blok \code{powtórz} ma dwa parametry: liczbę 4 oraz skrypt
 
@@ -152,7 +152,7 @@ Widzieliśmy wcześniej przykład dwóch duszków poruszających się jednocześ
 
 Słowo ,,szczekaj'' występujące w~bloku \inlinepic{nadaj-szczekaj-do-wszystkich-i-czekaj} to pierwszy lepszy wyraz, który przyszedł mi do głowy. Jedną z~opcji, które ukazują się po kliknięciu strzałki w~dół obok tego pola parametru (i~jedyną początkowo dostępną), jest ,,\code{nowy}''. Po jej wybraniu \Snap{} pyta o~nazwę komunikatu. Kiedy wspomniany blok zostanie wykonany, wybrany komunikat zostaje wysłany do \emph{każdego} duszka --- stąd też określenie ,,nadaj do wszystkich''. Jednak w~naszym przykładzie tylko jeden duszek ma skrypt, który jest wywoływany w~momencie nadania tego komunikatu --- jest nim pies. Ponieważ skrypt chłopca wykorzystuje blok \code{nadaj do wszystkich i~czekaj} zamiast \code{nadaj do wszystkich}, chłopiec nie przechodzi do następującego po nim bloku \code{powiedz}, dopóki skrypt psa się nie skończy. Z~tej przyczyny dwa duszki mówią na zmianę, a~nie jednocześnie.
 
-Warto przy okazji zwrócić uwagę na to, że pierwsze pole parametru na bloku \code{powiedz} nie jest zaokrąglone, lecz prostokątne. Oznacza to, że parametr ten może być dowolnym łańcuchem znaków (tekstem), nie tylko liczbą. W~polach parametrów typu tekstowego spacje ukazują się jako brązowe kropki, abyśmy mogli policzyć liczbę odstępów między wyrazami. Co ważniejsze, możemy dzięki temu odróżnić pusty łańcuch od złożonego z~samych spacji. Brązowe kropki \emph{nie będą} widoczne na scenie, kiedy blok zostanie wykonany.
+Warto przy okazji zwrócić uwagę na to, że pierwsze pole parametru na bloku \code{powiedz} nie jest owalne, lecz prostokątne. Oznacza to, że parametr ten może być dowolnym łańcuchem znaków (tekstem), nie tylko liczbą. W~polach parametrów typu tekstowego spacje ukazują się jako brązowe kropki, abyśmy mogli policzyć liczbę odstępów między wyrazami. Co ważniejsze, możemy dzięki temu odróżnić pusty łańcuch od złożonego z~samych spacji. Brązowe kropki \emph{nie będą} widoczne na scenie, kiedy blok zostanie wykonany.
 
 Scena ma swój własny obszar skryptów. Możemy wyświetlić jej szczegóły klikając ikonę ,,Scena'' po lewej stronie zagrody duszków. W~przeciwieństwie do duszków scena się nie porusza. Zamiast kostiumów ma \emph{tła} --- obrazki wypełniające cały obszar sceny. Duszki rysowane są na aktualnym tle. W~skomplikowanych projektach często wygodnie jest użyć skryptu sceny do koordynacji działań poszczególnych części programu.
 
@@ -176,7 +176,27 @@ W~tym przypadku chcielibyśmy animować rękę Alonza. (Ręka została pokolorow
 \end{minipage}
 \end{figure}
 
-\section{Reporter Blocks and Expressions}
+\section{Bloki funkcji i wyrażenia}
+
+Jak dotąd używaliśmy dwóch rodzajów bloków: ,,czapek'' i~komend. Kolejnym rodzajem jest blok \emph{funkcji}, który ma owalny kształt: \inlinereporterpic{pozycja-x}. Nazywamy go ,,blokiem funkcji'', ponieważ --- podobnie jak funkcja w~matematyce --- kiedy zostaje wykonany, zamiast przeprowadzać jakąś czynność, zwraca wartość, która może zostać użyta jako parametr w~innym bloku. Jeśli przeciągniemy sam blok funkcji do obszaru skryptów i~klikniemy go, obok pokaże się dymek z~wartością zwróconą przez tę funkcję:
+
+\bigpic{pozycja-x-zwraca-liczbe}
+
+Kiedy przeciągamy blok funkcji nad polem parametru należącym do innego bloku, wokół tego pola pojawia się biała otoczka, analogicznie do sytuacji, w~której łączymy bloki komend i~pojawia się biała linia. Oto przykładowy skrypt wykorzystujący funkcję:
+
+\begin{figure}[H]
+\begin{minipage}{0.4\textwidth}
+\includegraphics[scale=\defaultGraphicsScale]{przykladowy-skrypt-wykorzystujacy-funkcje}
+\end{minipage}%
+\begin{minipage}{0.6\textwidth}
+\includegraphics{../common/turtle-says-its-position}
+\end{minipage}
+\end{figure}
+
+Funkcja \code{pozycja X} nadaje tu wartość pierwszemu parametrowi bloku \code{powiedz}. Pozycja X~duszka to inaczej jego współrzędna pozioma. Określa ona, jak daleko w~lewo (jeśli jest liczbą ujemną) lub w~prawo (jeśli dodatnią) znajduje się duszek w~stosunku do środka sceny. Analogicznie, pozycja Y~to współrzędna pionowa, mierzona ilością kroków w~górę (wartości dodatnie) lub w~dół od środka (wartości ujemne).
+
+Przy pomocy funkcji z palety ,,Wyrażenia'' możemy wykonywać obliczenia:
+
 \section{Predicates and Conditional Evaluation}
 \section{Variables}
 \subsection{Global Variables}
