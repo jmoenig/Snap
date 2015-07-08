@@ -343,7 +343,7 @@ SnapTranslator.dict.pl = {
     'think %s':
         'pomy\u015Bl %s',
     'Hello!':
-        'Hallo!',
+        'Cześć!',
     'Hmm...':
         'Hmm...',
     'change %eff effect by %n':
@@ -545,9 +545,9 @@ SnapTranslator.dict.pl = {
     'join %words':
         'po\u0142\u0105cz %words',
     'hello':
-        'Hallo',
+        'witaj',
     'world':
-        's\u0142owo',
+        'świecie',
     'letter %n of %s':
         'litera %n z %s',
     'length of %s':
