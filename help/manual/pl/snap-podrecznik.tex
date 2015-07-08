@@ -197,6 +197,21 @@ Funkcja \code{pozycja X} nadaje tu wartość pierwszemu parametrowi bloku \code{
 
 Przy pomocy funkcji z palety ,,Wyrażenia'' możemy wykonywać obliczenia:
 
+\begin{figure}[H]
+\begin{minipage}{0.6\textwidth}
+\includegraphics[scale=\defaultGraphicsScale]{uzycie-funkcji-do-obliczen}
+\end{minipage}%
+\begin{minipage}{0.4\textwidth}
+\includegraphics{../common/turtle-says-its-rounded-position}
+\end{minipage}
+\end{figure}
+
+Blok \code{zaokrąglij} zaokrągla 35.3905\ldots\ do 35, a~blok~\code{+} dodaje do tej liczby 100. Nawiasem mówiąc, choć blok \code{zaokrąglij} znajduje się na palecie ,,Wyrażenia'', podobnie jak~\code{+}, to w~tym skrypcie ma on jaśniejszy kolor i~czarne litery. To dlatego, że \Snap{} używa na przemian ciemnych i~jasnych odcieni kolorów, kiedy zagnieżdżamy w~sobie bloki z~tej samej palety:
+
+\bigpic{kolorowanie-w-zebre}
+
+Takie \emph{kolorowanie w~zebrę} poprawia czytelność programu. Blok funkcji wraz z~parametrami, a~być może również innymi blokami funkcji, na przykład \inlinepic{zaokraglij-pozycja-x-plus-100}, nazywamy \emph{wyrażeniem}.
+
 \section{Predicates and Conditional Evaluation}
 \section{Variables}
 \subsection{Global Variables}
