@@ -129,7 +129,8 @@ Earlier we saw an example of two sprites moving at the same time. In a more inte
 \centering
 \reflectbox{\includegraphics[scale=0.3]{../common/dog2-c}}
 \end{minipage}
-\vskip 3ex
+
+\vspace{3ex}
 \begin{minipage}[t]{0.5\textwidth}
 \centering
 \vspace{0pt} % REALLY align to top
@@ -160,12 +161,10 @@ Sprite nesting is shown in the sprite corral icons of both anchors and parts:
 In this illustration, it is desired to animate Alonzo's arm. (The arm has been colored green in this picture to make the relationship of the two sprites clearer, but in a real project they'd be the same color, probably.) Sprite1, representing Alonzo's body, is the anchor; Sprite2 is the arm. The icon for the anchor shows small images of up to three attached parts at the bottom. The icon for each part shows a small image of the anchor in its top left corner, and a \emph{synchronous rotation flag} in the top right corner. In its initial setting, as shown above, it means that the when the anchor sprite rotates, the part sprite also rotates as well as revolving around the anchor. When clicked, it changes from a circular arrow to a straight arrow, and indicates that when the anchor sprite rotates, the part sprite revolves around it, but does not rotate, keeping its original orientation. (The part can also be rotated separately, using its \code{turn} blocks.) Any change in the position or size of the anchor is always extended to its parts.
 
 \begin{figure}[H]
-\begin{minipage}{0.3\textwidth}
-\includegraphics[scale=\defaultGraphicsScale]{hand-waving-command}
-\end{minipage}%
-\begin{minipage}{0.3\textwidth}
+\centering
+\includegraphics[scale=\defaultGraphicsScale]{hand-waving-command}%
+\hspace{2em}%
 \includegraphics[scale=0.4]{../common/alonzo-waving}
-\end{minipage}
 \end{figure}
 
 \section{Reporter Blocks and Expressions}
@@ -177,12 +176,10 @@ So far, we've used two kinds of blocks: hat blocks and command blocks. Another k
 When you drag a reporter block over another block's input slot, a white ``halo'' appears around that input slot, analogous to the white line that appears when snapping command blocks together. Here's a simple script that uses a reporter block:
 
 \begin{figure}[H]
-\begin{minipage}{0.4\textwidth}
-\includegraphics[scale=\defaultGraphicsScale]{example-script-that-uses-a-reporter}
-\end{minipage}%
-\begin{minipage}{0.6\textwidth}
+\centering
+\includegraphics[scale=\defaultGraphicsScale]{example-script-that-uses-a-reporter}%
+\hspace{2em}%
 \includegraphics{../common/turtle-says-its-position}
-\end{minipage}
 \end{figure}
 
 Here the \code{x position} reporter provides the first input to the \code{say} block. (The sprite's X position is its horizontal position, how far left (negative values) or right (positive values) it is compared to the center of the stage. Similarly, the Y position is measured vertically, in steps above (positive) or below (negative) the center.)
@@ -190,12 +187,10 @@ Here the \code{x position} reporter provides the first input to the \code{say} b
 You can do arithmetic using reporters in the Operators palette: 
 
 \begin{figure}[H]
-\begin{minipage}{0.6\textwidth}
-\includegraphics[scale=\defaultGraphicsScale]{using-reporters-for-arithmetic}
-\end{minipage}%
-\begin{minipage}{0.4\textwidth}
+\centering
+\includegraphics[scale=\defaultGraphicsScale]{using-reporters-for-arithmetic}%
+\hspace{2em}%
 \includegraphics{../common/turtle-says-its-rounded-position}
-\end{minipage}
 \end{figure}
 
 The \code{round} block rounds 35.3905\ldots\ to 35, and the \code{+}~block adds 100 to that. (By the way, the \code{round} block is in the Operators palette, just like~\code{+}, but in this script it's a lighter color with black lettering because \Snap{} alternates light and dark versions of the palette colors when a block is nested inside another block from the same palette:

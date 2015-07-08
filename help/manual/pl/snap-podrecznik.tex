@@ -168,12 +168,10 @@ Zagnieżdżone duszki --- zarówno kotwice jak i części --- mają w zagrodzie 
 W~tym przypadku chcielibyśmy animować rękę Alonza. (Ręka została pokolorowana na zielono, aby uwypuklić zależność między dwoma duszkami, choć w~prawdziwym projekcie miałyby one raczej ten sam kolor). ,,Duszek1'', reprezentujący ciało Alonza, jest kotwicą; ,,Duszek2'' to ręka. Ikona duszka-kotwicy zawiera w~dolnej części do trzech miniatur doczepionych do niego duszków-części. Z~kolei na ikonie każdej z~części widać pomniejszony obrazek duszka-kotwicy w~lewym górnym rogu, w~prawym górnym zaś --- \emph{przełącznik synchronizacji obrotów}. Początkowo, jak widać na rysunku powyżej, jest on tak ustawiony, aby obrót kotwicy powodował zarówno orbitowanie części wokół niej, jak i~obrót części dookoła swojej własnej osi. Po kliknięciu przełącznik zmienia kształt z~okrągłej strzałki na prostą, co oznacza, że od tej pory obrót duszka-kotwicy będzie powodował jedynie zmianę pozycji przymocowanych do niego części, ale nie będą się one obracać wokół własnej osi. (Części mogą również obracać się niezależnie, przy pomocy bloków \code{obróć}). Każda zmiana pozycji lub rozmiaru kotwicy jest propagowana na wszystkie części.
 
 \begin{figure}[H]
-\begin{minipage}{0.3\textwidth}
-\includegraphics[scale=\defaultGraphicsScale]{komenda-machania-reka}
-\end{minipage}%
-\begin{minipage}{0.3\textwidth}
+\centering
+\includegraphics[scale=\defaultGraphicsScale]{komenda-machania-reka}%
+\hspace{2em}%
 \includegraphics[scale=0.4]{../common/alonzo-waving}
-\end{minipage}
 \end{figure}
 
 \section{Bloki funkcji i wyrażenia}
@@ -185,12 +183,10 @@ Jak dotąd używaliśmy dwóch rodzajów bloków: ,,czapek'' i~komend. Kolejnym 
 Kiedy przeciągamy blok funkcji nad polem parametru należącym do innego bloku, wokół tego pola pojawia się biała otoczka, analogicznie do sytuacji, w~której łączymy bloki komend i~pojawia się biała linia. Oto przykładowy skrypt wykorzystujący funkcję:
 
 \begin{figure}[H]
-\begin{minipage}{0.4\textwidth}
-\includegraphics[scale=\defaultGraphicsScale]{przykladowy-skrypt-wykorzystujacy-funkcje}
-\end{minipage}%
-\begin{minipage}{0.6\textwidth}
+\centering
+\includegraphics[scale=\defaultGraphicsScale]{przykladowy-skrypt-wykorzystujacy-funkcje}%
+\hspace{2em}%
 \includegraphics{../common/turtle-says-its-position}
-\end{minipage}
 \end{figure}
 
 Funkcja \code{pozycja X} nadaje tu wartość pierwszemu parametrowi bloku \code{powiedz}. Pozycja X~duszka to inaczej jego współrzędna pozioma. Określa ona, jak daleko w~lewo (jeśli jest liczbą ujemną) lub w~prawo (jeśli dodatnią) znajduje się duszek w~stosunku do środka sceny. Analogicznie, pozycja Y~to współrzędna pionowa, mierzona ilością kroków w~górę (wartości dodatnie) lub w~dół od środka (wartości ujemne).
@@ -198,12 +194,10 @@ Funkcja \code{pozycja X} nadaje tu wartość pierwszemu parametrowi bloku \code{
 Przy pomocy funkcji z palety ,,Wyrażenia'' możemy wykonywać obliczenia:
 
 \begin{figure}[H]
-\begin{minipage}{0.6\textwidth}
-\includegraphics[scale=\defaultGraphicsScale]{uzycie-funkcji-do-obliczen}
-\end{minipage}%
-\begin{minipage}{0.4\textwidth}
+\centering
+\includegraphics[scale=\defaultGraphicsScale]{uzycie-funkcji-do-obliczen}%
+\hspace{2em}%
 \includegraphics{../common/turtle-says-its-rounded-position}
-\end{minipage}
 \end{figure}
 
 Blok \code{zaokrąglij} zaokrągla 35.3905\ldots\ do 35, a~blok~\code{+} dodaje do tej liczby 100. Nawiasem mówiąc, choć blok \code{zaokrąglij} znajduje się na palecie ,,Wyrażenia'', podobnie jak~\code{+}, to w~tym skrypcie ma on jaśniejszy kolor i~czarne litery. To dlatego, że \Snap{} używa na przemian ciemnych i~jasnych odcieni kolorów, kiedy zagnieżdżamy w~sobie bloki z~tej samej palety:
