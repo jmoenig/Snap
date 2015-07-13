@@ -212,6 +212,28 @@ Większość funkcji zwraca albo liczbę, jak \inlinereporterpic{plus}, lub ła�
 
 \bigpic{przycisk-myszy-nacisniety}
 
+\begin{sloppypar}
+Specjalny kształt jest oznaką, że predykaty nie mają z~reguły sensu w~tych polach parametrów, które oczekują liczby lub tekstu. Raczej nie napisalibyśmy \inlinepic{przesun-o-przycisk-myszy-nacisniety-krokow}, choć gdybyśmy się uparli, \Snap{} by nam na to pozwolił, co widać na załączonym obrazku. W~typowych sytuacjach predykaty umieszczamy w~specjalnych sześciokątnych polach parametrów takich jak to:
+\end{sloppypar}
+
+\bigpic{jezeli-to}
+
+Klamra \code{jeżeli --- to} wykonuje obejmowany przez nią fragment skryptu wtedy i~tylko wtedy, gdy wyrażenie w~jej sześciokątnym polu parametru jest prawdziwe, czyli zwraca wartość \code{prawda}.
+
+\bigpic{predykaty-i-obliczenia-warunkowe-1}
+
+Poniższy blok jest bardzo użyteczny w~animacjach. Wykonuje on skrypt będący jego parametrem \emph{wielokrotnie}, dopóki predykat nie zostanie spełniony:
+
+\bigpic{predykaty-i-obliczenia-warunkowe-2}
+
+Jeśli pracując nad projektem, będziemy chcieli tymczasowo pominąć niektóre komendy w~skrypcie, lecz nie będziemy chcieli zapomnieć, gdzie było ich miejsce, możemy użyć następującej sztuczki:
+
+\bigpic{predykaty-i-obliczenia-warunkowe-3}
+
+Sometimes you want to take the same action whether some condition is true or false, but with a different input value. For this purpose you can use the \emph{reporter} \code{if} block:\footnote{\onehalfspacing If you don't see it in the Control palette, click on the File button \inlinepic{../common/btn-file} in the Tool Bar and choose ``Import tools.''}
+
+\bigpic{predykaty-i-obliczenia-warunkowe-4}
+
 \section{Variables}
 \subsection{Global Variables}
 \subsection{Script Variables}

@@ -205,7 +205,25 @@ Most reporters report either a number, like \inlinereporterpic{plus}, or a text 
 
 \bigpic{mouse-down}
 
-The special shape is a reminder that predicates don't generally make sense in an input slot of blocks that are expecting a number or text. You wouldn't say , although (as you can see from the picture) \Snap{} lets you do it if you really want. Instead, you normally use predicates in special hexagonal input slots like this one:
+The special shape is a reminder that predicates don't generally make sense in an input slot of blocks that are expecting a number or text. You wouldn't say \inlinepic{move-mouse-down-steps}, although (as you can see from the picture) \Snap{} lets you do it if you really want. Instead, you normally use predicates in special hexagonal input slots like this one:
+
+\bigpic{if}
+
+The C-shaped \code{if} block runs its input script if (and only if) the expression in its hexagonal input reports \code{true}.
+
+\bigpic{predicates-and-conditional-evaluation-1}
+
+A really useful block in animations runs its input script \emph{repeatedly} until a predicate is satisfied:
+
+\bigpic{predicates-and-conditional-evaluation-2}
+
+If, while working on a project, you want to omit temporarily some commands in a script, but you don't want to forget where they belong, you can say
+
+\bigpic{predicates-and-conditional-evaluation-3}
+
+Sometimes you want to take the same action whether some condition is true or false, but with a different input value. For this purpose you can use the \emph{reporter} \code{if} block:\footnote{\onehalfspacing If you don't see it in the Control palette, click on the File button \inlinepic{../common/btn-file} in the Tool Bar and choose ``Import tools.''}
+
+\bigpic{predicates-and-conditional-evaluation-4}
 
 \section{Variables}
 \subsection{Global Variables}

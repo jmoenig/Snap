@@ -1,13 +1,15 @@
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage{baskervald}  % Default font
-\usepackage{setspace} \onehalfspacing
+\usepackage[onehalfspacing]{setspace}
 \usepackage{graphicx}
 \usepackage{color}
 \usepackage{textcomp}
 \usepackage{hyperref}
 \usepackage{float}
 \usepackage{ltxcmds}
+\usepackage{fp}
+\usepackage{calc}
 
 % This macro produces a "Snap!" logo.
 %
@@ -22,16 +24,28 @@
 }
 
 \newcommand{\code}[1]{\textsf{\textbf{#1}}}
+\makeatletter
 \newcommand{\defaultGraphicsScale}{0.6}
+\makeatother
 
 \renewcommand{\thechapter}{\Roman{chapter}}
 \renewcommand{\thesection}{\Alph{section}}
 \renewcommand{\thesubsection}{}
 
 \makeatletter
-\newcommand{\inlinepicraised}[2]{%
-	\raisebox{#2}{%
-		\includegraphics[scale=\defaultGraphicsScale]{#1}%
+\edef\defaultFontSize{\f@size}
+
+% A dirty hack: Apparently, this is the only way to multiply a length by a constant factor in the code below. What a mess.
+\newdimen\raiseLength
+
+\newcommand{\inlinepicraised}[3]{%
+	{%
+		\FPeval\fontSizeRatio{\f@size / \defaultFontSize}%
+		\FPeval\scale{#3 * \fontSizeRatio}%
+		\raiseLength=#2%
+		\raisebox{\fontSizeRatio\raiseLength}{%
+			\includegraphics[scale=\scale]{#1}%
+		}%
 	}%
 	% Add kerns if the next character is punctuation.
 	\ltx@ifnextchar@nospace.{\,}{%
@@ -41,12 +55,12 @@
 }
 \makeatother
 
-\newcommand{\inlinepic}[1]{%
-	\inlinepicraised{#1}{-4pt}%
+\newcommand{\inlinepic}[2][\defaultGraphicsScale]{%
+	\inlinepicraised{#2}{-4pt}{#1}%
 }
 
-\newcommand{\inlinereporterpic}[1]{%
-	\inlinepicraised{#1}{-1.5pt}%
+\newcommand{\inlinereporterpic}[2][\defaultGraphicsScale]{%
+	\inlinepicraised{#2}{-1.5pt}{#1}%
 }
 
 \newcommand{\bigpic}[1]{
