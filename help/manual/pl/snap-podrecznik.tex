@@ -44,7 +44,7 @@ Podręcznik użytkownika \\
 
 \clearpage
 
-\chapter{Bloki, skrypty i duszki}
+\chapter{Bloki, skrypty i~duszki}
 
 W~tym rozdziale poznamy kilka cech języka \Snap{} odziedziczonych po Scratchu; doświadczeni użytkownicy Scratcha mogą przejść od razu do sekcji~\ref{sec:zagnieżdżanie-duszków}.
 
@@ -70,15 +70,15 @@ Na powyższy skrypt składa się pięć bloków w~trzech różnych kolorach, odp
 
 Pozioma biała linia sygnalizuje, że jeśli puścimy zielony blok, połączy się on z~wypustką ciemnożółtego.
 
-\subsection{Bloki-czapki i bloki komend}
+\subsection{Bloki-czapki i~bloki komend}
 
 Na górze skryptu znajduje się \emph{blok-czapka}, który określa, kiedy skrypt ma zostać wykonany. Nazwy bloków-czapek zazwyczaj zaczynają się słowem ,,\code{kiedy}''; nasz przykładowy skrypt powinien zostać uruchomiony w~momencie kliknięcia zielonej flagi, znajdującej się w pobliżu prawej strony paska narzędzi \Snap{a}. (Pasek ten jest częścią okna programu \Snap{}; nie chodzi tutaj o pasek menu przeglądarki lub systemu operacyjnego). Skrypt nie musi posiadać czapki, jednak w~takim przypadku zostanie wykonany tylko wtedy, gdy użytkownik sam go kliknie. Skrypt nie może mieć więcej niż jednej czapki; jej charakterystyczny kształt służy łatwiejszemu zapamiętaniu tej szczególnej własności.
 
 Pozostałe bloki w naszym skrypcie to \emph{bloki komend}. Każdy z~nich oznacza jakąś akcję, którą \Snap{} potrafi wykonać. Na przykład blok \inlinepic{przesun-o-10-krokow} nakazuje duszkowi\footnote{W grafice komputerowej słowem ,,duszek'' (ang. \textit{sprite}) nazywa się ruchomy obiekt na ekranie --- przyp. tłum.}, czyli strzałce na \emph{scenie} po prawej stronie okna, aby przesunął się o~dziesięć kroków do przodu w~kierunku, w~którym jest zwrócony. Każdy krok to niewielka odległość na ekranie. Wkrótce przekonamy się, że na scenie może być więcej duszków, a~każdy z nich może mieć własne skrypty. Ponadto duszki nie muszą wyglądać jak strzałki; ich kostiumy mogą być dowolnymi obrazkami. Kształt bloku \code{przesuń} ma za zadanie przypominać klocek, skrypt zaś jest jak wieża z klocków. Słowa ,,blok'' będziemy używać dla oznaczenia zarówno graficznego symbolu na ekranie, jak i~procedury (akcji) jaką ten blok wykonuje.
 
-Liczbę 10 w powyższym bloku \code{przesuń} nazywamy jego \emph{parametrem}. Kliknąwszy na białym, owalnym polu, możemy wpisać w~jej miejsce dowolną inną. W przykładowym skrypcie ze strony \pageref{fig:typowy-skrypt} parametrem jest liczba 100. Jak się później okaże, pola parametrów mogą mieć kształty inne od owalnych; oznacza to wtedy, że akceptują one wartości inne niż liczby. Zobaczymy również, że zamiast wpisywać konkretne wartości w~pola, możemy nakazać komputerowi je obliczać. Ponadto blok może mieć więcej niż jeden parametr. Na przykład blok \code{leć}, znajdujący się mniej więcej w~połowie palety ,,Ruch'', przyjmuje trzy parametry.
+Liczbę $10$ w powyższym bloku \code{przesuń} nazywamy jego \emph{parametrem}. Kliknąwszy na białym, owalnym polu, możemy wpisać w~jej miejsce dowolną inną. W przykładowym skrypcie ze strony \pageref{fig:typowy-skrypt} parametrem jest liczba $100$. Jak się później okaże, pola parametrów mogą mieć kształty inne od owalnych; oznacza to wtedy, że akceptują one wartości inne niż liczby. Zobaczymy również, że zamiast wpisywać konkretne wartości w~pola, możemy nakazać komputerowi je obliczać. Ponadto blok może mieć więcej niż jeden parametr. Na przykład blok \code{leć}, znajdujący się mniej więcej w~połowie palety ,,Ruch'', przyjmuje trzy parametry.
 
-Większość bloków komend ma kształt klocków, lecz niektóre, jak \code{powtórz} z~tego samego przykładu, wyglądają jak \emph{klamry}. Większość bloków klamrowych można znaleźć na palecie ,,Kontrola'. Wnętrze klamry jest szczególnym rodzajem pola parametru, który przyjmuje \emph{skrypt} jako parametr. W~przykładowym skrypcie blok \code{powtórz} ma dwa parametry: liczbę 4 oraz skrypt
+Większość bloków komend ma kształt klocków, lecz niektóre, jak \code{powtórz} z~tego samego przykładu, wyglądają jak \emph{klamry}. Większość bloków klamrowych można znaleźć na palecie ,,Kontrola'. Wnętrze klamry jest szczególnym rodzajem pola parametru, który przyjmuje \emph{skrypt} jako parametr. W~przykładowym skrypcie blok \code{powtórz} ma dwa parametry: liczbę $4$ oraz skrypt
 
 \bigpic{typowy-skrypt-wnetrze}
 
@@ -114,7 +114,7 @@ Kiedy klikniemy zieloną flagę \inlinepic{../common/btn-start}, powinniśmy zob
 
 Po naciśnięciu spacji duszek powinien zacząć bez końca chodzić w kółko, ponieważ bloki \code{przesuń} i \code{obróć} są wykonywane współbieżnie. (Aby przerwać program, kliknij czerwony czerwony znak ,,stop'' \inlinepic{../common/btn-stop} na prawym brzegu paska narzędzi).
 
-\subsection{Kostiumy i dźwięki}
+\subsection{Kostiumy i~dźwięki}
 
 Aby zmienić wygląd duszka, należy zaimportować dla niego nowy \emph{kostium}. Są na to trzy sposoby. Najpierw trzeba wybrać duszka z~zagrody. Następnie, w~pierwszej metodzie, klikamy na ikonie pliku \inlinepic{../common/btn-file} na pasku narzędzi, a~następnie wybieramy polecenie ,,\code{Kostiumy\ldots}''. Ukaże się lista kostiumów z~publicznej biblioteki multimediów, spośród których możemy dokonać wyboru. Drugą metodą jest wybór pliku ze swojego własnego kompuera. Należy w~tym celu kliknąć ikonę pliku, a~następnie polecenie ,,\code{Importuj\ldots}''. Można wtedy wybrać plik obrazu w~dowolnym formacie (PNG, JPEG itd.) obsługiwanym przez przeglądarkę. Trzeci sposób jest szybszy jeśli plik, którego chcemy użyć, jest widoczny na pulpicie: po prostu przeciągnij go do okna \Snap{a}. W~każdym z~tych przypadków obszar skryptów zacznie wyglądać mniej więcej tak:
 
@@ -156,7 +156,7 @@ Warto przy okazji zwrócić uwagę na to, że pierwsze pole parametru na bloku \
 
 Scena ma swój własny obszar skryptów. Możemy wyświetlić jej szczegóły klikając ikonę ,,Scena'' po lewej stronie zagrody duszków. W~przeciwieństwie do duszków scena się nie porusza. Zamiast kostiumów ma \emph{tła} --- obrazki wypełniające cały obszar sceny. Duszki rysowane są na aktualnym tle. W~skomplikowanych projektach często wygodnie jest użyć skryptu sceny do koordynacji działań poszczególnych części programu.
 
-\section{Zagnieżdżanie duszków: kotwice i części}
+\section{Zagnieżdżanie duszków: kotwice i~części}
 \label{sec:zagnieżdżanie-duszków}
 
 Czasem dobrze jest stworzyć swego rodzaju ,,nadduszka'', złożonego z~kawałków, które poruszają się razem, ale mogą być osobno względem siebie ustawiane. Klasycznym przykładem może być ciało człowieka złożone z~tułowia, kończyn i~głowy. \Snap{} pozwala nam uczynić jednego z~duszków \emph{kotwicą} złożonego obiektu, a~resztę --- jego \emph{częściami}. Aby zagnieździć w~ten sposób duszki, należy przeciągnąć z~zagrody ikonę duszka, który ma zostać \emph{częścią} złożonego obiektu na znajdującego się na scenie (nie w~zagrodzie!) duszka, który zostanie \emph{kotwicą}.
@@ -174,7 +174,7 @@ W~tym przypadku chcielibyśmy animować rękę Alonza. (Ręka została pokolorow
 \includegraphics[scale=0.4]{../common/alonzo-waving}
 \end{figure}
 
-\section{Bloki funkcji i wyrażenia}
+\section{Bloki funkcji i~wyrażenia}
 
 Jak dotąd używaliśmy dwóch rodzajów bloków: ,,czapek'' i~komend. Kolejnym rodzajem jest blok \emph{funkcji}, który ma owalny kształt: \inlinereporterpic{pozycja-x}. Nazywamy go ,,blokiem funkcji'', ponieważ --- podobnie jak funkcja w~matematyce --- kiedy zostaje wykonany, zamiast przeprowadzać jakąś czynność, zwraca wartość, która może zostać użyta jako parametr w~innym bloku. Jeśli przeciągniemy sam blok funkcji do obszaru skryptów i~klikniemy go, obok pokaże się dymek z~wartością zwróconą przez tę funkcję:
 
@@ -200,13 +200,13 @@ Przy pomocy funkcji z palety ,,Wyrażenia'' możemy wykonywać obliczenia:
 \includegraphics{../common/turtle-says-its-rounded-position}
 \end{figure}
 
-Blok \code{zaokrąglij} zaokrągla 35.3905\ldots\ do 35, a~blok~\code{+} dodaje do tej liczby 100. Nawiasem mówiąc, choć blok \code{zaokrąglij} znajduje się na palecie ,,Wyrażenia'', podobnie jak~\code{+}, to w~tym skrypcie ma on jaśniejszy kolor i~czarne litery. To dlatego, że \Snap{} używa na przemian ciemnych i~jasnych odcieni kolorów, kiedy zagnieżdżamy w~sobie bloki z~tej samej palety:
+Blok \code{zaokrąglij} zaokrągla $35.3905\ldots$ do $35$, a~blok~\code{+} dodaje do tej liczby $100$. Nawiasem mówiąc, choć blok \code{zaokrąglij} znajduje się na palecie ,,Wyrażenia'', podobnie jak~\code{+}, to w~tym skrypcie ma on jaśniejszy kolor i~czarne litery. To dlatego, że \Snap{} używa na przemian ciemnych i~jasnych odcieni kolorów, kiedy zagnieżdżamy w~sobie bloki z~tej samej palety:
 
 \bigpic{kolorowanie-w-zebre}
 
 Takie \emph{kolorowanie w~zebrę} poprawia czytelność programu. Blok funkcji wraz z~parametrami, a~być może również innymi blokami funkcji, na przykład \inlinepic{zaokraglij-pozycja-x-plus-100}, nazywamy \emph{wyrażeniem}.
 
-\section{Predykaty i obliczenia warunkowe}
+\section{Predykaty i~obliczenia warunkowe}
 
 Większość funkcji zwraca albo liczbę, jak \inlinereporterpic{plus}, lub łańcuch tekstowy, jak \inlinereporterpic{polacz-witaj-swiecie}. \emph{Predykat} to specjalny rodzaj funkcji, która zawsze zwraca jedną z dwojga wartości \code{prawdę} lub \code{fałsz}. Predykaty mają kształt sześciokątów:
 
@@ -234,7 +234,20 @@ Czasami potrzeba wykonać tę samą czynność bez względu na to, czy jakiś wa
 
 \bigpic{predykaty-i-obliczenia-warunkowe-4}
 
-\section{Variables}
+\section{Zmienne}
+
+Wypróbujmy następujący skrypt:\footnote{Blok \code{for}\footnotemark{} również znajduje się w~bibliotece narzędzi; użyj polecenia ,,\code{Importuj narzędzia}'' z~menu ,,Plik'', jeśli nie widzisz ich na palecie ,,Kontrola''.}\footnotetext{Słowa \code{for i = 1 to 10} oznaczają ,,dla $i=1$ do $10$'' --- przyp. tłum.}
+
+\bigpic{skrypt-kwadratowej-spirali}
+
+Parametr bloku \code{przesuń} ma postać pomarańczowego owalu. Aby go tam umieścić, należy przeciągnąć taki sam owal będący częścią bloku \code{for}:
+
+\bigpic{przeciaganie-zmiennej}
+
+Ten owal to \emph{zmienna} --- symboliczna nazwa reprezentująca jakąś wartość. Powyższy rysunek przedstawia sytuację sprzed zmiany drugiego parametru liczbowego bloku \code{for} z~domyślnego $10$ na $200$ oraz przeciągnięcia do jego środka bloku \code{obróć}. Blok \code{for} wykonuje swój parametr skryptowy wielokrotnie, podobnie jak \code{powtarzaj}, lecz przed każdym razem zapisuje liczbę do zmiennej~\code{i}, zaczynając od swojego pierwszego parametru liczbowego, dodając~$1$ przy każdym powtórzeniu, aż dojdzie do liczby z~drugiego parametru liczbowego. W~tym przypadku będziemy mieć $200$ powtórzeń, najpierw dla $\code{i}=1$, potem dla $\code{i}=2$, następnie $3$ i~tak dalej, aż do $\code{i}=200$ w~ostatnim powtórzeniu. W~rezultacie każdy blok \code{przesuń} rysuje coraz to dłuższy segment łamanej, co nadaje jej wygląd zbliżony do spirali. (Możesz spróbować ze skrętem $90$~stopni zamiast $92$; zobaczysz wtedy, dlaczego nazywamy tego rodzaju obraz ,,kwadratową spiralą'').
+
+Zmienna \code{i} została utworzona przez blok \code{for} i może zostać użyta wyłącznie wewnątrz jego klamry. Nawiasem mówiąc, jeśli nie spodoba nam się nazwa \code{i}, możemy ją zmienić klikając pomarańczowy owal bez przeciągania go. Pokaże się wtedy okno dialogowe, do którego można wpisać inną nazwę:
+
 \subsection{Global Variables}
 \subsection{Script Variables}
 \section{Etcetera}

@@ -68,9 +68,9 @@ At the top of the script is a \emph{hat} block, which indicates when the script 
 
 The other blocks in this script are \emph{command} blocks. Each command block corresponds to an action that \Snap{} already knows how to carry out. For example, the block \inlinepic{move-10-steps} tells the sprite (the arrowhead shape on the \emph{stage} at the right end of the window) to move ten steps (a step is a very small unit of distance) in the direction in which the arrowhead is pointing. We'll see shortly that there can be more than one sprite, and that each sprite has its own scripts. Also, a sprite doesn't have to look like an arrowhead, but can have any picture as a costume. The shape of the \code{move} block is meant to remind you of a Lego\texttrademark{} brick; a script is a stack of blocks. (The word ``block'' denotes both the graphical shape on the screen and the procedure, the action, that the block carries out.)
 
-The number~10 in the \code{move} block above is called an \emph{input} to the block. By clicking on the white oval, you can type any number in place of the 10. The sample script on page~\pageref{fig:typical-script} uses 100 as the input value. We'll see later that inputs can have non-oval shapes that accept values other than numbers. We'll also see that you can compute input values, instead of typing a particular value into the oval. A block can have more than one input slot. For example, the \code{glide} block located about halfway down the Motion palette has three inputs.
+The number~$10$ in the \code{move} block above is called an \emph{input} to the block. By clicking on the white oval, you can type any number in place of the $10$. The sample script on page~\pageref{fig:typical-script} uses $100$ as the input value. We'll see later that inputs can have non-oval shapes that accept values other than numbers. We'll also see that you can compute input values, instead of typing a particular value into the oval. A block can have more than one input slot. For example, the \code{glide} block located about halfway down the Motion palette has three inputs.
 
-Most command blocks have that brick shape, but some, like the \code{repeat} block in the sample script, are \emph{C-shaped}. Most C-shaped blocks are found in the Control palette. The slot inside the C shape is a special kind of input slot that accepts a \emph{script} as the input. In the sample script, the \code{repeat} block has two inputs: the number 4 and the script
+Most command blocks have that brick shape, but some, like the \code{repeat} block in the sample script, are \emph{C-shaped}. Most C-shaped blocks are found in the Control palette. The slot inside the C shape is a special kind of input slot that accepts a \emph{script} as the input. In the sample script, the \code{repeat} block has two inputs: the number $4$ and the script
 
 \bigpic{typical-script-inner}
 
@@ -193,7 +193,7 @@ You can do arithmetic using reporters in the Operators palette:
 \includegraphics{../common/turtle-says-its-rounded-position}
 \end{figure}
 
-The \code{round} block rounds 35.3905\ldots\ to 35, and the \code{+}~block adds 100 to that. (By the way, the \code{round} block is in the Operators palette, just like~\code{+}, but in this script it's a lighter color with black lettering because \Snap{} alternates light and dark versions of the palette colors when a block is nested inside another block from the same palette:
+The \code{round} block rounds $35.3905\ldots$ to $35$, and the \code{+}~block adds $100$ to that. (By the way, the \code{round} block is in the Operators palette, just like~\code{+}, but in this script it's a lighter color with black lettering because \Snap{} alternates light and dark versions of the palette colors when a block is nested inside another block from the same palette:
 
 \bigpic{zebra-coloring}
 
@@ -226,6 +226,19 @@ Sometimes you want to take the same action whether some condition is true or fal
 \bigpic{predicates-and-conditional-evaluation-4}
 
 \section{Variables}
+
+Try this script:\footnote{The \code{for} block is also in the tools library; choose ``\code{Import tools}'' from the file menu if you don't have it in the Control palette.}
+
+\bigpic{squiral-script}
+
+The input to the \code{move} block is an orange oval. To get it there, drag the orange oval that's part of the \code{for} block:
+
+\bigpic{variable-dragging}
+
+The orange oval is a \emph{variable}: a symbol that represents a value. (I took this screenshot before changing the second number input to the \code{for} block from the default $10$ to $200$, and before dragging in a \code{turn} block.) \code{For} runs its script input repeatedly, just like \code{repeat}, but before each repetition it sets the variable \code{i} to a number starting with its first numeric input, adding $1$ for each repetition, until it reaches the second numeric input. In this case, there will be $200$ repetitions, first with $\code{i}=1$, then with $\code{i}=2$, then $3$, and so on until $\code{i}=200$ for the final repetition. The result is that each \code{move} draws a longer and longer line segment, and that's why the picture you see is a kind of spiral. (If you try again with a turn of $90$ degrees instead of $92$, you'll see why this picture is called a ``squiral.'')
+
+The variable \code{i} is created by the \code{for} block, and it can only be used in the script inside the block's C-slot. (By the way, if you don't like the name \code{i}, you can change it by clicking on the orange oval without dragging it, which will pop up a dialog window in which you can enter a different name:
+
 \subsection{Global Variables}
 \subsection{Script Variables}
 \section{Etcetera}
