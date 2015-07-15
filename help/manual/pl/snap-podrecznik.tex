@@ -246,9 +246,20 @@ Parametr bloku \code{przesuń} ma postać pomarańczowego owalu. Aby go tam umie
 
 Ten owal to \emph{zmienna} --- symboliczna nazwa reprezentująca jakąś wartość. Powyższy rysunek przedstawia sytuację sprzed zmiany drugiego parametru liczbowego bloku \code{for} z~domyślnego $10$ na $200$ oraz przeciągnięcia do jego środka bloku \code{obróć}. Blok \code{for} wykonuje swój parametr skryptowy wielokrotnie, podobnie jak \code{powtarzaj}, lecz przed każdym razem zapisuje liczbę do zmiennej~\code{i}, zaczynając od swojego pierwszego parametru liczbowego, dodając~$1$ przy każdym powtórzeniu, aż dojdzie do liczby z~drugiego parametru liczbowego. W~tym przypadku będziemy mieć $200$ powtórzeń, najpierw dla $\code{i}=1$, potem dla $\code{i}=2$, następnie $3$ i~tak dalej, aż do $\code{i}=200$ w~ostatnim powtórzeniu. W~rezultacie każdy blok \code{przesuń} rysuje coraz to dłuższy segment łamanej, co nadaje jej wygląd zbliżony do spirali. (Możesz spróbować ze skrętem $90$~stopni zamiast $92$; zobaczysz wtedy, dlaczego nazywamy tego rodzaju obraz ,,kwadratową spiralą'').
 
-Zmienna \code{i} została utworzona przez blok \code{for} i może zostać użyta wyłącznie wewnątrz jego klamry. Nawiasem mówiąc, jeśli nie spodoba nam się nazwa \code{i}, możemy ją zmienić klikając pomarańczowy owal bez przeciągania go. Pokaże się wtedy okno dialogowe, do którego można wpisać inną nazwę:
+Zmienna~\code{i}~została utworzona przez blok \code{for} i~może zostać użyta wyłącznie wewnątrz jego klamry. Nawiasem mówiąc, jeśli nie spodoba nam się nazwa~\code{i}, możemy ją zmienić klikając pomarańczowy owal bez przeciągania go. Pokaże się wtedy okno dialogowe, do którego można wpisać inną nazwę:
 
-\subsection{Global Variables}
+\bigpic{dialog-nazwy-zmiennej-skryptu}
+
+Nazwa~,,\code{i}'' nie mówi nam zbyt wiele; można by tu użyć słowa ,,długość'', aby podkreślić znaczenie zmiennej. Nazwa~,,\code{i}'' jest popularna, gdyż w~matematyce istnieje tradycja używania liter od~\code{i} do~\code{n} dla liczb całkowitych. W~językach programowania nie musimy się jednak ograniczać do jednoliterowych nazw zmiennych.
+
+\subsection{Zmienne globalne}
+
+Możemy ,,ręcznie'' tworzyć zmienne, których widoczność nie jest ograniczona do jednego bloku. Aby to zrobić, należy kliknąć przycisk ,,\code{Stwórz zmienną}'' w~górnej części palety ,,Dane''.
+
+\bigpic{stworz-zmienna}
+
+Otworzy się okno dialogowe, które pozwala na nazwanie zmiennej:
+
 \subsection{Script Variables}
 \section{Etcetera}
 \chapter{Saving and Loading Projects and Media}

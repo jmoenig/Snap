@@ -237,9 +237,22 @@ The input to the \code{move} block is an orange oval. To get it there, drag the 
 
 The orange oval is a \emph{variable}: a symbol that represents a value. (I took this screenshot before changing the second number input to the \code{for} block from the default $10$ to $200$, and before dragging in a \code{turn} block.) \code{For} runs its script input repeatedly, just like \code{repeat}, but before each repetition it sets the variable \code{i} to a number starting with its first numeric input, adding $1$ for each repetition, until it reaches the second numeric input. In this case, there will be $200$ repetitions, first with $\code{i}=1$, then with $\code{i}=2$, then $3$, and so on until $\code{i}=200$ for the final repetition. The result is that each \code{move} draws a longer and longer line segment, and that's why the picture you see is a kind of spiral. (If you try again with a turn of $90$ degrees instead of $92$, you'll see why this picture is called a ``squiral.'')
 
-The variable \code{i} is created by the \code{for} block, and it can only be used in the script inside the block's C-slot. (By the way, if you don't like the name \code{i}, you can change it by clicking on the orange oval without dragging it, which will pop up a dialog window in which you can enter a different name:
+The variable~\code{i} is created by the \code{for} block, and it can only be used in the script inside the block's C-slot. (By the way, if you don't like the name~\code{i}, you can change it by clicking on the orange oval without dragging it, which will pop up a dialog window in which you can enter a different name:
+
+\bigpic{script-variable-name-dialog}
+
+``\code{I}'' isn't a very descriptive name; you might prefer ``\code{length}'' to indicate its purpose in the script. ``\code{I}'' is traditional because mathematicians tend to use letters between~\code{i} and~\code{n} to represent integer values, but in programming languages we don't have to restrict ourselves to single-letter variable names.)
 
 \subsection{Global Variables}
+
+You can create variables ``by hand'' that aren't limited to being used within a single block. At the top of the Variables palette, click the ``\code{Make a variable}'' button:
+
+\bigpic{make-a-variable}
+
+This will bring up a dialog window in which you can give your variable a name:
+
+\bigpic{variable-name-dialog}
+
 \subsection{Script Variables}
 \section{Etcetera}
 \chapter{Saving and Loading Projects and Media}
