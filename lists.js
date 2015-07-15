@@ -158,9 +158,8 @@ List.prototype.add = function (element, index) {
     if no index is specifed, append the element
 */
     var idx = index || this.length() + 1,
-        obj = element === 0 ? 0
-                : element === false ? false
-                        : element || null;
+        obj = isNil(element) ? null : element;
+
     this.becomeArray();
     this.contents.splice(idx - 1, 0, obj);
     this.changed();
