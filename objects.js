@@ -290,6 +290,12 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'motion',
             spec: 'if on edge, bounce'
         },
+        doSetRotationStyle: {
+            only: SpriteMorph,
+            type: 'command',
+            category: 'motion',
+            spec: 'set rotation style to %rotateStyle'
+        },
         xPosition: {
             only: SpriteMorph,
             type: 'reporter',
@@ -1737,6 +1743,8 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('setYPosition'));
         blocks.push('-');
         blocks.push(block('bounceOffEdge'));
+        blocks.push('-');
+        blocks.push(block('doSetRotationStyle'));
         blocks.push('-');
         blocks.push(watcherToggle('xPosition'));
         blocks.push(block('xPosition'));
@@ -3477,6 +3485,11 @@ SpriteMorph.prototype.bounceOffEdge = function () {
         fb.amountToTranslateWithin(stage.bounds)
     ));
     this.positionTalkBubble();
+};
+
+// A block to control sprite rotation
+SpriteMorph.prototype.doSetRotationStyle = function (style) {
+    console.log(style);
 };
 
 // SpriteMorph message broadcasting

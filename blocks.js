@@ -848,6 +848,19 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             );
             part.setContents(90);
             break;
+        case '%rotateStyle':
+            part = new InputSlotMorph(
+                null, // text
+                false, // numeric?
+                {
+                    'left-right' : ['left-right'],
+                    'don\'t rotate' : ['don\'t rotate'],
+                    'all around' : ['all around']
+                },
+                true // read-only
+            );
+            part.setContents(['left-right']);
+            break;
         case '%inst':
             part = new InputSlotMorph(
                 null,
