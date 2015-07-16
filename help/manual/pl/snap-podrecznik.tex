@@ -258,10 +258,51 @@ Możemy ,,ręcznie'' tworzyć zmienne, których widoczność nie jest ograniczon
 
 \bigpic{stworz-zmienna}
 
-Otworzy się okno dialogowe, które pozwala na nazwanie zmiennej:
+Otworzy się okno dialogowe, które pozwala nadać nazwę nowej zmiennej:
 
-\subsection{Script Variables}
-\section{Etcetera}
+\bigpic{dialog-nazwy-zmiennej}
+
+Okno to pozwala również wybrać, czy zmienna ma być dostępna dla wszystkich duszków (co jest pożądane w~większości przypadków), czy ma być ona widoczna tylko dla aktualnego duszka. Postępujemy tak, jeśli mamy zamiar dać wielu duszkom własne zmienne o~\emph{tej samej nazwie}. Możemy potem kopiować skrypty między duszkami, przeciągając je z~obszaru skryptów aktualnego duszka na obrazek innego duszka w~zagrodzie duszków. Dzięki temu różne duszki będą wykonywać nieco inne rzeczy w~momencie wykonywania tego skryptu, ponieważ każdy z~nich będzie miał w~tej zmiennej zapisaną inną wartość.
+
+Jeśli nadamy zmiennej nazwę ,,imię'', paleta ,,Dane'' będzie wyglądać następująco:
+
+\bigpic{zmienna-na-palecie}
+
+Widzimy teraz przycisk ,,\code{usuń zmienną}'', a~także pomarańczowy owal z~nazwą zmiennej, taki sam jak owal na bloku \code{for}. Zmienną możemy przeciągnąć do dowolnego skryptu w~obszarze skryptów. Obok owalu widzimy pole wyboru; jest ono początkowo zaznaczone, dzięki czemu na scenie widoczny jest \emph{podgląd zmiennej}:
+
+\bigpic{podglad-zmiennej}
+
+Kiedy nadamy zmiennej jakąś wartość, pojawia ona się w~polu podglądu.
+
+Ale \emph{jak} nadać zmiennej wartość? Należy użyć do tego bloku \code{ustaw}:
+
+\bigpic{zapytaj-i-ustaw}
+
+Zauważ, że \emph{nie przeciągamy} owalu zmiennej do bloku \code{ustaw}! Aby wybrać z~listy dostępnych zmiennych, należy kliknąć strzałkę w~dół przy pierwszym polu parametru tegoż bloku.
+
+\subsection{Zmienne skryptu}
+
+W~poprzednim przykładzie przeprowadzaliśmy interakcję z~użytkownikiem i~chcieliśmy zapamiętać jego imię na potrzeby całego projektu. To dobry przykład sytuacji, w~której właściwe jest użycie zmiennej \emph{globalnej} (z~rodzaju tych, które tworzymy przyciskiem ,,\code{Stwórz zmienną}''). Innym typowym przykładem jest zmienna ,,\code{wynik}'' w~projekcie gry. Czasem jednak potrzebujemy zmiennej tylko tymczasowo podczas wykonywania któregoś ze skryptów. W~takim przypadku możemy użyć bloku \code{zmienne skryptu} aby ją utworzyć:
+
+\begin{figure}[H]
+\begin{minipage}{0.5\textwidth}
+\centering
+\includegraphics[scale=\defaultGraphicsScale]{skrypt-skrecajacej-linii}%
+\end{minipage}%
+\begin{minipage}{0.5\textwidth}
+\centering
+\includegraphics{../common/wiggling-line}
+\end{minipage}%
+\end{figure}
+
+Podobnie jak w przypadku bloku \code{for}, aby zmienić nazwę zmiennej, wystarczy kliknąć pomarańczowy owal w bloku \code{zmienne skryptu} bez przeciągania. Możemy również stworzyć więcej tymczasowych zmiennych klikając strzałkę w prawo na końcu bloku. Spowoduje to dodanie kolejnego owalu zmiennej:
+
+\bigpic{zmienne-skryptu-a-b-c}
+
+\section{I tak dalej}
+
+Niniejszy podręcznik nie opisuje szczegółowo każdego bloku. Jest wiele bloków związanych z ruchem, dźwiękiem, kostiumami, efektami graficznymi i tak dalej. Ich przeznaczenie można poznać eksperymentalnie, ale także poprzez lekturę ,,ekranów pomocy''\footnote{Niestety, są one dostępne wyłącznie w języku angielskim --- przyp. tłum.}, które można obejrzeć klikając interesujący nas blok albo prawym przyciskiem myszy, albo lewym z wciśniętym jednocześnie klawiczem Ctrl, a następnie wybierając z menu polecenie ,,\code{pomoc\ldots}''. Jeśli zapomnisz, w której palecie znajduje się potrzebny Ci blok, ale pamiętasz choćby część nazwy, wciśnij Ctrl-F i wpisz ją w polu tekstowym, które pojawi się w obszarze palet.
+
 \chapter{Saving and Loading Projects and Media}
 \section{Local Storage}
 \subsection{Localstore}

@@ -253,8 +253,47 @@ This will bring up a dialog window in which you can give your variable a name:
 
 \bigpic{variable-name-dialog}
 
+The dialog also gives you a choice to make the variable available to all sprites (which is almost always what you want) or to make it visible only in the current sprite. You'd do that if you're going to give several sprites individual variables \emph{with the same name}, so that you can share a script between sprites (by dragging it from the current sprite's scripting area to the picture of another sprite in the sprite corral), and the different sprites will do slightly different things when running that script because each has a different value for that variable name.
+
+If you give your variable the name ``\code{name}'' then the Variables palette will look like this:
+
+\bigpic{variable-on-a-palette}
+
+There's now a ``\code{Delete a variable}'' button, and there's an orange oval with the variable name in it, just like the orange oval in the \code{for} block. You can drag the variable into any script in the scripting area. Next to the oval is a checkbox, initially checked. When it's checked, you'll also see a \emph{variable watcher} on the stage:
+
+\bigpic{variable-watcher}
+
+When you give the variable a value, the orange box in its watcher will display the value.
+
+\emph{How} do you give it a value? You use the \code{set} block:
+
+\bigpic{ask-and-set}
+
+Note that you \emph{don't} drag the variable's oval into the \code{set} block! You click on the down arrow in the first input slot, and you get a menu of all the available variable names.
+
 \subsection{Script Variables}
+
+In that example, our project is going to carry on an interaction with the user, and we want to remember her name throughout the project. That's a good example of a situation in which a \emph{global} variable (the kind you make with the ``\code{Make a variable}'' button) is appropriate. Another common example is a variable called ``\code{score}'' in a game project. But sometimes you only need a variable temporarily, during the running of a particular script. In that case you can use the \code{script variables} block to make the variable:
+
+\begin{figure}[H]
+\begin{minipage}{0.5\textwidth}
+\centering
+\includegraphics[scale=\defaultGraphicsScale]{wiggling-line-script}%
+\end{minipage}%
+\begin{minipage}{0.5\textwidth}
+\centering
+\includegraphics{../common/wiggling-line}
+\end{minipage}%
+\end{figure}
+
+As in the \code{for} block, you can click on an orange oval in the \code{script variables} block without dragging to change its name. You can also make more than one temporary variable by clicking on the right arrow at the end of the block to add another variable oval:
+
+\bigpic{script-variables-a-b-c}
+
 \section{Etcetera}
+
+This manual doesn't explain every block in detail. There are many more motion blocks, sound blocks, costume and graphics effects blocks, and so on. You can learn what they all do by experimentation, and also by reading the ``help screens'' that you can get by right-clicking or control-clicking a block and selecting ``\code{help\ldots}'' from the menu that appears. If you forget what palette (color) a block is, but you remember at least part of its name, type control-F and enter the name in the text block that appears in the palette area.
+
 \chapter{Saving and Loading Projects and Media}
 \section{Local Storage}
 \subsection{Localstore}
