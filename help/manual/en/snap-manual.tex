@@ -8,7 +8,40 @@
 \author{Brian Harvey \and Jens M\"{o}nig}
 \date{}
 
-\maketitle
+\begin{titlepage}
+\begin{tikzpicture}[remember picture, overlay, text depth=0]
+\definecolor{title blue}{HTML}{206C8F}
+\definecolor{title orange}{HTML}{F59201}
+\pgfdeclareimage[width=0.2\textwidth]{logo}{../common/logo}
+\pgfdeclareimage{cover picture}{../common/cover-picture}
+\coordinate (NW) at ($(current page.north west) + (0.5, -0.5)$);
+\coordinate (NE) at ($(current page.north east) + (-0.5, -0.5)$);
+\coordinate (SW) at ($(current page.south west) + (0.5, 0.5)$);
+\coordinate (SE) at ($(current page.south east) + (-0.5, 0.5)$);
+\fill[title blue] ($(NE) - (7.5, 0)$) rectangle (SE);
+\node[below right, align=left] at ($(NW) + (1.5, -1.5)$) {
+	\pgfuseimage{logo}\\
+	\Large Build Your Own Blocks
+};
+\node[below right, color=white] at ($(NE) - (7, 5)$) {
+	\fontsize{40pt}{48pt}\selectfont 4.0\par
+};
+\draw[color=white, ultra thick, fill=title orange] ($(NW) - (0, 8)$)
+	rectangle ($(NE) - (2, 10)$);
+\node[left, color=white] at ($(NE) - (2.5, 9)$) {
+	\fontsize{40pt}{48pt}\selectfont
+	Snap! Reference Manual\par
+};
+\node[below left] at ($(NE) - (0, 12)$) {
+	\pgfuseimage{cover picture}
+};
+\node[above right, color=white, align=left] at ($(SE) + (-7, 2)$) {
+	\Large
+	Brian Harvey\\
+	Jens M\"onig
+};
+\end{tikzpicture}
+\end{titlepage}
 
 \tableofcontents
 
