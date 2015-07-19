@@ -9,7 +9,11 @@
 \date{}
 
 \begin{titlepage}
+
+\pgfdeclarelayer{background}
+\pgfsetlayers{background,main}
 \begin{tikzpicture}[remember picture, overlay, text depth=0]
+
 \definecolor{title blue}{HTML}{206C8F}
 \definecolor{title orange}{HTML}{F59201}
 \pgfdeclareimage[width=0.2\textwidth]{logo}{../common/logo}
@@ -18,28 +22,75 @@
 \coordinate (NE) at ($(current page.north east) + (-0.5, -0.5)$);
 \coordinate (SW) at ($(current page.south west) + (0.5, 0.5)$);
 \coordinate (SE) at ($(current page.south east) + (-0.5, 0.5)$);
-\fill[title blue] ($(NE) - (7.5, 0)$) rectangle (SE);
-\node[below right, align=left] at ($(NW) + (1.5, -1.5)$) {
+
+% Logo at the top left corner.
+\node[
+	below right,
+	align=left, 
+	font=\Large,
+	execute at begin node=\setlength\baselineskip{3ex}]
+	at ($(NW) + (1.5, -1.5)$) {
 	\pgfuseimage{logo}\\
-	\Large Build Your Own Blocks
+	Build Your Own Blocks
 };
-\node[below right, color=white] at ($(NE) - (7, 5)$) {
-	\fontsize{40pt}{48pt}\selectfont 4.0\par
+
+% Version number.
+\node[
+	below right,
+	color=white,
+	font=\fontsize{40pt}{48pt}\selectfont]
+	at ($(NE) - (7, 5)$) {
+	4.0
 };
-\draw[color=white, ultra thick, fill=title orange] ($(NW) - (0, 8)$)
-	rectangle ($(NE) - (2, 10)$);
-\node[left, color=white] at ($(NE) - (2.5, 9)$) {
-	\fontsize{40pt}{48pt}\selectfont
-	Snap! Reference Manual\par
+
+% Title. Note: the % at the end is necessary for correct spacing between the text and orange background.
+\node[
+	left,
+	text=white,
+	align=right,
+	inner sep=15pt,
+	font=\fontsize{40pt}{42pt}\selectfont]
+	(title text)
+	at ($(NE) - (1.5, 9)$) {
+	Snap! Reference Manual%
 };
-\node[below left] at ($(NE) - (0, 12)$) {
+
+% The cover picture.
+\node[below left, inner sep=0] (cover picture)
+	at ($(NE) - (0, 12)$) {
 	\pgfuseimage{cover picture}
 };
-\node[above right, color=white, align=left] at ($(SE) + (-7, 2)$) {
-	\Large
+\draw[white, ultra thick]
+	(cover picture.north west) -- (cover picture.north east);
+\draw[white, ultra thick]
+	(cover picture.south west) -- (cover picture.south east);
+
+% Authors.
+\node[above right, color=white, align=left, font=\Large] at ($(SE) + (-7, 2)$) {
 	Brian Harvey\\
 	Jens M\"onig
 };
+
+\begin{pgfonlayer}{background}
+	% Blue bar on the right.
+	\fill[title blue] ($(NE) - (7.5, 0)$) rectangle (SE);
+	
+	% Title background stretches to the left until it reaches the left edge, which means (NW.x, title text.west.y).
+	\coordinate (title background left point)
+		at (NW |- title text.west);
+	% Orange title background.
+	\node[
+		fit=(title text) (title background left point),
+		shape=rectangle,
+		fill=title orange,
+		text=white,
+		draw=white,
+		ultra thick,
+		align=right,
+		inner sep=0,
+		font=\fontsize{40pt}{42pt}\selectfont] {};
+\end{pgfonlayer}
+	
 \end{tikzpicture}
 \end{titlepage}
 
