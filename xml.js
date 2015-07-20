@@ -7,7 +7,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2014 by Jens Mönig
+    Copyright (C) 2015 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -57,15 +57,17 @@
     Nathan Dinsmore contributed to the design and implemented a first
     working version of a complete XMLSerializer. I have taken much of the
     overall design and many of the functions and methods in this file from
-    Nathan's fine original prototype.
+    Nathan's fine original prototype. Recently Nathan has once again
+    worked his magic on the parser and optimized it by an order of
+    magnitude.
 
 */
 
-/*global modules, isString, detect, Node, isNil*/
+/*global modules, detect, Node, isNil*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.xml = '2014-January-09';
+modules.xml = '2015-June-25';
 
 // Declarations
 
@@ -85,7 +87,8 @@ function ReadStream(arrayOrString) {
 
 // ReadStream constants:
 
-ReadStream.prototype.space = /[\s]/;
+ReadStream.prototype.nonSpace = /\S|$/g;
+ReadStream.prototype.nonWord = /[\s\>\/\=]|$/g;
 
 // ReadStream accessing:
 
@@ -115,46 +118,26 @@ ReadStream.prototype.atEnd = function () {
 
 // ReadStream accessing String contents:
 
-ReadStream.prototype.upTo = function (regex) {
-    var i, start;
-    if (!isString(this.contents)) {return ''; }
-    i = this.contents.substr(this.index).search(regex);
-    if (i === -1) {
-        return '';
-    }
-    start = this.index;
-    this.index += i;
-    return this.contents.substring(start, this.index);
+ReadStream.prototype.upTo = function (str) {
+    var i = this.contents.indexOf(str, this.index);
+    return i === -1 ? '' : this.contents.slice(this.index, this.index = i);
 };
 
-ReadStream.prototype.peekUpTo = function (regex) {
-    if (!isString(this.contents)) {return ''; }
-    var i = this.contents.substr(this.index).search(regex);
-    if (i === -1) {
-        return '';
-    }
-    return this.contents.substring(this.index, this.index + i);
+ReadStream.prototype.peekUpTo = function (str) {
+    var i = this.contents.indexOf(str, this.index);
+    return i === -1 ? '' : this.contents.slice(this.index, i);
 };
 
 ReadStream.prototype.skipSpace = function () {
-    if (!isString(this.contents)) {return ''; }
-    var ch = this.peek();
-    while (this.space.test(ch) && ch !== '') {
-        this.skip();
-        ch = this.peek();
-    }
+    this.nonSpace.lastIndex = this.index;
+    var result = this.nonSpace.exec(this.contents);
+    if (result) this.index = result.index;
 };
 
 ReadStream.prototype.word = function () {
-    var i, start;
-    if (!isString(this.contents)) {return ''; }
-    i = this.contents.substr(this.index).search(/[\s\>\/\=]|$/);
-    if (i === -1) {
-        return '';
-    }
-    start = this.index;
-    this.index += i;
-    return this.contents.substring(start, this.index);
+    this.nonWord.lastIndex = this.index;
+    var result = this.nonWord.exec(this.contents);
+    return result ? this.contents.slice(this.index, this.index = result.index) : '';
 };
 
 // XML_Element ///////////////////////////////////////////////////////////
@@ -166,7 +149,7 @@ ReadStream.prototype.word = function () {
 
 // XML_Element inherits from Node:
 
-XML_Element.prototype = new Node();
+XML_Element.prototype = Object.create(Node.prototype);
 XML_Element.prototype.constructor = XML_Element;
 XML_Element.uber = Node.prototype;
 
@@ -190,9 +173,7 @@ XML_Element.prototype.init = function (tag, contents, parent) {
     XML_Element.uber.init.call(this);
 
     // override inherited properties
-    if (parent instanceof XML_Element) {
-        parent.addChild(this);
-    }
+    if (parent) parent.addChild(this);
 };
 
 // XML_Element DOM navigation: (aside from what's inherited from Node)
@@ -318,51 +299,18 @@ XML_Element.prototype.escape = function (string, ignoreQuotes) {
 };
 
 XML_Element.prototype.unescape = function (string) {
-    var stream = new ReadStream(string),
-        result = '',
-        ch,
-        esc;
-
-    function nextPut(str) {
-        result += str;
-        stream.upTo(';');
-        stream.skip();
-    }
-
-    while (!stream.atEnd()) {
-        ch = stream.next();
-        if (ch === '&') {
-            esc = stream.peekUpTo(';');
-            switch (esc) {
-            case 'apos':
-                nextPut('\'');
-                break;
-            case 'quot':
-                nextPut('\"');
-                break;
-            case 'lt':
-                nextPut('<');
-                break;
-            case 'gt':
-                nextPut('>');
-                break;
-            case 'amp':
-                nextPut('&');
-                break;
-            case '#xD':
-                nextPut('\n');
-                break;
-            case '#126':
-                nextPut('~');
-                break;
-            default:
-                result += ch;
-            }
-        } else {
-            result += ch;
+    return string.replace(/&(amp|apos|quot|lt|gt|#xD|#126);/g, function(_, name) {
+        switch (name) {
+            case 'amp': return '&';
+            case 'apos': return '\'';
+            case 'quot': return '"';
+            case 'lt': return '<';
+            case 'gt': return '>';
+            case '#xD': return '\n';
+            case '#126': return '~';
+            default: console.warn('unreachable');
         }
-    }
-    return result;
+    });
 };
 
 // XML_Element parsing:
@@ -375,10 +323,7 @@ XML_Element.prototype.parseString = function (string) {
 };
 
 XML_Element.prototype.parseStream = function (stream) {
-    var key,
-        value,
-        ch,
-        child;
+    var key, value, ch, child;
 
     // tag:
     this.tag = stream.word();
@@ -395,9 +340,7 @@ XML_Element.prototype.parseStream = function (stream) {
         stream.skipSpace();
         ch = stream.next();
         if (ch !== '"' && ch !== "'") {
-            throw new Error(
-                'Expected single- or double-quoted attribute value'
-            );
+            throw new Error('Expected single- or double-quoted attribute value');
         }
         value = stream.upTo(ch);
         stream.skip(1);
@@ -407,7 +350,7 @@ XML_Element.prototype.parseStream = function (stream) {
     }
 
     // empty tag:
-    if (stream.peek() === '/') {
+    if (ch === '/') {
         stream.skip();
         if (stream.next() !== '>') {
             throw new Error('Expected ">" after "/" in empty tag');

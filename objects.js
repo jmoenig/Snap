@@ -105,7 +105,7 @@ InspectorMorph, ListMorph, Math, MenuItemMorph, MenuMorph, Morph,
 MorphicPreferences, MouseSensorMorph, Node, Object, PenMorph, Point,
 Rectangle, ScrollFrameMorph, ShadowMorph, SliderButtonMorph,
 SliderMorph, String, StringFieldMorph, StringMorph, TextMorph,
-TriggerMorph, WorldMorph, clone, contains, copy, degrees, detect,
+TriggerMorph, WorldMorph, contains, copy, degrees, detect,
 document, getDocumentPositionOf, isNaN, isObject, isString, newCanvas,
 nop, parseFloat, radians, standardSettings, touchScreenSettings,
 useBlurredShadows, version, window, modules, IDE_Morph, VariableDialogMorph,
@@ -125,7 +125,7 @@ PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.objects = '2015-May-18';
+modules.objects = '2015-June-25';
 
 var SpriteMorph;
 var StageMorph;
@@ -583,7 +583,7 @@ SpriteMorph.prototype.initBlocks = function () {
         },
 
     /* migrated to a newer block version:
-  
+
         receiveClick: {
             type: 'hat',
             category: 'control',
@@ -2718,7 +2718,7 @@ SpriteMorph.prototype.remove = function () {
 
 SpriteMorph.prototype.createClone = function () {
     var stage = this.parentThatIsA(StageMorph);
-    if (stage && stage.cloneCount <= 300) {
+    if (stage && stage.cloneCount <= 1000) {
         this.fullCopy().clonify(stage);
     }
 };
@@ -3008,7 +3008,7 @@ SpriteMorph.prototype.applyGraphicsEffects = function (canvas) {
         var i;
         if (value !== 0) {
             for (i = 0; i < p.length; i += 4) {
-                p[i] += value; //255 = 100% of this color 
+                p[i] += value; //255 = 100% of this color
                 p[i + 1] += value;
                 p[i + 2] += value;
             }
@@ -3290,7 +3290,7 @@ SpriteMorph.prototype.nestingBounds = function () {
 
 // SpriteMorph motion primitives
 
-Morph.prototype.setPosition = function (aPoint, justMe) {
+SpriteMorph.prototype.setPosition = function (aPoint, justMe) {
     // override the inherited default to make sure my parts follow
     // unless it's justMe
     var delta = aPoint.subtract(this.topLeft());
@@ -3509,7 +3509,10 @@ SpriteMorph.prototype.allHatBlocksFor = function (message) {
         if (morph.selector) {
             if (morph.selector === 'receiveMessage') {
                 event = morph.inputs()[0].evaluate();
-                return event === message || (event instanceof Array);
+                return event === message
+                    || (event instanceof Array
+                        && message !== '__shout__go__'
+                        && message !== '__clone__init__');
             }
             if (morph.selector === 'receiveGo') {
                 return message === '__shout__go__';
@@ -6429,7 +6432,7 @@ Note.prototype.play = function () {
     if (!this.oscillator.stop) {
         this.oscillator.stop = this.oscillator.noteOff;
     }
-    this.oscillator.type = 0;
+    this.oscillator.type = 'sine';
     this.oscillator.frequency.value =
         Math.pow(2, (this.pitch - 69) / 12) * 440;
     this.oscillator.connect(this.gainNode);

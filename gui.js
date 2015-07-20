@@ -69,7 +69,7 @@ SpeechBubbleMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2015-May-18';
+modules.gui = '2015-June-25';
 
 // Declarations
 
@@ -81,6 +81,11 @@ var TurtleIconMorph;
 var WardrobeMorph;
 var SoundIconMorph;
 var JukeboxMorph;
+
+// Get the full url without "snap.html"
+var baseUrl = document.URL.split('/');
+baseUrl.pop(baseUrl.length - 1);
+baseUrl = baseUrl.join('/') + '/';
 
 // IDE_Morph ///////////////////////////////////////////////////////////
 
@@ -304,7 +309,8 @@ IDE_Morph.prototype.openIn = function (world) {
             }
             throw new Error('unable to retrieve ' + url);
         } catch (err) {
-            return;
+            myself.showMessage('unable to retrieve project');
+            return '';
         }
     }
 
@@ -2491,13 +2497,10 @@ IDE_Morph.prototype.projectMenu = function () {
         function () {
             // read a list of libraries from an external file,
             var libMenu = new MenuMorph(this, 'Import library'),
-                libUrl = 'http://snap.berkeley.edu/snapsource/libraries/' +
-                    'LIBRARIES';
+                libUrl = baseUrl + 'libraries/' + 'LIBRARIES';
 
             function loadLib(name) {
-                var url = 'http://snap.berkeley.edu/snapsource/libraries/'
-                        + name
-                        + '.xml';
+                var url = baseUrl + 'libraries/' + name + '.xml';
                 myself.droppedText(myself.getURL(url), name);
             }
 
@@ -2614,7 +2617,7 @@ IDE_Morph.prototype.aboutSnap = function () {
         module, btn1, btn2, btn3, btn4, licenseBtn, translatorsBtn,
         world = this.world();
 
-    aboutTxt = 'Snap! 4.0\nBuild Your Own Blocks\n\n'
+    aboutTxt = 'Snap! 4.0.1\nBuild Your Own Blocks\n\n'
         + 'Copyright \u24B8 2015 Jens M\u00F6nig and '
         + 'Brian Harvey\n'
         + 'jens@moenig.org, bh@cs.berkeley.edu\n\n'
@@ -2648,7 +2651,7 @@ IDE_Morph.prototype.aboutSnap = function () {
 
     creditsTxt = localize('Contributors')
         + '\n\nNathan Dinsmore: Saving/Loading, Snap-Logo Design, '
-        + 'countless bugfixes'
+        + '\ncountless bugfixes and optimizations'
         + '\nKartik Chandra: Paint Editor'
         + '\nMichael Ball: Time/Date UI, many bugfixes'
         + '\n"Ava" Yuan Yuan: Graphic Effects'
@@ -4216,8 +4219,7 @@ IDE_Morph.prototype.getURLsbeOrRelative = function (url) {
     var request = new XMLHttpRequest(),
         myself = this;
     try {
-        request.open('GET', 'http://snap.berkeley.edu/snapsource/' +
-                                           url, false);
+        request.open('GET', baseUrl + url, false);
         request.send();
         if (request.status === 200) {
             return request.responseText;
@@ -4658,8 +4660,7 @@ ProjectDialogMorph.prototype.setSource = function (source) {
                 myself.nameField.setContents(item.name || '');
             }
             src = myself.ide.getURL(
-                'http://snap.berkeley.edu/snapsource/Examples/' +
-                    item.name + '.xml'
+                baseUrl + 'Examples/' + item.name + '.xml'
             );
 
             xml = myself.ide.serializer.parse(src);
@@ -4713,8 +4714,9 @@ ProjectDialogMorph.prototype.getLocalProjectList = function () {
 ProjectDialogMorph.prototype.getExamplesProjectList = function () {
     var dir,
         projects = [];
+        //alert(baseUrl);
 
-    dir = this.ide.getURL('http://snap.berkeley.edu/snapsource/Examples/');
+    dir = this.ide.getURL(baseUrl + 'Examples/');
     dir.split('\n').forEach(
         function (line) {
             var startIdx = line.search(new RegExp('href=".*xml"')),
@@ -4733,8 +4735,8 @@ ProjectDialogMorph.prototype.getExamplesProjectList = function () {
             }
         }
     );
-    projects.sort(function (x, y) {
-        return x.name < y.name ? -1 : 1;
+    projects = projects.sort(function (x, y) {
+        return x.name.toLowerCase() < y.name.toLowerCase() ? -1 : 1;
     });
     return projects;
 };
@@ -4833,10 +4835,7 @@ ProjectDialogMorph.prototype.openProject = function () {
     if (this.source === 'cloud') {
         this.openCloudProject(proj);
     } else if (this.source === 'examples') {
-        src = this.ide.getURL(
-            'http://snap.berkeley.edu/snapsource/Examples/' +
-                proj.name + '.xml'
-        );
+        src = this.ide.getURL(baseUrl + 'Examples/' + proj.name + '.xml');
         this.ide.openProjectString(src);
         this.destroy();
     } else { // 'local'
@@ -5006,6 +5005,7 @@ ProjectDialogMorph.prototype.deleteProject = function () {
 
 ProjectDialogMorph.prototype.shareProject = function () {
     var myself = this,
+        ide = this.ide,
         proj = this.listField.selected,
         entry = this.listField.active;
 
@@ -5036,6 +5036,15 @@ ProjectDialogMorph.prototype.shareProject = function () {
                             myself.ide.cloudError(),
                             [proj.ProjectName]
                         );
+                        // Set the Shared URL if the project is currently open
+                        if (proj.ProjectName === ide.projectName) {
+                            var usr = SnapCloud.username,
+                                projectId = 'Username=' +
+                                    encodeURIComponent(usr.toLowerCase()) +
+                                    '&ProjectName=' +
+                                    encodeURIComponent(proj.projectName);
+                            location.hash = projectId;
+                        }
                     },
                     myself.ide.cloudError()
                 );
@@ -5046,6 +5055,7 @@ ProjectDialogMorph.prototype.shareProject = function () {
 
 ProjectDialogMorph.prototype.unshareProject = function () {
     var myself = this,
+        ide = this.ide,
         proj = this.listField.selected,
         entry = this.listField.active;
 
@@ -5077,6 +5087,10 @@ ProjectDialogMorph.prototype.unshareProject = function () {
                             myself.ide.cloudError(),
                             [proj.ProjectName]
                         );
+                        // Remove the shared URL if the project is open.
+                        if (proj.ProjectName === ide.projectName) {
+                            location.hash = '';
+                        }
                     },
                     myself.ide.cloudError()
                 );
