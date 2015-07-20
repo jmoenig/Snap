@@ -50,7 +50,7 @@ W~tym rozdziale poznamy kilka cech języka \Snap{} odziedziczonych po Scratchu; 
 
 \Snap{} jest językiem programowania --- notacją, przy pomocy której możemy powiedzieć komputerowi, co ma zrobić. Jednak w~odróżnieniu od większości innych, \Snap{} jest językiem wizualnym; programując w~nim, zamiast posługiwać się klawiaturą, używamy metody ,,przeciągnij i~upuść'', dobrze znanej użytkownikom komputerów.
 
-Uruchom teraz środowisko \Snap{}. Powinieneś zobaczyć ekran podzielony na kilka obszarów:\footnote{\onehalfspacing Pierwsze uruchomienie \Snap{a} prawdopodobnie spowoduje wyświetlenie angielskiej wersji programu; aby przełączyć się na język polski, należy kliknąć menu ,,Ustawienia'' \inlinepic{../common/btn-settings} na pasku narzędzi, a~następnie użyć polecenia ,,Language\ldots'' (,,Język\ldots'') --- przyp. tłum.}
+Uruchom teraz środowisko \Snap{}. Powinieneś zobaczyć ekran podzielony na kilka obszarów:\footnote{\onehalfspacing Pierwsze uruchomienie \Snap{a} prawdopodobnie spowoduje wyświetlenie angielskiej wersji programu; aby przełączyć się na język polski, należy kliknąć menu ,,Ustawienia'' \inlinepic{../common/btn-settings} na pasku narzędzi, a~następnie użyć polecenia ,,Language\ldots'' (,,Język\ldots'') --- przyp. tłum.}\nopagebreak
 
 \begin{center}
 \def\svgwidth{\textwidth}
@@ -59,12 +59,12 @@ Uruchom teraz środowisko \Snap{}. Powinieneś zobaczyć ekran podzielony na kil
 
 (Proporcje tych stref mogą się różnić, w~zależności od rozmiaru i~kształtu okna przeglądarki).
 
-Program w~języku \Snap{} składa się z~jednego lub więcej \emph{skryptów}, te zaś z~kolei --- z~\emph{bloków}. Oto przykładowy skrypt:
+Program w~języku \Snap{} składa się z~jednego lub więcej \emph{skryptów}, te zaś z~kolei --- z~\emph{bloków}. Oto przykładowy skrypt:\nopagebreak
 
 \label{fig:typowy-skrypt}
 \bigpic{typowy-skrypt}
 
-Na powyższy skrypt składa się pięć bloków w~trzech różnych kolorach, odpowiadających trzem z~ośmiu \emph{palet} z~blokami. Obszar palet, znajdujący się po lewej stronie okna, pokazuje jedną paletę na raz. Do zmiany widocznej palety służy osiem przycisków znajdujących się tuż nad tym obszarem. Bloki ciemnożółte, widoczne w~naszym skrypcie, pochodzą z~palety ,,Kontrola''; zielone z~palety ,,Pisak'', a~niebieskie --- z~palety ,,Ruch''. Aby złożyć taki skrypt, należy poprzeciągać odpowiednie bloki z~palet do \emph{obszaru skryptów}, umiejscowionego na środku okna. Kiedy układamy jeden blok pod drugim w~taki sposób, aby wcięcie dolnego bloku znalazło się w~pobliżu wypustki tego powyżej, bloki łączą się ze sobą (ang. \textit{snap together}; stąd nazwa języka \Snap{}):
+Na powyższy skrypt składa się pięć bloków w~trzech różnych kolorach, odpowiadających trzem z~ośmiu \emph{palet} z~blokami. Obszar palet, znajdujący się po lewej stronie okna, pokazuje jedną paletę na raz. Do zmiany widocznej palety służy osiem przycisków znajdujących się tuż nad tym obszarem. Bloki ciemnożółte, widoczne w~naszym skrypcie, pochodzą z~palety ,,Kontrola''; zielone z~palety ,,Pisak'', a~niebieskie --- z~palety ,,Ruch''. Aby złożyć taki skrypt, należy poprzeciągać odpowiednie bloki z~palet do \emph{obszaru skryptów}, umiejscowionego na środku okna. Kiedy układamy jeden blok pod drugim w~taki sposób, aby wcięcie dolnego bloku znalazło się w~pobliżu wypustki tego powyżej, bloki łączą się ze sobą (ang. \textit{snap together}; stąd nazwa języka \Snap{}):\nopagebreak
 
 \bigpic{laczenie-blokow}
 
@@ -78,7 +78,7 @@ Pozostałe bloki w naszym skrypcie to \emph{bloki komend}. Każdy z~nich oznacza
 
 Liczbę $10$ w powyższym bloku \code{przesuń} nazywamy jego \emph{parametrem}. Kliknąwszy na białym, owalnym polu, możemy wpisać w~jej miejsce dowolną inną. W przykładowym skrypcie ze strony \pageref{fig:typowy-skrypt} parametrem jest liczba $100$. Jak się później okaże, pola parametrów mogą mieć kształty inne od owalnych; oznacza to wtedy, że akceptują one wartości inne niż liczby. Zobaczymy również, że zamiast wpisywać konkretne wartości w~pola, możemy nakazać komputerowi je obliczać. Ponadto blok może mieć więcej niż jeden parametr. Na przykład blok \code{leć}, znajdujący się mniej więcej w~połowie palety ,,Ruch'', przyjmuje trzy parametry.
 
-Większość bloków komend ma kształt klocków, lecz niektóre, jak \code{powtórz} z~tego samego przykładu, wyglądają jak \emph{klamry}. Większość bloków klamrowych można znaleźć na palecie ,,Kontrola'. Wnętrze klamry jest szczególnym rodzajem pola parametru, który przyjmuje \emph{skrypt} jako parametr. W~przykładowym skrypcie blok \code{powtórz} ma dwa parametry: liczbę $4$ oraz skrypt
+Większość bloków komend ma kształt klocków, lecz niektóre, jak \code{powtórz} z~tego samego przykładu, wyglądają jak \emph{klamry}. Większość bloków klamrowych można znaleźć na palecie ,,Kontrola'. Wnętrze klamry jest szczególnym rodzajem pola parametru, który przyjmuje \emph{skrypt} jako parametr. W~przykładowym skrypcie blok \code{powtórz} ma dwa parametry: liczbę $4$ oraz skrypt\nopagebreak
 
 \bigpic{typowy-skrypt-wnetrze}
 
@@ -86,7 +86,7 @@ Większość bloków komend ma kształt klocków, lecz niektóre, jak \code{powt
 
 Tuż pod sceną znajduje się przycisk ,,nowy duszek'' \inlinepic{../common/btn-new-sprite}. Kliknięcie go spowoduje dodanie nowego duszka do sceny. Pojawi się on w~losowym miejscu na scenie, skierowany w~losową stronę i~zabarwiony na losowy kolor.
 
-Każdy duszek ma swoje własne skrypty. Aby wyświetlić w~obszarze skryptów te należące do konkretnego duszka, należy kliknąć na jego obrazku w~\emph{zagrodzie duszków}, znajdującej się w~prawym dolnym rogu okna. Spróbuj umieścić następujące skrypty w~obszarze skryptów --- po jednym dla każdego duszka:
+Każdy duszek ma swoje własne skrypty. Aby wyświetlić w~obszarze skryptów te należące do konkretnego duszka, należy kliknąć na jego obrazku w~\emph{zagrodzie duszków}, znajdującej się w~prawym dolnym rogu okna. Spróbuj umieścić następujące skrypty w~obszarze skryptów --- po jednym dla każdego duszka:\nopagebreak
 
 \begin{figure}[H]
 \begin{minipage}{0.5\textwidth}
@@ -99,7 +99,7 @@ Każdy duszek ma swoje własne skrypty. Aby wyświetlić w~obszarze skryptów te
 \end{minipage}
 \end{figure}
 
-Kiedy klikniemy zieloną flagę \inlinepic{../common/btn-start}, powinniśmy zobaczyć jak jeden duszek się obraca, podczas gdy drugi porusza się w~tę i~z~powrotem. Ten eksperyment pokazuje, jak różne skrypty mogą być wykonywane jednocześnie (\emph{współbieżnie}). Obracanie się dookoła i~ruch po linii prostej zachodzą jednocześnie. Współbieżność zachodzi również w~przypadku wielu skryptów należących do tego samego duszka. Spróbujmy tego przykładu:
+Kiedy klikniemy zieloną flagę \inlinepic{../common/btn-start}, powinniśmy zobaczyć jak jeden duszek się obraca, podczas gdy drugi porusza się w~tę i~z~powrotem. Ten eksperyment pokazuje, jak różne skrypty mogą być wykonywane jednocześnie (\emph{współbieżnie}). Obracanie się dookoła i~ruch po linii prostej zachodzą jednocześnie. Współbieżność zachodzi również w~przypadku wielu skryptów należących do tego samego duszka. Spróbujmy tego przykładu:\nopagebreak
 
 \begin{figure}[H]
 \begin{minipage}{0.5\textwidth}
@@ -116,7 +116,7 @@ Po naciśnięciu spacji duszek powinien zacząć bez końca chodzić w kółko, 
 
 \subsection{Kostiumy i~dźwięki}
 
-Aby zmienić wygląd duszka, należy zaimportować dla niego nowy \emph{kostium}. Są na to trzy sposoby. Najpierw trzeba wybrać duszka z~zagrody. Następnie, w~pierwszej metodzie, klikamy na ikonie pliku \inlinepic{../common/btn-file} na pasku narzędzi, a~następnie wybieramy polecenie ,,\code{Kostiumy\ldots}''. Ukaże się lista kostiumów z~publicznej biblioteki multimediów, spośród których możemy dokonać wyboru. Drugą metodą jest wybór pliku ze swojego własnego kompuera. Należy w~tym celu kliknąć ikonę pliku, a~następnie polecenie ,,\code{Importuj\ldots}''. Można wtedy wybrać plik obrazu w~dowolnym formacie (PNG, JPEG itd.) obsługiwanym przez przeglądarkę. Trzeci sposób jest szybszy jeśli plik, którego chcemy użyć, jest widoczny na pulpicie: po prostu przeciągnij go do okna \Snap{a}. W~każdym z~tych przypadków obszar skryptów zacznie wyglądać mniej więcej tak:
+Aby zmienić wygląd duszka, należy zaimportować dla niego nowy \emph{kostium}. Są na to trzy sposoby. Najpierw trzeba wybrać duszka z~zagrody. Następnie, w~pierwszej metodzie, klikamy na ikonie pliku \inlinepic{../common/btn-file} na pasku narzędzi, a~następnie wybieramy polecenie ,,\code{Kostiumy\ldots}''. Ukaże się lista kostiumów z~publicznej biblioteki multimediów, spośród których możemy dokonać wyboru. Drugą metodą jest wybór pliku ze swojego własnego kompuera. Należy w~tym celu kliknąć ikonę pliku, a~następnie polecenie ,,\code{Importuj\ldots}''. Można wtedy wybrać plik obrazu w~dowolnym formacie (PNG, JPEG itd.) obsługiwanym przez przeglądarkę. Trzeci sposób jest szybszy jeśli plik, którego chcemy użyć, jest widoczny na pulpicie: po prostu przeciągnij go do okna \Snap{a}. W~każdym z~tych przypadków obszar skryptów zacznie wyglądać mniej więcej tak:\nopagebreak
 
 \bigpic{obszar-skryptow-z-dodatkowym-kostiumem}
 
@@ -126,7 +126,7 @@ Oprócz kostiumów, duszki mogą posiadać \emph{dźwięki}; dźwiękowy odpowie
 
 \subsection{Nadawanie i~odbieranie komunikatów}
 
-Widzieliśmy wcześniej przykład dwóch duszków poruszających się jednocześnie. Jednak w~bardziej interesującym programie duszki na scenie będą wchodzić w~interakcje, abyśmy mogli opowiedzieć przy ich pomocy jakąś historię, zagrać w~grę itd. Czasami jeden duszek będzie musiał nakazać innemu wykonanie jakiegoś skryptu. Oto prosty przykład:
+Widzieliśmy wcześniej przykład dwóch duszków poruszających się jednocześnie. Jednak w~bardziej interesującym programie duszki na scenie będą wchodzić w~interakcje, abyśmy mogli opowiedzieć przy ich pomocy jakąś historię, zagrać w~grę itd. Czasami jeden duszek będzie musiał nakazać innemu wykonanie jakiegoś skryptu. Oto prosty przykład:\nopagebreak
 
 \begin{figure}[H]
 \begin{minipage}{0.5\textwidth}
@@ -161,7 +161,7 @@ Scena ma swój własny obszar skryptów. Możemy wyświetlić jej szczegóły kl
 
 Czasem dobrze jest stworzyć swego rodzaju ,,nadduszka'', złożonego z~kawałków, które poruszają się razem, ale mogą być osobno względem siebie ustawiane. Klasycznym przykładem może być ciało człowieka złożone z~tułowia, kończyn i~głowy. \Snap{} pozwala nam uczynić jednego z~duszków \emph{kotwicą} złożonego obiektu, a~resztę --- jego \emph{częściami}. Aby zagnieździć w~ten sposób duszki, należy przeciągnąć z~zagrody ikonę duszka, który ma zostać \emph{częścią} złożonego obiektu na znajdującego się na scenie (nie w~zagrodzie!) duszka, który zostanie \emph{kotwicą}.
 
-Zagnieżdżone duszki --- zarówno kotwice jak i części --- mają w zagrodzie specjalne oznaczenia:
+Zagnieżdżone duszki --- zarówno kotwice jak i części --- mają w zagrodzie specjalne oznaczenia:\nopagebreak
 
 \bigpic{zagniezdzone-duszki-w-zagrodzie}
 
@@ -176,11 +176,11 @@ W~tym przypadku chcielibyśmy animować rękę Alonza. (Ręka została pokolorow
 
 \section{Bloki funkcji i~wyrażenia}
 
-Jak dotąd używaliśmy dwóch rodzajów bloków: ,,czapek'' i~komend. Kolejnym rodzajem jest blok \emph{funkcji}, który ma owalny kształt: \inlinereporterpic{pozycja-x}. Nazywamy go ,,blokiem funkcji'', ponieważ --- podobnie jak funkcja w~matematyce --- kiedy zostaje wykonany, zamiast przeprowadzać jakąś czynność, zwraca wartość, która może zostać użyta jako parametr w~innym bloku. Jeśli przeciągniemy sam blok funkcji do obszaru skryptów i~klikniemy go, obok pokaże się dymek z~wartością zwróconą przez tę funkcję:
+Jak dotąd używaliśmy dwóch rodzajów bloków: ,,czapek'' i~komend. Kolejnym rodzajem jest blok \emph{funkcji}, który ma owalny kształt: \inlinereporterpic{pozycja-x}. Nazywamy go ,,blokiem funkcji'', ponieważ --- podobnie jak funkcja w~matematyce --- kiedy zostaje wykonany, zamiast przeprowadzać jakąś czynność, zwraca wartość, która może zostać użyta jako parametr w~innym bloku. Jeśli przeciągniemy sam blok funkcji do obszaru skryptów i~klikniemy go, obok pokaże się dymek z~wartością zwróconą przez tę funkcję:\nopagebreak
 
 \bigpic{pozycja-x-zwraca-liczbe}
 
-Kiedy przeciągamy blok funkcji nad polem parametru należącym do innego bloku, wokół tego pola pojawia się biała otoczka, analogicznie do sytuacji, w~której łączymy bloki komend i~pojawia się biała linia. Oto przykładowy skrypt wykorzystujący funkcję:
+Kiedy przeciągamy blok funkcji nad polem parametru należącym do innego bloku, wokół tego pola pojawia się biała otoczka, analogicznie do sytuacji, w~której łączymy bloki komend i~pojawia się biała linia. Oto przykładowy skrypt wykorzystujący funkcję:\nopagebreak
 
 \begin{figure}[H]
 \centering
@@ -191,7 +191,7 @@ Kiedy przeciągamy blok funkcji nad polem parametru należącym do innego bloku,
 
 Funkcja \code{pozycja X} nadaje tu wartość pierwszemu parametrowi bloku \code{powiedz}. Pozycja X~duszka to inaczej jego współrzędna pozioma. Określa ona, jak daleko w~lewo (jeśli jest liczbą ujemną) lub w~prawo (jeśli dodatnią) znajduje się duszek w~stosunku do środka sceny. Analogicznie, pozycja Y~to współrzędna pionowa, mierzona ilością kroków w~górę (wartości dodatnie) lub w~dół od środka (wartości ujemne).
 
-Przy pomocy funkcji z palety ,,Wyrażenia'' możemy wykonywać obliczenia:
+Przy pomocy funkcji z palety ,,Wyrażenia'' możemy wykonywać obliczenia:\nopagebreak
 
 \begin{figure}[H]
 \centering
@@ -200,7 +200,7 @@ Przy pomocy funkcji z palety ,,Wyrażenia'' możemy wykonywać obliczenia:
 \includegraphics{../common/turtle-says-its-rounded-position}
 \end{figure}
 
-Blok \code{zaokrąglij} zaokrągla $35.3905\ldots$ do $35$, a~blok~\code{+} dodaje do tej liczby $100$. Nawiasem mówiąc, choć blok \code{zaokrąglij} znajduje się na palecie ,,Wyrażenia'', podobnie jak~\code{+}, to w~tym skrypcie ma on jaśniejszy kolor i~czarne litery. To dlatego, że \Snap{} używa na przemian ciemnych i~jasnych odcieni kolorów, kiedy zagnieżdżamy w~sobie bloki z~tej samej palety:
+Blok \code{zaokrąglij} zaokrągla $35.3905\ldots$ do $35$, a~blok~\code{+} dodaje do tej liczby $100$. Nawiasem mówiąc, choć blok \code{zaokrąglij} znajduje się na palecie ,,Wyrażenia'', podobnie jak~\code{+}, to w~tym skrypcie ma on jaśniejszy kolor i~czarne litery. To dlatego, że \Snap{} używa na przemian ciemnych i~jasnych odcieni kolorów, kiedy zagnieżdżamy w~sobie bloki z~tej samej palety:\nopagebreak
 
 \bigpic{kolorowanie-w-zebre}
 
@@ -208,45 +208,45 @@ Takie \emph{kolorowanie w~zebrę} poprawia czytelność programu. Blok funkcji w
 
 \section{Predykaty i~obliczenia warunkowe}
 
-Większość funkcji zwraca albo liczbę, jak \inlinereporterpic{plus}, lub łańcuch tekstowy, jak \inlinereporterpic{polacz-witaj-swiecie}. \emph{Predykat} to specjalny rodzaj funkcji, która zawsze zwraca jedną z dwojga wartości \code{prawdę} lub \code{fałsz}. Predykaty mają kształt sześciokątów:
+Większość funkcji zwraca albo liczbę, jak \inlinereporterpic{plus}, lub łańcuch tekstowy, jak \inlinereporterpic{polacz-witaj-swiecie}. \emph{Predykat} to specjalny rodzaj funkcji, która zawsze zwraca jedną z dwojga wartości \code{prawdę} lub \code{fałsz}. Predykaty mają kształt sześciokątów:\nopagebreak
 
 \bigpic{przycisk-myszy-nacisniety}
 
 \begin{sloppypar}
-Specjalny kształt jest oznaką, że predykaty nie mają z~reguły sensu w~tych polach parametrów, które oczekują liczby lub tekstu. Raczej nie napisalibyśmy \inlinepic{przesun-o-przycisk-myszy-nacisniety-krokow}, choć gdybyśmy się uparli, \Snap{} by nam na to pozwolił, co widać na załączonym obrazku. W~typowych sytuacjach predykaty umieszczamy w~specjalnych sześciokątnych polach parametrów takich jak to:
+Specjalny kształt jest oznaką, że predykaty nie mają z~reguły sensu w~tych polach parametrów, które oczekują liczby lub tekstu. Raczej nie napisalibyśmy \inlinepic{przesun-o-przycisk-myszy-nacisniety-krokow}, choć gdybyśmy się uparli, \Snap{} by nam na to pozwolił, co widać na załączonym obrazku. W~typowych sytuacjach predykaty umieszczamy w~specjalnych sześciokątnych polach parametrów takich jak to:\nopagebreak
 \end{sloppypar}
 
 \bigpic{jezeli-to}
 
-Klamra \code{jeżeli --- to} wykonuje obejmowany przez nią fragment skryptu wtedy i~tylko wtedy, gdy wyrażenie w~jej sześciokątnym polu parametru jest prawdziwe, czyli zwraca wartość \code{prawda}.
+Klamra \code{jeżeli --- to} wykonuje obejmowany przez nią fragment skryptu wtedy i~tylko wtedy, gdy wyrażenie w~jej sześciokątnym polu parametru jest prawdziwe, czyli zwraca wartość \code{prawda}.\nopagebreak
 
 \bigpic{predykaty-i-obliczenia-warunkowe-1}
 
-Poniższy blok jest bardzo użyteczny w~animacjach. Wykonuje on skrypt będący jego parametrem \emph{wielokrotnie}, dopóki predykat nie zostanie spełniony:
+Poniższy blok jest bardzo użyteczny w~animacjach. Wykonuje on skrypt będący jego parametrem \emph{wielokrotnie}, dopóki predykat nie zostanie spełniony:\nopagebreak
 
 \bigpic{predykaty-i-obliczenia-warunkowe-2}
 
-Jeśli pracując nad projektem, będziemy chcieli tymczasowo pominąć niektóre komendy w~skrypcie, lecz nie będziemy chcieli zapomnieć, gdzie było ich miejsce, możemy użyć następującej sztuczki:
+Jeśli pracując nad projektem, będziemy chcieli tymczasowo pominąć niektóre komendy w~skrypcie, lecz nie będziemy chcieli zapomnieć, gdzie było ich miejsce, możemy użyć następującej sztuczki:\nopagebreak
 
 \bigpic{predykaty-i-obliczenia-warunkowe-3}
 
-Czasami potrzeba wykonać tę samą czynność bez względu na to, czy jakiś warunek zachodzi czy nie, za to z~różnymi parametrami dla obu tych przypadków. Można do tego użyć bloku \emph{funkcji} \code{if}:\footnote{\onehalfspacing Jeśli nie widzisz go w~palecie ,,Kontrola'', kliknij przycisk ,,Plik'' \inlinepic{../common/btn-file} na pasku narzędzi i~wybierz polecenie ,,Importuj narzędzia''.}\footnote{Niestety, podobnie jak pozostałe dodatkowe narzędzia i~biblioteki bloków, blok \code{if --- then --- else} posiada wyłącznie angielską nazwę, bez względu na nasze ustawienia języka. Oznacza ona ,,jeżeli --- to --- w~przeciwnym razie'' --- przyp. tłum.}
+Czasami potrzeba wykonać tę samą czynność bez względu na to, czy jakiś warunek zachodzi czy nie, za to z~różnymi parametrami dla obu tych przypadków. Można do tego użyć bloku \emph{funkcji} \code{if}:\footnote{\onehalfspacing Jeśli nie widzisz go w~palecie ,,Kontrola'', kliknij przycisk ,,Plik'' \inlinepic{../common/btn-file} na pasku narzędzi i~wybierz polecenie ,,Importuj narzędzia''.}\footnote{Niestety, podobnie jak pozostałe dodatkowe narzędzia i~biblioteki bloków, blok \code{if --- then --- else} posiada wyłącznie angielską nazwę, bez względu na nasze ustawienia języka. Oznacza ona ,,jeżeli --- to --- w~przeciwnym razie'' --- przyp. tłum.}\nopagebreak
 
 \bigpic{predykaty-i-obliczenia-warunkowe-4}
 
 \section{Zmienne}
 
-Wypróbujmy następujący skrypt:\footnote{Blok \code{for}\footnotemark{} również znajduje się w~bibliotece narzędzi; użyj polecenia ,,\code{Importuj narzędzia}'' z~menu ,,Plik'', jeśli nie widzisz ich na palecie ,,Kontrola''.}\footnotetext{Słowa \code{for i = 1 to 10} oznaczają ,,dla $i=1$ do $10$'' --- przyp. tłum.}
+Wypróbujmy następujący skrypt:\footnote{Blok \code{for}\footnotemark{} również znajduje się w~bibliotece narzędzi; użyj polecenia ,,\code{Importuj narzędzia}'' z~menu ,,Plik'', jeśli nie widzisz ich na palecie ,,Kontrola''.}\footnotetext{Słowa \code{for i = 1 to 10} oznaczają ,,dla $i=1$ do $10$'' --- przyp. tłum.}\nopagebreak
 
 \bigpic{skrypt-kwadratowej-spirali}
 
-Parametr bloku \code{przesuń} ma postać pomarańczowego owalu. Aby go tam umieścić, należy przeciągnąć taki sam owal będący częścią bloku \code{for}:
+Parametr bloku \code{przesuń} ma postać pomarańczowego owalu. Aby go tam umieścić, należy przeciągnąć taki sam owal będący częścią bloku \code{for}:\nopagebreak
 
 \bigpic{przeciaganie-zmiennej}
 
 Ten owal to \emph{zmienna} --- symboliczna nazwa reprezentująca jakąś wartość. Powyższy rysunek przedstawia sytuację sprzed zmiany drugiego parametru liczbowego bloku \code{for} z~domyślnego $10$ na $200$ oraz przeciągnięcia do jego środka bloku \code{obróć}. Blok \code{for} wykonuje swój parametr skryptowy wielokrotnie, podobnie jak \code{powtarzaj}, lecz przed każdym razem zapisuje liczbę do zmiennej~\code{i}, zaczynając od swojego pierwszego parametru liczbowego, dodając~$1$ przy każdym powtórzeniu, aż dojdzie do liczby z~drugiego parametru liczbowego. W~tym przypadku będziemy mieć $200$ powtórzeń, najpierw dla $\code{i}=1$, potem dla $\code{i}=2$, następnie $3$ i~tak dalej, aż do $\code{i}=200$ w~ostatnim powtórzeniu. W~rezultacie każdy blok \code{przesuń} rysuje coraz to dłuższy segment łamanej, co nadaje jej wygląd zbliżony do spirali. (Możesz spróbować ze skrętem $90$~stopni zamiast $92$; zobaczysz wtedy, dlaczego nazywamy tego rodzaju obraz ,,kwadratową spiralą'').
 
-Zmienna~\code{i}~została utworzona przez blok \code{for} i~może zostać użyta wyłącznie wewnątrz jego klamry. Nawiasem mówiąc, jeśli nie spodoba nam się nazwa~\code{i}, możemy ją zmienić klikając pomarańczowy owal bez przeciągania go. Pokaże się wtedy okno dialogowe, do którego można wpisać inną nazwę:
+Zmienna~\code{i}~została utworzona przez blok \code{for} i~może zostać użyta wyłącznie wewnątrz jego klamry. Nawiasem mówiąc, jeśli nie spodoba nam się nazwa~\code{i}, możemy ją zmienić klikając pomarańczowy owal bez przeciągania go. Pokaże się wtedy okno dialogowe, do którego można wpisać inną nazwę:\nopagebreak
 
 \bigpic{dialog-nazwy-zmiennej-skryptu}
 
@@ -254,27 +254,27 @@ Nazwa~,,\code{i}'' nie mówi nam zbyt wiele; można by tu użyć słowa ,,długo
 
 \subsection{Zmienne globalne}
 
-Możemy ,,ręcznie'' tworzyć zmienne, których widoczność nie jest ograniczona do jednego bloku. Aby to zrobić, należy kliknąć przycisk ,,\code{Stwórz zmienną}'' w~górnej części palety ,,Dane''.
+Możemy ,,ręcznie'' tworzyć zmienne, których widoczność nie jest ograniczona do jednego bloku. Aby to zrobić, należy kliknąć przycisk ,,\code{Stwórz zmienną}'' w~górnej części palety ,,Dane'':\nopagebreak
 
 \bigpic{stworz-zmienna}
 
-Otworzy się okno dialogowe, które pozwala nadać nazwę nowej zmiennej:
+Otworzy się okno dialogowe, które pozwala nadać nazwę nowej zmiennej:\nopagebreak
 
 \bigpic{dialog-nazwy-zmiennej}
 
 Okno to pozwala również wybrać, czy zmienna ma być dostępna dla wszystkich duszków (co jest pożądane w~większości przypadków), czy ma być ona widoczna tylko dla aktualnego duszka. Postępujemy tak, jeśli mamy zamiar dać wielu duszkom własne zmienne o~\emph{tej samej nazwie}. Możemy potem kopiować skrypty między duszkami, przeciągając je z~obszaru skryptów aktualnego duszka na obrazek innego duszka w~zagrodzie duszków. Dzięki temu różne duszki będą wykonywać nieco inne rzeczy w~momencie wykonywania tego skryptu, ponieważ każdy z~nich będzie miał w~tej zmiennej zapisaną inną wartość.
 
-Jeśli nadamy zmiennej nazwę ,,imię'', paleta ,,Dane'' będzie wyglądać następująco:
+Jeśli nadamy zmiennej nazwę ,,imię'', paleta ,,Dane'' będzie wyglądać następująco:\nopagebreak
 
 \bigpic{zmienna-na-palecie}
 
-Widzimy teraz przycisk ,,\code{usuń zmienną}'', a~także pomarańczowy owal z~nazwą zmiennej, taki sam jak owal na bloku \code{for}. Zmienną możemy przeciągnąć do dowolnego skryptu w~obszarze skryptów. Obok owalu widzimy pole wyboru; jest ono początkowo zaznaczone, dzięki czemu na scenie widoczny jest \emph{podgląd zmiennej}:
+Widzimy teraz przycisk ,,\code{usuń zmienną}'', a~także pomarańczowy owal z~nazwą zmiennej, taki sam jak owal na bloku \code{for}. Zmienną możemy przeciągnąć do dowolnego skryptu w~obszarze skryptów. Obok owalu widzimy pole wyboru; jest ono początkowo zaznaczone, dzięki czemu na scenie widoczny jest \emph{podgląd zmiennej}:\nopagebreak
 
 \bigpic{podglad-zmiennej}
 
 Kiedy nadamy zmiennej jakąś wartość, pojawia ona się w~polu podglądu.
 
-Ale \emph{jak} nadać zmiennej wartość? Należy użyć do tego bloku \code{ustaw}:
+Ale \emph{jak} nadać zmiennej wartość? Należy użyć do tego bloku \code{ustaw}:\nopagebreak
 
 \bigpic{zapytaj-i-ustaw}
 
@@ -282,7 +282,7 @@ Zauważ, że \emph{nie przeciągamy} owalu zmiennej do bloku \code{ustaw}! Aby w
 
 \subsection{Zmienne skryptu}
 
-W~poprzednim przykładzie przeprowadzaliśmy interakcję z~użytkownikiem i~chcieliśmy zapamiętać jego imię na potrzeby całego projektu. To dobry przykład sytuacji, w~której właściwe jest użycie zmiennej \emph{globalnej} (z~rodzaju tych, które tworzymy przyciskiem ,,\code{Stwórz zmienną}''). Innym typowym przykładem jest zmienna ,,\code{wynik}'' w~projekcie gry. Czasem jednak potrzebujemy zmiennej tylko tymczasowo podczas wykonywania któregoś ze skryptów. W~takim przypadku możemy użyć bloku \code{zmienne skryptu} aby ją utworzyć:
+W~poprzednim przykładzie przeprowadzaliśmy interakcję z~użytkownikiem i~chcieliśmy zapamiętać jego imię na potrzeby całego projektu. To dobry przykład sytuacji, w~której właściwe jest użycie zmiennej \emph{globalnej} (z~rodzaju tych, które tworzymy przyciskiem ,,\code{Stwórz zmienną}''). Innym typowym przykładem jest zmienna ,,\code{wynik}'' w~projekcie gry. Czasem jednak potrzebujemy zmiennej tylko tymczasowo podczas wykonywania któregoś ze skryptów. W~takim przypadku możemy użyć bloku \code{zmienne skryptu} aby ją utworzyć:\nopagebreak
 
 \begin{figure}[H]
 \begin{minipage}{0.5\textwidth}
@@ -295,7 +295,7 @@ W~poprzednim przykładzie przeprowadzaliśmy interakcję z~użytkownikiem i~chci
 \end{minipage}%
 \end{figure}
 
-Podobnie jak w przypadku bloku \code{for}, aby zmienić nazwę zmiennej, wystarczy kliknąć pomarańczowy owal w bloku \code{zmienne skryptu} bez przeciągania. Możemy również stworzyć więcej tymczasowych zmiennych klikając strzałkę w prawo na końcu bloku. Spowoduje to dodanie kolejnego owalu zmiennej:
+Podobnie jak w przypadku bloku \code{for}, aby zmienić nazwę zmiennej, wystarczy kliknąć pomarańczowy owal w bloku \code{zmienne skryptu} bez przeciągania. Możemy również stworzyć więcej tymczasowych zmiennych klikając strzałkę w prawo na końcu bloku. Spowoduje to dodanie kolejnego owalu zmiennej:\nopagebreak
 
 \bigpic{zmienne-skryptu-a-b-c}
 

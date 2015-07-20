@@ -43,7 +43,7 @@ This chapter describes the \Snap{} features inherited from Scratch; experienced 
 
 \Snap{} is a programming language---a notation in which you can tell a computer what you want it to do. Unlike most programming languages, though, \Snap{} is a visual language; instead of writing a program using the keyboard, the \Snap{} programmer uses the same drag-and-drop interface familiar to computer users.
 
-Start \Snap{}. You should see the following arrangement of regions in the window:
+Start \Snap{}. You should see the following arrangement of regions in the window:\nopagebreak
 
 \begin{center}
 \includegraphics[width=\textwidth]{window-regions}
@@ -51,12 +51,12 @@ Start \Snap{}. You should see the following arrangement of regions in the window
 
 (The proportions of these areas may be different, depending on the size and shape of your browser window.)
 
-A \Snap{} program consists of one or more \emph{scripts}, each of which is made of \emph{blocks}. Here's a typical script:
+A \Snap{} program consists of one or more \emph{scripts}, each of which is made of \emph{blocks}. Here's a typical script:\nopagebreak
 
 \label{fig:typical-script}
 \bigpic{typical-script}
 
-The five blocks that make up this script have three different colors, corresponding to three of the eight \emph{palettes} in which blocks can be found. The palette area at the left edge of the window shows one palette at a time, chosen with the eight buttons just above the palette area. In this script, the gold blocks are from the Control palette; the green block is from the Pen palette; and the blue blocks are from the Motion palette. A script is assembled by dragging blocks from a palette into the \emph{scripting area} in the middle part of the window. Blocks snap together (hence the name \Snap{} for the language) when you drag a block so that its indentation is near the tab of the one above it:
+The five blocks that make up this script have three different colors, corresponding to three of the eight \emph{palettes} in which blocks can be found. The palette area at the left edge of the window shows one palette at a time, chosen with the eight buttons just above the palette area. In this script, the gold blocks are from the Control palette; the green block is from the Pen palette; and the blue blocks are from the Motion palette. A script is assembled by dragging blocks from a palette into the \emph{scripting area} in the middle part of the window. Blocks snap together (hence the name \Snap{} for the language) when you drag a block so that its indentation is near the tab of the one above it:\nopagebreak
 
 \bigpic{snapping-blocks}
 
@@ -70,7 +70,7 @@ The other blocks in this script are \emph{command} blocks. Each command block co
 
 The number~$10$ in the \code{move} block above is called an \emph{input} to the block. By clicking on the white oval, you can type any number in place of the $10$. The sample script on page~\pageref{fig:typical-script} uses $100$ as the input value. We'll see later that inputs can have non-oval shapes that accept values other than numbers. We'll also see that you can compute input values, instead of typing a particular value into the oval. A block can have more than one input slot. For example, the \code{glide} block located about halfway down the Motion palette has three inputs.
 
-Most command blocks have that brick shape, but some, like the \code{repeat} block in the sample script, are \emph{C-shaped}. Most C-shaped blocks are found in the Control palette. The slot inside the C shape is a special kind of input slot that accepts a \emph{script} as the input. In the sample script, the \code{repeat} block has two inputs: the number $4$ and the script
+Most command blocks have that brick shape, but some, like the \code{repeat} block in the sample script, are \emph{C-shaped}. Most C-shaped blocks are found in the Control palette. The slot inside the C shape is a special kind of input slot that accepts a \emph{script} as the input. In the sample script, the \code{repeat} block has two inputs: the number $4$ and the script\nopagebreak
 
 \bigpic{typical-script-inner}
 
@@ -78,7 +78,7 @@ Most command blocks have that brick shape, but some, like the \code{repeat} bloc
 
 Just below the stage is the ``new sprite'' button \inlinepic{../common/btn-new-sprite}. Click the button to add a new sprite to the stage. The new sprite will appear in a random position on the stage, facing in a random direction, with a random color.
 
-Each sprite has its own scripts. To see the scripts for a particular sprite in the scripting area, click on the picture of that sprite in the \emph{sprite corral} in the bottom right corner of the window. Try putting one of the following scripts in each sprite's scripting area:
+Each sprite has its own scripts. To see the scripts for a particular sprite in the scripting area, click on the picture of that sprite in the \emph{sprite corral} in the bottom right corner of the window. Try putting one of the following scripts in each sprite's scripting area:\nopagebreak
 
 \begin{figure}[H]
 \begin{minipage}{0.5\textwidth}
@@ -91,7 +91,7 @@ Each sprite has its own scripts. To see the scripts for a particular sprite in t
 \end{minipage}
 \end{figure}
 
-When you click the green flag \inlinepic{../common/btn-start}, you should see one sprite rotate while the other moves back and forth. This experiment illustrates the way different scripts can run in parallel. The turning and the moving happen together. Parallelism can be seen with multiple scripts of a single sprite also. Try this example:
+When you click the green flag \inlinepic{../common/btn-start}, you should see one sprite rotate while the other moves back and forth. This experiment illustrates the way different scripts can run in parallel. The turning and the moving happen together. Parallelism can be seen with multiple scripts of a single sprite also. Try this example:\nopagebreak
 
 \begin{figure}[H]
 \begin{minipage}{0.5\textwidth}
@@ -108,7 +108,7 @@ When you press the space key, the sprite should turn forever in a circle, becaus
 
 \subsection{Costumes and Sounds}
 
-To change the appearance of a sprite, import a new \emph{costume} for it. There are three ways to do this. First, select the desired sprite in the sprite corral. Then, one way is to click on the file icon \inlinepic{../common/btn-file} in the tool bar, then choose the ``\code{Costumes\ldots}'' menu item. You will see a list of costumes from the public media library, and can choose one. The second way, for a costume stored on your own computer, is too click on the file icon and choose the ``\code{Import\ldots}'' menu item. You can then select a file in any picture format (PNG, JPEG, etc.) supported by your browser. The third way is quicker if the file you want is visible on the desktop: Just drag the file onto the \Snap{} window. In any of these cases, the scripting area will be replaced by something like this:
+To change the appearance of a sprite, import a new \emph{costume} for it. There are three ways to do this. First, select the desired sprite in the sprite corral. Then, one way is to click on the file icon \inlinepic{../common/btn-file} in the tool bar, then choose the ``\code{Costumes\ldots}'' menu item. You will see a list of costumes from the public media library, and can choose one. The second way, for a costume stored on your own computer, is too click on the file icon and choose the ``\code{Import\ldots}'' menu item. You can then select a file in any picture format (PNG, JPEG, etc.) supported by your browser. The third way is quicker if the file you want is visible on the desktop: Just drag the file onto the \Snap{} window. In any of these cases, the scripting area will be replaced by something like this:\nopagebreak
 
 \bigpic{scripting-area-with-additional-costume}
 
@@ -118,7 +118,7 @@ In addition to its costumes, a sprite can have \emph{sounds}; the equivalent for
 
 \subsection{Inter-Sprite Communication with Broadcast}
 
-Earlier we saw an example of two sprites moving at the same time. In a more interesting program, though, the sprites on stage will interact to tell a story, play a game, etc. Often one sprite will have to tell another sprite to run a script. Here's a simple example:
+Earlier we saw an example of two sprites moving at the same time. In a more interesting program, though, the sprites on stage will interact to tell a story, play a game, etc. Often one sprite will have to tell another sprite to run a script. Here's a simple example:\nopagebreak
 
 \begin{figure}[H]
 \begin{minipage}{0.5\textwidth}
@@ -154,7 +154,7 @@ The stage has its own scripting area. It can be selected by clicking on the Stag
 
 Sometimes it's desirable to make a sort of ``super-sprite'' composed of pieces that can move together but can also be separately articulated. The classic example is a person's body made up of a torso, limbs, and a head. \Snap{} allows one sprite to be designated as the \emph{anchor} of the combined shape, with other sprites as its \emph{parts}. To set up sprite nesting, drag the sprite corral icon of a \emph{part} sprite onto the stage display (not the sprite corral icon!) of the desired \emph{anchor} sprite.
 
-Sprite nesting is shown in the sprite corral icons of both anchors and parts:
+Sprite nesting is shown in the sprite corral icons of both anchors and parts:\nopagebreak
 
 \bigpic{nested-sprites-in-corral}
 
@@ -169,11 +169,11 @@ In this illustration, it is desired to animate Alonzo's arm. (The arm has been c
 
 \section{Reporter Blocks and Expressions}
 
-So far, we've used two kinds of blocks: hat blocks and command blocks. Another kind is the \emph{reporter} block, which has an oval shape: \inlinereporterpic{x-position}. It's called a ``reporter'' because when it's run, instead of carrying out an action, it reports a value that can be used as an input to another block. If you drag a reporter into the scripting area by itself and click on it, the value it reports will appear in a speech balloon next to the block:
+So far, we've used two kinds of blocks: hat blocks and command blocks. Another kind is the \emph{reporter} block, which has an oval shape: \inlinereporterpic{x-position}. It's called a ``reporter'' because when it's run, instead of carrying out an action, it reports a value that can be used as an input to another block. If you drag a reporter into the scripting area by itself and click on it, the value it reports will appear in a speech balloon next to the block:\nopagebreak
 
 \bigpic{x-position-returns-a-number}
 
-When you drag a reporter block over another block's input slot, a white ``halo'' appears around that input slot, analogous to the white line that appears when snapping command blocks together. Here's a simple script that uses a reporter block:
+When you drag a reporter block over another block's input slot, a white ``halo'' appears around that input slot, analogous to the white line that appears when snapping command blocks together. Here's a simple script that uses a reporter block:\nopagebreak
 
 \begin{figure}[H]
 \centering
@@ -184,7 +184,7 @@ When you drag a reporter block over another block's input slot, a white ``halo''
 
 Here the \code{x position} reporter provides the first input to the \code{say} block. (The sprite's X position is its horizontal position, how far left (negative values) or right (positive values) it is compared to the center of the stage. Similarly, the Y position is measured vertically, in steps above (positive) or below (negative) the center.)
 
-You can do arithmetic using reporters in the Operators palette: 
+You can do arithmetic using reporters in the Operators palette:\nopagebreak
 
 \begin{figure}[H]
 \centering
@@ -193,7 +193,7 @@ You can do arithmetic using reporters in the Operators palette:
 \includegraphics{../common/turtle-says-its-rounded-position}
 \end{figure}
 
-The \code{round} block rounds $35.3905\ldots$ to $35$, and the \code{+}~block adds $100$ to that. (By the way, the \code{round} block is in the Operators palette, just like~\code{+}, but in this script it's a lighter color with black lettering because \Snap{} alternates light and dark versions of the palette colors when a block is nested inside another block from the same palette:
+The \code{round} block rounds $35.3905\ldots$ to $35$, and the \code{+}~block adds $100$ to that. (By the way, the \code{round} block is in the Operators palette, just like~\code{+}, but in this script it's a lighter color with black lettering because \Snap{} alternates light and dark versions of the palette colors when a block is nested inside another block from the same palette:\nopagebreak
 
 \bigpic{zebra-coloring}
 
@@ -201,43 +201,43 @@ This aid to readability is called \emph{zebra coloring}.) A reporter block with 
 
 \section{Predicates and Conditional Evaluation}
 
-Most reporters report either a number, like \inlinereporterpic{plus}, or a text string, like \inlinereporterpic{join-hello-world}. A \emph{predicate} is a special kind of reporter that always reports \code{true} or \code{false}. Predicates have a hexagonal shape:
+Most reporters report either a number, like \inlinereporterpic{plus}, or a text string, like \inlinereporterpic{join-hello-world}. A \emph{predicate} is a special kind of reporter that always reports \code{true} or \code{false}. Predicates have a hexagonal shape:\nopagebreak
 
 \bigpic{mouse-down}
 
-The special shape is a reminder that predicates don't generally make sense in an input slot of blocks that are expecting a number or text. You wouldn't say \inlinepic{move-mouse-down-steps}, although (as you can see from the picture) \Snap{} lets you do it if you really want. Instead, you normally use predicates in special hexagonal input slots like this one:
+The special shape is a reminder that predicates don't generally make sense in an input slot of blocks that are expecting a number or text. You wouldn't say \inlinepic{move-mouse-down-steps}, although (as you can see from the picture) \Snap{} lets you do it if you really want. Instead, you normally use predicates in special hexagonal input slots like this one:\nopagebreak
 
 \bigpic{if}
 
-The C-shaped \code{if} block runs its input script if (and only if) the expression in its hexagonal input reports \code{true}.
+The C-shaped \code{if} block runs its input script if (and only if) the expression in its hexagonal input reports \code{true}.\nopagebreak
 
 \bigpic{predicates-and-conditional-evaluation-1}
 
-A really useful block in animations runs its input script \emph{repeatedly} until a predicate is satisfied:
+A really useful block in animations runs its input script \emph{repeatedly} until a predicate is satisfied:\nopagebreak
 
 \bigpic{predicates-and-conditional-evaluation-2}
 
-If, while working on a project, you want to omit temporarily some commands in a script, but you don't want to forget where they belong, you can say
+If, while working on a project, you want to omit temporarily some commands in a script, but you don't want to forget where they belong, you can say\nopagebreak
 
 \bigpic{predicates-and-conditional-evaluation-3}
 
-Sometimes you want to take the same action whether some condition is true or false, but with a different input value. For this purpose you can use the \emph{reporter} \code{if} block:\footnote{\onehalfspacing If you don't see it in the Control palette, click on the File button \inlinepic{../common/btn-file} in the Tool Bar and choose ``Import tools.''}
+Sometimes you want to take the same action whether some condition is true or false, but with a different input value. For this purpose you can use the \emph{reporter} \code{if} block:\footnote{\onehalfspacing If you don't see it in the Control palette, click on the File button \inlinepic{../common/btn-file} in the Tool Bar and choose ``Import tools.''}\nopagebreak
 
 \bigpic{predicates-and-conditional-evaluation-4}
 
 \section{Variables}
 
-Try this script:\footnote{The \code{for} block is also in the tools library; choose ``\code{Import tools}'' from the file menu if you don't have it in the Control palette.}
+Try this script:\footnote{The \code{for} block is also in the tools library; choose ``\code{Import tools}'' from the file menu if you don't have it in the Control palette.}\nopagebreak
 
 \bigpic{squiral-script}
 
-The input to the \code{move} block is an orange oval. To get it there, drag the orange oval that's part of the \code{for} block:
+The input to the \code{move} block is an orange oval. To get it there, drag the orange oval that's part of the \code{for} block:\nopagebreak
 
 \bigpic{variable-dragging}
 
 The orange oval is a \emph{variable}: a symbol that represents a value. (I took this screenshot before changing the second number input to the \code{for} block from the default $10$ to $200$, and before dragging in a \code{turn} block.) \code{For} runs its script input repeatedly, just like \code{repeat}, but before each repetition it sets the variable \code{i} to a number starting with its first numeric input, adding $1$ for each repetition, until it reaches the second numeric input. In this case, there will be $200$ repetitions, first with $\code{i}=1$, then with $\code{i}=2$, then $3$, and so on until $\code{i}=200$ for the final repetition. The result is that each \code{move} draws a longer and longer line segment, and that's why the picture you see is a kind of spiral. (If you try again with a turn of $90$ degrees instead of $92$, you'll see why this picture is called a ``squiral.'')
 
-The variable~\code{i} is created by the \code{for} block, and it can only be used in the script inside the block's C-slot. (By the way, if you don't like the name~\code{i}, you can change it by clicking on the orange oval without dragging it, which will pop up a dialog window in which you can enter a different name:
+The variable~\code{i} is created by the \code{for} block, and it can only be used in the script inside the block's C-slot. (By the way, if you don't like the name~\code{i}, you can change it by clicking on the orange oval without dragging it, which will pop up a dialog window in which you can enter a different name:\nopagebreak
 
 \bigpic{script-variable-name-dialog}
 
@@ -245,27 +245,27 @@ The variable~\code{i} is created by the \code{for} block, and it can only be use
 
 \subsection{Global Variables}
 
-You can create variables ``by hand'' that aren't limited to being used within a single block. At the top of the Variables palette, click the ``\code{Make a variable}'' button:
+You can create variables ``by hand'' that aren't limited to being used within a single block. At the top of the Variables palette, click the ``\code{Make a variable}'' button:\nopagebreak
 
 \bigpic{make-a-variable}
 
-This will bring up a dialog window in which you can give your variable a name:
+This will bring up a dialog window in which you can give your variable a name:\nopagebreak
 
 \bigpic{variable-name-dialog}
 
 The dialog also gives you a choice to make the variable available to all sprites (which is almost always what you want) or to make it visible only in the current sprite. You'd do that if you're going to give several sprites individual variables \emph{with the same name}, so that you can share a script between sprites (by dragging it from the current sprite's scripting area to the picture of another sprite in the sprite corral), and the different sprites will do slightly different things when running that script because each has a different value for that variable name.
 
-If you give your variable the name ``\code{name}'' then the Variables palette will look like this:
+If you give your variable the name ``\code{name}'' then the Variables palette will look like this:\nopagebreak
 
 \bigpic{variable-on-a-palette}
 
-There's now a ``\code{Delete a variable}'' button, and there's an orange oval with the variable name in it, just like the orange oval in the \code{for} block. You can drag the variable into any script in the scripting area. Next to the oval is a checkbox, initially checked. When it's checked, you'll also see a \emph{variable watcher} on the stage:
+There's now a ``\code{Delete a variable}'' button, and there's an orange oval with the variable name in it, just like the orange oval in the \code{for} block. You can drag the variable into any script in the scripting area. Next to the oval is a checkbox, initially checked. When it's checked, you'll also see a \emph{variable watcher} on the stage:\nopagebreak
 
 \bigpic{variable-watcher}
 
 When you give the variable a value, the orange box in its watcher will display the value.
 
-\emph{How} do you give it a value? You use the \code{set} block:
+\emph{How} do you give it a value? You use the \code{set} block:\nopagebreak
 
 \bigpic{ask-and-set}
 
@@ -273,7 +273,7 @@ Note that you \emph{don't} drag the variable's oval into the \code{set} block! Y
 
 \subsection{Script Variables}
 
-In that example, our project is going to carry on an interaction with the user, and we want to remember her name throughout the project. That's a good example of a situation in which a \emph{global} variable (the kind you make with the ``\code{Make a variable}'' button) is appropriate. Another common example is a variable called ``\code{score}'' in a game project. But sometimes you only need a variable temporarily, during the running of a particular script. In that case you can use the \code{script variables} block to make the variable:
+In that example, our project is going to carry on an interaction with the user, and we want to remember her name throughout the project. That's a good example of a situation in which a \emph{global} variable (the kind you make with the ``\code{Make a variable}'' button) is appropriate. Another common example is a variable called ``\code{score}'' in a game project. But sometimes you only need a variable temporarily, during the running of a particular script. In that case you can use the \code{script variables} block to make the variable:\nopagebreak
 
 \begin{figure}[H]
 \begin{minipage}{0.5\textwidth}
@@ -286,7 +286,7 @@ In that example, our project is going to carry on an interaction with the user, 
 \end{minipage}%
 \end{figure}
 
-As in the \code{for} block, you can click on an orange oval in the \code{script variables} block without dragging to change its name. You can also make more than one temporary variable by clicking on the right arrow at the end of the block to add another variable oval:
+As in the \code{for} block, you can click on an orange oval in the \code{script variables} block without dragging to change its name. You can also make more than one temporary variable by clicking on the right arrow at the end of the block to add another variable oval:\nopagebreak
 
 \bigpic{script-variables-a-b-c}
 
