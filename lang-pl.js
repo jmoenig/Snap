@@ -331,7 +331,7 @@ SnapTranslator.dict.pl = {
     'switch to costume %cst':
         'zmie\u0144 kostium na %cst',
     'next costume':
-        'następny kostium',
+        'nast\u0118pny kostium',
     'costume #':
         'kostium nr ',
     'say %s for %n secs':
