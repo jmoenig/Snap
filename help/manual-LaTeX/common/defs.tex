@@ -175,3 +175,12 @@
 	\end{tikzpicture}
 	\end{titlepage}
 } }
+
+\newcommand{\TODO}[1]{%
+	\colorbox{yellow}{\textcolor{red}{\textbf{%
+		TODO%
+		\ifstrempty{#1}{}{%
+			: #1
+		}%
+	}}}%
+}

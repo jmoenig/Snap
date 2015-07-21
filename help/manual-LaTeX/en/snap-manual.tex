@@ -299,8 +299,21 @@ This manual doesn't explain every block in detail. There are many more motion bl
 After you've created a project, you'll want to save it, so that you can have access to it the next time you use \Snap{}. There are several ways to do that. You can save a project on your own computer, or you can save it at the \Snap{} web site. The advantage of saving on the net is that you have access to your project even if you are using a different computer, or a mobile device such as a tablet or smartphone. The advantage of saving on your computer is that you have access to the saved project while on an airplane or otherwise not on the net. This is why we have multiple ways to save.
 
 \section{Local Storage}
+
+There are two different ways to save a project (or a media file such as a costume) on your computer. The reason for this complexity is that JavaScript, in which \Snap{} is implemented, deliberately restricts the ability of programs running in a browser to affect the computer. This is a good thing, because it means that you can confidently run someone else's \Snap{} project without worrying that it will delete all your files or infect your computer with a virus. But it does make things a little complicated.
+
 \subsection{Localstore}
+
+{\Huge \TODO{}}
+
 \subsection{XML Export}
+
+The second way to save a project on your computer requires two steps, but it doesn't have the limitations of localstore (\TODO{rename}). Projects saved in this second way are normal files on your computer and can be shared with friends, can be opened in any browser, and have no size limitation.
+
+From the file menu \inlinepic{../common/btn-file}, choose ``Export project\ldots'' The entire \Snap{} window will disappear, replaced by a screenful of what looks like gibberish. Don't panic! This is what's supposed to happen. You are looking at your project, in a notation called XML. The main reason it looks like gibberish is that it includes an encoding of the pictures and other media in the project. If you look through the XML, the actual scripts of the project are pretty readable, although they don't look like \Snap{} blocks. \Snap{} has opened a new browser tab for this XML text; the actual \Snap{} window is still there, hiding in its original tab.
+
+But the point of this XML text isn't for you to read. Once you're looking at that tab, use your browser's Save command (in its File menu, or usually with a shortcut of command-S (Mac) or control-S (everything else). You can choose a filename for it, and it'll be saved in your usual Downloads folder. You can then close that tab and return to the \Snap{} tab.
+
 \section{Cloud Storage}
 \section{Loading Saved Projects}
 \chapter{Building a Block}
