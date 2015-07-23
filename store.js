@@ -810,7 +810,11 @@ SnapSerializer.prototype.loadCustomBlocks = function (
                     child.attributes.type,
                     child.contents,
                     options ? options.contents : undefined,
-                    child.attributes.readonly === 'true'
+                    // SF: MOD: read name of option list variable (if any)
+                    // child.attributes.readonly === 'true'
+                    child.attributes.readonly === 'true',
+                    child.attributes.listvarname
+
                 ];
             });
         }
@@ -1744,13 +1748,22 @@ CustomBlockDefinition.prototype.toXML = function (serializer) {
         this.codeMapping || '',
         Object.keys(this.declarations).reduce(function (xml, decl) {
                 return xml + serializer.format(
-                    '<input type="@"$>$%</input>',
+                    // SF: MOD: output the name of option list variable
+                    // SF: MOD too (if any)
+                    // '<input type="@"$>$%</input>',
+                    '<input type="@"$$>$%</input>',
+
                     myself.declarations[decl][0],
                     myself.declarations[decl][3] ?
                             ' readonly="true"' : '',
+                    // SF: MOD: output name of option list var (if any)
+                    myself.declarations[decl][4] ?
+                                ' listvarname="' +
+                                myself.declarations[decl][4] + '"' : '',
+
                     myself.declarations[decl][1],
                     myself.declarations[decl][2] ?
-                            '<options>' + myself.declarations[decl][2] +
+                                '<options>' + myself.declarations[decl][2] +
                                 '</options>'
                                 : ''
                 );
