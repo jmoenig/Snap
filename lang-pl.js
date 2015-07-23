@@ -673,6 +673,8 @@ SnapTranslator.dict.pl = {
         'Logowanie...',
     'Signup...':
         'Rejestracja...',
+    'Reset Password...':
+        'Zresetuj hasło...',
 
     // settings menu
     'Language...':
@@ -1269,5 +1271,13 @@ SnapTranslator.dict.pl = {
     'please fill out\nthis field':
         'Proszę wypełnić\nto pole',
     'please agree to\nthe TOS':
-        'Proszę zaakceptować\nRegulamin'
+        'Proszę zaakceptować\nRegulamin',
+    'Sign in':
+        'Zaloguj się',
+    'Password:':
+        'Hasło:',
+    'stay signed in on this computer\nuntil logging out':
+        'Zapamiętaj mnie na tym komputerze\naż do wylogowania',
+    'Reset password':
+        'Zresetuj hasło'
 };
