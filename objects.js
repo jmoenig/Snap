@@ -3487,11 +3487,6 @@ SpriteMorph.prototype.bounceOffEdge = function () {
     this.positionTalkBubble();
 };
 
-// A block to control sprite rotation
-SpriteMorph.prototype.doSetRotationStyle = function (style) {
-    console.log(style);
-};
-
 // SpriteMorph message broadcasting
 
 SpriteMorph.prototype.allMessageNames = function () {

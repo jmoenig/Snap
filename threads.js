@@ -2367,6 +2367,39 @@ Process.prototype.doGotoObject = function (name) {
     }
 };
 
+// Set Rotation Style
+Process.prototype.doSetRotationStyle = function (style) {
+    var style = this.inputOption(style),
+        thisObj = this.blockReceiver(),
+        ide;
+    if (!thisObj) {return; }
+    
+    switch (style) {
+    case 'don\'t rotate':
+        thisObj.rotationStyle = 0;
+        break;
+    case 'all around':
+        thisObj.rotationStyle = 1;
+        break;
+    case 'left-right':
+        thisObj.rotationStyle = 2;
+        break;
+    default:
+        return;
+    }
+    // Redraw Sprite
+    thisObj.changed();
+    thisObj.drawNew();
+    thisObj.changed();
+    
+    // Update the Sprite Control bar.
+    ide = thisObj.parentThatIsA(IDE_Morph);
+    ide.rotationStyleButtons.forEach(function (button) {
+        button.refresh();
+    });
+};
+
+
 // Process temporary cloning (Scratch-style)
 
 Process.prototype.createClone = function (name) {
