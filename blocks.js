@@ -3217,6 +3217,22 @@ BlockMorph.prototype.focus = function () {
     }
 };
 
+BlockMorph.prototype.activeProcess = function () {
+    var top = this.topBlock(),
+        receiver = top.receiver(),
+        stage;
+    if (top instanceof PrototypeHatBlockMorph) {
+        return null;
+    }
+    if (receiver) {
+        stage = receiver.parentThatIsA(StageMorph);
+        if (stage) {
+            return stage.threads.findProcess(top);
+        }
+    }
+    return null;
+};
+
 // BlockMorph thumbnail
 
 BlockMorph.prototype.thumbnail = function (scale, clipWidth) {
