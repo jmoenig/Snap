@@ -2415,6 +2415,20 @@ IDE_Morph.prototype.settingsMenu = function () {
         'check for block\nto text mapping features',
         false
     );
+    addPreference(
+        'Inheritance support',
+        function () {
+            StageMorph.prototype.enableInheritance =
+                !StageMorph.prototype.enableInheritance;
+            myself.currentSprite.blocksCache.variables = null;
+            myself.currentSprite.paletteCache.variables = null;
+            myself.refreshPalette();
+        },
+        StageMorph.prototype.enableInheritance,
+        'uncheck to disable\nsprite inheritance features',
+        'check for sprite\ninheritance features',
+        false
+    );
     menu.popup(world, pos);
 };
 
@@ -5506,6 +5520,10 @@ SpriteIconMorph.prototype.removeSprite = function () {
 
 SpriteIconMorph.prototype.exportSprite = function () {
     this.object.exportSprite();
+};
+
+SpriteIconMorph.prototype.chooseExemplar = function () {
+    this.object.chooseExemplar();
 };
 
 SpriteIconMorph.prototype.showSpriteOnStage = function () {

@@ -74,7 +74,7 @@ HTMLCanvasElement, fontHeight, SymbolMorph, localize, SpeechBubbleMorph,
 ArrowMorph, MenuMorph, isString, isNil, SliderMorph, MorphicPreferences,
 ScrollFrameMorph*/
 
-modules.widgets = '2015-June-25';
+modules.widgets = '2015-July-27';
 
 var PushButtonMorph;
 var ToggleButtonMorph;
@@ -560,12 +560,13 @@ ToggleButtonMorph.prototype.init = function (
 // ToggleButtonMorph events
 
 ToggleButtonMorph.prototype.mouseEnter = function () {
+    var contents = this.hint instanceof Function ? this.hint() : this.hint;
     if (!this.state) {
         this.image = this.highlightImage;
         this.changed();
     }
-    if (this.hint) {
-        this.bubbleHelp(this.hint);
+    if (contents) {
+        this.bubbleHelp(contents);
     }
 };
 

@@ -1238,6 +1238,15 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             );
             part.isStatic = true;
             break;
+        case '%shd':
+            part = new InputSlotMorph(
+                null,
+                false,
+                'shadowedVariablesMenu',
+                true
+            );
+            part.isStatic = true;
+            break;
         case '%lst':
             part = new InputSlotMorph(
                 null,
@@ -1873,7 +1882,6 @@ SyntaxElementMorph.prototype.endLayout = function () {
     this.topBlock().fullChanged();
 };
 
-
 // BlockMorph //////////////////////////////////////////////////////////
 
 /*
@@ -1939,7 +1947,6 @@ SyntaxElementMorph.prototype.endLayout = function () {
     %att    - chameleon colored rectangular drop-down for attributes
     %fun    - chameleon colored rectangular drop-down for math functions
     %typ    - chameleon colored rectangular drop-down for data types
-    %var - chameleon colored rectangular drop-down for variable names
     %lst    - chameleon colored rectangular drop-down for list names
     %b        - chameleon colored hexagonal slot (for predicates)
     %l        - list icon
