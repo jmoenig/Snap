@@ -857,7 +857,7 @@ SnapTranslator.dict.pl = {
     'Ok':
         'Ok',
     'Cancel':
-        'Poniechaj',
+        'Anuluj',
     'Yes':
         'Tak',
     'No':
