@@ -248,8 +248,8 @@ SnapTranslator.dict.pl = {
         'tylko lewo/prawo',
 
     // new sprite button:
-    'add a new sprite':
-        'dodaj nowego duszka',
+    'add a new Turtle sprite':
+        'dodaj nowego duszka-żółwia',
 
     // tab help
     'costumes tab help':
@@ -1081,7 +1081,7 @@ SnapTranslator.dict.pl = {
 
     // costumes
     'Turtle':
-        'Duszek',
+        'Żółw',
     'Empty':
         'Pusty',
 
