@@ -2185,6 +2185,8 @@ BlockMorph.prototype.userMenu = function () {
         world = this.world(),
         myself = this,
         shiftClicked = world.currentKey === 16,
+        proc = this.activeProcess(),
+        vNames = proc ? proc.context.outerContext.variables.names() : [],
         alternatives,
         top,
         blck;
@@ -2285,7 +2287,7 @@ BlockMorph.prototype.userMenu = function () {
     );
     if (this instanceof CommandBlockMorph && this.nextBlock()) {
         menu.addItem(
-            this.thumbnail(0.5, 60),
+            (proc ? this.fullCopy() : this).thumbnail(0.5, 60),
             function () {
                 var cpy = this.fullCopy(),
                     nb = cpy.nextBlock(),
@@ -2313,6 +2315,20 @@ BlockMorph.prototype.userMenu = function () {
         },
         'open a new window\nwith a picture of this script'
     );
+    if (proc) {
+        if (vNames.length) {
+            menu.addLine();
+            vNames.forEach(function (vn) {
+                menu.addItem(
+                    vn + '...',
+                    function () {
+                        proc.doShowVar(vn);
+                    }
+                );
+            });
+        }
+        return menu;
+    }
     if (this.parentThatIsA(RingMorph)) {
         menu.addLine();
         menu.addItem("unringify", 'unringify');

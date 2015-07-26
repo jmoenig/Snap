@@ -7458,7 +7458,46 @@ WatcherMorph.prototype.userMenu = function () {
     var myself = this,
         menu = new MenuMorph(this),
         on = '\u25CF',
-        off = '\u25CB';
+        off = '\u25CB',
+        vNames;
+
+    function monitor(vName) {
+        var stage = myself.parentThatIsA(StageMorph),
+            varFrame = myself.currentValue.outerContext.variables;
+        menu.addItem(
+            vName + '...',
+            function () {
+                var watcher = detect(
+                    stage.children,
+                    function (morph) {
+                        return morph instanceof WatcherMorph
+                            && morph.target === varFrame
+                            && morph.getter === vName;
+                    }
+                ),
+                    others;
+                if (watcher !== null) {
+                    watcher.show();
+                    watcher.fixLayout(); // re-hide hidden parts
+                    return;
+                }
+                watcher = new WatcherMorph(
+                    vName + ' ' + localize('(temporary)'),
+                    SpriteMorph.prototype.blockColor.variables,
+                    varFrame,
+                    vName
+                );
+                watcher.setPosition(stage.position().add(10));
+                others = stage.watchers(watcher.left());
+                if (others.length > 0) {
+                    watcher.setTop(others[others.length - 1].bottom());
+                }
+                stage.add(watcher);
+                watcher.fixLayout();
+            }
+        );
+    }
+
     menu.addItem(
         (this.style === 'normal' ? on : off) + ' ' + localize('normal'),
         'styleNormal'
@@ -7557,6 +7596,14 @@ WatcherMorph.prototype.userMenu = function () {
                     );
                 }
             );
+        } else if (this.currentValue instanceof Context) {
+            vNames = this.currentValue.outerContext.variables.names();
+            if (vNames.length) {
+                menu.addLine();
+                vNames.forEach(function (vName) {
+                    monitor(vName);
+                });
+            }
         }
     }
     return menu;
