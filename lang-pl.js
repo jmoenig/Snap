@@ -673,6 +673,8 @@ SnapTranslator.dict.pl = {
         'Logowanie...',
     'Signup...':
         'Rejestracja...',
+    'Reset Password...':
+        'Zresetuj hasło...',
 
     // settings menu
     'Language...':
@@ -1221,5 +1223,61 @@ SnapTranslator.dict.pl = {
     'last':
         'ostatni',
     'any':
-        'dowolny'
+        'dowolny',
+
+    // Sign up dialog
+    'Sign up':
+        'Rejestracja',
+    'User name:':
+        'Nazwa użytkownika:',
+    'Birth date:':
+        'Data urodzenia:',
+    'year:':
+        'rok:',
+    'E-mail address:':
+        'Adres e-mail:',
+    'E-mail address of parent or guardian:':
+        'Adres e-mail rodzica lub opiekuna:',
+    'Terms of Service...':
+        'Regulamin...',
+    'Privacy...':
+        'Polityka prywatności...',
+    'I have read and agree\nto the Terms of Service':
+        'Przeczytałem i zgadzam się\nz Regulaminem',
+    'January':
+        'styczeń',
+    'February':
+        'luty',
+    'March':
+        'marzec',
+    'April':
+        'kwiecień',
+    'May':
+        'maj',
+    'June':
+        'czerwiec',
+    'July':
+        'lipiec',
+    'August':
+        'sierpień',
+    'September':
+        'wrzesień',
+    'October':
+        'październik',
+    'November':
+        'listopad',
+    'December':
+        'grudzień',
+    'please fill out\nthis field':
+        'Proszę wypełnić\nto pole',
+    'please agree to\nthe TOS':
+        'Proszę zaakceptować\nRegulamin',
+    'Sign in':
+        'Zaloguj się',
+    'Password:':
+        'Hasło:',
+    'stay signed in on this computer\nuntil logging out':
+        'Zapamiętaj mnie na tym komputerze\naż do wylogowania',
+    'Reset password':
+        'Zresetuj hasło'
 };
