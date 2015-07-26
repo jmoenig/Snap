@@ -900,17 +900,20 @@ SpriteMorph.prototype.initBlocks = function () {
         reifyScript: {
             type: 'ring',
             category: 'other',
-            spec: '%rc %ringparms'
+            spec: '%rc %ringparms',
+            alias: 'command ring lambda'
         },
         reifyReporter: {
             type: 'ring',
             category: 'other',
-            spec: '%rr %ringparms'
+            spec: '%rr %ringparms',
+            alias: 'reporter ring lambda'
         },
         reifyPredicate: {
             type: 'ring',
             category: 'other',
-            spec: '%rp %ringparms'
+            spec: '%rp %ringparms',
+            alias: 'predicate ring lambda'
         },
         reportSum: {
             type: 'reporter',
@@ -920,12 +923,14 @@ SpriteMorph.prototype.initBlocks = function () {
         reportDifference: {
             type: 'reporter',
             category: 'operators',
-            spec: '%n \u2212 %n'
+            spec: '%n \u2212 %n',
+            alias: '-'
         },
         reportProduct: {
             type: 'reporter',
             category: 'operators',
-            spec: '%n \u00D7 %n'
+            spec: '%n \u00D7 %n',
+            alias: '*'
         },
         reportQuotient: {
             type: 'reporter',
@@ -2357,14 +2362,29 @@ SpriteMorph.prototype.freshPalette = function (category) {
 
 // SpriteMorph blocks searching
 
-SpriteMorph.prototype.blocksMatching = function (searchString, strictly) {
+SpriteMorph.prototype.blocksMatching = function (
+    searchString,
+    strictly,
+    types, // optional, ['hat', 'command', 'reporter', 'predicate']
+    varNames // optional, list of reachable unique variable names
+) {
     // answer an array of block templates whose spec contains
     // the given search string, ordered by descending relevance
+    // types is an optional array containing block types the search
+    // is limited to, e.g. "command", "hat", "reporter", "predicate".
+    // Note that "predicate" is not subsumed by "reporter" and has
+    // to be specified explicitly.
+    // if no types are specified all blocks are searched
     var blocks = [],
         blocksDict,
         myself = this,
         search = searchString.toLowerCase(),
         stage = this.parentThatIsA(StageMorph);
+
+    if (!types || !types.length) {
+        types = ['hat', 'command', 'reporter', 'predicate', 'ring'];
+    }
+    if (!varNames) {varNames = []; }
 
     function labelOf(aBlockSpec) {
         var words = (BlockMorph.prototype.parseSpec(aBlockSpec)),
@@ -2396,29 +2416,39 @@ SpriteMorph.prototype.blocksMatching = function (searchString, strictly) {
         return newBlock;
     }
 
+    // variable getters
+    varNames.forEach(function (vName) {
+        var rel = relevance(labelOf(vName), search);
+        if (rel !== -1) {
+            blocks.push([myself.variableBlock(vName), rel + '1']);
+        }
+    });
     // custom blocks
     [this.customBlocks, stage.globalBlocks].forEach(function (blocksList) {
         blocksList.forEach(function (definition) {
-            var spec = localize(definition.blockSpec()).toLowerCase(),
-                rel = relevance(labelOf(spec), search);
-            if (rel !== -1) {
-                blocks.push([definition.templateInstance(), rel + '1']);
+            if (contains(types, definition.type)) {
+                var spec = localize(definition.blockSpec()).toLowerCase(),
+                    rel = relevance(labelOf(spec), search);
+                if (rel !== -1) {
+                    blocks.push([definition.templateInstance(), rel + '2']);
+                }
             }
         });
     });
     // primitives
     blocksDict = SpriteMorph.prototype.blocks;
     Object.keys(blocksDict).forEach(function (selector) {
-        if (!StageMorph.prototype.hiddenPrimitives[selector]) {
+        if (!StageMorph.prototype.hiddenPrimitives[selector] &&
+                contains(types, blocksDict[selector].type)) {
             var block = blocksDict[selector],
-                spec = localize(block.spec).toLowerCase(),
+                spec = localize(block.alias || block.spec).toLowerCase(),
                 rel = relevance(labelOf(spec), search);
             if (
                 (rel !== -1) &&
                     (!block.dev) &&
                     (!block.only || (block.only === myself.constructor))
             ) {
-                blocks.push([primitive(selector), rel + '2']);
+                blocks.push([primitive(selector), rel + '3']);
             }
         }
     });
@@ -2426,18 +2456,43 @@ SpriteMorph.prototype.blocksMatching = function (searchString, strictly) {
     return blocks.map(function (each) {return each[0]; });
 };
 
-SpriteMorph.prototype.searchBlocks = function () {
+SpriteMorph.prototype.searchBlocks = function (
+    searchString,
+    types,
+    varNames,
+    scriptFocus
+) {
     var myself = this,
         unit = SyntaxElementMorph.prototype.fontSize,
         ide = this.parentThatIsA(IDE_Morph),
         oldSearch = '',
-        searchBar = new InputFieldMorph(''),
-        searchPane = ide.createPalette('forSearch');
+        searchBar = new InputFieldMorph(searchString || ''),
+        searchPane = ide.createPalette('forSearch'),
+        blocksList = [],
+        selection,
+        focus;
+
+    function showSelection() {
+        if (focus) {focus.destroy(); }
+        if (!selection || !scriptFocus) {return; }
+        focus = selection.outline(
+            MorphicPreferences.isFlat ? new Color(150, 200, 255)
+                    : new Color(255, 255, 255),
+            2
+        );
+        searchPane.contents.add(focus);
+        focus.scrollIntoView();
+    }
 
     function show(blocks) {
         var oldFlag = Morph.prototype.trackChanges,
             x = searchPane.contents.left() + 5,
             y = (searchBar.bottom() + unit);
+        blocksList = blocks;
+        selection = null;
+        if (blocks.length && scriptFocus) {
+            selection = blocks[0];
+        }
         Morph.prototype.trackChanges = false;
         searchPane.contents.children = [searchPane.contents.children[0]];
         blocks.forEach(function (block) {
@@ -2447,6 +2502,7 @@ SpriteMorph.prototype.searchBlocks = function () {
             y += unit * 0.3;
         });
         Morph.prototype.trackChanges = oldFlag;
+        showSelection();
         searchPane.changed();
     }
 
@@ -2463,17 +2519,52 @@ SpriteMorph.prototype.searchBlocks = function () {
     searchBar.drawNew();
 
     searchPane.accept = function () {
-        var search = searchBar.getValue();
-        if (search.length > 0) {
-            show(myself.blocksMatching(search));
+        var search;
+        if (scriptFocus) {
+            searchBar.cancel();
+            if (selection) {
+                scriptFocus.insertBlock(selection);
+            }
+        } else {
+            search = searchBar.getValue();
+            if (search.length > 0) {
+                show(myself.blocksMatching(search));
+            }
         }
     };
 
-    searchPane.reactToKeystroke = function () {
-        var search = searchBar.getValue();
-        if (search !== oldSearch) {
-            oldSearch = search;
-            show(myself.blocksMatching(search, search.length < 2));
+    searchPane.reactToKeystroke = function (evt) {
+        var search, idx, code = evt ? evt.keyCode : 0;
+        switch (code) {
+        case 38: // up arrow
+            if (!scriptFocus || !selection) {return; }
+            idx = blocksList.indexOf(selection) - 1;
+            if (idx < 0) {
+                idx = blocksList.length - 1;
+            }
+            selection = blocksList[idx];
+            showSelection();
+            return;
+        case 40: // down arrow
+            if (!scriptFocus || !selection) {return; }
+            idx = blocksList.indexOf(selection) + 1;
+            if (idx >= blocksList.length) {
+                idx = 0;
+            }
+            selection = blocksList[idx];
+            showSelection();
+            return;
+        default:
+            search = searchBar.getValue();
+            if (search !== oldSearch) {
+                oldSearch = search;
+                show(myself.blocksMatching(
+                    search,
+                    search.length < 2,
+                    types,
+                    varNames
+                ));
+            }
         }
     };
 
@@ -2484,6 +2575,7 @@ SpriteMorph.prototype.searchBlocks = function () {
 
     ide.fixLayout('refreshPalette');
     searchBar.edit();
+    if (searchString) {searchPane.reactToKeystroke(); }
 };
 
 // SpriteMorph variable management
@@ -4791,6 +4883,8 @@ StageMorph.prototype.processKeyEvent = function (event, action) {
         keyName = 'enter';
         if (event.ctrlKey || event.metaKey) {
             keyName = 'ctrl enter';
+        } else if (event.shiftKey) {
+            keyName = 'shift enter';
         }
         break;
     case 27:
@@ -4830,6 +4924,9 @@ StageMorph.prototype.fireKeyEvent = function (key) {
     this.keysPressed[evt] = true;
     if (evt === 'ctrl enter') {
         return this.fireGreenFlagEvent();
+    }
+    if (evt === 'shift enter') {
+        return this.editScripts();
     }
     if (evt === 'ctrl f') {
         if (!ide.isAppMode) {ide.currentSprite.searchBlocks(); }
@@ -4929,6 +5026,25 @@ StageMorph.prototype.removeAllClones = function () {
         clone.destroy();
     });
     this.cloneCount = 0;
+};
+
+StageMorph.prototype.editScripts = function () {
+    var ide = this.parentThatIsA(IDE_Morph),
+        scripts,
+        sorted;
+    if (ide.isAppMode || !ScriptsMorph.prototype.enableKeyboard) {return; }
+    scripts = this.parentThatIsA(IDE_Morph).currentSprite.scripts;
+    scripts.edit(scripts.position());
+    sorted = scripts.focus.sortedScripts();
+    if (sorted.length) {
+        scripts.focus.element = sorted[0];
+        if (scripts.focus.element instanceof HatBlockMorph) {
+            scripts.focus.nextCommand();
+        }
+    } else {
+        scripts.focus.moveBy(new Point(50, 50));
+    }
+    scripts.focus.fixLayout();
 };
 
 // StageMorph block templates

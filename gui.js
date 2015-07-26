@@ -65,11 +65,11 @@ ScriptsMorph, isNil, SymbolMorph, BlockExportDialogMorph,
 BlockImportDialogMorph, SnapTranslator, localize, List, InputSlotMorph,
 SnapCloud, Uint8Array, HandleMorph, SVG_Costume, fontHeight, hex_sha512,
 sb, CommentMorph, CommandBlockMorph, BlockLabelPlaceHolderMorph, Audio,
-SpeechBubbleMorph*/
+SpeechBubbleMorph, ScriptFocusMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2015-June-25';
+modules.gui = '2015-July-26';
 
 // Declarations
 
@@ -1806,7 +1806,8 @@ IDE_Morph.prototype.applySavedSettings = function () {
         click = this.getSetting('click'),
         longform = this.getSetting('longform'),
         longurls = this.getSetting('longurls'),
-        plainprototype = this.getSetting('plainprototype');
+        plainprototype = this.getSetting('plainprototype'),
+        keyboard = this.getSetting('keyboard');
 
     // design
     if (design === 'flat') {
@@ -1844,6 +1845,13 @@ IDE_Morph.prototype.applySavedSettings = function () {
         this.projectsInURLs = true;
     } else {
         this.projectsInURLs = false;
+    }
+
+    // keyboard editing
+    if (keyboard) {
+        ScriptsMorph.prototype.enableKeyboard = true;
+    } else {
+        ScriptsMorph.prototype.enableKeyboard = false;
     }
 
     // plain prototype labels
@@ -2352,6 +2360,22 @@ IDE_Morph.prototype.settingsMenu = function () {
         'check to enable\nsprite composition',
         true
     );
+    addPreference(
+        'Keyboard Editing',
+        function () {
+            ScriptsMorph.prototype.enableKeyboard =
+                !ScriptsMorph.prototype.enableKeyboard;
+            if (ScriptsMorph.prototype.enableKeyboard) {
+                myself.saveSetting('keyboard', true);
+            } else {
+                myself.removeSetting('keyboard');
+            }
+        },
+        ScriptsMorph.prototype.enableKeyboard,
+        'uncheck to disable\nkeyboard editing support',
+        'check to enable\nkeyboard editing support',
+        false
+    );
     menu.addLine(); // everything below this line is stored in the project
     addPreference(
         'Thread safe scripts',
@@ -2840,6 +2864,7 @@ IDE_Morph.prototype.newProject = function () {
     StageMorph.prototype.codeMappings = {};
     StageMorph.prototype.codeHeaders = {};
     StageMorph.prototype.enableCodeMapping = false;
+    StageMorph.prototype.enableInheritance = false;
     SpriteMorph.prototype.useFlatLineEnds = false;
     this.setProjectName('');
     this.projectNotes = '';
@@ -3059,6 +3084,7 @@ IDE_Morph.prototype.rawOpenProjectString = function (str) {
     StageMorph.prototype.codeMappings = {};
     StageMorph.prototype.codeHeaders = {};
     StageMorph.prototype.enableCodeMapping = false;
+    StageMorph.prototype.enableInheritance = false;
     if (Process.prototype.isCatchingErrors) {
         try {
             this.serializer.openProject(
@@ -3100,6 +3126,7 @@ IDE_Morph.prototype.rawOpenCloudDataString = function (str) {
     StageMorph.prototype.codeMappings = {};
     StageMorph.prototype.codeHeaders = {};
     StageMorph.prototype.enableCodeMapping = false;
+    StageMorph.prototype.enableInheritance = false;
     if (Process.prototype.isCatchingErrors) {
         try {
             model = this.serializer.parse(str);
@@ -3446,6 +3473,9 @@ IDE_Morph.prototype.toggleAppMode = function (appMode) {
                 morph.hide();
             }
         });
+        if (world.keyboardReceiver instanceof ScriptFocusMorph) {
+            world.keyboardReceiver.stopEditing();
+        }
     } else {
         this.setColor(this.backgroundColor);
         this.controlBar.setColor(this.frameColor);
@@ -5220,7 +5250,7 @@ function SpriteIconMorph(aSprite, aTemplate) {
 }
 
 SpriteIconMorph.prototype.init = function (aSprite, aTemplate) {
-    var colors, action, query, myself = this;
+    var colors, action, query, hover, myself = this;
 
     if (!aTemplate) {
         colors = [
@@ -5250,6 +5280,11 @@ SpriteIconMorph.prototype.init = function (aSprite, aTemplate) {
         return false;
     };
 
+    hover = function () {
+        if (!aSprite.exemplar) {return null; }
+        return (localize('parent' + ':\n' + aSprite.exemplar.name));
+    };
+
     // additional properties:
     this.object = aSprite || new SpriteMorph(); // mandatory, actually
     this.version = this.object.version;
@@ -5265,7 +5300,7 @@ SpriteIconMorph.prototype.init = function (aSprite, aTemplate) {
         this.object.name, // label string
         query, // predicate/selector
         null, // environment
-        null, // hint
+        hover, // hint
         aTemplate // optional, for cached background images
     );
 
@@ -5436,6 +5471,9 @@ SpriteIconMorph.prototype.userMenu = function () {
     menu.addItem("duplicate", 'duplicateSprite');
     menu.addItem("delete", 'removeSprite');
     menu.addLine();
+    if (StageMorph.prototype.enableInheritance) {
+        menu.addItem("parent...", 'chooseExemplar');
+    }
     if (this.object.anchor) {
         menu.addItem(
             localize('detach from') + ' ' + this.object.anchor.name,

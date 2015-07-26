@@ -106,7 +106,7 @@ SymbolMorph, isNil*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2015-June-25';
+modules.byob = '2015-July-26';
 
 // Declarations
 
@@ -1966,8 +1966,13 @@ PrototypeHatBlockMorph.prototype.init = function (definition) {
 
 PrototypeHatBlockMorph.prototype.mouseClickLeft = function () {
     // relay the mouse click to my prototype block to
-    // pop-up a Block Dialog
+    // pop-up a Block Dialog, unless the shift key
+    // is pressed, in which case initiate keyboard
+    // editing support
 
+    if (this.world().currentKey === 16) { // shift-clicked
+        return this.focus();
+    }
     this.children[0].mouseClickLeft();
 };
 
