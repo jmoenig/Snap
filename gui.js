@@ -43,6 +43,7 @@
         TurtleIconMorph
         CostumeIconMorph
         WardrobeMorph
+        StageHandleMorph;
 
 
     credits
@@ -69,7 +70,7 @@ SpeechBubbleMorph, ScriptFocusMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2015-July-26';
+modules.gui = '2015-July-27';
 
 // Declarations
 
@@ -81,6 +82,7 @@ var TurtleIconMorph;
 var WardrobeMorph;
 var SoundIconMorph;
 var JukeboxMorph;
+var StageHandleMorph;
 
 // Get the full url without "snap.html"
 var baseURL = (function getPath(location) {
@@ -236,6 +238,7 @@ IDE_Morph.prototype.init = function (isAutoFill) {
     this.spriteBar = null;
     this.spriteEditor = null;
     this.stage = null;
+    this.stageHandle = null;
     this.corralBar = null;
     this.corral = null;
 
@@ -981,9 +984,7 @@ IDE_Morph.prototype.createPalette = function (forSearching) {
 
 IDE_Morph.prototype.createStage = function () {
     // assumes that the logo pane has already been created
-    if (this.stage) {
-        this.stage.destroy();
-    }
+    if (this.stage) {this.stage.destroy(); }
     StageMorph.prototype.frameRate = 0;
     this.stage = new StageMorph(this.globalVariables);
     this.stage.setExtent(this.stage.dimensions); // dimensions are fixed
@@ -996,6 +997,13 @@ IDE_Morph.prototype.createStage = function () {
         this.stage.add(this.currentSprite);
     }
     this.add(this.stage);
+};
+
+IDE_Morph.prototype.createStageHandle = function () {
+    // assumes that the stage has already been created
+    if (this.stageHandle) {this.stageHandle.destroy(); }
+    this.stageHandle = new StageHandleMorph(this.stage);
+    this.add(this.stageHandle);
 };
 
 IDE_Morph.prototype.createSpriteBar = function () {
@@ -1361,6 +1369,7 @@ IDE_Morph.prototype.createCorral = function () {
     // assumes the corral bar has already been created
     var frame, template, padding = 5, myself = this;
 
+    this.createStageHandle();
     if (this.corral) {
         this.corral.destroy();
     }
@@ -1492,10 +1501,10 @@ IDE_Morph.prototype.fixLayout = function (situation) {
             ) * 10) / 10);
             this.stage.setCenter(this.center());
         } else {
-//            this.stage.setScale(this.isSmallStage ? 0.5 : 1);
             this.stage.setScale(this.isSmallStage ? this.stageRatio : 1);
             this.stage.setTop(this.logo.bottom() + padding);
             this.stage.setRight(this.right());
+            this.stageHandle.fixLayout();
         }
 
         // spriteBar
@@ -1544,7 +1553,12 @@ IDE_Morph.prototype.setProjectName = function (string) {
 IDE_Morph.prototype.setExtent = function (point) {
     var padding = new Point(430, 110),
         minExt,
-        ext;
+        ext,
+        maxWidth,
+        minWidth,
+        maxHeight,
+        minRatio,
+        maxRatio;
 
     // determine the minimum dimensions making sense for the current mode
     if (this.isAppMode) {
@@ -1552,21 +1566,29 @@ IDE_Morph.prototype.setExtent = function (point) {
             this.controlBar.height() + 10
         );
     } else {
-    /* // auto-switches to small stage mode, commented out b/c I don't like it
-        if (point.x < 910) {
-            this.isSmallStage = true;
-            this.stageRatio = 0.5;
+        if (this.stageRatio > 1) {
+            minExt = padding.add(StageMorph.prototype.dimensions);
+        } else {
+            minExt = padding.add(
+                StageMorph.prototype.dimensions.multiplyBy(this.stageRatio)
+            );
         }
-    */
-        minExt = this.isSmallStage ?
-                padding.add(StageMorph.prototype.dimensions.divideBy(2))
-                      : padding.add(StageMorph.prototype.dimensions);
-/*
-        minExt = this.isSmallStage ?
-                new Point(700, 350) : new Point(910, 490);
-*/
     }
     ext = point.max(minExt);
+
+    // adjust stage ratio if necessary
+    maxWidth = ext.x - (this.spriteBar.tabBar.fullBounds().right() -
+        this.left());
+    minWidth = SpriteIconMorph.prototype.thumbSize.x * 3;
+    maxHeight = (ext.y - SpriteIconMorph.prototype.thumbSize.y * 3.5);
+    minRatio = minWidth / this.stage.dimensions.x;
+    maxRatio = Math.min(
+        (maxWidth / this.stage.dimensions.x),
+        (maxHeight / this.stage.dimensions.y)
+    );
+    this.stageRatio = Math.min(maxRatio, Math.max(minRatio, this.stageRatio));
+
+    // apply
     IDE_Morph.uber.setExtent.call(this, ext);
     this.fixLayout();
 };
@@ -3464,6 +3486,7 @@ IDE_Morph.prototype.toggleAppMode = function (appMode) {
             this.controlBar.projectButton,
             this.controlBar.settingsButton,
             this.controlBar.stageSizeButton,
+            this.stageHandle,
             this.corral,
             this.corralBar,
             this.spriteEditor,
@@ -3526,36 +3549,32 @@ IDE_Morph.prototype.toggleStageSize = function (isSmall) {
     var myself = this,
         smallRatio = 0.5,
         world = this.world(),
-        shiftClicked = (world.currentKey === 16);
+        shiftClicked = (world.currentKey === 16),
+        altClicked = (world.currentKey === 18);
 
     function toggle() {
         myself.isSmallStage = isNil(isSmall) ? !myself.isSmallStage : isSmall;
     }
 
-    function zoomIn() {
-        myself.step = function () {
-            myself.stageRatio -= (myself.stageRatio - smallRatio) / 2;
-            myself.setExtent(world.extent());
-            if (myself.stageRatio < (smallRatio + 0.1)) {
-                myself.stageRatio = smallRatio;
-                myself.setExtent(world.extent());
-                delete myself.step;
-            }
-        };
-    }
-
-    function zoomOut() {
+    function zoomTo(targetRatio) {
+        var count = 1,
+            steps = 5;
+        myself.fps = 30;
         myself.isSmallStage = true;
         myself.step = function () {
-            myself.stageRatio += (1 - myself.stageRatio) / 2;
-            myself.setExtent(world.extent());
-            if (myself.stageRatio > 0.9) {
-                myself.stageRatio = 1;
-                myself.isSmallStage = false;
-                myself.setExtent(world.extent());
-                myself.controlBar.stageSizeButton.refresh();
+            var diff;
+            if (count >= steps) {
+                myself.stageRatio = targetRatio;
                 delete myself.step;
+                myself.fps = 0;
+                myself.isSmallStage = !(targetRatio === 1);
+                myself.controlBar.stageSizeButton.refresh();
+            } else {
+                count += 1;
+                diff = (targetRatio - myself.stageRatio) / 2;
+                myself.stageRatio += diff;
             }
+            myself.setExtent(world.extent());
         };
     }
 
@@ -3565,14 +3584,20 @@ IDE_Morph.prototype.toggleStageSize = function (isSmall) {
         if (!this.isSmallStage || (smallRatio === this.stageRatio)) {
             toggle();
         }
+    } else if (altClicked) {
+        smallRatio = this.width() / 2 /
+            this.stage.dimensions.x;
+        if (!this.isSmallStage || (smallRatio === this.stageRatio)) {
+            toggle();
+        }
     } else {
         toggle();
     }
     if (this.isAnimating) {
         if (this.isSmallStage) {
-            zoomIn();
+            zoomTo(smallRatio);
         } else {
-            zoomOut();
+            zoomTo(1);
         }
     } else {
         if (this.isSmallStage) {this.stageRatio = smallRatio; }
@@ -6545,3 +6570,148 @@ JukeboxMorph.prototype.reactToDropOf = function (icon) {
     this.sprite.sounds.add(costume, idx);
     this.updateList();
 };
+
+// StageHandleMorph ////////////////////////////////////////////////////////
+
+// I am a horizontal resizing handle for a StageMorph
+
+// StageHandleMorph inherits from Morph:
+
+StageHandleMorph.prototype = new Morph();
+StageHandleMorph.prototype.constructor = StageHandleMorph;
+StageHandleMorph.uber = Morph.prototype;
+
+// StageHandleMorph instance creation:
+
+function StageHandleMorph(target) {
+    this.init(target);
+}
+
+StageHandleMorph.prototype.init = function (target) {
+    this.target = target || null;
+    HandleMorph.uber.init.call(this);
+    this.color = MorphicPreferences.isFlat ?
+            IDE_Morph.prototype.groupColor : new Color(190, 190, 190);
+    this.isDraggable = false;
+    this.noticesTransparentClick = true;
+    this.setExtent(new Point(12, 50));
+};
+
+// StageHandleMorph drawing:
+
+StageHandleMorph.prototype.drawNew = function () {
+    this.normalImage = newCanvas(this.extent());
+    this.highlightImage = newCanvas(this.extent());
+    this.drawOnCanvas(
+        this.normalImage,
+        this.color
+    );
+    this.drawOnCanvas(
+        this.highlightImage,
+        MorphicPreferences.isFlat ?
+                new Color(245, 245, 255) : new Color(100, 100, 255),
+        this.color
+    );
+    this.image = this.normalImage;
+    this.fixLayout();
+};
+
+StageHandleMorph.prototype.drawOnCanvas = function (
+    aCanvas,
+    color,
+    shadowColor
+) {
+    var context = aCanvas.getContext('2d'),
+        l = aCanvas.height / 8,
+        w = aCanvas.width / 6,
+        r = w / 2,
+        x,
+        y,
+        i;
+
+    context.lineWidth = w;
+    context.lineCap = 'round';
+    y = aCanvas.height / 2;
+
+    context.strokeStyle = color.toString();
+    x = aCanvas.width / 12;
+    for (i = 0; i < 3; i += 1) {
+        if (i > 0) {
+            context.beginPath();
+            context.moveTo(x, y - (l - r));
+            context.lineTo(x, y + (l - r));
+            context.stroke();
+        }
+        x += (w * 2);
+        l *= 2;
+    }
+    if (shadowColor) {
+        context.strokeStyle = shadowColor.toString();
+        x = aCanvas.width / 12 + w;
+        l = aCanvas.height / 8;
+        for (i = 0; i < 3; i += 1) {
+            if (i > 0) {
+                context.beginPath();
+                context.moveTo(x, y - (l - r));
+                context.lineTo(x, y + (l - r));
+                context.stroke();
+            }
+            x += (w * 2);
+            l *= 2;
+        }
+    }
+};
+
+// StageHandleMorph layout:
+
+StageHandleMorph.prototype.fixLayout = function () {
+    if (!this.target) {return; }
+    var ide = this.target.parentThatIsA(IDE_Morph);
+    this.setTop(this.target.top() + 10);
+    this.setRight(this.target.left());
+    if (ide) {ide.add(this); } // come to front
+};
+
+// StageHandleMorph stepping:
+
+StageHandleMorph.prototype.step = null;
+
+StageHandleMorph.prototype.mouseDownLeft = function (pos) {
+    var world = this.world(),
+        offset = this.right() - pos.x,
+        myself = this,
+        ide = this.target.parentThatIsA(IDE_Morph);
+
+    if (!this.target) {
+        return null;
+    }
+    ide.isSmallStage = true;
+    ide.controlBar.stageSizeButton.refresh();
+    this.step = function () {
+        var newPos, newWidth;
+        if (world.hand.mouseButton) {
+            newPos = world.hand.bounds.origin.x + offset;
+            newWidth = myself.target.right() - newPos;
+            ide.stageRatio = newWidth / myself.target.dimensions.x;
+            ide.setExtent(world.extent());
+
+        } else {
+            this.step = null;
+            ide.isSmallStage = !(ide.stageRatio === 1);
+            ide.controlBar.stageSizeButton.refresh();
+        }
+    };
+};
+
+// StageHandleMorph events:
+
+StageHandleMorph.prototype.mouseEnter = function () {
+    this.image = this.highlightImage;
+    this.changed();
+};
+
+StageHandleMorph.prototype.mouseLeave = function () {
+    this.image = this.normalImage;
+    this.changed();
+};
+
