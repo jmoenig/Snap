@@ -487,3 +487,16 @@ SnapTranslator.dict.tr = {
     'last_changed':
         '2015-7-26'
 };
+
+SnapTranslator.dict.hu = {
+    // translations meta information
+    'language_name':
+        'Magyar',
+    'language_translator':
+        'Makány György',
+    'translator_e-mail':
+        'makany.gyorgy@gmail.com',
+    'last_changed':
+        '2015-07-26'
+};
+
