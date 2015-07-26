@@ -42,7 +42,7 @@
 
 /*global modules, contains*/
 
-modules.locale = '2015-June-25';
+modules.locale = '2015-July-26';
 
 // Global stuff
 
@@ -474,4 +474,16 @@ SnapTranslator.dict.te = {
         'vnkmr7620@gmail.com', // optional
     'last_changed':
         '2015-02-20'
+};
+
+SnapTranslator.dict.tr = {
+    // translations meta information
+    'language_name':
+        'Türkçe',
+    'language_translator':
+        'Hakan Atas',
+    'translator_e-mail':
+        'hakanatas@gmail.com',
+    'last_changed':
+        '2015-7-26'
 };
