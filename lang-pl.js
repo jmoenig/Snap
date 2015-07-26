@@ -905,9 +905,53 @@ SnapTranslator.dict.pl = {
     'Delete Project':
         'Usu\u0144 projekt',
     'Are you sure you want to delete':
-        'Czy napewno chcesz usun\u0105\u0107?',
+        'Czy napewno chcesz usun\u0105\u0107',
     'rename...':
         'przemianuj',
+    'Cloud':
+        'Chmura',
+    'Browser':
+        'Przeglądarka',
+    'Examples':
+        'Przykłady',
+    'You are not logged in':
+        'Nie jesteś zalogowany',
+    'Updating\nproject list...':
+        'Aktualizowanie\nlisty projektów...',
+    'last changed':
+        'ostatnio zmieniony',
+    'Open':
+        'Otwórz',
+    'Share':
+        'Udostępnij',
+    'Unshare':
+        'Wyłącz udostępnianie',
+    'Share Project':
+        'Udostępnij projekt',
+    'Unshare Project':
+        'Wyłącz udostępnianie projektu',
+    'Are you sure you want to publish':
+        'Czy na pewno chcesz opublikować projekt',
+    'Are you sure you want to unpublish':
+        'Czy na pewno chcesz wyłączyć publikowanie projektu',
+    'sharing\nproject...':
+        'Udostępnianie\nprojektu...',
+    'shared.':
+        'Projekt udostępniony.',
+    'unsharing\nproject...':
+        'Wyłączanie\nudostępniania projektu...',
+    'unshared.':
+        'Udostępnianie wyłączone.',
+    'Fetching project\nfrom the cloud...':
+        'Wczytywanie projektu\nz chmury...',
+    'Opening project...':
+        'Otwieranie projektu...',
+    'Save Project':
+        'Zapisz projekt',
+    'Saving project\nto the cloud...':
+        'Zapisywanie projektu\ndo chmury...',
+    'saved.':
+        'Projekt zapisany.',
 
     // costume editor
     'Costume Editor':
