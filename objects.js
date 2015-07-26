@@ -125,7 +125,7 @@ PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.objects = '2015-June-25';
+modules.objects = '2015-July-26';
 
 var SpriteMorph;
 var StageMorph;
@@ -2658,7 +2658,7 @@ SpriteMorph.prototype.userMenu = function () {
     }
     menu.addItem("duplicate", 'duplicate');
     menu.addItem("delete", 'remove');
-    menu.addItem("move", 'move');
+    menu.addItem("move", 'moveCenter');
     if (!this.isClone) {
         menu.addItem("edit", 'edit');
     }
@@ -3176,10 +3176,18 @@ SpriteMorph.prototype.positionTalkBubble = function () {
 SpriteMorph.prototype.prepareToBeGrabbed = function (hand) {
     this.removeShadow();
     this.recordLayers();
-    if (!this.bounds.containsPoint(hand.position())) {
+    if (!this.bounds.containsPoint(hand.position()) &&
+            this.isCorrectingOutsideDrag()) {
         this.setCenter(hand.position());
     }
     this.addShadow();
+};
+
+SpriteMorph.prototype.isCorrectingOutsideDrag = function () {
+    // make sure I don't "trail behind" the hand when dragged
+    // override for morphs that you want to be dragged outside
+    // their full bounds
+    return !this.parts.length;
 };
 
 SpriteMorph.prototype.justDropped = function () {
@@ -3238,6 +3246,22 @@ SpriteMorph.prototype.moveBy = function (delta, justMe) {
             part.moveBy(delta);
         });
     }
+};
+
+SpriteMorph.prototype.silentMoveBy = function (delta, justMe) {
+    SpriteMorph.uber.silentMoveBy.call(this, delta);
+    if (!justMe && this.parent instanceof HandMorph) {
+        this.parts.forEach(function (part) {
+            part.moveBy(delta);
+        });
+    }
+};
+
+SpriteMorph.prototype.rootForGrab = function () {
+    if (this.anchor) {
+        return this.anchor.rootForGrab();
+    }
+    return SpriteMorph.uber.rootForGrab.call(this);
 };
 
 SpriteMorph.prototype.slideBackTo = function (situation, inSteps) {
