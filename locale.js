@@ -42,7 +42,7 @@
 
 /*global modules, contains*/
 
-modules.locale = '2015-July-26';
+modules.locale = '2015-July-27';
 
 // Global stuff
 
@@ -485,7 +485,7 @@ SnapTranslator.dict.tr = {
     'translator_e-mail':
         'hakanatas@gmail.com',
     'last_changed':
-        '2015-7-26'
+        '2015-7-27'
 };
 
 SnapTranslator.dict.hu = {
@@ -497,6 +497,6 @@ SnapTranslator.dict.hu = {
     'translator_e-mail':
         'makany.gyorgy@gmail.com',
     'last_changed':
-        '2015-07-26'
+        '2015-07-27'
 };
 

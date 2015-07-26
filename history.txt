@@ -2527,3 +2527,19 @@ ______
 150626
 ------
 * Morphic: Fix Inspector duplication, update documentation
+
+150726
+------
+* Polish translation update, thanks, Bartosz Leper!
+* Turkish translation. Yay!! Thanks, Hakan Ataş!
+* Hungarian translation. Yay!! Thanks, Makány György!
+* GUI: relative-url fixes, Thanks, Michael!
+* Morphic: enable exporting a screenshot of the World
+* Morphic: enable more fine-grained control over dragging position correction
+* Morphic: enable all Morphs to “scrollIntoView()”
+* Morpic: keyboard accessibility for menus
+* Objects: fixes and enhancements for nested sprites
+* Blocks, Objects, BYOB, GUI: keyboard editing support
+* Objects, Blocks, Threads, GUI, Store, Widgets: Prototypal inheritance for sprite-local variables
+* Objects, Blocks: enable monitoring closurized non-locals and thread-temporaries (script vars of running processes)
+* GUI: stage resizing handle
