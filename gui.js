@@ -5042,7 +5042,7 @@ ProjectDialogMorph.prototype.shareProject = function () {
                                 projectId = 'Username=' +
                                     encodeURIComponent(usr.toLowerCase()) +
                                     '&ProjectName=' +
-                                    encodeURIComponent(proj.projectName);
+                                    encodeURIComponent(proj.ProjectName);
                             location.hash = projectId;
                         }
                     },
