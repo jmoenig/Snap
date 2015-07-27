@@ -2289,7 +2289,7 @@ BlockMorph.prototype.userMenu = function () {
         menu.addItem(
             (proc ? this.fullCopy() : this).thumbnail(0.5, 60),
             function () {
-                var cpy = this.fullCopy(),
+                var cpy = myself.fullCopy(),
                     nb = cpy.nextBlock(),
                     ide = myself.parentThatIsA(IDE_Morph);
                 if (nb) {nb.destroy(); }

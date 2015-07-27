@@ -1208,7 +1208,8 @@ Process.prototype.doShowVar = function (varName) {
     if (this.homeContext.receiver) {
         stage = this.homeContext.receiver.parentThatIsA(StageMorph);
         if (stage) {
-            target = varFrame.find(name);
+            target = varFrame.silentFind(name);
+            if (!target) {return; }
             // first try to find an existing (hidden) watcher
             watcher = detect(
                 stage.children,
