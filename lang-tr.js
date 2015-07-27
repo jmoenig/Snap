@@ -329,11 +329,11 @@ SnapTranslator.dict.tr = {
     'costume #':
         'kostüm no:',
     'say %s for %n secs':
-        '%n saniye %s söyle',
+        '%s saniye %n söyle',
     'say %s':
         '%s söyle',
     'think %s for %n secs':
-        '%n saniye %s diye düşün',
+        '%s saniye %n diye düşün',
     'think %s':
         '%s diye düşün',
     'Hello!':
@@ -531,7 +531,7 @@ SnapTranslator.dict.tr = {
     'round %n':
         '%n yuvarla',
     '%fun of %n':
-        '%n un %fun si',
+        '%fun un %n si',
     'pick random %n to %n':
         '%n ile %n arasında rastgele bir sayı seç',
     '%b and %b':
@@ -553,13 +553,13 @@ SnapTranslator.dict.tr = {
     'world':
         'dünya',
     'letter %n of %s':
-        '%s in harfleri %n',
+        '%n in harfleri %s',
     'length of %s':
         '%s in uzunluğu',
     'unicode of %s':
         '%s in unicode hali',
     'unicode %n as letter':
-        'harf olarak  %n in unicode hali',
+        'harf olarak %n in unicode hali',
     'is %s a %typ ?':
         '%s bir %typ mi?',
     'is %s identical to %s ?':
@@ -593,7 +593,7 @@ SnapTranslator.dict.tr = {
     'list %exp':
         'Liste %exp',
     '%s in front of %l':
-        '%l nin %s önündeki',
+        '%s nin %l önündeki',
     'item %idx of %l':
         'item %idx of %l',
     'all but first of %l':
