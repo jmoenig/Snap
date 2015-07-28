@@ -2549,3 +2549,4 @@ ______
 * GUI: fixed relative urls, thanks, Michael!
 * Morphic: escalate origin with “accept” and “cancel” events from text cursors
 * BYOB: keep BlockEditors open when <enter> or <esc> keys are pressed
+* GUI: stop keyboard editing of blocks when selecting another sprite
