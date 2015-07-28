@@ -70,7 +70,7 @@ SpeechBubbleMorph, ScriptFocusMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2015-July-27';
+modules.gui = '2015-July-28';
 
 // Declarations
 

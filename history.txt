@@ -2522,13 +2522,13 @@ ______
 * Morphic, Objects, Blocks, XML: Optimizations and dramatic speed-up. Thanks, Nathan!!
 * Objects: push maximum clone count up to 1000, tweak Note::play
 
-=== Start with v4.0.1 ===
+=== v4.0.1 (unreleased) ===
 
 150626
 ------
 * Morphic: Fix Inspector duplication, update documentation
 
-150726
+150727
 ------
 * Polish translation update, thanks, Bartosz Leper!
 * Turkish translation. Yay!! Thanks, Hakan Ataş!
@@ -2543,3 +2543,7 @@ ______
 * Objects, Blocks, Threads, GUI, Store, Widgets: Prototypal inheritance for sprite-local variables
 * Objects, Blocks: enable monitoring closurized non-locals and thread-temporaries (script vars of running processes)
 * GUI: stage resizing handle
+
+150728
+------
+* GUI: fixed relative urls, thanks, Michael!
