@@ -1048,7 +1048,7 @@
 /*global window, HTMLCanvasElement, getMinimumFontHeight, FileReader, Audio,
 FileList, getBlurredShadowSupport*/
 
-var morphicVersion = '2015-July-27';
+var morphicVersion = '2015-July-28';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = getBlurredShadowSupport(); // check for Chrome-bug
 
@@ -4736,7 +4736,7 @@ CursorMorph.prototype.accept = function () {
     if (world) {
         world.stopEditing();
     }
-    this.escalateEvent('accept', null);
+    this.escalateEvent('accept', this);
 };
 
 CursorMorph.prototype.cancel = function () {
@@ -4745,7 +4745,7 @@ CursorMorph.prototype.cancel = function () {
     if (world) {
         world.stopEditing();
     }
-    this.escalateEvent('cancel', null);
+    this.escalateEvent('cancel', this);
 };
 
 CursorMorph.prototype.undo = function () {
