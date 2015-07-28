@@ -90,7 +90,7 @@ var baseURL = (function getPath(location) {
     path = location.pathname; // starts with a /
     origin = location.origin; // has no trailing /
     slash = path.lastIndexOf('/');
-    path = path.slice(0, slash); // keep a trailing /
+    path = path.slice(0, slash + 1); // keep a trailing /
     return origin + path;
 }(window.location));
 
@@ -2563,10 +2563,10 @@ IDE_Morph.prototype.projectMenu = function () {
         function () {
             // read a list of libraries from an external file,
             var libMenu = new MenuMorph(this, 'Import library'),
-                libUrl = baseURL + '/libraries/' + 'LIBRARIES';
+                libUrl = baseURL + 'libraries/' + 'LIBRARIES';
 
             function loadLib(name) {
-                var url = baseURL + '/libraries/' + name + '.xml';
+                var url = baseURL + 'libraries/' + name + '.xml';
                 myself.droppedText(myself.getURL(url), name);
             }
 
