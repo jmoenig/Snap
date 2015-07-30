@@ -156,7 +156,7 @@ DialogBoxMorph, BlockInputFragmentMorph, PrototypeHatBlockMorph, Costume*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2015-July-27';
+modules.blocks = '2015-July-30';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -11675,6 +11675,7 @@ ScriptFocusMorph.prototype.items = function () {
             !(each instanceof TemplateSlotMorph) &&
             (!each.isStatic ||
                 each.choices ||
+                each instanceof RingMorph ||
                 each instanceof MultiArgMorph ||
                 each instanceof CommandSlotMorph);
     });

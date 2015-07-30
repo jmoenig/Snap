@@ -2550,3 +2550,7 @@ ______
 * Morphic: escalate origin with “accept” and “cancel” events from text cursors
 * BYOB: keep BlockEditors open when <enter> or <esc> keys are pressed
 * GUI: stop keyboard editing of blocks when selecting another sprite
+
+150730
+------
+* Blocks: improve keyboard editing for embedded rings
