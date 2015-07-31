@@ -851,7 +851,7 @@ StageMorph.prototype.getObjectCellX = function(otherObject)
 {
 	if (otherObject instanceof SpriteMorph)
 		return otherObject.cellX();
-	if (otherObject === null)
+	if (this.isNobody(otherObject))
 		return NOBODY;
 	return NOT_AN_OBJECT;
 }
@@ -863,7 +863,7 @@ StageMorph.prototype.getObjectCellY = function(otherObject)
 {
 	if (otherObject instanceof SpriteMorph)
 		return otherObject.cellY();
-	if (otherObject === null)
+	if (this.isNobody(otherObject))
 		return NOBODY;
 	return NOT_AN_OBJECT;
 }
@@ -875,7 +875,7 @@ StageMorph.prototype.getObjectX = function(otherObject)
 {
 	if (otherObject instanceof SpriteMorph)
 		return otherObject.xPosition();
-	if (otherObject === null)
+	if (this.isNobody(otherObject))
 		return NOBODY;
 	return NOT_AN_OBJECT;
 }
@@ -887,7 +887,7 @@ StageMorph.prototype.getObjectY = function(otherObject)
 {
 	if (otherObject instanceof SpriteMorph)
 		return otherObject.yPosition();
-	if (otherObject === null)
+	if (this.isNobody(otherObject))
 		return NOBODY;
 	return NOT_AN_OBJECT;
 }
@@ -952,12 +952,10 @@ StageMorph.prototype.getTypeName = function(otherObject)
 		else
 			return otherObject.name;
 	}
-	else if (otherObject === null)
-	{
+	
+	if (this.isNobody(otherObject))
 		return NOBODY;
-	}
-	else 
-		return NOT_AN_OBJECT;
+	return NOT_AN_OBJECT;
 }
 
 SpriteMorph.prototype.getCostumeNameObject = function(otherObject) { 
@@ -969,12 +967,10 @@ StageMorph.prototype.getCostumeNameObject = function(otherObject)
 	{
 		return otherObject.getCostumeName();
 	}
-	else if (otherObject === null)
-	{
+	
+	if (this.isNobody(otherObject))
 		return NOBODY;
-	}
-	else 
-		return NOT_AN_OBJECT;
+	return NOT_AN_OBJECT;
 }
 
 SpriteMorph.prototype.getCostumeName = function()
@@ -987,7 +983,7 @@ SpriteMorph.prototype.reportNobody = function() {
 }
 StageMorph.prototype.reportNobody = function()
 {
-	return null;
+	return NOBODY;
 }
 
 SpriteMorph.prototype.reportThis = function()
@@ -1005,7 +1001,7 @@ SpriteMorph.prototype.isNobody = function(x) {
 }
 StageMorph.prototype.isNobody = function(x)
 {
-	return x == null;
+	return x === undefined || x === null || x == NOBODY;
 }
 
 SpriteMorph.prototype.setVariable = function(n,v,x) { 
@@ -1017,6 +1013,10 @@ StageMorph.prototype.setVariable = function(n,v,x)
 	{
 		x.variables.setVar(n, v);
 	}
+    if (this.isNobody(x)) {
+    	throw new Error("The object is nobody!");
+    }
+	throw new Error("Not an object!");
 }
 
 SpriteMorph.prototype.getVariable = function(n,x) { 
@@ -1024,11 +1024,13 @@ SpriteMorph.prototype.getVariable = function(n,x) {
 }
 StageMorph.prototype.getVariable = function(n,x)
 {
-	if (x instanceof SpriteMorph)
-	{
+	if (x instanceof SpriteMorph) {
 		return x.variables.getVar(n);
 	}
-	return 42;
+    if (this.isNobody(x)) {
+    	throw new Error("The object is nobody!");
+    }
+	throw new Error("Not an object!");
 }
 
 SpriteMorph.prototype.changeVariable = function(n,v,x) { 
@@ -1040,6 +1042,10 @@ StageMorph.prototype.changeVariable = function(n,v,x)
 	{
 		return x.variables.setVar(n, v + x.variables.getVar(n));
 	}
+    if (this.isNobody(x)) {
+    	throw new Error("The object is nobody!");
+    }
+	throw new Error("Not an object!");
 }
 
 SpriteMorph.prototype.changeCellAttributeCell = function(attribute, cx, cy, value) { return this.parentThatIsA(StageMorph).changeCellAttributeCell(attribute, cx, cy, value); }
@@ -1048,7 +1054,7 @@ StageMorph.prototype.changeCellAttributeCell = function(attribute, cx, cy, value
 	var cell = this.getCellAtCellCoords(cx,cy);
 	if (!cell)
 		return;
-	cell.setAttribute(attribute, cell.getAttribute(attribute) + value);
+	cell.setAttribute(attribute, cell.getAttribute(attribute) + Number(value));
 }
 
 SpriteMorph.prototype.changeCellAttributeEverywhere = function(attribute, value) { return this.parentThatIsA(StageMorph).changeCellAttributeEverywhere(attribute, value); }
@@ -1060,7 +1066,7 @@ StageMorph.prototype.changeCellAttributeEverywhere = function(attribute, value)
 	{
 		for (var j=0; j<cells[i].length; j++)
 		{
-			cells[i][j].setAttribute(attribute, cells[i][j].getAttribute(attribute) + value);
+			cells[i][j].setAttribute(attribute, cells[i][j].getAttribute(attribute) + Number(value));
 		}
 	}
 }
@@ -1071,7 +1077,7 @@ StageMorph.prototype.changeCellAttribute = function(attribute, x, y, value)
 	var cell = this.getCellAtStageCoords(x,y);
 	if (!cell)
 		return;
-	cell.setAttribute(attribute, cell.getAttribute(attribute) + value);
+	cell.setAttribute(attribute, cell.getAttribute(attribute) + Number(value));
 }
 
 SpriteMorph.prototype.changeCellAttributeHere = function(attribute, value) {
@@ -1079,7 +1085,7 @@ SpriteMorph.prototype.changeCellAttributeHere = function(attribute, value) {
 	var cell = this.parentThatIsA(StageMorph).getCellAt(rotCentre.x, rotCentre.y);
 	if (!cell)
 		return;
-	cell.setAttribute(attribute, cell.getAttribute(attribute) + value);
+	cell.setAttribute(attribute, cell.getAttribute(attribute) + Number(value));
 }
 
 SpriteMorph.prototype.setCellAttributeCell = function(attribute, cx, cy, value) { return this.parentThatIsA(StageMorph).setCellAttributeCell(attribute, cx, cy, value); }
@@ -1250,8 +1256,8 @@ SpriteMorph.prototype.moveToNbrCellBase = function(open)
 	var cellX = this.cellX();
 	var cellY = this.cellY();
 	var stage = this.parentThatIsA(StageMorph);
-	var cellW = stage.cellWidth();
-	var cellH = stage.cellHeight();
+	var cellW = stage.cellWidthPx();
+	var cellH = stage.cellHeightPx();
 	
 	var nOpenCells = 0;
 	for (var x=-1; x<=1; x++)
@@ -1319,8 +1325,8 @@ SpriteMorph.prototype.moveToCell = function(cellX, cellY)
 	var stage = this.parentThatIsA(StageMorph);
 	var cellsX = stage.cellsX;
 	var cellsY = stage.cellsY;
-	var cellW = stage.cellWidth();
-	var cellH = stage.cellHeight();
+	var cellW = stage.cellWidthReal();
+	var cellH = stage.cellHeightReal();
 	
 	this.gotoXY((cellX + 0.5) * cellW - 240, 180 - (cellY + 0.5) * cellH);
 }
@@ -1555,6 +1561,9 @@ SpriteMorph.prototype.isObjectInCell = function(objectOrName, cellDir) {
 	cellPos.y += cellDirY[cellDir[0]];
 	
 	var cell = stage.getCellAtCellCoords(cellPos);
+	if (!cell) {
+    	return false;
+	}
     for (var i = 0; i < cell.spriteMorphs.length; i++) {
         var ii = cell.spriteMorphs[i];
         // Deal with both cases (object/name) for objectOrName
@@ -1610,6 +1619,9 @@ SpriteMorph.prototype.isCostumeInCell = function(costumeName, cellDir) {
 	cellPos.y += cellDirY[cellDir[0]];
 	
 	var cell = stage.getCellAtCellCoords(cellPos);
+	if (!cell) {
+    	return false;
+	}
     for (var i = 0; i < cell.spriteMorphs.length; i++) {
         var ii = cell.spriteMorphs[i];
         if (ii.parentSprite == this.parentSprite && ii.getCostumeName() == costumeName) {
@@ -2056,8 +2068,10 @@ StageMorph.prototype.changeCellCount = function(newX, newY)
 /*
 ** Calculates the dimension of the cells and returns it.
 */
-StageMorph.prototype.cellWidth  = function() { return this.bounds.width()  / this.cellsX; }
-StageMorph.prototype.cellHeight = function() { return this.bounds.height() / this.cellsY; }
+StageMorph.prototype.cellWidthPx    = function() { return this.bounds.width()  / this.cellsX; }
+StageMorph.prototype.cellHeightPx   = function() { return this.bounds.height() / this.cellsY; }
+StageMorph.prototype.cellWidthReal  = function() { return 480 / this.cellsX; }
+StageMorph.prototype.cellHeightReal = function() { return 360 / this.cellsY; }
 
 /*
 ** Used when a cell attribute changes. Adds the area that the cell occupies to a list 
@@ -2065,14 +2079,14 @@ StageMorph.prototype.cellHeight = function() { return this.bounds.height() / thi
 */
 StageMorph.prototype.dirtyCellAt = function(x, y)
 {
-	var cellWidth = this.cellWidth();
-	var cellHeight = this.cellHeight();
+	var cellWidthPx = this.cellWidthPx();
+	var cellHeightPx = this.cellHeightPx();
 	this.world().broken.push(
 		new Rectangle(
-			this.bounds.left() + cellWidth * x,
-			this.bounds.top() + cellHeight * y,
-			this.bounds.left() + cellWidth * (x+1),
-			this.bounds.top() + cellHeight * (y+1)).spread());
+			this.bounds.left() + cellWidthPx * x,
+			this.bounds.top() + cellHeightPx * y,
+			this.bounds.left() + cellWidthPx * (x+1),
+			this.bounds.top() + cellHeightPx * (y+1)).spread());
 }
 
 /*
@@ -2123,10 +2137,22 @@ StageMorph.prototype.screenToCellSpace = function(pointOrX, y)
 	{
 		var cellX = (pointOrX - this.bounds.left()) / this.bounds.width() * this.cellsX;
 		var cellY = (y - this.bounds.top()) / this.bounds.height() * this.cellsY;
-		if (cellX < this.cellsX && cellX >= 0 && cellY < this.cellsY && cellY >= 0)
+		//if (cellX < this.cellsX && cellX >= 0 && cellY < this.cellsY && cellY >= 0)
 			return new Point(cellX, cellY);
-		return null;
 	}
+}
+
+/*
+** Converts a position in pixels to a position in cell coordinates.
+*/
+StageMorph.prototype.screenToCellSpaceNullWhenOob = function(pointOrX, y)
+{
+	var point = this.screenToCellSpace(pointOrX, y);
+	var cellX = point.x;
+	var cellY = point.y;
+	
+	if (cellX < this.cellsX && cellX >= 0 && cellY < this.cellsY && cellY >= 0)
+		return new Point(cellX, cellY);
 }
 
 /*
@@ -2167,7 +2193,7 @@ StageMorph.prototype.getCellAtStageCoords = function(pointOrX, y)
 */
 StageMorph.prototype.getCellAt = function(pointOrX, y)
 {
-	var point = this.screenToCellSpace(pointOrX, y);
+	var point = this.screenToCellSpaceNullWhenOob(pointOrX, y);
 	
 	if (point == null)
 	{
@@ -2202,14 +2228,14 @@ StageMorph.prototype.drawOn = function (aCanvas, aRect) {
 			ctx.rect(area.left(), area.top(), area.width(), area.height());
 			ctx.clip();
 			
-			var cellWidth = this.cellWidth();
-			var cellHeight = this.cellHeight();
-			var startCellX = Math.floor((area.left()-this.bounds.left())/cellWidth);
-			var endCellX = Math.ceil((area.right()-this.bounds.left())/cellWidth);
-			var startX = startCellX*cellWidth + this.bounds.left();
-			var startCellY = Math.floor((area.top()-this.bounds.top())/cellHeight);
-			var endCellY = Math.ceil((area.bottom()-this.bounds.top())/cellHeight);
-			var startY = startCellY*cellHeight + this.bounds.top();
+			var cellWidthPx = this.cellWidthPx();
+			var cellHeightPx = this.cellHeightPx();
+			var startCellX = Math.floor((area.left()-this.bounds.left())/cellWidthPx);
+			var endCellX = Math.ceil((area.right()-this.bounds.left())/cellWidthPx);
+			var startX = startCellX*cellWidthPx + this.bounds.left();
+			var startCellY = Math.floor((area.top()-this.bounds.top())/cellHeightPx);
+			var endCellY = Math.ceil((area.bottom()-this.bounds.top())/cellHeightPx);
+			var startY = startCellY*cellHeightPx + this.bounds.top();
 			
 			//Draw cells
 			if (this.cells != undefined && this.cells != null)
@@ -2231,7 +2257,7 @@ StageMorph.prototype.drawOn = function (aCanvas, aRect) {
 							if (value > 0)
 							{
 								ctx.beginPath();
-								ctx.rect(x*cellWidth + this.bounds.left() + 1, y*cellHeight + this.bounds.top() + 1, cellWidth - 1, cellHeight - 1);
+								ctx.rect(x*cellWidthPx + this.bounds.left() + 1, y*cellHeightPx + this.bounds.top() + 1, cellWidthPx - 1, cellHeightPx - 1);
 								var col = Cell.attributeColours[this.visibleAttributes[i]];
 								var dr = Cell.attributeDrawRange[this.visibleAttributes[i]];
 								var alp = (value - dr[0]) / (dr[1] - dr[0]);
@@ -2249,12 +2275,12 @@ StageMorph.prototype.drawOn = function (aCanvas, aRect) {
 			ctx.lineWidth = 1;
 			ctx.strokeStyle = "rgba(0,0,0,0.25)";
 			ctx.beginPath();
-			for (var x=startX; x<area.right(); x+=cellWidth)
+			for (var x=startX; x<area.right(); x+=cellWidthPx)
 			{
 				ctx.moveTo(x+0.5, area.top());
 				ctx.lineTo(x+0.5, area.bottom());
 			}
-			for (var y=startY; y<area.bottom(); y+=cellHeight)
+			for (var y=startY; y<area.bottom(); y+=cellHeightPx)
 			{
 				ctx.moveTo(area.left(), y+0.5);
 				ctx.lineTo(area.right(), y+0.5);
@@ -2292,8 +2318,8 @@ StageMorph.prototype.mouseMove = function(point)
 {
 	if (this.drawTool && this.world().hand.mouseButton === "left")
 	{
-		var previous = this.screenToCellSpace(this.previousPoint);
-		var next = this.screenToCellSpace(point);
+		var previous = this.screenToCellSpaceNullWhenOob(this.previousPoint);
+		var next = this.screenToCellSpaceNullWhenOob(point);
 		if (previous != null && next != null)
 		{
 			var strokeDecayWidth = Math.max(0, this.strokeSize);
@@ -2493,8 +2519,8 @@ function removeNulls(array)
 //We override double check at the start of the following functions:
 SpriteMorph.prototype.scaleToCellSize = function() {
 	var stage = this.parentThatIsA(StageMorph);
-	var scaleX = stage.cellWidth() / this.width();
-	var scaleY = stage.cellHeight() / this.height();
+	var scaleX = stage.cellWidthPx() / this.width();
+	var scaleY = stage.cellHeightPx() / this.height();
     var currentScale = this.getScale();
     this.setScale(currentScale * Math.min(scaleX, scaleY));
 };

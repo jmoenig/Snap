@@ -94,6 +94,11 @@ Process.prototype.asObject = function (object, commandBlock) {
 			this.pushContext();
 		}
 	}
+	var stage = this.context.receiver.parentThatIsA(StageMorph);
+    if (stage.isNobody(object)) {
+    	throw new Error("The object is nobody!");
+    }
+	throw new Error("Not an object!");
 };
 
 Process.prototype.nearestObject = function (otherObjectName, x, y, predicate) {
@@ -134,7 +139,7 @@ Process.prototype.nearestObject = function (otherObjectName, x, y, predicate) {
 			objects: objects,
 			lastObject: null, 
 			minSqDist: -1, 
-			minObject: null 
+			minObject: NOBODY // Defined in changesToObjects.js
 		};
 	}
 	

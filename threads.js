@@ -3077,7 +3077,10 @@ Variable.prototype.copy = function () {
 
 // VariableFrame ///////////////////////////////////////////////////////
 
+variableFrameList = [];
+
 function VariableFrame(parentFrame, owner) {
+    variableFrameList.push(this);
     this.vars = {};
     this.parentFrame = parentFrame || null;
     this.owner = owner || null;

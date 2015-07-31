@@ -32,7 +32,11 @@ Cell.prototype.getAttribute = function(attribute)
 */
 Cell.prototype.setAttribute = function(attribute, value, dirty)
 {
-	this.attributeValues[attribute] = Number(value);
+    value = Number(value);
+    if (!isFinite(value)) {
+        value = 0;
+    }
+	this.attributeValues[attribute] = value;
 	if (dirty || dirty === undefined)
 		this.stageMorph.dirtyCellAt(this.x, this.y);
 }
