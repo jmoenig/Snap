@@ -528,7 +528,7 @@ IDE_Morph.prototype.createControlBar = function () {
         muteSoundsButton,
         projectButton,
         settingsButton,
-		goalImagesButton,
+        goalImagesButton,
         stageSizeButton,
         appModeButton,
         cloudButton,
@@ -799,6 +799,27 @@ IDE_Morph.prototype.createControlBar = function () {
        this.controlBar.goalImagesButton = goalImagesButton; // for menu positioning
     }
 
+    // goalImagesButton
+    button = new PushButtonMorph(
+        this,
+        'goalImagesMenu', ' Goals  '
+    );
+    button.corner = 12;
+    button.color = colors[0];
+    button.highlightColor = colors[1];
+    button.pressColor = colors[2];
+    button.labelMinExtent = new Point(36, 18);
+    button.padding = 0;
+    button.labelShadowOffset = new Point(-1, -1);
+    button.labelShadowColor = colors[1];
+    button.labelColor = this.buttonLabelColor;
+    button.contrast = this.buttonContrast;
+    button.drawNew();
+    button.fixLayout();
+    goalImagesButton = button;
+    this.controlBar.add(goalImagesButton);
+    this.controlBar.goalImagesButton = goalImagesButton; // for menu positioning
+    
     // cloudButton
     button = new PushButtonMorph(
         this,
@@ -857,13 +878,18 @@ IDE_Morph.prototype.createControlBar = function () {
            settingsButton.setCenter(myself.controlBar.center());
            settingsButton.setLeft(this.left() - 40);
         }
+        
+        goalImagesButton.setCenter(myself.controlBar.center());
+        goalImagesButton.setLeft(this.left());
+        
+        settingsButton.setCenter(myself.controlBar.center());
+        settingsButton.setLeft(goalImagesButton.left() - padding - 40);
 
         cloudButton.setCenter(myself.controlBar.center());
         cloudButton.setRight(settingsButton.left() - padding);
 
         projectButton.setCenter(myself.controlBar.center());
         projectButton.setRight(cloudButton.left() - padding);
-
         this.updateLabel();
     };
 
@@ -1054,7 +1080,8 @@ IDE_Morph.prototype.createSpriteBar = function () {
     var rotationStyleButtons = [],
         thumbSize = new Point(45, 45),
         nameField,
-        padlock,
+        checkbox, 
+        checkbox2,
         thumbnail,
         tabCorner = 15,
         tabColors = this.tabColors,
@@ -1157,37 +1184,80 @@ IDE_Morph.prototype.createSpriteBar = function () {
         myself.currentSprite.setName(nameField.getValue());
     };
 
-    // padlock
-    padlock = new ToggleMorph(
-        'checkbox',
-        null,
-        function () {
-            myself.currentSprite.isDraggable =
-                !myself.currentSprite.isDraggable;
-        },
-        localize('draggable'),
-        function () {
-            return myself.currentSprite.isDraggable;
-        }
-    );
-    padlock.label.isBold = false;
-    padlock.label.setColor(this.buttonLabelColor);
-    padlock.color = tabColors[2];
-    padlock.highlightColor = tabColors[0];
-    padlock.pressColor = tabColors[1];
-
-    padlock.tick.shadowOffset = MorphicPreferences.isFlat ?
-            new Point() : new Point(-1, -1);
-    padlock.tick.shadowColor = new Color(); // black
-    padlock.tick.color = this.buttonLabelColor;
-    padlock.tick.isBold = false;
-    padlock.tick.drawNew();
-
-    padlock.setPosition(nameField.bottomLeft().add(2));
-    padlock.drawNew();
-    this.spriteBar.add(padlock);
+    // checkbox
     if (this.currentSprite instanceof StageMorph) {
-        padlock.hide();
+        checkbox = new ToggleMorph(
+            'checkbox',
+            null,
+            function () {
+                myself.currentSprite.toggleGrid();
+            },
+            'display grid', // TODO: localize
+            function () {
+                return myself.currentSprite.getGridVisible();
+            }
+        );
+    }
+    else {
+        checkbox = new ToggleMorph(
+            'checkbox',
+            null,
+            function () {
+                myself.currentSprite.isDraggable =
+                    !myself.currentSprite.isDraggable;
+            },
+            localize('draggable'),
+            function () {
+                return myself.currentSprite.isDraggable;
+            }
+        );
+    }
+    checkbox.label.isBold = false;
+    checkbox.label.setColor(this.buttonLabelColor);
+    checkbox.color = tabColors[2];
+    checkbox.highlightColor = tabColors[0];
+    checkbox.pressColor = tabColors[1];
+
+    checkbox.tick.shadowOffset = MorphicPreferences.isFlat ?
+            new Point() : new Point(-1, -1);
+    checkbox.tick.shadowColor = new Color(); // black
+    checkbox.tick.color = this.buttonLabelColor;
+    checkbox.tick.isBold = false;
+    checkbox.tick.drawNew();
+
+    checkbox.setPosition(nameField.bottomLeft().add(2));
+    checkbox.drawNew();
+    this.spriteBar.add(checkbox);
+
+    if (this.currentSprite instanceof SpriteMorph) {
+        checkbox2 = new ToggleMorph(
+            'checkbox',
+            null,
+            function () {
+                myself.currentSprite.toggle3D();
+            },
+            'switch to 3D', // TODO: localize
+            function () {
+                return myself.currentSprite.costume ? 
+                    myself.currentSprite.costume.is3D : false;
+            }
+        );
+        checkbox2.label.isBold = false;
+        checkbox2.label.setColor(this.buttonLabelColor);
+        checkbox2.color = tabColors[2];
+        checkbox2.highlightColor = tabColors[0];
+        checkbox2.pressColor = tabColors[1];
+
+        checkbox2.tick.shadowOffset = MorphicPreferences.isFlat ?
+            new Point() : new Point(-1, -1);
+        checkbox2.tick.shadowColor = new Color(); // black
+        checkbox2.tick.color = this.buttonLabelColor;
+        checkbox2.tick.isBold = false;
+        checkbox2.tick.drawNew();
+
+        checkbox2.setPosition(checkbox.topRight().add(new Point(60, 0)));
+        checkbox2.drawNew();
+        this.spriteBar.add(checkbox2);
     }
 
     // tab bar
@@ -1405,7 +1475,6 @@ IDE_Morph.prototype.createCorralBar = function () {
     paintbutton.setLeft(
         this.corralBar.left() + padding + newbutton.width() + padding
     );
-
     this.corralBar.add(paintbutton);
   
     xlabel = new StringMorph(
@@ -1701,10 +1770,14 @@ IDE_Morph.prototype.reactToWorldResize = function (rect) {
     }
 };
 
-IDE_Morph.prototype.droppedImage = function (aCanvas, name) {
+IDE_Morph.prototype.droppedImage = function (aCanvas, name, url) {
     var costume = new Costume(
         aCanvas,
-        name ? name.split('.')[0] : '' // up to period
+        name ? name.split('.')[0] : '', // up to period
+        null,
+        url,
+        false, // is3D
+        true   // is3dSwitchable
     );
 
     if (costume.isTainted()) {
@@ -1718,15 +1791,46 @@ IDE_Morph.prototype.droppedImage = function (aCanvas, name) {
         );
         return;
     }
-	
-	if(costume.contents.height >= 360){
-		this.showMessage("Using an image greater than 360 will cause inaccuracies in the 'translate by width/height' block");
-	}
+    
+    if(costume.contents.height >= 360){
+        this.showMessage("Using an image greater than 360 will cause inaccuracies in the 'translate by width/height' block");
+    }
+    this.currentSprite.addCostume(costume);
+    this.currentSprite.wearCostume(costume);
+    this.spriteBar.tabBar.tabTo('costumes');
+    this.hasChangedMedia = true;
+
+    this.selectSprite(this.currentSprite); // do this to call createSpriteBar()
+};
+
+IDE_Morph.prototype.dropped3dObject = function (name, url) {
+    var costume = new Costume(
+        null, // no canvas for 3D costumes
+        name ? name.split('.')[0] : '', // up to period
+        null, // rotation center
+        url,
+        true, // is3D
+        false // is3dSwitchable
+    );
+
     this.currentSprite.addCostume(costume);
     this.currentSprite.wearCostume(costume);
     this.spriteBar.tabBar.tabTo('costumes');
     this.hasChangedMedia = true;
 };
+
+IDE_Morph.prototype.droppedTexture = function (name, url) {
+    var texture = new Texture(
+        name ? name.split('.')[0] : '', // up to period
+        url
+    );
+
+    // this.currentSprite.addTexture(texture);
+    this.currentSprite.wearTexture(texture);
+    this.spriteBar.tabBar.tabTo('costumes');
+    this.hasChangedMedia = true;
+};
+
 
 IDE_Morph.prototype.droppedSVG = function (anImage, name) {
     var costume = new SVG_Costume(anImage, name.split('.')[0]);
@@ -2016,6 +2120,8 @@ IDE_Morph.prototype.paintNewSprite = function () {
     this.sprites.add(sprite);
     this.corral.addSprite(sprite);
     this.selectSprite(sprite);
+    cos.name = sprite.name;
+    cos.is3dSwitchable = true;
     cos.edit(
         this.world(),
         this,
@@ -2043,6 +2149,9 @@ IDE_Morph.prototype.duplicateSprite = function (sprite) {
 IDE_Morph.prototype.removeSprite = function (sprite) {
     var idx = this.sprites.asArray().indexOf(sprite) + 1;
 
+    if (sprite.costume && sprite.costume.is3D) {
+        sprite.destroy3dSprite();
+    }
     sprite.destroy();
     this.stage.watchers().forEach(function (watcher) {
         if (watcher.object() === sprite) {
@@ -2247,14 +2356,14 @@ IDE_Morph.prototype.cloudMenu = function () {
 };
 
 IDE_Morph.prototype.goalImagesMenu = function() {
-	var menu,
+    var menu,
         stage = this.stage,
         world = this.world(),
         myself = this,
         pos = this.controlBar.goalImagesButton.bottomLeft(),
         shiftClicked = (world.currentKey === 16);
-		
-		function addPreference(label, toggle, test, onHint, offHint, hide) {
+        
+        function addPreference(label, toggle, test, onHint, offHint, hide) {
         var on = '\u2611 ',
             off = '\u2610 ';
         if (!hide || shiftClicked) {
@@ -2266,8 +2375,8 @@ IDE_Morph.prototype.goalImagesMenu = function() {
             );
         }
     }
-	
-	new ProjectDialogMorph(this, 'goals').popUp();
+    
+    new ProjectDialogMorph(this, 'goals').popUp();
 };
 
 IDE_Morph.prototype.settingsMenu = function () {
@@ -2467,7 +2576,9 @@ IDE_Morph.prototype.settingsMenu = function () {
             StageMorph.prototype.enableCodeMapping =
                 !StageMorph.prototype.enableCodeMapping;
             myself.currentSprite.blocksCache.variables = null;
+            myself.currentSprite.blocksCache3D.variables = null;
             myself.currentSprite.paletteCache.variables = null;
+            myself.currentSprite.paletteCache3D.variables = null;
             myself.refreshPalette();
         },
         StageMorph.prototype.enableCodeMapping,
@@ -2631,47 +2742,143 @@ IDE_Morph.prototype.projectMenu = function () {
         },
         'Select categories of additional blocks to add to this project.'
     );
-	
-	menu.addLine();
-	menu.addItem(
+    
+    menu.addLine();
+    menu.addItem(
         'Load Demos...',
         function () { new ProjectDialogMorph(this, 'demos').popUp();},
         'show different default scripts'
     );
 
-    menu.addItem(
-        localize(graphicsName) + '...',
-        function () {
-            var dir = graphicsName,
+    if (this.currentSprite instanceof SpriteMorph) {
+        // SpriteMorph
+        menu.addItem(
+            '2D ' + localize(graphicsName) + '...',
+            function () {
+                var dir = graphicsName,
+                names = myself.getCostumesList(dir),
+                libMenu = new MenuMorph(
+                    myself,
+                    localize('Import') + ' ' + '2D ' + localize(graphicsName)
+                );
+
+                function loadCostume(name) {
+                    var url = dir + '/' + name,
+                    img = new Image();
+                    img.onload = function () {
+                        var canvas = newCanvas(new Point(img.width, img.height));
+                        canvas.getContext('2d').drawImage(img, 0, 0);
+                        myself.droppedImage(canvas, name, img.src);
+                    };
+                    img.src = url;
+                }
+
+                names.forEach(function (line) {
+                    if (line.length > 0) {
+                        libMenu.addItem(
+                            line,
+                            function () {loadCostume(line); }
+                        );
+                    }
+                });
+                libMenu.popup(world, pos);
+            },
+            'Select a 2D costume from the media library'
+        );
+        menu.addItem(
+            '3D ' + localize(graphicsName) + '...',
+            function () {
+                var dir = config.asset_path + graphicsName + '3D',
+                names = myself.getCostumesList(dir+'/list.html'),
+                libMenu = new MenuMorph(
+                    myself,
+                    localize('Import') + ' ' + '3D ' + localize(graphicsName)
+                );
+
+                function loadCostume(name) {
+                    var url = dir + '/' + name;
+                    myself.dropped3dObject(name, url);  
+                }
+
+                names.forEach(function (line) {
+                    if (line.length > 0) {
+                        libMenu.addItem(
+                            line,
+                            function () {loadCostume(line); }
+                        );
+                    }
+                });
+                libMenu.popup(world, pos);
+            },
+            'Select a 3D costume from the media library'
+        );
+
+        menu.addItem(
+            'Textures...', // TODO: localize this 
+            function () {
+                var dir = 'Textures',
+                names = myself.getTexturesList(dir),
+                libMenu = new MenuMorph(
+                    myself,
+                    localize('Import') + ' ' + dir 
+                );
+
+                function loadTexture(name) {
+                    var url = dir + '/' + name;
+                    myself.droppedTexture(name, url);   
+                }
+
+                names.forEach(function (line) {
+                    if (line.length > 0) {
+                        libMenu.addItem(
+                            line,
+                            function () {loadTexture(line); }
+                        );
+                    }
+                });
+                libMenu.popup(world, pos);
+            },
+            'Select a texture from the media library'
+        );
+            
+            
+    }
+    else {
+        // StageMorph
+        menu.addItem(
+            localize(graphicsName) + '...',
+            function () {
+                var dir = graphicsName,
                 names = myself.getCostumesList(dir),
                 libMenu = new MenuMorph(
                     myself,
                     localize('Import') + ' ' + localize(dir)
                 );
 
-            function loadCostume(name) {
-                var url = dir + '/' + name,
+                function loadCostume(name) {
+                    var url = dir + '/' + name,
                     img = new Image();
-                img.onload = function () {
-                    var canvas = newCanvas(new Point(img.width, img.height));
-                    canvas.getContext('2d').drawImage(img, 0, 0);
-                    myself.droppedImage(canvas, name);
-                };
-                img.src = url;
-            }
-
-            names.forEach(function (line) {
-                if (line.length > 0) {
-                    libMenu.addItem(
-                        line,
-                        function () {loadCostume(line); }
-                    );
+                    img.onload = function () {
+                        var canvas = newCanvas(new Point(img.width, img.height));
+                        canvas.getContext('2d').drawImage(img, 0, 0);
+                        myself.droppedImage(canvas, name);
+                    };
+                    img.src = url;
                 }
-            });
-            libMenu.popup(world, pos);
-        },
-        'Select a costume from the media library'
-    );
+
+                names.forEach(function (line) {
+                    if (line.length > 0) {
+                        libMenu.addItem(
+                            line,
+                            function () {loadCostume(line); }
+                        );
+                    }
+                });
+                libMenu.popup(world, pos);
+            },
+            'Select a 2D costume from the media library'
+        );
+    }
     menu.addItem(
         localize('Sounds') + '...',
         function () {
@@ -2709,7 +2916,7 @@ IDE_Morph.prototype.getCostumesList = function (dirname) {
     dir = this.getURL(dirname);
     dir.split('\n').forEach(
         function (line) {
-            var startIdx = line.search(new RegExp('href="[^./?].*"')),
+            var startIdx = line.search(new RegExp('href="[^./?].*"', 'i')),
                 endIdx,
                 name;
 
@@ -2727,20 +2934,21 @@ IDE_Morph.prototype.getCostumesList = function (dirname) {
     return costumes;
 };
 
+IDE_Morph.prototype.getTexturesList = 
+    IDE_Morph.prototype.getCostumesList;
+
 // IDE_Morph menu actions
 
 IDE_Morph.prototype.aboutCSnap = function () {
     var dlg, aboutTxt, noticeTxt, creditsTxt, versions = '', translations,
         module, btn1, btn2, btn3, btn4, licenseBtn, translatorsBtn,
         world = this.world();
-		
+        
 
     aboutTxt = 'CSnap 1.0\nCSDTs with Snap!\n\n'
         + 'Culturally Situated Design Tools (CSDTs) were developed at RPI with support from the\n'
         + 'National Science Foundation. In 2014 the Java versions were ported to the Snap!\n'
-        + 'codebase created by Jens Mönig, which is based on the Scratch interface from MIT.\n\n'
-        + 'For more information on CSDTs see http://community.csdt.rpi.edu\n';
-		//+ '____________________________________________________'
+        + 'codebase created by Jens Mönig, which is based on the Scratch interface'
 
     noticeTxt = localize('License')
         + '\n\n'
@@ -3307,6 +3515,7 @@ IDE_Morph.prototype.flushBlocksCache = function (category) {
         this.stage.children.forEach(function (m) {
             if (m instanceof SpriteMorph) {
                 m.blocksCache[category] = null;
+                m.blocksCache3D[category] = null;
             }
         });
     } else {
@@ -3314,6 +3523,7 @@ IDE_Morph.prototype.flushBlocksCache = function (category) {
         this.stage.children.forEach(function (m) {
             if (m instanceof SpriteMorph) {
                 m.blocksCache = {};
+                m.blocksCache3D = {};
             }
         });
     }
@@ -3327,6 +3537,7 @@ IDE_Morph.prototype.flushPaletteCache = function (category) {
         this.stage.children.forEach(function (m) {
             if (m instanceof SpriteMorph) {
                 m.paletteCache[category] = null;
+                m.paletteCache3D[category] = null;
             }
         });
     } else {
@@ -3334,6 +3545,7 @@ IDE_Morph.prototype.flushPaletteCache = function (category) {
         this.stage.children.forEach(function (m) {
             if (m instanceof SpriteMorph) {
                 m.paletteCache = {};
+                m.paletteCache3D = {};
             }
         });
     }
@@ -4186,20 +4398,20 @@ ProjectDialogMorph.prototype.init = function (ide, task) {
     );
 
     // override inherited properites:
-	if(this.task === 'save'){
-		this.labelString = 'Save Project';
-	}
-	else if(this.task === 'open'){
-		this.labelString = 'Open Project';
-	}
-	else if(this.task === 'demos'){
-		this.labelString = 'Demos List';
-		this.source = 'examples';
-	}
-	else if(this.task === 'goals'){
-		this.labelString = 'Goals';
-		this.source = 'goals';
-	}
+    if(this.task === 'save'){
+        this.labelString = 'Save Project';
+    }
+    else if(this.task === 'open'){
+        this.labelString = 'Open Project';
+    }
+    else if(this.task === 'demos'){
+        this.labelString = 'Demos List';
+        this.source = 'examples';
+    }
+    else if(this.task === 'goals'){
+        this.labelString = 'Goals';
+        this.source = 'goals';
+    }
     this.createLabel();
     this.key = 'project' + task;
 
@@ -4234,20 +4446,20 @@ ProjectDialogMorph.prototype.buildContents = function () {
         notification.refresh = nop;
         this.srcBar.add(notification);
     }
-	
-	if(this.task === 'demos'){
-		this.addSourceButton('examples', localize('Examples'), 'poster');
-	}
-	else if(this.task === 'goals'){
-		//no source button needed
-	}
-	else{
-		this.addSourceButton('cloud', localize('Cloud'), 'cloud');
-		this.addSourceButton('local', localize('Browser'), 'storage');
-		if (this.task === 'open') {
-			this.addSourceButton('examples', localize('Examples'), 'poster');
-		}
-	}
+    
+    if(this.task === 'demos'){
+        this.addSourceButton('examples', localize('Examples'), 'poster');
+    }
+    else if(this.task === 'goals'){
+        //no source button needed
+    }
+    else{
+        this.addSourceButton('cloud', localize('Cloud'), 'cloud');
+        this.addSourceButton('local', localize('Browser'), 'storage');
+        if (this.task === 'open') {
+            this.addSourceButton('examples', localize('Examples'), 'poster');
+        }
+    }
     this.srcBar.fixLayout();
     this.body.add(this.srcBar);
 
@@ -4286,13 +4498,13 @@ ProjectDialogMorph.prototype.buildContents = function () {
         this.changed();
     };
     this.preview.drawRectBorder = InputFieldMorph.prototype.drawRectBorder;
-	if(this.task === 'goals'){
-		this.preview.setExtent(new Point(250, 250));
-	} else{
-		this.preview.setExtent(
-			this.ide.serializer.thumbnailSize.add(this.preview.edge * 2)
-		);
-	}
+    if(this.task === 'goals'){
+        this.preview.setExtent(new Point(250, 250));
+    } else{
+        this.preview.setExtent(
+            this.ide.serializer.thumbnailSize.add(this.preview.edge * 2)
+        );
+    }
 
     this.body.add(this.preview);
     this.preview.drawNew();
@@ -4336,12 +4548,12 @@ ProjectDialogMorph.prototype.buildContents = function () {
     if (this.task === 'open') {
         this.addButton('openProject', 'Open');
         this.action = 'openProject';
-	} else if (this.task === 'demos'){
-		this.addButton('openProject', 'Open');
+    } else if (this.task === 'demos'){
+        this.addButton('openProject', 'Open');
         this.action = 'openProject';
-	} else if (this.task === 'goals'){
-		this.addButton('ok', 'Ok');
-		//action needed?
+    } else if (this.task === 'goals'){
+        this.addButton('ok', 'Ok');
+        //action needed?
     } else { // 'save'
         this.addButton('saveProject', 'Save');
         this.action = 'saveProject';
@@ -4506,9 +4718,9 @@ ProjectDialogMorph.prototype.setSource = function (source) {
     case 'examples':
         this.projectList = this.getExamplesProjectList();
         break;
-	case 'goals':
-		this.projectList = this.getGoalProjectList();
-		break;
+    case 'goals':
+        this.projectList = this.getGoalProjectList();
+        break;
     case 'local':
         this.projectList = this.getLocalProjectList();
         break;
@@ -4564,6 +4776,29 @@ ProjectDialogMorph.prototype.setSource = function (source) {
 			function () {myself.ok(); }
 		);
 	}
+    
+    if(this.source === 'goals'){
+        this.listField = new ListMorph(
+            this.projectList, 
+            this.projectList.length > 0 ?
+                    function (element) {
+                        return element.thumb;
+                    } : null,
+            null,
+            function () {myself.ok();}
+        );
+    }
+    else{
+        this.listField = new ListMorph(
+            this.projectList,
+            this.projectList.length > 0 ?
+                    function (element) {
+                        return element.name;
+                    } : null,
+            null,
+            function () {myself.ok(); }
+        );
+    }
 
     this.fixListFieldItemColors();
     this.listField.fixLayout = nop;
@@ -4598,7 +4833,31 @@ ProjectDialogMorph.prototype.setSource = function (source) {
             }
             myself.edit();
         };	
-	} else if (this.source === 'goals'){ //Goals action moved above.
+    } else if (this.source === 'goals'){
+        this.listField.action = function (item) {
+            var img, desc;
+            if (item === undefined) {return; }
+            if (myself.nameField) {
+               myself.nameField.setContents(item.name || '');
+            }
+            var request = new XMLHttpRequest();
+            request.open("GET", config.urls.goals_url, false);
+            request.send();
+            var JSON_object = JSON.parse(request.responseText);
+            for (var i = 0; i < JSON_object.length; i++){
+                if(JSON_object[i].name === item.name){
+                    img = JSON_object[i].img_url;
+                    desc = JSON_object[i].description;
+                    myself.notesText.text = desc || '';
+                    myself.notesText.drawNew();
+                    myself.notesField.contents.adjustBounds();
+                    myself.preview.texture = img || null;
+                    myself.preview.cachedTexture = img;
+                    myself.preview.drawNew();
+                    myself.edit();
+                }
+            }
+        };
     } else { // 'examples', 'cloud' is initialized elsewhere
         this.listField.action = function (item) {
             var src, xml;
@@ -4606,15 +4865,15 @@ ProjectDialogMorph.prototype.setSource = function (source) {
             if (myself.nameField) {
                 myself.nameField.setContents(item.name || '');
             }
-			var request = new XMLHttpRequest();
-			request.open("GET", config.urls.demos_url, false);
-			request.send();
-			var JSON_object = JSON.parse(request.responseText);
-			for (var i = 0; i < JSON_object.length; i++){
-				if(JSON_object[i]["name"] === item.name){
-					src = myself.ide.getURL(JSON_object[i]["project_url"]);
-				}
-			}
+            var request = new XMLHttpRequest();
+            request.open("GET", config.urls.demos_url, false);
+            request.send();
+            var JSON_object = JSON.parse(request.responseText);
+            for (var i = 0; i < JSON_object.length; i++){
+                if(JSON_object[i]["name"] === item.name){
+                    src = myself.ide.getURL(JSON_object[i]["project_url"]);
+                }
+            }
 
             xml = myself.ide.serializer.parse(src);
             myself.notesText.text = xml.childNamed('notes').contents
@@ -4665,7 +4924,7 @@ ProjectDialogMorph.prototype.getLocalProjectList = function () {
 };
 
 ProjectDialogMorph.prototype.getGoalProjectList = function () {
-	var dir, dta,
+    var dir, dta,
         projects = [], thumbnail;
 	var request = new XMLHttpRequest();
 	if(request.open("GET", config.urls.goals_url, false)){
@@ -4684,6 +4943,22 @@ ProjectDialogMorph.prototype.getGoalProjectList = function () {
 		};
 		projects.push(dta);
 	}
+    var request = new XMLHttpRequest();
+    request.open("GET", config.urls.goals_url, false);
+    request.send();
+    var JSON_object = JSON.parse(request.responseText);
+    for (var i = 0; i < JSON_object.length; i++){
+        //preload images
+        thumbnail = new Image();
+        thumbnail.src = JSON_object[i].thumb_url
+        dta = {
+            name: JSON_object[i].name,
+            img: JSON_object[i].img_url,
+            thumb: thumbnail,
+            notes: JSON_object[i].description
+        };
+        projects.push(dta);
+    }
     projects.sort(function (x, y) {
         return x.name < y.name ? -1 : 1;
     });
@@ -4713,6 +4988,23 @@ ProjectDialogMorph.prototype.getExamplesProjectList = function () {
     catch(e) {
         this.ide.showMessage("Failed to load examples.");
     }
+    var dir,
+        projects = [];
+    var request = new XMLHttpRequest();
+    request.open("GET", config.urls.demos_url, false);
+    request.send();
+    var JSON_object = JSON.parse(request.responseText);
+    for (var i = 0; i < JSON_object.length; i++){
+        dta = {
+            name: JSON_object[i]["name"],
+            thumb: null,
+            notes: null
+        };
+        projects.push(dta);
+    }
+    projects.sort(function (x, y) {
+        return x.name < y.name ? -1 : 1;
+    });
     return projects;
 };
 
@@ -4805,6 +5097,15 @@ ProjectDialogMorph.prototype.openProject = function () {
         }
         if(config.urls.demo_detail_url) {
           SnapCloud.updateURL(config.urls.demo_detail_url + demoId);
+		}
+        var request = new XMLHttpRequest();
+        request.open("GET", config.urls.demos_url, false);
+        request.send();
+        var JSON_object = JSON.parse(request.responseText);
+        for (var i = 0; i < JSON_object.length; i++){
+                if(JSON_object[i]["name"] === proj.name){
+                    src = this.ide.getURL(JSON_object[i]["project_url"]);
+                }
         }
         this.ide.openProjectString(src);
         this.destroy();
@@ -4842,7 +5143,7 @@ ProjectDialogMorph.prototype.saveProject = function () {
     var name = this.nameField.contents().text.text,
         notes = this.notesText.text,
         myself = this;
-	
+    
     this.ide.projectNotes = notes || this.ide.projectNotes;
     if (name) {
         if (this.source === 'cloud') {
@@ -5044,10 +5345,10 @@ ProjectDialogMorph.prototype.fixLayout = function () {
     var th = fontHeight(this.titleFontSize) + this.titlePadding * 2,
         thin = this.padding / 2,
         oldFlag = Morph.prototype.trackChanges;
-		
-	if(this.task === 'goals'){
-		this.setExtent(new Point(550, 450));
-	}
+        
+    if(this.task === 'goals'){
+        this.setExtent(new Point(550, 450));
+    }
 
     Morph.prototype.trackChanges = false;
 
@@ -5697,7 +5998,7 @@ CostumeIconMorph.prototype.duplicateCostume = function () {
 };
 
 CostumeIconMorph.prototype.removeCostume = function () {
-	var wardrobe = this.parentThatIsA(WardrobeMorph),
+    var wardrobe = this.parentThatIsA(WardrobeMorph),
         idx = this.parent.children.indexOf(this),
         ide = this.parentThatIsA(IDE_Morph);
     wardrobe.removeCostumeAt(idx - 2);
