@@ -47,4 +47,4 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 Current Release
 ---------------
 
-The current release is 20150705.
+The current release is 20150731.
