@@ -3811,23 +3811,39 @@ SpriteMorph.prototype.silentGotoXY = function (x, y, justMe) {
 };
 
 SpriteMorph.prototype.setXPosition = function (num) {
-    this.gotoXYZ(+num || 0, this.yPosition(), this.zPosition());
+    if (this.costume && this.costume.is3D) {
+        this.gotoXYZ(+num || 0, this.yPosition(), this.zPosition());
+    }
+    else{
+        this.gotoXY(+num || 0, this.yPosition());
+    }
 };
 
 SpriteMorph.prototype.changeXPosition = function (delta) {
-    this.gotoXYZ(this.xPosition() + (+delta || 0), 
-                 this.yPosition(),
-                 this.zPosition());
+    if (this.costume && this.costume.is3D) {
+        this.gotoXYZ(this.xPosition() + (+delta || 0), this.yPosition(), this.zPosition());
+    }
+    else{
+        this.gotoXY(this.xPosition() + (+delta || 0), this.yPosition());
+    }
 };
 
 SpriteMorph.prototype.setYPosition = function (num) {
-    this.gotoXYZ(this.xPosition(), +num || 0, this.zPosition());
+    if (this.costume && this.costume.is3D) {
+        this.gotoXYZ(this.xPosition(), +num || 0, this.zPosition());
+    }
+    else{
+        this.gotoXY(this.xPosition(), +num || 0);
+    }
 };
 
 SpriteMorph.prototype.changeYPosition = function (delta) {
-    this.gotoXYZ(this.xPosition(),
-                 this.yPosition() + (+delta || 0),
-                 this.zPosition());
+    if (this.costume && this.costume.is3D) {
+        this.gotoXYZ(this.xPosition(), this.yPosition() + (+delta || 0), this.zPosition());
+    }
+    else{
+        this.gotoXY(this.xPosition(), this.yPosition() + (+delta || 0));
+    }
 
 };
 
