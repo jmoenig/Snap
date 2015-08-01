@@ -359,8 +359,27 @@ Druga z powyższych technik pozwala również importować do projektu multimedia
 
 \Snap{} potrafi również importować projekty stworzone przy pomocy BYOB~3.0, Scratcha~1.4 lub Scratcha~2.0 (to ostatnie z~pewnymi utrudnieniami; zob. naszą stronę internetową). Niemal wszystkie takie projekty pracują poprawnie pod \Snap{em}, z~wyłączeniem niewielkiej liczby niekompatybilnych bloków. Projekty z~BYOB~3.1 również działają, pod warunkiem, że nie korzystają z~pierwszoklasowych duszków; w~\Snap{ie}~4.1 będą już działać wszystkie projekty z~BYOB~3.1.
 
-\chapter{Building a Block}
-\section{Simple Blocks}
+\chapter{Tworzenie własnych bloków}
+
+\Snap{} pierwotnie nazywał się BYOB, co oznacza ,,Zbuduj Swoje Własne Bloki'' (ang. \textit{Build Your Own Blocks}). Była to pierwsza i~do dziś najważniejsza cecha, którą dodaliśmy do Scratcha. (Nazwa została zmieniona, gdyż niektórzy nauczyciele nie podzielali naszego poczucia humoru.\footnote{Skrót BYOB oznacza tak naprawdę \textit{bring your own beer}, czyli ,,przynieś własne piwo'' i~oznacza, że zostajemy zaproszeni na przyjęcie, ale oczekuje się od nas, że przyniesiemy ze sobą alkohol --- przyp. tłum.} Cóż, czasem trzeba wiedzieć kiedy się poddać.) Nowy Scratch~2.0 również częściowo obsługuje tworzenie własnych bloków.
+
+\section{Proste bloki}
+
+Na palecie ,,Dane'', w~pobliżu dolnej krawędzi, znajdziemy przycisk ,,nowy blok''.\nopagebreak
+
+\begin{figure}[H]
+\centering
+\input{paleta-dane.pdf_tex}
+\end{figure}
+
+Po kliknięciu tego przycisku pokaże się okno dialogowe, przy pomocy którego możemy wybrać nazwę i~kształt bloku, a~także jego paletę (a~zarazem kolor). Możemy także zdecydować, czy blok ten będzie dostępny dla wszystkich duszków, czy tylko dla aktualnego duszka i~jego klonów. Uwaga: Możemy również wywołać okno ,,nowy blok'' poprzez kliknięcie na tle obszaru skryptu prawym przyciskiem (lub lewym z~wciśniętym klawiszem Ctrl), a~następnie wybranie z~menu polecenia ,,buduj nowy blok\ldots''.
+
+\bigpic{nowy-blok}
+
+W~tym oknie dialogowym możemy wybrać paletę, kształt i~nazwę bloku. Poza jednym wyjątkiem, każda paleta ma przyporządkowany jeden kolor, np. wszystkie bloki z~palety ,,Ruch'' są niebieskie. Jednak paleta ,,Dane'' zawiera zarówno pomarańczowe bloki związane ze zmiennymi, jak i~czerwone, związane z~listami. Oba kolory są dostępne; jest również opcja ,,Inne'', przy pomocy której w~palecie ,,Dane'' tworzymy szare bloki, które nie pasują do żadnej z~powyższych kategorii.
+
+Istnieją trzy kształty bloków, zgodnie z konwencją która powinna być znana użytkownikom Scratcha: bloki w kształcie puzzli to komendy --- nie zwracają one wyników. Bloki owalne to funkcje, które zwracają wyniki, a sześciokątne to predykaty, czyli, innymi słowy, funkcje zwracające wyniki typu logicznego (prawdę lub fałsz).
+
 \subsection{Custom Blocks with Inputs}
 \section{Recursion}
 \section{Block Libraries}
@@ -385,7 +404,7 @@ Druga z powyższych technik pozwala również importować do projektu multimedia
 \subsection{Recursive Calls to Multiple-Input Blocks}
 \section{Formal Parameters}
 \section{Procedures as Data}
-\section{Special Forms}
+1\section{Special Forms}
 \subsection{Special Forms in Scratch}
 \chapter{Object Oriented Programming}
 \section{Local State with Script Variables}
