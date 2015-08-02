@@ -248,8 +248,8 @@ SnapTranslator.dict.pl = {
         'tylko lewo/prawo',
 
     // new sprite button:
-    'add a new sprite':
-        'dodaj nowego duszka',
+    'add a new Turtle sprite':
+        'dodaj nowego duszka-żółwia',
 
     // tab help
     'costumes tab help':
@@ -343,7 +343,7 @@ SnapTranslator.dict.pl = {
     'think %s':
         'pomy\u015Bl %s',
     'Hello!':
-        'Hallo!',
+        'Cześć!',
     'Hmm...':
         'Hmm...',
     'change %eff effect by %n':
@@ -545,9 +545,9 @@ SnapTranslator.dict.pl = {
     'join %words':
         'po\u0142\u0105cz %words',
     'hello':
-        'Hallo',
+        'witaj',
     'world':
-        's\u0142owo',
+        'świecie',
     'letter %n of %s':
         'litera %n z %s',
     'length of %s':
@@ -673,6 +673,8 @@ SnapTranslator.dict.pl = {
         'Logowanie...',
     'Signup...':
         'Rejestracja...',
+    'Reset Password...':
+        'Zresetuj hasło...',
 
     // settings menu
     'Language...':
@@ -857,7 +859,7 @@ SnapTranslator.dict.pl = {
     'Ok':
         'Ok',
     'Cancel':
-        'Poniechaj',
+        'Anuluj',
     'Yes':
         'Tak',
     'No':
@@ -903,9 +905,53 @@ SnapTranslator.dict.pl = {
     'Delete Project':
         'Usu\u0144 projekt',
     'Are you sure you want to delete':
-        'Czy napewno chcesz usun\u0105\u0107?',
+        'Czy napewno chcesz usun\u0105\u0107',
     'rename...':
         'przemianuj',
+    'Cloud':
+        'Chmura',
+    'Browser':
+        'Przeglądarka',
+    'Examples':
+        'Przykłady',
+    'You are not logged in':
+        'Nie jesteś zalogowany',
+    'Updating\nproject list...':
+        'Aktualizowanie\nlisty projektów...',
+    'last changed':
+        'ostatnio zmieniony',
+    'Open':
+        'Otwórz',
+    'Share':
+        'Udostępnij',
+    'Unshare':
+        'Wyłącz udostępnianie',
+    'Share Project':
+        'Udostępnij projekt',
+    'Unshare Project':
+        'Wyłącz udostępnianie projektu',
+    'Are you sure you want to publish':
+        'Czy na pewno chcesz opublikować projekt',
+    'Are you sure you want to unpublish':
+        'Czy na pewno chcesz wyłączyć publikowanie projektu',
+    'sharing\nproject...':
+        'Udostępnianie\nprojektu...',
+    'shared.':
+        'Projekt udostępniony.',
+    'unsharing\nproject...':
+        'Wyłączanie\nudostępniania projektu...',
+    'unshared.':
+        'Udostępnianie wyłączone.',
+    'Fetching project\nfrom the cloud...':
+        'Wczytywanie projektu\nz chmury...',
+    'Opening project...':
+        'Otwieranie projektu...',
+    'Save Project':
+        'Zapisz projekt',
+    'Saving project\nto the cloud...':
+        'Zapisywanie projektu\ndo chmury...',
+    'saved.':
+        'Projekt zapisany.',
 
     // costume editor
     'Costume Editor':
@@ -1081,7 +1127,7 @@ SnapTranslator.dict.pl = {
 
     // costumes
     'Turtle':
-        'Duszek',
+        'Żółw',
     'Empty':
         'Pusty',
 
@@ -1221,5 +1267,61 @@ SnapTranslator.dict.pl = {
     'last':
         'ostatni',
     'any':
-        'dowolny'
+        'dowolny',
+
+    // Sign up dialog
+    'Sign up':
+        'Rejestracja',
+    'User name:':
+        'Nazwa użytkownika:',
+    'Birth date:':
+        'Data urodzenia:',
+    'year:':
+        'rok:',
+    'E-mail address:':
+        'Adres e-mail:',
+    'E-mail address of parent or guardian:':
+        'Adres e-mail rodzica lub opiekuna:',
+    'Terms of Service...':
+        'Regulamin...',
+    'Privacy...':
+        'Polityka prywatności...',
+    'I have read and agree\nto the Terms of Service':
+        'Przeczytałem i zgadzam się\nz Regulaminem',
+    'January':
+        'styczeń',
+    'February':
+        'luty',
+    'March':
+        'marzec',
+    'April':
+        'kwiecień',
+    'May':
+        'maj',
+    'June':
+        'czerwiec',
+    'July':
+        'lipiec',
+    'August':
+        'sierpień',
+    'September':
+        'wrzesień',
+    'October':
+        'październik',
+    'November':
+        'listopad',
+    'December':
+        'grudzień',
+    'please fill out\nthis field':
+        'Proszę wypełnić\nto pole',
+    'please agree to\nthe TOS':
+        'Proszę zaakceptować\nRegulamin',
+    'Sign in':
+        'Zaloguj się',
+    'Password:':
+        'Hasło:',
+    'stay signed in on this computer\nuntil logging out':
+        'Zapamiętaj mnie na tym komputerze\naż do wylogowania',
+    'Reset password':
+        'Zresetuj hasło'
 };

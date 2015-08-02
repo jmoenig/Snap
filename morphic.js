@@ -1048,7 +1048,7 @@
 /*global window, HTMLCanvasElement, getMinimumFontHeight, FileReader, Audio,
 FileList, getBlurredShadowSupport*/
 
-var morphicVersion = '2015-June-26';
+var morphicVersion = '2015-July-28';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = getBlurredShadowSupport(); // check for Chrome-bug
 
@@ -2501,6 +2501,32 @@ Morph.prototype.keepWithin = function (aMorph) {
     }
 };
 
+Morph.prototype.scrollIntoView = function () {
+    var leftOff, rightOff, topOff, bottomOff,
+        sf = this.parentThatIsA(ScrollFrameMorph);
+    if (!sf) {return; }
+    rightOff = Math.min(
+        this.fullBounds().right() - sf.right(),
+        sf.contents.right() - sf.right()
+    );
+    if (rightOff > 0) {
+        sf.contents.moveBy(new Point(-rightOff, 0));
+    }
+    leftOff = this.fullBounds().left() - sf.left();
+    if (leftOff < 0) {
+        sf.contents.moveBy(new Point(-leftOff, 0));
+    }
+    topOff = this.fullBounds().top() - sf.top();
+    if (topOff < 0) {
+        sf.contents.moveBy(new Point(0, -topOff));
+    }
+    bottomOff = this.fullBounds().bottom() - sf.bottom();
+    if (bottomOff > 0) {
+        sf.contents.moveBy(new Point(0, -bottomOff));
+    }
+    sf.adjustScrollBars();
+};
+
 // Morph accessing - dimensional changes requiring a complete redraw
 
 Morph.prototype.setExtent = function (aPoint) {
@@ -3092,6 +3118,13 @@ Morph.prototype.rootForGrab = function () {
     return this.parent.rootForGrab();
 };
 
+Morph.prototype.isCorrectingOutsideDrag = function () {
+    // make sure I don't "trail behind" the hand when dragged
+    // override for morphs that you want to be dragged outside
+    // their full bounds
+    return true;
+};
+
 Morph.prototype.wantsDropOf = function (aMorph) {
     // default is to answer the general flag - change for my heirs
     if ((aMorph instanceof HandleMorph) ||
@@ -3171,6 +3204,17 @@ Morph.prototype.move = function () {
         null,
         null,
         'move'
+    );
+};
+
+Morph.prototype.moveCenter = function () {
+    this.world().activeHandle = new HandleMorph(
+        this,
+        null,
+        null,
+        null,
+        null,
+        'moveCenter'
     );
 };
 
@@ -3722,7 +3766,7 @@ HandleMorph.prototype.init = function (
     this.target = target || null;
     this.minExtent = new Point(minX || 0, minY || 0);
     this.inset = new Point(insetX || 0, insetY || insetX || 0);
-    this.type =  type || 'resize'; // can also be 'move'
+    this.type =  type || 'resize'; // can also be 'move', 'moveCenter'
     HandleMorph.uber.init.call(this);
     this.color = new Color(255, 255, 255);
     this.isDraggable = false;
@@ -3747,11 +3791,15 @@ HandleMorph.prototype.drawNew = function () {
     );
     this.image = this.normalImage;
     if (this.target) {
-        this.setPosition(
-            this.target.bottomRight().subtract(
-                this.extent().add(this.inset)
-            )
-        );
+        if (this.type === 'moveCenter') {
+            this.setCenter(this.target.center());
+        } else { // 'resize', 'move'
+            this.setPosition(
+                this.target.bottomRight().subtract(
+                    this.extent().add(this.inset)
+                )
+            );
+        }
         this.target.add(this);
         this.target.changed();
     }
@@ -3763,6 +3811,7 @@ HandleMorph.prototype.drawOnCanvas = function (
     shadowColor
 ) {
     var context = aCanvas.getContext('2d'),
+        isSquare = (this.type.indexOf('move') === 0),
         p1,
         p11,
         p2,
@@ -3774,7 +3823,7 @@ HandleMorph.prototype.drawOnCanvas = function (
 
     context.strokeStyle = color.toString();
 
-    if (this.type === 'move') {
+    if (isSquare) {
 
         p1 = this.bottomLeft().subtract(this.position());
         p11 = p1.copy();
@@ -3811,7 +3860,7 @@ HandleMorph.prototype.drawOnCanvas = function (
 
     context.strokeStyle = shadowColor.toString();
 
-    if (this.type === 'move') {
+    if (isSquare) {
 
         p1 = this.bottomLeft().subtract(this.position());
         p11 = p1.copy();
@@ -3853,11 +3902,16 @@ HandleMorph.prototype.step = null;
 
 HandleMorph.prototype.mouseDownLeft = function (pos) {
     var world = this.root(),
-        offset = pos.subtract(this.bounds.origin),
+        offset,
         myself = this;
 
     if (!this.target) {
         return null;
+    }
+    if (this.type === 'moveCenter') {
+        offset = pos.subtract(this.center());
+    } else {
+        offset = pos.subtract(this.bounds.origin);
     }
     this.step = function () {
         var newPos, newExt;
@@ -3875,6 +3929,8 @@ HandleMorph.prototype.mouseDownLeft = function (pos) {
                         myself.extent().add(myself.inset)
                     )
                 );
+            } else if (this.type === 'moveCenter') {
+                myself.target.setCenter(newPos);
             } else { // type === 'move'
                 myself.target.setPosition(
                     newPos.subtract(this.target.extent())
@@ -4680,7 +4736,7 @@ CursorMorph.prototype.accept = function () {
     if (world) {
         world.stopEditing();
     }
-    this.escalateEvent('accept', null);
+    this.escalateEvent('accept', this);
 };
 
 CursorMorph.prototype.cancel = function () {
@@ -4689,7 +4745,7 @@ CursorMorph.prototype.cancel = function () {
     if (world) {
         world.stopEditing();
     }
-    this.escalateEvent('cancel', null);
+    this.escalateEvent('cancel', this);
 };
 
 CursorMorph.prototype.undo = function () {
@@ -6652,6 +6708,8 @@ MenuMorph.prototype.init = function (target, title, environment, fontSize) {
     this.label = null;
     this.world = null;
     this.isListContents = false;
+    this.hasFocus = false;
+    this.selection = null;
 
     // initialize inherited properties:
     MenuMorph.uber.init.call(this);
@@ -6871,6 +6929,7 @@ MenuMorph.prototype.popup = function (world, pos) {
     }
     world.add(this);
     world.activeMenu = this;
+    this.world = world; // optionally enable keyboard support
     this.fullChanged();
 };
 
@@ -6899,6 +6958,105 @@ MenuMorph.prototype.popUpCenteredInWorld = function (world) {
             this.extent().floorDivideBy(2)
         )
     );
+};
+
+// MenuMorph keyboard accessibility
+
+MenuMorph.prototype.getFocus = function () {
+    this.world.keyboardReceiver = this;
+    this.selection = null;
+    this.selectFirst();
+    this.hasFocus = true;
+};
+
+MenuMorph.prototype.processKeyDown = function (event) {
+    //console.log(event.keyCode);
+    switch (event.keyCode) {
+    case 13: // 'enter'
+    case 32: // 'space'
+        if (this.selection) {
+            this.selection.mouseClickLeft();
+        }
+        return;
+    case 27: // 'esc'
+        return this.destroy();
+    case 38: // 'up arrow'
+        return this.selectUp();
+    case 40: // 'down arrow'
+        return this.selectDown();
+    default:
+        nop();
+    }
+};
+
+MenuMorph.prototype.processKeyUp = function (event) {
+    nop(event);
+};
+
+MenuMorph.prototype.processKeyPress = function (event) {
+    nop(event);
+};
+
+MenuMorph.prototype.selectFirst = function () {
+    var i;
+    for (i = 0; i < this.children.length; i += 1) {
+        if (this.children[i] instanceof MenuItemMorph) {
+            this.select(this.children[i]);
+            return;
+        }
+    }
+};
+
+MenuMorph.prototype.selectUp = function () {
+    var triggers, idx;
+
+    triggers = this.children.filter(function (each) {
+        return each instanceof MenuItemMorph;
+    });
+    if (!this.selection) {
+        if (triggers.length) {
+            this.select(triggers[0]);
+        }
+        return;
+    }
+    idx = triggers.indexOf(this.selection) - 1;
+    if (idx < 0) {
+        idx = triggers.length - 1;
+    }
+    this.select(triggers[idx]);
+};
+
+MenuMorph.prototype.selectDown = function () {
+    var triggers, idx;
+
+    triggers = this.children.filter(function (each) {
+        return each instanceof MenuItemMorph;
+    });
+    if (!this.selection) {
+        if (triggers.length) {
+            this.select(triggers[0]);
+        }
+        return;
+    }
+    idx = triggers.indexOf(this.selection) + 1;
+    if (idx >= triggers.length) {
+        idx = 0;
+    }
+    this.select(triggers[idx]);
+};
+
+MenuMorph.prototype.select = function (aMenuItem) {
+    this.unselectAllItems();
+    aMenuItem.image = aMenuItem.highlightImage;
+    aMenuItem.changed();
+    this.selection = aMenuItem;
+};
+
+MenuMorph.prototype.destroy = function () {
+    if (this.hasFocus) {
+        this.world.keyboardReceiver = null;
+    }
+    MenuMorph.uber.destroy.call(this);
 };
 
 // StringMorph /////////////////////////////////////////////////////////
@@ -9586,32 +9744,16 @@ HandMorph.prototype.processMouseMove = function (event) {
                 this.grabOrigin = this.morphToGrab.situation();
             }
             if (morph) {
-                // if the mouse has left its fullBounds, center it
+                // if the mouse has left its fullBounds, allow to center it
                 fb = morph.fullBounds();
-                if (!fb.containsPoint(pos)) {
+                if (!fb.containsPoint(pos) &&
+                        morph.isCorrectingOutsideDrag()) {
                     this.bounds.origin = fb.center();
                     this.grab(morph);
                     this.setPosition(pos);
                 }
             }
         }
-
-/*
-    original, more cautious code for grabbing Morphs,
-    retained in case of needing to fall back:
-
-        if (morph === this.morphToGrab) {
-            if (morph.isDraggable) {
-                this.grab(morph);
-            } else if (morph.isTemplate) {
-                morph = morph.fullCopy();
-                morph.isTemplate = false;
-                morph.isDraggable = true;
-                this.grab(morph);
-            }
-        }
-*/
-
     }
 
     this.mouseOverList.forEach(function (old) {
@@ -10398,6 +10540,13 @@ WorldMorph.prototype.contextMenu = function () {
             "inspect...",
             'inspect',
             'open a window on\nall properties'
+        );
+        menu.addItem(
+            "screenshot...",
+            function () {
+                window.open(this.fullImageClassic().toDataURL());
+            },
+            'open a new window\nwith a picture of this morph'
         );
         menu.addLine();
         menu.addItem(

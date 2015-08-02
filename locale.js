@@ -42,7 +42,7 @@
 
 /*global modules, contains*/
 
-modules.locale = '2015-June-25';
+modules.locale = '2015-July-27';
 
 // Global stuff
 
@@ -475,3 +475,28 @@ SnapTranslator.dict.te = {
     'last_changed':
         '2015-02-20'
 };
+
+SnapTranslator.dict.tr = {
+    // translations meta information
+    'language_name':
+        'Türkçe',
+    'language_translator':
+        'Hakan Atas',
+    'translator_e-mail':
+        'hakanatas@gmail.com',
+    'last_changed':
+        '2015-7-27'
+};
+
+SnapTranslator.dict.hu = {
+    // translations meta information
+    'language_name':
+        'Magyar',
+    'language_translator':
+        'Makány György',
+    'translator_e-mail':
+        'makany.gyorgy@gmail.com',
+    'last_changed':
+        '2015-07-27'
+};
+

@@ -43,6 +43,7 @@
         TurtleIconMorph
         CostumeIconMorph
         WardrobeMorph
+        StageHandleMorph;
 
 
     credits
@@ -65,11 +66,11 @@ ScriptsMorph, isNil, SymbolMorph, BlockExportDialogMorph,
 BlockImportDialogMorph, SnapTranslator, localize, List, InputSlotMorph,
 SnapCloud, Uint8Array, HandleMorph, SVG_Costume, fontHeight, hex_sha512,
 sb, CommentMorph, CommandBlockMorph, BlockLabelPlaceHolderMorph, Audio,
-SpeechBubbleMorph*/
+SpeechBubbleMorph, ScriptFocusMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2015-June-25';
+modules.gui = '2015-July-28';
 
 // Declarations
 
@@ -81,11 +82,18 @@ var TurtleIconMorph;
 var WardrobeMorph;
 var SoundIconMorph;
 var JukeboxMorph;
+var StageHandleMorph;
 
 // Get the full url without "snap.html"
-var baseUrl = document.URL.split('/');
-baseUrl.pop(baseUrl.length - 1);
-baseUrl = baseUrl.join('/') + '/';
+var baseURL = (function getPath(location) {
+    var origin, path, slash;
+    path = location.pathname; // starts with a /
+    origin = location.origin; // has no trailing /
+    slash = path.lastIndexOf('/');
+    path = path.slice(0, slash + 1); // keep a trailing /
+    return origin + path;
+}(window.location));
+
 
 // IDE_Morph ///////////////////////////////////////////////////////////
 
@@ -230,6 +238,7 @@ IDE_Morph.prototype.init = function (isAutoFill) {
     this.spriteBar = null;
     this.spriteEditor = null;
     this.stage = null;
+    this.stageHandle = null;
     this.corralBar = null;
     this.corral = null;
 
@@ -975,9 +984,7 @@ IDE_Morph.prototype.createPalette = function (forSearching) {
 
 IDE_Morph.prototype.createStage = function () {
     // assumes that the logo pane has already been created
-    if (this.stage) {
-        this.stage.destroy();
-    }
+    if (this.stage) {this.stage.destroy(); }
     StageMorph.prototype.frameRate = 0;
     this.stage = new StageMorph(this.globalVariables);
     this.stage.setExtent(this.stage.dimensions); // dimensions are fixed
@@ -990,6 +997,13 @@ IDE_Morph.prototype.createStage = function () {
         this.stage.add(this.currentSprite);
     }
     this.add(this.stage);
+};
+
+IDE_Morph.prototype.createStageHandle = function () {
+    // assumes that the stage has already been created
+    if (this.stageHandle) {this.stageHandle.destroy(); }
+    this.stageHandle = new StageHandleMorph(this.stage);
+    this.add(this.stageHandle);
 };
 
 IDE_Morph.prototype.createSpriteBar = function () {
@@ -1355,6 +1369,7 @@ IDE_Morph.prototype.createCorral = function () {
     // assumes the corral bar has already been created
     var frame, template, padding = 5, myself = this;
 
+    this.createStageHandle();
     if (this.corral) {
         this.corral.destroy();
     }
@@ -1486,10 +1501,10 @@ IDE_Morph.prototype.fixLayout = function (situation) {
             ) * 10) / 10);
             this.stage.setCenter(this.center());
         } else {
-//            this.stage.setScale(this.isSmallStage ? 0.5 : 1);
             this.stage.setScale(this.isSmallStage ? this.stageRatio : 1);
             this.stage.setTop(this.logo.bottom() + padding);
             this.stage.setRight(this.right());
+            this.stageHandle.fixLayout();
         }
 
         // spriteBar
@@ -1538,7 +1553,12 @@ IDE_Morph.prototype.setProjectName = function (string) {
 IDE_Morph.prototype.setExtent = function (point) {
     var padding = new Point(430, 110),
         minExt,
-        ext;
+        ext,
+        maxWidth,
+        minWidth,
+        maxHeight,
+        minRatio,
+        maxRatio;
 
     // determine the minimum dimensions making sense for the current mode
     if (this.isAppMode) {
@@ -1546,21 +1566,29 @@ IDE_Morph.prototype.setExtent = function (point) {
             this.controlBar.height() + 10
         );
     } else {
-    /* // auto-switches to small stage mode, commented out b/c I don't like it
-        if (point.x < 910) {
-            this.isSmallStage = true;
-            this.stageRatio = 0.5;
+        if (this.stageRatio > 1) {
+            minExt = padding.add(StageMorph.prototype.dimensions);
+        } else {
+            minExt = padding.add(
+                StageMorph.prototype.dimensions.multiplyBy(this.stageRatio)
+            );
         }
-    */
-        minExt = this.isSmallStage ?
-                padding.add(StageMorph.prototype.dimensions.divideBy(2))
-                      : padding.add(StageMorph.prototype.dimensions);
-/*
-        minExt = this.isSmallStage ?
-                new Point(700, 350) : new Point(910, 490);
-*/
     }
     ext = point.max(minExt);
+
+    // adjust stage ratio if necessary
+    maxWidth = ext.x - (this.spriteBar.tabBar.fullBounds().right() -
+        this.left());
+    minWidth = SpriteIconMorph.prototype.thumbSize.x * 3;
+    maxHeight = (ext.y - SpriteIconMorph.prototype.thumbSize.y * 3.5);
+    minRatio = minWidth / this.stage.dimensions.x;
+    maxRatio = Math.min(
+        (maxWidth / this.stage.dimensions.x),
+        (maxHeight / this.stage.dimensions.y)
+    );
+    this.stageRatio = Math.min(maxRatio, Math.max(minRatio, this.stageRatio));
+
+    // apply
     IDE_Morph.uber.setExtent.call(this, ext);
     this.fixLayout();
 };
@@ -1746,6 +1774,9 @@ IDE_Morph.prototype.stopAllScripts = function () {
 };
 
 IDE_Morph.prototype.selectSprite = function (sprite) {
+    if (this.currentSprite && this.currentSprite.scripts.focus) {
+        this.currentSprite.scripts.focus.stopEditing();
+    }
     this.currentSprite = sprite;
     this.createPalette();
     this.createSpriteBar();
@@ -1800,7 +1831,8 @@ IDE_Morph.prototype.applySavedSettings = function () {
         click = this.getSetting('click'),
         longform = this.getSetting('longform'),
         longurls = this.getSetting('longurls'),
-        plainprototype = this.getSetting('plainprototype');
+        plainprototype = this.getSetting('plainprototype'),
+        keyboard = this.getSetting('keyboard');
 
     // design
     if (design === 'flat') {
@@ -1838,6 +1870,13 @@ IDE_Morph.prototype.applySavedSettings = function () {
         this.projectsInURLs = true;
     } else {
         this.projectsInURLs = false;
+    }
+
+    // keyboard editing
+    if (keyboard) {
+        ScriptsMorph.prototype.enableKeyboard = true;
+    } else {
+        ScriptsMorph.prototype.enableKeyboard = false;
     }
 
     // plain prototype labels
@@ -2346,6 +2385,22 @@ IDE_Morph.prototype.settingsMenu = function () {
         'check to enable\nsprite composition',
         true
     );
+    addPreference(
+        'Keyboard Editing',
+        function () {
+            ScriptsMorph.prototype.enableKeyboard =
+                !ScriptsMorph.prototype.enableKeyboard;
+            if (ScriptsMorph.prototype.enableKeyboard) {
+                myself.saveSetting('keyboard', true);
+            } else {
+                myself.removeSetting('keyboard');
+            }
+        },
+        ScriptsMorph.prototype.enableKeyboard,
+        'uncheck to disable\nkeyboard editing support',
+        'check to enable\nkeyboard editing support',
+        false
+    );
     menu.addLine(); // everything below this line is stored in the project
     addPreference(
         'Thread safe scripts',
@@ -2383,6 +2438,20 @@ IDE_Morph.prototype.settingsMenu = function () {
         StageMorph.prototype.enableCodeMapping,
         'uncheck to disable\nblock to text mapping features',
         'check for block\nto text mapping features',
+        false
+    );
+    addPreference(
+        'Inheritance support',
+        function () {
+            StageMorph.prototype.enableInheritance =
+                !StageMorph.prototype.enableInheritance;
+            myself.currentSprite.blocksCache.variables = null;
+            myself.currentSprite.paletteCache.variables = null;
+            myself.refreshPalette();
+        },
+        StageMorph.prototype.enableInheritance,
+        'uncheck to disable\nsprite inheritance features',
+        'check for sprite\ninheritance features',
         false
     );
     menu.popup(world, pos);
@@ -2497,10 +2566,10 @@ IDE_Morph.prototype.projectMenu = function () {
         function () {
             // read a list of libraries from an external file,
             var libMenu = new MenuMorph(this, 'Import library'),
-                libUrl = baseUrl + 'libraries/' + 'LIBRARIES';
+                libUrl = baseURL + 'libraries/' + 'LIBRARIES';
 
             function loadLib(name) {
-                var url = baseUrl + 'libraries/' + name + '.xml';
+                var url = baseURL + 'libraries/' + name + '.xml';
                 myself.droppedText(myself.getURL(url), name);
             }
 
@@ -2617,7 +2686,7 @@ IDE_Morph.prototype.aboutSnap = function () {
         module, btn1, btn2, btn3, btn4, licenseBtn, translatorsBtn,
         world = this.world();
 
-    aboutTxt = 'Snap! 4.0.1\nBuild Your Own Blocks\n\n'
+    aboutTxt = 'Snap! 4.0.2\nBuild Your Own Blocks\n\n'
         + 'Copyright \u24B8 2015 Jens M\u00F6nig and '
         + 'Brian Harvey\n'
         + 'jens@moenig.org, bh@cs.berkeley.edu\n\n'
@@ -2834,6 +2903,7 @@ IDE_Morph.prototype.newProject = function () {
     StageMorph.prototype.codeMappings = {};
     StageMorph.prototype.codeHeaders = {};
     StageMorph.prototype.enableCodeMapping = false;
+    StageMorph.prototype.enableInheritance = false;
     SpriteMorph.prototype.useFlatLineEnds = false;
     this.setProjectName('');
     this.projectNotes = '';
@@ -3053,6 +3123,7 @@ IDE_Morph.prototype.rawOpenProjectString = function (str) {
     StageMorph.prototype.codeMappings = {};
     StageMorph.prototype.codeHeaders = {};
     StageMorph.prototype.enableCodeMapping = false;
+    StageMorph.prototype.enableInheritance = false;
     if (Process.prototype.isCatchingErrors) {
         try {
             this.serializer.openProject(
@@ -3094,6 +3165,7 @@ IDE_Morph.prototype.rawOpenCloudDataString = function (str) {
     StageMorph.prototype.codeMappings = {};
     StageMorph.prototype.codeHeaders = {};
     StageMorph.prototype.enableCodeMapping = false;
+    StageMorph.prototype.enableInheritance = false;
     if (Process.prototype.isCatchingErrors) {
         try {
             model = this.serializer.parse(str);
@@ -3417,6 +3489,7 @@ IDE_Morph.prototype.toggleAppMode = function (appMode) {
             this.controlBar.projectButton,
             this.controlBar.settingsButton,
             this.controlBar.stageSizeButton,
+            this.stageHandle,
             this.corral,
             this.corralBar,
             this.spriteEditor,
@@ -3440,6 +3513,9 @@ IDE_Morph.prototype.toggleAppMode = function (appMode) {
                 morph.hide();
             }
         });
+        if (world.keyboardReceiver instanceof ScriptFocusMorph) {
+            world.keyboardReceiver.stopEditing();
+        }
     } else {
         this.setColor(this.backgroundColor);
         this.controlBar.setColor(this.frameColor);
@@ -3476,36 +3552,32 @@ IDE_Morph.prototype.toggleStageSize = function (isSmall) {
     var myself = this,
         smallRatio = 0.5,
         world = this.world(),
-        shiftClicked = (world.currentKey === 16);
+        shiftClicked = (world.currentKey === 16),
+        altClicked = (world.currentKey === 18);
 
     function toggle() {
         myself.isSmallStage = isNil(isSmall) ? !myself.isSmallStage : isSmall;
     }
 
-    function zoomIn() {
-        myself.step = function () {
-            myself.stageRatio -= (myself.stageRatio - smallRatio) / 2;
-            myself.setExtent(world.extent());
-            if (myself.stageRatio < (smallRatio + 0.1)) {
-                myself.stageRatio = smallRatio;
-                myself.setExtent(world.extent());
-                delete myself.step;
-            }
-        };
-    }
-
-    function zoomOut() {
+    function zoomTo(targetRatio) {
+        var count = 1,
+            steps = 5;
+        myself.fps = 30;
         myself.isSmallStage = true;
         myself.step = function () {
-            myself.stageRatio += (1 - myself.stageRatio) / 2;
-            myself.setExtent(world.extent());
-            if (myself.stageRatio > 0.9) {
-                myself.stageRatio = 1;
-                myself.isSmallStage = false;
-                myself.setExtent(world.extent());
-                myself.controlBar.stageSizeButton.refresh();
+            var diff;
+            if (count >= steps) {
+                myself.stageRatio = targetRatio;
                 delete myself.step;
+                myself.fps = 0;
+                myself.isSmallStage = !(targetRatio === 1);
+                myself.controlBar.stageSizeButton.refresh();
+            } else {
+                count += 1;
+                diff = (targetRatio - myself.stageRatio) / 2;
+                myself.stageRatio += diff;
             }
+            myself.setExtent(world.extent());
         };
     }
 
@@ -3515,14 +3587,20 @@ IDE_Morph.prototype.toggleStageSize = function (isSmall) {
         if (!this.isSmallStage || (smallRatio === this.stageRatio)) {
             toggle();
         }
+    } else if (altClicked) {
+        smallRatio = this.width() / 2 /
+            this.stage.dimensions.x;
+        if (!this.isSmallStage || (smallRatio === this.stageRatio)) {
+            toggle();
+        }
     } else {
         toggle();
     }
     if (this.isAnimating) {
         if (this.isSmallStage) {
-            zoomIn();
+            zoomTo(smallRatio);
         } else {
-            zoomOut();
+            zoomTo(1);
         }
     } else {
         if (this.isSmallStage) {this.stageRatio = smallRatio; }
@@ -4219,7 +4297,7 @@ IDE_Morph.prototype.getURLsbeOrRelative = function (url) {
     var request = new XMLHttpRequest(),
         myself = this;
     try {
-        request.open('GET', baseUrl + url, false);
+        request.open('GET', baseURL + url, false);
         request.send();
         if (request.status === 200) {
             return request.responseText;
@@ -4660,7 +4738,7 @@ ProjectDialogMorph.prototype.setSource = function (source) {
                 myself.nameField.setContents(item.name || '');
             }
             src = myself.ide.getURL(
-                baseUrl + 'Examples/' + item.name + '.xml'
+                baseURL + 'Examples/' + item.name + '.xml'
             );
 
             xml = myself.ide.serializer.parse(src);
@@ -4714,9 +4792,9 @@ ProjectDialogMorph.prototype.getLocalProjectList = function () {
 ProjectDialogMorph.prototype.getExamplesProjectList = function () {
     var dir,
         projects = [];
-        //alert(baseUrl);
+        //alert(baseURL);
 
-    dir = this.ide.getURL(baseUrl + 'Examples/');
+    dir = this.ide.getURL(baseURL + 'Examples/');
     dir.split('\n').forEach(
         function (line) {
             var startIdx = line.search(new RegExp('href=".*xml"')),
@@ -4835,7 +4913,7 @@ ProjectDialogMorph.prototype.openProject = function () {
     if (this.source === 'cloud') {
         this.openCloudProject(proj);
     } else if (this.source === 'examples') {
-        src = this.ide.getURL(baseUrl + 'Examples/' + proj.name + '.xml');
+        src = this.ide.getURL(baseURL + 'Examples/' + proj.name + '.xml');
         this.ide.openProjectString(src);
         this.destroy();
     } else { // 'local'
@@ -5042,7 +5120,7 @@ ProjectDialogMorph.prototype.shareProject = function () {
                                 projectId = 'Username=' +
                                     encodeURIComponent(usr.toLowerCase()) +
                                     '&ProjectName=' +
-                                    encodeURIComponent(proj.projectName);
+                                    encodeURIComponent(proj.ProjectName);
                             location.hash = projectId;
                         }
                     },
@@ -5214,7 +5292,7 @@ function SpriteIconMorph(aSprite, aTemplate) {
 }
 
 SpriteIconMorph.prototype.init = function (aSprite, aTemplate) {
-    var colors, action, query, myself = this;
+    var colors, action, query, hover, myself = this;
 
     if (!aTemplate) {
         colors = [
@@ -5244,6 +5322,11 @@ SpriteIconMorph.prototype.init = function (aSprite, aTemplate) {
         return false;
     };
 
+    hover = function () {
+        if (!aSprite.exemplar) {return null; }
+        return (localize('parent' + ':\n' + aSprite.exemplar.name));
+    };
+
     // additional properties:
     this.object = aSprite || new SpriteMorph(); // mandatory, actually
     this.version = this.object.version;
@@ -5259,7 +5342,7 @@ SpriteIconMorph.prototype.init = function (aSprite, aTemplate) {
         this.object.name, // label string
         query, // predicate/selector
         null, // environment
-        null, // hint
+        hover, // hint
         aTemplate // optional, for cached background images
     );
 
@@ -5430,6 +5513,9 @@ SpriteIconMorph.prototype.userMenu = function () {
     menu.addItem("duplicate", 'duplicateSprite');
     menu.addItem("delete", 'removeSprite');
     menu.addLine();
+    if (StageMorph.prototype.enableInheritance) {
+        menu.addItem("parent...", 'chooseExemplar');
+    }
     if (this.object.anchor) {
         menu.addItem(
             localize('detach from') + ' ' + this.object.anchor.name,
@@ -5462,6 +5548,10 @@ SpriteIconMorph.prototype.removeSprite = function () {
 
 SpriteIconMorph.prototype.exportSprite = function () {
     this.object.exportSprite();
+};
+
+SpriteIconMorph.prototype.chooseExemplar = function () {
+    this.object.chooseExemplar();
 };
 
 SpriteIconMorph.prototype.showSpriteOnStage = function () {
@@ -6483,3 +6573,148 @@ JukeboxMorph.prototype.reactToDropOf = function (icon) {
     this.sprite.sounds.add(costume, idx);
     this.updateList();
 };
+
+// StageHandleMorph ////////////////////////////////////////////////////////
+
+// I am a horizontal resizing handle for a StageMorph
+
+// StageHandleMorph inherits from Morph:
+
+StageHandleMorph.prototype = new Morph();
+StageHandleMorph.prototype.constructor = StageHandleMorph;
+StageHandleMorph.uber = Morph.prototype;
+
+// StageHandleMorph instance creation:
+
+function StageHandleMorph(target) {
+    this.init(target);
+}
+
+StageHandleMorph.prototype.init = function (target) {
+    this.target = target || null;
+    HandleMorph.uber.init.call(this);
+    this.color = MorphicPreferences.isFlat ?
+            IDE_Morph.prototype.groupColor : new Color(190, 190, 190);
+    this.isDraggable = false;
+    this.noticesTransparentClick = true;
+    this.setExtent(new Point(12, 50));
+};
+
+// StageHandleMorph drawing:
+
+StageHandleMorph.prototype.drawNew = function () {
+    this.normalImage = newCanvas(this.extent());
+    this.highlightImage = newCanvas(this.extent());
+    this.drawOnCanvas(
+        this.normalImage,
+        this.color
+    );
+    this.drawOnCanvas(
+        this.highlightImage,
+        MorphicPreferences.isFlat ?
+                new Color(245, 245, 255) : new Color(100, 100, 255),
+        this.color
+    );
+    this.image = this.normalImage;
+    this.fixLayout();
+};
+
+StageHandleMorph.prototype.drawOnCanvas = function (
+    aCanvas,
+    color,
+    shadowColor
+) {
+    var context = aCanvas.getContext('2d'),
+        l = aCanvas.height / 8,
+        w = aCanvas.width / 6,
+        r = w / 2,
+        x,
+        y,
+        i;
+
+    context.lineWidth = w;
+    context.lineCap = 'round';
+    y = aCanvas.height / 2;
+
+    context.strokeStyle = color.toString();
+    x = aCanvas.width / 12;
+    for (i = 0; i < 3; i += 1) {
+        if (i > 0) {
+            context.beginPath();
+            context.moveTo(x, y - (l - r));
+            context.lineTo(x, y + (l - r));
+            context.stroke();
+        }
+        x += (w * 2);
+        l *= 2;
+    }
+    if (shadowColor) {
+        context.strokeStyle = shadowColor.toString();
+        x = aCanvas.width / 12 + w;
+        l = aCanvas.height / 8;
+        for (i = 0; i < 3; i += 1) {
+            if (i > 0) {
+                context.beginPath();
+                context.moveTo(x, y - (l - r));
+                context.lineTo(x, y + (l - r));
+                context.stroke();
+            }
+            x += (w * 2);
+            l *= 2;
+        }
+    }
+};
+
+// StageHandleMorph layout:
+
+StageHandleMorph.prototype.fixLayout = function () {
+    if (!this.target) {return; }
+    var ide = this.target.parentThatIsA(IDE_Morph);
+    this.setTop(this.target.top() + 10);
+    this.setRight(this.target.left());
+    if (ide) {ide.add(this); } // come to front
+};
+
+// StageHandleMorph stepping:
+
+StageHandleMorph.prototype.step = null;
+
+StageHandleMorph.prototype.mouseDownLeft = function (pos) {
+    var world = this.world(),
+        offset = this.right() - pos.x,
+        myself = this,
+        ide = this.target.parentThatIsA(IDE_Morph);
+
+    if (!this.target) {
+        return null;
+    }
+    ide.isSmallStage = true;
+    ide.controlBar.stageSizeButton.refresh();
+    this.step = function () {
+        var newPos, newWidth;
+        if (world.hand.mouseButton) {
+            newPos = world.hand.bounds.origin.x + offset;
+            newWidth = myself.target.right() - newPos;
+            ide.stageRatio = newWidth / myself.target.dimensions.x;
+            ide.setExtent(world.extent());
+
+        } else {
+            this.step = null;
+            ide.isSmallStage = !(ide.stageRatio === 1);
+            ide.controlBar.stageSizeButton.refresh();
+        }
+    };
+};
+
+// StageHandleMorph events:
+
+StageHandleMorph.prototype.mouseEnter = function () {
+    this.image = this.highlightImage;
+    this.changed();
+};
+
+StageHandleMorph.prototype.mouseLeave = function () {
+    this.image = this.normalImage;
+    this.changed();
+};
+

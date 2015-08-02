@@ -102,11 +102,11 @@ ArrowMorph, PushButtonMorph, contains, InputSlotMorph, ShadowMorph,
 ToggleButtonMorph, IDE_Morph, MenuMorph, copy, ToggleElementMorph,
 Morph, fontHeight, StageMorph, SyntaxElementMorph, SnapSerializer,
 CommentMorph, localize, CSlotMorph, SpeechBubbleMorph, MorphicPreferences,
-SymbolMorph, isNil*/
+SymbolMorph, isNil, CursorMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2015-June-25';
+modules.byob = '2015-July-28';
 
 // Declarations
 
@@ -1727,8 +1727,9 @@ BlockEditorMorph.prototype.popUp = function () {
 
 // BlockEditorMorph ops
 
-BlockEditorMorph.prototype.accept = function () {
+BlockEditorMorph.prototype.accept = function (origin) {
     // check DialogBoxMorph comment for accept()
+    if (origin instanceof CursorMorph) {return; }
     if (this.action) {
         if (typeof this.target === 'function') {
             if (typeof this.action === 'function') {
@@ -1747,7 +1748,8 @@ BlockEditorMorph.prototype.accept = function () {
     this.close();
 };
 
-BlockEditorMorph.prototype.cancel = function () {
+BlockEditorMorph.prototype.cancel = function (origin) {
+    if (origin instanceof CursorMorph) {return; }
     //this.refreshAllBlockInstances();
     this.close();
 };
@@ -1966,8 +1968,13 @@ PrototypeHatBlockMorph.prototype.init = function (definition) {
 
 PrototypeHatBlockMorph.prototype.mouseClickLeft = function () {
     // relay the mouse click to my prototype block to
-    // pop-up a Block Dialog
+    // pop-up a Block Dialog, unless the shift key
+    // is pressed, in which case initiate keyboard
+    // editing support
 
+    if (this.world().currentKey === 16) { // shift-clicked
+        return this.focus();
+    }
     this.children[0].mouseClickLeft();
 };
 
