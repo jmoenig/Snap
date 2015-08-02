@@ -83,7 +83,7 @@ ArgLabelMorph, localize, XML_Element, hex_sha512*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.threads = '2015-June-25';
+modules.threads = '2015-July-27';
 
 var ThreadManager;
 var Process;
@@ -1157,7 +1157,8 @@ Process.prototype.doSetVar = function (varName, value) {
         if (name.expression.selector === 'reportGetVar') {
             name.variables.setVar(
                 name.expression.blockSpec,
-                value
+                value,
+                this.blockReceiver()
             );
             return;
         }
@@ -1173,7 +1174,8 @@ Process.prototype.doChangeVar = function (varName, value) {
         if (name.expression.selector === 'reportGetVar') {
             name.variables.changeVar(
                 name.expression.blockSpec,
-                value
+                value,
+                this.blockReceiver()
             );
             return;
         }
@@ -1206,7 +1208,8 @@ Process.prototype.doShowVar = function (varName) {
     if (this.homeContext.receiver) {
         stage = this.homeContext.receiver.parentThatIsA(StageMorph);
         if (stage) {
-            target = varFrame.find(name);
+            target = varFrame.silentFind(name);
+            if (!target) {return; }
             // first try to find an existing (hidden) watcher
             watcher = detect(
                 stage.children,
@@ -1223,7 +1226,7 @@ Process.prototype.doShowVar = function (varName) {
             }
             // if no watcher exists, create a new one
             isGlobal = contains(
-                this.homeContext.receiver.variables.parentFrame.names(),
+                this.homeContext.receiver.globalVariables().names(),
                 varName
             );
             if (isGlobal || target.owner) {
@@ -1299,6 +1302,23 @@ Process.prototype.doRemoveTemporaries = function () {
                 }
             });
         }
+    }
+};
+
+// Process sprite inheritance primitives
+
+Process.prototype.doDeleteAttr = function (attrName) {
+    // currently only variables are deletable
+    var name = attrName,
+        rcvr = this.blockReceiver();
+
+    if (name instanceof Context) {
+        if (name.expression.selector === 'reportGetVar') {
+            name = name.expression.blockSpec;
+        }
+    }
+    if (contains(rcvr.inheritedVariableNames(true), name)) {
+        rcvr.deleteVariable(name);
     }
 };
 
@@ -3115,35 +3135,50 @@ VariableFrame.prototype.silentFind = function (name) {
     return null;
 };
 
-VariableFrame.prototype.setVar = function (name, value) {
-/*
-    change the specified variable if it exists
-    else throw an error, because variables need to be
-    declared explicitly (e.g. through a "script variables" block),
-    before they can be accessed.
-*/
+VariableFrame.prototype.setVar = function (name, value, sender) {
+    // change the specified variable if it exists
+    // else throw an error, because variables need to be
+    // declared explicitly (e.g. through a "script variables" block),
+    // before they can be accessed.
+    // if the found frame is inherited by the sender sprite
+    // shadow it (create an explicit one for the sender)
+    // before setting the value ("create-on-write")
+
     var frame = this.find(name);
     if (frame) {
-        frame.vars[name].value = value;
+        if (sender instanceof SpriteMorph &&
+                (frame.owner instanceof SpriteMorph) &&
+                (sender !== frame.owner)) {
+            sender.shadowVar(name, value);
+        } else {
+            frame.vars[name].value = value;
+        }
     }
 };
 
-VariableFrame.prototype.changeVar = function (name, delta) {
-/*
-    change the specified variable if it exists
-    else throw an error, because variables need to be
-    declared explicitly (e.g. through a "script variables" block,
-    before they can be accessed.
-*/
+VariableFrame.prototype.changeVar = function (name, delta, sender) {
+    // change the specified variable if it exists
+    // else throw an error, because variables need to be
+    // declared explicitly (e.g. through a "script variables" block,
+    // before they can be accessed.
+    // if the found frame is inherited by the sender sprite
+    // shadow it (create an explicit one for the sender)
+    // before changing the value ("create-on-write")
+
     var frame = this.find(name),
-        value;
+        value,
+        newValue;
     if (frame) {
         value = parseFloat(frame.vars[name].value);
-        if (isNaN(value)) {
-            frame.vars[name].value = delta;
+        newValue = isNaN(value) ? delta : value + parseFloat(delta);
+        if (sender instanceof SpriteMorph &&
+                (frame.owner instanceof SpriteMorph) &&
+                (sender !== frame.owner)) {
+            sender.shadowVar(name, newValue);
         } else {
-            frame.vars[name].value = value + parseFloat(delta);
+            frame.vars[name].value = newValue;
         }
+
     }
 };
 
