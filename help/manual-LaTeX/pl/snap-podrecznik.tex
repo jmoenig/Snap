@@ -30,7 +30,9 @@ Brian zdobywał szlify w~MIT oraz Stanford Artificial Intelligence Labs\footnote
 
 \textbf{\emph{Za starych dobrych czasów mawialiśmy w~MIT Logo Lab: ,,Język Logo to Lisp w przebraniu BASIC-a''. Dziś, ze swoimi pierwszoklasowymi procedurami, zasięgami leksykalnymi~i pierwszoklasowymi kontynuacjami, \Snap{} jest jak Scheme w~przebraniu Scratcha.}}
 
-Szczęśliwym zrządzeniem losu, poprzez forum Scratch Advanced Topics, poznaliśmy wspaniałą grupę błyskotliwych uczniów gimnazjów~(!\@) i liceów. Kilku z nich wniosło swój wkład w~kod \Snap{a}: Kartik Chandra, Nathan Dinsmore, Connor Hudson i~Ian Reynolds. Ponadto wielu zgłosiło pomysły i~raporty błędów podczas testowania wersji alfa. Wśród studentów Uniwersytetu Kalifornijskiego w~Berkeley, którzy przyczynili się do rozwoju kodu, znajdują się Michael Ball, Achal Dave, Kyle Hotchkiss, Ivan Motyashov i~Yuan Yuan. Wymienianie wszystkich tłumaczy zajęłoby zbyt wiele miejsca, ale można ich odnaleźć w~okienku ,,O \Snap{}\ldots'' dostępnym w~programie. Niniejsze dzieło powstało częściowo w~ramach grantu nr~1143566 udzielonego przez National Science Foundation, a częściowo przy wsparciu firmy MioSoft.
+Szczęśliwym zrządzeniem losu, poprzez forum Scratch Advanced Topics, poznaliśmy wspaniałą grupę błyskotliwych uczniów gimnazjów~(!\@) i liceów. Kilku z nich wniosło swój wkład w~kod \Snap{a}: Kartik Chandra, Nathan Dinsmore, Connor Hudson i~Ian Reynolds. Ponadto wielu zgłosiło pomysły i~raporty błędów podczas testowania wersji alfa. Wśród studentów Uniwersytetu Kalifornijskiego w~Berkeley, którzy przyczynili się do rozwoju kodu, znajdują się Michael Ball, Achal Dave, Kyle Hotchkiss, Ivan Motyashov i~Yuan Yuan. Wymienianie wszystkich tłumaczy zajęłoby zbyt wiele miejsca, ale można ich odnaleźć w~okienku ,,O \Snap{}\ldots'' dostępnym w~programie.
+
+Niniejsze dzieło powstało częściowo w~ramach grantu nr~1143566 udzielonego przez National Science Foundation, a częściowo przy wsparciu firmy MioSoft.
 
 \clearpage
 
@@ -40,7 +42,9 @@ Podręcznik użytkownika \\
 \huge Wersja 4.0 \vspace{40pt}
 \end{center}
 
-\Snap{} to rozszerzona reimplementacja języka Scratch (\url{http://scratch.mit.edu}), która pozwala na tworzenie własnych bloków (ang.\ \textit{Build Your Own Blocks}; stąd dawna nazwa \Snap{a} --- BYOB). Opisywany tu język obsługuje pierwszoklasowe listy, procedury i~kontynuacje. Te dodatkowe możliwości sprawiają, że nadaje się on do przeprowadzenia poważnego wstępu do informatyki dla uczniów liceów i szkół wyższych. Aby uruchomić środowisko \Snap{}, wystarczy otworzyć przeglądarkę internetową i~wpisać adres \url{http://snap.berkeley.edu/run}, aby zacząć pracę z~minimalnym zestawem bloków. Można też użyć adresu \url{http://snap.berkeley.edu/init}, aby załadować niewielki zestaw dodatkowych bloków. Wiąże się to z~nieco wolniejszym ładowaniem, ale jest zalecane dla wygody użytkowników (w~dalszej części podręcznika będziemy zakładali korzystanie z~tej właśnie metody).
+\Snap{} to rozszerzona reimplementacja języka Scratch (\url{http://scratch.mit.edu}), która pozwala na tworzenie własnych bloków (ang.\ \textit{Build Your Own Blocks}; stąd dawna nazwa \Snap{a} --- BYOB). Opisywany tu język obsługuje pierwszoklasowe listy, procedury i~kontynuacje. Te dodatkowe możliwości sprawiają, że nadaje się on do przeprowadzenia poważnego wstępu do informatyki dla uczniów liceów i szkół wyższych.
+
+Aby uruchomić środowisko \Snap{}, wystarczy otworzyć przeglądarkę internetową i~wpisać adres \url{http://snap.berkeley.edu/run}, aby zacząć pracę z~minimalnym zestawem bloków. Można też użyć adresu \url{http://snap.berkeley.edu/init}, aby załadować niewielki zestaw dodatkowych bloków. Wiąże się to z~nieco wolniejszym ładowaniem, ale jest zalecane dla wygody użytkowników (w~dalszej części podręcznika będziemy zakładali korzystanie z~tej właśnie metody).
 
 \clearpage
 
@@ -208,7 +212,7 @@ Takie \emph{kolorowanie w~zebrę} poprawia czytelność programu. Blok funkcji w
 
 \section{Predykaty i~obliczenia warunkowe}
 
-Większość funkcji zwraca albo liczbę, jak \inlinereporterpic{plus}, lub łańcuch tekstowy, jak \inlinereporterpic{polacz-witaj-swiecie}. \emph{Predykat} to specjalny rodzaj funkcji, która zawsze zwraca jedną z dwojga wartości \code{prawdę} lub \code{fałsz}. Predykaty mają kształt sześciokątów:\nopagebreak
+Większość funkcji zwraca albo liczbę, jak \inlinereporterpic{plus}, lub łańcuch tekstowy, jak \inlinereporterpic{polacz-witaj-swiecie}. \emph{Predykat} to specjalny rodzaj funkcji, która zawsze zwraca jedną z dwojga wartości: \code{prawdę} lub \code{fałsz}. Predykaty mają kształt sześciokątów:\nopagebreak
 
 \bigpic{przycisk-myszy-nacisniety}
 
@@ -233,6 +237,10 @@ Jeśli pracując nad projektem, będziemy chcieli tymczasowo pominąć niektóre
 Czasami potrzeba wykonać tę samą czynność bez względu na to, czy jakiś warunek zachodzi czy nie, za to z~różnymi parametrami dla obu tych przypadków. Można do tego użyć bloku \emph{funkcji} \code{if}:\footnote{\onehalfspacing Jeśli nie widzisz go w~palecie ,,Kontrola'', kliknij przycisk ,,Plik'' \inlinepic{../common/btn-file} na pasku narzędzi i~wybierz polecenie ,,Importuj narzędzia''.}\footnote{Niestety, podobnie jak pozostałe dodatkowe narzędzia i~biblioteki bloków, blok \code{if --- then --- else} posiada wyłącznie angielską nazwę, bez względu na nasze ustawienia języka. Oznacza ona ,,jeżeli --- to --- w~przeciwnym razie'' --- przyp. tłum.}\nopagebreak
 
 \bigpic{predykaty-i-obliczenia-warunkowe-4}
+
+Wartości \code{prawda} i~\code{fałsz} określa się technicznymi terminami ,,wartość logiczna'' lub ,,wartość boolowska'' (ang. \textit{Boolean}). Ta ostatnia nazwa pochodzi on nazwiska George'a Boole'a, który stworzył opisującą je teorię matematyczną\footnote{Jest to \emph{algebra Boole'a} --- przyp. tłum.}. Uważaj na nazewnictwo --- sześciokątny blok to \emph{predykat}, ale wartość przezeń zwracana to \emph{wartość logiczna}.
+
+Jest jeszcze jedna warta wytłumaczenia niejasność terminologiczna:  W wielu językach programowania nazwa ,,procedura'' jest zarezerwowana dla \emph{komend}, które wykonują jakąś czynność, zaś nazwa ,,funkcja'' --- dla części programów zwracających wartość (\emph{funkcji} i \emph{predykatów}). W tym podręczniku \emph{procedury} to dowolne składniki programu, zarówno te zwracające, jak i nie zwracające wartości. Podobnie jak komendy, również funkcje i predykaty będziemy nazywać procedurami. Słowa ,,typ proceduralny'' będą skrótem myślowym dla słów ,,typ komendowy, funkcyjny lub predykatowy''.
 
 \section{Zmienne}
 
