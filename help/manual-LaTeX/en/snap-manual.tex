@@ -23,7 +23,9 @@ Brian grew up at the MIT and Stanford Artificial Intelligence Labs, learning fro
 
 \textbf{\emph{In the glory days of the MIT Logo Lab, we used to say, ``Logo is Lisp disguised as BASIC.'' Now, with its first class procedures, lexical scope, and first class continuations, \Snap{} is Scheme disguised as Scratch.}}
 
-We have been fortunate to get to know an amazing group of brilliant middle school (!\@) and high school students through the Scratch Advanced Topics forum, several of whom have contributed code to \Snap{}: Kartik Chandra, Nathan Dinsmore, Connor Hudson, and Ian Reynolds. Many more have contributed ideas and alpha-testing bug reports. UC Berkeley students who've contributed code include Michael Ball, Achal Dave, Kyle Hotchkiss, Ivan Motyashov, and Yuan Yuan. Contributors of translations are too numerous to list here, but they're in the ``About\ldots'' box in \Snap{} itself. This work was supported in part by the National Science Foundation grant 1143566, and in part by MioSoft.
+We have been fortunate to get to know an amazing group of brilliant middle school (!\@) and high school students through the Scratch Advanced Topics forum, several of whom have contributed code to \Snap{}: Kartik Chandra, Nathan Dinsmore, Connor Hudson, and Ian Reynolds. Many more have contributed ideas and alpha-testing bug reports. UC Berkeley students who've contributed code include Michael Ball, Achal Dave, Kyle Hotchkiss, Ivan Motyashov, and Yuan Yuan. Contributors of translations are too numerous to list here, but they're in the ``About\ldots'' box in \Snap{} itself.
+
+This work was supported in part by the National Science Foundation grant 1143566, and in part by MioSoft.
 
 \clearpage
 
@@ -33,7 +35,9 @@ We have been fortunate to get to know an amazing group of brilliant middle schoo
 \vspace{40pt}
 \end{center}
 
-\Snap{} (formerly BYOB) is an extended reimplementation of Scratch (\url{http://scratch.mit.edu}) that allows you to Build Your Own Blocks. It also features first class lists, first class procedures, and continuations. These added capabilities make it suitable for a serious introduction to computer science for high school or college students.  To run \Snap{}, open a browser window and connect to either \url{http://snap.berkeley.edu/run} to start with a minimal set of blocks or \url{http://snap.berkeley.edu/init} to load a small set of additional blocks (a little slower startup, but recommended for convenience and assumed in this manual).
+\Snap{} (formerly BYOB) is an extended reimplementation of Scratch (\url{http://scratch.mit.edu}) that allows you to Build Your Own Blocks. It also features first class lists, first class procedures, and continuations. These added capabilities make it suitable for a serious introduction to computer science for high school or college students.
+
+To run \Snap{}, open a browser window and connect to either \url{http://snap.berkeley.edu/run} to start with a minimal set of blocks or \url{http://snap.berkeley.edu/init} to load a small set of additional blocks (a little slower startup, but recommended for convenience and assumed in this manual).
 
 \clearpage
 
@@ -150,7 +154,7 @@ Notice, by the way, that the \code{say} block's first input slot is rectangular 
 The stage has its own scripting area. It can be selected by clicking on the Stage icon at the left of the sprite corral. Unlike a sprite, though, the stage can't move. Instead of costumes, it has \emph{backgrounds}: pictures that fill the entire stage area. The sprites appear in front of the current background. In a complicated project, it's often convenient to use a script in the stage's scripting area as the overall director of the action.
 
 \section{Nesting Sprites: Anchors and Parts}
-\label{nesting-sprites}
+\label{sec:nesting-sprites}
 
 Sometimes it's desirable to make a sort of ``super-sprite'' composed of pieces that can move together but can also be separately articulated. The classic example is a person's body made up of a torso, limbs, and a head. \Snap{} allows one sprite to be designated as the \emph{anchor} of the combined shape, with other sprites as its \emph{parts}. To set up sprite nesting, drag the sprite corral icon of a \emph{part} sprite onto the stage display (not the sprite corral icon!) of the desired \emph{anchor} sprite.
 
@@ -224,6 +228,10 @@ If, while working on a project, you want to omit temporarily some commands in a 
 Sometimes you want to take the same action whether some condition is true or false, but with a different input value. For this purpose you can use the \emph{reporter} \code{if} block:\footnote{\onehalfspacing If you don't see it in the Control palette, click on the File button \inlinepic{../common/btn-file} in the Tool Bar and choose ``Import tools.''}\nopagebreak
 
 \bigpic{predicates-and-conditional-evaluation-4}
+
+The technical term for a \code{true} or \code{false} value is a ``Boolean'' value; it has a capital~B because it's named after a person, George Boole, who developed the mathematical theory of Boolean values. Don't get confused; a hexagonal block is a \emph{predicate}, but the value it reports is a \emph{Boolean}.
+
+Another quibble about vocabulary: Many programming languages reserve the name ``procedure'' for Commands (that carry out an action) and use the name ``function'' for Reporters and Predicates. In this manual, a \emph{procedure} is any computational capability, including those that report values and those that don't. Commands, Reporters, and Predicates are all procedures. The words ``a Procedure type'' are shorthand for ``Command type, Reporter type, or Predicate type.''
 
 \section{Variables}
 
