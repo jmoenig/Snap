@@ -785,7 +785,7 @@ SpriteMorph.prototype.addCellularBlocks = function () {
 	SpriteMorph.prototype.blocks.allObjectsInNbrCells = {
 		type: 'reporter',
 		category: 'neighbours',
-		spec: 'list of all objects in nbr cells',
+		spec: 'list of objects in nbr cells',
 	};
 	SpriteMorph.prototype.blocks.numObjectsInNbrCells = {
 		type: 'reporter',
