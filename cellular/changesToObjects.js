@@ -2397,6 +2397,7 @@ StageMorph.prototype.mouseMove = function(point)
 					else
 					{
 						alpha = Math.min(1, (distanceToLine - strokeXIntercept) * strokeGrad);
+						alpha *= Math.min(1, Math.max(0, this.strokeHardness + 0.1));
 					}
 					if (alpha > 0 && cell != null)
 					{

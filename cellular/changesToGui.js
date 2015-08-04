@@ -69,15 +69,6 @@ IDE_Morph.prototype.createCorral = function()
             this.frameColor.darker(50)
         ];
 
-    if (this.stageBottomBar) {
-        this.stageBottomBar.destroy();
-    }
-
-    this.stageBottomBar = new Morph();
-    this.stageBottomBar.color = this.frameColor;
-    this.stageBottomBar.setHeight(this.logo.height()); // height is fixed
-    this.add(this.stageBottomBar);
-
     // paint brush tool
     var scribbleButton = new ToggleButtonMorph(
         null, //colors,
@@ -107,38 +98,34 @@ IDE_Morph.prototype.createCorral = function()
     scribbleButton.labelColor = new Color(0, 200, 200);
     scribbleButton.contrast = this.buttonContrast;
     scribbleButton.hint = "draw to cell attributes";
-    scribbleButton.drawNew();
-    scribbleButton.fixLayout();
-    scribbleButton.setCenter(this.stageBottomBar.center());
-    scribbleButton.setLeft(this.stageBottomBar.left() + padding);
-    this.stageBottomBar.add(scribbleButton);
 	
-	var sizeLabel;
-	sizeLabel = new TextMorph("radius (cells):");
-    sizeLabel.corner = 12;
-    sizeLabel.padding = 0;
-    sizeLabel.color = this.buttonLabelColor;
-    sizeLabel.contrast = this.buttonContrast;
-    sizeLabel.setCenter(this.stageBottomBar.center());
-    sizeLabel.setLeft(scribbleButton.right() + padding);
-    sizeLabel.drawNew();
-    this.stageBottomBar.add(sizeLabel);
+	function createBasicLabel(text) {
+		var basicLabel = new TextMorph(text);
+		basicLabel.corner = 12;
+		basicLabel.padding = 0;
+		basicLabel.color = myself.buttonLabelColor;
+		basicLabel.contrast = myself.buttonContrast;
+		return basicLabel;
+	};
 	
-	var sizeField;
-	sizeField = new InputFieldMorph(this.stage.strokeSize.toString());
-    if (MorphicPreferences.isFlat) {
-        sizeField.color = this.groupColor;
-    }
-    sizeField.corner = 12;
-    sizeField.padding = 0;
-    sizeField.contrast = this.buttonContrast;
-    sizeField.hint = "brush size (in cells)";
-	sizeField.contents().minWidth = 0;
-    sizeField.setCenter(this.stageBottomBar.center());
-    sizeField.setWidth(32); // fixed dimensions
-    sizeField.setLeft(sizeLabel.right() + padding);
-    sizeField.drawNew();
-    sizeField.accept = function () {
+	function createBasicField(hint, width, accept, defaultValue) {
+		var basicField = new InputFieldMorph(defaultValue);
+		if (MorphicPreferences.isFlat) {
+		    basicField.color = myself.groupColor;
+		}
+		basicField.corner = 12;
+		basicField.padding = 0;
+		basicField.contrast = myself.buttonContrast;
+		basicField.hint = hint;
+		basicField.contents().minWidth = 0;
+		basicField.setWidth(width); // fixed dimensions
+		basicField.accept = accept
+		return basicField;
+	};
+
+	var sizeLabel = createBasicLabel("cell radius:");
+
+	var sizeField = createBasicField("brush size (in cells)", 32, function () {
 		var value = Number(sizeField.getValue());
 		if (isNaN(value))
 		{
@@ -156,21 +143,11 @@ IDE_Morph.prototype.createCorral = function()
 			return;
 		}
         myself.stage.strokeSize = value;
-    };
-    this.stageBottomBar.add(sizeField);
-	
-	var hardnessField;
-	/*hardnessField = new InputFieldMorph(this.stage.strokeHardness.toString());
-    hardnessField.corner = 12;
-    hardnessField.padding = 0;
-    hardnessField.contrast = this.buttonContrast;
-    hardnessField.hint = "brush hardness (0-1)";
-	hardnessField.contents().minWidth = 0;
-    hardnessField.setCenter(this.stageBottomBar.center());
-    hardnessField.setWidth(32); // fixed dimensions
-    hardnessField.setLeft(sizeField.right() + padding);
-    hardnessField.drawNew();
-    hardnessField.accept = function () {
+    }, this.stage.strokeSize.toString());
+
+	var hardnessLabel = createBasicLabel("hard:");
+
+	var hardnessField = createBasicField("brush hardness (0-1)", 32, function () {
 		var value = Number(hardnessField.getValue());
 		if (isNaN(value))
 		{
@@ -188,35 +165,11 @@ IDE_Morph.prototype.createCorral = function()
 			return;
 		}
         myself.stage.strokeHardness = value;
-    };
-    this.stageBottomBar.add(hardnessField);*/
+    }, this.stage.strokeHardness.toString());
 	
-	var valueLabel;
-	valueLabel = new TextMorph("value:");
-    valueLabel.corner = 12;
-    valueLabel.padding = 0;
-    valueLabel.color = this.buttonLabelColor;
-    valueLabel.contrast = this.buttonContrast;
-    valueLabel.setCenter(this.stageBottomBar.center());
-    valueLabel.setLeft(sizeField.right() + padding);
-    valueLabel.drawNew();
-    this.stageBottomBar.add(valueLabel);
-	
-	var valueField;
-	valueField = new InputFieldMorph(this.stage.strokeValue.toString());
-    if (MorphicPreferences.isFlat) {
-        valueField.color = this.groupColor;
-    }
-    valueField.corner = 12;
-    valueField.padding = 0;
-    valueField.contrast = this.buttonContrast;
-    valueField.hint = "brush value";
-	valueField.contents().minWidth = 0;
-    valueField.setCenter(this.stageBottomBar.center());
-    valueField.setWidth(32); // fixed dimensions
-    valueField.setLeft(valueLabel.right() + padding);
-    valueField.drawNew();
-    valueField.accept = function () {
+	var valueLabel = createBasicLabel("value:");
+
+	var valueField = createBasicField("brush value", 32, function () {
 		var value = Number(valueField.getValue());
 		if (isNaN(value))
 		{
@@ -224,9 +177,29 @@ IDE_Morph.prototype.createCorral = function()
 			return;
 		}
         myself.stage.strokeValue = value;
-    };
-    this.stageBottomBar.add(valueField);
+    }, this.stage.strokeValue.toString());
+
+	var attributeSelectorLabel = createBasicLabel("attribute:");
 	
+	var attributeSelector = new InputFieldMorph(Cell.attributes.length > 0 ? Cell.attributes[0] : "", false, function() {
+		var retn = {};
+		for (var i=0; i<Cell.attributes.length; i++)
+		{
+			retn[Cell.attributes[i]] = Cell.attributes[i];
+		}
+		return retn;
+	}, true );
+    if (MorphicPreferences.isFlat) {
+        attributeSelector.color = this.groupColor;
+    }
+    attributeSelector.corner = 12;
+    attributeSelector.padding = 0;
+    attributeSelector.contrast = this.buttonContrast;
+    attributeSelector.hint = "grid size";
+	this.attributeSelector = attributeSelector;
+	
+	var gridSizerLabel = createBasicLabel("grid size:");
+
 	var gridSizer = new InputFieldMorph(
             "40x30", false, // numeric?
             {
@@ -244,41 +217,56 @@ IDE_Morph.prototype.createCorral = function()
     gridSizer.padding = 0;
     gridSizer.contrast = this.buttonContrast;
     gridSizer.hint = "grid size";
-    gridSizer.setCenter(this.stageBottomBar.center());
-    gridSizer.setLeft(valueField.right() + padding);
 	gridSizer.contents().minWidth = 0;
-	gridSizer.bounds.setTo(gridSizer.bounds.left(), gridSizer.bounds.top(), (gridSizer.left() + 54), gridSizer.bounds.bottom());
-    gridSizer.drawNew();
-    gridSizer.fixLayout();
-    this.stageBottomBar.add(gridSizer);
 	
-	var defaultSelection = "";
-	if (Cell.attributes.length > 0) {
-		defaultSelection = Cell.attributes[0];
-	}
-	var attributeSelector = new InputFieldMorph(defaultSelection, false, function() {
-		var retn = {};
-		for (var i=0; i<Cell.attributes.length; i++)
-		{
-			retn[Cell.attributes[i]] = Cell.attributes[i];
-		}
-		return retn;
-	}, true );
-    if (MorphicPreferences.isFlat) {
-        attributeSelector.color = this.groupColor;
+	var lineHeight = this.logo.height();
+	var lines = [
+		[
+			scribbleButton,
+			sizeLabel,
+			sizeField,
+			hardnessLabel,
+			hardnessField,
+			valueLabel,
+			valueField,
+			attributeSelectorLabel,
+			attributeSelector
+		],
+		[
+			gridSizerLabel,
+			gridSizer
+		]
+	];
+
+	
+    if (this.stageBottomBar) {
+        this.stageBottomBar.destroy();
     }
-    attributeSelector.corner = 12;
-    attributeSelector.padding = 0;
-    attributeSelector.contrast = this.buttonContrast;
-    attributeSelector.hint = "grid size";
-    attributeSelector.setCenter(this.stageBottomBar.center());
-    attributeSelector.setLeft(gridSizer.right() + padding);
-    attributeSelector.drawNew();
-    attributeSelector.fixLayout();
-	this.attributeSelector = attributeSelector;
-	this.stageBottomBar.add(attributeSelector);
-	
-	this.stageBottomBar.reactToChoice = function(choice)
+	this.stageBottomBar = new Morph();
+
+	var stageBottomBar = this.stageBottomBar;
+    stageBottomBar.color = this.frameColor;
+    stageBottomBar.setHeight(lineHeight * lines.length + padding);
+    this.add(stageBottomBar);
+
+	var currentY = stageBottomBar.top() + padding / 2;
+	lines.forEach(function (line) {
+		var currentX = stageBottomBar.left() + padding;
+		line.forEach(function (morph) {
+			morph.setCenter(new Point(0, currentY + lineHeight / 2));
+			morph.setLeft(currentX);
+			morph.drawNew();
+			if (morph.fixLayout) {
+				morph.fixLayout();
+			}
+			stageBottomBar.add(morph);
+
+			currentX = morph.right() + padding;
+		});
+		currentY += lineHeight;
+	});
+
+	stageBottomBar.reactToChoice = function(choice)
 	{
 		var gridSizeChoice = gridSizer.getValue();
 		var choiceInt = 40;
@@ -297,9 +285,10 @@ IDE_Morph.prototype.createCorral = function()
 		}
 	}
 	
-    this.stageBottomBar.reactToEdit = function () {
+    stageBottomBar.reactToEdit = function () {
 		sizeField.accept();
 		valueField.accept();
+		hardnessField.accept();
 	}
 };
 
