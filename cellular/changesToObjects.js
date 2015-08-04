@@ -1769,11 +1769,33 @@ SpriteMorph.prototype.currentCell = null;
 SpriteMorph.prototype.updateCurrentCell = function()
 {
 	if (!this.parentSprite)
-		return; //No parent, thus this is a prototype sprite morph and is 'sposed to be invisible.
+		return; //No parent, thus this is a prototype sprite morph and is supposed to be invisible.
 		
 	var stage = this.parentThatIsA(StageMorph);
 	if (!stage)
 		return; //No stage, can't go on!
+
+	if (this.__workaround__removed) {
+		// We need this for a few reasons.
+		// 1) Node.removeChild(x) does not set the parent of x to null. So even 
+        //    if the child has been removed, this.parentThatIsA(StageMorph) 
+        //    still returns the old parent. We do NOT want to put a sprite that 
+        //    has been removed into the cell structures.
+		// 2) Clearly, we would not need this work around if updateCurrentCell
+		//    would never be called once a sprite is removed from the stage.
+		//    I thought that calling 
+		//         this.stage.threads.stopAllForReceiver(child)
+		//    would stop all blocks from running. Instead, it just queues them
+		//    to stop in a short time. Unfortunately, during this time some 
+		//    blocks may be executed, moving the sprite and causing 
+		//    updateCurrentCell to be called.
+		if (this.currentCell)
+		{
+			this.currentCell.removeSpriteMorph(this);
+			this.currentCell = null;
+		}
+		return;
+	}
 
 	var newCell = stage.getCellAt(this.rotationCenter());
 	
@@ -1785,10 +1807,7 @@ SpriteMorph.prototype.updateCurrentCell = function()
 	if (this.currentCell)
 	{
 		this.currentCell.removeSpriteMorph(this);
-		if (this.currentCell.spriteMorphs.length == 0)
-		{
-			this.currentCell.parentECT.cellMadeEmpty();
-		}
+		this.currentCell = null;
 	}
 	
 	this.currentCell = newCell;
@@ -1796,10 +1815,6 @@ SpriteMorph.prototype.updateCurrentCell = function()
 	//... and add to new one
 	if (this.currentCell)
 	{
-		if (this.currentCell.spriteMorphs.length == 0)
-		{
-			this.currentCell.parentECT.cellFilled();
-		}
 		this.currentCell.addSpriteMorph(this);
 	}
 }
@@ -1855,16 +1870,20 @@ SpriteMorph.prototype.drawNew = function() {
 StageMorph.prototype.uberAddChild = StageMorph.prototype.addChild;
 StageMorph.prototype.addChild = function (aNode) {
 	var ret = this.uberAddChild(aNode);
-	if (aNode instanceof SpriteMorph)
+	if (aNode instanceof SpriteMorph) {
 		aNode.updateCurrentCell();
+		aNode.__workaround__removed = false; // For more info, see updateCurrentCell
+	}
 	return ret;
 };
 
 StageMorph.prototype.uberAddChildFirst = StageMorph.prototype.addChildFirst;
 StageMorph.prototype.addChildFirst = function (aNode) {
 	var ret = this.addChildFirst(aNode);
-	if (aNode instanceof SpriteMorph)
+	if (aNode instanceof SpriteMorph) {
 		aNode.updateCurrentCell();
+		aNode.__workaround__removed = false; // For more info, see updateCurrentCell
+	}
 	return ret;
 };
 
@@ -1875,10 +1894,9 @@ StageMorph.prototype.removeChild = function (aNode) {
 		if (aNode.currentCell)
 		{
 			aNode.currentCell.removeSpriteMorph(aNode);
-			if (aNode.currentCell.spriteMorphs.length == 0)
-				aNode.currentCell.parentECT.cellMadeEmpty();
 			aNode.currentCell = null;
 		}
+		aNode.__workaround__removed = true; // For more info, see updateCurrentCell
 	}
 	return this.uberRemoveChild(aNode);
 };
@@ -2227,7 +2245,7 @@ StageMorph.prototype.drawOn = function (aCanvas, aRect) {
 			ctx.beginPath();
 			ctx.rect(area.left(), area.top(), area.width(), area.height());
 			ctx.clip();
-			
+
 			var cellWidthPx = this.cellWidthPx();
 			var cellHeightPx = this.cellHeightPx();
 			var startCellX = Math.floor((area.left()-this.bounds.left())/cellWidthPx);
@@ -2250,7 +2268,7 @@ StageMorph.prototype.drawOn = function (aCanvas, aRect) {
 						var cell = cellRow[x];
 						if (cell == null || cell == undefined)
 							break;
-							
+			
 						for (var i=0; i<this.visibleAttributes.length; i++)
 						{
 							var value = cell.getAttribute(this.visibleAttributes[i]);

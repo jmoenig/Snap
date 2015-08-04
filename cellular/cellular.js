@@ -50,6 +50,8 @@ Cell.prototype.removeSpriteMorph = function(morph)
 	if (index > -1) {
 		this.spriteMorphs.splice(index, 1);
 	}
+	if (this.spriteMorphs.length == 0)
+		this.parentECT.cellMadeEmpty();
 }
 
 /*
@@ -57,6 +59,10 @@ Cell.prototype.removeSpriteMorph = function(morph)
 */
 Cell.prototype.addSpriteMorph = function(morph)
 {
+	if (this.spriteMorphs.length == 0)
+	{
+		this.parentECT.cellFilled();
+	}
 	this.spriteMorphs.push(morph);
 }
 

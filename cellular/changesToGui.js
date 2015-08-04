@@ -310,8 +310,8 @@ IDE_Morph.prototype.killAllClones = function(prototypeObject) {
 		if (child.parentSprite == prototypeObject)
 		{
 			//Remove it if it is a clone of this sprite
-			this.stage.removeChild(child);
 			this.stage.threads.stopAllForReceiver(child);
+			this.stage.removeChild(child);
 			child.parentSprite.cloneDestroyed();
 			i--;
 		}
@@ -425,10 +425,11 @@ SpriteIconMorph.prototype.createDuplicator = function () {
 			var clone = myself.object.createCellularClone();
 			ide.stage.add(clone);
 			clone.setCenter(ide.stage.center());
-			clone.turn(rnd.call(this, 1, 360));
+			clone.turn(90); // rnd.call(this, 1, 360));
 			clone.setXPosition(rnd.call(this, -220, 220));
 			clone.setYPosition(rnd.call(this, -160, 160));
 			clone.snapToCell();
+			clone.scaleToCellSize();
 		}
 		
 		ide.stage.dirtyEntireStage();
