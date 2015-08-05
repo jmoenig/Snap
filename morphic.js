@@ -9689,6 +9689,18 @@ HandMorph.prototype.processMouseMove = function (event) {
     // determine the new mouse-over-list:
     // mouseOverNew = this.allMorphsAtPointer();
     mouseOverNew = this.morphAtPointer().allParents();
+    
+    // BEGIN SNAPAPPS
+    {
+        var topMorphSnapApps = this.morphAtPointer();
+        if (topMorphSnapApps.snapappsTrueMouseMove) {
+            topMorphSnapApps.snapappsTrueMouseMove(pos, this.mouseButton);
+            if (this.mouseButton === 'right') {
+                this.contextMenuEnabled = false;
+            }
+        }
+    }
+    // END SNAPAPPS
 
     if (!this.children.length && this.mouseButton) {
         topMorph = this.morphAtPointer();

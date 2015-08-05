@@ -34,20 +34,20 @@ IDE_Morph.prototype.exportIndex = "cellular.html";
 /***************************** OVERRIDES *****************************/
 /*********************************************************************/
 
-IDE_Morph.prototype.snapAppsGetIsDraggableOverride = function () { 
+IDE_Morph.prototype.snapAppsGetIsDraggableOverride = function () {
     return this.currentSprite.areClonesDraggable;
 };
 
 IDE_Morph.prototype.snapAppsIsDraggableOverride = function () {
     var currentSprite = this.currentSprite;
-    
+
     currentSprite.areClonesDraggable = !currentSprite.areClonesDraggable;
-	this.stage.children.forEach(function (x) {
-		if (x instanceof SpriteMorph && x.parentSprite == currentSprite)
-		{
-			x.isDraggable = currentSprite.areClonesDraggable;
-		}
-	});
+    this.stage.children.forEach(function (x) {
+        if (x instanceof SpriteMorph && x.parentSprite == currentSprite)
+        {
+            x.isDraggable = currentSprite.areClonesDraggable;
+        }
+    });
 };
 
 /*
@@ -57,7 +57,7 @@ IDE_Morph.prototype.createCorralSnap = IDE_Morph.prototype.createCorral;
 IDE_Morph.prototype.createCorral = function()
 {
     this.createCorralSnap();
-    
+
     // assumes the stage has already been created
     var myself = this,
         padding = 5,
@@ -98,97 +98,97 @@ IDE_Morph.prototype.createCorral = function()
     scribbleButton.labelColor = new Color(0, 200, 200);
     scribbleButton.contrast = this.buttonContrast;
     scribbleButton.hint = "draw to cell attributes";
-	
-	function createBasicLabel(text) {
-		var basicLabel = new TextMorph(text);
-		basicLabel.corner = 12;
-		basicLabel.padding = 0;
-		basicLabel.color = myself.buttonLabelColor;
-		basicLabel.contrast = myself.buttonContrast;
-		return basicLabel;
-	};
-	
-	function createBasicField(hint, width, accept, defaultValue) {
-		var basicField = new InputFieldMorph(defaultValue);
-		if (MorphicPreferences.isFlat) {
-		    basicField.color = myself.groupColor;
-		}
-		basicField.corner = 12;
-		basicField.padding = 0;
-		basicField.contrast = myself.buttonContrast;
-		basicField.hint = hint;
-		basicField.contents().minWidth = 0;
-		basicField.setWidth(width); // fixed dimensions
-		basicField.accept = accept
-		return basicField;
-	};
 
-	var sizeLabel = createBasicLabel("cell radius:");
+    function createBasicLabel(text) {
+        var basicLabel = new TextMorph(text);
+        basicLabel.corner = 12;
+        basicLabel.padding = 0;
+        basicLabel.color = myself.buttonLabelColor;
+        basicLabel.contrast = myself.buttonContrast;
+        return basicLabel;
+    };
 
-	var sizeField = createBasicField("brush size (in cells)", 32, function () {
-		var value = Number(sizeField.getValue());
-		if (isNaN(value))
-		{
-			sizeField.setContents(1);
-			return;
-		}
-		if (value > 99)
-		{
-			sizeField.setContents(99);
-			return;
-		}
-		if (value < 0.5)
-		{
-			sizeField.setContents(0.5);
-			return;
-		}
+    function createBasicField(hint, width, accept, defaultValue) {
+        var basicField = new InputFieldMorph(defaultValue);
+        if (MorphicPreferences.isFlat) {
+            basicField.color = myself.groupColor;
+        }
+        basicField.corner = 12;
+        basicField.padding = 0;
+        basicField.contrast = myself.buttonContrast;
+        basicField.hint = hint;
+        basicField.contents().minWidth = 0;
+        basicField.setWidth(width); // fixed dimensions
+        basicField.accept = accept
+        return basicField;
+    };
+
+    var sizeLabel = createBasicLabel("cell radius:");
+
+    var sizeField = createBasicField("brush size (in cells)", 32, function () {
+        var value = Number(sizeField.getValue());
+        if (isNaN(value))
+        {
+            sizeField.setContents(1);
+            return;
+        }
+        if (value > 99)
+        {
+            sizeField.setContents(99);
+            return;
+        }
+        if (value < 0.5)
+        {
+            sizeField.setContents(0.5);
+            return;
+        }
         myself.stage.strokeSize = value;
     }, this.stage.strokeSize.toString());
 
-	var hardnessLabel = createBasicLabel("hard:");
+    var hardnessLabel = createBasicLabel("hard:");
 
-	var hardnessField = createBasicField("brush hardness (0-1)", 32, function () {
-		var value = Number(hardnessField.getValue());
-		if (isNaN(value))
-		{
-			hardnessField.setContents(1);
-			return;
-		}
-		if (value > 1)
-		{
-			hardnessField.setContents(1);
-			return;
-		}
-		if (value < 0)
-		{
-			hardnessField.setContents(0);
-			return;
-		}
+    var hardnessField = createBasicField("brush hardness (0-1)", 32, function () {
+        var value = Number(hardnessField.getValue());
+        if (isNaN(value))
+        {
+            hardnessField.setContents(1);
+            return;
+        }
+        if (value > 1)
+        {
+            hardnessField.setContents(1);
+            return;
+        }
+        if (value < 0)
+        {
+            hardnessField.setContents(0);
+            return;
+        }
         myself.stage.strokeHardness = value;
     }, this.stage.strokeHardness.toString());
-	
-	var valueLabel = createBasicLabel("value:");
 
-	var valueField = createBasicField("brush value", 32, function () {
-		var value = Number(valueField.getValue());
-		if (isNaN(value))
-		{
-			valueField.setContents(10);
-			return;
-		}
+    var valueLabel = createBasicLabel("value:");
+
+    var valueField = createBasicField("brush value", 32, function () {
+        var value = Number(valueField.getValue());
+        if (isNaN(value))
+        {
+            valueField.setContents(10);
+            return;
+        }
         myself.stage.strokeValue = value;
     }, this.stage.strokeValue.toString());
 
-	var attributeSelectorLabel = createBasicLabel("attribute:");
-	
-	var attributeSelector = new InputFieldMorph(Cell.attributes.length > 0 ? Cell.attributes[0] : "", false, function() {
-		var retn = {};
-		for (var i=0; i<Cell.attributes.length; i++)
-		{
-			retn[Cell.attributes[i]] = Cell.attributes[i];
-		}
-		return retn;
-	}, true );
+    var attributeSelectorLabel = createBasicLabel("attribute:");
+
+    var attributeSelector = new InputFieldMorph(Cell.attributes.length > 0 ? Cell.attributes[0] : "", false, function() {
+        var retn = {};
+        for (var i=0; i<Cell.attributes.length; i++)
+        {
+            retn[Cell.attributes[i]] = Cell.attributes[i];
+        }
+        return retn;
+    }, true );
     if (MorphicPreferences.isFlat) {
         attributeSelector.color = this.groupColor;
     }
@@ -196,18 +196,18 @@ IDE_Morph.prototype.createCorral = function()
     attributeSelector.padding = 0;
     attributeSelector.contrast = this.buttonContrast;
     attributeSelector.hint = "grid size";
-	this.attributeSelector = attributeSelector;
-	
-	var gridSizerLabel = createBasicLabel("grid size:");
+    this.attributeSelector = attributeSelector;
 
-	var gridSizer = new InputFieldMorph(
+    var gridSizerLabel = createBasicLabel("grid size:");
+
+    var gridSizer = new InputFieldMorph(
             "40x30", false, // numeric?
             {
-			"16x12": "16x12",
-			"20x15": "20x15",
-			"40x30": "40x30",
-			"80x60": "80x60",
-			}, // drop-down dict, optional
+            "16x12": "16x12",
+            "20x15": "20x15",
+            "40x30": "40x30",
+            "80x60": "80x60",
+            }, // drop-down dict, optional
             true
         );
     if (MorphicPreferences.isFlat) {
@@ -217,94 +217,98 @@ IDE_Morph.prototype.createCorral = function()
     gridSizer.padding = 0;
     gridSizer.contrast = this.buttonContrast;
     gridSizer.hint = "grid size";
-	gridSizer.contents().minWidth = 0;
-	
-	var lineHeight = this.logo.height();
-	var lines = [
-		[
-			scribbleButton,
-			sizeLabel,
-			sizeField,
-			hardnessLabel,
-			hardnessField,
-			valueLabel,
-			valueField,
-			attributeSelectorLabel,
-			attributeSelector
-		],
-		[
-			gridSizerLabel,
-			gridSizer
-		]
-	];
+    gridSizer.contents().minWidth = 0;
 
-	
+    var queryValueLabel = createBasicLabel("(hover to query)");
+    this.cellAttributeQueryText = queryValueLabel;
+
+    var lineHeight = this.logo.height();
+    var lines = [
+        [
+            scribbleButton,
+            sizeLabel,
+            sizeField,
+            hardnessLabel,
+            hardnessField,
+            valueLabel,
+            valueField,
+            attributeSelectorLabel,
+            attributeSelector
+        ],
+        [
+            gridSizerLabel,
+            gridSizer,
+            queryValueLabel,
+        ]
+    ];
+
+
     if (this.stageBottomBar) {
         this.stageBottomBar.destroy();
     }
-	this.stageBottomBar = new Morph();
+    this.stageBottomBar = new Morph();
 
-	var stageBottomBar = this.stageBottomBar;
+    var stageBottomBar = this.stageBottomBar;
     stageBottomBar.color = this.frameColor;
     stageBottomBar.setHeight(lineHeight * lines.length + padding);
     this.add(stageBottomBar);
 
-	var currentY = stageBottomBar.top() + padding / 2;
-	lines.forEach(function (line) {
-		var currentX = stageBottomBar.left() + padding;
-		line.forEach(function (morph) {
-			morph.setCenter(new Point(0, currentY + lineHeight / 2));
-			morph.setLeft(currentX);
-			morph.drawNew();
-			if (morph.fixLayout) {
-				morph.fixLayout();
-			}
-			stageBottomBar.add(morph);
+    var currentY = stageBottomBar.top() + padding / 2;
+    lines.forEach(function (line) {
+        var currentX = stageBottomBar.left() + padding;
+        line.forEach(function (morph) {
+            morph.setCenter(new Point(0, currentY + lineHeight / 2));
+            morph.setLeft(currentX);
+            morph.drawNew();
+            if (morph.fixLayout) {
+                morph.fixLayout();
+            }
+            stageBottomBar.add(morph);
 
-			currentX = morph.right() + padding;
-		});
-		currentY += lineHeight;
-	});
+            currentX = morph.right() + padding;
+        });
+        currentY += lineHeight;
+    });
 
-	stageBottomBar.reactToChoice = function(choice)
-	{
-		var gridSizeChoice = gridSizer.getValue();
-		var choiceInt = 40;
-		switch (gridSizeChoice)
-		{
-			case "16x12": choiceInt = 16; break;
-			case "20x15": choiceInt = 20; break;
-			case "40x30": choiceInt = 40; break;
-			case "80x60": choiceInt = 80; break;
-		}
-		if (myself.stage.cellsX != choiceInt || myself.stage.cellsY != choiceInt * 3 / 4)
-		{
-			myself.stage.cellsX = choiceInt;
-			myself.stage.cellsY = choiceInt * 3 / 4;
-			myself.stage.updateCells();
-		}
-	}
-	
+    stageBottomBar.reactToChoice = function(choice)
+    {
+        var gridSizeChoice = gridSizer.getValue();
+        var choiceInt = 40;
+        switch (gridSizeChoice)
+        {
+            case "16x12": choiceInt = 16; break;
+            case "20x15": choiceInt = 20; break;
+            case "40x30": choiceInt = 40; break;
+            case "80x60": choiceInt = 80; break;
+        }
+        if (myself.stage.cellsX != choiceInt || myself.stage.cellsY != choiceInt * 3 / 4)
+        {
+            myself.stage.cellsX = choiceInt;
+            myself.stage.cellsY = choiceInt * 3 / 4;
+            myself.stage.updateCells();
+        }
+    }
+
     stageBottomBar.reactToEdit = function () {
-		sizeField.accept();
-		valueField.accept();
-		hardnessField.accept();
-	}
+        sizeField.accept();
+        valueField.accept();
+        hardnessField.accept();
+    }
 };
 
 IDE_Morph.prototype.killAllClones = function(prototypeObject) {
-	for (var i = 0; i<this.stage.children.length; i++)
-	{
-		var child = this.stage.children[i];
-		if (child.parentSprite == prototypeObject)
-		{
-			//Remove it if it is a clone of this sprite
-			this.stage.threads.stopAllForReceiver(child);
-			this.stage.removeChild(child);
-			child.parentSprite.cloneDestroyed();
-			i--;
-		}
-	}
+    for (var i = 0; i<this.stage.children.length; i++)
+    {
+        var child = this.stage.children[i];
+        if (child.parentSprite == prototypeObject)
+        {
+            //Remove it if it is a clone of this sprite
+            this.stage.threads.stopAllForReceiver(child);
+            this.stage.removeChild(child);
+            child.parentSprite.cloneDestroyed();
+            i--;
+        }
+    }
 }
 
 //Add cellular centre.
@@ -354,10 +358,10 @@ TurtleIconMorph.prototype.userMenu = function () {
 
 IDE_Morph.prototype.refreshCellAttributes = function()
 {
-	if (!Cell.hasAttribute(this.attributeSelector.getValue()))
-	{
-		this.attributeSelector.setChoice(null);
-	}
+    if (!Cell.hasAttribute(this.attributeSelector.getValue()))
+    {
+        this.attributeSelector.setChoice(null);
+    }
 }
 
 /*********************************************************************/
@@ -370,9 +374,9 @@ IDE_Morph.prototype.scribble = function () {
 
 SpriteIconMorph.prototype.uberInit = SpriteIconMorph.prototype.init;
 SpriteIconMorph.prototype.init = function (aSprite, aTemplate) {
-	this.uberInit(aSprite, aTemplate);
-	this.createDuplicator();
-	this.fixLayout();
+    this.uberInit(aSprite, aTemplate);
+    this.createDuplicator();
+    this.fixLayout();
 }
 
 /*
@@ -383,55 +387,55 @@ SpriteIconMorph.prototype.createDuplicator = function () {
     if (this.duplicator) {
         this.duplicator.destroy();
     }
-	var myself = this;
-	var duplicator;
-	duplicator = new InputFieldMorph("0");
+    var myself = this;
+    var duplicator;
+    duplicator = new InputFieldMorph("0");
     duplicator.corner = 12;
     duplicator.padding = 0;
     duplicator.contrast = this.buttonContrast;
     duplicator.hint = "clones";
-	duplicator.contents().minWidth = 0;
+    duplicator.contents().minWidth = 0;
     duplicator.setCenter(this.center());
     duplicator.setWidth(32); // fixed dimensions
     duplicator.drawNew();
     duplicator.accept = function () {
-		var value = Number(duplicator.getValue());
-		var rnd = Process.prototype.reportRandom;
-		
-		if (isNaN(value))
-		{
-			value = 1;
-			duplicator.setContents(1);
-		}
-		
-		//Go through every object and remove everyone that is based off this sprite
-		var ide = myself.parentThatIsA(IDE_Morph);
-		ide.killAllClones(myself.object);
-		
-		//Now we make the clones
-		for (var i = 0; i<value; i++)
-		{
-			var clone = myself.object.createCellularClone();
-			ide.stage.add(clone);
-			clone.setCenter(ide.stage.center());
-			clone.turn(90); // rnd.call(this, 1, 360));
-			clone.setXPosition(rnd.call(this, -220, 220));
-			clone.setYPosition(rnd.call(this, -160, 160));
-			clone.snapToCell();
-			clone.scaleToCellSize();
-		}
-		
-		ide.stage.dirtyEntireStage();
+        var value = Number(duplicator.getValue());
+        var rnd = Process.prototype.reportRandom;
+
+        if (isNaN(value))
+        {
+            value = 1;
+            duplicator.setContents(1);
+        }
+
+        //Go through every object and remove everyone that is based off this sprite
+        var ide = myself.parentThatIsA(IDE_Morph);
+        ide.killAllClones(myself.object);
+
+        //Now we make the clones
+        for (var i = 0; i<value; i++)
+        {
+            var clone = myself.object.createCellularClone();
+            ide.stage.add(clone);
+            clone.setCenter(ide.stage.center());
+            clone.turn(90); // rnd.call(this, 1, 360));
+            clone.setXPosition(rnd.call(this, -220, 220));
+            clone.setYPosition(rnd.call(this, -160, 160));
+            clone.snapToCell();
+            clone.scaleToCellSize();
+        }
+
+        ide.stage.dirtyEntireStage();
     };
     this.add(duplicator);
-	this.duplicator = duplicator;
-	
-	myself.object.spriteIconMorph = this;
+    this.duplicator = duplicator;
+
+    myself.object.spriteIconMorph = this;
 };
 
 SpriteIconMorph.prototype.updateDuplicator = function()
 {
-	this.duplicator.setContents(this.object.cloneCount);
+    this.duplicator.setContents(this.object.cloneCount);
 }
 
 // SpriteIconMorph layout (we need to change it so we can add room for the text box)
@@ -450,8 +454,8 @@ SpriteIconMorph.prototype.fixLayout = function () {
             + this.outline * 2
             + this.edge * 2
             + this.padding * 3
-			+ (this.object instanceof StageMorph ? 0 : 
-			  this.padding * 2
+            + (this.object instanceof StageMorph ? 0 :
+              this.padding * 2
             + this.duplicator.height())
             + this.label.height()
     );
@@ -466,38 +470,38 @@ SpriteIconMorph.prototype.fixLayout = function () {
         this.rotationButton.setRight(this.right());
     }
 
-	var nextY;
+    var nextY;
     if (this.object instanceof StageMorph) {
-		if (this.duplicator != undefined)
-		{
-			this.duplicator.destroy();
-			this.duplicator = undefined;
-		}
-		nextY = this.thumbnail.bottom();
-	} else {
-		this.duplicator.setCenter(this.center());
-		this.duplicator.setTop(
-			this.thumbnail.bottom() + this.padding
-		);
-		nextY = this.duplicator.bottom();
-		
-		if (this.object)
-		{
-			var stage = this.object.parentThatIsA(StageMorph);
-			if (stage && stage.children)
-			{
-				var numClones = 0;
-				var stageChildren = stage.children;
-				for (var i=0; i<stageChildren.length; i++)
-					if (stageChildren[i] instanceof SpriteMorph 
-						&& stageChildren[i].parentSprite == this.object)
-						numClones++;
-						
-				this.duplicator.setContents(numClones);
-			}
-		}
-	}
-	
+        if (this.duplicator != undefined)
+        {
+            this.duplicator.destroy();
+            this.duplicator = undefined;
+        }
+        nextY = this.thumbnail.bottom();
+    } else {
+        this.duplicator.setCenter(this.center());
+        this.duplicator.setTop(
+            this.thumbnail.bottom() + this.padding
+        );
+        nextY = this.duplicator.bottom();
+
+        if (this.object)
+        {
+            var stage = this.object.parentThatIsA(StageMorph);
+            if (stage && stage.children)
+            {
+                var numClones = 0;
+                var stageChildren = stage.children;
+                for (var i=0; i<stageChildren.length; i++)
+                    if (stageChildren[i] instanceof SpriteMorph
+                        && stageChildren[i].parentSprite == this.object)
+                        numClones++;
+         
+                this.duplicator.setContents(numClones);
+            }
+        }
+    }
+
     this.label.setWidth(
         Math.min(
             this.label.children[0].width(), // the actual text
@@ -516,9 +520,9 @@ IDE_Morph.prototype.newProject = function() {
     return this.uberNewProject();
 }
 
-//This overrides the additition of a sprite to the stage. 
-/*IDE_Morph.prototype.snapAppsHookAddSprite = function (sprite) { 
-	this.stage.add(sprite);
+//This overrides the additition of a sprite to the stage.
+/*IDE_Morph.prototype.snapAppsHookAddSprite = function (sprite) {
+    this.stage.add(sprite);
 };*/
 
 IDE_Morph.prototype.uberRemoveSprite = IDE_Morph.prototype.removeSprite;
