@@ -421,8 +421,18 @@ SnapTranslator.dict.pl = {
         'kiedy klikni\u0119to %greenflag',
     'when %keyHat key pressed':
         'kiedy klawisz %keyHat naci\u015Bni\u0119ty',
-    'when I am clicked':
-        'kiedy duszek klikni\u0119ty',
+    'when I am %interaction':
+        'kiedy zostanę %interaction',
+    'clicked':
+        'kliknięty',
+    'pressed':
+        'naciśnięty',
+    'dropped':
+        'upuszczony',
+    'mouse-entered':
+        'najechany przez kursor myszy',
+    'mouse-departed':
+        'opuszczony przez kursor myszy',
     'when I receive %msgHat':
         'kiedy otrzymam %msgHat',
     'broadcast %msg':
