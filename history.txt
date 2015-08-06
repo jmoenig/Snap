@@ -2554,3 +2554,9 @@ ______
 150730
 ------
 * Blocks: improve keyboard editing for embedded rings
+
+150806
+------
+* Polish & German translation updates
+
+=== Release v4.0.2 ===

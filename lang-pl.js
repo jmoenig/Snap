@@ -190,7 +190,7 @@ SnapTranslator.dict.pl = {
     'translator_e-mail':
         'witek@oeiizk.waw.pl', // optional
     'last_changed':
-        '2013-08-05', // this, too, will appear in the Translators tab
+        '2015-08-06', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
