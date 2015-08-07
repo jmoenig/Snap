@@ -50,6 +50,19 @@ IDE_Morph.prototype.snapAppsIsDraggableOverride = function () {
     });
 };
 
+function runOnLoseFocus(inputFieldMorph, runMe) {
+    inputFieldMorph.reactToEdit = runMe; /*
+    var uberEscalateEvent = inputFieldMorph.escalateEvent;
+    inputFieldMorph.escalateEvent = function(name, arg) {
+        console.log("escalateEvent");
+        if (name == 'reactToEdit') {
+            console.log("reactToEdit");
+            runMe();
+        }
+        return uberEscalateEvent(name, arg);
+    }*/
+}
+
 /*
 ** This is what creates the cell brush tools GUI.
 */
@@ -119,7 +132,8 @@ IDE_Morph.prototype.createCorral = function()
         basicField.hint = hint;
         basicField.contents().minWidth = 0;
         basicField.setWidth(width); // fixed dimensions
-        basicField.accept = accept
+        basicField.accept = accept;
+        runOnLoseFocus(basicField, accept);
         return basicField;
     };
 
@@ -422,11 +436,11 @@ SpriteIconMorph.prototype.createDuplicator = function () {
             clone.setXPosition(rnd.call(this, -220, 220));
             clone.setYPosition(rnd.call(this, -160, 160));
             clone.snapToCell();
-            clone.scaleToCellSize();
         }
 
         ide.stage.dirtyEntireStage();
     };
+    runOnLoseFocus(duplicator, duplicator.accept);
     this.add(duplicator);
     this.duplicator = duplicator;
 
