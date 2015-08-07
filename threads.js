@@ -161,11 +161,11 @@ ThreadManager.prototype.startProcess = function (
         active.stop();
         this.removeTerminatedProcesses();
     }
-    top.addHighlight();
+    top.cachedPushHighlight();
     newProc = new Process(block.topBlock(), callback, receiver);
     newProc.exportResult = exportResult;
     if (!newProc.homeContext.receiver.isClone) {
-        top.addHighlight();
+//         top.cachedPushHighlight();
     }
     this.processes.push(newProc);
     return newProc;
@@ -241,7 +241,7 @@ ThreadManager.prototype.removeTerminatedProcesses = function () {
     this.processes.forEach(function (proc) {
         if ((!proc.isRunning() && !proc.errorFlag) || proc.isDead) {
             if (proc.topBlock instanceof BlockMorph) {
-                proc.topBlock.removeHighlight();
+                proc.topBlock.cachedPopHighlight();
             }
             if (proc.prompter) {
                 proc.prompter.destroy();
@@ -749,7 +749,7 @@ Process.prototype.handleError = function (error, element) {
     var m = element;
     this.stop();
     this.errorFlag = true;
-    this.topBlock.addErrorHighlight();
+    this.topBlock.cachedAddErrorHighlight();
     if (isNil(m) || isNil(m.world())) {m = this.topBlock; }
     m.showBubble(
         (m === element ? '' : 'Inside: ')

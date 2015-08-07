@@ -268,25 +268,3 @@ ReporterBlockMorph.prototype.drawArrow = function (context) {
     context.closePath();
     context.stroke();
 };
-
-
-// Kill block highlighting: it causes major lag:
-BlockMorph.prototype.uberAddHighlight = BlockMorph.prototype.addHighlight;
-BlockMorph.prototype.addHighlight = function (oldHighlight) {
-};
-
-BlockMorph.prototype.uberAddErrorHighlight = BlockMorph.prototype.addErrorHighlight;
-BlockMorph.prototype.addErrorHighlight = function () {
-};
-
-BlockMorph.prototype.uberRemoveHighlight = BlockMorph.prototype.removeHighlight;
-BlockMorph.prototype.removeHighlight = function () {
-};
-
-BlockMorph.prototype.uberToggleHighlight = BlockMorph.prototype.toggleHighlight;
-BlockMorph.prototype.toggleHighlight = function () {
-};
-
-BlockMorph.prototype.uberGetHighlight = BlockMorph.prototype.getHighlight;
-BlockMorph.prototype.getHighlight = function () {
-};

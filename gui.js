@@ -1489,12 +1489,16 @@ IDE_Morph.prototype.fixLayout = function (situation) {
     if (situation !== 'refreshPalette') {
         // stage
         if (this.isAppMode) {
+            // SNAPAPPS: Modified this so that in Cellular, the "stageBottomBar" is kept on-screen.
+            var bottomBarHeight = this.stageBottomBar ? this.stageBottomBar.height() : 0;
             this.stage.setScale(Math.floor(Math.min(
                 (this.width() - padding * 2) / this.stage.dimensions.x,
-                (this.height() - this.controlBar.height() * 2 - padding * 2)
+                (this.height() - this.controlBar.height() * 2 - padding * 2 - bottomBarHeight)
                     / this.stage.dimensions.y
             ) * 10) / 10);
-            this.stage.setCenter(this.center());
+            var c = this.center();
+            c.y -= bottomBarHeight / 2.0;
+            this.stage.setCenter(c);
         } else {
 //            this.stage.setScale(this.isSmallStage ? 0.5 : 1);
             this.stage.setScale(this.isSmallStage ? this.stageRatio : 1);
