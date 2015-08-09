@@ -500,3 +500,14 @@ SnapTranslator.dict.hu = {
         '2015-07-27'
 };
 
+SnapTranslator.dict.ia = {
+    // translations meta information
+    'language_name':
+        'Interlingua',
+    'language_translator':
+        'Ken Dickey',
+    'translator_e-mail':
+        'Ken.Dickey@whidbey.com',
+    'last_changed':
+        '2015-08-09'
+};

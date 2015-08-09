@@ -2560,3 +2560,7 @@ ______
 * Polish & German translation updates
 
 === Release v4.0.2 ===
+
+150809
+------
+* Interlingua support, yay!! thanks, Ken Dickey!
