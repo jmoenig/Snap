@@ -3854,15 +3854,13 @@ SpriteMorph.prototype.changeYPosition = function (delta) {
 
 SpriteMorph.prototype.setZPosition = function (num) {
     if (this.costume && this.costume.is3D) {
-        this.object.position.z = num;
-        this.parent.changed();
+        this.gotoXYZ(this.xPosition(), this.yPosition(), +num || 0);
     }
 };
 
 SpriteMorph.prototype.changeZPosition = function (delta) {
     if (this.costume && this.costume.is3D) {
-        this.object.position.z += delta;
-        this.parent.changed();
+        this.gotoXYZ(this.xPosition(), this.yPosition(), this.zPosition() + (+delta || 0));
     }
 };
 
