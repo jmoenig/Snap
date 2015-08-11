@@ -32,6 +32,7 @@ SnapSerializer.prototype.loadSprite = function (model, project) {
 		v.heading = parseFloat(model.attributes.heading) || 0;
 		v.x = +model.attributes.x || 0;
 		v.y = +model.attributes.y || 0;
+		v.costume = +model.attributes.costume;
 		v.variables = new VariableFrame();
 		this.loadVariables(v.variables, model.require('variables'));
 	}
@@ -75,6 +76,14 @@ SnapSerializer.prototype.loadSprite = function (model, project) {
 */
 SnapSerializer.prototype.spritesLoaded = function(stage, spriteList)
 {
+	function costumeLoadedFunction() {
+		var me = this;
+        this.loadedListeners.forEach(function (i) {
+			i.wearCostume(me);
+		});
+        this.loaded = true;
+	}
+
 	var sprites = {};
 	
 	for(var i=0; i<spriteList.length; i++)
@@ -102,6 +111,22 @@ SnapSerializer.prototype.spritesLoaded = function(stage, spriteList)
 		v.color = ii.color;
 		v.setScale(ii.scale * 100);
 		v.heading = ii.heading;
+
+        costume = v.costumes.asArray()[ii.costume - 1];
+        if (costume) {
+            if (costume.loaded === true) {
+                object.wearCostume(costume);
+            } else if (costume.loaded === costumeLoadedFunction) {
+				costume.loadedListeners.push(v);
+			} else {
+				// So for whatever reason, it seems that the "loaded" property 
+				// of a costume is either the callback that is called when the
+				// costume is run, or "true" when the costume is loaded.
+				costume.loadedListeners = [v];
+                costume.loaded = costumeLoadedFunction;
+            }
+        }
+
 		v.drawNew();
 		v.gotoXY(ii.x, ii.y);
 	}
