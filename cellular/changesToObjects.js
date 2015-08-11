@@ -290,6 +290,7 @@ SpriteMorph.prototype.snapappsHookBlockTemplates = function(blocks, block, cat, 
         blocks.push(block('changeVariable'));
         blocks.push('-');
         blocks.push(block('getCostumeNameObject'));
+        blocks.push(block('getCostumeNumberObject'));
         blocks.push(block('getTypeName'));
         blocks.push(block('objectIsA'));
         blocks.push(block('obliterate'));
@@ -319,8 +320,14 @@ SpriteMorph.prototype.snapappsHookBlockTemplates = function(blocks, block, cat, 
         blocks.push('-');
         blocks.push(block("numCostumeInNbrCells"));
         blocks.push(block("numObjectsInNbrCells"));
+        blocks.push('-');
         blocks.push(block("isCostumeInCell"));
         blocks.push(block("isObjectInCell"));
+        blocks.push(block("isAnyObjectInCell"));
+        blocks.push('-');
+        blocks.push(block("isCostumeInAllNbrCells"));
+        blocks.push(block("isObjectInAllNbrCells"));
+        blocks.push(block("isAnyObjectInAllNbrCells"));
         blocks.push('-');
         blocks.push(block("allObjectsInNbrCells"));
         blocks.push(block("numFilledNbrCells"));
@@ -381,6 +388,7 @@ StageMorph.prototype.snapappsHookBlockTemplates = function(blocks, block, cat, h
         blocks.push(block('changeVariable'));
         blocks.push('-');
         blocks.push(block('getCostumeNameObject'));
+        blocks.push(block('getCostumeNumberObject'));
         blocks.push(block('getTypeName'));
         blocks.push(block('objectIsA'));
         blocks.push(block('obliterate'));
@@ -690,6 +698,11 @@ SpriteMorph.prototype.addCellularBlocks = function () {
         category: 'objects',
         spec: 'costume name of %obj',
     };
+    SpriteMorph.prototype.blocks.getCostumeNumberObject = {
+        type: 'reporter',
+        category: 'objects',
+        spec: 'costume # of %obj',
+    };
     SpriteMorph.prototype.blocks.getTypeName = {
         type: 'reporter',
         category: 'objects',
@@ -797,16 +810,39 @@ SpriteMorph.prototype.addCellularBlocks = function () {
         category: 'neighbours',
         spec: '# costume %cst in nbr cells',
     };
-    SpriteMorph.prototype.blocks.isObjectInCell = {
-        type: 'predicate',
-        category: 'neighbours',
-        spec: 'is object %spr in cell %celldir',
-    };
+
     SpriteMorph.prototype.blocks.isCostumeInCell = {
         type: 'predicate',
         category: 'neighbours',
         spec: 'is costume %cst in cell %celldir',
     };
+    SpriteMorph.prototype.blocks.isObjectInCell = {
+        type: 'predicate',
+        category: 'neighbours',
+        spec: 'is object %spr in cell %celldir',
+    };
+    SpriteMorph.prototype.blocks.isAnyObjectInCell = {
+        type: 'predicate',
+        category: 'neighbours',
+        spec: 'is any object in cell %celldir',
+    };
+
+    SpriteMorph.prototype.blocks.isCostumeInAllNbrCells = {
+        type: 'predicate',
+        category: 'neighbours',
+        spec: 'is costume %cst in all nbr cells',
+    };
+    SpriteMorph.prototype.blocks.isObjectInAllNbrCells = {
+        type: 'predicate',
+        category: 'neighbours',
+        spec: 'is object %spr in all nbr cells',
+    };
+    SpriteMorph.prototype.blocks.isAnyObjectInAllNbrCells = {
+        type: 'predicate',
+        category: 'neighbours',
+        spec: 'is an object in every nbr cell',
+    };
+
     SpriteMorph.prototype.blocks.numFilledNbrCells = {
         type: 'reporter',
         category: 'neighbours',
@@ -892,14 +928,17 @@ StageMorph.prototype.getObjectY = function(otherObject)
     return NOT_AN_OBJECT;
 }
 
-SpriteMorph.prototype.obliterate = function(otherObject) {
-    return this.parentThatIsA(StageMorph).obliterate(otherObject);
+SpriteMorph.prototype.listOfAllClones = function(otherObjectName) {
+    return this.parentThatIsA(StageMorph).listOfAllClones(otherObjectName, this);
 }
-StageMorph.prototype.listOfAllClones = function(otherObjectName)
+StageMorph.prototype.listOfAllClones = function(otherObjectName, myselfParameter)
 {
     if (!otherObjectName) { return null; }
-    if (otherObjectName == "myself")
-        otherObjectName = this.parentSprite ? this.parentSprite.name : this.name;
+	// To distinguish itself from the other options, the "myself" option comes in as ["myself"]
+	if (Object.prototype.toString.call(otherObjectName) === '[object Array]' 
+        && otherObjectName[0] == "myself" && myselfParameter instanceof SpriteMorph) {
+        otherObjectName = myselfParameter.parentSprite ? myselfParameter.parentSprite.name : myselfParameter.name;
+	}
     var arrayToReturn = [];
     this.parentThatIsA(StageMorph).children.forEach(function (x) {
         if (x instanceof SpriteMorph && x.parentSprite && x.parentSprite.name == otherObjectName)
@@ -951,6 +990,21 @@ StageMorph.prototype.getTypeName = function(otherObject)
             return otherObject.parentSprite.name;
         else
             return otherObject.name;
+    }
+
+    if (this.isNobody(otherObject))
+        return NOBODY;
+    return NOT_AN_OBJECT;
+}
+
+SpriteMorph.prototype.getCostumeNumberObject = function(otherObject) {
+    return this.parentThatIsA(StageMorph).getCostumeNumberObject(otherObject);
+}
+StageMorph.prototype.getCostumeNumberObject = function(otherObject)
+{
+    if (otherObject instanceof SpriteMorph)
+    {
+        return otherObject.getCostumeIdx();
     }
 
     if (this.isNobody(otherObject))
@@ -1418,6 +1472,11 @@ var cellDirY =
     'bottom right': 1,
 }
 
+SpriteMorph.prototype.isAnyObjectInCell = function(cellDir)
+{
+    return this.objectInCellDir(cellDir) != null;
+}
+
 SpriteMorph.prototype.objectInCellDir = function(cellDir)
 {
     if (!cellDir || !cellDir[0])
@@ -1631,8 +1690,7 @@ SpriteMorph.prototype.isCostumeInCell = function(costumeName, cellDir) {
     return false;
 };
 
-SpriteMorph.prototype.numFilledNbrCells = function()
-{
+SpriteMorph.prototype.forNbrCells = function(callback) {
     var stage = this.parentThatIsA(StageMorph),
         cellPos = stage.screenToCellSpace(this.rotationCenter()),
         numFilled = 0;
@@ -1646,10 +1704,64 @@ SpriteMorph.prototype.numFilledNbrCells = function()
             var cell = stage.getCellAtCellCoords(cellPos.x + i, cellPos.y + j);
             if (!cell)
                 continue;
-            if (cell.spriteMorphs.length != 0)
-                numFilled++;
+            callback(cell);
         }
     }
+}
+
+SpriteMorph.prototype.isCostumeInAllNbrCells = function(costumeName)
+{
+    var numCounted = 0;
+	var numFilled = 0;
+	var parentSprite = this.parentSprite;
+	this.forNbrCells(function (cell) {
+		numCounted++;
+		var exists = cell.spriteMorphs.some(function (i) {
+			return i.parentSprite == parentSprite
+                   && i.getCostumeName() == costumeName;
+		});
+		if (exists) {
+			numFilled++;
+		}
+	});
+	return numCounted == 8 && numFilled == 8;
+}
+
+SpriteMorph.prototype.isObjectInAllNbrCells = function(name)
+{
+    var numCounted = 0;
+	var numFilled = 0;
+	this.forNbrCells(function (cell) {
+		numCounted++;
+		var exists = cell.spriteMorphs.some(function (i) {
+			return i.parentSprite && i.parentSprite.name == name;
+		});
+		if (exists) {
+			numFilled++;
+		}
+	});
+	return numCounted == 8 && numFilled == 8;
+}
+
+SpriteMorph.prototype.isAnyObjectInAllNbrCells = function()
+{
+    var numCounted = 0;
+	var numFilled = 0;
+	this.forNbrCells(function (cell) {
+		numCounted++;
+        if (cell.spriteMorphs.length != 0)
+            numFilled++;
+	});
+	return numCounted == 8 && numFilled == 8;
+}
+
+SpriteMorph.prototype.numFilledNbrCells = function()
+{
+    var numFilled = 0;
+	this.forNbrCells(function (cell) {
+        if (cell.spriteMorphs.length != 0)
+            numFilled++;
+	});
     return numFilled;
 }
 
@@ -1671,7 +1783,6 @@ SpriteMorph.prototype.removeClone = function () {
         return;
     this.removed = true;
     this.parent.threads.stopAllForReceiver(this);
-    this.parentSprite.cloneDestroyed();
     this.destroy();
 };
 
@@ -1867,23 +1978,45 @@ SpriteMorph.prototype.drawNew = function() {
     return retn;
 }
 
+/*
+** Deals with the number of clones an object has
+*/
+SpriteMorph.prototype.cloneCount = 0;
+SpriteMorph.prototype.cloneCreated = function()
+{
+    this.cloneCount++;
+    if (this.spriteIconMorph)
+        this.spriteIconMorph.updateDuplicator();
+}
+
+SpriteMorph.prototype.cloneDestroyed = function()
+{
+    this.cloneCount--;
+    if (this.spriteIconMorph)
+        this.spriteIconMorph.updateDuplicator();
+}
+
+StageMorph.prototype.dealWithCellularAddChild = function (aNode) {
+	if (aNode instanceof SpriteMorph) {
+        aNode.updateCurrentCell();
+		if (aNode.parentSprite && (aNode.__workaround__removed === undefined || aNode.__workaround__removed)) {
+			aNode.parentSprite.cloneCreated();
+		}
+        aNode.__workaround__removed = false; // For more info, see updateCurrentCell
+    }
+}
+
 StageMorph.prototype.uberAddChild = StageMorph.prototype.addChild;
 StageMorph.prototype.addChild = function (aNode) {
     var ret = this.uberAddChild(aNode);
-    if (aNode instanceof SpriteMorph) {
-        aNode.updateCurrentCell();
-        aNode.__workaround__removed = false; // For more info, see updateCurrentCell
-    }
+    this.dealWithCellularAddChild(aNode);
     return ret;
 };
 
 StageMorph.prototype.uberAddChildFirst = StageMorph.prototype.addChildFirst;
 StageMorph.prototype.addChildFirst = function (aNode) {
-    var ret = this.addChildFirst(aNode);
-    if (aNode instanceof SpriteMorph) {
-        aNode.updateCurrentCell();
-        aNode.__workaround__removed = false; // For more info, see updateCurrentCell
-    }
+    var ret = this.uberAddChildFirst(aNode);
+    this.dealWithCellularAddChild(aNode);
     return ret;
 };
 
@@ -1896,6 +2029,9 @@ StageMorph.prototype.removeChild = function (aNode) {
             aNode.currentCell.removeSpriteMorph(aNode);
             aNode.currentCell = null;
         }
+		if (aNode.parentSprite && aNode.__workaround__removed === false) {
+			aNode.parentSprite.cloneDestroyed();
+		}
         aNode.__workaround__removed = true; // For more info, see updateCurrentCell
     }
     return this.uberRemoveChild(aNode);
@@ -2480,27 +2616,10 @@ SpriteMorph.prototype.createCellularClone = function()
     c.sounds = this.sounds;
     c.isDraggable = true;
 
-    c.parentSprite.cloneCreated();
+	// Cloning an object actually clones all of its attributes. 
+	c.__workaround__removed = true;
 
     return c;
-}
-
-/*
-** Deals with the number of clones an object has
-*/
-SpriteMorph.prototype.cloneCount = 0;
-SpriteMorph.prototype.cloneCreated = function()
-{
-    this.cloneCount++;
-    if (this.spriteIconMorph)
-        this.spriteIconMorph.updateDuplicator();
-}
-
-SpriteMorph.prototype.cloneDestroyed = function()
-{
-    this.cloneCount--;
-    if (this.spriteIconMorph)
-        this.spriteIconMorph.updateDuplicator();
 }
 
 /*

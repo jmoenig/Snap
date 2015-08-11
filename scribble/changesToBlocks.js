@@ -69,7 +69,6 @@ BlockMorph.prototype._snapapps_uncacheHighlight = function() {
 }
 
 BlockMorph.prototype.cachedPopHighlight = function () {
-    console.log("cachedPopHighlight: " + this._snapapps_highlightStackSize);
     if (this._snapapps_highlightStackSize === null) {
         return;
     }
@@ -91,7 +90,6 @@ BlockMorph.prototype.cachedPushHighlight = function () {
     } else {
         this._snapapps_highlightStackSize++;
     }
-    console.log("cachedPushHighlight: " + this._snapapps_highlightStackSize);
     if (this._snapapps_cachedHighlightAction === -1) {
         this.fullChanged();
     }
