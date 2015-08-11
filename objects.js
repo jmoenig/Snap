@@ -3094,14 +3094,19 @@ SpriteMorph.prototype.doStamp = function () {
     if (isWarped) {
         this.endWarp();
     }
-    context.save();
-    context.scale(1 / stage.scale, 1 / stage.scale);
-    context.drawImage(
-        this.image,
-        (this.left() - stage.left()),
-        (this.top() - stage.top())
-    );
-    context.restore();
+    if (this.costume && this.costume.is3D) {
+            this.render3dShape(this.costume.geometry);
+	}
+    else{
+		context.save();
+		context.scale(1 / stage.scale, 1 / stage.scale);
+		context.drawImage(
+			this.image,
+			(this.left() - stage.left()),
+			(this.top() - stage.top())
+		);
+		context.restore();
+    }
     this.changed();
     if (isWarped) {
         this.startWarp();
