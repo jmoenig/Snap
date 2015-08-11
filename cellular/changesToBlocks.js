@@ -13,12 +13,14 @@ SyntaxElementMorph.prototype.labelPartSnapapps = function (spec)
 {
 	if (spec == "%clat")
 	{
-		return new InputSlotMorph(
+		var input = new InputSlotMorph(
 			null,
 			false,
 			'cellAttributesMenu',
 			true
 		);
+		input.setContents(Cell.attributes.length > 0 ? Cell.attributes[0] : "");
+		return input;
 	}
 	if (spec == "%ntci") //No typing circle input
 	{
