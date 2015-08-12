@@ -918,12 +918,12 @@ IDE_Morph.prototype.createControlBar = function () {
         this.label.drawNew();
         this.add(this.label);
         this.label.setCenter(this.center());
-        if(goals) {
+        //if(goals) {
             this.label.setLeft(this.goalImagesButton.right() + padding);
-        }
-        else {
-            this.label.setLeft(this.settingsButton.right() + padding);
-        }
+        //}
+        //else {
+        //    this.label.setLeft(this.settingsButton.right() + padding);
+        //}
     };
 };
 
