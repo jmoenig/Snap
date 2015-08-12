@@ -1524,6 +1524,7 @@ IDE_Morph.prototype.updateCorralBar = function () {
    
    var MouseX = this.stage.reportMouseX();
    var MouseY = this.stage.reportMouseY();
+    Morph.prototype.trackChanges = false;
    if(this.isSmallStage ||
       MouseX > StageMorph.prototype.dimensions.x / 2 ||
       MouseY > StageMorph.prototype.dimensions.y / 2 ||
@@ -1539,7 +1540,9 @@ IDE_Morph.prototype.updateCorralBar = function () {
 
    this.corralBar.children[2].drawNew();
    this.corralBar.children[3].drawNew();
-   this.fixLayout();
+   
+   Morph.prototype.trackChanges = true;
+   this.corralBar.changed();
     
 };
 
