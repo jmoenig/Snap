@@ -17,7 +17,7 @@ function getSnapAppsName()
 
 function getSnapAppsAboutText()
 {
-    return 'Cellular 1.0\n Based upon Snap! 4.0\nBuild Your Own Blocks\n\n--- beta ---\n\n'
+    return 'Cellular 0.98\n Based upon Snap! 4.0\nBuild Your Own Blocks\n\n--- beta ---\n\n'
         + 'Cellular modifications copyright \u24B8 2013 Aidan Lane and Matthew Ready\n'
         + 'aidan.lane@monash.edu, matt.ready@monash.edu\n\n'
         + 'For more information visit http://flipt.org/';
