@@ -2564,3 +2564,7 @@ ______
 150809
 ------
 * Interlingua support, yay!! thanks, Ken Dickey!
+
+150814
+------
+* Blocks: fixed #907
