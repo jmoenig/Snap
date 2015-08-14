@@ -2097,8 +2097,6 @@ SpriteMorph.prototype.blockTemplates = function (category) {
 
     } else if (cat === 'lists') {
 
-        blocks.push('=');
-
         blocks.push(block('reportNewList'));
         blocks.push('-');
         blocks.push(block('reportCONS'));
