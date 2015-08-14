@@ -2010,11 +2010,11 @@ SpriteMorph.prototype.cloneDestroyed = function()
 
 StageMorph.prototype.dealWithCellularAddChild = function (aNode) {
 	if (aNode instanceof SpriteMorph) {
-        aNode.updateCurrentCell();
 		if (aNode.parentSprite && (aNode.__workaround__removed === undefined || aNode.__workaround__removed)) {
 			aNode.parentSprite.cloneCreated();
 		}
         aNode.__workaround__removed = false; // For more info, see updateCurrentCell
+        aNode.updateCurrentCell();
     }
 }
 
