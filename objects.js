@@ -3094,14 +3094,19 @@ SpriteMorph.prototype.doStamp = function () {
     if (isWarped) {
         this.endWarp();
     }
-    context.save();
-    context.scale(1 / stage.scale, 1 / stage.scale);
-    context.drawImage(
-        this.image,
-        (this.left() - stage.left()),
-        (this.top() - stage.top())
-    );
-    context.restore();
+    if (this.costume && this.costume.is3D) {
+            this.render3dShape(this.costume.geometry);
+	}
+    else{
+		context.save();
+		context.scale(1 / stage.scale, 1 / stage.scale);
+		context.drawImage(
+			this.image,
+			(this.left() - stage.left()),
+			(this.top() - stage.top())
+		);
+		context.restore();
+    }
     this.changed();
     if (isWarped) {
         this.startWarp();
@@ -3849,15 +3854,13 @@ SpriteMorph.prototype.changeYPosition = function (delta) {
 
 SpriteMorph.prototype.setZPosition = function (num) {
     if (this.costume && this.costume.is3D) {
-        this.object.position.z = num;
-        this.parent.changed();
+        this.gotoXYZ(this.xPosition(), this.yPosition(), +num || 0);
     }
 };
 
 SpriteMorph.prototype.changeZPosition = function (delta) {
     if (this.costume && this.costume.is3D) {
-        this.object.position.z += delta;
-        this.parent.changed();
+        this.gotoXYZ(this.xPosition(), this.yPosition(), this.zPosition() + (+delta || 0));
     }
 };
 

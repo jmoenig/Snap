@@ -797,7 +797,29 @@ IDE_Morph.prototype.createControlBar = function () {
        goalImagesButton = button;
        this.controlBar.add(goalImagesButton);
        this.controlBar.goalImagesButton = goalImagesButton; // for menu positioning
-    } 
+    }
+
+    // goalImagesButton
+    button = new PushButtonMorph(
+        this,
+        'goalImagesMenu', ' Goals  '
+    );
+    button.corner = 12;
+    button.color = colors[0];
+    button.highlightColor = colors[1];
+    button.pressColor = colors[2];
+    button.labelMinExtent = new Point(36, 18);
+    button.padding = 0;
+    button.labelShadowOffset = new Point(-1, -1);
+    button.labelShadowColor = colors[1];
+    button.labelColor = this.buttonLabelColor;
+    button.contrast = this.buttonContrast;
+    button.drawNew();
+    button.fixLayout();
+    goalImagesButton = button;
+    this.controlBar.add(goalImagesButton);
+    this.controlBar.goalImagesButton = goalImagesButton; // for menu positioning
+    
     // cloudButton
     button = new PushButtonMorph(
         this,
@@ -856,7 +878,12 @@ IDE_Morph.prototype.createControlBar = function () {
            settingsButton.setCenter(myself.controlBar.center());
            settingsButton.setLeft(this.left() - 40);
         }
-
+        
+        goalImagesButton.setCenter(myself.controlBar.center());
+        goalImagesButton.setLeft(this.left());
+        
+        settingsButton.setCenter(myself.controlBar.center());
+        settingsButton.setLeft(goalImagesButton.left() - padding - 40);
 
         cloudButton.setCenter(myself.controlBar.center());
         cloudButton.setRight(settingsButton.left() - padding);
@@ -891,12 +918,12 @@ IDE_Morph.prototype.createControlBar = function () {
         this.label.drawNew();
         this.add(this.label);
         this.label.setCenter(this.center());
-        if(goals) {
+        //if(goals) {
             this.label.setLeft(this.goalImagesButton.right() + padding);
-        }
-        else {
-            this.label.setLeft(this.settingsButton.right() + padding);
-        }
+        //}
+        //else {
+        //    this.label.setLeft(this.settingsButton.right() + padding);
+        //}
     };
 };
 
@@ -1497,6 +1524,7 @@ IDE_Morph.prototype.updateCorralBar = function () {
    
    var MouseX = this.stage.reportMouseX();
    var MouseY = this.stage.reportMouseY();
+    Morph.prototype.trackChanges = false;
    if(this.isSmallStage ||
       MouseX > StageMorph.prototype.dimensions.x / 2 ||
       MouseY > StageMorph.prototype.dimensions.y / 2 ||
@@ -1512,7 +1540,9 @@ IDE_Morph.prototype.updateCorralBar = function () {
 
    this.corralBar.children[2].drawNew();
    this.corralBar.children[3].drawNew();
-   this.fixLayout();
+   
+   Morph.prototype.trackChanges = true;
+   this.corralBar.changed();
     
 };
 
@@ -4749,6 +4779,29 @@ ProjectDialogMorph.prototype.setSource = function (source) {
 			function () {myself.ok(); }
 		);
 	}
+    
+    if(this.source === 'goals'){
+        this.listField = new ListMorph(
+            this.projectList, 
+            this.projectList.length > 0 ?
+                    function (element) {
+                        return element.thumb;
+                    } : null,
+            null,
+            function () {myself.ok();}
+        );
+    }
+    else{
+        this.listField = new ListMorph(
+            this.projectList,
+            this.projectList.length > 0 ?
+                    function (element) {
+                        return element.name;
+                    } : null,
+            null,
+            function () {myself.ok(); }
+        );
+    }
 
     this.fixListFieldItemColors();
     this.listField.fixLayout = nop;
@@ -4783,7 +4836,31 @@ ProjectDialogMorph.prototype.setSource = function (source) {
             }
             myself.edit();
         };	
-    } else if (this.source === 'goals'){//Goals action moved above.
+    } else if (this.source === 'goals'){
+        this.listField.action = function (item) {
+            var img, desc;
+            if (item === undefined) {return; }
+            if (myself.nameField) {
+               myself.nameField.setContents(item.name || '');
+            }
+            var request = new XMLHttpRequest();
+            request.open("GET", config.urls.goals_url, false);
+            request.send();
+            var JSON_object = JSON.parse(request.responseText);
+            for (var i = 0; i < JSON_object.length; i++){
+                if(JSON_object[i].name === item.name){
+                    img = JSON_object[i].img_url;
+                    desc = JSON_object[i].description;
+                    myself.notesText.text = desc || '';
+                    myself.notesText.drawNew();
+                    myself.notesField.contents.adjustBounds();
+                    myself.preview.texture = img || null;
+                    myself.preview.cachedTexture = img;
+                    myself.preview.drawNew();
+                    myself.edit();
+                }
+            }
+        };
     } else { // 'examples', 'cloud' is initialized elsewhere
         this.listField.action = function (item) {
             var src, xml;

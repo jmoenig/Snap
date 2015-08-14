@@ -683,7 +683,13 @@ SnapSerializer.prototype.loadCostumes = function (object, model) {
         if (costume) {
             if (costume.loaded) {
                 object.wearCostume(costume);
-            } else {
+            }
+            else if(costume.is3D)
+            {
+                object.addCostume(costume);
+                object.wearCostume(costume);
+            }
+			else {
                 costume.loaded = function () {
                     object.wearCostume(costume);
                     this.loaded = true;
@@ -1226,7 +1232,19 @@ SnapSerializer.prototype.loadValue = function (model) {
                         v.loaded = true;
                     }
                 };
-            } else {
+            }
+			else if (Object.prototype.hasOwnProperty.call(model.attributes,'is3D') && model.attributes.is3D){
+                var url = config.asset_path + 'Costumes3D' + '/' + name+ ".js";
+				v = new Costume(
+					null, // no canvas for 3D costumes
+					name ? name.split('.')[0] : '', // up to period
+					null, // rotation center
+					url,
+					true, // is3D
+					false // is3dSwitchable
+				);
+			}
+			else {
                 v = new Costume(null, name, center);
                 v.costumeColor = costumeColor;
                 image.onload = function () {
@@ -1485,7 +1503,7 @@ Costume.prototype.toXML = function (serializer) {
         this.costumeColor = new Color(255,255,255);
     }
     serialized = serializer.format(
-        '<costume name="@" center-x="@" center-y="@" costume-color="@,@,@" image="@" ~/>',
+        '<costume name="@" center-x="@" center-y="@" costume-color="@,@,@" image="@" is3D="@" ~/>',
         this.name,
         this.rotationCenter.x,
         this.rotationCenter.y,
@@ -1493,7 +1511,8 @@ Costume.prototype.toXML = function (serializer) {
         this.costumeColor.g,
         this.costumeColor.b,
         this instanceof SVG_Costume ?
-                this.contents.src : this.contents.toDataURL('image/png')
+                this.contents.src : this.contents.toDataURL('image/png'),
+        this.is3D
     );
     if(this.originalPixels) {
         this.setColor(this.costumeColor);
