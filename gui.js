@@ -1257,7 +1257,7 @@ IDE_Morph.prototype.createSpriteBar = function () {
 
         checkbox2.setPosition(checkbox.topRight().add(new Point(60, 0)));
         checkbox2.drawNew();
-        this.spriteBar.add(checkbox2);
+        //this.spriteBar.add(checkbox2);
     }
 
     // tab bar
@@ -2788,6 +2788,7 @@ IDE_Morph.prototype.projectMenu = function () {
             },
             'Select a 2D costume from the media library'
         );
+		/*
         menu.addItem(
             '3D ' + localize(graphicsName) + '...',
             function () {
@@ -2815,6 +2816,7 @@ IDE_Morph.prototype.projectMenu = function () {
             },
             'Select a 3D costume from the media library'
         );
+		*/
 
         menu.addItem(
             'Textures...', // TODO: localize this 
