@@ -159,6 +159,12 @@ function addCellAttributeButtons(blocks, block, cat, helpMenu)
         colour.nextIsRight = true;
         blocks.push(colour);
 
+        var txt = new TextMorph("Show");
+        txt.fontSize = 12;
+        txt.setColor(this.paletteTextColor);
+        txt.nextIsRight = true;
+        blocks.push(txt);
+
         var fromField;
         fromField = new InputFieldMorph(Cell.attributeDrawRange[Cell.attributes[i]][0].toString());
         fromField.corner = 12;
@@ -169,7 +175,7 @@ function addCellAttributeButtons(blocks, block, cat, helpMenu)
         fromField.setWidth(32); // fixed dimensions
         fromField.drawNew();
         fromField.cellAttribute = Cell.attributes[i];
-        fromField.accept = function () {
+        fromField.reactToEdit = function () {
             var value = Number(fromField.getValue());
             if (isNaN(value))
             {
@@ -182,6 +188,12 @@ function addCellAttributeButtons(blocks, block, cat, helpMenu)
         fromField.nextIsRight = true;
         blocks.push(fromField);
 
+        txt = new TextMorph("to");
+        txt.fontSize = 12;
+        txt.setColor(this.paletteTextColor);
+        txt.nextIsRight = true;
+        blocks.push(txt);
+
         var toField;
         toField = new InputFieldMorph(Cell.attributeDrawRange[Cell.attributes[i]][1].toString());
         toField.corner = 12;
@@ -192,7 +204,7 @@ function addCellAttributeButtons(blocks, block, cat, helpMenu)
         toField.setWidth(32); // fixed dimensions
         toField.drawNew();
         toField.cellAttribute = Cell.attributes[i];
-        toField.accept = function () {
+        toField.reactToEdit = function () {
             var value = Number(toField.getValue());
             if (isNaN(value))
             {
