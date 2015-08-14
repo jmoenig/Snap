@@ -931,9 +931,7 @@ IDE_Morph.prototype.createCategories = function () {
     }
 
     SpriteMorph.prototype.categories.forEach(function (cat) {
-        if (!contains(['lists', 'other'], cat)) {
-            addCategoryButton(cat);
-        }
+        addCategoryButton(cat);
     });
     fixCategoriesLayout();
     this.add(this.categories);

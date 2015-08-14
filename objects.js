@@ -2095,7 +2095,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
             blocks.push(block('doDeleteAttr'));
         }
 
-    ///////////////////////////////
+    } else if (cat === 'lists') {
 
         blocks.push('=');
 
@@ -2129,9 +2129,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
             blocks.push(block('doForEach'));
         }
 
-    /////////////////////////////////
-
-        blocks.push('=');
+    } else if (cat === 'other') {
 
         if (StageMorph.prototype.enableCodeMapping) {
             blocks.push(block('doMapCodeOrHeader'));
@@ -2341,11 +2339,7 @@ SpriteMorph.prototype.freshPalette = function (category) {
         stage.globalBlocks.forEach(function (definition) {
             var block;
             if (definition.category === category ||
-                    (category === 'variables'
-                        && contains(
-                            ['lists', 'other'],
-                            definition.category
-                        ))) {
+                    category === 'other') {
                 block = definition.templateInstance();
                 y += unit * 0.3;
                 block.setPosition(new Point(x, y));
@@ -2362,11 +2356,7 @@ SpriteMorph.prototype.freshPalette = function (category) {
     this.customBlocks.forEach(function (definition) {
         var block;
         if (definition.category === category ||
-                (category === 'variables'
-                    && contains(
-                        ['lists', 'other'],
-                        definition.category
-                    ))) {
+                category === 'other') {
             block = definition.templateInstance();
             y += unit * 0.3;
             block.setPosition(new Point(x, y));
@@ -5614,6 +5604,9 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('doHideVar'));
         blocks.push(block('doDeclareVariables'));
         blocks.push('=');
+
+    } else if (cat === 'lists') {
+
         blocks.push(block('reportNewList'));
         blocks.push('-');
         blocks.push(block('reportCONS'));
@@ -5644,9 +5637,7 @@ StageMorph.prototype.blockTemplates = function (category) {
             blocks.push(block('doForEach'));
         }
 
-    /////////////////////////////////
-
-        blocks.push('=');
+    } else if (cat === 'other') {
 
         if (StageMorph.prototype.enableCodeMapping) {
             blocks.push(block('doMapCodeOrHeader'));
