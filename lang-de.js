@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org', // optional
     'last_changed':
-        '2015-02-23', // this, too, will appear in the Translators tab
+        '2015-08-06', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -780,6 +780,10 @@ SnapTranslator.dict.de = {
         'ausschalten, um Skripte\nnormal auszuf\u00fchren',
     'check to enable\nIDE animations':
         'einschalten um IDE-\nAnimationen zu erlauben',
+    'Flat design':
+        'Helles Design',
+    'Keyboard Editing':
+        'Tastaturunterstützung',
     'Thread safe scripts':
         'Threadsicherheit',
     'uncheck to allow\nscript reentrance':
@@ -798,6 +802,8 @@ SnapTranslator.dict.de = {
         'einschalten f\u00fcr flache\nPinselstrichenden',
     'uncheck for round ends of lines':
         'auschalten f\u00fcr runde\nPinselstrichenden',
+    'Inheritance support':
+        'Prototypische Vererbung',
 
     // inputs
     'with inputs':
