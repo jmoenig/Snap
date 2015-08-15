@@ -1,12 +1,12 @@
 /*
 
-    lang-pl.js
+    lang-ia.js
 
-    Polskie tłumaczenie SNAP!
+    Interlingua translation for SNAP!
 
-    Podziękowania dla Jensa Möniga
+    edited for Interlingua by Ken Dickey
 
-    za przygotowanie mechanizmu tłumaczenia
+    Copyright (C) 2015 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -47,6 +47,8 @@
     in your web browser, and refresh it as you progress with your
     translation).
 
+    Or via GitHub:
+	git clone https://github.com/jmoenig/Snap--Build-Your-Own-Blocks.git
 
     2. Edit
 
@@ -63,6 +65,7 @@
         pt - Portuguese => SnapTranslator.dict.pt = {
         es - Spanish => SnapTranslator.dict.es = {
         el - Greek => => SnapTranslator.dict.el = {
+        ia - Interlingua => => SnapTranslator.dict.ia = {
 
     etc. (see <http://en.wikipedia.org/wiki/ISO_639-1>)
 
@@ -144,6 +147,7 @@
         pt - Portuguese => lang-pt.js
         es - Spanish => lang-es.js
         el - Greek => => lang-el.js
+        ia - Interlingua => lange-ia.js
 
     and send it to me for inclusion in the official Snap! distribution.
     Once your translation has been included, Your name will the shown in the
@@ -164,99 +168,99 @@
     -Jens
 */
 
+/*
+ * De nota:
+ * 
+ * https://translatewiki.net/wiki/Portal:Ia
+ * 
+ * In my view, a "variable" is a box (cassa) in which one
+ * stores a value -- vs a "constant", which is a named value.
+ */
+
 /*global SnapTranslator*/
 
-SnapTranslator.dict.pl = {
+SnapTranslator.dict.ia = {
 
 /*
     Special characters: (see <http://0xcc.net/jsescape/>)
-	Ą, ą	\u0104,	\u0105
-	Ć, ć	\u0106,	\u0107
-	Ę, ę	\u0118,	\u0119
-	Ł, ł	\u0141, \u0142
-	Ń, ń	\u0143, \u0144
-	Ś, ś	\u015A, \u015B
-	Ó, ó	\u00D3, \u00F3
-	Ź, ź	\u0179,	\u017A
-	Ż, ż	\u017B, \u017C
-	
+
+	None
 */
 
     // translations meta information
     'language_name':
-        'Polski', // the name as it should appear in the language menu
+        'Interlingua', // the name as it should appear in the language menu
     'language_translator':
-        'Witek Kranas', // your name for the Translators tab
+        'Ken Dickey', // your name for the Translators tab
     'translator_e-mail':
-        'witek@oeiizk.waw.pl', // optional
+        'Ken.Dickey@whidbey.com', // optional
     'last_changed':
-        '2015-08-06', // this, too, will appear in the Translators tab
+        '2015-08-09', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
     'untitled':
-        'bez nazwy',
+        'innominate', // 'nulle titulo'
     'development mode':
-        'tryb budowania',
+        'disveloppation moda',
 
     // categories:
     'Motion':
-        'Ruch',
+        'Movimento',
     'Looks':
-        'Wygl\u0105d',
+        'Apparentia',
     'Sound':
-        'D\u017Awi\u0119k',
+        'Sono',
     'Pen':
-        'Pisak',
+        'Penna',
     'Control':
-        'Kontrola',
+        'Reger',
     'Sensing':
-        'Czujniki',
+        'Sensation',
     'Operators':
-        'Wyra\u017Cenia',
+        'Operators',
     'Variables':
-        'Dane',
+        'Cassas',
     'Lists':
-        'Listy',
+        'Listas',
     'Other':
-        'Inne',
+        'Altere',
 
     // editor:
     'draggable':
-        'przeci\u0105ganie',
+        'traheribile',
 
     // tabs:
     'Scripts':
-        'Skrypty',
+        'Scriptes',
     'Costumes':
-        'Kostiumy',
+        'Costumes',
     'Sounds':
-        'D\u017Awi\u0119ki',
+        'Sonas',
 
     // names:
     'Sprite':
-        'Duszek',
+        'Spirito', // 'Animo'
     'Stage':
         'Scena',
 
     // rotation styles:
     'don\'t rotate':
-        'nie obracaj',
+        'non rota',
     'can rotate':
-        'dowolny obrót',
+        'capabile de rota',
     'only face left/right':
-        'tylko lewo/prawo',
+        'sol facie sinistre o dextre',
 
     // new sprite button:
-    'add a new Turtle sprite':
-        'dodaj nowego duszka-żółwia',
+    'add a new sprite':
+        'adde spirito nove',
 
     // tab help
     'costumes tab help':
-        'Importuj obrazy z innej strony\n'
-            + 'lub z komputera przeci\u0105gaj\u0105c tu',
+        'costumes adjuta',
     'import a sound from your computer\nby dragging it into here':
-        'Importuj d\u017Awi\u0119k z komputera\nprzeci\u0105gaj\u0105c tu',
+        'face importa un sono per trahe hic',
 
     // primitive blocks:
 
@@ -292,870 +296,910 @@ SnapTranslator.dict.pl = {
 
     // motion:
     'Stage selected:\nno motion primitives':
-        'Wybrana scena\nnie ma blok\u00F3w ruchu',
+        'Scena selecte:\n'
+	+ 'nulle motion primitives',
 
     'move %n steps':
-        'przesu\u0144 o %n krok\u00F3w',
+        'move %n passos',
     'turn %clockwise %n degrees':
-        'obr\u00F3\u0107 %clockwise o %n stopni',
+        'torna %clockwise %n grados',  // dirige
     'turn %counterclockwise %n degrees':
-        'obr\u00F3\u0107 %counterclockwise o %n stopni',
+        'torna %counterclockwise %n grados',
     'point in direction %dir':
-        'ustaw kierunek na %dir',
+        'puncta direction %dir',
     'point towards %dst':
-        'ustaw w stron\u0119 %dst',
+        'puncta erga %dst',
     'go to x: %n y: %n':
-        'id\u017A do x: %n y: %n',
+        'ir a x: %n y: %n',  // 'adi'
     'go to %dst':
-        'id\u017A do %dst',
+        'ir a %dst',
     'glide %n secs to x: %n y: %n':
-        'le\u0107 przez %n s do x: %n y: %n',
+        'glissa %n secundes a x: %n y: %n',
     'change x by %n':
-        'zmie\u0144 x o %n',
+        'cambia x per %n',
     'set x to %n':
-        'ustaw x na %n',
+        'in x pone %n', // 'pone in x le valo %n',
     'change y by %n':
-        'zmie\u0144 y o %n',
+        'cambia y per %n',
     'set y to %n':
-        'ustaw y na %n',
+        'in y pone %n',
     'if on edge, bounce':
-        'je\u017Celi na brzegu, odbij si\u0119',
+        'si in bordo talia, recula',
     'x position':
-        'pozycja X',
+        'x position',
     'y position':
-        'pozycja Y',
+        'y position',
     'direction':
-        'kierunek',
+        'direction',
 
-    // wyglad:
+    // looks:
     'switch to costume %cst':
-        'zmie\u0144 kostium na %cst',
+        'cambio a costume %cst',
     'next costume':
-        'następny kostium',
+        'proxime costume',
     'costume #':
-        'kostium nr ',
+        'costume numero',
     'say %s for %n secs':
-        'powiedz %s przez %n s',
+        'dice %s per %n secundes',
     'say %s':
-        'powiedz %s',
+        'dice %s',
     'think %s for %n secs':
-        'pomy\u015Bl %s przez %n s',
+        'pensa %s per %n secundes',
     'think %s':
-        'pomy\u015Bl %s',
+        'pensa %s',
     'Hello!':
-        'Cześć!',
+        'Hallo!',
     'Hmm...':
         'Hmm...',
     'change %eff effect by %n':
-        'zmie\u0144 efekt %eff o %n',
+        'cambia %eff effecto per %n',
     'set %eff effect to %n':
-        'ustaw efekt %eff na %n',
+        'in %eff pone effecto %n',
     'clear graphic effects':
-        'wyczy\u015B\u0107 efekty graficzne',
+        'depura effectos graphic',
     'change size by %n':
-        'zmie\u0144 rozmiar o %n',
+        'accrescimento dimensiones per %n',
     'set size to %n %':
-        'ustaw rozmiar na %n %',
+        'delimita dimentiones a %n %',
     'size':
-        'rozmiar',
+        'dimentiones',
     'show':
-        'poka\u017C',
+        'expone',  // 'monstra'
     'hide':
-        'ukryj',
+        'cela',   // 'occulta'
     'go to front':
-        'na wierzch',
+        'antepone',  // 'ir maxima ante',
     'go back %n layers':
-        'wr\u00F3\u0107 o %n poziom\u00F3w',
+        'ir detra %n strato',
 
     'development mode \ndebugging primitives:':
-        'tryb budowania \ndebugowanie procedur pierwotnych',
+        'disveloppa modo \n'
+	+ 'anti-defacto primitives',
     'console log %mult%s':
-        'log konsoli: %mult%s',
+        'entra in registration %mult%s',
     'alert %mult%s':
-        'alert: %mult%s',
+        'alerte %mult%s',
 
-    // dzwiek:
+    // sound:
     'play sound %snd':
-        'zagraj d\u017Awi\u0119k %snd',
+        'sona %snd',  // 'face sono %snd',
     'play sound %snd until done':
-        'zagraj d\u017Awi\u0119k %snd i czekaj',
+        'sona %snd usque complete', // 'sona %snd integral',
     'stop all sounds':
-        'zatrzymaj wszystkie d\u017Awi\u0119ki',
+        'cessar sona tote',
     'rest for %n beats':
-        'pauzuj przez %n takt\u00F3w',
+        'pausa per %n pulsia',
     'play note %n for %n beats':
-        'zagraj nut\u0119 %n przez %n takt\u00F3w',
+        'sona nota %n per %n pulsia',
     'change tempo by %n':
-        'zmie\u0144 tempo o %n',
+        'cambio tempo per %n',
     'set tempo to %n bpm':
-        'ustaw tempo na %n takt\u00F3w na min.',
+        'face tempo a %n pulsia per minuta',
     'tempo':
         'tempo',
 
-    // pisak:
+    // pen:
     'clear':
-        'wyczy\u015B\u0107',
+        'depura',
     'pen down':
-        'przy\u0142\u00F3\u017C pisak',
+        'face penna a basso',
     'pen up':
-        'podnie\u015B pisak',
+        'face penna in alto',
     'set pen color to %clr':
-        'ustaw kolor piaka na %clr',
+        'face color del penna a %clr',
     'change pen color by %n':
-        'zmie\u0144 kolor pisaka o %n',
+        'cambia color del penna a %n',
     'set pen color to %n':
-        'ustaw kolor pisaka na %n',
+        'face color del penna a %n',
     'change pen shade by %n':
-        'zmie\u0144 odcie\u0144 pisaka o %n',
+        'cambio tinta del penna per %n', 
     'set pen shade to %n':
-        'ustaw odcie\u0144 pisaka na %n',
+        'face tinta del penna a %n',
     'change pen size by %n':
-        'zmie\u0144 rozmiar pisaka o %n',
+        'cambio dimension del penna per %n',
     'set pen size to %n':
-        'ustaw rozmiar pisaka na %n',
+        'face dimension del penna a %n',
     'stamp':
-        'stempluj',
+        'timbra',  // 'cunea' 'stampa'
 
     // control:
     'when %greenflag clicked':
-        'kiedy klikni\u0119to %greenflag',
+        'cuando %greenflag clic',
     'when %keyHat key pressed':
-        'kiedy klawisz %keyHat naci\u015Bni\u0119ty',
+        'cuando %keyHat clave pressa',
     'when I am %interaction':
-        'kiedy zostanę %interaction',
+        'cuando io es %interaction',
     'clicked':
-        'kliknięty',
+        'clicco',
     'pressed':
-        'naciśnięty',
+        'pressa',
     'dropped':
-        'upuszczony',
+        'depone',
     'mouse-entered':
-        'najechany przez kursor myszy',
+        'mure entra',
     'mouse-departed':
-        'opuszczony przez kursor myszy',
+        'mure parti',  // 'quita'
     'when I receive %msgHat':
-        'kiedy otrzymam %msgHat',
+        'cuando io recipe %msgHat',
     'broadcast %msg':
-        'nadaj %msg do wszystkich',
+        'mitte %msg a omne',
     'broadcast %msg and wait':
-        'nadaj %msg do wszystkich i czekaj',
+        'mitte %msg a omni e attende',
     'Message name':
-        'nazwa wiadomo\u015Bci',
+        'Nomine de message',
     'message':
-        'wiadomo\u015B\u0107',
+        'message',
     'any message':
-        'dowolna wiadomo\u015B\u0107',
+        'qualcosa message',  // 'cualcunque message'
     'wait %n secs':
-        'czekaj %n s',
+        'attende %n secundes',
     'wait until %b':
-        'czekaj a\u017C %b',
+        'attende donec %b',
     'forever %c':
-        'zawsze %c',
+        'sin termino %c',
     'repeat %n %c':
-        'powt\u00F3rz %n razy %c',
+        'itera %n %c',
     'repeat until %b %c':
-        'powtarzaj a\u017C %b %c',
+        'itera donec %b %c',
     'if %b %c':
-        'je\u017Celi %b to %c',
+        'si %b %c',
     'if %b %c else %c':
-        'je\u017Celi %b to %c w przeciwnym razie %c',
+        'si %b %c nisi %c',
     'report %s':
-        'zwr\u00F3\u0107 %s',
-    'stop block':
-        'zatrzymaj ten blok',
-    'stop script':
-        'zatrzymaj ten skrypt',
-    'stop all %stop':
-        'zatrzymaj wszystko %stop',
+        'reporta %s', // 'valor restituite'
+    'stop %stopChoices':
+        'cessa %stopChoices',
+    'all':
+        'omni',
+    'this script':
+        'iste scripte',  // 'este'
+    'this block':
+        'iste bloco',
+    'stop %stopOthersChoices':
+        'cessa %stopOthersChoices',
+    'all but this script':
+        'omni excepte iste scripte',
+    'other scripts in sprite':
+        'altere scriptes in iste spirito',
     'pause all %pause':
-        'pauzuj wszystko %pause',
+        'pausa omni %pause',
     'run %cmdRing %inputs':
-        'uruchom %cmdRing z %inputs',
+        'comencia %cmdRing %inputs', // 'initio'
     'launch %cmdRing %inputs':
-        'zacznij %cmdRing %inputs',
+        'lancea %cmdRing %inputs',
     'call %repRing %inputs':
-        'wywo\u0142aj %repRing z %inputs',
+        'evoca %repRing %inputs',
     'run %cmdRing w/continuation':
-        'uruchom %cmdRing z kontynuacj\u0105',
+        'comencia %cmdRing con continuation',
     'call %cmdRing w/continuation':
-        'wywo\u0142aj %cmdRing z kontynuacj\u0105',
+        'evoca %cmdRing con continuation',
     'warp %c':
-        'warp %c',
+        'ordi %c',  // 'ordito'
     'when I start as a clone':
-        'kiedy zaczynam jako klon',
+        'quando io comencia como copia',
     'create a clone of %cln':
-        'sklonuj %cln',
+        'face un copia de %cln',
     'myself':
-        'ja',
+        'io mesme',
     'delete this clone':
-        'usu\u0144 tego klona',
+        'dele ista copia',
 
     // sensing:
     'touching %col ?':
-        'dotyka %col ?',
+        'continge %col ?',
     'touching %clr ?':
-        'dotyka koloru %clr ?',
+        'continge %clr ?',
     'color %clr is touching %clr ?':
-        'czy kolor %clr dotyka %clr ?',
+        'color %clr es continge %clr ?',
     'ask %s and wait':
-        'zapytaj %s i czekaj',
+        'demanda %s e attende',
     'what\'s your name?':
-        'Jak masz na imi\u0119?',
+        'que es tu nomine?',
     'answer':
-        'odpowied\u017A',
+        'responde',
     'mouse x':
-        'x myszy',
+        'mure x position',
     'mouse y':
-        'y myszy',
+        'mure y position',
     'mouse down?':
-        'przycisk myszy naci\u015Bni\u0119ty',
+        'a mure es a basso?',
     'key %key pressed?':
-        'klawisz %key naci\u015Bni\u0119ty?',
+        'a clave %key pressa?',
     'distance to %dst':
-        'odleg\u0142o\u015B\u0107 do %dst',
+        'distantia a %dst',
     'reset timer':
-        'kasuj zegar',
+        'recomenciar le chronometria',
     'timer':
-        'czasomierz',
+        'chronometria',
     '%att of %spr':
-        '%att z %spr',
+        '%att de %spr',
     'http:// %s':
         'http:// %s',
     'turbo mode?':
-        'tryb turbo?',
+        'a turbo modo?',
     'set turbo mode to %b':
-        'ustaw tryb turbo na %b',
+        'face turbo modo a %b',
 
     'filtered for %clr':
-        'przefiltrowane dla %clr',
+        'filtra per %clr',
     'stack size':
-        'rozmiar stosu',
+        'pila dimensione',
     'frames':
-        'klatki',
+        'quadros',
 
     // operators:
     '%n mod %n':
         '%n modulo %n',
     'round %n':
-        'zaokr\u0105glij %n',
+        '%n rotunda',
     '%fun of %n':
-        '%fun z %n',
+        '%fun de %n',
     'pick random %n to %n':
-        'losuj od %n do %n',
+        'al aventura inter %n e %n',  // 'al hasardo'
     '%b and %b':
-        '%b i %b',
+        '%b e %b',
     '%b or %b':
-        '%b lub %b',
+        '%b o %b',
     'not %b':
-        'nie %b',
+        'non %b',
     'true':
-        'prawda',
+        'ver',
     'false':
-        'fa\u0142sz',
+        'false',
     'join %words':
-        'po\u0142\u0105cz %words',
+        'junge %words',
+    'split %s by %delim':
+        'fisse %s de %delim',
     'hello':
-        'witaj',
+        'Hallo',
     'world':
-        'świecie',
+        'Mundo',
     'letter %n of %s':
-        'litera %n z %s',
+        'character %n de %s',
     'length of %s':
-        'd\u0142ugo\u015B\u0107 %s',
+        'longor de %s',
     'unicode of %s':
-        'Unicode z %s',
+        'Unicode valor de %s',
     'unicode %n as letter':
-        'Unicode %n jako litera',
+        'Unicode character pro %n',
     'is %s a %typ ?':
-        'jest %s typu %typ ?',
+        'a es %s de %typ ?',
     'is %s identical to %s ?':
-        'jest %s identyczne z %s ?',
+        'a es %s identic a %s ?', // 'mesme' ?
 
     'type of %s':
-        'typ %s',
+        'typo de %s',
 
     // variables:
     'Make a variable':
-        'Stw\u00F3rz zmienn\u0105',
+        'Nove Cassa',  // 'Face Cassa'
     'Variable name':
-        'nazwa zmiennej',
+        'Nomine de Cassa',  // global?
     'Script variable name':
-        'nazwa zmiennej skryptu',
+        'Nomine de Scripte Cassa',
     'Delete a variable':
-        'usu\u0144 zmienn\u0105',
+        'Dele un Cassa',
 
     'set %var to %s':
-        'ustaw %var na %s',
+        'in %var pone %s',
     'change %var by %n':
-        'zmie\u0144 %var o %n',
+        'cambio %var per %n',
     'show variable %var':
-        'poka\u017C zmienn\u0105 %var',
+        'expone cassa %var',
     'hide variable %var':
-        'ukryj zmienn\u0105 %var',
+        'cella cassa %var',  // 'occulta'
     'script variables %scriptVars':
-        'zmienne skryptu %scriptVars',
+        'cassas de scripte %scriptVars',
 
     // lists:
     'list %exp':
-        'lista %exp',
+        'Liste %exp',
     '%s in front of %l':
-        'wstaw %s przed %l',
+        '%s es ante que %l',
     'item %idx of %l':
-        'element %idx z %l',
+        'elemento %idx de %l',
     'all but first of %l':
-        'bez pierwszego z %l',
+        'onme excepte prime de %l',
     'length of %l':
-        'd\u0142ugo\u015B\u0107 %l',
+        'longor de %l',
     '%l contains %s':
-        '%l zawiera %s',
+        '%l contine %s',
     'thing':
-        'co\u015B',
+        'cosa',
     'add %s to %l':
-        'dodaj %s do %l',
+        'adde %s e %l',
     'delete %ida of %l':
-        'usu\u0144 %ida z %l',
+        'dele %ida de %l',
     'insert %s at %idx of %l':
-        'wstaw %s na pozycji %idx do %l',
+        'inserta %s in %idx de %l',
     'replace item %idx of %l with %s':
-        'zamie\u0144 element %idx z %l na %s',
+        'reimplacia elemento %idx de %l con %s',  // surroga
 
     // other
     'Make a block':
-        'nowy blok',
+        'Face un bloco',
 
     // menus
     // snap menu
     'About...':
-        'O Snap!...',
+        'In re Snap!...',  
     'Reference manual':
-        'Podr\u0119cznik',
+        'Manual referentia ',
     'Snap! website':
-        'Strona Snap!',
+        'Snap! sito web',
     'Download source':
-        'Pobierz \u017Ar\u00F3d\u0142o',
+        'Discarga fonte',
     'Switch back to user mode':
-        'Prze\u0142\u0105cz do trybu u\u017Cytkownika',
+        'Cambio retro a modo usator',
     'disable deep-Morphic\ncontext menus\nand show user-friendly ones':
-        'disable Morphic',
+        'Face inactive profunde Morphic\n'
+        + 'menus contexto e\n'
+        + 'expone se usator amicabile',
     'Switch to dev mode':
-        'do trybu budowania',
+        'Cambio a modo disveloppator',
     'enable Morphic\ncontext menus\nand inspectors,\nnot user-friendly!':
-        'enable Morphic',
+        'Face active Morphic\n'
+		+ 'menus contexto e inspector,\n'
+		+ 'non amicabile de usatores',
 
     // project menu
     'Project notes...':
-        'O projekcie...',
+        'Annotos de projecto...',
     'New':
-        'Nowy',
+        'Nova',
     'Open...':
-        'Otw\u00F3rz...',
+        'Aperte...',
     'Save':
-        'Zapisz',
+        'Salvo', // 'Secur'
+    'Save to disk':
+        'Salvo in file',  // 'Salve/Secur a systema de files'
+    'store this project\nin the downloads folder\n(in supporting browsers)':
+        'Pone esti projecto\n'
+        + 'in dossier discarga\n'
+        + '(per navigators sustene)',
     'Save As...':
-        'Zapisz jako...',
+        'Salvo como nomine...',
     'Import...':
-        'Importuj...',
+        'Importa...',
     'file menu import hint':
-        '\u0142aduje wyeksportowany projekt\n'
-		  + 'biblitek\u0119 '
-          + 'kostium lub d\u017Awi\u0119k',
+        'Importa insinua per menu de file ',
     'Export project as plain text...':
-        'Eksportuj projekt jako tekst...',
+        'Exporta projecto in texto simple...',
     'Export project...':
-        'Eksportuj projekt...',
+        'Exporta projecto...',
     'show project data as XML\nin a new browser window':
-        'poka\u017C projekt jako XML\nin w nowej karcie',
+        'Expone dato de projecto in XML\n'
+        + 'immane nove fenestra de navigator',
+        // vitrina
     'Export blocks...':
-        'Eksportuj bloki...',
+        'Exporta blocos...',
     'show global custom block definitions as XML\nin a new browser window':
-        'poka\u017C definicje blok\u00F3w jako XML/min w nowej karcie',
+        'Expone blocos artificiose global como XML\n'
+        + 'immane nove fenestra de navigator',
     'Import tools':
-        'Importuj narz\u0119dzia',
+        'Importa utensiles',
     'load the official library of\npowerful blocks':
-        'za\u0142aduj oficjaln\u0105 bibliotek\u0119 blok\u00F3w',
+        'Incarga bibliotheca official de blocos potente',
     'Libraries...':
-        'Biblioteka...',
+        'Bibliothecas...',
     'Import library':
-        'Importuj bibliotek\u0119',
+        'Importa bibliotheca',
 
     // cloud menu
     'Login...':
-        'Logowanie...',
+        'Authenticar se...',
     'Signup...':
-        'Rejestracja...',
-    'Reset Password...':
-        'Zresetuj hasło...',
+        'Abonamento...',
 
     // settings menu
     'Language...':
-        'J\u0119zyk...',
+        'Lingua...',
     'Zoom blocks...':
-        'Powi\u0119ksz bloki...',
+        'Zoom blocos...',
+    'Stage size...':
+        'Scena dimensiones...',
+    'Stage size':
+        'Scena dimensiones',
+    'Stage width':
+        'Scena traverso',
+    'Stage height':
+        'Scena statura',
+    'Default':
+        'Normal',
     'Blurred shadows':
-        'Rozmyte cienie',
+        'Umbre indistincte',
     'uncheck to use solid drop\nshadows and highlights':
-        'Odznacz, aby uzyska\u0107\nmocne cienie i granice',
+        'dismarca por usa gutta umbras\n'
+        + 'e accentuas solide',
     'check to use blurred drop\nshadows and highlights':
-        'Zaznacz, aby uzyska\u0107\rozmyte cienie i granice',
+        'marca a selecte por usa gutta umbras\n'
+        + 'e accentuas indistincte',
     'Zebra coloring':
-        'Kolorowanie zebr\u0105',
+        'Zebra colorito',
     'check to enable alternating\ncolors for nested blocks':
-        'zaznacz, aby pozowli\u0107 na zmian\u0119\nbarw zagnie\u017Cd\u017Conych blok\u00F3w',
+        'marca a selecta colors alternative\n'
+        + 'por blocos annida',
     'uncheck to disable alternating\ncolors for nested block':
-        'odznacz, aby nie pozowli\u0107 na zmian\u0119\nbarw zagnie\u017Cd\u017Conych blok\u00F3w',
+        'dismarca a disactiva colors alternative\n'
+        + 'por blocos annida',
     'Dynamic input labels':
-        'Dynamiczne opisy parametr\u00F3w',
+        'Dynamic etiquettas entrata',
     'uncheck to disable dynamic\nlabels for variadic inputs':
-        'odznacz to disable dynamic\nlabels for variadic inputs',
+        'dismarca a disactiva dynamic\n'
+        + 'etiquettas varia entrata', // 'variante'
     'check to enable dynamic\nlabels for variadic inputs':
-        'zaznacz to enable dynamic\nlabels for variadic inputs',
+        'marca a activa dynamic\n'
+        + 'etiquetta varia entrata',
     'Prefer empty slot drops':
-        'Preferuj empty slot drops',
+        'Dar le preferentia a cader in apatur vacue', 
+				// ..' in foramine vacue'
     'settings menu prefer empty slots hint':
-        'menu ustawie\u0144 prefer empty slots hint',
+        'Dar le preferentia in menu predefinite\n'
+        + ' per apatur vacue insinua',
     'uncheck to allow dropped\nreporters to kick out others':
-        'odznacz to allow dropped\nreporters to kick out others',
+        'dismarca a activar reporters cadera\n'
+            + 'a capabile displacia alteres',
     'Long form input dialog':
-        'D\u0142uga forma dialogu wej\u015Bcia',
+        'Usa dialogo entrata forma longe',
+    'Plain prototype labels':
+        'Face plan le etiquettas prototypic',
+    'uncheck to always show (+) symbols\nin block prototype labels':
+        'dismarca a expone (+) symbolos\n'
+        + 'in etiquettas prototypic per blocos ',
+    'check to hide (+) symbols\nin block prototype labels':
+        'marca a cella (+) symbols\n'
+        + 'in etiquettas prototypic per blocos',
     'check to always show slot\ntypes in the input dialog':
-        'zaznacz to always show slot\ntypes in the input dialog',
+        'marca a expone apatur typos\n'
+        + 'in dialogo entrata',
     'uncheck to use the input\ndialog in short form':
-        'odznacz to use the input\ndialog in short form',
+        'dismarka a usa dialogo entrata forma curte',
     'Virtual keyboard':
-        'Witualna klawiatura',
+        'Virtual claviero',
     'uncheck to disable\nvirtual keyboard support\nfor mobile devices':
-        'odznacz, aby nie u\u017Cywa\u0107 klawiatury\nwirtualnej dla urzdze\u0144 mobilnych',
+        'dismarca a disactivar virtual claviero\n'
+            + 'per dispositivo mobile',
     'check to enable\nvirtual keyboard support\nfor mobile devices':
-        'zaznacz, aby u\u017Cywa\u0107 klawiatury\nwirtualnej dla urzdze\u0144 mobilnych',
+        'marca a activar virtual claviero\n'
+            + 'per dispositivo mobile',
+    'Input sliders':
+        'Entrata glissatores',
     'uncheck to disable\ninput sliders for\nentry fields':
-        'odznacz, aby nie pozwoli\u0107 na suwaki w polach wej\u015Bciowych',
+        'dismarca a disactivar\n'
+        + 'entrata glissatores\n'
+        + 'pro campos entrate',
     'check to enable\ninput sliders for\nentry fields':
-        'zaznacz, aby pozwoli\u0107 na suwaki w polach wej\u015Bciowych',
+        'marca a activar\n'
+         + 'entrata glissatores\n'
+         + 'pro campos entrate',
     'Clicking sound':
-        'D\u017Awi\u0119k klikni\u0119cia',
-	'uncheck to turn\nblock clicking\nsound off':
-		'odznacz, aby wy\u0142\u0105czy\u0107 \nd\u017Awi\u0119k klikni\u0119cia',
-	'check to turn\nblock clicking\nsound on':
-		'zaznacz, aby w\u0142\u0105czy\u0107 \nd\u017Awi\u0119k klikni\u0119cia',
+        'Sona de clicca',
+    'uncheck to turn\nblock clicking\nsound off':
+        'dismarca a disactivar\nsona de clicca',
+    'check to turn\nblock clicking\nsound on':
+        'marca a activar\nsona de clicca',
     'Animations':
-        'Animacje',
+        'Animations',
     'uncheck to disable\nIDE animations':
-        'odznacz, aby nie pozwoli\u0107\nna animacje IDE',
+        'dismarca a disactivar\nIDE-Animations',
     'Turbo mode':
-        'Tryb turbo',
+        'Turbo modo',
     'check to prioritize\nscript execution':
-        'zaznacz, aby nada\u0107 priorytet\nwykonaniu skryptu',
+        'marca a prioitate\nexecution de scripte', // 'exequer'
     'uncheck to run scripts\nat normal speed':
-        'odznacz, aby wykona\u0107 skrypt\nz normaln\u0105 szybko\u015Bci\u0105',
+        'dismarca a comencia scriptes\n'
+        + 'a velocitate normal', // 'celeritate'
     'check to enable\nIDE animations':
-        'zaznacz, aby pozwoli\u0107\nna animacje IDE',
+        'marca a activar \nIDE animations',
     'Thread safe scripts':
-        'Omijaj bezpieczne skrypty',
+        'Filo secur scriptes',
     'uncheck to allow\nscript reentrance':
-        'odznacz, aby pozwoli\u0107\nna restartowanie skryptu',
+        'dismarca a permitte\nscripte readmitte',
     'check to disallow\nscript reentrance':
-        'zaznacz, aby nie pozwoli\u0107\nna restartowanie skryptu',
+        'marca a prohibi\nscripte readmitte',
     'Prefer smooth animations':
-        'Preferuj g\u0142adkie animacje',
+        'Prefere aminationes lisia',
     'uncheck for greater speed\nat variable frame rates':
-        'odznacz, aby pozwoli\u0107na\nwi\u0119ksz pr\u0119dko\u015B\u0107 ramek animacji',
+        'dismarca pro plus veloce\n'  // 'accelera'
+         + 'ma variable rata\n'
+         + 'de frame monstra',
     'check for smooth, predictable\nanimations across computers':
-        'zaznacz, aby zapewni\u0107na\njednakowe, g\u0142adkie animacje',
+        'marca pro predice lisia\n'
+        + 'animationes trans computator systemas', // multi-platteforma
+    'Flat line ends':
+        'Lineas fin quadrate',
+    'check for flat ends of lines':
+        'marca pro lineas fin quadrate',
+    'uncheck for round ends of lines':
+        'dismarca pro lineas fin rotunde',
 
     // inputs
     'with inputs':
-        'z parametrami',
+        'Con entratas',
     'input names:':
-        'nazwy parametr\u00F3w:',
+        'Entrata nomines:',
     'Input Names:':
-        'Nazwy Parametr\u00F3w:',
+        'Entrata nomines:',
     'input list:':
-        'parametr - lista:',
+        'Entrata Listes:',
 
     // context menus:
     'help':
-        'pomoc',
+        'adjuva',
 
     // palette:
     'hide primitives':
-        'ukryj pierwotne',
+        'cela primativos',
     'show primitives':
-        'poka\u017C pierwotne',
+        'expone primativos',
 
     // blocks:
     'help...':
-        'pomoc...',
+        'adjunta...',
     'relabel...':
-        'przemianuj...',
+        'redacto etiquettas...',
     'duplicate':
-        'powiel',
+        'duplica',
     'make a copy\nand pick it up':
-        'wykonaj i we\u017A kopi\u0119',
+        'duplica e prende in mano',
     'only duplicate this block':
-        'powiel tylko ten blok',
+        'duploca solo esto bloco',
     'delete':
-        'usu\u0144',
+        'dele',
     'script pic...':
-        'obrazek skryptu...',
+        'scripte pictura...',
     'open a new window\nwith a picture of this script':
-        'otw\u00F3rz nowe okno\nz obrazkiem tego skryptu',
+        'Aperte fenestra nove\n'
+        + 'con pictura de este scripte',
     'ringify':
-        'obwiednia',
+        'Anulamento',
     'unringify':
-        'bez obwiedni',
+        'Disanulamento',
 
     // custom blocks:
     'delete block definition...':
-        'usu\u0144 definicj\u0119 bloku',
+        'dele definition del bloco',
     'edit...':
-        'edytuj...',
+        'edita...',
 
     // sprites:
     'edit':
-        'edytuj',
+        'edita',
+    'move':
+        'move',
+    'detach from':
+        'distacca de',
+    'detach all parts':
+        'distacca omni partes',
     'export...':
-        'eksportuj...',
+        'exporta...',
 
     // stage:
     'show all':
-        'poka\u017C wszystko',
+        'monstra omni',
     'pic...':
-        'obrazek...',
+        'pictura...',
     'open a new window\nwith a picture of the stage':
-        'otw\u00F3rz w nowym oknie\nz obrazkiem sceny',
+        'expone nove fenestra\n'
+		+ 'con pictura del scena',
 
     // scripting area
     'clean up':
-        'wyczy\u015B\u0107',
+        'abluenta',
     'arrange scripts\nvertically':
-        'ustaw skrypty pionowo',
+        'presentar scriptes\n' + 'verticalitate',
     'add comment':
-        'dodaj komentarz',
+        'adde un commento',
     'undrop':
-        'odklej',
+        'disdepone',
     'undo the last\nblock drop\nin this pane':
-        'cofnij ostatnie upuszczenie\nbloku na tej planszy',
-	'scripts pic...':
-        'obrazek skryptu...',
+        'disfacer bloco depone antea\n'
+		+ 'in este pannello',
+    'scripts pic...':
+        'scriptes pictura...',
     'open a new window\nwith a picture of all scripts':
-        'otw\u00F3rz nowe okno\nz obrazkami wszystkich skrypt\u00F3w',
+        'expone nove fenestra\n'
+		+ 'con pictura del omni scriptes',
     'make a block...':
-        'buduj nowy blok...',
+        'face un bloco...',
 
     // costumes
     'rename':
-        'zmie\u0144 nazw\u0119',
+        'edita le nomine',
     'export':
-        'eksportuj',
+        'exporta',
     'rename costume':
-        'zmie\u0144 nazw\u0119 kostiumu',
+        'edita le nomine del costume',
 
     // sounds
     'Play sound':
-        'Zagraj d\u017Cwi\u0119k',
+        'Sona le sono',
     'Stop sound':
-        'Zatrzymaj d\u017Cwi\u0119k',
+        'Arresta sono',
     'Stop':
-        'Stop',
+        'Halto',
     'Play':
-        'Graj',
+        'Sona',
     'rename sound':
-        'zmie\u0144 nazw\u0119 d\u017Cwi\u0119ku',
+        'Edita le nomine del sono',
 
     // dialogs
     // buttons
     'OK':
         'OK',
     'Ok':
-        'Ok',
+        'OK',
     'Cancel':
-        'Anuluj',
+        'Revoca',
     'Yes':
-        'Tak',
+        'Si',
     'No':
-        'Nie',
+        'Non',
 
     // help
     'Help':
-        'Pomoc',
+        'Adjuta',
 
     // zoom blocks
     'Zoom blocks':
-        'Zoom blok\u00F3w',
+        'Zoom blocos',
     'build':
-        'buduj',
+        'edifica',
     'your own':
-        'swoje',
+        'vostre',
     'blocks':
-        'bloki',
+        'blocos',
     'normal (1x)':
-        'normalne (1x)',
+        'normal (1x)',
     'demo (1.2x)':
-        'demo (1.2x)',
+        'por demonstration (1.2x)',
     'presentation (1.4x)':
-        'prezentacja (1.4x)',
+        'por presentation (1.4x)',
     'big (2x)':
-        'du\u017Ce (2x)',
+        'grande (2x)',
     'huge (4x)':
-        'ogromne (4x)',
+        'grosse (4x)',
     'giant (8x)':
-        'gigantyczne (8x)',
-    'monstrous (10x)':
-        'monstrualne (10x)',
+        'gigante (8x)',
+    'monstrous (10x)':  // 'monstruose'
+        'maxima (10x)',
 
     // Project Manager
     'Untitled':
-        'Bez nazwy',
+        'Nulle titulo',  // 'Innominate'
     'Open Project':
-        'Otw\u00F3rz projekt',
+        'Aperte Projecto',
     '(empty)':
-        '(puste)',
+        '(vacue)',
     'Saved!':
-        'Zapisane!',
+        'Secur!',  // 'Faceva secur per salvo a file'
     'Delete Project':
-        'Usu\u0144 projekt',
+        'Dele Projecto',
     'Are you sure you want to delete':
-        'Czy napewno chcesz usun\u0105\u0107',
+        'A certe que vos vole a dele?',
     'rename...':
-        'przemianuj',
-    'Cloud':
-        'Chmura',
-    'Browser':
-        'Przeglądarka',
-    'Examples':
-        'Przykłady',
-    'You are not logged in':
-        'Nie jesteś zalogowany',
-    'Updating\nproject list...':
-        'Aktualizowanie\nlisty projektów...',
-    'last changed':
-        'ostatnio zmieniony',
-    'Open':
-        'Otwórz',
-    'Share':
-        'Udostępnij',
-    'Unshare':
-        'Wyłącz udostępnianie',
-    'Share Project':
-        'Udostępnij projekt',
-    'Unshare Project':
-        'Wyłącz udostępnianie projektu',
-    'Are you sure you want to publish':
-        'Czy na pewno chcesz opublikować projekt',
-    'Are you sure you want to unpublish':
-        'Czy na pewno chcesz wyłączyć publikowanie projektu',
-    'sharing\nproject...':
-        'Udostępnianie\nprojektu...',
-    'shared.':
-        'Projekt udostępniony.',
-    'unsharing\nproject...':
-        'Wyłączanie\nudostępniania projektu...',
-    'unshared.':
-        'Udostępnianie wyłączone.',
-    'Fetching project\nfrom the cloud...':
-        'Wczytywanie projektu\nz chmury...',
-    'Opening project...':
-        'Otwieranie projektu...',
-    'Save Project':
-        'Zapisz projekt',
-    'Saving project\nto the cloud...':
-        'Zapisywanie projektu\ndo chmury...',
-    'saved.':
-        'Projekt zapisany.',
+        'Edita le nomine...',
 
     // costume editor
     'Costume Editor':
-        'Edytor kostium\u00F3w',
+        'Costume Editor',
     'click or drag crosshairs to move the rotation center':
-        'Kliknij lub przeci\u0105gnij krzy\u017Cyk, aby ustawi\u0107 centrum obrotu',
+        'clicca o trahe capilo cruce \n'
+        + 'a move le centro de rotation',
 
     // project notes
     'Project Notes':
-        'Opis projektu',
+        'Annotos del projecto',
 
     // new project
     'New Project':
-        'Nowy projekt',
+        'Projecto Nove',
     'Replace the current project with a new one?':
-        'Zast\u0105pi\u0107 aktualny projekt przez nowy?',
+        'A surroga le projecto existente pro un nove?',
 
     // save project
     'Save Project As...':
-        'Zapisz projekt jako...',
+        'Secur Projecto Como...',
 
     // export blocks
     'Export blocks':
-        'Eksportuj bloki',
+        'Exporta blocos',
     'Import blocks':
-        'Importuj bloki',
+        'Importa blocos',
     'this project doesn\'t have any\ncustom global blocks yet':
-        'ten projekt nie ma jeszcze\nw\u0142asnych globalnych blok\u00F3w',
+        'esti projecto no trova\n'
+        + 'blocos artificiose global',
     'select':
-        'wybierz',
-    'all':
-        'wszystko',
+        'selecta',
     'none':
-        'nic',
+        'necun',  // 'necuno'
 
     // variable dialog
     'for all sprites':
-        'dla wszystkich duszk\u00F3w',
+        'por omni spiritos',
     'for this sprite only':
-        'tylko dla tego duszka',
+        'solo por este spirito',
 
     // block dialog
     'Change block':
-        'Zmie\u0144 blok',
+        'Cambia bloco',
     'Command':
-        'Komenda',
+        'Commando',
     'Reporter':
-        'Funkcja',
+        'Reporter',
     'Predicate':
-        'Predykat',
+        'Proposition',
 
     // block editor
     'Block Editor':
-        'Edytor blok\u00F3w',
+        'Editor de blocos',
     'Apply':
-        'Zastosuj',
+        'Applica',
 
     // block deletion dialog
     'Delete Custom Block':
-        'Usu\u0144 w\u0142asny blok',
+        'Dele bloco artificiose',
     'block deletion dialog text':
-        'czy ten blok ze wszystkimi wyst\u0105pieniami\n' +
-            'rzeczywi\u015Bcie usun\u0105\u0107?',
+        'Edita bloco dele dialogo texto',  //??
 
     // input dialog
     'Create input name':
-        'Utw\u00F3rz nazw\u0119 parametru',
+        'Crea entrata nomine',
     'Edit input name':
-        'Edytuj nazw\u0119 parametru',
+        'Edita entrata nomine',
     'Edit label fragment':
-        'Edytuj opis parametru',
+        'Edita etiquetta fragmento',  // 'Edit texto clasma'
     'Title text':
-        'Tekst tutu\u0142owy',
+        'Titulo texto',
     'Input name':
-        'Nazwa',
+        'Entrata nomine',
     'Delete':
-        'Usu\u0144',
+        'Dele',
     'Object':
-        'Obiekt',
+        'Objecto',
     'Number':
-        'Liczba',
+        'Numero',
     'Text':
-        'Tekst',
+        'Texto',
     'List':
-        'Lista',
+        'Liste',
     'Any type':
-        'Dowolnego rodzaju',
+        'Qualcunque Typo',
     'Boolean (T/F)':
-        'Logiczny (P/F)',
+        'Ver o False (V/F)',
     'Command\n(inline)':
-        'Komenda',
+        'Commando\n(in linea)',
     'Command\n(C-shape)':
-        'Komenda\n(C-Form)',
+        'Commando\n(C-forma)',
     'Any\n(unevaluated)':
-        'Dowolny\n(nieokre\u015Blony)',
+        'Qualcunque\n(non-evaluta)',
     'Boolean\n(unevaluated)':
-        'Logiczny\n(nieokre\u015Blony)',
+        'Ver o False\n(non-evaluta)',
     'Single input.':
-        'Jeden parametr.',
+        'Sol entrata',
     'Default Value:':
-        'Warto\u015B\u0107 standardowa:',
+        'Valor predefiniva:', // normal
     'Multiple inputs (value is list of inputs)':
-        'Wiele parametr\u00F3w (jako lista)',
+        'entrata plure (valor es lista)',  // 'aliquot'
     'Upvar - make internal variable visible to caller':
-        'Wewn\u0119trzna zmienna widoczna dla wywo\u0142ania',
+        'Cassa in Alto - face cassa interne visible a evocator', 
 
     // About Snap
     'About Snap':
-        'O Snap',
+        'in re Snap',
     'Back...':
-        'Wstecz...',
+        'a retro!...',
     'License...':
-        'Licencja...',
+        'Licentia...',
     'Modules...':
-        'Modu\u0142y...',
+        'Modulos...',
     'Credits...':
-        'Podzi\u0119kowania...',
+        'Credito...',
     'Translators...':
-        'T\u0142umacze',
+        'Traductores...',
     'License':
-        'Licencja',
+        'Licentia',
     'current module versions:':
-        'aktualna wersja modu\u0142\u00F3w',
+        'currente modulo versiones',
     'Contributors':
-        'Wsp\u00F3\u0142pracownicy',
+        'Contribuentes',
     'Translations':
-        'T\u0142umaczenia',
+        'Traductiones..',
 
-    // variable watchers
+    // variable watchers (observa loco de valores = cassa)
     'normal':
-        'normalny',
+        'normal',
     'large':
-        'wielki',
+        'grande',
     'slider':
-        'suwak',
+        'glissator',
     'slider min...':
-        'minimum suwaka...',
+        'glissator minime...',
     'slider max...':
-        'maksimum suwaka...',
+        'glissator maxime...',
     'import...':
-        'importuj...',
+        'importa...',
     'Slider minimum value':
-        'Minimalna warto\u015B\u0107 suwaka',
+        'glissator minime valor',
     'Slider maximum value':
-        'Maksymalna warto\u015B\u0107 suwaka',
+        'glissator maxime valor',
 
     // list watchers
     'length: ':
-        'du\u0142go\u015B\u0107: ',
+        'Longor: ',
 
     // coments
     'add comment here...':
-        'dodaj komentarz tutaj...',
+        'adde commento hic',
 
     // drow downs
     // directions
     '(90) right':
-        '(90) prawo',
+        '(90) dextera',
     '(-90) left':
-        '(-90) lewo',
+        '(-90) sinistra',
     '(0) up':
-        '(0) g\u00F3ra',
+        '(0) alto',
     '(180) down':
-        '(180) d\u00F3\u0142',
+        '(180) basso',
 
     // collision detection
     'mouse-pointer':
-        'Wska\u017Anik myszy',
+        'mure punctator',
     'edge':
-        'Kraw\u0119dzie',
+        'bordo talia',
     'pen trails':
-        '\u015Alady pisaka',
+        'penna tracia',
 
     // costumes
     'Turtle':
-        'Żółw',
+        'Tortuca',
     'Empty':
-        'Pusty',
+        'Vacue',
 
     // graphical effects
+    'brightness':
+        'brillantia', // 'nitor'
     'ghost':
-        'duch',
+        'apparition',  // 'spectro'
+    'negative':
+        'negative',
+    'comic':
+        'comic',
+    'confetti':
+        'confetti',
 
     // keys
     'space':
-        'spacja',
+        'spatio vacue',
     'up arrow':
-        'strz\u0142aka w g\u00F3r\u0119',
+        'alto flecha',  // 'sagitta'
     'down arrow':
-        'strz\u0142aka w d\u00F3\u0142',
+        'basso flecha',
     'right arrow':
-        'strz\u0142aka w prawo',
+        'dextera flecha',
     'left arrow':
-        'strz\u0142aka w lewo',
+        'sinistra flecha',
     'a':
         'a',
     'b':
@@ -1231,107 +1275,63 @@ SnapTranslator.dict.pl = {
 
     // messages
     'new...':
-        'nowy...',
+        'Nove...',
 
     // math functions
     'abs':
-        'modu\u0142',
+        'abs',
     'floor':
-        'pod\u0142oga',
+        'floor',
     'sqrt':
-        'pierwiastek kwadratowy',
+        'sqrt',
     'sin':
         'sin',
     'cos':
         'cos',
     'tan':
-        'tg',
+        'tan',
     'asin':
-        'arcsin',
+        'asin',
     'acos':
-        'arccos',
+        'acos',
     'atan':
-        'arctg',
+        'atan',
     'ln':
         'ln',
     'e^':
         'e^',
 
+    // delimiters
+    'letter':
+        'character',
+    'whitespace':
+        'spatio blanco',  // spatio vacue'
+    'line':
+        'linea',
+    'tab':
+        'tabulator',
+    'cr':
+        'fin de linea',
+
     // data types
     'number':
-        'liczba',
+        'Numero',
     'text':
-        'tekst',
+        'Texto',
     'Boolean':
-        'logiczna',
+        'Ver o False',
     'list':
-        'lista',
+        'Lista',
     'command':
-        'komenda',
+        'Commando',
     'reporter':
-        'funkcja',
+        'Reporter',
     'predicate':
-        'predykat',
+        'Proposition',
 
     // list indices
     'last':
-        'ostatni',
+        'ultime',
     'any':
-        'dowolny',
-
-    // Sign up dialog
-    'Sign up':
-        'Rejestracja',
-    'User name:':
-        'Nazwa użytkownika:',
-    'Birth date:':
-        'Data urodzenia:',
-    'year:':
-        'rok:',
-    'E-mail address:':
-        'Adres e-mail:',
-    'E-mail address of parent or guardian:':
-        'Adres e-mail rodzica lub opiekuna:',
-    'Terms of Service...':
-        'Regulamin...',
-    'Privacy...':
-        'Polityka prywatności...',
-    'I have read and agree\nto the Terms of Service':
-        'Przeczytałem i zgadzam się\nz Regulaminem',
-    'January':
-        'styczeń',
-    'February':
-        'luty',
-    'March':
-        'marzec',
-    'April':
-        'kwiecień',
-    'May':
-        'maj',
-    'June':
-        'czerwiec',
-    'July':
-        'lipiec',
-    'August':
-        'sierpień',
-    'September':
-        'wrzesień',
-    'October':
-        'październik',
-    'November':
-        'listopad',
-    'December':
-        'grudzień',
-    'please fill out\nthis field':
-        'Proszę wypełnić\nto pole',
-    'please agree to\nthe TOS':
-        'Proszę zaakceptować\nRegulamin',
-    'Sign in':
-        'Zaloguj się',
-    'Password:':
-        'Hasło:',
-    'stay signed in on this computer\nuntil logging out':
-        'Zapamiętaj mnie na tym komputerze\naż do wylogowania',
-    'Reset password':
-        'Zresetuj hasło'
+        'alcuno'  // 'qualcun'
 };
