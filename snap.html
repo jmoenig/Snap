@@ -1,61 +1,61 @@
 <!DOCTYPE html>
 <html manifest="manifest.mf">
-	<head>
-		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-		<title>Snap! Build Your Own Blocks</title>
-		<link rel="shortcut icon" href="favicon.ico">
-		<!-- iOS Web App configuration -->
-		<meta name="apple-mobile-web-app-capable" content="yes" />
-		<meta name="apple-mobile-web-app-title" content="Snap!" />
-		<meta name="apple-mobile-web-app-status-bar-style" content="black" />
-		<link rel="apple-touch-icon-precomposed" href="icon.png" />
-		<link rel="apple-touch-icon-precomposed" sizes="72x72" href="icon.png" />
-		<link rel="apple-touch-icon-precomposed" sizes="114x114" href="icon.png" />
-		<link rel="apple-touch-icon-precomposed" sizes="120x120" href="icon.png" />
-		<link rel="apple-touch-icon-precomposed" sizes="144x144" href="icon.png" />
-		<!-- iPhone 3 and 4 Non-Retina -->
-		<link rel="apple-touch-startup-image" media="(device-width: 320px)" href="iOS/iphone3.png">
-		<!-- iPhone 4 Retina -->
-		<link rel="apple-touch-startup-image" media="(device-width: 320px) and (-webkit-device-pixel-ratio: 2)" href="iOS/iphone4.png">
-		<!-- iPhone 5 Retina -->
-		<link rel="apple-touch-startup-image" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)" href="iOS/iphone5.png">
- 
-		<!-- iPad Non-Retina Portrait -->
-		<link rel="apple-touch-startup-image" media="(device-width: 768px) and (orientation: portrait)" href="iOS/ipadp.png">
-		<!-- iPad Non-Retina Landscape -->
-		<link rel="apple-touch-startup-image" media="(device-width: 768px) and (orientation: landscape)" href="iOS/ipadl.png">
-		<!-- iPad Retina Portrait -->
-		<link rel="apple-touch-startup-image" media="(device-width: 1536px) and (orientation: portrait) and (-webkit-device-pixel-ratio: 2)" href="iOS/ipadrp.png">
-		<!-- iPad Retina Landscape -->
-		<link rel="apple-touch-startup-image" media="(device-width: 1536px)  and (orientation: landscape) and (-webkit-device-pixel-ratio: 2)" href="iOS/ipadrl.png">
-		<script type="text/javascript" src="morphic.js"></script>
-		<script type="text/javascript" src="widgets.js"></script>
-		<script type="text/javascript" src="blocks.js"></script>
-		<script type="text/javascript" src="threads.js"></script>
-		<script type="text/javascript" src="objects.js"></script>
-		<script type="text/javascript" src="gui.js"></script>
-		<script type="text/javascript" src="paint.js"></script>
-		<script type="text/javascript" src="lists.js"></script>
-		<script type="text/javascript" src="byob.js"></script>
-		<script type="text/javascript" src="xml.js"></script>
-		<script type="text/javascript" src="store.js"></script>
-		<script type="text/javascript" src="locale.js"></script>
-		<script type="text/javascript" src="cloud.js"></script>
-		<script type="text/javascript" src="sha512.js"></script>
-		<script type="text/javascript">
-			var world;
-			window.onload = function () {
-				world = new WorldMorph(document.getElementById('world'));
-                world.worldCanvas.focus();
-				new IDE_Morph().openIn(world);
-				setInterval(loop, 1);
-			};
-			function loop() {
-				world.doOneCycle();
-			}
-		</script>
-	</head>
-	<body style="margin: 0;">
-		<canvas id="world" tabindex="1" style="position: absolute;" />
-	</body>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Snap! Build Your Own Blocks</title>
+    <link rel="shortcut icon" href="favicon.ico">
+    <!-- iOS Web App configuration -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="Snap!" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <link rel="apple-touch-icon-precomposed" href="icon.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="icon.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="icon.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="120x120" href="icon.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="icon.png" />
+    <!-- iPhone 3 and 4 Non-Retina -->
+    <link rel="apple-touch-startup-image" media="(device-width: 320px)" href="iOS/iphone3.png">
+    <!-- iPhone 4 Retina -->
+    <link rel="apple-touch-startup-image" media="(device-width: 320px) and (-webkit-device-pixel-ratio: 2)" href="iOS/iphone4.png">
+    <!-- iPhone 5 Retina -->
+    <link rel="apple-touch-startup-image" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)" href="iOS/iphone5.png">
+
+    <!-- iPad Non-Retina Portrait -->
+    <link rel="apple-touch-startup-image" media="(device-width: 768px) and (orientation: portrait)" href="iOS/ipadp.png">
+    <!-- iPad Non-Retina Landscape -->
+    <link rel="apple-touch-startup-image" media="(device-width: 768px) and (orientation: landscape)" href="iOS/ipadl.png">
+    <!-- iPad Retina Portrait -->
+    <link rel="apple-touch-startup-image" media="(device-width: 1536px) and (orientation: portrait) and (-webkit-device-pixel-ratio: 2)" href="iOS/ipadrp.png">
+    <!-- iPad Retina Landscape -->
+    <link rel="apple-touch-startup-image" media="(device-width: 1536px)  and (orientation: landscape) and (-webkit-device-pixel-ratio: 2)" href="iOS/ipadrl.png">
+    <script src="morphic.js"></script>
+    <script src="widgets.js"></script>
+    <script src="blocks.js"></script>
+    <script src="threads.js"></script>
+    <script src="objects.js"></script>
+    <script src="gui.js"></script>
+    <script src="paint.js"></script>
+    <script src="lists.js"></script>
+    <script src="byob.js"></script>
+    <script src="xml.js"></script>
+    <script src="store.js"></script>
+    <script src="locale.js"></script>
+    <script src="cloud.js"></script>
+    <script src="sha512.js"></script>
+    <script type="text/javascript">
+      var world;
+      window.onload = function () {
+        world = new WorldMorph(document.getElementById('world'));
+        world.worldCanvas.focus();
+        new IDE_Morph().openIn(world);
+        setInterval(loop, 1);
+      };
+      function loop() {
+        world.doOneCycle();
+      }
+    </script>
+  </head>
+  <body style="margin: 0;">
+    <canvas id="world" tabindex="1" style="position: absolute;" />
+  </body>
 </html>
