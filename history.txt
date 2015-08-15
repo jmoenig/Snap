@@ -2554,3 +2554,17 @@ ______
 150730
 ------
 * Blocks: improve keyboard editing for embedded rings
+
+150806
+------
+* Polish & German translation updates
+
+=== Release v4.0.2 ===
+
+150809
+------
+* Interlingua support, yay!! thanks, Ken Dickey!
+
+150814
+------
+* Blocks: fixed #907
