@@ -379,7 +379,38 @@ In this dialog box, you can choose the block's palette, shape and name. With one
 
 There are three block shapes, following a convention that should be familiar to Scratch users: The jigsaw-puzzle-piece shaped blocks are Commands, and don't report a value. The oval blocks are Reporters, and the hexagonal blocks are Predicates, which is the technical term for reporters that report Boolean (true or false) values.
 
+Suppose you want to make a block named ``square'' that draws a square. You would choose Motion, Command, and type ``\code{square}'' into the name field. When you click OK, you enter the Block Editor. This works just like making a script in the sprite's scripting area, except that the ``hat'' block at the top, instead of saying something like ``\code{when I am clicked},'' has a picture of the block you're building. This hat block is called the \emph{prototype} of your custom block.\footnote{This use of the word ``prototype'' is unrelated to the \emph{prototyping object oriented programming} discussed later.} You drag blocks under the hat to program your custom block, then click OK:\nopagebreak
+
+\bigpic{dragging-block-into-block-editor}
+\bigpic{block-editor-square}
+
+Your block appears at the bottom of the Motion palette. Here's the block and the result of using it:\nopagebreak
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=\defaultGraphicsScale]%
+	{square-block-on-palette}
+\includegraphics[scale=\defaultGraphicsScale]{../common/square}
+\end{figure}
+
 \subsection{Custom Blocks with Inputs}
+
+But suppose you want to be able to draw squares of different sizes. Control-click or right-click on the block, choose ``\code{edit},'' and the Block Editor will open. Notice the plus signs before and after the word \code{square} in the prototype block. If you hover the mouse over one, it lights up:\nopagebreak
+
+\bigpic{block-prototype-with-plus-highlighted}
+
+Click on the plus on the right. You will then see the ``input name'' dialog:\nopagebreak
+
+\bigpic{create-input-name}
+
+Type in the name ``\code{size}'' and click OK. There are other options in this dialog; you can choose ``\code{title text}'' if you want to add words to the block name, so it can have text after an input slot, like the ``\code{move~(\,)~steps}'' block. Or you can select a more extensive dialog with a lot of options about your input name. But we'll leave that for later. When you click OK, the new input appears in the block prototype:\nopagebreak
+
+\bigpic{square-block-script-with-size-input}
+
+You can now drag the orange variable down into the script, then click okay:\nopagebreak
+
+\bigpic{dragging-block-input}
+
 \section{Recursion}
 \section{Block Libraries}
 \chapter{First Class Lists}

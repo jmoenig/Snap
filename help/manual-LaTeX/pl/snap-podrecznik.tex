@@ -386,9 +386,41 @@ Po kliknięciu tego przycisku pokaże się okno dialogowe, przy pomocy którego 
 
 W~tym oknie dialogowym możemy wybrać paletę, kształt i~nazwę bloku. Poza jednym wyjątkiem, każda paleta ma przyporządkowany jeden kolor, np. wszystkie bloki z~palety ,,Ruch'' są niebieskie. Jednak paleta ,,Dane'' zawiera zarówno pomarańczowe bloki związane ze zmiennymi, jak i~czerwone, związane z~listami. Oba kolory są dostępne; jest również opcja ,,Inne'', przy pomocy której w~palecie ,,Dane'' tworzymy szare bloki, które nie pasują do żadnej z~powyższych kategorii.
 
-Istnieją trzy kształty bloków, zgodnie z konwencją która powinna być znana użytkownikom Scratcha: bloki w kształcie puzzli to komendy --- nie zwracają one wyników. Bloki owalne to funkcje, które zwracają wyniki, a sześciokątne to predykaty, czyli, innymi słowy, funkcje zwracające wyniki typu logicznego (prawdę lub fałsz).
+Istnieją trzy kształty bloków, zgodnie z~konwencją która powinna być znana użytkownikom Scratcha: bloki w~kształcie puzzli to komendy --- nie zwracają one wyników. Bloki owalne to funkcje, które zwracają wyniki, a~sześciokątne to predykaty, czyli, innymi słowy, funkcje zwracające wyniki typu logicznego (prawdę lub fałsz).
 
-\subsection{Custom Blocks with Inputs}
+Załóżmy, że chcemy utworzyć blok o~nazwie ,,kwadrat'', który rysuje kwadrat. W~oknie ,,nowy blok'' wybieramy opcje ,,Ruch'' i~,,Komenda'', a~następnie wpisujemy ,,\code{kwadrat}'' w~pole nazwy. Po kliknięciu przycisku OK przechodzimy do edytora bloków. Korzystamy z~niego w~taki sam sposób, jak z~obszaru skryptów w~głównym oknie. Jedyna różnica polega na tym, że blok-kapelusz na górze skryptu, zamiast nosić nazwę w~rodzaju ,,\code{kiedy zostanę kliknięty}'', zawiera obraz bloku, który budujemy. Ten kapelusz nazywamy \emph{prototypem}\footnote{W~tym znaczeniu słowo ,,prototyp'' nie jest związane z~omawianym później \emph{programowaniem obiektowym opartym na prototypach}.} nowo tworzonego bloku. Aby zaprogramować działanie własnego bloku, układamy inne bloki pod kapeluszem, a~następnie klikamy przycisk OK:\nopagebreak
+
+\bigpic{przeciaganie-bloku-do-edytora-blokow}
+\bigpic{edytor-blokow-kwadrat}
+
+Nasz blok pojawi się na dole palety ,,Ruch''. Oto on wraz z~rezultatem jego użycia:\nopagebreak
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=\defaultGraphicsScale]%
+	{blok-kwadrat-na-palecie}
+\includegraphics[scale=\defaultGraphicsScale]{../common/square}
+\end{figure}
+
+\subsection{Własne bloki z parametrami}
+
+Załóżmy jednak, że chcielibyśmy móc rysować kwadraty o~różnych rozmiarach. Klikamy na bloku prawym przyciskiem lub lewym z~wciśniętym klawiszem Ctrl. Kiedy wybierzemy polecenie ,,\code{edytuj\ldots}'', otworzy się edytor bloków. Zwróć uwagę na symbole plusów przed i~po słowie \code{kwadrat} w~bloku prototypu. Jeśli zatrzymasz wskaźnik myszy nad jednym z~nich, zostanie on podświetlony:\nopagebreak
+
+\bigpic{prototyp-bloku-z-podswietlonym-plusem}
+
+Klikamy prawy plus. Pojawi się okno dialogowe ,,Utwórz nazwę parametru'':\nopagebreak
+
+\bigpic{utworz-nazwe-parametru}
+
+Wpisujemy nazwę ,,\code{wielkość}'' i~klikamy przycisk OK. Dialog ten ma więcej opcji; możemy wybrać ,,\code{Tekst tytułowy}'', aby dodać słowa do nazwy bloku, tak aby po polu parametru następował tekst, podobnie jak w~bloku ,,\code{przesuń o~(\,)~kroków}''. Możemy też użyć bardziej kompleksowego okna z~wieloma opcjami dotyczącymi naszego pola parametru; zostawmy to jednak na później. Po kliknięciu OK ujrzymy w~prototypie bloku nowy parametr:\nopagebreak
+
+\bigpic{skrypt-bloku-kwadrat-z-parametrem-rozmiar}
+
+Teraz już możemy przeciągnąć pomarańczowy owal zmiennej do skryptu, a następnie kliknąć przycisk OK w oknie edytora bloków:\nopagebreak
+
+\bigpic{przeciaganie-parametru-bloku}
+\bigpic{skrypt-bloku-kwadrat-z-parametrem-rozmiar}
+
 \section{Recursion}
 \section{Block Libraries}
 \chapter{First Class Lists}
