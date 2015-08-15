@@ -1,9 +1,33 @@
 <!DOCTYPE html>
-<html>
+<html manifest="manifest.mf">
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 		<title>Snap! Build Your Own Blocks</title>
 		<link rel="shortcut icon" href="favicon.ico">
+		<!-- iOS Web App configuration -->
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-title" content="Snap!" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+		<link rel="apple-touch-icon-precomposed" href="icon.png" />
+		<link rel="apple-touch-icon-precomposed" sizes="72x72" href="icon.png" />
+		<link rel="apple-touch-icon-precomposed" sizes="114x114" href="icon.png" />
+		<link rel="apple-touch-icon-precomposed" sizes="120x120" href="icon.png" />
+		<link rel="apple-touch-icon-precomposed" sizes="144x144" href="icon.png" />
+		<!-- iPhone 3 and 4 Non-Retina -->
+		<link rel="apple-touch-startup-image" media="(device-width: 320px)" href="iOS/iphone3.png">
+		<!-- iPhone 4 Retina -->
+		<link rel="apple-touch-startup-image" media="(device-width: 320px) and (-webkit-device-pixel-ratio: 2)" href="iOS/iphone4.png">
+		<!-- iPhone 5 Retina -->
+		<link rel="apple-touch-startup-image" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)" href="iOS/iphone5.png">
+ 
+		<!-- iPad Non-Retina Portrait -->
+		<link rel="apple-touch-startup-image" media="(device-width: 768px) and (orientation: portrait)" href="iOS/ipadp.png">
+		<!-- iPad Non-Retina Landscape -->
+		<link rel="apple-touch-startup-image" media="(device-width: 768px) and (orientation: landscape)" href="iOS/ipadl.png">
+		<!-- iPad Retina Portrait -->
+		<link rel="apple-touch-startup-image" media="(device-width: 1536px) and (orientation: portrait) and (-webkit-device-pixel-ratio: 2)" href="iOS/ipadrp.png">
+		<!-- iPad Retina Landscape -->
+		<link rel="apple-touch-startup-image" media="(device-width: 1536px)  and (orientation: landscape) and (-webkit-device-pixel-ratio: 2)" href="iOS/ipadrl.png">
 		<script type="text/javascript" src="morphic.js"></script>
 		<script type="text/javascript" src="widgets.js"></script>
 		<script type="text/javascript" src="blocks.js"></script>
