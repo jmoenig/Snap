@@ -10,60 +10,12 @@
    xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="235.13568"
-   height="136"
+   width="279.5"
+   height="170"
    id="svg4875"
    version="1.1"
-   inkscape:version="0.48.4 r9939"
+   inkscape:version="0.91 r"
    sodipodi:docname="square-block-on-palette.svg">
-  <defs
-     id="defs4877">
-    <filter
-       id="filter7491"
-       inkscape:label="Drop Shadow"
-       color-interpolation-filters="sRGB">
-      <feFlood
-         id="feFlood7493"
-         flood-opacity="0.5"
-         flood-color="rgb(0,0,0)"
-         result="flood" />
-      <feComposite
-         in2="SourceGraphic"
-         id="feComposite7495"
-         in="flood"
-         operator="in"
-         result="composite1" />
-      <feGaussianBlur
-         id="feGaussianBlur7497"
-         stdDeviation="2"
-         result="blur" />
-      <feOffset
-         id="feOffset7499"
-         dx="4"
-         dy="4"
-         result="offset" />
-      <feComposite
-         in2="offset"
-         id="feComposite7501"
-         in="SourceGraphic"
-         operator="over"
-         result="composite2" />
-    </filter>
-    <marker
-       inkscape:stockid="Arrow2Mend6Iq"
-       orient="auto"
-       refY="0"
-       refX="0"
-       id="Arrow2Mend6Iq"
-       style="overflow:visible">
-      <path
-         id="path6035"
-         style="fill:#d99900;fill-rule:evenodd;stroke:#d99900;stroke-width:0.625;stroke-linejoin:round"
-         d="M 8.7185878,4.0337352 -2.2072895,0.01601326 8.7185884,-4.0017078 c -1.7454984,2.3720609 -1.7354408,5.6174519 -6e-7,8.035443 z"
-         transform="scale(-0.6,-0.6)"
-         inkscape:connector-curvature="0" />
-    </marker>
-  </defs>
   <sodipodi:namedview
      id="base"
      pagecolor="#ffffff"
@@ -73,12 +25,12 @@
      inkscape:pageshadow="2"
      inkscape:zoom="1"
      inkscape:cx="293.85"
-     inkscape:cy="55.714294"
+     inkscape:cy="59.714291"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
      inkscape:window-width="1362"
-     inkscape:window-height="725"
+     inkscape:window-height="724"
      inkscape:window-x="0"
      inkscape:window-y="20"
      inkscape:window-maximized="0"
@@ -86,6 +38,54 @@
      fit-margin-left="0"
      fit-margin-right="0"
      fit-margin-bottom="0" />
+  <defs
+     id="defs4877">
+    <filter
+       inkscape:label="Drop Shadow"
+       id="filter7491"
+       style="color-interpolation-filters:sRGB">
+      <feFlood
+         result="flood"
+         flood-color="rgb(0,0,0)"
+         flood-opacity="0.5"
+         id="feFlood7493" />
+      <feComposite
+         result="composite1"
+         operator="in"
+         in="flood"
+         id="feComposite7495"
+         in2="SourceGraphic" />
+      <feGaussianBlur
+         result="blur"
+         stdDeviation="2"
+         id="feGaussianBlur7497" />
+      <feOffset
+         result="offset"
+         dy="4"
+         dx="4"
+         id="feOffset7499" />
+      <feComposite
+         result="composite2"
+         operator="over"
+         in="SourceGraphic"
+         id="feComposite7501"
+         in2="offset" />
+    </filter>
+    <marker
+       style="overflow:visible"
+       id="Arrow2Mend6Iq"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="Arrow2Mend6Iq">
+      <path
+         inkscape:connector-curvature="0"
+         transform="scale(-0.6,-0.6)"
+         d="M 8.7185878,4.0337352 -2.2072895,0.01601326 8.7185884,-4.0017078 c -1.7454984,2.3720609 -1.7354408,5.6174519 -6e-7,8.035443 z"
+         style="fill:#d99900;fill-rule:evenodd;stroke:#d99900;stroke-width:0.625;stroke-linejoin:round"
+         id="path6035" />
+    </marker>
+  </defs>
   <metadata
      id="metadata4880">
     <rdf:RDF>
@@ -99,14 +99,32 @@
     </rdf:RDF>
   </metadata>
   <g
-     inkscape:label="Layer 1"
-     inkscape:groupmode="layer"
+     transform="translate(-81.150004,-262.07648)"
      id="layer1"
-     transform="translate(-81.150004,-292.07648)">
+     inkscape:groupmode="layer"
+     inkscape:label="Layer 1">
+    <g
+       style="filter:url(#filter7491)"
+       id="g7487"
+       transform="translate(40.125004,65.267857)">
+      <path
+         style="fill:none;stroke:#d99900;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#Arrow2Mend6Iq)"
+         d="m 54,345.36218 48.92678,0"
+         id="path3982"
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="cc" />
+      <rect
+         style="fill:none;stroke:none"
+         id="rect7485"
+         width="64.75"
+         height="29.75"
+         x="47.5"
+         y="329.36218" />
+    </g>
     <image
-       y="292.07648"
-       x="152.28569"
-       id="image8404"
+       y="262.07648"
+       x="155.64999"
+       id="image3698"
        xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAKQAAACICAIAAADmuddbAAAAA3NCSVQICAjb4U/gAAAVMElEQVR4
 nO2deXhU9bnH37PPvmVfyA6JQkDWCIhAlCJUEeyt4tJer1Zt7epjW+yt97FqF6/3aa1oW7sg1lYK
 D2IBtSkVUKuA7CAxJCErkz2Tmcx+zpzld/8YTDIzZ5KQzCSQcz5/8PDM/H6/ec98c5Y55/u+L1ZR
@@ -205,25 +223,8 @@ kx3IFGFwz/bbdyAAiZnudUYUl8EJTXrBstGs5bAfE0LuREUmSSKGJD7QohdOJWpNhRNxNR6w7wCA
 xGFjUAAvlYToZxUIIX9fjRU/l+DQVBLNZZSg5hyHCTgs6yOg1cfiVwOqSgpCFVtBqGIrCFVsBaGK
 rSD+H3BNLJzRIpBYAAAAAElFTkSuQmCC
 "
-       height="136"
-       width="164" />
-    <g
-       transform="translate(40.125004,65.267857)"
-       id="g7487"
-       style="filter:url(#filter7491)">
-      <path
-         sodipodi:nodetypes="cc"
-         inkscape:connector-curvature="0"
-         id="path3982"
-         d="m 54,345.36218 48.92678,0"
-         style="fill:none;stroke:#d99900;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker-end:url(#Arrow2Mend6Iq)" />
-      <rect
-         y="329.36218"
-         x="47.5"
-         height="29.75"
-         width="64.75"
-         id="rect7485"
-         style="fill:none;stroke:none" />
-    </g>
+       preserveAspectRatio="none"
+       height="170"
+       width="205" />
   </g>
 </svg>

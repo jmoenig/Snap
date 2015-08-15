@@ -10,29 +10,12 @@
    xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="162"
-   height="144"
+   width="202.5"
+   height="180"
    id="svg9578"
    version="1.1"
-   inkscape:version="0.48.4 r9939"
+   inkscape:version="0.91 r"
    sodipodi:docname="przeciaganie-parametru-bloku.svg">
-  <defs
-     id="defs9580">
-    <marker
-       inkscape:stockid="Arrow2Mend"
-       orient="auto"
-       refY="0"
-       refX="0"
-       id="Arrow2Mend"
-       style="overflow:visible">
-      <path
-         inkscape:connector-curvature="0"
-         id="path3983"
-         style="fill-rule:evenodd;stroke-width:0.625;stroke-linejoin:round"
-         d="M 8.7185878,4.0337352 -2.2072895,0.01601326 8.7185884,-4.0017078 c -1.7454984,2.3720609 -1.7354408,5.6174519 -6e-7,8.035443 z"
-         transform="scale(-0.6,-0.6)" />
-    </marker>
-  </defs>
   <sodipodi:namedview
      id="base"
      pagecolor="#ffffff"
@@ -41,8 +24,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1"
-     inkscape:cx="227.21426"
-     inkscape:cy="36.285673"
+     inkscape:cx="18.214264"
+     inkscape:cy="72.285671"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -51,10 +34,27 @@
      fit-margin-right="0"
      fit-margin-bottom="0"
      inkscape:window-width="1362"
-     inkscape:window-height="725"
+     inkscape:window-height="724"
      inkscape:window-x="0"
      inkscape:window-y="20"
      inkscape:window-maximized="0" />
+  <defs
+     id="defs9580">
+    <marker
+       style="overflow:visible"
+       id="Arrow2Mend"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="Arrow2Mend">
+      <path
+         transform="scale(-0.6,-0.6)"
+         d="M 8.7185878,4.0337352 -2.2072895,0.01601326 8.7185884,-4.0017078 c -1.7454984,2.3720609 -1.7354408,5.6174519 -6e-7,8.035443 z"
+         style="fill-rule:evenodd;stroke-width:0.625;stroke-linejoin:round"
+         id="path3983"
+         inkscape:connector-curvature="0" />
+    </marker>
+  </defs>
   <metadata
      id="metadata9583">
     <rdf:RDF>
@@ -68,14 +68,14 @@
     </rdf:RDF>
   </metadata>
   <g
-     inkscape:label="Layer 1"
-     inkscape:groupmode="layer"
+     transform="translate(-356.78574,-424.64786)"
      id="layer1"
-     transform="translate(-147.78574,-424.64786)">
+     inkscape:groupmode="layer"
+     inkscape:label="Layer 1">
     <image
        y="424.64786"
-       x="147.78574"
-       id="image10241"
+       x="356.78574"
+       id="image4022"
        xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAKIAAACQCAYAAACLQLC9AAAABHNCSVQICAgIfAhkiAAAIABJREFU
 eJztnXd4HMXZwH+7V6U7tVO1erMt917ABVzANjiYZkggtJhQAqEFMCUhIeEDAoSWQEJxTA0tpsbY
 GNsYF9yr3CWr93I66XR12/eHbLnoJEuyZcu2fs/jZ+Xbmdl3Zt99d2b2fWcETgF1Gx68B0BnCL1c
@@ -327,13 +327,13 @@ zR4f7+wr8k/LLZdbfMkPMgra5GHBHX5EV+90q/UurWcNxHaiKCqyKlBe6y9Os3m7bOK4u9IuBSv/
 KPVmTRDnt7fQHXlebcV294FnP3Gc4Tta93CqaLela68y9ihhD52hQ6/c8o9Sb/5us/vfktLKSq+q
 pu0p8dW8+N/6mOOX1kMPh/l/e+9zP3qSIGwAAAAASUVORK5CYII=
 "
-       height="144"
-       width="162" />
+       preserveAspectRatio="none"
+       height="180"
+       width="202.5" />
     <path
-       style="color:#000000;fill:none;stroke:#000000;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;marker-end:url(#Arrow2Mend);visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
-       d="m 123,95 -4,55"
-       id="path9734"
        inkscape:connector-curvature="0"
-       transform="translate(117.78574,365.64786)" />
+       id="path9734"
+       d="m 473.78574,474.64786 -4,55"
+       style="color:#000000;display:inline;overflow:visible;visibility:visible;fill:none;stroke:#000000;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;marker-end:url(#Arrow2Mend);enable-background:accumulate" />
   </g>
 </svg>
