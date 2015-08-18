@@ -543,6 +543,7 @@ SpriteMorph.prototype.addCellularBlocks = function () {
         type: 'command',
         category: 'motion',
         spec: 'move to cell at cell x: %n cell y: %n',
+        defaults: [10, 10]
     };
     SpriteMorph.prototype.blocks.snapToCell = {
         type: 'command',
@@ -579,12 +580,14 @@ SpriteMorph.prototype.addCellularBlocks = function () {
         type: 'reporter',
         category: 'cells',
         spec: 'value of %clat at x: %n y: %n',
+        defaults: [null, 10, 10]
     };
 
     SpriteMorph.prototype.blocks.getCellAttributeCell = {
         type: 'reporter',
         category: 'cells',
         spec: 'value of %clat at cell x: %n cell y: %n',
+        defaults: [null, 10, 10]
     };
 
     SpriteMorph.prototype.blocks.getCellAttributeHere = {
@@ -615,48 +618,56 @@ SpriteMorph.prototype.addCellularBlocks = function () {
         type: 'command',
         category: 'cells',
         spec: 'set %clat at x: %n y: %n to %n',
+        defaults: [null, 10, 10, 0]
     };
 
     SpriteMorph.prototype.blocks.setCellAttributeCell = {
         type: 'command',
         category: 'cells',
         spec: 'set %clat at cell x: %n cell y: %n to %n',
+        defaults: [null, 10, 10, 0]
     };
 
     SpriteMorph.prototype.blocks.setCellAttributeHere = {
         type: 'command',
         category: 'cells',
         spec: 'set %clat here to %n',
+        defaults: [null, 0]
     };
 
     SpriteMorph.prototype.blocks.setCellAttributeEverywhere = {
         type: 'command',
         category: 'cells',
         spec: 'set %clat everywhere to %n',
+        defaults: [null, 0]
     };
 
     SpriteMorph.prototype.blocks.changeCellAttribute = {
         type: 'command',
         category: 'cells',
         spec: 'change %clat at x: %n y: %n by %n',
+        defaults: [null, 10, 10, 1]
     };
 
     SpriteMorph.prototype.blocks.changeCellAttributeCell = {
         type: 'command',
         category: 'cells',
         spec: 'change %clat at cell x: %n cell y: %n by %n',
+        defaults: [null, 10, 10, 1]
     };
 
     SpriteMorph.prototype.blocks.changeCellAttributeHere = {
         type: 'command',
         category: 'cells',
         spec: 'change %clat here by %n',
+        defaults: [null, 1]
     };
 
     SpriteMorph.prototype.blocks.changeCellAttributeEverywhere = {
         type: 'command',
         category: 'cells',
         spec: 'change %clat everywhere by %n',
+        defaults: [null, 1]
     };
 
     //objects
@@ -684,16 +695,19 @@ SpriteMorph.prototype.addCellularBlocks = function () {
         type: 'command',
         category: 'objects',
         spec: 'set var %s to %s in %obj',
+        defaults: ["varName", 0, null]
     };
     SpriteMorph.prototype.blocks.getVariable = {
         type: 'reporter',
         category: 'objects',
         spec: 'get var %s in %obj',
+        defaults: ["varName"]
     };
     SpriteMorph.prototype.blocks.changeVariable = {
         type: 'reporter',
         category: 'objects',
         spec: 'change var %s by %s in %obj',
+        defaults: ["varName", 1, null]
     };
     SpriteMorph.prototype.blocks.scaleToCellSize = {
         type: 'command',
@@ -759,16 +773,19 @@ SpriteMorph.prototype.addCellularBlocks = function () {
         type: 'command',
         category: 'objects',
         spec: 'move %obj to x: %n y: %n',
+        defaults: [null, 10, 10]
     };
     SpriteMorph.prototype.blocks.setObjectCellPosition = {
         type: 'command',
         category: 'objects',
         spec: 'move %obj to cell x: %n cell y: %n',
+        defaults: [null, 10, 10]
     };
     SpriteMorph.prototype.blocks.nearestObject = {
         type: 'reporter',
         category: 'objects',
         spec: 'nearest %cln to x: %n y: %n where %predRing',
+        defaults: [null, 10, 10, null]
     };
     SpriteMorph.prototype.blocks.asObject = {
         type: 'command',
@@ -786,11 +803,13 @@ SpriteMorph.prototype.addCellularBlocks = function () {
         type: 'arrow',
         category: 'neighbours',
         spec: 'object in cell cellX: %n cellY: %n',
+        defaults: [10, 10]
     };
     SpriteMorph.prototype.blocks.objectInCellReal = {
         type: 'arrow',
         category: 'neighbours',
         spec: 'object in cell x: %n y: %n',
+        defaults: [10, 10]
     };
     SpriteMorph.prototype.blocks.allObjectsInCellDir = {
         type: 'reporter',
@@ -801,11 +820,13 @@ SpriteMorph.prototype.addCellularBlocks = function () {
         type: 'reporter',
         category: 'neighbours',
         spec: 'objects in cell cellX: %n cellY: %n',
+        defaults: [10, 10]
     };
     SpriteMorph.prototype.blocks.allObjectsInCellReal = {
         type: 'reporter',
         category: 'neighbours',
         spec: 'objects in cell x: %n y: %n',
+        defaults: [10, 10]
     };
     SpriteMorph.prototype.blocks.allObjectsInNbrCells = {
         type: 'reporter',
