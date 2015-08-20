@@ -4355,26 +4355,36 @@ SpriteMorph.prototype.thumbnail = function (extentPoint) {
     answer a new Canvas of extentPoint dimensions containing
     my thumbnail representation keeping the originial aspect ratio
 */
-    var src = this.image, // at this time sprites aren't composite morphs
-        scale = Math.min(
-            (extentPoint.x / src.width),
-            (extentPoint.y / src.height)
-        ),
-        xOffset = (extentPoint.x - (src.width * scale)) / 2,
-        yOffset = (extentPoint.y - (src.height * scale)) / 2,
-        trg = newCanvas(extentPoint),
-        ctx = trg.getContext('2d');
+	if(this.costume && this.costume.is3D)
+	{
+		// tried a few things but couldn't get this to work... so leaving blank for now
+		var trg = newCanvas(extentPoint);
+		return trg;
 
-    ctx.save();
-    if (src.width && src.height) {
-        ctx.scale(scale, scale);
-        ctx.drawImage(
-            src,
-            Math.floor(xOffset / scale),
-            Math.floor(yOffset / scale)
-        );
-    }
-    return trg;
+	}
+	else
+	{
+		var src = this.image, // at this time sprites aren't composite morphs
+			scale = Math.min(
+				(extentPoint.x / src.width),
+				(extentPoint.y / src.height)
+			),
+			xOffset = (extentPoint.x - (src.width * scale)) / 2,
+			yOffset = (extentPoint.y - (src.height * scale)) / 2,
+			trg = newCanvas(extentPoint),
+			ctx = trg.getContext('2d');
+
+		ctx.save();
+		if (src.width && src.height) {
+			ctx.scale(scale, scale);
+			ctx.drawImage(
+				src,
+				Math.floor(xOffset / scale),
+				Math.floor(yOffset / scale)
+			);
+		}
+		return trg;
+	}
 };
 
 SpriteMorph.prototype.fullThumbnail = function (extentPoint) {
@@ -4960,6 +4970,10 @@ StageMorph.prototype.init3D = function () {
 StageMorph.prototype.get3dCanvas = function () {
     if (!this.canvas3D) {
         this.canvas3D = newCanvas(this.dimensions);
+        context = this.canvas3D.getContext("2d");
+        context.fillRect(0, 0, this.dimensions.x, this.dimensions.y);
+        context.fillStyle="rgba(0, 0, 200, 0)";
+        context.fill();
     }
     return this.canvas3D;
 };
