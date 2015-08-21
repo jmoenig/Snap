@@ -529,3 +529,8 @@ IDE_Morph.prototype.removeSprite = function (object) {
     this.killAllClones(object);
     return this.uberRemoveSprite(object);
 }
+
+// Remove this functionality because it does NOT work right now. I didn't realise this was possible
+// and I thought the dimensions of the stage were hardcoded somewhere. FIX ME.
+IDE_Morph.prototype.userSetStageSize = function () { };
+IDE_Morph.prototype._snapapps_showStageSizeOptions = false;

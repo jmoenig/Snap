@@ -2198,6 +2198,7 @@ IDE_Morph.prototype.cloudMenu = function () {
     menu.popup(world, pos);
 };
 
+IDE_Morph.prototype._snapapps_showStageSizeOptions = true;
 IDE_Morph.prototype.settingsMenu = function () {
     var menu,
         stage = this.stage,
@@ -2225,10 +2226,12 @@ IDE_Morph.prototype.settingsMenu = function () {
         'Zoom blocks...',
         'userSetBlocksScale'
     );
-    menu.addItem(
-        'Stage size...',
-        'userSetStageSize'
-    );
+    if (IDE_Morph.prototype._snapapps_showStageSizeOptions) {
+        menu.addItem(
+            'Stage size...',
+            'userSetStageSize'
+        );
+    }
     menu.addLine();
     addPreference(
         'Blurred shadows',
