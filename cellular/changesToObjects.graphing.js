@@ -67,7 +67,7 @@ DialogBoxMorph.prototype.plotGraph = function (
     
     var show = this.addButton(
         function () {
-            text = "time, value\n";
+            var text = "time, value\n";
             g.values.forEach(function (d) {
                 text += d.x + ", " + d.y + "\n";
             });

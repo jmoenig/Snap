@@ -3,8 +3,25 @@ module.exports = function(grunt) {
   var path = require('path');
   var rimraf = require('rimraf');
   
+  // Thanks to http://stackoverflow.com/a/2548133
+  String.prototype.endsWith = function(suffix) {
+      return this.indexOf(suffix, this.length - suffix.length) !== -1;
+  };
+  
+  function addD3Files(prefix, arrayToAddTo) {
+    return arrayToAddTo.concat([
+        prefix + 'd3.min.js', 
+        prefix + 'd3.min.js.LICENSE', 
+        prefix + 'nv.d3.min.js', 
+        prefix + 'nv.d3.min.css', 
+        prefix + 'nv.d3.min.LICENSE'
+    ]);
+  }
+  
   /**
-   * This function gets all script sources from HTML tags in exactly the following format: <script type="text/javascript" src="?"></script>
+   * This function gets all script sources from HTML tags in exactly the following format: 
+   * <script type="text/javascript" src="?"></script>
+   * Ignores files ending in .min.js
    */
   function getScripts(htmlFilename) {
       var htmlFile = fs.readFileSync(htmlFilename);
@@ -14,7 +31,9 @@ module.exports = function(grunt) {
 	  var result;
 	  while ((result = regex.exec(htmlFile)) !== null)
 	  {
-	    scriptsArray.push(result[1]);
+	    if (!result[1].endsWith(".min.js")) {
+	      scriptsArray.push(result[1]);
+	    }
       }
 	  return scriptsArray;
   }
@@ -25,13 +44,10 @@ module.exports = function(grunt) {
   
   //To avoid tonnes of repetition, this creates the configuration object that creates a zip of a program.
   //It simply sets the zip output name to 'build/xxx.zip' and includes all files from the base + 'xxx.html', 'xxx_logo_sm.png' and (if usesExtraJs) 'js/xxx.min.js'
-  function makeCompressObject(name, usesExtraJs)
+  function makeCompressObject(name, extraFiles)
   {
     var inputArray = ['help/*.png', 'click.wav', 'js/base.min.js', name + '.html', name + '_logo_sm.png'];
-	if (usesExtraJs)
-	{
-		inputArray.push('js/' + name + '.min.js');
-	}
+    Array.prototype.push.apply(inputArray, extraFiles);
 	return {
 		options: {
 		  archive: 'build/'+name+'.zip'
@@ -89,6 +105,7 @@ module.exports = function(grunt) {
     uglify: {
 	  'all': {
 		  options: {
+		      screwIE8: true,
 		  },
 		  files: filesObject,
 		}
@@ -122,9 +139,9 @@ module.exports = function(grunt) {
 		  },
 		]
 	  },
-	 'cellular': makeCompressObject('cellular', true),
-	 'scribble': makeCompressObject('scribble', false),
-	 'ardrone': makeCompressObject('ardrone', true),
+	 'cellular': makeCompressObject('cellular', addD3Files("", ['js/cellular.min.js'])),
+	 'scribble': makeCompressObject('scribble', []),
+	 'ardrone': makeCompressObject('ardrone', ['js/ardrone.min.js']),
 	 'ardrone-server': {
 		options: {
 		  archive: 'build/ardrone-server.zip'
@@ -140,22 +157,23 @@ module.exports = function(grunt) {
 	}
   });
   
-  //Copy all the logo files into the output directory
-  grunt.registerTask('copyLogos', 'Copy files', function() {
-	copyFiles = [
+  // Copy all the extra files into the output directory
+  grunt.registerTask('copyExtras', 'Copy files', function() {
+	copyFiles = addD3Files("cellular/", [
 		'cellular_logo_sm.png',
 		'scribble_logo_sm.png',
 		'ardrone_logo_sm.png',
 		'click.wav',
-	];
+	]);
 	copyFiles.forEach(function(value) {
 		var log = grunt.log.write('Copying file ' + value + '... ');
-		copyFile(value, 'build/html/' + value);
+		var to = value.substring(value.lastIndexOf("/") + 1);
+		copyFile(value, 'build/html/' + to);
 		log.ok();
 	});
   });
   
-  //Removes and re-creates the build directory
+  // Removes and re-creates the build directory
   grunt.registerTask('clean', 'Clean build', function() {
 	rimraf.sync('build');
 	fs.mkdirSync('build');
@@ -167,5 +185,5 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-compress');
 
   // Default task(s).
-  grunt.registerTask('default', ['clean', 'uglify', 'copy', 'copyLogos', 'compress']);
+  grunt.registerTask('default', ['clean', 'uglify', 'copy', 'copyExtras', 'compress']);
 };
