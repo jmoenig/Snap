@@ -1,27 +1,27 @@
 /*
 
-    lang-de.js
+	lang-de.js
 
-    German translation for SNAP!
+	German translation for SNAP!
 
-    written by Jens Mönig
+	written by Jens Mönig
 
-    Copyright (C) 2014 by Jens Mönig
+	Copyright (C) 2012 by Jens Mönig
 
-    This file is part of Snap!.
+	This file is part of Snap!.
 
-    Snap! is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License as
-    published by the Free Software Foundation, either version 3 of
-    the License, or (at your option) any later version.
+	Snap! is free software: you can redistribute it and/or modify
+	it under the terms of the GNU Affero General Public License as
+	published by the Free Software Foundation, either version 3 of
+	the License, or (at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU Affero General Public License for more details.
 
-    You should have received a copy of the GNU Affero General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+	You should have received a copy of the GNU Affero General Public License
+	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 
@@ -166,7 +166,7 @@
 
 /*global SnapTranslator*/
 
-SnapTranslator.dict.de = {
+SnapTranslator.dict.tr = {
 
 /*
     Special characters: (see <http://0xcc.net/jsescape/>)
@@ -179,79 +179,79 @@ SnapTranslator.dict.de = {
 
     // translations meta information
     'language_name':
-        'Deutsch', // the name as it should appear in the language menu
+        'Türkçe', // the name as it should appear in the language menu
     'language_translator':
-        'Jens M\u00F6nig', // your name for the Translators tab
+        'Hakan Atas', // your name for the Translators tab
     'translator_e-mail':
-        'jens@moenig.org', // optional
+        'hakanatas@gmail.com', // optional
     'last_changed':
-        '2015-08-06', // this, too, will appear in the Translators tab
+        '2015-7-26', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
     'untitled':
-        'Unbenannt',
+        'adsız',
     'development mode':
-        'Hackermodus',
+        'geliştirici modu',
 
     // categories:
     'Motion':
-        'Bewegung',
+        'Hareket',
     'Looks':
-        'Aussehen',
+        'Görünümler',
     'Sound':
-        'Klang',
+        'Ses',
     'Pen':
-        'Stift',
+        'Kalem',
     'Control':
-        'Steuerung',
+        'Kontrol',
     'Sensing':
-        'F\u00fchlen',
+        'Algılama',
     'Operators':
-        'Operatoren',
+        'İşlemler',
     'Variables':
-        'Variablen',
+        'Değişkenler',
     'Lists':
-        'Listen',
+        'Listeler',
     'Other':
-        'Andere',
+        'Diğerleri',
 
     // editor:
     'draggable':
-        'greifbar',
+        'sürüklenebilir',
 
     // tabs:
     'Scripts':
-        'Skripte',
+        'Betikler',
     'Costumes':
-        'Kost\u00fcme',
+        'Kostümler',
     'Sounds':
-        'Kl\u00e4nge',
+        'Sesler',
 
     // names:
     'Sprite':
-        'Objekt',
+        'Karakter',
     'Stage':
-        'B\u00fchne',
+        'Sahne',
 
     // rotation styles:
     'don\'t rotate':
-        'nicht drehbar',
+        'dönebilir',
     'can rotate':
-        'frei drehbar',
+        'dönemez',
     'only face left/right':
-        'kann sich nur nach\nlinks/rechts drehen',
+        'sadece sağa/sola dönebilir',
 
     // new sprite button:
     'add a new sprite':
-        'ein neues Objekt\nhinzuf\u00fcgen',
+        'yeni bir karakter ekle',
 
     // tab help
     'costumes tab help':
-        'Bilder durch hereinziehen von einer anderen\n'
-            + 'Webseite or vom Computer importieren',
+        'kostüm sekmesi yardımı',
     'import a sound from your computer\nby dragging it into here':
-        'Kl\u00e4nge durch hereinziehen importieren',
+        'bilgisayarınızdan bir sesi\n'
+            + 'buraya sürükleyerek içeri aktarın',
 
     // primitive blocks:
 
@@ -287,886 +287,857 @@ SnapTranslator.dict.de = {
 
     // motion:
     'Stage selected:\nno motion primitives':
-        'B\u00fchne ausgew\u00e4hlt:\nkeine Standardbewegungsbl\u00f6cke\n'
-            + 'vorhanden',
-
+        'Seçili sahne:\nhareket temelleri yok',
     'move %n steps':
-        'gehe %n Schritte',
+        '%n adım git',
     'turn %clockwise %n degrees':
-        'drehe %clockwise %n Grad',
+        '%clockwise yönünde %n derece dön',
     'turn %counterclockwise %n degrees':
-        'drehe %counterclockwise %n Grad',
+        '%counterclockwise yönünde %n derece dön',
     'point in direction %dir':
-        'zeige Richtung %dir',
+        '%dir yönüne dön',
     'point towards %dst':
-        'zeige auf %dst',
+        '%dst e doğru dön',
     'go to x: %n y: %n':
-        'gehe zu x: %n y: %n',
+        'x: %n y: %n git',
     'go to %dst':
-        'gehe zu %dst',
+        '%dst git',
     'glide %n secs to x: %n y: %n':
-        'gleite %n Sek. zu x: %n y: %n',
+        'x: %n y: %n noktasına %n saniyede süzül',
     'change x by %n':
-        '\u00e4ndere x um %n',
+        'x\'i %n değiştir',
     'set x to %n':
-        'setze x auf %n',
+        'x\'i %n ayarla',
     'change y by %n':
-        '\u00e4ndere y um %n',
+        'y\'i %n değiştir',
     'set y to %n':
-        'setze y auf %n',
+        'y\'i %n olarak ayarla',
     'if on edge, bounce':
-        'pralle vom Rand ab',
+        'kenardaysan sek',
     'x position':
-        'x-Position',
+        'x-pozisyonu',
     'y position':
-        'y-Position',
+        'y-pozisyonu',
     'direction':
-        'Richtung',
+        'doğrultu',
 
     // looks:
     'switch to costume %cst':
-        'ziehe Kost\u00fcm %cst an',
+        'kostümü %cst olarak değiştir',
     'next costume':
-        'n\u00e4chstes Kost\u00fcm',
+        'sonraki kostüm',
     'costume #':
-        'Kost\u00fcm Nr.',
+        'kostüm no:',
     'say %s for %n secs':
-        'sage %s f\u00fcr %n Sek.',
+        '%s saniye %n söyle',
     'say %s':
-        'sage %s',
+        '%s söyle',
     'think %s for %n secs':
-        'denke %s f\u00fcr %n Sek.',
+        '%s saniye %n diye düşün',
     'think %s':
-        'denke %s',
+        '%s diye düşün',
     'Hello!':
-        'Hallo!',
+        'Merhaba!',
     'Hmm...':
         'Hmm...',
     'change %eff effect by %n':
-        '\u00e4ndere %eff -Effekt um %n',
+        '%eff etkisini %n değiştir',
     'set %eff effect to %n':
-        'setze %eff -Effekt auf %n',
+        '%eff etkisini %n yap',
     'clear graphic effects':
-        'schalte Grafikeffekte aus',
+        'görsel etkileri temizle',
     'change size by %n':
-        '\u00e4ndere Gr\u00f6\u00dfe um %n',
+        'büyüklüğünü %n değiştir',
     'set size to %n %':
-        'setze Gr\u00f6\u00dfe auf %n %',
+        'büyüklüğü % %n yap',
     'size':
-        'Gr\u00f6\u00dfe',
+        'büyüklük',
     'show':
-        'anzeigen',
+        'göster',
     'hide':
-        'verstecken',
+        'gizle',
     'go to front':
-        'komme nach vorn',
+        'öne git',
     'go back %n layers':
-        'gehe %n Ebenen zur\u00fcck',
+        '%n katman alta in',
 
     'development mode \ndebugging primitives:':
-        'Hackermodus \nDebugging-Bl\u00f6cke',
+        'geliştirici modu \nhata ayıklama temelleri',
     'console log %mult%s':
-        'schreibe in die Konsole: %mult%s',
+        'log dosyasına yaz %mult%s',
     'alert %mult%s':
-        'Pop-up: %mult%s',
+        'uyarı: %mult%s',
 
     // sound:
     'play sound %snd':
-        'spiele Klang %snd',
+        '%snd sesini çal',
     'play sound %snd until done':
-        'spiele Klang %snd ganz',
+        '%snd sesini bitene kadar çal',
     'stop all sounds':
-        'stoppe alle Kl\u00e4nge',
+        'tüm sesleri durdur',
     'rest for %n beats':
-        'spiele Pause f\u00fcr %n Schl\u00e4ge',
+        '%n vuruş sus',
     'play note %n for %n beats':
-        'spiele Note %n f\u00fcr %n Schl\u00e4ge',
+        '%n notasını %n vuruş çal',
     'change tempo by %n':
-        '\u00e4ndere Tempo um %n',
+        'tempoyu %n değiştir',
     'set tempo to %n bpm':
-        'setze Tempo auf %n Schl\u00e4ge/Min.',
+        'tempoyu %n yap',
     'tempo':
-        'Tempo',
+        'tempo',
 
     // pen:
     'clear':
-        'wische',
+        'temizle',
     'pen down':
-        'Stift runter',
+        'kalemi bastır',
     'pen up':
-        'Stift hoch',
+        'kalemi kaldır',
     'set pen color to %clr':
-        'setze Stiftfarbe auf %clr',
+        'kalemin rengini %clr yap',
     'change pen color by %n':
-        '\u00e4ndere Stiftfarbe um %n',
+        'kalemin rengini %n değiştir',
     'set pen color to %n':
-        'setze Stiftfarbe auf %n',
+        'kalemin rengini %n yap',
     'change pen shade by %n':
-        '\u00e4ndere Farbst\u00e4rke um %n',
+        'kalemin tonunu %n değiştir',
     'set pen shade to %n':
-        'setze Farbst\u00e4rke auf %n',
+        'kalemin tonunu %n yap',
     'change pen size by %n':
-        '\u00e4ndere Stiftdicke um %n',
+        'kalemin kalınlığını %n değiştir',
     'set pen size to %n':
-        'setze Stiftdicke auf %n',
+        'kalemin kalınlığını %n yap',
     'stamp':
-        'stemple',
+        'damga',
 
     // control:
     'when %greenflag clicked':
-        'Wenn %greenflag angeklickt',
+        '%greenflag tıklanınca',
     'when %keyHat key pressed':
-        'Wenn Taste %keyHat gedr\u00fcckt',
-    'when I am %interaction':
-        'Wenn ich %interaction werde',
-    'clicked':
-        'angeklickt',
-    'pressed':
-        'gedr\u00fcckt',
-    'dropped':
-        'abgestellt',
-    'mouse-entered':
-        'vom Mauszeiger betreten',
-    'mouse-departed':
-        'vom Mauszeiger verlassen',
+        '%keyHat tuşu basılınca',
+    'when I am clicked':
+        'bu kukla tıklanınca',
     'when I receive %msgHat':
-        'Wenn ich %msgHat empfange',
+        '%msgHat haberi gelince',
     'broadcast %msg':
-        'sende %msg an alle',
+        '%msg yayımla',
     'broadcast %msg and wait':
-        'sende %msg an alle und warte',
+        '%msg yayımla ve bekle',
     'Message name':
-        'Nachricht',
+        'Mesaj adı',
     'message':
-        'Nachricht',
+        'mesaj',
     'any message':
-        'eine beliebige Nachricht',
+        'herhangi bir mesaj',
     'wait %n secs':
-        'warte %n Sek.',
+        '%n sn bekle',
     'wait until %b':
-        'warte bis %b',
+        '%b olana kadar bekle',
     'forever %c':
-        'fortlaufend %c',
+        'sürekli %c',
     'repeat %n %c':
-        'wiederhole %n mal %c',
+        '%n kere tekrarla %c',
     'repeat until %b %c':
-        'wiederhole bis %b %c',
+        '%b olana kadar tekrarla %c',
     'if %b %c':
-        'falls %b %c',
+        'eğer %b %c',
     'if %b %c else %c':
-        'falls %b %c sonst %c',
+        'eğer %b %c değilse %c',
     'report %s':
-        'berichte %s',
+        'rapor %s',
     'stop %stopChoices':
-        'stoppe %stopChoices',
+        'durdur %stopChoices',
     'all':
-        'alles',
+        'tümü',
     'this script':
-        'dieses Skript',
+        'bu script',
     'this block':
-        'diesen Block',
+        'bu blok',
     'stop %stopOthersChoices':
-        'stoppe %stopOthersChoices',
+        'durdur %stopOthersChoices',
     'all but this script':
-        'alles au\u00dfer diesem Skript',
+        'bu hariç diğerleri',
     'other scripts in sprite':
-        'andere Skripte in diesem Objekt',
+        'bu karakter içindeki diğer betikler',
     'pause all %pause':
-        'pausiere alles %pause',
+        'tümünü beklet %pause',
     'run %cmdRing %inputs':
-        'f\u00fchre %cmdRing aus %inputs',
+        'çalıştır %cmdRing  %inputs',
     'launch %cmdRing %inputs':
-        'starte %cmdRing %inputs',
+        'başlat %cmdRing %inputs',
     'call %repRing %inputs':
-        'rufe %repRing auf %inputs',
+        'çağır %repRing %inputs',
     'run %cmdRing w/continuation':
-        'f\u00fchre %cmdRing mit Continuation aus',
+        'çalıştır %cmdRing w/sürekli',
     'call %cmdRing w/continuation':
-        'rufe %cmdRing mit Continuation auf',
+        'çağır %cmdRing w/sürekli',
     'warp %c':
-        'Warp %c',
+        'çarpıtmak %c',
     'when I start as a clone':
-        'Wenn ich geklont werde',
+        'Klon olarak başlatığında',
     'create a clone of %cln':
-        'klone %cln',
+        '%cln klonunu oluştur',
     'myself':
-        'mich',
+        'kendim',
     'delete this clone':
-        'entferne diesen Klon',
+        'bu klonu sil',
 
     // sensing:
     'touching %col ?':
-        'ber\u00fchre %col ?',
+        '%col a değiyor mu?',
     'touching %clr ?':
-        'ber\u00fchre %clr ?',
+        '%clr rengine değiyor mu?',
     'color %clr is touching %clr ?':
-        'Farbe %clr ber\u00fchrt %clr ?',
+        '%clr rengi %clr rengine değdi mi?',
     'ask %s and wait':
-        'frage %s und warte',
+        '%s sor ve bekle',
     'what\'s your name?':
-        'Wie hei\u00dft Du?',
+        'adınız ne?',
     'answer':
-        'Antwort',
+        'cevap',
     'mouse x':
-        'Maus x-Position',
+        'Fare x-konumu',
     'mouse y':
-        'Maus y-Position',
+        'Fare y-konumu',
     'mouse down?':
-        'Maustaste gedr\u00fcckt?',
+        'fareye basılı mı?',
     'key %key pressed?':
-        'Taste %key gedr\u00fcckt?',
+        '%key tuşu basılı mı?',
     'distance to %dst':
-        'Entfernung von %dst',
+        '%dst a mesafe',
     'reset timer':
-        'starte Stoppuhr neu',
+        'zamanlayıcıyı sıfırla',
     'timer':
-        'Stoppuhr',
+        'zamanlayıcı',
     '%att of %spr':
-        '%att von %spr',
+        '%spr nun %att ',
     'http:// %s':
         'http:// %s',
     'turbo mode?':
-        'Turbomodus?',
+        'Turbomod?',
     'set turbo mode to %b':
-        'setze Turbomodus auf %b',
+        'turbo modu %b yap',
 
     'filtered for %clr':
-        'nach %clr gefiltert',
+        '%clr için filtrele',
     'stack size':
-        'Stapelgr\u00f6\u00dfe',
+        'yığın büyüklüğü',
     'frames':
-        'Rahmenz\u00e4hler',
+        'çerçeveler',
 
     // operators:
     '%n mod %n':
-        '%n modulo %n',
+        '%n mod %n',
     'round %n':
-        '%n gerundet',
+        '%n yuvarla',
     '%fun of %n':
-        '%fun von %n',
+        '%fun un %n si',
     'pick random %n to %n':
-        'Zufallszahl von %n bis %n',
+        '%n ile %n arasında rastgele bir sayı seç',
     '%b and %b':
-        '%b und %b',
+        '%b ve %b',
     '%b or %b':
-        '%b oder %b',
+        '%b veya %b',
     'not %b':
-        'nicht %b',
+        '%b değil',
     'true':
-        'wahr',
+        'doğru',
     'false':
-        'falsch',
+        'yanlış',
     'join %words':
-        'verbinde %words',
+        '%words birleştir',
     'split %s by %delim':
-        'trenne %s nach %delim',
+        'parçala ayır %s , %delim e gore',
     'hello':
-        'Hallo',
+        'merhaba',
     'world':
-        'Welt',
+        'dünya',
     'letter %n of %s':
-        'Zeichen %n von %s',
+        '%n in harfleri %s',
     'length of %s':
-        'L\u00e4nge von %s',
+        '%s in uzunluğu',
     'unicode of %s':
-        'Unicode Wert von %s',
+        '%s in unicode hali',
     'unicode %n as letter':
-        'Unicode %n als Buchstabe',
+        'harf olarak %n in unicode hali',
     'is %s a %typ ?':
-        'ist %s ein(e) %typ ?',
+        '%s bir %typ mi?',
     'is %s identical to %s ?':
-        'ist %s identisch mit %s ?',
+        '%s ile %s aynı mı?',
 
     'type of %s':
-        'Typ von %s',
+        '%s un tipi',
 
     // variables:
     'Make a variable':
-        'Neue Variable',
+        'Değişken oluştur',
     'Variable name':
-        'Variablenname',
+        'Değişken adı',
     'Script variable name':
-        'Skriptvariablenname',
+        'Script değişken adı',
     'Delete a variable':
-        'Variable l\u00f6schen',
+        'Değişkeni sil',
 
     'set %var to %s':
-        'setze %var auf %s',
+        '%var  %s olsun',
     'change %var by %n':
-        '\u00e4ndere %var um %n',
+        '%var i %n değiştir',
     'show variable %var':
-        'zeige Variable %var',
+        '%var değişkenini göster',
     'hide variable %var':
-        'verstecke Variable %var',
+        '%var değişkenini gizle',
     'script variables %scriptVars':
-        'Skriptvariablen %scriptVars',
+        '%scriptVars script değişkenleri',
 
     // lists:
     'list %exp':
         'Liste %exp',
     '%s in front of %l':
-        '%s am Anfang von %l',
+        '%s nin %l önündeki',
     'item %idx of %l':
-        'Element %idx von %l',
+        'item %idx of %l',
     'all but first of %l':
-        'alles au\u00dfer dem ersten von %l',
+        '%l in ilk elemanı hariç tümü',
     'length of %l':
-        'L\u00e4nge von %l',
+        '%l nin uzunluğu',
     '%l contains %s':
-        '%l enth\u00e4lt %s',
+        '%l %s i içeriyor',
     'thing':
-        'etwas',
+        'şey',
     'add %s to %l':
-        'f\u00fcge %s zu %l hinzu',
+        '%s i %l ye ekle',
     'delete %ida of %l':
-        'entferne %ida aus %l',
+        'sil %ida nın %l',
     'insert %s at %idx of %l':
-        'f\u00fcge %s als %idx in %l ein',
+        'ekle %s %idx indeksine %l listesinin',
     'replace item %idx of %l with %s':
-        'ersetze Element %idx in %l durch %s',
+        'yer değiştir %idx %l listesinin %s ile',
 
     // other
     'Make a block':
-        'Neuer Block',
+        'Yeni bir blok oluştur',
 
     // menus
     // snap menu
     'About...':
-        '\u00dcber Snap!...',
+        'Snap Hakkında!...',
     'Reference manual':
-        'Handbuch lesen',
+        'El kitapçığı',
     'Snap! website':
-        'Snap! Webseite',
+        'Snap! web sitesi',
     'Download source':
-        'Quellcode runterladen',
+        'Indirilebilir kaynak',
     'Switch back to user mode':
-        'zur\u00fcck zum Benutzermodus',
+        'Kullanıcı moduna geri dön',
     'disable deep-Morphic\ncontext menus\nand show user-friendly ones':
         'verl\u00e4sst Morphic',
     'Switch to dev mode':
-        'zum Hackermodus wechseln',
+        'geliştirici moduna dön',
     'enable Morphic\ncontext menus\nand inspectors,\nnot user-friendly!':
-        'erm\u00f6glicht Morphic Funktionen',
+        'etkinleştir Morfik\niçerik menüsü\nve gözlemleme\nkullanıcı dostu değil ',
 
     // project menu
     'Project notes...':
-        'Projektanmerkungen...',
+        'Proje notları...',
     'New':
-        'Neu',
+        'Yeni',
     'Open...':
-        '\u00d6ffnen...',
+        'Aç...',
     'Save':
-        'Sichern',
-    'Save to disk':
-        'Abpeichern',
-    'store this project\nin the downloads folder\n(in supporting browsers)':
-        'dieses Projekt herunterladen\nund lokal speichern\n'
-            + '(nicht von allen Browsern unters\u00fctzt)',
+        'Kaydet',
     'Save As...':
-        'Sichern als...',
+        'Farklı kaydet...',
     'Import...':
-        'Importieren...',
+        'İçeri aktar...',
     'file menu import hint':
-        'l\u00e4dt ein exportiertes Projekt,\neine Bibliothek mit '
-            + 'Bl\u00f6cken\n'
-            + 'ein Kost\u00fcm oder einen Klang',
+        'dosya menü içeri aktar ipucu',
     'Export project as plain text...':
-        'Projekt als normalen Text exportieren...',
+        'Düz metin olarak projeyi dışarı aktar...',
     'Export project...':
-        'Projekt exportieren...',
+        'Projeyi dışarı aktar...',
     'show project data as XML\nin a new browser window':
-        'zeigt das Projekt als XML\nin einem neuen Browserfenster an',
+        'Yeni bir pencerede\nproje verilerini XML olarak göster',
     'Export blocks...':
-        'Bl\u00f6cke exportieren...',
+        'Blokları dışarı aktar...',
     'show global custom block definitions as XML\nin a new browser window':
-        'zeigt globale Benutzerblockdefinitionen\nals XML im Browser an',
+        'blok tanımlarını XML dosyası olarak\nyeni bir pencerede göster',
     'Import tools':
-        'Tools laden',
+        'Araçları içeri aktar',
     'load the official library of\npowerful blocks':
-        'das offizielle Modul mit\nm\u00e4chtigen Bl\u00f6cken laden',
+        'güçlü blokların\nresmi kütüphanesini yükletin',
     'Libraries...':
-        'Module...',
+        'Kütüphaneler...',
     'Import library':
-        'Modul laden',
+        'Kütüphaneyi içeri aktar',
 
     // cloud menu
     'Login...':
-        'Anmelden...',
+        'Giriş yap...',
     'Signup...':
-        'Benutzerkonto einrichten...',
+        'Kayıt ol...',
 
     // settings menu
     'Language...':
-        'Sprache...',
+        'Dil...',
     'Zoom blocks...':
-        'Bl\u00f6cke vergr\u00f6\u00dfern...',
+        'Yaklaşma blokları...',
     'Stage size...':
-        'B\u00fchnengr\u00f6\u00dfe...',
+        'Sahne büyüklüğü...',
     'Stage size':
-        'B\u00fchnengr\u00f6\u00dfe',
+        'Sahne büyüküğü',
     'Stage width':
-        'B\u00fchnenbreite',
+        'Sahne genişliği',
     'Stage height':
-        'B\u00fchnenh\u00f6he',
+        'Sahne yüksekliği',
     'Default':
-        'Normal',
+        'Varsayılan',
     'Blurred shadows':
-        'Weiche Schatten',
+        'Bulanış gölgeler',
     'uncheck to use solid drop\nshadows and highlights':
-        'abschalten f\u00fcr harte Schatten\nund Beleuchtung',
+        'katı gölge ve ışıkları kullanmak için seçimi kaldırın',
     'check to use blurred drop\nshadows and highlights':
-        'einschalten f\u00fcr harte Schatten\nund Beleuchtung',
+        'gölge ve ışıkları bulanık hale getirmek için\nseçim yapın',
     'Zebra coloring':
-        'Zebrafarben',
+        'çizgili boyama',
     'check to enable alternating\ncolors for nested blocks':
-        'einschalten \u00fcr abwechselnde Farbnuancen\nin Bl\u00f6cken',
+        'iç içe bloklarda değişmeli renkler için\ntik atın',
     'uncheck to disable alternating\ncolors for nested block':
-        'ausschalten verhindert abwechselnde\nFarbnuancen in Bl\u00f6cken',
+        'iç içe bloklarda değişmeli renkleri\n kaldırmak için seçimi kaldırın',
     'Dynamic input labels':
-        'Eingabenbeschriftung',
+        'Dinamik girdi etiketleri',
     'uncheck to disable dynamic\nlabels for variadic inputs':
-        'ausschalten verhindert Beschriftung\nvon Mehrfacheingaben',
+        'farklı girdiler için dinamik etkiletlemeyi\nkaldırmak için seçimi kaldırın',
     'check to enable dynamic\nlabels for variadic inputs':
-        'einschalten um Mehrfacheingabefelder\nautomatisch zu beschriften',
+        'farklı girdiler için dinamik etkiletlemeyi\netkinleştirmek için seçimi kaldırın',
     'Prefer empty slot drops':
-        'Leere Platzhalter bevorzugen',
+        'Boş slotları tercih et',
     'settings menu prefer empty slots hint':
-        'einschalten um leere Platzhalter\nbeim Platzieren von Bl\u00f6cken'
-            + 'zu bevorzugen',
+        'boş slotlar için menü ayarları',
     'uncheck to allow dropped\nreporters to kick out others':
-        'ausschalten um das "Rauskicken"\nvon platzierten Bl\u00f6cken\n'
-            + 'zu erm\u00f6glichen',
+        'uncheck to allow dropped\nreporters to kick out others',
     'Long form input dialog':
-        'Ausf\u00fchrlicher Input-Dialog',
+        'girdi dialogları için uzun form',
     'Plain prototype labels':
-        'Einfache Prototyp-Beschriftung',
+        'Düz protatip etkiletleri',
     'uncheck to always show (+) symbols\nin block prototype labels':
-        'ausschalten, um (+) Zeichen\nim Blockeditor zu verbergen',
+        'prototip etiketinde (+) sembolünün\ngörünmesi için seçimi kaldırın',
     'check to hide (+) symbols\nin block prototype labels':
-        'einschalten, um (+) Zeichen\nim Blockeditor immer anzuzeigen',
+        'prototip etiketinde (+) sembolünün\ngizlenmesi için seçin',
     'check to always show slot\ntypes in the input dialog':
-        'einschalten, um immer die Datentypen\nim Input-Dialog zu sehen',
+        'girdi dialoglarında\ntipinin görünmesi için seçin',
     'uncheck to use the input\ndialog in short form':
-        'ausschalten f\u00fcr kurzen\nInput-Dialog',
+        'girdi dialoglarını kısa form\nolarak kullanmak için seçimi kaldırın',
     'Virtual keyboard':
-        'Virtuelle Tastatur',
+        'Sanal klavye',
     'uncheck to disable\nvirtual keyboard support\nfor mobile devices':
-        'ausschalten um die virtuelle\nTastatur auf mobilen Ger\u00e4ten\n'
-            + 'zu sperren',
+        'mobil araçlar için\nsanal klavye desteğini\nkaldırmak için seçimi kaldırın',
     'check to enable\nvirtual keyboard support\nfor mobile devices':
-        'einschalten um die virtuelle\nTastatur auf mobilen Ger\u00e4ten\n'
-            + 'zu erm\u00f6glichen',
+        'mobil araçlar için\nsanal klavye desteğini\naktifleştirmek için seçin',
     'Input sliders':
-        'Eingabeschieber',
+        'Girdi sürgüleri',
     'uncheck to disable\ninput sliders for\nentry fields':
-        'ausschalten um Schieber\nin Eingabefeldern zu verhindern',
+        'girdi alanlarındanki girdi sürgülerini etkisizleştirmek için seçimi kaldırın',
     'check to enable\ninput sliders for\nentry fields':
-        'einschalten um Schieber\nin Eingabefeldern zu aktivieren',
+        'girdi alanlarındanki girdi sürgülerini etkisizleştirmek için seçin',
     'Clicking sound':
-        'Akustisches Klicken',
+        'Sesi tıklayın',
     'uncheck to turn\nblock clicking\nsound off':
-        'ausschalten um akustisches\nKlicken zu deaktivieren',
+        'sesi kapatmak için\nseçimi kaldırın',
     'check to turn\nblock clicking\nsound on':
-        'einschalten um akustisches\nKlicken zu aktivieren',
+        'sesi açmak için\nseçim yapın',
     'Animations':
-        'Animationen',
+        'Animasyonlar',
     'uncheck to disable\nIDE animations':
-        'ausschalten um IDE-\nAnimationen zu verhindern',
+        'animasyonları etkisezliştirmek için\nseçimi kaldırın',
     'Turbo mode':
-        'Turbomodus',
+        'Turbo Mod',
     'check to prioritize\nscript execution':
-        'einschalten, um Skripte\nzu priorisieren',
+        'Betikleme çalışmasına öncelik\nvermek için seçim yapın',
     'uncheck to run scripts\nat normal speed':
-        'ausschalten, um Skripte\nnormal auszuf\u00fchren',
+        'betiklemelerin normal hızla çalışması\niçin seçimi kaldırın',
     'check to enable\nIDE animations':
-        'einschalten um IDE-\nAnimationen zu erlauben',
-    'Flat design':
-        'Helles Design',
-    'Keyboard Editing':
-        'Tastaturunterstützung',
+        'IDE animasyonlarını\naktifleştirmek için seçim yapın',
     'Thread safe scripts':
-        'Threadsicherheit',
+        'Güvenli betik parçacığı',
     'uncheck to allow\nscript reentrance':
-        'verhindert, dass unvollendete\nSkripte erneut gestartet werden',
+        'betiklemeye tekrar girişe\nizin vermek için seçimi kaldırın',
     'check to disallow\nscript reentrance':
-        'verhindert, dass unvollendete\nSkripte erneut gestartet werden',
+        'vbetiklemeye tekrar girişe\nizin vermemek için seçimi kaldırın',
     'Prefer smooth animations':
-        'Fixe Framerate',
+        'Pürüzsüz animayonu tercih et',
     'uncheck for greater speed\nat variable frame rates':
-        'ausschalten, um Animationen \ndynamischer auszuf\u00fchren',
+        'çerçevelerin daha hızlanması\niçin seçimi kaldırın',
     'check for smooth, predictable\nanimations across computers':
-        'einschalten, damit Animationen\n\u00fcberall gleich laufen',
+        'bilgisayarlar arası düz,tahmin edilebilir\nanimasyonlar için seçim yapın',
     'Flat line ends':
-        'Flache Pinselstriche',
+        'Düz çizgi bitimleri',
     'check for flat ends of lines':
-        'einschalten f\u00fcr flache\nPinselstrichenden',
+        'düz biten bitim çizgileri\niçin seçin',
     'uncheck for round ends of lines':
-        'auschalten f\u00fcr runde\nPinselstrichenden',
-    'Inheritance support':
-        'Prototypische Vererbung',
+        'yumuşak köşeli bitim çizgileri\niçin seçimi kaldırın',
 
     // inputs
     'with inputs':
-        'mit Eingaben',
+        'girdi ile',
     'input names:':
-        'Eingaben:',
+        'girdi isimleri:',
     'Input Names:':
-        'Eingaben:',
+        'girdi isimleri:',
     'input list:':
-        'Eingabeliste:',
+        'girdi listesi:',
 
     // context menus:
     'help':
-        'Hilfe',
+        'yardım',
 
     // palette:
     'hide primitives':
-        'Basisbl\u00f6cke ausblenden',
+        'primitifleri gizle',
     'show primitives':
-        'Basisbl\u00f6cke anzeigen',
+        'primitifleri göster',
 
     // blocks:
     'help...':
-        'Hilfe...',
+        'yardım...',
     'relabel...':
-        'Umbenennen...',
+        'yeniden adlandır...',
     'duplicate':
-        'Duplizieren',
+        'kopyala',
     'make a copy\nand pick it up':
-        'eine Kopie aufnehmen',
+        'kopya oluştur\nve onu al',
     'only duplicate this block':
-        'nur diesen Block duplizieren',
+        'sadece bu bloğun kopyasını oluştur',
     'delete':
-        'L\u00f6schen',
+        'sil',
     'script pic...':
-        'Skriptbild...',
+        'betik resmi...',
     'open a new window\nwith a picture of this script':
-        'ein neues Browserfenster mit einem\nBild dieses Skripts \u00f6ffnen',
+        'bu betiğin resmini\n yeni bir pencerede açın',
     'ringify':
-        'Umringen',
+        'ringify',
     'unringify':
-        'Entringen',
+        'unringify',
 
     // custom blocks:
     'delete block definition...':
-        'Blockdefinition l\u00f6schen',
+        'blok tanımlarını sil...',
     'edit...':
-        'Bearbeiten...',
+        'düzenle...',
 
     // sprites:
     'edit':
-        'Bearbeiten',
+        'düzenle',
     'move':
-        'Verschieben',
+        'hareket et',
     'detach from':
-        'Abtrennen von',
+        'parçayı ayır',
     'detach all parts':
-        'Alle Teile abtrennen',
+        'tüm parçaları ayır',
     'export...':
-        'Exportieren...',
+        'dşıarı aktar...',
 
     // stage:
     'show all':
-        'Alles zeigen',
+        'hepsini göster',
     'pic...':
-        'Bild exportieren...',
+        'resimler...',
     'open a new window\nwith a picture of the stage':
-        'ein neues Browserfenster mit einem\nBild der B\u00fchne \u00f6ffnen',
+        'sahnenin bir resmi ile\n yeni bir pence aç',
 
     // scripting area
     'clean up':
-        'Aufr\u00e4umen',
+        'temizle',
     'arrange scripts\nvertically':
-        'Skripte der Reihe nach\nanordnen',
+        'scriptleri dikey olarak düzenle',
     'add comment':
-        'Anmerkung hinzuf\u00fcgen',
+        'yorum ekle',
     'undrop':
-        'R\u00fcckg\u00e4ngig',
+        'bırak',
     'undo the last\nblock drop\nin this pane':
-        'Setzen des letzten Blocks\nwiderrufen',
+        'levhaya bıraktığın\n son bloğu geri al',
     'scripts pic...':
-        'Bild aller Scripte...',
+        'script resimleri...',
     'open a new window\nwith a picture of all scripts':
-        'ein neues Browserfenster mit einem\nBild aller Skripte \u00f6ffnen',
+        'tüm scriptleri bir resim ile\n yeni bir pencerede aç',
     'make a block...':
-        'Neuen Block bauen...',
+        'bir blok oluştur...',
 
     // costumes
     'rename':
-        'Umbenennen',
+        'yeniden adlandır',
     'export':
-        'Exportieren',
+        'dışarı aktar',
     'rename costume':
-        'Kost\u00fcm umbenennen',
+        'Köstümü yeniden adlandır',
 
     // sounds
     'Play sound':
-        'Klang\nabspielen',
+        'Sesi oynat',
     'Stop sound':
-        'Klang\nanhalten',
+        'Sesi durdur',
     'Stop':
-        'Halt',
+        'Durdur',
     'Play':
-        'Los',
+        'Oyna',
     'rename sound':
-        'Klang umbenennen',
+        'sesi yeniden adlandır',
 
     // dialogs
     // buttons
     'OK':
-        'OK',
+        'TAMAM',
     'Ok':
-        'OK',
+        'Tamam',
     'Cancel':
-        'Abbrechen',
+        'İptal',
     'Yes':
-        'Ja',
+        'Evet',
     'No':
-        'Nein',
+        'Hayır',
 
     // help
     'Help':
-        'Hilfe',
+        'Yardım',
 
     // zoom blocks
     'Zoom blocks':
-        'Bl\u00f6cke vergr\u00f6\u00dfern',
+        'Yakınlaştırma blokları',
     'build':
-        'baue',
+        'inşaa et',
     'your own':
-        'eigene',
+        'kendinizin',
     'blocks':
-        'Bl\u00f6cke',
+        'blokları',
     'normal (1x)':
         'normal (1x)',
     'demo (1.2x)':
         'Demo (1.2x)',
     'presentation (1.4x)':
-        'Pr\u00e4sentation (1.4x)',
+        'Sunum (1.4x)',
     'big (2x)':
-        'gro\u00df (2x)',
+        'büyük (2x)',
     'huge (4x)':
-        'riesig (4x)',
+        'kocaman (4x)',
     'giant (8x)':
-        'gigantisch (8x)',
+        'devasa (8x)',
     'monstrous (10x)':
-        'ungeheuerlich (10x)',
+        'çok büyük (10x)',
 
     // Project Manager
     'Untitled':
-        'Unbenannt',
+        'Adsız',
     'Open Project':
-        'Project \u00f6ffnen',
+        'Projec aç',
     '(empty)':
-        '(leer)',
+        '(boş)',
     'Saved!':
-        'Gesichert!',
+        'Kaydedildi!',
     'Delete Project':
-        'Projekt l\u00f6schen',
+        'Projeyi sil',
     'Are you sure you want to delete':
-        'Wirklich l\u00f6schen?',
+        'Silmek istediğinize emin misiniz?',
     'rename...':
-        'Umbenennen...',
+        'yeniden adlandır...',
 
     // costume editor
     'Costume Editor':
-        'Kost\u00fcmeditor',
+        'Kostüm editörü',
     'click or drag crosshairs to move the rotation center':
-        'Fadenkreuz anklicken oder bewegen um den Drehpunkt zu setzen',
+        'dönme merkezini hareket ettirmek için referans noktasına tıklayın ya da sürükleyin',
 
     // project notes
     'Project Notes':
-        'Projektanmerkungen',
+        'Proje Notları',
 
     // new project
     'New Project':
-        'Neues Projekt',
+        'Yeni proje',
     'Replace the current project with a new one?':
-        'Das aktuelle Projekt durch ein neues ersetzen?',
+        'Şu an ki projeyi yenisiyle değiştirelim mi?',
 
     // save project
     'Save Project As...':
-        'Projekt Sichern Als...',
+        'Projeyi farklı kaydet...',
 
     // export blocks
     'Export blocks':
-        'Bl\u00f6cke exportieren',
+        'Blokları dışarı aktar',
     'Import blocks':
-        'Bl\u00f6cke importieren',
+        'Blokları içeri aktar',
     'this project doesn\'t have any\ncustom global blocks yet':
-        'in diesem Projekt gibt es noch keine\nglobalen Bl\u00f6cke',
+        'bu proje henüz herhangi bir global blok içermiyor',
     'select':
-        'ausw\u00e4hlen',
+        'seç',
     'none':
-        'nichts',
+        'hiçbiri',
 
     // variable dialog
     'for all sprites':
-        'f\u00fcr alle',
+        'tüm karakterler için',
     'for this sprite only':
-        'nur f\u00fcr dieses Objekt',
+        'sadece bu karakter için',
 
     // block dialog
     'Change block':
-        'Block ver\u00e4ndern',
+        'Bloğu değiştir',
     'Command':
-        'Befehl',
+        'Komut',
     'Reporter':
-        'Funktion',
+        'Fonksiyon',
     'Predicate':
-        'Pr\u00e4dikat',
+        'Beyan etme',
 
     // block editor
     'Block Editor':
-        'Blockeditor',
+        'Blok Editörü',
     'Apply':
-        'Anwenden',
+        'Uygula',
 
     // block deletion dialog
     'Delete Custom Block':
-        'Block L\u00f6schen',
+        'Bloğu Sil',
     'block deletion dialog text':
-        'Soll dieser Block mit allen seinen Exemplare\n' +
+        'BSoll dieser Block mit allen seinen Exemplare\n' +
             'wirklich gel\u00f6scht werden?',
 
     // input dialog
     'Create input name':
-        'Eingabe erstellen',
+        'Girdi oluştur',
     'Edit input name':
-        'Eingabe bearbeiten',
+        'Girdiyi düzenle',
     'Edit label fragment':
-        'Beschriftung bearbeiten',
+        'Etiketi düzenle',
     'Title text':
-        'Beschriftung',
+        'Başlık',
     'Input name':
-        'Eingabe',
+        'Girdi Adı',
     'Delete':
-        'L\u00f6schen',
+        'Sil',
     'Object':
-        'Objekt',
+        'Obje',
     'Number':
-        'Zahl',
+        'Sayı',
     'Text':
-        'Text',
+        'Metin',
     'List':
         'Liste',
     'Any type':
-        'Beliebig',
+        'Herhangi bir tip',
     'Boolean (T/F)':
-        'Boolsch (W/F)',
+        'Mantıksal (D/Y)',
     'Command\n(inline)':
-        'Befehl',
+        'Komut',
     'Command\n(C-shape)':
-        'Befehl\n(C-Form)',
+        'Komut\n(C-Şenlinde)',
     'Any\n(unevaluated)':
-        'Beliebig\n(zitiert)',
+        'Herhangi\n(değerlendirilmemiş)',
     'Boolean\n(unevaluated)':
-        'Boolsch\n(zitiert)',
+        'Mantıksal\n(değerlendirilmemiş)',
     'Single input.':
-        'Einzeleingabe.',
+        'Tek girdi.',
     'Default Value:':
-        'Standardwert:',
+        'Varsayılan değer:',
     'Multiple inputs (value is list of inputs)':
-        'Mehrere Eingaben (als Liste)',
+        'Çoklu girdi (liste olarak)',
     'Upvar - make internal variable visible to caller':
-        'Interne Variable au\u00dfen sichtbar machen',
+        'İç değişkeni çağırıcıya görünür kıl',
 
     // About Snap
     'About Snap':
-        '\u00dcber Snap',
+        'Snap hakkında',
     'Back...':
-        'Zur\u00fcck...',
+        'Geriye...',
     'License...':
-        'Lizenz...',
+        'Lisans...',
     'Modules...':
         'Komponenten...',
     'Credits...':
-        'Mitwirkende...',
+        'Katkıda bulunanlar...',
     'Translators...':
-        '\u00dcbersetzer',
+        'Çevirmenler...',
     'License':
-        'Lizenz',
+        'Lisans',
     'current module versions:':
-        'Komponenten-Versionen',
+        'Şu anki versiyonlar',
     'Contributors':
-        'Mitwirkende',
+        'Katkıda bulunanlar',
     'Translations':
-        '\u00dcbersetzungen',
+        'Çeviriler',
 
     // variable watchers
     'normal':
         'normal',
     'large':
-        'gro\u00df',
+        'geniş',
     'slider':
-        'Regler',
+        'sürgü',
     'slider min...':
-        'Minimalwert...',
+        'sürgü en düşük...',
     'slider max...':
-        'Maximalwert...',
+        'sürgü en yüksek...',
     'import...':
-        'Importieren...',
+        'içeri aktar...',
     'Slider minimum value':
-        'Minimalwert des Reglers',
-    'Slider maximum value':
-        'Maximalwert des Reglers',
+        'Sürgünün en düşük değeri',
+	'Slider maximum value':
+        'Sürgünün en yüksek değeri',
 
     // list watchers
     'length: ':
-        'L\u00e4nge: ',
+        'uzunluk: ',
 
     // coments
     'add comment here...':
-        'Anmerkung hier hinzuf\u00fcgen',
+        '.. buraya yorum ekle',
 
     // drow downs
     // directions
     '(90) right':
-        '(90) rechts',
+        '(90) sağ',
     '(-90) left':
-        '(-90) links',
+        '(-90) sol',
     '(0) up':
-        '(0) oben',
+        '(0) yukarı',
     '(180) down':
-        '(180) unten',
+        '(180) aşağı',
 
     // collision detection
     'mouse-pointer':
-        'Mauszeiger',
-    'edge':
-        'Kante',
+        'Fare-İşaretçisi',
+    'corner':
+        'kenar',
     'pen trails':
         'Malspuren',
 
     // costumes
     'Turtle':
-        'Richtungszeiger',
+        'Kaplumbağa',
     'Empty':
-        'Leer',
+        'Boş',
 
     // graphical effects
     'brightness':
-        'Helligeit',
+        'parlaklık',
     'ghost':
-        'Durchsichtigkeit',
+        'hayalet',
     'negative':
-        'Farbumkehr',
+        'negatif',
     'comic':
-        'Moire',
+        'komik',
     'confetti':
-        'Farbverschiebung',
+        'konfeti',
 
     // keys
     'space':
-        'Leertaste',
+        'boşluk',
     'up arrow':
-        'Pfeil nach oben',
+        'yukarı ok',
     'down arrow':
-        'Pfeil nach unten',
+        'aşağı ok',
     'right arrow':
-        'Pfeil nach rechts',
+        'sol ok',
     'left arrow':
-        'Pfeil nach links',
+        'sağ ok',
     'a':
         'a',
     'b':
@@ -1242,15 +1213,15 @@ SnapTranslator.dict.de = {
 
     // messages
     'new...':
-        'Neu...',
+        'yeni...',
 
     // math functions
     'abs':
-        'Betrag',
+        'MutlakDeğer',
     'floor':
-        'Abgerundet',
+        'alt değer',
     'sqrt':
-        'Wurzel',
+        'Karekök',
     'sin':
         'sin',
     'cos':
@@ -1270,35 +1241,35 @@ SnapTranslator.dict.de = {
 
     // delimiters
     'letter':
-        'Buchstabe',
+        'harf',
     'whitespace':
-        'Leerraum',
+        'alfabe dışı',
     'line':
-        'Zeilenvorschub',
+        'çizgi',
     'tab':
-        'Tabulator',
+        'sekme',
     'cr':
-        'Wagenr\u00fccklauf',
+        'karakter',
 
     // data types
     'number':
-        'Zahl',
+        'sayı',
     'text':
-        'Text',
+        'metin',
     'Boolean':
-        'Boole',
+        'mantıksal',
     'list':
         'Liste',
     'command':
-        'Befehlsblock',
+        'komut',
     'reporter':
-        'Funktionsblock',
+        'fonksiyonlar',
     'predicate':
-        'Pr\u00e4dikat',
+        'ön ek',
 
     // list indices
     'last':
-        'letztes',
+        'son',
     'any':
-        'beliebiges'
+        'herhangi'
 };

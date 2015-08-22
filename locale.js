@@ -42,7 +42,7 @@
 
 /*global modules, contains*/
 
-modules.locale = '2015-May-18';
+modules.locale = '2015-August-06';
 
 // Global stuff
 
@@ -149,7 +149,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org',
     'last_changed':
-        '2015-02-23'
+        '2015-08-06'
 };
 
 SnapTranslator.dict.it = {
@@ -209,7 +209,7 @@ SnapTranslator.dict.pt = {
     'translator_e-mail':
         'mmsequeira@gmail.com',
     'last_changed':
-        '2015-05-04'
+        '2015-08-02'
 };
 
 SnapTranslator.dict.cs = {
@@ -257,7 +257,7 @@ SnapTranslator.dict.fr = {
     'translator_e-mail':
         'i.scool@mac.com',
     'last_changed':
-        '2014-02-04'
+        '2015-06-25'
 };
 
 SnapTranslator.dict.si = {
@@ -317,7 +317,7 @@ SnapTranslator.dict.pl = {
     'translator_e-mail':
         'witek@oeiizk.waw.pl',
     'last_changed':
-        '2013-08-05'
+        '2015-08-06'
 };
 
 SnapTranslator.dict.tw = {
@@ -474,4 +474,40 @@ SnapTranslator.dict.te = {
         'vnkmr7620@gmail.com', // optional
     'last_changed':
         '2015-02-20'
+};
+
+SnapTranslator.dict.tr = {
+    // translations meta information
+    'language_name':
+        'Türkçe',
+    'language_translator':
+        'Hakan Atas',
+    'translator_e-mail':
+        'hakanatas@gmail.com',
+    'last_changed':
+        '2015-7-27'
+};
+
+SnapTranslator.dict.hu = {
+    // translations meta information
+    'language_name':
+        'Magyar',
+    'language_translator':
+        'Makány György',
+    'translator_e-mail':
+        'makany.gyorgy@gmail.com',
+    'last_changed':
+        '2015-07-27'
+};
+
+SnapTranslator.dict.ia = {
+    // translations meta information
+    'language_name':
+        'Interlingua',
+    'language_translator':
+        'Ken Dickey',
+    'translator_e-mail':
+        'Ken.Dickey@whidbey.com',
+    'last_changed':
+        '2015-08-09'
 };

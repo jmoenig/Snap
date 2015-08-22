@@ -185,7 +185,7 @@ SnapTranslator.dict.pt = {
     'translator_e-mail':
         'mmsequeira@gmail.com',
     'last_changed':
-        '2015-05-04',
+        '2015-08-02',
 
     // GUI
     // control bar:
@@ -1702,5 +1702,17 @@ SnapTranslator.dict.pt = {
             + 'nomes para os parâmetros (ignorando os nomes mostrados).',
     'Enter code that corresponds to the block\'s operation (usually a single\nfunction invocation). Use <#n> to reference actual arguments as shown.':
         'Introduza o código que corresponda à operação do bloco (normalmente uma simples\n'
-            + 'invocação de rotina). Use <#n> para referenciar os argumentos tal como mostrado'
+            + 'invocação de rotina). Use <#n> para referenciar os argumentos tal como mostrado',
+    'Keyboard Editing':
+        'Edição usando o teclado',
+    'uncheck to disable\nkeyboard editing support':
+        'Desassinalar para desactivar\na edição usando o teclado.',
+    'check to enable\nkeyboard editing support':
+        'Assinalar para activar\na edição usando o teclado.',
+    'Inheritance support':
+        'Suporte para herança',
+    'uncheck to disable\nsprite inheritance features':
+        'Desassinalar para desactivar\nfuncionalidades de herança de actores.',
+    'check for sprite\ninheritance features':
+        'Assinalar para activar\nfuncionalidades de herança de actores.'
 };

@@ -7,7 +7,7 @@
     written by Jens Mönig and Brian Harvey
     jens@moenig.org, bh@cs.berkeley.edu
 
-    Copyright (C) 2014 by Jens Mönig and Brian Harvey
+    Copyright (C) 2015 by Jens Mönig and Brian Harvey
 
     This file is part of Snap!.
 
@@ -61,7 +61,7 @@ PushButtonMorph, SyntaxElementMorph, Color, Point, WatcherMorph,
 StringMorph, SpriteMorph, ScrollFrameMorph, CellMorph, ArrowMorph,
 MenuMorph, snapEquals, Morph, isNil, localize, MorphicPreferences*/
 
-modules.lists = '2014-November-20';
+modules.lists = '2015-July-27';
 
 var List;
 var ListWatcherMorph;
@@ -158,9 +158,8 @@ List.prototype.add = function (element, index) {
     if no index is specifed, append the element
 */
     var idx = index || this.length() + 1,
-        obj = element === 0 ? 0
-                : element === false ? false
-                        : element || null;
+        obj = isNil(element) ? null : element;
+
     this.becomeArray();
     this.contents.splice(idx - 1, 0, obj);
     this.changed();
@@ -634,6 +633,7 @@ ListWatcherMorph.prototype.setStartIndex = function (index) {
 };
 
 ListWatcherMorph.prototype.fixLayout = function () {
+    if (!this.label) {return; }
     Morph.prototype.trackChanges = false;
     if (this.frame) {
         this.arrangeCells();

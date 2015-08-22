@@ -185,7 +185,7 @@ SnapTranslator.dict.fr = {
     'translator_e-mail':
         'i.scool@mac.com', // optional
     'last_changed':
-        '2014-02-04', // this, too, will appear in the Translators tab
+        '2015-06-25', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -392,7 +392,7 @@ SnapTranslator.dict.fr = {
     'clear':
         'effacer tout',
     'pen down':
-        'stylo en position d\u0027\u00EAcriture',
+        'stylo en position d\u0027\u00E9criture',
     'pen up':
         'relever le stylo',
     'set pen color to %clr':
@@ -419,6 +419,8 @@ SnapTranslator.dict.fr = {
         'Quand %keyHat est press\u00E9',
     'when I am clicked':
         'Quand je suis press\u00E9 ',
+	'when I am %interaction':
+		'Quand je suis %interaction',
     'when I receive %msgHat':
         'Quand je re\u00E7ois %msgHat',
     'broadcast %msg':
@@ -447,6 +449,10 @@ SnapTranslator.dict.fr = {
         'arr\u00EAter le bloc',
     'stop script':
         'arr\u00EAter le script',
+	'stop %stopOthersChoices':
+		'arr\u00EAter %stopOthersChoices',
+	'stop %stopChoices':
+		'arr\u00EAter %stopChoices',
     'stop all %stop':
         'arr\u00EAter tout %stop',
     'run %cmdRing %inputs':
@@ -469,8 +475,16 @@ SnapTranslator.dict.fr = {
         'moi-m\u00EAme',
     'delete this clone':
         'supprime ce clone',
-    'pause all':
-        'mettre en pause',
+    'pause all %pause':
+        'mettre en pause %pause',
+	'all but this script':
+		'tout sauf ce lutin',
+	'other scripts in sprite':
+		'les autres scripts de ce lutin',
+	'this script':
+		'ce script',
+	'this block':
+		'ce bloc',
         
      // sensing:
     'touching %col ?':
@@ -958,6 +972,8 @@ SnapTranslator.dict.fr = {
         'tabulations',
     'cr':
         'retours de ligne',
+	'letter':
+		'lettres',
 	
   // About Snap
     'About Snap':
@@ -1162,5 +1178,133 @@ SnapTranslator.dict.fr = {
     'last':
         'dernier',
     'any':
-        'n\u0027importe quel'
+        'n\u0027importe quel',
+
+	// miscellaneous
+	'find blocks...':
+		'chercher des blocs...',
+	'hide primitives':
+		'cacher les primitives',
+	'show primitives':
+		'montrer les primitives',
+	'Login...':
+		'Connexion...',
+	'Signup...':
+		'S\u0027enregistrer...',
+	'Reset Password...':
+		'Remise \u00E0 z\u00E9ro du mot de passe',
+	'show all':
+		'tout montrer',
+	'pic...':
+		'image...',
+	'open a new window\nwith a picture of the stage':
+		'ouvre une nouvelle fen\u00EAtre\navec une image de la sc\u00E8ne',
+	'scripts pic...':
+		'image des scripts...',
+	'open a new window\nwith a picture of all scripts':
+		'ouvre une nouvelle fen\u00EAtre\navec une image de tous les scripts',
+	'Stage size...':
+		'Taille de la sc\u00E8ne...',
+	'Zoom blocks...':
+		'Agrandir les blocs...',
+
+	'Plain prototype labels':
+		'\u00C9tiquettes simples de d\u00E9finition',
+	'uncheck to always show (+) symbols\nin block prototype labels':
+		'd\u00E9cocher pour montrer en permance le symbole (+)\ndans les \u00e9tiquettes de d\u00E9finition de bloc',
+	'check to hide (+) symbols\nin block prototype labels':
+		'cocher pour cacher le symbole (+)\ndans les \u00e9tiquettes de d\u00E9finition de bloc',
+
+	'check for flat ends of lines':
+		'cocher pour dessiner des fins de ligne plates',
+	'uncheck for round ends of lines':
+		'd\u00E9cocher pour dessiner des fins de lignes arrondies',
+	'Flat line ends':
+		'Fins de ligne plates',
+
+	'Codification support':
+		'Support de la \u00AB codification \u00BB',
+	'uncheck to disable\nblock to text mapping features':
+		'd\u00E9cocher pour d\u00E9activer\nla fonction de transformation :\nbloc vers texte',
+	'check for block\nto text mapping features':
+		'cocher pour activer\nla fonction de transformation :\nbloc vers texte',
+
+	'current %dates':
+		'date courante %dates',
+	'year':'ann\u00E9e',
+	'month':'mois',
+	'date':'jour',
+	'hour':'heure',
+	'minute':'minute',
+	'second':'seconde',
+	'time in milliseconds':
+		'heure en millisecondes',
+	'day of week':
+		'jour de la semaine',
+
+	'brightness':
+		'luminosit\u00E9',
+	'transparence':
+		'transparence',
+	'negative':
+		'n\u00E9gatif',
+	'comic':
+		'bande dessin\u00E9e',
+
+	'clicked':
+		'cliqu\u00E9',
+	'pressed':
+		'press\u00E9',
+	'dropped':
+		'd\u00E9pos\u00E9',
+	'mouse-entered':
+		'survol\u00E9',
+	'mouse-departed':
+		'quitt\u00E9',
+
+	'JavaScript function ( %mult%s ) { %code }':
+		'fonction JavaScript ( %mult%s ) { %code }',
+
+
+	// Copy / Paste
+	'Press CTRL+C one more time to effectively copy to clipboard.':
+		'Taper une nouvelle fois sur CTRL+C pour copier effectivement vers le presse-papier.',
+	'Press CTRL+V one more time to effectively paste from clipboard.':
+		'Taper une nouvelle fois sur CTRL+V pour coller effectivement depuis le presse-papier.',
+	'Press CTRL+X one more time to effectively cut to clipboard.':
+		'Taper une nouvelle fois sur CTRL+X pour couper effectivement vers le presse-papier.',
+
+	// Paint.js
+	'undo':'d\u00E9faire',
+	'Paintbrush tool\n(free draw)':
+		'Pinceau\n(dessin \u00E0 main lev\u00E9)',
+	'Stroked Rectangle\n(shift: square)':
+		'Rectangle\n(Maj: carr\u00E9)',
+	'Stroked Ellipse\n(shift: circle)':
+		'Ellipse\n(Maj: cercle)',
+	'Eraser tool':
+		'Gomme',
+	'Set the rotation center':
+		'Fixe le centre de rotation',
+	'Line tool\n(shift: vertical/horizontal)':
+		'Ligne\n(Maj: verticale/horizontale)',
+	'Filled Rectangle\n(shift: square)':
+		'Rectangle plein\n(Maj: carr\u00E9)',
+	'Filled Ellipse\n(shift: circle)':
+		'Ellipse pleine\n(Maj: cercle)',
+	'Fill a region':
+		'Remplir une r\u00E9gion',
+	'Pipette tool\n(pick a color anywhere)':
+		'Pipette\n(s\u00E9lectionnez une couleur n\u0027importe o\u00F9',
+	'grow':'agrandir',
+	'shrink':'r\u00E9duire',
+	'flip \u2194':
+		'miroir \u2194',
+	'flip \u2195':
+		'miroir \u2195',
+	'Brush size':
+		'Taille de pinceau',
+	'Constrain proportions of shapes?\n(you can also hold shift)':
+		'Contrainte sur les proportions de la forme ?\n(vous pouvez aussi maintenir appuy\u00E9 Maj)'
+
 };

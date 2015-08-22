@@ -83,7 +83,7 @@ ArgLabelMorph, localize, XML_Element, hex_sha512*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.threads = '2015-May-01';
+modules.threads = '2015-July-27';
 
 var ThreadManager;
 var Process;
@@ -339,7 +339,7 @@ ThreadManager.prototype.findProcess = function (block) {
 */
 
 Process.prototype = {};
-Process.prototype.contructor = Process;
+Process.prototype.constructor = Process;
 Process.prototype.timeout = 500; // msecs after which to force yield
 Process.prototype.isCatchingErrors = true;
 
@@ -1157,7 +1157,8 @@ Process.prototype.doSetVar = function (varName, value) {
         if (name.expression.selector === 'reportGetVar') {
             name.variables.setVar(
                 name.expression.blockSpec,
-                value
+                value,
+                this.blockReceiver()
             );
             return;
         }
@@ -1173,7 +1174,8 @@ Process.prototype.doChangeVar = function (varName, value) {
         if (name.expression.selector === 'reportGetVar') {
             name.variables.changeVar(
                 name.expression.blockSpec,
-                value
+                value,
+                this.blockReceiver()
             );
             return;
         }
@@ -1206,7 +1208,8 @@ Process.prototype.doShowVar = function (varName) {
     if (this.homeContext.receiver) {
         stage = this.homeContext.receiver.parentThatIsA(StageMorph);
         if (stage) {
-            target = varFrame.find(name);
+            target = varFrame.silentFind(name);
+            if (!target) {return; }
             // first try to find an existing (hidden) watcher
             watcher = detect(
                 stage.children,
@@ -1223,7 +1226,7 @@ Process.prototype.doShowVar = function (varName) {
             }
             // if no watcher exists, create a new one
             isGlobal = contains(
-                this.homeContext.receiver.variables.parentFrame.names(),
+                this.homeContext.receiver.globalVariables().names(),
                 varName
             );
             if (isGlobal || target.owner) {
@@ -1299,6 +1302,23 @@ Process.prototype.doRemoveTemporaries = function () {
                 }
             });
         }
+    }
+};
+
+// Process sprite inheritance primitives
+
+Process.prototype.doDeleteAttr = function (attrName) {
+    // currently only variables are deletable
+    var name = attrName,
+        rcvr = this.blockReceiver();
+
+    if (name instanceof Context) {
+        if (name.expression.selector === 'reportGetVar') {
+            name = name.expression.blockSpec;
+        }
+    }
+    if (contains(rcvr.inheritedVariableNames(true), name)) {
+        rcvr.deleteVariable(name);
     }
 };
 
@@ -2122,14 +2142,14 @@ Process.prototype.reportMonadic = function (fname, n) {
     case 'ln':
         result = Math.log(x);
         break;
-    case 'log':
-        result = 0;
+    case 'log': // base 10
+        result =  Math.log(x) / Math.LN10;
         break;
     case 'e^':
         result = Math.exp(x);
         break;
     case '10^':
-        result = 0;
+        result = Math.pow(10, x);
         break;
     default:
         nop();
@@ -2640,31 +2660,30 @@ Process.prototype.reportTimer = function () {
 };
 
 // Process Dates and times in Snap
-// Map block options to built-in functions
-var dateMap = {
-    'year' : 'getFullYear',
-    'month' : 'getMonth',
-    'date': 'getDate',
-    'day of week' : 'getDay',
-    'hour' : 'getHours',
-    'minute' : 'getMinutes',
-    'second' : 'getSeconds',
-    'time in milliseconds' : 'getTime'
-};
-
 Process.prototype.reportDate = function (datefn) {
-    var inputFn = this.inputOption(datefn),
-        currDate = new Date(),
-        func = dateMap[inputFn],
-        result = currDate[func]();
+    var currDate, func, result,
+        inputFn = this.inputOption(datefn),
+        // Map block options to built-in functions
+        dateMap = {
+            'year' : 'getFullYear',
+            'month' : 'getMonth',
+            'date': 'getDate',
+            'day of week' : 'getDay',
+            'hour' : 'getHours',
+            'minute' : 'getMinutes',
+            'second' : 'getSeconds',
+            'time in milliseconds' : 'getTime'
+        };
 
     if (!dateMap[inputFn]) { return ''; }
+    currDate = new Date();
+    func = dateMap[inputFn];
+    result = currDate[func]();
 
     // Show months as 1-12 and days as 1-7
     if (inputFn === 'month' || inputFn === 'day of week') {
         result += 1;
     }
-
     return result;
 };
 
@@ -3116,35 +3135,50 @@ VariableFrame.prototype.silentFind = function (name) {
     return null;
 };
 
-VariableFrame.prototype.setVar = function (name, value) {
-/*
-    change the specified variable if it exists
-    else throw an error, because variables need to be
-    declared explicitly (e.g. through a "script variables" block),
-    before they can be accessed.
-*/
+VariableFrame.prototype.setVar = function (name, value, sender) {
+    // change the specified variable if it exists
+    // else throw an error, because variables need to be
+    // declared explicitly (e.g. through a "script variables" block),
+    // before they can be accessed.
+    // if the found frame is inherited by the sender sprite
+    // shadow it (create an explicit one for the sender)
+    // before setting the value ("create-on-write")
+
     var frame = this.find(name);
     if (frame) {
-        frame.vars[name].value = value;
+        if (sender instanceof SpriteMorph &&
+                (frame.owner instanceof SpriteMorph) &&
+                (sender !== frame.owner)) {
+            sender.shadowVar(name, value);
+        } else {
+            frame.vars[name].value = value;
+        }
     }
 };
 
-VariableFrame.prototype.changeVar = function (name, delta) {
-/*
-    change the specified variable if it exists
-    else throw an error, because variables need to be
-    declared explicitly (e.g. through a "script variables" block,
-    before they can be accessed.
-*/
+VariableFrame.prototype.changeVar = function (name, delta, sender) {
+    // change the specified variable if it exists
+    // else throw an error, because variables need to be
+    // declared explicitly (e.g. through a "script variables" block,
+    // before they can be accessed.
+    // if the found frame is inherited by the sender sprite
+    // shadow it (create an explicit one for the sender)
+    // before changing the value ("create-on-write")
+
     var frame = this.find(name),
-        value;
+        value,
+        newValue;
     if (frame) {
         value = parseFloat(frame.vars[name].value);
-        if (isNaN(value)) {
-            frame.vars[name].value = delta;
+        newValue = isNaN(value) ? delta : value + parseFloat(delta);
+        if (sender instanceof SpriteMorph &&
+                (frame.owner instanceof SpriteMorph) &&
+                (sender !== frame.owner)) {
+            sender.shadowVar(name, newValue);
         } else {
-            frame.vars[name].value = value + parseFloat(delta);
+            frame.vars[name].value = newValue;
         }
+
     }
 };
 

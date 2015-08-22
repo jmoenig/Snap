@@ -2512,3 +2512,59 @@ ______
 150523
 ------
 * BYOB: Fix encoding glitch
+
+150608
+------
+* Blocks: Fixed #820
+
+150625
+------
+* Morphic, Objects, Blocks, XML: Optimizations and dramatic speed-up. Thanks, Nathan!!
+* Objects: push maximum clone count up to 1000, tweak Note::play
+
+=== v4.0.1 (unreleased) ===
+
+150626
+------
+* Morphic: Fix Inspector duplication, update documentation
+
+150727
+------
+* Polish translation update, thanks, Bartosz Leper!
+* Turkish translation. Yay!! Thanks, Hakan Ataş!
+* Hungarian translation. Yay!! Thanks, Makány György!
+* GUI: relative-url fixes, Thanks, Michael!
+* Morphic: enable exporting a screenshot of the World
+* Morphic: enable more fine-grained control over dragging position correction
+* Morphic: enable all Morphs to “scrollIntoView()”
+* Morpic: keyboard accessibility for menus
+* Objects: fixes and enhancements for nested sprites
+* Blocks, Objects, BYOB, GUI: keyboard editing support
+* Objects, Blocks, Threads, GUI, Store, Widgets: Prototypal inheritance for sprite-local variables
+* Objects, Blocks: enable monitoring closurized non-locals and thread-temporaries (script vars of running processes)
+* GUI: stage resizing handle
+
+150728
+------
+* GUI: fixed relative urls, thanks, Michael!
+* Morphic: escalate origin with “accept” and “cancel” events from text cursors
+* BYOB: keep BlockEditors open when <enter> or <esc> keys are pressed
+* GUI: stop keyboard editing of blocks when selecting another sprite
+
+150730
+------
+* Blocks: improve keyboard editing for embedded rings
+
+150806
+------
+* Polish & German translation updates
+
+=== Release v4.0.2 ===
+
+150809
+------
+* Interlingua support, yay!! thanks, Ken Dickey!
+
+150814
+------
+* Blocks: fixed #907
