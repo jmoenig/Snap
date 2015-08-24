@@ -1428,6 +1428,7 @@ IDE_Morph.prototype.createCorralBar = function () {
     this.corralBar = new Morph();
     this.corralBar.color = this.frameColor;
     this.corralBar.setHeight(this.logo.height()); // height is fixed
+	this.corralBar.fps = 15;
     this.add(this.corralBar);
 
     // new sprite button
