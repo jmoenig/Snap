@@ -228,6 +228,9 @@ IDE_Morph.prototype.init = function (isAutoFill) {
 
     // override inherited properites:
     this.color = this.backgroundColor;
+	
+	this.corralBarOldX = "";
+	this.corralBarOldY = "";
 };
 
 IDE_Morph.prototype.openIn = function (world) {
@@ -1538,12 +1541,18 @@ IDE_Morph.prototype.updateCorralBar = function () {
      this.corralBar.children[2].text = "X: " + this.stage.reportMouseX();
      this.corralBar.children[3].text = "Y: " + this.stage.reportMouseY();
    }
-
-   this.corralBar.children[2].drawNew();
-   this.corralBar.children[3].drawNew();
-   
-   Morph.prototype.trackChanges = true;
-   this.corralBar.changed();
+	 Morph.prototype.trackChanges = true;
+	 
+	 //update only if the coordinates have changed to save CPU
+   if(this.corralBarOldX != this.corralBar.children[2].text || this.corralBarOldY != this.corralBar.children[3].text)
+   {
+	 this.corralBarOldX = this.corralBar.children[2].text;
+	 this.corralBarOldY = this.corralBar.children[3].text;
+	 this.corralBar.children[2].drawNew();
+	 this.corralBar.children[3].drawNew();
+	   
+	 this.corralBar.changed();
+   }
     
 };
 
