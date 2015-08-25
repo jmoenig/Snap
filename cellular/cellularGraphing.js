@@ -91,6 +91,9 @@ var CellularGraphing = (function() {
         this.skip = 1;
         this.visibleValues.splice(0, this.visibleValues.length);
         this.values.splice(0, this.values.length);
+        if (this.chart) {
+            this.chart.update();
+		}
     }
     
     GraphDisplay.prototype.setRect = function(x, y, width, height) {

@@ -277,6 +277,10 @@ SpriteMorph.prototype.snapappsHookBlockTemplates = function(blocks, block, cat, 
         blocks.push('-');
         blocks.push(block('snapToCell'));
     }
+    else if (cat == 'sensing')
+    {
+        blocks.push(block('systemTime'));
+	}
     else if (cat == 'control')
     {
         blocks.splice(blocks.length - 3, 0, block('getLastClone'));
@@ -383,6 +387,10 @@ StageMorph.prototype.snapappsHookBlockTemplates = function(blocks, block, cat, h
             blocks.push(block('changeCellAttributeEverywhere'));
         }
     }
+    else if (cat == 'sensing')
+    {
+        blocks.push(block('systemTime'));
+	}
     else if (cat == 'control')
     {
         blocks.splice(blocks.length - 3, 0, block('getLastClone'));
@@ -549,6 +557,13 @@ SpriteMorph.prototype.addCellularBlocks = function () {
         type: 'command',
         category: 'motion',
         spec: 'snap to centre of cell',
+    };
+
+	//sensing
+    SpriteMorph.prototype.blocks.systemTime = {
+        type: 'reporter',
+        category: 'sensing',
+        spec: 'system time',
     };
 
     //cells
@@ -2069,6 +2084,11 @@ StageMorph.prototype.removeChild = function (aNode) {
     }
     return this.uberRemoveChild(aNode);
 };
+
+StageMorph.prototype.systemTime = function () {
+	return (new Date()).getTime();
+}
+SpriteMorph.prototype.systemTime = StageMorph.prototype.systemTime;
 
 /*
 ** Linear interpolation function. Makes things a bit more readable.

@@ -1,7 +1,7 @@
 // DialogBoxMorph ops
 var PLOT_WIDTH = 700;
 var PLOT_HEIGHT = 500;
-var PLOT_INTERVAL = 100;
+var PLOT_INTERVAL = 150;
 
 // Add a plotGraph function to DialogBoxMorph from widgets.js
 DialogBoxMorph.prototype.plotGraph = function (
@@ -16,10 +16,24 @@ DialogBoxMorph.prototype.plotGraph = function (
     var me = this;
     
     var g = new CellularGraphing.GraphDisplay();
-    me.currentTime = 0;
+    me.currentSampleTime = 0;
+	me.lastTimeSampled = null;
     var interval = setInterval(function() {
-        g.appendPoint(me.currentTime, valueGetter());
-        me.currentTime += PLOT_INTERVAL / 1000.0;
+		var ide = me.world().children.reduce(function(previous, current) {
+			if (current instanceof IDE_Morph) {
+				return current;
+			}
+			return previous;
+		}, null);
+		var time = (new Date()).getTime();
+		if (ide != null && ide.stage.threads.processes.length > 0) {
+			if (me.lastTimeSampled != null) {
+				me.currentSampleTime += (time - me.lastTimeSampled) / 1000.0;
+			}
+
+        	g.appendPoint(me.currentSampleTime, valueGetter());
+		}
+		me.lastTimeSampled = time;
     }, PLOT_INTERVAL);
     
     var m = new Morph();
@@ -28,7 +42,6 @@ DialogBoxMorph.prototype.plotGraph = function (
     m.setColor(new Color(255, 255, 255));
     
     function updateMorphRect() {
-        console.log("stepframe");
         g.setRect(m.left(), m.top(), m.width(), m.height());
     }
     
@@ -60,7 +73,8 @@ DialogBoxMorph.prototype.plotGraph = function (
     var clear = this.addButton(
         function () {
             g.clear();
-            me.currentTime = 0;
+			me.currentSampleTime = 0;
+			me.lastTimeSampled = null;
         },
         'Clear'
     );
@@ -73,7 +87,7 @@ DialogBoxMorph.prototype.plotGraph = function (
             });
             window.open('data:text/csv;charset=UTF-8,' + encodeURIComponent(text));
         },
-        'Show values...'
+        'Download values (csv)...'
     );
     
     this.drawNew();
