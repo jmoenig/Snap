@@ -165,9 +165,6 @@ ThreadManager.prototype.stopAllForReceiver = function (rcvr, excpt) {
     this.processes.forEach(function (proc) {
         if (proc.homeContext.receiver === rcvr && proc !== excpt) {
             proc.stop();
-            if (rcvr.isClone) {
-                proc.isDead = true;
-            }
         }
     });
 };

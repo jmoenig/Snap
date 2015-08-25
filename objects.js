@@ -1,4 +1,4 @@
-/*
+﻿/*
     objects.js
 
     a scriptable microworld
@@ -3120,7 +3120,24 @@ SpriteMorph.prototype.clear = function () {
     var stage = this.parent;
     stage.shownObjects.asArray().forEach(function (object) {
         stage.scene.remove(object);
+        if(object instanceof THREE.Object3D) //3D objects must be deleted specifically
+        {
+          object.children.forEach(function (child)
+          {
+            if(child.geometry != undefined) child.geometry.dispose();
+            if(child.material != undefined) child.material.dispose();
+            if(child.texture != undefined) child.texture.dispose();
+          });
+        }
     });
+	
+	
+    if ( stage.renderer instanceof THREE.CanvasRenderer ) {
+      stage.scene.__lights = { length: 0, push: function(){}, indexOf: function (){ return -1 }, splice: function(){} }
+      stage.scene.__objectsAdded = { length: 0, push: function(){}, indexOf: function (){ return -1 }, splice: function(){} }
+      stage.scene.__objectsRemoved = { length: 0, push: function(){}, indexOf: function (){ return -1 }, splice: function(){} }
+    }
+	
     stage.shownObjects.clear();
     stage.hiddenObjects.clear();
     stage.changed();
