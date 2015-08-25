@@ -16,25 +16,41 @@ DialogBoxMorph.prototype.plotGraph = function (
     var me = this;
     
     var g = new CellularGraphing.GraphDisplay();
-    me.currentSampleTime = 0;
-	me.lastTimeSampled = null;
+	me.lastTimeStartedReal = 0;
+	me.lastTimeStartedGraphTime = 0;
+	me.lastTimeAddedToGraph = 0;
     var interval = setInterval(function() {
+		// Get IDE
 		var ide = me.world().children.reduce(function(previous, current) {
 			if (current instanceof IDE_Morph) {
 				return current;
 			}
 			return previous;
 		}, null);
-		var time = (new Date()).getTime();
+
+		var timeReal = (new Date()).getTime();
 		if (ide != null && ide.stage.threads.processes.length > 0) {
-			if (me.lastTimeSampled != null) {
-				me.currentSampleTime += (time - me.lastTimeSampled) / 1000.0;
+			
+			if (me.lastTimeStartedReal === null) {
+				// Graph just unpaused.
+				me.lastTimeStartedReal = timeReal;
+				me.lastTimeStartedGraphTime = me.lastTimeAddedToGraph;
 			}
 
-        	g.appendPoint(me.currentSampleTime, valueGetter());
+			// Add points to the graph
+			var currentTime = me.lastTimeStartedGraphTime + (timeReal - me.lastTimeStartedReal);
+			me.lastTimeAddedToGraph = currentTime;
+        	g.appendPoint(currentTime / 1000.0, valueGetter());
+		} else {
+			// Graph paused.
+			me.lastTimeStartedReal = null;
 		}
-		me.lastTimeSampled = time;
     }, PLOT_INTERVAL);
+
+	function cleanup() {
+		clearInterval(interval);
+        g.destroy();
+	}
     
     var m = new Morph();
     m.setWidth(PLOT_WIDTH);
@@ -64,8 +80,6 @@ DialogBoxMorph.prototype.plotGraph = function (
     var close = this.addButton(
         function () {
             this.accept();
-            g.destroy();
-            clearInterval(interval);
         },
         'Close'
     );
@@ -73,8 +87,8 @@ DialogBoxMorph.prototype.plotGraph = function (
     var clear = this.addButton(
         function () {
             g.clear();
-			me.currentSampleTime = 0;
-			me.lastTimeSampled = null;
+			me.lastTimeStartedReal = null;
+			me.lastTimeStartedGraphTime = 0;
         },
         'Clear'
     );
@@ -89,6 +103,18 @@ DialogBoxMorph.prototype.plotGraph = function (
         },
         'Download values (csv)...'
     );
+
+	var uberAccept = this.accept;
+	this.accept = function() {
+        cleanup();
+		return uberAccept.call(this);
+	}
+
+	var uberCancel = this.cancel;
+	this.cancel = function() {
+        cleanup();
+		return uberCancel.call(this);
+	}
     
     this.drawNew();
     this.fixLayout();
