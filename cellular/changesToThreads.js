@@ -93,12 +93,13 @@ Process.prototype.asObject = function (object, commandBlock) {
 			this.pushContext(args[1].blockSequence(), this.context);
 			this.pushContext();
 		}
+	} else {
+		var stage = this.context.receiver.parentThatIsA(StageMorph);
+		if (stage.isNobody(object)) {
+			throw new Error("The object is nobody!");
+		}
+		throw new Error("Not an object!");
 	}
-	var stage = this.context.receiver.parentThatIsA(StageMorph);
-    if (stage.isNobody(object)) {
-    	throw new Error("The object is nobody!");
-    }
-	throw new Error("Not an object!");
 };
 
 Process.prototype.nearestObject = function (otherObjectName, x, y, predicate) {
