@@ -1,4 +1,4 @@
-/*
+﻿/*
 
     gui.js
 
@@ -228,6 +228,9 @@ IDE_Morph.prototype.init = function (isAutoFill) {
 
     // override inherited properites:
     this.color = this.backgroundColor;
+	
+	this.corralBarOldX = "";
+	this.corralBarOldY = "";
 };
 
 IDE_Morph.prototype.openIn = function (world) {
@@ -1428,6 +1431,7 @@ IDE_Morph.prototype.createCorralBar = function () {
     this.corralBar = new Morph();
     this.corralBar.color = this.frameColor;
     this.corralBar.setHeight(this.logo.height()); // height is fixed
+    this.corralBar.fps = 15;
     this.add(this.corralBar);
 
     // new sprite button
@@ -1537,12 +1541,18 @@ IDE_Morph.prototype.updateCorralBar = function () {
      this.corralBar.children[2].text = "X: " + this.stage.reportMouseX();
      this.corralBar.children[3].text = "Y: " + this.stage.reportMouseY();
    }
-
-   this.corralBar.children[2].drawNew();
-   this.corralBar.children[3].drawNew();
-   
    Morph.prototype.trackChanges = true;
-   this.corralBar.changed();
+	 
+   //update only if the coordinates have changed to save CPU
+   if(this.corralBarOldX != this.corralBar.children[2].text || this.corralBarOldY != this.corralBar.children[3].text)
+   {
+     this.corralBarOldX = this.corralBar.children[2].text;
+     this.corralBarOldY = this.corralBar.children[3].text;
+     this.corralBar.children[2].drawNew();
+     this.corralBar.children[3].drawNew();
+	   
+     this.corralBar.changed();
+   }
     
 };
 
