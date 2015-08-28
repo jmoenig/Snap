@@ -3227,11 +3227,12 @@ SpriteMorph.prototype.renderBox = function (width, height, depth) {
 
 SpriteMorph.prototype.renderArc = function (width, height) {
     const THREEJS_ARC_SEGMENTS = 60,
-        THREEJS_TUBE_SEGMENTS = THREEJS_ARC_SEGMENTS,
-        THREEJS_TUBE_RADIUS = 4;
-        THREEJS_TUBE_RADIUS_SEGMENTS = 4;
+        THREEJS_TUBE_SEGMENTS = THREEJS_ARC_SEGMENTS;
     var xRadius = width/2, yRadius = height, x, y, points = new Array(), 
-        path, geometry;
+        path, 
+        THREEJS_TUBE_RADIUS = this.penSize(),
+        THREEJS_TUBE_RADIUS_SEGMENTS = 4,
+		geometry;
 
     for (var theta = 0; theta <= Math.PI; theta += (Math.PI/THREEJS_ARC_SEGMENTS)) {
         x = xRadius * Math.cos(theta);

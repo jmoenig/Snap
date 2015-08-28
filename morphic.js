@@ -9671,7 +9671,7 @@ HandMorph.prototype.processMouseMove = function (event) {
     mouseOverNew = this.morphAtPointer().allParents();
 
     if ((this.children.length === 0) &&
-            (this.mouseButton === 'left')) {
+            (this.mouseButton === 'left') && (event.movementX != 0 || event.movementY != 0)) {
         topMorph = this.morphAtPointer();
         morph = topMorph.rootForGrab();
         if (topMorph.mouseMove) {

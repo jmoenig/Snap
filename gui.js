@@ -4017,6 +4017,9 @@ IDE_Morph.prototype.setStageExtent = function (aPoint) {
         this.fixLayout();
         this.setExtent(world.extent());
     }
+    myself.stage.canvas3D.width = ext.x;
+    myself.stage.canvas3D.height = ext.y;
+    myself.stage.init3D();
 };
 
 // IDE_Morph cloud interface
