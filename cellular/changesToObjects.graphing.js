@@ -16,7 +16,7 @@ DialogBoxMorph.prototype.plotGraph = function (
     var me = this;
     
     var g = new CellularGraphing.GraphDisplay();
-	me.lastTimeStartedReal = 0;
+	me.lastTimeStartedReal = null;
 	me.lastTimeStartedGraphTime = 0;
 	me.lastTimeAddedToGraph = 0;
     var interval = setInterval(function() {
