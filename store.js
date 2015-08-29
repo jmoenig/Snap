@@ -1233,7 +1233,7 @@ SnapSerializer.prototype.loadValue = function (model) {
                     }
                 };
             }
-			else if (Object.prototype.hasOwnProperty.call(model.attributes,'is3D') && model.attributes.is3D){
+			else if (Object.prototype.hasOwnProperty.call(model.attributes,'is3D') && model.attributes.is3D == "true"){
                 var url = config.asset_path + 'Costumes3D' + '/' + name+ ".js";
 				v = new Costume(
 					null, // no canvas for 3D costumes
