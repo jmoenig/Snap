@@ -1,10 +1,31 @@
 'use strict';
-
-var fs = require('fs'),
+var express = require('express'),
+    app = express(),
     argv = require('yargs').argv,
-    wsPort = process.env.WS_PORT || 5432,
     port = process.env.PORT || 8080,
+    wsPort = process.env.WS_PORT || 5432,
+    NetsBlocksServer = require('./NetsBlocksServer'),
+    fs = require('fs'),
     path = require('path');
+
+console.log('port:', port);
+app.use(express.static(__dirname + '/client/'));
+
+app.get('/', function(req, res) {
+    res.redirect('/snap.html');
+});
+
+app.get('/Examples', function(req, res) {
+    var files = fs.readdirSync(__dirname+'/client/Examples');
+    console.log('Received request for examples:', files);
+    res.json(files);
+});
+
+var server = app.listen(port);
+
+console.log('NetsBlocks server listening on port '+port);
+
+// Parse cmd line options for group manager
 
 var getGroupManagerDict = function() {
     var result = {},
@@ -22,7 +43,7 @@ var getGroupManagerDict = function() {
 };
 
 var GroupManagers = getGroupManagerDict(),
-    def = 'basic',
+    def = 'TwoPlayer',
     group = argv.g || def,
     manager = GroupManagers[group.toLowerCase()] || GroupManagers[def];
 

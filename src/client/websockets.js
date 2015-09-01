@@ -10,8 +10,7 @@ var WebSocketManager = function (stage) {
 
 WebSocketManager.prototype._connectWebSocket = function() {
     // Connect socket to the server
-    console.log('Creating new websocket!');
-    var address = 'ws://'+window.location.hostname+':5432',
+    var address = window.location.origin.replace('http://','ws://'),
         self = this;
     this.websocket = new WebSocket(address);
     // Set up message firing queue
@@ -28,7 +27,6 @@ WebSocketManager.prototype._connectWebSocket = function() {
             type = data.shift(),
             role = data.pop(),
             content = JSON.parse(data.join(' ') || null);
-        console.log('received', type, 'from', role);
         self.onMessageReceived(type, content, role);
     };
 };
