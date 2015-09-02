@@ -3,3 +3,4 @@
 *.log
 *.swo
 node_modules/
+coverage/

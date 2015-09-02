@@ -1,7 +1,7 @@
 /*globals after,afterEach,describe,it,before,beforeEach*/
 'use strict';
 
-var NetsBlocks = require('../../src/NetsBlocksServer'),
+var NetsBlocks = require('../../src/server/groups/CommunicationManager'),
     WebSocket = require('ws'),  // jshint ignore:line
     R = require('ramda'),
     assert = require('assert'),
@@ -30,6 +30,61 @@ describe('NetsBlocksServer tests', function() {
 
     describe('Basic tests', function() {
         var socket;
+
+        describe('Paradigm Selection tests', function() {
+            before(function(done) {
+                server = new NetsBlocks();
+                if (!socket || socket.readyState !== 1) {
+                    socket = new WebSocket(host);
+                    socket.on('open', function() {
+                        socket.send('username socket1');
+                        done();
+                    });
+                }
+                server.start();
+            });
+
+            after(function() {
+                server.stop();
+            });
+
+            it('should use sandbox by default', function(done) {
+                setTimeout(function() {
+                    var id = server.username2Socket.socket1.id;
+                    assert(server.socket2Paradigm[id].getName(), 'Sandbox');
+                    done();
+                }, 200);
+            });
+
+            it('should change the paradigm with "paradigm"', function(done) {
+                socket.send('paradigm uniquerole');
+                setTimeout(function() {
+                    var id = server.username2Socket.socket1.id;
+                    assert(server.socket2Paradigm[id].getName(), 'UniqueRole');
+                    done();
+                }, 200);
+            });
+
+            it('should support multiple paradigms at once', function(done) {
+                var newSocket = new WebSocket(host);
+                socket.send('paradigm uniquerole');
+                newSocket.on('open', function() {
+                    newSocket.send('username socket2');
+                    setTimeout(function() {
+                        var expectedParadigms = ['UniqueRole', 'Sandbox'];
+                        ['socket1', 'socket2'].map(function(username) {
+                            var id = server.username2Socket[username].id;
+                            // Get the paradigm
+                            return server.socket2Paradigm[id];
+                        })
+                        .forEach(function(paradigm, index) {
+                            assert.equal(paradigm.getName(), expectedParadigms[index]);
+                        });
+                        done();
+                    }, 200);
+                });
+            });
+        });
 
         describe('Connection tests', function() {
             beforeEach(function() {
@@ -64,14 +119,32 @@ describe('NetsBlocksServer tests', function() {
         describe('multi-socket tests', function() {
             var newSocket;
 
-            beforeEach(function() {
+            beforeEach(function(done) {
+                var count = 0;
                 server = new NetsBlocks();
                 server.start();
                 if (!socket || socket.readyState !== 1) {
+                    count++;
                     socket = new WebSocket(host);
+                    socket.on('open', function() {
+                        socket.send('paradigm uniquerole');
+                        if (--count === 0) {
+                            done();
+                        }
+                    });
                 }
                 if (!newSocket || newSocket.readyState !== 1) {
+                    count++;
                     newSocket = new WebSocket(host);
+                    newSocket.on('open', function() {
+                        newSocket.send('paradigm uniquerole');
+                        if (--count === 0) {
+                            done();
+                        }
+                    });
+                }
+                if (count === 0) {
+                    done();
                 }
             });
 
@@ -114,8 +187,14 @@ describe('NetsBlocksServer tests', function() {
                         done();
                     }
                 });
-                s1.on('open', onAllConnected);
-                s2.on('open', onAllConnected);
+                s2.on('open', function() {
+                    s2.send('paradigm uniquerole');
+                    setTimeout(onAllConnected,100);
+                });
+                s1.on('open', function() {
+                    s1.send('paradigm uniquerole');
+                    setTimeout(onAllConnected,100);
+                });
             });
 
             it('should broadcast messages to members of the group', function(done) {
@@ -124,6 +203,7 @@ describe('NetsBlocksServer tests', function() {
                     matches = false;
 
                 socket2.on('open', function() {
+                    socket2.send('paradigm uniquerole');
                     socket2.on('message', function(data) {
                         var msg, 
                             sender;
@@ -165,6 +245,7 @@ describe('GroupManager Testing', function() {
     var createOnStart = function(socketCount, cb) {
         var count = 0;
         return function() {
+            console.log('socket connected!');
             if (++count === socketCount) {
                 cb();
             }
@@ -174,20 +255,40 @@ describe('GroupManager Testing', function() {
     var refreshSockets = function(count) {
         // Throw out all old sockets and start fresh!
         for (var i = count; i--;) {
-            console.log('connecting socket['+i+']');
             sockets[i] = new WebSocket(host);
         }
     };
 
+    var refreshSocketsWithParadigm = function(count, paradigm, callback) {
+        refreshSockets(count);
+        sockets.forEach(function(socket) {
+            socket.on('open', function() {
+                socket.send('paradigm '+paradigm);
+                socket.send('username s'+sockets.indexOf(socket));
+                if (--count === 0) {
+                    callback();
+                }
+            });
+        });
+    };
+
     describe('N-player tests', function() {
-        beforeEach(function() {
-            var GenericManager = require('../../src/GroupManagers/GenericManager');
-            server = new NetsBlocks({GroupManager: GenericManager});
+        beforeEach(function(done) {
+            server = new NetsBlocks();
             server.start();
             sockets = [];
 
-            // Throw out all old sockets and start fresh!
             refreshSockets(socketCount);
+            var count = sockets.length;
+            sockets.forEach(function(socket) {
+                socket.on('open', function() {
+                    socket.send('paradigm uniquerole');
+                    socket.send('username s'+sockets.indexOf(socket));
+                    if (--count === 0) {
+                        done();
+                    }
+                });
+            });
         });
 
         afterEach(function() {
@@ -197,30 +298,35 @@ describe('GroupManager Testing', function() {
             server.stop();
         });
 
-        it('should group players into groups by role name', function(done) {
+        it('should group 3 players w/ 2 roles into 2 rooms', function(done) {
+            var usernames = ['s0', 's1', 's2'];
             register(sockets[0], 'p1');
             register(sockets[1], 'p2');
             register(sockets[2], 'p2');
 
             // Verify that 0,1 are in the same group but 2 is not
-            var received = 0;
-            sockets[1].on('message', function(msg) {
-                if (msg.indexOf('Hello_world') > -1) {
-                    received++;
-                }
-            });
-
-            sockets[2].on('message', function(msg) {
-                if (msg.indexOf('Hello_world') > -1) {
-                    received++;
-                }
-            });
-
             sendMessage(sockets[0], 'Hello_world!');
 
+            setTimeout(function() {
+                var groups = usernames.map(server.getGroupId.bind(server));
+                assert.equal(R.uniq(groups).length,2);
+                done();
+            }, 200);
+        });
+
+        it('should group players into groups by role name', function(done) {
+            var usernames = ['s0', 's1', 's2'];
+            register(sockets[0], 'p1');
+            register(sockets[1], 'p2');
+            register(sockets[2], 'p2');
+
+            // Verify that 0,1 are in the same group but 2 is not
+            sendMessage(sockets[0], 'Hello_world!');
 
             setTimeout(function() {
-                assert.equal(received,1);
+                var groups = usernames.map(server.getGroupId.bind(server));
+                assert.notEqual(groups[1],groups[2]);
+                assert(groups[0] === groups[2] || groups[0] === groups[1]);
                 done();
             }, 200);
         });
@@ -233,38 +339,23 @@ describe('GroupManager Testing', function() {
                             done();
                         }
                     }
-                },
-                onStart = function() {
-                    // Testing logic
-                    sockets[0].send('message hey');
-                },
-                onAllConnected = createOnStart(3, onStart);
-
-            sockets[0].on('open', onAllConnected);
-            sockets[1].on('open', onAllConnected);
-            sockets[2].on('open', onAllConnected);
-
+                };
             sockets[1].on('message', counter);
             sockets[2].on('message', counter);
+            sockets[0].send('message hey');
         });
 
         it('join messages should include registered role', function(done) {
-            var onStart = function() {
-                    // Testing logic
-                    sockets[0].send('register hey');
-                    sockets[1].send('register hey2');
-                },
-                onAllConnected = createOnStart(2, onStart),
-                test = function(msg) {
+            var test = function(msg) {
+                    console.log('MSG:', msg);
                     if (msg.indexOf('hey') > -1) {
                         done();
                     }
                 };
 
-            sockets[0].on('open', onAllConnected);
-            sockets[1].on('open', onAllConnected);
-
             sockets[0].on('message', test);
+            sockets[0].send('register hey');
+            sockets[1].send('register hey2');
         });
 
         it.skip('should group players by game id', function(done) {
@@ -275,8 +366,7 @@ describe('GroupManager Testing', function() {
 
     describe('2 player tests', function() {
         beforeEach(function() {
-            var TwoPlayerTurn = require('../../src/GroupManagers/TurnBasedManager');
-            server = new NetsBlocks({GroupManager: TwoPlayerTurn});
+            server = new NetsBlocks();
             server.start();
             sockets = [];
         });
@@ -288,28 +378,40 @@ describe('GroupManager Testing', function() {
             server.stop();
         });
 
+        it('should place 3 people in 2 groups', function(done) {
+            var count = 0,
+                checkFn = function() {
+                    // Testing logic
+                    var groups = ['s0', 's1', 's2'].map(server.getGroupId.bind(server));
+                    assert.equal(R.uniq(groups).length, 2, 'Incorrect number of groups. '+
+                        'Expected 2 but found '+R.uniq(groups).length+'.\n'+
+                        JSON.stringify(server.paradigms.twoplayer._printableGroups()));
+                    done();
+                };
+
+            refreshSocketsWithParadigm(3, 'twoplayer', function() {
+                setTimeout(checkFn, 100);
+            });
+        });
+
         it('should pass messages between 2 of 3 people', function(done) {
             var count = 0,
                 onStart = function() {
-                    // Testing logic
+                    sockets[0].on('message', checkReceive);
+                    sockets[1].on('message', checkReceive);
+                    sockets[2].on('message', checkReceive);
+
                     sockets[0].send('message hey!');
                     sockets[1].send('message listen!');
+                    sockets[2].send('message listen!');
                 },
-                onAllConnected = createOnStart(3, onStart),
                 checkReceive = function(msg) {
                     if (msg.indexOf('hey') + msg.indexOf('listen') > -2) {
                         count++;
                     }
                 };
 
-            refreshSockets(4);
-            sockets[0].on('open', onAllConnected);
-            sockets[1].on('open', onAllConnected);
-            sockets[2].on('open', onAllConnected);
-
-            sockets[0].on('message', checkReceive);
-            sockets[1].on('message', checkReceive);
-            sockets[2].on('message', checkReceive);
+            refreshSocketsWithParadigm(4, 'twoplayer', onStart);
 
             setTimeout(function() {
                 assert.equal(count, 2);
@@ -339,57 +441,52 @@ describe('GroupManager Testing', function() {
             });
         });
 
-        // Sometimes fails when run with all the other tests...
-        it('should block multiple turns by same person', function(done) {
-            var count = 0,
-                onStart = function() {
-                    // Testing logic
-                    sockets[0].send('message Hey!');
-                    sockets[0].send('message Listen!');
-                },
-                onAllConnected = createOnStart(2, onStart),
-                checkReceive = function(msg) {
-                    if (msg.indexOf('Hey') + msg.indexOf('Listen') > -2) {
-                        count++;
-                    }
-                };
+        describe('2 player turn based tests', function() {
+            beforeEach(function(done) {
+                refreshSocketsWithParadigm(2, 'turnbased', done);
+            });
 
-            refreshSockets(2);
-            sockets[0].on('open', onAllConnected);
-            sockets[1].on('open', onAllConnected);
+            afterEach(function() {
+                sockets.forEach(function(s) {
+                    s.close();
+                });
+            });
 
-            sockets[0].on('message', checkReceive);
-            sockets[1].on('message', checkReceive);
+            // Sometimes fails when run with all the other tests...
+            it('should block multiple turns by same person', function(done) {
+                var count = 0,
+                    checkReceive = function(msg) {
+                        if (msg.indexOf('Hey') + msg.indexOf('Listen') > -2) {
+                            count++;
+                        }
+                    };
 
-            setTimeout(function() {
-                assert.equal(count, 1);
-                done();
-            }, 100);
-        });
+                //sockets[0].on('message', checkReceive);
+                sockets[1].on('message', checkReceive);
+                sockets[0].send('message Hey!');
+                sockets[0].send('message Listen!');
 
-        it('should receive join message from the other player', function(done) {
-            var counts = [0, 0],
-                checkFn = R.partial(assert.equal, 1),
-                onStart = function() {
-                    setTimeout(function() {
-                        counts.forEach(checkFn);
-                        done();
-                    }, 100);
-                },
-                onAllConnected = createOnStart(2, onStart),
-                checkReceive = function(index, msg) {
-                    console.log('\n\nReceived:', msg);
-                    counts[index]++;
-                };
+                setTimeout(function() {
+                    assert.equal(count, 1);
+                    done();
+                }, 100);
+            });
 
-            refreshSockets(2);
-            sockets[0].on('open', onAllConnected);
-            sockets[1].on('open', onAllConnected);
+            it('should receive join message from the other player', function(done) {
+                var counts = [0, 0],
+                    checkFn = R.partial(assert.equal, 1),
+                    checkReceive = function(index, msg) {
+                        counts[index]++;
+                    };
 
-            sockets[0].on('message', checkReceive.bind(null, 0));
-            sockets[1].on('message', checkReceive.bind(null, 1));
+                sockets[0].on('message', checkReceive.bind(null, 0));
+                sockets[1].on('message', checkReceive.bind(null, 1));
+                setTimeout(function() {
+                    counts.forEach(checkFn);
+                    done();
+                }, 100);
+            });
 
         });
-
     });
 });

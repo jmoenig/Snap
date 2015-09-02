@@ -1,23 +1,24 @@
 /*
- * This GroupManager assumes we are playing 2 player game (not turn based)
+ * This paradigm assumes we are playing 2 player game (not turn based)
  *
  * @author brollb / https://github/brollb
  */
 
 'use strict';
 
-var BaseManager = require('./Basic.js'),
-    Utils = require('../Utils.js'),
+var BaseParadigm = require('./Basic.js'),
+    Utils = require('../../Utils.js'),
     assert = require('assert'),
     _debug = require('debug'),
     log = _debug('NetsBlocks:GroupManager:log'),
     info = _debug('NetsBlocks:GroupManager:info'),
     debug = _debug('NetsBlocks:GroupManager:debug'),
-    R = require('ramda');
+    R = require('ramda'),
+    COUNT = 0;
 
 var getId = R.partialRight(Utils.getAttribute, 'id');
-var TwoPlayerManager = function() {
-    BaseManager.call(this);
+var TwoPlayerParadigm = function() {
+    BaseParadigm.call(this);
     this.groups = [];
     info('Created '+this.getName());
 
@@ -25,23 +26,33 @@ var TwoPlayerManager = function() {
     this.id2Group = {};
 };
 
-Utils.inherit(TwoPlayerManager.prototype, BaseManager.prototype);
+Utils.inherit(TwoPlayerParadigm.prototype, BaseParadigm.prototype);
 
-TwoPlayerManager.prototype.getName = function() {
-    return 'TwoPlayerManager';
+TwoPlayerParadigm.prototype.getName = function() {
+    return 'TwoPlayer';
 };
 
-TwoPlayerManager.prototype.getAllGroups = function() {
+/**
+ * Get the group id given the username
+ *
+ * @param {WebSocket} id
+ * @return {Int} group id
+ */
+TwoPlayerParadigm.prototype.getGroupId = function(socket) {
+    return this.id2Group[socket.id].id;
+};
+
+TwoPlayerParadigm.prototype.getAllGroups = function() {
     return R.clone(this.groups);
 };
 
-TwoPlayerManager.prototype.getGroupMembersToMessage = function(socket) {
+TwoPlayerParadigm.prototype.getGroupMembersToMessage = function(socket) {
     var members = this.getGroupMembers(socket);
     info('Getting group members to message for '+socket.id+': '+members.map(getId));
     return members;
 };
 
-TwoPlayerManager.prototype.getGroupMembers = function(socket) {
+TwoPlayerParadigm.prototype.getGroupMembers = function(socket) {
     var group = this.id2Group[socket.id] || [],
         isSocketId = R.partial(R.eq, socket.id),
         members = R.reject(R.pipe(getId, isSocketId), group);
@@ -52,20 +63,20 @@ TwoPlayerManager.prototype.getGroupMembers = function(socket) {
     return members;
 };
 
-TwoPlayerManager.prototype.onMessage = function(socket) {
+TwoPlayerParadigm.prototype.onMessage = function(socket) {
     this._printGroups();
 };
 
-TwoPlayerManager.prototype.onConnect = function(socket) {
+TwoPlayerParadigm.prototype.onConnect = function(socket) {
     this._addToGroup(socket);
 };
 
-TwoPlayerManager.prototype.onDisconnect = function(socket) {
+TwoPlayerParadigm.prototype.onDisconnect = function(socket) {
     var group = this.id2Group[socket.id],
         index,
         peer;
 
-    info('Removing #'+socket.id+' from '+TwoPlayerManager._printGroup(group));
+    info('Removing #'+socket.id+' from '+TwoPlayerParadigm._printGroup(group));
 
     // Remove the given group and add the other socket back to a group
     if (group.length === 2) {
@@ -83,7 +94,7 @@ TwoPlayerManager.prototype.onDisconnect = function(socket) {
     }
 };
 
-TwoPlayerManager.prototype._addToGroup = function(socket) {
+TwoPlayerParadigm.prototype._addToGroup = function(socket) {
     for (var i = 0; i < this.groups.length; i++) {
         if (this.groups[i].length < 2) {
             this.groups[i].push(socket);
@@ -93,21 +104,26 @@ TwoPlayerManager.prototype._addToGroup = function(socket) {
 
     // Create a new group
     var group = [];
+    group.id = COUNT++;
     group.push(socket);
     this.groups.push(group);
     return this.id2Group[socket.id] = group; //jshint ignore:line
 };
 
 // debugging
-TwoPlayerManager.prototype._printGroups = function() {
-    debug('Groups are', this.groups.map(TwoPlayerManager._printGroup),
+TwoPlayerParadigm.prototype._printGroups = function() {
+    debug('Groups are', this._printableGroups(),
         '(',this.groups.length,')');
 };
 
-TwoPlayerManager._printGroup = function(group) {
+TwoPlayerParadigm.prototype._printableGroups = function() {
+    return this.groups.map(TwoPlayerParadigm._printGroup);
+};
+
+TwoPlayerParadigm._printGroup = function(group) {
     return group.map(function(s) {
         return s.id;
     });
 };
 
-module.exports = TwoPlayerManager;
+module.exports = TwoPlayerParadigm;

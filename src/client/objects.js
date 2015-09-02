@@ -163,6 +163,7 @@ SpriteMorph.prototype.categories =
         'operators',
         'pen',
         'variables',
+        'network',
         'lists',
         'other'
     ];
@@ -176,6 +177,7 @@ SpriteMorph.prototype.blockColor = {
     sensing : new Color(4, 148, 220),
     operators : new Color(98, 194, 19),
     variables : new Color(243, 118, 29),
+    network : new Color(217, 77, 17),
     lists : new Color(217, 77, 17),
     other: new Color(150, 150, 150)
 };
@@ -605,32 +607,32 @@ SpriteMorph.prototype.initBlocks = function () {
         // WebSockets
         doRegisterClient: {  // for use with the generic group manager
             type: 'command',
-            category: 'control',
+            category: 'network',
             spec: 'register as %role'
         },
         doSocketDisconnect: {
             type: 'command',
-            category: 'control',
+            category: 'network',
             spec: 'unregister'
         },
         receiveSocketEvent: {
             type: 'hat',
-            category: 'control',
+            category: 'network',
             spec: 'when I receive %socketMsgHat from %roleHat'
         },
         doSocketEvent: {
             type: 'command',
-            category: 'control',
+            category: 'network',
             spec: 'broadcast event %socketMsg'
         },
         doSocketMessage: {
             type: 'command',
-            category: 'control',
+            category: 'network',
             spec: 'broadcast msg %socketMsg %mult%s'
         },
         receiveSocketMessage: {
             type: 'hat',
-            category: 'control',
+            category: 'network',
             spec: 'when I receive msg %socketMsg %scriptVars'
         },
         doBroadcast: {

@@ -5,7 +5,7 @@ var supertest = require('supertest'),
     assert = require('assert'),
     port = 8493,
     api = supertest('http://localhost:'+port+'/api'),  // https?
-    Server = require('../../src/Server'),
+    Server = require('../../src/server/Server'),
     not = function(checkCode) {
         return function(v) {
             assert(checkCode !== +v.statusCode);

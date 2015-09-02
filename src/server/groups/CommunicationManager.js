@@ -1,32 +1,63 @@
-// NetsBlocks Server
+// Communication Manager
 // Handles the groups and websocket communication 
+// TODO: Change this to be a group manager which manages multiple paradigms
 
 'use strict';
 
 // Web Sockets
 var WebSocketServer = require('ws').Server,
+    path = require('path'),
+    fs = require('fs'),
     counter = 0,
-    GenericManager = require('./GroupManagers/GenericManager'),
+    GenericManager = require('./paradigms/UniqueRoleParadigm'),
     R = require('ramda'),
-    Utils = require('./Utils'),
+    Utils = require('../Utils'),
     _ = require('lodash'),
     defOptions = {
         wsPort: 5432,
-        GroupManager: require('./GroupManagers/Basic')
+        GroupManager: require('./paradigms/Basic')
     },
     debug = require('debug'),
     log = debug('NetsBlocks:log'),
-    info = debug('NetsBlocks:info');
+    info = debug('NetsBlocks:info'),
+    HandleSocketRequest = require('./RequestTypes');
 
-var NetsBlocksServer = function(opts) {
+// Settings
+var DEFAULT_PARADIGM = 'sandbox';
+var CommunicationManager = function(opts) {
     opts = _.extend({}, defOptions, opts);
     this._wsPort = opts.wsPort;
     this.sockets = [];
     this.socket2Role = {};
+    this.socket2Paradigm = {};
 
-    var GroupManager = opts.GroupManager || GenericManager;
-    this.groupManager = new GroupManager();
-    info('Using GroupManager: '+this.groupManager.getName());
+    this.socket2Username = {};
+    this.username2Socket = {};
+
+    info('Default messaging paradigm: '+DEFAULT_PARADIGM);
+    this.paradigms = this.loadParadigms();
+    // Set the default to Sandbox
+    this.defaultParadigm = this.paradigms[DEFAULT_PARADIGM];
+};
+
+CommunicationManager.prototype.getGroupId = function(username) {
+    var socket = this.username2Socket[username],
+        paradigm = this.socket2Paradigm[socket.id];
+    return paradigm.getName()+'_'+paradigm.getGroupId(socket);
+};
+
+CommunicationManager.prototype.loadParadigms = function() {
+    var paradigmDir = path.join(__dirname, 'paradigms'),
+        result = {};
+
+    Utils.loadJsFiles(paradigmDir)
+        .map(function(Paradigm) {
+            return new Paradigm();
+        })
+        .forEach(function(paradigm) {
+            result[paradigm.getName().toLowerCase()] = paradigm;
+        });
+    return result;
 };
 
 /**
@@ -35,7 +66,7 @@ var NetsBlocksServer = function(opts) {
  * @param {Object} opts
  * @return {undefined}
  */
-NetsBlocksServer.prototype.start = function() {
+CommunicationManager.prototype.start = function() {
     this._wss = new WebSocketServer({port: this._wsPort});
 
     this._wss.on('connection', function(socket) {
@@ -46,11 +77,10 @@ NetsBlocksServer.prototype.start = function() {
         this.sockets.push(socket);
         this.socket2Role[socket.id] = 'default_'+socket.id;
 
-        // Add the client to the global group
-        this.groupManager.onConnect(socket);
-        // Broadcast 'join' on connect
-        this.notifyGroupJoin(socket);
+        // Add the socket to the default paradigm
+        this.joinParadigm(socket, this.defaultParadigm);
 
+        // Set up event handlers
         socket.on('message', function(data) {
             log('Received message: ',data);
             this.onMsgReceived(socket, data);
@@ -64,8 +94,32 @@ NetsBlocksServer.prototype.start = function() {
     }.bind(this));
 };
 
-NetsBlocksServer.prototype.stop = function() {
+CommunicationManager.prototype.stop = function() {
     this._wss.close();
+};
+
+CommunicationManager.prototype.joinParadigm = function(socket, paradigm) {
+    // Add the client to the global group
+    this.socket2Paradigm[socket.id] = paradigm;
+    paradigm.onConnect(socket);
+    // Broadcast 'join' on connect
+    this.notifyGroupJoin(socket);
+};
+
+CommunicationManager.prototype.leaveParadigm = function(socket) {
+    var role, 
+        paradigm,
+        peers;
+
+    paradigm = this.socket2Paradigm[socket.id];
+    role = this.socket2Role[socket.id];
+
+    // Broadcast the leave message to peers of the given socket
+    peers = paradigm.getGroupMembers(socket);
+
+    console.log('socket', socket.id, 'is leaving');
+    paradigm.onDisconnect(socket);
+    this.broadcast('leave '+role, peers);
 };
 
 /**
@@ -75,7 +129,7 @@ NetsBlocksServer.prototype.stop = function() {
  * @param {WebSocket} peers
  * @return {undefined}
  */
-NetsBlocksServer.prototype.broadcast = function(message, peers) {
+CommunicationManager.prototype.broadcast = function(message, peers) {
     log('Broadcasting '+message,'to', peers.map(function(r){return r.id;}));
     var s;
     for (var i = peers.length; i--;) {
@@ -94,23 +148,18 @@ NetsBlocksServer.prototype.broadcast = function(message, peers) {
  * @param {WebSocket} socket
  * @return {Boolean} connected?
  */
-NetsBlocksServer.prototype.updateSocket = function(socket) {
+CommunicationManager.prototype.updateSocket = function(socket) {
     if (socket.readyState !== socket.OPEN) {
         info('Removing disconnected socket ('+socket.id+')');
-        var role = this.socket2Role[socket.id];
-        this._removeFromRecords(socket);
-        // Broadcast the leave message to peers of the given socket
-        var peers = this.groupManager.getGroupMembers(socket);
 
-        console.log('socket', socket.id, 'is leaving');
-        this.groupManager.onDisconnect(socket);
-        this.broadcast('leave '+role, peers);
+        this.leaveParadigm(socket);
+        this._removeFromRecords(socket);
         return false;
     }
     return true;
 };
 
-NetsBlocksServer.prototype._removeFromRecords = function(socket) {
+CommunicationManager.prototype._removeFromRecords = function(socket) {
     var index = this.sockets.indexOf(socket),
         role = this.socket2Role[socket.id];
 
@@ -125,17 +174,21 @@ NetsBlocksServer.prototype._removeFromRecords = function(socket) {
  * @param {WebSocket} socket
  * @return {undefined}
  */
-NetsBlocksServer.prototype.notifyGroupJoin = function(socket) {
-    var role = this.socket2Role[socket.id],
-        peers = this.groupManager.getGroupMembers(socket);
+CommunicationManager.prototype.notifyGroupJoin = function(socket) {
+    var role,
+        paradigm,
+        peers;
 
+    role = this.socket2Role[socket.id];
+    paradigm = this.socket2Paradigm[socket.id];
+    peers = paradigm.getGroupMembers(socket);
     // Send 'join' messages to peers in the 'group'
     this.broadcast('join '+role, peers);
 
     // Send new member join messages from everyone else
     for (var i = peers.length; i--;) {
         if (peers[i] !== socket.id) {
-            socket.send('join '+this.socket2Role[peers[i]]);
+            socket.send('join '+this.socket2Role[peers[i].id]);
         }
     }
 };
@@ -147,50 +200,35 @@ NetsBlocksServer.prototype.notifyGroupJoin = function(socket) {
  * @param {String} message
  * @return {undefined}
  */
-NetsBlocksServer.prototype.onMsgReceived = function(socket, message) {
+CommunicationManager.prototype.onMsgReceived = function(socket, message) {
     var msg = message.split(' '),
-        socketId = socket.id,
         type = msg.shift(),
         oldRole = this.socket2Role[socket.id],
+        paradigm = this.socket2Paradigm[socket.id],
         peers,
         group,
         oldMembers,
         role;
 
     // Early return..
-    if (!this.groupManager.isMessageAllowed(socket, message)) {
+    if (!paradigm.isMessageAllowed(socket, message)) {
         info('GroupManager blocking message "'+message+'" from '+socket.id);
         return;
     }
 
     log('Received msg: '+ message+ ' from '+socket.id);
 
-    oldMembers = this.groupManager.onMessage(socket, message);
+    oldMembers = paradigm.onMessage(socket, message);
 
     // Handle the different request types
-    switch (type) {
-        case 'register':
-            role = msg.shift();  // record the roleId
-            this.socket2Role[socket.id] = role;
-            break;
-
-        case 'message':
-            // broadcast the message, role to all peers
-            role = this.socket2Role[socketId];
-            msg.push(role);
-            log('About to broadcast '+msg.join(' ')+
-                        ' from socket #'+socketId+' ('+role+')');
-            peers = this.groupManager.getGroupMembersToMessage(socket);
-            this.broadcast(msg.join(' '), peers);
-            break;
-
-        default:
-            break;
+    if (HandleSocketRequest[type] !== undefined) {
+        HandleSocketRequest[type].call(this,socket, msg);
+    } else {
+        log('Received invalid message type: '+type);
     }
 
     if (oldMembers) { // Update group change
-        var k,
-            r;
+        var k;
 
         // Broadcast 'leave' to old peers
         k = oldMembers.indexOf(socket);
@@ -201,4 +239,4 @@ NetsBlocksServer.prototype.onMsgReceived = function(socket, message) {
     }
 };
 
-module.exports = NetsBlocksServer;
+module.exports = CommunicationManager;

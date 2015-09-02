@@ -5,7 +5,8 @@ var express = require('express'),
     _ = require('lodash'),
     Utils = _.extend(require('./Utils'), require('./ServerUtils.js')),
     R = require('ramda'),
-    NetsBlocksServer = require('./NetsBlocksServer'),
+    NetsBlocksServer = require('./groups/CommunicationManager'),
+    RPCManager = require('./rpc/RPCManager'),
     MongoClient = require('mongodb').MongoClient,
     ObjectID = require('mongodb').ObjectID,
     API = require('./UserAPI.js'),
@@ -16,7 +17,7 @@ var express = require('express'),
         mongoURI: 'mongodb://localhost:27017'
     },
     key = process.env.SECRET_KEY || 'change this',
-    hash = require('./client/sha512').hex_sha512,
+    hash = require('../client/sha512').hex_sha512,
 
     // Session and cookie info
     sessionSecret = process.env.SESSION_SECRET || 'DoNotUseThisInProduction',
@@ -25,13 +26,18 @@ var express = require('express'),
 
 var Server = function(opts) {
     opts = _.extend({}, DEFAULT_OPTIONS, opts);
-    NetsBlocksServer.call(this, opts);
     this._port = opts.port;
     this.app = express();
 
     // Connect to mongo
     this._users = null;
     this._server = null;
+
+    // Group and RPC Managers
+    this.groupManager = new NetsBlocksServer(opts);
+    this.rpcManager = new RPCManager(this.groupManager);
+
+    // TODO: Consider moving this to be executed on server.start();
     MongoClient.connect(opts.mongoURI, function(err, db) {
         if (err) {
             throw err;
@@ -39,11 +45,13 @@ var Server = function(opts) {
 
         this._users = db.collection('users');
         this.configureRoutes();
+
         console.log('Connected to '+opts.mongoURI);
         if (this.onComplete) {
             this.start(this.onComplete);
         }
     }.bind(this));
+
 };
 
 Server.prototype.configureRoutes = function() {
@@ -138,20 +146,18 @@ Server.prototype.emailPassword = function(user, password) {
     // TODO
 };
 
-_.extend(Server.prototype, NetsBlocksServer.prototype);
-
 Server.prototype.start = function(done) {
     done = done || Utils.nop;
     if (this._users) {
         this._server = this.app.listen(this._port, done);
-        NetsBlocksServer.prototype.start.call(this);
+        this.groupManager.start();
     }
     this.onComplete = done;
 };
 
 Server.prototype.stop = function(done) {
     done = done || Utils.nop;
-    NetsBlocksServer.prototype.stop.call(this);
+    this.groupManager.stop();
     this._server.close(done);
 };
 

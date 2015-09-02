@@ -1,21 +1,23 @@
 /*
- * GenericManager groups the sockets by their roles. Assumes nothing about the 
+ * This paradigm groups the sockets by their roles. Assumes nothing about the 
  * client app except that each role should be unique for each game.
  *
  * @author brollb / https://github/brollb
  */
 
 'use strict';
-var BaseManager = require('./Basic.js'),
-    Utils = require('../Utils.js'),
+var BaseParadigm = require('./Basic.js'),
+    Utils = require('../../Utils.js'),
     assert = require('assert'),
     R = require('ramda'),
-    defaultRolePrefix = 'default_';
+    defaultRolePrefix = 'default_',
+    ID_KEY = '__id__',
+    COUNT = 0;
 
-var GenericManager = function() {
+var UniqueRoleParadigm = function() {
     // A group is a hash map of role names to ids
     this.groups = [];
-    this.globalGroup = {};
+    this.globalGroup = this._createNewGroup();
 
     // Dictionary records
     this.id2Group = {};
@@ -23,19 +25,29 @@ var GenericManager = function() {
     this.id2Socket = {};
 };
 
-Utils.inherit(GenericManager.prototype, BaseManager.prototype);
+Utils.inherit(UniqueRoleParadigm.prototype, BaseParadigm.prototype);
 
 // Public API
-GenericManager.prototype.getName = function() {
-    return 'GenericManager';
+UniqueRoleParadigm.prototype.getName = function() {
+    return 'UniqueRole';
 };
 
-GenericManager.prototype.getAllGroups = function() {
+/**
+ * Get the group id given the username
+ *
+ * @param {WebSocket} id
+ * @return {Int} group id
+ */
+UniqueRoleParadigm.prototype.getGroupId = function(socket) {
+    return this.id2Group[socket.id][ID_KEY];
+};
+
+UniqueRoleParadigm.prototype.getAllGroups = function() {
     var groups = this.groups.concat([this.globalGroup]);
     return groups.map(this._getGroupSockets);
 };
 
-GenericManager.prototype.getGroupMembersToMessage = function(socket) {
+UniqueRoleParadigm.prototype.getGroupMembersToMessage = function(socket) {
     var self = this,
         group = this.id2Group[socket.id];
 
@@ -49,7 +61,7 @@ GenericManager.prototype.getGroupMembersToMessage = function(socket) {
  * @param {String} id
  * @return {Array<Id>}
  */
-GenericManager.prototype.getGroupMembers = function(socket) {
+UniqueRoleParadigm.prototype.getGroupMembers = function(socket) {
     var group = this.getGroupMembersToMessage(socket),
         getId = R.partialRight(Utils.getAttribute, 'id'),
         isSocketId = R.partial(R.eq, socket.id);
@@ -61,13 +73,13 @@ GenericManager.prototype.getGroupMembers = function(socket) {
  * Event handler for a socket connection. Socket id is added to the global
  * group.
  *
- * @param {String} id
+ * @param {WebSocket} socket
  * @return {undefined}
  */
-GenericManager.prototype.onConnect = function(socket) {
+UniqueRoleParadigm.prototype.onConnect = function(socket) {
     var id = socket.id;
     this.id2Socket[id] = socket;
-    this.id2Role[id] = 'default_'+id;  // Unique default username
+    this.id2Role[id] = 'default_'+id;  // Unique default role
 
     this._addClientToGroup(socket, this.globalGroup);
 };
@@ -79,7 +91,7 @@ GenericManager.prototype.onConnect = function(socket) {
  * @param {String} id
  * @return {Array<Ids>|null} 
  */
-GenericManager.prototype.onMessage = function(socket, message) {
+UniqueRoleParadigm.prototype.onMessage = function(socket, message) {
     var id = socket.id,
         data = message.split(' '),
         type = data.shift(),
@@ -112,7 +124,7 @@ GenericManager.prototype.onMessage = function(socket, message) {
  * @param id
  * @return {undefined}
  */
-GenericManager.prototype.onDisconnect = function(socket) {
+UniqueRoleParadigm.prototype.onDisconnect = function(socket) {
     // Update the groups
     var id = socket.id,
         role = this.id2Role[id],
@@ -126,7 +138,7 @@ GenericManager.prototype.onDisconnect = function(socket) {
 };
 
 // Internal API
-GenericManager.prototype._removeClientFromGroup = function(id, role) {
+UniqueRoleParadigm.prototype._removeClientFromGroup = function(id, role) {
     var oldGroup = this.id2Group[id];
 
     delete oldGroup[role];
@@ -140,7 +152,7 @@ GenericManager.prototype._removeClientFromGroup = function(id, role) {
  * @param {Group} group
  * @return {undefined}
  */
-GenericManager.prototype._addClientToGroup = function(socket, group) {
+UniqueRoleParadigm.prototype._addClientToGroup = function(socket, group) {
     var id = socket.id,
         role = this.id2Role[id];
 
@@ -157,7 +169,7 @@ GenericManager.prototype._addClientToGroup = function(socket, group) {
  * @return {undefined}
  */
 
-GenericManager.prototype._findGroupForClient = function(socket) {
+UniqueRoleParadigm.prototype._findGroupForClient = function(socket) {
     var id = socket.id,
         role = this.id2Role[id];
 
@@ -169,32 +181,38 @@ GenericManager.prototype._findGroupForClient = function(socket) {
     }
 
     // Create a new group
-    this.groups.push({});
+    this.groups.push(this._createNewGroup());
     this._addClientToGroup(socket, this.groups[this.groups.length-1]);
 };
 
-GenericManager.prototype._canSwitchRolesInCurrentGroup = function(id, newRole) {
+UniqueRoleParadigm.prototype._canSwitchRolesInCurrentGroup = function(id, newRole) {
     var group = this.id2Group[id];
 
     return !group[newRole] && group !== this.globalGroup;
 };
 
-GenericManager.prototype._getGroupSockets = function(group) {
-    var roles = Object.keys(group);
+UniqueRoleParadigm.prototype._getGroupSockets = function(group) {
+    var roles = R.difference(Object.keys(group), [ID_KEY]);
 
     return roles.map(function(role) {
         return group[role];
     });
 };
 
-GenericManager.prototype._printGroups = function() {
+UniqueRoleParadigm.prototype._createNewGroup = function() {
+    var group = {};
+    group[ID_KEY] = COUNT++;
+    return group;
+};
+
+UniqueRoleParadigm.prototype._printGroups = function() {
     console.log('Printing groups:');
     this.groups.forEach(this._printGroup.bind(this));
 };
 
-GenericManager.prototype._printGroup = function(group) {
+UniqueRoleParadigm.prototype._printGroup = function(group) {
     var number = this.groups.indexOf(group);
     console.log('Group', number, ':', R.mapObj(function(s){return s.id;}, group));
 };
 
-module.exports = GenericManager;
+module.exports = UniqueRoleParadigm;
