@@ -29,16 +29,18 @@ var Server = function(opts) {
     this._port = opts.port;
     this.app = express();
 
-    // Connect to mongo
+    // Mongo variables
     this._users = null;
     this._server = null;
+    this._mongoURI = opts.mongoURI;
 
     // Group and RPC Managers
     this.groupManager = new NetsBlocksServer(opts);
     this.rpcManager = new RPCManager(this.groupManager);
+};
 
-    // TODO: Consider moving this to be executed on server.start();
-    MongoClient.connect(opts.mongoURI, function(err, db) {
+Server.prototype.connectToMongo = function(callback) {
+    MongoClient.connect(this._mongoURI, function(err, db) {
         if (err) {
             throw err;
         }
@@ -46,12 +48,9 @@ var Server = function(opts) {
         this._users = db.collection('users');
         this.configureRoutes();
 
-        console.log('Connected to '+opts.mongoURI);
-        if (this.onComplete) {
-            this.start(this.onComplete);
-        }
+        console.log('Connected to '+this._mongoURI);
+        callback(err);
     }.bind(this));
-
 };
 
 Server.prototype.configureRoutes = function() {
@@ -70,11 +69,7 @@ Server.prototype.configureRoutes = function() {
         res.redirect('/snap.html');
     });
 
-    // TODO: Storage endpoints
-    //this.app.all('/api', function(req, res) {
-        //console.log('req:', req);
-    //});
-
+    // TODO: Move this to a subrouter
     this.app.get('/api/ResetPW', function(req, res) {
         console.log('password reset request:', req.query.Username);
         // Change the password
@@ -133,7 +128,12 @@ Server.prototype.configureRoutes = function() {
     }.bind(this));
 
     // Add User API routes (routes requiring logged in user)
+    // I would make this a sub router but the client expects the structure
+    // TODO: There may still be a better way to do this
     API.forEach(this.addAPIRoute.bind(this));
+
+    // Add RPC routes
+    this.app.use('/rpc', this.rpcManager.router);
 };
 
 Server.prototype.addAPIRoute = function(api) {
@@ -148,11 +148,10 @@ Server.prototype.emailPassword = function(user, password) {
 
 Server.prototype.start = function(done) {
     done = done || Utils.nop;
-    if (this._users) {
+    this.connectToMongo(function (err) {
         this._server = this.app.listen(this._port, done);
         this.groupManager.start();
-    }
-    this.onComplete = done;
+    }.bind(this));
 };
 
 Server.prototype.stop = function(done) {

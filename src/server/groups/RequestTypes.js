@@ -45,7 +45,7 @@ var Requests = {
          */
         username: function(socket, msg) {
             // Set the username for the socket
-            var username = msg.shift();
+            var username = msg.join(' ');
             this.socket2Username[socket.id] = username;
             this.username2Socket[username] = socket;
         },

@@ -141,6 +141,10 @@ UniqueRoleParadigm.prototype.onDisconnect = function(socket) {
 UniqueRoleParadigm.prototype._removeClientFromGroup = function(id, role) {
     var oldGroup = this.id2Group[id];
 
+    if (Object.keys(oldGroup).length === 1) {
+        this.notifyGroupClose(this.id2Socket[id]);
+    }
+
     delete oldGroup[role];
     delete this.id2Group[id];
 };

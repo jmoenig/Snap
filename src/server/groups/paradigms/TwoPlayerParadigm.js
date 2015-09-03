@@ -79,10 +79,13 @@ TwoPlayerParadigm.prototype.onDisconnect = function(socket) {
     info('Removing #'+socket.id+' from '+TwoPlayerParadigm._printGroup(group));
 
     // Remove the given group and add the other socket back to a group
+    // TODO: This could cause problems as this means the RPC context will be 
+    // updated
     if (group.length === 2) {
         peer = group[0] === socket ? group[1] : group[0];
     }
 
+    this.notifyGroupClose(socket);
     index = this.groups.indexOf(group);
     this.groups.splice(group, 1);
     delete this.id2Group[socket.id];

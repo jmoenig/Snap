@@ -82,4 +82,20 @@ BasicParadigm.prototype.onDisconnect = function(socket) {
     globalGroup.splice(i,1);
 };
 
+/**
+ * Callback for closing a group. This will be overridden by the Communication
+ * Manager to allow functions to be evaluated when this event occurs
+ *
+ * @param {String} groupId
+ * @return {undefined}
+ */
+BasicParadigm.prototype.onGroupClose = function(groupId) {
+    // nop
+};
+
+BasicParadigm.prototype.notifyGroupClose = function(socket) {
+    var groupId = this.getGroupId(socket);
+    this.onGroupClose(groupId);
+};
+
 module.exports = BasicParadigm;

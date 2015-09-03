@@ -27,12 +27,16 @@ var DEFAULT_PARADIGM = 'sandbox';
 var CommunicationManager = function(opts) {
     opts = _.extend({}, defOptions, opts);
     this._wsPort = opts.wsPort;
+    this._wss = null;
     this.sockets = [];
     this.socket2Role = {};
     this.socket2Paradigm = {};
 
     this.socket2Username = {};
     this.username2Socket = {};
+
+    // Group close callbacks
+    this._groupCloseListeners = [];
 
     info('Default messaging paradigm: '+DEFAULT_PARADIGM);
     this.paradigms = this.loadParadigms();
@@ -41,9 +45,26 @@ var CommunicationManager = function(opts) {
 };
 
 CommunicationManager.prototype.getGroupId = function(username) {
-    var socket = this.username2Socket[username],
-        paradigm = this.socket2Paradigm[socket.id];
+    var socket,
+        paradigm;
+
+    socket = this.username2Socket[username];
+    if (!socket) {  // Return null if no socket has the given username
+        return null;
+    }
+
+    paradigm = this.socket2Paradigm[socket.id];
     return paradigm.getName()+'_'+paradigm.getGroupId(socket);
+};
+
+CommunicationManager.prototype.onGroupClose = function(fn) {
+    this._groupCloseListeners.push(fn);
+};
+
+CommunicationManager.prototype.fireGroupCloseEvents = function(groupId) {
+    this._groupCloseListeners.forEach(function(fn) {
+        fn(groupId);
+    });
 };
 
 CommunicationManager.prototype.loadParadigms = function() {
@@ -55,8 +76,10 @@ CommunicationManager.prototype.loadParadigms = function() {
             return new Paradigm();
         })
         .forEach(function(paradigm) {
+            // Set 'onGroupClose' callback
+            paradigm.onGroupClose = this.fireGroupCloseEvents.bind(this);
             result[paradigm.getName().toLowerCase()] = paradigm;
-        });
+        },this);
     return result;
 };
 
@@ -76,6 +99,10 @@ CommunicationManager.prototype.start = function() {
         socket.id = ++counter;
         this.sockets.push(socket);
         this.socket2Role[socket.id] = 'default_'+socket.id;
+
+        // Provide a temporary username
+        this.socket2Username[socket.id] = 'user_'+socket.id;
+        this.username2Socket['user_'+socket.id] = socket;
 
         // Add the socket to the default paradigm
         this.joinParadigm(socket, this.defaultParadigm);

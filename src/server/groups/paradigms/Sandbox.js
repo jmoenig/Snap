@@ -9,11 +9,15 @@
 
 'use strict';
 
-var groups = [],
+var BaseParadigm = require('./Basic.js'),
+    Utils = require('../../Utils.js'),
+    groups = [],
     count = 0;
 
 var SandboxParadigm = function() {
 };
+
+Utils.inherit(SandboxParadigm.prototype, BaseParadigm.prototype);
 
 SandboxParadigm.prototype.getName = function() {
     return 'Sandbox';
@@ -81,6 +85,7 @@ SandboxParadigm.prototype.onDisconnect = function(socket) {
     var group = this._findGroupContaining(socket),
         index;
     if (group) {
+        this.notifyGroupClose(socket);
         index = groups.indexOf(group);
         groups.splice(index,1);
     }

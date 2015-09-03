@@ -3,6 +3,11 @@
 
 'use strict';
 
+var R = require('ramda'),
+    debug = require('debug'),
+    log = debug('NetsBlocks:RPCManager:TicTacToe:log'),
+    info = debug('NetsBlocks:RPCManager:TicTacToe:info');
+
 /**
  * TicTacToeRPC - This constructor is called on the first request to an RPC
  * from a given room
@@ -24,28 +29,54 @@ TicTacToeRPC.getPath = function() {
     return '/tictactoe';
 };
 
+/**
+ * This function is used to expose the public API for RPC calls
+ *
+ * @return {Array<String>}
+ */
 TicTacToeRPC.getActions = function() {
     return ['isOpen', // Check if a space is open
             'getTile', // Get the tile at a location
             'getWinner',  // Get the winner
+            'clear',
             'play',  // Play a tile at the given location
             'isGameOver'];  // Check for game over
 };
 
 // Actions
 TicTacToeRPC.prototype.isOpen = function(req, res) {
-    var row = req.query.row,
-        column = req.query.column,
-        open = this.board[row][column] === null;
+    var row = req.query.row-1,
+        column = req.query.column-1,
+        open,
+        isOnBoard = [row, column].every(this.isValidPosition.bind(this));
 
-    res.send(open);
+    if (!isOnBoard) {
+        return res.status(400).send('ERROR: invalid position');
+    }
+    open = this.board[row][column] === null;
+    return res.send(open);
+};
+
+TicTacToeRPC.prototype.clear = function(req, res) {
+    this.winner = null;
+    this.board = TicTacToeRPC.getNewBoard();
+    info(req.query.username+' is clearing board');
+    res.status(200).send(true);
 };
 
 TicTacToeRPC.prototype.getTile = function(req, res) {
-    var row = req.query.row,
-        column = req.query.column;
+    var row = req.query.row-1,
+        column = req.query.column-1,
+        isOnBoard = [row, column].every(this.isValidPosition.bind(this));
 
-    // TODO
+    if (isOnBoard) {
+        info('Requesting tile at '+row+', '+column+' ('+this.board[row][column]+') from '+
+            req.query.username);
+        res.send(this.board[row][column]);
+    } else {
+        log('Received invalid position in tile request: '+row+', '+column);
+        res.status(400).send('ERROR: invalid position');
+    }
 };
 
 TicTacToeRPC.prototype.getWinner = function(req, res) {
@@ -53,15 +84,29 @@ TicTacToeRPC.prototype.getWinner = function(req, res) {
 };
 
 TicTacToeRPC.prototype.play = function(req, res) {
-    var username = req.session.username,
-        row = req.query.row,
-        column = req.query.column,
-        open = this.board[row][column] === null;
+    var username = req.query.username,
+        row = req.query.row-1,
+        column = req.query.column-1,
+        open = this.board[row][column] === null,
+        isOnBoard = [row, column].every(this.isValidPosition.bind(this));
 
+    // Check that...
+
+    // ...the game is still going
     if (this.winner) {
-        return res.status(400).send('Game is over');
+        log('"'+username+'" is trying to play after the game is over');
+        return res.status(400).send('ERROR: game is over. '+
+            TicTacToeRPC.getWinner(this.board)+' won.');
     }
 
+    // ...it's a valid position
+    if (!isOnBoard) {
+        log('"'+username+'" is trying to play in an invalid position ('+row+','+column+')');
+        return res.status(400).send('ERROR: invalid position. Please select a '+
+            'position between 1 and 3');
+    }
+
+    // ...it's not occupied
     if (open) {
         this.board[row][column] = username;
         this.winner = TicTacToeRPC.getWinner(this.board);
@@ -91,9 +136,11 @@ TicTacToeRPC.getWinner = function(board) {
     possibleWinners.push(TicTacToeRPC.getHorizontalWinner(rotatedBoard));
 
     // Check diagonals
-    var flippedBoard = board.map(board.reverse.call);
-    possibleWinners.push(TicTacToeRPC.getVerticalWinner(board) || 
-        TicTacToeRPC.getVerticalWinner(flippedBoard));
+    var flippedBoard = board.map(function(row) {
+        return row.slice().reverse();
+    });
+    possibleWinners.push(TicTacToeRPC.getDiagonalWinner(board) || 
+        TicTacToeRPC.getDiagonalWinner(flippedBoard));
 
     return possibleWinners.reduce(function(prev, curr) {
         return prev || curr;
@@ -118,7 +165,21 @@ TicTacToeRPC.rotateBoard = function(board) {
     return rotatedBoard;
 };
 
-TicTacToeRPC.getVerticalWinner = function(board) {
+TicTacToeRPC.getDiagonalWinner = function(board) {
+    var items;
+
+    // Get the diagonal
+    items = [1,2,3]
+        .map(R.nthArg(1))
+        .map(function(i) {
+            return board[i][i];
+        });
+
+    // Test it
+    if (TicTacToeRPC.areEqualNonNull(items)) {
+        return items[0];
+    }
+    return null;
 };
 
 TicTacToeRPC.getHorizontalWinner = function(board) {
@@ -128,6 +189,16 @@ TicTacToeRPC.getHorizontalWinner = function(board) {
         }
     }
     return null;
+};
+
+/**
+ * Check if it is in the range of the board and a number
+ *
+ * @param {Number} pos
+ * @return {Boolean}
+ */
+TicTacToeRPC.prototype.isValidPosition = function(pos) {
+    return !isNaN(pos) && 0 <= pos && pos < this.board.length;
 };
 
 TicTacToeRPC.areEqualNonNull = function(row) {
