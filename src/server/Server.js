@@ -5,7 +5,7 @@ var express = require('express'),
     _ = require('lodash'),
     Utils = _.extend(require('./Utils'), require('./ServerUtils.js')),
     R = require('ramda'),
-    NetsBlocksServer = require('./groups/CommunicationManager'),
+    CommunicationManager = require('./groups/CommunicationManager'),
     RPCManager = require('./rpc/RPCManager'),
     MongoClient = require('mongodb').MongoClient,
     ObjectID = require('mongodb').ObjectID,
@@ -18,6 +18,11 @@ var express = require('express'),
     },
     key = process.env.SECRET_KEY || 'change this',
     hash = require('../client/sha512').hex_sha512,
+
+    // Logging
+    debug = require('debug'),
+    log = debug('NetsBlocks:API:log'),
+    info = debug('NetsBlocks:API:info'),
 
     // Session and cookie info
     sessionSecret = process.env.SESSION_SECRET || 'DoNotUseThisInProduction',
@@ -35,7 +40,7 @@ var Server = function(opts) {
     this._mongoURI = opts.mongoURI;
 
     // Group and RPC Managers
-    this.groupManager = new NetsBlocksServer(opts);
+    this.groupManager = new CommunicationManager(opts);
     this.rpcManager = new RPCManager(this.groupManager);
 };
 
@@ -54,7 +59,7 @@ Server.prototype.connectToMongo = function(callback) {
 };
 
 Server.prototype.configureRoutes = function() {
-    this.app.use(express.static(__dirname + '/client/'));
+    this.app.use(express.static(__dirname + '/../client/'));
     this.app.use(bodyParser.json());
     this.app.use(bodyParser.urlencoded({
         extended: true
@@ -88,7 +93,6 @@ Server.prototype.configureRoutes = function() {
             tmpPassword = 'password';
 
         this._users.findOne({username: uname}, function(e, user) {
-            console.log('User is:', user, '('+uname+')');
             if (!user) {
                 // Default password is "password". Change this to update password
                 // and email it to the user 
@@ -100,15 +104,15 @@ Server.prototype.configureRoutes = function() {
 
                 this.emailPassword(newUser, tmpPassword);
                 this._users.insert(newUser, function (err, result) {
-                                   // FIXME: Change password to something meaningful
                     if (err) {
                         return res.serverError(err);
                     }
+                    log('Created new user: "'+uname+'"');
                     return res.sendStatus(200);
                 });
                 return;
             }
-            console.log('User exists');
+            log('User "'+uname+'" already exists. Could not make new user.');
             return res.status(401).send('ERROR: user exists');
         }.bind(this));
     }.bind(this));
