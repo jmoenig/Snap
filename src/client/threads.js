@@ -1871,6 +1871,24 @@ Process.prototype.reportLastAnswer = function () {
 
 // Process URI retrieval (interpolated)
 
+Process.prototype.callRPC = function (rpc, params) {
+    var stage = this.homeContext.receiver.parentThatIsA(StageMorph),
+        uuid = stage.sockets.uuid,
+        url,
+        result;
+
+    url = window.location.host+'/rpc/'+rpc+'?username='+uuid+'&'+params;
+    result = this.reportURL(url);
+    if (result) {
+        try {  // Try to convert it to JSON
+            result = JSON.parse(result);
+        } catch (e) {
+            // nop
+        }
+    }
+    return result;
+};
+
 Process.prototype.reportURL = function (url) {
     var response;
     if (!this.httpRequest) {

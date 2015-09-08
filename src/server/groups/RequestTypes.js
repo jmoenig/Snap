@@ -43,12 +43,12 @@ var Requests = {
          * @param {Array<String>} msg
          * @return {undefined}
          */
-        username: function(socket, msg) {
-            // Set the username for the socket
-            var username = msg.join(' ');
-            this.socket2Username[socket.id] = username;
-            this.username2Socket[username] = socket;
-        },
+        //username: function(socket, msg) {
+            //// Set the username for the socket
+            //var username = msg.join(' ');
+            //this.socket2Username[socket.id] = username;
+            //this.username2Socket[username] = socket;
+        //},
 
         /**
          * Message to be emitted to the user's peers wrt the given paradigm.

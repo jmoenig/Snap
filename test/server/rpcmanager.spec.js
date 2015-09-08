@@ -15,7 +15,7 @@ var supertest = require('supertest'),
     };
 
 describe('RPC Manager Tests', function() {
-    var username = 'test',
+    var username,
         server;
 
     before(function(done) {
@@ -44,8 +44,14 @@ describe('RPC Manager Tests', function() {
         before(function(done) {
             socket = new WebSocket(host);
             socket.on('open', function() {
-                socket.send('username '+username);
-                setTimeout(done, 100);
+                socket.on('message', function(msg) {
+                    var data = msg.split(' '),
+                        type = data.shift();
+                    if (type === 'uuid') {
+                        username = data.join(' ');
+                        done();
+                    }
+                });
             });
         });
 
@@ -83,13 +89,19 @@ describe('RPC Manager Tests', function() {
 
         describe('Second connection', function() {
             var newSocket,
-                username2 = 'I want to play, too';  // This is an intentionally challenging name
+                username2;  // This is an intentionally challenging name
 
             before(function(done) {
                 newSocket = new WebSocket(host);
                 newSocket.on('open', function() {
-                    newSocket.send('username '+username2);
-                    done();
+                    newSocket.on('message', function(msg) {
+                        var data = msg.split(' '),
+                            type = data.shift();
+                        if (type === 'uuid') {
+                            username2 = data.join(' ');
+                            done();
+                        }
+                    });
                 });
             });
 

@@ -11,6 +11,9 @@
 
 var BaseParadigm = require('./Basic.js'),
     Utils = require('../../Utils.js'),
+    debug = require('debug'),
+    log = debug('NetsBlox:CommunicationManager:Paradigms:Sandbox:log'),
+    info = debug('NetsBlox:CommunicationManager:Paradigms:Sandbox:info'),
     groups = [],
     count = 0;
 

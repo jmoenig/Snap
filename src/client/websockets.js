@@ -1,8 +1,9 @@
-/*globals Context,VariableFrame,SpriteMorph, StageMorph*/
+/*globals SnapCloud,Context,VariableFrame,SpriteMorph,StageMorph*/
 // WebSocket Manager
 
 var WebSocketManager = function (stage) {
     this.stage = stage;
+    this.uuid = null;
     this.websocket = null;
     this.messages = [];
     this._connectWebSocket();
@@ -10,11 +11,17 @@ var WebSocketManager = function (stage) {
 
 WebSocketManager.prototype._connectWebSocket = function() {
     // Connect socket to the server
-    var address = window.location.origin.replace('http://','ws://'),
-        self = this;
+    var self = this,
+        address;
+
+    address = 'ws://'+(window.location.origin
+        .replace('http://','')
+        .replace(/:?[0-9]*$/,':5432'));
+
     this.websocket = new WebSocket(address);
     // Set up message firing queue
     this.websocket.onopen = function() {
+        console.log('Connection established');  // REMOVE this
         while (self.messages.length) {
             self.websocket.send(self.messages.shift());
         }
@@ -25,21 +32,30 @@ WebSocketManager.prototype._connectWebSocket = function() {
     this.websocket.onmessage = function(message) {
         var data = message.data.split(' '),
             type = data.shift(),
-            role = data.pop(),
+            role,
+            content;
+
+        if (type === 'uuid') {
+            self.uuid = data.join(' ');
+        } else {
+            role = data.pop();
             content = JSON.parse(data.join(' ') || null);
-        self.onMessageReceived(type, content, role);
+            self.onMessageReceived(type, content, role);
+        }
+    };
+
+    this.websocket.onclose = function() {
+        console.log('Connection closed');  // REMOVE this
+        setTimeout(self._connectWebSocket.bind(self), 500);
     };
 };
 
 WebSocketManager.prototype.sendMessage = function(message) {
-    // Should send role, game, etc on every message?
-    // FIXME
     var state = this.websocket.readyState;
     if (state === this.websocket.OPEN) {
         this.websocket.send(message);
-    } else if (state !== this.websocket.CONNECTING) {
+    } else {
         this.messages.push(message);
-        this._connectWebSocket();
     }
 };
 

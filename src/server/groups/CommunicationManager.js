@@ -1,6 +1,5 @@
 // Communication Manager
 // Handles the groups and websocket communication 
-// TODO: Change this to be a group manager which manages multiple paradigms
 
 'use strict';
 
@@ -18,8 +17,8 @@ var WebSocketServer = require('ws').Server,
         GroupManager: require('./paradigms/Basic')
     },
     debug = require('debug'),
-    log = debug('NetsBlocks:log'),
-    info = debug('NetsBlocks:info'),
+    log = debug('NetsBlox:CommunicationManager:log'),
+    info = debug('NetsBlox:CommunicationManager:info'),
     HandleSocketRequest = require('./RequestTypes');
 
 // Settings
@@ -32,23 +31,23 @@ var CommunicationManager = function(opts) {
     this.socket2Role = {};
     this.socket2Paradigm = {};
 
-    this.socket2Username = {};
-    this.username2Socket = {};
+    this.socket2Uuid = {};
+    this.uuid2Socket = {};
 
     // Group close callbacks
     this._groupCloseListeners = [];
 
-    info('Default messaging paradigm: '+DEFAULT_PARADIGM);
     this.paradigms = this.loadParadigms();
     // Set the default to Sandbox
     this.defaultParadigm = this.paradigms[DEFAULT_PARADIGM];
+    info('Default messaging paradigm: "'+this.defaultParadigm.getName()+'"');
 };
 
 CommunicationManager.prototype.getGroupId = function(username) {
     var socket,
         paradigm;
 
-    socket = this.username2Socket[username];
+    socket = this.uuid2Socket[username];
     if (!socket) {  // Return null if no socket has the given username
         return null;
     }
@@ -90,19 +89,24 @@ CommunicationManager.prototype.loadParadigms = function() {
  * @return {undefined}
  */
 CommunicationManager.prototype.start = function() {
+    var uuid;
     this._wss = new WebSocketServer({port: this._wsPort});
+    info('WebSocket server listening on '+this._wsPort);
 
     this._wss.on('connection', function(socket) {
-        log('WebSocket connection established! ('+counter+')');
 
         // ID the socket
         socket.id = ++counter;
         this.sockets.push(socket);
         this.socket2Role[socket.id] = 'default_'+socket.id;
 
-        // Provide a temporary username
-        this.socket2Username[socket.id] = 'user_'+socket.id;
-        this.username2Socket['user_'+socket.id] = socket;
+        // Provide a uuid
+        uuid = 'user_'+socket.id;
+        this.socket2Uuid[socket.id] = uuid;
+        this.uuid2Socket[uuid] = socket;
+        socket.send('uuid '+uuid);
+
+        log('A new NetsBlox client has connected! UUID: '+uuid);
 
         // Add the socket to the default paradigm
         this.joinParadigm(socket, this.defaultParadigm);

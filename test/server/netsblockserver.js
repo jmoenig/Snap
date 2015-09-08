@@ -29,7 +29,8 @@ describe('NetsBlocksServer tests', function() {
     var server;
 
     describe('Basic tests', function() {
-        var socket;
+        var socket,
+            uuid;
 
         describe('Paradigm Selection tests', function() {
             before(function(done) {
@@ -37,8 +38,12 @@ describe('NetsBlocksServer tests', function() {
                 if (!socket || socket.readyState !== 1) {
                     socket = new WebSocket(host);
                     socket.on('open', function() {
-                        socket.send('username socket1');
-                        done();
+                        socket.on('message', function(message) {
+                            var data = message.split(' '),
+                                type = data.shift();
+                            uuid = data.join(' ');
+                            done();
+                        });
                     });
                 }
                 server.start();
@@ -50,7 +55,7 @@ describe('NetsBlocksServer tests', function() {
 
             it('should use sandbox by default', function(done) {
                 setTimeout(function() {
-                    var id = server.username2Socket.socket1.id;
+                    var id = server.uuid2Socket[uuid].id;
                     assert(server.socket2Paradigm[id].getName(), 'Sandbox');
                     done();
                 }, 200);
@@ -59,40 +64,44 @@ describe('NetsBlocksServer tests', function() {
             it('should change the paradigm with "paradigm"', function(done) {
                 socket.send('paradigm uniquerole');
                 setTimeout(function() {
-                    var id = server.username2Socket.socket1.id;
+                    var id = server.uuid2Socket[uuid].id;
                     assert(server.socket2Paradigm[id].getName(), 'UniqueRole');
                     done();
                 }, 200);
             });
 
             it('should support multiple paradigms at once', function(done) {
-                var newSocket = new WebSocket(host);
+                var newSocket = new WebSocket(host),
+                    newUuid;
                 socket.send('paradigm uniquerole');
                 newSocket.on('open', function() {
-                    newSocket.send('username socket2');
-                    setTimeout(function() {
-                        var expectedParadigms = ['UniqueRole', 'Sandbox'];
-                        ['socket1', 'socket2'].map(function(username) {
-                            var id = server.username2Socket[username].id;
-                            // Get the paradigm
-                            return server.socket2Paradigm[id];
-                        })
-                        .forEach(function(paradigm, index) {
-                            assert.equal(paradigm.getName(), expectedParadigms[index]);
-                        });
-                        done();
-                    }, 200);
+                    newSocket.on('message', function(msg) {
+                        newUuid = msg.split(' ').pop();
+                        setTimeout(function() {
+                            var expectedParadigms = ['UniqueRole', 'Sandbox'];
+                            [uuid, newUuid].map(function(username) {
+                                var id = server.uuid2Socket[username].id;
+                                // Get the paradigm
+                                return server.socket2Paradigm[id];
+                            })
+                            .forEach(function(paradigm, index) {
+                                assert.equal(paradigm.getName(), expectedParadigms[index]);
+                            });
+                            done();
+                        }, 200);
+                    });
                 });
             });
         });
 
         describe('Connection tests', function() {
-            beforeEach(function() {
+            beforeEach(function(done) {
                 server = new NetsBlocks();
+                server.start();
                 if (!socket || socket.readyState !== 1) {
                     socket = new WebSocket(host);
                 }
-                server.start();
+                socket.on('open', done);
             });
 
             afterEach(function() {
@@ -110,7 +119,7 @@ describe('NetsBlocksServer tests', function() {
                 socket.close();
                 // Check that the server removed the socket
                 setTimeout(function() {
-                    assert.equal(server.sockets.length, 0);
+                    assert.equal(server.sockets.indexOf(socket), -1);
                     done();
                 }, 500);
             });
@@ -229,7 +238,8 @@ describe('NetsBlocksServer tests', function() {
 describe('GroupManager Testing', function() {
     var server,
         sockets,
-        socketCount = 3;
+        socketCount = 3,
+        usernames = [];
 
     // Helper functions
     var register = function(socket, role) {
@@ -254,6 +264,7 @@ describe('GroupManager Testing', function() {
 
     var refreshSockets = function(count) {
         // Throw out all old sockets and start fresh!
+        usernames = new Array(count);
         for (var i = count; i--;) {
             sockets[i] = new WebSocket(host);
         }
@@ -264,10 +275,18 @@ describe('GroupManager Testing', function() {
         sockets.forEach(function(socket) {
             socket.on('open', function() {
                 socket.send('paradigm '+paradigm);
-                socket.send('username s'+sockets.indexOf(socket));
-                if (--count === 0) {
-                    callback();
-                }
+                socket.on('message', function(msg) {
+                    var data = msg.split(' '),
+                        type = data.shift();
+
+                    if (type === 'uuid') {
+                        var index = sockets.indexOf(socket);
+                        usernames[index] = data.join(' ');
+                        if (--count === 0) {
+                            callback();
+                        }
+                    }
+                });
             });
         });
     };
@@ -283,10 +302,18 @@ describe('GroupManager Testing', function() {
             sockets.forEach(function(socket) {
                 socket.on('open', function() {
                     socket.send('paradigm uniquerole');
-                    socket.send('username s'+sockets.indexOf(socket));
-                    if (--count === 0) {
-                        done();
-                    }
+                    socket.on('message', function(msg) {
+                        var data = msg.split(' '),
+                            type = data.shift();
+
+                        if (type === 'uuid') {
+                            var index = sockets.indexOf(socket);
+                            usernames[index] = data.join(' ');
+                            if (--count === 0) {
+                                done();
+                            }
+                        }
+                    });
                 });
             });
         });
@@ -295,11 +322,11 @@ describe('GroupManager Testing', function() {
             sockets.forEach(function(s) {
                 s.close();
             });
+            usernames = [];
             server.stop();
         });
 
         it('should group 3 players w/ 2 roles into 2 rooms', function(done) {
-            var usernames = ['s0', 's1', 's2'];
             register(sockets[0], 'p1');
             register(sockets[1], 'p2');
             register(sockets[2], 'p2');
@@ -315,7 +342,6 @@ describe('GroupManager Testing', function() {
         });
 
         it('should group players into groups by role name', function(done) {
-            var usernames = ['s0', 's1', 's2'];
             register(sockets[0], 'p1');
             register(sockets[1], 'p2');
             register(sockets[2], 'p2');
@@ -325,6 +351,7 @@ describe('GroupManager Testing', function() {
 
             setTimeout(function() {
                 var groups = usernames.map(server.getGroupId.bind(server));
+                console.log('groups:', groups);
                 assert.notEqual(groups[1],groups[2]);
                 assert(groups[0] === groups[2] || groups[0] === groups[1]);
                 done();
@@ -347,7 +374,6 @@ describe('GroupManager Testing', function() {
 
         it('join messages should include registered role', function(done) {
             var test = function(msg) {
-                    console.log('MSG:', msg);
                     if (msg.indexOf('hey') > -1) {
                         done();
                     }
@@ -382,7 +408,7 @@ describe('GroupManager Testing', function() {
             var count = 0,
                 checkFn = function() {
                     // Testing logic
-                    var groups = ['s0', 's1', 's2'].map(server.getGroupId.bind(server));
+                    var groups = usernames.map(server.getGroupId.bind(server));
                     assert.equal(R.uniq(groups).length, 2, 'Incorrect number of groups. '+
                         'Expected 2 but found '+R.uniq(groups).length+'.\n'+
                         JSON.stringify(server.paradigms.twoplayer._printableGroups()));

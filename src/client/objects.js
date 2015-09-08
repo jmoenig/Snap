@@ -617,7 +617,7 @@ SpriteMorph.prototype.initBlocks = function () {
         },
         receiveSocketEvent: {
             type: 'hat',
-            category: 'network',
+            category: 'control',
             spec: 'when I receive %socketMsgHat from %roleHat'
         },
         doSocketEvent: {
@@ -632,7 +632,7 @@ SpriteMorph.prototype.initBlocks = function () {
         },
         receiveSocketMessage: {
             type: 'hat',
-            category: 'network',
+            category: 'control',
             spec: 'when I receive msg %socketMsg %scriptVars'
         },
         doBroadcast: {
@@ -907,9 +907,21 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: '%att of %spr',
             defaults: [['costume #']]
         },
+        // Creating URL block with params
+        //param: {
+            //type: 'reporter',
+            //category: 'network',
+            //spec: 'name: %s value: %s'
+        //},
+        callRPC: {
+            type: 'reporter',
+            category: 'network',
+            spec: 'call %s with %s',
+            defaults: ['tictactoe']
+        },
         reportURL: {
             type: 'reporter',
-            category: 'sensing',
+            category: 'network',
             spec: 'http:// %s',
             defaults: ['snap.berkeley.edu']
         },
@@ -1892,11 +1904,6 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(watcherToggle('getLastMessage'));
         blocks.push(block('getLastMessage'));
         blocks.push('-');
-        blocks.push(block('doRegisterClient'));
-        blocks.push(block('doSocketEvent'));
-        blocks.push(block('doSocketDisconnect'));
-        blocks.push(block('doSocketMessage'));
-        blocks.push('-');
         blocks.push(block('doWarp'));
         blocks.push('-');
         blocks.push(block('doWait'));
@@ -1940,6 +1947,17 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push('-');
         blocks.push(block('doPauseAll'));
 
+    } else if (cat === 'network') {
+        // TODO: Move these later to other categories
+        blocks.push(block('doRegisterClient'));
+        blocks.push(block('doSocketEvent'));
+        blocks.push(block('doSocketDisconnect'));
+        blocks.push(block('doSocketMessage'));
+        blocks.push('-');
+        blocks.push(block('reportURL'));
+        blocks.push(block('callRPC'));
+        //blocks.push(block('param'));
+        blocks.push('-');
     } else if (cat === 'sensing') {
 
         blocks.push(block('reportTouchingObject'));
@@ -1965,8 +1983,6 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('getTimer'));
         blocks.push('-');
         blocks.push(block('reportAttributeOf'));
-        blocks.push('-');
-        blocks.push(block('reportURL'));
         blocks.push('-');
         blocks.push(block('reportIsFastTracking'));
         blocks.push(block('doSetFastTracking'));
@@ -5248,8 +5264,8 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push('-');
         blocks.push(block('reportAttributeOf'));
         blocks.push('-');
-        blocks.push(block('reportURL'));
-        blocks.push('-');
+        //blocks.push(block('reportURL'));
+        //blocks.push('-');
         blocks.push(block('reportIsFastTracking'));
         blocks.push(block('doSetFastTracking'));
         blocks.push('-');

@@ -5,8 +5,8 @@
 
 var R = require('ramda'),
     debug = require('debug'),
-    log = debug('NetsBlocks:RPCManager:TicTacToe:log'),
-    info = debug('NetsBlocks:RPCManager:TicTacToe:info');
+    log = debug('NetsBlox:RPCManager:TicTacToe:log'),
+    info = debug('NetsBlox:RPCManager:TicTacToe:info');
 
 /**
  * TicTacToeRPC - This constructor is called on the first request to an RPC
@@ -51,7 +51,7 @@ TicTacToeRPC.prototype.isOpen = function(req, res) {
         isOnBoard = [row, column].every(this.isValidPosition.bind(this));
 
     if (!isOnBoard) {
-        return res.status(400).send('ERROR: invalid position');
+        return res.status(400).send(false);
     }
     open = this.board[row][column] === null;
     return res.send(open);
@@ -75,7 +75,7 @@ TicTacToeRPC.prototype.getTile = function(req, res) {
         res.send(this.board[row][column]);
     } else {
         log('Received invalid position in tile request: '+row+', '+column);
-        res.status(400).send('ERROR: invalid position');
+        res.status(400).send(false);
     }
 };
 
@@ -116,6 +116,7 @@ TicTacToeRPC.prototype.play = function(req, res) {
 };
 
 TicTacToeRPC.prototype.isGameOver = function(req, res) {
+    log('isGameOver: '+(this.winner !== null)+' ('+this.winner+')');
     res.send(this.winner !== null);
 };
 
