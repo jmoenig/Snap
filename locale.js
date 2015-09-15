@@ -42,7 +42,7 @@
 
 /*global modules, contains*/
 
-modules.locale = '2015-August-06';
+modules.locale = '2015-September-15';
 
 // Global stuff
 
@@ -510,4 +510,15 @@ SnapTranslator.dict.ia = {
         'Ken.Dickey@whidbey.com',
     'last_changed':
         '2015-08-09'
+};
+
+SnapTranslator.dict.hr = {
+    'language_name':
+        'Hrvatski',
+    'language_translator':
+        '\u017Deljko Hrvoj',
+    'translator_e-mail':
+        'zeljko.hrvoj@zg.t-com.hr',
+    'last_changed':
+        '2015-09-15'
 };
