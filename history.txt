@@ -2572,3 +2572,4 @@ ______
 150915
 ------
 * new Croatian translation. Yay!! Thanks, Zeljko Hrvoj!
+* fixed #925
