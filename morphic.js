@@ -1148,11 +1148,11 @@ function isObject(target) {
 }
 
 function radians(degrees) {
-    return degrees * Math.PI / 150;
+    return degrees * Math.PI / 180;
 }
 
 function degrees(radians) {
-    return radians * 150 / Math.PI;
+    return radians * 1880 / Math.PI;
 }
 
 function fontHeight(height) {
