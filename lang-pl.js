@@ -461,12 +461,20 @@ SnapTranslator.dict.pl = {
         'je\u017Celi %b to %c w przeciwnym razie %c',
     'report %s':
         'zwr\u00F3\u0107 %s',
-    'stop block':
-        'zatrzymaj ten blok',
-    'stop script':
-        'zatrzymaj ten skrypt',
-    'stop all %stop':
-        'zatrzymaj wszystko %stop',
+    'stop %stopChoices':
+        'zatrzymaj %stopChoices',
+    'all':
+        'wszystko',
+    'this script':
+        'ten skrypt',
+    'this block':
+        'ten blok',
+    'stop %stopOthersChoices':
+        'zatrzymaj %stopOthersChoices',
+    'all but this script':
+        'wszystko oprócz tego skryptu',
+    'other scripts in sprite':
+        'inne skrypty tego duszka',
     'pause all %pause':
         'pauzuj wszystko %pause',
     'run %cmdRing %inputs':
