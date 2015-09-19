@@ -28,7 +28,7 @@ Mieliśmy ogromne szczęście do mentorów. Jens zdobył dużo doświadczenia pr
 
 Brian zdobywał szlify w~MIT oraz Stanford Artificial Intelligence Labs\footnote{Laboratorium sztucznej inteligencji na Uniwersytecie Stanforda --- przyp. tłum.}, gdzie uczył się pod okiem Johna McCarthy'ego, twórcy Lispa, oraz Geralda~J. Suss\-mana i~Guya Steele'a, twórców języka Scheme. Zdobywał również wiedzę od wielu innych wybitnych informatyków, w~tym autorów najlepszej książki z zakresu informatyki --- \emph{Struktury i~interpretacji programów komputerowych}: Hala Abelsona, Geralda~J. Suss\-mana i~Julie Suss\-man.
 
-\textbf{\emph{Za starych dobrych czasów mawialiśmy w~MIT Logo Lab: ,,Język Logo to Lisp w przebraniu BASIC-a''. Dziś, ze swoimi pierwszoklasowymi procedurami, zasięgami leksykalnymi~i pierwszoklasowymi kontynuacjami, \Snap{} jest jak Scheme w~przebraniu Scratcha.}}
+\textbf{\emph{Za starych dobrych czasów mawialiśmy w~MIT Logo Lab: ,,Język Logo to Lisp braniu BASIC-a''. Dziś, ze swoimi pierwszoklasowymi procedurami, zasięgami leksykalnymi~i pierwszoklasowymi kontynuacjami, \Snap{} jest jak Scheme w~przebraniu Scratcha.}}
 
 Szczęśliwym zrządzeniem losu, poprzez forum Scratch Advanced Topics, poznaliśmy wspaniałą grupę błyskotliwych uczniów gimnazjów~(!\@) i liceów. Kilku z nich wniosło swój wkład w~kod \Snap{a}: Kartik Chandra, Nathan Dinsmore, Connor Hudson i~Ian Reynolds. Ponadto wielu zgłosiło pomysły i~raporty błędów podczas testowania wersji alfa. Wśród studentów Uniwersytetu Kalifornijskiego w~Berkeley, którzy przyczynili się do rozwoju kodu, znajdują się Michael Ball, Achal Dave, Kyle Hotchkiss, Ivan Motyashov i~Yuan Yuan. Wymienianie wszystkich tłumaczy zajęłoby zbyt wiele miejsca, ale można ich odnaleźć w~okienku ,,O \Snap{}\ldots'' dostępnym w~programie.
 
@@ -54,7 +54,7 @@ W~tym rozdziale poznamy kilka cech języka \Snap{} odziedziczonych po Scratchu; 
 
 \Snap{} jest językiem programowania --- notacją, przy pomocy której możemy powiedzieć komputerowi, co ma zrobić. Jednak w~odróżnieniu od większości innych, \Snap{} jest językiem wizualnym; programując w~nim, zamiast posługiwać się klawiaturą, używamy metody ,,przeciągnij i~upuść'', dobrze znanej użytkownikom komputerów.
 
-Uruchom teraz środowisko \Snap{}. Powinieneś zobaczyć ekran podzielony na kilka obszarów:\footnote{\onehalfspacing Pierwsze uruchomienie \Snap{a} prawdopodobnie spowoduje wyświetlenie angielskiej wersji programu; aby przełączyć się na język polski, należy kliknąć menu ,,Ustawienia'' \inlinepic{../common/btn-settings} na pasku narzędzi, a~następnie użyć polecenia ,,Language\ldots'' (,,Język\ldots'') --- przyp. tłum.}\nopagebreak
+Uruchom teraz środowisko \Snap{}. Powinieneś zobaczyć ekran podzielony na kilka obszarów:\footnote{\onehalfspacing Pierwsze uruchomienie \Snap{a} prawdopodobnie spowoduje wyświetlenie angielskiej wersji programu; aby przełączyć się na język polski, należy kliknąć menu ,,Ustawienia''~\inlinepic{../common/btn-settings} na pasku narzędzi, a~następnie użyć polecenia ,,Language\ldots'' (,,Język\ldots'') --- przyp. tłum.}\nopagebreak
 
 \begin{center}
 \def\svgwidth{\textwidth}
@@ -88,7 +88,7 @@ Większość bloków komend ma kształt klocków, lecz niektóre, jak \code{powt
 
 \section{Duszki i~współbieżność}
 
-Tuż pod sceną znajduje się przycisk ,,nowy duszek'' \inlinepic{../common/btn-new-sprite}. Kliknięcie go spowoduje dodanie nowego duszka do sceny. Pojawi się on w~losowym miejscu na scenie, skierowany w~losową stronę i~zabarwiony na losowy kolor.
+Tuż pod sceną znajduje się przycisk ,,nowy duszek''~\inlinepic{../common/btn-new-sprite}. Kliknięcie go spowoduje dodanie nowego duszka do sceny. Pojawi się on w~losowym miejscu na scenie, skierowany w~losową stronę i~zabarwiony na losowy kolor.
 
 Każdy duszek ma swoje własne skrypty. Aby wyświetlić w~obszarze skryptów te należące do konkretnego duszka, należy kliknąć na jego obrazku w~\emph{zagrodzie duszków}, znajdującej się w~prawym dolnym rogu okna. Spróbuj umieścić następujące skrypty w~obszarze skryptów --- po jednym dla każdego duszka:\nopagebreak
 
@@ -103,7 +103,7 @@ Każdy duszek ma swoje własne skrypty. Aby wyświetlić w~obszarze skryptów te
 \end{minipage}
 \end{figure}
 
-Kiedy klikniemy zieloną flagę \inlinepic{../common/btn-start}, powinniśmy zobaczyć jak jeden duszek się obraca, podczas gdy drugi porusza się w~tę i~z~powrotem. Ten eksperyment pokazuje, jak różne skrypty mogą być wykonywane jednocześnie (\emph{współbieżnie}). Obracanie się dookoła i~ruch po linii prostej zachodzą jednocześnie. Współbieżność zachodzi również w~przypadku wielu skryptów należących do tego samego duszka. Spróbujmy tego przykładu:\nopagebreak
+Kiedy klikniemy zieloną flagę~\inlinepic{../common/btn-start}, powinniśmy zobaczyć jak jeden duszek się obraca, podczas gdy drugi porusza się w~tę i~z~powrotem. Ten eksperyment pokazuje, jak różne skrypty mogą być wykonywane jednocześnie (\emph{współbieżnie}). Obracanie się dookoła i~ruch po linii prostej zachodzą jednocześnie. Współbieżność zachodzi również w~przypadku wielu skryptów należących do tego samego duszka. Spróbujmy tego przykładu:\nopagebreak
 
 \begin{figure}[H]
 \begin{minipage}{0.5\textwidth}
@@ -116,11 +116,11 @@ Kiedy klikniemy zieloną flagę \inlinepic{../common/btn-start}, powinniśmy zob
 \end{minipage}
 \end{figure}
 
-Po naciśnięciu spacji duszek powinien zacząć bez końca chodzić w kółko, ponieważ bloki \code{przesuń} i \code{obróć} są wykonywane współbieżnie. (Aby przerwać program, kliknij czerwony czerwony znak ,,stop'' \inlinepic{../common/btn-stop} na prawym brzegu paska narzędzi).
+Po naciśnięciu spacji duszek powinien zacząć bez końca chodzić w kółko, ponieważ bloki \code{przesuń} i \code{obróć} są wykonywane współbieżnie. (Aby przerwać program, kliknij czerwony czerwony znak ,,stop''~\inlinepic{../common/btn-stop} na prawym brzegu paska narzędzi).
 
 \subsection{Kostiumy i~dźwięki}
 
-Aby zmienić wygląd duszka, należy zaimportować dla niego nowy \emph{kostium}. Są na to trzy sposoby. Najpierw trzeba wybrać duszka z~zagrody. Następnie, w~pierwszej metodzie, klikamy na ikonie pliku \inlinepic{../common/btn-file} na pasku narzędzi, a~następnie wybieramy polecenie ,,\code{Kostiumy\ldots}''. Ukaże się lista kostiumów z~publicznej biblioteki multimediów, spośród których możemy dokonać wyboru. Drugą metodą jest wybór pliku ze swojego własnego komputera. Należy w~tym celu kliknąć ikonę pliku, a~następnie polecenie ,,\code{Importuj\ldots}''. Można wtedy wybrać plik obrazu w~dowolnym formacie (PNG, JPEG itd.) obsługiwanym przez przeglądarkę. Trzeci sposób jest szybszy jeśli plik, którego chcemy użyć, jest widoczny na pulpicie: po prostu przeciągnij go do okna \Snap{a}. W~każdym z~tych przypadków obszar skryptów zacznie wyglądać mniej więcej tak:\nopagebreak
+Aby zmienić wygląd duszka, należy zaimportować dla niego nowy \emph{kostium}. Są na to trzy sposoby. Najpierw trzeba wybrać duszka z~zagrody. Następnie, w~pierwszej metodzie, klikamy na ikonie pliku~\inlinepic{../common/btn-file} na pasku narzędzi, a~następnie wybieramy polecenie ,,\code{Kostiumy\ldots}''. Ukaże się lista kostiumów z~publicznej biblioteki multimediów, spośród których możemy dokonać wyboru. Drugą metodą jest wybór pliku ze swojego własnego komputera. Należy w~tym celu kliknąć ikonę pliku, a~następnie polecenie ,,\code{Importuj\ldots}''. Można wtedy wybrać plik obrazu w~dowolnym formacie (PNG, JPEG itd.) obsługiwanym przez przeglądarkę. Trzeci sposób jest szybszy jeśli plik, którego chcemy użyć, jest widoczny na pulpicie: po prostu przeciągnij go do okna \Snap{a}. W~każdym z~tych przypadków obszar skryptów zacznie wyglądać mniej więcej tak:\nopagebreak
 
 \bigpic{obszar-skryptow-z-dodatkowym-kostiumem}
 
@@ -234,7 +234,7 @@ Jeśli pracując nad projektem, będziemy chcieli tymczasowo pominąć niektóre
 
 \bigpic{predykaty-i-obliczenia-warunkowe-3}
 
-Czasami potrzeba wykonać tę samą czynność bez względu na to, czy jakiś warunek zachodzi czy nie, za to z~różnymi parametrami dla obu tych przypadków. Można do tego użyć bloku \emph{funkcji} \code{if}:\footnote{\onehalfspacing Jeśli nie widzisz go w~palecie ,,Kontrola'', kliknij przycisk ,,Plik'' \inlinepic{../common/btn-file} na pasku narzędzi i~wybierz polecenie ,,Importuj narzędzia''.}\footnote{Niestety, podobnie jak pozostałe dodatkowe narzędzia i~biblioteki bloków, blok \code{if --- then --- else} posiada wyłącznie angielską nazwę, bez względu na nasze ustawienia języka. Oznacza ona ,,jeżeli --- to --- w~przeciwnym razie'' --- przyp. tłum.}\nopagebreak
+Czasami potrzeba wykonać tę samą czynność bez względu na to, czy jakiś warunek zachodzi czy nie, za to z~różnymi parametrami dla obu tych przypadków. Można do tego użyć bloku \emph{funkcji} \code{if}:\footnote{\onehalfspacing Jeśli nie widzisz go w~palecie ,,Kontrola'', kliknij przycisk ,,Plik''~\inlinepic{../common/btn-file} na pasku narzędzi i~wybierz polecenie ,,Importuj narzędzia''.}\footnote{Niestety, podobnie jak pozostałe dodatkowe narzędzia i~biblioteki bloków, funkcja \code{if --- then --- else} posiada wyłącznie angielską nazwę, bez względu na nasze ustawienia języka. Oznacza ona ,,jeżeli --- to --- w~przeciwnym razie'' --- przyp. tłum.}\nopagebreak
 
 \bigpic{predykaty-i-obliczenia-warunkowe-4}
 
@@ -327,7 +327,7 @@ Istnieją dwa różne sposoby na zapisanie projektu lub pliku multimedialnego (n
 
 Drugi sposób na zapisanie projektu na komputerze ma dwa etapy, ale nie ma ograniczeń związanych z~użyciem localstore (\TODO{zmień nazwę}). Projekty zapisane w~ten sposób są zwykłymi plikami na dysku komputera i~można je wysłać do znajomych oraz otworzyć w~dowolnej przeglądarce. Ponadto ich rozmiar nie jest ograniczony.
 
-Z~menu ,,Plik'' \inlinepic{../common/btn-file} wybieramy ,,Eksportuj projekt\ldots''. Okno \Snap{a} zniknie i~zostanie zastąpione przez ekran wypełniony ,,krzakami''. Bez paniki! Tak ma być. To, co widzimy, to zapis projektu w~notacji zwanej XML. Głównym powodem, dla którego wygląda on jak stek bzdur, jest to, że zawiera on zakodowane obrazki i~inne multimedia zawarte w~projekcie. Jeśli się dobrze wpatrzymy, same skrypty są jako tako czytelne, choć nie wyglądają jak bloki \Snap{a}. Przeglądarka otworzyła dla tekstu XML nową kartę; okno \Snap{a} jest wciąż otwarte, ukryte pod spodem.
+Z~menu ,,Plik''~\inlinepic{../common/btn-file} wybieramy ,,Eksportuj projekt\ldots''. Okno \Snap{a} zniknie i~zostanie zastąpione przez ekran wypełniony ,,krzakami''. Bez paniki! Tak ma być. To, co widzimy, to zapis projektu w~notacji zwanej XML. Głównym powodem, dla którego wygląda on jak stek bzdur, jest to, że zawiera on zakodowane obrazki i~inne multimedia zawarte w~projekcie. Jeśli się dobrze wpatrzymy, same skrypty są jako tako czytelne, choć nie wyglądają jak bloki \Snap{a}. Przeglądarka otworzyła dla tekstu XML nową kartę; okno \Snap{a} jest wciąż otwarte, ukryte pod spodem.
 
 Jednak tekst XML nie jest po to, abyśmy go czytali. Kiedy już mamy otwartą tę kartę, możemy użyć polecenia ,,Zapisz'' w~przeglądarce. Można je uruchomić z~poziomu menu przeglądarki lub przy pomocy skrótu klawiszowego --- zazwyczaj Command-S (Mac) lub Ctrl-S (wszędzie indziej). Wybieramy nazwę dla pliku, a~przeglądarka zapisze go w~folderze ,,Pobrane''\footnote{lub w~innym miejscu, które wskażemy w~oknie zapisu --- przyp. tłum.}. Na koniec zamykamy kartę z~plikiem XML i~wracamy do środowiska \Snap{}.
 
@@ -420,13 +420,56 @@ Teraz już możemy przeciągnąć pomarańczowy owal zmiennej do skryptu, a~nast
 
 \bigpic{przeciaganie-parametru-bloku}
 
-Nasz blok wraz z~polem parametru jest teraz widoczny na palecie ,,Ruch'':
+Nasz blok wraz z~polem parametru jest teraz widoczny na palecie ,,Ruch'':\nopagebreak
 
 \bigpic{blok-kwadrat}
 
 Możemy narysować kwadrat dowolnego rozmiaru wpisując długość boku w~polu parametru i~uruchamiając blok jak zazwyczaj, poprzez kliknięcie na nim lub umieszczenie go w~skrypcie.
 
-\section{Recursion}
+\section{Rekurencja}
+
+Ponieważ nowy blok pojawił się na palecie, kiedy tylko \emph{zaczęliśmy} go tworzyć, możemy programować bloki rekurencyjne --- czyli takie, które wywołują same siebie. W tym celu należy przeciągnąć blok do jego własnej definicji:\nopagebreak
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=\defaultGraphicsScale]{skrypt-bloku-drzewo}\\
+\begin{minipage}{0.5\textwidth}
+\centering
+\includegraphics[scale=\defaultGraphicsScale]{blok-drzewo-w-skrypcie}
+\end{minipage}%
+\begin{minipage}{0.5\textwidth}
+\centering
+\includegraphics[scale=\defaultGraphicsScale]{../common/tree}
+\end{minipage}%
+\end{figure}
+
+Jeśli rekurencja jest dla Ciebie czymś nowym, oto kilka wskazówek: Kluczowym składnikiem rekurencji jest \emph{przypadek bazowy}, a~więc jakiś minimalny problem, który nasz blok może rozwiązać od razu, bez wywoływania samego siebie. W~naszym przykładzie jest to przypadek $\code{głębokość}=0$, w~którym blok nie robi zupełnie nic, co gwarantuje instrukcja \code{if}, obejmująca w~całości jego treść. Bez przypadku bazowego blok rekurencyjny wykonywałaby się w~nieskończoność\footnote{Mówiąc ściśle: dopóki nie zabraknie pamięci, bowiem każde zagnieżdżone wywołanie bloku rekurencyjnego zużywa jej odrobinę, zwalniając ją dopiero po zakończeniu wykonywania, co w~tym przypadku nigdy by nie nastąpiło. W~przeciwieństwie do wielu innych języków programowania, \Snap{} jest jednak na tyle powolny, że prawdopodobnie trudno by było doczekać się wyczerpania pamięci bez zauważenia wcześniej, że coś jest nie tak --- przyp. tłum.}, wywołując w~kółko sam siebie.
+
+Staraj się nie myśleć o~tym, jaką dokładnie sekwencję kroków wykonuje komputer przy uruchamianiu programu rekurencyjnego. Zamiast tego wyobraź sobie, że wewnątrz komputera żyje mnóstwo małych ludzików. Jeśli jedna z~nich --- nazwijmy ją Dorota --- rysuje drzewo o~rozmiarze 100 i~głębokości 6, musi zatrudnić Dominika, aby zrobił drzewo o~rozmiarze 70 i~głębokości 5, a~następnie Darka do zrobienia kolejnego drzewa o~rozmiarze 70 i~głębokości 5. Dominik z~kolei zatrudnia Dagmarę oraz Darię i~tak dalej. Każdy z~ludzików ma swoje własne zmienne lokalne --- \code{rozmiar} oraz \code{głębokość} --- i~każda z~nich ma swoją własną wartość, potencjalnie inną od zmiennych innych ludzików.
+
+Możesz również tworzyć funkcje rekurencyjne, takie jak na przykład ten blok obliczający silnię:\nopagebreak
+
+\begin{figure}[H]
+\begin{minipage}{0.5\textwidth}
+\centering
+\includegraphics[scale=\defaultGraphicsScale]{skrypt-bloku-silnia}
+\end{minipage}%
+\begin{minipage}{0.5\textwidth}
+\centering
+\includegraphics[scale=\defaultGraphicsScale]{silnia-5-z-rezultatem}
+\end{minipage}%
+\end{figure}
+
+Skupmy się chwilowo na sposobie użycia bloku \code{zwróć}. Kiedy funkcja używa tego bloku, kończy ona swą pracę i~zwraca zadaną wartość; żadne inne bloki w~jej skrypcie nie będą już wykonane. Dlatego też blok \code{jeżeli --- to --- w~przeciwnym razie} z~powyższego skryptu mógłby być po prostu blokiem \code{jeżeli}; wówczas drugi z~bloków \code{zwróć} znajdowałby się pod nim, a~nie wewnątrz niego. Działanie funkcji pozostałoby takie samo, ponieważ w~momencie gdy pierwszy blok \code{zwróć} zostałby wykonany w~przypadku bazowym, działanie funkcji zostałoby zakończone, a~drugi blok \code{zwróć} zostałby zignorowany. Istnieje również komenda \code{zatrzymaj ten blok}, która także kończy wykonywanie aktualnego bloku, a~której używamy do przerywania działania bloków niczego nie zwracających, czyli komend. W~przeciwieństwie do niej blok \code{zatrzymaj ten skrypt} przerywa nie tylko obecne wywołanie bloku, ale cały wywołujący go skrypt, aż do najwyższego poziomu.
+
+A oto nieco bardziej zwięzły sposób na zapis funkcji silni:\nopagebreak
+
+\bigpic{skrypt-bloku-zwiezla-silnia}
+
+(Jeśli nie widzisz bloku funkcji \code{if} na palecie ,,Kontrola'', kliknij przycisk ,,Plik''~\inlinepic{../common/btn-file} na pasku narzędzi i wybierz ,,\code{Importuj narzędzia}''.)
+
+Pragnących dowiedzieć się więcej na temat rekursji odsyłamy do książek Erica Robertsa \textit{Thinking Recursively} (ISBN~978-0471816522) oraz nieco bardziej aktualnej \textit{Thinking Recursively in Java} (ISBN~978-0471701460).
+
 \section{Block Libraries}
 \chapter{First Class Lists}
 \section{The list Block}

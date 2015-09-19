@@ -80,7 +80,7 @@ Most command blocks have that brick shape, but some, like the \code{repeat} bloc
 
 \section{Sprites and Parallelism}
 
-Just below the stage is the ``new sprite'' button \inlinepic{../common/btn-new-sprite}. Click the button to add a new sprite to the stage. The new sprite will appear in a random position on the stage, facing in a random direction, with a random color.
+Just below the stage is the ``new sprite'' button~\inlinepic{../common/btn-new-sprite}. Click the button to add a new sprite to the stage. The new sprite will appear in a random position on the stage, facing in a random direction, with a random color.
 
 Each sprite has its own scripts. To see the scripts for a particular sprite in the scripting area, click on the picture of that sprite in the \emph{sprite corral} in the bottom right corner of the window. Try putting one of the following scripts in each sprite's scripting area:\nopagebreak
 
@@ -95,7 +95,7 @@ Each sprite has its own scripts. To see the scripts for a particular sprite in t
 \end{minipage}
 \end{figure}
 
-When you click the green flag \inlinepic{../common/btn-start}, you should see one sprite rotate while the other moves back and forth. This experiment illustrates the way different scripts can run in parallel. The turning and the moving happen together. Parallelism can be seen with multiple scripts of a single sprite also. Try this example:\nopagebreak
+When you click the green flag~\inlinepic{../common/btn-start}, you should see one sprite rotate while the other moves back and forth. This experiment illustrates the way different scripts can run in parallel. The turning and the moving happen together. Parallelism can be seen with multiple scripts of a single sprite also. Try this example:\nopagebreak
 
 \begin{figure}[H]
 \begin{minipage}{0.5\textwidth}
@@ -108,11 +108,11 @@ When you click the green flag \inlinepic{../common/btn-start}, you should see on
 \end{minipage}
 \end{figure}
 
-When you press the space key, the sprite should turn forever in a circle, because the \code{move} and \code{turn} blocks are run in parallel. (To stop the program, click the red stop sign \inlinepic{../common/btn-stop} at the right end of the tool bar.)
+When you press the space key, the sprite should turn forever in a circle, because the \code{move} and \code{turn} blocks are run in parallel. (To stop the program, click the red stop sign~\inlinepic{../common/btn-stop} at the right end of the tool bar.)
 
 \subsection{Costumes and Sounds}
 
-To change the appearance of a sprite, import a new \emph{costume} for it. There are three ways to do this. First, select the desired sprite in the sprite corral. Then, one way is to click on the file icon \inlinepic{../common/btn-file} in the tool bar, then choose the ``\code{Costumes\ldots}'' menu item. You will see a list of costumes from the public media library, and can choose one. The second way, for a costume stored on your own computer, is too click on the file icon and choose the ``\code{Import\ldots}'' menu item. You can then select a file in any picture format (PNG, JPEG, etc.) supported by your browser. The third way is quicker if the file you want is visible on the desktop: Just drag the file onto the \Snap{} window. In any of these cases, the scripting area will be replaced by something like this:\nopagebreak
+To change the appearance of a sprite, import a new \emph{costume} for it. There are three ways to do this. First, select the desired sprite in the sprite corral. Then, one way is to click on the file icon~\inlinepic{../common/btn-file} in the tool bar, then choose the ``\code{Costumes\ldots}'' menu item. You will see a list of costumes from the public media library, and can choose one. The second way, for a costume stored on your own computer, is too click on the file icon and choose the ``\code{Import\ldots}'' menu item. You can then select a file in any picture format (PNG, JPEG, etc.) supported by your browser. The third way is quicker if the file you want is visible on the desktop: Just drag the file onto the \Snap{} window. In any of these cases, the scripting area will be replaced by something like this:\nopagebreak
 
 \bigpic{scripting-area-with-additional-costume}
 
@@ -225,7 +225,7 @@ If, while working on a project, you want to omit temporarily some commands in a 
 
 \bigpic{predicates-and-conditional-evaluation-3}
 
-Sometimes you want to take the same action whether some condition is true or false, but with a different input value. For this purpose you can use the \emph{reporter} \code{if} block:\footnote{\onehalfspacing If you don't see it in the Control palette, click on the File button \inlinepic{../common/btn-file} in the Tool Bar and choose ``Import tools.''}\nopagebreak
+Sometimes you want to take the same action whether some condition is true or false, but with a different input value. For this purpose you can use the \emph{reporter} \code{if} block:\footnote{\onehalfspacing If you don't see it in the Control palette, click on the File button~\inlinepic{../common/btn-file} in the Tool Bar and choose ``Import tools.''}\nopagebreak
 
 \bigpic{predicates-and-conditional-evaluation-4}
 
@@ -318,7 +318,7 @@ There are two different ways to save a project (or a media file such as a costum
 
 The second way to save a project on your computer requires two steps, but it doesn't have the limitations of localstore (\TODO{rename}). Projects saved in this second way are normal files on your computer and can be shared with friends, can be opened in any browser, and have no size limitation.
 
-From the file menu \inlinepic{../common/btn-file}, choose ``Export project\ldots'' The entire \Snap{} window will disappear, replaced by a screenful of what looks like gibberish. Don't panic! This is what's supposed to happen. You are looking at your project, in a notation called XML. The main reason it looks like gibberish is that it includes an encoding of the pictures and other media in the project. If you look through the XML, the actual scripts of the project are pretty readable, although they don't look like \Snap{} blocks. \Snap{} has opened a new browser tab for this XML text; the actual \Snap{} window is still there, hiding in its original tab.
+From the file menu~\inlinepic{../common/btn-file}, choose ``Export project\ldots'' The entire \Snap{} window will disappear, replaced by a screenful of what looks like gibberish. Don't panic! This is what's supposed to happen. You are looking at your project, in a notation called XML. The main reason it looks like gibberish is that it includes an encoding of the pictures and other media in the project. If you look through the XML, the actual scripts of the project are pretty readable, although they don't look like \Snap{} blocks. \Snap{} has opened a new browser tab for this XML text; the actual \Snap{} window is still there, hiding in its original tab.
 
 But the point of this XML text isn't for you to read. Once you're looking at that tab, use your browser's Save command (in its File menu, or usually with a shortcut of command-S (Mac) or control-S (everything else). You can choose a filename for it, and it'll be saved in your usual Downloads folder. You can then close that tab and return to the \Snap{} tab.
 
@@ -411,13 +411,58 @@ You can now drag the orange variable down into the script, then click okay:\nopa
 
 \bigpic{dragging-block-input}
 
-Your block now appears in the Motion palette with an input box:
+Your block now appears in the Motion palette with an input box:\nopagebreak
 
 \bigpic{square-block}
 
 You can draw any size square by entering the length of its side in the box and running the block as usual, by clicking it or by putting it in a script.
 
 \section{Recursion}
+
+Since the new custom block appears in its palette as soon as you \emph{start} editing it, you can write recursive blocks (blocks that call themselves) by dragging the block into its own definition:\nopagebreak
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=\defaultGraphicsScale]{tree-block-script}\\
+\begin{minipage}{0.5\textwidth}
+\centering
+\includegraphics[scale=\defaultGraphicsScale]%
+	{tree-block-inside-script}
+\end{minipage}%
+\begin{minipage}{0.5\textwidth}
+\centering
+\includegraphics[scale=\defaultGraphicsScale]{../common/tree}
+\end{minipage}%
+\end{figure}
+
+If recursion is new to you, here are a few brief hints: It's crucial that the recursion have a \emph{base case}, that is, some small(est) case that the block can handle without using recursion. In this example, it's the case $\code{depth}=0$, for which the block does nothing at all, because of the enclosing \code{if}. Without a base case, the recursion would run forever, calling itself over and over.
+
+Don't try to trace the exact sequence of steps that the computer follows in a recursive program. Instead, imagine that inside the computer there are many small people, and if Theresa is drawing a tree of size~100, depth~6, she hires Tom to make a tree of size~70, depth~5, and later hires Theo to make another tree of size~70, depth~5. Tom in turn hires Tammy and Tallulah, and so on. Each little person has his or her own local variables \code{size} and \code{depth}, each with different values.
+
+You can also write recursive reporters, like this block to compute the factorial function:\nopagebreak
+
+\begin{figure}[H]
+\begin{minipage}{0.5\textwidth}
+\centering
+\includegraphics[scale=\defaultGraphicsScale]{factorial-block-script}
+\end{minipage}%
+\begin{minipage}{0.5\textwidth}
+\centering
+\includegraphics[scale=\defaultGraphicsScale]%
+	{factorial-5-with-result}
+\end{minipage}%
+\end{figure}
+
+Note the use of the \code{report} block. When a reporter block uses this block, the reporter finishes its work and reports the value given; any further blocks in the script are not evaluated. Thus, the \code{if else} block in the script above could have been just an \code{if}, with the second \code{report} block below it instead of inside it, and the result would be the same, because when the first \code{report} is seen in the base case, that finishes the block invocation, and the second \code{report} is ignored. There is also a \code{stop this block} block that has a similar purpose, ending the block invocation early, for command blocks. (By contrast, the \code{stop this script} block stops not only the current block invocation, but also the entire top-level script that called it.)
+
+Here's a slightly more compact way to write the factorial function:\nopagebreak
+
+\bigpic{concise-factorial-block-script}
+
+(If you don't see the reporter-\code{if} block in the Control palette, click the file button~\inlinepic{../common/btn-file} in the tool bar and choose ``\code{Import tools}.'')
+
+For more on recursion, see \textit{Thinking Recursively} by Eric Roberts. (The original edition is ISBN~978--0471816522; a more recent \textit{Thinking Recursively in Java} is ISBN~978--0471701460.)
+
 \section{Block Libraries}
 \chapter{First Class Lists}
 \section{The list Block}
