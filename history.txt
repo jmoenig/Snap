@@ -2568,3 +2568,8 @@ ______
 150814
 ------
 * Blocks: fixed #907
+
+150915
+------
+* new Croatian translation. Yay!! Thanks, Zeljko Hrvoj!
+* fixed #925
