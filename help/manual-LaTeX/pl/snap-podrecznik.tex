@@ -28,7 +28,7 @@ Mieliśmy ogromne szczęście do mentorów. Jens zdobył dużo doświadczenia pr
 
 Brian zdobywał szlify w~MIT oraz Stanford Artificial Intelligence Labs\footnote{Laboratorium sztucznej inteligencji na Uniwersytecie Stanforda --- przyp. tłum.}, gdzie uczył się pod okiem Johna McCarthy'ego, twórcy Lispa, oraz Geralda~J. Suss\-mana i~Guya Steele'a, twórców języka Scheme. Zdobywał również wiedzę od wielu innych wybitnych informatyków, w~tym autorów najlepszej książki z zakresu informatyki --- \emph{Struktury i~interpretacji programów komputerowych}: Hala Abelsona, Geralda~J. Suss\-mana i~Julie Suss\-man.
 
-\textbf{\emph{Za starych dobrych czasów mawialiśmy w~MIT Logo Lab: ,,Język Logo to Lisp w przebraniu BASIC-a''. Dziś, ze swoimi pierwszoklasowymi procedurami, zasięgami leksykalnymi~i pierwszoklasowymi kontynuacjami, \Snap{} jest jak Scheme w~przebraniu Scratcha.}}
+\textbf{\emph{Za starych dobrych czasów mawialiśmy w~MIT Logo Lab: ,,Język Logo to Lisp braniu BASIC-a''. Dziś, ze swoimi pierwszoklasowymi procedurami, zasięgami leksykalnymi~i pierwszoklasowymi kontynuacjami, \Snap{} jest jak Scheme w~przebraniu Scratcha.}}
 
 Szczęśliwym zrządzeniem losu, poprzez forum Scratch Advanced Topics, poznaliśmy wspaniałą grupę błyskotliwych uczniów gimnazjów~(!\@) i liceów. Kilku z nich wniosło swój wkład w~kod \Snap{a}: Kartik Chandra, Nathan Dinsmore, Connor Hudson i~Ian Reynolds. Ponadto wielu zgłosiło pomysły i~raporty błędów podczas testowania wersji alfa. Wśród studentów Uniwersytetu Kalifornijskiego w~Berkeley, którzy przyczynili się do rozwoju kodu, znajdują się Michael Ball, Achal Dave, Kyle Hotchkiss, Ivan Motyashov i~Yuan Yuan. Wymienianie wszystkich tłumaczy zajęłoby zbyt wiele miejsca, ale można ich odnaleźć w~okienku ,,O \Snap{}\ldots'' dostępnym w~programie.
 
@@ -54,7 +54,7 @@ W~tym rozdziale poznamy kilka cech języka \Snap{} odziedziczonych po Scratchu; 
 
 \Snap{} jest językiem programowania --- notacją, przy pomocy której możemy powiedzieć komputerowi, co ma zrobić. Jednak w~odróżnieniu od większości innych, \Snap{} jest językiem wizualnym; programując w~nim, zamiast posługiwać się klawiaturą, używamy metody ,,przeciągnij i~upuść'', dobrze znanej użytkownikom komputerów.
 
-Uruchom teraz środowisko \Snap{}. Powinieneś zobaczyć ekran podzielony na kilka obszarów:\footnote{\onehalfspacing Pierwsze uruchomienie \Snap{a} prawdopodobnie spowoduje wyświetlenie angielskiej wersji programu; aby przełączyć się na język polski, należy kliknąć menu ,,Ustawienia'' \inlinepic{../common/btn-settings} na pasku narzędzi, a~następnie użyć polecenia ,,Language\ldots'' (,,Język\ldots'') --- przyp. tłum.}\nopagebreak
+Uruchom teraz środowisko \Snap{}. Powinieneś zobaczyć ekran podzielony na kilka obszarów:\footnote{\onehalfspacing Pierwsze uruchomienie \Snap{a} prawdopodobnie spowoduje wyświetlenie angielskiej wersji programu; aby przełączyć się na język polski, należy kliknąć menu ,,Ustawienia''~\inlinepic{../common/btn-settings} na pasku narzędzi, a~następnie użyć polecenia ,,Language\ldots'' (,,Język\ldots'') --- przyp. tłum.}\nopagebreak
 
 \begin{center}
 \def\svgwidth{\textwidth}
@@ -88,7 +88,7 @@ Większość bloków komend ma kształt klocków, lecz niektóre, jak \code{powt
 
 \section{Duszki i~współbieżność}
 
-Tuż pod sceną znajduje się przycisk ,,nowy duszek'' \inlinepic{../common/btn-new-sprite}. Kliknięcie go spowoduje dodanie nowego duszka do sceny. Pojawi się on w~losowym miejscu na scenie, skierowany w~losową stronę i~zabarwiony na losowy kolor.
+Tuż pod sceną znajduje się przycisk ,,nowy duszek''~\inlinepic{../common/btn-new-sprite}. Kliknięcie go spowoduje dodanie nowego duszka do sceny. Pojawi się on w~losowym miejscu na scenie, skierowany w~losową stronę i~zabarwiony na losowy kolor.
 
 Każdy duszek ma swoje własne skrypty. Aby wyświetlić w~obszarze skryptów te należące do konkretnego duszka, należy kliknąć na jego obrazku w~\emph{zagrodzie duszków}, znajdującej się w~prawym dolnym rogu okna. Spróbuj umieścić następujące skrypty w~obszarze skryptów --- po jednym dla każdego duszka:\nopagebreak
 
@@ -103,7 +103,7 @@ Każdy duszek ma swoje własne skrypty. Aby wyświetlić w~obszarze skryptów te
 \end{minipage}
 \end{figure}
 
-Kiedy klikniemy zieloną flagę \inlinepic{../common/btn-start}, powinniśmy zobaczyć jak jeden duszek się obraca, podczas gdy drugi porusza się w~tę i~z~powrotem. Ten eksperyment pokazuje, jak różne skrypty mogą być wykonywane jednocześnie (\emph{współbieżnie}). Obracanie się dookoła i~ruch po linii prostej zachodzą jednocześnie. Współbieżność zachodzi również w~przypadku wielu skryptów należących do tego samego duszka. Spróbujmy tego przykładu:\nopagebreak
+Kiedy klikniemy zieloną flagę~\inlinepic{../common/btn-start}, powinniśmy zobaczyć jak jeden duszek się obraca, podczas gdy drugi porusza się w~tę i~z~powrotem. Ten eksperyment pokazuje, jak różne skrypty mogą być wykonywane jednocześnie (\emph{współbieżnie}). Obracanie się dookoła i~ruch po linii prostej zachodzą jednocześnie. Współbieżność zachodzi również w~przypadku wielu skryptów należących do tego samego duszka. Spróbujmy tego przykładu:\nopagebreak
 
 \begin{figure}[H]
 \begin{minipage}{0.5\textwidth}
@@ -116,11 +116,11 @@ Kiedy klikniemy zieloną flagę \inlinepic{../common/btn-start}, powinniśmy zob
 \end{minipage}
 \end{figure}
 
-Po naciśnięciu spacji duszek powinien zacząć bez końca chodzić w kółko, ponieważ bloki \code{przesuń} i \code{obróć} są wykonywane współbieżnie. (Aby przerwać program, kliknij czerwony czerwony znak ,,stop'' \inlinepic{../common/btn-stop} na prawym brzegu paska narzędzi).
+Po naciśnięciu spacji duszek powinien zacząć bez końca chodzić w kółko, ponieważ bloki \code{przesuń} i \code{obróć} są wykonywane współbieżnie. (Aby przerwać program, kliknij czerwony czerwony znak ,,stop''~\inlinepic{../common/btn-stop} na prawym brzegu paska narzędzi).
 
 \subsection{Kostiumy i~dźwięki}
 
-Aby zmienić wygląd duszka, należy zaimportować dla niego nowy \emph{kostium}. Są na to trzy sposoby. Najpierw trzeba wybrać duszka z~zagrody. Następnie, w~pierwszej metodzie, klikamy na ikonie pliku \inlinepic{../common/btn-file} na pasku narzędzi, a~następnie wybieramy polecenie ,,\code{Kostiumy\ldots}''. Ukaże się lista kostiumów z~publicznej biblioteki multimediów, spośród których możemy dokonać wyboru. Drugą metodą jest wybór pliku ze swojego własnego kompuera. Należy w~tym celu kliknąć ikonę pliku, a~następnie polecenie ,,\code{Importuj\ldots}''. Można wtedy wybrać plik obrazu w~dowolnym formacie (PNG, JPEG itd.) obsługiwanym przez przeglądarkę. Trzeci sposób jest szybszy jeśli plik, którego chcemy użyć, jest widoczny na pulpicie: po prostu przeciągnij go do okna \Snap{a}. W~każdym z~tych przypadków obszar skryptów zacznie wyglądać mniej więcej tak:\nopagebreak
+Aby zmienić wygląd duszka, należy zaimportować dla niego nowy \emph{kostium}. Są na to trzy sposoby. Najpierw trzeba wybrać duszka z~zagrody. Następnie, w~pierwszej metodzie, klikamy na ikonie pliku~\inlinepic{../common/btn-file} na pasku narzędzi, a~następnie wybieramy polecenie ,,\code{Kostiumy\ldots}''. Ukaże się lista kostiumów z~publicznej biblioteki multimediów, spośród których możemy dokonać wyboru. Drugą metodą jest wybór pliku ze swojego własnego komputera. Należy w~tym celu kliknąć ikonę pliku, a~następnie polecenie ,,\code{Importuj\ldots}''. Można wtedy wybrać plik obrazu w~dowolnym formacie (PNG, JPEG itd.) obsługiwanym przez przeglądarkę. Trzeci sposób jest szybszy jeśli plik, którego chcemy użyć, jest widoczny na pulpicie: po prostu przeciągnij go do okna \Snap{a}. W~każdym z~tych przypadków obszar skryptów zacznie wyglądać mniej więcej tak:\nopagebreak
 
 \bigpic{obszar-skryptow-z-dodatkowym-kostiumem}
 
@@ -234,7 +234,7 @@ Jeśli pracując nad projektem, będziemy chcieli tymczasowo pominąć niektóre
 
 \bigpic{predykaty-i-obliczenia-warunkowe-3}
 
-Czasami potrzeba wykonać tę samą czynność bez względu na to, czy jakiś warunek zachodzi czy nie, za to z~różnymi parametrami dla obu tych przypadków. Można do tego użyć bloku \emph{funkcji} \code{if}:\footnote{\onehalfspacing Jeśli nie widzisz go w~palecie ,,Kontrola'', kliknij przycisk ,,Plik'' \inlinepic{../common/btn-file} na pasku narzędzi i~wybierz polecenie ,,Importuj narzędzia''.}\footnote{Niestety, podobnie jak pozostałe dodatkowe narzędzia i~biblioteki bloków, blok \code{if --- then --- else} posiada wyłącznie angielską nazwę, bez względu na nasze ustawienia języka. Oznacza ona ,,jeżeli --- to --- w~przeciwnym razie'' --- przyp. tłum.}\nopagebreak
+Czasami potrzeba wykonać tę samą czynność bez względu na to, czy jakiś warunek zachodzi czy nie, za to z~różnymi parametrami dla obu tych przypadków. Można do tego użyć bloku \emph{funkcji} \code{if}:\footnote{\onehalfspacing Jeśli nie widzisz go w~palecie ,,Kontrola'', kliknij przycisk ,,Plik''~\inlinepic{../common/btn-file} na pasku narzędzi i~wybierz polecenie ,,Importuj narzędzia''.}\footnote{Niestety, podobnie jak pozostałe dodatkowe narzędzia i~biblioteki bloków, funkcja \code{if --- then --- else} posiada wyłącznie angielską nazwę, bez względu na nasze ustawienia języka. Oznacza ona ,,jeżeli --- to --- w~przeciwnym razie'' --- przyp. tłum.}\nopagebreak
 
 \bigpic{predykaty-i-obliczenia-warunkowe-4}
 
@@ -303,24 +303,173 @@ W~poprzednim przykładzie przeprowadzaliśmy interakcję z~użytkownikiem i~chci
 \end{minipage}%
 \end{figure}
 
-Podobnie jak w przypadku bloku \code{for}, aby zmienić nazwę zmiennej, wystarczy kliknąć pomarańczowy owal w bloku \code{zmienne skryptu} bez przeciągania. Możemy również stworzyć więcej tymczasowych zmiennych klikając strzałkę w prawo na końcu bloku. Spowoduje to dodanie kolejnego owalu zmiennej:\nopagebreak
+Podobnie jak w~przypadku bloku \code{for}, aby zmienić nazwę zmiennej, wystarczy kliknąć pomarańczowy owal w~bloku \code{zmienne skryptu} bez przeciągania. Możemy również stworzyć więcej tymczasowych zmiennych klikając strzałkę w~prawo na końcu bloku. Spowoduje to dodanie kolejnego owalu zmiennej:\nopagebreak
 
 \bigpic{zmienne-skryptu-a-b-c}
 
 \section{I tak dalej}
 
-Niniejszy podręcznik nie opisuje szczegółowo każdego bloku. Jest wiele bloków związanych z ruchem, dźwiękiem, kostiumami, efektami graficznymi i tak dalej. Ich przeznaczenie można poznać eksperymentalnie, ale także poprzez lekturę ,,ekranów pomocy''\footnote{Niestety, są one dostępne wyłącznie w języku angielskim --- przyp. tłum.}, które można obejrzeć klikając interesujący nas blok albo prawym przyciskiem myszy, albo lewym z wciśniętym jednocześnie klawiczem Ctrl, a następnie wybierając z menu polecenie ,,\code{pomoc\ldots}''. Jeśli zapomnisz, w której palecie znajduje się potrzebny Ci blok, ale pamiętasz choćby część nazwy, wciśnij Ctrl-F i wpisz ją w polu tekstowym, które pojawi się w obszarze palet.
+Niniejszy podręcznik nie opisuje szczegółowo każdego bloku. Jest wiele bloków związanych z~ruchem, dźwiękiem, kostiumami, efektami graficznymi i~tak dalej. Ich przeznaczenie można poznać eksperymentalnie, ale także poprzez lekturę ,,ekranów pomocy''\footnote{Niestety, są one dostępne wyłącznie w~języku angielskim --- przyp. tłum.}, które można obejrzeć klikając interesujący nas blok albo prawym przyciskiem myszy, albo lewym z~wciśniętym jednocześnie klawiszem Ctrl, a~następnie wybierając z~menu polecenie ,,\code{pomoc\ldots}''. Jeśli zapomnisz, w~której palecie znajduje się potrzebny Ci blok, ale pamiętasz choćby część nazwy, wciśnij Ctrl-F i~wpisz ją w~polu tekstowym, które pojawi się w~obszarze palet.
 
-\chapter{Saving and Loading Projects and Media}
-\section{Local Storage}
+\chapter{Zapisywanie i otwieranie projektów i multimediów}
+
+Kiedy już stworzymy jakiś projekt, dobrze by było móc go zapisać, aby mieć go pod ręką, kiedy ponownie uruchomimy \Snap{a}. Jest na to kilka sposobów. Możemy zapisać projekt na swoim komputerze albo na stronie internetowej \Snap{a}. Zaletą zapisywania w~sieci jest dostęp do projektów nawet podczas używania innego komputera lub urządzenia mobilnego, takiego jak tablet czy smartfon. Z~kolei zapisywanie na własnym komputerze pozwala na dostęp do zapisanych projektów w~przypadku braku dostępu do sieci, na przykład w~czasie podróży pociągiem lub samolotem. Dlatego właśnie mamy wiele sposobów na zapisanie projektu.
+
+\section{Zapisywanie na komputerze}
+
+Istnieją dwa różne sposoby na zapisanie projektu lub pliku multimedialnego (na przykład kostiumu) na własnym komputerze. Ta złożoność wynika z~tego, że JavaScript, w~którym \Snap{} jest zaimplementowany, celowo ogranicza wpływ programów wykonywanych przez przeglądarkę na komputer użytkownika. Jest to pożyteczne, ponieważ dzięki temu możemy z~pełnym zaufaniem uruchamiać w~\Snap{ie} cudze projekty --- bez obawy, że usuną nam wszystkie pliki lub zainfekują komputer wirusem. Jednak mechanizm ten nieco utrudnia pracę.
+
 \subsection{Localstore}
+
+{\Huge \TODO{}}
+
 \subsection{XML Export}
+
+Drugi sposób na zapisanie projektu na komputerze ma dwa etapy, ale nie ma ograniczeń związanych z~użyciem localstore (\TODO{zmień nazwę}). Projekty zapisane w~ten sposób są zwykłymi plikami na dysku komputera i~można je wysłać do znajomych oraz otworzyć w~dowolnej przeglądarce. Ponadto ich rozmiar nie jest ograniczony.
+
+Z~menu ,,Plik''~\inlinepic{../common/btn-file} wybieramy ,,Eksportuj projekt\ldots''. Okno \Snap{a} zniknie i~zostanie zastąpione przez ekran wypełniony ,,krzakami''. Bez paniki! Tak ma być. To, co widzimy, to zapis projektu w~notacji zwanej XML. Głównym powodem, dla którego wygląda on jak stek bzdur, jest to, że zawiera on zakodowane obrazki i~inne multimedia zawarte w~projekcie. Jeśli się dobrze wpatrzymy, same skrypty są jako tako czytelne, choć nie wyglądają jak bloki \Snap{a}. Przeglądarka otworzyła dla tekstu XML nową kartę; okno \Snap{a} jest wciąż otwarte, ukryte pod spodem.
+
+Jednak tekst XML nie jest po to, abyśmy go czytali. Kiedy już mamy otwartą tę kartę, możemy użyć polecenia ,,Zapisz'' w~przeglądarce. Można je uruchomić z~poziomu menu przeglądarki lub przy pomocy skrótu klawiszowego --- zazwyczaj Command-S (Mac) lub Ctrl-S (wszędzie indziej). Wybieramy nazwę dla pliku, a~przeglądarka zapisze go w~folderze ,,Pobrane''\footnote{lub w~innym miejscu, które wskażemy w~oknie zapisu --- przyp. tłum.}. Na koniec zamykamy kartę z~plikiem XML i~wracamy do środowiska \Snap{}.
+
 \section{Cloud Storage}
-\section{Loading Saved Projects}
-\chapter{Building a Block}
-\section{Simple Blocks}
-\subsection{Custom Blocks with Inputs}
-\section{Recursion}
+
+Inną możliwością jest zapisanie projektu ,,w~chmurze'', na stronie internetowej \Snap{a}. Aby to zrobić, musimy najpierw założyć tam konto. Klikamy na przycisku ,,Chmura'' (\,\inlinepic{../common/btn-cloud}\,) na pasku narzędzi, a~następnie wybieramy polecenie ,,Rejestracja\ldots''. Pokaże się następujące okno:\nopagebreak
+
+\bigpic{rejestracja}
+
+Należy teraz wybrać nazwę użytkownika, którą będziemy się legitymować w~obrębie strony, taką jak na przykład \code{Jens} lub \code{bh}. Jeśli jesteś użytkownikiem Scratcha, możesz również użyć na stronie \Snap{a} swojej nazwy użytkownika z~serwisu Scratch. Jeśli jesteś dzieckiem, nie wybieraj nazwy użytkownika, która zawierałaby twoje nazwisko; imiona i~inicjały są akceptowalne. Nie wybieraj też nazwy, której wstydziłbyś się pokazać innym użytkownikom lub rodzicom! Jeśli wybrana przez Ciebie nazwa jest już zajęta, będziesz musiał wybrać inną.
+
+Będziesz musiał też podać swój miesiąc i~rok urodzenia. \Snap{} używa tych informacji tylko i~wyłącznie aby zdecydować, czy zapytać Cię o~Twój własny adres e-mail, czy też o~adres rodzica. Jeśli jesteś dzieckiem, nie powinieneś zakładać konta w~żadnym serwisie internetowym --- wliczając w~to \Snap{a} --- bez zgody rodzica. \Snap{} nie będzie przechowywać Twojej daty urodzenia na serwerze; zostanie ona użyta tylko na Twoim własnym komputerze podczas procedury rejestracji. Program nie wymaga podania \emph{dokładnej} daty, nawet ten jeden raz, ponieważ jest to ważna dana osobowa.
+
+Po kliknięciu przycisku OK, na podany adres e-mail zostanie wysłana wiadomość z~początkowym hasłem do nowego konta. \Snap{} będzie przechowywać Twój adres, aby w~przypadku zapomnienia hasła móc wysłać Ci link pozwalający je zresetować. Ponadto \Snap{} wyśle Ci wiadomość, jeśli Twoje konto zostanie zawieszone za naruszenie regulaminu. Twój adres nie będzie wykorzystywany do innych celów. Nie będziesz dostawać żadnego rodzaju wiadomości marketingowych poprzez tę stronę --- ani od zespołu \Snap{a}, ani od osób trzecich. Jeśli mimo to wahasz się przed podaniem tej informacji, poszukaj w~internecie pod hasłem ,,tymczasowy e-mail''.
+
+Na koniec powinieneś przeczytać regulamin usługi i~wyrazić zgodę na jego postanowienia. Oto ich krótkie streszczenie: nie przeszkadzaj korzystać ze \Snap{a} innym użytkownikom, nie umieszczaj cudzych utworów chronionych prawem autorskim ani żadnych danych osobowych w~projektach udostępnionych innym. Zespół \Snap{a} nie bierze również odpowiedzialności za szkody, jeśli coś pójdzie nie tak. (To nie znaczy, że można by \emph{oczekiwać}, że coś złego się stanie --- ponieważ \Snap{} używa JavaScriptu wewnątrz przeglądarki, jest mocno izolowany od całej reszty komputera. Jednak prawo jest prawem i~musimy to wyraźnie zaznaczyć.)
+
+Po utworzeniu konta, możemy się na nie zalogować używając polecenia ,,Logowanie\ldots'' z~menu ,,Chmura'':\nopagebreak
+
+\bigpic{zaloguj-sie}
+
+Użyj ustalonej wcześniej nazwy użytkownika i~hasła. Jeśli zaznaczysz pole ,,Zapamiętaj mnie na tym komputerze'', zostaniesz zalogowany automatycznie, kiedy następnym razem uruchomisz \Snap{a} w~tej samej przeglądarce na tym samym komputerze. Zaznacz to pole jeśli używasz swojego własnego komputera i~nie udostępniasz go innym. Nie zaznaczaj go, jeśli używasz publicznie dostępnego komputera w~bibliotece, szkole itp.
+
+Kiedy już się zalogujemy, możemy wybrać opcję ,,Chmura'' w~oknie ,,Zapisz projekt'' ze strony \TODO{Link do obrazka}. Wpisujemy nazwę projektu, a~także opcjonalnie notatki, tak jak w~przypadku zapisywania w~Localstore \TODO{nazwa}. Jednak tym razem nasz projekt będzie zapisany online i~będzie mógł zostać wczytany z~dowolnego miejsca z~dostępem do sieci.
+
+\section{Wczytywanie zapisanych projektów}
+
+Kiedy już zapisaliśmy projekt, chcielibyśmy go wczytać z~powrotem do \Snap{a}. Są na to dwa sposoby:
+
+\begin{enumerate}
+\item Jeśli zapisałeś projekt w~Localstore \TODO{nazwa} lub na swoim koncie w~serwisie \Snap{}, użyj polecenia ,,Otwórz\ldots'' z~menu ,,Plik''. Wybierz opcję ,,Przeglądarka'' lub ,,Chmura'', a~potem wybierz swój projekt z~listy i~kliknij OK. Trzecia opcja --- ,,Przykłady'' --- pozwala wybrać spośród dostarczonych przez zespół \Snap{a} przykładowych projektów. Możemy dowiedzieć się o~czym jest każdy z~nich klikając na nim i~czytając jego notatki.
+
+\item Jeśli zapisałeś projekt w~formacie XML na komputerze, kliknij ,,Importuj\ldots'' w~menu ,,Plik''. Przeglądarka pokaże zwyczajne okno otwierania pliku, przy pomocy którego możesz wskazać projekt, podobnie jak w~innych programach. Możesz również znaleźć swój plik XML z~poziomu pulpitu, a~potem po prostu przeciągnąć go do okna \Snap{a}.
+\end{enumerate}
+
+Druga z powyższych technik pozwala również importować do projektu multimedia (kostiumy i dźwięki). Wystarczy wybrać ,,Importuj...'', a potem wskazać obrazek lub dźwięk zamiast pliku XML.
+
+\Snap{} potrafi również importować projekty stworzone przy pomocy BYOB~3.0, Scratcha~1.4 lub Scratcha~2.0 (to ostatnie z~pewnymi utrudnieniami; zob. naszą stronę internetową). Niemal wszystkie takie projekty pracują poprawnie pod \Snap{em}, z~wyłączeniem niewielkiej liczby niekompatybilnych bloków. Projekty z~BYOB~3.1 również działają, pod warunkiem, że nie korzystają z~pierwszoklasowych duszków; w~\Snap{ie}~4.1 będą już działać wszystkie projekty z~BYOB~3.1.
+
+\chapter{Tworzenie własnych bloków}
+
+\Snap{} pierwotnie nazywał się BYOB, co oznacza ,,Zbuduj Swoje Własne Bloki'' (ang. \textit{Build Your Own Blocks}). Była to pierwsza i~do dziś najważniejsza cecha, którą dodaliśmy do Scratcha. (Nazwa została zmieniona, gdyż niektórzy nauczyciele nie podzielali naszego poczucia humoru.\footnote{Skrót BYOB oznacza tak naprawdę \textit{bring your own beer}, czyli ,,przynieś własne piwo'' i~oznacza, że zostajemy zaproszeni na przyjęcie, ale oczekuje się od nas, że przyniesiemy ze sobą alkohol --- przyp. tłum.} Cóż, czasem trzeba wiedzieć kiedy się poddać.) Nowy Scratch~2.0 również częściowo obsługuje tworzenie własnych bloków.
+
+\section{Proste bloki}
+
+Na palecie ,,Dane'', w~pobliżu dolnej krawędzi, znajdziemy przycisk ,,nowy blok''.\nopagebreak
+
+\begin{figure}[H]
+\centering
+\input{paleta-dane.pdf_tex}
+\end{figure}
+
+Po kliknięciu tego przycisku pokaże się okno dialogowe, przy pomocy którego możemy wybrać nazwę i~kształt bloku, a~także jego paletę (a~zarazem kolor). Możemy także zdecydować, czy blok ten będzie dostępny dla wszystkich duszków, czy tylko dla aktualnego duszka i~jego klonów. Uwaga: Możemy również wywołać okno ,,nowy blok'' poprzez kliknięcie na tle obszaru skryptu prawym przyciskiem (lub lewym z~wciśniętym klawiszem Ctrl), a~następnie wybranie z~menu polecenia ,,buduj nowy blok\ldots''.
+
+\bigpic{nowy-blok}
+
+W~tym oknie dialogowym możemy wybrać paletę, kształt i~nazwę bloku. Poza jednym wyjątkiem, każda paleta ma przyporządkowany jeden kolor, np. wszystkie bloki z~palety ,,Ruch'' są niebieskie. Jednak paleta ,,Dane'' zawiera zarówno pomarańczowe bloki związane ze zmiennymi, jak i~czerwone, związane z~listami. Oba kolory są dostępne; jest również opcja ,,Inne'', przy pomocy której w~palecie ,,Dane'' tworzymy szare bloki, które nie pasują do żadnej z~powyższych kategorii.
+
+Istnieją trzy kształty bloków, zgodnie z~konwencją która powinna być znana użytkownikom Scratcha: bloki w~kształcie puzzli to komendy --- nie zwracają one wyników. Bloki owalne to funkcje, które zwracają wyniki, a~sześciokątne to predykaty, czyli, innymi słowy, funkcje zwracające wyniki typu logicznego (prawdę lub fałsz).
+
+Załóżmy, że chcemy utworzyć blok o~nazwie ,,kwadrat'', który rysuje kwadrat. W~oknie ,,nowy blok'' wybieramy opcje ,,Ruch'' i~,,Komenda'', a~następnie wpisujemy ,,\code{kwadrat}'' w~pole nazwy. Po kliknięciu przycisku OK przechodzimy do edytora bloków. Korzystamy z~niego w~taki sam sposób, jak z~obszaru skryptów w~głównym oknie. Jedyna różnica polega na tym, że blok-kapelusz na górze skryptu, zamiast nosić nazwę w~rodzaju ,,\code{kiedy zostanę kliknięty}'', zawiera obraz bloku, który budujemy. Ten kapelusz nazywamy \emph{prototypem}\footnote{W~tym znaczeniu słowo ,,prototyp'' nie jest związane z~omawianym później \emph{programowaniem obiektowym opartym na prototypach}.} nowo tworzonego bloku. Aby zaprogramować działanie własnego bloku, układamy inne bloki pod kapeluszem, a~następnie klikamy przycisk OK:\nopagebreak
+
+\bigpic{przeciaganie-bloku-do-edytora-blokow}
+\bigpic{edytor-blokow-kwadrat}
+
+Nasz blok pojawi się na dole palety ,,Ruch''. Oto on wraz z~rezultatem jego użycia:\nopagebreak
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=\defaultGraphicsScale]%
+	{blok-kwadrat-na-palecie}
+\includegraphics[scale=\defaultGraphicsScale]{../common/square}
+\end{figure}
+
+\subsection{Własne bloki z parametrami}
+
+Załóżmy jednak, że chcielibyśmy móc rysować kwadraty o~różnych rozmiarach. Klikamy na bloku prawym przyciskiem lub lewym z~wciśniętym klawiszem Ctrl. Kiedy wybierzemy polecenie ,,\code{edytuj\ldots}'', otworzy się edytor bloków. Zwróć uwagę na symbole plusów przed i~po słowie \code{kwadrat} w~bloku prototypu. Jeśli zatrzymasz wskaźnik myszy nad jednym z~nich, zostanie on podświetlony:\nopagebreak
+
+\bigpic{prototyp-bloku-z-podswietlonym-plusem}
+
+Klikamy prawy plus. Pojawi się okno dialogowe ,,Utwórz nazwę parametru'':\nopagebreak
+
+\bigpic{utworz-nazwe-parametru}
+
+Wpisujemy nazwę ,,\code{wielkość}'' i~klikamy przycisk OK. Dialog ten ma więcej opcji; możemy wybrać ,,\code{Tekst tytułowy}'', aby dodać słowa do nazwy bloku, tak aby po polu parametru następował tekst, podobnie jak w~bloku ,,\code{przesuń o~(\,)~kroków}''. Możemy też użyć bardziej kompleksowego okna z~wieloma opcjami dotyczącymi naszego pola parametru; zostawmy to jednak na później. Po kliknięciu OK ujrzymy w~prototypie bloku nowy parametr:\nopagebreak
+
+\bigpic{skrypt-bloku-kwadrat-z-parametrem-rozmiar}
+
+Teraz już możemy przeciągnąć pomarańczowy owal zmiennej do skryptu, a~następnie kliknąć przycisk OK w~oknie edytora bloków:\nopagebreak
+
+\bigpic{przeciaganie-parametru-bloku}
+
+Nasz blok wraz z~polem parametru jest teraz widoczny na palecie ,,Ruch'':\nopagebreak
+
+\bigpic{blok-kwadrat}
+
+Możemy narysować kwadrat dowolnego rozmiaru wpisując długość boku w~polu parametru i~uruchamiając blok jak zazwyczaj, poprzez kliknięcie na nim lub umieszczenie go w~skrypcie.
+
+\section{Rekurencja}
+
+Ponieważ nowy blok pojawił się na palecie, kiedy tylko \emph{zaczęliśmy} go tworzyć, możemy programować bloki rekurencyjne --- czyli takie, które wywołują same siebie. W tym celu należy przeciągnąć blok do jego własnej definicji:\nopagebreak
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=\defaultGraphicsScale]{skrypt-bloku-drzewo}\\
+\begin{minipage}{0.5\textwidth}
+\centering
+\includegraphics[scale=\defaultGraphicsScale]{blok-drzewo-w-skrypcie}
+\end{minipage}%
+\begin{minipage}{0.5\textwidth}
+\centering
+\includegraphics[scale=\defaultGraphicsScale]{../common/tree}
+\end{minipage}%
+\end{figure}
+
+Jeśli rekurencja jest dla Ciebie czymś nowym, oto kilka wskazówek: Kluczowym składnikiem rekurencji jest \emph{przypadek bazowy}, a~więc jakiś minimalny problem, który nasz blok może rozwiązać od razu, bez wywoływania samego siebie. W~naszym przykładzie jest to przypadek $\code{głębokość}=0$, w~którym blok nie robi zupełnie nic, co gwarantuje instrukcja \code{if}, obejmująca w~całości jego treść. Bez przypadku bazowego blok rekurencyjny wykonywałaby się w~nieskończoność\footnote{Mówiąc ściśle: dopóki nie zabraknie pamięci, bowiem każde zagnieżdżone wywołanie bloku rekurencyjnego zużywa jej odrobinę, zwalniając ją dopiero po zakończeniu wykonywania, co w~tym przypadku nigdy by nie nastąpiło. W~przeciwieństwie do wielu innych języków programowania, \Snap{} jest jednak na tyle powolny, że prawdopodobnie trudno by było doczekać się wyczerpania pamięci bez zauważenia wcześniej, że coś jest nie tak --- przyp. tłum.}, wywołując w~kółko sam siebie.
+
+Staraj się nie myśleć o~tym, jaką dokładnie sekwencję kroków wykonuje komputer przy uruchamianiu programu rekurencyjnego. Zamiast tego wyobraź sobie, że wewnątrz komputera żyje mnóstwo małych ludzików. Jeśli jedna z~nich --- nazwijmy ją Dorota --- rysuje drzewo o~rozmiarze 100 i~głębokości 6, musi zatrudnić Dominika, aby zrobił drzewo o~rozmiarze 70 i~głębokości 5, a~następnie Darka do zrobienia kolejnego drzewa o~rozmiarze 70 i~głębokości 5. Dominik z~kolei zatrudnia Dagmarę oraz Darię i~tak dalej. Każdy z~ludzików ma swoje własne zmienne lokalne --- \code{rozmiar} oraz \code{głębokość} --- i~każda z~nich ma swoją własną wartość, potencjalnie inną od zmiennych innych ludzików.
+
+Możesz również tworzyć funkcje rekurencyjne, takie jak na przykład ten blok obliczający silnię:\nopagebreak
+
+\begin{figure}[H]
+\begin{minipage}{0.5\textwidth}
+\centering
+\includegraphics[scale=\defaultGraphicsScale]{skrypt-bloku-silnia}
+\end{minipage}%
+\begin{minipage}{0.5\textwidth}
+\centering
+\includegraphics[scale=\defaultGraphicsScale]{silnia-5-z-rezultatem}
+\end{minipage}%
+\end{figure}
+
+Skupmy się chwilowo na sposobie użycia bloku \code{zwróć}. Kiedy funkcja używa tego bloku, kończy ona swą pracę i~zwraca zadaną wartość; żadne inne bloki w~jej skrypcie nie będą już wykonane. Dlatego też blok \code{jeżeli --- to --- w~przeciwnym razie} z~powyższego skryptu mógłby być po prostu blokiem \code{jeżeli}; wówczas drugi z~bloków \code{zwróć} znajdowałby się pod nim, a~nie wewnątrz niego. Działanie funkcji pozostałoby takie samo, ponieważ w~momencie gdy pierwszy blok \code{zwróć} zostałby wykonany w~przypadku bazowym, działanie funkcji zostałoby zakończone, a~drugi blok \code{zwróć} zostałby zignorowany. Istnieje również komenda \code{zatrzymaj ten blok}, która także kończy wykonywanie aktualnego bloku, a~której używamy do przerywania działania bloków niczego nie zwracających, czyli komend. W~przeciwieństwie do niej blok \code{zatrzymaj ten skrypt} przerywa nie tylko obecne wywołanie bloku, ale cały wywołujący go skrypt, aż do najwyższego poziomu.
+
+A oto nieco bardziej zwięzły sposób na zapis funkcji silni:\nopagebreak
+
+\bigpic{skrypt-bloku-zwiezla-silnia}
+
+(Jeśli nie widzisz bloku funkcji \code{if} na palecie ,,Kontrola'', kliknij przycisk ,,Plik''~\inlinepic{../common/btn-file} na pasku narzędzi i wybierz ,,\code{Importuj narzędzia}''.)
+
+Pragnących dowiedzieć się więcej na temat rekursji odsyłamy do książek Erica Robertsa \textit{Thinking Recursively} (ISBN~978-0471816522) oraz nieco bardziej aktualnej \textit{Thinking Recursively in Java} (ISBN~978-0471701460).
+
 \section{Block Libraries}
 \chapter{First Class Lists}
 \section{The list Block}
@@ -343,7 +492,7 @@ Niniejszy podręcznik nie opisuje szczegółowo każdego bloku. Jest wiele blok�
 \subsection{Recursive Calls to Multiple-Input Blocks}
 \section{Formal Parameters}
 \section{Procedures as Data}
-\section{Special Forms}
+1\section{Special Forms}
 \subsection{Special Forms in Scratch}
 \chapter{Object Oriented Programming}
 \section{Local State with Script Variables}

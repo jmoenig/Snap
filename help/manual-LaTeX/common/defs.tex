@@ -13,6 +13,7 @@
 \usepackage{etoolbox}
 % We frequently prevent page breaks before pictures, and it has a tendency to create a lot of widowed lines. Let's prevent it from happening.
 \usepackage[all]{nowidow}
+\usepackage{wasysym}
 
 \usetikzlibrary{calc}
 \usetikzlibrary{fit}
@@ -175,3 +176,12 @@
 	\end{tikzpicture}
 	\end{titlepage}
 } }
+
+\newcommand{\TODO}[1]{%
+	\colorbox{yellow}{\textcolor{red}{\textbf{%
+		TODO%
+		\ifstrempty{#1}{}{%
+			: #1
+		}%
+	}}}%
+}

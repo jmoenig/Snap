@@ -80,7 +80,7 @@ Most command blocks have that brick shape, but some, like the \code{repeat} bloc
 
 \section{Sprites and Parallelism}
 
-Just below the stage is the ``new sprite'' button \inlinepic{../common/btn-new-sprite}. Click the button to add a new sprite to the stage. The new sprite will appear in a random position on the stage, facing in a random direction, with a random color.
+Just below the stage is the ``new sprite'' button~\inlinepic{../common/btn-new-sprite}. Click the button to add a new sprite to the stage. The new sprite will appear in a random position on the stage, facing in a random direction, with a random color.
 
 Each sprite has its own scripts. To see the scripts for a particular sprite in the scripting area, click on the picture of that sprite in the \emph{sprite corral} in the bottom right corner of the window. Try putting one of the following scripts in each sprite's scripting area:\nopagebreak
 
@@ -95,7 +95,7 @@ Each sprite has its own scripts. To see the scripts for a particular sprite in t
 \end{minipage}
 \end{figure}
 
-When you click the green flag \inlinepic{../common/btn-start}, you should see one sprite rotate while the other moves back and forth. This experiment illustrates the way different scripts can run in parallel. The turning and the moving happen together. Parallelism can be seen with multiple scripts of a single sprite also. Try this example:\nopagebreak
+When you click the green flag~\inlinepic{../common/btn-start}, you should see one sprite rotate while the other moves back and forth. This experiment illustrates the way different scripts can run in parallel. The turning and the moving happen together. Parallelism can be seen with multiple scripts of a single sprite also. Try this example:\nopagebreak
 
 \begin{figure}[H]
 \begin{minipage}{0.5\textwidth}
@@ -108,11 +108,11 @@ When you click the green flag \inlinepic{../common/btn-start}, you should see on
 \end{minipage}
 \end{figure}
 
-When you press the space key, the sprite should turn forever in a circle, because the \code{move} and \code{turn} blocks are run in parallel. (To stop the program, click the red stop sign \inlinepic{../common/btn-stop} at the right end of the tool bar.)
+When you press the space key, the sprite should turn forever in a circle, because the \code{move} and \code{turn} blocks are run in parallel. (To stop the program, click the red stop sign~\inlinepic{../common/btn-stop} at the right end of the tool bar.)
 
 \subsection{Costumes and Sounds}
 
-To change the appearance of a sprite, import a new \emph{costume} for it. There are three ways to do this. First, select the desired sprite in the sprite corral. Then, one way is to click on the file icon \inlinepic{../common/btn-file} in the tool bar, then choose the ``\code{Costumes\ldots}'' menu item. You will see a list of costumes from the public media library, and can choose one. The second way, for a costume stored on your own computer, is too click on the file icon and choose the ``\code{Import\ldots}'' menu item. You can then select a file in any picture format (PNG, JPEG, etc.) supported by your browser. The third way is quicker if the file you want is visible on the desktop: Just drag the file onto the \Snap{} window. In any of these cases, the scripting area will be replaced by something like this:\nopagebreak
+To change the appearance of a sprite, import a new \emph{costume} for it. There are three ways to do this. First, select the desired sprite in the sprite corral. Then, one way is to click on the file icon~\inlinepic{../common/btn-file} in the tool bar, then choose the ``\code{Costumes\ldots}'' menu item. You will see a list of costumes from the public media library, and can choose one. The second way, for a costume stored on your own computer, is too click on the file icon and choose the ``\code{Import\ldots}'' menu item. You can then select a file in any picture format (PNG, JPEG, etc.) supported by your browser. The third way is quicker if the file you want is visible on the desktop: Just drag the file onto the \Snap{} window. In any of these cases, the scripting area will be replaced by something like this:\nopagebreak
 
 \bigpic{scripting-area-with-additional-costume}
 
@@ -225,7 +225,7 @@ If, while working on a project, you want to omit temporarily some commands in a 
 
 \bigpic{predicates-and-conditional-evaluation-3}
 
-Sometimes you want to take the same action whether some condition is true or false, but with a different input value. For this purpose you can use the \emph{reporter} \code{if} block:\footnote{\onehalfspacing If you don't see it in the Control palette, click on the File button \inlinepic{../common/btn-file} in the Tool Bar and choose ``Import tools.''}\nopagebreak
+Sometimes you want to take the same action whether some condition is true or false, but with a different input value. For this purpose you can use the \emph{reporter} \code{if} block:\footnote{\onehalfspacing If you don't see it in the Control palette, click on the File button~\inlinepic{../common/btn-file} in the Tool Bar and choose ``Import tools.''}\nopagebreak
 
 \bigpic{predicates-and-conditional-evaluation-4}
 
@@ -303,15 +303,166 @@ As in the \code{for} block, you can click on an orange oval in the \code{script 
 This manual doesn't explain every block in detail. There are many more motion blocks, sound blocks, costume and graphics effects blocks, and so on. You can learn what they all do by experimentation, and also by reading the ``help screens'' that you can get by right-clicking or control-clicking a block and selecting ``\code{help\ldots}'' from the menu that appears. If you forget what palette (color) a block is, but you remember at least part of its name, type control-F and enter the name in the text block that appears in the palette area.
 
 \chapter{Saving and Loading Projects and Media}
+
+After you've created a project, you'll want to save it, so that you can have access to it the next time you use \Snap{}. There are several ways to do that. You can save a project on your own computer, or you can save it at the \Snap{} web site. The advantage of saving on the net is that you have access to your project even if you are using a different computer, or a mobile device such as a tablet or smartphone. The advantage of saving on your computer is that you have access to the saved project while on an airplane or otherwise not on the net. This is why we have multiple ways to save.
+
 \section{Local Storage}
+
+There are two different ways to save a project (or a media file such as a costume) on your computer. The reason for this complexity is that JavaScript, in which \Snap{} is implemented, deliberately restricts the ability of programs running in a browser to affect the computer. This is a good thing, because it means that you can confidently run someone else's \Snap{} project without worrying that it will delete all your files or infect your computer with a virus. But it does make things a little complicated.
+
 \subsection{Localstore}
+
+{\Huge \TODO{}}
+
 \subsection{XML Export}
+
+The second way to save a project on your computer requires two steps, but it doesn't have the limitations of localstore (\TODO{rename}). Projects saved in this second way are normal files on your computer and can be shared with friends, can be opened in any browser, and have no size limitation.
+
+From the file menu~\inlinepic{../common/btn-file}, choose ``Export project\ldots'' The entire \Snap{} window will disappear, replaced by a screenful of what looks like gibberish. Don't panic! This is what's supposed to happen. You are looking at your project, in a notation called XML. The main reason it looks like gibberish is that it includes an encoding of the pictures and other media in the project. If you look through the XML, the actual scripts of the project are pretty readable, although they don't look like \Snap{} blocks. \Snap{} has opened a new browser tab for this XML text; the actual \Snap{} window is still there, hiding in its original tab.
+
+But the point of this XML text isn't for you to read. Once you're looking at that tab, use your browser's Save command (in its File menu, or usually with a shortcut of command-S (Mac) or control-S (everything else). You can choose a filename for it, and it'll be saved in your usual Downloads folder. You can then close that tab and return to the \Snap{} tab.
+
 \section{Cloud Storage}
+
+The other possibility is to save your project ``in the cloud,'' at the \Snap{} web site. In order to do this, you need an account with us. Click on the Cloud button (\,\inlinepic{../common/btn-cloud}\,) in the Tool Bar. Choose the ``Signup\ldots'' option. This will show you a window that looks like this:\nopagebreak
+
+\bigpic{sign-up}
+
+You must choose a user name that will identify you on the web site, such as \code{Jens} or \code{bh}. If you're a Scratch user, you can use your Scratch name for \Snap{} too. If you're a kid, don't pick a user name that includes your family name, but first names or initials are okay. Don't pick something you'd be embarrassed to have other users (or your parents) see! If the name you want is already taken, you'll have to choose another one.
+
+We ask for your month and year of birth; we use this information only to decide whether to ask for your own email address or your parent's email address. (If you're a kid, you shouldn't sign up for anything on the net, not even \Snap{}, without your parent's knowledge.) We do not store your birthdate information on our server; it is used on your own computer only during this initial signup. We do not ask for your \emph{exact} birthdate, even for this one-time purpose, because that's an important piece of personally identifiable information.
+
+When you click OK, an email will be sent to the email address you gave, with an initial password for your account. We keep your email address on file so that, if you forget your password, we can send you a password-reset link. We will also email you if your account is suspended for violation of the Terms of Service. We do not use your address for any other purpose. You will never receive marketing emails of any kind through this site, neither from us nor from third parties. If, nevertheless, you are worried about providing this information, do a web search for ``temporary email.''
+
+Finally, you must read and agree to the Terms of Service. A quick summary: Don't interfere with anyone else's use of the web site, and don't put copyrighted media or personally identifiable information in projects that you share with other users. And we're not responsible if something goes wrong. (Not that we \emph{expect} anything to go wrong; since \Snap{} runs in JavaScript in your browser, it is strongly isolated from the rest of your computer. But the lawyers make us say this.)
+
+Once you've created your account, you can log into it using the ``Login\ldots'' option from the Cloud menu:\nopagebreak
+
+\bigpic{sign-in}
+
+Use the user name and password that you set up earlier. If you check the ``Stay signed in'' box, then you will be logged in automatically the next time you run \Snap{} from the same browser on the same computer. Check the box if you're using your own computer and you don't share it with siblings. Don't check the box if you're using a public computer at the library, at school, etc.
+
+Once logged in, you can choose the ``Cloud'' option in the ``Save as\ldots'' dialog shown on page~\TODO{Link to the picture}. You enter a project name, and optionally project notes, just as for Localstore \TODO{name} saving, but your project will be saved online and can be loaded from anywhere with net access.
+
 \section{Loading Saved Projects}
+
+Once you've saved a project, you want to be able to load it back into \Snap{}. There are two ways to do this:
+
+\begin{enumerate}
+\item If you saved the project in Localstore or in your online \Snap{} account, choose the ``Open\ldots'' option from the File menu. Choose the ``Browser'' or ``Cloud'' button, then select your project from the list in the big text box and click OK. (A third button, ``Examples,'' lets you choose from example projects that we provide. You can see what each of these projects is about by clicking on it and reading its project notes.)
+
+\item If you saved the project as an XML file on your computer, choose ``Import\ldots'' from the File menu. This will give you an ordinary browser file-open window, in which you can navigate to the file as you would in other software. Alternatively, find the XML file on your desktop, and just drag it onto the \Snap{} window.
+\end{enumerate}
+
+The second technique above also allows you to import media (costumes and sounds) into a project. Just choose ``Import\ldots'' and then select a picture or sound file instead of an XML file.
+
+\Snap{} can also import projects created in BYOB~3.0, or in Scratch~1.4 or (with some effort; see our web site) 2.0. Almost all such projects work correctly in \Snap{}, apart from a small number of incompatible blocks. BYOB~3.1 projects that don't use first class sprites work, too; all BYOB~3.1 projects will work in \Snap{}~4.1.
+
 \chapter{Building a Block}
+
+The first version of \Snap{} was called BYOB, for ``Build Your Own Blocks.'' This was the first and is still the most important capability we added to Scratch. (The name was changed because a few teachers have no sense of humor.~\frownie{} You pick your battles.) The new Scratch~2.0 also has a partial custom block capability.
+
 \section{Simple Blocks}
+
+In the Variables palette, at or near the bottom, is a button labeled ``Make a block.''\nopagebreak
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.5]{variables-palette}
+\end{figure}
+
+Clicking this button will display a dialog window in which you choose the block's name, shape, and palette/color. You also decide whether the block will be available to all sprites, or only to the current sprite and its children. Note: You can also enter the ``Make a block'' dialog by right-click/control-click on the script area background and then choose ``\code{Make a block}'' from the menu that appears.
+
+\bigpic{make-a-block}
+
+In this dialog box, you can choose the block's palette, shape and name. With one exception, there is one color per palette, e.g., all Motion blocks are blue. But the Variables palette includes the orange variable-related blocks and the red list-related blocks. Both colors are available, along with an ``Other'' option that makes grey blocks in the Variables palette for blocks that don't fit any category.
+
+There are three block shapes, following a convention that should be familiar to Scratch users: The jigsaw-puzzle-piece shaped blocks are Commands, and don't report a value. The oval blocks are Reporters, and the hexagonal blocks are Predicates, which is the technical term for reporters that report Boolean (true or false) values.
+
+Suppose you want to make a block named ``square'' that draws a square. You would choose Motion, Command, and type ``\code{square}'' into the name field. When you click OK, you enter the Block Editor. This works just like making a script in the sprite's scripting area, except that the ``hat'' block at the top, instead of saying something like ``\code{when I am clicked},'' has a picture of the block you're building. This hat block is called the \emph{prototype} of your custom block.\footnote{This use of the word ``prototype'' is unrelated to the \emph{prototyping object oriented programming} discussed later.} You drag blocks under the hat to program your custom block, then click OK:\nopagebreak
+
+\bigpic{dragging-block-into-block-editor}
+\bigpic{block-editor-square}
+
+Your block appears at the bottom of the Motion palette. Here's the block and the result of using it:\nopagebreak
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=\defaultGraphicsScale]%
+	{square-block-on-palette}
+\includegraphics[scale=\defaultGraphicsScale]{../common/square}
+\end{figure}
+
 \subsection{Custom Blocks with Inputs}
+
+But suppose you want to be able to draw squares of different sizes. Control-click or right-click on the block, choose ``\code{edit},'' and the Block Editor will open. Notice the plus signs before and after the word \code{square} in the prototype block. If you hover the mouse over one, it lights up:\nopagebreak
+
+\bigpic{block-prototype-with-plus-highlighted}
+
+Click on the plus on the right. You will then see the ``input name'' dialog:\nopagebreak
+
+\bigpic{create-input-name}
+
+Type in the name ``\code{size}'' and click OK. There are other options in this dialog; you can choose ``\code{title text}'' if you want to add words to the block name, so it can have text after an input slot, like the ``\code{move~(\,)~steps}'' block. Or you can select a more extensive dialog with a lot of options about your input name. But we'll leave that for later. When you click OK, the new input appears in the block prototype:\nopagebreak
+
+\bigpic{square-block-script-with-size-input}
+
+You can now drag the orange variable down into the script, then click okay:\nopagebreak
+
+\bigpic{dragging-block-input}
+
+Your block now appears in the Motion palette with an input box:\nopagebreak
+
+\bigpic{square-block}
+
+You can draw any size square by entering the length of its side in the box and running the block as usual, by clicking it or by putting it in a script.
+
 \section{Recursion}
+
+Since the new custom block appears in its palette as soon as you \emph{start} editing it, you can write recursive blocks (blocks that call themselves) by dragging the block into its own definition:\nopagebreak
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=\defaultGraphicsScale]{tree-block-script}\\
+\begin{minipage}{0.5\textwidth}
+\centering
+\includegraphics[scale=\defaultGraphicsScale]%
+	{tree-block-inside-script}
+\end{minipage}%
+\begin{minipage}{0.5\textwidth}
+\centering
+\includegraphics[scale=\defaultGraphicsScale]{../common/tree}
+\end{minipage}%
+\end{figure}
+
+If recursion is new to you, here are a few brief hints: It's crucial that the recursion have a \emph{base case}, that is, some small(est) case that the block can handle without using recursion. In this example, it's the case $\code{depth}=0$, for which the block does nothing at all, because of the enclosing \code{if}. Without a base case, the recursion would run forever, calling itself over and over.
+
+Don't try to trace the exact sequence of steps that the computer follows in a recursive program. Instead, imagine that inside the computer there are many small people, and if Theresa is drawing a tree of size~100, depth~6, she hires Tom to make a tree of size~70, depth~5, and later hires Theo to make another tree of size~70, depth~5. Tom in turn hires Tammy and Tallulah, and so on. Each little person has his or her own local variables \code{size} and \code{depth}, each with different values.
+
+You can also write recursive reporters, like this block to compute the factorial function:\nopagebreak
+
+\begin{figure}[H]
+\begin{minipage}{0.5\textwidth}
+\centering
+\includegraphics[scale=\defaultGraphicsScale]{factorial-block-script}
+\end{minipage}%
+\begin{minipage}{0.5\textwidth}
+\centering
+\includegraphics[scale=\defaultGraphicsScale]%
+	{factorial-5-with-result}
+\end{minipage}%
+\end{figure}
+
+Note the use of the \code{report} block. When a reporter block uses this block, the reporter finishes its work and reports the value given; any further blocks in the script are not evaluated. Thus, the \code{if else} block in the script above could have been just an \code{if}, with the second \code{report} block below it instead of inside it, and the result would be the same, because when the first \code{report} is seen in the base case, that finishes the block invocation, and the second \code{report} is ignored. There is also a \code{stop this block} block that has a similar purpose, ending the block invocation early, for command blocks. (By contrast, the \code{stop this script} block stops not only the current block invocation, but also the entire top-level script that called it.)
+
+Here's a slightly more compact way to write the factorial function:\nopagebreak
+
+\bigpic{concise-factorial-block-script}
+
+(If you don't see the reporter-\code{if} block in the Control palette, click the file button~\inlinepic{../common/btn-file} in the tool bar and choose ``\code{Import tools}.'')
+
+For more on recursion, see \textit{Thinking Recursively} by Eric Roberts. (The original edition is ISBN~978--0471816522; a more recent \textit{Thinking Recursively in Java} is ISBN~978--0471701460.)
+
 \section{Block Libraries}
 \chapter{First Class Lists}
 \section{The list Block}
