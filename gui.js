@@ -70,7 +70,7 @@ SpeechBubbleMorph, ScriptFocusMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2015-July-27';
+modules.gui = '2015-September-07';
 
 // Declarations
 
@@ -90,7 +90,7 @@ var baseURL = (function getPath(location) {
     path = location.pathname; // starts with a /
     origin = location.origin; // has no trailing /
     slash = path.lastIndexOf('/');
-    path = path.slice(0, slash); // keep a trailing /
+    path = path.slice(0, slash + 1); // keep a trailing /
     return origin + path;
 }(window.location));
 
@@ -1774,6 +1774,9 @@ IDE_Morph.prototype.stopAllScripts = function () {
 };
 
 IDE_Morph.prototype.selectSprite = function (sprite) {
+    if (this.currentSprite && this.currentSprite.scripts.focus) {
+        this.currentSprite.scripts.focus.stopEditing();
+    }
     this.currentSprite = sprite;
     this.createPalette();
     this.createSpriteBar();
@@ -5118,7 +5121,7 @@ ProjectDialogMorph.prototype.shareProject = function () {
                                     encodeURIComponent(usr.toLowerCase()) +
                                     '&ProjectName=' +
                                     encodeURIComponent(proj.ProjectName);
-                            location.hash = projectId;
+                            location.hash = 'present:' + projectId;
                         }
                     },
                     myself.ide.cloudError()

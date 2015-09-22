@@ -156,7 +156,7 @@ DialogBoxMorph, BlockInputFragmentMorph, PrototypeHatBlockMorph, Costume*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2015-July-27';
+modules.blocks = '2015-August-14';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -2307,7 +2307,7 @@ BlockMorph.prototype.userMenu = function () {
         menu.addItem(
             (proc ? this.fullCopy() : this).thumbnail(0.5, 60),
             function () {
-                var cpy = this.fullCopy(),
+                var cpy = myself.fullCopy(),
                     nb = cpy.nextBlock(),
                     ide = myself.parentThatIsA(IDE_Morph);
                 if (nb) {nb.destroy(); }
@@ -11330,8 +11330,8 @@ ScriptFocusMorph.prototype.trigger = function () {
             delete this.fps;
             delete this.step;
             this.hide();
-            current.contents().edit();
             this.world().onNextStep = function () {
+                current.contents().edit();
                 current.contents().selectAll();
             };
         } else if (current.choices) {
@@ -11693,6 +11693,7 @@ ScriptFocusMorph.prototype.items = function () {
             !(each instanceof TemplateSlotMorph) &&
             (!each.isStatic ||
                 each.choices ||
+                each instanceof RingMorph ||
                 each instanceof MultiArgMorph ||
                 each instanceof CommandSlotMorph);
     });

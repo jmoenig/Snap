@@ -1,0 +1,525 @@
+\documentclass{report}
+
+\input{../common/defs.tex}
+
+\begin{document}
+
+\title{Snap! Reference Manual}
+\author{Brian Harvey\texorpdfstring{ \and}{,} Jens M\"onig}
+\date{}
+
+\manualtitlepage{Snap! Reference Manual}
+
+\tableofcontents
+
+\chapter*{}
+\section*{Acknowledgements}
+
+We have been extremely lucky in our mentors. Jens cut his teeth in the company of the Smalltalk pioneers: Alan Kay, Dan Ingalls, and the rest of the gang who invented personal computing and object oriented programming in the great days of Xerox PARC. He worked with John Maloney, of the MIT Scratch Team, who developed the Morphic graphics framework that's still at the heart of \Snap{}. The brilliant design of Scratch, from the Lifelong Kindergarten Group at the MIT Media Lab, is crucial to \Snap{}.
+
+\textbf{\emph{Our earlier version, BYOB, was a direct modification of the Scratch source code. \Snap{} is a complete rewrite, but its code structure and its user interface remain deeply indebted to Scratch. And the Scratch Team, who could have seen us as rivals, have been entirely supportive and welcoming to us.}}
+
+Brian grew up at the MIT and Stanford Artificial Intelligence Labs, learning from Lisp inventor John McCarthy, Scheme inventors Gerald~J. Sussman and Guy Steele, and the authors of the world's best computer science book, \textit{Structure and Interpretation of Computer Programs}, Hal Abelson and Gerald~J. Sussman with Julie Sussman, among many other heroes of computer science.
+
+\textbf{\emph{In the glory days of the MIT Logo Lab, we used to say, ``Logo is Lisp disguised as BASIC.'' Now, with its first class procedures, lexical scope, and first class continuations, \Snap{} is Scheme disguised as Scratch.}}
+
+We have been fortunate to get to know an amazing group of brilliant middle school (!\@) and high school students through the Scratch Advanced Topics forum, several of whom have contributed code to \Snap{}: Kartik Chandra, Nathan Dinsmore, Connor Hudson, and Ian Reynolds. Many more have contributed ideas and alpha-testing bug reports. UC Berkeley students who've contributed code include Michael Ball, Achal Dave, Kyle Hotchkiss, Ivan Motyashov, and Yuan Yuan. Contributors of translations are too numerous to list here, but they're in the ``About\ldots'' box in \Snap{} itself.
+
+This work was supported in part by the National Science Foundation grant 1143566, and in part by MioSoft.
+
+\clearpage
+
+\begin{center}
+\bf \Huge \Snap{} Reference Manual \\
+\huge Version 4.0
+\vspace{40pt}
+\end{center}
+
+\Snap{} (formerly BYOB) is an extended reimplementation of Scratch (\url{http://scratch.mit.edu}) that allows you to Build Your Own Blocks. It also features first class lists, first class procedures, and continuations. These added capabilities make it suitable for a serious introduction to computer science for high school or college students.
+
+To run \Snap{}, open a browser window and connect to either \url{http://snap.berkeley.edu/run} to start with a minimal set of blocks or \url{http://snap.berkeley.edu/init} to load a small set of additional blocks (a little slower startup, but recommended for convenience and assumed in this manual).
+
+\clearpage
+
+\chapter{Blocks, Scripts, and Sprites}
+
+This chapter describes the \Snap{} features inherited from Scratch; experienced Scratch users can skip to section~\ref{sec:nesting-sprites}.
+
+\Snap{} is a programming language---a notation in which you can tell a computer what you want it to do. Unlike most programming languages, though, \Snap{} is a visual language; instead of writing a program using the keyboard, the \Snap{} programmer uses the same drag-and-drop interface familiar to computer users.
+
+Start \Snap{}. You should see the following arrangement of regions in the window:\nopagebreak
+
+\begin{center}
+\includegraphics[width=\textwidth]{window-regions}
+\end{center}
+
+(The proportions of these areas may be different, depending on the size and shape of your browser window.)
+
+A \Snap{} program consists of one or more \emph{scripts}, each of which is made of \emph{blocks}. Here's a typical script:\nopagebreak
+
+\label{fig:typical-script}
+\bigpic{typical-script}
+
+The five blocks that make up this script have three different colors, corresponding to three of the eight \emph{palettes} in which blocks can be found. The palette area at the left edge of the window shows one palette at a time, chosen with the eight buttons just above the palette area. In this script, the gold blocks are from the Control palette; the green block is from the Pen palette; and the blue blocks are from the Motion palette. A script is assembled by dragging blocks from a palette into the \emph{scripting area} in the middle part of the window. Blocks snap together (hence the name \Snap{} for the language) when you drag a block so that its indentation is near the tab of the one above it:\nopagebreak
+
+\bigpic{snapping-blocks}
+
+The white horizontal line is a signal that if you let go of the green block it will snap into the tab of the gold one.
+
+\subsection{Hat Blocks and Command Blocks}
+
+At the top of the script is a \emph{hat} block, which indicates when the script should be carried out. Hat block names typically start with the word ``\code{when}''; in this example, the script should be run when the green flag near the right end of the \Snap{} tool bar is clicked. (The \Snap{} tool bar is part of the \Snap{} window, not the same as the browser's or operating system's menu bar.) A script isn't required to have a hat block, but if not, then the script will be run only if the user clicks on the script itself. A script can't have more than one hat block, and the hat block can be used only at the top of the script; its distinctive shape is meant to remind you of that.
+
+The other blocks in this script are \emph{command} blocks. Each command block corresponds to an action that \Snap{} already knows how to carry out. For example, the block \inlinepic{move-10-steps} tells the sprite (the arrowhead shape on the \emph{stage} at the right end of the window) to move ten steps (a step is a very small unit of distance) in the direction in which the arrowhead is pointing. We'll see shortly that there can be more than one sprite, and that each sprite has its own scripts. Also, a sprite doesn't have to look like an arrowhead, but can have any picture as a costume. The shape of the \code{move} block is meant to remind you of a Lego\texttrademark{} brick; a script is a stack of blocks. (The word ``block'' denotes both the graphical shape on the screen and the procedure, the action, that the block carries out.)
+
+The number~$10$ in the \code{move} block above is called an \emph{input} to the block. By clicking on the white oval, you can type any number in place of the $10$. The sample script on page~\pageref{fig:typical-script} uses $100$ as the input value. We'll see later that inputs can have non-oval shapes that accept values other than numbers. We'll also see that you can compute input values, instead of typing a particular value into the oval. A block can have more than one input slot. For example, the \code{glide} block located about halfway down the Motion palette has three inputs.
+
+Most command blocks have that brick shape, but some, like the \code{repeat} block in the sample script, are \emph{C-shaped}. Most C-shaped blocks are found in the Control palette. The slot inside the C shape is a special kind of input slot that accepts a \emph{script} as the input. In the sample script, the \code{repeat} block has two inputs: the number $4$ and the script\nopagebreak
+
+\bigpic{typical-script-inner}
+
+\section{Sprites and Parallelism}
+
+Just below the stage is the ``new sprite'' button~\inlinepic{../common/btn-new-sprite}. Click the button to add a new sprite to the stage. The new sprite will appear in a random position on the stage, facing in a random direction, with a random color.
+
+Each sprite has its own scripts. To see the scripts for a particular sprite in the scripting area, click on the picture of that sprite in the \emph{sprite corral} in the bottom right corner of the window. Try putting one of the following scripts in each sprite's scripting area:\nopagebreak
+
+\begin{figure}[H]
+\begin{minipage}{0.5\textwidth}
+\centering
+\includegraphics[scale=\defaultGraphicsScale]{sprites-and-parallelism-1}
+\end{minipage}%
+\begin{minipage}{0.5\textwidth}
+\centering
+\includegraphics[scale=\defaultGraphicsScale]{sprites-and-parallelism-2}
+\end{minipage}
+\end{figure}
+
+When you click the green flag~\inlinepic{../common/btn-start}, you should see one sprite rotate while the other moves back and forth. This experiment illustrates the way different scripts can run in parallel. The turning and the moving happen together. Parallelism can be seen with multiple scripts of a single sprite also. Try this example:\nopagebreak
+
+\begin{figure}[H]
+\begin{minipage}{0.5\textwidth}
+\centering
+\includegraphics[scale=\defaultGraphicsScale]{sprites-and-parallelism-3}
+\end{minipage}%
+\begin{minipage}{0.5\textwidth}
+\centering
+\includegraphics[scale=\defaultGraphicsScale]{sprites-and-parallelism-4}
+\end{minipage}
+\end{figure}
+
+When you press the space key, the sprite should turn forever in a circle, because the \code{move} and \code{turn} blocks are run in parallel. (To stop the program, click the red stop sign~\inlinepic{../common/btn-stop} at the right end of the tool bar.)
+
+\subsection{Costumes and Sounds}
+
+To change the appearance of a sprite, import a new \emph{costume} for it. There are three ways to do this. First, select the desired sprite in the sprite corral. Then, one way is to click on the file icon~\inlinepic{../common/btn-file} in the tool bar, then choose the ``\code{Costumes\ldots}'' menu item. You will see a list of costumes from the public media library, and can choose one. The second way, for a costume stored on your own computer, is too click on the file icon and choose the ``\code{Import\ldots}'' menu item. You can then select a file in any picture format (PNG, JPEG, etc.) supported by your browser. The third way is quicker if the file you want is visible on the desktop: Just drag the file onto the \Snap{} window. In any of these cases, the scripting area will be replaced by something like this:\nopagebreak
+
+\bigpic{scripting-area-with-additional-costume}
+
+Just above this part of the window is a set of three tabs: Scripts, Costumes, and Sounds. You'll see that the Costumes tab is now selected. In this view, the sprite's \emph{wardrobe}, you can choose whether the sprite should wear its Turtle costume or its Alonzo costume. (Alonzo, the \Snap{} mascot, is named after Alonzo Church, a mathematician who invented the idea of procedures as data, the most important way in which \Snap{} is different from Scratch.) You can give a sprite as many costumes as you like, and then choose which it will wear either by clicking in its wardrobe or by using the \inlinepic{switch-to-costume-turtle} or \inlinepic{next-costume} block in a script. (Every costume has a number as well as a name. The \code{next costume} block selects the next costume by number; after the highest-numbered costume it switches to costume~1. The Turtle, costume~0, is never chosen by \code{next costume}.) The Turtle costume is the only one that changes color to match a change in the sprite's pen color.
+
+In addition to its costumes, a sprite can have \emph{sounds}; the equivalent for sounds of the sprite's wardrobe is called its \emph{jukebox}. Sound files can be imported in any format (WAV, OGG, MP3, etc.) supported by your browser. Two blocks accomplish the task of playing sounds. If you would like a script to continue running while the sound is playing, use the block \inlinepic{play-sound-help}. In contrast, you can use the \inlinepic{play-sound-help-until-done} block to wait for the sound's completion before continuing the rest of the script.
+
+\subsection{Inter-Sprite Communication with Broadcast}
+
+Earlier we saw an example of two sprites moving at the same time. In a more interesting program, though, the sprites on stage will interact to tell a story, play a game, etc. Often one sprite will have to tell another sprite to run a script. Here's a simple example:\nopagebreak
+
+\begin{figure}[H]
+\begin{minipage}{0.5\textwidth}
+\centering
+\includegraphics[scale=0.4]{../common/boy1-walking}
+\end{minipage}%
+\begin{minipage}{0.5\textwidth}
+\centering
+\reflectbox{\includegraphics[scale=0.3]{../common/dog2-c}}
+\end{minipage}
+
+\vspace{3ex}
+\begin{minipage}[t]{0.5\textwidth}
+\centering
+\vspace{0pt} % REALLY align to top
+\includegraphics[scale=\defaultGraphicsScale]{inter-sprite-communication-1}
+\end{minipage}%
+\begin{minipage}[t]{0.5\textwidth}
+\centering
+\vspace{0pt} % REALLY align to top
+\includegraphics[scale=\defaultGraphicsScale]{inter-sprite-communication-2}
+\end{minipage}
+\end{figure}
+
+In the \inlinepic{broadcast-bark-and-wait} block, the word ``bark'' is just an arbitrary name I made up. When you click on the downward arrowhead in that input slot, one of the choices (the only choice, the first time) is ``\code{new},'' which then prompts you to enter a name for the new broadcast. When this block is run, the chosen message is sent to \emph{every} sprite, which is why the block is called ``broadcast.'' In this program, though, only one sprite has a script to run when that broadcast is sent, namely the dog. Because the boy's script uses \code{broadcast and wait} rather than just \code{broadcast}, the boy doesn't go on to his next \code{say} block until the dog's script finishes. That's why the two sprites take turns talking, instead of both talking at once.
+
+Notice, by the way, that the \code{say} block's first input slot is rectangular rather than oval. This means the input can be any text string, not only a number. In the text input slots, a space character is shown as a brown dot, so that you can count the number of spaces between words, and in particular you can tell the difference between an empty slot and one containing spaces. The brown dots are \emph{not} shown on the stage when the block is run.
+
+The stage has its own scripting area. It can be selected by clicking on the Stage icon at the left of the sprite corral. Unlike a sprite, though, the stage can't move. Instead of costumes, it has \emph{backgrounds}: pictures that fill the entire stage area. The sprites appear in front of the current background. In a complicated project, it's often convenient to use a script in the stage's scripting area as the overall director of the action.
+
+\section{Nesting Sprites: Anchors and Parts}
+\label{sec:nesting-sprites}
+
+Sometimes it's desirable to make a sort of ``super-sprite'' composed of pieces that can move together but can also be separately articulated. The classic example is a person's body made up of a torso, limbs, and a head. \Snap{} allows one sprite to be designated as the \emph{anchor} of the combined shape, with other sprites as its \emph{parts}. To set up sprite nesting, drag the sprite corral icon of a \emph{part} sprite onto the stage display (not the sprite corral icon!) of the desired \emph{anchor} sprite.
+
+Sprite nesting is shown in the sprite corral icons of both anchors and parts:\nopagebreak
+
+\bigpic{nested-sprites-in-corral}
+
+In this illustration, it is desired to animate Alonzo's arm. (The arm has been colored green in this picture to make the relationship of the two sprites clearer, but in a real project they'd be the same color, probably.) Sprite1, representing Alonzo's body, is the anchor; Sprite2 is the arm. The icon for the anchor shows small images of up to three attached parts at the bottom. The icon for each part shows a small image of the anchor in its top left corner, and a \emph{synchronous rotation flag} in the top right corner. In its initial setting, as shown above, it means that the when the anchor sprite rotates, the part sprite also rotates as well as revolving around the anchor. When clicked, it changes from a circular arrow to a straight arrow, and indicates that when the anchor sprite rotates, the part sprite revolves around it, but does not rotate, keeping its original orientation. (The part can also be rotated separately, using its \code{turn} blocks.) Any change in the position or size of the anchor is always extended to its parts.
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=\defaultGraphicsScale]{hand-waving-command}%
+\hspace{2em}%
+\includegraphics[scale=0.4]{../common/alonzo-waving}
+\end{figure}
+
+\section{Reporter Blocks and Expressions}
+
+So far, we've used two kinds of blocks: hat blocks and command blocks. Another kind is the \emph{reporter} block, which has an oval shape: \inlinereporterpic{x-position}. It's called a ``reporter'' because when it's run, instead of carrying out an action, it reports a value that can be used as an input to another block. If you drag a reporter into the scripting area by itself and click on it, the value it reports will appear in a speech balloon next to the block:\nopagebreak
+
+\bigpic{x-position-returns-a-number}
+
+When you drag a reporter block over another block's input slot, a white ``halo'' appears around that input slot, analogous to the white line that appears when snapping command blocks together. Here's a simple script that uses a reporter block:\nopagebreak
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=\defaultGraphicsScale]{example-script-that-uses-a-reporter}%
+\hspace{2em}%
+\includegraphics{../common/turtle-says-its-position}
+\end{figure}
+
+Here the \code{x position} reporter provides the first input to the \code{say} block. (The sprite's X position is its horizontal position, how far left (negative values) or right (positive values) it is compared to the center of the stage. Similarly, the Y position is measured vertically, in steps above (positive) or below (negative) the center.)
+
+You can do arithmetic using reporters in the Operators palette:\nopagebreak
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=\defaultGraphicsScale]{using-reporters-for-arithmetic}%
+\hspace{2em}%
+\includegraphics{../common/turtle-says-its-rounded-position}
+\end{figure}
+
+The \code{round} block rounds $35.3905\ldots$ to $35$, and the \code{+}~block adds $100$ to that. (By the way, the \code{round} block is in the Operators palette, just like~\code{+}, but in this script it's a lighter color with black lettering because \Snap{} alternates light and dark versions of the palette colors when a block is nested inside another block from the same palette:\nopagebreak
+
+\bigpic{zebra-coloring}
+
+This aid to readability is called \emph{zebra coloring}.) A reporter block with its inputs, maybe including other reporter blocks, such as \inlinepic{round-x-position-plus-100}, is called an \emph{expression}.
+
+\section{Predicates and Conditional Evaluation}
+
+Most reporters report either a number, like \inlinereporterpic{plus}, or a text string, like \inlinereporterpic{join-hello-world}. A \emph{predicate} is a special kind of reporter that always reports \code{true} or \code{false}. Predicates have a hexagonal shape:\nopagebreak
+
+\bigpic{mouse-down}
+
+The special shape is a reminder that predicates don't generally make sense in an input slot of blocks that are expecting a number or text. You wouldn't say \inlinepic{move-mouse-down-steps}, although (as you can see from the picture) \Snap{} lets you do it if you really want. Instead, you normally use predicates in special hexagonal input slots like this one:\nopagebreak
+
+\bigpic{if}
+
+The C-shaped \code{if} block runs its input script if (and only if) the expression in its hexagonal input reports \code{true}.\nopagebreak
+
+\bigpic{predicates-and-conditional-evaluation-1}
+
+A really useful block in animations runs its input script \emph{repeatedly} until a predicate is satisfied:\nopagebreak
+
+\bigpic{predicates-and-conditional-evaluation-2}
+
+If, while working on a project, you want to omit temporarily some commands in a script, but you don't want to forget where they belong, you can say\nopagebreak
+
+\bigpic{predicates-and-conditional-evaluation-3}
+
+Sometimes you want to take the same action whether some condition is true or false, but with a different input value. For this purpose you can use the \emph{reporter} \code{if} block:\footnote{\onehalfspacing If you don't see it in the Control palette, click on the File button~\inlinepic{../common/btn-file} in the Tool Bar and choose ``Import tools.''}\nopagebreak
+
+\bigpic{predicates-and-conditional-evaluation-4}
+
+The technical term for a \code{true} or \code{false} value is a ``Boolean'' value; it has a capital~B because it's named after a person, George Boole, who developed the mathematical theory of Boolean values. Don't get confused; a hexagonal block is a \emph{predicate}, but the value it reports is a \emph{Boolean}.
+
+Another quibble about vocabulary: Many programming languages reserve the name ``procedure'' for Commands (that carry out an action) and use the name ``function'' for Reporters and Predicates. In this manual, a \emph{procedure} is any computational capability, including those that report values and those that don't. Commands, Reporters, and Predicates are all procedures. The words ``a Procedure type'' are shorthand for ``Command type, Reporter type, or Predicate type.''
+
+\section{Variables}
+
+Try this script:\footnote{The \code{for} block is also in the tools library; choose ``\code{Import tools}'' from the file menu if you don't have it in the Control palette.}\nopagebreak
+
+\bigpic{squiral-script}
+
+The input to the \code{move} block is an orange oval. To get it there, drag the orange oval that's part of the \code{for} block:\nopagebreak
+
+\bigpic{variable-dragging}
+
+The orange oval is a \emph{variable}: a symbol that represents a value. (I took this screenshot before changing the second number input to the \code{for} block from the default $10$ to $200$, and before dragging in a \code{turn} block.) \code{For} runs its script input repeatedly, just like \code{repeat}, but before each repetition it sets the variable \code{i} to a number starting with its first numeric input, adding $1$ for each repetition, until it reaches the second numeric input. In this case, there will be $200$ repetitions, first with $\code{i}=1$, then with $\code{i}=2$, then $3$, and so on until $\code{i}=200$ for the final repetition. The result is that each \code{move} draws a longer and longer line segment, and that's why the picture you see is a kind of spiral. (If you try again with a turn of $90$ degrees instead of $92$, you'll see why this picture is called a ``squiral.'')
+
+The variable~\code{i} is created by the \code{for} block, and it can only be used in the script inside the block's C-slot. (By the way, if you don't like the name~\code{i}, you can change it by clicking on the orange oval without dragging it, which will pop up a dialog window in which you can enter a different name:\nopagebreak
+
+\bigpic{script-variable-name-dialog}
+
+``\code{I}'' isn't a very descriptive name; you might prefer ``\code{length}'' to indicate its purpose in the script. ``\code{I}'' is traditional because mathematicians tend to use letters between~\code{i} and~\code{n} to represent integer values, but in programming languages we don't have to restrict ourselves to single-letter variable names.)
+
+\subsection{Global Variables}
+
+You can create variables ``by hand'' that aren't limited to being used within a single block. At the top of the Variables palette, click the ``\code{Make a variable}'' button:\nopagebreak
+
+\bigpic{make-a-variable}
+
+This will bring up a dialog window in which you can give your variable a name:\nopagebreak
+
+\bigpic{variable-name-dialog}
+
+The dialog also gives you a choice to make the variable available to all sprites (which is almost always what you want) or to make it visible only in the current sprite. You'd do that if you're going to give several sprites individual variables \emph{with the same name}, so that you can share a script between sprites (by dragging it from the current sprite's scripting area to the picture of another sprite in the sprite corral), and the different sprites will do slightly different things when running that script because each has a different value for that variable name.
+
+If you give your variable the name ``\code{name}'' then the Variables palette will look like this:\nopagebreak
+
+\bigpic{variable-on-a-palette}
+
+There's now a ``\code{Delete a variable}'' button, and there's an orange oval with the variable name in it, just like the orange oval in the \code{for} block. You can drag the variable into any script in the scripting area. Next to the oval is a checkbox, initially checked. When it's checked, you'll also see a \emph{variable watcher} on the stage:\nopagebreak
+
+\bigpic{variable-watcher}
+
+When you give the variable a value, the orange box in its watcher will display the value.
+
+\emph{How} do you give it a value? You use the \code{set} block:\nopagebreak
+
+\bigpic{ask-and-set}
+
+Note that you \emph{don't} drag the variable's oval into the \code{set} block! You click on the down arrow in the first input slot, and you get a menu of all the available variable names.
+
+\subsection{Script Variables}
+
+In that example, our project is going to carry on an interaction with the user, and we want to remember her name throughout the project. That's a good example of a situation in which a \emph{global} variable (the kind you make with the ``\code{Make a variable}'' button) is appropriate. Another common example is a variable called ``\code{score}'' in a game project. But sometimes you only need a variable temporarily, during the running of a particular script. In that case you can use the \code{script variables} block to make the variable:\nopagebreak
+
+\begin{figure}[H]
+\begin{minipage}{0.5\textwidth}
+\centering
+\includegraphics[scale=\defaultGraphicsScale]{wiggling-line-script}%
+\end{minipage}%
+\begin{minipage}{0.5\textwidth}
+\centering
+\includegraphics{../common/wiggling-line}
+\end{minipage}%
+\end{figure}
+
+As in the \code{for} block, you can click on an orange oval in the \code{script variables} block without dragging to change its name. You can also make more than one temporary variable by clicking on the right arrow at the end of the block to add another variable oval:\nopagebreak
+
+\bigpic{script-variables-a-b-c}
+
+\section{Etcetera}
+
+This manual doesn't explain every block in detail. There are many more motion blocks, sound blocks, costume and graphics effects blocks, and so on. You can learn what they all do by experimentation, and also by reading the ``help screens'' that you can get by right-clicking or control-clicking a block and selecting ``\code{help\ldots}'' from the menu that appears. If you forget what palette (color) a block is, but you remember at least part of its name, type control-F and enter the name in the text block that appears in the palette area.
+
+\chapter{Saving and Loading Projects and Media}
+
+After you've created a project, you'll want to save it, so that you can have access to it the next time you use \Snap{}. There are several ways to do that. You can save a project on your own computer, or you can save it at the \Snap{} web site. The advantage of saving on the net is that you have access to your project even if you are using a different computer, or a mobile device such as a tablet or smartphone. The advantage of saving on your computer is that you have access to the saved project while on an airplane or otherwise not on the net. This is why we have multiple ways to save.
+
+\section{Local Storage}
+
+There are two different ways to save a project (or a media file such as a costume) on your computer. The reason for this complexity is that JavaScript, in which \Snap{} is implemented, deliberately restricts the ability of programs running in a browser to affect the computer. This is a good thing, because it means that you can confidently run someone else's \Snap{} project without worrying that it will delete all your files or infect your computer with a virus. But it does make things a little complicated.
+
+\subsection{Localstore}
+
+{\Huge \TODO{}}
+
+\subsection{XML Export}
+
+The second way to save a project on your computer requires two steps, but it doesn't have the limitations of localstore (\TODO{rename}). Projects saved in this second way are normal files on your computer and can be shared with friends, can be opened in any browser, and have no size limitation.
+
+From the file menu~\inlinepic{../common/btn-file}, choose ``Export project\ldots'' The entire \Snap{} window will disappear, replaced by a screenful of what looks like gibberish. Don't panic! This is what's supposed to happen. You are looking at your project, in a notation called XML. The main reason it looks like gibberish is that it includes an encoding of the pictures and other media in the project. If you look through the XML, the actual scripts of the project are pretty readable, although they don't look like \Snap{} blocks. \Snap{} has opened a new browser tab for this XML text; the actual \Snap{} window is still there, hiding in its original tab.
+
+But the point of this XML text isn't for you to read. Once you're looking at that tab, use your browser's Save command (in its File menu, or usually with a shortcut of command-S (Mac) or control-S (everything else). You can choose a filename for it, and it'll be saved in your usual Downloads folder. You can then close that tab and return to the \Snap{} tab.
+
+\section{Cloud Storage}
+
+The other possibility is to save your project ``in the cloud,'' at the \Snap{} web site. In order to do this, you need an account with us. Click on the Cloud button (\,\inlinepic{../common/btn-cloud}\,) in the Tool Bar. Choose the ``Signup\ldots'' option. This will show you a window that looks like this:\nopagebreak
+
+\bigpic{sign-up}
+
+You must choose a user name that will identify you on the web site, such as \code{Jens} or \code{bh}. If you're a Scratch user, you can use your Scratch name for \Snap{} too. If you're a kid, don't pick a user name that includes your family name, but first names or initials are okay. Don't pick something you'd be embarrassed to have other users (or your parents) see! If the name you want is already taken, you'll have to choose another one.
+
+We ask for your month and year of birth; we use this information only to decide whether to ask for your own email address or your parent's email address. (If you're a kid, you shouldn't sign up for anything on the net, not even \Snap{}, without your parent's knowledge.) We do not store your birthdate information on our server; it is used on your own computer only during this initial signup. We do not ask for your \emph{exact} birthdate, even for this one-time purpose, because that's an important piece of personally identifiable information.
+
+When you click OK, an email will be sent to the email address you gave, with an initial password for your account. We keep your email address on file so that, if you forget your password, we can send you a password-reset link. We will also email you if your account is suspended for violation of the Terms of Service. We do not use your address for any other purpose. You will never receive marketing emails of any kind through this site, neither from us nor from third parties. If, nevertheless, you are worried about providing this information, do a web search for ``temporary email.''
+
+Finally, you must read and agree to the Terms of Service. A quick summary: Don't interfere with anyone else's use of the web site, and don't put copyrighted media or personally identifiable information in projects that you share with other users. And we're not responsible if something goes wrong. (Not that we \emph{expect} anything to go wrong; since \Snap{} runs in JavaScript in your browser, it is strongly isolated from the rest of your computer. But the lawyers make us say this.)
+
+Once you've created your account, you can log into it using the ``Login\ldots'' option from the Cloud menu:\nopagebreak
+
+\bigpic{sign-in}
+
+Use the user name and password that you set up earlier. If you check the ``Stay signed in'' box, then you will be logged in automatically the next time you run \Snap{} from the same browser on the same computer. Check the box if you're using your own computer and you don't share it with siblings. Don't check the box if you're using a public computer at the library, at school, etc.
+
+Once logged in, you can choose the ``Cloud'' option in the ``Save as\ldots'' dialog shown on page~\TODO{Link to the picture}. You enter a project name, and optionally project notes, just as for Localstore \TODO{name} saving, but your project will be saved online and can be loaded from anywhere with net access.
+
+\section{Loading Saved Projects}
+
+Once you've saved a project, you want to be able to load it back into \Snap{}. There are two ways to do this:
+
+\begin{enumerate}
+\item If you saved the project in Localstore or in your online \Snap{} account, choose the ``Open\ldots'' option from the File menu. Choose the ``Browser'' or ``Cloud'' button, then select your project from the list in the big text box and click OK. (A third button, ``Examples,'' lets you choose from example projects that we provide. You can see what each of these projects is about by clicking on it and reading its project notes.)
+
+\item If you saved the project as an XML file on your computer, choose ``Import\ldots'' from the File menu. This will give you an ordinary browser file-open window, in which you can navigate to the file as you would in other software. Alternatively, find the XML file on your desktop, and just drag it onto the \Snap{} window.
+\end{enumerate}
+
+The second technique above also allows you to import media (costumes and sounds) into a project. Just choose ``Import\ldots'' and then select a picture or sound file instead of an XML file.
+
+\Snap{} can also import projects created in BYOB~3.0, or in Scratch~1.4 or (with some effort; see our web site) 2.0. Almost all such projects work correctly in \Snap{}, apart from a small number of incompatible blocks. BYOB~3.1 projects that don't use first class sprites work, too; all BYOB~3.1 projects will work in \Snap{}~4.1.
+
+\chapter{Building a Block}
+
+The first version of \Snap{} was called BYOB, for ``Build Your Own Blocks.'' This was the first and is still the most important capability we added to Scratch. (The name was changed because a few teachers have no sense of humor.~\frownie{} You pick your battles.) The new Scratch~2.0 also has a partial custom block capability.
+
+\section{Simple Blocks}
+
+In the Variables palette, at or near the bottom, is a button labeled ``Make a block.''\nopagebreak
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.5]{variables-palette}
+\end{figure}
+
+Clicking this button will display a dialog window in which you choose the block's name, shape, and palette/color. You also decide whether the block will be available to all sprites, or only to the current sprite and its children. Note: You can also enter the ``Make a block'' dialog by right-click/control-click on the script area background and then choose ``\code{Make a block}'' from the menu that appears.
+
+\bigpic{make-a-block}
+
+In this dialog box, you can choose the block's palette, shape and name. With one exception, there is one color per palette, e.g., all Motion blocks are blue. But the Variables palette includes the orange variable-related blocks and the red list-related blocks. Both colors are available, along with an ``Other'' option that makes grey blocks in the Variables palette for blocks that don't fit any category.
+
+There are three block shapes, following a convention that should be familiar to Scratch users: The jigsaw-puzzle-piece shaped blocks are Commands, and don't report a value. The oval blocks are Reporters, and the hexagonal blocks are Predicates, which is the technical term for reporters that report Boolean (true or false) values.
+
+Suppose you want to make a block named ``square'' that draws a square. You would choose Motion, Command, and type ``\code{square}'' into the name field. When you click OK, you enter the Block Editor. This works just like making a script in the sprite's scripting area, except that the ``hat'' block at the top, instead of saying something like ``\code{when I am clicked},'' has a picture of the block you're building. This hat block is called the \emph{prototype} of your custom block.\footnote{This use of the word ``prototype'' is unrelated to the \emph{prototyping object oriented programming} discussed later.} You drag blocks under the hat to program your custom block, then click OK:\nopagebreak
+
+\bigpic{dragging-block-into-block-editor}
+\bigpic{block-editor-square}
+
+Your block appears at the bottom of the Motion palette. Here's the block and the result of using it:\nopagebreak
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=\defaultGraphicsScale]%
+	{square-block-on-palette}
+\includegraphics[scale=\defaultGraphicsScale]{../common/square}
+\end{figure}
+
+\subsection{Custom Blocks with Inputs}
+
+But suppose you want to be able to draw squares of different sizes. Control-click or right-click on the block, choose ``\code{edit},'' and the Block Editor will open. Notice the plus signs before and after the word \code{square} in the prototype block. If you hover the mouse over one, it lights up:\nopagebreak
+
+\bigpic{block-prototype-with-plus-highlighted}
+
+Click on the plus on the right. You will then see the ``input name'' dialog:\nopagebreak
+
+\bigpic{create-input-name}
+
+Type in the name ``\code{size}'' and click OK. There are other options in this dialog; you can choose ``\code{title text}'' if you want to add words to the block name, so it can have text after an input slot, like the ``\code{move~(\,)~steps}'' block. Or you can select a more extensive dialog with a lot of options about your input name. But we'll leave that for later. When you click OK, the new input appears in the block prototype:\nopagebreak
+
+\bigpic{square-block-script-with-size-input}
+
+You can now drag the orange variable down into the script, then click okay:\nopagebreak
+
+\bigpic{dragging-block-input}
+
+Your block now appears in the Motion palette with an input box:\nopagebreak
+
+\bigpic{square-block}
+
+You can draw any size square by entering the length of its side in the box and running the block as usual, by clicking it or by putting it in a script.
+
+\section{Recursion}
+
+Since the new custom block appears in its palette as soon as you \emph{start} editing it, you can write recursive blocks (blocks that call themselves) by dragging the block into its own definition:\nopagebreak
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=\defaultGraphicsScale]{tree-block-script}\\
+\begin{minipage}{0.5\textwidth}
+\centering
+\includegraphics[scale=\defaultGraphicsScale]%
+	{tree-block-inside-script}
+\end{minipage}%
+\begin{minipage}{0.5\textwidth}
+\centering
+\includegraphics[scale=\defaultGraphicsScale]{../common/tree}
+\end{minipage}%
+\end{figure}
+
+If recursion is new to you, here are a few brief hints: It's crucial that the recursion have a \emph{base case}, that is, some small(est) case that the block can handle without using recursion. In this example, it's the case $\code{depth}=0$, for which the block does nothing at all, because of the enclosing \code{if}. Without a base case, the recursion would run forever, calling itself over and over.
+
+Don't try to trace the exact sequence of steps that the computer follows in a recursive program. Instead, imagine that inside the computer there are many small people, and if Theresa is drawing a tree of size~100, depth~6, she hires Tom to make a tree of size~70, depth~5, and later hires Theo to make another tree of size~70, depth~5. Tom in turn hires Tammy and Tallulah, and so on. Each little person has his or her own local variables \code{size} and \code{depth}, each with different values.
+
+You can also write recursive reporters, like this block to compute the factorial function:\nopagebreak
+
+\begin{figure}[H]
+\begin{minipage}{0.5\textwidth}
+\centering
+\includegraphics[scale=\defaultGraphicsScale]{factorial-block-script}
+\end{minipage}%
+\begin{minipage}{0.5\textwidth}
+\centering
+\includegraphics[scale=\defaultGraphicsScale]%
+	{factorial-5-with-result}
+\end{minipage}%
+\end{figure}
+
+Note the use of the \code{report} block. When a reporter block uses this block, the reporter finishes its work and reports the value given; any further blocks in the script are not evaluated. Thus, the \code{if else} block in the script above could have been just an \code{if}, with the second \code{report} block below it instead of inside it, and the result would be the same, because when the first \code{report} is seen in the base case, that finishes the block invocation, and the second \code{report} is ignored. There is also a \code{stop this block} block that has a similar purpose, ending the block invocation early, for command blocks. (By contrast, the \code{stop this script} block stops not only the current block invocation, but also the entire top-level script that called it.)
+
+Here's a slightly more compact way to write the factorial function:\nopagebreak
+
+\bigpic{concise-factorial-block-script}
+
+(If you don't see the reporter-\code{if} block in the Control palette, click the file button~\inlinepic{../common/btn-file} in the tool bar and choose ``\code{Import tools}.'')
+
+For more on recursion, see \textit{Thinking Recursively} by Eric Roberts. (The original edition is ISBN~978--0471816522; a more recent \textit{Thinking Recursively in Java} is ISBN~978--0471701460.)
+
+\section{Block Libraries}
+\chapter{First Class Lists}
+\section{The list Block}
+\section{Lists of Lists}
+\section{Functional and Imperative List Programming}
+\section{Higher Order List Operations and Rings}
+\chapter{Typed Inputs}
+\section{Scratch's Type Notation}
+\section{The \Snap{} Input Type Dialog}
+\subsection{Procedure Types}
+\subsection{Pulldown inputs}
+\subsection{Input variants}
+\subsection{Prototype Hints}
+\subsection{Title Text and Symbols}
+\chapter{Procedures as Data}
+\section{Call and Run}
+\subsection{Call/Run with inputs}
+\subsection{Variables in Ring Slots}
+\section{Writing Higher Order Procedures}
+\subsection{Recursive Calls to Multiple-Input Blocks}
+\section{Formal Parameters}
+\section{Procedures as Data}
+\section{Special Forms}
+\subsection{Special Forms in Scratch}
+\chapter{Object Oriented Programming}
+\section{Local State with Script Variables}
+\section{Messages and Dispatch Procedures}
+\section{Inheritance via Delegation}
+\section{An Implementation of Prototyping OOP}
+\chapter{The Outside World}
+\section{The World Wide Web}
+\section{Hardware Devices}
+\section{Date and Time}
+\chapter{Continuations}
+\section{Continuation Passing Style}
+\section{Call/Run w/Continuation}
+\subsection{Nonlocal exit}
+\chapter{User Interface Elements}
+\section{Tool Bar Features}
+\subsection{The \Snap{} Logo Menu}
+\subsection{The File Menu}
+\subsection{The Cloud Menu}
+\subsection{The Settings Menu}
+\subsection{Stage Resizing Buttons}
+\subsection{Project Control Buttons}
+\section{The Palette Area}
+\subsection{Context Menus for Palette Blocks}
+\subsection{Context Menu for the Palette Background}
+\section{The Scripting Area}
+\subsection{Sprite Appearance and Behavior Controls}
+\subsection{Scripting Area Tabs}
+\subsection{Scripts and Blocks Within Scripts}
+\subsection{Scripting Area Background Context Menu}
+\subsection{Controls in the Costumes Tab}
+\subsection{The Paint Editor}
+\subsection{Controls in the Sounds Tab}
+\section{Controls on the Stage}
+\section{The Sprite Corral and Sprite Creation Buttons}
+
+\end{document}
