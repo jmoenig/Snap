@@ -2115,6 +2115,9 @@ Process.prototype.reportMonadic = function (fname, n) {
     case 'abs':
         result = Math.abs(x);
         break;
+    case 'ceiling':
+        result = Math.ceil(x);
+        break;
     case 'floor':
         result = Math.floor(x);
         break;

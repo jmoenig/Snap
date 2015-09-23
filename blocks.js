@@ -1149,6 +1149,7 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                 false,
                 {
                     abs : ['abs'],
+                    ceiling : ['ceiling'],
                     floor : ['floor'],
                     sqrt : ['sqrt'],
                     sin : ['sin'],
