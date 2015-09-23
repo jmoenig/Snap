@@ -6,7 +6,7 @@
 
     written by Jens Mönig
 
-    Copyright (C) 2014 by Jens Mönig
+    Copyright (C) 2015 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org', // optional
     'last_changed':
-        '2015-08-06', // this, too, will appear in the Translators tab
+        '2015-09-23', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -1247,6 +1247,8 @@ SnapTranslator.dict.de = {
     // math functions
     'abs':
         'Betrag',
+    'ceiling':
+        'Aufgerundet',
     'floor':
         'Abgerundet',
     'sqrt':

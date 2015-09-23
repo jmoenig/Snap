@@ -2577,3 +2577,5 @@ ______
 150923
 ------
 * Morphic, Objects: Improve display precision (stop rounding display coordinates)
+* Added “ceiling” function, thanks, Michael
+* Updated various translations
