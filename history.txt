@@ -2573,3 +2573,7 @@ ______
 ------
 * new Croatian translation. Yay!! Thanks, Zeljko Hrvoj!
 * fixed #925
+
+150923
+------
+* Morphic, Objects: Improve display precision (stop rounding display coordinates)

@@ -125,7 +125,7 @@ PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.objects = '2015-July-27';
+modules.objects = '2015-September-23';
 
 var SpriteMorph;
 var StageMorph;
@@ -4777,10 +4777,10 @@ StageMorph.prototype.drawOn = function (aCanvas, aRect) {
         return null;
     }
     rectangle = aRect || this.bounds;
-    area = rectangle.intersect(this.bounds).round();
+    area = rectangle.intersect(this.bounds);
     if (area.extent().gt(new Point(0, 0))) {
         delta = this.position().neg();
-        src = area.copy().translateBy(delta).round();
+        src = area.copy().translateBy(delta);
         context = aCanvas.getContext('2d');
         context.globalAlpha = this.alpha;
 
@@ -4794,8 +4794,8 @@ StageMorph.prototype.drawOn = function (aCanvas, aRect) {
         }
         context.drawImage(
             this.image,
-            src.left(),
-            src.top(),
+            sl,
+            st,
             w,
             h,
             area.left(),
@@ -4812,8 +4812,8 @@ StageMorph.prototype.drawOn = function (aCanvas, aRect) {
         try {
             context.drawImage(
                 this.penTrails(),
-                src.left() / this.scale,
-                src.top() / this.scale,
+                sl / this.scale,
+                st / this.scale,
                 ws,
                 hs,
                 area.left() / this.scale,
