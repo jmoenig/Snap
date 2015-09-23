@@ -156,7 +156,7 @@ DialogBoxMorph, BlockInputFragmentMorph, PrototypeHatBlockMorph, Costume*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2015-Sep-23';
+modules.blocks = '2015-September-23';
 
 var SyntaxElementMorph;
 var BlockMorph;
