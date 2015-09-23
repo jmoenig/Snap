@@ -4960,7 +4960,7 @@ StageMorph.prototype.getLastMessage = function () {
     return this.lastMessage || '';
 };
 
-// StageMorph Mouse Corridnates
+// StageMorph Mouse Coordinates
 
 StageMorph.prototype.reportMouseX = function () {
     var world = this.world();
