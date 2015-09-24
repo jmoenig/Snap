@@ -771,7 +771,7 @@ IDE_Morph.prototype.createControlBar = function () {
     button.padding = 0;
     button.labelShadowOffset = new Point(-1, -1);
     button.labelShadowColor = colors[1];
-    button.labelColor = this.buttonLabelColor;
+    button.labelColor = SnapCloud.username ? new Color(0, 200, 0) : this.buttonLabelColor;
     button.contrast = this.buttonContrast;
     button.drawNew();
     // button.hint = 'cloud operations';
@@ -3882,6 +3882,7 @@ IDE_Morph.prototype.initializeCloud = function () {
                     }
                     myself.source = 'cloud';
                     myself.showMessage('now connected.', 2);
+                    myself.refreshIDE();
                 },
                 myself.cloudError()
             );
@@ -4019,10 +4020,12 @@ IDE_Morph.prototype.logout = function () {
         function () {
             SnapCloud.clear();
             myself.showMessage('disconnected.', 2);
+            myself.refreshIDE();
         },
         function () {
             SnapCloud.clear();
             myself.showMessage('disconnected.', 2);
+            myself.refreshIDE();
         }
     );
 };
