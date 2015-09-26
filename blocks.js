@@ -1068,6 +1068,8 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                 null,
                 false,
                 {
+                    'any key': ['any key'],
+                    'number key': ['number key'],
                     'up arrow': ['up arrow'],
                     'down arrow': ['down arrow'],
                     'right arrow': ['right arrow'],

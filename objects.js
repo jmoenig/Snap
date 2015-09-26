@@ -847,6 +847,11 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'sensing',
             spec: 'key %key pressed?'
         },
+        getKeysPressed: {
+            type: 'reporter',
+            category: 'sensing',
+            spec: 'keys pressed'
+        },
         reportDistanceTo: {
             type: 'reporter',
             category: 'sensing',
@@ -1934,6 +1939,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('reportMouseDown'));
         blocks.push('-');
         blocks.push(block('reportKeyPressed'));
+        blocks.push(block('getKeysPressed'));
         blocks.push('-');
         blocks.push(block('reportDistanceTo'));
         blocks.push('-');
@@ -3673,7 +3679,19 @@ SpriteMorph.prototype.allHatBlocksForKey = function (key) {
     return this.scripts.children.filter(function (morph) {
         if (morph.selector) {
             if (morph.selector === 'receiveKey') {
-                return morph.inputs()[0].evaluate()[0] === key;
+                var selectedOption = morph.inputs()[0].evaluate()[0];
+
+                if (selectedOption === 'any key') {
+                    return true;
+                }
+                if (selectedOption === 'number key' &&
+                        (key >= '0' && key <= '9')) {
+                    return true;
+                }
+                if (selectedOption === key) {
+                    return true;
+                }
+                return false;
             }
         }
         return false;
@@ -3740,6 +3758,16 @@ SpriteMorph.prototype.getTempo = function () {
         return stage.getTempo();
     }
     return 0;
+};
+
+// SpriteMorph last key
+
+SpriteMorph.prototype.getKeysPressed = function () {
+    var stage = this.parentThatIsA(StageMorph);
+    if (stage) {
+        return stage.getKeysPressed();
+    }
+    return '';
 };
 
 // SpriteMorph last message
@@ -4954,6 +4982,16 @@ StageMorph.prototype.getTempo = function () {
     return +this.tempo;
 };
 
+// StageMorph keys
+
+StageMorph.prototype.getKeysPressed = function () {
+    var keys = [];
+    for (var key in this.keysPressed) {
+        keys.push(key);
+    }
+    return new List(keys);
+};
+
 // StageMorph messages
 
 StageMorph.prototype.getLastMessage = function () {
@@ -5007,7 +5045,7 @@ StageMorph.prototype.step = function () {
         world.keyboardReceiver = this;
     }
     if (world.currentKey === null) {
-        this.keyPressed = null;
+        this.keysPressed = {};
     }
 
     // manage threads
@@ -5466,6 +5504,7 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('reportMouseDown'));
         blocks.push('-');
         blocks.push(block('reportKeyPressed'));
+        blocks.push(block('getKeysPressed'));
         blocks.push('-');
         blocks.push(block('doResetTimer'));
         blocks.push(watcherToggle('getTimer'));
@@ -7220,7 +7259,7 @@ WatcherMorph.prototype.object = function () {
 
 WatcherMorph.prototype.isGlobal = function (selector) {
     return contains(
-        ['getLastAnswer', 'getLastMessage', 'getTempo', 'getTimer',
+        ['getLastAnswer', 'getKeysPressed', 'getLastMessage', 'getTempo', 'getTimer',
              'reportMouseX', 'reportMouseY', 'reportThreadCount'],
         selector
     );
