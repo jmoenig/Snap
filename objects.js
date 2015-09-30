@@ -5107,6 +5107,12 @@ StageMorph.prototype.processKeyEvent = function (event, action) {
     case 40:
         keyName = 'down arrow';
         break;
+    case 187:
+        keyName = '+';
+        break;
+    case 189:
+        keyName = '-';
+        break;
     default:
         keyName = String.fromCharCode(event.keyCode || event.charCode);
         if (event.ctrlKey || event.metaKey) {
