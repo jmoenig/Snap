@@ -70,7 +70,7 @@
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.paint = '2015-June-25';
+modules.paint = '2015-October-02';
 
 // Declarations
 
@@ -624,12 +624,15 @@ PaintCanvasMorph.prototype.undo = function () {
     }
 };
 
-PaintCanvasMorph.prototype.disableSmoothing = function(ctx) {
-    ctx['imageSmoothingEnabled'] = false;       /* standard */
-    ctx['mozImageSmoothingEnabled'] = false;    /* Firefox */
-    ctx['oImageSmoothingEnabled'] = false;      /* Opera */
-    ctx['webkitImageSmoothingEnabled'] = false; /* Safari */
-    ctx['msImageSmoothingEnabled'] = false;     /* IE */
+PaintCanvasMorph.prototype.disableSmoothing = function (ctx) {
+    ctx.imageSmoothingEnabled = false;       /* standard */
+
+    // we oughta keep checking whether the following ones
+    // are still needed
+    ctx.mozImageSmoothingEnabled = false;    /* Firefox */
+    ctx.oImageSmoothingEnabled = false;      /* Opera */
+    ctx.webkitImageSmoothingEnabled = false; /* Safari */
+    ctx.msImageSmoothingEnabled = false;     /* IE */
 };
 
 PaintCanvasMorph.prototype.merge = function (a, b) {

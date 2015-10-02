@@ -2585,3 +2585,4 @@ ______
 * GUI, Blocks, BYOB: New “Export Project Summary” Feature, also: exporting script pics now includes attached comments
 * Blocks, Objects, Threads: Key hat block and key sensor support for “any” key
 * German translation update
+* Suppress antialiasing when scaling things in the paint editor. Thanks, Kartik!
