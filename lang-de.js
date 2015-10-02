@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org', // optional
     'last_changed':
-        '2015-09-23', // this, too, will appear in the Translators tab
+        '2015-10-02', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -680,6 +680,15 @@ SnapTranslator.dict.de = {
         'Bl\u00f6cke exportieren...',
     'show global custom block definitions as XML\nin a new browser window':
         'zeigt globale Benutzerblockdefinitionen\nals XML im Browser an',
+    'Export summary...':
+        'Zusammenfassung exportieren...',
+    'open a new browser browser window\n with a summary of this project':
+        'eine Zusammenfassung diese Projects\nin einem neuen Browserfenster'
+            + 'anzeigen',
+    'Blocks':
+        'Bausteine',
+    'For all Sprites':
+        'F\u00fcr alle',
     'Import tools':
         'Tools laden',
     'load the official library of\npowerful blocks':
@@ -1302,5 +1311,5 @@ SnapTranslator.dict.de = {
     'last':
         'letztes',
     'any':
-        'beliebiges'
+        'beliebig'
 };

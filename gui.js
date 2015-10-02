@@ -66,11 +66,11 @@ ScriptsMorph, isNil, SymbolMorph, BlockExportDialogMorph,
 BlockImportDialogMorph, SnapTranslator, localize, List, InputSlotMorph,
 SnapCloud, Uint8Array, HandleMorph, SVG_Costume, fontHeight, hex_sha512,
 sb, CommentMorph, CommandBlockMorph, BlockLabelPlaceHolderMorph, Audio,
-SpeechBubbleMorph, ScriptFocusMorph*/
+SpeechBubbleMorph, ScriptFocusMorph, XML_Element*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2015-September-07';
+modules.gui = '2015-October-02';
 
 // Declarations
 
@@ -2539,6 +2539,12 @@ IDE_Morph.prototype.projectMenu = function () {
         'show global custom block definitions as XML\nin a new browser window'
     );
 
+    menu.addItem(
+        'Export summary...',
+        function () {myself.exportProjectSummary(); },
+        'open a new browser browser window\n with a summary of this project'
+    );
+
     if (shiftClicked) {
         menu.addItem(
             'Export all scripts as pic...',
@@ -3097,6 +3103,179 @@ IDE_Morph.prototype.exportScriptsPicture = function () {
     });
 
     window.open(pic.toDataURL());
+};
+
+IDE_Morph.prototype.exportProjectSummary = function () {
+    var html, head, meta, body, pname, notes, globalVars, globalBlocks;
+
+    function addNode(tag, node, contents) {
+        if (!node) {node = body; }
+        return new XML_Element(tag, contents, node);
+    }
+
+    function add(contents, tag, node) {
+        if (!tag) {tag = 'p'; }
+        if (!node) {node = body; }
+        return new XML_Element(tag, contents, node);
+    }
+
+    function addImage(canvas, node, inline) {
+        if (!node) {node = body; }
+        var para = !inline ? addNode('p', node) : null,
+            pic = addNode('img', para || node);
+        pic.attributes.src = canvas.toDataURL();
+        return pic;
+    }
+
+    function addBlocks(definitions) {
+        if (definitions.length) {
+            add(localize('Blocks'), 'h3');
+            SpriteMorph.prototype.categories.forEach(function (category) {
+                var isFirst = true,
+                    ul;
+                definitions.forEach(function (def) {
+                    var li;
+                    if (def.category === category) {
+                        if (isFirst) {
+                            add(
+                                localize(
+                                    category[0].toUpperCase().concat(
+                                        category.slice(1)
+                                    )
+                                ),
+                                'h4'
+                            );
+                            ul = addNode('ul');
+                            isFirst = false;
+                        }
+                        li = addNode('li', ul);
+                        addImage(def.templateInstance().scriptPic(), li);
+                        def.sortedElements().forEach(function (script) {
+                            addImage(
+                                script instanceof BlockMorph ?
+                                        script.scriptPic()
+                                                : script.fullImageClassic(),
+                                li
+                            );
+                        });
+                    }
+                });
+            });
+        }
+    }
+
+    pname = this.projectName || localize('untitled');
+
+    html = new XML_Element('html');
+    html.attributes.contenteditable = 'true';
+
+    head = addNode('head', html);
+
+    meta = addNode('meta', head);
+    meta.attributes['http-equiv'] = 'Content-Type';
+    meta.attributes.content = 'text/html; charset=UTF-8';
+    add(pname, 'title', head);
+
+    body = addNode('body', html);
+    add(pname, 'h1');
+
+    /*
+    if (SnapCloud.username) {
+        add(localize('by ' + SnapCloud.username));
+    }
+    */
+
+    add(this.serializer.app);
+    addImage(this.stage.thumbnail(
+        this.serializer.thumbnailSize.multiplyBy(2)
+    ));
+
+    // project notes
+    notes = Process.prototype.reportTextSplit(this.projectNotes, 'line');
+    notes.asArray().forEach(
+        function (paragraph) {add(paragraph); }
+    );
+
+    // sprites & stage
+    this.sprites.asArray().concat([this.stage]).forEach(function (sprite) {
+        var scripts = sprite.scripts.sortedElements(),
+            varNames = sprite.variables.names(),
+            cl = sprite.costumes.length(),
+            ol;
+
+        add(sprite.name, 'h2');
+        if (sprite instanceof SpriteMorph || sprite.costume) {
+            addImage(sprite.image);
+        }
+
+        // costumes
+        if (cl > 1 || (sprite.getCostumeIdx() !== cl)) {
+            add(localize('Costumes'), 'h3');
+            ol = addNode('ol');
+            sprite.costumes.asArray().forEach(function (costume) {
+                var li = addNode('li', ol, costume.name);
+                addNode('br', li);
+                addImage(costume.thumbnail(new Point(40, 40)), li, true);
+            });
+        }
+
+        // sounds
+        if (sprite.sounds.length()) {
+            add(localize('Sounds'), 'h3');
+            ol = addNode('ol');
+            sprite.sounds.asArray().forEach(function (sound) {
+                add(sound.name, 'li', ol);
+            });
+        }
+
+        // variables
+        if (varNames.length) {
+            add(localize('Variables'), 'h3');
+            varNames.forEach(function (name) {
+                addImage(
+                    SpriteMorph.prototype.variableBlock(name).scriptPic()
+                );
+            });
+        }
+
+        // scripts
+        if (scripts.length) {
+            add(localize('Scripts'), 'h3');
+            scripts.forEach(function (script) {
+                addImage(script instanceof BlockMorph ? script.scriptPic()
+                        : script.fullImageClassic());
+            });
+        }
+
+        // custom blocks
+        addBlocks(sprite.customBlocks);
+    });
+
+    // globals
+    globalVars = this.stage.globalVariables().names();
+    globalBlocks = this.stage.globalBlocks;
+
+    if (globalVars.length || globalBlocks.length) {
+        addNode('hr');
+        add(localize('For all Sprites'), 'h2');
+
+        // variables
+        if (globalVars.length) {
+            add(localize('Variables'), 'h3');
+            globalVars.forEach(function (name) {
+                addImage(
+                    SpriteMorph.prototype.variableBlock(name).scriptPic()
+                );
+            });
+        }
+
+        // custom blocks
+        addBlocks(globalBlocks);
+    }
+
+    window.open('data:text/html;charset=utf-8,' + encodeURIComponent(
+        '<!DOCTYPE html>' + html.toString()
+    ));
 };
 
 IDE_Morph.prototype.openProjectString = function (str) {

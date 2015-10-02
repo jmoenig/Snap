@@ -106,7 +106,7 @@ SymbolMorph, isNil, CursorMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2015-July-28';
+modules.byob = '2015-October-02';
 
 // Declarations
 
@@ -341,6 +341,16 @@ CustomBlockDefinition.prototype.parseSpec = function (spec) {
 // CustomBlockDefinition picturing
 
 CustomBlockDefinition.prototype.scriptsPicture = function () {
+    return this.scriptsModel().scriptsPicture();
+};
+
+CustomBlockDefinition.prototype.sortedElements = function () {
+    return this.scriptsModel().sortedElements();
+};
+
+CustomBlockDefinition.prototype.scriptsModel = function () {
+    // answer a restored scripting area for the sake
+    // of creating script pictures
     var scripts, proto, block, comment;
 
     scripts = new ScriptsMorph();
@@ -372,7 +382,7 @@ CustomBlockDefinition.prototype.scriptsPicture = function () {
     });
     proto.children[0].fixLayout();
     scripts.fixMultiArgs();
-    return scripts.scriptsPicture();
+    return scripts;
 };
 
 // CustomCommandBlockMorph /////////////////////////////////////////////

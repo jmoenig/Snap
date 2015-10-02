@@ -83,7 +83,7 @@ ArgLabelMorph, localize, XML_Element, hex_sha512*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.threads = '2015-September-23';
+modules.threads = '2015-October-02';
 
 var ThreadManager;
 var Process;
@@ -2636,6 +2636,9 @@ Process.prototype.reportKeyPressed = function (keyString) {
     if (this.homeContext.receiver) {
         stage = this.homeContext.receiver.parentThatIsA(StageMorph);
         if (stage) {
+            if (this.inputOption(keyString) === 'any') {
+                return Object.keys(stage.keysPressed).length > 0;
+            }
             return stage.keysPressed[keyString] !== undefined;
         }
     }

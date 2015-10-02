@@ -2579,3 +2579,9 @@ ______
 * Morphic, Objects: Improve display precision (stop rounding display coordinates)
 * Added “ceiling” function, thanks, Michael
 * Updated various translations
+
+151002
+------
+* GUI, Blocks, BYOB: New “Export Project Summary” Feature, also: exporting script pics now includes attached comments
+* Blocks, Objects, Threads: Key hat block and key sensor support for “any” key
+* German translation update
