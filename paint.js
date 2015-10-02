@@ -58,6 +58,7 @@
     Aug 24 - floodfill alpha-integer issue (Kartik)
     Sep 29 - tweaks (Jens)
     Sep 28 [of the following year :)] - Try to prevent antialiasing (Kartik)
+    Oct 02 - revert disable smoothing (Jens)
  */
 
 /*global Point, Rectangle, DialogBoxMorph, fontHeight, AlignmentMorph,
@@ -596,7 +597,6 @@ PaintCanvasMorph.prototype.scale = function (x, y) {
         this.rotationCenter.y
     );
     c.getContext("2d").scale(1 + x, 1 + y);
-    this.disableSmoothing(c.getContext("2d"));
     c.getContext("2d").drawImage(
         this.paper,
         -this.rotationCenter.x,
@@ -624,24 +624,11 @@ PaintCanvasMorph.prototype.undo = function () {
     }
 };
 
-PaintCanvasMorph.prototype.disableSmoothing = function (ctx) {
-    ctx.imageSmoothingEnabled = false;       /* standard */
-
-    // we oughta keep checking whether the following ones
-    // are still needed
-    ctx.mozImageSmoothingEnabled = false;    /* Firefox */
-    ctx.oImageSmoothingEnabled = false;      /* Opera */
-    ctx.webkitImageSmoothingEnabled = false; /* Safari */
-    ctx.msImageSmoothingEnabled = false;     /* IE */
-};
-
 PaintCanvasMorph.prototype.merge = function (a, b) {
-    this.disableSmoothing(b.getContext("2d"));
     b.getContext("2d").drawImage(a, 0, 0);
 };
 
 PaintCanvasMorph.prototype.centermerge = function (a, b) {
-    this.disableSmoothing(b.getContext("2d"));
     b.getContext("2d").drawImage(
         a,
         (b.width - a.width) / 2,
@@ -828,9 +815,6 @@ PaintCanvasMorph.prototype.mouseMove = function (pos) {
     this.brushBuffer.push([p, q]);
     mctx.lineWidth = this.settings.linewidth;
     mctx.clearRect(0, 0, this.bounds.width(), this.bounds.height()); // mask
-
-    // Antialiasing trick.
-    mctx.translate(0.5, 0.5);
 
     this.dragRect.corner = relpos.subtract(this.dragRect.origin); // reset crn
 
