@@ -4596,7 +4596,7 @@ SpriteMorph.prototype.doScreenshot = function (imgSource, data) {
         return;
     }
     if (imgSource[0] === "pen trails") {
-        canvas = stage.trailsCanvas;
+        canvas = stage.penTrails();
         costume = new Costume(canvas, data).copy(); // prevent mutation
     } else if (imgSource[0] === "stage image") {
         canvas = stage.fullImageClassic();
@@ -4688,7 +4688,7 @@ StageMorph.prototype.init = function (globals) {
     this.lastAnswer = ''; // last user input, do not persist
     this.activeSounds = []; // do not persist
 
-    this.trailsCanvas = null;
+    this.layers = []; // stackable canvas layers
     this.isThreadSafe = false;
 
     this.graphicsValues = { 'negative': 0,
@@ -4773,7 +4773,19 @@ StageMorph.prototype.drawNew = function () {
 
 StageMorph.prototype.drawOn = function (aCanvas, aRect) {
     // make sure to draw the pen trails canvas as well
-    var rectangle, area, delta, src, context, w, h, sl, st, ws, hs;
+    var myself = this,
+        rectangle, 
+        area, 
+        delta, 
+        src, 
+        context, 
+        w, 
+        h, 
+        sl, 
+        st, 
+        ws, 
+        hs;
+
     if (!this.isVisible) {
         return null;
     }
@@ -4810,47 +4822,54 @@ StageMorph.prototype.drawOn = function (aCanvas, aRect) {
         hs = h / this.scale;
         context.save();
         context.scale(this.scale, this.scale);
-        try {
-            context.drawImage(
-                this.penTrails(),
-                sl / this.scale,
-                st / this.scale,
-                ws,
-                hs,
-                area.left() / this.scale,
-                area.top() / this.scale,
-                ws,
-                hs
-            );
-        } catch (err) { // sometimes triggered only by Firefox
-            // console.log(err);
-            context.restore();
-            context.drawImage(
-                this.penTrails(),
-                0,
-                0,
-                this.dimensions.x,
-                this.dimensions.y,
-                this.left(),
-                this.top(),
-                this.dimensions.x * this.scale,
-                this.dimensions.y * this.scale
-            );
-        }
+        this.layers.forEach(function(layer){
+            try {
+                context.drawImage(
+                    layer.canvas,
+                    sl / myself.scale,
+                    st / myself.scale,
+                    ws,
+                    hs,
+                    area.left() / myself.scale,
+                    area.top() / myself.scale,
+                    ws,
+                    hs
+                    );
+            } catch (err) { // sometimes triggered only by Firefox
+                // console.log(err);
+                context.restore();
+                context.drawImage(
+                    layer.canvas,
+                    0,
+                    0,
+                    myself.dimensions.x,
+                    myself.dimensions.y,
+                    myself.left(),
+                    myself.top(),
+                    myself.dimensions.x * myself.scale,
+                    myself.dimensions.y * myself.scale
+                    );
+            }
+        })
         context.restore();
     }
 };
 
+StageMorph.prototype.createPenTrails = function() {
+    this.addLayer(newCanvas(this.dimensions), 'penTrails');
+};
+
 StageMorph.prototype.clearPenTrails = function () {
-    this.trailsCanvas = newCanvas(this.dimensions);
+    this.removeLayer('penTrails');
+    this.createPenTrails();
     this.changed();
 };
 
 StageMorph.prototype.penTrails = function () {
-    if (!this.trailsCanvas) {
-        this.trailsCanvas = newCanvas(this.dimensions);
-    }
-    return this.trailsCanvas;
+    // Returns the actual canvas, as doing otherwise would break a lot of the Snap! API
+    // and would render old projects unloadable
+    if (!this.getLayer('penTrails')) { this.createPenTrails() };
+    return this.getLayer('penTrails').canvas;
 };
 
 StageMorph.prototype.penTrailsMorph = function () {
@@ -4873,6 +4892,41 @@ StageMorph.prototype.penTrailsMorph = function () {
         this.image.height
     );
     return morph;
+};
+
+StageMorph.prototype.addLayer = function(canvas, name) {
+    var layer = {
+        canvas: canvas,
+        name: name };
+
+    if (!this.getLayer(name)) {
+        this.layers.push(layer)
+    }
+
+    return layer;
+};
+
+StageMorph.prototype.getLayer = function(name) {
+    for (i = 0; i < this.layers.length; i++) {
+        if (this.layers[i].name == name) { 
+            return this.layers[i] 
+        }
+    }
+    return null;
+};
+
+StageMorph.prototype.removeLayer = function(name) {
+    var index;
+
+    for (i = 0; i < this.layers.length; i++) {
+        if (this.layers[i].name == name) { 
+            index = i
+        }
+    }
+
+    if (index !== null) {
+        this.layers.splice(index, 1);
+    }
 };
 
 StageMorph.prototype.colorFiltered = function (aColor, excludedSprite) {
@@ -5723,7 +5777,7 @@ StageMorph.prototype.userMenu = function () {
             "turn pen trails into new costume...",
             function () {
                 var costume = new Costume(
-                    myself.trailsCanvas,
+                    myself.penTrails(),
                     Date.now().toString()
                 ).copy();
                 ide.currentSprite.addCostume(costume);
@@ -5773,13 +5827,15 @@ StageMorph.prototype.thumbnail = function (extentPoint, excludedSprite) {
         0,
         0
     );
-    ctx.drawImage(
-        this.penTrails(),
-        0,
-        0,
-        this.dimensions.x * this.scale,
-        this.dimensions.y * this.scale
-    );
+    this.layers.forEach(function(layer){
+        ctx.drawImage(
+            layer.canvas,
+            0,
+            0,
+            myself.dimensions.x * myself.scale,
+            myself.dimensions.y * myself.scale
+            )
+        });
     this.children.forEach(function (morph) {
         if (morph.isVisible && (morph !== excludedSprite)) {
             fb = morph.fullBounds();
