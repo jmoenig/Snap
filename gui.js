@@ -2569,25 +2569,24 @@ IDE_Morph.prototype.projectMenu = function () {
         'Libraries...',
         function () {
             // read a list of libraries from an external file,
-            var libMenu = new MenuMorph(this, 'Import library'),
-                libUrl = baseURL + 'libraries/' + 'LIBRARIES';
+            // TODO: Make menu name consistent, fix URL
+            var libs,
+                libMenu = new MenuMorph(this, 'Import library'),
+                libUrl = 'libraries/' + 'LIBRARIES';
 
-            function loadLib(name) {
-                var url = baseURL + 'libraries/' + name + '.xml';
+            function loadLib(file, name) {
+                // TODO: Consistent URL
+                var url = 'libraries/' + file;
                 myself.droppedText(myself.getURL(url), name);
             }
 
-            myself.getURL(libUrl).split('\n').forEach(function (line) {
-                if (line.length > 0) {
-                    libMenu.addItem(
-                        line.substring(line.indexOf('\t') + 1),
-                        function () {
-                            loadLib(
-                                line.substring(0, line.indexOf('\t'))
-                            );
-                        }
-                    );
-                }
+            libs = myself.getURL(libUrl);
+            myself.parseResourceFile(libs).forEach(function (lib) {
+                libMenu.addItem(
+                    lib.name,
+                    function () { loadLib(lib.file, lib.name) },
+                    lib.help
+                );
             });
 
             libMenu.popup(world, pos);
@@ -2606,6 +2605,7 @@ IDE_Morph.prototype.projectMenu = function () {
                 );
 
             function loadCostume(name) {
+                // TODO: Make this URL consistent
                 var url = dir + '/' + name,
                     img = new Image();
                 img.onload = function () {
@@ -2632,9 +2632,11 @@ IDE_Morph.prototype.projectMenu = function () {
         localize('Sounds') + '...',
         function () {
             var names = this.getMediaList('Sounds'),
+                // TODO: Fix this menu name
                 libMenu = new MenuMorph(this, 'Import sound');
 
             function loadSound(name) {
+                // TODO: Refactor This URL
                 var url = 'Sounds/' + name,
                     audio = new Audio();
                 audio.src = url;
@@ -2659,9 +2661,11 @@ IDE_Morph.prototype.projectMenu = function () {
 };
 
 IDE_Morph.prototype.getMediaList = function (dirname) {
+    // TODO: Fix Variable Names
     var dir,
         costumes = [];
 
+    // TODO:  have this load the /UPPERCASE name
     dir = this.getURL(dirname);
     dir.split('\n').forEach(
         function (line) {
@@ -2690,8 +2694,34 @@ IDE_Morph.prototype.getMediaList = function (dirname) {
 // All lines have 3 fields: file-name, Display Name, Help Text
 // These fields are delimited by tabs.
 IDE_Morph.prototype.parseResourceFile = function (text) {
+    var parts,
+        items = [],
+        comment = '#',
+        delimter = '\t';
 
-}
+    text = text.split(/\n|\r\n/);
+
+    text.map(function (line) {
+        return line.trim();
+    }).filter(function (line) {
+        return line.length > 0 && line[0] !== comment;
+    }).forEach(function (line) {
+        parts = line.split(delimter);
+        parts = parts.map(function (str) { return str.trim() });
+
+        if (parts.length < 2) {
+            return;
+        }
+
+        items.push({
+            file: parts[0],
+            name: parts[1],
+            help: parts.length > 2 ? parts[2] : ''
+        });
+    });
+
+    return items;
+};
 
 
 // IDE_Morph menu actions
