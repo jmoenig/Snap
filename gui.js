@@ -2570,21 +2570,18 @@ IDE_Morph.prototype.projectMenu = function () {
         function () {
             // read a list of libraries from an external file,
             // TODO: Make menu name consistent, fix URL
-            var libs,
-                libMenu = new MenuMorph(this, 'Import library'),
-                libUrl = 'libraries/' + 'LIBRARIES';
+            var libMenu = new MenuMorph(this, 'Import library'),
+                libraries = this.getMediaList('libraries');
 
             function loadLib(file, name) {
-                // TODO: Consistent URL
-                var url = 'libraries/' + file;
+                var url = myself.resourceURL('libraries', file);
                 myself.droppedText(myself.getURL(url), name);
             }
 
-            libs = myself.getURL(libUrl);
-            myself.parseResourceFile(libs).forEach(function (lib) {
+            libraries.forEach(function (lib) {
                 libMenu.addItem(
                     lib.name,
-                    function () { loadLib(lib.file, lib.name) },
+                    function () {loadLib(lib.file, lib.name) },
                     lib.help
                 );
             });
@@ -2605,8 +2602,7 @@ IDE_Morph.prototype.projectMenu = function () {
                 );
 
             function loadCostume(name) {
-                // TODO: Make this URL consistent
-                var url = dir + '/' + name,
+                var url = myself.resourceURL(dir, name),
                     img = new Image();
                 img.onload = function () {
                     var canvas = newCanvas(new Point(img.width, img.height));
@@ -2616,13 +2612,12 @@ IDE_Morph.prototype.projectMenu = function () {
                 img.src = url;
             }
 
-            names.forEach(function (line) {
-                if (line.length > 0) {
-                    libMenu.addItem(
-                        line,
-                        function () {loadCostume(line); }
-                    );
-                }
+            names.forEach(function (image) {
+                libMenu.addItem(
+                    image.name,
+                    function () {loadCostume(image.file); },
+                    image.help
+                );
             });
             libMenu.popup(world, pos);
         },
@@ -2636,21 +2631,19 @@ IDE_Morph.prototype.projectMenu = function () {
                 libMenu = new MenuMorph(this, 'Import sound');
 
             function loadSound(name) {
-                // TODO: Refactor This URL
-                var url = 'Sounds/' + name,
+                var url = myself.resourceURL('Sounds', name),
                     audio = new Audio();
                 audio.src = url;
                 audio.load();
                 myself.droppedAudio(audio, name);
             }
 
-            names.forEach(function (line) {
-                if (line.length > 0) {
-                    libMenu.addItem(
-                        line,
-                        function () {loadSound(line); }
-                    );
-                }
+            names.forEach(function (sound) {
+                libMenu.addItem(
+                    sound.name,
+                    function () {loadSound(sound.file); },
+                    sound.help
+                );
             });
             libMenu.popup(world, pos);
         },
@@ -2660,31 +2653,24 @@ IDE_Morph.prototype.projectMenu = function () {
     menu.popup(world, pos);
 };
 
+// Give a path a file in subfolders.
+// Method can be easily overridden if running in a custom location.
+IDE_Morph.prototype.resourceURL = function (folder, file) {
+    return folder + '/' + file;
+}
+
+// Return a list of files in a directory based on the contents file
 IDE_Morph.prototype.getMediaList = function (dirname) {
-    // TODO: Fix Variable Names
-    var dir,
-        costumes = [];
+    var url, data;
 
-    // TODO:  have this load the /UPPERCASE name
-    dir = this.getURL(dirname);
-    dir.split('\n').forEach(
-        function (line) {
-            var startIdx = line.search(new RegExp('href="[^./?].*"')),
-                endIdx,
-                name;
+    url = this.resourceURL(dirname, dirname.toUpperCase());
+    data = this.parseResourceFile(this.getURL(url));
 
-            if (startIdx > 0) {
-                name = line.substring(startIdx + 6);
-                endIdx = name.search(new RegExp('"'));
-                name = name.substring(0, endIdx);
-                costumes.push(name);
-            }
-        }
-    );
-    costumes.sort(function (x, y) {
-        return x < y ? -1 : 1;
+    data.sort(function (x, y) {
+        return x.name.toLowerCase() < y.name.toLowerCase() ? -1 : 1;
     });
-    return costumes;
+
+    return data;
 };
 
 // A Resource File lists all the files that could be loaded in a submenu
@@ -2696,7 +2682,7 @@ IDE_Morph.prototype.getMediaList = function (dirname) {
 IDE_Morph.prototype.parseResourceFile = function (text) {
     var parts,
         items = [],
-        comment = '#',
+        comment = '//',
         delimter = '\t';
 
     text = text.split(/\n|\r\n/);
