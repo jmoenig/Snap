@@ -4918,7 +4918,7 @@ ProjectDialogMorph.prototype.setSource = function (source) {
             }
             myself.edit();
         };
-    } else { // 'examples', 'cloud' is initialized elsewhere
+    } else { // 'examples'; 'cloud' is initialized elsewhere
         this.listField.action = function (item) {
             var src, xml;
             if (item === undefined) {return; }
@@ -4926,7 +4926,7 @@ ProjectDialogMorph.prototype.setSource = function (source) {
                 myself.nameField.setContents(item.name || '');
             }
             src = myself.ide.getURL(
-                baseURL + 'Examples/' + item.name + '.xml'
+                myself.ide.resourceURL('Examples', item.file)
             );
 
             xml = myself.ide.serializer.parse(src);
@@ -4978,33 +4978,7 @@ ProjectDialogMorph.prototype.getLocalProjectList = function () {
 };
 
 ProjectDialogMorph.prototype.getExamplesProjectList = function () {
-    var dir,
-        projects = [];
-        //alert(baseURL);
-
-    dir = this.ide.getURL(baseURL + 'Examples/');
-    dir.split('\n').forEach(
-        function (line) {
-            var startIdx = line.search(new RegExp('href=".*xml"')),
-                endIdx,
-                name,
-                dta;
-            if (startIdx > 0) {
-                endIdx = line.search(new RegExp('.xml'));
-                name = line.substring(startIdx + 6, endIdx);
-                dta = {
-                    name: name,
-                    thumb: null,
-                    notes: null
-                };
-                projects.push(dta);
-            }
-        }
-    );
-    projects = projects.sort(function (x, y) {
-        return x.name.toLowerCase() < y.name.toLowerCase() ? -1 : 1;
-    });
-    return projects;
+    return this.ide.getMediaList('Examples');
 };
 
 ProjectDialogMorph.prototype.installCloudProjectList = function (pl) {
@@ -5101,7 +5075,8 @@ ProjectDialogMorph.prototype.openProject = function () {
     if (this.source === 'cloud') {
         this.openCloudProject(proj);
     } else if (this.source === 'examples') {
-        src = this.ide.getURL(baseURL + 'Examples/' + proj.name + '.xml');
+        // Note "file" is a property of the parseResourceFile function.
+        src = this.ide.getURL(this.ide.resourceURL('Examples', proj.file));
         this.ide.openProjectString(src);
         this.destroy();
     } else { // 'local'
