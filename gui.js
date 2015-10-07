@@ -2601,7 +2601,7 @@ IDE_Morph.prototype.projectMenu = function () {
         localize(graphicsName) + '...',
         function () {
             var dir = graphicsName,
-                names = myself.getCostumesList(dir),
+                names = myself.getMediaList(dir),
                 libMenu = new MenuMorph(
                     myself,
                     localize('Import') + ' ' + localize(dir)
@@ -2633,7 +2633,7 @@ IDE_Morph.prototype.projectMenu = function () {
     menu.addItem(
         localize('Sounds') + '...',
         function () {
-            var names = this.getCostumesList('Sounds'),
+            var names = this.getMediaList('Sounds'),
                 libMenu = new MenuMorph(this, 'Import sound');
 
             function loadSound(name) {
@@ -2660,7 +2660,7 @@ IDE_Morph.prototype.projectMenu = function () {
     menu.popup(world, pos);
 };
 
-IDE_Morph.prototype.getCostumesList = function (dirname) {
+IDE_Morph.prototype.getMediaList = function (dirname) {
     var dir,
         costumes = [];
 
@@ -2684,6 +2684,17 @@ IDE_Morph.prototype.getCostumesList = function (dirname) {
     });
     return costumes;
 };
+
+// A Resource File lists all the files that could be loaded in a submenu
+// Examples are libraries/LIBRARIES, Costumes/COSTUMES, etc
+// A File is very simple:
+// A "//" starts a comment line, that is ignored.
+// All lines have 3 fields: file-name, Display Name, Help Text
+// These fields are delimited by tabs.
+IDE_Morph.prototype.parseResourceFile = function (text) {
+
+}
+
 
 // IDE_Morph menu actions
 
@@ -4454,7 +4465,7 @@ IDE_Morph.prototype.setCloudURL = function () {
     );
 };
 
-// IDE_Morph synchronous Http data fetching
+// IDE_Morph synchronous HTTP data fetching
 
 IDE_Morph.prototype.getURL = function (url) {
     var request = new XMLHttpRequest(),
