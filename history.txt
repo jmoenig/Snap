@@ -2585,3 +2585,21 @@ ______
 * GUI, Blocks, BYOB: New “Export Project Summary” Feature, also: exporting script pics now includes attached comments
 * Blocks, Objects, Threads: Key hat block and key sensor support for “any” key
 * German translation update
+
+151007
+------
+* BYOB, Objects, GUI: New “Remove Unused Global Blocks” Feature
+* GUI, Lists: “Export Project Summary” improvements:
+  - show variable values as watcher pics
+  - expand list watcher pics to show their complete contents (1. level)
+  - url for shared projects
+  - table of contents
+  - basic support for sprite nesting and inheritance
+  - make the summary “browsable” instead of editable
+  - outline around sprite / stage snapshots
+  - experimental hidden (shift-click) “drop-shadows” option
+* GUI: Rearrange project menu, only show global blocks-related ops if there are any
+* GUI: Remove URL location.hash information when loading a new project
+* Store: Fix deserialization support for projects using inheritance
+* German translation update
+

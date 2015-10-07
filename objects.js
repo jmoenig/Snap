@@ -125,7 +125,7 @@ PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.objects = '2015-October-02';
+modules.objects = '2015-October-07';
 
 var SpriteMorph;
 var StageMorph;
@@ -4029,7 +4029,12 @@ SpriteMorph.prototype.paletteBlockInstance = function (definition) {
     );
 };
 
-SpriteMorph.prototype.usesBlockInstance = function (definition) {
+SpriteMorph.prototype.usesBlockInstance = function (
+    definition,
+    forRemoval, // optional bool
+    skipGlobals, // optional bool
+    skipBlocks // optional array with ignorable definitions
+) {
     var inDefinitions,
         inScripts = detect(
             this.scripts.allChildren(),
@@ -4039,6 +4044,24 @@ SpriteMorph.prototype.usesBlockInstance = function (definition) {
         );
 
     if (inScripts) {return true; }
+
+    if (definition.isGlobal && !skipGlobals) {
+        inDefinitions = [];
+        this.parentThatIsA(StageMorph).globalBlocks.forEach(
+            function (def) {
+                if (forRemoval && (definition === def)) {return; }
+                if (skipBlocks && contains(skipBlocks, def)) {return; }
+                if (def.body) {
+                    def.body.expression.allChildren().forEach(function (c) {
+                        if (c.definition && (c.definition === definition)) {
+                            inDefinitions.push(c);
+                        }
+                    });
+                }
+            }
+        );
+        if (inDefinitions.length > 0) {return true; }
+    }
 
     inDefinitions = [];
     this.customBlocks.forEach(function (def) {

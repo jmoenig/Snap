@@ -66,11 +66,12 @@ ScriptsMorph, isNil, SymbolMorph, BlockExportDialogMorph,
 BlockImportDialogMorph, SnapTranslator, localize, List, InputSlotMorph,
 SnapCloud, Uint8Array, HandleMorph, SVG_Costume, fontHeight, hex_sha512,
 sb, CommentMorph, CommandBlockMorph, BlockLabelPlaceHolderMorph, Audio,
-SpeechBubbleMorph, ScriptFocusMorph, XML_Element*/
+SpeechBubbleMorph, ScriptFocusMorph, XML_Element, WatcherMorph,
+BlockRemovalDialogMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2015-October-02';
+modules.gui = '2015-October-07';
 
 // Declarations
 
@@ -1653,9 +1654,11 @@ IDE_Morph.prototype.droppedAudio = function (anAudio, name) {
 IDE_Morph.prototype.droppedText = function (aString, name) {
     var lbl = name ? name.split('.')[0] : '';
     if (aString.indexOf('<project') === 0) {
+        location.hash = '';
         return this.openProjectString(aString);
     }
     if (aString.indexOf('<snapdata') === 0) {
+        location.hash = '';
         return this.openCloudDataString(aString);
     }
     if (aString.indexOf('<blocks') === 0) {
@@ -2533,11 +2536,20 @@ IDE_Morph.prototype.projectMenu = function () {
         shiftClicked ? new Color(100, 0, 0) : null
     );
 
-    menu.addItem(
-        'Export blocks...',
-        function () {myself.exportGlobalBlocks(); },
-        'show global custom block definitions as XML\nin a new browser window'
-    );
+    if (this.stage.globalBlocks.length) {
+        menu.addItem(
+            'Export blocks...',
+            function () {myself.exportGlobalBlocks(); },
+            'show global custom block definitions as XML' +
+                '\nin a new browser window'
+        );
+        menu.addItem(
+            'Unused blocks...',
+            function () {myself.removeUnusedBlocks(); },
+            'find unused global custom blocks' +
+                '\nand remove their definitions'
+        );
+    }
 
     menu.addItem(
         'Export summary...',
@@ -2546,6 +2558,15 @@ IDE_Morph.prototype.projectMenu = function () {
     );
 
     if (shiftClicked) {
+        menu.addItem(
+            'Export summary with drop-shadows...',
+            function () {myself.exportProjectSummary(true); },
+            'open a new browser browser window' +
+                '\n with a summary of this project' +
+                '\nwith drop-shadows on all pictures.' +
+                '\nnot supported by all browsers',
+            new Color(100, 0, 0)
+        );
         menu.addItem(
             'Export all scripts as pic...',
             function () {myself.exportScriptsPicture(); },
@@ -3042,6 +3063,44 @@ IDE_Morph.prototype.exportGlobalBlocks = function () {
     }
 };
 
+IDE_Morph.prototype.removeUnusedBlocks = function () {
+    var targets = this.sprites.asArray().concat([this.stage]),
+        globalBlocks = this.stage.globalBlocks,
+        unused = [],
+        isDone = false,
+        found;
+
+    function scan() {
+        return globalBlocks.filter(function (def) {
+            if (contains(unused, def)) {return false; }
+            return targets.every(function (each, trgIdx) {
+                return !(each.usesBlockInstance(def, true, trgIdx, unused));
+            });
+        });
+    }
+
+    while (!isDone) {
+        found = scan();
+        if (found.length) {
+            unused = unused.concat(found);
+        } else {
+            isDone = true;
+        }
+    }
+    if (unused.length > 0) {
+        new BlockRemovalDialogMorph(
+            unused,
+            this.stage
+        ).popUp(this.world());
+    } else {
+        this.inform(
+            'Remove unused blocks',
+            'there are currently no unused\n'
+                + 'global custom blocks in this project'
+        );
+    }
+};
+
 IDE_Morph.prototype.exportSprite = function (sprite) {
     var str = encodeURIComponent(
         this.serializer.serialize(sprite.allParts())
@@ -3105,8 +3164,9 @@ IDE_Morph.prototype.exportScriptsPicture = function () {
     window.open(pic.toDataURL());
 };
 
-IDE_Morph.prototype.exportProjectSummary = function () {
-    var html, head, meta, body, pname, notes, globalVars, globalBlocks;
+IDE_Morph.prototype.exportProjectSummary = function (useDropShadows) {
+    var html, head, meta, css, body, pname, notes, toc, globalVars,
+        stage = this.stage;
 
     function addNode(tag, node, contents) {
         if (!node) {node = body; }
@@ -3127,6 +3187,41 @@ IDE_Morph.prototype.exportProjectSummary = function () {
         return pic;
     }
 
+    function addVariables(varFrame) {
+        var names = varFrame.names().sort(),
+            isFirst = true,
+            ul;
+        if (names.length) {
+            add(localize('Variables'), 'h3');
+            names.forEach(function (name) {
+                /*
+                addImage(
+                    SpriteMorph.prototype.variableBlock(name).scriptPic()
+                );
+                */
+                var watcher, listMorph, li, img;
+
+                if (isFirst) {
+                    ul = addNode('ul');
+                    isFirst = false;
+                }
+                li = addNode('li', ul);
+                watcher = new WatcherMorph(
+                    name,
+                    SpriteMorph.prototype.blockColor.variables,
+                    varFrame,
+                    name
+                );
+                listMorph = watcher.cellMorph.contentsMorph;
+                if (listMorph instanceof ListWatcherMorph) {
+                    listMorph.expand();
+                }
+                img = addImage(watcher.fullImageClassic(), li);
+                img.attributes.class = 'script';
+            });
+        }
+    }
+
     function addBlocks(definitions) {
         if (definitions.length) {
             add(localize('Blocks'), 'h3');
@@ -3134,7 +3229,7 @@ IDE_Morph.prototype.exportProjectSummary = function () {
                 var isFirst = true,
                     ul;
                 definitions.forEach(function (def) {
-                    var li;
+                    var li, blockImg;
                     if (def.category === category) {
                         if (isFirst) {
                             add(
@@ -3149,14 +3244,19 @@ IDE_Morph.prototype.exportProjectSummary = function () {
                             isFirst = false;
                         }
                         li = addNode('li', ul);
-                        addImage(def.templateInstance().scriptPic(), li);
+                        blockImg = addImage(
+                            def.templateInstance().scriptPic(),
+                            li
+                        );
+                        blockImg.attributes.class = 'script';
                         def.sortedElements().forEach(function (script) {
-                            addImage(
+                            var defImg = addImage(
                                 script instanceof BlockMorph ?
                                         script.scriptPic()
                                                 : script.fullImageClassic(),
                                 li
                             );
+                            defImg.attributes.class = 'script';
                         });
                     }
                 });
@@ -3167,13 +3267,39 @@ IDE_Morph.prototype.exportProjectSummary = function () {
     pname = this.projectName || localize('untitled');
 
     html = new XML_Element('html');
-    html.attributes.contenteditable = 'true';
+    // html.attributes.contenteditable = 'true';
 
     head = addNode('head', html);
 
     meta = addNode('meta', head);
     meta.attributes['http-equiv'] = 'Content-Type';
     meta.attributes.content = 'text/html; charset=UTF-8';
+
+    if (useDropShadows) {
+        css = 'img {' +
+            'vertical-align: top;' +
+            'filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.5));' +
+            '-webkit-filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.5));' +
+            '-ms-filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.5));' +
+            '}' +
+            '.toc {' +
+            'vertical-align: middle;' +
+            'padding: 2px 1em 2px 1em;' +
+            '}';
+    } else {
+        css = 'img {' +
+            'vertical-align: top;' +
+            '}' +
+            '.toc {' +
+            'vertical-align: middle;' +
+            'padding: 2px 1em 2px 1em;' +
+            '}' +
+            '.sprite {' +
+            'border: 1px solid lightgray;' +
+            '}';
+    }
+    addNode('style', head, css);
+
     add(pname, 'title', head);
 
     body = addNode('body', html);
@@ -3181,14 +3307,22 @@ IDE_Morph.prototype.exportProjectSummary = function () {
 
     /*
     if (SnapCloud.username) {
-        add(localize('by ' + SnapCloud.username));
+        add(localize('by ') + SnapCloud.username);
     }
     */
-
-    add(this.serializer.app);
-    addImage(this.stage.thumbnail(
-        this.serializer.thumbnailSize.multiplyBy(2)
-    ));
+    if (location.hash.indexOf('#present:') === 0) {
+        add(location.toString(), 'a', body).attributes.href =
+            location.toString();
+        addImage(
+            stage.thumbnail(stage.dimensions)
+        ).attributes.class = 'sprite';
+        add(this.serializer.app, 'h4');
+    } else {
+        add(this.serializer.app, 'h4');
+        addImage(
+            stage.thumbnail(stage.dimensions)
+        ).attributes.class = 'sprite';
+    }
 
     // project notes
     notes = Process.prototype.reportTextSplit(this.projectNotes, 'line');
@@ -3196,16 +3330,56 @@ IDE_Morph.prototype.exportProjectSummary = function () {
         function (paragraph) {add(paragraph); }
     );
 
+    // table of contents
+    add(localize('Contents'), 'h4');
+    toc = addNode('ul');
+
     // sprites & stage
-    this.sprites.asArray().concat([this.stage]).forEach(function (sprite) {
-        var scripts = sprite.scripts.sortedElements(),
-            varNames = sprite.variables.names(),
+    this.sprites.asArray().concat([stage]).forEach(function (sprite) {
+        var tocEntry = addNode('li', toc),
+            scripts = sprite.scripts.sortedElements(),
             cl = sprite.costumes.length(),
+            pic,
             ol;
 
-        add(sprite.name, 'h2');
-        if (sprite instanceof SpriteMorph || sprite.costume) {
-            addImage(sprite.image);
+        addNode('hr');
+        addImage(
+            sprite.thumbnail(new Point(40, 40)),
+            tocEntry,
+            true
+        ).attributes.class = 'toc';
+        add(sprite.name, 'a', tocEntry).attributes.href = '#' + sprite.name;
+
+        add(sprite.name, 'h2').attributes.id = sprite.name;
+        // if (sprite instanceof SpriteMorph || sprite.costume) {
+        pic = addImage(
+            sprite.thumbnail(sprite.extent().divideBy(stage.scale))
+        );
+        pic.attributes.class = 'sprite';
+        if (sprite instanceof SpriteMorph) {
+            if (sprite.exemplar) {
+                addImage(
+                    sprite.exemplar.thumbnail(new Point(40, 40)),
+                    add(localize('Kind of') + ' ' + sprite.exemplar.name),
+                    true
+                ).attributes.class = 'toc';
+            }
+            if (sprite.anchor) {
+                addImage(
+                    sprite.anchor.thumbnail(new Point(40, 40)),
+                    add(localize('Part of') + ' ' + sprite.anchor.name),
+                    true
+                ).attributes.class = 'toc';
+            }
+            if (sprite.parts.length) {
+                add(localize('Parts'), 'h3');
+                ol = addNode('ul');
+                sprite.parts.forEach(function (part) {
+                    var li = addNode('li', ol, part.name);
+                    addImage(part.thumbnail(new Point(40, 40)), li, true)
+                        .attributes.class = 'toc';
+                });
+            }
         }
 
         // costumes
@@ -3214,8 +3388,8 @@ IDE_Morph.prototype.exportProjectSummary = function () {
             ol = addNode('ol');
             sprite.costumes.asArray().forEach(function (costume) {
                 var li = addNode('li', ol, costume.name);
-                addNode('br', li);
-                addImage(costume.thumbnail(new Point(40, 40)), li, true);
+                addImage(costume.thumbnail(new Point(40, 40)), li, true)
+                    .attributes.class = 'toc';
             });
         }
 
@@ -3229,21 +3403,16 @@ IDE_Morph.prototype.exportProjectSummary = function () {
         }
 
         // variables
-        if (varNames.length) {
-            add(localize('Variables'), 'h3');
-            varNames.forEach(function (name) {
-                addImage(
-                    SpriteMorph.prototype.variableBlock(name).scriptPic()
-                );
-            });
-        }
+        addVariables(sprite.variables);
 
         // scripts
         if (scripts.length) {
             add(localize('Scripts'), 'h3');
             scripts.forEach(function (script) {
-                addImage(script instanceof BlockMorph ? script.scriptPic()
-                        : script.fullImageClassic());
+                var img = addImage(script instanceof BlockMorph ?
+                        script.scriptPic()
+                                : script.fullImageClassic());
+                img.attributes.class = 'script';
             });
         }
 
@@ -3252,25 +3421,21 @@ IDE_Morph.prototype.exportProjectSummary = function () {
     });
 
     // globals
-    globalVars = this.stage.globalVariables().names();
-    globalBlocks = this.stage.globalBlocks;
-
-    if (globalVars.length || globalBlocks.length) {
+    globalVars = stage.globalVariables();
+    if (Object.keys(globalVars.vars).length || stage.globalBlocks.length) {
         addNode('hr');
-        add(localize('For all Sprites'), 'h2');
+        add(
+            localize('For all Sprites'),
+            'a',
+            addNode('li', toc)
+        ).attributes.href = '#global';
+        add(localize('For all Sprites'), 'h2').attributes.id = 'global';
 
         // variables
-        if (globalVars.length) {
-            add(localize('Variables'), 'h3');
-            globalVars.forEach(function (name) {
-                addImage(
-                    SpriteMorph.prototype.variableBlock(name).scriptPic()
-                );
-            });
-        }
+        addVariables(globalVars);
 
         // custom blocks
-        addBlocks(globalBlocks);
+        addBlocks(stage.globalBlocks);
     }
 
     window.open('data:text/html;charset=utf-8,' + encodeURIComponent(
