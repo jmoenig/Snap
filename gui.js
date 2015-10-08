@@ -2466,6 +2466,27 @@ IDE_Morph.prototype.projectMenu = function () {
                 'Costumes' : 'Backgrounds',
         shiftClicked = (world.currentKey === 16);
 
+    // Utility for creating Costumes, etc menus.
+    // loadFunction takes in two parameters: a file URL, and a canonical name
+    function createMediaMenu (mediaType, loadFunction) {
+        return function () {
+            var names = this.getMediaList(mediaType),
+                mediaMenu = new MenuMorph(
+                    myself,
+                    localize('Import') + ' ' + localize(mediaType)
+                );
+
+            names.forEach(function (item) {
+                mediaMenu.addItem(
+                    item.name,
+                    function () {loadFunction(item.file, item.name); },
+                    item.help
+                );
+            });
+            mediaMenu.popup(world, pos);
+        }
+    }
+
     menu = new MenuMorph(this);
     menu.addItem('Project notes...', 'editProjectNotes');
     menu.addLine();
@@ -2567,42 +2588,22 @@ IDE_Morph.prototype.projectMenu = function () {
     );
     menu.addItem(
         'Libraries...',
-        function () {
-            // read a list of libraries from an external file,
-            // TODO: Make menu name consistent, fix URL
-            var libMenu = new MenuMorph(this, 'Import library'),
-                libraries = this.getMediaList('libraries');
-
+        createMediaMenu(
+            'libraries',
             function loadLib(file, name) {
                 var url = myself.resourceURL('libraries', file);
                 myself.droppedText(myself.getURL(url), name);
             }
-
-            libraries.forEach(function (lib) {
-                libMenu.addItem(
-                    lib.name,
-                    function () {loadLib(lib.file, lib.name) },
-                    lib.help
-                );
-            });
-
-            libMenu.popup(world, pos);
-        },
+        ),
         'Select categories of additional blocks to add to this project.'
     );
 
     menu.addItem(
         localize(graphicsName) + '...',
-        function () {
-            var dir = graphicsName,
-                names = myself.getMediaList(dir),
-                libMenu = new MenuMorph(
-                    myself,
-                    localize('Import') + ' ' + localize(dir)
-                );
-
-            function loadCostume(name) {
-                var url = myself.resourceURL(dir, name),
+        createMediaMenu(
+            graphicsName,
+            function loadCostume(file, name) {
+                var url = myself.resourceURL(graphicsName, file),
                     img = new Image();
                 img.onload = function () {
                     var canvas = newCanvas(new Point(img.width, img.height));
@@ -2611,42 +2612,21 @@ IDE_Morph.prototype.projectMenu = function () {
                 };
                 img.src = url;
             }
-
-            names.forEach(function (image) {
-                libMenu.addItem(
-                    image.name,
-                    function () {loadCostume(image.file); },
-                    image.help
-                );
-            });
-            libMenu.popup(world, pos);
-        },
+        ),
         'Select a costume from the media library'
     );
     menu.addItem(
         localize('Sounds') + '...',
-        function () {
-            var names = this.getMediaList('Sounds'),
-                // TODO: Fix this menu name
-                libMenu = new MenuMorph(this, 'Import sound');
-
-            function loadSound(name) {
-                var url = myself.resourceURL('Sounds', name),
+        createMediaMenu(
+            'Sounds',
+            function loadSound(file, name) {
+                var url = myself.resourceURL('Sounds', file),
                     audio = new Audio();
                 audio.src = url;
                 audio.load();
                 myself.droppedAudio(audio, name);
             }
-
-            names.forEach(function (sound) {
-                libMenu.addItem(
-                    sound.name,
-                    function () {loadSound(sound.file); },
-                    sound.help
-                );
-            });
-            libMenu.popup(world, pos);
-        },
+        ),
         'Select a sound from the media library'
     );
 
