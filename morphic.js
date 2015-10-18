@@ -1060,7 +1060,7 @@
                 ctx.backingStorePixelRatio || 1;
 
     function getPixelRatio() {
-        return window.devicePixelRatio || 1 / backingStorePixelRatio;
+        return (window.devicePixelRatio || 1) / backingStorePixelRatio;
     }
 
     var canvasProto = HTMLCanvasElement.prototype;
@@ -1159,6 +1159,42 @@
                 sx * pixelRatio, sy * pixelRatio,
                 sw * pixelRatio, sh * pixelRatio);
     };
+
+    var superShadowOffsetX =
+            Object.getOwnPropertyDescriptor(contextProto, 'shadowOffsetX');
+    Object.defineProperty(contextProto, 'shadowOffsetX', {
+        get: function() {
+            return superShadowOffsetX.get.call(this) / getPixelRatio();
+        },
+        set: function(offset) {
+            var pixelRatio = getPixelRatio();
+            superShadowOffsetX.set.call(this, offset * pixelRatio);
+        }
+    });
+
+    var superShadowOffsetY =
+            Object.getOwnPropertyDescriptor(contextProto, 'shadowOffsetY');
+    Object.defineProperty(contextProto, 'shadowOffsetY', {
+        get: function() {
+            return superShadowOffsetY.get.call(this) / getPixelRatio();
+        },
+        set: function(offset) {
+            var pixelRatio = getPixelRatio();
+            superShadowOffsetY.set.call(this, offset * pixelRatio);
+        }
+    });
+
+    var superShadowBlur =
+            Object.getOwnPropertyDescriptor(contextProto, 'shadowBlur');
+    Object.defineProperty(contextProto, 'shadowBlur', {
+        get: function() {
+            return superShadowBlur.get.call(this) / getPixelRatio();
+        },
+        set: function(blur) {
+            var pixelRatio = getPixelRatio();
+            superShadowBlur.set.call(this, blur * pixelRatio);
+        }
+    });
 })();
 
 // Global settings /////////////////////////////////////////////////////
