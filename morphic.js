@@ -1047,15 +1047,24 @@
     - Jens Mönig
 */
 
-// Canvas polyfill /////////////////////////////////////////////////////
+// Retina Canvas polyfill //////////////////////////////////////////////
 
 (function() {
+    // Get the window's pixel ratio for canvas elements.
+    // See: http://www.html5rocks.com/en/tutorials/canvas/hidpi/
+    var ctx = document.createElement("canvas").getContext("2d"),
+            backingStorePixelRatio = ctx.webkitBackingStorePixelRatio ||
+                ctx.mozBackingStorePixelRatio ||
+                ctx.msBackingStorePixelRatio ||
+                ctx.oBackingStorePixelRatio ||
+                ctx.backingStorePixelRatio || 1;
+
     function getPixelRatio() {
-        return window.devicePixelRatio;
+        return window.devicePixelRatio || 1 / backingStorePixelRatio;
     }
+
     var canvasProto = HTMLCanvasElement.prototype;
     var superWidth = Object.getOwnPropertyDescriptor(canvasProto, 'width');
-    var superHeight = Object.getOwnPropertyDescriptor(canvasProto, 'height');
     Object.defineProperty(canvasProto, 'width', {
         get: function() {
             return superWidth.get.call(this) / getPixelRatio();
@@ -1069,6 +1078,8 @@
             context.scale(pixelRatio, pixelRatio);
         }
     });
+
+    var superHeight = Object.getOwnPropertyDescriptor(canvasProto, 'height');
     Object.defineProperty(canvasProto, 'height', {
         get: function() {
             return superHeight.get.call(this) / getPixelRatio();
@@ -1085,39 +1096,68 @@
 
     var contextProto = CanvasRenderingContext2D.prototype;
     var superDrawImage = contextProto.drawImage;
-    contextProto.drawImage = function(
-            image, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight) {
+    contextProto.drawImage = function(image) {
+        var pixelRatio, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight;
+
         if (!(image instanceof HTMLCanvasElement)) {
             superDrawImage.apply(this, arguments);
-        } else if (arguments.length === 9) {
-            var pixelRatio = getPixelRatio();
-            superDrawImage.call(
-                    this,
-                    image,
-                    sx * pixelRatio,
-                    sy * pixelRatio,
-                    sWidth * pixelRatio,
-                    sHeight * pixelRatio,
-                    dx,
-                    dy,
-                    dWidth,
-                    dHeight);
-        } else if(arguments.length === 3) {
-            var pixelRatio = getPixelRatio();
-            superDrawImage.call(
-                    this,
-                    image,
-                    0,  // sx
-                    0,  // sy
-                    image.width * pixelRatio,  // sWidth
-                    image.height * pixelRatio,  // sHeight
-                    arguments[1],  // dx
-                    arguments[2],  // dy
-                    image.width,  // dWidth
-                    image.height);  //dHeight
-        } else {
-            superDrawImage.apply(this, arguments);
+            return;
         }
+        
+        pixelRatio = getPixelRatio();
+        switch (arguments.length) {
+            case 9:
+                sx = arguments[1];
+                sy = arguments[2];
+                sWidth = arguments[3];
+                sHeight = arguments[4];
+                dx = arguments[5];
+                dy = arguments[6];
+                dWidth = arguments[7];
+                dHeight = arguments[8];
+                break;
+
+            case 5:
+                sx = 0;
+                sy = 0;
+                sWidth = image.width;
+                sHeight = image.height;
+                dx = arguments[1];
+                dy = arguments[2];
+                dWidth = arguments[3];
+                dHeight = arguments[4];
+                break;
+
+            case 3:
+                sx = 0;
+                sy = 0;
+                sWidth = image.width;
+                sHeight = image.height;
+                dx = arguments[1];
+                dy = arguments[2];
+                dWidth = image.width;
+                dHeight = image.height;
+                break;
+
+            default:
+                throw Error('Called drawImage() with ' + arguments.length +
+                        ' arguments');
+        }
+        superDrawImage.call(
+                this, image,
+                sx * pixelRatio, sy * pixelRatio,
+                sWidth * pixelRatio, sHeight * pixelRatio,
+                dx, dy,
+                dWidth, dHeight);
+    };
+
+    var superGetImageData = contextProto.getImageData;
+    contextProto.getImageData = function(sx, sy, sw, sh) {
+        var pixelRatio = getPixelRatio();
+        return superGetImageData.call(
+                this,
+                sx * pixelRatio, sy * pixelRatio,
+                sw * pixelRatio, sh * pixelRatio);
     };
 })();
 
