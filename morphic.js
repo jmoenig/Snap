@@ -1047,6 +1047,80 @@
     - Jens Mönig
 */
 
+// Canvas polyfill /////////////////////////////////////////////////////
+
+(function() {
+    function getPixelRatio() {
+        return window.devicePixelRatio;
+    }
+    var canvasProto = HTMLCanvasElement.prototype;
+    var superWidth = Object.getOwnPropertyDescriptor(canvasProto, 'width');
+    var superHeight = Object.getOwnPropertyDescriptor(canvasProto, 'height');
+    Object.defineProperty(canvasProto, 'width', {
+        get: function() {
+            return superWidth.get.call(this) / getPixelRatio();
+        },
+        set: function(width) {
+            var pixelRatio = getPixelRatio();
+            superWidth.set.call(this, width * pixelRatio);
+            var context = this.getContext('2d');
+            context.restore();
+            context.save();
+            context.scale(pixelRatio, pixelRatio);
+        }
+    });
+    Object.defineProperty(canvasProto, 'height', {
+        get: function() {
+            return superHeight.get.call(this) / getPixelRatio();
+        },
+        set: function(height) {
+            var pixelRatio = getPixelRatio();
+            superHeight.set.call(this, height * pixelRatio);
+            var context = this.getContext('2d');
+            context.restore();
+            context.save();
+            context.scale(pixelRatio, pixelRatio);
+        }
+    });
+
+    var contextProto = CanvasRenderingContext2D.prototype;
+    var superDrawImage = contextProto.drawImage;
+    contextProto.drawImage = function(
+            image, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight) {
+        if (!(image instanceof HTMLCanvasElement)) {
+            superDrawImage.apply(this, arguments);
+        } else if (arguments.length === 9) {
+            var pixelRatio = getPixelRatio();
+            superDrawImage.call(
+                    this,
+                    image,
+                    sx * pixelRatio,
+                    sy * pixelRatio,
+                    sWidth * pixelRatio,
+                    sHeight * pixelRatio,
+                    dx,
+                    dy,
+                    dWidth,
+                    dHeight);
+        } else if(arguments.length === 3) {
+            var pixelRatio = getPixelRatio();
+            superDrawImage.call(
+                    this,
+                    image,
+                    0,  // sx
+                    0,  // sy
+                    image.width * pixelRatio,  // sWidth
+                    image.height * pixelRatio,  // sHeight
+                    arguments[1],  // dx
+                    arguments[2],  // dy
+                    image.width,  // dWidth
+                    image.height);  //dHeight
+        } else {
+            superDrawImage.apply(this, arguments);
+        }
+    };
+})();
+
 // Global settings /////////////////////////////////////////////////////
 
 /*global window, HTMLCanvasElement, getMinimumFontHeight, FileReader, Audio,
@@ -10114,22 +10188,16 @@ WorldMorph.prototype.doOneCycle = function () {
 };
 
 WorldMorph.prototype.fillPage = function () {
-    var pos = getDocumentPositionOf(this.worldCanvas),
-        clientHeight = window.innerHeight,
+    var clientHeight = window.innerHeight,
         clientWidth = window.innerWidth,
         myself = this;
 
+    this.worldCanvas.style.position = "absolute";
+    this.worldCanvas.style.left = "0px";
+    this.worldCanvas.style.right = "0px";
+    this.worldCanvas.style.width = "100%";
+    this.worldCanvas.style.height = "100%";
 
-    if (pos.x > 0) {
-        this.worldCanvas.style.position = "absolute";
-        this.worldCanvas.style.left = "0px";
-        pos.x = 0;
-    }
-    if (pos.y > 0) {
-        this.worldCanvas.style.position = "absolute";
-        this.worldCanvas.style.top = "0px";
-        pos.y = 0;
-    }
     if (document.documentElement.scrollTop) {
         // scrolled down b/c of viewport scaling
         clientHeight = document.documentElement.clientHeight;
