@@ -1064,14 +1064,14 @@
     }
 
     var canvasProto = HTMLCanvasElement.prototype;
-    var superWidth = Object.getOwnPropertyDescriptor(canvasProto, 'width');
+    var uberWidth = Object.getOwnPropertyDescriptor(canvasProto, 'width');
     Object.defineProperty(canvasProto, 'width', {
         get: function() {
-            return superWidth.get.call(this) / getPixelRatio();
+            return uberWidth.get.call(this) / getPixelRatio();
         },
         set: function(width) {
             var pixelRatio = getPixelRatio();
-            superWidth.set.call(this, width * pixelRatio);
+            uberWidth.set.call(this, width * pixelRatio);
             var context = this.getContext('2d');
             context.restore();
             context.save();
@@ -1079,14 +1079,14 @@
         }
     });
 
-    var superHeight = Object.getOwnPropertyDescriptor(canvasProto, 'height');
+    var uberHeight = Object.getOwnPropertyDescriptor(canvasProto, 'height');
     Object.defineProperty(canvasProto, 'height', {
         get: function() {
-            return superHeight.get.call(this) / getPixelRatio();
+            return uberHeight.get.call(this) / getPixelRatio();
         },
         set: function(height) {
             var pixelRatio = getPixelRatio();
-            superHeight.set.call(this, height * pixelRatio);
+            uberHeight.set.call(this, height * pixelRatio);
             var context = this.getContext('2d');
             context.restore();
             context.save();
@@ -1095,12 +1095,12 @@
     });
 
     var contextProto = CanvasRenderingContext2D.prototype;
-    var superDrawImage = contextProto.drawImage;
+    var uberDrawImage = contextProto.drawImage;
     contextProto.drawImage = function(image) {
         var pixelRatio, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight;
 
         if (!(image instanceof HTMLCanvasElement)) {
-            superDrawImage.apply(this, arguments);
+            uberDrawImage.apply(this, arguments);
             return;
         }
         
@@ -1143,7 +1143,7 @@
                 throw Error('Called drawImage() with ' + arguments.length +
                         ' arguments');
         }
-        superDrawImage.call(
+        uberDrawImage.call(
                 this, image,
                 sx * pixelRatio, sy * pixelRatio,
                 sWidth * pixelRatio, sHeight * pixelRatio,
@@ -1151,48 +1151,48 @@
                 dWidth, dHeight);
     };
 
-    var superGetImageData = contextProto.getImageData;
+    var uberGetImageData = contextProto.getImageData;
     contextProto.getImageData = function(sx, sy, sw, sh) {
         var pixelRatio = getPixelRatio();
-        return superGetImageData.call(
+        return uberGetImageData.call(
                 this,
                 sx * pixelRatio, sy * pixelRatio,
                 sw * pixelRatio, sh * pixelRatio);
     };
 
-    var superShadowOffsetX =
+    var uberShadowOffsetX =
             Object.getOwnPropertyDescriptor(contextProto, 'shadowOffsetX');
     Object.defineProperty(contextProto, 'shadowOffsetX', {
         get: function() {
-            return superShadowOffsetX.get.call(this) / getPixelRatio();
+            return uberShadowOffsetX.get.call(this) / getPixelRatio();
         },
         set: function(offset) {
             var pixelRatio = getPixelRatio();
-            superShadowOffsetX.set.call(this, offset * pixelRatio);
+            uberShadowOffsetX.set.call(this, offset * pixelRatio);
         }
     });
 
-    var superShadowOffsetY =
+    var uberShadowOffsetY =
             Object.getOwnPropertyDescriptor(contextProto, 'shadowOffsetY');
     Object.defineProperty(contextProto, 'shadowOffsetY', {
         get: function() {
-            return superShadowOffsetY.get.call(this) / getPixelRatio();
+            return uberShadowOffsetY.get.call(this) / getPixelRatio();
         },
         set: function(offset) {
             var pixelRatio = getPixelRatio();
-            superShadowOffsetY.set.call(this, offset * pixelRatio);
+            uberShadowOffsetY.set.call(this, offset * pixelRatio);
         }
     });
 
-    var superShadowBlur =
+    var uberShadowBlur =
             Object.getOwnPropertyDescriptor(contextProto, 'shadowBlur');
     Object.defineProperty(contextProto, 'shadowBlur', {
         get: function() {
-            return superShadowBlur.get.call(this) / getPixelRatio();
+            return uberShadowBlur.get.call(this) / getPixelRatio();
         },
         set: function(blur) {
             var pixelRatio = getPixelRatio();
-            superShadowBlur.set.call(this, blur * pixelRatio);
+            uberShadowBlur.set.call(this, blur * pixelRatio);
         }
     });
 })();
