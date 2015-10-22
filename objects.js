@@ -5149,28 +5149,34 @@ StageMorph.prototype.fireKeyEvent = function (key) {
 
     this.keysPressed[evt] = true;
     if (evt === 'ctrl enter') {
+        event.preventDefault();
         return this.fireGreenFlagEvent();
     }
     if (evt === 'shift enter') {
         return this.editScripts();
     }
     if (evt === 'ctrl f') {
+        event.preventDefault();
         if (!ide.isAppMode) {ide.currentSprite.searchBlocks(); }
         return;
     }
     if (evt === 'ctrl n') {
+        event.preventDefault();
         if (!ide.isAppMode) {ide.createNewProject(); }
         return;
     }
     if (evt === 'ctrl o') {
+        event.preventDefault();
         if (!ide.isAppMode) {ide.openProjectsBrowser(); }
         return;
     }
     if (evt === 'ctrl s') {
+        event.preventDefault();
         if (!ide.isAppMode) {ide.save(); }
         return;
     }
     if (evt === 'ctrl shift s') {
+        event.preventDefault();
         if (!ide.isAppMode) {return ide.saveProjectsBrowser(); }
         return;
     }
