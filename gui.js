@@ -2956,7 +2956,6 @@ IDE_Morph.prototype.save = function () {
     }
 };
 
-
 IDE_Morph.prototype.saveProject = function (name) {
     var myself = this;
     this.nextSteps([
@@ -2969,6 +2968,7 @@ IDE_Morph.prototype.saveProject = function (name) {
     ]);
 };
 
+// Serialize a project and save to the browser.
 IDE_Morph.prototype.rawSaveProject = function (name) {
     var str;
     if (name) {
@@ -2991,6 +2991,7 @@ IDE_Morph.prototype.rawSaveProject = function (name) {
     }
 };
 
+// Use the a[download] method to save a project without intervention
 IDE_Morph.prototype.saveProjectToDisk = function () {
     var data,
         link = document.createElement('a');
@@ -3016,10 +3017,12 @@ IDE_Morph.prototype.saveProjectToDisk = function () {
     }
 };
 
+// Save a project as a file to the user's computer
 IDE_Morph.prototype.exportProject = function (name, plain) {
-    var menu, str;
+    var menu, str, dataPrefix;
     if (name) {
         this.setProjectName(name);
+        dataPrefix = 'data:text/' + plain ? 'plain,' : 'xml,';
         if (Process.prototype.isCatchingErrors) {
             try {
                 menu = this.showMessage('Exporting');
@@ -3027,8 +3030,7 @@ IDE_Morph.prototype.exportProject = function (name, plain) {
                     this.serializer.serialize(this.stage)
                 );
                 this.setURL('#open:' + str);
-                window.open('data:text/'
-                    + (plain ? 'plain,' + str : 'xml,' + str));
+                this.saveFileAs(dataPrefix + str, name);
                 menu.destroy();
                 this.showMessage('Exported!', 1);
             } catch (err) {
@@ -3040,8 +3042,7 @@ IDE_Morph.prototype.exportProject = function (name, plain) {
                 this.serializer.serialize(this.stage)
             );
             this.setURL('#open:' + str);
-            window.open('data:text/'
-                + (plain ? 'plain,' + str : 'xml,' + str));
+            this.saveFileAs(dataPrefix + str, name);
             menu.destroy();
             this.showMessage('Exported!', 1);
         }
@@ -3101,6 +3102,8 @@ IDE_Morph.prototype.removeUnusedBlocks = function () {
     }
 };
 
+// TODO: Fix this and update comment
+// TODO: Add Error handling.
 IDE_Morph.prototype.exportSprite = function (sprite) {
     var str = encodeURIComponent(
         this.serializer.serialize(sprite.allParts())
@@ -3114,6 +3117,7 @@ IDE_Morph.prototype.exportSprite = function (sprite) {
         + '</sprites>');
 };
 
+// TODO: Fix this and update comment
 IDE_Morph.prototype.exportScriptsPicture = function () {
     var pics = [],
         pic,
@@ -3164,6 +3168,7 @@ IDE_Morph.prototype.exportScriptsPicture = function () {
     window.open(pic.toDataURL());
 };
 
+// TODO: Fix this and update comment
 IDE_Morph.prototype.exportProjectSummary = function (useDropShadows) {
     var html, head, meta, css, body, pname, notes, toc, globalVars,
         stage = this.stage;
@@ -3638,11 +3643,69 @@ IDE_Morph.prototype.openProject = function (name) {
     }
 };
 
+// Set the URL to a project's XML contents
 IDE_Morph.prototype.setURL = function (str) {
     if (this.projectsInURLs) {
         location.hash = str;
     }
 };
+
+// Allow for downloading a file to a disk or open in a new tab.
+// This function relies the FileSaver.js library which exports saveAs()
+// https://github.com/eligrey/FileSaver.js
+// This function is the primary way to get any data (image or text) out of Snap!
+IDE_Morph.prototype.saveFileAs = function (contents, fileName, newWindow) {
+    // TODO: handle Process.isCatchingErrors easily?
+    // TODO: Add confirmations
+    // TODO: Properly handle extensions.
+    var isFileSaverSupported, exhibitsChomeBug,
+        blobData, fileType, fileExt,
+        world, dlg, errorMessage;
+
+    // File type for blobs, text for XML, image/png for images.
+    fileType = 'text/xml;charset=utf-8';
+    fileExt = '.xml'; // .txt, when?
+    // Error Message Handling
+    world = this.world();
+    errorMessage = 'Longer Message is coming soon!';
+
+    try {
+        isFileSaverSupported = !!new Blob;
+    } catch (e) {}
+
+    exhibitsChomeBug = false;
+
+    // Force open in a new window, or use as a fallback.
+    if (!isFileSaverSupported || newWindow) {
+        // Prevent crashing errors in Chrome
+        if (!exhibitsChomeBug) {
+            window.open(contents, '_blank');
+        } else {
+            dlg = new DialogBoxMorph();
+            dlg.inform('Uh oh!', errorMessage, world);
+            // btn = dlg.buttons.children[0];
+            dlg.fixLayout();
+            dlg.drawNew();
+        }
+    } else {
+        // TODO: Properly use blob API's for Canvas elements (FF and IE).
+        if (contents instanceof HTMLCanvasElement) {
+            if (contents.toBlob) {
+                contents.toBlob(function(blob) {
+                    saveAs(blobData, fileName, false);
+                });
+            } else {
+                contents = contents.toDataURL();
+                fileType = 'image/png';
+                fileExt = '.png';
+            }
+        }
+
+        console.log('FILENAME: ', fileName);
+        blobData = new Blob([contents], {type: fileType});
+        saveAs(blobData, fileName + fileExt, false);
+    }
+}
 
 IDE_Morph.prototype.switchToUserMode = function () {
     var world = this.world();
@@ -4384,6 +4447,7 @@ IDE_Morph.prototype.saveProjectToCloud = function (name) {
     }
 };
 
+// TODO: Update this function
 IDE_Morph.prototype.exportProjectMedia = function (name) {
     var menu, media;
     this.serializer.isCollectingMedia = true;
@@ -4423,6 +4487,7 @@ IDE_Morph.prototype.exportProjectMedia = function (name) {
     // this.hasChangedMedia = false;
 };
 
+// TODO: Update this function
 IDE_Morph.prototype.exportProjectNoMedia = function (name) {
     var menu, str;
     this.serializer.isCollectingMedia = true;
@@ -4455,6 +4520,7 @@ IDE_Morph.prototype.exportProjectNoMedia = function (name) {
     this.serializer.flushMedia();
 };
 
+// TODO: Update this function
 IDE_Morph.prototype.exportProjectAsCloudData = function (name) {
     var menu, str, media, dta;
     this.serializer.isCollectingMedia = true;
