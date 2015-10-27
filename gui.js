@@ -84,16 +84,6 @@ var SoundIconMorph;
 var JukeboxMorph;
 var StageHandleMorph;
 
-// Get the full url without "snap.html"
-var baseURL = (function getPath(location) {
-    var origin, path, slash;
-    path = location.pathname; // starts with a /
-    origin = location.origin; // has no trailing /
-    slash = path.lastIndexOf('/');
-    path = path.slice(0, slash + 1); // keep a trailing /
-    return origin + path;
-}(window.location));
-
 
 // IDE_Morph ///////////////////////////////////////////////////////////
 
