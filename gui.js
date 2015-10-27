@@ -3026,11 +3026,9 @@ IDE_Morph.prototype.exportProject = function (name, plain) {
         if (Process.prototype.isCatchingErrors) {
             try {
                 menu = this.showMessage('Exporting');
-                str = encodeURIComponent(
-                    this.serializer.serialize(this.stage)
-                );
-                this.setURL('#open:' + str);
-                this.saveFileAs(dataPrefix + str, name);
+                str = this.serializer.serialize(this.stage)
+                this.setURL('#open:' + encodeURIComponent(str));
+                this.saveFileAs(str, name);
                 menu.destroy();
                 this.showMessage('Exported!', 1);
             } catch (err) {
@@ -3038,11 +3036,9 @@ IDE_Morph.prototype.exportProject = function (name, plain) {
             }
         } else {
             menu = this.showMessage('Exporting');
-            str = encodeURIComponent(
-                this.serializer.serialize(this.stage)
-            );
-            this.setURL('#open:' + str);
-            this.saveFileAs(dataPrefix + str, name);
+            str = this.serializer.serialize(this.stage)
+            this.setURL('#open:' + encodeURIComponent(str));
+            this.saveFileAs(str, name);
             menu.destroy();
             this.showMessage('Exported!', 1);
         }
@@ -3658,9 +3654,10 @@ IDE_Morph.prototype.saveFileAs = function (contents, fileName, newWindow) {
     // TODO: handle Process.isCatchingErrors easily?
     // TODO: Add confirmations
     // TODO: Properly handle extensions.
-    var isFileSaverSupported, exhibitsChomeBug,
+    // TODO: Check for URI encoding?
+    var isFileSaverSupported,
         blobData, fileType, fileExt,
-        world, dlg, errorMessage;
+        encodedData, world, dlg, errorMessage;
 
     // File type for blobs, text for XML, image/png for images.
     fileType = 'text/xml;charset=utf-8';
@@ -3669,17 +3666,37 @@ IDE_Morph.prototype.saveFileAs = function (contents, fileName, newWindow) {
     world = this.world();
     errorMessage = 'Longer Message is coming soon!';
 
+    // This is a workaround for a known Chrome crash with large URLs
+    function exhibitsChomeBug(contents) {
+       var MAX_LENGTH = 2e6;
+
+       return false;
+   };
+
     try {
         isFileSaverSupported = !!new Blob;
     } catch (e) {}
 
-    exhibitsChomeBug = false;
+    // Handle rendering Cavas elements
+    if (contents instanceof HTMLCanvasElement) {
+        if (contents.toBlob && isFileSaverSupported) {
+            contents.toBlob(function(blob) {
+                saveAs(blobData, fileName, false);
+            });
+            return;
+        } else {
+            contents = contents.toDataURL();
+            fileType = 'image/png';
+            fileExt = '.png';
+        }
+    }
 
     // Force open in a new window, or use as a fallback.
     if (!isFileSaverSupported || newWindow) {
         // Prevent crashing errors in Chrome
-        if (!exhibitsChomeBug) {
-            window.open(contents, '_blank');
+        encodedData = encodeURIComponent(contents);
+        if (!exhibitsChomeBug(encodedData)) {
+            window.open('data:' + fileType + ',' + encodedData, '_blank');
         } else {
             dlg = new DialogBoxMorph();
             dlg.inform('Uh oh!', errorMessage, world);
@@ -3688,19 +3705,6 @@ IDE_Morph.prototype.saveFileAs = function (contents, fileName, newWindow) {
             dlg.drawNew();
         }
     } else {
-        // TODO: Properly use blob API's for Canvas elements (FF and IE).
-        if (contents instanceof HTMLCanvasElement) {
-            if (contents.toBlob) {
-                contents.toBlob(function(blob) {
-                    saveAs(blobData, fileName, false);
-                });
-            } else {
-                contents = contents.toDataURL();
-                fileType = 'image/png';
-                fileExt = '.png';
-            }
-        }
-
         console.log('FILENAME: ', fileName);
         blobData = new Blob([contents], {type: fileType});
         saveAs(blobData, fileName + fileExt, false);
