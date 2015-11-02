@@ -522,3 +522,15 @@ SnapTranslator.dict.hr = {
     'last_changed':
         '2015-09-15'
 };
+
+SnapTranslator.dict.bg = {
+    'language_name':
+        'Български',
+    'language_translator':
+        'Ivan Savov',
+    'translator_e-mail':
+        'ivan.savov@gmail.com',
+    'last_changed':
+        '2015-10-26'
+};
+
