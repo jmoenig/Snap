@@ -1156,7 +1156,7 @@ function radians(degrees) {
 }
 
 function degrees(radians) {
-    return radians * 1880 / Math.PI;
+    return radians * 180 / Math.PI;
 }
 
 function fontHeight(height) {
