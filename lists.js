@@ -61,7 +61,7 @@ PushButtonMorph, SyntaxElementMorph, Color, Point, WatcherMorph,
 StringMorph, SpriteMorph, ScrollFrameMorph, CellMorph, ArrowMorph,
 MenuMorph, snapEquals, Morph, isNil, localize, MorphicPreferences*/
 
-modules.lists = '2015-July-27';
+modules.lists = '2015-October-07';
 
 var List;
 var ListWatcherMorph;
@@ -680,6 +680,17 @@ ListWatcherMorph.prototype.arrangeCells = function () {
         lastCell = cell;
     }
     this.frame.contents.adjustBounds();
+};
+
+ListWatcherMorph.prototype.expand = function () {
+    // make sure to show all (first 100) cells
+    // used for exporting a project summary
+    var fe = this.frame.contents.extent(),
+        w = fe.x + 6,
+        h = fe.y + this.label.height() + 6;
+    this.setExtent(new Point(w, h));
+    this.handle.setRight(this.right() - 3);
+    this.handle.setBottom(this.bottom() - 3);
 };
 
 // ListWatcherMorph hiding/showing:

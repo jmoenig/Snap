@@ -125,7 +125,7 @@ PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.objects = '2015-July-27';
+modules.objects = '2015-October-07';
 
 var SpriteMorph;
 var StageMorph;
@@ -3673,7 +3673,8 @@ SpriteMorph.prototype.allHatBlocksForKey = function (key) {
     return this.scripts.children.filter(function (morph) {
         if (morph.selector) {
             if (morph.selector === 'receiveKey') {
-                return morph.inputs()[0].evaluate()[0] === key;
+                var evt = morph.inputs()[0].evaluate()[0];
+                return evt === key || evt === 'any';
             }
         }
         return false;
@@ -4028,7 +4029,12 @@ SpriteMorph.prototype.paletteBlockInstance = function (definition) {
     );
 };
 
-SpriteMorph.prototype.usesBlockInstance = function (definition) {
+SpriteMorph.prototype.usesBlockInstance = function (
+    definition,
+    forRemoval, // optional bool
+    skipGlobals, // optional bool
+    skipBlocks // optional array with ignorable definitions
+) {
     var inDefinitions,
         inScripts = detect(
             this.scripts.allChildren(),
@@ -4038,6 +4044,24 @@ SpriteMorph.prototype.usesBlockInstance = function (definition) {
         );
 
     if (inScripts) {return true; }
+
+    if (definition.isGlobal && !skipGlobals) {
+        inDefinitions = [];
+        this.parentThatIsA(StageMorph).globalBlocks.forEach(
+            function (def) {
+                if (forRemoval && (definition === def)) {return; }
+                if (skipBlocks && contains(skipBlocks, def)) {return; }
+                if (def.body) {
+                    def.body.expression.allChildren().forEach(function (c) {
+                        if (c.definition && (c.definition === definition)) {
+                            inDefinitions.push(c);
+                        }
+                    });
+                }
+            }
+        );
+        if (inDefinitions.length > 0) {return true; }
+    }
 
     inDefinitions = [];
     this.customBlocks.forEach(function (def) {
@@ -4777,10 +4801,10 @@ StageMorph.prototype.drawOn = function (aCanvas, aRect) {
         return null;
     }
     rectangle = aRect || this.bounds;
-    area = rectangle.intersect(this.bounds).round();
+    area = rectangle.intersect(this.bounds);
     if (area.extent().gt(new Point(0, 0))) {
         delta = this.position().neg();
-        src = area.copy().translateBy(delta).round();
+        src = area.copy().translateBy(delta);
         context = aCanvas.getContext('2d');
         context.globalAlpha = this.alpha;
 
@@ -4794,8 +4818,8 @@ StageMorph.prototype.drawOn = function (aCanvas, aRect) {
         }
         context.drawImage(
             this.image,
-            src.left(),
-            src.top(),
+            sl,
+            st,
             w,
             h,
             area.left(),
@@ -4812,8 +4836,8 @@ StageMorph.prototype.drawOn = function (aCanvas, aRect) {
         try {
             context.drawImage(
                 this.penTrails(),
-                src.left() / this.scale,
-                src.top() / this.scale,
+                sl / this.scale,
+                st / this.scale,
                 ws,
                 hs,
                 area.left() / this.scale,
@@ -4960,7 +4984,7 @@ StageMorph.prototype.getLastMessage = function () {
     return this.lastMessage || '';
 };
 
-// StageMorph Mouse Corridnates
+// StageMorph Mouse Coordinates
 
 StageMorph.prototype.reportMouseX = function () {
     var world = this.world();

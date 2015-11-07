@@ -57,6 +57,8 @@
     June 4 - tweaks (Jens)
     Aug 24 - floodfill alpha-integer issue (Kartik)
     Sep 29 - tweaks (Jens)
+    Sep 28 [of the following year :)] - Try to prevent antialiasing (Kartik)
+    Oct 02 - revert disable smoothing (Jens)
  */
 
 /*global Point, Rectangle, DialogBoxMorph, fontHeight, AlignmentMorph,
@@ -69,7 +71,7 @@
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.paint = '2015-June-25';
+modules.paint = '2015-October-02';
 
 // Declarations
 

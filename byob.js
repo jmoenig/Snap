@@ -51,6 +51,7 @@
         BlockEditorMorph
         BlockExportDialogMorph
         BlockImportDialogMorph
+        BlockRemovalDialogMorph
         InputSlotDialogMorph
         VariableDialogMorph
 
@@ -90,6 +91,7 @@
     VariableDialogMorph
     BlockExportDialogMorph
     BlockImportDialogMorph
+    BlockRemovalDialogMorph
 
 */
 
@@ -106,7 +108,7 @@ SymbolMorph, isNil, CursorMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2015-July-28';
+modules.byob = '2015-October-07';
 
 // Declarations
 
@@ -125,6 +127,7 @@ var VariableDialogMorph;
 var JaggedBlockMorph;
 var BlockExportDialogMorph;
 var BlockImportDialogMorph;
+var BlockRemovalDialogMorph;
 
 // CustomBlockDefinition ///////////////////////////////////////////////
 
@@ -341,6 +344,16 @@ CustomBlockDefinition.prototype.parseSpec = function (spec) {
 // CustomBlockDefinition picturing
 
 CustomBlockDefinition.prototype.scriptsPicture = function () {
+    return this.scriptsModel().scriptsPicture();
+};
+
+CustomBlockDefinition.prototype.sortedElements = function () {
+    return this.scriptsModel().sortedElements();
+};
+
+CustomBlockDefinition.prototype.scriptsModel = function () {
+    // answer a restored scripting area for the sake
+    // of creating script pictures
     var scripts, proto, block, comment;
 
     scripts = new ScriptsMorph();
@@ -372,7 +385,7 @@ CustomBlockDefinition.prototype.scriptsPicture = function () {
     });
     proto.children[0].fixLayout();
     scripts.fixMultiArgs();
-    return scripts.scriptsPicture();
+    return scripts;
 };
 
 // CustomCommandBlockMorph /////////////////////////////////////////////
@@ -728,7 +741,16 @@ CustomCommandBlockMorph.prototype.attachTargets = function () {
 CustomCommandBlockMorph.prototype.isInUse = function () {
     // anser true if an instance of my definition is found
     // in any of my receiver's scripts or block definitions
-    return this.receiver().usesBlockInstance(this.definition);
+    var def = this.definition,
+        ide = this.receiver().parentThatIsA(IDE_Morph);
+    if (def.isGlobal && ide) {
+        return ide.sprites.asArray().concat([ide.stage]).some(
+            function (any, idx) {
+                return any.usesBlockInstance(def, false, idx);
+            }
+        );
+    }
+    return this.receiver().usesBlockInstance(def);
 };
 
 // CustomCommandBlockMorph menu:
@@ -3419,4 +3441,97 @@ BlockImportDialogMorph.prototype.importBlocks = function (name) {
 // BlockImportDialogMorph layout
 
 BlockImportDialogMorph.prototype.fixLayout
+    = BlockEditorMorph.prototype.fixLayout;
+
+// BlockRemovalDialogMorph ///////////////////////////////////////////////////
+
+// BlockRemovalDialogMorph inherits from DialogBoxMorph
+// and pseudo-inherits from BlockExportDialogMorph:
+
+BlockRemovalDialogMorph.prototype = new DialogBoxMorph();
+BlockRemovalDialogMorph.prototype.constructor = BlockImportDialogMorph;
+BlockRemovalDialogMorph.uber = DialogBoxMorph.prototype;
+
+// BlockRemovalDialogMorph constants:
+
+BlockRemovalDialogMorph.prototype.key = 'blockRemove';
+
+// BlockRemovalDialogMorph instance creation:
+
+function BlockRemovalDialogMorph(blocks, target) {
+    this.init(blocks, target);
+}
+
+BlockRemovalDialogMorph.prototype.init = function (blocks, target) {
+    var myself = this;
+
+    // additional properties:
+    this.blocks = blocks.slice(0);
+    this.handle = null;
+
+    // initialize inherited properties:
+    BlockExportDialogMorph.uber.init.call(
+        this,
+        target,
+        function () {myself.removeBlocks(); },
+        null // environment
+    );
+
+    // override inherited properites:
+    this.labelString = localize('Remove unused blocks')
+        + (name ? ': ' : '')
+        + name || '';
+    this.createLabel();
+
+    // build contents
+    this.buildContents();
+};
+
+BlockRemovalDialogMorph.prototype.buildContents
+    = BlockExportDialogMorph.prototype.buildContents;
+
+BlockRemovalDialogMorph.prototype.popUp
+    = BlockExportDialogMorph.prototype.popUp;
+
+// BlockRemovalDialogMorph menu
+
+BlockRemovalDialogMorph.prototype.userMenu
+    = BlockExportDialogMorph.prototype.userMenu;
+
+BlockRemovalDialogMorph.prototype.selectAll
+    = BlockExportDialogMorph.prototype.selectAll;
+
+BlockRemovalDialogMorph.prototype.selectNone
+    = BlockExportDialogMorph.prototype.selectNone;
+
+// BlockRemovalDialogMorph ops
+
+BlockRemovalDialogMorph.prototype.removeBlocks = function () {
+    var ide = this.target.parentThatIsA(IDE_Morph);
+    if (!ide) {return; }
+    if (this.blocks.length > 0) {
+        this.blocks.forEach(function (def) {
+            var idx = ide.stage.globalBlocks.indexOf(def);
+            if (idx !== -1) {
+                ide.stage.globalBlocks.splice(idx, 1);
+            }
+        });
+        ide.flushPaletteCache();
+        ide.refreshPalette();
+        ide.showMessage(
+            this.blocks.length + ' ' + localize('unused block(s) removed'),
+            2
+        );
+    } else {
+        new DialogBoxMorph().inform(
+            'Remove unused blocks',
+            'no blocks were selected',
+            this.world()
+        );
+    }
+};
+
+// BlockRemovalDialogMorph layout
+
+BlockRemovalDialogMorph.prototype.fixLayout
     = BlockEditorMorph.prototype.fixLayout;
