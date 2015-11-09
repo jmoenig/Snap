@@ -1853,6 +1853,7 @@ SyntaxElementMorph.prototype.exportPictureWithResult = function (aBubble) {
         ctx = pic.getContext('2d');
     ctx.drawImage(scr, 0, pic.height - scr.height);
     ctx.drawImage(bub, scr.width + 2, 0);
+    // TODO: modify this call!
     window.open(pic.toDataURL());
 };
 
@@ -2312,6 +2313,7 @@ BlockMorph.prototype.userMenu = function () {
     );
     menu.addItem(
         "script pic...",
+        // TODO: modify this function to use saveAs
         function () {
             window.open(myself.topBlock().scriptPic().toDataURL());
         },
@@ -5376,6 +5378,7 @@ ScriptsMorph.prototype.cleanUp = function () {
 ScriptsMorph.prototype.exportScriptsPicture = function () {
     var pic = this.scriptsPicture();
     if (pic) {
+        // TODO: modify this to use a saveAs
         window.open(pic.toDataURL());
     }
 };
@@ -11039,6 +11042,7 @@ CommentMorph.prototype.userMenu = function () {
     menu.addItem("delete", 'destroy');
     menu.addItem(
         "comment pic...",
+        // TODO: modify this to use save as
         function () {
             window.open(myself.fullImageClassic().toDataURL());
         },

@@ -583,7 +583,7 @@ SpriteMorph.prototype.initBlocks = function () {
         },
 
     /* migrated to a newer block version:
-  
+
         receiveClick: {
             type: 'hat',
             category: 'control',
@@ -5735,8 +5735,13 @@ StageMorph.prototype.userMenu = function () {
     menu.addItem("show all", 'showAll');
     menu.addItem(
         "pic...",
+<<<<<<< Local Changes
+        // TODO: replace this function.
+=======
+>>>>>>> External Changes
         function () {
-            window.open(myself.fullImageClassic().toDataURL());
+            // pass a canvas to be opened as a new window.
+            ide.saveCanvasAs(myself.fullImageClassic(), 'stage', true);
         },
         'open a new window\nwith a picture of the stage'
     );
@@ -7614,9 +7619,11 @@ WatcherMorph.prototype.userMenu = function () {
             menu.addItem(
                 'export...',
                 function () {
-                    window.open(
-                        'data:text/plain;charset=utf-8,' +
-                            encodeURIComponent(this.currentValue.toString())
+                    ide.saveFileAs(
+                        this.currentValue.toString(),
+                        'text/plain;charset=utf-8',
+                        'variable',
+                        false
                     );
                 }
             );

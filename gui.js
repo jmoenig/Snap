@@ -67,7 +67,7 @@ BlockImportDialogMorph, SnapTranslator, localize, List, InputSlotMorph,
 SnapCloud, Uint8Array, HandleMorph, SVG_Costume, fontHeight, hex_sha512,
 sb, CommentMorph, CommandBlockMorph, BlockLabelPlaceHolderMorph, Audio,
 SpeechBubbleMorph, ScriptFocusMorph, XML_Element, WatcherMorph,
-BlockRemovalDialogMorph*/
+BlockRemovalDialogMorph, saveAs*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
@@ -3647,56 +3647,48 @@ IDE_Morph.prototype.setURL = function (str) {
 };
 
 // Allow for downloading a file to a disk or open in a new tab.
-// This function relies the FileSaver.js library which exports saveAs()
-// https://github.com/eligrey/FileSaver.js
-// This function is the primary way to get any data (image or text) out of Snap!
-IDE_Morph.prototype.saveFileAs = function (contents, fileName, newWindow) {
+// This relies the FileSaver.js library which exports saveAs()
+// See: https://github.com/eligrey/FileSaver.js
+// There are two utility methods saveImageAs and saveXMLAs that should be used
+// over this method, if appropriate.
+IDE_Morph.prototype.saveFileAs = function (contents, type, fileName, newWindow) {
     // TODO: handle Process.isCatchingErrors easily?
     // TODO: Add confirmations
     // TODO: Properly handle extensions.
     // TODO: Check for URI encoding?
-    var isFileSaverSupported,
-        blobData, fileType, fileExt,
+    var isFileSaverSupported = false,
+        fileExt,
         encodedData, world, dlg, errorMessage;
 
-    // File type for blobs, text for XML, image/png for images.
-    fileType = 'text/xml;charset=utf-8';
-    fileExt = '.xml'; // .txt, when?
+    // type is a <kind>/<ext>;<meta> format.
+    fileExt = '.' + type.split('/')[1].split(';')[0]
     // Error Message Handling
     world = this.world();
     errorMessage = 'Longer Message is coming soon!';
 
     // This is a workaround for a known Chrome crash with large URLs
     function exhibitsChomeBug(contents) {
-       var MAX_LENGTH = 2e6;
+       var MAX_LENGTH = 2e6,
+            isChrome  = navigator.userAgent.indexOf('Chrome') !== -1,
+            isTooLong = contents.length > MAX_LENGTH;
 
-       return false;
+       return isChrome && isTooLong
    };
+
+   function dataURLFormat (text) {
+       return 'data:' + fileType + ',' + text;
+   }
 
     try {
         isFileSaverSupported = !!new Blob;
     } catch (e) {}
-
-    // Handle rendering Cavas elements
-    if (contents instanceof HTMLCanvasElement) {
-        if (contents.toBlob && isFileSaverSupported) {
-            contents.toBlob(function(blob) {
-                saveAs(blobData, fileName, false);
-            });
-            return;
-        } else {
-            contents = contents.toDataURL();
-            fileType = 'image/png';
-            fileExt = '.png';
-        }
-    }
 
     // Force open in a new window, or use as a fallback.
     if (!isFileSaverSupported || newWindow) {
         // Prevent crashing errors in Chrome
         encodedData = encodeURIComponent(contents);
         if (!exhibitsChomeBug(encodedData)) {
-            window.open('data:' + fileType + ',' + encodedData, '_blank');
+            window.open(dataURLFormat(encodedData), '_blank');
         } else {
             dlg = new DialogBoxMorph();
             dlg.inform('Uh oh!', errorMessage, world);
@@ -3704,11 +3696,29 @@ IDE_Morph.prototype.saveFileAs = function (contents, fileName, newWindow) {
             dlg.fixLayout();
             dlg.drawNew();
         }
-    } else {
-        console.log('FILENAME: ', fileName);
-        blobData = new Blob([contents], {type: fileType});
-        saveAs(blobData, fileName + fileExt, false);
+    } else if (!(contents instanceof Blob)){
+        contents = new Blob([contents], {type: type });
     }
+
+    saveAs(contents, fileName + fileExt, false);
+}
+
+// This helps exporting a canvas as an image
+// cavas.toBlob() is only supported in Firefox and IE, but is faster.
+IDE_Morph.prototype.saveCanvasAs = function (canvas, fileName, newWindow) {
+    var myself = this;
+    if (canvas.toBlob) {
+        canvas.toBlob(function(blob) {
+            this.saveFileAs(blob, 'image/png', fileName, newWindow);
+        });
+    } else {
+        this.saveFileAs(canvas.toDataURL(), 'image/png', fileName, newWindow);
+    }
+}
+
+IDE_Morph.prototype.saveXMLAs = function(text, fileName, newWindow) {
+    var typeTag = 'text/xml;chartset=utf-8';
+    this.saveFileAs(text, typeTag, fileName, newWindow);
 }
 
 IDE_Morph.prototype.switchToUserMode = function () {
@@ -5908,6 +5918,7 @@ SpriteIconMorph.prototype.fixLayout = function () {
 
 // SpriteIconMorph menu
 
+// TODO: fix this function
 SpriteIconMorph.prototype.userMenu = function () {
     var menu = new MenuMorph(this),
         myself = this;
@@ -6270,6 +6281,7 @@ CostumeIconMorph.prototype.removeCostume = function () {
     }
 };
 
+// TODO: Modify and fix this
 CostumeIconMorph.prototype.exportCostume = function () {
     if (this.object instanceof SVG_Costume) {
         window.open(this.object.contents.src);

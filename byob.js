@@ -762,6 +762,7 @@ CustomCommandBlockMorph.prototype.userMenu = function () {
         menu = new MenuMorph(this);
         menu.addItem(
             "script pic...",
+            // TODO: modify this to use saveAs
             function () {
                 window.open(this.topBlock().fullImage().toDataURL());
             },
@@ -784,6 +785,7 @@ CustomCommandBlockMorph.prototype.userMenu = function () {
 
 CustomCommandBlockMorph.prototype.exportBlockDefinition = function () {
     var xml = new SnapSerializer().serialize(this.definition);
+    // TODO: modify this to use saveAs
     window.open('data:text/xml,' + encodeURIComponent(xml));
 };
 
@@ -3326,6 +3328,7 @@ BlockExportDialogMorph.prototype.selectNone = function () {
 // BlockExportDialogMorph ops
 
 BlockExportDialogMorph.prototype.exportBlocks = function () {
+    // TODO: modify this code to use saveAs
     var str = encodeURIComponent(
         this.serializer.serialize(this.blocks)
     );
