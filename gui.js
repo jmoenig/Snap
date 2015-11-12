@@ -3651,7 +3651,10 @@ IDE_Morph.prototype.setURL = function (str) {
 // See: https://github.com/eligrey/FileSaver.js
 // There are two utility methods saveImageAs and saveXMLAs that should be used
 // over this method, if appropriate.
-IDE_Morph.prototype.saveFileAs = function (contents, type, fileName, newWindow) {
+IDE_Morph.prototype.saveFileAs = function (
+    contents,
+    type,
+    fileName, newWindow) {
     // TODO: handle Process.isCatchingErrors easily?
     // TODO: Add confirmations
     // TODO: Properly handle extensions.
@@ -3667,29 +3670,34 @@ IDE_Morph.prototype.saveFileAs = function (contents, type, fileName, newWindow) 
     errorMessage = 'Longer Message is coming soon!';
 
     // This is a workaround for a known Chrome crash with large URLs
-    function exhibitsChomeBug(contents) {
-       var MAX_LENGTH = 2e6,
+    function exhibitsChomeBug (contents) {
+        var MAX_LENGTH = 2e6,
             isChrome  = navigator.userAgent.indexOf('Chrome') !== -1,
             isTooLong = contents.length > MAX_LENGTH;
 
-       return isChrome && isTooLong
-   };
+        return isChrome && isTooLong
+    };
 
-   function dataURLFormat (text) {
-       return 'data:' + fileType + ',' + text;
-   }
+    function dataURLFormat (text) {
+        var hasTypeStr = text.indexOf('data:') === 0;
+        if (hasTypeStr) {return text; }
+        return 'data:' + type + ',' + encodeURIComponent(text);
+    }
 
     try {
         isFileSaverSupported = !!new Blob;
     } catch (e) {}
 
     // Force open in a new window, or use as a fallback.
+    // TODO: refactor set newWindow based on isFileSaverSupported
     if (!isFileSaverSupported || newWindow) {
         // Prevent crashing errors in Chrome
-        encodedData = encodeURIComponent(contents);
+        encodedData = dataURLFormat(contents);
         if (!exhibitsChomeBug(encodedData)) {
-            window.open(dataURLFormat(encodedData), '_blank');
-        } else {
+            window.open(encodedData, '_blank');
+        } else if (!newWindow) {
+           // Warn and try to download.
+        } else { // Can't export at all.
             dlg = new DialogBoxMorph();
             dlg.inform('Uh oh!', errorMessage, world);
             // btn = dlg.buttons.children[0];

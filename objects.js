@@ -5735,10 +5735,6 @@ StageMorph.prototype.userMenu = function () {
     menu.addItem("show all", 'showAll');
     menu.addItem(
         "pic...",
-<<<<<<< Local Changes
-        // TODO: replace this function.
-=======
->>>>>>> External Changes
         function () {
             // pass a canvas to be opened as a new window.
             ide.saveCanvasAs(myself.fullImageClassic(), 'stage', true);
