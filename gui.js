@@ -2993,33 +2993,34 @@ IDE_Morph.prototype.rawSaveProject = function (name) {
 
 // Use the a[download] method to save a project without intervention
 IDE_Morph.prototype.saveProjectToDisk = function () {
-    var data,
-        link = document.createElement('a');
+    var menu, str, dataPrefix;
+        dataPrefix = 'data:text/xml,';
 
     if (Process.prototype.isCatchingErrors) {
         try {
-            data = this.serializer.serialize(this.stage);
-            link.setAttribute('href', 'data:text/xml,' + data);
-            link.setAttribute('download', this.projectName + '.xml');
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
+            menu = this.showMessage('Exporting');
+            str = this.serializer.serialize(this.stage)
+            this.setURL('#open:' + dataPrefix + encodeURIComponent(str));
+            this.saveXMLAs(str, name);
+            menu.destroy();
+            this.showMessage('Exported!', 1);
         } catch (err) {
-            this.showMessage('Saving failed: ' + err);
+            this.showMessage('Export failed: ' + err);
         }
     } else {
-        data = this.serializer.serialize(this.stage);
-        link.setAttribute('href', 'data:text/xml,' + data);
-        link.setAttribute('download', this.projectName + '.xml');
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
+        menu = this.showMessage('Exporting');
+        str = this.serializer.serialize(this.stage)
+        this.setURL('#open:' + dataPrefix + encodeURIComponent(str));
+        this.saveXMLAs(str, name);
+        menu.destroy();
+        this.showMessage('Exported!', 1);
     }
 };
 
-// Save a project as a file to the user's computer
+// Export project XML to a new browser window.
 IDE_Morph.prototype.exportProject = function (name, plain) {
     var menu, str, dataPrefix;
+    // saveXMLAs(x, x, true) tries to open a new tab.
     if (name) {
         this.setProjectName(name);
         dataPrefix = 'data:text/' + plain ? 'plain,' : 'xml,';
@@ -3038,7 +3039,7 @@ IDE_Morph.prototype.exportProject = function (name, plain) {
             menu = this.showMessage('Exporting');
             str = this.serializer.serialize(this.stage)
             this.setURL('#open:' + dataPrefix + encodeURIComponent(str));
-            this.saveXMLAs(str, name);
+            this.saveXMLAs(str, name, true);
             menu.destroy();
             this.showMessage('Exported!', 1);
         }
