@@ -2478,7 +2478,15 @@ IDE_Morph.prototype.projectMenu = function () {
     if (shiftClicked) {
         menu.addItem(
             'Save to disk',
-            'saveProjectToDisk',
+            function () {
+                if (myself.projectName) {
+                    myself.exportProject(myself.projectName);
+                } else {
+                    myself.prompt('Export Project As...', function (name) {
+                        myself.exportProject(name);
+                    }, null, 'exportProject');
+                }
+            },
             'store this project\nin the downloads folder\n'
                 + '(in supporting browsers)',
             new Color(100, 0, 0)
@@ -2525,10 +2533,11 @@ IDE_Morph.prototype.projectMenu = function () {
                 'Export project as plain text...' : 'Export project...',
         function () {
             if (myself.projectName) {
-                myself.exportProject(myself.projectName, shiftClicked);
+                // true requests that the browser try to display a new window.
+                myself.exportProject(myself.projectName, true, shiftClicked);
             } else {
                 myself.prompt('Export Project As...', function (name) {
-                    myself.exportProject(name);
+                    myself.exportProject(name, true);
                 }, null, 'exportProject');
             }
         },
@@ -2991,34 +3000,9 @@ IDE_Morph.prototype.rawSaveProject = function (name) {
     }
 };
 
-// Use the a[download] method to save a project without intervention
-IDE_Morph.prototype.saveProjectToDisk = function () {
-    var menu, str, dataPrefix;
-        dataPrefix = 'data:text/xml,';
-
-    if (Process.prototype.isCatchingErrors) {
-        try {
-            menu = this.showMessage('Exporting');
-            str = this.serializer.serialize(this.stage)
-            this.setURL('#open:' + dataPrefix + encodeURIComponent(str));
-            this.saveXMLAs(str, name);
-            menu.destroy();
-            this.showMessage('Exported!', 1);
-        } catch (err) {
-            this.showMessage('Export failed: ' + err);
-        }
-    } else {
-        menu = this.showMessage('Exporting');
-        str = this.serializer.serialize(this.stage)
-        this.setURL('#open:' + dataPrefix + encodeURIComponent(str));
-        this.saveXMLAs(str, name);
-        menu.destroy();
-        this.showMessage('Exported!', 1);
-    }
-};
-
-// Export project XML to a new browser window.
-IDE_Morph.prototype.exportProject = function (name, plain) {
+// Export project XML, newWindow opens a new tab if true
+// This is used both for "Save to Disk" and "Export project..."
+IDE_Morph.prototype.exportProject = function (name, newWindow, plain) {
     var menu, str, dataPrefix;
     // saveXMLAs(x, x, true) tries to open a new tab.
     if (name) {
@@ -3029,7 +3013,7 @@ IDE_Morph.prototype.exportProject = function (name, plain) {
                 menu = this.showMessage('Exporting');
                 str = this.serializer.serialize(this.stage)
                 this.setURL('#open:' + dataPrefix + encodeURIComponent(str));
-                this.saveXMLAs(str, name, true);
+                this.saveXMLAs(str, name, newWindow);
                 menu.destroy();
                 this.showMessage('Exported!', 1);
             } catch (err) {
