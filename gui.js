@@ -3027,8 +3027,8 @@ IDE_Morph.prototype.exportProject = function (name, plain) {
             try {
                 menu = this.showMessage('Exporting');
                 str = this.serializer.serialize(this.stage)
-                this.setURL('#open:' + encodeURIComponent(str));
-                this.saveFileAs(str, name);
+                this.setURL('#open:' + dataPrefix + encodeURIComponent(str));
+                this.saveXMLAs(str, name, true);
                 menu.destroy();
                 this.showMessage('Exported!', 1);
             } catch (err) {
@@ -3037,8 +3037,8 @@ IDE_Morph.prototype.exportProject = function (name, plain) {
         } else {
             menu = this.showMessage('Exporting');
             str = this.serializer.serialize(this.stage)
-            this.setURL('#open:' + encodeURIComponent(str));
-            this.saveFileAs(str, name);
+            this.setURL('#open:' + dataPrefix + encodeURIComponent(str));
+            this.saveXMLAs(str, name);
             menu.destroy();
             this.showMessage('Exported!', 1);
         }
