@@ -762,9 +762,13 @@ CustomCommandBlockMorph.prototype.userMenu = function () {
         menu = new MenuMorph(this);
         menu.addItem(
             "script pic...",
-            // TODO: modify this to use saveAs
             function () {
-                window.open(this.topBlock().fullImage().toDataURL());
+                var ide = this.parentThatIsA(IDE_Morph);
+                ide.saveCanvasAs(
+                    this.topBlock().fullImage(),
+                    this.projectName + ' ' + localize('script pic'),
+                    true // request opening a new window
+                );
             },
             'open a new window\nwith a picture of this script'
         );
@@ -784,9 +788,10 @@ CustomCommandBlockMorph.prototype.userMenu = function () {
 };
 
 CustomCommandBlockMorph.prototype.exportBlockDefinition = function () {
-    var xml = new SnapSerializer().serialize(this.definition);
-    // TODO: modify this to use saveAs
-    window.open('data:text/xml,' + encodeURIComponent(xml));
+    var xml = new SnapSerializer().serialize(this.definition),
+        ide = this.parentThatIsA(IDE_Morph);
+
+    ide.saveXMLAs(xml, this.spec);
 };
 
 CustomCommandBlockMorph.prototype.deleteBlockDefinition = function () {
@@ -3328,18 +3333,17 @@ BlockExportDialogMorph.prototype.selectNone = function () {
 // BlockExportDialogMorph ops
 
 BlockExportDialogMorph.prototype.exportBlocks = function () {
-    // TODO: modify this code to use saveAs
-    var str = encodeURIComponent(
-        this.serializer.serialize(this.blocks)
-    );
+    var str = this.serializer.serialize(this.blocks),
+        ide = this.parentThatIsA(IDE_Morph);
     if (this.blocks.length > 0) {
-        window.open('data:text/xml,<blocks app="'
+        str = '<blocks app="'
             + this.serializer.app
             + '" version="'
             + this.serializer.version
             + '">'
             + str
-            + '</blocks>');
+            + '</blocks>';
+        ide.saveXMLAs(str, ide.projectName + ' ' + localize('blocks'));
     } else {
         new DialogBoxMorph().inform(
             'Export blocks',

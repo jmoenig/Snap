@@ -3098,22 +3098,18 @@ IDE_Morph.prototype.removeUnusedBlocks = function () {
     }
 };
 
-// TODO: Fix this and update comment
-// TODO: Add Error handling.
 IDE_Morph.prototype.exportSprite = function (sprite) {
-    var str = encodeURIComponent(
-        this.serializer.serialize(sprite.allParts())
-    );
-    window.open('data:text/xml,<sprites app="'
+    var str = this.serializer.serialize(sprite.allParts());
+    str = '<sprites app="'
         + this.serializer.app
         + '" version="'
         + this.serializer.version
         + '">'
         + str
-        + '</sprites>');
+        + '</sprites>';
+    ide.saveXMLAs(str, sprite);
 };
 
-// TODO: Fix this and update comment
 IDE_Morph.prototype.exportScriptsPicture = function () {
     var pics = [],
         pic,
@@ -3161,10 +3157,9 @@ IDE_Morph.prototype.exportScriptsPicture = function () {
         y += each.height;
     });
 
-    window.open(pic.toDataURL());
+    this.saveCanvasAs(pic, this.projectName, true);
 };
 
-// TODO: Fix this and update comment
 IDE_Morph.prototype.exportProjectSummary = function (useDropShadows) {
     var html, head, meta, css, body, pname, notes, toc, globalVars,
         stage = this.stage;
@@ -3439,9 +3434,12 @@ IDE_Morph.prototype.exportProjectSummary = function (useDropShadows) {
         addBlocks(stage.globalBlocks);
     }
 
-    window.open('data:text/html;charset=utf-8,' + encodeURIComponent(
-        '<!DOCTYPE html>' + html.toString()
-    ));
+    this.saveFileAs(
+        '<!DOCTYPE html>' + html.toString(),
+        'text/html;charset=utf-8,',
+        this.projectName,
+        true // request opening a new window.
+    );
 };
 
 IDE_Morph.prototype.openProjectString = function (str) {
@@ -3654,11 +3652,11 @@ IDE_Morph.prototype.setURL = function (str) {
 IDE_Morph.prototype.saveFileAs = function (
     contents,
     type,
-    fileName, newWindow) {
-    // TODO: handle Process.isCatchingErrors easily?
+    fileName,
+    newWindow
+) {
+    // TODO: handle Process.isCatchingErrors?
     // TODO: Add confirmations
-    // TODO: Properly handle extensions.
-    // TODO: Check for URI encoding?
     var isFileSaverSupported = false,
         fileExt,
         encodedData, world, dlg, errorMessage;
@@ -4469,7 +4467,6 @@ IDE_Morph.prototype.saveProjectToCloud = function (name) {
     }
 };
 
-// TODO: Update this function
 IDE_Morph.prototype.exportProjectMedia = function (name) {
     var menu, media;
     this.serializer.isCollectingMedia = true;
@@ -4478,13 +4475,8 @@ IDE_Morph.prototype.exportProjectMedia = function (name) {
         if (Process.prototype.isCatchingErrors) {
             try {
                 menu = this.showMessage('Exporting');
-                encodeURIComponent(
-                    this.serializer.serialize(this.stage)
-                );
-                media = encodeURIComponent(
-                    this.serializer.mediaXML(name)
-                );
-                window.open('data:text/xml,' + media);
+                media = this.serializer.mediaXML(name);
+                this.saveXMLAs(media, this.projectName + ' media');
                 menu.destroy();
                 this.showMessage('Exported!', 1);
             } catch (err) {
@@ -4493,13 +4485,8 @@ IDE_Morph.prototype.exportProjectMedia = function (name) {
             }
         } else {
             menu = this.showMessage('Exporting');
-            encodeURIComponent(
-                this.serializer.serialize(this.stage)
-            );
-            media = encodeURIComponent(
-                this.serializer.mediaXML()
-            );
-            window.open('data:text/xml,' + media);
+            media = this.serializer.mediaXML();
+            this.saveXMLAs(media, this.projectName + ' media');
             menu.destroy();
             this.showMessage('Exported!', 1);
         }
@@ -4509,7 +4496,6 @@ IDE_Morph.prototype.exportProjectMedia = function (name) {
     // this.hasChangedMedia = false;
 };
 
-// TODO: Update this function
 IDE_Morph.prototype.exportProjectNoMedia = function (name) {
     var menu, str;
     this.serializer.isCollectingMedia = true;
@@ -4518,10 +4504,8 @@ IDE_Morph.prototype.exportProjectNoMedia = function (name) {
         if (Process.prototype.isCatchingErrors) {
             try {
                 menu = this.showMessage('Exporting');
-                str = encodeURIComponent(
-                    this.serializer.serialize(this.stage)
-                );
-                window.open('data:text/xml,' + str);
+                str = this.serializer.serialize(this.stage);
+                this.saveXMLAs(str, this.projectName);
                 menu.destroy();
                 this.showMessage('Exported!', 1);
             } catch (err) {
@@ -4530,10 +4514,8 @@ IDE_Morph.prototype.exportProjectNoMedia = function (name) {
             }
         } else {
             menu = this.showMessage('Exporting');
-            str = encodeURIComponent(
-                this.serializer.serialize(this.stage)
-            );
-            window.open('data:text/xml,' + str);
+            str = this.serializer.serialize(this.stage);
+            this.saveXMLAs(str, this.projectName);
             menu.destroy();
             this.showMessage('Exported!', 1);
         }
@@ -4542,7 +4524,6 @@ IDE_Morph.prototype.exportProjectNoMedia = function (name) {
     this.serializer.flushMedia();
 };
 
-// TODO: Update this function
 IDE_Morph.prototype.exportProjectAsCloudData = function (name) {
     var menu, str, media, dta;
     this.serializer.isCollectingMedia = true;
@@ -4551,17 +4532,10 @@ IDE_Morph.prototype.exportProjectAsCloudData = function (name) {
         if (Process.prototype.isCatchingErrors) {
             try {
                 menu = this.showMessage('Exporting');
-                str = encodeURIComponent(
-                    this.serializer.serialize(this.stage)
-                );
-                media = encodeURIComponent(
-                    this.serializer.mediaXML(name)
-                );
-                dta = encodeURIComponent('<snapdata>')
-                    + str
-                    + media
-                    + encodeURIComponent('</snapdata>');
-                window.open('data:text/xml,' + dta);
+                str = this.serializer.serialize(this.stage);
+                media = this.serializer.mediaXML(name);
+                dta = '<snapdata>' + str + media + '</snapdata>';
+                this.saveXMLAs(str, this.projectName);
                 menu.destroy();
                 this.showMessage('Exported!', 1);
             } catch (err) {
@@ -4570,17 +4544,10 @@ IDE_Morph.prototype.exportProjectAsCloudData = function (name) {
             }
         } else {
             menu = this.showMessage('Exporting');
-            str = encodeURIComponent(
-                this.serializer.serialize(this.stage)
-            );
-            media = encodeURIComponent(
-                this.serializer.mediaXML()
-            );
-            dta = encodeURIComponent('<snapdata>')
-                + str
-                + media
-                + encodeURIComponent('</snapdata>');
-            window.open('data:text/xml,' + dta);
+            str = this.serializer.serialize(this.stage);
+            media = this.serializer.mediaXML(name);
+            dta = '<snapdata>' + str + media + '</snapdata>';
+            this.saveXMLAs(str, this.projectName);
             menu.destroy();
             this.showMessage('Exported!', 1);
         }
@@ -5926,7 +5893,6 @@ SpriteIconMorph.prototype.fixLayout = function () {
 
 // SpriteIconMorph menu
 
-// TODO: fix this function
 SpriteIconMorph.prototype.userMenu = function () {
     var menu = new MenuMorph(this),
         myself = this;
@@ -5934,7 +5900,12 @@ SpriteIconMorph.prototype.userMenu = function () {
         menu.addItem(
             'pic...',
             function () {
-                window.open(myself.object.fullImageClassic().toDataURL());
+                var ide = myself.parentThatIsA(IDE_Morph);
+                ide.saveCanvasAs(
+                    myself.object.fullImageClassic(),
+                    this.name,
+                    true
+                );
             },
             'open a new window\nwith a picture of the stage'
         );
@@ -6289,12 +6260,12 @@ CostumeIconMorph.prototype.removeCostume = function () {
     }
 };
 
-// TODO: Modify and fix this
 CostumeIconMorph.prototype.exportCostume = function () {
+    var ide = this.parentThatIsA(IDE_Morph);
     if (this.object instanceof SVG_Costume) {
-        window.open(this.object.contents.src);
+        ide.saveFileAs(this.object.contents.src, 'text/svg', this.name);
     } else { // rastered Costume
-        window.open(this.object.contents.toDataURL());
+        ide.saveCanvasAs(this.object.contents, this.name, true);
     }
 };
 
