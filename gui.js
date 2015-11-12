@@ -3631,23 +3631,22 @@ IDE_Morph.prototype.setURL = function (str) {
 
 // Allow for downloading a file to a disk or open in a new tab.
 // This relies the FileSaver.js library which exports saveAs()
-// See: https://github.com/eligrey/FileSaver.js
-// There are two utility methods saveImageAs and saveXMLAs that should be used
-// over this method, if appropriate.
+// Two utility methods saveImageAs and saveXMLAs that should be used first
 IDE_Morph.prototype.saveFileAs = function (
     contents,
-    type,
+    fileType,
     fileName,
     newWindow
 ) {
+    // newWidow (optional) defaults to false.
     // TODO: handle Process.isCatchingErrors?
     // TODO: Add confirmations
     var isFileSaverSupported = false,
         fileExt,
         encodedData, world, dlg, errorMessage;
 
-    // type is a <kind>/<ext>;<meta> format.
-    fileExt = '.' + type.split('/')[1].split(';')[0]
+    // fileType is a <kind>/<ext>;<meta> format.
+    fileExt = '.' + fileType.split('/')[1].split(';')[0]
     // Error Message Handling
     world = this.world();
     errorMessage = 'Longer Message is coming soon!';
@@ -3664,34 +3663,43 @@ IDE_Morph.prototype.saveFileAs = function (
     function dataURLFormat (text) {
         var hasTypeStr = text.indexOf('data:') === 0;
         if (hasTypeStr) {return text; }
-        return 'data:' + type + ',' + encodeURIComponent(text);
+        return 'data:' + fileType + ',' + encodeURIComponent(text);
     }
 
     try {
-        isFileSaverSupported = !!new Blob;
+        blobIsSupported = !!new Blob;
     } catch (e) {}
 
-    // Force open in a new window, or use as a fallback.
-    // TODO: refactor set newWindow based on isFileSaverSupported
-    if (!isFileSaverSupported || newWindow) {
-        // Prevent crashing errors in Chrome
+    // Simple Case: Download a File
+    if (blobIsSupported) {
+        if (!(contents instanceof Blob)) {
+            contents = new Blob([contents], {type: fileType });
+        }
+        if (newWindow) {
+            // Use the Blob API to open a new widnow
+            // this is a lower memory way to export content out.
+            
+        } else { // download a file and delegate to FileSaver
+            // false: Do not preprend a BOM to the file.
+            saveAs(contents, fileName + fileExt, false);
+        }
+    } else if (newWindow) { // Use the traditional windw.open method.
         encodedData = dataURLFormat(contents);
+        // Detect crashing errors and try to force a download
         if (!exhibitsChomeBug(encodedData)) {
             window.open(encodedData, '_blank');
-        } else if (!newWindow) {
-           // Warn and try to download.
-        } else { // Can't export at all.
-            dlg = new DialogBoxMorph();
-            dlg.inform('Uh oh!', errorMessage, world);
-            // btn = dlg.buttons.children[0];
-            dlg.fixLayout();
-            dlg.drawNew();
+        } else {
+            this.showMessage('forcing a download');
+            this.saveFileAs(contents, fileType, fileName);
         }
-    } else if (!(contents instanceof Blob)){
-        contents = new Blob([contents], {type: type });
+    } else {
+        // Error Case. TODO.
+        dlg = new DialogBoxMorph();
+        dlg.inform('Uh oh!', errorMessage, world);
+        // btn = dlg.buttons.children[0];
+        dlg.fixLayout();
+        dlg.drawNew();
     }
-
-    saveAs(contents, fileName + fileExt, false);
 }
 
 // This helps exporting a canvas as an image
