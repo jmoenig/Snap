@@ -3629,16 +3629,19 @@ IDE_Morph.prototype.setURL = function (str) {
     }
 };
 
-// Allow for downloading a file to a disk or open in a new tab.
-// This relies the FileSaver.js library which exports saveAs()
-// Two utility methods saveImageAs and saveXMLAs that should be used first
+/** Allow for downloading a file to a disk or open in a new tab.
+    This relies the FileSaver.js library which exports saveAs()
+    Two utility methods saveImageAs and saveXMLAs that should be used first.
+    1. Opening a new window uses standard URI encoding.
+    2. downloading a file uses Blobs.
+    - every other combo is unsupposed.
+*/
 IDE_Morph.prototype.saveFileAs = function (
     contents,
     fileType,
     fileName,
-    newWindow
+    newWindow // (optional) defaults to false.
 ) {
-    // newWidow (optional) defaults to false.
     // TODO: Add confirmations
     var blobIsSupported = false,
         fileExt,
@@ -3686,22 +3689,7 @@ IDE_Morph.prototype.saveFileAs = function (
         blobIsSupported = !!new Blob;
     } catch (e) {}
 
-    // Simple Case: Download a File
-    if (blobIsSupported) {
-        if (!(contents instanceof Blob)) {
-            contents = dataURItoBlob(contents, fileType);
-        }
-        if (newWindow) {
-            // Use the Blob API to open a new widnow
-            // this is a lower memory way to export content out.
-            dataURL = URL.createObjectURL(contents);
-            window.open(dataURL, '_blank');
-            URL.revokeObjectURL(dataURL);
-        } else { // download a file and delegate to FileSaver
-            // false: Do not preprend a BOM to the file.
-            saveAs(contents, fileName + fileExt, false);
-        }
-    } else if (newWindow) { // Use the traditional windw.open method.
+    if (newWindow) {
         dataURL = dataURLFormat(contents);
         // Detect crashing errors and try to force a download
         if (!exhibitsChomeBug(dataURL)) {
@@ -3710,6 +3698,13 @@ IDE_Morph.prototype.saveFileAs = function (
             this.showMessage('forcing a download');
             this.saveFileAs(contents, fileType, fileName);
         }
+    } else if (blobIsSupported) {
+        if (!(contents instanceof Blob)) {
+            contents = dataURItoBlob(contents, fileType);
+        }
+        // download a file and delegate to FileSaver
+        // false: Do not preprend a BOM to the file.
+        saveAs(contents, fileName + fileExt, false);
     } else {
         // Error Case. TODO.
         dlg = new DialogBoxMorph();
