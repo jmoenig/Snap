@@ -3639,13 +3639,12 @@ IDE_Morph.prototype.saveFileAs = function (
     newWindow
 ) {
     // newWidow (optional) defaults to false.
-    // TODO: handle Process.isCatchingErrors?
     // TODO: Add confirmations
-    var isFileSaverSupported = false,
+    var blobIsSupported = false,
         fileExt,
-        encodedData, world, dlg, errorMessage;
+        dataURI, world, dlg, errorMessage;
 
-    // fileType is a <kind>/<ext>;<meta> format.
+    // fileType is a <kind>/<ext>;<charset> format.
     fileExt = '.' + fileType.split('/')[1].split(';')[0]
     // Error Message Handling
     world = this.world();
@@ -3660,6 +3659,23 @@ IDE_Morph.prototype.saveFileAs = function (
         return isChrome && isTooLong
     };
 
+    function dataURItoBlob (text, mimeType) {
+        var i,
+            data = text,
+            components = text.split(','),
+            hasTypeStr = text.indexOf('data:') === 0;
+        // Convert to binary data, in format Blob() can use.
+        if (hasTypeStr && components[0].indexOf('base64') > -1) {
+            text = atob(components[1]);
+            data = new Uint8Array(text.length);
+            for (i = 0; i < text.length; i++) {
+                data[i] = text.charCodeAt(i);
+            }
+        }
+
+        return new Blob([data], {type: mimeType });
+    }
+
     function dataURLFormat (text) {
         var hasTypeStr = text.indexOf('data:') === 0;
         if (hasTypeStr) {return text; }
@@ -3673,21 +3689,23 @@ IDE_Morph.prototype.saveFileAs = function (
     // Simple Case: Download a File
     if (blobIsSupported) {
         if (!(contents instanceof Blob)) {
-            contents = new Blob([contents], {type: fileType });
+            contents = dataURItoBlob(contents, fileType);
         }
         if (newWindow) {
             // Use the Blob API to open a new widnow
             // this is a lower memory way to export content out.
-            
+            dataURL = URL.createObjectURL(contents);
+            window.open(dataURL, '_blank');
+            URL.revokeObjectURL(dataURL);
         } else { // download a file and delegate to FileSaver
             // false: Do not preprend a BOM to the file.
             saveAs(contents, fileName + fileExt, false);
         }
     } else if (newWindow) { // Use the traditional windw.open method.
-        encodedData = dataURLFormat(contents);
+        dataURL = dataURLFormat(contents);
         // Detect crashing errors and try to force a download
-        if (!exhibitsChomeBug(encodedData)) {
-            window.open(encodedData, '_blank');
+        if (!exhibitsChomeBug(dataURL)) {
+            window.open(dataURL, '_blank');
         } else {
             this.showMessage('forcing a download');
             this.saveFileAs(contents, fileType, fileName);
