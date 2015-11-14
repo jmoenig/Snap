@@ -6714,6 +6714,7 @@ MenuMorph.prototype.init = function (target, title, environment, fontSize) {
     this.isListContents = false;
     this.hasFocus = false;
     this.selection = null;
+    this.scrollMenu = null;
 
     // initialize inherited properties:
     MenuMorph.uber.init.call(this);
@@ -6924,16 +6925,24 @@ MenuMorph.prototype.popup = function (world, pos) {
     this.drawNew();
     this.setPosition(pos);
     this.addShadow(new Point(2, 2), 80);
-    this.keepWithin(world);
     if (world.activeMenu) {
         world.activeMenu.destroy();
     }
     if (this.items.length < 1 && !this.title) { // don't show empty menus
         return;
     }
+    this.keepVisible(world);
     world.add(this);
     world.activeMenu = this;
     this.world = world; // optionally enable keyboard support
+    if (this.scrollMenu!= null) {
+        this.scrollMenu.world = world;
+        world.add(this.scrollMenu);
+        this.scrollMenu.setPosition(pos);
+        this.scrollMenu.setHeight(this.world.height()-this.scrollMenu.bounds.top());
+        this.scrollMenu.setWidth(this.width());
+        this.scrollMenu.addContents(this);
+    }
     this.fullChanged();
 };
 
@@ -6962,6 +6971,15 @@ MenuMorph.prototype.popUpCenteredInWorld = function (world) {
             this.extent().floorDivideBy(2)
         )
     );
+};
+
+MenuMorph.prototype.keepVisible=function(world){
+    if(this.bounds.bottom()>world.height() && this.scrollMenu==null){
+         var slideColor = new Color(55,55,55);
+         slideColor = slideColor.lighter(30);
+         this.scrollMenu = new ScrollFrameMorph(this.scrollMenu, this.scrollBarSize, slideColor);
+         this.scrollMenu.addContents(this);
+    }
 };
 
 // MenuMorph keyboard accessibility
@@ -7061,6 +7079,9 @@ MenuMorph.prototype.destroy = function () {
         this.world.keyboardReceiver = null;
     }
     MenuMorph.uber.destroy.call(this);
+    if(this.scrollMenu!= null) {
+        this.scrollMenu.destroy();
+    }
 };
 
 // StringMorph /////////////////////////////////////////////////////////
@@ -9578,13 +9599,24 @@ HandMorph.prototype.processMouseDown = function (event) {
     } else {
         morph = this.morphAtPointer();
         if (this.world.activeMenu) {
-            if (!contains(
+            if (this.world.activeMenu.scrollMenu!=null) {
+		if (!contains(
+                    morph.allParents(),
+                    this.world.activeMenu.scrollMenu
+                )) {
+                this.world.activeMenu.destroy();
+                } else {
+		    clearInterval(this.touchHoldTimeout);
+                }
+            } else {
+		if (!contains(
                     morph.allParents(),
                     this.world.activeMenu
                 )) {
                 this.world.activeMenu.destroy();
-            } else {
-                clearInterval(this.touchHoldTimeout);
+                } else {
+                    clearInterval(this.touchHoldTimeout);
+                }
             }
         }
         if (this.world.activeHandle) {
