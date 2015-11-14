@@ -9599,7 +9599,7 @@ HandMorph.prototype.processMouseDown = function (event) {
     } else {
         morph = this.morphAtPointer();
         if (this.world.activeMenu) {
-            if (this.world.activeMenu.scrollMenu!=null) {
+            if (this.world.activeMenu.scrollMenu!= null) {
 		if (!contains(
                     morph.allParents(),
                     this.world.activeMenu.scrollMenu
