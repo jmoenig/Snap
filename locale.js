@@ -221,7 +221,7 @@ SnapTranslator.dict.cs = {
     'translator_e-mail':
         'info@iguru.eu, jan.tomsa.1976@gmail.com',
     'last_changed':
-        '2015-09-23'
+        '2015-11-16'
 };
 
 SnapTranslator.dict.zh = {
