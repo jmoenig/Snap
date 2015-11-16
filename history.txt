@@ -2611,7 +2611,7 @@ new stuff - bulk of 151116
 151030
 ------
 * Blocks: Tweak precision of rendering of transparent “holes”
-* updated Czech translation (remember to integrate from email!)
+* updated Czech translation
 * Morphic: Streamlined nop-stepping
 * Blocks: Let SyntaxElements step (again), for better input slot editing experience
 
@@ -2675,3 +2675,11 @@ new stuff - bulk of 151116
 ++++++++++++++++++++++++++
 end - bulk of 151116
 ++++++++++++++++++++++++++
+
+151116 community contributions
+------
+* new Bulgarian and Romanian translations contributed!
+* fix for IE backspace and tab errors contributed!
+* better resource loading mechanism contributed!
+
+
