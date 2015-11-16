@@ -4098,6 +4098,7 @@ IDE_Morph.prototype.userSetBlocksScale = function () {
             block.drawNew();
             block.setSpec(block.blockSpec);
         });
+        scrpt.changed();
     };
 
     new DialogBoxMorph(
