@@ -10204,14 +10204,12 @@ WorldMorph.prototype.initVirtualKeyboard = function () {
                 myself.keyboardReceiver.processKeyDown(event);
             }
             // supress backspace override
-            if (event.keyIdentifier === 'U+0008' ||
-                    event.keyIdentifier === 'Backspace') {
+            if (event.keyCode === 8) {
                 event.preventDefault();
             }
             // supress tab override and make sure tab gets
             // received by all browsers
-            if (event.keyIdentifier === 'U+0009' ||
-                    event.keyIdentifier === 'Tab') {
+            if (event.keyCode === 9) {
                 if (myself.keyboardReceiver) {
                     myself.keyboardReceiver.processKeyPress(event);
                 }
@@ -10336,21 +10334,19 @@ WorldMorph.prototype.initEventListeners = function () {
                 myself.keyboardReceiver.processKeyDown(event);
             }
             // supress backspace override
-            if (event.keyIdentifier === 'U+0008' ||
-                    event.keyIdentifier === 'Backspace') {
+            if (event.keyCode === 8) {
                 event.preventDefault();
             }
             // supress tab override and make sure tab gets
             // received by all browsers
-            if (event.keyIdentifier === 'U+0009' ||
-                    event.keyIdentifier === 'Tab') {
+            if (event.keyCode === 9) {
                 if (myself.keyboardReceiver) {
                     myself.keyboardReceiver.processKeyPress(event);
                 }
                 event.preventDefault();
             }
             if ((event.ctrlKey || event.metaKey) &&
-                    (event.keyIdentifier !== 'U+0056')) { // allow pasting-in
+                    (event.keyCode !== 86)) { // allow pasting-in
                 event.preventDefault();
             }
         },
