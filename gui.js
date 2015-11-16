@@ -2472,7 +2472,7 @@ IDE_Morph.prototype.projectMenu = function () {
 
     // Utility for creating Costumes, etc menus.
     // loadFunction takes in two parameters: a file URL, and a canonical name
-    function createMediaMenu (mediaType, loadFunction) {
+    function createMediaMenu(mediaType, loadFunction) {
         return function () {
             var names = this.getMediaList(mediaType),
                 mediaMenu = new MenuMorph(
@@ -2488,7 +2488,7 @@ IDE_Morph.prototype.projectMenu = function () {
                 );
             });
             mediaMenu.popup(world, pos);
-        }
+        };
     }
 
     menu = new MenuMorph(this);
@@ -2659,7 +2659,7 @@ IDE_Morph.prototype.projectMenu = function () {
 // Method can be easily overridden if running in a custom location.
 IDE_Morph.prototype.resourceURL = function (folder, file) {
     return folder + '/' + file;
-}
+};
 
 // Return a list of files in a directory based on the contents file
 IDE_Morph.prototype.getMediaList = function (dirname) {
@@ -2695,7 +2695,7 @@ IDE_Morph.prototype.parseResourceFile = function (text) {
         return line.length > 0 && line[0] !== comment;
     }).forEach(function (line) {
         parts = line.split(delimter);
-        parts = parts.map(function (str) { return str.trim() });
+        parts = parts.map(function (str) { return str.trim(); });
 
         if (parts.length < 2) {
             return;
