@@ -2655,14 +2655,14 @@ IDE_Morph.prototype.projectMenu = function () {
     menu.popup(world, pos);
 };
 
-// Give a path a file in subfolders.
-// Method can be easily overridden if running in a custom location.
 IDE_Morph.prototype.resourceURL = function (folder, file) {
+    // Give a path a file in subfolders.
+    // Method can be easily overridden if running in a custom location.
     return folder + '/' + file;
 };
 
-// Return a list of files in a directory based on the contents file
 IDE_Morph.prototype.getMediaList = function (dirname) {
+    // Return a list of files in a directory based on the contents file
     var url, data;
 
     url = this.resourceURL(dirname, dirname.toUpperCase());
@@ -2675,13 +2675,13 @@ IDE_Morph.prototype.getMediaList = function (dirname) {
     return data;
 };
 
-// A Resource File lists all the files that could be loaded in a submenu
-// Examples are libraries/LIBRARIES, Costumes/COSTUMES, etc
-// A File is very simple:
-// A "//" starts a comment line, that is ignored.
-// All lines have 3 fields: file-name, Display Name, Help Text
-// These fields are delimited by tabs.
 IDE_Morph.prototype.parseResourceFile = function (text) {
+    // A Resource File lists all the files that could be loaded in a submenu
+    // Examples are libraries/LIBRARIES, Costumes/COSTUMES, etc
+    // A File is very simple:
+    // A "//" starts a comment line, that is ignored.
+    // All lines have 3 fields: file-name, Display Name, Help Text
+    // These fields are delimited by tabs.
     var parts,
         items = [],
         comment = '//',
