@@ -1701,6 +1701,7 @@ BlockEditorMorph.prototype.init = function (definition, target) {
 
     scripts.add(proto);
     proto.fixBlockColor(null, true);
+    proto.drawNew();
 
     this.definition.scripts.forEach(function (element) {
         block = element.fullCopy();
