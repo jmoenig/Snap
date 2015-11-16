@@ -534,3 +534,14 @@ SnapTranslator.dict.bg = {
         '2015-11-16'
 };
 
+SnapTranslator.dict.ro = {
+    'language_name':
+        'Român',
+    'language_translator':
+        'Cristian Macarascu',
+    'translator_e-mail':
+        '',
+    'last_changed':
+        '2015-10-24'
+};
+
