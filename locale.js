@@ -42,7 +42,7 @@
 
 /*global modules, contains*/
 
-modules.locale = '2015-October-07';
+modules.locale = '2015-November-16';
 
 // Global stuff
 
@@ -123,7 +123,7 @@ SnapTranslator.dict.en = {
     'translator_e-mail':
         'jens@moenig.org',
     'last_changed':
-        '2012-10-16',
+        '2012-11-16',
 
     // long strings look-up only
     'file menu import hint':
@@ -143,7 +143,7 @@ SnapTranslator.dict.en = {
         'It has been saved to your browser\'s downloads folder.',
     'unable to export text':
         'This item could not be exported from Snap!.\n' +
-        'It\'s like that your project may contain a lot of media ' +
+        'It\'s likely that your project may contain a lot of media ' +
         '(sounds and images) or that you are using an older browser.' +
         'Please try using a recent version of Chrome, Firefox, or Safari.'
 };
@@ -229,7 +229,7 @@ SnapTranslator.dict.cs = {
     'translator_e-mail':
         'info@iguru.eu, jan.tomsa.1976@gmail.com',
     'last_changed':
-        '2015-09-23'
+        '2015-11-16'
 };
 
 SnapTranslator.dict.zh = {
@@ -530,3 +530,26 @@ SnapTranslator.dict.hr = {
     'last_changed':
         '2015-09-15'
 };
+
+SnapTranslator.dict.bg = {
+    'language_name':
+        'Български',
+    'language_translator':
+        'Ivan Savov',
+    'translator_e-mail':
+        'ivan.savov@gmail.com',
+    'last_changed':
+        '2015-11-16'
+};
+
+SnapTranslator.dict.ro = {
+    'language_name':
+        'Român',
+    'language_translator':
+        'Cristian Macarascu',
+    'translator_e-mail':
+        '',
+    'last_changed':
+        '2015-10-24'
+};
+
