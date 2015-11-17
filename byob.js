@@ -769,7 +769,7 @@ CustomCommandBlockMorph.prototype.userMenu = function () {
                 var ide = this.parentThatIsA(IDE_Morph);
                 ide.saveCanvasAs(
                     this.topBlock().scriptPic(),
-                    this.projectName + ' ' + localize('script pic'),
+                    ide.projectName + ' ' + localize('script pic'),
                     true // request opening a new window
                 );
             },

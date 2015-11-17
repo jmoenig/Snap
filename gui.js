@@ -3006,11 +3006,12 @@ IDE_Morph.prototype.rawSaveProject = function (name) {
     }
 };
 
-// Export project XML, newWindow opens a new tab if true
-// This is used both for "Save to Disk" and "Export project..."
+
 IDE_Morph.prototype.exportProject = function (name, newWindow, plain) {
+    // Export project XML, newWindow opens a new tab if true
+    // This is used both for "Save to Disk" and "Export project..."
     var menu, str, dataPrefix;
-    // saveXMLAs(x, x, true) tries to open a new tab.
+
     if (name) {
         this.setProjectName(name);
         dataPrefix = 'data:text/' + plain ? 'plain,' : 'xml,';
@@ -3029,7 +3030,7 @@ IDE_Morph.prototype.exportProject = function (name, newWindow, plain) {
             menu = this.showMessage('Exporting');
             str = this.serializer.serialize(this.stage)
             this.setURL('#open:' + dataPrefix + encodeURIComponent(str));
-            this.saveXMLAs(str, name, true);
+            this.saveXMLAs(str, name, newWindow);
             menu.destroy();
             this.showMessage('Exported!', 1);
         }

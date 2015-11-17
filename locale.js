@@ -143,7 +143,7 @@ SnapTranslator.dict.en = {
         'It has been saved to your browser\'s downloads folder.',
     'unable to export text':
         'This item could not be exported from Snap!.\n' +
-        'It\'s like that your project may contain a lot of media ' + 
+        'It\'s like that your project may contain a lot of media ' +
         '(sounds and images) or that you are using an older browser.' +
         'Please try using a recent version of Chrome, Firefox, or Safari.'
 };
