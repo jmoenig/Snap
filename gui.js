@@ -3658,7 +3658,7 @@ IDE_Morph.prototype.saveFileAs = function (
     // This is a workaround for a known Chrome crash with large URLs
     function exhibitsChomeBug(contents) {
         var MAX_LENGTH = 2e6,
-            isChrome  = navigator.userAgent.indexOf('Chrome') !== -1,
+        isChrome  = navigator.userAgent.indexOf('Chrome') !== -1;
         return isChrome && contents.length > MAX_LENGTH;
     }
 
