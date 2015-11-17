@@ -766,16 +766,12 @@ CustomCommandBlockMorph.prototype.userMenu = function () {
         menu.addItem(
             "script pic...",
             function () {
-<<<<<<< HEAD
                 var ide = this.parentThatIsA(IDE_Morph);
                 ide.saveCanvasAs(
-                    this.topBlock().fullImage(),
+                    this.topBlock().scriptPic(),
                     this.projectName + ' ' + localize('script pic'),
                     true // request opening a new window
                 );
-=======
-                window.open(this.topBlock().scriptPic().toDataURL());
->>>>>>> master
             },
             'open a new window\nwith a picture of this script'
         );

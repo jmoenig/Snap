@@ -3627,8 +3627,8 @@ IDE_Morph.prototype.openProject = function (name) {
     }
 };
 
-// Set the URL to a project's XML contents
 IDE_Morph.prototype.setURL = function (str) {
+    // Set the URL to a project's XML contents
     if (this.projectsInURLs) {
         location.hash = str;
     }
@@ -3648,22 +3648,19 @@ IDE_Morph.prototype.saveFileAs = function (
         - every other combo is unsupposed.
     */
     var blobIsSupported = false,
+        world = this.world(),
         fileExt,
-        dataURI, world, dlg;
+        dataURI, dialog;
 
     // fileType is a <kind>/<ext>;<charset> format.
-    fileExt = '.' + fileType.split('/')[1].split(';')[0]
-    // Error Message Handling
-    world = this.world();
+    fileExt = '.' + fileType.split('/')[1].split(';')[0];
 
     // This is a workaround for a known Chrome crash with large URLs
     function exhibitsChomeBug(contents) {
         var MAX_LENGTH = 2e6,
             isChrome  = navigator.userAgent.indexOf('Chrome') !== -1,
-            isTooLong = contents.length > MAX_LENGTH;
-
-        return isChrome && isTooLong
-    };
+        return isChrome && contents.length > MAX_LENGTH;
+    }
 
     function dataURItoBlob(text, mimeType) {
         var i,
@@ -3678,11 +3675,10 @@ IDE_Morph.prototype.saveFileAs = function (
                 data[i] = text.charCodeAt(i);
             }
         }
-
         return new Blob([data], {type: mimeType });
     }
 
-    function dataURLFormat (text) {
+    function dataURLFormat(text) {
         var hasTypeStr = text.indexOf('data:') === 0;
         if (hasTypeStr) {return text; }
         return 'data:' + fileType + ',' + encodeURIComponent(text);
@@ -3693,10 +3689,10 @@ IDE_Morph.prototype.saveFileAs = function (
     } catch (e) {}
 
     if (newWindow) {
-        dataURL = dataURLFormat(contents);
+        dataURI = dataURLFormat(contents);
         // Detect crashing errors - fallback to downloading if necessary
-        if (!exhibitsChomeBug(dataURL)) {
-            window.open(dataURL, fileName);
+        if (!exhibitsChomeBug(dataURI)) {
+            window.open(dataURI, fileName);
         } else {
             // (recursively) call this defauling newWindow to false
             this.showMessage('download to disk text');
@@ -3710,21 +3706,24 @@ IDE_Morph.prototype.saveFileAs = function (
         // false: Do not preprend a BOM to the file.
         saveAs(contents, fileName + fileExt, false);
     } else {
-        // Error Case. TODO.
-        dlg = new DialogBoxMorph();
-        dlg.inform('Uh oh!', 'unable to export text', world);
-        // btn = dlg.buttons.children[0];
-        dlg.fixLayout();
-        dlg.drawNew();
+        dialog = new DialogBoxMorph();
+        dialog.inform(
+            localize('Could not export') + ' ' + fileName,
+            'unable to export text',
+            world
+        );
+        dialog.fixLayout();
+        dialog.drawNew();
     }
 }
 
-// This helps exporting a canvas as an image
-// cavas.toBlob() is only supported in Firefox and IE, but is faster.
 IDE_Morph.prototype.saveCanvasAs = function (canvas, fileName, newWindow) {
-    var myself = this;
-    if (canvas.toBlob) {
-        canvas.toBlob(function(blob) {
+    // Export a Canvas object as a PNG image
+    // cavas.toBlob() is only supported in Firefox and IE, but is faster.
+    var myself = this,
+        blobFunction = canvas.toBlob || canvas.msToBlob;
+    if (blobFunction) {
+        canvas[blobFunction](function (blob) {
             this.saveFileAs(blob, 'image/png', fileName, newWindow);
         });
     } else {
@@ -3732,9 +3731,9 @@ IDE_Morph.prototype.saveCanvasAs = function (canvas, fileName, newWindow) {
     }
 }
 
-IDE_Morph.prototype.saveXMLAs = function(text, fileName, newWindow) {
-    var typeTag = 'text/xml;chartset=utf-8';
-    this.saveFileAs(text, typeTag, fileName, newWindow);
+IDE_Morph.prototype.saveXMLAs = function(xml, fileName, newWindow) {
+    // wrapper to saving XML files with a proper type tag.
+    this.saveFileAs(xml, 'text/xml;chartset=utf-8', fileName, newWindow);
 }
 
 IDE_Morph.prototype.switchToUserMode = function () {
