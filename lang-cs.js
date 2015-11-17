@@ -185,7 +185,7 @@ SnapTranslator.dict.cs = {
     'translator_e-mail':
         'info@iguru.eu, jan.tomsa.1976@gmail.com', // optional
     'last_changed':
-        '2015-09-22', // this, too, will appear in the Translators tab
+        '2015-11-16', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -451,19 +451,23 @@ SnapTranslator.dict.cs = {
     'repeat %n %c':
         'opakuj %n krát %c',
     'repeat until %b %c':
-        'opakuj dokud %b %c',
+        'opakuj dokud nenastane %b %c',
     'if %b %c':
         'když %b %c',
     'if %b %c else %c':
         'když %b %c jinak %c',
     'report %s':
         'vrátit %s',
-    'stop block':
-        'zastav blok',
-    'stop script':
-        'zastav skript',
-    'stop all %stop':
-        'zastav vše %stop',
+    'stop %stopChoices':
+        'stop %stopChoices',
+    'all':
+        'vše',
+    'this script':
+        'tento skript',
+    'this block':
+        'tento blok',
+    'stop %stopOthersChoices':
+        'stop %stopOthersChoices',
     'run %cmdRing %inputs':
         'spusť %cmdRing %inputs',
     'launch %cmdRing %inputs':
@@ -471,9 +475,9 @@ SnapTranslator.dict.cs = {
     'call %repRing %inputs':
         'zavolat %repRing %inputs',
     'run %cmdRing w/continuation':
-        'spustit %cmdRing s podmínkou',
+        'spustit %cmdRing s pokračováním',
     'call %cmdRing w/continuation':
-        'zavolat %cmdRing s podmínkou',
+        'zavolat %cmdRing s pokračováním',
     'warp %c':
         'obal %c',
     'when I start as a clone':
@@ -487,9 +491,9 @@ SnapTranslator.dict.cs = {
     'all but this script':
         'vše kromě tohoto skriptu',
     'other scripts in sprite':
-        'ostatní skripty v tomto objektu',
+        'ostatní skripty tohoto objektu',
     'pause all %pause':
-        'zastavit všechny %pause',
+        'zastavit vše %pause',
 
 
     // sensing:
@@ -593,6 +597,8 @@ SnapTranslator.dict.cs = {
         'Vytvoř proměnnou',
     'Variable name':
         'Jméno proměnné',
+    'Script variable name':
+        'Jméno skriptové proměnné',
     'Delete a variable':
         'Smaž proměnnou',
 
@@ -605,19 +611,19 @@ SnapTranslator.dict.cs = {
     'hide variable %var':
         'schovej proměnnou %var',
     'script variables %scriptVars':
-        'Vytvoř seznam %scriptVars',
+        'Vytvoř skriptové proměnné %scriptVars',
 
     // lists:
     'list %exp':
         'seznam %exp',
     '%s in front of %l':
-        '%s v popředí z %l',
+        '%s na začátek %l',
     'item %idx of %l':
-        'položka %idx ze %l',
+        'položka %idx z %l',
     'all but first of %l':
         'vše kromě první položky z %l',
     'length of %l':
-        'velikost %l',
+        'délka %l',
     '%l contains %s':
         '%l obsahuje %s',
     'thing':
@@ -627,9 +633,9 @@ SnapTranslator.dict.cs = {
     'delete %ida of %l':
         'smazat %ida z %l',
     'insert %s at %idx of %l':
-        'vložit %s na %idx v %l',
+        'vložit %s na %idx pozici v %l',
     'replace item %idx of %l with %s':
-        'nahraď prvek %idx v %l za %s',
+        'nahraď položku %idx v %l hodnotou %s',
 
     // other
     'Make a block':
@@ -1192,8 +1198,17 @@ SnapTranslator.dict.cs = {
         'želva',
 
     // graphical effects
+    'brightness':
+        'jas',
     'ghost':
         'duch',
+    'negative':
+        'negativ',
+    'comic':
+        'moaré',
+    'confetti':
+        'barevnost',
+
 
     // keys
     'space':
@@ -1286,6 +1301,10 @@ SnapTranslator.dict.cs = {
     // math functions
     'abs':
         'absolutní hodnota',
+    'ceiling':
+        'zaokrouhlit nahoru',
+    'floor':
+        'zaokrouhlit dolů',
     'sqrt':
         'odmocnina',
     'sin':
@@ -1325,5 +1344,5 @@ SnapTranslator.dict.cs = {
     'last':
         'poslední',
     'any':
-        'jakýkoliv'
+        'kterákoli'
 };

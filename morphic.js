@@ -1052,7 +1052,7 @@
 /*global window, HTMLCanvasElement, getMinimumFontHeight, FileReader, Audio,
 FileList, getBlurredShadowSupport*/
 
-var morphicVersion = '2015-September-23';
+var morphicVersion = '2015-November-16';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = getBlurredShadowSupport(); // check for Chrome-bug
 
@@ -1072,7 +1072,8 @@ var standardSettings = {
     useVirtualKeyboard: true,
     isTouchDevice: false, // turned on by touch events, don't set
     rasterizeSVGs: false,
-    isFlat: false
+    isFlat: false,
+    grabThreshold: 5
 };
 
 var touchScreenSettings = {
@@ -1091,7 +1092,8 @@ var touchScreenSettings = {
     useVirtualKeyboard: true,
     isTouchDevice: false,
     rasterizeSVGs: false,
-    isFlat: false
+    isFlat: false,
+    grabThreshold: 5
 };
 
 var MorphicPreferences = standardSettings;
@@ -2207,7 +2209,10 @@ function Morph() {
 Morph.prototype.init = function (noDraw) {
     Morph.uber.init.call(this);
     this.isMorph = true;
+    this.image = null;
     this.bounds = new Rectangle(0, 0, 50, 40);
+    this.cachedFullImage = null;
+    this.cachedFullBounds = null;
     this.color = new Color(80, 80, 80);
     this.texture = null; // optional url of a fill-image
     this.cachedTexture = null; // internal cache of actual bg image
@@ -2284,9 +2289,7 @@ Morph.prototype.nextSteps = function (arrayOfFunctions) {
     }
 };
 
-Morph.prototype.step = function () {
-    nop();
-};
+Morph.prototype.step = nop;
 
 // Morph accessing - geometry getting:
 
@@ -2412,6 +2415,9 @@ Morph.prototype.silentMoveBy = function (delta) {
     var children = this.children,
         i = children.length;
     this.bounds = this.bounds.translateBy(delta);
+    if (this.cachedFullBounds) {
+        this.cachedFullBounds = this.cachedFullBounds.translateBy(delta);
+    }
     // ugly optimization avoiding forEach()
     for (i; i > 0; i -= 1) {
         children[i - 1].silentMoveBy(delta);
@@ -2533,7 +2539,12 @@ Morph.prototype.scrollIntoView = function () {
 
 // Morph accessing - dimensional changes requiring a complete redraw
 
-Morph.prototype.setExtent = function (aPoint) {
+Morph.prototype.setExtent = function (aPoint, silently) {
+    // silently avoids redrawing the receiver
+    if (silently) {
+        this.silentSetExtent(aPoint);
+        return;
+    }
     if (!aPoint.eq(this.extent())) {
         this.changed();
         this.silentSetExtent(aPoint);
@@ -2640,29 +2651,31 @@ Morph.prototype.drawCachedTexture = function () {
 */
 
 Morph.prototype.drawOn = function (aCanvas, aRect) {
-    var rectangle, area, delta, src, context, w, h, sl, st;
+    var rectangle, area, delta, src, context, w, h, sl, st,
+        pic = this.cachedFullImage || this.image,
+        bounds = this.cachedFullBounds || this.bounds;
     if (!this.isVisible) {
         return null;
     }
-    rectangle = aRect || this.bounds();
-    area = rectangle.intersect(this.bounds);
+    rectangle = aRect || bounds;
+    area = rectangle.intersect(bounds);
     if (area.extent().gt(new Point(0, 0))) {
-        delta = this.position().neg();
+        delta = bounds.position().neg();
         src = area.copy().translateBy(delta);
         context = aCanvas.getContext('2d');
         context.globalAlpha = this.alpha;
 
         sl = src.left();
         st = src.top();
-        w = Math.min(src.width(), this.image.width - sl);
-        h = Math.min(src.height(), this.image.height - st);
+        w = Math.min(src.width(), pic.width - sl);
+        h = Math.min(src.height(), pic.height - st);
 
         if (w < 1 || h < 1) {
             return null;
         }
 
         context.drawImage(
-            this.image,
+            pic,
             sl,
             st,
             w,
@@ -2672,42 +2685,6 @@ Morph.prototype.drawOn = function (aCanvas, aRect) {
             w,
             h
         );
-
-    /* "for debugging purposes:"
-
-        try {
-            context.drawImage(
-                this.image,
-                sl,
-                st,
-                w,
-                h,
-                area.left(),
-                area.top(),
-                w,
-                h
-            );
-        } catch (err) {
-            alert('internal error\n\n' + err
-                + '\n ---'
-                + '\n canvas: ' + aCanvas
-                + '\n canvas.width: ' + aCanvas.width
-                + '\n canvas.height: ' + aCanvas.height
-                + '\n ---'
-                + '\n image: ' + this.image
-                + '\n image.width: ' + this.image.width
-                + '\n image.height: ' + this.image.height
-                + '\n ---'
-                + '\n w: ' + w
-                + '\n h: ' + h
-                + '\n sl: ' + sl
-                + '\n st: ' + st
-                + '\n area.left: ' + area.left()
-                + '\n area.top ' + area.top()
-                );
-        }
-    */
-
     }
 };
 
@@ -2716,8 +2693,9 @@ Morph.prototype.fullDrawOn = function (aCanvas, aRect) {
     if (!this.isVisible) {
         return null;
     }
-    rectangle = aRect || this.fullBounds();
+    rectangle = aRect || this.cachedFullBounds || this.fullBounds();
     this.drawOn(aCanvas, rectangle);
+    if (this.cachedFullImage) {return; }
     this.children.forEach(function (child) {
         child.fullDrawOn(aCanvas, rectangle);
     });
@@ -2911,7 +2889,9 @@ Morph.prototype.fullChanged = function () {
     if (this.trackChanges) {
         var w = this.root();
         if (w instanceof WorldMorph) {
-            w.broken.push(this.fullBounds().spread());
+            w.broken.push(
+                (this.cachedFullBounds || this.fullBounds()).spread()
+            );
         }
     }
 };
@@ -9448,7 +9428,7 @@ function HandMorph(aWorld) {
 // HandMorph initialization:
 
 HandMorph.prototype.init = function (aWorld) {
-    HandMorph.uber.init.call(this);
+    HandMorph.uber.init.call(this, true);
     this.bounds = new Rectangle();
 
     // additional properties:
@@ -9456,6 +9436,7 @@ HandMorph.prototype.init = function (aWorld) {
     this.mouseButton = null;
     this.mouseOverList = [];
     this.morphToGrab = null;
+    this.grabPosition = null;
     this.grabOrigin = null;
     this.temporaries = [];
     this.touchHoldTimeout = null;
@@ -9520,6 +9501,8 @@ HandMorph.prototype.grab = function (aMorph) {
         if (aMorph.prepareToBeGrabbed) {
             aMorph.prepareToBeGrabbed(this);
         }
+        aMorph.cachedFullImage = aMorph.fullImageClassic();
+        aMorph.cachedFullBounds = aMorph.fullBounds();
         this.add(aMorph);
         this.changed();
         if (oldParent && oldParent.reactToGrabOf) {
@@ -9535,6 +9518,8 @@ HandMorph.prototype.drop = function () {
         target = this.dropTargetFor(morphToDrop);
         this.changed();
         target.add(morphToDrop);
+        morphToDrop.cachedFullImage = null;
+        morphToDrop.cachedFullBounds = null;
         morphToDrop.changed();
         morphToDrop.removeShadow();
         this.children = [];
@@ -9545,7 +9530,6 @@ HandMorph.prototype.drop = function () {
         if (target.reactToDropOf) {
             target.reactToDropOf(morphToDrop, this);
         }
-        this.dragOrigin = null;
     }
 };
 
@@ -9572,6 +9556,7 @@ HandMorph.prototype.processMouseDown = function (event) {
     this.destroyTemporaries();
     this.contextMenuEnabled = true;
     this.morphToGrab = null;
+    this.grabPosition = null;
     if (this.children.length !== 0) {
         this.drop();
         this.mouseButton = null;
@@ -9599,6 +9584,7 @@ HandMorph.prototype.processMouseDown = function (event) {
         }
         if (!morph.mouseMove) {
             this.morphToGrab = morph.rootForGrab();
+            this.grabPosition = this.bounds.origin.copy();
         }
         if (event.button === 2 || event.ctrlKey) {
             this.mouseButton = 'right';
@@ -9708,8 +9694,7 @@ HandMorph.prototype.processMouseMove = function (event) {
         mouseOverNew,
         myself = this,
         morph,
-        topMorph,
-        fb;
+        topMorph;
 
     pos = new Point(
         event.pageX - posInDocument.x,
@@ -9733,7 +9718,11 @@ HandMorph.prototype.processMouseMove = function (event) {
         }
 
         // if a morph is marked for grabbing, just grab it
-        if (this.mouseButton === 'left' && this.morphToGrab) {
+        if (this.mouseButton === 'left' &&
+                this.morphToGrab &&
+                (this.grabPosition.distanceTo(this.bounds.origin) >
+                    MorphicPreferences.grabThreshold)) {
+            this.setPosition(this.grabPosition);
             if (this.morphToGrab.isDraggable) {
                 morph = this.morphToGrab;
                 this.grab(morph);
@@ -9747,16 +9736,7 @@ HandMorph.prototype.processMouseMove = function (event) {
                 this.grab(morph);
                 this.grabOrigin = this.morphToGrab.situation();
             }
-            if (morph) {
-                // if the mouse has left its fullBounds, allow to center it
-                fb = morph.fullBounds();
-                if (!fb.containsPoint(pos) &&
-                        morph.isCorrectingOutsideDrag()) {
-                    this.bounds.origin = fb.center();
-                    this.grab(morph);
-                    this.setPosition(pos);
-                }
-            }
+            this.setPosition(pos);
         }
     }
 
@@ -10224,14 +10204,12 @@ WorldMorph.prototype.initVirtualKeyboard = function () {
                 myself.keyboardReceiver.processKeyDown(event);
             }
             // supress backspace override
-            if (event.keyIdentifier === 'U+0008' ||
-                    event.keyIdentifier === 'Backspace') {
+            if (event.keyCode === 8) {
                 event.preventDefault();
             }
             // supress tab override and make sure tab gets
             // received by all browsers
-            if (event.keyIdentifier === 'U+0009' ||
-                    event.keyIdentifier === 'Tab') {
+            if (event.keyCode === 9) {
                 if (myself.keyboardReceiver) {
                     myself.keyboardReceiver.processKeyPress(event);
                 }
@@ -10356,21 +10334,19 @@ WorldMorph.prototype.initEventListeners = function () {
                 myself.keyboardReceiver.processKeyDown(event);
             }
             // supress backspace override
-            if (event.keyIdentifier === 'U+0008' ||
-                    event.keyIdentifier === 'Backspace') {
+            if (event.keyCode === 8) {
                 event.preventDefault();
             }
             // supress tab override and make sure tab gets
             // received by all browsers
-            if (event.keyIdentifier === 'U+0009' ||
-                    event.keyIdentifier === 'Tab') {
+            if (event.keyCode === 9) {
                 if (myself.keyboardReceiver) {
                     myself.keyboardReceiver.processKeyPress(event);
                 }
                 event.preventDefault();
             }
             if ((event.ctrlKey || event.metaKey) &&
-                    (event.keyIdentifier !== 'U+0056')) { // allow pasting-in
+                    (event.keyCode !== 86)) { // allow pasting-in
                 event.preventDefault();
             }
         },

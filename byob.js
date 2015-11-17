@@ -108,7 +108,7 @@ SymbolMorph, isNil, CursorMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2015-October-07';
+modules.byob = '2015-November-16';
 
 // Declarations
 
@@ -148,6 +148,7 @@ function CustomBlockDefinition(spec, receiver) {
 
     // don't serialize (not needed for functionality):
     this.receiver = receiver || null; // for serialization only (pointer)
+    this.editorDimensions = null; // a rectangle, last bounds of the editor
 }
 
 // CustomBlockDefinition instantiating blocks
@@ -405,9 +406,7 @@ function CustomCommandBlockMorph(definition, isProto) {
 CustomCommandBlockMorph.prototype.init = function (definition, isProto) {
     this.definition = definition; // mandatory
     this.isPrototype = isProto || false; // optional
-
-    CustomCommandBlockMorph.uber.init.call(this);
-
+    CustomCommandBlockMorph.uber.init.call(this, true); // silently
     this.category = definition.category;
     this.selector = 'evaluateCustomBlock';
     if (definition) { // needed for de-serializing
@@ -415,7 +414,7 @@ CustomCommandBlockMorph.prototype.init = function (definition, isProto) {
     }
 };
 
-CustomCommandBlockMorph.prototype.refresh = function () {
+CustomCommandBlockMorph.prototype.refresh = function (silently) {
     var def = this.definition,
         newSpec = this.isPrototype ?
                 def.spec : def.blockSpec(),
@@ -429,7 +428,7 @@ CustomCommandBlockMorph.prototype.refresh = function () {
         } else {
             this.fixBlockColor();
         }
-        this.setSpec(newSpec);
+        this.setSpec(newSpec, silently);
         this.fixLabelColor();
         this.restoreInputs(oldInputs);
     } else { // update all input slots' drop-downs
@@ -671,7 +670,7 @@ CustomCommandBlockMorph.prototype.mouseClickLeft = function () {
 };
 
 CustomCommandBlockMorph.prototype.edit = function () {
-    var myself = this, block, hat;
+    var myself = this, editor, block, hat;
 
     if (this.isPrototype) {
         block = this.definition.blockInstance();
@@ -696,7 +695,11 @@ CustomCommandBlockMorph.prototype.edit = function () {
             myself.isInUse()
         );
     } else {
-        new BlockEditorMorph(this.definition, this.receiver()).popUp();
+        Morph.prototype.trackChanges = false;
+        editor = new BlockEditorMorph(this.definition, this.receiver());
+        editor.popUp();
+        Morph.prototype.trackChanges = true;
+        editor.changed();
     }
 };
 
@@ -763,12 +766,16 @@ CustomCommandBlockMorph.prototype.userMenu = function () {
         menu.addItem(
             "script pic...",
             function () {
+<<<<<<< HEAD
                 var ide = this.parentThatIsA(IDE_Morph);
                 ide.saveCanvasAs(
                     this.topBlock().fullImage(),
                     this.projectName + ' ' + localize('script pic'),
                     true // request opening a new window
                 );
+=======
+                window.open(this.topBlock().scriptPic().toDataURL());
+>>>>>>> master
             },
             'open a new window\nwith a picture of this script'
         );
@@ -943,7 +950,7 @@ CustomReporterBlockMorph.prototype.init = function (
     this.definition = definition; // mandatory
     this.isPrototype = isProto || false; // optional
 
-    CustomReporterBlockMorph.uber.init.call(this, isPredicate);
+    CustomReporterBlockMorph.uber.init.call(this, isPredicate, true); // sil.
 
     this.category = definition.category;
     this.selector = 'evaluateCustomBlock';
@@ -953,7 +960,7 @@ CustomReporterBlockMorph.prototype.init = function (
 };
 
 CustomReporterBlockMorph.prototype.refresh = function () {
-    CustomCommandBlockMorph.prototype.refresh.call(this);
+    CustomCommandBlockMorph.prototype.refresh.call(this, true);
     if (!this.isPrototype) {
         this.isPredicate = (this.definition.type === 'predicate');
     }
@@ -1705,6 +1712,7 @@ BlockEditorMorph.prototype.init = function (definition, target) {
 
     scripts.add(proto);
     proto.fixBlockColor(null, true);
+    proto.drawNew();
 
     this.definition.scripts.forEach(function (element) {
         block = element.fullCopy();
@@ -1733,7 +1741,7 @@ BlockEditorMorph.prototype.init = function (definition, target) {
     this.addButton('updateDefinition', 'Apply');
     this.addButton('cancel', 'Cancel');
 
-    this.setExtent(new Point(375, 300));
+    this.setExtent(new Point(375, 300)); // normal initial extent
     this.fixLayout();
     proto.children[0].fixLayout();
     scripts.fixMultiArgs();
@@ -1744,6 +1752,7 @@ BlockEditorMorph.prototype.popUp = function () {
 
     if (world) {
         BlockEditorMorph.uber.popUp.call(this, world);
+        this.setInitialDimensions();
         this.handle = new HandleMorph(
             this,
             280,
@@ -1751,7 +1760,16 @@ BlockEditorMorph.prototype.popUp = function () {
             this.corner,
             this.corner
         );
+        world.keyboardReceiver = null;
     }
+};
+
+BlockEditorMorph.prototype.justDropped = function () {
+    // override the inherited default behavior, which is to
+    // give keyboard focus to dialog boxes, as in this case
+    // we want Snap-global keyboard-shortcuts like ctrl-f
+    // to still work
+    nop();
 };
 
 // BlockEditorMorph ops
@@ -1858,6 +1876,7 @@ BlockEditorMorph.prototype.updateDefinition = function () {
     this.definition.spec = this.prototypeSpec();
     this.definition.declarations = this.prototypeSlots();
     this.definition.scripts = [];
+    this.definition.editorDimensions = this.bounds.copy();
 
     this.body.contents.children.forEach(function (morph) {
         if (morph instanceof PrototypeHatBlockMorph) {
@@ -1933,6 +1952,26 @@ BlockEditorMorph.prototype.prototypeSlots = function () {
 };
 
 // BlockEditorMorph layout
+
+BlockEditorMorph.prototype.setInitialDimensions = function () {
+    var world = this.world(),
+        mex = world.extent().subtract(new Point(this.padding, this.padding)),
+        th = fontHeight(this.titleFontSize) + this.titlePadding * 2,
+        bh = this.buttons.height();
+
+    if (this.definition.editorDimensions) {
+        this.setPosition(this.definition.editorDimensions.origin);
+        this.setExtent(this.definition.editorDimensions.extent().min(mex));
+        this.keepWithin(world);
+        return;
+    }
+    this.setExtent(
+        this.body.contents.extent().add(
+            new Point(this.padding, this.padding + th + bh)
+        ).min(mex)
+    );
+    this.setCenter(this.world().center());
+};
 
 BlockEditorMorph.prototype.fixLayout = function () {
     var th = fontHeight(this.titleFontSize) + this.titlePadding * 2;
