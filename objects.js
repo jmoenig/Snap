@@ -5737,8 +5737,11 @@ StageMorph.prototype.userMenu = function () {
     menu.addItem(
         "pic...",
         function () {
-            // pass a canvas to be opened as a new window.
-            ide.saveCanvasAs(myself.fullImageClassic(), 'stage', true);
+            ide.saveCanvasAs(
+                myself.fullImageClassic(),
+                localize('stage'),
+                true // open as new window
+            );
         },
         'open a new window\nwith a picture of the stage'
     );

@@ -3098,7 +3098,7 @@ IDE_Morph.prototype.exportSprite = function (sprite) {
         + '">'
         + str
         + '</sprites>';
-    ide.saveXMLAs(str, sprite);
+    ide.saveXMLAs(str, sprite.name);
 };
 
 IDE_Morph.prototype.exportScriptsPicture = function () {

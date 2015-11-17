@@ -1852,7 +1852,7 @@ SyntaxElementMorph.prototype.exportPictureWithResult = function (aBubble) {
     ctx.drawImage(scr, 0, pic.height - scr.height);
     ctx.drawImage(bub, scr.width + 2, 0);
     // request to open pic in new window.
-    ide.saveCanvasAs(pic, ide.projetName + ' ' + localize('scrip pic'), true);
+    ide.saveCanvasAs(pic, ide.projetName + ' ' + localize('script pic'), true);
 };
 
 // SyntaxElementMorph code mapping
