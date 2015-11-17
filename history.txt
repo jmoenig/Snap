@@ -2682,4 +2682,6 @@ end - bulk of 151116
 * fix for IE backspace and tab errors contributed!
 * better resource loading mechanism contributed!
 
-
+151117
+------
+* Blocks: fixed a zebra-coloring glitch for BooleanSlotMorph

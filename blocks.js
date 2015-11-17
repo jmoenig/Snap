@@ -156,7 +156,7 @@ DialogBoxMorph, BlockInputFragmentMorph, PrototypeHatBlockMorph, Costume*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2015-November-16';
+modules.blocks = '2015-November-17';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -3153,6 +3153,9 @@ BlockMorph.prototype.fixChildrensBlockColor = function (isForced) {
             morph.fixBlockColor(null, isForced);
         } else if (morph instanceof SyntaxElementMorph) {
             morph.fixBlockColor(myself, isForced);
+            if (morph instanceof BooleanSlotMorph) {
+                morph.drawNew();
+            }
         }
     });
 };
