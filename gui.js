@@ -3141,8 +3141,7 @@ IDE_Morph.prototype.exportScriptsPicture = function () {
         y += padding;
         y += each.height;
     });
-
-    this.saveCanvasAs(pic, this.projectName, true);
+    this.saveCanvasAs(pic, this.ProjectName, true);
 };
 
 IDE_Morph.prototype.exportProjectSummary = function (useDropShadows) {
@@ -3629,32 +3628,30 @@ IDE_Morph.prototype.setURL = function (str) {
     }
 };
 
-/** Allow for downloading a file to a disk or open in a new tab.
-    This relies the FileSaver.js library which exports saveAs()
-    Two utility methods saveImageAs and saveXMLAs that should be used first.
-    1. Opening a new window uses standard URI encoding.
-    2. downloading a file uses Blobs.
-    - every other combo is unsupposed.
-*/
 IDE_Morph.prototype.saveFileAs = function (
     contents,
     fileType,
     fileName,
     newWindow // (optional) defaults to false.
 ) {
-    // TODO: Add confirmations
+    /** Allow for downloading a file to a disk or open in a new tab.
+        This relies the FileSaver.js library which exports saveAs()
+        Two utility methods saveImageAs and saveXMLAs should be used first.
+        1. Opening a new window uses standard URI encoding.
+        2. downloading a file uses Blobs.
+        - every other combo is unsupposed.
+    */
     var blobIsSupported = false,
         fileExt,
-        dataURI, world, dlg, errorMessage;
+        dataURI, world, dlg;
 
     // fileType is a <kind>/<ext>;<charset> format.
     fileExt = '.' + fileType.split('/')[1].split(';')[0]
     // Error Message Handling
     world = this.world();
-    errorMessage = 'Longer Message is coming soon!';
 
     // This is a workaround for a known Chrome crash with large URLs
-    function exhibitsChomeBug (contents) {
+    function exhibitsChomeBug(contents) {
         var MAX_LENGTH = 2e6,
             isChrome  = navigator.userAgent.indexOf('Chrome') !== -1,
             isTooLong = contents.length > MAX_LENGTH;
@@ -3662,7 +3659,7 @@ IDE_Morph.prototype.saveFileAs = function (
         return isChrome && isTooLong
     };
 
-    function dataURItoBlob (text, mimeType) {
+    function dataURItoBlob(text, mimeType) {
         var i,
             data = text,
             components = text.split(','),
@@ -3691,11 +3688,12 @@ IDE_Morph.prototype.saveFileAs = function (
 
     if (newWindow) {
         dataURL = dataURLFormat(contents);
-        // Detect crashing errors and try to force a download
+        // Detect crashing errors - fallback to downloading if necessary
         if (!exhibitsChomeBug(dataURL)) {
-            window.open(dataURL, '_blank');
+            window.open(dataURL, fileName);
         } else {
-            this.showMessage('forcing a download');
+            // (recursively) call this defauling newWindow to false
+            this.showMessage('download to disk text');
             this.saveFileAs(contents, fileType, fileName);
         }
     } else if (blobIsSupported) {
@@ -3708,7 +3706,7 @@ IDE_Morph.prototype.saveFileAs = function (
     } else {
         // Error Case. TODO.
         dlg = new DialogBoxMorph();
-        dlg.inform('Uh oh!', errorMessage, world);
+        dlg.inform('Uh oh!', 'unable to export text', world);
         // btn = dlg.buttons.children[0];
         dlg.fixLayout();
         dlg.drawNew();

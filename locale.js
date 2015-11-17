@@ -137,7 +137,11 @@ SnapTranslator.dict.en = {
             + 'a file on your computer by dropping it here\n',
     'block deletion dialog text':
         'Are you sure you want to delete this\n'
-            + 'custom block and all its instances?'
+            + 'custom block and all its instances?',
+    'download to disk text':
+        'This item could not be opened in a new tab.',
+    'unable to export text':
+        'This item could not be exported from Snap!.'
 };
 
 SnapTranslator.dict.de = {
