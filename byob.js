@@ -3369,9 +3369,8 @@ BlockExportDialogMorph.prototype.selectNone = function () {
 
 BlockExportDialogMorph.prototype.exportBlocks = function () {
     var str = this.serializer.serialize(this.blocks),
-        ide = this.parentThatIsA(IDE_Morph);
-    window.ed = this;
-    console.log(this.prototype);
+        ide = this.world().children[0];
+
     if (this.blocks.length > 0) {
         str = '<blocks app="'
             + this.serializer.app
