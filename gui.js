@@ -3722,9 +3722,8 @@ IDE_Morph.prototype.saveCanvasAs = function (canvas, fileName, newWindow) {
     // Export a Canvas object as a PNG image
     // cavas.toBlob() is only supported in Firefox and IE, but is faster.
     var myself = this,
-        blobFunction = canvas.toBlob || canvas.msToBlob;
-    if (blobFunction) {
-        canvas[blobFunction](function (blob) {
+    if (canvas.toBlob) {
+        canvas.toBlob(function (blob) {
             this.saveFileAs(blob, 'image/png', fileName, newWindow);
         });
     } else {
