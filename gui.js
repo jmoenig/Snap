@@ -3671,8 +3671,9 @@ IDE_Morph.prototype.saveFileAs = function (
         // Convert to binary data, in format Blob() can use.
         if (hasTypeStr && components[0].indexOf('base64') > -1) {
             text = atob(components[1]);
-            data = new Uint8Array(text.length);
-            for (i = 0; i < text.length; i++) {
+            data = new Uint8Array(text.length),
+            i = text.length;
+            while (i--) {
                 data[i] = text.charCodeAt(i);
             }
         }
@@ -3690,10 +3691,19 @@ IDE_Morph.prototype.saveFileAs = function (
     } catch (e) {}
 
     if (newWindow) {
-        dataURI = dataURLFormat(contents);
+        if (contents instanceof Blob) {
+            dataURI = URL.createObjectURL(contents);
+        } else {
+            dataURI = dataURLFormat(contents);
+        }
+
         // Detect crashing errors - fallback to downloading if necessary
         if (!exhibitsChomeBug(dataURI)) {
             window.open(dataURI, fileName);
+            // Blob URIs should be "cleaned up" to reduce memory.
+            if (contents instanceof Blob) {
+                URL.revokeObjectURL(dataURI);
+            }
         } else {
             // (recursively) call this defauling newWindow to false
             this.showMessage('download to disk text');
@@ -3721,10 +3731,10 @@ IDE_Morph.prototype.saveFileAs = function (
 IDE_Morph.prototype.saveCanvasAs = function (canvas, fileName, newWindow) {
     // Export a Canvas object as a PNG image
     // cavas.toBlob() is only supported in Firefox and IE, but is faster.
-    var myself = this,
+    var myself = this;
     if (canvas.toBlob) {
         canvas.toBlob(function (blob) {
-            this.saveFileAs(blob, 'image/png', fileName, newWindow);
+            myself.saveFileAs(blob, 'image/png', fileName, newWindow);
         });
     } else {
         this.saveFileAs(canvas.toDataURL(), 'image/png', fileName, newWindow);
