@@ -51,6 +51,7 @@
         BlockEditorMorph
         BlockExportDialogMorph
         BlockImportDialogMorph
+        BlockRemovalDialogMorph
         InputSlotDialogMorph
         VariableDialogMorph
 
@@ -90,6 +91,7 @@
     VariableDialogMorph
     BlockExportDialogMorph
     BlockImportDialogMorph
+    BlockRemovalDialogMorph
 
 */
 
@@ -106,7 +108,7 @@ SymbolMorph, isNil, CursorMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2015-July-28';
+modules.byob = '2015-November-16';
 
 // Declarations
 
@@ -125,6 +127,7 @@ var VariableDialogMorph;
 var JaggedBlockMorph;
 var BlockExportDialogMorph;
 var BlockImportDialogMorph;
+var BlockRemovalDialogMorph;
 
 // CustomBlockDefinition ///////////////////////////////////////////////
 
@@ -145,6 +148,7 @@ function CustomBlockDefinition(spec, receiver) {
 
     // don't serialize (not needed for functionality):
     this.receiver = receiver || null; // for serialization only (pointer)
+    this.editorDimensions = null; // a rectangle, last bounds of the editor
 }
 
 // CustomBlockDefinition instantiating blocks
@@ -341,6 +345,16 @@ CustomBlockDefinition.prototype.parseSpec = function (spec) {
 // CustomBlockDefinition picturing
 
 CustomBlockDefinition.prototype.scriptsPicture = function () {
+    return this.scriptsModel().scriptsPicture();
+};
+
+CustomBlockDefinition.prototype.sortedElements = function () {
+    return this.scriptsModel().sortedElements();
+};
+
+CustomBlockDefinition.prototype.scriptsModel = function () {
+    // answer a restored scripting area for the sake
+    // of creating script pictures
     var scripts, proto, block, comment;
 
     scripts = new ScriptsMorph();
@@ -372,7 +386,7 @@ CustomBlockDefinition.prototype.scriptsPicture = function () {
     });
     proto.children[0].fixLayout();
     scripts.fixMultiArgs();
-    return scripts.scriptsPicture();
+    return scripts;
 };
 
 // CustomCommandBlockMorph /////////////////////////////////////////////
@@ -392,9 +406,7 @@ function CustomCommandBlockMorph(definition, isProto) {
 CustomCommandBlockMorph.prototype.init = function (definition, isProto) {
     this.definition = definition; // mandatory
     this.isPrototype = isProto || false; // optional
-
-    CustomCommandBlockMorph.uber.init.call(this);
-
+    CustomCommandBlockMorph.uber.init.call(this, true); // silently
     this.category = definition.category;
     this.selector = 'evaluateCustomBlock';
     if (definition) { // needed for de-serializing
@@ -402,7 +414,7 @@ CustomCommandBlockMorph.prototype.init = function (definition, isProto) {
     }
 };
 
-CustomCommandBlockMorph.prototype.refresh = function () {
+CustomCommandBlockMorph.prototype.refresh = function (silently) {
     var def = this.definition,
         newSpec = this.isPrototype ?
                 def.spec : def.blockSpec(),
@@ -416,7 +428,7 @@ CustomCommandBlockMorph.prototype.refresh = function () {
         } else {
             this.fixBlockColor();
         }
-        this.setSpec(newSpec);
+        this.setSpec(newSpec, silently);
         this.fixLabelColor();
         this.restoreInputs(oldInputs);
     } else { // update all input slots' drop-downs
@@ -658,7 +670,7 @@ CustomCommandBlockMorph.prototype.mouseClickLeft = function () {
 };
 
 CustomCommandBlockMorph.prototype.edit = function () {
-    var myself = this, block, hat;
+    var myself = this, editor, block, hat;
 
     if (this.isPrototype) {
         block = this.definition.blockInstance();
@@ -683,7 +695,11 @@ CustomCommandBlockMorph.prototype.edit = function () {
             myself.isInUse()
         );
     } else {
-        new BlockEditorMorph(this.definition, this.receiver()).popUp();
+        Morph.prototype.trackChanges = false;
+        editor = new BlockEditorMorph(this.definition, this.receiver());
+        editor.popUp();
+        Morph.prototype.trackChanges = true;
+        editor.changed();
     }
 };
 
@@ -728,7 +744,16 @@ CustomCommandBlockMorph.prototype.attachTargets = function () {
 CustomCommandBlockMorph.prototype.isInUse = function () {
     // anser true if an instance of my definition is found
     // in any of my receiver's scripts or block definitions
-    return this.receiver().usesBlockInstance(this.definition);
+    var def = this.definition,
+        ide = this.receiver().parentThatIsA(IDE_Morph);
+    if (def.isGlobal && ide) {
+        return ide.sprites.asArray().concat([ide.stage]).some(
+            function (any, idx) {
+                return any.usesBlockInstance(def, false, idx);
+            }
+        );
+    }
+    return this.receiver().usesBlockInstance(def);
 };
 
 // CustomCommandBlockMorph menu:
@@ -741,7 +766,7 @@ CustomCommandBlockMorph.prototype.userMenu = function () {
         menu.addItem(
             "script pic...",
             function () {
-                window.open(this.topBlock().fullImage().toDataURL());
+                window.open(this.topBlock().scriptPic().toDataURL());
             },
             'open a new window\nwith a picture of this script'
         );
@@ -914,7 +939,7 @@ CustomReporterBlockMorph.prototype.init = function (
     this.definition = definition; // mandatory
     this.isPrototype = isProto || false; // optional
 
-    CustomReporterBlockMorph.uber.init.call(this, isPredicate);
+    CustomReporterBlockMorph.uber.init.call(this, isPredicate, true); // sil.
 
     this.category = definition.category;
     this.selector = 'evaluateCustomBlock';
@@ -924,7 +949,7 @@ CustomReporterBlockMorph.prototype.init = function (
 };
 
 CustomReporterBlockMorph.prototype.refresh = function () {
-    CustomCommandBlockMorph.prototype.refresh.call(this);
+    CustomCommandBlockMorph.prototype.refresh.call(this, true);
     if (!this.isPrototype) {
         this.isPredicate = (this.definition.type === 'predicate');
     }
@@ -1676,6 +1701,7 @@ BlockEditorMorph.prototype.init = function (definition, target) {
 
     scripts.add(proto);
     proto.fixBlockColor(null, true);
+    proto.drawNew();
 
     this.definition.scripts.forEach(function (element) {
         block = element.fullCopy();
@@ -1704,7 +1730,7 @@ BlockEditorMorph.prototype.init = function (definition, target) {
     this.addButton('updateDefinition', 'Apply');
     this.addButton('cancel', 'Cancel');
 
-    this.setExtent(new Point(375, 300));
+    this.setExtent(new Point(375, 300)); // normal initial extent
     this.fixLayout();
     proto.children[0].fixLayout();
     scripts.fixMultiArgs();
@@ -1715,6 +1741,7 @@ BlockEditorMorph.prototype.popUp = function () {
 
     if (world) {
         BlockEditorMorph.uber.popUp.call(this, world);
+        this.setInitialDimensions();
         this.handle = new HandleMorph(
             this,
             280,
@@ -1722,7 +1749,16 @@ BlockEditorMorph.prototype.popUp = function () {
             this.corner,
             this.corner
         );
+        world.keyboardReceiver = null;
     }
+};
+
+BlockEditorMorph.prototype.justDropped = function () {
+    // override the inherited default behavior, which is to
+    // give keyboard focus to dialog boxes, as in this case
+    // we want Snap-global keyboard-shortcuts like ctrl-f
+    // to still work
+    nop();
 };
 
 // BlockEditorMorph ops
@@ -1829,6 +1865,7 @@ BlockEditorMorph.prototype.updateDefinition = function () {
     this.definition.spec = this.prototypeSpec();
     this.definition.declarations = this.prototypeSlots();
     this.definition.scripts = [];
+    this.definition.editorDimensions = this.bounds.copy();
 
     this.body.contents.children.forEach(function (morph) {
         if (morph instanceof PrototypeHatBlockMorph) {
@@ -1904,6 +1941,26 @@ BlockEditorMorph.prototype.prototypeSlots = function () {
 };
 
 // BlockEditorMorph layout
+
+BlockEditorMorph.prototype.setInitialDimensions = function () {
+    var world = this.world(),
+        mex = world.extent().subtract(new Point(this.padding, this.padding)),
+        th = fontHeight(this.titleFontSize) + this.titlePadding * 2,
+        bh = this.buttons.height();
+
+    if (this.definition.editorDimensions) {
+        this.setPosition(this.definition.editorDimensions.origin);
+        this.setExtent(this.definition.editorDimensions.extent().min(mex));
+        this.keepWithin(world);
+        return;
+    }
+    this.setExtent(
+        this.body.contents.extent().add(
+            new Point(this.padding, this.padding + th + bh)
+        ).min(mex)
+    );
+    this.setCenter(this.world().center());
+};
 
 BlockEditorMorph.prototype.fixLayout = function () {
     var th = fontHeight(this.titleFontSize) + this.titlePadding * 2;
@@ -3419,4 +3476,97 @@ BlockImportDialogMorph.prototype.importBlocks = function (name) {
 // BlockImportDialogMorph layout
 
 BlockImportDialogMorph.prototype.fixLayout
+    = BlockEditorMorph.prototype.fixLayout;
+
+// BlockRemovalDialogMorph ///////////////////////////////////////////////////
+
+// BlockRemovalDialogMorph inherits from DialogBoxMorph
+// and pseudo-inherits from BlockExportDialogMorph:
+
+BlockRemovalDialogMorph.prototype = new DialogBoxMorph();
+BlockRemovalDialogMorph.prototype.constructor = BlockImportDialogMorph;
+BlockRemovalDialogMorph.uber = DialogBoxMorph.prototype;
+
+// BlockRemovalDialogMorph constants:
+
+BlockRemovalDialogMorph.prototype.key = 'blockRemove';
+
+// BlockRemovalDialogMorph instance creation:
+
+function BlockRemovalDialogMorph(blocks, target) {
+    this.init(blocks, target);
+}
+
+BlockRemovalDialogMorph.prototype.init = function (blocks, target) {
+    var myself = this;
+
+    // additional properties:
+    this.blocks = blocks.slice(0);
+    this.handle = null;
+
+    // initialize inherited properties:
+    BlockExportDialogMorph.uber.init.call(
+        this,
+        target,
+        function () {myself.removeBlocks(); },
+        null // environment
+    );
+
+    // override inherited properites:
+    this.labelString = localize('Remove unused blocks')
+        + (name ? ': ' : '')
+        + name || '';
+    this.createLabel();
+
+    // build contents
+    this.buildContents();
+};
+
+BlockRemovalDialogMorph.prototype.buildContents
+    = BlockExportDialogMorph.prototype.buildContents;
+
+BlockRemovalDialogMorph.prototype.popUp
+    = BlockExportDialogMorph.prototype.popUp;
+
+// BlockRemovalDialogMorph menu
+
+BlockRemovalDialogMorph.prototype.userMenu
+    = BlockExportDialogMorph.prototype.userMenu;
+
+BlockRemovalDialogMorph.prototype.selectAll
+    = BlockExportDialogMorph.prototype.selectAll;
+
+BlockRemovalDialogMorph.prototype.selectNone
+    = BlockExportDialogMorph.prototype.selectNone;
+
+// BlockRemovalDialogMorph ops
+
+BlockRemovalDialogMorph.prototype.removeBlocks = function () {
+    var ide = this.target.parentThatIsA(IDE_Morph);
+    if (!ide) {return; }
+    if (this.blocks.length > 0) {
+        this.blocks.forEach(function (def) {
+            var idx = ide.stage.globalBlocks.indexOf(def);
+            if (idx !== -1) {
+                ide.stage.globalBlocks.splice(idx, 1);
+            }
+        });
+        ide.flushPaletteCache();
+        ide.refreshPalette();
+        ide.showMessage(
+            this.blocks.length + ' ' + localize('unused block(s) removed'),
+            2
+        );
+    } else {
+        new DialogBoxMorph().inform(
+            'Remove unused blocks',
+            'no blocks were selected',
+            this.world()
+        );
+    }
+};
+
+// BlockRemovalDialogMorph layout
+
+BlockRemovalDialogMorph.prototype.fixLayout
     = BlockEditorMorph.prototype.fixLayout;

@@ -66,11 +66,12 @@ ScriptsMorph, isNil, SymbolMorph, BlockExportDialogMorph,
 BlockImportDialogMorph, SnapTranslator, localize, List, InputSlotMorph,
 SnapCloud, Uint8Array, HandleMorph, SVG_Costume, fontHeight, hex_sha512,
 sb, CommentMorph, CommandBlockMorph, BlockLabelPlaceHolderMorph, Audio,
-SpeechBubbleMorph, ScriptFocusMorph*/
+SpeechBubbleMorph, ScriptFocusMorph, XML_Element, WatcherMorph,
+BlockRemovalDialogMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2015-July-28';
+modules.gui = '2015-November-16';
 
 // Declarations
 
@@ -83,16 +84,6 @@ var WardrobeMorph;
 var SoundIconMorph;
 var JukeboxMorph;
 var StageHandleMorph;
-
-// Get the full url without "snap.html"
-var baseURL = (function getPath(location) {
-    var origin, path, slash;
-    path = location.pathname; // starts with a /
-    origin = location.origin; // has no trailing /
-    slash = path.lastIndexOf('/');
-    path = path.slice(0, slash + 1); // keep a trailing /
-    return origin + path;
-}(window.location));
 
 
 // IDE_Morph ///////////////////////////////////////////////////////////
@@ -1653,9 +1644,11 @@ IDE_Morph.prototype.droppedAudio = function (anAudio, name) {
 IDE_Morph.prototype.droppedText = function (aString, name) {
     var lbl = name ? name.split('.')[0] : '';
     if (aString.indexOf('<project') === 0) {
+        location.hash = '';
         return this.openProjectString(aString);
     }
     if (aString.indexOf('<snapdata') === 0) {
+        location.hash = '';
         return this.openCloudDataString(aString);
     }
     if (aString.indexOf('<blocks') === 0) {
@@ -2009,6 +2002,7 @@ IDE_Morph.prototype.userMenu = function () {
 
 IDE_Morph.prototype.snapMenu = function () {
     var menu,
+        myself = this,
         world = this.world();
 
     menu = new MenuMorph(this);
@@ -2017,7 +2011,8 @@ IDE_Morph.prototype.snapMenu = function () {
     menu.addItem(
         'Reference manual',
         function () {
-            window.open('help/SnapManual.pdf', 'SnapReferenceManual');
+            var url = myself.resourceURL('help', 'SnapManual.pdf');
+            window.open(url, 'SnapReferenceManual');
         }
     );
     menu.addItem(
@@ -2224,6 +2219,15 @@ IDE_Morph.prototype.settingsMenu = function () {
         'Stage size...',
         'userSetStageSize'
     );
+    if (shiftClicked) {
+        menu.addItem(
+            'Dragging threshold...',
+            'userSetDragThreshold',
+            'specify the distance the hand has to move\n' +
+                'before it picks up an object',
+            new Color(100, 0, 0)
+        );
+    }
     menu.addLine();
     addPreference(
         'Blurred shadows',
@@ -2466,6 +2470,27 @@ IDE_Morph.prototype.projectMenu = function () {
                 'Costumes' : 'Backgrounds',
         shiftClicked = (world.currentKey === 16);
 
+    // Utility for creating Costumes, etc menus.
+    // loadFunction takes in two parameters: a file URL, and a canonical name
+    function createMediaMenu(mediaType, loadFunction) {
+        return function () {
+            var names = this.getMediaList(mediaType),
+                mediaMenu = new MenuMorph(
+                    myself,
+                    localize('Import') + ' ' + localize(mediaType)
+                );
+
+            names.forEach(function (item) {
+                mediaMenu.addItem(
+                    item.name,
+                    function () {loadFunction(item.file, item.name); },
+                    item.help
+                );
+            });
+            mediaMenu.popup(world, pos);
+        };
+    }
+
     menu = new MenuMorph(this);
     menu.addItem('Project notes...', 'editProjectNotes');
     menu.addLine();
@@ -2533,13 +2558,37 @@ IDE_Morph.prototype.projectMenu = function () {
         shiftClicked ? new Color(100, 0, 0) : null
     );
 
+    if (this.stage.globalBlocks.length) {
+        menu.addItem(
+            'Export blocks...',
+            function () {myself.exportGlobalBlocks(); },
+            'show global custom block definitions as XML' +
+                '\nin a new browser window'
+        );
+        menu.addItem(
+            'Unused blocks...',
+            function () {myself.removeUnusedBlocks(); },
+            'find unused global custom blocks' +
+                '\nand remove their definitions'
+        );
+    }
+
     menu.addItem(
-        'Export blocks...',
-        function () {myself.exportGlobalBlocks(); },
-        'show global custom block definitions as XML\nin a new browser window'
+        'Export summary...',
+        function () {myself.exportProjectSummary(); },
+        'open a new browser browser window\n with a summary of this project'
     );
 
     if (shiftClicked) {
+        menu.addItem(
+            'Export summary with drop-shadows...',
+            function () {myself.exportProjectSummary(true); },
+            'open a new browser browser window' +
+                '\n with a summary of this project' +
+                '\nwith drop-shadows on all pictures.' +
+                '\nnot supported by all browsers',
+            new Color(100, 0, 0)
+        );
         menu.addItem(
             'Export all scripts as pic...',
             function () {myself.exportScriptsPicture(); },
@@ -2553,9 +2602,7 @@ IDE_Morph.prototype.projectMenu = function () {
         'Import tools',
         function () {
             myself.droppedText(
-                myself.getURLsbeOrRelative(
-                    'tools.xml'
-                ),
+                myself.getURL('tools.xml'),
                 'tools'
             );
         },
@@ -2563,46 +2610,22 @@ IDE_Morph.prototype.projectMenu = function () {
     );
     menu.addItem(
         'Libraries...',
-        function () {
-            // read a list of libraries from an external file,
-            var libMenu = new MenuMorph(this, 'Import library'),
-                libUrl = baseURL + 'libraries/' + 'LIBRARIES';
-
-            function loadLib(name) {
-                var url = baseURL + 'libraries/' + name + '.xml';
+        createMediaMenu(
+            'libraries',
+            function loadLib(file, name) {
+                var url = myself.resourceURL('libraries', file);
                 myself.droppedText(myself.getURL(url), name);
             }
-
-            myself.getURL(libUrl).split('\n').forEach(function (line) {
-                if (line.length > 0) {
-                    libMenu.addItem(
-                        line.substring(line.indexOf('\t') + 1),
-                        function () {
-                            loadLib(
-                                line.substring(0, line.indexOf('\t'))
-                            );
-                        }
-                    );
-                }
-            });
-
-            libMenu.popup(world, pos);
-        },
+        ),
         'Select categories of additional blocks to add to this project.'
     );
 
     menu.addItem(
         localize(graphicsName) + '...',
-        function () {
-            var dir = graphicsName,
-                names = myself.getCostumesList(dir),
-                libMenu = new MenuMorph(
-                    myself,
-                    localize('Import') + ' ' + localize(dir)
-                );
-
-            function loadCostume(name) {
-                var url = dir + '/' + name,
+        createMediaMenu(
+            graphicsName,
+            function loadCostume(file, name) {
+                var url = myself.resourceURL(graphicsName, file),
                     img = new Image();
                 img.onload = function () {
                     var canvas = newCanvas(new Point(img.width, img.height));
@@ -2611,73 +2634,83 @@ IDE_Morph.prototype.projectMenu = function () {
                 };
                 img.src = url;
             }
-
-            names.forEach(function (line) {
-                if (line.length > 0) {
-                    libMenu.addItem(
-                        line,
-                        function () {loadCostume(line); }
-                    );
-                }
-            });
-            libMenu.popup(world, pos);
-        },
+        ),
         'Select a costume from the media library'
     );
     menu.addItem(
         localize('Sounds') + '...',
-        function () {
-            var names = this.getCostumesList('Sounds'),
-                libMenu = new MenuMorph(this, 'Import sound');
-
-            function loadSound(name) {
-                var url = 'Sounds/' + name,
+        createMediaMenu(
+            'Sounds',
+            function loadSound(file, name) {
+                var url = myself.resourceURL('Sounds', file),
                     audio = new Audio();
                 audio.src = url;
                 audio.load();
                 myself.droppedAudio(audio, name);
             }
-
-            names.forEach(function (line) {
-                if (line.length > 0) {
-                    libMenu.addItem(
-                        line,
-                        function () {loadSound(line); }
-                    );
-                }
-            });
-            libMenu.popup(world, pos);
-        },
+        ),
         'Select a sound from the media library'
     );
 
     menu.popup(world, pos);
 };
 
-IDE_Morph.prototype.getCostumesList = function (dirname) {
-    var dir,
-        costumes = [];
-
-    dir = this.getURL(dirname);
-    dir.split('\n').forEach(
-        function (line) {
-            var startIdx = line.search(new RegExp('href="[^./?].*"')),
-                endIdx,
-                name;
-
-            if (startIdx > 0) {
-                name = line.substring(startIdx + 6);
-                endIdx = name.search(new RegExp('"'));
-                name = name.substring(0, endIdx);
-                costumes.push(name);
-            }
-        }
-    );
-    costumes.sort(function (x, y) {
-        return x < y ? -1 : 1;
-    });
-    return costumes;
+IDE_Morph.prototype.resourceURL = function (folder, file) {
+    // Give a path a file in subfolders.
+    // Method can be easily overridden if running in a custom location.
+    return folder + '/' + file;
 };
+
+IDE_Morph.prototype.getMediaList = function (dirname) {
+    // Return a list of files in a directory based on the contents file
+    var url, data;
+
+    url = this.resourceURL(dirname, dirname.toUpperCase());
+    data = this.parseResourceFile(this.getURL(url));
+
+    data.sort(function (x, y) {
+        return x.name.toLowerCase() < y.name.toLowerCase() ? -1 : 1;
+    });
+
+    return data;
+};
+
+IDE_Morph.prototype.parseResourceFile = function (text) {
+    // A Resource File lists all the files that could be loaded in a submenu
+    // Examples are libraries/LIBRARIES, Costumes/COSTUMES, etc
+    // A File is very simple:
+    // A "//" starts a comment line, that is ignored.
+    // All lines have 3 fields: file-name, Display Name, Help Text
+    // These fields are delimited by tabs.
+    var parts,
+        items = [],
+        comment = '//',
+        delimter = '\t';
+
+    text = text.split(/\n|\r\n/);
+
+    text.map(function (line) {
+        return line.trim();
+    }).filter(function (line) {
+        return line.length > 0 && line[0] !== comment;
+    }).forEach(function (line) {
+        parts = line.split(delimter);
+        parts = parts.map(function (str) { return str.trim(); });
+
+        if (parts.length < 2) {
+            return;
+        }
+
+        items.push({
+            file: parts[0],
+            name: parts[1],
+            help: parts.length > 2 ? parts[2] : ''
+        });
+    });
+
+    return items;
+};
+
 
 // IDE_Morph menu actions
 
@@ -2686,7 +2719,7 @@ IDE_Morph.prototype.aboutSnap = function () {
         module, btn1, btn2, btn3, btn4, licenseBtn, translatorsBtn,
         world = this.world();
 
-    aboutTxt = 'Snap! 4.0.2\nBuild Your Own Blocks\n\n'
+    aboutTxt = 'Snap! 4.0.3\nBuild Your Own Blocks\n\n'
         + 'Copyright \u24B8 2015 Jens M\u00F6nig and '
         + 'Brian Harvey\n'
         + 'jens@moenig.org, bh@cs.berkeley.edu\n\n'
@@ -3036,6 +3069,44 @@ IDE_Morph.prototype.exportGlobalBlocks = function () {
     }
 };
 
+IDE_Morph.prototype.removeUnusedBlocks = function () {
+    var targets = this.sprites.asArray().concat([this.stage]),
+        globalBlocks = this.stage.globalBlocks,
+        unused = [],
+        isDone = false,
+        found;
+
+    function scan() {
+        return globalBlocks.filter(function (def) {
+            if (contains(unused, def)) {return false; }
+            return targets.every(function (each, trgIdx) {
+                return !(each.usesBlockInstance(def, true, trgIdx, unused));
+            });
+        });
+    }
+
+    while (!isDone) {
+        found = scan();
+        if (found.length) {
+            unused = unused.concat(found);
+        } else {
+            isDone = true;
+        }
+    }
+    if (unused.length > 0) {
+        new BlockRemovalDialogMorph(
+            unused,
+            this.stage
+        ).popUp(this.world());
+    } else {
+        this.inform(
+            'Remove unused blocks',
+            'there are currently no unused\n'
+                + 'global custom blocks in this project'
+        );
+    }
+};
+
 IDE_Morph.prototype.exportSprite = function (sprite) {
     var str = encodeURIComponent(
         this.serializer.serialize(sprite.allParts())
@@ -3097,6 +3168,285 @@ IDE_Morph.prototype.exportScriptsPicture = function () {
     });
 
     window.open(pic.toDataURL());
+};
+
+IDE_Morph.prototype.exportProjectSummary = function (useDropShadows) {
+    var html, head, meta, css, body, pname, notes, toc, globalVars,
+        stage = this.stage;
+
+    function addNode(tag, node, contents) {
+        if (!node) {node = body; }
+        return new XML_Element(tag, contents, node);
+    }
+
+    function add(contents, tag, node) {
+        if (!tag) {tag = 'p'; }
+        if (!node) {node = body; }
+        return new XML_Element(tag, contents, node);
+    }
+
+    function addImage(canvas, node, inline) {
+        if (!node) {node = body; }
+        var para = !inline ? addNode('p', node) : null,
+            pic = addNode('img', para || node);
+        pic.attributes.src = canvas.toDataURL();
+        return pic;
+    }
+
+    function addVariables(varFrame) {
+        var names = varFrame.names().sort(),
+            isFirst = true,
+            ul;
+        if (names.length) {
+            add(localize('Variables'), 'h3');
+            names.forEach(function (name) {
+                /*
+                addImage(
+                    SpriteMorph.prototype.variableBlock(name).scriptPic()
+                );
+                */
+                var watcher, listMorph, li, img;
+
+                if (isFirst) {
+                    ul = addNode('ul');
+                    isFirst = false;
+                }
+                li = addNode('li', ul);
+                watcher = new WatcherMorph(
+                    name,
+                    SpriteMorph.prototype.blockColor.variables,
+                    varFrame,
+                    name
+                );
+                listMorph = watcher.cellMorph.contentsMorph;
+                if (listMorph instanceof ListWatcherMorph) {
+                    listMorph.expand();
+                }
+                img = addImage(watcher.fullImageClassic(), li);
+                img.attributes.class = 'script';
+            });
+        }
+    }
+
+    function addBlocks(definitions) {
+        if (definitions.length) {
+            add(localize('Blocks'), 'h3');
+            SpriteMorph.prototype.categories.forEach(function (category) {
+                var isFirst = true,
+                    ul;
+                definitions.forEach(function (def) {
+                    var li, blockImg;
+                    if (def.category === category) {
+                        if (isFirst) {
+                            add(
+                                localize(
+                                    category[0].toUpperCase().concat(
+                                        category.slice(1)
+                                    )
+                                ),
+                                'h4'
+                            );
+                            ul = addNode('ul');
+                            isFirst = false;
+                        }
+                        li = addNode('li', ul);
+                        blockImg = addImage(
+                            def.templateInstance().scriptPic(),
+                            li
+                        );
+                        blockImg.attributes.class = 'script';
+                        def.sortedElements().forEach(function (script) {
+                            var defImg = addImage(
+                                script instanceof BlockMorph ?
+                                        script.scriptPic()
+                                                : script.fullImageClassic(),
+                                li
+                            );
+                            defImg.attributes.class = 'script';
+                        });
+                    }
+                });
+            });
+        }
+    }
+
+    pname = this.projectName || localize('untitled');
+
+    html = new XML_Element('html');
+    // html.attributes.contenteditable = 'true';
+
+    head = addNode('head', html);
+
+    meta = addNode('meta', head);
+    meta.attributes['http-equiv'] = 'Content-Type';
+    meta.attributes.content = 'text/html; charset=UTF-8';
+
+    if (useDropShadows) {
+        css = 'img {' +
+            'vertical-align: top;' +
+            'filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.5));' +
+            '-webkit-filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.5));' +
+            '-ms-filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.5));' +
+            '}' +
+            '.toc {' +
+            'vertical-align: middle;' +
+            'padding: 2px 1em 2px 1em;' +
+            '}';
+    } else {
+        css = 'img {' +
+            'vertical-align: top;' +
+            '}' +
+            '.toc {' +
+            'vertical-align: middle;' +
+            'padding: 2px 1em 2px 1em;' +
+            '}' +
+            '.sprite {' +
+            'border: 1px solid lightgray;' +
+            '}';
+    }
+    addNode('style', head, css);
+
+    add(pname, 'title', head);
+
+    body = addNode('body', html);
+    add(pname, 'h1');
+
+    /*
+    if (SnapCloud.username) {
+        add(localize('by ') + SnapCloud.username);
+    }
+    */
+    if (location.hash.indexOf('#present:') === 0) {
+        add(location.toString(), 'a', body).attributes.href =
+            location.toString();
+        addImage(
+            stage.thumbnail(stage.dimensions)
+        ).attributes.class = 'sprite';
+        add(this.serializer.app, 'h4');
+    } else {
+        add(this.serializer.app, 'h4');
+        addImage(
+            stage.thumbnail(stage.dimensions)
+        ).attributes.class = 'sprite';
+    }
+
+    // project notes
+    notes = Process.prototype.reportTextSplit(this.projectNotes, 'line');
+    notes.asArray().forEach(
+        function (paragraph) {add(paragraph); }
+    );
+
+    // table of contents
+    add(localize('Contents'), 'h4');
+    toc = addNode('ul');
+
+    // sprites & stage
+    this.sprites.asArray().concat([stage]).forEach(function (sprite) {
+        var tocEntry = addNode('li', toc),
+            scripts = sprite.scripts.sortedElements(),
+            cl = sprite.costumes.length(),
+            pic,
+            ol;
+
+        addNode('hr');
+        addImage(
+            sprite.thumbnail(new Point(40, 40)),
+            tocEntry,
+            true
+        ).attributes.class = 'toc';
+        add(sprite.name, 'a', tocEntry).attributes.href = '#' + sprite.name;
+
+        add(sprite.name, 'h2').attributes.id = sprite.name;
+        // if (sprite instanceof SpriteMorph || sprite.costume) {
+        pic = addImage(
+            sprite.thumbnail(sprite.extent().divideBy(stage.scale))
+        );
+        pic.attributes.class = 'sprite';
+        if (sprite instanceof SpriteMorph) {
+            if (sprite.exemplar) {
+                addImage(
+                    sprite.exemplar.thumbnail(new Point(40, 40)),
+                    add(localize('Kind of') + ' ' + sprite.exemplar.name),
+                    true
+                ).attributes.class = 'toc';
+            }
+            if (sprite.anchor) {
+                addImage(
+                    sprite.anchor.thumbnail(new Point(40, 40)),
+                    add(localize('Part of') + ' ' + sprite.anchor.name),
+                    true
+                ).attributes.class = 'toc';
+            }
+            if (sprite.parts.length) {
+                add(localize('Parts'), 'h3');
+                ol = addNode('ul');
+                sprite.parts.forEach(function (part) {
+                    var li = addNode('li', ol, part.name);
+                    addImage(part.thumbnail(new Point(40, 40)), li, true)
+                        .attributes.class = 'toc';
+                });
+            }
+        }
+
+        // costumes
+        if (cl > 1 || (sprite.getCostumeIdx() !== cl)) {
+            add(localize('Costumes'), 'h3');
+            ol = addNode('ol');
+            sprite.costumes.asArray().forEach(function (costume) {
+                var li = addNode('li', ol, costume.name);
+                addImage(costume.thumbnail(new Point(40, 40)), li, true)
+                    .attributes.class = 'toc';
+            });
+        }
+
+        // sounds
+        if (sprite.sounds.length()) {
+            add(localize('Sounds'), 'h3');
+            ol = addNode('ol');
+            sprite.sounds.asArray().forEach(function (sound) {
+                add(sound.name, 'li', ol);
+            });
+        }
+
+        // variables
+        addVariables(sprite.variables);
+
+        // scripts
+        if (scripts.length) {
+            add(localize('Scripts'), 'h3');
+            scripts.forEach(function (script) {
+                var img = addImage(script instanceof BlockMorph ?
+                        script.scriptPic()
+                                : script.fullImageClassic());
+                img.attributes.class = 'script';
+            });
+        }
+
+        // custom blocks
+        addBlocks(sprite.customBlocks);
+    });
+
+    // globals
+    globalVars = stage.globalVariables();
+    if (Object.keys(globalVars.vars).length || stage.globalBlocks.length) {
+        addNode('hr');
+        add(
+            localize('For all Sprites'),
+            'a',
+            addNode('li', toc)
+        ).attributes.href = '#global';
+        add(localize('For all Sprites'), 'h2').attributes.id = 'global';
+
+        // variables
+        addVariables(globalVars);
+
+        // custom blocks
+        addBlocks(stage.globalBlocks);
+    }
+
+    window.open('data:text/html;charset=utf-8,' + encodeURIComponent(
+        '<!DOCTYPE html>' + html.toString()
+    ));
 };
 
 IDE_Morph.prototype.openProjectString = function (str) {
@@ -3748,6 +4098,7 @@ IDE_Morph.prototype.userSetBlocksScale = function () {
             block.drawNew();
             block.setSpec(block.blockSpec);
         });
+        scrpt.changed();
     };
 
     new DialogBoxMorph(
@@ -3855,6 +4206,29 @@ IDE_Morph.prototype.setStageExtent = function (aPoint) {
         this.fixLayout();
         this.setExtent(world.extent());
     }
+};
+
+// IDE_Morph dragging threshold (internal feature)
+
+IDE_Morph.prototype.userSetDragThreshold = function () {
+    new DialogBoxMorph(
+        this,
+        function (num) {
+            MorphicPreferences.grabThreshold = Math.min(
+                Math.max(+num, 0),
+                200
+            );
+        },
+        this
+    ).prompt(
+        "Dragging threshold",
+        MorphicPreferences.grabThreshold.toString(),
+        this.world(),
+        null, // pic
+        null, // choices
+        null, // read only
+        true // numeric
+    );
 };
 
 // IDE_Morph cloud interface
@@ -4275,7 +4649,7 @@ IDE_Morph.prototype.setCloudURL = function () {
     );
 };
 
-// IDE_Morph synchronous Http data fetching
+// IDE_Morph synchronous HTTP data fetching
 
 IDE_Morph.prototype.getURL = function (url) {
     var request = new XMLHttpRequest(),
@@ -4287,22 +4661,6 @@ IDE_Morph.prototype.getURL = function (url) {
             return request.responseText;
         }
         throw new Error('unable to retrieve ' + url);
-    } catch (err) {
-        myself.showMessage(err);
-        return;
-    }
-};
-
-IDE_Morph.prototype.getURLsbeOrRelative = function (url) {
-    var request = new XMLHttpRequest(),
-        myself = this;
-    try {
-        request.open('GET', baseURL + url, false);
-        request.send();
-        if (request.status === 200) {
-            return request.responseText;
-        }
-        return myself.getURL(url);
     } catch (err) {
         myself.showMessage(err);
         return;
@@ -4730,7 +5088,7 @@ ProjectDialogMorph.prototype.setSource = function (source) {
             }
             myself.edit();
         };
-    } else { // 'examples', 'cloud' is initialized elsewhere
+    } else { // 'examples'; 'cloud' is initialized elsewhere
         this.listField.action = function (item) {
             var src, xml;
             if (item === undefined) {return; }
@@ -4738,7 +5096,7 @@ ProjectDialogMorph.prototype.setSource = function (source) {
                 myself.nameField.setContents(item.name || '');
             }
             src = myself.ide.getURL(
-                baseURL + 'Examples/' + item.name + '.xml'
+                myself.ide.resourceURL('Examples', item.file)
             );
 
             xml = myself.ide.serializer.parse(src);
@@ -4790,33 +5148,7 @@ ProjectDialogMorph.prototype.getLocalProjectList = function () {
 };
 
 ProjectDialogMorph.prototype.getExamplesProjectList = function () {
-    var dir,
-        projects = [];
-        //alert(baseURL);
-
-    dir = this.ide.getURL(baseURL + 'Examples/');
-    dir.split('\n').forEach(
-        function (line) {
-            var startIdx = line.search(new RegExp('href=".*xml"')),
-                endIdx,
-                name,
-                dta;
-            if (startIdx > 0) {
-                endIdx = line.search(new RegExp('.xml'));
-                name = line.substring(startIdx + 6, endIdx);
-                dta = {
-                    name: name,
-                    thumb: null,
-                    notes: null
-                };
-                projects.push(dta);
-            }
-        }
-    );
-    projects = projects.sort(function (x, y) {
-        return x.name.toLowerCase() < y.name.toLowerCase() ? -1 : 1;
-    });
-    return projects;
+    return this.ide.getMediaList('Examples');
 };
 
 ProjectDialogMorph.prototype.installCloudProjectList = function (pl) {
@@ -4913,7 +5245,8 @@ ProjectDialogMorph.prototype.openProject = function () {
     if (this.source === 'cloud') {
         this.openCloudProject(proj);
     } else if (this.source === 'examples') {
-        src = this.ide.getURL(baseURL + 'Examples/' + proj.name + '.xml');
+        // Note "file" is a property of the parseResourceFile function.
+        src = this.ide.getURL(this.ide.resourceURL('Examples', proj.file));
         this.ide.openProjectString(src);
         this.destroy();
     } else { // 'local'
@@ -5121,7 +5454,7 @@ ProjectDialogMorph.prototype.shareProject = function () {
                                     encodeURIComponent(usr.toLowerCase()) +
                                     '&ProjectName=' +
                                     encodeURIComponent(proj.ProjectName);
-                            location.hash = projectId;
+                            location.hash = 'present:' + projectId;
                         }
                     },
                     myself.ide.cloudError()
@@ -5601,12 +5934,17 @@ SpriteIconMorph.prototype.prepareToBeGrabbed = function () {
     var ide = this.parentThatIsA(IDE_Morph),
         idx;
     this.mouseClickLeft(); // select me
+    this.alpha = 0.85;
     if (ide) {
         idx = ide.sprites.asArray().indexOf(this.object);
         ide.sprites.remove(idx + 1);
         ide.createCorral();
         ide.fixLayout();
     }
+};
+
+SpriteIconMorph.prototype.justDropped = function () {
+    this.alpha = 1;
 };
 
 SpriteIconMorph.prototype.wantsDropOf = function (morph) {

@@ -181,11 +181,11 @@ SnapTranslator.dict.cs = {
     'language_name':
         'Česky', // the name as it should appear in the language menu
     'language_translator':
-        'Michal Moc', // your name for the Translators tab
+        'Michal Moc, Jan Tomsa', // your name for the Translators tab
     'translator_e-mail':
-        'info@iguru.eu', // optional
+        'info@iguru.eu, jan.tomsa.1976@gmail.com', // optional
     'last_changed':
-        '2013-03-011', // this, too, will appear in the Translators tab
+        '2015-11-16', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -245,6 +245,8 @@ SnapTranslator.dict.cs = {
     // new sprite button:
     'add a new sprite':
         'přidat nový sprite',
+    'add a new Turtle sprite':
+        'přidat nový sprite želvy',
 
     // tab help
     'costumes tab help':
@@ -416,8 +418,18 @@ SnapTranslator.dict.cs = {
         'Po klepnutí na %greenflag',
     'when %keyHat key pressed':
         'po stisku klávesy %keyHat',
-    'when I am clicked':
-        'po kliknutí na',
+    'when I am %interaction':
+        'když %interaction',
+    'clicked':
+        'na mě kliknou',
+    'pressed':
+        'mě stisknou',
+    'dropped':
+        'mě upustí',
+    'mouse-entered':
+        'na mě najede myš',
+    'mouse-departed':
+        'ze mě sjede myš',
     'when I receive %msgHat':
         'po přijetí zprávy %msgHat',
     'broadcast %msg':
@@ -425,7 +437,11 @@ SnapTranslator.dict.cs = {
     'broadcast %msg and wait':
         'poslat všem %msg a čekat',
     'Message name':
-        'jméno zprávy',
+        'název zprávy',
+    'message':
+        'zpráva',
+    'any message':
+        'jakákoli zpráva',
     'wait %n secs':
         'čekej %n sekund',
     'wait until %b':
@@ -435,19 +451,23 @@ SnapTranslator.dict.cs = {
     'repeat %n %c':
         'opakuj %n krát %c',
     'repeat until %b %c':
-        'opakuj dokud %b %c',
+        'opakuj dokud nenastane %b %c',
     'if %b %c':
         'když %b %c',
     'if %b %c else %c':
         'když %b %c jinak %c',
     'report %s':
         'vrátit %s',
-    'stop block':
-        'zastav blok',
-    'stop script':
-        'zastav skript',
-    'stop all %stop':
-        'zastav vše %stop',
+    'stop %stopChoices':
+        'stop %stopChoices',
+    'all':
+        'vše',
+    'this script':
+        'tento skript',
+    'this block':
+        'tento blok',
+    'stop %stopOthersChoices':
+        'stop %stopOthersChoices',
     'run %cmdRing %inputs':
         'spusť %cmdRing %inputs',
     'launch %cmdRing %inputs':
@@ -455,17 +475,26 @@ SnapTranslator.dict.cs = {
     'call %repRing %inputs':
         'zavolat %repRing %inputs',
     'run %cmdRing w/continuation':
-        'spustit %cmdRing s podmínkou',
+        'spustit %cmdRing s pokračováním',
     'call %cmdRing w/continuation':
-        'zavolat %cmdRing s podmínkou',
+        'zavolat %cmdRing s pokračováním',
     'warp %c':
         'obal %c',
     'when I start as a clone':
         'začít po naklonování',
     'create a clone of %cln':
         'vytvořit klon %cln',
+    'myself':
+        'sama sebe',
     'delete this clone':
         'odstranit klon',
+    'all but this script':
+        'vše kromě tohoto skriptu',
+    'other scripts in sprite':
+        'ostatní skripty tohoto objektu',
+    'pause all %pause':
+        'zastavit vše %pause',
+
 
     // sensing:
     'touching %col ?':
@@ -502,6 +531,16 @@ SnapTranslator.dict.cs = {
         'turbo mód?',
     'set turbo mode to %b':
         'nastavit turbo mód na %b',
+    'current %dates':
+        'aktuální %dates',
+            'year' : 'rok',
+            'month' : 'měsíc',
+            'date' : 'datum',
+            'day of week' : 'den v týdnu',
+            'hour' : 'hodina',
+            'minute' : 'minuta',
+            'second' : 'sekunda',
+            'time in milliseconds' : 'čas v milisekundách',
 
     'filtered for %clr':
         'filtrovaný pro %clr',
@@ -535,6 +574,8 @@ SnapTranslator.dict.cs = {
         'ahoj',
     'world':
         'světe',
+    'split %s by %delim':
+        'rozděl %s podle %delim',
     'letter %n of %s':
         'písmeno %n z %s',
     'length of %s':
@@ -556,6 +597,8 @@ SnapTranslator.dict.cs = {
         'Vytvoř proměnnou',
     'Variable name':
         'Jméno proměnné',
+    'Script variable name':
+        'Jméno skriptové proměnné',
     'Delete a variable':
         'Smaž proměnnou',
 
@@ -568,19 +611,19 @@ SnapTranslator.dict.cs = {
     'hide variable %var':
         'schovej proměnnou %var',
     'script variables %scriptVars':
-        'Vytvoř seznam %scriptVars',
+        'Vytvoř skriptové proměnné %scriptVars',
 
     // lists:
     'list %exp':
         'seznam %exp',
     '%s in front of %l':
-        '%s v popředí z %l',
+        '%s na začátek %l',
     'item %idx of %l':
-        'položka %idx ze %l',
+        'položka %idx z %l',
     'all but first of %l':
-        'vše, ale první z %l',
+        'vše kromě první položky z %l',
     'length of %l':
-        'velikost %l',
+        'délka %l',
     '%l contains %s':
         '%l obsahuje %s',
     'thing':
@@ -590,9 +633,9 @@ SnapTranslator.dict.cs = {
     'delete %ida of %l':
         'smazat %ida z %l',
     'insert %s at %idx of %l':
-        'vložit %s na %idx v %l',
+        'vložit %s na %idx pozici v %l',
     'replace item %idx of %l with %s':
-        'nahraď prvek %idx v %l za %s',
+        'nahraď položku %idx v %l hodnotou %s',
 
     // other
     'Make a block':
@@ -647,10 +690,100 @@ SnapTranslator.dict.cs = {
         'Importovat nástroje',
     'load the official library of\npowerful blocks':
         'nahraje oficialní knihovnu\npokročilých bloků',
+    'Libraries...':
+        'Knihovny...',
+    'Import library':
+        'Importovat knihovnu',
+        
+	  'Select a costume from the media library':
+		    'Vyberte kostým z knihovny médií',
+    'Select a sound from the media library':
+        'Vyberte si zvuk z knihovny médií',
 
+    // cloud menu
+    'Login...':
+        'Přihlásit...',
+    'Signup...':
+        'Vytvořit účet...',
+    'Reset Password...':
+        'Resetovat heslo...',
+
+    'Sign in':
+        'Přihlásit se',
+    'User name:':
+        'Uživatelské jméno:',
+    'Password:':
+        'Heslo:',
+    'stay signed in on this computer\nuntil logging out':
+        'zůstaň přihlášen na tomto počítači\naž do odhlášení',
+    'Reset password':
+        'Resetuj heslo',
+    'Sign up':
+        'Vytvořit účet',
+    'Birth date:':
+        'Datum narození:',
+    'year:':
+        'rok:',
+    'E-mail address:':
+        'E-mailová adresa:',
+    'E-mail address of parent or guardian:':
+        'E-mailová adresa rodiče či opatrovníka:',
+    'Terms of Service...':
+        'Podmínky služby...',
+    'Privacy...':
+        'Politika soukromí...',
+    'I have read and agree\nto the Terms of Service':
+        'Četl jsem a souhlasím s podímkami služby',
+    'January':
+        'leden',
+    'February':
+        'únor',
+    'March':
+        'březen',
+    'April':
+        'duben',
+    'May':
+        'květen',
+    'June':
+        'červen',
+    'July':
+        'červenec',
+    'August':
+        'srpen',
+    'September':
+        'září',
+    'October':
+        'říjen',
+    'November':
+        'listopad',
+    'December':
+        'prosinec',
+    'please fill out\nthis field':
+        'prosím vyplňte\ntoto pole',
+    'please agree to\nthe TOS':
+        'prosím zaškrtněte souhlas\ns Podmínkami služby',
+    'User name must be four\ncharacters or longer':
+        'Uživatelské jméno musí být\ndlouhé alespoň čtyři znaky.',
+    'please provide a valid\nemail address':
+        'Zadejte, prosím, platnou emailovou adresu.',
+    'password must be six\ncharacters or longer':
+        'Heslo musí být dlouhé\nalespoň šest znaků.',
+    'passwords do\nnot match':
+        'Hesla se neshodují.',
+                        
     // settings menu
     'Language...':
         'Jazyk...',
+    'Zoom blocks...':
+        'Velikost bloků...',
+    'Stage size...':
+        'Velikost scény...',
+    'Stage size':
+        'Velikost scény',
+    'Stage width':
+        'Šířka scény',
+    'Stage height':
+        'Výška scény',
     'Blurred shadows':
         'Měkké stíny',
     'uncheck to use solid drop\nshadows and highlights':
@@ -675,6 +808,12 @@ SnapTranslator.dict.cs = {
         'Zaškrtnutím povolit zobrazování typů slotů ve vstupním dialogu',
     'uncheck to use the input\ndialog in short form':
         'odškrtnutí použije vstupní dialogy v krátké formě',
+    'Plain prototype labels':
+        'Prosté nadpisy prototypů',
+    'uncheck to always show (+) symbols\nin block prototype labels':
+        'odškrtněte pro používání symbolů (+) v editoru bloků',
+    'check to hide (+) symbols\nin block prototype labels':
+        'zaškrtněte pro skrytí symbolů (+) v editoru bloků',
     'Virtual keyboard':
         'Virtuální klávesnice',
     'uncheck to disable\nvirtual keyboard support\nfor mobile devices':
@@ -696,9 +835,9 @@ SnapTranslator.dict.cs = {
         'zaškrtnutí zapne zvuk přicvaknutí bloku',
     'Thread safe scripts':
         'Vláknově bezpečné skripty',
-    'uncheck to allow\nscript reentrancy':
+    'uncheck to allow\nscript reentrance':
         'odškrtnutí povolí více vláken',
-    'check to disallow\nscript reentrancy':
+    'check to disallow\nscript reentrance':
         'zaškrtnutí zakáže více vláken',
     'Turbo mode':
         'Turbo mód',
@@ -706,12 +845,42 @@ SnapTranslator.dict.cs = {
         'odškrtnutí spustí skript\nnormální rychlostí',
     'check to prioritize\nscript execution':
         'zaškrtnutí spustí skripty\nzvýšenou rychlostí',
+    'Flat design':
+        'Plochý design',
+    'check for alternative\nGUI design':
+        'zaškrtněte pro alternativní design GUI',
+    'uncheck for default\nGUI design':
+        'odškrtněte pro výchozí design GUI',
+    'Keyboard Editing':
+        'Editace klávesnicí',
+    'uncheck to disable\nkeyboard editing support':
+        'odškrtněte pro vypnutí podpory editace klávesnicí',
+    'check to enable\nkeyboard editing support':
+        'zaškrtněte pro podporu editace klávesnicí',
     'Prefer smooth animations':
         'Zapnout plynulou animaci',
     'uncheck for greater speed\nat variable frame rates':
-        'odškrtnout pro vyšší rychlost',
+        'odškrtněte pro vyšší rychlost',
     'check for smooth, predictable\nanimations across computers':
         'zaškrtněte pro plynulé, předvídatelné\nanimace napříč počítači',
+    'Flat line ends':
+        'Ploché konce čar',
+    'check for flat ends of lines':
+        'zaškrtněte pro ploché konce čar',
+    'uncheck for round ends of lines':
+        'odškrtněte pro zakulacené konce čar',
+    'Codification support':
+        'Podpora kodifikace',
+    'uncheck to disable\nblock to text mapping features':
+        'odškrtněte pro vypnutí funkcí\nmapování bloků na text',
+    'check for block\nto text mapping features':
+        'zaškrtněte pro funkce\nmapování bloků na text',
+    'Inheritance support':
+        'Podpora dědičnosti',
+    'uncheck to disable\nsprite inheritance features':
+        'odškrtněte pro vypnutí funkcí\ndědičnosti spritů',
+    'check for sprite\ninheritance features':
+        'zaškrtněte pro funkce\ndědičnosti spritů',
 
     // inputs
     'with inputs':
@@ -756,8 +925,12 @@ SnapTranslator.dict.cs = {
     // sprites:
     'edit':
         'upravit',
+    'move':
+        'přesunout',
     'export...':
         'export...',
+    'paint a new sprite':
+        'nakreslit nový sprite',
 
       // stage:
     'show all':
@@ -780,6 +953,8 @@ SnapTranslator.dict.cs = {
         'exportovat',
     'rename costume':
         'přejmenovat kostým',
+    'Paint a new costume':
+        'Nakresli nový kostým',
 
     // sounds
     'Play sound':
@@ -809,6 +984,30 @@ SnapTranslator.dict.cs = {
     // help
     'Help':
         'Nápověda',
+
+    // zoom blocks
+    'Zoom blocks':
+        'Velikost bloků',
+    'build':
+        'vytvoř si',
+    'your own':
+        'své vlastní',
+    'blocks':
+        'bloky',
+    'normal (1x)':
+        'normální (1x)',
+    'demo (1.2x)':
+        'demo (1.2x)',
+    'presentation (1.4x)':
+        'prezentace (1.4x)',
+    'big (2x)':
+        'velké (2x)',
+    'huge (4x)':
+        'obrovské (4x)',
+    'giant (8x)':
+        'gigantické (8x)',
+    'monstrous (10x)':
+        'monstrózní (10x)',
 
     // Project Manager
     'Untitled':
@@ -999,8 +1198,17 @@ SnapTranslator.dict.cs = {
         'želva',
 
     // graphical effects
+    'brightness':
+        'jas',
     'ghost':
         'duch',
+    'negative':
+        'negativ',
+    'comic':
+        'moaré',
+    'confetti':
+        'barevnost',
+
 
     // keys
     'space':
@@ -1093,6 +1301,10 @@ SnapTranslator.dict.cs = {
     // math functions
     'abs':
         'absolutní hodnota',
+    'ceiling':
+        'zaokrouhlit nahoru',
+    'floor':
+        'zaokrouhlit dolů',
     'sqrt':
         'odmocnina',
     'sin':
@@ -1132,5 +1344,5 @@ SnapTranslator.dict.cs = {
     'last':
         'poslední',
     'any':
-        'jakýkoliv'
+        'kterákoli'
 };

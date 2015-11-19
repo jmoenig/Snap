@@ -83,7 +83,7 @@ ArgLabelMorph, localize, XML_Element, hex_sha512*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.threads = '2015-July-27';
+modules.threads = '2015-November-16';
 
 var ThreadManager;
 var Process;
@@ -126,6 +126,26 @@ function snapEquals(a, b) {
     }
 
     return x === y;
+}
+
+function invoke(block, timeout) {
+    // exectue the given block synchronously, i.e. without yielding.
+    // if a timeout (in milliseconds) is specified, abort execution
+    // after the timeout has been reached and throw an error.
+    // For debugging purposes only.
+    // Caution: Kids, do not try this at home!
+    // use ThreadManager::startProcess instead
+    var proc = new Process(block),
+        startTime = Date.now();
+    while (proc.isRunning()) {
+        if (timeout && ((Date.now() - startTime) > timeout)) {
+            throw (new Error("a synchronous Snap! script has timed out"));
+        }
+        proc.runStep();
+    }
+    if (block instanceof ReporterBlockMorph) {
+        return proc.homeContext.inputs[0];
+    }
 }
 
 // ThreadManager ///////////////////////////////////////////////////////
@@ -638,7 +658,8 @@ Process.prototype.evaluateInput = function (input) {
             if (contains(
                     [CommandSlotMorph, ReporterSlotMorph],
                     input.constructor
-                ) || (input instanceof CSlotMorph && !input.isStatic)) {
+                ) || (input instanceof CSlotMorph &&
+                        (!input.isStatic || input.isLambda))) {
                 // I know, this still needs yet to be done right....
                 ans = this.reify(ans, new List());
             }
@@ -2115,6 +2136,9 @@ Process.prototype.reportMonadic = function (fname, n) {
     case 'abs':
         result = Math.abs(x);
         break;
+    case 'ceiling':
+        result = Math.ceil(x);
+        break;
     case 'floor':
         result = Math.floor(x);
         break;
@@ -2580,6 +2604,7 @@ Process.prototype.reportContextFor = function (context, otherObj) {
     result.receiver = otherObj;
     if (result.outerContext) {
         result.outerContext = copy(result.outerContext);
+        result.outerContext.variables = copy(result.outerContext.variables);
         result.outerContext.receiver = otherObj;
         result.outerContext.variables.parentFrame = otherObj.variables;
     }
@@ -2632,6 +2657,9 @@ Process.prototype.reportKeyPressed = function (keyString) {
     if (this.homeContext.receiver) {
         stage = this.homeContext.receiver.parentThatIsA(StageMorph);
         if (stage) {
+            if (this.inputOption(keyString) === 'any') {
+                return Object.keys(stage.keysPressed).length > 0;
+            }
             return stage.keysPressed[keyString] !== undefined;
         }
     }
