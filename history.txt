@@ -2685,3 +2685,7 @@ end - bulk of 151116
 151117
 ------
 * Blocks: fixed a zebra-coloring glitch for BooleanSlotMorph
+
+151120
+------
+* Lists: fixed linked lists identity loss when showing watchers

@@ -61,7 +61,7 @@ PushButtonMorph, SyntaxElementMorph, Color, Point, WatcherMorph,
 StringMorph, SpriteMorph, ScrollFrameMorph, CellMorph, ArrowMorph,
 MenuMorph, snapEquals, Morph, isNil, localize, MorphicPreferences*/
 
-modules.lists = '2015-November-16';
+modules.lists = '2015-November-20';
 
 var List;
 var ListWatcherMorph;
@@ -112,7 +112,7 @@ function List(array) {
 }
 
 List.prototype.toString = function () {
-    return 'a List [' + this.asArray() + ']';
+    return 'a List [' + this.length + ' elements]';
 };
 
 // List updating:
