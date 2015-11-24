@@ -40,17 +40,32 @@ Process.prototype.instanceCount = function(countThese)
     var thisObj = this.homeContext.receiver;
 		
     if (thisObj) {
+		var foundObject = null;
         if (this.inputOption(countThese) === 'myself') {
-			while(thisObj.parentSprite)
-				thisObj = thisObj.parentSprite;
-			return thisObj.cloneCount;
+			foundObject = thisObj;
         } else {
-            var thatObj = this.getOtherObject(name, thisObj);
-            if (thatObj) {
-                return thatObj.cloneCount;
-            }
+            foundObject = this.getOtherObject(this.inputOption(countThese), thisObj);
+
+			// getOtherObject might return null.
+			if (!foundObject) {
+				return 0;
+			}
         }
+
+		// Try to get the parent sprite. Theoretically, there should only be 
+		// one level of these, but just in case let's iterate.
+		var loopCatcher = 0;
+		while (loopCatcher < 20 && foundObject.parentSprite) {
+			foundObject = foundObject.parentSprite;
+			loopCatcher++;
+		}
+
+		// Return if possible.
+		if (foundObject.cloneCount) {
+			return foundObject.cloneCount;
+		}
     }
+	return 0;
 }
 
 /*
