@@ -1910,7 +1910,7 @@ SpriteMorph.prototype.nearestObjectToMe = function (otherObjectName) {
 		if (x instanceof SpriteMorph 
 			&& x.parentSprite 
 			&& x.parentSprite.name === otherObjectName
-			&& x !== this)
+			&& x !== myself)
 		{
 			var dx = x.xPosition() - thisX;
 			var dy = x.yPosition() - thisY;
