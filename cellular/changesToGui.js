@@ -415,13 +415,7 @@ SpriteIconMorph.prototype.createDuplicator = function () {
         //Now we make the clones
         for (var i = 0; i<value; i++)
         {
-            var clone = myself.object.createCellularClone();
-            ide.stage.add(clone);
-            clone.setCenter(ide.stage.center());
-            clone.turn(90); // rnd.call(this, 1, 360));
-            clone.setXPosition(rnd.call(this, -220, 220));
-            clone.setYPosition(rnd.call(this, -160, 160));
-            clone.snapToCell();
+			ide.stage.createCellularClone(myself.object);
         }
 
         ide.stage.dirtyEntireStage();

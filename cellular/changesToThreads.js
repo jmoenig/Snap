@@ -51,6 +51,19 @@ Process.prototype.instanceCount = function(countThese)
 				return 0;
 			}
         }
+        // find the corresponding sprite on the stage
+        thatObj = stage.getClosestCellularClone(thisObj.xPosition(), thisObj.yPosition(), name);
+        if (!thatObj) {
+            // check if the sprite in question is currently being
+            // dragged around
+            thatObj = detect(
+                stage.world().hand.children,
+                function (morph) {
+                    return morph instanceof SpriteMorph
+                        && morph.name === name;
+                }
+            );
+        }
 
 		// Try to get the parent sprite. Theoretically, there should only be 
 		// one level of these, but just in case let's iterate.
@@ -80,20 +93,21 @@ Process.prototype.getLastClone = function () {
 
 //When a clone is created, we need to note down the last created clone
 Process.prototype.createClone = function (name) {
-    var thisObj = this.homeContext.receiver,
-        thatObj;
+    var thisObj = this.homeContext.receiver;
 		
 	this.lastCreatedClone = null;
 
     if (!name) {return; }
     if (thisObj) {
-        if (this.inputOption(name) === 'myself') {
+		name = this.inputOption(name);
+        if (name === 'myself') {
             this.lastCreatedClone = thisObj.createClone();
         } else {
-            thatObj = this.getOtherObject(name, thisObj);
-            if (thatObj) {
-                this.lastCreatedClone = thatObj.createClone();
-            }
+			var stage = thisObj.parentThatIsA(StageMorph);
+			var proto = stage.getPrototypeMorphFromName(name);
+			if (proto != null) {
+				this.lastCreatedClone = stage.createCellularClone(proto);
+			}
         }
     }
 };

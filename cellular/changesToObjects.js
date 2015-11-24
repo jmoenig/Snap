@@ -2095,6 +2095,28 @@ StageMorph.prototype.dealWithCellularAddChild = function (aNode) {
     }
 }
 
+StageMorph.prototype.getPrototypeMorphFromName = function(name) {
+    for (var i = 0; i<this.children.length; i++)
+    {
+        var child = this.children[i];
+        if (child.parentSprite == null && child.name == name)
+        {
+			return child;
+        }
+    }
+}
+
+StageMorph.prototype.createCellularClone = function(prototypeMorph) {
+	var clone = prototypeMorph.createCellularClone();
+	this.add(clone);
+	clone.setCenter(this.center());
+	clone.turn(90);
+	clone.setXPosition(Math.random() * 440 - 220);
+	clone.setYPosition(Math.random() * 320 - 160);
+	clone.snapToCell();
+	return clone;
+};
+
 StageMorph.prototype.uberAddChild = StageMorph.prototype.addChild;
 StageMorph.prototype.addChild = function (aNode) {
     var ret = this.uberAddChild(aNode);
