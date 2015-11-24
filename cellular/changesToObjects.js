@@ -2681,7 +2681,14 @@ StageMorph.prototype.snapappsTrueMouseMove = function(point)
                     }
                     if (alpha > 0 && cell != null)
                     {
-                        var newValue = cell.getAttribute(drawAttribute) * (1 - alpha) + this.strokeValue * alpha;
+						var currentValue = cell.getAttribute(drawAttribute);
+						var BLEED = 0.01;
+						var newValue;
+						if (currentValue > this.strokeValue) {
+		                    newValue = Math.max(currentValue * (1 - alpha) + (this.strokeValue - BLEED) * alpha, this.strokeValue);
+						} else {
+		                    newValue = Math.min(currentValue * (1 - alpha) + (this.strokeValue + BLEED) * alpha, this.strokeValue);
+						}
                         cell.setAttribute(drawAttribute, newValue, false);
                     }
                 }
