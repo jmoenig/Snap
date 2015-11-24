@@ -323,6 +323,7 @@ SpriteMorph.prototype.snapappsHookBlockTemplates = function(blocks, block, cat, 
         blocks.push('-');
         blocks.push(block('asObject'));
         blocks.push(block('nearestObject'));
+        blocks.push(block('nearestObjectToMe'));
     }
     else if (cat == 'neighbours')
     {
@@ -802,6 +803,12 @@ SpriteMorph.prototype.addCellularBlocks = function () {
         spec: 'nearest %cln to x: %n y: %n where %predRing',
         defaults: [null, 10, 10, null]
     };
+    SpriteMorph.prototype.blocks.nearestObjectToMe = {
+        type: 'reporter',
+        category: 'objects',
+        spec: 'nearest %cln to myself',
+        defaults: [null]
+    };
     SpriteMorph.prototype.blocks.asObject = {
         type: 'command',
         category: 'objects',
@@ -1107,7 +1114,7 @@ StageMorph.prototype.isNobody = function(x)
 }
 
 SpriteMorph.prototype.setVariable = function(n,v,x) {
-    return this.parentThatIsA(StageMorph).getVariable(n,v,x);
+    return this.parentThatIsA(StageMorph).setVariable(n,v,x);
 }
 StageMorph.prototype.setVariable = function(n,v,x)
 {
@@ -1884,6 +1891,40 @@ StageMorph.prototype.getCellAttributeVisibility = function(name)
     return false;
 }
 
+SpriteMorph.prototype.nearestObjectToMe = function (otherObjectName) {
+	//Get a list of all objects of the type "otherObjectName".
+	if (!otherObjectName) 
+	{ 
+		return null; 
+	}
+	if (otherObjectName == "myself")
+		otherObjectName = this.parentSprite ? this.parentSprite.name : this.name;
+
+	var thisX = this.xPosition();
+	var thisY = this.yPosition();
+
+	var minSqDistance = -1;
+	var closestObject = null;
+	var myself = this;
+	this.parentThatIsA(StageMorph).children.forEach(function (x) {
+		if (x instanceof SpriteMorph 
+			&& x.parentSprite 
+			&& x.parentSprite.name === otherObjectName
+			&& x !== this)
+		{
+			var dx = x.xPosition() - thisX;
+			var dy = x.yPosition() - thisY;
+			var sqDist = dx * dx + dy * dy;
+			if (minSqDistance < 0 || sqDist < minSqDistance) {
+				minSqDistance = sqDist;
+				closestObject = x;
+			}
+		}
+	});
+
+	return closestObject == null ? null : closestObject;
+};
+
 SpriteMorph.prototype.cellularScaler = 1.0;
 
 SpriteMorph.prototype.uberGetScale = SpriteMorph.prototype.getScale;
@@ -2501,14 +2542,36 @@ StageMorph.prototype.drawOn = function (aCanvas, aRect) {
     return retnVal;
 };
 
+// True when the paint brush button is on in the gui
 StageMorph.prototype.drawTool = false;
+
+// True when the mouse has been clicked in the stage.
+StageMorph.prototype.drawToolMouseDrawing = false;
 
 /*
 ** Override the mouseDownLeft callback to enable pen drawing.
 */
+
+StageMorph.prototype.uberMouseLeave = StageMorph.prototype.mouseLeave;
+StageMorph.prototype.mouseLeave = function()
+{
+	this.uberMouseLeave();
+    this.updateQueryText();
+}
+
+StageMorph.prototype.uberMouseClickLeft = StageMorph.prototype.mouseClickLeft;
+StageMorph.prototype.mouseClickLeft = function()
+{
+	this.uberMouseClickLeft();
+
+	this.drawToolMouseDrawing = false;
+}
+
 StageMorph.prototype.uberMouseDownLeft = StageMorph.prototype.mouseDownLeft;
 StageMorph.prototype.mouseDownLeft = function()
 {
+	this.drawToolMouseDrawing = true;
+
     if (this.drawTool)
     {
         var worldhand = this.world().hand;
@@ -2546,17 +2609,12 @@ StageMorph.prototype.updateQueryText = function(screenPoint) {
     ide.cellAttributeQueryText.changed();
 }
 
-StageMorph.prototype.mouseLeave = function()
-{
-    this.updateQueryText();
-}
-
 /*
 ** Override the mouseMove callback to enable pen drawing.
 */
 StageMorph.prototype.snapappsTrueMouseMove = function(point)
 {
-    if (this.drawTool && this.world().hand.mouseButton === "left")
+    if (this.drawTool && this.drawToolMouseDrawing && this.world().hand.mouseButton === "left")
     {
         var drawAttribute = this.parentThatIsA(IDE_Morph).attributeSelector.getValue();
         var previous = this.screenToCellSpaceNullWhenOob(this.previousPoint);

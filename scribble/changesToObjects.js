@@ -415,13 +415,14 @@ SpriteMorph.prototype.addScribbleBlocks = function () {
  * Simply updates the current shape that the spritemorph holds when ever
  * the pen should be updated.
  */
-var override_spriteMorph_prototype_drawLine = SpriteMorph.prototype.drawLine;
+var override_spriteMorph_prototype_moveBy = SpriteMorph.prototype.moveBy;
 
-SpriteMorph.prototype.drawLine = function (start, dest) {
-    override_spriteMorph_prototype_drawLine.call(this, start, dest);
+SpriteMorph.prototype.moveBy = function (delta, justMe) {
+    override_spriteMorph_prototype_moveBy.call(this, delta, justMe);
     
     if (this.currentShape != null)
     {
+		var dest = this.rotationCenter();
         this.currentShape.addPoint(dest.x, dest.y);
     }
 }
