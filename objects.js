@@ -569,6 +569,16 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'pen',
             spec: 'stamp'
         },
+        doStreamCamera: {
+            type: 'command',
+            category: 'pen',
+            spec: 'start streaming from the camera'
+        },
+        doStopCamera: {
+            type: 'command',
+            category: 'pen',
+            spec: 'stop streaming from the camera'
+        },
 
         // Control
         receiveGo: {
@@ -785,6 +795,23 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'predicate',
             category: 'sensing',
             spec: 'color %clr is touching %clr ?'
+        },
+        reportCameraMotion: {
+            only: SpriteMorph,
+            type: 'predicate',
+            category: 'sensing',
+            spec: 'camera motion at my position?'
+        },
+        reportCameraDirection: {
+            only: SpriteMorph,
+            type: 'reporter',
+            category: 'sensing',
+            spec: 'camera motion direction'
+        },
+        reportStreamingCamera: {
+            type: 'predicate',
+            category: 'sensing',
+            spec: 'streaming from the camera?'
         },
         colorFiltered: {
             dev: true,
@@ -1922,6 +1949,10 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('reportTouchingObject'));
         blocks.push(block('reportTouchingColor'));
         blocks.push(block('reportColorIsTouchingColor'));
+        blocks.push('-');
+        blocks.push(block('reportCameraMotion'));
+        blocks.push(block('reportCameraDirection'));
+        blocks.push(block('reportStreamingCamera'));
         blocks.push('-');
         blocks.push(block('doAsk'));
         blocks.push(watcherToggle('getLastAnswer'));
@@ -4711,6 +4742,9 @@ StageMorph.prototype.init = function (globals) {
     this.paletteCache = {}; // not to be serialized (!)
     this.lastAnswer = ''; // last user input, do not persist
     this.activeSounds = []; // do not persist
+    this.streamingCamera = false;
+    this.lastCameraCanvas = null;
+    this.lastCameraMotion = new Point(0, 0);
 
     this.trailsCanvas = null;
     this.isThreadSafe = false;
@@ -5424,6 +5458,9 @@ StageMorph.prototype.blockTemplates = function (category) {
     } else if (cat === 'pen') {
 
         blocks.push(block('clear'));
+        blocks.push('-');
+        blocks.push(block('doStreamCamera'));
+        blocks.push(block('doStopCamera'));
 
     } else if (cat === 'control') {
 
@@ -5480,6 +5517,8 @@ StageMorph.prototype.blockTemplates = function (category) {
 
     } else if (cat === 'sensing') {
 
+        blocks.push(block('reportStreamingCamera'));
+        blocks.push('-');
         blocks.push(block('doAsk'));
         blocks.push(watcherToggle('getLastAnswer'));
         blocks.push(block('getLastAnswer'));
