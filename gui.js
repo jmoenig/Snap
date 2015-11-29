@@ -3995,9 +3995,26 @@ IDE_Morph.prototype.languageMenu = function () {
     menu.popup(world, pos);
 };
 
+var getJSON = function(url) {
+  return new Promise(function(resolve, reject) {
+    var xhr = new XMLHttpRequest();
+    xhr.open('get', url, true);
+    xhr.responseType = 'json';
+    xhr.onload = function() {
+      var status = xhr.status;
+      if (status == 200) {
+        resolve(xhr.response);
+      } else {
+        reject(status);
+      }
+    };
+    xhr.send();
+  });
+};
+
 IDE_Morph.prototype.setLanguage = function (lang, callback) {
     var translation = document.getElementById('language'),
-        src = 'langs/' + lang + '.js',
+        src = 'langs/' + lang + '.json',
         myself = this;
     SnapTranslator.unload();
     if (translation) {
@@ -4008,11 +4025,15 @@ IDE_Morph.prototype.setLanguage = function (lang, callback) {
     }
     translation = document.createElement('script');
     translation.id = 'language';
-    translation.onload = function () {
-        myself.reflectLanguage(lang, callback);
-    };
     document.head.appendChild(translation);
-    translation.src = src;
+    getJSON(src).then(function(response) {
+     translation.innerHTML = "SnapTranslator.dict." + lang + " = " + JSON.stringify(response);
+     myself.reflectLanguage(lang, callback);
+     //alert(Object.keys(response));
+    }, function(error) {
+      console.error("Failed!", error);
+    });
+    //translation.body = JSON.parse(JSON.stringify(getURL(src)));
 };
 
 IDE_Morph.prototype.reflectLanguage = function (lang, callback) {
