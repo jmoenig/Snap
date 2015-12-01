@@ -3654,7 +3654,9 @@ IDE_Morph.prototype.saveFileAs = function (
         dataURI, dialog;
 
     // fileType is a <kind>/<ext>;<charset> format.
-    fileExt = '.' + fileType.split('/')[1].split(';')[0];
+    fileExt = fileType.split('/')[1].split(';')[0];
+    // handle text/plain as a .txt file
+    fileExt = '.' + (fileExt === 'plain' ? 'txt' : fileExt);
 
     // This is a workaround for a known Chrome crash with large URLs
     function exhibitsChomeBug(contents) {
@@ -3690,8 +3692,7 @@ IDE_Morph.prototype.saveFileAs = function (
         blobIsSupported = !!new Blob;
     } catch (e) {}
 
-    if (false) {
-    //if (newWindow) {
+    if (newWindow) {
         // Blob URIs need a custom URL to be displayed in a new window
         if (contents instanceof Blob) {
             dataURI = URL.createObjectURL(contents);

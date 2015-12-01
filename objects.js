@@ -7625,12 +7625,11 @@ WatcherMorph.prototype.userMenu = function () {
             menu.addItem(
                 'export...',
                 function () {
+                    var ide = myself.parentThatIsA(IDE_Morph);
                     ide.saveFileAs(
-                        this.currentValue.toString(),
+                        myself.currentValue.toString(),
                         'text/plain;charset=utf-8',
-                        // TODO: Name!
-                        'variable',
-                        false
+                        myself.getter // variable name
                     );
                 }
             );
