@@ -5421,7 +5421,6 @@ ScriptsMorph.prototype.cleanUp = function () {
 ScriptsMorph.prototype.exportScriptsPicture = function () {
     var pic = this.scriptsPicture(),
         ide = this.world().children[0];
-    console.log(this);
     if (pic) {
         ide.saveCanvasAs(
             pic,

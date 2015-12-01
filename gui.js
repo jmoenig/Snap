@@ -4494,23 +4494,19 @@ IDE_Morph.prototype.exportProjectMedia = function (name) {
     this.serializer.isCollectingMedia = true;
     if (name) {
         this.setProjectName(name);
-        if (Process.prototype.isCatchingErrors) {
-            try {
-                menu = this.showMessage('Exporting');
-                media = this.serializer.mediaXML(name);
-                this.saveXMLAs(media, this.projectName + ' media');
-                menu.destroy();
-                this.showMessage('Exported!', 1);
-            } catch (err) {
-                this.serializer.isCollectingMedia = false;
-                this.showMessage('Export failed: ' + err);
-            }
-        } else {
+        try {
             menu = this.showMessage('Exporting');
-            media = this.serializer.mediaXML();
+            media = this.serializer.mediaXML(name);
             this.saveXMLAs(media, this.projectName + ' media');
             menu.destroy();
             this.showMessage('Exported!', 1);
+        } catch (err) {
+            if (Process.prototype.isCatchingErrors) {
+                this.serializer.isCollectingMedia = false;
+                this.showMessage('Export failed: ' + err);
+            } else {
+                throw err;
+            }
         }
     }
     this.serializer.isCollectingMedia = false;
