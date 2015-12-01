@@ -2996,24 +2996,19 @@ IDE_Morph.prototype.exportProject = function (name, plain) {
     if (name) {
         this.setProjectName(name);
         dataPrefix = 'data:text/' + plain ? 'plain,' : 'xml,';
-        if (Process.prototype.isCatchingErrors) {
-            try {
-                menu = this.showMessage('Exporting');
-                str = this.serializer.serialize(this.stage)
-                this.setURL('#open:' + dataPrefix + encodeURIComponent(str));
-                this.saveXMLAs(str, name);
-                menu.destroy();
-                this.showMessage('Exported!', 1);
-            } catch (err) {
-                this.showMessage('Export failed: ' + err);
-            }
-        } else {
+        try {
             menu = this.showMessage('Exporting');
             str = this.serializer.serialize(this.stage)
             this.setURL('#open:' + dataPrefix + encodeURIComponent(str));
             this.saveXMLAs(str, name);
             menu.destroy();
             this.showMessage('Exported!', 1);
+        } catch (err) {
+            if (Process.prototype.isCatchingErrors) {
+                this.showMessage('Export failed: ' + err);
+            } else {
+                throw err;
+            }
         }
     }
 };
