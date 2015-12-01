@@ -5739,7 +5739,7 @@ StageMorph.prototype.userMenu = function () {
         function () {
             ide.saveCanvasAs(
                 myself.fullImageClassic(),
-                localize('stage'),
+                myself.name,
                 true // open as new window
             );
         },
@@ -7628,6 +7628,7 @@ WatcherMorph.prototype.userMenu = function () {
                     ide.saveFileAs(
                         this.currentValue.toString(),
                         'text/plain;charset=utf-8',
+                        // TODO: Name!
                         'variable',
                         false
                     );

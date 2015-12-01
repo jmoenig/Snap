@@ -3099,7 +3099,7 @@ IDE_Morph.prototype.exportSprite = function (sprite) {
         + '">'
         + str
         + '</sprites>';
-    ide.saveXMLAs(str, sprite.name);
+    this.saveXMLAs(str, sprite.name);
 };
 
 IDE_Morph.prototype.exportScriptsPicture = function () {
@@ -3148,7 +3148,7 @@ IDE_Morph.prototype.exportScriptsPicture = function () {
         y += padding;
         y += each.height;
     });
-    this.saveCanvasAs(pic, this.ProjectName, true);
+    this.saveCanvasAs(pic, this.projectName || localize('Untitled'), true);
 };
 
 IDE_Morph.prototype.exportProjectSummary = function (useDropShadows) {
@@ -3690,7 +3690,9 @@ IDE_Morph.prototype.saveFileAs = function (
         blobIsSupported = !!new Blob;
     } catch (e) {}
 
-    if (newWindow) {
+    if (false) {
+    //if (newWindow) {
+        // Blob URIs need a custom URL to be displayed in a new window
         if (contents instanceof Blob) {
             dataURI = URL.createObjectURL(contents);
         } else {
@@ -3730,7 +3732,7 @@ IDE_Morph.prototype.saveFileAs = function (
 
 IDE_Morph.prototype.saveCanvasAs = function (canvas, fileName, newWindow) {
     // Export a Canvas object as a PNG image
-    // cavas.toBlob() is only supported in Firefox and IE, but is faster.
+    // cavas.toBlob() is currently only supported in Firefox and IE
     var myself = this;
     if (canvas.toBlob) {
         canvas.toBlob(function (blob) {
@@ -5905,7 +5907,7 @@ SpriteIconMorph.prototype.userMenu = function () {
                 var ide = myself.parentThatIsA(IDE_Morph);
                 ide.saveCanvasAs(
                     myself.object.fullImageClassic(),
-                    this.name,
+                    this.object.name,
                     true
                 );
             },
@@ -6270,9 +6272,10 @@ CostumeIconMorph.prototype.removeCostume = function () {
 CostumeIconMorph.prototype.exportCostume = function () {
     var ide = this.parentThatIsA(IDE_Morph);
     if (this.object instanceof SVG_Costume) {
-        ide.saveFileAs(this.object.contents.src, 'text/svg', this.name);
-    } else { // rastered Costume
-        ide.saveCanvasAs(this.object.contents, this.name, true);
+        // don't show SVG costumes in a new tab (shows text)
+        ide.saveFileAs(this.object.contents.src, 'text/svg', this.object.name);
+    } else { // rasterized Costume
+        ide.saveCanvasAs(this.object.object.contents, this.object.name, true);
     }
 };
 

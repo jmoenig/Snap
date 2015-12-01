@@ -766,10 +766,11 @@ CustomCommandBlockMorph.prototype.userMenu = function () {
         menu.addItem(
             "script pic...",
             function () {
-                var ide = this.parentThatIsA(IDE_Morph);
+                var ide = this.world().children[0];
                 ide.saveCanvasAs(
                     this.topBlock().scriptPic(),
-                    ide.projectName + ' ' + localize('script pic'),
+                    ide.projectName || localize('Untitled') + ' ' +
+                        localize('script pic'),
                     true // request opening a new window
                 );
             },
@@ -3379,7 +3380,10 @@ BlockExportDialogMorph.prototype.exportBlocks = function () {
             + '">'
             + str
             + '</blocks>';
-        ide.saveXMLAs(str, ide.projectName + ' ' + localize('blocks'));
+        ide.saveXMLAs(
+            str,
+            ide.projectName || localize('Untitled') + ' ' + localize('blocks')
+        );
     } else {
         new DialogBoxMorph().inform(
             'Export blocks',
