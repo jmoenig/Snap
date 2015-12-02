@@ -1,5 +1,6 @@
 #  Snap<em>!</em> _Build Your Own Blocks_
 > a visual, blocks based programming language inspired by [Scratch]
+
 > _[http://snap.berkeley.edu][Snap]_
 
 written by Jens Mönig and Brian Harvey
