@@ -1,7 +1,6 @@
-# Snap<i>!</i> Build Your Own Blocks
-_[http://snap.berkeley.edu][snapsite]_
-
-a visual, blocks based programming language inspired by [Scratch][scratchsite]
+# Snap<i>!</i> _Build Your Own Blocks_
+> a visual, blocks based programming language inspired by [Scratch]
+_[http://snap.berkeley.edu][Snap]_
 
 written by Jens Mönig and Brian Harvey
 jens@moenig.org, bh@cs.berkeley.edu
@@ -23,7 +22,7 @@ There are a few main places the Snap<i>!</i> team hangs around.
 * There is also a [development thread][dev-thread] on the forums.
 
 ## License
-Copyright (C) 2014 by Jens Mönig and Brian Harvey
+Copyright (C) 2015 by Jens Mönig and Brian Harvey
 
 Snap<i>!</i> is free software: you can redistribute it and/or modify
 it under the terms of the GNU Affero General Public License as
@@ -39,8 +38,8 @@ You should have received [a copy](LICENSE.txt) of the GNU Affero General Public 
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-[snapsite]: http://snap.berkeley.edu
-[scratchsite]: http://scratch.mit.edu
+[Snap]: http://snap.berkeley.edu
+[Scratch]: http://scratch.mit.edu
 [run]: http://snap.berkeley.edu/run/
 [gh-issues]: https://github.com/jmoenig/Snap--Build-Your-Own-Blocks/issues
 [user-thread]: http://scratch.mit.edu/discuss/topic/4455

@@ -1,0 +1,187 @@
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{baskervald}  % Default font
+\usepackage[onehalfspacing]{setspace}
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage{textcomp}
+\usepackage[hidelinks, pdfusetitle]{hyperref}
+\usepackage{float}
+\usepackage{ltxcmds}
+\usepackage{fp}
+\usepackage{tikz}
+\usepackage{etoolbox}
+% We frequently prevent page breaks before pictures, and it has a tendency to create a lot of widowed lines. Let's prevent it from happening.
+\usepackage[all]{nowidow}
+\usepackage{wasysym}
+
+\usetikzlibrary{calc}
+\usetikzlibrary{fit}
+
+% This macro produces a "Snap!" logo.
+%
+% Note that in Polish (and other languages), nouns are inflected. The form "Snap!" with suffix looks plain stupid, so the macro takes a suffix as argument. If the suffix is non-empty, no exclamation mark is generated, and the suffix is used instead.
+\newcommand{\Snap}[1]{%
+	\textsf{%
+		Snap%
+		\ifx\\#1\\\textit{!\@}%
+		\else #1%
+		\fi%
+	}%
+}
+
+\newcommand{\code}[1]{\textsf{\textbf{#1}}}
+\makeatletter
+\newcommand{\defaultGraphicsScale}{0.6}
+\makeatother
+
+\renewcommand{\thechapter}{\Roman{chapter}}
+\renewcommand{\thesection}{\Alph{section}}
+\renewcommand{\thesubsection}{}
+
+\makeatletter
+\edef\defaultFontSize{\f@size}
+
+% A dirty hack: Apparently, this is the only way to multiply a length by a constant factor in the code below. What a mess.
+\newdimen\raiseLength
+
+\newcommand{\inlinepicraised}[3]{%
+	{%
+		\FPeval\fontSizeRatio{\f@size / \defaultFontSize}%
+		\FPeval\scale{#3 * \fontSizeRatio}%
+		\raiseLength=#2%
+		\raisebox{\fontSizeRatio\raiseLength}{%
+			\includegraphics[scale=\scale]{#1}%
+		}%
+	}%
+	% Add kerns if the next character is punctuation.
+	\ltx@ifnextchar@nospace.{\,}{%
+		\ltx@ifnextchar@nospace,{\,}{%
+		}%
+	}%
+}
+\makeatother
+
+\newcommand{\inlinepic}[2][\defaultGraphicsScale]{%
+	\inlinepicraised{#2}{-4pt}{#1}%
+}
+
+\newcommand{\inlinereporterpic}[2][\defaultGraphicsScale]{%
+	\inlinepicraised{#2}{-1.5pt}{#1}%
+}
+
+\newcommand{\bigpic}[1]{
+	\begin{figure}[H]
+	\centering
+	\includegraphics[scale=\defaultGraphicsScale]{#1}
+	\end{figure}
+}
+
+\newcommand{\manualtitlepage}[2][]{ {
+	\def\title{#2}
+	\def\translator{#1}
+	
+	\begin{titlepage}
+
+	\pgfdeclarelayer{background}
+	\pgfsetlayers{background,main}
+	\begin{tikzpicture}[remember picture, overlay, text depth=0]
+	
+	\definecolor{title blue}{HTML}{206C8F}
+	\definecolor{title orange}{HTML}{F59201}
+	\pgfdeclareimage[width=0.2\textwidth]{logo}{../common/logo}
+	\pgfdeclareimage{cover picture}{../common/cover-picture}
+	\coordinate (NW) at ($(current page.north west) + (0.5, -0.5)$);
+	\coordinate (NE) at ($(current page.north east) + (-0.5, -0.5)$);
+	\coordinate (SW) at ($(current page.south west) + (0.5, 0.5)$);
+	\coordinate (SE) at ($(current page.south east) + (-0.5, 0.5)$);
+	
+	% Logo at the top left corner.
+	\node[
+		below right,
+		align=left, 
+		font=\Large,
+		execute at begin node=\setlength\baselineskip{3ex}]
+		at ($(NW) + (1.5, -1.5)$) {
+		\pgfuseimage{logo}\\
+		Build Your Own Blocks
+	};
+	
+	% Version number.
+	\node[
+		below right,
+		color=white,
+		font=\fontsize{40pt}{48pt}\selectfont]
+		at ($(NE) - (7, 5)$) {
+		4.0
+	};
+	
+	% Title. Note: the % at the end is necessary for correct spacing between the text and orange background.
+	\node[
+		left,
+		text=white,
+		align=right,
+		inner sep=15pt,
+		font=\fontsize{40pt}{42pt}\selectfont]
+		(title text)
+		at ($(NE) - (1.5, 9)$) {
+		\title%
+	};
+	
+	% The cover picture.
+	\node[below left, inner sep=0] (cover picture)
+		at ($(NE) - (0, 12)$) {
+		\pgfuseimage{cover picture}
+	};
+	\draw[white, ultra thick]
+		(cover picture.north west) -- (cover picture.north east);
+	\draw[white, ultra thick]
+		(cover picture.south west) -- (cover picture.south east);
+	
+	% Authors.
+	\node[above right, color=white, align=left, font=\Large]
+		at ($(SE) + (-7, 3)$) {
+		Brian Harvey\\
+		Jens M\"onig
+	};
+	
+	% Translator.
+	\ifdefempty{\translator}{}{
+		\node [below right, color=white, align=left, font=\large]
+			at ($(SE) + (-7, 2)$) {
+			\translator
+		};
+	}
+	
+	\begin{pgfonlayer}{background}
+		% Blue bar on the right.
+		\fill[title blue] ($(NE) - (7.5, 0)$) rectangle (SE);
+		
+		% Title background stretches to the left until it reaches the left edge, which means (NW.x, title text.west.y).
+		\coordinate (title background left point)
+			at (NW |- title text.west);
+		% Orange title background.
+		\node[
+			fit=(title text) (title background left point),
+			shape=rectangle,
+			fill=title orange,
+			text=white,
+			draw=white,
+			ultra thick,
+			align=right,
+			inner sep=0,
+			font=\fontsize{40pt}{42pt}\selectfont] {};
+	\end{pgfonlayer}
+
+	\end{tikzpicture}
+	\end{titlepage}
+} }
+
+\newcommand{\TODO}[1]{%
+	\colorbox{yellow}{\textcolor{red}{\textbf{%
+		TODO%
+		\ifstrempty{#1}{}{%
+			: #1
+		}%
+	}}}%
+}

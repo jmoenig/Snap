@@ -6,7 +6,7 @@
 
     written by Jens Mönig
 
-    Copyright (C) 2014 by Jens Mönig
+    Copyright (C) 2015 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -42,7 +42,7 @@
 
 /*global modules, contains*/
 
-modules.locale = '2014-December-15';
+modules.locale = '2015-November-16';
 
 // Global stuff
 
@@ -149,7 +149,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org',
     'last_changed':
-        '2014-07-29'
+        '2015-10-07'
 };
 
 SnapTranslator.dict.it = {
@@ -157,11 +157,11 @@ SnapTranslator.dict.it = {
     'language_name':
         'Italiano',
     'language_translator':
-        'Stefano Federici',
+        'Stefano Federici, Alberto Firpo',
     'translator_e-mail':
-        's_federici@yahoo.com',
+        's_federici@yahoo.com, albertofirpo12@gmail.com',
     'last_changed':
-        '2013-04-08'
+        '2015-01-12'
 };
 
 SnapTranslator.dict.ja = {
@@ -195,9 +195,9 @@ SnapTranslator.dict.ko = {
     'language_translator':
         'Yunjae Jang',
     'translator_e-mail':
-        'yunjae.jang@inc.korea.ac.kr',
+        'janggoons@gmail.com',
     'last_changed':
-        '2012-11-18'
+        '2015-01-21'
 };
 
 SnapTranslator.dict.pt = {
@@ -209,7 +209,7 @@ SnapTranslator.dict.pt = {
     'translator_e-mail':
         'mmsequeira@gmail.com',
     'last_changed':
-        '2014-10-01'
+        '2015-08-02'
 };
 
 SnapTranslator.dict.cs = {
@@ -217,11 +217,11 @@ SnapTranslator.dict.cs = {
     'language_name':
         'Česky',
     'language_translator':
-        'Michal Moc',
+        'Michal Moc, Jan Tomsa',
     'translator_e-mail':
-        'info@iguru.eu',
+        'info@iguru.eu, jan.tomsa.1976@gmail.com',
     'last_changed':
-        '2013-03-11'
+        '2015-11-16'
 };
 
 SnapTranslator.dict.zh = {
@@ -257,7 +257,7 @@ SnapTranslator.dict.fr = {
     'translator_e-mail':
         'i.scool@mac.com',
     'last_changed':
-        '2014-02-04'
+        '2015-06-25'
 };
 
 SnapTranslator.dict.si = {
@@ -317,7 +317,7 @@ SnapTranslator.dict.pl = {
     'translator_e-mail':
         'witek@oeiizk.waw.pl',
     'last_changed':
-        '2013-08-05'
+        '2015-09-23'
 };
 
 SnapTranslator.dict.tw = {
@@ -375,9 +375,9 @@ SnapTranslator.dict.ca = {
     'language_translator':
         'Bernat Romagosa Carrasquer',
     'translator_e-mail':
-        'tibabenfortlapalanca@gmail.com',
+        'bromagosa@citilab.eu',
     'last_changed':
-        '2013-11-26'
+        '2015-09-23'
 };
 
 SnapTranslator.dict.fi = {
@@ -439,3 +439,109 @@ SnapTranslator.dict.kn = {
     'last_changed':
         '2014-12-02'
 };
+
+SnapTranslator.dict.ml = {
+    // translations meta information
+    'language_name':
+        'Malayalam',
+    'language_translator':
+        'vinayakumar R',
+    'translator_e-mail':
+        'vnkmr7620@gmail.com',
+    'last_changed':
+        '2015-02-20'
+};
+
+SnapTranslator.dict.ta = {
+    // translations meta information
+    'language_name':
+        'Tamil',
+    'language_translator':
+        'vinayakumar R',
+    'translator_e-mail':
+        'vnkmr7620@gmail.com',
+    'last_changed':
+        '2015-02-20'
+};
+
+SnapTranslator.dict.te = {
+    // translations meta information
+    'language_name':
+        'Telagu', // the name as it should appear in the language menu
+    'language_translator':
+        'vinayakumar R', // your name for the Translators tab
+    'translator_e-mail':
+        'vnkmr7620@gmail.com', // optional
+    'last_changed':
+        '2015-02-20'
+};
+
+SnapTranslator.dict.tr = {
+    // translations meta information
+    'language_name':
+        'Türkçe',
+    'language_translator':
+        'Hakan Atas',
+    'translator_e-mail':
+        'hakanatas@gmail.com',
+    'last_changed':
+        '2015-7-27'
+};
+
+SnapTranslator.dict.hu = {
+    // translations meta information
+    'language_name':
+        'Magyar',
+    'language_translator':
+        'Makány György',
+    'translator_e-mail':
+        'makany.gyorgy@gmail.com',
+    'last_changed':
+        '2015-07-27'
+};
+
+SnapTranslator.dict.ia = {
+    // translations meta information
+    'language_name':
+        'Interlingua',
+    'language_translator':
+        'Ken Dickey',
+    'translator_e-mail':
+        'Ken.Dickey@whidbey.com',
+    'last_changed':
+        '2015-08-09'
+};
+
+SnapTranslator.dict.hr = {
+    'language_name':
+        'Hrvatski',
+    'language_translator':
+        '\u017Deljko Hrvoj',
+    'translator_e-mail':
+        'zeljko.hrvoj@zg.t-com.hr',
+    'last_changed':
+        '2015-09-15'
+};
+
+SnapTranslator.dict.bg = {
+    'language_name':
+        'Български',
+    'language_translator':
+        'Ivan Savov',
+    'translator_e-mail':
+        'ivan.savov@gmail.com',
+    'last_changed':
+        '2015-11-16'
+};
+
+SnapTranslator.dict.ro = {
+    'language_name':
+        'Român',
+    'language_translator':
+        'Cristian Macarascu',
+    'translator_e-mail':
+        '',
+    'last_changed':
+        '2015-10-24'
+};
+

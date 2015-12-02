@@ -185,7 +185,7 @@ SnapTranslator.dict.pt = {
     'translator_e-mail':
         'mmsequeira@gmail.com',
     'last_changed':
-        '2014-10-01',
+        '2015-08-02',
 
     // GUI
     // control bar:
@@ -417,8 +417,18 @@ SnapTranslator.dict.pt = {
         'Quando alguém clicar em %greenflag',
     'when %keyHat key pressed':
         'Quando alguém pressionar a tecla %keyHat',
-    'when I am clicked':
-        'Quando alguém clicar em ti',
+    'when I am %interaction':
+        'Quando o rato %interaction',
+    'clicked':
+        'clicar em ti',
+    'pressed':
+        'pressionar em ti',
+    'dropped':
+        'te largar',
+    'mouse-entered':
+        'entrar em ti',
+    'mouse-departed':
+        'sair de ti',
     'when I receive %msgHat':
         'Quando receberes a mensagem %msgHat',
     'broadcast %msg':
@@ -647,13 +657,17 @@ SnapTranslator.dict.pt = {
         'Abrir um projecto…',
     'Save':
         'Guardar este projecto',
+    'Save to disk':
+        'Guardar no disco',
+    'store this project\nin the downloads folder\n(in supporting browsers)':
+        'Guardar este projecto\nna sua pasta de descargas\n'
+            + '(em navegadores que o suportem).',
     'Save As...':
         'Guardar este projecto como…',
     'Import...':
         'Importar…',
     'file menu import hint':
-        'Abrir um projecto exportado,\n'
-            + 'substitundo o projecto corrente, ou\n'
+        'Abrir um projecto exportado,\nsubstitundo o projecto corrente, ou\n'
             + 'importar uma biblioteca de blocos, um\n'
             + 'traje ou um som para o projecto corrente.',
     'Export project as plain text...':
@@ -1443,10 +1457,6 @@ SnapTranslator.dict.pt = {
         'Suportar produção de código',
     'check for block\nto text mapping features':
         'Assinalar para funcionalidades\nde mapeamento entre blocos e texto.',
-    'Save to disk':
-        'Guardar no disco',
-    'experimental - store this project\nin your downloads folder':
-        'Experimental - Guardar este projecto\nna sua pasta de descargas.',
     'saved.':
         'guardado.',
     'options...':
@@ -1692,5 +1702,17 @@ SnapTranslator.dict.pt = {
             + 'nomes para os parâmetros (ignorando os nomes mostrados).',
     'Enter code that corresponds to the block\'s operation (usually a single\nfunction invocation). Use <#n> to reference actual arguments as shown.':
         'Introduza o código que corresponda à operação do bloco (normalmente uma simples\n'
-            + 'invocação de rotina). Use <#n> para referenciar os argumentos tal como mostrado'
+            + 'invocação de rotina). Use <#n> para referenciar os argumentos tal como mostrado',
+    'Keyboard Editing':
+        'Edição usando o teclado',
+    'uncheck to disable\nkeyboard editing support':
+        'Desassinalar para desactivar\na edição usando o teclado.',
+    'check to enable\nkeyboard editing support':
+        'Assinalar para activar\na edição usando o teclado.',
+    'Inheritance support':
+        'Suporte para herança',
+    'uncheck to disable\nsprite inheritance features':
+        'Desassinalar para desactivar\nfuncionalidades de herança de actores.',
+    'check for sprite\ninheritance features':
+        'Assinalar para activar\nfuncionalidades de herança de actores.'
 };
