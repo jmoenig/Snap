@@ -1,11 +1,12 @@
-# ![Snap-Logo](snap_logo_sm.png) _Build Your Own Blocks_
+#  Snap<em>!</em> _Build Your Own Blocks_
 > a visual, blocks based programming language inspired by [Scratch]
-_[http://snap.berkeley.edu][Snap]_
+> _[http://snap.berkeley.edu][Snap]_
 
 written by Jens Mönig and Brian Harvey
+
 jens@moenig.org, bh@cs.berkeley.edu
 
-### [Run Snap<em>!</em> now!][run]
+### [Run ![Snap-Logo](snap_logo_sm.png) now!][run]
 
 ## Getting Started With Snap<em>!</em>
 To start using Snap<em>!</em> we recommend you just [jump in][run]! (There is also a very handy [manual][manual] available.)
