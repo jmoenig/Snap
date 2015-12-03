@@ -299,6 +299,7 @@ IDE_Morph.prototype.openIn = function (world) {
 
     this.reactToWorldResize(world.bounds);
 
+    // TODO: use IDE::getURL
     function getURL(url) {
         try {
             var request = new XMLHttpRequest();
@@ -4663,7 +4664,7 @@ IDE_Morph.prototype.getURL = function (url) {
         throw new Error('unable to retrieve ' + url);
     } catch (err) {
         myself.showMessage(err);
-        return;
+        return '';
     }
 };
 

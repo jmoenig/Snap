@@ -308,7 +308,7 @@ XML_Element.prototype.unescape = function (string) {
         case 'gt': return '>';
         case '#xD': return '\n';
         case '#126': return '~';
-        default: console.warn('unreachable');
+        default: console.warn('unreachable'); //eslint-disable-line no-console
         }
     });
 };
