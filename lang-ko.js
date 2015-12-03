@@ -462,13 +462,13 @@ SnapTranslator.dict.ko = {
     'this script':
         '이 스크립트',
     'this block':
-        '이 블록',    
+        '이 블록',
     'stop %stopOthersChoices':
         '%stopOthersChoices 멈추기',
     'all but this script':
         '이 스크립트를 제외한 모두',
     'other scripts in sprite':
-        '이 스프라이트에 있는 다른 스크립트',    
+        '이 스프라이트에 있는 다른 스크립트',
     'pause all %pause':
         '모두 잠시 멈추기 %pause',
     'run %cmdRing %inputs':
@@ -777,89 +777,89 @@ SnapTranslator.dict.ko = {
         '세로(높이)',
     'Default':
         '기본설정',
-    
+
     'Blurred shadows':
         '반투명 그림자',
     'uncheck to use solid drop\nshadows and highlights':
         '체크해제하면, 그림자와 하이라이트가\n불투명 상태로 됩니다.',
     'check to use blurred drop\nshadows and highlights':
         '체크하면, 그림자와 하이라이트가\n반투명 상태로 됩니다.',
-    
+
     'Zebra coloring':
         '중첩 블록 구분하기',
     'check to enable alternating\ncolors for nested blocks':
         '체크하면, 중첩된 블록을\n다른 색으로 구분할 수 있습니다.',
     'uncheck to disable alternating\ncolors for nested block':
         '체크해제하면, 중첩된 블록을\n다른 색으로 구분할 수 없습니다.',
-    
+
     'Dynamic input labels':
         'Dynamic input labels',
     'uncheck to disable dynamic\nlabels for variadic inputs':
         'uncheck to disable dynamic\nlabels for variadic inputs',
     'check to enable dynamic\nlabels for variadic inputs':
         'check to enable dynamic\nlabels for variadic inputs',
-    
+
     'Prefer empty slot drops':
         '빈 슬롯에 입력 가능',
     'settings menu prefer empty slots hint':
         '설정 메뉴에 빈 슬롯의\n힌트를 사용할 수 있습니다.',
     'uncheck to allow dropped\nreporters to kick out others':
         '체크해제하면, 기존 리포터 블록에\n새로운 리포터 블록으로 대체할 수 있습니다.',
-    
+
     'Long form input dialog':
         '긴 형태의 입력 대화창',
     'check to always show slot\ntypes in the input dialog':
         '체크하면, 입력 대화창에\n항상 슬롯의 형태를 보여줍니다.',
     'uncheck to use the input\ndialog in short form':
         '체크해제하면, 입력 대화창을\n짧은 형태로 사용합니다.',
-    
+
     'Plain prototype labels':
         '새로 만든 블록 인수 설정',
     'uncheck to always show (+) symbols\nin block prototype labels':
         '체크해제하면, 블록 편집기에서\n 블록 인수 추가 버튼(+)을\n 보입니다.',
     'check to hide (+) symbols\nin block prototype labels':
         '체크하면, 블록 편집기에서\n 블록 인수 추가 버튼(+)을\n 숨깁니다.',
-    
+
     'Virtual keyboard':
         '가상 키보드',
     'uncheck to disable\nvirtual keyboard support\nfor mobile devices':
         '체크해제하면, 모바일 기기에서\n가상 키보드를 사용할 수 없습니다.',
     'check to enable\nvirtual keyboard support\nfor mobile devices':
         '체크하면, 모바일 기기에서\n가상 키보드를 사용할 수 있습니다.',
-    
+
     'Input sliders':
         '입력창에서 슬라이더 사용',
     'uncheck to disable\ninput sliders for\nentry fields':
         '체크해제하면, 입력창에서\n슬라이더를 사용할 수 없습니다.',
     'check to enable\ninput sliders for\nentry fields':
         '체크하면, 입력창에서\n슬라이더를 사용할 수 있습니다.',
-    
+
     'Clicking sound':
         '블록 클릭시 소리',
     'uncheck to turn\nblock clicking\nsound off':
         '체크해제하면, 블록 클릭시\n소리가 꺼집니다.',
     'check to turn\nblock clicking\nsound on':
         '체크하면, 블록 클릭시\n소리가 켜집니다.',
-    
+
     'Animations':
         '애니메이션',
     'uncheck to disable\nIDE animations':
         '체크해제하면, IDE 애니메이션을\n 사용할 수 없습니다.',
-    
+
     'Turbo mode':
         '터보 모드',
     'check to prioritize\nscript execution':
         '체크하면, 스크립트를\n 빠르게 실행합니다.',
     'uncheck to run scripts\nat normal speed':
         '체크해제하면, 스크립트 실행 속도를\n 보통으로 합니다.',
-    
+
     'Flat design':
         '플랫(Flat) 디자인',
     'uncheck for default\nGUI design':
         '체크해제하면,\n 기본 GUI 디자인으로\n 변경합니다.',
     'check for alternative\nGUI design':
         '체크하면, 플랫(Flat)\n 디자인으로 변경합니다.',
-    
+
     'Sprite Nesting':
         'Sprite Nesting',
     'uncheck to disable\nsprite composition':
@@ -873,27 +873,27 @@ SnapTranslator.dict.ko = {
         '체크해제하면, 스크립트\n재진입성을 허락합니다.',
     'check to disallow\nscript reentrance':
         '체크하면, 스크립트\n재진입성을 허락하지 않습니다.',
-    
+
     'Prefer smooth animations':
         '자연스러운 애니메이션',
     'uncheck for greater speed\nat variable frame rates':
         '체크해제하면, 프레임\n 전환 비율이 빨라집니다.',
     'check for smooth, predictable\nanimations across computers':
         '체크하면, 애니메이션이\n 자연스러워 집니다.',
-    
+
     'Flat line ends':
         '선 끝을 평평하게 만들기',
     'check for flat ends of lines':
         '체크하면, 선 끝을\n 평평하게 만듭니다.',
     'uncheck for round ends of lines':
         '체크해제하면, 선 끝을\n 둥글게 만듭니다.',
-    
+
     'Codification support':
         '체계화 지원',
     'uncheck to disable\nblock to text mapping features':
-        'uncheck to disable\nblock to text mapping features',    
+        'uncheck to disable\nblock to text mapping features',
     'check for block\nto text mapping features':
-        '체크하면, check for block\nto text mapping features', 
+        '체크하면, check for block\nto text mapping features',
 
     // inputs
     'with inputs':
@@ -906,7 +906,7 @@ SnapTranslator.dict.ko = {
     // context menus:
     'help':
         '도움말',
-    
+
     // palette:
     'find blocks...':
         '블록 찾기...',
@@ -994,7 +994,7 @@ SnapTranslator.dict.ko = {
     'OK':
         '확인',
     'Ok':
-        '확인',    
+        '확인',
     'Cancel':
         '취소',
     'Yes':

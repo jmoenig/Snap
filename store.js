@@ -621,7 +621,7 @@ SnapSerializer.prototype.loadSprites = function (xmlString, ide) {
         throw 'Module uses newer version of Serializer';
     }
     model.childrenNamed('sprite').forEach(function (model) {
-        var sprite  = new SpriteMorph(project.globalVariables);
+        var sprite = new SpriteMorph(project.globalVariables);
 
         if (model.attributes.id) {
             myself.objects[model.attributes.id] = sprite;
@@ -1183,7 +1183,7 @@ SnapSerializer.prototype.loadValue = function (model) {
         });
         return v;
     case 'sprite':
-        v  = new SpriteMorph(myself.project.globalVariables);
+        v = new SpriteMorph(myself.project.globalVariables);
         if (model.attributes.id) {
             myself.objects[model.attributes.id] = v;
         }
@@ -1774,7 +1774,7 @@ CustomBlockDefinition.prototype.toXML = function (serializer) {
         this.codeHeader || '',
         this.codeMapping || '',
         Object.keys(this.declarations).reduce(function (xml, decl) {
-                return xml + serializer.format(
+            return xml + serializer.format(
                     '<input type="@"$>$%</input>',
                     myself.declarations[decl][0],
                     myself.declarations[decl][3] ?
@@ -1785,7 +1785,7 @@ CustomBlockDefinition.prototype.toXML = function (serializer) {
                                 '</options>'
                                 : ''
                 );
-            }, ''),
+        }, ''),
         this.body ? serializer.store(this.body.expression) : '',
         this.scripts.length > 0 ?
                     '<scripts>' + encodeScripts(this.scripts) + '</scripts>'

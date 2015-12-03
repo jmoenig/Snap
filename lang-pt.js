@@ -947,7 +947,7 @@ SnapTranslator.dict.pt = {
         'monstruosa (10x)',
 
     // Gestor de Projectos
-     'Untitled':
+    'Untitled':
         'Sem título',
     'Open Project':
         'Abrir Projecto',

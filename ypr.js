@@ -11,6 +11,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 Last changed 2013-04-03 by Jens Moenig (disabled text area overlay)
 
 */
+/*eslint-disable*/
 
 var sb = (function (sb) {
     'use strict';

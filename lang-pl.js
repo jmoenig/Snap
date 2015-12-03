@@ -179,7 +179,7 @@ SnapTranslator.dict.pl = {
 	Ó, ó	\u00D3, \u00F3
 	Ź, ź	\u0179,	\u017A
 	Ż, ż	\u017B, \u017C
-	
+
 */
 
     // translations meta information
@@ -664,8 +664,7 @@ SnapTranslator.dict.pl = {
     'Import...':
         'Importuj...',
     'file menu import hint':
-        '\u0142aduje wyeksportowany projekt\n'
-		  + 'biblitek\u0119 '
+        '\u0142aduje wyeksportowany projekt\n' + 'biblitek\u0119 '
           + 'kostium lub d\u017Awi\u0119k',
     'Export project as plain text...':
         'Eksportuj projekt jako tekst...',
@@ -741,9 +740,9 @@ SnapTranslator.dict.pl = {
         'zaznacz, aby pozwoli\u0107 na suwaki w polach wej\u015Bciowych',
     'Clicking sound':
         'D\u017Awi\u0119k klikni\u0119cia',
-	'uncheck to turn\nblock clicking\nsound off':
+	        'uncheck to turn\nblock clicking\nsound off':
 		'odznacz, aby wy\u0142\u0105czy\u0107 \nd\u017Awi\u0119k klikni\u0119cia',
-	'check to turn\nblock clicking\nsound on':
+	        'check to turn\nblock clicking\nsound on':
 		'zaznacz, aby w\u0142\u0105czy\u0107 \nd\u017Awi\u0119k klikni\u0119cia',
     'Animations':
         'Animacje',
@@ -843,7 +842,7 @@ SnapTranslator.dict.pl = {
         'odklej',
     'undo the last\nblock drop\nin this pane':
         'cofnij ostatnie upuszczenie\nbloku na tej planszy',
-	'scripts pic...':
+	        'scripts pic...':
         'obrazek skryptu...',
     'open a new window\nwith a picture of all scripts':
         'otw\u00F3rz nowe okno\nz obrazkami wszystkich skrypt\u00F3w',

@@ -1350,7 +1350,7 @@ BlockDialogMorph.prototype.fixCategoriesLayout = function () {
         xPadding = 15,
         yPadding = 2,
         border = 10, // this.categories.border,
-        rows =  Math.ceil((this.categories.children.length) / 2),
+        rows = Math.ceil((this.categories.children.length) / 2),
         l = this.categories.left(),
         t = this.categories.top(),
         i = 0,
@@ -3041,7 +3041,7 @@ InputSlotDialogMorph.prototype.addSlotsMenu = function () {
                     localize('read-only'),
                 function () {myself.fragment.isReadOnly =
                          !myself.fragment.isReadOnly;
-                         }
+                }
             );
             return menu;
         }

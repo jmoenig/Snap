@@ -380,13 +380,13 @@ SnapTranslator.dict.cs = {
         'vypni všechny zvuky',
     'rest for %n beats':
             'pauza %n dob(y)',
-        'play note %n for %n beats':
+    'play note %n for %n beats':
             'zahraj tón %n po %n dob(y)',
-        'change tempo by %n':
+    'change tempo by %n':
             'změň tempo o %n',
-        'set tempo to %n bpm':
+    'set tempo to %n bpm':
             'nastav tempo na %n bpm.',
-        'tempo':
+    'tempo':
             'tempo',
 
     // pen:
@@ -533,14 +533,14 @@ SnapTranslator.dict.cs = {
         'nastavit turbo mód na %b',
     'current %dates':
         'aktuální %dates',
-            'year' : 'rok',
-            'month' : 'měsíc',
-            'date' : 'datum',
-            'day of week' : 'den v týdnu',
-            'hour' : 'hodina',
-            'minute' : 'minuta',
-            'second' : 'sekunda',
-            'time in milliseconds' : 'čas v milisekundách',
+    'year' : 'rok',
+    'month' : 'měsíc',
+    'date' : 'datum',
+    'day of week' : 'den v týdnu',
+    'hour' : 'hodina',
+    'minute' : 'minuta',
+    'second' : 'sekunda',
+    'time in milliseconds' : 'čas v milisekundách',
 
     'filtered for %clr':
         'filtrovaný pro %clr',
@@ -693,9 +693,7 @@ SnapTranslator.dict.cs = {
     'Libraries...':
         'Knihovny...',
     'Import library':
-        'Importovat knihovnu',
-        
-	  'Select a costume from the media library':
+        'Importovat knihovnu', 'Select a costume from the media library':
 		    'Vyberte kostým z knihovny médií',
     'Select a sound from the media library':
         'Vyberte si zvuk z knihovny médií',
@@ -770,7 +768,7 @@ SnapTranslator.dict.cs = {
         'Heslo musí být dlouhé\nalespoň šest znaků.',
     'passwords do\nnot match':
         'Hesla se neshodují.',
-                        
+
     // settings menu
     'Language...':
         'Jazyk...',

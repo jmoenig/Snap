@@ -170,9 +170,9 @@
 
 /*
  * De nota:
- * 
+ *
  * https://translatewiki.net/wiki/Portal:Ia
- * 
+ *
  * In my view, a "variable" is a box (cassa) in which one
  * stores a value -- vs a "constant", which is a named value.
  */
@@ -412,7 +412,7 @@ SnapTranslator.dict.ia = {
     'set pen color to %n':
         'face color del penna a %n',
     'change pen shade by %n':
-        'cambio tinta del penna per %n', 
+        'cambio tinta del penna per %n',
     'set pen shade to %n':
         'face tinta del penna a %n',
     'change pen size by %n':
@@ -642,7 +642,7 @@ SnapTranslator.dict.ia = {
     // menus
     // snap menu
     'About...':
-        'In re Snap!...',  
+        'In re Snap!...',
     'Reference manual':
         'Manual referentia ',
     'Snap! website':
@@ -751,7 +751,7 @@ SnapTranslator.dict.ia = {
         'marca a activa dynamic\n'
         + 'etiquetta varia entrata',
     'Prefer empty slot drops':
-        'Dar le preferentia a cader in apatur vacue', 
+        'Dar le preferentia a cader in apatur vacue',
 				// ..' in foramine vacue'
     'settings menu prefer empty slots hint':
         'Dar le preferentia in menu predefinite\n'
@@ -1102,7 +1102,7 @@ SnapTranslator.dict.ia = {
     'Multiple inputs (value is list of inputs)':
         'entrata plure (valor es lista)',  // 'aliquot'
     'Upvar - make internal variable visible to caller':
-        'Cassa in Alto - face cassa interne visible a evocator', 
+        'Cassa in Alto - face cassa interne visible a evocator',
 
     // About Snap
     'About Snap':

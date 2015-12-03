@@ -412,7 +412,7 @@ SnapTranslator.dict.bn = {
         'লেখনীর আকার নির্ধারণ কর %n',
     'stamp':
         'সীলমোহর',
-        
+
     // control:
     'when %greenflag clicked':
         'যখন  %greenflag ক্লিক কর',
@@ -438,7 +438,7 @@ SnapTranslator.dict.bn = {
         'পুশ',
     'pull':
         'পুল',
-        
+
     'wait %n secs':
         'অপেক্ষা কর   %n সেকেণড',
     'wait until %b':
@@ -512,12 +512,12 @@ SnapTranslator.dict.bn = {
     'timer':
         'সময় নির্ণায়ক',
     '%att of %spr':
-        '%att লক্ষণ  %spr এর',    
+        '%att লক্ষণ  %spr এর',
     'http:// %s':
         'http:// %s',
     'turbo mode?':
         'টার্বো মোড কিনা?',
-     'set turbo mode to %b':
+    'set turbo mode to %b':
         'টার্বো মোডকে  %b নির্ধারণ কর',
 
     'filtered for %clr':
@@ -606,7 +606,7 @@ SnapTranslator.dict.bn = {
     	'%ida কে  %l থেকে মুছে ফেল',
     'insert %s at %idx of %l':
      	'%s কে  %idx স্থানে  %l তালিকায় সন্নিবেশিত কর',
-     'replace item %idx of %l with %s':
+    'replace item %idx of %l with %s':
     	'%idx স্থানের  %l তালিকার উপাদানটি  %s দ্বারা প্রতিস্থাপন কর',
 
     // other
@@ -617,7 +617,7 @@ SnapTranslator.dict.bn = {
     // snap menu
     'About...':
         'Snap! সম্পর্কিত তথ্য...',
-     'Reference manual':
+    'Reference manual':
         'Snap! রেফারেন্স ম্যানুয়াল',
     'Snap! website':
         'Snap! ওয়েবসাইট',
@@ -659,11 +659,11 @@ SnapTranslator.dict.bn = {
         'সার্বজনীন কাস্টম ব্লক সংজ্ঞার্থ একটি নতুন ব্রাউজার উইন্ডোতে XMLফাইল হিসেবে প্রদর্শন কর',
     'Import tools':
         'যন্ত্রপাতি ইম্পোর্ট কর',
-     'Libraries...':
+    'Libraries...':
         'লাইব্রেরি লোড কর',
-     'Costumes...':
+    'Costumes...':
         'পরিচ্ছদ লোড কর',
-     'Sounds...':
+    'Sounds...':
         'শব্দের ফাইল লোড কর',
     'load the official library of\npowerful blocks':
         'শক্তিশালী ব্লকের অফিসিয়াল লাইব্রেরি লোড কর',
@@ -675,8 +675,8 @@ SnapTranslator.dict.bn = {
         'ক্লাউড সাইন আপ...',
     'Reset Password...':
         'পাসওয়ার্ড পরিবর্তন কর...',
-            
-        
+
+
     // settings menu
     'Language...':
         'ভাষা পরিবর্তন কর...',
@@ -712,7 +712,7 @@ SnapTranslator.dict.bn = {
         'দীর্ঘ আকারের ডায়লগ ইনপুট',
     'Plain prototype labels':
         'সাধারণ প্রোটোটাইপ লেবেল',
-            
+
     'check to always show slot\ntypes in the input dialog':
         'সর্বদা ইনপুট ডায়লগে স্লট এর ধরন দেখানোর জন্য চেক কর',
     'uncheck to use the input\ndialog in short form':
@@ -756,8 +756,8 @@ SnapTranslator.dict.bn = {
     'Flat line ends':
         'ফ্লাট লাইনের সমাপ্তি',
     'Codification support':
-        'সারসংগ্রহ সমর্থন',   
-        
+        'সারসংগ্রহ সমর্থন',
+
     // inputs
     'with inputs':
         'ইনপুট দ্বারা',

@@ -419,7 +419,7 @@ SnapTranslator.dict.fr = {
         'Quand %keyHat est press\u00E9',
     'when I am clicked':
         'Quand je suis press\u00E9 ',
-	'when I am %interaction':
+	        'when I am %interaction':
 		'Quand je suis %interaction',
     'when I receive %msgHat':
         'Quand je re\u00E7ois %msgHat',
@@ -449,9 +449,9 @@ SnapTranslator.dict.fr = {
         'arr\u00EAter le bloc',
     'stop script':
         'arr\u00EAter le script',
-	'stop %stopOthersChoices':
+	        'stop %stopOthersChoices':
 		'arr\u00EAter %stopOthersChoices',
-	'stop %stopChoices':
+	        'stop %stopChoices':
 		'arr\u00EAter %stopChoices',
     'stop all %stop':
         'arr\u00EAter tout %stop',
@@ -477,15 +477,15 @@ SnapTranslator.dict.fr = {
         'supprime ce clone',
     'pause all %pause':
         'mettre en pause %pause',
-	'all but this script':
+	        'all but this script':
 		'tout sauf ce lutin',
-	'other scripts in sprite':
+	        'other scripts in sprite':
 		'les autres scripts de ce lutin',
-	'this script':
+	        'this script':
 		'ce script',
-	'this block':
+	        'this block':
 		'ce bloc',
-        
+
      // sensing:
     'touching %col ?':
         ' %col touch\u00E9?',
@@ -717,7 +717,7 @@ SnapTranslator.dict.fr = {
         'Cliquetis',
     'uncheck to turn\nblock clicking\nsound off':
         'D\u00E9cocher pour d\u00E9sactiver le cliquetis \n'
-		+'lors de l\u0027embo\u00EEtement des blocs' ,
+		+'lors de l\u0027embo\u00EEtement des blocs',
     'check to turn\nblock clicking\nsound on':
         'Cocher pour activer le cliquetis \n'
 		+'lors de l\u0027embo\u00EEtement des blocs',
@@ -732,22 +732,20 @@ SnapTranslator.dict.fr = {
     'check for alternative\nGUI design':
         'Cocher pour un style d\interface alternatif',
     'uncheck for default\nGUI design':
-	'D\u00E9cocher pour le style classique d\interface',		
+	'D\u00E9cocher pour le style classique d\interface',
     'Thread safe scripts':
         'Scripts réentrants',
     'check to disallow\nscript reentrance':
-        'Cocher pour interdire\n la r\u00E9entrance des scripts\n'
-	  +'et les ex\u00E9cuter s\u00E9par\u00E9ment',
+        'Cocher pour interdire\n la r\u00E9entrance des scripts\n' +'et les ex\u00E9cuter s\u00E9par\u00E9ment',
     'uncheck to allow\nscript reentrance':
-        'D\u00E9cocher pour permettre\n la r\u00E9entrance des scripts\n'
-	  +'o\u00F9 certains s\'ex\u00E9cutent en paral\u00E8lle',
+        'D\u00E9cocher pour permettre\n la r\u00E9entrance des scripts\n' +'o\u00F9 certains s\'ex\u00E9cutent en paral\u00E8lle',
     'Prefer smooth animations':
         'Vitesse d\'animation fixe',
     'uncheck for greater speed\nat variable frame rates':
         'D\u00E9cocher pour une vitesse\nd\'animation maximale (mais variable)',
     'check for smooth, predictable\nanimations across computers':
         'Cocher pour une vitesse d\'animation\nfixe et identique sur tous les ordinateurs',
-	
+
     // inputs
     'with inputs':
         'avec entr\u00E9es',
@@ -923,7 +921,7 @@ SnapTranslator.dict.fr = {
             'toutes ces instances?',
 
     // input dialog
-     'Create input name':
+    'Create input name':
         'Cr\u00E9er le nom de l\u0027entr\u00E9e',
     'Edit input name':
         '\u00C9diter le nom de l\u0027entr\u00E9e',
@@ -972,9 +970,9 @@ SnapTranslator.dict.fr = {
         'tabulations',
     'cr':
         'retours de ligne',
-	'letter':
+	        'letter':
 		'lettres',
-	
+
   // About Snap
     'About Snap':
         'A propos de Snap',
@@ -1181,130 +1179,130 @@ SnapTranslator.dict.fr = {
         'n\u0027importe quel',
 
 	// miscellaneous
-	'find blocks...':
+	        'find blocks...':
 		'chercher des blocs...',
-	'hide primitives':
+	        'hide primitives':
 		'cacher les primitives',
-	'show primitives':
+	        'show primitives':
 		'montrer les primitives',
-	'Login...':
+	        'Login...':
 		'Connexion...',
-	'Signup...':
+	        'Signup...':
 		'S\u0027enregistrer...',
-	'Reset Password...':
+	        'Reset Password...':
 		'Remise \u00E0 z\u00E9ro du mot de passe',
-	'show all':
+	        'show all':
 		'tout montrer',
-	'pic...':
+	        'pic...':
 		'image...',
-	'open a new window\nwith a picture of the stage':
+	        'open a new window\nwith a picture of the stage':
 		'ouvre une nouvelle fen\u00EAtre\navec une image de la sc\u00E8ne',
-	'scripts pic...':
+	        'scripts pic...':
 		'image des scripts...',
-	'open a new window\nwith a picture of all scripts':
+	        'open a new window\nwith a picture of all scripts':
 		'ouvre une nouvelle fen\u00EAtre\navec une image de tous les scripts',
-	'Stage size...':
+	        'Stage size...':
 		'Taille de la sc\u00E8ne...',
-	'Zoom blocks...':
+	        'Zoom blocks...':
 		'Agrandir les blocs...',
 
-	'Plain prototype labels':
+	        'Plain prototype labels':
 		'\u00C9tiquettes simples de d\u00E9finition',
-	'uncheck to always show (+) symbols\nin block prototype labels':
+	        'uncheck to always show (+) symbols\nin block prototype labels':
 		'd\u00E9cocher pour montrer en permance le symbole (+)\ndans les \u00e9tiquettes de d\u00E9finition de bloc',
-	'check to hide (+) symbols\nin block prototype labels':
+	        'check to hide (+) symbols\nin block prototype labels':
 		'cocher pour cacher le symbole (+)\ndans les \u00e9tiquettes de d\u00E9finition de bloc',
 
-	'check for flat ends of lines':
+	        'check for flat ends of lines':
 		'cocher pour dessiner des fins de ligne plates',
-	'uncheck for round ends of lines':
+	        'uncheck for round ends of lines':
 		'd\u00E9cocher pour dessiner des fins de lignes arrondies',
-	'Flat line ends':
+	        'Flat line ends':
 		'Fins de ligne plates',
 
-	'Codification support':
+	        'Codification support':
 		'Support de la \u00AB codification \u00BB',
-	'uncheck to disable\nblock to text mapping features':
+	        'uncheck to disable\nblock to text mapping features':
 		'd\u00E9cocher pour d\u00E9activer\nla fonction de transformation :\nbloc vers texte',
-	'check for block\nto text mapping features':
+	        'check for block\nto text mapping features':
 		'cocher pour activer\nla fonction de transformation :\nbloc vers texte',
 
-	'current %dates':
+	        'current %dates':
 		'date courante %dates',
-	'year':'ann\u00E9e',
-	'month':'mois',
-	'date':'jour',
-	'hour':'heure',
-	'minute':'minute',
-	'second':'seconde',
-	'time in milliseconds':
+	        'year':'ann\u00E9e',
+	        'month':'mois',
+	        'date':'jour',
+	        'hour':'heure',
+	        'minute':'minute',
+	        'second':'seconde',
+	        'time in milliseconds':
 		'heure en millisecondes',
-	'day of week':
+	        'day of week':
 		'jour de la semaine',
 
-	'brightness':
+	        'brightness':
 		'luminosit\u00E9',
-	'transparence':
+	        'transparence':
 		'transparence',
-	'negative':
+	        'negative':
 		'n\u00E9gatif',
-	'comic':
+	        'comic':
 		'bande dessin\u00E9e',
 
-	'clicked':
+	        'clicked':
 		'cliqu\u00E9',
-	'pressed':
+	        'pressed':
 		'press\u00E9',
-	'dropped':
+	        'dropped':
 		'd\u00E9pos\u00E9',
-	'mouse-entered':
+	        'mouse-entered':
 		'survol\u00E9',
-	'mouse-departed':
+	        'mouse-departed':
 		'quitt\u00E9',
 
-	'JavaScript function ( %mult%s ) { %code }':
+	        'JavaScript function ( %mult%s ) { %code }':
 		'fonction JavaScript ( %mult%s ) { %code }',
 
 
 	// Copy / Paste
-	'Press CTRL+C one more time to effectively copy to clipboard.':
+	        'Press CTRL+C one more time to effectively copy to clipboard.':
 		'Taper une nouvelle fois sur CTRL+C pour copier effectivement vers le presse-papier.',
-	'Press CTRL+V one more time to effectively paste from clipboard.':
+	        'Press CTRL+V one more time to effectively paste from clipboard.':
 		'Taper une nouvelle fois sur CTRL+V pour coller effectivement depuis le presse-papier.',
-	'Press CTRL+X one more time to effectively cut to clipboard.':
+	        'Press CTRL+X one more time to effectively cut to clipboard.':
 		'Taper une nouvelle fois sur CTRL+X pour couper effectivement vers le presse-papier.',
 
 	// Paint.js
-	'undo':'d\u00E9faire',
-	'Paintbrush tool\n(free draw)':
+	        'undo':'d\u00E9faire',
+	        'Paintbrush tool\n(free draw)':
 		'Pinceau\n(dessin \u00E0 main lev\u00E9)',
-	'Stroked Rectangle\n(shift: square)':
+	        'Stroked Rectangle\n(shift: square)':
 		'Rectangle\n(Maj: carr\u00E9)',
-	'Stroked Ellipse\n(shift: circle)':
+	        'Stroked Ellipse\n(shift: circle)':
 		'Ellipse\n(Maj: cercle)',
-	'Eraser tool':
+	        'Eraser tool':
 		'Gomme',
-	'Set the rotation center':
+	        'Set the rotation center':
 		'Fixe le centre de rotation',
-	'Line tool\n(shift: vertical/horizontal)':
+	        'Line tool\n(shift: vertical/horizontal)':
 		'Ligne\n(Maj: verticale/horizontale)',
-	'Filled Rectangle\n(shift: square)':
+	        'Filled Rectangle\n(shift: square)':
 		'Rectangle plein\n(Maj: carr\u00E9)',
-	'Filled Ellipse\n(shift: circle)':
+	        'Filled Ellipse\n(shift: circle)':
 		'Ellipse pleine\n(Maj: cercle)',
-	'Fill a region':
+	        'Fill a region':
 		'Remplir une r\u00E9gion',
-	'Pipette tool\n(pick a color anywhere)':
+	        'Pipette tool\n(pick a color anywhere)':
 		'Pipette\n(s\u00E9lectionnez une couleur n\u0027importe o\u00F9',
-	'grow':'agrandir',
-	'shrink':'r\u00E9duire',
-	'flip \u2194':
+	        'grow':'agrandir',
+	        'shrink':'r\u00E9duire',
+	        'flip \u2194':
 		'miroir \u2194',
-	'flip \u2195':
+	        'flip \u2195':
 		'miroir \u2195',
-	'Brush size':
+	        'Brush size':
 		'Taille de pinceau',
-	'Constrain proportions of shapes?\n(you can also hold shift)':
+	        'Constrain proportions of shapes?\n(you can also hold shift)':
 		'Contrainte sur les proportions de la forme ?\n(vous pouvez aussi maintenir appuy\u00E9 Maj)'
 
 };

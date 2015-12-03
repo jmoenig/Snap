@@ -856,7 +856,7 @@ SnapTranslator.dict.zh = {
     'monstrous (10x)':
         '无敌型 (10x)',
 
- 'Untitled':
+    'Untitled':
         '无标题',
     'Open Project':
         '打开项目',
