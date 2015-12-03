@@ -856,7 +856,7 @@ SnapTranslator.dict.tw = {
     'monstrous (10x)':
         '無敵型 (10x)',
 
- 'Untitled':
+    'Untitled':
         '無標題',
     'Open Project':
         '打開項目',

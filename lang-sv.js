@@ -8,7 +8,7 @@
 
     Copyright (C) 2014 by Jens Mönig
 
-    This file is part of Snap!. 
+    This file is part of Snap!.
 
     Snap! is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -267,21 +267,21 @@ SnapTranslator.dict.sv = {
         abbreviation.
 
         For example:
-        
+
             'say %s for %n secs'
 
         can currently not be changed into
-        
+
             'say %n secs long %s'
 
         and still work as intended.
 
         Similarly
-        
+
             'point towards %dst'
 
         cannot be changed into
-        
+
             'point towards %cst'
 
         without breaking its functionality.
@@ -1163,197 +1163,197 @@ SnapTranslator.dict.sv = {
         'sista',
     'any':
         'vilken som helst',
-        
+
     // missing labels from initial translation added below
     'add a new sprite':
     	'ny sprite',
-	'when %keyHat key pressed':
+	        'when %keyHat key pressed':
 		'n\u00E4r tangent %keyHat trycks ned',
-	'when I receive %msgHat':
+	        'when I receive %msgHat':
 		'n\u00E4r jag tar emot %msgHat',
-	'message':
+	        'message':
 		'meddelande',
-	'any message':
+	        'any message':
 		'n\u00E5got meddelande',
-	'stop %stopChoices':
+	        'stop %stopChoices':
 		'stoppa %stopChoices',
-	'this script':
+	        'this script':
 		'detta skript',
-	'this block':
+	        'this block':
 		'detta block',
-	'stop %stopOthersChoices':
+	        'stop %stopOthersChoices':
 		'stoppa %stopOthersChoices',
-	'all but this script':
+	        'all but this script':
 		'alla f\u00F6rutom detta skript',
-	'other scripts in sprite':
+	        'other scripts in sprite':
 		'andra skript i denna sprite',
-	'%att of %spr':
+	        '%att of %spr':
 		'%att av %spr',
-	'%fun of %n':
+	        '%fun of %n':
 		'%fun av %n',
-	'split %s by %delim':
+	        'split %s by %delim':
 		'dela %s med tecken %delim',
-	'Script variable name':
+	        'Script variable name':
 		'Skriptvariabelnamn',
-	'Reference manual':
+	        'Reference manual':
 		'Referensbok',
-	'Export project as plain text...':
+	        'Export project as plain text...':
 		'Exportera projektet som vanlig text...',
-	'Import tools':
+	        'Import tools':
 		'Importverktyg',
-	'Signup...':
+	        'Signup...':
 		'Registrera...',
-	'Stage size...':
+	        'Stage size...':
 		'Scenstorlek...',
-	'Stage size':
+	        'Stage size':
 		'Scenstorlek',
-	'Stage width':
+	        'Stage width':
 		'Scenbredd',
-	'Stage height':
+	        'Stage height':
 		'Scenh\u00F6jd',
-	'Default':
+	        'Default':
 		'Standard',
-	'Plain prototype labels':
+	        'Plain prototype labels':
 		'Vanliga prototypetiketter',
-	'uncheck to always show (+) symbols\nin block prototype labels':
+	        'uncheck to always show (+) symbols\nin block prototype labels':
 		'avmarkera f\u00F6r att visa (+) symboler \n i blockprototypetiketter',
-	'check to hide (+) symbols\nin block prototype labels':
+	        'check to hide (+) symbols\nin block prototype labels':
 		'kryssa f\u00F6r att visa (+) symboler \n i blockprototypetiketter',
-	'check to prioritize\nscript execution':
+	        'check to prioritize\nscript execution':
 		'kryssa f\u00F6r att prioritera \nskriptexekvering',
-	'uncheck to run scripts\nat normal speed':
+	        'uncheck to run scripts\nat normal speed':
 		'avmarkera f\u00F6r att k\u00F6ra \nskript vid normal hastighet',
-	'uncheck to allow\nscript reentrance':
+	        'uncheck to allow\nscript reentrance':
 		'avmarkera f\u00F6r att till\u00E5ta \nskript att \u00E5tertilltr\u00E4da',
-	'check to disallow\nscript reentrance':
+	        'check to disallow\nscript reentrance':
 		'kryssa f\u00F6r att f\u00F6rbjuda \nskript att \u00E5tertilltr\u00E4da',
-	'Flat line ends':
+	        'Flat line ends':
 		'Platta streckslut',
-	'check for flat ends of lines':
+	        'check for flat ends of lines':
 		'kryssa f\u00F6r platta streckslut',
-	'uncheck for round ends of lines':
+	        'uncheck for round ends of lines':
 		'avmarkera f\u00F6r avrundade streckslut',
-	'hide primitives':
+	        'hide primitives':
 		'g\u00F6m primitiva',
-	'show primitives':
+	        'show primitives':
 		'visa primitiva',
-	'help...':
+	        'help...':
 		'hj\u00E4lp...',
-	'move':
+	        'move':
 		'flytta',
-	'detach from':
+	        'detach from':
 		'koppla bort',
-	'detach all parts':
+	        'detach all parts':
 		'koppla bort alla delar',
-	'pic...':
+	        'pic...':
 		'bild...',
-	'open a new window\nwith a picture of the stage':
+	        'open a new window\nwith a picture of the stage':
 		'\u00F6ppna ett nytt f\u00F6nster\nmed en bild av scenen',
-	'undrop':
+	        'undrop':
 		'\u00E5ngra sl\u00E4pp',
-	'undo the last\nblock drop\nin this pane':
+	        'undo the last\nblock drop\nin this pane':
 		'\u00E5ngra sista \nblocksl\u00E4ppet i\ndetta omr\u00E5de',
-	'scripts pic...':
+	        'scripts pic...':
 		'skriptbild...',
-	'open a new window\nwith a picture of all scripts':
+	        'open a new window\nwith a picture of all scripts':
 		'\u00F6ppna ett nytt f\u00F6nster\nmed en bild p\u00E5 alla skript',
-	'Zoom blocks':
+	        'Zoom blocks':
 		'F\u00F6rstora blocken',
-	'build':
+	        'build':
 		'bygg',
-	'your own':
+	        'your own':
 		'dina egna',
-	'blocks':
+	        'blocks':
 		'block',
-	'normal (1x)':
+	        'normal (1x)':
 		'normal (1x)',
-	'demo (1.2x)':
+	        'demo (1.2x)':
 		'demo (1.2x)',
-	'presentation (1.4x)':
+	        'presentation (1.4x)':
 		'presentation (1.4x)',
-	'big (2x)':
+	        'big (2x)':
 		'stor (2x)',
-	'huge (4x)':
+	        'huge (4x)':
 		'j\u00E4ttestor (4x)',
-	'giant (8x)':
+	        'giant (8x)':
 		'enorm (8x)',
-	'monstrous (10x)':
+	        'monstrous (10x)':
 		'gigantisk (10x)',
-	'Empty':
+	        'Empty':
 		'Tom',
-	'brightness':
+	        'brightness':
 		'ljusstyrke',
-	'negative':
+	        'negative':
 		'negativ',
-	'comic':
+	        'comic':
 		'komisk',
-	'confetti':
+	        'confetti':
 		'konfetti',
-	'floor':
+	        'floor':
 		'golv',
-	'letter':
+	        'letter':
 		'bokstav',
-	'whitespace':
+	        'whitespace':
 		'mellanslag',
-	'line':
+	        'line':
 		'rad',
-	'tab':
+	        'tab':
 		'tab',
-	'cr':
+	        'cr':
 		'retur',
-	'warp %c':
+	        'warp %c':
 		'snabbspola %c',
-	'Reset Password...':
+	        'Reset Password...':
 		'Nollst\u00E4ll l\u00F6senord...',
-	'Codification support':
+	        'Codification support':
 		'St\u00F6d f\u00F6r textprogrammering',
-	'Flat design':
+	        'Flat design':
 		'Platt utseende',
-	'check for block\nto text mapping features':
+	        'check for block\nto text mapping features':
 		'kryssa f\u00F6r att aktivera\nblock-till-text funktioner',
-	'uncheck to disable\nblock to text mapping features':
+	        'uncheck to disable\nblock to text mapping features':
 		'avmarkera f\u00F6r att inaktivera\nblock-till-text funktioner',
-	'check for alternative\nGUI design':
+	        'check for alternative\nGUI design':
 		'kryssa f\u00F6r att aktivera ett\nalternativt utseende',
-	'uncheck for default\nGUI design':
+	        'uncheck for default\nGUI design':
 		'avmarkera f\u00F6r att byta\ntill standardutseendet',
-	'Select categories of additional blocks to add to this project.':
+	        'Select categories of additional blocks to add to this project.':
 		'v\u00E4lj grupper av extrablock att l\u00E4gga till i projektet',
-	'Select a costume from the media library':
+	        'Select a costume from the media library':
 		'v\u00E4lj en kostym fr\u00E5n mediabiblioteket',
-	'Select a sound from the media library':
+	        'Select a sound from the media library':
 		'v\u00E4lj ett ljud fr\u00E5n mediabiblioteket',
-	'Iteration, composition':
+	        'Iteration, composition':
 		'Upprepning, komposition',
-	'List utilities':
+	        'List utilities':
 		'Listverktyg',
-	'Streams (lazy lists)':
+	        'Streams (lazy lists)':
 		'Str\u00F6mmar (lata listor)',
-	'Variadic reporters':
+	        'Variadic reporters':
 		'Variabla rapporterare',
-	'Words, sentences':
+	        'Words, sentences':
 		'Ord, meningar',
-	'Paint a new costume':
+	        'Paint a new costume':
 		'Rita en ny kostym',
-	'add a new Turtle sprite':
+	        'add a new Turtle sprite':
 		'l\u00E4gg till en ny Sk\u00F6ldpadda-sprite',
-	'paint a new sprite':
+	        'paint a new sprite':
 		'rita en ny sprite',
-	'Paint Editor':
+	        'Paint Editor':
 		'Rita',
-	'undo':
+	        'undo':
 		'\u00E5ngra',
-	'grow':
+	        'grow':
 		'st\u00F6rre',
-	'shrink':
+	        'shrink':
 		'mindre',
-	'flip ↔':
+	        'flip ↔':
 		'v\u00E4nd ↔',
-	'flip ↕':
+	        'flip ↕':
 		'v\u00E4nd ↕',
-	'Brush size':
+	        'Brush size':
 		'Pennstorlek',
-	'Constrain proportions of shapes?\n(you can also hold shift)':
+	        'Constrain proportions of shapes?\n(you can also hold shift)':
 		'Beh\u00E5ll figurernas proportioner?\n(du kan ocks\u00E5 h\u00E5lla skift nedtryckt)'
-		
+
 };

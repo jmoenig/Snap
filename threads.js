@@ -2475,8 +2475,8 @@ Process.prototype.objectTouchingObject = function (thisObj, name) {
             }
             those = this.getObjectsNamed(name, thisObj, stage); // clones
             if (those.some(function (any) {
-                    return thisObj.isTouching(any);
-                })) {
+                return thisObj.isTouching(any);
+            })) {
                 return true;
             }
         }

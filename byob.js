@@ -3041,7 +3041,7 @@ InputSlotDialogMorph.prototype.addSlotsMenu = function () {
                     localize('read-only'),
                 function () {myself.fragment.isReadOnly =
                          !myself.fragment.isReadOnly;
-                         }
+                }
             );
             return menu;
         }

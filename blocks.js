@@ -1630,8 +1630,8 @@ SyntaxElementMorph.prototype.fixLayout = function (silently) {
     // determine my height:
     y += lineHeight;
     if (this.children.some(function (any) {
-            return any instanceof CSlotMorph;
-        })) {
+        return any instanceof CSlotMorph;
+    })) {
         bottomCorrection = this.bottomPadding;
         if (this instanceof ReporterBlockMorph && !this.isPredicate) {
             bottomCorrection = Math.max(

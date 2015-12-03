@@ -1774,7 +1774,7 @@ CustomBlockDefinition.prototype.toXML = function (serializer) {
         this.codeHeader || '',
         this.codeMapping || '',
         Object.keys(this.declarations).reduce(function (xml, decl) {
-                return xml + serializer.format(
+            return xml + serializer.format(
                     '<input type="@"$>$%</input>',
                     myself.declarations[decl][0],
                     myself.declarations[decl][3] ?
@@ -1785,7 +1785,7 @@ CustomBlockDefinition.prototype.toXML = function (serializer) {
                                 '</options>'
                                 : ''
                 );
-            }, ''),
+        }, ''),
         this.body ? serializer.store(this.body.expression) : '',
         this.scripts.length > 0 ?
                     '<scripts>' + encodeScripts(this.scripts) + '</scripts>'

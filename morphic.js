@@ -6285,17 +6285,17 @@ InspectorMorph.prototype.buildPanes = function () {
         this.target instanceof Array ? attribs : attribs.sort(),
         null, // label getter
         this.markOwnProperties ?
-                [ // format list
-                    [ // format element: [color, predicate(element]
-                        new Color(0, 0, 180),
-                        function (element) {
+            [ // format list
+                [ // format element: [color, predicate(element]
+                    new Color(0, 0, 180),
+                    function (element) {
                             return Object.prototype.hasOwnProperty.call(
                                 myself.target,
                                 element
                             );
                         }
-                    ]
                 ]
+            ]
                 : null,
         doubleClickAction
     );

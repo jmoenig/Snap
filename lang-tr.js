@@ -1079,7 +1079,7 @@ SnapTranslator.dict.tr = {
         'içeri aktar...',
     'Slider minimum value':
         'Sürgünün en düşük değeri',
-	'Slider maximum value':
+	        'Slider maximum value':
         'Sürgünün en yüksek değeri',
 
     // list watchers

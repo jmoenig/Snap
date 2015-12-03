@@ -3200,8 +3200,7 @@ InputFieldMorph.prototype.drawNew = function () {
 
     // cache my border colors
     this.cachedClr = borderColor.toString();
-    this.cachedClrBright = borderColor.lighter(this.contrast)
-        .toString();
+    this.cachedClrBright = borderColor.lighter(this.contrast).toString();
     this.cachedClrDark = borderColor.darker(this.contrast).toString();
 
     context.fillRect(

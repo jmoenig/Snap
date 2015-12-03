@@ -154,18 +154,18 @@ SpriteMorph.uber = PenMorph.prototype;
 // SpriteMorph settings
 
 SpriteMorph.prototype.categories =
-    [
-        'motion',
-        'control',
-        'looks',
-        'sensing',
-        'sound',
-        'operators',
-        'pen',
-        'variables',
-        'lists',
-        'other'
-    ];
+[
+    'motion',
+    'control',
+    'looks',
+    'sensing',
+    'sound',
+    'operators',
+    'pen',
+    'variables',
+    'lists',
+    'other'
+];
 
 SpriteMorph.prototype.blockColor = {
     motion : new Color(74, 108, 212),
@@ -583,7 +583,7 @@ SpriteMorph.prototype.initBlocks = function () {
         },
 
     /* migrated to a newer block version:
-  
+
         receiveClick: {
             type: 'hat',
             category: 'control',

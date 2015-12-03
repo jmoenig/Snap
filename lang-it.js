@@ -448,7 +448,7 @@ SnapTranslator.dict.it = {
         'risultato %s',
     'stop block':
         'ferma il blocco',
-   'all':
+    'all':
         'tutti',
     'this script':
         'questo script',
@@ -549,7 +549,7 @@ SnapTranslator.dict.it = {
         'falso',
     'join %words':
         'unione di %words',
-   'split %s by %delim':
+    'split %s by %delim':
         'separa %s di %delim',
     'hello':
         'ciao',
@@ -624,7 +624,7 @@ SnapTranslator.dict.it = {
     // snap menu
     'About...':
         'Informazioni su Snap!...',
-   'Reference manual':
+    'Reference manual':
         'Manuale',
     'Snap! website':
         'Sito web di Snap!',
@@ -670,7 +670,7 @@ SnapTranslator.dict.it = {
         'Importa tools',
     'load the official library of\npowerful blocks':
         'carica la libreria ufficiale di\nblocchi Snap',
-   'Libraries...':
+    'Libraries...':
         'Modulo...',
     'Import library':
         'Importa modulo',
@@ -686,7 +686,7 @@ SnapTranslator.dict.it = {
         'Lingua...',
     'Zoom blocks...':
         'Zoom dei blocchi...',
-   'Stage size...':
+    'Stage size...':
         'Dimensione pannello...',
     'Stage size':
         'Dimensione pannello',
@@ -724,13 +724,13 @@ SnapTranslator.dict.it = {
         'disabilitare per permettere agli slot di espellere\ni reporter inclusi al loro interno',
     'Long form input dialog':
         'Usa finestra degli input estesa',
-   'Plain prototype labels':
+    'Plain prototype labels':
         'Etichetta prototipo base',
     'uncheck to always show (+) symbols\nin block prototype labels':
         'disabilitare per visualizzare sempre (+) \nnelle etichette dei blocchi prototipo',
     'check to hide (+) symbols\nin block prototype labels':
         'abilitare per visualizzare sempre (+) \nnelle etichette dei blocchi prototipo',
- 
+
     'check to always show slot\ntypes in the input dialog':
         'abilitare per mostrare sempre i tipi degli slot\nnella finestra di creazione degli input',
     'uncheck to use the input\ndialog in short form':
@@ -777,7 +777,7 @@ SnapTranslator.dict.it = {
         'disabilitare per massima velocità\na framerate variabile',
     'check for smooth, predictable\nanimations across computers':
         'abilitare per avere animazioni\nfluide su tutti i computer',
-   'Flat line ends':
+    'Flat line ends':
         'fine linea piana',
     'check for flat ends of lines':
         'abilitare per fine linea netti',

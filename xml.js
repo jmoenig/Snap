@@ -301,14 +301,14 @@ XML_Element.prototype.escape = function (string, ignoreQuotes) {
 XML_Element.prototype.unescape = function (string) {
     return string.replace(/&(amp|apos|quot|lt|gt|#xD|#126);/g, function(_, name) {
         switch (name) {
-            case 'amp': return '&';
-            case 'apos': return '\'';
-            case 'quot': return '"';
-            case 'lt': return '<';
-            case 'gt': return '>';
-            case '#xD': return '\n';
-            case '#126': return '~';
-            default: console.warn('unreachable');
+        case 'amp': return '&';
+        case 'apos': return '\'';
+        case 'quot': return '"';
+        case 'lt': return '<';
+        case 'gt': return '>';
+        case '#xD': return '\n';
+        case '#126': return '~';
+        default: console.warn('unreachable');
         }
     });
 };
