@@ -1270,7 +1270,7 @@ function copy(target) {
         }
     } else {
         c = {};
-        for (property in target) {
+        for (property in target) { /* eslint guard-for-in: 0 */
             c[property] = target[property];
         }
     }
@@ -1982,7 +1982,7 @@ Rectangle.prototype.intersects = function (aRect) {
 Rectangle.prototype.isNearTo = function (aRect, threshold) {
     var ro = aRect.origin, rc = aRect.corner, border = threshold || 0;
     return (rc.x + border >= this.origin.x) &&
-        (rc.y  + border >= this.origin.y) &&
+        (rc.y + border >= this.origin.y) &&
         (ro.x - border <= this.corner.x) &&
         (ro.y - border <= this.corner.y);
 };
@@ -2147,7 +2147,6 @@ Node.prototype.parentThatIsAnyOf = function (constructors) {
 // Morphs //////////////////////////////////////////////////////////////
 
 // Morph: referenced constructors
-
 var Morph;
 var WorldMorph;
 var HandMorph;
@@ -2690,9 +2689,7 @@ Morph.prototype.drawOn = function (aCanvas, aRect) {
 
 Morph.prototype.fullDrawOn = function (aCanvas, aRect) {
     var rectangle;
-    if (!this.isVisible) {
-        return null;
-    }
+    if (!this.isVisible) {return; }
     rectangle = aRect || this.cachedFullBounds || this.fullBounds();
     this.drawOn(aCanvas, rectangle);
     if (this.cachedFullImage) {return; }
@@ -3656,7 +3653,7 @@ Morph.prototype.evaluateString = function (code) {
     var result;
 
     try {
-        result = eval(code);
+        result = eval(code); // eslint-disable-line no-eval
         this.drawNew();
         this.changed();
     } catch (err) {
@@ -3750,7 +3747,7 @@ HandleMorph.prototype.init = function (
     this.target = target || null;
     this.minExtent = new Point(minX || 0, minY || 0);
     this.inset = new Point(insetX || 0, insetY || insetX || 0);
-    this.type =  type || 'resize'; // can also be 'move', 'moveCenter'
+    this.type = type || 'resize'; // can also be 'move', 'moveCenter'
     HandleMorph.uber.init.call(this);
     this.color = new Color(255, 255, 255);
     this.isDraggable = false;
@@ -5793,7 +5790,7 @@ SliderMorph.prototype.drawNew = function () {
     SliderMorph.uber.drawNew.call(this);
     this.button.orientation = this.orientation;
     if (this.orientation === 'vertical') {
-        bw  = this.width() - 2;
+        bw = this.width() - 2;
         bh = Math.max(bw, Math.round(this.height() * this.ratio()));
         this.button.silentSetExtent(new Point(bw, bh));
         posX = 1;
@@ -5803,7 +5800,7 @@ SliderMorph.prototype.drawNew = function () {
         );
     } else {
         bh = this.height() - 2;
-        bw  = Math.max(bh, Math.round(this.width() * this.ratio()));
+        bw = Math.max(bh, Math.round(this.width() * this.ratio()));
         this.button.silentSetExtent(new Point(bw, bh));
         posY = 1;
         posX = Math.min(

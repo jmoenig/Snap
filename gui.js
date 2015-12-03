@@ -893,7 +893,7 @@ IDE_Morph.prototype.createCategories = function () {
         var buttonWidth = myself.categories.children[0].width(),
             buttonHeight = myself.categories.children[0].height(),
             border = 3,
-            rows =  Math.ceil((myself.categories.children.length) / 2),
+            rows = Math.ceil((myself.categories.children.length) / 2),
             xPadding = (myself.categories.width()
                 - border
                 - buttonWidth * 2) / 3,

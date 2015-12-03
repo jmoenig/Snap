@@ -1,8 +1,8 @@
 /*
 
-	sha512.js
+    sha512.js
 
-	encryption for SNAP!
+    encryption for SNAP!
     This file is derived from crypto-js.
 
     © 2009–2012 by Jeff Mott. All rights reserved.
@@ -16,6 +16,7 @@
 
 */
 
+/*eslint-disable*/
 var hex_sha512 = (function (hex_sha512) {
 
     var hexcase = 0;

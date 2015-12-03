@@ -6935,7 +6935,7 @@ CellMorph.prototype.drawNew = function () {
         if (this.contents instanceof Morph) {
             this.contentsMorph = this.contents;
         } else if (isString(this.contents)) {
-            txt  = this.contents.length > 500 ?
+            txt = this.contents.length > 500 ?
                     this.contents.slice(0, 500) + '...' : this.contents;
             this.contentsMorph = new TextMorph(
                 txt,

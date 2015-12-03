@@ -1035,7 +1035,7 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             part = new InputSlotMorph(
                 null,
                 false,
-                {   brightness : ['brightness'],
+                { brightness : ['brightness'],
                     ghost : ['ghost'],
                     negative : ['negative'],
                     comic: ['comic'],
@@ -1799,7 +1799,7 @@ SyntaxElementMorph.prototype.showBubble = function (value, exportPic) {
             value
         );
     } else if (isString(value)) {
-        txt  = value.length > 500 ? value.slice(0, 500) + '...' : value;
+        txt = value.length > 500 ? value.slice(0, 500) + '...' : value;
         morphToShow = new TextMorph(
             txt,
             this.fontSize
@@ -5888,11 +5888,11 @@ CommandSlotMorph.prototype.drawFlat = function (context) {
     context.lineTo(this.corner + ins + edge + rf * 2, edge);
     context.lineTo(indent + edge + rf * 2, this.corner + edge);
     context.lineTo(
-        indent + edge  + rf * 2 + (dent - rf * 2),
+        indent + edge + rf * 2 + (dent - rf * 2),
         this.corner + edge
     );
     context.lineTo(
-        indent + edge  + rf * 2 + (dent - rf * 2) + this.corner,
+        indent + edge + rf * 2 + (dent - rf * 2) + this.corner,
         edge
     );
     context.lineTo(this.width() - this.corner - edge, edge);
@@ -6090,16 +6090,16 @@ CommandSlotMorph.prototype.drawEdges = function (context) {
     context.beginPath();
     context.moveTo(indent + edge + rf * 2 + shift, this.corner + shift);
     context.lineTo(
-        indent + edge  + rf * 2 + (dent - rf * 2),
+        indent + edge + rf * 2 + (dent - rf * 2),
         this.corner + shift
     );
     context.stroke();
 
     // dent right edge
     rightGradient = context.createLinearGradient(
-        indent + edge  + rf * 2 + (dent - rf * 2) - shift,
+        indent + edge + rf * 2 + (dent - rf * 2) - shift,
         this.corner,
-        indent + edge  + rf * 2 + (dent - rf * 2) + shift * 0.7,
+        indent + edge + rf * 2 + (dent - rf * 2) + shift * 0.7,
         this.corner + shift + shift * 0.7
     );
     rightGradient.addColorStop(0, this.cachedClr);
@@ -6108,11 +6108,11 @@ CommandSlotMorph.prototype.drawEdges = function (context) {
     context.strokeStyle = rightGradient;
     context.beginPath();
     context.moveTo(
-        indent + edge  + rf * 2 + (dent - rf * 2),
+        indent + edge + rf * 2 + (dent - rf * 2),
         this.corner + shift
     );
     context.lineTo(
-        indent + edge  + rf * 2 + (dent - rf * 2) + this.corner,
+        indent + edge + rf * 2 + (dent - rf * 2) + this.corner,
         shift
     );
     context.stroke();
@@ -6121,7 +6121,7 @@ CommandSlotMorph.prototype.drawEdges = function (context) {
     context.strokeStyle = upperGradient;
     context.beginPath();
     context.moveTo(
-        indent + edge  + rf * 2 + (dent - rf * 2) + this.corner,
+        indent + edge + rf * 2 + (dent - rf * 2) + this.corner,
         shift
     );
     context.lineTo(this.width() - this.corner - edge, shift);
@@ -6221,11 +6221,11 @@ RingCommandSlotMorph.prototype.drawFlat = function (context) {
     context.lineTo(this.corner + ins + edge + rf * 2, edge);
     context.lineTo(indent + edge + rf * 2, this.corner + edge);
     context.lineTo(
-        indent + edge  + rf * 2 + (dent - rf * 2),
+        indent + edge + rf * 2 + (dent - rf * 2),
         this.corner + edge
     );
     context.lineTo(
-        indent + edge  + rf * 2 + (dent - rf * 2) + this.corner,
+        indent + edge + rf * 2 + (dent - rf * 2) + this.corner,
         edge
     );
     context.lineTo(this.width() - this.corner - edge, edge);
@@ -6363,7 +6363,7 @@ CSlotMorph.prototype.fixLayout = function () {
         this.setHeight(nb.fullBounds().height() + this.corner);
         this.setWidth(nb.fullBounds().width() + (this.cSlotPadding * 2));
     } else {
-        this.setHeight(this.corner * 4  + this.cSlotPadding); // default
+        this.setHeight(this.corner * 4 + this.cSlotPadding); // default
         this.setWidth(
             this.corner * 4
                 + (this.inset * 2)

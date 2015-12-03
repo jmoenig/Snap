@@ -621,7 +621,7 @@ SnapSerializer.prototype.loadSprites = function (xmlString, ide) {
         throw 'Module uses newer version of Serializer';
     }
     model.childrenNamed('sprite').forEach(function (model) {
-        var sprite  = new SpriteMorph(project.globalVariables);
+        var sprite = new SpriteMorph(project.globalVariables);
 
         if (model.attributes.id) {
             myself.objects[model.attributes.id] = sprite;
@@ -1183,7 +1183,7 @@ SnapSerializer.prototype.loadValue = function (model) {
         });
         return v;
     case 'sprite':
-        v  = new SpriteMorph(myself.project.globalVariables);
+        v = new SpriteMorph(myself.project.globalVariables);
         if (model.attributes.id) {
             myself.objects[model.attributes.id] = v;
         }

@@ -664,8 +664,7 @@ SnapTranslator.dict.pl = {
     'Import...':
         'Importuj...',
     'file menu import hint':
-        '\u0142aduje wyeksportowany projekt\n'
-		  + 'biblitek\u0119 '
+        '\u0142aduje wyeksportowany projekt\n' + 'biblitek\u0119 '
           + 'kostium lub d\u017Awi\u0119k',
     'Export project as plain text...':
         'Eksportuj projekt jako tekst...',

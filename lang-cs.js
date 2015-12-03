@@ -693,9 +693,7 @@ SnapTranslator.dict.cs = {
     'Libraries...':
         'Knihovny...',
     'Import library':
-        'Importovat knihovnu',
-        
-	  'Select a costume from the media library':
+        'Importovat knihovnu', 'Select a costume from the media library':
 		    'Vyberte kostým z knihovny médií',
     'Select a sound from the media library':
         'Vyberte si zvuk z knihovny médií',

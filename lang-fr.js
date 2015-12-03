@@ -736,11 +736,9 @@ SnapTranslator.dict.fr = {
     'Thread safe scripts':
         'Scripts réentrants',
     'check to disallow\nscript reentrance':
-        'Cocher pour interdire\n la r\u00E9entrance des scripts\n'
-	  +'et les ex\u00E9cuter s\u00E9par\u00E9ment',
+        'Cocher pour interdire\n la r\u00E9entrance des scripts\n' +'et les ex\u00E9cuter s\u00E9par\u00E9ment',
     'uncheck to allow\nscript reentrance':
-        'D\u00E9cocher pour permettre\n la r\u00E9entrance des scripts\n'
-	  +'o\u00F9 certains s\'ex\u00E9cutent en paral\u00E8lle',
+        'D\u00E9cocher pour permettre\n la r\u00E9entrance des scripts\n' +'o\u00F9 certains s\'ex\u00E9cutent en paral\u00E8lle',
     'Prefer smooth animations':
         'Vitesse d\'animation fixe',
     'uncheck for greater speed\nat variable frame rates':

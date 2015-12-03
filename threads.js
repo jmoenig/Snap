@@ -2167,7 +2167,7 @@ Process.prototype.reportMonadic = function (fname, n) {
         result = Math.log(x);
         break;
     case 'log': // base 10
-        result =  Math.log(x) / Math.LN10;
+        result = Math.log(x) / Math.LN10;
         break;
     case 'e^':
         result = Math.exp(x);
