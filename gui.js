@@ -71,7 +71,7 @@ BlockRemovalDialogMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2015-November-16';
+modules.gui = '2015-December-04';
 
 // Declarations
 
@@ -5272,11 +5272,11 @@ ProjectDialogMorph.prototype.rawOpenCloudProject = function (proj) {
     SnapCloud.reconnect(
         function () {
             SnapCloud.callService(
-                'getProject',
+                'getRawProject',
                 function (response) {
                     SnapCloud.disconnect();
                     myself.ide.source = 'cloud';
-                    myself.ide.droppedText(response[0].SourceCode);
+                    myself.ide.droppedText(response);
                     if (proj.Public === 'true') {
                         location.hash = '#present:Username=' +
                             encodeURIComponent(SnapCloud.username) +

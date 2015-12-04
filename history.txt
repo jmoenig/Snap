@@ -2689,3 +2689,9 @@ end - bulk of 151116
 151120
 ------
 * Lists: fixed linked lists identity loss when showing watchers
+
+151204
+------
+* Cloud: doubled the number of supported backend slices
+* Cloud, GUI: support new “raw” cloud project services
+
