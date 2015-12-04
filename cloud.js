@@ -30,7 +30,7 @@
 /*global modules, IDE_Morph, SnapSerializer, hex_sha512, alert, nop,
 localize*/
 
-modules.cloud = '2015-January-12';
+modules.cloud = '2015-December-04';
 
 // Global stuff
 
@@ -65,7 +65,7 @@ Cloud.prototype.hasProtocol = function () {
 };
 
 Cloud.prototype.setRoute = function (username) {
-    var routes = 10,
+    var routes = 20,
         userNum = 0,
         i;
 
@@ -145,13 +145,12 @@ Cloud.prototype.getPublicProject = function (
     // where the values are url-component encoded
     // callBack is a single argument function, errorCall take two args
     var request = new XMLHttpRequest(),
-        responseList,
         myself = this;
     try {
         request.open(
             "GET",
             (this.hasProtocol() ? '' : 'http://')
-                + this.url + 'Public'
+                + this.url + 'RawPublic'
                 + '?'
                 + id,
             true
@@ -170,12 +169,9 @@ Cloud.prototype.getPublicProject = function (
                             request.responseText
                         );
                     } else {
-                        responseList = myself.parseResponse(
-                            request.responseText
-                        );
                         callBack.call(
                             null,
-                            responseList[0].SourceCode
+                            request.responseText
                         );
                     }
                 } else {
@@ -544,9 +540,13 @@ Cloud.prototype.callService = function (
                 if (serviceName === 'login') {
                     myself.api = myself.parseAPI(request.responseText);
                 }
-                responseList = myself.parseResponse(
-                    request.responseText
-                );
+                if (serviceName === 'getRawProject') {
+                    responseList = request.responseText;
+                } else {
+                    responseList = myself.parseResponse(
+                        request.responseText
+                    )
+                }
                 callBack.call(null, responseList, service.url);
             }
         };

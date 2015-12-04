@@ -1,7 +1,7 @@
-iteration-composition	Iteration, composition
-list-utilities	List utilities
-stream-tools	Streams (lazy lists)
-variadic-reporters	Variadic reporters
-word-sentence	Words, sentences
-cases	Multi-branched conditional (switch)
-leap-library LEAP Motion controller
+iteration-composition.xml	Iteration, composition
+list-utilities.xml	List utilities
+stream-tools.xml	Streams (lazy lists)
+variadic-reporters.xml	Variadic reporters
+word-sentence.xml	Words, sentences
+cases.xml	Multi-branched conditional (switch)
+leap-library.xml	LEAP Motion controller

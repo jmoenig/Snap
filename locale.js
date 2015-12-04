@@ -42,7 +42,7 @@
 
 /*global modules, contains*/
 
-modules.locale = '2015-October-07';
+modules.locale = '2015-November-16';
 
 // Global stuff
 
@@ -221,7 +221,7 @@ SnapTranslator.dict.cs = {
     'translator_e-mail':
         'info@iguru.eu, jan.tomsa.1976@gmail.com',
     'last_changed':
-        '2015-09-23'
+        '2015-11-16'
 };
 
 SnapTranslator.dict.zh = {
@@ -522,3 +522,26 @@ SnapTranslator.dict.hr = {
     'last_changed':
         '2015-09-15'
 };
+
+SnapTranslator.dict.bg = {
+    'language_name':
+        'Български',
+    'language_translator':
+        'Ivan Savov',
+    'translator_e-mail':
+        'ivan.savov@gmail.com',
+    'last_changed':
+        '2015-11-16'
+};
+
+SnapTranslator.dict.ro = {
+    'language_name':
+        'Român',
+    'language_translator':
+        'Cristian Macarascu',
+    'translator_e-mail':
+        '',
+    'last_changed':
+        '2015-10-24'
+};
+
