@@ -20,7 +20,8 @@ module.exports = {
         // encourages use of dot notation whenever possible
         "dot-notation": [2, { "allowKeywords": true}],
         // enforces consistent newlines before or after dots
-        "dot-location": 2,
+        // TODO: this needs configuration
+        // "dot-location": 1,
         // require the use of === and !==
         "eqeqeq": 2,
         // make sure for-in loops have an if statement
@@ -52,7 +53,7 @@ module.exports = {
         // disallow use of eval()-like methods
         "no-implied-eval": 2,
         // disallow this keywords outside of classes or class-like objects
-        "no-invalid-this": 0,
+        "no-invalid-this": 2,
         // disallow usage of __iterator__ property
         "no-iterator": 2,
         // disallow use of labeled statements
@@ -79,7 +80,7 @@ module.exports = {
         // var foo = "Copyright \251";
         "no-octal-escape": 2,
         // allow reassignment of function parameters
-        "no-param-reassign": 0,
+        "no-param-reassign": 1,
         // disallow usage of __proto__ property
         "no-proto": 2,
         // disallow declaring the same variable more then once
@@ -99,12 +100,8 @@ module.exports = {
         "no-unused-expressions": 2,
         // disallow unnecessary .call() and .apply()
         "no-useless-call": 0,
-        // disallow unnecessary concatenation of literals or template literals
-        "no-useless-concat": 0,
         // disallow use of void operator
         "no-void": 0,
-        // disallow usage of configurable warning terms in comments: e.g. todo
-        "no-warning-comments": [0, { "terms": ["todo", "fixme", "xxx"], "location": "start" }],
         // disallow use of the with statement
         "no-with": 2,
         // require use of the second argument for parseInt()
@@ -115,7 +112,7 @@ module.exports = {
         // require immediate function invocation to be wrapped in parentheses
         "wrap-iife": [2, "any"],
         // disallow "Yoda" conditions: "thing" === var
-        "yoda": 2,
+        "yoda": 1,
         // "accessor-pairs": 1,
         // "array-bracket-spacing": 1,
         // "block-spacing": 1,
@@ -125,10 +122,9 @@ module.exports = {
         "comma-dangle": 2,
         "comma-spacing": 1,
         "comma-style": 1,
-        // "complexity": 1,
         // "computed-property-spacing": 1,
         // Always use name myself for "this" in callbacks
-        // "consistent-this": [2, "myself"],
+        // "consistent-this": [1, "myself"],
         // files should end with a newline
         "eol-last": 2,
         "func-style": [2, "declaration"],
