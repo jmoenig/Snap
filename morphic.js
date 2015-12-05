@@ -9590,6 +9590,7 @@ HandMorph.prototype.processMouseDown = function (event) {
     this.destroyTemporaries();
     this.contextMenuEnabled = true;
     this.morphToGrab = null;
+    this.grabPosition = null;
     if (this.children.length !== 0) {
         this.drop();
         this.mouseButton = null;
@@ -9599,12 +9600,13 @@ HandMorph.prototype.processMouseDown = function (event) {
             if (!contains(
                     morph.allParents(),
                     this.world.activeMenu
-                )&&!contains(morph.allParents(),this.world.activeMenu.scrollMenu)) {
+                ) && !contains(morph.allParents(), this.world.activeMenu.scrollMenu)) {
 
                 this.world.activeMenu.destroy();}
             else {
                 clearInterval(this.touchHoldTimeout);
-            }}
+            }
+        }
         if (this.world.activeHandle) {
             if (morph !== this.world.activeHandle) {
                 this.world.activeHandle.destroy();
@@ -9617,6 +9619,7 @@ HandMorph.prototype.processMouseDown = function (event) {
         }
         if (!morph.mouseMove) {
             this.morphToGrab = morph.rootForGrab();
+            this.grabPosition = this.bounds.origin.copy();
         }
         if (event.button === 2 || event.ctrlKey) {
             this.mouseButton = 'right';
