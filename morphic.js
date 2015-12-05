@@ -7070,6 +7070,10 @@ MenuMorph.prototype.destroy = function () {
     if (this.hasFocus) {
         this.world.keyboardReceiver = null;
     }
+    if (this.scrollMenu != null) {
+        this.scrollMenu.destroy();
+    }
+
     MenuMorph.uber.destroy.call(this);
 };
 
