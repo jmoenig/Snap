@@ -6931,10 +6931,10 @@ MenuMorph.prototype.popup = function (world, pos) {
     world.add(this);
     this.world = world; // optionally enable keyboard support
     world.activeMenu = this;
-    if (this.scrollMenu!= undefined && this.scrollMenu!= null) {
+    if (this.scrollMenu != undefined && this.scrollMenu != null) {
         pos = this.position();
         var labelHeight = 0;
-        if (this.label!=null) {
+        if (this.label != null) {
             labelHeight = this.label.height() + 2;
         }
         this.scrollMenu.world = world;
