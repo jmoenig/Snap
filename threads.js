@@ -756,6 +756,13 @@ Process.prototype.expectReport = function () {
 
 // Process Exception Handling
 
+Process.prototype.checkIfList = function (maybeList) {
+    if (!(maybeList instanceof List)) {
+        maybeList = new List();
+    }
+    return maybeList;
+};
+
 Process.prototype.handleError = function (error, element) {
     var m = element;
     this.stop();
@@ -1354,15 +1361,19 @@ Process.prototype.reportCONS = function (car, cdr) {
 };
 
 Process.prototype.reportCDR = function (list) {
+    list = this.checkIfList(list);
     return list.cdr();
 };
 
 Process.prototype.doAddToList = function (element, list) {
+    list = this.checkIfList(list);
     list.add(element);
 };
 
 Process.prototype.doDeleteFromList = function (index, list) {
     var idx = index;
+    list = this.checkIfList(list);
+
     if (this.inputOption(index) === 'all') {
         return list.clear();
     }
@@ -1379,6 +1390,8 @@ Process.prototype.doDeleteFromList = function (index, list) {
 
 Process.prototype.doInsertInList = function (element, index, list) {
     var idx = index;
+    list = this.checkIfList(list);
+
     if (index === '') {
         return null;
     }
@@ -1393,6 +1406,8 @@ Process.prototype.doInsertInList = function (element, index, list) {
 
 Process.prototype.doReplaceInList = function (index, list, element) {
     var idx = index;
+    list = this.checkIfList(list);
+
     if (index === '') {
         return null;
     }
@@ -1407,6 +1422,8 @@ Process.prototype.doReplaceInList = function (index, list, element) {
 
 Process.prototype.reportListItem = function (index, list) {
     var idx = index;
+    list = this.checkIfList(list);
+
     if (index === '') {
         return '';
     }
@@ -1420,10 +1437,12 @@ Process.prototype.reportListItem = function (index, list) {
 };
 
 Process.prototype.reportListLength = function (list) {
+    list = this.checkIfList(list);
     return list.length();
 };
 
 Process.prototype.reportListContainsItem = function (list, element) {
+    list = this.checkIfList(list);
     return list.contains(element);
 };
 
@@ -1682,6 +1701,8 @@ Process.prototype.reportMap = function (reporter, list) {
     // documented in each of the variants' code (linked or arrayed) below
 
     var next;
+    list = this.checkIfList(list);
+
     if (list.isLinked) {
         // this.context.inputs:
         // [0] - reporter
