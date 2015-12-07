@@ -415,6 +415,11 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: 'go back %n layers',
             defaults: [1]
         },
+        doNotify: {
+            type: 'command',
+            category: 'looks',
+            spec: 'notification with title %s and content %s'
+        },
         doScreenshot: {
             type: 'command',
             category: 'looks',
@@ -568,6 +573,16 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'command',
             category: 'pen',
             spec: 'stamp'
+        },
+        doStreamCamera: {
+            type: 'command',
+            category: 'pen',
+            spec: 'start streaming from the camera'
+        },
+        doStopCamera: {
+            type: 'command',
+            category: 'pen',
+            spec: 'stop streaming from the camera'
         },
 
         // Control
@@ -786,6 +801,23 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'sensing',
             spec: 'color %clr is touching %clr ?'
         },
+        reportCameraMotion: {
+            only: SpriteMorph,
+            type: 'predicate',
+            category: 'sensing',
+            spec: 'camera motion at my position?'
+        },
+        reportCameraDirection: {
+            only: SpriteMorph,
+            type: 'reporter',
+            category: 'sensing',
+            spec: 'camera motion direction'
+        },
+        reportStreamingCamera: {
+            type: 'predicate',
+            category: 'sensing',
+            spec: 'streaming from the camera?'
+        },
         colorFiltered: {
             dev: true,
             type: 'reporter',
@@ -894,6 +926,31 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'reporter',
             category: 'sensing',
             spec: 'current %dates'
+        },
+        doVibrate: {
+            type: 'command',
+            category: 'sensing',
+            spec: 'vibrate %n seconds'
+        },
+        reportCompassHeading: {
+            type: 'reporter',
+            category: 'sensing',
+            spec: 'current compass heading'
+        },
+        reportAccelerationX: {
+            type: 'reporter',
+            category: 'sensing',
+            spec: 'current acceleration along the x axes'
+        },
+        reportAccelerationY: {
+            type: 'reporter',
+            category: 'sensing',
+            spec: 'current acceleration along the y axes'
+        },
+        reportAccelerationZ: {
+            type: 'reporter',
+            category: 'sensing',
+            spec: 'current acceleration along the z axes'
         },
 
         // Operators
@@ -1792,6 +1849,8 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push('-');
         blocks.push(block('comeToFront'));
         blocks.push(block('goBack'));
+        blocks.push('-');
+        blocks.push(block('doNotify'));
 
     // for debugging: ///////////////
 
@@ -1923,6 +1982,10 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('reportTouchingColor'));
         blocks.push(block('reportColorIsTouchingColor'));
         blocks.push('-');
+        blocks.push(block('reportCameraMotion'));
+        blocks.push(block('reportCameraDirection'));
+        blocks.push(block('reportStreamingCamera'));
+        blocks.push('-');
         blocks.push(block('doAsk'));
         blocks.push(watcherToggle('getLastAnswer'));
         blocks.push(block('getLastAnswer'));
@@ -1949,6 +2012,14 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('doSetFastTracking'));
         blocks.push('-');
         blocks.push(block('reportDate'));
+        blocks.push('-');
+        blocks.push(block('doVibrate'));
+        blocks.push('-');
+        blocks.push(block('reportCompassHeading'));
+        blocks.push('-');
+        blocks.push(block('reportAccelerationX'));
+        blocks.push(block('reportAccelerationY'));
+        blocks.push(block('reportAccelerationZ'));
 
     // for debugging: ///////////////
 
@@ -4711,6 +4782,11 @@ StageMorph.prototype.init = function (globals) {
     this.paletteCache = {}; // not to be serialized (!)
     this.lastAnswer = ''; // last user input, do not persist
     this.activeSounds = []; // do not persist
+    this.acceleration = null; // do not persist
+    this.compassHeading = null; // do not persist
+    this.streamingCamera = false;
+    this.lastCameraCanvas = null;
+    this.lastCameraMotion = new Point(0, 0);
 
     this.trailsCanvas = null;
     this.isThreadSafe = false;
@@ -5370,6 +5446,8 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push('-');
         blocks.push(block('show'));
         blocks.push(block('hide'));
+        blocks.push('-');
+        blocks.push(block('doNotify'));
 
     // for debugging: ///////////////
 
@@ -5424,6 +5502,9 @@ StageMorph.prototype.blockTemplates = function (category) {
     } else if (cat === 'pen') {
 
         blocks.push(block('clear'));
+        blocks.push('-');
+        blocks.push(block('doStreamCamera'));
+        blocks.push(block('doStopCamera'));
 
     } else if (cat === 'control') {
 
@@ -5480,6 +5561,8 @@ StageMorph.prototype.blockTemplates = function (category) {
 
     } else if (cat === 'sensing') {
 
+        blocks.push(block('reportStreamingCamera'));
+        blocks.push('-');
         blocks.push(block('doAsk'));
         blocks.push(watcherToggle('getLastAnswer'));
         blocks.push(block('getLastAnswer'));
@@ -5504,6 +5587,14 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('doSetFastTracking'));
         blocks.push('-');
         blocks.push(block('reportDate'));
+        blocks.push('-');
+        blocks.push(block('doVibrate'));
+        blocks.push('-');
+        blocks.push(block('reportCompassHeading'));
+        blocks.push('-');
+        blocks.push(block('reportAccelerationX'));
+        blocks.push(block('reportAccelerationY'));
+        blocks.push(block('reportAccelerationZ'));
 
     // for debugging: ///////////////
 

@@ -1,0 +1,16 @@
+<?xml version='4.0' encoding='utf-8'?>
+<widget id="edu.berkeley.snap" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>Snap!</name>
+    <description>
+        Snap! Build Your Own Blocks
+        A visual, blocks based programming language inspired by Scratch
+    </description>
+    <author email="jens@moenig.org" href="http://snap.berkeley.edu">
+        Jens Mönig and Brian Harvey
+    </author>
+    <content src="snap.html" />
+    <access origin="*" />
+    <preference name="Fullscreen" value="true" />
+    <preference name="Orientation" value="landscape" />
+    <icon src="www/snap_logo_sm.png" />
+</widget>

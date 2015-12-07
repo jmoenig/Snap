@@ -10809,6 +10809,11 @@ WorldMorph.prototype.edit = function (aStringOrTextMorph) {
         this.virtualKeyboard.style.top = this.cursor.top() + pos.y + "px";
         this.virtualKeyboard.style.left = this.cursor.left() + pos.x + "px";
         this.virtualKeyboard.focus();
+        if (cordova) {
+            if (cordova.plugins.SoftKeyboard) { // Android only
+                cordova.plugins.SoftKeyboard.show(); // Issue #81
+            }
+        }
     }
 
     if (MorphicPreferences.useSliderForInput) {
