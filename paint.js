@@ -307,6 +307,7 @@ PaintEditorMorph.prototype.refreshToolButtons = function () {
 };
 
 PaintEditorMorph.prototype.ok = function () {
+    this.paper.updateAutomaticCenter();
     this.callback(
         this.paper.paper,
         this.paper.rotationCenter
@@ -585,10 +586,110 @@ PaintCanvasMorph.prototype.init = function (shift) {
         var key = this.world().currentKey;
         return (key === 16);
     };
+    // should we calculate the center of the image ourselves,
+    // or use the user position
+    this.automaticCrosshairs = true;
     this.buildContents();
 };
 
+// Returns a rectangle that encloses all the non-transparent pixels on the canvas.
+PaintCanvasMorph.prototype.calculateCanvasBounds = function(canvas) {
+    var context = canvas.getContext("2d");
+    var imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+    var imageDataBuffer = imageData.data;
+
+    var minX = canvas.width, minY = canvas.height, maxX = 0, maxY = 0;
+
+    // Scan to find the top border.
+    for (var y = 0; y < minY; y++) {
+        for (var x = 0; x < canvas.width; x++) {
+            var alphaValue = imageDataBuffer[(y * canvas.width + x) * 4 + 3];
+            if (alphaValue > 0) {
+                if (x < minX) {
+                    minX = x;
+                }
+                if (x > maxX) {
+                    maxX = x;
+                }
+                minY = y;
+                // Don't break yet, we must finish the row.
+            }
+        }
+    }
+
+    if (minY == canvas.height) {
+        // Early exit: no opaque pixels.
+        return null;
+    }
+
+    // Scan to find the bottom border
+    maxY = minY;
+    for (var y = canvas.height - 1; y > maxY; y--) {
+        for (var x = 0; x < canvas.width; x++) {
+            var alphaValue = imageDataBuffer[(y * canvas.width + x) * 4 + 3];
+            if (alphaValue > 0) {
+                if (x < minX) {
+                    minX = x;
+                }
+                if (x > maxX) {
+                    maxX = x;
+                }
+                maxY = y;
+                // Don't break yet, we must finish the row.
+            }
+        }
+    }
+
+    // Scan to find the left border
+    for (var x = 0; x < minX; x++) {
+        for (var y = minY + 1; y < maxY; y++) {
+            var alphaValue = imageDataBuffer[(y * canvas.width + x) * 4 + 3];
+            if (alphaValue > 0) {
+                minX = x;
+                // Break now, no need to finish the column.
+                break;
+            }
+        }
+    }
+
+    // Finally find the right border
+    for (var x = canvas.width - 1; x > maxX; x--) {
+        for (var y = minY + 1; y < maxY; y++) {
+            var alphaValue = imageDataBuffer[(y * canvas.width + x) * 4 + 3];
+            if (alphaValue > 0) {
+                maxX = x;
+                // Break now, no need to finish the column.
+                break;
+            }
+        }
+    }
+
+    return new Rectangle(minX, minY, maxX + 1, maxY + 1);
+};
+
+// Calculate the center of all the non-transparent pixels on the canvas.
+PaintCanvasMorph.prototype.calculateCanvasCenter = function(canvas) {
+    var canvasBounds = this.calculateCanvasBounds(canvas);
+    if (canvasBounds == null) {
+        return null;
+    }
+    // Can't use canvasBounds.center(), it rounds down.
+    return new Point((canvasBounds.origin.x + canvasBounds.corner.x) / 2, (canvasBounds.origin.y + canvasBounds.corner.y) / 2);
+};
+
+// If we are in automaticCrosshairs mode, recalculate the rotationCenter.
+PaintCanvasMorph.prototype.updateAutomaticCenter = function () {
+    if (this.automaticCrosshairs) {
+        // Calculate this.rotationCenter from this.paper
+        var rotationCenter = this.calculateCanvasCenter(this.paper);
+        if (rotationCenter != null) {
+            this.rotationCenter = rotationCenter;
+        }
+    }
+};
+
 PaintCanvasMorph.prototype.scale = function (x, y) {
+    this.updateAutomaticCenter();
     this.mask = newCanvas(this.extent());
     var c = newCanvas(this.extent());
     c.getContext("2d").save();
@@ -645,6 +746,7 @@ PaintCanvasMorph.prototype.clearCanvas = function () {
 PaintCanvasMorph.prototype.toolChanged = function (tool) {
     this.mask = newCanvas(this.extent());
     if (tool === "crosshairs") {
+        this.updateAutomaticCenter();
         this.drawcrosshair();
     }
     this.drawNew();
@@ -908,6 +1010,8 @@ PaintCanvasMorph.prototype.mouseMove = function (pos) {
         }
         break;
     case "crosshairs":
+        // Disable automatic crosshairs: user has now chosen where they should be.
+        this.automaticCrosshairs = false;
         this.rotationCenter = relpos.copy();
         this.drawcrosshair(mctx);
         break;
