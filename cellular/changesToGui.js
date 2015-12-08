@@ -219,6 +219,14 @@ IDE_Morph.prototype.createCorral = function()
     gridSizer.hint = "grid size";
     gridSizer.contents().minWidth = 0;
 
+    var clearButton = new PushButtonMorph(
+        myself,
+        'onClearButton',
+        'clear',
+        null,
+        'clear current cell attribute',
+        null);
+
     var queryValueLabel = createBasicLabel("(hover to query)");
     this.cellAttributeQueryText = queryValueLabel;
 
@@ -238,7 +246,8 @@ IDE_Morph.prototype.createCorral = function()
         [
             gridSizerLabel,
             gridSizer,
-            queryValueLabel,
+            clearButton,
+            queryValueLabel, // Keep the query label last since it changes size.
         ]
     ];
 
@@ -293,6 +302,13 @@ IDE_Morph.prototype.createCorral = function()
         sizeField.accept();
         valueField.accept();
         hardnessField.accept();
+    }
+};
+
+IDE_Morph.prototype.onClearButton = function() {
+    var attribute = this.attributeSelector.getValue();
+    if (Cell.hasAttribute(attribute)) {
+        this.stage.setCellAttributeEverywhere(attribute, 0);
     }
 };
 
