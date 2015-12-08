@@ -17,6 +17,10 @@ SpriteMorph.prototype.snapappsHookBlockTemplates = function(blocks, block, cat, 
         blocks.splice(6, 0, block('faceToXY'), block('setDirection'));
         blocks.splice(11, 0, block('gotoRandomLocation'));
     }
+    if (cat === 'control')
+    {
+        blocks.splice(1, 0, block('receiveKeyReleased'));
+    }
     if (cat === 'operators')
     {
         blocks.push(block('reportExpression'));
@@ -94,7 +98,15 @@ SpriteMorph.prototype.snapappsHookBlockTemplates = function(blocks, block, cat, 
         blocks.push('-');
         blocks.push(block('reportPenDown'));
     }
-}
+};
+
+StageMorph.prototype.snapappsHookBlockTemplates = function(blocks, block, cat, helpMenu)
+{
+    if (cat === 'control')
+    {
+        blocks.splice(1, 0, block('receiveKeyReleased'));
+    }
+};
 
 /*********************************************************************/
 /***************************** OVERRIDES *****************************/
@@ -132,6 +144,12 @@ SpriteMorph.prototype.addScribbleBlocks = function () {
         type: 'command',
         category: 'motion',
         spec: 'point to x: %n y: %n'
+    };
+
+    SpriteMorph.prototype.blocks.receiveKeyReleased = {
+        type: 'hat',
+        category: 'control',
+        spec: 'when %keyHat key released'
     };
 
     SpriteMorph.prototype.blocks.startShape = {
@@ -533,7 +551,48 @@ StageMorph.prototype.replacePic = function () {
 	document.body.appendChild(inp);
 	ide.filePicker = inp;
 	inp.click();
-}
+};
+
+SpriteMorph.prototype.allHatBlocksForKeyReleased = function (key) {
+    return this.scripts.children.filter(function (morph) {
+        if (morph.selector) {
+            if (morph.selector === 'receiveKeyReleased') {
+                var evt = morph.inputs()[0].evaluate()[0];
+                return evt === key || evt === 'any';
+            }
+        }
+        return false;
+    });
+};
+
+StageMorph.prototype.allHatBlocksForKeyReleased
+    = SpriteMorph.prototype.allHatBlocksForKeyReleased;
+
+StageMorph.prototype.uberRemovePressedKey = StageMorph.prototype.removePressedKey;
+StageMorph.prototype.removePressedKey = function (key) {
+    var myself = this;
+    var evt = key.toLowerCase();
+    var hats = [];
+
+    this.children.concat(this).forEach(function (morph) {
+        if (morph instanceof SpriteMorph || morph instanceof StageMorph) {
+            var morphHats = morph.allHatBlocksForKeyReleased(evt);
+            for (var i=0; i<morphHats.length; i++)
+            {
+                var hatAndReceiver = {};
+                hatAndReceiver.hat = morphHats[i];
+                hatAndReceiver.receiver = morph;
+                hats.push(hatAndReceiver);
+            }
+        }
+    });
+
+    hats.forEach(function (morphHat) {
+        myself.threads.startProcess(morphHat.hat, myself.isThreadSafe, undefined, undefined, morphHat.receiver);
+    });
+
+    return this.uberRemovePressedKey(key);
+};
 
 /*********************************************************************/
 /****************************** OBJECTS ******************************/
@@ -553,7 +612,7 @@ var ScribbleShape = function()
 ScribbleShape.prototype.addPoint = function (x, y)
 {
     this.points.push(new Point(x,y));
-}
+};
 
 /*********************************************************************/
 /**************************** BLOCK LOGIC ****************************/
