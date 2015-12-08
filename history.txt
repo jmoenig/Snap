@@ -2682,4 +2682,16 @@ end - bulk of 151116
 * fix for IE backspace and tab errors contributed!
 * better resource loading mechanism contributed!
 
+151117
+------
+* Blocks: fixed a zebra-coloring glitch for BooleanSlotMorph
+
+151120
+------
+* Lists: fixed linked lists identity loss when showing watchers
+
+151204
+------
+* Cloud: doubled the number of supported backend slices
+* Cloud, GUI: support new “raw” cloud project services
 
