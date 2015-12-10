@@ -177,7 +177,7 @@ function addCellAttributeButtons(blocks, block, cat, helpMenu)
         fromField.cellAttribute = Cell.attributes[i];
         fromField.reactToEdit = function () {
             var value = Number(fromField.getValue());
-            if (isNaN(value))
+            if (isNaN(value) || !isFinite(value))
             {
                 fromField.setContents(0);
                 return;
@@ -206,7 +206,7 @@ function addCellAttributeButtons(blocks, block, cat, helpMenu)
         toField.cellAttribute = Cell.attributes[i];
         toField.reactToEdit = function () {
             var value = Number(toField.getValue());
-            if (isNaN(value))
+            if (isNaN(value) || !isFinite(value))
             {
                 toField.setContents(0);
                 return;

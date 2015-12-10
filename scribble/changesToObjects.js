@@ -1467,6 +1467,17 @@ SpriteMorph.prototype.setTextFillString = function (string) {
     this.setTextColor(getColorFromString(string));
 };
 
+SpriteMorph.prototype.uberSetPosition = SpriteMorph.prototype.setPosition;
+SpriteMorph.prototype.setPosition = function (aPoint, justMe) {
+    if (isNaN(aPoint.x) || !isFinite(aPoint.x)) {
+        aPoint.x = 0;
+    }
+    if (isNaN(aPoint.y) || !isFinite(aPoint.y)) {
+        aPoint.y = 0;
+    }
+    return this.uberSetPosition(aPoint, justMe);
+}
+
 /*********************************************************************/
 /****************************** STATICS ******************************/
 /*********************************************************************/
