@@ -2036,14 +2036,32 @@ Process.prototype.reportProduct = function (a, b) {
     return +a * +b;
 };
 
+function QuotientNaNException(numerator, denominator) {
+    this.name = "Quotient exception";
+    this.message = "illegal division operation: (" + numerator + ") / (" + denominator + ")";
+}
+
 Process.prototype.reportQuotient = function (a, b) {
-    return +a / +b;
+    var result = +a / +b;
+    if (isNaN(result) || +b === 0) {
+        throw new QuotientNaNException(+a, +b);
+    }
+    return result;
 };
+
+function ModulusNaNException(numerator, denominator) {
+    this.name = "Modulus exception";
+    this.message = "illegal modulus operation: (" + numerator + ") / (" + denominator + ")";
+}
 
 Process.prototype.reportModulus = function (a, b) {
     var x = +a,
         y = +b;
-    return ((x % y) + y) % y;
+    var result = ((x % y) + y) % y;
+    if (isNaN(result)) {
+        throw new ModulusNaNException(+a, +b);
+    }
+    return result;
 };
 
 Process.prototype.reportRandom = function (min, max) {
@@ -2128,6 +2146,11 @@ Process.prototype.reportRound = function (n) {
     return Math.round(+n);
 };
 
+function MonadicNaNException(func, number) {
+    this.name = "\"" + func + "\" exception";
+    this.message = "illegal " + func + " operation: " + func + "(" + number + ")";
+}
+
 Process.prototype.reportMonadic = function (fname, n) {
     var x = +n,
         result = 0;
@@ -2177,6 +2200,9 @@ Process.prototype.reportMonadic = function (fname, n) {
         break;
     default:
         nop();
+    }
+    if (isNaN(result)) {
+        throw new MonadicNaNException(fname, n);
     }
     return result;
 };

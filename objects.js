@@ -3445,7 +3445,12 @@ SpriteMorph.prototype.setPosition = function (aPoint, justMe) {
 
 SpriteMorph.prototype.forward = function (steps) {
     var dest,
-        dist = steps * this.parent.scale || 0;
+        dist;
+    
+    if (isNaN(steps) || !isFinite(steps)) {
+        steps = 0;
+    }
+    dist = steps * this.parent.scale || 0;
 
     if (dist >= 0) {
         dest = this.position().distanceAngle(dist, this.heading);
@@ -3463,7 +3468,13 @@ SpriteMorph.prototype.setHeading = function (degrees) {
     var x = this.xPosition(),
         y = this.yPosition(),
         dir = (+degrees || 0),
-        turn = dir - this.heading;
+        turn;
+        
+    if (isNaN(dir) || !isFinite(dir)) {
+        dir = 0;
+    }
+    
+    turn = dir - this.heading;
 
     // apply to myself
     this.changed();
@@ -3538,6 +3549,13 @@ SpriteMorph.prototype.gotoXY = function (x, y, justMe) {
         newX,
         newY,
         dest;
+        
+    if (isNaN(x) || !isFinite(x)) {
+        x = 0;
+    }
+    if (isNaN(y) || !isFinite(y)) {
+        y = 0;
+    }
 
     if (!stage) {return; }
     newX = stage.center().x + (+x || 0) * stage.scale;
