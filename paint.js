@@ -592,84 +592,9 @@ PaintCanvasMorph.prototype.init = function (shift) {
     this.buildContents();
 };
 
-// Returns a rectangle that encloses all the non-transparent pixels on the canvas.
-PaintCanvasMorph.prototype.calculateCanvasBounds = function(canvas) {
-    var context = canvas.getContext("2d");
-    var imageData = context.getImageData(0, 0, canvas.width, canvas.height);
-    var imageDataBuffer = imageData.data;
-
-    var minX = canvas.width, minY = canvas.height, maxX = 0, maxY = 0;
-
-    // Scan to find the top border.
-    for (var y = 0; y < minY; y++) {
-        for (var x = 0; x < canvas.width; x++) {
-            var alphaValue = imageDataBuffer[(y * canvas.width + x) * 4 + 3];
-            if (alphaValue > 0) {
-                if (x < minX) {
-                    minX = x;
-                }
-                if (x > maxX) {
-                    maxX = x;
-                }
-                minY = y;
-                // Don't break yet, we must finish the row.
-            }
-        }
-    }
-
-    if (minY == canvas.height) {
-        // Early exit: no opaque pixels.
-        return null;
-    }
-
-    // Scan to find the bottom border
-    maxY = minY;
-    for (var y = canvas.height - 1; y > maxY; y--) {
-        for (var x = 0; x < canvas.width; x++) {
-            var alphaValue = imageDataBuffer[(y * canvas.width + x) * 4 + 3];
-            if (alphaValue > 0) {
-                if (x < minX) {
-                    minX = x;
-                }
-                if (x > maxX) {
-                    maxX = x;
-                }
-                maxY = y;
-                // Don't break yet, we must finish the row.
-            }
-        }
-    }
-
-    // Scan to find the left border
-    for (var x = 0; x < minX; x++) {
-        for (var y = minY + 1; y < maxY; y++) {
-            var alphaValue = imageDataBuffer[(y * canvas.width + x) * 4 + 3];
-            if (alphaValue > 0) {
-                minX = x;
-                // Break now, no need to finish the column.
-                break;
-            }
-        }
-    }
-
-    // Finally find the right border
-    for (var x = canvas.width - 1; x > maxX; x--) {
-        for (var y = minY + 1; y < maxY; y++) {
-            var alphaValue = imageDataBuffer[(y * canvas.width + x) * 4 + 3];
-            if (alphaValue > 0) {
-                maxX = x;
-                // Break now, no need to finish the column.
-                break;
-            }
-        }
-    }
-
-    return new Rectangle(minX, minY, maxX + 1, maxY + 1);
-};
-
 // Calculate the center of all the non-transparent pixels on the canvas.
 PaintCanvasMorph.prototype.calculateCanvasCenter = function(canvas) {
-    var canvasBounds = this.calculateCanvasBounds(canvas);
+    var canvasBounds = Costume.prototype.canvasBoundingBox(canvas);
     if (canvasBounds == null) {
         return null;
     }

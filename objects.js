@@ -6330,11 +6330,10 @@ Costume.prototype.shrinkWrap = function () {
     this.version = Date.now();
 };
 
-Costume.prototype.boundingBox = function () {
+Costume.prototype.canvasBoundingBox = function (pic) {
     // answer the rectangle surrounding my contents' non-transparent pixels
     var row,
         col,
-        pic = this.contents,
         w = pic.width,
         h = pic.height,
         ctx = pic.getContext('2d'),
@@ -6390,6 +6389,10 @@ Costume.prototype.boundingBox = function () {
 
     return new Rectangle(getLeft(), getTop(), getRight(), getBottom());
 };
+
+Costume.prototype.boundingBox = function () {
+    return this.canvasBoundingBox(this.contents);
+}
 
 // Costume duplication
 
