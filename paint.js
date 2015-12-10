@@ -595,7 +595,7 @@ PaintCanvasMorph.prototype.init = function (shift) {
 // Calculate the center of all the non-transparent pixels on the canvas.
 PaintCanvasMorph.prototype.calculateCanvasCenter = function(canvas) {
     var canvasBounds = Costume.prototype.canvasBoundingBox(canvas);
-    if (canvasBounds == null) {
+    if (canvasBounds === null) {
         return null;
     }
     // Can't use canvasBounds.center(), it rounds down.
