@@ -1467,15 +1467,31 @@ SpriteMorph.prototype.setTextFillString = function (string) {
     this.setTextColor(getColorFromString(string));
 };
 
-SpriteMorph.prototype.uberSetPosition = SpriteMorph.prototype.setPosition;
-SpriteMorph.prototype.setPosition = function (aPoint, justMe) {
-    if (isNaN(aPoint.x) || !isFinite(aPoint.x)) {
-        aPoint.x = 0;
+SpriteMorph.prototype.uberGotoXY = SpriteMorph.prototype.gotoXY;
+SpriteMorph.prototype.gotoXY = function (x, y, justMe) {
+    if (isNaN(x) || !isFinite(x)) {
+        x = 0;
     }
-    if (isNaN(aPoint.y) || !isFinite(aPoint.y)) {
-        aPoint.y = 0;
+    if (isNaN(y) || !isFinite(y)) {
+        y = 0;
     }
-    return this.uberSetPosition(aPoint, justMe);
+    return this.uberGotoXY(x, y, justMe);
+}
+
+SpriteMorph.prototype.uberSetHeading = SpriteMorph.prototype.setHeading;
+SpriteMorph.prototype.setHeading = function (degrees) {
+    if (isNaN(degrees) || !isFinite(degrees)) {
+        degrees = 0;
+    }
+    return this.uberSetHeading(degrees);
+}
+
+SpriteMorph.prototype.uberForward = SpriteMorph.prototype.forward;
+SpriteMorph.prototype.forward = function (steps) {
+    if (isNaN(steps) || !isFinite(steps)) {
+        steps = 0;
+    }
+    return this.uberForward(steps);
 }
 
 /*********************************************************************/

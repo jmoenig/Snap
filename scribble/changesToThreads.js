@@ -5,7 +5,7 @@ function QuotientNaNException(numerator, denominator) {
 
 Process.prototype.reportQuotient = function (a, b) {
     var result = +a / +b;
-    if (isNaN(result)) {
+    if (isNaN(result) || +b === 0) {
         throw new QuotientNaNException(+a, +b);
     }
     return result;
