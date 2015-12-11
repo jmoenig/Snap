@@ -6925,7 +6925,7 @@ MenuMorph.prototype.popup = function (world, pos) {
         world.add(this.scrollMenu);
         this.scrollMenu.setPosition(new Point(pos.x + 3, labelHeight + 6));
         this.bounds.corner.y = Math.round(0.98 * world.height());
-        this.scrollMenu.setWidth(this.width() - 6);
+        this.scrollMenu.setWidth(this.width() - 7);
         this.scrollMenu.setHeight(this.bottom() - this.scrollMenu.top() - 4);
         for (var i = this.children.length ; i > -1 ; i += -1){
             if (this.children[i] instanceof MenuItemMorph) {
@@ -6965,12 +6965,19 @@ MenuMorph.prototype.popUpCenteredInWorld = function (world) {
 };
 
 MenuMorph.prototype.keepVisible = function(world) {
+    var zoom = 1;
     this.keepWithin(world);
     if(this.height() > world.height() && !this.scrollMenu){
          this.setTop(0);
+         this.children.forEach(function (child) {
+             if (child instanceof MenuItemMorph) {
+                 zoom = child.height() / 12;
+             }
+         });
          var slideColor = new Color(0,0,0);
-         slideColor = slideColor.lighter(60);
-         this.scrollMenu = new ScrollFrameMorph(this.scrollMenu, this.scrollBarSize, slideColor);
+         slideColor = slideColor.lighter(50);
+         this.scrollMenu = new ScrollFrameMorph(this.scrollMenu, 2.5 * zoom + 4, slideColor);
+         this.add(this.scrollMenu);
     }
 };
 
