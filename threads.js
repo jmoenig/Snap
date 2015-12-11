@@ -1629,10 +1629,19 @@ Process.prototype.doForever = function (body) {
     this.pushContext();
 };
 
+function DoRepeatError(value) {
+	this.name = "Repeat Error";
+	this.message = localize("The repeat loop was given an unsupported number of repetitions: ") + value;
+}
+
 Process.prototype.doRepeat = function (counter, body) {
     var block = this.context.expression,
         outer = this.context.outerContext, // for tail call elimination
         isCustomBlock = this.context.isCustomBlock;
+
+	if (isNaN(counter) || !isFinite(counter)) {
+		throw new DoRepeatError(counter);
+	}
 
     if (counter < 1) { // was '=== 0', which caused infinite loops on non-ints
         return null;
