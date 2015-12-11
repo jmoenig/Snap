@@ -6935,7 +6935,6 @@ MenuMorph.prototype.popup = function (world, pos) {
     }
     this.addShadow(new Point(2, 2), 80);
     this.fullChanged();
-
 };
 
 MenuMorph.prototype.popUpAtHand = function (world) {
@@ -8435,7 +8434,6 @@ function MenuItemMorph(
         italic,
         doubleClickAction
     );
-    
     this.menu = null;
 }
 
@@ -9602,9 +9600,9 @@ HandMorph.prototype.processMouseDown = function (event) {
             if (!contains(
                     morph.allParents(),
                     this.world.activeMenu
-                ) && 
+                ) &&
                 !contains(
-                    morph.allParents(), 
+                    morph.allParents(),
                     this.world.activeMenu.scrollMenu
                 )
                ) {
