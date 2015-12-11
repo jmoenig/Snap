@@ -141,6 +141,15 @@ var StagePrompterMorph;
 var Note;
 var SpriteHighlightMorph;
 
+function defaultFiniteValue(num, def) {
+	num = +num || 0;
+    if (isNaN(num) || !isFinite(num)) {
+        return def;
+    } else {
+        return num;
+    }
+}
+
 // SpriteMorph /////////////////////////////////////////////////////////
 
 // I am a scriptable object
@@ -3447,9 +3456,7 @@ SpriteMorph.prototype.forward = function (steps) {
     var dest,
         dist;
     
-    if (isNaN(steps) || !isFinite(steps)) {
-        steps = 0;
-    }
+    steps = defaultFiniteValue(steps, 0);
     dist = steps * this.parent.scale || 0;
 
     if (dist >= 0) {
@@ -3467,14 +3474,8 @@ SpriteMorph.prototype.forward = function (steps) {
 SpriteMorph.prototype.setHeading = function (degrees) {
     var x = this.xPosition(),
         y = this.yPosition(),
-        dir = (+degrees || 0),
-        turn;
-        
-    if (isNaN(dir) || !isFinite(dir)) {
-        dir = 0;
-    }
-    
-    turn = dir - this.heading;
+        dir = defaultFiniteValue(degrees, 0),
+        turn = dir - this.heading;
 
     // apply to myself
     this.changed();
@@ -3549,13 +3550,9 @@ SpriteMorph.prototype.gotoXY = function (x, y, justMe) {
         newX,
         newY,
         dest;
-        
-    if (isNaN(x) || !isFinite(x)) {
-        x = 0;
-    }
-    if (isNaN(y) || !isFinite(y)) {
-        y = 0;
-    }
+    
+    x = defaultFiniteValue(x, 0);
+    y = defaultFiniteValue(y, 0); 
 
     if (!stage) {return; }
     newX = stage.center().x + (+x || 0) * stage.scale;
