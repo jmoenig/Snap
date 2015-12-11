@@ -1631,7 +1631,8 @@ Process.prototype.doForever = function (body) {
 
 function DoRepeatError(value) {
 	this.name = "Repeat Error";
-	this.message = localize("The repeat loop was given an unsupported number of repetitions: ") + value;
+	this.message = localize("The repeat loop was given an " + 
+                            "unsupported number of repetitions: ") + value;
 }
 
 Process.prototype.doRepeat = function (counter, body) {
@@ -2033,42 +2034,51 @@ Process.prototype.reportTypeOf = function (thing) {
 
 // Process math primtives
 
+function UndefinedOperationError(opName, argA, symbol, argB) {
+    var localOp = localize(opName);
+    this.name = localize("%s operation error").replace("%s", localOp);
+    this.message = localize("undefined %s operation:").replace("%s", localOp);
+    this.message += " ";
+    if (symbol !== undefined && argB !== undefined) {
+        this.message += "(" + argA + ") " + symbol + " (" + argB + ")";
+    } else {
+        this.message += localOp + "(" + argA + ")";
+    }
+}
+
+function checkBinaryOperationResult(result, opName, argA, symbol, argB) {
+    if (isNaN(result)) {
+        throw new UndefinedOperationError(opName, argA, symbol, argB);
+    }
+    return result;
+}
+
 Process.prototype.reportSum = function (a, b) {
-    return +a + (+b);
+    return checkBinaryOperationResult(+a + +b, "sum", +a, "+", +b);
 };
 
 Process.prototype.reportDifference = function (a, b) {
-    return +a - +b;
+    return checkBinaryOperationResult(+a - +b, "difference", +a, "-", +b);
 };
 
 Process.prototype.reportProduct = function (a, b) {
-    return +a * +b;
+    return checkBinaryOperationResult(+a * +b, "product", +a, "*", +b);
 };
-
-function QuotientNaNException(numerator, denominator) {
-    this.name = "Quotient exception";
-    this.message = "illegal division operation: (" + numerator + ") / (" + denominator + ")";
-}
 
 Process.prototype.reportQuotient = function (a, b) {
     var result = +a / +b;
     if (isNaN(result) || +b === 0) {
-        throw new QuotientNaNException(+a, +b);
+        throw new UndefinedOperationError("division", +a, "/", +b);
     }
     return result;
 };
 
-function ModulusNaNException(numerator, denominator) {
-    this.name = "Modulus exception";
-    this.message = "illegal modulus operation: (" + numerator + ") / (" + denominator + ")";
-}
-
 Process.prototype.reportModulus = function (a, b) {
     var x = +a,
-        y = +b;
-    var result = ((x % y) + y) % y;
-    if (isNaN(result)) {
-        throw new ModulusNaNException(+a, +b);
+        y = +b,
+        result = ((x % y) + y) % y;
+    if (isNaN(result) || y === 0) {
+        throw new UndefinedOperationError("modulus", x, "mod", y);
     }
     return result;
 };
@@ -2155,11 +2165,6 @@ Process.prototype.reportRound = function (n) {
     return Math.round(+n);
 };
 
-function MonadicNaNException(func, number) {
-    this.name = "\"" + func + "\" exception";
-    this.message = "illegal " + func + " operation: " + func + "(" + number + ")";
-}
-
 Process.prototype.reportMonadic = function (fname, n) {
     var x = +n,
         result = 0;
@@ -2211,7 +2216,7 @@ Process.prototype.reportMonadic = function (fname, n) {
         nop();
     }
     if (isNaN(result)) {
-        throw new MonadicNaNException(fname, n);
+        throw new UndefinedOperationError(fname, n);
     }
     return result;
 };
