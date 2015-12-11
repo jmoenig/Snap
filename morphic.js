@@ -6965,15 +6965,10 @@ MenuMorph.prototype.popUpCenteredInWorld = function (world) {
 };
 
 MenuMorph.prototype.keepVisible = function(world) {
-    var zoom = 1;
+    var zoom = (this.fontSize || MorphicPreferences.menuFontSize) / 10;
     this.keepWithin(world);
     if(this.height() > world.height() && !this.scrollMenu){
          this.setTop(0);
-         this.children.forEach(function (child) {
-             if (child instanceof MenuItemMorph) {
-                 zoom = child.height() / 12;
-             }
-         });
          var slideColor = new Color(0,0,0);
          slideColor = slideColor.lighter(50);
          this.scrollMenu = new ScrollFrameMorph(this.scrollMenu, 2.5 * zoom + 4, slideColor);
