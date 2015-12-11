@@ -6969,7 +6969,7 @@ MenuMorph.prototype.keepVisible = function(world) {
     if(this.height() > world.height() && !this.scrollMenu){
          this.setTop(0);
          var slideColor = new Color(0,0,0);
-         slideColor = slideColor.lighter(30);
+         slideColor = slideColor.lighter(60);
          this.scrollMenu = new ScrollFrameMorph(this.scrollMenu, this.scrollBarSize, slideColor);
     }
 };
