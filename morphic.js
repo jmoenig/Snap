@@ -6694,7 +6694,7 @@ MenuMorph.prototype.init = function (target, title, environment, fontSize) {
     this.isListContents = false;
     this.hasFocus = false;
     this.selection = null;
-    this.scrollMenu=null;
+    this.scrollMenu = null;
 
     // initialize inherited properties:
     MenuMorph.uber.init.call(this);
@@ -6826,6 +6826,7 @@ MenuMorph.prototype.drawNew = function () {
                 tuple[6] // doubleclick action
             );
         }
+        item.menu = myself;
         if (isLine) {
             y += 1;
         }
@@ -6902,6 +6903,7 @@ MenuMorph.prototype.unselectAllItems = function () {
 };
 
 MenuMorph.prototype.popup = function (world, pos) {
+    var labelHeight = 0;
     this.drawNew();
     this.setPosition(pos);
     if (world.activeMenu) {
@@ -6914,10 +6916,9 @@ MenuMorph.prototype.popup = function (world, pos) {
     world.add(this);
     this.world = world; // optionally enable keyboard support
     world.activeMenu = this;
-    if (this.scrollMenu != undefined && this.scrollMenu != null) {
+    if (this.scrollMenu) {
         pos = this.position();
-        var labelHeight = 0;
-        if (this.label != null) {
+        if (this.label) {
             labelHeight = this.label.height() + 2;
         }
         this.scrollMenu.world = world;
@@ -6964,9 +6965,9 @@ MenuMorph.prototype.popUpCenteredInWorld = function (world) {
     );
 };
 
-MenuMorph.prototype.keepVisible=function(world){
+MenuMorph.prototype.keepVisible = function(world) {
     this.keepWithin(world);
-    if(this.height() > world.height() && this.scrollMenu == null){
+    if(this.height() > world.height() && !this.scrollMenu){
          this.setTop(0);
          var slideColor = new Color(0,0,0);
          slideColor = slideColor.lighter(30);
@@ -7070,10 +7071,9 @@ MenuMorph.prototype.destroy = function () {
     if (this.hasFocus) {
         this.world.keyboardReceiver = null;
     }
-    if (this.scrollMenu != null) {
+    if (this.scrollMenu) {
         this.scrollMenu.destroy();
     }
-
     MenuMorph.uber.destroy.call(this);
 };
 
@@ -8435,6 +8435,8 @@ function MenuItemMorph(
         italic,
         doubleClickAction
     );
+    
+    this.menu = null;
 }
 
 MenuItemMorph.prototype.createLabel = function () {
@@ -8521,7 +8523,7 @@ MenuItemMorph.prototype.mouseLeave = function () {
 
 MenuItemMorph.prototype.mouseDownLeft = function (pos) {
     if (this.isListItem()) {
-        this.parent.unselectAllItems();
+        this.menu.unselectAllItems();
         this.escalateEvent('mouseDownLeft', pos);
     }
     this.image = this.pressImage;
@@ -8536,15 +8538,15 @@ MenuItemMorph.prototype.mouseMove = function () {
 
 MenuItemMorph.prototype.mouseClickLeft = function () {
     if (!this.isListItem()) {
-        this.parent.destroy();
+        this.menu.destroy();
         this.root().activeMenu = null;
     }
     this.trigger();
 };
 
 MenuItemMorph.prototype.isListItem = function () {
-    if (this.parent) {
-        return this.parent.isListContents;
+    if (this.menu) {
+        return this.menu.isListContents;
     }
     return false;
 };
@@ -9600,9 +9602,14 @@ HandMorph.prototype.processMouseDown = function (event) {
             if (!contains(
                     morph.allParents(),
                     this.world.activeMenu
-                ) && !contains(morph.allParents(), this.world.activeMenu.scrollMenu)) {
-
-                this.world.activeMenu.destroy();}
+                ) && 
+                !contains(
+                    morph.allParents(), 
+                    this.world.activeMenu.scrollMenu
+                )
+               ) {
+                this.world.activeMenu.destroy();
+                 }
             else {
                 clearInterval(this.touchHoldTimeout);
             }
@@ -10921,4 +10928,3 @@ WorldMorph.prototype.togglePreferences = function () {
         MorphicPreferences = standardSettings;
     }
 };
-
