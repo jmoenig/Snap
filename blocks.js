@@ -2582,7 +2582,7 @@ BlockMorph.prototype.showHelp = function () {
         ctx;
 
     pic.onload = function () {
-        help = newCanvas(new Point(pic.width, pic.height));
+        help = newNonRetinaCanvas(new Point(pic.width, pic.height));
         ctx = help.getContext('2d');
         ctx.drawImage(pic, 0, 0);
         new DialogBoxMorph().inform(

@@ -1507,7 +1507,7 @@ SpriteMorph.prototype.drawNew = function () {
 
         // create a new, adequately dimensioned canvas
         // and draw the costume on it
-        this.image = newCanvas(costumeExtent);
+        this.image = newNonRetinaCanvas(costumeExtent);
         this.silentSetExtent(costumeExtent);
         ctx = this.image.getContext('2d');
         ctx.scale(this.scale * stageScale, this.scale * stageScale);
@@ -1536,7 +1536,7 @@ SpriteMorph.prototype.drawNew = function () {
             1000
         );
         this.silentSetExtent(new Point(newX, newX));
-        this.image = newCanvas(this.extent());
+        this.image = newNonRetinaCanvas(this.extent());
         this.setCenter(currentCenter, true); // just me
         SpriteMorph.uber.drawNew.call(this, facing);
         this.rotationOffset = this.extent().divideBy(2);
@@ -1585,7 +1585,7 @@ SpriteMorph.prototype.colorFiltered = function (aColor) {
         dta;
 
     src = this.image.getContext('2d').getImageData(0, 0, ext.x, ext.y);
-    morph.image = newCanvas(ext);
+    morph.image = newNonRetinaCanvas(ext);
     morph.bounds = this.bounds.copy();
     ctx = morph.image.getContext('2d');
     dta = ctx.createImageData(ext.x, ext.y);
@@ -2970,11 +2970,11 @@ SpriteMorph.prototype.goBack = function (layers) {
 SpriteMorph.prototype.overlappingImage = function (otherSprite) {
     // overrides method from Morph because Sprites aren't nested Morphs
     var oRect = this.bounds.intersect(otherSprite.bounds),
-        oImg = newCanvas(oRect.extent()),
+        oImg = newNonRetinaCanvas(oRect.extent()),
         ctx = oImg.getContext('2d');
 
     if (oRect.width() < 1 || oRect.height() < 1) {
-        return newCanvas(new Point(1, 1));
+        return newNonRetinaCanvas(new Point(1, 1));
     }
     ctx.drawImage(
         this.image,
@@ -6267,8 +6267,7 @@ SpriteBubbleMorph.prototype.fixLayout = function () {
 // Costume instance creation
 
 function Costume(canvas, name, rotationCenter) {
-    this.contents = canvas || newCanvas();
-    //this.contents.isRetinaEnabled = false;
+    this.contents = canvas || newNonRetinaCanvas();
     this.shrinkToFit(this.maxExtent());
     this.name = name || null;
     this.rotationCenter = rotationCenter || this.center();
@@ -6312,7 +6311,7 @@ Costume.prototype.shrinkWrap = function () {
     // adjust my contents'  bounds to my visible bounding box
     var bb = this.boundingBox(),
         ext = bb.extent(),
-        pic = newCanvas(ext),
+        pic = newNonRetinaCanvas(ext),
         ctx = pic.getContext('2d');
 
     ctx.drawImage(
@@ -6395,7 +6394,7 @@ Costume.prototype.boundingBox = function () {
 // Costume duplication
 
 Costume.prototype.copy = function () {
-    var canvas = newCanvas(this.extent()),
+    var canvas = newNonRetinaCanvas(this.extent()),
         cpy,
         ctx;
 
@@ -6414,7 +6413,7 @@ Costume.prototype.flipped = function () {
     (mirrored along a vertical axis), used for
     SpriteMorph's rotation style type 2
 */
-    var canvas = newCanvas(this.extent()),
+    var canvas = newNonRetinaCanvas(this.extent()),
         ctx = canvas.getContext('2d'),
         flipped;
 
@@ -6440,7 +6439,7 @@ Costume.prototype.edit = function (aWorld, anIDE, isnew, oncancel, onsubmit) {
     editor.openIn(
         aWorld,
         isnew ?
-                newCanvas(StageMorph.prototype.dimensions) :
+                newNonRetinaCanvas(StageMorph.prototype.dimensions) :
                 this.contents,
         isnew ?
                 new Point(240, 180) :

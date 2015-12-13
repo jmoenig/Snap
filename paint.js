@@ -570,9 +570,9 @@ PaintCanvasMorph.prototype.init = function (shift) {
     this.dragRect = new Rectangle();
     // rectangle with origin being the starting drag position and
     // corner being the current drag position
-    this.mask = newCanvas(this.extent()); // Temporary canvas
-    this.paper = newCanvas(this.extent()); // Actual canvas
-    this.erasermask = newCanvas(this.extent()); // eraser memory
+    this.mask = newNonRetinaCanvas(this.extent()); // Temporary canvas
+    this.paper = newNonRetinaCanvas(this.extent()); // Actual canvas
+    this.erasermask = newNonRetinaCanvas(this.extent()); // eraser memory
     this.background = newCanvas(this.extent()); // checkers
     this.settings = {
         "primarycolor": new Color(0, 0, 0, 255), // usually fill color
@@ -589,8 +589,8 @@ PaintCanvasMorph.prototype.init = function (shift) {
 };
 
 PaintCanvasMorph.prototype.scale = function (x, y) {
-    this.mask = newCanvas(this.extent());
-    var c = newCanvas(this.extent());
+    this.mask = newNonRetinaCanvas(this.extent());
+    var c = newNonRetinaCanvas(this.extent());
     c.getContext("2d").save();
     c.getContext("2d").translate(
         this.rotationCenter.x,
@@ -609,14 +609,14 @@ PaintCanvasMorph.prototype.scale = function (x, y) {
 };
 
 PaintCanvasMorph.prototype.cacheUndo = function () {
-    var cachecan = newCanvas(this.extent());
+    var cachecan = newNonRetinaCanvas(this.extent());
     this.merge(this.paper, cachecan);
     this.undoBuffer.push(cachecan);
 };
 
 PaintCanvasMorph.prototype.undo = function () {
     if (this.undoBuffer.length > 0) {
-        this.paper = newCanvas(this.extent());
+        this.paper = newNonRetinaCanvas(this.extent());
         this.mask.width = this.mask.width + 1 - 1;
         this.merge(this.undoBuffer.pop(), this.paper);
         this.drawNew();
@@ -643,7 +643,7 @@ PaintCanvasMorph.prototype.clearCanvas = function () {
 };
 
 PaintCanvasMorph.prototype.toolChanged = function (tool) {
-    this.mask = newCanvas(this.extent());
+    this.mask = newNonRetinaCanvas(this.extent());
     if (tool === "crosshairs") {
         this.drawcrosshair();
     }
@@ -783,7 +783,7 @@ PaintCanvasMorph.prototype.mouseDownLeft = function (pos) {
     }
     if (this.settings.primarycolor === "transparent" &&
             this.currentTool !== "crosshairs") {
-        this.erasermask = newCanvas(this.extent());
+        this.erasermask = newNonRetinaCanvas(this.extent());
         this.merge(this.paper, this.erasermask);
     }
 };
@@ -922,7 +922,7 @@ PaintCanvasMorph.prototype.mouseMove = function (pos) {
         }
         mctx.stroke();
         mctx.restore();
-        this.paper = newCanvas(this.extent());
+        this.paper = newNonRetinaCanvas(this.extent());
         this.merge(this.mask, this.paper);
         break;
     default:
@@ -946,9 +946,9 @@ PaintCanvasMorph.prototype.mouseLeaveDragging
 
 PaintCanvasMorph.prototype.buildContents = function () {
     this.background = newCanvas(this.extent());
-    this.paper = newCanvas(this.extent());
-    this.mask = newCanvas(this.extent());
-    this.erasermask = newCanvas(this.extent());
+    this.paper = newNonRetinaCanvas(this.extent());
+    this.mask = newNonRetinaCanvas(this.extent());
+    this.erasermask = newNonRetinaCanvas(this.extent());
     var i, j, bkctx = this.background.getContext("2d");
     for (i = 0; i < this.background.width; i += 5) {
         for (j = 0; j < this.background.height; j += 5) {
@@ -963,7 +963,7 @@ PaintCanvasMorph.prototype.buildContents = function () {
 };
 
 PaintCanvasMorph.prototype.drawNew = function () {
-    var can = newCanvas(this.extent());
+    var can = newNonRetinaCanvas(this.extent());
     this.merge(this.background, can);
     this.merge(this.paper, can);
     this.merge(this.mask, can);

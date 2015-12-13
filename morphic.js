@@ -1348,6 +1348,12 @@ function newCanvas(extentPoint) {
     return canvas;
 }
 
+function newNonRetinaCanvas(extentPoint) {
+    var canvas = newCanvas(extentPoint);
+    canvas.isRetinaEnabled = false;
+    return canvas;
+}
+
 function getMinimumFontHeight() {
     // answer the height of the smallest font renderable in pixels
     var str = 'I',
@@ -10023,8 +10029,7 @@ HandMorph.prototype.processDrop = function (event) {
             target = target.parent;
         }
         pic.onload = function () {
-            canvas = newCanvas(new Point(pic.width, pic.height));
-            canvas.isRetinaEnabled = false;
+            canvas = newNonRetinaCanvas(new Point(pic.width, pic.height));
             canvas.getContext('2d').drawImage(pic, 0, 0);
             target.droppedImage(canvas, aFile.name);
         };
@@ -10115,7 +10120,7 @@ HandMorph.prototype.processDrop = function (event) {
             }
             img = new Image();
             img.onload = function () {
-                canvas = newCanvas(new Point(img.width, img.height));
+                canvas = newNonRetinaCanvas(new Point(img.width, img.height));
                 canvas.getContext('2d').drawImage(img, 0, 0);
                 target.droppedImage(canvas);
             };
@@ -10127,7 +10132,7 @@ HandMorph.prototype.processDrop = function (event) {
         }
         img = new Image();
         img.onload = function () {
-            canvas = newCanvas(new Point(img.width, img.height));
+            canvas = newNonRetinaCanvas(new Point(img.width, img.height));
             canvas.getContext('2d').drawImage(img, 0, 0);
             target.droppedImage(canvas);
         };
