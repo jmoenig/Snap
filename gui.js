@@ -1608,6 +1608,7 @@ IDE_Morph.prototype.reactToWorldResize = function (rect) {
 };
 
 IDE_Morph.prototype.droppedImage = function (aCanvas, name) {
+    console.log(`Dropped ${aCanvas.width}x${aCanvas.height}`);
     var costume = new Costume(
         aCanvas,
         this.currentSprite.newCostumeName(
@@ -2633,6 +2634,7 @@ IDE_Morph.prototype.projectMenu = function () {
                     img = new Image();
                 img.onload = function () {
                     var canvas = newCanvas(new Point(img.width, img.height));
+                    canvas.isRetinaEnabled = false;
                     canvas.getContext('2d').drawImage(img, 0, 0);
                     myself.droppedImage(canvas, name);
                 };

@@ -1302,6 +1302,7 @@ SnapSerializer.prototype.loadValue = function (model) {
                             new Point(image.width, image.height)
                         ),
                         context = canvas.getContext('2d');
+                    canvas.isRetinaEnabled = false;
                     context.drawImage(image, 0, 0);
                     v.contents = canvas;
                     v.version = +new Date();
