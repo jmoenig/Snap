@@ -1047,7 +1047,7 @@
     - Jens Mönig
 */
 
-// Retina Canvas polyfill //////////////////////////////////////////////
+// Retina Canvas utilities /////////////////////////////////////////////
 
 // This installs a series of utilities that allow using Canvas the same way on
 // retina and non-retina displays. If the display is a retina one, the
