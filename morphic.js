@@ -1049,6 +1049,15 @@
 
 // Retina Canvas polyfill //////////////////////////////////////////////
 
+// This installs a series of utilities that allow using Canvas the same way on
+// retina and non-retina displays. If the display is a retina one, the
+// underlying dimensions of the Canvas elements are doubled, but this will be
+// transparent to the code that uses Canvas. All dimensions read or written to
+// the Canvas element will be scaled appropriately.
+//
+// NOTE: This implementation is not exhaustive; it only implements what is
+// needed by the Snap! UI.
+
 (function() {
     // Get the window's pixel ratio for canvas elements.
     // See: http://www.html5rocks.com/en/tutorials/canvas/hidpi/
@@ -1116,14 +1125,9 @@
     var contextProto = CanvasRenderingContext2D.prototype;
     var uberDrawImage = contextProto.drawImage;
     contextProto.drawImage = function(image) {
-        var pixelRatio, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight;
-
-//        if (!(image instanceof HTMLCanvasElement)) {
-//            uberDrawImage.apply(this, arguments);
-//            return;
-//        }
+        var pixelRatio = getPixelRatio(image),
+            sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight;
         
-        pixelRatio = getPixelRatio(image);
         // Different signatures of drawImage() method have different parameter
         // assignments.
         switch (arguments.length) {
