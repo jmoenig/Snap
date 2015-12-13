@@ -1077,7 +1077,6 @@
 
             this._isRetinaEnabled = enabled;
             if (getPixelRatio(this) != prevPixelRatio) {
-                console.log(`${this.width}x${this.height} -> ${prevWidth}x${prevHeight}`);
                 this.width = prevWidth;
                 this.height = prevHeight;
             }
