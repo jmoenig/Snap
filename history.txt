@@ -2603,3 +2603,95 @@ ______
 * Store: Fix deserialization support for projects using inheritance
 * German translation update
 
+
+++++++++++++++++++++++++++
+new stuff - bulk of 151116
+++++++++++++++++++++++++++
+
+151030
+------
+* Blocks: Tweak precision of rendering of transparent “holes”
+* updated Czech translation
+* Morphic: Streamlined nop-stepping
+* Blocks: Let SyntaxElements step (again), for better input slot editing experience
+
+151101
+------
+* BYOB: Script pic: Always export comments attached to custom block definitions
+* Blocks: fixed #982 (made %interaction slot static)
+* Morphic: removed an obsolete line (“dragOrigin”)
+* BYOB: make block editor big enough to show the whole definition, if possible
+* BYOB: remember user-set position and size of block editor when pressing “OK”, per session (not serialized in project)
+* Blocks: speed up stacking of commands (also when done programmatically) by suppressing redraws
+* Morphic, Blocks, BYOB: Suppress redundant redraws
+
+151104
+------
+* Morphic: new grabTheshold preference to suppress accidental grabbing through micro-movements of the hand
+* GUI: hidden (shift-click) option to adjust the grabThreshold for the current session
+* Lists, Blocks: Expand list watchers inside result bubbles to show everything
+* Objects: Expand list watchers inside speech/thought bubbles to show everything
+* Morphic: fixed a bug that occasionally expanded the Hand’s bounds when dragging morphs
+
+151107
+------
+* Threads: invoke a block synchronously
+
+151009
+------
+* Morphic: cache fullImage and fullBounds when dragging
+* Blocks: make reporters semi-transparent while dragging
+* GUI: make SpriteIcons semi-transparent while dragging
+* Blocks: make it harder to drop reporters onto filled custom C-slots and variadic slot arrows
+* Blocks: make ScriptsMorphs notice transparent clicks (addresses #997)
+* Blocks: fixed “undrop” for replacing C-slots with reporters
+* BYOB: fixed ctrl-f for the BlockEditor in all situations
+
+151111
+------
+* Objects: fixed a between slideBackTo() and possible running scripts in sprites, thanks, Paul, for reporting it!
+
+151112
+------
+* Blocks, Objects, Threads: new internal slot type: %cl for auto-reifying C-slots that reject reporter drops. Changed (hidden) “for each” to reject reporters in C-slot
+
+151113
+------
+* Frames, snap.html: initial version of a new general purpose prototypal single inheritance object system
+* snap_slo.html: alternative animation-frame based outer scheduler, experimental
+* Threads: added optional timeout to the new synchronous invoke(block) function
+* Blocks: fixed too brutally optimized redraw for “ringify” and “unringify”
+
+151114
+------
+* Frames, snap.html, snap_slo.html: remove initial version for now, needs more low-levelish rewrite (Map-based “shortcut” design doesn’t cut it).
+
+151116
+------
+* Blocks, GUI: Slightly less transparency for dragged reporters and sprite icons
+
+=== v4.0.3 (unreleased) ===
+
+++++++++++++++++++++++++++
+end - bulk of 151116
+++++++++++++++++++++++++++
+
+151116 community contributions
+------
+* new Bulgarian and Romanian translations contributed!
+* fix for IE backspace and tab errors contributed!
+* better resource loading mechanism contributed!
+
+151117
+------
+* Blocks: fixed a zebra-coloring glitch for BooleanSlotMorph
+
+151120
+------
+* Lists: fixed linked lists identity loss when showing watchers
+
+151204
+------
+* Cloud: doubled the number of supported backend slices
+* Cloud, GUI: support new “raw” cloud project services
+
