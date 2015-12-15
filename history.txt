@@ -2800,3 +2800,6 @@ end - bulk of 151215
 151215 - contributions
 ------
 * Objects, Paint: Automatic Sprite Center Detection, Thanks, Craxic!!
+* Morphic: Handling of diacritics, [Alt] + key in input fields (Windows), Thanks, DaDoro!!
+* NL translation update
+

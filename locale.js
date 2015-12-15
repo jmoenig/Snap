@@ -123,7 +123,7 @@ SnapTranslator.dict.en = {
     'translator_e-mail':
         'jens@moenig.org',
     'last_changed':
-        '2015-12-12',
+        '2015-12-15',
 
     // rewordings in English avoiding having to adjust all other translations
     'any':
@@ -153,7 +153,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org',
     'last_changed':
-        '2015-12-14'
+        '2015-12-15'
 };
 
 SnapTranslator.dict.it = {
@@ -309,7 +309,7 @@ SnapTranslator.dict.nl = {
     'translator_e-mail':
         'frank.sierens@telenet.be, sjoerddirk@fromScratchEd.nl',
     'last_changed':
-        '2013-08-12'
+        '2015-12-15'
 };
 
 SnapTranslator.dict.pl = {
