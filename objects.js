@@ -6497,7 +6497,7 @@ Costume.prototype.canvasBoundingBox = function (pic) {
 
 Costume.prototype.boundingBox = function () {
     return this.canvasBoundingBox(this.contents);
-}
+};
 
 // Costume duplication
 

@@ -59,6 +59,7 @@
     Sep 29 - tweaks (Jens)
     Sep 28 [of the following year :)] - Try to prevent antialiasing (Kartik)
     Oct 02 - revert disable smoothing (Jens)
+    Dec 15 - center rotation point on costume creating (Craxic)
  */
 
 /*global Point, Rectangle, DialogBoxMorph, fontHeight, AlignmentMorph,
@@ -71,7 +72,7 @@
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.paint = '2015-October-02';
+modules.paint = '2015-December-15';
 
 // Declarations
 
@@ -607,7 +608,7 @@ PaintCanvasMorph.prototype.updateAutomaticCenter = function () {
     if (this.automaticCrosshairs) {
         // Calculate this.rotationCenter from this.paper
         var rotationCenter = this.calculateCanvasCenter(this.paper);
-        if (rotationCenter != null) {
+        if (rotationCenter !== null) {
             this.rotationCenter = rotationCenter;
         }
     }
