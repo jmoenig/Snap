@@ -2338,7 +2338,8 @@ BlockMorph.prototype.userMenu = function () {
     menu.addItem(
         "script pic...",
         function () {
-            var ide = myself.parentThatIsA(IDE_Morph);
+            var ide = myself.parentThatIsA(IDE_Morph) ||
+                myself.parentThatIsA(BlockEditorMorph).ide;
             ide.saveCanvasAs(
                 myself.topBlock().scriptPic(),
                 ide.projetName || localize('Untitled') + ' ' +
