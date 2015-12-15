@@ -2803,3 +2803,6 @@ end - bulk of 151215
 * Morphic: Handling of diacritics, [Alt] + key in input fields (Windows), Thanks, DaDoro!!
 * NL translation update
 
+151215 - more changes
+------
+* Cloud: 10 MB cloud upload limit for media per project

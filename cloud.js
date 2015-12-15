@@ -327,7 +327,8 @@ Cloud.prototype.saveProject = function (ide, callBack, errorCall) {
     var myself = this,
         pdata,
         media,
-        size;
+        size,
+        mediaSize;
 
     ide.serializer.isCollectingMedia = true;
     pdata = ide.serializer.serialize(ide.stage);
@@ -336,18 +337,18 @@ Cloud.prototype.saveProject = function (ide, callBack, errorCall) {
     ide.serializer.isCollectingMedia = false;
     ide.serializer.flushMedia();
 
-    size = pdata.length + (media ? media.length : 0);
-    /*
-    if (size > 5242880) {
+    mediaSize = media ? media.length : 0;
+    size = pdata.length + mediaSize;
+    if (mediaSize > 10485760) {
         new DialogBoxMorph().inform(
-            'Snap!Cloud',
-            'Project exceeds 5 MB size limit',
+            'Snap!Cloud - Cannot Save Project',
+            'The media inside this project exceeds 10 MB.\n' +
+                'Please reduce the size of costumes or sounds.\n',
             ide.world(),
             ide.cloudIcon(null, new Color(180, 0, 0))
         );
-        throw new Error('Project exceeds 5 MB size limit');
+        throw new Error('Project media exceeds 10 MB size limit');
     }
-    */
 
     // check if serialized data can be parsed back again
     try {
