@@ -990,7 +990,7 @@ SnapTranslator.dict.nl = {
     'Command\n(C-shape)':
         'Opdracht\n(C-vorm)',
     'Any\n(unevaluated)':
-        'Alle\n(onge\u00EBvalueerd)',
+        'Willekeurig\n(onge\u00EBvalueerd)',
     'Boolean\n(unevaluated)':
         'Booleaans\n(onge\u00EBvalueerd)',
     'Single input.':
@@ -1211,6 +1211,6 @@ SnapTranslator.dict.nl = {
     'last':
         'laatste',
     'any':
-        'alle'
+        'willekeurig'
 };
 
