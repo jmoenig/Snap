@@ -85,7 +85,6 @@ var SoundIconMorph;
 var JukeboxMorph;
 var StageHandleMorph;
 
-
 // IDE_Morph ///////////////////////////////////////////////////////////
 
 // I am SNAP's top-level frame, the Editor window
@@ -2533,6 +2532,24 @@ IDE_Morph.prototype.projectMenu = function () {
         'file menu import hint' // looks up the actual text in the translator
     );
 
+    if (shiftClicked) {
+        menu.addItem(
+            localize('Export project...') + ' ' + localize('(in a new window)'),
+            function () {
+                if (myself.projectName) {
+                    myself.exportProject(myself.projectName, shiftClicked);
+                } else {
+                    myself.prompt('Export Project As...', function (name) {
+                        // false - override the shiftClick setting to use XML
+                        // true - open XML in a new tab
+                        myself.exportProject(name, false, true);
+                    }, null, 'exportProject');
+                }
+            },
+            'show project data as XML\nin a new browser window',
+            new Color(100, 0, 0)
+        );
+    }
     menu.addItem(
         shiftClicked ?
                 'Export project as plain text...' : 'Export project...',
@@ -2545,7 +2562,7 @@ IDE_Morph.prototype.projectMenu = function () {
                 }, null, 'exportProject');
             }
         },
-        'show project data as XML\nin a new browser window',
+        'save project data as XML\nto your downloads folder',
         shiftClicked ? new Color(100, 0, 0) : null
     );
 
@@ -2989,8 +3006,9 @@ IDE_Morph.prototype.rawSaveProject = function (name) {
 };
 
 
-IDE_Morph.prototype.exportProject = function (name, plain) {
+IDE_Morph.prototype.exportProject = function (name, plain, newWindow) {
     // Export project XML, saving a file to disk
+    // newWindow requests displaying the project in a new tab.
     var menu, str, dataPrefix;
 
     if (name) {
@@ -3000,7 +3018,7 @@ IDE_Morph.prototype.exportProject = function (name, plain) {
             menu = this.showMessage('Exporting');
             str = this.serializer.serialize(this.stage)
             this.setURL('#open:' + dataPrefix + encodeURIComponent(str));
-            this.saveXMLAs(str, name);
+            this.saveXMLAs(str, name, newWindow);
             menu.destroy();
             this.showMessage('Exported!', 1);
         } catch (err) {
