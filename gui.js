@@ -71,7 +71,7 @@ BlockRemovalDialogMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2015-December-04';
+modules.gui = '2015-December-15';
 
 // Declarations
 
@@ -624,11 +624,22 @@ IDE_Morph.prototype.createControlBar = function () {
     this.controlBar.appModeButton = appModeButton; // for refreshing
 
     // stopButton
-    button = new PushButtonMorph(
-        this,
+    button = new ToggleButtonMorph(
+        null, // colors
+        this, // the IDE is the target
         'stopAllScripts',
-        new SymbolMorph('octagon', 14)
+        [
+            new SymbolMorph('octagon', 14),
+            new SymbolMorph('square', 14)
+        ],
+        function () {  // query
+            return myself.stage ?
+                    myself.stage.enableCustomHatBlocks &&
+                        myself.stage.threads.pauseCustomHatBlocks
+                        : true;
+        }
     );
+
     button.corner = 12;
     button.color = colors[0];
     button.highlightColor = colors[1];
@@ -642,13 +653,15 @@ IDE_Morph.prototype.createControlBar = function () {
     button.drawNew();
     // button.hint = 'stop\nevery-\nthing';
     button.fixLayout();
+    button.refresh();
     stopButton = button;
     this.controlBar.add(stopButton);
+    this.controlBar.stopButton = stopButton; // for refreshing
 
     //pauseButton
     button = new ToggleButtonMorph(
         null, //colors,
-        myself, // the IDE is the target
+        this, // the IDE is the target
         'togglePauseResume',
         [
             new SymbolMorph('pause', 12),
@@ -1706,6 +1719,8 @@ IDE_Morph.prototype.pressStart = function () {
     if (this.world().currentKey === 16) { // shiftClicked
         this.toggleFastTracking();
     } else {
+        this.stage.threads.pauseCustomHatBlocks = false;
+        this.controlBar.stopButton.refresh();
         this.runScripts();
     }
 };
@@ -1763,6 +1778,13 @@ IDE_Morph.prototype.isPaused = function () {
 };
 
 IDE_Morph.prototype.stopAllScripts = function () {
+    if (this.stage.enableCustomHatBlocks) {
+        this.stage.threads.pauseCustomHatBlocks =
+            !this.stage.threads.pauseCustomHatBlocks;
+    } else {
+        this.stage.threads.pauseCustomHatBlocks = false;
+    }
+    this.controlBar.stopButton.refresh();
     this.stage.fireStopAllEvent();
 };
 
@@ -2719,7 +2741,7 @@ IDE_Morph.prototype.aboutSnap = function () {
         module, btn1, btn2, btn3, btn4, licenseBtn, translatorsBtn,
         world = this.world();
 
-    aboutTxt = 'Snap! 4.0.3\nBuild Your Own Blocks\n\n'
+    aboutTxt = 'Snap! 4.0.4\nBuild Your Own Blocks\n\n'
         + 'Copyright \u24B8 2015 Jens M\u00F6nig and '
         + 'Brian Harvey\n'
         + 'jens@moenig.org, bh@cs.berkeley.edu\n\n'
@@ -3021,6 +3043,51 @@ IDE_Morph.prototype.saveProjectToDisk = function () {
         document.body.removeChild(link);
     }
 };
+
+/* alternative download mechanism, commented out in favor of blob-uris
+IDE_Morph.prototype.saveProjectToDisk = function () {
+    var data;
+    if (Process.prototype.isCatchingErrors) {
+        try {
+            data = this.serializer.serialize(this.stage);
+        } catch (err) {
+            this.showMessage('Serialization failed: ' + err);
+        }
+    } else {
+        data = this.serializer.serialize(this.stage);
+    }
+    this.download(data, this.projectName);
+};
+
+IDE_Morph.prototype.download = function (data, fileName, mime, suffix) {
+    var link = document.createElement('a'),
+        myself = this;
+
+    mime = mime || 'data:text/xml';
+    fileName = fileName || 'download';
+    suffix = suffix || 'xml';
+
+    function saveToDisk() {
+        var msg =  myself.showMessage('Downloading to disk...');
+        link.setAttribute('href', mime + ',' + data);
+        link.setAttribute('download', fileName + '.' + suffix);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        msg.destroy();
+    }
+
+    if (Process.prototype.isCatchingErrors) {
+        try {
+            saveToDisk();
+        } catch (err) {
+            this.showMessage('Saving failed: ' + err);
+        }
+    } else {
+        saveToDisk();
+    }
+};
+*/
 
 IDE_Morph.prototype.exportProject = function (name, plain) {
     var menu, str;
@@ -3494,10 +3561,11 @@ IDE_Morph.prototype.rawOpenProjectString = function (str) {
 
 IDE_Morph.prototype.openCloudDataString = function (str) {
     var msg,
-        myself = this;
+        myself = this,
+        size = Math.round(str.length / 1024);
     this.nextSteps([
         function () {
-            msg = myself.showMessage('Opening project...');
+            msg = myself.showMessage('Opening project\n' + size + ' KB...');
         },
         function () {nop(); }, // yield (bug in Chrome)
         function () {
@@ -5275,6 +5343,12 @@ ProjectDialogMorph.prototype.rawOpenCloudProject = function (proj) {
                 'getRawProject',
                 function (response) {
                     SnapCloud.disconnect();
+                    /*
+                    if (myself.world().currentKey === 16) {
+                        myself.ide.download(response);
+                        return;
+                    }
+                    */
                     myself.ide.source = 'cloud';
                     myself.ide.droppedText(response);
                     if (proj.Public === 'true') {

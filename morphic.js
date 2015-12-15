@@ -1052,7 +1052,7 @@
 /*global window, HTMLCanvasElement, getMinimumFontHeight, FileReader, Audio,
 FileList, getBlurredShadowSupport*/
 
-var morphicVersion = '2015-November-16';
+var morphicVersion = '2015-December-15';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = getBlurredShadowSupport(); // check for Chrome-bug
 
@@ -8896,6 +8896,7 @@ ScrollFrameMorph.prototype.mouseDownLeft = function (pos) {
         return null;
     }
     var world = this.root(),
+        hand = world.hand,
         oldPos = pos,
         myself = this,
         deltaX = 0,
@@ -8904,10 +8905,18 @@ ScrollFrameMorph.prototype.mouseDownLeft = function (pos) {
 
     this.step = function () {
         var newPos;
-        if (world.hand.mouseButton &&
-                (world.hand.children.length === 0) &&
-                (myself.bounds.containsPoint(world.hand.position()))) {
-            newPos = world.hand.bounds.origin;
+        if (hand.mouseButton &&
+                (hand.children.length === 0) &&
+                (myself.bounds.containsPoint(hand.bounds.origin))) {
+
+            if (hand.grabPosition &&
+                (hand.grabPosition.distanceTo(hand.position()) <=
+                    MorphicPreferences.grabThreshold)) {
+                // still within the grab threshold
+                return null;
+            }
+
+            newPos = hand.bounds.origin;
             deltaX = newPos.x - oldPos.x;
             if (deltaX !== 0) {
                 myself.scrollX(deltaX);
