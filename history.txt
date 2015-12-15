@@ -2797,12 +2797,14 @@ v4.0.4 draft features:
 end - bulk of 151215
 ++++++++++++++++++++++++++
 
+151215 - more changes
+------
+* Cloud: 10 MB cloud upload limit for media per project
+
 151215 - contributions
 ------
 * Objects, Paint: Automatic Sprite Center Detection, Thanks, Craxic!!
 * Morphic: Handling of diacritics, [Alt] + key in input fields (Windows), Thanks, DaDoro!!
 * NL translation update
+* Use Blob API to Save Files (to Disk), Thanks, Michael!!
 
-151215 - more changes
-------
-* Cloud: 10 MB cloud upload limit for media per project

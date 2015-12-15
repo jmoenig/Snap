@@ -3038,7 +3038,7 @@ IDE_Morph.prototype.exportProject = function (name, plain, newWindow) {
         dataPrefix = 'data:text/' + plain ? 'plain,' : 'xml,';
         try {
             menu = this.showMessage('Exporting');
-            str = this.serializer.serialize(this.stage)
+            str = this.serializer.serialize(this.stage);
             this.setURL('#open:' + dataPrefix + encodeURIComponent(str));
             this.saveXMLAs(str, name, newWindow);
             menu.destroy();
@@ -3690,7 +3690,7 @@ IDE_Morph.prototype.saveFileAs = function (
         // Convert to binary data, in format Blob() can use.
         if (hasTypeStr && components[0].indexOf('base64') > -1) {
             text = atob(components[1]);
-            data = new Uint8Array(text.length),
+            data = new Uint8Array(text.length);
             i = text.length;
             while (i--) {
                 data[i] = text.charCodeAt(i);
@@ -3706,7 +3706,7 @@ IDE_Morph.prototype.saveFileAs = function (
     }
 
     try {
-        blobIsSupported = !!new Blob;
+        blobIsSupported = !!new Blob();
     } catch (e) {}
 
     if (newWindow) {
@@ -3746,7 +3746,7 @@ IDE_Morph.prototype.saveFileAs = function (
         dialog.fixLayout();
         dialog.drawNew();
     }
-}
+};
 
 IDE_Morph.prototype.saveCanvasAs = function (canvas, fileName, newWindow) {
     // Export a Canvas object as a PNG image
@@ -3759,12 +3759,12 @@ IDE_Morph.prototype.saveCanvasAs = function (canvas, fileName, newWindow) {
     } else {
         this.saveFileAs(canvas.toDataURL(), 'image/png', fileName, newWindow);
     }
-}
+};
 
 IDE_Morph.prototype.saveXMLAs = function(xml, fileName, newWindow) {
     // wrapper to saving XML files with a proper type tag.
     this.saveFileAs(xml, 'text/xml;chartset=utf-8', fileName, newWindow);
-}
+};
 
 IDE_Morph.prototype.switchToUserMode = function () {
     var world = this.world();
