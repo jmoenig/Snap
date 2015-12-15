@@ -42,7 +42,7 @@
 
 /*global modules, contains*/
 
-modules.locale = '2015-November-16';
+modules.locale = '2015-December-15';
 
 // Global stuff
 
@@ -123,7 +123,11 @@ SnapTranslator.dict.en = {
     'translator_e-mail':
         'jens@moenig.org',
     'last_changed':
-        '2012-11-16',
+        '2015-12-15',
+
+    // rewordings in English avoiding having to adjust all other translations
+    'any':
+        'random',
 
     // long strings look-up only
     'file menu import hint':
@@ -157,7 +161,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org',
     'last_changed':
-        '2015-10-07'
+        '2015-12-15'
 };
 
 SnapTranslator.dict.it = {
@@ -313,7 +317,7 @@ SnapTranslator.dict.nl = {
     'translator_e-mail':
         'frank.sierens@telenet.be, sjoerddirk@fromScratchEd.nl',
     'last_changed':
-        '2013-08-12'
+        '2015-12-15'
 };
 
 SnapTranslator.dict.pl = {

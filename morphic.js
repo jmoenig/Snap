@@ -1052,7 +1052,7 @@
 /*global window, HTMLCanvasElement, getMinimumFontHeight, FileReader, Audio,
 FileList, getBlurredShadowSupport*/
 
-var morphicVersion = '2015-November-16';
+var morphicVersion = '2015-December-15';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = getBlurredShadowSupport(); // check for Chrome-bug
 
@@ -4515,7 +4515,7 @@ CursorMorph.prototype.processKeyPress = function (event) {
         return null;
     }
     if (event.keyCode) { // Opera doesn't support charCode
-        if (event.ctrlKey) {
+        if (event.ctrlKey && (!event.altKey)) {
             this.ctrl(event.keyCode, event.shiftKey);
         } else if (event.metaKey) {
             this.cmd(event.keyCode, event.shiftKey);
@@ -4526,7 +4526,7 @@ CursorMorph.prototype.processKeyPress = function (event) {
             );
         }
     } else if (event.charCode) { // all other browsers
-        if (event.ctrlKey) {
+        if (event.ctrlKey && (!event.altKey)) {
             this.ctrl(event.charCode, event.shiftKey);
         } else if (event.metaKey) {
             this.cmd(event.charCode, event.shiftKey);
@@ -4545,7 +4545,7 @@ CursorMorph.prototype.processKeyDown = function (event) {
     // this.inspectKeyEvent(event);
     var shift = event.shiftKey;
     this.keyDownEventUsed = false;
-    if (event.ctrlKey) {
+    if (event.ctrlKey && (!event.altKey)) {
         this.ctrl(event.keyCode, event.shiftKey);
         // notify target's parent of key event
         this.target.escalateEvent('reactToKeystroke', event);
@@ -8896,6 +8896,7 @@ ScrollFrameMorph.prototype.mouseDownLeft = function (pos) {
         return null;
     }
     var world = this.root(),
+        hand = world.hand,
         oldPos = pos,
         myself = this,
         deltaX = 0,
@@ -8904,10 +8905,18 @@ ScrollFrameMorph.prototype.mouseDownLeft = function (pos) {
 
     this.step = function () {
         var newPos;
-        if (world.hand.mouseButton &&
-                (world.hand.children.length === 0) &&
-                (myself.bounds.containsPoint(world.hand.position()))) {
-            newPos = world.hand.bounds.origin;
+        if (hand.mouseButton &&
+                (hand.children.length === 0) &&
+                (myself.bounds.containsPoint(hand.bounds.origin))) {
+
+            if (hand.grabPosition &&
+                (hand.grabPosition.distanceTo(hand.position()) <=
+                    MorphicPreferences.grabThreshold)) {
+                // still within the grab threshold
+                return null;
+            }
+
+            newPos = hand.bounds.origin;
             deltaX = newPos.x - oldPos.x;
             if (deltaX !== 0) {
                 myself.scrollX(deltaX);
@@ -10345,7 +10354,7 @@ WorldMorph.prototype.initEventListeners = function () {
                 }
                 event.preventDefault();
             }
-            if ((event.ctrlKey || event.metaKey) &&
+            if ((event.ctrlKey && (!event.altKey) || event.metaKey) &&
                     (event.keyCode !== 86)) { // allow pasting-in
                 event.preventDefault();
             }
