@@ -2592,7 +2592,7 @@ IDE_Morph.prototype.projectMenu = function () {
             'Export summary with drop-shadows...',
             function () {myself.exportProjectSummary(true); },
             'open a new browser browser window' +
-                '\n with a summary of this project' +
+                '\nwith a summary of this project' +
                 '\nwith drop-shadows on all pictures.' +
                 '\nnot supported by all browsers',
             new Color(100, 0, 0)
