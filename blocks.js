@@ -1855,7 +1855,8 @@ SyntaxElementMorph.prototype.showBubble = function (value, exportPic) {
 };
 
 SyntaxElementMorph.prototype.exportPictureWithResult = function (aBubble) {
-    var scr = this.fullImage(),
+    var ide = this.parentThatIsA(IDE_Morph),
+        scr = this.fullImage(),
         bub = aBubble.fullImageClassic(),
         taller = Math.max(0, bub.height - scr.height),
         pic = newCanvas(new Point(
@@ -1865,7 +1866,12 @@ SyntaxElementMorph.prototype.exportPictureWithResult = function (aBubble) {
         ctx = pic.getContext('2d');
     ctx.drawImage(scr, 0, pic.height - scr.height);
     ctx.drawImage(bub, scr.width + 2, 0);
-    window.open(pic.toDataURL());
+    // request to open pic in new window.
+    ide.saveCanvasAs(
+        pic,
+        ide.projetName || localize('Untitled') + ' ' + localize('script pic'),
+        true
+    );
 };
 
 // SyntaxElementMorph code mapping
@@ -2332,7 +2338,13 @@ BlockMorph.prototype.userMenu = function () {
     menu.addItem(
         "script pic...",
         function () {
-            window.open(myself.topBlock().scriptPic().toDataURL());
+            var ide = myself.parentThatIsA(IDE_Morph);
+            ide.saveCanvasAs(
+                myself.topBlock().scriptPic(),
+                ide.projetName || localize('Untitled') + ' ' +
+                    localize('script pic'),
+                true // request new window
+            );
         },
         'open a new window\nwith a picture of this script'
     );
@@ -5489,9 +5501,15 @@ ScriptsMorph.prototype.cleanUp = function () {
 };
 
 ScriptsMorph.prototype.exportScriptsPicture = function () {
-    var pic = this.scriptsPicture();
+    var pic = this.scriptsPicture(),
+        ide = this.world().children[0];
     if (pic) {
-        window.open(pic.toDataURL());
+        ide.saveCanvasAs(
+            pic,
+            ide.projetName || localize('Untitled') + ' ' +
+                localize('script pic'),
+            true // request new window
+        );
     }
 };
 
@@ -11166,7 +11184,13 @@ CommentMorph.prototype.userMenu = function () {
     menu.addItem(
         "comment pic...",
         function () {
-            window.open(myself.fullImageClassic().toDataURL());
+            var ide = myself.parentThatIsA(IDE_Morph);
+            ide.saveCanvasAs(
+                myself.fullImageClassic(),
+                ide.projetName || localize('Untitled') + ' ' +
+                    localize('comment pic'),
+                true // request new window
+            );
         },
         'open a new window\nwith a picture of this comment'
     );

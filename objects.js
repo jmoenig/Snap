@@ -589,7 +589,7 @@ SpriteMorph.prototype.initBlocks = function () {
         },
 
     /* migrated to a newer block version:
-  
+
         receiveClick: {
             type: 'hat',
             category: 'control',
@@ -5839,7 +5839,11 @@ StageMorph.prototype.userMenu = function () {
     menu.addItem(
         "pic...",
         function () {
-            window.open(myself.fullImageClassic().toDataURL());
+            ide.saveCanvasAs(
+                myself.fullImageClassic(),
+                myself.name,
+                true // open as new window
+            );
         },
         'open a new window\nwith a picture of the stage'
     );
@@ -7729,9 +7733,11 @@ WatcherMorph.prototype.userMenu = function () {
             menu.addItem(
                 'export...',
                 function () {
-                    window.open(
-                        'data:text/plain;charset=utf-8,' +
-                            encodeURIComponent(this.currentValue.toString())
+                    var ide = myself.parentThatIsA(IDE_Morph);
+                    ide.saveFileAs(
+                        myself.currentValue.toString(),
+                        'text/plain;charset=utf-8',
+                        myself.getter // variable name
                     );
                 }
             );
