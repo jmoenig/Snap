@@ -4512,8 +4512,6 @@ CursorMorph.prototype.init = function (aStringOrTextMorph) {
     this.hiddenText.addEventListener(
         'keypress',
         function (event) {
-            console.log('press');
-            console.log(event);
             myself.processKeyPress(event);
             this.value = myself.target.selection();
             this.select();
@@ -4524,8 +4522,6 @@ CursorMorph.prototype.init = function (aStringOrTextMorph) {
     this.hiddenText.addEventListener(
         'keydown',
         function (event) {
-            console.log('down');
-            console.log(event);
             myself.processKeyDown(event);
             this.value = myself.target.selection();
             this.select();
