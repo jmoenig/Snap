@@ -3445,7 +3445,7 @@ Morph.prototype.developersMenu = function () {
     menu.addItem(
         "pick up",
         'pickUp',
-        'disattach and put \ninto the hand'
+        'detach and put \ninto the hand'
     );
     menu.addItem(
         "attach...",
@@ -9079,7 +9079,6 @@ ScrollFrameMorph.prototype.developersMenu = function () {
     }
     return menu;
 };
-
 
 ScrollFrameMorph.prototype.toggleTextLineWrapping = function () {
     this.isTextLineWrapping = !this.isTextLineWrapping;
