@@ -4478,7 +4478,7 @@ function CursorMorph(aStringOrTextMorph) {
 }
 
 CursorMorph.prototype.init = function (aStringOrTextMorph) {
-    var ls;
+    var ls, myself = this;
 
     // additional properties:
     this.keyDownEventUsed = false;
@@ -4496,6 +4496,59 @@ CursorMorph.prototype.init = function (aStringOrTextMorph) {
         this.target.setAlignmentToLeft();
     }
     this.gotoSlot(this.slot);
+    
+    // Add hidden text box for copying and pasting
+    this.hiddenText = document.createElement('textarea');
+    this.target.hiddenText = this.hiddenText;
+    this.hiddenText.style.position = 'absolute';
+    this.hiddenText.style.right = '101%'; // placed just out of view
+    
+    document.body.appendChild(this.hiddenText);
+    
+    this.hiddenText.value = this.target.selection();
+    this.hiddenText.focus();
+    this.hiddenText.select();
+    
+    this.hiddenText.addEventListener(
+        'keypress',
+        function (event) {
+            console.log('press');
+            console.log(event);
+            myself.processKeyPress(event);
+            this.value = myself.target.selection();
+            this.select();
+        },
+        false
+    );
+    
+    this.hiddenText.addEventListener(
+        'keydown',
+        function (event) {
+            console.log('down');
+            console.log(event);
+            myself.processKeyDown(event);
+            this.value = myself.target.selection();
+            this.select();
+            
+            // Make sure tab prevents default
+            if (event.keyIdentifier === 'U+0009' || event.keyIdentifier === 'Tab') {
+                myself.processKeyPress(event);
+                event.preventDefault();
+            }
+        },
+        false
+    );
+    
+    this.hiddenText.addEventListener(
+        'input',
+        function (event) {
+            if (this.value === '') {
+                myself.gotoSlot(myself.target.selectionStartSlot());
+                myself.target.deleteSelection();
+            }
+        },
+        false
+    );
 };
 
 // CursorMorph event processing:
@@ -4848,6 +4901,9 @@ CursorMorph.prototype.destroy = function () {
         this.target.alignment = this.originalAlignment;
         this.target.drawNew();
         this.target.changed();
+    }
+    if (this.hiddenText) {
+        document.body.removeChild(this.hiddenText);
     }
     CursorMorph.uber.destroy.call(this);
 };
