@@ -4527,7 +4527,8 @@ CursorMorph.prototype.init = function (aStringOrTextMorph) {
             this.select();
             
             // Make sure tab prevents default
-            if (event.keyIdentifier === 'U+0009' || event.keyIdentifier === 'Tab') {
+            if (event.keyIdentifier === 'U+0009' ||
+                    event.keyIdentifier === 'Tab') {
                 myself.processKeyPress(event);
                 event.preventDefault();
             }
