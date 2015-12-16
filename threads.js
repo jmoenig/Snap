@@ -1553,7 +1553,12 @@ Process.prototype.reportListLength = function (list) {
     if (list instanceof List) {
         return list.length();
     }
-    return list.length; // catch a common student error
+    if (list && list.hasOwnProperty('length')) {
+        return list.length; // catch a common student error
+    }
+    throw new Error(
+        'expecting a list as input, but received ' + this.reportTypeOf(list)
+    );
 };
 
 Process.prototype.reportListContainsItem = function (list, element) {
