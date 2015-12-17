@@ -42,7 +42,7 @@
 
 /*global modules, contains*/
 
-modules.locale = '2015-December-15';
+modules.locale = '2015-December-18';
 
 // Global stuff
 
@@ -557,3 +557,13 @@ SnapTranslator.dict.ro = {
         '2015-10-24'
 };
 
+SnapTranslator.dict.ar = {
+    'language_name':
+        'العربية', // the name as it should appear in the language menu
+    'language_translator':
+        'طارق جلال', // your name for the Translators tab
+    'translator_e-mail':
+        'tarekgalal46@hotmail.com', // optional
+    'last_changed':
+        '2015-12-18'
+};

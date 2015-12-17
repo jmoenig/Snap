@@ -2808,6 +2808,10 @@ end - bulk of 151215
 * NL translation update
 * Use Blob API to Save Files (to Disk), Thanks, Michael!!
 
-151216
+151217
 ------
 * Threads: fixed #1071 “length of list” type error possibility by no longer guaranteeing that the red “length of” reporter also works on text input
+
+151218
+------
+* new Arabic translation, yay!! Thanks Tarek Galal!!!
