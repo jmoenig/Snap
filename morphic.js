@@ -4496,19 +4496,18 @@ CursorMorph.prototype.init = function (aStringOrTextMorph) {
         this.target.setAlignmentToLeft();
     }
     this.gotoSlot(this.slot);
-    
+
     // Add hidden text box for copying and pasting
     this.hiddenText = document.createElement('textarea');
-    this.target.hiddenText = this.hiddenText;
     this.hiddenText.style.position = 'absolute';
     this.hiddenText.style.right = '101%'; // placed just out of view
-    
+
     document.body.appendChild(this.hiddenText);
-    
+
     this.hiddenText.value = this.target.selection();
     this.hiddenText.focus();
     this.hiddenText.select();
-    
+
     this.hiddenText.addEventListener(
         'keypress',
         function (event) {
@@ -4518,7 +4517,7 @@ CursorMorph.prototype.init = function (aStringOrTextMorph) {
         },
         false
     );
-    
+
     this.hiddenText.addEventListener(
         'keydown',
         function (event) {
