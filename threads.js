@@ -83,7 +83,7 @@ ArgLabelMorph, localize, XML_Element, hex_sha512*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.threads = '2015-December-15';
+modules.threads = '2015-December-17';
 
 var ThreadManager;
 var Process;
@@ -727,6 +727,7 @@ Process.prototype.evaluateMultiSlot = function (multiSlot, argCount) {
         }
     }
 };
+
 Process.prototype.evaluateArgLabel = function (argLabel) {
     // perform the ID function on an ArgLabelMorph element
     var inputs = this.context.inputs;
@@ -1480,19 +1481,23 @@ Process.prototype.reportNewList = function (elements) {
 };
 
 Process.prototype.reportCONS = function (car, cdr) {
+    // this.assertType(cdr, 'list');
     return new List().cons(car, cdr);
 };
 
 Process.prototype.reportCDR = function (list) {
+    // this.assertType(list, 'list');
     return list.cdr();
 };
 
 Process.prototype.doAddToList = function (element, list) {
+    // this.assertType(list, 'list');
     list.add(element);
 };
 
 Process.prototype.doDeleteFromList = function (index, list) {
     var idx = index;
+    // this.assertType(list, 'list');
     if (this.inputOption(index) === 'all') {
         return list.clear();
     }
@@ -1509,6 +1514,7 @@ Process.prototype.doDeleteFromList = function (index, list) {
 
 Process.prototype.doInsertInList = function (element, index, list) {
     var idx = index;
+    // this.assertType(list, 'list');
     if (index === '') {
         return null;
     }
@@ -1523,6 +1529,7 @@ Process.prototype.doInsertInList = function (element, index, list) {
 
 Process.prototype.doReplaceInList = function (index, list, element) {
     var idx = index;
+    // this.assertType(list, 'list');
     if (index === '') {
         return null;
     }
@@ -1537,6 +1544,7 @@ Process.prototype.doReplaceInList = function (index, list, element) {
 
 Process.prototype.reportListItem = function (index, list) {
     var idx = index;
+    // this.assertType(list, 'list');
     if (index === '') {
         return '';
     }
@@ -1550,13 +1558,12 @@ Process.prototype.reportListItem = function (index, list) {
 };
 
 Process.prototype.reportListLength = function (list) {
-    if (list instanceof List) {
-        return list.length();
-    }
-    return list.length; // catch a common student error
+    // this.assertType(list, 'list');
+    return list.length();
 };
 
 Process.prototype.reportListContainsItem = function (list, element) {
+    // this.assertType(list, 'list');
     return list.contains(element);
 };
 
@@ -2099,6 +2106,18 @@ Process.prototype.getLastMessage = function () {
 
 Process.prototype.reportIsA = function (thing, typeString) {
     return this.reportTypeOf(thing) === this.inputOption(typeString);
+};
+
+Process.prototype.assertType = function (thing, typeString) {
+    // make sure "thing" is a particular type or any of a number of types
+    // and raise an error if not
+    // unused as of now because of performance considerations
+    var thingType = this.reportTypeOf(thing);
+    if (thingType === typeString) {return true; }
+    if (typeString instanceof Array && contains(typeString, thingType)) {
+        return true;
+    }
+    throw new Error('expecting ' + typeString + ' but getting ' + thingType);
 };
 
 Process.prototype.reportTypeOf = function (thing) {
