@@ -125,7 +125,7 @@ PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.objects = '2015-December-15';
+modules.objects = '2015-December-19';
 
 var SpriteMorph;
 var StageMorph;
@@ -3533,10 +3533,14 @@ SpriteMorph.prototype.setHeading = function (degrees) {
         turn = dir - this.heading;
 
     // apply to myself
-    this.changed();
-    SpriteMorph.uber.setHeading.call(this, dir);
-    this.silentGotoXY(x, y, true); // just me
-    this.positionTalkBubble();
+    if (this.rotationStyle) { // optimization, only redraw if rotatable
+        this.changed();
+        SpriteMorph.uber.setHeading.call(this, dir);
+        this.silentGotoXY(x, y, true); // just me
+        this.positionTalkBubble();
+    } else {
+        this.heading = parseFloat(degrees) % 360;
+    }
 
     // propagate to my parts
     this.parts.forEach(function (part) {

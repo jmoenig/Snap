@@ -2815,3 +2815,7 @@ end - bulk of 151215
 151218
 ------
 * new Arabic translation, yay!! Thanks Tarek Galal!!!
+
+151219
+------
+* Objects: Optimization: Don’t redraw unrotateable sprites on TURN
