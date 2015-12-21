@@ -2819,3 +2819,9 @@ end - bulk of 151215
 151219
 ------
 * Objects: Optimization: Don’t redraw unrotateable sprites on TURN
+
+151221
+------
+* Morphic: Native Copy & Paste support, thanks, @cyderize, for this contribution!!
+* GUI: Code tweaks
+* Portuguese translation update, thanks, Manuel!
