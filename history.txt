@@ -2825,3 +2825,7 @@ end - bulk of 151215
 * Morphic: Native Copy & Paste support, thanks, @cyderize, for this contribution!!
 * GUI: Code tweaks
 * Portuguese translation update, thanks, Manuel!
+
+151221
+------
+* Blocks, Objects, Threads, Locale: revert to ’any key’ in the key-pressed menu

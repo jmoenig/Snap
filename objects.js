@@ -125,7 +125,7 @@ PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.objects = '2015-December-19';
+modules.objects = '2015-December-22';
 
 var SpriteMorph;
 var StageMorph;
@@ -3746,7 +3746,7 @@ SpriteMorph.prototype.allHatBlocksForKey = function (key) {
         if (morph.selector) {
             if (morph.selector === 'receiveKey') {
                 var evt = morph.inputs()[0].evaluate()[0];
-                return evt === key || evt === 'any';
+                return evt === key || evt === 'any key';
             }
         }
         return false;
