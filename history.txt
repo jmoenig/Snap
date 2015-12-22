@@ -2829,3 +2829,4 @@ end - bulk of 151215
 151221
 ------
 * Blocks, Objects, Threads, Locale: revert to ’any key’ in the key-pressed menu
+* GUI: Improve sorting and tab switching in the Project Dialog, Thanks, Michael!

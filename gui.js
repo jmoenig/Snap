@@ -71,7 +71,7 @@ BlockRemovalDialogMorph, saveAs*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2015-December-21';
+modules.gui = '2015-December-22';
 
 // Declarations
 
