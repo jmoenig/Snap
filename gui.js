@@ -2802,6 +2802,7 @@ IDE_Morph.prototype.projectMenu = function () {
     menu.addPair('Open...', 'openProjectsBrowser', '⌘O');
     menu.addPair('Save', "save", '⌘S');
     menu.addItem('Save As...', 'saveProjectsBrowser');
+    menu.addItem('Save and Share...', "saveAndShare");
     menu.addLine();
     menu.addItem(
         'Import...',
@@ -2959,8 +2960,10 @@ IDE_Morph.prototype.projectMenu = function () {
     menu.popup(world, pos);
 };
 
-IDE_Morph.prototype.resourceURL = function () {
-    // Take in variadic inputs that represent an a nested folder structure.
+// IDE_Morph utility methods of dynamic submenu lists
+
+IDE_Morph.prototype.resourceURL = function (folder, file) {
+    // Give a path a file in subfolders.
     // Method can be easily overridden if running in a custom location.
     // Default Snap! simply returns a path (relative to snap.html)
     var args = Array.prototype.slice.call(arguments, 0);
