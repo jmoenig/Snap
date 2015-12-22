@@ -3472,6 +3472,47 @@ IDE_Morph.prototype.saveProject = function (name) {
     ]);
 };
 
+// Save a project and show a URL
+IDE_Morph.prototype.saveAndShare = function() {
+    var myself = this,
+	projectName = this.projectName;
+
+    if (projectName) {
+	this.showMessage('Saving project\nto the cloud...');
+	this.setProjectName(projectName);
+
+	SnapCloud.saveProject(
+	    this,
+	    function () {
+		myself.showMessage('sharing\nproject...');
+		SnapCloud.reconnect(
+		    function () {
+			SnapCloud.callService(
+			    'publishProject',
+			    function () {
+				myself.showMessage('shared.', 2);
+			    },
+			    myself.cloudError(),
+			    [
+				projectName,
+				myself.stage.thumbnail(
+				    SnapSerializer.prototype.thumbnailSize
+				).toDataURL('image/png')
+			    ]
+			);
+		    },
+		    myself.cloudError()
+		);
+		prompt(
+		    'This project is now public at the following URL:',
+		    this.publicProjectURL(this.username, projectName)
+		);
+	    },
+	    this.cloudError()
+	)
+    }
+}
+
 // Serialize a project and save to the browser.
 IDE_Morph.prototype.rawSaveProject = function (name) {
     var str;
@@ -3494,7 +3535,6 @@ IDE_Morph.prototype.rawSaveProject = function (name) {
         }
     }
 };
-
 
 IDE_Morph.prototype.exportProject = function (name, plain, newWindow) {
     // Export project XML, saving a file to disk
@@ -5233,8 +5273,19 @@ IDE_Morph.prototype.setCloudURL = function () {
     );
 };
 
-// IDE_Morph HTTP data fetching
+IDE_Morph.prototype.publicProjectURL = function (username, projectName) {
+    // Return a new URL to a public Snap! project
+    var url = new URL(window.location);
 
+    url.hash = 'present:' + SnapCloud.encodeDict({
+        'Username': username,
+        'ProjectName': projectName
+    });
+
+    return url;
+}
+
+// IDE_Morph HTTP data fetching
 IDE_Morph.prototype.getURL = function (url, callback) {
     // fetch the contents of a url and pass it into the specified callback.
     // If no callback is specified synchronously fetch and return it
