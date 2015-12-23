@@ -3481,6 +3481,8 @@ IDE_Morph.prototype.saveAndShare = function() {
         projectDialog;
 
     function shareProject() {
+	var urlDialog, urlBox;
+
         myself.showMessage('sharing\nproject...');
         SnapCloud.reconnect(
             function () {
@@ -3491,7 +3493,7 @@ IDE_Morph.prototype.saveAndShare = function() {
                     },
                     myself.cloudError(),
                     [
-                        projectName,
+			myself.projectName,
                         myself.stage.thumbnail(
                             SnapSerializer.prototype.thumbnailSize
                         ).toDataURL('image/png')
@@ -3500,10 +3502,21 @@ IDE_Morph.prototype.saveAndShare = function() {
             },
             myself.cloudError()
         );
-        prompt(
-            'This project is now public at the following URL:',
-	    myself.publicProjectURL(SnapCloud.username, myself.projectName)
+
+        urlDialog = new DialogBoxMorph();
+        urlDialog.labelString = 'Copy the public address:';
+        urlDialog.createLabel();
+        urlBox = new InputFieldMorph(
+            myself.publicProjectURL(SnapCloud.username, myself.projectName)
         );
+        urlBox.setWidth(300);
+        urlDialog.addBody(urlBox);
+        urlBox.drawNew();
+        urlDialog.addButton('ok', 'OK');
+        urlDialog.fixLayout();
+        urlDialog.drawNew();
+        urlDialog.fixLayout();
+        urlDialog.popUp(world);
     }
 
     if (!this.projectName) {
@@ -3511,16 +3524,16 @@ IDE_Morph.prototype.saveAndShare = function() {
         // When a project it saved to the cloud, also share it.
         projectDialog.saveCloudProject = function () {
             myself.showMessage('Saving project\nto the cloud...');
-	    SnapCloud.saveProject(
-		myself,
-		shareProject,
-		myself.cloudError());
+            SnapCloud.saveProject(
+                myself,
+                shareProject,
+                myself.cloudError());
             this.destroy();
         };
         projectDialog.popUp();
     } else {
         this.showMessage('Saving project\nto the cloud...');
-	this.setProjectName(this.projectName);
+        this.setProjectName(this.projectName);
         SnapCloud.saveProject(this, shareProject, this.cloudError());
     }
 };
@@ -5288,25 +5301,18 @@ IDE_Morph.prototype.setCloudURL = function () {
 IDE_Morph.prototype.publicProjectURL = function (username, projectName) {
     // Return a new URL to a public Snap! project
     var url = new URL(window.location);
-
     url.hash = 'present:' + SnapCloud.encodeDict({
         'Username': username,
         'ProjectName': projectName
     });
-
-    return url;
+    return url.href;
 }
 
-<<<<<<< HEAD
 // IDE_Morph HTTP data fetching
 IDE_Morph.prototype.getURL = function (url, callback) {
     // fetch the contents of a url and pass it into the specified callback.
     // If no callback is specified synchronously fetch and return it
     // Note: Synchronous fetching has been deprecated and should be switched
-=======
-// IDE_Morph synchronous HTTP data fetching
-IDE_Morph.prototype.getURL = function (url) {
->>>>>>> Improve save and share to show the save dialog for new projects
     var request = new XMLHttpRequest(),
         async = callback instanceof Function,
         myself = this;
