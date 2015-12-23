@@ -1057,7 +1057,7 @@
 /*global window, HTMLCanvasElement, getMinimumFontHeight, FileReader, Audio,
 FileList, getBlurredShadowSupport*/
 
-var morphicVersion = '2015-December-21';
+var morphicVersion = '2015-December-23';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = getBlurredShadowSupport(); // check for Chrome-bug
 
@@ -4905,6 +4905,7 @@ CursorMorph.prototype.destroy = function () {
     }
     if (this.clipboardHandler) {
         document.body.removeChild(this.clipboardHandler);
+        this.clipboardHandler = null;
     }
     CursorMorph.uber.destroy.call(this);
 };
