@@ -3478,10 +3478,11 @@ IDE_Morph.prototype.saveProject = function (name) {
 // Save a project and show a URL
 IDE_Morph.prototype.saveAndShare = function() {
     var myself = this,
+	world = this.world(),
 	projectDialog;
 
     function shareProject() {
-	var urlDialog, urlBox, alreadyPublic,
+	var dialog, frame, text, width,
 	    publicURL;
 
 	publicURL = myself.publicProjectURL(
@@ -3490,7 +3491,7 @@ IDE_Morph.prototype.saveAndShare = function() {
 	);
 
 	// only call Snap!Cloud if the project has needs to be shared
-	if (window.location !== publicURL) {
+	if (window.location.href !== publicURL) {
 	    myself.showMessage('sharing\nproject...');
 	    SnapCloud.reconnect(
 		function () {
@@ -3513,18 +3514,39 @@ IDE_Morph.prototype.saveAndShare = function() {
 	    );
 	}
 
-	urlDialog = new DialogBoxMorph();
-	urlDialog.labelString = 'Copy the public address:';
-	urlDialog.createLabel();
-	urlBox = new InputFieldMorph(publicURL);
-	urlBox.setWidth(300);
-	urlDialog.addBody(urlBox);
-	urlBox.drawNew();
-        urlDialog.addButton('ok', 'OK');
-        urlDialog.fixLayout();
-        urlDialog.drawNew();
-        urlDialog.fixLayout();
-        urlDialog.popUp(world);
+	dialog = new DialogBoxMorph().withKey('sharedURLDialog');
+	dialog.labelString = 'Copy the public address:';
+	dialog.createLabel();
+
+	frame = new ScrollFrameMorph(),
+	text = new StringMorph(publicURL),
+	width = 250,
+
+	frame.padding = 6;
+	frame.setWidth(width);
+	text.setWidth(width - frame.padding * 2);
+	text.setPosition(frame.topLeft().add(frame.padding));
+	text.enableSelecting();
+	text.isEditable = true;
+
+	frame.fixLayout = nop;
+	frame.edge = InputFieldMorph.prototype.edge;
+	frame.fontSize = InputFieldMorph.prototype.fontSize;
+	frame.typeInPadding = InputFieldMorph.prototype.typeInPadding;
+	frame.contrast = InputFieldMorph.prototype.contrast;
+	frame.drawNew = InputFieldMorph.prototype.drawNew;
+	frame.drawRectBorder = InputFieldMorph.prototype.drawRectBorder;
+
+	frame.addContents(text);
+	text.drawNew();
+	dialog.addBody(frame);
+	frame.drawNew();
+	dialog.addButton('ok', 'OK');
+	dialog.fixLayout();
+	dialog.drawNew();
+	dialog.popUp(world);
+	dialog.setCenter(world.center());
+	text.edit();
     }
 
     if (!this.projectName) {
