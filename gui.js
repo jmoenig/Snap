@@ -3478,7 +3478,6 @@ IDE_Morph.prototype.saveProject = function (name) {
 // Save a project and show a URL
 IDE_Morph.prototype.saveAndShare = function() {
     var myself = this,
-        projectName = this.projectName,
         projectDialog;
 
     function shareProject() {
@@ -3503,25 +3502,28 @@ IDE_Morph.prototype.saveAndShare = function() {
         );
         prompt(
             'This project is now public at the following URL:',
-            myself.publicProjectURL(myself.username, projectName)
+	    myself.publicProjectURL(SnapCloud.username, myself.projectName)
         );
     }
 
-    if (!projectName) {
+    if (!this.projectName) {
         projectDialog = new ProjectDialogMorph(this, 'save');
         // When a project it saved to the cloud, also share it.
         projectDialog.saveCloudProject = function () {
             myself.showMessage('Saving project\nto the cloud...');
-            SnapCloud.saveProject(myself, saveProject, myself.cloudError());
+	    SnapCloud.saveProject(
+		myself,
+		shareProject,
+		myself.cloudError());
             this.destroy();
         };
         projectDialog.popUp();
     } else {
         this.showMessage('Saving project\nto the cloud...');
-        this.setProjectName(projectName);
+	this.setProjectName(this.projectName);
         SnapCloud.saveProject(this, shareProject, this.cloudError());
     }
-}
+};
 
 // Serialize a project and save to the browser.
 IDE_Morph.prototype.rawSaveProject = function (name) {
