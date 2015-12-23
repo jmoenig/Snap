@@ -3478,40 +3478,48 @@ IDE_Morph.prototype.saveProject = function (name) {
 // Save a project and show a URL
 IDE_Morph.prototype.saveAndShare = function() {
     var myself = this,
-        projectDialog;
+	projectDialog;
 
     function shareProject() {
-	var urlDialog, urlBox;
+	var urlDialog, urlBox, alreadyPublic,
+	    publicURL;
 
-        myself.showMessage('sharing\nproject...');
-        SnapCloud.reconnect(
-            function () {
-                SnapCloud.callService(
-                    'publishProject',
-                    function () {
-                        myself.showMessage('shared.', 2);
-                    },
-                    myself.cloudError(),
-                    [
-			myself.projectName,
-                        myself.stage.thumbnail(
-                            SnapSerializer.prototype.thumbnailSize
-                        ).toDataURL('image/png')
-                    ]
-                );
-            },
-            myself.cloudError()
-        );
+	publicURL = myself.publicProjectURL(
+	    SnapCloud.username,
+	    myself.projectName
+	);
 
-        urlDialog = new DialogBoxMorph();
-        urlDialog.labelString = 'Copy the public address:';
-        urlDialog.createLabel();
-        urlBox = new InputFieldMorph(
-            myself.publicProjectURL(SnapCloud.username, myself.projectName)
-        );
-        urlBox.setWidth(300);
-        urlDialog.addBody(urlBox);
-        urlBox.drawNew();
+	// only call Snap!Cloud if the project has needs to be shared
+	if (window.location !== publicURL) {
+	    myself.showMessage('sharing\nproject...');
+	    SnapCloud.reconnect(
+		function () {
+		    SnapCloud.callService(
+			'publishProject',
+			function () {
+			    myself.showMessage('shared.', 2);
+			    window.location.hash = (new URL(publicURL)).hash;
+			},
+			myself.cloudError(),
+			[
+			    myself.projectName,
+			    myself.stage.thumbnail(
+				SnapSerializer.prototype.thumbnailSize
+			    ).toDataURL('image/png')
+			]
+		    );
+		},
+		myself.cloudError()
+	    );
+	}
+
+	urlDialog = new DialogBoxMorph();
+	urlDialog.labelString = 'Copy the public address:';
+	urlDialog.createLabel();
+	urlBox = new InputFieldMorph(publicURL);
+	urlBox.setWidth(300);
+	urlDialog.addBody(urlBox);
+	urlBox.drawNew();
         urlDialog.addButton('ok', 'OK');
         urlDialog.fixLayout();
         urlDialog.drawNew();
@@ -3524,10 +3532,7 @@ IDE_Morph.prototype.saveAndShare = function() {
         // When a project it saved to the cloud, also share it.
         projectDialog.saveCloudProject = function () {
             myself.showMessage('Saving project\nto the cloud...');
-            SnapCloud.saveProject(
-                myself,
-                shareProject,
-                myself.cloudError());
+	    SnapCloud.saveProject(myself, shareProject, myself.cloudError());
             this.destroy();
         };
         projectDialog.popUp();
