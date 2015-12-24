@@ -3177,9 +3177,7 @@ Morph.prototype.slideBackTo = function (situation, inSteps) {
 
 // Morph utilities:
 
-Morph.prototype.nop = function () {
-    nop();
-};
+Morph.prototype.nop = nop;
 
 Morph.prototype.resize = function () {
     this.world().activeHandle = new HandleMorph(this);
@@ -5585,9 +5583,7 @@ SliderButtonMorph.prototype.init = function (orientation) {
     SliderButtonMorph.uber.init.call(this, orientation);
 };
 
-SliderButtonMorph.prototype.autoOrientation = function () {
-    nop();
-};
+SliderButtonMorph.prototype.autoOrientation = nop;
 
 SliderButtonMorph.prototype.drawNew = function () {
     var colorBak = this.color.copy();
@@ -5823,9 +5819,7 @@ SliderMorph.prototype.init = function (
     // this.drawNew();
 };
 
-SliderMorph.prototype.autoOrientation = function () {
-    nop();
-};
+SliderMorph.prototype.autoOrientation = nop;
 
 SliderMorph.prototype.rangeSize = function () {
     return this.stop - this.start;
@@ -8944,9 +8938,7 @@ ScrollFrameMorph.prototype.scrollY = function (steps) {
     }
 };
 
-ScrollFrameMorph.prototype.step = function () {
-    nop();
-};
+ScrollFrameMorph.prototype.step = nop;
 
 ScrollFrameMorph.prototype.mouseDownLeft = function (pos) {
     if (!this.isScrollingByDragging) {
@@ -10511,21 +10503,13 @@ WorldMorph.prototype.initEventListeners = function () {
     };
 };
 
-WorldMorph.prototype.mouseDownLeft = function () {
-    nop();
-};
+WorldMorph.prototype.mouseDownLeft = nop;
 
-WorldMorph.prototype.mouseClickLeft = function () {
-    nop();
-};
+WorldMorph.prototype.mouseClickLeft = nop;
 
-WorldMorph.prototype.mouseDownRight = function () {
-    nop();
-};
+WorldMorph.prototype.mouseDownRight = nop;
 
-WorldMorph.prototype.mouseClickRight = function () {
-    nop();
-};
+WorldMorph.prototype.mouseClickRight = nop;
 
 WorldMorph.prototype.wantsDropOf = function () {
     // allow handle drops if any drops are allowed
