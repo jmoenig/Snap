@@ -821,7 +821,13 @@ CustomCommandBlockMorph.prototype.userMenu = function () {
         menu.addItem(
             "script pic...",
             function () {
-                window.open(this.topBlock().scriptPic().toDataURL());
+                var ide = this.world().children[0];
+                ide.saveCanvasAs(
+                    this.topBlock().scriptPic(),
+                    ide.projectName || localize('Untitled') + ' ' +
+                        localize('script pic'),
+                    true // request opening a new window
+                );
             },
             'open a new window\nwith a picture of this script'
         );
@@ -862,8 +868,10 @@ CustomCommandBlockMorph.prototype.userMenu = function () {
 };
 
 CustomCommandBlockMorph.prototype.exportBlockDefinition = function () {
-    var xml = new SnapSerializer().serialize(this.definition);
-    window.open('data:text/xml,' + encodeURIComponent(xml));
+    var xml = new SnapSerializer().serialize(this.definition),
+        ide = this.parentThatIsA(IDE_Morph);
+
+    ide.saveXMLAs(xml, this.spec);
 };
 
 CustomCommandBlockMorph.prototype.deleteBlockDefinition = function () {
@@ -3497,17 +3505,21 @@ BlockExportDialogMorph.prototype.selectNone = function () {
 // BlockExportDialogMorph ops
 
 BlockExportDialogMorph.prototype.exportBlocks = function () {
-    var str = encodeURIComponent(
-        this.serializer.serialize(this.blocks)
-    );
+    var str = this.serializer.serialize(this.blocks),
+        ide = this.world().children[0];
+
     if (this.blocks.length > 0) {
-        window.open('data:text/xml,<blocks app="'
+        str = '<blocks app="'
             + this.serializer.app
             + '" version="'
             + this.serializer.version
             + '">'
             + str
-            + '</blocks>');
+            + '</blocks>';
+        ide.saveXMLAs(
+            str,
+            ide.projectName || localize('Untitled') + ' ' + localize('blocks')
+        );
     } else {
         new DialogBoxMorph().inform(
             'Export blocks',

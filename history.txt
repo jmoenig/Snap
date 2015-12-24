@@ -2797,12 +2797,36 @@ v4.0.4 draft features:
 end - bulk of 151215
 ++++++++++++++++++++++++++
 
+151215 - more changes
+------
+* Cloud: 10 MB cloud upload limit for media per project
+
 151215 - contributions
 ------
 * Objects, Paint: Automatic Sprite Center Detection, Thanks, Craxic!!
 * Morphic: Handling of diacritics, [Alt] + key in input fields (Windows), Thanks, DaDoro!!
 * NL translation update
+* Use Blob API to Save Files (to Disk), Thanks, Michael!!
 
-151215 - more changes
+151217
 ------
-* Cloud: 10 MB cloud upload limit for media per project
+* Threads: fixed #1071 “length of list” type error possibility by no longer guaranteeing that the red “length of” reporter also works on text input
+
+151218
+------
+* new Arabic translation, yay!! Thanks Tarek Galal!!!
+
+151219
+------
+* Objects: Optimization: Don’t redraw unrotateable sprites on TURN
+
+151221
+------
+* Morphic: Native Copy & Paste support, thanks, @cyderize, for this contribution!!
+* GUI: Code tweaks
+* Portuguese translation update, thanks, Manuel!
+
+151221
+------
+* Blocks, Objects, Threads, Locale: revert to ’any key’ in the key-pressed menu
+* GUI: Improve sorting and tab switching in the Project Dialog, Thanks, Michael!

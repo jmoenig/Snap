@@ -125,7 +125,7 @@ PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.objects = '2015-December-15';
+modules.objects = '2015-December-22';
 
 var SpriteMorph;
 var StageMorph;
@@ -589,7 +589,7 @@ SpriteMorph.prototype.initBlocks = function () {
         },
 
     /* migrated to a newer block version:
-  
+
         receiveClick: {
             type: 'hat',
             category: 'control',
@@ -3533,10 +3533,14 @@ SpriteMorph.prototype.setHeading = function (degrees) {
         turn = dir - this.heading;
 
     // apply to myself
-    this.changed();
-    SpriteMorph.uber.setHeading.call(this, dir);
-    this.silentGotoXY(x, y, true); // just me
-    this.positionTalkBubble();
+    if (this.rotationStyle) { // optimization, only redraw if rotatable
+        this.changed();
+        SpriteMorph.uber.setHeading.call(this, dir);
+        this.silentGotoXY(x, y, true); // just me
+        this.positionTalkBubble();
+    } else {
+        this.heading = parseFloat(degrees) % 360;
+    }
 
     // propagate to my parts
     this.parts.forEach(function (part) {
@@ -3742,7 +3746,7 @@ SpriteMorph.prototype.allHatBlocksForKey = function (key) {
         if (morph.selector) {
             if (morph.selector === 'receiveKey') {
                 var evt = morph.inputs()[0].evaluate()[0];
-                return evt === key || evt === 'any';
+                return evt === key || evt === 'any key';
             }
         }
         return false;
@@ -5839,7 +5843,11 @@ StageMorph.prototype.userMenu = function () {
     menu.addItem(
         "pic...",
         function () {
-            window.open(myself.fullImageClassic().toDataURL());
+            ide.saveCanvasAs(
+                myself.fullImageClassic(),
+                myself.name,
+                true // open as new window
+            );
         },
         'open a new window\nwith a picture of the stage'
     );
@@ -7729,9 +7737,11 @@ WatcherMorph.prototype.userMenu = function () {
             menu.addItem(
                 'export...',
                 function () {
-                    window.open(
-                        'data:text/plain;charset=utf-8,' +
-                            encodeURIComponent(this.currentValue.toString())
+                    var ide = myself.parentThatIsA(IDE_Morph);
+                    ide.saveFileAs(
+                        myself.currentValue.toString(),
+                        'text/plain;charset=utf-8',
+                        myself.getter // variable name
                     );
                 }
             );

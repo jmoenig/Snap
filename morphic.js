@@ -153,7 +153,7 @@
 
     IV. open issues
     ----------------
-    - clipboard support (copy & paste)
+    - clipboard support (copy & paste) for non-textual data
     - native (unscaled) high-resolution display support
 
 
@@ -169,10 +169,11 @@
     - Chrome for Windows
     - Chrome for Mac
     - Chrome for Android
-    - Safari for Windows
+    - Safari for Windows (deprecated)
     - safari for Mac
     - Safari for iOS (mobile)
     - IE for Windows
+    - Edge for Windows
     - Opera for Windows
     - Opera for Mac
 
@@ -262,10 +263,11 @@
                 window.onload = function () {
                     world = new WorldMorph(
                         document.getElementById('world'));
-                    setInterval(loop, 50);
+                    loop();
                 };
 
                 function loop() {
+                    requestAnimationFrame(loop);
                     world.doOneCycle();
                 }
             </script>
@@ -309,10 +311,11 @@
                         document.getElementById('world1'), false);
                     world2 = new WorldMorph(
                         document.getElementById('world2'), false);
-                    setInterval(loop, 50);
+                    loop();
                 };
 
                 function loop() {
+                    requestAnimationFrame(loop);
                     world1.doOneCycle();
                     world2.doOneCycle();
                 }
@@ -377,10 +380,11 @@
                         x = 0;
                         y += 1;
                     }
-                    setInterval(loop, 50);
+                    loop();
                 };
 
                 function loop() {
+                    requestAnimationFrame(loop);
                     world.doOneCycle();
                 }
             </script>
@@ -1043,6 +1047,7 @@
     background texture handling, countless bug fixes and optimizations.
     Ian Reynolds contributed backspace key handling for Chrome.
     Davide Della Casa contributed performance optimizations for Firefox.
+    Jason N (@cyderize) contributed native copy & paste for text editing.
 
     - Jens Mönig
 */
@@ -1052,7 +1057,7 @@
 /*global window, HTMLCanvasElement, getMinimumFontHeight, FileReader, Audio,
 FileList, getBlurredShadowSupport*/
 
-var morphicVersion = '2015-December-15';
+var morphicVersion = '2015-December-21';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = getBlurredShadowSupport(); // check for Chrome-bug
 
@@ -4478,7 +4483,7 @@ function CursorMorph(aStringOrTextMorph) {
 }
 
 CursorMorph.prototype.init = function (aStringOrTextMorph) {
-    var ls;
+    var ls, myself = this;
 
     // additional properties:
     this.keyDownEventUsed = false;
@@ -4496,6 +4501,55 @@ CursorMorph.prototype.init = function (aStringOrTextMorph) {
         this.target.setAlignmentToLeft();
     }
     this.gotoSlot(this.slot);
+
+    // Add hidden text box for copying and pasting
+    this.clipboardHandler = document.createElement('textarea');
+    this.clipboardHandler.style.position = 'absolute';
+    this.clipboardHandler.style.right = '101%'; // placed just out of view
+
+    document.body.appendChild(this.clipboardHandler);
+
+    this.clipboardHandler.value = this.target.selection();
+    this.clipboardHandler.focus();
+    this.clipboardHandler.select();
+
+    this.clipboardHandler.addEventListener(
+        'keypress',
+        function (event) {
+            myself.processKeyPress(event);
+            this.value = myself.target.selection();
+            this.select();
+        },
+        false
+    );
+
+    this.clipboardHandler.addEventListener(
+        'keydown',
+        function (event) {
+            myself.processKeyDown(event);
+            this.value = myself.target.selection();
+            this.select();
+            
+            // Make sure tab prevents default
+            if (event.keyIdentifier === 'U+0009' ||
+                    event.keyIdentifier === 'Tab') {
+                myself.processKeyPress(event);
+                event.preventDefault();
+            }
+        },
+        false
+    );
+    
+    this.clipboardHandler.addEventListener(
+        'input',
+        function (event) {
+            if (this.value === '') {
+                myself.gotoSlot(myself.target.selectionStartSlot());
+                myself.target.deleteSelection();
+            }
+        },
+        false
+    );
 };
 
 // CursorMorph event processing:
@@ -4848,6 +4902,9 @@ CursorMorph.prototype.destroy = function () {
         this.target.alignment = this.originalAlignment;
         this.target.drawNew();
         this.target.changed();
+    }
+    if (this.clipboardHandler) {
+        document.body.removeChild(this.clipboardHandler);
     }
     CursorMorph.uber.destroy.call(this);
 };
