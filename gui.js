@@ -6300,7 +6300,7 @@ CostumeIconMorph.prototype.exportCostume = function () {
         // don't show SVG costumes in a new tab (shows text)
         ide.saveFileAs(this.object.contents.src, 'text/svg', this.object.name);
     } else { // rasterized Costume
-        ide.saveCanvasAs(this.object.object.contents, this.object.name, true);
+        ide.saveCanvasAs(this.object.contents, this.object.name, true);
     }
 };
 
