@@ -2228,7 +2228,7 @@ BlockMorph.prototype.userMenu = function () {
             menu.addItem(
                 "script pic with result...",
                 function () {
-                    top.ExportResultPic();
+                    top.exportResultPic();
                 },
                 'open a new window\n' +
                     'with a picture of both\nthis script and its result',
@@ -4557,7 +4557,7 @@ ReporterBlockMorph.prototype.mouseClickLeft = function (pos) {
 
 // ReporterBlock exporting picture with result bubble
 
-ReporterBlockMorph.prototype.ExportResultPic = function () {
+ReporterBlockMorph.prototype.exportResultPic = function () {
     var top = this.topBlock(),
         receiver = top.receiver(),
         stage;
@@ -4570,7 +4570,6 @@ ReporterBlockMorph.prototype.ExportResultPic = function () {
         }
     }
 };
-
 
 // ReporterBlockMorph deleting
 
