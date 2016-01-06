@@ -179,7 +179,7 @@ SnapTranslator.dict.nl = {
     'translator_e-mail':
         'sjoerddirk@fromScratchEd.nl, frank.sierens@telenet.be', // optional
     'last_changed':
-        '2013-08-12', // this, too, will appear in the Translators tab
+        '2015-12-15', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -990,7 +990,7 @@ SnapTranslator.dict.nl = {
     'Command\n(C-shape)':
         'Opdracht\n(C-vorm)',
     'Any\n(unevaluated)':
-        'Alle\n(onge\u00EBvalueerd)',
+        'Willekeurig\n(onge\u00EBvalueerd)',
     'Boolean\n(unevaluated)':
         'Booleaans\n(onge\u00EBvalueerd)',
     'Single input.':
@@ -1211,6 +1211,6 @@ SnapTranslator.dict.nl = {
     'last':
         'laatste',
     'any':
-        'alle'
+        'willekeurig'
 };
 

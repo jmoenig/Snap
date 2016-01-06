@@ -153,7 +153,7 @@
 
     IV. open issues
     ----------------
-    - clipboard support (copy & paste)
+    - clipboard support (copy & paste) for non-textual data
     - native (unscaled) high-resolution display support
 
 
@@ -169,10 +169,11 @@
     - Chrome for Windows
     - Chrome for Mac
     - Chrome for Android
-    - Safari for Windows
+    - Safari for Windows (deprecated)
     - safari for Mac
     - Safari for iOS (mobile)
     - IE for Windows
+    - Edge for Windows
     - Opera for Windows
     - Opera for Mac
 
@@ -262,10 +263,11 @@
                 window.onload = function () {
                     world = new WorldMorph(
                         document.getElementById('world'));
-                    setInterval(loop, 50);
+                    loop();
                 };
 
                 function loop() {
+                    requestAnimationFrame(loop);
                     world.doOneCycle();
                 }
             </script>
@@ -309,10 +311,11 @@
                         document.getElementById('world1'), false);
                     world2 = new WorldMorph(
                         document.getElementById('world2'), false);
-                    setInterval(loop, 50);
+                    loop();
                 };
 
                 function loop() {
+                    requestAnimationFrame(loop);
                     world1.doOneCycle();
                     world2.doOneCycle();
                 }
@@ -377,10 +380,11 @@
                         x = 0;
                         y += 1;
                     }
-                    setInterval(loop, 50);
+                    loop();
                 };
 
                 function loop() {
+                    requestAnimationFrame(loop);
                     world.doOneCycle();
                 }
             </script>
@@ -1043,6 +1047,7 @@
     background texture handling, countless bug fixes and optimizations.
     Ian Reynolds contributed backspace key handling for Chrome.
     Davide Della Casa contributed performance optimizations for Firefox.
+    Jason N (@cyderize) contributed native copy & paste for text editing.
 
     - Jens Mönig
 */
@@ -1052,7 +1057,7 @@
 /*global window, HTMLCanvasElement, getMinimumFontHeight, FileReader, Audio,
 FileList, getBlurredShadowSupport*/
 
-var morphicVersion = '2015-November-16';
+var morphicVersion = '2015-December-23';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = getBlurredShadowSupport(); // check for Chrome-bug
 
@@ -4496,6 +4501,60 @@ CursorMorph.prototype.init = function (aStringOrTextMorph) {
         this.target.setAlignmentToLeft();
     }
     this.gotoSlot(this.slot);
+    this.initializeClipboardHandler();
+};
+
+CursorMorph.prototype.initializeClipboardHandler = function () {
+    // Add hidden text box for copying and pasting
+    var myself = this;
+
+    this.clipboardHandler = document.createElement('textarea');
+    this.clipboardHandler.style.position = 'absolute';
+    this.clipboardHandler.style.right = '101%'; // placed just out of view
+
+    document.body.appendChild(this.clipboardHandler);
+
+    this.clipboardHandler.value = this.target.selection();
+    this.clipboardHandler.focus();
+    this.clipboardHandler.select();
+
+    this.clipboardHandler.addEventListener(
+        'keypress',
+        function (event) {
+            myself.processKeyPress(event);
+            this.value = myself.target.selection();
+            this.select();
+        },
+        false
+    );
+
+    this.clipboardHandler.addEventListener(
+        'keydown',
+        function (event) {
+            myself.processKeyDown(event);
+            this.value = myself.target.selection();
+            this.select();
+            
+            // Make sure tab prevents default
+            if (event.keyIdentifier === 'U+0009' ||
+                    event.keyIdentifier === 'Tab') {
+                myself.processKeyPress(event);
+                event.preventDefault();
+            }
+        },
+        false
+    );
+    
+    this.clipboardHandler.addEventListener(
+        'input',
+        function (event) {
+            if (this.value === '') {
+                myself.gotoSlot(myself.target.selectionStartSlot());
+                myself.target.deleteSelection();
+            }
+        },
+        false
+    );
 };
 
 // CursorMorph event processing:
@@ -4849,7 +4908,23 @@ CursorMorph.prototype.destroy = function () {
         this.target.drawNew();
         this.target.changed();
     }
+    this.destroyClipboardHandler();
     CursorMorph.uber.destroy.call(this);
+};
+
+CursorMorph.prototype.destroyClipboardHandler = function () {
+    var nodes = document.body.children,
+        each,
+        i;
+    if (this.clipboardHandler) {
+        for (i = 0; i < nodes.length; i += 1) {
+            each = nodes[i];
+            if (each === this.clipboardHandler) {
+                document.body.removeChild(this.clipboardHandler);
+                this.clipboardHandler = null;
+            }
+        }
+    }
 };
 
 // CursorMorph utilities:
@@ -8896,6 +8971,7 @@ ScrollFrameMorph.prototype.mouseDownLeft = function (pos) {
         return null;
     }
     var world = this.root(),
+        hand = world.hand,
         oldPos = pos,
         myself = this,
         deltaX = 0,
@@ -8904,10 +8980,18 @@ ScrollFrameMorph.prototype.mouseDownLeft = function (pos) {
 
     this.step = function () {
         var newPos;
-        if (world.hand.mouseButton &&
-                (world.hand.children.length === 0) &&
-                (myself.bounds.containsPoint(world.hand.position()))) {
-            newPos = world.hand.bounds.origin;
+        if (hand.mouseButton &&
+                (hand.children.length === 0) &&
+                (myself.bounds.containsPoint(hand.bounds.origin))) {
+
+            if (hand.grabPosition &&
+                (hand.grabPosition.distanceTo(hand.position()) <=
+                    MorphicPreferences.grabThreshold)) {
+                // still within the grab threshold
+                return null;
+            }
+
+            newPos = hand.bounds.origin;
             deltaX = newPos.x - oldPos.x;
             if (deltaX !== 0) {
                 myself.scrollX(deltaX);

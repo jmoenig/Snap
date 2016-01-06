@@ -104,11 +104,11 @@ ArrowMorph, PushButtonMorph, contains, InputSlotMorph, ShadowMorph,
 ToggleButtonMorph, IDE_Morph, MenuMorph, copy, ToggleElementMorph,
 Morph, fontHeight, StageMorph, SyntaxElementMorph, SnapSerializer,
 CommentMorph, localize, CSlotMorph, SpeechBubbleMorph, MorphicPreferences,
-SymbolMorph, isNil, CursorMorph*/
+SymbolMorph, isNil, CursorMorph, VariableFrame*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2015-November-16';
+modules.byob = '2015-December-15';
 
 // Declarations
 
@@ -142,6 +142,7 @@ function CustomBlockDefinition(spec, receiver) {
     this.spec = spec || '';
     // format: {'inputName' : [type, default, options, readonly]}
     this.declarations = {};
+    this.variableNames = [];
     this.comment = null;
     this.codeMapping = null; // experimental, generate text code
     this.codeHeader = null; // experimental, generate text code
@@ -384,7 +385,7 @@ CustomBlockDefinition.prototype.scriptsModel = function () {
     proto.allComments().forEach(function (comment) {
         comment.align(proto);
     });
-    proto.children[0].fixLayout();
+    proto.parts()[0].fixLayout();
     scripts.fixMultiArgs();
     return scripts;
 };
@@ -409,9 +410,19 @@ CustomCommandBlockMorph.prototype.init = function (definition, isProto) {
     CustomCommandBlockMorph.uber.init.call(this, true); // silently
     this.category = definition.category;
     this.selector = 'evaluateCustomBlock';
+    this.variables = null;
+    this.initializeVariables();
     if (definition) { // needed for de-serializing
         this.refresh();
     }
+};
+
+CustomCommandBlockMorph.prototype.initializeVariables = function () {
+    var myself = this;
+    this.variables = new VariableFrame();
+    this.definition.variableNames.forEach(function (name) {
+        myself.variables.addVar(name);
+    });
 };
 
 CustomCommandBlockMorph.prototype.refresh = function (silently) {
@@ -447,6 +458,10 @@ CustomCommandBlockMorph.prototype.refresh = function (silently) {
             inp.setContents(def.inputNames()[idx]);
         }
     });
+
+    // initialize block vars
+    // to do: preserve values of unchanged variable names
+    this.initializeVariables();
 };
 
 CustomCommandBlockMorph.prototype.restoreInputs = function (oldInputs) {
@@ -759,17 +774,80 @@ CustomCommandBlockMorph.prototype.isInUse = function () {
 // CustomCommandBlockMorph menu:
 
 CustomCommandBlockMorph.prototype.userMenu = function () {
-    var menu;
+    var hat = this.parentThatIsA(PrototypeHatBlockMorph),
+        rcvr = this.receiver(),
+        myself = this,
+        menu;
+
+   function monitor(vName) {
+        var stage = rcvr.parentThatIsA(StageMorph),
+            varFrame = myself.variables;
+        menu.addItem(
+            vName + '...',
+            function () {
+                var watcher = detect(
+                    stage.children,
+                    function (morph) {
+                        return morph instanceof WatcherMorph
+                            && morph.target === varFrame
+                            && morph.getter === vName;
+                    }
+                ),
+                    others;
+                if (watcher !== null) {
+                    watcher.show();
+                    watcher.fixLayout(); // re-hide hidden parts
+                    return;
+                }
+                watcher = new WatcherMorph(
+                    vName + ' ' + localize('(temporary)'),
+                    SpriteMorph.prototype.blockColor.variables,
+                    varFrame,
+                    vName
+                );
+                watcher.setPosition(stage.position().add(10));
+                others = stage.watchers(watcher.left());
+                if (others.length > 0) {
+                    watcher.setTop(others[others.length - 1].bottom());
+                }
+                stage.add(watcher);
+                watcher.fixLayout();
+            }
+        );
+    }
 
     if (this.isPrototype) {
         menu = new MenuMorph(this);
         menu.addItem(
             "script pic...",
             function () {
-                window.open(this.topBlock().scriptPic().toDataURL());
+                var ide = this.world().children[0];
+                ide.saveCanvasAs(
+                    this.topBlock().scriptPic(),
+                    ide.projectName || localize('Untitled') + ' ' +
+                        localize('script pic'),
+                    true // request opening a new window
+                );
             },
             'open a new window\nwith a picture of this script'
         );
+        if (hat.inputs().length < 2) {
+            menu.addItem(
+                "block variables...",
+                function () {
+                    hat.enableBlockVars();
+                },
+                'experimental -\nunder construction'
+            );
+        } else {
+            menu.addItem(
+                "remove block variables...",
+                function () {
+                    hat.enableBlockVars(false);
+                },
+                'experimental -\nunder construction'
+            );
+        }
     } else {
         menu = this.constructor.uber.userMenu.call(this);
         if (!menu) {
@@ -780,14 +858,20 @@ CustomCommandBlockMorph.prototype.userMenu = function () {
 
         // menu.addItem("export definition...", 'exportBlockDefinition');
         menu.addItem("delete block definition...", 'deleteBlockDefinition');
+
+        this.variables.names().forEach(function (vName) {
+            monitor(vName);
+        });
     }
     menu.addItem("edit...", 'edit'); // works also for prototypes
     return menu;
 };
 
 CustomCommandBlockMorph.prototype.exportBlockDefinition = function () {
-    var xml = new SnapSerializer().serialize(this.definition);
-    window.open('data:text/xml,' + encodeURIComponent(xml));
+    var xml = new SnapSerializer().serialize(this.definition),
+        ide = this.parentThatIsA(IDE_Morph);
+
+    ide.saveXMLAs(xml, this.spec);
 };
 
 CustomCommandBlockMorph.prototype.deleteBlockDefinition = function () {
@@ -938,15 +1022,18 @@ CustomReporterBlockMorph.prototype.init = function (
 ) {
     this.definition = definition; // mandatory
     this.isPrototype = isProto || false; // optional
-
     CustomReporterBlockMorph.uber.init.call(this, isPredicate, true); // sil.
-
     this.category = definition.category;
+    this.variables = new VariableFrame();
+    this.initializeVariables();
     this.selector = 'evaluateCustomBlock';
     if (definition) { // needed for de-serializing
         this.refresh();
     }
 };
+
+CustomReporterBlockMorph.prototype.initializeVariables =
+    CustomCommandBlockMorph.prototype.initializeVariables;
 
 CustomReporterBlockMorph.prototype.refresh = function () {
     CustomCommandBlockMorph.prototype.refresh.call(this, true);
@@ -1732,7 +1819,7 @@ BlockEditorMorph.prototype.init = function (definition, target) {
 
     this.setExtent(new Point(375, 300)); // normal initial extent
     this.fixLayout();
-    proto.children[0].fixLayout();
+    proto.parts()[0].fixLayout();
     scripts.fixMultiArgs();
 };
 
@@ -1864,6 +1951,7 @@ BlockEditorMorph.prototype.updateDefinition = function () {
     this.definition.receiver = this.target; // only for serialization
     this.definition.spec = this.prototypeSpec();
     this.definition.declarations = this.prototypeSlots();
+    this.definition.variableNames = this.variableNames();
     this.definition.scripts = [];
     this.definition.editorDimensions = this.bounds.copy();
 
@@ -1940,6 +2028,14 @@ BlockEditorMorph.prototype.prototypeSlots = function () {
     ).parts()[0].declarationsFromFragments();
 };
 
+BlockEditorMorph.prototype.variableNames = function () {
+    // answer the variable declarations from my prototype hat
+    return detect(
+        this.body.contents.children,
+        function (c) {return c instanceof PrototypeHatBlockMorph; }
+    ).variableNames();
+};
+
 // BlockEditorMorph layout
 
 BlockEditorMorph.prototype.setInitialDimensions = function () {
@@ -2006,7 +2102,8 @@ function PrototypeHatBlockMorph(definition) {
 }
 
 PrototypeHatBlockMorph.prototype.init = function (definition) {
-    var proto = definition.prototypeInstance();
+    var proto = definition.prototypeInstance(),
+        vars;
 
     this.definition = definition;
 
@@ -2019,6 +2116,14 @@ PrototypeHatBlockMorph.prototype.init = function (definition) {
     this.color = SpriteMorph.prototype.blockColor.control;
     this.category = 'control';
     this.add(proto);
+    if (definition.variableNames.length) {
+        vars = this.labelPart('%blockVars');
+        this.add(this.labelPart('%br'));
+        this.add(vars);
+        definition.variableNames.forEach(function (name) {
+            vars.addInput(name);
+        });
+    }
     proto.refreshPrototypeSlotTypes(); // show slot type indicators
     this.fixLayout();
 };
@@ -2032,11 +2137,11 @@ PrototypeHatBlockMorph.prototype.mouseClickLeft = function () {
     if (this.world().currentKey === 16) { // shift-clicked
         return this.focus();
     }
-    this.children[0].mouseClickLeft();
+    this.parts()[0].mouseClickLeft();
 };
 
 PrototypeHatBlockMorph.prototype.userMenu = function () {
-    return this.children[0].userMenu();
+    return this.parts()[0].userMenu();
 };
 
 // PrototypeHatBlockMorph zebra coloring
@@ -2045,7 +2150,7 @@ PrototypeHatBlockMorph.prototype.fixBlockColor = function (
     nearestBlock,
     isForced
 ) {
-    var nearest = this.children[0] || nearestBlock;
+    var nearest = this.parts()[0] || nearestBlock;
 
     if (!this.zebraContrast && !isForced) {
         return;
@@ -2066,6 +2171,25 @@ PrototypeHatBlockMorph.prototype.fixBlockColor = function (
     if (isForced) {
         this.fixChildrensBlockColor(true);
     }
+};
+
+// PrototypeHatBlockMorph block instance variables
+
+PrototypeHatBlockMorph.prototype.variableNames = function (choice) {
+    var parts = this.parts();
+    if (parts.length < 3) {return []; }
+    return parts[2].evaluate();
+};
+
+PrototypeHatBlockMorph.prototype.enableBlockVars = function (choice) {
+    var prot = this.parts()[0];
+    if (choice === false) {
+        this.setSpec('%s', true);
+    } else {
+        this.setSpec('%s %br %blockVars', true);
+    }
+    this.replaceInput(this.parts()[0], prot);
+    this.spec = null;
 };
 
 // BlockLabelFragment //////////////////////////////////////////////////
@@ -2306,8 +2430,11 @@ BlockLabelFragmentMorph.prototype.userMenu = function () {
                 tuple[0] = '$' + string;
                 myself.text = tuple.join('-');
                 myself.fragment.labelString = myself.text;
+                myself.parent.parent.changed();
                 myself.drawNew();
                 myself.changed();
+                myself.parent.parent.fixLayout();
+                myself.parent.parent.changed();
             },
             null,
             this,
@@ -2428,21 +2555,38 @@ BlockLabelPlaceHolderMorph.prototype.drawNew = function () {
         if (this.parent.fixLayout) {
             this.parent.fixLayout();
         }
+        if (this.parent.parent instanceof PrototypeHatBlockMorph) {
+            this.parent.parent.fixLayout();
+        }
     }
 };
 
 // BlockLabelPlaceHolderMorph events:
 
 BlockLabelPlaceHolderMorph.prototype.mouseEnter = function () {
+    var hat = this.parentThatIsA(PrototypeHatBlockMorph);
     this.isHighlighted = true;
-    this.drawNew();
-    this.changed();
+    if (this.plainLabel && hat) {
+        hat.changed();
+        this.drawNew();
+        hat.changed();
+    } else {
+        this.drawNew();
+        this.changed();
+    }
 };
 
 BlockLabelPlaceHolderMorph.prototype.mouseLeave = function () {
+    var hat = this.parentThatIsA(PrototypeHatBlockMorph);
     this.isHighlighted = false;
-    this.drawNew();
-    this.changed();
+    if (this.plainLabel && hat) {
+        hat.changed();
+        this.drawNew();
+        hat.changed();
+    } else {
+        this.drawNew();
+        this.changed();
+    }
 };
 
 BlockLabelPlaceHolderMorph.prototype.mouseClickLeft
@@ -3361,17 +3505,21 @@ BlockExportDialogMorph.prototype.selectNone = function () {
 // BlockExportDialogMorph ops
 
 BlockExportDialogMorph.prototype.exportBlocks = function () {
-    var str = encodeURIComponent(
-        this.serializer.serialize(this.blocks)
-    );
+    var str = this.serializer.serialize(this.blocks),
+        ide = this.world().children[0];
+
     if (this.blocks.length > 0) {
-        window.open('data:text/xml,<blocks app="'
+        str = '<blocks app="'
             + this.serializer.app
             + '" version="'
             + this.serializer.version
             + '">'
             + str
-            + '</blocks>');
+            + '</blocks>';
+        ide.saveXMLAs(
+            str,
+            ide.projectName || localize('Untitled') + ' ' + localize('blocks')
+        );
     } else {
         new DialogBoxMorph().inform(
             'Export blocks',
