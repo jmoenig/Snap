@@ -865,7 +865,8 @@ Process.prototype.handleError = function (error, element) {
         (m === element ? '' : 'Inside: ')
             + error.name
             + '\n'
-            + error.message
+            + error.message,
+        this.exportResult
     );
 };
 
