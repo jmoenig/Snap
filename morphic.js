@@ -10261,8 +10261,7 @@ WorldMorph.prototype.initVirtualKeyboard = function () {
         document.body.removeChild(this.virtualKeyboard);
         this.virtualKeyboard = null;
     }
-    if (!MorphicPreferences.isTouchDevice
-            || !MorphicPreferences.useVirtualKeyboard) {
+    if (!MorphicPreferences.useVirtualKeyboard) {
         return;
     }
     this.virtualKeyboard = document.createElement("input");
@@ -10329,6 +10328,23 @@ WorldMorph.prototype.initVirtualKeyboard = function () {
         },
         false
     );
+
+    this.virtualKeyboard.addEventListener(
+        "compositionend",
+        function (event){
+		var newEvent = {ctrlKey : false, altKey : false, shiftKey : false, metaKey : false,
+				keyCode : 0, charCode : 0, preventDefault : function(){}};
+            	if (myself.keyboardReceiver) {
+				for (var i = 0; i < event.data.length; ++i){
+					newEvent.keyCode=0;  
+					newEvent.charCode=event.data.charCodeAt( i);
+					myself.keyboardReceiver.processKeyPress( newEvent);
+				}
+            }
+       },
+        false
+    );
+
 };
 
 WorldMorph.prototype.initEventListeners = function () {
@@ -10888,8 +10904,7 @@ WorldMorph.prototype.edit = function (aStringOrTextMorph) {
     this.keyboardReceiver = this.cursor;
 
     this.initVirtualKeyboard();
-    if (MorphicPreferences.isTouchDevice
-            && MorphicPreferences.useVirtualKeyboard) {
+    if (MorphicPreferences.useVirtualKeyboard) {
         this.virtualKeyboard.style.top = this.cursor.top() + pos.y + "px";
         this.virtualKeyboard.style.left = this.cursor.left() + pos.x + "px";
         this.virtualKeyboard.focus();
