@@ -9,7 +9,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2015 by Jens Mönig
+    Copyright (C) 2016 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -83,7 +83,7 @@ ArgLabelMorph, localize, XML_Element, hex_sha512*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.threads = '2015-December-22';
+modules.threads = '2016-January-08';
 
 var ThreadManager;
 var Process;
@@ -1046,7 +1046,7 @@ Process.prototype.fork = function (context, args) {
     var proc = new Process(),
         stage = this.homeContext.receiver.parentThatIsA(StageMorph);
     proc.initializeFor(context, args);
-    proc.pushContext('doYield');
+    // proc.pushContext('doYield');
     stage.threads.processes.push(proc);
 };
 

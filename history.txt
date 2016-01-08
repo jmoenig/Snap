@@ -2838,3 +2838,4 @@ end - bulk of 151215
 160108
 ------
 * BYOB: fixed #1098
+* Threads: remove a redundant yield from the fork primitive
