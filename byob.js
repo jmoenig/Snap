@@ -9,7 +9,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2015 by Jens Mönig
+    Copyright (C) 2016 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -108,7 +108,7 @@ SymbolMorph, isNil, CursorMorph, VariableFrame*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2015-December-15';
+modules.byob = '2016-January-08';
 
 // Declarations
 
@@ -462,6 +462,11 @@ CustomCommandBlockMorph.prototype.refresh = function (silently) {
     // initialize block vars
     // to do: preserve values of unchanged variable names
     this.initializeVariables();
+
+    // make (double) sure I'm colored correctly
+    this.forceNormalColoring();
+    this.drawNew();
+    this.fixBlockColor(null, true);
 };
 
 CustomCommandBlockMorph.prototype.restoreInputs = function (oldInputs) {

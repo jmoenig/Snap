@@ -2834,3 +2834,7 @@ end - bulk of 151215
 151223
 ------
 * Morphic: fixed #1083
+
+160108
+------
+* BYOB: fixed #1098
