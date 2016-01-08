@@ -2840,3 +2840,4 @@ end - bulk of 151215
 * BYOB: fixed #1098
 * Threads: remove a redundant yield from the fork primitive
 * GUI: fixed #1099, thanks, Michael!
+* Portuguese translation update, thanks, Manuel!
