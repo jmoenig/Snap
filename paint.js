@@ -59,6 +59,7 @@
     Sep 29 - tweaks (Jens)
     Sep 28 [of the following year :)] - Try to prevent antialiasing (Kartik)
     Oct 02 - revert disable smoothing (Jens)
+    Dec 15 - center rotation point on costume creating (Craxic)
  */
 
 /*global Point, Rectangle, DialogBoxMorph, fontHeight, AlignmentMorph,
@@ -71,7 +72,7 @@
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.paint = '2015-October-02';
+modules.paint = '2015-December-15';
 
 // Declarations
 
@@ -307,6 +308,7 @@ PaintEditorMorph.prototype.refreshToolButtons = function () {
 };
 
 PaintEditorMorph.prototype.ok = function () {
+    this.paper.updateAutomaticCenter();
     this.callback(
         this.paper.paper,
         this.paper.rotationCenter
@@ -585,10 +587,35 @@ PaintCanvasMorph.prototype.init = function (shift) {
         var key = this.world().currentKey;
         return (key === 16);
     };
+    // should we calculate the center of the image ourselves,
+    // or use the user position
+    this.automaticCrosshairs = true;
     this.buildContents();
 };
 
+// Calculate the center of all the non-transparent pixels on the canvas.
+PaintCanvasMorph.prototype.calculateCanvasCenter = function(canvas) {
+    var canvasBounds = Costume.prototype.canvasBoundingBox(canvas);
+    if (canvasBounds === null) {
+        return null;
+    }
+    // Can't use canvasBounds.center(), it rounds down.
+    return new Point((canvasBounds.origin.x + canvasBounds.corner.x) / 2, (canvasBounds.origin.y + canvasBounds.corner.y) / 2);
+};
+
+// If we are in automaticCrosshairs mode, recalculate the rotationCenter.
+PaintCanvasMorph.prototype.updateAutomaticCenter = function () {
+    if (this.automaticCrosshairs) {
+        // Calculate this.rotationCenter from this.paper
+        var rotationCenter = this.calculateCanvasCenter(this.paper);
+        if (rotationCenter !== null) {
+            this.rotationCenter = rotationCenter;
+        }
+    }
+};
+
 PaintCanvasMorph.prototype.scale = function (x, y) {
+    this.updateAutomaticCenter();
     this.mask = newCanvas(this.extent());
     var c = newCanvas(this.extent());
     c.getContext("2d").save();
@@ -645,6 +672,7 @@ PaintCanvasMorph.prototype.clearCanvas = function () {
 PaintCanvasMorph.prototype.toolChanged = function (tool) {
     this.mask = newCanvas(this.extent());
     if (tool === "crosshairs") {
+        this.updateAutomaticCenter();
         this.drawcrosshair();
     }
     this.drawNew();
@@ -908,6 +936,8 @@ PaintCanvasMorph.prototype.mouseMove = function (pos) {
         }
         break;
     case "crosshairs":
+        // Disable automatic crosshairs: user has now chosen where they should be.
+        this.automaticCrosshairs = false;
         this.rotationCenter = relpos.copy();
         this.drawcrosshair(mctx);
         break;

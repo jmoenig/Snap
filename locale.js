@@ -42,7 +42,7 @@
 
 /*global modules, contains*/
 
-modules.locale = '2015-November-16';
+modules.locale = '2015-December-22';
 
 // Global stuff
 
@@ -123,7 +123,11 @@ SnapTranslator.dict.en = {
     'translator_e-mail':
         'jens@moenig.org',
     'last_changed':
-        '2012-10-16',
+        '2015-12-22',
+
+    // rewordings in English avoiding having to adjust all other translations
+    'any':
+        'random',
 
     // long strings look-up only
     'file menu import hint':
@@ -137,7 +141,15 @@ SnapTranslator.dict.en = {
             + 'a file on your computer by dropping it here\n',
     'block deletion dialog text':
         'Are you sure you want to delete this\n'
-            + 'custom block and all its instances?'
+            + 'custom block and all its instances?',
+    'download to disk text':
+        'This item could not be opened in a new tab.\n' +
+        'It has been saved to your browser\'s downloads folder.',
+    'unable to export text':
+        'This item could not be exported from Snap!.\n' +
+        'It\'s likely that your project may contain a lot of media ' +
+        '(sounds and images) or that you are using an older browser.' +
+        'Please try using a recent version of Chrome, Firefox, or Safari.'
 };
 
 SnapTranslator.dict.de = {
@@ -149,7 +161,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org',
     'last_changed':
-        '2015-10-07'
+        '2015-12-22'
 };
 
 SnapTranslator.dict.it = {
@@ -209,7 +221,7 @@ SnapTranslator.dict.pt = {
     'translator_e-mail':
         'mmsequeira@gmail.com',
     'last_changed':
-        '2015-08-02'
+        '2015-12-21'
 };
 
 SnapTranslator.dict.cs = {
@@ -305,7 +317,7 @@ SnapTranslator.dict.nl = {
     'translator_e-mail':
         'frank.sierens@telenet.be, sjoerddirk@fromScratchEd.nl',
     'last_changed':
-        '2013-08-12'
+        '2015-12-15'
 };
 
 SnapTranslator.dict.pl = {
@@ -545,3 +557,13 @@ SnapTranslator.dict.ro = {
         '2015-10-24'
 };
 
+SnapTranslator.dict.ar = {
+    'language_name':
+        'العربية', // the name as it should appear in the language menu
+    'language_translator':
+        'طارق جلال', // your name for the Translators tab
+    'translator_e-mail':
+        'tarekgalal46@hotmail.com', // optional
+    'last_changed':
+        '2015-12-18'
+};

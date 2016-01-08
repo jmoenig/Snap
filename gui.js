@@ -67,11 +67,11 @@ BlockImportDialogMorph, SnapTranslator, localize, List, InputSlotMorph,
 SnapCloud, Uint8Array, HandleMorph, SVG_Costume, fontHeight, hex_sha512,
 sb, CommentMorph, CommandBlockMorph, BlockLabelPlaceHolderMorph, Audio,
 SpeechBubbleMorph, ScriptFocusMorph, XML_Element, WatcherMorph,
-BlockRemovalDialogMorph*/
+BlockRemovalDialogMorph, saveAs*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2015-December-04';
+modules.gui = '2015-December-22';
 
 // Declarations
 
@@ -84,7 +84,6 @@ var WardrobeMorph;
 var SoundIconMorph;
 var JukeboxMorph;
 var StageHandleMorph;
-
 
 // IDE_Morph ///////////////////////////////////////////////////////////
 
@@ -222,6 +221,7 @@ IDE_Morph.prototype.init = function (isAutoFill) {
     this.projectName = '';
     this.projectNotes = '';
 
+    this.logoURL = 'snap_logo_sm.png';
     this.logo = null;
     this.controlBar = null;
     this.categories = null;
@@ -233,7 +233,7 @@ IDE_Morph.prototype.init = function (isAutoFill) {
     this.corralBar = null;
     this.corral = null;
 
-    this.isAutoFill = isAutoFill || true;
+    this.isAutoFill = isAutoFill === undefined ? true : isAutoFill;
     this.isAppMode = false;
     this.isSmallStage = false;
     this.filePicker = null;
@@ -488,7 +488,7 @@ IDE_Morph.prototype.createLogo = function () {
     }
 
     this.logo = new Morph();
-    this.logo.texture = 'snap_logo_sm.png';
+    this.logo.texture = this.logoURL;
     this.logo.drawNew = function () {
         this.image = newCanvas(this.extent());
         var context = this.image.getContext('2d'),
@@ -624,11 +624,22 @@ IDE_Morph.prototype.createControlBar = function () {
     this.controlBar.appModeButton = appModeButton; // for refreshing
 
     // stopButton
-    button = new PushButtonMorph(
-        this,
+    button = new ToggleButtonMorph(
+        null, // colors
+        this, // the IDE is the target
         'stopAllScripts',
-        new SymbolMorph('octagon', 14)
+        [
+            new SymbolMorph('octagon', 14),
+            new SymbolMorph('square', 14)
+        ],
+        function () {  // query
+            return myself.stage ?
+                    myself.stage.enableCustomHatBlocks &&
+                        myself.stage.threads.pauseCustomHatBlocks
+                        : true;
+        }
     );
+
     button.corner = 12;
     button.color = colors[0];
     button.highlightColor = colors[1];
@@ -642,13 +653,15 @@ IDE_Morph.prototype.createControlBar = function () {
     button.drawNew();
     // button.hint = 'stop\nevery-\nthing';
     button.fixLayout();
+    button.refresh();
     stopButton = button;
     this.controlBar.add(stopButton);
+    this.controlBar.stopButton = stopButton; // for refreshing
 
     //pauseButton
     button = new ToggleButtonMorph(
         null, //colors,
-        myself, // the IDE is the target
+        this, // the IDE is the target
         'togglePauseResume',
         [
             new SymbolMorph('pause', 12),
@@ -1706,6 +1719,8 @@ IDE_Morph.prototype.pressStart = function () {
     if (this.world().currentKey === 16) { // shiftClicked
         this.toggleFastTracking();
     } else {
+        this.stage.threads.pauseCustomHatBlocks = false;
+        this.controlBar.stopButton.refresh();
         this.runScripts();
     }
 };
@@ -1763,6 +1778,13 @@ IDE_Morph.prototype.isPaused = function () {
 };
 
 IDE_Morph.prototype.stopAllScripts = function () {
+    if (this.stage.enableCustomHatBlocks) {
+        this.stage.threads.pauseCustomHatBlocks =
+            !this.stage.threads.pauseCustomHatBlocks;
+    } else {
+        this.stage.threads.pauseCustomHatBlocks = false;
+    }
+    this.controlBar.stopButton.refresh();
     this.stage.fireStopAllEvent();
 };
 
@@ -2497,15 +2519,6 @@ IDE_Morph.prototype.projectMenu = function () {
     menu.addItem('New', 'createNewProject');
     menu.addItem('Open...', 'openProjectsBrowser');
     menu.addItem('Save', "save");
-    if (shiftClicked) {
-        menu.addItem(
-            'Save to disk',
-            'saveProjectToDisk',
-            'store this project\nin the downloads folder\n'
-                + '(in supporting browsers)',
-            new Color(100, 0, 0)
-        );
-    }
     menu.addItem('Save As...', 'saveProjectsBrowser');
     menu.addLine();
     menu.addItem(
@@ -2542,6 +2555,24 @@ IDE_Morph.prototype.projectMenu = function () {
         'file menu import hint' // looks up the actual text in the translator
     );
 
+    if (shiftClicked) {
+        menu.addItem(
+            localize('Export project...') + ' ' + localize('(in a new window)'),
+            function () {
+                if (myself.projectName) {
+                    myself.exportProject(myself.projectName, shiftClicked);
+                } else {
+                    myself.prompt('Export Project As...', function (name) {
+                        // false - override the shiftClick setting to use XML
+                        // true - open XML in a new tab
+                        myself.exportProject(name, false, true);
+                    }, null, 'exportProject');
+                }
+            },
+            'show project data as XML\nin a new browser window',
+            new Color(100, 0, 0)
+        );
+    }
     menu.addItem(
         shiftClicked ?
                 'Export project as plain text...' : 'Export project...',
@@ -2550,11 +2581,11 @@ IDE_Morph.prototype.projectMenu = function () {
                 myself.exportProject(myself.projectName, shiftClicked);
             } else {
                 myself.prompt('Export Project As...', function (name) {
-                    myself.exportProject(name);
+                    myself.exportProject(name, shiftClicked);
                 }, null, 'exportProject');
             }
         },
-        'show project data as XML\nin a new browser window',
+        'save project data as XML\nto your downloads folder',
         shiftClicked ? new Color(100, 0, 0) : null
     );
 
@@ -2584,7 +2615,7 @@ IDE_Morph.prototype.projectMenu = function () {
             'Export summary with drop-shadows...',
             function () {myself.exportProjectSummary(true); },
             'open a new browser browser window' +
-                '\n with a summary of this project' +
+                '\nwith a summary of this project' +
                 '\nwith drop-shadows on all pictures.' +
                 '\nnot supported by all browsers',
             new Color(100, 0, 0)
@@ -2719,7 +2750,7 @@ IDE_Morph.prototype.aboutSnap = function () {
         module, btn1, btn2, btn3, btn4, licenseBtn, translatorsBtn,
         world = this.world();
 
-    aboutTxt = 'Snap! 4.0.3\nBuild Your Own Blocks\n\n'
+    aboutTxt = 'Snap! 4.0.4\nBuild Your Own Blocks\n\n'
         + 'Copyright \u24B8 2015 Jens M\u00F6nig and '
         + 'Brian Harvey\n'
         + 'jens@moenig.org, bh@cs.berkeley.edu\n\n'
@@ -2962,7 +2993,6 @@ IDE_Morph.prototype.save = function () {
     }
 };
 
-
 IDE_Morph.prototype.saveProject = function (name) {
     var myself = this;
     this.nextSteps([
@@ -2975,6 +3005,7 @@ IDE_Morph.prototype.saveProject = function (name) {
     ]);
 };
 
+// Serialize a project and save to the browser.
 IDE_Morph.prototype.rawSaveProject = function (name) {
     var str;
     if (name) {
@@ -2997,59 +3028,28 @@ IDE_Morph.prototype.rawSaveProject = function (name) {
     }
 };
 
-IDE_Morph.prototype.saveProjectToDisk = function () {
-    var data,
-        link = document.createElement('a');
 
-    if (Process.prototype.isCatchingErrors) {
-        try {
-            data = this.serializer.serialize(this.stage);
-            link.setAttribute('href', 'data:text/xml,' + data);
-            link.setAttribute('download', this.projectName + '.xml');
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        } catch (err) {
-            this.showMessage('Saving failed: ' + err);
-        }
-    } else {
-        data = this.serializer.serialize(this.stage);
-        link.setAttribute('href', 'data:text/xml,' + data);
-        link.setAttribute('download', this.projectName + '.xml');
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-    }
-};
+IDE_Morph.prototype.exportProject = function (name, plain, newWindow) {
+    // Export project XML, saving a file to disk
+    // newWindow requests displaying the project in a new tab.
+    var menu, str, dataPrefix;
 
-IDE_Morph.prototype.exportProject = function (name, plain) {
-    var menu, str;
     if (name) {
         this.setProjectName(name);
-        if (Process.prototype.isCatchingErrors) {
-            try {
-                menu = this.showMessage('Exporting');
-                str = encodeURIComponent(
-                    this.serializer.serialize(this.stage)
-                );
-                this.setURL('#open:' + str);
-                window.open('data:text/'
-                    + (plain ? 'plain,' + str : 'xml,' + str));
-                menu.destroy();
-                this.showMessage('Exported!', 1);
-            } catch (err) {
-                this.showMessage('Export failed: ' + err);
-            }
-        } else {
+        dataPrefix = 'data:text/' + plain ? 'plain,' : 'xml,';
+        try {
             menu = this.showMessage('Exporting');
-            str = encodeURIComponent(
-                this.serializer.serialize(this.stage)
-            );
-            this.setURL('#open:' + str);
-            window.open('data:text/'
-                + (plain ? 'plain,' + str : 'xml,' + str));
+            str = this.serializer.serialize(this.stage);
+            this.setURL('#open:' + dataPrefix + encodeURIComponent(str));
+            this.saveXMLAs(str, name, newWindow);
             menu.destroy();
             this.showMessage('Exported!', 1);
+        } catch (err) {
+            if (Process.prototype.isCatchingErrors) {
+                this.showMessage('Export failed: ' + err);
+            } else {
+                throw err;
+            }
         }
     }
 };
@@ -3108,16 +3108,15 @@ IDE_Morph.prototype.removeUnusedBlocks = function () {
 };
 
 IDE_Morph.prototype.exportSprite = function (sprite) {
-    var str = encodeURIComponent(
-        this.serializer.serialize(sprite.allParts())
-    );
-    window.open('data:text/xml,<sprites app="'
+    var str = this.serializer.serialize(sprite.allParts());
+    str = '<sprites app="'
         + this.serializer.app
         + '" version="'
         + this.serializer.version
         + '">'
         + str
-        + '</sprites>');
+        + '</sprites>';
+    this.saveXMLAs(str, sprite.name);
 };
 
 IDE_Morph.prototype.exportScriptsPicture = function () {
@@ -3166,8 +3165,7 @@ IDE_Morph.prototype.exportScriptsPicture = function () {
         y += padding;
         y += each.height;
     });
-
-    window.open(pic.toDataURL());
+    this.saveCanvasAs(pic, this.projectName || localize('Untitled'), true);
 };
 
 IDE_Morph.prototype.exportProjectSummary = function (useDropShadows) {
@@ -3444,9 +3442,12 @@ IDE_Morph.prototype.exportProjectSummary = function (useDropShadows) {
         addBlocks(stage.globalBlocks);
     }
 
-    window.open('data:text/html;charset=utf-8,' + encodeURIComponent(
-        '<!DOCTYPE html>' + html.toString()
-    ));
+    this.saveFileAs(
+        '<!DOCTYPE html>' + html.toString(),
+        'text/html;charset=utf-8,',
+        pname,
+        true // request opening a new window.
+    );
 };
 
 IDE_Morph.prototype.openProjectString = function (str) {
@@ -3494,10 +3495,11 @@ IDE_Morph.prototype.rawOpenProjectString = function (str) {
 
 IDE_Morph.prototype.openCloudDataString = function (str) {
     var msg,
-        myself = this;
+        myself = this,
+        size = Math.round(str.length / 1024);
     this.nextSteps([
         function () {
-            msg = myself.showMessage('Opening project...');
+            msg = myself.showMessage('Opening project\n' + size + ' KB...');
         },
         function () {nop(); }, // yield (bug in Chrome)
         function () {
@@ -3645,9 +3647,124 @@ IDE_Morph.prototype.openProject = function (name) {
 };
 
 IDE_Morph.prototype.setURL = function (str) {
+    // Set the URL to a project's XML contents
     if (this.projectsInURLs) {
         location.hash = str;
     }
+};
+
+IDE_Morph.prototype.saveFileAs = function (
+    contents,
+    fileType,
+    fileName,
+    newWindow // (optional) defaults to false.
+) {
+    /** Allow for downloading a file to a disk or open in a new tab.
+        This relies the FileSaver.js library which exports saveAs()
+        Two utility methods saveImageAs and saveXMLAs should be used first.
+        1. Opening a new window uses standard URI encoding.
+        2. downloading a file uses Blobs.
+        - every other combo is unsupposed.
+    */
+    var blobIsSupported = false,
+        world = this.world(),
+        fileExt,
+        dataURI, dialog;
+
+    // fileType is a <kind>/<ext>;<charset> format.
+    fileExt = fileType.split('/')[1].split(';')[0];
+    // handle text/plain as a .txt file
+    fileExt = '.' + (fileExt === 'plain' ? 'txt' : fileExt);
+
+    // This is a workaround for a known Chrome crash with large URLs
+    function exhibitsChomeBug(contents) {
+        var MAX_LENGTH = 2e6,
+        isChrome  = navigator.userAgent.indexOf('Chrome') !== -1;
+        return isChrome && contents.length > MAX_LENGTH;
+    }
+
+    function dataURItoBlob(text, mimeType) {
+        var i,
+            data = text,
+            components = text.split(','),
+            hasTypeStr = text.indexOf('data:') === 0;
+        // Convert to binary data, in format Blob() can use.
+        if (hasTypeStr && components[0].indexOf('base64') > -1) {
+            text = atob(components[1]);
+            data = new Uint8Array(text.length);
+            i = text.length;
+            while (i--) {
+                data[i] = text.charCodeAt(i);
+            }
+        }
+        return new Blob([data], {type: mimeType });
+    }
+
+    function dataURLFormat(text) {
+        var hasTypeStr = text.indexOf('data:') === 0;
+        if (hasTypeStr) {return text; }
+        return 'data:' + fileType + ',' + encodeURIComponent(text);
+    }
+
+    try {
+        blobIsSupported = !!new Blob();
+    } catch (e) {}
+
+    if (newWindow) {
+        // Blob URIs need a custom URL to be displayed in a new window
+        if (contents instanceof Blob) {
+            dataURI = URL.createObjectURL(contents);
+        } else {
+            dataURI = dataURLFormat(contents);
+        }
+
+        // Detect crashing errors - fallback to downloading if necessary
+        if (!exhibitsChomeBug(dataURI)) {
+            window.open(dataURI, fileName);
+            // Blob URIs should be "cleaned up" to reduce memory.
+            if (contents instanceof Blob) {
+                URL.revokeObjectURL(dataURI);
+            }
+        } else {
+            // (recursively) call this defauling newWindow to false
+            this.showMessage('download to disk text');
+            this.saveFileAs(contents, fileType, fileName);
+        }
+    } else if (blobIsSupported) {
+        if (!(contents instanceof Blob)) {
+            contents = dataURItoBlob(contents, fileType);
+        }
+        // download a file and delegate to FileSaver
+        // false: Do not preprend a BOM to the file.
+        saveAs(contents, fileName + fileExt, false);
+    } else {
+        dialog = new DialogBoxMorph();
+        dialog.inform(
+            localize('Could not export') + ' ' + fileName,
+            'unable to export text',
+            world
+        );
+        dialog.fixLayout();
+        dialog.drawNew();
+    }
+};
+
+IDE_Morph.prototype.saveCanvasAs = function (canvas, fileName, newWindow) {
+    // Export a Canvas object as a PNG image
+    // cavas.toBlob() is currently only supported in Firefox and IE
+    var myself = this;
+    if (canvas.toBlob) {
+        canvas.toBlob(function (blob) {
+            myself.saveFileAs(blob, 'image/png', fileName, newWindow);
+        });
+    } else {
+        this.saveFileAs(canvas.toDataURL(), 'image/png', fileName, newWindow);
+    }
+};
+
+IDE_Morph.prototype.saveXMLAs = function(xml, fileName, newWindow) {
+    // wrapper to saving XML files with a proper type tag.
+    this.saveFileAs(xml, 'text/xml;chartset=utf-8', fileName, newWindow);
 };
 
 IDE_Morph.prototype.switchToUserMode = function () {
@@ -4419,33 +4536,19 @@ IDE_Morph.prototype.exportProjectMedia = function (name) {
     this.serializer.isCollectingMedia = true;
     if (name) {
         this.setProjectName(name);
-        if (Process.prototype.isCatchingErrors) {
-            try {
-                menu = this.showMessage('Exporting');
-                encodeURIComponent(
-                    this.serializer.serialize(this.stage)
-                );
-                media = encodeURIComponent(
-                    this.serializer.mediaXML(name)
-                );
-                window.open('data:text/xml,' + media);
-                menu.destroy();
-                this.showMessage('Exported!', 1);
-            } catch (err) {
-                this.serializer.isCollectingMedia = false;
-                this.showMessage('Export failed: ' + err);
-            }
-        } else {
+        try {
             menu = this.showMessage('Exporting');
-            encodeURIComponent(
-                this.serializer.serialize(this.stage)
-            );
-            media = encodeURIComponent(
-                this.serializer.mediaXML()
-            );
-            window.open('data:text/xml,' + media);
+            media = this.serializer.mediaXML(name);
+            this.saveXMLAs(media, this.projectName + ' media');
             menu.destroy();
             this.showMessage('Exported!', 1);
+        } catch (err) {
+            if (Process.prototype.isCatchingErrors) {
+                this.serializer.isCollectingMedia = false;
+                this.showMessage('Export failed: ' + err);
+            } else {
+                throw err;
+            }
         }
     }
     this.serializer.isCollectingMedia = false;
@@ -4461,10 +4564,8 @@ IDE_Morph.prototype.exportProjectNoMedia = function (name) {
         if (Process.prototype.isCatchingErrors) {
             try {
                 menu = this.showMessage('Exporting');
-                str = encodeURIComponent(
-                    this.serializer.serialize(this.stage)
-                );
-                window.open('data:text/xml,' + str);
+                str = this.serializer.serialize(this.stage);
+                this.saveXMLAs(str, this.projectName);
                 menu.destroy();
                 this.showMessage('Exported!', 1);
             } catch (err) {
@@ -4473,10 +4574,8 @@ IDE_Morph.prototype.exportProjectNoMedia = function (name) {
             }
         } else {
             menu = this.showMessage('Exporting');
-            str = encodeURIComponent(
-                this.serializer.serialize(this.stage)
-            );
-            window.open('data:text/xml,' + str);
+            str = this.serializer.serialize(this.stage);
+            this.saveXMLAs(str, this.projectName);
             menu.destroy();
             this.showMessage('Exported!', 1);
         }
@@ -4493,17 +4592,10 @@ IDE_Morph.prototype.exportProjectAsCloudData = function (name) {
         if (Process.prototype.isCatchingErrors) {
             try {
                 menu = this.showMessage('Exporting');
-                str = encodeURIComponent(
-                    this.serializer.serialize(this.stage)
-                );
-                media = encodeURIComponent(
-                    this.serializer.mediaXML(name)
-                );
-                dta = encodeURIComponent('<snapdata>')
-                    + str
-                    + media
-                    + encodeURIComponent('</snapdata>');
-                window.open('data:text/xml,' + dta);
+                str = this.serializer.serialize(this.stage);
+                media = this.serializer.mediaXML(name);
+                dta = '<snapdata>' + str + media + '</snapdata>';
+                this.saveXMLAs(str, this.projectName);
                 menu.destroy();
                 this.showMessage('Exported!', 1);
             } catch (err) {
@@ -4512,17 +4604,10 @@ IDE_Morph.prototype.exportProjectAsCloudData = function (name) {
             }
         } else {
             menu = this.showMessage('Exporting');
-            str = encodeURIComponent(
-                this.serializer.serialize(this.stage)
-            );
-            media = encodeURIComponent(
-                this.serializer.mediaXML()
-            );
-            dta = encodeURIComponent('<snapdata>')
-                + str
-                + media
-                + encodeURIComponent('</snapdata>');
-            window.open('data:text/xml,' + dta);
+            str = this.serializer.serialize(this.stage);
+            media = this.serializer.mediaXML(name);
+            dta = '<snapdata>' + str + media + '</snapdata>';
+            this.saveXMLAs(str, this.projectName);
             menu.destroy();
             this.showMessage('Exported!', 1);
         }
@@ -5027,7 +5112,10 @@ ProjectDialogMorph.prototype.setSource = function (source) {
         this.projectList = [];
         SnapCloud.getProjectList(
             function (projectList) {
-                myself.installCloudProjectList(projectList);
+                // Don't show cloud projects if user has since switch panes.
+                if (myself.source === 'cloud') {
+                    myself.installCloudProjectList(projectList);
+                }
                 msg.destroy();
             },
             function (err, lbl) {
@@ -5142,7 +5230,7 @@ ProjectDialogMorph.prototype.getLocalProjectList = function () {
         }
     }
     projects.sort(function (x, y) {
-        return x.name < y.name ? -1 : 1;
+        return x.name.toLowerCase() < y.name.toLowerCase() ? -1 : 1;
     });
     return projects;
 };
@@ -5155,7 +5243,8 @@ ProjectDialogMorph.prototype.installCloudProjectList = function (pl) {
     var myself = this;
     this.projectList = pl || [];
     this.projectList.sort(function (x, y) {
-        return x.ProjectName < y.ProjectName ? -1 : 1;
+        return x.ProjectName.toLowerCase() < y.ProjectName.toLowerCase() ?
+                 -1 : 1;
     });
 
     this.listField.destroy();
@@ -5275,6 +5364,12 @@ ProjectDialogMorph.prototype.rawOpenCloudProject = function (proj) {
                 'getRawProject',
                 function (response) {
                     SnapCloud.disconnect();
+                    /*
+                    if (myself.world().currentKey === 16) {
+                        myself.ide.download(response);
+                        return;
+                    }
+                    */
                     myself.ide.source = 'cloud';
                     myself.ide.droppedText(response);
                     if (proj.Public === 'true') {
@@ -5834,7 +5929,12 @@ SpriteIconMorph.prototype.userMenu = function () {
         menu.addItem(
             'pic...',
             function () {
-                window.open(myself.object.fullImageClassic().toDataURL());
+                var ide = myself.parentThatIsA(IDE_Morph);
+                ide.saveCanvasAs(
+                    myself.object.fullImageClassic(),
+                    this.object.name,
+                    true
+                );
             },
             'open a new window\nwith a picture of the stage'
         );
@@ -6195,10 +6295,12 @@ CostumeIconMorph.prototype.removeCostume = function () {
 };
 
 CostumeIconMorph.prototype.exportCostume = function () {
+    var ide = this.parentThatIsA(IDE_Morph);
     if (this.object instanceof SVG_Costume) {
-        window.open(this.object.contents.src);
-    } else { // rastered Costume
-        window.open(this.object.contents.toDataURL());
+        // don't show SVG costumes in a new tab (shows text)
+        ide.saveFileAs(this.object.contents.src, 'text/svg', this.object.name);
+    } else { // rasterized Costume
+        ide.saveCanvasAs(this.object.object.contents, this.object.name, true);
     }
 };
 

@@ -5,3 +5,4 @@ variadic-reporters.xml	Variadic reporters
 word-sentence.xml	Words, sentences
 cases.xml	Multi-branched conditional (switch)
 leap-library.xml	LEAP Motion controller
+setrgb.xml	Set RGB or HSV pen color
