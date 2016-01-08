@@ -1198,6 +1198,8 @@ SnapTranslator.dict.pt = {
         'seta para a direita',
     'left arrow':
         'seta para a esquerda',
+    'any key':
+        'qualquer',
     'a':
         'a',
     'b':
