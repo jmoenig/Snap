@@ -356,7 +356,7 @@ CustomBlockDefinition.prototype.sortedElements = function () {
 CustomBlockDefinition.prototype.scriptsModel = function () {
     // answer a restored scripting area for the sake
     // of creating script pictures
-    var scripts, proto, block, comment;
+    var scripts, proto, block, comment, template;
 
     scripts = new ScriptsMorph();
     scripts.cleanUpMargin = 10;
@@ -371,6 +371,7 @@ CustomBlockDefinition.prototype.scriptsModel = function () {
         proto.nextBlock(this.body.expression.fullCopy());
     }
     scripts.add(proto);
+    proto.fixBlockColor(null, true);
     this.scripts.forEach(function (element) {
         block = element.fullCopy();
         block.setPosition(scripts.position().add(element.position()));
@@ -384,7 +385,10 @@ CustomBlockDefinition.prototype.scriptsModel = function () {
     proto.allComments().forEach(function (comment) {
         comment.align(proto);
     });
-    proto.parts()[0].fixLayout();
+    template = proto.parts()[0];
+    template.fixLayout();
+    template.forceNormalColoring();
+    template.fixBlockColor(proto, true);
     scripts.fixMultiArgs();
     return scripts;
 };
@@ -1788,6 +1792,8 @@ BlockEditorMorph.prototype.init = function (definition, target) {
         proto.nextBlock(definition.body.expression.fullCopy());
     }
     scripts.add(proto);
+    proto.fixBlockColor(null, true);
+    proto.drawNew();
 
     this.definition.scripts.forEach(function (element) {
         block = element.fullCopy();
@@ -1818,7 +1824,6 @@ BlockEditorMorph.prototype.init = function (definition, target) {
 
     this.setExtent(new Point(375, 300)); // normal initial extent
     this.fixLayout();
-    proto.parts()[0].fixLayout();
     scripts.fixMultiArgs();
 };
 
