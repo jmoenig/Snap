@@ -99,16 +99,16 @@
 StringMorph, Color, DialogBoxMorph, ScriptsMorph, ScrollFrameMorph,
 Point, HandleMorph, HatBlockMorph, BlockMorph, detect, List, Process,
 AlignmentMorph, ToggleMorph, InputFieldMorph, ReporterBlockMorph,
-Context, StringMorph, nop, newCanvas, radians, BoxMorph,
-ArrowMorph, PushButtonMorph, contains, InputSlotMorph, ShadowMorph,
-ToggleButtonMorph, IDE_Morph, MenuMorph, copy, ToggleElementMorph,
-Morph, fontHeight, StageMorph, SyntaxElementMorph, SnapSerializer,
-CommentMorph, localize, CSlotMorph, SpeechBubbleMorph, MorphicPreferences,
-SymbolMorph, isNil, CursorMorph, VariableFrame*/
+StringMorph, nop, newCanvas, radians, BoxMorph, ArrowMorph, PushButtonMorph,
+contains, InputSlotMorph, ToggleButtonMorph, IDE_Morph, MenuMorph, copy,
+ToggleElementMorph, Morph, fontHeight, StageMorph, SyntaxElementMorph,
+SnapSerializer, CommentMorph, localize, CSlotMorph, SpeechBubbleMorph,
+MorphicPreferences, SymbolMorph, isNil, CursorMorph, VariableFrame,
+WatcherMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2016-January-08';
+modules.byob = '2016-January-11';
 
 // Declarations
 
@@ -371,7 +371,6 @@ CustomBlockDefinition.prototype.scriptsModel = function () {
         proto.nextBlock(this.body.expression.fullCopy());
     }
     scripts.add(proto);
-    proto.fixBlockColor(null, true);
     this.scripts.forEach(function (element) {
         block = element.fullCopy();
         block.setPosition(scripts.position().add(element.position()));
@@ -1780,20 +1779,15 @@ BlockEditorMorph.prototype.init = function (definition, target) {
 
     proto = new PrototypeHatBlockMorph(this.definition);
     proto.setPosition(scripts.position().add(10));
-
     if (definition.comment !== null) {
         comment = definition.comment.fullCopy();
         proto.comment = comment;
         comment.block = proto;
     }
-
     if (definition.body !== null) {
         proto.nextBlock(definition.body.expression.fullCopy());
     }
-
     scripts.add(proto);
-    proto.fixBlockColor(null, true);
-    proto.drawNew();
 
     this.definition.scripts.forEach(function (element) {
         block = element.fullCopy();
@@ -2131,6 +2125,7 @@ PrototypeHatBlockMorph.prototype.init = function (definition) {
     }
     proto.refreshPrototypeSlotTypes(); // show slot type indicators
     this.fixLayout();
+    proto.fixBlockColor(this, true);
 };
 
 PrototypeHatBlockMorph.prototype.mouseClickLeft = function () {
