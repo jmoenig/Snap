@@ -1057,7 +1057,7 @@
 /*global window, HTMLCanvasElement, getMinimumFontHeight, FileReader, Audio,
 FileList, getBlurredShadowSupport*/
 
-var morphicVersion = '2015-December-21';
+var morphicVersion = '2015-December-23';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = getBlurredShadowSupport(); // check for Chrome-bug
 
@@ -4481,7 +4481,7 @@ function CursorMorph(aStringOrTextMorph) {
 }
 
 CursorMorph.prototype.init = function (aStringOrTextMorph) {
-    var ls, myself = this;
+    var ls;
 
     // additional properties:
     this.keyDownEventUsed = false;
@@ -4499,8 +4499,13 @@ CursorMorph.prototype.init = function (aStringOrTextMorph) {
         this.target.setAlignmentToLeft();
     }
     this.gotoSlot(this.slot);
+    this.initializeClipboardHandler();
+};
 
+CursorMorph.prototype.initializeClipboardHandler = function () {
     // Add hidden text box for copying and pasting
+    var myself = this;
+
     this.clipboardHandler = document.createElement('textarea');
     this.clipboardHandler.style.position = 'absolute';
     this.clipboardHandler.style.right = '101%'; // placed just out of view
@@ -4901,10 +4906,23 @@ CursorMorph.prototype.destroy = function () {
         this.target.drawNew();
         this.target.changed();
     }
-    if (this.clipboardHandler) {
-        document.body.removeChild(this.clipboardHandler);
-    }
+    this.destroyClipboardHandler();
     CursorMorph.uber.destroy.call(this);
+};
+
+CursorMorph.prototype.destroyClipboardHandler = function () {
+    var nodes = document.body.children,
+        each,
+        i;
+    if (this.clipboardHandler) {
+        for (i = 0; i < nodes.length; i += 1) {
+            each = nodes[i];
+            if (each === this.clipboardHandler) {
+                document.body.removeChild(this.clipboardHandler);
+                this.clipboardHandler = null;
+            }
+        }
+    }
 };
 
 // CursorMorph utilities:
