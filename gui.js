@@ -9,7 +9,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2015 by Jens Mönig
+    Copyright (C) 2016 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -71,7 +71,7 @@ BlockRemovalDialogMorph, saveAs*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2015-December-22';
+modules.gui = '2016-January-08';
 
 // Declarations
 
@@ -2751,7 +2751,7 @@ IDE_Morph.prototype.aboutSnap = function () {
         world = this.world();
 
     aboutTxt = 'Snap! 4.0.4\nBuild Your Own Blocks\n\n'
-        + 'Copyright \u24B8 2015 Jens M\u00F6nig and '
+        + 'Copyright \u24B8 2016 Jens M\u00F6nig and '
         + 'Brian Harvey\n'
         + 'jens@moenig.org, bh@cs.berkeley.edu\n\n'
 
@@ -6300,7 +6300,7 @@ CostumeIconMorph.prototype.exportCostume = function () {
         // don't show SVG costumes in a new tab (shows text)
         ide.saveFileAs(this.object.contents.src, 'text/svg', this.object.name);
     } else { // rasterized Costume
-        ide.saveCanvasAs(this.object.object.contents, this.object.name, true);
+        ide.saveCanvasAs(this.object.contents, this.object.name, true);
     }
 };
 

@@ -6,7 +6,7 @@
 
     written by Jens Mönig
 
-    Copyright (C) 2015 by Jens Mönig
+    Copyright (C) 2016 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -42,7 +42,7 @@
 
 /*global modules, contains*/
 
-modules.locale = '2015-December-22';
+modules.locale = '2016-January-08';
 
 // Global stuff
 
@@ -221,7 +221,7 @@ SnapTranslator.dict.pt = {
     'translator_e-mail':
         'mmsequeira@gmail.com',
     'last_changed':
-        '2015-12-21'
+        '2016-01-08'
 };
 
 SnapTranslator.dict.cs = {

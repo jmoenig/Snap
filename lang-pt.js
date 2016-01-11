@@ -6,7 +6,7 @@
 
     translated by Manuel Menezes de Sequeira
 
-    Copyright (C) 2012 by Manuel Menezes de Sequeira
+    Copyright (C) 2016 by Manuel Menezes de Sequeira
 
     This file is part of Snap!.
 
@@ -185,7 +185,7 @@ SnapTranslator.dict.pt = {
     'translator_e-mail':
         'mmsequeira@gmail.com',
     'last_changed':
-        '2015-12-20',
+        '2016-01-08',
 
     // GUI
     // control bar:
@@ -1198,6 +1198,8 @@ SnapTranslator.dict.pt = {
         'seta para a direita',
     'left arrow':
         'seta para a esquerda',
+    'any key':
+        'qualquer',
     'a':
         'a',
     'b':

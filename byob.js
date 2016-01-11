@@ -9,7 +9,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2015 by Jens Mönig
+    Copyright (C) 2016 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -99,16 +99,16 @@
 StringMorph, Color, DialogBoxMorph, ScriptsMorph, ScrollFrameMorph,
 Point, HandleMorph, HatBlockMorph, BlockMorph, detect, List, Process,
 AlignmentMorph, ToggleMorph, InputFieldMorph, ReporterBlockMorph,
-Context, StringMorph, nop, newCanvas, radians, BoxMorph,
-ArrowMorph, PushButtonMorph, contains, InputSlotMorph, ShadowMorph,
-ToggleButtonMorph, IDE_Morph, MenuMorph, copy, ToggleElementMorph,
-Morph, fontHeight, StageMorph, SyntaxElementMorph, SnapSerializer,
-CommentMorph, localize, CSlotMorph, SpeechBubbleMorph, MorphicPreferences,
-SymbolMorph, isNil, CursorMorph, VariableFrame*/
+StringMorph, nop, newCanvas, radians, BoxMorph, ArrowMorph, PushButtonMorph,
+contains, InputSlotMorph, ToggleButtonMorph, IDE_Morph, MenuMorph, copy,
+ToggleElementMorph, Morph, fontHeight, StageMorph, SyntaxElementMorph,
+SnapSerializer, CommentMorph, localize, CSlotMorph, SpeechBubbleMorph,
+MorphicPreferences, SymbolMorph, isNil, CursorMorph, VariableFrame,
+WatcherMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2015-December-15';
+modules.byob = '2016-January-11';
 
 // Declarations
 
@@ -356,7 +356,7 @@ CustomBlockDefinition.prototype.sortedElements = function () {
 CustomBlockDefinition.prototype.scriptsModel = function () {
     // answer a restored scripting area for the sake
     // of creating script pictures
-    var scripts, proto, block, comment;
+    var scripts, proto, block, comment, template;
 
     scripts = new ScriptsMorph();
     scripts.cleanUpMargin = 10;
@@ -385,7 +385,10 @@ CustomBlockDefinition.prototype.scriptsModel = function () {
     proto.allComments().forEach(function (comment) {
         comment.align(proto);
     });
-    proto.parts()[0].fixLayout();
+    template = proto.parts()[0];
+    template.fixLayout();
+    template.forceNormalColoring();
+    template.fixBlockColor(proto, true);
     scripts.fixMultiArgs();
     return scripts;
 };
@@ -462,6 +465,11 @@ CustomCommandBlockMorph.prototype.refresh = function (silently) {
     // initialize block vars
     // to do: preserve values of unchanged variable names
     this.initializeVariables();
+
+    // make (double) sure I'm colored correctly
+    this.forceNormalColoring();
+    this.drawNew();
+    this.fixBlockColor(null, true);
 };
 
 CustomCommandBlockMorph.prototype.restoreInputs = function (oldInputs) {
@@ -1775,17 +1783,14 @@ BlockEditorMorph.prototype.init = function (definition, target) {
 
     proto = new PrototypeHatBlockMorph(this.definition);
     proto.setPosition(scripts.position().add(10));
-
     if (definition.comment !== null) {
         comment = definition.comment.fullCopy();
         proto.comment = comment;
         comment.block = proto;
     }
-
     if (definition.body !== null) {
         proto.nextBlock(definition.body.expression.fullCopy());
     }
-
     scripts.add(proto);
     proto.fixBlockColor(null, true);
     proto.drawNew();
@@ -1819,7 +1824,6 @@ BlockEditorMorph.prototype.init = function (definition, target) {
 
     this.setExtent(new Point(375, 300)); // normal initial extent
     this.fixLayout();
-    proto.parts()[0].fixLayout();
     scripts.fixMultiArgs();
 };
 
@@ -2126,6 +2130,7 @@ PrototypeHatBlockMorph.prototype.init = function (definition) {
     }
     proto.refreshPrototypeSlotTypes(); // show slot type indicators
     this.fixLayout();
+    proto.fixBlockColor(this, true);
 };
 
 PrototypeHatBlockMorph.prototype.mouseClickLeft = function () {
