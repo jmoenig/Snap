@@ -1492,7 +1492,6 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
         } else { // Is these necessary? (was default case before)
             nop();
         }
-
     } else if (spec[0] === '$' &&
             spec.length > 1 &&
             this.selector !== 'reportGetVar') {
@@ -1532,7 +1531,7 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             part.drawNew();
             return part;
         }
-        var part = new SymbolMorph(tokens[0]);
+        part = new SymbolMorph(tokens[0]);
         part.size = this.fontSize * (+tokens[1] || 1.2);
         part.color = new Color(
             +tokens[2] === 0 ? 0 : +tokens[2] || 255,
