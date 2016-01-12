@@ -1508,7 +1508,7 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             rcvr.costumes.asArray(),
             function (each) {return each.name === id; }
         );
-        var part = new SymbolMorph(cst);
+        part = new SymbolMorph(cst);
         part.size = this.fontSize * 1.5;
         part.color = new Color(255, 255, 255);
         part.isProtectedLabel = true; // doesn't participate in zebraing
