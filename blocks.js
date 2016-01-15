@@ -9,7 +9,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2015 by Jens Mönig
+    Copyright (C) 2016 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -156,7 +156,7 @@ DialogBoxMorph, BlockInputFragmentMorph, PrototypeHatBlockMorph, Costume*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2015-December-16';
+modules.blocks = '2016-January-16';
 
 var SyntaxElementMorph;
 var BlockMorph;
