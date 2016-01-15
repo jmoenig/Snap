@@ -2845,3 +2845,7 @@ end - bulk of 151215
 160111
 ------
 * BYOB: fixed #1107
+
+160116
+------
+* Blocks: fixed a multi-line input slot layout glitch
