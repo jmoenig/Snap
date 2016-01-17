@@ -2849,3 +2849,8 @@ end - bulk of 151215
 160116
 ------
 * Blocks: fixed a multi-line input slot layout glitch
+
+160117
+------
+* BYOB: preserve custom block instances’ block var values when editing their definition
+

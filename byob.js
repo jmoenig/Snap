@@ -104,11 +104,11 @@ contains, InputSlotMorph, ToggleButtonMorph, IDE_Morph, MenuMorph, copy,
 ToggleElementMorph, Morph, fontHeight, StageMorph, SyntaxElementMorph,
 SnapSerializer, CommentMorph, localize, CSlotMorph, SpeechBubbleMorph,
 MorphicPreferences, SymbolMorph, isNil, CursorMorph, VariableFrame,
-WatcherMorph*/
+WatcherMorph, Variable*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2016-January-11';
+modules.byob = '2016-January-17';
 
 // Declarations
 
@@ -420,11 +420,15 @@ CustomCommandBlockMorph.prototype.init = function (definition, isProto) {
     }
 };
 
-CustomCommandBlockMorph.prototype.initializeVariables = function () {
+CustomCommandBlockMorph.prototype.initializeVariables = function (oldVars) {
     var myself = this;
     this.variables = new VariableFrame();
     this.definition.variableNames.forEach(function (name) {
-        myself.variables.addVar(name);
+        var v = oldVars ? oldVars[name] : null;
+        myself.variables.addVar(
+            name,
+            v instanceof Variable ? v.value : null
+        );
     });
 };
 
@@ -463,8 +467,8 @@ CustomCommandBlockMorph.prototype.refresh = function (silently) {
     });
 
     // initialize block vars
-    // to do: preserve values of unchanged variable names
-    this.initializeVariables();
+    // preserve values of unchanged variable names
+    this.initializeVariables(this.variables.vars);
 
     // make (double) sure I'm colored correctly
     this.forceNormalColoring();
