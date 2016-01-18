@@ -2857,3 +2857,4 @@ end - bulk of 151215
 160118
 ------
 * Paint: avoid pixel collision detection in PaintCanvas (optimization)
+* BYOB: fixed a zebra coloring glitch in the block editor

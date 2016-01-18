@@ -108,7 +108,7 @@ WatcherMorph, Variable*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2016-January-17';
+modules.byob = '2016-January-18';
 
 // Declarations
 
@@ -1829,6 +1829,10 @@ BlockEditorMorph.prototype.init = function (definition, target) {
     this.setExtent(new Point(375, 300)); // normal initial extent
     this.fixLayout();
     scripts.fixMultiArgs();
+
+    block = proto.parts()[0];
+    block.forceNormalColoring();
+    block.fixBlockColor(proto, true);
 };
 
 BlockEditorMorph.prototype.popUp = function () {
