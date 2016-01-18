@@ -2858,3 +2858,7 @@ end - bulk of 151215
 ------
 * Paint: avoid pixel collision detection in PaintCanvas (optimization)
 * BYOB: fixed a zebra coloring glitch in the block editor
+
+160119
+------
+* Threads, Store: Throw an error for “obsolete” blocks instead of (forever) doing nothing (and thus often freezing and crashing). Thanks, Paul, for helping identify this!
