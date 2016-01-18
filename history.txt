@@ -2854,3 +2854,6 @@ end - bulk of 151215
 ------
 * BYOB: preserve custom block instances’ block var values when editing their definition
 
+160118
+------
+* Paint: avoid pixel collision detection in PaintCanvas (optimization)
