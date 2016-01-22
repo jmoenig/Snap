@@ -10259,20 +10259,51 @@ WorldMorph.prototype.initVirtualKeyboard = function () {
         false
     );
 
+// numeric & symbol handling with IME active
+    this.virtualKeyboard.g_compositionended = false;
+    this.virtualKeyboard.g_iscomposing = false;
+
+    this.virtualKeyboard.addEventListener("compositionstart", function (event){ this.g_iscomposing = true; }, false);
+
     this.virtualKeyboard.addEventListener(
         "compositionend",
-        function (event){
-		var newEvent = {ctrlKey : false, altKey : false, shiftKey : false, metaKey : false,
-				keyCode : 0, charCode : 0, preventDefault : function(){}};
-            	if (myself.keyboardReceiver) {
-				for (var i = 0; i < event.data.length; ++i){
-					newEvent.keyCode=0;  
-					newEvent.charCode=event.data.charCodeAt( i);
-					myself.keyboardReceiver.processKeyPress( newEvent);
-				}
+        function (event){       
+            this.g_compositionended = true;
+            this.g_iscomposing = false;
+
+            var newEvent = {ctrlKey : false, altKey : false, shiftKey : false, metaKey : false,
+                  keyCode : 0, charCode : 0, preventDefault : function(){}};
+            if (myself.keyboardReceiver) {
+                for (var i = 0; i < event.data.length; ++i){
+                      newEvent.keyCode=0;  
+                      newEvent.charCode=event.data.charCodeAt( i);
+                      myself.keyboardReceiver.processKeyPress( newEvent);
+                }
             }
        },
         false
+    );    
+    
+    this.virtualKeyboard.addEventListener(
+        "input",
+        function (event){
+            if (this.g_iscomposing) { // Note: input event property isComposing is not supported by browsers...
+                return; // Ignore all "input" during composing
+            } else {
+                if (this.g_compositionended) {
+                    this.g_compositionended = false;
+                    return; // ignore the first "input" after "compositionend"
+                }
+                if (myself.currentKey == 229) { // double confirm it is in IME mode.
+                    var v = event.target.value; // Any better way to get the "last char" directly?
+                    var newEvent = {ctrlKey : false, altKey : false, shiftKey : false, metaKey : false,
+                      keyCode : 0, charCode : 0, preventDefault : function(){}};
+                    newEvent.keyCode=0;  
+                    newEvent.charCode=v.charCodeAt(v.length -1);  // last char
+                    myself.keyboardReceiver.processKeyPress( newEvent);
+                }
+            }
+        }
     );
 
 };
