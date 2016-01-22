@@ -2862,3 +2862,8 @@ end - bulk of 151215
 160119
 ------
 * Threads, Store: Throw an error for “obsolete” blocks instead of (forever) doing nothing (and thus often freezing and crashing). Thanks, Paul, for helping identify this!
+
+160122
+------
+* Blocks: Fixed a slight rendering glitch when deleting reporters via the context menu
+

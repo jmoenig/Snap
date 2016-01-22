@@ -156,7 +156,7 @@ DialogBoxMorph, BlockInputFragmentMorph, PrototypeHatBlockMorph, Costume*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2016-January-16';
+modules.blocks = '2016-January-22';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -4576,6 +4576,7 @@ ReporterBlockMorph.prototype.ExportResultPic = function () {
 
 ReporterBlockMorph.prototype.userDestroy = function () {
     // make sure to restore default slot of parent block
+    this.topBlock().fullChanged();
     this.prepareToBeGrabbed(this.world().hand);
     this.destroy();
 };
