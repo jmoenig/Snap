@@ -10243,7 +10243,7 @@ WorldMorph.prototype.initVirtualKeyboard = function () {
                     myself.keyboardReceiver.processKeyUp(event);
                 }
             }
-            event.preventDefault();
+            //event.preventDefault();//Allow clipboard shortcut Ctrl C, Ctrl V, Ctrl INS, Shift INS,  
         },
         false
     );
@@ -10254,7 +10254,7 @@ WorldMorph.prototype.initVirtualKeyboard = function () {
             if (myself.keyboardReceiver) {
                 myself.keyboardReceiver.processKeyPress(event);
             }
-            event.preventDefault();
+            //event.preventDefault();//Allow clipboard shortcut Ctrl C, Ctrl V, Ctrl INS, Shift INS,  
         },
         false
     );
