@@ -2513,6 +2513,12 @@ DialogBoxMorph.prototype.fixLayout = function () {
                     + this.buttons.height()
                     + this.padding
         );
+        this.silentSetWidth(Math.max(
+                this.width(),
+                this.buttons.width()
+                        + (2 * this.padding)
+            )
+        );
         this.buttons.setCenter(this.center());
         this.buttons.setBottom(this.bottom() - this.padding);
     }
@@ -2927,6 +2933,7 @@ AlignmentMorph.prototype.fixLayout = function () {
                         ))
                     );
                 }
+                cfb = c.fullBounds();
                 newBounds = newBounds.merge(cfb);
             } else {
                 newBounds = cfb;
