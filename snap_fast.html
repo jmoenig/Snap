@@ -25,10 +25,9 @@
 				world = new WorldMorph(document.getElementById('world'));
                 world.worldCanvas.focus();
 				new IDE_Morph().openIn(world);
-        loop();
+				setInterval(loop, 1);
 			};
 			function loop() {
-        requestAnimationFrame(loop);
 				world.doOneCycle();
 			}
 		</script>

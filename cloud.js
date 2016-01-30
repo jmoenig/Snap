@@ -30,7 +30,7 @@
 /*global modules, IDE_Morph, SnapSerializer, hex_sha512, alert, nop,
 localize*/
 
-modules.cloud = '2015-December-04';
+modules.cloud = '2015-December-15';
 
 // Global stuff
 
@@ -326,7 +326,9 @@ Cloud.prototype.reconnect = function (
 Cloud.prototype.saveProject = function (ide, callBack, errorCall) {
     var myself = this,
         pdata,
-        media;
+        media,
+        size,
+        mediaSize;
 
     ide.serializer.isCollectingMedia = true;
     pdata = ide.serializer.serialize(ide.stage);
@@ -334,6 +336,19 @@ Cloud.prototype.saveProject = function (ide, callBack, errorCall) {
             ide.serializer.mediaXML(ide.projectName) : null;
     ide.serializer.isCollectingMedia = false;
     ide.serializer.flushMedia();
+
+    mediaSize = media ? media.length : 0;
+    size = pdata.length + mediaSize;
+    if (mediaSize > 10485760) {
+        new DialogBoxMorph().inform(
+            'Snap!Cloud - Cannot Save Project',
+            'The media inside this project exceeds 10 MB.\n' +
+                'Please reduce the size of costumes or sounds.\n',
+            ide.world(),
+            ide.cloudIcon(null, new Color(180, 0, 0))
+        );
+        throw new Error('Project media exceeds 10 MB size limit');
+    }
 
     // check if serialized data can be parsed back again
     try {
@@ -353,6 +368,7 @@ Cloud.prototype.saveProject = function (ide, callBack, errorCall) {
     ide.serializer.isCollectingMedia = false;
     ide.serializer.flushMedia();
 
+    ide.showMessage('Uploading ' + Math.round(size / 1024) + ' KB...');
     myself.reconnect(
         function () {
             myself.callService(
@@ -545,7 +561,7 @@ Cloud.prototype.callService = function (
                 } else {
                     responseList = myself.parseResponse(
                         request.responseText
-                    )
+                    );
                 }
                 callBack.call(null, responseList, service.url);
             }

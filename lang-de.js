@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org', // optional
     'last_changed':
-        '2015-10-07', // this, too, will appear in the Translators tab
+        '2015-12-22', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -411,6 +411,8 @@ SnapTranslator.dict.de = {
         'setze Stiftdicke auf %n',
     'stamp':
         'stemple',
+    'fill':
+        'male aus',
 
     // control:
     'when %greenflag clicked':
@@ -429,6 +431,8 @@ SnapTranslator.dict.de = {
         'vom Mauszeiger betreten',
     'mouse-departed':
         'vom Mauszeiger verlassen',
+    'when %b':
+        'Wenn %b',
     'when I receive %msgHat':
         'Wenn ich %msgHat empfange',
     'broadcast %msg':
@@ -1194,6 +1198,8 @@ SnapTranslator.dict.de = {
         'Pfeil nach rechts',
     'left arrow':
         'Pfeil nach links',
+    'any key':
+        'beliebige Taste',
     'a':
         'a',
     'b':

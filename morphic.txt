@@ -9,7 +9,7 @@
 
 	Copyright (C) 2015 by Jens Mönig
 
-	this documentation last changed: Sep 23, 2015
+	this documentation last changed: Dec 21, 2015
 
 	This file is part of Snap!.
 
@@ -154,7 +154,7 @@
 
     IV. open issues
     ----------------
-    - clipboard support (copy & paste)
+    - clipboard support (copy & paste) for non-textual data
     - native (unscaled) high-resolution display support
 
 
@@ -170,10 +170,11 @@
     - Chrome for Windows
     - Chrome for Mac
     - Chrome for Android
-    - Safari for Windows
+    - Safari for Windows (deprecated)
     - safari for Mac
     - Safari for iOS (mobile)
     - IE for Windows
+    - Edge for Windows
     - Opera for Windows
     - Opera for Mac
 
@@ -263,10 +264,11 @@
                 window.onload = function () {
                     world = new WorldMorph(
                         document.getElementById('world'));
-                    setInterval(loop, 50);
+                    loop();
                 };
 
                 function loop() {
+                    requestAnimationFrame(loop);
                     world.doOneCycle();
                 }
             </script>
@@ -310,10 +312,11 @@
                         document.getElementById('world1'), false);
                     world2 = new WorldMorph(
                         document.getElementById('world2'), false);
-                    setInterval(loop, 50);
+                    loop();
                 };
 
                 function loop() {
+                    requestAnimationFrame(loop);
                     world1.doOneCycle();
                     world2.doOneCycle();
                 }
@@ -378,10 +381,11 @@
                         x = 0;
                         y += 1;
                     }
-                    setInterval(loop, 50);
+                    loop();
                 };
 
                 function loop() {
+                    requestAnimationFrame(loop);
                     world.doOneCycle();
                 }
             </script>
@@ -1044,5 +1048,6 @@
     background texture handling, countless bug fixes and optimizations.
     Ian Reynolds contributed backspace key handling for Chrome.
     Davide Della Casa contributed performance optimizations for Firefox.
+    Jason N (@cyderize) contributed native copy & paste for text editing.
 
     - Jens Mönig
