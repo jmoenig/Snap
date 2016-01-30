@@ -1068,9 +1068,13 @@
                 ctx.oBackingStorePixelRatio ||
                 ctx.backingStorePixelRatio || 1;
 
+    // Unfortunately, it's really hard to make this work well when changing zoom level, so let's
+    // leave it like this right now, and stick to whatever the ratio was in the beginning.
+    var originalDevicePixelRatio = window.devicePixelRatio;
+
     function getPixelRatio(imageSource) {
         return imageSource.isRetinaEnabled ?
-            (window.devicePixelRatio || 1) / backingStorePixelRatio : 1;
+            (originalDevicePixelRatio || 1) / backingStorePixelRatio : 1;
     }
 
     var canvasProto = HTMLCanvasElement.prototype;
