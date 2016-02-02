@@ -2599,7 +2599,7 @@ BlockMorph.prototype.restoreInputs = function (oldInputs) {
 
 BlockMorph.prototype.showHelp = function () {
     var myself = this,
-        ide = this.parentThatIsA(IDE_Morph),
+        ide = this.parentThatIsA(BlockEditorMorph).siblings()[0],
         pic = new Image(),
         help,
         comment,
