@@ -2585,3 +2585,285 @@ ______
 * GUI, Blocks, BYOB: New “Export Project Summary” Feature, also: exporting script pics now includes attached comments
 * Blocks, Objects, Threads: Key hat block and key sensor support for “any” key
 * German translation update
+
+151007
+------
+* BYOB, Objects, GUI: New “Remove Unused Global Blocks” Feature
+* GUI, Lists: “Export Project Summary” improvements:
+  - show variable values as watcher pics
+  - expand list watcher pics to show their complete contents (1. level)
+  - url for shared projects
+  - table of contents
+  - basic support for sprite nesting and inheritance
+  - make the summary “browsable” instead of editable
+  - outline around sprite / stage snapshots
+  - experimental hidden (shift-click) “drop-shadows” option
+* GUI: Rearrange project menu, only show global blocks-related ops if there are any
+* GUI: Remove URL location.hash information when loading a new project
+* Store: Fix deserialization support for projects using inheritance
+* German translation update
+
+
+++++++++++++++++++++++++++
+new stuff - bulk of 151116
+++++++++++++++++++++++++++
+
+151030
+------
+* Blocks: Tweak precision of rendering of transparent “holes”
+* updated Czech translation
+* Morphic: Streamlined nop-stepping
+* Blocks: Let SyntaxElements step (again), for better input slot editing experience
+
+151101
+------
+* BYOB: Script pic: Always export comments attached to custom block definitions
+* Blocks: fixed #982 (made %interaction slot static)
+* Morphic: removed an obsolete line (“dragOrigin”)
+* BYOB: make block editor big enough to show the whole definition, if possible
+* BYOB: remember user-set position and size of block editor when pressing “OK”, per session (not serialized in project)
+* Blocks: speed up stacking of commands (also when done programmatically) by suppressing redraws
+* Morphic, Blocks, BYOB: Suppress redundant redraws
+
+151104
+------
+* Morphic: new grabTheshold preference to suppress accidental grabbing through micro-movements of the hand
+* GUI: hidden (shift-click) option to adjust the grabThreshold for the current session
+* Lists, Blocks: Expand list watchers inside result bubbles to show everything
+* Objects: Expand list watchers inside speech/thought bubbles to show everything
+* Morphic: fixed a bug that occasionally expanded the Hand’s bounds when dragging morphs
+
+151107
+------
+* Threads: invoke a block synchronously
+
+151009
+------
+* Morphic: cache fullImage and fullBounds when dragging
+* Blocks: make reporters semi-transparent while dragging
+* GUI: make SpriteIcons semi-transparent while dragging
+* Blocks: make it harder to drop reporters onto filled custom C-slots and variadic slot arrows
+* Blocks: make ScriptsMorphs notice transparent clicks (addresses #997)
+* Blocks: fixed “undrop” for replacing C-slots with reporters
+* BYOB: fixed ctrl-f for the BlockEditor in all situations
+
+151111
+------
+* Objects: fixed a between slideBackTo() and possible running scripts in sprites, thanks, Paul, for reporting it!
+
+151112
+------
+* Blocks, Objects, Threads: new internal slot type: %cl for auto-reifying C-slots that reject reporter drops. Changed (hidden) “for each” to reject reporters in C-slot
+
+151113
+------
+* Frames, snap.html: initial version of a new general purpose prototypal single inheritance object system
+* snap_slo.html: alternative animation-frame based outer scheduler, experimental
+* Threads: added optional timeout to the new synchronous invoke(block) function
+* Blocks: fixed too brutally optimized redraw for “ringify” and “unringify”
+
+151114
+------
+* Frames, snap.html, snap_slo.html: remove initial version for now, needs more low-levelish rewrite (Map-based “shortcut” design doesn’t cut it).
+
+151116
+------
+* Blocks, GUI: Slightly less transparency for dragged reporters and sprite icons
+
+=== v4.0.3 (unreleased) ===
+
+++++++++++++++++++++++++++
+end - bulk of 151116
+++++++++++++++++++++++++++
+
+151116 community contributions
+------
+* new Bulgarian and Romanian translations contributed!
+* fix for IE backspace and tab errors contributed!
+* better resource loading mechanism contributed!
+
+151117
+------
+* Blocks: fixed a zebra-coloring glitch for BooleanSlotMorph
+
+151120
+------
+* Lists: fixed linked lists identity loss when showing watchers
+
+151204
+------
+* Cloud: doubled the number of supported backend slices
+* Cloud, GUI: support new “raw” cloud project services
+
+++++++++++++++++++++++++++
+new stuff - bulk of 151215
+++++++++++++++++++++++++++
+
+151121
+------
+* Threads: Show result bubble when the user clicks on a command script that uses REPORT (You can now click on REPORT and it actually does something)
+
+151124
+------
+* Blocks: fix a re-rendering glitch when changing block specs in dev mode
+* Threads: add optional receiver (environment) to invoke() function
+
+151125
+------
+* Threads, Objects, GUI, Store: Generic “When” hat block
+* BYOB: fixed a rendering bug when using plain prototype labels
+
+151126
+------
+* Threads, Blocks: Performance optimizations (replace “contains” with chained tests)
+* German translation update (for custom hat blocks)
+
+151127
+------
+* Blocks, BYOB, Store: new experimental block variables feature
+* BYOB: more prototype label rendering fixes
+
+151128
+------
+* BYOB, Store: Fix some bugs related to block vars (zebra coloring etc.)
+
+151201
+------
+* BYOB, Blocks: Fix BlockMorph.fullCopy() for block vars
+
+151202
+------
+* Threads: Only support block vars for blocks that actually define any, to avoid race conditions among parallel global blocks with the same definition that also access sprite-local variables
+
+151207
+------
+* Threads, GUI: Stop button stops / restarts custom hat blocks, green flag starts custom hat blocks
+
+151208
+------
+* Objects, Blocks, Threads, GUI, Store, Locale: Automatically enable/disable custom hat blocks when they’re used in a project
+* BYOB: initialize custom block vars on every definition-refresh
+
+151209
+------
+* Threads: allow invoke() to operate on both blocks and rings with arguments
+* Blocks: cache reporter slot specs for evaluation performance (30% speedup)
+
+151210
+------
+* Store: persist block (instance) vars
+* Threads: only show result bubble on user-clicked scripts if “Report” is in the lexical script (not inside a reporter block definition)
+* Morphic: obey grab threshold when dragging inside scroll frames
+
+151211
+------
+* Threads: extend red LENGTH reporter to also work on Text
+* GUI, Objects, Blocks: extend the red stop button to reflect whether custom hat blocks are paused (indicated by a red square instead of the stop sign)
+* Blocks: Tweak C-Slots to better fit inside reporters
+
+151212
+------
+* Locale: change English ‘any’ (in “item of”) to ‘random’ because teachers
+
+151214
+------
+* Objects: added “fill” primitive to the Pen category
+* Updated German translation
+* GUI: Directly download projects from cloud by holding shift while opening - commented out
+* GUI, Cloud: show size of uploaded / downloaded projects
+* GUI, Cloud: upload size limit of 5 MB - commented out
+
+151215
+------
+* snap.html: switch to animation frame scheduling because Chrome sucks sooooo much!!!!
+* GUI: pushed version to 4.0.4
+
+++++++++++++++++++++++++++
+
+v4.0.4 draft features:
+* Show result bubble when the user clicks on a command script that uses REPORT (You can now click on REPORT and it actually does something)
+* New generic “When” hat block, enhances red stop button behavior
+* New block (instance) variables feature (experimental)
+* evaluator performance optimizations
+* Morphic grab-threshold fix for scroll frames
+* fixed several block rendering glitches
+* List category LENGTH reporter now also works on text
+* Changed “any” to “random” (in English only)
+* new FILL primitive in the Pen category
+* switched to animation frame scheduling, please use TURBO for music
+* Updated German translation
+
+++++++++++++++++++++++++++
+end - bulk of 151215
+++++++++++++++++++++++++++
+
+151215 - more changes
+------
+* Cloud: 10 MB cloud upload limit for media per project
+
+151215 - contributions
+------
+* Objects, Paint: Automatic Sprite Center Detection, Thanks, Craxic!!
+* Morphic: Handling of diacritics, [Alt] + key in input fields (Windows), Thanks, DaDoro!!
+* NL translation update
+* Use Blob API to Save Files (to Disk), Thanks, Michael!!
+
+151217
+------
+* Threads: fixed #1071 “length of list” type error possibility by no longer guaranteeing that the red “length of” reporter also works on text input
+
+151218
+------
+* new Arabic translation, yay!! Thanks Tarek Galal!!!
+
+151219
+------
+* Objects: Optimization: Don’t redraw unrotateable sprites on TURN
+
+151221
+------
+* Morphic: Native Copy & Paste support, thanks, @cyderize, for this contribution!!
+* GUI: Code tweaks
+* Portuguese translation update, thanks, Manuel!
+
+151222
+------
+* Blocks, Objects, Threads, Locale: revert to ’any key’ in the key-pressed menu
+* GUI: Improve sorting and tab switching in the Project Dialog, Thanks, Michael!
+
+151223
+------
+* Morphic: fixed #1083
+
+160108
+------
+* BYOB: fixed #1098
+* Threads: remove a redundant yield from the fork primitive
+* GUI: fixed #1099, thanks, Michael!
+* Portuguese translation update, thanks, Manuel!
+
+160111
+------
+* BYOB: fixed #1107
+
+160116
+------
+* Blocks: fixed a multi-line input slot layout glitch
+
+160117
+------
+* BYOB: preserve custom block instances’ block var values when editing their definition
+
+160118
+------
+* Paint: avoid pixel collision detection in PaintCanvas (optimization)
+* BYOB: fixed a zebra coloring glitch in the block editor
+
+160119
+------
+* Threads, Store: Throw an error for “obsolete” blocks instead of (forever) doing nothing (and thus often freezing and crashing). Thanks, Paul, for helping identify this!
+
+160122
+------
+* Blocks: Fixed a slight rendering glitch when deleting reporters via the context menu
+
