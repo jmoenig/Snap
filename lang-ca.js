@@ -707,7 +707,7 @@ SnapTranslator.dict.ca = {
     'Blocks':
         'Blocs',
     'For all Sprites':
-        'Per a tots els Sprites', 
+        'Per a tots els objectes', 
     'Import tools':
         'Importar eines',
     'load the official library of\npowerful blocks':
