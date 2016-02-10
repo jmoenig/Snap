@@ -4960,7 +4960,7 @@ StageMorph.prototype.drawOn = function (aCanvas, aRect) {
 };
 
 StageMorph.prototype.createPenTrails = function() {
-    this.addLayer(newCanvas(this.dimensions), 'penTrails');
+    return this.addLayer(newCanvas(this.dimensions), 'penTrails');
 };
 
 StageMorph.prototype.clearPenTrails = function () {
@@ -4972,8 +4972,13 @@ StageMorph.prototype.clearPenTrails = function () {
 StageMorph.prototype.penTrails = function () {
     // Returns the actual canvas, as doing otherwise would break a lot of the Snap! API
     // and would render old projects unloadable
-    if (!this.getLayer('penTrails')) { this.createPenTrails() };
-    return this.getLayer('penTrails').canvas;
+    var layer = detect(this.layers, function(layer) { return layer.name === 'penTrails' });
+
+    if (!layer) { 
+        layer = this.createPenTrails(); 
+    }
+
+    return layer.canvas;
 };
 
 StageMorph.prototype.penTrailsMorph = function () {
@@ -4999,32 +5004,25 @@ StageMorph.prototype.penTrailsMorph = function () {
 };
 
 StageMorph.prototype.addLayer = function(canvas, name) {
-    var layer = {
-        canvas: canvas,
-        name: name };
+    var layer = detect(this.layers, function(each) { return each.name === name });
 
-    if (!this.getLayer(name)) {
+    if (!layer) {
+        layer = {
+            canvas: canvas,
+            name: name
+        };
         this.layers.push(layer)
-    }
+    };
 
     return layer;
-};
-
-StageMorph.prototype.getLayer = function(name) {
-    for (i = 0; i < this.layers.length; i++) {
-        if (this.layers[i].name == name) { 
-            return this.layers[i] 
-        }
-    }
-    return null;
 };
 
 StageMorph.prototype.removeLayer = function(name) {
     var index;
 
     for (i = 0; i < this.layers.length; i++) {
-        if (this.layers[i].name == name) { 
-            index = i
+        if (this.layers[i].name === name) { 
+            index = i;
         }
     }
 
