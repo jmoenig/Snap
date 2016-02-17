@@ -4056,6 +4056,34 @@ IDE_Morph.prototype.initializeCloud = function () {
         myself.cloudMsg
     );
 };
+IDE_Morph.prototype.initializeCloudCallback = function (successCallBack, failureCallBack) {
+    var myself = this,
+        world = this.world();
+    new DialogBoxMorph(
+        null,
+        function (user) {
+            var pwh = hex_sha512(user.password),
+                str;
+            SnapCloud.login(
+                user.username,
+                user.password,
+                successCallBack,
+                failureCallBack
+            );
+        }
+    ).withKey('cloudlogin').promptCredentials(
+        'Sign in',
+        'login',
+        null,
+        null,
+        null,
+        null,
+        'stay signed in on this computer\nuntil logging out',
+        world,
+        myself.cloudIcon(),
+        myself.cloudMsg
+    );
+};
 
 IDE_Morph.prototype.openMyProjects = function() {
     if(config.urls !== undefined) {
