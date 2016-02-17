@@ -83,7 +83,7 @@ Cloud.prototype.login = function (
          });
         callBack(data, textStatus);
     };
-    $.post(this.login_url, {'username': username, 'password': password}, myCallBack).fail(errorCall);
+    $.post(this.login_url, {'login': username, 'password': password}, myCallBack).fail(errorCall);
 };
 
 Cloud.prototype.saveProject = function (ide, callBack, errorCall) {

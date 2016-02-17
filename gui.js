@@ -4039,7 +4039,7 @@ IDE_Morph.prototype.initializeCloud = function () {
                     myself.showMessage('now connected.', 2);
                 },
                 function () {
-                    myself.shoeMessage("Error connecting to cloud", 2);
+                    myself.showMessage("Error connecting to cloud", 2);
                 }
             );
         }
