@@ -1460,7 +1460,7 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
         // allow GUI symbols as label icons
         // usage: $symbolName[-size-r-g-b], size and color values are optional
         tokens = spec.slice(1).split('-');
-        if (!contains(SymbolMorph.prototype.names, tokens[0])) {
+        if (!SymbolMorph.SYMBOL[tokens[0]]) {
             part = new StringMorph(spec);
             part.fontName = this.labelFontName;
             part.fontStyle = this.labelFontStyle;
@@ -8161,54 +8161,6 @@ SymbolMorph.prototype = new Morph();
 SymbolMorph.prototype.constructor = SymbolMorph;
 SymbolMorph.uber = Morph.prototype;
 
-// SymbolMorph available symbols:
-
-SymbolMorph.prototype.names = [
-    'square',
-    'pointRight',
-    'gears',
-    'file',
-    'fullScreen',
-    'normalScreen',
-    'smallStage',
-    'normalStage',
-    'turtle',
-    'stage',
-    'turtleOutline',
-    'pause',
-    'flag',
-    'octagon',
-    'cloud',
-    'cloudOutline',
-    'cloudGradient',
-    'turnRight',
-    'turnLeft',
-    'storage',
-    'poster',
-    'flash',
-    'brush',
-    'rectangle',
-    'rectangleSolid',
-    'circle',
-    'circleSolid',
-    'line',
-    'crosshairs',
-    'paintbucket',
-    'eraser',
-    'pipette',
-    'speechBubble',
-    'speechBubbleOutline',
-    'arrowUp',
-    'arrowUpOutline',
-    'arrowLeft',
-    'arrowLeftOutline',
-    'arrowDown',
-    'arrowDownOutline',
-    'arrowRight',
-    'arrowRightOutline',
-    'robot'
-];
-
 // SymbolMorph instance creation:
 
 function SymbolMorph(name, size, color, shadowOffset, shadowColor) {
@@ -8275,104 +8227,72 @@ SymbolMorph.prototype.drawNew = function () {
     );
 };
 
+// This is a dictionary containing the function to draw each
+// symbol. Each function contains the same method signature:
+//
+//     SymbolMorph.prototype.drawSymbolStop = function (canvas, aColor) ...
+//
+SymbolMorph.SYMBOL = {
+    'square': 'drawSymbolStop',
+    'pointRight': 'drawSymbolPointRight',
+    'gears': 'drawSymbolGears',
+    'file': 'drawSymbolFile',
+    'fullScreen': 'drawSymbolFullScreen',
+    'normalScreen': 'drawSymbolNormalScreen',
+    'smallStage': 'drawSymbolSmallStage',
+    'normalStage': 'drawSymbolNormalStage',
+    'turtle': 'drawSymbolTurtle',
+    'stage': 'drawSymbolStop',
+    'turtleOutline': 'drawSymbolTurtleOutline',
+    'pause': 'drawSymbolPause',
+    'flag': 'drawSymbolFlag',
+    'octagon': 'drawSymbolOctagon',
+    'cloud': 'drawSymbolCloud',
+    'cloudOutline': 'drawSymbolCloudOutline',
+    'cloudGradient': 'drawSymbolCloudGradient',
+    'turnRight': 'drawSymbolTurnRight',
+    'turnLeft': 'drawSymbolTurnLeft',
+    'storage': 'drawSymbolStorage',
+    'poster': 'drawSymbolPoster',
+    'flash': 'drawSymbolFlash',
+    'brush': 'drawSymbolBrush',
+    'rectangle': 'drawSymbolRectangle',
+    'rectangleSolid': 'drawSymbolRectangleSolid',
+    'circle': 'drawSymbolCircle',
+    'circleSolid': 'drawSymbolCircleSolid',
+    'line': 'drawSymbolLine',
+    'crosshairs': 'drawSymbolCrosshairs',
+    'paintbucket': 'drawSymbolPaintbucket',
+    'eraser': 'drawSymbolEraser',
+    'pipette': 'drawSymbolPipette',
+    'speechBubble': 'drawSymbolSpeechBubble',
+    'speechBubbleOutline': 'drawSymbolSpeechBubbleOutline',
+    'arrowUp': 'drawSymbolArrowUp',
+    'arrowUpOutline': 'drawSymbolArrowUpOutline',
+    'arrowLeft': 'drawSymbolArrowLeft',
+    'arrowLeftOutline': 'drawSymbolArrowLeftOutline',
+    'arrowDown': 'drawSymbolArrowDown',
+    'arrowDownOutline': 'drawSymbolArrowDownOutline',
+    'arrowRight': 'drawSymbolArrowRight',
+    'arrowRightOutline': 'drawSymbolArrowRightOutline',
+    'robot': 'drawSymbolRobot'
+};
+
 SymbolMorph.prototype.symbolCanvasColored = function (aColor) {
     // private
     if (this.name instanceof Costume) {
         return this.name.thumbnail(new Point(this.symbolWidth(), this.size));
     }
 
-    var canvas = newCanvas(new Point(this.symbolWidth(), this.size));
+    var canvas = newCanvas(new Point(this.symbolWidth(), this.size)),
+        symbolFnName = SymbolMorph.SYMBOL[this.name];
 
-    switch (this.name) {
-    case 'square':
-        return this.drawSymbolStop(canvas, aColor);
-    case 'pointRight':
-        return this.drawSymbolPointRight(canvas, aColor);
-    case 'gears':
-        return this.drawSymbolGears(canvas, aColor);
-    case 'file':
-        return this.drawSymbolFile(canvas, aColor);
-    case 'fullScreen':
-        return this.drawSymbolFullScreen(canvas, aColor);
-    case 'normalScreen':
-        return this.drawSymbolNormalScreen(canvas, aColor);
-    case 'smallStage':
-        return this.drawSymbolSmallStage(canvas, aColor);
-    case 'normalStage':
-        return this.drawSymbolNormalStage(canvas, aColor);
-    case 'turtle':
-        return this.drawSymbolTurtle(canvas, aColor);
-    case 'stage':
-        return this.drawSymbolStop(canvas, aColor);
-    case 'turtleOutline':
-        return this.drawSymbolTurtleOutline(canvas, aColor);
-    case 'pause':
-        return this.drawSymbolPause(canvas, aColor);
-    case 'flag':
-        return this.drawSymbolFlag(canvas, aColor);
-    case 'octagon':
-        return this.drawSymbolOctagon(canvas, aColor);
-    case 'cloud':
-        return this.drawSymbolCloud(canvas, aColor);
-    case 'cloudOutline':
-        return this.drawSymbolCloudOutline(canvas, aColor);
-    case 'cloudGradient':
-        return this.drawSymbolCloudGradient(canvas, aColor);
-    case 'turnRight':
-        return this.drawSymbolTurnRight(canvas, aColor);
-    case 'turnLeft':
-        return this.drawSymbolTurnLeft(canvas, aColor);
-    case 'storage':
-        return this.drawSymbolStorage(canvas, aColor);
-    case 'poster':
-        return this.drawSymbolPoster(canvas, aColor);
-    case 'flash':
-        return this.drawSymbolFlash(canvas, aColor);
-    case 'brush':
-        return this.drawSymbolBrush(canvas, aColor);
-    case 'rectangle':
-        return this.drawSymbolRectangle(canvas, aColor);
-    case 'rectangleSolid':
-        return this.drawSymbolRectangleSolid(canvas, aColor);
-    case 'circle':
-        return this.drawSymbolCircle(canvas, aColor);
-    case 'circleSolid':
-        return this.drawSymbolCircleSolid(canvas, aColor);
-    case 'line':
-        return this.drawSymbolLine(canvas, aColor);
-    case 'crosshairs':
-        return this.drawSymbolCrosshairs(canvas, aColor);
-    case 'paintbucket':
-        return this.drawSymbolPaintbucket(canvas, aColor);
-    case 'eraser':
-        return this.drawSymbolEraser(canvas, aColor);
-    case 'pipette':
-        return this.drawSymbolPipette(canvas, aColor);
-    case 'speechBubble':
-        return this.drawSymbolSpeechBubble(canvas, aColor);
-    case 'speechBubbleOutline':
-        return this.drawSymbolSpeechBubbleOutline(canvas, aColor);
-    case 'arrowUp':
-        return this.drawSymbolArrowUp(canvas, aColor);
-    case 'arrowUpOutline':
-        return this.drawSymbolArrowUpOutline(canvas, aColor);
-    case 'arrowLeft':
-        return this.drawSymbolArrowLeft(canvas, aColor);
-    case 'arrowLeftOutline':
-        return this.drawSymbolArrowLeftOutline(canvas, aColor);
-    case 'arrowDown':
-        return this.drawSymbolArrowDown(canvas, aColor);
-    case 'arrowDownOutline':
-        return this.drawSymbolArrowDownOutline(canvas, aColor);
-    case 'arrowRight':
-        return this.drawSymbolArrowRight(canvas, aColor);
-    case 'arrowRightOutline':
-        return this.drawSymbolArrowRightOutline(canvas, aColor);
-    case 'robot':
-        return this.drawSymbolRobot(canvas, aColor);
-    default:
-        return canvas;
+    if (symbolFnName) {
+        return this[symbolFnName](canvas, aColor);
     }
+
+    return canvas;
+
 };
 
 SymbolMorph.prototype.symbolWidth = function () {

@@ -2452,8 +2452,10 @@ BlockLabelFragmentMorph.prototype.userMenu = function () {
             null,
             this,
             this.fontSize
-        );
-    SymbolMorph.prototype.names.forEach(function (name) {
+        ),
+        names = Object.keys(SymbolMorph.SYMBOL);
+
+    names.forEach(function (name) {
         menu.addItem(
             [new SymbolMorph(name, menu.fontSize, symbolColor), name],
             name
@@ -2904,8 +2906,9 @@ InputSlotDialogMorph.prototype.open = function (
 InputSlotDialogMorph.prototype.symbolMenu = function () {
     var symbols = [],
         symbolColor = new Color(100, 100, 130),
-        myself = this;
-    SymbolMorph.prototype.names.forEach(function (symbol) {
+        myself = this,
+        names = Object.keys(SymbolMorph.SYMBOL);
+    names.forEach(function (symbol) {
         symbols.push([
             [
                 new SymbolMorph(symbol, myself.fontSize, symbolColor),
