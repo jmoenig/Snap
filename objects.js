@@ -622,6 +622,7 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: 'set border color to %n',
             defaults: [0]
         },
+		//add Border Shade functionality - Get, Set, and Change
 		getBorderShade: {
 				"type": "reporter",
 				"category": "pen",
@@ -3012,6 +3013,7 @@ SpriteMorph.prototype.changeHue = function (delta) {
 SpriteMorph.prototype.getBorderHue = function () {
     return this.borderColor.hsv()[0] * 100;
 };
+//add border shade functionality - Get, Set, and Change
 
 SpriteMorph.prototype.getBorderShade = (function () {
 	return function () {
