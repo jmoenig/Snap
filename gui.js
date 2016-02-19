@@ -221,7 +221,7 @@ IDE_Morph.prototype.init = function (isAutoFill) {
     this.projectName = '';
     this.projectNotes = '';
 
-    this.logoURL = 'snap_logo_sm.png';
+    this.logoURL = this.resourceURL('', 'snap_logo_sm.png');
     this.logo = null;
     this.controlBar = null;
     this.categories = null;
@@ -2633,7 +2633,7 @@ IDE_Morph.prototype.projectMenu = function () {
         'Import tools',
         function () {
             myself.droppedText(
-                myself.getURL('tools.xml'),
+                myself.getURL(myself.resourceURL('', 'tools.xml')),
                 'tools'
             );
         },
