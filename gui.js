@@ -4540,7 +4540,6 @@ ProjectDialogMorph.prototype.buildContents = function () {
     this.preview.drawCachedTexture = function () {
         var context = this.image.getContext('2d');
         context.drawImage(this.cachedTexture, this.edge, this.edge);
-        this.changed();
     };
     this.preview.drawRectBorder = InputFieldMorph.prototype.drawRectBorder;
     if(this.task === 'goals'){
@@ -4554,6 +4553,8 @@ ProjectDialogMorph.prototype.buildContents = function () {
     this.body.add(this.preview);
     this.preview.drawNew();
     if (this.task === 'save') {
+
+    this.body.add(this.listField);
         thumbnail = this.ide.stage.thumbnail(
             SnapSerializer.prototype.thumbnailSize
         );
@@ -4574,22 +4575,39 @@ ProjectDialogMorph.prototype.buildContents = function () {
 
     this.notesField.acceptsDrops = false;
     this.notesField.contents.acceptsDrops = false;
-
+	
     if (this.task === 'open') {
         this.notesText = new TextMorph('');
     } else { // 'save'
+	
+		this.classroomListField = new ListMorph([]);
+		this.fixClassRoomItemColors();
+		this.classroomListField.fixLayout = nop;
+		this.classroomListField.edge = InputFieldMorph.prototype.edge;
+		this.classroomListField.fontSize = InputFieldMorph.prototype.fontSize;
+		this.classroomListField.typeInPadding = InputFieldMorph.prototype.typeInPadding;
+		this.classroomListField.contrast = InputFieldMorph.prototype.contrast;
+		this.classroomListField.drawNew = InputFieldMorph.prototype.drawNew;
+		this.classroomListField.drawRectBorder = InputFieldMorph.prototype.drawRectBorder;
+		this.classroomListField.acceptsDrops = false;
+		this.classroomListField.contents.acceptsDrops = false;
+		this.classroomListField.isTextLineWrapping = true;
+		this.classroomListField.padding = 3;
+		this.classroomListField.setWidth(this.preview.width());
+		this.body.add(this.classroomListField);
+		
         this.notesText = new TextMorph(this.ide.projectNotes);
         this.notesText.isEditable = true;
         this.notesText.enableSelecting();
     }
-
-    this.notesField.isTextLineWrapping = true;
-    this.notesField.padding = 3;
-    this.notesField.setContents(this.notesText);
-    this.notesField.setWidth(this.preview.width());
+	
+	this.notesField.isTextLineWrapping = true;
+	this.notesField.padding = 3;
+	this.notesField.setContents(this.notesText);
+	this.notesField.setWidth(this.preview.width());
 
     this.body.add(this.notesField);
-
+	
     if (this.task === 'open') {
         this.addButton('openProject', 'Open');
         this.action = 'openProject';
@@ -4759,6 +4777,17 @@ ProjectDialogMorph.prototype.setSource = function (source) {
                 myself.ide.cloudError().call(null, err, lbl);
             }
         );
+        this.classroomList = [];
+        SnapCloud.getClassroomList( 
+            function (classroomList) {
+                myself.installCloudClassroomList(classroomList);
+                msg.destroy();
+            },
+            function (err, lbl) {
+                msg.destroy();
+                myself.ide.cloudError().call(null, err, lbl);
+            }
+        );
         return;
     case 'examples':
         this.projectList = this.getExamplesProjectList();
@@ -4771,6 +4800,7 @@ ProjectDialogMorph.prototype.setSource = function (source) {
         break;
     }
     this.listField.destroy();
+    this.classroomListField.destroy();
 	
 	if(this.source === 'goals'){
 		this.listField = new ListMorph(
@@ -4822,26 +4852,15 @@ ProjectDialogMorph.prototype.setSource = function (source) {
 		);
 	}
     
-    if(this.source === 'goals'){
-        this.listField = new ListMorph(
-            this.projectList, 
-            this.projectList.length > 0 ?
+    if(this.source === 'save'){
+        this.classroomListField = new ListMorph(
+            this.classroomList, 
+            this.classroomList.length > 0 ?
                     function (element) {
-                        return element.thumb;
+                        return element.team_name;
                     } : null,
             null,
             function () {myself.ok();}
-        );
-    }
-    else{
-        this.listField = new ListMorph(
-            this.projectList,
-            this.projectList.length > 0 ?
-                    function (element) {
-                        return element.name;
-                    } : null,
-            null,
-            function () {myself.ok(); }
         );
     }
 
@@ -4854,6 +4873,15 @@ ProjectDialogMorph.prototype.setSource = function (source) {
     this.listField.drawNew = InputFieldMorph.prototype.drawNew;
     this.listField.drawRectBorder = InputFieldMorph.prototype.drawRectBorder;
 
+    this.fixClassRoomItemColors();
+    this.classroomListField.fixLayout = nop;
+    this.classroomListField.edge = InputFieldMorph.prototype.edge;
+    this.classroomListField.fontSize = InputFieldMorph.prototype.fontSize;
+    this.classroomListField.typeInPadding = InputFieldMorph.prototype.typeInPadding;
+    this.classroomListField.contrast = InputFieldMorph.prototype.contrast;
+    this.classroomListField.drawNew = InputFieldMorph.prototype.drawNew;
+    this.classroomListField.drawRectBorder = InputFieldMorph.prototype.drawRectBorder;
+	
     if (this.source === 'local') {
         this.listField.action = function (item) {
             var src, xml;
@@ -4933,6 +4961,7 @@ ProjectDialogMorph.prototype.setSource = function (source) {
         };
     }
     this.body.add(this.listField);
+    this.body.add(this.classroomListField);
     this.shareButton.hide();
     this.unshareButton.hide();
     if (this.source === 'local') {
@@ -4945,6 +4974,48 @@ ProjectDialogMorph.prototype.setSource = function (source) {
     if (this.task === 'open') {
         this.clearDetails();
     }
+};
+
+ProjectDialogMorph.prototype.installCloudClassroomList = function (cl) {
+    var myself = this;
+    this.classroomList = cl || [];
+    this.classroomList.sort(function (x, y) {
+        return x.name < y.name ? -1 : 1;
+    });
+
+    this.classroomListField.destroy();
+    this.classroomListField = new ListMorph(
+        this.classroomList,
+        this.classroomList.length > 0 ?
+                function (element) {
+                    return element.team_name;
+                } : null,
+        [ // format: display shared project names bold
+            [
+                'bold',
+                function (proj) {return proj.approved === true; }
+            ]
+        ],
+        function () {myself.ok(); }
+    );
+	this.fixClassRoomItemColors();
+    this.classroomListField.fixLayout = nop;
+    this.classroomListField.edge = InputFieldMorph.prototype.edge;
+    this.classroomListField.fontSize = InputFieldMorph.prototype.fontSize;
+    this.classroomListField.typeInPadding = InputFieldMorph.prototype.typeInPadding;
+    this.classroomListField.contrast = InputFieldMorph.prototype.contrast;
+    this.classroomListField.drawNew = InputFieldMorph.prototype.drawNew;
+    this.classroomListField.drawRectBorder = InputFieldMorph.prototype.drawRectBorder;
+	this.classroomListField.action = function (item) {
+        if (item === undefined) {return; }
+        if (item.team) {
+            SnapCloud.classroom_id = item.team;
+        }
+        myself.edit();
+    };
+	this.classroomListField.select(this.classroomListField.elements[0],true);
+    this.body.add(this.classroomListField);
+    this.fixLayout();
 };
 
 ProjectDialogMorph.prototype.getLocalProjectList = function () {
@@ -5452,6 +5523,14 @@ ProjectDialogMorph.prototype.fixLayout = function () {
         this.notesField.setHeight(
             this.body.bottom() - this.preview.bottom() - thin
         );
+        if(this.classroomListField)
+		{
+			this.classroomListField.setTop(this.srcBar.bottom() +this.srcBar.height() + thin*2);
+			this.classroomListField.setLeft(this.srcBar.left());
+			this.classroomListField.setHeight(this.listField.bottom()-this.classroomListField.top());
+			this.classroomListField.setWidth(this.srcBar.width());
+			this.classroomListField.contents.children[0].adjustWidths();
+		}
     }
 
     if (this.label) {
@@ -6765,4 +6844,15 @@ JukeboxMorph.prototype.reactToDropOf = function (icon) {
     });
     this.sprite.sounds.add(costume, idx);
     this.updateList();
+};
+ProjectDialogMorph.prototype.fixClassRoomItemColors = function () {
+    // remember to always fixLayout() afterwards for the changes
+    // to take effect
+    var myself = this;
+    this.classroomListField.contents.children[0].alpha = 0;
+    this.classroomListField.contents.children[0].children.forEach(function (item) {
+        item.pressColor = myself.titleBarColor.darker(20);
+        item.color = new Color(0, 0, 0, 0);
+        item.noticesTransparentClick = true;
+    });
 };
