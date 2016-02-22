@@ -139,7 +139,7 @@ var WatcherMorph;
 var StagePrompterMorph;
 var Note;
 var SpriteHighlightMorph;
-
+var _3DRotationX = 0, _3DRotationY = 0, _3DRotationZ = 0;
 
 // SpriteMorph /////////////////////////////////////////////////////////
 
@@ -2615,6 +2615,7 @@ SpriteMorph.prototype.wearCostume = function (costume) {
 
             this.mesh = mesh;
             this.hide();
+            this.object.children = []
             this.object.add(this.mesh);
             this.parent.changed(); // redraw stage
         }
@@ -3725,9 +3726,20 @@ SpriteMorph.prototype.faceToXY = function (x, y) {
 
 SpriteMorph.prototype.point3D = function (degX, degY, degZ) {
     if (this.costume && this.costume.is3D) {
-        this.object.rotation.x = radians(degX);
-        this.object.rotation.y = radians(degY);
-        this.object.rotation.z = radians(degZ);
+
+        var fullQuaternion = new THREE.Quaternion(), quaternionX = new THREE.Quaternion(), quaternionY = new THREE.Quaternion(), quaternionZ = new THREE.Quaternion();
+        quaternionX.setFromAxisAngle( new THREE.Vector3( 1, 0, 0 ), radians(degX) );
+        quaternionY.setFromAxisAngle( new THREE.Vector3( 0, 1, 0 ), radians(degY) );
+        quaternionZ.setFromAxisAngle( new THREE.Vector3( 0, 0, 1 ), -radians(degZ) );
+
+        fullQuaternion.multiplyQuaternions(quaternionZ,quaternionY.multiplyQuaternions(quaternionY,quaternionX));
+
+        this.object.quaternion.copy(fullQuaternion);
+
+        _3DRotationX = degX;
+        _3DRotationY = degY;
+        _3DRotationZ = degZ;
+
         this.parent.changed();
     }
 }
@@ -3742,9 +3754,19 @@ SpriteMorph.prototype.turnLeft = function (degrees) {
 
 SpriteMorph.prototype.turn3D = function (degX, degY, degZ) {
     if (this.costume && this.costume.is3D) {
-        this.object.rotation.x += radians(degX);
-        this.object.rotation.y += radians(degY);
-        this.object.rotation.z += radians(degZ);
+        
+        var fullQuaternion = new THREE.Quaternion(), quaternionX = new THREE.Quaternion(), quaternionY = new THREE.Quaternion(), quaternionZ = new THREE.Quaternion();
+        quaternionX.setFromAxisAngle( new THREE.Vector3( 1, 0, 0 ), radians(degX) );
+        quaternionY.setFromAxisAngle( new THREE.Vector3( 0, 1, 0 ), radians(degY) );
+        quaternionZ.setFromAxisAngle( new THREE.Vector3( 0, 0, 1 ), -radians(degZ) );
+
+        _3DRotationX += degX;
+        _3DRotationY += degY;
+        _3DRotationZ += degZ;
+		
+        fullQuaternion.multiplyQuaternions(quaternionZ,quaternionY.multiplyQuaternions(quaternionY,quaternionX.multiplyQuaternions(quaternionX,this.object.quaternion)));
+
+        this.object.quaternion.copy(fullQuaternion);
         this.parent.changed();
     }
 };
