@@ -6132,7 +6132,17 @@ CostumeIconMorph.prototype.removeCostume = function () {
         ide = this.parentThatIsA(IDE_Morph);
     wardrobe.removeCostumeAt(idx - 2);
     if (ide.currentSprite.costume === this.object) {
-        ide.currentSprite.wearCostume(null);
+        if(wardrobe.sprite.costumes.length==0){
+            ide.currentSprite.wearCostume(null);
+	}
+        else
+	{
+	    if(idx==3)
+		ide.currentSprite.wearCostume(wardrobe.sprite.costumes.asArray()[idx - 3]);
+	    else
+                ide.currentSprite.wearCostume(wardrobe.sprite.costumes.asArray()[idx - 4]);
+	}
+
     }
 };
 
