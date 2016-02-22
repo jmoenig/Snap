@@ -4905,6 +4905,7 @@ ProjectDialogMorph.prototype.setSource = function (source) {
                 myself.preview.drawNew();
             }
             myself.edit();
+			this.classroomListField.hide();
         };	
     } else if (this.source === 'goals'){
         this.listField.action = function (item) {
