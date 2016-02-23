@@ -89,6 +89,7 @@ Cloud.prototype.login = function (
             url: myself.user_api_detail_url,
             success: function(data) {
                 myself.user_id = data.id;
+                config.urls.user_detail_url = "/users/"+data.id
 				callBack(data, textStatus);
             }
          });
