@@ -314,20 +314,16 @@ IDE_Morph.prototype.openIn = function (world) {
         }
 
         if(config.demo !== undefined) {
-            var xhr = new XMLHttpRequest();
-            xhr.open("GET", config.demo.project_url, true);
-            xhr.responseType = "arraybuffer";
-            xhr.onload = function () {
-              if(this.status === 200) {
-                var blob = this.response;
-                var zip = new JSZip(blob, {base64: false})
-                var demo = zip.file("stage.xml");
-                if(demo != null) {
-                  myself.openProjectString(demo.asText());
+            var request = new XMLHttpRequest();
+            request.open("GET", config.urls.demos_url, false);
+            request.send();
+            var JSON_object = JSON.parse(request.responseText);
+            for (var i = 0; i < JSON_object.length; i++){
+                if(JSON_object[i]["name"] === config.demo.name){
+                    src = getURL(JSON_object[i]["project_url"]);
                 }
-             }
-          }
-          xhr.send()
+            }
+            world.children[0].openProjectString(src);
         }
     }
 
