@@ -2120,6 +2120,7 @@ DialogBoxMorph.prototype.promptCredentials = function (
 
     this.addButton('ok', 'OK');
     this.addButton('cancel', 'Cancel');
+    this.addButton('redirectSignUp', 'SignUp');
     this.fixLayout();
     this.drawNew();
     this.fixLayout();
@@ -2196,6 +2197,11 @@ DialogBoxMorph.prototype.promptCredentials = function (
         if (validInputs()) {
             DialogBoxMorph.prototype.accept.call(myself);
         }
+    };
+    
+    this.redirectSignUp = function () {
+		if(config.urls.signup_url)
+            window.open(config.urls.signup_url);
     };
 
     this.edit = function () {
