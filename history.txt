@@ -2845,3 +2845,25 @@ end - bulk of 151215
 160111
 ------
 * BYOB: fixed #1107
+
+160116
+------
+* Blocks: fixed a multi-line input slot layout glitch
+
+160117
+------
+* BYOB: preserve custom block instances’ block var values when editing their definition
+
+160118
+------
+* Paint: avoid pixel collision detection in PaintCanvas (optimization)
+* BYOB: fixed a zebra coloring glitch in the block editor
+
+160119
+------
+* Threads, Store: Throw an error for “obsolete” blocks instead of (forever) doing nothing (and thus often freezing and crashing). Thanks, Paul, for helping identify this!
+
+160122
+------
+* Blocks: Fixed a slight rendering glitch when deleting reporters via the context menu
+

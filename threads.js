@@ -83,7 +83,7 @@ ArgLabelMorph, localize, XML_Element, hex_sha512*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.threads = '2016-January-08';
+modules.threads = '2016-January-19';
 
 var ThreadManager;
 var Process;
@@ -867,6 +867,10 @@ Process.prototype.handleError = function (error, element) {
             + '\n'
             + error.message
     );
+};
+
+Process.prototype.errorObsolete = function () {
+    throw new Error('a custom block definition is missing');
 };
 
 // Process Lambda primitives

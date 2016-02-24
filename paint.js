@@ -5,7 +5,7 @@
     inspired by the Scratch paint editor.
 
     written by Kartik Chandra
-    Copyright (C) 2015 by Kartik Chandra
+    Copyright (C) 2016 by Kartik Chandra
 
     This file is part of Snap!.
 
@@ -60,6 +60,7 @@
     Sep 28 [of the following year :)] - Try to prevent antialiasing (Kartik)
     Oct 02 - revert disable smoothing (Jens)
     Dec 15 - center rotation point on costume creating (Craxic)
+    Jan 18 - avoid pixel collision detection in PaintCanvas (Jens)
  */
 
 /*global Point, Rectangle, DialogBoxMorph, fontHeight, AlignmentMorph,
@@ -72,7 +73,7 @@
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.paint = '2015-December-15';
+modules.paint = '2016-January-18';
 
 // Declarations
 
@@ -590,6 +591,7 @@ PaintCanvasMorph.prototype.init = function (shift) {
     // should we calculate the center of the image ourselves,
     // or use the user position
     this.automaticCrosshairs = true;
+    this.noticesTransparentClick = true; // optimization
     this.buildContents();
 };
 

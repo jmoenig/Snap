@@ -42,7 +42,7 @@
 
 /*global modules, contains*/
 
-modules.locale = '2016-January-08';
+modules.locale = '2016-January-22';
 
 // Global stuff
 
@@ -565,5 +565,5 @@ SnapTranslator.dict.ar = {
     'translator_e-mail':
         'tarekgalal46@hotmail.com', // optional
     'last_changed':
-        '2015-12-18'
+        '2016-01-17'
 };

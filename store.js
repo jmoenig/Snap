@@ -7,7 +7,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2015 by Jens Mönig
+    Copyright (C) 2016 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -61,7 +61,7 @@ SyntaxElementMorph, Variable*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2015-December-15';
+modules.store = '2016-January-19';
 
 
 // XML_Serializer ///////////////////////////////////////////////////////
@@ -1073,7 +1073,7 @@ SnapSerializer.prototype.obsoleteBlock = function (isReporter) {
     // private
     var block = isReporter ? new ReporterBlockMorph()
             : new CommandBlockMorph();
-    block.selector = 'nop';
+    block.selector = 'errorObsolete';
     block.color = new Color(200, 0, 20);
     block.setSpec('Obsolete!');
     block.isDraggable = true;

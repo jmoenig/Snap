@@ -9,7 +9,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2015 by Jens Mönig
+    Copyright (C) 2016 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -156,7 +156,7 @@ DialogBoxMorph, BlockInputFragmentMorph, PrototypeHatBlockMorph, Costume*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2015-December-22';
+modules.blocks = '2016-January-22';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -4576,6 +4576,7 @@ ReporterBlockMorph.prototype.ExportResultPic = function () {
 
 ReporterBlockMorph.prototype.userDestroy = function () {
     // make sure to restore default slot of parent block
+    this.topBlock().fullChanged();
     this.prepareToBeGrabbed(this.world().hand);
     this.destroy();
 };
@@ -7295,7 +7296,8 @@ InputSlotMorph.prototype.fixLayout = function () {
                 + this.typeInPadding * 2,
             contents.rawHeight ? // single vs. multi-line contents
                         contents.rawHeight() + arrowWidth
-                                : contents.height() / 1.2 + arrowWidth,
+                                : fontHeight(contents.fontSize) / 1.3
+                                    + arrowWidth,
             this.minWidth // for text-type slots
         );
     }
