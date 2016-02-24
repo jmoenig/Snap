@@ -334,9 +334,12 @@ ThreadManager.prototype.findProcess = function (block) {
 
 ThreadManager.prototype.doWhen = function (block, stopIt) {
     if (this.pauseCustomHatBlocks) {return; }
-    var pred = block.inputs()[0];
+    var pred = block.inputs()[0], world;
     if (block.removeHighlight()) {
-        block.world().hand.destroyTemporaries();
+        world = block.world();
+        if (world) {
+            world.hand.destroyTemporaries();
+        }
     }
     if (stopIt) {return; }
     if ((!block) ||
