@@ -265,11 +265,11 @@ SnapTranslator.dict.fr = {
     'language_name':
         'Fran\u00E7ais',
     'language_translator':
-        'Jean-Jacques Valliet, Mark Rafter, Martin Quinson',
+        'Jean-Jacques Valliet, Mark Rafter, Martin Quinson, Damien Caselli',
     'translator_e-mail':
         'i.scool@mac.com',
     'last_changed':
-        '2015-06-25'
+        '2016-02-24'
 };
 
 SnapTranslator.dict.si = {
