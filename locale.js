@@ -389,7 +389,7 @@ SnapTranslator.dict.ca = {
     'translator_e-mail':
         'bromagosa@citilab.eu',
     'last_changed':
-        '2015-09-23'
+        '2016-02-24'
 };
 
 SnapTranslator.dict.fi = {
