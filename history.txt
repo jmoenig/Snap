@@ -2867,3 +2867,7 @@ end - bulk of 151215
 ------
 * Blocks: Fixed a slight rendering glitch when deleting reporters via the context menu
 
+160224
+------
+* == v4.0.5 ==== - table views
+

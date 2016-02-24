@@ -108,7 +108,7 @@ WatcherMorph, Variable*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2016-January-18';
+modules.byob = '2016-February-24';
 
 // Declarations
 
@@ -488,7 +488,7 @@ CustomCommandBlockMorph.prototype.restoreInputs = function (oldInputs) {
         old = oldInputs[i];
         if (old instanceof ReporterBlockMorph &&
                 (!(inp instanceof TemplateSlotMorph))) {
-            myself.silentReplaceInput(inp, old);
+            myself.silentReplaceInput(inp, old.fullCopy());
         } else if (old instanceof InputSlotMorph
                 && inp instanceof InputSlotMorph) {
             inp.setContents(old.evaluate());

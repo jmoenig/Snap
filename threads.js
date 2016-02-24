@@ -51,39 +51,17 @@
 
 */
 
-// globals from blocks.js:
-
-/*global ArgMorph, ArrowMorph, BlockHighlightMorph, BlockMorph,
-BooleanSlotMorph, BoxMorph, Color, ColorPaletteMorph, ColorSlotMorph,
-CommandBlockMorph, CommandSlotMorph, FrameMorph, HatBlockMorph,
-InputSlotMorph, MenuMorph, Morph, MultiArgMorph, Point,
-ReporterBlockMorph, ScriptsMorph, ShadowMorph, StringMorph,
-SyntaxElementMorph, TextMorph, WorldMorph, blocksVersion, contains,
-degrees, detect, getDocumentPositionOf, newCanvas, nop, radians,
-useBlurredShadows, ReporterSlotMorph, CSlotMorph, RingMorph, IDE_Morph,
-ArgLabelMorph, localize, XML_Element, hex_sha512*/
-
-// globals from objects.js:
-
-/*global StageMorph, SpriteMorph, StagePrompterMorph, Note*/
-
-// globals from morphic.js:
-
-/*global modules, isString, copy, isNil*/
-
-// globals from gui.js:
-
-/*global WatcherMorph*/
-
-// globals from lists.js:
-
-/*global List, ListWatcherMorph*/
-
-/*global alert, console*/
-
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.threads = '2016-January-19';
+/*global ArgMorph, BlockMorph, CommandBlockMorph, CommandSlotMorph, Morph,
+MultiArgMorph, Point, ReporterBlockMorph, SyntaxElementMorph, contains,
+degrees, detect, nop, radians, ReporterSlotMorph, CSlotMorph, RingMorph,
+IDE_Morph, ArgLabelMorph, localize, XML_Element, hex_sha512, TableDialogMorph,
+StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
+isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph,
+TableFrameMorph*/
+
+modules.threads = '2016-February-24';
 
 var ThreadManager;
 var Process;
@@ -303,6 +281,7 @@ ThreadManager.prototype.removeTerminatedProcesses = function () {
     // and un-highlight their scripts
     var remaining = [];
     this.processes.forEach(function (proc) {
+        var result;
         if ((!proc.isRunning() && !proc.errorFlag) || proc.isDead) {
             if (proc.topBlock instanceof BlockMorph) {
                 proc.topBlock.removeHighlight();
@@ -313,21 +292,24 @@ ThreadManager.prototype.removeTerminatedProcesses = function () {
                     proc.homeContext.receiver.stopTalking();
                 }
             }
-
-            if (proc.topBlock instanceof ReporterBlockMorph || proc.isShowingResult) {
+            if (proc.topBlock instanceof ReporterBlockMorph ||
+                    proc.isShowingResult) {
+                result = proc.homeContext.inputs[0];
                 if (proc.onComplete instanceof Function) {
-                    proc.onComplete(proc.homeContext.inputs[0]);
+                    proc.onComplete(result);
                 } else {
-                    if (proc.homeContext.inputs[0] instanceof List) {
+                    if (result instanceof List) {
                         proc.topBlock.showBubble(
-                            new ListWatcherMorph(
-                                proc.homeContext.inputs[0]
-                            ),
+                            result.isTable() ?
+                                    new TableFrameMorph(
+                                        new TableMorph(result, 10)
+                                    )
+                                    : new ListWatcherMorph(result),
                             proc.exportResult
                         );
                     } else {
                         proc.topBlock.showBubble(
-                            proc.homeContext.inputs[0],
+                            result,
                             proc.exportResult
                         );
                     }
@@ -1569,6 +1551,12 @@ Process.prototype.reportListLength = function (list) {
 Process.prototype.reportListContainsItem = function (list, element) {
     // this.assertType(list, 'list');
     return list.contains(element);
+};
+
+Process.prototype.doShowTable = function (list) {
+    // experimental
+    this.assertType(list, 'list');
+    new TableDialogMorph(list).popUp(this.blockReceiver().world());
 };
 
 // Process conditionals primitives

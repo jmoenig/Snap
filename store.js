@@ -49,19 +49,18 @@
 
 */
 
-/*global modules, XML_Element, VariableFrame, StageMorph,
-SpriteMorph, WatcherMorph, Point, CustomBlockDefinition, Context,
-ReporterBlockMorph, CommandBlockMorph, HatBlockMorph, RingMorph, contains,
-detect, CustomCommandBlockMorph, CustomReporterBlockMorph, Color, List,
-newCanvas, Costume, Sound, Audio, IDE_Morph, ScriptsMorph, BlockMorph,
-ArgMorph, InputSlotMorph, TemplateSlotMorph, CommandSlotMorph,
+/*global modules, XML_Element, VariableFrame, StageMorph, SpriteMorph,
+WatcherMorph, Point, CustomBlockDefinition, Context, ReporterBlockMorph,
+CommandBlockMorph, detect, CustomCommandBlockMorph, CustomReporterBlockMorph,
+Color, List, newCanvas, Costume, Sound, Audio, IDE_Morph, ScriptsMorph,
+BlockMorph, ArgMorph, InputSlotMorph, TemplateSlotMorph, CommandSlotMorph,
 FunctionSlotMorph, MultiArgMorph, ColorSlotMorph, nop, CommentMorph, isNil,
 localize, sizeOf, ArgLabelMorph, SVG_Costume, MorphicPreferences,
 SyntaxElementMorph, Variable*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2016-January-19';
+modules.store = '2016-February-24';
 
 
 // XML_Serializer ///////////////////////////////////////////////////////

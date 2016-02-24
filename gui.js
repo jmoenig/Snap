@@ -54,24 +54,22 @@
 
 */
 
-/*global modules, Morph, SpriteMorph, BoxMorph, SyntaxElementMorph, Color,
-ListWatcherMorph, isString, TextMorph, newCanvas, useBlurredShadows,
-radians, VariableFrame, StringMorph, Point, SliderMorph, MenuMorph,
-morphicVersion, DialogBoxMorph, ToggleButtonMorph, contains,
-ScrollFrameMorph, StageMorph, PushButtonMorph, InputFieldMorph, FrameMorph,
-Process, nop, SnapSerializer, ListMorph, detect, AlignmentMorph, TabMorph,
-Costume, CostumeEditorMorph, MorphicPreferences, touchScreenSettings,
-standardSettings, Sound, BlockMorph, ToggleMorph, InputSlotDialogMorph,
-ScriptsMorph, isNil, SymbolMorph, BlockExportDialogMorph,
-BlockImportDialogMorph, SnapTranslator, localize, List, InputSlotMorph,
-SnapCloud, Uint8Array, HandleMorph, SVG_Costume, fontHeight, hex_sha512,
-sb, CommentMorph, CommandBlockMorph, BlockLabelPlaceHolderMorph, Audio,
-SpeechBubbleMorph, ScriptFocusMorph, XML_Element, WatcherMorph,
-BlockRemovalDialogMorph, saveAs*/
+/*global modules, Morph, SpriteMorph, SyntaxElementMorph, Color,
+ListWatcherMorph, TextMorph, newCanvas, useBlurredShadows, VariableFrame,
+StringMorph, Point, MenuMorph, morphicVersion, DialogBoxMorph,
+ToggleButtonMorph, contains, ScrollFrameMorph, StageMorph, PushButtonMorph,
+InputFieldMorph, FrameMorph, Process, nop, SnapSerializer, ListMorph, detect,
+AlignmentMorph, TabMorph, Costume, MorphicPreferences, Sound, BlockMorph,
+ToggleMorph, InputSlotDialogMorph, ScriptsMorph, isNil, SymbolMorph,
+BlockExportDialogMorph, BlockImportDialogMorph, SnapTranslator, localize,
+List, InputSlotMorph, SnapCloud, Uint8Array, HandleMorph, SVG_Costume,
+fontHeight, hex_sha512, sb, CommentMorph, CommandBlockMorph,
+BlockLabelPlaceHolderMorph, Audio, SpeechBubbleMorph, ScriptFocusMorph,
+XML_Element, WatcherMorph, BlockRemovalDialogMorph, saveAs, TableMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2016-January-08';
+modules.gui = '2016-February-24';
 
 // Declarations
 
@@ -1642,10 +1640,6 @@ IDE_Morph.prototype.droppedSVG = function (anImage, name) {
     this.currentSprite.wearCostume(costume);
     this.spriteBar.tabBar.tabTo('costumes');
     this.hasChangedMedia = true;
-    this.showMessage(
-        'SVG costumes are\nnot yet fully supported\nin every browser',
-        2
-    );
 };
 
 IDE_Morph.prototype.droppedAudio = function (anAudio, name) {
@@ -1847,7 +1841,9 @@ IDE_Morph.prototype.applySavedSettings = function () {
         longform = this.getSetting('longform'),
         longurls = this.getSetting('longurls'),
         plainprototype = this.getSetting('plainprototype'),
-        keyboard = this.getSetting('keyboard');
+        keyboard = this.getSetting('keyboard'),
+        tables = this.getSetting('tables'),
+        tableLines = this.getSetting('tableLines');
 
     // design
     if (design === 'flat') {
@@ -1892,6 +1888,20 @@ IDE_Morph.prototype.applySavedSettings = function () {
         ScriptsMorph.prototype.enableKeyboard = true;
     } else {
         ScriptsMorph.prototype.enableKeyboard = false;
+    }
+
+    // tables
+    if (tables) {
+        List.prototype.enableTables = true;
+    } else {
+        List.prototype.enableTables = false;
+    }
+
+    // tableLines
+    if (tableLines) {
+        TableMorph.prototype.highContrast = true;
+    } else {
+        TableMorph.prototype.highContrast = false;
     }
 
     // plain prototype labels
@@ -2427,6 +2437,40 @@ IDE_Morph.prototype.settingsMenu = function () {
         'check to enable\nkeyboard editing support',
         false
     );
+    addPreference(
+        'Table support',
+        function () {
+            List.prototype.enableTables =
+                !List.prototype.enableTables;
+            if (List.prototype.enableTables) {
+                myself.saveSetting('tables', true);
+            } else {
+                myself.removeSetting('tables');
+            }
+        },
+        List.prototype.enableTables,
+        'uncheck to disable\nmulti-column list views',
+        'check for multi-column\nlist view support',
+        false
+    );
+    if (List.prototype.enableTables) {
+        addPreference(
+            'Table lines',
+            function () {
+                TableMorph.prototype.highContrast =
+                    !TableMorph.prototype.highContrast;
+                if (TableMorph.prototype.highContrast) {
+                    myself.saveSetting('tableLines', true);
+                } else {
+                    myself.removeSetting('tableLines');
+                }
+            },
+            TableMorph.prototype.highContrast,
+            'uncheck for less contrast\nmulti-column list views',
+            'check for higher contrast\ntable views',
+            false
+        );
+    }
     menu.addLine(); // everything below this line is stored in the project
     addPreference(
         'Thread safe scripts',
@@ -2750,7 +2794,7 @@ IDE_Morph.prototype.aboutSnap = function () {
         module, btn1, btn2, btn3, btn4, licenseBtn, translatorsBtn,
         world = this.world();
 
-    aboutTxt = 'Snap! 4.0.4\nBuild Your Own Blocks\n\n'
+    aboutTxt = 'Snap! 4.0.5\nBuild Your Own Blocks\n\n'
         + 'Copyright \u24B8 2016 Jens M\u00F6nig and '
         + 'Brian Harvey\n'
         + 'jens@moenig.org, bh@cs.berkeley.edu\n\n'
@@ -4037,7 +4081,7 @@ IDE_Morph.prototype.toggleStageSize = function (isSmall) {
                 myself.stageRatio = targetRatio;
                 delete myself.step;
                 myself.fps = 0;
-                myself.isSmallStage = !(targetRatio === 1);
+                myself.isSmallStage = (targetRatio !== 1);
                 myself.controlBar.stageSizeButton.refresh();
             } else {
                 count += 1;
@@ -7140,7 +7184,7 @@ StageHandleMorph.prototype.mouseDownLeft = function (pos) {
 
         } else {
             this.step = null;
-            ide.isSmallStage = !(ide.stageRatio === 1);
+            ide.isSmallStage = (ide.stageRatio !== 1);
             ide.controlBar.stageSizeButton.refresh();
         }
     };

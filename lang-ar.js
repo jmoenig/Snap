@@ -185,7 +185,7 @@ SnapTranslator.dict.ar = {
     'translator_e-mail':
         'tarekgalal46@hotmail.com', // optional
     'last_changed':
-        '2016-01-17', // this, too, will appear in the Translators tab
+        '2016-01-23', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -429,6 +429,8 @@ SnapTranslator.dict.ar = {
         'دخـول',
     'mouse-departed':
         'مغـادرة',
+    'when %b':
+        '%b عندما',
     'when I receive %msgHat':
         '%msgHat رسـالة أستقبال عند',
     'broadcast %msg':
@@ -480,9 +482,9 @@ SnapTranslator.dict.ar = {
     'call %repRing %inputs':
         'إستدع %repRing  %inputs',
     'run %cmdRing w/continuation':
-        'نفّذ %cmdRing w/continuation',
+        'نفّذ %cmdRing (الفاعلية استمرار بقاء مع)',
     'call %cmdRing w/continuation':
-        'استدع %cmdRing w/continuation',
+        'استدع %cmdRing (الفاعلية استمرار بقاء مع)',
     'warp %c':
         'تسريع %c',
     'when I start as a clone':
@@ -817,6 +819,12 @@ SnapTranslator.dict.ar = {
         'حدد لجعل نهايات الخطوط\n قائمة الزاوية',
     'uncheck for round ends of lines':
         'أزل لجعل نهايات الخطوط \nدائرية',
+    'Inheritance support':
+        ' توريث الخصائص بين الكائنات',
+	'uncheck to disable\nsprite inheritance features':
+        'أزل لألغاء تفعيل توريث الخصائص بين الكائنات',
+    'check for sprite\ninheritance features':
+        'حدد لتفعيل توريث الخصائص بين الكائنات',
 
     // inputs
     'with inputs':
@@ -1328,7 +1336,6 @@ SnapTranslator.dict.ar = {
 		'أزل التحديد لألغاء مساعد التكويد',
 	'check for block\nto text mapping features':
 		'حَدد لتفعيل مساعد التكويد',
-
 	'current %dates':
 		'التاريخ الحالي %dates',
 	'year':'سنة',

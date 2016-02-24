@@ -136,27 +136,20 @@
     constructor for further details.
 */
 
-/*global Array, BlinkerMorph, BouncerMorph, BoxMorph, CircleBoxMorph,
-Color, ColorPaletteMorph, ColorPickerMorph, CursorMorph, Date,
-FrameMorph, Function, GrayPaletteMorph, HandMorph, HandleMorph,
-InspectorMorph, ListMorph, Math, MenuItemMorph, MenuMorph, Morph,
-MorphicPreferences, MouseSensorMorph, Node, Object, PenMorph, Point,
-Rectangle, ScrollFrameMorph, ShadowMorph, SliderButtonMorph,
-SliderMorph, String, StringFieldMorph, StringMorph, TextMorph,
-TriggerMorph, WorldMorph, clone, contains, copy, degrees, detect,
-document, getDocumentPositionOf, isNaN, isObject, isString, newCanvas,
-nop, parseFloat, radians, standardSettings, touchScreenSettings,
-useBlurredShadows, version, window, SpeechBubbleMorph, modules, StageMorph,
-fontHeight*/
-
-/*global SpriteMorph, Context, ListWatcherMorph, CellMorph,
-DialogBoxMorph, BlockInputFragmentMorph, PrototypeHatBlockMorph, Costume*/
-
-/*global IDE_Morph, BlockDialogMorph, BlockEditorMorph, localize, isNil*/
+/*global Array, BoxMorph,
+Color, ColorPaletteMorph, CursorMorph, FrameMorph, Function, HandleMorph,
+Math, MenuMorph, Morph, MorphicPreferences, Object, Point, ScrollFrameMorph,
+ShadowMorph, String, StringMorph, TextMorph, WorldMorph, contains, degrees,
+detect, document, getDocumentPositionOf, isNaN, isString, newCanvas, nop,
+parseFloat, radians, useBlurredShadows, SpeechBubbleMorph, modules,
+StageMorph, fontHeight, TableFrameMorph, SpriteMorph, Context,
+ListWatcherMorph, CellMorph, DialogBoxMorph, BlockInputFragmentMorph,
+PrototypeHatBlockMorph, Costume, IDE_Morph, BlockDialogMorph,
+BlockEditorMorph, localize, isNil*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2016-January-22';
+modules.blocks = '2016-February-24';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -1790,6 +1783,11 @@ SyntaxElementMorph.prototype.showBubble = function (value, exportPic) {
         morphToShow.isDraggable = false;
         morphToShow.expand(this.parentThatIsA(ScrollFrameMorph).extent());
         isClickable = true;
+    } else if (value instanceof TableFrameMorph) {
+        morphToShow = value;
+        morphToShow.isDraggable = false;
+        morphToShow.expand(this.parentThatIsA(ScrollFrameMorph).extent());
+        isClickable = true;
     } else if (value instanceof Morph) {
         img = value.fullImage();
         morphToShow = new Morph();
@@ -2600,6 +2598,7 @@ BlockMorph.prototype.restoreInputs = function (oldInputs) {
 BlockMorph.prototype.showHelp = function () {
     var myself = this,
         ide = this.parentThatIsA(IDE_Morph),
+        blockEditor,
         pic = new Image(),
         help,
         comment,
@@ -2608,6 +2607,13 @@ BlockMorph.prototype.showHelp = function () {
         spec = isCustomBlock ?
                 this.definition.helpSpec() : this.selector,
         ctx;
+
+    if (!ide) {
+        blockEditor = this.parentThatIsA(BlockEditorMorph);
+        if (blockEditor) {
+            ide = blockEditor.target.parentThatIsA(IDE_Morph);
+        }
+    }
 
     pic.onload = function () {
         help = newCanvas(new Point(pic.width, pic.height));
@@ -3788,6 +3794,7 @@ CommandBlockMorph.prototype.userDestroyJustThis = function () {
         above,
         cslot = this.parentThatIsA(CSlotMorph);
 
+    this.topBlock().fullChanged();
     if (this.parent) {
         pb = this.parent.parentThatIsA(CommandBlockMorph);
     }
@@ -4404,7 +4411,7 @@ ReporterBlockMorph.prototype.snap = function (hand) {
         target;
 
     this.cachedSlotSpec = null;
-    if (!scripts instanceof ScriptsMorph) {
+    if (!(scripts instanceof ScriptsMorph)) {
         return null;
     }
 
@@ -11242,7 +11249,7 @@ CommentMorph.prototype.snap = function (hand) {
     var scripts = this.parent,
         target;
 
-    if (!scripts instanceof ScriptsMorph) {
+    if (!(scripts instanceof ScriptsMorph)) {
         return null;
     }
 

@@ -7,7 +7,7 @@
     written by Jens Mönig and Brian Harvey
     jens@moenig.org, bh@cs.berkeley.edu
 
-    Copyright (C) 2015 by Jens Mönig and Brian Harvey
+    Copyright (C) 2016 by Jens Mönig and Brian Harvey
 
     This file is part of Snap!.
 
@@ -56,12 +56,13 @@
 
 // Global settings /////////////////////////////////////////////////////
 
-/*global modules, contains, BoxMorph, WorldMorph, HandleMorph,
-PushButtonMorph, SyntaxElementMorph, Color, Point, WatcherMorph,
-StringMorph, SpriteMorph, ScrollFrameMorph, CellMorph, ArrowMorph,
-MenuMorph, snapEquals, Morph, isNil, localize, MorphicPreferences*/
+/*global modules, BoxMorph, HandleMorph, PushButtonMorph, SyntaxElementMorph,
+Color, Point, WatcherMorph, StringMorph, SpriteMorph, ScrollFrameMorph,
+CellMorph, ArrowMorph, MenuMorph, snapEquals, Morph, isNil, localize,
+MorphicPreferences, TableDialogMorph, SpriteBubbleMorph, SpeechBubbleMorph,
+TableFrameMorph, TableMorph, Variable*/
 
-modules.lists = '2015-November-20';
+modules.lists = '2016-February-24';
 
 var List;
 var ListWatcherMorph;
@@ -110,6 +111,12 @@ function List(array) {
     this.isLinked = false;
     this.lastChanged = Date.now();
 }
+
+// List global preferences
+
+List.prototype.enableTables = false; // default, to not confuse NYC teachers
+
+// List printing
 
 List.prototype.toString = function () {
     return 'a List [' + this.length + ' elements]';
@@ -232,6 +239,79 @@ List.prototype.contains = function (element) {
     return pair.contents.some(function (any) {
         return snapEquals(any, element);
     });
+};
+
+// List table (2D) accessing (for table morph widget):
+
+List.prototype.isTable = function () {
+    return this.enableTables && (this.length() > 100 || this.cols() > 1);
+};
+
+List.prototype.get = function (col, row) {
+    var r, len, cols;
+    if (!col) {
+        if (!row) {return [this.length()]; }
+        if (row > this.rows()) {return null; }
+        return this.rowName(row);
+    } else if (!row) {
+        if (this.cols() === 1) {return localize('items'); }
+        return this.colName(col);
+    }
+    r = this.at(row);
+
+    // encode "orphaned" as arrays and overshooting ones as Variables
+    if (r instanceof List) {
+        len = r.length();
+        cols = this.cols();
+        if (col > len) {
+            return null;
+        } else if (cols === 1 && len > 1) {
+            return [r];
+        } else if (col >= cols && len > cols) { // overshooting
+            return new Variable(r.at(col));
+        }
+        return r.at(col);
+    }
+    if (col === 1 && row <= this.rows()) {
+        return [r];
+    }
+    return null;
+};
+
+List.prototype.rows = function () {
+    return this.length();
+};
+
+List.prototype.cols = function () {
+    var r = (this.at(1));
+    return r instanceof List ? r.length() : 1;
+};
+
+List.prototype.colName = function (col) {
+    if (col > this.cols()) {return null; }
+    return String.fromCharCode(64 + ((col % 26) || 26)).repeat(
+        Math.floor((col - 1) / 26) + 1
+    );
+};
+
+List.prototype.rowName = function (row) {
+    return row;
+};
+
+List.prototype.columnNames = function () {
+    return [];
+};
+
+List.prototype.version = function (startRow, rows) {
+    var l = Math.min(startRow + rows, this.length()),
+        v = this.lastChanged,
+        r,
+        i;
+    for (i = startRow; i <= l; i += 1) {
+        r = this.at(i);
+        v = Math.max(v, r.lastChanged ? r.lastChanged : 0);
+    }
+    return v;
 };
 
 // List conversion:
@@ -443,7 +523,7 @@ ListWatcherMorph.prototype.init = function (list, parentCell) {
     );
 
     this.color = new Color(220, 220, 220);
-    this.isDraggable = true;
+    this.isDraggable = false;
     this.setExtent(new Point(80, 70).multiplyBy(
         SyntaxElementMorph.prototype.scale
     ));
@@ -692,6 +772,56 @@ ListWatcherMorph.prototype.expand = function (maxExtent) {
     this.setExtent(ext);
     this.handle.setRight(this.right() - 3);
     this.handle.setBottom(this.bottom() - 3);
+};
+
+// ListWatcherMorph context menu
+
+ListWatcherMorph.prototype.userMenu = function () {
+    if (!List.prototype.enableTables) {
+        return this.escalateEvent('userMenu');
+    }
+    var menu = new MenuMorph(this),
+        myself = this;
+    menu.addItem('table view...', 'showTableView');
+    menu.addLine();
+    menu.addItem(
+        'open in dialog...',
+        function () {
+            new TableDialogMorph(myself.list).popUp(myself.world());
+        }
+    );
+    return menu;
+};
+
+ListWatcherMorph.prototype.showTableView = function () {
+    var view = this.parentThatIsAnyOf([
+        SpriteBubbleMorph,
+        SpeechBubbleMorph,
+        CellMorph
+    ]);
+    if (!view) {return; }
+    if (view instanceof SpriteBubbleMorph) {
+        view.changed();
+        view.drawNew();
+    } else if (view instanceof SpeechBubbleMorph) {
+        view.contents = new TableFrameMorph(new TableMorph(this.list, 10));
+        view.contents.expand(this.extent());
+        view.drawNew(true);
+    } else { // watcher cell
+        view.drawNew(true, 'table');
+        view.contentsMorph.expand(this.extent());
+    }
+    view.fixLayout();
+};
+
+// ListWatcherMorph events:
+
+ListWatcherMorph.prototype.mouseDoubleClick = function (pos) {
+    if (List.prototype.enableTables) {
+        new TableDialogMorph(this.list).popUp(this.world());
+    } else {
+        this.escalateEvent('mouseDoubleClick', pos);
+    }
 };
 
 // ListWatcherMorph hiding/showing:
