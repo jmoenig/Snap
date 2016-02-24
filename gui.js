@@ -219,7 +219,7 @@ IDE_Morph.prototype.init = function (isAutoFill) {
     this.projectName = '';
     this.projectNotes = '';
 
-    this.logoURL = 'snap_logo_sm.png';
+    this.logoURL = this.resourceURL('snap_logo_sm.png');
     this.logo = null;
     this.controlBar = null;
     this.categories = null;
@@ -2677,7 +2677,7 @@ IDE_Morph.prototype.projectMenu = function () {
         'Import tools',
         function () {
             myself.droppedText(
-                myself.getURL('tools.xml'),
+                myself.getURL(myself.resourceURL('tools.xml')),
                 'tools'
             );
         },
@@ -2730,10 +2730,12 @@ IDE_Morph.prototype.projectMenu = function () {
     menu.popup(world, pos);
 };
 
-IDE_Morph.prototype.resourceURL = function (folder, file) {
-    // Give a path a file in subfolders.
+IDE_Morph.prototype.resourceURL = function () {
+    // Take in variadic inputs that represent an a nested folder structure.
     // Method can be easily overridden if running in a custom location.
-    return folder + '/' + file;
+    // Default Snap! simply returns a path (relative to snap.html)
+    var args = Array.prototype.slice.call(arguments, 0);
+    return args.join('/');
 };
 
 IDE_Morph.prototype.getMediaList = function (dirname) {
@@ -4158,7 +4160,7 @@ IDE_Morph.prototype.languageMenu = function () {
 
 IDE_Morph.prototype.setLanguage = function (lang, callback) {
     var translation = document.getElementById('language'),
-        src = 'lang-' + lang + '.js',
+        src = this.resourceURL('lang-' + lang + '.js'),
         myself = this;
     SnapTranslator.unload();
     if (translation) {
