@@ -6,7 +6,7 @@
 
     written by Jens Mönig
 
-    Copyright (C) 2014 by Jens Mönig
+    Copyright (C) 2016 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -411,6 +411,8 @@ SnapTranslator.dict.ca = {
         'fixa la mida del llapis en %n',
     'stamp':
         'estampa',
+    'fill':
+        'omple',
 
     // control:
     'when %greenflag clicked':
@@ -429,6 +431,8 @@ SnapTranslator.dict.ca = {
         'el ratolí toqui',
     'mouse-departed':
         'el ratolí surti d\'',
+    'when %b':
+        'quan %b',
     'when I receive %msgHat':
         'Quan rebi %msgHat',
     'broadcast %msg':
@@ -678,6 +682,32 @@ SnapTranslator.dict.ca = {
         'Exportar blocs...',
     'show global custom block definitions as XML\nin a new browser window':
         'mostrar definicions de blocs personalitzats\nen format XML en una altra finestra del\nnavegador',
+    'Unused blocks...':
+        'Blocs no utilitzats...',
+    'find unused global custom blocks\nand remove their definitions':
+        'busca blocs personalitzats globals\nno utilitzats i esborra\'ls',
+    'Remove unused blocks':
+        'Esborra blocs no utilitzats',
+    'there are currently no unused\nglobal custom blocks in this project':
+        'no hi ha cap bloc\npersonalitzat no utilitzat\nen aquest projecte',
+    'unused block(s) removed':
+        'bloc(s) personalitzats no utilitzats esborrats',
+    'Export summary...':
+        'Exportar resum...',
+    'open a new browser browser window\n with a summary of this project':
+        'obre una finestra nova del navegador\namb un resum d\'aquest projecte',
+    'Contents':
+        'Continguts',
+    'Kind of':
+        'Espècie de',
+    'Part of':
+        'Part de',
+    'Parts':
+        'Parts',
+    'Blocks':
+        'Blocs',
+    'For all Sprites':
+        'Per a tots els objectes', 
     'Import tools':
         'Importar eines',
     'load the official library of\npowerful blocks':
@@ -1080,7 +1110,7 @@ SnapTranslator.dict.ca = {
     'License':
         'Llicència',
     'current module versions:':
-        'versions del mòdul actual',
+        'versions actuals dels mòduls',
     'Contributors':
         'Contribuïdors',
     'Translations':
@@ -1152,6 +1182,8 @@ SnapTranslator.dict.ca = {
     // keys
     'space':
         'espai',
+    'any key':
+        'qualsevol tecla',
     'up arrow':
         'fletxa amunt',
     'down arrow':
@@ -1240,6 +1272,8 @@ SnapTranslator.dict.ca = {
     // math functions
     'abs':
         'valor absolut',
+    'ceiling':
+        'sostre',
     'floor':
         'part entera',
     'sqrt':
