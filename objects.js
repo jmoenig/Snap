@@ -82,7 +82,7 @@ SpeechBubbleMorph, RingMorph, isNil, FileReader, TableDialogMorph,
 BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph*/
 
-modules.objects = '2016-February-24';
+modules.objects = '2016-March-06';
 
 var SpriteMorph;
 var StageMorph;
@@ -3291,6 +3291,10 @@ SpriteMorph.prototype.isCorrectingOutsideDrag = function () {
 };
 
 SpriteMorph.prototype.justDropped = function () {
+    var stage = this.parentThatIsA(StageMorph);
+    if (stage) {
+        stage.enableCustomHatBlocks = true;
+    }
     this.restoreLayers();
     this.positionTalkBubble();
     this.receiveUserInteraction('dropped');
