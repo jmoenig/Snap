@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph,
 TableFrameMorph*/
 
-modules.threads = '2016-February-24';
+modules.threads = '2016-March-16';
 
 var ThreadManager;
 var Process;
@@ -3240,16 +3240,18 @@ Context.prototype.stackSize = function () {
 
 // Variable /////////////////////////////////////////////////////////////////
 
-function Variable(value) {
+function Variable(value, isTransient) {
     this.value = value;
+    this.isTransient = isTransient || false; // prevent value serialization
 }
 
 Variable.prototype.toString = function () {
-    return 'a Variable [' + this.value + ']';
+    return 'a ' + this.isTransient ? 'transient ' : '' + 'Variable [' +
+        this.value + ']';
 };
 
 Variable.prototype.copy = function () {
-    return new Variable(this.value);
+    return new Variable(this.value, this.isTransient);
 };
 
 // VariableFrame ///////////////////////////////////////////////////////

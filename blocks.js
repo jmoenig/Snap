@@ -149,7 +149,7 @@ BlockEditorMorph, localize, isNil*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2016-February-24';
+modules.blocks = '2016-March-16';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -2216,6 +2216,16 @@ BlockMorph.prototype.userMenu = function () {
         top,
         blck;
 
+    function addOption(label, toggle, test, onHint, offHint) {
+        var on = '\u2611 ',
+            off = '\u2610 ';
+        menu.addItem(
+            (test ? on : off) + localize(label),
+            toggle,
+            test ? onHint : offHint
+        );
+    }
+
     menu.addItem(
         "help...",
         'showHelp'
@@ -2236,7 +2246,15 @@ BlockMorph.prototype.userMenu = function () {
     }
     if (this.isTemplate) {
         if (!(this.parent instanceof SyntaxElementMorph)) {
-            if (this.selector !== 'evaluateCustomBlock') {
+            if (this.selector === 'reportGetVar') {
+                addOption(
+                    'transient',
+                    'toggleTransientVariable',
+                    myself.isTransientVariable(),
+                    'uncheck to save contents\nin the project',
+                    'check to prevent contents\nfrom being saved'
+                );
+            } else if (this.selector !== 'evaluateCustomBlock') {
                 menu.addItem(
                     "hide",
                     'hidePrimitive'
@@ -2428,6 +2446,20 @@ BlockMorph.prototype.hidePrimitive = function () {
     if (cat === 'lists') {cat = 'variables'; }
     ide.flushBlocksCache(cat);
     ide.refreshPalette();
+};
+
+BlockMorph.prototype.isTransientVariable = function () {
+    // private - only for variable getter template inside the palette
+    var varFrame = this.receiver().variables.silentFind(this.blockSpec);
+    return varFrame ? varFrame.vars[this.blockSpec].isTransient : false;
+};
+
+BlockMorph.prototype.toggleTransientVariable = function () {
+    // private - only for variable getter template inside the palette
+    var varFrame = this.receiver().variables.silentFind(this.blockSpec);
+    if (!varFrame) {return; }
+    varFrame.vars[this.blockSpec].isTransient =
+        !(varFrame.vars[this.blockSpec].isTransient);
 };
 
 BlockMorph.prototype.deleteBlock = function () {

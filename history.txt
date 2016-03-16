@@ -2874,3 +2874,11 @@ end - bulk of 151215
 160306
 ------
 * Objects: Reenable custom hat blocks when dropping a sprite
+
+160316
+------
+* Store, Objects, GUI: fixed #99 (saving linked lists)
+* Objects: fixed #1163
+* added web api / https reporter library
+* Blocks, Store: New “transient variable” feature
+* German translation update

@@ -82,7 +82,7 @@ SpeechBubbleMorph, RingMorph, isNil, FileReader, TableDialogMorph,
 BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph*/
 
-modules.objects = '2016-March-06';
+modules.objects = '2016-March-16';
 
 var SpriteMorph;
 var StageMorph;
@@ -2423,7 +2423,7 @@ SpriteMorph.prototype.blocksMatching = function (
 
     // variable getters
     varNames.forEach(function (vName) {
-        var rel = relevance(labelOf(vName), search);
+        var rel = relevance(labelOf(vName.toLowerCase()), search);
         if (rel !== -1) {
             blocks.push([myself.variableBlock(vName), rel + '1']);
         }
@@ -4726,6 +4726,7 @@ StageMorph.prototype.codeMappings = {};
 StageMorph.prototype.codeHeaders = {};
 StageMorph.prototype.enableCodeMapping = false;
 StageMorph.prototype.enableInheritance = false;
+StageMorph.prototype.enableSublistIDs = false;
 
 // StageMorph instance creation
 

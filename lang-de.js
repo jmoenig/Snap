@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org', // optional
     'last_changed':
-        '2016-02-24', // this, too, will appear in the Translators tab
+        '2016-03-16', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -881,6 +881,12 @@ SnapTranslator.dict.de = {
         'Umringen',
     'unringify':
         'Entringen',
+    'transient':
+        'nicht persistent',
+    'uncheck to save contents\nin the project':
+        'ausschalten, um den Inhalt\nim Projekt zu speichern',
+    'check to prevent contents\nfrom being saved':
+        'einschalten, um das Speichern des Inhalts\nim Projekt zu verhindern',
 
     // custom blocks:
     'delete block definition...':
