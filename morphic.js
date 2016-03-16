@@ -4533,8 +4533,8 @@ CursorMorph.prototype.initializeClipboardHandler = function () {
             var length=this.value.length-myself.target.text.length;
             myself.target.text = myself.clipboardHandler.value;
             myself.gotoSlot(myself.clipboardHandler.selectionStart);
-            myself.target.drawNew();console.log(myself.clipboardHandler.value);
-            myself.target.changed();console.log(myself.clipboardHandler.selectionStart);
+            myself.target.drawNew();
+            myself.target.changed();
         },
         false
     );
