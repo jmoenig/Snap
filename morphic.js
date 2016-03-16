@@ -4504,7 +4504,7 @@ CursorMorph.prototype.init = function (aStringOrTextMorph) {
 };
 
 CursorMorph.prototype.initializeClipboardHandler = function () {
-    // Add hidden text box for copying and pasting
+    // Add hidden text box for texting
     var myself = this;
 
     this.clipboardHandler = document.createElement('textarea');
@@ -4512,92 +4512,38 @@ CursorMorph.prototype.initializeClipboardHandler = function () {
     this.clipboardHandler.style.right = '101%'; // placed just out of view
 
     document.body.appendChild(this.clipboardHandler);
-
-    this.clipboardHandler.value = this.target.selection();
     this.clipboardHandler.focus();
-    this.clipboardHandler.select();
+    this.clipboardHandler.value = this.target.text;
 
-    this.clipboardHandler.addEventListener(
-        'keypress',
-        function (event) {
+
+    this.clipboardHandler.onkeydown= function (event) {
+        myself.processKeyDown(event);
+
+        // Make sure tab prevents default
+        if (event.keyIdentifier === 'U+0009' ||
+            event.keyIdentifier === 'Tab') {
             myself.processKeyPress(event);
-            this.value = myself.target.selection();
-            this.select();
-        },
-        false
-    );
+            event.preventDefault();
+        }
+    };
 
-    this.clipboardHandler.addEventListener(
-        'keydown',
-        function (event) {
-            myself.processKeyDown(event);
-            this.value = myself.target.selection();
-            this.select();
-            
-            // Make sure tab prevents default
-            if (event.keyIdentifier === 'U+0009' ||
-                    event.keyIdentifier === 'Tab') {
-                myself.processKeyPress(event);
-                event.preventDefault();
-            }
-        },
-        false
-    );
-    
     this.clipboardHandler.addEventListener(
         'input',
         function (event) {
-            if (this.value === '') {
-                myself.gotoSlot(myself.target.selectionStartSlot());
-                myself.target.deleteSelection();
-            }
+            var length=this.value.length-myself.target.text.length;
+            myself.target.text = myself.clipboardHandler.value;
+            myself.gotoSlot(myself.clipboardHandler.selectionStart);
+            myself.target.drawNew();console.log(myself.clipboardHandler.value);
+            myself.target.changed();console.log(myself.clipboardHandler.selectionStart);
         },
         false
     );
+    this.clipboardHandler.gotoPos=function(length){
+        this.setSelectionRange(length,length);
+    }
 };
 
 // CursorMorph event processing:
-
-CursorMorph.prototype.processKeyPress = function (event) {
-    // this.inspectKeyEvent(event);
-    if (this.keyDownEventUsed) {
-        this.keyDownEventUsed = false;
-        return null;
-    }
-    if ((event.keyCode === 40) || event.charCode === 40) {
-        this.insert('(');
-        return null;
-    }
-    if ((event.keyCode === 37) || event.charCode === 37) {
-        this.insert('%');
-        return null;
-    }
-    if (event.keyCode) { // Opera doesn't support charCode
-        if (event.ctrlKey && (!event.altKey)) {
-            this.ctrl(event.keyCode, event.shiftKey);
-        } else if (event.metaKey) {
-            this.cmd(event.keyCode, event.shiftKey);
-        } else {
-            this.insert(
-                String.fromCharCode(event.keyCode),
-                event.shiftKey
-            );
-        }
-    } else if (event.charCode) { // all other browsers
-        if (event.ctrlKey && (!event.altKey)) {
-            this.ctrl(event.charCode, event.shiftKey);
-        } else if (event.metaKey) {
-            this.cmd(event.charCode, event.shiftKey);
-        } else {
-            this.insert(
-                String.fromCharCode(event.charCode),
-                event.shiftKey
-            );
-        }
-    }
-    // notify target's parent of key event
-    this.target.escalateEvent('reactToKeystroke', event);
-};
 
 CursorMorph.prototype.processKeyDown = function (event) {
     // this.inspectKeyEvent(event);
@@ -4750,7 +4696,9 @@ CursorMorph.prototype.goEnd = function (shift) {
 };
 
 CursorMorph.prototype.gotoPos = function (aPoint) {
-    this.gotoSlot(this.target.slotAt(aPoint));
+    var pos=this.target.slotAt(aPoint);
+    this.gotoSlot(pos);
+    this.clipboardHandler.gotoPos(pos);
     this.show();
 };
 
@@ -4798,32 +4746,6 @@ CursorMorph.prototype.undo = function () {
     this.gotoSlot(0);
 };
 
-CursorMorph.prototype.insert = function (aChar, shiftKey) {
-    var text;
-    if (aChar === '\u0009') {
-        this.target.escalateEvent('reactToEdit', this.target);
-        if (shiftKey) {
-            return this.target.backTab(this.target);
-        }
-        return this.target.tab(this.target);
-    }
-    if (!this.target.isNumeric ||
-            !isNaN(parseFloat(aChar)) ||
-            contains(['-', '.'], aChar)) {
-        if (this.target.selection() !== '') {
-            this.gotoSlot(this.target.selectionStartSlot());
-            this.target.deleteSelection();
-        }
-        text = this.target.text;
-        text = text.slice(0, this.slot) +
-            aChar +
-            text.slice(this.slot);
-        this.target.text = text;
-        this.target.drawNew();
-        this.target.changed();
-        this.goRight(false, aChar.length);
-    }
-};
 
 CursorMorph.prototype.ctrl = function (aChar, shiftKey) {
     if (aChar === 64 || (aChar === 65 && shiftKey)) {
