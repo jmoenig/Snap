@@ -4559,7 +4559,8 @@ CursorMorph.prototype.processKeyDown = function (event) {
         this.target.escalateEvent('reactToKeystroke', event);
         return;
     }
-
+    //prevent the error cased by multithreading
+if(shift)event.preventDefault();
     switch (event.keyCode) {
         case 37:
             this.goLeft(shift);
@@ -4695,11 +4696,10 @@ CursorMorph.prototype.updateSelection = function (shift) {
             this.target.endMark = this.slot;
         } else if (this.target.endMark !== this.slot) {
             this.target.endMark = this.slot;
-            //why?
             if(this.target.endMark<this.target.startMark){
-                this.clipboardHandler.setSelectionRange(this.target.endMark+1,this.target.startMark);
+                this.clipboardHandler.setSelectionRange(this.target.endMark,this.target.startMark);
             }else {
-                this.clipboardHandler.setSelectionRange(this.target.startMark,this.target.endMark-1);
+                this.clipboardHandler.setSelectionRange(this.target.startMark,this.target.endMark);
             }
             this.target.drawNew();
             this.target.changed();
@@ -7516,9 +7516,9 @@ StringMorph.prototype.enableSelecting = function () {
             if (newMark !== this.endMark) {
                 this.endMark = newMark;
                 if(this.endMark<this.startMark){
-                    this.root().cursor.clipboardHandler.setSelectionRange(this.endMark+1,this.startMark);
-                }else {console.log(this.root().cursor.clipboardHandler);
-                    this.root().cursor.clipboardHandler.setSelectionRange(this.startMark,this.endMark-1);
+                    this.root().cursor.clipboardHandler.setSelectionRange(this.endMark,this.startMark);
+                }else {
+                    this.root().cursor.clipboardHandler.setSelectionRange(this.startMark,this.endMark);
                 }
                 this.drawNew();
                 this.changed();
