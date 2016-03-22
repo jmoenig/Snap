@@ -6,7 +6,7 @@ http://community.csdt.rpi.edu
 License
 -------
 
-Copyright (C) 2014-2015 by Rensselaer Polytechnic Institute
+Copyright (C) 2014-2016 by Rensselaer Polytechnic Institute
 
 CSnap is free software: you can redistribute it and/or modify
 it under the terms of the GNU Affero General Public License as
@@ -47,4 +47,4 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 Current Release
 ---------------
 
-The current release is 20150828.
+The current release is 20150322.
