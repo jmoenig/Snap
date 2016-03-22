@@ -130,8 +130,9 @@ Cloud.prototype.saveProject = function (ide, callBack, errorCall) {
         }
     }
     //$.post(this.create_file_url, {'file':blob}, success, "json");
+    var formData = new FormData();
     $.ajax({
-        type: 'POST',
+        type: 'PUT',
         url: this.create_file_url,
         data: image,
         processData: false,
@@ -146,7 +147,7 @@ Cloud.prototype.saveProject = function (ide, callBack, errorCall) {
         }
     }).fail(errorCall);
     $.ajax({
-        type:'POST',
+        type:'PUT',
         url: this.create_file_url,
         data: xml,
         processData: false,
