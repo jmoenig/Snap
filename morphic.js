@@ -4510,7 +4510,7 @@ CursorMorph.prototype.initializeClipboardHandler = function () {
 
     this.clipboardHandler = document.createElement('textarea');
     this.clipboardHandler.style.position = 'absolute';
-    this.clipboardHandler.style.right = '101%'; // placed just out of view
+    this.clipboardHandler.style.right = '211%'; // placed just out of view
 
     document.body.appendChild(this.clipboardHandler);
     this.clipboardHandler.focus();
@@ -4559,8 +4559,8 @@ CursorMorph.prototype.processKeyDown = function (event) {
         this.target.escalateEvent('reactToKeystroke', event);
         return;
     }
-    //prevent the error cased by multithreading
-if(shift)event.preventDefault();
+    //prevent the error cased by clipboardHandler
+    if (shift)event.preventDefault();
     switch (event.keyCode) {
         case 37:
             this.goLeft(shift);
@@ -4604,7 +4604,7 @@ if(shift)event.preventDefault();
 // CursorMorph navigation:
 
 /*
-  original non-scrolling code, commented out in case we need to fall back:
+ original non-scrolling code, commented out in case we need to fall back:
 
  CursorMorph.prototype.gotoSlot = function (newSlot) {
  this.setPosition(this.target.slotPosition(newSlot));
@@ -4696,10 +4696,10 @@ CursorMorph.prototype.updateSelection = function (shift) {
             this.target.endMark = this.slot;
         } else if (this.target.endMark !== this.slot) {
             this.target.endMark = this.slot;
-            if(this.target.endMark<this.target.startMark){
-                this.clipboardHandler.setSelectionRange(this.target.endMark,this.target.startMark);
-            }else {
-                this.clipboardHandler.setSelectionRange(this.target.startMark,this.target.endMark);
+            if (this.target.endMark < this.target.startMark) {
+                this.clipboardHandler.setSelectionRange(this.target.endMark, this.target.startMark);
+            } else {
+                this.clipboardHandler.setSelectionRange(this.target.startMark, this.target.endMark);
             }
             this.target.drawNew();
             this.target.changed();
@@ -4730,7 +4730,7 @@ CursorMorph.prototype.cancel = function () {
 
 CursorMorph.prototype.undo = function () {
     this.target.text = this.originalContents;
-    this.clipboardHandler.value=this.originalContents;
+    this.clipboardHandler.value = this.originalContents;
     this.target.changed();
     this.target.drawNew();
     this.target.changed();
@@ -4763,7 +4763,6 @@ CursorMorph.prototype.cmd = function (aChar) {
         }
     }
 };
-
 
 
 // CursorMorph destroying:
@@ -7485,6 +7484,13 @@ StringMorph.prototype.mouseClickLeft = function (pos) {
         cursor = this.root().cursor;
         if (cursor) {
             cursor.gotoPos(pos);
+            //after mousemoving this event will be fired again
+            if (this.endMark != this.startMark)
+                if (this.endMark < this.startMark) {
+                    this.root().cursor.clipboardHandler.setSelectionRange(this.endMark, this.startMark);
+                } else {
+                    this.root().cursor.clipboardHandler.setSelectionRange(this.startMark, this.endMark);
+                }
         }
         this.currentlySelecting = true;
     } else {
@@ -7508,6 +7514,7 @@ StringMorph.prototype.enableSelecting = function () {
             }
         }
     };
+
     this.mouseMove = function (pos) {
         if (this.isEditable &&
             this.currentlySelecting &&
@@ -7515,11 +7522,6 @@ StringMorph.prototype.enableSelecting = function () {
             var newMark = this.slotAt(pos);
             if (newMark !== this.endMark) {
                 this.endMark = newMark;
-                if(this.endMark<this.startMark){
-                    this.root().cursor.clipboardHandler.setSelectionRange(this.endMark,this.startMark);
-                }else {
-                    this.root().cursor.clipboardHandler.setSelectionRange(this.startMark,this.endMark);
-                }
                 this.drawNew();
                 this.changed();
             }
