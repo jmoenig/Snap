@@ -7462,6 +7462,7 @@ StringMorph.prototype.selectAll = function () {
     if (this.isEditable) {
         this.startMark = 0;
         this.endMark = this.text.length;
+        this.root().cursor.clipboardHandler.setSelectionRange(this.startMark,this.endMark);
         this.drawNew();
         this.changed();
     }
@@ -7484,7 +7485,7 @@ StringMorph.prototype.mouseClickLeft = function (pos) {
         cursor = this.root().cursor;
         if (cursor) {
             cursor.gotoPos(pos);
-            //after mousemoving this event will be fired again
+            //If mouse does not move away the morph  this event will be fired again after mousemoving
             if (this.endMark != this.startMark)
                 if (this.endMark < this.startMark) {
                     this.root().cursor.clipboardHandler.setSelectionRange(this.endMark, this.startMark);
@@ -7522,6 +7523,11 @@ StringMorph.prototype.enableSelecting = function () {
             var newMark = this.slotAt(pos);
             if (newMark !== this.endMark) {
                 this.endMark = newMark;
+                    if (this.endMark < this.startMark) {
+                        this.root().cursor.clipboardHandler.setSelectionRange(this.endMark, this.startMark);
+                    } else {
+                        this.root().cursor.clipboardHandler.setSelectionRange(this.startMark, this.endMark);
+                    }
                 this.drawNew();
                 this.changed();
             }
