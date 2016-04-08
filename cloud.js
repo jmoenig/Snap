@@ -60,9 +60,19 @@ function Cloud() {
         }
     }
     this.user_id = config.user_id;
+    this.classroom_id = 25;
     this.application_id = config.application_id;
 }
 
+Cloud.prototype.loggedInCallBack = function(success, failure) {
+    if(this.user_id === undefined) {
+        world.children[0].initializeCloudCallback(success, failure);
+    }
+    else
+    {
+        success();
+    }
+};
 // Cloud: Snap! API
 
 Cloud.prototype.login = function (
@@ -79,11 +89,12 @@ Cloud.prototype.login = function (
             url: myself.user_api_detail_url,
             success: function(data) {
                 myself.user_id = data.id;
+                config.urls.user_detail_url = "/users/"+data.id
+				callBack(data, textStatus);
             }
          });
-        callBack(data, textStatus);
     };
-    $.post(this.login_url, {'username': username, 'password': password}, myCallBack).fail(errorCall);
+    $.post(this.login_url, {'login': username, 'password': password}, myCallBack).fail(errorCall);
 };
 
 Cloud.prototype.saveProject = function (ide, callBack, errorCall) {
@@ -175,6 +186,7 @@ Cloud.prototype.saveProject = function (ide, callBack, errorCall) {
                 data: {
                     name: ide.projectName,
                     description: '',
+                    classroom: myself.classroom_id,
                     application: myself.application_id,
                     project: xml_id,
                     screenshot: image_id
@@ -188,6 +200,7 @@ Cloud.prototype.saveProject = function (ide, callBack, errorCall) {
             $.post(create_project_url, {
                 name: ide.projectName,
                 description: '',
+                classroom: myself.classroom_id,
                 application: myself.application_id,
                 project: xml_id,
                 screenshot: image_id
@@ -217,11 +230,20 @@ Cloud.prototype.openProject = function(project, callBack, errorCall) {
 }
 
 Cloud.prototype.getProjectList = function(callBack, errorCall) {
-    if(!this.loggedIn())
-      return;
-    $.get(this.list_project_url+"?owner="+this.user_id, null, function(data) {
-        callBack(data);
-    }, "json").fail(errorCall);
+    var myself=this;
+    this.loggedInCallBack(
+        function()
+        {
+            $.get(myself.list_project_url+"?owner="+myself.user_id, null, 
+            function(data) {
+                callBack(data);
+            }, "json").fail(errorCall);
+        },
+        function()
+        {
+            return
+        }
+    );
 };
 
 Cloud.prototype.loggedIn = function() {
@@ -230,6 +252,26 @@ Cloud.prototype.loggedIn = function() {
         return false;
     }
     return true;
+};
+
+Cloud.prototype.loggedInCallBack = function(success, failure) {
+    if(this.user_id === undefined) {
+        world.children[0].initializeCloudCallback(success, failure);
+    }
+    else
+    {
+        success();
+    }
+};
+
+Cloud.prototype.getClassroomList = function(callBack, errorCall) {
+	if(!this.loggedIn())
+		return;
+	$.get("/api/team/?user="+this.user_id, null, 
+            function(data) {
+                callBack(data);
+            }, "json").fail(errorCall);
+    
 };
 
 Cloud.prototype.message = function (string) {
