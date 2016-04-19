@@ -1338,6 +1338,7 @@ SpriteMorph.prototype.initBlocks = function () {
 };
 
 SpriteMorph.prototype.initBlocks();
+SpriteMorph._3DRotationX = 0, SpriteMorph._3DRotationY = 0, SpriteMorph._3DRotationZ = 0;
 
 SpriteMorph.prototype.initBlockMigrations = function () {
     SpriteMorph.prototype.blockMigrations = {
@@ -2643,28 +2644,29 @@ SpriteMorph.prototype.wearCostume = function (costume) {
         else {
             // first time we load this geometry
             var loader = new THREE.JSONLoader(), myself = this;
-            loader.load(costume.url, function(geometry) {
-                var color = new THREE.Color(myself.color.r/255, 
-                                            myself.color.g/255, 
-                                            myself.color.b/255);
-                var material = new THREE.MeshLambertMaterial({color: color}),
-                    mesh = new THREE.Mesh(geometry, material),
-                    sphere = geometry.boundingSphere; // THREE.Sphere
-                mesh.position.set(-sphere.center.x, -sphere.center.y, -sphere.center.z);
-                myself.mesh = mesh;
+			
+            var geometry = loader.parse(eval("("+decodeURIComponent(costume.url.substring(15))+")")).geometry;
+			var color = new THREE.Color(myself.color.r/255, 
+										myself.color.g/255, 
+										myself.color.b/255);
+			var material = new THREE.MeshLambertMaterial({color: color}),
+				mesh = new THREE.Mesh(geometry, material),
+				sphere = geometry.boundingSphere; // THREE.Sphere
+			mesh.position.set(-sphere.center.x, -sphere.center.y, -sphere.center.z);
+			myself.mesh = mesh;
+			if(!myself.object)
+				myself.object = new THREE.Object3D();
+			
+			myself.object.add(myself.mesh);
+			myself.object.position.x = myself.xPosition();
+			myself.object.position.y = myself.yPosition();
+			myself.object.position.z = myself.zPosition();
 
-                myself.object = new THREE.Object3D();
-                myself.object.add(myself.mesh);
-                myself.object.position.x = myself.xPosition();
-                myself.object.position.y = myself.yPosition();
-                myself.object.position.z = 0;
+			myself.hide(); // hide the 2D image
+			myself.parent.scene.add(myself.object);
+			myself.parent.changed(); // redraw stage
 
-                myself.hide(); // hide the 2D image
-                myself.parent.scene.add(myself.object);
-                myself.parent.changed(); // redraw stage
-
-                costume.geometry = geometry;
-            });
+			costume.geometry = geometry;
         }
         this.costume = costume;
     }
@@ -3785,23 +3787,22 @@ SpriteMorph.prototype.faceToXY = function (x, y) {
 };
 
 SpriteMorph.prototype.point3D = function (degX, degY, degZ) {
-    if (this.costume && this.costume.is3D) {
+	if(!this.object)
+		this.object = new THREE.Object3D()
+	var fullQuaternion = new THREE.Quaternion(), quaternionX = new THREE.Quaternion(), quaternionY = new THREE.Quaternion(), quaternionZ = new THREE.Quaternion();
+	quaternionX.setFromAxisAngle( new THREE.Vector3( 1, 0, 0 ), radians(degX) );
+	quaternionY.setFromAxisAngle( new THREE.Vector3( 0, 1, 0 ), radians(degY) );
+	quaternionZ.setFromAxisAngle( new THREE.Vector3( 0, 0, 1 ), -radians(degZ) );
 
-        var fullQuaternion = new THREE.Quaternion(), quaternionX = new THREE.Quaternion(), quaternionY = new THREE.Quaternion(), quaternionZ = new THREE.Quaternion();
-        quaternionX.setFromAxisAngle( new THREE.Vector3( 1, 0, 0 ), radians(degX) );
-        quaternionY.setFromAxisAngle( new THREE.Vector3( 0, 1, 0 ), radians(degY) );
-        quaternionZ.setFromAxisAngle( new THREE.Vector3( 0, 0, 1 ), -radians(degZ) );
+	fullQuaternion.multiplyQuaternions(quaternionZ,quaternionY.multiplyQuaternions(quaternionY,quaternionX));
 
-        fullQuaternion.multiplyQuaternions(quaternionZ,quaternionY.multiplyQuaternions(quaternionY,quaternionX));
+	this.object.quaternion.copy(fullQuaternion);
 
-        this.object.quaternion.copy(fullQuaternion);
+	this._3DRotationX = degX;
+	this._3DRotationY = degY;
+	this._3DRotationZ = degZ;
 
-        _3DRotationX = degX;
-        _3DRotationY = degY;
-        _3DRotationZ = degZ;
-
-        this.parent.changed();
-    }
+	this.parent.changed();
 }
 
 SpriteMorph.prototype.turn = function (degrees) {
@@ -3813,22 +3814,21 @@ SpriteMorph.prototype.turnLeft = function (degrees) {
 };
 
 SpriteMorph.prototype.turn3D = function (degX, degY, degZ) {
-    if (this.costume && this.costume.is3D) {
-        
-        var fullQuaternion = new THREE.Quaternion(), quaternionX = new THREE.Quaternion(), quaternionY = new THREE.Quaternion(), quaternionZ = new THREE.Quaternion();
-        quaternionX.setFromAxisAngle( new THREE.Vector3( 1, 0, 0 ), radians(degX) );
-        quaternionY.setFromAxisAngle( new THREE.Vector3( 0, 1, 0 ), radians(degY) );
-        quaternionZ.setFromAxisAngle( new THREE.Vector3( 0, 0, 1 ), -radians(degZ) );
+	if(!this.object)
+		this.object = new THREE.Object3D()
+	var fullQuaternion = new THREE.Quaternion(), quaternionX = new THREE.Quaternion(), quaternionY = new THREE.Quaternion(), quaternionZ = new THREE.Quaternion();
+	quaternionX.setFromAxisAngle( new THREE.Vector3( 1, 0, 0 ), radians(degX) );
+	quaternionY.setFromAxisAngle( new THREE.Vector3( 0, 1, 0 ), radians(degY) );
+	quaternionZ.setFromAxisAngle( new THREE.Vector3( 0, 0, 1 ), -radians(degZ) );
 
-        _3DRotationX += degX;
-        _3DRotationY += degY;
-        _3DRotationZ += degZ;
-		
-        fullQuaternion.multiplyQuaternions(quaternionZ,quaternionY.multiplyQuaternions(quaternionY,quaternionX.multiplyQuaternions(quaternionX,this.object.quaternion)));
+	this._3DRotationX += degX;
+	this._3DRotationY += degY;
+	this._3DRotationZ += degZ;
 
-        this.object.quaternion.copy(fullQuaternion);
-        this.parent.changed();
-    }
+	fullQuaternion.multiplyQuaternions(quaternionZ,quaternionY.multiplyQuaternions(quaternionY,quaternionX.multiplyQuaternions(quaternionX,this.object.quaternion)));
+
+	this.object.quaternion.copy(fullQuaternion);
+	this.parent.changed();
 };
 
 SpriteMorph.prototype.xPosition = function () {
@@ -3856,7 +3856,7 @@ SpriteMorph.prototype.yPosition = function () {
 };
 
 SpriteMorph.prototype.zPosition = function () {
-    return  (this.costume && this.costume.is3D) ? this.object.position.z : 0;
+    return  (this.object) ? this.object.position.z : 0;
 }
 
 SpriteMorph.prototype.direction = function () {
@@ -3896,15 +3896,25 @@ SpriteMorph.prototype.gotoXY = function (x, y, justMe) {
     this.positionTalkBubble();
 };
 
-SpriteMorph.prototype.gotoXYZ = function (x, y, z, justMe) {
-    if (this.costume && this.costume.is3D) {
-        this.gotoXY(x,y, justMe);
 
+
+SpriteMorph.prototype.gotoXYZ = function (x, y, z, justMe) {
+    if (this.object) {
+        this.gotoXY(x,y, justMe);
         this.object.position.x = x;
         this.object.position.y = y;
         this.object.position.z = z;
         this.parent.changed();
     }
+	else{
+		this.object = new THREE.Object3D();
+        this.gotoXY(x,y, justMe);
+        this.object.position.x = x;
+        this.object.position.y = y;
+        this.object.position.z = z;
+        this.parent.changed();
+		
+	}
 }
 
 SpriteMorph.prototype.silentGotoXY = function (x, y, justMe) {
@@ -8031,3 +8041,9 @@ StagePrompterMorph.prototype.mouseClickLeft = function () {
 StagePrompterMorph.prototype.accept = function () {
     this.isDone = true;
 };
+
+function round10(val,exp)
+{
+	var pow = Math.pow(10,exp);
+	return Math.round(val/pow)*pow;
+}
