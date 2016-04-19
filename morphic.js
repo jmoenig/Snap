@@ -153,7 +153,7 @@
 
  IV. open issues
  ----------------
- - clipboard support (copy & paste) for non-textual data
+ - input support (copy & paste) for non-textual data
  - native (unscaled) high-resolution display support
 
 
@@ -4500,24 +4500,24 @@ CursorMorph.prototype.init = function (aStringOrTextMorph) {
         (this.target.alignment !== 'left')) {
         this.target.setAlignmentToLeft();
     }
-    this.initializeClipboardHandler();
+    this.initializeInputHandler();
     this.gotoSlot(this.slot);
 };
 
-CursorMorph.prototype.initializeClipboardHandler = function () {
+CursorMorph.prototype.initializeInputHandler = function () {
     // Add hidden text box for copying and pasting
     var myself = this;
 
-    this.clipboardHandler = document.createElement('textarea');
-    this.clipboardHandler.style.position = 'absolute';
-    this.clipboardHandler.style.right = '211%'; // placed just out of view
+    this.inputHandler = document.createElement('textarea');
+    this.inputHandler.style.position = 'absolute';
+    this.inputHandler.style.right = '211%'; // placed just out of view
 
-    document.body.appendChild(this.clipboardHandler);
-    this.clipboardHandler.focus();
-    this.clipboardHandler.value = this.target.text;
+    document.body.appendChild(this.inputHandler);
+    this.inputHandler.focus();
+    this.inputHandler.value = this.target.text;
 
 
-    this.clipboardHandler.onkeydown = function (event) {
+    this.inputHandler.onkeydown = function (event) {
         myself.processKeyDown(event);
 
         // Make sure tab prevents default
@@ -4528,18 +4528,18 @@ CursorMorph.prototype.initializeClipboardHandler = function () {
         }
     };
 
-    this.clipboardHandler.addEventListener(
+    this.inputHandler.addEventListener(
         'input',
         function (event) {
             myself.target.deleteSelection();
-            myself.target.text = myself.clipboardHandler.value;
-            myself.gotoSlot(myself.clipboardHandler.selectionStart);
+            myself.target.text = myself.inputHandler.value;
+            myself.gotoSlot(myself.inputHandler.selectionStart);
             myself.target.drawNew();
             myself.target.changed();
         },
         false
     );
-    this.clipboardHandler.gotoSlot = function (Slot) {
+    this.inputHandler.gotoSlot = function (Slot) {
         this.setSelectionRange(Slot, Slot);
     }
 };
@@ -4559,7 +4559,7 @@ CursorMorph.prototype.processKeyDown = function (event) {
         this.target.escalateEvent('reactToKeystroke', event);
         return;
     }
-    //prevent the error cased by clipboardHandler
+    //prevent the error cased by inputHandler
     if (shift)event.preventDefault();
     switch (event.keyCode) {
         case 37:
@@ -4650,9 +4650,9 @@ CursorMorph.prototype.goLeft = function (shift) {
     this.updateSelection(shift);
 };
 
-CursorMorph.prototype.goRight = function (shift, howMany) {
+CursorMorph.prototype.goRight = function (shift) {
     this.updateSelection(shift);
-    this.gotoSlot(this.slot + (howMany || 1));
+    this.gotoSlot(this.slot + 1);
     this.updateSelection(shift);
 };
 
@@ -4683,7 +4683,7 @@ CursorMorph.prototype.goEnd = function (shift) {
 CursorMorph.prototype.gotoPos = function (aPoint) {
     var pos = this.target.slotAt(aPoint);
     this.gotoSlot(pos);
-    this.clipboardHandler.gotoSlot(pos);
+    this.inputHandler.gotoSlot(pos);
     this.show();
 };
 
@@ -4691,15 +4691,15 @@ CursorMorph.prototype.gotoPos = function (aPoint) {
 
 CursorMorph.prototype.updateSelection = function (shift) {
     if (shift) {
-        if (!this.target.endMark && !this.target.startMark) {
+        if (this.target.endMark<0 && this.target.startMark<0) {
             this.target.startMark = this.slot;
             this.target.endMark = this.slot;
         } else if (this.target.endMark !== this.slot) {
             this.target.endMark = this.slot;
             if (this.target.endMark < this.target.startMark) {
-                this.clipboardHandler.setSelectionRange(this.target.endMark, this.target.startMark);
+                this.inputHandler.setSelectionRange(this.target.endMark, this.target.startMark);
             } else {
-                this.clipboardHandler.setSelectionRange(this.target.startMark, this.target.endMark);
+                this.inputHandler.setSelectionRange(this.target.startMark, this.target.endMark);
             }
             this.target.drawNew();
             this.target.changed();
@@ -4730,12 +4730,12 @@ CursorMorph.prototype.cancel = function () {
 
 CursorMorph.prototype.undo = function () {
     this.target.text = this.originalContents;
-    this.clipboardHandler.value = this.originalContents;
+    this.inputHandler.value = this.originalContents;
     this.target.changed();
     this.target.drawNew();
     this.target.changed();
     this.gotoSlot(0);
-    this.clipboardHandler.gotoSlot(0);
+    this.inputHandler.gotoSlot(0);
 };
 
 CursorMorph.prototype.ctrl = function (aChar) {
@@ -4773,20 +4773,20 @@ CursorMorph.prototype.destroy = function () {
         this.target.drawNew();
         this.target.changed();
     }
-    this.destroyClipboardHandler();
+    this.destroyInputHandler();
     CursorMorph.uber.destroy.call(this);
 };
 
-CursorMorph.prototype.destroyClipboardHandler = function () {
+CursorMorph.prototype.destroyInputHandler = function () {
     var nodes = document.body.children,
         each,
         i;
-    if (this.clipboardHandler) {
+    if (this.inputHandler) {
         for (i = 0; i < nodes.length; i += 1) {
             each = nodes[i];
-            if (each === this.clipboardHandler) {
-                document.body.removeChild(this.clipboardHandler);
-                this.clipboardHandler = null;
+            if (each === this.inputHandler) {
+                document.body.removeChild(this.inputHandler);
+                this.inputHandler = null;
             }
         }
     }
@@ -6899,7 +6899,6 @@ MenuMorph.prototype.getFocus = function () {
 };
 
 MenuMorph.prototype.processKeyDown = function (event) {
-    //console.log(event.keyCode);
     switch (event.keyCode) {
         case 13: // 'enter'
         case 32: // 'space'
@@ -7052,8 +7051,8 @@ StringMorph.prototype.init = function (text,
     // additional properties for text-editing:
     this.isScrollable = true; // scrolls into view when edited
     this.currentlySelecting = false;
-    this.startMark = 0;
-    this.endMark = 0;
+    this.startMark = -1;
+    this.endMark = -1;
     this.markedTextColor = new Color(255, 255, 255);
     this.markedBackgoundColor = new Color(60, 60, 120);
 
@@ -7437,13 +7436,13 @@ StringMorph.prototype.selectionStartSlot = function () {
 
 StringMorph.prototype.clearSelection = function () {
     if (!this.currentlySelecting &&
-        this.startMark === 0 &&
-        this.endMark === 0) {
+        this.startMark === -1 &&
+        this.endMark === -1) {
         return;
     }
     this.currentlySelecting = false;
-    this.startMark = 0;
-    this.endMark = 0;
+    this.startMark = -1;
+    this.endMark = -1;
     this.drawNew();
     this.changed();
 };
@@ -7462,7 +7461,7 @@ StringMorph.prototype.selectAll = function () {
     if (this.isEditable) {
         this.startMark = 0;
         this.endMark = this.text.length;
-        this.root().cursor.clipboardHandler.setSelectionRange(this.startMark,this.endMark);
+        this.root().cursor.inputHandler.setSelectionRange(this.startMark,this.endMark);
         this.drawNew();
         this.changed();
     }
@@ -7488,9 +7487,9 @@ StringMorph.prototype.mouseClickLeft = function (pos) {
             //If mouse does not move away the morph  this event will be fired again after mousemoving
             if (this.endMark != this.startMark)
                 if (this.endMark < this.startMark) {
-                    this.root().cursor.clipboardHandler.setSelectionRange(this.endMark, this.startMark);
+                    cursor.inputHandler.setSelectionRange(this.endMark, this.startMark);
                 } else {
-                    this.root().cursor.clipboardHandler.setSelectionRange(this.startMark, this.endMark);
+                    cursor.inputHandler.setSelectionRange(this.startMark, this.endMark);
                 }
         }
         this.currentlySelecting = true;
@@ -7524,9 +7523,9 @@ StringMorph.prototype.enableSelecting = function () {
             if (newMark !== this.endMark) {
                 this.endMark = newMark;
                     if (this.endMark < this.startMark) {
-                        this.root().cursor.clipboardHandler.setSelectionRange(this.endMark, this.startMark);
+                        this.root().cursor.inputHandler.setSelectionRange(this.endMark, this.startMark);
                     } else {
-                        this.root().cursor.clipboardHandler.setSelectionRange(this.startMark, this.endMark);
+                        this.root().cursor.inputHandler.setSelectionRange(this.startMark, this.endMark);
                     }
                 this.drawNew();
                 this.changed();
@@ -7608,8 +7607,8 @@ TextMorph.prototype.init = function (text,
     // additional properties for text-editing:
     this.isScrollable = true; // scrolls into view when edited
     this.currentlySelecting = false;
-    this.startMark = 0;
-    this.endMark = 0;
+    this.startMark = -1;
+    this.endMark = -1;
     this.markedTextColor = new Color(255, 255, 255);
     this.markedBackgoundColor = new Color(60, 60, 120);
 
@@ -10366,7 +10365,7 @@ WorldMorph.prototype.initEventListeners = function () {
     document.body.addEventListener(
         "paste",
         function (event) {
-            var txt = event.clipboardData.getData("Text");
+            var txt = event.inputData.getData("Text");
             if (txt && myself.cursor) {
                 myself.cursor.insert(txt);
             }
