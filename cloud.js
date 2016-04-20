@@ -182,7 +182,7 @@ Cloud.prototype.saveProject = function (ide, callBack, errorCall) {
         if(myself.project_id !== undefined) {
             $.ajax({
                 type: 'PUT',
-                url: create_project_url+myself.project_id, 
+                url: create_project_url+myself.project_id+"/", 
                 data: {
                     name: ide.projectName,
                     description: '',
