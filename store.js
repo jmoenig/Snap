@@ -1044,6 +1044,32 @@ SnapSerializer.prototype.loadInput = function (model, input, block) {
     }
 };
 
+Costume.prototype.toXML = function (serializer) {
+    if(this.originalPixels) {
+        this.contents.getContext('2d').putImageData(this.originalPixels, 0, 0);
+    }
+    if(!this.costumeColor) {
+        this.costumeColor = new Color(255,255,255);
+    }
+    serialized = serializer.format(
+        '<costume name="@" center-x="@" center-y="@" costume-color="@,@,@" image="@" is3D="@" ~/>',
+        this.name,
+        this.rotationCenter.x,
+        this.rotationCenter.y,
+        this.costumeColor.r,
+        this.costumeColor.g,
+        this.costumeColor.b,
+        this.is3D ? this.url :
+            this instanceof SVG_Costume ?
+                    this.contents.src : this.contents.toDataURL('image/png'),
+        this.is3D
+    );
+    if(this.originalPixels) {
+        this.setColor(this.costumeColor);
+    }
+    return serialized;
+};
+
 SnapSerializer.prototype.loadValue = function (model) {
     // private
     var v, items, el, center, image, name, audio, option,
@@ -1141,8 +1167,10 @@ SnapSerializer.prototype.loadValue = function (model) {
         v.isDraggable = model.attributes.draggable !== 'false';
         v.isVisible = model.attributes.hidden !== 'true';
         v.heading = parseFloat(model.attributes.heading) || 0;
+        if(model.attributes.xRotation && model.attributes.yRotation && model.attributes.zRotation) v.point3D(model.attributes.xRotation || 0, model.attributes.yRotation || 0, model.attributes.zRotation || 0)
         v.drawNew();
         v.gotoXY(+model.attributes.x || 0, +model.attributes.y || 0);
+		if(model.attributes.z) v.gotoXYZ(+model.attributes.x || 0, +model.attributes.y || 0, +model.attributes.z || 0);
         myself.loadObject(v, model);
         return v;
     case 'context':
@@ -1234,12 +1262,11 @@ SnapSerializer.prototype.loadValue = function (model) {
                 };
             }
 			else if (Object.prototype.hasOwnProperty.call(model.attributes,'is3D') && model.attributes.is3D == "true"){
-                var url = config.asset_path + 'Costumes3D' + '/' + name+ ".js";
 				v = new Costume(
 					null, // no canvas for 3D costumes
 					name ? name.split('.')[0] : '', // up to period
 					null, // rotation center
-					url,
+					model.attributes.image,
 					true, // is3D
 					false // is3dSwitchable
 				);
@@ -1441,8 +1468,8 @@ SpriteMorph.prototype.toXML = function (serializer) {
         ide = stage ? stage.parentThatIsA(IDE_Morph) : null,
         idx = ide ? ide.sprites.asArray().indexOf(this) + 1 : 0;
     return serializer.format(
-        '<sprite name="@" idx="@" x="@" y="@"' +
-            ' heading="@"' +
+        '<sprite name="@" idx="@" x="@" y="@" z="@"' +
+            ' heading="@" xRotation="@" yRotation="@" zRotation="@"' +
             ' scale="@"' +
             ' rotation="@"' +
             ' draggable="@"' +
@@ -1459,7 +1486,11 @@ SpriteMorph.prototype.toXML = function (serializer) {
         idx,
         this.xPosition(),
         this.yPosition(),
+        this.zPosition(),
         this.heading,
+        this._3DRotationX,
+        this._3DRotationY,
+        this._3DRotationZ,
         this.scale,
         this.rotationStyle,
         this.isDraggable,

@@ -1876,6 +1876,9 @@ IDE_Morph.prototype.droppedText = function (aString, name) {
     if (aString.indexOf('<media') === 0) {
         return this.openMediaString(aString);
     }
+    if (aString.indexOf('<3DCostume>') === 0) {
+        return this.dropped3dObject(name, 'data:text/json,'+encodeURIComponent(aString.substring(11)));
+    }
 };
 
 IDE_Morph.prototype.droppedBinary = function (anArrayBuffer, name) {
@@ -2597,7 +2600,6 @@ IDE_Morph.prototype.settingsMenu = function () {
     );
     menu.popup(world, pos);
 };
-
 IDE_Morph.prototype.projectMenu = function () {
     var menu,
         myself = this,
@@ -2671,18 +2673,14 @@ IDE_Morph.prototype.projectMenu = function () {
             inp.addEventListener(
                 "change",
                 function () {
+                    document.body.removeChild(inp);
+                    myself.filePicker = null;
                     world.hand.processDrop(inp.files);
                 },
                 false
             );
             document.body.appendChild(inp);
             myself.filePicker = inp;
-			document.body.onfocus = 
-				function () {
-					document.body.removeChild(inp);
-					myself.filePicker = null;
-					document.body.onfocus = null;
-                };
             inp.click();
         },
         'file menu import hint' // looks up the actual text in the translator
@@ -2811,7 +2809,17 @@ IDE_Morph.prototype.projectMenu = function () {
 
                 function loadCostume(name) {
                     var url = dir + '/' + name;
-                    myself.dropped3dObject(name, url);  
+                    request = new XMLHttpRequest();
+                    try {
+                        request.open('GET', url, false);
+                        request.send();
+                        if (request.status === 200) {
+                        myself.dropped3dObject(name, 'data:text/json,'+encodeURIComponent(request.responseText));
+                        }
+                    }
+                    catch(e){}
+
+  
                 }
 
                 names.forEach(function (line) {
