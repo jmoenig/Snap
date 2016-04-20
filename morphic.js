@@ -4496,8 +4496,9 @@ CursorMorph.prototype.init = function (aStringOrTextMorph) {
     this.setExtent(new Point(Math.max(Math.floor(ls / 20), 1), ls));
     this.drawNew();
     this.image.getContext('2d').font = this.target.font();
-    if (this.target instanceof TextMorph &&
-        (this.target.alignment !== 'left')) {
+    if (this.target instanceof TextMorph ) {
+        this.target.cursor=this;
+        if (this.target.alignment !== 'left')
         this.target.setAlignmentToLeft();
     }
     this.initializeInputHandler();
@@ -4541,7 +4542,20 @@ CursorMorph.prototype.initializeInputHandler = function () {
     );
     this.inputHandler.gotoSlot = function (Slot) {
         this.setSelectionRange(Slot, Slot);
-    }
+    };
+
+    this.inputHandler.insert = function (str, staPos,endPos) {
+        var selection=this.selectionStart;
+        var tmpStr = this.value;
+        this.value = tmpStr.substring(0, staPos) + str + tmpStr.substring(endPos, tmpStr.length);
+        //if selectionStart != selectionEnd,this is wrong.
+        if (endPos <= this.selectionStart){
+            myself.gotoSlot(selection + str.length);
+        }else {
+            myself.gotoSlot(selection);
+        }
+
+    };
 };
 
 
@@ -4691,7 +4705,7 @@ CursorMorph.prototype.gotoPos = function (aPoint) {
 
 CursorMorph.prototype.updateSelection = function (shift) {
     if (shift) {
-        if (this.target.endMark<0 && this.target.startMark<0) {
+        if (this.target.endMark < 0 && this.target.startMark < 0) {
             this.target.startMark = this.slot;
             this.target.endMark = this.slot;
         } else if (this.target.endMark !== this.slot) {
@@ -7461,7 +7475,7 @@ StringMorph.prototype.selectAll = function () {
     if (this.isEditable) {
         this.startMark = 0;
         this.endMark = this.text.length;
-        this.root().cursor.inputHandler.setSelectionRange(this.startMark,this.endMark);
+        this.root().cursor.inputHandler.setSelectionRange(this.startMark, this.endMark);
         this.drawNew();
         this.changed();
     }
@@ -7522,11 +7536,11 @@ StringMorph.prototype.enableSelecting = function () {
             var newMark = this.slotAt(pos);
             if (newMark !== this.endMark) {
                 this.endMark = newMark;
-                    if (this.endMark < this.startMark) {
-                        this.root().cursor.inputHandler.setSelectionRange(this.endMark, this.startMark);
-                    } else {
-                        this.root().cursor.inputHandler.setSelectionRange(this.startMark, this.endMark);
-                    }
+                if (this.endMark < this.startMark) {
+                    this.root().cursor.inputHandler.setSelectionRange(this.endMark, this.startMark);
+                } else {
+                    this.root().cursor.inputHandler.setSelectionRange(this.startMark, this.endMark);
+                }
                 this.drawNew();
                 this.changed();
             }
@@ -7603,7 +7617,8 @@ TextMorph.prototype.init = function (text,
 
     //additional properties for ad-hoc evaluation:
     this.receiver = null;
-
+//additional properties for inputHander
+    this.cursor=null;
     // additional properties for text-editing:
     this.isScrollable = true; // scrolls into view when edited
     this.currentlySelecting = false;
@@ -7664,6 +7679,9 @@ TextMorph.prototype.parse = function () {
                 w = context.measureText(newline).width;
                 if (w > myself.maxWidth) {
                     myself.lines.push(oldline);
+                    if(myself.cursor){
+                        myself.cursor.inputHandler.insert('\n',slot-1,slot);
+                    }
                     myself.lineSlots.push(slot);
                     myself.maxLineWidth = Math.max(
                         myself.maxLineWidth,
