@@ -448,6 +448,12 @@ SnapTranslator.dict.zh = {
         '字体大小…',
     'set this String\'s\nfont point size':
         '设置字符串的字体点数',
+    'align left':
+        '靠左',
+    'align right':
+        '靠右',
+    'align center':
+        '居中',
     'serif':
         '衬线字体',
     'sans-serif':
@@ -532,6 +538,14 @@ SnapTranslator.dict.zh = {
         '全部围住…',
     'keep all submorphs\nwithin and visible':
         '围入所有子morph\n全部可见',
+    'auto line wrap on...':
+        '自动折行',
+    'enable automatic\nline wrapping':
+        '打开自动折行功能',
+    'auto line wrap off...':
+        '不自动折行',
+    'turn automatic\nline wrapping\noff':
+        '关闭自动折行功能',
     'screenshot...':
         '屏幕截图…',
     'restore display':
@@ -1920,6 +1934,8 @@ SnapTranslator.dict.zh = {
         'e^',
 
     // delimiters
+    'character':
+        '字符',
     'letter':
         '字母',
     'whitespace':
@@ -1927,7 +1943,7 @@ SnapTranslator.dict.zh = {
     'line':
         '行',
     'tab':
-        'tab',
+        '制表符',
     'cr':
         '回车',
 
