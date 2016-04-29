@@ -496,16 +496,18 @@
             function genLangJS() {
                 var locale = actionForm.locale.value;
                 var baseLocale = actionForm.base.value;
-                var baseJS = document.getElementById('baseDict');
+                var baseJS = document.getElementById('baseDict').textContent;
                 var baseDict = SnapTranslator.dict[baseLocale];
                 var targetDict = SnapTranslator.dict[locale];
-                var srcLines = baseJS.textContent.split('\n');
+                var targetJS = document.getElementById('targetDict').textContent;
+                var srcLines = baseJS.split('\n');
                 var blockCommentOpen = false;
                 var entry = null;
                 var todos = 0, entries = 0;
                 var translation = null;
                 var continuedLine = false;
                 var closingLine = null;
+                var now = new Date();
 
                 logMsg('info', 'Generating lang-'+locale+'.js ...');
 
@@ -517,10 +519,22 @@
                                      ? line.match(/\*\//) === null
                                      : (line.match(/\/\*/) !== null 
                                          && line.match(/\*\//) === null);
-                    if (blockCommentOpen)
-                        return optionForm['gen-nocomment'].checked
-                            ? '' : line.replace(/^\s+lang-\w+\.js$/,
-                                                   '    lang-'+ locale +'.js');
+                    if (blockCommentOpen) {
+                        if (optionForm['gen-nocomment'].checked) 
+                            return '';
+                        else if (line.match(/translation for SNAP!/i))
+                            return '    ' + targetDict.language_name + ' translation for SNAP!';
+                        else if (line.match(/written by /i))
+                            return ([].concat(targetJS.match(/^\s*written by .*$/))[0] 
+                                    || '    written by ' + targetDict.language_translator);
+                        else if (line.match(/Copyright/i))
+                            return ([].concat(targetJS.match(/^\s*Copyright.*$/i)))[0]
+                                    || '    Copyright (C) ' + now.getFullYear() + ' by ' + targetDict.language_translator;
+                        else if (line.match(/^\s*lang-\w+\.js\s*/))
+                            return '    lang-'+ locale +'.js';
+                        else
+                            return line;
+                    }
 
                     if (line.match(/\*\//))
                         return optionForm['gen-nocomment'].checked 
@@ -534,12 +548,15 @@
                         //entry = match[1].replace(/\\n/g, '\n').replace(/\\'/g, '\'');
                         eval('entry = '+match[1]);
                         entries ++;
-                        return line.replace(/^\t/, '    ');
+                        return line;
                     }
 
                     if (entry && line.match(/'.*'/)) { // matches a new value
                         if (entry in targetDict) {
-                            translation = singleQuote(targetDict[entry]);
+                            if (entry === 'last_changed')
+                                translation = singleQuote((new Date()).toISOString().substr(0, 10));
+                            else
+                                translation = singleQuote(targetDict[entry]);
                             // line ends with (+) to be continued to next line
                             continuedLine = line.match(/\+\s*$/) !== null;
                         }
@@ -590,7 +607,10 @@
 
                 result.value = newLines.filter(function (line, i) {
                     return line !== '' || newLines[i-1] !== '';    // remove extra empty lines
-                }).join('\n');
+                }).join('\n')
+                  .replace(/^( *)\t/mg, "$1    ") // reformat leading tab to 4 spaces
+                  .replace(/^( *)\t/mg, "$1    ")
+                  .replace(/^( *)\t/mg, "$1    ");
 
                 logMsg('info', 'Done, '
                     + entries + ' entries, '
