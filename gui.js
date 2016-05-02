@@ -3842,15 +3842,19 @@ IDE_Morph.prototype.saveFileAs = function (
 
 IDE_Morph.prototype.saveCanvasAs = function (canvas, fileName, newWindow) {
     // Export a Canvas object as a PNG image
-    // cavas.toBlob() is currently only supported in Firefox and IE
-    var myself = this;
-    if (canvas.toBlob) {
-        canvas.toBlob(function (blob) {
-            myself.saveFileAs(blob, 'image/png', fileName, newWindow);
-        });
-    } else {
-        this.saveFileAs(canvas.toDataURL(), 'image/png', fileName, newWindow);
-    }
+    // Note: This commented out due to poor browser support.
+    // cavas.toBlob() is currently supported in Firefox, IE, Chrome but 
+    // browsers prevent easily saving the generated files.
+    // Do not re-enable without revisiting issue #1191
+    // if (canvas.toBlob) {
+    //     var myself = this;
+    //     canvas.toBlob(function (blob) {
+    //         myself.saveFileAs(blob, 'image/png', fileName, newWindow);
+    //     });
+    //     return;
+    // }
+    
+    this.saveFileAs(canvas.toDataURL(), 'image/png', fileName, newWindow);
 };
 
 IDE_Morph.prototype.saveXMLAs = function(xml, fileName, newWindow) {
