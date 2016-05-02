@@ -2882,3 +2882,36 @@ end - bulk of 151215
 * added web api / https reporter library
 * Blocks, Store: New “transient variable” feature
 * German translation update
+
+== v4.0.6 ==== - saving linked lists
+
+160502
+------
+* first class sprites, new MY reporter block and extended functionality of TOUCHING
+* fixed switching from list watcher to table view inside sprite speech bubbles
+* fixed paint editor automatic rotation center issue
+* enhanced functionality to SET a sprite’s attributes
+* execute clone initialization scripts’ first step in the same frame as the clone command
+* auto-repair (sorta) certain broken project files
+* Threads: More aggressive emergency yielding
+* “corpsify” deleted sprites, which might still be referred to by variables and lists
+* Blocks: simplify block copying
+* experimental hidden “live-coding support” preference
+* updated penTrails library to shrinkWrap generated costumes
+
+
+demos from the documentation:
+http://snap.berkeley.edu/run#cloud:Username=jens&ProjectName=population
+http://snap.berkeley.edu/run#present:Username=jens&ProjectName=Woodworm
+http://snap.berkeley.edu/run#present:Username=jens&ProjectName=Ferris%20Wheel%202016
+http://snap.berkeley.edu/run#cloud:Username=jens&ProjectName=PathFollower
+http://snap.berkeley.edu/run#present:Username=jens&ProjectName=cartwheel
+http://snap.berkeley.edu/run#cloud:Username=jens&ProjectName=rotation
+
+* Translation updates: Slovenian, Portuguese, Chinese
+* minor bug fixes
+
+== v4.0.7 ==== - first class sprites
+
+
+

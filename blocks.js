@@ -137,19 +137,19 @@
 */
 
 /*global Array, BoxMorph,
-Color, ColorPaletteMorph, CursorMorph, FrameMorph, Function, HandleMorph,
-Math, MenuMorph, Morph, MorphicPreferences, Object, Point, ScrollFrameMorph,
-ShadowMorph, String, StringMorph, TextMorph, WorldMorph, contains, degrees,
-detect, document, getDocumentPositionOf, isNaN, isString, newCanvas, nop,
-parseFloat, radians, useBlurredShadows, SpeechBubbleMorph, modules,
-StageMorph, fontHeight, TableFrameMorph, SpriteMorph, Context,
-ListWatcherMorph, CellMorph, DialogBoxMorph, BlockInputFragmentMorph,
-PrototypeHatBlockMorph, Costume, IDE_Morph, BlockDialogMorph,
-BlockEditorMorph, localize, isNil*/
+Color, ColorPaletteMorph, FrameMorph, Function, HandleMorph, Math, MenuMorph,
+Morph, MorphicPreferences, Object, Point, ScrollFrameMorph, ShadowMorph,
+String, StringMorph, TextMorph, WorldMorph, contains, degrees, detect,
+document, getDocumentPositionOf, isNaN, isString, newCanvas, nop, parseFloat,
+radians, useBlurredShadows, SpeechBubbleMorph, modules, StageMorph,
+fontHeight, TableFrameMorph, SpriteMorph, Context, ListWatcherMorph,
+CellMorph, DialogBoxMorph, BlockInputFragmentMorph, PrototypeHatBlockMorph,
+Costume, IDE_Morph, BlockDialogMorph, BlockEditorMorph, localize, isNil,
+isSnapObject*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2016-March-16';
+modules.blocks = '2016-May-02';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -1031,6 +1031,15 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                 true
             );
             break;
+        case '%get': // sprites, parts, speciment, clones
+            part = new InputSlotMorph(
+                null,
+                false,
+                'gettablesMenu',
+                true
+            );
+            part.isStatic = true;
+            break;
         case '%cst':
             part = new InputSlotMorph(
                 null,
@@ -1049,7 +1058,7 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                     comic: ['comic'],
                     duplicate: ['duplicate'],
                     confetti: ['confetti']
-                    },
+                },
                 true
             );
             part.setContents(['ghost']);
@@ -1215,17 +1224,7 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             part = new InputSlotMorph(
                 null,
                 false,
-                {
-                    number : ['number'],
-                    text : ['text'],
-                    Boolean : ['Boolean'],
-                    list : ['list'],
-                    command : ['command'],
-                    reporter : ['reporter'],
-                    predicate : ['predicate']
-                    // ring : 'ring'
-                    // object : 'object'
-                },
+                'typesMenu',
                 true
             );
             part.setContents(['number']);
@@ -1789,11 +1788,28 @@ SyntaxElementMorph.prototype.showBubble = function (value, exportPic) {
         morphToShow.expand(this.parentThatIsA(ScrollFrameMorph).extent());
         isClickable = true;
     } else if (value instanceof Morph) {
-        img = value.fullImage();
-        morphToShow = new Morph();
-        morphToShow.silentSetWidth(img.width);
-        morphToShow.silentSetHeight(img.height);
-        morphToShow.image = img;
+        if (isSnapObject(value)) {
+            img = value.thumbnail(new Point(40, 40));
+            morphToShow = new Morph();
+            morphToShow.silentSetWidth(img.width);
+            morphToShow.silentSetHeight(img.height);
+            morphToShow.image = img;
+            morphToShow.version = value.version;
+            morphToShow.step = function () {
+                if (this.version !== value.version) {
+                    img = value.thumbnail(new Point(40, 40));
+                    this.image = img;
+                    this.version = value.version;
+                    this.changed();
+                }
+            };
+        } else {
+            img = value.fullImage();
+            morphToShow = new Morph();
+            morphToShow.silentSetWidth(img.width);
+            morphToShow.silentSetHeight(img.height);
+            morphToShow.image = img;
+        }
     } else if (value instanceof Costume) {
         img = value.thumbnail(new Point(40, 40));
         morphToShow = new Morph();
@@ -3245,13 +3261,14 @@ BlockMorph.prototype.fullCopy = function () {
     ans.allChildren().filter(function (block) {
         if (block instanceof SyntaxElementMorph) {
             block.cachedInputs = null;
-            if (block instanceof InputSlotMorph) {
-                block.contents().clearSelection();
-            } else if (block.definition) {
+//            if (block instanceof InputSlotMorph) {
+//                block.contents().clearSelection();
+//            } else
+            if (block.definition) {
                 block.initializeVariables();
             }
-        } else if (block instanceof CursorMorph) {
-            block.destroy();
+//        } else if (block instanceof CursorMorph) {
+//            block.destroy();
         }
         return !isNil(block.comment);
     }).forEach(function (block) {
@@ -7023,7 +7040,7 @@ InputSlotMorph.prototype.messagesMenu = function () {
         allNames = [];
 
     stage.children.concat(stage).forEach(function (morph) {
-        if (morph instanceof SpriteMorph || morph instanceof StageMorph) {
+        if (isSnapObject(morph)) {
             allNames = allNames.concat(morph.allMessageNames());
         }
     });
@@ -7057,7 +7074,7 @@ InputSlotMorph.prototype.messagesReceivedMenu = function () {
         allNames = [];
 
     stage.children.concat(stage).forEach(function (morph) {
-        if (morph instanceof SpriteMorph || morph instanceof StageMorph) {
+        if (isSnapObject(morph)) {
             allNames = allNames.concat(morph.allMessageNames());
         }
     });
@@ -7172,6 +7189,48 @@ InputSlotMorph.prototype.objectsMenu = function () {
             dict[name] = name;
         });
     }
+    return dict;
+};
+
+InputSlotMorph.prototype.typesMenu = function () {
+    var dict = {
+        number : ['number'],
+        text : ['text'],
+        Boolean : ['Boolean'],
+        list : ['list']
+    };
+    if (SpriteMorph.prototype.enableFirstClass) {
+        dict.sprite = ['sprite'];
+    }
+    dict.command = ['command'];
+    dict.reporter = ['reporter'];
+    dict.predicate = ['predicate'];
+    return dict;
+};
+
+InputSlotMorph.prototype.gettablesMenu = function () {
+    var dict = {
+        neighbors : ['neighbors'],
+        self : ['self'],
+        'other sprites' : ['other sprites'],
+        clones : ['clones'],
+        'other clones' : ['other clones']
+    };
+    if (SpriteMorph.prototype.enableNesting) {
+        dict.parts = ['parts'];
+        dict.anchor = ['anchor'];
+    }
+    dict.stage = ['stage'];
+    if (StageMorph.prototype.enableInheritance) {
+        dict.children = ['children'];
+        dict.parent = ['parent'];
+    }
+    dict.name = ['name'];
+    dict['dangling?'] = ['dangling?'];
+    dict['rotation x'] = ['rotation x'];
+    dict['rotation y'] = ['rotation y'];
+    dict['center x'] = ['center x'];
+    dict['center y'] = ['center y'];
     return dict;
 };
 

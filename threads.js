@@ -59,9 +59,9 @@ degrees, detect, nop, radians, ReporterSlotMorph, CSlotMorph, RingMorph,
 IDE_Morph, ArgLabelMorph, localize, XML_Element, hex_sha512, TableDialogMorph,
 StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph,
-TableFrameMorph*/
+TableFrameMorph, isSnapObject*/
 
-modules.threads = '2016-March-16';
+modules.threads = '2016-May-02';
 
 var ThreadManager;
 var Process;
@@ -191,7 +191,8 @@ ThreadManager.prototype.startProcess = function (
     isThreadSafe,
     exportResult,
     callback,
-    isClicked
+    isClicked,
+    rightAway
 ) {
     var active = this.findProcess(block),
         top = block.topBlock(),
@@ -203,13 +204,16 @@ ThreadManager.prototype.startProcess = function (
         active.stop();
         this.removeTerminatedProcesses();
     }
-    newProc = new Process(block.topBlock(), callback);
+    newProc = new Process(block.topBlock(), callback, rightAway);
     newProc.exportResult = exportResult;
     newProc.isClicked = isClicked || false;
     if (!newProc.homeContext.receiver.isClone) {
         top.addHighlight();
     }
     this.processes.push(newProc);
+    if (rightAway) {
+        newProc.runStep();
+    }
     return newProc;
 };
 
@@ -351,7 +355,7 @@ ThreadManager.prototype.doWhen = function (block, stopIt) {
             pred,
             null,
             null,
-            20,
+            50,
             'the predicate takes\ntoo long for a\ncustom hat block',
             true // suppress errors => handle them right here instead
         ) === true) {
@@ -430,8 +434,9 @@ Process.prototype = {};
 Process.prototype.constructor = Process;
 Process.prototype.timeout = 500; // msecs after which to force yield
 Process.prototype.isCatchingErrors = true;
+Process.prototype.enableLiveCoding = false; // experimental
 
-function Process(topBlock, onComplete) {
+function Process(topBlock, onComplete, rightAway) {
     this.topBlock = topBlock || null;
 
     this.readyToYield = false;
@@ -462,7 +467,9 @@ function Process(topBlock, onComplete) {
             topBlock.blockSequence(),
             this.homeContext
         );
-        this.pushContext('doYield'); // highlight top block
+        if (!rightAway) {
+            this.pushContext('doYield'); // highlight top block
+        }
     }
 }
 
@@ -485,8 +492,9 @@ Process.prototype.runStep = function (deadline) {
     this.readyToYield = false;
     while (!this.readyToYield
             && this.context
-            && (this.isAtomic ?
-                    (Date.now() - this.lastYield < this.timeout) : true)
+            && // (this.isAtomic ?
+                    (Date.now() - this.lastYield < this.timeout)
+               //             : true)
                 ) {
         // also allow pausing inside atomic steps - for PAUSE block primitive:
         if (this.isPaused) {
@@ -870,7 +878,8 @@ Process.prototype.reify = function (topBlock, parameterNames, isCustomBlock) {
         i = 0;
 
     if (topBlock) {
-        context.expression = topBlock.fullCopy();
+        context.expression = this.enableLiveCoding ?
+                topBlock : topBlock.fullCopy();
         context.expression.show(); // be sure to make visible if in app mode
 
         if (!isCustomBlock) {
@@ -888,7 +897,8 @@ Process.prototype.reify = function (topBlock, parameterNames, isCustomBlock) {
         }
 
     } else {
-        context.expression = [this.context.expression.fullCopy()];
+        context.expression = this.enableLiveCoding ? [this.context.expression]
+                : [this.context.expression.fullCopy()];
     }
 
     context.inputs = parameterNames.asArray();
@@ -1294,16 +1304,20 @@ Process.prototype.doDeclareVariables = function (varNames) {
 
 Process.prototype.doSetVar = function (varName, value) {
     var varFrame = this.context.variables,
-        name = varName;
+        name = varName,
+        rcvr;
     if (name instanceof Context) {
+        rcvr = this.blockReceiver();
         if (name.expression.selector === 'reportGetVar') {
             name.variables.setVar(
                 name.expression.blockSpec,
                 value,
-                this.blockReceiver()
+                rcvr
             );
             return;
         }
+        this.doSet(name, value);
+        return;
     }
     varFrame.setVar(name, value, this.blockReceiver());
 };
@@ -1959,7 +1973,7 @@ Process.prototype.blockReceiver = function () {
 // Process sound primitives (interpolated)
 
 Process.prototype.doPlaySoundUntilDone = function (name) {
-    var sprite = this.homeContext.receiver;
+    var sprite = this.blockReceiver();
     if (this.context.activeAudio === null) {
         this.context.activeAudio = sprite.playSound(name);
     }
@@ -2060,7 +2074,7 @@ Process.prototype.doBroadcast = function (message) {
     if (message !== '') {
         stage.lastMessage = message;
         stage.children.concat(stage).forEach(function (morph) {
-            if (morph instanceof SpriteMorph || morph instanceof StageMorph) {
+            if (isSnapObject(morph)) {
                 hats = hats.concat(morph.allHatBlocksFor(message));
             }
         });
@@ -2116,6 +2130,12 @@ Process.prototype.assertType = function (thing, typeString) {
     throw new Error('expecting ' + typeString + ' but getting ' + thingType);
 };
 
+Process.prototype.assertAlive = function (thing) {
+    if (thing && thing.isCorpse) {
+        throw new Error('cannot operate on a deleted sprite');
+    }
+};
+
 Process.prototype.reportTypeOf = function (thing) {
     // answer a string denoting the argument's type
     var exp;
@@ -2133,6 +2153,12 @@ Process.prototype.reportTypeOf = function (thing) {
     }
     if (thing instanceof List) {
         return 'list';
+    }
+    if (thing instanceof SpriteMorph) {
+        return 'sprite';
+    }
+    if (thing instanceof StageMorph) {
+        return 'stage';
     }
     if (thing instanceof Context) {
         if (thing.expression instanceof RingMorph) {
@@ -2473,6 +2499,11 @@ Process.prototype.getOtherObject = function (name, thisObj, stageObj) {
     // private, find the sprite indicated by the given name
     // either onstage or in the World's hand
 
+    // experimental: deal with first-class sprites
+    if (isSnapObject(name)) {
+        return name;
+    }
+
     var stage = isNil(stageObj) ?
                 thisObj.parentThatIsA(StageMorph) : stageObj,
         thatObj = null;
@@ -2564,7 +2595,7 @@ Process.prototype.doGotoObject = function (name) {
 // Process temporary cloning (Scratch-style)
 
 Process.prototype.createClone = function (name) {
-    var thisObj = this.homeContext.receiver,
+    var thisObj = this.blockReceiver(),
         thatObj;
 
     if (!name) {return; }
@@ -2623,7 +2654,14 @@ Process.prototype.objectTouchingObject = function (thisObj, name) {
                     thisObj.isTouching(stage.penTrailsMorph())) {
                 return true;
             }
-            those = this.getObjectsNamed(name, thisObj, stage); // clones
+            if (isSnapObject(name)) {
+                return thisObj.isTouching(name);
+            }
+            if (name instanceof List) { // assume all elements to be sprites
+                those = name.itemsArray();
+            } else {
+                those = this.getObjectsNamed(name, thisObj, stage); // clones
+            }
             if (those.some(function (any) {
                     return thisObj.isTouching(any);
                 })) {
@@ -2640,7 +2678,7 @@ Process.prototype.objectTouchingObject = function (thisObj, name) {
 
 Process.prototype.reportTouchingColor = function (aColor) {
     // also check for any parts (subsprites)
-    var thisObj = this.homeContext.receiver,
+    var thisObj = this.blockReceiver(),
         stage;
 
     if (thisObj) {
@@ -2661,7 +2699,7 @@ Process.prototype.reportTouchingColor = function (aColor) {
 
 Process.prototype.reportColorIsTouchingColor = function (color1, color2) {
     // also check for any parts (subsprites)
-    var thisObj = this.homeContext.receiver,
+    var thisObj = this.blockReceiver(),
         stage;
 
     if (thisObj) {
@@ -2713,6 +2751,7 @@ Process.prototype.reportAttributeOf = function (attribute, name) {
         stage;
 
     if (thisObj) {
+        this.assertAlive(thisObj);
         stage = thisObj.parentThatIsA(StageMorph);
         if (stage.name === name) {
             thatObj = stage;
@@ -2720,6 +2759,7 @@ Process.prototype.reportAttributeOf = function (attribute, name) {
             thatObj = this.getOtherObject(name, thisObj, stage);
         }
         if (thatObj) {
+            this.assertAlive(thatObj);
             if (attribute instanceof Context) {
                 return this.reportContextFor(attribute, thatObj);
             }
@@ -2745,6 +2785,139 @@ Process.prototype.reportAttributeOf = function (attribute, name) {
         }
     }
     return '';
+};
+
+Process.prototype.reportGet = function (query) {
+    // experimental, answer a reference to a first-class member
+    // or a list of first-class members
+    var thisObj = this.blockReceiver(),
+        neighborhood,
+        stage,
+        objName;
+
+    if (thisObj) {
+        switch (this.inputOption(query)) {
+        case 'self' :
+            return thisObj;
+        case 'other sprites':
+            stage = thisObj.parentThatIsA(StageMorph);
+            return new List(
+                stage.children.filter(function (each) {
+                    return each instanceof SpriteMorph &&
+                        each !== thisObj;
+                })
+            );
+        case 'parts':
+            return new List(thisObj.parts || []);
+        case 'anchor':
+            return thisObj.anchor || '';
+        case 'parent':
+            return thisObj.exemplar || '';
+        case 'children':
+            return new List(thisObj.specimens ? thisObj.specimens() : []);
+        case 'clones':
+            stage = thisObj.parentThatIsA(StageMorph);
+            objName = thisObj.name || thisObj.cloneOriginName;
+            return new List(
+                stage.children.filter(function (each) {
+                    return each.isClone &&
+                        (each !== thisObj) &&
+                        (each.cloneOriginName === objName);
+                })
+            );
+        case 'other clones':
+            return thisObj.isClone ? this.reportGet(['clones']) : new List();
+        case 'neighbors':
+            stage = thisObj.parentThatIsA(StageMorph);
+            neighborhood = thisObj.bounds.expandBy(new Point(
+                thisObj.width(),
+                thisObj.height()
+            ));
+            return new List(
+                stage.children.filter(function (each) {
+                    return each instanceof SpriteMorph &&
+                        (each !== thisObj) &&
+                        each.bounds.intersects(neighborhood);
+                })
+            );
+        case 'dangling?':
+            return !thisObj.rotatesWithAnchor;
+        case 'rotation x':
+            return thisObj.xPosition();
+        case 'rotation y':
+            return thisObj.yPosition();
+        case 'center x':
+            return thisObj.xCenter();
+        case 'center y':
+            return thisObj.yCenter();
+        case 'name':
+            return thisObj.name;
+        case 'stage':
+            return thisObj.parentThatIsA(StageMorph);
+        }
+    }
+    return '';
+};
+
+Process.prototype.doSet = function (attribute, value) {
+    // experimental, manipulate sprites' attributes
+    var name, rcvr;
+    if (!(attribute instanceof Context)) {
+        return;
+    }
+    rcvr = this.blockReceiver();
+    this.assertAlive(rcvr);
+    if (!(attribute instanceof Context) ||
+            attribute.expression.selector !== 'reportGet') {
+        throw new Error(localize('unsupported attribute'));
+    }
+    name = attribute.expression.inputs()[0].evaluate();
+    if (name instanceof Array) {
+        name = name[0];
+    }
+    switch (name) {
+    case 'anchor':
+        this.assertType(rcvr, 'sprite');
+        if (value instanceof SpriteMorph) {
+            // avoid circularity here, because the GUI already checks for
+            // conflicts while the user drags parts over prospective targets
+            if (!rcvr.enableNesting || contains(rcvr.allParts(), value)) {
+                throw new Error(
+                    localize('unable to nest\n(disabled or circular?)')
+                );
+            }
+            value.attachPart(rcvr);
+        } else {
+            rcvr.detachFromAnchor();
+        }
+        break;
+    case 'parent':
+        this.assertType(rcvr, 'sprite');
+        value = value instanceof SpriteMorph ? value : null;
+        // needed: circularity avoidance
+        rcvr.setExemplar(value);
+        break;
+    case 'dangling?':
+        this.assertType(rcvr, 'sprite');
+        this.assertType(value, 'Boolean');
+        rcvr.rotatesWithAnchor = !value;
+        rcvr.version = Date.now();
+        break;
+    case 'rotation x':
+        this.assertType(rcvr, 'sprite');
+        this.assertType(value, 'number');
+        rcvr.setRotationX(value);
+        break;
+    case 'rotation y':
+        this.assertType(rcvr, 'sprite');
+        this.assertType(value, 'number');
+        rcvr.setRotationY(value);
+        break;
+    default:
+        throw new Error(
+            '"' + localize(name) + '" ' + localize('is read-only')
+        );
+    }
 };
 
 Process.prototype.reportContextFor = function (context, otherObj) {

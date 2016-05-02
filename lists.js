@@ -60,9 +60,9 @@
 Color, Point, WatcherMorph, StringMorph, SpriteMorph, ScrollFrameMorph,
 CellMorph, ArrowMorph, MenuMorph, snapEquals, Morph, isNil, localize,
 MorphicPreferences, TableDialogMorph, SpriteBubbleMorph, SpeechBubbleMorph,
-TableFrameMorph, TableMorph, Variable*/
+TableFrameMorph, TableMorph, Variable, isSnapObject*/
 
-modules.lists = '2016-February-24';
+modules.lists = '2016-May-02';
 
 var List;
 var ListWatcherMorph;
@@ -322,6 +322,27 @@ List.prototype.asArray = function () {
     return this.contents;
 };
 
+List.prototype.itemsArray = function () {
+    // answer an array containing my elements
+    // don't convert linked lists to arrays
+    if (this.isLinked) {
+        var next = this,
+            result = [],
+            i;
+        while (next && next.isLinked) {
+            result.push(next.first);
+            next = next.rest;
+        }
+        if (next) {
+            for (i = 1; i <= next.contents.length; i += 1) {
+                result.push(next.at(i));
+            }
+        }
+        return result;
+    }
+    return this.contents;
+};
+
 List.prototype.asText = function () {
     var result = '',
         length,
@@ -353,17 +374,7 @@ List.prototype.asText = function () {
 
 List.prototype.becomeArray = function () {
     if (this.isLinked) {
-        var next = this, i;
-        this.contents = [];
-        while (next && next.isLinked) {
-            this.contents.push(next.first);
-            next = next.rest;
-        }
-        if (next) {
-            for (i = 1; i <= next.contents.length; i += 1) {
-                this.contents.push(next.at(i));
-            }
-        }
+        this.contents = this.itemsArray();
         this.isLinked = false;
         this.first = null;
         this.rest = null;
@@ -543,10 +554,12 @@ ListWatcherMorph.prototype.update = function (anyway) {
         starttime, maxtime = 1000;
 
     this.frame.contents.children.forEach(function (m) {
-
-        if (m instanceof CellMorph
-                && m.contentsMorph instanceof ListWatcherMorph) {
-            m.contentsMorph.update();
+        if (m instanceof CellMorph) {
+            if (m.contentsMorph instanceof ListWatcherMorph) {
+                m.contentsMorph.update();
+            } else if (isSnapObject(m.contents)) {
+                m.update();
+            }
         }
     });
 
@@ -802,7 +815,7 @@ ListWatcherMorph.prototype.showTableView = function () {
     if (!view) {return; }
     if (view instanceof SpriteBubbleMorph) {
         view.changed();
-        view.drawNew();
+        view.drawNew(true);
     } else if (view instanceof SpeechBubbleMorph) {
         view.contents = new TableFrameMorph(new TableMorph(this.list, 10));
         view.contents.expand(this.extent());

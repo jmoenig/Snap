@@ -82,7 +82,7 @@ SpeechBubbleMorph, RingMorph, isNil, FileReader, TableDialogMorph,
 BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph*/
 
-modules.objects = '2016-March-16';
+modules.objects = '2016-May-02';
 
 var SpriteMorph;
 var StageMorph;
@@ -97,6 +97,10 @@ var WatcherMorph;
 var StagePrompterMorph;
 var Note;
 var SpriteHighlightMorph;
+
+function isSnapObject(thing) {
+    return thing instanceof SpriteMorph || (thing instanceof StageMorph);
+}
 
 // SpriteMorph /////////////////////////////////////////////////////////
 
@@ -144,6 +148,7 @@ SpriteMorph.prototype.sliderColor
 SpriteMorph.prototype.isCachingPrimitives = true;
 
 SpriteMorph.prototype.enableNesting = true;
+SpriteMorph.prototype.enableFirstClass = true;
 SpriteMorph.prototype.useFlatLineEnds = false;
 SpriteMorph.prototype.highlightColor = new Color(250, 200, 130);
 SpriteMorph.prototype.highlightBorder = 8;
@@ -863,6 +868,12 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'sensing',
             spec: 'current %dates'
         },
+        reportGet:{
+            type: 'reporter',
+            category: 'sensing',
+            spec: 'my %get',
+            defaults: [['neighbors']]
+        },
 
         // Operators
         reifyScript: {
@@ -1310,6 +1321,7 @@ SpriteMorph.prototype.init = function (globals) {
     this.rotationStyle = 1; // 1 = full, 2 = left/right, 0 = off
     this.version = Date.now(); // for observer optimization
     this.isClone = false; // indicate a "temporary" Scratch-style clone
+    this.isCorpse = false; // indicate whether a sprite/clone has been deleted
     this.cloneOriginName = '';
 
     // sprite nesting properties
@@ -1356,7 +1368,6 @@ SpriteMorph.prototype.fullCopy = function () {
     var c = SpriteMorph.uber.fullCopy.call(this),
         myself = this,
         arr = [],
-        dp,
         cb;
 
     c.stopTalking();
@@ -1393,7 +1404,7 @@ SpriteMorph.prototype.fullCopy = function () {
     c.anchor = null;
     c.parts = [];
     this.parts.forEach(function (part) {
-        dp = part.fullCopy();
+        var dp = part.fullCopy();
         dp.nestingScale = part.nestingScale;
         dp.rotatesWithAnchor = part.rotatesWithAnchor;
         c.attachPart(dp);
@@ -1404,10 +1415,12 @@ SpriteMorph.prototype.fullCopy = function () {
 
 SpriteMorph.prototype.appearIn = function (ide) {
     // private - used in IDE_Morph.duplicateSprite()
-    this.name = ide.newSpriteName(this.name);
+    if (!this.isClone) {
+        this.name = ide.newSpriteName(this.name);
+        ide.corral.addSprite(this);
+        ide.sprites.add(this);
+    }
     ide.stage.add(this);
-    ide.sprites.add(this);
-    ide.corral.addSprite(this);
     this.parts.forEach(function (part) {
         part.appearIn(ide);
     });
@@ -1531,7 +1544,7 @@ SpriteMorph.prototype.drawNew = function () {
 
         }
     }
-    this.version = Date.now();
+    this.version = Date.now(); // for observer optimization
 };
 
 SpriteMorph.prototype.endWarp = function () {
@@ -1921,7 +1934,12 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('getTimer'));
         blocks.push('-');
         blocks.push(block('reportAttributeOf'));
+
+        if (SpriteMorph.prototype.enableFirstClass) {
+            blocks.push(block('reportGet'));
+        }
         blocks.push('-');
+
         blocks.push(block('reportURL'));
         blocks.push('-');
         blocks.push(block('reportIsFastTracking'));
@@ -2756,7 +2774,9 @@ SpriteMorph.prototype.userMenu = function () {
         // menu.addItem('help', 'nop');
         return menu;
     }
-    menu.addItem("duplicate", 'duplicate');
+    if (!this.isClone) {
+        menu.addItem("duplicate", 'duplicate');
+    }
     menu.addItem("delete", 'remove');
     menu.addItem("move", 'moveCenter');
     if (!this.isClone) {
@@ -2836,17 +2856,33 @@ SpriteMorph.prototype.clonify = function (stage) {
     stage.add(this);
     hats = this.allHatBlocksFor('__clone__init__');
     hats.forEach(function (block) {
-        stage.threads.startProcess(block, stage.isThreadSafe);
+        stage.threads.startProcess(
+            block,
+            stage.isThreadSafe,
+            null, // export result
+            null, // callback
+            null, // is clicked
+            true // right away
+            );
     });
+    this.endWarp();
 };
 
 SpriteMorph.prototype.removeClone = function () {
     if (this.isClone) {
         // this.stopTalking();
         this.parent.threads.stopAllForReceiver(this);
+        this.corpsify();
         this.destroy();
         this.parent.cloneCount -= 1;
     }
+};
+
+// SpriteMorph deleting
+
+SpriteMorph.prototype.corpsify = function () {
+    this.isCorpse = true;
+    this.version = Date.now();
 };
 
 // SpriteMorph primitives
@@ -3666,6 +3702,53 @@ SpriteMorph.prototype.bounceOffEdge = function () {
     this.positionTalkBubble();
 };
 
+// SpriteMorph rotation center / fixation point manipulation
+
+SpriteMorph.prototype.setRotationX = function (absoluteX) {
+  this.setRotationCenter(new Point(absoluteX, this.yPosition()));
+};
+
+SpriteMorph.prototype.setRotationY = function (absoluteY) {
+  this.setRotationCenter(new Point(this.xPosition(), absoluteY));
+};
+
+SpriteMorph.prototype.setRotationCenter = function (absoluteCoordinate) {
+    var delta, normal;
+    if (!this.costume) {
+        throw new Error('setting the rotation center requires a costume');
+    }
+    delta = absoluteCoordinate.subtract(
+        new Point(this.xPosition(), this.yPosition())
+    ).divideBy(this.scale).rotateBy(radians(90 - this.heading));
+    normal = this.costume.rotationCenter.add(new Point(delta.x, -delta.y));
+    this.costume.rotationCenter = normal;
+    this.drawNew();
+};
+
+SpriteMorph.prototype.xCenter = function () {
+    var stage = this.parentThatIsA(StageMorph);
+
+    if (!stage && this.parent.grabOrigin) { // I'm currently being dragged
+        stage = this.parent.grabOrigin.origin;
+    }
+    if (stage) {
+        return (this.center().x - stage.center().x) / stage.scale;
+    }
+    return this.center().x;
+};
+
+SpriteMorph.prototype.yCenter = function () {
+    var stage = this.parentThatIsA(StageMorph);
+
+    if (!stage && this.parent.grabOrigin) { // I'm currently being dragged
+        stage = this.parent.grabOrigin.origin;
+    }
+    if (stage) {
+        return (stage.center().y - this.center().y) / stage.scale;
+    }
+    return this.center().y;
+};
+
 // SpriteMorph message broadcasting
 
 SpriteMorph.prototype.allMessageNames = function () {
@@ -4363,7 +4446,23 @@ SpriteMorph.prototype.thumbnail = function (extentPoint) {
         trg = newCanvas(extentPoint),
         ctx = trg.getContext('2d');
 
+    function xOut(style, alpha, width) {
+        var inset = Math.min(extentPoint.x, extentPoint.y) / 10;
+        ctx.strokeStyle = style;
+        ctx.globalAlpha = alpha;
+        ctx.compositeOperation = 'lighter';
+        ctx.lineWidth = width || 1;
+        ctx.moveTo(inset, inset);
+        ctx.lineTo(trg.width - inset, trg.height - inset);
+        ctx.moveTo(inset, trg.height - inset);
+        ctx.lineTo(trg.width - inset, inset);
+        ctx.stroke();
+    }
+
     ctx.save();
+    if (this.isCorpse) {
+        ctx.globalAlpha = 0.3;
+    }
     if (src.width && src.height) {
         ctx.scale(scale, scale);
         ctx.drawImage(
@@ -4371,6 +4470,11 @@ SpriteMorph.prototype.thumbnail = function (extentPoint) {
             Math.floor(xOffset / scale),
             Math.floor(yOffset / scale)
         );
+    }
+    if (this.isCorpse) {
+        ctx.restore();
+        xOut('white', 0.8, 6);
+        xOut('black', 0.8, 1);
     }
     return trg;
 };
@@ -4709,7 +4813,6 @@ StageMorph.uber = FrameMorph.prototype;
 // StageMorph preferences settings
 
 StageMorph.prototype.dimensions = new Point(480, 360); // unscaled extent
-
 StageMorph.prototype.frameRate = 0; // unscheduled per default
 
 StageMorph.prototype.isCachingPrimitives
@@ -4845,6 +4948,7 @@ StageMorph.prototype.drawNew = function () {
         );
         this.image = this.applyGraphicsEffects(this.image);
     }
+    this.version = Date.now(); // for observer optimization
 };
 
 StageMorph.prototype.drawOn = function (aCanvas, aRect) {
@@ -5256,7 +5360,7 @@ StageMorph.prototype.fireKeyEvent = function (key) {
         return this.fireStopAllEvent();
     }
     this.children.concat(this).forEach(function (morph) {
-        if (morph instanceof SpriteMorph || morph instanceof StageMorph) {
+        if (isSnapObject(morph)) {
             hats = hats.concat(morph.allHatBlocksForKey(evt));
         }
     });
@@ -5284,7 +5388,7 @@ StageMorph.prototype.fireGreenFlagEvent = function () {
         myself = this;
 
     this.children.concat(this).forEach(function (morph) {
-        if (morph instanceof SpriteMorph || morph instanceof StageMorph) {
+        if (isSnapObject(morph)) {
             hats = hats.concat(morph.allHatBlocksFor('__shout__go__'));
         }
     });
@@ -5327,6 +5431,8 @@ StageMorph.prototype.removeAllClones = function () {
         );
     clones.forEach(function (clone) {
         myself.threads.stopAllForReceiver(clone);
+        clone.detachFromAnchor();
+        clone.corpsify();
         clone.destroy();
     });
     this.cloneCount = 0;
@@ -5575,7 +5681,12 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('getTimer'));
         blocks.push('-');
         blocks.push(block('reportAttributeOf'));
+
+        if (SpriteMorph.prototype.enableFirstClass) {
+            blocks.push(block('reportGet'));
+        }
         blocks.push('-');
+
         blocks.push(block('reportURL'));
         blocks.push('-');
         blocks.push(block('reportIsFastTracking'));
@@ -5848,9 +5959,16 @@ StageMorph.prototype.userMenu = function () {
 StageMorph.prototype.showAll = function () {
     var myself = this;
     this.children.forEach(function (m) {
-        m.show();
-        m.keepWithin(myself);
-        if (m.fixLayout) {m.fixLayout(); }
+        if (m instanceof SpriteMorph) {
+            if (!m.anchor) {
+                m.show();
+                m.keepWithin(myself);
+            }
+        } else {
+            m.show();
+            m.keepWithin(myself);
+            if (m.fixLayout) {m.fixLayout(); }
+        }
     });
 };
 
@@ -6173,14 +6291,31 @@ SpriteBubbleMorph.prototype.init = function (
 
 SpriteBubbleMorph.prototype.dataAsMorph = function (data, toggle) {
     var contents,
+        isTable,
         sprite = SpriteMorph.prototype,
         isText,
         img,
         scaledImg,
         width;
-
     if (data instanceof Morph) {
-        contents = data;
+        if (isSnapObject(data)) {
+            img = data.thumbnail(new Point(40, 40));
+            contents = new Morph();
+            contents.silentSetWidth(img.width);
+            contents.silentSetHeight(img.height);
+            contents.image = img;
+            contents.version = data.version;
+            contents.step = function () {
+                if (this.version !== data.version) {
+                    img = data.thumbnail(new Point(40, 40));
+                    this.image = img;
+                    this.version = data.version;
+                    this.changed();
+                }
+            };
+        } else {
+            contents = data;
+        }
     } else if (isString(data)) {
         isText = true;
         contents = new TextMorph(
@@ -6209,7 +6344,13 @@ SpriteBubbleMorph.prototype.dataAsMorph = function (data, toggle) {
         contents.silentSetHeight(data.height);
         contents.image = data;
     } else if (data instanceof List) {
-        if (!toggle && data.isTable()) {
+        if (toggle && this.contentsMorph) {
+            isTable = (this.contentsMorph instanceof ListWatcherMorph);
+        } else {
+            isTable = data.isTable();
+        }
+
+        if (isTable) { // (!toggle && data.isTable()) {
             contents = new TableFrameMorph(new TableMorph(data, 10));
             if (this.stage) {
                 contents.expand(this.stage.extent().translateBy(
@@ -6540,7 +6681,7 @@ Costume.prototype.edit = function (aWorld, anIDE, isnew, oncancel, onsubmit) {
                 newCanvas(StageMorph.prototype.dimensions) :
                 this.contents,
         isnew ?
-                new Point(240, 180) :
+                null :
                 this.rotationCenter,
         function (img, rc) {
             myself.contents = img;
@@ -6963,6 +7104,7 @@ CellMorph.prototype.init = function (contents, color, idx, parentCell) {
     );
     this.color = color || new Color(255, 140, 0);
     this.isBig = false;
+    this.version = null; // only for observing sprites
     this.drawNew();
 };
 
@@ -7012,6 +7154,16 @@ CellMorph.prototype.fixLayout = function () {
 
 // CellMorph drawing:
 
+CellMorph.prototype.update = function () {
+    // special case for observing sprites
+    if (!isSnapObject(this.contents)) {
+        return;
+    }
+    if (this.version !== this.contents.version) {
+        this.drawNew();
+    }
+};
+
 CellMorph.prototype.drawNew = function (toggle, type) {
     var context,
         txt,
@@ -7029,11 +7181,21 @@ CellMorph.prototype.drawNew = function (toggle, type) {
     // re-build my contents
     if (toggle || (this.contentsMorph && !isSameList && !isSameTable)) {
         this.contentsMorph.destroy();
+        this.version = null;
     }
 
     if (toggle || (!isSameList && !isSameTable)) {
         if (this.contents instanceof Morph) {
-            this.contentsMorph = this.contents;
+            if (isSnapObject(this.contents)) {
+                img = this.contents.thumbnail(new Point(40, 40));
+                this.contentsMorph = new Morph();
+                this.contentsMorph.silentSetWidth(img.width);
+                this.contentsMorph.silentSetHeight(img.height);
+                this.contentsMorph.image = img;
+                this.version = this.contents.version;
+            } else {
+                this.contentsMorph = this.contents;
+            }
         } else if (isString(this.contents)) {
             txt  = this.contents.length > 500 ?
                     this.contents.slice(0, 500) + '...' : this.contents;
@@ -7444,6 +7606,8 @@ WatcherMorph.prototype.update = function () {
     }
     if (this.cellMorph.contentsMorph instanceof ListWatcherMorph) {
         this.cellMorph.contentsMorph.update();
+    } else if (isSnapObject(this.cellMorph.contents)) {
+        this.cellMorph.update();
     }
 };
 

@@ -65,11 +65,12 @@ BlockExportDialogMorph, BlockImportDialogMorph, SnapTranslator, localize,
 List, InputSlotMorph, SnapCloud, Uint8Array, HandleMorph, SVG_Costume,
 fontHeight, hex_sha512, sb, CommentMorph, CommandBlockMorph,
 BlockLabelPlaceHolderMorph, Audio, SpeechBubbleMorph, ScriptFocusMorph,
-XML_Element, WatcherMorph, BlockRemovalDialogMorph, saveAs, TableMorph*/
+XML_Element, WatcherMorph, BlockRemovalDialogMorph, saveAs, TableMorph,
+isSnapObject*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2016-March-16';
+modules.gui = '2016-May-02';
 
 // Declarations
 
@@ -1399,8 +1400,10 @@ IDE_Morph.prototype.createCorral = function () {
     frame.alpha = 0;
 
     this.sprites.asArray().forEach(function (morph) {
-        template = new SpriteIconMorph(morph, template);
-        frame.contents.add(template);
+        if (!morph.isClone) {
+            template = new SpriteIconMorph(morph, template);
+            frame.contents.add(template);
+        }
     });
 
     this.corral.frame = frame;
@@ -1988,6 +1991,7 @@ IDE_Morph.prototype.removeSprite = function (sprite) {
     sprite.parts.forEach(function (part) {myself.removeSprite(part); });
     idx = this.sprites.asArray().indexOf(sprite) + 1;
     this.stage.threads.stopAllForReceiver(sprite);
+    sprite.corpsify();
     sprite.destroy();
     this.stage.watchers().forEach(function (watcher) {
         if (watcher.object() === sprite) {
@@ -2422,6 +2426,20 @@ IDE_Morph.prototype.settingsMenu = function () {
         true
     );
     addPreference(
+        'First-Class Sprites',
+        function () {
+            SpriteMorph.prototype.enableFirstClass =
+                !SpriteMorph.prototype.enableFirstClass;
+            myself.currentSprite.blocksCache.sensing = null;
+            myself.currentSprite.paletteCache.sensing = null;
+            myself.refreshPalette();
+        },
+        SpriteMorph.prototype.enableFirstClass,
+        'uncheck to disable support\nfor first-class sprites',
+        'check to enable support\n for first-class sprite',
+        true
+    );
+    addPreference(
         'Keyboard Editing',
         function () {
             ScriptsMorph.prototype.enableKeyboard =
@@ -2471,6 +2489,17 @@ IDE_Morph.prototype.settingsMenu = function () {
             false
         );
     }
+    addPreference(
+        'Live coding support',
+        function () {
+            Process.prototype.enableLiveCoding =
+                !Process.prototype.enableLiveCoding;
+        },
+        Process.prototype.enableLiveCoding,
+        'EXPERIMENTAL! uncheck to disable live\ncustom control structures',
+        'EXPERIMENTAL! check to enable\n live custom control structures',
+        true
+    );
     menu.addLine(); // everything below this line is stored in the project
     addPreference(
         'Thread safe scripts',
@@ -2799,7 +2828,6 @@ IDE_Morph.prototype.parseResourceFile = function (text) {
     return items;
 };
 
-
 // IDE_Morph menu actions
 
 IDE_Morph.prototype.aboutSnap = function () {
@@ -2807,7 +2835,7 @@ IDE_Morph.prototype.aboutSnap = function () {
         module, btn1, btn2, btn3, btn4, licenseBtn, translatorsBtn,
         world = this.world();
 
-    aboutTxt = 'Snap! 4.0.6\nBuild Your Own Blocks\n\n'
+    aboutTxt = 'Snap! 4.0.7\nBuild Your Own Blocks\n\n'
         + 'Copyright \u24B8 2016 Jens M\u00F6nig and '
         + 'Brian Harvey\n'
         + 'jens@moenig.org, bh@cs.berkeley.edu\n\n'
@@ -3027,6 +3055,7 @@ IDE_Morph.prototype.newProject = function () {
     StageMorph.prototype.enableInheritance = false;
     StageMorph.prototype.enableSublistIDs = false;
     SpriteMorph.prototype.useFlatLineEnds = false;
+    Process.prototype.enableLiveCoding = false;
     this.setProjectName('');
     this.projectNotes = '';
     this.createStage();
@@ -3534,6 +3563,7 @@ IDE_Morph.prototype.rawOpenProjectString = function (str) {
     StageMorph.prototype.enableCodeMapping = false;
     StageMorph.prototype.enableInheritance = false;
     StageMorph.prototype.enableSublistIDs = false;
+    Process.prototype.enableLiveCoding = false;
     if (Process.prototype.isCatchingErrors) {
         try {
             this.serializer.openProject(
@@ -3578,6 +3608,7 @@ IDE_Morph.prototype.rawOpenCloudDataString = function (str) {
     StageMorph.prototype.enableCodeMapping = false;
     StageMorph.prototype.enableInheritance = false;
     StageMorph.prototype.enableSublistIDs = false;
+    Process.prototype.enableLiveCoding = false;
     if (Process.prototype.isCatchingErrors) {
         try {
             model = this.serializer.parse(str);
@@ -3929,7 +3960,7 @@ IDE_Morph.prototype.toggleZebraColoring = function () {
 
     // select all scripts:
     this.stage.children.concat(this.stage).forEach(function (morph) {
-        if (morph instanceof SpriteMorph || morph instanceof StageMorph) {
+        if (isSnapObject(morph)) {
             scripts = scripts.concat(
                 morph.scripts.children.filter(function (morph) {
                     return morph instanceof BlockMorph;
@@ -6298,7 +6329,8 @@ CostumeIconMorph.prototype.editCostume = function () {
     } else {
         this.object.edit(
             this.world(),
-            this.parentThatIsA(IDE_Morph)
+            this.parentThatIsA(IDE_Morph),
+            false // not a new costume, retain existing rotation center
         );
     }
 };

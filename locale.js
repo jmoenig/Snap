@@ -42,7 +42,7 @@
 
 /*global modules, contains*/
 
-modules.locale = '2016-March-16';
+modules.locale = '2016-May-02';
 
 // Global stuff
 
@@ -161,7 +161,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org',
     'last_changed':
-        '2016-03-16'
+        '2016-05-02'
 };
 
 SnapTranslator.dict.it = {
