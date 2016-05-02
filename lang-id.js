@@ -420,15 +420,15 @@ SnapTranslator.dict.de = {
     'when %keyHat key pressed':
         'Ketika %keyHat ditekan',
     'when I am %interaction':
-        'Ketika aku %interaction',
+        'Ketika %interaction',
     'clicked':
-        'diklik',
+        'aku diklik',
     'pressed':
-        'ditekan',
+        'aku ditekan',
     'dropped':
-        'dijatuhkan',
+        'aku dijatuhkan',
     'mouse-entered':
-        'dimasuki tetikus/mouse',
+        'aku dimasuki tetikus/mouse',
     'mouse-departed':
         'tetikus/mouse keluar',
     'when %b':
