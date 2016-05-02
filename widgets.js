@@ -74,7 +74,7 @@ HTMLCanvasElement, fontHeight, SymbolMorph, localize, SpeechBubbleMorph,
 ArrowMorph, MenuMorph, isString, isNil, SliderMorph, MorphicPreferences,
 ScrollFrameMorph*/
 
-modules.widgets = '2015-July-27';
+modules.widgets = '2016-May-02';
 
 var PushButtonMorph;
 var ToggleButtonMorph;
