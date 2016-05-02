@@ -4512,7 +4512,8 @@ CursorMorph.prototype.initializeInputHandler = function () {
     this.inputHandler = document.createElement('textarea');
     this.inputHandler.style.position = 'absolute';
     this.inputHandler.style.right = '211%'; // placed just out of view
-
+    this.inputHandler.start=0;
+    this.inputHandler.end=0;
     document.body.appendChild(this.inputHandler);
     this.inputHandler.focus();
     this.inputHandler.value = this.target.text;
@@ -4534,47 +4535,80 @@ CursorMorph.prototype.initializeInputHandler = function () {
         function (event) {
             myself.target.deleteSelection();
             myself.target.text = myself.inputHandler.value;
-            myself.gotoSlot(myself.inputHandler.selectionStart);
-            myself.target.drawNew();
+
             myself.target.changed();
+            myself.target.drawNew();
+
+            myself.gotoSlot(myself.inputHandler.selectionStart);
+            myself.target.changed();
+            myself.target.drawNew();
         },
         false
     );
     this.inputHandler.gotoSlot = function (Slot) {
         this.setSelectionRange(Slot, Slot);
     };
-
-    this.inputHandler.insert = function (str, staPos,endPos) {
+this.inputHandler.saveSelection=function(){
+    this.start=this.selectionStart;
+    this.end=this.selectionEnd;
+};
+    this.inputHandler.restore=function(){
+        this.setSelectionRange(this.start,this.end);
+    };
+    this.inputHandler.insert = function (str, staPos,endPos,changed) {
         var selection=this.selectionStart;
         var tmpStr = this.value;
-        this.value = tmpStr.substring(0, staPos) + str + tmpStr.substring(endPos, tmpStr.length);
-        //if selectionStart != selectionEnd,this is wrong.
-        if (endPos <= this.selectionStart){
-            myself.gotoSlot(selection + str.length);
-        }else {
-            myself.gotoSlot(selection);
-        }
+        this.value = tmpStr.substring(0, staPos===null?selection:staPos) + str + tmpStr.substring(endPos===null?selection:endPos, tmpStr.length);
+        if(changed){
+            //if selectionStart != selectionEnd,this is wrong.
+            if (endPos <= this.selectionStart){
+                var length=str=='\n'?0:str.length;
+                this.gotoSlot(selection + length);
+            }else {
+                this.gotoSlot(selection);
+            }
+            myself.target.text = this.value;
 
+            myself.target.changed();
+            myself.target.drawNew();
+
+            myself.gotoSlot(this.selectionStart);
+            myself.target.changed();
+            myself.target.drawNew();
+        }else {
+            //if selectionStart != selectionEnd,this is wrong.
+            if (endPos <= this.selectionStart){
+                var length=str=='\n'?0:str.length;
+                this.gotoSlot(selection + length);
+            }else {
+                this.gotoSlot(selection);
+            }
+        }
     };
 };
 
 
 CursorMorph.prototype.processKeyDown = function (event) {
+
     var shift = event.shiftKey;
     if (event.ctrlKey && (!event.altKey)) {
-        this.ctrl(event.keyCode);
+        this.ctrl(event.keyCode,event);
         // notify target's parent of key event
         this.target.escalateEvent('reactToKeystroke', event);
         return;
     }
     if (event.metaKey) {
-        this.cmd(event.keyCode);
+        this.cmd(event.keyCode,event);
         // notify target's parent of key event
         this.target.escalateEvent('reactToKeystroke', event);
         return;
     }
-    //prevent the error cased by inputHandler
-    if (shift)event.preventDefault();
+    if (shift){
+            if(event.keyCode>64&&event.keyCode<91){
+                this.inputHandler.insert(String.fromCharCode(event.keyCode),null,null,true);
+            }
+        //prevent the error cased by inputHandler
+        event.preventDefault();}
     switch (event.keyCode) {
         case 37:
             this.goLeft(shift);
@@ -4609,12 +4643,11 @@ CursorMorph.prototype.processKeyDown = function (event) {
             }
             return this.target.tab(this.target);
         default:
-            nop();
+          nop();
     }
     // notify target's parent of key event
     this.target.escalateEvent('reactToKeystroke', event);
 };
-
 // CursorMorph navigation:
 
 /*
@@ -4752,7 +4785,7 @@ CursorMorph.prototype.undo = function () {
     this.inputHandler.gotoSlot(0);
 };
 
-CursorMorph.prototype.ctrl = function (aChar) {
+CursorMorph.prototype.ctrl = function (aChar,event) {
     if (!isNil(this.target.receiver)) {
         if (aChar === 68) {
             this.target.doIt();
@@ -4762,11 +4795,13 @@ CursorMorph.prototype.ctrl = function (aChar) {
             this.target.showIt();
         }
     }
-
-
+if(aChar==65){
+    this.target.selectAll();
+//    event.preventDefault();
+}
 };
 
-CursorMorph.prototype.cmd = function (aChar) {
+CursorMorph.prototype.cmd = function (aChar,event) {
     if (!isNil(this.target.receiver)) {
         if (aChar === 68) {
             this.target.doIt();
@@ -4775,6 +4810,10 @@ CursorMorph.prototype.cmd = function (aChar) {
         } else if (aChar === 80) {
             this.target.showIt();
         }
+    }
+    if(aChar==65){
+        this.target.selectAll();
+  //      event.preventDefault();
     }
 };
 
@@ -7500,11 +7539,7 @@ StringMorph.prototype.mouseClickLeft = function (pos) {
             cursor.gotoPos(pos);
             //If mouse does not move away the morph  this event will be fired again after mousemoving
             if (this.endMark != this.startMark)
-                if (this.endMark < this.startMark) {
-                    cursor.inputHandler.setSelectionRange(this.endMark, this.startMark);
-                } else {
-                    cursor.inputHandler.setSelectionRange(this.startMark, this.endMark);
-                }
+                cursor.inputHandler.restore();
         }
         this.currentlySelecting = true;
     } else {
@@ -7541,6 +7576,7 @@ StringMorph.prototype.enableSelecting = function () {
                 } else {
                     this.root().cursor.inputHandler.setSelectionRange(this.startMark, this.endMark);
                 }
+                this.root().cursor.inputHandler.saveSelection();
                 this.drawNew();
                 this.changed();
             }
@@ -7618,7 +7654,7 @@ TextMorph.prototype.init = function (text,
     //additional properties for ad-hoc evaluation:
     this.receiver = null;
 //additional properties for inputHander
-    this.cursor=null;
+    this.cursor=0;
     // additional properties for text-editing:
     this.isScrollable = true; // scrolls into view when edited
     this.currentlySelecting = false;
@@ -7644,6 +7680,8 @@ TextMorph.prototype.toString = function () {
 TextMorph.prototype.font = StringMorph.prototype.font;
 
 TextMorph.prototype.parse = function () {
+    if(this.cursor.inputHandler)
+    this.text= this.cursor.inputHandler.value;
     var myself = this,
         paragraphs = this.text.split('\n'),
         canvas = newCanvas(),
@@ -7679,7 +7717,7 @@ TextMorph.prototype.parse = function () {
                 w = context.measureText(newline).width;
                 if (w > myself.maxWidth) {
                     myself.lines.push(oldline);
-                    if(myself.cursor){
+                    if(myself.cursor.inputHandler){
                         myself.cursor.inputHandler.insert('\n',slot-1,slot);
                     }
                     myself.lineSlots.push(slot);
