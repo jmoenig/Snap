@@ -185,7 +185,7 @@ SnapTranslator.dict.pt = {
     'translator_e-mail':
         'mmsequeira@gmail.com',
     'last_changed':
-        '2016-01-08',
+        '2016-04-06',
 
     // GUI
     // control bar:
@@ -815,6 +815,10 @@ SnapTranslator.dict.pt = {
         'Design plano',
     'Keyboard Editing':
         'Edição usando o teclado',
+    'Table support':
+        'Suporte de tabelas',
+    'Table lines':
+        'Tabelas com linhas',
     'Thread safe scripts':
         'Guiões seguros face a threads',
     'uncheck to allow\nscript reentrance':
@@ -877,6 +881,12 @@ SnapTranslator.dict.pt = {
         'adicionar anel',
     'unringify':
         'remover anel',
+    'transient':
+        'transiente',
+    'uncheck to save contents\nin the project':
+        'Desassinalar para guardar\no conteúdo no projecto',
+    'check to prevent contents\nfrom being saved':
+        'Assinalar para não guardar\no conteúdo no projecto',
 
     // blocos personalizados:
     'delete block definition...':
@@ -941,6 +951,18 @@ SnapTranslator.dict.pt = {
         'Tocar',
     'rename sound':
         'Qual o novo nome do som?',
+
+    // lists and tables
+    'list view...':
+        'vista de lista…',
+    'table view...':
+        'vista de tabela…',
+    'open in dialog...':
+        'abrir em caixa de diálogo…',
+    'reset columns':
+        'reiniciar colunas',
+    'items':
+        'itens',
 
     // caixas de diálogo
     // botões
@@ -1746,6 +1768,22 @@ SnapTranslator.dict.pt = {
         'com variáveis de bloco',
     'experimental -\nunder construction':
         'Experimental – em construção',
+    'Table view':
+        'Vista de tabela',
+    'open in another dialog...':
+        'abrir noutra caixa de diálogo…',
+    'check for multi-column\nlist view support':
+        'Assinalar para suporte de\nvistas multicoluna de listas.',
+    'uncheck to disable\nmulti-column list views':
+        'Desassinalar para desactivar\nvistas multicoluna de listas.',
+    'check for higher contrast\ntable views':
+        'Assinalar para vistas de\ntabela com maior contraste.',
+    'uncheck for less contrast\nmulti-column list views':
+        'Desassinalar para vistas multicoluna\nde listas com menor contraste.',
+    '(in a new window)':
+        '(numa nova janela)',
+    'save project data as XML\nto your downloads folder':
+        'Guardar dados do projecto como XML\nna sua pasta de descarregamentos.',
 
     // produção de código
     'map %cmdRing to %codeKind %code':
