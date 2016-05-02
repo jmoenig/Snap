@@ -241,11 +241,11 @@ SnapTranslator.dict.zh = {
     'language_name':
         '简体中文',
     'language_translator':
-        '邓江华',
+        '五百刀/邓江华',
     'translator_e-mail':
-        'djh@rhjxx.cn',
+        'ubertao@qq.com/djh@rhjxx.cn',
     'last_changed':
-        '2013-03-25'
+        '2016-04-27'
 };
 
 SnapTranslator.dict.eo = {

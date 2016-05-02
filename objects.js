@@ -2011,9 +2011,9 @@ SpriteMorph.prototype.blockTemplates = function (category) {
 
         if (this.world().isDevMode) {
             blocks.push('-');
-            txt = new TextMorph(
+            txt = new TextMorph(localize(
                 'development mode \ndebugging primitives:'
-            );
+            ));
             txt.fontSize = 9;
             txt.setColor(this.paletteTextColor);
             blocks.push(txt);
