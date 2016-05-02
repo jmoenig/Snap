@@ -166,7 +166,7 @@
 
 /*global SnapTranslator*/
 
-SnapTranslator.dict.de = {
+SnapTranslator.dict.id = {
 
 /*
     Special characters: (see <http://0xcc.net/jsescape/>)
