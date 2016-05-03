@@ -547,3 +547,14 @@ SnapTranslator.dict.id = {
     'last_changed':
         '2016-5-2'
 };
+
+SnapTranslator.dict.et = {
+    'language_name':
+        'Eesti',
+    'language_translator':
+        'Hasso Tepper',
+    'translator_e-mail':
+        'hasso.tepper@gmail.com',
+    'last_changed':
+        '2016-05-03'
+};
