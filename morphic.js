@@ -337,7 +337,7 @@
     (c) an application
     -------------------
     Of course, most of the time you don't want to just plain use the
-    standard Morhic World "as is" out of the box, but write your own
+    standard Morphic World "as is" out of the box, but write your own
     application (something like Scratch!) in it. For such an
     application you'll create your own morph prototypes, perhaps
     assemble your own "window frame" and bring it all to life in a
@@ -1054,10 +1054,9 @@
 
 // Global settings /////////////////////////////////////////////////////
 
-/*global window, HTMLCanvasElement, getMinimumFontHeight, FileReader, Audio,
-FileList, getBlurredShadowSupport*/
+/*global window, HTMLCanvasElement, FileReader, Audio, FileList*/
 
-var morphicVersion = '2016-February-24';
+var morphicVersion = '2016-May-04';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = getBlurredShadowSupport(); // check for Chrome-bug
 
@@ -1938,7 +1937,7 @@ Rectangle.prototype.round = function () {
 Rectangle.prototype.spread = function () {
     // round me by applying floor() to my origin and ceil() to my corner
     // expand by 1 to be on the safe side, this eliminates rounding
-    // artefacts caused by Safari's auto-scaling on retina displays
+    // artifacts caused by Safari's auto-scaling on retina displays
     return this.origin.floor().corner(this.corner.ceil()).expandBy(1);
 };
 
@@ -2088,6 +2087,20 @@ Node.prototype.forAllChildren = function (aFunction) {
         });
     }
     aFunction.call(null, this);
+};
+
+Node.prototype.anyChild = function (aPredicate) {
+    // includes myself
+    var i;
+    if (aPredicate.call(null, this)) {
+        return true;
+    }
+    for (i = 0; i < this.children.length; i += 1) {
+        if (this.children[i].anyChild(aPredicate)) {
+            return true;
+        }
+    }
+    return false;
 };
 
 Node.prototype.allLeafs = function () {

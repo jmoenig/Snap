@@ -145,11 +145,11 @@ radians, useBlurredShadows, SpeechBubbleMorph, modules, StageMorph,
 fontHeight, TableFrameMorph, SpriteMorph, Context, ListWatcherMorph,
 CellMorph, DialogBoxMorph, BlockInputFragmentMorph, PrototypeHatBlockMorph,
 Costume, IDE_Morph, BlockDialogMorph, BlockEditorMorph, localize, isNil,
-isSnapObject*/
+isSnapObject, copy*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2016-May-02';
+modules.blocks = '2016-May-04';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -3251,7 +3251,14 @@ BlockMorph.prototype.setCategory = function (aString) {
 
 // BlockMorph copying
 
-BlockMorph.prototype.fullCopy = function () {
+BlockMorph.prototype.fullCopy = function (forClone) {
+    if (forClone) {
+        if (this.hasBlockVars()) {
+            forClone = false;
+        } else {
+            return copy(this);
+        }
+    }
     var ans = BlockMorph.uber.fullCopy.call(this);
     ans.removeHighlight();
     ans.isDraggable = true;
@@ -3261,22 +3268,15 @@ BlockMorph.prototype.fullCopy = function () {
     ans.allChildren().filter(function (block) {
         if (block instanceof SyntaxElementMorph) {
             block.cachedInputs = null;
-//            if (block instanceof InputSlotMorph) {
-//                block.contents().clearSelection();
-//            } else
             if (block.definition) {
                 block.initializeVariables();
             }
-//        } else if (block instanceof CursorMorph) {
-//            block.destroy();
         }
         return !isNil(block.comment);
     }).forEach(function (block) {
         var cmnt = block.comment.fullCopy();
         block.comment = cmnt;
         cmnt.block = block;
-        //block.comment = null;
-
     });
     ans.cachedInputs = null;
     return ans;
@@ -3284,6 +3284,12 @@ BlockMorph.prototype.fullCopy = function () {
 
 BlockMorph.prototype.reactToTemplateCopy = function () {
     this.forceNormalColoring();
+};
+
+BlockMorph.prototype.hasBlockVars = function () {
+    return this.anyChild(function (any) {
+        return any.definition && any.definition.variableNames.length;
+    });
 };
 
 // BlockMorph events
@@ -5177,7 +5183,7 @@ ScriptsMorph.prototype.init = function (owner) {
 
 // ScriptsMorph deep copying:
 
-ScriptsMorph.prototype.fullCopy = function () {
+ScriptsMorph.prototype.fullCopy = function (forClone) {
     var cpy = new ScriptsMorph(),
         pos = this.position(),
         child;
@@ -5186,17 +5192,21 @@ ScriptsMorph.prototype.fullCopy = function () {
     }
     this.children.forEach(function (morph) {
         if (!morph.block) { // omit anchored comments
-            child = morph.fullCopy();
-            child.setPosition(morph.position().subtract(pos));
+            child = morph.fullCopy(forClone);
             cpy.add(child);
-            if (child instanceof BlockMorph) {
-                child.allComments().forEach(function (comment) {
-                    comment.align(child);
-                });
+            if (!forClone) {
+                child.setPosition(morph.position().subtract(pos));
+                if (child instanceof BlockMorph) {
+                    child.allComments().forEach(function (comment) {
+                        comment.align(child);
+                    });
+                }
             }
         }
     });
-    cpy.adjustBounds();
+    if (!forClone) {
+        cpy.adjustBounds();
+    }
     return cpy;
 };
 

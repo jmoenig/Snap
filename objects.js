@@ -82,7 +82,7 @@ SpeechBubbleMorph, RingMorph, isNil, FileReader, TableDialogMorph,
 BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph*/
 
-modules.objects = '2016-May-02';
+modules.objects = '2016-May-04';
 
 var SpriteMorph;
 var StageMorph;
@@ -1364,7 +1364,7 @@ SpriteMorph.prototype.init = function (globals) {
 
 // SpriteMorph duplicating (fullCopy)
 
-SpriteMorph.prototype.fullCopy = function () {
+SpriteMorph.prototype.fullCopy = function (forClone) {
     var c = SpriteMorph.uber.fullCopy.call(this),
         myself = this,
         arr = [],
@@ -1374,20 +1374,22 @@ SpriteMorph.prototype.fullCopy = function () {
     c.color = this.color.copy();
     c.blocksCache = {};
     c.paletteCache = {};
-    c.scripts = this.scripts.fullCopy();
+    c.scripts = this.scripts.fullCopy(forClone);
     c.scripts.owner = c;
     c.variables = this.variables.copy();
     c.variables.owner = c;
     c.customBlocks = [];
-    this.customBlocks.forEach(function (def) {
-        cb = def.copyAndBindTo(c);
-        c.customBlocks.push(cb);
-        c.allBlockInstances(def).forEach(function (block) {
-            block.definition = cb;
+    if (!forClone) {
+        this.customBlocks.forEach(function (def) {
+            cb = def.copyAndBindTo(c);
+            c.customBlocks.push(cb);
+            c.allBlockInstances(def).forEach(function (block) {
+                block.definition = cb;
+            });
         });
-    });
+    }
     this.costumes.asArray().forEach(function (costume) {
-        var cst = costume.copy();
+        var cst = forClone ? costume : costume.copy();
         arr.push(cst);
         if (costume === myself.costume) {
             c.costume = cst;
@@ -1404,12 +1406,11 @@ SpriteMorph.prototype.fullCopy = function () {
     c.anchor = null;
     c.parts = [];
     this.parts.forEach(function (part) {
-        var dp = part.fullCopy();
+        var dp = part.fullCopy(forClone);
         dp.nestingScale = part.nestingScale;
         dp.rotatesWithAnchor = part.rotatesWithAnchor;
         c.attachPart(dp);
     });
-
     return c;
 };
 
@@ -2834,12 +2835,30 @@ SpriteMorph.prototype.remove = function () {
     }
 };
 
-// SpriteMorph cloning (experimental)
+// SpriteMorph cloning
+
+/*
+    clones are temporary, partially shallow copies of sprites that don't
+    appear as icons in the corral. Clones get deleted when the red stop button
+    is pressed. Shallow-copying clones' scripts and costumes makes spawning
+    very fast, so they can be used for particle system simulations.
+    This speed-up, however, comes at the cost of some detrimental side
+    effects: Changes to a costume or a script of the original sprite are
+    in some cases shared with all of its clones, however such shared changes
+    are hard to predict for users and not actively propagated, so they don't
+    offer any reliable feature, and will not be supported as such.
+    Changes to the original sprite's scripts affect all of its clones, unless
+    the script contains any custom block whose definition contains one or more
+    block variables (in which case the script does get deep-copied).
+    The original sprite's scripting area, costumes wardrobe or sounds jukebox
+    are also not shared. therefore adding or deleting a script, sound or
+    costume in the original sprite has no effect on any of its clones.
+*/
 
 SpriteMorph.prototype.createClone = function () {
     var stage = this.parentThatIsA(StageMorph);
-    if (stage && stage.cloneCount <= 1000) {
-        this.fullCopy().clonify(stage);
+    if (stage && stage.cloneCount <= 2000) {
+        this.fullCopy(true).clonify(stage);
     }
 };
 
@@ -6636,7 +6655,6 @@ Costume.prototype.copy = function () {
     var canvas = newCanvas(this.extent()),
         cpy,
         ctx;
-
     ctx = canvas.getContext('2d');
     ctx.drawImage(this.contents, 0, 0);
     cpy = new Costume(canvas, this.name ? copy(this.name) : null);

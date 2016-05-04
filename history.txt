@@ -2908,10 +2908,15 @@ http://snap.berkeley.edu/run#cloud:Username=jens&ProjectName=PathFollower
 http://snap.berkeley.edu/run#present:Username=jens&ProjectName=cartwheel
 http://snap.berkeley.edu/run#cloud:Username=jens&ProjectName=rotation
 
+* new Indonesian translation. Yay!! Thank you, Alexander Liu!!
 * Translation updates: Slovenian, Portuguese, Chinese
 * minor bug fixes
 
 == v4.0.7 ==== - first class sprites
 
+160504
+------
+* Morphic, Objects, Blocks, Threads, GUI: Partially shallow-copy clones for speed
+* new Estonian translation! Yay!! Thanks, Hasso Tepper!
 
-
+== v4.0.7.1 ==== - cloning speed-up

@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph,
 TableFrameMorph, isSnapObject*/
 
-modules.threads = '2016-May-02';
+modules.threads = '2016-May-04';
 
 var ThreadManager;
 var Process;
@@ -354,7 +354,7 @@ ThreadManager.prototype.doWhen = function (block, stopIt) {
         if (invoke(
             pred,
             null,
-            null,
+            block.receiver(), // needed for shallow copied clones - was null
             50,
             'the predicate takes\ntoo long for a\ncustom hat block',
             true // suppress errors => handle them right here instead
