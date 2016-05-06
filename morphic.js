@@ -4604,11 +4604,13 @@ CursorMorph.prototype.processKeyDown = function (event) {
         return;
     }
     if (shift){
-            if(event.keyCode>64&&event.keyCode<91){
-                this.inputHandler.insert(String.fromCharCode(event.keyCode),null,null,true);
-            }
-        //prevent the error cased by inputHandler
-        event.preventDefault();}
+        var sCode=[37,38,39,36,40,35,9];
+        for(var i in sCode){
+            if(event.keyCode==sCode[i])
+            //prevent the error cased by inputHandler
+                event.preventDefault();
+        }
+     }
     switch (event.keyCode) {
         case 37:
             this.goLeft(shift);
@@ -4692,15 +4694,23 @@ CursorMorph.prototype.gotoSlot = function (slot) {
 };
 
 CursorMorph.prototype.goLeft = function (shift) {
-    this.updateSelection(shift);
-    this.gotoSlot(this.slot - 1);
-    this.updateSelection(shift);
+    if(shift||(this.target.endMark == this.target.startMark)){
+        this.updateSelection(shift);
+        this.gotoSlot(this.slot - 1);
+        this.updateSelection(shift);
+    }else {
+        this.updateSelection(shift);
+    }
 };
 
 CursorMorph.prototype.goRight = function (shift) {
-    this.updateSelection(shift);
-    this.gotoSlot(this.slot + 1);
-    this.updateSelection(shift);
+    if(shift||(this.target.endMark == this.target.startMark)){
+        this.updateSelection(shift);
+        this.gotoSlot(this.slot + 1);
+        this.updateSelection(shift);
+    }else {
+        this.updateSelection(shift);
+    }
 };
 
 CursorMorph.prototype.goUp = function (shift) {
@@ -7306,12 +7316,12 @@ StringMorph.prototype.slotAt = function (aPoint) {
 
 StringMorph.prototype.upFrom = function (slot) {
     // answer the slot above the given one
-    return slot;
+    return 0;
 };
 
 StringMorph.prototype.downFrom = function (slot) {
     // answer the slot below the given one
-    return slot;
+    return this.text.length;
 };
 
 StringMorph.prototype.startOfLine = function () {
@@ -7513,7 +7523,7 @@ StringMorph.prototype.deleteSelection = function () {
 StringMorph.prototype.selectAll = function () {
     if (this.isEditable) {
         this.startMark = 0;
-        this.endMark = this.text.length;
+        this.endMark = this.text.length;console.log("df");
         this.root().cursor.inputHandler.setSelectionRange(this.startMark, this.endMark);
         this.drawNew();
         this.changed();
@@ -7536,6 +7546,7 @@ StringMorph.prototype.mouseClickLeft = function (pos) {
         }
         cursor = this.root().cursor;
         if (cursor) {
+            cursor.inputHandler.saveSelection();
             cursor.gotoPos(pos);
             //If mouse does not move away the morph  this event will be fired again after mousemoving
             if (this.endMark != this.startMark)
@@ -10418,16 +10429,6 @@ WorldMorph.prototype.initEventListeners = function () {
         false
     );
 
-    document.body.addEventListener(
-        "paste",
-        function (event) {
-            var txt = event.inputData.getData("Text");
-            if (txt && myself.cursor) {
-                myself.cursor.insert(txt);
-            }
-        },
-        false
-    );
 
     window.addEventListener(
         "dragover",
@@ -10502,8 +10503,8 @@ WorldMorph.prototype.nextTab = function (editField) {
     var next = this.nextEntryField(editField);
     if (next) {
         editField.clearSelection();
-        next.selectAll();
         next.edit();
+        next.selectAll();
     }
 };
 
@@ -10511,8 +10512,8 @@ WorldMorph.prototype.previousTab = function (editField) {
     var prev = this.previousEntryField(editField);
     if (prev) {
         editField.clearSelection();
-        prev.selectAll();
-        prev.edit();
+        next.edit();
+        next.selectAll();
     }
 };
 
