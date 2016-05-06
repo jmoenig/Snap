@@ -4705,7 +4705,7 @@ CursorMorph.prototype.gotoPos = function (aPoint) {
 
 CursorMorph.prototype.updateSelection = function (shift) {
     if (shift) {
-        if (!this.target.endMark && !this.target.startMark) {
+        if (this.target.endMark<0 && this.target.startMark<0) {
             this.target.startMark = this.slot;
             this.target.endMark = this.slot;
         } else if (this.target.endMark !== this.slot) {
@@ -7116,8 +7116,8 @@ StringMorph.prototype.init = function (
     // additional properties for text-editing:
     this.isScrollable = true; // scrolls into view when edited
     this.currentlySelecting = false;
-    this.startMark = 0;
-    this.endMark = 0;
+    this.startMark = -1;
+    this.endMark = -1;
     this.markedTextColor = new Color(255, 255, 255);
     this.markedBackgoundColor = new Color(60, 60, 120);
 
@@ -7501,13 +7501,13 @@ StringMorph.prototype.selectionStartSlot = function () {
 
 StringMorph.prototype.clearSelection = function () {
     if (!this.currentlySelecting &&
-            this.startMark === 0 &&
-            this.endMark === 0) {
+            this.startMark === -1 &&
+            this.endMark === -1) {
         return;
     }
     this.currentlySelecting = false;
-    this.startMark = 0;
-    this.endMark = 0;
+    this.startMark = -1;
+    this.endMark = -1;
     this.drawNew();
     this.changed();
 };
@@ -7660,8 +7660,8 @@ TextMorph.prototype.init = function (
     // additional properties for text-editing:
     this.isScrollable = true; // scrolls into view when edited
     this.currentlySelecting = false;
-    this.startMark = 0;
-    this.endMark = 0;
+    this.startMark = -1;
+    this.endMark = -1;
     this.markedTextColor = new Color(255, 255, 255);
     this.markedBackgoundColor = new Color(60, 60, 120);
 
@@ -10565,8 +10565,8 @@ WorldMorph.prototype.nextTab = function (editField) {
     var next = this.nextEntryField(editField);
     if (next) {
         editField.clearSelection();
-        next.selectAll();
         next.edit();
+        next.selectAll();
     }
 };
 
@@ -10574,8 +10574,8 @@ WorldMorph.prototype.previousTab = function (editField) {
     var prev = this.previousEntryField(editField);
     if (prev) {
         editField.clearSelection();
-        prev.selectAll();
-        prev.edit();
+        next.edit();
+        next.selectAll();
     }
 };
 
