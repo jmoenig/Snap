@@ -625,7 +625,7 @@ SnapTranslator.dict.zh = {
     'rest for %n beats':
         '停止 %n 拍',
     'play note %n for %n beats':
-        '弹奏 %n  %n 拍',
+        '弹奏 %n %n 拍',
     'change tempo by %n':
         '把节奏加快 %n',
     'set tempo to %n bpm':
@@ -658,12 +658,16 @@ SnapTranslator.dict.zh = {
         '图章',
     'fill':
         '填充',
+    'tip':
+        '尖端',
+    'middle':
+        '中间',
 
     // control:
     'when %greenflag clicked':
         '当 %greenflag 被点击',
     'when %keyHat key pressed':
-        '当按下 %keyHat',
+        '当按下 %keyHat 键',
     'when I am %interaction':
         '当 %interaction 我',
     'clicked':
@@ -697,13 +701,13 @@ SnapTranslator.dict.zh = {
     'forever %c':
         '重复执行 %c',
     'repeat %n %c':
-        '重复执行 %n  %c',
+        '重复执行 %n %c',
     'repeat until %b %c':
-        '重复执行直到 %b  %c',
+        '重复执行直到 %b %c',
     'if %b %c':
-        '如果 %b  %c',
+        '如果 %b %c',
     'if %b %c else %c':
-        '如果 %b  %c 否则 %c',
+        '如果 %b %c 否则 %c',
     'report %s':
         '报告 %s',
     'stop %stopChoices':
@@ -725,9 +729,9 @@ SnapTranslator.dict.zh = {
     'run %cmdRing %inputs':
         '运行 %cmdRing %inputs',
     'launch %cmdRing %inputs':
-        '启动 %cmdRing  %inputs',
+        '启动 %cmdRing %inputs',
     'call %repRing %inputs':
-        '调用 %repRing  %inputs',
+        '调用 %repRing %inputs',
     'run %cmdRing w/continuation':
         '持续运行 %cmdRing',
     'call %cmdRing w/continuation':
@@ -772,6 +776,8 @@ SnapTranslator.dict.zh = {
         '计时器',
     '%att of %spr':
         '取 %att 于 %spr',
+    'my %get':
+        '我的 %get',
     'http:// %s':
         'http:// %s',
     'turbo mode?':
@@ -980,9 +986,9 @@ SnapTranslator.dict.zh = {
     'Kind of':
         '类型：',
     'Part of':
-        '零件：',
+        '属于：',
     'Parts':
-        '零件',
+        '组件',
     'Blocks':
         '积木',
     'For all Sprites':
@@ -1256,17 +1262,23 @@ SnapTranslator.dict.zh = {
     'check for block\nto text mapping features':
         '开：打开积木转文字的功能',
     'Inheritance support':
-        '亲子角色(继承)',
+        '母子角色(继承)',
     'uncheck to disable\nsprite inheritance features':
         '关：角色不可以继承',
     'check for sprite\ninheritance features':
-        '开：子角色可以继承亲代角色',
+        '开：角色可以继承',
     'Sprite Nesting':
         '角色组合',
     'check to enable\nsprite composition':
         '开：允许角色组合',
     'uncheck to disable\nsprite composition':
         '关：不允许角色组合',
+    'First-Class Sprites':
+        '高等角色',
+    'uncheck to disable support\nfor first-class sprites':
+        '关：不使用高等角色',
+    'check to enable support\n for first-class sprite':
+        '开：使用高等角色',
     'Dragging threshold...':
         '拖放最小距离…',
     'specify the distance the hand has to move\nbefore it picks up an object':
@@ -1380,8 +1392,6 @@ SnapTranslator.dict.zh = {
     'code string mapping...':
         '字符串对应的代码…',
     // sprites:
-    'parent':
-        '母角色',
     'parent:':
         '母角色：',
     'parent...':
@@ -1437,7 +1447,7 @@ SnapTranslator.dict.zh = {
     'detach from':
         '脱离',
     'detach all parts':
-        '拆除所有零件',
+        '拆除所有组件',
     'export...':
         '导出…',
     'paint a new sprite':
@@ -1962,12 +1972,48 @@ SnapTranslator.dict.zh = {
         '记录',
     'predicate':
         '判断',
+    'sprite':
+        '角色',
 
     // list indices
     'last':
         '最后',
     'any':
         '任意',
+
+    // attributes
+    'neighbors':
+        '邻居',
+    'self':
+        '本身',
+    'other sprites':
+        '其他角色',
+    'parts':
+        '组件',
+    'anchor':
+        '组合后角色',
+    'parent':
+        '母角色',
+    'children':
+        '子角色',
+    'clones':
+        '克隆',
+    'other clones':
+        '其他克隆',
+    'dangling?':
+        '是否悬垂？',
+    'rotation x':
+        '旋转点x坐标',
+    'rotation y':
+        '旋转点y坐标',
+    'center x':
+        '中心点x坐标',
+    'center y':
+        '中心店y坐标',
+    'name':
+        '名字',
+    'stage':
+        '舞台',
 
     // Paint.js
     'Paint Editor':
