@@ -56,11 +56,11 @@ Color, List, newCanvas, Costume, Sound, Audio, IDE_Morph, ScriptsMorph,
 BlockMorph, ArgMorph, InputSlotMorph, TemplateSlotMorph, CommandSlotMorph,
 FunctionSlotMorph, MultiArgMorph, ColorSlotMorph, nop, CommentMorph, isNil,
 localize, sizeOf, ArgLabelMorph, SVG_Costume, MorphicPreferences,
-SyntaxElementMorph, Variable*/
+SyntaxElementMorph, Variable, isSnapObject, console*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2016-March-16';
+modules.store = '2016-May-02';
 
 
 // XML_Serializer ///////////////////////////////////////////////////////
@@ -974,7 +974,16 @@ SnapSerializer.prototype.loadScript = function (model) {
             return;
         }
         if (block) {
-            block.nextBlock(nextBlock);
+            if (block.nextBlock && (nextBlock instanceof CommandBlockMorph)) {
+                block.nextBlock(nextBlock);
+            } else { // +++
+                console.log(
+                    'SNAP: expecting a command but getting a reporter:\n' +
+                        '  ' + block.blockSpec + '\n' +
+                        '  ' + nextBlock.blockSpec
+                );
+                return topBlock;
+            }
         } else {
             topBlock = nextBlock;
         }
@@ -1605,10 +1614,14 @@ VariableFrame.prototype.toXML = function (serializer) {
             dta = serializer.format(
                 '<variable name="@">%</variable>',
                 v,
-                typeof val === 'object' ? serializer.store(val)
-                        : typeof val === 'boolean' ?
-                                serializer.format('<bool>$</bool>', val)
-                                : serializer.format('<l>$</l>', val)
+                typeof val === 'object' ?
+                        (isSnapObject(val) ? ''
+                                : serializer.store(val))
+                                : typeof val === 'boolean' ?
+                                        serializer.format(
+                                            '<bool>$</bool>', val
+                                        )
+                                        : serializer.format('<l>$</l>', val)
             );
         }
         return vars + dta;
@@ -1897,7 +1910,8 @@ List.prototype.toXML = function (serializer, mediaContext) {
                 xml += serializer.format(
                     '<item>%</item>',
                     typeof value === 'object' ?
-                            serializer.store(value, mediaContext)
+                            (isSnapObject(value) ? ''
+                                    : serializer.store(value, mediaContext))
                             : typeof value === 'boolean' ?
                                     serializer.format('<bool>$</bool>', value)
                                     : serializer.format('<l>$</l>', value)
@@ -1916,7 +1930,8 @@ List.prototype.toXML = function (serializer, mediaContext) {
                 xml += serializer.format(
                     '<item>%</item>',
                     typeof value === 'object' ?
-                            serializer.store(value, mediaContext)
+                            (isSnapObject(value) ? ''
+                                    : serializer.store(value, mediaContext))
                             : typeof value === 'boolean' ?
                                     serializer.format('<bool>$</bool>', value)
                                     : serializer.format('<l>$</l>', value)
@@ -1933,7 +1948,8 @@ List.prototype.toXML = function (serializer, mediaContext) {
             return xml + serializer.format(
                 '<item>%</item>',
                 typeof item === 'object' ?
-                        serializer.store(item, mediaContext)
+                        (isSnapObject(item) ? ''
+                                : serializer.store(item, mediaContext))
                         : typeof item === 'boolean' ?
                                 serializer.format('<bool>$</bool>', item)
                                 : serializer.format('<l>$</l>', item)

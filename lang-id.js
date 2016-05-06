@@ -1,27 +1,27 @@
 /*
 
-	lang-si.js
+    lang-id.js
 
-	Slovenian translation for SNAP!
+    German translation for SNAP!
 
-	translated by Sasa Divjak
+    written by Jens Mönig
 
-	Copyright (C) 2012 by Jens Mönig
+    Copyright (C) 2016 by Jens Mönig
 
-	This file is part of Snap!.
+    This file is part of Snap!.
 
-	Snap! is free software: you can redistribute it and/or modify
-	it under the terms of the GNU Affero General Public License as
-	published by the Free Software Foundation, either version 3 of
-	the License, or (at your option) any later version.
+    Snap! is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as
+    published by the Free Software Foundation, either version 3 of
+    the License, or (at your option) any later version.
 
-	This program is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-	GNU Affero General Public License for more details.
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
 
-	You should have received a copy of the GNU Affero General Public License
-	along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 
@@ -63,7 +63,6 @@
         pt - Portuguese => SnapTranslator.dict.pt = {
         es - Spanish => SnapTranslator.dict.es = {
         el - Greek => => SnapTranslator.dict.el = {
-		si - Slovenian => => SnapTranslator.dict.si = {
 
     etc. (see <http://en.wikipedia.org/wiki/ISO_639-1>)
 
@@ -145,7 +144,6 @@
         pt - Portuguese => lang-pt.js
         es - Spanish => lang-es.js
         el - Greek => => lang-el.js
-		si - Slovenian => => lang-si.js
 
     and send it to me for inclusion in the official Snap! distribution.
     Once your translation has been included, Your name will the shown in the
@@ -168,92 +166,92 @@
 
 /*global SnapTranslator*/
 
-SnapTranslator.dict.si = {
+SnapTranslator.dict.id = {
 
 /*
     Special characters: (see <http://0xcc.net/jsescape/>)
 
-   Ss ,    \u0160, \u0161
-   Cc     \u010C, \u010D
-   Zz,   \u017D, \u017E
-
+    Ä, ä   \u00c4, \u00e4
+    Ö, ö   \u00d6, \u00f6
+    Ü, ü   \u00dc, \u00fc
+    ß      \u00df
 */
 
     // translations meta information
     'language_name':
-        'Sloven\u0161\u010Dina', // the name as it should appear in the language menu
+        'Bahasa Indonesia', // the name as it should appear in the language menu
     'language_translator':
-        'Sasa Divjak, Gorazd Breskvar', // your name for the Translators tab
+        'Alexander Raphael Liu', // your name for the Translators tab
     'translator_e-mail':
-        'sasa.divjak@fri.uni-lj.si', // optional
+        'raphaxander@gmail.com', // optional
     'last_changed':
-        '2016-04-22', // this, too, will appear in the Translators tab
+        '2016-5-2', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
     'untitled':
-        'Neimenovan',
+        'tak bernama',
     'development mode':
-        'Razvojni na\u010Din',
+        'mode percobaan',
 
     // categories:
     'Motion':
-        'Premikanje',
+        'Gerakan',
     'Looks':
-        'Izgled',
+        'Penampilan',
     'Sound':
-        'Zvok',
+        'Suara',
     'Pen':
-        'Svin\u010Dnik',
+        'Pena',
     'Control':
-        'Krmiljenje',
+        'Kontrol',
     'Sensing':
-        'Zaznavanje',
+        'Sensor',
     'Operators':
-        'Operatorji',
+        'Operator',
     'Variables':
-        'Spremenljivke',
+        'Variabel',
     'Lists':
-        'Seznami',
+        'Daftar',
     'Other':
-        'Drugo',
+        'Lain-lain',
 
     // editor:
     'draggable':
-        'vle\u010Dljiv',
+        'bisa di drag',
 
     // tabs:
     'Scripts':
-        'Skripte',
+        'Skrip',
     'Costumes':
-        'Obleke',
+        'Kostum',
     'Sounds':
-        'Zvoki',
+        'Suara',
 
     // names:
     'Sprite':
-        'Objekt',
+        'Karakter',
     'Stage':
-        'Oder',
+        'Panggung',
 
     // rotation styles:
     'don\'t rotate':
-        'ne vrti',
+        'jangan berputar',
     'can rotate':
-        'prosto vrtenje',
+        'bisa berputar',
     'only face left/right':
-        'lahko obrnemo le levo/desno',
+        'hanya boleh mengahadap kiri kanan',
 
     // new sprite button:
     'add a new sprite':
-        'dodaj nov objekt',
+        'tambah sprite baru',
 
     // tab help
     'costumes tab help':
-        'Slike uvozi\u0161 s povle\u010Denjem iz ene druge\n'
-            + 'spletne strani ali ra\u010Dunalnika',
+        'impor gambar dari site atau \n'
+            + 'sebiah file dengan cara men-drag file nya',
     'import a sound from your computer\nby dragging it into here':
-        'Zvok uvozi\u0161 tako, da ga povle\u010De\u0161 sem',
+        'impor sebuah suara dari komputer mu dengan men-drag file nya kesini',
 
     // primitive blocks:
 
@@ -289,915 +287,940 @@ SnapTranslator.dict.si = {
 
     // motion:
     'Stage selected:\nno motion primitives':
-        'Oder je izbran:\nni na voljo gibljivih gradnikov',
+        'Panggung terpilih: tidak ada primitif (balok)\n'
+            + 'gerak',
 
     'move %n steps':
-        'premakni se %n korakov',
+        'maju %n langkah',
     'turn %clockwise %n degrees':
-        'obrni se %clockwise %n stopinj',
+        'berputar %clockwise %n derajad',
     'turn %counterclockwise %n degrees':
-        'obrni se %counterclockwise %n stopinj',
+        'berputar %counterclockwise %n derajad',
     'point in direction %dir':
-        'obrni se v smeri %dir',
+        'tunjuk ke arah %dir',
     'point towards %dst':
-        'obrni se proti %dst',
+        'tunjuk ke arah %dst',
     'go to x: %n y: %n':
-        'pojdi na x: %n y: %n',
+        'pergi ke x: %n y: %n',
     'go to %dst':
-        'pojdi k %dst',
+        'pergi ke %dst',
     'glide %n secs to x: %n y: %n':
-        'drsi %n sekund do x: %n y: %n',
+        'meluncur %n dtk. ke x: %n y: %n',
     'change x by %n':
-        'spremeni x za %n',
+        'ubah x sebanyak %n',
     'set x to %n':
-        'nastavi x na %n',
+        'atur x ke %n',
     'change y by %n':
-        'spremeni y za %n',
+        'ubah y sebanyak %n',
     'set y to %n':
-        'nastavi y na %n',
+        'set y ke %n',
     'if on edge, bounce':
-        'odbij se, \u010De si na robu',
+        'jika ada di ujung, melambung',
     'x position':
-        'polo\u017Eaj x',
+        'posisi x',
     'y position':
-        'polo\u017Eaj y',
+        'posisi y',
     'direction':
-        'smer',
+        'arah',
 
     // looks:
     'switch to costume %cst':
-        'Preklopi na obleko %cst',
+        'ganti ke kostum %cst',
     'next costume':
-        'naslednja obleka',
+        'kostum selanjutnya',
     'costume #':
-        '\u0160t.obleke',
+        'nomor kostum',
     'say %s for %n secs':
-        'reci %s za %n sekund.',
+        'katakan %s untuk %n dtk.',
     'say %s':
-        'reci %s',
+        'katakan %s',
     'think %s for %n secs':
-        'misli %s za %n sekund',
+        'pikirkan %s untuk %n dtk.',
     'think %s':
-        'misli %s',
+        'pikirkan %s',
     'Hello!':
         'Halo!',
     'Hmm...':
         'Hmm...',
     'change %eff effect by %n':
-        'spremeni u\u010Dinek %eff za %n',
+        'ubah efek %eff sebanyak %n',
     'set %eff effect to %n':
-        'nastavi u\u010Dinek %eff na %n',
+        'atur efek %eff ke %n',
     'clear graphic effects':
-        'zbri\u0161i grafi\u010Dne u\u010Dinke',
+        'hapus efek grafik',
     'change size by %n':
-        'spremeni velikost za %n',
+        'ubah ukuran sebanyak %n',
     'set size to %n %':
-        'nastavi velikost na %n %',
+        'atur ukuran ke %n %',
     'size':
-        'velikost',
+        'ukuran',
     'show':
-        'prika\u017Ei',
+        'tampilkan',
     'hide':
-        'skrij',
+        'sembunyikan',
     'go to front':
-        'prestavi v ospredje',
+        'ke depan',
     'go back %n layers':
-        'prestavi %n ravnin nazaj',
+        'ke belakang %n lapisan',
 
     'development mode \ndebugging primitives:':
-        'razvojni na\u010Din \nrazhro\u0161\u010Devanje gradnikov',
+        'primitif debugging \nmode percobaan',
     'console log %mult%s':
-        'izpi\u0161i na konzolo: %mult%s',
+        'catat di konsol %mult%s',
     'alert %mult%s':
-        'pozor: %mult%s',
+        'tampilkan popup: %mult%s',
 
     // sound:
     'play sound %snd':
-        'predvajaj zvok %snd',
+        'mainkan suara %snd',
     'play sound %snd until done':
-        'predvajaj zvok %snd do konca',
+        'mainkan %snd sampai selesai',
     'stop all sounds':
-        'ustavi vse zvoke',
+        'hentikan semua suara',
     'rest for %n beats':
-        'po\u010Divaj %n udarcev',
+        'istriahat untuk %n ketukan',
     'play note %n for %n beats':
-        'predvajaj noto %n za %n udarcev',
+        'mainkan not %n selama %n ketukan',
     'change tempo by %n':
-        'spremeni tempo za %n',
+        'ubah tempo sebanyak %n',
     'set tempo to %n bpm':
-        'nastavi tempo na %n udarcev na minuto.',
+        'atur tempo ke %n ketukan per menit',
     'tempo':
-        'tempo',
+        'ketukan',
 
     // pen:
     'clear':
-        'zbri\u0161i',
+        'bersihkan layar',
     'pen down':
-        'svin\u010Dnik spu\u0161\u010Den',
+        'turunkan pena',
     'pen up':
-        'svin\u010Dnik dvignjen',
+        'naikan pena',
     'set pen color to %clr':
-        'nastavi barvo svin\u010Dnika na %clr',
+        'atur warna pena ke %clr',
     'change pen color by %n':
-        'spremeni barvo svin\u010Dnika za %n',
+        'ubah warna pena sebanyak %n',
     'set pen color to %n':
-        'nastavi barvo svin\u010Dnika na %n',
+        'atur warna pena ke %n',
     'change pen shade by %n':
-        'spremeni senco svin\u010Dnika za %n',
+        'ubah kegelapan pena sebanyak %n',
     'set pen shade to %n':
-        'nastavi senco svin\u010Dnika na %n',
+        'atur kegelapan pena ke %n',
     'change pen size by %n':
-        'spremeni debelino svin\u010Dnika za %n',
+        'ubah ukuran pena sebesar %n',
     'set pen size to %n':
-        'nastavi debelino svin\u010Dnika na %n',
+        'atur ukuran pena ke %n',
     'stamp':
-        '\u0161tampiljka',
+        'stempel',
+    'fill':
+        'isi dengan cat',
 
     // control:
     'when %greenflag clicked':
-        'ko kliknemo na %greenflag',
+        'Ketika %greenflag diklik',
     'when %keyHat key pressed':
-        'ko pritisnemo na tipko %keyHat ',
+        'Ketika %keyHat ditekan',
     'when I am %interaction':
-        'Ko je %interaction',
+        'Ketika %interaction',
     'clicked':
-        'mi\u0161ka kliknjena',
+        'aku diklik',
     'pressed':
-        'gumb mi\u0161ke pritisnjen',
+        'aku ditekan',
     'dropped':
-        'konec vle\u010Denja',
+        'aku dijatuhkan',
     'mouse-entered':
-        'mi\u0161ka se dotika',
+        'aku dimasuki tetikus/mouse',
     'mouse-departed':
-        'mi\u0161ka se ne dotika ve\u010D',
+        'tetikus/mouse keluar',
     'when %b':
-        'Ko je %b',
+        'Ketika %b',
     'when I receive %msgHat':
-        'ko sprejmem %msgHat',
+        'Ketika aku menerima %msgHat',
     'broadcast %msg':
-        'po\u0161lji %msg vsem',
+        'beritakan %msg',
     'broadcast %msg and wait':
-        'po\u0161lji vsem %msg in po\u010Dakaj',
+        'beritakan %msg dan tunggu',
     'Message name':
-        'Obvestilo',
+        'Nama pesan',
     'message':
-        'sporo\u010Dilo',
+        'Pesan',
     'any message':
-        'poljudno sporo\u010Dilo',
+        'pesan apapun',
     'wait %n secs':
-        '\u010Dakaj %n sekund.',
+        'tungu %n dtk.',
     'wait until %b':
-        '\u010Dakaj, dokler %b',
+        'tunggu sampai %b',
     'forever %c':
-        'za vedno %c',
+        'selamanya lakukan: %c',
     'repeat %n %c':
-        'ponovi %n krat %c',
+        'ulangi %n kali %c',
     'repeat until %b %c':
-        'ponavljaj, dokler %b %c',
+        'ulangi sampai %b %c',
     'if %b %c':
-        '\u010De %b %c',
+        'jika %b %c',
     'if %b %c else %c':
-        '\u010De %b %c sicer %c',
+        'jika %b %c jika tidak %c',
     'report %s':
-        'sporo\u010Di %s',
+        'laporkan %s',
     'stop %stopChoices':
-        'ustavi %stopChoices',
+        'hentikan %stopChoices',
+    'all':
+        'semuanya',
     'this script':
-        'to skripto',
+        'skrip ini',
     'this block':
-        'ta blok',
+        'blok ini',
     'stop %stopOthersChoices':
-        'ustavi %stopOthersChoices',
+        'hentikan %stopOthersChoices',
     'all but this script':
-        'vse razen te skripte',
+        'semua selain skrip ini',
     'other scripts in sprite':
-        'ostale skripte tega objekta',
+        'skrip lain di karakter ini',
     'pause all %pause':
-        'pavziraj vse %pause',
+        'paus semua %pause',
     'run %cmdRing %inputs':
-        'izvajaj %cmdRing  %inputs',
+        'jalankan %cmdRing %inputs',
     'launch %cmdRing %inputs':
-        'po\u017Eeni %cmdRing %inputs',
+        'luncurkan %cmdRing %inputs',
     'call %repRing %inputs':
-        'pokli\u010Di %repRing  %inputs',
+        'panggil %repRing %inputs',
     'run %cmdRing w/continuation':
-        'izvajaj %cmdRing z nadaljevanjem',
+        'jalankan %cmdRing dengan kontinuasi',
     'call %cmdRing w/continuation':
-        'pokli\u010Di %cmdRing z nadaljevanjem',
+        'panggil %cmdRing dengan kontinuasi',
     'warp %c':
-        'Warp %c',
+        'bungkus %c',
     'when I start as a clone':
-        'ko za\u010Dnem kot klon',
+        'ketika aku mulai sebagai klon',
     'create a clone of %cln':
-        'kloniraj %cln',
+        'buat klon baru dari %cln',
     'myself':
-        'sebe',
+        'diriku',
     'delete this clone':
-        'izbri\u0161i ta klon',
+        'hapus klon ini',
 
     // sensing:
     'touching %col ?':
-        'se dotika %col ?',
+        'menyentuh %col ?',
     'touching %clr ?':
-        'se dotika %clr ?',
+        'menyentuh %clr ?',
     'color %clr is touching %clr ?':
-        'barva %clr se dotika %clr ?',
+        'warna %clr menyentuh %clr ?',
     'ask %s and wait':
-        'vpra\u0161aj %s in \u010Dakaj',
+        'tanya %s dan tunggu',
     'what\'s your name?':
-        'Kako ti je ime?',
+        'Siapa namamu?',
     'answer':
-        'odgovor',
+        'jawaban',
     'mouse x':
-        'x polo\u017Eaj mi\u0161ke',
+        'posisi x tetikus/mouse',
     'mouse y':
-        'y polo\u017Eaj mi\u0161ke',
+        'posisi y tetikus/mouse',
     'mouse down?':
-        'gumb mi\u0161ke pritisnjen?',
+        'tetikus/mouse diklik?',
     'key %key pressed?':
-        'tipka %key pritisnjena?',
+        'kunci %key ditekan?',
     'distance to %dst':
-        'razdalja do %dst',
+        'jarak ke %dst',
     'reset timer':
-        'reset \u0161toparice',
+        'atur ulang timer',
     'timer':
-        '\u0161toparica',
+        'timer',
+    '%att of %spr':
+        '%att dari %spr',
     'http:// %s':
         'http:// %s',
     'turbo mode?':
-        'hitri na\u010Din?',
+        'mode turbo nyala?',
     'set turbo mode to %b':
-        'nastavi hitri na\u010Din na %b',
-
-    'current %dates':
-        'trenutni %dates',
-    'year':
-        'leto',
-    'month':
-        'mesec',
-    'date':
-        'dan',
-    'day of week':
-        'dan v tednu',
-    'hour':
-        'ura',
-    'minute':
-        'minuta',
-    'second':
-        'sekunda',
-    'time in milliseconds':
-        '\u010Das v tiso\u010Dinkah sekunde',
-
+        'atur mode turbo ke %b',
 
     'filtered for %clr':
-        'filtriran za %clr',
+        'disaring untuk %clr',
     'stack size':
-        'velikost sklada',
+        'ukuran tumpukan:',
     'frames':
-        'sli\u010Dice',
+        'jumlah frame:',
 
     // operators:
     '%n mod %n':
         '%n modulo %n',
     'round %n':
-        'zaokro\u017Eeno %n',
+        'bulatkan %n',
     '%fun of %n':
-        '%fun von %n',
+        '%fun dari %n',
     'pick random %n to %n':
-        'naklju\u010Dno \u0161tevilo od %n do %n',
+        'pilih angka acak dari %n ke %n',
     '%b and %b':
-        '%b in %b',
+        '%b dan %b',
     '%b or %b':
-        '%b ali %b',
+        '%b atau %b',
     'not %b':
-        'ne %b',
+        'bukan %b',
     'true':
-        'res',
+        'benar',
     'false':
-        'ni res',
+        'salah',
     'join %words':
-        'pove\u017Ei %words',
+        'gabungkan %words',
     'split %s by %delim':
-        'razdeli %s z %delim',
+        'potong %s di setiap %delim',
     'hello':
-        'Halo',
+        'halo',
     'world':
-        'Svet',
+        'dunia',
     'letter %n of %s':
-        '\u010Drka %n od %s',
+        'huruf %n dari %s',
     'length of %s':
-        'dol\u017Eina %s',
+        'panjang dari %s',
     'unicode of %s':
-        'Unicode vrednost od %s',
+        'nilai unicode dari %s',
     'unicode %n as letter':
-        'Unicode %n kot \u010Drka',
+        'Unicode %n sebagai huruf',
     'is %s a %typ ?':
-        'je %s tipa %typ ?',
+        'apakah %s sebuah %typ ?',
     'is %s identical to %s ?':
-        'je %s identi\u010Den %s ?',
+        'apakah %s identik dengan %s ?',
 
     'type of %s':
-        'Tip od %s',
+        'tipe dari %s',
 
     // variables:
     'Make a variable':
-        'Nova spremenljivka',
+        'Buat variabel',
     'Variable name':
-        'Ime spremenljivke',
+        'Nama variabel',
+    'Script variable name':
+        'Skrip nama variabel',
     'Delete a variable':
-        'Zbri\u0161i spremenljivko',
+        'Hapus variabel',
 
     'set %var to %s':
-        'nastavi %var na %s',
+        'atur %var ke %s',
     'change %var by %n':
-        'spremeni spremenljivko %var za %n',
+        'ubah %var sebanyak %n',
     'show variable %var':
-        'prika\u017Ei spremenljivko %var',
+        'tampilkan variabel %var',
     'hide variable %var':
-        'skrij spremenljivko %var',
+        'sembunyikan Variable %var',
     'script variables %scriptVars':
-        'spremenljivke programa %scriptVars',
+        'skrip variabel %scriptVars',
 
     // lists:
     'list %exp':
-        'Seznam %exp',
+        'daftar %exp',
     '%s in front of %l':
-        '%s na za\u010Detku %l',
+        '%s di depan %l',
     'item %idx of %l':
-        'Element %idx od %l',
+        'barang %idx dari %l',
     'all but first of %l':
-        'vsi razen prvega od %l',
+        'semua kecuali barang pertama dari %l',
     'length of %l':
-        'dol\u017Eina %l',
+        'panjang dari %l',
     '%l contains %s':
-        '%l vsebuje %s',
+        '%l mempunyai %s',
     'thing':
-        'stvar',
+        'barang',
     'add %s to %l':
-        'dodaj %s k %l',
+        'tambahkan %s ke %l',
     'delete %ida of %l':
-        'zbri\u0161i %ida iz %l',
+        'hapus %ida dari %l',
     'insert %s at %idx of %l':
-        'vstavi %s na mesto %idx v %l',
+        'tambahkan %s di %idx dari %l',
     'replace item %idx of %l with %s':
-        'zamenjaj element %idx v %l z %s',
+        'ganti barang %idx di %l dengan %s',
 
     // other
     'Make a block':
-        'Nov blok',
+        'buat block baru',
 
     // menus
     // snap menu
     'About...':
-        'Nekaj o Snap!...',
+        'Tentang Snap!...',
     'Reference manual':
-        'Uporabni\u0161ka navodila',
+        'Panduan',
     'Snap! website':
-        'Spletna stran Snap!',
+        'Website Snap!',
     'Download source':
-        'Nalo\u017Ei izvorno kodo',
+        'Download kodenya',
     'Switch back to user mode':
-        'Preklop nazaj na uporabni\u0161ki na\u010Din',
+        'Kembali ke mode pengunna',
     'disable deep-Morphic\ncontext menus\nand show user-friendly ones':
-        'izklop Morfic menujev in prikaz uporabni\u0161ko prijaznih',
+        'matikan konteks menu \ndeep-morphic dan \ntunjukan konteks \nmenu yang ramah',
     'Switch to dev mode':
-        'preklop na razvojni na\u010Din',
+        'ganti ke mode percobaan',
     'enable Morphic\ncontext menus\nand inspectors,\nnot user-friendly!':
-        'omogo\u010Di  Morphic menuje in in\u0161pektorje, \ni uporabniku prijazno',
+        'nyalahkan Morphic \ncontext menu\ndan inspektor, \ntidak ramah!',
 
     // project menu
     'Project notes...':
-        'Opis projekta...',
+        'Catatan Projek...',
     'New':
-        'Nov',
+        'Baru',
     'Open...':
-        'Odpri...',
+        'Buka',
     'Save':
-        'Shrani',
+        'Simpan',
     'Save to disk':
-        'Shrani na disk',
+        'Simpan ke komputer',
     'store this project\nin the downloads folder\n(in supporting browsers)':
-        'shrani v mapo Prenosi\n'
-            + '(ni na voljo v vseh brkljalnika)',
+        'simpan projek ini\ndi folder downloads\n'
+            + '(hanya untuk browser yang mendukung!)',
     'Save As...':
-        'Shrani kot...',
+        'Simpan sebagai',
     'Import...':
-        'Uvozi...',
+        'Impor',
     'file menu import hint':
-        'Nalaganje izvo\u017Eenega projekta,\nknji\u017Enice z '
-            + 'bloki\n'
-            + 'obleko ali zvokom',
+        'impor sebuah projek yang sudah diekspor atau\n '
+            + 'pustaka blok,\n'
+            + 'kostum atau suara',
     'Export project as plain text...':
-        'Izvozi projekt kot navadno besedilo...',
+        'expor projek sebagai file .txt',
     'Export project...':
-        'Izvozi projekt...',
+        'Expor projek',
     'show project data as XML\nin a new browser window':
-        'Prikaz projekta kot XML\nv novem oknu brkljalnika',
+        'tunjukan data projek sebagai XML\ndi jendela browser',
     'Export blocks...':
-        'Izvozi bloke',
+        'Expor balok...',
     'show global custom block definitions as XML\nin a new browser window':
-        'Prikaz definicij globalnih lastnih blokov kot XML\nv novem oknu brkljalnika',
+        'tunjukan definisi balok kostum global\nsebagai xml di jendela baru',
     'Unused blocks...':
-          'Neuporabljeni bloki...',
+          'Balok yang tidak dipakai',
     'find unused global custom blocks\nand remove their definitions':
-        'najdi in odstrani uporabni\u0161ke neuporabljene globalne bloke',
+        'cari balok kostum global yang tidak dipakai\ndan hapus definisi mereka',
     'Remove unused blocks':
-        'Odstrani neuporabljene bloke',
+        'Hapus balok yang tidak dipakai',
     'there are currently no unused\nglobal custom blocks in this project':
-        'trenutno ni neuporabljenih globalnih blokov v tem projektu',
+        'sekarang tidak ada balok kostum global\nyang tidak dipakai',
     'unused block(s) removed':
-        'neuporabljeni bloki so bili odstranjeni',
+        'blok yang tidak dipakai terhapus',
     'Export summary...':
-        'Povzetek izvoza...',
+        'Expor ringkasan...',
+    'open a new browser browser window\n with a summary of this project':
+        'buka jendela browser baru\ndengan ringkasan dari projek ini',
+    'Contents':
+        'Konten',
+    'Kind of':
+        'Seperti',
+    'Part of':
+        'Bagian dari',
+    'Parts':
+        'Bagian',
+    'Blocks':
+        'Balok',
+    'For all Sprites':
+        'Untuk semua karakter',
     'Import tools':
-        'Uvozi orodja',
+        'Impor peralatan',
     'load the official library of\npowerful blocks':
-        'uvozi uradni modul z naprednimi bloki',
+        'impor modul resmi dari\nblok hebat',
     'Libraries...':
-        'Knji\u017Enice...',
+        'Pustaka...',
     'Import library':
-        'Nalo\u017Ei knji\u017Enico',
+        'Import modul/pustaka',
 
     // cloud menu
     'Login...':
-        'Prijava...',
+        'Masuk...',
     'Signup...':
-        'Registracija...',
-    'Reset Password...':
-        'Pozabljeno geslo...',
+        'Daftar',
 
     // settings menu
     'Language...':
-        'Jezik...',
+        'Bahasa...',
     'Zoom blocks...':
-        'Pove\u010Daj bloke...',
+        'Perbesar balok',
     'Stage size...':
-        'Velikost scene...',
+        'Ukuran panggung',
     'Stage size':
-        'Velikost scene',
+        'Ukuran panggung',
     'Stage width':
-        '\u0160irina scene',
+        'Lebar panggung',
     'Stage height':
-        'Vi\u0161ina scene',
+        'Tinggi panggung',
     'Default':
-        'Normalno',
+        'Normal',
     'Blurred shadows':
-        'Mehke sence',
+        'Bayangan blur',
     'uncheck to use solid drop\nshadows and highlights':
-        'izklopi za uporabo trdih senc in osvetlitev',
+        'jangan centang untuk mengunakan\nbayangan dan cahaya saat jatuh',
     'check to use blurred drop\nshadows and highlights':
-        'vklopi za mehke sence in osvetlitve',
+        'centang untuk mengunakan bayangan \ndan cahaya blur saat jatuh',
     'Zebra coloring':
-        'barvanje kot zebra',
+        'Warna zebra',
     'check to enable alternating\ncolors for nested blocks':
-        'vklopi izmenjujo\u010De barve vgnezdenih blokov',
+        'centang untuk menyalahkan warna\nberganti di blok bersarang',
     'uncheck to disable alternating\ncolors for nested block':
-        'izklopi izmenjujo\u010De barve gnezdenih blokov',
+        'jangan centang untu mematikan\nwarna berganti di balok bersarang',
+    'Dynamic input labels':
+        'Label input yang dinamik',
+    'uncheck to disable dynamic\nlabels for variadic inputs':
+        'jangan centang untuk mematika\nlabel dinamik untuk input variadik',
+    'check to enable dynamic\nlabels for variadic inputs':
+        'centang untuk menyalahkan label\ndinamik untu input variadik',
     'Prefer empty slot drops':
-        'Imejmo raje prazne re\u017Ee',
+        'Memilih jatuh slot kosong',
     'settings menu prefer empty slots hint':
-        'vklop raje namiga za prazne re\u017Ee'
-            + 'zu bevorzugen',
+        'jangan centang untuk mengizinkan reporter yang jatuh menendang'
+            + 'yang lain',
     'uncheck to allow dropped\nreporters to kick out others':
-        'razkljukaj za to, da reporterji odrinejo druge',
+        'jangan centang untuk mengizinkan reporter yang jatuh menendang'
+            + 'yang lain',
     'Long form input dialog':
-        'Vhodni dialog dolge oblike',
+        'Form input panjang',
+    'Plain prototype labels':
+        'Label prototipe/purwarupa polos',
+    'uncheck to always show (+) symbols\nin block prototype labels':
+        'jangan centang untuk selalu menunjukan (+)\ndi label balok prototype',
+    'check to hide (+) symbols\nin block prototype labels':
+        'centang untuk menyembunykan (+)\ndi label balok prototype',
     'check to always show slot\ntypes in the input dialog':
-        'odkljukaj za prikaz tipov v vhodnih dialogih',
-    'razkljukaj za uporabo kratke oblike vhodnih dialogov':
-        'razkljukaj za uporabo dialoga kratke oblike',
+        'centang untuk selalu menunjukan slot\ntipe di input dialog',
+    'uncheck to use the input\ndialog in short form':
+        'jangan centang untuk menggunakan input\ndialog dalam bentuk pendek',
     'Virtual keyboard':
-        'Virtualna tipkovnicaa',
+        'Kibor virtual',
     'uncheck to disable\nvirtual keyboard support\nfor mobile devices':
-        'razkljukaj za izklop podpore virtualne tipkovnice za mobilne naprave',
+        'jangan centang untuk mematikan\nkibor virtual untuk\n'
+            + 'alat mobile',
     'check to enable\nvirtual keyboard support\nfor mobile devices':
-        'odkljukaj za vklop podpore z virtualni tipkovnico za mobilne naprave',
+        'centang untuk meyalahkan\nkibor virtual untuk\n'
+            + 'alat mobile',
     'Input sliders':
-        'Vhodni drsniki',
+        'Slider input',
     'uncheck to disable\ninput sliders for\nentry fields':
-        'razkljukaj za izklop vhodnih drsnikov',
+        'jangan centang untuk mematikan\nslider input untuk\nbagian entry',
     'check to enable\ninput sliders for\nentry fields':
-        'odkljukaj za aktiviranje vhodnih drsnikov',
+        'centang untuk menyalahkan\nslider input intuk\nbagian entry',
     'Clicking sound':
-        'Akusti\u010Dno klikanje',
+        'Suara klik',
     'uncheck to turn\nblock clicking\nsound off':
-        'razkljukaj za deaktiviranje akusti\u010Dnega klikanja',
+        'jangan centang untuk mematiakn\nsuara klik',
     'check to turn\nblock clicking\nsound on':
-        'odkljukaj za vklop akusti\u010Dnega klikanja',
+        'centang untuk menyalahkan\nsuara klik',
     'Animations':
-        'Animacije',
+        'Animasi',
     'uncheck to disable\nIDE animations':
-        'razkljukaj za izklop IDE animacij',
+        'jangan centang untuk mematikan\nanimasi IDE',
     'Turbo mode':
-        'Hitri na\u010Din',
+        'Mode turbo',
     'check to prioritize\nscript execution':
-        'odkljukaj za ve\u010Djo prioriteto izvajanja skript',
+        'centang untuk mementingkan\neksekusi skrip',
     'uncheck to run scripts\nat normal speed':
-        'razkljukaj za normalno hitrost izvajanja skript',
+        'jangan centang untuk menjalankan\nskrip pada kecepatan normal',
     'check to enable\nIDE animations':
-        'odkljukaj za IDE animacije',
+        'centang untuk menyalahkan \nanimasi IDE',
     'Flat design':
-        'Svetli izgled',
+        'Desain datar',
     'Keyboard Editing':
-        'Urejanje s tipkovnico',
+        'Editing melalui kibor',
     'Table support':
-        'Podpora za tabele',
+        'Dukungan tabel',
     'Table lines':
-        '\u010Crte med celicami v tabeli',
+        'Garis tabel',
     'Thread safe scripts':
-        'Varnost niti',
+        'Skrip aman untuk thread',
     'uncheck to allow\nscript reentrance':
-        'razkljukaj za dopu\u0161\u010Danje ve\u010Dkraten vstop skript (reentrancy)',
+        'jangan centang, untuk\nmengizinkan skrip masuk ulang',
     'check to disallow\nscript reentrance':
-        'odkljukaj za onemogo\u010Danje ve\u010Dkratnega vstopa skript',
+        'klik untuk menghindari\nskrip masuk ulang',
     'Prefer smooth animations':
-        'Gladka animacija',
+        'Memilih animasi lembut',
     'uncheck for greater speed\nat variable frame rates':
-        'razkljukaj za hitrej\u0161e animacije s spremenljivo hitrostjo osve\u017Eevanja',
+        'jangan centang untuk kecepatan lebih\ndan frame rate dinamis',
     'check for smooth, predictable\nanimations across computers':
-        'odkljukaj za bolj predvidljivo hitrost animacij med razli\u010Dnimi ra\u010Dunalniki',
+        'centang untuk animasi lembut, bisa diramalkan\ndi komputer',
     'Flat line ends':
-        'Ravni zaklju\u010Dki \u010Drt',
+        'Garis ujung rata',
     'check for flat ends of lines':
-        'odkljukaj za ravne zaklju\u010Dke \u010Drt',
+        'centang untuk ujung rata dari\ngaris pena',
     'uncheck for round ends of lines':
-        'razkljukaj za zaobljene zaklju\u010Dke \u010Drt',
+        'matikan untuk ujung bulat dari\ngaris pena',
     'Inheritance support':
-        'Podpora za dedovanje',
+        'Dukungan inheritance',
 
     // inputs
     'with inputs':
-        'z vhodi',
+        'dengan input',
     'input names:':
-        'imena vhodov:',
+        'Nama input:',
     'Input Names:':
-        'imena vhodov:',
+        'Nama input:',
     'input list:':
-        'vhodni seznam:',
+        'Dafta input:',
 
     // context menus:
     'help':
-        'Pomo\u010D...',
+        'Tolong',
 
     // palette:
     'hide primitives':
-        'skrij osnovne bloke',
+        'sembunyikan primitif',
     'show primitives':
-        'poka\u017Ei osnovne bloke',
+        'tampilkan primitif',
 
     // blocks:
     'help...':
-        'pomo\u010D...',
+        'bantuan...',
     'relabel...':
-        'spremeni tip...',
+        'label ulang...',
     'duplicate':
-        'podvoji',
+        'gandakan',
     'make a copy\nand pick it up':
-        'kopiraj',
+        'buat kopi\ndat ambil',
     'only duplicate this block':
-        'podvoji ta blok',
+        'hanya gandakan blok ini',
     'delete':
-        'bri\u0161i',
+        'hapus',
     'script pic...':
-        'slika skript...',
+        'gambar skrip...',
     'open a new window\nwith a picture of this script':
-        'odpri novo okno s sliko tega skripta',
+        'buka jendela baru\ndengan gambar dari skrip ini',
     'ringify':
-        'Obkro\u017Ei',
+        'cincinkan',
     'unringify':
-        'odstrani obro\u010D',
+        'hapus cincin',
     'transient':
-        'se ne shranjuje',
+        'sementara',
+    'uncheck to save contents\nin the project':
+        'jangan centang untuk\nmenymimpan konten di dalam\nprojek',
+    'check to prevent contents\nfrom being saved':
+        'centang untuk mencegah konten\ndisimpan',
 
     // custom blocks:
     'delete block definition...':
-        'bri\u0161i definicijo bloka',
+        'hapus definisi blok',
     'edit...':
-        'uredi...',
+        'edit...',
 
     // sprites:
     'edit':
-        'uredi',
+        'edit',
     'move':
-        'premakni',
+        'bergerak',
     'detach from':
-        'odklopi',
+        'lepaskan dari',
     'detach all parts':
-        'odklopi vse dele',
+        'lepaskan semua bagian',
     'export...':
-        'izvozi...',
+        'expor...',
 
     // stage:
     'show all':
-        'prila\u017Ei vse ',
+        'Tunjukan semua',
     'pic...':
-        'izvozi sliko...',
+        'expor gambar...',
     'open a new window\nwith a picture of the stage':
-        'odpri novo okno s sliko te scene',
+        'buka jendela baru\ndengan gambar dari panggung',
 
     // scripting area
     'clean up':
-        'po\u010Disti',
+        'rapikan',
     'arrange scripts\nvertically':
-        'uredi skripte vertikalno',
+        'urutkan skripnya\nsecara vertikal',
     'add comment':
-        'dodaj komentar',
+        'tambahkan komen',
     'undrop':
-        'ponovno povle\u010Di',
+        'undo jatuhkan',
     'undo the last\nblock drop\nin this pane':
-        'prekli\u010Di dodajanje zadnjega bloka v tem okviru',
+        'undo mendrag\ndan jatuhkan\nblok terakhir\ndi panel ini',
     'scripts pic...':
-        'slika skript...',
+        'Gambar skrip',
     'open a new window\nwith a picture of all scripts':
-        'odpri novo okno s sliko vseh skript',
+        'buka jendela baru\ndengan gambar semua skrip',
     'make a block...':
-        'Gradnja novega bloka...',
+        'Buat blok baru.',
 
     // costumes
     'rename':
-        'preimenuj',
+        'namakan ulang',
     'export':
-        'izvozi',
+        'expor',
     'rename costume':
-        'preimenuj izgled',
+        'namakan ulang kostum',
 
     // sounds
     'Play sound':
-        'Predvajaj zvok',
+        'Mainkan suara',
     'Stop sound':
-        'Ustavi zvok',
+        'Hentikan suara',
     'Stop':
-        'Ustavi',
+        'Berhenti',
     'Play':
-        'Predvajaj',
+        'mainkan bunyi',
     'rename sound':
-        'Preimenuj zvok',
+        'namakan ulang bunyi',
 
     // lists and tables
     'list view...':
-        'prika\u017Ei kot seznam...',
+        'tampilan daftar',
     'table view...':
-        'prika\u017Ei kot tabelo',
+        'tampilan tabel',
     'open in dialog...':
-        'odpri v novem oknu',
+        'buka di dialog...',
+    'reset columns':
+        'atur ulang kolum',
     'items':
-        'elementi',
+        'barang',
 
     // dialogs
     // buttons
     'OK':
-        'V redu',
+        'OK',
     'Ok':
-        'V redu',
+        'oke',
     'Cancel':
-        'Prekli\u010Di',
+        'Batalkan',
     'Yes':
-        'Da',
+        'Ya',
     'No':
-        'Ne',
+        'tidak',
 
     // help
     'Help':
-        'Pomo\u010D',
+        'Bantuan',
 
     // zoom blocks
     'Zoom blocks':
-        'Pove\u010Daj blok',
+        'balok zoom',
     'build':
-        'zgradi',
+        'bangun',
     'your own':
-        'svoj',
+        'punyamu',
     'blocks':
-        'blok',
+        'balok',
     'normal (1x)':
-        'normalno (1x)',
+        'normal (1x)',
     'demo (1.2x)':
         'demo (1.2x)',
     'presentation (1.4x)':
-        'predstavitev(1.4x)',
+        'presentasi (1.4x)',
     'big (2x)':
-        'veliko (2x)',
+        'gro\u00df (2x)',
     'huge (4x)':
-        've\u010Dje(4x)',
+        'besar sekali (4x)',
     'giant (8x)':
-        'ogromno (8x)',
+        'raksasa (8x)',
     'monstrous (10x)':
-        'najve\u010Dje(10x)',
+        'sangat besar (10x)',
 
     // Project Manager
     'Untitled':
-        'Neimenovano',
+        'Tak bernama',
     'Open Project':
-        'Odpri projekt',
+        'Buka projek',
     '(empty)':
-        '(prazno)',
+        '(kosong)',
     'Saved!':
-        'Shranjeno!',
+        'Tersimpan!',
     'Delete Project':
-        'Zbri\u0161i projekt',
+        'Hapus projek',
     'Are you sure you want to delete':
-        'Ste prepri\u010Dani da \u017Eelite izbrisati?',
+        'Apakah kamu yakin mau menghapus?',
     'rename...':
-        'preimenuj...',
+        'Namakan ulang...',
 
     // costume editor
     'Costume Editor':
-        'Urejevalnik oblek',
+        'Editor kostum',
     'click or drag crosshairs to move the rotation center':
-        'Klikni ali povle\u010Di kri\u017Eec za premik centra vrtenja',
+        'Kilk atau drag crosshair nya untuk megerakan pusat rotasi',
 
     // project notes
     'Project Notes':
-        'Opis projekta',
+        'Catatan projek',
 
     // new project
     'New Project':
-        'Nov projekt',
+        'Projek baru',
     'Replace the current project with a new one?':
-        'Zamenjam trenutni projekt z novim?',
+        'Ganti projek yang sudah ada denagn yang baru?',
 
     // save project
     'Save Project As...':
-        'Shrani projekt kot...',
+        'Simpan projek sebagai',
 
     // export blocks
     'Export blocks':
-        'Izvoz blokov',
+        'Expor balok',
     'Import blocks':
-        'Uvoz blokov',
+        'Impor balok',
     'this project doesn\'t have any\ncustom global blocks yet':
-        'ta projekt \u0161e nima lastnih globalnih blokov',
+        'projek ini sepertinya tidak \npunya blok global buatan sendiri',
     'select':
-        'izberi',
-    'all':
-        'vse',
+        'pilih',
     'none':
-        'ni\u010D',
+        'tidak ada',
 
     // variable dialog
     'for all sprites':
-        'za vse objekte',
+        'untuk semua sprite',
     'for this sprite only':
-        'le za ta objekt',
+        'hanya untuk sprite ini',
 
     // block dialog
     'Change block':
-        'Spremeni blok',
+        'Ganti blok',
     'Command':
-        'Ukaz',
+        'Perintah',
     'Reporter':
-        'Funkcija',
+        'Pelapor',
     'Predicate':
         'Predikat',
 
     // block editor
     'Block Editor':
-        'Urejevalnik blokov',
+        'Editor blok',
     'Apply':
-        'Uporabi',
+        'Aplikasikan',
 
     // block deletion dialog
     'Delete Custom Block':
-        'Zbri\u0161i latni blok',
+        'Hapus blok',
     'block deletion dialog text':
-        'Ali naj res zbri\u0161em ta blok\n' +
-            'z vsemi njegovimi primeri?',
+        'Apakah anda yaking anda mau menghapus\n' +
+            'blok ini dan instans-nya?',
 
     // input dialog
     'Create input name':
-        'Tvori ime vhoda',
+        'Buat nama input',
     'Edit input name':
-        'Uredi ime vhoda',
+        'Edit nama input',
     'Edit label fragment':
-        'Uredi ime dela',
+        'Edit bagian label',
     'Title text':
-        'Naslovno besedilo',
+        'Teks judul',
     'Input name':
-        'ime vhoda',
+        'Nama input',
     'Delete':
-        'Bri\u0161i',
+        'Hapus',
     'Object':
-        'Objekt',
+        'Objek',
     'Number':
-        '\u0160tevilo',
+        'Angka',
     'Text':
-        'Tekst',
+        'Teks',
     'List':
-        'Seznam',
+        'Daftar',
     'Any type':
-        'Poljuben tip',
+        'Tipe apapun',
     'Boolean (T/F)':
-        'Boolova spr. (W/F)',
+        'Boolean (B/S)',
     'Command\n(inline)':
-        'Ukaz',
+        'Perintah',
     'Command\n(C-shape)':
-        'Ukaz\n(C-oblika)',
+        'Perintah\n(bentuk-C)',
     'Any\n(unevaluated)':
-        'Poljuben\n(neovrednoten)',
+        'Apapun\n(tidak dievaluasi)',
     'Boolean\n(unevaluated)':
-        'Boolova spr.\n(neovrednotena)',
+        'Boolean\n(tidak dievaluasi)',
     'Single input.':
-        'En vnos.',
+        'Input tunggal.',
     'Default Value:':
-        'Privzeta vrednost:',
+        'Nilai default:',
     'Multiple inputs (value is list of inputs)':
-        'Ve\u010D vnosov (kot seznam)',
+        'Input multipel (nilai adalah daftar input)',
     'Upvar - make internal variable visible to caller':
-        'interne spremenljivke naj bodo navzven vidne',
+        'Upvar - membuat var internal mirip dengan pemanggil',
 
     // About Snap
     'About Snap':
-        'nekaj o Snap',
+        'Tentang Snap',
     'Back...':
-        'Nazaj...',
+        'Kembali...',
     'License...':
-        'Licenca...',
+        'Lisensi...',
     'Modules...':
-        'Komponente...',
+        'Modul...',
     'Credits...':
-        'Sodelujo\u010Di...',
+        'Kredit...',
     'Translators...':
-        'Prevajalci',
+        'Penerjemah',
     'License':
-        'Licenca',
+        'Lisensi',
     'current module versions:':
-        'Verzije komponent',
+        'Versi komponen sekarang',
     'Contributors':
-        'Prispevali',
+        'Kontributor',
     'Translations':
-        'prevodi',
+        'Terjemahan',
 
     // variable watchers
     'normal':
-        'normalen',
+        'normal',
     'large':
-        'velik',
+        'besar',
     'slider':
-        'drsnik',
+        'slider',
     'slider min...':
-        'min vrednost...',
+        'Minimum slider...',
     'slider max...':
-        'maks vrednost...',
+        'Maksimum slider...',
     'import...':
-        'uvozi...',
+        'Impor...',
     'Slider minimum value':
-        'Minimalna vrednost drsnika',
+        'Nilai minimum slider:',
     'Slider maximum value':
-        'Maksimalna vrednost drsnika',
+        'Nilai maksimum slider:',
 
     // list watchers
     'length: ':
-        'Dol\u017Eina: ',
+        'panjang: ',
 
     // coments
     'add comment here...':
-        'tu vnese\u0161 komentar',
+        'tambahkan komen disini...',
 
     // drow downs
     // directions
     '(90) right':
-        '(90) desno',
+        '(90) kanan',
     '(-90) left':
-        '(-90) levo',
+        '(-90) kiri',
     '(0) up':
-        '(0) gor',
-    '(180) right':
-        '(180) dol',
+        '(0) atas',
+    '(180) down':
+        '(180) bawah',
 
     // collision detection
     'mouse-pointer':
-        'kazalec mi\u0161ke',
+        'penunjuk tetikus/mouse',
     'edge':
-        'rob',
+        'ujung',
     'pen trails':
-        'sledi svin\u010Dnika',
+        'jejak pena',
 
     // costumes
     'Turtle':
-        'Kazalec smeri',
+        'kura-kura',
     'Empty':
-        'Prazno',
+        'kosong',
 
     // graphical effects
     'brightness':
-        'svetlost',
+        'kecerahan',
     'ghost':
-        'prosojnost',
+        'keburaman',
     'negative':
-        'obratno',
+        'negatif',
+    'comic':
+        'komik',
+    'confetti':
+        'konfetti',
+
     // keys
     'space':
-        'presledek',
+        'spasi',
     'up arrow':
-        'pu\u0161\u010Dica gor',
+        'panah bawah',
     'down arrow':
-        'pu\u0161\u010Dica dol',
+        'panah atas',
     'right arrow':
-        'pu\u0161\u010Dica desno',
+        'panah kanan',
     'left arrow':
-        'pu\u0161\u010Dica levo',
+        'panah kiri',
     'any key':
-        'poljuden',
+        'tombol apapun',
     'a':
         'a',
     'b':
@@ -1273,17 +1296,17 @@ SnapTranslator.dict.si = {
 
     // messages
     'new...':
-        'nov...',
+        'Neu...',
 
     // math functions
     'abs':
-        'abs',
+        'nilai absolut',
     'ceiling':
-        'zaokro\u017Eevanje navzgor',
+        'bulatkan keatas',
     'floor':
-        'zaokro\u017Eevanje navzdol',
+        'bulatkan kebawah',
     'sqrt':
-        'koren',
+        'akar',
     'sin':
         'sin',
     'cos':
@@ -1303,33 +1326,35 @@ SnapTranslator.dict.si = {
 
     // delimiters
     'letter':
-        '\u010Drke',
+        'huruf',
     'whitespace':
-        'presledki',
+        'spasi',
     'line':
-        'vrstica',
+        'garis',
     'tab':
-        'tab',
+        'indentasi',
+    'cr':
+        'cr',
 
     // data types
     'number':
-        '\u0161tevilo',
+        'Zahl',
     'text':
-        'Tekst',
+        'Text',
     'Boolean':
-        'logi\u010Dna spr.',
+        'Boole',
     'list':
-        'seznam',
+        'Liste',
     'command':
-        'ukaz',
+        'perintah',
     'reporter':
-        'funkcijski blok',
+        'pelapor',
     'predicate':
-        'Predikat',
+        'predikat',
 
     // list indices
     'last':
-        'zadnji',
+        'terakhir',
     'any':
-        'poljuben'
+        'apapun'
 };

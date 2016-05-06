@@ -61,19 +61,18 @@
     Oct 02 - revert disable smoothing (Jens)
     Dec 15 - center rotation point on costume creating (Craxic)
     Jan 18 - avoid pixel collision detection in PaintCanvas (Jens)
- */
+    Mar 22 - fixed automatic rotation center point mechanism (Jens)
+*/
 
-/*global Point, Rectangle, DialogBoxMorph, fontHeight, AlignmentMorph,
- FrameMorph, PushButtonMorph, Color, SymbolMorph, newCanvas, Morph, TextMorph,
- CostumeIconMorph, IDE_Morph, Costume, SpriteMorph, nop, Image, WardrobeMorph,
- TurtleIconMorph, localize, MenuMorph, InputFieldMorph, SliderMorph,
- ToggleMorph, ToggleButtonMorph, BoxMorph, modules, radians,
- MorphicPreferences, getDocumentPositionOf, StageMorph
- */
+/*global Point, Rectangle, DialogBoxMorph, AlignmentMorph, PushButtonMorph,
+Color, SymbolMorph, newCanvas, Morph, TextMorph, Costume, SpriteMorph, nop,
+localize, InputFieldMorph, SliderMorph, ToggleMorph, ToggleButtonMorph,
+BoxMorph, modules, radians, MorphicPreferences, getDocumentPositionOf,
+StageMorph, isNil*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.paint = '2016-January-18';
+modules.paint = '2016-May-02';
 
 // Declarations
 
@@ -253,7 +252,6 @@ PaintEditorMorph.prototype.buildScaleBox = function () {
 PaintEditorMorph.prototype.openIn = function (world, oldim, oldrc, callback) {
     // Open the editor in a world with an optional image to edit
     this.oldim = oldim;
-    this.oldrc = oldrc.copy();
     this.callback = callback || nop;
 
     this.processKeyUp = function () {
@@ -268,9 +266,10 @@ PaintEditorMorph.prototype.openIn = function (world, oldim, oldrc, callback) {
 
     //merge oldim:
     if (this.oldim) {
+        this.paper.automaticCrosshairs = isNil(oldrc);
         this.paper.centermerge(this.oldim, this.paper.paper);
         this.paper.rotationCenter =
-            this.oldrc.add(
+            (oldrc || new Point(0, 0)).add(
                 new Point(
                     (this.paper.paper.width - this.oldim.width) / 2,
                     (this.paper.paper.height - this.oldim.height) / 2

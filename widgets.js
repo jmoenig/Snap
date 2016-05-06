@@ -74,7 +74,7 @@ HTMLCanvasElement, fontHeight, SymbolMorph, localize, SpeechBubbleMorph,
 ArrowMorph, MenuMorph, isString, isNil, SliderMorph, MorphicPreferences,
 ScrollFrameMorph*/
 
-modules.widgets = '2015-July-27';
+modules.widgets = '2016-May-02';
 
 var PushButtonMorph;
 var ToggleButtonMorph;
@@ -2513,6 +2513,12 @@ DialogBoxMorph.prototype.fixLayout = function () {
                     + this.buttons.height()
                     + this.padding
         );
+        this.silentSetWidth(Math.max(
+                this.width(),
+                this.buttons.width()
+                        + (2 * this.padding)
+            )
+        );
         this.buttons.setCenter(this.center());
         this.buttons.setBottom(this.bottom() - this.padding);
     }
@@ -2927,6 +2933,7 @@ AlignmentMorph.prototype.fixLayout = function () {
                         ))
                     );
                 }
+                cfb = c.fullBounds();
                 newBounds = newBounds.merge(cfb);
             } else {
                 newBounds = cfb;
