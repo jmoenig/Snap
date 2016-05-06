@@ -4604,11 +4604,9 @@ CursorMorph.prototype.processKeyDown = function (event) {
         return;
     }
     if (shift){
-        var sCode=[37,38,39,36,40,35,9];
-        for(var i in sCode){
-            if(event.keyCode==sCode[i])
-            //prevent the error cased by inputHandler
-                event.preventDefault();
+        var sCode=[37,38,39,36,40,35,9,33,34];
+        if (sCode.indexOf(event.keyCode) !== -1) {
+            event.preventDefault();
         }
      }
     switch (event.keyCode) {
