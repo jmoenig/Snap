@@ -4578,6 +4578,11 @@ CursorMorph.prototype.initializeTextarea = function () {
                 // ignore cursor movement, delegated to CursorMorph
                 event.preventDefault();
             }
+            if (navigator.os === 'osx' && event.ctrlKey) {
+                // some ctrl shortcuts (e.g. ctrl+a, ctrl+e) move cursor, leave them to CursorMorph
+                event.preventDefault();
+                return;
+            }
         },
         false
     );
@@ -4614,7 +4619,7 @@ CursorMorph.prototype.processKeyPress = function (event) {
         this.keyDownEventUsed = false;
         return null;
     }
-
+    /*
     if (event.keyCode) { // Opera doesn't support charCode
         if (event.ctrlKey && (!event.altKey)) {
             this.ctrl(event.keyCode, event.shiftKey);
@@ -4628,6 +4633,7 @@ CursorMorph.prototype.processKeyPress = function (event) {
             this.cmd(event.charCode, event.shiftKey);
         }
     }
+    */
     // notify target's parent of key event
     this.target.escalateEvent('reactToKeystroke', event);
 };
@@ -4647,9 +4653,8 @@ CursorMorph.prototype.processKeyDown = function (event) {
         return;
     }
 
-    if (navigator.os === 'osx' &&
-        (event.ctrlKey || event.altKey)) {
-        // no support for ctrl/alt movements shortcuts on osx
+    if (navigator.os === 'osx' && event.ctrlKey) {
+        // no support for ctrl movements shortcuts on osx
         this.keyDownEventUsed = true;
         event.preventDefault();
         return;
