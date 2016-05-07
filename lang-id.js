@@ -230,7 +230,7 @@ SnapTranslator.dict.id = {
 
     // names:
     'Sprite':
-        'Karakter',
+        'Sprite',
     'Stage':
         'Panggung',
 
@@ -474,7 +474,7 @@ SnapTranslator.dict.id = {
     'all but this script':
         'semua selain skrip ini',
     'other scripts in sprite':
-        'skrip lain di karakter ini',
+        'skrip lain di sprite ini',
     'pause all %pause':
         'paus semua %pause',
     'run %cmdRing %inputs':
@@ -709,7 +709,7 @@ SnapTranslator.dict.id = {
     'Blocks':
         'Balok',
     'For all Sprites':
-        'Untuk semua karakter',
+        'Untuk semua sprite',
     'Import tools':
         'Impor peralatan',
     'load the official library of\npowerful blocks':
