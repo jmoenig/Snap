@@ -2743,7 +2743,7 @@ IDE_Morph.prototype.projectMenu = function () {
                 var url = myself.resourceURL(graphicsName, file),
                     img = new Image();
                 img.onload = function () {
-                    var canvas = newCanvas(new Point(img.width, img.height));
+                    var canvas = newNonRetinaCanvas(new Point(img.width, img.height));
                     canvas.getContext('2d').drawImage(img, 0, 0);
                     myself.droppedImage(canvas, name);
                 };

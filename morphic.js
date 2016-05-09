@@ -1052,6 +1052,185 @@
     - Jens Mönig
 */
 
+// Retina Canvas utilities /////////////////////////////////////////////
+
+// This installs a series of utilities that allow using Canvas the same way on
+// retina and non-retina displays. If the display is a retina one, the
+// underlying dimensions of the Canvas elements are doubled, but this will be
+// transparent to the code that uses Canvas. All dimensions read or written to
+// the Canvas element will be scaled appropriately.
+//
+// NOTE: This implementation is not exhaustive; it only implements what is
+// needed by the Snap! UI.
+
+(function() {
+    // Get the window's pixel ratio for canvas elements.
+    // See: http://www.html5rocks.com/en/tutorials/canvas/hidpi/
+    var ctx = document.createElement("canvas").getContext("2d"),
+            backingStorePixelRatio = ctx.webkitBackingStorePixelRatio ||
+                ctx.mozBackingStorePixelRatio ||
+                ctx.msBackingStorePixelRatio ||
+                ctx.oBackingStorePixelRatio ||
+                ctx.backingStorePixelRatio || 1;
+
+    // Unfortunately, it's really hard to make this work well when changing zoom level, so let's
+    // leave it like this right now, and stick to whatever the ratio was in the beginning.
+    var originalDevicePixelRatio = window.devicePixelRatio;
+
+    function getPixelRatio(imageSource) {
+        return imageSource.isRetinaEnabled ?
+            (originalDevicePixelRatio || 1) / backingStorePixelRatio : 1;
+    }
+
+    var canvasProto = HTMLCanvasElement.prototype;
+    canvasProto._isRetinaEnabled = true;
+    Object.defineProperty(canvasProto, 'isRetinaEnabled', {
+        get: function() {
+            return this._isRetinaEnabled;
+        },
+        set: function(enabled) {
+            var prevPixelRatio = getPixelRatio(this);
+            var prevWidth = this.width;
+            var prevHeight = this.height;
+
+            this._isRetinaEnabled = enabled;
+            if (getPixelRatio(this) != prevPixelRatio) {
+                this.width = prevWidth;
+                this.height = prevHeight;
+            }
+        }
+    });
+
+    var uberWidth = Object.getOwnPropertyDescriptor(canvasProto, 'width');
+    Object.defineProperty(canvasProto, 'width', {
+        get: function() {
+            return uberWidth.get.call(this) / getPixelRatio(this);
+        },
+        set: function(width) {
+            var pixelRatio = getPixelRatio(this);
+            uberWidth.set.call(this, width * pixelRatio);
+            var context = this.getContext('2d');
+            context.restore();
+            context.save();
+            context.scale(pixelRatio, pixelRatio);
+        }
+    });
+
+    var uberHeight = Object.getOwnPropertyDescriptor(canvasProto, 'height');
+    Object.defineProperty(canvasProto, 'height', {
+        get: function() {
+            return uberHeight.get.call(this) / getPixelRatio(this);
+        },
+        set: function(height) {
+            var pixelRatio = getPixelRatio(this);
+            uberHeight.set.call(this, height * pixelRatio);
+            var context = this.getContext('2d');
+            context.restore();
+            context.save();
+            context.scale(pixelRatio, pixelRatio);
+        }
+    });
+
+    var contextProto = CanvasRenderingContext2D.prototype;
+    var uberDrawImage = contextProto.drawImage;
+    contextProto.drawImage = function(image) {
+        var pixelRatio = getPixelRatio(image),
+            sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight;
+        
+        // Different signatures of drawImage() method have different parameter
+        // assignments.
+        switch (arguments.length) {
+            case 9:
+                sx = arguments[1];
+                sy = arguments[2];
+                sWidth = arguments[3];
+                sHeight = arguments[4];
+                dx = arguments[5];
+                dy = arguments[6];
+                dWidth = arguments[7];
+                dHeight = arguments[8];
+                break;
+
+            case 5:
+                sx = 0;
+                sy = 0;
+                sWidth = image.width;
+                sHeight = image.height;
+                dx = arguments[1];
+                dy = arguments[2];
+                dWidth = arguments[3];
+                dHeight = arguments[4];
+                break;
+
+            case 3:
+                sx = 0;
+                sy = 0;
+                sWidth = image.width;
+                sHeight = image.height;
+                dx = arguments[1];
+                dy = arguments[2];
+                dWidth = image.width;
+                dHeight = image.height;
+                break;
+
+            default:
+                throw Error('Called drawImage() with ' + arguments.length +
+                        ' arguments');
+        }
+        uberDrawImage.call(
+                this, image,
+                sx * pixelRatio, sy * pixelRatio,
+                sWidth * pixelRatio, sHeight * pixelRatio,
+                dx, dy,
+                dWidth, dHeight);
+    };
+
+    var uberGetImageData = contextProto.getImageData;
+    contextProto.getImageData = function(sx, sy, sw, sh) {
+        var pixelRatio = getPixelRatio(this.canvas);
+        return uberGetImageData.call(
+                this,
+                sx * pixelRatio, sy * pixelRatio,
+                sw * pixelRatio, sh * pixelRatio);
+    };
+
+    var uberShadowOffsetX =
+            Object.getOwnPropertyDescriptor(contextProto, 'shadowOffsetX');
+    Object.defineProperty(contextProto, 'shadowOffsetX', {
+        get: function() {
+            return uberShadowOffsetX.get.call(this) / getPixelRatio(this.canvas);
+        },
+        set: function(offset) {
+            var pixelRatio = getPixelRatio(this.canvas);
+            uberShadowOffsetX.set.call(this, offset * pixelRatio);
+        }
+    });
+
+    var uberShadowOffsetY =
+            Object.getOwnPropertyDescriptor(contextProto, 'shadowOffsetY');
+    Object.defineProperty(contextProto, 'shadowOffsetY', {
+        get: function() {
+            return uberShadowOffsetY.get.call(this) / getPixelRatio(this.canvas);
+        },
+        set: function(offset) {
+            var pixelRatio = getPixelRatio(this.canvas);
+            uberShadowOffsetY.set.call(this, offset * pixelRatio);
+        }
+    });
+
+    var uberShadowBlur =
+            Object.getOwnPropertyDescriptor(contextProto, 'shadowBlur');
+    Object.defineProperty(contextProto, 'shadowBlur', {
+        get: function() {
+            return uberShadowBlur.get.call(this) / getPixelRatio(this.canvas);
+        },
+        set: function(blur) {
+            var pixelRatio = getPixelRatio(this.canvas);
+            uberShadowBlur.set.call(this, blur * pixelRatio);
+        }
+    });
+})();
+
 // Global settings /////////////////////////////////////////////////////
 
 /*global window, HTMLCanvasElement, FileReader, Audio, FileList*/
@@ -1177,6 +1356,12 @@ function newCanvas(extentPoint) {
     canvas = document.createElement('canvas');
     canvas.width = ext.x;
     canvas.height = ext.y;
+    return canvas;
+}
+
+function newNonRetinaCanvas(extentPoint) {
+    var canvas = newCanvas(extentPoint);
+    canvas.isRetinaEnabled = false;
     return canvas;
 }
 
@@ -9947,7 +10132,7 @@ HandMorph.prototype.processDrop = function (event) {
             target = target.parent;
         }
         pic.onload = function () {
-            canvas = newCanvas(new Point(pic.width, pic.height));
+            canvas = newNonRetinaCanvas(new Point(pic.width, pic.height));
             canvas.getContext('2d').drawImage(pic, 0, 0);
             target.droppedImage(canvas, aFile.name);
         };
@@ -10038,7 +10223,7 @@ HandMorph.prototype.processDrop = function (event) {
             }
             img = new Image();
             img.onload = function () {
-                canvas = newCanvas(new Point(img.width, img.height));
+                canvas = newNonRetinaCanvas(new Point(img.width, img.height));
                 canvas.getContext('2d').drawImage(img, 0, 0);
                 target.droppedImage(canvas);
             };
@@ -10050,7 +10235,7 @@ HandMorph.prototype.processDrop = function (event) {
         }
         img = new Image();
         img.onload = function () {
-            canvas = newCanvas(new Point(img.width, img.height));
+            canvas = newNonRetinaCanvas(new Point(img.width, img.height));
             canvas.getContext('2d').drawImage(img, 0, 0);
             target.droppedImage(canvas);
         };
@@ -10190,22 +10375,16 @@ WorldMorph.prototype.doOneCycle = function () {
 };
 
 WorldMorph.prototype.fillPage = function () {
-    var pos = getDocumentPositionOf(this.worldCanvas),
-        clientHeight = window.innerHeight,
+    var clientHeight = window.innerHeight,
         clientWidth = window.innerWidth,
         myself = this;
 
+    this.worldCanvas.style.position = "absolute";
+    this.worldCanvas.style.left = "0px";
+    this.worldCanvas.style.right = "0px";
+    this.worldCanvas.style.width = "100%";
+    this.worldCanvas.style.height = "100%";
 
-    if (pos.x > 0) {
-        this.worldCanvas.style.position = "absolute";
-        this.worldCanvas.style.left = "0px";
-        pos.x = 0;
-    }
-    if (pos.y > 0) {
-        this.worldCanvas.style.position = "absolute";
-        this.worldCanvas.style.top = "0px";
-        pos.y = 0;
-    }
     if (document.documentElement.scrollTop) {
         // scrolled down b/c of viewport scaling
         clientHeight = document.documentElement.clientHeight;

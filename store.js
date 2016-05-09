@@ -1320,7 +1320,7 @@ SnapSerializer.prototype.loadValue = function (model) {
             } else {
                 v = new Costume(null, name, center);
                 image.onload = function () {
-                    var canvas = newCanvas(
+                    var canvas = newNonRetinaCanvas(
                             new Point(image.width, image.height)
                         ),
                         context = canvas.getContext('2d');
