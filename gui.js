@@ -2597,6 +2597,69 @@ IDE_Morph.prototype.projectMenu = function () {
         };
     }
 
+    function importMediaDialog(mediaType) {
+        var dialog = new DialogBoxMorph().withKey('import' + mediaType),
+            frame = new ScrollFrameMorph(),
+            size = 500,
+            padding = 4, x = padding, y = padding,
+            selectedIcon = null,
+            turtle = new SymbolMorph('turtle', 60),
+            items = myself.getMediaList(mediaType);
+
+        frame.padding = 6;
+        frame.setWidth(size);
+        frame.acceptsDrops = false;
+        frame.contents.acceptsDrops = false;
+        frame.setHeight(size);
+        frame.fixLayout = nop;
+
+        items.forEach(function (item) {
+            var url = myself.resourceURL(mediaType, item.file),
+                img = new Image();
+            var icon = new CostumeIconMorph(new Costume(turtle.image, item.name));
+            icon.setPosition(new Point(x, y));
+            icon.userMenu = null;
+            icon.action = function () { 
+                if (selectedIcon === icon) return;
+                var prevSelected = selectedIcon;
+                selectedIcon = icon;
+                if (prevSelected) prevSelected.refresh();
+            };
+            icon.query = function () {
+                return icon === selectedIcon;
+            };
+            frame.addContents(icon);
+            x = icon.right() + padding;
+            if (x + icon.width() > frame.width()) {
+                x = padding;
+                y = icon.bottom() + padding;
+            }
+            img.onload = function () {
+                var canvas = newCanvas(new Point(img.width, img.height));
+                canvas.getContext('2d').drawImage(img, 0, 0);
+                icon.object = new Costume(canvas, item.name);
+                icon.rawImage = canvas;
+                icon.refresh();
+            };
+            img.src = url;
+        });
+
+        dialog.ok = function () {
+            myself.droppedImage(selectedIcon.rawImage, selectedIcon.labelString);
+        };
+
+        dialog.labelString = mediaType;
+        dialog.createLabel();
+        dialog.addBody(frame);
+        frame.drawNew();
+        dialog.addButton('ok', 'Import');
+        dialog.addButton('cancel', 'Cancel');
+        dialog.fixLayout();
+        dialog.drawNew();
+        dialog.popUp(world);
+        dialog.setCenter(world.center());
+    }
+
     menu = new MenuMorph(this);
     menu.addItem('Project notes...', 'editProjectNotes');
     menu.addLine();
@@ -2737,19 +2800,9 @@ IDE_Morph.prototype.projectMenu = function () {
 
     menu.addItem(
         localize(graphicsName) + '...',
-        createMediaMenu(
-            graphicsName,
-            function loadCostume(file, name) {
-                var url = myself.resourceURL(graphicsName, file),
-                    img = new Image();
-                img.onload = function () {
-                    var canvas = newCanvas(new Point(img.width, img.height));
-                    canvas.getContext('2d').drawImage(img, 0, 0);
-                    myself.droppedImage(canvas, name);
-                };
-                img.src = url;
-            }
-        ),
+        function () {
+            importMediaDialog(graphicsName);
+        },
         'Select a costume from the media library'
     );
     menu.addItem(
