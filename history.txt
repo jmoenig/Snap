@@ -2920,3 +2920,11 @@ http://snap.berkeley.edu/run#cloud:Username=jens&ProjectName=rotation
 * new Estonian translation! Yay!! Thanks, Hasso Tepper!
 
 == v4.0.7.1 ==== - cloning speed-up
+
+160509
+------
+* Threads: fixed #1212 - Null continuation doesn't escape from calling context.
+* Updated Simplified Chinese translation, thanks to @ubertao!
+* Media import dialog with thumbnail, thanks to @ubertao!
+
+== v4.0.7.2 ==== 
