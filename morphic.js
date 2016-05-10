@@ -4544,19 +4544,22 @@ CursorMorph.prototype.initializeTextarea = function () {
     this.textarea.style.opacity = 0;
     this.textarea.style.zIndex = 0;
     this.textarea.style.height = (this.bounds.corner.y - this.bounds.origin.y) + 'px';
-    this.textarea.style.width = this.target.parent.bounds.corner.x 
-                              - this.target.parent.bounds.origin.x + 'px';
     this.textarea.id = 'txt' + Date.now(); // for debugging
     this.textarea.value = this.target.text;
 
-    this.textarea.changePosition = function () {
-        if (this.style.left !== myself.bounds.origin.x + 'px')
-            this.style.left = myself.bounds.origin.x + 'px';
-        if (this.style.top  !== myself.bounds.origin.y + 'px')
-            this.style.top  = myself.bounds.origin.y + 'px';
+    this.textarea.adjustPlacement = function () {
+        var bounds = (myself.target instanceof StringMorph)
+                   ? myself.target.parent.bounds : myself.target.bounds,
+            width = bounds.corner.x - bounds.origin.x;
+        if (this.style.left !== bounds.origin.x + 'px')
+            this.style.left = bounds.origin.x + 'px';
+        if (this.style.top !== myself.bounds.origin.y + 'px')
+            this.style.top = myself.bounds.origin.y + 'px';
+        if (this.style.width !== width + 'px')
+            this.style.width = width + 'px';
     };
 
-    this.textarea.changePosition();
+    this.textarea.adjustPlacement();
 
     document.body.appendChild(this.textarea);
 
@@ -4600,7 +4603,7 @@ CursorMorph.prototype.initializeTextarea = function () {
 
             // target may change bound or scroll, need to adjust cursor one more time
             myself.gotoSlot(event.target.selectionEnd);
-            this.changePosition();
+            this.adjustPlacement();
         },
         false
     );
@@ -4834,7 +4837,7 @@ CursorMorph.prototype.updateTargetSelection = function (shift) {
 CursorMorph.prototype.updateTextareaSelection = function () {
     this.textarea.selectionStart = this.target.selectionStartSlot();
     this.textarea.selectionEnd = this.target.selectionEndSlot();
-    this.textarea.changePosition();
+    this.textarea.adjustPlacement();
 };
 
 // CursorMorph editing:
@@ -7596,16 +7599,6 @@ StringMorph.prototype.clearSelection = function () {
     this.changed();
 };
 
-StringMorph.prototype.deleteSelection = function () {
-    var start, stop, text;
-    text = this.text;
-    start = Math.min(this.startMark, this.endMark);
-    stop = Math.max(this.startMark, this.endMark);
-    this.text = text.slice(0, start) + text.slice(stop);
-    this.changed();
-    this.clearSelection();
-};
-
 StringMorph.prototype.selectAll = function () {
     var cursor;
     if (this.isEditable) {
@@ -8052,8 +8045,6 @@ TextMorph.prototype.selectionEndSlot
     = StringMorph.prototype.selectionEndSlot;
 
 TextMorph.prototype.clearSelection = StringMorph.prototype.clearSelection;
-
-TextMorph.prototype.deleteSelection = StringMorph.prototype.deleteSelection;
 
 TextMorph.prototype.selectAll = StringMorph.prototype.selectAll;
 
