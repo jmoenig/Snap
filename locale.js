@@ -42,7 +42,7 @@
 
 /*global modules, contains*/
 
-modules.locale = '2016-May-09';
+modules.locale = '2016-May-10';
 
 // Global stuff
 
@@ -167,11 +167,11 @@ SnapTranslator.dict.it = {
     'language_name':
         'Italiano',
     'language_translator':
-        'Stefano Federici, Alberto Firpo',
+        'Stefano Federici, Alberto Firpo, Massimo Ghisalberti',
     'translator_e-mail':
-        's_federici@yahoo.com, albertofirpo12@gmail.com',
+        's_federici@yahoo.com, albertofirpo12@gmail.com, zairik@gmail.com',
     'last_changed':
-        '2015-01-12'
+        '2016-05-10'
 };
 
 SnapTranslator.dict.ja = {

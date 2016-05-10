@@ -1036,7 +1036,8 @@
     I have originally written morphic.js in Florian Balmer's Notepad2
     editor for Windows, later switched to Apple's Dashcode and later
     still to Apple's Xcode. I've also come to depend on both Douglas
-    Crockford's JSLint, Mozilla's Firebug and Google's Chrome to get
+    Crockford's JSLint and later the JSHint project, as well as on
+    Mozilla's Firebug and Google's Chrome to get
     it right.
 
 
@@ -1048,6 +1049,7 @@
     Ian Reynolds contributed backspace key handling for Chrome.
     Davide Della Casa contributed performance optimizations for Firefox.
     Jason N (@cyderize) contributed native copy & paste for text editing.
+    Bartosz Leper contributed retina display support.
 
     - Jens Mönig
 */
@@ -1056,7 +1058,7 @@
 
 /*global window, HTMLCanvasElement, FileReader, Audio, FileList*/
 
-var morphicVersion = '2016-May-04';
+var morphicVersion = '2016-May-10';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = getBlurredShadowSupport(); // check for Chrome-bug
 
@@ -1101,6 +1103,8 @@ var touchScreenSettings = {
 };
 
 var MorphicPreferences = standardSettings;
+
+enableRetinaSupport();
 
 // Global Functions ////////////////////////////////////////////////////
 
@@ -1170,13 +1174,18 @@ function fontHeight(height) {
     return minHeight * 1.2; // assuming 1/5 font size for ascenders
 }
 
-function newCanvas(extentPoint) {
+function newCanvas(extentPoint, nonRetina) {
     // answer a new empty instance of Canvas, don't display anywhere
+    // nonRetina - optional Boolean "false"
+    // by default retina support is automatic
     var canvas, ext;
     ext = extentPoint || {x: 0, y: 0};
     canvas = document.createElement('canvas');
     canvas.width = ext.x;
     canvas.height = ext.y;
+    if (nonRetina && canvas.isRetinaEnabled) {
+        canvas.isRetinaEnabled = false;
+    }
     return canvas;
 }
 
@@ -1279,6 +1288,216 @@ function copy(target) {
         }
     }
     return c;
+}
+
+// Retina Display Support //////////////////////////////////////////////
+
+function enableRetinaSupport() {
+/*
+    === contributed by Bartosz Leper ===
+
+    This installs a series of utilities that allow using Canvas the same way
+    on retina and non-retina displays. If the display is a retina one, the
+    underlying dimensions of the Canvas elements are doubled, but this will
+    be transparent to the code that uses Canvas. All dimensions read or
+    written to the Canvas element will be scaled appropriately.
+
+    NOTE: This implementation is not exhaustive; it only implements what is
+    needed by the Snap! UI.
+*/
+
+    // Get the window's pixel ratio for canvas elements.
+    // See: http://www.html5rocks.com/en/tutorials/canvas/hidpi/
+    var ctx = document.createElement("canvas").getContext("2d"),
+        backingStorePixelRatio = ctx.webkitBackingStorePixelRatio ||
+            ctx.mozBackingStorePixelRatio ||
+            ctx.msBackingStorePixelRatio ||
+            ctx.oBackingStorePixelRatio ||
+            ctx.backingStorePixelRatio || 1,
+
+    // Unfortunately, it's really hard to make this work well when changing
+    // zoom level, so let's leave it like this right now, and stick to
+    // whatever the ratio was in the beginning.
+        originalDevicePixelRatio = window.devicePixelRatio,
+
+        canvasProto = HTMLCanvasElement.prototype,
+        contextProto = CanvasRenderingContext2D.prototype,
+
+        uber = {
+            drawImage: contextProto.drawImage,
+            getImageData: contextProto.getImageData,
+
+            width: Object.getOwnPropertyDescriptor(
+                canvasProto,
+                'width'
+            ),
+            height: Object.getOwnPropertyDescriptor(
+                canvasProto,
+                'height'
+            ),
+            shadowOffsetX: Object.getOwnPropertyDescriptor(
+                contextProto,
+                'shadowOffsetX'
+            ),
+            shadowOffsetY: Object.getOwnPropertyDescriptor(
+                contextProto,
+                'shadowOffsetY'
+            ),
+            shadowBlur: Object.getOwnPropertyDescriptor(
+                contextProto,
+                'shadowBlur'
+            )
+        };
+
+    // check whether properties can be overridden, needed for Safari
+    if (Object.keys(uber).some(function (any) {
+        var prop = uber[any];
+        return prop.hasOwnProperty('configurable') && (!prop.configurable);
+    })) {return; }
+
+    function getPixelRatio(imageSource) {
+        return imageSource.isRetinaEnabled ?
+            (originalDevicePixelRatio || 1) / backingStorePixelRatio : 1;
+    }
+
+    canvasProto._isRetinaEnabled = true;
+    Object.defineProperty(canvasProto, 'isRetinaEnabled', {
+        get: function() {
+            return this._isRetinaEnabled;
+        },
+        set: function(enabled) {
+            var prevPixelRatio = getPixelRatio(this);
+            var prevWidth = this.width;
+            var prevHeight = this.height;
+
+            this._isRetinaEnabled = enabled;
+            if (getPixelRatio(this) != prevPixelRatio) {
+                this.width = prevWidth;
+                this.height = prevHeight;
+            }
+        }
+    });
+
+    Object.defineProperty(canvasProto, 'width', {
+        get: function() {
+            return uber.width.get.call(this) / getPixelRatio(this);
+        },
+        set: function(width) {
+            var pixelRatio = getPixelRatio(this);
+            uber.width.set.call(this, width * pixelRatio);
+            var context = this.getContext('2d');
+            context.restore();
+            context.save();
+            context.scale(pixelRatio, pixelRatio);
+        }
+    });
+
+    Object.defineProperty(canvasProto, 'height', {
+        get: function() {
+            return uber.height.get.call(this) / getPixelRatio(this);
+        },
+        set: function(height) {
+            var pixelRatio = getPixelRatio(this);
+            uber.height.set.call(this, height * pixelRatio);
+            var context = this.getContext('2d');
+            context.restore();
+            context.save();
+            context.scale(pixelRatio, pixelRatio);
+        }
+    });
+
+    contextProto.drawImage = function(image) {
+        var pixelRatio = getPixelRatio(image),
+            sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight;
+        
+        // Different signatures of drawImage() method have different
+        // parameter assignments.
+        switch (arguments.length) {
+            case 9:
+                sx = arguments[1];
+                sy = arguments[2];
+                sWidth = arguments[3];
+                sHeight = arguments[4];
+                dx = arguments[5];
+                dy = arguments[6];
+                dWidth = arguments[7];
+                dHeight = arguments[8];
+                break;
+
+            case 5:
+                sx = 0;
+                sy = 0;
+                sWidth = image.width;
+                sHeight = image.height;
+                dx = arguments[1];
+                dy = arguments[2];
+                dWidth = arguments[3];
+                dHeight = arguments[4];
+                break;
+
+            case 3:
+                sx = 0;
+                sy = 0;
+                sWidth = image.width;
+                sHeight = image.height;
+                dx = arguments[1];
+                dy = arguments[2];
+                dWidth = image.width;
+                dHeight = image.height;
+                break;
+
+            default:
+                throw Error('Called drawImage() with ' + arguments.length +
+                        ' arguments');
+        }
+        uber.drawImage.call(
+                this, image,
+                sx * pixelRatio, sy * pixelRatio,
+                sWidth * pixelRatio, sHeight * pixelRatio,
+                dx, dy,
+                dWidth, dHeight);
+    };
+
+    contextProto.getImageData = function(sx, sy, sw, sh) {
+        var pixelRatio = getPixelRatio(this.canvas);
+        return uber.getImageData.call(
+                this,
+                sx * pixelRatio, sy * pixelRatio,
+                sw * pixelRatio, sh * pixelRatio);
+    };
+
+    Object.defineProperty(contextProto, 'shadowOffsetX', {
+        get: function() {
+            return uber.shadowOffsetX.get.call(this) /
+                getPixelRatio(this.canvas);
+        },
+        set: function(offset) {
+            var pixelRatio = getPixelRatio(this.canvas);
+            uber.shadowOffsetX.set.call(this, offset * pixelRatio);
+        }
+    });
+
+    Object.defineProperty(contextProto, 'shadowOffsetY', {
+        get: function() {
+            return uber.shadowOffsetY.get.call(this) /
+                getPixelRatio(this.canvas);
+        },
+        set: function(offset) {
+            var pixelRatio = getPixelRatio(this.canvas);
+            uber.shadowOffsetY.set.call(this, offset * pixelRatio);
+        }
+    });
+
+    Object.defineProperty(contextProto, 'shadowBlur', {
+        get: function() {
+            return uber.shadowBlur.get.call(this) /
+                getPixelRatio(this.canvas);
+        },
+        set: function(blur) {
+            var pixelRatio = getPixelRatio(this.canvas);
+            uber.shadowBlur.set.call(this, blur * pixelRatio);
+        }
+    });
 }
 
 // Colors //////////////////////////////////////////////////////////////
@@ -9947,7 +10166,7 @@ HandMorph.prototype.processDrop = function (event) {
             target = target.parent;
         }
         pic.onload = function () {
-            canvas = newCanvas(new Point(pic.width, pic.height));
+            canvas = newCanvas(new Point(pic.width, pic.height), true);
             canvas.getContext('2d').drawImage(pic, 0, 0);
             target.droppedImage(canvas, aFile.name);
         };
@@ -10038,7 +10257,7 @@ HandMorph.prototype.processDrop = function (event) {
             }
             img = new Image();
             img.onload = function () {
-                canvas = newCanvas(new Point(img.width, img.height));
+                canvas = newCanvas(new Point(img.width, img.height), true);
                 canvas.getContext('2d').drawImage(img, 0, 0);
                 target.droppedImage(canvas);
             };
@@ -10050,7 +10269,7 @@ HandMorph.prototype.processDrop = function (event) {
         }
         img = new Image();
         img.onload = function () {
-            canvas = newCanvas(new Point(img.width, img.height));
+            canvas = newCanvas(new Point(img.width, img.height), true);
             canvas.getContext('2d').drawImage(img, 0, 0);
             target.droppedImage(canvas);
         };
@@ -10190,22 +10409,16 @@ WorldMorph.prototype.doOneCycle = function () {
 };
 
 WorldMorph.prototype.fillPage = function () {
-    var pos = getDocumentPositionOf(this.worldCanvas),
-        clientHeight = window.innerHeight,
+    var clientHeight = window.innerHeight,
         clientWidth = window.innerWidth,
         myself = this;
 
+    this.worldCanvas.style.position = "absolute";
+    this.worldCanvas.style.left = "0px";
+    this.worldCanvas.style.right = "0px";
+    this.worldCanvas.style.width = "100%";
+    this.worldCanvas.style.height = "100%";
 
-    if (pos.x > 0) {
-        this.worldCanvas.style.position = "absolute";
-        this.worldCanvas.style.left = "0px";
-        pos.x = 0;
-    }
-    if (pos.y > 0) {
-        this.worldCanvas.style.position = "absolute";
-        this.worldCanvas.style.top = "0px";
-        pos.y = 0;
-    }
     if (document.documentElement.scrollTop) {
         // scrolled down b/c of viewport scaling
         clientHeight = document.documentElement.clientHeight;

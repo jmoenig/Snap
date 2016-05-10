@@ -70,7 +70,7 @@ isSnapObject*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2016-May-09';
+modules.gui = '2016-May-10';
 
 // Declarations
 
@@ -2903,7 +2903,7 @@ IDE_Morph.prototype.importMedia = function (mediaType) {
         };
         frame.addContents(icon);
         img.onload = function () {
-            var canvas = newCanvas(new Point(img.width, img.height));
+            var canvas = newCanvas(new Point(img.width, img.height), true);
             canvas.getContext('2d').drawImage(img, 0, 0);
             icon.object = new Costume(canvas, item.name);
             icon.refresh();
@@ -2911,7 +2911,7 @@ IDE_Morph.prototype.importMedia = function (mediaType) {
         img.src = url;
     });
     dialog.popUp(world);
-    dialog.setExtent(new Point(390, 300));
+    dialog.setExtent(new Point(400, 300));
     dialog.setCenter(world.center());
     dialog.drawNew();
 
@@ -2931,7 +2931,7 @@ IDE_Morph.prototype.aboutSnap = function () {
         module, btn1, btn2, btn3, btn4, licenseBtn, translatorsBtn,
         world = this.world();
 
-    aboutTxt = 'Snap! 4.0.7.2\nBuild Your Own Blocks\n\n'
+    aboutTxt = 'Snap! 4.0.8 - dev -\nBuild Your Own Blocks\n\n'
         + 'Copyright \u24B8 2016 Jens M\u00F6nig and '
         + 'Brian Harvey\n'
         + 'jens@moenig.org, bh@cs.berkeley.edu\n\n'
@@ -2968,6 +2968,7 @@ IDE_Morph.prototype.aboutSnap = function () {
         + '\ncountless bugfixes and optimizations'
         + '\nKartik Chandra: Paint Editor'
         + '\nMichael Ball: Time/Date UI, many bugfixes'
+        + '\nBartosz Leper: Retina Display Support'
         + '\n"Ava" Yuan Yuan: Graphic Effects'
         + '\nKyle Hotchkiss: Block search design'
         + '\nIan Reynolds: UI Design, Event Bindings, '

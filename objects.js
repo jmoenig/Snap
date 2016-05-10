@@ -82,7 +82,7 @@ SpeechBubbleMorph, RingMorph, isNil, FileReader, TableDialogMorph,
 BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph*/
 
-modules.objects = '2016-May-04';
+modules.objects = '2016-May-10';
 
 var SpriteMorph;
 var StageMorph;
@@ -1498,7 +1498,7 @@ SpriteMorph.prototype.drawNew = function () {
 
         // create a new, adequately dimensioned canvas
         // and draw the costume on it
-        this.image = newCanvas(costumeExtent);
+        this.image = newCanvas(costumeExtent, true);
         this.silentSetExtent(costumeExtent);
         ctx = this.image.getContext('2d');
         ctx.scale(this.scale * stageScale, this.scale * stageScale);
@@ -1527,7 +1527,7 @@ SpriteMorph.prototype.drawNew = function () {
             1000
         );
         this.silentSetExtent(new Point(newX, newX));
-        this.image = newCanvas(this.extent());
+        this.image = newCanvas(this.extent(), true);
         this.setCenter(currentCenter, true); // just me
         SpriteMorph.uber.drawNew.call(this, facing);
         this.rotationOffset = this.extent().divideBy(2);
@@ -1576,7 +1576,7 @@ SpriteMorph.prototype.colorFiltered = function (aColor) {
         dta;
 
     src = this.image.getContext('2d').getImageData(0, 0, ext.x, ext.y);
-    morph.image = newCanvas(ext);
+    morph.image = newCanvas(ext, true);
     morph.bounds = this.bounds.copy();
     ctx = morph.image.getContext('2d');
     dta = ctx.createImageData(ext.x, ext.y);
@@ -3005,11 +3005,11 @@ SpriteMorph.prototype.goBack = function (layers) {
 SpriteMorph.prototype.overlappingImage = function (otherSprite) {
     // overrides method from Morph because Sprites aren't nested Morphs
     var oRect = this.bounds.intersect(otherSprite.bounds),
-        oImg = newCanvas(oRect.extent()),
+        oImg = newCanvas(oRect.extent(), true),
         ctx = oImg.getContext('2d');
 
     if (oRect.width() < 1 || oRect.height() < 1) {
-        return newCanvas(new Point(1, 1));
+        return newCanvas(new Point(1, 1), true);
     }
     ctx.drawImage(
         this.image,
@@ -6522,7 +6522,7 @@ SpriteBubbleMorph.prototype.fixLayout = function () {
 // Costume instance creation
 
 function Costume(canvas, name, rotationCenter) {
-    this.contents = canvas || newCanvas();
+    this.contents = canvas || newCanvas(null, true);
     this.shrinkToFit(this.maxExtent());
     this.name = name || null;
     this.rotationCenter = rotationCenter || this.center();
@@ -6566,7 +6566,7 @@ Costume.prototype.shrinkWrap = function () {
     // adjust my contents'  bounds to my visible bounding box
     var bb = this.boundingBox(),
         ext = bb.extent(),
-        pic = newCanvas(ext),
+        pic = newCanvas(ext, true),
         ctx = pic.getContext('2d');
 
     ctx.drawImage(
@@ -6652,7 +6652,7 @@ Costume.prototype.boundingBox = function () {
 // Costume duplication
 
 Costume.prototype.copy = function () {
-    var canvas = newCanvas(this.extent()),
+    var canvas = newCanvas(this.extent(), true),
         cpy,
         ctx;
     ctx = canvas.getContext('2d');
@@ -6670,7 +6670,7 @@ Costume.prototype.flipped = function () {
     (mirrored along a vertical axis), used for
     SpriteMorph's rotation style type 2
 */
-    var canvas = newCanvas(this.extent()),
+    var canvas = newCanvas(this.extent(), true),
         ctx = canvas.getContext('2d'),
         flipped;
 
@@ -6696,7 +6696,7 @@ Costume.prototype.edit = function (aWorld, anIDE, isnew, oncancel, onsubmit) {
     editor.openIn(
         aWorld,
         isnew ?
-                newCanvas(StageMorph.prototype.dimensions) :
+                newCanvas(StageMorph.prototype.dimensions, true) :
                 this.contents,
         isnew ?
                 null :

@@ -2928,3 +2928,5 @@ http://snap.berkeley.edu/run#cloud:Username=jens&ProjectName=rotation
 * Media import dialog with thumbnail, thanks to @ubertao!
 
 == v4.0.7.2 ==== 
+
+* in progress: Retina Display Support, thanks, Bartosz Leper!!

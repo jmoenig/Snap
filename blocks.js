@@ -149,7 +149,7 @@ isSnapObject, copy*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2016-May-04';
+modules.blocks = '2016-May-10';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -2664,7 +2664,7 @@ BlockMorph.prototype.showHelp = function () {
     }
 
     pic.onload = function () {
-        help = newCanvas(new Point(pic.width, pic.height));
+        help = newCanvas(new Point(pic.width, pic.height), true); // nonRetina
         ctx = help.getContext('2d');
         ctx.drawImage(pic, 0, 0);
         new DialogBoxMorph().inform(

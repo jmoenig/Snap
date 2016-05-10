@@ -60,7 +60,7 @@ SyntaxElementMorph, Variable, isSnapObject, console*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2016-May-02';
+modules.store = '2016-May-10';
 
 
 // XML_Serializer ///////////////////////////////////////////////////////
@@ -1321,7 +1321,8 @@ SnapSerializer.prototype.loadValue = function (model) {
                 v = new Costume(null, name, center);
                 image.onload = function () {
                     var canvas = newCanvas(
-                            new Point(image.width, image.height)
+                            new Point(image.width, image.height),
+                            true // nonRetina
                         ),
                         context = canvas.getContext('2d');
                     context.drawImage(image, 0, 0);
