@@ -410,12 +410,28 @@ SnapTranslator.dict.it = {
         'porta dimensione penna a %n',
     'stamp':
         'timbra',
+    'fill':
+        'riempi',
 
     // control:
+    'when %b':
+        'quando %b',
     'when %greenflag clicked':
         'quando si clicca su %greenflag',
     'when %keyHat key pressed':
         'quando si preme il tasto %keyHat',
+    'when I am %interaction':
+        'quando sono %interaction',
+    'clicked':
+        'cliccato',
+    'pressed':
+        'premuto',
+    'dropped':
+        'lasciato',
+    'mouse-entered':
+        'il mouse entra',
+    'mouse-departed':
+        'il mouse esce',
     'when I am clicked':
         'quando vengo cliccato',
     'when I receive %msgHat':
@@ -448,7 +464,12 @@ SnapTranslator.dict.it = {
         'risultato %s',
     'stop block':
         'ferma il blocco',
-   'all':
+	  'stop %stopOthersChoices':
+		  'ferma %stopOthersChoices',
+	  'stop %stopChoices':
+		  'ferma %stopChoices',        
+        
+    'all':
         'tutti',
     'this script':
         'questo script',
@@ -520,6 +541,26 @@ SnapTranslator.dict.it = {
         'modalit\u00E0 turbo attiva',
     'set turbo mode to %b':
         'porta modalit\u00E0 turbo a %b',
+        
+    'current %dates':
+        '%dates attuale',
+        
+  	'year':
+          'anno',
+    'month':
+          'mese',
+    'date':
+          'giorno',
+    'hour':
+          'ora',
+    'minute':
+          'minuto',
+    'second':
+          'secondo',
+    'time in milliseconds':
+	    'ora in millisecondi',
+    'day of week':
+	    'giorno della settimana',
 
     'filtered for %clr':
         'selezionati per colore %clr',
@@ -567,9 +608,10 @@ SnapTranslator.dict.it = {
         '%s \u00E8 di tipo %typ',
     'is %s identical to %s ?':
         '%s \u00E8 identico a %s ?',
-
     'type of %s':
         'tipo di %s',
+    'JavaScript function ( %mult%s ) { %code }':
+        'funzione JavaScript ( %mult%s ) { %code }',
 
     // variables:
     'Make a variable':
@@ -1288,4 +1330,6 @@ SnapTranslator.dict.it = {
         'ultimo',
     'any':
         'qualunque'
+    
+    
 };
