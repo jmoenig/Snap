@@ -80,9 +80,9 @@ document, isNaN, isString, newCanvas, nop, parseFloat, radians, window,
 modules, IDE_Morph, VariableDialogMorph, HTMLCanvasElement, Context, List,
 SpeechBubbleMorph, RingMorph, isNil, FileReader, TableDialogMorph,
 BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
-TableMorph, TableFrameMorph*/
+TableMorph, TableFrameMorph, normalizeCanvas*/
 
-modules.objects = '2016-May-10';
+modules.objects = '2016-May-11';
 
 var SpriteMorph;
 var StageMorph;
@@ -3390,7 +3390,7 @@ SpriteMorph.prototype.drawLine = function (start, dest) {
 };
 
 SpriteMorph.prototype.floodFill = function () {
-    var layer = this.parent.penTrails(),
+    var layer = normalizeCanvas(this.parent.penTrails()),
         width = layer.width,
         height = layer.height,
         ctx = layer.getContext('2d'),
@@ -5089,7 +5089,7 @@ StageMorph.prototype.colorFiltered = function (aColor, excludedSprite) {
 
     src = img.getContext('2d').getImageData(0, 0, ext.x, ext.y);
     morph.bounds = this.bounds.copy();
-    morph.image = newCanvas(ext);
+    morph.image = newCanvas(ext, true);
     ctx = morph.image.getContext('2d');
     dta = ctx.createImageData(ext.x, ext.y);
     for (i = 0; i < ext.x * ext.y * 4; i += 4) {
@@ -6522,7 +6522,8 @@ SpriteBubbleMorph.prototype.fixLayout = function () {
 // Costume instance creation
 
 function Costume(canvas, name, rotationCenter) {
-    this.contents = canvas || newCanvas(null, true);
+    this.contents = canvas ? normalizeCanvas(canvas, true)
+            : newCanvas(null, true);
     this.shrinkToFit(this.maxExtent());
     this.name = name || null;
     this.rotationCenter = rotationCenter || this.center();

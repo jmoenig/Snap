@@ -66,11 +66,12 @@ List, InputSlotMorph, SnapCloud, Uint8Array, HandleMorph, SVG_Costume,
 fontHeight, hex_sha512, sb, CommentMorph, CommandBlockMorph,
 BlockLabelPlaceHolderMorph, Audio, SpeechBubbleMorph, ScriptFocusMorph,
 XML_Element, WatcherMorph, BlockRemovalDialogMorph, saveAs, TableMorph,
-isSnapObject*/
+isSnapObject, isRetinaEnabled, disableRetinaSupport, enableRetinaSupport,
+isRetinaSupported*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2016-May-10';
+modules.gui = '2016-May-11';
 
 // Declarations
 
@@ -1798,6 +1799,20 @@ IDE_Morph.prototype.selectSprite = function (sprite) {
     this.currentSprite.scripts.fixMultiArgs();
 };
 
+// IDE_Morph retina display support
+
+IDE_Morph.prototype.toggleRetina = function () {
+    if (isRetinaEnabled()) {
+        disableRetinaSupport();
+    } else {
+        enableRetinaSupport();
+    }
+    this.world().fillPage();
+    IDE_Morph.prototype.scriptsPaneTexture = this.scriptsTexture();
+    this.drawNew();
+    this.refreshIDE();
+};
+
 // IDE_Morph skins
 
 IDE_Morph.prototype.defaultDesign = function () {
@@ -2265,6 +2280,15 @@ IDE_Morph.prototype.settingsMenu = function () {
         );
     }
     menu.addLine();
+    if (isRetinaSupported()) {
+        addPreference(
+            'Retina display support',
+            'toggleRetina',
+            isRetinaEnabled(),
+            'uncheck for lower resolution,\nsaves computing resources',
+            'check for higher resolution,\nuses more computing resources'
+        );
+    }
     addPreference(
         'Blurred shadows',
         'toggleBlurredShadows',
