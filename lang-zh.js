@@ -1009,6 +1009,8 @@ SnapTranslator.dict.zh = {
         '导入',
     'Import library':
         '导入积木库',
+    'Backgrounds':
+        '背景',
 
     // cloud menu
     'Login...':
