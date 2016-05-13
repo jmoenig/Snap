@@ -74,4 +74,36 @@
 			</block>
 		</script>
 	</block-definition>
+	<block-definition category="operators" s="Radians to degrees %'radians'" type="reporter">
+		<header/>
+		<code/>
+		<inputs>
+			<input type="%n"/>
+		</inputs>
+		<script>
+			<block s="doReport">
+				<block s="evaluate">
+					<block s="reportJSFunction">
+						<list>
+							<l>a</l>
+						</list>
+						<l>return a*180/Math.PI;</l>
+					</block>
+					<list>
+						<block var="radians"/>
+					</list>
+				</block>
+			</block>
+		</script>
+	</block-definition>
+	<block-definition category="variables" s="pi" type="reporter">
+		<header/>
+		<code/>
+		<inputs/>
+		<script>
+			<block s="doReport">
+				<l>3.141592653589793</l>
+			</block>
+		</script>
+	</block-definition>
 </blocks>
