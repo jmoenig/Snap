@@ -3,11 +3,9 @@ Snap! Build Your Own Blocks
 
 http://snap.berkeley.edu
 
-a visual, blocks based programming language
-inspired by Scratch
+a visual, blocks based programming language inspired by Scratch
 
-written by Jens Mönig and Brian Harvey
-jens@moenig.org, bh@cs.berkeley.edu
+written by Jens Mönig and Brian Harvey jens@moenig.org, bh@cs.berkeley.edu
 
 Copyright (C) 2016 by Jens Mönig and Brian Harvey
 
