@@ -616,6 +616,7 @@ SnapSerializer.prototype.loadSprites = function (xmlString, ide) {
         sprite.heading = parseFloat(model.attributes.heading) || 0;
         sprite.drawNew();
         sprite.gotoXY(+model.attributes.x || 0, +model.attributes.y || 0);
+        v.isVisible = model.attributes.hidden !== 'true';
         myself.loadObject(sprite, model);
     });
     this.objects = {};
@@ -652,12 +653,14 @@ SnapSerializer.prototype.loadObject = function (object, model) {
     // private
     var blocks = model.require('blocks');
     this.loadNestingInfo(object, model);
+	var tempVis = object.isVisible; 
     this.loadCostumes(object, model);
     this.loadSounds(object, model);
     this.loadCustomBlocks(object, blocks);
     this.populateCustomBlocks(object, blocks);
     this.loadVariables(object.variables, model.require('variables'));
     this.loadScripts(object.scripts, model.require('scripts'));
+    if(!tempVis) object.hide();
 };
 
 SnapSerializer.prototype.loadNestingInfo = function (object, model) {
@@ -691,8 +694,10 @@ SnapSerializer.prototype.loadCostumes = function (object, model) {
             }
 			else {
                 costume.loaded = function () {
+                    var tempVis = object.isvisible;
                     object.wearCostume(costume);
                     this.loaded = true;
+					if(!tempVis) object.hide();
                 };
             }
         }
@@ -1171,6 +1176,7 @@ SnapSerializer.prototype.loadValue = function (model) {
         v.drawNew();
         v.gotoXY(+model.attributes.x || 0, +model.attributes.y || 0);
 		if(model.attributes.z) v.gotoXYZ(+model.attributes.x || 0, +model.attributes.y || 0, +model.attributes.z || 0);
+        v.isVisible = model.attributes.hidden !== 'true';
         myself.loadObject(v, model);
         return v;
     case 'context':
