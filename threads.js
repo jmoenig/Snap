@@ -1447,6 +1447,18 @@ Process.prototype.doHideVar = function (varName) {
     }
 };
 
+Process.prototype.doDeclareClass = function(name, init) {
+    var cl = new ClassMorph(name, init);
+    this.doIf(cl.init, true);    
+    return cl;
+    //return 'This is future feature (L) CopyLeft by DK';
+};
+
+Process.prototype.reportClassName = function(cl) {
+    if(cl instanceof ClassMorph) return cl.name;
+    return null;
+};
+
 Process.prototype.doRemoveTemporaries = function () {
     var stage;
     if (this.homeContext.receiver) {
