@@ -11406,11 +11406,3 @@ WorldMorph.prototype.togglePreferences = function () {
         MorphicPreferences = standardSettings;
     }
 };
-
-function ClassMorph(name, init)
-{
-    this.name = name || '';
-    this.init = init || 0;
-}
-
-
