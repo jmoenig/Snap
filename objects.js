@@ -1086,6 +1086,17 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'other',
             spec: 'script variables %scriptVars'
         },
+        doDeclareClass: {
+            type: 'reporter',
+            category: 'other',
+            spec: 'class %s init: %c',
+            defaults: ['myclass']
+        },
+        reportClassName: {
+            type: 'reporter',
+            category: 'other',
+            spec: 'get name of class %s'
+        },
 
         // inheritance - experimental
         doDeleteAttr: {
@@ -2085,6 +2096,8 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('doShowVar'));
         blocks.push(block('doHideVar'));
         blocks.push(block('doDeclareVariables'));
+        blocks.push(block('doDeclareClass'));
+        blocks.push(block('reportClassName'));
 
     // inheritance:
 
@@ -5846,6 +5859,8 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('doShowVar'));
         blocks.push(block('doHideVar'));
         blocks.push(block('doDeclareVariables'));
+        blocks.push(block('doDeclareClass'));
+        blocks.push(block('reportClassName'));
         blocks.push('=');
         blocks.push(block('reportNewList'));
         blocks.push('-');
