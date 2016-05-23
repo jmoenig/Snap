@@ -11413,3 +11413,8 @@ function ClassMorph(name, init)
     this.init = init || 0;
 }
 
+ClassMorph.prototype.toString = function()
+{
+    return 'Class of name '+this.name;
+};
+
