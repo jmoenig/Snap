@@ -1648,10 +1648,8 @@ SpriteMorph.prototype.drawNew = function () {
             cst = this.costume;
             handle = setInterval(
                 function () {
-					var tempVis = myself.isVisible;
                     myself.wearCostume(cst);
                     clearInterval(handle);
-					if(!tempVis) myself.hide();
                 },
                 100
             );
