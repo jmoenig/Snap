@@ -1744,6 +1744,18 @@ BlockDialogMorph.prototype.fixLayout = function () {
     }
 };
 
+BlockDialogMorph.prototype.accept = function () {
+    if (this.getInput().spec === '') {
+        new DialogBoxMorph().inform(
+            'No name',
+            'Please give a name to this block',
+            this.world()
+        );
+    } else {
+        BlockDialogMorph.uber.accept.call(this);
+    }
+};
+
 // BlockEditorMorph ////////////////////////////////////////////////////
 
 // BlockEditorMorph inherits from DialogBoxMorph:
