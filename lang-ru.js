@@ -503,7 +503,7 @@ SnapTranslator.dict.ru = {
     'ask %s and wait':
         'спросить %s и ждать',
     'what\'s your name?':
-        'как вас зовут?',
+        'Как Вас зовут?',
     'answer':
         'ответ',
     'mouse x':
@@ -560,7 +560,7 @@ SnapTranslator.dict.ru = {
     'join %words':
         'объединить %words',
     'hello':
-        'привет',
+        'Привет',
     'world':
         'мир',
     'letter %n of %s':
