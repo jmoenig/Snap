@@ -3398,13 +3398,13 @@ BlockMorph.prototype.scriptPic = function () {
         if (anchor) {
             ctx.drawImage(
                 anchor.image,
-                anchor.left() - fb.left(),
+                anchor.left() - fb.left() - 4,
                 anchor.top() - fb.top()
             );
         }
         ctx.drawImage(
             comment.fullImageClassic(),
-            comment.left() - fb.left(),
+            comment.left() - fb.left() - 4,
             comment.top() - fb.top()
         );
     });
