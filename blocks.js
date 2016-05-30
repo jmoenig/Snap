@@ -149,7 +149,7 @@ isSnapObject, copy*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2016-May-10';
+modules.blocks = '2016-May-30';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -2227,7 +2227,8 @@ BlockMorph.prototype.userMenu = function () {
         myself = this,
         shiftClicked = world.currentKey === 16,
         proc = this.activeProcess(),
-        vNames = proc ? proc.context.outerContext.variables.names() : [],
+        vNames = proc && proc.context && proc.context.outerContext ?
+                proc.context.outerContext.variables.names() : [],
         alternatives,
         top,
         blck;
@@ -3397,13 +3398,13 @@ BlockMorph.prototype.scriptPic = function () {
         if (anchor) {
             ctx.drawImage(
                 anchor.image,
-                anchor.left() - fb.left(),
+                anchor.left() - fb.left() - 4,
                 anchor.top() - fb.top()
             );
         }
         ctx.drawImage(
             comment.fullImageClassic(),
-            comment.left() - fb.left(),
+            comment.left() - fb.left() - 4,
             comment.top() - fb.top()
         );
     });
