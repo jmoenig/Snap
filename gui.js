@@ -71,7 +71,7 @@ isRetinaSupported*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2016-May-13';
+modules.gui = '2016-May-30';
 
 // Declarations
 
@@ -460,7 +460,7 @@ IDE_Morph.prototype.openIn = function (world) {
     }
 
     if (this.userLanguage) {
-        this.setLanguage(this.userLanguage, interpretUrlAnchors);
+        this.setLanguage(this.userLanguage, interpretUrlAnchors, true);
     } else {
         interpretUrlAnchors.call(this);
     }
@@ -4329,7 +4329,7 @@ IDE_Morph.prototype.languageMenu = function () {
     menu.popup(world, pos);
 };
 
-IDE_Morph.prototype.setLanguage = function (lang, callback) {
+IDE_Morph.prototype.setLanguage = function (lang, callback, forStartUp) {
     var translation = document.getElementById('language'),
         src = this.resourceURL('lang-' + lang + '.js'),
         myself = this;
@@ -4343,16 +4343,16 @@ IDE_Morph.prototype.setLanguage = function (lang, callback) {
     translation = document.createElement('script');
     translation.id = 'language';
     translation.onload = function () {
-        myself.reflectLanguage(lang, callback);
+        myself.reflectLanguage(lang, callback, forStartUp);
     };
     document.head.appendChild(translation);
     translation.src = src;
 };
 
-IDE_Morph.prototype.reflectLanguage = function (lang, callback) {
+IDE_Morph.prototype.reflectLanguage = function (lang, callback, forStartUp) {
     var projectData;
     SnapTranslator.language = lang;
-    if (!this.loadNewProject) {
+    if (!this.loadNewProject && !forStartUp) {
         if (Process.prototype.isCatchingErrors) {
             try {
                 projectData = this.serializer.serialize(this.stage);
@@ -4370,6 +4370,9 @@ IDE_Morph.prototype.reflectLanguage = function (lang, callback) {
     this.fixLayout();
     if (this.loadNewProject) {
         this.newProject();
+    } else if (forStartUp) {
+        this.stage.setName(localize('Stage'));
+        this.currentSprite.setName(localize('Sprite'));
     } else {
         this.openProjectString(projectData);
     }
