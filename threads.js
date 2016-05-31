@@ -1459,6 +1459,12 @@ Process.prototype.reportClassName = function(cl) {
     return null;
 };
 
+Process.prototype.addClassMethod = function(cl, func)
+{
+    if(cl instanceof ClassMorph) cl.addMethod(func);
+}
+
+
 Process.prototype.doRemoveTemporaries = function () {
     var stage;
     if (this.homeContext.receiver) {
