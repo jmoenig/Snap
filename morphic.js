@@ -11418,3 +11418,7 @@ ClassMorph.prototype.toString = function()
     return 'Class of name '+this.name;
 };
 
+ClassMorph.prototype.addMethod = function(func)
+{
+   this.methods.add(func);
+};
