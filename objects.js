@@ -1097,6 +1097,12 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'other',
             spec: 'get name of class %s'
         },
+        addClassMethod: {
+            type: 'command',
+            category: 'other',
+            spec: 'Add method to class %s : %c'
+        },
+
 
         // inheritance - experimental
         doDeleteAttr: {
