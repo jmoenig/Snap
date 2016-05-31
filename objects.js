@@ -2104,6 +2104,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('doDeclareVariables'));
         blocks.push(block('doDeclareClass'));
         blocks.push(block('reportClassName'));
+        blocks.push(block('addClassMethod'));
 
     // inheritance:
 
@@ -5867,6 +5868,7 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('doDeclareVariables'));
         blocks.push(block('doDeclareClass'));
         blocks.push(block('reportClassName'));
+        blocks.push(block('addClassMethod'));
         blocks.push('=');
         blocks.push(block('reportNewList'));
         blocks.push('-');
