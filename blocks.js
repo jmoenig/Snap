@@ -3484,6 +3484,11 @@ BlockMorph.prototype.destroy = function () {
     this.allComments().forEach(function (comment) {
         comment.destroy();
     });
+    
+    if (this.topBlock() === this && this.activeProcess()) {
+        this.activeProcess().stop();
+    }
+
     BlockMorph.uber.destroy.call(this);
 };
 
