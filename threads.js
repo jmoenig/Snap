@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph,
 TableFrameMorph, isSnapObject*/
 
-modules.threads = '2016-May-09';
+modules.threads = '2016-May-31';
 
 var ThreadManager;
 var Process;
@@ -1772,6 +1772,7 @@ Process.prototype.doPauseAll = function () {
 // Process loop primitives
 
 Process.prototype.doForever = function (body) {
+    this.context.inputs = []; // force re-evaluation of C-slot
     this.pushContext('doYield');
     if (body) {
         this.pushContext(body.blockSequence());
