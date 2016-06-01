@@ -56,11 +56,11 @@ Color, List, newCanvas, Costume, Sound, Audio, IDE_Morph, ScriptsMorph,
 BlockMorph, ArgMorph, InputSlotMorph, TemplateSlotMorph, CommandSlotMorph,
 FunctionSlotMorph, MultiArgMorph, ColorSlotMorph, nop, CommentMorph, isNil,
 localize, sizeOf, ArgLabelMorph, SVG_Costume, MorphicPreferences,
-SyntaxElementMorph, Variable, isSnapObject, console*/
+SyntaxElementMorph, Variable, isSnapObject, console, BooleanSlotMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2016-May-10';
+modules.store = '2016-June-01';
 
 
 // XML_Serializer ///////////////////////////////////////////////////////
@@ -1134,7 +1134,7 @@ SnapSerializer.prototype.loadInput = function (model, input, block) {
 
 SnapSerializer.prototype.loadValue = function (model) {
     // private
-    var v, lst, items, el, center, image, name, audio, option,
+    var v, lst, items, el, center, image, name, audio, option, bool,
         myself = this;
 
     function record() {
@@ -1165,7 +1165,14 @@ SnapSerializer.prototype.loadValue = function (model) {
         throw new Error('expecting a reference id');
     case 'l':
         option = model.childNamed('option');
-        return option ? [option.contents] : model.contents;
+        if (option) {
+            return [option.contents];
+        }
+        bool = model.childNamed('bool');
+        if (bool) {
+            return this.loadValue(bool);
+        }
+        return model.contents;
     case 'bool':
         return model.contents === 'true';
     case 'list':
@@ -1248,7 +1255,14 @@ SnapSerializer.prototype.loadValue = function (model) {
             } else {
                 el = model.childNamed('l');
                 if (el) {
-                    v.expression = new InputSlotMorph(el.contents);
+                    bool = el.childNamed('bool');
+                    if (bool) {
+                        v.expression = new BooleanSlotMorph(
+                            this.loadValue(bool)
+                        );
+                    } else {
+                        v.expression = new InputSlotMorph(el.contents);
+                    }
                 }
             }
         }
@@ -1840,6 +1854,13 @@ CustomBlockDefinition.prototype.toXML = function (serializer) {
 
 ArgMorph.prototype.toXML = function () {
     return '<l/>'; // empty by default
+};
+
+BooleanSlotMorph.prototype.toXML = function () {
+    return (typeof this.value === 'boolean') ?
+            '<l><bool>' + this.value + '</bool></l>'
+                    : '<l/>';
+
 };
 
 InputSlotMorph.prototype.toXML = function (serializer) {

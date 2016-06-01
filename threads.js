@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph,
 TableFrameMorph, isSnapObject*/
 
-modules.threads = '2016-May-31';
+modules.threads = '2016-June-01';
 
 var ThreadManager;
 var Process;
@@ -149,6 +149,8 @@ function invoke(
             action.blockSequence(),
             proc.homeContext
         );
+    } else if (action.evaluate) {
+        return action.evaluate();
     } else {
         throw new Error('expecting a block or ring but getting ' + action);
     }
@@ -346,9 +348,7 @@ ThreadManager.prototype.doWhen = function (block, stopIt) {
         }
     }
     if (stopIt) {return; }
-    if ((!block) ||
-        !(pred instanceof ReporterBlockMorph) ||
-        this.findProcess(block)
+    if ((!block) || this.findProcess(block)
     ) {return; }
     try {
         if (invoke(
@@ -2293,12 +2293,8 @@ Process.prototype.isImmutable = function (obj) {
         type === 'undefined';
 };
 
-Process.prototype.reportTrue = function () {
-    return true;
-};
-
-Process.prototype.reportFalse = function () {
-    return false;
+Process.prototype.reportBoolean = function (bool) {
+    return bool;
 };
 
 Process.prototype.reportRound = function (n) {

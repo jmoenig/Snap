@@ -80,9 +80,9 @@ document, isNaN, isString, newCanvas, nop, parseFloat, radians, window,
 modules, IDE_Morph, VariableDialogMorph, HTMLCanvasElement, Context, List,
 SpeechBubbleMorph, RingMorph, isNil, FileReader, TableDialogMorph,
 BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
-TableMorph, TableFrameMorph, normalizeCanvas*/
+TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph*/
 
-modules.objects = '2016-May-11';
+modules.objects = '2016-June-01';
 
 var SpriteMorph;
 var StageMorph;
@@ -968,15 +968,10 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'operators',
             spec: 'not %b'
         },
-        reportTrue: {
+        reportBoolean: {
             type: 'predicate',
             category: 'operators',
-            spec: 'true'
-        },
-        reportFalse: {
-            type: 'predicate',
-            category: 'operators',
-            spec: 'false'
+            spec: '%bool'
         },
         reportJoinWords: {
             type: 'reporter',
@@ -1220,6 +1215,14 @@ SpriteMorph.prototype.initBlockMigrations = function () {
         receiveClick: {
             selector: 'receiveInteraction',
             inputs: [['clicked']]
+        },
+        reportTrue: {
+            selector: 'reportBoolean',
+            inputs: [true]
+        },
+        reportFalse: {
+            selector: 'reportBoolean',
+            inputs: [false]
         }
     };
 };
@@ -1292,8 +1295,6 @@ SpriteMorph.prototype.blockAlternatives = {
     reportGreaterThan: ['reportEquals', 'reportLessThan'],
     reportAnd: ['reportOr'],
     reportOr: ['reportAnd'],
-    reportTrue: ['reportFalse'],
-    reportFalse: ['reportTrue'],
 
     // variables
     doSetVar: ['doChangeVar'],
@@ -1991,9 +1992,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('reportAnd'));
         blocks.push(block('reportOr'));
         blocks.push(block('reportNot'));
-        blocks.push('-');
-        blocks.push(block('reportTrue'));
-        blocks.push(block('reportFalse'));
+        blocks.push(block('reportBoolean'));
         blocks.push('-');
         blocks.push(block('reportJoinWords'));
         blocks.push(block('reportTextSplit'));
@@ -4528,11 +4527,7 @@ SpriteMorph.prototype.fullThumbnail = function (extentPoint) {
 // SpriteMorph Boolean visual representation
 
 SpriteMorph.prototype.booleanMorph = function (bool) {
-    // answer a block which can be shown in watchers, speech bubbles etc.
-    var block = new ReporterBlockMorph(true);
-    block.color = SpriteMorph.prototype.blockColor.operators;
-    block.setSpec(localize(bool.toString()));
-    return block;
+    return new BooleanSlotMorph(bool);
 };
 
 // SpriteMorph nesting
@@ -5758,9 +5753,7 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('reportAnd'));
         blocks.push(block('reportOr'));
         blocks.push(block('reportNot'));
-        blocks.push('-');
-        blocks.push(block('reportTrue'));
-        blocks.push(block('reportFalse'));
+        blocks.push(block('reportBoolean'));
         blocks.push('-');
         blocks.push(block('reportJoinWords'));
         blocks.push(block('reportTextSplit'));
