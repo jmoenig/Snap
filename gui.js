@@ -71,7 +71,7 @@ isRetinaSupported*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2016-May-30';
+modules.gui = '2016-June-01';
 
 // Declarations
 
@@ -460,7 +460,8 @@ IDE_Morph.prototype.openIn = function (world) {
     }
 
     if (this.userLanguage) {
-        this.setLanguage(this.userLanguage, interpretUrlAnchors, true);
+        this.loadNewProject = true;
+        this.setLanguage(this.userLanguage, interpretUrlAnchors);
     } else {
         interpretUrlAnchors.call(this);
     }
@@ -4329,7 +4330,7 @@ IDE_Morph.prototype.languageMenu = function () {
     menu.popup(world, pos);
 };
 
-IDE_Morph.prototype.setLanguage = function (lang, callback, forStartUp) {
+IDE_Morph.prototype.setLanguage = function (lang, callback) {
     var translation = document.getElementById('language'),
         src = this.resourceURL('lang-' + lang + '.js'),
         myself = this;
@@ -4343,16 +4344,16 @@ IDE_Morph.prototype.setLanguage = function (lang, callback, forStartUp) {
     translation = document.createElement('script');
     translation.id = 'language';
     translation.onload = function () {
-        myself.reflectLanguage(lang, callback, forStartUp);
+        myself.reflectLanguage(lang, callback);
     };
     document.head.appendChild(translation);
     translation.src = src;
 };
 
-IDE_Morph.prototype.reflectLanguage = function (lang, callback, forStartUp) {
+IDE_Morph.prototype.reflectLanguage = function (lang, callback) {
     var projectData;
     SnapTranslator.language = lang;
-    if (!this.loadNewProject && !forStartUp) {
+    if (!this.loadNewProject) {
         if (Process.prototype.isCatchingErrors) {
             try {
                 projectData = this.serializer.serialize(this.stage);
@@ -4370,9 +4371,6 @@ IDE_Morph.prototype.reflectLanguage = function (lang, callback, forStartUp) {
     this.fixLayout();
     if (this.loadNewProject) {
         this.newProject();
-    } else if (forStartUp) {
-        this.stage.setName(localize('Stage'));
-        this.currentSprite.setName(localize('Sprite'));
     } else {
         this.openProjectString(projectData);
     }
