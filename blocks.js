@@ -8184,7 +8184,7 @@ BooleanSlotMorph.prototype.drawLabel = function (context) {
 
     switch (this.value) {
     case true:
-        x = r + (this.edge * 2);
+        x = r + (this.edge * 2) + shift;
         if (!MorphicPreferences.isFlat) {
             context.shadowOffsetX = -shift;
             context.shadowOffsetY = -shift;
@@ -8203,7 +8203,7 @@ BooleanSlotMorph.prototype.drawLabel = function (context) {
         context.stroke();
         break;
     case false:
-        x = w - y - this.edge - shift;
+        x = w - y - (this.edge * 2);
         if (!MorphicPreferences.isFlat) {
             context.shadowOffsetX = -shift;
             context.shadowOffsetY = -shift;
