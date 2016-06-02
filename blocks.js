@@ -149,7 +149,7 @@ isSnapObject, copy, PushButtonMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2016-June-01';
+modules.blocks = '2016-June-02';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -8057,6 +8057,7 @@ BooleanSlotMorph.prototype.drawNew = function () {
     this.image = newCanvas(this.extent());
     context = this.image.getContext('2d');
     this.drawDiamond(context);
+    this.drawLabel(context);
     this.drawKnob(context);
 };
 
@@ -8173,6 +8174,58 @@ BooleanSlotMorph.prototype.drawDiamond = function (context) {
     context.stroke();
 };
 
+BooleanSlotMorph.prototype.drawLabel = function (context) {
+    var w = this.width(),
+        r = this.height() / 2 - this.edge,
+        r2 = r / 2,
+        shift = this.edge / 2,
+        x,
+        y = this.height() / 2;
+
+    switch (this.value) {
+    case true:
+        x = r + (this.edge * 2);
+        if (!MorphicPreferences.isFlat) {
+            context.shadowOffsetX = -shift;
+            context.shadowOffsetY = -shift;
+            context.shadowBlur = shift;
+            context.shadowColor = 'rgb(0, 100, 0)';
+        }
+        // "tick:"
+        context.strokeStyle = 'white';
+        context.lineWidth = this.edge * 2;
+        context.lineCap = 'round';
+        context.lineJoin = 'miter';
+        context.beginPath();
+        context.moveTo(x - r2, y);
+        context.lineTo(x, y + r2);
+        context.lineTo(x + r2, r2 + this.edge);
+        context.stroke();
+        break;
+    case false:
+        x = w - y - this.edge - shift;
+        if (!MorphicPreferences.isFlat) {
+            context.shadowOffsetX = -shift;
+            context.shadowOffsetY = -shift;
+            context.shadowBlur = shift;
+            context.shadowColor = 'rgb(100, 0, 0)';
+        }
+        // "cross:"
+        context.strokeStyle = 'white';
+        context.lineWidth = this.edge * 2;
+        context.lineCap = 'butt';
+        context.beginPath();
+        context.moveTo(x - r2, y - r2);
+        context.lineTo(x + r2, y + r2);
+        context.moveTo(x - r2, y + r2);
+        context.lineTo(x + r2, y - r2);
+        context.stroke();
+        break;
+    default:
+        return;
+    }
+};
+
 BooleanSlotMorph.prototype.drawKnob = function (context) {
     var w = this.width(),
         r = this.height() / 2,
@@ -8189,16 +8242,22 @@ BooleanSlotMorph.prototype.drawKnob = function (context) {
 
     // draw the 'flat' shape:
     switch (this.value) {
-    case true:
+    case false:
         x = r;
         if (!MorphicPreferences.isFlat) {
             context.shadowOffsetX = shift;
+            context.shadowOffsetY = 0;
             context.shadowBlur = shift;
             context.shadowColor = 'black';
         }
         break;
-    case false:
+    case true:
         x = w - r;
+        if (!MorphicPreferences.isFlat) {
+            context.shadowOffsetX = 0;
+            context.shadowOffsetY = 0;
+            context.shadowBlur = 0;
+        }
         break;
     default:
         return;
