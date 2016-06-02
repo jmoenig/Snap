@@ -8193,7 +8193,7 @@ BooleanSlotMorph.prototype.drawLabel = function (context) {
         }
         // "tick:"
         context.strokeStyle = 'white';
-        context.lineWidth = this.edge * 2;
+        context.lineWidth = this.edge + shift;
         context.lineCap = 'round';
         context.lineJoin = 'miter';
         context.beginPath();
@@ -8212,7 +8212,7 @@ BooleanSlotMorph.prototype.drawLabel = function (context) {
         }
         // "cross:"
         context.strokeStyle = 'white';
-        context.lineWidth = this.edge * 2;
+        context.lineWidth = this.edge;
         context.lineCap = 'butt';
         context.beginPath();
         context.moveTo(x - r2, y - r2);
