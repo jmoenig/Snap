@@ -82,7 +82,7 @@ SpeechBubbleMorph, RingMorph, isNil, FileReader, TableDialogMorph,
 BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph*/
 
-modules.objects = '2016-June-01';
+modules.objects = '2016-June-04';
 
 var SpriteMorph;
 var StageMorph;
@@ -4527,7 +4527,10 @@ SpriteMorph.prototype.fullThumbnail = function (extentPoint) {
 // SpriteMorph Boolean visual representation
 
 SpriteMorph.prototype.booleanMorph = function (bool) {
-    return new BooleanSlotMorph(bool);
+    var sym = new BooleanSlotMorph(bool);
+    sym.isStatic = true;
+    sym.drawNew();
+    return sym;
 };
 
 // SpriteMorph nesting
