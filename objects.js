@@ -2741,13 +2741,17 @@ SpriteMorph.prototype.addSound = function (audio, name) {
     this.sounds.add(new Sound(audio, name));
 };
 
-SpriteMorph.prototype.playSound = function (name) {
+SpriteMorph.prototype.playSound = function (nameOrSound) {
     var stage = this.parentThatIsA(StageMorph),
+        sound, active;
+    if (nameOrSound instanceof Sound) {
+        sound = nameOrSound
+    } else {
         sound = detect(
             this.sounds.asArray(),
-            function (s) {return s.name === name; }
-        ),
-        active;
+            function (s) {return s.nameOrSound === nameOrSound; }
+        )
+    }
     if (sound) {
         active = sound.play();
         if (stage) {
