@@ -80,9 +80,9 @@ document, isNaN, isString, newCanvas, nop, parseFloat, radians, window,
 modules, IDE_Morph, VariableDialogMorph, HTMLCanvasElement, Context, List,
 SpeechBubbleMorph, RingMorph, isNil, FileReader, TableDialogMorph,
 BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
-TableMorph, TableFrameMorph*/
+TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph*/
 
-modules.objects = '2016-May-04';
+modules.objects = '2016-June-01';
 
 var SpriteMorph;
 var StageMorph;
@@ -968,15 +968,10 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'operators',
             spec: 'not %b'
         },
-        reportTrue: {
+        reportBoolean: {
             type: 'predicate',
             category: 'operators',
-            spec: 'true'
-        },
-        reportFalse: {
-            type: 'predicate',
-            category: 'operators',
-            spec: 'false'
+            spec: '%bool'
         },
         reportJoinWords: {
             type: 'reporter',
@@ -1220,6 +1215,14 @@ SpriteMorph.prototype.initBlockMigrations = function () {
         receiveClick: {
             selector: 'receiveInteraction',
             inputs: [['clicked']]
+        },
+        reportTrue: {
+            selector: 'reportBoolean',
+            inputs: [true]
+        },
+        reportFalse: {
+            selector: 'reportBoolean',
+            inputs: [false]
         }
     };
 };
@@ -1292,8 +1295,6 @@ SpriteMorph.prototype.blockAlternatives = {
     reportGreaterThan: ['reportEquals', 'reportLessThan'],
     reportAnd: ['reportOr'],
     reportOr: ['reportAnd'],
-    reportTrue: ['reportFalse'],
-    reportFalse: ['reportTrue'],
 
     // variables
     doSetVar: ['doChangeVar'],
@@ -1498,7 +1499,7 @@ SpriteMorph.prototype.drawNew = function () {
 
         // create a new, adequately dimensioned canvas
         // and draw the costume on it
-        this.image = newCanvas(costumeExtent);
+        this.image = newCanvas(costumeExtent, true);
         this.silentSetExtent(costumeExtent);
         ctx = this.image.getContext('2d');
         ctx.scale(this.scale * stageScale, this.scale * stageScale);
@@ -1527,7 +1528,7 @@ SpriteMorph.prototype.drawNew = function () {
             1000
         );
         this.silentSetExtent(new Point(newX, newX));
-        this.image = newCanvas(this.extent());
+        this.image = newCanvas(this.extent(), true);
         this.setCenter(currentCenter, true); // just me
         SpriteMorph.uber.drawNew.call(this, facing);
         this.rotationOffset = this.extent().divideBy(2);
@@ -1576,7 +1577,7 @@ SpriteMorph.prototype.colorFiltered = function (aColor) {
         dta;
 
     src = this.image.getContext('2d').getImageData(0, 0, ext.x, ext.y);
-    morph.image = newCanvas(ext);
+    morph.image = newCanvas(ext, true);
     morph.bounds = this.bounds.copy();
     ctx = morph.image.getContext('2d');
     dta = ctx.createImageData(ext.x, ext.y);
@@ -1991,9 +1992,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('reportAnd'));
         blocks.push(block('reportOr'));
         blocks.push(block('reportNot'));
-        blocks.push('-');
-        blocks.push(block('reportTrue'));
-        blocks.push(block('reportFalse'));
+        blocks.push(block('reportBoolean'));
         blocks.push('-');
         blocks.push(block('reportJoinWords'));
         blocks.push(block('reportTextSplit'));
@@ -3005,11 +3004,11 @@ SpriteMorph.prototype.goBack = function (layers) {
 SpriteMorph.prototype.overlappingImage = function (otherSprite) {
     // overrides method from Morph because Sprites aren't nested Morphs
     var oRect = this.bounds.intersect(otherSprite.bounds),
-        oImg = newCanvas(oRect.extent()),
+        oImg = newCanvas(oRect.extent(), true),
         ctx = oImg.getContext('2d');
 
     if (oRect.width() < 1 || oRect.height() < 1) {
-        return newCanvas(new Point(1, 1));
+        return newCanvas(new Point(1, 1), true);
     }
     ctx.drawImage(
         this.image,
@@ -3390,7 +3389,7 @@ SpriteMorph.prototype.drawLine = function (start, dest) {
 };
 
 SpriteMorph.prototype.floodFill = function () {
-    var layer = this.parent.penTrails(),
+    var layer = normalizeCanvas(this.parent.penTrails()),
         width = layer.width,
         height = layer.height,
         ctx = layer.getContext('2d'),
@@ -4528,11 +4527,7 @@ SpriteMorph.prototype.fullThumbnail = function (extentPoint) {
 // SpriteMorph Boolean visual representation
 
 SpriteMorph.prototype.booleanMorph = function (bool) {
-    // answer a block which can be shown in watchers, speech bubbles etc.
-    var block = new ReporterBlockMorph(true);
-    block.color = SpriteMorph.prototype.blockColor.operators;
-    block.setSpec(localize(bool.toString()));
-    return block;
+    return new BooleanSlotMorph(bool);
 };
 
 // SpriteMorph nesting
@@ -5089,7 +5084,7 @@ StageMorph.prototype.colorFiltered = function (aColor, excludedSprite) {
 
     src = img.getContext('2d').getImageData(0, 0, ext.x, ext.y);
     morph.bounds = this.bounds.copy();
-    morph.image = newCanvas(ext);
+    morph.image = newCanvas(ext, true);
     ctx = morph.image.getContext('2d');
     dta = ctx.createImageData(ext.x, ext.y);
     for (i = 0; i < ext.x * ext.y * 4; i += 4) {
@@ -5758,9 +5753,7 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('reportAnd'));
         blocks.push(block('reportOr'));
         blocks.push(block('reportNot'));
-        blocks.push('-');
-        blocks.push(block('reportTrue'));
-        blocks.push(block('reportFalse'));
+        blocks.push(block('reportBoolean'));
         blocks.push('-');
         blocks.push(block('reportJoinWords'));
         blocks.push(block('reportTextSplit'));
@@ -6522,7 +6515,8 @@ SpriteBubbleMorph.prototype.fixLayout = function () {
 // Costume instance creation
 
 function Costume(canvas, name, rotationCenter) {
-    this.contents = canvas || newCanvas();
+    this.contents = canvas ? normalizeCanvas(canvas, true)
+            : newCanvas(null, true);
     this.shrinkToFit(this.maxExtent());
     this.name = name || null;
     this.rotationCenter = rotationCenter || this.center();
@@ -6566,7 +6560,7 @@ Costume.prototype.shrinkWrap = function () {
     // adjust my contents'  bounds to my visible bounding box
     var bb = this.boundingBox(),
         ext = bb.extent(),
-        pic = newCanvas(ext),
+        pic = newCanvas(ext, true),
         ctx = pic.getContext('2d');
 
     ctx.drawImage(
@@ -6652,7 +6646,7 @@ Costume.prototype.boundingBox = function () {
 // Costume duplication
 
 Costume.prototype.copy = function () {
-    var canvas = newCanvas(this.extent()),
+    var canvas = newCanvas(this.extent(), true),
         cpy,
         ctx;
     ctx = canvas.getContext('2d');
@@ -6670,7 +6664,7 @@ Costume.prototype.flipped = function () {
     (mirrored along a vertical axis), used for
     SpriteMorph's rotation style type 2
 */
-    var canvas = newCanvas(this.extent()),
+    var canvas = newCanvas(this.extent(), true),
         ctx = canvas.getContext('2d'),
         flipped;
 
@@ -6696,7 +6690,7 @@ Costume.prototype.edit = function (aWorld, anIDE, isnew, oncancel, onsubmit) {
     editor.openIn(
         aWorld,
         isnew ?
-                newCanvas(StageMorph.prototype.dimensions) :
+                newCanvas(StageMorph.prototype.dimensions, true) :
                 this.contents,
         isnew ?
                 null :
