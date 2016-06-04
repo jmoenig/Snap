@@ -1338,17 +1338,19 @@ SpriteMorph.prototype.init = function (globals) {
     this.idx = 0; // not to be serialized (!) - used for de-serialization
     this.wasWarped = false; // not to be serialized, used for fast-tracking
 
-    this.graphicsValues = { 'negative': 0,
-                            'fisheye': 0,
-                            'whirl': 0,
-                            'pixelate': 0,
-                            'mosaic': 0,
-                            'brightness': 0,
-                            'color': 0,
-                            'comic': 0,
-                            'duplicate': 0,
-                            'confetti': 0
-                         };
+    this.graphicsValues = {
+        'color': 0,
+        'fisheye': 0,
+        'whirl': 0,
+        'pixelate': 0,
+        'mosaic': 0,
+        'duplicate': 0,
+        'negative': 0,
+        'comic': 0,
+        'confetti': 0,
+        'saturation': 0,
+        'brightness': 0
+    };
 
     // sprite inheritance
     this.exemplar = null;
@@ -3126,105 +3128,295 @@ SpriteMorph.prototype.graphicsChanged = function () {
 };
 
 SpriteMorph.prototype.applyGraphicsEffects = function (canvas) {
-// For every effect: apply transform of that effect(canvas, stored value)
-// The future: write more effects here
+  // For every effect: apply transform of that effect(canvas, stored value)
+  // Graphic effects from Scratch are heavily based on ScratchPlugin.c
+
     var ctx, imagedata, pixels, newimagedata;
 
-    function transform_negative(p, value) {
-        var i, rcom, gcom, bcom;
-        if (value !== 0) {
-            for (i = 0; i < p.length; i += 4) {
-                rcom = 255 - p[i];
-                gcom = 255 - p[i + 1];
-                bcom = 255 - p[i + 2];
+    function transform_fisheye (imagedata, value) {
+        var pixels, newImageData, newPixels, centerX, centerY,
+            x, y, dx, dy, r,  angle, srcX, srcY, i, srcI;
+        pixels = imagedata.data;
+        newImageData = ctx.createImageData(imagedata.width, imagedata.height);
+        newPixels = newImageData.data;
 
-                if (p[i] < rcom) { //compare to the complement
-                    p[i] += value;
-                } else if (p[i] > rcom) {
-                    p[i] -= value;
+        centerX = imagedata.width / 2;
+        centerY = imagedata.height / 2;
+        value = Math.max(0, (value + 100) / 100);
+        for (y = 0; y < imagedata.height; y++) {
+            for (x = 0; x < imagedata.width; x++) {
+                dx = (x - centerX) / centerX;
+                dy = (y - centerY) / centerY;
+                r = Math.pow(Math.sqrt(dx * dx + dy * dy), value);
+                if (r <= 1) {
+                    angle = Math.atan2(dy, dx);
+                    srcX = Math.floor(centerX + (r * Math.cos(angle) * centerX));
+                    srcY = Math.floor(centerY + (r * Math.sin(angle) * centerY));
+                } else {
+                    srcX = x;
+                    srcY = y;
                 }
-                if (p[i + 1] < gcom) {
-                    p[i + 1] += value;
-                } else if (p[i + 1] > gcom) {
-                    p[i + 1] -= value;
+                i = (y * imagedata.width + x) * 4;
+                srcI = (srcY * imagedata.width + srcX) * 4;
+                newPixels[i] = pixels[srcI];
+                newPixels[i + 1] = pixels[srcI + 1];
+                newPixels[i + 2] = pixels[srcI + 2];
+                newPixels[i + 3] = pixels[srcI + 3];
+            }
+        }
+        return newImageData;
+    }
+
+    function transform_whirl (imagedata, value) {
+        var pixels, newImageData, newPixels, centerX, centerY,
+            x, y, radius, scaleX, scaleY, whirlRadians, radiusSquared,
+            dx, dy, d, factor, angle, srcX, srcY, i, srcI;
+        pixels = imagedata.data;
+        newImageData = ctx.createImageData(imagedata.width, imagedata.height);
+        newPixels = newImageData.data;
+
+        centerX = imagedata.width / 2;
+        centerY = imagedata.height / 2;
+        radius = Math.min(centerX, centerY);
+        whirlRadians = radians(value);
+        radiusSquared = radius * radius;
+        for (y = 0; y < imagedata.height; y++) {
+            for (x = 0; x < imagedata.width; x++) {
+                dx = x - centerX;
+                dy = y - centerY;
+                d = dx * dx + dy * dy;
+                if (d < radiusSquared) {
+                    factor = 1 - (Math.sqrt(d) / radius);
+                    angle = whirlRadians * (factor * factor);
+                    sina = Math.sin(angle);
+                    cosa = Math.cos(angle);
+                    srcX = Math.floor((cosa * dx - sina * dy) + centerX);
+                    srcY = Math.floor((sina * dx + cosa * dy) + centerY);
+                } else {
+                    srcX = x;
+                    srcY = y;
                 }
-                if (p[i + 2] < bcom) {
-                    p[i + 2] += value;
-                } else if (p[i + 2] > bcom) {
-                    p[i + 2] -= value;
+                i = (y * imagedata.width + x) * 4;
+                srcI = (srcY * imagedata.width + srcX) * 4;
+                newPixels[i] = pixels[srcI];
+                newPixels[i + 1] = pixels[srcI + 1];
+                newPixels[i + 2] = pixels[srcI + 2];
+                newPixels[i + 3] = pixels[srcI + 3];
+            }
+        }
+        return newImageData;
+    }
+
+    function transform_pixelate (imagedata, value) {
+        var pixels, newImageData, newPixels, x, y,
+            srcX, srcY, i, srcI;
+        pixels = imagedata.data;
+        newImageData = ctx.createImageData(imagedata.width, imagedata.height);
+        newPixels = newImageData.data;
+
+        value = Math.floor(Math.abs(value / 10) + 1);
+        for (y = 0; y < imagedata.height; y++) {
+            for (x = 0; x < imagedata.width; x++) {
+                srcX = Math.floor(x / value) * value;
+                srcY = Math.floor(y / value) * value;
+                i = (y * imagedata.width + x) * 4;
+                srcI = (srcY * imagedata.width + srcX) * 4;
+                newPixels[i] = pixels[srcI];
+                newPixels[i + 1] = pixels[srcI + 1];
+                newPixels[i + 2] = pixels[srcI + 2];
+                newPixels[i + 3] = pixels[srcI + 3];
+            }
+        }
+        return newImageData;
+    }
+
+    function transform_mosaic (imagedata, value) {
+        var i, pixels, newImageData, newPixels, srcI;
+        pixels = imagedata.data;
+        newImageData = ctx.createImageData(imagedata.width, imagedata.height);
+        newPixels = newImageData.data;
+
+        value = Math.round((Math.abs(value) + 10) / 10);
+        value = Math.max(0, Math.min(value, Math.min(imagedata.width, imagedata.height)));
+        for (i = 0; i < pixels.length; i += 4) {
+            srcI = i * value % pixels.length
+            newPixels[i] = pixels[srcI];
+            newPixels[i + 1] = pixels[srcI + 1];
+            newPixels[i + 2] = pixels[srcI + 2];
+            newPixels[i + 3] = pixels[srcI + 3];
+        }
+        return newImageData;
+    }
+
+    function transform_duplicate (imagedata, value) {
+        var pixels, i;
+        pixels = imagedata.data;
+        for (i = 0; i < pixels.length; i += 4) {
+            pixels[i] = pixels[i * value];
+            pixels[i + 1] = pixels[i * value + 1];
+            pixels[i + 2] = pixels[i * value + 2];
+            pixels[i + 3] = pixels[i * value + 3];
+        }
+        return imagedata;
+    }
+
+    function transform_HSV (imagedata, hueShift, saturationShift, brightnessShift) {
+        var pixels, index, r, g, b, max, min, span,
+            h, s, v, i, f, p, q, t, newR, newG, newB;
+        pixels = imagedata.data;
+        for (index = 0; index < pixels.length; index += 4) {
+            r = pixels[index];
+            g = pixels[index + 1];
+            b = pixels[index + 2];
+
+            max = Math.max(r, g, b);
+            min = Math.min(r, g, b);
+            span = max - min;
+            if (span === 0) {
+                h = s = 0;
+            } else {
+                if (max === r) {
+                    h = (60 * (g - b)) / span
+                } else if (max === g) {
+                    h = 120 + ((60 * (b - r)) / span);
+                } else if (max === b) {
+                    h = 240 + ((60 * (r - g)) / span);
                 }
+                s = (max - min) / max;
             }
+            if (h < 0) {
+                h += 360
+            }
+            v = max / 255;
+
+            h = (h + hueShift * 360 / 200) % 360;
+            s = Math.max(0, Math.min(s + saturationShift / 100, 1));
+            v = Math.max(0, Math.min(v + brightnessShift / 100, 1));
+
+            i = Math.floor(h / 60);
+            f = (h / 60) - i;
+            p = v * (1 - s);
+            q = v * (1 - (s * f));
+            t = v * (1 - (s * (1 - f)));
+
+            if (i === 0 || i === 6) {
+                newR = v;
+                newG = t;
+                newB = p;
+            } else if (i === 1) {
+                newR = q;
+                newG = v;
+                newB = p;
+            } else if (i === 2) {
+                newR = p;
+                newG = v;
+                newB = t;
+            } else if (i === 3) {
+                newR = p;
+                newG = q;
+                newB = v;
+            } else if (i === 4) {
+                newR = t;
+                newG = p;
+                newB = v;
+            } else if (i === 5) {
+                newR = v;
+                newG = p;
+                newB = q;
+            }
+
+            pixels[index] = newR * 255;
+            pixels[index + 1] = newG * 255;
+            pixels[index + 2] = newB * 255;
         }
-        return p;
+        return imagedata;
     }
 
-    function transform_brightness(p, value) {
-        var i;
-        if (value !== 0) {
-            for (i = 0; i < p.length; i += 4) {
-                p[i] += value; //255 = 100% of this color
-                p[i + 1] += value;
-                p[i + 2] += value;
+    function transform_negative (imagedata, value) {
+        var pixels, i, rcom, gcom, bcom;
+        pixels = imagedata.data;
+        for (i = 0; i < pixels.length; i += 4) {
+            rcom = 255 - pixels[i];
+            gcom = 255 - pixels[i + 1];
+            bcom = 255 - pixels[i + 2];
+
+            if (pixels[i] < rcom) { //compare to the complement
+                pixels[i] += value;
+            } else if (pixels[i] > rcom) {
+                pixels[i] -= value;
+            }
+            if (pixels[i + 1] < gcom) {
+                pixels[i + 1] += value;
+            } else if (pixels[i + 1] > gcom) {
+                pixels[i + 1] -= value;
+            }
+            if (pixels[i + 2] < bcom) {
+                pixels[i + 2] += value;
+            } else if (pixels[i + 2] > bcom) {
+                pixels[i + 2] -= value;
             }
         }
-        return p;
+        return imagedata;
     }
 
-    function transform_comic(p, value) {
-        var i;
-        if (value !== 0) {
-            for (i = 0; i < p.length; i += 4) {
-                p[i] += Math.sin(i * value) * 127 + 128;
-                p[i + 1] += Math.sin(i * value) * 127 + 128;
-                p[i + 2] += Math.sin(i * value) * 127 + 128;
-            }
+    function transform_comic (imagedata, value) {
+        var pixels, i;
+        pixels = imagedata.data;
+        for (i = 0; i < pixels.length; i += 4) {
+            pixels[i] += Math.sin(i * value) * 127 + 128;
+            pixels[i + 1] += Math.sin(i * value) * 127 + 128;
+            pixels[i + 2] += Math.sin(i * value) * 127 + 128;
         }
-        return p;
+        return imagedata;
     }
 
-    function transform_duplicate(p, value) {
-        var i;
-        if (value !== 0) {
-            for (i = 0; i < p.length; i += 4) {
-                p[i] = p[i * value];
-                p[i + 1] = p[i * value + 1];
-                p[i + 2] = p[i * value + 2];
-                p[i + 3] = p[i * value + 3];
-            }
+    function transform_confetti (imagedata, value) {
+        var pixels, i;
+        pixels = imagedata.data;
+        for (i = 0; i < pixels.length; i += 1) {
+            pixels[i] = Math.sin(value * pixels[i]) * 127 + pixels[i];
         }
-        return p;
-    }
-
-    function transform_confetti(p, value) {
-        var i;
-        if (value !== 0) {
-            for (i = 0; i < p.length; i += 1) {
-                p[i] = Math.sin(value * p[i]) * 127 + p[i];
-            }
-        }
-        return p;
+        return imagedata;
     }
 
     if (this.graphicsChanged()) {
         ctx = canvas.getContext("2d");
         imagedata = ctx.getImageData(0, 0, canvas.width, canvas.height);
-        pixels = imagedata.data;
 
-        //A sprite should wear all 7 effects at once
-        /*pixels = transform_whirl(pixels, this.graphicsValues.whirl);*/
-        pixels = transform_negative(pixels, this.graphicsValues.negative);
-        pixels = transform_brightness(pixels, this.graphicsValues.brightness);
-        pixels = transform_comic(pixels, this.graphicsValues.comic);
-        /*pixels = transform_pixelate(pixels, this.graphicsValues.pixelate);*/
-        pixels = transform_duplicate(pixels, this.graphicsValues.duplicate);
-        /*pixels = transform_color(pixels, this.graphicsValues.color);*/
-        /*pixels = transform_fisheye(pixels, this.graphicsValues.fisheye);*/
-        pixels = transform_confetti(pixels, this.graphicsValues.confetti);
+        if (this.graphicsValues.fisheye) {
+            imagedata = transform_fisheye(imagedata, this.graphicsValues.fisheye);
+        }
+        if (this.graphicsValues.whirl) {
+            imagedata = transform_whirl(imagedata, this.graphicsValues.whirl);
+        }
+        if (this.graphicsValues.pixelate) {
+            imagedata = transform_pixelate(imagedata, this.graphicsValues.pixelate);
+        }
+        if (this.graphicsValues.mosaic) {
+            imagedata = transform_mosaic(imagedata, this.graphicsValues.mosaic);
+        }
+        if (this.graphicsValues.duplicate) {
+            imagedata = transform_duplicate(imagedata, this.graphicsValues.duplicate);
+        }
+        if (this.graphicsValues.color || this.graphicsValues.saturation || this.graphicsValues.brightness) {
+            imagedata = transform_HSV(
+                imagedata,
+                this.graphicsValues.color,
+                this.graphicsValues.saturation,
+                this.graphicsValues.brightness
+            );
+        }
+        if (this.graphicsValues.negative) {
+            imagedata = transform_negative(imagedata, this.graphicsValues.negative);
+        }
+        if (this.graphicsValues.comic) {
+            imagedata = transform_comic(imagedata, this.graphicsValues.comic);
+        }
+        if (this.graphicsValues.confetti) {
+            imagedata = transform_confetti(imagedata, this.graphicsValues.confetti);
+        }
 
-        //the last object will have all the transformations done on it
-        newimagedata = ctx.createImageData(imagedata); //make imgdata object
-        newimagedata.data.set(pixels); //add transformed pixels
-        ctx.putImageData(newimagedata, 0, 0);
+        ctx.putImageData(imagedata, 0, 0);
     }
 
     return canvas;
@@ -4887,17 +5079,19 @@ StageMorph.prototype.init = function (globals) {
     this.trailsCanvas = null;
     this.isThreadSafe = false;
 
-    this.graphicsValues = { 'negative': 0,
-                            'fisheye': 0,
-                            'whirl': 0,
-                            'pixelate': 0,
-                            'mosaic': 0,
-                            'brightness': 0,
-                            'color': 0,
-                            'comic': 0,
-                            'duplicate': 0,
-                            'confetti': 0
-                        };
+    this.graphicsValues = {
+        'color': 0,
+        'fisheye': 0,
+        'whirl': 0,
+        'pixelate': 0,
+        'mosaic': 0,
+        'duplicate': 0,
+        'negative': 0,
+        'comic': 0,
+        'confetti': 0,
+        'saturation': 0,
+        'brightness': 0
+    };
 
     StageMorph.uber.init.call(this);
 
