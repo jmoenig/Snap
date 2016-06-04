@@ -1784,6 +1784,7 @@ SyntaxElementMorph.prototype.showBubble = function (value, exportPic) {
     }
     if (value instanceof Sound) {
         morphToShow = new SoundIconMorph(value);
+        morphToShow.isDraggable = false;
         isClickable = true;
     } else if (value instanceof ListWatcherMorph) {
         morphToShow = value;
