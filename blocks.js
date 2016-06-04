@@ -149,7 +149,7 @@ isSnapObject, copy, PushButtonMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2016-June-03';
+modules.blocks = '2016-June-04';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -8068,7 +8068,8 @@ BooleanSlotMorph.prototype.mouseClickLeft = function () {
 };
 
 BooleanSlotMorph.prototype.mouseEnter = function () {
-    if (!this.isStatic && (this.value === false)) {
+    if (this.isStatic) {return; }
+    if (this.value === false) {
         var oldValue = this.value;
         this.value = null;
         this.drawNew(3);
@@ -8081,6 +8082,7 @@ BooleanSlotMorph.prototype.mouseEnter = function () {
 };
 
 BooleanSlotMorph.prototype.mouseLeave = function () {
+    if (this.isStatic) {return; }
     this.drawNew();
     this.changed();
 };
@@ -8090,11 +8092,22 @@ BooleanSlotMorph.prototype.mouseLeave = function () {
 BooleanSlotMorph.prototype.drawNew = function (progress) {
     // "progress" is an optional number sliding the knob
     // on a range between 0 and 4
-    var context;
-    this.silentSetExtent(new Point(
-        (this.fontSize + this.edge * 2) * 2,
-        this.fontSize + this.edge * 2
-    ));
+    var context,
+        textLabel = this.isStatic ? this.textLabel() : null,
+        h;
+
+    if (textLabel) {
+        h = textLabel.height + (this.edge * 3);
+        this.silentSetExtent(new Point(
+            textLabel.width + (h * 1.5) + (this.edge * 2),
+            h
+        ));
+    } else {
+        this.silentSetExtent(new Point(
+            (this.fontSize + this.edge * 2) * 2,
+            this.fontSize + this.edge * 2
+        ));
+    }
     this.color = this.parent ? this.parent.color : new Color(200, 200, 200);
     this.cachedClr = this.color.toString();
     this.cachedClrBright = this.bright();
@@ -8102,7 +8115,7 @@ BooleanSlotMorph.prototype.drawNew = function (progress) {
     this.image = newCanvas(this.extent());
     context = this.image.getContext('2d');
     this.drawDiamond(context, progress);
-    this.drawLabel(context);
+    this.drawLabel(context, textLabel);
     this.drawKnob(context, progress);
 };
 
@@ -8243,7 +8256,7 @@ BooleanSlotMorph.prototype.drawDiamond = function (context, progress) {
     context.stroke();
 };
 
-BooleanSlotMorph.prototype.drawLabel = function (context) {
+BooleanSlotMorph.prototype.drawLabel = function (context, textLabel) {
     var w = this.width(),
         r = this.height() / 2 - this.edge,
         r2 = r / 2,
@@ -8252,6 +8265,22 @@ BooleanSlotMorph.prototype.drawLabel = function (context) {
         y = this.height() / 2;
 
     if (this.isEmptySlot()) {
+        return;
+    }
+    if (textLabel) {
+        y = (this.height() - textLabel.height) / 2;
+        if (this.value) {
+            x = this.height() / 2;
+        } else {
+            x = this.width() - (this.height() / 2) - textLabel.width;
+        }
+    if (!MorphicPreferences.isFlat) {
+        context.shadowOffsetX = -shift;
+        context.shadowOffsetY = -shift;
+        context.shadowBlur = shift;
+        context.shadowColor = this.value ? 'rgb(0, 100, 0)' : 'rgb(100, 0, 0)';
+    }
+        context.drawImage(textLabel, x, y);
         return;
     }
     // "tick:"
@@ -8407,6 +8436,42 @@ BooleanSlotMorph.prototype.drawKnob = function (context, progress) {
         false
     );
     context.stroke();
+};
+
+BooleanSlotMorph.prototype.textLabel = function () {
+    if (this.isEmptySlot()) {return null; }
+    var t, f, img, lbl, x, y;
+    t = new StringMorph(
+        localize('true'),
+        this.fontSize,
+        null,
+        true, // bold
+        null,
+        null,
+        null,
+        null,
+        new Color(255, 255, 255)
+    ).image;
+    f = new StringMorph(
+        localize('false'),
+        this.fontSize,
+        null,
+        true, // bold
+        null,
+        null,
+        null,
+        null,
+        new Color(255, 255, 255)
+    ).image;
+    img = newCanvas(new Point(
+        Math.max(t.width, f.width),
+        Math.max(t.height, f.height)
+    ));
+    lbl = this.value ? t : f;
+    x = (img.width - lbl.width) / 2;
+    y = (img.height - lbl.height) / 2;
+    img.getContext('2d').drawImage(lbl, x, y);
+    return img;
 };
 
 // ArrowMorph //////////////////////////////////////////////////////////
