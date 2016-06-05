@@ -6661,6 +6661,7 @@ Costume.prototype.edit = function (aWorld, anIDE, isnew, oncancel, onsubmit) {
             aWorld.changed();
             if (anIDE) {
                 anIDE.currentSprite.wearCostume(myself);
+                myself.originalPixels = myself.contents.getContext('2d').getImageData(0, 0, myself.contents.width, myself.contents.height);
                 anIDE.hasChangedMedia = true;
             }
             (onsubmit || nop)();
