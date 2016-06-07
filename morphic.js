@@ -11410,7 +11410,8 @@ WorldMorph.prototype.togglePreferences = function () {
 function ClassMorph(name, init)
 {
     this.name = name || '';
-    this.init = init || 0;
+    this.init = init || new Context();
+    this.methods = new List();
 }
 
 ClassMorph.prototype.toString = function()
