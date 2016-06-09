@@ -415,7 +415,7 @@ SnapTranslator.dict.sv = {
     'stamp':
         'st\u00E4mpla',
     'fill':
-    	'fyll',
+        'fyll',
 
     // control:
     'when %greenflag clicked':
@@ -476,9 +476,9 @@ SnapTranslator.dict.sv = {
     'delete this clone':
         'radera klon',
     'when I am %interaction':
-    	'n\u00E4r jag %interaction',
+        'n\u00E4r jag %interaction',
     'when %b':
-    	'n\u00E4r %b',
+        'n\u00E4r %b',
     'clicked':
         'klickas p\u00E5',
     'pressed':
@@ -493,7 +493,7 @@ SnapTranslator.dict.sv = {
         'n\u00E4r jag klickas p\u00E5',
     'when I receive %msgHat':
         'n\u00E4r jag tar emot %msgHat',
-    	
+        
 
 
     'warp %c':
@@ -552,7 +552,7 @@ SnapTranslator.dict.sv = {
     'current %dates':
         '%dates just nu',
         
-  	'year':
+    'year':
           '\u00E5ret',
     'month':
           'm\u00E5naden',
@@ -565,9 +565,9 @@ SnapTranslator.dict.sv = {
     'second':
           'sekunden',
     'time in milliseconds':
-	    'tiden i millisekunder',
+        'tiden i millisekunder',
     'day of week':
-	    'veckodagen',
+        'veckodagen',
         
 
     // operators:
@@ -689,7 +689,7 @@ SnapTranslator.dict.sv = {
     'Import...':
         'Importera...',
     'file menu import hint':
-    	'l\u00E4ser in ett exporterat projekt,\nett bibliotek med block,\nen kostym, eller ett ljud',
+        'l\u00E4ser in ett exporterat projekt,\nett bibliotek med block,\nen kostym, eller ett ljud',
     'Export project as plain text ...':
         'Exportera projektet som vanlig text...',
     'Export project...':
@@ -838,7 +838,7 @@ SnapTranslator.dict.sv = {
     'parent...':
         'f\u00F6r\u00E4lder...',
     'current parent':
-    	'nuvarande f\u00F6r\u00E4lder',
+        'nuvarande f\u00F6r\u00E4lder',
 
     // stage:
     'show all':
@@ -1196,10 +1196,10 @@ SnapTranslator.dict.sv = {
         'ln',
     'e^':
         'e^',
-   	'floor':
-		'golv',
-	'ceiling':	
-		'tak',
+    'floor':
+        'golv',
+    'ceiling':  
+        'tak',
 
     // data types
     'number':
@@ -1260,210 +1260,210 @@ SnapTranslator.dict.sv = {
         
     // missing labels from initial translation added below
     'add a new sprite':
-    	'ny sprite',
-	'when %keyHat key pressed':
-		'n\u00E4r tangent %keyHat trycks ned',
-	'when I receive %msgHat':
-		'n\u00E4r jag tar emot %msgHat',
-	'message':
-		'meddelande',
-	'any message':
-		'n\u00E5got meddelande',
-	'stop %stopChoices':
-		'stoppa %stopChoices',
-	'this script':
-		'detta skript',
-	'this block':
-		'detta block',
-	'stop %stopOthersChoices':
-		'stoppa %stopOthersChoices',
-	'all but this script':
-		'alla f\u00F6rutom detta skript',
-	'other scripts in sprite':
-		'andra skript i denna sprite',
-	'%att of %spr':
-		'%att av %spr',
-	'%fun of %n':
-		'%fun av %n',
-	'split %s by %delim':
-		'dela %s med tecken %delim',
-	'Script variable name':
-		'Skriptvariabelnamn',
-	'Reference manual':
-		'Referensbok',
-	'Export project as plain text...':
-		'Exportera projektet som vanlig text...',
-	'Import tools':
-		'Importverktyg',
-	'Signup...':
-		'Registrera...',
-	'Stage size...':
-		'Scenstorlek...',
-	'Stage size':
-		'Scenstorlek',
-	'Stage width':
-		'Scenbredd',
-	'Stage height':
-		'Scenh\u00F6jd',
-	'Default':
-		'Standard',
-	'Plain prototype labels':
-		'Vanliga prototypetiketter',
-	'uncheck to always show (+) symbols\nin block prototype labels':
-		'avmarkera f\u00F6r att visa (+) symboler \n i blockprototypetiketter',
-	'check to hide (+) symbols\nin block prototype labels':
-		'kryssa f\u00F6r att visa (+) symboler \n i blockprototypetiketter',
-	'check to prioritize\nscript execution':
-		'kryssa f\u00F6r att prioritera \nskriptexekvering',
-	'uncheck to run scripts\nat normal speed':
-		'avmarkera f\u00F6r att k\u00F6ra \nskript vid normal hastighet',
-	'uncheck to allow\nscript reentrance':
-		'avmarkera f\u00F6r att till\u00E5ta \nskript att \u00E5tertilltr\u00E4da',
-	'check to disallow\nscript reentrance':
-		'kryssa f\u00F6r att f\u00F6rbjuda \nskript att \u00E5tertilltr\u00E4da',
-	'Flat line ends':
-		'Platta streckslut',
-	'check for flat ends of lines':
-		'kryssa f\u00F6r platta streckslut',
-	'uncheck for round ends of lines':
-		'avmarkera f\u00F6r avrundade streckslut',
-	'hide primitives':
-		'g\u00F6m primitiva',
-	'show primitives':
-		'visa primitiva',
-	'help...':
-		'hj\u00E4lp...',
-	'move':
-		'flytta',
-	'detach from':
-		'koppla bort',
-	'detach all parts':
-		'koppla bort alla delar',
-	'pic...':
-		'bild...',
-	'open a new window\nwith a picture of the stage':
-		'\u00F6ppna ett nytt f\u00F6nster\nmed en bild av scenen',
-	'undrop':
-		'\u00E5ngra sl\u00E4pp',
-	'undo the last\nblock drop\nin this pane':
-		'\u00E5ngra sista \nblocksl\u00E4ppet i\ndetta omr\u00E5de',
-	'scripts pic...':
-		'skriptbild...',
-	'open a new window\nwith a picture of all scripts':
-		'\u00F6ppna ett nytt f\u00F6nster\nmed en bild p\u00E5 alla skript',
-	'Zoom blocks':
-		'F\u00F6rstora blocken',
-	'build':
-		'bygg',
-	'your own':
-		'dina egna',
-	'blocks':
-		'block',
-	'normal (1x)':
-		'normal (1x)',
-	'demo (1.2x)':
-		'demo (1.2x)',
-	'presentation (1.4x)':
-		'presentation (1.4x)',
-	'big (2x)':
-		'stor (2x)',
-	'huge (4x)':
-		'j\u00E4ttestor (4x)',
-	'giant (8x)':
-		'enorm (8x)',
-	'monstrous (10x)':
-		'gigantisk (10x)',
-	'Empty':
-		'Tom',
-	'brightness':
-		'ljusstyrka',
-	'negative':
-		'negativ',
-	'comic':
-		'komisk',
-	'confetti':
-		'konfetti',
-	'letter':
-		'bokstav',
-	'whitespace':
-		'mellanslag',
-	'line':
-		'rad',
-	'tab':
-		'tab',
-	'cr':
-		'retur',
-	'warp %c':
-		'snabbspola %c',
-	'Reset Password...':
-		'Nollst\u00E4ll l\u00F6senord...',
-	'Codification support':
-		'St\u00F6d f\u00F6r textprogrammering',
-	'Flat design':
-		'Platt utseende',
-	'Keyboard Editing':
-		'Tangentbordsredigering',
-	'Table support':
-		'Tabellstöd',
+        'ny sprite',
+    'when %keyHat key pressed':
+        'n\u00E4r tangent %keyHat trycks ned',
+    'when I receive %msgHat':
+        'n\u00E4r jag tar emot %msgHat',
+    'message':
+        'meddelande',
+    'any message':
+        'n\u00E5got meddelande',
+    'stop %stopChoices':
+        'stoppa %stopChoices',
+    'this script':
+        'detta skript',
+    'this block':
+        'detta block',
+    'stop %stopOthersChoices':
+        'stoppa %stopOthersChoices',
+    'all but this script':
+        'alla f\u00F6rutom detta skript',
+    'other scripts in sprite':
+        'andra skript i denna sprite',
+    '%att of %spr':
+        '%att av %spr',
+    '%fun of %n':
+        '%fun av %n',
+    'split %s by %delim':
+        'dela %s med tecken %delim',
+    'Script variable name':
+        'Skriptvariabelnamn',
+    'Reference manual':
+        'Referensbok',
+    'Export project as plain text...':
+        'Exportera projektet som vanlig text...',
+    'Import tools':
+        'Importverktyg',
+    'Signup...':
+        'Registrera...',
+    'Stage size...':
+        'Scenstorlek...',
+    'Stage size':
+        'Scenstorlek',
+    'Stage width':
+        'Scenbredd',
+    'Stage height':
+        'Scenh\u00F6jd',
+    'Default':
+        'Standard',
+    'Plain prototype labels':
+        'Vanliga prototypetiketter',
+    'uncheck to always show (+) symbols\nin block prototype labels':
+        'avmarkera f\u00F6r att visa (+) symboler \n i blockprototypetiketter',
+    'check to hide (+) symbols\nin block prototype labels':
+        'kryssa f\u00F6r att visa (+) symboler \n i blockprototypetiketter',
+    'check to prioritize\nscript execution':
+        'kryssa f\u00F6r att prioritera \nskriptexekvering',
+    'uncheck to run scripts\nat normal speed':
+        'avmarkera f\u00F6r att k\u00F6ra \nskript vid normal hastighet',
+    'uncheck to allow\nscript reentrance':
+        'avmarkera f\u00F6r att till\u00E5ta \nskript att \u00E5tertilltr\u00E4da',
+    'check to disallow\nscript reentrance':
+        'kryssa f\u00F6r att f\u00F6rbjuda \nskript att \u00E5tertilltr\u00E4da',
+    'Flat line ends':
+        'Platta streckslut',
+    'check for flat ends of lines':
+        'kryssa f\u00F6r platta streckslut',
+    'uncheck for round ends of lines':
+        'avmarkera f\u00F6r avrundade streckslut',
+    'hide primitives':
+        'g\u00F6m primitiva',
+    'show primitives':
+        'visa primitiva',
+    'help...':
+        'hj\u00E4lp...',
+    'move':
+        'flytta',
+    'detach from':
+        'koppla bort',
+    'detach all parts':
+        'koppla bort alla delar',
+    'pic...':
+        'bild...',
+    'open a new window\nwith a picture of the stage':
+        '\u00F6ppna ett nytt f\u00F6nster\nmed en bild av scenen',
+    'undrop':
+        '\u00E5ngra sl\u00E4pp',
+    'undo the last\nblock drop\nin this pane':
+        '\u00E5ngra sista \nblocksl\u00E4ppet i\ndetta omr\u00E5de',
+    'scripts pic...':
+        'skriptbild...',
+    'open a new window\nwith a picture of all scripts':
+        '\u00F6ppna ett nytt f\u00F6nster\nmed en bild p\u00E5 alla skript',
+    'Zoom blocks':
+        'F\u00F6rstora blocken',
+    'build':
+        'bygg',
+    'your own':
+        'dina egna',
+    'blocks':
+        'block',
+    'normal (1x)':
+        'normal (1x)',
+    'demo (1.2x)':
+        'demo (1.2x)',
+    'presentation (1.4x)':
+        'presentation (1.4x)',
+    'big (2x)':
+        'stor (2x)',
+    'huge (4x)':
+        'j\u00E4ttestor (4x)',
+    'giant (8x)':
+        'enorm (8x)',
+    'monstrous (10x)':
+        'gigantisk (10x)',
+    'Empty':
+        'Tom',
+    'brightness':
+        'ljusstyrka',
+    'negative':
+        'negativ',
+    'comic':
+        'komisk',
+    'confetti':
+        'konfetti',
+    'letter':
+        'bokstav',
+    'whitespace':
+        'mellanslag',
+    'line':
+        'rad',
+    'tab':
+        'tab',
+    'cr':
+        'retur',
+    'warp %c':
+        'snabbspola %c',
+    'Reset Password...':
+        'Nollst\u00E4ll l\u00F6senord...',
+    'Codification support':
+        'St\u00F6d f\u00F6r textprogrammering',
+    'Flat design':
+        'Platt utseende',
+    'Keyboard Editing':
+        'Tangentbordsredigering',
+    'Table support':
+        'Tabellstöd',
     'Inheritance support':
-    	'Arv',
+        'Arv',
     'uncheck to disable\nsprite inheritance features':
-    	'avmarkera f\u00F6r att inaktivera\nst\u00F6d f\u00F6r arv mellan sprites',
+        'avmarkera f\u00F6r att inaktivera\nst\u00F6d f\u00F6r arv mellan sprites',
     'check for sprite\ninheritance features':
-    	'kryssa f\u00F6r att aktivera\nst\u00F6d f\u00F6r arv mellan sprites',
-	'uncheck to disable\nmulti-column list views':
-		'avmarkera f\u00F6r att inaktivera\nst\u00F6d f\u00F6r redigering av listor i flera kolumner',
+        'kryssa f\u00F6r att aktivera\nst\u00F6d f\u00F6r arv mellan sprites',
+    'uncheck to disable\nmulti-column list views':
+        'avmarkera f\u00F6r att inaktivera\nst\u00F6d f\u00F6r redigering av listor i flera kolumner',
     'check for multi-column\nlist view support':
-    	'kryssa f\u00F6r att aktivera\nst\u00F6d f\u00F6r redigering av listor i flera kolumner',
-    'check to enable\nkeyboard editing support':	
-		'kryssa f\u00F6r att aktivera\ntangentbordsredigering',
+        'kryssa f\u00F6r att aktivera\nst\u00F6d f\u00F6r redigering av listor i flera kolumner',
+    'check to enable\nkeyboard editing support':    
+        'kryssa f\u00F6r att aktivera\ntangentbordsredigering',
     'uncheck to disable\nkeyboard editing support':
-    	'avmarkera f\u00F6r att inaktivera\ntangentbordsredigering',
-	'check for block\nto text mapping features':
-		'kryssa f\u00F6r att aktivera\nblock-till-text funktioner',
-	'uncheck to disable\nblock to text mapping features':
-		'avmarkera f\u00F6r att inaktivera\nblock-till-text funktioner',
-	'check for alternative\nGUI design':
-		'kryssa f\u00F6r att aktivera ett\nalternativt utseende',
-	'uncheck for default\nGUI design':
-		'avmarkera f\u00F6r att byta\ntill standardutseendet',
-	'Select categories of additional blocks to add to this project.':
-		'v\u00E4lj grupper av extrablock att l\u00E4gga till i projektet',
-	'Select a costume from the media library':
-		'v\u00E4lj en kostym fr\u00E5n mediabiblioteket',
-	'Select a sound from the media library':
-		'v\u00E4lj ett ljud fr\u00E5n mediabiblioteket',
-	'Iteration, composition':
-		'Upprepning, komposition',
-	'List utilities':
-		'Listverktyg',
-	'Streams (lazy lists)':
-		'Str\u00F6mmar (lata listor)',
-	'Variadic reporters':
-		'Variabla rapporterare',
-	'Words, sentences':
-		'Ord, meningar',
-	'Paint a new costume':
-		'Rita en ny kostym',
-	'add a new Turtle sprite':
-		'l\u00E4gg till en ny Sk\u00F6ldpadda-sprite',
-	'paint a new sprite':
-		'rita en ny sprite',
-	'Paint Editor':
-		'Rita',
-	'undo':
-		'\u00E5ngra',
-	'grow':
-		'st\u00F6rre',
-	'shrink':
-		'mindre',
-	'flip ↔':
-		'v\u00E4nd ↔',
-	'flip ↕':
-		'v\u00E4nd ↕',
-	'Brush size':
-		'Pennstorlek',
-	'Constrain proportions of shapes?\n(you can also hold shift)':
-		'Beh\u00E5ll figurernas proportioner?\n(du kan ocks\u00E5 h\u00E5lla skift nedtryckt)'
-		
+        'avmarkera f\u00F6r att inaktivera\ntangentbordsredigering',
+    'check for block\nto text mapping features':
+        'kryssa f\u00F6r att aktivera\nblock-till-text funktioner',
+    'uncheck to disable\nblock to text mapping features':
+        'avmarkera f\u00F6r att inaktivera\nblock-till-text funktioner',
+    'check for alternative\nGUI design':
+        'kryssa f\u00F6r att aktivera ett\nalternativt utseende',
+    'uncheck for default\nGUI design':
+        'avmarkera f\u00F6r att byta\ntill standardutseendet',
+    'Select categories of additional blocks to add to this project.':
+        'v\u00E4lj grupper av extrablock att l\u00E4gga till i projektet',
+    'Select a costume from the media library':
+        'v\u00E4lj en kostym fr\u00E5n mediabiblioteket',
+    'Select a sound from the media library':
+        'v\u00E4lj ett ljud fr\u00E5n mediabiblioteket',
+    'Iteration, composition':
+        'Upprepning, komposition',
+    'List utilities':
+        'Listverktyg',
+    'Streams (lazy lists)':
+        'Str\u00F6mmar (lata listor)',
+    'Variadic reporters':
+        'Variabla rapporterare',
+    'Words, sentences':
+        'Ord, meningar',
+    'Paint a new costume':
+        'Rita en ny kostym',
+    'add a new Turtle sprite':
+        'l\u00E4gg till en ny Sk\u00F6ldpadda-sprite',
+    'paint a new sprite':
+        'rita en ny sprite',
+    'Paint Editor':
+        'Rita',
+    'undo':
+        '\u00E5ngra',
+    'grow':
+        'st\u00F6rre',
+    'shrink':
+        'mindre',
+    'flip ↔':
+        'v\u00E4nd ↔',
+    'flip ↕':
+        'v\u00E4nd ↕',
+    'Brush size':
+        'Pennstorlek',
+    'Constrain proportions of shapes?\n(you can also hold shift)':
+        'Beh\u00E5ll figurernas proportioner?\n(du kan ocks\u00E5 h\u00E5lla skift nedtryckt)'
+        
 };
