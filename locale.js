@@ -391,7 +391,7 @@ SnapTranslator.dict.sv = {
     'translator_e-mail':
         'eolsson@gmail.com',
     'last_changed':
-        '2014-12-14'
+        '2016-06-09'
 };
 
 SnapTranslator.dict.pt_BR = {

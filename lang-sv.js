@@ -250,7 +250,7 @@ SnapTranslator.dict.sv = {
 
     // tab help
     'costumes tab help':
-        'importera en bild fr\u00E5n en annan webbsida eller fr\u00E5n\nen fil på din dator genom att dra den hit',
+        'importera en bild fr\u00E5n en annan webbsida eller fr\u00E5n\nen fil p\u00E5 din dator genom att dra den hit',
 
     'import a sound from your computer\nby dragging it into here':
         'importera en ljudfil fr\u00E5n din dator\ngenom att dra den hit',
@@ -331,6 +331,8 @@ SnapTranslator.dict.sv = {
         'n\u00E4sta kostym',
     'costume #':
         'kostym nr.',
+    'costume name':
+        'kostymnamn',
     'say %s for %n secs':
         's\u00E4g %s i %n sek',
     'say %s':
@@ -412,6 +414,8 @@ SnapTranslator.dict.sv = {
         's\u00E4tt penntjocklek til %n',
     'stamp':
         'st\u00E4mpla',
+    'fill':
+    	'fyll',
 
     // control:
     'when %greenflag clicked':
@@ -443,7 +447,7 @@ SnapTranslator.dict.sv = {
     'if %b %c else %c':
         'om %b %c d\u00E5 %c',
     'report %s':
-        'returnera %s',
+        'rapportera %s',
     'stop block':
         'stoppa block',
     'stop script':
@@ -471,6 +475,25 @@ SnapTranslator.dict.sv = {
         'mig sj\u00E4lv',
     'delete this clone':
         'radera klon',
+    'when I am %interaction':
+    	'n\u00E4r jag %interaction',
+    'when %b':
+    	'n\u00E4r %b',
+    'clicked':
+        'klickas p\u00E5',
+    'pressed':
+        'trycks ned',
+    'dropped':
+        'sl\u00E4pps ned',
+    'mouse-entered':
+        'f\u00E5r muspekaren \u00F6ver mig',
+    'mouse-departed':
+        'inte l\u00E4ngre har muspekaren \u00F6ver mig',
+    'when I am clicked':
+        'n\u00E4r jag klickas p\u00E5',
+    'when I receive %msgHat':
+        'n\u00E4r jag tar emot %msgHat',
+    	
 
 
     'warp %c':
@@ -480,7 +503,7 @@ SnapTranslator.dict.sv = {
     'touching %col ?':
         'r\u00F6r %col ?',
     'touching %clr ?':
-        'r\u00F6r %clr ?',
+        'r\u00F6r f\u00E4rgen %clr ?',
     'color %clr is touching %clr ?':
         'f\u00E4rgen %clr r\u00F6r %clr ?',
     'ask %s and wait':
@@ -518,14 +541,42 @@ SnapTranslator.dict.sv = {
         'stack-storlek',
     'frames':
         'ramar',
+        
+    
+    '%att of %spr':
+        '%att av %spr',
+    'my %get':
+        'attribut %get',
+
+        
+    'current %dates':
+        '%dates just nu',
+        
+  	'year':
+          '\u00E5ret',
+    'month':
+          'm\u00E5naden',
+    'date':
+          'datum',
+    'hour':
+          'timmen',
+    'minute':
+          'minuten',
+    'second':
+          'sekunden',
+    'time in milliseconds':
+	    'tiden i millisekunder',
+    'day of week':
+	    'veckodagen',
+        
 
     // operators:
     '%n mod %n':
         '%n mod %n',
     'round %n':
         'avrunda %n',
-    '%fun av %n':
-        '%fun von %n',
+    '%fun of %n':
+        '%fun av %n',
     'pick random %n to %n':
         'slumptal fr\u00E5n %n till %n',
     '%b and %b':
@@ -558,7 +609,7 @@ SnapTranslator.dict.sv = {
         '%s identisk med %s ?',
 
     'type of %s':
-        'type %s',
+        'typ %s',
 
     // variables:
     'Make a variable':
@@ -784,6 +835,10 @@ SnapTranslator.dict.sv = {
         'redigera',
     'export...':
         'exportera...',
+    'parent...':
+        'f\u00F6r\u00E4lder...',
+    'current parent':
+    	'nuvarande f\u00F6r\u00E4lder',
 
     // stage:
     'show all':
@@ -910,10 +965,10 @@ SnapTranslator.dict.sv = {
 
     // block deletion dialog
     'Delete Custom Block':
-        'Radera custom blokk',
+        'Radera block',
     'block deletion dialog text':
-        'Skal denne blokken med alle dens instanser\n' +
-            'bli slettet?',
+        'Ska detta block med alla dess instanser\n' +
+            'tas bort?',
 
     // input dialog
     'Create input name':
@@ -1141,6 +1196,10 @@ SnapTranslator.dict.sv = {
         'ln',
     'e^':
         'e^',
+   	'floor':
+		'golv',
+	'ceiling':	
+		'tak',
 
     // data types
     'number':
@@ -1163,6 +1222,41 @@ SnapTranslator.dict.sv = {
         'sista',
     'any':
         'vilken som helst',
+    
+
+    // attributes
+    'neighbors':
+        'grannar',
+    'self':
+        'mig sj\u00E4lv',
+    'other sprites':
+        'andra sprites',
+    'parts':
+        'delar',
+    'anchor':
+        'ankare',
+    'parent':
+        'f\u00F6r\u00E4ldrar',
+    'children':
+        'barn',
+    'clones':
+        'kloner',
+    'other clones':
+        'andra kloner',
+    'dangling?':
+        'h\u00E4ngande?',
+    'rotation x':
+        'rotation x',
+    'rotation y':
+        'rotation y',
+    'center x':
+        'mittpunkt x',
+    'center y':
+        'mittpunkt y',
+    'name':
+        'namn',
+    'stage':
+        'scen',    
         
     // missing labels from initial translation added below
     'add a new sprite':
@@ -1282,15 +1376,13 @@ SnapTranslator.dict.sv = {
 	'Empty':
 		'Tom',
 	'brightness':
-		'ljusstyrke',
+		'ljusstyrka',
 	'negative':
 		'negativ',
 	'comic':
 		'komisk',
 	'confetti':
 		'konfetti',
-	'floor':
-		'golv',
 	'letter':
 		'bokstav',
 	'whitespace':
@@ -1309,6 +1401,24 @@ SnapTranslator.dict.sv = {
 		'St\u00F6d f\u00F6r textprogrammering',
 	'Flat design':
 		'Platt utseende',
+	'Keyboard Editing':
+		'Tangentbordsredigering',
+	'Table support':
+		'Tabellstöd',
+    'Inheritance support':
+    	'Arv',
+    'uncheck to disable\nsprite inheritance features':
+    	'avmarkera f\u00F6r att inaktivera\nst\u00F6d f\u00F6r arv mellan sprites',
+    'check for sprite\ninheritance features':
+    	'kryssa f\u00F6r att aktivera\nst\u00F6d f\u00F6r arv mellan sprites',
+	'uncheck to disable\nmulti-column list views':
+		'avmarkera f\u00F6r att inaktivera\nst\u00F6d f\u00F6r redigering av listor i flera kolumner',
+    'check for multi-column\nlist view support':
+    	'kryssa f\u00F6r att aktivera\nst\u00F6d f\u00F6r redigering av listor i flera kolumner',
+    'check to enable\nkeyboard editing support':	
+		'kryssa f\u00F6r att aktivera\ntangentbordsredigering',
+    'uncheck to disable\nkeyboard editing support':
+    	'avmarkera f\u00F6r att inaktivera\ntangentbordsredigering',
 	'check for block\nto text mapping features':
 		'kryssa f\u00F6r att aktivera\nblock-till-text funktioner',
 	'uncheck to disable\nblock to text mapping features':
