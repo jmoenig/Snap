@@ -2355,7 +2355,7 @@ IDE_Morph.prototype.settingsMenu = function () {
         addPreference(
             'Execute on slider change',
             'toggleSliderExecute',
-            InputSlotMorph.prototype.executeOnSliderEdit,
+            ArgMorph.prototype.executeOnSliderEdit,
             'uncheck to supress\nrunning scripts\nwhen moving the slider',
             'check to run\nthe edited script\nwhen moving the slider'
         );
@@ -4162,8 +4162,8 @@ IDE_Morph.prototype.toggleInputSliders = function () {
 };
 
 IDE_Morph.prototype.toggleSliderExecute = function () {
-    InputSlotMorph.prototype.executeOnSliderEdit =
-        !InputSlotMorph.prototype.executeOnSliderEdit;
+    ArgMorph.prototype.executeOnSliderEdit =
+        !ArgMorph.prototype.executeOnSliderEdit;
 };
 
 IDE_Morph.prototype.toggleAppMode = function (appMode) {
