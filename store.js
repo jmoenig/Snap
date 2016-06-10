@@ -60,7 +60,7 @@ SyntaxElementMorph, Variable, isSnapObject, console, BooleanSlotMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2016-June-01';
+modules.store = '2016-June-10';
 
 
 // XML_Serializer ///////////////////////////////////////////////////////
@@ -1182,7 +1182,7 @@ SnapSerializer.prototype.loadValue = function (model) {
             record();
             lst = v;
             items = model.childrenNamed('item');
-            items.forEach(function (item) {
+            items.forEach(function (item, i) {
                 var value = item.children[0];
                 if (!value) {
                     v.first = 0;
@@ -1194,9 +1194,11 @@ SnapSerializer.prototype.loadValue = function (model) {
                 if (tail) {
                     v.rest = myself.loadValue(tail);
                 } else {
-                    v.rest = new List();
-                    v = v.rest;
-                    v.isLinked = true;
+                    if (i < (items.length - 1)) {
+                        v.rest = new List();
+                        v = v.rest;
+                        v.isLinked = true;
+                    }
                 }
             });
             return lst;
