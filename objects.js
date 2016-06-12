@@ -3135,16 +3135,19 @@ SpriteMorph.prototype.applyGraphicsEffects = function (canvas) {
 
     function transform_fisheye (imagedata, value) {
         var pixels, newImageData, newPixels, centerX, centerY,
-            x, y, dx, dy, r,  angle, srcX, srcY, i, srcI;
+            w, h, x, y, dx, dy, r, angle, srcX, srcY, i, srcI;
+
+        w = imagedata.width;
+        h = imagedata.height;
         pixels = imagedata.data;
-        newImageData = ctx.createImageData(imagedata.width, imagedata.height);
+        newImageData = ctx.createImageData(w, h);
         newPixels = newImageData.data;
 
-        centerX = imagedata.width / 2;
-        centerY = imagedata.height / 2;
+        centerX = w / 2;
+        centerY = h / 2;
         value = Math.max(0, (value + 100) / 100);
-        for (y = 0; y < imagedata.height; y++) {
-            for (x = 0; x < imagedata.width; x++) {
+        for (y = 0; y < h; y++) {
+            for (x = 0; x < w; x++) {
                 dx = (x - centerX) / centerX;
                 dy = (y - centerY) / centerY;
                 r = Math.pow(Math.sqrt(dx * dx + dy * dy), value);
@@ -3156,8 +3159,8 @@ SpriteMorph.prototype.applyGraphicsEffects = function (canvas) {
                     srcX = x;
                     srcY = y;
                 }
-                i = (y * imagedata.width + x) * 4;
-                srcI = (srcY * imagedata.width + srcX) * 4;
+                i = (y * w + x) * 4;
+                srcI = (srcY * w + srcX) * 4;
                 newPixels[i] = pixels[srcI];
                 newPixels[i + 1] = pixels[srcI + 1];
                 newPixels[i + 2] = pixels[srcI + 2];
@@ -3168,36 +3171,46 @@ SpriteMorph.prototype.applyGraphicsEffects = function (canvas) {
     }
 
     function transform_whirl (imagedata, value) {
-        var pixels, newImageData, newPixels, centerX, centerY,
+        var pixels, newImageData, newPixels, w, h, centerX, centerY,
             x, y, radius, scaleX, scaleY, whirlRadians, radiusSquared,
             dx, dy, d, factor, angle, srcX, srcY, i, srcI;
+
+        w = imagedata.width;
+        h = imagedata.height;
         pixels = imagedata.data;
-        newImageData = ctx.createImageData(imagedata.width, imagedata.height);
+        newImageData = ctx.createImageData(w, h);
         newPixels = newImageData.data;
 
-        centerX = imagedata.width / 2;
-        centerY = imagedata.height / 2;
+        centerX = w / 2;
+        centerY = h / 2;
         radius = Math.min(centerX, centerY);
-        whirlRadians = radians(value);
+        if (w < h) {
+            scaleX = h / w;
+            scaleY = 1;
+        } else {
+            scaleX = 1;
+            scaleY = w / h;
+        }
+        whirlRadians = -radians(value);
         radiusSquared = radius * radius;
-        for (y = 0; y < imagedata.height; y++) {
-            for (x = 0; x < imagedata.width; x++) {
-                dx = x - centerX;
-                dy = y - centerY;
+        for (y = 0; y < h; y++) {
+            for (x = 0; x < w; x++) {
+                dx = scaleX * (x - centerX);
+                dy = scaleY * (y - centerY);
                 d = dx * dx + dy * dy;
                 if (d < radiusSquared) {
                     factor = 1 - (Math.sqrt(d) / radius);
                     angle = whirlRadians * (factor * factor);
                     sina = Math.sin(angle);
                     cosa = Math.cos(angle);
-                    srcX = Math.floor((cosa * dx - sina * dy) + centerX);
-                    srcY = Math.floor((sina * dx + cosa * dy) + centerY);
+                    srcX = Math.floor((cosa * dx - sina * dy) / scaleX + centerX);
+                    srcY = Math.floor((sina * dx + cosa * dy) / scaleY + centerY);
                 } else {
                     srcX = x;
                     srcY = y;
                 }
-                i = (y * imagedata.width + x) * 4;
-                srcI = (srcY * imagedata.width + srcX) * 4;
+                i = (y * w + x) * 4;
+                srcI = (srcY * w + srcX) * 4;
                 newPixels[i] = pixels[srcI];
                 newPixels[i + 1] = pixels[srcI + 1];
                 newPixels[i + 2] = pixels[srcI + 2];
@@ -3208,19 +3221,22 @@ SpriteMorph.prototype.applyGraphicsEffects = function (canvas) {
     }
 
     function transform_pixelate (imagedata, value) {
-        var pixels, newImageData, newPixels, x, y,
-            srcX, srcY, i, srcI;
+        var pixels, newImageData, newPixels, w, h,
+            x, y, srcX, srcY, i, srcI;
+
+        w = imagedata.width;
+        h = imagedata.height;
         pixels = imagedata.data;
-        newImageData = ctx.createImageData(imagedata.width, imagedata.height);
+        newImageData = ctx.createImageData(w, h);
         newPixels = newImageData.data;
 
         value = Math.floor(Math.abs(value / 10) + 1);
-        for (y = 0; y < imagedata.height; y++) {
-            for (x = 0; x < imagedata.width; x++) {
+        for (y = 0; y < h; y++) {
+            for (x = 0; x < w; x++) {
                 srcX = Math.floor(x / value) * value;
                 srcY = Math.floor(y / value) * value;
-                i = (y * imagedata.width + x) * 4;
-                srcI = (srcY * imagedata.width + srcX) * 4;
+                i = (y * w + x) * 4;
+                srcI = (srcY * w + srcX) * 4;
                 newPixels[i] = pixels[srcI];
                 newPixels[i + 1] = pixels[srcI + 1];
                 newPixels[i + 2] = pixels[srcI + 2];
@@ -3231,15 +3247,15 @@ SpriteMorph.prototype.applyGraphicsEffects = function (canvas) {
     }
 
     function transform_mosaic (imagedata, value) {
-        var i, pixels, newImageData, newPixels, srcI;
+        var pixels, i, l, newImageData, newPixels, srcI;
         pixels = imagedata.data;
         newImageData = ctx.createImageData(imagedata.width, imagedata.height);
         newPixels = newImageData.data;
 
         value = Math.round((Math.abs(value) + 10) / 10);
         value = Math.max(0, Math.min(value, Math.min(imagedata.width, imagedata.height)));
-        for (i = 0; i < pixels.length; i += 4) {
-            srcI = i * value % pixels.length
+        for (i = 0, l = pixels.length; i < l; i += 4) {
+            srcI = i * value % l
             newPixels[i] = pixels[srcI];
             newPixels[i + 1] = pixels[srcI + 1];
             newPixels[i + 2] = pixels[srcI + 2];
@@ -3249,7 +3265,7 @@ SpriteMorph.prototype.applyGraphicsEffects = function (canvas) {
     }
 
     function transform_duplicate (imagedata, value) {
-        var pixels, i;
+        var pixels, i, l;
         pixels = imagedata.data;
         for (i = 0; i < pixels.length; i += 4) {
             pixels[i] = pixels[i * value];
@@ -3261,10 +3277,10 @@ SpriteMorph.prototype.applyGraphicsEffects = function (canvas) {
     }
 
     function transform_HSV (imagedata, hueShift, saturationShift, brightnessShift) {
-        var pixels, index, r, g, b, max, min, span,
+        var pixels, index, l, r, g, b, max, min, span,
             h, s, v, i, f, p, q, t, newR, newG, newB;
         pixels = imagedata.data;
-        for (index = 0; index < pixels.length; index += 4) {
+        for (index = 0, l = pixels.length; index < l; index += 4) {
             r = pixels[index];
             g = pixels[index + 1];
             b = pixels[index + 2];
@@ -3333,9 +3349,9 @@ SpriteMorph.prototype.applyGraphicsEffects = function (canvas) {
     }
 
     function transform_negative (imagedata, value) {
-        var pixels, i, rcom, gcom, bcom;
+        var pixels, i, l, rcom, gcom, bcom;
         pixels = imagedata.data;
-        for (i = 0; i < pixels.length; i += 4) {
+        for (i = 0, l = pixels.length; i < l; i += 4) {
             rcom = 255 - pixels[i];
             gcom = 255 - pixels[i + 1];
             bcom = 255 - pixels[i + 2];
@@ -3360,9 +3376,9 @@ SpriteMorph.prototype.applyGraphicsEffects = function (canvas) {
     }
 
     function transform_comic (imagedata, value) {
-        var pixels, i;
+        var pixels, i, l;
         pixels = imagedata.data;
-        for (i = 0; i < pixels.length; i += 4) {
+        for (i = 0, l = pixels.length; i < l; i += 4) {
             pixels[i] += Math.sin(i * value) * 127 + 128;
             pixels[i + 1] += Math.sin(i * value) * 127 + 128;
             pixels[i + 2] += Math.sin(i * value) * 127 + 128;
@@ -3371,9 +3387,9 @@ SpriteMorph.prototype.applyGraphicsEffects = function (canvas) {
     }
 
     function transform_confetti (imagedata, value) {
-        var pixels, i;
+        var pixels, i, l;
         pixels = imagedata.data;
-        for (i = 0; i < pixels.length; i += 1) {
+        for (i = 0, l = pixels.length; i < l; i += 1) {
             pixels[i] = Math.sin(value * pixels[i]) * 127 + pixels[i];
         }
         return imagedata;
