@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph,
 TableFrameMorph, isSnapObject*/
 
-modules.threads = '2016-June-01';
+modules.threads = '2016-June-12';
 
 var ThreadManager;
 var Process;
@@ -412,6 +412,7 @@ ThreadManager.prototype.doWhen = function (block, stopIt) {
     isDead              boolean indicating a terminated clone process
     timeout             msecs after which to force yield
     lastYield           msecs when the process last yielded
+    isFirstStep         boolean indicating whether on first step - for clones
     errorFlag           boolean indicating whether an error was encountered
     prompter            active instance of StagePrompterMorph
     httpRequest         active instance of an HttpRequest or null
@@ -447,7 +448,8 @@ function Process(topBlock, onComplete, rightAway) {
     this.errorFlag = false;
     this.context = null;
     this.homeContext = new Context();
-    this.lastYield = Date.now();
+    this.lastYield =  Date.now();
+    this.isFirstStep = true;
     this.isAtomic = false;
     this.prompter = null;
     this.httpRequest = null;
@@ -492,10 +494,8 @@ Process.prototype.runStep = function (deadline) {
     this.readyToYield = false;
     while (!this.readyToYield
             && this.context
-            && // (this.isAtomic ?
-                    (Date.now() - this.lastYield < this.timeout)
-               //             : true)
-                ) {
+            && (Date.now() - this.lastYield < this.timeout)
+    ) {
         // also allow pausing inside atomic steps - for PAUSE block primitive:
         if (this.isPaused) {
             return this.pauseStep();
@@ -511,6 +511,7 @@ Process.prototype.runStep = function (deadline) {
         this.evaluateContext();
     }
     this.lastYield = Date.now();
+    this.isFirstStep = false;
 
     // make sure to redraw atomic things
     if (this.isAtomic &&
@@ -2598,11 +2599,11 @@ Process.prototype.createClone = function (name) {
     if (!name) {return; }
     if (thisObj) {
         if (this.inputOption(name) === 'myself') {
-            thisObj.createClone();
+            thisObj.createClone(!this.isFirstStep);
         } else {
             thatObj = this.getOtherObject(name, thisObj);
             if (thatObj) {
-                thatObj.createClone();
+                thatObj.createClone(!this.isFirstStep);
             }
         }
     }

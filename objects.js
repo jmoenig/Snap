@@ -82,7 +82,7 @@ SpeechBubbleMorph, RingMorph, isNil, FileReader, TableDialogMorph,
 BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph*/
 
-modules.objects = '2016-June-04';
+modules.objects = '2016-June-13';
 
 var SpriteMorph;
 var StageMorph;
@@ -2854,14 +2854,14 @@ SpriteMorph.prototype.remove = function () {
     costume in the original sprite has no effect on any of its clones.
 */
 
-SpriteMorph.prototype.createClone = function () {
+SpriteMorph.prototype.createClone = function (immediately) {
     var stage = this.parentThatIsA(StageMorph);
     if (stage && stage.cloneCount <= 2000) {
-        this.fullCopy(true).clonify(stage);
+        this.fullCopy(true).clonify(stage, immediately);
     }
 };
 
-SpriteMorph.prototype.clonify = function (stage) {
+SpriteMorph.prototype.clonify = function (stage, immediately) {
     var hats;
     this.parts.forEach(function (part) {
         part.clonify(stage);
@@ -2880,7 +2880,7 @@ SpriteMorph.prototype.clonify = function (stage) {
             null, // export result
             null, // callback
             null, // is clicked
-            true // right away
+            immediately // without yielding
             );
     });
     this.endWarp();
