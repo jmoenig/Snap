@@ -56,11 +56,12 @@ Color, List, newCanvas, Costume, Sound, Audio, IDE_Morph, ScriptsMorph,
 BlockMorph, ArgMorph, InputSlotMorph, TemplateSlotMorph, CommandSlotMorph,
 FunctionSlotMorph, MultiArgMorph, ColorSlotMorph, nop, CommentMorph, isNil,
 localize, sizeOf, ArgLabelMorph, SVG_Costume, MorphicPreferences,
-SyntaxElementMorph, Variable, isSnapObject, console, BooleanSlotMorph*/
+SyntaxElementMorph, Variable, isSnapObject, console, BooleanSlotMorph,
+normalizeCanvas*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2016-June-10';
+modules.store = '2016-June-17';
 
 
 // XML_Serializer ///////////////////////////////////////////////////////
@@ -389,6 +390,7 @@ SnapSerializer.prototype.rawLoadProjectModel = function (xmlNode) {
     if (model.pentrails) {
         project.pentrails = new Image();
         project.pentrails.onload = function () {
+            normalizeCanvas(project.stage.trailsCanvas);
             var context = project.stage.trailsCanvas.getContext('2d');
             context.drawImage(project.pentrails, 0, 0);
             project.stage.changed();
@@ -1508,7 +1510,7 @@ StageMorph.prototype.toXML = function (serializer) {
         this.enableInheritance,
         this.enableSublistIDs,
         StageMorph.prototype.frameRate !== 0,
-        this.trailsCanvas.toDataURL('image/png'),
+        normalizeCanvas(this.trailsCanvas, true).toDataURL('image/png'),
         serializer.store(this.costumes, this.name + '_cst'),
         serializer.store(this.sounds, this.name + '_snd'),
         serializer.store(this.variables),
