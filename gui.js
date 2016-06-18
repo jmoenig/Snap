@@ -71,7 +71,7 @@ isRetinaSupported*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2016-June-01';
+modules.gui = '2016-June-18';
 
 // Declarations
 
@@ -1810,6 +1810,7 @@ IDE_Morph.prototype.toggleRetina = function () {
     }
     this.world().fillPage();
     IDE_Morph.prototype.scriptsPaneTexture = this.scriptsTexture();
+    this.stage.clearPenTrails();
     this.drawNew();
     this.refreshIDE();
 };
