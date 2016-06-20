@@ -868,7 +868,7 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'sensing',
             spec: 'current %dates'
         },
-        reportGet:{
+        reportGet: {
             type: 'reporter',
             category: 'sensing',
             spec: 'my %get',
@@ -971,7 +971,8 @@ SpriteMorph.prototype.initBlocks = function () {
         reportBoolean: {
             type: 'predicate',
             category: 'operators',
-            spec: '%bool'
+            spec: '%bool',
+            alias: 'true false boolean'
         },
         reportJoinWords: {
             type: 'reporter',
