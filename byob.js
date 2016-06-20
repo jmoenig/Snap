@@ -108,7 +108,7 @@ WatcherMorph, Variable*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2016-February-24';
+modules.byob = '2016-June-19';
 
 // Declarations
 
@@ -936,7 +936,7 @@ CustomCommandBlockMorph.prototype.mouseEnter = function () {
         comment.contents.lines.forEach(function (line) {
             help = help + '\n' + line;
         });
-        this.bubbleHelp(
+        this.popUpbubbleHelp(
             help.substr(1),
             this.definition.comment.color
         );
@@ -947,20 +947,6 @@ CustomCommandBlockMorph.prototype.mouseLeave = function () {
     if (this.isTemplate && this.definition.comment) {
         this.world().hand.destroyTemporaries();
     }
-};
-
-// CustomCommandBlockMorph bubble help:
-
-CustomCommandBlockMorph.prototype.bubbleHelp = function (contents, color) {
-    var myself = this;
-    this.fps = 2;
-    this.step = function () {
-        if (this.bounds.containsPoint(this.world().hand.position())) {
-            myself.popUpbubbleHelp(contents, color);
-        }
-        myself.fps = 0;
-        delete myself.step;
-    };
 };
 
 CustomCommandBlockMorph.prototype.popUpbubbleHelp = function (
