@@ -182,7 +182,7 @@ SnapTranslator.dict.ru = {
     'translator_e-mail':
         'svetlanap@berkeley.edu, tema@school830.ru', // optional
     'last_changed':
-        '2016-05-25', // this, too, will appear in the Translators tab
+        '2016-06-21', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -673,7 +673,9 @@ SnapTranslator.dict.ru = {
     'show global custom block definitions as XML\nin a new browser window':
         'представить определения глобальных пользовательских блоков как XML\nв новом окне браузера',
     'Import tools':
-        'Импорт сервисные ср-ва',
+        'Импортировать сервисные ср-ва',
+    'Backgrounds...':
+        'Фоны...',
     'Libraries...':
         'Библиотеки...',
     'load the official library of\npowerful blocks':
