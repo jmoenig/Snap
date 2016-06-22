@@ -868,6 +868,11 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'sensing',
             spec: 'current %dates'
         },
+        reportUsername: {
+              type: 'reporter',
+              category: 'sensing',
+              spec: 'username'
+        },
         reportGet:{
             type: 'reporter',
             category: 'sensing',
@@ -1964,6 +1969,8 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('doSetFastTracking'));
         blocks.push('-');
         blocks.push(block('reportDate'));
+        blocks.push('-');
+        blocks.push(block('reportUsername'));
 
     // for debugging: ///////////////
 
@@ -5732,6 +5739,8 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('doSetFastTracking'));
         blocks.push('-');
         blocks.push(block('reportDate'));
+        blocks.push('-');
+        blocks.push(block('reportUsername'));
 
     // for debugging: ///////////////
 
