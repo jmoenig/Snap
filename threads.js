@@ -3028,6 +3028,10 @@ Process.prototype.reportTimer = function () {
     return 0;
 };
 
+Process.prototype.reportUsername = function () {
+    return SnapCloud.username ? SnapCloud.username : '';
+};
+
 // Process Dates and times in Snap
 Process.prototype.reportDate = function (datefn) {
     var currDate, func, result,
