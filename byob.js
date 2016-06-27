@@ -1745,13 +1745,24 @@ BlockDialogMorph.prototype.fixLayout = function () {
 };
 
 BlockDialogMorph.prototype.accept = function () {
-    if (this.getInput().spec === '') {
-        new DialogBoxMorph().inform(
-            'No name',
-            'Please give a name to this block',
-            this.world()
-        );
-    } else {
+    var myself = this;
+    var hasName = true;
+
+    this.children.forEach(
+        function (child) {
+            if (child instanceof InputFieldMorph &&
+                myself.getInput().spec === '') {
+                new DialogBoxMorph().inform(
+                    'No name',
+                    'Please give a name to this block',
+                    myself.world()
+                );
+                hasName = false;
+            }
+        }
+    );
+
+    if (hasName) {
         BlockDialogMorph.uber.accept.call(this);
     }
 };
