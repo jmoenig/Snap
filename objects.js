@@ -1371,7 +1371,7 @@ SpriteMorph.prototype.fullCopy = function (forClone) {
     var c = SpriteMorph.uber.fullCopy.call(this),
         myself = this,
         arr = [],
-        cb;
+        cb, effect;
 
     c.stopTalking();
     c.color = this.color.copy();
@@ -1414,6 +1414,12 @@ SpriteMorph.prototype.fullCopy = function (forClone) {
         dp.rotatesWithAnchor = part.rotatesWithAnchor;
         c.attachPart(dp);
     });
+    c.graphicsValues = {};
+    for (effect in this.graphicsValues) {
+        if (this.graphicsValues.hasOwnProperty(effect)) {
+            c.graphicsValues[effect] = this.graphicsValues[effect];
+        }
+    }
     return c;
 };
 
