@@ -149,7 +149,7 @@ isSnapObject, copy, PushButtonMorph, SpriteIconMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2016-June-05';
+modules.blocks = '2016-June-28';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -8033,7 +8033,7 @@ BooleanSlotMorph.prototype.isEmptySlot = function () {
 };
 
 BooleanSlotMorph.prototype.setContents = function (boolOrNull, silently) {
-    this.value = boolOrNull;
+    this.value = (typeof boolOrNull === 'boolean') ? boolOrNull : null;
     if (silently) {return; }
     this.drawNew();
     this.changed();
