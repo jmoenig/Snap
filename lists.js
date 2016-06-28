@@ -62,7 +62,7 @@ CellMorph, ArrowMorph, MenuMorph, snapEquals, Morph, isNil, localize,
 MorphicPreferences, TableDialogMorph, SpriteBubbleMorph, SpeechBubbleMorph,
 TableFrameMorph, TableMorph, Variable, isSnapObject*/
 
-modules.lists = '2016-May-02';
+modules.lists = '2016-June-10';
 
 var List;
 var ListWatcherMorph;
@@ -387,9 +387,11 @@ List.prototype.becomeLinked = function () {
         stop = this.length();
         for (i = 0; i < stop; i += 1) {
             tail.first = this.contents[i];
-            tail.rest = new List();
-            tail.isLinked = true;
-            tail = tail.rest;
+            if (i < (stop - 1)) {
+                tail.rest = new List();
+                tail.isLinked = true;
+                tail = tail.rest;
+            }
         }
         this.contents = [];
         this.isLinked = true;
