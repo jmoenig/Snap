@@ -2930,3 +2930,4 @@ http://snap.berkeley.edu/run#cloud:Username=jens&ProjectName=rotation
 == v4.0.7.2 ==== 
 
 * in progress: Retina Display Support, thanks, Bartosz Leper!!
+* in progress: Interactive Toggle Switches for Boolean Slots and Literals

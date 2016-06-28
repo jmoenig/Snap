@@ -80,9 +80,9 @@ document, isNaN, isString, newCanvas, nop, parseFloat, radians, window,
 modules, IDE_Morph, VariableDialogMorph, HTMLCanvasElement, Context, List,
 SpeechBubbleMorph, RingMorph, isNil, FileReader, TableDialogMorph,
 BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
-TableMorph, TableFrameMorph*/
+TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph*/
 
-modules.objects = '2016-May-10';
+modules.objects = '2016-June-13';
 
 var SpriteMorph;
 var StageMorph;
@@ -968,15 +968,10 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'operators',
             spec: 'not %b'
         },
-        reportTrue: {
+        reportBoolean: {
             type: 'predicate',
             category: 'operators',
-            spec: 'true'
-        },
-        reportFalse: {
-            type: 'predicate',
-            category: 'operators',
-            spec: 'false'
+            spec: '%bool'
         },
         reportJoinWords: {
             type: 'reporter',
@@ -1220,6 +1215,14 @@ SpriteMorph.prototype.initBlockMigrations = function () {
         receiveClick: {
             selector: 'receiveInteraction',
             inputs: [['clicked']]
+        },
+        reportTrue: {
+            selector: 'reportBoolean',
+            inputs: [true]
+        },
+        reportFalse: {
+            selector: 'reportBoolean',
+            inputs: [false]
         }
     };
 };
@@ -1292,8 +1295,6 @@ SpriteMorph.prototype.blockAlternatives = {
     reportGreaterThan: ['reportEquals', 'reportLessThan'],
     reportAnd: ['reportOr'],
     reportOr: ['reportAnd'],
-    reportTrue: ['reportFalse'],
-    reportFalse: ['reportTrue'],
 
     // variables
     doSetVar: ['doChangeVar'],
@@ -1991,9 +1992,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('reportAnd'));
         blocks.push(block('reportOr'));
         blocks.push(block('reportNot'));
-        blocks.push('-');
-        blocks.push(block('reportTrue'));
-        blocks.push(block('reportFalse'));
+        blocks.push(block('reportBoolean'));
         blocks.push('-');
         blocks.push(block('reportJoinWords'));
         blocks.push(block('reportTextSplit'));
@@ -2855,14 +2854,14 @@ SpriteMorph.prototype.remove = function () {
     costume in the original sprite has no effect on any of its clones.
 */
 
-SpriteMorph.prototype.createClone = function () {
+SpriteMorph.prototype.createClone = function (immediately) {
     var stage = this.parentThatIsA(StageMorph);
     if (stage && stage.cloneCount <= 2000) {
-        this.fullCopy(true).clonify(stage);
+        this.fullCopy(true).clonify(stage, immediately);
     }
 };
 
-SpriteMorph.prototype.clonify = function (stage) {
+SpriteMorph.prototype.clonify = function (stage, immediately) {
     var hats;
     this.parts.forEach(function (part) {
         part.clonify(stage);
@@ -2881,7 +2880,7 @@ SpriteMorph.prototype.clonify = function (stage) {
             null, // export result
             null, // callback
             null, // is clicked
-            true // right away
+            immediately // without yielding
             );
     });
     this.endWarp();
@@ -3390,7 +3389,7 @@ SpriteMorph.prototype.drawLine = function (start, dest) {
 };
 
 SpriteMorph.prototype.floodFill = function () {
-    var layer = this.parent.penTrails(),
+    var layer = normalizeCanvas(this.parent.penTrails()),
         width = layer.width,
         height = layer.height,
         ctx = layer.getContext('2d'),
@@ -4528,11 +4527,10 @@ SpriteMorph.prototype.fullThumbnail = function (extentPoint) {
 // SpriteMorph Boolean visual representation
 
 SpriteMorph.prototype.booleanMorph = function (bool) {
-    // answer a block which can be shown in watchers, speech bubbles etc.
-    var block = new ReporterBlockMorph(true);
-    block.color = SpriteMorph.prototype.blockColor.operators;
-    block.setSpec(localize(bool.toString()));
-    return block;
+    var sym = new BooleanSlotMorph(bool);
+    sym.isStatic = true;
+    sym.drawNew();
+    return sym;
 };
 
 // SpriteMorph nesting
@@ -5089,7 +5087,7 @@ StageMorph.prototype.colorFiltered = function (aColor, excludedSprite) {
 
     src = img.getContext('2d').getImageData(0, 0, ext.x, ext.y);
     morph.bounds = this.bounds.copy();
-    morph.image = newCanvas(ext);
+    morph.image = newCanvas(ext, true);
     ctx = morph.image.getContext('2d');
     dta = ctx.createImageData(ext.x, ext.y);
     for (i = 0; i < ext.x * ext.y * 4; i += 4) {
@@ -5758,9 +5756,7 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('reportAnd'));
         blocks.push(block('reportOr'));
         blocks.push(block('reportNot'));
-        blocks.push('-');
-        blocks.push(block('reportTrue'));
-        blocks.push(block('reportFalse'));
+        blocks.push(block('reportBoolean'));
         blocks.push('-');
         blocks.push(block('reportJoinWords'));
         blocks.push(block('reportTextSplit'));
@@ -6522,7 +6518,8 @@ SpriteBubbleMorph.prototype.fixLayout = function () {
 // Costume instance creation
 
 function Costume(canvas, name, rotationCenter) {
-    this.contents = canvas || newCanvas(null, true);
+    this.contents = canvas ? normalizeCanvas(canvas, true)
+            : newCanvas(null, true);
     this.shrinkToFit(this.maxExtent());
     this.name = name || null;
     this.rotationCenter = rotationCenter || this.center();

@@ -56,11 +56,12 @@ Color, List, newCanvas, Costume, Sound, Audio, IDE_Morph, ScriptsMorph,
 BlockMorph, ArgMorph, InputSlotMorph, TemplateSlotMorph, CommandSlotMorph,
 FunctionSlotMorph, MultiArgMorph, ColorSlotMorph, nop, CommentMorph, isNil,
 localize, sizeOf, ArgLabelMorph, SVG_Costume, MorphicPreferences,
-SyntaxElementMorph, Variable, isSnapObject, console*/
+SyntaxElementMorph, Variable, isSnapObject, console, BooleanSlotMorph,
+normalizeCanvas*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2016-May-10';
+modules.store = '2016-June-17';
 
 
 // XML_Serializer ///////////////////////////////////////////////////////
@@ -389,6 +390,7 @@ SnapSerializer.prototype.rawLoadProjectModel = function (xmlNode) {
     if (model.pentrails) {
         project.pentrails = new Image();
         project.pentrails.onload = function () {
+            normalizeCanvas(project.stage.trailsCanvas);
             var context = project.stage.trailsCanvas.getContext('2d');
             context.drawImage(project.pentrails, 0, 0);
             project.stage.changed();
@@ -1134,7 +1136,7 @@ SnapSerializer.prototype.loadInput = function (model, input, block) {
 
 SnapSerializer.prototype.loadValue = function (model) {
     // private
-    var v, lst, items, el, center, image, name, audio, option,
+    var v, lst, items, el, center, image, name, audio, option, bool,
         myself = this;
 
     function record() {
@@ -1165,7 +1167,14 @@ SnapSerializer.prototype.loadValue = function (model) {
         throw new Error('expecting a reference id');
     case 'l':
         option = model.childNamed('option');
-        return option ? [option.contents] : model.contents;
+        if (option) {
+            return [option.contents];
+        }
+        bool = model.childNamed('bool');
+        if (bool) {
+            return this.loadValue(bool);
+        }
+        return model.contents;
     case 'bool':
         return model.contents === 'true';
     case 'list':
@@ -1175,7 +1184,7 @@ SnapSerializer.prototype.loadValue = function (model) {
             record();
             lst = v;
             items = model.childrenNamed('item');
-            items.forEach(function (item) {
+            items.forEach(function (item, i) {
                 var value = item.children[0];
                 if (!value) {
                     v.first = 0;
@@ -1187,9 +1196,11 @@ SnapSerializer.prototype.loadValue = function (model) {
                 if (tail) {
                     v.rest = myself.loadValue(tail);
                 } else {
-                    v.rest = new List();
-                    v = v.rest;
-                    v.isLinked = true;
+                    if (i < (items.length - 1)) {
+                        v.rest = new List();
+                        v = v.rest;
+                        v.isLinked = true;
+                    }
                 }
             });
             return lst;
@@ -1248,7 +1259,14 @@ SnapSerializer.prototype.loadValue = function (model) {
             } else {
                 el = model.childNamed('l');
                 if (el) {
-                    v.expression = new InputSlotMorph(el.contents);
+                    bool = el.childNamed('bool');
+                    if (bool) {
+                        v.expression = new BooleanSlotMorph(
+                            this.loadValue(bool)
+                        );
+                    } else {
+                        v.expression = new InputSlotMorph(el.contents);
+                    }
                 }
             }
         }
@@ -1492,7 +1510,7 @@ StageMorph.prototype.toXML = function (serializer) {
         this.enableInheritance,
         this.enableSublistIDs,
         StageMorph.prototype.frameRate !== 0,
-        this.trailsCanvas.toDataURL('image/png'),
+        normalizeCanvas(this.trailsCanvas, true).toDataURL('image/png'),
         serializer.store(this.costumes, this.name + '_cst'),
         serializer.store(this.sounds, this.name + '_snd'),
         serializer.store(this.variables),
@@ -1840,6 +1858,13 @@ CustomBlockDefinition.prototype.toXML = function (serializer) {
 
 ArgMorph.prototype.toXML = function () {
     return '<l/>'; // empty by default
+};
+
+BooleanSlotMorph.prototype.toXML = function () {
+    return (typeof this.value === 'boolean') ?
+            '<l><bool>' + this.value + '</bool></l>'
+                    : '<l/>';
+
 };
 
 InputSlotMorph.prototype.toXML = function (serializer) {

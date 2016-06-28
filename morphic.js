@@ -54,7 +54,8 @@
         (6) development and user modes
         (7) turtle graphics
         (8) damage list housekeeping
-        (9) minifying morphic.js
+        (9) supporting high-resolution "retina" screens
+        (10) minifying morphic.js
     VIII. acknowledgements
     IX. contributors
 
@@ -990,8 +991,54 @@
     methods of SyntaxElementMorph in the Snap application.
 
 
-    (9) minifying morphic.js
-    ------------------------
+    (9) supporting high-resolution "retina" screens
+    -----------------------------------------------
+    By default retina support gets installed when Morphic.js loads. There
+    are two global functions that let you test for retina availability:
+
+        isRetinaSupported() - Bool, answers if retina support is available
+        isRetinaEnabled()   - Bool, answers if currently in retina mode
+
+    and two more functions that let you control retina support if it is
+    available:
+
+        enableRetinaSupport()
+        disableRetinaSupport()
+
+    Both of these internally test whether retina is available, so they are
+    safe to call directly. For an example how to make retina support
+    user-specifiable refer to
+
+        Snap! >> guis.js >> toggleRetina()
+
+    Even when in retina mode it often makes sense to use normal-resolution
+    canvasses for simple shapes in order to save system resources and
+    optimize performance. Examples are costumes and backgrounds in Snap.
+    In Morphic you can create new canvas elements using
+    
+        newCanvas(extentPoint [, nonRetinaFlag])
+
+    If retina support is enabled such new canvasses will automatically be
+    high-resolution canvasses, unless the newCanvas() function is given an
+    otherwise optional second Boolean <true> argument that explicitly makes
+    it a non-retina canvas.
+
+    Not the whole canvas API is supported by Morphic's retina utilities.
+    Especially if your code uses putImageData() you will want to "downgrade"
+    a target high-resolution canvas to a normal-resolution ("non-retina")
+    one before using
+
+        normalizeCanvas(aCanvas [, copyFlag])
+
+    This will change the target canvas' resolution in place (!). If you
+    pass in the optional second Boolean <true> flag the function returns
+    a non-retina copy and leaves the target canvas unchanged. An example
+    of this normalize mechanism is converting the penTrails layer of Snap's
+    stage (high-resolution) into a sprite-costume (normal resolution).
+
+
+    (10) minifying morphic.js
+    -------------------------
     Coming from Smalltalk and being a Squeaker at heart I am a huge fan
     of browsing the code itself to make sense of it. Therefore I have
     included this documentation and (too little) inline comments so all
@@ -1058,7 +1105,7 @@
 
 /*global window, HTMLCanvasElement, FileReader, Audio, FileList*/
 
-var morphicVersion = '2016-May-10';
+var morphicVersion = '2016-May-11';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = getBlurredShadowSupport(); // check for Chrome-bug
 
@@ -1103,6 +1150,32 @@ var touchScreenSettings = {
 };
 
 var MorphicPreferences = standardSettings;
+
+// first, try enabling support for retina displays - can be turned off later
+
+/*
+    Support for retina displays has been pioneered and contributed by
+    Bartosz Leper.
+
+    NOTE: this will make changes to the HTMLCanvasElement that - mostly -
+    make Morphic usable on retina displays in very high resolution mode
+    with crisp fonts and clear fine lines without you (the programmer)
+    needing to know any specifics, provided both the display and the browser
+    support these (Safari currently doesn't), otherwise these utilities will
+    not be installed.
+    If you don't want your Morphic application to support retina resolutions
+    you don't have to edit this morphic.js file to comment out the next line
+    of code, instead you can simply call
+
+        disableRetinaSupport();
+
+    before you create your World(s) in the html page. Disabling retina
+    support also will simply do nothing if retina support is not possible
+    or already disabled, so it's equally safe to call.
+
+    For an example how to make retina support user-specifiable refer to
+    Snap! >> guis.js >> toggleRetina()
+*/
 
 enableRetinaSupport();
 
@@ -1292,6 +1365,48 @@ function copy(target) {
 
 // Retina Display Support //////////////////////////////////////////////
 
+/*
+    By default retina support gets installed when Morphic.js loads. There
+    are two global functions that let you test for retina availability:
+
+        isRetinaSupported() - Boolean, whether retina support is available
+        isRetinaEnabled()   - Boolean, whether currently in retina mode
+
+    and two more functions that let you control retina support if it is
+    available:
+
+        enableRetinaSupport()
+        disableRetinaSupport()
+
+    Both of these internally test whether retina is available, so they are
+    safe to call directly.
+
+    Even when in retina mode it often makes sense to use non-high-resolution
+    canvasses for simple shapes in order to save system resources and
+    optimize performance. Examples are costumes and backgrounds in Snap.
+    In Morphic you can create new canvas elements using
+    
+        newCanvas(extentPoint [, nonRetinaFlag])
+
+    If retina support is enabled such new canvasses will automatically be
+    high-resolution canvasses, unless the newCanvas() function is given an
+    otherwise optional second Boolean <true> argument that explicitly makes
+    it a non-retina canvas.
+
+    Not the whole canvas API is supported by Morphic's retina utilities.
+    Especially if your code uses putImageData() you will want to "downgrade"
+    a target high-resolution canvas to a normal-resolution ("non-retina")
+    one before using
+
+        normalizeCanvas(aCanvas [, copyFlag])
+
+    This will change the target canvas' resolution in place (!). If you
+    pass in the optional second Boolean <true> flag the function returns
+    a non-retina copy and leaves the target canvas unchanged. An example
+    of this normalize mechanism is converting the penTrails layer of Snap's
+    stage (high-resolution) into a sprite-costume (normal resolution).
+*/
+
 function enableRetinaSupport() {
 /*
     === contributed by Bartosz Leper ===
@@ -1304,6 +1419,12 @@ function enableRetinaSupport() {
 
     NOTE: This implementation is not exhaustive; it only implements what is
     needed by the Snap! UI.
+    
+    [Jens]: like all other retina screen support implementations I've seen
+    Bartosz's patch also does not address putImageData() compatibility when
+    mixing retina-enabled and non-retina canvasses. If you need to manipulate
+    pixels in such mixed canvasses, make sure to "downgrade" them all using
+    normalizeCanvas() below.
 */
 
     // Get the window's pixel ratio for canvas elements.
@@ -1323,6 +1444,8 @@ function enableRetinaSupport() {
         canvasProto = HTMLCanvasElement.prototype,
         contextProto = CanvasRenderingContext2D.prototype,
 
+    // [Jens]: keep track of original properties in a dictionary
+    // so they can be iterated over and restored
         uber = {
             drawImage: contextProto.drawImage,
             getImageData: contextProto.getImageData,
@@ -1349,7 +1472,9 @@ function enableRetinaSupport() {
             )
         };
 
-    // check whether properties can be overridden, needed for Safari
+    // [Jens]: only install retina utilities if the display supports them
+    if (backingStorePixelRatio === originalDevicePixelRatio) {return; }
+    // [Jens]: check whether properties can be overridden, needed for Safari
     if (Object.keys(uber).some(function (any) {
         var prop = uber[any];
         return prop.hasOwnProperty('configurable') && (!prop.configurable);
@@ -1361,6 +1486,10 @@ function enableRetinaSupport() {
     }
 
     canvasProto._isRetinaEnabled = true;
+    // [Jens]: remember the original non-retina properties,
+    // so they can be restored again
+    canvasProto._bak = uber;
+
     Object.defineProperty(canvasProto, 'isRetinaEnabled', {
         get: function() {
             return this._isRetinaEnabled;
@@ -1375,7 +1504,8 @@ function enableRetinaSupport() {
                 this.width = prevWidth;
                 this.height = prevHeight;
             }
-        }
+        },
+        configurable: true // [Jens]: allow to be deleted an reconfigured
     });
 
     Object.defineProperty(canvasProto, 'width', {
@@ -1498,6 +1628,87 @@ function enableRetinaSupport() {
             uber.shadowBlur.set.call(this, blur * pixelRatio);
         }
     });
+}
+
+function isRetinaSupported () {
+    var ctx = document.createElement("canvas").getContext("2d"),
+        backingStorePixelRatio = ctx.webkitBackingStorePixelRatio ||
+            ctx.mozBackingStorePixelRatio ||
+            ctx.msBackingStorePixelRatio ||
+            ctx.oBackingStorePixelRatio ||
+            ctx.backingStorePixelRatio || 1,
+        canvasProto = HTMLCanvasElement.prototype,
+        contextProto = CanvasRenderingContext2D.prototype,
+        uber = {
+            drawImage: contextProto.drawImage,
+            getImageData: contextProto.getImageData,
+
+            width: Object.getOwnPropertyDescriptor(
+                canvasProto,
+                'width'
+            ),
+            height: Object.getOwnPropertyDescriptor(
+                canvasProto,
+                'height'
+            ),
+            shadowOffsetX: Object.getOwnPropertyDescriptor(
+                contextProto,
+                'shadowOffsetX'
+            ),
+            shadowOffsetY: Object.getOwnPropertyDescriptor(
+                contextProto,
+                'shadowOffsetY'
+            ),
+            shadowBlur: Object.getOwnPropertyDescriptor(
+                contextProto,
+                'shadowBlur'
+            )
+        };
+    return backingStorePixelRatio !== window.devicePixelRatio &&
+        !(Object.keys(uber).some(function (any) {
+            var prop = uber[any];
+            return prop.hasOwnProperty('configurable') && (!prop.configurable);
+        })
+    );
+}
+
+function isRetinaEnabled () {
+    return HTMLCanvasElement.prototype.hasOwnProperty('_isRetinaEnabled');
+}
+
+function disableRetinaSupport() {
+    // uninstalls Retina utilities. Make sure to re-create every Canvas
+    // element afterwards
+    var canvasProto, contextProto, uber;
+    if (!isRetinaEnabled()) {return; }
+    canvasProto = HTMLCanvasElement.prototype;
+    contextProto = CanvasRenderingContext2D.prototype;
+    uber = canvasProto._bak;
+    Object.defineProperty(canvasProto, 'width', uber.width);
+    Object.defineProperty(canvasProto, 'height', uber.height);
+    contextProto.drawImage = uber.drawImage;
+    contextProto.getImageData = uber.getImageData;
+    Object.defineProperty(contextProto, 'shadowOffsetX', uber.shadowOffsetX);
+    Object.defineProperty(contextProto, 'shadowOffsetY', uber.shadowOffsetY);
+    Object.defineProperty(contextProto, 'shadowBlur', uber.shadowBlur);
+    delete canvasProto._isRetinaEnabled;
+    delete canvasProto.isRetinaEnabled;
+    delete canvasProto._bak;
+}
+
+function normalizeCanvas(aCanvas, getCopy) {
+    // make sure aCanvas is non-retina, otherwise convert it in place (!)
+    // or answer a normalized copy if the "getCopy" flag is <true>
+    var cpy;
+    if (!aCanvas.isRetinaEnabled) {return aCanvas; }
+    cpy = newCanvas(new Point(aCanvas.width, aCanvas.height), true);
+    cpy.getContext('2d').drawImage(aCanvas, 0, 0);
+    if (getCopy) {return cpy; }
+    aCanvas.isRetinaEnabled = false;
+    aCanvas.width = cpy.width;
+    aCanvas.height = cpy.height;
+    aCanvas.getContext('2d').drawImage(cpy, 0, 0);
+    return aCanvas;
 }
 
 // Colors //////////////////////////////////////////////////////////////

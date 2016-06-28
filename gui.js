@@ -66,11 +66,12 @@ List, InputSlotMorph, SnapCloud, Uint8Array, HandleMorph, SVG_Costume,
 fontHeight, hex_sha512, sb, CommentMorph, CommandBlockMorph,
 BlockLabelPlaceHolderMorph, Audio, SpeechBubbleMorph, ScriptFocusMorph,
 XML_Element, WatcherMorph, BlockRemovalDialogMorph, saveAs, TableMorph,
-isSnapObject*/
+isSnapObject, isRetinaEnabled, disableRetinaSupport, enableRetinaSupport,
+isRetinaSupported*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2016-May-10';
+modules.gui = '2016-June-19';
 
 // Declarations
 
@@ -459,6 +460,7 @@ IDE_Morph.prototype.openIn = function (world) {
     }
 
     if (this.userLanguage) {
+        this.loadNewProject = true;
         this.setLanguage(this.userLanguage, interpretUrlAnchors);
     } else {
         interpretUrlAnchors.call(this);
@@ -1798,6 +1800,21 @@ IDE_Morph.prototype.selectSprite = function (sprite) {
     this.currentSprite.scripts.fixMultiArgs();
 };
 
+// IDE_Morph retina display support
+
+IDE_Morph.prototype.toggleRetina = function () {
+    if (isRetinaEnabled()) {
+        disableRetinaSupport();
+    } else {
+        enableRetinaSupport();
+    }
+    this.world().fillPage();
+    IDE_Morph.prototype.scriptsPaneTexture = this.scriptsTexture();
+    this.stage.clearPenTrails();
+    this.drawNew();
+    this.refreshIDE();
+};
+
 // IDE_Morph skins
 
 IDE_Morph.prototype.defaultDesign = function () {
@@ -2265,6 +2282,15 @@ IDE_Morph.prototype.settingsMenu = function () {
         );
     }
     menu.addLine();
+    if (isRetinaSupported()) {
+        addPreference(
+            'Retina display support',
+            'toggleRetina',
+            isRetinaEnabled(),
+            'uncheck for lower resolution,\nsaves computing resources',
+            'check for higher resolution,\nuses more computing resources'
+        );
+    }
     addPreference(
         'Blurred shadows',
         'toggleBlurredShadows',
@@ -2937,9 +2963,10 @@ IDE_Morph.prototype.aboutSnap = function () {
         + 'jens@moenig.org, bh@cs.berkeley.edu\n\n'
 
         + 'Snap! is developed by the University of California, Berkeley\n'
-        + '          with support from the National Science Foundation, '
-        + 'MioSoft,     \n'
-        + 'and the Communications Design Group at SAP Labs. \n'
+        + '          with support from the National Science Foundation (NSF), '
+        + 'MioSoft,          \n'
+        + 'the Communications Design Group (CDG) at SAP Labs, and the\n'
+        + 'Human Advancement Research Community (HARC) at YC Research.\n'
 
         + 'The design of Snap! is influenced and inspired by Scratch,\n'
         + 'from the Lifelong Kindergarten group at the MIT Media Lab\n\n'
@@ -4298,7 +4325,10 @@ IDE_Morph.prototype.languageMenu = function () {
         menu.addItem(
             (SnapTranslator.language === lang ? '\u2713 ' : '    ') +
                 SnapTranslator.languageName(lang),
-            function () {myself.setLanguage(lang); }
+            function () {
+                myself.loadNewProject = false;
+                myself.setLanguage(lang);
+            }
         );
     });
     menu.popup(world, pos);
