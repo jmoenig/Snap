@@ -11420,7 +11420,7 @@ ClassMorph.uber = Morph.prototype;
 function ClassMorph(name, init)
 {
     this.name = name || '';
-    this.init = init || new Expression();
+    this.init = init || new Context();
     this.methods = new List();
 }
 
