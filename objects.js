@@ -1094,8 +1094,8 @@ SpriteMorph.prototype.initBlocks = function () {
         doDeclareClass: {
             type: 'reporter',
             category: 'other',
-            spec: 'class %s init: %c',
-            defaults: ['myclass']
+            spec: 'class %s %t init: %c',
+            defaults: ['myclass','object']
         },
         reportClassName: {
             type: 'reporter',
@@ -1105,7 +1105,8 @@ SpriteMorph.prototype.initBlocks = function () {
         addClassMethod: {
             type: 'command',
             category: 'other',
-            spec: 'Add method to class %s : %c'
+            spec: 'Add method to class %s %t : %c',
+            defaults: [null, 'object']
         },
 
 
