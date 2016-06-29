@@ -1447,11 +1447,16 @@ Process.prototype.doHideVar = function (varName) {
     }
 };
 
-Process.prototype.doDeclareClass = function(name, init) {
-    var cl = new ClassMorph(name, init);
-    this.doIf(cl.init, true);    
-    return cl;
-    //return 'This is future feature (L) CopyLeft by DK';
+Process.prototype.doDeclareClass = function(name, handle, init) {
+    var ctxt, cl;
+    if(init)
+    {
+        ctxt = new Context(null,init);
+        ctxt.inputs = [handle];
+        cl = new ClassMorph(name, ctxt);
+        this.evaluate(cl.init, new List([cl]), true);
+    }
+    return cl; // After if block, DDDDDDDDDDDDDDDDD;
 };
 
 Process.prototype.reportClassName = function(cl) {
@@ -1459,9 +1464,12 @@ Process.prototype.reportClassName = function(cl) {
     return null;
 };
 
-Process.prototype.addClassMethod = function(cl, func)
+Process.prototype.addClassMethod = function(cl, handle, func)
 {
-    if(cl instanceof ClassMorph) cl.addMethod(func);
+    if(cl instanceof ClassMorph) {
+    var ctxt = new Context(null,func);
+    ctxt.inputs = [handle];
+    cl.addMethod(ctxt); }
 }
 
 
