@@ -11407,10 +11407,20 @@ WorldMorph.prototype.togglePreferences = function () {
     }
 };
 
+// Class Object #byDK (C) CopyLeft
+
+var ClassMorph;
+
+// ClassMorph inherits from Morph
+
+ClassMorph.prototype = new Morph();
+ClassMorph.prototype.constructor = ClassMorph;
+ClassMorph.uber = Morph.prototype;
+
 function ClassMorph(name, init)
 {
     this.name = name || '';
-    this.init = init || new Context();
+    this.init = init || new Expression();
     this.methods = new List();
 }
 
