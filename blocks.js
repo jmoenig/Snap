@@ -5799,6 +5799,40 @@ ArgMorph.prototype.init = function (type, silently) {
     this.setExtent(new Point(50, 50), silently);
 };
 
+// ArgMorph preferences settings:
+
+ArgMorph.prototype.executeOnSliderEdit = false;
+
+// ArgMorph events:
+
+ArgMorph.prototype.reactToSliderEdit = function () {
+/*
+    directly execute the stack of blocks I'm part of if my
+    "executeOnSliderEdit" setting is turned on, obeying the stage's
+    thread safety setting. This feature allows for "Bret Victor" style
+    interactive coding.
+*/
+    var block, top, receiver, stage;
+    if (!this.executeOnSliderEdit) {return; }
+    block = this.parentThatIsA(BlockMorph);
+    if (block) {
+        top = block.topBlock();
+        receiver = top.receiver();
+        if (top instanceof PrototypeHatBlockMorph) {
+            return;
+        }
+        if (receiver) {
+            stage = receiver.parentThatIsA(StageMorph);
+            if (stage && stage.isThreadSafe) {
+                stage.threads.startProcess(top, stage.isThreadSafe);
+            } else {
+                top.mouseClickLeft();
+            }
+        }
+    }
+};
+
+
 // ArgMorph drag & drop: for demo puposes only
 
 ArgMorph.prototype.justDropped = function () {
@@ -6934,10 +6968,6 @@ InputSlotMorph.prototype = new ArgMorph();
 InputSlotMorph.prototype.constructor = InputSlotMorph;
 InputSlotMorph.uber = ArgMorph.prototype;
 
-// InputSlotMorph preferences settings:
-
-InputSlotMorph.prototype.executeOnSliderEdit = false;
-
 // InputSlotMorph instance creation:
 
 function InputSlotMorph(text, isNumeric, choiceDict, isReadOnly) {
@@ -7516,33 +7546,6 @@ InputSlotMorph.prototype.reactToEdit = function () {
     this.contents().clearSelection();
 };
 
-InputSlotMorph.prototype.reactToSliderEdit = function () {
-/*
-    directly execute the stack of blocks I'm part of if my
-    "executeOnSliderEdit" setting is turned on, obeying the stage's
-    thread safety setting. This feature allows for "Bret Victor" style
-    interactive coding.
-*/
-    var block, top, receiver, stage;
-    if (!this.executeOnSliderEdit) {return; }
-    block = this.parentThatIsA(BlockMorph);
-    if (block) {
-        top = block.topBlock();
-        receiver = top.receiver();
-        if (top instanceof PrototypeHatBlockMorph) {
-            return;
-        }
-        if (receiver) {
-            stage = receiver.parentThatIsA(StageMorph);
-            if (stage && stage.isThreadSafe) {
-                stage.threads.startProcess(top, stage.isThreadSafe);
-            } else {
-                top.mouseClickLeft();
-            }
-        }
-    }
-};
-
 // InputSlotMorph menu:
 
 InputSlotMorph.prototype.userMenu = function () {
@@ -8082,6 +8085,7 @@ BooleanSlotMorph.prototype.toggleValue = function () {
 
 BooleanSlotMorph.prototype.mouseClickLeft = function () {
     this.toggleValue();
+    this.reactToSliderEdit();
 };
 
 BooleanSlotMorph.prototype.mouseEnter = function () {
@@ -8103,6 +8107,7 @@ BooleanSlotMorph.prototype.mouseLeave = function () {
     this.drawNew();
     this.changed();
 };
+
 
 // BooleanSlotMorph drawing:
 
