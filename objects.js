@@ -3145,7 +3145,7 @@ SpriteMorph.prototype.applyGraphicsEffects = function (canvas) {
   // For every effect: apply transform of that effect(canvas, stored value)
   // Graphic effects from Scratch are heavily based on ScratchPlugin.c
 
-    var ctx, imagedata, pixels, newimagedata;
+    var ctx, imagedata;
 
     function transform_fisheye (imagedata, value) {
         var pixels, newImageData, newPixels, centerX, centerY,
@@ -3187,7 +3187,7 @@ SpriteMorph.prototype.applyGraphicsEffects = function (canvas) {
     function transform_whirl (imagedata, value) {
         var pixels, newImageData, newPixels, w, h, centerX, centerY,
             x, y, radius, scaleX, scaleY, whirlRadians, radiusSquared,
-            dx, dy, d, factor, angle, srcX, srcY, i, srcI;
+            dx, dy, d, factor, angle, srcX, srcY, i, srcI, sina, cosa;
 
         w = imagedata.width;
         h = imagedata.height;
@@ -3269,7 +3269,7 @@ SpriteMorph.prototype.applyGraphicsEffects = function (canvas) {
         value = Math.round((Math.abs(value) + 10) / 10);
         value = Math.max(0, Math.min(value, Math.min(imagedata.width, imagedata.height)));
         for (i = 0, l = pixels.length; i < l; i += 4) {
-            srcI = i * value % l
+            srcI = i * value % l;
             newPixels[i] = pixels[srcI];
             newPixels[i + 1] = pixels[srcI + 1];
             newPixels[i + 2] = pixels[srcI + 2];
@@ -3279,7 +3279,7 @@ SpriteMorph.prototype.applyGraphicsEffects = function (canvas) {
     }
 
     function transform_duplicate (imagedata, value) {
-        var pixels, i, l;
+        var pixels, i;
         pixels = imagedata.data;
         for (i = 0; i < pixels.length; i += 4) {
             pixels[i] = pixels[i * value];
@@ -3306,7 +3306,7 @@ SpriteMorph.prototype.applyGraphicsEffects = function (canvas) {
                 h = s = 0;
             } else {
                 if (max === r) {
-                    h = (60 * (g - b)) / span
+                    h = (60 * (g - b)) / span;
                 } else if (max === g) {
                     h = 120 + ((60 * (b - r)) / span);
                 } else if (max === b) {
@@ -3315,7 +3315,7 @@ SpriteMorph.prototype.applyGraphicsEffects = function (canvas) {
                 s = (max - min) / max;
             }
             if (h < 0) {
-                h += 360
+                h += 360;
             }
             v = max / 255;
 
