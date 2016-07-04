@@ -3431,17 +3431,9 @@ BlockMorph.prototype.scriptPic = function () {
         pic = newCanvas(fb.extent()),
         ctx = pic.getContext('2d');
     this.allComments().forEach(function (comment) {
-        var anchor = comment.anchor;
-        if (anchor) {
-            ctx.drawImage(
-                anchor.image,
-                anchor.left() - fb.left() - 4,
-                anchor.top() - fb.top()
-            );
-        }
         ctx.drawImage(
             comment.fullImageClassic(),
-            comment.left() - fb.left() - 4,
+            comment.fullBounds().left() - fb.left(),
             comment.top() - fb.top()
         );
     });
@@ -5646,7 +5638,7 @@ ScriptsMorph.prototype.scriptsPicture = function () {
     pic = newCanvas(boundingBox.extent());
     ctx = pic.getContext('2d');
     this.children.forEach(function (child) {
-        var pos = child.position();
+        var pos = child.fullBounds().origin;
         if (child.isVisible) {
             ctx.drawImage(
                 child.fullImageClassic(),
