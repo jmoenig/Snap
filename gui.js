@@ -71,7 +71,7 @@ isRetinaSupported*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2016-June-19';
+modules.gui = '2016-July-04';
 
 // Declarations
 
@@ -1904,17 +1904,17 @@ IDE_Morph.prototype.applySavedSettings = function () {
     }
 
     // keyboard editing
-    if (keyboard) {
-        ScriptsMorph.prototype.enableKeyboard = true;
-    } else {
+    if (keyboard === 'false') {
         ScriptsMorph.prototype.enableKeyboard = false;
+    } else {
+        ScriptsMorph.prototype.enableKeyboard = true;
     }
 
     // tables
-    if (tables) {
-        List.prototype.enableTables = true;
-    } else {
+    if (tables === 'false') {
         List.prototype.enableTables = false;
+    } else {
+        List.prototype.enableTables = true;
     }
 
     // tableLines
@@ -2471,9 +2471,9 @@ IDE_Morph.prototype.settingsMenu = function () {
             ScriptsMorph.prototype.enableKeyboard =
                 !ScriptsMorph.prototype.enableKeyboard;
             if (ScriptsMorph.prototype.enableKeyboard) {
-                myself.saveSetting('keyboard', true);
-            } else {
                 myself.removeSetting('keyboard');
+            } else {
+                myself.saveSetting('keyboard', false);
             }
         },
         ScriptsMorph.prototype.enableKeyboard,
@@ -2487,9 +2487,9 @@ IDE_Morph.prototype.settingsMenu = function () {
             List.prototype.enableTables =
                 !List.prototype.enableTables;
             if (List.prototype.enableTables) {
-                myself.saveSetting('tables', true);
-            } else {
                 myself.removeSetting('tables');
+            } else {
+                myself.saveSetting('tables', false);
             }
         },
         List.prototype.enableTables,
