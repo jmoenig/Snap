@@ -82,7 +82,7 @@ SpeechBubbleMorph, RingMorph, isNil, FileReader, TableDialogMorph,
 BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph*/
 
-modules.objects = '2016-June-13';
+modules.objects = '2016-July-04';
 
 var SpriteMorph;
 var StageMorph;
@@ -972,7 +972,14 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'predicate',
             category: 'operators',
             spec: '%bool',
-            alias: 'true false boolean'
+            alias: 'true boolean'
+        },
+        reportFalse: { // special case for keyboard entry and search
+            type: 'predicate',
+            category: 'operators',
+            spec: '%bool',
+            defaults: [false],
+            alias: 'false boolean'
         },
         reportJoinWords: {
             type: 'reporter',
