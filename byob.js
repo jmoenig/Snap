@@ -108,7 +108,7 @@ WatcherMorph, Variable*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2016-June-19';
+modules.byob = '2016-July-04';
 
 // Declarations
 
@@ -1731,24 +1731,10 @@ BlockDialogMorph.prototype.fixLayout = function () {
 };
 
 BlockDialogMorph.prototype.accept = function () {
-    var myself = this;
-    var hasName = true;
-
-    this.children.forEach(
-        function (child) {
-            if (child instanceof InputFieldMorph &&
-                myself.getInput().spec === '') {
-                new DialogBoxMorph().inform(
-                    'No name',
-                    'Please give a name to this block',
-                    myself.world()
-                );
-                hasName = false;
-            }
-        }
-    );
-
-    if (hasName) {
+    if ((this.body instanceof InputFieldMorph) &&
+            (this.normalizeSpaces(this.body.getValue()) === '')) {
+        this.edit();
+    } else {
         BlockDialogMorph.uber.accept.call(this);
     }
 };
