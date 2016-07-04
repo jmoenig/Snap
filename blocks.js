@@ -149,7 +149,7 @@ isSnapObject, copy, PushButtonMorph, SpriteIconMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2016-June-28';
+modules.blocks = '2016-July-04';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -8085,6 +8085,7 @@ BooleanSlotMorph.prototype.toggleValue = function () {
 
 BooleanSlotMorph.prototype.mouseClickLeft = function () {
     this.toggleValue();
+    if (isNil(this.value)) {return; }
     this.reactToSliderEdit();
 };
 
@@ -8107,7 +8108,6 @@ BooleanSlotMorph.prototype.mouseLeave = function () {
     this.drawNew();
     this.changed();
 };
-
 
 // BooleanSlotMorph drawing:
 
