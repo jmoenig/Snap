@@ -149,7 +149,7 @@ isSnapObject, copy, PushButtonMorph, SpriteIconMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2016-July-04';
+modules.blocks = '2016-July-05';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -10357,6 +10357,13 @@ MultiArgMorph.prototype.removeInput = function () {
 // MultiArgMorph events:
 
 MultiArgMorph.prototype.mouseClickLeft = function (pos) {
+    // prevent expansion in the palette
+    // (because it can be hard or impossible to collapse again)
+    if (this.parentThatIsA(BlockMorph).isTemplate &&
+            !this.parentThatIsA(ScriptsMorph)) {
+        this.escalateEvent('mouseClickLeft', pos);
+        return;
+    }
     // if the <shift> key is pressed, repeat action 5 times
     var arrows = this.arrows(),
         leftArrow = arrows.children[0],
