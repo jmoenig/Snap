@@ -10359,8 +10359,7 @@ MultiArgMorph.prototype.removeInput = function () {
 MultiArgMorph.prototype.mouseClickLeft = function (pos) {
     // prevent expansion in the palette
     // (because it can be hard or impossible to collapse again)
-    if (this.parentThatIsA(BlockMorph).isTemplate &&
-            !this.parentThatIsA(ScriptsMorph)) {
+    if (!this.parentThatIsA(ScriptsMorph)) {
         this.escalateEvent('mouseClickLeft', pos);
         return;
     }
