@@ -71,7 +71,7 @@ isRetinaSupported*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2016-July-04';
+modules.gui = '2016-July-06';
 
 // Declarations
 
@@ -226,6 +226,7 @@ IDE_Morph.prototype.init = function (isAutoFill) {
     this.controlBar = null;
     this.categories = null;
     this.palette = null;
+    this.paletteHandle = null;
     this.spriteBar = null;
     this.spriteEditor = null;
     this.stage = null;
@@ -240,6 +241,7 @@ IDE_Morph.prototype.init = function (isAutoFill) {
     this.hasChangedMedia = false;
 
     this.isAnimating = true;
+    this.paletteWidth = 200; // initially same as logo width
     this.stageRatio = 1; // for IDE animations, e.g. when zooming
 
     this.loadNewProject = false; // flag when starting up translated
@@ -852,7 +854,6 @@ IDE_Morph.prototype.createControlBar = function () {
 };
 
 IDE_Morph.prototype.createCategories = function () {
-    // assumes the logo has already been created
     var myself = this;
 
     if (this.categories) {
@@ -860,7 +861,7 @@ IDE_Morph.prototype.createCategories = function () {
     }
     this.categories = new Morph();
     this.categories.color = this.groupColor;
-    this.categories.silentSetWidth(this.logo.width()); // width is fixed
+    this.categories.silentSetWidth(this.paletteWidth);
 
     function addCategoryButton(category) {
         var labelWidth = 75,
@@ -908,7 +909,7 @@ IDE_Morph.prototype.createCategories = function () {
             buttonHeight = myself.categories.children[0].height(),
             border = 3,
             rows =  Math.ceil((myself.categories.children.length) / 2),
-            xPadding = (myself.categories.width()
+            xPadding = (200 // myself.logo.width()
                 - border
                 - buttonWidth * 2) / 3,
             yPadding = 2,
@@ -985,6 +986,13 @@ IDE_Morph.prototype.createPalette = function (forSearching) {
     this.palette.setWidth(this.logo.width());
     this.add(this.palette);
     return this.palette;
+};
+
+IDE_Morph.prototype.createPaletteHandle = function () {
+    // assumes that the palette has already been created
+    if (this.paletteHandle) {this.paletteHandle.destroy(); }
+    this.paletteHandle = new PaletteHandleMorph(this.categories);
+    this.add(this.paletteHandle);
 };
 
 IDE_Morph.prototype.createStage = function () {
@@ -1375,6 +1383,8 @@ IDE_Morph.prototype.createCorral = function () {
     var frame, template, padding = 5, myself = this;
 
     this.createStageHandle();
+    this.createPaletteHandle();
+
     if (this.corral) {
         this.corral.destroy();
     }
@@ -1478,7 +1488,8 @@ IDE_Morph.prototype.createCorral = function () {
 IDE_Morph.prototype.fixLayout = function (situation) {
     // situation is a string, i.e.
     // 'selectSprite' or 'refreshPalette' or 'tabEditor'
-    var padding = this.padding;
+    var padding = this.padding,
+        maxPaletteWidth;
 
     Morph.prototype.trackChanges = false;
 
@@ -1491,12 +1502,14 @@ IDE_Morph.prototype.fixLayout = function (situation) {
         // categories
         this.categories.setLeft(this.logo.left());
         this.categories.setTop(this.logo.bottom());
+        this.categories.setWidth(this.paletteWidth);
     }
 
     // palette
     this.palette.setLeft(this.logo.left());
     this.palette.setTop(this.categories.bottom());
     this.palette.setHeight(this.bottom() - this.palette.top());
+    this.palette.setWidth(this.paletteWidth);
 
     if (situation !== 'refreshPalette') {
         // stage
@@ -1511,11 +1524,21 @@ IDE_Morph.prototype.fixLayout = function (situation) {
             this.stage.setScale(this.isSmallStage ? this.stageRatio : 1);
             this.stage.setTop(this.logo.bottom() + padding);
             this.stage.setRight(this.right());
+            maxPaletteWidth = this.width() -
+                this.stage.width() -
+                this.spriteBar.tabBar.width() -
+                (this.padding * 2);
+            if (this.paletteWidth > maxPaletteWidth) {
+                this.paletteWidth = maxPaletteWidth;
+                this.fixLayout();
+            }
             this.stageHandle.fixLayout();
+            this.paletteHandle.fixLayout();
         }
 
         // spriteBar
-        this.spriteBar.setPosition(this.logo.bottomRight().add(padding));
+        this.spriteBar.setLeft(this.paletteWidth + padding);
+        this.spriteBar.setTop(this.logo.bottom() + padding);
         this.spriteBar.setExtent(new Point(
             Math.max(0, this.stage.left() - padding - this.spriteBar.left()),
             this.categories.bottom() - this.spriteBar.top() - padding
@@ -1584,8 +1607,8 @@ IDE_Morph.prototype.setExtent = function (point) {
     ext = point.max(minExt);
 
     // adjust stage ratio if necessary
-    maxWidth = ext.x - (this.spriteBar.tabBar.fullBounds().right() -
-        this.left());
+    maxWidth = ext.x -
+        (200 + this.spriteBar.tabBar.width() + (this.padding * 2));
     minWidth = SpriteIconMorph.prototype.thumbSize.x * 3;
     maxHeight = (ext.y - SpriteIconMorph.prototype.thumbSize.y * 3.5);
     minRatio = minWidth / this.stage.dimensions.x;
@@ -4175,6 +4198,7 @@ IDE_Morph.prototype.toggleAppMode = function (appMode) {
             this.controlBar.projectButton,
             this.controlBar.settingsButton,
             this.controlBar.stageSizeButton,
+            this.paletteHandle,
             this.stageHandle,
             this.corral,
             this.corralBar,
@@ -7381,3 +7405,83 @@ StageHandleMorph.prototype.mouseLeave = function () {
     this.changed();
 };
 
+// PaletteHandleMorph ////////////////////////////////////////////////////////
+
+// I am a horizontal resizing handle for a blocks palette
+// I pseudo-inherit many things from StageHandleMorph
+
+// PaletteHandleMorph inherits from Morph:
+
+PaletteHandleMorph.prototype = new Morph();
+PaletteHandleMorph.prototype.constructor = PaletteHandleMorph;
+PaletteHandleMorph.uber = Morph.prototype;
+
+// PaletteHandleMorph instance creation:
+
+function PaletteHandleMorph(target) {
+    this.init(target);
+}
+
+PaletteHandleMorph.prototype.init = function (target) {
+    this.target = target || null;
+    HandleMorph.uber.init.call(this);
+    this.color = MorphicPreferences.isFlat ?
+            new Color(255, 255, 255) : new Color(190, 190, 190);
+    this.isDraggable = false;
+    this.noticesTransparentClick = true;
+    this.setExtent(new Point(12, 50));
+};
+
+// PaletteHandleMorph drawing:
+
+PaletteHandleMorph.prototype.drawNew =
+    StageHandleMorph.prototype.drawNew;
+
+PaletteHandleMorph.prototype.drawOnCanvas =
+    StageHandleMorph.prototype.drawOnCanvas;
+
+// PaletteHandleMorph layout:
+
+PaletteHandleMorph.prototype.fixLayout = function () {
+    if (!this.target) {return; }
+    var ide = this.target.parentThatIsA(IDE_Morph);
+    this.setTop(this.target.top() + 10);
+    this.setRight(this.target.right());
+    if (ide) {ide.add(this); } // come to front
+};
+
+// PaletteHandleMorph stepping:
+
+PaletteHandleMorph.prototype.step = null;
+
+PaletteHandleMorph.prototype.mouseDownLeft = function (pos) {
+    var world = this.world(),
+        offset = this.right() - pos.x,
+        ide = this.target.parentThatIsA(IDE_Morph);
+
+    if (!this.target) {
+        return null;
+    }
+    this.step = function () {
+        var newPos;
+        if (world.hand.mouseButton) {
+            newPos = world.hand.bounds.origin.x + offset;
+            ide.paletteWidth = Math.min(
+                Math.max(200, newPos),
+                ide.stageHandle.left() - ide.spriteBar.tabBar.width()
+            );
+            ide.setExtent(world.extent());
+
+        } else {
+            this.step = null;
+        }
+    };
+};
+
+// PaletteHandleMorph events:
+
+PaletteHandleMorph.prototype.mouseEnter
+    = StageHandleMorph.prototype.mouseEnter;
+
+PaletteHandleMorph.prototype.mouseLeave
+    = StageHandleMorph.prototype.mouseLeave;
