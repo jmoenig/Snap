@@ -108,7 +108,7 @@ WatcherMorph, Variable*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2016-July-04';
+modules.byob = '2016-July-06';
 
 // Declarations
 
@@ -1775,6 +1775,7 @@ BlockEditorMorph.prototype.init = function (definition, target) {
 
     // create scripting area
     scripts = new ScriptsMorph(target);
+    scripts.rejectsHats = true;
     scripts.isDraggable = false;
     scripts.color = IDE_Morph.prototype.groupColor;
     scripts.cachedTexture = IDE_Morph.prototype.scriptsPaneTexture;
