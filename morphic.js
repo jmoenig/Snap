@@ -1105,7 +1105,7 @@
 
 /*global window, HTMLCanvasElement, FileReader, Audio, FileList*/
 
-var morphicVersion = '2016-May-11';
+var morphicVersion = '2016-July-06';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = getBlurredShadowSupport(); // check for Chrome-bug
 
@@ -5093,7 +5093,7 @@ CursorMorph.prototype.processKeyDown = function (event) {
         this.keyDownEventUsed = true;
         break;
     case 13:
-        if (this.target instanceof StringMorph) {
+        if ((this.target instanceof StringMorph) || shift) {
             this.accept();
         } else {
             this.insert('\n');
