@@ -44,6 +44,7 @@
         CostumeIconMorph
         WardrobeMorph
         StageHandleMorph;
+        PaletteHandleMorph;
 
 
     credits
@@ -71,7 +72,7 @@ isRetinaSupported*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2016-July-06';
+modules.gui = '2016-July-07';
 
 // Declarations
 
@@ -84,6 +85,7 @@ var WardrobeMorph;
 var SoundIconMorph;
 var JukeboxMorph;
 var StageHandleMorph;
+var PaletteHandleMorph;
 
 // IDE_Morph ///////////////////////////////////////////////////////////
 
@@ -4258,9 +4260,9 @@ IDE_Morph.prototype.toggleAppMode = function (appMode) {
     this.setExtent(this.world().extent()); // resume trackChanges
 };
 
-IDE_Morph.prototype.toggleStageSize = function (isSmall) {
+IDE_Morph.prototype.toggleStageSize = function (isSmall, forcedRatio) {
     var myself = this,
-        smallRatio = 0.5,
+        smallRatio = forcedRatio || 0.5,
         world = this.world(),
         shiftClicked = (world.currentKey === 16),
         altClicked = (world.currentKey === 18);
@@ -4316,6 +4318,29 @@ IDE_Morph.prototype.toggleStageSize = function (isSmall) {
         if (this.isSmallStage) {this.stageRatio = smallRatio; }
         this.setExtent(world.extent());
     }
+};
+
+IDE_Morph.prototype.setPaletteWidth = function (newWidth) {
+    var count = 1,
+        steps = this.isAnimating ? 5 : 1,
+        world = this.world(),
+        myself = this;
+
+    newWidth = Math.max(newWidth, 200);
+    this.fps = 30;
+    this.step = function () {
+        var diff;
+        if (count >= steps) {
+            myself.paletteWidth = newWidth;
+            delete myself.step;
+            myself.fps = 0;
+        } else {
+            count += 1;
+            diff = (myself.paletteWidth - newWidth) / 2;
+            myself.paletteWidth -= diff;
+        }
+        myself.setExtent(world.extent());
+    };
 };
 
 IDE_Morph.prototype.createNewProject = function () {
@@ -7405,6 +7430,10 @@ StageHandleMorph.prototype.mouseLeave = function () {
     this.changed();
 };
 
+StageHandleMorph.prototype.mouseDoubleClick = function () {
+    this.target.parentThatIsA(IDE_Morph).toggleStageSize(true, 1);
+};
+
 // PaletteHandleMorph ////////////////////////////////////////////////////////
 
 // I am a horizontal resizing handle for a blocks palette
@@ -7485,3 +7514,8 @@ PaletteHandleMorph.prototype.mouseEnter
 
 PaletteHandleMorph.prototype.mouseLeave
     = StageHandleMorph.prototype.mouseLeave;
+    
+PaletteHandleMorph.prototype.mouseDoubleClick = function () {
+    this.target.parentThatIsA(IDE_Morph).setPaletteWidth(200);
+};
+
