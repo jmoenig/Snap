@@ -42,7 +42,7 @@
 
 /*global modules, contains*/
 
-modules.locale = '2016-May-10';
+modules.locale = '2016-June-07';
 
 // Global stuff
 
@@ -365,11 +365,11 @@ SnapTranslator.dict.ca = {
     'language_name':
         'Català',
     'language_translator':
-        'Bernat Romagosa Carrasquer',
+        'Bernat Romagosa Carrasquer, Joan Guillén i Pelegay',
     'translator_e-mail':
-        'bromagosa@citilab.eu',
+        'bernat@arduino.org, jguille2@xtec.cat',
     'last_changed':
-        '2016-02-24'
+        '2016-07-07'
 };
 
 SnapTranslator.dict.fi = {
