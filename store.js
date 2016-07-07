@@ -61,7 +61,7 @@ normalizeCanvas*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2016-June-17';
+modules.store = '2016-July-07';
 
 
 // XML_Serializer ///////////////////////////////////////////////////////
@@ -1657,6 +1657,10 @@ WatcherMorph.prototype.toXML = function (serializer) {
                 this.topLeft().subtract(this.parent.topLeft())
                 : this.topLeft();
 
+    if (this.isTemporary()) {
+        // do not save watchers on temporary variables
+        return '';
+    }
     return serializer.format(
         '<watcher% % style="@"% x="@" y="@" color="@,@,@"%%/>',
         (isVar && this.target.owner) || (!isVar && this.target) ?
