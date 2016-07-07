@@ -4033,7 +4033,11 @@ IDE_Morph.prototype.switchToUserMode = function () {
     // onto the World in user-mode
     world.reactToDropOf = function (morph) {
         if (!(morph instanceof DialogBoxMorph)) {
-            world.hand.grab(morph);
+            if (world.hand.grabOrigin) {
+                morph.slideBackTo(world.hand.grabOrigin);
+            } else {
+                world.hand.grab(morph);
+            }
         }
     };
     this.showMessage('entering user mode', 1);
