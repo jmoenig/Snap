@@ -3518,6 +3518,12 @@ BlockExportDialogMorph.prototype.selectNone = function () {
 // BlockExportDialogMorph ops
 
 BlockExportDialogMorph.prototype.exportBlocks = function () {
+    var myself = this;
+
+    this.blocks.forEach(function (def) {
+        myself.findBlockDependencies(def);
+    });
+
     var str = this.serializer.serialize(this.blocks),
         ide = this.world().children[0];
 
@@ -3540,6 +3546,41 @@ BlockExportDialogMorph.prototype.exportBlocks = function () {
             this.world()
         );
     }
+};
+
+BlockExportDialogMorph.prototype.findBlockDependencies = function (def) {
+    var myself = this;
+
+    if (def.body === null) {
+        if (this.blocks.indexOf(def) === -1) {
+            this.blocks.push(def);
+        }
+        return;
+    }
+
+    def.body.expression.blockSequence().forEach(function (block) {
+        myself.addBlockDependencies(block);
+
+        block.allInputs().forEach(function (input) {
+            if (!myself.addBlockDependencies(input)) {
+                myself.addBlockDependencies(input.evaluate());
+            }
+        });
+    });
+
+};
+
+BlockExportDialogMorph.prototype.addBlockDependencies = function (block) {
+    if ((block instanceof CustomCommandBlockMorph
+            || block instanceof CustomReporterBlockMorph)
+            && this.blocks.indexOf(block.definition) === -1) {
+        this.blocks.push(block.definition);
+        this.findBlockDependencies(block.definition);
+
+        return true;
+    }
+
+    return false;
 };
 
 // BlockExportDialogMorph layout
