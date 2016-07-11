@@ -72,7 +72,7 @@ isRetinaSupported*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2016-July-07';
+modules.gui = '2016-July-11';
 
 // Declarations
 
@@ -3021,7 +3021,7 @@ IDE_Morph.prototype.aboutSnap = function () {
         + '\nKartik Chandra: Paint Editor'
         + '\nMichael Ball: Time/Date UI, many bugfixes'
         + '\nBartosz Leper: Retina Display Support'
-        + '\n"Ava" Yuan Yuan: Graphic Effects'
+        + '\n"Ava" Yuan Yuan, Dylan Servilla: Graphic Effects'
         + '\nKyle Hotchkiss: Block search design'
         + '\nIan Reynolds: UI Design, Event Bindings, '
         + 'Sound primitives'

@@ -61,7 +61,7 @@
     sound handling
     Achal Dave contributed research and prototyping for creating music
     using the Web Audio API
-    Yuan Yuan contributed graphic effects for costumes
+    Yuan Yuan and Dylan Servilla contributed graphic effects for costumes
 
 */
 
@@ -82,7 +82,7 @@ SpeechBubbleMorph, RingMorph, isNil, FileReader, TableDialogMorph,
 BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph*/
 
-modules.objects = '2016-July-04';
+modules.objects = '2016-July-11';
 
 var SpriteMorph;
 var StageMorph;
