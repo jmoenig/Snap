@@ -1552,7 +1552,22 @@ IDE_Morph.prototype.fixLayout = function (situation) {
 IDE_Morph.prototype.setProjectName = function (string) {
     this.projectName = string.replace(/['"]/g, ''); // filter quotation marks
     this.hasChangedMedia = true;
+    this.updateDocumentTitleText();
     this.controlBar.updateLabel();
+};
+
+IDE_Morph.prototype.updateDocumentTitleText = function (string) {
+    var text = this.getDocumentTitleText(string || this.projectName);
+    title = document.getElementsByTagName('title')[0];
+    if (title) {
+        title.innerHTML = '';
+        title.appendChild(document.createTextNode(text));
+    }
+};
+
+IDE_Morph.prototype.getDocumentTitleText = function (string) {
+    var text = string || this.projectName;
+    return 'Snap! - ' + text;
 };
 
 // IDE_Morph resizing
@@ -3703,6 +3718,7 @@ IDE_Morph.prototype.rawOpenProjectString = function (str) {
         );
     }
     this.stopFastTracking();
+    this.updateDocumentTitleText();
 };
 
 IDE_Morph.prototype.openCloudDataString = function (str) {
