@@ -1558,11 +1558,7 @@ IDE_Morph.prototype.setProjectName = function (string) {
 
 IDE_Morph.prototype.updateDocumentTitleText = function (string) {
     var text = this.getDocumentTitleText(string || this.projectName);
-    title = document.getElementsByTagName('title')[0];
-    if (title) {
-        title.innerHTML = '';
-        title.appendChild(document.createTextNode(text));
-    }
+    document.title = text;
 };
 
 IDE_Morph.prototype.getDocumentTitleText = function (string) {
