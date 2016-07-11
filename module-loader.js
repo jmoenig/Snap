@@ -44,31 +44,7 @@ ModuleLoader.prototype.loadModule = function(module, api, callback) {
      var process_modules = null;
      var pending = 0;
      var myself = this;
-     var append_module = function(json) {
-         pending += 1;
-         // Load the ZIP file
-         // We can't do jquery here; need to a XMLHttpRequest
-         JSZipUtils.getBinaryContent(json['application_file'], function(err, data) {
-                 // If the module has parents, we need to load those... otherwise all done
-                 var zip = new JSZip(data);
-                 loaded_modules[json['name']] = zip;
-                 var parents = myself.getParents(zip);
-                 if(parents != null) {
-                     for(var k in parents) {
-                        if(!k in loaded_modules) {
-                            $.get({
-                                url: myself.getApplicationURL(k, api),
-                                success: append_module
-                            });
-                        }
-                    }
-                 }
-                 pending -= 1;
-                 if(pending == 0) {
-                     process_modules();
-                 }
-         });
-     }
+         
 
      process_modules = function() {
          var depends_tree = [];
@@ -97,7 +73,26 @@ ModuleLoader.prototype.loadModule = function(module, api, callback) {
      };
 
      // Launch the first request
-     $.get(myself.getApplicationURL(module, api), null, append_module);
+     JSZipUtils.getBinaryContent(myself.getApplicationURL(module, api), function(err, data) {
+		 // If the module has parents, we need to load those... otherwise all done
+		 var zip = new JSZip(data);
+		 loaded_modules[module] = zip;
+		 var parents = myself.getParents(zip);
+		 if(parents != null) {
+			 for(var k in parents) {
+				if(!k in loaded_modules) {
+					$.get({
+						url: myself.getApplicationURL(k, api),
+						success: append_module
+					});
+				}
+			}
+		 }
+		 pending -= 1;
+		 if(pending <= 0) {
+			 process_modules();
+		 }
+	 });
 }
 
 ModuleLoader.prototype.checkVersion = function(moduleVersion, expectedVersion) {
@@ -201,7 +196,7 @@ ModuleLoader.prototype.getApplicationURL = function(module, api_url) {
     //var module_name = this.slugify(module);
     // API doesn't support slugged module names yet
     var module_name = module;
-    return api_url + module_name + '/?format=json';
+    return api_url + module_name + "/" + module_name + ".zip";
 }
 
 ModuleLoader.prototype.slugify = function(text) {
