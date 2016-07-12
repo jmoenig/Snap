@@ -61,7 +61,7 @@ normalizeCanvas*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2016-July-07';
+modules.store = '2016-July-12';
 
 
 // XML_Serializer ///////////////////////////////////////////////////////
@@ -1442,7 +1442,10 @@ Array.prototype.toXML = function (serializer) {
 // Sprites
 
 StageMorph.prototype.toXML = function (serializer) {
-    var thumbnail = this.thumbnail(SnapSerializer.prototype.thumbnailSize),
+    var thumbnail = normalizeCanvas(
+            this.thumbnail(SnapSerializer.prototype.thumbnailSize),
+            true
+        ),
         thumbdata,
         ide = this.parentThatIsA(IDE_Morph);
 
