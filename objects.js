@@ -2004,13 +2004,6 @@ SpriteMorph.prototype.blockTemplates = function (category) {
             blocks.push(block('show3dPen'));
             blocks.push(block('hide3dPen'));
             blocks.push('-');
-            blocks.push(block('setColor'));
-            blocks.push(block('changeHue'));
-            blocks.push(block('setHue'));
-            blocks.push('-');
-            blocks.push(block('changeBrightness'));
-            blocks.push(block('setBrightness'));
-            blocks.push('-');
             blocks.push(block('renderSphere'));
             blocks.push(block('renderBox'));
             blocks.push(block('renderArc'));
@@ -2019,22 +2012,6 @@ SpriteMorph.prototype.blockTemplates = function (category) {
             blocks.push(block('renderText'));
         }
         else {
-            blocks.push(block('clear'));
-            blocks.push('-');
-            blocks.push(block('down'));
-            blocks.push(block('up'));
-            blocks.push('-');
-            blocks.push(block('setColor'));
-            blocks.push(block('changeHue'));
-            blocks.push(block('setHue'));
-            blocks.push('-');
-            blocks.push(block('changeBrightness'));
-            blocks.push(block('setBrightness'));
-            blocks.push('-');
-            blocks.push(block('changeSize'));
-            blocks.push(block('setSize'));
-            blocks.push('-');
-            blocks.push(block('doStamp'));
         }
 
     } else if (cat === 'control') {
