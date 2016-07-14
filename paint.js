@@ -73,7 +73,7 @@ StageMorph, isNil*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.paint = '2016-July-14';
+modules.paint = '2016-May-10';
 
 // Declarations
 
@@ -114,7 +114,9 @@ PaintEditorMorph.prototype.init = function () {
 PaintEditorMorph.prototype.buildContents = function () {
     var myself = this;
 
-    this.paper = new PaintCanvasMorph(function () {return myself.shift; });
+    this.lineCaps = "butt";
+
+    this.paper = new PaintCanvasMorph(function () {return myself.shift; }, function(){return myself.lineCaps; });
     this.paper.setExtent(StageMorph.prototype.dimensions);
 
     this.addBody(new AlignmentMorph('row', this.padding));
@@ -403,12 +405,23 @@ PaintEditorMorph.prototype.populatePropertiesMenu = function () {
         "Constrain proportions of shapes?\n(you can also hold shift)",
         function () {return myself.shift; }
     );
+    pc.lineCaps = new ToggleMorph(
+        "checkbox",
+         this,
+         function () {
+             if (myself.lineCaps === "round") myself.lineCaps = "butt"
+             else myself.lineCaps = "round";
+         },
+         "Use rounded line endings?",
+         function () { return myself.lineCaps === "round"}
+     );
     c.add(pc.colorpicker);
     //c.add(pc.primaryColorButton);
     c.add(pc.primaryColorViewer);
     c.add(new TextMorph(localize("Brush size")));
     c.add(alpen);
     c.add(pc.constrain);
+    c.add(pc.lineCaps);
 };
 
 PaintEditorMorph.prototype.toolButton = function (icon, hint) {
@@ -476,6 +489,15 @@ PaintEditorMorph.prototype.getUserColor = function () {
         hand.processMouseUp = mouseUpBak;
     };
 };
+
+PaintEditorMorph.prototype.silentMouseMove = function(pos){
+    if (this.world().hand.clickedMorph instanceof PaintCanvasMorph) {
+        this.world().hand.clickedMorph.mouseMove(pos);
+    }
+}
+
+PaintEditorMorph.prototype.mouseClickLeft = function(pos){
+}
 
 // AdvancedColorPickerMorph //////////////////
 
@@ -548,8 +570,12 @@ PaintColorPickerMorph.prototype.mouseDownLeft = function (pos) {
     }
 };
 
-PaintColorPickerMorph.prototype.mouseMove =
-    PaintColorPickerMorph.prototype.mouseDownLeft;
+PaintColorPickerMorph.prototype.mouseMove = function(pos){
+    var clicked = this.world().hand.clickedMorph
+    if (this == clicked) {
+        this.mouseDownLeft(pos);
+    }
+}
 
 // PaintCanvasMorph ///////////////////////////
 /*
@@ -561,11 +587,11 @@ PaintCanvasMorph.prototype = new Morph();
 PaintCanvasMorph.prototype.constructor = PaintCanvasMorph;
 PaintCanvasMorph.uber = Morph.prototype;
 
-function PaintCanvasMorph(shift) {
-    this.init(shift);
+function PaintCanvasMorph(shift, lineCaps) {
+    this.init(shift, lineCaps);
 }
 
-PaintCanvasMorph.prototype.init = function (shift) {
+PaintCanvasMorph.prototype.init = function (shift, lineCaps) {
     this.rotationCenter = new Point(240, 180);
     this.dragRect = null;
     this.previousDragPoint = null;
@@ -584,10 +610,12 @@ PaintCanvasMorph.prototype.init = function (shift) {
     };
     this.brushBuffer = [];
     this.undoBuffer = [];
+    console.log(shift);
     this.isShiftPressed = shift || function () {
         var key = this.world().currentKey;
         return (key === 16);
     };
+    this.getLineCaps = lineCaps || function(){ return "butt"; }
     // should we calculate the center of the image ourselves,
     // or use the user position
     this.automaticCrosshairs = true;
@@ -818,154 +846,6 @@ PaintCanvasMorph.prototype.mouseDownLeft = function (pos) {
     }
 };
 
-PaintCanvasMorph.prototype.mouseMove = function (pos) {
-    if (this.currentTool === "paintbucket") {
-        return;
-    }
-
-    var relpos = pos.subtract(this.bounds.origin),
-        mctx = this.mask.getContext("2d"),
-        pctx = this.paper.getContext("2d"),
-        x = this.dragRect.origin.x, // original drag X
-        y = this.dragRect.origin.y, // original drag y
-        p = relpos.x,               // current drag x
-        q = relpos.y,               // current drag y
-        w = (p - x) / 2,            // half the rect width
-        h = (q - y) / 2,            // half the rect height
-        i,                          // iterator number
-        width = this.paper.width;
-
-    mctx.save();
-    function newW() {
-        return Math.max(Math.abs(w), Math.abs(h)) * (w / Math.abs(w));
-    }
-    function newH() {
-        return Math.max(Math.abs(w), Math.abs(h)) * (h / Math.abs(h));
-    }
-    this.brushBuffer.push([p, q]);
-    mctx.lineWidth = this.settings.linewidth;
-    mctx.clearRect(0, 0, this.bounds.width(), this.bounds.height()); // mask
-
-    this.dragRect.corner = relpos.subtract(this.dragRect.origin); // reset crn
-
-    if (this.settings.primarycolor === "transparent" &&
-            this.currentTool !== "crosshairs") {
-        this.merge(this.erasermask, this.mask);
-        pctx.clearRect(0, 0, this.bounds.width(), this.bounds.height());
-        mctx.globalCompositeOperation = "destination-out";
-    } else {
-        mctx.fillStyle = this.settings.primarycolor.toString();
-        mctx.strokeStyle = this.settings.primarycolor.toString();
-    }
-    switch (this.currentTool) {
-    case "rectangle":
-        if (this.isShiftPressed()) {
-            mctx.strokeRect(x, y, newW() * 2, newH() * 2);
-        } else {
-            mctx.strokeRect(x, y, w * 2, h * 2);
-        }
-        break;
-    case "rectangleSolid":
-        if (this.isShiftPressed()) {
-            mctx.fillRect(x, y, newW() * 2, newH() * 2);
-        } else {
-            mctx.fillRect(x, y, w * 2, h * 2);
-        }
-        break;
-    case "brush":
-        mctx.lineCap = "round";
-        mctx.lineJoin = "round";
-        mctx.beginPath();
-        mctx.moveTo(this.brushBuffer[0][0], this.brushBuffer[0][1]);
-        for (i = 0; i < this.brushBuffer.length; i += 1) {
-            mctx.lineTo(this.brushBuffer[i][0], this.brushBuffer[i][1]);
-        }
-        mctx.stroke();
-        break;
-    case "line":
-        mctx.beginPath();
-        mctx.moveTo(x, y);
-        if (this.isShiftPressed()) {
-            if (Math.abs(h) > Math.abs(w)) {
-                mctx.lineTo(x, q);
-            } else {
-                mctx.lineTo(p, y);
-            }
-        } else {
-            mctx.lineTo(p, q);
-        }
-        mctx.stroke();
-        break;
-    case "circle":
-    case "circleSolid":
-        mctx.beginPath();
-        if (this.isShiftPressed()) {
-            mctx.arc(
-                x,
-                y,
-                new Point(x, y).distanceTo(new Point(p, q)),
-                0,
-                Math.PI * 2,
-                false
-            );
-        } else {
-            for (i = 0; i < width; i += 1) {
-                mctx.lineTo(
-                    i,
-                    (2 * h) * Math.sqrt(2 - Math.pow(
-                        (i - x) / (2 * w),
-                        2
-                    )) + y
-                );
-            }
-            for (i = width; i > 0; i -= 1) {
-                mctx.lineTo(
-                    i,
-                    -1 * (2 * h) * Math.sqrt(2 - Math.pow(
-                        (i - x) / (2 * w),
-                        2
-                    )) + y
-                );
-            }
-        }
-        mctx.closePath();
-        if (this.currentTool === "circleSolid") {
-            mctx.fill();
-        } else {
-            if (this.currentTool === "circle") {
-                mctx.stroke();
-            }
-        }
-        break;
-    case "crosshairs":
-        // Disable automatic crosshairs: user has now chosen where they should be.
-        this.automaticCrosshairs = false;
-        this.rotationCenter = relpos.copy();
-        this.drawcrosshair(mctx);
-        break;
-    case "eraser":
-        this.merge(this.paper, this.mask);
-        mctx.save();
-        mctx.globalCompositeOperation = "destination-out";
-        mctx.beginPath();
-        mctx.moveTo(this.brushBuffer[0][0], this.brushBuffer[0][1]);
-        for (i = 0; i < this.brushBuffer.length; i += 1) {
-            mctx.lineTo(this.brushBuffer[i][0], this.brushBuffer[i][1]);
-        }
-        mctx.stroke();
-        mctx.restore();
-        this.paper = newCanvas(this.extent(), true);
-        this.merge(this.mask, this.paper);
-        break;
-    default:
-        nop();
-    }
-    this.previousDragPoint = relpos;
-    this.drawNew();
-    this.changed();
-    mctx.restore();
-};
-
 PaintCanvasMorph.prototype.mouseClickLeft = function () {
     if (this.currentTool !== "crosshairs") {
         this.merge(this.mask, this.paper);
@@ -973,8 +853,184 @@ PaintCanvasMorph.prototype.mouseClickLeft = function () {
     this.brushBuffer = [];
 };
 
-PaintCanvasMorph.prototype.mouseLeaveDragging
-    = PaintCanvasMorph.prototype.mouseClickLeft;
+PaintCanvasMorph.prototype.mouseMove = function (pos, btn, forced) {
+    if(forced || world.hand.morphAtPointer().paper instanceof HTMLElement){
+	    if (this.currentTool === "paintbucket") {
+		return;
+	    }
+	    if(this.world().hand.clickedMorph != this) return;
+
+	    var relpos = pos.subtract(this.bounds.origin),
+		mctx = this.mask.getContext("2d"),
+		pctx = this.paper.getContext("2d"),
+		x = this.dragRect.origin.x, // original drag X
+		y = this.dragRect.origin.y, // original drag y
+		p = relpos.x,               // current drag x
+		q = relpos.y,               // current drag y
+		w = (p - x) / 2,            // half the rect width
+		h = (q - y) / 2,            // half the rect height
+		i,                          // iterator number
+		width = this.paper.width;
+
+	    mctx.save();
+	    function newW() {
+		return Math.max(Math.abs(w), Math.abs(h)) * (w / Math.abs(w));
+	    }
+	    function newH() {
+		return Math.max(Math.abs(w), Math.abs(h)) * (h / Math.abs(h));
+	    }
+	    this.brushBuffer.push([p, q]);
+	    mctx.lineWidth = this.settings.linewidth;
+	    mctx.clearRect(0, 0, this.bounds.width(), this.bounds.height()); // mask
+
+	    this.dragRect.corner = relpos.subtract(this.dragRect.origin); // reset crn
+
+	    if (this.settings.primarycolor === "transparent" &&
+		    this.currentTool !== "crosshairs") {
+		this.merge(this.erasermask, this.mask);
+		pctx.clearRect(0, 0, this.bounds.width(), this.bounds.height());
+		mctx.globalCompositeOperation = "destination-out";
+	    } else {
+		mctx.fillStyle = this.settings.primarycolor.toString();
+		mctx.strokeStyle = this.settings.primarycolor.toString();
+	    }
+	    switch (this.currentTool) {
+	    case "rectangle":
+		mctx.lineCap = this.getLineCaps() || "butt";
+		mctx.lineJoin = this.getLineCaps() || "butt";
+		if (this.isShiftPressed()) {
+		    mctx.strokeRect(x, y, newW() * 2, newH() * 2);
+		} else {
+		    mctx.strokeRect(x, y, w * 2, h * 2);
+		}
+		break;
+	    case "rectangleSolid":
+		mctx.lineCap = this.getLineCaps() || "butt";
+		mctx.lineJoin = this.getLineCaps() || "butt";
+	    	console.log("detected");
+		if (this.isShiftPressed()) {
+		    mctx.fillRect(x, y, newW() * 2, newH() * 2);
+		} else {
+		    mctx.fillRect(x, y, w * 2, h * 2);
+		}
+		break;
+	    case "brush":
+		mctx.lineCap = this.getLineCaps() || "round";
+		mctx.lineJoin = this.getLineCaps() || "round";
+		mctx.beginPath();
+		mctx.moveTo(this.brushBuffer[0][0], this.brushBuffer[0][1]);
+		for (i = 0; i < this.brushBuffer.length; i += 1) {
+		    mctx.lineTo(this.brushBuffer[i][0], this.brushBuffer[i][1]);
+		}
+		mctx.stroke();
+		break;
+	    case "line":
+		mctx.lineCap = this.getLineCaps() || "butt";
+		mctx.lineJoin = this.getLineCaps() || "butt";
+		mctx.beginPath();
+		mctx.moveTo(x, y);
+		if (this.isShiftPressed()) {
+		    if (Math.abs(h) > Math.abs(w)) {
+			mctx.lineTo(x, q);
+		    } else {
+			mctx.lineTo(p, y);
+		    }
+		} else {
+		    mctx.lineTo(p, q);
+		}
+		mctx.stroke();
+		break;
+	    case "circle":
+	    case "circleSolid":
+		mctx.beginPath();
+		if (this.isShiftPressed()) {
+		    mctx.arc(
+			x,
+			y,
+			new Point(x, y).distanceTo(new Point(p, q)),
+			0,
+			Math.PI * 2,
+			false
+		    );
+		} else {
+		    for (i = 0; i < width; i += 1) {
+			mctx.lineTo(
+			    i,
+			    (2 * h) * Math.sqrt(2 - Math.pow(
+				(i - x) / (2 * w),
+				2
+			    )) + y
+			);
+		    }
+		    for (i = width; i > 0; i -= 1) {
+			mctx.lineTo(
+			    i,
+			    -1 * (2 * h) * Math.sqrt(2 - Math.pow(
+				(i - x) / (2 * w),
+				2
+			    )) + y
+			);
+		    }
+		}
+		mctx.closePath();
+		if (this.currentTool === "circleSolid") {
+		    mctx.fill();
+		} else {
+		    if (this.currentTool === "circle") {
+			mctx.stroke();
+		    }
+		}
+		break;
+	    case "crosshairs":
+		// Disable automatic crosshairs: user has now chosen where they should be.
+		this.automaticCrosshairs = false;
+		this.rotationCenter = relpos.copy();
+		this.drawcrosshair(mctx);
+		break;
+	    case "eraser":
+		mctx.lineCap = this.getLineCaps() || "butt";
+		mctx.lineJoin = this.getLineCaps() || "butt";
+		this.merge(this.paper, this.mask);
+		mctx.save();
+		mctx.globalCompositeOperation = "destination-out";
+		mctx.beginPath();
+		mctx.moveTo(this.brushBuffer[0][0], this.brushBuffer[0][1]);
+		for (i = 0; i < this.brushBuffer.length; i += 1) {
+		    mctx.lineTo(this.brushBuffer[i][0], this.brushBuffer[i][1]);
+		}
+		mctx.stroke();
+		mctx.restore();
+		this.paper = newCanvas(this.extent(), true);
+		this.merge(this.mask, this.paper);
+		break;
+	    default:
+		nop();
+	    }
+	    this.previousDragPoint = relpos;
+	    this.drawNew();
+	    this.changed();
+	    mctx.restore();
+    }
+};
+
+PaintCanvasMorph.prototype.mouseEnter = function(pos, prevPos, btn) {
+    if (!btn) {
+        this.mouseClickLeft();
+    }
+}
+
+
+PaintCanvasMorph.prototype.mouseEnterDragging = function(pos, prevPos){
+    var p = prevPos.subtract(this.bounds.origin);
+    this.brushBuffer.push([p.x, p.y]);
+}
+
+PaintCanvasMorph.prototype.mouseLeaveDragging = function(pos, btn){
+    this.mouseMove(pos, btn, true);
+    if (this.currentTool === "brush" || this.currentTool === "eraser"){
+        this.mouseClickLeft.apply(this,arguments);
+    }
+}
 
 PaintCanvasMorph.prototype.buildContents = function () {
     this.background = newCanvas(this.extent());
