@@ -2929,5 +2929,30 @@ http://snap.berkeley.edu/run#cloud:Username=jens&ProjectName=rotation
 
 == v4.0.7.2 ==== 
 
-* in progress: Retina Display Support, thanks, Bartosz Leper!!
-* in progress: Interactive Toggle Switches for Boolean Slots and Literals
+* New Features
+  - Retina Display Support, thanks, Bartosz Leper!!
+  - Additional Graphic Effects, thanks, Dylan Servilla!!
+  - Interactive Toggle Switches for Boolean Slots and Literals
+  - Resizable Palette (double-click on resizers to slide back to normal)
+
+* New Default Settings (now enabled by default)
+  - Keyboard Editing
+  - Tables Support
+
+* Bugfixes (most notable only):
+  - reject dropping hat-blocks into block editor scripting areas
+  - accept multi-line inputs (e.g. in JS-functions or code-mapping blocks) with shift-enter
+  - prevent “make a block” dialog from being closed by pressing “OK” if no label text has been specified
+  - show error message balloons happening in other sprites next to their icon in the sprite-corral
+  - (again) enable recursive cloning
+  - prevent expandable blocks from expanding / collapsing inside the palette
+
+* Translation updates
+  - Italian
+  - Swedish
+  - Chinese
+  - Russian
+  - Catalan
+  - German
+
+== v4.0.8 ==== - retina screen support -

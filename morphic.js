@@ -105,7 +105,6 @@
     the following list shows the order in which all constructors are
     defined. Use this list to locate code in this document:
 
-
     Global settings
     Global functions
 
@@ -155,7 +154,6 @@
     IV. open issues
     ----------------
     - clipboard support (copy & paste) for non-textual data
-    - native (unscaled) high-resolution display support
 
 
     V. browser compatibility
@@ -1105,7 +1103,7 @@
 
 /*global window, HTMLCanvasElement, FileReader, Audio, FileList*/
 
-var morphicVersion = '2016-July-06';
+var morphicVersion = '2016-July-14';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = getBlurredShadowSupport(); // check for Chrome-bug
 
