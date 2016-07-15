@@ -105,6 +105,7 @@
     the following list shows the order in which all constructors are
     defined. Use this list to locate code in this document:
 
+
     Global settings
     Global functions
 
@@ -154,6 +155,7 @@
     IV. open issues
     ----------------
     - clipboard support (copy & paste) for non-textual data
+    - native (unscaled) high-resolution display support
 
 
     V. browser compatibility
@@ -1103,7 +1105,7 @@
 
 /*global window, HTMLCanvasElement, FileReader, Audio, FileList*/
 
-var morphicVersion = '2016-July-14';
+var morphicVersion = '2016-May-11';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = getBlurredShadowSupport(); // check for Chrome-bug
 
@@ -5091,7 +5093,7 @@ CursorMorph.prototype.processKeyDown = function (event) {
         this.keyDownEventUsed = true;
         break;
     case 13:
-        if ((this.target instanceof StringMorph) || shift) {
+        if (this.target instanceof StringMorph) {
             this.accept();
         } else {
             this.insert('\n');
@@ -9965,6 +9967,8 @@ HandMorph.prototype.init = function (aWorld) {
     this.temporaries = [];
     this.touchHoldTimeout = null;
     this.contextMenuEnabled = false;
+
+    this.clickedMorph = null;
 };
 
 HandMorph.prototype.changed = function () {
@@ -10121,6 +10125,7 @@ HandMorph.prototype.processMouseDown = function (event) {
             morph = morph.parent;
         }
         morph[actualClick](this.bounds.origin);
+        this.clickedMorph = morph;
     }
 };
 
@@ -10193,6 +10198,7 @@ HandMorph.prototype.processMouseUp = function () {
         morph[expectedClick](this.bounds.origin);
     }
     this.mouseButton = null;
+    this.clickedMorph = null
 };
 
 HandMorph.prototype.processDoubleClick = function () {
@@ -10225,11 +10231,35 @@ HandMorph.prototype.processMouseMove = function (event) {
         event.pageY - posInDocument.y
     );
 
+    var prevPos = this.position();
+
     this.setPosition(pos);
 
     // determine the new mouse-over-list:
     // mouseOverNew = this.allMorphsAtPointer();
     mouseOverNew = this.morphAtPointer().allParents();
+
+    mouseOverNew.forEach(function (newMorph) {
+        if (!contains(myself.mouseOverList, newMorph)) {
+            if (newMorph.mouseEnter) {
+                newMorph.mouseEnter(pos, prevPos, myself.mouseButton);
+            }
+            if (newMorph.mouseEnterDragging && myself.mouseButton) {
+                newMorph.mouseEnterDragging(pos, prevPos, myself.mouseButton);
+            }
+        }
+
+        // autoScrolling support:
+        if (myself.children.length > 0) {
+            if (newMorph instanceof ScrollFrameMorph) {
+                if (!newMorph.bounds.insetBy(
+                        MorphicPreferences.scrollBarSize * 3
+                    ).containsPoint(myself.bounds.origin)) {
+                    newMorph.startAutoScrolling();
+                }
+            }
+        }
+    });
 
     if (!this.children.length && this.mouseButton) {
         topMorph = this.morphAtPointer();
@@ -10262,39 +10292,22 @@ HandMorph.prototype.processMouseMove = function (event) {
             }
             this.setPosition(pos);
         }
+    	if (this.mouseButton && topMorph.silentMouseMove) {
+            topMorph.silentMouseMove(pos,this.mouseButton);
+        }
     }
-
+    
     this.mouseOverList.forEach(function (old) {
         if (!contains(mouseOverNew, old)) {
             if (old.mouseLeave) {
-                old.mouseLeave();
+                old.mouseLeave(myself.mouseButton);
             }
             if (old.mouseLeaveDragging && myself.mouseButton) {
-                old.mouseLeaveDragging();
+                old.mouseLeaveDragging(pos, myself.mouseButton);
             }
         }
     });
-    mouseOverNew.forEach(function (newMorph) {
-        if (!contains(myself.mouseOverList, newMorph)) {
-            if (newMorph.mouseEnter) {
-                newMorph.mouseEnter();
-            }
-            if (newMorph.mouseEnterDragging && myself.mouseButton) {
-                newMorph.mouseEnterDragging();
-            }
-        }
 
-        // autoScrolling support:
-        if (myself.children.length > 0) {
-            if (newMorph instanceof ScrollFrameMorph) {
-                if (!newMorph.bounds.insetBy(
-                        MorphicPreferences.scrollBarSize * 3
-                    ).containsPoint(myself.bounds.origin)) {
-                    newMorph.startAutoScrolling();
-                }
-            }
-        }
-    });
     this.mouseOverList = mouseOverNew;
 };
 
