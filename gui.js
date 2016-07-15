@@ -329,7 +329,7 @@ IDE_Morph.prototype.openIn = function (world) {
 
     if(config.modules !== undefined && config.modules.module !== undefined ) {
         var mdl = new ModuleLoader(myself);
-        mdl.loadModule(config.modules.module, config.urls.module_api, load_project);
+        mdl.loadModule(config.modules.module, config.urls.applications_root, load_project);
     } else {
         load_project();
     }
