@@ -149,7 +149,7 @@ isSnapObject, copy, PushButtonMorph, SpriteIconMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2016-July-14';
+modules.blocks = '2016-July-15';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -12110,7 +12110,7 @@ ScriptFocusMorph.prototype.deleteLastElement = function () {
 };
 
 ScriptFocusMorph.prototype.insertBlock = function (block) {
-    var pb;
+    var pb, stage, ide;
     block.isTemplate = false;
     block.isDraggable = true;
 
@@ -12173,6 +12173,21 @@ ScriptFocusMorph.prototype.insertBlock = function (block) {
     this.editor.adjustBounds();
     // block.scrollIntoView();
     this.fixLayout();
+
+    // register generic hat blocks
+    if (block.selector === 'receiveCondition') {
+        if (this.editor.owner) {
+            stage = this.editor.owner.parentThatIsA(StageMorph);
+            if (stage) {
+                stage.enableCustomHatBlocks = true;
+                stage.threads.pauseCustomHatBlocks = false;
+                ide = stage.parentThatIsA(IDE_Morph);
+                if (ide) {
+                    ide.controlBar.stopButton.refresh();
+                }
+            }
+        }
+    }
 };
 
 ScriptFocusMorph.prototype.insertVariableGetter = function () {

@@ -2929,6 +2929,8 @@ http://snap.berkeley.edu/run#cloud:Username=jens&ProjectName=rotation
 
 == v4.0.7.2 ==== 
 
+160714
+------
 * New Features
   - Retina Display Support, thanks, Bartosz Leper!!
   - Additional Graphic Effects, thanks, Dylan Servilla!!
@@ -2956,3 +2958,10 @@ http://snap.berkeley.edu/run#cloud:Username=jens&ProjectName=rotation
   - German
 
 == v4.0.8 ==== - retina screen support -
+
+160715
+------
+* Blocks: activate generic hat blocks inserted via keyboard editing
+
+== v4.0.8.1 ====
+
