@@ -2681,6 +2681,12 @@ IDE_Morph.prototype.projectMenu = function () {
             );
             document.body.appendChild(inp);
             myself.filePicker = inp;
+            document.body.onfocus = 		
+                function () {		
+                    document.body.removeChild(inp);		
+                    myself.filePicker = null;		
+                    document.body.onfocus = null;		
+                };
             inp.click();
         },
         'file menu import hint' // looks up the actual text in the translator
