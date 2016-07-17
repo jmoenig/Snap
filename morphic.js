@@ -10387,14 +10387,12 @@ HandMorph.prototype.processDrop = function (event) {
     }
 
     function readAudio(aFile) {
-        var snd = new Audio(),
-            frd = new FileReader();
+        var frd = new FileReader();
         while (!target.droppedAudio) {
             target = target.parent;
         }
         frd.onloadend = function (e) {
-            snd.src = e.target.result;
-            target.droppedAudio(snd, aFile.name);
+            target.droppedAudio(e.target.result, aFile.name);
         };
         frd.readAsDataURL(aFile);
     }

@@ -2810,11 +2810,8 @@ IDE_Morph.prototype.projectMenu = function () {
         createMediaMenu(
             'Sounds',
             function loadSound(file, name) {
-                var url = myself.resourceURL('Sounds', file),
-                    audio = new Audio();
-                audio.src = url;
-                audio.load();
-                myself.droppedAudio(audio, name);
+                var url = myself.resourceURL('Sounds', file);
+                myself.droppedAudio(url, name);
             }
         ),
         'Select a sound from the media library'
@@ -4009,7 +4006,7 @@ IDE_Morph.prototype.saveFileAs = function (
 IDE_Morph.prototype.saveCanvasAs = function (canvas, fileName, newWindow) {
     // Export a Canvas object as a PNG image
     // Note: This commented out due to poor browser support.
-    // cavas.toBlob() is currently supported in Firefox, IE, Chrome but 
+    // cavas.toBlob() is currently supported in Firefox, IE, Chrome but
     // browsers prevent easily saving the generated files.
     // Do not re-enable without revisiting issue #1191
     // if (canvas.toBlob) {
@@ -6410,7 +6407,7 @@ SpriteIconMorph.prototype.copyCostume = function (costume) {
 
 SpriteIconMorph.prototype.copySound = function (sound) {
     var dup = sound.copy();
-    this.object.addSound(dup.audio, dup.name);
+    this.object.addSound(dup.url, dup.name, dup.buffer);
 };
 
 // CostumeIconMorph ////////////////////////////////////////////////////
@@ -7105,24 +7102,32 @@ SoundIconMorph.prototype.createThumbnail = function () {
 };
 
 SoundIconMorph.prototype.createInfo = function () {
-    var dur = Math.round(this.object.audio.duration || 0),
-        mod = dur % 60;
-    return Math.floor(dur / 60).toString()
-            + ":"
-            + (mod < 10 ? "0" : "")
-            + mod.toString();
+    var dur, mod;
+    if (this.object.loaded) {
+        var dur = Math.round(this.object.buffer.duration),
+            mod = dur % 60;
+        return Math.floor(dur / 60).toString()
+                + ":"
+                + (mod < 10 ? "0" : "")
+                + mod.toString();
+    } else {
+        return '0:00';
+    }
 };
 
 SoundIconMorph.prototype.toggleAudioPlaying = function () {
     var myself = this;
+    if (!this.object.loaded) {
+        return null;
+    }
     if (!this.object.previewAudio) {
         //Audio is not playing
         this.button.labelString = 'Stop';
         this.button.hint = 'Stop sound';
-        this.object.previewAudio = this.object.play();
-        this.object.previewAudio.addEventListener('ended', function () {
+        this.object.previewAudio = this.object.play(SnapAudioContext.destination);
+        this.object.previewAudio.onended = function () {
             myself.audioHasEnded();
-        }, false);
+        };
     } else {
         //Audio is currently playing
         this.button.labelString = 'Play';
@@ -7144,10 +7149,8 @@ SoundIconMorph.prototype.createLabel
 
 // SoundIconMorph stepping
 
-/*
 SoundIconMorph.prototype.step
     = SpriteIconMorph.prototype.step;
-*/
 
 // SoundIconMorph layout
 
@@ -7175,8 +7178,6 @@ SoundIconMorph.prototype.renameSound = function () {
             if (answer && (answer !== sound.name)) {
                 sound.name = answer;
                 sound.version = Date.now();
-                myself.createLabel(); // can be omitted once I'm stepping
-                myself.fixLayout(); // can be omitted once I'm stepping
                 ide.hasChangedMedia = true;
             }
         }

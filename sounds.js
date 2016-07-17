@@ -2,6 +2,7 @@
 
 var SnapAudioContext;
 var Sound;
+var SoundPlayer;
 var SoundBank;
 var SnapSoundBank;
 var Note;
@@ -40,31 +41,96 @@ function pitchForKey (key) {
 
 // Sound instance creation
 
-function Sound(audio, name) {
-    this.audio = audio; // mandatory
+function Sound(url, name, buffer) {
+    var request,
+        myself = this;
+
+    this.url = url; // mandatory
     this.name = name || "Sound";
+    this.version = Date.now();
+
+    if (buffer) {
+        this.buffer = buffer;
+        this.loaded = true;
+    } else {
+        request = new XMLHttpRequest();
+        request.open('GET', url, true);
+        request.responseType = 'arraybuffer';
+        request.onload = function () {
+            SnapAudioContext.decodeAudioData(
+                request.response,
+                function (buffer) {
+                    myself.buffer = buffer;
+                    myself.loaded = true;
+                    myself.version = Date.now();
+                },
+                function (error) {
+                    throw error;
+                }
+            );
+        };
+        request.send();
+    }
 }
 
-Sound.prototype.play = function () {
-    // return an instance of an audio element which can be terminated
+Sound.prototype.play = function (destination) {
+    // return an instance of a sound player which can be terminated
     // externally (i.e. by the stage)
-    var aud = document.createElement('audio');
-    aud.src = this.audio.src;
-    aud.play();
-    return aud;
+    var player = new SoundPlayer(this.buffer, destination);
+    player.play();
+    return player;
 };
 
 Sound.prototype.copy = function () {
-    var snd = document.createElement('audio'),
-        cpy;
-
-    snd.src = this.audio.src;
-    cpy = new Sound(snd, this.name ? copy(this.name) : null);
-    return cpy;
+    return new Sound(
+        this.url,
+        this.name ? copy(this.name) : null,
+        this.buffer
+    );
 };
 
 Sound.prototype.toDataURL = function () {
-    return this.audio.src;
+    return this.url;
+};
+
+// SoundPlayer /////////////////////////////////////////////////////////
+
+function SoundPlayer(buffer, destination) {
+    this.buffer = buffer;
+    this.destination = destination;
+    this.source = null;
+
+    this.startTime = 0;
+    this.pauseTime = 0;
+
+    this.ended = false;
+    this.terminated = false;
+    this.onended = null;
+}
+
+SoundPlayer.prototype.play = function () {
+    var myself = this;
+
+    this.source = SnapAudioContext.createBufferSource();
+    this.source.buffer = this.buffer;
+    this.source.connect(this.destination);
+    this.source.onended = function () {
+        if (typeof myself.onended === 'function') {
+            myself.onended();
+        }
+        myself.ended = true;
+    };
+    this.source.start(0, this.pauseTime);
+
+    this.startTime = SnapAudioContext.currentTime;
+};
+
+SoundPlayer.prototype.pause = function () {
+    if (this.source) {
+        this.source.onended = null;
+        this.source.stop();
+    }
+    this.pauseTime = SnapAudioContext.currentTime - this.startTime;
 };
 
 // SoundBank ////////////////////////////////////////////////////

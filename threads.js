@@ -1975,12 +1975,17 @@ Process.prototype.blockReceiver = function () {
 // Process sound primitives (interpolated)
 
 Process.prototype.doPlaySoundUntilDone = function (name) {
-    var sprite = this.blockReceiver();
-    if (this.context.activeAudio === null) {
+    var sprite = this.blockReceiver(),
+        duration;
+    if (!this.context.startTime) {
+        this.context.startTime = Date.now();
         this.context.activeAudio = sprite.playSound(name);
+        if (!this.context.activeAudio) {
+            return null;
+        }
     }
-    if (this.context.activeAudio.ended
-            || this.context.activeAudio.terminated) {
+    duration = this.context.activeAudio.buffer.duration;
+    if ((Date.now() - this.context.startTime) >= (duration * 1000)) {
         return null;
     }
     this.pushContext('doYield');

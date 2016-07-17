@@ -1358,9 +1358,7 @@ SnapSerializer.prototype.loadValue = function (model) {
         record();
         return v;
     case 'sound':
-        audio = new Audio();
-        audio.src = model.attributes.sound;
-        v = new Sound(audio, model.attributes.name);
+        v = new Sound(model.attributes.sound, model.attributes.name);
         if (Object.prototype.hasOwnProperty.call(
                 model.attributes,
                 'mediaID'
