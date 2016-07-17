@@ -3421,7 +3421,7 @@ BlockExportDialogMorph.prototype.init = function (serializer, blocks) {
     BlockExportDialogMorph.uber.init.call(
         this,
         null, // target
-        function () {myself.exportBlocks(); },
+        function () {myself.exportDependencies(); },
         null // environment
     );
 
@@ -3547,8 +3547,6 @@ BlockExportDialogMorph.prototype.selectNone = function () {
 // BlockExportDialogMorph ops
 
 BlockExportDialogMorph.prototype.exportBlocks = function () {
-    this.blocks = this.getBlockDependencies(this.blocks);
-
     var str = this.serializer.serialize(this.blocks),
         ide = this.world().children[0];
 
@@ -3600,6 +3598,44 @@ BlockExportDialogMorph.prototype.getBlockDependencies = function (blocks) {
     }
 
     return depend;
+};
+
+BlockExportDialogMorph.prototype.exportDependencies = function () {
+    var myself = this;
+    var depend = this.getBlockDependencies(this.blocks);
+
+    if (depend.slice(this.blocks.length).length > 0) {
+        var exportDependenciesWindow = new DialogBoxMorph(
+            this,
+            function () {
+                myself.blocks = depend.slice(0);
+                myself.exportBlocks();
+            },
+            this
+        );
+        exportDependenciesWindow.addButton(
+            function () {
+                myself.exportBlocks();
+                this.destroy();
+            },
+            "export without dependencies"
+        );
+        exportDependenciesWindow.askYesNo(
+            "export dependencies",
+            "The blocks you are about to export are missing the following "
+                    + "dependent blocks: "
+                    + depend.slice(myself.blocks.length).map(function (def) {
+                return def.spec;
+            }).join(", ")
+                    + ".\n"
+                    + "Do you want to also export the "
+                    + "missing block dependencies?",
+            this.world(),
+            null
+        );
+    } else {
+        this.exportBlocks();
+    }
 };
 
 // BlockExportDialogMorph layout
