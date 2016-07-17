@@ -416,11 +416,17 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'sound',
             spec: 'stop all sounds'
         },
+        doPlayDrum: {
+            type: 'command',
+            category: 'sound',
+            spec: 'play drum %drum for %n beats',
+            defaults: [1, 0.25]
+        },
         doRest: {
             type: 'command',
             category: 'sound',
             spec: 'rest for %n beats',
-            defaults: [0.2]
+            defaults: [0.25]
         },
         doPlayNote: {
             type: 'command',
@@ -428,6 +434,29 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: 'play note %n for %n beats',
             defaults: [60, 0.5]
         },
+        doSetInstrument: {
+            type: 'command',
+            category: 'sound',
+            spec: 'set instrument to %inst',
+            defaults: [1]
+        },
+        changeVolume: {
+            type: 'command',
+            category: 'sound',
+            spec: 'change volume by %n',
+            defaults: [-10]
+        },
+        setVolume: {
+            type: 'command',
+            category: 'sound',
+            spec: 'set volume to %n %',
+            defaults: [100]
+        },
+        getVolume: {
+            type: 'reporter',
+            category: 'sound',
+            spec: 'volume'
+},
         doChangeTempo: {
             type: 'command',
             category: 'sound',
@@ -1258,6 +1287,8 @@ SpriteMorph.prototype.blockAlternatives = {
     // sound:
     playSound: ['doPlaySoundUntilDone'],
     doPlaySoundUntilDone: ['playSound'],
+    changeVolume: ['setVolume'],
+    setVolume: ['changeVolume'],
     doChangeTempo: ['doSetTempo'],
     doSetTempo: ['doChangeTempo'],
 
@@ -1320,6 +1351,8 @@ SpriteMorph.prototype.init = function (globals) {
     this.costumes = new List();
     this.costume = null;
     this.sounds = new List();
+    this.volume = 100;
+    this.instrument = 0;
     this.normalExtent = new Point(60, 60); // only for costume-less situation
     this.scale = 1;
     this.rotationStyle = 1; // 1 = full, 2 = left/right, 0 = off
@@ -1340,6 +1373,8 @@ SpriteMorph.prototype.init = function (globals) {
     this.rotationOffset = new Point(); // not to be serialized (!)
     this.idx = 0; // not to be serialized (!) - used for de-serialization
     this.wasWarped = false; // not to be serialized, used for fast-tracking
+    this.volumeNode = SnapAudioContext.createGain(); // not to be serialized
+    this.volumeNode.connect(SnapAudioContext.destination);
 
     this.graphicsValues = {
         'color': 0,
@@ -1423,6 +1458,9 @@ SpriteMorph.prototype.fullCopy = function (forClone) {
             c.graphicsValues[effect] = this.graphicsValues[effect];
         }
     }
+    c.volumeNode = SnapAudioContext.createGain();
+    c.volumeNode.connect(SnapAudioContext.destination);
+    c.setVolume(this.volume);
     return c;
 };
 
@@ -1823,9 +1861,16 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('doPlaySoundUntilDone'));
         blocks.push(block('doStopAllSounds'));
         blocks.push('-');
+        blocks.push(block('doPlayDrum'));
         blocks.push(block('doRest'));
         blocks.push('-');
         blocks.push(block('doPlayNote'));
+        blocks.push(block('doSetInstrument'));
+        blocks.push('-');
+        blocks.push(block('changeVolume'));
+        blocks.push(block('setVolume'));
+        blocks.push(watcherToggle('getVolume'));
+        blocks.push(block('getVolume'));
         blocks.push('-');
         blocks.push(block('doChangeTempo'));
         blocks.push(block('doSetTempo'));
@@ -2763,9 +2808,7 @@ SpriteMorph.prototype.playSound = function (name) {
         active = sound.play();
         if (stage) {
             stage.activeSounds.push(active);
-            stage.activeSounds = stage.activeSounds.filter(function (aud) {
-                return !aud.ended && !aud.terminated;
-            });
+            stage.cleanUpEndedSounds();
         }
         return active;
     }
@@ -2773,6 +2816,23 @@ SpriteMorph.prototype.playSound = function (name) {
 
 SpriteMorph.prototype.reportSounds = function () {
     return this.sounds;
+};
+
+// SpriteMorph volume
+
+SpriteMorph.prototype.setVolume = function (volume) {
+    if (!isNaN(volume)) {
+        this.volume = Math.max(0, Math.min(+volume, 100));
+        this.volumeNode.gain.value = this.volume / 100;
+    }
+};
+
+SpriteMorph.prototype.changeVolume = function (delta) {
+    this.setVolume(this.volume + delta);
+};
+
+SpriteMorph.prototype.getVolume = function (volume) {
+    return this.volume;
 };
 
 // SpriteMorph user menu
@@ -5081,6 +5141,8 @@ StageMorph.prototype.init = function (globals) {
     this.costumes = new List();
     this.costume = null;
     this.sounds = new List();
+    this.volume = 100;
+    this.instrument = 0;
     this.version = Date.now(); // for observers
     this.isFastTracked = false;
     this.enableCustomHatBlocks = true;
@@ -5103,6 +5165,9 @@ StageMorph.prototype.init = function (globals) {
 
     this.trailsCanvas = null;
     this.isThreadSafe = false;
+
+    this.volumeNode = SnapAudioContext.createGain(); // not to be serialized
+    this.volumeNode.connect(SnapAudioContext.destination);
 
     this.graphicsValues = {
         'color': 0,
@@ -5817,9 +5882,16 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('doPlaySoundUntilDone'));
         blocks.push(block('doStopAllSounds'));
         blocks.push('-');
+        blocks.push(block('doPlayDrum'));
         blocks.push(block('doRest'));
         blocks.push('-');
         blocks.push(block('doPlayNote'));
+        blocks.push(block('doSetInstrument'));
+        blocks.push('-');
+        blocks.push(block('changeVolume'));
+        blocks.push(block('setVolume'));
+        blocks.push(watcherToggle('getVolume'));
+        blocks.push(block('getVolume'));
         blocks.push('-');
         blocks.push(block('doChangeTempo'));
         blocks.push(block('doSetTempo'));
@@ -6385,8 +6457,25 @@ StageMorph.prototype.resumeAllActiveSounds = function () {
     });
 };
 
+StageMorph.prototype.cleanUpEndedSounds = function () {
+    this.activeSounds = this.activeSounds.filter(function (aud) {
+        return !aud.ended && !aud.terminated;
+    });
+};
+
 StageMorph.prototype.reportSounds
     = SpriteMorph.prototype.reportSounds;
+
+// StageMorph volume
+
+StageMorph.prototype.setVolume
+    = SpriteMorph.prototype.setVolume;
+
+StageMorph.prototype.changeVolume
+    = SpriteMorph.prototype.changeVolume;
+
+StageMorph.prototype.getVolume
+    = SpriteMorph.prototype.getVolume;
 
 // StageMorph non-variable watchers
 

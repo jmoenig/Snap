@@ -3141,27 +3141,69 @@ Process.prototype.doSetTempo = function (bpm) {
     }
 };
 
+Process.prototype.doSetInstrument = function (instrument) {
+    if (this.homeContext.receiver) {
+        instrument = Math.max(1, Math.min(instrument, SnapSoundBank.instruments.length)) - 1;
+        this.homeContext.receiver.instrument = instrument;
+    }
+};
+
 Process.prototype.doPlayNote = function (pitch, beats) {
     var tempo = this.reportTempo();
     this.doPlayNoteForSecs(
         parseFloat(pitch || '0'),
-        60 / tempo * parseFloat(beats || '0')
+        60 / tempo * parseFloat(beats || '0'),
+        false
     );
 };
 
-Process.prototype.doPlayNoteForSecs = function (pitch, secs) {
-    // interpolated
-    if (!this.context.startTime) {
-        this.context.startTime = Date.now();
-        this.context.activeNote = new Note(pitch);
-        this.context.activeNote.play();
-    }
-    if ((Date.now() - this.context.startTime) >= (secs * 1000)) {
-        if (this.context.activeNote) {
-            this.context.activeNote.stop();
-            this.context.activeNote = null;
+Process.prototype.doPlayDrum = function (drum, beats) {
+    var tempo = this.reportTempo();
+    drum = parseFloat(drum || '0');
+    drum = Math.max(1, Math.min(drum, SnapSoundBank.drums.length)) - 1;
+    this.doPlayNoteForSecs(
+        drum,
+        60 / tempo * parseFloat(beats || '0'),
+        true
+    );
+};
+
+Process.prototype.doPlayNoteForSecs = function (note, secs, isDrum) {
+    var stage;
+
+    if (SnapSoundBank.samplesLoaded) {
+        if (!this.homeContext.receiver) {
+            return null;
         }
-        return null;
+        stage = this.homeContext.receiver.parentThatIsA(StageMorph);
+        if (!this.context.startTime) {
+            this.context.startTime = Date.now();
+            if (isDrum) {
+                this.context.activeNote = SnapSoundBank.getDrum(
+                    +note, +secs, this.homeContext.receiver.volumeNode
+                );
+            } else {
+                this.context.activeNote = SnapSoundBank.getNote(
+                    +note, this.homeContext.receiver.instrument,
+                    +secs, this.homeContext.receiver.volumeNode
+                );
+            }
+            this.context.activeNote.play();
+            if (stage) {
+                stage.activeSounds.push(this.context.activeNote);
+                stage.cleanUpEndedSounds();
+            }
+        }
+        if ((Date.now() - this.context.startTime) >= (secs * 1000)) {
+            if (this.context.activeNote) {
+                this.context.activeNote = null;
+            }
+            return null;
+        }
+    } else {
+        if (!SnapSoundBank.samplesRequested) {
+            SnapSoundBank.loadSamples();
+        }
     }
     this.pushContext('doYield');
     this.pushContext();
