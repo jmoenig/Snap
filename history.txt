@@ -2965,3 +2965,9 @@ http://snap.berkeley.edu/run#cloud:Username=jens&ProjectName=rotation
 
 == v4.0.8.1 ====
 
+160717
+------
+* Morphic: fixed collision detection for non-integer devicePixelRatios
+
+== v4.0.8.2 ====
+

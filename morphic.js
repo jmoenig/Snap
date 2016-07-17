@@ -1103,7 +1103,7 @@
 
 /*global window, HTMLCanvasElement, FileReader, Audio, FileList*/
 
-var morphicVersion = '2016-July-14';
+var morphicVersion = '2016-July-17';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = getBlurredShadowSupport(); // check for Chrome-bug
 
@@ -4114,9 +4114,13 @@ Morph.prototype.evaluateString = function (code) {
 
 Morph.prototype.isTouching = function (otherMorph) {
     var oImg = this.overlappingImage(otherMorph),
-        data = oImg.getContext('2d')
-            .getImageData(1, 1, oImg.width, oImg.height)
-            .data;
+        data;
+    if (!oImg.width || !oImg.height) {
+        return false;
+    }
+    data = oImg.getContext('2d')
+        .getImageData(1, 1, oImg.width, oImg.height)
+        .data;
     return detect(
         data,
         function (each) {
