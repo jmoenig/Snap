@@ -393,6 +393,34 @@ CustomBlockDefinition.prototype.scriptsModel = function () {
     return scripts;
 };
 
+CustomBlockDefinition.prototype.usesBlockInstance = function (definition) {
+    var found = false;
+
+    this.scripts.forEach(function (script) {
+        script.allChildren().forEach(function (child) {
+            if (child.definition && child.definition === definition) {
+                found = true;
+                return;
+            }
+        });
+    });
+
+    if (found) {
+        return true;
+    }
+
+    if (this.body) {
+        this.body.expression.allChildren().forEach(function (child) {
+            if (child.definition && child.definition === definition) {
+                found = true;
+                return;
+            }
+        });
+    }
+
+    return found;
+};
+
 // CustomCommandBlockMorph /////////////////////////////////////////////
 
 // CustomCommandBlockMorph inherits from CommandBlockMorph:
@@ -3387,6 +3415,7 @@ BlockExportDialogMorph.prototype.init = function (serializer, blocks) {
     this.serializer = serializer;
     this.blocks = blocks.slice(0);
     this.handle = null;
+    this.allCustomBlocks = blocks.slice(0);
 
     // initialize inherited properties:
     BlockExportDialogMorph.uber.init.call(
@@ -3518,11 +3547,7 @@ BlockExportDialogMorph.prototype.selectNone = function () {
 // BlockExportDialogMorph ops
 
 BlockExportDialogMorph.prototype.exportBlocks = function () {
-    var myself = this;
-
-    this.blocks.forEach(function (def) {
-        myself.findBlockDependencies(def);
-    });
+    this.blocks = this.getBlockDependencies(this.blocks);
 
     var str = this.serializer.serialize(this.blocks),
         ide = this.world().children[0];
@@ -3548,39 +3573,33 @@ BlockExportDialogMorph.prototype.exportBlocks = function () {
     }
 };
 
-BlockExportDialogMorph.prototype.findBlockDependencies = function (def) {
+BlockExportDialogMorph.prototype.getBlockDependencies = function (blocks) {
     var myself = this;
+    var depend = blocks.slice(0);
+    var isDone = false;
+    var found;
 
-    if (def.body === null) {
-        if (this.blocks.indexOf(def) === -1) {
-            this.blocks.push(def);
-        }
-        return;
-    }
-
-    def.body.expression.blockSequence().forEach(function (block) {
-        myself.addBlockDependencies(block);
-
-        block.allInputs().forEach(function (input) {
-            if (!myself.addBlockDependencies(input)) {
-                myself.addBlockDependencies(input.evaluate());
+    function scan() {
+        return myself.allCustomBlocks.filter(function (def) {
+            if (contains(depend, def)) {
+                return false;
             }
+            return depend.some(function (each) {
+                return each.usesBlockInstance(def);
+            });
         });
-    });
-
-};
-
-BlockExportDialogMorph.prototype.addBlockDependencies = function (block) {
-    if ((block instanceof CustomCommandBlockMorph
-            || block instanceof CustomReporterBlockMorph)
-            && this.blocks.indexOf(block.definition) === -1) {
-        this.blocks.push(block.definition);
-        this.findBlockDependencies(block.definition);
-
-        return true;
     }
 
-    return false;
+    while (!isDone) {
+        found = scan();
+        if (found.length) {
+            depend = depend.concat(found);
+        } else {
+            isDone = true;
+        }
+    }
+
+    return depend;
 };
 
 // BlockExportDialogMorph layout
