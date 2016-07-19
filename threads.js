@@ -2501,7 +2501,7 @@ Process.prototype.reportTextSplit = function (string, delimiter) {
     if (!contains(types, delType)) {
         throw new Error('expecting a text delimiter instead of a ' + delType);
     }
-    str = isNil(string) ? '' string.toString();
+    str = isNil(string) ? '' : string.toString();
     switch (this.inputOption(delimiter)) {
     case 'line':
         // Unicode compliant line splitting (platform independent)
