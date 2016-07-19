@@ -2971,3 +2971,13 @@ http://snap.berkeley.edu/run#cloud:Username=jens&ProjectName=rotation
 
 == v4.0.8.2 ====
 
+
+160719
+------
+* Morphic: avoid blitting artifacts for non-integer devicePixelRatios in Firefox
+* Widgets: fixed 3D corners for buttons in Firefox for Windows
+* Objects: fixed color collision detection for retina mode
+* Threads: enable broadcasts to be sent to specific sprites (experimental)
+
+== v4.0.8.3 ====
+
