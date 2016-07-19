@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph,
 TableFrameMorph, isSnapObject*/
 
-modules.threads = '2016-July-14';
+modules.threads = '2016-July-19';
 
 var ThreadManager;
 var Process;
@@ -2069,6 +2069,65 @@ Process.prototype.reportURL = function (url) {
 // Process event messages primitives
 
 Process.prototype.doBroadcast = function (message) {
+    // messages are user-defined events, and by default global, same as in
+    // Scratch. An experimental feature, messages can be sent to a single
+    // sprite or to a list of sprites by using a 2-item list in the message
+    // slot, where the first slot is a message text, and the second slot
+    // its recipient(s), identified either by a single name or sprite, or by
+    // a list of names or sprites (can be a heterogeneous list).
+
+    var stage = this.homeContext.receiver.parentThatIsA(StageMorph),
+        thisObj,
+        msg = message,
+        trg,
+        rcvrs,
+        myself = this,
+        hats = [],
+        procs = [];
+
+    if (message instanceof List && (message.length() === 2)) {
+        thisObj = this.blockReceiver();
+        msg = message.at(1);
+        trg = message.at(2);
+        if (isSnapObject(trg)) {
+            rcvrs = [trg];
+        } else if (isString(trg)) {
+            // assume the string to be the name of a sprite or the stage
+            if (trg === stage.name) {
+                rcvrs = [stage];
+            } else {
+                rcvrs = [this.getOtherObject(trg, thisObj, stage)];
+            }
+        } else if (trg instanceof List) {
+            // assume all elements to be sprites or sprite names
+            rcvrs = trg.itemsArray().map(function (each) {
+                return myself.getOtherObject(each, thisObj, stage);
+            });
+        } else {
+            return; // abort
+        }
+    } else { // global
+        rcvrs = stage.children.concat(stage);
+    }
+    if (msg !== '') {
+        stage.lastMessage = message; // the actual data structure
+        rcvrs.forEach(function (morph) {
+            if (isSnapObject(morph)) {
+                hats = hats.concat(morph.allHatBlocksFor(msg));
+            }
+        });
+        hats.forEach(function (block) {
+            procs.push(stage.threads.startProcess(block, stage.isThreadSafe));
+        });
+    }
+    return procs;
+};
+
+// old purely global broadcast code, commented out and retained in case
+// we need to revert
+
+/*
+Process.prototype.doBroadcast = function (message) {
     var stage = this.homeContext.receiver.parentThatIsA(StageMorph),
         hats = [],
         procs = [];
@@ -2086,6 +2145,7 @@ Process.prototype.doBroadcast = function (message) {
     }
     return procs;
 };
+*/
 
 Process.prototype.doBroadcastAndWait = function (message) {
     if (!this.context.activeSends) {
