@@ -2441,10 +2441,10 @@ Process.prototype.reportTextSplit = function (string, delimiter) {
     if (!contains(types, delType)) {
         throw new Error('expecting a text delimiter instead of a ' + delType);
     }
-    str = (string || '').toString();
+    str = isNil(string) ? '' string.toString();
     switch (this.inputOption(delimiter)) {
     case 'line':
-        // Unicode Compliant Line Splitting (Platform independent)
+        // Unicode compliant line splitting (platform independent)
         // http://www.unicode.org/reports/tr18/#Line_Boundaries
         del = /\r\n|[\n\v\f\r\x85\u2028\u2029]/;
         break;
@@ -2462,7 +2462,7 @@ Process.prototype.reportTextSplit = function (string, delimiter) {
         del = '';
         break;
     default:
-        del = (delimiter || '').toString();
+        del = isNil(delimiter) ? '' : delimiter.toString();
     }
     return new List(str.split(del));
 };
