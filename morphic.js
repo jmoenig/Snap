@@ -1103,7 +1103,7 @@
 
 /*global window, HTMLCanvasElement, FileReader, Audio, FileList*/
 
-var morphicVersion = '2016-July-17';
+var morphicVersion = '2016-July-19';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = getBlurredShadowSupport(); // check for Chrome-bug
 
@@ -1437,7 +1437,17 @@ function enableRetinaSupport() {
     // Unfortunately, it's really hard to make this work well when changing
     // zoom level, so let's leave it like this right now, and stick to
     // whatever the ratio was in the beginning.
-        originalDevicePixelRatio = window.devicePixelRatio,
+
+        // originalDevicePixelRatio = window.devicePixelRatio,
+
+    // [Jens]: As of summer 2016 non-integer devicePixelRatios lead to
+    // artifacts when blitting images onto canvas elements in all browsers
+    // except Chrome, especially Firefox, Edge, IE (Safari doesn't even
+    // support retina mode as implemented here).
+    // therefore - to ensure crisp fonts - use the ceiling of whatever
+    // the devicePixelRatio is. This needs more memory, but looks nicer.
+
+        originalDevicePixelRatio = Math.ceil(window.devicePixelRatio),
 
         canvasProto = HTMLCanvasElement.prototype,
         contextProto = CanvasRenderingContext2D.prototype,
