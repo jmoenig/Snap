@@ -2411,12 +2411,12 @@ Process.prototype.reportLetter = function (idx, string) {
     return str[i - 1] || '';
 };
 
-Process.prototype.reportStringSize = function (string) {
-    if (string instanceof List) { // catch a common user error
-        return string.length();
+Process.prototype.reportStringSize = function (data) {
+    if (data instanceof List) { // catch a common user error
+        return data.length();
     }
-    var str = (string || '').toString();
-    return str.length;
+
+    return (isNil(data) ? '' : data).toString().length;
 };
 
 Process.prototype.reportUnicode = function (string) {
