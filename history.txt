@@ -2971,7 +2971,6 @@ http://snap.berkeley.edu/run#cloud:Username=jens&ProjectName=rotation
 
 == v4.0.8.2 ====
 
-
 160719
 ------
 * Morphic: avoid blitting artifacts for non-integer devicePixelRatios in Firefox
@@ -2980,4 +2979,10 @@ http://snap.berkeley.edu/run#cloud:Username=jens&ProjectName=rotation
 * Threads: enable broadcasts to be sent to specific sprites (experimental)
 
 == v4.0.8.3 ====
+
+160720
+------
+* GUI: fixed #1333 - paint a new costume not working in retina mode in FF and Edge
+
+== v4.0.8.4 ====
 
