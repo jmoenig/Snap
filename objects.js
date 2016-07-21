@@ -844,6 +844,11 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'sensing',
             spec: 'key %key pressed?'
         },
+        reportLoudness: {
+            type: 'reporter',
+            category: 'sensing',
+            spec: 'loudness'
+        },
         reportDistanceTo: {
             type: 'reporter',
             category: 'sensing',
@@ -1984,6 +1989,9 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('reportMouseDown'));
         blocks.push('-');
         blocks.push(block('reportKeyPressed'));
+        blocks.push('-');
+        blocks.push(watcherToggle('reportLoudness'));
+        blocks.push(block('reportLoudness'));
         blocks.push('-');
         blocks.push(block('reportDistanceTo'));
         blocks.push('-');
@@ -4207,6 +4215,16 @@ SpriteMorph.prototype.reportMouseY = function () {
     return 0;
 };
 
+// SpriteMorph microphone loudness
+
+SpriteMorph.prototype.reportLoudness = function () {
+    var stage = this.parentThatIsA(StageMorph);
+    if (stage) {
+        return stage.reportLoudness();
+    }
+    return 0;
+};
+
 // SpriteMorph thread count (for debugging)
 
 SpriteMorph.prototype.reportThreadCount = function () {
@@ -5460,6 +5478,20 @@ StageMorph.prototype.reportMouseY = function () {
     return 0;
 };
 
+// SpriteMorph microphone loudness
+
+StageMorph.prototype.microphone = null;
+
+StageMorph.prototype.reportLoudness = function () {
+    if (!this.microphone) {
+        StageMorph.prototype.microphone = new Microphone();
+    }
+    if (this.microphone.error) {
+        throw this.microphone.error;
+    }
+    return this.microphone.getLoudness();
+};
+
 // StageMorph drag & drop
 
 StageMorph.prototype.wantsDropOf = function (aMorph) {
@@ -5983,6 +6015,9 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('reportMouseDown'));
         blocks.push('-');
         blocks.push(block('reportKeyPressed'));
+        blocks.push('-');
+        blocks.push(watcherToggle('reportLoudness'));
+        blocks.push(block('reportLoudness'));
         blocks.push('-');
         blocks.push(block('doResetTimer'));
         blocks.push(watcherToggle('getTimer'));
@@ -7757,7 +7792,8 @@ WatcherMorph.prototype.object = function () {
 WatcherMorph.prototype.isGlobal = function (selector) {
     return contains(
         ['getLastAnswer', 'getLastMessage', 'getTempo', 'getTimer',
-             'reportMouseX', 'reportMouseY', 'reportThreadCount'],
+             'reportMouseX', 'reportMouseY', 'reportThreadCount',
+             'reportLoudness'],
         selector
     );
 };

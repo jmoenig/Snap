@@ -6,6 +6,7 @@ var SoundPlayer;
 var SoundBank;
 var SnapSoundBank;
 var Note;
+var Microphone;
 
 function getAudioContext () {
     var AudioContext = window.AudioContext || window.webkitAudioContext,
@@ -1301,4 +1302,68 @@ Note.prototype.stop = function () {
         this.source.stop();
     }
     this.terminated = true;
+};
+
+// Microphone //////////////////////////////////////////////////////////
+
+function Microphone () {
+    var myself = this;
+
+    this.mediaStream = null;
+    this.source = null;
+    this.scriptProcessor = null;
+    this.analyser = null;
+
+    this.error = null;
+
+    // Request permission to access the user's microphone
+    navigator.getUserMedia = navigator.getUserMedia
+                          || navigator.webkitGetUserMedia
+                          || navigator.mozGetUserMedia;
+    if (!navigator.getUserMedia) {
+        this.error = new Error('getUserMedia is not supported in this browser');
+        return;
+    }
+    navigator.getUserMedia(
+        {audio: true},
+        function (mediaStream) {
+            myself.gotUserMedia(mediaStream);
+        },
+        function (error) {
+            myself.error = error;
+        }
+    );
+}
+
+Microphone.prototype.gotUserMedia = function (mediaStream) {
+    var myself = this;
+
+    this.mediaStream = mediaStream;
+    this.source = SnapAudioContext.createMediaStreamSource(mediaStream);
+
+    this.analyser = SnapAudioContext.createAnalyser();
+    this.analyser.fftSize = 256;
+    this.analyser.smoothingTimeConstant = 0;
+    this.frequencyData = new Uint8Array(this.analyser.frequencyBinCount);
+
+    this.source.connect(this.analyser);
+};
+
+Microphone.prototype.getLoudness = function () {
+    var max, length, total, mean;
+
+    if (!this.analyser) {
+        return 0;
+    }
+
+    this.analyser.getByteFrequencyData(this.frequencyData);
+
+    length = this.frequencyData.length;
+    total = 0;
+    for (i = 0; i < length; i++) {
+        total += this.frequencyData[i];
+    }
+    mean = total / length;
+
+    return Math.round(mean * 100 / 255);
 };
