@@ -1243,7 +1243,7 @@ Note.prototype.play = function () {
         noteOver = false;
 
         gain.setValueAtTime(this.lastGain, time);
-        if (attackEnd > this.pauseTime) {
+        if (attackEnd > 0) {
             if (attackEnd < duration) {
                 gain.linearRampToValueAtTime(1, time + attackEnd);
             } else {
@@ -1256,7 +1256,7 @@ Note.prototype.play = function () {
         } else {
             gain.setValueAtTime(1, time);
         }
-        if (holdEnd > attackEnd && holdEnd > 0 && !noteOver) {
+        if (holdEnd > attackEnd && !noteOver) {
             if (holdEnd < duration) {
                 gain.linearRampToValueAtTime(1, time + holdEnd);
             } else {
@@ -1264,7 +1264,7 @@ Note.prototype.play = function () {
                 noteOver = true;
             }
         }
-        if (decayEnd > holdEnd && holdEnd > 0 && !noteOver) {
+        if (decayEnd > holdEnd && !noteOver) {
             if (decayEnd < duration) {
                 gain.linearRampToValueAtTime(0, time + decayEnd);
             } else {
