@@ -456,7 +456,7 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'reporter',
             category: 'sound',
             spec: 'volume'
-},
+        },
         doChangeTempo: {
             type: 'command',
             category: 'sound',
