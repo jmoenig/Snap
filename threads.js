@@ -1448,8 +1448,8 @@ Process.prototype.doHideVar = function (varName) {
 };
 
 Process.prototype.doDeclareClass = function(name, handle, init) {
-    if(this.isEnd) {
-		var cl = new ClassObj(name,new Context(null,init)); delete this.isEnd; return cl
+    if(this.endCl) {
+		var cl = this.endCl; delete this.endCl; return cl
 	}
     var cl, //ctx, 
         myself = this;
@@ -1464,7 +1464,7 @@ Process.prototype.doDeclareClass = function(name, handle, init) {
 	//this.context.addInput();
     this.pushContext('doYield')
 	this.pushContext();
-    this.isEnd = true;
+    this.endCl = cl;
     return;
     }
     return new ClassObj(name);
