@@ -48,6 +48,7 @@
         CellMorph
         WatcherMorph
         StagePrompterMorph
+        ClassObj
 
         SpeechBubbleMorph*
             SpriteBubbleMorph
@@ -8171,4 +8172,32 @@ StagePrompterMorph.prototype.mouseClickLeft = function () {
 
 StagePrompterMorph.prototype.accept = function () {
     this.isDone = true;
+};
+
+// Class Object #byDK (L) CopyLeft
+
+var ClassObj;
+
+// ClassObj not inherits from Morph
+
+//ClassMorph.prototype = new Morph();
+//ClassMorph.prototype.constructor = ClassMorph;
+//ClassMorph.uber = Morph.prototype;
+
+function ClassObj(name, init)
+{
+    this.name = name || '';
+    this.init = init || new Context();
+    this.methods = {};
+}
+
+ClassObj.prototype.toString = function()
+{
+   return 'Class of name '+this.name;
+};
+
+ClassObj.prototype.addMethod = function(name, func)
+{
+   //if(this.methods[name] === null || this.methods[name] === undefined)
+   this.methods[name] = func;
 };
