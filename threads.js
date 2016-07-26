@@ -1448,15 +1448,27 @@ Process.prototype.doHideVar = function (varName) {
 };
 
 Process.prototype.doDeclareClass = function(name, handle, init) {
-    var ctxt, cl;
-    if(init)
-    {
-        ctxt = new Context(null,init);
-        ctxt.inputs = [handle];
-        cl = new ClassMorph(name, ctxt);
-        this.evaluate(cl.init, new List([cl]), true);
+    if(this.isEnd) {
+		var cl = new ClassObj(name,new Context(null,init)); delete this.isEnd; return cl
+	}
+    var cl, //ctx, 
+        myself = this;
+    if(init){ init = init.blockSequence()
+    //ctx = new Context(null, init);
+    //ctx.addInput(handle);
+    cl = new ClassObj(name,new Context(null,init))
+    
+    this.pushContext(init);
+	this.context.outerContext.variables.addVar(handle);
+	this.context.outerContext.variables.setVar(handle,cl);
+	//this.context.addInput();
+    this.pushContext('doYield')
+	this.pushContext();
+    this.isEnd = true;
+    return;
     }
-    return cl; // After if block, DDDDDDDDDDDDDDDDD;
+    return new ClassObj(name);
+    //return 'This is future feature (L) CopyLeft by DK';
 };
 
 Process.prototype.reportClassName = function(cl) {
