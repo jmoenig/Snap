@@ -1476,7 +1476,7 @@ Process.prototype.reportClassName = function(cl) {
     return null;
 };
 
-Process.prototype.addClassMethod = function(cl, handle, func)
+Process.prototype.addClassMethod = function(cl, name, handle, func)
 {
     if(cl instanceof ClassMorph) {
     var ctxt = new Context(null,func);
