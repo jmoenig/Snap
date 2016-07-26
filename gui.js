@@ -2673,8 +2673,6 @@ IDE_Morph.prototype.projectMenu = function () {
             inp.addEventListener(
                 "change",
                 function () {
-                    document.body.removeChild(inp);
-                    myself.filePicker = null;
                     world.hand.processDrop(inp.files);
                 },
                 false
