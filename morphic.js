@@ -11407,29 +11407,3 @@ WorldMorph.prototype.togglePreferences = function () {
     }
 };
 
-// Class Object #byDK (C) CopyLeft
-
-var ClassMorph;
-
-// ClassMorph inherits from Morph
-
-ClassMorph.prototype = new Morph();
-ClassMorph.prototype.constructor = ClassMorph;
-ClassMorph.uber = Morph.prototype;
-
-function ClassMorph(name, init)
-{
-    this.name = name || '';
-    this.init = init || new Context();
-    this.methods = new List();
-}
-
-ClassMorph.prototype.toString = function()
-{
-    return 'Class of name '+this.name;
-};
-
-ClassMorph.prototype.addMethod = function(func)
-{
-   this.methods.add(func);
-};
