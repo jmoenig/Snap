@@ -5038,7 +5038,7 @@ IDE_Morph.prototype.getURL = function (url, callback, errorCall) {
         };
     }
 
-    request.open('GET', url, true);
+    request.open('GET', url);
     request.onload = function () {
         if (request.status === 200) {
             callback(request.responseText);
