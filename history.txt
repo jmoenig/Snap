@@ -2986,3 +2986,9 @@ http://snap.berkeley.edu/run#cloud:Username=jens&ProjectName=rotation
 
 == v4.0.8.4 ====
 
+160731
+------
+* GUI: fixed #1348 - opening projects from url not working in non-English
+
+== v4.0.8.5 ====
+

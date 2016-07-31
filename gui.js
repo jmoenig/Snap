@@ -72,7 +72,7 @@ isRetinaSupported*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2016-July-20';
+modules.gui = '2016-July-31';
 
 // Declarations
 
@@ -2982,7 +2982,7 @@ IDE_Morph.prototype.aboutSnap = function () {
         module, btn1, btn2, btn3, btn4, licenseBtn, translatorsBtn,
         world = this.world();
 
-    aboutTxt = 'Snap! 4.0.8.4\nBuild Your Own Blocks\n\n'
+    aboutTxt = 'Snap! 4.0.8.5\nBuild Your Own Blocks\n\n'
         + 'Copyright \u24B8 2016 Jens M\u00F6nig and '
         + 'Brian Harvey\n'
         + 'jens@moenig.org, bh@cs.berkeley.edu\n\n'
@@ -4408,7 +4408,8 @@ IDE_Morph.prototype.setLanguage = function (lang, callback) {
 };
 
 IDE_Morph.prototype.reflectLanguage = function (lang, callback) {
-    var projectData;
+    var projectData,
+        urlBar = location.hash;
     SnapTranslator.language = lang;
     if (!this.loadNewProject) {
         if (Process.prototype.isCatchingErrors) {
@@ -4428,6 +4429,7 @@ IDE_Morph.prototype.reflectLanguage = function (lang, callback) {
     this.fixLayout();
     if (this.loadNewProject) {
         this.newProject();
+        location.hash = urlBar;
     } else {
         this.openProjectString(projectData);
     }
