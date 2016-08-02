@@ -2592,6 +2592,8 @@ Morph.prototype.drawCachedTexture = function () {
         y,
         context = this.image.getContext('2d');
 
+        if(lines>10000||cols>10000) return;
+
     for (y = 0; y <= lines; y += 1) {
         for (x = 0; x <= cols; x += 1) {
             context.drawImage(bg, x * bg.width, y * bg.height);
