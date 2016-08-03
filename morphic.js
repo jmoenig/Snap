@@ -4955,60 +4955,6 @@ CursorMorph.prototype.init = function (aStringOrTextMorph) {
         this.target.setAlignmentToLeft();
     }
     this.gotoSlot(this.slot);
-    this.initializeClipboardHandler();
-};
-
-CursorMorph.prototype.initializeClipboardHandler = function () {
-    // Add hidden text box for copying and pasting
-    var myself = this;
-
-    this.clipboardHandler = document.createElement('textarea');
-    this.clipboardHandler.style.position = 'absolute';
-    this.clipboardHandler.style.right = '101%'; // placed just out of view
-
-    document.body.appendChild(this.clipboardHandler);
-
-    this.clipboardHandler.value = this.target.selection();
-    this.clipboardHandler.focus();
-    this.clipboardHandler.select();
-
-    this.clipboardHandler.addEventListener(
-        'keypress',
-        function (event) {
-            myself.processKeyPress(event);
-            this.value = myself.target.selection();
-            this.select();
-        },
-        false
-    );
-
-    this.clipboardHandler.addEventListener(
-        'keydown',
-        function (event) {
-            myself.processKeyDown(event);
-            this.value = myself.target.selection();
-            this.select();
-            
-            // Make sure tab prevents default
-            if (event.keyIdentifier === 'U+0009' ||
-                    event.keyIdentifier === 'Tab') {
-                myself.processKeyPress(event);
-                event.preventDefault();
-            }
-        },
-        false
-    );
-    
-    this.clipboardHandler.addEventListener(
-        'input',
-        function (event) {
-            if (this.value === '') {
-                myself.gotoSlot(myself.target.selectionStartSlot());
-                myself.target.deleteSelection();
-            }
-        },
-        false
-    );
 };
 
 // CursorMorph event processing:
@@ -5213,7 +5159,7 @@ CursorMorph.prototype.gotoPos = function (aPoint) {
 
 CursorMorph.prototype.updateSelection = function (shift) {
     if (shift) {
-        if (!this.target.endMark && !this.target.startMark) {
+        if (this.target.endMark<0 && this.target.startMark<0) {
             this.target.startMark = this.slot;
             this.target.endMark = this.slot;
         } else if (this.target.endMark !== this.slot) {
@@ -5362,23 +5308,7 @@ CursorMorph.prototype.destroy = function () {
         this.target.drawNew();
         this.target.changed();
     }
-    this.destroyClipboardHandler();
     CursorMorph.uber.destroy.call(this);
-};
-
-CursorMorph.prototype.destroyClipboardHandler = function () {
-    var nodes = document.body.children,
-        each,
-        i;
-    if (this.clipboardHandler) {
-        for (i = 0; i < nodes.length; i += 1) {
-            each = nodes[i];
-            if (each === this.clipboardHandler) {
-                document.body.removeChild(this.clipboardHandler);
-                this.clipboardHandler = null;
-            }
-        }
-    }
 };
 
 // CursorMorph utilities:
@@ -7640,8 +7570,8 @@ StringMorph.prototype.init = function (
     // additional properties for text-editing:
     this.isScrollable = true; // scrolls into view when edited
     this.currentlySelecting = false;
-    this.startMark = 0;
-    this.endMark = 0;
+    this.startMark = -1;
+    this.endMark = -1;
     this.markedTextColor = new Color(255, 255, 255);
     this.markedBackgoundColor = new Color(60, 60, 120);
 
@@ -8025,13 +7955,13 @@ StringMorph.prototype.selectionStartSlot = function () {
 
 StringMorph.prototype.clearSelection = function () {
     if (!this.currentlySelecting &&
-            this.startMark === 0 &&
-            this.endMark === 0) {
+            this.startMark === -1 &&
+            this.endMark === -1) {
         return;
     }
     this.currentlySelecting = false;
-    this.startMark = 0;
-    this.endMark = 0;
+    this.startMark = -1;
+    this.endMark = -1;
     this.drawNew();
     this.changed();
 };
@@ -8184,8 +8114,8 @@ TextMorph.prototype.init = function (
     // additional properties for text-editing:
     this.isScrollable = true; // scrolls into view when edited
     this.currentlySelecting = false;
-    this.startMark = 0;
-    this.endMark = 0;
+    this.startMark = -1;
+    this.endMark = -1;
     this.markedTextColor = new Color(255, 255, 255);
     this.markedBackgoundColor = new Color(60, 60, 120);
 
@@ -10709,8 +10639,7 @@ WorldMorph.prototype.initVirtualKeyboard = function () {
         document.body.removeChild(this.virtualKeyboard);
         this.virtualKeyboard = null;
     }
-    if (!MorphicPreferences.isTouchDevice
-            || !MorphicPreferences.useVirtualKeyboard) {
+    if (!MorphicPreferences.useVirtualKeyboard) {
         return;
     }
     this.virtualKeyboard = document.createElement("input");
@@ -10745,7 +10674,7 @@ WorldMorph.prototype.initVirtualKeyboard = function () {
                 if (myself.keyboardReceiver) {
                     myself.keyboardReceiver.processKeyPress(event);
                 }
-                event.preventDefault();
+                //event.preventDefault(); //Allow clipboard shortcut Ctrl C, Ctrl V, Ctrl INS, Shift INS,  
             }
         },
         false
@@ -10762,7 +10691,7 @@ WorldMorph.prototype.initVirtualKeyboard = function () {
                     myself.keyboardReceiver.processKeyUp(event);
                 }
             }
-            event.preventDefault();
+            //event.preventDefault();//Allow clipboard shortcut Ctrl C, Ctrl V, Ctrl INS, Shift INS,  
         },
         false
     );
@@ -10773,10 +10702,58 @@ WorldMorph.prototype.initVirtualKeyboard = function () {
             if (myself.keyboardReceiver) {
                 myself.keyboardReceiver.processKeyPress(event);
             }
-            event.preventDefault();
+            //event.preventDefault();//Allow clipboard shortcut Ctrl C, Ctrl V, Ctrl INS, Shift INS,  
         },
         false
     );
+
+// numeric & symbol handling with IME active
+    this.virtualKeyboard.g_compositionended = false;
+    this.virtualKeyboard.g_iscomposing = false;
+
+    this.virtualKeyboard.addEventListener("compositionstart", function (event){ this.g_iscomposing = true; }, false);
+
+    this.virtualKeyboard.addEventListener(
+        "compositionend",
+        function (event){       
+            this.g_compositionended = true;
+            this.g_iscomposing = false;
+
+            var newEvent = {ctrlKey : false, altKey : false, shiftKey : false, metaKey : false,
+                  keyCode : 0, charCode : 0, preventDefault : function(){}};
+            if (myself.keyboardReceiver) {
+                for (var i = 0; i < event.data.length; ++i){
+                      newEvent.keyCode=0;  
+                      newEvent.charCode=event.data.charCodeAt( i);
+                      myself.keyboardReceiver.processKeyPress( newEvent);
+                }
+            }
+       },
+        false
+    );    
+    
+    this.virtualKeyboard.addEventListener(
+        "input",
+        function (event){
+            if (this.g_iscomposing) { // Note: input event property isComposing is not supported by browsers...
+                return; // Ignore all "input" during composing
+            } else {
+                if (this.g_compositionended) {
+                    this.g_compositionended = false;
+                    return; // ignore the first "input" after "compositionend"
+                }
+                if (myself.currentKey == 229) { // double confirm it is in IME mode.
+                    var v = event.target.value; // Any better way to get the "last char" directly?
+                    var newEvent = {ctrlKey : false, altKey : false, shiftKey : false, metaKey : false,
+                      keyCode : 0, charCode : 0, preventDefault : function(){}};
+                    newEvent.keyCode=0;  
+                    newEvent.charCode=v.charCodeAt(v.length -1);  // last char
+                    myself.keyboardReceiver.processKeyPress( newEvent);
+                }
+            }
+        }
+    );
+
 };
 
 WorldMorph.prototype.initEventListeners = function () {
@@ -10932,12 +10909,35 @@ WorldMorph.prototype.initEventListeners = function () {
     document.body.addEventListener(
         "paste",
         function (event) {
-            var txt = event.clipboardData.getData("Text");
+            clpbrdData = event.clipboardData || window.clipboardData; // W3C || IE
+            var txt = clpbrdData.getData("Text");
             if (txt && myself.cursor) {
                 myself.cursor.insert(txt);
             }
         },
         false
+    );
+
+    document.body.addEventListener(
+        "copy",
+        function (event){
+            if (myself.keyboardReceiver && myself.keyboardReceiver.target && myself.keyboardReceiver.target.selection()) {
+                clpbrdData = event.clipboardData || window.clipboardData;// W3C || IE
+                clpbrdData.setData ("Text", myself.keyboardReceiver.target.selection());
+                event.preventDefault();
+            }
+        }
+        ,false
+    );
+
+    document.body.addEventListener(
+        "beforecopy",
+        function (event){
+            if(myself.keyboardReceiver && myself.keyboardReceiver.target && myself.keyboardReceiver.target.selection()){
+                event.preventDefault();
+            }
+        }
+        ,false
     );
 
     window.addEventListener(
@@ -11013,8 +11013,8 @@ WorldMorph.prototype.nextTab = function (editField) {
     var next = this.nextEntryField(editField);
     if (next) {
         editField.clearSelection();
-        next.selectAll();
         next.edit();
+        next.selectAll();
     }
 };
 
@@ -11022,8 +11022,8 @@ WorldMorph.prototype.previousTab = function (editField) {
     var prev = this.previousEntryField(editField);
     if (prev) {
         editField.clearSelection();
-        prev.selectAll();
-        prev.edit();
+        next.edit();
+        next.selectAll();
     }
 };
 
@@ -11336,8 +11336,7 @@ WorldMorph.prototype.edit = function (aStringOrTextMorph) {
     this.keyboardReceiver = this.cursor;
 
     this.initVirtualKeyboard();
-    if (MorphicPreferences.isTouchDevice
-            && MorphicPreferences.useVirtualKeyboard) {
+    if (MorphicPreferences.useVirtualKeyboard) {
         this.virtualKeyboard.style.top = this.cursor.top() + pos.y + "px";
         this.virtualKeyboard.style.left = this.cursor.left() + pos.x + "px";
         this.virtualKeyboard.focus();
