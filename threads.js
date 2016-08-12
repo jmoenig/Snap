@@ -609,20 +609,18 @@ Process.prototype.evaluateBlock = function (block, argCount) {
         if (this[selector]) {
             rcvr = this;
         }
-        if (this.isCatchingErrors) {
-            try {
-                this.returnValueToParentContext(
-                    rcvr[selector].apply(rcvr, inputs)
-                );
-                this.popContext();
-            } catch (error) {
-                this.handleError(error, block);
-            }
-        } else {
+        try {
             this.returnValueToParentContext(
                 rcvr[selector].apply(rcvr, inputs)
             );
             this.popContext();
+        } catch (error) {
+            if (this.isCatchingErrors) {
+                this.handleError(error, block);
+            } else {
+                this.popContext(); // Pop context for not throw error multiple times
+                throw error;       // and re-throw
+            }
         }
     }
 };
