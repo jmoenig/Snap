@@ -131,7 +131,7 @@ function invoke(
 
     if (action instanceof Context) {
         if (receiver) {
-            action = proc.reportContextFor(receiver);
+            action = proc.reportContextFor(action,receiver);
         }
         proc.initializeFor(action, contextArgs || new List());
     } else if (action instanceof BlockMorph) {
