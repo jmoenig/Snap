@@ -3001,3 +3001,4 @@ http://snap.berkeley.edu/run#cloud:Username=jens&ProjectName=rotation
 160812
 ------
 * Threads: for hidden sprites display ASK questions in the input box
+* Morphic: replace deprecated KeyboardEvent.keyIdentifier with .key
