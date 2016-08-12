@@ -2998,3 +2998,6 @@ http://snap.berkeley.edu/run#cloud:Username=jens&ProjectName=rotation
 
 == v4.0.8.6 ====
 
+160812
+------
+* Threads: for hidden sprites display ASK questions in the input box

@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph,
 TableFrameMorph, isSnapObject*/
 
-modules.threads = '2016-July-19';
+modules.threads = '2016-August-12';
 
 var ThreadManager;
 var Process;
@@ -2006,7 +2006,9 @@ Process.prototype.doStopAllSounds = function () {
 
 Process.prototype.doAsk = function (data) {
     var stage = this.homeContext.receiver.parentThatIsA(StageMorph),
-        isStage = this.blockReceiver() instanceof StageMorph,
+        rcvr = this.blockReceiver(),
+        isStage = rcvr instanceof StageMorph,
+        isHiddenSprite = rcvr instanceof SpriteMorph && !rcvr.isVisible,
         activePrompter;
 
     stage.keysPressed = {};
@@ -2016,10 +2018,12 @@ Process.prototype.doAsk = function (data) {
             function (morph) {return morph instanceof StagePrompterMorph; }
         );
         if (!activePrompter) {
-            if (!isStage) {
-                this.blockReceiver().bubble(data, false, true);
+            if (!isStage && !isHiddenSprite) {
+                rcvr.bubble(data, false, true);
             }
-            this.prompter = new StagePrompterMorph(isStage ? data : null);
+            this.prompter = new StagePrompterMorph(
+                isStage || isHiddenSprite ? data : null
+            );
             if (stage.scale < 1) {
                 this.prompter.setWidth(stage.width() - 10);
             } else {
@@ -2037,7 +2041,7 @@ Process.prototype.doAsk = function (data) {
             stage.lastAnswer = this.prompter.inputField.getValue();
             this.prompter.destroy();
             this.prompter = null;
-            if (!isStage) {this.blockReceiver().stopTalking(); }
+            if (!isStage) {rcvr.stopTalking(); }
             return null;
         }
     }
