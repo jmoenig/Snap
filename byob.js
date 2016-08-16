@@ -3625,7 +3625,9 @@ BlockExportDialogMorph.prototype.exportDependencies = function () {
             "The blocks you are about to export are missing the following "
                     + "dependent blocks: "
                     + depend.slice(myself.blocks.length).map(function (def) {
-                return def.spec;
+                return def.parseSpec(def.spec).filter(function (part) {
+                    return part[0] !== "%";
+                }).join(" ");
             }).join(", ")
                     + ".\n"
                     + "Do you want to also export the "
