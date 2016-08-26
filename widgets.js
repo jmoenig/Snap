@@ -74,7 +74,7 @@ HTMLCanvasElement, fontHeight, SymbolMorph, localize, SpeechBubbleMorph,
 ArrowMorph, MenuMorph, isString, isNil, SliderMorph, MorphicPreferences,
 ScrollFrameMorph*/
 
-modules.widgets = '2016-May-02';
+modules.widgets = '2016-July-19';
 
 var PushButtonMorph;
 var ToggleButtonMorph;
@@ -220,8 +220,8 @@ PushButtonMorph.prototype.drawOutline = function (context) {
             0,
             this.height()
         );
-        outlineStyle.addColorStop(1, 'white');
         outlineStyle.addColorStop(0, this.outlineColor.darker().toString());
+        outlineStyle.addColorStop(1, 'white');
     } else {
         outlineStyle = this.outlineColor.toString();
     }
@@ -290,8 +290,8 @@ PushButtonMorph.prototype.drawEdges = function (
         this.corner,
         Math.max(this.corner - this.outline, 0)
     );
-    gradient.addColorStop(1, topColor.toString());
     gradient.addColorStop(0, color.toString());
+    gradient.addColorStop(1, topColor.toString());
 
     context.strokeStyle = gradient;
     context.lineCap = 'round';
@@ -352,8 +352,8 @@ PushButtonMorph.prototype.drawEdges = function (
         h - this.corner,
         Math.max(this.corner - this.outline, 0)
     );
-    gradient.addColorStop(1, bottomColor.toString());
     gradient.addColorStop(0, color.toString());
+    gradient.addColorStop(1, bottomColor.toString());
 
     context.strokeStyle = gradient;
     context.lineCap = 'round';
@@ -2766,11 +2766,11 @@ DialogBoxMorph.prototype.drawNew = function () {
         this.corner,
         0
     );
-    gradient.addColorStop(1, this.color.toString());
     gradient.addColorStop(
         0,
         this.color.lighter(this.contrast).toString()
     );
+    gradient.addColorStop(1, this.color.toString());
 
     context.lineCap = 'butt';
     context.strokeStyle = gradient;
@@ -2787,11 +2787,11 @@ DialogBoxMorph.prototype.drawNew = function () {
         this.corner,
         0
     );
-    gradient.addColorStop(1, this.color.toString());
     gradient.addColorStop(
         0,
         this.color.lighter(this.contrast).toString()
     );
+    gradient.addColorStop(1, this.color.toString());
 
     context.lineCap = 'round';
     context.strokeStyle = gradient;

@@ -73,7 +73,7 @@ StageMorph, isNil*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.paint = '2016-May-10';
+modules.paint = '2016-July-14';
 
 // Declarations
 

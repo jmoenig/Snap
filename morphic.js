@@ -105,7 +105,6 @@
     the following list shows the order in which all constructors are
     defined. Use this list to locate code in this document:
 
-
     Global settings
     Global functions
 
@@ -155,7 +154,6 @@
     IV. open issues
     ----------------
     - clipboard support (copy & paste) for non-textual data
-    - native (unscaled) high-resolution display support
 
 
     V. browser compatibility
@@ -1105,7 +1103,7 @@
 
 /*global window, HTMLCanvasElement, FileReader, Audio, FileList*/
 
-var morphicVersion = '2016-May-11';
+var morphicVersion = '2016-August-12';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = getBlurredShadowSupport(); // check for Chrome-bug
 
@@ -1439,7 +1437,17 @@ function enableRetinaSupport() {
     // Unfortunately, it's really hard to make this work well when changing
     // zoom level, so let's leave it like this right now, and stick to
     // whatever the ratio was in the beginning.
-        originalDevicePixelRatio = window.devicePixelRatio,
+
+        // originalDevicePixelRatio = window.devicePixelRatio,
+
+    // [Jens]: As of summer 2016 non-integer devicePixelRatios lead to
+    // artifacts when blitting images onto canvas elements in all browsers
+    // except Chrome, especially Firefox, Edge, IE (Safari doesn't even
+    // support retina mode as implemented here).
+    // therefore - to ensure crisp fonts - use the ceiling of whatever
+    // the devicePixelRatio is. This needs more memory, but looks nicer.
+
+        originalDevicePixelRatio = Math.ceil(window.devicePixelRatio),
 
         canvasProto = HTMLCanvasElement.prototype,
         contextProto = CanvasRenderingContext2D.prototype,
@@ -4116,9 +4124,13 @@ Morph.prototype.evaluateString = function (code) {
 
 Morph.prototype.isTouching = function (otherMorph) {
     var oImg = this.overlappingImage(otherMorph),
-        data = oImg.getContext('2d')
-            .getImageData(1, 1, oImg.width, oImg.height)
-            .data;
+        data;
+    if (!oImg.width || !oImg.height) {
+        return false;
+    }
+    data = oImg.getContext('2d')
+        .getImageData(1, 1, oImg.width, oImg.height)
+        .data;
     return detect(
         data,
         function (each) {
@@ -4976,10 +4988,10 @@ CursorMorph.prototype.initializeClipboardHandler = function () {
             myself.processKeyDown(event);
             this.value = myself.target.selection();
             this.select();
-            
+
             // Make sure tab prevents default
-            if (event.keyIdentifier === 'U+0009' ||
-                    event.keyIdentifier === 'Tab') {
+            if (event.key === 'U+0009' ||
+                    event.key === 'Tab') {
                 myself.processKeyPress(event);
                 event.preventDefault();
             }
@@ -5093,7 +5105,7 @@ CursorMorph.prototype.processKeyDown = function (event) {
         this.keyDownEventUsed = true;
         break;
     case 13:
-        if (this.target instanceof StringMorph) {
+        if ((this.target instanceof StringMorph) || shift) {
             this.accept();
         } else {
             this.insert('\n');

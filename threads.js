@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph,
 TableFrameMorph, isSnapObject*/
 
-modules.threads = '2016-June-01';
+modules.threads = '2016-August-12';
 
 var ThreadManager;
 var Process;
@@ -412,6 +412,7 @@ ThreadManager.prototype.doWhen = function (block, stopIt) {
     isDead              boolean indicating a terminated clone process
     timeout             msecs after which to force yield
     lastYield           msecs when the process last yielded
+    isFirstStep         boolean indicating whether on first step - for clones
     errorFlag           boolean indicating whether an error was encountered
     prompter            active instance of StagePrompterMorph
     httpRequest         active instance of an HttpRequest or null
@@ -447,7 +448,8 @@ function Process(topBlock, onComplete, rightAway) {
     this.errorFlag = false;
     this.context = null;
     this.homeContext = new Context();
-    this.lastYield = Date.now();
+    this.lastYield =  Date.now();
+    this.isFirstStep = true;
     this.isAtomic = false;
     this.prompter = null;
     this.httpRequest = null;
@@ -492,10 +494,8 @@ Process.prototype.runStep = function (deadline) {
     this.readyToYield = false;
     while (!this.readyToYield
             && this.context
-            && // (this.isAtomic ?
-                    (Date.now() - this.lastYield < this.timeout)
-               //             : true)
-                ) {
+            && (Date.now() - this.lastYield < this.timeout)
+    ) {
         // also allow pausing inside atomic steps - for PAUSE block primitive:
         if (this.isPaused) {
             return this.pauseStep();
@@ -511,6 +511,7 @@ Process.prototype.runStep = function (deadline) {
         this.evaluateContext();
     }
     this.lastYield = Date.now();
+    this.isFirstStep = false;
 
     // make sure to redraw atomic things
     if (this.isAtomic &&
@@ -2005,7 +2006,9 @@ Process.prototype.doStopAllSounds = function () {
 
 Process.prototype.doAsk = function (data) {
     var stage = this.homeContext.receiver.parentThatIsA(StageMorph),
-        isStage = this.blockReceiver() instanceof StageMorph,
+        rcvr = this.blockReceiver(),
+        isStage = rcvr instanceof StageMorph,
+        isHiddenSprite = rcvr instanceof SpriteMorph && !rcvr.isVisible,
         activePrompter;
 
     stage.keysPressed = {};
@@ -2015,10 +2018,12 @@ Process.prototype.doAsk = function (data) {
             function (morph) {return morph instanceof StagePrompterMorph; }
         );
         if (!activePrompter) {
-            if (!isStage) {
-                this.blockReceiver().bubble(data, false, true);
+            if (!isStage && !isHiddenSprite) {
+                rcvr.bubble(data, false, true);
             }
-            this.prompter = new StagePrompterMorph(isStage ? data : null);
+            this.prompter = new StagePrompterMorph(
+                isStage || isHiddenSprite ? data : null
+            );
             if (stage.scale < 1) {
                 this.prompter.setWidth(stage.width() - 10);
             } else {
@@ -2036,7 +2041,7 @@ Process.prototype.doAsk = function (data) {
             stage.lastAnswer = this.prompter.inputField.getValue();
             this.prompter.destroy();
             this.prompter = null;
-            if (!isStage) {this.blockReceiver().stopTalking(); }
+            if (!isStage) {rcvr.stopTalking(); }
             return null;
         }
     }
@@ -2068,6 +2073,65 @@ Process.prototype.reportURL = function (url) {
 // Process event messages primitives
 
 Process.prototype.doBroadcast = function (message) {
+    // messages are user-defined events, and by default global, same as in
+    // Scratch. An experimental feature, messages can be sent to a single
+    // sprite or to a list of sprites by using a 2-item list in the message
+    // slot, where the first slot is a message text, and the second slot
+    // its recipient(s), identified either by a single name or sprite, or by
+    // a list of names or sprites (can be a heterogeneous list).
+
+    var stage = this.homeContext.receiver.parentThatIsA(StageMorph),
+        thisObj,
+        msg = message,
+        trg,
+        rcvrs,
+        myself = this,
+        hats = [],
+        procs = [];
+
+    if (message instanceof List && (message.length() === 2)) {
+        thisObj = this.blockReceiver();
+        msg = message.at(1);
+        trg = message.at(2);
+        if (isSnapObject(trg)) {
+            rcvrs = [trg];
+        } else if (isString(trg)) {
+            // assume the string to be the name of a sprite or the stage
+            if (trg === stage.name) {
+                rcvrs = [stage];
+            } else {
+                rcvrs = [this.getOtherObject(trg, thisObj, stage)];
+            }
+        } else if (trg instanceof List) {
+            // assume all elements to be sprites or sprite names
+            rcvrs = trg.itemsArray().map(function (each) {
+                return myself.getOtherObject(each, thisObj, stage);
+            });
+        } else {
+            return; // abort
+        }
+    } else { // global
+        rcvrs = stage.children.concat(stage);
+    }
+    if (msg !== '') {
+        stage.lastMessage = message; // the actual data structure
+        rcvrs.forEach(function (morph) {
+            if (isSnapObject(morph)) {
+                hats = hats.concat(morph.allHatBlocksFor(msg));
+            }
+        });
+        hats.forEach(function (block) {
+            procs.push(stage.threads.startProcess(block, stage.isThreadSafe));
+        });
+    }
+    return procs;
+};
+
+// old purely global broadcast code, commented out and retained in case
+// we need to revert
+
+/*
+Process.prototype.doBroadcast = function (message) {
     var stage = this.homeContext.receiver.parentThatIsA(StageMorph),
         hats = [],
         procs = [];
@@ -2085,6 +2149,7 @@ Process.prototype.doBroadcast = function (message) {
     }
     return procs;
 };
+*/
 
 Process.prototype.doBroadcastAndWait = function (message) {
     if (!this.context.activeSends) {
@@ -2406,16 +2471,16 @@ Process.prototype.reportLetter = function (idx, string) {
         return '';
     }
     var i = +(idx || 0),
-        str = (string || '').toString();
+        str = isNil(string) ? '' : string.toString();
     return str[i - 1] || '';
 };
 
-Process.prototype.reportStringSize = function (string) {
-    if (string instanceof List) { // catch a common user error
-        return string.length();
+Process.prototype.reportStringSize = function (data) {
+    if (data instanceof List) { // catch a common user error
+        return data.length();
     }
-    var str = (string || '').toString();
-    return str.length;
+
+    return isNil(data) ? 0 : data.toString().length;
 };
 
 Process.prototype.reportUnicode = function (string) {
@@ -2440,10 +2505,10 @@ Process.prototype.reportTextSplit = function (string, delimiter) {
     if (!contains(types, delType)) {
         throw new Error('expecting a text delimiter instead of a ' + delType);
     }
-    str = (string || '').toString();
+    str = isNil(string) ? '' : string.toString();
     switch (this.inputOption(delimiter)) {
     case 'line':
-        // Unicode Compliant Line Splitting (Platform independent)
+        // Unicode compliant line splitting (platform independent)
         // http://www.unicode.org/reports/tr18/#Line_Boundaries
         del = /\r\n|[\n\v\f\r\x85\u2028\u2029]/;
         break;
@@ -2461,7 +2526,7 @@ Process.prototype.reportTextSplit = function (string, delimiter) {
         del = '';
         break;
     default:
-        del = (delimiter || '').toString();
+        del = isNil(delimiter) ? '' : delimiter.toString();
     }
     return new List(str.split(del));
 };
@@ -2598,11 +2663,11 @@ Process.prototype.createClone = function (name) {
     if (!name) {return; }
     if (thisObj) {
         if (this.inputOption(name) === 'myself') {
-            thisObj.createClone();
+            thisObj.createClone(!this.isFirstStep);
         } else {
             thatObj = this.getOtherObject(name, thisObj);
             if (thatObj) {
-                thatObj.createClone();
+                thatObj.createClone(!this.isFirstStep);
             }
         }
     }
