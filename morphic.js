@@ -8,7 +8,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2015 by Jens Mönig
+    Copyright (C) 2016 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -54,7 +54,8 @@
         (6) development and user modes
         (7) turtle graphics
         (8) damage list housekeeping
-        (9) minifying morphic.js
+        (9) supporting high-resolution "retina" screens
+        (10) minifying morphic.js
     VIII. acknowledgements
     IX. contributors
 
@@ -103,7 +104,6 @@
     -------
     the following list shows the order in which all constructors are
     defined. Use this list to locate code in this document:
-
 
     Global settings
     Global functions
@@ -154,7 +154,6 @@
     IV. open issues
     ----------------
     - clipboard support (copy & paste) for non-textual data
-    - native (unscaled) high-resolution display support
 
 
     V. browser compatibility
@@ -337,7 +336,7 @@
     (c) an application
     -------------------
     Of course, most of the time you don't want to just plain use the
-    standard Morhic World "as is" out of the box, but write your own
+    standard Morphic World "as is" out of the box, but write your own
     application (something like Scratch!) in it. For such an
     application you'll create your own morph prototypes, perhaps
     assemble your own "window frame" and bring it all to life in a
@@ -974,7 +973,7 @@
     single submorph's changes tremendous performance improvements can be
     achieved by setting the trackChanges flag to false before propagating
     the layout changes, setting it to true again and then storing the full
-    bounds of the surrounding morph. An an example refer to the
+    bounds of the surrounding morph. As an example refer to the
 
         moveBy()
 
@@ -990,8 +989,54 @@
     methods of SyntaxElementMorph in the Snap application.
 
 
-    (9) minifying morphic.js
-    ------------------------
+    (9) supporting high-resolution "retina" screens
+    -----------------------------------------------
+    By default retina support gets installed when Morphic.js loads. There
+    are two global functions that let you test for retina availability:
+
+        isRetinaSupported() - Bool, answers if retina support is available
+        isRetinaEnabled()   - Bool, answers if currently in retina mode
+
+    and two more functions that let you control retina support if it is
+    available:
+
+        enableRetinaSupport()
+        disableRetinaSupport()
+
+    Both of these internally test whether retina is available, so they are
+    safe to call directly. For an example how to make retina support
+    user-specifiable refer to
+
+        Snap! >> guis.js >> toggleRetina()
+
+    Even when in retina mode it often makes sense to use normal-resolution
+    canvasses for simple shapes in order to save system resources and
+    optimize performance. Examples are costumes and backgrounds in Snap.
+    In Morphic you can create new canvas elements using
+    
+        newCanvas(extentPoint [, nonRetinaFlag])
+
+    If retina support is enabled such new canvasses will automatically be
+    high-resolution canvasses, unless the newCanvas() function is given an
+    otherwise optional second Boolean <true> argument that explicitly makes
+    it a non-retina canvas.
+
+    Not the whole canvas API is supported by Morphic's retina utilities.
+    Especially if your code uses putImageData() you will want to "downgrade"
+    a target high-resolution canvas to a normal-resolution ("non-retina")
+    one before using
+
+        normalizeCanvas(aCanvas [, copyFlag])
+
+    This will change the target canvas' resolution in place (!). If you
+    pass in the optional second Boolean <true> flag the function returns
+    a non-retina copy and leaves the target canvas unchanged. An example
+    of this normalize mechanism is converting the penTrails layer of Snap's
+    stage (high-resolution) into a sprite-costume (normal resolution).
+
+
+    (10) minifying morphic.js
+    -------------------------
     Coming from Smalltalk and being a Squeaker at heart I am a huge fan
     of browsing the code itself to make sense of it. Therefore I have
     included this documentation and (too little) inline comments so all
@@ -1036,7 +1081,8 @@
     I have originally written morphic.js in Florian Balmer's Notepad2
     editor for Windows, later switched to Apple's Dashcode and later
     still to Apple's Xcode. I've also come to depend on both Douglas
-    Crockford's JSLint, Mozilla's Firebug and Google's Chrome to get
+    Crockford's JSLint and later the JSHint project, as well as on
+    Mozilla's Firebug and Google's Chrome to get
     it right.
 
 
@@ -1048,16 +1094,16 @@
     Ian Reynolds contributed backspace key handling for Chrome.
     Davide Della Casa contributed performance optimizations for Firefox.
     Jason N (@cyderize) contributed native copy & paste for text editing.
+    Bartosz Leper contributed retina display support.
 
     - Jens Mönig
 */
 
 // Global settings /////////////////////////////////////////////////////
 
-/*global window, HTMLCanvasElement, getMinimumFontHeight, FileReader, Audio,
-FileList, getBlurredShadowSupport*/
+/*global window, HTMLCanvasElement, FileReader, Audio, FileList*/
 
-var morphicVersion = '2015-December-23';
+var morphicVersion = '2016-August-12';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = getBlurredShadowSupport(); // check for Chrome-bug
 
@@ -1102,6 +1148,34 @@ var touchScreenSettings = {
 };
 
 var MorphicPreferences = standardSettings;
+
+// first, try enabling support for retina displays - can be turned off later
+
+/*
+    Support for retina displays has been pioneered and contributed by
+    Bartosz Leper.
+
+    NOTE: this will make changes to the HTMLCanvasElement that - mostly -
+    make Morphic usable on retina displays in very high resolution mode
+    with crisp fonts and clear fine lines without you (the programmer)
+    needing to know any specifics, provided both the display and the browser
+    support these (Safari currently doesn't), otherwise these utilities will
+    not be installed.
+    If you don't want your Morphic application to support retina resolutions
+    you don't have to edit this morphic.js file to comment out the next line
+    of code, instead you can simply call
+
+        disableRetinaSupport();
+
+    before you create your World(s) in the html page. Disabling retina
+    support also will simply do nothing if retina support is not possible
+    or already disabled, so it's equally safe to call.
+
+    For an example how to make retina support user-specifiable refer to
+    Snap! >> guis.js >> toggleRetina()
+*/
+
+enableRetinaSupport();
 
 // Global Functions ////////////////////////////////////////////////////
 
@@ -1171,13 +1245,18 @@ function fontHeight(height) {
     return minHeight * 1.2; // assuming 1/5 font size for ascenders
 }
 
-function newCanvas(extentPoint) {
+function newCanvas(extentPoint, nonRetina) {
     // answer a new empty instance of Canvas, don't display anywhere
+    // nonRetina - optional Boolean "false"
+    // by default retina support is automatic
     var canvas, ext;
     ext = extentPoint || {x: 0, y: 0};
     canvas = document.createElement('canvas');
     canvas.width = ext.x;
     canvas.height = ext.y;
+    if (nonRetina && canvas.isRetinaEnabled) {
+        canvas.isRetinaEnabled = false;
+    }
     return canvas;
 }
 
@@ -1280,6 +1359,364 @@ function copy(target) {
         }
     }
     return c;
+}
+
+// Retina Display Support //////////////////////////////////////////////
+
+/*
+    By default retina support gets installed when Morphic.js loads. There
+    are two global functions that let you test for retina availability:
+
+        isRetinaSupported() - Boolean, whether retina support is available
+        isRetinaEnabled()   - Boolean, whether currently in retina mode
+
+    and two more functions that let you control retina support if it is
+    available:
+
+        enableRetinaSupport()
+        disableRetinaSupport()
+
+    Both of these internally test whether retina is available, so they are
+    safe to call directly.
+
+    Even when in retina mode it often makes sense to use non-high-resolution
+    canvasses for simple shapes in order to save system resources and
+    optimize performance. Examples are costumes and backgrounds in Snap.
+    In Morphic you can create new canvas elements using
+    
+        newCanvas(extentPoint [, nonRetinaFlag])
+
+    If retina support is enabled such new canvasses will automatically be
+    high-resolution canvasses, unless the newCanvas() function is given an
+    otherwise optional second Boolean <true> argument that explicitly makes
+    it a non-retina canvas.
+
+    Not the whole canvas API is supported by Morphic's retina utilities.
+    Especially if your code uses putImageData() you will want to "downgrade"
+    a target high-resolution canvas to a normal-resolution ("non-retina")
+    one before using
+
+        normalizeCanvas(aCanvas [, copyFlag])
+
+    This will change the target canvas' resolution in place (!). If you
+    pass in the optional second Boolean <true> flag the function returns
+    a non-retina copy and leaves the target canvas unchanged. An example
+    of this normalize mechanism is converting the penTrails layer of Snap's
+    stage (high-resolution) into a sprite-costume (normal resolution).
+*/
+
+function enableRetinaSupport() {
+/*
+    === contributed by Bartosz Leper ===
+
+    This installs a series of utilities that allow using Canvas the same way
+    on retina and non-retina displays. If the display is a retina one, the
+    underlying dimensions of the Canvas elements are doubled, but this will
+    be transparent to the code that uses Canvas. All dimensions read or
+    written to the Canvas element will be scaled appropriately.
+
+    NOTE: This implementation is not exhaustive; it only implements what is
+    needed by the Snap! UI.
+    
+    [Jens]: like all other retina screen support implementations I've seen
+    Bartosz's patch also does not address putImageData() compatibility when
+    mixing retina-enabled and non-retina canvasses. If you need to manipulate
+    pixels in such mixed canvasses, make sure to "downgrade" them all using
+    normalizeCanvas() below.
+*/
+
+    // Get the window's pixel ratio for canvas elements.
+    // See: http://www.html5rocks.com/en/tutorials/canvas/hidpi/
+    var ctx = document.createElement("canvas").getContext("2d"),
+        backingStorePixelRatio = ctx.webkitBackingStorePixelRatio ||
+            ctx.mozBackingStorePixelRatio ||
+            ctx.msBackingStorePixelRatio ||
+            ctx.oBackingStorePixelRatio ||
+            ctx.backingStorePixelRatio || 1,
+
+    // Unfortunately, it's really hard to make this work well when changing
+    // zoom level, so let's leave it like this right now, and stick to
+    // whatever the ratio was in the beginning.
+
+        // originalDevicePixelRatio = window.devicePixelRatio,
+
+    // [Jens]: As of summer 2016 non-integer devicePixelRatios lead to
+    // artifacts when blitting images onto canvas elements in all browsers
+    // except Chrome, especially Firefox, Edge, IE (Safari doesn't even
+    // support retina mode as implemented here).
+    // therefore - to ensure crisp fonts - use the ceiling of whatever
+    // the devicePixelRatio is. This needs more memory, but looks nicer.
+
+        originalDevicePixelRatio = Math.ceil(window.devicePixelRatio),
+
+        canvasProto = HTMLCanvasElement.prototype,
+        contextProto = CanvasRenderingContext2D.prototype,
+
+    // [Jens]: keep track of original properties in a dictionary
+    // so they can be iterated over and restored
+        uber = {
+            drawImage: contextProto.drawImage,
+            getImageData: contextProto.getImageData,
+
+            width: Object.getOwnPropertyDescriptor(
+                canvasProto,
+                'width'
+            ),
+            height: Object.getOwnPropertyDescriptor(
+                canvasProto,
+                'height'
+            ),
+            shadowOffsetX: Object.getOwnPropertyDescriptor(
+                contextProto,
+                'shadowOffsetX'
+            ),
+            shadowOffsetY: Object.getOwnPropertyDescriptor(
+                contextProto,
+                'shadowOffsetY'
+            ),
+            shadowBlur: Object.getOwnPropertyDescriptor(
+                contextProto,
+                'shadowBlur'
+            )
+        };
+
+    // [Jens]: only install retina utilities if the display supports them
+    if (backingStorePixelRatio === originalDevicePixelRatio) {return; }
+    // [Jens]: check whether properties can be overridden, needed for Safari
+    if (Object.keys(uber).some(function (any) {
+        var prop = uber[any];
+        return prop.hasOwnProperty('configurable') && (!prop.configurable);
+    })) {return; }
+
+    function getPixelRatio(imageSource) {
+        return imageSource.isRetinaEnabled ?
+            (originalDevicePixelRatio || 1) / backingStorePixelRatio : 1;
+    }
+
+    canvasProto._isRetinaEnabled = true;
+    // [Jens]: remember the original non-retina properties,
+    // so they can be restored again
+    canvasProto._bak = uber;
+
+    Object.defineProperty(canvasProto, 'isRetinaEnabled', {
+        get: function() {
+            return this._isRetinaEnabled;
+        },
+        set: function(enabled) {
+            var prevPixelRatio = getPixelRatio(this);
+            var prevWidth = this.width;
+            var prevHeight = this.height;
+
+            this._isRetinaEnabled = enabled;
+            if (getPixelRatio(this) != prevPixelRatio) {
+                this.width = prevWidth;
+                this.height = prevHeight;
+            }
+        },
+        configurable: true // [Jens]: allow to be deleted an reconfigured
+    });
+
+    Object.defineProperty(canvasProto, 'width', {
+        get: function() {
+            return uber.width.get.call(this) / getPixelRatio(this);
+        },
+        set: function(width) {
+            var pixelRatio = getPixelRatio(this);
+            uber.width.set.call(this, width * pixelRatio);
+            var context = this.getContext('2d');
+            context.restore();
+            context.save();
+            context.scale(pixelRatio, pixelRatio);
+        }
+    });
+
+    Object.defineProperty(canvasProto, 'height', {
+        get: function() {
+            return uber.height.get.call(this) / getPixelRatio(this);
+        },
+        set: function(height) {
+            var pixelRatio = getPixelRatio(this);
+            uber.height.set.call(this, height * pixelRatio);
+            var context = this.getContext('2d');
+            context.restore();
+            context.save();
+            context.scale(pixelRatio, pixelRatio);
+        }
+    });
+
+    contextProto.drawImage = function(image) {
+        var pixelRatio = getPixelRatio(image),
+            sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight;
+        
+        // Different signatures of drawImage() method have different
+        // parameter assignments.
+        switch (arguments.length) {
+            case 9:
+                sx = arguments[1];
+                sy = arguments[2];
+                sWidth = arguments[3];
+                sHeight = arguments[4];
+                dx = arguments[5];
+                dy = arguments[6];
+                dWidth = arguments[7];
+                dHeight = arguments[8];
+                break;
+
+            case 5:
+                sx = 0;
+                sy = 0;
+                sWidth = image.width;
+                sHeight = image.height;
+                dx = arguments[1];
+                dy = arguments[2];
+                dWidth = arguments[3];
+                dHeight = arguments[4];
+                break;
+
+            case 3:
+                sx = 0;
+                sy = 0;
+                sWidth = image.width;
+                sHeight = image.height;
+                dx = arguments[1];
+                dy = arguments[2];
+                dWidth = image.width;
+                dHeight = image.height;
+                break;
+
+            default:
+                throw Error('Called drawImage() with ' + arguments.length +
+                        ' arguments');
+        }
+        uber.drawImage.call(
+                this, image,
+                sx * pixelRatio, sy * pixelRatio,
+                sWidth * pixelRatio, sHeight * pixelRatio,
+                dx, dy,
+                dWidth, dHeight);
+    };
+
+    contextProto.getImageData = function(sx, sy, sw, sh) {
+        var pixelRatio = getPixelRatio(this.canvas);
+        return uber.getImageData.call(
+                this,
+                sx * pixelRatio, sy * pixelRatio,
+                sw * pixelRatio, sh * pixelRatio);
+    };
+
+    Object.defineProperty(contextProto, 'shadowOffsetX', {
+        get: function() {
+            return uber.shadowOffsetX.get.call(this) /
+                getPixelRatio(this.canvas);
+        },
+        set: function(offset) {
+            var pixelRatio = getPixelRatio(this.canvas);
+            uber.shadowOffsetX.set.call(this, offset * pixelRatio);
+        }
+    });
+
+    Object.defineProperty(contextProto, 'shadowOffsetY', {
+        get: function() {
+            return uber.shadowOffsetY.get.call(this) /
+                getPixelRatio(this.canvas);
+        },
+        set: function(offset) {
+            var pixelRatio = getPixelRatio(this.canvas);
+            uber.shadowOffsetY.set.call(this, offset * pixelRatio);
+        }
+    });
+
+    Object.defineProperty(contextProto, 'shadowBlur', {
+        get: function() {
+            return uber.shadowBlur.get.call(this) /
+                getPixelRatio(this.canvas);
+        },
+        set: function(blur) {
+            var pixelRatio = getPixelRatio(this.canvas);
+            uber.shadowBlur.set.call(this, blur * pixelRatio);
+        }
+    });
+}
+
+function isRetinaSupported () {
+    var ctx = document.createElement("canvas").getContext("2d"),
+        backingStorePixelRatio = ctx.webkitBackingStorePixelRatio ||
+            ctx.mozBackingStorePixelRatio ||
+            ctx.msBackingStorePixelRatio ||
+            ctx.oBackingStorePixelRatio ||
+            ctx.backingStorePixelRatio || 1,
+        canvasProto = HTMLCanvasElement.prototype,
+        contextProto = CanvasRenderingContext2D.prototype,
+        uber = {
+            drawImage: contextProto.drawImage,
+            getImageData: contextProto.getImageData,
+
+            width: Object.getOwnPropertyDescriptor(
+                canvasProto,
+                'width'
+            ),
+            height: Object.getOwnPropertyDescriptor(
+                canvasProto,
+                'height'
+            ),
+            shadowOffsetX: Object.getOwnPropertyDescriptor(
+                contextProto,
+                'shadowOffsetX'
+            ),
+            shadowOffsetY: Object.getOwnPropertyDescriptor(
+                contextProto,
+                'shadowOffsetY'
+            ),
+            shadowBlur: Object.getOwnPropertyDescriptor(
+                contextProto,
+                'shadowBlur'
+            )
+        };
+    return backingStorePixelRatio !== window.devicePixelRatio &&
+        !(Object.keys(uber).some(function (any) {
+            var prop = uber[any];
+            return prop.hasOwnProperty('configurable') && (!prop.configurable);
+        })
+    );
+}
+
+function isRetinaEnabled () {
+    return HTMLCanvasElement.prototype.hasOwnProperty('_isRetinaEnabled');
+}
+
+function disableRetinaSupport() {
+    // uninstalls Retina utilities. Make sure to re-create every Canvas
+    // element afterwards
+    var canvasProto, contextProto, uber;
+    if (!isRetinaEnabled()) {return; }
+    canvasProto = HTMLCanvasElement.prototype;
+    contextProto = CanvasRenderingContext2D.prototype;
+    uber = canvasProto._bak;
+    Object.defineProperty(canvasProto, 'width', uber.width);
+    Object.defineProperty(canvasProto, 'height', uber.height);
+    contextProto.drawImage = uber.drawImage;
+    contextProto.getImageData = uber.getImageData;
+    Object.defineProperty(contextProto, 'shadowOffsetX', uber.shadowOffsetX);
+    Object.defineProperty(contextProto, 'shadowOffsetY', uber.shadowOffsetY);
+    Object.defineProperty(contextProto, 'shadowBlur', uber.shadowBlur);
+    delete canvasProto._isRetinaEnabled;
+    delete canvasProto.isRetinaEnabled;
+    delete canvasProto._bak;
+}
+
+function normalizeCanvas(aCanvas, getCopy) {
+    // make sure aCanvas is non-retina, otherwise convert it in place (!)
+    // or answer a normalized copy if the "getCopy" flag is <true>
+    var cpy;
+    if (!aCanvas.isRetinaEnabled) {return aCanvas; }
+    cpy = newCanvas(new Point(aCanvas.width, aCanvas.height), true);
+    cpy.getContext('2d').drawImage(aCanvas, 0, 0);
+    if (getCopy) {return cpy; }
+    aCanvas.isRetinaEnabled = false;
+    aCanvas.width = cpy.width;
+    aCanvas.height = cpy.height;
+    aCanvas.getContext('2d').drawImage(cpy, 0, 0);
+    return aCanvas;
 }
 
 // Colors //////////////////////////////////////////////////////////////
@@ -1938,7 +2375,7 @@ Rectangle.prototype.round = function () {
 Rectangle.prototype.spread = function () {
     // round me by applying floor() to my origin and ceil() to my corner
     // expand by 1 to be on the safe side, this eliminates rounding
-    // artefacts caused by Safari's auto-scaling on retina displays
+    // artifacts caused by Safari's auto-scaling on retina displays
     return this.origin.floor().corner(this.corner.ceil()).expandBy(1);
 };
 
@@ -2090,6 +2527,20 @@ Node.prototype.forAllChildren = function (aFunction) {
     aFunction.call(null, this);
 };
 
+Node.prototype.anyChild = function (aPredicate) {
+    // includes myself
+    var i;
+    if (aPredicate.call(null, this)) {
+        return true;
+    }
+    for (i = 0; i < this.children.length; i += 1) {
+        if (this.children[i].anyChild(aPredicate)) {
+            return true;
+        }
+    }
+    return false;
+};
+
 Node.prototype.allLeafs = function () {
     var result = [];
     this.allChildren().forEach(function (element) {
@@ -2188,7 +2639,7 @@ Morph.uber = Node.prototype;
     single submorph's changes tremendous performance improvements can be
     achieved by setting the trackChanges flag to false before propagating
     the layout changes, setting it to true again and then storing the full
-    bounds of the surrounding morph. An an example refer to the
+    bounds of the surrounding morph. As an example refer to the
 
         fixLayout()
 
@@ -2733,11 +3184,10 @@ Morph.prototype.toggleVisibility = function () {
 // Morph full image:
 
 Morph.prototype.fullImageClassic = function () {
-    // why doesn't this work for all Morphs?
-    var fb = this.fullBounds(),
+    var fb = this.cachedFullBounds || this.fullBounds(), // use the cache since fullDrawOn() will
         img = newCanvas(fb.extent()),
         ctx = img.getContext('2d');
-    ctx.translate(-this.bounds.origin.x, -this.bounds.origin.y);
+    ctx.translate(-fb.origin.x, -fb.origin.y);
     this.fullDrawOn(img, fb);
     img.globalAlpha = this.alpha;
     return img;
@@ -3674,9 +4124,13 @@ Morph.prototype.evaluateString = function (code) {
 
 Morph.prototype.isTouching = function (otherMorph) {
     var oImg = this.overlappingImage(otherMorph),
-        data = oImg.getContext('2d')
-            .getImageData(1, 1, oImg.width, oImg.height)
-            .data;
+        data;
+    if (!oImg.width || !oImg.height) {
+        return false;
+    }
+    data = oImg.getContext('2d')
+        .getImageData(1, 1, oImg.width, oImg.height)
+        .data;
     return detect(
         data,
         function (each) {
@@ -4534,10 +4988,10 @@ CursorMorph.prototype.initializeClipboardHandler = function () {
             myself.processKeyDown(event);
             this.value = myself.target.selection();
             this.select();
-            
+
             // Make sure tab prevents default
-            if (event.keyIdentifier === 'U+0009' ||
-                    event.keyIdentifier === 'Tab') {
+            if (event.key === 'U+0009' ||
+                    event.key === 'Tab') {
                 myself.processKeyPress(event);
                 event.preventDefault();
             }
@@ -4651,7 +5105,7 @@ CursorMorph.prototype.processKeyDown = function (event) {
         this.keyDownEventUsed = true;
         break;
     case 13:
-        if (this.target instanceof StringMorph) {
+        if ((this.target instanceof StringMorph) || shift) {
             this.accept();
         } else {
             this.insert('\n');
@@ -9935,7 +10389,7 @@ HandMorph.prototype.processDrop = function (event) {
             target = target.parent;
         }
         pic.onload = function () {
-            canvas = newCanvas(new Point(pic.width, pic.height));
+            canvas = newCanvas(new Point(pic.width, pic.height), true);
             canvas.getContext('2d').drawImage(pic, 0, 0);
             target.droppedImage(canvas, aFile.name);
         };
@@ -10026,7 +10480,7 @@ HandMorph.prototype.processDrop = function (event) {
             }
             img = new Image();
             img.onload = function () {
-                canvas = newCanvas(new Point(img.width, img.height));
+                canvas = newCanvas(new Point(img.width, img.height), true);
                 canvas.getContext('2d').drawImage(img, 0, 0);
                 target.droppedImage(canvas);
             };
@@ -10038,7 +10492,7 @@ HandMorph.prototype.processDrop = function (event) {
         }
         img = new Image();
         img.onload = function () {
-            canvas = newCanvas(new Point(img.width, img.height));
+            canvas = newCanvas(new Point(img.width, img.height), true);
             canvas.getContext('2d').drawImage(img, 0, 0);
             target.droppedImage(canvas);
         };
@@ -10178,22 +10632,16 @@ WorldMorph.prototype.doOneCycle = function () {
 };
 
 WorldMorph.prototype.fillPage = function () {
-    var pos = getDocumentPositionOf(this.worldCanvas),
-        clientHeight = window.innerHeight,
+    var clientHeight = window.innerHeight,
         clientWidth = window.innerWidth,
         myself = this;
 
+    this.worldCanvas.style.position = "absolute";
+    this.worldCanvas.style.left = "0px";
+    this.worldCanvas.style.right = "0px";
+    this.worldCanvas.style.width = "100%";
+    this.worldCanvas.style.height = "100%";
 
-    if (pos.x > 0) {
-        this.worldCanvas.style.position = "absolute";
-        this.worldCanvas.style.left = "0px";
-        pos.x = 0;
-    }
-    if (pos.y > 0) {
-        this.worldCanvas.style.position = "absolute";
-        this.worldCanvas.style.top = "0px";
-        pos.y = 0;
-    }
     if (document.documentElement.scrollTop) {
         // scrolled down b/c of viewport scaling
         clientHeight = document.documentElement.clientHeight;
