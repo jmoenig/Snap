@@ -697,7 +697,7 @@ SnapTranslator.dict.zh = {
     'wait %n secs':
         '等待 %n 秒',
     'wait until %b':
-        '直到 %b 前都等待阗',
+        '直到 %b 前都等待',
     'forever %c':
         '重复执行 %c',
     'repeat %n %c':
@@ -1009,6 +1009,8 @@ SnapTranslator.dict.zh = {
         '导入',
     'Import library':
         '导入积木库',
+    'Backgrounds':
+        '背景',
 
     // cloud menu
     'Login...':

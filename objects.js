@@ -61,7 +61,7 @@
     sound handling
     Achal Dave contributed research and prototyping for creating music
     using the Web Audio API
-    Yuan Yuan contributed graphic effects for costumes
+    Yuan Yuan and Dylan Servilla contributed graphic effects for costumes
 
 */
 
@@ -80,9 +80,9 @@ document, isNaN, isString, newCanvas, nop, parseFloat, radians, window,
 modules, IDE_Morph, VariableDialogMorph, HTMLCanvasElement, Context, List,
 SpeechBubbleMorph, RingMorph, isNil, FileReader, TableDialogMorph,
 BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
-TableMorph, TableFrameMorph, normalizeCanvas*/
+TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph*/
 
-modules.objects = '2016-May-11';
+modules.objects = '2016-July-19';
 
 var SpriteMorph;
 var StageMorph;
@@ -868,7 +868,7 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'sensing',
             spec: 'current %dates'
         },
-        reportGet:{
+        reportGet: {
             type: 'reporter',
             category: 'sensing',
             spec: 'my %get',
@@ -968,15 +968,18 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'operators',
             spec: 'not %b'
         },
-        reportTrue: {
+        reportBoolean: {
             type: 'predicate',
             category: 'operators',
-            spec: 'true'
+            spec: '%bool',
+            alias: 'true boolean'
         },
-        reportFalse: {
+        reportFalse: { // special case for keyboard entry and search
             type: 'predicate',
             category: 'operators',
-            spec: 'false'
+            spec: '%bool',
+            defaults: [false],
+            alias: 'false boolean'
         },
         reportJoinWords: {
             type: 'reporter',
@@ -1220,6 +1223,14 @@ SpriteMorph.prototype.initBlockMigrations = function () {
         receiveClick: {
             selector: 'receiveInteraction',
             inputs: [['clicked']]
+        },
+        reportTrue: {
+            selector: 'reportBoolean',
+            inputs: [true]
+        },
+        reportFalse: {
+            selector: 'reportBoolean',
+            inputs: [false]
         }
     };
 };
@@ -1292,8 +1303,6 @@ SpriteMorph.prototype.blockAlternatives = {
     reportGreaterThan: ['reportEquals', 'reportLessThan'],
     reportAnd: ['reportOr'],
     reportOr: ['reportAnd'],
-    reportTrue: ['reportFalse'],
-    reportFalse: ['reportTrue'],
 
     // variables
     doSetVar: ['doChangeVar'],
@@ -1337,17 +1346,19 @@ SpriteMorph.prototype.init = function (globals) {
     this.idx = 0; // not to be serialized (!) - used for de-serialization
     this.wasWarped = false; // not to be serialized, used for fast-tracking
 
-    this.graphicsValues = { 'negative': 0,
-                            'fisheye': 0,
-                            'whirl': 0,
-                            'pixelate': 0,
-                            'mosaic': 0,
-                            'brightness': 0,
-                            'color': 0,
-                            'comic': 0,
-                            'duplicate': 0,
-                            'confetti': 0
-                         };
+    this.graphicsValues = {
+        'color': 0,
+        'fisheye': 0,
+        'whirl': 0,
+        'pixelate': 0,
+        'mosaic': 0,
+        'duplicate': 0,
+        'negative': 0,
+        'comic': 0,
+        'confetti': 0,
+        'saturation': 0,
+        'brightness': 0
+    };
 
     // sprite inheritance
     this.exemplar = null;
@@ -1368,7 +1379,7 @@ SpriteMorph.prototype.fullCopy = function (forClone) {
     var c = SpriteMorph.uber.fullCopy.call(this),
         myself = this,
         arr = [],
-        cb;
+        cb, effect;
 
     c.stopTalking();
     c.color = this.color.copy();
@@ -1411,6 +1422,12 @@ SpriteMorph.prototype.fullCopy = function (forClone) {
         dp.rotatesWithAnchor = part.rotatesWithAnchor;
         c.attachPart(dp);
     });
+    c.graphicsValues = {};
+    for (effect in this.graphicsValues) {
+        if (this.graphicsValues.hasOwnProperty(effect)) {
+            c.graphicsValues[effect] = this.graphicsValues[effect];
+        }
+    }
     return c;
 };
 
@@ -1575,7 +1592,12 @@ SpriteMorph.prototype.colorFiltered = function (aColor) {
         i,
         dta;
 
-    src = this.image.getContext('2d').getImageData(0, 0, ext.x, ext.y);
+    src = normalizeCanvas(this.image, true).getContext('2d').getImageData(
+        0,
+        0,
+        ext.x,
+        ext.y
+    );
     morph.image = newCanvas(ext, true);
     morph.bounds = this.bounds.copy();
     ctx = morph.image.getContext('2d');
@@ -1991,9 +2013,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('reportAnd'));
         blocks.push(block('reportOr'));
         blocks.push(block('reportNot'));
-        blocks.push('-');
-        blocks.push(block('reportTrue'));
-        blocks.push(block('reportFalse'));
+        blocks.push(block('reportBoolean'));
         blocks.push('-');
         blocks.push(block('reportJoinWords'));
         blocks.push(block('reportTextSplit'));
@@ -2855,14 +2875,14 @@ SpriteMorph.prototype.remove = function () {
     costume in the original sprite has no effect on any of its clones.
 */
 
-SpriteMorph.prototype.createClone = function () {
+SpriteMorph.prototype.createClone = function (immediately) {
     var stage = this.parentThatIsA(StageMorph);
     if (stage && stage.cloneCount <= 2000) {
-        this.fullCopy(true).clonify(stage);
+        this.fullCopy(true).clonify(stage, immediately);
     }
 };
 
-SpriteMorph.prototype.clonify = function (stage) {
+SpriteMorph.prototype.clonify = function (stage, immediately) {
     var hats;
     this.parts.forEach(function (part) {
         part.clonify(stage);
@@ -2881,7 +2901,7 @@ SpriteMorph.prototype.clonify = function (stage) {
             null, // export result
             null, // callback
             null, // is clicked
-            true // right away
+            immediately // without yielding
             );
     });
     this.endWarp();
@@ -3127,105 +3147,311 @@ SpriteMorph.prototype.graphicsChanged = function () {
 };
 
 SpriteMorph.prototype.applyGraphicsEffects = function (canvas) {
-// For every effect: apply transform of that effect(canvas, stored value)
-// The future: write more effects here
-    var ctx, imagedata, pixels, newimagedata;
+  // For every effect: apply transform of that effect(canvas, stored value)
+  // Graphic effects from Scratch are heavily based on ScratchPlugin.c
 
-    function transform_negative(p, value) {
-        var i, rcom, gcom, bcom;
-        if (value !== 0) {
-            for (i = 0; i < p.length; i += 4) {
-                rcom = 255 - p[i];
-                gcom = 255 - p[i + 1];
-                bcom = 255 - p[i + 2];
+    var ctx, imagedata;
 
-                if (p[i] < rcom) { //compare to the complement
-                    p[i] += value;
-                } else if (p[i] > rcom) {
-                    p[i] -= value;
+    function transform_fisheye (imagedata, value) {
+        var pixels, newImageData, newPixels, centerX, centerY,
+            w, h, x, y, dx, dy, r, angle, srcX, srcY, i, srcI;
+
+        w = imagedata.width;
+        h = imagedata.height;
+        pixels = imagedata.data;
+        newImageData = ctx.createImageData(w, h);
+        newPixels = newImageData.data;
+
+        centerX = w / 2;
+        centerY = h / 2;
+        value = Math.max(0, (value + 100) / 100);
+        for (y = 0; y < h; y++) {
+            for (x = 0; x < w; x++) {
+                dx = (x - centerX) / centerX;
+                dy = (y - centerY) / centerY;
+                r = Math.pow(Math.sqrt(dx * dx + dy * dy), value);
+                if (r <= 1) {
+                    angle = Math.atan2(dy, dx);
+                    srcX = Math.floor(centerX + (r * Math.cos(angle) * centerX));
+                    srcY = Math.floor(centerY + (r * Math.sin(angle) * centerY));
+                } else {
+                    srcX = x;
+                    srcY = y;
                 }
-                if (p[i + 1] < gcom) {
-                    p[i + 1] += value;
-                } else if (p[i + 1] > gcom) {
-                    p[i + 1] -= value;
+                i = (y * w + x) * 4;
+                srcI = (srcY * w + srcX) * 4;
+                newPixels[i] = pixels[srcI];
+                newPixels[i + 1] = pixels[srcI + 1];
+                newPixels[i + 2] = pixels[srcI + 2];
+                newPixels[i + 3] = pixels[srcI + 3];
+            }
+        }
+        return newImageData;
+    }
+
+    function transform_whirl (imagedata, value) {
+        var pixels, newImageData, newPixels, w, h, centerX, centerY,
+            x, y, radius, scaleX, scaleY, whirlRadians, radiusSquared,
+            dx, dy, d, factor, angle, srcX, srcY, i, srcI, sina, cosa;
+
+        w = imagedata.width;
+        h = imagedata.height;
+        pixels = imagedata.data;
+        newImageData = ctx.createImageData(w, h);
+        newPixels = newImageData.data;
+
+        centerX = w / 2;
+        centerY = h / 2;
+        radius = Math.min(centerX, centerY);
+        if (w < h) {
+            scaleX = h / w;
+            scaleY = 1;
+        } else {
+            scaleX = 1;
+            scaleY = w / h;
+        }
+        whirlRadians = -radians(value);
+        radiusSquared = radius * radius;
+        for (y = 0; y < h; y++) {
+            for (x = 0; x < w; x++) {
+                dx = scaleX * (x - centerX);
+                dy = scaleY * (y - centerY);
+                d = dx * dx + dy * dy;
+                if (d < radiusSquared) {
+                    factor = 1 - (Math.sqrt(d) / radius);
+                    angle = whirlRadians * (factor * factor);
+                    sina = Math.sin(angle);
+                    cosa = Math.cos(angle);
+                    srcX = Math.floor((cosa * dx - sina * dy) / scaleX + centerX);
+                    srcY = Math.floor((sina * dx + cosa * dy) / scaleY + centerY);
+                } else {
+                    srcX = x;
+                    srcY = y;
                 }
-                if (p[i + 2] < bcom) {
-                    p[i + 2] += value;
-                } else if (p[i + 2] > bcom) {
-                    p[i + 2] -= value;
+                i = (y * w + x) * 4;
+                srcI = (srcY * w + srcX) * 4;
+                newPixels[i] = pixels[srcI];
+                newPixels[i + 1] = pixels[srcI + 1];
+                newPixels[i + 2] = pixels[srcI + 2];
+                newPixels[i + 3] = pixels[srcI + 3];
+            }
+        }
+        return newImageData;
+    }
+
+    function transform_pixelate (imagedata, value) {
+        var pixels, newImageData, newPixels, w, h,
+            x, y, srcX, srcY, i, srcI;
+
+        w = imagedata.width;
+        h = imagedata.height;
+        pixels = imagedata.data;
+        newImageData = ctx.createImageData(w, h);
+        newPixels = newImageData.data;
+
+        value = Math.floor(Math.abs(value / 10) + 1);
+        for (y = 0; y < h; y++) {
+            for (x = 0; x < w; x++) {
+                srcX = Math.floor(x / value) * value;
+                srcY = Math.floor(y / value) * value;
+                i = (y * w + x) * 4;
+                srcI = (srcY * w + srcX) * 4;
+                newPixels[i] = pixels[srcI];
+                newPixels[i + 1] = pixels[srcI + 1];
+                newPixels[i + 2] = pixels[srcI + 2];
+                newPixels[i + 3] = pixels[srcI + 3];
+            }
+        }
+        return newImageData;
+    }
+
+    function transform_mosaic (imagedata, value) {
+        var pixels, i, l, newImageData, newPixels, srcI;
+        pixels = imagedata.data;
+        newImageData = ctx.createImageData(imagedata.width, imagedata.height);
+        newPixels = newImageData.data;
+
+        value = Math.round((Math.abs(value) + 10) / 10);
+        value = Math.max(0, Math.min(value, Math.min(imagedata.width, imagedata.height)));
+        for (i = 0, l = pixels.length; i < l; i += 4) {
+            srcI = i * value % l;
+            newPixels[i] = pixels[srcI];
+            newPixels[i + 1] = pixels[srcI + 1];
+            newPixels[i + 2] = pixels[srcI + 2];
+            newPixels[i + 3] = pixels[srcI + 3];
+        }
+        return newImageData;
+    }
+
+    function transform_duplicate (imagedata, value) {
+        var pixels, i;
+        pixels = imagedata.data;
+        for (i = 0; i < pixels.length; i += 4) {
+            pixels[i] = pixels[i * value];
+            pixels[i + 1] = pixels[i * value + 1];
+            pixels[i + 2] = pixels[i * value + 2];
+            pixels[i + 3] = pixels[i * value + 3];
+        }
+        return imagedata;
+    }
+
+    function transform_HSV (imagedata, hueShift, saturationShift, brightnessShift) {
+        var pixels, index, l, r, g, b, max, min, span,
+            h, s, v, i, f, p, q, t, newR, newG, newB;
+        pixels = imagedata.data;
+        for (index = 0, l = pixels.length; index < l; index += 4) {
+            r = pixels[index];
+            g = pixels[index + 1];
+            b = pixels[index + 2];
+
+            max = Math.max(r, g, b);
+            min = Math.min(r, g, b);
+            span = max - min;
+            if (span === 0) {
+                h = s = 0;
+            } else {
+                if (max === r) {
+                    h = (60 * (g - b)) / span;
+                } else if (max === g) {
+                    h = 120 + ((60 * (b - r)) / span);
+                } else if (max === b) {
+                    h = 240 + ((60 * (r - g)) / span);
                 }
+                s = (max - min) / max;
             }
+            if (h < 0) {
+                h += 360;
+            }
+            v = max / 255;
+
+            h = (h + hueShift * 360 / 200) % 360;
+            s = Math.max(0, Math.min(s + saturationShift / 100, 1));
+            v = Math.max(0, Math.min(v + brightnessShift / 100, 1));
+
+            i = Math.floor(h / 60);
+            f = (h / 60) - i;
+            p = v * (1 - s);
+            q = v * (1 - (s * f));
+            t = v * (1 - (s * (1 - f)));
+
+            if (i === 0 || i === 6) {
+                newR = v;
+                newG = t;
+                newB = p;
+            } else if (i === 1) {
+                newR = q;
+                newG = v;
+                newB = p;
+            } else if (i === 2) {
+                newR = p;
+                newG = v;
+                newB = t;
+            } else if (i === 3) {
+                newR = p;
+                newG = q;
+                newB = v;
+            } else if (i === 4) {
+                newR = t;
+                newG = p;
+                newB = v;
+            } else if (i === 5) {
+                newR = v;
+                newG = p;
+                newB = q;
+            }
+
+            pixels[index] = newR * 255;
+            pixels[index + 1] = newG * 255;
+            pixels[index + 2] = newB * 255;
         }
-        return p;
+        return imagedata;
     }
 
-    function transform_brightness(p, value) {
-        var i;
-        if (value !== 0) {
-            for (i = 0; i < p.length; i += 4) {
-                p[i] += value; //255 = 100% of this color
-                p[i + 1] += value;
-                p[i + 2] += value;
+    function transform_negative (imagedata, value) {
+        var pixels, i, l, rcom, gcom, bcom;
+        pixels = imagedata.data;
+        for (i = 0, l = pixels.length; i < l; i += 4) {
+            rcom = 255 - pixels[i];
+            gcom = 255 - pixels[i + 1];
+            bcom = 255 - pixels[i + 2];
+
+            if (pixels[i] < rcom) { //compare to the complement
+                pixels[i] += value;
+            } else if (pixels[i] > rcom) {
+                pixels[i] -= value;
+            }
+            if (pixels[i + 1] < gcom) {
+                pixels[i + 1] += value;
+            } else if (pixels[i + 1] > gcom) {
+                pixels[i + 1] -= value;
+            }
+            if (pixels[i + 2] < bcom) {
+                pixels[i + 2] += value;
+            } else if (pixels[i + 2] > bcom) {
+                pixels[i + 2] -= value;
             }
         }
-        return p;
+        return imagedata;
     }
 
-    function transform_comic(p, value) {
-        var i;
-        if (value !== 0) {
-            for (i = 0; i < p.length; i += 4) {
-                p[i] += Math.sin(i * value) * 127 + 128;
-                p[i + 1] += Math.sin(i * value) * 127 + 128;
-                p[i + 2] += Math.sin(i * value) * 127 + 128;
-            }
+    function transform_comic (imagedata, value) {
+        var pixels, i, l;
+        pixels = imagedata.data;
+        for (i = 0, l = pixels.length; i < l; i += 4) {
+            pixels[i] += Math.sin(i * value) * 127 + 128;
+            pixels[i + 1] += Math.sin(i * value) * 127 + 128;
+            pixels[i + 2] += Math.sin(i * value) * 127 + 128;
         }
-        return p;
+        return imagedata;
     }
 
-    function transform_duplicate(p, value) {
-        var i;
-        if (value !== 0) {
-            for (i = 0; i < p.length; i += 4) {
-                p[i] = p[i * value];
-                p[i + 1] = p[i * value + 1];
-                p[i + 2] = p[i * value + 2];
-                p[i + 3] = p[i * value + 3];
-            }
+    function transform_confetti (imagedata, value) {
+        var pixels, i, l;
+        pixels = imagedata.data;
+        for (i = 0, l = pixels.length; i < l; i += 1) {
+            pixels[i] = Math.sin(value * pixels[i]) * 127 + pixels[i];
         }
-        return p;
-    }
-
-    function transform_confetti(p, value) {
-        var i;
-        if (value !== 0) {
-            for (i = 0; i < p.length; i += 1) {
-                p[i] = Math.sin(value * p[i]) * 127 + p[i];
-            }
-        }
-        return p;
+        return imagedata;
     }
 
     if (this.graphicsChanged()) {
         ctx = canvas.getContext("2d");
         imagedata = ctx.getImageData(0, 0, canvas.width, canvas.height);
-        pixels = imagedata.data;
 
-        //A sprite should wear all 7 effects at once
-        /*pixels = transform_whirl(pixels, this.graphicsValues.whirl);*/
-        pixels = transform_negative(pixels, this.graphicsValues.negative);
-        pixels = transform_brightness(pixels, this.graphicsValues.brightness);
-        pixels = transform_comic(pixels, this.graphicsValues.comic);
-        /*pixels = transform_pixelate(pixels, this.graphicsValues.pixelate);*/
-        pixels = transform_duplicate(pixels, this.graphicsValues.duplicate);
-        /*pixels = transform_color(pixels, this.graphicsValues.color);*/
-        /*pixels = transform_fisheye(pixels, this.graphicsValues.fisheye);*/
-        pixels = transform_confetti(pixels, this.graphicsValues.confetti);
+        if (this.graphicsValues.fisheye) {
+            imagedata = transform_fisheye(imagedata, this.graphicsValues.fisheye);
+        }
+        if (this.graphicsValues.whirl) {
+            imagedata = transform_whirl(imagedata, this.graphicsValues.whirl);
+        }
+        if (this.graphicsValues.pixelate) {
+            imagedata = transform_pixelate(imagedata, this.graphicsValues.pixelate);
+        }
+        if (this.graphicsValues.mosaic) {
+            imagedata = transform_mosaic(imagedata, this.graphicsValues.mosaic);
+        }
+        if (this.graphicsValues.duplicate) {
+            imagedata = transform_duplicate(imagedata, this.graphicsValues.duplicate);
+        }
+        if (this.graphicsValues.color || this.graphicsValues.saturation || this.graphicsValues.brightness) {
+            imagedata = transform_HSV(
+                imagedata,
+                this.graphicsValues.color,
+                this.graphicsValues.saturation,
+                this.graphicsValues.brightness
+            );
+        }
+        if (this.graphicsValues.negative) {
+            imagedata = transform_negative(imagedata, this.graphicsValues.negative);
+        }
+        if (this.graphicsValues.comic) {
+            imagedata = transform_comic(imagedata, this.graphicsValues.comic);
+        }
+        if (this.graphicsValues.confetti) {
+            imagedata = transform_confetti(imagedata, this.graphicsValues.confetti);
+        }
 
-        //the last object will have all the transformations done on it
-        newimagedata = ctx.createImageData(imagedata); //make imgdata object
-        newimagedata.data.set(pixels); //add transformed pixels
-        ctx.putImageData(newimagedata, 0, 0);
+        ctx.putImageData(imagedata, 0, 0);
     }
 
     return canvas;
@@ -3390,6 +3616,9 @@ SpriteMorph.prototype.drawLine = function (start, dest) {
 };
 
 SpriteMorph.prototype.floodFill = function () {
+    if (!this.parent.bounds.containsPoint(this.rotationCenter())) {
+        return;
+    }
     var layer = normalizeCanvas(this.parent.penTrails()),
         width = layer.width,
         height = layer.height,
@@ -4528,11 +4757,10 @@ SpriteMorph.prototype.fullThumbnail = function (extentPoint) {
 // SpriteMorph Boolean visual representation
 
 SpriteMorph.prototype.booleanMorph = function (bool) {
-    // answer a block which can be shown in watchers, speech bubbles etc.
-    var block = new ReporterBlockMorph(true);
-    block.color = SpriteMorph.prototype.blockColor.operators;
-    block.setSpec(localize(bool.toString()));
-    return block;
+    var sym = new BooleanSlotMorph(bool);
+    sym.isStatic = true;
+    sym.drawNew();
+    return sym;
 };
 
 // SpriteMorph nesting
@@ -4889,17 +5117,19 @@ StageMorph.prototype.init = function (globals) {
     this.trailsCanvas = null;
     this.isThreadSafe = false;
 
-    this.graphicsValues = { 'negative': 0,
-                            'fisheye': 0,
-                            'whirl': 0,
-                            'pixelate': 0,
-                            'mosaic': 0,
-                            'brightness': 0,
-                            'color': 0,
-                            'comic': 0,
-                            'duplicate': 0,
-                            'confetti': 0
-                        };
+    this.graphicsValues = {
+        'color': 0,
+        'fisheye': 0,
+        'whirl': 0,
+        'pixelate': 0,
+        'mosaic': 0,
+        'duplicate': 0,
+        'negative': 0,
+        'comic': 0,
+        'confetti': 0,
+        'saturation': 0,
+        'brightness': 0
+    };
 
     StageMorph.uber.init.call(this);
 
@@ -5087,7 +5317,12 @@ StageMorph.prototype.colorFiltered = function (aColor, excludedSprite) {
         i,
         dta;
 
-    src = img.getContext('2d').getImageData(0, 0, ext.x, ext.y);
+    src = normalizeCanvas(img, true).getContext('2d').getImageData(
+        0,
+        0,
+        ext.x,
+        ext.y
+    );
     morph.bounds = this.bounds.copy();
     morph.image = newCanvas(ext, true);
     ctx = morph.image.getContext('2d');
@@ -5758,9 +5993,7 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('reportAnd'));
         blocks.push(block('reportOr'));
         blocks.push(block('reportNot'));
-        blocks.push('-');
-        blocks.push(block('reportTrue'));
-        blocks.push(block('reportFalse'));
+        blocks.push(block('reportBoolean'));
         blocks.push('-');
         blocks.push(block('reportJoinWords'));
         blocks.push(block('reportTextSplit'));

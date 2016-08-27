@@ -44,6 +44,7 @@
         CostumeIconMorph
         WardrobeMorph
         StageHandleMorph;
+        PaletteHandleMorph;
 
 
     credits
@@ -62,7 +63,7 @@ InputFieldMorph, FrameMorph, Process, nop, SnapSerializer, ListMorph, detect,
 AlignmentMorph, TabMorph, Costume, MorphicPreferences, Sound, BlockMorph,
 ToggleMorph, InputSlotDialogMorph, ScriptsMorph, isNil, SymbolMorph,
 BlockExportDialogMorph, BlockImportDialogMorph, SnapTranslator, localize,
-List, InputSlotMorph, SnapCloud, Uint8Array, HandleMorph, SVG_Costume,
+List, ArgMorph, SnapCloud, Uint8Array, HandleMorph, SVG_Costume,
 fontHeight, hex_sha512, sb, CommentMorph, CommandBlockMorph,
 BlockLabelPlaceHolderMorph, Audio, SpeechBubbleMorph, ScriptFocusMorph,
 XML_Element, WatcherMorph, BlockRemovalDialogMorph, saveAs, TableMorph,
@@ -71,7 +72,7 @@ isRetinaSupported*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2016-May-13';
+modules.gui = '2016-August-12';
 
 // Declarations
 
@@ -84,6 +85,7 @@ var WardrobeMorph;
 var SoundIconMorph;
 var JukeboxMorph;
 var StageHandleMorph;
+var PaletteHandleMorph;
 
 // IDE_Morph ///////////////////////////////////////////////////////////
 
@@ -226,6 +228,7 @@ IDE_Morph.prototype.init = function (isAutoFill) {
     this.controlBar = null;
     this.categories = null;
     this.palette = null;
+    this.paletteHandle = null;
     this.spriteBar = null;
     this.spriteEditor = null;
     this.stage = null;
@@ -240,6 +243,7 @@ IDE_Morph.prototype.init = function (isAutoFill) {
     this.hasChangedMedia = false;
 
     this.isAnimating = true;
+    this.paletteWidth = 200; // initially same as logo width
     this.stageRatio = 1; // for IDE animations, e.g. when zooming
 
     this.loadNewProject = false; // flag when starting up translated
@@ -460,6 +464,7 @@ IDE_Morph.prototype.openIn = function (world) {
     }
 
     if (this.userLanguage) {
+        this.loadNewProject = true;
         this.setLanguage(this.userLanguage, interpretUrlAnchors);
     } else {
         interpretUrlAnchors.call(this);
@@ -851,7 +856,6 @@ IDE_Morph.prototype.createControlBar = function () {
 };
 
 IDE_Morph.prototype.createCategories = function () {
-    // assumes the logo has already been created
     var myself = this;
 
     if (this.categories) {
@@ -859,7 +863,7 @@ IDE_Morph.prototype.createCategories = function () {
     }
     this.categories = new Morph();
     this.categories.color = this.groupColor;
-    this.categories.silentSetWidth(this.logo.width()); // width is fixed
+    this.categories.silentSetWidth(this.paletteWidth);
 
     function addCategoryButton(category) {
         var labelWidth = 75,
@@ -907,7 +911,7 @@ IDE_Morph.prototype.createCategories = function () {
             buttonHeight = myself.categories.children[0].height(),
             border = 3,
             rows =  Math.ceil((myself.categories.children.length) / 2),
-            xPadding = (myself.categories.width()
+            xPadding = (200 // myself.logo.width()
                 - border
                 - buttonWidth * 2) / 3,
             yPadding = 2,
@@ -984,6 +988,13 @@ IDE_Morph.prototype.createPalette = function (forSearching) {
     this.palette.setWidth(this.logo.width());
     this.add(this.palette);
     return this.palette;
+};
+
+IDE_Morph.prototype.createPaletteHandle = function () {
+    // assumes that the palette has already been created
+    if (this.paletteHandle) {this.paletteHandle.destroy(); }
+    this.paletteHandle = new PaletteHandleMorph(this.categories);
+    this.add(this.paletteHandle);
 };
 
 IDE_Morph.prototype.createStage = function () {
@@ -1374,6 +1385,8 @@ IDE_Morph.prototype.createCorral = function () {
     var frame, template, padding = 5, myself = this;
 
     this.createStageHandle();
+    this.createPaletteHandle();
+
     if (this.corral) {
         this.corral.destroy();
     }
@@ -1477,7 +1490,8 @@ IDE_Morph.prototype.createCorral = function () {
 IDE_Morph.prototype.fixLayout = function (situation) {
     // situation is a string, i.e.
     // 'selectSprite' or 'refreshPalette' or 'tabEditor'
-    var padding = this.padding;
+    var padding = this.padding,
+        maxPaletteWidth;
 
     Morph.prototype.trackChanges = false;
 
@@ -1490,12 +1504,14 @@ IDE_Morph.prototype.fixLayout = function (situation) {
         // categories
         this.categories.setLeft(this.logo.left());
         this.categories.setTop(this.logo.bottom());
+        this.categories.setWidth(this.paletteWidth);
     }
 
     // palette
     this.palette.setLeft(this.logo.left());
     this.palette.setTop(this.categories.bottom());
     this.palette.setHeight(this.bottom() - this.palette.top());
+    this.palette.setWidth(this.paletteWidth);
 
     if (situation !== 'refreshPalette') {
         // stage
@@ -1510,11 +1526,21 @@ IDE_Morph.prototype.fixLayout = function (situation) {
             this.stage.setScale(this.isSmallStage ? this.stageRatio : 1);
             this.stage.setTop(this.logo.bottom() + padding);
             this.stage.setRight(this.right());
+            maxPaletteWidth = this.width() -
+                this.stage.width() -
+                this.spriteBar.tabBar.width() -
+                (this.padding * 2);
+            if (this.paletteWidth > maxPaletteWidth) {
+                this.paletteWidth = maxPaletteWidth;
+                this.fixLayout();
+            }
             this.stageHandle.fixLayout();
+            this.paletteHandle.fixLayout();
         }
 
         // spriteBar
-        this.spriteBar.setPosition(this.logo.bottomRight().add(padding));
+        this.spriteBar.setLeft(this.paletteWidth + padding);
+        this.spriteBar.setTop(this.logo.bottom() + padding);
         this.spriteBar.setExtent(new Point(
             Math.max(0, this.stage.left() - padding - this.spriteBar.left()),
             this.categories.bottom() - this.spriteBar.top() - padding
@@ -1583,8 +1609,8 @@ IDE_Morph.prototype.setExtent = function (point) {
     ext = point.max(minExt);
 
     // adjust stage ratio if necessary
-    maxWidth = ext.x - (this.spriteBar.tabBar.fullBounds().right() -
-        this.left());
+    maxWidth = ext.x -
+        (200 + this.spriteBar.tabBar.width() + (this.padding * 2));
     minWidth = SpriteIconMorph.prototype.thumbSize.x * 3;
     maxHeight = (ext.y - SpriteIconMorph.prototype.thumbSize.y * 3.5);
     minRatio = minWidth / this.stage.dimensions.x;
@@ -1809,6 +1835,7 @@ IDE_Morph.prototype.toggleRetina = function () {
     }
     this.world().fillPage();
     IDE_Morph.prototype.scriptsPaneTexture = this.scriptsTexture();
+    this.stage.clearPenTrails();
     this.drawNew();
     this.refreshIDE();
 };
@@ -1902,17 +1929,17 @@ IDE_Morph.prototype.applySavedSettings = function () {
     }
 
     // keyboard editing
-    if (keyboard) {
-        ScriptsMorph.prototype.enableKeyboard = true;
-    } else {
+    if (keyboard === 'false') {
         ScriptsMorph.prototype.enableKeyboard = false;
+    } else {
+        ScriptsMorph.prototype.enableKeyboard = true;
     }
 
     // tables
-    if (tables) {
-        List.prototype.enableTables = true;
-    } else {
+    if (tables === 'false') {
         List.prototype.enableTables = false;
+    } else {
+        List.prototype.enableTables = true;
     }
 
     // tableLines
@@ -2354,7 +2381,7 @@ IDE_Morph.prototype.settingsMenu = function () {
         addPreference(
             'Execute on slider change',
             'toggleSliderExecute',
-            InputSlotMorph.prototype.executeOnSliderEdit,
+            ArgMorph.prototype.executeOnSliderEdit,
             'uncheck to supress\nrunning scripts\nwhen moving the slider',
             'check to run\nthe edited script\nwhen moving the slider'
         );
@@ -2469,9 +2496,9 @@ IDE_Morph.prototype.settingsMenu = function () {
             ScriptsMorph.prototype.enableKeyboard =
                 !ScriptsMorph.prototype.enableKeyboard;
             if (ScriptsMorph.prototype.enableKeyboard) {
-                myself.saveSetting('keyboard', true);
-            } else {
                 myself.removeSetting('keyboard');
+            } else {
+                myself.saveSetting('keyboard', false);
             }
         },
         ScriptsMorph.prototype.enableKeyboard,
@@ -2485,9 +2512,9 @@ IDE_Morph.prototype.settingsMenu = function () {
             List.prototype.enableTables =
                 !List.prototype.enableTables;
             if (List.prototype.enableTables) {
-                myself.saveSetting('tables', true);
-            } else {
                 myself.removeSetting('tables');
+            } else {
+                myself.saveSetting('tables', false);
             }
         },
         List.prototype.enableTables,
@@ -2955,7 +2982,7 @@ IDE_Morph.prototype.aboutSnap = function () {
         module, btn1, btn2, btn3, btn4, licenseBtn, translatorsBtn,
         world = this.world();
 
-    aboutTxt = 'Snap! 4.0.8 - dev -\nBuild Your Own Blocks\n\n'
+    aboutTxt = 'Snap! 4.0.8.7\nBuild Your Own Blocks\n\n'
         + 'Copyright \u24B8 2016 Jens M\u00F6nig and '
         + 'Brian Harvey\n'
         + 'jens@moenig.org, bh@cs.berkeley.edu\n\n'
@@ -2994,7 +3021,7 @@ IDE_Morph.prototype.aboutSnap = function () {
         + '\nKartik Chandra: Paint Editor'
         + '\nMichael Ball: Time/Date UI, many bugfixes'
         + '\nBartosz Leper: Retina Display Support'
-        + '\n"Ava" Yuan Yuan: Graphic Effects'
+        + '\n"Ava" Yuan Yuan, Dylan Servilla: Graphic Effects'
         + '\nKyle Hotchkiss: Block search design'
         + '\nIan Reynolds: UI Design, Event Bindings, '
         + 'Sound primitives'
@@ -4006,7 +4033,11 @@ IDE_Morph.prototype.switchToUserMode = function () {
     // onto the World in user-mode
     world.reactToDropOf = function (morph) {
         if (!(morph instanceof DialogBoxMorph)) {
-            world.hand.grab(morph);
+            if (world.hand.grabOrigin) {
+                morph.slideBackTo(world.hand.grabOrigin);
+            } else {
+                world.hand.grab(morph);
+            }
         }
     };
     this.showMessage('entering user mode', 1);
@@ -4161,8 +4192,8 @@ IDE_Morph.prototype.toggleInputSliders = function () {
 };
 
 IDE_Morph.prototype.toggleSliderExecute = function () {
-    InputSlotMorph.prototype.executeOnSliderEdit =
-        !InputSlotMorph.prototype.executeOnSliderEdit;
+    ArgMorph.prototype.executeOnSliderEdit =
+        !ArgMorph.prototype.executeOnSliderEdit;
 };
 
 IDE_Morph.prototype.toggleAppMode = function (appMode) {
@@ -4173,6 +4204,7 @@ IDE_Morph.prototype.toggleAppMode = function (appMode) {
             this.controlBar.projectButton,
             this.controlBar.settingsButton,
             this.controlBar.stageSizeButton,
+            this.paletteHandle,
             this.stageHandle,
             this.corral,
             this.corralBar,
@@ -4232,9 +4264,9 @@ IDE_Morph.prototype.toggleAppMode = function (appMode) {
     this.setExtent(this.world().extent()); // resume trackChanges
 };
 
-IDE_Morph.prototype.toggleStageSize = function (isSmall) {
+IDE_Morph.prototype.toggleStageSize = function (isSmall, forcedRatio) {
     var myself = this,
-        smallRatio = 0.5,
+        smallRatio = forcedRatio || 0.5,
         world = this.world(),
         shiftClicked = (world.currentKey === 16),
         altClicked = (world.currentKey === 18);
@@ -4292,6 +4324,29 @@ IDE_Morph.prototype.toggleStageSize = function (isSmall) {
     }
 };
 
+IDE_Morph.prototype.setPaletteWidth = function (newWidth) {
+    var count = 1,
+        steps = this.isAnimating ? 5 : 1,
+        world = this.world(),
+        myself = this;
+
+    newWidth = Math.max(newWidth, 200);
+    this.fps = 30;
+    this.step = function () {
+        var diff;
+        if (count >= steps) {
+            myself.paletteWidth = newWidth;
+            delete myself.step;
+            myself.fps = 0;
+        } else {
+            count += 1;
+            diff = (myself.paletteWidth - newWidth) / 2;
+            myself.paletteWidth -= diff;
+        }
+        myself.setExtent(world.extent());
+    };
+};
+
 IDE_Morph.prototype.createNewProject = function () {
     var myself = this;
     this.confirm(
@@ -4323,7 +4378,10 @@ IDE_Morph.prototype.languageMenu = function () {
         menu.addItem(
             (SnapTranslator.language === lang ? '\u2713 ' : '    ') +
                 SnapTranslator.languageName(lang),
-            function () {myself.setLanguage(lang); }
+            function () {
+                myself.loadNewProject = false;
+                myself.setLanguage(lang);
+            }
         );
     });
     menu.popup(world, pos);
@@ -4350,7 +4408,8 @@ IDE_Morph.prototype.setLanguage = function (lang, callback) {
 };
 
 IDE_Morph.prototype.reflectLanguage = function (lang, callback) {
-    var projectData;
+    var projectData,
+        urlBar = location.hash;
     SnapTranslator.language = lang;
     if (!this.loadNewProject) {
         if (Process.prototype.isCatchingErrors) {
@@ -4370,6 +4429,7 @@ IDE_Morph.prototype.reflectLanguage = function (lang, callback) {
     this.fixLayout();
     if (this.loadNewProject) {
         this.newProject();
+        location.hash = urlBar;
     } else {
         this.openProjectString(projectData);
     }
@@ -6865,7 +6925,7 @@ WardrobeMorph.prototype.removeCostumeAt = function (idx) {
 
 WardrobeMorph.prototype.paintNew = function () {
     var cos = new Costume(
-            newCanvas(),
+            newCanvas(null, true),
             this.sprite.newCostumeName(localize('Untitled'))
         ),
         ide = this.parentThatIsA(IDE_Morph),
@@ -7374,5 +7434,94 @@ StageHandleMorph.prototype.mouseEnter = function () {
 StageHandleMorph.prototype.mouseLeave = function () {
     this.image = this.normalImage;
     this.changed();
+};
+
+StageHandleMorph.prototype.mouseDoubleClick = function () {
+    this.target.parentThatIsA(IDE_Morph).toggleStageSize(true, 1);
+};
+
+// PaletteHandleMorph ////////////////////////////////////////////////////////
+
+// I am a horizontal resizing handle for a blocks palette
+// I pseudo-inherit many things from StageHandleMorph
+
+// PaletteHandleMorph inherits from Morph:
+
+PaletteHandleMorph.prototype = new Morph();
+PaletteHandleMorph.prototype.constructor = PaletteHandleMorph;
+PaletteHandleMorph.uber = Morph.prototype;
+
+// PaletteHandleMorph instance creation:
+
+function PaletteHandleMorph(target) {
+    this.init(target);
+}
+
+PaletteHandleMorph.prototype.init = function (target) {
+    this.target = target || null;
+    HandleMorph.uber.init.call(this);
+    this.color = MorphicPreferences.isFlat ?
+            new Color(255, 255, 255) : new Color(190, 190, 190);
+    this.isDraggable = false;
+    this.noticesTransparentClick = true;
+    this.setExtent(new Point(12, 50));
+};
+
+// PaletteHandleMorph drawing:
+
+PaletteHandleMorph.prototype.drawNew =
+    StageHandleMorph.prototype.drawNew;
+
+PaletteHandleMorph.prototype.drawOnCanvas =
+    StageHandleMorph.prototype.drawOnCanvas;
+
+// PaletteHandleMorph layout:
+
+PaletteHandleMorph.prototype.fixLayout = function () {
+    if (!this.target) {return; }
+    var ide = this.target.parentThatIsA(IDE_Morph);
+    this.setTop(this.target.top() + 10);
+    this.setRight(this.target.right());
+    if (ide) {ide.add(this); } // come to front
+};
+
+// PaletteHandleMorph stepping:
+
+PaletteHandleMorph.prototype.step = null;
+
+PaletteHandleMorph.prototype.mouseDownLeft = function (pos) {
+    var world = this.world(),
+        offset = this.right() - pos.x,
+        ide = this.target.parentThatIsA(IDE_Morph);
+
+    if (!this.target) {
+        return null;
+    }
+    this.step = function () {
+        var newPos;
+        if (world.hand.mouseButton) {
+            newPos = world.hand.bounds.origin.x + offset;
+            ide.paletteWidth = Math.min(
+                Math.max(200, newPos),
+                ide.stageHandle.left() - ide.spriteBar.tabBar.width()
+            );
+            ide.setExtent(world.extent());
+
+        } else {
+            this.step = null;
+        }
+    };
+};
+
+// PaletteHandleMorph events:
+
+PaletteHandleMorph.prototype.mouseEnter
+    = StageHandleMorph.prototype.mouseEnter;
+
+PaletteHandleMorph.prototype.mouseLeave
+    = StageHandleMorph.prototype.mouseLeave;
+    
+PaletteHandleMorph.prototype.mouseDoubleClick = function () {
+    this.target.parentThatIsA(IDE_Morph).setPaletteWidth(200);
 };
 
