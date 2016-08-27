@@ -396,13 +396,14 @@ CustomBlockDefinition.prototype.scriptsModel = function () {
 CustomBlockDefinition.prototype.usesBlockInstance = function (definition) {
     var found = false;
 
-    this.scripts.forEach(function (script) {
-        script.allChildren().forEach(function (child) {
+    this.scripts.some(function (script) {
+        script.allChildren().some(function (child) {
             if (child.definition && child.definition === definition) {
                 found = true;
-                return;
+                return true;
             }
         });
+        return found;
     });
 
     if (found) {
@@ -410,10 +411,10 @@ CustomBlockDefinition.prototype.usesBlockInstance = function (definition) {
     }
 
     if (this.body) {
-        this.body.expression.allChildren().forEach(function (child) {
+        this.body.expression.allChildren().some(function (child) {
             if (child.definition && child.definition === definition) {
                 found = true;
-                return;
+                return true;
             }
         });
     }
@@ -3572,10 +3573,10 @@ BlockExportDialogMorph.prototype.exportBlocks = function () {
 };
 
 BlockExportDialogMorph.prototype.getBlockDependencies = function (blocks) {
-    var myself = this;
-    var depend = blocks.slice(0);
-    var isDone = false;
-    var found;
+    var myself = this,
+        depend = blocks.slice(0),
+        isDone = false,
+        found;
 
     function scan() {
         return myself.allCustomBlocks.filter(function (def) {
@@ -3601,10 +3602,18 @@ BlockExportDialogMorph.prototype.getBlockDependencies = function (blocks) {
 };
 
 BlockExportDialogMorph.prototype.exportDependencies = function () {
-    var myself = this;
-    var depend = this.getBlockDependencies(this.blocks);
+    var myself = this,
+        depend = this.getBlockDependencies(this.blocks),
+        blockNames,
+        txt;
 
     if (depend.slice(this.blocks.length).length > 0) {
+        blockNames = depend.slice(myself.blocks.length).map(function (def) {
+            return def.parseSpec(def.spec).filter(function (part) {
+                return (part.indexOf("%") !== 0);
+            }).join(" ");
+        }).join(", ");
+
         var exportDependenciesWindow = new DialogBoxMorph(
             this,
             function () {
@@ -3613,6 +3622,29 @@ BlockExportDialogMorph.prototype.exportDependencies = function () {
             },
             this
         );
+
+        txt = new TextMorph(
+            "The blocks you are about to export are missing the following "
+                    + "dependent blocks: "
+                    + blockNames
+                    + ".\n Do you want to also export "
+                    + "the missing block dependencies?",
+            exportDependenciesWindow.fontSize,
+            exportDependenciesWindow.fontStyle,
+            true,
+            false,
+            "center",
+            null,
+            null,
+            MorphicPreferences.isFlat ? null : new Point(1, 1),
+            new Color(255, 255, 255)
+        );
+
+        exportDependenciesWindow.key = "export blocks dialog";
+        exportDependenciesWindow.labelString = "export dependencies";
+        exportDependenciesWindow.createLabel();
+        exportDependenciesWindow.addBody(txt);
+        exportDependenciesWindow.addButton("ok", "export with dependencies");
         exportDependenciesWindow.addButton(
             function () {
                 myself.exportBlocks();
@@ -3620,21 +3652,11 @@ BlockExportDialogMorph.prototype.exportDependencies = function () {
             },
             "export without dependencies"
         );
-        exportDependenciesWindow.askYesNo(
-            "export dependencies",
-            "The blocks you are about to export are missing the following "
-                    + "dependent blocks: "
-                    + depend.slice(myself.blocks.length).map(function (def) {
-                return def.parseSpec(def.spec).filter(function (part) {
-                    return part[0] !== "%";
-                }).join(" ");
-            }).join(", ")
-                    + ".\n"
-                    + "Do you want to also export the "
-                    + "missing block dependencies?",
-            this.world(),
-            null
-        );
+        exportDependenciesWindow.addButton("cancel", "cancel");
+        exportDependenciesWindow.fixLayout();
+        exportDependenciesWindow.drawNew();
+        exportDependenciesWindow.fixLayout();
+        exportDependenciesWindow.popUp(this.world());
     } else {
         this.exportBlocks();
     }
