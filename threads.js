@@ -1313,7 +1313,7 @@ Process.prototype.doReportObjectWith = function (obj, key, value) {
 	return obj;
 };
 
-Process.prototype.doReportOfObject = function (obj, key) {
+Process.prototype.doReportOfObject = function (key, obj) {
 	return obj instanceof Obj ? obj.dict[key] || '' : '';
 }
 
