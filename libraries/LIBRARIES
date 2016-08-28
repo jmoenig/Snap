@@ -1,15 +1,3 @@
-<<<<<<< HEAD
-iteration-composition.xml	Iteration, composition
-list-utilities.xml	List utilities
-stream-tools.xml	Streams (lazy lists)
-variadic-reporters.xml	Variadic reporters
-httpBlocks.xml	Web services access (https)
-word-sentence.xml	Words, sentences
-cases.xml	Multi-branched conditional (switch)
-leap-library.xml	LEAP Motion controller
-setrgb.xml	Set RGB or HSV pen color
-penTrails.xml	Save and restore pictures drawn by pen
-=======
 iteration-composition.xml	Iteration, composition
 list-utilities.xml	List utilities
 stream-tools.xml	Streams (lazy lists)
@@ -22,4 +10,3 @@ setrgb.xml	Set RGB or HSV pen color
 penTrails.xml	Save and restore pictures drawn by pen
 try-catch.xml	Catch errors in a script
 multiline.xml Allow multi-line text input to a block
->>>>>>> refs/remotes/jmoenig/master
