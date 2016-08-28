@@ -2493,6 +2493,54 @@ SpriteMorph.prototype.blocksMatching = function (
                     (!block.only || (block.only === myself.constructor))
             ) {
                 blocks.push([primitive(selector), rel + '3']);
+            } else {
+                var splitSpec = BlockMorph.prototype.parseSpec(spec),
+                    specCombinations = [];
+
+                splitSpec.forEach(function (part, idx) {
+                    if (part.indexOf("%") === 0) {
+                        var input = SyntaxElementMorph.prototype
+                            .labelPart(part);
+
+                        if (input instanceof InputSlotMorph &&
+                                input.choices) {
+                            splitSpec[idx] = Object.keys(input.choices);
+                        } else {
+                            splitSpec.splice(idx, 1);
+                        }
+                    }
+                });
+                splitSpec.forEach(function (part) {
+                    if (specCombinations.length === 0) {
+                        specCombinations = specCombinations.concat(part);
+                    } else if (part instanceof Array) {
+                        specCombinations.forEach(function (name, idx) {
+                            specCombinations.splice(idx, 1);
+                            part.forEach(function (choice) {
+                                specCombinations.push(name + " " + choice);
+                            });
+                        });
+                    } else {
+                        specCombinations = specCombinations.map(
+                            function (name) {
+                                return (name + " " + part);
+                            }
+                        );
+                    }
+                });
+
+                specCombinations = specCombinations.map(function (name) {
+                    return relevance(name, search);
+                });
+
+                rel = Math.max.apply(null, specCombinations);
+                if (
+                    (rel !== -1) &&
+                        (!block.dev) &&
+                        (!block.only || (block.only === myself.constructor))
+                ) {
+                    blocks.push([primitive(selector), rel + '3']);
+                }
             }
         }
     });
