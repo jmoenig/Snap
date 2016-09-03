@@ -457,9 +457,9 @@ SnapTranslator.dict.ru = {
     'report %s':
         'результат %s',
     'stop %stopChoices':
-        'стоп %stopChoices',
+        'остоновить %stopChoices',
     'all':
-        'все',
+        'всё',
     'this script':
         'этот скрипт',
     'this block':
