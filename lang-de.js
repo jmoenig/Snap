@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org', // optional
     'last_changed':
-        '2016-03-16', // this, too, will appear in the Translators tab
+        '2016-07-12', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -527,6 +527,8 @@ SnapTranslator.dict.de = {
         'Stoppuhr',
     '%att of %spr':
         '%att von %spr',
+    'my %get':
+        'Attribut %get',
     'http:// %s':
         'http:// %s',
     'turbo mode?':
@@ -1198,6 +1200,18 @@ SnapTranslator.dict.de = {
         'Leer',
 
     // graphical effects
+    'color':
+        'Farbe',
+    'fisheye':
+        'Fischauge',
+    'whirl':
+        'Wirbel',
+    'pixelate':
+        'Pixel',
+    'mosaic':
+        'Mosaik',
+    'saturation':
+        'Sättigung',
     'brightness':
         'Helligeit',
     'ghost':
@@ -1352,10 +1366,46 @@ SnapTranslator.dict.de = {
         'Funktionsblock',
     'predicate':
         'Pr\u00e4dikat',
+    'sprite':
+        'Objekt',
 
     // list indices
     'last':
         'letztes',
     'any':
-        'beliebig'
+        'beliebig',
+
+    // attributes
+    'neighbors':
+        'Nachbarn',
+    'self':
+        'selbst',
+    'other sprites':
+        'andere Objekte',
+    'parts':
+        'Teile',
+    'anchor':
+        'Verankerung',
+    'parent':
+        'Vorfahr',
+    'children':
+        'Abkömmlinge',
+    'clones':
+        'Klone',
+    'other clones':
+        'andere Klone',
+    'dangling?':
+        'Baumeln?',
+    'rotation x':
+        'Drehpunkt x',
+    'rotation y':
+        'Drehpunkt y',
+    'center x':
+        'Mittelpunkt x',
+    'center y':
+        'Mittelpunkt y',
+    'name':
+        'Name',
+    'stage':
+        'B\u00fchne',
 };

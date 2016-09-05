@@ -108,7 +108,7 @@ WatcherMorph, Variable*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2016-February-24';
+modules.byob = '2016-July-14';
 
 // Declarations
 
@@ -936,7 +936,7 @@ CustomCommandBlockMorph.prototype.mouseEnter = function () {
         comment.contents.lines.forEach(function (line) {
             help = help + '\n' + line;
         });
-        this.bubbleHelp(
+        this.popUpbubbleHelp(
             help.substr(1),
             this.definition.comment.color
         );
@@ -947,20 +947,6 @@ CustomCommandBlockMorph.prototype.mouseLeave = function () {
     if (this.isTemplate && this.definition.comment) {
         this.world().hand.destroyTemporaries();
     }
-};
-
-// CustomCommandBlockMorph bubble help:
-
-CustomCommandBlockMorph.prototype.bubbleHelp = function (contents, color) {
-    var myself = this;
-    this.fps = 2;
-    this.step = function () {
-        if (this.bounds.containsPoint(this.world().hand.position())) {
-            myself.popUpbubbleHelp(contents, color);
-        }
-        myself.fps = 0;
-        delete myself.step;
-    };
 };
 
 CustomCommandBlockMorph.prototype.popUpbubbleHelp = function (
@@ -1744,6 +1730,15 @@ BlockDialogMorph.prototype.fixLayout = function () {
     }
 };
 
+BlockDialogMorph.prototype.accept = function () {
+    if ((this.body instanceof InputFieldMorph) &&
+            (this.normalizeSpaces(this.body.getValue()) === '')) {
+        this.edit();
+    } else {
+        BlockDialogMorph.uber.accept.call(this);
+    }
+};
+
 // BlockEditorMorph ////////////////////////////////////////////////////
 
 // BlockEditorMorph inherits from DialogBoxMorph:
@@ -1780,6 +1775,7 @@ BlockEditorMorph.prototype.init = function (definition, target) {
 
     // create scripting area
     scripts = new ScriptsMorph(target);
+    scripts.rejectsHats = true;
     scripts.isDraggable = false;
     scripts.color = IDE_Morph.prototype.groupColor;
     scripts.cachedTexture = IDE_Morph.prototype.scriptsPaneTexture;
@@ -2686,6 +2682,7 @@ InputSlotDialogMorph.prototype.init = function (
     this.isExpanded = false;
     this.category = category || 'other';
     this.cachedRadioButton = null; // "template" for radio button backgrounds
+    this.noDelete = false;
 
     // initialize inherited properties:
     BlockDialogMorph.uber.init.call(
@@ -2804,8 +2801,9 @@ InputSlotDialogMorph.prototype.getInput = function () {
         this.fragment.labelString = lbl;
         this.fragment.defaultValue = this.slots.defaultInputField.getValue();
         return lbl;
+    } else if (!this.noDelete) {
+        this.fragment.isDeleted = true;
     }
-    this.fragment.isDeleted = true;
     return null;
 };
 
@@ -2890,6 +2888,8 @@ InputSlotDialogMorph.prototype.open = function (
     this.addButton('ok', 'OK');
     if (!noDeleteButton) {
         this.addButton('deleteFragment', 'Delete');
+    } else {
+        this.noDelete = true;
     }
     this.addButton('cancel', 'Cancel');
     this.fixLayout();

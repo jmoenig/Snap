@@ -181,11 +181,11 @@ SnapTranslator.dict.ca = {
     'language_name':
         'Català', // the name as it should appear in the language menu
     'language_translator':
-        'Bernat Romagosa Carrasquer', // your name for the Translators tab
+        'Bernat Romagosa Carrasquer, Joan Guillén i Pelegay', // your name for the Translators tab
     'translator_e-mail':
-        'bromagosa@citilab.eu', // optional
+        'bernat@arduino.org, jguille2@xtec.cat', // optional
     'last_changed':
-        '2015-09-17', // this, too, will appear in the Translators tab
+        '2016-07-07', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -236,15 +236,15 @@ SnapTranslator.dict.ca = {
 
     // rotation styles:
     'don\'t rotate':
-        'no girar',
+        'no gira',
     'can rotate':
         'pot girar',
     'only face left/right':
-        'només mirar esquerra/dreta',
+        'només mira a esquerra/dreta',
 
     // new sprite button:
     'add a new sprite':
-        'afegir un nou objecte',
+        'afegeix un nou objecte',
 
     // tab help
     'costumes tab help':
@@ -291,7 +291,7 @@ SnapTranslator.dict.ca = {
             + 'disponibles',
 
     'move %n steps':
-        'moure %n passos',
+        'mou-te %n passos',
     'turn %clockwise %n degrees':
         'gira %clockwise %n graus',
     'turn %counterclockwise %n degrees':
@@ -527,6 +527,8 @@ SnapTranslator.dict.ca = {
         'cronòmetre',
     '%att of %spr':
         '%att de %spr',
+    'my %get':
+        'atribut %get',
     'http:// %s':
         'http:// %s',
     'turbo mode?':
@@ -573,26 +575,26 @@ SnapTranslator.dict.ca = {
     'length of %s':
         'longitud de %s',
     'unicode of %s':
-        'Valor Unicode de %s',
+        'valor Unicode de %s',
     'unicode %n as letter':
-        'Lletra amb valor Unicode %n',
+        'lletra amb valor Unicode %n',
     'is %s a %typ ?':
-        'És %s un %typ ?',
+        'és %s un %typ ?',
     'is %s identical to %s ?':
-        'És %s idèntic a %s ?',
+        'és %s idèntic a %s ?',
 
     'type of %s':
         'tipus de %s',
 
     // variables:
     'Make a variable':
-        'Crear una variable',
+        'Crea una variable',
     'Variable name':
         'Nom de variable',
     'Script variable name':
         'Nom de la variable de programa',
     'Delete a variable':
-        'Esborrar una variable',
+        'Esborra una variable',
 
     'set %var to %s':
         'assigna a %var el valor %s',
@@ -609,7 +611,7 @@ SnapTranslator.dict.ca = {
     'list %exp':
         'llista %exp',
     '%s in front of %l':
-        '%s afegir davant de %l',
+        'afegeix %s davant de %l',
     'item %idx of %l':
         'element %idx de %l',
     'all but first of %l':
@@ -642,15 +644,15 @@ SnapTranslator.dict.ca = {
     'Snap! website':
         'Web de Snap!',
     'Download source':
-        'Descarregar codi font',
+        'Descarrega el codi font',
     'Switch back to user mode':
-        'Tornar a mode d\'usuari',
+        'Torna a mode d\'usuari',
     'disable deep-Morphic\ncontext menus\nand show user-friendly ones':
-        'canviar menús contextuals\nprimitius de Morphic\nper menús més amigables',
+        'canvia els menús contextuals\nprimitius de Morphic\nper menús més amigables',
     'Switch to dev mode':
-        'Canviar a mode desenvolupador',
+        'Canvia a mode desenvolupador',
     'enable Morphic\ncontext menus\nand inspectors,\nnot user-friendly!':
-        'habilitar menús\ncontextuals de\nMorphic i inspectors,\nmode expert!',
+        'habilita els menús\ncontextuals de\nMorphic i inspectors,\nmode expert!',
 
     // project menu
     'Project notes...':
@@ -658,30 +660,32 @@ SnapTranslator.dict.ca = {
     'New':
         'Nou',
     'Open...':
-        'Obrir...',
+        'Obre...',
     'Save':
-        'Desar',
+        'Desa',
     'Save to disk':
-        'Desar a disc',
+        'Desa al disc',
     'store this project\nin the downloads folder\n(in supporting browsers)':
         'desa aquest projecte\na la carpeta de descàrregues\n'
             + '(en navegadors que ho suportin)',
     'Save As...':
-        'Desar com...',
+        'Anomena i desa...',
     'Import...':
-        'Importar...',
+        'Importa...',
     'file menu import hint':
         'carrega una llibreria de projecte\no de blocs exportada, un vestit\no un so',
+
+
     'Export project as plain text...':
-        'Exportar projecte en text pla...',
+        'Exporta el projecte en text pla...',
     'Export project...':
-        'Exportar projecte...',
+        'Exporta el projecte...',
     'show project data as XML\nin a new browser window':
-        'mostrar tot el projecte en format XML\nen una altra finestra del navegador',
+        'mostra tot el projecte en format XML\nen una altra finestra del navegador',
     'Export blocks...':
-        'Exportar blocs...',
+        'Exporta els blocs...',
     'show global custom block definitions as XML\nin a new browser window':
-        'mostrar definicions de blocs personalitzats\nen format XML en una altra finestra del\nnavegador',
+        'mostra les definicions de blocs personalitzats\nen format XML en una altra finestra del\nnavegador',
     'Unused blocks...':
         'Blocs no utilitzats...',
     'find unused global custom blocks\nand remove their definitions':
@@ -693,9 +697,10 @@ SnapTranslator.dict.ca = {
     'unused block(s) removed':
         'bloc(s) personalitzats no utilitzats esborrats',
     'Export summary...':
-        'Exportar resum...',
+        'Exporta el resum...',
     'open a new browser browser window\n with a summary of this project':
         'obre una finestra nova del navegador\namb un resum d\'aquest projecte',
+
     'Contents':
         'Continguts',
     'Kind of':
@@ -709,23 +714,23 @@ SnapTranslator.dict.ca = {
     'For all Sprites':
         'Per a tots els objectes', 
     'Import tools':
-        'Importar eines',
+        'Importa eines',
     'load the official library of\npowerful blocks':
-        'carregar la llibreria\noficial de blocs avançats',
+        'carrega la llibreria\noficial de blocs avançats',
     'Libraries...':
         'Llibreries...',
     'Import library':
-        'Importar llibreria',
+        'Importa una llibreria',
 
     // cloud menu
     'Login...':
-        'Iniciar sessió...',
+        'Inicia la sessió...',
     'Signup...':
-        'Registrar-se...',
+        'Registra\'t...',
 
     // settings menu
     'Language...':
-        'Idioma...',
+        'Llengua...',
     'Zoom blocks...':
         'Mida dels blocs...',
     'Stage size...':
@@ -760,10 +765,12 @@ SnapTranslator.dict.ca = {
         'Dóna preferència a les ranures buides',
     'settings menu prefer empty slots hint':
         'marca\'m per a fer que les ranures\nbuides tinguin preferència sobre les plenes\na l\'hora de deixar-hi caure peces',
+
     'uncheck to allow dropped\nreporters to kick out others':
         'marca\'m per a fer que les ranures\nbuides tinguin la mateixa preferència que les\nplenes a l\'hora de deixar-hi caure peces',
+
     'Long form input dialog':
-        'Forçar diàleg de selecció de tipus',
+        'Força el diàleg de selecció de tipus',
     'Plain prototype labels':
         'Etiquetes de prototip simples',
     'uncheck to always show (+) symbols\nin block prototype labels':
@@ -778,8 +785,10 @@ SnapTranslator.dict.ca = {
         'Teclat virtual',
     'uncheck to disable\nvirtual keyboard support\nfor mobile devices':
         'desmarca\'m per inhabilitar\nel suport per al teclat virtual\nen dispositius mòbils',
+
     'check to enable\nvirtual keyboard support\nfor mobile devices':
         'marca\'m per habilitar\nel suport per al teclat virtual\nen dispositius mòbils',
+
     'Input sliders':
         'Lliscadors d\'entrada',
     'uncheck to disable\ninput sliders for\nentry fields':
@@ -808,6 +817,10 @@ SnapTranslator.dict.ca = {
         'Disseny pla',
     'Keyboard Editing':
         'Edició per teclat',
+    'Table support':
+        'Edició de taules',
+    'Table lines':
+        'Línies de taules',
     'Thread safe scripts':
         'Fil d\'execució segur',
     'uncheck to allow\nscript reentrance':
@@ -845,9 +858,9 @@ SnapTranslator.dict.ca = {
 
     // palette:
     'hide primitives':
-        'amaga blocs primitius',
+        'amaga els blocs primitius',
     'show primitives':
-        'mostra blocs primitius',
+        'mostra els blocs primitius',
 
     // blocks:
     'help...':
@@ -870,6 +883,12 @@ SnapTranslator.dict.ca = {
         'encapsula\'m',
     'unringify':
         'des-encapsula\'m',
+    'transient':
+        'no persistent',
+    'uncheck to save contents\nin the project':
+        'desactiveu l\'opció per desar els continguts\nen el projecte',
+    'check to prevent contents\nfrom being saved':
+        'activeu l\'opció per evitar que els continguts\nes desin',
 
     // custom blocks:
     'delete block definition...':
@@ -879,21 +898,21 @@ SnapTranslator.dict.ca = {
 
     // sprites:
     'edit':
-        'editar',
+        'edita',
     'move':
-        'moure',
+        'mou',
     'detach from':
         'desenganxa de',
     'detach all parts':
         'desenganxa totes les parts',
     'export...':
-        'exportar...',
+        'exporta...',
 
     // stage:
     'show all':
-        'mostrar-los tots',
+        'mostra\'ls tots',
     'pic...':
-        'exportar com a imatge...',
+        'exporta com a imatge...',
     'open a new window\nwith a picture of the stage':
         'obre una nova finestra\namb una foto de l\'escenari',
 
@@ -909,7 +928,7 @@ SnapTranslator.dict.ca = {
     'undo the last\nblock drop\nin this pane':
         'recupera l\'últim bloc\nque s\'hagi llençat',
     'scripts pic...':
-        'exportar com a imatge...',
+        'exporta com a imatge...',
     'open a new window\nwith a picture of all scripts':
         'obre una nova finestra\namb una foto d\'aquests programes',
     'make a block...':
@@ -934,6 +953,18 @@ SnapTranslator.dict.ca = {
         'Toca',
     'rename sound':
         'canvia el nom del so',
+
+    // lists and tables
+    'list view...':
+        'vista en format de llista...',
+    'table view...':
+        'vista en format de taula...',
+    'open in dialog...':
+        'obre en una finestra...',
+    'reset columns':
+        'reinicialitza les columnes',
+    'items':
+        'elements',
 
     // dialogs
     // buttons
@@ -979,14 +1010,14 @@ SnapTranslator.dict.ca = {
     // Project Manager
     'Untitled':
         'Sense títol',
-    'Open Project':
+    'Open un Project':
         'Obre projecte',
     '(empty)':
         '(buit)',
     'Saved!':
         'Desat!',
     'Delete Project':
-        'Esborra projecte',
+        'Esborra un projecte',
     'Are you sure you want to delete':
         'Segur que vols esborrar',
     'rename...':
@@ -1010,7 +1041,7 @@ SnapTranslator.dict.ca = {
 
     // save project
     'Save Project As...':
-        'Anomena i desa projecte...',
+        'Anomena i desa el projecte...',
 
     // export blocks
     'Export blocks':
@@ -1020,7 +1051,7 @@ SnapTranslator.dict.ca = {
     'this project doesn\'t have any\ncustom global blocks yet':
         'aquest projecte encara no\nté cap bloc personalitzat',
     'select':
-        'seleccionar',
+        'selecciona',
     'none':
         'cap bloc',
 
@@ -1048,17 +1079,18 @@ SnapTranslator.dict.ca = {
 
     // block deletion dialog
     'Delete Custom Block':
-        'Esborrar un bloc personalitzat',
+        'Esborra el bloc personalitzat',
     'block deletion dialog text':
         'Segur que vols esborrar la definició\nd\'aquest bloc?',
 
+
     // input dialog
     'Create input name':
-        'Crear ranura',
+        'Crea una ranura',
     'Edit input name':
-        'Editar ranura',
+        'Edita la ranura',
     'Edit label fragment':
-        'Editar fragment d\'etiqueta',
+        'Edita el fragment d\'etiqueta',
     'Title text':
         'Text del títol',
     'Input name':
@@ -1140,7 +1172,7 @@ SnapTranslator.dict.ca = {
 
     // coments
     'add comment here...':
-        'afegir un comentari aquí...',
+        'afegeix un comentari aquí...',
 
     // drow downs
     // directions
@@ -1327,5 +1359,36 @@ SnapTranslator.dict.ca = {
     'last':
         'últim',
     'any':
-        'qualsevol'
+        'qualsevol',
+
+    // attributes
+    'neighbors':
+        'veins',
+    'self':
+        'un mateix',
+    'other sprites':
+        'els altres objectes',
+    'parts':
+        'parts',
+    'anchor':
+        'àncora',
+    'parent':
+        'pare',
+    'children':
+        'fill',
+    'clones':
+        'clons',
+    'other clones':
+        'altres clons',
+    'dangling?':
+        'Baumeln?',
+    'rotation x':
+        'rotació x',
+    'rotation y':
+        'rotació y',
+    'center x':
+        'centre x',
+    'center y':
+        'centre y'
+
 };

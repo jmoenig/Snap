@@ -68,9 +68,9 @@
 MorphicPreferences, FrameMorph, HandleMorph, DialogBoxMorph, isString,
 SpriteMorph, Context, Costume, ArgMorph, BlockEditorMorph,
 SyntaxElementMorph, MenuMorph, SpriteBubbleMorph, SpeechBubbleMorph,
-CellMorph, ListWatcherMorph, isNil, BoxMorph, Variable*/
+CellMorph, ListWatcherMorph, isNil, BoxMorph, Variable, isSnapObject*/
 
-modules.tables = '2016-February-24';
+modules.tables = '2016-May-02';
 
 var Table;
 var TableCellMorph;
@@ -307,6 +307,10 @@ TableCellMorph.prototype.setData = function (data, extent) {
     // note: don't call changed(), let the TableMorph handle it instead
 };
 
+TableCellMorph.prototype.getData = function () {
+    return this.data instanceof Array ? this.data[0] : this.data;
+};
+
 TableCellMorph.prototype.drawNew = function () {
     this.image = newCanvas(this.extent());
     this.drawData();
@@ -373,7 +377,11 @@ TableCellMorph.prototype.drawData = function (lbl, bg) {
 
 TableCellMorph.prototype.dataRepresentation = function (dta) {
     if (dta instanceof Morph) {
-        return dta.fullImageClassic();
+        if (isSnapObject(dta)) {
+            return dta.thumbnail(new Point(40, 40));
+        } else {
+            return dta.fullImageClassic();
+        }
     } else if (isString(dta)) {
         return dta.length > 100 ? dta.slice(0, 100) + '...' : dta;
     } else if (typeof dta === 'number') {
@@ -544,6 +552,9 @@ TableMorph.prototype.init = function (
     this.resizeCol = null;
     this.resizeRow = null;
 
+    // cached property for updating (don not persist):
+    this.wantsUpdate = false;
+
     // initialize inherited properties:
     // make sure not to draw anything just yet
     // therefore omit FrameMorph's properties (not needed here)
@@ -697,6 +708,9 @@ TableMorph.prototype.buildCells = function () {
                 ).add(pos)
             );
             this.add(cell);
+            if (isSnapObject(cell.getData())) {
+                this.wantsUpdate = true;
+            }
         }
     }
     this.add(this.hBar);
@@ -718,6 +732,9 @@ TableMorph.prototype.drawData = function (noScrollUpdate) {
                     !r ? r : r + this.startRow - 1
                 )
             );
+            if (isSnapObject(cell.getData())) {
+                this.wantsUpdate = true;
+            }
         }
     }
     if (!noScrollUpdate) {this.updateScrollBars(); }
@@ -777,7 +794,10 @@ TableMorph.prototype.update = function () {
         version = this.table instanceof List ?
             this.table.version(this.startRow, this.rows)
                     : this.table.lastChanged;
-    if (this.tableVersion === version) { return; }
+    if (this.tableVersion === version && !this.wantsUpdate) {
+        return;
+    }
+    this.wantsUpdate = false;
     if (this.table instanceof List) {
         oldCols = this.columns.length;
         oldRows = this.rows;
@@ -1048,6 +1068,7 @@ TableMorph.prototype.showListView = function () {
         view.drawNew(true);
     } else if (view instanceof SpeechBubbleMorph) {
         view.contents = new ListWatcherMorph(this.table);
+        view.contents.step = view.contents.update;
         view.contents.expand(this.extent());
         view.drawNew(true);
     } else { // watcher cell

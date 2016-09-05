@@ -56,11 +56,12 @@ Color, List, newCanvas, Costume, Sound, Audio, IDE_Morph, ScriptsMorph,
 BlockMorph, ArgMorph, InputSlotMorph, TemplateSlotMorph, CommandSlotMorph,
 FunctionSlotMorph, MultiArgMorph, ColorSlotMorph, nop, CommentMorph, isNil,
 localize, sizeOf, ArgLabelMorph, SVG_Costume, MorphicPreferences,
-SyntaxElementMorph, Variable*/
+SyntaxElementMorph, Variable, isSnapObject, console, BooleanSlotMorph,
+normalizeCanvas*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2016-March-16';
+modules.store = '2016-August-03';
 
 
 // XML_Serializer ///////////////////////////////////////////////////////
@@ -389,6 +390,7 @@ SnapSerializer.prototype.rawLoadProjectModel = function (xmlNode) {
     if (model.pentrails) {
         project.pentrails = new Image();
         project.pentrails.onload = function () {
+            normalizeCanvas(project.stage.trailsCanvas);
             var context = project.stage.trailsCanvas.getContext('2d');
             context.drawImage(project.pentrails, 0, 0);
             project.stage.changed();
@@ -974,7 +976,16 @@ SnapSerializer.prototype.loadScript = function (model) {
             return;
         }
         if (block) {
-            block.nextBlock(nextBlock);
+            if (block.nextBlock && (nextBlock instanceof CommandBlockMorph)) {
+                block.nextBlock(nextBlock);
+            } else { // +++
+                console.log(
+                    'SNAP: expecting a command but getting a reporter:\n' +
+                        '  ' + block.blockSpec + '\n' +
+                        '  ' + nextBlock.blockSpec
+                );
+                return topBlock;
+            }
         } else {
             topBlock = nextBlock;
         }
@@ -1125,7 +1136,7 @@ SnapSerializer.prototype.loadInput = function (model, input, block) {
 
 SnapSerializer.prototype.loadValue = function (model) {
     // private
-    var v, lst, items, el, center, image, name, audio, option,
+    var v, i, lst, items, el, center, image, name, audio, option, bool,
         myself = this;
 
     function record() {
@@ -1156,7 +1167,14 @@ SnapSerializer.prototype.loadValue = function (model) {
         throw new Error('expecting a reference id');
     case 'l':
         option = model.childNamed('option');
-        return option ? [option.contents] : model.contents;
+        if (option) {
+            return [option.contents];
+        }
+        bool = model.childNamed('bool');
+        if (bool) {
+            return this.loadValue(bool);
+        }
+        return model.contents;
     case 'bool':
         return model.contents === 'true';
     case 'list':
@@ -1166,7 +1184,7 @@ SnapSerializer.prototype.loadValue = function (model) {
             record();
             lst = v;
             items = model.childrenNamed('item');
-            items.forEach(function (item) {
+            items.forEach(function (item, i) {
                 var value = item.children[0];
                 if (!value) {
                     v.first = 0;
@@ -1178,9 +1196,11 @@ SnapSerializer.prototype.loadValue = function (model) {
                 if (tail) {
                     v.rest = myself.loadValue(tail);
                 } else {
-                    v.rest = new List();
-                    v = v.rest;
-                    v.isLinked = true;
+                    if (i < (items.length - 1)) {
+                        v.rest = new List();
+                        v = v.rest;
+                        v.isLinked = true;
+                    }
                 }
             });
             return lst;
@@ -1239,9 +1259,30 @@ SnapSerializer.prototype.loadValue = function (model) {
             } else {
                 el = model.childNamed('l');
                 if (el) {
-                    v.expression = new InputSlotMorph(el.contents);
+                    bool = el.childNamed('bool');
+                    if (bool) {
+                        v.expression = new BooleanSlotMorph(
+                            this.loadValue(bool)
+                        );
+                    } else {
+                        v.expression = new InputSlotMorph(el.contents);
+                    }
                 }
             }
+        }
+        if (v.expression instanceof BlockMorph) {
+            // bind empty slots to implicit formal parameters
+            i = 0;
+            v.expression.allEmptySlots().forEach(function (slot) {
+                i += 1;
+                if (slot instanceof MultiArgMorph) {
+                    slot.bindingID = ['arguments'];
+                } else {
+                    slot.bindingID = i;
+                }
+            });
+            // and remember the number of detected empty slots
+            v.emptySlots = i;
         }
         el = model.childNamed('receiver');
         if (el) {
@@ -1312,7 +1353,8 @@ SnapSerializer.prototype.loadValue = function (model) {
                 v = new Costume(null, name, center);
                 image.onload = function () {
                     var canvas = newCanvas(
-                            new Point(image.width, image.height)
+                            new Point(image.width, image.height),
+                            true // nonRetina
                         ),
                         context = canvas.getContext('2d');
                     context.drawImage(image, 0, 0);
@@ -1414,7 +1456,10 @@ Array.prototype.toXML = function (serializer) {
 // Sprites
 
 StageMorph.prototype.toXML = function (serializer) {
-    var thumbnail = this.thumbnail(SnapSerializer.prototype.thumbnailSize),
+    var thumbnail = normalizeCanvas(
+            this.thumbnail(SnapSerializer.prototype.thumbnailSize),
+            true
+        ),
         thumbdata,
         ide = this.parentThatIsA(IDE_Morph);
 
@@ -1482,7 +1527,7 @@ StageMorph.prototype.toXML = function (serializer) {
         this.enableInheritance,
         this.enableSublistIDs,
         StageMorph.prototype.frameRate !== 0,
-        this.trailsCanvas.toDataURL('image/png'),
+        normalizeCanvas(this.trailsCanvas, true).toDataURL('image/png'),
         serializer.store(this.costumes, this.name + '_cst'),
         serializer.store(this.sounds, this.name + '_snd'),
         serializer.store(this.variables),
@@ -1605,10 +1650,14 @@ VariableFrame.prototype.toXML = function (serializer) {
             dta = serializer.format(
                 '<variable name="@">%</variable>',
                 v,
-                typeof val === 'object' ? serializer.store(val)
-                        : typeof val === 'boolean' ?
-                                serializer.format('<bool>$</bool>', val)
-                                : serializer.format('<l>$</l>', val)
+                typeof val === 'object' ?
+                        (isSnapObject(val) ? ''
+                                : serializer.store(val))
+                                : typeof val === 'boolean' ?
+                                        serializer.format(
+                                            '<bool>$</bool>', val
+                                        )
+                                        : serializer.format('<l>$</l>', val)
             );
         }
         return vars + dta;
@@ -1625,6 +1674,10 @@ WatcherMorph.prototype.toXML = function (serializer) {
                 this.topLeft().subtract(this.parent.topLeft())
                 : this.topLeft();
 
+    if (this.isTemporary()) {
+        // do not save watchers on temporary variables
+        return '';
+    }
     return serializer.format(
         '<watcher% % style="@"% x="@" y="@" color="@,@,@"%%/>',
         (isVar && this.target.owner) || (!isVar && this.target) ?
@@ -1828,6 +1881,13 @@ ArgMorph.prototype.toXML = function () {
     return '<l/>'; // empty by default
 };
 
+BooleanSlotMorph.prototype.toXML = function () {
+    return (typeof this.value === 'boolean') ?
+            '<l><bool>' + this.value + '</bool></l>'
+                    : '<l/>';
+
+};
+
 InputSlotMorph.prototype.toXML = function (serializer) {
     if (this.constant) {
         return serializer.format(
@@ -1897,7 +1957,8 @@ List.prototype.toXML = function (serializer, mediaContext) {
                 xml += serializer.format(
                     '<item>%</item>',
                     typeof value === 'object' ?
-                            serializer.store(value, mediaContext)
+                            (isSnapObject(value) ? ''
+                                    : serializer.store(value, mediaContext))
                             : typeof value === 'boolean' ?
                                     serializer.format('<bool>$</bool>', value)
                                     : serializer.format('<l>$</l>', value)
@@ -1916,7 +1977,8 @@ List.prototype.toXML = function (serializer, mediaContext) {
                 xml += serializer.format(
                     '<item>%</item>',
                     typeof value === 'object' ?
-                            serializer.store(value, mediaContext)
+                            (isSnapObject(value) ? ''
+                                    : serializer.store(value, mediaContext))
                             : typeof value === 'boolean' ?
                                     serializer.format('<bool>$</bool>', value)
                                     : serializer.format('<l>$</l>', value)
@@ -1933,7 +1995,8 @@ List.prototype.toXML = function (serializer, mediaContext) {
             return xml + serializer.format(
                 '<item>%</item>',
                 typeof item === 'object' ?
-                        serializer.store(item, mediaContext)
+                        (isSnapObject(item) ? ''
+                                : serializer.store(item, mediaContext))
                         : typeof item === 'boolean' ?
                                 serializer.format('<bool>$</bool>', item)
                                 : serializer.format('<l>$</l>', item)
