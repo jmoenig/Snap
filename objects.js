@@ -2460,6 +2460,30 @@ SpriteMorph.prototype.blocksMatching = function (
         return newBlock;
     }
 
+    function calcInputValue (splitSpec) {
+        var specCombinations = [];
+        splitSpec.forEach(function (part) {
+            if (specCombinations.length === 0) {
+                specCombinations = specCombinations.concat(part);
+            } else if (isString(part)) {
+                specCombinations = specCombinations.map(
+                    function (name) {return (name + " " + part);});
+            } else {
+                specCombinations.forEach(function (name, idx) {
+                    specCombinations.splice(idx, 1);
+                    part.forEach(function (choice) {
+                        specCombinations.push(name + " " + choice);
+                    });
+                });
+            }
+        });
+        specCombinations = specCombinations.map(function (name) {
+            return relevance(name, search);
+        });
+
+        return Math.max.apply(null, specCombinations);
+    }
+
     // variable getters
     varNames.forEach(function (vName) {
         var rel = relevance(labelOf(vName.toLowerCase()), search);
@@ -2475,6 +2499,36 @@ SpriteMorph.prototype.blocksMatching = function (
                     rel = relevance(labelOf(spec), search);
                 if (rel !== -1) {
                     blocks.push([definition.templateInstance(), rel + '2']);
+                } else {
+                    var block = definition.blockInstance(),
+                        splitSpec = BlockMorph.prototype.parseSpec(spec);
+
+                    for (var idx = 0; idx < splitSpec.length; idx++) {
+                        var part = splitSpec[idx];
+                        if (part.length > 1 && part[0] === "%") {
+                            var input = block.children[idx +
+                                        block.children.length -
+                                        splitSpec.length];
+                            if (input instanceof InputSlotMorph &&
+                                    input.choices) {
+                                splitSpec[idx] = Object.keys(input.choices);
+                            } else {
+                                splitSpec.splice(idx, 1);
+                                idx--;
+                            }
+                        }
+                    }
+
+                    if (!splitSpec.some(function(part) {
+                        if (part instanceof Array) {return true;}
+                    })) {return;}
+
+                    rel = calcInputValue(splitSpec);
+
+                    if (rel !== -1) {
+                        blocks.push([definition.templateInstance(),
+                                rel + '2']);
+                    }
                 }
             }
         });
@@ -2494,46 +2548,40 @@ SpriteMorph.prototype.blocksMatching = function (
             ) {
                 blocks.push([primitive(selector), rel + '3']);
             } else {
-                var splitSpec = BlockMorph.prototype.parseSpec(spec),
-                    specCombinations = [];
+                var splitSpec = BlockMorph.prototype.parseSpec(
+                        localize(block.alias || block.spec));
 
-                splitSpec.forEach(function (part, idx) {
+                for (var idx = 0; idx < splitSpec.length; idx++) {
+                    var part = splitSpec[idx];
                     if (part.indexOf("%") === 0) {
                         var input = SyntaxElementMorph.prototype
                             .labelPart(part);
 
                         if (input instanceof InputSlotMorph &&
-                                input.choices) {
+                                input.choices && !isString(input.choices)) {
                             splitSpec[idx] = Object.keys(input.choices);
                         } else {
                             splitSpec.splice(idx, 1);
+                            idx--;
                         }
                     }
-                });
-                splitSpec.forEach(function (part) {
-                    if (specCombinations.length === 0) {
-                        specCombinations = specCombinations.concat(part);
-                    } else if (part instanceof Array) {
-                        specCombinations.forEach(function (name, idx) {
-                            specCombinations.splice(idx, 1);
-                            part.forEach(function (choice) {
-                                specCombinations.push(name + " " + choice);
-                            });
-                        });
+                }
+
+                if (!splitSpec.some(function(part) {
+                    if (part instanceof Array) {return true;}
+                })) {return;}
+
+                splitSpec = splitSpec.map(function (part) {
+                    if (isString(part)) {
+                        return part.toLowerCase();
                     } else {
-                        specCombinations = specCombinations.map(
-                            function (name) {
-                                return (name + " " + part);
-                            }
-                        );
+                        return part.map(function (choice) {
+                            return choice.toLowerCase();
+                        });
                     }
                 });
 
-                specCombinations = specCombinations.map(function (name) {
-                    return relevance(name, search);
-                });
-
-                rel = Math.max.apply(null, specCombinations);
+                rel = calcInputValue(splitSpec);
                 if (
                     (rel !== -1) &&
                         (!block.dev) &&
@@ -2544,6 +2592,7 @@ SpriteMorph.prototype.blocksMatching = function (
             }
         }
     });
+
     blocks.sort(function (x, y) {return x[1] < y[1] ? -1 : 1; });
     return blocks.map(function (each) {return each[0]; });
 };
