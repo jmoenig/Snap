@@ -1318,6 +1318,7 @@ function SpriteMorph(globals) {
 }
 
 SpriteMorph.prototype.init = function (globals) {
+    this.blockNames = {};
     this.name = localize('Sprite');
     this.variables = new VariableFrame(globals || null, this);
     this.scripts = new ScriptsMorph(this);
@@ -2460,7 +2461,7 @@ SpriteMorph.prototype.blocksMatching = function (
         return newBlock;
     }
 
-    function calcInputValue (splitSpec) {
+    function generateCombinations (splitSpec) {
         var specCombinations = [];
         splitSpec.forEach(function (part) {
             if (specCombinations.length === 0) {
@@ -2477,11 +2478,8 @@ SpriteMorph.prototype.blocksMatching = function (
                 });
             }
         });
-        specCombinations = specCombinations.map(function (name) {
-            return relevance(name, search);
-        });
 
-        return Math.max.apply(null, specCombinations);
+        return specCombinations;
     }
 
     // variable getters
@@ -2523,7 +2521,12 @@ SpriteMorph.prototype.blocksMatching = function (
                         if (part instanceof Array) {return true;}
                     })) {return;}
 
-                    rel = calcInputValue(splitSpec);
+                    rel = Math.max.apply(
+                        null,
+                        generateCombinations(splitSpec).map(function (name) {
+                            return relevance(name, search);
+                        })
+                    );
 
                     if (rel !== -1) {
                         blocks.push([definition.templateInstance(),
@@ -2548,40 +2551,53 @@ SpriteMorph.prototype.blocksMatching = function (
             ) {
                 blocks.push([primitive(selector), rel + '3']);
             } else {
-                var splitSpec = BlockMorph.prototype.parseSpec(
-                        localize(block.alias || block.spec));
+                if (!(selector in myself.blockNames)) {
+                    var splitSpec = BlockMorph.prototype.parseSpec(
+                            localize(block.alias || block.spec)),
+                        noChoices = true;
 
-                for (var idx = 0; idx < splitSpec.length; idx++) {
-                    var part = splitSpec[idx];
-                    if (part.indexOf("%") === 0) {
-                        var input = SyntaxElementMorph.prototype
-                            .labelPart(part);
+                    for (var idx = 0; idx < splitSpec.length; idx++) {
+                        var part = splitSpec[idx];
+                        if (part.indexOf("%") === 0) {
+                            var input = SyntaxElementMorph.prototype
+                                .labelPart(part);
 
-                        if (input instanceof InputSlotMorph &&
-                                input.choices && !isString(input.choices)) {
-                            splitSpec[idx] = Object.keys(input.choices);
-                        } else {
-                            splitSpec.splice(idx, 1);
-                            idx--;
+                            if (input instanceof InputSlotMorph &&
+                                    input.choices &&
+                                    !isString(input.choices)) {
+                                splitSpec[idx] = Object.keys(input.choices);
+                                noChoices = false;
+                            } else {
+                                splitSpec.splice(idx, 1);
+                                idx--;
+                            }
                         }
                     }
+
+                    if (noChoices) {
+                        return;
+                    }
+
+                    splitSpec = splitSpec.map(function (part) {
+                        if (isString(part)) {
+                            return part.toLowerCase();
+                        } else {
+                            return part.map(function (choice) {
+                                return choice.toLowerCase();
+                            });
+                        }
+                    });
+
+                    myself.blockNames[selector] = generateCombinations(
+                            splitSpec);
                 }
 
-                if (!splitSpec.some(function(part) {
-                    if (part instanceof Array) {return true;}
-                })) {return;}
+                rel = Math.max.apply(null,
+                    myself.blockNames[selector].map(
+                        function(name){return relevance(name, search);}
+                    )
+                );
 
-                splitSpec = splitSpec.map(function (part) {
-                    if (isString(part)) {
-                        return part.toLowerCase();
-                    } else {
-                        return part.map(function (choice) {
-                            return choice.toLowerCase();
-                        });
-                    }
-                });
-
-                rel = calcInputValue(splitSpec);
                 if (
                     (rel !== -1) &&
                         (!block.dev) &&
