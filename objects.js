@@ -2406,7 +2406,6 @@ SpriteMorph.prototype.freshPalette = function (category) {
 };
 
 // SpriteMorph blocks searching
-
 SpriteMorph.prototype.blocksMatching = function (
     searchString,
     strictly,
@@ -2461,14 +2460,17 @@ SpriteMorph.prototype.blocksMatching = function (
         return newBlock;
     }
 
-    function generateCombinations (splitSpec) {
+    function generateCombinations(splitSpec) {
         var specCombinations = [];
         splitSpec.forEach(function (part) {
             if (specCombinations.length === 0) {
                 specCombinations = specCombinations.concat(part);
             } else if (isString(part)) {
                 specCombinations = specCombinations.map(
-                    function (name) {return (name + " " + part);});
+                    function (name) {
+                        return (name + " " + part);
+                    }
+                );
             } else {
                 specCombinations.forEach(function (name, idx) {
                     specCombinations.splice(idx, 1);
@@ -2478,7 +2480,6 @@ SpriteMorph.prototype.blocksMatching = function (
                 });
             }
         });
-
         return specCombinations;
     }
 
@@ -2498,36 +2499,40 @@ SpriteMorph.prototype.blocksMatching = function (
                 if (rel !== -1) {
                     blocks.push([definition.templateInstance(), rel + '2']);
                 } else {
-                    var block = definition.blockInstance(),
-                        splitSpec = BlockMorph.prototype.parseSpec(spec);
+                    var splitSpec = BlockMorph.prototype.parseSpec(
+                            definition.spec.split("'").join("")
+                        ),
+                        noChoices = true;
 
-                    for (var idx = 0; idx < splitSpec.length; idx++) {
-                        var part = splitSpec[idx];
-                        if (part.length > 1 && part[0] === "%") {
-                            var input = block.children[idx +
-                                        block.children.length -
-                                        splitSpec.length];
-                            if (input instanceof InputSlotMorph &&
-                                    input.choices) {
-                                splitSpec[idx] = Object.keys(input.choices);
-                            } else {
-                                splitSpec.splice(idx, 1);
-                                idx--;
+                    splitSpec = splitSpec.map(function (part) {
+                        if (part.indexOf("%") === 0 && part.length > 1) {
+                            var choices = definition
+                                .declarations[part.substring(1)][2];
+                            if (choices) {
+                                noChoices = false;
+                                return choices.split("\n").map(
+                                    function (choice) {
+                                        return choice.split("=")[0];
+                                    }
+                                );
                             }
                         }
+                        return part;
+                    });
+                    if (noChoices) {
+                        return;
                     }
-
-                    if (!splitSpec.some(function(part) {
-                        if (part instanceof Array) {return true;}
-                    })) {return;}
-
+                    splitSpec = splitSpec.filter(function (part) {
+                        return (part && (part instanceof Array ||
+                                (part.indexOf("%") !== 0 ||
+                                 part.length === 1)));
+                    });
                     rel = Math.max.apply(
                         null,
                         generateCombinations(splitSpec).map(function (name) {
                             return relevance(name, search);
                         })
                     );
-
                     if (rel !== -1) {
                         blocks.push([definition.templateInstance(),
                                 rel + '2']);
@@ -2551,53 +2556,46 @@ SpriteMorph.prototype.blocksMatching = function (
             ) {
                 blocks.push([primitive(selector), rel + '3']);
             } else {
-                if (!(selector in myself.blockNames)) {
+                if (!myself.blockNames.hasOwnProperty(selector)) {
                     var splitSpec = BlockMorph.prototype.parseSpec(
-                            localize(block.alias || block.spec)),
+                            localize(block.alias || block.spec)
+                        ),
                         noChoices = true;
-
-                    for (var idx = 0; idx < splitSpec.length; idx++) {
-                        var part = splitSpec[idx];
+                    splitSpec = splitSpec.map(function (part) {
                         if (part.indexOf("%") === 0) {
                             var input = SyntaxElementMorph.prototype
                                 .labelPart(part);
-
                             if (input instanceof InputSlotMorph &&
                                     input.choices &&
                                     !isString(input.choices)) {
-                                splitSpec[idx] = Object.keys(input.choices);
                                 noChoices = false;
-                            } else {
-                                splitSpec.splice(idx, 1);
-                                idx--;
+                                return Object.keys(input.choices).map(
+                                    function (choice) {
+                                        return choice.toLowerCase();
+                                    }
+                                );
                             }
                         }
-                    }
-
+                        return part.toLowerCase();
+                    });
                     if (noChoices) {
                         return;
                     }
-
-                    splitSpec = splitSpec.map(function (part) {
-                        if (isString(part)) {
-                            return part.toLowerCase();
-                        } else {
-                            return part.map(function (choice) {
-                                return choice.toLowerCase();
-                            });
-                        }
+                    splitSpec = splitSpec.filter(function (part) {
+                        return (part instanceof Array ||
+                                part.indexOf("%") !== 0);
                     });
-
                     myself.blockNames[selector] = generateCombinations(
-                            splitSpec);
+                        splitSpec
+                    );
                 }
-
                 rel = Math.max.apply(null,
-                    myself.blockNames[selector].map(
-                        function(name){return relevance(name, search);}
+                        myself.blockNames[selector].map(
+                    function (name) {
+                        return relevance(name, search);
+                        }
                     )
                 );
-
                 if (
                     (rel !== -1) &&
                         (!block.dev) &&
