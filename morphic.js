@@ -1245,6 +1245,11 @@ function fontHeight(height) {
     return minHeight * 1.2; // assuming 1/5 font size for ascenders
 }
 
+function isWordChar(aCharacter) {
+    // can't use \b or \w because they ignore diacritics
+    return aCharacter.match(/[A-zÀ-ÿ]/);
+}
+
 function newCanvas(extentPoint, nonRetina) {
     // answer a new empty instance of Canvas, don't display anywhere
     // nonRetina - optional Boolean "false"
@@ -5056,28 +5061,30 @@ CursorMorph.prototype.processKeyPress = function (event) {
 
 CursorMorph.prototype.processKeyDown = function (event) {
     // this.inspectKeyEvent(event);
-    var shift = event.shiftKey;
+    var shift = event.shiftKey,
+        wordNavigation = event.ctrlKey || event.metaKey;
+
     this.keyDownEventUsed = false;
     if (event.ctrlKey && (!event.altKey)) {
         this.ctrl(event.keyCode, event.shiftKey);
         // notify target's parent of key event
         this.target.escalateEvent('reactToKeystroke', event);
-        return;
     }
     if (event.metaKey) {
         this.cmd(event.keyCode, event.shiftKey);
         // notify target's parent of key event
         this.target.escalateEvent('reactToKeystroke', event);
-        return;
     }
 
     switch (event.keyCode) {
     case 37:
-        this.goLeft(shift);
+        // if Control (or ⌘ in Mac) is pressed, move one word to the left
+        this.goLeft(shift, wordNavigation ? this.slot - this.target.previousWordFrom(this.slot) : 1);
         this.keyDownEventUsed = true;
         break;
     case 39:
-        this.goRight(shift);
+        // if Control (or ⌘ in Mac) is pressed, move one word to the right
+        this.goRight(shift, wordNavigation ? this.target.nextWordFrom(this.slot) - this.slot : 1);
         this.keyDownEventUsed = true;
         break;
     case 38:
@@ -5168,9 +5175,9 @@ CursorMorph.prototype.gotoSlot = function (slot) {
     }
 };
 
-CursorMorph.prototype.goLeft = function (shift) {
+CursorMorph.prototype.goLeft = function (shift, howMany) {
     this.updateSelection(shift);
-    this.gotoSlot(this.slot - 1);
+    this.gotoSlot(this.slot - (howMany || 1));
     this.updateSelection(shift);
 };
 
@@ -5213,7 +5220,7 @@ CursorMorph.prototype.gotoPos = function (aPoint) {
 
 CursorMorph.prototype.updateSelection = function (shift) {
     if (shift) {
-        if (!this.target.endMark && !this.target.startMark) {
+        if (isNil(this.target.endMark) && isNil(this.target.startMark)) {
             this.target.startMark = this.slot;
             this.target.endMark = this.slot;
         } else if (this.target.endMark !== this.slot) {
@@ -7860,6 +7867,48 @@ StringMorph.prototype.endOfLine = function () {
     return this.text.length;
 };
 
+StringMorph.prototype.previousWordFrom = function (aSlot) {
+    // answer the slot (index) slots indicating the position of the
+    // previous word to the left of aSlot
+    var index = aSlot - 1;
+    
+    // while the current character is non-word one, we skip it, so that
+    // if we are in the middle of a non-alphanumeric sequence, we'll get
+    // right to the beginning of the previous word
+    while (index > 0 && !isWordChar(this.text[index])) {
+        index --;
+    }
+
+    // while the current character is a word one, we skip it until we
+    // find the beginning of the current word
+    while (index > 0 && isWordChar(this.text[index - 1])) {
+        index --;
+    }
+
+    return index;
+};
+
+StringMorph.prototype.nextWordFrom = function (aSlot) {
+    // answer the slot (index) slots indicating the position of the
+    // next word to the right of aSlot
+    var index = aSlot;
+    
+    // while the current character is non-word one, we skip it, so that
+    // if we are in the middle of a non-alphanumeric sequence, we'll get
+    // right to the beginning of the next word
+    while (index < this.endOfLine() && !isWordChar(this.text[index])) {
+        index ++;
+    }
+
+    // while the current character is a word one, we skip it until we
+    // find the end of the current word
+    while (index < this.endOfLine() && isWordChar(this.text[index])) {
+        index ++;
+    }
+
+    return index;
+};
+
 StringMorph.prototype.rawHeight = function () {
     // answer my corrected fontSize
     return this.height() / 1.2;
@@ -8025,13 +8074,13 @@ StringMorph.prototype.selectionStartSlot = function () {
 
 StringMorph.prototype.clearSelection = function () {
     if (!this.currentlySelecting &&
-            this.startMark === 0 &&
-            this.endMark === 0) {
+            isNil(this.startMark) &&
+            isNil(this.endMark)) {
         return;
     }
     this.currentlySelecting = false;
-    this.startMark = 0;
-    this.endMark = 0;
+    this.startMark = null;
+    this.endMark = null;
     this.drawNew();
     this.changed();
 };
@@ -8468,6 +8517,10 @@ TextMorph.prototype.endOfLine = function (slot) {
     return this.startOfLine(slot) +
         this.lines[this.columnRow(slot).y].length - 1;
 };
+
+TextMorph.prototype.previousWordFrom = StringMorph.prototype.previousWordFrom;
+
+TextMorph.prototype.nextWordFrom = StringMorph.prototype.nextWordFrom;
 
 // TextMorph editing:
 
