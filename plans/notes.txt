@@ -1,0 +1,15 @@
+https://github.com/wcyuan/snap-github/blob/master/gui.js
+
+ProjectDialogMorph.prototype.buildContents - add a source button for git
+ProjectDialogMorph.prototype.setSource - add a case for 'git'
+Somewhere, we need to ask for (and display) the repo url
+Then we read the entire repo and show any xml files?  (name = path within the repo/name.xml)
+
+https://github.com/wcyuan/snap-github/blob/master/cloud.js
+
+Make look like cloud.
+
+Possible designs:
+ A - provide github repo when you open, repo/user/pass when you save
+ B - have a separate place where you can set the repo and provide user/pass, put it where you login to snap
+
