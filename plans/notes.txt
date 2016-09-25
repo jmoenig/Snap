@@ -11,5 +11,10 @@ Make look like cloud.
 
 Possible designs:
  A - provide github repo when you open, repo/user/pass when you save
+   - prompt the user with pop-ups every time?
+     - or try to remember it, but then need a way for the user to change them
+   - remove the share button from the open dialog
  B - have a separate place where you can set the repo and provide user/pass, put it where you login to snap
+
+ How do we send or save the password, is it plaintext?  Hash it?
 
