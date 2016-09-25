@@ -2506,15 +2506,11 @@ SpriteMorph.prototype.blocksMatching = function (
 
                     splitSpec = splitSpec.map(function (part) {
                         if (part.indexOf("%") === 0 && part.length > 1) {
-                            var choices = definition
-                                .declarations[part.substring(1)][2];
+                            var choices = definition.inputOptionsOf(
+                                    part.substring(1))[0];
                             if (choices) {
                                 noChoices = false;
-                                return choices.split("\n").map(
-                                    function (choice) {
-                                        return choice.split("=")[0];
-                                    }
-                                );
+                                return Object.keys(choices);
                             }
                         }
                         return part;
@@ -2530,7 +2526,7 @@ SpriteMorph.prototype.blocksMatching = function (
                     rel = Math.max.apply(
                         null,
                         generateCombinations(splitSpec).map(function (name) {
-                            return relevance(name, search);
+                            return relevance(name.toLowerCase(), search);
                         })
                     );
                     if (rel !== -1) {
@@ -2547,8 +2543,8 @@ SpriteMorph.prototype.blocksMatching = function (
         if (!StageMorph.prototype.hiddenPrimitives[selector] &&
                 contains(types, blocksDict[selector].type)) {
             var block = blocksDict[selector],
-                spec = localize(block.alias || block.spec).toLowerCase(),
-                rel = relevance(labelOf(spec), search);
+                spec = localize(block.alias || block.spec),
+                rel = relevance(labelOf(spec.toLowerCase()), search);
             if (
                 (rel !== -1) &&
                     (!block.dev) &&
@@ -2557,9 +2553,7 @@ SpriteMorph.prototype.blocksMatching = function (
                 blocks.push([primitive(selector), rel + '3']);
             } else {
                 if (!myself.blockNames.hasOwnProperty(selector)) {
-                    var splitSpec = BlockMorph.prototype.parseSpec(
-                            localize(block.alias || block.spec)
-                        ),
+                    var splitSpec = BlockMorph.prototype.parseSpec(spec),
                         noChoices = true;
                     splitSpec = splitSpec.map(function (part) {
                         if (part.indexOf("%") === 0) {
@@ -2579,6 +2573,7 @@ SpriteMorph.prototype.blocksMatching = function (
                         return part.toLowerCase();
                     });
                     if (noChoices) {
+                        myself.blockNames[selector] = false;
                         return;
                     }
                     splitSpec = splitSpec.filter(function (part) {
@@ -2589,19 +2584,21 @@ SpriteMorph.prototype.blocksMatching = function (
                         splitSpec
                     );
                 }
-                rel = Math.max.apply(null,
-                        myself.blockNames[selector].map(
-                    function (name) {
-                        return relevance(name, search);
-                        }
-                    )
-                );
-                if (
-                    (rel !== -1) &&
-                        (!block.dev) &&
-                        (!block.only || (block.only === myself.constructor))
-                ) {
-                    blocks.push([primitive(selector), rel + '3']);
+                if (myself.blockNames[selector]) {
+                    rel = Math.max.apply(null,
+                            myself.blockNames[selector].map(
+                        function (name) {
+                            return relevance(name, search);
+                            }
+                        )
+                    );
+                    if (
+                        (rel !== -1) &&
+                            (!block.dev) &&
+                            (!block.only || (block.only === myself.constructor))
+                    ) {
+                        blocks.push([primitive(selector), rel + '3']);
+                    }
                 }
             }
         }
