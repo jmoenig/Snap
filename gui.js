@@ -5150,6 +5150,7 @@ ProjectDialogMorph.prototype.buildContents = function () {
     }
 
     this.addSourceButton('cloud', localize('Cloud'), 'cloud');
+    this.addSourceButton('github', localize('Github'), 'github');
     this.addSourceButton('local', localize('Browser'), 'storage');
     if (this.task === 'open') {
         this.addSourceButton('examples', localize('Examples'), 'poster');
@@ -5407,6 +5408,23 @@ ProjectDialogMorph.prototype.setSource = function (source) {
     case 'local':
         this.projectList = this.getLocalProjectList();
         break;
+    case 'github':
+        msg = myself.ide.showMessage('Updating\nproject list...');
+        this.projectList = [];
+        Github.getProjectList(
+            function (projectList) {
+                // Don't show github projects if user has since switch panes.
+                if (myself.source === 'github') {
+                    myself.installCloudProjectList(projectList);
+                }
+                msg.destroy();
+            },
+            function (err, lbl) {
+                msg.destroy();
+                myself.ide.cloudError().call(null, err, lbl);
+            }
+        );
+        return;
     }
 
     this.listField.destroy();
@@ -5615,6 +5633,8 @@ ProjectDialogMorph.prototype.openProject = function () {
         src = this.ide.getURL(this.ide.resourceURL('Examples', proj.file));
         this.ide.openProjectString(src);
         this.destroy();
+    } else if (this.source === 'github') {
+	location.hash = '#run:' + encodeURIComponent(proj.file);
     } else { // 'local'
         this.ide.openProject(proj.name);
         this.destroy();

@@ -43,7 +43,52 @@ function Github() {
 }
 
 Github.prototype.getProjectList = function (callback, errorCall, username, repo) {
-    
+    var request = new XMLHttpRequest(),
+        myself = this;
+    username = username || "wcyuan";
+    repo = repo || "snap-projects";
+    var url = "https://api.github.com/repos/"
+        + encodeURIComponent(username)
+        + "/"
+        + encodeURIComponent(repo)
+        + "/contents";
+    try {
+	request.open(
+		     "GET",
+		     url,
+		     true);
+        request.setRequestHeader(
+				 );
+        request.withCredentials = true;
+        request.onreadystatechange = function () {
+            if (request.readyState === 4) {
+                if (request.responseText) {
+                    if (request.responseText.indexOf('ERROR') === 0) {
+                        errorCall.call(
+                            this,
+                            request.responseText,
+                            url
+                        );
+                    } else {
+                        callBack.call(
+                            null,
+                            request.responseText,
+                            url
+                        );
+                    }
+                } else {
+                    errorCall.call(
+                        null,
+                        myself.url,
+                        localize('could not connect to:')
+                    );
+                }
+            }
+        };
+	request.send(null);
+    } catch (err) {
+	errorCall.call(this, err.toString(), "Github");
+    }
 };
 
 Github.prototype.saveProject = function (ide, callback, errorCall, username, password, repo) {
