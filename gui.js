@@ -5635,6 +5635,10 @@ ProjectDialogMorph.prototype.openProject = function () {
         this.destroy();
     } else if (this.source === 'github') {
 	location.hash = '#run:' + encodeURIComponent(proj.file);
+	this.ide.rawOpenProjectString(this.ide.getURL(proj.file));
+	// this is another possibility?
+	//this.ide.interpretUrlAnchors();
+        this.destroy();
     } else { // 'local'
         this.ide.openProject(proj.name);
         this.destroy();

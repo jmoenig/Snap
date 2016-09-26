@@ -40,11 +40,16 @@ var SnapGithub = new Github();
 // Github /////////////////////////////////////////////////////////////
 
 function Github() {
+    this.baseUrl = "https://api.github.com";
 }
 
-Github.prototype.getProjectList = function (callback, errorCall, username, repo) {
-    var request = new XMLHttpRequest(),
-        myself = this;
+Github.prototype.getProjectList = function (
+    callBack,
+    errorCall,
+    username,
+    repo
+) {
+    var myself = this;
     username = username || "wcyuan";
     repo = repo || "snap-projects";
     var url = "https://api.github.com/repos/"
@@ -52,14 +57,41 @@ Github.prototype.getProjectList = function (callback, errorCall, username, repo)
         + "/"
         + encodeURIComponent(repo)
         + "/contents";
+    myself.callApi(function(response, url) {
+	    var projects = [];
+	    parsed = JSON.parse(response);
+	    for (var idx = 0; idx < parsed.length; idx++) {
+		projects.push({
+			file: parsed[idx].download_url,
+			    ProjectName: parsed[idx].name,
+			    Public: false
+			    });
+	    }
+	    callBack.call(null, projects, url, response);
+    }, errorCall, url);
+}
+
+Github.prototype.callApi = function (
+    callBack,
+    errorCall,
+    url,
+    method,
+    username,
+    password
+) {
+    var request = new XMLHttpRequest(),
+        myself = this;
+    method = method || "GET";
     try {
-	request.open(
-		     "GET",
+	request.open(method,
 		     url,
 		     true);
-        request.setRequestHeader(
-				 );
-        request.withCredentials = true;
+        request.setRequestHeader('Accept', 'application/vnd.github.v3+json',
+				 'Content-Type', 'application/json;charset=UTF-8');
+	if (username && password) {
+	    request.withCredentials = true;
+	    request.setRequestHeader('Authorization', 'Basic ' + Base64.encode(username + ':' + password));
+	}
         request.onreadystatechange = function () {
             if (request.readyState === 4) {
                 if (request.responseText) {
@@ -149,7 +181,6 @@ Cloud.prototype.signup = function (
             "Content-Type",
             "application/x-www-form-urlencoded"
         );
-        request.withCredentials = true;
         request.onreadystatechange = function () {
             if (request.readyState === 4) {
                 if (request.responseText) {
