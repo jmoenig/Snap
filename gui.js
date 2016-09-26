@@ -5440,16 +5440,19 @@ ProjectDialogMorph.prototype.setSource = function (source) {
             if (myself.task === 'open') {
 
                 src = localStorage['-snap-project-' + item.name];
-                xml = myself.ide.serializer.parse(src);
 
-                myself.notesText.text = xml.childNamed('notes').contents
-                    || '';
-                myself.notesText.drawNew();
-                myself.notesField.contents.adjustBounds();
-                myself.preview.texture = xml.childNamed('thumbnail').contents
-                    || null;
-                myself.preview.cachedTexture = null;
-                myself.preview.drawNew();
+                if (src) {
+                    xml = myself.ide.serializer.parse(src);
+
+                    myself.notesText.text = xml.childNamed('notes').contents
+                        || '';
+                    myself.notesText.drawNew();
+                    myself.notesField.contents.adjustBounds();
+                    myself.preview.texture =
+                        xml.childNamed('thumbnail').contents || null;
+                    myself.preview.cachedTexture = null;
+                    myself.preview.drawNew();
+                }
             }
             myself.edit();
         };
