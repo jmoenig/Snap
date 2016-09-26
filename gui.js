@@ -5411,7 +5411,7 @@ ProjectDialogMorph.prototype.setSource = function (source) {
     case 'github':
         msg = myself.ide.showMessage('Updating\nproject list...');
         this.projectList = [];
-        Github.getProjectList(
+        SnapGithub.getProjectList(
             function (projectList) {
                 // Don't show github projects if user has since switch panes.
                 if (myself.source === 'github') {
