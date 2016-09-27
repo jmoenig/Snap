@@ -5715,6 +5715,25 @@ ProjectDialogMorph.prototype.saveProject = function () {
                 this.ide.setProjectName(name);
                 myself.saveCloudProject();
             }
+        } else if (this.source === 'github') {
+            if (detect(
+                    this.projectList,
+                    function (item) {return item.ProjectName === name; }
+                )) {
+                this.ide.confirm(
+                    localize(
+                        'Are you sure you want to replace'
+                    ) + '\n"' + name + '"?',
+                    'Replace Project',
+                    function () {
+                        myself.ide.setProjectName(name);
+                        myself.saveGithubProject();
+                    }
+                );
+            } else {
+                this.ide.setProjectName(name);
+                myself.saveGithubProject();
+            }
         } else { // 'local'
             if (detect(
                     this.projectList,
@@ -5749,6 +5768,20 @@ ProjectDialogMorph.prototype.saveCloudProject = function () {
         this.ide,
         function () {
             myself.ide.source = 'cloud';
+            myself.ide.showMessage('saved.', 2);
+        },
+        this.ide.cloudError()
+    );
+    this.destroy();
+};
+
+ProjectDialogMorph.prototype.saveGithubProject = function () {
+    var myself = this;
+    this.ide.showMessage('Saving project\nto Github...');
+    SnapGithub.saveProject(
+        this.ide,
+        function () {
+            myself.ide.source = 'github';
             myself.ide.showMessage('saved.', 2);
         },
         this.ide.cloudError()
