@@ -18,3 +18,9 @@ Possible designs:
 
  How do we send or save the password, is it plaintext?  Hash it?
 
+Todo:
+ - show files in all sub-directories of the repo
+ - only show xml files
+ - have the user provide the github username and repo name
+ - fix error related to having no preview
+ - handle github pagination
