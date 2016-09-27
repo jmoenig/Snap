@@ -183,7 +183,7 @@ Github.prototype.callApi = function (
         request.onreadystatechange = function () {
             if (request.readyState === 4) {
                 if (request.responseText) {
-                    if (request.status != 200) {
+                    if (request.status < 200 || request.status >= 300) {
                         errorCall.call(
                             this,
                             request.responseText,
