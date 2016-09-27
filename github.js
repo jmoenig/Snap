@@ -73,7 +73,7 @@ Github.prototype.getProjectList = function (
     }, errorCall, url);
 };
 
-Github.prototype.saveProject = function (ide, callback, errorCall, username, password, repo, path) {
+Github.prototype.saveProject = function (ide, callBack, errorCall, username, password, repo, path) {
     var myself = this,
         pdata,
         media,
@@ -81,11 +81,15 @@ Github.prototype.saveProject = function (ide, callback, errorCall, username, pas
         mediaSize;
 
     username = username || "wcyuan";
+    password = password || "";
     repo = repo || "snap-projects";
     path = path || "/";
     var filename = encodeURIComponent(ide.projectName);
     if (!ide.projectName.endsWith(".xml")) {
         filename += ".xml";
+    }
+    if (path.endsWith("/")) {
+        path = path.substring(0, path.length - 2);
     }
     var url = myself.baseUrl + "/repos/"
         + encodeURIComponent(username)
@@ -122,12 +126,13 @@ Github.prototype.saveProject = function (ide, callback, errorCall, username, pas
 	    "message" : "commit from Snap!",
 	    "content" : pdata,
 	});
+    //params = "&message=commit-from-snap&content=" + encodeURIComponent(pdata);
+
 
     ide.showMessage('Uploading ' + Math.round(size / 1024) + ' KB...');
     myself.callApi(
         function (response, url) {
 	    callBack.call(null, response, url);
-	    myself.disconnect();
 	    ide.hasChangedMedia = false;
 	},
 	errorCall,
@@ -159,13 +164,12 @@ Github.prototype.callApi = function (
         request.setRequestHeader('Accept', 'application/vnd.github.v3+json',
 				 'Content-Type', 'application/json;charset=UTF-8');
 	if (username && password) {
-	    request.withCredentials = true;
-	    request.setRequestHeader('Authorization', 'Basic ' + Base64.encode(username + ':' + password));
+	    request.setRequestHeader('Authorization', 'Basic ' + btoa(username + ':' + password));
 	}
         request.onreadystatechange = function () {
             if (request.readyState === 4) {
                 if (request.responseText) {
-                    if (request.responseText.indexOf('ERROR') === 0) {
+                    if (request.status != 200) {
                         errorCall.call(
                             this,
                             request.responseText,
