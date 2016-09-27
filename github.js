@@ -66,6 +66,7 @@ Github.prototype.getProjectList = function (
 		projects.push({
 			file: parsed[idx].download_url,
 			    ProjectName: parsed[idx].name,
+			    FullResponse: parsed[idx],
 			    Public: false
 			    });
 	    }
@@ -88,7 +89,7 @@ Github.prototype.emails = function(username, password) {
 		   );
 };
 
-Github.prototype.saveProject = function (ide, callBack, errorCall, username, password, repo, path) {
+Github.prototype.saveProject = function (ide, callBack, errorCall, username, password, repo, path, sha) {
     var myself = this,
         pdata,
         media,
@@ -137,10 +138,13 @@ Github.prototype.saveProject = function (ide, callBack, errorCall, username, pas
     //ide.serializer.isCollectingMedia = false;
     //ide.serializer.flushMedia();
 
-    params = JSON.stringify({
+    params = {
 	    "message" : "commit from Snap!",
 	    "content" : btoa(pdata)
-	});
+	};
+    if (sha) {
+	params.sha = sha;
+    }
     //params = "&message=commit-from-snap&content=" + encodeURIComponent(pdata);
 
     ide.showMessage('Uploading ' + Math.round(size / 1024) + ' KB...');
@@ -152,7 +156,7 @@ Github.prototype.saveProject = function (ide, callBack, errorCall, username, pas
 	errorCall,
 	url,
 	"PUT",
-	params,
+	JSON.stringify(params),
 	username,
 	password
     );

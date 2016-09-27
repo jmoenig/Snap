@@ -3221,6 +3221,8 @@ IDE_Morph.prototype.save = function () {
     if (this.projectName) {
         if (this.source === 'local') { // as well as 'examples'
             this.saveProject(this.projectName);
+	} else if (this.source === 'github') {
+            this.saveProject(this.projectName);
         } else { // 'cloud'
             this.saveProjectToCloud(this.projectName);
         }
@@ -4808,6 +4810,21 @@ IDE_Morph.prototype.saveProjectToCloud = function (name) {
     }
 };
 
+IDE_Morph.prototype.saveProjectToGithub = function (name) {
+    var myself = this;
+    if (name) {
+        this.showMessage('Saving project\nto github...');
+        this.setProjectName(name);
+	// TODO(wcy): fix this -- add username/password, detect existing project
+	// cloudError -> githubError
+        SnapGithub.saveProject(
+            this,
+            function () {myself.showMessage('saved.', 2); },
+            this.cloudError()
+        );
+    }
+};
+
 IDE_Morph.prototype.exportProjectMedia = function (name) {
     var menu, media;
     this.serializer.isCollectingMedia = true;
@@ -5716,18 +5733,24 @@ ProjectDialogMorph.prototype.saveProject = function () {
                 myself.saveCloudProject();
             }
         } else if (this.source === 'github') {
-            if (detect(
-                    this.projectList,
-                    function (item) {return item.ProjectName === name; }
-                )) {
+	    var existing = detect(this.projectList,
+				  function (item) {
+				      if (name.endsWith(".xml")) {
+					  return item.ProjectName === name;
+				      } else {
+					  return item.ProjectName === name + ".xml";
+				      }
+				  }
+				  );
+	    if (existing) {
                 this.ide.confirm(
                     localize(
                         'Are you sure you want to replace'
-                    ) + '\n"' + name + '"?',
+                    ) + '\n"' + name + " -- " + existing.FullResponse.sha + '"?',
                     'Replace Project',
                     function () {
                         myself.ide.setProjectName(name);
-                        myself.saveGithubProject();
+                        myself.saveGithubProject(existing);
                     }
                 );
             } else {
@@ -5775,8 +5798,12 @@ ProjectDialogMorph.prototype.saveCloudProject = function () {
     this.destroy();
 };
 
-ProjectDialogMorph.prototype.saveGithubProject = function () {
+ProjectDialogMorph.prototype.saveGithubProject = function (existing) {
     var myself = this;
+    var sha;
+    if (existing) {
+	sha = existing.FullResponse.sha;
+    }
     this.ide.showMessage('Saving project\nto Github...');
     SnapGithub.saveProject(
         this.ide,
@@ -5784,7 +5811,12 @@ ProjectDialogMorph.prototype.saveGithubProject = function () {
             myself.ide.source = 'github';
             myself.ide.showMessage('saved.', 2);
         },
-        this.ide.cloudError()
+        this.ide.cloudError(),
+	"", // username
+	"", // password
+	"", // repo
+	"/", // path
+	sha // sha
     );
     this.destroy();
 };
