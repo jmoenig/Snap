@@ -96,7 +96,7 @@ Github.prototype.saveProject = function (ide, callBack, errorCall, username, pas
         mediaSize;
 
     username = username || "wcyuan";
-    password = password || "";
+    password = password || "PASSWORD";
     repo = repo || "snap-projects";
     path = path || "/";
     var filename = encodeURIComponent(ide.projectName);
@@ -139,10 +139,9 @@ Github.prototype.saveProject = function (ide, callBack, errorCall, username, pas
 
     params = JSON.stringify({
 	    "message" : "commit from Snap!",
-	    "content" : pdata,
+	    "content" : btoa(pdata)
 	});
     //params = "&message=commit-from-snap&content=" + encodeURIComponent(pdata);
-
 
     ide.showMessage('Uploading ' + Math.round(size / 1024) + ' KB...');
     myself.callApi(
@@ -152,7 +151,7 @@ Github.prototype.saveProject = function (ide, callBack, errorCall, username, pas
 	},
 	errorCall,
 	url,
-	"POST",
+	"PUT",
 	params,
 	username,
 	password
