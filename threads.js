@@ -936,6 +936,17 @@ Process.prototype.doRun = function (context, args) {
     return this.evaluate(context, args, true);
 };
 
+Process.prototype.findBlock = function(context, selector, _opt_spec) {
+    // Private
+    var exp = context.expression;
+    if (exp instanceof Array) exp = exp[0];
+    return exp.allChildren().filter(function(m){
+        return m != exp && m instanceof BlockMorph;
+    }).some(function(block){
+        return block.selector === selector && (_opt_spec ? block.blockSpec === _opt_spec : true);
+    });
+};
+
 Process.prototype.evaluate = function (
     context,
     args,
@@ -1011,7 +1022,7 @@ Process.prototype.evaluate = function (
                     outer.variables.addVar(i, parms[i - 1]);
                 }
 
-            } else if (context.emptySlots !== 1) {
+            } else if (context.emptySlots !== 1 && !this.findBlock(context, 'reportGetVar', 'arguments')) {
                 throw new Error(
                     localize('expecting') + ' ' + context.emptySlots + ' '
                         + localize('input(s), but getting') + ' '
