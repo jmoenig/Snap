@@ -73,6 +73,21 @@ Github.prototype.getProjectList = function (
     }, errorCall, url);
 };
 
+Github.prototype.emails = function(username, password) {
+    var myself = this;
+    var url = myself.baseUrl + "/user/emails";
+    var params = JSON.stringify({});
+    myself.callApi(function (response, url) {
+	    console.log(response)},
+		   function (response, url) {},
+		   url,
+		   "GET",
+		   params,
+		   username,
+		   password
+		   );
+};
+
 Github.prototype.saveProject = function (ide, callBack, errorCall, username, password, repo, path) {
     var myself = this,
         pdata,
