@@ -3050,17 +3050,21 @@ SpriteMorph.prototype.overlappingImage = function (otherSprite) {
 SpriteMorph.prototype.doStamp = function () {
     var stage = this.parent,
         context = stage.penTrails().getContext('2d'),
-        isWarped = this.isWarped;
+        isWarped = this.isWarped,
+        originalAlpha = context.globalAlpha;
+
     if (isWarped) {
         this.endWarp();
     }
     context.save();
     context.scale(1 / stage.scale, 1 / stage.scale);
+    context.globalAlpha = this.alpha;
     context.drawImage(
         this.image,
         (this.left() - stage.left()),
         (this.top() - stage.top())
     );
+    context.globalAlpha = originalAlpha;
     context.restore();
     this.changed();
     if (isWarped) {
