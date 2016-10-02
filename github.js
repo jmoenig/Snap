@@ -45,6 +45,32 @@ function Github() {
 
 // Github API
 
+Github.prototype.promptRepoGetProjectList = function (
+    ide,
+    callBack,
+    errorCall
+) {
+    var myself = this,
+        world = ide.world();
+    new DialogBoxMorph(
+        null,
+	function (user) {
+	    myself.getProjectList(callBack, errorCall, user.username, user.repo);
+	}
+    ).withKey('githubGet').promptCredentials(
+        'Github Repo',
+	'github get',
+	null,
+	null,
+	null,
+	null,
+	null,
+	world,
+	ide.cloudIcon(),
+	ide.cloudMsg
+    );
+}
+
 Github.prototype.getProjectList = function (
     callBack,
     errorCall,
@@ -52,8 +78,6 @@ Github.prototype.getProjectList = function (
     repo
 ) {
     var myself = this;
-    username = username || "wcyuan";
-    repo = repo || "snap-projects";
     var url = myself.baseUrl + "/repos/"
         + encodeURIComponent(username)
         + "/"
@@ -89,6 +113,33 @@ Github.prototype.emails = function(username, password) {
 		   );
 };
 
+Github.prototype.promptRepoSaveProject = function (
+    ide,
+    callBack,
+    errorCall,
+    sha
+) {
+    var myself = this,
+        world = ide.world();
+    new DialogBoxMorph(
+        null,
+	function (user) {
+	    myself.saveProject(ide, callBack, errorCall, user.username, user.password, user.repo, "/" /* path */, sha);
+	}
+    ).withKey('githubSave').promptCredentials(
+        'Github Repo',
+	'github save',
+	null,
+	null,
+	null,
+	null,
+	null,
+	world,
+	ide.cloudIcon(),
+	ide.cloudMsg
+    );
+}
+
 Github.prototype.saveProject = function (ide, callBack, errorCall, username, password, repo, path, sha) {
     var myself = this,
         pdata,
@@ -96,10 +147,6 @@ Github.prototype.saveProject = function (ide, callBack, errorCall, username, pas
         size,
         mediaSize;
 
-    username = username || "wcyuan";
-    password = password || "PASSWORD";
-    repo = repo || "snap-projects";
-    path = path || "/";
     var filename = encodeURIComponent(ide.projectName);
     if (!ide.projectName.endsWith(".xml")) {
         filename += ".xml";
@@ -150,6 +197,10 @@ Github.prototype.saveProject = function (ide, callBack, errorCall, username, pas
     ide.showMessage('Uploading ' + Math.round(size / 1024) + ' KB...');
     myself.callApi(
         function (response, url) {
+	    response = response.forEach(function (project) {
+                project.username = username;
+                project.repo = repo;
+            });
 	    callBack.call(null, response, url);
 	    ide.hasChangedMedia = false;
 	},

@@ -1888,6 +1888,7 @@ DialogBoxMorph.prototype.promptCredentials = function (
         pw1 = new InputFieldMorph(),
         pw2 = new InputFieldMorph(),
         opw = new InputFieldMorph(),
+        repo = new InputFieldMorph(),
         agree = false,
         chk,
         dof = new AlignmentMorph('row', 4),
@@ -2017,6 +2018,7 @@ DialogBoxMorph.prototype.promptCredentials = function (
     pw1.setWidth(200);
     pw2.setWidth(200);
     opw.setWidth(200);
+    repo.setWidth(200);
     pw1.contents().text.toggleIsPassword();
     pw2.contents().text.toggleIsPassword();
     opw.contents().text.toggleIsPassword();
@@ -2058,6 +2060,22 @@ DialogBoxMorph.prototype.promptCredentials = function (
     if (purpose === 'resetPassword') {
         inp.add(labelText('User name:'));
         inp.add(usr);
+    }
+
+    if (purpose === 'github get') {
+        inp.add(labelText('User name:'));
+        inp.add(usr);
+        inp.add(labelText('Repo:'));
+        inp.add(repo);
+    }
+
+    if (purpose === 'github save') {
+        inp.add(labelText('User name:'));
+        inp.add(usr);
+        inp.add(labelText('Repo:'));
+        inp.add(repo);
+        inp.add(labelText('Password:'));
+        inp.add(pw1);
     }
 
     if (msg) {
@@ -2116,6 +2134,7 @@ DialogBoxMorph.prototype.promptCredentials = function (
     pw1.drawNew();
     pw2.drawNew();
     opw.drawNew();
+    repo.drawNew();
     eml.drawNew();
     bdy.fixLayout();
 
@@ -2145,6 +2164,10 @@ DialogBoxMorph.prototype.promptCredentials = function (
 
         if (purpose === 'login') {
             checklist = [usr, pw1];
+	} else if (purpose === 'github get') {
+	    checklist = [usr, repo];
+	} else if (purpose === 'github save') {
+	    checklist = [usr, repo, pw1];
         } else if (purpose === 'signup') {
             checklist = [usr, bmn, byr, eml];
         } else if (purpose === 'changePassword') {
@@ -2213,6 +2236,7 @@ DialogBoxMorph.prototype.promptCredentials = function (
             email: eml.getValue(),
             oldpassword: opw.getValue(),
             password: pw1.getValue(),
+	    repo: repo.getValue(),
             choice: agree
         };
     };

@@ -5428,7 +5428,8 @@ ProjectDialogMorph.prototype.setSource = function (source) {
     case 'github':
         msg = myself.ide.showMessage('Updating\nproject list...');
         this.projectList = [];
-        SnapGithub.getProjectList(
+        SnapGithub.promptRepoGetProjectList(
+	    myself.ide,
             function (projectList) {
                 // Don't show github projects if user has since switch panes.
                 if (myself.source === 'github') {
@@ -5805,17 +5806,13 @@ ProjectDialogMorph.prototype.saveGithubProject = function (existing) {
 	sha = existing.FullResponse.sha;
     }
     this.ide.showMessage('Saving project\nto Github...');
-    SnapGithub.saveProject(
+    SnapGithub.promptRepoSaveProject(
         this.ide,
         function () {
             myself.ide.source = 'github';
             myself.ide.showMessage('saved.', 2);
         },
         this.ide.cloudError(),
-	"", // username
-	"", // password
-	"", // repo
-	"/", // path
 	sha // sha
     );
     this.destroy();

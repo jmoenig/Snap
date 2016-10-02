@@ -24,3 +24,7 @@ Todo:
  - have the user provide the github username and repo name
  - fix error related to having no preview
  - handle github pagination
+ - handle delete
+ - handle save (instead of save as)
+ - add to snap-fast.html
+ - allow staying logged in on this computer until logged out (?)
