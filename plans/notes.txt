@@ -9,6 +9,9 @@ https://github.com/wcyuan/snap-github/blob/master/cloud.js
 
 Make look like cloud.
 
+"saveProjectToCloud" = save
+"saveCloudProject" = saveAs
+
 Possible designs:
  A - provide github repo when you open, repo/user/pass when you save
    - prompt the user with pop-ups every time?
@@ -17,6 +20,39 @@ Possible designs:
  B - have a separate place where you can set the repo and provide user/pass, put it where you login to snap
 
  How do we send or save the password, is it plaintext?  Hash it?
+
+save as:
+  - opens the Save As dialog
+  - user clicks 'setSource' (if necessary)
+  - this prompts for username / repo
+    - SnapGithub.promptRepoGetProjectList
+      - saves the lastUser and lastRepo in SnapGithub object
+  - user clicks 'save'
+  - calls saveProject
+  - calls saveGithubProjectWithList (with the project list)
+  - this checks the project list to see if the project with that name already exists
+    - if so, prompts the user to confirm overwrite
+    - also saves the sha
+  - saveAsGithubProject
+    - SnapGithub.promptPasswordSaveProject (prompts for password only)
+      - reuses the lastUser and lastRepo in SnapGithub object
+
+
+save:
+  - user clicks save, doesn't open any dialog
+  - calls saveGithubProjectNoList (with the project list)
+    - gets the project list
+    - calls SnapGithub.maybePromptGetProjectList
+      - if name, lastUser and lastRepo are not set, prompts for everything
+        - SnapGithub.promptRepoPasswordSaveProject
+      - otherwise, reuses lastUser and lastRepo to download the project list
+      	- once it has the list, (re)uses saveGithubProjectWithList
+	  which will prompt for the password
+
+todo:
+  - create SnapGithub.maybePromptGetProjectList
+  - 
+
 
 Todo:
  - show files in all sub-directories of the repo

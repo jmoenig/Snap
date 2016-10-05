@@ -2078,6 +2078,11 @@ DialogBoxMorph.prototype.promptCredentials = function (
         inp.add(pw1);
     }
 
+    if (purpose === 'github save as') {
+        inp.add(labelText('Password:'));
+        inp.add(pw1);
+    }
+
     if (msg) {
         bdy.add(labelText(msg));
     }

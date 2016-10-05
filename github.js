@@ -41,6 +41,8 @@ var SnapGithub = new Github();
 
 function Github() {
     this.baseUrl = "https://api.github.com";
+    this.lastUser = null;
+    this.lastRepo = null;
 }
 
 // Github API
@@ -58,7 +60,7 @@ Github.prototype.promptRepoGetProjectList = function (
 	    myself.getProjectList(callBack, errorCall, user.username, user.repo);
 	}
     ).withKey('githubGet').promptCredentials(
-        'Github Repo',
+        'Github Username and Repository',
 	'github get',
 	null,
 	null,
@@ -69,7 +71,19 @@ Github.prototype.promptRepoGetProjectList = function (
 	ide.cloudIcon(),
 	ide.cloudMsg
     );
-}
+};
+
+Github.prototype.maybePromptGetProjectList = function (
+    ide,
+    callBack,
+    errorCall
+) {
+    // implement me:
+    // - if lastUser and lastRepo are set, call
+    //   getProjectList, then call
+    //   ide.saveGithubProjectWithList
+    // - otherwise, call promptRepoPasswordSaveProject
+};
 
 Github.prototype.getProjectList = function (
     callBack,
@@ -84,17 +98,19 @@ Github.prototype.getProjectList = function (
         + encodeURIComponent(repo)
         + "/contents";
     myself.callApi(function(response, url) {
-	    var projects = [];
-	    parsed = JSON.parse(response);
-	    for (var idx = 0; idx < parsed.length; idx++) {
-		projects.push({
-			file: parsed[idx].download_url,
-			    ProjectName: parsed[idx].name,
-			    FullResponse: parsed[idx],
-			    Public: false
-			    });
-	    }
-	    callBack.call(null, projects, url, response);
+        var projects = [];
+        parsed = JSON.parse(response);
+	for (var idx = 0; idx < parsed.length; idx++) {
+	    projects.push({
+                file: parsed[idx].download_url,
+		ProjectName: parsed[idx].name,
+		FullResponse: parsed[idx],
+		Public: false
+            });
+	}
+        myself.lastUser = username;
+        myself.lastRepo = repo;
+	callBack.call(null, projects, url, response);
     }, errorCall, url);
 };
 
@@ -113,7 +129,7 @@ Github.prototype.emails = function(username, password) {
 		   );
 };
 
-Github.prototype.promptRepoSaveProject = function (
+Github.prototype.promptPasswordSaveProject = function (
     ide,
     callBack,
     errorCall,
@@ -124,10 +140,52 @@ Github.prototype.promptRepoSaveProject = function (
     new DialogBoxMorph(
         null,
 	function (user) {
-	    myself.saveProject(ide, callBack, errorCall, user.username, user.password, user.repo, "/" /* path */, sha);
+	    myself.saveProject(ide,
+			       callBack,
+			       errorCall,
+			       myself.lastUser,
+			       user.password,
+			       myself.lastRepo,
+			       "/" /* path */,
+			       sha);
+	}
+    ).withKey('githubSaveAs').promptCredentials(
+        'Github Password',
+	'github save as',
+	null,
+	null,
+	null,
+	null,
+	null,
+	world,
+	ide.cloudIcon(),
+	ide.cloudMsg
+    );
+};
+
+// unused, unclear if there is a use for it
+Github.prototype.promptRepoPasswordSaveProject = function (
+    ide,
+    callBack,
+    errorCall,
+    sha
+) {
+    var myself = this,
+        world = ide.world();
+    new DialogBoxMorph(
+        null,
+	function (user) {
+	    myself.saveProject(ide,
+			       callBack,
+			       errorCall,
+			       user.username,
+			       user.password,
+			       user.repo,
+			       "/" /* path */,
+			       sha);
 	}
     ).withKey('githubSave').promptCredentials(
-        'Github Repo',
+        'Github Username/Password/Repo',
 	'github save',
 	null,
 	null,
@@ -138,7 +196,7 @@ Github.prototype.promptRepoSaveProject = function (
 	ide.cloudIcon(),
 	ide.cloudMsg
     );
-}
+};
 
 Github.prototype.saveProject = function (ide, callBack, errorCall, username, password, repo, path, sha) {
     var myself = this,
@@ -197,10 +255,6 @@ Github.prototype.saveProject = function (ide, callBack, errorCall, username, pas
     ide.showMessage('Uploading ' + Math.round(size / 1024) + ' KB...');
     myself.callApi(
         function (response, url) {
-	    response = response.forEach(function (project) {
-                project.username = username;
-                project.repo = repo;
-            });
 	    callBack.call(null, response, url);
 	    ide.hasChangedMedia = false;
 	},
