@@ -68,8 +68,8 @@ Github.prototype.promptRepoGetProjectList = function (
 	null,
 	null,
 	world,
-	ide.cloudIcon(),
-	ide.cloudMsg
+	null,
+	null
     );
 };
 
@@ -158,8 +158,8 @@ Github.prototype.promptPasswordSaveProject = function (
 	null,
 	null,
 	world,
-	ide.cloudIcon(),
-	ide.cloudMsg
+	null,
+	null
     );
 };
 
@@ -193,8 +193,8 @@ Github.prototype.promptRepoPasswordSaveProject = function (
 	null,
 	null,
 	world,
-	ide.cloudIcon(),
-	ide.cloudMsg
+	null,
+	null
     );
 };
 

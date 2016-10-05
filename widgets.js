@@ -2173,6 +2173,8 @@ DialogBoxMorph.prototype.promptCredentials = function (
 	    checklist = [usr, repo];
 	} else if (purpose === 'github save') {
 	    checklist = [usr, repo, pw1];
+	} else if (purpose === 'github save as') {
+	    checklist = [pw1];
         } else if (purpose === 'signup') {
             checklist = [usr, bmn, byr, eml];
         } else if (purpose === 'changePassword') {
@@ -2230,6 +2232,8 @@ DialogBoxMorph.prototype.promptCredentials = function (
     this.edit = function () {
         if (purpose === 'changePassword') {
             opw.edit();
+        } else if (purpose === 'github save as') {
+            pw1.edit();
         } else { // 'signup', 'login', 'resetPassword'
             usr.edit();
         }
