@@ -83,6 +83,17 @@ Github.prototype.maybePromptGetProjectList = function (
     //   getProjectList, then call
     //   ide.saveGithubProjectWithList
     // - otherwise, call promptRepoPasswordSaveProject
+    var myself = this;
+    if (myself.lastUser && myself.lastRepo) {
+	myself.getProjectList(
+	    callBack,
+	    errorCall,
+	    myself.lastUser,
+	    myself.lastRepo
+	);
+    } else {
+	myself.promptRepoGetProjectList(ide, callBack, errorCall);
+    }
 };
 
 Github.prototype.getProjectList = function (
@@ -114,12 +125,13 @@ Github.prototype.getProjectList = function (
     }, errorCall, url);
 };
 
+// Unused.  This is only here to test simple authentication on a GET
 Github.prototype.emails = function(username, password) {
     var myself = this;
     var url = myself.baseUrl + "/user/emails";
     var params = JSON.stringify({});
     myself.callApi(function (response, url) {
-	    console.log(response)},
+	    console.log(response);},
 		   function (response, url) {},
 		   url,
 		   "GET",
@@ -163,7 +175,6 @@ Github.prototype.promptPasswordSaveProject = function (
     );
 };
 
-// unused, unclear if there is a use for it
 Github.prototype.promptRepoPasswordSaveProject = function (
     ide,
     callBack,

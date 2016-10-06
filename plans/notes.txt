@@ -48,6 +48,8 @@ save:
       - otherwise, reuses lastUser and lastRepo to download the project list
       	- once it has the list, (re)uses saveGithubProjectWithList
 	  which will prompt for the password
+	- actually, this branch almost never happens because the only ways
+	  that set the source to github also set lastUser and lastRepo
 
 todo:
   - create SnapGithub.maybePromptGetProjectList
