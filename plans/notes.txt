@@ -52,9 +52,14 @@ save:
 	  that set the source to github also set lastUser and lastRepo
 
 Todo:
- [ ] show files in all sub-directories of the repo (?)
-   - add "path" as a separate variable aside from repo
-   - default to "/"
+ [-] show files in all sub-directories of the repo (?)
+   [x] add "path" as a separate variable aside from repo
+   [x] default to "/"
+   [ ] would be better to be able to traverse directories properly
+       [ ] if user selects a directory, it just refreshes the project list
+       [ ] subdirectories need a way to go up
+   [ ] no nice way to add a new folder, but you can currently do it if you
+       save a project as "directory/name"
  [x] remember username/repo, and provide a button to change repo
  [x] when source=github, remove "share" button
  [ ] handle delete project

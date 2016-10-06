@@ -1889,6 +1889,7 @@ DialogBoxMorph.prototype.promptCredentials = function (
         pw2 = new InputFieldMorph(),
         opw = new InputFieldMorph(),
         repo = new InputFieldMorph(),
+        path = new InputFieldMorph('/'),
         agree = false,
         chk,
         dof = new AlignmentMorph('row', 4),
@@ -2019,6 +2020,7 @@ DialogBoxMorph.prototype.promptCredentials = function (
     pw2.setWidth(200);
     opw.setWidth(200);
     repo.setWidth(200);
+    path.setWidth(200);
     pw1.contents().text.toggleIsPassword();
     pw2.contents().text.toggleIsPassword();
     opw.contents().text.toggleIsPassword();
@@ -2067,6 +2069,8 @@ DialogBoxMorph.prototype.promptCredentials = function (
         inp.add(usr);
         inp.add(labelText('Repo:'));
         inp.add(repo);
+        inp.add(labelText('Directory:'));
+        inp.add(path);
     }
 
     if (purpose === 'github save') {
@@ -2074,6 +2078,8 @@ DialogBoxMorph.prototype.promptCredentials = function (
         inp.add(usr);
         inp.add(labelText('Repo:'));
         inp.add(repo);
+        inp.add(labelText('Directory:'));
+        inp.add(path);
         inp.add(labelText('Password:'));
         inp.add(pw1);
     }
@@ -2170,9 +2176,9 @@ DialogBoxMorph.prototype.promptCredentials = function (
         if (purpose === 'login') {
             checklist = [usr, pw1];
 	} else if (purpose === 'github get') {
-	    checklist = [usr, repo];
+	    checklist = [usr, repo, path];
 	} else if (purpose === 'github save') {
-	    checklist = [usr, repo, pw1];
+	    checklist = [usr, repo, path, pw1];
 	} else if (purpose === 'github save as') {
 	    checklist = [pw1];
         } else if (purpose === 'signup') {
@@ -2246,6 +2252,7 @@ DialogBoxMorph.prototype.promptCredentials = function (
             oldpassword: opw.getValue(),
             password: pw1.getValue(),
 	    repo: repo.getValue(),
+	    path: path.getValue(),
             choice: agree
         };
     };

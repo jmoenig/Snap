@@ -43,6 +43,7 @@ function Github() {
     this.baseUrl = "https://api.github.com";
     this.lastUser = null;
     this.lastRepo = null;
+    this.lastPath = null;
 }
 
 // Github API
@@ -57,7 +58,7 @@ Github.prototype.promptRepoGetProjectList = function (
     new DialogBoxMorph(
         null,
 	function (user) {
-	    myself.getProjectList(callBack, errorCall, user.username, user.repo);
+	    myself.getProjectList(callBack, errorCall, user.username, user.repo, user.path);
 	}
     ).withKey('githubGet').promptCredentials(
         'Github Username and Repository',
@@ -79,12 +80,13 @@ Github.prototype.maybePromptGetProjectList = function (
     errorCall
 ) {
     var myself = this;
-    if (myself.lastUser && myself.lastRepo) {
+    if (myself.lastUser && myself.lastRepo && myself.lastPath !== null) {
 	myself.getProjectList(
 	    callBack,
 	    errorCall,
 	    myself.lastUser,
-	    myself.lastRepo
+	    myself.lastRepo,
+	    myself.lastPath
 	);
     } else {
 	myself.promptRepoGetProjectList(ide, callBack, errorCall);
@@ -95,29 +97,40 @@ Github.prototype.getProjectList = function (
     callBack,
     errorCall,
     username,
-    repo
+    repo,
+    path
 ) {
     var myself = this;
+    if (path.endsWith("/")) {
+        path = path.substring(0, path.length - 2);
+    }
     var url = myself.baseUrl + "/repos/"
         + encodeURIComponent(username)
         + "/"
         + encodeURIComponent(repo)
-        + "/contents";
-    myself.callApi(function(response, url) {
-        var projects = [];
-        parsed = JSON.parse(response);
-	for (var idx = 0; idx < parsed.length; idx++) {
-	    projects.push({
-                file: parsed[idx].download_url,
-		ProjectName: parsed[idx].name,
-		FullResponse: parsed[idx],
-		Public: false
-            });
-	}
-        myself.lastUser = username;
-        myself.lastRepo = repo;
-	callBack.call(null, projects, url, response);
-    }, errorCall, url);
+        + "/contents"
+	+ encodeURIComponent(path);
+    myself.callApi(
+	function(response, url) {
+            var projects = [];
+            parsed = JSON.parse(response);
+	    for (var idx = 0; idx < parsed.length; idx++) {
+		// TODO(wcy): filter out all but directories and xml files
+		// include a bit that says whether it is a directory
+		// if name includes a directory, remove it?
+		projects.push(
+		    {
+			file: parsed[idx].download_url,
+			ProjectName: parsed[idx].name,
+			FullResponse: parsed[idx],
+			Public: false
+		    });
+	    }
+            myself.lastUser = username;
+            myself.lastRepo = repo;
+	    myself.lastPath = path;
+	    callBack.call(null, projects, url, response);
+	}, errorCall, url);
 };
 
 // Unused.  This is only here to test simple authentication on a GET
@@ -153,7 +166,7 @@ Github.prototype.promptPasswordSaveProject = function (
 			       myself.lastUser,
 			       user.password,
 			       myself.lastRepo,
-			       "/" /* path */,
+			       myself.lastPath,
 			       sha);
 	}
     ).withKey('githubSaveAs').promptCredentials(
@@ -170,6 +183,7 @@ Github.prototype.promptPasswordSaveProject = function (
     );
 };
 
+// Not sure this is ever used...
 Github.prototype.promptRepoPasswordSaveProject = function (
     ide,
     callBack,
@@ -187,7 +201,7 @@ Github.prototype.promptRepoPasswordSaveProject = function (
 			       user.username,
 			       user.password,
 			       user.repo,
-			       "/" /* path */,
+			       user.path,
 			       sha);
 	}
     ).withKey('githubSave').promptCredentials(
@@ -204,7 +218,16 @@ Github.prototype.promptRepoPasswordSaveProject = function (
     );
 };
 
-Github.prototype.saveProject = function (ide, callBack, errorCall, username, password, repo, path, sha) {
+Github.prototype.saveProject = function (
+    ide,
+    callBack,
+    errorCall,
+    username,
+    password,
+    repo,
+    path,
+    sha)
+{
     var myself = this,
         pdata,
         media,

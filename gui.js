@@ -5487,9 +5487,8 @@ ProjectDialogMorph.prototype.setSource = function (source) {
         this.projectList = this.getLocalProjectList();
         break;
     case 'github':
-        msg = myself.ide.showMessage('Updating\nproject list...');
         this.projectList = [];
-        this.changeRepo(true, msg);
+        this.changeRepo(true, true);
         return;
     }
 
@@ -5709,10 +5708,9 @@ ProjectDialogMorph.prototype.openProject = function () {
         this.ide.openProjectString(src);
         this.destroy();
     } else if (this.source === 'github') {
+	// TODO(wcy): if this is a folder, just call changeRepo on the new folder
 	location.hash = '#run:' + encodeURIComponent(proj.file);
 	this.ide.rawOpenProjectString(this.ide.getURL(proj.file));
-	// this is another possibility?
-	//this.ide.interpretUrlAnchors();
         this.destroy();
     } else { // 'local'
         this.ide.openProject(proj.name);
@@ -5888,11 +5886,18 @@ ProjectDialogMorph.prototype.deleteProject = function () {
     }
 };
 
-ProjectDialogMorph.prototype.changeRepo = function (skipPrompt, msg) {
+ProjectDialogMorph.prototype.changeRepo = function (skipPrompt, showMessage, newPath) {
     var myself = this;
     var fcn = SnapGithub.promptRepoGetProjectList;
     if (skipPrompt) {
 	fcn = SnapGithub.maybePromptGetProjectList;
+	if (newPath) {
+	    SnapGithub.lastPath = newPath;
+	}
+    }
+    var msg;
+    if (showMessage) {
+        msg = this.ide.showMessage('Updating\nproject list...');
     }
     fcn.call(
 	SnapGithub,
