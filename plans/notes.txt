@@ -52,15 +52,17 @@ save:
 	  that set the source to github also set lastUser and lastRepo
 
 Todo:
- - show files in all sub-directories of the repo (?)
-   - or add "path" as a separate variable aside from repo
- - only show xml files
- - remember username/repo, and provide a button to change repo
- - when source=github, remove "share" button
- - show last modified time
- - handle github pagination
- - handle github 2-factor auth
- - handle delete project
-   - until it's ready, remove the "delete" button
- - add to snap-fast.html
+ [ ] show files in all sub-directories of the repo (?)
+   - add "path" as a separate variable aside from repo
+   - default to "/"
+ [x] remember username/repo, and provide a button to change repo
+ [x] when source=github, remove "share" button
+ [ ] handle delete project
+   [x] until it's ready, remove the "delete" button
+ [ ] only show xml files
+ [ ] show last modified time
+
+ [ ] handle github pagination
+ [ ] handle github 2-factor auth
+ [ ] add to snap-fast.html
 

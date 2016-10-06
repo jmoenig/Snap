@@ -5178,6 +5178,7 @@ ProjectDialogMorph.prototype.init = function (ide, task) {
     this.deleteButton = null;
     this.shareButton = null;
     this.unshareButton = null;
+    this.changeRepoButton = null;
 
     // initialize inherited properties:
     ProjectDialogMorph.uber.init.call(
@@ -5324,6 +5325,8 @@ ProjectDialogMorph.prototype.buildContents = function () {
     this.unshareButton.hide();
     this.deleteButton = this.addButton('deleteProject', 'Delete');
     this.addButton('cancel', 'Cancel');
+    this.changeRepoButton = this.addButton('changeRepo', 'Change Repo');
+    this.changeRepoButton.hide();
 
     if (notification) {
         this.setExtent(new Point(455, 335).add(notification.extent()));
@@ -5467,7 +5470,7 @@ ProjectDialogMorph.prototype.setSource = function (source) {
             function (projectList) {
                 // Don't show cloud projects if user has since switch panes.
                 if (myself.source === 'cloud') {
-                    myself.installCloudProjectList(projectList);
+                    myself.installCloudProjectList(projectList, myself.source);
                 }
                 msg.destroy();
             },
@@ -5486,20 +5489,7 @@ ProjectDialogMorph.prototype.setSource = function (source) {
     case 'github':
         msg = myself.ide.showMessage('Updating\nproject list...');
         this.projectList = [];
-        SnapGithub.promptRepoGetProjectList(
-	    myself.ide,
-            function (projectList) {
-                // Don't show github projects if user has since switch panes.
-                if (myself.source === 'github') {
-                    myself.installCloudProjectList(projectList);
-                }
-                msg.destroy();
-            },
-            function (err, lbl) {
-                msg.destroy();
-                myself.ide.cloudError().call(null, err, lbl);
-            }
-        );
+        this.changeRepo(true, msg);
         return;
     }
 
@@ -5610,7 +5600,7 @@ ProjectDialogMorph.prototype.getExamplesProjectList = function () {
     return this.ide.getMediaList('Examples');
 };
 
-ProjectDialogMorph.prototype.installCloudProjectList = function (pl) {
+ProjectDialogMorph.prototype.installCloudProjectList = function (pl, source) {
     var myself = this;
     this.projectList = pl || [];
     this.projectList.sort(function (x, y) {
@@ -5666,21 +5656,30 @@ ProjectDialogMorph.prototype.installCloudProjectList = function (pl) {
                 myself.preview.rightCenter().add(new Point(2, 0))
             );
         }
-        if (item.Public === 'true') {
-            myself.shareButton.hide();
-            myself.unshareButton.show();
-        } else {
-            myself.unshareButton.hide();
-            myself.shareButton.show();
-        }
+	if (source !== 'github') { // cloud
+            if (item.Public === 'true') {
+		myself.shareButton.hide();
+		myself.unshareButton.show();
+            } else {
+		myself.unshareButton.hide();
+		myself.shareButton.show();
+            }
+	}
         myself.buttons.fixLayout();
         myself.fixLayout();
         myself.edit();
     };
     this.body.add(this.listField);
-    this.shareButton.show();
-    this.unshareButton.hide();
-    this.deleteButton.show();
+    if (source === 'github') {
+	this.shareButton.hide();
+	this.unshareButton.hide();
+	this.deleteButton.hide();
+	this.changeRepoButton.show();
+    } else { // cloud
+	this.shareButton.show();
+	this.unshareButton.hide();
+	this.deleteButton.show();
+    }
     this.buttons.fixLayout();
     this.fixLayout();
     if (this.task === 'open') {
@@ -5859,7 +5858,8 @@ ProjectDialogMorph.prototype.deleteProject = function () {
                                     idx = myself.projectList.indexOf(proj);
                                     myself.projectList.splice(idx, 1);
                                     myself.installCloudProjectList(
-                                        myself.projectList
+                                        myself.projectList,
+					myself.source
                                     ); // refresh list
                                 },
                                 myself.ide.cloudError(),
@@ -5886,6 +5886,34 @@ ProjectDialogMorph.prototype.deleteProject = function () {
             );
         }
     }
+};
+
+ProjectDialogMorph.prototype.changeRepo = function (skipPrompt, msg) {
+    var myself = this;
+    var fcn = SnapGithub.promptRepoGetProjectList;
+    if (skipPrompt) {
+	fcn = SnapGithub.maybePromptGetProjectList;
+    }
+    fcn.call(
+	SnapGithub,
+	myself.ide,
+        function (projectList) {
+            // Don't show github projects if user has since switch panes.
+            if (myself.source === 'github') {
+		this.projectList = [];
+                myself.installCloudProjectList(projectList, myself.source);
+            }
+	    if (msg) {
+		msg.destroy();
+	    }
+        },
+        function (err, lbl) {
+	    if (msg) {
+		msg.destroy();
+	    }
+            myself.ide.cloudError().call(null, err, lbl);
+        }
+    );
 };
 
 ProjectDialogMorph.prototype.shareProject = function () {
