@@ -106,7 +106,7 @@ Github.prototype.getProjectList = function (
         + encodeURIComponent(username)
         + "/"
         + encodeURIComponent(repo)
-        + "/contents"
+        + "/contents/"
 	+ encodeURIComponent(path);
     myself.callApi(
 	function(response, url) {
@@ -233,9 +233,13 @@ Github.prototype.promptRepoPasswordSaveProject = function (
     );
 };
 
+// Remove leading and trailing slashes from the path
 Github.prototype.trimPath = function (path) {
     if (path.endsWith("/")) {
-        return path.substring(0, path.length - 2);
+        path = path.substring(0, path.length - 2);
+    }
+    if (path.startsWith("/")) {
+        path = path.substring(1, path.length - 1);
     }
     return path;
 };
@@ -247,7 +251,7 @@ Github.prototype.updatePath = function (path) {
 	if (path === "..") {
 	    newpath = this.lastPath.substring(0, this.lastPath.lastIndexOf("/"));
 	} else {
-	    newpath += "/" + path;
+	    newpath = this.lastPath + "/" + path;
 	}
     } else {
 	newpath = path;
@@ -281,7 +285,7 @@ Github.prototype.saveProject = function (
         + encodeURIComponent(username)
         + "/"
         + encodeURIComponent(repo)
-        + "/contents"
+        + "/contents/"
         + encodeURIComponent(path)
         + "/"
         + filename;
