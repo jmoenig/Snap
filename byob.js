@@ -769,7 +769,7 @@ CustomCommandBlockMorph.prototype.attachTargets = function () {
 };
 
 CustomCommandBlockMorph.prototype.isInUse = function () {
-    // anser true if an instance of my definition is found
+    // answer true if an instance of my definition is found
     // in any of my receiver's scripts or block definitions
     var def = this.definition,
         ide = this.receiver().parentThatIsA(IDE_Morph);
