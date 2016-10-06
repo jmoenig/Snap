@@ -101,9 +101,7 @@ Github.prototype.getProjectList = function (
     path
 ) {
     var myself = this;
-    if (path.endsWith("/")) {
-        path = path.substring(0, path.length - 2);
-    }
+    path = myself.trimPath(path);
     var url = myself.baseUrl + "/repos/"
         + encodeURIComponent(username)
         + "/"
@@ -115,15 +113,30 @@ Github.prototype.getProjectList = function (
             var projects = [];
             parsed = JSON.parse(response);
 	    for (var idx = 0; idx < parsed.length; idx++) {
-		// TODO(wcy): filter out all but directories and xml files
-		// include a bit that says whether it is a directory
-		// if name includes a directory, remove it?
+		if (parsed[idx].type === "file") {
+		    if (!parsed[idx].name.endsWith(".xml")) {
+			continue;
+		    }
+		} else if (parsed[idx].type !== "dir") {
+		    continue;
+		}
 		projects.push(
 		    {
 			file: parsed[idx].download_url,
+			type: parsed[idx].type,
 			ProjectName: parsed[idx].name,
-			FullResponse: parsed[idx],
-			Public: false
+			sha: parsed[idx].sha,
+			Public: 'false',
+			FullResponse: parsed[idx]
+		    });
+	    }
+	    if (path !== "") {
+		projects.push(
+		    {
+			file: "..",
+			type: "dir",
+			ProjectName: "..",
+			Public: 'false'
 		    });
 	    }
             myself.lastUser = username;
@@ -138,15 +151,17 @@ Github.prototype.emails = function(username, password) {
     var myself = this;
     var url = myself.baseUrl + "/user/emails";
     var params = JSON.stringify({});
-    myself.callApi(function (response, url) {
-	    console.log(response);},
-		   function (response, url) {},
-		   url,
-		   "GET",
-		   params,
-		   username,
-		   password
-		   );
+    myself.callApi(
+	function (response, url) {
+	    console.log(response);
+	},
+	function (response, url) {},
+	url,
+	"GET",
+	params,
+	username,
+	password
+    );
 };
 
 Github.prototype.promptPasswordSaveProject = function (
@@ -218,6 +233,29 @@ Github.prototype.promptRepoPasswordSaveProject = function (
     );
 };
 
+Github.prototype.trimPath = function (path) {
+    if (path.endsWith("/")) {
+        return path.substring(0, path.length - 2);
+    }
+    return path;
+};
+
+Github.prototype.updatePath = function (path) {
+    var newpath;
+    path = this.trimPath(path);
+    if (this.lastPath) {
+	if (path === "..") {
+	    newpath = this.lastPath.substring(0, this.lastPath.lastIndexOf("/"));
+	} else {
+	    newpath += "/" + path;
+	}
+    } else {
+	newpath = path;
+    }
+    this.lastPath = newpath;
+    return this.lastPath;
+};
+
 Github.prototype.saveProject = function (
     ide,
     callBack,
@@ -238,9 +276,7 @@ Github.prototype.saveProject = function (
     if (!ide.projectName.endsWith(".xml")) {
         filename += ".xml";
     }
-    if (path.endsWith("/")) {
-        path = path.substring(0, path.length - 2);
-    }
+    path = this.trimPath(path);
     var url = myself.baseUrl + "/repos/"
         + encodeURIComponent(username)
         + "/"

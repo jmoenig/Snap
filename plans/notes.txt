@@ -55,17 +55,20 @@ Todo:
  [-] show files in all sub-directories of the repo (?)
    [x] add "path" as a separate variable aside from repo
    [x] default to "/"
-   [ ] would be better to be able to traverse directories properly
-       [ ] if user selects a directory, it just refreshes the project list
-       [ ] subdirectories need a way to go up
+   [-] would be better to be able to traverse directories properly
+       [x] if user selects a directory, it just refreshes the project list
+       [x] subdirectories need a way to go up
+       [-] at that point, remove path as a separate input?  Or I guess it's fine to leave it
+       [ ] doesn't work on double-click -- closes the dialog because
+       	   DialogBoxMorph.prototype.accept ends with this.destroy();
    [ ] no nice way to add a new folder, but you can currently do it if you
        save a project as "directory/name"
  [x] remember username/repo, and provide a button to change repo
  [x] when source=github, remove "share" button
  [ ] handle delete project
    [x] until it's ready, remove the "delete" button
- [ ] only show xml files
- [ ] show last modified time
+ [x] only show xml files
+ [ ] show last modified time -- or suppress.  it's not readily available from github api
 
  [ ] handle github pagination
  [ ] handle github 2-factor auth

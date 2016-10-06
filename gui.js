@@ -4830,21 +4830,22 @@ IDE_Morph.prototype.saveGithubProjectWithList = function (
     shouldConfirm
 ) {
     var myself = this;
-    var existing = detect(projectList,
-			  function (item) {
-			      if (name.endsWith(".xml")) {
-				  return item.ProjectName === name;
-			      } else {
-				  return item.ProjectName === name + ".xml";
-			      }
-			  }
-			 );
+    var existing = detect(
+	projectList,
+	function (item) {
+	    if (name.endsWith(".xml")) {
+		return item.ProjectName === name;
+	    } else {
+		return item.ProjectName === name + ".xml";
+	    }
+	}
+    );
     if (existing) {
 	if (shouldConfirm) {
             this.confirm(
 		localize(
                     'Are you sure you want to replace'
-		) + '\n"' + name + " -- " + existing.FullResponse.sha + '"?',
+		) + '\n"' + name + '" (sha = ' + existing.sha + ')?',
 		'Replace Project',
 		function () {
                     myself.setProjectName(name);
@@ -4865,7 +4866,7 @@ IDE_Morph.prototype.saveAsGithubProject = function (dialog, existing) {
     var myself = this;
     var sha;
     if (existing) {
-	sha = existing.FullResponse.sha;
+	sha = existing.sha;
     }
     myself.showMessage('Saving project\nto Github...');
     SnapGithub.promptPasswordSaveProject(
@@ -5708,10 +5709,14 @@ ProjectDialogMorph.prototype.openProject = function () {
         this.ide.openProjectString(src);
         this.destroy();
     } else if (this.source === 'github') {
-	// TODO(wcy): if this is a folder, just call changeRepo on the new folder
-	location.hash = '#run:' + encodeURIComponent(proj.file);
-	this.ide.rawOpenProjectString(this.ide.getURL(proj.file));
-        this.destroy();
+	if (proj.type === "dir") {
+	    this.changeRepo(true, true, proj.ProjectName);
+	    return;
+	} else {
+	    location.hash = '#run:' + encodeURIComponent(proj.file);
+	    this.ide.rawOpenProjectString(this.ide.getURL(proj.file));
+            this.destroy();
+	}
     } else { // 'local'
         this.ide.openProject(proj.name);
         this.destroy();
@@ -5892,7 +5897,7 @@ ProjectDialogMorph.prototype.changeRepo = function (skipPrompt, showMessage, new
     if (skipPrompt) {
 	fcn = SnapGithub.maybePromptGetProjectList;
 	if (newPath) {
-	    SnapGithub.lastPath = newPath;
+	    SnapGithub.updatePath(newPath);
 	}
     }
     var msg;
