@@ -51,21 +51,16 @@ save:
 	- actually, this branch almost never happens because the only ways
 	  that set the source to github also set lastUser and lastRepo
 
-todo:
-  - create SnapGithub.maybePromptGetProjectList
-  - 
-
-
 Todo:
- - show files in all sub-directories of the repo
+ - show files in all sub-directories of the repo (?)
+   - or add "path" as a separate variable aside from repo
  - only show xml files
- - when saving, only provide username/repo once
- - fix error related to having no preview
+ - remember username/repo, and provide a button to change repo
+ - when source=github, remove "share" button
+ - show last modified time
  - handle github pagination
- - handle delete
- - handle save (instead of save as)
+ - handle github 2-factor auth
+ - handle delete project
+   - until it's ready, remove the "delete" button
  - add to snap-fast.html
- - allow staying logged in on this computer until logged out (?)
 
-Done:
- - have the user provide the github username and repo name

@@ -78,11 +78,6 @@ Github.prototype.maybePromptGetProjectList = function (
     callBack,
     errorCall
 ) {
-    // implement me:
-    // - if lastUser and lastRepo are set, call
-    //   getProjectList, then call
-    //   ide.saveGithubProjectWithList
-    // - otherwise, call promptRepoPasswordSaveProject
     var myself = this;
     if (myself.lastUser && myself.lastRepo) {
 	myself.getProjectList(
