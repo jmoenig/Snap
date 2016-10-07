@@ -5577,12 +5577,12 @@ ProjectDialogMorph.prototype.setSource = function (source) {
     } else { // examples
         this.deleteButton.hide();
     }
+    this.changeRepoButton.hide();
     this.buttons.fixLayout();
     this.fixLayout();
     if (this.task === 'open') {
         this.clearDetails();
     }
-    this.changeRepoButton.hide();
 };
 
 ProjectDialogMorph.prototype.getLocalProjectList = function () {

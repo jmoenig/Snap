@@ -61,8 +61,6 @@ Todo:
      because I think those are saved with the project, right?
 
  [ ] localize strings, add icons
- [ ] button alignment on ProjectDialogMorph gets screwed up when
-     you switch from github back to local
 
  [ ] add a way to include the repo in a link so you can send someone a link to your snap projects
  [ ] handle github pagination
@@ -86,3 +84,5 @@ Done:
  [x] Fix double-clicking on directories in the ProjectDialogMorph
      Currently it just closes the dialog because DialogBoxMorph.prototype.accept
      ends with this.destroy();
+ [x] button alignment on ProjectDialogMorph gets screwed up when
+     you switch from github back to local
