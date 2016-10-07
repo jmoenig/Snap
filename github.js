@@ -27,8 +27,8 @@
 
 // Global settings /////////////////////////////////////////////////////
 
-/*global modules, IDE_Morph, SnapSerializer, hex_sha512, alert, nop,
-localize*/
+/*global modules, IDE_Morph, DialogBoxMorph, SnapSerializer, hex_sha512,
+  localize*/
 
 modules.github = '2016-October-16';
 
@@ -37,7 +37,7 @@ modules.github = '2016-October-16';
 var Github;
 var SnapGithub = new Github();
 
-// Github /////////////////////////////////////////////////////////////
+// Github //////////////////////////////////////////////////////////////
 
 function Github() {
     this.baseUrl = "https://api.github.com";
@@ -46,8 +46,27 @@ function Github() {
     this.lastPath = null;
 }
 
-// Github API
+// Public Functions ////////////////////////////////////////////////////
+//
+// These are the methods which are officially "exported" (which are
+// meant to be called outside of this file):
+//   promptRepoGetProjectList
+//   maybePromptGetProjectList
+//   promptPasswordSaveProject
+//   promptRepoPasswordSaveProject
+//
+// Github objects will save the username, repo, and path, but for
+// security, we don't store the password.  We prompt the user for
+// the password each time it is necessary (i.e. when a file is updated).
+//
 
+
+// Public functions for getting the project list
+
+// promptRepoGetProjectList
+// 
+// This prompts for the github username, repo name, and path (defaults
+// to "/") even if lastRepo, lastUser, and lastPath are set.
 Github.prototype.promptRepoGetProjectList = function (
     ide,
     callBack,
@@ -58,7 +77,8 @@ Github.prototype.promptRepoGetProjectList = function (
     new DialogBoxMorph(
         null,
 	function (user) {
-	    myself.getProjectList(callBack, errorCall, user.username, user.repo, user.path);
+	    myself.getProjectList(
+		callBack, errorCall, user.username, user.repo, user.path);
 	}
     ).withKey('githubGet').promptCredentials(
         'Github Username and Repository',
@@ -74,6 +94,11 @@ Github.prototype.promptRepoGetProjectList = function (
     );
 };
 
+
+// maybePromptGetProjectList
+// 
+// This tries to use lastUser, lastRepo, and lastPath.  If any of
+// those aren't set, it will prompt for all of them.
 Github.prototype.maybePromptGetProjectList = function (
     ide,
     callBack,
@@ -93,77 +118,16 @@ Github.prototype.maybePromptGetProjectList = function (
     }
 };
 
-Github.prototype.getProjectList = function (
-    callBack,
-    errorCall,
-    username,
-    repo,
-    path
-) {
-    var myself = this;
-    path = myself.trimPath(path);
-    var url = myself.baseUrl + "/repos/"
-        + encodeURIComponent(username)
-        + "/"
-        + encodeURIComponent(repo)
-        + "/contents/"
-	+ encodeURIComponent(path);
-    myself.callApi(
-	function(response, url) {
-            var projects = [];
-            parsed = JSON.parse(response);
-	    for (var idx = 0; idx < parsed.length; idx++) {
-		if (parsed[idx].type === "file") {
-		    if (!parsed[idx].name.endsWith(".xml")) {
-			continue;
-		    }
-		} else if (parsed[idx].type !== "dir") {
-		    continue;
-		}
-		projects.push(
-		    {
-			file: parsed[idx].download_url,
-			type: parsed[idx].type,
-			ProjectName: parsed[idx].name,
-			sha: parsed[idx].sha,
-			Public: 'false',
-			FullResponse: parsed[idx]
-		    });
-	    }
-	    if (path !== "") {
-		projects.push(
-		    {
-			file: "..",
-			type: "dir",
-			ProjectName: "..",
-			Public: 'false'
-		    });
-	    }
-            myself.lastUser = username;
-            myself.lastRepo = repo;
-	    myself.lastPath = path;
-	    callBack.call(null, projects, url, response);
-	}, errorCall, url);
-};
 
-// Unused.  This is only here to test simple authentication on a GET
-Github.prototype.emails = function(username, password) {
-    var myself = this;
-    var url = myself.baseUrl + "/user/emails";
-    var params = JSON.stringify({});
-    myself.callApi(
-	function (response, url) {
-	    console.log(response);
-	},
-	function (response, url) {},
-	url,
-	"GET",
-	params,
-	username,
-	password
-    );
-};
+// Public functions for saving a project
 
+// promptPasswordSaveProject
+// 
+// This requires that lastUser, lastRepo, and
+// lastPath are set.  It prompts for the password, and uses that to
+// save the file.
+//
+// sha should be set if and only if we are updating a file
 Github.prototype.promptPasswordSaveProject = function (
     ide,
     callBack,
@@ -172,6 +136,43 @@ Github.prototype.promptPasswordSaveProject = function (
 ) {
     var myself = this,
         world = ide.world();
+
+    // Confirm that username, repo, and path are set
+    if (!myself.lastUser) {
+        new DialogBoxMorph().inform(
+            'Github - Cannot Save Project',
+            'Internal error.  Github username is not set: '
+		+ myself.lastUser + '\n',
+            ide.world(),
+            ide.cloudIcon(null, new Color(180, 0, 0))
+        );
+        throw new Error('Internal Error - Github username not set: ' +
+			myself.lastuser);
+    }
+    if (!myself.lastRepo) {
+        new DialogBoxMorph().inform(
+            'Github - Cannot Save Project',
+            'Internal error.  Github repo is not set: '
+		+ myself.lastRepo + '\n',
+            ide.world(),
+            ide.cloudIcon(null, new Color(180, 0, 0))
+        );
+        throw new Error('Internal Error - Github repo not set: ' +
+			myself.lastRepo);
+    }
+    if (myself.lastPath === null) {
+        new DialogBoxMorph().inform(
+            'Github - Cannot Save Project',
+            'Internal error.  Github path is not set: '
+		+ myself.lastPath + '\n',
+            ide.world(),
+            ide.cloudIcon(null, new Color(180, 0, 0))
+        );
+        throw new Error('Internal Error - Github path not set: ' +
+			myself.lastPath);
+    }
+
+    // Prompt for password
     new DialogBoxMorph(
         null,
 	function (user) {
@@ -198,7 +199,13 @@ Github.prototype.promptPasswordSaveProject = function (
     );
 };
 
-// Not sure this is ever used...
+
+// promptRepoPasswordSaveProject
+// 
+// In theory this is called when you try to do a save with source = github,
+// but lastUser, lastRepo, and lastPath aren't set.  However, I don't think
+// that scenario is actually possible, so I don't think this function
+// is ever called.
 Github.prototype.promptRepoPasswordSaveProject = function (
     ide,
     callBack,
@@ -207,6 +214,7 @@ Github.prototype.promptRepoPasswordSaveProject = function (
 ) {
     var myself = this,
         world = ide.world();
+    // Prompt for username, repo, and password
     new DialogBoxMorph(
         null,
 	function (user) {
@@ -233,7 +241,15 @@ Github.prototype.promptRepoPasswordSaveProject = function (
     );
 };
 
-// Remove leading and trailing slashes from the path
+
+// Private Functions ///////////////////////////////////////////////////
+
+// ------------------
+// Private utility functions
+
+// trimPath
+//
+// Normalize paths by remove leading and trailing slashes
 Github.prototype.trimPath = function (path) {
     if (path.endsWith("/")) {
         path = path.substring(0, path.length - 2);
@@ -244,12 +260,40 @@ Github.prototype.trimPath = function (path) {
     return path;
 };
 
+
+// updatePath
+//
+// This is called when the user wants to move to a different directory
+// in the same repo.
+//
+// The input path should be the name of the directory (relative to
+// the current lastPath)
+//
+// This function updates this.lastPath to reflect the full absolute
+// path to the new directory.
+// 
+// The caller is then responsible for calling getProjectList on the
+// new path.
+// 
+// For example:
+// 
+// input     initial               final
+// path      this.lastPath     ->  this.lastPath
+// ------    -------------         -------------
+// "direc"   ""                    "direc"
+// "subdir"  "direc"               "direc/subdir"
+// ".."      "direc/subdir"        "direc"
+// ".."      "direc"               ""
+//
 Github.prototype.updatePath = function (path) {
     var newpath;
     path = this.trimPath(path);
     if (this.lastPath) {
 	if (path === "..") {
-	    newpath = this.lastPath.substring(0, this.lastPath.lastIndexOf("/"));
+	    // go up one level: the new path is everything up to
+	    // the last '/'.  It does not include that last '/'.
+	    newpath =
+		this.lastPath.substring(0, this.lastPath.lastIndexOf("/"));
 	} else {
 	    newpath = this.lastPath + "/" + path;
 	}
@@ -260,6 +304,103 @@ Github.prototype.updatePath = function (path) {
     return this.lastPath;
 };
 
+
+// ------------------
+// Private functions for calling specific parts of the Github API,
+// specifically for getting the project list and saving a file
+//
+
+// getProjectList
+//
+// Calls the Github API for getting the contents of a directory.
+Github.prototype.getProjectList = function (
+    callBack,
+    errorCall,
+    username,
+    repo,
+    path
+) {
+    var myself = this;
+
+    // Construct the request
+    // https://developer.github.com/v3/repos/contents/#get-contents
+    path = myself.trimPath(path);
+    var url = myself.baseUrl + "/repos/"
+        + encodeURIComponent(username)
+        + "/"
+        + encodeURIComponent(repo)
+        + "/contents/"
+	+ encodeURIComponent(path);
+
+    // Make the call
+    myself.callApi(
+	function(response, url) {
+            var projects = [];
+            parsed = JSON.parse(response);
+
+	    // Read the contents of the directory and construct the
+	    // ProjectList from it.
+	    // Only return directories and files that end in .xml.
+	    for (var idx = 0; idx < parsed.length; idx++) {
+		var project_name;
+		if (parsed[idx].type === "file") {
+		    if (!parsed[idx].name.endsWith(".xml")) {
+			continue;
+		    }
+		    // Strip off the ".xml" to get the project name.
+		    project_name =
+			parsed[idx].name.substring(
+			    0, parsed[idx].name.length-4);
+		} else if (parsed[idx].type === "dir") {
+		    project_name = parsed[idx].name;
+		} else {
+		    continue;
+		}
+		projects.push(
+		    {
+			// The download_url is the full url to the file, like
+			// https://raw.githubusercontent.com/alonso/my_repo/master/my_proj.xml
+			// For directories, download_url is null
+			file: parsed[idx].download_url,
+			// The type is either "file" or "dir"
+			type: parsed[idx].type,
+			ProjectName: project_name,
+			Public: 'false',
+			sha: parsed[idx].sha,
+			// FullResponse is included for debugging
+			// information, but it should never be used.
+			FullResponse: parsed[idx]
+		    });
+	    }
+
+	    // If this is a subdirectory, add an item for the
+	    // parent directory: ".."
+	    if (path !== "") {
+		projects.push(
+		    {
+			file: null,
+			type: "dir",
+			ProjectName: "..",
+			Public: 'false',
+			sha: null,
+			FullResponse: null
+		    });
+	    }
+
+	    // Save the username, repo, and path so that the user
+	    // doesn't have to specify them again next time.
+            myself.lastUser = username;
+            myself.lastRepo = repo;
+	    myself.lastPath = path;
+	    callBack.call(null, projects, url, response);
+	}, errorCall, url);
+};
+
+
+// saveProject
+//
+// Call the Github API for saving a file, either creating a new file or
+// updating an existing file.
 Github.prototype.saveProject = function (
     ide,
     callBack,
@@ -271,25 +412,10 @@ Github.prototype.saveProject = function (
     sha)
 {
     var myself = this,
-        pdata,
-        media,
-        size,
-        mediaSize;
+        pdata;
 
-    var filename = encodeURIComponent(ide.projectName);
-    if (!ide.projectName.endsWith(".xml")) {
-        filename += ".xml";
-    }
-    path = this.trimPath(path);
-    var url = myself.baseUrl + "/repos/"
-        + encodeURIComponent(username)
-        + "/"
-        + encodeURIComponent(repo)
-        + "/contents/"
-        + encodeURIComponent(path)
-        + "/"
-        + filename;
-
+    // Check the size of the project.  The Github API only supports
+    // files up to 1MB.
     pdata = ide.serializer.serialize(ide.stage);
     if (pdata.length > 1000000) {
         new DialogBoxMorph().inform(
@@ -302,26 +428,43 @@ Github.prototype.saveProject = function (
         throw new Error('Project exceeds 1 MB size limit');
     }
 
-    // check if serialized data can be parsed back again
+    // Confirm that the serialized data can be parsed back again
     try {
         ide.serializer.parse(pdata);
     } catch (err) {
         ide.showMessage('Serialization of program data failed:\n' + err);
         throw new Error('Serialization of program data failed:\n' + err);
     }
-    //ide.serializer.isCollectingMedia = false;
-    //ide.serializer.flushMedia();
 
+    // Construct the API request for saving the file
+    // https://developer.github.com/v3/repos/contents/#create-a-file
+    var filename = ide.projectName;
+    if (!ide.projectName.endsWith(".xml")) {
+        filename += ".xml";
+    }
+    path = this.trimPath(path);
+    if (path !== "") {
+	path += "/";
+    }
+    var url = myself.baseUrl + "/repos/"
+        + encodeURIComponent(username)
+        + "/"
+        + encodeURIComponent(repo)
+        + "/contents/"
+        + encodeURIComponent(path)
+        + encodeURIComponent(filename);
     params = {
 	    "message" : "commit from Snap!",
 	    "content" : btoa(pdata)
 	};
+    // If overwriting an existing file, we need to provide the SHA of
+    // the file bing overwritten.
     if (sha) {
 	params.sha = sha;
     }
-    //params = "&message=commit-from-snap&content=" + encodeURIComponent(pdata);
 
-    ide.showMessage('Uploading ' + Math.round(size / 1024) + ' KB...');
+    // Make the call
+    ide.showMessage('Uploading ' + Math.round(pdata.length / 1024) + ' KB...');
     myself.callApi(
         function (response, url) {
 	    callBack.call(null, response, url);
@@ -337,8 +480,13 @@ Github.prototype.saveProject = function (
 };
 
 
-// Github API
-
+// ------------------
+// Private generic function for calling any method of the Github API
+// 
+// Only supports Basic Authentication with a username and password
+//
+// https://developer.github.com/v3/
+//
 Github.prototype.callApi = function (
     callBack,
     errorCall,
@@ -353,10 +501,12 @@ Github.prototype.callApi = function (
     method = method || "GET";
     try {
 	request.open(method, url, true);
-        request.setRequestHeader('Accept', 'application/vnd.github.v3+json',
-				 'Content-Type', 'application/json;charset=UTF-8');
+        request.setRequestHeader(
+	    'Accept', 'application/vnd.github.v3+json',
+	    'Content-Type', 'application/json;charset=UTF-8');
 	if (username && password) {
-	    request.setRequestHeader('Authorization', 'Basic ' + btoa(username + ':' + password));
+	    request.setRequestHeader(
+		'Authorization', 'Basic ' + btoa(username + ':' + password));
 	}
         request.onreadystatechange = function () {
             if (request.readyState === 4) {
@@ -387,27 +537,4 @@ Github.prototype.callApi = function (
     } catch (err) {
 	errorCall.call(this, err.toString(), "Github");
     }
-};
-
-
-// Cloud.prototype.reconnect = function (
-//     callBack,
-//     errorCall
-// ) {
-//     if (!(this.username && this.password)) {
-//         this.message('You are not logged in');
-//         return;
-//     }
-//     this.login(
-//         this.username,
-//         this.password,
-//         callBack,
-//         errorCall
-//     );
-// };
-
-// Github: user messages (to be overridden)
-
-Github.prototype.message = function (string) {
-    alert(string);
 };

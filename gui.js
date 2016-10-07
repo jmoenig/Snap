@@ -4833,11 +4833,14 @@ IDE_Morph.prototype.saveGithubProjectWithList = function (
     var existing = detect(
 	projectList,
 	function (item) {
-	    if (name.endsWith(".xml")) {
-		return item.ProjectName === name;
-	    } else {
+	    if (item.ProjectName === name) {
+		return true;
+	    } else if (name.endsWith(".xml") && !item.ProjectName.endsWith(".xml")) {
+		return item.ProjectName + ".xml" === name;
+	    } else if (!name.endsWith(".xml") && item.ProjectName.endsWith(".xml")) {
 		return item.ProjectName === name + ".xml";
 	    }
+	    return false;
 	}
     );
     if (existing) {
