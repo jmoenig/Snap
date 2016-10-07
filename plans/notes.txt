@@ -52,16 +52,17 @@ save:
 	  that set the source to github also set lastUser and lastRepo
 
 Todo:
- [ ] Fix double-clicking on directories in the ProjectDialogMorph
-     Currently it just closes the dialog because DialogBoxMorph.prototype.accept
-     ends with this.destroy();
+ [ ] handle delete project
+ [ ] handle github 2-factor auth
 
  [ ] show last modified time -- actually, suppress it.
      it's not readily available from github api
- [ ] handle delete project
  [ ] turn github on and off in settings?  A little weird
      because I think those are saved with the project, right?
- [ ] handle github 2-factor auth
+
+ [ ] localize strings, add icons
+ [ ] button alignment on ProjectDialogMorph gets screwed up when
+     you switch from github back to local
 
  [ ] add a way to include the repo in a link so you can send someone a link to your snap projects
  [ ] handle github pagination
@@ -82,3 +83,6 @@ Done:
  [x] only show xml files
  [x] until delete is ready, remove the "delete" button for github
  [x] add to snap_fast.html
+ [x] Fix double-clicking on directories in the ProjectDialogMorph
+     Currently it just closes the dialog because DialogBoxMorph.prototype.accept
+     ends with this.destroy();

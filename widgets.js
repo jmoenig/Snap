@@ -2312,6 +2312,8 @@ DialogBoxMorph.prototype.accept = function () {
             }
         }
     }
+    var e = Error();
+    console.log(e.stack);
     this.destroy();
 };
 

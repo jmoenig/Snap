@@ -5320,6 +5320,15 @@ ProjectDialogMorph.prototype.buildContents = function () {
         this.addButton('saveProject', 'Save');
         this.action = 'saveProject';
     }
+    this.ok = function() {
+	// The only difference between this and the inherited
+	// DialogBoxMorph.prototype.accept function is that
+	// this does not automatically call this.destroy
+	// That way, we can make it so that if you open
+	// a directory, it changes the project list without
+	// destroying the dialog.
+	this.target[this.action](this.getInput());
+    };
     this.shareButton = this.addButton('shareProject', 'Share');
     this.unshareButton = this.addButton('unshareProject', 'Unshare');
     this.shareButton.hide();
@@ -5573,6 +5582,7 @@ ProjectDialogMorph.prototype.setSource = function (source) {
     if (this.task === 'open') {
         this.clearDetails();
     }
+    this.changeRepoButton.hide();
 };
 
 ProjectDialogMorph.prototype.getLocalProjectList = function () {
@@ -5656,7 +5666,12 @@ ProjectDialogMorph.prototype.installCloudProjectList = function (pl, source) {
                 myself.preview.rightCenter().add(new Point(2, 0))
             );
         }
-	if (source !== 'github') { // cloud
+	if (source === 'github') {
+	    myself.shareButton.hide();
+	    myself.unshareButton.hide();
+	    myself.deleteButton.hide();
+	    myself.changeRepoButton.show();
+	} else { // cloud
             if (item.Public === 'true') {
 		myself.shareButton.hide();
 		myself.unshareButton.show();
@@ -5664,6 +5679,8 @@ ProjectDialogMorph.prototype.installCloudProjectList = function (pl, source) {
 		myself.unshareButton.hide();
 		myself.shareButton.show();
             }
+	    this.deleteButton.show();
+	    this.changeRepoButton.hide();
 	}
         myself.buttons.fixLayout();
         myself.fixLayout();
@@ -5679,6 +5696,7 @@ ProjectDialogMorph.prototype.installCloudProjectList = function (pl, source) {
 	this.shareButton.show();
 	this.unshareButton.hide();
 	this.deleteButton.show();
+	this.changeRepoButton.hide();
     }
     this.buttons.fixLayout();
     this.fixLayout();
@@ -5703,6 +5721,7 @@ ProjectDialogMorph.prototype.openProject = function () {
     this.ide.source = this.source;
     if (this.source === 'cloud') {
         this.openCloudProject(proj);
+	this.destroy();
     } else if (this.source === 'examples') {
         // Note "file" is a property of the parseResourceFile function.
         src = this.ide.getURL(this.ide.resourceURL('Examples', proj.file));
