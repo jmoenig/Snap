@@ -6938,13 +6938,13 @@ Costume.prototype.edit = function (aWorld, anIDE, isnew, oncancel, onsubmit) {
         function (img, rc) {
             myself.contents = img;
             myself.rotationCenter = rc;
-            if (anIDE.currentSprite instanceof SpriteMorph) {
-                // don't shrinkwrap stage costumes
-                myself.shrinkWrap();
-            }
             myself.version = Date.now();
             aWorld.changed();
             if (anIDE) {
+                if (anIDE.currentSprite instanceof SpriteMorph) {
+                    // don't shrinkwrap stage costumes
+                    myself.shrinkWrap();
+                }
                 anIDE.currentSprite.wearCostume(myself);
                 anIDE.hasChangedMedia = true;
             }
