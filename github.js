@@ -81,16 +81,16 @@ Github.prototype.promptRepoGetProjectList = function (
 		callBack, errorCall, user.username, user.repo, user.path);
 	}
     ).withKey('githubGet').promptCredentials(
-        'Github Username and Repository',
-	'github get',
-	null,
-	null,
-	null,
-	null,
-	null,
-	world,
-	null,
-	null
+        'Github Username and Repository',   // title
+	'github get',                       // purpose
+	null,                               // tosURL
+	null,                               // tosLabel
+	null,                               // prvURL    
+	null,                               // prvLabel    
+	null,                               // checkBoxLabel
+	world,                              // world
+	null,                               // pic
+	null                                // msg            
     );
 };
 
@@ -186,16 +186,16 @@ Github.prototype.promptPasswordSaveProject = function (
 			       sha);
 	}
     ).withKey('githubSaveAs').promptCredentials(
-        'Github Password',
-	'github save as',
-	null,
-	null,
-	null,
-	null,
-	null,
-	world,
-	null,
-	null
+        'Github Password',     // title
+	'github save as',      // purpose
+	null,		       // tosURL
+	null,		       // tosLabel
+	null,		       // prvURL
+	null,		       // prvLabel
+	null,		       // checkBoxLabel
+	world,		       // world
+	null,		       // pic
+	null		       // msg
     );
 };
 
@@ -228,16 +228,16 @@ Github.prototype.promptRepoPasswordSaveProject = function (
 			       sha);
 	}
     ).withKey('githubSave').promptCredentials(
-        'Github Username/Password/Repo',
-	'github save',
-	null,
-	null,
-	null,
-	null,
-	null,
-	world,
-	null,
-	null
+        'Github Username/Password/Repo',    // title
+	'github save',			    // purpose
+	null,				    // tosURL
+	null,				    // tosLabel
+	null,				    // prvURL
+	null,				    // prvLabel
+	null,				    // checkBoxLabel
+	world,				    // world
+	null,				    // pic
+	null				    // msg
     );
 };
 
