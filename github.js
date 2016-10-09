@@ -28,7 +28,7 @@
 // Global settings /////////////////////////////////////////////////////
 
 /*global modules, IDE_Morph, DialogBoxMorph, SnapSerializer, hex_sha512,
-  localize*/
+  localize, Color*/
 
 modules.github = '2016-October-16';
 
@@ -53,6 +53,7 @@ function Github() {
 //   promptRepoGetProjectList
 //   maybePromptGetProjectList
 //   promptPasswordSaveProject
+//   promptPasswordDeleteFile
 //   promptRepoPasswordSaveProject
 //
 // Github objects will save the username, repo, and path, but for
@@ -104,17 +105,16 @@ Github.prototype.maybePromptGetProjectList = function (
     callBack,
     errorCall
 ) {
-    var myself = this;
-    if (myself.lastUser && myself.lastRepo && myself.lastPath !== null) {
-	myself.getProjectList(
+    if (this.lastUser && this.lastRepo && this.lastPath !== null) {
+	this.getProjectList(
 	    callBack,
 	    errorCall,
-	    myself.lastUser,
-	    myself.lastRepo,
-	    myself.lastPath
+	    this.lastUser,
+	    this.lastRepo,
+	    this.lastPath
 	);
     } else {
-	myself.promptRepoGetProjectList(ide, callBack, errorCall);
+	this.promptRepoGetProjectList(ide, callBack, errorCall);
     }
 };
 
@@ -137,40 +137,7 @@ Github.prototype.promptPasswordSaveProject = function (
     var myself = this,
         world = ide.world();
 
-    // Confirm that username, repo, and path are set
-    if (!myself.lastUser) {
-        new DialogBoxMorph().inform(
-            'Github - Cannot Save Project',
-            'Internal error.  Github username is not set: '
-		+ myself.lastUser + '\n',
-            ide.world(),
-            ide.cloudIcon(null, new Color(180, 0, 0))
-        );
-        throw new Error('Internal Error - Github username not set: ' +
-			myself.lastuser);
-    }
-    if (!myself.lastRepo) {
-        new DialogBoxMorph().inform(
-            'Github - Cannot Save Project',
-            'Internal error.  Github repo is not set: '
-		+ myself.lastRepo + '\n',
-            ide.world(),
-            ide.cloudIcon(null, new Color(180, 0, 0))
-        );
-        throw new Error('Internal Error - Github repo not set: ' +
-			myself.lastRepo);
-    }
-    if (myself.lastPath === null) {
-        new DialogBoxMorph().inform(
-            'Github - Cannot Save Project',
-            'Internal error.  Github path is not set: '
-		+ myself.lastPath + '\n',
-            ide.world(),
-            ide.cloudIcon(null, new Color(180, 0, 0))
-        );
-        throw new Error('Internal Error - Github path not set: ' +
-			myself.lastPath);
-    }
+    this.confirmVariables(ide);
 
     // Prompt for password
     new DialogBoxMorph(
@@ -244,6 +211,54 @@ Github.prototype.promptRepoPasswordSaveProject = function (
 };
 
 
+// promptPasswordDeleteFile
+// 
+// This requires that lastUser, lastRepo, and
+// lastPath are set.  It prompts for the password, and uses that to
+// save the file.
+//
+// sha should be set if and only if we are updating a file
+Github.prototype.promptPasswordDeleteFile = function (
+    filename,
+    ide,
+    callBack,
+    errorCall,
+    sha
+) {
+    var myself = this,
+        world = ide.world();
+
+    this.confirmVariables(ide);
+
+    // Prompt for password
+    new DialogBoxMorph(
+        null,
+	function (user) {
+	    myself.deleteFile(filename,
+			      callBack,
+			      errorCall,
+			      myself.lastUser,
+			      user.password,
+			      myself.lastRepo,
+			      myself.lastPath,
+			      user.commitMsg,
+			      sha);
+	}
+    ).withKey('githubSaveAs').promptCredentials(
+        'Github Password',     // title
+	'github save as',      // purpose
+	null,		       // tosURL
+	null,		       // tosLabel
+	null,		       // prvURL
+	null,		       // prvLabel
+	null,		       // checkBoxLabel
+	world,		       // world
+	null,		       // pic
+	null		       // msg
+    );
+};
+
+
 // Private Functions ///////////////////////////////////////////////////
 
 // ------------------
@@ -307,6 +322,34 @@ Github.prototype.updatePath = function (path) {
 };
 
 
+// confirmVariables
+//
+// Confirm that username, repo, and path are set
+Github.prototype.confirmVariables = function (
+    ide
+) {
+    var variables = [
+	["lastUser", "username"],
+	["lastRepo", "repo"],
+	["lastPath", "path"]
+    ];
+    for (var ii = 0; ii < variables.length; ii++) {
+	var varname = variables[ii][0];
+	var str = variables[ii][1];
+	if (this[varname] === null) {
+            new DialogBoxMorph().inform(
+		'Github - Cannot Save Project',
+		'Internal error.  Github ' + str + ' is not set: '
+		    + this[varname] + '\n',
+		ide.world(),
+		ide.cloudIcon(null, new Color(180, 0, 0))
+            );
+            throw new Error('Internal Error - Github ' + str + ' not set: ' +
+			    this[varname]);
+	}
+    }
+};
+
 // ------------------
 // Private functions for calling specific parts of the Github API,
 // specifically for getting the project list and saving a file
@@ -326,8 +369,8 @@ Github.prototype.getProjectList = function (
 
     // Construct the request
     // https://developer.github.com/v3/repos/contents/#get-contents
-    path = myself.trimPath(path);
-    var url = myself.baseUrl + "/repos/"
+    path = this.trimPath(path);
+    var url = this.baseUrl + "/repos/"
         + encodeURIComponent(username)
         + "/"
         + encodeURIComponent(repo)
@@ -335,10 +378,10 @@ Github.prototype.getProjectList = function (
 	+ encodeURIComponent(path);
 
     // Make the call
-    myself.callApi(
+    this.callApi(
 	function(response, url) {
             var projects = [];
-            parsed = JSON.parse(response);
+            var parsed = JSON.parse(response);
 
 	    // Read the contents of the directory and construct the
 	    // ProjectList from it.
@@ -412,14 +455,11 @@ Github.prototype.saveProject = function (
     repo,
     path,
     commitMsg,
-    sha)
-{
-    var myself = this,
-        pdata;
-
+    sha
+) {
     // Check the size of the project.  The Github API only supports
     // files up to 1MB.
-    pdata = ide.serializer.serialize(ide.stage);
+    var pdata = ide.serializer.serialize(ide.stage);
     if (pdata.length > 1000000) {
         new DialogBoxMorph().inform(
             'Github - Cannot Save Project',
@@ -442,21 +482,21 @@ Github.prototype.saveProject = function (
     // Construct the API request for saving the file
     // https://developer.github.com/v3/repos/contents/#create-a-file
     var filename = ide.projectName;
-    if (!ide.projectName.endsWith(".xml")) {
+    if (!filename.endsWith(".xml")) {
         filename += ".xml";
     }
     path = this.trimPath(path);
     if (path !== "") {
 	path += "/";
     }
-    var url = myself.baseUrl + "/repos/"
+    var url = this.baseUrl + "/repos/"
         + encodeURIComponent(username)
         + "/"
         + encodeURIComponent(repo)
         + "/contents/"
         + encodeURIComponent(path)
         + encodeURIComponent(filename);
-    params = {
+    var params = {
 	    "message" : commitMsg || "commit from Snap!",
 	    "content" : btoa(pdata)
 	};
@@ -468,7 +508,7 @@ Github.prototype.saveProject = function (
 
     // Make the call
     ide.showMessage('Uploading ' + Math.round(pdata.length / 1024) + ' KB...');
-    myself.callApi(
+    this.callApi(
         function (response, url) {
 	    callBack.call(null, response, url);
 	    ide.hasChangedMedia = false;
@@ -480,6 +520,57 @@ Github.prototype.saveProject = function (
 	username,
 	password
     );
+};
+
+
+// deleteFile
+//
+// Calls the Github API for deleting a file
+Github.prototype.deleteFile = function (
+    filename,
+    callBack,
+    errorCall,
+    username,
+    password,
+    repo,
+    path,
+    commitMsg,
+    sha
+) {
+    // Construct the request
+    // https://developer.github.com/v3/repos/contents/#delete-a-file 
+    if (!filename.endsWith(".xml")) {
+        filename += ".xml";
+    }
+    path = this.trimPath(path);
+    if (path !== "") {
+	path += "/";
+    }
+    var url = this.baseUrl + "/repos/"
+        + encodeURIComponent(username)
+        + "/"
+        + encodeURIComponent(repo)
+        + "/contents/"
+	+ encodeURIComponent(path)
+	+ encodeURIComponent(filename);
+
+    var params = {
+	"path" : path + filename,
+	"message" : commitMsg || "commit from Snap!",
+	"sha" : sha
+    };
+
+    // Make the call
+    this.callApi(
+	function(response, url) {
+	    callBack.call(null, response);
+	},
+	errorCall,
+	url,
+	"DELETE",
+	JSON.stringify(params),
+	username,
+	password);
 };
 
 

@@ -4813,7 +4813,7 @@ IDE_Morph.prototype.saveProjectToCloud = function (name) {
 IDE_Morph.prototype.saveGithubProjectNoList = function (name, dialog) {
     var myself = this;
     SnapGithub.maybePromptGetProjectList(
-	myself,
+	this,
         function (projectList) {
             myself.saveGithubProjectWithList(dialog, name, projectList, false);
         },
@@ -4856,12 +4856,12 @@ IDE_Morph.prototype.saveGithubProjectWithList = function (
 		}
             );
 	} else {
-            myself.setProjectName(name);
-            myself.saveAsGithubProject(dialog, existing);
+            this.setProjectName(name);
+            this.saveAsGithubProject(dialog, existing);
 	}
     } else {
-        myself.setProjectName(name);
-        myself.saveAsGithubProject(dialog);
+        this.setProjectName(name);
+        this.saveAsGithubProject(dialog);
     }
 }
 
@@ -4871,7 +4871,7 @@ IDE_Morph.prototype.saveAsGithubProject = function (dialog, existing) {
     if (existing) {
 	sha = existing.sha;
     }
-    myself.showMessage('Saving project\nto Github...');
+    this.showMessage('Saving project\nto Github...');
     SnapGithub.promptPasswordSaveProject(
         this,
         function () {
@@ -4879,7 +4879,7 @@ IDE_Morph.prototype.saveAsGithubProject = function (dialog, existing) {
             myself.showMessage('saved.', 2);
         },
 	// TODO(wcy): cloudError -> githubError
-        myself.cloudError(),
+        this.cloudError(),
 	sha // sha
     );
     if (dialog) {
@@ -5672,7 +5672,6 @@ ProjectDialogMorph.prototype.installCloudProjectList = function (pl, source) {
 	if (source === 'github') {
 	    myself.shareButton.hide();
 	    myself.unshareButton.hide();
-	    myself.deleteButton.hide();
 	    myself.changeRepoButton.show();
 	} else { // cloud
             if (item.Public === 'true') {
@@ -5682,9 +5681,9 @@ ProjectDialogMorph.prototype.installCloudProjectList = function (pl, source) {
 		myself.unshareButton.hide();
 		myself.shareButton.show();
             }
-	    this.deleteButton.show();
-	    this.changeRepoButton.hide();
+	    myself.changeRepoButton.hide();
 	}
+	myself.deleteButton.show();
         myself.buttons.fixLayout();
         myself.fixLayout();
         myself.edit();
@@ -5693,14 +5692,13 @@ ProjectDialogMorph.prototype.installCloudProjectList = function (pl, source) {
     if (source === 'github') {
 	this.shareButton.hide();
 	this.unshareButton.hide();
-	this.deleteButton.hide();
 	this.changeRepoButton.show();
     } else { // cloud
 	this.shareButton.show();
 	this.unshareButton.hide();
-	this.deleteButton.show();
 	this.changeRepoButton.hide();
     }
+    this.deleteButton.show();
     this.buttons.fixLayout();
     this.fixLayout();
     if (this.task === 'open') {
@@ -5896,6 +5894,33 @@ ProjectDialogMorph.prototype.deleteProject = function () {
                 }
             );
         }
+    } else if (this.source === 'github') {
+        proj = this.listField.selected;
+        if (proj) {
+            this.ide.confirm(
+                localize(
+                    'Are you sure you want to delete'
+                ) + '\n"' + proj.ProjectName + '"?',
+                'Delete Project',
+                function () {
+                    SnapGithub.promptPasswordDeleteFile(
+                        proj.ProjectName,
+			myself.ide,
+                        function () {
+                            myself.ide.hasChangedMedia = true;
+                            idx = myself.projectList.indexOf(proj);
+                            myself.projectList.splice(idx, 1);
+                            myself.installCloudProjectList(
+                                myself.projectList,
+				myself.source
+                            ); // refresh list
+                        },
+                        myself.ide.cloudError(),
+			proj.sha
+		    );
+		}
+	    );
+        }
     } else { // 'local, examples'
         if (this.listField.selected) {
             name = this.listField.selected.name;
@@ -5928,7 +5953,7 @@ ProjectDialogMorph.prototype.changeRepo = function (skipPrompt, showMessage, new
     }
     fcn.call(
 	SnapGithub,
-	myself.ide,
+	this.ide,
         function (projectList) {
             // Don't show github projects if user has since switch panes.
             if (myself.source === 'github') {

@@ -52,17 +52,17 @@ save:
 	  that set the source to github also set lastUser and lastRepo
 
 Todo:
- [ ] handle delete project
  [ ] handle github 2-factor auth
-
- [ ] show last modified time -- actually, suppress it.
-     it's not readily available from github api
+ [ ] handle non-master branches
+ [ ] fix buttons on open/save github (they need more space, currently they collide with
+     the source buttons)
+ [ ] remove the preview / notes / last modified time in the open/save dialog for github
  [ ] turn github on and off in settings?  A little weird
      because I think those are saved with the project, right?
-
  [ ] localize strings, add icons
-
  [ ] add a way to include the repo in a link so you can send someone a link to your snap projects
+   [ ] if you are given a #run or #present, and the file is on github, extract the
+       username, repo, and path from it?
  [ ] handle github pagination
  [ ] add a way to add a new folder
      - you can currently do it if you save a project as "directory/name"
@@ -87,3 +87,4 @@ Done:
  [x] button alignment on ProjectDialogMorph gets screwed up when
      you switch from github back to local
  [x] allow user to specify a commit message
+ [x] handle delete project
