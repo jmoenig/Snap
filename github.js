@@ -60,6 +60,8 @@ function Github() {
 // security, we don't store the password.  We prompt the user for
 // the password each time it is necessary (i.e. when a file is updated).
 //
+// Currently, all actions are performed on the default (master) branch.
+//
 
 
 // Public functions for getting the project list
