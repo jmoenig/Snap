@@ -183,6 +183,7 @@ Github.prototype.promptPasswordSaveProject = function (
 			       user.password,
 			       myself.lastRepo,
 			       myself.lastPath,
+			       user.commitMsg,
 			       sha);
 	}
     ).withKey('githubSaveAs').promptCredentials(
@@ -225,6 +226,7 @@ Github.prototype.promptRepoPasswordSaveProject = function (
 			       user.password,
 			       user.repo,
 			       user.path,
+			       user.commitMsg,
 			       sha);
 	}
     ).withKey('githubSave').promptCredentials(
@@ -409,6 +411,7 @@ Github.prototype.saveProject = function (
     password,
     repo,
     path,
+    commitMsg,
     sha)
 {
     var myself = this,
@@ -454,7 +457,7 @@ Github.prototype.saveProject = function (
         + encodeURIComponent(path)
         + encodeURIComponent(filename);
     params = {
-	    "message" : "commit from Snap!",
+	    "message" : commitMsg || "commit from Snap!",
 	    "content" : btoa(pdata)
 	};
     // If overwriting an existing file, we need to provide the SHA of

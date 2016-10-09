@@ -1889,6 +1889,7 @@ DialogBoxMorph.prototype.promptCredentials = function (
         pw2 = new InputFieldMorph(),
         opw = new InputFieldMorph(),
         repo = new InputFieldMorph(),
+        commitMsg = new InputFieldMorph('Commit from Snap!'),
         path = new InputFieldMorph('/'),
         agree = false,
         chk,
@@ -2020,6 +2021,7 @@ DialogBoxMorph.prototype.promptCredentials = function (
     pw2.setWidth(200);
     opw.setWidth(200);
     repo.setWidth(200);
+    commitMsg.setWidth(400);
     path.setWidth(200);
     pw1.contents().text.toggleIsPassword();
     pw2.contents().text.toggleIsPassword();
@@ -2082,11 +2084,15 @@ DialogBoxMorph.prototype.promptCredentials = function (
         inp.add(path);
         inp.add(labelText('Password:'));
         inp.add(pw1);
+        inp.add(labelText('Commit Message:'));
+        inp.add(commitMsg);
     }
 
     if (purpose === 'github save as') {
         inp.add(labelText('Password:'));
         inp.add(pw1);
+        inp.add(labelText('Commit Message:'));
+        inp.add(commitMsg);
     }
 
     if (msg) {
@@ -2146,6 +2152,7 @@ DialogBoxMorph.prototype.promptCredentials = function (
     pw2.drawNew();
     opw.drawNew();
     repo.drawNew();
+    commitMsg.drawNew();
     eml.drawNew();
     bdy.fixLayout();
 
@@ -2178,9 +2185,9 @@ DialogBoxMorph.prototype.promptCredentials = function (
 	} else if (purpose === 'github get') {
 	    checklist = [usr, repo, path];
 	} else if (purpose === 'github save') {
-	    checklist = [usr, repo, path, pw1];
+	    checklist = [usr, repo, path, pw1, commitMsg];
 	} else if (purpose === 'github save as') {
-	    checklist = [pw1];
+	    checklist = [pw1, commitMsg];
         } else if (purpose === 'signup') {
             checklist = [usr, bmn, byr, eml];
         } else if (purpose === 'changePassword') {
@@ -2253,6 +2260,7 @@ DialogBoxMorph.prototype.promptCredentials = function (
             password: pw1.getValue(),
 	    repo: repo.getValue(),
 	    path: path.getValue(),
+	    commitMsg: commitMsg.getValue(),
             choice: agree
         };
     };

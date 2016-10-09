@@ -86,3 +86,4 @@ Done:
      ends with this.destroy();
  [x] button alignment on ProjectDialogMorph gets screwed up when
      you switch from github back to local
+ [x] allow user to specify a commit message
