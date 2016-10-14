@@ -7529,7 +7529,6 @@ InputSlotMorph.prototype.mouseDownLeft = function (pos) {
         this.escalateEvent('mouseDownLeft', pos);
     } else {
         this.contents().edit();
-        this.contents().selectAll();
     }
 };
 
@@ -7540,7 +7539,6 @@ InputSlotMorph.prototype.mouseClickLeft = function (pos) {
         this.dropDownMenu();
     } else {
         this.contents().edit();
-        this.contents().selectAll();
     }
 };
 
