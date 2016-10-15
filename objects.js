@@ -82,7 +82,7 @@ SpeechBubbleMorph, RingMorph, isNil, FileReader, TableDialogMorph,
 BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph*/
 
-modules.objects = '2016-July-19';
+modules.objects = '2016-October-12';
 
 var SpriteMorph;
 var StageMorph;
@@ -1409,9 +1409,11 @@ SpriteMorph.prototype.fullCopy = function (forClone) {
     c.costumes = new List(arr);
     arr = [];
     this.sounds.asArray().forEach(function (sound) {
-        arr.push(sound);
+        var snd = forClone ? sound : sound.copy();
+        arr.push(snd);
     });
     c.sounds = new List(arr);
+    arr = [];
     c.nestingScale = 1;
     c.rotatesWithAnchor = true;
     c.anchor = null;
@@ -2950,8 +2952,10 @@ SpriteMorph.prototype.setColor = function (aColor) {
         y = this.yPosition();
     if (!this.color.eq(aColor)) {
         this.color = aColor.copy();
-        this.drawNew();
-        this.gotoXY(x, y);
+        if (!this.costume) {
+            this.drawNew();
+            this.silentGotoXY(x, y);
+        }
     }
 };
 
@@ -4000,14 +4004,33 @@ SpriteMorph.prototype.yCenter = function () {
 // SpriteMorph message broadcasting
 
 SpriteMorph.prototype.allMessageNames = function () {
-    var msgs = [];
-    this.scripts.allChildren().forEach(function (morph) {
-        var txt;
-        if (morph.selector) {
-            if (contains(
-                    ['receiveMessage', 'doBroadcast', 'doBroadcastAndWait'],
-                    morph.selector
-                )) {
+    var msgs = [],
+        all = this.scripts.children.slice();
+    this.customBlocks.forEach(function (def) {
+        if (def.body) {
+            all.push(def.body.expression);
+        }
+        def.scripts.forEach(function (scr) {
+            all.push(scr);
+        });
+    });
+    if (this.globalBlocks) {
+        this.globalBlocks.forEach(function (def) {
+            if (def.body) {
+                all.push(def.body.expression);
+            }
+            def.scripts.forEach(function (scr) {
+                all.push(scr);
+            });
+        });
+    }
+    all.forEach(function (script) {
+        script.allChildren().forEach(function (morph) {
+            var txt;
+            if (morph.selector && contains(
+                ['receiveMessage', 'doBroadcast', 'doBroadcastAndWait'],
+                morph.selector
+            )) {
                 txt = morph.inputs()[0].evaluate();
                 if (isString(txt) && txt !== '') {
                     if (!contains(msgs, txt)) {
@@ -4015,7 +4038,7 @@ SpriteMorph.prototype.allMessageNames = function () {
                     }
                 }
             }
-        }
+        });
     });
     return msgs;
 };
@@ -5435,7 +5458,7 @@ StageMorph.prototype.reactToDropOf = function (morph, hand) {
 // StageMorph stepping
 
 StageMorph.prototype.step = function () {
-    var current, elapsed, leftover, world = this.world();
+    var current, elapsed, leftover, ide, world = this.world();
 
     // handle keyboard events
     if (world.keyboardReceiver === null) {
@@ -5471,6 +5494,14 @@ StageMorph.prototype.step = function () {
         this.changed();
     } else {
         this.threads.step();
+
+        // single-stepping hook:
+        if (this.threads.wantsToPause) {
+            ide = this.parentThatIsA(IDE_Morph);
+            if (ide) {
+                ide.controlBar.pauseButton.refresh();
+            }
+        }
     }
 
     // update watchers

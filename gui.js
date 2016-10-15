@@ -68,11 +68,11 @@ fontHeight, hex_sha512, sb, CommentMorph, CommandBlockMorph,
 BlockLabelPlaceHolderMorph, Audio, SpeechBubbleMorph, ScriptFocusMorph,
 XML_Element, WatcherMorph, BlockRemovalDialogMorph, saveAs, TableMorph,
 isSnapObject, isRetinaEnabled, disableRetinaSupport, enableRetinaSupport,
-isRetinaSupported*/
+isRetinaSupported, SliderMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2016-August-12';
+modules.gui = '2016-October-10';
 
 // Declarations
 
@@ -536,6 +536,7 @@ IDE_Morph.prototype.createControlBar = function () {
     // assumes the logo has already been created
     var padding = 5,
         button,
+        slider,
         stopButton,
         pauseButton,
         startButton,
@@ -718,6 +719,23 @@ IDE_Morph.prototype.createControlBar = function () {
     this.controlBar.add(startButton);
     this.controlBar.startButton = startButton;
 
+    // steppingSlider
+    slider = new SliderMorph(
+        61,
+        1,
+        Process.prototype.flashTime * 100 + 1,
+        6,
+        'horizontal'
+    );
+    slider.action = function (num) {
+        Process.prototype.flashTime = (num - 1) / 100;
+        myself.controlBar.refreshResumeSymbol();
+    };
+    slider.alpha = MorphicPreferences.isFlat ? 0.1 : 0.3;
+    slider.setExtent(new Point(50, 14));
+    this.controlBar.add(slider);
+    this.controlBar.steppingSlider = slider;
+
     // projectButton
     button = new PushButtonMorph(
         this,
@@ -814,6 +832,9 @@ IDE_Morph.prototype.createControlBar = function () {
             }
         );
 
+        slider.setCenter(myself.controlBar.center());
+        slider.setRight(stageSizeButton.left() - padding);
+
         settingsButton.setCenter(myself.controlBar.center());
         settingsButton.setLeft(this.left());
 
@@ -823,7 +844,39 @@ IDE_Morph.prototype.createControlBar = function () {
         projectButton.setCenter(myself.controlBar.center());
         projectButton.setRight(cloudButton.left() - padding);
 
+        this.refreshSlider();
         this.updateLabel();
+    };
+
+    this.controlBar.refreshSlider = function () {
+        if (Process.prototype.enableSingleStepping && !myself.isAppMode) {
+            slider.drawNew();
+            slider.show();
+        } else {
+            slider.hide();
+        }
+        this.refreshResumeSymbol();
+    };
+    
+    this.controlBar.refreshResumeSymbol = function () {
+        var pauseSymbols;
+        if (Process.prototype.enableSingleStepping &&
+                Process.prototype.flashTime > 0.5) {
+            myself.stage.threads.pauseAll(myself.stage);
+            pauseSymbols = [
+                new SymbolMorph('pause', 12),
+                new SymbolMorph('stepForward', 14)
+            ];
+        } else {
+            pauseSymbols = [
+                new SymbolMorph('pause', 12),
+                new SymbolMorph('pointRight', 14)
+            ];
+        }
+        pauseButton.labelString = pauseSymbols;
+        pauseButton.createLabel();
+        pauseButton.fixLayout();
+        pauseButton.refresh();
     };
 
     this.controlBar.updateLabel = function () {
@@ -967,6 +1020,7 @@ IDE_Morph.prototype.createPalette = function (forSearching) {
     }
     this.palette.isDraggable = false;
     this.palette.acceptsDrops = true;
+    this.palette.enableAutoScrolling = false;
     this.palette.contents.acceptsDrops = false;
 
     this.palette.reactToDropOf = function (droppedMorph) {
@@ -1767,6 +1821,11 @@ IDE_Morph.prototype.toggleVariableFrameRate = function () {
     }
 };
 
+IDE_Morph.prototype.toggleSingleStepping = function () {
+    this.stage.threads.toggleSingleStepping();
+    this.controlBar.refreshSlider();
+};
+
 IDE_Morph.prototype.startFastTracking = function () {
     this.stage.isFastTracked = true;
     this.stage.fps = 0;
@@ -2551,6 +2610,14 @@ IDE_Morph.prototype.settingsMenu = function () {
         'EXPERIMENTAL! check to enable\n live custom control structures',
         true
     );
+    addPreference(
+        'Visible stepping',
+        'toggleSingleStepping',
+        Process.prototype.enableSingleStepping,
+        'uncheck to turn off\nvisible stepping',
+        'check to turn on\n visible stepping (slow)',
+        false
+    );
     menu.addLine(); // everything below this line is stored in the project
     addPreference(
         'Thread safe scripts',
@@ -2982,7 +3049,7 @@ IDE_Morph.prototype.aboutSnap = function () {
         module, btn1, btn2, btn3, btn4, licenseBtn, translatorsBtn,
         world = this.world();
 
-    aboutTxt = 'Snap! 4.0.8.7\nBuild Your Own Blocks\n\n'
+    aboutTxt = 'Snap! 4.0.9 - dev -\nBuild Your Own Blocks\n\n'
         + 'Copyright \u24B8 2016 Jens M\u00F6nig and '
         + 'Brian Harvey\n'
         + 'jens@moenig.org, bh@cs.berkeley.edu\n\n'
