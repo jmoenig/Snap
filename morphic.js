@@ -1103,7 +1103,7 @@
 
 /*global window, HTMLCanvasElement, FileReader, Audio, FileList*/
 
-var morphicVersion = '2016-August-12';
+var morphicVersion = '2016-October-10';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = getBlurredShadowSupport(); // check for Chrome-bug
 
@@ -9255,7 +9255,8 @@ ScrollFrameMorph.prototype.init = function (scroller, size, sliderColor) {
     ScrollFrameMorph.uber.init.call(this);
     this.scrollBarSize = size || MorphicPreferences.scrollBarSize;
     this.autoScrollTrigger = null;
-    this.isScrollingByDragging = true;    // change if desired
+    this.enableAutoScrolling = true; // change to suppress
+    this.isScrollingByDragging = true; // change to suppress
     this.hasVelocity = true; // dto.
     this.padding = 0; // around the scrollable area
     this.growth = 0; // pixels or Point to grow right/left when near edge
@@ -10300,7 +10301,12 @@ HandMorph.prototype.processMouseMove = function (event) {
 
         // autoScrolling support:
         if (myself.children.length > 0) {
-            if (newMorph instanceof ScrollFrameMorph) {
+            if (newMorph instanceof ScrollFrameMorph &&
+                    newMorph.enableAutoScrolling &&
+                    newMorph.contents.allChildren().some(function (any) {
+                        return any.wantsDropOf(myself.children[0]);
+                    })
+            ) {
                 if (!newMorph.bounds.insetBy(
                         MorphicPreferences.scrollBarSize * 3
                     ).containsPoint(myself.bounds.origin)) {
