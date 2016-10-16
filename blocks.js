@@ -2347,7 +2347,7 @@ BlockMorph.prototype.userMenu = function () {
             function () {
                 new DialogBoxMorph(
                     myself,
-                    myself.setSpec,
+                    myself.userSetSpec,
                     myself
                 ).prompt(
                     "Variable name",
