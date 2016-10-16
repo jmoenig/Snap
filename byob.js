@@ -1579,7 +1579,7 @@ BlockDialogMorph.prototype.createScopeButtons = function () {
     var myself = this;
 
     this.addScopeButton(
-        function () {myself.setScope('gobal'); },
+        function () {myself.setScope('global'); },
         "for all sprites",
         function () {return myself.isGlobal; }
     );
@@ -1612,7 +1612,7 @@ BlockDialogMorph.prototype.addScopeButton = function (action, label, query) {
 
 
 BlockDialogMorph.prototype.setScope = function (varType) {
-    this.isGlobal = (varType === 'gobal');
+    this.isGlobal = (varType === 'global');
     this.scopes.children.forEach(function (c) {
         c.refresh();
     });
@@ -3310,7 +3310,7 @@ VariableDialogMorph.prototype.createTypeButtons = function () {
     var myself = this;
 
     this.addTypeButton(
-        function () {myself.setType('gobal'); },
+        function () {myself.setType('global'); },
         "for all sprites",
         function () {return myself.isGlobal; }
     );
@@ -3325,7 +3325,7 @@ VariableDialogMorph.prototype.addTypeButton
     = BlockDialogMorph.prototype.addTypeButton;
 
 VariableDialogMorph.prototype.setType = function (varType) {
-    this.isGlobal = (varType === 'gobal');
+    this.isGlobal = (varType === 'global');
     this.types.children.forEach(function (c) {
         c.refresh();
     });
