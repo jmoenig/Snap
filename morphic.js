@@ -5159,11 +5159,6 @@ CursorMorph.prototype.processKeyDown = function (event) {
     this.target.escalateEvent('reactToKeystroke', event);
 };
 
-CursorMorph.prototype.processKeyUp = function (event) {
-    this.world().currentKey = null;
-    this.target.escalateEvent('reactToKeystroke', event);
-};
-
 // CursorMorph navigation:
 
 /*
@@ -7918,13 +7913,13 @@ StringMorph.prototype.previousWordFrom = function (aSlot) {
     // if we are in the middle of a non-alphanumeric sequence, we'll get
     // right to the beginning of the previous word
     while (index > 0 && !isWordChar(this.text[index])) {
-        index --;
+        index -= 1
     }
 
     // while the current character is a word one, we skip it until we
     // find the beginning of the current word
     while (index > 0 && isWordChar(this.text[index - 1])) {
-        index --;
+        index -= 1
     }
 
     return index;
@@ -7934,11 +7929,11 @@ StringMorph.prototype.nextWordFrom = function (aSlot) {
     var index = aSlot;
     
     while (index < this.endOfLine() && !isWordChar(this.text[index])) {
-        index ++;
+        index += 1
     }
 
     while (index < this.endOfLine() && isWordChar(this.text[index])) {
-        index ++;
+        index += 1
     }
 
     return index;
@@ -8196,7 +8191,7 @@ StringMorph.prototype.mouseDoubleClick = function (pos) {
         this.edit();
 
         if (slot === this.text.length) {
-            slot --;
+            slot -= 1;
         }
 
         if (isWordChar(this.text[slot])) {
@@ -8236,7 +8231,7 @@ StringMorph.prototype.selectBetweenWordsAt = function (slot) {
 
     while (this.endMark < this.text.length
             && !isWordChar(this.text[this.endMark])) {
-        this.endMark ++;
+        this.endMark += 1
     }
 
     this.drawNew();
