@@ -149,7 +149,7 @@ isSnapObject, copy, PushButtonMorph, SpriteIconMorph, Process*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2016-October-11';
+modules.blocks = '2016-October-20';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -12273,7 +12273,8 @@ ScriptFocusMorph.prototype.insertBlock = function (block) {
     }
 
     // experimental: if the inserted block has inputs, go to the first one
-    if (this.element.inputs && this.element.inputs().length) {
+    if (block.inputs && block.inputs().length) {
+        this.element = block;
         this.atEnd = false;
         this.nextElement();
     }

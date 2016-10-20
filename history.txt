@@ -3072,3 +3072,7 @@ http://snap.berkeley.edu/run#cloud:Username=jens&ProjectName=rotation
 161011
 ------
 * Objects: fixed #1456 (collect message names from all scripts, including custom block definitions)
+
+161020
+------
+* Blocks: Tweak Keyboard-Entry
