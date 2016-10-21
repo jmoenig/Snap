@@ -3004,3 +3004,79 @@ http://snap.berkeley.edu/run#cloud:Username=jens&ProjectName=rotation
 * Morphic: replace deprecated KeyboardEvent.keyIdentifier with .key
 
 == v4.0.8.7 ====
+
+*** in development ***
+
+160915
+------
+* new single stepping feature (like Scratch 1.4) with flashing blocks
+* slider for single-stepping speed
+* pausing now flashes the currently active blocks
+
+160916
+------
+* enable single stepping for clone-scripts w. multiple blocks flashing per script
+* enable single stepping for custom block definitions
+* Objects: fixed #1410 (duplicating a sprite does not duplicate its sounds)
+
+160918
+------
+* Treat single-stepping as thread safe (reverted on 160923)
+* Allow user to trigger one step at a time, both in normal and single-stepping mode
+
+160919
+------
+* new “stepForward” symbol
+* dragging the single-step speed slider all the way to the left turns the “resume” side of the “pause” button into “stepForward”
+
+160920
+------
+* atomic synching of single-stepping
+
+160921
+------
+* remove shift-click-to-forward-one-frame option for the “resume” button
+
+160922
+------
+* renamed “single stepping” to “visible stepping”, thanks, Brian!
+* updated German translation
+
+160923
+------
+* custom block execution: only yield if directly recursive and unwrapped (“speed up”)
+* new feature: “wait 0” or “wait <empty>” now yields once, unless warped
+* revert treating visual stepping as thread safe, because of music scheduling
+
+160924
+------
+* don’t update the recursion cache when updating a custom block definition 
+
+160929
+------
+* Objects: fixed #1437
+
+161007
+------
+* Blocks: [Keyboard-Entry] if an inserted block has inputs, go to the first one
+
+161010
+------
+* Morphic: configure autoscrolling
+* GUI: suppress autoscrolling for the palette and the project dialog
+
+161011
+------
+* Blocks: make sure to fix multi-args when deleting a custom reporter definition
+
+161011
+------
+* Objects: fixed #1456 (collect message names from all scripts, including custom block definitions)
+
+161020
+------
+* Blocks: Tweak Keyboard-Entry
+
+161021
+------
+* Threads: Fixed #1422

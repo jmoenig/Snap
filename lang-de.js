@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org', // optional
     'last_changed':
-        '2016-07-12', // this, too, will appear in the Translators tab
+        '2016-09-22', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -821,6 +821,8 @@ SnapTranslator.dict.de = {
         'Tabellenunterstützung',
     'Table lines':
         'Tabellen mit Linien',
+    'Visible stepping':
+        'Programmausführung verfolgen',
     'Thread safe scripts':
         'Threadsicherheit',
     'uncheck to allow\nscript reentrance':

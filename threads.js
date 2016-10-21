@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph,
 TableFrameMorph, isSnapObject*/
 
-modules.threads = '2016-August-12';
+modules.threads = '2016-October-21';
 
 var ThreadManager;
 var Process;
@@ -175,6 +175,7 @@ function invoke(
 
 function ThreadManager() {
     this.processes = [];
+    this.wantsToPause = false; // single stepping support
 }
 
 ThreadManager.prototype.pauseCustomHatBlocks = false;
@@ -275,6 +276,25 @@ ThreadManager.prototype.step = function () {
     // for sprites that are currently picked up, then filter out any
     // processes that have been terminated
 
+    var isInterrupted;
+    if (Process.prototype.enableSingleStepping) {
+        this.processes.forEach(function (proc) {
+            if (proc.isInterrupted) {
+                proc.runStep();
+                isInterrupted = true;
+            } else {
+                proc.lastYield = Date.now();
+            }
+        });
+        this.wantsToPause = (Process.prototype.flashTime > 0.5);
+        if (isInterrupted) {
+            if (this.wantsToPause) {
+                this.pauseAll();
+            }
+            return;
+        }
+    }
+
     this.processes.forEach(function (proc) {
         if (!proc.homeContext.receiver.isPickedUp() && !proc.isDead) {
             proc.runStep();
@@ -290,6 +310,7 @@ ThreadManager.prototype.removeTerminatedProcesses = function () {
         var result;
         if ((!proc.isRunning() && !proc.errorFlag) || proc.isDead) {
             if (proc.topBlock instanceof BlockMorph) {
+                proc.unflash();
                 proc.topBlock.removeHighlight();
             }
             if (proc.prompter) {
@@ -371,6 +392,18 @@ ThreadManager.prototype.doWhen = function (block, stopIt) {
     }
 };
 
+ThreadManager.prototype.toggleSingleStepping = function () {
+    Process.prototype.enableSingleStepping =
+        !Process.prototype.enableSingleStepping;
+    if (!Process.prototype.enableSingleStepping) {
+        this.processes.forEach(function (proc) {
+            if (!proc.isPaused) {
+                proc.unflash();
+            }
+        });
+    }
+};
+
 // Process /////////////////////////////////////////////////////////////
 
 /*
@@ -429,6 +462,8 @@ ThreadManager.prototype.doWhen = function (block, stopIt) {
     procedureCount      number counting procedure call entries,
                         used to tag custom block calls, so "stop block"
                         invocations can catch them
+    flashingContext     for single stepping
+    isInterrupted       boolean, indicates intra-step flashing of blocks
 */
 
 Process.prototype = {};
@@ -436,6 +471,8 @@ Process.prototype.constructor = Process;
 Process.prototype.timeout = 500; // msecs after which to force yield
 Process.prototype.isCatchingErrors = true;
 Process.prototype.enableLiveCoding = false; // experimental
+Process.prototype.enableSingleStepping = false; // experimental
+Process.prototype.flashTime = 0; // experimental
 
 function Process(topBlock, onComplete, rightAway) {
     this.topBlock = topBlock || null;
@@ -459,6 +496,8 @@ function Process(topBlock, onComplete, rightAway) {
     this.exportResult = false;
     this.onComplete = onComplete || null;
     this.procedureCount = 0;
+    this.flashingContext = null; // experimental, for single-stepping
+    this.isInterrupted = false; // experimental, for single-stepping
 
     if (topBlock) {
         this.homeContext.receiver = topBlock.receiver();
@@ -490,9 +529,10 @@ Process.prototype.runStep = function (deadline) {
     if (this.isPaused) { // allow pausing in between atomic steps:
         return this.pauseStep();
     }
-
     this.readyToYield = false;
-    while (!this.readyToYield
+    this.isInterrupted = false;
+
+    while (!this.readyToYield && !this.isInterrupted
             && this.context
             && (Date.now() - this.lastYield < this.timeout)
     ) {
@@ -510,6 +550,7 @@ Process.prototype.runStep = function (deadline) {
         }
         this.evaluateContext();
     }
+
     this.lastYield = Date.now();
     this.isFirstStep = false;
 
@@ -544,13 +585,20 @@ Process.prototype.stop = function () {
 };
 
 Process.prototype.pause = function () {
+    if (this.readyToTerminate) {
+        return;
+    }
     this.isPaused = true;
+    this.flashPausedContext();
     if (this.context && this.context.startTime) {
         this.pauseOffset = Date.now() - this.context.startTime;
     }
 };
 
 Process.prototype.resume = function () {
+    if (!this.enableSingleStepping) {
+        this.unflash();
+    }
     this.isPaused = false;
     this.pauseOffset = null;
 };
@@ -586,7 +634,7 @@ Process.prototype.evaluateContext = function () {
         return this.evaluateBlock(exp, exp.inputs().length);
     }
     if (isString(exp)) {
-        return this[exp]();
+        return this[exp].apply(this, this.context.inputs);
     }
     this.popContext(); // default: just ignore it
 };
@@ -607,6 +655,7 @@ Process.prototype.evaluateBlock = function (block, argCount) {
     if (argCount > inputs.length) {
         this.evaluateNextInput(block);
     } else {
+        if (this.flashContext()) {return; } // yield to flash the block
         if (this[selector]) {
             rcvr = this;
         }
@@ -636,11 +685,13 @@ Process.prototype.reportOr = function (block) {
     if (inputs.length < 1) {
         this.evaluateNextInput(block);
     } else if (inputs[0]) {
+        if (this.flashContext()) {return; }
         this.returnValueToParentContext(true);
         this.popContext();
     } else if (inputs.length < 2) {
         this.evaluateNextInput(block);
     } else {
+        if (this.flashContext()) {return; }
         this.returnValueToParentContext(inputs[1] === true);
         this.popContext();
     }
@@ -652,11 +703,13 @@ Process.prototype.reportAnd = function (block) {
     if (inputs.length < 1) {
         this.evaluateNextInput(block);
     } else if (!inputs[0]) {
+        if (this.flashContext()) {return; }
         this.returnValueToParentContext(false);
         this.popContext();
     } else if (inputs.length < 2) {
         this.evaluateNextInput(block);
     } else {
+        if (this.flashContext()) {return; }
         this.returnValueToParentContext(inputs[1] === true);
         this.popContext();
     }
@@ -664,6 +717,7 @@ Process.prototype.reportAnd = function (block) {
 
 Process.prototype.doReport = function (block) {
     var outer = this.context.outerContext;
+    if (this.flashContext()) {return; } // flash the block here, special form
     if (this.isClicked && (block.topBlock() === this.topBlock)) {
         this.isShowingResult = true;
     }
@@ -736,6 +790,7 @@ Process.prototype.evaluateArgLabel = function (argLabel) {
 Process.prototype.evaluateInput = function (input) {
     // evaluate the input unless it is bound to an implicit parameter
     var ans;
+    if (this.flashContext()) {return; } // yield to flash the current argMorph
     if (input.bindingID) {
         if (this.isCatchingErrors) {
             try {
@@ -879,7 +934,8 @@ Process.prototype.reify = function (topBlock, parameterNames, isCustomBlock) {
         i = 0;
 
     if (topBlock) {
-        context.expression = this.enableLiveCoding ?
+        context.expression = this.enableLiveCoding ||
+            this.enableSingleStepping ?
                 topBlock : topBlock.fullCopy();
         context.expression.show(); // be sure to make visible if in app mode
 
@@ -898,7 +954,8 @@ Process.prototype.reify = function (topBlock, parameterNames, isCustomBlock) {
         }
 
     } else {
-        context.expression = this.enableLiveCoding ? [this.context.expression]
+        context.expression = this.enableLiveCoding ||
+            this.enableSingleStepping ? [this.context.expression]
                 : [this.context.expression.fullCopy()];
     }
 
@@ -1182,6 +1239,15 @@ Process.prototype.reportCallCC = function (aContext) {
 
 Process.prototype.runContinuation = function (aContext, args) {
     var parms = args.asArray();
+
+    // determine whether the continuations is to show the result
+    // in a value-balloon becuse the user has directly clicked on a reporter
+    if (aContext.expression === 'expectReport' && parms.length) {
+        this.stop();
+        this.homeContext.inputs[0] = parms[0];
+        return;
+    }
+
     this.context.parentContext = aContext.copyForContinuationCall();
     // passing parameter if any was passed
     if (parms.length === 1) {
@@ -1286,8 +1352,9 @@ Process.prototype.evaluateCustomBlock = function () {
         if (caller && !caller.tag) {
             caller.tag = this.procedureCount;
         }
-        // yield commands unless explicitly "warped"
-        if (!this.isAtomic) {
+        // yield commands unless explicitly "warped" or directly recursive
+        if (!this.isAtomic &&
+                this.context.expression.definition.isDirectlyRecursive()) {
             this.readyToYield = true;
         }
     }
@@ -1911,6 +1978,11 @@ Process.prototype.doWait = function (secs) {
         this.context.startTime = Date.now();
     }
     if ((Date.now() - this.context.startTime) >= (secs * 1000)) {
+        if (!this.isAtomic && (secs === 0)) {
+            // "wait 0 secs" is a plain "yield"
+            // that can be overridden by "warp"
+            this.readyToYield = true;
+        }
         return null;
     }
     this.pushContext('doYield');
@@ -3276,6 +3348,67 @@ Process.prototype.reportFrameCount = function () {
     return this.frameCount;
 };
 
+// Process single-stepping
+
+Process.prototype.flashContext = function () {
+    var expr = this.context.expression;
+    if (this.enableSingleStepping &&
+            !this.isAtomic &&
+            expr instanceof SyntaxElementMorph &&
+            !(expr instanceof CommandSlotMorph) &&
+            !this.context.isFlashing &&
+            expr.world()) {
+        this.unflash();
+        expr.flash();
+        this.context.isFlashing = true;
+        this.flashingContext = this.context;
+        if (this.flashTime > 0 && (this.flashTime <= 0.5)) {
+            this.pushContext('doIdle');
+            this.context.addInput(this.flashTime);
+        } else {
+            this.pushContext('doInterrupt');
+        }
+        return true;
+    }
+    return false;
+};
+
+Process.prototype.flashPausedContext = function () {
+    var flashable = this.context ? this.context.lastFlashable() : null;
+    if (flashable) {
+        this.unflash();
+        flashable.expression.flash();
+        flashable.isFlashing = true;
+        this.flashingContext = flashable;
+    }
+};
+
+Process.prototype.doInterrupt = function () {
+    this.popContext();
+    if (!this.isAtomic) {
+        this.isInterrupted = true;
+    }
+};
+
+Process.prototype.doIdle = function (secs) {
+    if (!this.context.startTime) {
+        this.context.startTime = Date.now();
+    }
+    if ((Date.now() - this.context.startTime) < (secs * 1000)) {
+        this.pushContext('doInterrupt');
+        return;
+    }
+    this.popContext();
+};
+
+Process.prototype.unflash = function () {
+    if (this.flashingContext) {
+        this.flashingContext.expression.unflash();
+        this.flashingContext.isFlashing = false;
+        this.flashingContext = null;
+    }
+};
+
 // Context /////////////////////////////////////////////////////////////
 
 /*
@@ -3298,6 +3431,7 @@ Process.prototype.reportFrameCount = function () {
                     (if expression is a    BlockMorph)
     pc              the index of the next block to evaluate
                     (if expression is an array)
+    isContinuation  flag for marking a transient continuation context
     startTime       time when the context was first evaluated
     startValue      initial value for interpolated operations
     activeAudio     audio buffer for interpolated operations, don't persist
@@ -3306,6 +3440,7 @@ Process.prototype.reportFrameCount = function () {
     emptySlots      caches the number of empty slots for reification
     tag             string or number to optionally identify the Context,
                     as a "return" target (for the "stop block" primitive)
+    isFlashing      flag for single-stepping
 */
 
 function Context(
@@ -3325,12 +3460,14 @@ function Context(
     }
     this.inputs = [];
     this.pc = 0;
+    this.isContinuation = false;
     this.startTime = null;
     this.activeAudio = null;
     this.activeNote = null;
     this.isCustomBlock = false; // marks the end of a custom block's stack
     this.emptySlots = 0; // used for block reification
     this.tag = null;  // lexical catch-tag for custom blocks
+    this.isFlashing = false; // for single-stepping
 }
 
 Context.prototype.toString = function () {
@@ -3462,6 +3599,19 @@ Context.prototype.stopMusic = function () {
         this.activeNote.stop();
         this.activeNote = null;
     }
+};
+
+// Context single-stepping:
+
+Context.prototype.lastFlashable = function () {
+    // for experimental single-stepping when pausing
+    if (this.expression instanceof SyntaxElementMorph &&
+            !(this.expression instanceof CommandSlotMorph)) {
+        return this;
+    } else if (this.parentContext) {
+        return this.parentContext.lastFlashable();
+    }
+    return null;
 };
 
 // Context debugging
