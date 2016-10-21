@@ -3076,3 +3076,7 @@ http://snap.berkeley.edu/run#cloud:Username=jens&ProjectName=rotation
 161020
 ------
 * Blocks: Tweak Keyboard-Entry
+
+161021
+------
+* Threads: Fixed #1422

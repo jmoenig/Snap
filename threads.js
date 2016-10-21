@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph,
 TableFrameMorph, isSnapObject*/
 
-modules.threads = '2016-September-23';
+modules.threads = '2016-October-21';
 
 var ThreadManager;
 var Process;
@@ -1239,6 +1239,15 @@ Process.prototype.reportCallCC = function (aContext) {
 
 Process.prototype.runContinuation = function (aContext, args) {
     var parms = args.asArray();
+
+    // determine whether the continuations is to show the result
+    // in a value-balloon becuse the user has directly clicked on a reporter
+    if (aContext.expression === 'expectReport' && parms.length) {
+        this.stop();
+        this.homeContext.inputs[0] = parms[0];
+        return;
+    }
+
     this.context.parentContext = aContext.copyForContinuationCall();
     // passing parameter if any was passed
     if (parms.length === 1) {
@@ -3422,6 +3431,7 @@ Process.prototype.unflash = function () {
                     (if expression is a    BlockMorph)
     pc              the index of the next block to evaluate
                     (if expression is an array)
+    isContinuation  flag for marking a transient continuation context
     startTime       time when the context was first evaluated
     startValue      initial value for interpolated operations
     activeAudio     audio buffer for interpolated operations, don't persist
@@ -3450,6 +3460,7 @@ function Context(
     }
     this.inputs = [];
     this.pc = 0;
+    this.isContinuation = false;
     this.startTime = null;
     this.activeAudio = null;
     this.activeNote = null;
