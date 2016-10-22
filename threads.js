@@ -634,7 +634,12 @@ Process.prototype.evaluateContext = function () {
         return this.evaluateBlock(exp, exp.inputs().length);
     }
     if (typeof exp === 'function') {
-        return exp.apply(this.context.receiver, [this].concat(this.context.inputs));
+        var yields = false;
+        var result = exp.apply(this.context.receiver, [this, function(){ yields = true; }].concat(this.context.inputs));
+        if (yields) return;
+        this.returnValueToParentContext(result);
+        this.popContext();
+        return result;
     }
     if (isString(exp)) {
         return this[exp].apply(this, this.context.inputs);
