@@ -633,6 +633,9 @@ Process.prototype.evaluateContext = function () {
     if (exp instanceof BlockMorph) {
         return this.evaluateBlock(exp, exp.inputs().length);
     }
+    if (typeof exp === 'function') {
+        return exp.apply(this.context.receiver, [this].concat(this.context.inputs));
+    }
     if (isString(exp)) {
         return this[exp].apply(this, this.context.inputs);
     }
