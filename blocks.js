@@ -10371,7 +10371,7 @@ MultiArgMorph.prototype.mouseClickLeft = function (pos) {
         this.escalateEvent('mouseClickLeft', pos);
         return;
     }
-    // if the <shift> key is pressed, repeat action 5 times
+    // if the <shift> key is pressed, repeat action 3 times
     var arrows = this.arrows(),
         leftArrow = arrows.children[0],
         rightArrow = arrows.children[1],
