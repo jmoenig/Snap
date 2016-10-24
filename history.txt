@@ -3080,3 +3080,9 @@ http://snap.berkeley.edu/run#cloud:Username=jens&ProjectName=rotation
 161021
 ------
 * Threads: Fixed #1422
+
+161024
+------
+* Text Editing Tweaks, thanks, Bernat!!
+
+

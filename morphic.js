@@ -10757,6 +10757,7 @@ WorldMorph.prototype.init = function (aCanvas, fillPage) {
     this.hand = new HandMorph(this);
     this.keyboardReceiver = null;
     this.cursor = null;
+    this.lastEditedText = null;
     this.activeMenu = null;
     this.activeHandle = null;
     this.virtualKeyboard = null;
@@ -11537,6 +11538,11 @@ WorldMorph.prototype.edit = function (aStringOrTextMorph) {
             this.slide(aStringOrTextMorph);
         }
     }
+
+    if (this.lastEditedText !== aStringOrTextMorph) {
+        aStringOrTextMorph.escalateEvent('freshTextEdit', aStringOrTextMorph);
+    }
+    this.lastEditedText = aStringOrTextMorph;
 };
 
 WorldMorph.prototype.slide = function (aStringOrTextMorph) {
@@ -11593,6 +11599,7 @@ WorldMorph.prototype.stopEditing = function () {
         document.body.removeChild(this.virtualKeyboard);
         this.virtualKeyboard = null;
     }
+    this.lastEditedText = null;
     this.worldCanvas.focus();
 };
 

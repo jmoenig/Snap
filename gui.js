@@ -72,7 +72,7 @@ isRetinaSupported, SliderMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2016-October-10';
+modules.gui = '2016-October-24';
 
 // Declarations
 
@@ -3088,8 +3088,10 @@ IDE_Morph.prototype.aboutSnap = function () {
         + '\nKartik Chandra: Paint Editor'
         + '\nMichael Ball: Time/Date UI, many bugfixes'
         + '\nBartosz Leper: Retina Display Support'
+        + '\nBernat Romagosa: Countless contributions'
         + '\n"Ava" Yuan Yuan, Dylan Servilla: Graphic Effects'
         + '\nKyle Hotchkiss: Block search design'
+        + '\nBrian Brol: Many bugfixes and optimizations'
         + '\nIan Reynolds: UI Design, Event Bindings, '
         + 'Sound primitives'
         + '\nIvan Motyashov: Initial Squeak Porting'

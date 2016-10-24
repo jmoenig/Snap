@@ -149,7 +149,7 @@ isSnapObject, copy, PushButtonMorph, SpriteIconMorph, Process*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2016-October-20';
+modules.blocks = '2016-October-24';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -7570,6 +7570,10 @@ InputSlotMorph.prototype.reactToKeystroke = function () {
 
 InputSlotMorph.prototype.reactToEdit = function () {
     this.contents().clearSelection();
+};
+
+InputSlotMorph.prototype.freshTextEdit = function (aStringOrTextMorph) {
+    aStringOrTextMorph.selectAll();
 };
 
 // InputSlotMorph menu:
