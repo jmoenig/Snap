@@ -3085,3 +3085,4 @@ http://snap.berkeley.edu/run#cloud:Username=jens&ProjectName=rotation
 ------
 * Text Editing Tweaks, thanks, Bernat!!
 * Store: fixed #1472
+* Trheads: Tweak continuations
