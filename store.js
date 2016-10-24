@@ -630,8 +630,8 @@ SnapSerializer.prototype.loadSprites = function (xmlString, ide) {
             myself.objects[model.attributes.id] = sprite;
         }
         if (model.attributes.name) {
-            sprite.name = model.attributes.name;
-            project.sprites[model.attributes.name] = sprite;
+            sprite.name = ide.newSpriteName(model.attributes.name);
+            project.sprites[sprite.name] = sprite;
         }
         if (model.attributes.color) {
             sprite.color = myself.loadColor(model.attributes.color);
