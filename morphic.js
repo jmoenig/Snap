@@ -1103,7 +1103,7 @@
 
 /*global window, HTMLCanvasElement, FileReader, Audio, FileList*/
 
-var morphicVersion = '2016-October-10';
+var morphicVersion = '2016-October-24';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = getBlurredShadowSupport(); // check for Chrome-bug
 
@@ -4965,7 +4965,8 @@ CursorMorph.prototype.init = function (aStringOrTextMorph) {
 
 CursorMorph.prototype.initializeClipboardHandler = function () {
     // Add hidden text box for copying and pasting
-    var myself = this;
+    var myself = this,
+        wrrld = this.target.world();
 
     this.clipboardHandler = document.createElement('textarea');
     this.clipboardHandler.style.position = 'absolute';
@@ -4992,7 +4993,7 @@ CursorMorph.prototype.initializeClipboardHandler = function () {
         function (event) {
             myself.processKeyDown(event);
             if (event.shiftKey) {
-                myself.world().currentKey = 16;
+                wrrld.currentKey = 16;
             }
             this.value = myself.target.selection();
             this.select();
@@ -5010,7 +5011,7 @@ CursorMorph.prototype.initializeClipboardHandler = function () {
     this.clipboardHandler.addEventListener(
         'keyup',
         function (event) {
-            myself.world().currentKey = null;
+            wrrld.currentKey = null;
         },
         false
     );
@@ -7913,13 +7914,13 @@ StringMorph.prototype.previousWordFrom = function (aSlot) {
     // if we are in the middle of a non-alphanumeric sequence, we'll get
     // right to the beginning of the previous word
     while (index > 0 && !isWordChar(this.text[index])) {
-        index -= 1
+        index -= 1;
     }
 
     // while the current character is a word one, we skip it until we
     // find the beginning of the current word
     while (index > 0 && isWordChar(this.text[index - 1])) {
-        index -= 1
+        index -= 1;
     }
 
     return index;
@@ -7929,11 +7930,11 @@ StringMorph.prototype.nextWordFrom = function (aSlot) {
     var index = aSlot;
     
     while (index < this.endOfLine() && !isWordChar(this.text[index])) {
-        index += 1
+        index += 1;
     }
 
     while (index < this.endOfLine() && isWordChar(this.text[index])) {
-        index += 1
+        index += 1;
     }
 
     return index;
@@ -8231,7 +8232,7 @@ StringMorph.prototype.selectBetweenWordsAt = function (slot) {
 
     while (this.endMark < this.text.length
             && !isWordChar(this.text[this.endMark])) {
-        this.endMark += 1
+        this.endMark += 1;
     }
 
     this.drawNew();
