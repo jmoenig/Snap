@@ -7573,7 +7573,9 @@ InputSlotMorph.prototype.reactToEdit = function () {
 };
 
 InputSlotMorph.prototype.freshTextEdit = function (aStringOrTextMorph) {
-    aStringOrTextMorph.selectAll();
+    this.onNextStep = function () {
+        aStringOrTextMorph.selectAll();
+    };
 };
 
 // InputSlotMorph menu:
