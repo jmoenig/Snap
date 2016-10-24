@@ -3091,7 +3091,7 @@ IDE_Morph.prototype.aboutSnap = function () {
         + '\nBernat Romagosa: Countless contributions'
         + '\n"Ava" Yuan Yuan, Dylan Servilla: Graphic Effects'
         + '\nKyle Hotchkiss: Block search design'
-        + '\nBrian Brol: Many bugfixes and optimizations'
+        + '\nBrian Broll: Many bugfixes and optimizations'
         + '\nIan Reynolds: UI Design, Event Bindings, '
         + 'Sound primitives'
         + '\nIvan Motyashov: Initial Squeak Porting'
