@@ -683,12 +683,12 @@ Process.prototype.evaluateBlock = function (block, argCount) {
 Process.prototype.evaluateFunction = function (exp) {
     var yields = false, result;
     if (this.isCatchingErrors) {
-            try {
-                result = exp.apply(this.context.receiver, [this, function(){ yields = true; }].concat(this.context.inputs));
-            } catch (error) {
-                this.handleError(error, exp);
-                return;
-            }
+        try {
+            result = exp.apply(this.context.receiver, [this, function(){ yields = true; }].concat(this.context.inputs));
+        } catch (error) {
+            this.handleError(error, exp);
+            return;
+        }
     } else {
         result = exp.apply(this.context.receiver, [this, function(){ yields = true; }].concat(this.context.inputs));
     }
