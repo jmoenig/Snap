@@ -634,12 +634,7 @@ Process.prototype.evaluateContext = function () {
         return this.evaluateBlock(exp, exp.inputs().length);
     }
     if (typeof exp === 'function') {
-        var yields = false;
-        var result = exp.apply(this.context.receiver, [this, function(){ yields = true; }].concat(this.context.inputs));
-        if (yields) return;
-        this.returnValueToParentContext(result);
-        this.popContext();
-        return result;
+        return this.evaluateFunction(exp);
     }
     if (isString(exp)) {
         return this[exp].apply(this, this.context.inputs);
@@ -684,6 +679,24 @@ Process.prototype.evaluateBlock = function (block, argCount) {
         }
     }
 };
+
+Process.prototype.evaluateFunction = function (exp) {
+    var yields = false, result;
+    if (this.isCatchingErrors) {
+            try {
+                result = exp.apply(this.context.receiver, [this, function(){ yields = true; }].concat(this.context.inputs));
+            } catch (error) {
+                this.handleError(error, exp);
+                return;
+            }
+    } else {
+        result = exp.apply(this.context.receiver, [this, function(){ yields = true; }].concat(this.context.inputs));
+    }
+    if (yields) return;
+    this.returnValueToParentContext(result);
+    this.popContext();
+    return result;
+}
 
 // Process: Special Forms Blocks Primitives
 
