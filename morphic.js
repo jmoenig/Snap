@@ -521,7 +521,7 @@
     create draggable composite morphs like Windows, DialogBoxes,
     Sliders etc.
 
-    Sometimes it is desireable to make "template" shapes which cannot be
+    Sometimes it is desirable to make "template" shapes which cannot be
     moved themselves, but from which instead duplicates can be peeled
     off. This is especially useful for building blocks in construction
     kits, e.g. the MIT-Scratch palette. Morphic.js lets you control this
