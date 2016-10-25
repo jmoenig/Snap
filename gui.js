@@ -2892,7 +2892,7 @@ IDE_Morph.prototype.importMedia = function (mediaType) {
     dialog.createLabel();
     dialog.addBody(frame);
     dialog.addButton('ok', 'Import');
-    dialog.addButton('cancel', 'Cancel');
+    dialog.addButton('cancel', 'Close');
 
     dialog.ok = function () {
         if (selectedIcon) {
