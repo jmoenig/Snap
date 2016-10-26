@@ -5600,13 +5600,32 @@ ScriptsMorph.prototype.userMenu = function () {
     }
     menu.addItem('clean up', 'cleanUp', 'arrange scripts\nvertically');
     menu.addItem('add comment', 'addComment');
-    if (this.lastDroppedBlock) {
+    //if (this.lastDroppedBlock) {
+        //menu.addItem(
+            //'undrop',
+            //'undrop',
+            //'undo the last\nblock drop\nin this pane'
+        //);
+    //}
+    if (SnapUndo.canUndo()) {
         menu.addItem(
-            'undrop',
-            'undrop',
-            'undo the last\nblock drop\nin this pane'
+            'undo',
+            function() {
+                SnapUndo.undo();
+            },
+            'undo the last edit'
         );
     }
+    if (SnapUndo.canRedo()) {
+        menu.addItem(
+            'redo',
+            function() {
+                SnapUndo.redo();
+            },
+            'redo the last edit'
+        );
+    }
+
     menu.addItem(
         'scripts pic...',
         'exportScriptsPicture',

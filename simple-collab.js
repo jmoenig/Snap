@@ -70,14 +70,19 @@ SimpleCollaborator.prototype.initialize = function() {
 };
 
 SimpleCollaborator.prototype.acceptEvent = function(msg) {
+    msg.id = msg.id || this.lastSeen + 1;
+    this.send(msg);
+    this._applyEvent(msg);
+};
+
+SimpleCollaborator.prototype._applyEvent = function(msg) {
     var method = this._getMethodFor(msg.type);
 
     logger.debug('received event:', msg);
-    msg.id = msg.id || this.lastSeen + 1;
-    this.send(msg);
     this[method].apply(this, msg.args);
     this.lastSeen = msg.id;
     this.idCount = 0;
+    SnapUndo.record(msg);
 };
 
 SimpleCollaborator.prototype.send = function(json) {
@@ -190,6 +195,15 @@ SimpleCollaborator.prototype._setBlocksPositions = function(ids, positions) {
     }, this)];
 };
 
+SimpleCollaborator.prototype._setStageSize = function(width, height) {
+    // Add the old stage size for undo support
+    return [
+        width,
+        height,
+        StageMorph.prototype.dimensions.y,
+        StageMorph.prototype.dimensions.x
+    ];
+};
 /* * * * * * * * * * * * Updating internal rep * * * * * * * * * * * */
 SimpleCollaborator.prototype._onSetField = function(pId, connId, value) {
     console.assert(!this.blockChildren[pId] || !this.blockChildren[pId][connId],'Connection occupied!');
@@ -230,7 +244,7 @@ SimpleCollaborator.prototype._onDeleteVariable = function(name, ownerId) {
 };
 
 /* * * * * * * * * * * * On UI Events * * * * * * * * * * * */
-[
+SimpleCollaborator.prototype.EVENTS = [
     'setStageSize',
 
     // Sprites
@@ -286,8 +300,9 @@ SimpleCollaborator.prototype._onDeleteVariable = function(name, ownerId) {
     'unringify',
 
     'toggleBoolean',
-    'setField',
-].forEach(function(method) {
+    'setField'
+];
+SimpleCollaborator.prototype.EVENTS.forEach(function(method) {
     SimpleCollaborator.prototype[method] = function() {
         var args = Array.prototype.slice.apply(arguments),
             fn = '_' + method,
@@ -303,13 +318,17 @@ SimpleCollaborator.prototype._onDeleteVariable = function(name, ownerId) {
             args: args
         };
 
-        if (this.isLeader) {
-            this.acceptEvent(msg);
-        } else {
-            this.send(msg);
-        }
+        this.applyEvent(msg);
     };
 });
+
+SimpleCollaborator.prototype.applyEvent = function(event) {
+    if (this.isLeader) {
+        this.acceptEvent(event);
+    } else {
+        this.send(event);
+    }
+};
 
 SimpleCollaborator.prototype._getMethodFor = function(action) {
     var method = '_on' + action.substring(0,1).toUpperCase() + action.substring(1);
@@ -1277,10 +1296,7 @@ SimpleCollaborator.prototype.onMessage = function(msg) {
         }
     } else {
         if (this[method]) {
-            logger.debug('received event:', msg);
-            this[method].apply(this, msg.args);
-            this.lastSeen = msg.id;
-            this.idCount = 0;
+            this._applyEvent(msg);
         }
     }
 };

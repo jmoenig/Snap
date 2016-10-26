@@ -21,18 +21,21 @@
 		<script type="text/javascript" src="sha512.js"></script>
 		<script type="text/javascript" src="FileSaver.min.js"></script>
 		<script type="text/javascript" src="simple-collab.js"></script>
+		<script type="text/javascript" src="undo.js"></script>
 		<script type="text/javascript">
-			var world;
+            var world;
+
 			window.onload = function () {
 				world = new WorldMorph(document.getElementById('world'));
                 world.worldCanvas.focus();
 				new IDE_Morph().openIn(world);
-        loop();
+                loop();
 			};
 			function loop() {
         requestAnimationFrame(loop);
 				world.doOneCycle();
 			}
+
 		</script>
 	</head>
 	<body style="margin: 0;">
