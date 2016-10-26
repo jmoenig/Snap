@@ -500,15 +500,15 @@ SimpleCollaborator.prototype.onMoveBlock = function(id, target) {
 };
 
 SimpleCollaborator.prototype.onRemoveBlock = function(id, userDestroy) {
-    var method = userDestroy ? 'userDestroy' : 'destroy',
-        block = this.getBlockFromId(id),
+    var block = this.getBlockFromId(id),
+        method = userDestroy ? 'userDestroy' : 'destroy',
         scripts = block.parentThatIsA(ScriptsMorph),
         parent = block.parent;
 
     if (block) {
         // Check the parent and revert to default input
-        if (parent && parent.revertToDefaultInput) {
-            parent.revertToDefaultInput(block);
+        if (block.prepareToBeGrabbed) {
+            block.prepareToBeGrabbed(this.world().hand);
         }
 
         // Remove the block
