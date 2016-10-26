@@ -5840,7 +5840,7 @@ ScriptsMorph.prototype.reactToDropOf = function (droppedMorph, hand) {
 
         target = droppedMorph.snapTarget(hand);
         if (target) {  // moveBlock
-            this.moveBlock(droppedMorph, target);
+            SnapCollaborator.moveBlock(droppedMorph, target);
         } else if (!droppedMorph.id) {  // addBlock
             this.addBlock(droppedMorph);
         } else {  // change position
@@ -5863,36 +5863,6 @@ ScriptsMorph.prototype.addBlock = function (block) {
     SnapCollaborator.addBlock(block, scripts, position, ownerId);
 
     block.destroy();
-};
-
-ScriptsMorph.prototype.moveBlock = function (block, target) {
-    var blockId = SnapCollaborator.serializeBlock(block),
-        isNewBlock = !block.id,
-        id;
-
-    if (block instanceof CommandBlockMorph) {
-        if (!target.element.id) {
-            if (target.element instanceof PrototypeHatBlockMorph) {
-                target.element = target.element.definition.id;
-            } else {
-                target.element = SnapCollaborator.getId(target.element);
-            }
-        } else {
-            target.element = target.element.id;
-        }
-        SnapCollaborator.moveBlock(blockId, target);
-    } else if (block instanceof ReporterBlockMorph) {
-        // target is a block to replace...
-        target = SnapCollaborator.getId(target);
-        SnapCollaborator.moveBlock(blockId, target);
-    } else {  // CommentMorph
-        console.log('comment...');
-        SnapCollaborator.moveBlock(blockId, target.id);
-    }
-
-    if (isNewBlock) {
-        block.destroy();
-    }
 };
 
 ScriptsMorph.prototype.setBlockPosition = function (block, hand) {

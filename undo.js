@@ -136,7 +136,10 @@ UndoManager.Invert.addBlock = function(event) {
 };
 
 UndoManager.Invert.removeBlock = function(event) {
-    // args are [id, userDestroy]
+    // args are
+    //  [id, userDestroy, y, x, ownerId, block]
+    // or 
+    //  [id, userDestroy, target]
     return {
         type: 'addBlock',
         args: event.args.reverse()
@@ -144,15 +147,24 @@ UndoManager.Invert.removeBlock = function(event) {
 };
 
 UndoManager.Invert.setBlockPosition = function(event) {
-    // args are [id, x, y, oldX, oldY]
-    var oldPos = event.args.splice(3, 2);
+    // args are [id, x, y, oldX, oldY] or [id, x, y, oldTarget]
 
-    // Swap the old position and new position
-    event.args.splice(1, 0, oldPos[0], oldPos[1]);
-    return {
-        type: 'setBlockPosition',
-        args: event.args
-    };
+    if (event.args.length === 5) {
+        // Swap the old position and new position
+        UndoManager.swap(event.args, 1, 3);  // x, oldX
+        UndoManager.swap(event.args, 2, 4);  // y, oldY
+        return {
+            type: 'setBlockPosition',
+            args: event.args
+        };
+    } else {  // previous was a moveBlock
+        UndoManager.swap(event.args, 1, 3);  // x, oldTarget
+        UndoManager.swap(event.args, 2, 3);  // y, x
+        return {
+            type: 'moveBlock',
+            args: event.args
+        };
+    }
 };
 
 UndoManager.Invert.setBlocksPositions = function(event) {
@@ -162,7 +174,51 @@ UndoManager.Invert.setBlocksPositions = function(event) {
         args: [event.args[0], event.args[2], event.args[1]]
     };
 };
-    //'setBlocksPositions',
+
+UndoManager.swap = function(array, x, y) {
+    var tmp = array.splice(y, 1)[0];
+    array.splice(x, 0, tmp);
+    return array;
+};
+
+UndoManager.Invert.moveBlock = function(event) {
+    // args are either:
+    //  [id, target, oldTarget]
+    //    or
+    //  [id, target, oldX, oldY]
+    //    or
+    //  [serializedBlock, target]
+    var isFromMove = event.args.length === 3,
+        isNewlyCreated = event.args.length === 4 && event.args[2] === false,
+        isFromPosition = !isNewlyCreated && event.args.length === 4;
+
+    // Check if had a position or old target
+    if (isFromMove) {
+        UndoManager.swap(event.args, 1, 2);
+        return {
+            type: 'moveBlock',
+            args: event.args
+        };
+    } else if (isFromPosition) {  // x, y
+        // move target to the end of the list
+        var target = event.args.splice(1, 1)[0];
+        event.args.push(target);
+        return {
+            type: 'setBlockPosition',
+            args: event.args
+        };
+    } else if (isNewlyCreated) {  // newly created (dragged from palette)
+        // Get the ids of the blocks
+        // return removeBlock w/ [id, false, target, serializedBlock]
+        // FIXME: May need to remove multiple blocks... may need another event
+        return {
+            type: 'removeBlock',
+            args: event.args.reverse()
+        };
+    } else {
+        logger.warn('Malformed moveBlock event!:', event);
+    }
+};
     //'moveBlock',
     //'importBlocks',
 

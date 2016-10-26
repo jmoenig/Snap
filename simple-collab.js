@@ -39,6 +39,8 @@ SimpleCollaborator.prototype.initializeRecords = function() {
     // Additional records for undo/redo support
     this._positionOf = {};
     this._blockToOwnerId = {};
+
+    this._blockToTarget = {};
 };
 
 SimpleCollaborator.prototype.initialize = function() {
@@ -248,6 +250,61 @@ SimpleCollaborator.prototype._setStageSize = function(width, height) {
         StageMorph.prototype.dimensions.x
     ];
 };
+
+SimpleCollaborator.prototype._serializeMoveTarget = function(block, target) {
+    if (block instanceof CommandBlockMorph) {
+        if (!target.element.id) {
+            if (target.element instanceof PrototypeHatBlockMorph) {
+                target.element = target.element.definition.id;
+            } else {
+                target.element = this.getId(target.element);
+            }
+        } else {
+            target.element = target.element.id;
+        }
+    } else if (block instanceof ReporterBlockMorph) {
+        // target is a block to replace...
+        target = SnapCollaborator.getId(target);
+    } else {  // CommentMorph
+        target = target.id;
+    }
+    return target;
+};
+
+SimpleCollaborator.prototype._moveBlock = function(block, target) {
+    var isNewBlock = !block.id,
+        id = block.id || this.newId(),
+        oldTarget = this._blockToTarget[id],
+        position = this._positionOf[id],
+        serialized,
+        args;
+
+    // Serialize the target
+    target = this._serializeMoveTarget(block, target);
+    block.id = id;
+    // FIXME: May need to id multiple blocks
+    serialized = this.serializeBlock(block, isNewBlock);
+
+    if (isNewBlock) {
+        block.destroy();
+    }
+
+    // If there is no target, get the current position
+    args = [serialized, target];
+    if (isNewBlock) {
+        // provide info for easy undo
+        args.push(false, id);
+    } else if (oldTarget) {
+        args.push(oldTarget);
+    } else if (position) {
+        args.push(position.x, position.y);
+    } else {
+        logger.warn('Could not get position or old target for ' + id);
+    }
+
+    return args;
+};
+
 /* * * * * * * * * * * * Updating internal rep * * * * * * * * * * * */
 SimpleCollaborator.prototype._onSetField = function(pId, connId, value) {
     console.assert(!this.blockChildren[pId] || !this.blockChildren[pId][connId],'Connection occupied!');
@@ -522,11 +579,14 @@ SimpleCollaborator.prototype.getBlockFromId = function(id) {
     return block;
 };
 
-SimpleCollaborator.prototype.onMoveBlock = function(id, target) {
+SimpleCollaborator.prototype.onMoveBlock = function(id, rawTarget) {
     // Convert the pId, connId back to the target...
     var block = this.deserializeBlock(id),
-        isNewBlock = !block.id,
+        isNewBlock = !this._blocks[block.id],
+        target = copy(rawTarget),
         scripts;
+
+    this._blockToTarget[id] = rawTarget;
 
     if (block instanceof CommandBlockMorph) {
         // Check if connecting to the beginning of a custom block definition
@@ -551,7 +611,6 @@ SimpleCollaborator.prototype.onMoveBlock = function(id, target) {
     }
 
     if (isNewBlock) {
-        block.id = this.newId();
         this._blocks[block.id] = block;
         scripts.add(block);
     } else {
@@ -582,6 +641,8 @@ SimpleCollaborator.prototype.onRemoveBlock = function(id, userDestroy) {
         delete this._blocks[id];
         delete this._positionOf[id];
         delete this._blockToOwnerId[id];
+        delete this._blockToTarget[id];
+
         this._updateBlockDefinitions(block);
 
         // Update parent block's UI
