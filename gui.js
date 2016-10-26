@@ -72,7 +72,7 @@ isRetinaSupported, SliderMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2016-October-24';
+modules.gui = '2016-October-26';
 
 // Declarations
 
@@ -3080,7 +3080,10 @@ IDE_Morph.prototype.aboutSnap = function () {
 
         + 'You should have received a copy of the\n'
         + 'GNU Affero General Public License along with this program.\n'
-        + 'If not, see http://www.gnu.org/licenses/';
+        + 'If not, see http://www.gnu.org/licenses/\n\n'
+
+        + 'Want to use Snap! but scared by the open-source license?\n'
+        + 'Get in touch with us, we\'ll make it work.';
 
     creditsTxt = localize('Contributors')
         + '\n\nNathan Dinsmore: Saving/Loading, Snap-Logo Design, '
