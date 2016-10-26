@@ -58,7 +58,10 @@ UndoManager.prototype.redo = function() {
         return false;
     }
 
-    event = this.getInverseEvent(origEvent);
+    event = {
+        type: origEvent.type,
+        args: origEvent.args.slice()
+    };
     event.replayType = UndoManager.REDO;
 
     SnapCollaborator.applyEvent(event);
@@ -66,11 +69,10 @@ UndoManager.prototype.redo = function() {
 };
 
 UndoManager.prototype.getInverseEvent = function(event) {
-    // TODO: Look up the event's inverter and call it
-    var type = event.type,
-        result = UndoManager.Invert[type].call(this, event);
+    var type = event.type;
     
-    return result;
+    event = JSON.parse(JSON.stringify(event));  // deep copy
+    return UndoManager.Invert[type].call(this, event);
 };
 
 UndoManager.Invert = {};
@@ -82,11 +84,17 @@ UndoManager.Invert.setStageSize = function(event) {
     };
 };
 
+    //serialized = SnapCollaborator.serializeBlock(block);
+
 //UndoManager.Invert.addSprite = function(event) {
+    //// args are [width, height, oldHeight, oldWidth]
+    //return {
+        //type: 'removeSprite',
+        //args: event.args.reverse()
+    //};
 //};
 
     //// Sprites
-    //'addSprite',
     //'removeSprite',
     //'renameSprite',
     //'toggleDraggable',
@@ -119,8 +127,22 @@ UndoManager.Invert.setStageSize = function(event) {
     //'deleteBlockLabel',
 
     //// Block manipulation
-    //'addBlock',
-    //'removeBlock',
+UndoManager.Invert.addBlock = function(event) {
+    // args are [block, ownerId, x, y, false, blockId]
+    return {
+        type: 'removeBlock',
+        args: event.args.reverse()
+    };
+};
+
+UndoManager.Invert.removeBlock = function(event) {
+    // args are [id, userDestroy]
+    return {
+        type: 'addBlock',
+        args: event.args.reverse()
+    };
+};
+
     //'setBlockPosition',
     //'setBlocksPositions',
     //'moveBlock',

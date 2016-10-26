@@ -35,6 +35,9 @@ SimpleCollaborator.prototype.initializeRecords = function() {
 
     this._sounds = {};
     this._soundToOwner = {};
+
+    // Additional records for undo/redo support
+    this._positionOf = {};
 };
 
 SimpleCollaborator.prototype.initialize = function() {
@@ -118,8 +121,8 @@ SimpleCollaborator.prototype.getId = function (block) {
     return id;
 };
 
-SimpleCollaborator.prototype.serializeBlock = function(block) {
-    if (block.id) {
+SimpleCollaborator.prototype.serializeBlock = function(block, force) {
+    if (block.id && !force) {
         return block.id;
     }
 
@@ -160,6 +163,8 @@ SimpleCollaborator.prototype.registerOwner = function(owner, id) {
 };
 
 /* * * * * * * * * * * * Preprocess args (before action is accepted) * * * * * * * * * * * */
+// These are decorators which take the args from the public API and return the args for
+// the event to be sent to the other collaborators (and received by the onEventName methods)
 SimpleCollaborator.prototype.getStandardPosition = function(scripts, position) {
     var scale = SyntaxElementMorph.prototype.scale;
     position = position.subtract(scripts.topLeft()).divideBy(scale);
@@ -167,14 +172,43 @@ SimpleCollaborator.prototype.getStandardPosition = function(scripts, position) {
 };
 
 SimpleCollaborator.prototype._addBlock = function(block, scripts, position, ownerId) {
-    var serialized = SnapCollaborator.serializeBlock(block),
-        stdPosition = this.getStandardPosition(scripts, position);
+    var stdPosition = this.getStandardPosition(scripts, position),
+        serialized,
+        iterBlock;  // block iterator
 
+    iterBlock = block;
+    while (iterBlock) {
+        iterBlock.isDraggable = true;
+        iterBlock.isTemplate = false;
+        iterBlock.id = this.newId();
+
+        iterBlock = iterBlock.nextBlock ? iterBlock.nextBlock() : null;
+    }
+
+    serialized = this.serializeBlock(block, true);
     return [
         serialized,
         ownerId || scripts.owner.id,
         stdPosition.x,
-        stdPosition.y
+        stdPosition.y,
+        false,
+        block.id
+    ];
+};
+
+SimpleCollaborator.prototype._removeBlock = function(id, userDestroy) {
+    var block = this._blocks[id],
+        serialized = this.serializeBlock(block, true),
+        position = this._positionOf[block.id],
+        scripts = block.parentThatIsA(ScriptsMorph);
+        
+    return [
+        id,
+        userDestroy,
+        position.y,
+        position.x,
+        scripts.owner.id,
+        serialized
     ];
 };
 
@@ -347,7 +381,7 @@ SimpleCollaborator.prototype.getAdjustedPosition = function(position, scripts) {
     return position;
 };
 
-SimpleCollaborator.prototype.onAddBlock = function(type, ownerId, x, y) {
+SimpleCollaborator.prototype.onAddBlock = function(block, ownerId, x, y) {
     var block,
         owner = this._owners[ownerId],
         world = this.ide().parentThatIsA(WorldMorph),
@@ -356,13 +390,14 @@ SimpleCollaborator.prototype.onAddBlock = function(type, ownerId, x, y) {
         i = 1,
         firstBlock;
 
-    firstBlock = this.deserializeBlock(type);
+    this._positionOf[block.id] = position;
+
+    firstBlock = this.deserializeBlock(block);
     block = firstBlock;
 
     while (block) {
         block.isDraggable = true;
         block.isTemplate = false;
-        block.id = this.newId();  // TODO: ID the blocks before sending them...
         this._blocks[block.id] = block;
 
         block = block.nextBlock ? block.nextBlock() : null;
@@ -533,6 +568,7 @@ SimpleCollaborator.prototype.onRemoveBlock = function(id, userDestroy) {
         // Remove the block
         block[method]();
         delete this._blocks[id];
+        delete this._positionOf[id];
         this._updateBlockDefinitions(block);
 
         // Update parent block's UI
@@ -573,6 +609,7 @@ SimpleCollaborator.prototype.onSetBlockPosition = function(id, x, y) {
 
     console.assert(block, 'Block "' + id + '" does not exist! Cannot set position');
 
+    this._positionOf[id] = position;
     if (block && block.prepareToBeGrabbed) {
         block.prepareToBeGrabbed({world: this.ide().world()});
     }
