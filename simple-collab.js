@@ -38,6 +38,7 @@ SimpleCollaborator.prototype.initializeRecords = function() {
 
     // Additional records for undo/redo support
     this._positionOf = {};
+    this._blockToOwnerId = {};
 };
 
 SimpleCollaborator.prototype.initialize = function() {
@@ -200,14 +201,14 @@ SimpleCollaborator.prototype._removeBlock = function(id, userDestroy) {
     var block = this._blocks[id],
         serialized = this.serializeBlock(block, true),
         position = this._positionOf[block.id],
-        scripts = block.parentThatIsA(ScriptsMorph);
+        ownerId = this._blockToOwnerId[id];
         
     return [
         id,
         userDestroy,
         position.y,
         position.x,
-        scripts.owner.id,
+        ownerId,
         serialized
     ];
 };
@@ -390,9 +391,11 @@ SimpleCollaborator.prototype.onAddBlock = function(block, ownerId, x, y) {
         i = 1,
         firstBlock;
 
-    this._positionOf[block.id] = position;
 
     firstBlock = this.deserializeBlock(block);
+    this._positionOf[firstBlock.id] = position;
+    this._blockToOwnerId[firstBlock.id] = ownerId;
+
     block = firstBlock;
 
     while (block) {
@@ -569,6 +572,7 @@ SimpleCollaborator.prototype.onRemoveBlock = function(id, userDestroy) {
         block[method]();
         delete this._blocks[id];
         delete this._positionOf[id];
+        delete this._blockToOwnerId[id];
         this._updateBlockDefinitions(block);
 
         // Update parent block's UI
