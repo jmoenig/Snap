@@ -216,9 +216,10 @@ SimpleCollaborator.prototype._removeBlock = function(id, userDestroy) {
 SimpleCollaborator.prototype._setBlockPosition = function(id, position) {
     var block = this.getBlockFromId(id),
         scripts = block.parentThatIsA(ScriptsMorph),
-        standardPosition = this.getStandardPosition(scripts, position);
+        standardPosition = this.getStandardPosition(scripts, position),
+        oldPosition = this._positionOf[id];
 
-    return [id, standardPosition.x, standardPosition.y];
+    return [id, standardPosition.x, standardPosition.y, oldPosition.x, oldPosition.y];
 };
 
 SimpleCollaborator.prototype._setBlocksPositions = function(ids, positions) {
