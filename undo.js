@@ -144,12 +144,22 @@ UndoManager.Invert.removeBlock = function(event) {
 };
 
 UndoManager.Invert.setBlockPosition = function(event) {
-    var oldPos = event.args.splice(3, 2);
     // args are [id, x, y, oldX, oldY]
+    var oldPos = event.args.splice(3, 2);
+
+    // Swap the old position and new position
     event.args.splice(1, 0, oldPos[0], oldPos[1]);
     return {
         type: 'setBlockPosition',
         args: event.args
+    };
+};
+
+UndoManager.Invert.setBlocksPositions = function(event) {
+    // args are [ids, positions, oldPositions]
+    return {
+        type: 'setBlocksPositions',
+        args: [event.args[0], event.args[2], event.args[1]]
     };
 };
     //'setBlocksPositions',

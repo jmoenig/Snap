@@ -224,11 +224,19 @@ SimpleCollaborator.prototype._setBlockPosition = function(id, position) {
 
 SimpleCollaborator.prototype._setBlocksPositions = function(ids, positions) {
     var block = this.getBlockFromId(ids[0]),
-        scripts = block.parentThatIsA(ScriptsMorph);
+        scripts = block.parentThatIsA(ScriptsMorph),
+        stdPositions,
+        oldPositions;
 
-    return [ids, positions.map(function(pos) {
+    oldPositions = ids.map(function(id) {
+        return this._positionOf[id];
+    }, this);
+
+    stdPositions = positions.map(function(pos) {
         return this.getStandardPosition(scripts, pos);
-    }, this)];
+    }, this)
+
+    return [ids, stdPositions, oldPositions];
 };
 
 SimpleCollaborator.prototype._setStageSize = function(width, height) {
