@@ -3085,4 +3085,8 @@ http://snap.berkeley.edu/run#cloud:Username=jens&ProjectName=rotation
 ------
 * Text Editing Tweaks, thanks, Bernat!!
 * Store: fixed #1472
-* Trheads: Tweak continuations
+* Threads: Tweak continuations
+
+161027
+------
+== v4.0.9 ====
