@@ -11245,7 +11245,7 @@ WorldMorph.prototype.contextMenu = function () {
         menu.addItem(
             "fill page...",
             'fillPage',
-            'let the World automatically\nadjust to browser resizings'
+            'let the World automatically\nadjust to browser resizing'
         );
         if (useBlurredShadows) {
             menu.addItem(
