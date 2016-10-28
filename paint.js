@@ -5,7 +5,7 @@
     inspired by the Scratch paint editor.
 
     written by Kartik Chandra
-    Copyright (C) 2015 by Kartik Chandra
+    Copyright (C) 2016 by Kartik Chandra
 
     This file is part of Snap!.
 
@@ -60,19 +60,20 @@
     Sep 28 [of the following year :)] - Try to prevent antialiasing (Kartik)
     Oct 02 - revert disable smoothing (Jens)
     Dec 15 - center rotation point on costume creating (Craxic)
- */
+    Jan 18 - avoid pixel collision detection in PaintCanvas (Jens)
+    Mar 22 - fixed automatic rotation center point mechanism (Jens)
+    May 10 - retina display support adjustments (Jens)
+*/
 
-/*global Point, Rectangle, DialogBoxMorph, fontHeight, AlignmentMorph,
- FrameMorph, PushButtonMorph, Color, SymbolMorph, newCanvas, Morph, TextMorph,
- CostumeIconMorph, IDE_Morph, Costume, SpriteMorph, nop, Image, WardrobeMorph,
- TurtleIconMorph, localize, MenuMorph, InputFieldMorph, SliderMorph,
- ToggleMorph, ToggleButtonMorph, BoxMorph, modules, radians,
- MorphicPreferences, getDocumentPositionOf, StageMorph
- */
+/*global Point, Rectangle, DialogBoxMorph, AlignmentMorph, PushButtonMorph,
+Color, SymbolMorph, newCanvas, Morph, TextMorph, Costume, SpriteMorph, nop,
+localize, InputFieldMorph, SliderMorph, ToggleMorph, ToggleButtonMorph,
+BoxMorph, modules, radians, MorphicPreferences, getDocumentPositionOf,
+StageMorph, isNil*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.paint = '2015-December-15';
+modules.paint = '2016-July-14';
 
 // Declarations
 
@@ -252,7 +253,6 @@ PaintEditorMorph.prototype.buildScaleBox = function () {
 PaintEditorMorph.prototype.openIn = function (world, oldim, oldrc, callback) {
     // Open the editor in a world with an optional image to edit
     this.oldim = oldim;
-    this.oldrc = oldrc.copy();
     this.callback = callback || nop;
 
     this.processKeyUp = function () {
@@ -267,9 +267,10 @@ PaintEditorMorph.prototype.openIn = function (world, oldim, oldrc, callback) {
 
     //merge oldim:
     if (this.oldim) {
+        this.paper.automaticCrosshairs = isNil(oldrc);
         this.paper.centermerge(this.oldim, this.paper.paper);
         this.paper.rotationCenter =
-            this.oldrc.add(
+            (oldrc || new Point(0, 0)).add(
                 new Point(
                     (this.paper.paper.width - this.oldim.width) / 2,
                     (this.paper.paper.height - this.oldim.height) / 2
@@ -572,9 +573,9 @@ PaintCanvasMorph.prototype.init = function (shift) {
     this.dragRect = new Rectangle();
     // rectangle with origin being the starting drag position and
     // corner being the current drag position
-    this.mask = newCanvas(this.extent()); // Temporary canvas
-    this.paper = newCanvas(this.extent()); // Actual canvas
-    this.erasermask = newCanvas(this.extent()); // eraser memory
+    this.mask = newCanvas(this.extent(), true); // Temporary canvas
+    this.paper = newCanvas(this.extent(), true); // Actual canvas
+    this.erasermask = newCanvas(this.extent(), true); // eraser memory
     this.background = newCanvas(this.extent()); // checkers
     this.settings = {
         "primarycolor": new Color(0, 0, 0, 255), // usually fill color
@@ -590,6 +591,7 @@ PaintCanvasMorph.prototype.init = function (shift) {
     // should we calculate the center of the image ourselves,
     // or use the user position
     this.automaticCrosshairs = true;
+    this.noticesTransparentClick = true; // optimization
     this.buildContents();
 };
 
@@ -616,8 +618,8 @@ PaintCanvasMorph.prototype.updateAutomaticCenter = function () {
 
 PaintCanvasMorph.prototype.scale = function (x, y) {
     this.updateAutomaticCenter();
-    this.mask = newCanvas(this.extent());
-    var c = newCanvas(this.extent());
+    this.mask = newCanvas(this.extent(), true);
+    var c = newCanvas(this.extent(), true);
     c.getContext("2d").save();
     c.getContext("2d").translate(
         this.rotationCenter.x,
@@ -636,14 +638,14 @@ PaintCanvasMorph.prototype.scale = function (x, y) {
 };
 
 PaintCanvasMorph.prototype.cacheUndo = function () {
-    var cachecan = newCanvas(this.extent());
+    var cachecan = newCanvas(this.extent(), true);
     this.merge(this.paper, cachecan);
     this.undoBuffer.push(cachecan);
 };
 
 PaintCanvasMorph.prototype.undo = function () {
     if (this.undoBuffer.length > 0) {
-        this.paper = newCanvas(this.extent());
+        this.paper = newCanvas(this.extent(), true);
         this.mask.width = this.mask.width + 1 - 1;
         this.merge(this.undoBuffer.pop(), this.paper);
         this.drawNew();
@@ -670,7 +672,7 @@ PaintCanvasMorph.prototype.clearCanvas = function () {
 };
 
 PaintCanvasMorph.prototype.toolChanged = function (tool) {
-    this.mask = newCanvas(this.extent());
+    this.mask = newCanvas(this.extent(), true);
     if (tool === "crosshairs") {
         this.updateAutomaticCenter();
         this.drawcrosshair();
@@ -811,7 +813,7 @@ PaintCanvasMorph.prototype.mouseDownLeft = function (pos) {
     }
     if (this.settings.primarycolor === "transparent" &&
             this.currentTool !== "crosshairs") {
-        this.erasermask = newCanvas(this.extent());
+        this.erasermask = newCanvas(this.extent(), true);
         this.merge(this.paper, this.erasermask);
     }
 };
@@ -952,7 +954,7 @@ PaintCanvasMorph.prototype.mouseMove = function (pos) {
         }
         mctx.stroke();
         mctx.restore();
-        this.paper = newCanvas(this.extent());
+        this.paper = newCanvas(this.extent(), true);
         this.merge(this.mask, this.paper);
         break;
     default:
@@ -976,9 +978,9 @@ PaintCanvasMorph.prototype.mouseLeaveDragging
 
 PaintCanvasMorph.prototype.buildContents = function () {
     this.background = newCanvas(this.extent());
-    this.paper = newCanvas(this.extent());
-    this.mask = newCanvas(this.extent());
-    this.erasermask = newCanvas(this.extent());
+    this.paper = newCanvas(this.extent(), true);
+    this.mask = newCanvas(this.extent(), true);
+    this.erasermask = newCanvas(this.extent(), true);
     var i, j, bkctx = this.background.getContext("2d");
     for (i = 0; i < this.background.width; i += 5) {
         for (j = 0; j < this.background.height; j += 5) {
@@ -993,7 +995,7 @@ PaintCanvasMorph.prototype.buildContents = function () {
 };
 
 PaintCanvasMorph.prototype.drawNew = function () {
-    var can = newCanvas(this.extent());
+    var can = newCanvas(this.extent(), true);
     this.merge(this.background, can);
     this.merge(this.paper, can);
     this.merge(this.mask, can);

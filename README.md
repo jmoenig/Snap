@@ -9,7 +9,7 @@ inspired by Scratch
 written by Jens Mönig and Brian Harvey
 jens@moenig.org, bh@cs.berkeley.edu
 
-Copyright (C) 2015 by Jens Mönig and Brian Harvey
+Copyright (C) 2016 by Jens Mönig and Brian Harvey
 
 Snap! is free software: you can redistribute it and/or modify
 it under the terms of the GNU Affero General Public License as
@@ -23,3 +23,6 @@ GNU Affero General Public License for more details.
 
 You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+Want to use Snap! but scared by the open-source license? Get in touch with us,
+we'll make it work.

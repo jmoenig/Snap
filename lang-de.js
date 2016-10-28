@@ -6,7 +6,7 @@
 
     written by Jens Mönig
 
-    Copyright (C) 2015 by Jens Mönig
+    Copyright (C) 2016 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org', // optional
     'last_changed':
-        '2015-12-22', // this, too, will appear in the Translators tab
+        '2016-09-22', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -527,6 +527,8 @@ SnapTranslator.dict.de = {
         'Stoppuhr',
     '%att of %spr':
         '%att von %spr',
+    'my %get':
+        'Attribut %get',
     'http:// %s':
         'http:// %s',
     'turbo mode?':
@@ -815,6 +817,12 @@ SnapTranslator.dict.de = {
         'Helles Design',
     'Keyboard Editing':
         'Tastaturunterstützung',
+    'Table support':
+        'Tabellenunterstützung',
+    'Table lines':
+        'Tabellen mit Linien',
+    'Visible stepping':
+        'Programmausführung verfolgen',
     'Thread safe scripts':
         'Threadsicherheit',
     'uncheck to allow\nscript reentrance':
@@ -877,6 +885,12 @@ SnapTranslator.dict.de = {
         'Umringen',
     'unringify':
         'Entringen',
+    'transient':
+        'nicht persistent',
+    'uncheck to save contents\nin the project':
+        'ausschalten, um den Inhalt\nim Projekt zu speichern',
+    'check to prevent contents\nfrom being saved':
+        'einschalten, um das Speichern des Inhalts\nim Projekt zu verhindern',
 
     // custom blocks:
     'delete block definition...':
@@ -941,6 +955,18 @@ SnapTranslator.dict.de = {
         'Los',
     'rename sound':
         'Klang umbenennen',
+
+    // lists and tables
+    'list view...':
+        'Listenansicht...',
+    'table view...':
+        'tabellarische Ansicht...',
+    'open in dialog...':
+        'in neuem Fenster \u00f6ffnen',
+    'reset columns':
+        'Spaltenbreiten zur\u00fccksetzen',
+    'items':
+        'Elemente',
 
     // dialogs
     // buttons
@@ -1176,6 +1202,18 @@ SnapTranslator.dict.de = {
         'Leer',
 
     // graphical effects
+    'color':
+        'Farbe',
+    'fisheye':
+        'Fischauge',
+    'whirl':
+        'Wirbel',
+    'pixelate':
+        'Pixel',
+    'mosaic':
+        'Mosaik',
+    'saturation':
+        'Sättigung',
     'brightness':
         'Helligeit',
     'ghost':
@@ -1330,10 +1368,46 @@ SnapTranslator.dict.de = {
         'Funktionsblock',
     'predicate':
         'Pr\u00e4dikat',
+    'sprite':
+        'Objekt',
 
     // list indices
     'last':
         'letztes',
     'any':
-        'beliebig'
+        'beliebig',
+
+    // attributes
+    'neighbors':
+        'Nachbarn',
+    'self':
+        'selbst',
+    'other sprites':
+        'andere Objekte',
+    'parts':
+        'Teile',
+    'anchor':
+        'Verankerung',
+    'parent':
+        'Vorfahr',
+    'children':
+        'Abkömmlinge',
+    'clones':
+        'Klone',
+    'other clones':
+        'andere Klone',
+    'dangling?':
+        'Baumeln?',
+    'rotation x':
+        'Drehpunkt x',
+    'rotation y':
+        'Drehpunkt y',
+    'center x':
+        'Mittelpunkt x',
+    'center y':
+        'Mittelpunkt y',
+    'name':
+        'Name',
+    'stage':
+        'B\u00fchne',
 };

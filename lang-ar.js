@@ -185,7 +185,7 @@ SnapTranslator.dict.ar = {
     'translator_e-mail':
         'tarekgalal46@hotmail.com', // optional
     'last_changed':
-        '2015-10-23', // this, too, will appear in the Translators tab
+        '2016-01-23', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -206,13 +206,13 @@ SnapTranslator.dict.ar = {
     'Control':
         'التحكم',
     'Sensing':
-        'التحسس',
+        'الاستشعار',
     'Operators':
         'العمليات',
     'Variables':
         'المتغيرات',
     'Lists':
-        'البيانات',
+        'قوائم(مصفوفات)',
     'Other':
         'لبنات اضافيه',
 
@@ -230,7 +230,7 @@ SnapTranslator.dict.ar = {
 
     // names:
     'Sprite':
-        'الكائنات',
+        'كائن',
     'Stage':
         'المنصة',
 
@@ -291,77 +291,77 @@ SnapTranslator.dict.ar = {
             + 'vorhanden',
 
     'move %n steps':
-        'تحرك %n خطوة',
+        'خطوة %n تحرك',
     'turn %clockwise %n degrees':
-        'استدر %clockwise %n درجه',
+        'درجة %n %clockwise استدر',
     'turn %counterclockwise %n degrees':
-        'استدر %counterclockwise %n درجه',
+        'درجة %n %counterclockwise استدر',
     'point in direction %dir':
-        'اتجه نحو الاتجاه %dir',
+        ' %dir الاتجاه نحو إتجه',
     'point towards %dst':
-        'اتجه نحو %dst',
+        ' %dst نحو إتجه ',
     'go to x: %n y: %n':
-        'اذهب للموضع س: %n ص: %n',
+        '%n =س %n =ص للنقطة أذهب',
     'go to %dst':
-        'اذهب الي %dst',
+        ' %dst الي إذهب',
     'glide %n secs to x: %n y: %n':
-        'انزلق خلال ث %n الي الموضع س: %n ص: %n',
+        'ثوان %n خلال %n =س %n =ص النقطة إلي إنزلق',
     'change x by %n':
-        'غير س بمقدار %n',
+        ' %n بمقدار س غير',
     'set x to %n':
-        'اجعل س تساوي %n',
+        '%n تساوي س إجعل',
     'change y by %n':
-        'غير ص بمقدار %n',
+        ' %n بمقدار ص غير',
     'set y to %n':
-        'اجعل ص تساوي %n',
+        '%n تساوي ص إجعل',
     'if on edge, bounce':
-        'ارتد اذا كنت عند الحافة',
+        'الحافة عند كنت إذا أرتد',
     'x position':
-        'الموضع س',
+        'س الموضع',
     'y position':
-        'الموضع ص',
+        'ص الموضع',
     'direction':
         'الاتجاه',
 
     // looks:
     'switch to costume %cst':
-        'غير المظهر الى %cst',
+        '%cst المظهر إلي إنتقل',
     'next costume':
-        'المظهر التالي',
+        'التالي المظهر',
     'costume #':
-        'رقم المظهر',
+        'المظهر ( ترتيب / رقم )',
     'say %s for %n secs':
-        'قل %s لمده %n ث',
+        ' %s قـل ثانية %n لمدة',
     'say %s':
-        'قل %s',
+        '%s قـل',
     'think %s for %n secs':
-        'فكر %s لمدة %n ث',
+        '%s فكر ثانية %n لمدة',
     'think %s':
-        'فكر %s',
+        ' %s فكـر',
     'Hello!':
-        'مرحبا!',
+        '!مـرحبـا',
     'Hmm...':
         'هممم...',
     'change %eff effect by %n':
-        'غير تأثير %eff بمقدار %n',
+        ' %eff التأثير قيمـة %n بمقدار غيّر',
     'set %eff effect to %n':
-        'اجعل تأثير %eff مساويا ل %n',
+        ' %eff التأثير لقيـمة %n المقدار حدد',
     'clear graphic effects':
-        'ازل التأثيرات الرسومية',
+        'الرسومية التأثيرات أحذف',
     'change size by %n':
-        'غير الحجم بمقدار %n',
+        ' %n بمقدار الحجم غيّـر',
     'set size to %n %':
-        'اجعل الحجم مساويا ل %n %',
+        '% %n  لـ مساوياً الحجم إجعل ',
     'size':
         'الحجم',
     'show':
-        'اظهر',
+        'إظهَر',
     'hide':
-        'اختف',
+        'إختَفي',
     'go to front':
-        'انتقل الى المقدمة',
+        'المقدمة الي إنتقل',
     'go back %n layers':
-        'انتقل  %n طبقة الى الخلف',
+        'طبقات  %n بمقدار الخلف الي انتقل',
 
     'development mode \ndebugging primitives:':
         'نمط البرمجه \nو تصحيح الاخطاء',
@@ -372,69 +372,71 @@ SnapTranslator.dict.ar = {
 
     // sound:
     'play sound %snd':
-        'شغل الصوت %snd',
+        '%snd الصـوت شغّـل',
     'play sound %snd until done':
-        'شغل الصوت %snd وانتظر انتهاءه',
+        'أنتهـاءة إنتظر ثم %snd الصـوت شغّـل',
     'stop all sounds':
-        'أوقف جميع الاصوات',
+        'الأصوات جميع أوقف',
     'rest for %n beats':
-        'استرح لمدة %n وحدة ايقاع',
+        'إقـاع وحدة %n لمدة إستـرح',
     'play note %n for %n beats':
-        ' اعزف النوته  %n لمدة %n وحدة ايقاع',
+        ' %n رقـم النوتـة أعزف ، إيـقاع وحـدة %n بمقدار',
     'change tempo by %n':
-        'غير شده الصوت بمقدار %n',
+        '%n بمقـدار الصوت شـدّة غيّـر',
     'set tempo to %n bpm':
-        'اجعل شدة الصوت مساوية %n',
+        '%n مسـاوية الصوت شدّة إجعل',
     'tempo':
-        'شدة الصوت',
+        'الصوت شدّة مقـدار',
 
     // pen:
     'clear':
         'امسح',
     'pen down':
-        'انزل القلم',
+        'القلـم أنـزل',
     'pen up':
-        'ارفع القلم',
+        'القلـم إرفـع',
     'set pen color to %clr':
-        'اجعل لون القلم مساويا لـ %clr',
+        ' %clr لـ مسـاوياً القلم لون إجعل',
     'change pen color by %n':
-        'غير لون القلم بمقدار %n',
+        ' %n بمقدار القلم لون غيّـر',
     'set pen color to %n':
-        'اجعل لون القلم مساويا لـ %n',
+        ' %n تسـاوي القلم لـون قيمة إجعـل',
     'change pen shade by %n':
-        'غير تظليل القلم بمقدار %n',
+        '%n بمقدار القلم لون (تعتيم/سطوع) درجة غيّر',
     'set pen shade to %n':
-        'اجعل تظليل القلم مساويا لـ %n',
+        '%n تساوي القلم لون (تعتيم/سطوع) درجة إجعل',
     'change pen size by %n':
-        'غير حجم القلم بمقدار %n',
+        '%n بمقدار القلم حجـم غيّـر',
     'set pen size to %n':
-        ' اجعل حجم القلم مساويا لـ %n',
+        ' %n لـ مساوياً (حجم/سُـمك)القلـم إجعل',
     'stamp':
         'اطبع',
 
     // control:
     'when %greenflag clicked':
-        'عند نقر %greenflag ',
+        'الأخضر العـَلم %greenflag نقر عنـد',
     'when %keyHat key pressed':
-        'عند ضغط مفتاح %keyHat ',
+        '%keyHat مفتـاح ضغط عند',
     'when I am %interaction':
-        'عندما اكون %interaction ',
+        'الفـأرة مـؤشْـر %interaction لـ أتعرض عندما',
     'clicked':
-        'عند نقر هذا الكائن',
+        'نقـر',
     'pressed':
-        'عند ضغط الكائن',
+        'ضغـط',
     'dropped':
-        'عند  افلات الكائن',
+        'الإفـلات_من',
     'mouse-entered':
-        'عند دخول الفأرة حيز الكائن',
+        'دخـول',
     'mouse-departed':
-        'عند خروج الفأرة من حيز الكائن',
+        'مغـادرة',
+    'when %b':
+        '%b عندما',
     'when I receive %msgHat':
-        'عندما استقبل رسالة %msgHat ',
+        '%msgHat رسـالة أستقبال عند',
     'broadcast %msg':
-        ' بث %msg ',
+        '  %msg بث',
     'broadcast %msg and wait':
-        ' بث و انتظر %msg ',
+        'إنتظـر ثم %msg بِـث',
     'Message name':
         'اسم الرسالة',
     'message':
@@ -442,93 +444,93 @@ SnapTranslator.dict.ar = {
     'any message':
         'اي رسالة',
     'wait %n secs':
-        ' انتظر لـ %n ث',
+        ' %n لـ إنتظـر',
     'wait until %b':
-        'انتظر حتي %b',
+        '%b الشرط يتحقق حتي إنتظر',
     'forever %c':
-        'كرر باستمرار %c',
+        'باستمرار كرر %c',
     'repeat %n %c':
-        'كرر %n %c',
+        ' %n كرر %c',
     'repeat until %b %c':
-        'كرر حتي %b %c',
+        '%b حتي كرر %c',
     'if %b %c':
-        'اذا %b %c',
+        ' %b اذا %c',
     'if %b %c else %c':
-        'اذا %b %c وإلا %c',
+        '%b اذا %c وإلا %c',
     'report %s':
-        'berichte %s',
+        '%s وَضِّـح',
     'stop %stopChoices':
-        'اوقف %stopChoices',
+        '%stopChoices اوقف',
     'all':
         'الكل',
     'this script':
-        'هذا المقطع البرمجي',
+        'هذا_المقطع_البرمجي',
     'this block':
-        'هذا البلوك',
+        'هذا_البلوك',
     'stop %stopOthersChoices':
-        'stoppe %stopOthersChoices',
+        '%stopOthersChoices أوقف',
     'all but this script':
-        'الكل باثتثناء هذا المقطع',
+        'كل_المقاطع_البرمجيه_للكائنات_عدا_هذا_المقطع',
     'other scripts in sprite':
-        'المقاطع الاخري في هذا الكائن',
+        'كل_المقاطع_البرمجية_للكائن_عدا_هذا_المقطع',
     'pause all %pause':
-        ' ايقاف الكل مؤقتا %pause',
+        '%pause مـؤقتاً التنفيذ أوقف',
     'run %cmdRing %inputs':
-        'تشغيل %cmdRing  مع مدخلات %inputs',
+        'نفّذ %cmdRing  %inputs',
     'launch %cmdRing %inputs':
-        'تلقيم %cmdRing مع مدخلات %inputs',
+        'شغّل %cmdRing %inputs',
     'call %repRing %inputs':
-        'استدعاء %repRing مع مدخلات %inputs',
+        'إستدع %repRing  %inputs',
     'run %cmdRing w/continuation':
-        'شغل %cmdRing باستمرار',
+        'نفّذ %cmdRing (الفاعلية استمرار بقاء مع)',
     'call %cmdRing w/continuation':
-        'استدع %cmdRing باستمرار',
+        'استدع %cmdRing (الفاعلية استمرار بقاء مع)',
     'warp %c':
-        'Warp %c',
+        'تسريع %c',
     'when I start as a clone':
-        'عندما تبدأ نسخة مني',
+        'مطابقة كنسخةٌ أبدأ عندما',
     'create a clone of %cln':
-        ' انشئ نسخه مني %cln',
+        '%cln من أستنسـاخاً أنشئ',
     'myself':
-        'انا',
+        'نفسي',
     'delete this clone':
-        'احذف هذه النسخة',
+        'الإستنساخ هذا إحذف',
 
     // sensing:
     'touching %col ?':
-        'ملامس لـ %col ?',
+        '؟ %col لـ ملامس هـل ',
     'touching %clr ?':
-        'ملامس للون %clr ?',
+        '؟ %clr لـ ملامس هـل',
     'color %clr is touching %clr ?':
-        'اللون %clr لامس اللون %clr ?',
+        '؟ %clr اللون ملامس %clr اللون هل',
     'ask %s and wait':
-        'اسأل و انتظر %s ',
+        '%s اسأل و انتظر ',
     'what\'s your name?':
-        'ما هو اسمك؟?',
+        '؟ إسمك هـو مـا',
     'answer':
         'الاجابة',
     'mouse x':
-        'الموضع س للفأرة',
+        'للفأرة س الموضع',
     'mouse y':
-        'الموضع ص للفأره',
+        'للفأرة ص الموضع',
     'mouse down?':
-        'زر الفأره الايسر مضغوط?',
+        '؟ مضغوط الايسر الفأرة زر هل',
     'key %key pressed?':
-        'المفتاح %key مضغوط?',
+        '؟ مضغوط %key  المفتاح هل',
     'distance to %dst':
-        'المسافة الي %dst',
+        ' %dst إلي المسـافة',
     'reset timer':
-        'صفر المؤقت',
+        'المؤقت تعيين إعـادة',
     'timer':
         'المؤقت',
     '%att of %spr':
-        '%att علي %spr',
+        '؟ %att قيمة ما %spr للكائن',
     'http:// %s':
         'http:// %s',
     'turbo mode?':
-        'الوضع السريع?',
+        '؟ التوربو وضع في التشغيل هل',
     'set turbo mode to %b':
-        'اضبط الوضع السريع لـ %b',
+        '%b التوربو وضـع تفعيل ',
     'filtered for %clr':
         'خلال هذه الفتره %clr gefiltert',
     'stack size':
@@ -538,13 +540,13 @@ SnapTranslator.dict.ar = {
 
     // operators:
     '%n mod %n':
-        '%n باقي قسمة %n',
+        '%n للرقم %n علي القسمة باقي',
     'round %n':
-        '%n قرب',
+        'صحيح لعدد %n قَرّب',
     '%fun of %n':
-        '%fun للقيمة %n',
+        '%fun قيمة إحسب %n للعدد',
     'pick random %n to %n':
-        'اختر عدد عشوائي بين %n و %n',
+        ' %n و %n بين عشوائي عدد إختر',
     '%b and %b':
         '%b و %b',
     '%b or %b':
@@ -552,29 +554,29 @@ SnapTranslator.dict.ar = {
     'not %b':
         'ليس %b',
     'true':
-        'صحيح منطقيا',
+        ' صحيح ',
     'false':
-        'خطأ منطقيا',
+        ' خـطأً ',
     'join %words':
-        'أربط %words',
+        '%words يلي مـا أَوصـل ',
     'split %s by %delim':
-        'قسم %s علي مستوي %delim',
+        '%s جـَزَّء ،كفواصل %delim بإستخدام',
     'hello':
         'مرحبا',
     'world':
         'ايها العالم',
     'letter %n of %s':
-        'الحرف %n من %s',
+        '%n الحرف أوجد %s العبارة من',
     'length of %s':
-        'طول  %s',
+        '%s أحرف عدد',
     'unicode of %s':
-        'قيمة ترميز يونيكود لـ %s',
+        ' %s للحرف يونيكود ترميز قيمة',
     'unicode %n as letter':
-        'الحرف المقابل لقيمة الترميز %n هو',
+        ' %n يونيكود لترميز المقابل الحرف ',
     'is %s a %typ ?':
-        'هل %s من النوع %typ ?',
+        '%s يوافق %typ النوع',
     'is %s identical to %s ?':
-        'هل %s مشابه لـ %s ?',
+        '؟ %s مع متماثل %s هل',
     'type of %s':
         'من نوع %s',
 
@@ -588,43 +590,43 @@ SnapTranslator.dict.ar = {
     'Delete a variable':
         'احذف متغيرا',
     'set %var to %s':
-        ' اجعل قيمة %var تساوى %s',
+        '%var للمتغيّر %s القيمة خصص',
     'change %var by %n':
-        'غير قيمة المتغير %var  بمقدار %n',
+        ' %var المتغير قيمة %n بمقدار غيّـر',
     'show variable %var':
-        'اظهر المتغير %var',
+        ' %var المُتَغيّر أظهـِر',
     'hide variable %var':
-        'اخف المتغير %var',
+        ' %var المُتَغيّر أخفِ',
     'script variables %scriptVars':
-        'متغيرات هذا الاسكربت %scriptVars',
+        '%scriptVars مَحَلْي مُتَغَيِّر',
 
     // lists:
     'list %exp':
-        'القائمة %exp',
+        '%exp المصفوفة',
     '%s in front of %l':
-        ' في الموقع %s ادرج %l من',
+        '%s ادرج %l بداية في',
     'item %idx of %l':
-        ' العنصر %idx من %l',
+        '%idx العنصر أظهـِر %l في',
     'all but first of %l':
-        'الكل باثتثناء الاول من %l',
+        'الأول عـدا الكل أظهـِر %l في',
     'length of %l':
-        ' طول  %l',
+        '%l عناصر عدد',
     '%l contains %s':
-        '%l يحتوى %s',
+        '%l محتويات ضمن %s القيمة',
     'thing':
         'شيئ',
     'add %s to %l':
-        'أضف %s الي %l ',
+        '%s القيمة %l في أَدْرِج',
     'delete %ida of %l':
-        'احذف %ida من %l',
+        '%ida العنصر احذف %l من',
     'insert %s at %idx of %l':
-        'ادرج %s فى الموضع %idx ضمن %l',
+        '%s القيمة %idx بالموضع %l في أَدْرِج',
     'replace item %idx of %l with %s':
-        ' استبدل قيمة العنصر ذو الترتيب %idx من %l بالقيمة %s',
+        ' %idx العنصر بدل %l المصفوفة في %s القيمة ضـع',
 
     // other
     'Make a block':
-        'انشاء لبنة',
+        'إنشاء لبنة مخصصة',
 
      // menus
     // snap menu
@@ -649,7 +651,7 @@ SnapTranslator.dict.ar = {
     'Project notes...':
         'ملاحظات عن المشروع...',
     'New':
-        'القوائم',
+        'جديد',
     'Open...':
         'فتح...',
     'Save':
@@ -657,9 +659,9 @@ SnapTranslator.dict.ar = {
     'Save to disk':
         'حفظ في المستعرض',
     'store this project\nin the downloads folder\n(in supporting browsers)':
-        'حفظ المشروع فى مجلد التنزيلاتالخاص بالمتصفح المحدد',
+        'حفظ المشروع فى مجلد التنزيلات الخاص بالمتصفح المحدد',
     'Save As...':
-        'حفظ بأسم جديد...',
+        'حفظ بأسم ...',
     'Import...':
         'استيراد...',
     'file menu import hint':
@@ -669,15 +671,42 @@ SnapTranslator.dict.ar = {
     'Export project...':
         'تصدير المشروع...',
     'show project data as XML\nin a new browser window':
-        'عرض المشروع فى شكل XML',
+        'عرض المشروع في صيغة XML',
     'Export blocks...':
         'تصدير اللبنات...',
     'show global custom block definitions as XML\nin a new browser window':
-        'عرض جميع اللبنات المخصصة في شكل XML',
-    'Import tools':
+        'عرض جميع اللبنات المخصصة في صيغة XML',
+		
+	'Unused blocks...':
+          'لبنات غير مستخدمة...',
+    'find unused global custom blocks\nand remove their definitions':
+        'إيجاد اللبنات المخصصة الغير مستخدمة لحذفها من المشروع',
+    'Remove unused blocks':
+        'حذف اللبنات المخصصة الغير مستخدمة',
+    'there are currently no unused\nglobal custom blocks in this project':
+        'لايوجد لبنات مخصصة غير مستخدمة في هذا المشروع',
+    'unused block(s) removed':
+        'تم ازالة اللبنات الغير مستخدمة',
+    'Export summary...':
+        'تصدير ملخص المشروع...',
+    'open a new browser browser window\n with a summary of this project':
+        'عرض ملخص المشروع فى نافذة مستعرض جديدة',
+    'Contents':
+        'محتويات',
+    'Kind of':
+        'نوع من أنواع',
+    'Part of':
+        'جزء من',
+    'Parts':
+        'أجزاء',
+    'Blocks':
+        'بلوكات',
+    'For all Sprites':
+        'لكل الكائنات',
+	'Import tools':
         'استيراد أدوات',
     'load the official library of\npowerful blocks':
-        'تحميل المكتبة اللبنات الرسمية لمزيد من التحكم',
+        'تحميل مكتبة اللبنات الرسمية لمزيد من التحكم',
     'Libraries...':
         'المكتبات...',
     'Import library':
@@ -703,7 +732,7 @@ SnapTranslator.dict.ar = {
     'Default':
         'افتراضى',
     'Blurred shadows':
-        'ظلال ضبابية',
+        'ظلال شبه شفافة',
     'uncheck to use solid drop\nshadows and highlights':
         'ازل لاستخدام الظلال المعتمة',
     'check to use blurred drop\nshadows and highlights':
@@ -713,7 +742,7 @@ SnapTranslator.dict.ar = {
     'check to enable alternating\ncolors for nested blocks':
         'حدد لتفعيل اختيار الوان\n متبادلة للبلوكات المتداخلة',
     'uncheck to disable alternating\ncolors for nested block':
-        'ازل لعدملتفعيل اختيار الوان\n متبادلة للبلوكات المتداخلة ',
+        'ازل لعدم لتفعيل اختيار الوان\n متبادلة للبلوكات المتداخلة ',
     'Dynamic input labels':
         'بطاقات الادخال الديناميكية',
     'uncheck to disable dynamic\nlabels for variadic inputs':
@@ -727,24 +756,23 @@ SnapTranslator.dict.ar = {
     'uncheck to allow dropped\nreporters to kick out others':
         'uncheck to allow dropped\nreporters to kick out others',
     'Long form input dialog':
-        'Long form input dialog',
+        'صندوق حوار تفصيلي لتعريف المدخلات',
     'Plain prototype labels':
-        'Plain prototype labels',
+        'تسميات عادية لنماذج البلوكات',
     'uncheck to always show (+) symbols\nin block prototype labels':
-        'uncheck to always show (+) symbols\nin block prototype labels',
+        'ازل التحديد لاظهار (+) \n في تسمسة نموذج البلوك',
     'check to hide (+) symbols\nin block prototype labels':
-        'check to hide (+) symbols\nin block prototype labels',
+        'حدد لأخفاء (+) \n من تسمسة نموذج البلوك',
     'check to always show slot\ntypes in the input dialog':
-        'check to always show slot\ntypes in the input dialog',
+        'حدد حتي تظهر دائما\n تصنيف بيانات الادخال \n في صندوق حوار تعريف المدخلات',
     'uncheck to use the input\ndialog in short form':
-        'uncheck to use the input\ndialog in short form',
+        'ازل التحديد لاستخدام صندوق الحوار المبسط لتعريف المدخلات',
     'Virtual keyboard':
         'لوحة المفاتيح الافتراضية',
     'uncheck to disable\nvirtual keyboard support\nfor mobile devices':
-        'ازل لالغاء تفعيل لوحة المفاتيح الافتراضية لاجهزة المحمول',
+        'ازل لالغاء تفعيل لوحة المفاتيح الافتراضية للاجهزة اللوحية',
     'check to enable\nvirtual keyboard support\nfor mobile devices':
-        'einschalten um die virtuelle\nTastatur auf mobilen Ger\u00e4ten\n'
-            + 'zu erm\u00f6glichen',
+        'حدد لتفعيل لوحة المفاتيح الافتراضية للاجهزة اللوحية',
     'Input sliders':
         'ألواح الأدخال',
     'uncheck to disable\ninput sliders for\nentry fields':
@@ -769,6 +797,10 @@ SnapTranslator.dict.ar = {
         'أزل, ليتم تنفيذ\n الاسكربت بالسرعة العادية',
     'check to enable\nIDE animations':
         'حدد لتشغيل المؤثرات IDE-\nالحركية',
+	'Flat design':
+        'تصميم مُصطَّح بسيط',
+    'Keyboard Editing':
+        'دعم لوحة المفاتيح',
     'Thread safe scripts':
         'تأمين الاسكربتات',
     'uncheck to allow\nscript reentrance':
@@ -776,9 +808,9 @@ SnapTranslator.dict.ar = {
     'check to disallow\nscript reentrance':
         'حدد, لمنع\n الاسكربت من اعادة الدخول',
     'Prefer smooth animations':
-        'أطارات  الحركه',
+        'الرسوم المتحركة على نحو سلس',
     'uncheck for greater speed\nat variable frame rates':
-        'أزل للحصول علي سرعه اعلي\nمع نسبة اطارات متغيره',
+        'أزل للحصول علي سرعه اعلي\nمع معدلات تتبابع اطارات متغيره',
     'check for smooth, predictable\nanimations across computers':
         'حدد للحصول على\nحركة ناعمة',
     'Flat line ends':
@@ -787,16 +819,22 @@ SnapTranslator.dict.ar = {
         'حدد لجعل نهايات الخطوط\n قائمة الزاوية',
     'uncheck for round ends of lines':
         'أزل لجعل نهايات الخطوط \nدائرية',
+    'Inheritance support':
+        ' توريث الخصائص بين الكائنات',
+	'uncheck to disable\nsprite inheritance features':
+        'أزل لألغاء تفعيل توريث الخصائص بين الكائنات',
+    'check for sprite\ninheritance features':
+        'حدد لتفعيل توريث الخصائص بين الكائنات',
 
     // inputs
     'with inputs':
-        'mit Eingaben',
+        'مستخدماً القيم التالية',
     'input names:':
-        'Eingaben:',
+        'مع المدخلات',
     'Input Names:':
-        'Eingaben:',
+        'أسماء المدخلات',
     'input list:':
-        'Eingabeliste:',
+        'قائمة المدخلات',
 
     // context menus:
     'help':
@@ -804,9 +842,9 @@ SnapTranslator.dict.ar = {
 
     // palette:
     'hide primitives':
-        'اخفاءprimitives',
+        'أخفاء اللبنات',
     'show primitives':
-        'أظهار primitivesال',
+        'إظهار اللبنات',
 
     // blocks:
     'help...':
@@ -822,7 +860,7 @@ SnapTranslator.dict.ar = {
     'delete':
         'حذف',
     'script pic...':
-        'script pic...',
+        'صورة نقطية للبلوك...',
     'open a new window\nwith a picture of this script':
         'افتح نافذه جديده و اعرض النص البرمجي خلالها',
     'ringify':
@@ -858,9 +896,9 @@ SnapTranslator.dict.ar = {
 
     // scripting area
     'clean up':
-        'مسح',
+        'محاذاة اللبنات',
     'arrange scripts\nvertically':
-        'محاذا البلوكات عموديا',
+        'محاذا اللبنات عموديا',
     'add comment':
         'اضافة تعليق',
     'undrop':
@@ -868,11 +906,11 @@ SnapTranslator.dict.ar = {
     'undo the last\nblock drop\nin this pane':
         'تراجع عن الافلات الاخير للبلوك',
     'scripts pic...':
-        'صور الاسكربت...',
+        'تصوير لقطة من الاسكربت...',
     'open a new window\nwith a picture of all scripts':
         'فتح نافذه جديده\n مع صورة لجميع الاسكربتات',
     'make a block...':
-        'اصنع بلوك...',
+        'أنشئ لَبِـنَة جديدة...',
 
     // costumes
     'rename':
@@ -915,11 +953,11 @@ SnapTranslator.dict.ar = {
     'Zoom blocks':
         'حجم اللبنات',
     'build':
-        'build',
+        ' لَبِناتِك إصنع',
     'your own':
-        'اغراضك',
+        'الخاصة',
     'blocks':
-        'لبنات',
+        'بنفسك',
     'normal (1x)':
         'عادي (1x)',
     'demo (1.2x)':
@@ -928,14 +966,14 @@ SnapTranslator.dict.ar = {
         'استعراضي (1.4x)',
     'big (2x)':
         'كبير (2x)',
-    'كبير (4x)':
+    'huge (4x)':
         'ضخم (4x)',
-    'عملاق (8x)':
-        'gigantisch (8x)',
+    'giant (8x)':
+        'عملاق (8x)',
     'monstrous (10x)':
         'عملاق جدا (10x)',
-
-    // Project Manager
+ 
+ // Project Manager
     'Untitled':
         'بدون عنوان',
     'Open Project':
@@ -953,9 +991,9 @@ SnapTranslator.dict.ar = {
 
     // costume editor
     'Costume Editor':
-        'محرر المخصصات',
+        'محرر المظاهر',
     'click or drag crosshairs to move the rotation center':
-        'انقر أو اسحب مرمى لنقل مركز دوران',
+        'انقر أو اسحب علامة المركز لنقل مركز دوران الكائن',
 
     // project notes
     'Project Notes':
@@ -965,7 +1003,7 @@ SnapTranslator.dict.ar = {
     'New Project':
         'مشروع جديد',
     'Replace the current project with a new one?':
-        'Dاستبدال المشروع الحالي بأخر جديد?',
+        'استبدال المشروع الحالي بأخر جديد?',
 
     // save project
     'Save Project As...':
@@ -977,7 +1015,7 @@ SnapTranslator.dict.ar = {
     'Import blocks':
         'استيراد البلوكات',
     'this project doesn\'t have any\ncustom global blocks yet':
-        'هذا المشروع خالي من  global blocks ',
+        'هذا المشروع لا يحتوى علي بلوكات مخصصة ',
     'select':
         'حدد',
     'none':
@@ -985,7 +1023,7 @@ SnapTranslator.dict.ar = {
 
     // variable dialog
     'for all sprites':
-        'لكل المشروع',
+        'لجميع الكائنات',
     'for this sprite only':
         'لهذا الكائن فقط',
 
@@ -995,9 +1033,9 @@ SnapTranslator.dict.ar = {
     'Command':
         'امر',
     'Reporter':
-        'Reporter',
+        'Reporter مُقَرِرات',
     'Predicate':
-        'Predicate الاسنادات',
+        'Predicate اسنادات تأكيدية',
 
     // block editor
     'Block Editor':
@@ -1009,19 +1047,19 @@ SnapTranslator.dict.ar = {
     'Delete Custom Block':
         'حذف بلوك مخصص',
     'block deletion dialog text':
-        'حذف بلوك مخصص',
+        'هل تريد حقا حذف هذه الكتلة مع جميع النسخ منها',
 
     // input dialog
     'Create input name':
-        'Create input name',
+        'إنشاء تسمية لمُدخَل جديد',
     'Edit input name':
-        'Edit input name',
+        'تعديل تسمية مُدخَل',
     'Edit label fragment':
         'Edit label fragment',
     'Title text':
         'نص العنوان',
     'Input name':
-        'ادخل الاسم',
+        'أسم المُدخَل',
     'Delete':
         'حذف',
     'Object':
@@ -1037,21 +1075,21 @@ SnapTranslator.dict.ar = {
     'Boolean (T/F)':
         'منطقي (W/F)',
     'Command\n(inline)':
-        'inline',
+        'لبنة مستطيلة الشكل',
     'Command\n(C-shape)':
-        'Command\n(C-Form)',
+        'لبنة هلالية الشكل',
     'Any\n(unevaluated)':
-        'اي\n(غير مقيم)',
+        'أي نوع\n(خام لم يُقَيَّم)',
     'Boolean\n(unevaluated)':
-        'منطقي\n(غير مقيم)',
+        'منطقي\n(خام لم يُقَيَّم)',
     'Single input.':
         'ادخال مفرد.',
     'Default Value:':
         'القيمة الافتراضية:',
     'Multiple inputs (value is list of inputs)':
-        'متعدد الادخالات (A LIST)',
+        'متعدد الادخالات (عبارة عن لائحة او مصفوفة من المدخلات)',
     'Upvar - make internal variable visible to caller':
-        'Upvar - اجعل متغير الفترات مرئي بالنسبة callerلل',
+        'Upvar - اجعل المتغيرات الداخلية مرئية بواسطة المُستَدعي',
 
     // About Snap
     'About Snap':
@@ -1071,7 +1109,7 @@ SnapTranslator.dict.ar = {
     'current module versions:':
         'الاصدار الحالي',
     'Contributors':
-        'المساهمين',
+        'المساهمون',
     'Translations':
         'المترجمون',
 
@@ -1114,11 +1152,11 @@ SnapTranslator.dict.ar = {
 
     // collision detection
     'mouse-pointer':
-        'مؤشر الفأرة',
+        'مؤشر_الفأرة',
     'edge':
         'الحافة',
     'pen trails':
-        'اثار القلم',
+        'اثار_القلم',
 
     // costumes
     'Turtle':
@@ -1142,13 +1180,13 @@ SnapTranslator.dict.ar = {
     'space':
         'المسافه',
     'up arrow':
-        'السهم لاعلي',
+        'السهم العلوي',
     'down arrow':
-        'السهم لاسفل',
+        'السهم السفلي',
     'right arrow':
-        'السهم لليمين',
+        'السهم الايمن',
     'left arrow':
-        'السهم لليسار',
+        'السهم الايسر',
     'a':
         'a',
     'b':
@@ -1252,15 +1290,15 @@ SnapTranslator.dict.ar = {
 
     // delimiters
     'letter':
-        'حروف',
+        'الحروف',
     'whitespace':
-        'مسافة فارغة',
+        'الفراغات_البينية',
     'line':
-        'سطر',
+        'علامات_الأسطر',
     'tab':
-        'مسافة بادئة',
+        'المسافات_البادئة',
     'cr':
-        'انتر',
+        'أكتب_ما_تريد',
 
     // data types
     'number':
@@ -1270,17 +1308,91 @@ SnapTranslator.dict.ar = {
     'Boolean':
         'منطقي',
     'list':
-        'لائحة',
+        'مصفوفة',
     'command':
-        'امر',
+        'لبنات_اجرائية',
     'reporter':
-        'reporter',
+        'لبنات_تقريرية',
     'predicate':
-        'predicate',
+        'لبنات_تأكيدية',
 
     // list indices
     'last':
         'الاخير',
     'any':
-        'أي'
+        'أي موضع',
+		
+		
+		// miscellaneous
+	'find blocks...':
+		'البحث عن لبنة...',
+	
+	'Reset Password...':
+		'إعادة تعيين كلمة المرور',
+	
+	'Codification support':
+		'مساعد التكويد',
+	'uncheck to disable\nblock to text mapping features':
+		'أزل التحديد لألغاء مساعد التكويد',
+	'check for block\nto text mapping features':
+		'حَدد لتفعيل مساعد التكويد',
+	'current %dates':
+		'التاريخ الحالي %dates',
+	'year':'سنة',
+	'month':'شهر',
+	'date':'يوم',
+	'hour':'ساعة',
+	'minute':'دقيقة',
+	'second':'ثانية',
+	'time in milliseconds':
+		'ملي_ثانية',
+	'day of week':
+		'ترتيب_اليوم_في_الاسبوع',
+
+	'JavaScript function ( %mult%s ) { %code }':
+		' ( %mult%s ) { %code } جافاسكربت دالة',
+
+
+	// Copy / Paste
+	'Press CTRL+C one more time to effectively copy to clipboard.':
+		'إضغط CTRL+C مرة أخري لتأكيد نسخ محتويات الحافظة.',
+	'Press CTRL+V one more time to effectively paste from clipboard.':
+		'إضغط CTRL+V مرة أخري لتأكيد لصق محتويات الحافظة.',
+	'Press CTRL+X one more time to effectively cut to clipboard.':
+		'إضغط CTRL+X مرة أخري لتأكيد لصق محتويات الحافظة.',
+
+	// Paint.js
+	'undo':'تراجع',
+	'Paintbrush tool\n(free draw)':
+		'اداة الرسم الحر',
+	'Stroked Rectangle\n(shift: square)':
+		'اداة رسم المستطيل',
+	'Stroked Ellipse\n(shift: circle)':
+		'اداة رسم الشكل البيضاوى',
+	'Eraser tool':
+		'اداة الممحاة',
+	'Set the rotation center':
+		'ضبط مركز الدوران',
+	'Line tool\n(shift: vertical/horizontal)':
+		'اداة رسم الخط المستقيم رأسيا أو أفقيا',
+	'Filled Rectangle\n(shift: square)':
+		'أداة رسم مستطيل ممتلئ بالون محدد',
+	'Filled Ellipse\n(shift: circle)':
+		'أداة رسم شكل بيضاوى ممتلئ بلون محدد',
+	'Fill a region':
+		'أداة الملئ بالون',
+	'Pipette tool\n(pick a color anywhere)':
+		'أداة إلتقاط الألوان',
+	'grow':'تكبير',
+	'shrink':'تصغير',
+	'flip \u2194':
+		'إنعكاس \u2194',
+	'flip \u2195':
+		'إنعكاس \u2195',
+	'Brush size':
+		'حجم الفرشـاة',
+	'Constrain proportions of shapes?\n(you can also hold shift)':
+		'تأمين نسبة الأرتفاع الي العرض?\n(يمكنك ايضا استخدام مفتاح Shift)'
+
+
 };

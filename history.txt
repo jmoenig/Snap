@@ -2834,3 +2834,255 @@ end - bulk of 151215
 151223
 ------
 * Morphic: fixed #1083
+
+160108
+------
+* BYOB: fixed #1098
+* Threads: remove a redundant yield from the fork primitive
+* GUI: fixed #1099, thanks, Michael!
+* Portuguese translation update, thanks, Manuel!
+
+160111
+------
+* BYOB: fixed #1107
+
+160116
+------
+* Blocks: fixed a multi-line input slot layout glitch
+
+160117
+------
+* BYOB: preserve custom block instances’ block var values when editing their definition
+
+160118
+------
+* Paint: avoid pixel collision detection in PaintCanvas (optimization)
+* BYOB: fixed a zebra coloring glitch in the block editor
+
+160119
+------
+* Threads, Store: Throw an error for “obsolete” blocks instead of (forever) doing nothing (and thus often freezing and crashing). Thanks, Paul, for helping identify this!
+
+160122
+------
+* Blocks: Fixed a slight rendering glitch when deleting reporters via the context menu
+
+160224
+------
+* == v4.0.5 ==== - table views
+
+160306
+------
+* Objects: Reenable custom hat blocks when dropping a sprite
+
+160316
+------
+* Store, Objects, GUI: fixed #99 (saving linked lists)
+* Objects: fixed #1163
+* added web api / https reporter library
+* Blocks, Store: New “transient variable” feature
+* German translation update
+
+== v4.0.6 ==== - saving linked lists
+
+160502
+------
+* first class sprites, new MY reporter block and extended functionality of TOUCHING
+* fixed switching from list watcher to table view inside sprite speech bubbles
+* fixed paint editor automatic rotation center issue
+* enhanced functionality to SET a sprite’s attributes
+* execute clone initialization scripts’ first step in the same frame as the clone command
+* auto-repair (sorta) certain broken project files
+* Threads: More aggressive emergency yielding
+* “corpsify” deleted sprites, which might still be referred to by variables and lists
+* Blocks: simplify block copying
+* experimental hidden “live-coding support” preference
+* updated penTrails library to shrinkWrap generated costumes
+
+
+demos from the documentation:
+http://snap.berkeley.edu/run#cloud:Username=jens&ProjectName=population
+http://snap.berkeley.edu/run#present:Username=jens&ProjectName=Woodworm
+http://snap.berkeley.edu/run#present:Username=jens&ProjectName=Ferris%20Wheel%202016
+http://snap.berkeley.edu/run#cloud:Username=jens&ProjectName=PathFollower
+http://snap.berkeley.edu/run#present:Username=jens&ProjectName=cartwheel
+http://snap.berkeley.edu/run#cloud:Username=jens&ProjectName=rotation
+
+* new Indonesian translation. Yay!! Thank you, Alexander Liu!!
+* Translation updates: Slovenian, Portuguese, Chinese
+* minor bug fixes
+
+== v4.0.7 ==== - first class sprites
+
+160504
+------
+* Morphic, Objects, Blocks, Threads, GUI: Partially shallow-copy clones for speed
+* new Estonian translation! Yay!! Thanks, Hasso Tepper!
+
+== v4.0.7.1 ==== - cloning speed-up
+
+160509
+------
+* Threads: fixed #1212 - Null continuation doesn't escape from calling context.
+* Updated Simplified Chinese translation, thanks to @ubertao!
+* Media import dialog with thumbnail, thanks to @ubertao!
+
+== v4.0.7.2 ==== 
+
+160714
+------
+* New Features
+  - Retina Display Support, thanks, Bartosz Leper!!
+  - Additional Graphic Effects, thanks, Dylan Servilla!!
+  - Interactive Toggle Switches for Boolean Slots and Literals
+  - Resizable Palette (double-click on resizers to slide back to normal)
+
+* New Default Settings (now enabled by default)
+  - Keyboard Editing
+  - Tables Support
+
+* Bugfixes (most notable only):
+  - reject dropping hat-blocks into block editor scripting areas
+  - accept multi-line inputs (e.g. in JS-functions or code-mapping blocks) with shift-enter
+  - prevent “make a block” dialog from being closed by pressing “OK” if no label text has been specified
+  - show error message balloons happening in other sprites next to their icon in the sprite-corral
+  - (again) enable recursive cloning
+  - prevent expandable blocks from expanding / collapsing inside the palette
+
+* Translation updates
+  - Italian
+  - Swedish
+  - Chinese
+  - Russian
+  - Catalan
+  - German
+
+== v4.0.8 ==== - retina screen support -
+
+160715
+------
+* Blocks: activate generic hat blocks inserted via keyboard editing
+
+== v4.0.8.1 ====
+
+160717
+------
+* Morphic: fixed collision detection for non-integer devicePixelRatios
+
+== v4.0.8.2 ====
+
+160719
+------
+* Morphic: avoid blitting artifacts for non-integer devicePixelRatios in Firefox
+* Widgets: fixed 3D corners for buttons in Firefox for Windows
+* Objects: fixed color collision detection for retina mode
+* Threads: enable broadcasts to be sent to specific sprites (experimental)
+
+== v4.0.8.3 ====
+
+160720
+------
+* GUI: fixed #1333 - paint a new costume not working in retina mode in FF and Edge
+
+== v4.0.8.4 ====
+
+160731
+------
+* GUI: fixed #1348 - opening projects from url not working in non-English
+
+== v4.0.8.5 ====
+
+160803
+------
+* Store: restore implicit formal parameters for serialized lambdas
+
+== v4.0.8.6 ====
+
+160812
+------
+* Threads: for hidden sprites display ASK questions in the input box
+* Morphic: replace deprecated KeyboardEvent.keyIdentifier with .key
+
+== v4.0.8.7 ====
+
+*** in development ***
+
+160915
+------
+* new single stepping feature (like Scratch 1.4) with flashing blocks
+* slider for single-stepping speed
+* pausing now flashes the currently active blocks
+
+160916
+------
+* enable single stepping for clone-scripts w. multiple blocks flashing per script
+* enable single stepping for custom block definitions
+* Objects: fixed #1410 (duplicating a sprite does not duplicate its sounds)
+
+160918
+------
+* Treat single-stepping as thread safe (reverted on 160923)
+* Allow user to trigger one step at a time, both in normal and single-stepping mode
+
+160919
+------
+* new “stepForward” symbol
+* dragging the single-step speed slider all the way to the left turns the “resume” side of the “pause” button into “stepForward”
+
+160920
+------
+* atomic synching of single-stepping
+
+160921
+------
+* remove shift-click-to-forward-one-frame option for the “resume” button
+
+160922
+------
+* renamed “single stepping” to “visible stepping”, thanks, Brian!
+* updated German translation
+
+160923
+------
+* custom block execution: only yield if directly recursive and unwrapped (“speed up”)
+* new feature: “wait 0” or “wait <empty>” now yields once, unless warped
+* revert treating visual stepping as thread safe, because of music scheduling
+
+160924
+------
+* don’t update the recursion cache when updating a custom block definition 
+
+160929
+------
+* Objects: fixed #1437
+
+161007
+------
+* Blocks: [Keyboard-Entry] if an inserted block has inputs, go to the first one
+
+161010
+------
+* Morphic: configure autoscrolling
+* GUI: suppress autoscrolling for the palette and the project dialog
+
+161011
+------
+* Blocks: make sure to fix multi-args when deleting a custom reporter definition
+
+161011
+------
+* Objects: fixed #1456 (collect message names from all scripts, including custom block definitions)
+
+161020
+------
+* Blocks: Tweak Keyboard-Entry
+
+161021
+------
+* Threads: Fixed #1422
+
+161024
+------
+* Text Editing Tweaks, thanks, Bernat!!
+* Store: fixed #1472
+* Trheads: Tweak continuations

@@ -6,7 +6,7 @@
 
     written by Jens Mönig
 
-    Copyright (C) 2015 by Jens Mönig
+    Copyright (C) 2016 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -42,7 +42,7 @@
 
 /*global modules, contains*/
 
-modules.locale = '2015-December-22';
+modules.locale = '2016-September-22';
 
 // Global stuff
 
@@ -153,7 +153,6 @@ SnapTranslator.dict.en = {
 };
 
 SnapTranslator.dict.de = {
-    // meta information
     'language_name':
         'Deutsch',
     'language_translator':
@@ -161,23 +160,21 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org',
     'last_changed':
-        '2015-12-22'
+        '2016-09-22'
 };
 
 SnapTranslator.dict.it = {
-    // meta information
     'language_name':
         'Italiano',
     'language_translator':
-        'Stefano Federici, Alberto Firpo',
+        'Stefano Federici, Alberto Firpo, Massimo Ghisalberti',
     'translator_e-mail':
-        's_federici@yahoo.com, albertofirpo12@gmail.com',
+        's_federici@yahoo.com, albertofirpo12@gmail.com, zairik@gmail.com',
     'last_changed':
-        '2015-01-12'
+        '2016-05-10'
 };
 
 SnapTranslator.dict.ja = {
-    // meta information
     'language_name':
         '日本語',
     'language_translator':
@@ -189,7 +186,6 @@ SnapTranslator.dict.ja = {
 };
 
 SnapTranslator.dict.ja_HIRA = {
-    // meta information
     'language_name':
         'にほんご',
     'language_translator':
@@ -201,7 +197,6 @@ SnapTranslator.dict.ja_HIRA = {
 };
 
 SnapTranslator.dict.ko = {
-    // meta information
     'language_name':
         '한국어',
     'language_translator':
@@ -213,7 +208,6 @@ SnapTranslator.dict.ko = {
 };
 
 SnapTranslator.dict.pt = {
-    // meta information
     'language_name':
         'Português',
     'language_translator':
@@ -221,11 +215,10 @@ SnapTranslator.dict.pt = {
     'translator_e-mail':
         'mmsequeira@gmail.com',
     'last_changed':
-        '2015-12-21'
+        '2016-01-08'
 };
 
 SnapTranslator.dict.cs = {
-    // meta information
     'language_name':
         'Česky',
     'language_translator':
@@ -237,19 +230,17 @@ SnapTranslator.dict.cs = {
 };
 
 SnapTranslator.dict.zh = {
-    // meta information
     'language_name':
         '简体中文',
     'language_translator':
-        '邓江华',
+        '五百刀/邓江华',
     'translator_e-mail':
-        'djh@rhjxx.cn',
+        'ubertao@qq.com/djh@rhjxx.cn',
     'last_changed':
-        '2013-03-25'
+        '2016-05-09'
 };
 
 SnapTranslator.dict.eo = {
-    // meta information
     'language_name':
         'Esperanto',
     'language_translator':
@@ -261,43 +252,39 @@ SnapTranslator.dict.eo = {
 };
 
 SnapTranslator.dict.fr = {
-    // meta information
     'language_name':
         'Fran\u00E7ais',
     'language_translator':
-        'Jean-Jacques Valliet, Mark Rafter, Martin Quinson',
+        'Jean-Jacques Valliet, Mark Rafter, Martin Quinson, Damien Caselli',
     'translator_e-mail':
         'i.scool@mac.com',
     'last_changed':
-        '2015-06-25'
+        '2016-02-24'
 };
 
 SnapTranslator.dict.si = {
-    // meta information
     'language_name':
         'Sloven\u0161\u010Dina',
     'language_translator':
-        'Sasa Divjak',
+        'Sasa Divjak, Gorazd Breskvar',
     'translator_e-mail':
         'sasa.divjak@fri.uni-lj.si',
     'last_changed':
-        '2013-01-07'
+        '2016-04-22'
 };
 
 SnapTranslator.dict.ru = {
-    // meta information
     'language_name':
         'Русский',
     'language_translator':
-        'Svetlana Ptashnaya',
+        'Svetlana Ptashnaya, Проскурнёв Артём',
     'translator_e-mail':
-        'svetlanap@berkeley.edu',
+        'svetlanap@berkeley.edu, tema@school830.ru',
     'last_changed':
-        '2014-09-29'
+        '2016-05-25'
 };
 
 SnapTranslator.dict.es = {
-    // meta information
     'language_name':
         'Espa\u00F1ol',
     'language_translator':
@@ -309,7 +296,6 @@ SnapTranslator.dict.es = {
 };
 
 SnapTranslator.dict.nl = {
-    // meta information
     'language_name':
         'Nederlands',
     'language_translator':
@@ -321,7 +307,6 @@ SnapTranslator.dict.nl = {
 };
 
 SnapTranslator.dict.pl = {
-    // meta information
     'language_name':
         'Polski',
     'language_translator':
@@ -333,7 +318,6 @@ SnapTranslator.dict.pl = {
 };
 
 SnapTranslator.dict.tw = {
-    // meta information
     'language_name':
         '繁體中文',
     'language_translator':
@@ -345,7 +329,6 @@ SnapTranslator.dict.tw = {
 };
 
 SnapTranslator.dict.no = {
-    // meta information
     'language_name':
         'Norsk',
     'language_translator':
@@ -357,7 +340,6 @@ SnapTranslator.dict.no = {
 };
 
 SnapTranslator.dict.dk = {
-    // meta information
     'language_name':
         'Dansk',
     'language_translator':
@@ -369,7 +351,6 @@ SnapTranslator.dict.dk = {
 };
 
 SnapTranslator.dict.el = {
-    // meta information
     'language_name':
         'Ελληνικά',
     'language_translator':
@@ -381,19 +362,17 @@ SnapTranslator.dict.el = {
 };
 
 SnapTranslator.dict.ca = {
-    // meta information
     'language_name':
         'Català',
     'language_translator':
-        'Bernat Romagosa Carrasquer',
+        'Bernat Romagosa Carrasquer, Joan Guillén i Pelegay',
     'translator_e-mail':
-        'bromagosa@citilab.eu',
+        'bernat@arduino.org, jguille2@xtec.cat',
     'last_changed':
-        '2015-09-23'
+        '2016-07-07'
 };
 
 SnapTranslator.dict.fi = {
-    // meta information
     'language_name':
         'suomi',
     'language_translator':
@@ -405,7 +384,6 @@ SnapTranslator.dict.fi = {
 };
 
 SnapTranslator.dict.sv = {
-    // meta information
     'language_name':
         'svenska',
     'language_translator':
@@ -413,11 +391,10 @@ SnapTranslator.dict.sv = {
     'translator_e-mail':
         'eolsson@gmail.com',
     'last_changed':
-        '2014-12-14'
+        '2016-06-09'
 };
 
 SnapTranslator.dict.pt_BR = {
-    // meta information
     'language_name':
         'Português do Brasil',
     'language_translator':
@@ -429,7 +406,6 @@ SnapTranslator.dict.pt_BR = {
 };
 
 SnapTranslator.dict.bn = {
-    // meta information
     'language_name':
         'বাংলা',
     'language_translator':
@@ -441,7 +417,6 @@ SnapTranslator.dict.bn = {
 };
 
 SnapTranslator.dict.kn = {
-    // translations meta information
     'language_name':
         '\u0C95\u0CA8\u0CCD\u0CA8\u0CA1',
     'language_translator':
@@ -453,7 +428,6 @@ SnapTranslator.dict.kn = {
 };
 
 SnapTranslator.dict.ml = {
-    // translations meta information
     'language_name':
         'Malayalam',
     'language_translator':
@@ -465,7 +439,6 @@ SnapTranslator.dict.ml = {
 };
 
 SnapTranslator.dict.ta = {
-    // translations meta information
     'language_name':
         'Tamil',
     'language_translator':
@@ -477,7 +450,6 @@ SnapTranslator.dict.ta = {
 };
 
 SnapTranslator.dict.te = {
-    // translations meta information
     'language_name':
         'Telagu', // the name as it should appear in the language menu
     'language_translator':
@@ -489,7 +461,6 @@ SnapTranslator.dict.te = {
 };
 
 SnapTranslator.dict.tr = {
-    // translations meta information
     'language_name':
         'Türkçe',
     'language_translator':
@@ -501,7 +472,6 @@ SnapTranslator.dict.tr = {
 };
 
 SnapTranslator.dict.hu = {
-    // translations meta information
     'language_name':
         'Magyar',
     'language_translator':
@@ -513,7 +483,6 @@ SnapTranslator.dict.hu = {
 };
 
 SnapTranslator.dict.ia = {
-    // translations meta information
     'language_name':
         'Interlingua',
     'language_translator':
@@ -565,5 +534,27 @@ SnapTranslator.dict.ar = {
     'translator_e-mail':
         'tarekgalal46@hotmail.com', // optional
     'last_changed':
-        '2015-12-18'
+        '2016-02-24'
+};
+
+SnapTranslator.dict.id = {
+    'language_name':
+        'Bahasa Indonesia',
+    'language_translator':
+        'Alexander Raphael Liu',
+    'translator_e-mail':
+        'raphaxander@gmail.com',
+    'last_changed':
+        '2016-5-2'
+};
+
+SnapTranslator.dict.et = {
+    'language_name':
+        'Eesti',
+    'language_translator':
+        'Hasso Tepper',
+    'translator_e-mail':
+        'hasso.tepper@gmail.com',
+    'last_changed':
+        '2016-05-03'
 };
