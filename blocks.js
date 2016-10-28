@@ -149,7 +149,7 @@ isSnapObject, copy, PushButtonMorph, SpriteIconMorph, Process*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2016-October-24';
+modules.blocks = '2016-October-27';
 
 var SyntaxElementMorph;
 var BlockMorph;
