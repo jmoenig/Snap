@@ -2239,6 +2239,7 @@ function BlockLabelFragment(labelString) {
     this.defaultValue = '';
     this.options = '';
     this.isReadOnly = false; // for input slots
+    this.isMultiLine = false; // for input slots
     this.isDeleted = false;
 }
 
@@ -2287,7 +2288,7 @@ BlockLabelFragment.prototype.defTemplateSpecFragment = function () {
 
 BlockLabelFragment.prototype.blockSpecFragment = function () {
     // answer a string representing my block spec
-    return this.isDeleted ? '' : this.type || this.labelString;
+    return this.isDeleted ? '' : (this.isMultiLine ? '%mlt' : this.type) || this.labelString;
 };
 
 BlockLabelFragment.prototype.copy = function () {
@@ -2344,7 +2345,7 @@ BlockLabelFragment.prototype.setToUpvar = function () {
 };
 
 BlockLabelFragment.prototype.singleInputType = function () {
-    // answer the type of my input withtou any preceding '%mult'
+    // answer the type of my input without any preceding '%mult'
     if (!this.type) {
         return null; // not an input at all
     }
@@ -2356,7 +2357,13 @@ BlockLabelFragment.prototype.singleInputType = function () {
 
 BlockLabelFragment.prototype.setSingleInputType = function (type) {
     if (!this.type || !this.isMultipleInput()) {
-        this.type = type;
+        if (type === '%mlt') {
+            this.type = '%txt';
+            this.isMultiLine = true;
+        } else {
+            this.type = type;
+            this.isMultiLine = false;
+        }
     } else {
         this.type = '%mult'.concat(type);
     }
@@ -3216,7 +3223,7 @@ InputSlotDialogMorph.prototype.addSlotsMenu = function () {
     var myself = this;
 
     this.slots.userMenu = function () {
-        if (contains(['%s', '%n', '%txt', '%anyUE'], myself.fragment.type)) {
+        if (contains(['%s', '%n', '%txt', '%anyUE', '%mlt'], myself.fragment.type)) {
             var menu = new MenuMorph(myself),
                 on = '\u2611 ',
                 off = '\u2610 ';
@@ -3228,6 +3235,15 @@ InputSlotDialogMorph.prototype.addSlotsMenu = function () {
                          !myself.fragment.isReadOnly;
                          }
             );
+            if (myself.fragment.type !== '%n') {
+                menu.addItem(
+                    (myself.fragment.isMultiLine ? on : off) +
+                        localize('multi-line'),
+                    function () {myself.fragment.isMultiLine =
+                         !myself.fragment.isMultiLine;
+                         }
+                );
+            }
             return menu;
         }
         return Morph.prototype.userMenu.call(myself);
