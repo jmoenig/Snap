@@ -2,7 +2,7 @@
 
     lang-bg.js
 
-    Bulgarian translation for SNAP!
+    Bulgarian translation for Snap!
 
     This file is part of Snap!.
 

@@ -2,7 +2,7 @@
 
     lists.js
 
-    list data structure and GUI for SNAP!
+    list data structure and GUI for Snap!
 
     written by Jens Mönig and Brian Harvey
     jens@moenig.org, bh@cs.berkeley.edu
@@ -70,7 +70,7 @@ var ListWatcherMorph;
 // List ////////////////////////////////////////////////////////////////
 
 /*
-    I am a dynamic array data structure for SNAP!
+    I am a dynamic array data structure for Snap!
     My index starts with 1
 
     I am a "smart" hybrid list, because I can be used as both a linked

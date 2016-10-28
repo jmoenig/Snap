@@ -2,7 +2,7 @@
 
 	lang-ko.js
 
-	Korean translation for SNAP!
+	Korean translation for Snap!
 
 	written by Jens Mönig
 

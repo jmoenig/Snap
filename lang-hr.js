@@ -2,7 +2,7 @@
 
     lang-hr.js
 
-    Croatian translation for SNAP!
+    Croatian translation for Snap!
 
     written by Jens Mönig
 

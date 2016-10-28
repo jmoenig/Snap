@@ -2,7 +2,7 @@
 
     lang-ia.js
 
-    Interlingua translation for SNAP!
+    Interlingua translation for Snap!
 
     edited for Interlingua by Ken Dickey
 

@@ -2,7 +2,7 @@
 
     lang-ro.js
 
-    Romanian translation for SNAP!
+    Romanian translation for Snap!
 
     written by Jens Mönig & Cristian Macarascu
 

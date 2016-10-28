@@ -2,7 +2,7 @@
 
     lang-es.js
 
-    Spanish translation for SNAP!
+    Spanish translation for Snap!
 
     written by Jens Mönig
 

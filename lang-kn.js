@@ -2,7 +2,7 @@
 
     lang-kn.js
 
-    Kannada translation for SNAP!
+    Kannada translation for Snap!
 
     written by Vinayakumar R
 

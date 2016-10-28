@@ -2,7 +2,7 @@
 
 	lang-ja_HIRA.js
 
-	Japanese Hiragana translation for SNAP!
+	Japanese Hiragana translation for Snap!
 
 	written by Jens Mönig
 

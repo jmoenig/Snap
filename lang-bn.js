@@ -2,7 +2,7 @@
 
     lang-bn.js
 
-   	বাংলা (Bangla) translation for SNAP!
+   	বাংলা (Bangla) translation for Snap!
 
     written by Dr. Mokter Hossain
 

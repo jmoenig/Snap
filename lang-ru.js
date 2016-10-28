@@ -2,7 +2,7 @@
 
     lang-ru.js
 
-    Russian translation for SNAP!
+    Russian translation for Snap!
 
     This file is part of Snap!.
 

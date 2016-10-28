@@ -2,7 +2,7 @@
 
 	lang-ja.js
 
-	Japanese translation for SNAP!
+	Japanese translation for Snap!
 
 	written by Jens Mönig
 

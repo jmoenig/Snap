@@ -2,7 +2,7 @@
 
     lang-sv.js
 
-    Swedish translation for SNAP!
+    Swedish translation for Snap!
 
     written by Erik A Olsson
 

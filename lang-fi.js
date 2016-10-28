@@ -2,7 +2,7 @@
 
     lang-fi.js
 
-    Finnish translation for SNAP!
+    Finnish translation for Snap!
 
     written by Jouni K. Seppänen
 

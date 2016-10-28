@@ -2,7 +2,7 @@
 
     lang-id.js
 
-    German translation for SNAP!
+    German translation for Snap!
 
     written by Jens Mönig
 

@@ -2,7 +2,7 @@
 
 	sha512.js
 
-	encryption for SNAP!
+	encryption for Snap!
     This file is derived from crypto-js.
 
     © 2009–2012 by Jeff Mott. All rights reserved.
