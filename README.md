@@ -23,3 +23,6 @@ GNU Affero General Public License for more details.
 
 You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+Want to use Snap! but scared by the open-source license? Get in touch with us,
+we'll make it work.

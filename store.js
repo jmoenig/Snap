@@ -61,7 +61,7 @@ normalizeCanvas*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2016-August-03';
+modules.store = '2016-October-27';
 
 
 // XML_Serializer ///////////////////////////////////////////////////////
@@ -630,8 +630,8 @@ SnapSerializer.prototype.loadSprites = function (xmlString, ide) {
             myself.objects[model.attributes.id] = sprite;
         }
         if (model.attributes.name) {
-            sprite.name = model.attributes.name;
-            project.sprites[model.attributes.name] = sprite;
+            sprite.name = ide.newSpriteName(model.attributes.name);
+            project.sprites[sprite.name] = sprite;
         }
         if (model.attributes.color) {
             sprite.color = myself.loadColor(model.attributes.color);
@@ -1619,8 +1619,8 @@ Costume.prototype.toXML = function (serializer) {
         this.name,
         this.rotationCenter.x,
         this.rotationCenter.y,
-        this instanceof SVG_Costume ?
-                this.contents.src : this.contents.toDataURL('image/png')
+        this instanceof SVG_Costume ? this.contents.src
+                : normalizeCanvas(this.contents).toDataURL('image/png')
     );
 };
 
