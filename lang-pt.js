@@ -1412,6 +1412,8 @@ SnapTranslator.dict.pt = {
         'o palco',
 
     // em falta no ficheiro lang-de.js
+    'delete %shd':
+        'remove %shd',
     'Retina display support':
         'Suporte para o ecrã retina',
     'uncheck for lower resolution,\nsaves computing resources':
@@ -1800,9 +1802,9 @@ SnapTranslator.dict.pt = {
     'input(s), but getting':
         'argumento(s), mas foram passados',
     'parent...':
-        'pai…',
+        'progenitor…',
     'current parent':
-        'pai actual',
+        'progenitor actual',
     'Dragging threshold...':
         'Limiar de arrastamento…',
     'Cache Inputs':
