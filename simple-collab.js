@@ -313,7 +313,7 @@ SimpleCollaborator.prototype._moveBlock = function(block, target) {
 };
 
 SimpleCollaborator.prototype._setField = function(field, value) {
-    var fieldId = SnapCollaborator.getId(field),
+    var fieldId = this.getId(field),
         oldValue = field.contents().text;
 
     return [
@@ -321,6 +321,21 @@ SimpleCollaborator.prototype._setField = function(field, value) {
         value,
         oldValue
     ];
+};
+
+SimpleCollaborator.prototype._toggleBoolean = function(field, value) {
+    var prevValue = false,
+        fieldId = this.getId(field);
+
+    // order is true -> false -> null -> true ...
+    // get the previous
+    if (value === true) {
+        prevValue = null;
+    } else if (value === false) {
+        prevValue = true;
+    }
+
+    return [fieldId, value, prevValue];
 };
 
 /* * * * * * * * * * * * Updating internal rep * * * * * * * * * * * */

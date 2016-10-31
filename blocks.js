@@ -8270,9 +8270,10 @@ BooleanSlotMorph.prototype.toggleValue = function () {
 // BooleanSlotMorph events:
 
 BooleanSlotMorph.prototype.mouseClickLeft = function () {
-    var id = SnapCollaborator.getId(this);
-    if (id) {
-        SnapCollaborator.toggleBoolean(id, this.value);
+    var block = this.parentThatIsA(BlockMorph);
+
+    if (block.id) {
+        SnapCollaborator.toggleBoolean(this, this.value);
     } else {  // in the palette
         this.toggleValue();
     }
@@ -12265,7 +12266,7 @@ ScriptFocusMorph.prototype.trigger = function () {
         return;
     }
     if (current instanceof BooleanSlotMorph) {
-        SnapCollaborator.toggleBoolean(id, current.value);
+        SnapCollaborator.toggleBoolean(current, current.value);
         return;
     }
     if (current instanceof InputSlotMorph) {
@@ -12315,7 +12316,7 @@ ScriptFocusMorph.prototype.deleteLastElement = function () {
         }
     } else if (current instanceof BooleanSlotMorph) {
         if (!current.isStatic) {
-            SnapCollaborator.toggleBoolean(id, false);
+            SnapCollaborator.toggleBoolean(current, false);
         }
     } else if (current instanceof ReporterBlockMorph) {
         if (!current.isTemplate) {

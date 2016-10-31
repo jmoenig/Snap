@@ -230,12 +230,6 @@ UndoManager.Invert.moveBlock = function(event) {
     }
 };
 
-UndoManager.Invert.setField = function(event) {
-    return [
-        event.args[0],  // name
-        event.args[2]  // oldValue
-    ];
-};
     //'moveBlock',
     //'importBlocks',
 
@@ -250,6 +244,18 @@ UndoManager.Invert.setField = function(event) {
     //'ringify',
     //'unringify',
 
-    //'toggleBoolean',
-    //'setField'
+UndoManager.Invert.setField = function(event) {
+    return [
+        event.args[0],  // name
+        event.args[2]  // oldValue
+    ];
+};
+
+UndoManager.Invert.toggleBoolean = function(event) {
+    return [
+        event.args[0],
+        event.args[2]
+    ];
+};
+
 var SnapUndo = new UndoManager();
