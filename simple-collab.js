@@ -174,12 +174,8 @@ SimpleCollaborator.prototype.getStandardPosition = function(scripts, position) {
     return position;
 };
 
-SimpleCollaborator.prototype._addBlock = function(block, scripts, position, ownerId) {
-    var stdPosition = this.getStandardPosition(scripts, position),
-        serialized,
-        iterBlock;  // block iterator
-
-    iterBlock = block;
+SimpleCollaborator.prototype._idBlocks = function(block) {
+    var iterBlock = block;
     while (iterBlock) {
         iterBlock.isDraggable = true;
         iterBlock.isTemplate = false;
@@ -187,6 +183,15 @@ SimpleCollaborator.prototype._addBlock = function(block, scripts, position, owne
 
         iterBlock = iterBlock.nextBlock ? iterBlock.nextBlock() : null;
     }
+
+    return block;
+};
+
+SimpleCollaborator.prototype._addBlock = function(block, scripts, position, ownerId) {
+    var stdPosition = this.getStandardPosition(scripts, position),
+        serialized;
+
+    this._idBlocks(block);
 
     serialized = this.serializeBlock(block, true);
     return [
@@ -281,8 +286,10 @@ SimpleCollaborator.prototype._moveBlock = function(block, target) {
 
     // Serialize the target
     target = this._serializeMoveTarget(block, target);
-    block.id = id;
-    // FIXME: May need to id multiple blocks
+    if (isNewBlock) {
+        this._idBlocks(block);
+    }
+
     serialized = this.serializeBlock(block, isNewBlock);
 
     if (isNewBlock) {
@@ -448,13 +455,27 @@ SimpleCollaborator.prototype.getAdjustedPosition = function(position, scripts) {
     return position;
 };
 
+SimpleCollaborator.prototype.registerBlocks = function(firstBlock) {
+    var block = firstBlock;
+
+    while (block) {
+        block.isDraggable = true;
+        block.isTemplate = false;
+        this._blocks[block.id] = block;
+
+        // FIXME: This doesn't check the inputs()!
+        block = block.nextBlock ? block.nextBlock() : null;
+    }
+
+    return firstBlock;
+};
+
 SimpleCollaborator.prototype.onAddBlock = function(block, ownerId, x, y) {
     var block,
         owner = this._owners[ownerId],
         world = this.ide().parentThatIsA(WorldMorph),
         hand = world.hand,
         position = new Point(x, y),
-        i = 1,
         firstBlock;
 
 
@@ -462,16 +483,7 @@ SimpleCollaborator.prototype.onAddBlock = function(block, ownerId, x, y) {
     this._positionOf[firstBlock.id] = position;
     this._blockToOwnerId[firstBlock.id] = ownerId;
 
-    block = firstBlock;
-
-    while (block) {
-        block.isDraggable = true;
-        block.isTemplate = false;
-        this._blocks[block.id] = block;
-
-        block = block.nextBlock ? block.nextBlock() : null;
-        ++i;
-    }
+    this.registerBlocks(firstBlock);
 
     if (firstBlock.snapSound) {
         firstBlock.snapSound.play();
@@ -611,7 +623,7 @@ SimpleCollaborator.prototype.onMoveBlock = function(id, rawTarget) {
     }
 
     if (isNewBlock) {
-        this._blocks[block.id] = block;
+        this.registerBlocks(block);
         scripts.add(block);
     } else {
         if (block.parent && block.parent.reactToGrabOf) {
