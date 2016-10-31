@@ -312,6 +312,17 @@ SimpleCollaborator.prototype._moveBlock = function(block, target) {
     return args;
 };
 
+SimpleCollaborator.prototype._setField = function(field, value) {
+    var fieldId = SnapCollaborator.getId(field),
+        oldValue = field.contents().text;
+
+    return [
+        fieldId,
+        value,
+        oldValue
+    ];
+};
+
 /* * * * * * * * * * * * Updating internal rep * * * * * * * * * * * */
 SimpleCollaborator.prototype._onSetField = function(pId, connId, value) {
     console.assert(!this.blockChildren[pId] || !this.blockChildren[pId][connId],'Connection occupied!');

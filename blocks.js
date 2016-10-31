@@ -7683,16 +7683,10 @@ InputSlotMorph.prototype.reactToKeystroke = function () {
 
 InputSlotMorph.prototype.updateFieldValue = function () {
     var newValue = this.contents().text,
-        fieldId = SnapCollaborator.getId(this),
         field;
 
-    if (fieldId) {
-        SnapCollaborator.setField(fieldId, newValue);
-        this.setContents(this.lastValue);  // set to original value in case it fails
-    } else if (this.id) {  // not template block - missing parent!
-        console.error('Cannot set field text: no parent found!');
-    }
-
+    this.setContents(this.lastValue);  // set to original value in case it fails
+    SnapCollaborator.setField(this, newValue);
 };
 
 InputSlotMorph.prototype.reactToEdit = function () {

@@ -69,10 +69,20 @@ UndoManager.prototype.redo = function() {
 };
 
 UndoManager.prototype.getInverseEvent = function(event) {
-    var type = event.type;
+    var type = event.type,
+        result;
     
     event = JSON.parse(JSON.stringify(event));  // deep copy
-    return UndoManager.Invert[type].call(this, event);
+    result = UndoManager.Invert[type].call(this, event);
+
+    if (result instanceof Array) {  // shorthand inverter result
+        result = {
+            type: type,
+            args: result
+        };
+    }
+
+    return result;
 };
 
 UndoManager.Invert = {};
@@ -218,6 +228,13 @@ UndoManager.Invert.moveBlock = function(event) {
     } else {
         logger.warn('Malformed moveBlock event!:', event);
     }
+};
+
+UndoManager.Invert.setField = function(event) {
+    return [
+        event.args[0],  // name
+        event.args[2]  // oldValue
+    ];
 };
     //'moveBlock',
     //'importBlocks',
