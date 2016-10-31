@@ -7683,10 +7683,13 @@ InputSlotMorph.prototype.reactToKeystroke = function () {
 
 InputSlotMorph.prototype.updateFieldValue = function () {
     var newValue = this.contents().text,
+        block = this.parentThatIsA(BlockMorph),
         field;
 
-    this.setContents(this.lastValue);  // set to original value in case it fails
-    SnapCollaborator.setField(this, newValue);
+    if (block.id) {  // not in the palette
+        this.setContents(this.lastValue);  // set to original value in case it fails
+        SnapCollaborator.setField(this, newValue);
+    }
 };
 
 InputSlotMorph.prototype.reactToEdit = function () {
