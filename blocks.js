@@ -11771,6 +11771,7 @@ CommentMorph.prototype.init = function (contents) {
         contents || localize('add comment here...'),
         this.fontSize
     );
+    this.lastValue = this.contents.text;
     this.contents.isEditable = true;
     this.contents.enableSelecting();
     this.contents.maxWidth = 90 * scale;
@@ -11805,7 +11806,15 @@ CommentMorph.prototype.init = function (contents) {
 
 CommentMorph.prototype.reactToEdit = function (value) {
     var text = value.text;
-    SnapCollaborator.setCommentText(this.id, text);
+
+    if (text !== this.lastValue) {
+        this.contents.text = this.lastValue;
+        this.contents.drawNew();
+        this.contents.changed();
+        this.layoutChanged();
+
+        SnapCollaborator.setCommentText(this, text);
+    }
 };
 
 CommentMorph.prototype.fullCopy = function () {

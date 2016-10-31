@@ -338,6 +338,11 @@ SimpleCollaborator.prototype._toggleBoolean = function(field, value) {
     return [fieldId, value, prevValue];
 };
 
+SimpleCollaborator.prototype._setCommentText = function(comment, value) {
+    var oldValue = comment.lastValue;
+
+    return [comment.id, value, oldValue];
+};
 /* * * * * * * * * * * * Updating internal rep * * * * * * * * * * * */
 SimpleCollaborator.prototype._onSetField = function(pId, connId, value) {
     console.assert(!this.blockChildren[pId] || !this.blockChildren[pId][connId],'Connection occupied!');
@@ -847,10 +852,13 @@ SimpleCollaborator.prototype.onSetField = function(fieldId, value) {
 
 SimpleCollaborator.prototype.onSetCommentText = function(id, text) {
     var block = this.getBlockFromId(id);
+
     block.contents.text = text;
     block.contents.drawNew();
     block.contents.changed();
     block.layoutChanged();
+    block.lastValue = text;
+
     this._updateBlockDefinitions(block);
 };
 

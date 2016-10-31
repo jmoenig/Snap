@@ -244,17 +244,12 @@ UndoManager.Invert.moveBlock = function(event) {
     //'ringify',
     //'unringify',
 
+UndoManager.Invert.setCommentText =
+UndoManager.Invert.toggleBoolean =
 UndoManager.Invert.setField = function(event) {
     return [
         event.args[0],  // name
         event.args[2]  // oldValue
-    ];
-};
-
-UndoManager.Invert.toggleBoolean = function(event) {
-    return [
-        event.args[0],
-        event.args[2]
     ];
 };
 
