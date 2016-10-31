@@ -149,7 +149,7 @@ isSnapObject, copy, PushButtonMorph, SpriteIconMorph, Process*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2016-October-27';
+modules.blocks = '2016-October-31';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -8818,7 +8818,7 @@ SymbolMorph.prototype.setLabelColor = function (
     shadowColor,
     shadowOffset
 ) {
-    this.shadowOffset = shadowOffset;
+    this.shadowOffset = shadowOffset || new Point();
     this.shadowColor = shadowColor;
     this.setColor(textColor);
 };
