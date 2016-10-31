@@ -891,7 +891,10 @@ SimpleCollaborator.prototype.onAddVariable = function(name, ownerId) {
 };
 
 SimpleCollaborator.prototype.onDeleteVariable = function(name, ownerId) {
-    var owner = this._owners[ownerId];
+    var isGlobal = ownerId === true,
+        owner = isGlobal ? this._owners[Object.keys(this._owners)[0]] :
+            this._owners[ownerId];
+
     owner.deleteVariable(name)
 };
 

@@ -80,6 +80,11 @@ UndoManager.prototype.getInverseEvent = function(event) {
             type: type,
             args: result
         };
+    } else if (typeof result === 'string') {
+        result = {
+            type: result,
+            args: event.args
+        }
     }
 
     return result;
@@ -123,9 +128,13 @@ UndoManager.Invert.setStageSize = function(event) {
     //'removeCostume',
     //'updateCostume',
 
-    //// Variables
-    //'addVariable',
-    //'deleteVariable',
+UndoManager.Invert.addVariable = function() {
+    return 'deleteVariable';
+};
+
+UndoManager.Invert.deleteVariable = function() {
+    return 'addVariable';
+};
 
     //// Custom blocks
     //'addCustomBlock',
@@ -232,8 +241,6 @@ UndoManager.Invert.moveBlock = function(event) {
 
     //'moveBlock',
     //'importBlocks',
-
-    //'setCommentText',
 
     //'setSelector',
     //'setBlockSpec',
