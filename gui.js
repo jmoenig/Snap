@@ -1114,7 +1114,7 @@ IDE_Morph.prototype.createSpriteBar = function () {
             myself, // the IDE is the target
             function () {
                 if (myself.currentSprite instanceof SpriteMorph) {
-                    SnapCollaborator.setRotationStyle(myself.currentSprite.id, rotationStyle);
+                    SnapCollaborator.setRotationStyle(myself.currentSprite, rotationStyle);
                 }
             },
             symbols[rotationStyle], // label
@@ -1192,7 +1192,7 @@ IDE_Morph.prototype.createSpriteBar = function () {
         'checkbox',
         null,
         function () {
-            SnapCollaborator.toggleDraggable(myself.currentSprite.id, !myself.currentSprite.isDraggable);
+            SnapCollaborator.toggleDraggable(myself.currentSprite, !myself.currentSprite.isDraggable);
         },
         localize('draggable'),
         function () {

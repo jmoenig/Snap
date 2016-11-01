@@ -112,10 +112,14 @@ UndoManager.Invert.setStageSize = function(event) {
     //// Sprites
     //'removeSprite',
     //'renameSprite',
-    //'toggleDraggable',
+UndoManager.Invert.toggleDraggable = function(event) {
+    return [
+        event.args[0],
+        !event.args[1]
+    ];
+};
     //'duplicateSprite',
     //'importSprites',
-    //'setRotationStyle',
 
     //// Sounds
     //'addSound',
@@ -242,14 +246,6 @@ UndoManager.Invert.moveBlock = function(event) {
     //'moveBlock',
     //'importBlocks',
 
-UndoManager.Invert.setSelector = function(event) {
-    return [event.args[0], event.args[2]];
-};
-
-UndoManager.Invert.setBlockSpec = function(event) {
-    return [event.args[0], event.args[2]];
-};
-
     //'addListInput',
     //'removeListInput',
 
@@ -261,6 +257,9 @@ UndoManager.Invert.unringify = function() {
     return 'ringify'
 };
 
+UndoManager.Invert.setRotationStyle =
+UndoManager.Invert.setSelector =
+UndoManager.Invert.setBlockSpec =
 UndoManager.Invert.setCommentText =
 UndoManager.Invert.toggleBoolean =
 UndoManager.Invert.setField = function(event) {

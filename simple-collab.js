@@ -405,6 +405,13 @@ SimpleCollaborator.prototype._setBlockSpec = function(block, spec) {
     return [blockId, spec, oldSpec];
 };
 
+SimpleCollaborator.prototype._toggleDraggable = function(owner, draggable) {
+    return [owner.id, draggable];
+};
+
+SimpleCollaborator.prototype._setRotationStyle = function(owner, rotationStyle) {
+    return [owner.id, rotationStyle, owner.rotationStyle];
+};
 /* * * * * * * * * * * * Updating internal rep * * * * * * * * * * * */
 SimpleCollaborator.prototype._onSetField = function(pId, connId, value) {
     console.assert(!this.blockChildren[pId] || !this.blockChildren[pId][connId],'Connection occupied!');
