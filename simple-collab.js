@@ -390,6 +390,14 @@ SimpleCollaborator.prototype._ringify = function(block) {
 
     return [block.id, ringId];
 };
+
+SimpleCollaborator.prototype._setSelector = function(block, selector) {
+    var blockId = this.getId(block),
+        oldSelector = block.selector;
+
+    return [blockId, selector, oldSelector];
+};
+
 /* * * * * * * * * * * * Updating internal rep * * * * * * * * * * * */
 SimpleCollaborator.prototype._onSetField = function(pId, connId, value) {
     console.assert(!this.blockChildren[pId] || !this.blockChildren[pId][connId],'Connection occupied!');
@@ -414,10 +422,6 @@ SimpleCollaborator.prototype._onSetBlockPosition = function(id, x, y) {
     }
 
     this.onSetBlockPosition(id, x, y);
-};
-
-SimpleCollaborator.prototype._onSetSelector = function(id, selector) {
-    this.onSetSelector(id, selector);
 };
 
 // / / / / / / / / / / / Variables / / / / / / / / / / / //

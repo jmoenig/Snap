@@ -2659,7 +2659,7 @@ BlockMorph.prototype.relabel = function (alternativeSelectors) {
         menu.addItem(
             block,
             function () {
-                SnapCollaborator.setSelector(myself.id, sel);
+                SnapCollaborator.setSelector(myself, sel);
             }
         );
     });
