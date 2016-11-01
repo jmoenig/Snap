@@ -343,6 +343,53 @@ SimpleCollaborator.prototype._setCommentText = function(comment, value) {
 
     return [comment.id, value, oldValue];
 };
+
+SimpleCollaborator.prototype._unringify = function(block) {
+    var ring = this.getOutermostRing(block),
+        parent = this.getParentWithId(block);
+
+    // Get the last block before the ring
+    while (parent !== ring) {
+        block = parent;
+        parent = this.getParentWithId(block);
+    }
+
+    return [block.id, ring.id];
+};
+
+SimpleCollaborator.prototype.getParentWithId = function(block) {
+    while (block.parent && !block.parent.id) {
+        block = block.parent;
+    }
+    return block.parent;
+};
+
+SimpleCollaborator.prototype.getOutermostRing = function(block, immediate) {
+    var parent;
+
+    if (immediate) {
+        parent = this.getParentWithId(block);
+    } else {
+        parent = block.parentThatIsA(RingMorph);
+    }
+
+    while (parent instanceof RingMorph) {
+        block = parent;
+        parent = this.getParentWithId(block);
+    }
+
+    return block;
+
+};
+
+SimpleCollaborator.prototype._ringify = function(block) {
+    // If contained in a ringmorph, get the outermost ring
+    var ringId = this.newId();
+
+    block = this.getOutermostRing(block, true);
+
+    return [block.id, ringId];
+};
 /* * * * * * * * * * * * Updating internal rep * * * * * * * * * * * */
 SimpleCollaborator.prototype._onSetField = function(pId, connId, value) {
     console.assert(!this.blockChildren[pId] || !this.blockChildren[pId][connId],'Connection occupied!');
@@ -898,12 +945,12 @@ SimpleCollaborator.prototype.onDeleteVariable = function(name, ownerId) {
     owner.deleteVariable(name)
 };
 
-SimpleCollaborator.prototype.onRingify = function(id) {
-    var block = this.getBlockFromId(id);
+SimpleCollaborator.prototype.onRingify = function(blockId, ringId) {
+    var block = this.getBlockFromId(blockId);
 
     if (block) {
         var ring = block.ringify();
-        ring.id = this.newId();
+        ring.id = ringId;
         this._blocks[ring.id] = ring;
     }
     this._updateBlockDefinitions(block);

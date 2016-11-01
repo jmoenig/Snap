@@ -2458,10 +2458,10 @@ BlockMorph.prototype.userMenu = function () {
     if (this.parent.parentThatIsA(RingMorph)) {
         menu.addLine();
         menu.addItem("unringify", function() {
-            SnapCollaborator.unringify(this.id);
+            SnapCollaborator.unringify(this);
         });
         menu.addItem("ringify", function() {
-            SnapCollaborator.ringify(this.id);
+            SnapCollaborator.ringify(this);
         });
         return menu;
     }
@@ -2474,7 +2474,7 @@ BlockMorph.prototype.userMenu = function () {
     }
     menu.addLine();
     menu.addItem("ringify", function() {
-        SnapCollaborator.ringify(this.id);
+        SnapCollaborator.ringify(this);
     });
     if (StageMorph.prototype.enableCodeMapping) {
         menu.addLine();

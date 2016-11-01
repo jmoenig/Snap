@@ -248,8 +248,13 @@ UndoManager.Invert.moveBlock = function(event) {
     //'addListInput',
     //'removeListInput',
 
-    //'ringify',
-    //'unringify',
+UndoManager.Invert.ringify = function() {
+    return 'unringify'
+};
+
+UndoManager.Invert.unringify = function() {
+    return 'ringify'
+};
 
 UndoManager.Invert.setCommentText =
 UndoManager.Invert.toggleBoolean =
