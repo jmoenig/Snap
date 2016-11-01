@@ -1035,7 +1035,7 @@ IDE_Morph.prototype.createPalette = function (forSearching) {
             SnapCollaborator.removeCostume(droppedMorph.object.id);
             droppedMorph.destroy();
         } else if (droppedMorph instanceof SoundIconMorph) {
-            SnapCollaborator.removeSound(droppedMorph.object.id);
+            SnapCollaborator.removeSound(droppedMorph.object);
             droppedMorph.destroy();
         } else {
             if (droppedMorph.id) {
@@ -1730,10 +1730,9 @@ IDE_Morph.prototype.droppedSVG = function (anImage, name) {
 };
 
 IDE_Morph.prototype.droppedAudio = function (anAudio, name) {
-    var sound = new Sound(anAudio, name.split('.')[0]),  // up to period
-        serialized = sound.toXML(this.serializer).replace('~', '');
+    var sound = new Sound(anAudio, name.split('.')[0]);  // up to period
 
-    SnapCollaborator.addSound(serialized, this.currentSprite.id, SnapCollaborator.id);
+    SnapCollaborator.addSound(sound, this.currentSprite, true);
 };
 
 IDE_Morph.prototype.droppedText = function (aString, name) {
@@ -6547,8 +6546,7 @@ SpriteIconMorph.prototype.copyCostume = function (costume) {
 };
 
 SpriteIconMorph.prototype.copySound = function (sound) {
-    var serialized = sound.toXML(SnapCollaborator.serializer).replace('~', '');
-    SnapCollaborator.addSound(serialized, this.object.id);
+    SnapCollaborator.addSound(sound, this.object);
 };
 
 // CostumeIconMorph ////////////////////////////////////////////////////
@@ -7325,7 +7323,7 @@ SoundIconMorph.prototype.renameSound = function () {
         null,
         function (answer) {
             if (answer && (answer !== sound.name)) {
-                SnapCollaborator.renameSound(sound.id, answer);
+                SnapCollaborator.renameSound(sound, answer);
             }
         }
     )).prompt(
@@ -7336,7 +7334,7 @@ SoundIconMorph.prototype.renameSound = function () {
 };
 
 SoundIconMorph.prototype.removeSound = function () {
-    SnapCollaborator.removeSound(this.object.id);
+    SnapCollaborator.removeSound(this.object);
 };
 
 SoundIconMorph.prototype.localRemoveSound = function () {

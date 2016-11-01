@@ -417,6 +417,34 @@ SimpleCollaborator.prototype._addListInput =
 SimpleCollaborator.prototype._removeListInput = function(block, count) {
     return [this.getId(block), count];
 };
+
+SimpleCollaborator.prototype._addSound = function(sound, owner, focus) {
+    var args;
+
+    sound.id = this.newId();
+
+    args = [
+        sound.toXML(this.serializer).replace('~', ''),
+        owner.id
+    ];
+    if (focus) {
+        args.push(this.id);
+    }
+
+    return args;
+};
+
+SimpleCollaborator.prototype._removeSound = function(sound) {
+    return [
+        sound.id,
+        sound.toXML(this.serializer).replace('~', ''),
+        this._soundToOwner[sound.id].id
+    ];
+};
+
+SimpleCollaborator.prototype._renameSound = function(sound, name) {
+    return [sound.id, name, sound.name];
+};
 /* * * * * * * * * * * * Updating internal rep * * * * * * * * * * * */
 SimpleCollaborator.prototype._onSetField = function(pId, connId, value) {
     console.assert(!this.blockChildren[pId] || !this.blockChildren[pId][connId],'Connection occupied!');
@@ -1352,7 +1380,6 @@ SimpleCollaborator.prototype.onAddSound = function(serialized, ownerId, creatorI
     ide.hasChangedMedia = true;
 
     // register the sound
-    sound.id = this.newId();
     this._sounds[sound.id] = sound;
     this._soundToOwner[sound.id] = owner;
 

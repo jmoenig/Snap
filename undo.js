@@ -262,6 +262,27 @@ UndoManager.Invert.unringify = function() {
     return 'ringify'
 };
 
+UndoManager.Invert.addSound = function(event) {
+    var serialized = event.args[0],
+        sound = SnapCollaborator.serializer.loadValue(SnapCollaborator.serializer.parse(serialized));
+    return {
+        type: 'removeSound',
+        args: [
+            sound.id
+        ]
+    };
+};
+
+UndoManager.Invert.removeSound = function(event) {
+    event.args.shift();
+    return {
+        type: 'addSound',
+        args: event.args
+    };
+};
+
+UndoManager.Invert.renameSound =
+
 UndoManager.Invert.setRotationStyle =
 UndoManager.Invert.setSelector =
 UndoManager.Invert.setBlockSpec =
