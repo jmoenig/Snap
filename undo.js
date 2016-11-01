@@ -242,11 +242,13 @@ UndoManager.Invert.moveBlock = function(event) {
     //'moveBlock',
     //'importBlocks',
 
-    //'setSelector',
 UndoManager.Invert.setSelector = function(event) {
     return [event.args[0], event.args[2]];
 };
-    //'setBlockSpec',
+
+UndoManager.Invert.setBlockSpec = function(event) {
+    return [event.args[0], event.args[2]];
+};
 
     //'addListInput',
     //'removeListInput',

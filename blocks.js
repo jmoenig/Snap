@@ -2349,8 +2349,7 @@ BlockMorph.prototype.userMenu = function () {
                 new DialogBoxMorph(
                     myself,
                     function(spec) {
-                        var id = SnapCollaborator.getId(this);
-                        SnapCollaborator.setBlockSpec(id, spec);
+                        SnapCollaborator.setBlockSpec(this, spec);
                     },
                     myself
                 ).prompt(
@@ -4696,8 +4695,7 @@ ReporterBlockMorph.prototype.mouseClickLeft = function (pos) {
         new DialogBoxMorph(
             this,
             function(spec) {
-                var id = SnapCollaborator.getId(this);
-                SnapCollaborator.setBlockSpec(id, spec);
+                SnapCollaborator.setBlockSpec(this, spec);
             },
             this
         ).prompt(

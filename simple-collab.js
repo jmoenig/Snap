@@ -398,6 +398,13 @@ SimpleCollaborator.prototype._setSelector = function(block, selector) {
     return [blockId, selector, oldSelector];
 };
 
+SimpleCollaborator.prototype._setBlockSpec = function(block, spec) {
+    var blockId = this.getId(block),
+        oldSpec = block.blockSpec;
+
+    return [blockId, spec, oldSpec];
+};
+
 /* * * * * * * * * * * * Updating internal rep * * * * * * * * * * * */
 SimpleCollaborator.prototype._onSetField = function(pId, connId, value) {
     console.assert(!this.blockChildren[pId] || !this.blockChildren[pId][connId],'Connection occupied!');
