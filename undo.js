@@ -246,8 +246,13 @@ UndoManager.Invert.moveBlock = function(event) {
     //'moveBlock',
     //'importBlocks',
 
-    //'addListInput',
-    //'removeListInput',
+UndoManager.Invert.addListInput = function() {
+    return 'removeListInput';
+};
+
+UndoManager.Invert.removeListInput = function() {
+    return 'addListInput';
+};
 
 UndoManager.Invert.ringify = function() {
     return 'unringify'

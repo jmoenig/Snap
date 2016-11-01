@@ -412,6 +412,11 @@ SimpleCollaborator.prototype._toggleDraggable = function(owner, draggable) {
 SimpleCollaborator.prototype._setRotationStyle = function(owner, rotationStyle) {
     return [owner.id, rotationStyle, owner.rotationStyle];
 };
+
+SimpleCollaborator.prototype._addListInput =
+SimpleCollaborator.prototype._removeListInput = function(block, count) {
+    return [this.getId(block), count];
+};
 /* * * * * * * * * * * * Updating internal rep * * * * * * * * * * * */
 SimpleCollaborator.prototype._onSetField = function(pId, connId, value) {
     console.assert(!this.blockChildren[pId] || !this.blockChildren[pId][connId],'Connection occupied!');

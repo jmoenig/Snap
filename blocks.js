@@ -10584,18 +10584,17 @@ MultiArgMorph.prototype.mouseClickLeft = function (pos) {
         leftArrow = arrows.children[0],
         rightArrow = arrows.children[1],
         repetition = this.world().currentKey === 16 ? 3 : 1,
-        id = SnapCollaborator.getId(this),
         i;
 
     repetition = Math.min(repetition, this.inputs().length - this.minInputs);
     this.startLayout();
     if (rightArrow.bounds.containsPoint(pos)) {
         if (rightArrow.isVisible) {
-            SnapCollaborator.addListInput(id, repetition);
+            SnapCollaborator.addListInput(this, repetition);
         }
     } else if (leftArrow.bounds.containsPoint(pos)) {
         if (leftArrow.isVisible) {
-            SnapCollaborator.removeListInput(id, repetition);
+            SnapCollaborator.removeListInput(this, repetition);
         }
     } else {
         this.escalateEvent('mouseClickLeft', pos);
@@ -12263,7 +12262,7 @@ ScriptFocusMorph.prototype.trigger = function () {
 
     if (current instanceof MultiArgMorph) {
         if (current.arrows().children[1].isVisible) {
-            SnapCollaborator.addListInput(id);
+            SnapCollaborator.addListInput(current);
         }
         return;
     }
