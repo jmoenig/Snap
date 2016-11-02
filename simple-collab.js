@@ -468,6 +468,10 @@ SimpleCollaborator.prototype._removeCostume = function(costume) {
         this._costumeToOwner[costume.id].id
     ];
 };
+
+SimpleCollaborator.prototype._renameCostume = function(costume, name) {
+    return [costume.id, name, costume.name];
+};
 /* * * * * * * * * * * * Updating internal rep * * * * * * * * * * * */
 SimpleCollaborator.prototype._onSetField = function(pId, connId, value) {
     console.assert(!this.blockChildren[pId] || !this.blockChildren[pId][connId],'Connection occupied!');

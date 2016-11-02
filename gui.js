@@ -6719,7 +6719,7 @@ CostumeIconMorph.prototype.renameCostume = function () {
                     answer,
                     costume
                 );
-                SnapCollaborator.renameCostume(costume.id, newName);
+                SnapCollaborator.renameCostume(costume, newName);
             }
         }
     ).prompt(

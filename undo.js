@@ -302,6 +302,7 @@ UndoManager.Invert.removeSound = function(event) {
     };
 };
 
+UndoManager.Invert.renameCostume =
 UndoManager.Invert.renameSound =
 
 UndoManager.Invert.setRotationStyle =
