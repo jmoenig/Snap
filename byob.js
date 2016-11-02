@@ -2410,17 +2410,11 @@ BlockLabelFragmentMorph.prototype.mouseClickLeft = function () {
         frag,
         null,
         function () {
-            var defId = myself.parent.definition.id,
-                index = myself.parent.children.indexOf(myself);
 
             if (frag.isDeleted) {
-                SnapCollaborator.deleteBlockLabel(defId, index);
+                SnapCollaborator.deleteBlockLabel(myself.parent.definition, myself);
             } else {
-                var type = frag.type,
-                    value = frag.labelString;
-
-                console.assert(index > -1, 'Cannot find the fragment!');
-                SnapCollaborator.updateBlockLabel(defId, index, type, value);
+                SnapCollaborator.updateBlockLabel(myself.parent.definition, myself, frag);
             }
         },
         this,

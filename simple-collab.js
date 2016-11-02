@@ -291,6 +291,21 @@ SimpleCollaborator.prototype._setCustomBlockType = function(definition, category
     return [definition.id, category, type, definition.category, definition.type];
 };
 
+SimpleCollaborator.prototype._deleteBlockLabel = function(definition, label) {
+    var index = label.parent.children.indexOf(label);
+
+    return [definition.id, index];
+};
+
+SimpleCollaborator.prototype._updateBlockLabel = function(definition, label, fragment) {
+    var index = label.parent.children.indexOf(label);
+        type = fragment.type,
+        value = fragment.labelString;
+
+    console.assert(index > -1, 'Cannot find the fragment!');
+    return [definition.id, index, type, value, label.fragment.type, label.fragment.labelString];
+};
+
 SimpleCollaborator.prototype._setStageSize = function(width, height) {
     // Add the old stage size for undo support
     return [
