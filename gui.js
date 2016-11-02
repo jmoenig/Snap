@@ -6680,12 +6680,9 @@ CostumeIconMorph.prototype.userMenu = function () {
 
 CostumeIconMorph.prototype.editCostume = function () {
     var myself = this,
+        original = this.object.copy(),
         updateCostume = function() {
-            var ide = myself.parentThatIsA(IDE_Morph),
-                serializedCostume = myself.object.toXML(ide.serializer).replace('~', '');
-
-            // Update the costume
-            SnapCollaborator.updateCostume(myself.object.id, serializedCostume);
+            SnapCollaborator.updateCostume(original, myself.object);
         };
 
     if (this.object instanceof SVG_Costume) {
