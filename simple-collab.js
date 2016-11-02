@@ -246,6 +246,35 @@ SimpleCollaborator.prototype._setBlocksPositions = function(ids, positions) {
     return [ids, stdPositions, oldPositions];
 };
 
+// Custom Blocks
+SimpleCollaborator.prototype._addCustomBlock = function(definition, owner, focus) {
+    var serialized,
+        args;
+
+    definition.id = this.newId();
+    serialized = this.serializer.serialize(definition);
+    if (definition.isGlobal) {  // global defs are stored in the stage
+        owner = this.ide().stage;
+    }
+    args = [
+        owner.id,
+        serialized,
+        definition.isGlobal
+    ];
+
+    if (focus) {
+        args.push(this.id);
+    }
+    return args;
+};
+
+SimpleCollaborator.prototype._deleteCustomBlock = function(definition) {
+    var owner = this._customBlockOwner[definition.id],
+        serialized = this.serializer.serialize(definition);
+
+    return [definition.id, owner.id, serialized, definition.isGlobal];
+};
+
 SimpleCollaborator.prototype._setStageSize = function(width, height) {
     // Add the old stage size for undo support
     return [
@@ -1072,59 +1101,57 @@ SimpleCollaborator.prototype.onToggleBoolean = function(id, fromValue) {
 };
 
 ////////////////////////// Custom Blocks //////////////////////////
-SimpleCollaborator.prototype.onAddCustomBlock = function(id, ownerId, opts, creatorId) {
-    var def = new CustomBlockDefinition(opts.spec),
-        owner = this._owners[ownerId],
-        ide = owner.parentThatIsA(IDE_Morph),
-        stage = owner.parentThatIsA(StageMorph),
+SimpleCollaborator.prototype.onAddCustomBlock = function(ownerId, serialized, isGlobal, creatorId) {
+    var owner = this._owners[ownerId],
+        ide = this.ide(),
         addedReporter = false,
         editor,
+        def,
         body;
 
-    // Create the CustomBlockDefinition
-    def = new CustomBlockDefinition(opts.spec);
-    def.type = opts.blockType;
-    def.category = opts.category;
-    def.isGlobal = opts.isGlobal;
-    def.id = id;
-    if (def.type === 'reporter' || def.type === 'predicate') {
-        var reporter = SpriteMorph.prototype.blockForSelector('doReport');
-        reporter.id = this.newId();
-        body = Process.prototype.reify.call(
-            null,
-            reporter,
-            new List(),
-            true // ignore empty slots for custom block reification
-        );
-        body.outerContext = null;
-        def.body = body;
-        addedReporter = true;
-    }
-
-    // Update the palette
-    if (def.isGlobal) {
-        stage.globalBlocks.push(def);
+    // Load the CustomBlockDefinition
+    def = this.serializer.loadCustomBlock(this.serializer.parse(serialized));
+    def.receiver = owner;
+    def.isGlobal = isGlobal;
+    if (isGlobal) {
+        owner.globalBlocks.push(def);
+        ide.currentSprite.paletteCache = {};
     } else {
         owner.customBlocks.push(def);
     }
-    ide.flushPaletteCache();
+    this.loadCustomBlocks([def], owner);
+
+    // Create the CustomBlockDefinition
+    //if (def.type === 'reporter' || def.type === 'predicate') {
+        //var reporter = SpriteMorph.prototype.blockForSelector('doReport');
+        //reporter.id = this.newId();
+        //body = Process.prototype.reify.call(
+            //null,
+            //reporter,
+            //new List(),
+            //true // ignore empty slots for custom block reification
+        //);
+        //body.outerContext = null;
+        //def.body = body;
+        //addedReporter = true;
+    //}
+
+    // Update the palette
+    owner.paletteCache = {};
     ide.refreshPalette();
-    this._customBlocks[id] = def;
-    this._customBlockOwner[id] = owner;
 
+    //if (addedReporter) {  // Add reporter to the _blocks dictionary
+        //var scripts,
+            //hat;
 
-    if (addedReporter) {  // Add reporter to the _blocks dictionary
-        var scripts,
-            hat;
+        //// Update the reporter to the one in the editor
+        //editor = new BlockEditorMorph(def, owner);
+        //scripts = editor.body.contents;
+        //hat = scripts.children[0];
+        //reporter = hat.nextBlock();
 
-        // Update the reporter to the one in the editor
-        editor = new BlockEditorMorph(def, owner);
-        scripts = editor.body.contents;
-        hat = scripts.children[0];
-        reporter = hat.nextBlock();
-
-        this._blocks[reporter.id] = reporter;
-    }
+        //this._blocks[reporter.id] = reporter;
+    //}
 
     if (creatorId === this.id) {
         if (!editor) {
@@ -1251,6 +1278,9 @@ SimpleCollaborator.prototype.onAddSprite = function(opts, creatorId) {
     var ide = this.ide(),
         myself = this,
         sprite = new SpriteMorph(ide.globalVariables);
+
+    // TODO: The sprite should be created in the _addSprite method (or before)
+    // Then simply added here (using appearIn probably)
 
     sprite.name = opts.name;
     sprite.setCenter(ide.stage.center());

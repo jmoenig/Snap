@@ -74,7 +74,7 @@ UndoManager.prototype.getInverseEvent = function(event) {
         result;
     
     event = JSON.parse(JSON.stringify(event));  // deep copy
-    result = UndoManager.Invert[type].call(this, event);
+    result = UndoManager.Invert[type].call(this, event.args);
 
     if (result instanceof Array) {  // shorthand inverter result
         result = {
@@ -92,31 +92,31 @@ UndoManager.prototype.getInverseEvent = function(event) {
 };
 
 UndoManager.Invert = {};
-UndoManager.Invert.setStageSize = function(event) {
+UndoManager.Invert.setStageSize = function(args) {
     // args are [width, height, oldHeight, oldWidth]
     return {
         type: 'setStageSize',
-        args: event.args.reverse()
+        args: args.reverse()
     };
 };
 
     //serialized = SnapCollaborator.serializeBlock(block);
 
-//UndoManager.Invert.addSprite = function(event) {
+//UndoManager.Invert.addSprite = function(args) {
     //// args are [width, height, oldHeight, oldWidth]
     //return {
         //type: 'removeSprite',
-        //args: event.args.reverse()
+        //args: args.reverse()
     //};
 //};
 
     //// Sprites
     //'removeSprite',
     //'renameSprite',
-UndoManager.Invert.toggleDraggable = function(event) {
+UndoManager.Invert.toggleDraggable = function(args) {
     return [
-        event.args[0],
-        !event.args[1]
+        args[0],
+        !args[1]
     ];
 };
     //'duplicateSprite',
@@ -142,8 +142,22 @@ UndoManager.Invert.deleteVariable = function() {
 };
 
     //// Custom blocks
-    //'addCustomBlock',
-    //'deleteCustomBlock',
+UndoManager.Invert.addCustomBlock = function(args) {
+    var def = SnapCollaborator.serializer.loadCustomBlock(SnapCollaborator.serializer.parse(args[1]));
+    return {
+        type: 'deleteCustomBlock',
+        args: [def.id, args[0]]
+    };
+};
+
+UndoManager.Invert.deleteCustomBlock = function(args) {
+    var serialized = args[2],
+        ownerId = args[1];
+    return {
+        type: 'addCustomBlock',
+        args: [ownerId, serialized, args[3]]
+    };
+};
     //'deleteCustomBlocks',
 
     //'setCustomBlockType',
@@ -151,51 +165,51 @@ UndoManager.Invert.deleteVariable = function() {
     //'deleteBlockLabel',
 
     //// Block manipulation
-UndoManager.Invert.addBlock = function(event) {
+UndoManager.Invert.addBlock = function(args) {
     // args are [block, ownerId, x, y, false, blockId]
     return {
         type: 'removeBlock',
-        args: event.args.reverse()
+        args: args.reverse()
     };
 };
 
-UndoManager.Invert.removeBlock = function(event) {
+UndoManager.Invert.removeBlock = function(args) {
     // args are
     //  [id, userDestroy, y, x, ownerId, block]
     // or 
     //  [id, userDestroy, target]
     return {
         type: 'addBlock',
-        args: event.args.reverse()
+        args: args.reverse()
     };
 };
 
-UndoManager.Invert.setBlockPosition = function(event) {
+UndoManager.Invert.setBlockPosition = function(args) {
     // args are [id, x, y, oldX, oldY] or [id, x, y, oldTarget]
 
-    if (event.args.length === 5) {
+    if (args.length === 5) {
         // Swap the old position and new position
-        UndoManager.swap(event.args, 1, 3);  // x, oldX
-        UndoManager.swap(event.args, 2, 4);  // y, oldY
+        UndoManager.swap(args, 1, 3);  // x, oldX
+        UndoManager.swap(args, 2, 4);  // y, oldY
         return {
             type: 'setBlockPosition',
-            args: event.args
+            args: args
         };
     } else {  // previous was a moveBlock
-        UndoManager.swap(event.args, 1, 3);  // x, oldTarget
-        UndoManager.swap(event.args, 2, 3);  // y, x
+        UndoManager.swap(args, 1, 3);  // x, oldTarget
+        UndoManager.swap(args, 2, 3);  // y, x
         return {
             type: 'moveBlock',
-            args: event.args
+            args: args
         };
     }
 };
 
-UndoManager.Invert.setBlocksPositions = function(event) {
+UndoManager.Invert.setBlocksPositions = function(args) {
     // args are [ids, positions, oldPositions]
     return {
         type: 'setBlocksPositions',
-        args: [event.args[0], event.args[2], event.args[1]]
+        args: [args[0], args[2], args[1]]
     };
 };
 
@@ -205,42 +219,42 @@ UndoManager.swap = function(array, x, y) {
     return array;
 };
 
-UndoManager.Invert.moveBlock = function(event) {
+UndoManager.Invert.moveBlock = function(args) {
     // args are either:
     //  [id, target, oldTarget]
     //    or
     //  [id, target, oldX, oldY]
     //    or
     //  [serializedBlock, target]
-    var isFromMove = event.args.length === 3,
-        isNewlyCreated = event.args.length === 4 && event.args[2] === false,
-        isFromPosition = !isNewlyCreated && event.args.length === 4;
+    var isFromMove = args.length === 3,
+        isNewlyCreated = args.length === 4 && args[2] === false,
+        isFromPosition = !isNewlyCreated && args.length === 4;
 
     // Check if had a position or old target
     if (isFromMove) {
-        UndoManager.swap(event.args, 1, 2);
+        UndoManager.swap(args, 1, 2);
         return {
             type: 'moveBlock',
-            args: event.args
+            args: args
         };
     } else if (isFromPosition) {  // x, y
         // move target to the end of the list
-        var target = event.args.splice(1, 1)[0];
-        event.args.push(target);
+        var target = args.splice(1, 1)[0];
+        args.push(target);
         return {
             type: 'setBlockPosition',
-            args: event.args
+            args: args
         };
     } else if (isNewlyCreated) {  // newly created (dragged from palette)
         // Get the ids of the blocks
         // return removeBlock w/ [id, false, target, serializedBlock]
-        // FIXME: May need to remove multiple blocks... may need another event
+        // FIXME: May need to remove multiple blocks... may need another args
         return {
             type: 'removeBlock',
-            args: event.args.reverse()
+            args: args.reverse()
         };
     } else {
-        logger.warn('Malformed moveBlock event!:', event);
+        logger.warn('Malformed moveBlock args!:', {type: 'moveBlock', args: args});
     }
 };
 
@@ -263,8 +277,8 @@ UndoManager.Invert.unringify = function() {
     return 'ringify'
 };
 
-UndoManager.Invert.addCostume = function(event) {
-    var serialized = event.args[0],
+UndoManager.Invert.addCostume = function(args) {
+    var serialized = args[0],
         cos = SnapCollaborator.serializer.loadValue(SnapCollaborator.serializer.parse(serialized));
 
     return {
@@ -275,16 +289,16 @@ UndoManager.Invert.addCostume = function(event) {
     };
 };
 
-UndoManager.Invert.removeCostume = function(event) {
-    event.args.shift();
+UndoManager.Invert.removeCostume = function(args) {
+    args.shift();
     return {
         type: 'addCostume',
-        args: event.args
+        args: args
     };
 };
 
-UndoManager.Invert.addSound = function(event) {
-    var serialized = event.args[0],
+UndoManager.Invert.addSound = function(args) {
+    var serialized = args[0],
         sound = SnapCollaborator.serializer.loadValue(SnapCollaborator.serializer.parse(serialized));
     return {
         type: 'removeSound',
@@ -294,11 +308,11 @@ UndoManager.Invert.addSound = function(event) {
     };
 };
 
-UndoManager.Invert.removeSound = function(event) {
-    event.args.shift();
+UndoManager.Invert.removeSound = function(args) {
+    args.shift();
     return {
         type: 'addSound',
-        args: event.args
+        args: args
     };
 };
 
@@ -311,10 +325,10 @@ UndoManager.Invert.setSelector =
 UndoManager.Invert.setBlockSpec =
 UndoManager.Invert.setCommentText =
 UndoManager.Invert.toggleBoolean =
-UndoManager.Invert.setField = function(event) {
+UndoManager.Invert.setField = function(args) {
     return [
-        event.args[0],  // name
-        event.args[2]  // oldValue
+        args[0],  // name
+        args[2]  // oldValue
     ];
 };
 

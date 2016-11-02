@@ -2170,15 +2170,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
                     null,
                     function (definition) {
                         if (definition.spec !== '') {
-                            var id = SnapCollaborator.newId(),
-                                opts = {
-                                    blockType: definition.type,
-                                    category: definition.category,
-                                    spec: definition.spec,
-                                    isGlobal: definition.isGlobal
-                                };
-
-                            SnapCollaborator.addCustomBlock(id, myself.id, opts, SnapCollaborator.id);
+                            SnapCollaborator.addCustomBlock(definition, myself, true);
                         }
                     },
                     myself
@@ -6167,15 +6159,7 @@ StageMorph.prototype.blockTemplates = function (category) {
                     null,
                     function (definition) {
                         if (definition.spec !== '') {
-                            var id = SnapCollaborator.newId(),
-                                opts = {
-                                    blockType: definition.type,
-                                    category: definition.category,
-                                    spec: definition.spec,
-                                    isGlobal: definition.isGlobal
-                                };
-
-                            SnapCollaborator.addCustomBlock(id, myself.id, opts, SnapCollaborator.id);
+                            SnapCollaborator.addCustomBlock(definition, myself, true);
                         }
                     },
                     myself

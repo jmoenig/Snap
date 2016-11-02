@@ -915,7 +915,7 @@ CustomCommandBlockMorph.prototype.deleteBlockDefinition = function () {
     new DialogBoxMorph(
         this,
         function () {
-            SnapCollaborator.deleteCustomBlock(myself.definition.id, myself.receiver().id);
+            SnapCollaborator.deleteCustomBlock(myself.definition);
         },
         this
     ).askYesNo(
