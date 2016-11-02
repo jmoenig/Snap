@@ -160,7 +160,11 @@ UndoManager.Invert.deleteCustomBlock = function(args) {
 };
     //'deleteCustomBlocks',
 
-    //'setCustomBlockType',
+UndoManager.Invert.setCustomBlockType = function(args) {
+    UndoManager.swap(args, 1, 3);  // category, oldCategory
+    UndoManager.swap(args, 2, 4);  // type, oldType
+    return args;
+};
     //'updateBlockLabel',
     //'deleteBlockLabel',
 

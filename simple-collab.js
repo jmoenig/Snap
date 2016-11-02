@@ -287,6 +287,10 @@ SimpleCollaborator.prototype._deleteCustomBlocks = function(blocks) {
     return [ids, serialized];
 };
 
+SimpleCollaborator.prototype._setCustomBlockType = function(definition, category, type) {
+    return [definition.id, category, type, definition.category, definition.type];
+};
+
 SimpleCollaborator.prototype._setStageSize = function(width, height) {
     // Add the old stage size for undo support
     return [
