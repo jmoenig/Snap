@@ -3710,15 +3710,11 @@ BlockRemovalDialogMorph.prototype.selectNone
 // BlockRemovalDialogMorph ops
 
 BlockRemovalDialogMorph.prototype.removeBlocks = function () {
-    var ide = this.target.parentThatIsA(IDE_Morph),
-        ids;
+    var ide = this.target.parentThatIsA(IDE_Morph);
 
     if (!ide) {return; }
     if (this.blocks.length > 0) {
-        ids = this.blocks.map(function (def) {
-            return def.id;
-        });
-        SnapCollaborator.deleteCustomBlocks(ids, ide.stage.id);
+        SnapCollaborator.deleteCustomBlocks(this.blocks);
 
         ide.flushPaletteCache();
         ide.refreshPalette();

@@ -7201,8 +7201,7 @@ InputSlotMorph.prototype.setContents = function (aStringOrFloat) {
 // InputSlotMorph drop-down menu:
 
 InputSlotMorph.prototype.setDropDownValue = function (value) {
-    this.setContents(value);
-    this.updateFieldValue();
+    this.updateFieldValue(value);
 };
 
 InputSlotMorph.prototype.dropDownMenu = function (enableKeyboard) {
@@ -7679,11 +7678,10 @@ InputSlotMorph.prototype.reactToKeystroke = function () {
     }
 };
 
-InputSlotMorph.prototype.updateFieldValue = function () {
-    var newValue = this.contents().text,
-        block = this.parentThatIsA(BlockMorph),
-        field;
+InputSlotMorph.prototype.updateFieldValue = function (newValue) {
+    var block = this.parentThatIsA(BlockMorph);
 
+    newValue = newValue || this.contents().text;
     if (block.id) {  // not in the palette
         this.setContents(this.lastValue);  // set to original value in case it fails
         SnapCollaborator.setField(this, newValue);

@@ -275,6 +275,18 @@ SimpleCollaborator.prototype._deleteCustomBlock = function(definition) {
     return [definition.id, owner.id, serialized, definition.isGlobal];
 };
 
+SimpleCollaborator.prototype._deleteCustomBlocks = function(blocks) {
+    var serialized = [],
+        ids = [];
+
+    for (var i = blocks.length; i--;) {
+        serialized.push(this.serializer.serialize(blocks[i]));
+        ids.push(blocks[i].id);
+    }
+
+    return [ids, serialized];
+};
+
 SimpleCollaborator.prototype._setStageSize = function(width, height) {
     // Add the old stage size for undo support
     return [
@@ -1161,8 +1173,9 @@ SimpleCollaborator.prototype.onAddCustomBlock = function(ownerId, serialized, is
     }
 };
 
-SimpleCollaborator.prototype.onDeleteCustomBlocks = function(ids, ownerId) {
-    var collab = this;
+SimpleCollaborator.prototype.onDeleteCustomBlocks = function(ids) {
+    var collab = this,
+        ownerId = this.ide().stage.id;
 
     return ids.map(function(id) {
         collab.onDeleteCustomBlock(id, ownerId);
