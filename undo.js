@@ -42,6 +42,7 @@ UndoManager.prototype.undo = function() {
         return false;
     }
 
+    console.log('undoing', origEvent);
     event = this.getInverseEvent(origEvent);
     event.replayType = UndoManager.UNDO;
 
@@ -260,6 +261,26 @@ UndoManager.Invert.ringify = function() {
 
 UndoManager.Invert.unringify = function() {
     return 'ringify'
+};
+
+UndoManager.Invert.addCostume = function(event) {
+    var serialized = event.args[0],
+        cos = SnapCollaborator.serializer.loadValue(SnapCollaborator.serializer.parse(serialized));
+
+    return {
+        type: 'removeCostume',
+        args: [
+            cos.id
+        ]
+    };
+};
+
+UndoManager.Invert.removeCostume = function(event) {
+    event.args.shift();
+    return {
+        type: 'addCostume',
+        args: event.args
+    };
 };
 
 UndoManager.Invert.addSound = function(event) {

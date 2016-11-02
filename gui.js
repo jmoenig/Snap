@@ -1032,7 +1032,7 @@ IDE_Morph.prototype.createPalette = function (forSearching) {
             droppedMorph.destroy();
             SnapCollaborator.removeSprite(droppedMorph.object.id);
         } else if (droppedMorph instanceof CostumeIconMorph) {
-            SnapCollaborator.removeCostume(droppedMorph.object.id);
+            SnapCollaborator.removeCostume(droppedMorph.object);
             droppedMorph.destroy();
         } else if (droppedMorph instanceof SoundIconMorph) {
             SnapCollaborator.removeSound(droppedMorph.object);
@@ -1716,8 +1716,7 @@ IDE_Morph.prototype.droppedImage = function (aCanvas, name) {
         return;
     }
 
-    var serializedCostume = costume.toXML(this.serializer).replace('~', '');
-    SnapCollaborator.addCostume(serializedCostume, this.currentSprite.id, SnapCollaborator.id);
+    SnapCollaborator.addCostume(costume, this.currentSprite, true);
 };
 
 IDE_Morph.prototype.droppedSVG = function (anImage, name) {
@@ -6541,8 +6540,7 @@ SpriteIconMorph.prototype.copyCostume = function (costume) {
         serialized;
 
     dup.name = this.object.newCostumeName(dup.name);
-    serialized = dup.toXML(SnapCollaborator.serializer).replace('~', '');
-    SnapCollaborator.addCostume(serialized, this.object.id);
+    SnapCollaborator.addCostume(dup, this.object);
 };
 
 SpriteIconMorph.prototype.copySound = function (sound) {
@@ -6734,16 +6732,14 @@ CostumeIconMorph.prototype.renameCostume = function () {
 CostumeIconMorph.prototype.duplicateCostume = function () {
     var wardrobe = this.parentThatIsA(WardrobeMorph),
         ide = this.parentThatIsA(IDE_Morph),
-        newcos = this.object.copy(),
-        serializedCostume;
+        newcos = this.object.copy();
 
     newcos.name = wardrobe.sprite.newCostumeName(newcos.name);
-    serializedCostume = newcos.toXML(ide.serializer).replace('~', '');
-    SnapCollaborator.addCostume(serializedCostume, wardrobe.sprite.id);
+    SnapCollaborator.addCostume(newcos, wardrobe.sprite);
 };
 
 CostumeIconMorph.prototype.removeCostume = function () {
-    SnapCollaborator.removeCostume(this.object.id);
+    SnapCollaborator.removeCostume(this.object);
 };
 
 CostumeIconMorph.prototype.exportCostume = function () {
@@ -7119,8 +7115,7 @@ WardrobeMorph.prototype.paintNew = function () {
         );
 
     cos.edit(this.world(), ide, true, null, function () {
-        var serializedCostume = cos.toXML(ide.serializer).replace('~', '');
-        SnapCollaborator.addCostume(serializedCostume, myself.sprite.id);
+        SnapCollaborator.addCostume(cos, myself.sprite);
     });
 };
 

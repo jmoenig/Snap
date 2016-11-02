@@ -445,6 +445,29 @@ SimpleCollaborator.prototype._removeSound = function(sound) {
 SimpleCollaborator.prototype._renameSound = function(sound, name) {
     return [sound.id, name, sound.name];
 };
+
+SimpleCollaborator.prototype._addCostume = function(costume, owner, focus) {
+    var args;
+
+    costume.id = this.newId();
+    args = [
+        costume.toXML(this.serializer).replace('~', ''),
+        owner.id
+    ];
+
+    if (focus) {
+        args.push(this.id);
+    }
+    return args;
+};
+
+SimpleCollaborator.prototype._removeCostume = function(costume) {
+    return [
+        costume.id,
+        costume.toXML(this.serializer).replace('~', ''),
+        this._costumeToOwner[costume.id].id
+    ];
+};
 /* * * * * * * * * * * * Updating internal rep * * * * * * * * * * * */
 SimpleCollaborator.prototype._onSetField = function(pId, connId, value) {
     console.assert(!this.blockChildren[pId] || !this.blockChildren[pId][connId],'Connection occupied!');
@@ -1291,7 +1314,6 @@ SimpleCollaborator.prototype.onToggleDraggable = function(spriteId, draggable) {
 };
 
 SimpleCollaborator.prototype._registerCostume = function(costume, sprite) {
-    costume.id = this.newId();
     this._costumes[costume.id] = costume;
     this._costumeToOwner[costume.id] = sprite;
 };
@@ -1347,7 +1369,7 @@ SimpleCollaborator.prototype.onRemoveCostume = function(id) {
         ide = this.ide(),
         wardrobe;
 
-    sprite.costumes.remove(idx);
+    sprite.costumes.remove(idx + 1);
 
     // Check for the wardrobe
     if (ide.spriteEditor instanceof WardrobeMorph) {
