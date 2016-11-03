@@ -104,13 +104,21 @@
 
         //serialized = SnapCollaborator.serializeBlock(block);
 
-    //UndoManager.Invert.addSprite = function(args) {
-        //// args are [width, height, oldHeight, oldWidth]
-        //return {
-            //type: 'removeSprite',
-            //args: args.reverse()
-        //};
-    //};
+    UndoManager.Invert.addSprite = function(args) {
+        // args are [opts]
+        return {
+            type: 'removeSprite',
+            args: [args[0].id]
+        };
+    };
+
+    UndoManager.Invert.removeSprite = function(args) {
+        args.shift();
+        return {
+            type: 'addSprite',
+            args: args
+        };
+    };
 
         //// Sprites
         //'removeSprite',

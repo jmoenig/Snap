@@ -540,6 +540,29 @@ SimpleCollaborator.prototype._updateCostume = function(original, newCostume) {
         original.toXML(this.serializer).replace('~', '')
     ];
 };
+
+SimpleCollaborator.prototype._addSprite = function(opts) {
+    opts.id = this.newId();
+    return [opts, this.id];
+};
+
+SimpleCollaborator.prototype._removeSprite = function(sprite) {
+    var costumes = sprite.costumes.asArray(),
+        opts = {
+            id: sprite.id,
+            name: sprite.name
+        };
+
+    if (costumes.length) {  // has costume (was painted)
+        opts.costume = costumes[0].toXML(this.serializer).replace('~', '');
+    } else {
+        opts.hue = sprite.getHue();
+        opts.brightness = sprite.getBrightness();
+        // ignore the position -> this could most easily have diverged...
+    }
+    return [sprite.id, opts];
+};
+
 /* * * * * * * * * * * * Updating internal rep * * * * * * * * * * * */
 SimpleCollaborator.prototype._onSetField = function(pId, connId, value) {
     console.assert(!this.blockChildren[pId] || !this.blockChildren[pId][connId],'Connection occupied!');
@@ -1344,7 +1367,7 @@ SimpleCollaborator.prototype.onAddSprite = function(opts, creatorId) {
         ide.selectSprite(sprite);
     }
 
-    this.registerOwner(sprite);
+    this.registerOwner(sprite, opts.id);
 };
 
 SimpleCollaborator.prototype.onRemoveSprite = function(spriteId) {

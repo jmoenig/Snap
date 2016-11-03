@@ -1027,10 +1027,10 @@ IDE_Morph.prototype.createPalette = function (forSearching) {
         if (droppedMorph instanceof DialogBoxMorph) {
             myself.world().add(droppedMorph);
         } else if (droppedMorph instanceof SpriteMorph) {
-            SnapCollaborator.removeSprite(droppedMorph.id);
+            SnapCollaborator.removeSprite(droppedMorph);
         } else if (droppedMorph instanceof SpriteIconMorph) {
             droppedMorph.destroy();
-            SnapCollaborator.removeSprite(droppedMorph.object.id);
+            SnapCollaborator.removeSprite(droppedMorph.object);
         } else if (droppedMorph instanceof CostumeIconMorph) {
             SnapCollaborator.removeCostume(droppedMorph.object);
             droppedMorph.destroy();
@@ -2054,7 +2054,7 @@ IDE_Morph.prototype.addNewSprite = function () {
         y: rnd.call(this, -160, 160)
     };
 
-    SnapCollaborator.addSprite(opts, SnapCollaborator.id);
+    SnapCollaborator.addSprite(opts);
 };
 
 IDE_Morph.prototype.paintNewSprite = function () {
@@ -2077,7 +2077,7 @@ IDE_Morph.prototype.paintNewSprite = function () {
                 costume: cos.toXML(myself.serializer).replace('~', ''),
                 name: name
             };
-            SnapCollaborator.addSprite(opts, SnapCollaborator.id);
+            SnapCollaborator.addSprite(opts);
         }
     );
 };
@@ -6400,7 +6400,7 @@ SpriteIconMorph.prototype.userMenu = function () {
         );
     });
     menu.addItem("delete", function() {
-        SnapCollaborator.removeSprite(this.object.id);
+        SnapCollaborator.removeSprite(this.object);
     });
     menu.addLine();
     if (StageMorph.prototype.enableInheritance) {
