@@ -41,6 +41,7 @@ SimpleCollaborator.prototype.initializeRecords = function() {
     this._blockToOwnerId = {};
 
     this._blockToTarget = {};
+    this._duplicatedSprites = {};
 };
 
 SimpleCollaborator.prototype.initialize = function() {
@@ -553,6 +554,12 @@ SimpleCollaborator.prototype._removeSprite = function(sprite) {
             name: sprite.name
         };
 
+    if (this._duplicatedSprites[sprite.id]) {
+        opts = this._duplicatedSprites[sprite.id];
+        delete this._duplicatedSprites[sprite.id];
+        return [sprite.id, opts.srcId, opts.x, opts.y];
+    }
+
     if (costumes.length) {  // has costume (was painted)
         opts.costume = costumes[0].toXML(this.serializer).replace('~', '');
     } else {
@@ -565,6 +572,18 @@ SimpleCollaborator.prototype._removeSprite = function(sprite) {
 
 SimpleCollaborator.prototype._renameSprite = function(sprite, name) {
     return [sprite.id, name, sprite.name];
+};
+
+SimpleCollaborator.prototype._duplicateSprite = function(sprite, position) {
+    var id = this.newId();
+
+    this._duplicatedSprites[id] = {
+        srcId: sprite.id,
+        x: position.x,
+        y: position.y
+    };
+
+    return [id, sprite.id, position.x, position.y, this.id];
 };
 
 /* * * * * * * * * * * * Updating internal rep * * * * * * * * * * * */
@@ -1379,7 +1398,7 @@ SimpleCollaborator.prototype.onRemoveSprite = function(spriteId) {
     this.ide().removeSprite(sprite);
 };
 
-SimpleCollaborator.prototype.onDuplicateSprite = function(spriteId, x, y, creatorId) {
+SimpleCollaborator.prototype.onDuplicateSprite = function(newId, spriteId, x, y, creatorId) {
     var sprite = this._owners[spriteId],
         ide = this.ide(),
         dup = ide.duplicateSprite(sprite);
@@ -1390,7 +1409,7 @@ SimpleCollaborator.prototype.onDuplicateSprite = function(spriteId, x, y, creato
     if (creatorId === this.id) {
         ide.selectSprite(dup);
     }
-    this.registerOwner(dup);
+    this.registerOwner(dup, newId);
 };
 
 SimpleCollaborator.prototype.onRenameSprite = function(spriteId, name) {

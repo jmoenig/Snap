@@ -6393,10 +6393,8 @@ SpriteIconMorph.prototype.userMenu = function () {
         var position = myself.world().hand.position();
 
         SnapCollaborator.duplicateSprite(
-            myself.object.id,
-            position.x,
-            position.y,
-            SnapCollaborator.id
+            myself.object,
+            position
         );
     });
     menu.addItem("delete", function() {

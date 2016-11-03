@@ -113,11 +113,22 @@
     };
 
     UndoManager.Invert.removeSprite = function(args) {
-        args.shift();
-        return {
-            type: 'addSprite',
-            args: args
-        };
+        if (args.length === 2) {
+            args.shift();
+            return {
+                type: 'addSprite',
+                args: args
+            };
+        } else {  // duplicated sprite
+            return {
+                type: 'duplicateSprite',
+                args: args
+            };
+        }
+    };
+
+    UndoManager.Invert.duplicateSprite = function(args) {
+        return 'removeSprite';
     };
 
     UndoManager.Invert.toggleDraggable = function(args) {
@@ -126,7 +137,6 @@
             !args[1]
         ];
     };
-        //'duplicateSprite',
         //'importSprites',
 
         //// Sounds
