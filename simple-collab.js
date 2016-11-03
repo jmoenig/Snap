@@ -294,7 +294,7 @@ SimpleCollaborator.prototype._setCustomBlockType = function(definition, category
 SimpleCollaborator.prototype._deleteBlockLabel = function(definition, label) {
     var index = label.parent.children.indexOf(label);
 
-    return [definition.id, index];
+    return [definition.id, index, label.fragment.type, label.fragment.labelString];
 };
 
 SimpleCollaborator.prototype._updateBlockLabel = function(definition, label, fragment) {
