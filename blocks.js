@@ -2032,10 +2032,7 @@ SyntaxElementMorph.prototype.endLayout = function () {
     %shd    - Chameleon colored rectuangular drop-down for shadowed var names
     %lst    - chameleon colored rectangular drop-down for list names
     %b      - chameleon colored hexagonal slot (for predicates)
-<<<<<<< HEAD
-=======
     %bool   - chameleon colored hexagonal slot (for predicates), static
->>>>>>> master
     %l      - list icon
     %c      - C-shaped command slot, special form for primitives
     %cs     - C-shaped, auto-reifying, accepts reporter drops
@@ -8061,20 +8058,15 @@ TemplateSlotMorph.prototype.unflash = function () {
     %b         - Boolean
     %boolUE    - Boolean unevaluated
 
-<<<<<<< HEAD
-    evaluate() returns null
-=======
     I can be directly edited. When the user clicks on me I toggle
     between <true>, <false> and <null> values.
 
-    evaluate returns my value.
+    evaluate() returns my value.
 
     my most important public attributes and accessors are:
 
-    value - user editable contents (Boolean or null)
+    value                      - user editable contents (Boolean or null)
     setContents(Boolean/null)  - display the argument (Boolean or null)
-
->>>>>>> master
 */
 
 // BooleanSlotMorph inherits from ArgMorph:
