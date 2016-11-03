@@ -120,9 +120,6 @@
         };
     };
 
-        //// Sprites
-        //'removeSprite',
-        //'renameSprite',
     UndoManager.Invert.toggleDraggable = function(args) {
         return [
             args[0],
@@ -350,6 +347,8 @@
             args: args
         };
     };
+
+    UndoManager.Invert.renameSprite =
 
     UndoManager.Invert.updateCostume =
     UndoManager.Invert.renameCostume =

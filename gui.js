@@ -1181,7 +1181,7 @@ IDE_Morph.prototype.createSpriteBar = function () {
             safeName = myself.newSpriteName(newName, myself.currentSprite);
 
         if (safeName !== currentName) {
-            SnapCollaborator.renameSprite(myself.currentSprite.id, safeName);
+            SnapCollaborator.renameSprite(myself.currentSprite, safeName);
         }
     };
     this.spriteBar.nameField = nameField;

@@ -563,6 +563,10 @@ SimpleCollaborator.prototype._removeSprite = function(sprite) {
     return [sprite.id, opts];
 };
 
+SimpleCollaborator.prototype._renameSprite = function(sprite, name) {
+    return [sprite.id, name, sprite.name];
+};
+
 /* * * * * * * * * * * * Updating internal rep * * * * * * * * * * * */
 SimpleCollaborator.prototype._onSetField = function(pId, connId, value) {
     console.assert(!this.blockChildren[pId] || !this.blockChildren[pId][connId],'Connection occupied!');
