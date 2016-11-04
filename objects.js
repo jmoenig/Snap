@@ -5636,6 +5636,12 @@ StageMorph.prototype.fireKeyEvent = function (key) {
         if (!ide.isAppMode) {return ide.saveProjectsBrowser(); }
         return;
     }
+    if (evt === 'ctrl z') {
+        SnapUndo.undo();
+    }
+    if (evt === 'ctrl y') {
+        SnapUndo.redo();
+    }
     if (evt === 'esc') {
         return this.fireStopAllEvent();
     }
