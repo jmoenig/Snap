@@ -1611,6 +1611,12 @@ SimpleCollaborator.prototype._registerBlock = function(block) {
     if (!(block instanceof PrototypeHatBlockMorph || block.isPrototype)) {
         console.assert(block.id, `Cannot register block without id: ${block.id} (${block.blockSpec})`);
         this._blocks[block.id] = block;
+
+        // Record the block's initial position...
+        var scripts = block.parentThatIsA(ScriptsMorph),
+            standardPosition = this.getStandardPosition(scripts, block.position());
+
+        this._positionOf[block.id] = standardPosition;
     }
 };
 
