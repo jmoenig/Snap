@@ -1480,22 +1480,19 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
 
         // allow GUI symbols as label icons
         // usage: $symbolName[-size-r-g-b], size and color values are optional
+        // If there isn't a symbol under that name, it just styles whatever is
+        // after "$", so you can add unicode icons to your blocks, for example
+        // ☺️
         tokens = spec.slice(1).split('-');
         if (!contains(SymbolMorph.prototype.names, tokens[0])) {
-            part = new StringMorph(spec);
+            part = new StringMorph(tokens[0]);
             part.fontName = this.labelFontName;
             part.fontStyle = this.labelFontStyle;
-            part.fontSize = this.fontSize;
-            part.color = new Color(255, 255, 255);
-            part.isBold = true;
-            part.shadowColor = this.color.darker(this.labelContrast);
-            part.shadowOffset = MorphicPreferences.isFlat ?
-                    new Point() : this.embossing;
-            part.drawNew();
-            return part;
+            part.fontSize = this.fontSize * (+tokens[1] || 1);
+        } else {
+            part = new SymbolMorph(tokens[0]);
+            part.size = this.fontSize * (+tokens[1] || 1.2);
         }
-        part = new SymbolMorph(tokens[0]);
-        part.size = this.fontSize * (+tokens[1] || 1.2);
         part.color = new Color(
             +tokens[2] === 0 ? 0 : +tokens[2] || 255,
             +tokens[3] === 0 ? 0 : +tokens[3] || 255,
