@@ -588,13 +588,15 @@ SimpleCollaborator.prototype._renameSprite = function(sprite, name) {
 SimpleCollaborator.prototype._duplicateSprite = function(sprite, position) {
     var id = this.newId(),
         newSprite = sprite.copy(),
+        ide = this.ide(),
         str,
         start,
         end,
         serialized;
 
     newSprite.id = id;
-    newSprite.parent = this.ide().stage;
+    newSprite.setName(ide.newSpriteName(sprite.name));
+    newSprite.parent = ide.stage;
 
     // Create new ids for all the sprite's children
     serialized = this.serializer.serialize(newSprite);
