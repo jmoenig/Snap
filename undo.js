@@ -140,7 +140,14 @@
             !args[1]
         ];
     };
-        //'importSprites',
+
+    UndoManager.Invert.importSprites = function(args) {
+        args.shift();
+        return {
+            type: 'removeSprites',
+            args: args
+        };
+    };
 
         //// Sounds
         //'addSound',

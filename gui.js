@@ -1750,9 +1750,7 @@ IDE_Morph.prototype.droppedText = function (aString, name) {
         });
     }
     if (aString.indexOf('<sprites') === 0) {
-        this.uniqueIdForImport(aString, lbl, function(str) {
-            return SnapCollaborator.importSprites(str);
-        });
+        return SnapCollaborator.importSprites(aString);
     }
     if (aString.indexOf('<media') === 0) {
         return this.openMediaString(aString);

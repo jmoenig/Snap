@@ -571,7 +571,7 @@ SimpleCollaborator.prototype.uniqueIdForImport = function (str) {
         }
     }
 
-    return model.toString();
+    return model;
 };
 
 SimpleCollaborator.prototype._removeSprite = function(sprite) {
@@ -602,7 +602,7 @@ SimpleCollaborator.prototype._duplicateSprite = function(sprite, position) {
     start = '<sprites>' + this._getOpeningSpriteTag(serialized);
     end = '</sprites>';
 
-    str = this.uniqueIdForImport(serialized);
+    str = this.uniqueIdForImport(serialized).toString();
     str = str.replace(/<sprite.*?[^\\]>/, start) + end;  // preserve sprite's id
 
     return [str, null, id];
@@ -614,6 +614,16 @@ SimpleCollaborator.prototype._getOpeningSpriteTag = function(str) {
         match = str.match(regex);
 
     return match[0];
+};
+
+SimpleCollaborator.prototype._importSprites = function(str) {
+    var model = this.uniqueIdForImport(str),
+        ids;
+
+    // need to get the ids for each of the sprites (so we can delete them on undo!)
+    ids = model.children.map(child => child.attributes.collabId);
+    str = model.toString();
+    return [str, ids];
 };
 
 /* * * * * * * * * * * * Updating internal rep * * * * * * * * * * * */
@@ -658,6 +668,7 @@ SimpleCollaborator.prototype.EVENTS = [
     // Sprites
     'addSprite',
     'removeSprite',
+    'removeSprites',  // (used for undo)
     'renameSprite',
     'toggleDraggable',
     'duplicateSprite',
@@ -1391,6 +1402,10 @@ SimpleCollaborator.prototype.onAddSprite = function(serialized, creatorId) {
     if (creatorId === this.id) {
         ide.selectSprite(sprites[sprites.length-1]);
     }
+};
+
+SimpleCollaborator.prototype.onRemoveSprites = function(ids) {
+    ids.forEach(id => this.onRemoveSprite(id));
 };
 
 SimpleCollaborator.prototype.onRemoveSprite = function(spriteId) {
