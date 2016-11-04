@@ -224,7 +224,7 @@ SimpleCollaborator.prototype._setBlockPosition = function(id, position) {
     var block = this.getBlockFromId(id),
         scripts = block.parentThatIsA(ScriptsMorph),
         standardPosition = this.getStandardPosition(scripts, position),
-        oldPosition = this._positionOf[id];
+        oldPosition = this._positionOf[id] || new Point(100, 100);
 
     return [id, standardPosition.x, standardPosition.y, oldPosition.x, oldPosition.y];
 };
@@ -558,6 +558,22 @@ SimpleCollaborator.prototype._addSprite = function(sprite, costume, position) {
     return [serialized, this.id, sprite.id];
 };
 
+SimpleCollaborator.prototype.uniqueIdForImport = function (str) {
+    var msg,
+        myself = this,
+        model = myself.serializer.parse(str),
+        children = model.allChildren();
+
+    // Just add an id to everything... not the most efficient but effective for now
+    for (var i = children.length; i--;) {
+        if (children[i].attributes) {
+            children[i].attributes.collabId = SnapCollaborator.newId();
+        }
+    }
+
+    return model.toString();
+};
+
 SimpleCollaborator.prototype._removeSprite = function(sprite) {
     var costumes = sprite.costumes.asArray(),
         serialized = '<sprites>' + this.serializer.serialize(sprite) + '</sprites>';
@@ -572,15 +588,32 @@ SimpleCollaborator.prototype._renameSprite = function(sprite, name) {
 SimpleCollaborator.prototype._duplicateSprite = function(sprite, position) {
     var id = this.newId(),
         newSprite = sprite.copy(),
+        str,
+        start,
+        end,
         serialized;
 
-    // Get new ids for all the blocks and stuff!
-    // TODO
     newSprite.id = id;
     newSprite.parent = this.ide().stage;
-    serialized = '<sprites>' + this.serializer.serialize(newSprite) + '</sprites>';
 
-    return [serialized, null, id];
+    // Create new ids for all the sprite's children
+    serialized = this.serializer.serialize(newSprite);
+
+    start = '<sprites>' + this._getOpeningSpriteTag(serialized);
+    end = '</sprites>';
+
+    str = this.uniqueIdForImport(serialized);
+    str = str.replace(/<sprite.*?[^\\]>/, start) + end;  // preserve sprite's id
+
+    return [str, null, id];
+};
+
+// Helper method
+SimpleCollaborator.prototype._getOpeningSpriteTag = function(str) {
+    var regex = /<sprite.*?[^\\]>/,
+        match = str.match(regex);
+
+    return match[0];
 };
 
 /* * * * * * * * * * * * Updating internal rep * * * * * * * * * * * */
