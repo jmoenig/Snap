@@ -2042,19 +2042,21 @@ IDE_Morph.prototype.removeSetting = function (key) {
 // IDE_Morph sprite list access
 
 IDE_Morph.prototype.addNewSprite = function () {
-    var rnd = Process.prototype.reportRandom;
+    var sprite = new SpriteMorph(this.globalVariables),
+        rnd = Process.prototype.reportRandom;
+
+    sprite.name = this.newSpriteName(sprite.name);
+    sprite.setCenter(this.stage.center());
+    sprite.parent = this.stage;
 
     // randomize sprite properties
-    var opts = {
-        hue: rnd.call(this, 0, 100),
-        brightness: rnd.call(this, 50, 100),
-        name: this.newSpriteName(new SpriteMorph(this.globalVariables).name),
-        dir: rnd.call(this, 1, 360),
-        x: rnd.call(this, -220, 220),
-        y: rnd.call(this, -160, 160)
-    };
+    sprite.setHue(rnd.call(this, 0, 100));
+    sprite.setBrightness(rnd.call(this, 50, 100));
+    sprite.turn(rnd.call(this, 1, 360));
+    sprite.setXPosition(rnd.call(this, -220, 220));
+    sprite.setYPosition(rnd.call(this, -160, 160));
 
-    SnapCollaborator.addSprite(opts);
+    SnapCollaborator.addSprite(sprite);
 };
 
 IDE_Morph.prototype.paintNewSprite = function () {
@@ -2073,11 +2075,11 @@ IDE_Morph.prototype.paintNewSprite = function () {
         nop,  // No need to do anything special on cancel
         function () {
             cos.shrinkWrap();
-            opts = {
-                costume: cos.toXML(myself.serializer).replace('~', ''),
-                name: name
-            };
-            SnapCollaborator.addSprite(opts);
+            sprite.parent = myself.stage;
+            sprite.addCostume(cos);
+            sprite.wearCostume(cos);
+            sprite.gotoXY(0, 0);
+            SnapCollaborator.addSprite(sprite);
         }
     );
 };

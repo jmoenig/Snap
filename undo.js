@@ -108,7 +108,7 @@
         // args are [opts]
         return {
             type: 'removeSprite',
-            args: [args[0].id]
+            args: [args[2]]
         };
     };
 
@@ -128,7 +128,10 @@
     };
 
     UndoManager.Invert.duplicateSprite = function(args) {
-        return 'removeSprite';
+        return {
+            type: 'removeSprite',
+            args: [args[2]]
+        };
     };
 
     UndoManager.Invert.toggleDraggable = function(args) {

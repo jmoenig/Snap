@@ -41,7 +41,6 @@ SimpleCollaborator.prototype.initializeRecords = function() {
     this._blockToOwnerId = {};
 
     this._blockToTarget = {};
-    this._duplicatedSprites = {};
 };
 
 SimpleCollaborator.prototype.initialize = function() {
@@ -542,32 +541,28 @@ SimpleCollaborator.prototype._updateCostume = function(original, newCostume) {
     ];
 };
 
-SimpleCollaborator.prototype._addSprite = function(opts) {
-    opts.id = this.newId();
-    return [opts, this.id];
+SimpleCollaborator.prototype._addSprite = function(sprite, costume, position) {
+    var serialized,
+        stage = this.ide().stage;
+
+    sprite.parent = stage;
+    position = position || sprite.rotationCenter();
+    sprite.id = this.newId();
+
+    //if (costume) {
+        //sprite.addCostume(costume);
+        //sprite.wearCostume(costume);
+    //}
+    serialized = '<sprites>' + this.serializer.serialize(sprite) + '</sprites>';
+
+    return [serialized, this.id, sprite.id];
 };
 
 SimpleCollaborator.prototype._removeSprite = function(sprite) {
     var costumes = sprite.costumes.asArray(),
-        opts = {
-            id: sprite.id,
-            name: sprite.name
-        };
+        serialized = '<sprites>' + this.serializer.serialize(sprite) + '</sprites>';
 
-    if (this._duplicatedSprites[sprite.id]) {
-        opts = this._duplicatedSprites[sprite.id];
-        delete this._duplicatedSprites[sprite.id];
-        return [sprite.id, opts.srcId, opts.x, opts.y];
-    }
-
-    if (costumes.length) {  // has costume (was painted)
-        opts.costume = costumes[0].toXML(this.serializer).replace('~', '');
-    } else {
-        opts.hue = sprite.getHue();
-        opts.brightness = sprite.getBrightness();
-        // ignore the position -> this could most easily have diverged...
-    }
-    return [sprite.id, opts];
+    return [sprite.id, serialized];
 };
 
 SimpleCollaborator.prototype._renameSprite = function(sprite, name) {
@@ -575,15 +570,17 @@ SimpleCollaborator.prototype._renameSprite = function(sprite, name) {
 };
 
 SimpleCollaborator.prototype._duplicateSprite = function(sprite, position) {
-    var id = this.newId();
+    var id = this.newId(),
+        newSprite = sprite.copy(),
+        serialized;
 
-    this._duplicatedSprites[id] = {
-        srcId: sprite.id,
-        x: position.x,
-        y: position.y
-    };
+    // Get new ids for all the blocks and stuff!
+    // TODO
+    newSprite.id = id;
+    newSprite.parent = this.ide().stage;
+    serialized = '<sprites>' + this.serializer.serialize(newSprite) + '</sprites>';
 
-    return [id, sprite.id, position.x, position.y, this.id];
+    return [serialized, null, id];
 };
 
 /* * * * * * * * * * * * Updating internal rep * * * * * * * * * * * */
@@ -1352,45 +1349,15 @@ SimpleCollaborator.prototype._loadCostume = function(savedCostume, callback) {
     }
 };
 
-SimpleCollaborator.prototype.onAddSprite = function(opts, creatorId) {
+SimpleCollaborator.prototype.onDuplicateSprite =
+SimpleCollaborator.prototype.onAddSprite = function(serialized, creatorId) {
     var ide = this.ide(),
-        myself = this,
-        sprite = new SpriteMorph(ide.globalVariables);
+        sprite;
 
-    // TODO: The sprite should be created in the _addSprite method (or before)
-    // Then simply added here (using appearIn probably)
-
-    sprite.name = opts.name;
-    sprite.setCenter(ide.stage.center());
-    ide.stage.add(sprite);
-    ide.sprites.add(sprite);
-    ide.corral.addSprite(sprite);
-
-    // randomize sprite properties
-    if (!opts.costume) {
-        sprite.setHue(opts.hue);
-        sprite.setBrightness(opts.brightness);
-        sprite.turn(opts.dir);
-    } else {
-        this._loadCostume(opts.costume, function(costume) {
-            costume.loaded = true;
-            sprite.addCostume(costume);
-            sprite.wearCostume(costume);
-            ide.hasChangedMedia = true;
-            myself._registerCostume(costume, sprite);
-        });
-    }
-
-    if (opts.x !== undefined && opts.y !== undefined) {
-        sprite.setXPosition(opts.x);
-        sprite.setYPosition(opts.y);
-    }
-
+    sprites = this.serializer.loadSprites(serialized, ide);
     if (creatorId === this.id) {
-        ide.selectSprite(sprite);
+        ide.selectSprite(sprites[sprites.length-1]);
     }
-
-    this.registerOwner(sprite, opts.id);
 };
 
 SimpleCollaborator.prototype.onRemoveSprite = function(spriteId) {
@@ -1398,19 +1365,19 @@ SimpleCollaborator.prototype.onRemoveSprite = function(spriteId) {
     this.ide().removeSprite(sprite);
 };
 
-SimpleCollaborator.prototype.onDuplicateSprite = function(newId, spriteId, x, y, creatorId) {
-    var sprite = this._owners[spriteId],
-        ide = this.ide(),
-        dup = ide.duplicateSprite(sprite);
+//SimpleCollaborator.prototype.onDuplicateSprite = function(newId, spriteId, x, y, creatorId) {
+    //var sprite = this._owners[spriteId],
+        //ide = this.ide(),
+        //dup = ide.duplicateSprite(sprite);
 
-    dup.setPosition(new Point(x, y));
-    dup.keepWithin(ide.stage);
+    //dup.setPosition(new Point(x, y));
+    //dup.keepWithin(ide.stage);
 
-    if (creatorId === this.id) {
-        ide.selectSprite(dup);
-    }
-    this.registerOwner(dup, newId);
-};
+    //if (creatorId === this.id) {
+        //ide.selectSprite(dup);
+    //}
+    //this.registerOwner(dup, newId);
+//};
 
 SimpleCollaborator.prototype.onRenameSprite = function(spriteId, name) {
     var sprite = this._owners[spriteId],

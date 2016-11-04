@@ -694,6 +694,8 @@ SnapSerializer.prototype.loadSprites = function (xmlString, ide) {
 //    ide.stage.drawNew();
     ide.createCorral();
     ide.fixLayout();
+
+    return project.stage.children;
 };
 
 SnapSerializer.prototype.loadMedia = function (xmlString) {
