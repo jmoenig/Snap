@@ -3579,13 +3579,13 @@ IDE_Morph.prototype.exportProjectSummary = function (useDropShadows) {
     pname = this.projectName || localize('untitled');
 
     html = new XML_Element('html');
+    html.attributes['lang'] = SnapTranslator.language;
     // html.attributes.contenteditable = 'true';
 
     head = addNode('head', html);
 
     meta = addNode('meta', head);
-    meta.attributes['http-equiv'] = 'Content-Type';
-    meta.attributes.content = 'text/html; charset=UTF-8';
+    meta.attributes['charset'] = 'UTF-8';
 
     if (useDropShadows) {
         css = 'img {' +
@@ -3752,7 +3752,7 @@ IDE_Morph.prototype.exportProjectSummary = function (useDropShadows) {
 
     this.saveFileAs(
         '<!DOCTYPE html>' + html.toString(),
-        'text/html;charset=utf-8,',
+        'text/html;charset=utf-8',
         pname,
         true // request opening a new window.
     );
