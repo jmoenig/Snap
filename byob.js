@@ -728,7 +728,7 @@ CustomCommandBlockMorph.prototype.edit = function () {
             null,
             function (definition) {
                 if (definition) { // temporarily update everything
-                    SnapCollaborator.setCustomBlockType(myself.definition, definition.category, definition.type);
+                    SnapActions.setCustomBlockType(myself.definition, definition.category, definition.type);
                 }
             },
             myself
@@ -915,7 +915,7 @@ CustomCommandBlockMorph.prototype.deleteBlockDefinition = function () {
     new DialogBoxMorph(
         this,
         function () {
-            SnapCollaborator.deleteCustomBlock(myself.definition);
+            SnapActions.deleteCustomBlock(myself.definition);
         },
         this
     ).askYesNo(
@@ -2412,9 +2412,9 @@ BlockLabelFragmentMorph.prototype.mouseClickLeft = function () {
         function () {
 
             if (frag.isDeleted) {
-                SnapCollaborator.deleteBlockLabel(myself.parent.definition, myself);
+                SnapActions.deleteBlockLabel(myself.parent.definition, myself);
             } else {
-                SnapCollaborator.updateBlockLabel(myself.parent.definition, myself, frag);
+                SnapActions.updateBlockLabel(myself.parent.definition, myself, frag);
             }
         },
         this,
@@ -3708,7 +3708,7 @@ BlockRemovalDialogMorph.prototype.removeBlocks = function () {
 
     if (!ide) {return; }
     if (this.blocks.length > 0) {
-        SnapCollaborator.deleteCustomBlocks(this.blocks);
+        SnapActions.deleteCustomBlocks(this.blocks);
 
         ide.flushPaletteCache();
         ide.refreshPalette();

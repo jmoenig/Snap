@@ -1743,13 +1743,13 @@ SpriteMorph.prototype.blockTemplates = function (category) {
             if (myself.isVariableNameInUse(pair[0], pair[1])) {
                 myself.inform('that name is already in use');
             } else {
-                SnapCollaborator.addVariable(pair[0], pair[1] || myself.id);
+                SnapActions.addVariable(pair[0], pair[1] || myself.id);
             }
         }
     }
 
     function deleteVar(name) {
-        SnapCollaborator.deleteVariable(name, myself.id);
+        SnapActions.deleteVariable(name, myself.id);
     }
 
     if (cat === 'motion') {
@@ -2170,7 +2170,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
                     null,
                     function (definition) {
                         if (definition.spec !== '') {
-                            SnapCollaborator.addCustomBlock(definition, myself, true);
+                            SnapActions.addCustomBlock(definition, myself, true);
                         }
                     },
                     myself
@@ -5808,14 +5808,14 @@ StageMorph.prototype.blockTemplates = function (category) {
             if (myself.isVariableNameInUse(pair[0])) {
                 myself.inform('that name is already in use');
             } else {
-                SnapCollaborator.addVariable(pair[0], pair[1] || myself.id);
+                SnapActions.addVariable(pair[0], pair[1] || myself.id);
                 //myself.addVariable(pair[0], pair[1]);
             }
         }
     }
 
     function deleteVar(name) {
-        SnapCollaborator.deleteVariable(name, myself.id);
+        SnapActions.deleteVariable(name, myself.id);
     }
 
     if (cat === 'motion') {
@@ -6165,7 +6165,7 @@ StageMorph.prototype.blockTemplates = function (category) {
                     null,
                     function (definition) {
                         if (definition.spec !== '') {
-                            SnapCollaborator.addCustomBlock(definition, myself, true);
+                            SnapActions.addCustomBlock(definition, myself, true);
                         }
                     },
                     myself

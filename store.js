@@ -657,7 +657,7 @@ SnapSerializer.prototype.loadSprites = function (xmlString, ide) {
         sprite.gotoXY(+model.attributes.x || 0, +model.attributes.y || 0);
         myself.loadObject(sprite, model);
 
-        SnapCollaborator.loadOwner(sprite);
+        SnapActions.loadOwner(sprite);
     });
 
     // restore inheritance and nesting associations
@@ -1481,7 +1481,7 @@ SnapSerializer.prototype.openProject = function (project, ide) {
     //   - definitions
     //   - costumes
     //   - sounds
-    SnapCollaborator.loadProject(ide, project.collabStartIndex);
+    SnapActions.loadProject(ide, project.collabStartIndex);
     ide.world().keyboardReceiver = project.stage;
 };
 
@@ -1553,7 +1553,7 @@ StageMorph.prototype.toXML = function (serializer) {
             '<blocks>%</blocks>' +
             '<variables>%</variables>' +
             '</project>',
-        SnapCollaborator.lastSeen,
+        SnapActions.lastSeen,
         (ide && ide.projectName) ? ide.projectName : localize('Untitled'),
         serializer.app,
         serializer.version,

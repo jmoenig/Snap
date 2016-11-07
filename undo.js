@@ -48,7 +48,7 @@
         event = this.getInverseEvent(origEvent);
         event.replayType = UndoManager.UNDO;
 
-        SnapCollaborator.applyEvent(event);
+        SnapActions.applyEvent(event);
         return true;
     };
 
@@ -67,7 +67,7 @@
         };
         event.replayType = UndoManager.REDO;
 
-        SnapCollaborator.applyEvent(event);
+        SnapActions.applyEvent(event);
         return true;
     };
 
@@ -102,7 +102,7 @@
         };
     };
 
-        //serialized = SnapCollaborator.serializeBlock(block);
+        //serialized = SnapActions.serializeBlock(block);
 
     UndoManager.Invert.addSprite = function(args) {
         // args are [opts]
@@ -170,7 +170,7 @@
 
         //// Custom blocks
     UndoManager.Invert.addCustomBlock = function(args) {
-        var def = SnapCollaborator.serializer.loadCustomBlock(SnapCollaborator.serializer.parse(args[1]));
+        var def = SnapActions.serializer.loadCustomBlock(SnapActions.serializer.parse(args[1]));
         return {
             type: 'deleteCustomBlock',
             args: [def.id, args[0]]
@@ -344,7 +344,7 @@
 
     UndoManager.Invert.addCostume = function(args) {
         var serialized = args[0],
-            cos = SnapCollaborator.serializer.loadValue(SnapCollaborator.serializer.parse(serialized));
+            cos = SnapActions.serializer.loadValue(SnapActions.serializer.parse(serialized));
 
         return {
             type: 'removeCostume',
@@ -364,7 +364,7 @@
 
     UndoManager.Invert.addSound = function(args) {
         var serialized = args[0],
-            sound = SnapCollaborator.serializer.loadValue(SnapCollaborator.serializer.parse(serialized));
+            sound = SnapActions.serializer.loadValue(SnapActions.serializer.parse(serialized));
         return {
             type: 'removeSound',
             args: [
