@@ -106,8 +106,6 @@
         };
     };
 
-        //serialized = SnapActions.serializeBlock(block);
-
     UndoManager.Invert.addSprite = function(args) {
         // args are [opts]
         return {
@@ -152,17 +150,6 @@
             args: args
         };
     };
-
-        //// Sounds
-        //'addSound',
-        //'renameSound',
-        //'removeSound',
-
-        //// Costumes
-        //'addCostume',
-        //'renameCostume',
-        //'removeCostume',
-        //'updateCostume',
 
     UndoManager.Invert.addVariable = function() {
         return 'deleteVariable';
@@ -330,9 +317,6 @@
             logger.warn('Malformed moveBlock args!:', {type: 'moveBlock', args: args});
         }
     };
-
-        //'moveBlock',
-        //'importBlocks',
 
     UndoManager.Invert.addListInput = function() {
         return 'removeListInput';
