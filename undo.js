@@ -75,6 +75,10 @@
         var type = event.type,
             result;
         
+        if (!UndoManager.Invert[type]) {
+            throw Error('Cannot undo "' + type + '" event!');
+        }
+
         event = JSON.parse(JSON.stringify(event));  // deep copy
         result = UndoManager.Invert[type].call(this, event.args);
 
