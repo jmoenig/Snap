@@ -38,6 +38,7 @@ ActionManager.prototype.initializeRecords = function() {
 
     // Additional records for undo/redo support
     this._positionOf = {};
+    this._targetOf = {};
     this._blockToOwnerId = {};
 
     this._blockToTarget = {};
@@ -220,13 +221,25 @@ ActionManager.prototype._removeBlock = function(id, userDestroy) {
     ];
 };
 
+ActionManager.prototype._getBlockState = function(id) {
+    var state = {};
+
+    if (this._targetOf[id]) {
+        return [this._targetOf[id]];
+    } else if (this._positionOf[id]) {
+        return [this._positionOf[id].x, this._positionOf[id].y];
+    } else {  // newly created
+        return [null];
+    }
+};
+
 ActionManager.prototype._setBlockPosition = function(id, position) {
     var block = this.getBlockFromId(id),
         scripts = block.parentThatIsA(ScriptsMorph),
         standardPosition = this.getStandardPosition(scripts, position),
-        oldPosition = this._positionOf[id] || new Point(100, 100);
+        oldState = this._getBlockState(id);
 
-    return [id, standardPosition.x, standardPosition.y, oldPosition.x, oldPosition.y];
+    return [id, standardPosition.x, standardPosition.y].concat(oldState);
 };
 
 ActionManager.prototype._setBlocksPositions = function(ids, positions) {
@@ -645,6 +658,19 @@ ActionManager.prototype._importSprites = function(str) {
 };
 
 /* * * * * * * * * * * * Updating internal rep * * * * * * * * * * * */
+ActionManager.prototype._onSetBlocksPositions = function(ids, positions) {
+    for (var i = ids.length; i--;) {
+        this._onSetBlockPosition(ids[i], positions[i].x, positions[i].y);
+    }
+};
+
+ActionManager.prototype._onSetBlockPosition = function(id, x, y) {
+    var position = new Point(x, y);
+
+    this._positionOf[id] = position;
+    this.onSetBlockPosition(id, position);
+};
+
 ActionManager.prototype._onSetField = function(pId, connId, value) {
     console.assert(!this.blockChildren[pId] || !this.blockChildren[pId][connId],'Connection occupied!');
 
@@ -655,28 +681,6 @@ ActionManager.prototype._onSetField = function(pId, connId, value) {
     this.fieldValues[pId][connId] = value;
 
     this.onSetField(pId, connId, value);
-};
-
-ActionManager.prototype._onSetBlockPosition = function(id, x, y) {
-    logger.log('<<< setting position of ', id, 'to', x, ',', y);
-
-    // Check if this is causing a disconnect
-    var parent = this.blockToParent[id];
-    if (parent) {
-        delete this.blockChildren[parent.id][parent.conn];
-        //this.onBlockDisconnected(id, parent.id, parent.conn);
-    }
-
-    this.onSetBlockPosition(id, x, y);
-};
-
-// / / / / / / / / / / / Variables / / / / / / / / / / / //
-ActionManager.prototype._onAddVariable = function(name, ownerId) {
-    this.onAddVariable(name, ownerId);
-};
-
-ActionManager.prototype._onDeleteVariable = function(name, ownerId) {
-    this.onDeleteVariable(name, ownerId);
 };
 
 /* * * * * * * * * * * * On UI Events * * * * * * * * * * * */
@@ -785,14 +789,28 @@ ActionManager.prototype.getAdjustedPosition = function(position, scripts) {
 };
 
 ActionManager.prototype.registerBlocks = function(firstBlock) {
-    var block = firstBlock;
+    var block = firstBlock,
+        prevBlock;
 
+    // TODO: Update this to record the block state, too!
     while (block) {
         block.isDraggable = true;
         block.isTemplate = false;
         this._blocks[block.id] = block;
+        if (prevBlock instanceof CommandBlockMorph) {
+            this._targetOf[block.id] = this._serializeMoveTarget(
+                block,
+                {
+                    point: prevBlock.bottomAttachPoint(),
+                    element: prevBlock,
+                    loc: 'bottom',
+                    type: 'block'
+                }
+            );
+        }
 
         // FIXME: This doesn't check the inputs()!
+        prevBlock = block;
         block = block.nextBlock ? block.nextBlock() : null;
     }
 
@@ -1009,22 +1027,14 @@ ActionManager.prototype._updateBlockDefinitions = function(block) {
     }
 };
 
-ActionManager.prototype.onSetBlocksPositions = function(ids, positions) {
-    for (var i = ids.length; i--;) {
-        this.onSetBlockPosition(ids[i], positions[i].x, positions[i].y);
-    }
-};
-
-ActionManager.prototype.onSetBlockPosition = function(id, x, y) {
+ActionManager.prototype.onSetBlockPosition = function(id, position) {
     // Disconnect from previous...
     var block = this.getBlockFromId(id),
         scripts = block.parentThatIsA(ScriptsMorph),
-        oldParent = block.parent,
-        position = new Point(x, y);
+        oldParent = block.parent;
 
     console.assert(block, 'Block "' + id + '" does not exist! Cannot set position');
 
-    this._positionOf[id] = position;
     if (block && block.prepareToBeGrabbed) {
         block.prepareToBeGrabbed({world: this.ide().world()});
     }

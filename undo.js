@@ -254,7 +254,10 @@
     };
 
     UndoManager.Invert.setBlockPosition = function(args) {
-        // args are [id, x, y, oldX, oldY] or [id, x, y, oldTarget]
+        // args are:
+        //  - [id, x, y, oldX, oldY]
+        //  - [id, x, y, oldTarget]
+        //  - [id, x, y, null]
 
         if (args.length === 5) {
             // Swap the old position and new position
@@ -263,6 +266,11 @@
             return {
                 type: 'setBlockPosition',
                 args: args
+            };
+        } else if (args[3] === null) {  // newly created
+            return {
+                type: 'removeBlock',
+                args: [args[0], true]
             };
         } else {  // previous was a moveBlock
             UndoManager.swap(args, 1, 3);  // x, oldTarget
