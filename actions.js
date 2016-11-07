@@ -1632,7 +1632,7 @@ ActionManager.prototype._getCurrentTarget = function(block) {
         target,
         id;
 
-    if (parent instanceof BlockMorph) {
+    if (parent instanceof BlockMorph || parent instanceof CommandSlotMorph) {
         if (block instanceof CommandBlockMorph) {
             // basic case (following another statement)
             if (parent.nextBlock && parent.nextBlock() === block) {
@@ -1738,16 +1738,27 @@ ActionManager.prototype.loadCustomBlocks = function(blocks, owner) {
 
 ActionManager.prototype.traverse = function(block, fn) {
     var current = [block],
-        next;
+        next,
+        inputs,
+        i,j;
 
     while (current.length) {
         next = [];
-        for (var i = current.length; i--;) {
+        for (i = current.length; i--;) {
             block = current[i];
             fn(block);
 
             if (block.inputs) {  // Add nested blocks
-                next = next.concat(block.inputs().filter(input => input instanceof ReporterBlockMorph));
+                inputs = block.inputs();
+                for (j = inputs.length; j--;) {
+                    if (inputs[j] instanceof ReporterBlockMorph) {
+                        next.push(inputs[j]);
+                    } else if (inputs[j] instanceof CommandSlotMorph &&
+                        inputs[j].nestedBlock()) {
+
+                        next.push(inputs[j].nestedBlock());
+                    }
+                }
             }
 
             if (block.nextBlock && block.nextBlock()) {  // add following blocks
