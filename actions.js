@@ -350,17 +350,21 @@ ActionManager.prototype._serializeMoveTarget = function(block, target) {
 
 ActionManager.prototype._moveBlock = function(block, target) {
     var isNewBlock = !block.id,
-        id = block.id || this.newId(),
-        oldTarget = this._blockToTarget[id],
-        position = this._positionOf[id],
+        oldTarget,
+        position,
         serialized,
+        id,
         args;
 
     // Serialize the target
     target = this._serializeMoveTarget(block, target);
     if (isNewBlock) {
+        // TODO: id the input blocks and record their connection state
         this._idBlocks(block);
     }
+    id = block.id;
+    oldTarget = this._blockToTarget[id];
+    position = this._positionOf[id];
 
     serialized = this.serializeBlock(block, isNewBlock);
 
