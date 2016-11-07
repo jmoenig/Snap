@@ -284,7 +284,19 @@ SimpleCollaborator.prototype._deleteCustomBlocks = function(blocks) {
         ids.push(blocks[i].id);
     }
 
+    serialized = '<blocks>' + serialized.join('') + '</blocks>';
     return [ids, serialized];
+};
+
+SimpleCollaborator.prototype._importBlocks = function(str, lbl) {
+    // Get unique ids for each of the blocks
+    var model = this.uniqueIdForImport(str),
+        ids;
+
+    // need to get the ids for each of the sprites (so we can delete them on undo!)
+    ids = model.children.map(child => child.attributes.collabId);
+    str = model.toString();
+    return [str, lbl, ids];
 };
 
 SimpleCollaborator.prototype._setCustomBlockType = function(definition, category, type) {
@@ -1282,11 +1294,11 @@ SimpleCollaborator.prototype.onAddCustomBlock = function(ownerId, serialized, is
 };
 
 SimpleCollaborator.prototype.onDeleteCustomBlocks = function(ids) {
-    var collab = this,
+    var myself = this,
         ownerId = this.ide().stage.id;
 
     return ids.map(function(id) {
-        collab.onDeleteCustomBlock(id, ownerId);
+        myself.onDeleteCustomBlock(id, ownerId);
     });
 };
 
@@ -1638,8 +1650,6 @@ SimpleCollaborator.prototype._registerBlock = function(block) {
 };
 
 SimpleCollaborator.prototype.loadOwner = function(owner) {
-    var collab = this;
-
     this.registerOwner(owner, owner.id);
 
     // Load the blocks from scripts

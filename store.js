@@ -800,6 +800,7 @@ SnapSerializer.prototype.loadVariables = function (varFrame, element) {
 
 SnapSerializer.prototype.loadCustomBlock = function (element, isGlobal) {
     var definition = new CustomBlockDefinition(element.attributes.s || ''),
+        myself = this,
         inputs,
         vars,
         header,

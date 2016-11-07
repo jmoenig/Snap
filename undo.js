@@ -185,7 +185,20 @@
             args: [ownerId, serialized, args[3]]
         };
     };
-        //'deleteCustomBlocks',
+
+    UndoManager.Invert.deleteCustomBlocks = function(args) {
+        return {
+            type: 'importBlocks',
+            args: [args[1]]
+        };
+    };
+
+    UndoManager.Invert.importBlocks = function(args) {
+        return {
+            type: 'deleteCustomBlocks',
+            args: [args[2]]
+        };
+    };
 
     UndoManager.Invert.setCustomBlockType = function(args) {
         UndoManager.swap(args, 1, 3);  // category, oldCategory

@@ -1745,9 +1745,7 @@ IDE_Morph.prototype.droppedText = function (aString, name) {
         return this.openCloudDataString(aString);
     }
     if (aString.indexOf('<blocks') === 0) {
-        this.uniqueIdForImport(aString, lbl, function(blocks) {
-            return SnapCollaborator.importBlocks(blocks, lbl);
-        });
+        return SnapCollaborator.importBlocks(aString, lbl);
     }
     if (aString.indexOf('<sprites') === 0) {
         return SnapCollaborator.importSprites(aString);
