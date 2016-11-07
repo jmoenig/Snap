@@ -235,9 +235,9 @@
 
         //// Block manipulation
     UndoManager.Invert.addBlock = function(args) {
-        // args are [block, ownerId, x, y, false, blockId]
+        // args are [block, ownerId, x, y, ids]
         return {
-            type: 'removeBlock',
+            type: 'removeBlocks',
             args: args.reverse()
         };
     };
@@ -298,13 +298,13 @@
 
     UndoManager.Invert.moveBlock = function(args) {
         // args are either:
-        //  [id, target, oldTarget]
+        //  [id, target, oldTarget]  --> from move
         //    or
-        //  [id, target, oldX, oldY]
+        //  [id, target, oldX, oldY]  --> from position
         //    or
-        //  [serializedBlock, target]
-        var isFromMove = args.length === 3,
-            isNewlyCreated = args.length === 4 && args[2] === false,
+        //  [id, target, ids]  --> newly created
+        var isNewlyCreated = args.length === 3 && args[2] instanceof Array,
+            isFromMove = !isNewlyCreated && args.length === 3,
             isFromPosition = !isNewlyCreated && args.length === 4;
 
         // Check if had a position or old target
@@ -315,19 +315,15 @@
                 args: args
             };
         } else if (isFromPosition) {  // x, y
-            // move target to the end of the list
+            // remove target
             var target = args.splice(1, 1)[0];
-            args.push(target);
             return {
                 type: 'setBlockPosition',
                 args: args
             };
         } else if (isNewlyCreated) {  // newly created (dragged from palette)
-            // Get the ids of the blocks
-            // return removeBlock w/ [id, false, target, serializedBlock]
-            // FIXME: May need to remove multiple blocks... may need another args
             return {
-                type: 'removeBlock',
+                type: 'removeBlocks',
                 args: args.reverse()
             };
         } else {

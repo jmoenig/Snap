@@ -173,11 +173,23 @@ ActionManager.prototype.getStandardPosition = function(scripts, position) {
     return position;
 };
 
+ActionManager.prototype._getStatementIds = function(block) {
+    var ids = [];
+
+    while (block) {
+        ids.push(block.id);
+        block = block.nextBlock ? block.nextBlock() : null;
+    }
+    return ids;
+};
+
 ActionManager.prototype._addBlock = function(block, scripts, position, ownerId) {
     var stdPosition = this.getStandardPosition(scripts, position),
-        serialized;
+        serialized,
+        ids;
 
     this._idBlocks(block);
+    ids = this._getStatementIds(block);
 
     serialized = this.serializeBlock(block, true);
     return [
@@ -185,8 +197,7 @@ ActionManager.prototype._addBlock = function(block, scripts, position, ownerId) 
         ownerId || scripts.owner.id,
         stdPosition.x,
         stdPosition.y,
-        false,
-        block.id
+        ids
     ];
 };
 
@@ -348,43 +359,32 @@ ActionManager.prototype._serializeMoveTarget = function(block, target) {
 
 ActionManager.prototype._moveBlock = function(block, target) {
     var isNewBlock = !block.id,
-        oldTarget,
         position,
         serialized,
+        ids,
         id,
         args;
 
     // Serialize the target
     target = this._serializeMoveTarget(block, target);
     if (isNewBlock) {
-        // TODO: id the input blocks and record their connection state
         this._idBlocks(block);
     }
     id = block.id;
-    // TODO: Get the block's current state
-    oldTarget = this._targetOf[id];
-    position = this._positionOf[id];
-
     serialized = this.serializeBlock(block, isNewBlock);
 
+    // If there is no target, get the current position
+
+    var oldState = this._getBlockState(id);  // target, pos (2), or null
+
+    args = [serialized, target];
     if (isNewBlock) {
+        ids = this._getStatementIds(block);
+        oldState = [ids];
         block.destroy();
     }
 
-    // If there is no target, get the current position
-    args = [serialized, target];
-    if (isNewBlock) {
-        // provide info for easy undo
-        args.push(false, id);
-    } else if (oldTarget) {
-        args.push(oldTarget);
-    } else if (position) {
-        args.push(position.x, position.y);
-    } else {
-        logger.warn('Could not get position or old target for ' + id);
-    }
-
-    return args;
+    return args.concat(oldState);
 };
 
 ActionManager.prototype._setField = function(field, value) {
@@ -710,6 +710,7 @@ ActionManager.prototype.EVENTS = [
     // Block manipulation
     'addBlock',
     'removeBlock',
+    'removeBlocks',
     'setBlockPosition',
     'setBlocksPositions',
     'moveBlock',
@@ -774,13 +775,15 @@ ActionManager.prototype.getAdjustedPosition = function(position, scripts) {
     return position;
 };
 
-ActionManager.prototype._idBlocks = function(block) {
+ActionManager.prototype._idBlocks = function(block, returnIds) {
+    var ids = [];
     this.traverse(block, iterBlock => {
         iterBlock.isDraggable = true;
         iterBlock.isTemplate = false;
         iterBlock.id = this.newId();
+        ids.push(iterBlock.id);
     });
-    return block;
+    return returnIds ? ids : block;
 };
 
 ActionManager.prototype.registerBlocks = function(firstBlock) {
@@ -958,6 +961,10 @@ ActionManager.prototype.onMoveBlock = function(id, rawTarget) {
     block.snap(target);
     this.updateCommentsPositions(block);
     this._updateBlockDefinitions(block);
+};
+
+ActionManager.prototype.onRemoveBlocks = function(ids) {
+    ids.forEach(id => this.onRemoveBlock(id, true));
 };
 
 ActionManager.prototype.onRemoveBlock = function(id, userDestroy) {
