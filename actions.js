@@ -40,8 +40,6 @@ ActionManager.prototype.initializeRecords = function() {
     this._positionOf = {};
     this._targetOf = {};
     this._blockToOwnerId = {};
-
-    this._blockToTarget = {};
 };
 
 ActionManager.prototype.initialize = function() {
@@ -173,19 +171,6 @@ ActionManager.prototype.getStandardPosition = function(scripts, position) {
     var scale = SyntaxElementMorph.prototype.scale;
     position = position.subtract(scripts.topLeft()).divideBy(scale);
     return position;
-};
-
-ActionManager.prototype._idBlocks = function(block) {
-    var iterBlock = block;
-    while (iterBlock) {
-        iterBlock.isDraggable = true;
-        iterBlock.isTemplate = false;
-        iterBlock.id = this.newId();
-
-        iterBlock = iterBlock.nextBlock ? iterBlock.nextBlock() : null;
-    }
-
-    return block;
 };
 
 ActionManager.prototype._addBlock = function(block, scripts, position, ownerId) {
@@ -376,7 +361,8 @@ ActionManager.prototype._moveBlock = function(block, target) {
         this._idBlocks(block);
     }
     id = block.id;
-    oldTarget = this._blockToTarget[id];
+    // TODO: Get the block's current state
+    oldTarget = this._targetOf[id];
     position = this._positionOf[id];
 
     serialized = this.serializeBlock(block, isNewBlock);
@@ -788,32 +774,23 @@ ActionManager.prototype.getAdjustedPosition = function(position, scripts) {
     return position;
 };
 
+ActionManager.prototype._idBlocks = function(block) {
+    this.traverse(block, iterBlock => {
+        iterBlock.isDraggable = true;
+        iterBlock.isTemplate = false;
+        iterBlock.id = this.newId();
+    });
+    return block;
+};
+
 ActionManager.prototype.registerBlocks = function(firstBlock) {
     var block = firstBlock,
+        target,
         prevBlock;
 
     // TODO: Update this to record the block state, too!
-    while (block) {
-        block.isDraggable = true;
-        block.isTemplate = false;
-        this._blocks[block.id] = block;
-        if (prevBlock instanceof CommandBlockMorph) {
-            this._targetOf[block.id] = this._serializeMoveTarget(
-                block,
-                {
-                    point: prevBlock.bottomAttachPoint(),
-                    element: prevBlock,
-                    loc: 'bottom',
-                    type: 'block'
-                }
-            );
-        }
-
-        // FIXME: This doesn't check the inputs()!
-        prevBlock = block;
-        block = block.nextBlock ? block.nextBlock() : null;
-    }
-
+    // TODO: Make a function to get the current target of connected block
+    this.traverse(block, this._registerBlock.bind(this));
     return firstBlock;
 };
 
@@ -945,7 +922,7 @@ ActionManager.prototype.onMoveBlock = function(id, rawTarget) {
         target = copy(rawTarget),
         scripts;
 
-    this._blockToTarget[id] = rawTarget;
+    this._targetOf[id] = rawTarget;
 
     if (block instanceof CommandBlockMorph) {
         // Check if connecting to the beginning of a custom block definition
@@ -1000,7 +977,7 @@ ActionManager.prototype.onRemoveBlock = function(id, userDestroy) {
         delete this._blocks[id];
         delete this._positionOf[id];
         delete this._blockToOwnerId[id];
-        delete this._blockToTarget[id];
+        delete this._targetOf[id];
 
         this._updateBlockDefinitions(block);
 
@@ -1650,16 +1627,68 @@ ActionManager.prototype.loadProject = function(ide, lastSeen) {
     this.lastSeen = lastSeen || 0;
 };
 
+ActionManager.prototype._getCurrentTarget = function(block) {
+    var parent = block.parent,
+        target,
+        id;
+
+    if (parent instanceof BlockMorph) {
+        if (block instanceof CommandBlockMorph) {
+            // basic case (following another statement)
+            if (parent.nextBlock && parent.nextBlock() === block) {
+                return this._serializeMoveTarget(
+                    block,
+                    {
+                        point: parent.bottomAttachPoint(),
+                        element: parent,
+                        loc: 'bottom',
+                        type: 'block'
+                    });
+            } else if (parent instanceof CommandSlotMorph) {  // nested in a slot
+                return this._serializeMoveTarget(
+                    block,
+                    {
+                        point: parent.slotAttachPoint(),
+                        element: parent,
+                        loc: 'bottom',
+                        type: 'slot'
+                    });
+            }
+
+        } else if (block instanceof ReporterBlockMorph) {
+            // Get the generic id
+            id = block.id;
+            block.id = null;
+            target = this.getId(block);
+            block.id = id;
+            return target;
+        } else {  // CommentMorph
+            return block.block.id;
+        }
+    }
+
+    return null;
+};
+
 ActionManager.prototype._registerBlock = function(block) {
+    var scripts,
+        standardPosition,
+        target;
+
     if (!(block instanceof PrototypeHatBlockMorph || block.isPrototype)) {
         console.assert(block.id, `Cannot register block without id: ${block.id} (${block.blockSpec})`);
         this._blocks[block.id] = block;
 
-        // Record the block's initial position...
-        var scripts = block.parentThatIsA(ScriptsMorph),
-            standardPosition = this.getStandardPosition(scripts, block.position());
+        // Record the block's initial state...
+        target = this._getCurrentTarget(block);
+        scripts = block.parentThatIsA(ScriptsMorph);
 
-        this._positionOf[block.id] = standardPosition;
+        if (target) {
+            this._targetOf[block.id] = target;
+        } else if (scripts) {
+            standardPosition = this.getStandardPosition(scripts, block.position());
+            this._positionOf[block.id] = standardPosition;
+        }
     }
 };
 
@@ -1667,7 +1696,7 @@ ActionManager.prototype.loadOwner = function(owner) {
     this.registerOwner(owner, owner.id);
 
     // Load the blocks from scripts
-    owner.scripts.children.forEach(block => this.traverse(block, this._registerBlock.bind(this)));
+    owner.scripts.children.forEach(block => this.registerBlocks(block));
 
     // Load the blocks from custom block definitions
     var customBlocks = owner.customBlocks,
