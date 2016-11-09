@@ -14,8 +14,46 @@ function ActionManager() {
     this.id = null;
     this.rank = null;
     this.isLeader = false;
-    this.initializeRecords();
     this.initialize();
+};
+
+ActionManager.prototype.addActions = function() {
+    var actions = Array.prototype.slice.call(arguments),
+        myself = this;
+
+    actions.forEach(function(method) {
+        myself[method] = function() {
+            var args = Array.prototype.slice.apply(arguments),
+                fn = '_' + method,
+                result,
+                msg;
+
+            if (this[fn]) {
+                args = this[fn].apply(this, args) || args;
+            }
+
+            msg = {
+                type: method,
+                args: args
+            };
+
+            this.applyEvent(msg);
+        };
+    });
+};
+
+ActionManager.prototype.initializeEventMethods = function() {
+    // Every event/action supported by the action manager has the same life-cycle:
+    //  - eventName
+    //    - public API
+    //  - _eventName
+    //    - Convert public API args to serializable, easy form
+    //    - Add any args needed for undo
+    //  - _onEventName
+    //    - Preprocessing for an accepted event
+    //  - onEventName
+    //    - Update the Snap environment
+    this.addActions.apply(this, this.EVENTS);
 };
 
 ActionManager.prototype.initializeRecords = function() {
@@ -47,6 +85,8 @@ ActionManager.prototype.initialize = function() {
         ws = new WebSocket(url),
         self = this;
 
+    this.initializeRecords();
+    this.initializeEventMethods();
     ws.onopen = function() {
         logger.debug('websocket connected!');
     };
@@ -733,25 +773,6 @@ ActionManager.prototype.EVENTS = [
     'toggleBoolean',
     'setField'
 ];
-ActionManager.prototype.EVENTS.forEach(function(method) {
-    ActionManager.prototype[method] = function() {
-        var args = Array.prototype.slice.apply(arguments),
-            fn = '_' + method,
-            result,
-            msg;
-
-        if (this[fn]) {
-            args = this[fn].apply(this, args) || args;
-        }
-
-        msg = {
-            type: method,
-            args: args
-        };
-
-        this.applyEvent(msg);
-    };
-});
 
 ActionManager.prototype.applyEvent = function(event) {
     if (this.isLeader) {
