@@ -581,8 +581,13 @@ SyntaxElementMorph.prototype.revertToDefaultInput = function (arg, noValues) {
             deflt = this.emptySlot();
         }
     }
-    // set default value
-    if (!noValues) {
+
+    // Try to set to the old value, first. If there is no old value,
+    // then (potentially) try to set the default value
+    var lastValue = SnapActions.getFieldValue(this, inp);
+    if (lastValue !== undefined) {
+        deflt.setContents(lastValue);
+    } else if (!noValues) {  // set default value
         if (inp !== -1) {
             if (deflt instanceof MultiArgMorph) {
                 deflt.setContents(this.defaults);

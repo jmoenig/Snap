@@ -107,7 +107,7 @@ ActionManager.prototype.newId = function() {
     return id;
 };
 
-ActionManager.prototype.getId = function (block) {
+ActionManager.prototype.getId = function (block, index) {
     var id = '';
     while (!block.id) {
         if (block.parent === null) {  // template block
@@ -120,6 +120,10 @@ ActionManager.prototype.getId = function (block) {
         }
     }
     id = block.id + '/' +  id;
+
+    if (index !== undefined) {
+        id += index + '/';
+    }
     return id;
 };
 
@@ -220,6 +224,7 @@ ActionManager.prototype._removeBlock = function(id, userDestroy) {
 ActionManager.prototype._getBlockState = function(id) {
     var state = {};
 
+    // TODO: Use a constant to specify the type
     if (this._targetOf[id]) {
         return [this._targetOf[id]];
     } else if (this._positionOf[id]) {
@@ -364,6 +369,10 @@ ActionManager.prototype._moveBlock = function(block, target) {
         ids,
         id,
         args;
+
+    // If the target is a ReporterBlockMorph, then we are replacing that block.
+    // Undo should place that block back into it's current place
+    // TODO
 
     // Serialize the target
     target = this._serializeMoveTarget(block, target);
@@ -657,16 +666,10 @@ ActionManager.prototype._onSetBlockPosition = function(id, x, y) {
     this.onSetBlockPosition(id, position);
 };
 
-ActionManager.prototype._onSetField = function(pId, connId, value) {
-    console.assert(!this.blockChildren[pId] || !this.blockChildren[pId][connId],'Connection occupied!');
+ActionManager.prototype._onSetField = function(fieldId, value) {
+    this.fieldValues[fieldId] = value;
 
-    if (!this.fieldValues[pId]) {
-        this.fieldValues[pId] = {};
-    }
-
-    this.fieldValues[pId][connId] = value;
-
-    this.onSetField(pId, connId, value);
+    this.onSetField(fieldId, value);
 };
 
 /* * * * * * * * * * * * On UI Events * * * * * * * * * * * */
@@ -1015,7 +1018,8 @@ ActionManager.prototype.onSetBlockPosition = function(id, position) {
     // Disconnect from previous...
     var block = this.getBlockFromId(id),
         scripts = block.parentThatIsA(ScriptsMorph),
-        oldParent = block.parent;
+        oldParent = block.parent,
+        inputIndex = oldParent && oldParent.inputs ? oldParent.inputs().indexOf(block) : -1;
 
     console.assert(block, 'Block "' + id + '" does not exist! Cannot set position');
 
@@ -1062,13 +1066,22 @@ ActionManager.prototype.updateCommentsPositions = function(block) {
     }
 };
 
+ActionManager.prototype.getFieldValue = function(block, index) {
+    var fieldId = this.getId(block, index);
+
+    return this.fieldValues[fieldId];
+};
+
 ActionManager.prototype.disconnectBlock = function(block, scripts) {
-    var oldParent = block.parent;
+    var oldParent = block.parent,
+        inputIndex;
 
     if (scripts) block.parent = scripts;
 
     scripts = scripts || block.parentThatIsA(ScriptsMorph);
     if (oldParent) {
+        inputIndex = oldParent.inputs ? oldParent.inputs().indexOf(block) : -1;
+
         if (oldParent.revertToDefaultInput) oldParent.revertToDefaultInput(block);
 
         if (!(oldParent instanceof ScriptsMorph)) {
@@ -1080,6 +1093,7 @@ ActionManager.prototype.disconnectBlock = function(block, scripts) {
             }
             oldParent.changed();
 
+            // TODO: if it had a field value, set the value now
             if (scripts) {
                 scripts.drawNew();
                 scripts.changed();
@@ -1680,6 +1694,8 @@ ActionManager.prototype._getCurrentTarget = function(block) {
 ActionManager.prototype._registerBlock = function(block) {
     var scripts,
         standardPosition,
+        fieldId,
+        value,
         target;
 
     if (!(block instanceof PrototypeHatBlockMorph || block.isPrototype)) {
@@ -1696,6 +1712,15 @@ ActionManager.prototype._registerBlock = function(block) {
             standardPosition = this.getStandardPosition(scripts, block.position());
             this._positionOf[block.id] = standardPosition;
         }
+
+        // Record the field values if it has any
+        block.inputs().forEach(input => {
+            value = input.contents && input.contents().text;
+            if (!(input instanceof BlockMorph) && value !== undefined) {
+                fieldId = this.getId(input);
+                this.fieldValues[fieldId] = value;
+            }
+        });
     }
 };
 
