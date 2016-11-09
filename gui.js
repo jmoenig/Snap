@@ -274,7 +274,7 @@ IDE_Morph.prototype.openIn = function (world) {
     }
 
     this.buildPanes();
-    SnapCollaborator.loadProject(this);
+    SnapActions.loadProject(this);
     world.add(this);
     world.userMenu = this.userMenu;
 
@@ -1027,19 +1027,19 @@ IDE_Morph.prototype.createPalette = function (forSearching) {
         if (droppedMorph instanceof DialogBoxMorph) {
             myself.world().add(droppedMorph);
         } else if (droppedMorph instanceof SpriteMorph) {
-            SnapCollaborator.removeSprite(droppedMorph.id);
+            SnapActions.removeSprite(droppedMorph);
         } else if (droppedMorph instanceof SpriteIconMorph) {
             droppedMorph.destroy();
-            SnapCollaborator.removeSprite(droppedMorph.object.id);
+            SnapActions.removeSprite(droppedMorph.object);
         } else if (droppedMorph instanceof CostumeIconMorph) {
-            SnapCollaborator.removeCostume(droppedMorph.object.id);
+            SnapActions.removeCostume(droppedMorph.object);
             droppedMorph.destroy();
         } else if (droppedMorph instanceof SoundIconMorph) {
-            SnapCollaborator.removeSound(droppedMorph.object.id);
+            SnapActions.removeSound(droppedMorph.object);
             droppedMorph.destroy();
         } else {
             if (droppedMorph.id) {
-                SnapCollaborator.removeBlock(droppedMorph.id);
+                SnapActions.removeBlock(droppedMorph.id);
             } else {
                 droppedMorph.destroy();
             }
@@ -1114,7 +1114,7 @@ IDE_Morph.prototype.createSpriteBar = function () {
             myself, // the IDE is the target
             function () {
                 if (myself.currentSprite instanceof SpriteMorph) {
-                    SnapCollaborator.setRotationStyle(myself.currentSprite.id, rotationStyle);
+                    SnapActions.setRotationStyle(myself.currentSprite, rotationStyle);
                 }
             },
             symbols[rotationStyle], // label
@@ -1181,7 +1181,7 @@ IDE_Morph.prototype.createSpriteBar = function () {
             safeName = myself.newSpriteName(newName, myself.currentSprite);
 
         if (safeName !== currentName) {
-            SnapCollaborator.renameSprite(myself.currentSprite.id, safeName);
+            SnapActions.renameSprite(myself.currentSprite, safeName);
         }
     };
     this.spriteBar.nameField = nameField;
@@ -1192,7 +1192,7 @@ IDE_Morph.prototype.createSpriteBar = function () {
         'checkbox',
         null,
         function () {
-            SnapCollaborator.toggleDraggable(myself.currentSprite.id, !myself.currentSprite.isDraggable);
+            SnapActions.toggleDraggable(myself.currentSprite, !myself.currentSprite.isDraggable);
         },
         localize('draggable'),
         function () {
@@ -1716,8 +1716,7 @@ IDE_Morph.prototype.droppedImage = function (aCanvas, name) {
         return;
     }
 
-    var serializedCostume = costume.toXML(this.serializer).replace('~', '');
-    SnapCollaborator.addCostume(serializedCostume, this.currentSprite.id, SnapCollaborator.id);
+    SnapActions.addCostume(costume, this.currentSprite, true);
 };
 
 IDE_Morph.prototype.droppedSVG = function (anImage, name) {
@@ -1730,10 +1729,9 @@ IDE_Morph.prototype.droppedSVG = function (anImage, name) {
 };
 
 IDE_Morph.prototype.droppedAudio = function (anAudio, name) {
-    var sound = new Sound(anAudio, name.split('.')[0]),  // up to period
-        serialized = sound.toXML(this.serializer).replace('~', '');
+    var sound = new Sound(anAudio, name.split('.')[0]);  // up to period
 
-    SnapCollaborator.addSound(serialized, this.currentSprite.id, SnapCollaborator.id);
+    SnapActions.addSound(sound, this.currentSprite, true);
 };
 
 IDE_Morph.prototype.droppedText = function (aString, name) {
@@ -1747,14 +1745,10 @@ IDE_Morph.prototype.droppedText = function (aString, name) {
         return this.openCloudDataString(aString);
     }
     if (aString.indexOf('<blocks') === 0) {
-        this.uniqueIdForImport(aString, lbl, function(blocks) {
-            return SnapCollaborator.importBlocks(blocks, lbl);
-        });
+        return SnapActions.importBlocks(aString, lbl);
     }
     if (aString.indexOf('<sprites') === 0) {
-        this.uniqueIdForImport(aString, lbl, function(str) {
-            return SnapCollaborator.importSprites(str);
-        });
+        return SnapActions.importSprites(aString);
     }
     if (aString.indexOf('<media') === 0) {
         return this.openMediaString(aString);
@@ -2044,19 +2038,21 @@ IDE_Morph.prototype.removeSetting = function (key) {
 // IDE_Morph sprite list access
 
 IDE_Morph.prototype.addNewSprite = function () {
-    var rnd = Process.prototype.reportRandom;
+    var sprite = new SpriteMorph(this.globalVariables),
+        rnd = Process.prototype.reportRandom;
+
+    sprite.name = this.newSpriteName(sprite.name);
+    sprite.setCenter(this.stage.center());
+    sprite.parent = this.stage;
 
     // randomize sprite properties
-    var opts = {
-        hue: rnd.call(this, 0, 100),
-        brightness: rnd.call(this, 50, 100),
-        name: this.newSpriteName(new SpriteMorph(this.globalVariables).name),
-        dir: rnd.call(this, 1, 360),
-        x: rnd.call(this, -220, 220),
-        y: rnd.call(this, -160, 160)
-    };
+    sprite.setHue(rnd.call(this, 0, 100));
+    sprite.setBrightness(rnd.call(this, 50, 100));
+    sprite.turn(rnd.call(this, 1, 360));
+    sprite.setXPosition(rnd.call(this, -220, 220));
+    sprite.setYPosition(rnd.call(this, -160, 160));
 
-    SnapCollaborator.addSprite(opts, SnapCollaborator.id);
+    SnapActions.addSprite(sprite);
 };
 
 IDE_Morph.prototype.paintNewSprite = function () {
@@ -2075,11 +2071,11 @@ IDE_Morph.prototype.paintNewSprite = function () {
         nop,  // No need to do anything special on cancel
         function () {
             cos.shrinkWrap();
-            opts = {
-                costume: cos.toXML(myself.serializer).replace('~', ''),
-                name: name
-            };
-            SnapCollaborator.addSprite(opts, SnapCollaborator.id);
+            sprite.parent = myself.stage;
+            sprite.addCostume(cos);
+            sprite.wearCostume(cos);
+            sprite.gotoXY(0, 0);
+            SnapActions.addSprite(sprite);
         }
     );
 };
@@ -3293,7 +3289,7 @@ IDE_Morph.prototype.newProject = function () {
     this.createCorral();
     this.selectSprite(this.stage.children[0]);
     this.fixLayout();
-    SnapCollaborator.loadProject(this);
+    SnapActions.loadProject(this);
 };
 
 IDE_Morph.prototype.save = function () {
@@ -3881,7 +3877,7 @@ IDE_Morph.prototype.uniqueIdForImport = function (str, name, callback) {
             // Just add an id to everything... not the most efficient but effective for now
             for (var i = children.length; i--;) {
                 if (children[i].attributes) {
-                    children[i].attributes.collabId = SnapCollaborator.newId();
+                    children[i].attributes.collabId = SnapActions.newId();
                 }
             }
 
@@ -3943,7 +3939,7 @@ IDE_Morph.prototype.importCustomBlocks = function (blocks) {
         'Imported Blocks Module' + (name ? ': ' + name : '') + '.',
         2
     );
-    SnapCollaborator.loadCustomBlocks(blocks);
+    SnapActions.loadCustomBlocks(blocks);
 };
 
 IDE_Morph.prototype.openSpritesString = function (str) {
@@ -4663,7 +4659,7 @@ IDE_Morph.prototype.userSetStageSize = function () {
     new DialogBoxMorph(
         this,
         function(point) {
-            SnapCollaborator.setStageSize(point.x, point.y);
+            SnapActions.setStageSize(point.x, point.y);
         },
         this
     ).promptVector(
@@ -6394,15 +6390,13 @@ SpriteIconMorph.prototype.userMenu = function () {
     menu.addItem("duplicate", function() {
         var position = myself.world().hand.position();
 
-        SnapCollaborator.duplicateSprite(
-            myself.object.id,
-            position.x,
-            position.y,
-            SnapCollaborator.id
+        SnapActions.duplicateSprite(
+            myself.object,
+            position
         );
     });
     menu.addItem("delete", function() {
-        SnapCollaborator.removeSprite(this.object.id);
+        SnapActions.removeSprite(this.object);
     });
     menu.addLine();
     if (StageMorph.prototype.enableInheritance) {
@@ -6534,7 +6528,7 @@ SpriteIconMorph.prototype.copyStack = function (block) {
     });
 
     dup.id = null;
-    SnapCollaborator.addBlock(dup, this.object.scripts, position);
+    SnapActions.addBlock(dup, this.object.scripts, position);
 };
 
 SpriteIconMorph.prototype.copyCostume = function (costume) {
@@ -6542,13 +6536,11 @@ SpriteIconMorph.prototype.copyCostume = function (costume) {
         serialized;
 
     dup.name = this.object.newCostumeName(dup.name);
-    serialized = dup.toXML(SnapCollaborator.serializer).replace('~', '');
-    SnapCollaborator.addCostume(serialized, this.object.id);
+    SnapActions.addCostume(dup, this.object);
 };
 
 SpriteIconMorph.prototype.copySound = function (sound) {
-    var serialized = sound.toXML(SnapCollaborator.serializer).replace('~', '');
-    SnapCollaborator.addSound(serialized, this.object.id);
+    SnapActions.addSound(sound, this.object);
 };
 
 // CostumeIconMorph ////////////////////////////////////////////////////
@@ -6684,12 +6676,9 @@ CostumeIconMorph.prototype.userMenu = function () {
 
 CostumeIconMorph.prototype.editCostume = function () {
     var myself = this,
+        original = this.object.copy(),
         updateCostume = function() {
-            var ide = myself.parentThatIsA(IDE_Morph),
-                serializedCostume = myself.object.toXML(ide.serializer).replace('~', '');
-
-            // Update the costume
-            SnapCollaborator.updateCostume(myself.object.id, serializedCostume);
+            SnapActions.updateCostume(original, myself.object);
         };
 
     if (this.object instanceof SVG_Costume) {
@@ -6723,7 +6712,7 @@ CostumeIconMorph.prototype.renameCostume = function () {
                     answer,
                     costume
                 );
-                SnapCollaborator.renameCostume(costume.id, newName);
+                SnapActions.renameCostume(costume, newName);
             }
         }
     ).prompt(
@@ -6736,16 +6725,14 @@ CostumeIconMorph.prototype.renameCostume = function () {
 CostumeIconMorph.prototype.duplicateCostume = function () {
     var wardrobe = this.parentThatIsA(WardrobeMorph),
         ide = this.parentThatIsA(IDE_Morph),
-        newcos = this.object.copy(),
-        serializedCostume;
+        newcos = this.object.copy();
 
     newcos.name = wardrobe.sprite.newCostumeName(newcos.name);
-    serializedCostume = newcos.toXML(ide.serializer).replace('~', '');
-    SnapCollaborator.addCostume(serializedCostume, wardrobe.sprite.id);
+    SnapActions.addCostume(newcos, wardrobe.sprite);
 };
 
 CostumeIconMorph.prototype.removeCostume = function () {
-    SnapCollaborator.removeCostume(this.object.id);
+    SnapActions.removeCostume(this.object);
 };
 
 CostumeIconMorph.prototype.exportCostume = function () {
@@ -7121,8 +7108,7 @@ WardrobeMorph.prototype.paintNew = function () {
         );
 
     cos.edit(this.world(), ide, true, null, function () {
-        var serializedCostume = cos.toXML(ide.serializer).replace('~', '');
-        SnapCollaborator.addCostume(serializedCostume, myself.sprite.id);
+        SnapActions.addCostume(cos, myself.sprite);
     });
 };
 
@@ -7325,7 +7311,7 @@ SoundIconMorph.prototype.renameSound = function () {
         null,
         function (answer) {
             if (answer && (answer !== sound.name)) {
-                SnapCollaborator.renameSound(sound.id, answer);
+                SnapActions.renameSound(sound, answer);
             }
         }
     )).prompt(
@@ -7336,7 +7322,7 @@ SoundIconMorph.prototype.renameSound = function () {
 };
 
 SoundIconMorph.prototype.removeSound = function () {
-    SnapCollaborator.removeSound(this.object.id);
+    SnapActions.removeSound(this.object);
 };
 
 SoundIconMorph.prototype.localRemoveSound = function () {

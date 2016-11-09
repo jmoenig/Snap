@@ -581,8 +581,13 @@ SyntaxElementMorph.prototype.revertToDefaultInput = function (arg, noValues) {
             deflt = this.emptySlot();
         }
     }
-    // set default value
-    if (!noValues) {
+
+    // Try to set to the old value, first. If there is no old value,
+    // then (potentially) try to set the default value
+    var lastValue = SnapActions.getFieldValue(this, inp);
+    if (lastValue !== undefined) {
+        deflt.setContents(lastValue);
+    } else if (!noValues) {  // set default value
         if (inp !== -1) {
             if (deflt instanceof MultiArgMorph) {
                 deflt.setContents(this.defaults);
@@ -2349,8 +2354,7 @@ BlockMorph.prototype.userMenu = function () {
                 new DialogBoxMorph(
                     myself,
                     function(spec) {
-                        var id = SnapCollaborator.getId(this);
-                        SnapCollaborator.setBlockSpec(id, spec);
+                        SnapActions.setBlockSpec(this, spec);
                     },
                     myself
                 ).prompt(
@@ -2420,7 +2424,7 @@ BlockMorph.prototype.userMenu = function () {
     menu.addItem(
         "delete", function() {
         if (this.id) {
-            SnapCollaborator.removeBlock(this.id, true);
+            SnapActions.removeBlock(this.id, true);
         } else {
             this.userDestroy();
         }
@@ -2458,10 +2462,10 @@ BlockMorph.prototype.userMenu = function () {
     if (this.parent.parentThatIsA(RingMorph)) {
         menu.addLine();
         menu.addItem("unringify", function() {
-            SnapCollaborator.unringify(this.id);
+            SnapActions.unringify(this);
         });
         menu.addItem("ringify", function() {
-            SnapCollaborator.ringify(this.id);
+            SnapActions.ringify(this);
         });
         return menu;
     }
@@ -2474,7 +2478,7 @@ BlockMorph.prototype.userMenu = function () {
     }
     menu.addLine();
     menu.addItem("ringify", function() {
-        SnapCollaborator.ringify(this.id);
+        SnapActions.ringify(this);
     });
     if (StageMorph.prototype.enableCodeMapping) {
         menu.addLine();
@@ -2499,8 +2503,8 @@ BlockMorph.prototype.developersMenu = function () {
         new DialogBoxMorph(
             this,
             function(spec) {
-                var id = SnapCollaborator.getId(this);
-                SnapCollaborator.setBlockSpec(id, spec);
+                var id = SnapActions.getId(this);
+                SnapActions.setBlockSpec(id, spec);
             },
             this
         ).prompt(
@@ -2659,7 +2663,7 @@ BlockMorph.prototype.relabel = function (alternativeSelectors) {
         menu.addItem(
             block,
             function () {
-                SnapCollaborator.setSelector(myself.id, sel);
+                SnapActions.setSelector(myself, sel);
             }
         );
     });
@@ -4696,8 +4700,7 @@ ReporterBlockMorph.prototype.mouseClickLeft = function (pos) {
         new DialogBoxMorph(
             this,
             function(spec) {
-                var id = SnapCollaborator.getId(this);
-                SnapCollaborator.setBlockSpec(id, spec);
+                SnapActions.setBlockSpec(this, spec);
             },
             this
         ).prompt(
@@ -5600,13 +5603,32 @@ ScriptsMorph.prototype.userMenu = function () {
     }
     menu.addItem('clean up', 'cleanUp', 'arrange scripts\nvertically');
     menu.addItem('add comment', 'addComment');
-    if (this.lastDroppedBlock) {
+    //if (this.lastDroppedBlock) {
+        //menu.addItem(
+            //'undrop',
+            //'undrop',
+            //'undo the last\nblock drop\nin this pane'
+        //);
+    //}
+    if (SnapUndo.canUndo()) {
         menu.addItem(
-            'undrop',
-            'undrop',
-            'undo the last\nblock drop\nin this pane'
+            'undo',
+            function() {
+                SnapUndo.undo();
+            },
+            'undo the last edit'
         );
     }
+    if (SnapUndo.canRedo()) {
+        menu.addItem(
+            'redo',
+            function() {
+                SnapUndo.redo();
+            },
+            'redo the last edit'
+        );
+    }
+
     menu.addItem(
         'scripts pic...',
         'exportScriptsPicture',
@@ -5620,16 +5642,7 @@ ScriptsMorph.prototype.userMenu = function () {
                 new BlockDialogMorph(
                     null,
                     function (definition) {
-                        if (definition.spec !== '') {
-                            if (definition.isGlobal) {
-                                stage.globalBlocks.push(definition);
-                            } else {
-                                obj.customBlocks.push(definition);
-                            }
-                            ide.flushPaletteCache();
-                            ide.refreshPalette();
-                            new BlockEditorMorph(definition, obj).popUp();
-                        }
+                        SnapActions.addCustomBlock(definition, obj, true);
                     },
                     myself
                 ).prompt(
@@ -5672,7 +5685,7 @@ ScriptsMorph.prototype.cleanUp = function () {
         return point;
     });
 
-    SnapCollaborator.setBlocksPositions(ids, positions);
+    SnapActions.setBlocksPositions(ids, positions);
     if (this.parent) {
         this.setPosition(this.parent.topLeft());
     }
@@ -5821,7 +5834,7 @@ ScriptsMorph.prototype.reactToDropOf = function (droppedMorph, hand) {
 
         target = droppedMorph.snapTarget(hand);
         if (target) {  // moveBlock
-            this.moveBlock(droppedMorph, target);
+            SnapActions.moveBlock(droppedMorph, target);
         } else if (!droppedMorph.id) {  // addBlock
             this.addBlock(droppedMorph);
         } else {  // change position
@@ -5841,39 +5854,9 @@ ScriptsMorph.prototype.addBlock = function (block) {
         ownerId = blockEditor.definition.id;
     }
 
-    SnapCollaborator.addBlock(block, scripts, position, ownerId);
+    SnapActions.addBlock(block, scripts, position, ownerId);
 
     block.destroy();
-};
-
-ScriptsMorph.prototype.moveBlock = function (block, target) {
-    var blockId = SnapCollaborator.serializeBlock(block),
-        isNewBlock = !block.id,
-        id;
-
-    if (block instanceof CommandBlockMorph) {
-        if (!target.element.id) {
-            if (target.element instanceof PrototypeHatBlockMorph) {
-                target.element = target.element.definition.id;
-            } else {
-                target.element = SnapCollaborator.getId(target.element);
-            }
-        } else {
-            target.element = target.element.id;
-        }
-        SnapCollaborator.moveBlock(blockId, target);
-    } else if (block instanceof ReporterBlockMorph) {
-        // target is a block to replace...
-        target = SnapCollaborator.getId(target);
-        SnapCollaborator.moveBlock(blockId, target);
-    } else {  // CommentMorph
-        console.log('comment...');
-        SnapCollaborator.moveBlock(blockId, target.id);
-    }
-
-    if (isNewBlock) {
-        block.destroy();
-    }
 };
 
 ScriptsMorph.prototype.setBlockPosition = function (block, hand) {
@@ -5885,7 +5868,7 @@ ScriptsMorph.prototype.setBlockPosition = function (block, hand) {
         block.setPosition(originPosition);
     }
 
-    SnapCollaborator.setBlockPosition(block.id, position);
+    SnapActions.setBlockPosition(block.id, position);
 };
 
 // ScriptsMorph events
@@ -7214,8 +7197,7 @@ InputSlotMorph.prototype.setContents = function (aStringOrFloat) {
 // InputSlotMorph drop-down menu:
 
 InputSlotMorph.prototype.setDropDownValue = function (value) {
-    this.setContents(value);
-    this.updateFieldValue();
+    this.updateFieldValue(value);
 };
 
 InputSlotMorph.prototype.dropDownMenu = function (enableKeyboard) {
@@ -7692,18 +7674,14 @@ InputSlotMorph.prototype.reactToKeystroke = function () {
     }
 };
 
-InputSlotMorph.prototype.updateFieldValue = function () {
-    var newValue = this.contents().text,
-        fieldId = SnapCollaborator.getId(this),
-        field;
+InputSlotMorph.prototype.updateFieldValue = function (newValue) {
+    var block = this.parentThatIsA(BlockMorph);
 
-    if (fieldId) {
-        SnapCollaborator.setField(fieldId, newValue);
+    newValue = newValue || this.contents().text;
+    if (block.id) {  // not in the palette
         this.setContents(this.lastValue);  // set to original value in case it fails
-    } else if (this.id) {  // not template block - missing parent!
-        console.error('Cannot set field text: no parent found!');
+        SnapActions.setField(this, newValue);
     }
-
 };
 
 InputSlotMorph.prototype.reactToEdit = function () {
@@ -8284,9 +8262,10 @@ BooleanSlotMorph.prototype.toggleValue = function () {
 // BooleanSlotMorph events:
 
 BooleanSlotMorph.prototype.mouseClickLeft = function () {
-    var id = SnapCollaborator.getId(this);
-    if (id) {
-        SnapCollaborator.toggleBoolean(id, this.value);
+    var block = this.parentThatIsA(BlockMorph);
+
+    if (block.id) {
+        SnapActions.toggleBoolean(this, this.value);
     } else {  // in the palette
         this.toggleValue();
     }
@@ -10599,18 +10578,17 @@ MultiArgMorph.prototype.mouseClickLeft = function (pos) {
         leftArrow = arrows.children[0],
         rightArrow = arrows.children[1],
         repetition = this.world().currentKey === 16 ? 3 : 1,
-        id = SnapCollaborator.getId(this),
         i;
 
     repetition = Math.min(repetition, this.inputs().length - this.minInputs);
     this.startLayout();
     if (rightArrow.bounds.containsPoint(pos)) {
         if (rightArrow.isVisible) {
-            SnapCollaborator.addListInput(id, repetition);
+            SnapActions.addListInput(this, repetition);
         }
     } else if (leftArrow.bounds.containsPoint(pos)) {
         if (leftArrow.isVisible) {
-            SnapCollaborator.removeListInput(id, repetition);
+            SnapActions.removeListInput(this, repetition);
         }
     } else {
         this.escalateEvent('mouseClickLeft', pos);
@@ -11784,6 +11762,7 @@ CommentMorph.prototype.init = function (contents) {
         contents || localize('add comment here...'),
         this.fontSize
     );
+    this.lastValue = this.contents.text;
     this.contents.isEditable = true;
     this.contents.enableSelecting();
     this.contents.maxWidth = 90 * scale;
@@ -11818,7 +11797,15 @@ CommentMorph.prototype.init = function (contents) {
 
 CommentMorph.prototype.reactToEdit = function (value) {
     var text = value.text;
-    SnapCollaborator.setCommentText(this.id, text);
+
+    if (text !== this.lastValue) {
+        this.contents.text = this.lastValue;
+        this.contents.drawNew();
+        this.contents.changed();
+        this.layoutChanged();
+
+        SnapActions.setCommentText(this, text);
+    }
 };
 
 CommentMorph.prototype.fullCopy = function () {
@@ -11936,7 +11923,7 @@ CommentMorph.prototype.userMenu = function () {
     );
     menu.addItem("delete", function() {
         if (this.id) {
-            SnapCollaborator.removeBlock(this.id);
+            SnapActions.removeBlock(this.id);
         } else {
             this.destroy();
         }
@@ -12265,11 +12252,11 @@ ScriptFocusMorph.prototype.manifestExpression = function () {
 
 ScriptFocusMorph.prototype.trigger = function () {
     var current = this.element,
-        id = SnapCollaborator.getId(current);
+        id = SnapActions.getId(current);
 
     if (current instanceof MultiArgMorph) {
         if (current.arrows().children[1].isVisible) {
-            SnapCollaborator.addListInput(id);
+            SnapActions.addListInput(current);
         }
         return;
     }
@@ -12279,7 +12266,7 @@ ScriptFocusMorph.prototype.trigger = function () {
         return;
     }
     if (current instanceof BooleanSlotMorph) {
-        SnapCollaborator.toggleBoolean(id, current.value);
+        SnapActions.toggleBoolean(current, current.value);
         return;
     }
     if (current instanceof InputSlotMorph) {
@@ -12314,7 +12301,7 @@ ScriptFocusMorph.prototype.menu = function () {
 
 ScriptFocusMorph.prototype.deleteLastElement = function () {
     var current = this.element,
-        id = SnapCollaborator.getId(current);
+        id = SnapActions.getId(current);
 
     if (current.parent instanceof ScriptsMorph) {
         if (this.atEnd || current instanceof ReporterBlockMorph) {
@@ -12325,11 +12312,11 @@ ScriptFocusMorph.prototype.deleteLastElement = function () {
         }
     } else if (current instanceof MultiArgMorph) {
         if (current.arrows().children[0].isVisible) {
-            SnapCollaborator.removeListInput(id);
+            SnapActions.removeListInput(id);
         }
     } else if (current instanceof BooleanSlotMorph) {
         if (!current.isStatic) {
-            SnapCollaborator.toggleBoolean(id, false);
+            SnapActions.toggleBoolean(current, false);
         }
     } else if (current instanceof ReporterBlockMorph) {
         if (!current.isTemplate) {

@@ -7,7 +7,7 @@ var logger = {
 };
 
 // If not the leader, send operations to the leader for approval
-function SimpleCollaborator() {
+function ActionManager() {
     this.lastSeen = 0;
     this.idCount = 0;
 
@@ -18,7 +18,7 @@ function SimpleCollaborator() {
     this.initialize();
 };
 
-SimpleCollaborator.prototype.initializeRecords = function() {
+ActionManager.prototype.initializeRecords = function() {
     this.blockChildren = {};
     this.blockToParent = {};
     this.fieldValues = {};
@@ -35,9 +35,14 @@ SimpleCollaborator.prototype.initializeRecords = function() {
 
     this._sounds = {};
     this._soundToOwner = {};
+
+    // Additional records for undo/redo support
+    this._positionOf = {};
+    this._targetOf = {};
+    this._blockToOwnerId = {};
 };
 
-SimpleCollaborator.prototype.initialize = function() {
+ActionManager.prototype.initialize = function() {
     var url = 'ws://' + window.location.host,
         ws = new WebSocket(url),
         self = this;
@@ -69,23 +74,28 @@ SimpleCollaborator.prototype.initialize = function() {
     this.serializer = new SnapSerializer();
 };
 
-SimpleCollaborator.prototype.acceptEvent = function(msg) {
+ActionManager.prototype.acceptEvent = function(msg) {
+    msg.id = msg.id || this.lastSeen + 1;
+    this.send(msg);
+    this._applyEvent(msg);
+};
+
+ActionManager.prototype._applyEvent = function(msg) {
     var method = this._getMethodFor(msg.type);
 
     logger.debug('received event:', msg);
-    msg.id = msg.id || this.lastSeen + 1;
-    this.send(msg);
     this[method].apply(this, msg.args);
     this.lastSeen = msg.id;
     this.idCount = 0;
+    SnapUndo.record(msg);
 };
 
-SimpleCollaborator.prototype.send = function(json) {
+ActionManager.prototype.send = function(json) {
     json.id = json.id || this.lastSeen + 1;
     this._ws.send(JSON.stringify(json));
 };
 
-SimpleCollaborator.prototype.newId = function() {
+ActionManager.prototype.newId = function() {
     // This is the same across devices since it uses the currently last seen value
     var id = 'item_' + this.lastSeen;
 
@@ -97,7 +107,7 @@ SimpleCollaborator.prototype.newId = function() {
     return id;
 };
 
-SimpleCollaborator.prototype.getId = function (block) {
+ActionManager.prototype.getId = function (block, index) {
     var id = '';
     while (!block.id) {
         if (block.parent === null) {  // template block
@@ -110,11 +120,15 @@ SimpleCollaborator.prototype.getId = function (block) {
         }
     }
     id = block.id + '/' +  id;
+
+    if (index !== undefined) {
+        id += index + '/';
+    }
     return id;
 };
 
-SimpleCollaborator.prototype.serializeBlock = function(block) {
-    if (block.id) {
+ActionManager.prototype.serializeBlock = function(block, force) {
+    if (block.id && !force) {
         return block.id;
     }
 
@@ -125,7 +139,7 @@ SimpleCollaborator.prototype.serializeBlock = function(block) {
     return block.toScriptXML(this.serializer);
 };
 
-SimpleCollaborator.prototype.deserializeBlock = function(ser) {
+ActionManager.prototype.deserializeBlock = function(ser) {
     var ownerId = Object.keys(this._owners).pop(),
         owner,
         stage;
@@ -149,93 +163,523 @@ SimpleCollaborator.prototype.deserializeBlock = function(ser) {
     }
 };
 
-SimpleCollaborator.prototype.registerOwner = function(owner, id) {
+ActionManager.prototype.registerOwner = function(owner, id) {
     owner.id = id || this.newId();
     this._owners[owner.id] = owner;
 };
 
 /* * * * * * * * * * * * Preprocess args (before action is accepted) * * * * * * * * * * * */
-SimpleCollaborator.prototype.getStandardPosition = function(scripts, position) {
+// These are decorators which take the args from the public API and return the args for
+// the event to be sent to the other collaborators (and received by the onEventName methods)
+ActionManager.prototype.getStandardPosition = function(scripts, position) {
     var scale = SyntaxElementMorph.prototype.scale;
     position = position.subtract(scripts.topLeft()).divideBy(scale);
     return position;
 };
 
-SimpleCollaborator.prototype._addBlock = function(block, scripts, position, ownerId) {
-    var serialized = SnapCollaborator.serializeBlock(block),
-        stdPosition = this.getStandardPosition(scripts, position);
+ActionManager.prototype._getStatementIds = function(block) {
+    var ids = [];
 
+    while (block) {
+        ids.push(block.id);
+        block = block.nextBlock ? block.nextBlock() : null;
+    }
+    return ids;
+};
+
+ActionManager.prototype._addBlock = function(block, scripts, position, ownerId) {
+    var stdPosition = this.getStandardPosition(scripts, position),
+        serialized,
+        ids;
+
+    this._idBlocks(block);
+    ids = this._getStatementIds(block);
+
+    serialized = this.serializeBlock(block, true);
     return [
         serialized,
         ownerId || scripts.owner.id,
         stdPosition.x,
-        stdPosition.y
+        stdPosition.y,
+        ids
     ];
 };
 
-SimpleCollaborator.prototype._setBlockPosition = function(id, position) {
-    var block = this.getBlockFromId(id),
-        scripts = block.parentThatIsA(ScriptsMorph),
-        standardPosition = this.getStandardPosition(scripts, position);
-
-    return [id, standardPosition.x, standardPosition.y];
+ActionManager.prototype._removeBlock = function(id, userDestroy) {
+    var block = this._blocks[id],
+        serialized = this.serializeBlock(block, true),
+        position = this._positionOf[block.id],
+        ownerId = this._blockToOwnerId[id];
+        
+    return [
+        id,
+        userDestroy,
+        position.y,
+        position.x,
+        ownerId,
+        serialized
+    ];
 };
 
-SimpleCollaborator.prototype._setBlocksPositions = function(ids, positions) {
-    var block = this.getBlockFromId(ids[0]),
-        scripts = block.parentThatIsA(ScriptsMorph);
+ActionManager.prototype._getBlockState = function(id) {
+    var state = {};
 
-    return [ids, positions.map(function(pos) {
+    // TODO: Use a constant to specify the type
+    if (this._targetOf[id]) {
+        return [this._targetOf[id]];
+    } else if (this._positionOf[id]) {
+        return [this._positionOf[id].x, this._positionOf[id].y];
+    } else {  // newly created
+        return [null];
+    }
+};
+
+ActionManager.prototype._setBlockPosition = function(id, position) {
+    var block = this.getBlockFromId(id),
+        scripts = block.parentThatIsA(ScriptsMorph),
+        standardPosition = this.getStandardPosition(scripts, position),
+        oldState = this._getBlockState(id);
+
+    return [id, standardPosition.x, standardPosition.y].concat(oldState);
+};
+
+ActionManager.prototype._setBlocksPositions = function(ids, positions) {
+    var block = this.getBlockFromId(ids[0]),
+        scripts = block.parentThatIsA(ScriptsMorph),
+        stdPositions,
+        oldPositions;
+
+    oldPositions = ids.map(function(id) {
+        return this._positionOf[id];
+    }, this);
+
+    stdPositions = positions.map(function(pos) {
         return this.getStandardPosition(scripts, pos);
-    }, this)];
+    }, this)
+
+    return [ids, stdPositions, oldPositions];
+};
+
+// Custom Blocks
+ActionManager.prototype._addCustomBlock = function(definition, owner, focus) {
+    var serialized,
+        args;
+
+    definition.id = this.newId();
+    serialized = this.serializer.serialize(definition);
+    if (definition.isGlobal) {  // global defs are stored in the stage
+        owner = this.ide().stage;
+    }
+    args = [
+        owner.id,
+        serialized,
+        definition.isGlobal
+    ];
+
+    if (focus) {
+        args.push(this.id);
+    }
+    return args;
+};
+
+ActionManager.prototype._deleteCustomBlock = function(definition) {
+    var owner = this._customBlockOwner[definition.id],
+        serialized = this.serializer.serialize(definition);
+
+    return [definition.id, owner.id, serialized, definition.isGlobal];
+};
+
+ActionManager.prototype._deleteCustomBlocks = function(blocks) {
+    var serialized = [],
+        ids = [];
+
+    for (var i = blocks.length; i--;) {
+        serialized.push(this.serializer.serialize(blocks[i]));
+        ids.push(blocks[i].id);
+    }
+
+    serialized = '<blocks>' + serialized.join('') + '</blocks>';
+    return [ids, serialized];
+};
+
+ActionManager.prototype._importBlocks = function(str, lbl) {
+    // Get unique ids for each of the blocks
+    var model = this.uniqueIdForImport(str),
+        ids;
+
+    // need to get the ids for each of the sprites (so we can delete them on undo!)
+    ids = model.children.map(child => child.attributes.collabId);
+    str = model.toString();
+    return [str, lbl, ids];
+};
+
+ActionManager.prototype._setCustomBlockType = function(definition, category, type) {
+    return [definition.id, category, type, definition.category, definition.type];
+};
+
+ActionManager.prototype._deleteBlockLabel = function(definition, label) {
+    var index = label.parent.children.indexOf(label);
+
+    return [definition.id, index, label.fragment.type, label.fragment.labelString];
+};
+
+ActionManager.prototype._updateBlockLabel = function(definition, label, fragment) {
+    var index = label.parent.children.indexOf(label);
+        type = fragment.type,
+        value = fragment.labelString;
+
+    console.assert(index > -1, 'Cannot find the fragment!');
+    return [definition.id, index, type, value, label.fragment.type, label.fragment.labelString];
+};
+
+ActionManager.prototype._setStageSize = function(width, height) {
+    // Add the old stage size for undo support
+    return [
+        width,
+        height,
+        StageMorph.prototype.dimensions.y,
+        StageMorph.prototype.dimensions.x
+    ];
+};
+
+ActionManager.prototype._serializeMoveTarget = function(block, target) {
+    if (block instanceof CommandBlockMorph) {
+        if (!target.element.id) {
+            if (target.element instanceof PrototypeHatBlockMorph) {
+                target.element = target.element.definition.id;
+            } else {
+                target.element = this.getId(target.element);
+            }
+        } else {
+            target.element = target.element.id;
+        }
+    } else if (block instanceof ReporterBlockMorph) {
+        // target is a block to replace...
+        target = this.getId(target);
+    } else {  // CommentMorph
+        target = target.id;
+    }
+    return target;
+};
+
+ActionManager.prototype._moveBlock = function(block, target) {
+    var isNewBlock = !block.id,
+        position,
+        serialized,
+        ids,
+        id,
+        args;
+
+    // If the target is a ReporterBlockMorph, then we are replacing that block.
+    // Undo should place that block back into it's current place
+    // TODO
+
+    // Serialize the target
+    target = this._serializeMoveTarget(block, target);
+    if (isNewBlock) {
+        this._idBlocks(block);
+    }
+    id = block.id;
+    serialized = this.serializeBlock(block, isNewBlock);
+
+    // If there is no target, get the current position
+
+    var oldState = this._getBlockState(id);  // target, pos (2), or null
+
+    args = [serialized, target];
+    if (isNewBlock) {
+        ids = this._getStatementIds(block);
+        oldState = [ids];
+        block.destroy();
+    }
+
+    return args.concat(oldState);
+};
+
+ActionManager.prototype._setField = function(field, value) {
+    var fieldId = this.getId(field),
+        oldValue = field.contents().text;
+
+    return [
+        fieldId,
+        value,
+        oldValue
+    ];
+};
+
+ActionManager.prototype._toggleBoolean = function(field, value) {
+    var prevValue = false,
+        fieldId = this.getId(field);
+
+    // order is true -> false -> null -> true ...
+    // get the previous
+    if (value === true) {
+        prevValue = null;
+    } else if (value === false) {
+        prevValue = true;
+    }
+
+    return [fieldId, value, prevValue];
+};
+
+ActionManager.prototype._setCommentText = function(comment, value) {
+    var oldValue = comment.lastValue;
+
+    return [comment.id, value, oldValue];
+};
+
+ActionManager.prototype._unringify = function(block) {
+    var ring = this.getOutermostRing(block),
+        parent = this.getParentWithId(block);
+
+    // Get the last block before the ring
+    while (parent !== ring) {
+        block = parent;
+        parent = this.getParentWithId(block);
+    }
+
+    return [block.id, ring.id];
+};
+
+ActionManager.prototype.getParentWithId = function(block) {
+    while (block.parent && !block.parent.id) {
+        block = block.parent;
+    }
+    return block.parent;
+};
+
+ActionManager.prototype.getOutermostRing = function(block, immediate) {
+    var parent;
+
+    if (immediate) {
+        parent = this.getParentWithId(block);
+    } else {
+        parent = block.parentThatIsA(RingMorph);
+    }
+
+    while (parent instanceof RingMorph) {
+        block = parent;
+        parent = this.getParentWithId(block);
+    }
+
+    return block;
+
+};
+
+ActionManager.prototype._ringify = function(block) {
+    // If contained in a ringmorph, get the outermost ring
+    var ringId = this.newId();
+
+    block = this.getOutermostRing(block, true);
+
+    return [block.id, ringId];
+};
+
+ActionManager.prototype._setSelector = function(block, selector) {
+    var blockId = this.getId(block),
+        oldSelector = block.selector;
+
+    return [blockId, selector, oldSelector];
+};
+
+ActionManager.prototype._setBlockSpec = function(block, spec) {
+    var blockId = this.getId(block),
+        oldSpec = block.blockSpec;
+
+    return [blockId, spec, oldSpec];
+};
+
+ActionManager.prototype._toggleDraggable = function(owner, draggable) {
+    return [owner.id, draggable];
+};
+
+ActionManager.prototype._setRotationStyle = function(owner, rotationStyle) {
+    return [owner.id, rotationStyle, owner.rotationStyle];
+};
+
+ActionManager.prototype._addListInput =
+ActionManager.prototype._removeListInput = function(block, count) {
+    return [this.getId(block), count];
+};
+
+ActionManager.prototype._addSound = function(sound, owner, focus) {
+    var args;
+
+    sound.id = this.newId();
+
+    args = [
+        sound.toXML(this.serializer).replace('~', ''),
+        owner.id
+    ];
+    if (focus) {
+        args.push(this.id);
+    }
+
+    return args;
+};
+
+ActionManager.prototype._removeSound = function(sound) {
+    return [
+        sound.id,
+        sound.toXML(this.serializer).replace('~', ''),
+        this._soundToOwner[sound.id].id
+    ];
+};
+
+ActionManager.prototype._renameSound = function(sound, name) {
+    return [sound.id, name, sound.name];
+};
+
+ActionManager.prototype._addCostume = function(costume, owner, focus) {
+    var args;
+
+    costume.id = this.newId();
+    args = [
+        costume.toXML(this.serializer).replace('~', ''),
+        owner.id
+    ];
+
+    if (focus) {
+        args.push(this.id);
+    }
+    return args;
+};
+
+ActionManager.prototype._removeCostume = function(costume) {
+    return [
+        costume.id,
+        costume.toXML(this.serializer).replace('~', ''),
+        this._costumeToOwner[costume.id].id
+    ];
+};
+
+ActionManager.prototype._renameCostume = function(costume, name) {
+    return [costume.id, name, costume.name];
+};
+
+ActionManager.prototype._updateCostume = function(original, newCostume) {
+    return [
+        newCostume.id,
+        newCostume.toXML(this.serializer).replace('~', ''),
+        original.toXML(this.serializer).replace('~', '')
+    ];
+};
+
+ActionManager.prototype._addSprite = function(sprite, costume, position) {
+    var serialized,
+        stage = this.ide().stage;
+
+    sprite.parent = stage;
+    position = position || sprite.rotationCenter();
+    sprite.id = this.newId();
+
+    //if (costume) {
+        //sprite.addCostume(costume);
+        //sprite.wearCostume(costume);
+    //}
+    serialized = '<sprites>' + this.serializer.serialize(sprite) + '</sprites>';
+
+    return [serialized, this.id, sprite.id];
+};
+
+ActionManager.prototype.uniqueIdForImport = function (str) {
+    var msg,
+        myself = this,
+        model = myself.serializer.parse(str),
+        children = model.allChildren();
+
+    // Just add an id to everything... not the most efficient but effective for now
+    for (var i = children.length; i--;) {
+        if (children[i].attributes) {
+            children[i].attributes.collabId = this.newId();
+        }
+    }
+
+    return model;
+};
+
+ActionManager.prototype._removeSprite = function(sprite) {
+    var costumes = sprite.costumes.asArray(),
+        serialized = '<sprites>' + this.serializer.serialize(sprite) + '</sprites>';
+
+    return [sprite.id, serialized];
+};
+
+ActionManager.prototype._renameSprite = function(sprite, name) {
+    return [sprite.id, name, sprite.name];
+};
+
+ActionManager.prototype._duplicateSprite = function(sprite, position) {
+    var id = this.newId(),
+        newSprite = sprite.copy(),
+        ide = this.ide(),
+        str,
+        start,
+        end,
+        serialized;
+
+    newSprite.id = id;
+    newSprite.setName(ide.newSpriteName(sprite.name));
+    newSprite.parent = ide.stage;
+
+    // Create new ids for all the sprite's children
+    serialized = this.serializer.serialize(newSprite);
+
+    start = '<sprites>' + this._getOpeningSpriteTag(serialized);
+    end = '</sprites>';
+
+    str = this.uniqueIdForImport(serialized).toString();
+    str = str.replace(/<sprite.*?[^\\]>/, start) + end;  // preserve sprite's id
+
+    return [str, null, id];
+};
+
+// Helper method
+ActionManager.prototype._getOpeningSpriteTag = function(str) {
+    var regex = /<sprite.*?[^\\]>/,
+        match = str.match(regex);
+
+    return match[0];
+};
+
+ActionManager.prototype._importSprites = function(str) {
+    var model = this.uniqueIdForImport(str),
+        ids;
+
+    // need to get the ids for each of the sprites (so we can delete them on undo!)
+    ids = model.children.map(child => child.attributes.collabId);
+    str = model.toString();
+    return [str, ids];
 };
 
 /* * * * * * * * * * * * Updating internal rep * * * * * * * * * * * */
-SimpleCollaborator.prototype._onSetField = function(pId, connId, value) {
-    console.assert(!this.blockChildren[pId] || !this.blockChildren[pId][connId],'Connection occupied!');
-
-    if (!this.fieldValues[pId]) {
-        this.fieldValues[pId] = {};
+ActionManager.prototype._onSetBlocksPositions = function(ids, positions) {
+    for (var i = ids.length; i--;) {
+        this._onSetBlockPosition(ids[i], positions[i].x, positions[i].y);
     }
-
-    this.fieldValues[pId][connId] = value;
-
-    this.onSetField(pId, connId, value);
 };
 
-SimpleCollaborator.prototype._onSetBlockPosition = function(id, x, y) {
-    logger.log('<<< setting position of ', id, 'to', x, ',', y);
+ActionManager.prototype._onSetBlockPosition = function(id, x, y) {
+    var position = new Point(x, y);
 
-    // Check if this is causing a disconnect
-    var parent = this.blockToParent[id];
-    if (parent) {
-        delete this.blockChildren[parent.id][parent.conn];
-        //this.onBlockDisconnected(id, parent.id, parent.conn);
-    }
-
-    this.onSetBlockPosition(id, x, y);
+    this._positionOf[id] = position;
+    this.onSetBlockPosition(id, position);
 };
 
-SimpleCollaborator.prototype._onSetSelector = function(id, selector) {
-    this.onSetSelector(id, selector);
-};
+ActionManager.prototype._onSetField = function(fieldId, value) {
+    this.fieldValues[fieldId] = value;
 
-// / / / / / / / / / / / Variables / / / / / / / / / / / //
-SimpleCollaborator.prototype._onAddVariable = function(name, ownerId) {
-    this.onAddVariable(name, ownerId);
-};
-
-SimpleCollaborator.prototype._onDeleteVariable = function(name, ownerId) {
-    this.onDeleteVariable(name, ownerId);
+    this.onSetField(fieldId, value);
 };
 
 /* * * * * * * * * * * * On UI Events * * * * * * * * * * * */
-[
+ActionManager.prototype.EVENTS = [
     'setStageSize',
 
     // Sprites
     'addSprite',
     'removeSprite',
+    'removeSprites',  // (used for undo)
     'renameSprite',
     'toggleDraggable',
     'duplicateSprite',
@@ -269,6 +713,7 @@ SimpleCollaborator.prototype._onDeleteVariable = function(name, ownerId) {
     // Block manipulation
     'addBlock',
     'removeBlock',
+    'removeBlocks',
     'setBlockPosition',
     'setBlocksPositions',
     'moveBlock',
@@ -286,9 +731,10 @@ SimpleCollaborator.prototype._onDeleteVariable = function(name, ownerId) {
     'unringify',
 
     'toggleBoolean',
-    'setField',
-].forEach(function(method) {
-    SimpleCollaborator.prototype[method] = function() {
+    'setField'
+];
+ActionManager.prototype.EVENTS.forEach(function(method) {
+    ActionManager.prototype[method] = function() {
         var args = Array.prototype.slice.apply(arguments),
             fn = '_' + method,
             result,
@@ -303,15 +749,19 @@ SimpleCollaborator.prototype._onDeleteVariable = function(name, ownerId) {
             args: args
         };
 
-        if (this.isLeader) {
-            this.acceptEvent(msg);
-        } else {
-            this.send(msg);
-        }
+        this.applyEvent(msg);
     };
 });
 
-SimpleCollaborator.prototype._getMethodFor = function(action) {
+ActionManager.prototype.applyEvent = function(event) {
+    if (this.isLeader) {
+        this.acceptEvent(event);
+    } else {
+        this.send(event);
+    }
+};
+
+ActionManager.prototype._getMethodFor = function(action) {
     var method = '_on' + action.substring(0,1).toUpperCase() + action.substring(1);
 
     if (!this[method]) {
@@ -322,33 +772,48 @@ SimpleCollaborator.prototype._getMethodFor = function(action) {
 };
 
 /* * * * * * * * * * * * Updating Snap! * * * * * * * * * * * */
-SimpleCollaborator.prototype.getAdjustedPosition = function(position, scripts) {
+ActionManager.prototype.getAdjustedPosition = function(position, scripts) {
     var scale = SyntaxElementMorph.prototype.scale;
     position = position.multiplyBy(scale).add(scripts.topLeft());
     return position;
 };
 
-SimpleCollaborator.prototype.onAddBlock = function(type, ownerId, x, y) {
+ActionManager.prototype._idBlocks = function(block, returnIds) {
+    var ids = [];
+    this.traverse(block, iterBlock => {
+        iterBlock.isDraggable = true;
+        iterBlock.isTemplate = false;
+        iterBlock.id = this.newId();
+        ids.push(iterBlock.id);
+    });
+    return returnIds ? ids : block;
+};
+
+ActionManager.prototype.registerBlocks = function(firstBlock) {
+    var block = firstBlock,
+        target,
+        prevBlock;
+
+    // TODO: Update this to record the block state, too!
+    // TODO: Make a function to get the current target of connected block
+    this.traverse(block, this._registerBlock.bind(this));
+    return firstBlock;
+};
+
+ActionManager.prototype.onAddBlock = function(block, ownerId, x, y) {
     var block,
         owner = this._owners[ownerId],
         world = this.ide().parentThatIsA(WorldMorph),
         hand = world.hand,
         position = new Point(x, y),
-        i = 1,
         firstBlock;
 
-    firstBlock = this.deserializeBlock(type);
-    block = firstBlock;
 
-    while (block) {
-        block.isDraggable = true;
-        block.isTemplate = false;
-        block.id = this.newId();  // TODO: ID the blocks before sending them...
-        this._blocks[block.id] = block;
+    firstBlock = this.deserializeBlock(block);
+    this._positionOf[firstBlock.id] = position;
+    this._blockToOwnerId[firstBlock.id] = ownerId;
 
-        block = block.nextBlock ? block.nextBlock() : null;
-        ++i;
-    }
+    this.registerBlocks(firstBlock);
 
     if (firstBlock.snapSound) {
         firstBlock.snapSound.play();
@@ -377,14 +842,14 @@ SimpleCollaborator.prototype.onAddBlock = function(type, ownerId, x, y) {
     // TODO
 };
 
-SimpleCollaborator.prototype.world = function() {
+ActionManager.prototype.world = function() {
     var ownerId = Object.keys(this._owners)[0],
         owner = this._owners[ownerId];
 
     return owner ? owner.parentThatIsA(WorldMorph) : null;
 };
 
-SimpleCollaborator.prototype._getCustomBlockEditor = function(blockId) {
+ActionManager.prototype._getCustomBlockEditor = function(blockId) {
     // Check for the block editor in the world children for this definition
     var children = this.world() ? this.world().children : [],
         owner = this._customBlockOwner[blockId],
@@ -402,7 +867,7 @@ SimpleCollaborator.prototype._getCustomBlockEditor = function(blockId) {
     return editor;
 };
 
-SimpleCollaborator.prototype.getBlockFromId = function(id) {
+ActionManager.prototype.getBlockFromId = function(id) {
     var ids = id.split('/'),
         blockId = ids.shift(),
         block = this._blocks[blockId],
@@ -456,11 +921,14 @@ SimpleCollaborator.prototype.getBlockFromId = function(id) {
     return block;
 };
 
-SimpleCollaborator.prototype.onMoveBlock = function(id, target) {
+ActionManager.prototype.onMoveBlock = function(id, rawTarget) {
     // Convert the pId, connId back to the target...
     var block = this.deserializeBlock(id),
-        isNewBlock = !block.id,
+        isNewBlock = !this._blocks[block.id],
+        target = copy(rawTarget),
         scripts;
+
+    this._targetOf[id] = rawTarget;
 
     if (block instanceof CommandBlockMorph) {
         // Check if connecting to the beginning of a custom block definition
@@ -485,8 +953,7 @@ SimpleCollaborator.prototype.onMoveBlock = function(id, target) {
     }
 
     if (isNewBlock) {
-        block.id = this.newId();
-        this._blocks[block.id] = block;
+        this.registerBlocks(block);
         scripts.add(block);
     } else {
         if (block.parent && block.parent.reactToGrabOf) {
@@ -499,7 +966,11 @@ SimpleCollaborator.prototype.onMoveBlock = function(id, target) {
     this._updateBlockDefinitions(block);
 };
 
-SimpleCollaborator.prototype.onRemoveBlock = function(id, userDestroy) {
+ActionManager.prototype.onRemoveBlocks = function(ids) {
+    ids.forEach(id => this.onRemoveBlock(id, true));
+};
+
+ActionManager.prototype.onRemoveBlock = function(id, userDestroy) {
     var block = this.getBlockFromId(id),
         method = userDestroy ? 'userDestroy' : 'destroy',
         scripts = block.parentThatIsA(ScriptsMorph),
@@ -514,6 +985,10 @@ SimpleCollaborator.prototype.onRemoveBlock = function(id, userDestroy) {
         // Remove the block
         block[method]();
         delete this._blocks[id];
+        delete this._positionOf[id];
+        delete this._blockToOwnerId[id];
+        delete this._targetOf[id];
+
         this._updateBlockDefinitions(block);
 
         // Update parent block's UI
@@ -532,25 +1007,19 @@ SimpleCollaborator.prototype.onRemoveBlock = function(id, userDestroy) {
     }
 };
 
-SimpleCollaborator.prototype._updateBlockDefinitions = function(block) {
+ActionManager.prototype._updateBlockDefinitions = function(block) {
     var editor = block.parentThatIsA(BlockEditorMorph);
     if (editor) {
         editor.updateDefinition();
     }
 };
 
-SimpleCollaborator.prototype.onSetBlocksPositions = function(ids, positions) {
-    for (var i = ids.length; i--;) {
-        this.onSetBlockPosition(ids[i], positions[i].x, positions[i].y);
-    }
-};
-
-SimpleCollaborator.prototype.onSetBlockPosition = function(id, x, y) {
+ActionManager.prototype.onSetBlockPosition = function(id, position) {
     // Disconnect from previous...
     var block = this.getBlockFromId(id),
         scripts = block.parentThatIsA(ScriptsMorph),
         oldParent = block.parent,
-        position = new Point(x, y);
+        inputIndex = oldParent && oldParent.inputs ? oldParent.inputs().indexOf(block) : -1;
 
     console.assert(block, 'Block "' + id + '" does not exist! Cannot set position');
 
@@ -588,7 +1057,7 @@ SimpleCollaborator.prototype.onSetBlockPosition = function(id, x, y) {
     this._updateBlockDefinitions(block);
 };
 
-SimpleCollaborator.prototype.updateCommentsPositions = function(block) {
+ActionManager.prototype.updateCommentsPositions = function(block) {
     if (block.topBlock) {  // Update comment positions
         var topBlock = block.topBlock();
         topBlock.allComments().forEach(function (comment) {
@@ -597,13 +1066,22 @@ SimpleCollaborator.prototype.updateCommentsPositions = function(block) {
     }
 };
 
-SimpleCollaborator.prototype.disconnectBlock = function(block, scripts) {
-    var oldParent = block.parent;
+ActionManager.prototype.getFieldValue = function(block, index) {
+    var fieldId = this.getId(block, index);
+
+    return this.fieldValues[fieldId];
+};
+
+ActionManager.prototype.disconnectBlock = function(block, scripts) {
+    var oldParent = block.parent,
+        inputIndex;
 
     if (scripts) block.parent = scripts;
 
     scripts = scripts || block.parentThatIsA(ScriptsMorph);
     if (oldParent) {
+        inputIndex = oldParent.inputs ? oldParent.inputs().indexOf(block) : -1;
+
         if (oldParent.revertToDefaultInput) oldParent.revertToDefaultInput(block);
 
         if (!(oldParent instanceof ScriptsMorph)) {
@@ -615,6 +1093,7 @@ SimpleCollaborator.prototype.disconnectBlock = function(block, scripts) {
             }
             oldParent.changed();
 
+            // TODO: if it had a field value, set the value now
             if (scripts) {
                 scripts.drawNew();
                 scripts.changed();
@@ -627,14 +1106,14 @@ SimpleCollaborator.prototype.disconnectBlock = function(block, scripts) {
     }
 };
 
-SimpleCollaborator.prototype.onBlockDisconnected = function(id, pId, conn) {
+ActionManager.prototype.onBlockDisconnected = function(id, pId, conn) {
     var block = this.getBlockFromId(id),
         scripts = block.parentThatIsA(ScriptsMorph);
 
     scripts.add(block);
 };
 
-SimpleCollaborator.prototype.onAddListInput = function(id, count) {
+ActionManager.prototype.onAddListInput = function(id, count) {
     var block = this.getBlockFromId(id),
         scripts = block.parentThatIsA(ScriptsMorph);
 
@@ -648,7 +1127,7 @@ SimpleCollaborator.prototype.onAddListInput = function(id, count) {
     this._updateBlockDefinitions(block);
 };
 
-SimpleCollaborator.prototype.onRemoveListInput = function(id, count) {
+ActionManager.prototype.onRemoveListInput = function(id, count) {
     var block = this.getBlockFromId(id),
         scripts = block.parentThatIsA(ScriptsMorph);
 
@@ -662,13 +1141,13 @@ SimpleCollaborator.prototype.onRemoveListInput = function(id, count) {
     this._updateBlockDefinitions(block);
 };
 
-SimpleCollaborator.prototype.onSetBlockSpec = function(id, spec) {
+ActionManager.prototype.onSetBlockSpec = function(id, spec) {
     var block = this.getBlockFromId(id);
     block.userSetSpec(spec);
     this._updateBlockDefinitions(block);
 };
 
-SimpleCollaborator.prototype.onSetField = function(fieldId, value) {
+ActionManager.prototype.onSetField = function(fieldId, value) {
     var block = this.getBlockFromId(fieldId);
 
     console.assert(block instanceof InputSlotMorph,
@@ -677,23 +1156,26 @@ SimpleCollaborator.prototype.onSetField = function(fieldId, value) {
     this._updateBlockDefinitions(block);
 };
 
-SimpleCollaborator.prototype.onSetCommentText = function(id, text) {
+ActionManager.prototype.onSetCommentText = function(id, text) {
     var block = this.getBlockFromId(id);
+
     block.contents.text = text;
     block.contents.drawNew();
     block.contents.changed();
     block.layoutChanged();
+    block.lastValue = text;
+
     this._updateBlockDefinitions(block);
 };
 
-SimpleCollaborator.prototype.onSetSelector = function(id, sel) {
+ActionManager.prototype.onSetSelector = function(id, sel) {
     var block = this.getBlockFromId(id);
     block.setSelector(sel);
     block.changed();
     this._updateBlockDefinitions(block);
 };
 
-SimpleCollaborator.prototype.onAddVariable = function(name, ownerId) {
+ActionManager.prototype.onAddVariable = function(name, ownerId) {
     // Get the sprite or the stage
     var owner,
         isGlobal = ownerId === true;
@@ -714,23 +1196,26 @@ SimpleCollaborator.prototype.onAddVariable = function(name, ownerId) {
     ide.refreshPalette();
 };
 
-SimpleCollaborator.prototype.onDeleteVariable = function(name, ownerId) {
-    var owner = this._owners[ownerId];
+ActionManager.prototype.onDeleteVariable = function(name, ownerId) {
+    var isGlobal = ownerId === true,
+        owner = isGlobal ? this._owners[Object.keys(this._owners)[0]] :
+            this._owners[ownerId];
+
     owner.deleteVariable(name)
 };
 
-SimpleCollaborator.prototype.onRingify = function(id) {
-    var block = this.getBlockFromId(id);
+ActionManager.prototype.onRingify = function(blockId, ringId) {
+    var block = this.getBlockFromId(blockId);
 
     if (block) {
         var ring = block.ringify();
-        ring.id = this.newId();
+        ring.id = ringId;
         this._blocks[ring.id] = ring;
     }
     this._updateBlockDefinitions(block);
 };
 
-SimpleCollaborator.prototype.onUnringify = function(id) {
+ActionManager.prototype.onUnringify = function(id) {
     var block = this.getBlockFromId(id);
     if (block) {
         var ring = block.unringify();
@@ -739,7 +1224,7 @@ SimpleCollaborator.prototype.onUnringify = function(id) {
     this._updateBlockDefinitions(block);
 };
 
-SimpleCollaborator.prototype.onToggleBoolean = function(id, fromValue) {
+ActionManager.prototype.onToggleBoolean = function(id, fromValue) {
     var block = this.getBlockFromId(id),
         iter = 0,
         prev;
@@ -760,59 +1245,57 @@ SimpleCollaborator.prototype.onToggleBoolean = function(id, fromValue) {
 };
 
 ////////////////////////// Custom Blocks //////////////////////////
-SimpleCollaborator.prototype.onAddCustomBlock = function(id, ownerId, opts, creatorId) {
-    var def = new CustomBlockDefinition(opts.spec),
-        owner = this._owners[ownerId],
-        ide = owner.parentThatIsA(IDE_Morph),
-        stage = owner.parentThatIsA(StageMorph),
+ActionManager.prototype.onAddCustomBlock = function(ownerId, serialized, isGlobal, creatorId) {
+    var owner = this._owners[ownerId],
+        ide = this.ide(),
         addedReporter = false,
         editor,
+        def,
         body;
 
-    // Create the CustomBlockDefinition
-    def = new CustomBlockDefinition(opts.spec);
-    def.type = opts.blockType;
-    def.category = opts.category;
-    def.isGlobal = opts.isGlobal;
-    def.id = id;
-    if (def.type === 'reporter' || def.type === 'predicate') {
-        var reporter = SpriteMorph.prototype.blockForSelector('doReport');
-        reporter.id = this.newId();
-        body = Process.prototype.reify.call(
-            null,
-            reporter,
-            new List(),
-            true // ignore empty slots for custom block reification
-        );
-        body.outerContext = null;
-        def.body = body;
-        addedReporter = true;
-    }
-
-    // Update the palette
-    if (def.isGlobal) {
-        stage.globalBlocks.push(def);
+    // Load the CustomBlockDefinition
+    def = this.serializer.loadCustomBlock(this.serializer.parse(serialized));
+    def.receiver = owner;
+    def.isGlobal = isGlobal;
+    if (isGlobal) {
+        owner.globalBlocks.push(def);
+        ide.currentSprite.paletteCache = {};
     } else {
         owner.customBlocks.push(def);
     }
-    ide.flushPaletteCache();
+    this.loadCustomBlocks([def], owner);
+
+    // Create the CustomBlockDefinition
+    //if (def.type === 'reporter' || def.type === 'predicate') {
+        //var reporter = SpriteMorph.prototype.blockForSelector('doReport');
+        //reporter.id = this.newId();
+        //body = Process.prototype.reify.call(
+            //null,
+            //reporter,
+            //new List(),
+            //true // ignore empty slots for custom block reification
+        //);
+        //body.outerContext = null;
+        //def.body = body;
+        //addedReporter = true;
+    //}
+
+    // Update the palette
+    owner.paletteCache = {};
     ide.refreshPalette();
-    this._customBlocks[id] = def;
-    this._customBlockOwner[id] = owner;
 
+    //if (addedReporter) {  // Add reporter to the _blocks dictionary
+        //var scripts,
+            //hat;
 
-    if (addedReporter) {  // Add reporter to the _blocks dictionary
-        var scripts,
-            hat;
+        //// Update the reporter to the one in the editor
+        //editor = new BlockEditorMorph(def, owner);
+        //scripts = editor.body.contents;
+        //hat = scripts.children[0];
+        //reporter = hat.nextBlock();
 
-        // Update the reporter to the one in the editor
-        editor = new BlockEditorMorph(def, owner);
-        scripts = editor.body.contents;
-        hat = scripts.children[0];
-        reporter = hat.nextBlock();
-
-        this._blocks[reporter.id] = reporter;
-    }
+        //this._blocks[reporter.id] = reporter;
+    //}
 
     if (creatorId === this.id) {
         if (!editor) {
@@ -822,15 +1305,16 @@ SimpleCollaborator.prototype.onAddCustomBlock = function(id, ownerId, opts, crea
     }
 };
 
-SimpleCollaborator.prototype.onDeleteCustomBlocks = function(ids, ownerId) {
-    var collab = this;
+ActionManager.prototype.onDeleteCustomBlocks = function(ids) {
+    var myself = this,
+        ownerId = this.ide().stage.id;
 
     return ids.map(function(id) {
-        collab.onDeleteCustomBlock(id, ownerId);
+        myself.onDeleteCustomBlock(id, ownerId);
     });
 };
 
-SimpleCollaborator.prototype.onDeleteCustomBlock = function(id, ownerId) {
+ActionManager.prototype.onDeleteCustomBlock = function(id, ownerId) {
     var definition = this._customBlocks[id],
         rcvr = this._owners[ownerId],
         stage,
@@ -857,7 +1341,7 @@ SimpleCollaborator.prototype.onDeleteCustomBlock = function(id, ownerId) {
     }
 };
 
-SimpleCollaborator.prototype._getCustomCmdBlock = function(id) {
+ActionManager.prototype._getCustomCmdBlock = function(id) {
     var editor = this._getCustomBlockEditor(id),
         scripts = editor.body.contents,
         hat = detect(scripts.children,
@@ -869,14 +1353,14 @@ SimpleCollaborator.prototype._getCustomCmdBlock = function(id) {
     return customBlock;
 };
 
-SimpleCollaborator.prototype._getFragment = function(id, index) {
+ActionManager.prototype._getFragment = function(id, index) {
     var customBlock = this._getCustomCmdBlock(id),
         frag = customBlock.children[index];
 
     return frag;
 };
 
-SimpleCollaborator.prototype.onUpdateBlockLabel = function(id, index, type, label) {
+ActionManager.prototype.onUpdateBlockLabel = function(id, index, type, label) {
     var fragLabel = new BlockLabelFragment(label),
         fragment = this._getFragment(id, index),
         editor = fragment.parentThatIsA(BlockEditorMorph);
@@ -886,7 +1370,7 @@ SimpleCollaborator.prototype.onUpdateBlockLabel = function(id, index, type, labe
     editor.updateDefinition();
 };
 
-SimpleCollaborator.prototype.onDeleteBlockLabel = function(id, index) {
+ActionManager.prototype.onDeleteBlockLabel = function(id, index) {
     var fragment = this._getFragment(id, index),
         editor = fragment.parentThatIsA(BlockEditorMorph);
 
@@ -895,7 +1379,7 @@ SimpleCollaborator.prototype.onDeleteBlockLabel = function(id, index) {
     editor.updateDefinition();
 };
 
-SimpleCollaborator.prototype.onSetCustomBlockType = function(id, cat, type) {
+ActionManager.prototype.onSetCustomBlockType = function(id, cat, type) {
     var customBlock = this._getCustomCmdBlock(id),
         hat = customBlock.parentThatIsA(PrototypeHatBlockMorph),
         editor = customBlock.parentThatIsA(BlockEditorMorph),
@@ -909,13 +1393,13 @@ SimpleCollaborator.prototype.onSetCustomBlockType = function(id, cat, type) {
 };
 
 ////////////////////////// Sprites //////////////////////////
-SimpleCollaborator.prototype.ide = function() {
+ActionManager.prototype.ide = function() {
     var ownerId = Object.keys(this._owners)[0];
 
     return this._owners[ownerId].parentThatIsA(IDE_Morph);
 };
 
-SimpleCollaborator.prototype._loadCostume = function(savedCostume, callback) {
+ActionManager.prototype._loadCostume = function(savedCostume, callback) {
     var model = this.serializer.parse(savedCostume),
         costume = this.serializer.loadValue(model),
         onLoad,
@@ -935,64 +1419,41 @@ SimpleCollaborator.prototype._loadCostume = function(savedCostume, callback) {
     }
 };
 
-SimpleCollaborator.prototype.onAddSprite = function(opts, creatorId) {
+ActionManager.prototype.onDuplicateSprite =
+ActionManager.prototype.onAddSprite = function(serialized, creatorId) {
     var ide = this.ide(),
-        myself = this,
-        sprite = new SpriteMorph(ide.globalVariables);
+        sprite;
 
-    sprite.name = opts.name;
-    sprite.setCenter(ide.stage.center());
-    ide.stage.add(sprite);
-    ide.sprites.add(sprite);
-    ide.corral.addSprite(sprite);
-
-    // randomize sprite properties
-    if (!opts.costume) {
-        sprite.setHue(opts.hue);
-        sprite.setBrightness(opts.brightness);
-        sprite.turn(opts.dir);
-    } else {
-        this._loadCostume(opts.costume, function(costume) {
-            costume.loaded = true;
-            sprite.addCostume(costume);
-            sprite.wearCostume(costume);
-            ide.hasChangedMedia = true;
-            myself._registerCostume(costume, sprite);
-        });
-    }
-
-    if (opts.x !== undefined && opts.y !== undefined) {
-        sprite.setXPosition(opts.x);
-        sprite.setYPosition(opts.y);
-    }
-
+    sprites = this.serializer.loadSprites(serialized, ide);
     if (creatorId === this.id) {
-        ide.selectSprite(sprite);
+        ide.selectSprite(sprites[sprites.length-1]);
     }
-
-    this.registerOwner(sprite);
 };
 
-SimpleCollaborator.prototype.onRemoveSprite = function(spriteId) {
+ActionManager.prototype.onRemoveSprites = function(ids) {
+    ids.forEach(id => this.onRemoveSprite(id));
+};
+
+ActionManager.prototype.onRemoveSprite = function(spriteId) {
     var sprite = this._owners[spriteId];
     this.ide().removeSprite(sprite);
 };
 
-SimpleCollaborator.prototype.onDuplicateSprite = function(spriteId, x, y, creatorId) {
-    var sprite = this._owners[spriteId],
-        ide = this.ide(),
-        dup = ide.duplicateSprite(sprite);
+//ActionManager.prototype.onDuplicateSprite = function(newId, spriteId, x, y, creatorId) {
+    //var sprite = this._owners[spriteId],
+        //ide = this.ide(),
+        //dup = ide.duplicateSprite(sprite);
 
-    dup.setPosition(new Point(x, y));
-    dup.keepWithin(ide.stage);
+    //dup.setPosition(new Point(x, y));
+    //dup.keepWithin(ide.stage);
 
-    if (creatorId === this.id) {
-        ide.selectSprite(dup);
-    }
-    this.registerOwner(dup);
-};
+    //if (creatorId === this.id) {
+        //ide.selectSprite(dup);
+    //}
+    //this.registerOwner(dup, newId);
+//};
 
-SimpleCollaborator.prototype.onRenameSprite = function(spriteId, name) {
+ActionManager.prototype.onRenameSprite = function(spriteId, name) {
     var sprite = this._owners[spriteId],
         ide = this.ide();
 
@@ -1003,7 +1464,7 @@ SimpleCollaborator.prototype.onRenameSprite = function(spriteId, name) {
     }
 };
 
-SimpleCollaborator.prototype.onToggleDraggable = function(spriteId, draggable) {
+ActionManager.prototype.onToggleDraggable = function(spriteId, draggable) {
     var sprite = this._owners[spriteId],
         ide = this.ide();
 
@@ -1013,13 +1474,12 @@ SimpleCollaborator.prototype.onToggleDraggable = function(spriteId, draggable) {
     }
 };
 
-SimpleCollaborator.prototype._registerCostume = function(costume, sprite) {
-    costume.id = this.newId();
+ActionManager.prototype._registerCostume = function(costume, sprite) {
     this._costumes[costume.id] = costume;
     this._costumeToOwner[costume.id] = sprite;
 };
 
-SimpleCollaborator.prototype.onAddCostume = function(savedCostume, ownerId, creatorId) {
+ActionManager.prototype.onAddCostume = function(savedCostume, ownerId, creatorId) {
     var ide = this.ide(),
         wardrobeMorph,
         sprite = this._owners[ownerId],
@@ -1043,7 +1503,7 @@ SimpleCollaborator.prototype.onAddCostume = function(savedCostume, ownerId, crea
     });
 };
 
-SimpleCollaborator.prototype.onUpdateCostume = function(id, savedCostume) {
+ActionManager.prototype.onUpdateCostume = function(id, savedCostume) {
     var ide = this.ide(),
         sprite = this._costumeToOwner[id],
         myself = this,
@@ -1063,14 +1523,14 @@ SimpleCollaborator.prototype.onUpdateCostume = function(id, savedCostume) {
     });
 };
 
-SimpleCollaborator.prototype.onRemoveCostume = function(id) {
+ActionManager.prototype.onRemoveCostume = function(id) {
     var costume = this._costumes[id],
         sprite = this._costumeToOwner[id],
         idx = sprite.costumes.asArray().indexOf(costume),
         ide = this.ide(),
         wardrobe;
 
-    sprite.costumes.remove(idx);
+    sprite.costumes.remove(idx + 1);
 
     // Check for the wardrobe
     if (ide.spriteEditor instanceof WardrobeMorph) {
@@ -1084,7 +1544,7 @@ SimpleCollaborator.prototype.onRemoveCostume = function(id) {
     delete this._costumes[id];
 };
 
-SimpleCollaborator.prototype.onRenameCostume = function(id, newName) {
+ActionManager.prototype.onRenameCostume = function(id, newName) {
     var costume = this._costumes[id],
         ide = this.ide();
 
@@ -1094,7 +1554,7 @@ SimpleCollaborator.prototype.onRenameCostume = function(id, newName) {
     return costume;
 };
 
-SimpleCollaborator.prototype.onAddSound = function(serialized, ownerId, creatorId) {
+ActionManager.prototype.onAddSound = function(serialized, ownerId, creatorId) {
     var owner = this._owners[ownerId],
         sound = this.serializer.loadValue(this.serializer.parse(serialized)),
         ide = this.ide();
@@ -1103,7 +1563,6 @@ SimpleCollaborator.prototype.onAddSound = function(serialized, ownerId, creatorI
     ide.hasChangedMedia = true;
 
     // register the sound
-    sound.id = this.newId();
     this._sounds[sound.id] = sound;
     this._soundToOwner[sound.id] = owner;
 
@@ -1119,7 +1578,7 @@ SimpleCollaborator.prototype.onAddSound = function(serialized, ownerId, creatorI
     }
 };
 
-SimpleCollaborator.prototype.onRenameSound = function(id, name) {
+ActionManager.prototype.onRenameSound = function(id, name) {
     var sound = this._sounds[id],
         ide = this.ide();
 
@@ -1135,7 +1594,7 @@ SimpleCollaborator.prototype.onRenameSound = function(id, name) {
     ide.hasChangedMedia = true;
 };
 
-SimpleCollaborator.prototype.onRemoveSound = function(id) {
+ActionManager.prototype.onRemoveSound = function(id) {
     var owner = this._soundToOwner[id],
         ide = this.ide(),
         idx = owner.sounds.asArray().indexOf(this._sounds[id]);
@@ -1150,11 +1609,11 @@ SimpleCollaborator.prototype.onRemoveSound = function(id) {
     delete this._soundToOwner[id];
 };
 
-SimpleCollaborator.prototype.onSetStageSize = function(width, height) {
+ActionManager.prototype.onSetStageSize = function(width, height) {
     this.ide().setStageExtent(new Point(width, height));
 };
 
-SimpleCollaborator.prototype.onSetRotationStyle = function(id, rotationStyle) {
+ActionManager.prototype.onSetRotationStyle = function(id, rotationStyle) {
     var sprite = this._owners[id];
 
     sprite.rotationStyle = rotationStyle;
@@ -1167,16 +1626,16 @@ SimpleCollaborator.prototype.onSetRotationStyle = function(id, rotationStyle) {
     });
 };
 //////////////////// Import ////////////////////
-SimpleCollaborator.prototype.onImportSprites = function(xmlString) {
+ActionManager.prototype.onImportSprites = function(xmlString) {
     return this.ide().openSpritesString(xmlString);
 };
 
-SimpleCollaborator.prototype.onImportBlocks = function(aString, lbl) {
+ActionManager.prototype.onImportBlocks = function(aString, lbl) {
     return this.ide().openBlocksString(aString, lbl, true);
 };
 
 //////////////////// Loading Projects ////////////////////
-SimpleCollaborator.prototype.loadProject = function(ide, lastSeen) {
+ActionManager.prototype.loadProject = function(ide, lastSeen) {
     // Clear old info
     this.initializeRecords();
 
@@ -1189,20 +1648,87 @@ SimpleCollaborator.prototype.loadProject = function(ide, lastSeen) {
     this.lastSeen = lastSeen || 0;
 };
 
-SimpleCollaborator.prototype._registerBlock = function(block) {
+ActionManager.prototype._getCurrentTarget = function(block) {
+    var parent = block.parent,
+        target,
+        id;
+
+    if (parent instanceof BlockMorph || parent instanceof CommandSlotMorph) {
+        if (block instanceof CommandBlockMorph) {
+            // basic case (following another statement)
+            if (parent.nextBlock && parent.nextBlock() === block) {
+                return this._serializeMoveTarget(
+                    block,
+                    {
+                        point: parent.bottomAttachPoint(),
+                        element: parent,
+                        loc: 'bottom',
+                        type: 'block'
+                    });
+            } else if (parent instanceof CommandSlotMorph) {  // nested in a slot
+                return this._serializeMoveTarget(
+                    block,
+                    {
+                        point: parent.slotAttachPoint(),
+                        element: parent,
+                        loc: 'bottom',
+                        type: 'slot'
+                    });
+            }
+
+        } else if (block instanceof ReporterBlockMorph) {
+            // Get the generic id
+            id = block.id;
+            block.id = null;
+            target = this.getId(block);
+            block.id = id;
+            return target;
+        } else {  // CommentMorph
+            return block.block.id;
+        }
+    }
+
+    return null;
+};
+
+ActionManager.prototype._registerBlock = function(block) {
+    var scripts,
+        standardPosition,
+        fieldId,
+        value,
+        target;
+
     if (!(block instanceof PrototypeHatBlockMorph || block.isPrototype)) {
         console.assert(block.id, `Cannot register block without id: ${block.id} (${block.blockSpec})`);
         this._blocks[block.id] = block;
+
+        // Record the block's initial state...
+        target = this._getCurrentTarget(block);
+        scripts = block.parentThatIsA(ScriptsMorph);
+
+        if (target) {
+            this._targetOf[block.id] = target;
+        } else if (scripts) {
+            standardPosition = this.getStandardPosition(scripts, block.position());
+            this._positionOf[block.id] = standardPosition;
+        }
+
+        // Record the field values if it has any
+        block.inputs().forEach(input => {
+            value = input.contents && input.contents().text;
+            if (!(input instanceof BlockMorph) && value !== undefined) {
+                fieldId = this.getId(input);
+                this.fieldValues[fieldId] = value;
+            }
+        });
     }
 };
 
-SimpleCollaborator.prototype.loadOwner = function(owner) {
-    var collab = this;
-
+ActionManager.prototype.loadOwner = function(owner) {
     this.registerOwner(owner, owner.id);
 
     // Load the blocks from scripts
-    owner.scripts.children.forEach(block => this.traverse(block, this._registerBlock.bind(this)));
+    owner.scripts.children.forEach(block => this.registerBlocks(block));
 
     // Load the blocks from custom block definitions
     var customBlocks = owner.customBlocks,
@@ -1228,7 +1754,7 @@ SimpleCollaborator.prototype.loadOwner = function(owner) {
     });
 };
 
-SimpleCollaborator.prototype.loadCustomBlocks = function(blocks, owner) {
+ActionManager.prototype.loadCustomBlocks = function(blocks, owner) {
     var editor,
         scripts;
 
@@ -1242,18 +1768,29 @@ SimpleCollaborator.prototype.loadCustomBlocks = function(blocks, owner) {
     });
 };
 
-SimpleCollaborator.prototype.traverse = function(block, fn) {
+ActionManager.prototype.traverse = function(block, fn) {
     var current = [block],
-        next;
+        next,
+        inputs,
+        i,j;
 
     while (current.length) {
         next = [];
-        for (var i = current.length; i--;) {
+        for (i = current.length; i--;) {
             block = current[i];
             fn(block);
 
             if (block.inputs) {  // Add nested blocks
-                next = next.concat(block.inputs().filter(input => input instanceof ReporterBlockMorph));
+                inputs = block.inputs();
+                for (j = inputs.length; j--;) {
+                    if (inputs[j] instanceof ReporterBlockMorph) {
+                        next.push(inputs[j]);
+                    } else if (inputs[j] instanceof CommandSlotMorph &&
+                        inputs[j].nestedBlock()) {
+
+                        next.push(inputs[j].nestedBlock());
+                    }
+                }
             }
 
             if (block.nextBlock && block.nextBlock()) {  // add following blocks
@@ -1265,7 +1802,7 @@ SimpleCollaborator.prototype.traverse = function(block, fn) {
 };
 
 /* * * * * * * * * * * * On Remote Events * * * * * * * * * * * */
-SimpleCollaborator.prototype.onMessage = function(msg) {
+ActionManager.prototype.onMessage = function(msg) {
     var method = this._getMethodFor(msg.type),
         accepted = true;
 
@@ -1277,12 +1814,9 @@ SimpleCollaborator.prototype.onMessage = function(msg) {
         }
     } else {
         if (this[method]) {
-            logger.debug('received event:', msg);
-            this[method].apply(this, msg.args);
-            this.lastSeen = msg.id;
-            this.idCount = 0;
+            this._applyEvent(msg);
         }
     }
 };
 
-SnapCollaborator = new SimpleCollaborator();
+SnapActions = new ActionManager();

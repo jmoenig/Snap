@@ -657,7 +657,7 @@ SnapSerializer.prototype.loadSprites = function (xmlString, ide) {
         sprite.gotoXY(+model.attributes.x || 0, +model.attributes.y || 0);
         myself.loadObject(sprite, model);
 
-        SnapCollaborator.loadOwner(sprite);
+        SnapActions.loadOwner(sprite);
     });
 
     // restore inheritance and nesting associations
@@ -694,6 +694,8 @@ SnapSerializer.prototype.loadSprites = function (xmlString, ide) {
 //    ide.stage.drawNew();
     ide.createCorral();
     ide.fixLayout();
+
+    return project.stage.children;
 };
 
 SnapSerializer.prototype.loadMedia = function (xmlString) {
@@ -796,6 +798,72 @@ SnapSerializer.prototype.loadVariables = function (varFrame, element) {
     });
 };
 
+SnapSerializer.prototype.loadCustomBlock = function (element, isGlobal) {
+    var definition = new CustomBlockDefinition(element.attributes.s || ''),
+        myself = this,
+        inputs,
+        vars,
+        header,
+        code,
+        comment,
+        i,
+        names;
+
+    definition.category = element.attributes.category || 'other';
+    definition.type = element.attributes.type || 'command';
+    definition.isGlobal = (isGlobal === true);
+    definition.id = element.attributes.collabId;
+    names = definition.parseSpec(definition.spec).filter(
+        function (str) {
+            return str.charAt(0) === '%' && str.length > 1;
+        }
+    ).map(function (str) {
+        return str.substr(1);
+    });
+
+    definition.names = names;
+    inputs = element.childNamed('inputs');
+    if (inputs) {
+        i = -1;
+        inputs.children.forEach(function (child) {
+            var options = child.childNamed('options');
+            if (child.tag !== 'input') {
+                return;
+            }
+            i += 1;
+            definition.declarations[names[i]] = [
+                child.attributes.type,
+                child.contents,
+                options ? options.contents : undefined,
+                child.attributes.readonly === 'true'
+            ];
+        });
+    }
+
+    vars = element.childNamed('variables');
+    if (vars) {
+        definition.variableNames = myself.loadValue(
+            vars.require('list')
+        ).asArray();
+    }
+
+    header = element.childNamed('header');
+    if (header) {
+        definition.codeHeader = header.contents;
+    }
+
+    code = element.childNamed('code');
+    if (code) {
+        definition.codeMapping = code.contents;
+    }
+
+    comment = element.childNamed('comment');
+    if (comment) {
+        definition.comment = myself.loadComment(comment);
+    }
+    return definition;
+};
+
 SnapSerializer.prototype.loadCustomBlocks = function (
     object,
     element,
@@ -804,71 +872,16 @@ SnapSerializer.prototype.loadCustomBlocks = function (
     // private
     var myself = this;
     element.children.forEach(function (child) {
-        var definition, names, inputs, vars, header, code, comment, i;
+        var definition;
         if (child.tag !== 'block-definition') {
             return;
         }
-        definition = new CustomBlockDefinition(
-            child.attributes.s || '',
-            object
-        );
-        definition.category = child.attributes.category || 'other';
-        definition.type = child.attributes.type || 'command';
-        definition.isGlobal = (isGlobal === true);
-        definition.id = child.attributes.collabId;
+        definition = myself.loadCustomBlock(child, isGlobal);
+        definition.receiver = object;
         if (definition.isGlobal) {
             object.globalBlocks.push(definition);
         } else {
             object.customBlocks.push(definition);
-        }
-
-        names = definition.parseSpec(definition.spec).filter(
-            function (str) {
-                return str.charAt(0) === '%' && str.length > 1;
-            }
-        ).map(function (str) {
-            return str.substr(1);
-        });
-
-        definition.names = names;
-        inputs = child.childNamed('inputs');
-        if (inputs) {
-            i = -1;
-            inputs.children.forEach(function (child) {
-                var options = child.childNamed('options');
-                if (child.tag !== 'input') {
-                    return;
-                }
-                i += 1;
-                definition.declarations[names[i]] = [
-                    child.attributes.type,
-                    child.contents,
-                    options ? options.contents : undefined,
-                    child.attributes.readonly === 'true'
-                ];
-            });
-        }
-
-        vars = child.childNamed('variables');
-        if (vars) {
-            definition.variableNames = myself.loadValue(
-                vars.require('list')
-            ).asArray();
-        }
-
-        header = child.childNamed('header');
-        if (header) {
-            definition.codeHeader = header.contents;
-        }
-
-        code = child.childNamed('code');
-        if (code) {
-            definition.codeMapping = code.contents;
-        }
-
-        comment = child.childNamed('comment');
-        if (comment) {
-            definition.comment = myself.loadComment(comment);
         }
     });
 };
@@ -1468,7 +1481,7 @@ SnapSerializer.prototype.openProject = function (project, ide) {
     //   - definitions
     //   - costumes
     //   - sounds
-    SnapCollaborator.loadProject(ide, project.collabStartIndex);
+    SnapActions.loadProject(ide, project.collabStartIndex);
     ide.world().keyboardReceiver = project.stage;
 };
 
@@ -1540,7 +1553,7 @@ StageMorph.prototype.toXML = function (serializer) {
             '<blocks>%</blocks>' +
             '<variables>%</variables>' +
             '</project>',
-        SnapCollaborator.lastSeen,
+        SnapActions.lastSeen,
         (ide && ide.projectName) ? ide.projectName : localize('Untitled'),
         serializer.app,
         serializer.version,

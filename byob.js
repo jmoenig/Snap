@@ -728,7 +728,7 @@ CustomCommandBlockMorph.prototype.edit = function () {
             null,
             function (definition) {
                 if (definition) { // temporarily update everything
-                    SnapCollaborator.setCustomBlockType(myself.definition.id, definition.category, definition.type);
+                    SnapActions.setCustomBlockType(myself.definition, definition.category, definition.type);
                 }
             },
             myself
@@ -915,7 +915,7 @@ CustomCommandBlockMorph.prototype.deleteBlockDefinition = function () {
     new DialogBoxMorph(
         this,
         function () {
-            SnapCollaborator.deleteCustomBlock(myself.definition.id, myself.receiver().id);
+            SnapActions.deleteCustomBlock(myself.definition);
         },
         this
     ).askYesNo(
@@ -2410,17 +2410,11 @@ BlockLabelFragmentMorph.prototype.mouseClickLeft = function () {
         frag,
         null,
         function () {
-            var defId = myself.parent.definition.id,
-                index = myself.parent.children.indexOf(myself);
 
             if (frag.isDeleted) {
-                SnapCollaborator.deleteBlockLabel(defId, index);
+                SnapActions.deleteBlockLabel(myself.parent.definition, myself);
             } else {
-                var type = frag.type,
-                    value = frag.labelString;
-
-                console.assert(index > -1, 'Cannot find the fragment!');
-                SnapCollaborator.updateBlockLabel(defId, index, type, value);
+                SnapActions.updateBlockLabel(myself.parent.definition, myself, frag);
             }
         },
         this,
@@ -3710,15 +3704,11 @@ BlockRemovalDialogMorph.prototype.selectNone
 // BlockRemovalDialogMorph ops
 
 BlockRemovalDialogMorph.prototype.removeBlocks = function () {
-    var ide = this.target.parentThatIsA(IDE_Morph),
-        ids;
+    var ide = this.target.parentThatIsA(IDE_Morph);
 
     if (!ide) {return; }
     if (this.blocks.length > 0) {
-        ids = this.blocks.map(function (def) {
-            return def.id;
-        });
-        SnapCollaborator.deleteCustomBlocks(ids, ide.stage.id);
+        SnapActions.deleteCustomBlocks(this.blocks);
 
         ide.flushPaletteCache();
         ide.refreshPalette();
