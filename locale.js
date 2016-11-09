@@ -558,3 +558,14 @@ SnapTranslator.dict.et = {
     'last_changed':
         '2016-05-03'
 };
+
+SnapTranslator.dict.gl = {
+    'language_name':
+        'Galego',
+    'language_translator':
+        'tecnoloxia',
+    'translator_e-mail':
+        '',
+    'last_changed':
+        '2016-11-09'
+};
