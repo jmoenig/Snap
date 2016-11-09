@@ -377,12 +377,12 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: 'go back %n layers',
             defaults: [1]
         },
-        doScreenshot: {
-            type: 'command',
-            category: 'looks',
-            spec: 'save %imgsource as costume named %s',
-            defaults: [['pen trails'], localize('screenshot')]
-        },
+        //doScreenshot: {
+            //type: 'command',
+            //category: 'looks',
+            //spec: 'save %imgsource as costume named %s',
+            //defaults: [['pen trails'], localize('screenshot')]
+        //},
 
         // Looks - Debugging primitives for development mode
         reportCostumes: {
@@ -1743,15 +1743,13 @@ SpriteMorph.prototype.blockTemplates = function (category) {
             if (myself.isVariableNameInUse(pair[0], pair[1])) {
                 myself.inform('that name is already in use');
             } else {
-                ide = myself.parentThatIsA(IDE_Morph);
-                myself.addVariable(pair[0], pair[1]);
-                if (!myself.showingVariableWatcher(pair[0])) {
-                    myself.toggleVariableWatcher(pair[0], pair[1]);
-                }
-                ide.flushBlocksCache('variables'); // b/c of inheritance
-                ide.refreshPalette();
+                SnapActions.addVariable(pair[0], pair[1] || myself.id);
             }
         }
+    }
+
+    function deleteVar(name) {
+        SnapActions.deleteVariable(name, myself.id);
     }
 
     if (cat === 'motion') {
@@ -2074,7 +2072,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
                 null,
                 function () {
                     var menu = new MenuMorph(
-                        myself.deleteVariable,
+                        deleteVar,
                         null,
                         myself
                     );
@@ -2172,14 +2170,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
                     null,
                     function (definition) {
                         if (definition.spec !== '') {
-                            if (definition.isGlobal) {
-                                stage.globalBlocks.push(definition);
-                            } else {
-                                myself.customBlocks.push(definition);
-                            }
-                            ide.flushPaletteCache();
-                            ide.refreshPalette();
-                            new BlockEditorMorph(definition, myself).popUp();
+                            SnapActions.addCustomBlock(definition, myself, true);
                         }
                     },
                     myself
@@ -2760,8 +2751,8 @@ SpriteMorph.prototype.reportCostumes = function () {
 
 // SpriteMorph sound management
 
-SpriteMorph.prototype.addSound = function (audio, name) {
-    this.sounds.add(new Sound(audio, name));
+SpriteMorph.prototype.addSound = function (sound) {
+    this.sounds.add(sound);
 };
 
 SpriteMorph.prototype.playSound = function (name) {
@@ -5645,6 +5636,12 @@ StageMorph.prototype.fireKeyEvent = function (key) {
         if (!ide.isAppMode) {return ide.saveProjectsBrowser(); }
         return;
     }
+    if (evt === 'ctrl z') {
+        SnapUndo.undo();
+    }
+    if (evt === 'ctrl y') {
+        SnapUndo.redo();
+    }
     if (evt === 'esc') {
         return this.fireStopAllEvent();
     }
@@ -5811,13 +5808,14 @@ StageMorph.prototype.blockTemplates = function (category) {
             if (myself.isVariableNameInUse(pair[0])) {
                 myself.inform('that name is already in use');
             } else {
-                myself.addVariable(pair[0], pair[1]);
-                myself.toggleVariableWatcher(pair[0], pair[1]);
-                myself.blocksCache[cat] = null;
-                myself.paletteCache[cat] = null;
-                myself.parentThatIsA(IDE_Morph).refreshPalette();
+                SnapActions.addVariable(pair[0], pair[1] || myself.id);
+                //myself.addVariable(pair[0], pair[1]);
             }
         }
+    }
+
+    function deleteVar(name) {
+        SnapActions.deleteVariable(name, myself.id);
     }
 
     if (cat === 'motion') {
@@ -6084,7 +6082,7 @@ StageMorph.prototype.blockTemplates = function (category) {
                 null,
                 function () {
                     var menu = new MenuMorph(
-                        myself.deleteVariable,
+                        deleteVar,
                         null,
                         myself
                     );
@@ -6167,14 +6165,7 @@ StageMorph.prototype.blockTemplates = function (category) {
                     null,
                     function (definition) {
                         if (definition.spec !== '') {
-                            if (definition.isGlobal) {
-                                myself.globalBlocks.push(definition);
-                            } else {
-                                myself.customBlocks.push(definition);
-                            }
-                            ide.flushPaletteCache();
-                            ide.refreshPalette();
-                            new BlockEditorMorph(definition, myself).popUp();
+                            SnapActions.addCustomBlock(definition, myself, true);
                         }
                     },
                     myself
@@ -6988,13 +6979,18 @@ Costume.prototype.edit = function (aWorld, anIDE, isnew, oncancel, onsubmit) {
     );
 };
 
-Costume.prototype.editRotationPointOnly = function (aWorld) {
+Costume.prototype.editRotationPointOnly = function (aWorld, onsubmit) {
     var editor = new CostumeEditorMorph(this),
         action,
         dialog,
         txt;
 
-    action = function () {editor.accept(); };
+    action = function () {
+        editor.accept();
+        if (onsubmit) {
+            onsubmit.call(this);
+        }
+    };
     dialog = new DialogBoxMorph(this, action);
     txt = new TextMorph(
         localize('click or drag crosshairs to move the rotation center'),

@@ -367,6 +367,7 @@ SnapSerializer.prototype.rawLoadProjectModel = function (xmlNode) {
     }
     model.globalVariables = model.project.childNamed('variables');
     project.globalVariables = new VariableFrame();
+    project.collabStartIndex = +(model.project.attributes.collabStartIndex || 0);
 
     /* Stage */
 
@@ -407,6 +408,7 @@ SnapSerializer.prototype.rawLoadProjectModel = function (xmlNode) {
         StageMorph.prototype.dimensions.y =
             Math.max(+model.stage.attributes.height, 180);
     }
+    project.stage.id = model.stage.attributes.collabId || null;
     project.stage.setExtent(StageMorph.prototype.dimensions);
     SpriteMorph.prototype.useFlatLineEnds =
         model.stage.attributes.lines === 'flat';
@@ -639,6 +641,9 @@ SnapSerializer.prototype.loadSprites = function (xmlString, ide) {
         if (model.attributes.pen) {
             sprite.penPoint = model.attributes.pen;
         }
+        if (model.attributes.collabId) {
+            sprite.id = model.attributes.collabId;
+        }
         project.stage.add(sprite);
         ide.sprites.add(sprite);
         sprite.scale = parseFloat(model.attributes.scale || '1');
@@ -651,6 +656,8 @@ SnapSerializer.prototype.loadSprites = function (xmlString, ide) {
         sprite.drawNew();
         sprite.gotoXY(+model.attributes.x || 0, +model.attributes.y || 0);
         myself.loadObject(sprite, model);
+
+        SnapActions.loadOwner(sprite);
     });
 
     // restore inheritance and nesting associations
@@ -687,6 +694,8 @@ SnapSerializer.prototype.loadSprites = function (xmlString, ide) {
 //    ide.stage.drawNew();
     ide.createCorral();
     ide.fixLayout();
+
+    return project.stage.children;
 };
 
 SnapSerializer.prototype.loadMedia = function (xmlString) {
@@ -789,6 +798,72 @@ SnapSerializer.prototype.loadVariables = function (varFrame, element) {
     });
 };
 
+SnapSerializer.prototype.loadCustomBlock = function (element, isGlobal) {
+    var definition = new CustomBlockDefinition(element.attributes.s || ''),
+        myself = this,
+        inputs,
+        vars,
+        header,
+        code,
+        comment,
+        i,
+        names;
+
+    definition.category = element.attributes.category || 'other';
+    definition.type = element.attributes.type || 'command';
+    definition.isGlobal = (isGlobal === true);
+    definition.id = element.attributes.collabId;
+    names = definition.parseSpec(definition.spec).filter(
+        function (str) {
+            return str.charAt(0) === '%' && str.length > 1;
+        }
+    ).map(function (str) {
+        return str.substr(1);
+    });
+
+    definition.names = names;
+    inputs = element.childNamed('inputs');
+    if (inputs) {
+        i = -1;
+        inputs.children.forEach(function (child) {
+            var options = child.childNamed('options');
+            if (child.tag !== 'input') {
+                return;
+            }
+            i += 1;
+            definition.declarations[names[i]] = [
+                child.attributes.type,
+                child.contents,
+                options ? options.contents : undefined,
+                child.attributes.readonly === 'true'
+            ];
+        });
+    }
+
+    vars = element.childNamed('variables');
+    if (vars) {
+        definition.variableNames = myself.loadValue(
+            vars.require('list')
+        ).asArray();
+    }
+
+    header = element.childNamed('header');
+    if (header) {
+        definition.codeHeader = header.contents;
+    }
+
+    code = element.childNamed('code');
+    if (code) {
+        definition.codeMapping = code.contents;
+    }
+
+    comment = element.childNamed('comment');
+    if (comment) {
+        definition.comment = myself.loadComment(comment);
+    }
+    return definition;
+};
+
 SnapSerializer.prototype.loadCustomBlocks = function (
     object,
     element,
@@ -797,70 +872,16 @@ SnapSerializer.prototype.loadCustomBlocks = function (
     // private
     var myself = this;
     element.children.forEach(function (child) {
-        var definition, names, inputs, vars, header, code, comment, i;
+        var definition;
         if (child.tag !== 'block-definition') {
             return;
         }
-        definition = new CustomBlockDefinition(
-            child.attributes.s || '',
-            object
-        );
-        definition.category = child.attributes.category || 'other';
-        definition.type = child.attributes.type || 'command';
-        definition.isGlobal = (isGlobal === true);
+        definition = myself.loadCustomBlock(child, isGlobal);
+        definition.receiver = object;
         if (definition.isGlobal) {
             object.globalBlocks.push(definition);
         } else {
             object.customBlocks.push(definition);
-        }
-
-        names = definition.parseSpec(definition.spec).filter(
-            function (str) {
-                return str.charAt(0) === '%' && str.length > 1;
-            }
-        ).map(function (str) {
-            return str.substr(1);
-        });
-
-        definition.names = names;
-        inputs = child.childNamed('inputs');
-        if (inputs) {
-            i = -1;
-            inputs.children.forEach(function (child) {
-                var options = child.childNamed('options');
-                if (child.tag !== 'input') {
-                    return;
-                }
-                i += 1;
-                definition.declarations[names[i]] = [
-                    child.attributes.type,
-                    child.contents,
-                    options ? options.contents : undefined,
-                    child.attributes.readonly === 'true'
-                ];
-            });
-        }
-
-        vars = child.childNamed('variables');
-        if (vars) {
-            definition.variableNames = myself.loadValue(
-                vars.require('list')
-            ).asArray();
-        }
-
-        header = child.childNamed('header');
-        if (header) {
-            definition.codeHeader = header.contents;
-        }
-
-        code = child.childNamed('code');
-        if (code) {
-            definition.codeMapping = code.contents;
-        }
-
-        comment = child.childNamed('comment');
-        if (comment) {
-            definition.comment = myself.loadComment(comment);
         }
     });
 };
@@ -1000,6 +1021,7 @@ SnapSerializer.prototype.loadComment = function (model) {
         scale = SyntaxElementMorph.prototype.scale;
     comment.isCollapsed = (model.attributes.collapsed === 'true');
     comment.setTextWidth(+model.attributes.w * scale);
+    comment.id = model.attributes.collabId;
     return comment;
 };
 
@@ -1011,11 +1033,14 @@ SnapSerializer.prototype.loadBlock = function (model, isReporter) {
                 model.attributes,
                 'var'
             )) {
-            return SpriteMorph.prototype.variableBlock(
+            block = SpriteMorph.prototype.variableBlock(
                 model.attributes['var']
             );
+            block.id = model.attributes.collabId;
+            return block;
         }
         block = SpriteMorph.prototype.blockForSelector(model.attributes.s);
+        block.id = model.attributes.collabId;
     } else if (model.tag === 'custom-block') {
         isGlobal = model.attributes.scope ? false : true;
         receiver = isGlobal ? this.project.stage
@@ -1030,7 +1055,9 @@ SnapSerializer.prototype.loadBlock = function (model, isReporter) {
             if (!isGlobal) {
                 receiver = this.project.stage;
             } else {
-                return this.obsoleteBlock(isReporter);
+                block = this.obsoleteBlock(isReporter);
+                block.id = model.attributes.collabId;
+                return block;
             }
         }
         if (isGlobal) {
@@ -1051,7 +1078,9 @@ SnapSerializer.prototype.loadBlock = function (model, isReporter) {
             });
         }
         if (!info) {
-            return this.obsoleteBlock(isReporter);
+            block = this.obsoleteBlock(isReporter);
+            block.id = model.attributes.collabId;
+            return block;
         }
         block = info.type === 'command' ? new CustomCommandBlockMorph(
             info,
@@ -1066,6 +1095,7 @@ SnapSerializer.prototype.loadBlock = function (model, isReporter) {
         block = this.obsoleteBlock(isReporter);
     }
     block.isDraggable = true;
+    block.id = model.attributes.collabId;
     inputs = block.inputs();
     model.children.forEach(function (child, i) {
         if (child.tag === 'variables') {
@@ -1233,6 +1263,9 @@ SnapSerializer.prototype.loadValue = function (model) {
         if (model.attributes.pen) {
             v.penPoint = model.attributes.pen;
         }
+        if (model.attributes.collabId) {
+            v.id = model.attributes.collabId;
+        }
         myself.project.stage.add(v);
         v.scale = parseFloat(model.attributes.scale || '1');
         v.rotationStyle = parseFloat(
@@ -1369,6 +1402,7 @@ SnapSerializer.prototype.loadValue = function (model) {
             }
             image.src = model.attributes.image;
         }
+        v.id = model.attributes.collabId;
         record();
         return v;
     case 'sound':
@@ -1381,6 +1415,7 @@ SnapSerializer.prototype.loadValue = function (model) {
             )) {
             myself.mediaDict[model.attributes.mediaID] = v;
         }
+        v.id = model.attributes.collabId;
         return v;
     }
     return undefined;
@@ -1440,6 +1475,13 @@ SnapSerializer.prototype.openProject = function (project, ide) {
     //  watcher.onNextStep = function () {this.currentValue = null;};
     //})
 
+    // TODO: Update the collaborator
+    //  - ids
+    //   - blocks
+    //   - definitions
+    //   - costumes
+    //   - sounds
+    SnapActions.loadProject(ide, project.collabStartIndex);
     ide.world().keyboardReceiver = project.stage;
 };
 
@@ -1488,10 +1530,10 @@ StageMorph.prototype.toXML = function (serializer) {
 
     this.removeAllClones();
     return serializer.format(
-        '<project name="@" app="@" version="@">' +
+        '<project collabStartIndex="@" name="@" app="@" version="@">' +
             '<notes>$</notes>' +
             '<thumbnail>$</thumbnail>' +
-            '<stage name="@" width="@" height="@" ' +
+            '<stage name="@" width="@" height="@" collabId="@" ' +
             'costume="@" tempo="@" threadsafe="@" ' +
             'lines="@" ' +
             'codify="@" ' +
@@ -1511,6 +1553,7 @@ StageMorph.prototype.toXML = function (serializer) {
             '<blocks>%</blocks>' +
             '<variables>%</variables>' +
             '</project>',
+        SnapActions.lastSeen,
         (ide && ide.projectName) ? ide.projectName : localize('Untitled'),
         serializer.app,
         serializer.version,
@@ -1519,6 +1562,7 @@ StageMorph.prototype.toXML = function (serializer) {
         this.name,
         StageMorph.prototype.dimensions.x,
         StageMorph.prototype.dimensions.y,
+        this.id,
         this.getCostumeIdx(),
         this.getTempo(),
         this.isThreadSafe,
@@ -1551,7 +1595,7 @@ SpriteMorph.prototype.toXML = function (serializer) {
         ide = stage ? stage.parentThatIsA(IDE_Morph) : null,
         idx = ide ? ide.sprites.asArray().indexOf(this) + 1 : 0;
     return serializer.format(
-        '<sprite name="@" idx="@" x="@" y="@"' +
+        '<sprite name="@" collabId="@" idx="@" x="@" y="@"' +
             ' heading="@"' +
             ' scale="@"' +
             ' rotation="@"' +
@@ -1567,6 +1611,7 @@ SpriteMorph.prototype.toXML = function (serializer) {
             '<scripts>%</scripts>' +
             '</sprite>',
         this.name,
+        this.id,
         idx,
         this.xPosition(),
         this.yPosition(),
@@ -1615,8 +1660,9 @@ Costume.prototype[XML_Serializer.prototype.mediaDetectionProperty] = true;
 
 Costume.prototype.toXML = function (serializer) {
     return serializer.format(
-        '<costume name="@" center-x="@" center-y="@" image="@" ~/>',
+        '<costume name="@" collabId="@" center-x="@" center-y="@" image="@" ~/>',
         this.name,
+        this.id,
         this.rotationCenter.x,
         this.rotationCenter.y,
         this instanceof SVG_Costume ? this.contents.src
@@ -1628,7 +1674,8 @@ Sound.prototype[XML_Serializer.prototype.mediaDetectionProperty] = true;
 
 Sound.prototype.toXML = function (serializer) {
     return serializer.format(
-        '<sound name="@" sound="@" ~/>',
+        '<sound collabId="@" name="@" sound="@" ~/>',
+        this.id,
         this.name,
         this.toDataURL()
     );
@@ -1758,7 +1805,8 @@ BlockMorph.prototype.toXML = BlockMorph.prototype.toScriptXML = function (
 
 BlockMorph.prototype.toBlockXML = function (serializer) {
     return serializer.format(
-        '<block s="@">%%</block>',
+        '<block collabId="@" s="@">%%</block>',
+        this.id,
         this.selector,
         serializer.store(this.inputs()),
         this.comment ? this.comment.toXML(serializer) : ''
@@ -1767,7 +1815,8 @@ BlockMorph.prototype.toBlockXML = function (serializer) {
 
 ReporterBlockMorph.prototype.toXML = function (serializer) {
     return this.selector === 'reportGetVar' ? serializer.format(
-        '<block var="@"/>',
+        '<block collabId="@" var="@"/>',
+        this.id,
         this.blockSpec
     ) : this.toBlockXML(serializer);
 };
@@ -1801,7 +1850,8 @@ CustomCommandBlockMorph.prototype.toBlockXML = function (serializer) {
     var scope = this.definition.isGlobal ? undefined
         : this.definition.receiver.name;
     return serializer.format(
-        '<custom-block s="@"%>%%%%</custom-block>',
+        '<custom-block collabId="@" s="@"%>%%%%</custom-block>',
+        this.id,
         this.blockSpec,
         this.definition.isGlobal ?
                 '' : serializer.format(' scope="@"', scope),
@@ -1840,13 +1890,14 @@ CustomBlockDefinition.prototype.toXML = function (serializer) {
     }
 
     return serializer.format(
-        '<block-definition s="@" type="@" category="@">' +
+        '<block-definition collabId="@" s="@" type="@" category="@">' +
             '%' +
             (this.variableNames.length ? '<variables>%</variables>' : '@') +
             '<header>@</header>' +
             '<code>@</code>' +
             '<inputs>%</inputs>%%' +
             '</block-definition>',
+        this.id,
         this.spec,
         this.type,
         this.category || 'other',
@@ -1949,7 +2000,7 @@ List.prototype.toXML = function (serializer, mediaContext) {
     // when collecting media into a separate module
     var xml, value, item;
     if (this.isLinked) {
-        xml = '<list linked="linked" ~>';
+        xml = '<list collabId="' + this.id + '" linked="linked" ~>';
         if (StageMorph.prototype.enableSublistIDs) {
             // recursively nest tails:
             value = this.first;
@@ -1990,7 +2041,8 @@ List.prototype.toXML = function (serializer, mediaContext) {
     }
     // dynamic array:
     return serializer.format(
-        '<list ~>%</list>',
+        '<list collabId="@" ~>%</list>',
+        this.id,
         this.contents.reduce(function (xml, item) {
             return xml + serializer.format(
                 '<item>%</item>',
@@ -2033,7 +2085,8 @@ CommentMorph.prototype.toXML = function (serializer) {
 
     if (this.block) { // attached to a block
         return serializer.format(
-            '<comment w="@" collapsed="@">%</comment>',
+            '<comment collabId="@" w="@" collapsed="@">%</comment>',
+            this.id,
             this.textWidth() / scale,
             this.isCollapsed,
             serializer.escape(this.text())
@@ -2047,7 +2100,8 @@ CommentMorph.prototype.toXML = function (serializer) {
         position = this.topLeft();
     }
     return serializer.format(
-        '<comment x="@" y="@" w="@" collapsed="@">%</comment>',
+        '<comment collabId="@" x="@" y="@" w="@" collapsed="@">%</comment>',
+        this.id,
         position.x / scale,
         position.y / scale,
         this.textWidth() / scale,
