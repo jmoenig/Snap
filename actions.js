@@ -264,7 +264,6 @@ ActionManager.prototype._removeBlock = function(id, userDestroy) {
 ActionManager.prototype._getBlockState = function(id) {
     var state = {};
 
-    // TODO: Use a constant to specify the type
     if (this._targetOf[id]) {
         return [this._targetOf[id]];
     } else if (this._positionOf[id]) {
@@ -703,6 +702,7 @@ ActionManager.prototype._onSetBlockPosition = function(id, x, y) {
     var position = new Point(x, y);
 
     this._positionOf[id] = position;
+    delete this._targetOf[id];
     this.onSetBlockPosition(id, position);
 };
 
@@ -815,8 +815,6 @@ ActionManager.prototype.registerBlocks = function(firstBlock) {
         target,
         prevBlock;
 
-    // TODO: Update this to record the block state, too!
-    // TODO: Make a function to get the current target of connected block
     this.traverse(block, this._registerBlock.bind(this));
     return firstBlock;
 };
@@ -975,7 +973,6 @@ ActionManager.prototype.onMoveBlock = function(id, rawTarget) {
     }
 
     if (isNewBlock) {
-        this.registerBlocks(block);
         scripts.add(block);
     } else {
         if (block.parent && block.parent.reactToGrabOf) {
@@ -984,6 +981,11 @@ ActionManager.prototype.onMoveBlock = function(id, rawTarget) {
     }
 
     block.snap(target);
+
+    if (isNewBlock) {
+        this.registerBlocks(block);
+    }
+
     this.updateCommentsPositions(block);
     this._updateBlockDefinitions(block);
 };
