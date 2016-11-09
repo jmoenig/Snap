@@ -858,6 +858,7 @@ ActionManager.prototype.onAddBlock = function(block, ownerId, x, y) {
         scripts.add(firstBlock);
         editor.updateDefinition();
     }
+    firstBlock.fixChildrensBlockColor(true);
 
     // Register generic hat blocks?
     // TODO
