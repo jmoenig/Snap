@@ -139,19 +139,18 @@ ActionManager.prototype.initializeRecords = function() {
     this._blockToOwnerId = {};
 };
 
-ActionManager.prototype.initialize = function() {
+ActionManager.prototype.collaborate = function() {
     var url = 'ws://' + window.location.host,
         ws = new WebSocket(url),
         self = this;
 
-    this.initializeRecords();
-    this.initializeEventMethods();
     ws.onopen = function() {
         logger.debug('websocket connected!');
+        self.isLeader = false;
     };
 
     ws.onclose = function() {
-        self.isLeader = false;
+        self.isLeader = true;
     };
 
     ws.onmessage = function(raw) {
@@ -168,9 +167,17 @@ ActionManager.prototype.initialize = function() {
             self.onMessage(msg);
         }
     };
-
     this._ws = ws;
+};
+
+ActionManager.prototype.initialize = function() {
     this.serializer = new SnapSerializer();
+    this._ws = null;
+    this.isLeader = true;
+
+    this.initializeRecords();
+    this.initializeEventMethods();
+    this.collaborate();
 };
 
 function Action(manager, event) {
@@ -263,7 +270,9 @@ ActionManager.prototype._rawApplyEvent = function(msg) {
 ActionManager.prototype.send = function(json) {
     json.id = json.id || this.lastSeen + 1;
     json.user = this.id;
-    this._ws.send(JSON.stringify(json));
+    if (this._ws && this._ws.readyState === WebSocket.OPEN) {
+        this._ws.send(JSON.stringify(json));
+    }
 };
 
 ActionManager.prototype.newId = function() {
