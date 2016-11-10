@@ -817,6 +817,8 @@ SnapTranslator.dict.de = {
         'einschalten um IDE-\nAnimationen zu erlauben',
     'Flat design':
         'Helles Design',
+    'Nested auto-wrapping':
+        'Automatisches Umklammern',
     'Keyboard Editing':
         'Tastaturunterstützung',
     'Table support':
