@@ -3090,3 +3090,25 @@ http://snap.berkeley.edu/run#cloud:Username=jens&ProjectName=rotation
 161027
 ------
 == v4.0.9 ====
+
+== v4.0.9.1 ====
+
+161110
+------
+* new Galician translation, yay!! Thanks, tecnoloxia.org!
+* Italian translation update
+* German translation update
+
+== v4.0.9.2 ====
+
+*** in development ***
+
+161107
+------
+* New C-Slot auto-wrapping / snapping feature (similar to Scratch)
+
+161109
+------
+* Blocks, GUI: preference setting to enable auto-wrapping inside nested block stacks
+* Blocks: Treat JS-function reporters the same as variable getters wrt rings
+* German translation update
