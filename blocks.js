@@ -7677,7 +7677,7 @@ InputSlotMorph.prototype.reactToKeystroke = function () {
 InputSlotMorph.prototype.updateFieldValue = function (newValue) {
     var block = this.parentThatIsA(BlockMorph);
 
-    newValue = newValue || this.contents().text;
+    newValue = newValue !== undefined ? newValue : this.contents().text;
     if (block.id) {  // not in the palette
         this.setContents(this.lastValue);  // set to original value in case it fails
         SnapActions.setField(this, newValue);
