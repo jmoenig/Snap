@@ -2424,7 +2424,7 @@ BlockMorph.prototype.userMenu = function () {
     menu.addItem(
         "delete", function() {
         if (this.id) {
-            SnapActions.removeBlock(this.id, true);
+            SnapActions.removeBlock(this, true);
         } else {
             this.userDestroy();
         }
@@ -11923,7 +11923,7 @@ CommentMorph.prototype.userMenu = function () {
     );
     menu.addItem("delete", function() {
         if (this.id) {
-            SnapActions.removeBlock(this.id);
+            SnapActions.removeBlock(this);
         } else {
             this.destroy();
         }

@@ -239,33 +239,42 @@ UndoManager.Invert.removeBlock = function(args) {
     };
 };
 
-UndoManager.Invert.setBlockPosition = function(args) {
-    // args are:
-    //  - [id, x, y, oldX, oldY]
-    //  - [id, x, y, oldTarget]
-    //  - [id, x, y, null]
+UndoManager.Invert._actionForState = function(state) {
+    // oldState is either:
+    //  - [id, x, y]
+    //  - [id, oldTarget]
+    //  - [id]
 
-    if (args.length === 5) {
-        // Swap the old position and new position
-        UndoManager.swap(args, 1, 3);  // x, oldX
-        UndoManager.swap(args, 2, 4);  // y, oldY
+    if (state.length === 3) {
         return {
             type: 'setBlockPosition',
-            args: args
+            args: state
         };
-    } else if (args[3] === null) {  // newly created
-        return {
-            type: 'removeBlock',
-            args: [args[0], true]
-        };
+    } else if (state.length === 1) {  // newly created
+        if (state[0] instanceof Array) {
+            return {
+                type: 'removeBlocks',
+                args: state
+            };
+        } else {
+            return {
+                type: 'removeBlock',
+                args: [state[0], true]
+            };
+        }
     } else {  // previous was a moveBlock
-        UndoManager.swap(args, 1, 3);  // x, oldTarget
-        UndoManager.swap(args, 2, 3);  // y, x
         return {
             type: 'moveBlock',
-            args: args
+            args: state
         };
     }
+};
+
+UndoManager.Invert.setBlockPosition = function(args) {
+    // args are:
+    //  - [id, x, y, oldState]
+
+    return this._actionForState(args[0], args[3]);
 };
 
 UndoManager.Invert.setBlocksPositions = function(args) {
@@ -284,37 +293,25 @@ UndoManager.swap = function(array, x, y) {
 
 UndoManager.Invert.moveBlock = function(args) {
     // args are either:
-    //  [id, target, oldTarget]  --> from move
+    //  [id, target, oldState]
     //    or
-    //  [id, target, oldX, oldY]  --> from position
-    //    or
-    //  [id, target, ids]  --> newly created
-    var isNewlyCreated = args.length === 3 && args[2] instanceof Array,
-        isFromMove = !isNewlyCreated && args.length === 3,
-        isFromPosition = !isNewlyCreated && args.length === 4;
+    //  [id, target, oldState, displacedReporter]
+    var revertToOldState = UndoManager.Invert._actionForState.call(null, args[2]),
+        event = {
+            type: 'batch',
+            args: [revertToOldState]
+        };
+        
 
-    // Check if had a position or old target
-    if (isFromMove) {
-        UndoManager.swap(args, 1, 2);
-        return {
+    // If a block was displaced, move it back to it's original target
+    if (args.length === 4) {
+        event.args.push({
             type: 'moveBlock',
-            args: args
-        };
-    } else if (isFromPosition) {  // x, y
-        // remove target
-        var target = args.splice(1, 1)[0];
-        return {
-            type: 'setBlockPosition',
-            args: args
-        };
-    } else if (isNewlyCreated) {  // newly created (dragged from palette)
-        return {
-            type: 'removeBlocks',
-            args: args.reverse()
-        };
-    } else {
-        logger.warn('Malformed moveBlock args!:', {type: 'moveBlock', args: args});
+            args: args[3]
+        });
     }
+
+    return event;
 };
 
 UndoManager.Invert.addListInput = function() {

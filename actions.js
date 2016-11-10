@@ -14,6 +14,8 @@ function ActionManager() {
     this.id = null;
     this.rank = null;
     this.isLeader = false;
+    this._onAccept = {};
+    this._onReject = {};
     this.initialize();
 };
 
@@ -21,6 +23,14 @@ ActionManager.prototype.addActions = function() {
     var actions = Array.prototype.slice.call(arguments),
         myself = this;
 
+    // Every event/action supported by the action manager has the same life-cycle:
+    //  - eventName
+    //    - public API
+    //  - _eventName
+    //    - Convert public API args to serializable, easy form
+    //    - Add any args needed for undo
+    //  - onEventName
+    //    - Update the Snap environment
     actions.forEach(function(method) {
         myself[method] = function() {
             var args = Array.prototype.slice.apply(arguments),
@@ -37,23 +47,72 @@ ActionManager.prototype.addActions = function() {
                 args: args
             };
 
-            this.applyEvent(msg);
+            return this.applyEvent(msg);
         };
     });
 };
 
 ActionManager.prototype.initializeEventMethods = function() {
-    // Every event/action supported by the action manager has the same life-cycle:
-    //  - eventName
-    //    - public API
-    //  - _eventName
-    //    - Convert public API args to serializable, easy form
-    //    - Add any args needed for undo
-    //  - _onEventName
-    //    - Preprocessing for an accepted event
-    //  - onEventName
-    //    - Update the Snap environment
-    this.addActions.apply(this, this.EVENTS);
+    this.addActions(
+        'setStageSize',
+
+        // Sprites
+        'addSprite',
+        'removeSprite',
+        'removeSprites',  // (used for undo)
+        'renameSprite',
+        'toggleDraggable',
+        'duplicateSprite',
+        'importSprites',
+        'setRotationStyle',
+
+        // Sounds
+        'addSound',
+        'renameSound',
+        'removeSound',
+
+        // Costumes
+        'addCostume',
+        'renameCostume',
+        'removeCostume',
+        'updateCostume',
+
+        // Variables
+        'addVariable',
+        'deleteVariable',
+
+        // Custom blocks
+        'addCustomBlock',
+        'deleteCustomBlock',
+        'deleteCustomBlocks',
+
+        'setCustomBlockType',
+        'updateBlockLabel',
+        'deleteBlockLabel',
+
+        // Block manipulation
+        'addBlock',
+        'removeBlock',
+        'removeBlocks',
+        'setBlockPosition',
+        'setBlocksPositions',
+        'moveBlock',
+        'importBlocks',
+
+        'setCommentText',
+
+        'setSelector',
+        'setBlockSpec',
+
+        'addListInput',
+        'removeListInput',
+
+        'ringify',
+        'unringify',
+
+        'toggleBoolean',
+        'setField'
+    );
 };
 
 ActionManager.prototype.initializeRecords = function() {
@@ -114,24 +173,96 @@ ActionManager.prototype.initialize = function() {
     this.serializer = new SnapSerializer();
 };
 
+function Action(manager, event) {
+    this._manager = manager;
+    this.id = event.id;
+};
+
+Action.prototype.accept = function(fn) {
+    this._manager._onAccept[this.id] = fn;
+    return this;
+};
+
+Action.prototype.reject = function(fn) {
+    this._manager._onReject[this.id] = fn;
+    return this;
+};
+
+ActionManager.prototype.applyEvent = function(event) {
+    if (this.isLeader) {
+        this.acceptEvent(event);
+    } else {
+        this.send(event);
+    }
+    return new Action(this, event);
+};
+
+ActionManager.prototype._getMethodFor = function(action) {
+    var method = '_on' + action.substring(0,1).toUpperCase() + action.substring(1);
+
+    if (!this[method]) {
+        method = method.substring(1);
+    }
+
+    return method;
+};
+
 ActionManager.prototype.acceptEvent = function(msg) {
     msg.id = msg.id || this.lastSeen + 1;
+    msg.user = this.id;
     this.send(msg);
-    this._applyEvent(msg);
+    setTimeout(this._applyEvent.bind(this), 0, msg);
+};
+
+ActionManager.prototype._isBatchEvent = function(msg) {
+    return msg.type === 'batch';
 };
 
 ActionManager.prototype._applyEvent = function(msg) {
-    var method = this._getMethodFor(msg.type);
+    var myself = this,
+        result;
 
     logger.debug('received event:', msg);
-    this[method].apply(this, msg.args);
+
+    // If it is a batch, it may need to call multiple...
+    if (this._isBatchEvent(msg)) {
+        result = msg.args.map(function(event) {
+            myself._rawApplyEvent(event);
+        });
+    } else {
+        result = this._rawApplyEvent(msg);
+    }
+
     this.lastSeen = msg.id;
     this.idCount = 0;
     SnapUndo.record(msg);
+
+    // Call 'success' or 'reject', if relevant
+    if (msg.user === this.id) {
+        if (this._onAccept[msg.id]) {
+            this._onAccept[msg.id](result);
+            delete this._onAccept[msg.id];
+        }
+
+        // We can call reject for any ids less than the given id...
+        for (var i = msg.id; i--;) {
+            if (this._onReject[msg.id]) {
+                this._onReject[msg.id](result);
+                delete this._onReject[msg.id];
+            }
+        }
+    }
+};
+
+ActionManager.prototype._rawApplyEvent = function(msg) {
+    var method = this._getMethodFor(msg.type);
+
+    return this[method].apply(this, msg.args);
 };
 
 ActionManager.prototype.send = function(json) {
     json.id = json.id || this.lastSeen + 1;
+    json.user = this.id;
     this._ws.send(JSON.stringify(json));
 };
 
@@ -245,14 +376,13 @@ ActionManager.prototype._addBlock = function(block, scripts, position, ownerId) 
     ];
 };
 
-ActionManager.prototype._removeBlock = function(id, userDestroy) {
-    var block = this._blocks[id],
-        serialized = this.serializeBlock(block, true),
+ActionManager.prototype._removeBlock = function(block, userDestroy) {
+    var serialized = this.serializeBlock(block, true),
         position = this._positionOf[block.id],
-        ownerId = this._blockToOwnerId[id];
+        ownerId = this._blockToOwnerId[block.id];
         
     return [
-        id,
+        block.id,
         userDestroy,
         position.y,
         position.x,
@@ -262,15 +392,18 @@ ActionManager.prototype._removeBlock = function(id, userDestroy) {
 };
 
 ActionManager.prototype._getBlockState = function(id) {
-    var state = {};
+    var state;
 
     if (this._targetOf[id]) {
-        return [this._targetOf[id]];
+        state = [this._targetOf[id]];
     } else if (this._positionOf[id]) {
-        return [this._positionOf[id].x, this._positionOf[id].y];
+        state = [this._positionOf[id].x, this._positionOf[id].y];
     } else {  // newly created
-        return [null];
+        state = [];
     }
+
+    state.unshift(id);
+    return state;
 };
 
 ActionManager.prototype._setBlockPosition = function(id, position) {
@@ -279,7 +412,7 @@ ActionManager.prototype._setBlockPosition = function(id, position) {
         standardPosition = this.getStandardPosition(scripts, position),
         oldState = this._getBlockState(id);
 
-    return [id, standardPosition.x, standardPosition.y].concat(oldState);
+    return [id, standardPosition.x, standardPosition.y, oldState];
 };
 
 ActionManager.prototype._setBlocksPositions = function(ids, positions) {
@@ -407,13 +540,16 @@ ActionManager.prototype._moveBlock = function(block, target) {
         serialized,
         ids,
         id,
+        oldState,
+        displacedTarget,
         args;
 
     // If the target is a ReporterBlockMorph, then we are replacing that block.
     // Undo should place that block back into it's current place
-    // TODO
+    if (target instanceof ReporterBlockMorph) {  // displacing a block
+        displacedTarget = [target.id, this._getCurrentTarget(target)];
+    }
 
-    // Serialize the target
     target = this._serializeMoveTarget(block, target);
     if (isNewBlock) {
         this._idBlocks(block);
@@ -421,10 +557,7 @@ ActionManager.prototype._moveBlock = function(block, target) {
     id = block.id;
     serialized = this.serializeBlock(block, isNewBlock);
 
-    // If there is no target, get the current position
-
-    var oldState = this._getBlockState(id);  // target, pos (2), or null
-
+    oldState = this._getBlockState(id);
     args = [serialized, target];
     if (isNewBlock) {
         ids = this._getStatementIds(block);
@@ -432,7 +565,12 @@ ActionManager.prototype._moveBlock = function(block, target) {
         block.destroy();
     }
 
-    return args.concat(oldState);
+    args.push(oldState);
+
+    if (displacedTarget) {
+        args.push(displacedTarget);
+    }
+    return args;
 };
 
 ActionManager.prototype._setField = function(field, value) {
@@ -712,86 +850,6 @@ ActionManager.prototype._onSetField = function(fieldId, value) {
     this.onSetField(fieldId, value);
 };
 
-/* * * * * * * * * * * * On UI Events * * * * * * * * * * * */
-ActionManager.prototype.EVENTS = [
-    'setStageSize',
-
-    // Sprites
-    'addSprite',
-    'removeSprite',
-    'removeSprites',  // (used for undo)
-    'renameSprite',
-    'toggleDraggable',
-    'duplicateSprite',
-    'importSprites',
-    'setRotationStyle',
-
-    // Sounds
-    'addSound',
-    'renameSound',
-    'removeSound',
-
-    // Costumes
-    'addCostume',
-    'renameCostume',
-    'removeCostume',
-    'updateCostume',
-
-    // Variables
-    'addVariable',
-    'deleteVariable',
-
-    // Custom blocks
-    'addCustomBlock',
-    'deleteCustomBlock',
-    'deleteCustomBlocks',
-
-    'setCustomBlockType',
-    'updateBlockLabel',
-    'deleteBlockLabel',
-
-    // Block manipulation
-    'addBlock',
-    'removeBlock',
-    'removeBlocks',
-    'setBlockPosition',
-    'setBlocksPositions',
-    'moveBlock',
-    'importBlocks',
-
-    'setCommentText',
-
-    'setSelector',
-    'setBlockSpec',
-
-    'addListInput',
-    'removeListInput',
-
-    'ringify',
-    'unringify',
-
-    'toggleBoolean',
-    'setField'
-];
-
-ActionManager.prototype.applyEvent = function(event) {
-    if (this.isLeader) {
-        this.acceptEvent(event);
-    } else {
-        this.send(event);
-    }
-};
-
-ActionManager.prototype._getMethodFor = function(action) {
-    var method = '_on' + action.substring(0,1).toUpperCase() + action.substring(1);
-
-    if (!this[method]) {
-        method = method.substring(1);
-    }
-
-    return method;
-};
-
 /* * * * * * * * * * * * Updating Snap! * * * * * * * * * * * */
 ActionManager.prototype.getAdjustedPosition = function(position, scripts) {
     var scale = SyntaxElementMorph.prototype.scale;
@@ -981,6 +1039,7 @@ ActionManager.prototype.onMoveBlock = function(id, rawTarget) {
     }
 
     block.snap(target);
+    scripts.drawNew();
 
     if (isNewBlock) {
         this.registerBlocks(block);
