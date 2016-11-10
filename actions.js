@@ -9,6 +9,7 @@ var logger = {
 // If not the leader, send operations to the leader for approval
 function ActionManager() {
     this.lastSeen = 0;
+    this.lastSent = null;
     this.idCount = 0;
 
     this.id = null;
@@ -196,6 +197,14 @@ Action.prototype.reject = function(fn) {
 };
 
 ActionManager.prototype.applyEvent = function(event) {
+    event.user = this.id;
+    event.id = event.id || this.lastSeen + 1;
+
+    // Skip duplicate undo/redo events
+    if (event.replayType && this.lastSent === event.id) {
+        return;
+    }
+
     if (this.isLeader) {
         this.acceptEvent(event);
     } else {
@@ -216,7 +225,8 @@ ActionManager.prototype._getMethodFor = function(action) {
 
 ActionManager.prototype.acceptEvent = function(msg) {
     msg.id = msg.id || this.lastSeen + 1;
-    msg.user = this.id;
+
+    // If we are undo/redo-ing, make sure it hasn't already been sent
     this.send(msg);
     setTimeout(this._applyEvent.bind(this), 0, msg);
 };
@@ -269,7 +279,7 @@ ActionManager.prototype._rawApplyEvent = function(msg) {
 
 ActionManager.prototype.send = function(json) {
     json.id = json.id || this.lastSeen + 1;
-    json.user = this.id;
+    this.lastSent = json.id;
     if (this._ws && this._ws.readyState === WebSocket.OPEN) {
         this._ws.send(JSON.stringify(json));
     }
