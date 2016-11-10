@@ -3603,13 +3603,13 @@ IDE_Morph.prototype.exportProjectSummary = function (useDropShadows) {
     pname = this.projectName || localize('untitled');
 
     html = new XML_Element('html');
-    html.attributes['lang'] = SnapTranslator.language;
+    html.attributes.lang = SnapTranslator.language;
     // html.attributes.contenteditable = 'true';
 
     head = addNode('head', html);
 
     meta = addNode('meta', head);
-    meta.attributes['charset'] = 'UTF-8';
+    meta.attributes.charset = 'UTF-8';
 
     if (useDropShadows) {
         css = 'img {' +
