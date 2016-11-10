@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org', // optional
     'last_changed':
-        '2016-10-27', // this, too, will appear in the Translators tab
+        '2016-11-10', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -225,6 +225,8 @@ SnapTranslator.dict.de = {
         'Skripte',
     'Costumes':
         'Kost\u00fcme',
+    'Backgrounds':
+        'Hintergr\u00fcnde',
     'Sounds':
         'Kl\u00e4nge',
 
