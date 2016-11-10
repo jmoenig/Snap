@@ -1045,6 +1045,11 @@ ActionManager.prototype.onMoveBlock = function(id, rawTarget) {
         this.registerBlocks(block);
     }
 
+    if (target instanceof ReporterBlockMorph) {
+        delete this._targetOf[target.id];
+        this._positionOf[target.id] = this.getStandardPosition(scripts, target.position());
+    }
+
     this.updateCommentsPositions(block);
     this._updateBlockDefinitions(block);
 };

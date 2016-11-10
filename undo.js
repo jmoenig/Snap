@@ -274,7 +274,7 @@ UndoManager.Invert.setBlockPosition = function(args) {
     // args are:
     //  - [id, x, y, oldState]
 
-    return this._actionForState(args[0], args[3]);
+    return UndoManager.Invert._actionForState.call(null, args[3]);
 };
 
 UndoManager.Invert.setBlocksPositions = function(args) {
