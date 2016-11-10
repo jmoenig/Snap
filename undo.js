@@ -1,5 +1,6 @@
 function UndoManager() {
     this.eventHistory = [];
+    this.allEvents = [];  // includes undo/redo events
     this.undoCount = 0;
 }
 
@@ -24,6 +25,7 @@ UndoManager.prototype.record = function(event) {
         this.undoCount--;
         console.assert(this.undoCount >= 0, 'undo count is negative!');
     }
+    this.allEvents.push(event);
 };
 
 UndoManager.prototype.canUndo = function() {

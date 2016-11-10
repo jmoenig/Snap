@@ -2731,6 +2731,63 @@ IDE_Morph.prototype.projectMenu = function () {
     menu.addItem('Open...', 'openProjectsBrowser');
     menu.addItem('Save', "save");
     menu.addItem('Save As...', 'saveProjectsBrowser');
+    if (shiftClicked) {
+        menu.addItem(
+            localize('Download replay events'),
+            function() {
+                myself.saveFileAs(
+                    JSON.stringify(SnapUndo.allEvents, null, 2),
+                    'text/json;charset=utf-8,',
+                    'replay-actions'
+                );
+            },
+            'download events for debugging and troubleshooting',
+            new Color(100, 0, 0)
+        );
+        menu.addItem(
+            localize('Replay events from file'),
+            function() {
+                var inp = document.createElement('input');
+                if (SnapUndo.canUndo()) {
+                    return this.showMessage('events can only be replayed on empty project');
+                }
+
+                if (myself.filePicker) {
+                    document.body.removeChild(myself.filePicker);
+                    myself.filePicker = null;
+                }
+                inp.type = 'file';
+                inp.style.color = "transparent";
+                inp.style.backgroundColor = "transparent";
+                inp.style.border = "none";
+                inp.style.outline = "none";
+                inp.style.position = "absolute";
+                inp.style.top = "0px";
+                inp.style.left = "0px";
+                inp.style.width = "0px";
+                inp.style.height = "0px";
+                inp.addEventListener(
+                    'change',
+                    function () {
+                        var reader = new FileReader();
+                        document.body.removeChild(inp);
+                        myself.filePicker = null;
+
+                        reader.onloadend = function(result) {
+                            return myself.loadSnapActions(result.target.result);
+                        };
+                        reader.readAsText(inp.files[0]);
+                    },
+                    false
+                );
+                document.body.appendChild(inp);
+                myself.filePicker = inp;
+                inp.click();
+            },
+            'download events for debugging and troubleshooting',
+            new Color(100, 0, 0)
+        );
+    }
     menu.addLine();
     menu.addItem(
         'Import...',
@@ -2888,6 +2945,19 @@ IDE_Morph.prototype.projectMenu = function () {
     );
 
     menu.popup(world, pos);
+};
+
+IDE_Morph.prototype.loadSnapActions = function (text) {
+    try {
+        var actions = JSON.parse(text);
+    } catch (e) {
+        this.showMessage('action load failed: invalid json');
+        return;
+    }
+
+    for (var i = 0; i < actions.length; i++) {
+        SnapActions.applyEvent(actions[i]);
+    }
 };
 
 IDE_Morph.prototype.resourceURL = function () {
