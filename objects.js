@@ -5629,6 +5629,10 @@ StageMorph.prototype.fireKeyEvent = function (key) {
         if (!ide.isAppMode) {ide.currentSprite.searchBlocks(); }
         return;
     }
+    if (evt === 'ctrl z') {
+        if (!ide.isAppMode) {ide.currentSprite.scripts.undrop(); }
+        return;
+    }
     if (evt === 'ctrl n') {
         if (!ide.isAppMode) {ide.createNewProject(); }
         return;
