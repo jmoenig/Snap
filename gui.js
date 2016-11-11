@@ -2556,7 +2556,6 @@ IDE_Morph.prototype.settingsMenu = function () {
         'check to enable support\n for first-class sprite',
         true
     );
-    /* Disabled for now - not supported yet w/ collaboration
     addPreference(
         'Keyboard Editing',
         function () {
@@ -2573,7 +2572,6 @@ IDE_Morph.prototype.settingsMenu = function () {
         'check to enable\nkeyboard editing support',
         false
     );
-    */
     addPreference(
         'Table support',
         function () {
