@@ -607,12 +607,16 @@ ActionManager.prototype._toggleBoolean = function(field, value) {
     var prevValue = false,
         fieldId = this.getId(field);
 
-    // order is true -> false -> null -> true ...
-    // get the previous
-    if (value === true) {
-        prevValue = null;
-    } else if (value === false) {
-        prevValue = true;
+    if (field.isStatic) {
+        prevValue = !value;
+    } else {
+        // order is true -> false -> null -> true ...
+        // get the previous
+        if (value === true) {
+            prevValue = null;
+        } else if (value === false) {
+            prevValue = true;
+        }
     }
 
     return [fieldId, value, prevValue];
