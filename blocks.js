@@ -12399,7 +12399,7 @@ ScriptFocusMorph.prototype.insertBlock = function (block) {
             if (block.isStop()) {
                 position = this.topLeft();
             } else {
-                position = new Point(this.left(), this.top() + block.height());
+                position = new Point(this.left(), this.top() - block.height());
                 isAtEnd = true;
             }
         } else {
