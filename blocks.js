@@ -12374,10 +12374,12 @@ ScriptFocusMorph.prototype.deleteLastElement = function () {
         }
     }
 
-    action.accept(function() {
-        myself.editor.adjustBounds();
-        myself.fixLayout();
-    });
+    if (action) {
+        action.accept(function() {
+            myself.editor.adjustBounds();
+            myself.fixLayout();
+        });
+    }
 };
 
 ScriptFocusMorph.prototype.insertBlock = function (block) {

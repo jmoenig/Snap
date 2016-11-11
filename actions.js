@@ -416,7 +416,7 @@ ActionManager.prototype._removeBlock = function(block, userDestroy) {
             userDestroy
         ];
         
-    if (!position) {
+    if (position) {
         args.push(
             position.y,
             position.x,
