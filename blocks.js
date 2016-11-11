@@ -12282,23 +12282,24 @@ ScriptFocusMorph.prototype.trigger = function () {
         return;
     }
     if (current instanceof InputSlotMorph) {
+        var oldFieldUpdate = current.updateFieldValue;
+        current.updateFieldValue = function() {
+            var action = oldFieldUpdate.apply(this, arguments);
+            if (action) {
+                action.accept(function() {
+                    myself.fixLayout();
+                });
+            }
+            this.updateFieldValue = oldFieldUpdate;
+        };
+
         if (!current.isReadOnly) {
             delete this.fps;
             delete this.step;
             this.hide();
             this.world().onNextStep = function () {
-                var oldFieldUpdate = current.updateFieldValue;
                 current.contents().edit();
                 current.contents().selectAll();
-                current.updateFieldValue = function() {
-                    var action = oldFieldUpdate.apply(this, arguments);
-                    if (action) {
-                        action.accept(function() {
-                            myself.fixLayout();
-                        });
-                    }
-                    this.updateFieldValue = oldFieldUpdate;
-                };
             };
         } else if (current.choices) {
             current.dropDownMenu(true);
