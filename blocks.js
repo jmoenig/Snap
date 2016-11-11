@@ -7680,7 +7680,7 @@ InputSlotMorph.prototype.updateFieldValue = function (newValue) {
     newValue = newValue !== undefined ? newValue : this.contents().text;
     if (block.id) {  // not in the palette
         this.setContents(this.lastValue);  // set to original value in case it fails
-        SnapActions.setField(this, newValue);
+        return SnapActions.setField(this, newValue);
     }
 };
 
@@ -12287,8 +12287,18 @@ ScriptFocusMorph.prototype.trigger = function () {
             delete this.step;
             this.hide();
             this.world().onNextStep = function () {
+                var oldFieldUpdate = current.updateFieldValue;
                 current.contents().edit();
                 current.contents().selectAll();
+                current.updateFieldValue = function() {
+                    var action = oldFieldUpdate.apply(this, arguments);
+                    if (action) {
+                        action.accept(function() {
+                            myself.fixLayout();
+                        });
+                    }
+                    this.updateFieldValue = oldFieldUpdate;
+                };
             };
         } else if (current.choices) {
             current.dropDownMenu(true);
