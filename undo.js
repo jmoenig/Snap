@@ -382,6 +382,7 @@ UndoManager.Invert.setSelector =
 UndoManager.Invert.setBlockSpec =
 UndoManager.Invert.setCommentText =
 UndoManager.Invert.toggleBoolean =
+UndoManager.Invert.setColorField =
 UndoManager.Invert.setField = function(args) {
     return [
         args[0],  // name

@@ -10191,6 +10191,7 @@ ColorSlotMorph.prototype.getUserColor = function () {
     var myself = this,
         world = this.world(),
         hand = world.hand,
+        oldClr = this.color,
         posInDocument = getDocumentPositionOf(world.worldCanvas),
         mouseMoveBak = hand.processMouseMove,
         mouseDownBak = hand.processMouseDown,
@@ -10213,6 +10214,15 @@ ColorSlotMorph.prototype.getUserColor = function () {
     hand.processMouseDown = nop;
 
     hand.processMouseUp = function () {
+        if (myself.parentThatIsA(ScriptsMorph)) {
+            SnapActions.setColorField(myself, myself.color)
+                .reject(function() {
+                    myself.setColor(oldClr);
+                });
+        } else {
+            myself.setColor(myself.color);
+        }
+
         pal.destroy();
         hand.processMouseMove = mouseMoveBak;
         hand.processMouseDown = mouseDownBak;

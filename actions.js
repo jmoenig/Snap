@@ -112,6 +112,7 @@ ActionManager.prototype.initializeEventMethods = function() {
         'unringify',
 
         'toggleBoolean',
+        'setColorField',
         'setField'
     );
 };
@@ -260,6 +261,7 @@ ActionManager.prototype._applyEvent = function(msg) {
             this._onAccept[msg.id](result);
             delete this._onAccept[msg.id];
         }
+        delete this._onReject[msg.id];
 
         // We can call reject for any ids less than the given id...
         for (var i = msg.id; i--;) {
@@ -601,6 +603,13 @@ ActionManager.prototype._setField = function(field, value) {
         value,
         oldValue
     ];
+};
+
+ActionManager.prototype._setColorField = function(field, color) {
+    var fieldId = this.getId(field),
+        oldValue = this.fieldValues[fieldId];
+
+    return [fieldId, color, oldValue];
 };
 
 ActionManager.prototype._toggleBoolean = function(field, value) {
@@ -1267,6 +1276,16 @@ ActionManager.prototype.onSetField = function(fieldId, value) {
     this._updateBlockDefinitions(block);
 };
 
+ActionManager.prototype.onSetColorField = function(fieldId, desc) {
+    var block = this.getBlockFromId(fieldId),
+        color = new Color(desc.r, desc.g, desc.b, desc.a);
+
+    console.log('setting color to ', color);
+    block.setColor(color);
+    this.fieldValues[fieldId] = color;
+    this._updateBlockDefinitions(block);
+};
+
 ActionManager.prototype.onSetCommentText = function(id, text) {
     var block = this.getBlockFromId(id);
 
@@ -1550,20 +1569,6 @@ ActionManager.prototype.onRemoveSprite = function(spriteId) {
     this.ide().removeSprite(sprite);
 };
 
-//ActionManager.prototype.onDuplicateSprite = function(newId, spriteId, x, y, creatorId) {
-    //var sprite = this._owners[spriteId],
-        //ide = this.ide(),
-        //dup = ide.duplicateSprite(sprite);
-
-    //dup.setPosition(new Point(x, y));
-    //dup.keepWithin(ide.stage);
-
-    //if (creatorId === this.id) {
-        //ide.selectSprite(dup);
-    //}
-    //this.registerOwner(dup, newId);
-//};
-
 ActionManager.prototype.onRenameSprite = function(spriteId, name) {
     var sprite = this._owners[spriteId],
         ide = this.ide();
@@ -1830,6 +1835,11 @@ ActionManager.prototype._registerBlock = function(block) {
             if (!(input instanceof BlockMorph) && value !== undefined) {
                 fieldId = this.getId(input);
                 this.fieldValues[fieldId] = value;
+            }
+
+            if (input instanceof ColorSlotMorph) {
+                fieldId = this.getId(input);
+                this.fieldValues[fieldId] = input.color;
             }
         });
     }
