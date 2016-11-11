@@ -12310,44 +12310,61 @@ ScriptFocusMorph.prototype.menu = function () {
 
 ScriptFocusMorph.prototype.deleteLastElement = function () {
     var current = this.element,
-        id = SnapActions.getId(current);
+        newBlock,
+        myself,
+        action;
 
     if (current.parent instanceof ScriptsMorph) {
         if (this.atEnd || current instanceof ReporterBlockMorph) {
-            // TODO: Use the collaborator!
-            current.destroy();
-            this.element = this.editor;
-            this.atEnd = false;
+            SnapActions.removeBlock(current)
+                .accept(function() {
+                    myself.element = myself.editor;
+                    myself.atEnd = false;
+                    myself.editor.adjustBounds();
+                    myself.fixLayout();
+                });
+
+            return;
         }
     } else if (current instanceof MultiArgMorph) {
         if (current.arrows().children[0].isVisible) {
-            SnapActions.removeListInput(id);
+            action = SnapActions.removeListInput(current);
         }
     } else if (current instanceof BooleanSlotMorph) {
         if (!current.isStatic) {
-            SnapActions.toggleBoolean(current, false);
+            action = SnapActions.toggleBoolean(current, false);
         }
     } else if (current instanceof ReporterBlockMorph) {
         if (!current.isTemplate) {
-            this.lastElement();
-            current.prepareToBeGrabbed();
-            // FIXME
-            current.destroy();
+            SnapActions.removeBlock(current)
+                .accept(function() {
+                    myself.lastElement();
+                    myself.editor.adjustBounds();
+                    myself.fixLayout();
+                });
+            return;
         }
     } else if (current instanceof CommandBlockMorph) {
         if (this.atEnd) {
-            this.element = current.parent;
-            // FIXME
-            current.userDestroy();
+            newBlock = current.parent;
+            SnapActions.removeBlock(current, true)
+                .accept(function() {
+                    myself.element = newBlock;
+                    myself.editor.adjustBounds();
+                    myself.fixLayout();
+                });
+            return;
         } else {
             if (current.parent instanceof CommandBlockMorph) {
-                // FIXME
-                current.parent.userDestroy();
+                action = SnapActions.removeBlock(current.parent, true);
             }
         }
     }
-    this.editor.adjustBounds();
-    this.fixLayout();
+
+    action.accept(function() {
+        myself.editor.adjustBounds();
+        myself.fixLayout();
+    });
 };
 
 ScriptFocusMorph.prototype.insertBlock = function (block) {
@@ -12360,11 +12377,6 @@ ScriptFocusMorph.prototype.insertBlock = function (block) {
     block.isTemplate = false;
     block.isDraggable = true;
 
-    // TODO: This is tricky bc this expects the 'addBlock' to be synchronous...
-    // Need to detect position or target
-    // Then call the method
-    // and update atEnd, element, and call fixLayout
-    //
     if (this.element instanceof ScriptsMorph) {
         // Getting position!
         if (block instanceof CommandBlockMorph) {

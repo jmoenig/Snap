@@ -239,10 +239,18 @@ UndoManager.Invert.removeBlock = function(args) {
     //  [id, userDestroy, y, x, ownerId, block]
     // or 
     //  [id, userDestroy, target]
-    return {
-        type: 'addBlock',
-        args: args.reverse()
-    };
+    if (args.length === 3) {
+        args.splice(1, 1);
+        return {
+            type: 'moveBlock',
+            args: args
+        };
+    } else {
+        return {
+            type: 'addBlock',
+            args: args.reverse()
+        };
+    }
 };
 
 UndoManager.Invert._actionForState = function(state) {
