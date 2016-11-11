@@ -93,6 +93,7 @@ ActionManager.prototype.initializeEventMethods = function() {
 
         // Block manipulation
         'addBlock',
+        'replaceBlock',  // (keyboard editing)
         'removeBlock',
         'removeBlocks',
         'setBlockPosition',
@@ -394,6 +395,15 @@ ActionManager.prototype._addBlock = function(block, scripts, position, ownerId) 
         stdPosition.x,
         stdPosition.y,
         ids
+    ];
+};
+
+ActionManager.prototype._replaceBlock = function(block, newBlock) {
+    // only for blocks on the ScriptsMorph!
+    newBlock.id = this.newId();
+    return [
+        this.serializeBlock(block, true),
+        this.serializeBlock(newBlock, true)
     ];
 };
 
@@ -900,6 +910,19 @@ ActionManager.prototype._idBlocks = function(block, returnIds) {
     return returnIds ? ids : block;
 };
 
+ActionManager.prototype._getScriptsFor = function(blockId) {
+    var editor = this._getCustomBlockEditor(blockId),
+        ownerId,
+        owner;
+
+    if (!editor) {
+        ownerId = this._blockToOwnerId[blockId];
+        owner = this._owners[ownerId];
+        return owner.scripts;
+    }
+    return editor.body.contents;
+};
+
 ActionManager.prototype.registerBlocks = function(firstBlock) {
     var block = firstBlock,
         target,
@@ -907,6 +930,20 @@ ActionManager.prototype.registerBlocks = function(firstBlock) {
 
     this.traverse(block, this._registerBlock.bind(this));
     return firstBlock;
+};
+
+ActionManager.prototype.onReplaceBlock = function(block, newBlock) {
+    var scripts,
+        ownerId,
+        position;
+
+    block = this.deserializeBlock(block);
+    scripts = this._getScriptsFor(block.id);
+    ownerId = this._blockToOwnerId[block.id];
+
+    position = this._positionOf[block.id];
+    this.onRemoveBlock(block.id, true);
+    return this.onAddBlock(newBlock, ownerId, position.x, position.y);
 };
 
 ActionManager.prototype.onAddBlock = function(block, ownerId, x, y) {
@@ -938,8 +975,8 @@ ActionManager.prototype.onAddBlock = function(block, ownerId, x, y) {
         firstBlock.changed();
         owner.scripts.adjustBounds();
     } else {
-        var def = this._customBlocks[ownerId],
-            editor = this._getCustomBlockEditor(ownerId),
+        var def = this._customBlocks[ownerId],  // ownerId?!?!?
+            editor = this._getCustomBlockEditor(ownerId),  // ownerId?!?!?
             scripts = editor.body.contents;
 
         position = this.getAdjustedPosition(position, scripts);
@@ -976,8 +1013,8 @@ ActionManager.prototype._getCustomBlockEditor = function(blockId) {
         owner = this._customBlockOwner[blockId],
         blockDef = this._customBlocks[blockId],
         editor = detect(children, function(child) {
-        return child instanceof BlockEditorMorph && child.definition.id === blockId;
-    });
+            return child instanceof BlockEditorMorph && child.definition.id === blockId;
+        });
 
     if (!editor && blockDef) {  // Create new editor dialog
         editor = new BlockEditorMorph(blockDef, owner);

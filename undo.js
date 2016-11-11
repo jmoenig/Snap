@@ -137,6 +137,10 @@ UndoManager.Invert.duplicateSprite = function(args) {
     };
 };
 
+UndoManager.Invert.replaceBlock = function(args) {
+    return args.reverse();
+};
+
 UndoManager.Invert.toggleDraggable = function(args) {
     return [
         args[0],

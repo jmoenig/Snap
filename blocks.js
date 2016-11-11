@@ -12426,17 +12426,13 @@ ScriptFocusMorph.prototype.insertBlock = function (block) {
         isAtEnd = true;
         action = SnapActions.moveBlock(block, target);
     } else {
-        //pb = this.element.parent;
-        //if (pb instanceof ScriptsMorph) {
-            //// Replace a block w/ another... remove and delete...?
-            //// TODO
-            //this.editor.add(block);
-            //block.setPosition(this.element.position());
-            //this.element.destroy();
-        //} else {
+        pb = this.element.parent;
+        if (pb instanceof ScriptsMorph) {
+            action = SnapActions.replaceBlock(this.element, block);
+        } else {
             isAtEnd = true;
             action = SnapActions.moveBlock(block, this.element);
-        //}
+        }
     }
 
     action.accept(function(block) {
