@@ -12351,88 +12351,108 @@ ScriptFocusMorph.prototype.deleteLastElement = function () {
 };
 
 ScriptFocusMorph.prototype.insertBlock = function (block) {
-    var pb, stage, ide;
+    var pb, stage, ide,
+        myself = this,
+        action,
+        position,
+        isAtEnd;
+
     block.isTemplate = false;
     block.isDraggable = true;
 
     // TODO: This is tricky bc this expects the 'addBlock' to be synchronous...
+    // Need to detect position or target
+    // Then call the method
+    // and update atEnd, element, and call fixLayout
+    //
     if (this.element instanceof ScriptsMorph) {
-        this.editor.add(block);
-        this.element = block;
+        // Getting position!
         if (block instanceof CommandBlockMorph) {
-            block.setLeft(this.left());
             if (block.isStop()) {
-                block.setTop(this.top());
+                position = this.topLeft();
             } else {
-                block.setBottom(this.top());
-                this.atEnd = true;
+                position = new Point(this.left(), this.top() + block.height());
+                isAtEnd = true;
             }
         } else {
-            block.setCenter(this.center());
-            block.setLeft(this.left());
+            position = new Point(this.left(), this.center().y + block.height()/2);
         }
+        action = SnapActions.addBlock(block, this.editor, position);
     } else if (this.element instanceof CommandBlockMorph) {
+        var target;
         if (this.atEnd) {
-            this.element.nextBlock(block);
-            this.element = block;
-            this.fixLayout();
+            target = {
+                point: this.element.bottomAttachPoint(),
+                element: this.element,
+                loc: 'bottom',
+                type: 'block'
+            };
         } else {
             // to be done: special case if block.isStop()
             pb = this.element.parent;
             if (pb instanceof ScriptsMorph) { // top block
-                block.setLeft(this.element.left());
-                block.setBottom(this.element.top() + this.element.corner);
-                this.editor.add(block);
-                block.nextBlock(this.element);
-                this.fixLayout();
+                target = {
+                    point: this.element.topAttachPoint(),
+                    element: this.element,
+                    loc: 'top',
+                    type: 'block'
+                };
+            // the next two branches are just moveBlock
             } else if (pb instanceof CommandSlotMorph) {
-                pb.nestedBlock(block);
+                target = {
+                    point: pb.slotAttachPoint(),
+                    element: pb,
+                    loc: 'bottom',
+                    type: 'slot'
+                };
             } else if (pb instanceof CommandBlockMorph) {
-                pb.nextBlock(block);
+                target = {
+                    point: pb.bottomAttachPoint(),
+                    element: pb,
+                    loc: 'bottom',
+                    type: 'block'
+                };
             }
         }
+        action = SnapActions.moveBlock(block, target);
     } else if (this.element instanceof CommandSlotMorph) {
         // to be done: special case if block.isStop()
-        this.element.nestedBlock(block);
-        this.element = block;
-        this.atEnd = true;
+        target = {
+            point: this.element.slotAttachPoint(),
+            element: this.element,
+            loc: 'bottom',
+            type: 'slot'
+        };
+        isAtEnd = true;
+        action = SnapActions.moveBlock(block, target);
     } else {
-        pb = this.element.parent;
-        if (pb instanceof ScriptsMorph) {
-            this.editor.add(block);
-            block.setPosition(this.element.position());
-            this.element.destroy();
-        } else {
-            pb.replaceInput(this.element, block);
-        }
-        this.element = block;
-    }
-    block.fixBlockColor();
-    this.editor.adjustBounds();
-    // block.scrollIntoView();
-    this.fixLayout();
-
-    // register generic hat blocks
-    if (block.selector === 'receiveCondition') {
-        if (this.editor.owner) {
-            stage = this.editor.owner.parentThatIsA(StageMorph);
-            if (stage) {
-                stage.enableCustomHatBlocks = true;
-                stage.threads.pauseCustomHatBlocks = false;
-                ide = stage.parentThatIsA(IDE_Morph);
-                if (ide) {
-                    ide.controlBar.stopButton.refresh();
-                }
-            }
-        }
+        //pb = this.element.parent;
+        //if (pb instanceof ScriptsMorph) {
+            //// Replace a block w/ another... remove and delete...?
+            //// TODO
+            //this.editor.add(block);
+            //block.setPosition(this.element.position());
+            //this.element.destroy();
+        //} else {
+            isAtEnd = true;
+            action = SnapActions.moveBlock(block, this.element);
+        //}
     }
 
-    // experimental: if the inserted block has inputs, go to the first one
-    if (block.inputs && block.inputs().length) {
-        this.element = block;
-        this.atEnd = false;
-        this.nextElement();
-    }
+    action.accept(function(block) {
+        if (isAtEnd) {
+            myself.atEnd = true;
+        }
+        myself.element = block;
+        myself.fixLayout();
+
+        // experimental: if the inserted block has inputs, go to the first one
+        if (block.inputs && block.inputs().length) {
+            myself.element = block;
+            myself.atEnd = false;
+            myself.nextElement();
+        }
+    });
 };
 
 ScriptFocusMorph.prototype.insertVariableGetter = function () {

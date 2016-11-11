@@ -911,8 +911,9 @@ ActionManager.prototype.registerBlocks = function(firstBlock) {
 
 ActionManager.prototype.onAddBlock = function(block, ownerId, x, y) {
     var block,
+        ide = this.ide(),
         owner = this._owners[ownerId],
-        world = this.ide().parentThatIsA(WorldMorph),
+        world = ide.parentThatIsA(WorldMorph),
         hand = world.hand,
         position = new Point(x, y),
         firstBlock;
@@ -948,8 +949,18 @@ ActionManager.prototype.onAddBlock = function(block, ownerId, x, y) {
     }
     firstBlock.fixChildrensBlockColor(true);
 
-    // Register generic hat blocks?
-    // TODO
+    // register generic hat blocks
+    if (firstBlock.selector === 'receiveCondition') {
+        stage = ide.stage;
+        if (stage) {
+            stage.enableCustomHatBlocks = true;
+            stage.threads.pauseCustomHatBlocks = false;
+            if (ide) {
+                ide.controlBar.stopButton.refresh();
+            }
+        }
+    }
+    return firstBlock;
 };
 
 ActionManager.prototype.world = function() {
@@ -1085,6 +1096,7 @@ ActionManager.prototype.onMoveBlock = function(id, rawTarget) {
 
     this.updateCommentsPositions(block);
     this._updateBlockDefinitions(block);
+    return block;
 };
 
 ActionManager.prototype.onRemoveBlocks = function(ids) {
