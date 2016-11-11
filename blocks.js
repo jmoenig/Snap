@@ -12261,16 +12261,19 @@ ScriptFocusMorph.prototype.manifestExpression = function () {
 // ScriptFocusMorph editing
 
 ScriptFocusMorph.prototype.trigger = function () {
-    var current = this.element;
+    var current = this.element,
+        myself = this;
 
     if (current instanceof MultiArgMorph) {
         if (current.arrows().children[1].isVisible) {
-            SnapActions.addListInput(current);
+            SnapActions.addListInput(current)
+                .accept(function() {
+                    myself.fixLayout();
+                });
         }
         return;
     }
     if (current.parent instanceof TemplateSlotMorph) {
-        // FIXME: Use the collaborator
         current.mouseClickLeft();
         return;
     }
@@ -12310,8 +12313,8 @@ ScriptFocusMorph.prototype.menu = function () {
 
 ScriptFocusMorph.prototype.deleteLastElement = function () {
     var current = this.element,
+        myself = this,
         newBlock,
-        myself,
         action;
 
     if (current.parent instanceof ScriptsMorph) {
