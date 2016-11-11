@@ -5248,6 +5248,7 @@ ProjectDialogMorph.prototype.buildContents = function () {
     this.addSourceButton('cloud', localize('Cloud'), 'cloud');
     this.addSourceButton('local', localize('Browser'), 'storage');
     if (this.task === 'open') {
+        this.buildFilterField();
         this.addSourceButton('examples', localize('Examples'), 'poster');
     }
     this.srcBar.fixLayout();
@@ -5469,6 +5470,43 @@ ProjectDialogMorph.prototype.fixListFieldItemColors = function () {
     });
 };
 
+// ProjectDialogMorph filter field
+
+ProjectDialogMorph.prototype.buildFilterField = function () {
+    var myself = this;
+
+    // we reuse the nameField attribute
+    this.nameField = new InputFieldMorph(this.ide.projectName);
+    this.body.add(this.nameField);
+
+    this.nameField.reactToKeystroke = function (evt) {
+        var text = this.getValue();
+
+        myself.listField.elements = 
+            myself.projectList.filter(function (aProject) {
+                var name,
+                    notes;
+
+                if (aProject.ProjectName) { // cloud
+                    name = aProject.ProjectName;
+                    notes = aProject.Notes;
+                } else { // local or examples
+                    name = aProject.name;
+                    notes = aProject.notes || '';
+                }
+
+                return name.toLowerCase().indexOf(text.toLowerCase()) > -1 ||
+                    notes.toLowerCase().indexOf(text.toLowerCase()) > -1;
+            });
+
+        myself.clearDetails();
+        myself.listField.buildListContents();
+        myself.fixListFieldItemColors();
+        myself.listField.scrollY(myself.listField.top());
+        myself.fixLayout();
+    };
+};
+
 // ProjectDialogMorph ops
 
 ProjectDialogMorph.prototype.setSource = function (source) {
@@ -5510,7 +5548,11 @@ ProjectDialogMorph.prototype.setSource = function (source) {
         this.projectList,
         this.projectList.length > 0 ?
                 function (element) {
-                    return element.name;
+                    if (element.name) {
+                        return element.name;
+                    } else {
+                        return element;
+                    }
                 } : null,
         null,
         function () {myself.ok(); }
@@ -5628,7 +5670,11 @@ ProjectDialogMorph.prototype.installCloudProjectList = function (pl) {
         this.projectList,
         this.projectList.length > 0 ?
                 function (element) {
-                    return element.ProjectName;
+                    if (element.ProjectName) {
+                        return element.ProjectName;
+                    } else {
+                        return element;
+                    }
                 } : null,
         [ // format: display shared project names bold
             [
