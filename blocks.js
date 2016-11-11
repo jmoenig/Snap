@@ -12261,8 +12261,7 @@ ScriptFocusMorph.prototype.manifestExpression = function () {
 // ScriptFocusMorph editing
 
 ScriptFocusMorph.prototype.trigger = function () {
-    var current = this.element,
-        id = SnapActions.getId(current);
+    var current = this.element;
 
     if (current instanceof MultiArgMorph) {
         if (current.arrows().children[1].isVisible) {

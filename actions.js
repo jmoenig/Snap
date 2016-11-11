@@ -963,12 +963,13 @@ ActionManager.prototype._getCustomBlockEditor = function(blockId) {
     // Check for the block editor in the world children for this definition
     var children = this.world() ? this.world().children : [],
         owner = this._customBlockOwner[blockId],
+        blockDef = this._customBlocks[blockId],
         editor = detect(children, function(child) {
         return child instanceof BlockEditorMorph && child.definition.id === blockId;
     });
 
-    if (!editor) {  // Create new editor dialog
-        editor = new BlockEditorMorph(this._customBlocks[blockId], owner);
+    if (!editor && blockDef) {  // Create new editor dialog
+        editor = new BlockEditorMorph(blockDef, owner);
         editor.popUp();  // need to guarantee the correct pos
         editor.setInitialDimensions();
         editor.cancel();
