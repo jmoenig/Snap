@@ -1,8 +1,12 @@
 function UndoManager() {
+    this.reset();
+}
+
+UndoManager.prototype.reset = function() {
     this.eventHistory = [];
     this.allEvents = [];  // includes undo/redo events
     this.undoCount = 0;
-}
+};
 
 // Constants
 UndoManager.UNDO = 1;

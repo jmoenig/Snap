@@ -275,6 +275,7 @@ IDE_Morph.prototype.openIn = function (world) {
 
     this.buildPanes();
     SnapActions.loadProject(this);
+    SnapUndo.reset();
     world.add(this);
     world.userMenu = this.userMenu;
 
@@ -3358,6 +3359,7 @@ IDE_Morph.prototype.newProject = function () {
     this.selectSprite(this.stage.children[0]);
     this.fixLayout();
     SnapActions.loadProject(this);
+    SnapUndo.reset();
 };
 
 IDE_Morph.prototype.save = function () {
@@ -3875,6 +3877,7 @@ IDE_Morph.prototype.rawOpenProjectString = function (str) {
         );
     }
     this.stopFastTracking();
+    SnapUndo.reset();
 };
 
 IDE_Morph.prototype.openCloudDataString = function (str) {
@@ -3930,6 +3933,7 @@ IDE_Morph.prototype.rawOpenCloudDataString = function (str) {
         );
     }
     this.stopFastTracking();
+    SnapUndo.reset();
 };
 
 IDE_Morph.prototype.uniqueIdForImport = function (str, name, callback) {
