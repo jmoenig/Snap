@@ -93,6 +93,7 @@ ActionManager.prototype.initializeEventMethods = function() {
 
         // Block manipulation
         'addBlock',
+        'replaceBlock',  // (keyboard editing)
         'removeBlock',
         'removeBlocks',
         'setBlockPosition',
@@ -397,19 +398,36 @@ ActionManager.prototype._addBlock = function(block, scripts, position, ownerId) 
     ];
 };
 
+ActionManager.prototype._replaceBlock = function(block, newBlock) {
+    // only for blocks on the ScriptsMorph!
+    newBlock.id = this.newId();
+    return [
+        this.serializeBlock(block, true),
+        this.serializeBlock(newBlock, true)
+    ];
+};
+
 ActionManager.prototype._removeBlock = function(block, userDestroy) {
     var serialized = this.serializeBlock(block, true),
         position = this._positionOf[block.id],
-        ownerId = this._blockToOwnerId[block.id];
+        ownerId = this._blockToOwnerId[block.id],
+        args = [
+            block.id,
+            userDestroy
+        ];
         
-    return [
-        block.id,
-        userDestroy,
-        position.y,
-        position.x,
-        ownerId,
-        serialized
-    ];
+    if (position) {
+        args.push(
+            position.y,
+            position.x,
+            ownerId,
+            serialized
+        );
+    } else {
+        args.push(this._targetOf[block.id]);
+    }
+
+    return args;
 };
 
 ActionManager.prototype._getBlockState = function(id) {
@@ -900,6 +918,19 @@ ActionManager.prototype._idBlocks = function(block, returnIds) {
     return returnIds ? ids : block;
 };
 
+ActionManager.prototype._getScriptsFor = function(blockId) {
+    var editor = this._getCustomBlockEditor(blockId),
+        ownerId,
+        owner;
+
+    if (!editor) {
+        ownerId = this._blockToOwnerId[blockId];
+        owner = this._owners[ownerId];
+        return owner.scripts;
+    }
+    return editor.body.contents;
+};
+
 ActionManager.prototype.registerBlocks = function(firstBlock) {
     var block = firstBlock,
         target,
@@ -909,10 +940,23 @@ ActionManager.prototype.registerBlocks = function(firstBlock) {
     return firstBlock;
 };
 
+ActionManager.prototype.onReplaceBlock = function(block, newBlock) {
+    var ownerId,
+        position;
+
+    block = this.deserializeBlock(block);
+    ownerId = this._blockToOwnerId[block.id];
+
+    position = this._positionOf[block.id];
+    this.onRemoveBlock(block.id, true);
+    return this.onAddBlock(newBlock, ownerId, position.x, position.y);
+};
+
 ActionManager.prototype.onAddBlock = function(block, ownerId, x, y) {
     var block,
+        ide = this.ide(),
         owner = this._owners[ownerId],
-        world = this.ide().parentThatIsA(WorldMorph),
+        world = ide.parentThatIsA(WorldMorph),
         hand = world.hand,
         position = new Point(x, y),
         firstBlock;
@@ -937,8 +981,8 @@ ActionManager.prototype.onAddBlock = function(block, ownerId, x, y) {
         firstBlock.changed();
         owner.scripts.adjustBounds();
     } else {
-        var def = this._customBlocks[ownerId],
-            editor = this._getCustomBlockEditor(ownerId),
+        var def = this._customBlocks[ownerId],  // ownerId?!?!?
+            editor = this._getCustomBlockEditor(ownerId),  // ownerId?!?!?
             scripts = editor.body.contents;
 
         position = this.getAdjustedPosition(position, scripts);
@@ -948,8 +992,16 @@ ActionManager.prototype.onAddBlock = function(block, ownerId, x, y) {
     }
     firstBlock.fixChildrensBlockColor(true);
 
-    // Register generic hat blocks?
-    // TODO
+    // register generic hat blocks
+    if (firstBlock.selector === 'receiveCondition') {
+        stage = ide.stage;
+        if (stage) {
+            stage.enableCustomHatBlocks = true;
+            stage.threads.pauseCustomHatBlocks = false;
+            ide.controlBar.stopButton.refresh();
+        }
+    }
+    return firstBlock;
 };
 
 ActionManager.prototype.world = function() {
@@ -965,8 +1017,8 @@ ActionManager.prototype._getCustomBlockEditor = function(blockId) {
         owner = this._customBlockOwner[blockId],
         blockDef = this._customBlocks[blockId],
         editor = detect(children, function(child) {
-        return child instanceof BlockEditorMorph && child.definition.id === blockId;
-    });
+            return child instanceof BlockEditorMorph && child.definition.id === blockId;
+        });
 
     if (!editor && blockDef) {  // Create new editor dialog
         editor = new BlockEditorMorph(blockDef, owner);
@@ -1085,6 +1137,7 @@ ActionManager.prototype.onMoveBlock = function(id, rawTarget) {
 
     this.updateCommentsPositions(block);
     this._updateBlockDefinitions(block);
+    return block;
 };
 
 ActionManager.prototype.onRemoveBlocks = function(ids) {

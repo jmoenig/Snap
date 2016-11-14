@@ -7680,7 +7680,7 @@ InputSlotMorph.prototype.updateFieldValue = function (newValue) {
     newValue = newValue !== undefined ? newValue : this.contents().text;
     if (block.id) {  // not in the palette
         this.setContents(this.lastValue);  // set to original value in case it fails
-        SnapActions.setField(this, newValue);
+        return SnapActions.setField(this, newValue);
     }
 };
 
@@ -12261,16 +12261,19 @@ ScriptFocusMorph.prototype.manifestExpression = function () {
 // ScriptFocusMorph editing
 
 ScriptFocusMorph.prototype.trigger = function () {
-    var current = this.element;
+    var current = this.element,
+        myself = this;
 
     if (current instanceof MultiArgMorph) {
         if (current.arrows().children[1].isVisible) {
-            SnapActions.addListInput(current);
+            SnapActions.addListInput(current)
+                .accept(function() {
+                    myself.fixLayout();
+                });
         }
         return;
     }
     if (current.parent instanceof TemplateSlotMorph) {
-        // FIXME: Use the collaborator
         current.mouseClickLeft();
         return;
     }
@@ -12279,6 +12282,17 @@ ScriptFocusMorph.prototype.trigger = function () {
         return;
     }
     if (current instanceof InputSlotMorph) {
+        var oldFieldUpdate = current.updateFieldValue;
+        current.updateFieldValue = function() {
+            var action = oldFieldUpdate.apply(this, arguments);
+            if (action) {
+                action.accept(function() {
+                    myself.fixLayout();
+                });
+            }
+            this.updateFieldValue = oldFieldUpdate;
+        };
+
         if (!current.isReadOnly) {
             delete this.fps;
             delete this.step;
@@ -12310,129 +12324,159 @@ ScriptFocusMorph.prototype.menu = function () {
 
 ScriptFocusMorph.prototype.deleteLastElement = function () {
     var current = this.element,
-        id = SnapActions.getId(current);
+        myself = this,
+        newBlock,
+        action;
 
     if (current.parent instanceof ScriptsMorph) {
         if (this.atEnd || current instanceof ReporterBlockMorph) {
-            // TODO: Use the collaborator!
-            current.destroy();
-            this.element = this.editor;
-            this.atEnd = false;
+            SnapActions.removeBlock(current)
+                .accept(function() {
+                    myself.element = myself.editor;
+                    myself.atEnd = false;
+                    myself.editor.adjustBounds();
+                    myself.fixLayout();
+                });
+
+            return;
         }
     } else if (current instanceof MultiArgMorph) {
         if (current.arrows().children[0].isVisible) {
-            SnapActions.removeListInput(id);
+            action = SnapActions.removeListInput(current);
         }
     } else if (current instanceof BooleanSlotMorph) {
         if (!current.isStatic) {
-            SnapActions.toggleBoolean(current, false);
+            action = SnapActions.toggleBoolean(current, false);
         }
     } else if (current instanceof ReporterBlockMorph) {
         if (!current.isTemplate) {
-            this.lastElement();
-            current.prepareToBeGrabbed();
-            // FIXME
-            current.destroy();
+            SnapActions.removeBlock(current)
+                .accept(function() {
+                    myself.lastElement();
+                    myself.editor.adjustBounds();
+                    myself.fixLayout();
+                });
+            return;
         }
     } else if (current instanceof CommandBlockMorph) {
         if (this.atEnd) {
-            this.element = current.parent;
-            // FIXME
-            current.userDestroy();
+            newBlock = current.parent;
+            SnapActions.removeBlock(current, true)
+                .accept(function() {
+                    myself.element = newBlock;
+                    myself.editor.adjustBounds();
+                    myself.fixLayout();
+                });
+            return;
         } else {
             if (current.parent instanceof CommandBlockMorph) {
-                // FIXME
-                current.parent.userDestroy();
+                action = SnapActions.removeBlock(current.parent, true);
             }
         }
     }
-    this.editor.adjustBounds();
-    this.fixLayout();
+
+    if (action) {
+        action.accept(function() {
+            myself.editor.adjustBounds();
+            myself.fixLayout();
+        });
+    }
 };
 
 ScriptFocusMorph.prototype.insertBlock = function (block) {
-    var pb, stage, ide;
+    var pb,
+        myself = this,
+        action,
+        position,
+        isAtEnd;
+
     block.isTemplate = false;
     block.isDraggable = true;
 
-    // TODO: This is tricky bc this expects the 'addBlock' to be synchronous...
     if (this.element instanceof ScriptsMorph) {
-        this.editor.add(block);
-        this.element = block;
+        // Getting position!
         if (block instanceof CommandBlockMorph) {
-            block.setLeft(this.left());
             if (block.isStop()) {
-                block.setTop(this.top());
+                position = this.topLeft();
             } else {
-                block.setBottom(this.top());
-                this.atEnd = true;
+                position = new Point(this.left(), this.top() - block.height());
+                isAtEnd = true;
             }
         } else {
-            block.setCenter(this.center());
-            block.setLeft(this.left());
+            position = new Point(this.left(), this.center().y + block.height()/2);
         }
+        action = SnapActions.addBlock(block, this.editor, position);
     } else if (this.element instanceof CommandBlockMorph) {
+        var target;
         if (this.atEnd) {
-            this.element.nextBlock(block);
-            this.element = block;
-            this.fixLayout();
+            target = {
+                point: this.element.bottomAttachPoint(),
+                element: this.element,
+                loc: 'bottom',
+                type: 'block'
+            };
         } else {
             // to be done: special case if block.isStop()
             pb = this.element.parent;
             if (pb instanceof ScriptsMorph) { // top block
-                block.setLeft(this.element.left());
-                block.setBottom(this.element.top() + this.element.corner);
-                this.editor.add(block);
-                block.nextBlock(this.element);
-                this.fixLayout();
+                target = {
+                    point: this.element.topAttachPoint(),
+                    element: this.element,
+                    loc: 'top',
+                    type: 'block'
+                };
+            // the next two branches are just moveBlock
             } else if (pb instanceof CommandSlotMorph) {
-                pb.nestedBlock(block);
+                target = {
+                    point: pb.slotAttachPoint(),
+                    element: pb,
+                    loc: 'bottom',
+                    type: 'slot'
+                };
             } else if (pb instanceof CommandBlockMorph) {
-                pb.nextBlock(block);
+                target = {
+                    point: pb.bottomAttachPoint(),
+                    element: pb,
+                    loc: 'bottom',
+                    type: 'block'
+                };
             }
         }
+        action = SnapActions.moveBlock(block, target);
     } else if (this.element instanceof CommandSlotMorph) {
         // to be done: special case if block.isStop()
-        this.element.nestedBlock(block);
-        this.element = block;
-        this.atEnd = true;
+        target = {
+            point: this.element.slotAttachPoint(),
+            element: this.element,
+            loc: 'bottom',
+            type: 'slot'
+        };
+        isAtEnd = true;
+        action = SnapActions.moveBlock(block, target);
     } else {
         pb = this.element.parent;
         if (pb instanceof ScriptsMorph) {
-            this.editor.add(block);
-            block.setPosition(this.element.position());
-            this.element.destroy();
+            action = SnapActions.replaceBlock(this.element, block);
         } else {
-            pb.replaceInput(this.element, block);
-        }
-        this.element = block;
-    }
-    block.fixBlockColor();
-    this.editor.adjustBounds();
-    // block.scrollIntoView();
-    this.fixLayout();
-
-    // register generic hat blocks
-    if (block.selector === 'receiveCondition') {
-        if (this.editor.owner) {
-            stage = this.editor.owner.parentThatIsA(StageMorph);
-            if (stage) {
-                stage.enableCustomHatBlocks = true;
-                stage.threads.pauseCustomHatBlocks = false;
-                ide = stage.parentThatIsA(IDE_Morph);
-                if (ide) {
-                    ide.controlBar.stopButton.refresh();
-                }
-            }
+            isAtEnd = true;
+            action = SnapActions.moveBlock(block, this.element);
         }
     }
 
-    // experimental: if the inserted block has inputs, go to the first one
-    if (block.inputs && block.inputs().length) {
-        this.element = block;
-        this.atEnd = false;
-        this.nextElement();
-    }
+    action.accept(function(block) {
+        if (isAtEnd) {
+            myself.atEnd = true;
+        }
+        myself.element = block;
+        myself.fixLayout();
+
+        // experimental: if the inserted block has inputs, go to the first one
+        if (block.inputs && block.inputs().length) {
+            myself.element = block;
+            myself.atEnd = false;
+            myself.nextElement();
+        }
+    });
 };
 
 ScriptFocusMorph.prototype.insertVariableGetter = function () {
