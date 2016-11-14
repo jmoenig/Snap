@@ -1927,18 +1927,8 @@ ActionManager.prototype.traverse = function(block, fn) {
             block = current[i];
             fn(block);
 
-            if (block.inputs) {  // Add nested blocks
-                inputs = block.inputs();
-                for (j = inputs.length; j--;) {
-                    if (inputs[j] instanceof ReporterBlockMorph) {
-                        next.push(inputs[j]);
-                    } else if (inputs[j] instanceof CommandSlotMorph &&
-                        inputs[j].nestedBlock()) {
-
-                        next.push(inputs[j].nestedBlock());
-                    }
-                }
-            }
+            inputs = this.getBlockInputs(block);
+            next = next.concat(inputs);
 
             if (block.nextBlock && block.nextBlock()) {  // add following blocks
                 next.push(block.nextBlock());
@@ -1946,6 +1936,27 @@ ActionManager.prototype.traverse = function(block, fn) {
         }
         current = next;
     }
+};
+
+ActionManager.prototype.getBlockInputs = function(block) {
+    var allInputs = [],
+        inputs;
+
+    if (block.inputs) {  // Add nested blocks
+        inputs = block.inputs();
+        for (var j = inputs.length; j--;) {
+            if (inputs[j] instanceof ReporterBlockMorph) {
+                allInputs.push(inputs[j]);
+            } else if (inputs[j] instanceof MultiArgMorph) {
+                allInputs = allInputs.concat(this.getBlockInputs(inputs[j]));
+
+            } else if (inputs[j].nestedBlock && inputs[j].nestedBlock()) {
+
+                allInputs.push(inputs[j].nestedBlock());
+            }
+        }
+    }
+    return allInputs;
 };
 
 /* * * * * * * * * * * * On Remote Events * * * * * * * * * * * */
