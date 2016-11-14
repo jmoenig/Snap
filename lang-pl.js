@@ -186,7 +186,7 @@ SnapTranslator.dict.pl = {
     'language_name':
         'Polski', // the name as it should appear in the language menu
     'language_translator':
-        'Witek Kranas, deKrain', // your name for the Translators tab
+        'Witek Kranas & deKrain', // your name for the Translators tab
     'translator_e-mail':
         'witek@oeiizk.waw.pl', // optional
     'last_changed':
