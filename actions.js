@@ -1865,6 +1865,7 @@ ActionManager.prototype._registerBlock = function(block) {
     var scripts,
         standardPosition,
         fieldId,
+        contents,
         value,
         target;
 
@@ -1886,15 +1887,18 @@ ActionManager.prototype._registerBlock = function(block) {
         // Record the field values if it has any
         if (block.inputs) {
             block.inputs().forEach(input => {
-                value = input.contents && input.contents().text;
-                if (!(input instanceof BlockMorph) && value !== undefined) {
-                    fieldId = this.getId(input);
-                    this.fieldValues[fieldId] = value;
-                }
+                contents = input.contents && input.contents();
+                if (contents) {
+                    value = contents.value || contents;
+                    if (!(input instanceof BlockMorph) && value !== undefined) {
+                        fieldId = this.getId(input);
+                        this.fieldValues[fieldId] = value;
+                    }
 
-                if (input instanceof ColorSlotMorph) {
-                    fieldId = this.getId(input);
-                    this.fieldValues[fieldId] = input.color;
+                    if (input instanceof ColorSlotMorph) {
+                        fieldId = this.getId(input);
+                        this.fieldValues[fieldId] = input.color;
+                    }
                 }
             });
         }
