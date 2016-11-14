@@ -2503,8 +2503,7 @@ BlockMorph.prototype.developersMenu = function () {
         new DialogBoxMorph(
             this,
             function(spec) {
-                var id = SnapActions.getId(this);
-                SnapActions.setBlockSpec(id, spec);
+                SnapActions.setBlockSpec(this, spec);
             },
             this
         ).prompt(
