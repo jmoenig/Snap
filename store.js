@@ -1475,12 +1475,7 @@ SnapSerializer.prototype.openProject = function (project, ide) {
     //  watcher.onNextStep = function () {this.currentValue = null;};
     //})
 
-    // TODO: Update the collaborator
-    //  - ids
-    //   - blocks
-    //   - definitions
-    //   - costumes
-    //   - sounds
+    // Update the collaborator
     SnapActions.loadProject(ide, project.collabStartIndex);
     ide.world().keyboardReceiver = project.stage;
 };

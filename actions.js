@@ -1869,7 +1869,7 @@ ActionManager.prototype._registerBlock = function(block) {
         target;
 
     if (!(block instanceof PrototypeHatBlockMorph || block.isPrototype)) {
-        console.assert(block.id, `Cannot register block without id: ${block.id} (${block.blockSpec})`);
+        block.id = block.id || this.newId();
         this._blocks[block.id] = block;
 
         // Record the block's initial state...
