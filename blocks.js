@@ -5641,7 +5641,11 @@ ScriptsMorph.prototype.userMenu = function () {
                 new BlockDialogMorph(
                     null,
                     function (definition) {
-                        SnapActions.addCustomBlock(definition, obj, true);
+                        SnapActions.addCustomBlock(definition, obj)
+                            .accept(function(def) {
+                                var editor = new BlockEditorMorph(def, obj);
+                                editor.popUp();
+                            });
                     },
                     myself
                 ).prompt(

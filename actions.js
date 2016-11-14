@@ -472,7 +472,7 @@ ActionManager.prototype._setBlocksPositions = function(ids, positions) {
 };
 
 // Custom Blocks
-ActionManager.prototype._addCustomBlock = function(definition, owner, focus) {
+ActionManager.prototype._addCustomBlock = function(definition, owner) {
     var serialized,
         args;
 
@@ -487,9 +487,6 @@ ActionManager.prototype._addCustomBlock = function(definition, owner, focus) {
         definition.isGlobal
     ];
 
-    if (focus) {
-        args.push(this.id);
-    }
     return args;
 };
 
@@ -1449,44 +1446,11 @@ ActionManager.prototype.onAddCustomBlock = function(ownerId, serialized, isGloba
     }
     this.loadCustomBlocks([def], owner);
 
-    // Create the CustomBlockDefinition
-    //if (def.type === 'reporter' || def.type === 'predicate') {
-        //var reporter = SpriteMorph.prototype.blockForSelector('doReport');
-        //reporter.id = this.newId();
-        //body = Process.prototype.reify.call(
-            //null,
-            //reporter,
-            //new List(),
-            //true // ignore empty slots for custom block reification
-        //);
-        //body.outerContext = null;
-        //def.body = body;
-        //addedReporter = true;
-    //}
-
     // Update the palette
     owner.paletteCache = {};
     ide.refreshPalette();
 
-    //if (addedReporter) {  // Add reporter to the _blocks dictionary
-        //var scripts,
-            //hat;
-
-        //// Update the reporter to the one in the editor
-        //editor = new BlockEditorMorph(def, owner);
-        //scripts = editor.body.contents;
-        //hat = scripts.children[0];
-        //reporter = hat.nextBlock();
-
-        //this._blocks[reporter.id] = reporter;
-    //}
-
-    if (creatorId === this.id) {
-        if (!editor) {
-            editor = new BlockEditorMorph(def, owner);
-        }
-        editor.popUp();
-    }
+    return def;
 };
 
 ActionManager.prototype.onDeleteCustomBlocks = function(ids) {

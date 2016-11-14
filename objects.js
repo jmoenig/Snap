@@ -2170,7 +2170,11 @@ SpriteMorph.prototype.blockTemplates = function (category) {
                     null,
                     function (definition) {
                         if (definition.spec !== '') {
-                            SnapActions.addCustomBlock(definition, myself, true);
+                            SnapActions.addCustomBlock(definition, myself)
+                                .accept(function(def) {
+                                    var editor = new BlockEditorMorph(def, myself);
+                                    editor.popUp();
+                                });
                         }
                     },
                     myself
@@ -6165,7 +6169,11 @@ StageMorph.prototype.blockTemplates = function (category) {
                     null,
                     function (definition) {
                         if (definition.spec !== '') {
-                            SnapActions.addCustomBlock(definition, myself, true);
+                            SnapActions.addCustomBlock(definition, myself)
+                                .accept(function(def) {
+                                    var editor = new BlockEditorMorph(def, myself);
+                                    editor.popUp();
+                                });
                         }
                     },
                     myself

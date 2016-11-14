@@ -2934,7 +2934,7 @@ IDE_Morph.prototype.projectMenu = function () {
             function loadSound(file, name) {
                 var url = myself.resourceURL('Sounds', file),
                     audio = new Audio();
-                // TODO: Use the collaborator!
+
                 audio.src = url;
                 audio.load();
                 myself.droppedAudio(audio, name);
