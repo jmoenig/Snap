@@ -1884,18 +1884,20 @@ ActionManager.prototype._registerBlock = function(block) {
         }
 
         // Record the field values if it has any
-        block.inputs().forEach(input => {
-            value = input.contents && input.contents().text;
-            if (!(input instanceof BlockMorph) && value !== undefined) {
-                fieldId = this.getId(input);
-                this.fieldValues[fieldId] = value;
-            }
+        if (block.inputs) {
+            block.inputs().forEach(input => {
+                value = input.contents && input.contents().text;
+                if (!(input instanceof BlockMorph) && value !== undefined) {
+                    fieldId = this.getId(input);
+                    this.fieldValues[fieldId] = value;
+                }
 
-            if (input instanceof ColorSlotMorph) {
-                fieldId = this.getId(input);
-                this.fieldValues[fieldId] = input.color;
-            }
-        });
+                if (input instanceof ColorSlotMorph) {
+                    fieldId = this.getId(input);
+                    this.fieldValues[fieldId] = input.color;
+                }
+            });
+        }
     }
 };
 
@@ -1935,11 +1937,13 @@ ActionManager.prototype.loadCustomBlocks = function(blocks, owner) {
 
     owner = owner || this.ide().stage;
     blocks.forEach(def => {
+        def.id = def.id || this.newId();
         this._customBlocks[def.id] = def;
         this._customBlockOwner[def.id] = owner;
         editor = this._getCustomBlockEditor(def.id);
         scripts = editor.body.contents;
         scripts.children.forEach(block => this.traverse(block, this._registerBlock.bind(this)));
+        editor.updateDefinition();
     });
 };
 
