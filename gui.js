@@ -1040,7 +1040,7 @@ IDE_Morph.prototype.createPalette = function (forSearching) {
             droppedMorph.destroy();
         } else {
             if (droppedMorph.id) {
-                SnapActions.removeBlock(droppedMorph.id);
+                SnapActions.removeBlock(droppedMorph);
             } else {
                 droppedMorph.destroy();
             }
