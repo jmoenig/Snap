@@ -941,12 +941,10 @@ ActionManager.prototype.registerBlocks = function(firstBlock) {
 };
 
 ActionManager.prototype.onReplaceBlock = function(block, newBlock) {
-    var scripts,
-        ownerId,
+    var ownerId,
         position;
 
     block = this.deserializeBlock(block);
-    scripts = this._getScriptsFor(block.id);
     ownerId = this._blockToOwnerId[block.id];
 
     position = this._positionOf[block.id];
@@ -1000,9 +998,7 @@ ActionManager.prototype.onAddBlock = function(block, ownerId, x, y) {
         if (stage) {
             stage.enableCustomHatBlocks = true;
             stage.threads.pauseCustomHatBlocks = false;
-            if (ide) {
-                ide.controlBar.stopButton.refresh();
-            }
+            ide.controlBar.stopButton.refresh();
         }
     }
     return firstBlock;

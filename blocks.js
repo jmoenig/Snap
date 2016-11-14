@@ -12384,7 +12384,7 @@ ScriptFocusMorph.prototype.deleteLastElement = function () {
 };
 
 ScriptFocusMorph.prototype.insertBlock = function (block) {
-    var pb, stage, ide,
+    var pb,
         myself = this,
         action,
         position,
