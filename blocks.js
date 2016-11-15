@@ -5871,7 +5871,7 @@ ScriptsMorph.prototype.setBlockPosition = function (block, hand) {
         block.setPosition(originPosition);
     }
 
-    SnapActions.setBlockPosition(block.id, position);
+    SnapActions.setBlockPosition(block, position);
 };
 
 // ScriptsMorph events
@@ -12695,7 +12695,7 @@ ScriptFocusMorph.prototype.shiftScript = function (deltaPoint) {
         tb = this.element.topBlock();
         if (tb && !(tb instanceof PrototypeHatBlockMorph)) {
             position = tb.topLeft().add(deltaPoint);
-            SnapActions.setBlockPosition(tb.id, position)
+            SnapActions.setBlockPosition(tb, position)
                 .accept(function() {
                     myself.editor.adjustBounds();
                     myself.fixLayout();

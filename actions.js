@@ -445,8 +445,8 @@ ActionManager.prototype._getBlockState = function(id) {
     return state;
 };
 
-ActionManager.prototype._setBlockPosition = function(id, position) {
-    var block = this.getBlockFromId(id),
+ActionManager.prototype._setBlockPosition = function(block, position) {
+    var id = block.id,
         scripts = block.parentThatIsA(ScriptsMorph),
         standardPosition = this.getStandardPosition(scripts, position),
         oldState = this._getBlockState(id);
@@ -963,7 +963,6 @@ ActionManager.prototype.onAddBlock = function(block, ownerId, x, y) {
 
 
     firstBlock = this.deserializeBlock(block);
-    this.registerBlocks(firstBlock, owner);
 
     if (firstBlock.snapSound) {
         firstBlock.snapSound.play();
@@ -1000,6 +999,8 @@ ActionManager.prototype.onAddBlock = function(block, ownerId, x, y) {
             ide.controlBar.stopButton.refresh();
         }
     }
+
+    this.registerBlocks(firstBlock, owner);
     return firstBlock;
 };
 
