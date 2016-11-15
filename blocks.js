@@ -12683,17 +12683,25 @@ ScriptFocusMorph.prototype.lastScript = function () {
 };
 
 ScriptFocusMorph.prototype.shiftScript = function (deltaPoint) {
-    var tb;
+    var myself = this,
+        position,
+        tb;
+
     if (this.element instanceof ScriptsMorph) {
         this.moveBy(deltaPoint);
+        this.editor.adjustBounds();
+        this.fixLayout();
     } else {
         tb = this.element.topBlock();
         if (tb && !(tb instanceof PrototypeHatBlockMorph)) {
-            tb.moveBy(deltaPoint);
+            position = tb.topLeft().add(deltaPoint);
+            SnapActions.setBlockPosition(tb.id, position)
+                .accept(function() {
+                    myself.editor.adjustBounds();
+                    myself.fixLayout();
+                });
         }
     }
-    this.editor.adjustBounds();
-    this.fixLayout();
 };
 
 ScriptFocusMorph.prototype.newScript = function () {
