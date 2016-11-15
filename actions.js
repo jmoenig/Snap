@@ -1971,9 +1971,7 @@ ActionManager.prototype.onMessage = function(msg) {
             this.acceptEvent(msg);
         }
     } else {
-        if (this[method]) {
-            this._applyEvent(msg);
-        }
+        this._applyEvent(msg);
     }
 };
 
