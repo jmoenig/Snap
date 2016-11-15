@@ -928,12 +928,15 @@ ActionManager.prototype._getScriptsFor = function(blockId) {
     return editor.body.contents;
 };
 
-ActionManager.prototype.registerBlocks = function(firstBlock) {
+ActionManager.prototype.registerBlocks = function(firstBlock, owner) {
     var block = firstBlock,
         target,
         prevBlock;
 
-    this.traverse(block, this._registerBlock.bind(this));
+    this.traverse(block, block => {
+        this._registerBlock(block);
+        this._blockToOwnerId[block.id] = owner.id;
+    });
     return firstBlock;
 };
 
@@ -960,10 +963,7 @@ ActionManager.prototype.onAddBlock = function(block, ownerId, x, y) {
 
 
     firstBlock = this.deserializeBlock(block);
-    this._positionOf[firstBlock.id] = position;
-    this._blockToOwnerId[firstBlock.id] = ownerId;
-
-    this.registerBlocks(firstBlock);
+    this.registerBlocks(firstBlock, owner);
 
     if (firstBlock.snapSound) {
         firstBlock.snapSound.play();
@@ -987,7 +987,9 @@ ActionManager.prototype.onAddBlock = function(block, ownerId, x, y) {
         scripts.add(firstBlock);
         editor.updateDefinition();
     }
-    firstBlock.fixChildrensBlockColor(true);
+    if (firstBlock.fixChildrensBlockColor) {
+        firstBlock.fixChildrensBlockColor(true);
+    }
 
     // register generic hat blocks
     if (firstBlock.selector === 'receiveCondition') {
@@ -1124,7 +1126,7 @@ ActionManager.prototype.onMoveBlock = function(id, rawTarget) {
     scripts.drawNew();
 
     if (isNewBlock) {
-        this.registerBlocks(block);
+        this.registerBlocks(block, scripts.owner);
     }
 
     if (target instanceof ReporterBlockMorph) {
@@ -1873,7 +1875,7 @@ ActionManager.prototype.loadOwner = function(owner) {
     this.registerOwner(owner, owner.id);
 
     // Load the blocks from scripts
-    owner.scripts.children.forEach(block => this.registerBlocks(block));
+    owner.scripts.children.forEach(block => this.registerBlocks(block, owner));
 
     // Load the blocks from custom block definitions
     var customBlocks = owner.customBlocks,
@@ -1910,7 +1912,7 @@ ActionManager.prototype.loadCustomBlocks = function(blocks, owner) {
         this._customBlockOwner[def.id] = owner;
         editor = this._getCustomBlockEditor(def.id);
         scripts = editor.body.contents;
-        scripts.children.forEach(block => this.traverse(block, this._registerBlock.bind(this)));
+        scripts.children.forEach(block => this.registerBlocks(block, owner));
         editor.updateDefinition();
     });
 };
