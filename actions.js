@@ -1127,6 +1127,7 @@ ActionManager.prototype.onMoveBlock = function(id, rawTarget) {
     scripts.drawNew();
 
     if (isNewBlock) {
+        this._targetOf[block.id] = rawTarget;
         this.registerBlocks(block, scripts.owner);
     }
 
@@ -1146,7 +1147,7 @@ ActionManager.prototype.onRemoveBlocks = function(ids) {
 
 ActionManager.prototype.onRemoveBlock = function(id, userDestroy) {
     var block = this.getBlockFromId(id),
-        method = userDestroy ? 'userDestroy' : 'destroy',
+        method = userDestroy && block.userDestroy ? 'userDestroy' : 'destroy',
         scripts = block.parentThatIsA(ScriptsMorph),
         parent = block.parent;
 
@@ -1334,7 +1335,6 @@ ActionManager.prototype.onSetColorField = function(fieldId, desc) {
     var block = this.getBlockFromId(fieldId),
         color = new Color(desc.r, desc.g, desc.b, desc.a);
 
-    console.log('setting color to ', color);
     block.setColor(color);
     this.fieldValues[fieldId] = color;
     this._updateBlockDefinitions(block);
