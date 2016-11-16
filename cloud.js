@@ -36,7 +36,7 @@ modules.cloud = '2015-December-15';
 
 var Cloud;
 var SnapCloud = new Cloud(
-    'https://snap.apps.miosoft.com/SnapCloud'
+    'https://snap.apps.miosoft.com/SnapCloudLocal'
 );
 
 // Cloud /////////////////////////////////////////////////////////////
