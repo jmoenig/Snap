@@ -905,6 +905,38 @@ IDE_Morph.prototype.createControlBar = function () {
         this.add(this.label);
         this.label.setCenter(this.center());
         this.label.setLeft(this.settingsButton.right() + padding);
+        this.label.mouseClickLeft = function () { myself.editProjectName(); };
+    };
+};
+
+IDE_Morph.prototype.editProjectName = function () {
+    var cursor,
+        originalKeyDown,
+        originalDestroy,
+        myself = this,
+        nameInput = new InputFieldMorph(this.projectName || localize('untitled'));
+
+    this.controlBar.label.hide();
+    this.controlBar.add(nameInput);
+    nameInput.setPosition(this.controlBar.label.position());
+    nameInput.edit();
+
+    cursor = this.root().cursor;
+
+    originalKeyDown = cursor.processKeyDown;
+    cursor.processKeyDown = function (event) {
+        originalKeyDown.call(this, event);
+        if (event.keyCode === 13) { // 'enter'
+            myself.setProjectName(nameInput.getValue());
+            cursor.destroy();
+        }
+    };
+
+    originalDestroy = cursor.destroy;
+    cursor.destroy = function () {
+        nameInput.destroy();
+        myself.controlBar.label.show();
+        originalDestroy.call(this);
     };
 };
 
