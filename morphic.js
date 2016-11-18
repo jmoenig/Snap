@@ -1888,6 +1888,14 @@ Color.prototype.dansDarker = function () {
     return result;
 };
 
+Color.prototype.inverted = function () {
+    return new Color(
+        255 - this.r,
+        255 - this.g,
+        255 - this.b
+    );
+}
+
 // Points //////////////////////////////////////////////////////////////
 
 // Point instance creation:
