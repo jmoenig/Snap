@@ -72,7 +72,7 @@ isRetinaSupported, SliderMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2016-November-10';
+modules.gui = '2016-November-22';
 
 // Declarations
 
@@ -451,6 +451,20 @@ IDE_Morph.prototype.openIn = function (world) {
                             myself.toggleAppMode(false);
                         }
                     ]);
+                },
+                this.cloudError()
+            );
+        } else if (location.hash.substr(0, 4) === '#dl:') {
+            myself.showMessage('Fetching project\nfrom the cloud...');
+
+            // make sure to lowercase the username
+            dict = SnapCloud.parseDict(location.hash.substr(4));
+            dict.Username = dict.Username.toLowerCase();
+
+            SnapCloud.getPublicProject(
+                SnapCloud.encodeDict(dict),
+                function (projectData) {
+                    window.open('data:text/xml,' + projectData);
                 },
                 this.cloudError()
             );
@@ -1023,7 +1037,7 @@ IDE_Morph.prototype.createPalette = function (forSearching) {
     this.palette.enableAutoScrolling = false;
     this.palette.contents.acceptsDrops = false;
 
-    this.palette.reactToDropOf = function (droppedMorph) {
+    this.palette.reactToDropOf = function (droppedMorph, hand) {
         if (droppedMorph instanceof DialogBoxMorph) {
             myself.world().add(droppedMorph);
         } else if (droppedMorph instanceof SpriteMorph) {
@@ -1033,6 +1047,13 @@ IDE_Morph.prototype.createPalette = function (forSearching) {
             myself.removeSprite(droppedMorph.object);
         } else if (droppedMorph instanceof CostumeIconMorph) {
             myself.currentSprite.wearCostume(null);
+            droppedMorph.destroy();
+        } else if (droppedMorph instanceof BlockMorph) {
+            if (hand && hand.grabOrigin.origin instanceof ScriptsMorph) {
+                hand.grabOrigin.origin.clearDropInfo();
+                hand.grabOrigin.origin.lastDroppedBlock = droppedMorph;
+                hand.grabOrigin.origin.recordDrop(hand.grabOrigin);
+            }
             droppedMorph.destroy();
         } else {
             droppedMorph.destroy();

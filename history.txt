@@ -3112,3 +3112,16 @@ http://snap.berkeley.edu/run#cloud:Username=jens&ProjectName=rotation
 * Blocks, GUI: preference setting to enable auto-wrapping inside nested block stacks
 * Blocks: Treat JS-function reporters the same as variable getters wrt rings
 * German translation update
+
+161114
+------
+* Blocks, Objects: Unlimited “Undrop / Redrop” of block drops per script pane and session (under construction)
+* GUI: new url switch #dl: for downloading raw shared projects
+
+161121
+------
+* Blocks: Delete variable getter blocks if the user drops them on template slots (e.g. script vars)
+
+161122
+------
+* Blocks, GUI: “Undrop / Redrop” for deleting blocks via the context menu or in keyboard edit mode
