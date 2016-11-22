@@ -1103,7 +1103,7 @@
 
 /*global window, HTMLCanvasElement, FileReader, Audio, FileList*/
 
-var morphicVersion = '2016-October-27';
+var morphicVersion = '2016-November-22';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = getBlurredShadowSupport(); // check for Chrome-bug
 
@@ -3605,7 +3605,7 @@ Morph.prototype.situation = function () {
     return null;
 };
 
-Morph.prototype.slideBackTo = function (situation, inSteps) {
+Morph.prototype.slideBackTo = function (situation, inSteps, onBeforeDrop) {
     var steps = inSteps || 5,
         pos = situation.origin.position().add(situation.position),
         xStep = -(this.left() - pos.x) / steps,
@@ -3621,6 +3621,7 @@ Morph.prototype.slideBackTo = function (situation, inSteps) {
         stepCount += 1;
         if (stepCount === steps) {
             situation.origin.add(myself);
+            if (onBeforeDrop) {onBeforeDrop(); }
             if (situation.origin.reactToDropOf) {
                 situation.origin.reactToDropOf(myself);
             }
