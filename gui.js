@@ -1060,6 +1060,13 @@ IDE_Morph.prototype.createPalette = function (forSearching) {
         }
     };
 
+    this.palette.contents.reactToDropOf = function (droppedMorph) {
+        // for "undrop" operation
+        if (droppedMorph instanceof BlockMorph) {
+            droppedMorph.destroy();
+        }
+    };
+
     this.palette.setWidth(this.logo.width());
     this.add(this.palette);
     return this.palette;

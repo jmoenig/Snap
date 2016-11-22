@@ -5824,7 +5824,11 @@ ScriptsMorph.prototype.undrop = function () {
         this.dropRecord.situation =
             this.dropRecord.lastDroppedBlock.situation();
     }
-    this.recoverLastDrop().slideBackTo(this.dropRecord.lastOrigin);
+    this.dropRecord.lastDroppedBlock.slideBackTo(
+        this.dropRecord.lastOrigin,
+        null,
+        this.recoverLastDrop()
+    );
     this.dropRecord = this.dropRecord.lastRecord;
 };
 
@@ -5832,15 +5836,24 @@ ScriptsMorph.prototype.redrop = function () {
     if (!this.dropRecord || !this.dropRecord.nextRecord) {return; }
     this.dropRecord = this.dropRecord.nextRecord;
     if (this.dropRecord.action === 'delete') {
-        this.recoverLastDrop(true).destroy();
+        this.recoverLastDrop(true);
+        this.dropRecord.lastDroppedBlock.destroy();
     } else {
-        this.recoverLastDrop(true).slideBackTo(this.dropRecord.situation);
+        this.dropRecord.lastDroppedBlock.slideBackTo(
+            this.dropRecord.situation,
+            null,
+            this.recoverLastDrop(true)
+        );
     }
 };
 
 ScriptsMorph.prototype.recoverLastDrop = function (forRedrop) {
+    // retrieve the block last touched by the user and answer a function
+    // to be called after the animation that moves it back right before
+    // dropping it into its former situation
     var rec = this.dropRecord,
         dropped,
+        onBeforeDrop,
         parent;
 
     if (!rec || !rec.lastDroppedBlock) {
@@ -5882,7 +5895,9 @@ ScriptsMorph.prototype.recoverLastDrop = function (forRedrop) {
                 );
                 if (rec.lastWrapParent instanceof CommandBlockMorph) {
                     if (forRedrop) {
-                        cslot.nestedBlock(rec.lastDropTarget.element);
+                        onBeforeDrop = function () {
+                            cslot.nestedBlock(rec.lastDropTarget.element);
+                        };
                     } else {
                         rec.lastWrapParent.nextBlock(
                             rec.lastDropTarget.element
@@ -5890,7 +5905,9 @@ ScriptsMorph.prototype.recoverLastDrop = function (forRedrop) {
                     }
                 } else if (rec.lastWrapParent instanceof CommandSlotMorph) {
                     if (forRedrop) {
-                        cslot.nestedBlock(rec.lastDropTarget.element);
+                        onBeforeDrop = function () {
+                            cslot.nestedBlock(rec.lastDropTarget.element);
+                        };
                     } else {
                         rec.lastWrapParent.nestedBlock(
                             rec.lastDropTarget.element
@@ -5945,7 +5962,7 @@ ScriptsMorph.prototype.recoverLastDrop = function (forRedrop) {
         }
     }
 
-    return dropped;
+    return onBeforeDrop;
 };
 
 ScriptsMorph.prototype.clearDropInfo = function () {
