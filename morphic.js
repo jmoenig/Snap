@@ -1103,7 +1103,7 @@
 
 /*global window, HTMLCanvasElement, FileReader, Audio, FileList*/
 
-var morphicVersion = '2016-November-22';
+var morphicVersion = '2016-November-23';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = getBlurredShadowSupport(); // check for Chrome-bug
 
@@ -3622,6 +3622,7 @@ Morph.prototype.slideBackTo = function (situation, inSteps, onBeforeDrop) {
         if (stepCount === steps) {
             situation.origin.add(myself);
             if (onBeforeDrop) {onBeforeDrop(); }
+            if (myself.justDropped) {myself.justDropped(); }
             if (situation.origin.reactToDropOf) {
                 situation.origin.reactToDropOf(myself);
             }

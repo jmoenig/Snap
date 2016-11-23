@@ -149,7 +149,7 @@ isSnapObject, copy, PushButtonMorph, SpriteIconMorph, Process*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2016-November-22';
+modules.blocks = '2016-November-23';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -5685,6 +5685,7 @@ ScriptsMorph.prototype.userMenu = function () {
         blockEditor,
         myself = this,
         obj = this.owner,
+        hasUndropQueue,
         stage = obj.parentThatIsA(StageMorph);
 
     if (!ide) {
@@ -5695,6 +5696,7 @@ ScriptsMorph.prototype.userMenu = function () {
     }
     if (this.dropRecord) {
         if (this.dropRecord.lastRecord) {
+            hasUndropQueue = true;
             menu.addItem(
                 'undrop',
                 'undrop',
@@ -5702,13 +5704,16 @@ ScriptsMorph.prototype.userMenu = function () {
             );
         }
         if (this.dropRecord.nextRecord) {
+            hasUndropQueue = true;
             menu.addItem(
                 'redrop',
                 'redrop',
                 'redo the last undone\nblock drop\nin this pane'
             );
         }
-        menu.addLine();
+        if (hasUndropQueue) {
+            menu.addLine();
+        }
     }
 
     menu.addItem('clean up', 'cleanUp', 'arrange scripts\nvertically');
@@ -5815,7 +5820,15 @@ ScriptsMorph.prototype.scriptsPicture = function () {
 };
 
 ScriptsMorph.prototype.addComment = function () {
-    new CommentMorph().pickUp(this.world());
+    var ide = this.parentThatIsA(IDE_Morph),
+        world = this.world();
+    new CommentMorph().pickUp(world);
+    if (ide) {
+        world.hand.grabOrigin = {
+            origin: ide.palette,
+            position: ide.palette.center()
+        };
+    }
 };
 
 ScriptsMorph.prototype.undrop = function () {
@@ -5861,7 +5874,7 @@ ScriptsMorph.prototype.recoverLastDrop = function (forRedrop) {
     }
     dropped = rec.lastDroppedBlock;
     parent = dropped.parent;
-    if (rec.lastDroppedBlock instanceof CommandBlockMorph) {
+    if (dropped instanceof CommandBlockMorph) {
         if (rec.lastNextBlock) {
             if (rec.action === 'delete') {
                 if (forRedrop) {
@@ -5925,7 +5938,7 @@ ScriptsMorph.prototype.recoverLastDrop = function (forRedrop) {
                 cslot.fixLayout();
             }
         }
-    } else { // ReporterBlockMorph
+    } else if (dropped instanceof ReporterBlockMorph) {
         if (rec.lastDropTarget) {
             rec.lastDropTarget.replaceInput(
                 rec.lastDroppedBlock,
@@ -5938,15 +5951,27 @@ ScriptsMorph.prototype.recoverLastDrop = function (forRedrop) {
                 });
             }
         }
+    } else if (dropped instanceof CommentMorph) {
+        if (forRedrop && rec.lastDropTarget) {
+            onBeforeDrop = function () {
+                rec.lastDropTarget.element.comment = dropped;
+                dropped.block = rec.lastDropTarget.element;
+                dropped.align();
+            };
+        }
+    } else {
+        throw new Error('unsupported action for ' + dropped);
     }
     this.clearDropInfo();
     dropped.prepareToBeGrabbed(this.world().hand);
+    if (dropped instanceof CommentMorph) {
+        dropped.removeShadow();
+    }
     this.add(dropped);
     parent.reactToGrabOf(dropped);
     if (dropped instanceof ReporterBlockMorph && parent instanceof BlockMorph) {
         parent.changed();
     }
-
     if (rec.action === 'delete') {
         if (forRedrop && rec.lastNextBlock) {
             if (parent instanceof CommandBlockMorph) {
@@ -5961,7 +5986,6 @@ ScriptsMorph.prototype.recoverLastDrop = function (forRedrop) {
             dropped.moveBy(new Point(-100, -20));
         }
     }
-
     return onBeforeDrop;
 };
 
@@ -12109,7 +12133,7 @@ CommentMorph.prototype.show = function () {
 
 // CommentMorph dragging & dropping
 
-CommentMorph.prototype.prepareToBeGrabbed = function () {
+CommentMorph.prototype.prepareToBeGrabbed = function (hand) {
     // disassociate from the block I'm posted to
     if (this.block) {
         this.block.comment = null;
@@ -12132,13 +12156,7 @@ CommentMorph.prototype.snap = function (hand) {
     if (!(scripts instanceof ScriptsMorph)) {
         return null;
     }
-
     scripts.clearDropInfo();
-    scripts.lastDroppedBlock = this;
-    if (hand) {
-        scripts.recordDrop(hand.grabOrigin);
-    }
-
     target = scripts.closestBlock(this, hand);
     if (target !== null) {
         target.comment = this;
@@ -12146,8 +12164,14 @@ CommentMorph.prototype.snap = function (hand) {
         if (this.snapSound) {
             this.snapSound.play();
         }
+        scripts.lastDropTarget = {element: target};
     }
     this.align();
+    scripts.lastDroppedBlock = this;
+    if (hand) {
+        scripts.recordDrop(hand.grabOrigin);
+    }
+
 };
 
 // CommentMorph sticking to blocks

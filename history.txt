@@ -3125,5 +3125,8 @@ http://snap.berkeley.edu/run#cloud:Username=jens&ProjectName=rotation
 161122
 ------
 * Blocks, GUI: “Undrop / Redrop” for deleting blocks via the context menu or in keyboard edit mode
-* Morphic: support optional “onBeforeDrop” callback parameter in Morph.slideBackTo()
+* Morphic: support “onBeforeDrop” callback parameter in slideBackTo()
 
+161123
+------
+* Blocks, Morphic: “Undrop / Redrop” support for sticky comments
