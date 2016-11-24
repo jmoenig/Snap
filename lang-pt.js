@@ -225,6 +225,8 @@ SnapTranslator.dict.pt = {
         'Guiões',
     'Costumes':
         'Trajes',
+    'Backgrounds':
+        'Cenários',
     'Sounds':
         'Sons',
 
@@ -815,6 +817,8 @@ SnapTranslator.dict.pt = {
         'Assinalar para activar\nas animações do AID',
     'Flat design':
         'Design plano',
+    'Nested auto-wrapping':
+        'Quebras de linha aninhadas',
     'Keyboard Editing':
         'Edição usando o teclado',
     'Table support':
@@ -929,6 +933,8 @@ SnapTranslator.dict.pt = {
         'desfazer última largada',
     'undo the last\nblock drop\nin this pane':
         'Desfazer a última largada de um bloco\nneste separador.',
+    'redrop':
+        'refazer última largada',
     'scripts pic...':
         'fotografia dos guiões…',
     'open a new window\nwith a picture of all scripts':
@@ -1150,7 +1156,7 @@ SnapTranslator.dict.pt = {
     'Translations':
         'Traduções',
 
-    // observadores de variáveis
+    // monitores de variáveis
     'normal':
         'normal',
     'large':
@@ -1168,7 +1174,7 @@ SnapTranslator.dict.pt = {
     'Slider maximum value':
         'Valor máximo do potenciómetro',
 
-    // observadores de listas
+    // monitores de listas
     'length: ':
         'comprimento: ',
 
