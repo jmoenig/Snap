@@ -3134,3 +3134,4 @@ http://snap.berkeley.edu/run#cloud:Username=jens&ProjectName=rotation
 161124
 ------
 * Morphic, Store: work around a dreaded FF NS_ERROR_FAILURE for supporting retina
+* Blocks: drag-origin support for blocks and comments duplicated inside a block editor

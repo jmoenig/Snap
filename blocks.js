@@ -149,7 +149,7 @@ isSnapObject, copy, PushButtonMorph, SpriteIconMorph, Process*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2016-November-23';
+modules.blocks = '2016-November-24';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -2378,8 +2378,15 @@ BlockMorph.prototype.userMenu = function () {
         "duplicate",
         function () {
             var dup = myself.fullCopy(),
-                ide = myself.parentThatIsA(IDE_Morph);
+                ide = myself.parentThatIsA(IDE_Morph),
+                blockEditor = myself.parentThatIsA(BlockEditorMorph);
             dup.pickUp(world);
+            // register the drop-origin, so the block can
+            // slide back to its former situation if dropped
+            // somewhere where it gets rejected
+            if (!ide && blockEditor) {
+                ide = blockEditor.target.parentThatIsA(IDE_Morph);
+            }
             if (ide) {
                 world.hand.grabOrigin = {
                     origin: ide.palette,
@@ -5821,8 +5828,15 @@ ScriptsMorph.prototype.scriptsPicture = function () {
 
 ScriptsMorph.prototype.addComment = function () {
     var ide = this.parentThatIsA(IDE_Morph),
+        blockEditor = this.parentThatIsA(BlockEditorMorph),
         world = this.world();
     new CommentMorph().pickUp(world);
+    // register the drop-origin, so the element can
+    // slide back to its former situation if dropped
+    // somewhere where it gets rejected
+    if (!ide && blockEditor) {
+        ide = blockEditor.target.parentThatIsA(IDE_Morph);
+    }
     if (ide) {
         world.hand.grabOrigin = {
             origin: ide.palette,
