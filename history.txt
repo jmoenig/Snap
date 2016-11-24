@@ -3090,3 +3090,48 @@ http://snap.berkeley.edu/run#cloud:Username=jens&ProjectName=rotation
 161027
 ------
 == v4.0.9 ====
+
+== v4.0.9.1 ====
+
+161110
+------
+* new Galician translation, yay!! Thanks, tecnoloxia.org!
+* Italian translation update
+* German translation update
+
+== v4.0.9.2 ====
+
+*** in development ***
+
+161107
+------
+* New C-Slot auto-wrapping / snapping feature (similar to Scratch)
+
+161109
+------
+* Blocks, GUI: preference setting to enable auto-wrapping inside nested block stacks
+* Blocks: Treat JS-function reporters the same as variable getters wrt rings
+* German translation update
+
+161114
+------
+* Blocks, Objects: Unlimited “Undrop / Redrop” of block drops per script pane and session (under construction)
+* GUI: new url switch #dl: for downloading raw shared projects
+
+161121
+------
+* Blocks: Delete variable getter blocks if the user drops them on template slots (e.g. script vars)
+
+161122
+------
+* Blocks, GUI: “Undrop / Redrop” for deleting blocks via the context menu or in keyboard edit mode
+* Morphic: support “onBeforeDrop” callback parameter in slideBackTo()
+
+161123
+------
+* Blocks, Morphic: “Undrop / Redrop” support for sticky comments
+
+161124
+------
+* Morphic, Store: work around a dreaded FF NS_ERROR_FAILURE for supporting retina
+* Blocks: drag-origin support for blocks and comments duplicated inside a block editor

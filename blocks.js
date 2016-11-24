@@ -149,7 +149,7 @@ isSnapObject, copy, PushButtonMorph, SpriteIconMorph, Process*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2016-October-31';
+modules.blocks = '2016-November-24';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -1480,22 +1480,19 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
 
         // allow GUI symbols as label icons
         // usage: $symbolName[-size-r-g-b], size and color values are optional
+        // If there isn't a symbol under that name, it just styles whatever is
+        // after "$", so you can add unicode icons to your blocks, for example
+        // ☺️
         tokens = spec.slice(1).split('-');
         if (!contains(SymbolMorph.prototype.names, tokens[0])) {
-            part = new StringMorph(spec);
+            part = new StringMorph(tokens[0]);
             part.fontName = this.labelFontName;
             part.fontStyle = this.labelFontStyle;
-            part.fontSize = this.fontSize;
-            part.color = new Color(255, 255, 255);
-            part.isBold = true;
-            part.shadowColor = this.color.darker(this.labelContrast);
-            part.shadowOffset = MorphicPreferences.isFlat ?
-                    new Point() : this.embossing;
-            part.drawNew();
-            return part;
+            part.fontSize = this.fontSize * (+tokens[1] || 1);
+        } else {
+            part = new SymbolMorph(tokens[0]);
+            part.size = this.fontSize * (+tokens[1] || 1.2);
         }
-        part = new SymbolMorph(tokens[0]);
-        part.size = this.fontSize * (+tokens[1] || 1.2);
         part.color = new Color(
             +tokens[2] === 0 ? 0 : +tokens[2] || 255,
             +tokens[3] === 0 ? 0 : +tokens[3] || 255,
@@ -2381,8 +2378,15 @@ BlockMorph.prototype.userMenu = function () {
         "duplicate",
         function () {
             var dup = myself.fullCopy(),
-                ide = myself.parentThatIsA(IDE_Morph);
+                ide = myself.parentThatIsA(IDE_Morph),
+                blockEditor = myself.parentThatIsA(BlockEditorMorph);
             dup.pickUp(world);
+            // register the drop-origin, so the block can
+            // slide back to its former situation if dropped
+            // somewhere where it gets rejected
+            if (!ide && blockEditor) {
+                ide = blockEditor.target.parentThatIsA(IDE_Morph);
+            }
             if (ide) {
                 world.hand.grabOrigin = {
                     origin: ide.palette,
@@ -3491,12 +3495,14 @@ BlockMorph.prototype.reactToDropOf = function (droppedMorph) {
 BlockMorph.prototype.situation = function () {
     // answer a dictionary specifying where I am right now, so
     // I can slide back to it if I'm dropped somewhere else
-    var scripts = this.parentThatIsA(ScriptsMorph);
-    if (scripts) {
-        return {
-            origin: scripts,
-            position: this.position().subtract(scripts.position())
-        };
+    if (!(this.parent instanceof TemplateSlotMorph)) {
+        var scripts = this.parentThatIsA(ScriptsMorph);
+        if (scripts) {
+            return {
+                origin: scripts,
+                position: this.position().subtract(scripts.position())
+            };
+        }
     }
     return BlockMorph.uber.situation.call(this);
 };
@@ -3709,6 +3715,20 @@ CommandBlockMorph.prototype.bottomAttachPoint = function () {
     );
 };
 
+CommandBlockMorph.prototype.wrapAttachPoint = function () {
+    var cslot = detect( // could be a method making uses of caching...
+        this.inputs(), // ... although these already are cached
+        function (each) {return each instanceof CSlotMorph; }
+    );
+    if (cslot && !cslot.nestedBlock()) {
+        return new Point(
+            cslot.left() + (cslot.inset * 2) + cslot.corner,
+            cslot.top() + (cslot.corner * 2)
+        );
+    }
+    return null;
+};
+
 CommandBlockMorph.prototype.dentLeft = function () {
     return this.left()
         + this.corner
@@ -3722,13 +3742,24 @@ CommandBlockMorph.prototype.dentCenter = function () {
 };
 
 CommandBlockMorph.prototype.attachTargets = function () {
-    var answer = [];
+    var answer = [],
+        tp;
     if (!(this instanceof HatBlockMorph)) {
+        tp = this.topAttachPoint();
         if (!(this.parent instanceof SyntaxElementMorph)) {
             answer.push({
-                point: this.topAttachPoint(),
+                point: tp,
                 element: this,
                 loc: 'top',
+                type: 'block'
+            });
+        }
+        if (ScriptsMorph.prototype.enableNestedAutoWrapping ||
+                !this.parentThatIsA(CommandSlotMorph)) {
+            answer.push({
+                point: tp,
+                element: this,
+                loc: 'wrap',
                 type: 'block'
             });
         }
@@ -3780,7 +3811,8 @@ CommandBlockMorph.prototype.closestAttachTarget = function (newParent) {
         ),
         dist,
         ref = [],
-        minDist = 1000;
+        minDist = 1000,
+        wrap;
 
     if (!(this instanceof HatBlockMorph)) {
         ref.push(
@@ -3789,6 +3821,15 @@ CommandBlockMorph.prototype.closestAttachTarget = function (newParent) {
                 loc: 'top'
             }
         );
+        wrap = this.wrapAttachPoint();
+        if (wrap) {
+            ref.push(
+                {
+                    point: wrap,
+                    loc: 'wrap'
+                }
+            );
+        }
     }
     if (!bottomBlock.isStop()) {
         ref.push(
@@ -3798,10 +3839,14 @@ CommandBlockMorph.prototype.closestAttachTarget = function (newParent) {
             }
         );
     }
-
     this.allAttachTargets(target).forEach(function (eachTarget) {
         ref.forEach(function (eachRef) {
-            if (eachRef.loc !== eachTarget.loc) {
+            // match: either both locs are 'wrap' or both are different,
+            // none being 'wrap' (can this be expressed any better?)
+            if ((eachRef.loc === 'wrap' && (eachTarget.loc === 'wrap')) ||
+                ((eachRef.loc !== eachTarget.loc) &&
+                    (eachRef.loc !== 'wrap') && (eachTarget.loc !== 'wrap'))
+            ) {
                 dist = eachRef.point.distanceTo(eachTarget.point);
                 if ((dist < thresh) && (dist < minDist)) {
                     minDist = dist;
@@ -3813,21 +3858,25 @@ CommandBlockMorph.prototype.closestAttachTarget = function (newParent) {
     return answer;
 };
 
-CommandBlockMorph.prototype.snap = function () {
+CommandBlockMorph.prototype.snap = function (hand) {
     var target = this.closestAttachTarget(),
         scripts = this.parentThatIsA(ScriptsMorph),
+        before,
         next,
         offsetY,
+        cslot,
         affected;
 
-    scripts.clearDropHistory();
+    scripts.clearDropInfo();
     scripts.lastDroppedBlock = this;
-
     if (target === null) {
         this.startLayout();
         this.fixBlockColor();
         this.endLayout();
         CommandBlockMorph.uber.snap.call(this); // align stuck comments
+        if (hand) {
+            scripts.recordDrop(hand.grabOrigin);
+        }
         return;
     }
 
@@ -3860,10 +3909,38 @@ CommandBlockMorph.prototype.snap = function () {
         this.setBottom(target.element.top() + this.corner - offsetY);
         this.setLeft(target.element.left());
         this.bottomBlock().nextBlock(target.element);
+    } else if (target.loc === 'wrap') {
+        cslot = detect( // this should be a method making use of caching
+            this.inputs(), // these are already cached, so maybe it's okay
+            function (each) {return each instanceof CSlotMorph; }
+        );
+        // assume the cslot is (still) empty, was checked determining the target
+        before = (target.element.parent);
+        scripts.lastWrapParent = before;
+
+        // adjust position of wrapping block
+        this.moveBy(target.point.subtract(cslot.slotAttachPoint()));
+
+        // wrap c-slot around target
+        cslot.nestedBlock(target.element);
+        if (before instanceof CommandBlockMorph) {
+            before.nextBlock(this);
+        } else if (before instanceof CommandSlotMorph) {
+            before.nestedBlock(this);
+        }
+
+        // fix zebra coloring.
+        // this could probably be generalized into the fixBlockColor mechanism
+        target.element.blockSequence().forEach(
+            function (cmd) {cmd.fixBlockColor(); }
+        );
     }
     this.fixBlockColor();
     this.endLayout();
     CommandBlockMorph.uber.snap.call(this); // align stuck comments
+    if (hand) {
+        scripts.recordDrop(hand.grabOrigin);
+    }
     if (this.snapSound) {
         this.snapSound.play();
     }
@@ -3888,7 +3965,18 @@ CommandBlockMorph.prototype.userDestroy = function () {
         this.userDestroyJustThis();
         return;
     }
-    var cslot = this.parentThatIsA(CSlotMorph);
+
+    var scripts = this.parentThatIsA(ScriptsMorph),
+        cslot = this.parentThatIsA(CSlotMorph);
+
+    // for undrop / redrop
+    if (scripts) {
+        scripts.clearDropInfo();
+        scripts.lastDroppedBlock = this;
+        scripts.recordDrop(this.situation());
+        scripts.dropRecord.action = 'delete';
+    }
+
     this.destroy();
     if (cslot) {
         cslot.fixLayout();
@@ -3903,6 +3991,15 @@ CommandBlockMorph.prototype.userDestroyJustThis = function () {
         nb = this.nextBlock(),
         above,
         cslot = this.parentThatIsA(CSlotMorph);
+
+    // for undrop / redrop
+    if (scripts) {
+        scripts.clearDropInfo();
+        scripts.lastDroppedBlock = this;
+        scripts.recordDrop(this.situation());
+        scripts.dropRecord.lastNextBlock = nb;
+        scripts.dropRecord.action = 'delete';
+    }
 
     this.topBlock().fullChanged();
     if (this.parent) {
@@ -4525,7 +4622,7 @@ ReporterBlockMorph.prototype.snap = function (hand) {
         return null;
     }
 
-    scripts.clearDropHistory();
+    scripts.clearDropInfo();
     scripts.lastDroppedBlock = this;
 
     target = scripts.closestInput(this, hand);
@@ -4555,6 +4652,9 @@ ReporterBlockMorph.prototype.snap = function (hand) {
     this.fixBlockColor();
     this.endLayout();
     ReporterBlockMorph.uber.snap.call(this);
+    if (hand) {
+        scripts.recordDrop(hand.grabOrigin);
+    }
 };
 
 ReporterBlockMorph.prototype.prepareToBeGrabbed = function (handMorph) {
@@ -4693,6 +4793,16 @@ ReporterBlockMorph.prototype.ExportResultPic = function () {
 
 ReporterBlockMorph.prototype.userDestroy = function () {
     // make sure to restore default slot of parent block
+
+    // for undrop / redrop
+    var scripts = this.parentThatIsA(ScriptsMorph);
+    if (scripts) {
+        scripts.clearDropInfo();
+        scripts.lastDroppedBlock = this;
+        scripts.recordDrop(this.situation());
+        scripts.dropRecord.action = 'delete';
+    }
+
     this.topBlock().fullChanged();
     this.prepareToBeGrabbed(this.world().hand);
     this.destroy();
@@ -5159,7 +5269,10 @@ RingMorph.prototype.vanishForSimilar = function () {
             || (this.parent instanceof RingCommandSlotMorph)) {
         return null;
     }
-    if (block.selector === 'reportGetVar' || (block instanceof RingMorph)) {
+    if (block.selector === 'reportGetVar' ||
+        block.selector === 'reportJSFunction' ||
+        (block instanceof RingMorph)
+    ) {
         this.parent.silentReplaceInput(this, block);
     }
 };
@@ -5215,6 +5328,7 @@ ScriptsMorph.prototype.cleanUpMargin = 20;
 ScriptsMorph.prototype.cleanUpSpacing = 15;
 ScriptsMorph.prototype.isPreferringEmptySlots = true;
 ScriptsMorph.prototype.enableKeyboard = true;
+ScriptsMorph.prototype.enableNestedAutoWrapping = false;
 
 // ScriptsMorph instance creation:
 
@@ -5234,6 +5348,7 @@ ScriptsMorph.prototype.init = function (owner) {
     this.lastDropTarget = null;
     this.lastPreservedBlocks = null;
     this.lastNextBlock = null;
+    this.lastWrapParent = null;
 
     // keyboard editing support:
     this.focus = null;
@@ -5241,6 +5356,9 @@ ScriptsMorph.prototype.init = function (owner) {
     ScriptsMorph.uber.init.call(this);
     this.setColor(new Color(70, 70, 70));
     this.noticesTransparentClick = true;
+
+    // initialize "undrop" queue
+    this.recordDrop();
 };
 
 // ScriptsMorph deep copying:
@@ -5347,6 +5465,10 @@ ScriptsMorph.prototype.showCommandDropFeedback = function (block) {
     if (!target) {
         return null;
     }
+    if (target.loc === 'wrap') {
+        this.showCSlotWrapFeedback(block, target.element);
+        return;
+    }
     this.add(this.feedbackMorph);
     this.feedbackMorph.border = 0;
     this.feedbackMorph.edge = 0;
@@ -5399,6 +5521,24 @@ ScriptsMorph.prototype.showCommentDropFeedback = function (comment, hand) {
     this.feedbackMorph.color = comment.color.copy();
     this.feedbackMorph.color.a = 0.25;
     this.feedbackMorph.borderColor = comment.titleBar.color;
+    this.feedbackMorph.drawNew();
+    this.feedbackMorph.changed();
+};
+
+ScriptsMorph.prototype.showCSlotWrapFeedback = function (srcBlock, trgBlock) {
+    var clr;
+    this.feedbackMorph.bounds = trgBlock.fullBounds()
+        .expandBy(BlockMorph.prototype.corner);
+    this.feedbackMorph.edge = SyntaxElementMorph.prototype.corner;
+    this.feedbackMorph.border = Math.max(
+        SyntaxElementMorph.prototype.edge,
+        3
+    );
+    this.add(this.feedbackMorph);
+    clr = srcBlock.color.lighter(40);
+    this.feedbackMorph.color = clr.copy();
+    this.feedbackMorph.color.a = 0.1;
+    this.feedbackMorph.borderColor = clr;
     this.feedbackMorph.drawNew();
     this.feedbackMorph.changed();
 };
@@ -5552,6 +5692,7 @@ ScriptsMorph.prototype.userMenu = function () {
         blockEditor,
         myself = this,
         obj = this.owner,
+        hasUndropQueue,
         stage = obj.parentThatIsA(StageMorph);
 
     if (!ide) {
@@ -5560,15 +5701,30 @@ ScriptsMorph.prototype.userMenu = function () {
             ide = blockEditor.target.parentThatIsA(IDE_Morph);
         }
     }
+    if (this.dropRecord) {
+        if (this.dropRecord.lastRecord) {
+            hasUndropQueue = true;
+            menu.addItem(
+                'undrop',
+                'undrop',
+                'undo the last\nblock drop\nin this pane'
+            );
+        }
+        if (this.dropRecord.nextRecord) {
+            hasUndropQueue = true;
+            menu.addItem(
+                'redrop',
+                'redrop',
+                'redo the last undone\nblock drop\nin this pane'
+            );
+        }
+        if (hasUndropQueue) {
+            menu.addLine();
+        }
+    }
+
     menu.addItem('clean up', 'cleanUp', 'arrange scripts\nvertically');
     menu.addItem('add comment', 'addComment');
-    if (this.lastDroppedBlock) {
-        menu.addItem(
-            'undrop',
-            'undrop',
-            'undo the last\nblock drop\nin this pane'
-        );
-    }
     menu.addItem(
         'scripts pic...',
         'exportScriptsPicture',
@@ -5671,59 +5827,210 @@ ScriptsMorph.prototype.scriptsPicture = function () {
 };
 
 ScriptsMorph.prototype.addComment = function () {
-    new CommentMorph().pickUp(this.world());
+    var ide = this.parentThatIsA(IDE_Morph),
+        blockEditor = this.parentThatIsA(BlockEditorMorph),
+        world = this.world();
+    new CommentMorph().pickUp(world);
+    // register the drop-origin, so the element can
+    // slide back to its former situation if dropped
+    // somewhere where it gets rejected
+    if (!ide && blockEditor) {
+        ide = blockEditor.target.parentThatIsA(IDE_Morph);
+    }
+    if (ide) {
+        world.hand.grabOrigin = {
+            origin: ide.palette,
+            position: ide.palette.center()
+        };
+    }
 };
 
 ScriptsMorph.prototype.undrop = function () {
-    if (!this.lastDroppedBlock) {return; }
-    if (this.lastDroppedBlock instanceof CommandBlockMorph) {
-        if (this.lastNextBlock) {
-            this.add(this.lastNextBlock);
+    if (!this.dropRecord || !this.dropRecord.lastRecord) {return; }
+    if (!this.dropRecord.situation) {
+        this.dropRecord.situation =
+            this.dropRecord.lastDroppedBlock.situation();
+    }
+    this.dropRecord.lastDroppedBlock.slideBackTo(
+        this.dropRecord.lastOrigin,
+        null,
+        this.recoverLastDrop()
+    );
+    this.dropRecord = this.dropRecord.lastRecord;
+};
+
+ScriptsMorph.prototype.redrop = function () {
+    if (!this.dropRecord || !this.dropRecord.nextRecord) {return; }
+    this.dropRecord = this.dropRecord.nextRecord;
+    if (this.dropRecord.action === 'delete') {
+        this.recoverLastDrop(true);
+        this.dropRecord.lastDroppedBlock.destroy();
+    } else {
+        this.dropRecord.lastDroppedBlock.slideBackTo(
+            this.dropRecord.situation,
+            null,
+            this.recoverLastDrop(true)
+        );
+    }
+};
+
+ScriptsMorph.prototype.recoverLastDrop = function (forRedrop) {
+    // retrieve the block last touched by the user and answer a function
+    // to be called after the animation that moves it back right before
+    // dropping it into its former situation
+    var rec = this.dropRecord,
+        dropped,
+        onBeforeDrop,
+        parent;
+
+    if (!rec || !rec.lastDroppedBlock) {
+        throw new Error('nothing to undrop');
+    }
+    dropped = rec.lastDroppedBlock;
+    parent = dropped.parent;
+    if (dropped instanceof CommandBlockMorph) {
+        if (rec.lastNextBlock) {
+            if (rec.action === 'delete') {
+                if (forRedrop) {
+                    this.add(rec.lastNextBlock);
+                }
+            } else {
+                this.add(rec.lastNextBlock);
+            }
         }
-        if (this.lastDropTarget) {
-            if (this.lastDropTarget.loc === 'bottom') {
-                if (this.lastDropTarget.type === 'slot') {
-                    if (this.lastNextBlock) {
-                        this.lastDropTarget.element.nestedBlock(
-                            this.lastNextBlock
+        if (rec.lastDropTarget) {
+            if (rec.lastDropTarget.loc === 'bottom') {
+                if (rec.lastDropTarget.type === 'slot') {
+                    if (rec.lastNextBlock) {
+                        rec.lastDropTarget.element.nestedBlock(
+                            rec.lastNextBlock
                         );
                     }
                 } else { // 'block'
-                    if (this.lastNextBlock) {
-                        this.lastDropTarget.element.nextBlock(
-                            this.lastNextBlock
+                    if (rec.lastNextBlock) {
+                        rec.lastDropTarget.element.nextBlock(
+                            rec.lastNextBlock
                         );
                     }
                 }
-            } else if (this.lastDropTarget.loc === 'top') {
-                this.add(this.lastDropTarget.element);
+            } else if (rec.lastDropTarget.loc === 'top') {
+                this.add(rec.lastDropTarget.element);
+            } else if (rec.lastDropTarget.loc === 'wrap') {
+                var cslot = detect( // could be cached...
+                    rec.lastDroppedBlock.inputs(), // ...although these are
+                    function (each) {return each instanceof CSlotMorph; }
+                );
+                if (rec.lastWrapParent instanceof CommandBlockMorph) {
+                    if (forRedrop) {
+                        onBeforeDrop = function () {
+                            cslot.nestedBlock(rec.lastDropTarget.element);
+                        };
+                    } else {
+                        rec.lastWrapParent.nextBlock(
+                            rec.lastDropTarget.element
+                        );
+                    }
+                } else if (rec.lastWrapParent instanceof CommandSlotMorph) {
+                    if (forRedrop) {
+                        onBeforeDrop = function () {
+                            cslot.nestedBlock(rec.lastDropTarget.element);
+                        };
+                    } else {
+                        rec.lastWrapParent.nestedBlock(
+                            rec.lastDropTarget.element
+                        );
+                    }
+                } else {
+                    this.add(rec.lastDropTarget.element);
+                }
+
+                // fix zebra coloring.
+                // this could be generalized into the fixBlockColor mechanism
+                rec.lastDropTarget.element.blockSequence().forEach(
+                    function (cmd) {cmd.fixBlockColor(); }
+                );
+                cslot.fixLayout();
             }
         }
-    } else { // ReporterBlockMorph
-        if (this.lastDropTarget) {
-            this.lastDropTarget.replaceInput(
-                this.lastDroppedBlock,
-                this.lastReplacedInput
+    } else if (dropped instanceof ReporterBlockMorph) {
+        if (rec.lastDropTarget) {
+            rec.lastDropTarget.replaceInput(
+                rec.lastDroppedBlock,
+                rec.lastReplacedInput
             );
-            this.lastDropTarget.fixBlockColor(null, true);
-            if (this.lastPreservedBlocks) {
-                this.lastPreservedBlocks.forEach(function (morph) {
+            rec.lastDropTarget.fixBlockColor(null, true);
+            if (rec.lastPreservedBlocks) {
+                rec.lastPreservedBlocks.forEach(function (morph) {
                     morph.destroy();
                 });
             }
         }
+    } else if (dropped instanceof CommentMorph) {
+        if (forRedrop && rec.lastDropTarget) {
+            onBeforeDrop = function () {
+                rec.lastDropTarget.element.comment = dropped;
+                dropped.block = rec.lastDropTarget.element;
+                dropped.align();
+            };
+        }
+    } else {
+        throw new Error('unsupported action for ' + dropped);
     }
-    this.lastDroppedBlock.pickUp(this.world());
-    this.clearDropHistory();
+    this.clearDropInfo();
+    dropped.prepareToBeGrabbed(this.world().hand);
+    if (dropped instanceof CommentMorph) {
+        dropped.removeShadow();
+    }
+    this.add(dropped);
+    parent.reactToGrabOf(dropped);
+    if (dropped instanceof ReporterBlockMorph && parent instanceof BlockMorph) {
+        parent.changed();
+    }
+    if (rec.action === 'delete') {
+        if (forRedrop && rec.lastNextBlock) {
+            if (parent instanceof CommandBlockMorph) {
+                parent.nextBlock(rec.lastNextBlock);
+            } else if (parent instanceof CommandSlotMorph) {
+                parent.nestedBlock(rec.lastNextBlock);
+            }
+        }
+
+        // animate "undelete"
+        if (!forRedrop) {
+            dropped.moveBy(new Point(-100, -20));
+        }
+    }
+    return onBeforeDrop;
 };
 
-
-ScriptsMorph.prototype.clearDropHistory = function () {
+ScriptsMorph.prototype.clearDropInfo = function () {
     this.lastDroppedBlock = null;
     this.lastReplacedInput = null;
     this.lastDropTarget = null;
     this.lastPreservedBlocks = null;
     this.lastNextBlock = null;
+    this.lastWrapParent = null;
+};
+
+ScriptsMorph.prototype.recordDrop = function (lastGrabOrigin) {
+    // support for "undrop" / "redrop"
+     var record = {
+        lastDroppedBlock: this.lastDroppedBlock,
+        lastReplacedInput: this.lastReplacedInput,
+        lastDropTarget: this.lastDropTarget,
+        lastPreservedBlocks: this.lastPreservedBlocks,
+        lastNextBlock: this.lastNextBlock,
+        lastWrapParent: this.lastWrapParent,
+        lastOrigin: lastGrabOrigin,
+        action: null,
+        situation: null,
+        lastRecord: this.dropRecord,
+        nextRecord: null
+     };
+     if (this.dropRecord) {
+        this.dropRecord.nextRecord = record;
+     }
+     this.dropRecord = record;
 };
 
 // ScriptsMorph sorting blocks and comments
@@ -5859,7 +6166,6 @@ ArgMorph.prototype.reactToSliderEdit = function () {
         }
     }
 };
-
 
 // ArgMorph drag & drop: for demo puposes only
 
@@ -8017,6 +8323,18 @@ TemplateSlotMorph.prototype.fixLayout = function () {
         if (this.parent.fixLayout) {
             this.parent.fixLayout();
         }
+    }
+};
+
+// TemplateSlotMorph drop behavior:
+
+TemplateSlotMorph.prototype.wantsDropOf = function (aMorph) {
+    return aMorph.selector === 'reportGetVar';
+};
+
+TemplateSlotMorph.prototype.reactToDropOf = function (droppedMorph) {
+    if (droppedMorph.selector === 'reportGetVar') {
+        droppedMorph.destroy();
     }
 };
 
@@ -11829,7 +12147,7 @@ CommentMorph.prototype.show = function () {
 
 // CommentMorph dragging & dropping
 
-CommentMorph.prototype.prepareToBeGrabbed = function () {
+CommentMorph.prototype.prepareToBeGrabbed = function (hand) {
     // disassociate from the block I'm posted to
     if (this.block) {
         this.block.comment = null;
@@ -11852,19 +12170,22 @@ CommentMorph.prototype.snap = function (hand) {
     if (!(scripts instanceof ScriptsMorph)) {
         return null;
     }
-
-    scripts.clearDropHistory();
-    scripts.lastDroppedBlock = this;
+    scripts.clearDropInfo();
     target = scripts.closestBlock(this, hand);
-
     if (target !== null) {
         target.comment = this;
         this.block = target;
         if (this.snapSound) {
             this.snapSound.play();
         }
+        scripts.lastDropTarget = {element: target};
     }
     this.align();
+    scripts.lastDroppedBlock = this;
+    if (hand) {
+        scripts.recordDrop(hand.grabOrigin);
+    }
+
 };
 
 // CommentMorph sticking to blocks
@@ -12542,6 +12863,16 @@ ScriptFocusMorph.prototype.sortedScripts = function () {
     return scripts;
 };
 
+// ScriptFocusMorph undo / redo
+
+ScriptFocusMorph.prototype.undrop = function () {
+    this.editor.undrop();
+};
+
+ScriptFocusMorph.prototype.redrop = function () {
+    this.editor.redrop();
+};
+
 // ScriptFocusMorph block types
 
 ScriptFocusMorph.prototype.blockTypes = function () {
@@ -12685,6 +13016,12 @@ ScriptFocusMorph.prototype.reactToKeyEvent = function (key) {
         return this.lastScript();
     case 'backspace':
         return this.deleteLastElement();
+    case 'ctrl z':
+        return this.undrop();
+    case 'ctrl shift z':
+        return this.redrop();
+    case 'ctrl [': // ignore the first press of the Mac cmd key
+        return;
     default:
         types = this.blockTypes();
         if (!(this.element instanceof ScriptsMorph) &&

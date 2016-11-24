@@ -185,7 +185,7 @@ SnapTranslator.dict.it = {
     'translator_e-mail':
         's_federici@yahoo.com, albertofirpo12@gmail.com, zairik@gmail.com', // optional
     'last_changed':
-        '2016-05-10', // this, too, will appear in the Translators tab
+        '2016-10-31', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -683,6 +683,11 @@ SnapTranslator.dict.it = {
     'enable Morphic\ncontext menus\nand inspectors,\nnot user-friendly!':
         'Abilita i menu contestuali\ndi Morphic e l\'inspector,\n non user-friendly',
 
+    'Export summary...':
+        'Esporta sommario...',
+    'open a new browser browser window\n with a summary of this project':
+        'apre una nuova finestra del browser\ncon un sommario del progetto',
+
     // project menu
     'Project notes...':
         'Note di Progetto...',
@@ -859,6 +864,12 @@ SnapTranslator.dict.it = {
         'Supporto per le tabelle',
     'Table lines':
         'Tabelle con linee',
+    'Visible stepping':
+        'Evidenzia esecuzione',
+    'uncheck to turn off\nvisible stepping':
+        'Deseleziona per disattivare la\nevidenziazione dell\'esecuzione',
+    'check to turn on\n visible stepping (slow)':
+        'Seleziona per attivare la\nevidenziazione dell\'esecuzione',
     'check for multi-column\nlist view support':
         'attiva la vista multicolonna',
     'uncheck to disable\nmulti-column list views':
