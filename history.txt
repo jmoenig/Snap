@@ -3130,3 +3130,7 @@ http://snap.berkeley.edu/run#cloud:Username=jens&ProjectName=rotation
 161123
 ------
 * Blocks, Morphic: “Undrop / Redrop” support for sticky comments
+
+161124
+------
+* Morphic, Store: work around a dreaded FF NS_ERROR_FAILURE for supporting retina

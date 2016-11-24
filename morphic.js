@@ -1103,7 +1103,7 @@
 
 /*global window, HTMLCanvasElement, FileReader, Audio, FileList*/
 
-var morphicVersion = '2016-November-23';
+var morphicVersion = '2016-November-24';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = getBlurredShadowSupport(); // check for Chrome-bug
 
@@ -1508,9 +1508,9 @@ function enableRetinaSupport() {
             return this._isRetinaEnabled;
         },
         set: function(enabled) {
-            var prevPixelRatio = getPixelRatio(this);
-            var prevWidth = this.width;
-            var prevHeight = this.height;
+            var prevPixelRatio = getPixelRatio(this),
+                prevWidth = this.width,
+                prevHeight = this.height;
 
             this._isRetinaEnabled = enabled;
             if (getPixelRatio(this) != prevPixelRatio) {
@@ -1526,12 +1526,19 @@ function enableRetinaSupport() {
             return uber.width.get.call(this) / getPixelRatio(this);
         },
         set: function(width) {
-            var pixelRatio = getPixelRatio(this);
-            uber.width.set.call(this, width * pixelRatio);
-            var context = this.getContext('2d');
-            context.restore();
-            context.save();
-            context.scale(pixelRatio, pixelRatio);
+            try { // workaround one of FF's dreaded NS_ERROR_FAILURE bugs
+                // this should be taken out as soon as FF gets fixed again
+                var pixelRatio = getPixelRatio(this),
+                    context;
+                uber.width.set.call(this, width * pixelRatio);
+                context = this.getContext('2d');
+                context.restore();
+                context.save();
+                context.scale(pixelRatio, pixelRatio);
+            } catch (err) {
+                console.log('Retina Display Support Problem', err);
+                uber.width.set.call(this, width);
+            }
         }
     });
 
@@ -1540,9 +1547,10 @@ function enableRetinaSupport() {
             return uber.height.get.call(this) / getPixelRatio(this);
         },
         set: function(height) {
-            var pixelRatio = getPixelRatio(this);
+            var pixelRatio = getPixelRatio(this),
+                context;
             uber.height.set.call(this, height * pixelRatio);
-            var context = this.getContext('2d');
+            context = this.getContext('2d');
             context.restore();
             context.save();
             context.scale(pixelRatio, pixelRatio);
