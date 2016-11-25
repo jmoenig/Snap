@@ -149,7 +149,7 @@ isSnapObject, copy, PushButtonMorph, SpriteIconMorph, Process*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2016-November-24';
+modules.blocks = '2016-November-25';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -5358,6 +5358,7 @@ ScriptsMorph.prototype.init = function (owner) {
     this.noticesTransparentClick = true;
 
     // initialize "undrop" queue
+    this.isAnimating = false;
     this.recordDrop();
 };
 
@@ -5846,30 +5847,38 @@ ScriptsMorph.prototype.addComment = function () {
 };
 
 ScriptsMorph.prototype.undrop = function () {
+    var myself = this;
+    if (this.isAnimating) {return; }
     if (!this.dropRecord || !this.dropRecord.lastRecord) {return; }
     if (!this.dropRecord.situation) {
         this.dropRecord.situation =
             this.dropRecord.lastDroppedBlock.situation();
     }
+    this.isAnimating = true;
     this.dropRecord.lastDroppedBlock.slideBackTo(
         this.dropRecord.lastOrigin,
         null,
-        this.recoverLastDrop()
+        this.recoverLastDrop(),
+        function () {myself.isAnimating = false; }
     );
     this.dropRecord = this.dropRecord.lastRecord;
 };
 
 ScriptsMorph.prototype.redrop = function () {
+    var myself = this;
+    if (this.isAnimating) {return; }
     if (!this.dropRecord || !this.dropRecord.nextRecord) {return; }
     this.dropRecord = this.dropRecord.nextRecord;
     if (this.dropRecord.action === 'delete') {
         this.recoverLastDrop(true);
         this.dropRecord.lastDroppedBlock.destroy();
     } else {
+        this.isAnimating = true;
         this.dropRecord.lastDroppedBlock.slideBackTo(
             this.dropRecord.situation,
             null,
-            this.recoverLastDrop(true)
+            this.recoverLastDrop(true),
+            function () {myself.isAnimating = false; }
         );
     }
 };

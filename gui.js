@@ -68,11 +68,11 @@ fontHeight, hex_sha512, sb, CommentMorph, CommandBlockMorph,
 BlockLabelPlaceHolderMorph, Audio, SpeechBubbleMorph, ScriptFocusMorph,
 XML_Element, WatcherMorph, BlockRemovalDialogMorph, saveAs, TableMorph,
 isSnapObject, isRetinaEnabled, disableRetinaSupport, enableRetinaSupport,
-isRetinaSupported, SliderMorph*/
+isRetinaSupported, SliderMorph, Animation*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2016-November-22';
+modules.gui = '2016-November-25';
 
 // Declarations
 
@@ -1047,16 +1047,16 @@ IDE_Morph.prototype.createPalette = function (forSearching) {
             myself.removeSprite(droppedMorph.object);
         } else if (droppedMorph instanceof CostumeIconMorph) {
             myself.currentSprite.wearCostume(null);
-            droppedMorph.destroy();
+            droppedMorph.perish();
         } else if (droppedMorph instanceof BlockMorph) {
             if (hand && hand.grabOrigin.origin instanceof ScriptsMorph) {
                 hand.grabOrigin.origin.clearDropInfo();
                 hand.grabOrigin.origin.lastDroppedBlock = droppedMorph;
                 hand.grabOrigin.origin.recordDrop(hand.grabOrigin);
             }
-            droppedMorph.destroy();
+            droppedMorph.perish();
         } else {
-            droppedMorph.destroy();
+            droppedMorph.perish();
         }
     };
 
@@ -4391,6 +4391,7 @@ IDE_Morph.prototype.toggleAppMode = function (appMode) {
 IDE_Morph.prototype.toggleStageSize = function (isSmall, forcedRatio) {
     var myself = this,
         smallRatio = forcedRatio || 0.5,
+        msecs = this.isAnimating ? 100 : 0,
         world = this.world(),
         shiftClicked = (world.currentKey === 16),
         altClicked = (world.currentKey === 18);
@@ -4400,25 +4401,23 @@ IDE_Morph.prototype.toggleStageSize = function (isSmall, forcedRatio) {
     }
 
     function zoomTo(targetRatio) {
-        var count = 1,
-            steps = 5;
-        myself.fps = 30;
         myself.isSmallStage = true;
-        myself.step = function () {
-            var diff;
-            if (count >= steps) {
-                myself.stageRatio = targetRatio;
-                delete myself.step;
-                myself.fps = 0;
+        world.animations.push(new Animation(
+            function (ratio) {
+                myself.stageRatio = ratio;
+                myself.setExtent(world.extent());
+            },
+            function () {
+                return myself.stageRatio;
+            },
+            targetRatio - myself.stageRatio,
+            msecs,
+            null, // easing
+            function () {
                 myself.isSmallStage = (targetRatio !== 1);
                 myself.controlBar.stageSizeButton.refresh();
-            } else {
-                count += 1;
-                diff = (targetRatio - myself.stageRatio) / 2;
-                myself.stageRatio += diff;
             }
-            myself.setExtent(world.extent());
-        };
+        ));
     }
 
     if (shiftClicked) {
@@ -4436,39 +4435,29 @@ IDE_Morph.prototype.toggleStageSize = function (isSmall, forcedRatio) {
     } else {
         toggle();
     }
-    if (this.isAnimating) {
-        if (this.isSmallStage) {
-            zoomTo(smallRatio);
-        } else {
-            zoomTo(1);
-        }
+    if (this.isSmallStage) {
+        zoomTo(smallRatio);
     } else {
-        if (this.isSmallStage) {this.stageRatio = smallRatio; }
-        this.setExtent(world.extent());
+        zoomTo(1);
     }
 };
 
 IDE_Morph.prototype.setPaletteWidth = function (newWidth) {
-    var count = 1,
-        steps = this.isAnimating ? 5 : 1,
+    var msecs = this.isAnimating ? 100 : 0,
         world = this.world(),
         myself = this;
 
-    newWidth = Math.max(newWidth, 200);
-    this.fps = 30;
-    this.step = function () {
-        var diff;
-        if (count >= steps) {
+    world.animations.push(new Animation(
+        function (newWidth) {
             myself.paletteWidth = newWidth;
-            delete myself.step;
-            myself.fps = 0;
-        } else {
-            count += 1;
-            diff = (myself.paletteWidth - newWidth) / 2;
-            myself.paletteWidth -= diff;
-        }
-        myself.setExtent(world.extent());
-    };
+            myself.setExtent(world.extent());
+        },
+        function () {
+            return myself.paletteWidth;
+        },
+        newWidth - myself.paletteWidth,
+        msecs
+    ));
 };
 
 IDE_Morph.prototype.createNewProject = function () {
