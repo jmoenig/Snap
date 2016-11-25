@@ -55,7 +55,8 @@
         (7) turtle graphics
         (8) damage list housekeeping
         (9) supporting high-resolution "retina" screens
-        (10) minifying morphic.js
+        (10 animations
+        (11) minifying morphic.js
     VIII. acknowledgements
     IX. contributors
 
@@ -66,6 +67,7 @@
     indentation indicating inheritance. Refer to this list to get a
     contextual overview:
 
+    Animation
     Color
     Node
         Morph
@@ -108,6 +110,7 @@
     Global settings
     Global functions
 
+    Animation
     Color
     Point
     Rectangle
@@ -1035,7 +1038,37 @@
     stage (high-resolution) into a sprite-costume (normal resolution).
 
 
-    (10) minifying morphic.js
+    (10) animations
+    ---------------
+    Animations handle gradual transitions between one state and another over a
+    period of time. Transition effects can be specified using easing functions.
+    An easing function maps a fraction of the transition time to a fraction of
+    the state delta. This way accelerating / decelerating and bouncing sliding
+    effects can be accomplished.
+
+    Animations are generic and not limited to motion, i.e. they can also handle
+    other transitions such as color changes, transparency fadings, growing,
+    shrinking, turning etc.
+
+    Animations need to be stepped by a scheduler, e. g. an interval function.
+    In Morphic the preferred way to run an animation is to register it with
+    the World by adding it to the World's animation queue. The World steps each
+    registered animation once per display cycle independently of the Morphic
+    stepping mechanism.
+
+    For an example how to use animations look at how the Morph's methods
+    
+        glideTo()
+        fadeTo()
+
+    and
+    
+        slideBackTo()
+
+    are implemented.
+
+
+    (11) minifying morphic.js
     -------------------------
     Coming from Smalltalk and being a Squeaker at heart I am a huge fan
     of browsing the code itself to make sense of it. Therefore I have
@@ -1103,7 +1136,7 @@
 
 /*global window, HTMLCanvasElement, FileReader, Audio, FileList*/
 
-var morphicVersion = '2016-November-24';
+var morphicVersion = '2016-November-25';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = getBlurredShadowSupport(); // check for Chrome-bug
 
@@ -1731,6 +1764,95 @@ function normalizeCanvas(aCanvas, getCopy) {
     aCanvas.getContext('2d').drawImage(cpy, 0, 0);
     return aCanvas;
 }
+
+// Animations //////////////////////////////////////////////////////////////
+
+/*
+    Animations handle gradual transitions between one state and another over a
+    period of time. Transition effects can be specified using easing functions.
+    An easing function maps a fraction of the transition time to a fraction of
+    the state delta. This way accelerating / decelerating and bouncing sliding
+    effects can be accomplished.
+
+    Animations are generic and not limited to motion, i.e. they can also handle
+    other transitions such as color changes, transparency fadings, growing,
+    shrinking, turning etc.
+
+    Animations need to be stepped by a scheduler, e. g. an interval function.
+    In Morphic the preferred way to run an animation is to register it with
+    the World by adding it to the World's animation queue. The World steps each
+    registered animation once per display cycle independently of the Morphic
+    stepping mechanism.
+
+    For an example how to use animations look at how the Morph's methods
+    
+        glideTo()
+        fadeTo()
+
+    and
+    
+        slideBackTo()
+
+    are implemented.
+*/
+
+// Animation instance creation:
+
+function Animation(setter, getter, delta, duration, easing, onComplete) {
+    this.setter = setter; // function
+    this.getter = getter; // function
+    this.delta = delta || 0; // number
+    this.duration = duration || 0; // milliseconds
+    this.easing = isString(easing) ? // string or function
+            this.easings[easing] || this.easings.sinusoidal
+                : easing || this.easings.sinusoidal;
+    this.onComplete = onComplete || null; // optional callback
+    this.endTime = null;
+    this.destination = null;
+    this.isActive = false;
+    this.start();
+}
+
+Animation.prototype.easings = {
+    // dictionary of a few pre-defined easing functions used to transgress the
+    //
+    linear: function (t) {return t; },
+    sinusoidal: function (t) {return 1 - Math.cos(radians(t * 90)); },
+    quadratic: function (t) {
+        return t < 0.5 ?
+                2 * t * t
+                    : ((4 - (2 * t)) * t) - 1;
+    },
+    cubic: function (t) {
+        return t < 0.5 ?
+                4 * t * t * t
+                    : ((t - 1) * ((2 * t) - 2) * ((2 * t) - 2)) + 1;
+    }
+};
+
+Animation.prototype.start = function () {
+    // (re-) activate the animation, e.g. if is has previously completed,
+    // make sure to plug it into something that repeatedly triggers step(),
+    // e.g. the World's animations queue
+    this.endTime = Date.now() + this.duration;
+    this.destination = this.getter.call(this) + this.delta;
+    this.isActive = true;
+};
+
+Animation.prototype.step = function () {
+    if (!this.isActive) {return; }
+    var now = Date.now();
+    if (now > this.endTime) {
+        this.setter(this.destination);
+        this.isActive = false;
+        if (this.onComplete) {this.onComplete(); }
+    } else {
+        this.setter(
+            this.destination -
+                (this.delta * this.easing((this.endTime - now) / this.duration))
+        );
+    }
+};
 
 // Colors //////////////////////////////////////////////////////////////
 
@@ -3613,31 +3735,88 @@ Morph.prototype.situation = function () {
     return null;
 };
 
-Morph.prototype.slideBackTo = function (situation, inSteps, onBeforeDrop) {
-    var steps = inSteps || 5,
-        pos = situation.origin.position().add(situation.position),
-        xStep = -(this.left() - pos.x) / steps,
-        yStep = -(this.top() - pos.y) / steps,
-        stepCount = 0,
-        oldStep = this.step,
-        oldFps = this.fps,
+Morph.prototype.slideBackTo = function (
+    situation,
+    msecs,
+    onBeforeDrop,
+    onComplete
+) {
+    var pos = situation.origin.position().add(situation.position),
         myself = this;
-
-    this.fps = 0;
-    this.step = function () {
-        myself.moveBy(new Point(xStep, yStep));
-        stepCount += 1;
-        if (stepCount === steps) {
+    this.glideTo(
+        pos,
+        msecs,
+        null, // easing
+        function () {
             situation.origin.add(myself);
             if (onBeforeDrop) {onBeforeDrop(); }
             if (myself.justDropped) {myself.justDropped(); }
             if (situation.origin.reactToDropOf) {
                 situation.origin.reactToDropOf(myself);
             }
-            myself.step = oldStep;
-            myself.fps = oldFps;
+            if (onComplete) {onComplete(); }
         }
-    };
+    );
+};
+
+// Morph animating:
+
+Morph.prototype.glideTo = function (endPoint, msecs, easing, onComplete) {
+    var world = this.world(),
+        myself = this;
+    world.animations.push(new Animation(
+        function (x) {myself.setLeft(x); },
+        function () {return myself.left(); },
+        -(this.left() - endPoint.x),
+        msecs || 100,
+        easing,
+        onComplete
+    ));
+    world.animations.push(new Animation(
+        function (y) {myself.setTop(y); },
+        function () {return myself.top(); },
+        -(this.top() - endPoint.y),
+        msecs || 100,
+        easing
+    ));
+};
+
+Morph.prototype.fadeTo = function (endAlpha, msecs, easing, onComplete) {
+    // include all my children, restore all original transparencies
+    // on completion, so I can be recovered
+    var world = this.world(),
+        myself = this,
+        oldAlpha = this.alpha;
+    this.children.forEach(function (child) {
+        child.fadeTo(endAlpha, msecs, easing);
+    });
+    world.animations.push(new Animation(
+        function (n) {
+            myself.alpha = n;
+            myself.changed();
+        },
+        function () {return myself.alpha; },
+        endAlpha - this.alpha,
+        msecs || 200,
+        easing,
+        function () {
+            myself.alpha = oldAlpha;
+            if (onComplete) {onComplete(); }
+        }
+    ));
+};
+
+Morph.prototype.perish = function (msecs, onComplete) {
+    var myself = this;
+    this.fadeTo(
+        0,
+        msecs || 100,
+        null,
+        function () {
+            myself.destroy();
+            if (onComplete) {onComplete(); }
+        }
+    );
 };
 
 // Morph utilities:
@@ -10764,6 +10943,7 @@ WorldMorph.prototype.init = function (aCanvas, fillPage) {
     }
     this.isDevMode = false;
     this.broken = [];
+    this.animations = [];
     this.hand = new HandMorph(this);
     this.keyboardReceiver = null;
     this.cursor = null;
@@ -10801,6 +10981,13 @@ WorldMorph.prototype.updateBroken = function () {
     this.broken = [];
 };
 
+WorldMorph.prototype.stepAnimations = function () {
+    this.animations.forEach(function (anim) {anim.step(); });
+    this.animations = this.animations.filter(function (anim) {
+        return anim.isActive;
+    });
+};
+
 WorldMorph.prototype.condenseDamages = function () {
     // collapse clustered damaged rectangles into their unions,
     // thereby reducing the array of brokens to a manageable size
@@ -10831,6 +11018,7 @@ WorldMorph.prototype.condenseDamages = function () {
 
 WorldMorph.prototype.doOneCycle = function () {
     this.stepFrame();
+    this.stepAnimations();
     this.updateBroken();
 };
 
