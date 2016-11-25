@@ -1739,7 +1739,8 @@ IDE_Morph.prototype.droppedText = function (aString, name) {
     var lbl = name ? name.split('.')[0] : '';
     if (aString.indexOf('<project') === 0) {
         location.hash = '';
-        return this.openProjectString(aString);
+        this.openProjectString(aString);
+        return SnapUndo.reset();
     }
     if (aString.indexOf('<snapdata') === 0) {
         location.hash = '';
@@ -3877,7 +3878,6 @@ IDE_Morph.prototype.rawOpenProjectString = function (str) {
         );
     }
     this.stopFastTracking();
-    SnapUndo.reset();
 };
 
 IDE_Morph.prototype.openCloudDataString = function (str) {
@@ -4063,6 +4063,7 @@ IDE_Morph.prototype.openProject = function (name) {
         this.setProjectName(name);
         str = localStorage['-snap-project-' + name];
         this.openProjectString(str);
+        SnapUndo.reset();
         this.setURL('#open:' + str);
     }
 };
@@ -5853,6 +5854,7 @@ ProjectDialogMorph.prototype.openProject = function () {
         // Note "file" is a property of the parseResourceFile function.
         src = this.ide.getURL(this.ide.resourceURL('Examples', proj.file));
         this.ide.openProjectString(src);
+        SnapUndo.reset();
         this.destroy();
     } else { // 'local'
         this.ide.openProject(proj.name);
