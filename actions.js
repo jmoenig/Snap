@@ -934,7 +934,7 @@ ActionManager.prototype.registerBlocks = function(firstBlock, owner) {
         prevBlock;
 
     this.traverse(block, block => {
-        this._registerBlock(block);
+        this._registerBlockState(block);
         this._blockToOwnerId[block.id] = owner.id;
     });
     return firstBlock;
@@ -1820,15 +1820,15 @@ ActionManager.prototype._getCurrentTarget = function(block) {
             target = this.getId(block);
             block.id = id;
             return target;
-        } else {  // CommentMorph
-            return block.block.id;
         }
+    } else if (block instanceof CommentMorph) {
+        return block.block.id;
     }
 
     return null;
 };
 
-ActionManager.prototype._registerBlock = function(block) {
+ActionManager.prototype._registerBlockState = function(block) {
     var scripts,
         standardPosition,
         fieldId,
@@ -1876,6 +1876,12 @@ ActionManager.prototype.loadOwner = function(owner) {
     this.registerOwner(owner, owner.id);
 
     // Load the blocks from scripts
+    owner.scripts.children.forEach(topBlock => {  // id the blocks
+        this.traverse(topBlock, block => {
+            block.id = block.id || this.newId();
+            this._blocks[block.id] = block;
+        });
+    });
     owner.scripts.children.forEach(block => this.registerBlocks(block, owner));
 
     // Load the blocks from custom block definitions
