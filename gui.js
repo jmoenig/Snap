@@ -72,7 +72,7 @@ isRetinaSupported, SliderMorph, Animation*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2016-November-25';
+modules.gui = '2016-November-28';
 
 // Declarations
 
@@ -2038,10 +2038,10 @@ IDE_Morph.prototype.applySavedSettings = function () {
     }
 
     // nested auto-wrapping
-    if (autoWrapping) {
-        ScriptsMorph.prototype.enableNestedAutoWrapping = true;
-    } else {
+    if (autoWrapping === 'false') {
         ScriptsMorph.prototype.enableNestedAutoWrapping = false;
+    } else {
+        ScriptsMorph.prototype.enableNestedAutoWrapping = true;
     }
 
     // plain prototype labels
@@ -2551,9 +2551,9 @@ IDE_Morph.prototype.settingsMenu = function () {
             ScriptsMorph.prototype.enableNestedAutoWrapping =
                 !ScriptsMorph.prototype.enableNestedAutoWrapping;
             if (ScriptsMorph.prototype.enableNestedAutoWrapping) {
-                myself.saveSetting('autowrapping', true);
-            } else {
                 myself.removeSetting('autowrapping');
+            } else {
+                myself.saveSetting('autowrapping', false);
             }
         },
         ScriptsMorph.prototype.enableNestedAutoWrapping,

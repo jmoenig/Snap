@@ -3147,3 +3147,4 @@ http://snap.berkeley.edu/run#cloud:Username=jens&ProjectName=rotation
 * Blocks: added symbols for “turnBack” and “turnForward”
 * Morphic: added support for floating tool bars in scroll frames
 * Blocks: added dynamic “undo” / “redo” buttons to each scripting pane
+* GUI, Blocks: Enable nested auto-wrapping by default

@@ -5328,7 +5328,7 @@ ScriptsMorph.prototype.cleanUpMargin = 20;
 ScriptsMorph.prototype.cleanUpSpacing = 15;
 ScriptsMorph.prototype.isPreferringEmptySlots = true;
 ScriptsMorph.prototype.enableKeyboard = true;
-ScriptsMorph.prototype.enableNestedAutoWrapping = false;
+ScriptsMorph.prototype.enableNestedAutoWrapping = true;
 
 // ScriptsMorph instance creation:
 
