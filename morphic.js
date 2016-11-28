@@ -1136,7 +1136,7 @@
 
 /*global window, HTMLCanvasElement, FileReader, Audio, FileList*/
 
-var morphicVersion = '2016-November-25';
+var morphicVersion = '2016-November-28';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = getBlurredShadowSupport(); // check for Chrome-bug
 
@@ -9677,6 +9677,7 @@ ScrollFrameMorph.prototype.init = function (scroller, size, sliderColor) {
     };
     this.vBar.isDraggable = false;
     this.add(this.vBar);
+    this.toolBar = null; // optional slot
 };
 
 ScrollFrameMorph.prototype.adjustScrollBars = function () {
@@ -9728,6 +9729,17 @@ ScrollFrameMorph.prototype.adjustScrollBars = function () {
         this.vBar.drawNew();
     } else {
         this.vBar.hide();
+    }
+    this.adjustToolBar();
+};
+
+ScrollFrameMorph.prototype.adjustToolBar = function () {
+    var padding = 3;
+    if (this.toolBar) {
+        this.toolBar.setTop(this.top() + padding);
+        this.toolBar.setRight(
+            (this.vBar.isVisible ? this.vBar.left() : this.right()) - padding
+        );
     }
 };
 
