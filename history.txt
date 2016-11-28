@@ -3140,3 +3140,7 @@ http://snap.berkeley.edu/run#cloud:Username=jens&ProjectName=rotation
 ------
 * Morphic: First-class animations
 * Blocks, Objects, GUI: Switch to new animation mechanism, add a few
+
+161125
+------
+* Objects, Blocks: map keyboard shortcut ctr-y to “undrop” (in addition to shift-ctrl-z)

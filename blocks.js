@@ -149,7 +149,7 @@ isSnapObject, copy, PushButtonMorph, SpriteIconMorph, Process*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2016-November-25';
+modules.blocks = '2016-November-28';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -13027,6 +13027,7 @@ ScriptFocusMorph.prototype.reactToKeyEvent = function (key) {
         return this.deleteLastElement();
     case 'ctrl z':
         return this.undrop();
+    case 'ctrl y':
     case 'ctrl shift z':
         return this.redrop();
     case 'ctrl [': // ignore the first press of the Mac cmd key
