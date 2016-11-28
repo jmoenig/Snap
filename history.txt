@@ -3144,3 +3144,4 @@ http://snap.berkeley.edu/run#cloud:Username=jens&ProjectName=rotation
 161125
 ------
 * Objects, Blocks: map keyboard shortcut ctr-y to “undrop” (in addition to shift-ctrl-z)
+* Blocks: added symbols for “turnBack” and “turnForward”

@@ -186,7 +186,7 @@ WorldMorph.prototype.customMorphs = function () {
 /*
     return [
         new SymbolMorph(
-            'stepForward',
+            'turnForward',
             50,
             new Color(250, 250, 250),
             new Point(-1, -1),
@@ -9102,6 +9102,8 @@ SymbolMorph.prototype.names = [
     'pipette',
     'speechBubble',
     'speechBubbleOutline',
+    'turnBack',
+    'turnForward',
     'arrowUp',
     'arrowUpOutline',
     'arrowLeft',
@@ -9258,6 +9260,10 @@ SymbolMorph.prototype.symbolCanvasColored = function (aColor) {
         return this.drawSymbolSpeechBubble(canvas, aColor);
     case 'speechBubbleOutline':
         return this.drawSymbolSpeechBubbleOutline(canvas, aColor);
+    case 'turnBack':
+        return this.drawSymbolTurnBack(canvas, aColor);
+    case 'turnForward':
+        return this.drawSymbolTurnForward(canvas, aColor);
     case 'arrowUp':
         return this.drawSymbolArrowUp(canvas, aColor);
     case 'arrowUpOutline':
@@ -9304,6 +9310,8 @@ SymbolMorph.prototype.symbolWidth = function () {
     case 'cloud':
     case 'cloudGradient':
     case 'cloudOutline':
+    case 'turnBack':
+    case 'turnForward':
         return size * 1.6;
     case 'turnRight':
     case 'turnLeft':
@@ -10169,6 +10177,54 @@ SymbolMorph.prototype.drawSymbolSpeechBubbleOutline = function (
     ctx.quadraticCurveTo(w - l, n * 2, n * 2, n * 2);
     ctx.lineTo(n / 2, h - l);
     ctx.closePath();
+    ctx.stroke();
+    return canvas;
+};
+
+SymbolMorph.prototype.drawSymbolTurnBack = function (canvas, aColor) {
+    var ctx = canvas.getContext('2d'),
+        w = canvas.width,
+        h = canvas.height,
+        w2 = canvas.width / 2,
+        h2 = canvas.height / 2,
+        l = Math.max(w / 20, 0.5);
+
+    ctx.fillStyle = aColor.toString();
+    ctx.lineWidth = l * 2;
+    ctx.beginPath();
+    ctx.moveTo(0, h2);
+    ctx.lineTo(w2, 0);
+    ctx.lineTo(w2, h);
+    ctx.closePath();
+    ctx.fill();
+    ctx.lineWidth = l * 3;
+    ctx.strokeStyle = aColor.toString();
+    ctx.beginPath();
+    ctx.arc(w2, h, h2, radians(0), radians(-90), true);
+    ctx.stroke();
+    return canvas;
+};
+
+SymbolMorph.prototype.drawSymbolTurnForward = function (canvas, aColor) {
+    var ctx = canvas.getContext('2d'),
+        w = canvas.width,
+        h = canvas.height,
+        w2 = canvas.width / 2,
+        h2 = canvas.height / 2,
+        l = Math.max(w / 20, 0.5);
+
+    ctx.fillStyle = aColor.toString();
+    ctx.lineWidth = l * 2;
+    ctx.beginPath();
+    ctx.moveTo(w, h2);
+    ctx.lineTo(w2, 0);
+    ctx.lineTo(w2, h);
+    ctx.closePath();
+    ctx.fill();
+    ctx.lineWidth = l * 3;
+    ctx.strokeStyle = aColor.toString();
+    ctx.beginPath();
+    ctx.arc(w2, h, h2, radians(-180), radians(-90), false);
     ctx.stroke();
     return canvas;
 };
