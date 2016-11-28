@@ -3145,3 +3145,5 @@ http://snap.berkeley.edu/run#cloud:Username=jens&ProjectName=rotation
 ------
 * Objects, Blocks: map keyboard shortcut ctr-y to “undrop” (in addition to shift-ctrl-z)
 * Blocks: added symbols for “turnBack” and “turnForward”
+* Morphic: added support for floating tool bars in scroll frames
+* Blocks: added dynamic “undo” / “redo” buttons to each scripting pane

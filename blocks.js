@@ -145,7 +145,7 @@ radians, useBlurredShadows, SpeechBubbleMorph, modules, StageMorph,
 fontHeight, TableFrameMorph, SpriteMorph, Context, ListWatcherMorph,
 CellMorph, DialogBoxMorph, BlockInputFragmentMorph, PrototypeHatBlockMorph,
 Costume, IDE_Morph, BlockDialogMorph, BlockEditorMorph, localize, isNil,
-isSnapObject, copy, PushButtonMorph, SpriteIconMorph, Process*/
+isSnapObject, copy, PushButtonMorph, SpriteIconMorph, Process, AlignmentMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
@@ -5846,6 +5846,8 @@ ScriptsMorph.prototype.addComment = function () {
     }
 };
 
+// ScriptsMorph undrop / redrop
+
 ScriptsMorph.prototype.undrop = function () {
     var myself = this;
     if (this.isAnimating) {return; }
@@ -5859,7 +5861,10 @@ ScriptsMorph.prototype.undrop = function () {
         this.dropRecord.lastOrigin,
         null,
         this.recoverLastDrop(),
-        function () {myself.isAnimating = false; }
+        function () {
+            myself.updateUndropControls();
+            myself.isAnimating = false;
+        }
     );
     this.dropRecord = this.dropRecord.lastRecord;
 };
@@ -5878,7 +5883,10 @@ ScriptsMorph.prototype.redrop = function () {
             this.dropRecord.situation,
             null,
             this.recoverLastDrop(true),
-            function () {myself.isAnimating = false; }
+            function () {
+                myself.updateUndropControls();
+                myself.isAnimating = false;
+            }
         );
     }
 };
@@ -6035,11 +6043,74 @@ ScriptsMorph.prototype.recordDrop = function (lastGrabOrigin) {
         situation: null,
         lastRecord: this.dropRecord,
         nextRecord: null
-     };
-     if (this.dropRecord) {
+    };
+    if (this.dropRecord) {
         this.dropRecord.nextRecord = record;
-     }
-     this.dropRecord = record;
+    }
+    this.dropRecord = record;
+    this.updateUndropControls();
+};
+
+ScriptsMorph.prototype.addUndropControls = function () {
+    var toolBar = new AlignmentMorph(),
+        shade = (new Color(140, 140, 140));
+    toolBar.undoButton = new PushButtonMorph(
+        this,
+        "undrop",
+        new SymbolMorph("turnBack", 12)
+    );
+    toolBar.redoButton = new PushButtonMorph(
+        this,
+        "redrop",
+        new SymbolMorph("turnForward", 12)
+    );
+    toolBar.undoButton.alpha = 0.2;
+    toolBar.undoButton.hint = 'undo the last\nblock drop\nin this pane';
+    toolBar.undoButton.labelShadowColor = shade;
+    toolBar.undoButton.drawNew();
+    toolBar.undoButton.fixLayout();
+    toolBar.add(toolBar.undoButton);
+
+    toolBar.redoButton.alpha = 0.2;
+    toolBar.redoButton.hint = 'redo the last undone\nblock drop\nin this pane';
+    toolBar.redoButton.labelShadowColor = shade;
+    toolBar.redoButton.drawNew();
+    toolBar.redoButton.fixLayout();
+    toolBar.add(toolBar.redoButton);
+    return toolBar;
+};
+
+ScriptsMorph.prototype.updateUndropControls = function () {
+    var sf = this.parentThatIsA(ScrollFrameMorph);
+    if (!sf) {return; }
+    if (!sf.toolBar) {
+        sf.toolBar = this.addUndropControls();
+        sf.add(sf.toolBar);
+    }
+    if (this.dropRecord) {
+        if (this.dropRecord.lastRecord) {
+            if (!sf.toolBar.undoButton.isVisible) {
+                sf.toolBar.undoButton.show();
+            }
+        } else {
+            if (sf.toolBar.undoButton.isVisible) {
+                sf.toolBar.undoButton.hide();
+            }
+        }
+        if (this.dropRecord.nextRecord) {
+            if (!sf.toolBar.redoButton.isVisible) {
+                sf.toolBar.redoButton.show();
+                sf.toolBar.undoButton.mouseLeave();
+            }
+        } else {
+            if (sf.toolBar.redoButton.isVisible) {
+                sf.toolBar.redoButton.hide();
+            }
+        }
+    }
+    sf.toolBar.drawNew();
+    sf.toolBar.changed();
+    sf.adjustToolBar();
 };
 
 // ScriptsMorph sorting blocks and comments
