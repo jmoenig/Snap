@@ -149,7 +149,7 @@ isSnapObject, copy, PushButtonMorph, SpriteIconMorph, Process, AlignmentMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2016-November-28';
+modules.blocks = '2016-November-29';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -5706,7 +5706,13 @@ ScriptsMorph.prototype.userMenu = function () {
         if (this.dropRecord.lastRecord) {
             hasUndropQueue = true;
             menu.addItem(
-                'undrop',
+                [
+                    new SymbolMorph(
+                        'turnBack',
+                        MorphicPreferences.menuFontSize
+                    ),
+                    'undrop'
+                ],
                 'undrop',
                 'undo the last\nblock drop\nin this pane'
             );
@@ -5714,7 +5720,13 @@ ScriptsMorph.prototype.userMenu = function () {
         if (this.dropRecord.nextRecord) {
             hasUndropQueue = true;
             menu.addItem(
-                'redrop',
+                [
+                    new SymbolMorph(
+                        'turnForward',
+                        MorphicPreferences.menuFontSize
+                    ),
+                    'redrop'
+                ],
                 'redrop',
                 'redo the last undone\nblock drop\nin this pane'
             );
@@ -6065,14 +6077,14 @@ ScriptsMorph.prototype.addUndropControls = function () {
         new SymbolMorph("turnForward", 12)
     );
     toolBar.undoButton.alpha = 0.2;
-    toolBar.undoButton.hint = 'undo the last\nblock drop\nin this pane';
+    // toolBar.undoButton.hint = 'undo the last\nblock drop\nin this pane';
     toolBar.undoButton.labelShadowColor = shade;
     toolBar.undoButton.drawNew();
     toolBar.undoButton.fixLayout();
     toolBar.add(toolBar.undoButton);
 
     toolBar.redoButton.alpha = 0.2;
-    toolBar.redoButton.hint = 'redo the last undone\nblock drop\nin this pane';
+    // toolBar.redoButton.hint = 'redo the last undone\nblock drop\nin this pane';
     toolBar.redoButton.labelShadowColor = shade;
     toolBar.redoButton.drawNew();
     toolBar.redoButton.fixLayout();

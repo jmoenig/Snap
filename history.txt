@@ -3141,10 +3141,14 @@ http://snap.berkeley.edu/run#cloud:Username=jens&ProjectName=rotation
 * Morphic: First-class animations
 * Blocks, Objects, GUI: Switch to new animation mechanism, add a few
 
-161125
+161128
 ------
 * Objects, Blocks: map keyboard shortcut ctr-y to “undrop” (in addition to shift-ctrl-z)
 * Blocks: added symbols for “turnBack” and “turnForward”
 * Morphic: added support for floating tool bars in scroll frames
 * Blocks: added dynamic “undo” / “redo” buttons to each scripting pane
 * GUI, Blocks: Enable nested auto-wrapping by default
+
+161129
+------
+* Blocks: added undo / redo icons to block context menu
