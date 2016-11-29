@@ -5359,6 +5359,7 @@ ScriptsMorph.prototype.init = function (owner) {
 
     // initialize "undrop" queue
     this.isAnimating = false;
+    this.dropRecord = null;
     this.recordDrop();
 };
 
@@ -5690,6 +5691,7 @@ ScriptsMorph.prototype.closestBlock = function (comment, hand) {
 ScriptsMorph.prototype.userMenu = function () {
     var menu = new MenuMorph(this),
         ide = this.parentThatIsA(IDE_Morph),
+        shiftClicked = this.world().currentKey === 16,
         blockEditor,
         myself = this,
         obj = this.owner,
@@ -5732,6 +5734,18 @@ ScriptsMorph.prototype.userMenu = function () {
             );
         }
         if (hasUndropQueue) {
+            if (shiftClicked) {
+                menu.addItem(
+                    "clear undrop queue",
+                    function () {
+                        myself.dropRecord = null;
+                        myself.clearDropInfo();
+                        myself.recordDrop();
+                    },
+                    'forget recorded block drops\non this pane',
+                    new Color(100, 0, 0)
+                );
+            }
             menu.addLine();
         }
     }
@@ -6120,8 +6134,13 @@ ScriptsMorph.prototype.updateUndropControls = function () {
             }
         }
     }
-    sf.toolBar.drawNew();
-    sf.toolBar.changed();
+    if (sf.toolBar.undoButton.isVisible || sf.toolBar.redoButton.isVisible) {
+        sf.toolBar.drawNew();
+        sf.toolBar.changed();
+    } else {
+        sf.removeChild(sf.toolBar);
+        sf.toolBar = null;
+    }
     sf.adjustToolBar();
 };
 
