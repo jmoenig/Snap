@@ -5911,6 +5911,7 @@ ScriptsMorph.prototype.redrop = function () {
     if (this.dropRecord.action === 'delete') {
         this.recoverLastDrop(true);
         this.dropRecord.lastDroppedBlock.destroy();
+        this.updateUndropControls();
     } else {
         this.isAnimating = true;
         this.dropRecord.lastDroppedBlock.slideBackTo(
