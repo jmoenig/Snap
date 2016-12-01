@@ -3153,3 +3153,7 @@ http://snap.berkeley.edu/run#cloud:Username=jens&ProjectName=rotation
 ------
 * Blocks: added undo / redo icons to scripts pane context menu
 * Blocks: added hidden “clear undrop queue” option to scripts pane context menu
+
+161201
+------
+* GUI: fixed #1540
