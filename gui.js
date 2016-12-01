@@ -5534,6 +5534,7 @@ ProjectDialogMorph.prototype.buildFilterField = function () {
         myself.clearDetails();
         myself.listField.buildListContents();
         myself.fixListFieldItemColors();
+        myself.listField.adjustScrollBars();
         myself.listField.scrollY(myself.listField.top());
         myself.fixLayout();
     };
