@@ -515,12 +515,16 @@ ActionManager.prototype._removeBlock = function(block, userDestroy) {
 };
 
 ActionManager.prototype._getBlockState = function(id) {
-    var state;
+    var target = this._targetOf[id],
+        position = this._positionOf[id],
+        state;
 
-    if (this._targetOf[id]) {
+    // Use the last connection unless the last connection was to the
+    // top of a command block and it has a position set
+    if (target && !(target.loc === 'top' && position)) {
         state = [this._targetOf[id]];
-    } else if (this._positionOf[id]) {
-        state = [this._positionOf[id].x, this._positionOf[id].y];
+    } else if (position) {
+        state = [position.x, position.y];
     } else {  // newly created
         state = [];
     }
@@ -677,11 +681,12 @@ ActionManager.prototype._moveBlock = function(block, target) {
     if (isNewBlock) {
         this._idBlocks(block);
     }
-    id = block.id;
     serialized = this.serializeBlock(block, isNewBlock);
 
+    id = target.loc === 'top' ? block.topBlock().id : block.id;
     oldState = this._getBlockState(id);
     args = [serialized, target];
+
     if (isNewBlock) {
         ids = this._getStatementIds(block);
         oldState = [ids];
@@ -1223,6 +1228,11 @@ ActionManager.prototype.onMoveBlock = function(id, rawTarget) {
     if (target instanceof ReporterBlockMorph) {
         delete this._targetOf[target.id];
         this._positionOf[target.id] = this.getStandardPosition(scripts, target.position());
+    }
+
+    if (target.loc === 'top') {
+        var topBlock = block.topBlock();
+        this._positionOf[topBlock.id] = this.getStandardPosition(scripts, topBlock.position());
     }
 
     this.updateCommentsPositions(block);
