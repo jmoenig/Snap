@@ -662,12 +662,15 @@ ActionManager.prototype._moveBlock = function(block, target) {
         id,
         oldState,
         displacedTarget,
+        targetState,
         args;
 
     // If the target is a ReporterBlockMorph, then we are replacing that block.
     // Undo should place that block back into it's current place
     if (target instanceof ReporterBlockMorph) {  // displacing a block
         displacedTarget = [target.id, this._getCurrentTarget(target)];
+    } else if (target.loc === 'top') {
+        targetState = this._getBlockState(target.element.id);
     }
 
     target = this._serializeMoveTarget(block, target);
@@ -689,6 +692,8 @@ ActionManager.prototype._moveBlock = function(block, target) {
 
     if (displacedTarget) {
         args.push(displacedTarget);
+    } else if (targetState) {
+        args.push(targetState);
     }
     return args;
 };

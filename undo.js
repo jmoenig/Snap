@@ -314,15 +314,20 @@ UndoManager.Invert.moveBlock = function(args) {
     //  [id, target, oldState]
     //    or
     //  [id, target, oldState, displacedReporter]
+    //    or
+    //  [id, target, oldState, oldTargetState]  // connecting to 'top' of cmd block
     var revertToOldState = UndoManager.Invert._actionForState.call(null, args[2]),
+        target = args[1],
         event = {
             type: 'batch',
             args: [revertToOldState]
         };
         
 
-    // If a block was displaced, move it back to it's original target
-    if (args.length === 4) {
+    if (target.loc === 'top') {  // top connection - need to revert target to old state!
+        revertToOldState = UndoManager.Invert._actionForState.call(null, args[3]);
+        event.args.unshift(revertToOldState);
+    } else if (args.length === 4) {  // If a block was displaced, move it back to it's original target
         event.args.push({
             type: 'moveBlock',
             args: args[3]
