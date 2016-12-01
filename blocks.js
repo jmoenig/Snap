@@ -9214,7 +9214,8 @@ SymbolMorph.prototype.names = [
     'arrowDownOutline',
     'arrowRight',
     'arrowRightOutline',
-    'robot'
+    'robot',
+    'magnifiyingGlass'
 ];
 
 // SymbolMorph instance creation:
@@ -9384,6 +9385,8 @@ SymbolMorph.prototype.symbolCanvasColored = function (aColor) {
         return this.drawSymbolArrowRightOutline(canvas, aColor);
     case 'robot':
         return this.drawSymbolRobot(canvas, aColor);
+    case 'magnifiyingGlass':
+        return this.drawSymbolMagnifyingGlass(canvas, aColor);
     default:
         return canvas;
     }
@@ -10516,6 +10519,48 @@ SymbolMorph.prototype.drawSymbolRobot = function (canvas, color) {
     ctx.lineTo(n * 4.5, n * 3.5);
     ctx.closePath();
     ctx.fill();
+
+    return canvas;
+};
+
+SymbolMorph.prototype.drawSymbolMagnifyingGlass = function (canvas, color) {
+    // answer a canvas showing a magnifying glass
+    var ctx = canvas.getContext('2d'),
+        gradient,
+        w = canvas.width,
+        h = canvas.height,
+        r = w * 0.3,
+        x = w * 2 / 3 - Math.sqrt(r),
+        y = h / 3 + Math.sqrt(r),
+        l = Math.max(w / 5, 0.5);
+
+    ctx.strokeStyle = color.toString();
+
+    gradient = ctx.createRadialGradient(
+        x,
+        y,
+        0,
+        x + r,
+        y + r,
+        w
+    );
+    
+    gradient.addColorStop(0, color.inverted().lighter(50).toString());
+    gradient.addColorStop(1, color.inverted().darker(25).toString());
+    ctx.fillStyle = gradient;
+    ctx.arc(x, y, r, radians(0), radians(360), false);
+    ctx.fill();
+
+    ctx.lineWidth = l / 2;
+    ctx.arc(x, y, r, radians(0), radians(360), false);
+    ctx.stroke();
+    
+    ctx.lineWidth = l;
+    ctx.beginPath();
+    ctx.moveTo(l / 2, h - l / 2);
+    ctx.lineTo(x - Math.sqrt(r + l), y + Math.sqrt(r + l));
+    ctx.closePath();
+    ctx.stroke();
 
     return canvas;
 };

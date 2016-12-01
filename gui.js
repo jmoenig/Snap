@@ -5212,6 +5212,8 @@ ProjectDialogMorph.prototype.init = function (ide, task) {
     this.handle = null;
     this.srcBar = null;
     this.nameField = null;
+    this.filterField = null;
+    this.magnifiyingGlass = null;
     this.listField = null;
     this.preview = null;
     this.notesText = null;
@@ -5268,6 +5270,7 @@ ProjectDialogMorph.prototype.buildContents = function () {
     this.addSourceButton('cloud', localize('Cloud'), 'cloud');
     this.addSourceButton('local', localize('Browser'), 'storage');
     if (this.task === 'open') {
+        this.buildFilterField();
         this.addSourceButton('examples', localize('Examples'), 'poster');
     }
     this.srcBar.fixLayout();
@@ -5489,6 +5492,53 @@ ProjectDialogMorph.prototype.fixListFieldItemColors = function () {
     });
 };
 
+// ProjectDialogMorph filter field
+
+ProjectDialogMorph.prototype.buildFilterField = function () {
+    var myself = this;
+
+    this.filterField = new InputFieldMorph('');
+    this.magnifiyingGlass =
+        new SymbolMorph(
+            'magnifiyingGlass',
+            this.filterField.height(),
+            this.titleBarColor.darker(50));
+
+    this.body.add(this.magnifiyingGlass);
+    this.body.add(this.filterField);
+
+    this.filterField.reactToKeystroke = function (evt) {
+        var text = this.getValue();
+
+        myself.listField.elements = 
+            myself.projectList.filter(function (aProject) {
+                var name,
+                    notes;
+
+                if (aProject.ProjectName) { // cloud
+                    name = aProject.ProjectName;
+                    notes = aProject.Notes;
+                } else { // local or examples
+                    name = aProject.name;
+                    notes = aProject.notes || '';
+                }
+
+                return name.toLowerCase().indexOf(text.toLowerCase()) > -1 ||
+                    notes.toLowerCase().indexOf(text.toLowerCase()) > -1;
+            });
+
+        if (myself.listField.elements.length === 0) {
+            myself.listField.elements.push('(no matches)')
+        }
+
+        myself.clearDetails();
+        myself.listField.buildListContents();
+        myself.fixListFieldItemColors();
+        myself.listField.scrollY(myself.listField.top());
+        myself.fixLayout();
+    };
+};
+
 // ProjectDialogMorph ops
 
 ProjectDialogMorph.prototype.setSource = function (source) {
@@ -5530,7 +5580,7 @@ ProjectDialogMorph.prototype.setSource = function (source) {
         this.projectList,
         this.projectList.length > 0 ?
                 function (element) {
-                    return element.name;
+                    return element.name || element;
                 } : null,
         null,
         function () {myself.ok(); }
@@ -5648,7 +5698,7 @@ ProjectDialogMorph.prototype.installCloudProjectList = function (pl) {
         this.projectList,
         this.projectList.length > 0 ?
                 function (element) {
-                    return element.ProjectName;
+                    return element.ProjectName || element;
                 } : null,
         [ // format: display shared project names bold
             [
@@ -6004,6 +6054,8 @@ ProjectDialogMorph.prototype.unshareProject = function () {
 ProjectDialogMorph.prototype.edit = function () {
     if (this.nameField) {
         this.nameField.edit();
+    } else if (this.filterField) {
+        this.filterField.edit();
     }
 };
 
@@ -6012,6 +6064,7 @@ ProjectDialogMorph.prototype.edit = function () {
 ProjectDialogMorph.prototype.fixLayout = function () {
     var th = fontHeight(this.titleFontSize) + this.titlePadding * 2,
         thin = this.padding / 2,
+        inputField = this.nameField || this.filterField;
         oldFlag = Morph.prototype.trackChanges;
 
     Morph.prototype.trackChanges = false;
@@ -6030,14 +6083,13 @@ ProjectDialogMorph.prototype.fixLayout = function () {
             this.height() - this.padding * 3 - th - this.buttons.height()
         ));
         this.srcBar.setPosition(this.body.position());
-        if (this.nameField) {
-            this.nameField.setWidth(
+
+        inputField.setWidth(
                 this.body.width() - this.srcBar.width() - this.padding * 6
             );
-            this.nameField.setLeft(this.srcBar.right() + this.padding * 3);
-            this.nameField.setTop(this.srcBar.top());
-            this.nameField.drawNew();
-        }
+        inputField.setLeft(this.srcBar.right() + this.padding * 3);
+        inputField.setTop(this.srcBar.top());
+        inputField.drawNew();
 
         this.listField.setLeft(this.srcBar.right() + this.padding);
         this.listField.setWidth(
@@ -6049,22 +6101,18 @@ ProjectDialogMorph.prototype.fixLayout = function () {
         );
         this.listField.contents.children[0].adjustWidths();
 
-        if (this.nameField) {
-            this.listField.setTop(this.nameField.bottom() + this.padding);
-            this.listField.setHeight(
-                this.body.height() - this.nameField.height() - this.padding
-            );
-        } else {
-            this.listField.setTop(this.body.top());
-            this.listField.setHeight(this.body.height());
+        this.listField.setTop(inputField.bottom() + this.padding);
+        this.listField.setHeight(
+            this.body.height() - inputField.height() - this.padding
+        );
+
+        if (this.magnifiyingGlass) {
+            this.magnifiyingGlass.setTop(inputField.top());
+            this.magnifiyingGlass.setLeft(this.listField.left());
         }
 
         this.preview.setRight(this.body.right());
-        if (this.nameField) {
-            this.preview.setTop(this.nameField.bottom() + this.padding);
-        } else {
-            this.preview.setTop(this.body.top());
-        }
+        this.preview.setTop(inputField.bottom() + this.padding);
 
         this.notesField.setTop(this.preview.bottom() + thin);
         this.notesField.setLeft(this.preview.left());
