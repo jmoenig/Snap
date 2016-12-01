@@ -142,45 +142,129 @@ ActionManager.prototype.initializeRecords = function() {
     this._blockToOwnerId = {};
 };
 
-ActionManager.prototype.collaborate = function() {
-    var url = 'ws://' + window.location.host,
-        ws = new WebSocket(url),
-        self = this;
+ActionManager.prototype.enableCollaboration = function() {
+    var url = 'ws://' + window.location.host;
 
-    ws.onopen = function() {
+    if (this.supportsCollaboration === false) {
+        // Display error message
+        this.ide().showMessage('Collaboration not supported');
+    }
+    this._ws = new WebSocket(url);
+    this._enableCollaboration();
+};
+
+ActionManager.RECONNECT_INTERVAL = 1500;
+ActionManager.prototype._enableCollaboration = function() {
+    var self = this;
+
+    if (this._ws.readyState > WebSocket.OPEN) {  // closed or closing
+        this._ws = new WebSocket(url);
+    }
+
+    this._ws.onopen = function() {
         logger.debug('websocket connected!');
         self.isLeader = false;
+        self.supportsCollaboration = true;
     };
 
-    ws.onclose = function() {
+    this._ws.onclose = function() {
         self.isLeader = true;
+        if (self.supportsCollaboration !== true) {
+            self.supportsCollaboration = false;
+        }
+        if (self._ws) {  // network failure or something. Try to reconnect
+            self.reconnectId = setTimeout(self._enableCollaboration.bind(self), ActionManager.RECONNECT_INTERVAL);
+        }
     };
 
-    ws.onmessage = function(raw) {
+    this._ws.onmessage = function(raw) {
         var msg = JSON.parse(raw.data);
 
         if (msg.type === 'rank') {
             self.rank = msg.value;
-            self.id = 'client_' + self.rank;
             logger.info('assigned rank of', self.rank);
         } else if (msg.type === 'leader-appoint') {
             self.isLeader = true;
             logger.info('Appointed leader!');
+        } else if (msg.type === 'uuid') {
+            self.id = msg.value;
+            logger.info('assigned id of', self.id);
+            if (self.onconnect) {
+                self.onconnect();
+            }
+        } else if (msg.type === 'session-project-request') {
+            // Return the serialized project
+            var str = self.serializer.serialize(self.ide().stage);
+            msg.project = str;
+            self._ws.send(JSON.stringify(msg));
+        } else if (msg.type === 'session-project') {
+            // Load the given project
+            self.ide().openProjectString(msg.project);
+        } else if (msg.type === 'session-id') {
+            self.sessionId = msg.value;
+            location.hash = 'collaborate=' + self.sessionId;
         } else {  // block action
             self.onMessage(msg);
         }
     };
-    this._ws = ws;
+};
+
+ActionManager.prototype.disableCollaboration = function() {
+    var ws = this._ws;
+
+    if (this.isCollaborating()) {
+        this._ws = null;
+        ws.close();
+        if (this.reconnectId) {
+            clearTimeout(this.reconnectId);
+        }
+        if (location.hash.indexOf('collaborate') !== -1) {
+            location.hash = '';
+        }
+    }
+};
+
+ActionManager.prototype.isCollaborating = function() {
+    return this._ws !== null;
 };
 
 ActionManager.prototype.initialize = function() {
     this.serializer = new SnapSerializer();
     this._ws = null;
+    this.supportsCollaboration = null;
     this.isLeader = true;
 
     this.initializeRecords();
     this.initializeEventMethods();
-    this.collaborate();
+};
+
+ActionManager.prototype.joinSession = function(sessionId, error) {
+    if (!SnapActions.id) {
+        this.onconnect = this._joinSession.bind(this, sessionId, error);
+    } else {
+        this._joinSession(sessionId, error);
+    }
+};
+
+ActionManager.prototype._joinSession = function(sessionId, error) {
+    var request = new XMLHttpRequest();
+    request.open(
+        'POST',
+        window.location.origin + '/collaboration/join'
+            + '?id=' + encodeURIComponent(SnapActions.id)
+            + '&sessionId=' + encodeURIComponent(sessionId),
+        true
+    );
+    request.withCredentials = true;
+    request.onreadystatechange = function () {
+        if (request.readyState === 4) {
+            if (request.responseText.indexOf('ERROR') === 0) {
+                return error(request.responseText, 'Collaborate');
+            }
+        }
+    };
+    request.send();
+    this.onconnect = null;
 };
 
 function Action(manager, event) {

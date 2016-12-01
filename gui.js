@@ -274,6 +274,7 @@ IDE_Morph.prototype.openIn = function (world) {
     }
 
     this.buildPanes();
+    SnapActions.disableCollaboration();
     SnapActions.loadProject(this);
     SnapUndo.reset();
     world.add(this);
@@ -461,6 +462,11 @@ IDE_Morph.prototype.openIn = function (world) {
             this.loadNewProject = true;
         } else if (location.hash.substr(0, 7) === '#signup') {
             this.createCloudAccount();
+        } else if (location.hash.substr(0, 12) === '#collaborate') {
+            var sessionId = location.hash.substr(13);
+            // Get the session id and join it!
+            SnapActions.enableCollaboration();
+            SnapActions.joinSession(sessionId, this.cloudError());
         }
     }
 
@@ -1739,6 +1745,7 @@ IDE_Morph.prototype.droppedText = function (aString, name) {
     var lbl = name ? name.split('.')[0] : '';
     if (aString.indexOf('<project') === 0) {
         location.hash = '';
+        SnapActions.disableCollaboration();
         this.openProjectString(aString);
         return SnapUndo.reset();
     }
@@ -2221,13 +2228,13 @@ IDE_Morph.prototype.cloudMenu = function () {
             'Reset Password...',
             'resetCloudPassword'
         );
-        /*
-        menu.addLine();
-        menu.addItem(
-            'Collaborate...',
-            'promptCollaboration'
-        );
-        */
+        if (SnapActions.isCollaborating() && SnapActions.sessionId) {
+            menu.addLine();
+            menu.addItem(
+                'Collaboration url...',
+                'promptCollaboration'
+            );
+        }
     } else {
         menu.addItem(
             localize('Logout') + ' ' + SnapCloud.username,
@@ -2627,6 +2634,22 @@ IDE_Morph.prototype.settingsMenu = function () {
         'check to turn on\n visible stepping (slow)',
         false
     );
+    if (SnapActions.supportsCollaboration !== false) {
+        addPreference(
+            'Collaborative editing',
+            function() {
+                if (SnapActions.isCollaborating()) {
+                    SnapActions.disableCollaboration();
+                } else {
+                    SnapActions.enableCollaboration();
+                }
+            },
+            SnapActions.isCollaborating(),
+            'uncheck to disable Google Docs-style collaboration',
+            'check to enable Google Docs-style collaboration',
+            false
+        );
+    }
     menu.addLine(); // everything below this line is stored in the project
     addPreference(
         'Thread safe scripts',
@@ -3359,6 +3382,7 @@ IDE_Morph.prototype.newProject = function () {
     this.createCorral();
     this.selectSprite(this.stage.children[0]);
     this.fixLayout();
+    SnapActions.disableCollaboration();
     SnapActions.loadProject(this);
     SnapUndo.reset();
 };
@@ -3907,6 +3931,7 @@ IDE_Morph.prototype.rawOpenCloudDataString = function (str) {
     StageMorph.prototype.enableInheritance = false;
     StageMorph.prototype.enableSublistIDs = false;
     Process.prototype.enableLiveCoding = false;
+    SnapActions.disableCollaboration();
     if (Process.prototype.isCatchingErrors) {
         try {
             model = this.serializer.parse(str);
@@ -4062,6 +4087,7 @@ IDE_Morph.prototype.openProject = function (name) {
         this.showMessage('opening project\n' + name);
         this.setProjectName(name);
         str = localStorage['-snap-project-' + name];
+        SnapActions.disableCollaboration();
         this.openProjectString(str);
         SnapUndo.reset();
         this.setURL('#open:' + str);
@@ -4894,45 +4920,23 @@ IDE_Morph.prototype.createCloudAccount = function () {
 };
 
 IDE_Morph.prototype.promptCollaboration = function () {
-    // Provide a key for collaborating
-    // TODO
-    // Or enter a key to join an existing session
-    // TODO
     var dialog = new DialogBoxMorph().withKey('promptCollab'),
         frame = new AlignmentMorph('column', 10),
-        fieldLabel = new TextMorph(localize('Enter a passcode to join an existing project:')),
-        passcodeLabel = new TextMorph(localize('Or share the following passcode with users that \nyou\'d like to join you on this project:')),
-        defaultPasscodeContent = localize('enter passcode here...'),
-        passcodeField = new InputFieldMorph(defaultPasscodeContent),
-        shareCode = localize('EXAMPLE_PASSCODE'),
+        passcodeLabel = new TextMorph(localize('Share the following url with any collaborators:')),
+        hash,
         ok = dialog.ok,
         myself = this,
         size = 250,
+        passCode = SnapActions.sessionId,
         world = this.world();
 
-    fieldLabel.setPosition(frame.topLeft().add(frame.padding));
-    passcodeField.setWidth(200);
+    hash = 'collaborate=' + passCode;
+    shareCode = window.location.origin + '#' + hash,
+    location.hash = hash;
 
-    frame.add(fieldLabel);
-    frame.add(passcodeField);
     frame.add(passcodeLabel);
     frame.add(new TextMorph(shareCode));
 
-    fieldLabel.drawNew();
-    passcodeField.drawNew();
-
-    dialog.ok = function () {
-        var passcode = passcodeField.contents().text.text;
-
-        // If the passcode is set, try to join the given group
-        if (passcode && passcode !== defaultPasscodeContent) {
-            // TODO: Try to join the given group
-            console.log('trying to join group:', passcode);
-        }
-        ok.call(this);
-    };
-
-    // TODO: 'enter' should trigger the 'ok' command
     dialog.labelString = 'Collaboration';
     dialog.createLabel();
 
@@ -5853,6 +5857,7 @@ ProjectDialogMorph.prototype.openProject = function () {
     } else if (this.source === 'examples') {
         // Note "file" is a property of the parseResourceFile function.
         src = this.ide.getURL(this.ide.resourceURL('Examples', proj.file));
+        SnapActions.disableCollaboration();
         this.ide.openProjectString(src);
         SnapUndo.reset();
         this.destroy();
