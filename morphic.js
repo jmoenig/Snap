@@ -1136,7 +1136,7 @@
 
 /*global window, HTMLCanvasElement, FileReader, Audio, FileList*/
 
-var morphicVersion = '2016-November-28';
+var morphicVersion = '2016-December-01';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = getBlurredShadowSupport(); // check for Chrome-bug
 
@@ -2024,7 +2024,7 @@ Color.prototype.inverted = function () {
         255 - this.g,
         255 - this.b
     );
-}
+};
 
 // Points //////////////////////////////////////////////////////////////
 

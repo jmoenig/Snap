@@ -3157,3 +3157,4 @@ http://snap.berkeley.edu/run#cloud:Username=jens&ProjectName=rotation
 161201
 ------
 * GUI: fixed #1540
+* Morphic, Blocks, GUI: Filter Project Names in the “open” dialog, thanks, Bernat!!

@@ -5528,7 +5528,7 @@ ProjectDialogMorph.prototype.buildFilterField = function () {
             });
 
         if (myself.listField.elements.length === 0) {
-            myself.listField.elements.push('(no matches)')
+            myself.listField.elements.push('(no matches)');
         }
 
         myself.clearDetails();
@@ -6064,7 +6064,7 @@ ProjectDialogMorph.prototype.edit = function () {
 ProjectDialogMorph.prototype.fixLayout = function () {
     var th = fontHeight(this.titleFontSize) + this.titlePadding * 2,
         thin = this.padding / 2,
-        inputField = this.nameField || this.filterField;
+        inputField = this.nameField || this.filterField,
         oldFlag = Morph.prototype.trackChanges;
 
     Morph.prototype.trackChanges = false;
