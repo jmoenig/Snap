@@ -3967,6 +3967,7 @@ CommandBlockMorph.prototype.userDestroy = function () {
     }
 
     var scripts = this.parentThatIsA(ScriptsMorph),
+        parent = this.parentThatIsA(SyntaxElementMorph),
         cslot = this.parentThatIsA(CSlotMorph);
 
     // for undrop / redrop
@@ -3981,6 +3982,9 @@ CommandBlockMorph.prototype.userDestroy = function () {
     if (cslot) {
         cslot.fixLayout();
     }
+    if (parent) {
+        parent.reactToGrabOf(this); // fix highlight
+    }
 };
 
 CommandBlockMorph.prototype.userDestroyJustThis = function () {
@@ -3990,6 +3994,7 @@ CommandBlockMorph.prototype.userDestroyJustThis = function () {
         pb,
         nb = this.nextBlock(),
         above,
+        parent = this.parentThatIsA(SyntaxElementMorph),
         cslot = this.parentThatIsA(CSlotMorph);
 
     // for undrop / redrop
@@ -4021,6 +4026,9 @@ CommandBlockMorph.prototype.userDestroyJustThis = function () {
         }
     } else if (cslot) {
         cslot.fixLayout();
+    }
+    if (parent) {
+        parent.reactToGrabOf(this); // fix highlight
     }
 };
 
