@@ -1244,6 +1244,10 @@ ActionManager.prototype.onMoveBlock = function(id, rawTarget) {
             target.element = this.getBlockFromId(target.element);
         }
         scripts = target.element.parentThatIsA(ScriptsMorph);
+        if (target.loc === 'bottom' && block.parent) {
+            block.parent.removeChild(block);
+            scripts.add(block);
+        }
     } else if (block instanceof ReporterBlockMorph || block instanceof CommentMorph) {
         target = this.getBlockFromId(target);
         scripts = target.parentThatIsA(ScriptsMorph);
