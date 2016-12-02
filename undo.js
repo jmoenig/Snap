@@ -311,23 +311,27 @@ UndoManager.swap = function(array, x, y) {
 
 UndoManager.Invert.moveBlock = function(args) {
     // args are either:
-    //  [id, target, oldState]
+    //  [id, target, spliceEvent|null, oldState]
     //    or
-    //  [id, target, oldState, displacedReporter]
+    //  [id, target, null, oldState, displacedReporter]
     //    or
-    //  [id, target, oldState, oldTargetState]  // connecting to 'top' of cmd block
-    var revertToOldState = UndoManager.Invert._actionForState.call(null, args[2]),
+    //  [id, target, spliceEvent|null, oldState, oldTargetState]  // connecting to 'top' of cmd block
+    var revertToOldState = UndoManager.Invert._actionForState.call(null, args[3]),
         target = args[1],
+        spliceEvent = args[2],
         event = {
             type: 'batch',
             args: [revertToOldState]
         };
         
 
+    if (spliceEvent) {
+        event.args.unshift(spliceEvent);
+    }
     if (target.loc === 'top') {  // top connection - need to revert target to old state!
-        revertToOldState = UndoManager.Invert._actionForState.call(null, args[3]);
+        revertToOldState = UndoManager.Invert._actionForState.call(null, args[4]);
         event.args.unshift(revertToOldState);
-    } else if (args.length === 4) {  // If a block was displaced, move it back to it's original target
+    } else if (args.length > 4) {  // If a block was displaced, move it back to it's original target
         event.args.push({
             type: 'moveBlock',
             args: args[3]

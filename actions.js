@@ -658,15 +658,54 @@ ActionManager.prototype._serializeMoveTarget = function(block, target) {
     return target;
 };
 
+ActionManager.prototype._getSpliceEvent = function(target) {
+    // Create the move event for reconnecting the target element to the current
+    // occupant
+    var topBlock,
+        bottomBlock,
+        target;
+
+    if (target.element instanceof CommandBlockMorph) {
+        if (target.loc === 'top') {
+            topBlock = target.element.parent instanceof CommandBlockMorph ?
+                target.element.parent : null;
+            bottomBlock = target.element;
+        } else if (target.loc === 'bottom') {
+            topBlock = target.element;
+            bottomBlock = target.element.nextBlock() ?
+                target.element.nextBlock() : null;
+        }
+    }
+
+    if (topBlock && bottomBlock) {  // splice!
+        target = {
+            type: 'block',
+            loc: 'bottom',
+            element: topBlock.id,
+            point: topBlock.bottomAttachPoint()
+        };
+        return {
+            type: 'moveBlock',
+            args: [
+                bottomBlock.id,
+                target
+            ]
+        };
+    }
+    return null;
+};
+
 ActionManager.prototype._moveBlock = function(block, target) {
     var isNewBlock = !block.id,
         position,
         serialized,
         ids,
+        spliceEvent,
         id,
         oldState,
         displacedTarget,
         targetState,
+        isSplicing = false,
         args;
 
     // If the target is a ReporterBlockMorph, then we are replacing that block.
@@ -677,15 +716,21 @@ ActionManager.prototype._moveBlock = function(block, target) {
         targetState = this._getBlockState(target.element.id);
     }
 
+    // Check if "splicing" (ie, target connection is occupied on cmd block)
+    spliceEvent = this._getSpliceEvent(target);
+
+    // Get the basic required args for moving a block
     target = this._serializeMoveTarget(block, target);
     if (isNewBlock) {
         this._idBlocks(block);
     }
     serialized = this.serializeBlock(block, isNewBlock);
+    args = [serialized, target];
 
+    // Record the old state (for undo support)
+    args.push(spliceEvent);
     id = target.loc === 'top' ? block.topBlock().id : block.id;
     oldState = this._getBlockState(id);
-    args = [serialized, target];
 
     if (isNewBlock) {
         ids = this._getStatementIds(block);
