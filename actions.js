@@ -148,14 +148,13 @@ ActionManager.prototype.initializeRecords = function() {
     this._blockToOwnerId = {};
 };
 
+ActionManager.URL = 'ws://' + window.location.host;
 ActionManager.prototype.enableCollaboration = function() {
-    var url = 'ws://' + window.location.host;
-
     if (this.supportsCollaboration === false) {
         // Display error message
         this.ide().showMessage('Collaboration not supported');
     }
-    this._ws = new WebSocket(url);
+    this._ws = new WebSocket(ActionManager.URL);
     this._enableCollaboration();
 };
 
@@ -164,7 +163,7 @@ ActionManager.prototype._enableCollaboration = function() {
     var self = this;
 
     if (this._ws.readyState > WebSocket.OPEN) {  // closed or closing
-        this._ws = new WebSocket(url);
+        this._ws = new WebSocket(ActionManager.URL);
     }
 
     this._ws.onopen = function() {

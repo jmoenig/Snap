@@ -1738,7 +1738,6 @@ SpriteMorph.prototype.blockTemplates = function (category) {
     }
 
     function addVar(pair) {
-        var ide;
         if (pair) {
             if (myself.isVariableNameInUse(pair[0], pair[1])) {
                 myself.inform('that name is already in use');
@@ -5813,7 +5812,6 @@ StageMorph.prototype.blockTemplates = function (category) {
                 myself.inform('that name is already in use');
             } else {
                 SnapActions.addVariable(pair[0], pair[1] || myself.id);
-                //myself.addVariable(pair[0], pair[1]);
             }
         }
     }
