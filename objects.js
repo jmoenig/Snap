@@ -5641,10 +5641,10 @@ StageMorph.prototype.fireKeyEvent = function (key) {
         return;
     }
     if (evt === 'ctrl z') {
-        SnapUndo.undo();
+        SnapUndo.undo(ide.currentSprite);
     }
     if (evt === 'ctrl y') {
-        SnapUndo.redo();
+        SnapUndo.redo(ide.currentSprite);
     }
     if (evt === 'esc') {
         return this.fireStopAllEvent();

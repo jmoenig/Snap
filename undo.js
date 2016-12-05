@@ -3,70 +3,90 @@ function UndoManager() {
 }
 
 UndoManager.prototype.reset = function() {
-    this.eventHistory = [];
     this.allEvents = [];  // includes undo/redo events
-    this.undoCount = 0;
+
+    this.eventHistory = {};
+    this.undoCount = {};
 };
 
 // Constants
 UndoManager.UNDO = 1;
 UndoManager.REDO = 2;
-// Need to:
-//  - record events in the history
-//  - be able to undo/redo
-//    - map the event to it's undo/redo
+
 UndoManager.prototype.record = function(event) {
-    if (!event.replayType) {
-        if (this.undoCount !== 0) {
-            var currentIndex = this.eventHistory.length - this.undoCount - 1;
-            var forgotten = this.eventHistory.splice(currentIndex + 1, this.undoCount);
-            this.undoCount = 0;  // forget any available redos
-        }
-        this.eventHistory.push(event);
-    } else if (event.replayType === UndoManager.UNDO) {
-        this.undoCount++;
-    } else if (event.replayType === UndoManager.REDO) {
-        this.undoCount--;
-        console.assert(this.undoCount >= 0, 'undo count is negative!');
-    }
+    var ownerId = event.owner,
+        undoCount,
+        eventHistory;
+
     this.allEvents.push(event);
+    if (ownerId) {  // only record undo events w/ an ownerId
+        if (!this.eventHistory[ownerId]) {
+            this.undoCount[ownerId] = 0;
+            this.eventHistory[ownerId] = [];
+        }
+        undoCount = this.undoCount[ownerId];
+        eventHistory = this.eventHistory[ownerId];
+
+        if (!event.replayType) {
+            if (undoCount !== 0) {
+                var currentIndex = eventHistory.length - undoCount - 1;
+                var forgotten = this.eventHistory[ownerId].splice(currentIndex + 1, undoCount);
+                this.undoCount[ownerId] = 0;  // forget any available redos
+            }
+            eventHistory.push(event);
+        } else if (event.replayType === UndoManager.UNDO) {
+            this.undoCount[ownerId]++;
+        } else if (event.replayType === UndoManager.REDO) {
+            this.undoCount[ownerId]--;
+            console.assert(this.undoCount[ownerId] >= 0, 'undo count is negative!');
+        }
+    }
 };
 
-UndoManager.prototype.canUndo = function() {
-    return this.eventHistory.length > this.undoCount;
+UndoManager.prototype.canUndo = function(owner) {
+    var ownerId = owner.id || owner;
+    return this.eventHistory[ownerId] &&
+        this.eventHistory[ownerId].length > this.undoCount[ownerId];
 };
 
-UndoManager.prototype.canRedo = function() {
-    return this.undoCount > 0;
+UndoManager.prototype.canRedo = function(owner) {
+    var ownerId = owner.id || owner;
+    return this.eventHistory[ownerId] && this.undoCount[ownerId] > 0;
 };
 
-UndoManager.prototype.undo = function() {
-    var index = this.eventHistory.length - this.undoCount - 1,
-        origEvent = this.eventHistory[index],
+UndoManager.prototype.undo = function(owner) {
+    var ownerId = owner.id || owner,
+        eventHistory = this.eventHistory[ownerId] || [],
+        index = eventHistory.length - this.undoCount[ownerId] - 1,
+        origEvent = eventHistory[index],
         event;
 
-    if (index < 0) {
+    if (index < 0 || isNaN(index)) {
         return false;
     }
 
     console.log('undoing', origEvent);
     event = this.getInverseEvent(origEvent);
     event.replayType = UndoManager.UNDO;
+    event.owner = origEvent.owner;
 
     SnapActions.applyEvent(event);
     return true;
 };
 
-UndoManager.prototype.redo = function() {
-    var index = this.eventHistory.length - this.undoCount,
-        origEvent = this.eventHistory[index],
+UndoManager.prototype.redo = function(owner) {
+    var ownerId = owner.id || owner,
+        eventHistory = this.eventHistory[ownerId] || [],
+        index = eventHistory.length - this.undoCount[ownerId],
+        origEvent = eventHistory[index],
         event;
 
-    if (index >= this.eventHistory.length) {
+    if (index >= eventHistory.length) {
         return false;
     }
 
     event = {
+        owner: origEvent.owner,
         type: origEvent.type,
         args: origEvent.args.slice()
     };

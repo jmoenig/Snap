@@ -1548,6 +1548,30 @@ IDE_Morph.prototype.createCorral = function () {
         myself.createCorral();
         myself.fixLayout();
     };
+
+    this.corral.userMenu = function() {
+        var menu = new MenuMorph(this),
+            action,
+            sprites,
+            deletedSprite,
+            len;
+
+        if (SnapUndo.canUndo('corral')) {
+            // get the deleted sprite's name
+            len = SnapUndo.eventHistory.corral.length;
+            action = SnapUndo.eventHistory.corral[len-1];
+            deletedSprite = myself.serializer.parse(action.args[1])
+                .childrenNamed('sprite')[0];
+
+            menu.addItem(
+                'restore ' + deletedSprite.attributes.name,
+                function() {
+                    SnapUndo.undo('corral');
+                }
+            );
+        }
+        return menu;
+    };
 };
 
 // IDE_Morph layout
@@ -2771,7 +2795,7 @@ IDE_Morph.prototype.projectMenu = function () {
             localize('Replay events from file'),
             function() {
                 var inp = document.createElement('input');
-                if (SnapUndo.canUndo()) {
+                if (SnapUndo.allEvents.length) {
                     return this.showMessage('events can only be replayed on empty project');
                 }
 

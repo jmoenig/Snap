@@ -36,6 +36,7 @@ ActionManager.prototype.addActions = function() {
         myself[method] = function() {
             var args = Array.prototype.slice.apply(arguments),
                 fn = '_' + method,
+                ownerId = this.ide().stage.id,
                 result,
                 msg;
 
@@ -44,9 +45,15 @@ ActionManager.prototype.addActions = function() {
             }
 
             msg = {
+                owner: ownerId,
                 type: method,
                 args: args
             };
+
+            if (ActionManager.OwnerFor[method]) {
+                ownerId = ActionManager.OwnerFor[method].apply(this, msg.args);
+                msg.owner = ownerId;
+            }
 
             return this.applyEvent(msg);
         };
@@ -2116,7 +2123,6 @@ ActionManager.prototype.getBlockInputs = function(block) {
     return allInputs;
 };
 
-/* * * * * * * * * * * * On Remote Events * * * * * * * * * * * */
 ActionManager.prototype.onMessage = function(msg) {
     var method = this._getMethodFor(msg.type),
         accepted = true;
@@ -2130,6 +2136,108 @@ ActionManager.prototype.onMessage = function(msg) {
     } else {
         this._applyEvent(msg);
     }
+};
+
+/* * * * * * * * * * * * OwnerFor * * * * * * * * * * * */
+ActionManager.OwnerFor = {};
+
+ActionManager.OwnerFor.toggleBoolean =
+ActionManager.OwnerFor.setColorField =
+ActionManager.OwnerFor.setField =
+
+ActionManager.OwnerFor.addListInput =
+ActionManager.OwnerFor.unringify =
+
+ActionManager.OwnerFor.ringify =
+ActionManager.OwnerFor.unringify =
+
+ActionManager.OwnerFor.setCommentText =
+ActionManager.OwnerFor.setSelector =
+ActionManager.OwnerFor.setBlockSpec =
+
+ActionManager.OwnerFor.removeBlock =
+ActionManager.OwnerFor.setBlockPosition = function(blockOrInputId) {
+    var blockId = blockOrInputId.split('/').shift();
+    return this._blockToOwnerId[blockId];
+};
+
+ActionManager.OwnerFor.replaceBlock = function(block) {
+    block = this.deserializeBlock(block);
+    return this._blockToOwnerId[block.id];
+};
+
+// Actions where owner is first arg:
+ActionManager.OwnerFor.renameSprite =
+ActionManager.OwnerFor.toggleDraggable =
+ActionManager.OwnerFor.setRotationStyle =
+ActionManager.OwnerFor.addCustomBlock = function(ownerId) {
+    return ownerId;
+};
+
+ActionManager.OwnerFor.addVariable =
+ActionManager.OwnerFor.deleteVariable = function() {
+    // Can I do this for everything?
+    return this.ide().currentSprite.id;
+};
+
+// Actions where owner is second arg:
+ActionManager.OwnerFor.addSound =
+ActionManager.OwnerFor.addCostume =
+
+ActionManager.OwnerFor.deleteCustomBlock =
+ActionManager.OwnerFor.addBlock = function(block, ownerId) {
+    return ownerId;
+};
+
+// Actions where owner is third arg:
+ActionManager.OwnerFor.removeCostume =
+ActionManager.OwnerFor.removeSound = function() {
+    return arguments[2];
+};
+
+ActionManager.OwnerFor.renameSound = function(soundId) {
+    return this._soundToOwner[soundId].id;
+};
+
+ActionManager.OwnerFor.updateCostume =
+ActionManager.OwnerFor.renameCostume = function(costumeId) {
+    return this._costumeToOwner[costumeId].id;
+};
+
+ActionManager.OwnerFor.removeBlocks =
+ActionManager.OwnerFor.setBlocksPositions = function(ids) {
+    if (ids.length) {
+        return this._blockToOwnerId[ids[0]];
+    }
+};
+
+ActionManager.OwnerFor.updateBlockLabel =
+ActionManager.OwnerFor.deleteBlockLabel =
+ActionManager.OwnerFor.setCustomBlockType = function(id) {
+    return this._customBlockOwner[id].id;
+};
+
+ActionManager.OwnerFor.moveBlock = function(block, target) {
+    var blockId;
+
+    // Base this off the target since the block could be new...
+    blockId = (typeof target) === 'string' ? target : target.element;
+
+    return this._blockToOwnerId[blockId];
+};
+
+// Can't undo
+ActionManager.OwnerFor.setStageSize =
+ActionManager.OwnerFor.importBlocks =
+ActionManager.OwnerFor.importSprites =
+ActionManager.OwnerFor.duplicateSprites =
+ActionManager.OwnerFor.addSprite = function() {
+    return null;
+};
+
+// Corral events
+ActionManager.OwnerFor.removeSprite = function() {
+    return 'corral';
 };
 
 SnapActions = new ActionManager();
