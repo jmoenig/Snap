@@ -549,18 +549,19 @@ ActionManager.prototype._setBlockPosition = function(block, position) {
 };
 
 ActionManager.prototype._setBlocksPositions = function(ids, positions) {
-    var block = this.getBlockFromId(ids[0]),
+    var myself = this,
+        block = this.getBlockFromId(ids[0]),
         scripts = block.parentThatIsA(ScriptsMorph),
         stdPositions,
         oldPositions;
 
     oldPositions = ids.map(function(id) {
-        return this._positionOf[id];
-    }, this);
+        return myself._positionOf[id];
+    });
 
     stdPositions = positions.map(function(pos) {
-        return this.getStandardPosition(scripts, pos);
-    }, this)
+        return myself.getStandardPosition(scripts, pos);
+    });
 
     return [ids, stdPositions, oldPositions];
 };
@@ -610,7 +611,9 @@ ActionManager.prototype._importBlocks = function(str, lbl) {
         ids;
 
     // need to get the ids for each of the sprites (so we can delete them on undo!)
-    ids = model.children.map(child => child.attributes.collabId);
+    ids = model.children.map(function(child) {
+        return child.attributes.collabId;
+    });
     str = model.toString();
     return [str, lbl, ids];
 };
@@ -1016,7 +1019,9 @@ ActionManager.prototype._importSprites = function(str) {
         ids;
 
     // need to get the ids for each of the sprites (so we can delete them on undo!)
-    ids = model.children.map(child => child.attributes.collabId);
+    ids = model.children.map(function(child) {
+        return child.attributes.collabId;
+    });
     str = model.toString();
     return [str, ids];
 };
@@ -1050,11 +1055,13 @@ ActionManager.prototype.getAdjustedPosition = function(position, scripts) {
 };
 
 ActionManager.prototype._idBlocks = function(block, returnIds) {
-    var ids = [];
-    this.traverse(block, iterBlock => {
+    var myself = this,
+        ids = [];
+
+    this.traverse(block, function(iterBlock) {
         iterBlock.isDraggable = true;
         iterBlock.isTemplate = false;
-        iterBlock.id = this.newId();
+        iterBlock.id = myself.newId();
         ids.push(iterBlock.id);
     });
     return returnIds ? ids : block;
@@ -1074,13 +1081,14 @@ ActionManager.prototype._getScriptsFor = function(blockId) {
 };
 
 ActionManager.prototype.registerBlocks = function(firstBlock, owner) {
-    var block = firstBlock,
+    var myself = this,
+        block = firstBlock,
         target,
         prevBlock;
 
-    this.traverse(block, block => {
-        this._registerBlockState(block);
-        this._blockToOwnerId[block.id] = owner.id;
+    this.traverse(block, function(block) {
+        myself._registerBlockState(block);
+        myself._blockToOwnerId[block.id] = owner.id;
     });
     return firstBlock;
 };
@@ -1919,11 +1927,15 @@ ActionManager.prototype.onImportBlocks = function(aString, lbl) {
 
 //////////////////// Loading Projects ////////////////////
 ActionManager.prototype.loadProject = function(ide, lastSeen) {
+    var myself = this;
+
     // Clear old info
     this.initializeRecords();
 
     // Load the owners
-    ide.sprites.asArray().concat(ide.stage).forEach(sprite => this.loadOwner(sprite));
+    ide.sprites.asArray().concat(ide.stage).forEach(function(sprite) {
+        return myself.loadOwner(sprite);
+    });
 
     //  - Traverse all blocks in custom block definitions
 
@@ -1975,7 +1987,8 @@ ActionManager.prototype._getCurrentTarget = function(block) {
 };
 
 ActionManager.prototype._registerBlockState = function(block) {
-    var scripts,
+    var myself = this,
+        scripts,
         standardPosition,
         fieldId,
         contents,
@@ -1999,18 +2012,18 @@ ActionManager.prototype._registerBlockState = function(block) {
 
         // Record the field values if it has any
         if (block.inputs) {
-            block.inputs().forEach(input => {
+            block.inputs().forEach(function(input) {
                 contents = input.contents && input.contents();
                 if (contents) {
                     value = contents.value || contents;
                     if (!(input instanceof BlockMorph) && value !== undefined) {
-                        fieldId = this.getId(input);
-                        this.fieldValues[fieldId] = value;
+                        fieldId = myself.getId(input);
+                        myself.fieldValues[fieldId] = value;
                     }
 
                     if (input instanceof ColorSlotMorph) {
-                        fieldId = this.getId(input);
-                        this.fieldValues[fieldId] = input.color;
+                        fieldId = myself.getId(input);
+                        myself.fieldValues[fieldId] = input.color;
                     }
                 }
             });
@@ -2019,16 +2032,20 @@ ActionManager.prototype._registerBlockState = function(block) {
 };
 
 ActionManager.prototype.loadOwner = function(owner) {
+    var myself = this;
+
     this.registerOwner(owner, owner.id);
 
     // Load the blocks from scripts
-    owner.scripts.children.forEach(topBlock => {  // id the blocks
-        this.traverse(topBlock, block => {
-            block.id = block.id || this.newId();
-            this._blocks[block.id] = block;
+    owner.scripts.children.forEach(function(topBlock) {  // id the blocks
+        myself.traverse(topBlock, function(block) {
+            block.id = block.id || myself.newId();
+            myself._blocks[block.id] = block;
         });
     });
-    owner.scripts.children.forEach(block => this.registerBlocks(block, owner));
+    owner.scripts.children.forEach(function(block) {
+        myself.registerBlocks(block, owner);
+    });
 
     // Load the blocks from custom block definitions
     var customBlocks = owner.customBlocks,
@@ -2042,30 +2059,33 @@ ActionManager.prototype.loadOwner = function(owner) {
     this.loadCustomBlocks(customBlocks, owner);
 
     // Load the costumes
-    owner.costumes.asArray().forEach(costume => {
-        this._costumes[costume.id] = costume;
-        this._costumeToOwner[costume.id] = owner;
+    owner.costumes.asArray().forEach(function(costume) {
+        myself._costumes[costume.id] = costume;
+        myself._costumeToOwner[costume.id] = owner;
     });
 
     // Load the sounds
-    owner.sounds.asArray().forEach(sound => {
-        this._sounds[sound.id] = sound;
-        this._soundToOwner[sound.id] = owner;
+    owner.sounds.asArray().forEach(function(sound) {
+        myself._sounds[sound.id] = sound;
+        myself._soundToOwner[sound.id] = owner;
     });
 };
 
 ActionManager.prototype.loadCustomBlocks = function(blocks, owner) {
-    var editor,
+    var myself = this,
+        editor,
         scripts;
 
     owner = owner || this.ide().stage;
-    blocks.forEach(def => {
-        def.id = def.id || this.newId();
-        this._customBlocks[def.id] = def;
-        this._customBlockOwner[def.id] = owner;
-        editor = this._getCustomBlockEditor(def.id);
+    blocks.forEach(function(def) {
+        def.id = def.id || myself.newId();
+        myself._customBlocks[def.id] = def;
+        myself._customBlockOwner[def.id] = owner;
+        editor = myself._getCustomBlockEditor(def.id);
         scripts = editor.body.contents;
-        scripts.children.forEach(block => this.registerBlocks(block, owner));
+        scripts.children.forEach(function(block) {
+            myself.registerBlocks(block, owner);
+        });
         editor.updateDefinition();
     });
 };
