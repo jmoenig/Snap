@@ -3160,3 +3160,7 @@ http://snap.berkeley.edu/run#cloud:Username=jens&ProjectName=rotation
 * Morphic, Blocks, GUI: Filter Project Names in the “open” dialog, thanks, Bernat!!
 * GUI: update scrollbars of the project dialog as the project list is filtered
 * Blocks: fixed #1522
+
+161205
+------
+* Objects: fixed #1543

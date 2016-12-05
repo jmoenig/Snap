@@ -82,7 +82,7 @@ SpeechBubbleMorph, RingMorph, isNil, FileReader, TableDialogMorph,
 BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph*/
 
-modules.objects = '2016-November-28';
+modules.objects = '2016-December-05';
 
 var SpriteMorph;
 var StageMorph;
@@ -7300,7 +7300,7 @@ Note.prototype.setupContext = function () {
             window.msAudioContext ||
             window.oAudioContext ||
             window.webkitAudioContext;
-        if (!ctx.prototype.hasOwnProperty('createGain')) {
+        if (!ctx.prototype.createGain) {
             ctx.prototype.createGain = ctx.prototype.createGainNode;
         }
         return ctx;
