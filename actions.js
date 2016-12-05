@@ -67,7 +67,6 @@ ActionManager.prototype.initializeEventMethods = function() {
         // Sprites
         'addSprite',
         'removeSprite',
-        'removeSprites',  // (used for undo)
         'renameSprite',
         'toggleDraggable',
         'duplicateSprite',
@@ -102,7 +101,6 @@ ActionManager.prototype.initializeEventMethods = function() {
         'addBlock',
         'replaceBlock',  // (keyboard editing)
         'removeBlock',
-        'removeBlocks',
         'setBlockPosition',
         'setBlocksPositions',
         'moveBlock',
@@ -1296,10 +1294,6 @@ ActionManager.prototype.onMoveBlock = function(id, rawTarget) {
     return block;
 };
 
-ActionManager.prototype.onRemoveBlocks = function(ids) {
-    ids.forEach(id => this.onRemoveBlock(id, true));
-};
-
 ActionManager.prototype.onRemoveBlock = function(id, userDestroy) {
     var block = this.getBlockFromId(id),
         method = userDestroy && block.userDestroy ? 'userDestroy' : 'destroy',
@@ -1734,10 +1728,6 @@ ActionManager.prototype.onAddSprite = function(serialized, creatorId) {
     if (creatorId === this.id) {
         ide.selectSprite(sprites[sprites.length-1]);
     }
-};
-
-ActionManager.prototype.onRemoveSprites = function(ids) {
-    ids.forEach(id => this.onRemoveSprite(id));
 };
 
 ActionManager.prototype.onRemoveSprite = function(spriteId) {
@@ -2204,7 +2194,6 @@ ActionManager.OwnerFor.renameCostume = function(costumeId) {
     return this._costumeToOwner[costumeId].id;
 };
 
-ActionManager.OwnerFor.removeBlocks =
 ActionManager.OwnerFor.setBlocksPositions = function(ids) {
     if (ids.length) {
         return this._blockToOwnerId[ids[0]];

@@ -173,10 +173,16 @@ UndoManager.Invert.toggleDraggable = function(args) {
 };
 
 UndoManager.Invert.importSprites = function(args) {
-    args.shift();
+    var ids = args.pop();
+
     return {
-        type: 'removeSprites',
-        args: args
+        type: 'batch',
+        args: ids.map(function(id) {
+            return {
+                type: 'removeSprite',
+                args: [id]
+            };
+        })
     };
 };
 
@@ -252,9 +258,15 @@ UndoManager.Invert.deleteBlockLabel = function(args) {
     //// Block manipulation
 UndoManager.Invert.addBlock = function(args) {
     // args are [block, ownerId, x, y, ids]
+    var ids = args.pop();
     return {
-        type: 'removeBlocks',
-        args: args.reverse()
+        type: 'batch',
+        args: ids.map(function(id) {
+            return {
+                type: 'removeBlock',
+                args: [id, true]
+            };
+        })
     };
 };
 
@@ -291,8 +303,13 @@ UndoManager.Invert._actionForState = function(state) {
     } else if (state.length === 1) {  // newly created
         if (state[0] instanceof Array) {
             return {
-                type: 'removeBlocks',
-                args: state
+                type: 'batch',
+                args: state[0].map(function(id) {
+                    return {
+                        type: 'removeBlock',
+                        args: [id, true]
+                    };
+                })
             };
         } else {
             return {
@@ -341,9 +358,14 @@ UndoManager.Invert.moveBlock = function(args) {
         spliceEvent = args[2],
         event = {
             type: 'batch',
-            args: [revertToOldState]
+            args: []
         };
         
+    if (revertToOldState.type === 'batch') {
+        event.args = revertToOldState.args;
+    } else {
+        event.args.push(revertToOldState);
+    }
 
     if (spliceEvent) {
         event.args.unshift(spliceEvent);
