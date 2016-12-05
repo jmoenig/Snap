@@ -1280,7 +1280,9 @@ IDE_Morph.prototype.createSpriteBar = function () {
         tabColors,
         null, // target
         function () {tabBar.tabTo('costumes'); },
-        localize('Costumes'), // label
+        localize(this.currentSprite instanceof SpriteMorph ?
+			'Costumes' : 'Backgrounds'
+			),
         function () {  // query
             return myself.currentTab === 'costumes';
         }
