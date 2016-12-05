@@ -45,15 +45,16 @@ ActionManager.prototype.addActions = function() {
             }
 
             msg = {
-                owner: ownerId,
                 type: method,
                 args: args
             };
 
             if (ActionManager.OwnerFor[method]) {
                 ownerId = ActionManager.OwnerFor[method].apply(this, msg.args);
-                msg.owner = ownerId;
+            } else {
+                ownerId = ActionManager.OwnerFor.apply(this, msg.args);
             }
+            msg.owner = ownerId;
 
             return this.applyEvent(msg);
         };
@@ -2129,7 +2130,10 @@ ActionManager.prototype.onMessage = function(msg) {
 };
 
 /* * * * * * * * * * * * OwnerFor * * * * * * * * * * * */
-ActionManager.OwnerFor = {};
+ActionManager.OwnerFor = function() {
+    // default owner is the current sprite
+    return this.ide().currentSprite.id;
+};
 
 ActionManager.OwnerFor.toggleBoolean =
 ActionManager.OwnerFor.setColorField =
@@ -2162,12 +2166,6 @@ ActionManager.OwnerFor.toggleDraggable =
 ActionManager.OwnerFor.setRotationStyle =
 ActionManager.OwnerFor.addCustomBlock = function(ownerId) {
     return ownerId;
-};
-
-ActionManager.OwnerFor.addVariable =
-ActionManager.OwnerFor.deleteVariable = function() {
-    // Can I do this for everything?
-    return this.ide().currentSprite.id;
 };
 
 // Actions where owner is second arg:
