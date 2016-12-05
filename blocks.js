@@ -906,18 +906,59 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             );
             part.setContents(90);
             break;
+        case '%drum':
+            part = new InputSlotMorph(
+                null,
+                true,
+                {
+                    '(1) Snare Drum': 1,
+                    '(2) Bass Drum': 2,
+                    '(3) Side Stick': 3,
+                    '(4) Crash Cymbal': 4,
+                    '(5) Open Hi-Hat': 5,
+                    '(6) Closed Hi-Hat': 6,
+                    '(7) Tambourine': 7,
+                    '(8) Hand Clap': 8,
+                    '(9) Claves': 9,
+                    '(10) Wood Block': 10,
+                    '(11) Cowbell': 11,
+                    '(12) Triangle': 12,
+                    '(13) Bongo': 13,
+                    '(14) Conga': 14,
+                    '(15) Cabasa': 15,
+                    '(16) Guiro': 16,
+                    '(17) Vibraslap': 17,
+                    '(18) Open Cuica': 18
+                }
+            );
+            part.setContents(1);
+            break;
         case '%inst':
             part = new InputSlotMorph(
                 null,
                 true,
                 {
-                    '(1) Acoustic Grand' : 1,
-                    '(2) Bright Acoustic' : 2,
-                    '(3) Electric Grand' : 3,
-                    '(4) Honky Tonk' : 4,
-                    '(5) Electric Piano 1' : 5,
-                    '(6) Electric Piano 2' : 6,
-                    '(7) Harpsichord' : 7
+                    '(1) Piano': 1,
+                    '(2) Electric Piano': 2,
+                    '(3) Organ': 3,
+                    '(4) Guitar': 4,
+                    '(5) Electric Guitar': 5,
+                    '(6) Bass': 6,
+                    '(7) Pizzicato': 7,
+                    '(8) Cello': 8,
+                    '(9) Trombone': 9,
+                    '(10) Clarinet': 10,
+                    '(11) Saxophone': 11,
+                    '(12) Flute': 12,
+                    '(13) Wooden Flute': 13,
+                    '(14) Bassoon': 14,
+                    '(15) Choir': 15,
+                    '(16) Vibraphone': 16,
+                    '(17) Music Box': 17,
+                    '(18) Steel Drum': 18,
+                    '(19) Marimba': 19,
+                    '(20) Synth Lead': 20,
+                    '(21) Synth Pad': 21
                 }
             );
             part.setContents(1);
@@ -2009,6 +2050,7 @@ SyntaxElementMorph.prototype.endLayout = function () {
     %code   - white rectangular type-in slot, monospaced font
     %n      - white roundish type-in slot ("numerical")
     %dir    - white roundish type-in slot with drop-down for directions
+    %drum   - white roundish type-in slot with drop-down for drums
     %inst   - white roundish type-in slot with drop-down for instruments
     %ida    - white roundish type-in slot with drop-down for list indices
     %idx    - white roundish type-in slot for indices incl. "any"
