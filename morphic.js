@@ -10915,7 +10915,10 @@ HandMorph.prototype.processDrop = function (event) {
                     pic.onload = function () {
                         target.droppedSVG(
                             pic,
-                            url.slice(0, url.lastIndexOf('.'))
+                            url.slice(
+                                url.lastIndexOf('/') + 1,
+                                url.lastIndexOf('.')
+                            )
                         );
                     };
                     pic.src = 'data:image/svg+xml;utf8,' + txt;
