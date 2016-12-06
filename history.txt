@@ -3164,3 +3164,7 @@ http://snap.berkeley.edu/run#cloud:Username=jens&ProjectName=rotation
 161205
 ------
 * Objects: fixed #1543
+
+161206
+------
+* GUI: Switch to asynchronous loading of resources (costumes, sounds, libraries etc.) 

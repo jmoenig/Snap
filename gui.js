@@ -72,7 +72,7 @@ isRetinaSupported, SliderMorph, Animation*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2016-December-01';
+modules.gui = '2016-December-06';
 
 // Declarations
 
@@ -2749,24 +2749,28 @@ IDE_Morph.prototype.projectMenu = function () {
                 'Costumes' : 'Backgrounds',
         shiftClicked = (world.currentKey === 16);
 
-    // Utility for creating Costumes, etc menus.
-    // loadFunction takes in two parameters: a file URL, and a canonical name
     function createMediaMenu(mediaType, loadFunction) {
+        // Utility for creating Costumes, etc menus.
+        // loadFunction takes in two parameters:
+        // a file URL, and a canonical name
         return function () {
-            var names = this.getMediaList(mediaType),
-                mediaMenu = new MenuMorph(
-                    myself,
-                    localize('Import') + ' ' + localize(mediaType)
-                );
-
-            names.forEach(function (item) {
-                mediaMenu.addItem(
-                    item.name,
-                    function () {loadFunction(item.file, item.name); },
-                    item.help
-                );
-            });
-            mediaMenu.popup(world, pos);
+            myself.getMediaList(
+                mediaType,
+                function (names) {
+                    var mediaMenu = new MenuMorph(
+                        myself,
+                        localize('Import') + ' ' + localize(mediaType)
+                    );
+                    names.forEach(function (item) {
+                        mediaMenu.addItem(
+                            item.name,
+                            function () {loadFunction(item.file, item.name); },
+                            item.help
+                        );
+                    });
+                    mediaMenu.popup(world, pos);
+                }
+            );
         };
     }
 
@@ -2891,9 +2895,11 @@ IDE_Morph.prototype.projectMenu = function () {
     menu.addItem(
         'Import tools',
         function () {
-            myself.droppedText(
-                myself.getURL(myself.resourceURL('tools.xml')),
-                'tools'
+            myself.getURL(
+                myself.resourceURL('tools.xml'),
+                function (txt) {
+                    myself.droppedText(txt, 'tools');
+                }
             );
         },
         'load the official library of\npowerful blocks'
@@ -2902,9 +2908,13 @@ IDE_Morph.prototype.projectMenu = function () {
         'Libraries...',
         createMediaMenu(
             'libraries',
-            function loadLib(file, name) {
-                var url = myself.resourceURL('libraries', file);
-                myself.droppedText(myself.getURL(url), name);
+            function (file, name) {
+                myself.getURL(
+                    myself.resourceURL('libraries', file),
+                    function (txt) {
+                        myself.droppedText(txt, name);
+                    }
+                );
             }
         ),
         'Select categories of additional blocks to add to this project.'
@@ -2921,7 +2931,7 @@ IDE_Morph.prototype.projectMenu = function () {
         localize('Sounds') + '...',
         createMediaMenu(
             'Sounds',
-            function loadSound(file, name) {
+            function (file, name) {
                 var url = myself.resourceURL('Sounds', file),
                     audio = new Audio();
                 audio.src = url;
@@ -2943,18 +2953,34 @@ IDE_Morph.prototype.resourceURL = function () {
     return args.join('/');
 };
 
-IDE_Morph.prototype.getMediaList = function (dirname) {
-    // Return a list of files in a directory based on the contents file
-    var url, data;
+IDE_Morph.prototype.getMediaList = function (dirname, callback) {
+    // Invoke the given callback with a list of files in a directory
+    // based on the contents file.
+    // If no callback is specified, synchronously return the list of files
+    // Note: Synchronous fetching has been deprecated and should be switched
+    var url = this.resourceURL(dirname, dirname.toUpperCase()),
+        async = callback instanceof Function,
+        myself = this,
+        data;
 
-    url = this.resourceURL(dirname, dirname.toUpperCase());
-    data = this.parseResourceFile(this.getURL(url));
-
-    data.sort(function (x, y) {
+    function alphabetically(x, y) {
         return x.name.toLowerCase() < y.name.toLowerCase() ? -1 : 1;
-    });
+    }
 
-    return data;
+    if (async) {
+        this.getURL(
+            url,
+            function (txt) {
+                var data = myself.parseResourceFile(txt);
+                data.sort(alphabetically);
+                callback.call(this, data);
+            }
+        );
+    } else {
+        data = this.parseResourceFile(this.getURL(url));
+        data.sort(alphabetically);
+        return data;
+    }
 };
 
 IDE_Morph.prototype.parseResourceFile = function (text) {
@@ -2996,12 +3022,25 @@ IDE_Morph.prototype.parseResourceFile = function (text) {
 IDE_Morph.prototype.importMedia = function (mediaType) {
     // open a dialog box letting the user browse available "built-in"
     // costumes or backgrounds
+    var myself = this,
+        msg = this.showMessage('Opening ' + mediaType + '...');
+    this.getMediaList(
+        mediaType,
+        function (items) {
+            msg.destroy();
+            myself.popupMediaImportDialog(mediaType, items);
+        }
+    );
 
+};
+
+IDE_Morph.prototype.popupMediaImportDialog = function (mediaType, items) {
+    // private - this gets called by importMedia() and creates
+    // the actual dialog
     var dialog = new DialogBoxMorph().withKey('import' + mediaType),
         frame = new ScrollFrameMorph(),
         selectedIcon = null,
         turtle = new SymbolMorph('turtle', 60),
-        items = this.getMediaList(mediaType),
         myself = this,
         world = this.world(),
         handle;
@@ -3057,6 +3096,7 @@ IDE_Morph.prototype.importMedia = function (mediaType) {
     };
 
     items.forEach(function (item) {
+        // Caution: creating very many thumbnails can take a long time!
         var url = myself.resourceURL(mediaType, item.file),
             img = new Image(),
             icon = new CostumeIconMorph(
@@ -5127,21 +5167,45 @@ IDE_Morph.prototype.setCloudURL = function () {
     );
 };
 
-// IDE_Morph synchronous HTTP data fetching
+// IDE_Morph HTTP data fetching
 
-IDE_Morph.prototype.getURL = function (url) {
+IDE_Morph.prototype.getURL = function (url, callback) {
+    // fetch the contents of a url and pass it into the specified callback.
+    // If no callback is specified synchronously fetch and return it
+    // Note: Synchronous fetching has been deprecated and should be switched
     var request = new XMLHttpRequest(),
+        async = callback instanceof Function,
         myself = this;
     try {
-        request.open('GET', url, false);
-        request.send();
-        if (request.status === 200) {
-            return request.responseText;
+        request.open('GET', url, async);
+        if (async) {
+            request.onreadystatechange = function () {
+                if (request.readyState === 4) {
+                    if (request.responseText) {
+                        callback.call(
+                            myself,
+                            request.responseText
+                        );
+                    } else {
+                        throw new Error('unable to retrieve ' + url);
+                    }
+                }
+            };
         }
-        throw new Error('unable to retrieve ' + url);
+        request.send();
+        if (!async) {
+            if (request.status === 200) {
+                return request.responseText;
+            }
+            throw new Error('unable to retrieve ' + url);
+        }
     } catch (err) {
         myself.showMessage(err.toString());
-        return;
+        if (async) {
+            callback.call(this);
+        } else {
+            return request.responseText;
+        }
     }
 };
 
