@@ -3057,10 +3057,17 @@ IDE_Morph.prototype.popupMediaImportDialog = function (mediaType, items) {
 
     dialog.ok = function () {
         if (selectedIcon) {
-            myself.droppedImage(
-                selectedIcon.object.contents,
-                selectedIcon.labelString
-            );
+            if (selectedIcon.object instanceof SVG_Costume) {
+                myself.droppedSVG(
+                    selectedIcon.object.contents,
+                    selectedIcon.labelString
+                );
+            } else {
+                myself.droppedImage(
+                    selectedIcon.object.contents,
+                    selectedIcon.labelString
+                );
+            }
         }
     };
 
@@ -3099,29 +3106,45 @@ IDE_Morph.prototype.popupMediaImportDialog = function (mediaType, items) {
         // Caution: creating very many thumbnails can take a long time!
         var url = myself.resourceURL(mediaType, item.file),
             img = new Image(),
+            suffix = url.slice(url.lastIndexOf('.') + 1).toLowerCase(),
+            isSVG = suffix === 'svg' && !MorphicPreferences.rasterizeSVGs,
             icon = new CostumeIconMorph(
                 new Costume(turtle.image, item.name)
             );
+
         icon.isDraggable = false;
         icon.userMenu = nop;
         icon.action = function () {
-            if (selectedIcon === icon) return;
+            if (selectedIcon === icon) {return; }
             var prevSelected = selectedIcon;
             selectedIcon = icon;
-            if (prevSelected) prevSelected.refresh();
+            if (prevSelected) {prevSelected.refresh(); }
         };
         icon.doubleClickAction = dialog.ok;
         icon.query = function () {
             return icon === selectedIcon;
         };
         frame.addContents(icon);
-        img.onload = function () {
-            var canvas = newCanvas(new Point(img.width, img.height), true);
-            canvas.getContext('2d').drawImage(img, 0, 0);
-            icon.object = new Costume(canvas, item.name);
-            icon.refresh();
-        };
-        img.src = url;
+        if (isSVG) {
+            img.onload = function () {
+                icon.object = new SVG_Costume(img, item.name);
+                icon.refresh();
+            };
+            myself.getURL(
+                url,
+                function (txt) {
+                    img.src = 'data:image/svg+xml;utf8,' + txt;
+                }
+            );
+        } else {
+            img.onload = function () {
+                var canvas = newCanvas(new Point(img.width, img.height), true);
+                canvas.getContext('2d').drawImage(img, 0, 0);
+                icon.object = new Costume(canvas, item.name);
+                icon.refresh();
+            };
+            img.src = url;
+        }
     });
     dialog.popUp(world);
     dialog.setExtent(new Point(400, 300));

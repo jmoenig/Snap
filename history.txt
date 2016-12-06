@@ -3169,3 +3169,4 @@ http://snap.berkeley.edu/run#cloud:Username=jens&ProjectName=rotation
 ------
 * GUI: Switch to asynchronous loading of resources (costumes, sounds, libraries etc.) 
 * Morphic: Added support for dropping links to SVGs from other web pages onto the World
+* GUI: Support importing unrasterized SVG_Costumes from the “Costumes” and “Backgrounds” dialog
