@@ -6714,7 +6714,7 @@ CostumeIconMorph.prototype.renameCostume = function () {
             }
         }
     ).prompt(
-        'rename costume',
+        this.currentSprite instanceof SpriteMorph ?	'rename costume' : 'rename background',
         costume.name,
         this.world()
     );
