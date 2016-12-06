@@ -1136,7 +1136,7 @@
 
 /*global window, HTMLCanvasElement, FileReader, Audio, FileList*/
 
-var morphicVersion = '2016-December-01';
+var morphicVersion = '2016-December-06';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = getBlurredShadowSupport(); // check for Chrome-bug
 
@@ -10762,6 +10762,7 @@ HandMorph.prototype.processDrop = function (event) {
                 event.dataTransfer.getData('URL') : null,
         txt = event.dataTransfer ?
                 event.dataTransfer.getData('Text/HTML') : null,
+        suffix,
         src,
         target = this.morphAtPointer(),
         img = new Image(),
@@ -10837,6 +10838,21 @@ HandMorph.prototype.processDrop = function (event) {
         frd.readAsArrayBuffer(aFile);
     }
 
+    function readURL(url, callback) {
+        var request = new XMLHttpRequest();
+        request.open('GET', url);
+        request.onreadystatechange = function () {
+            if (request.readyState === 4) {
+                if (request.responseText) {
+                    callback(request.responseText);
+                } else {
+                    throw new Error('unable to retrieve ' + url);
+                }
+            }
+        };
+        request.send();
+    }
+
     function parseImgURL(html) {
         var iurl = '',
             idx,
@@ -10871,10 +10887,11 @@ HandMorph.prototype.processDrop = function (event) {
             }
         }
     } else if (url) {
+        suffix = url.slice(url.lastIndexOf('.') + 1).toLowerCase();
         if (
             contains(
                 ['gif', 'png', 'jpg', 'jpeg', 'bmp'],
-                url.slice(url.lastIndexOf('.') + 1).toLowerCase()
+                suffix
             )
         ) {
             while (!target.droppedImage) {
@@ -10887,6 +10904,23 @@ HandMorph.prototype.processDrop = function (event) {
                 target.droppedImage(canvas);
             };
             img.src = url;
+        } else if (suffix === 'svg' && !MorphicPreferences.rasterizeSVGs) {
+            while (!target.droppedSVG) {
+                target = target.parent;
+            }
+            readURL(
+                url,
+                function (txt) {
+                    var pic = new Image();
+                    pic.onload = function () {
+                        target.droppedSVG(
+                            pic,
+                            url.slice(0, url.lastIndexOf('.'))
+                        );
+                    };
+                    pic.src = 'data:image/svg+xml;utf8,' + txt;
+                }
+            );
         }
     } else if (txt) {
         while (!target.droppedImage) {
