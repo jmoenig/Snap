@@ -3170,3 +3170,24 @@ http://snap.berkeley.edu/run#cloud:Username=jens&ProjectName=rotation
 * GUI: Switch to asynchronous loading of resources (costumes, sounds, libraries etc.) 
 * Morphic: Added support for dropping links to SVGs from other web pages onto the World
 * GUI: Support importing unrasterized SVG_Costumes from the “Costumes” and “Backgrounds” dialog
+
+161207
+------
+* Morphic, GUI: URI-encode SVG data for Firefox-compatibility
+
+
+== v4.10 === (in development)
+
+Features:
+* auto-wrapping of C-slots
+* undo / redo for blocks, unlimited, but has some issues
+* search field for projects, thanks, Bernat!!
+* basic typography support for custom block labels, thanks, Bernat!!
+* Treat JS-function reporters the same as variable getters wrt rings
+* new url switch #dl: for downloading raw shared projects
+* svg support for images from the web (svg files have been supported for a long time)
+
+Fixes:
+* Music (play note) to work again in new and recent browser versions (Chrome 55)
+* IDE layout: fixed resizing issues when the window becomes too small
+

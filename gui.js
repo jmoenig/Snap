@@ -72,7 +72,7 @@ isRetinaSupported, SliderMorph, Animation*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2016-December-06';
+modules.gui = '2016-December-07';
 
 // Declarations
 
@@ -3133,7 +3133,8 @@ IDE_Morph.prototype.popupMediaImportDialog = function (mediaType, items) {
             myself.getURL(
                 url,
                 function (txt) {
-                    img.src = 'data:image/svg+xml;utf8,' + txt;
+                    img.src = 'data:image/svg+xml;utf8,' +
+                        encodeURIComponent(txt);
                 }
             );
         } else {

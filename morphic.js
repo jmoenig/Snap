@@ -1136,7 +1136,7 @@
 
 /*global window, HTMLCanvasElement, FileReader, Audio, FileList*/
 
-var morphicVersion = '2016-December-06';
+var morphicVersion = '2016-December-07';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = getBlurredShadowSupport(); // check for Chrome-bug
 
@@ -10921,7 +10921,8 @@ HandMorph.prototype.processDrop = function (event) {
                             )
                         );
                     };
-                    pic.src = 'data:image/svg+xml;utf8,' + txt;
+                    pic.src = 'data:image/svg+xml;utf8,' +
+                        encodeURIComponent(txt);
                 }
             );
         }
