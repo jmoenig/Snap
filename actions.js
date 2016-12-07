@@ -1258,6 +1258,11 @@ ActionManager.prototype.onMoveBlock = function(id, rawTarget) {
         }
         scripts = target.element.parentThatIsA(ScriptsMorph);
         if (target.loc === 'bottom' && block.parent) {
+            // disconnect command block
+            block.parent.removeChild(block);
+            scripts.add(block);
+        } else if (target.loc === 'top' && !(block.parent instanceof ScriptsMorph)) {
+            // disconnect if connecting to a parent
             block.parent.removeChild(block);
             scripts.add(block);
         }
