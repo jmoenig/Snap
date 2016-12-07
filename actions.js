@@ -189,8 +189,10 @@ ActionManager.prototype._enableCollaboration = function() {
             self.rank = msg.value;
             logger.info('assigned rank of', self.rank);
         } else if (msg.type === 'leader-appoint') {
-            self.isLeader = true;
-            logger.info('Appointed leader!');
+            self.isLeader = msg.value;
+            if (msg.value) {
+                logger.info('Appointed leader!');
+            }
         } else if (msg.type === 'uuid') {
             self.id = msg.value;
             logger.info('assigned id of', self.id);
