@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph,
 TableFrameMorph, isSnapObject*/
 
-modules.threads = '2016-October-21';
+modules.threads = '2016-October-27';
 
 var ThreadManager;
 var Process;
@@ -3531,7 +3531,9 @@ Context.prototype.continuation = function () {
     } else if (this.parentContext) {
         cont = this.parentContext;
     } else {
-        return new Context(null, 'doStop');
+        cont = new Context(null, 'expectReport');
+        cont.isContinuation = true;
+        return cont;
     }
     cont = cont.copyForContinuation();
     cont.tag = null;
