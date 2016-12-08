@@ -5957,7 +5957,7 @@ ScriptsMorph.prototype.undrop = function () {
         null,
         this.recoverLastDrop(),
         function () {
-            myself.updateUndropControls();
+            myself.updateUndoControls();
             myself.isAnimating = false;
         }
     );
@@ -5972,7 +5972,7 @@ ScriptsMorph.prototype.redrop = function () {
     if (this.dropRecord.action === 'delete') {
         this.recoverLastDrop(true);
         this.dropRecord.lastDroppedBlock.destroy();
-        this.updateUndropControls();
+        this.updateUndoControls();
     } else {
         this.isAnimating = true;
         this.dropRecord.lastDroppedBlock.slideBackTo(
@@ -5980,7 +5980,7 @@ ScriptsMorph.prototype.redrop = function () {
             null,
             this.recoverLastDrop(true),
             function () {
-                myself.updateUndropControls();
+                myself.updateUndoControls();
                 myself.isAnimating = false;
             }
         );
@@ -6144,10 +6144,10 @@ ScriptsMorph.prototype.recordDrop = function (lastGrabOrigin) {
         this.dropRecord.nextRecord = record;
     }
     this.dropRecord = record;
-    this.updateUndropControls();
+    this.updateUndoControls();
 };
 
-ScriptsMorph.prototype.addUndropControls = function () {
+ScriptsMorph.prototype.addUndoControls = function () {
     var toolBar = new AlignmentMorph(),
         shade = (new Color(140, 140, 140));
     toolBar.undoButton = new PushButtonMorph(
@@ -6180,11 +6180,11 @@ ScriptsMorph.prototype.addUndropControls = function () {
     return toolBar;
 };
 
-ScriptsMorph.prototype.updateUndropControls = function () {
+ScriptsMorph.prototype.updateUndoControls = function () {
     var sf = this.parentThatIsA(ScrollFrameMorph);
     if (!sf) {return; }
     if (!sf.toolBar) {
-        sf.toolBar = this.addUndropControls();
+        sf.toolBar = this.addUndoControls();
         sf.add(sf.toolBar);
     }
     if (SnapUndo.canUndo(this.owner)) {
@@ -13448,10 +13448,10 @@ ScriptFocusMorph.prototype.reactToKeyEvent = function (key) {
     case 'backspace':
         return this.deleteLastElement();
     case 'ctrl z':
-        return this.undrop();
+        return SnapUndo.undo(this.editor.owner);
     case 'ctrl y':
     case 'ctrl shift z':
-        return this.redrop();
+        return SnapUndo.redo(this.editor.owner);
     case 'ctrl [': // ignore the first press of the Mac cmd key
         return;
     default:

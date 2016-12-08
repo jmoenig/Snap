@@ -5598,11 +5598,11 @@ StageMorph.prototype.fireKeyEvent = function (key) {
         return;
     }
     if (evt === 'ctrl z') {
-        if (!ide.isAppMode) {ide.currentSprite.scripts.undrop(); }
+        if (!ide.isAppMode) {SnapUndo.undo(ide.currentSprite);}
          return;
     }
     if (evt === 'ctrl shift z' || (evt === 'ctrl y')) {
-        if (!ide.isAppMode) {ide.currentSprite.scripts.redrop(); }
+        if (!ide.isAppMode) {SnapUndo.redo(ide.currentSprite);}
          return;
     }
     if (evt === 'ctrl n') {
@@ -5620,12 +5620,6 @@ StageMorph.prototype.fireKeyEvent = function (key) {
     if (evt === 'ctrl shift s') {
         if (!ide.isAppMode) {return ide.saveProjectsBrowser(); }
         return;
-    }
-    if (evt === 'ctrl z') {
-        SnapUndo.undo(ide.currentSprite);
-    }
-    if (evt === 'ctrl y') {
-        SnapUndo.redo(ide.currentSprite);
     }
     if (evt === 'esc') {
         return this.fireStopAllEvent();

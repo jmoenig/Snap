@@ -62,7 +62,7 @@ UndoManager.prototype.undo = function(owner) {
         event;
 
     if (index < 0 || isNaN(index)) {
-        return false;
+        return null;
     }
 
     console.log('undoing', origEvent);
@@ -70,8 +70,7 @@ UndoManager.prototype.undo = function(owner) {
     event.replayType = UndoManager.UNDO;
     event.owner = origEvent.owner;
 
-    SnapActions.applyEvent(event);
-    return true;
+    return SnapActions.applyEvent(event);
 };
 
 UndoManager.prototype.redo = function(owner) {
@@ -82,7 +81,7 @@ UndoManager.prototype.redo = function(owner) {
         event;
 
     if (index >= eventHistory.length) {
-        return false;
+        return null;
     }
 
     event = {
@@ -92,8 +91,7 @@ UndoManager.prototype.redo = function(owner) {
     };
     event.replayType = UndoManager.REDO;
 
-    SnapActions.applyEvent(event);
-    return true;
+    return SnapActions.applyEvent(event);
 };
 
 UndoManager.prototype.getInverseEvent = function(event) {
