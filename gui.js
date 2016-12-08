@@ -3136,9 +3136,14 @@ IDE_Morph.prototype.popupMediaImportDialog = function (folderName, items) {
         };
         frame.addContents(icon);
         if (isSound) {
+            icon.object.audio.onloadeddata = function () {
+                icon.createThumbnail();
+                icon.fixLayout();
+                icon.refresh();
+            };
+
             icon.object.audio.src = url;
             icon.object.audio.load();
-            // it would be nice if we could get a "loaded" event...
         } else if (isSVG) {
             img.onload = function () {
                 icon.object = new SVG_Costume(img, item.name);
