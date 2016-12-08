@@ -72,7 +72,7 @@ isRetinaSupported, SliderMorph, Animation*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2016-December-07';
+modules.gui = '2016-December-08';
 
 // Declarations
 
@@ -2749,17 +2749,17 @@ IDE_Morph.prototype.projectMenu = function () {
                 'Costumes' : 'Backgrounds',
         shiftClicked = (world.currentKey === 16);
 
-    function createMediaMenu(mediaType, loadFunction) {
-        // Utility for creating Costumes, etc menus.
+    function createMediaMenu(folderName, loadFunction) {
+        // Utility for creating Libraries, etc menus.
         // loadFunction takes in two parameters:
         // a file URL, and a canonical name
         return function () {
             myself.getMediaList(
-                mediaType,
+                folderName,
                 function (names) {
                     var mediaMenu = new MenuMorph(
                         myself,
-                        localize('Import') + ' ' + localize(mediaType)
+                        localize('Import') + ' ' + localize(folderName)
                     );
                     names.forEach(function (item) {
                         mediaMenu.addItem(
@@ -2929,16 +2929,9 @@ IDE_Morph.prototype.projectMenu = function () {
     );
     menu.addItem(
         localize('Sounds') + '...',
-        createMediaMenu(
-            'Sounds',
-            function (file, name) {
-                var url = myself.resourceURL('Sounds', file),
-                    audio = new Audio();
-                audio.src = url;
-                audio.load();
-                myself.droppedAudio(audio, name);
-            }
-        ),
+        function () {
+            myself.importMedia('Sounds');
+        },
         'Select a sound from the media library'
     );
 
@@ -3019,25 +3012,25 @@ IDE_Morph.prototype.parseResourceFile = function (text) {
     return items;
 };
 
-IDE_Morph.prototype.importMedia = function (mediaType) {
+IDE_Morph.prototype.importMedia = function (folderName) {
     // open a dialog box letting the user browse available "built-in"
-    // costumes or backgrounds
+    // costumes, backgrounds or sounds
     var myself = this,
-        msg = this.showMessage('Opening ' + mediaType + '...');
+        msg = this.showMessage('Opening ' + folderName + '...');
     this.getMediaList(
-        mediaType,
+        folderName,
         function (items) {
             msg.destroy();
-            myself.popupMediaImportDialog(mediaType, items);
+            myself.popupMediaImportDialog(folderName, items);
         }
     );
 
 };
 
-IDE_Morph.prototype.popupMediaImportDialog = function (mediaType, items) {
+IDE_Morph.prototype.popupMediaImportDialog = function (folderName, items) {
     // private - this gets called by importMedia() and creates
     // the actual dialog
-    var dialog = new DialogBoxMorph().withKey('import' + mediaType),
+    var dialog = new DialogBoxMorph().withKey('import' + folderName),
         frame = new ScrollFrameMorph(),
         selectedIcon = null,
         turtle = new SymbolMorph('turtle', 60),
@@ -3049,7 +3042,7 @@ IDE_Morph.prototype.popupMediaImportDialog = function (mediaType, items) {
     frame.contents.acceptsDrops = false;
     frame.color = myself.groupColor;
     frame.fixLayout = nop;
-    dialog.labelString = mediaType;
+    dialog.labelString = folderName;
     dialog.createLabel();
     dialog.addBody(frame);
     dialog.addButton('ok', 'Import');
@@ -3057,7 +3050,12 @@ IDE_Morph.prototype.popupMediaImportDialog = function (mediaType, items) {
 
     dialog.ok = function () {
         if (selectedIcon) {
-            if (selectedIcon.object instanceof SVG_Costume) {
+            if (selectedIcon.object instanceof Sound) {
+                myself.droppedAudio(
+                    selectedIcon.object.copy().audio,
+                    selectedIcon.labelString
+                );
+            } else if (selectedIcon.object instanceof SVG_Costume) {
                 myself.droppedSVG(
                     selectedIcon.object.contents,
                     selectedIcon.labelString
@@ -3104,14 +3102,26 @@ IDE_Morph.prototype.popupMediaImportDialog = function (mediaType, items) {
 
     items.forEach(function (item) {
         // Caution: creating very many thumbnails can take a long time!
-        var url = myself.resourceURL(mediaType, item.file),
+        var url = myself.resourceURL(folderName, item.file),
             img = new Image(),
             suffix = url.slice(url.lastIndexOf('.') + 1).toLowerCase(),
             isSVG = suffix === 'svg' && !MorphicPreferences.rasterizeSVGs,
-            icon = new CostumeIconMorph(
-                new Costume(turtle.image, item.name)
-            );
+            isSound = contains(['wav', 'mp3'], suffix),
+            cstTemplate,
+            sndTemplate,
+            icon;
 
+        if (isSound) {
+            sndTemplate = icon = new SoundIconMorph(
+                new Sound(new Audio(), item.name),
+                sndTemplate
+            );
+        } else {
+            cstTemplate = icon = new CostumeIconMorph(
+                new Costume(turtle.image, item.name),
+                cstTemplate
+            );
+        }
         icon.isDraggable = false;
         icon.userMenu = nop;
         icon.action = function () {
@@ -3125,7 +3135,11 @@ IDE_Morph.prototype.popupMediaImportDialog = function (mediaType, items) {
             return icon === selectedIcon;
         };
         frame.addContents(icon);
-        if (isSVG) {
+        if (isSound) {
+            icon.object.audio.src = url;
+            icon.object.audio.load();
+            // it would be nice if we could get a "loaded" event...
+        } else if (isSVG) {
             img.onload = function () {
                 icon.object = new SVG_Costume(img, item.name);
                 icon.refresh();

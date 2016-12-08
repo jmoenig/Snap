@@ -3175,6 +3175,10 @@ http://snap.berkeley.edu/run#cloud:Username=jens&ProjectName=rotation
 ------
 * Morphic, GUI: URI-encode SVG data for Firefox-compatibility
 
+161208
+------
+* GUI: use media dialog for browsing and importing sounds
+
 
 == v4.10 === (in development)
 
@@ -3186,6 +3190,7 @@ Features:
 * Treat JS-function reporters the same as variable getters wrt rings
 * new url switch #dl: for downloading raw shared projects
 * svg support for images from the web (svg files have been supported for a long time)
+* use media dialog for browsing and importing sounds
 
 Fixes:
 * Music (play note) to work again in new and recent browser versions (Chrome 55)
