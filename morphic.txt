@@ -9,7 +9,7 @@
 
 	Copyright (C) 2016 by Jens Mönig
 
-	this documentation last changed: July 14, 2016
+	this documentation last changed: November 25, 2016
 
 	This file is part of Snap!.
 
@@ -56,7 +56,8 @@
         (7) turtle graphics
         (8) damage list housekeeping
         (9) supporting high-resolution "retina" screens
-        (10) minifying morphic.js
+        (10 animations
+        (11) minifying morphic.js
     VIII. acknowledgements
     IX. contributors
 
@@ -67,6 +68,7 @@
     indentation indicating inheritance. Refer to this list to get a
     contextual overview:
 
+    Animation
     Color
     Node
         Morph
@@ -109,6 +111,7 @@
     Global settings
     Global functions
 
+    Animation
     Color
     Point
     Rectangle
@@ -1036,7 +1039,37 @@
     stage (high-resolution) into a sprite-costume (normal resolution).
 
 
-    (10) minifying morphic.js
+    (10) animations
+    ---------------
+    Animations handle gradual transitions between one state and another over a
+    period of time. Transition effects can be specified using easing functions.
+    An easing function maps a fraction of the transition time to a fraction of
+    the state delta. This way accelerating / decelerating and bouncing sliding
+    effects can be accomplished.
+
+    Animations are generic and not limited to motion, i.e. they can also handle
+    other transitions such as color changes, transparency fadings, growing,
+    shrinking, turning etc.
+
+    Animations need to be stepped by a scheduler, e. g. an interval function.
+    In Morphic the preferred way to run an animation is to register it with
+    the World by adding it to the World's animation queue. The World steps each
+    registered animation once per display cycle independently of the Morphic
+    stepping mechanism.
+
+    For an example how to use animations look at how the Morph's methods
+    
+        glideTo()
+        fadeTo()
+
+    and
+    
+        slideBackTo()
+
+    are implemented.
+
+
+    (11) minifying morphic.js
     -------------------------
     Coming from Smalltalk and being a Squeaker at heart I am a huge fan
     of browsing the code itself to make sense of it. Therefore I have

@@ -82,7 +82,7 @@ SpeechBubbleMorph, RingMorph, isNil, FileReader, TableDialogMorph,
 BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph*/
 
-modules.objects = '2016-October-12';
+modules.objects = '2016-December-05';
 
 var SpriteMorph;
 var StageMorph;
@@ -3708,32 +3708,6 @@ SpriteMorph.prototype.rootForGrab = function () {
     return SpriteMorph.uber.rootForGrab.call(this);
 };
 
-SpriteMorph.prototype.slideBackTo = function (situation, inSteps) {
-    // override the inherited default to make sure my parts follow
-    var steps = inSteps || 5,
-        pos = situation.origin.position().add(situation.position),
-        xStep = -(this.left() - pos.x) / steps,
-        yStep = -(this.top() - pos.y) / steps,
-        stepCount = 0,
-        oldStep = this.step,
-        oldFps = this.fps,
-        myself = this;
-
-    this.fps = 0;
-    this.step = function () {
-        myself.moveBy(new Point(xStep, yStep));
-        stepCount += 1;
-        if (stepCount === steps) {
-            situation.origin.add(myself);
-            if (situation.origin.reactToDropOf) {
-                situation.origin.reactToDropOf(myself);
-            }
-            myself.step = oldStep;
-            myself.fps = oldFps;
-        }
-    };
-};
-
 SpriteMorph.prototype.setCenter = function (aPoint, justMe) {
     // override the inherited default to make sure my parts follow
     // unless it's justMe
@@ -5623,6 +5597,14 @@ StageMorph.prototype.fireKeyEvent = function (key) {
         if (!ide.isAppMode) {ide.currentSprite.searchBlocks(); }
         return;
     }
+    if (evt === 'ctrl z') {
+        if (!ide.isAppMode) {ide.currentSprite.scripts.undrop(); }
+         return;
+    }
+    if (evt === 'ctrl shift z' || (evt === 'ctrl y')) {
+        if (!ide.isAppMode) {ide.currentSprite.scripts.redrop(); }
+         return;
+    }
     if (evt === 'ctrl n') {
         if (!ide.isAppMode) {ide.createNewProject(); }
         return;
@@ -7320,7 +7302,7 @@ Note.prototype.setupContext = function () {
             window.msAudioContext ||
             window.oAudioContext ||
             window.webkitAudioContext;
-        if (!ctx.prototype.hasOwnProperty('createGain')) {
+        if (!ctx.prototype.createGain) {
             ctx.prototype.createGain = ctx.prototype.createGainNode;
         }
         return ctx;

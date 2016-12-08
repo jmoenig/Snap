@@ -61,7 +61,7 @@ normalizeCanvas*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2016-August-03';
+modules.store = '2016-November-24';
 
 
 // XML_Serializer ///////////////////////////////////////////////////////
@@ -391,10 +391,12 @@ SnapSerializer.prototype.rawLoadProjectModel = function (xmlNode) {
     if (model.pentrails) {
         project.pentrails = new Image();
         project.pentrails.onload = function () {
-            normalizeCanvas(project.stage.trailsCanvas);
-            var context = project.stage.trailsCanvas.getContext('2d');
-            context.drawImage(project.pentrails, 0, 0);
-            project.stage.changed();
+            if (project.stage.trailsCanvas) { // work-around a bug in FF
+                normalizeCanvas(project.stage.trailsCanvas);
+                var context = project.stage.trailsCanvas.getContext('2d');
+                context.drawImage(project.pentrails, 0, 0);
+                project.stage.changed();
+            }
         };
         project.pentrails.src = model.pentrails.contents;
     }
@@ -632,8 +634,8 @@ SnapSerializer.prototype.loadSprites = function (xmlString, ide) {
             myself.objects[model.attributes.id] = sprite;
         }
         if (model.attributes.name) {
-            sprite.name = model.attributes.name;
-            project.sprites[model.attributes.name] = sprite;
+            sprite.name = ide.newSpriteName(model.attributes.name);
+            project.sprites[sprite.name] = sprite;
         }
         if (model.attributes.color) {
             sprite.color = myself.loadColor(model.attributes.color);
@@ -1158,7 +1160,10 @@ SnapSerializer.prototype.loadInput = function (model, input, block) {
         input.setColor(this.loadColor(model.contents));
     } else {
         val = this.loadValue(model);
-        if (!isNil(val) && input.setContents) {
+        if (!isNil(val) && !isNil(input) && input.setContents) {
+            // checking whether "input" is nil should not
+            // be necessary, but apparently is after retina support
+            // was added.
             input.setContents(this.loadValue(model));
         }
     }
@@ -1660,8 +1665,8 @@ Costume.prototype.toXML = function (serializer) {
         this.id,
         this.rotationCenter.x,
         this.rotationCenter.y,
-        this instanceof SVG_Costume ?
-                this.contents.src : this.contents.toDataURL('image/png')
+        this instanceof SVG_Costume ? this.contents.src
+                : normalizeCanvas(this.contents).toDataURL('image/png')
     );
 };
 
