@@ -1132,14 +1132,14 @@ ActionManager.prototype.onAddBlock = function(block, ownerId, x, y) {
         firstBlock.changed();
         owner.scripts.adjustBounds();
     } else {
-        var def = this._customBlocks[ownerId],  // ownerId?!?!?
-            editor = this._getCustomBlockEditor(ownerId),  // ownerId?!?!?
+        var editor = this._getCustomBlockEditor(ownerId),
             scripts = editor.body.contents;
 
         position = this.getAdjustedPosition(position, scripts);
         firstBlock.setPosition(position);
         scripts.add(firstBlock);
         editor.updateDefinition();
+        owner = this._customBlocks[ownerId];
     }
     if (firstBlock.fixChildrensBlockColor) {
         firstBlock.fixChildrensBlockColor(true);
