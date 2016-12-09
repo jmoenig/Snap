@@ -1280,7 +1280,9 @@ IDE_Morph.prototype.createSpriteBar = function () {
         tabColors,
         null, // target
         function () {tabBar.tabTo('costumes'); },
-        localize('Costumes'), // label
+        localize(this.currentSprite instanceof SpriteMorph ?
+			'Costumes' : 'Backgrounds'
+			),
         function () {  // query
             return myself.currentTab === 'costumes';
         }
@@ -6819,7 +6821,7 @@ CostumeIconMorph.prototype.renameCostume = function () {
             }
         }
     ).prompt(
-        'rename costume',
+        this.currentSprite instanceof SpriteMorph ?	'rename costume' : 'rename background',
         costume.name,
         this.world()
     );
