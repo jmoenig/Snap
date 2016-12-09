@@ -785,6 +785,8 @@ SnapTranslator.dict.pl = {
         'zaznacz, aby widzie\u0107 poszczeg\u00F3lne\nkroki skrypt\u00F3w (wolne)',
     'uncheck to turn off\nvisible stepping':
         'odznacz, aby wy\u0142\u0105czy\u0107\nkrokowanie',
+    'Debug on exceptions':
+        'Debuguj wyj\u0105tki',
     'Thread safe scripts':
         'Omijaj bezpieczne skrypty',
     'uncheck to allow\nscript reentrance':
