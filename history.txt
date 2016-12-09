@@ -3179,6 +3179,10 @@ http://snap.berkeley.edu/run#cloud:Username=jens&ProjectName=rotation
 ------
 * GUI: use media dialog for browsing and importing sounds
 
+161209
+------
+* Translation updates (Russian, Polish, Danish, Portuguese)
+
 
 == v4.10 === (in development)
 
@@ -3195,4 +3199,6 @@ Features:
 Fixes:
 * Music (play note) to work again in new and recent browser versions (Chrome 55)
 * IDE layout: fixed resizing issues when the window becomes too small
+* Translation updates (Russian, Polish, Danish, Portuguese)
+
 
