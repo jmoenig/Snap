@@ -450,7 +450,7 @@ SnapTranslator.dict.pl = {
     'any message':
         'dowolna wiadomo\u015B\u0107',
     'warp %c':
-        'turbo dla %c',
+        'wykonaj b\u0142yskawicznie %c',
     'wait %n secs':
         'czekaj %n s',
     'wait until %b':
@@ -493,8 +493,6 @@ SnapTranslator.dict.pl = {
         'uruchom %cmdRing z kontynuacj\u0105',
     'call %cmdRing w/continuation':
         'wywo\u0142aj %cmdRing z kontynuacj\u0105',
-    'warp %c':
-        'warp %c',
     'when I start as a clone':
         'kiedy zaczynam jako klon',
     'create a clone of %cln':
