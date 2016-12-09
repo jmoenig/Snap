@@ -443,13 +443,13 @@ SnapTranslator.dict.ru = {
     'wait %n secs':
         'ждать %n сек.',
     'wait until %b':
-        'ждать пока %b',
+        'ждать до %b',
     'forever %c':
         'непрерывно %c',
     'repeat %n %c':
         'повторять %n %c',
     'repeat until %b %c':
-        'повторять пока %b %c',
+        'повторять пока не %b %c',
     'if %b %c':
         'если %b %c',
     'if %b %c else %c':
