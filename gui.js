@@ -1859,6 +1859,10 @@ IDE_Morph.prototype.toggleSingleStepping = function () {
     this.controlBar.refreshSlider();
 };
 
+IDE_Morph.prototype.toggleExceptDebugging = function () {
+    this.stage.threads.toggleExceptDebugging();
+};
+
 IDE_Morph.prototype.startFastTracking = function () {
     this.stage.isFastTracked = true;
     this.stage.fps = 0;
@@ -2673,6 +2677,14 @@ IDE_Morph.prototype.settingsMenu = function () {
         Process.prototype.enableSingleStepping,
         'uncheck to turn off\nvisible stepping',
         'check to turn on\n visible stepping (slow)',
+        false
+    );
+    addPreference(
+        'Debug on exceptions',
+        'toggleExceptDebugging',
+        Process.prototype.enableExceptionDebugging,
+        'uncheck to turn off\npausing on exceptions',
+        'check to turn on\npausing on exceptions',
         false
     );
     menu.addLine(); // everything below this line is stored in the project

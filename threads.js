@@ -404,6 +404,11 @@ ThreadManager.prototype.toggleSingleStepping = function () {
     }
 };
 
+ThreadManager.prototype.toggleExceptDebugging = function () {
+    Process.prototype.enableExceptionDebugging =
+        !Process.prototype.enableExceptionDebugging;
+};
+
 // Process /////////////////////////////////////////////////////////////
 
 /*
@@ -472,6 +477,7 @@ Process.prototype.timeout = 500; // msecs after which to force yield
 Process.prototype.isCatchingErrors = true;
 Process.prototype.enableLiveCoding = false; // experimental
 Process.prototype.enableSingleStepping = false; // experimental
+Process.prototype.enableExceptionDebugging = false; // experimental
 Process.prototype.flashTime = 0; // experimental
 
 function Process(topBlock, onComplete, rightAway) {
@@ -666,7 +672,21 @@ Process.prototype.evaluateBlock = function (block, argCount) {
                 );
                 this.popContext();
             } catch (error) {
-                this.handleError(error, block);
+                if (!this.enableExceptionDebugging) {
+                    this.handleError(error, block);
+                } else {
+                    this.stop();
+                    this.errorFlag = true;
+                    this.flashContext(true);
+                    var inside = isNil(block.world());
+                    (inside ? this.topBlock : block).showBubble(
+                         (inside ? 'Inside: ' : '')
+                            + error.name
+                            + '\n'
+                            + error.message,
+                         this.exportResult
+                    );
+                }
             }
         } else {
             this.returnValueToParentContext(
@@ -3350,9 +3370,9 @@ Process.prototype.reportFrameCount = function () {
 
 // Process single-stepping
 
-Process.prototype.flashContext = function () {
+Process.prototype.flashContext = function (except) {
     var expr = this.context.expression;
-    if (this.enableSingleStepping &&
+    if ((this.enableSingleStepping || except) &&
             !this.isAtomic &&
             expr instanceof SyntaxElementMorph &&
             !(expr instanceof CommandSlotMorph) &&
