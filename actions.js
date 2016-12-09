@@ -1295,7 +1295,12 @@ ActionManager.prototype.onMoveBlock = function(id, rawTarget) {
 
     if (isNewBlock) {
         this._targetOf[block.id] = rawTarget;
-        this.registerBlocks(block, scripts.owner);
+        // set the owner to custom block id if necessary
+        if (target.element instanceof PrototypeHatBlockMorph) {
+            this.registerBlocks(block, target.element.definition);
+        } else {
+            this.registerBlocks(block, scripts.owner);
+	}
     }
 
     if (target instanceof ReporterBlockMorph) {
@@ -2279,7 +2284,11 @@ ActionManager.OwnerFor.moveBlock = function(block, target) {
     // Base this off the target since the block could be new...
     blockId = (typeof target) === 'string' ? target : target.element;
 
-    return this._blockToOwnerId[blockId];
+    if (this._customBlocks[blockId]) {
+        return blockId;
+    } else {
+        return this._blockToOwnerId[blockId];
+    }
 };
 
 // Can't undo
