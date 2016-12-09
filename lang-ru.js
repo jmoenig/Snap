@@ -245,7 +245,7 @@ SnapTranslator.dict.ru = {
 
     // tab help
     'costumes tab help':
-        'импортируйте изображение с другого веб-сайта\nили со своего компьютера скопировав его сюда',
+        'импортируйте изображение с другого веб-сайта\nили со своего компьютера, скопировав его сюда',
     'import a sound from your computer\nby dragging it into here':
         'импортируйте звук со своего компьютера\nскопировав его сюда',
 
@@ -457,9 +457,9 @@ SnapTranslator.dict.ru = {
     'report %s':
         'результат %s',
     'stop %stopChoices':
-        'стоп %stopChoices',
+        'остановить %stopChoices',
     'all':
-        'все',
+        'всё',
     'this script':
         'этот скрипт',
     'this block':
