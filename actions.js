@@ -333,6 +333,7 @@ ActionManager.prototype._applyEvent = function(msg) {
         result;
 
     logger.debug('received event:', msg);
+    this.currentEvent = msg;
 
     // If it is a batch, it may need to call multiple...
     if (this._isBatchEvent(msg)) {
@@ -364,6 +365,7 @@ ActionManager.prototype._applyEvent = function(msg) {
         }
     }
     this.afterActionApplied(msg);
+    this.currentEvent = null;
 };
 
 ActionManager.prototype._rawApplyEvent = function(msg) {
@@ -1156,6 +1158,7 @@ ActionManager.prototype.onAddBlock = function(block, ownerId, x, y) {
     }
 
     this.registerBlocks(firstBlock, owner);
+    this.__updateActiveEditor(firstBlock.id);
     return firstBlock;
 };
 
@@ -1307,6 +1310,7 @@ ActionManager.prototype.onMoveBlock = function(id, rawTarget) {
 
     this.updateCommentsPositions(block);
     this._updateBlockDefinitions(block);
+    this.__updateActiveEditor(block.id);
     return block;
 };
 
@@ -1395,6 +1399,7 @@ ActionManager.prototype.onSetBlockPosition = function(id, position) {
 
     // Save the block definition
     this._updateBlockDefinitions(block);
+    this.__updateActiveEditor(block.id);
 };
 
 ActionManager.prototype.updateCommentsPositions = function(block) {
@@ -2141,9 +2146,41 @@ ActionManager.prototype.getBlockInputs = function(block) {
     return allInputs;
 };
 
+ActionManager.prototype.__updateActiveEditor = function(blockId) {
+    var ownerId = this._blockToOwnerId[blockId],
+        editor = this._getCustomBlockEditor(ownerId),
+        ide = this.ide(),
+        owner;
+
+    if (this.currentEvent.replayType) {
+        return;
+    }
+
+    if (editor) {
+        ide.setActiveEditor(editor);
+    }
+
+    owner = this._owners[ownerId];
+    if (owner === ide.currentSprite) {
+        ide.setActiveEditor();
+    }
+};
+
 ActionManager.prototype.afterActionApplied = function(/*msg*/) {
-    // Update the scripts morph undo
-    this.ide().currentSprite.scripts.updateUndoControls();
+    // Update the undo buttons of the focused window
+    var ide = this.ide(),
+        active = ide.activeEditor,
+        scripts;
+
+    // Update the focus (set to the owner if the owner is the currentSprite or
+    // a custom block)
+
+
+    if (active instanceof BlockEditorMorph) {
+        active.onSetActive();
+    } else {  // IDE
+        ide.currentSprite.scripts.updateUndoControls();
+    }
 };
 
 ActionManager.prototype.onMessage = function(msg) {

@@ -253,6 +253,7 @@ IDE_Morph.prototype.init = function (isAutoFill) {
 
     // override inherited properites:
     this.color = this.backgroundColor;
+    this.activeEditor = this;
 };
 
 IDE_Morph.prototype.openIn = function (world) {
@@ -551,6 +552,43 @@ IDE_Morph.prototype.createLogo = function () {
     this.logo.color = new Color();
     this.logo.setExtent(new Point(200, 28)); // dimensions are fixed
     this.add(this.logo);
+};
+
+IDE_Morph.prototype.mouseClickLeft = function () {
+    this.setActiveEditor();
+};
+
+IDE_Morph.prototype.setActiveEditor = function (dialog) {
+    if (this.activeEditor === dialog) {
+        return;
+    }
+
+    this.activeEditor.onUnsetActive();
+    this.activeEditor = dialog || this;
+    this.activeEditor.onSetActive();
+};
+
+IDE_Morph.prototype.onSetActive = function () {
+    if (this.currentTab === 'scripts') {
+        this.currentSprite.scripts.updateUndoControls();
+    }
+};
+
+IDE_Morph.prototype.onUnsetActive = function () {
+    if (this.currentTab === 'scripts') {
+        this.currentSprite.scripts.hideUndoControls();
+    }
+};
+
+IDE_Morph.prototype.getActiveEntity = function () {
+    // Return the entity which is the subject of the focus. If a block editor
+    // is open, return the definition which is being edited, else return the
+    // sprite being edited
+
+    if (this.activeEditor instanceof BlockEditorMorph) {
+        return this.activeEditor.definition;
+    }
+    return this.currentSprite;
 };
 
 IDE_Morph.prototype.createControlBar = function () {
@@ -1350,8 +1388,8 @@ IDE_Morph.prototype.createSpriteEditor = function () {
         this.spriteEditor.contents.acceptsDrops = true;
 
         scripts.scrollFrame = this.spriteEditor;
-        scripts.updateUndoControls();
         this.add(this.spriteEditor);
+        scripts.updateUndoControls();
         this.spriteEditor.scrollX(this.spriteEditor.padding);
         this.spriteEditor.scrollY(this.spriteEditor.padding);
     } else if (this.currentTab === 'costumes') {

@@ -1834,8 +1834,22 @@ BlockEditorMorph.prototype.init = function (definition, target) {
     block.fixBlockColor(proto, true);
 };
 
+BlockEditorMorph.prototype.mouseClickLeft = function() {
+    var ide = this.target.parentThatIsA(IDE_Morph);
+    ide.setActiveEditor(this);
+};
+
+BlockEditorMorph.prototype.onSetActive = function() {
+    this.body.contents.updateUndoControls();
+};
+
+BlockEditorMorph.prototype.onUnsetActive = function() {
+    this.body.contents.hideUndoControls()
+};
+
 BlockEditorMorph.prototype.popUp = function () {
-    var world = this.target.world();
+    var world = this.target.world(),
+        ide;
 
     if (world) {
         BlockEditorMorph.uber.popUp.call(this, world);
@@ -1848,6 +1862,9 @@ BlockEditorMorph.prototype.popUp = function () {
             this.corner
         );
         world.keyboardReceiver = null;
+        // Set the undo focus
+        ide = this.target.parentThatIsA(IDE_Morph);
+        ide.setActiveEditor(this);
     }
 };
 
@@ -1879,6 +1896,13 @@ BlockEditorMorph.prototype.accept = function (origin) {
             }
         }
     }
+
+    // Update the focus
+    var ide = this.target.parentThatIsA(IDE_Morph);
+    if (ide && ide.activeEditor === this) {
+        ide.setActiveEditor();
+    }
+
     this.close();
 };
 

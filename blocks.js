@@ -3904,20 +3904,13 @@ CommandBlockMorph.prototype.snap = function (target) {
         cslot,
         affected;
 
-    scripts.clearDropInfo();
-    scripts.lastDroppedBlock = this;
     if (target === null) {
         this.startLayout();
         this.fixBlockColor();
         this.endLayout();
         CommandBlockMorph.uber.snap.call(this); // align stuck comments
-        if (hand) {
-            scripts.recordDrop(hand.grabOrigin);
-        }
         return;
     }
-
-    scripts.lastDropTarget = target;
 
     this.startLayout();
     if (target.loc === 'bottom') {
@@ -4696,9 +4689,6 @@ ReporterBlockMorph.prototype.snap = function (target) {
     this.fixBlockColor();
     this.endLayout();
     ReporterBlockMorph.uber.snap.call(this);
-    if (hand) {
-        scripts.recordDrop(hand.grabOrigin);
-    }
 };
 
 ReporterBlockMorph.prototype.prepareToBeGrabbed = function (handMorph) {
@@ -5406,7 +5396,7 @@ ScriptsMorph.prototype.init = function (owner) {
     // initialize "undrop" queue
     this.isAnimating = false;
     this.dropRecord = null;
-    this.recordDrop();
+    //this.recordDrop();
 };
 
 // ScriptsMorph deep copying:
@@ -6147,20 +6137,33 @@ ScriptsMorph.prototype.recordDrop = function (lastGrabOrigin) {
     this.updateUndoControls();
 };
 
+ScriptsMorph.prototype.definitionOrSprite = function () {
+    var gparent = this.parent.parent,
+        owner = this.owner;
+
+    if (gparent instanceof BlockEditorMorph) {
+        owner = gparent.definition;
+    }
+
+    return owner;
+};
+
 ScriptsMorph.prototype.addUndoControls = function () {
     var toolBar = new AlignmentMorph(),
-        shade = (new Color(140, 140, 140));
+        shade = (new Color(140, 140, 140)),
+        owner = this.definitionOrSprite();
+
     toolBar.undoButton = new PushButtonMorph(
         this,
         function() {
-            SnapUndo.undo(this.owner);
+            SnapUndo.undo(owner);
         },
         new SymbolMorph("turnBack", 12)
     );
     toolBar.redoButton = new PushButtonMorph(
         this,
         function() {
-            SnapUndo.redo(this.owner);
+            SnapUndo.redo(owner);
         },
         new SymbolMorph("turnForward", 12)
     );
@@ -6181,13 +6184,15 @@ ScriptsMorph.prototype.addUndoControls = function () {
 };
 
 ScriptsMorph.prototype.updateUndoControls = function () {
-    var sf = this.parentThatIsA(ScrollFrameMorph);
+    var sf = this.parentThatIsA(ScrollFrameMorph),
+        owner = this.definitionOrSprite();
+
     if (!sf) {return; }
     if (!sf.toolBar) {
         sf.toolBar = this.addUndoControls();
         sf.add(sf.toolBar);
     }
-    if (SnapUndo.canUndo(this.owner)) {
+    if (SnapUndo.canUndo(owner)) {
         if (!sf.toolBar.undoButton.isVisible) {
             sf.toolBar.undoButton.show();
         }
@@ -6195,7 +6200,7 @@ ScriptsMorph.prototype.updateUndoControls = function () {
         sf.toolBar.undoButton.hide();
     }
 
-    if (SnapUndo.canRedo(this.owner)) {
+    if (SnapUndo.canRedo(owner)) {
         if (!sf.toolBar.redoButton.isVisible) {
             sf.toolBar.redoButton.show();
             sf.toolBar.undoButton.mouseLeave();
@@ -6212,6 +6217,15 @@ ScriptsMorph.prototype.updateUndoControls = function () {
         sf.toolBar = null;
     }
     sf.adjustToolBar();
+};
+
+ScriptsMorph.prototype.hideUndoControls = function () {
+    var sf = this.parentThatIsA(ScrollFrameMorph);
+
+    if (sf.toolBar) {
+        sf.toolBar.undoButton.hide();
+        sf.toolBar.redoButton.hide();
+    }
 };
 
 // ScriptsMorph sorting blocks and comments
@@ -6307,6 +6321,7 @@ ScriptsMorph.prototype.mouseClickLeft = function (pos) {
         return this.edit(pos);
     }
     if (this.focus) {this.focus.stopEditing(); }
+    this.escalateEvent('mouseClickLeft', pos);
 };
 
 // ScriptsMorph keyboard support
@@ -12545,22 +12560,14 @@ CommentMorph.prototype.snap = function (target) {
         return null;
     }
 
-    scripts.clearDropInfo();
-
     if (target !== null) {
         target.comment = this;
         this.block = target;
         if (this.snapSound) {
             this.snapSound.play();
         }
-        scripts.lastDropTarget = {element: target};
     }
     this.align();
-    scripts.lastDroppedBlock = this;
-    if (hand) {
-        scripts.recordDrop(hand.grabOrigin);
-    }
-
 };
 
 // CommentMorph sticking to blocks

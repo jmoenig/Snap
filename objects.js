@@ -5598,11 +5598,11 @@ StageMorph.prototype.fireKeyEvent = function (key) {
         return;
     }
     if (evt === 'ctrl z') {
-        if (!ide.isAppMode) {SnapUndo.undo(ide.currentSprite);}
+        if (!ide.isAppMode) {SnapUndo.undo(ide.getActiveEntity());}
          return;
     }
     if (evt === 'ctrl shift z' || (evt === 'ctrl y')) {
-        if (!ide.isAppMode) {SnapUndo.redo(ide.currentSprite);}
+        if (!ide.isAppMode) {SnapUndo.redo(ide.getActiveEntity());}
          return;
     }
     if (evt === 'ctrl n') {
