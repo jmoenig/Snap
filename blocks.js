@@ -5722,7 +5722,7 @@ ScriptsMorph.prototype.userMenu = function () {
                         'turnBack',
                         MorphicPreferences.menuFontSize
                     ),
-                    'undrop'
+                    localize('undrop')
                 ],
                 'undrop',
                 'undo the last\nblock drop\nin this pane'
@@ -5736,7 +5736,7 @@ ScriptsMorph.prototype.userMenu = function () {
                         'turnForward',
                         MorphicPreferences.menuFontSize
                     ),
-                    'redrop'
+                    localize('redrop')
                 ],
                 'redrop',
                 'redo the last undone\nblock drop\nin this pane'
