@@ -82,7 +82,7 @@ SpeechBubbleMorph, RingMorph, isNil, FileReader, TableDialogMorph,
 BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph*/
 
-modules.objects = '2016-December-05';
+modules.objects = '2016-December-09';
 
 var SpriteMorph;
 var StageMorph;
@@ -6207,7 +6207,9 @@ StageMorph.prototype.userMenu = function () {
     if (shiftClicked) {
         menu.addLine();
         menu.addItem(
-            ide.currentSprite instanceof SpriteMorph ?	"turn pen trails into new costume..." : "turn pen trails into new background...",
+            ide.currentSprite instanceof SpriteMorph ?
+                "turn pen trails into new costume..."
+                    : "turn pen trails into new background...",
             function () {
                 var costume = new Costume(
                     myself.trailsCanvas,
@@ -6217,10 +6219,11 @@ StageMorph.prototype.userMenu = function () {
                 ide.currentSprite.wearCostume(costume);
                 ide.hasChangedMedia = true;
             },
-            ide.currentSprite instanceof SpriteMorph ? 'turn all pen trails and stamps\n' +
-                'into a new costume for the\ncurrently selected sprite' :
-				'turn all pen trails and stamps\n' +
-				'into a new background for the stage',
+            ide.currentSprite instanceof SpriteMorph ?
+                'turn all pen trails and stamps\n' +
+                    'into a new costume for the\ncurrently selected sprite'
+                        : 'turn all pen trails and stamps\n' +
+                            'into a new background for the stage',
             new Color(100, 0, 0)
         );
     }

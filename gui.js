@@ -72,7 +72,7 @@ isRetinaSupported, SliderMorph, Animation*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2016-December-08';
+modules.gui = '2016-December-09';
 
 // Declarations
 
@@ -1281,8 +1281,8 @@ IDE_Morph.prototype.createSpriteBar = function () {
         null, // target
         function () {tabBar.tabTo('costumes'); },
         localize(this.currentSprite instanceof SpriteMorph ?
-			'Costumes' : 'Backgrounds'
-			),
+            'Costumes' : 'Backgrounds'
+        ),
         function () {  // query
             return myself.currentTab === 'costumes';
         }
@@ -6821,7 +6821,8 @@ CostumeIconMorph.prototype.renameCostume = function () {
             }
         }
     ).prompt(
-        this.currentSprite instanceof SpriteMorph ?	'rename costume' : 'rename background',
+        this.currentSprite instanceof SpriteMorph ?
+            'rename costume' : 'rename background',
         costume.name,
         this.world()
     );
