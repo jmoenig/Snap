@@ -186,11 +186,11 @@ SnapTranslator.dict.pl = {
     'language_name':
         'Polski', // the name as it should appear in the language menu
     'language_translator':
-        'Witek Kranas', // your name for the Translators tab
+        'Witek Kranas & deKrain', // your name for the Translators tab
     'translator_e-mail':
         'witek@oeiizk.waw.pl', // optional
     'last_changed':
-        '2015-08-06', // this, too, will appear in the Translators tab
+        '2016-11-14', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -415,6 +415,8 @@ SnapTranslator.dict.pl = {
         'ustaw rozmiar pisaka na %n',
     'stamp':
         'stempluj',
+    'fill':
+        'wype\u0142nij',
 
     // control:
     'when %greenflag clicked':
@@ -433,6 +435,8 @@ SnapTranslator.dict.pl = {
         'najechany przez kursor myszy',
     'mouse-departed':
         'opuszczony przez kursor myszy',
+    'when %b':
+        'kiedy %b',
     'when I receive %msgHat':
         'kiedy otrzymam %msgHat',
     'broadcast %msg':
@@ -445,6 +449,8 @@ SnapTranslator.dict.pl = {
         'wiadomo\u015B\u0107',
     'any message':
         'dowolna wiadomo\u015B\u0107',
+    'warp %c':
+        'wykonaj b\u0142yskawicznie %c',
     'wait %n secs':
         'czekaj %n s',
     'wait until %b':
@@ -487,8 +493,6 @@ SnapTranslator.dict.pl = {
         'uruchom %cmdRing z kontynuacj\u0105',
     'call %cmdRing w/continuation':
         'wywo\u0142aj %cmdRing z kontynuacj\u0105',
-    'warp %c':
-        'warp %c',
     'when I start as a clone':
         'kiedy zaczynam jako klon',
     'create a clone of %cln':
@@ -516,7 +520,7 @@ SnapTranslator.dict.pl = {
     'mouse y':
         'y myszy',
     'mouse down?':
-        'przycisk myszy naci\u015Bni\u0119ty',
+        'przycisk myszy naci\u015Bni\u0119ty?',
     'key %key pressed?':
         'klawisz %key naci\u015Bni\u0119ty?',
     'distance to %dst':
@@ -527,6 +531,8 @@ SnapTranslator.dict.pl = {
         'czasomierz',
     '%att of %spr':
         '%att z %spr',
+    'my %get':
+        'atrybut %get',
     'http:// %s':
         'http:// %s',
     'turbo mode?':
@@ -757,6 +763,28 @@ SnapTranslator.dict.pl = {
         'odznacz, aby wykona\u0107 skrypt\nz normaln\u0105 szybko\u015Bci\u0105',
     'check to enable\nIDE animations':
         'zaznacz, aby pozwoli\u0107\nna animacje IDE',
+    'Flat design':
+        'Prosty wygl\u0105d',
+    'check for alternative\nGUI design':
+        'zaznacz, aby prze\u0142\u0105czy\u0107\nna alternatywny wygl\u0105d GUI',
+    'uncheck for default\nGUI design':
+        'odznacz, aby przywr\u00F3ci\u0107\nnormalny wygląd GUI',
+    'Nested auto-wrapping':
+        'Przyleganie do kompletnych skrypt\u00F3w',
+    'check to enable auto-wrapping\ninside nested block stacks':
+        'zaznacz, aby umo\u017Cliwi\u0107 przyleganie\nC-blok\u00F3w do skrypt\u00F3w z czapkami',
+    'uncheck to confine auto-wrapping\nto top-level block stacks':
+        'odznacz, aby uniemo\u017Cliwi\u0107 przyleganie\nC-blok\u00F3w do skrypt\u00F3w z czapkami',
+    'Keyboard Editing':
+        'Edytowanie Klawiatur\u0105',
+    'Table support':
+        'Tablice 2D',
+    'Visible stepping':
+        'Debugowanie krokowe',
+    'check to turn on\n visible stepping (slow)':
+        'zaznacz, aby widzie\u0107 poszczeg\u00F3lne\nkroki skrypt\u00F3w (wolne)',
+    'uncheck to turn off\nvisible stepping':
+        'odznacz, aby wy\u0142\u0105czy\u0107\nkrokowanie',
     'Thread safe scripts':
         'Omijaj bezpieczne skrypty',
     'uncheck to allow\nscript reentrance':
