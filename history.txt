@@ -3186,7 +3186,8 @@ http://snap.berkeley.edu/run#cloud:Username=jens&ProjectName=rotation
 161212
 ------
 * fixed #1560
-* Morphic: added a few in-/out- only easing functions for animations 
+* Morphic: added a few in-/out- only easing functions for animations
+* Morphic: added easeOutElastic function thanks to @joshmarinacci’s excellent blog post
 
 
 == v4.10 === (in development)

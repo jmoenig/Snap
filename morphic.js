@@ -1838,7 +1838,15 @@ Animation.prototype.easings = {
 
     // ease out only:
     sine_out: function (t) {return Math.sin(radians(t * 90)); },
-    quad_out: function (t) {return t * (2 - t); }
+    quad_out: function (t) {return t * (2 - t); },
+    elastic_out: function (t) { // this one's fun!
+        // thanks to Josh Marinacci's blog:
+        // http://www.joshondesign.com/2013/03/01/improvedEasingEquations
+        var p = 0.3;
+        return Math.pow(2, -10 * t) * Math.sin(
+            (t - p / 4) * (2 * Math.PI) / p
+        ) + 1;
+    }
 };
 
 Animation.prototype.start = function () {
