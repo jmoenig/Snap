@@ -6296,9 +6296,11 @@ ScriptsMorph.prototype.moveBlock = function (block, target, hand) {
             dup = block.fullCopy(),
             ownerId = this.definitionOrSprite().id;
 
-        // TODO: will this work if coming from connected block?
-        hand.grabOrigin.origin.add(block);
-        block.setPosition(originPosition);
+        if (SnapActions.isCollaborating()) {
+            // only revert if collaborating - ow, this can't fail!
+            hand.grabOrigin.origin.add(block);
+            block.setPosition(originPosition);
+        }
 
         // copy the blocks and add them to the new editor
         dup.id = null;
@@ -6328,14 +6330,18 @@ ScriptsMorph.prototype.setBlockPosition = function (block, hand) {
 
     if (hand) {
         if (hand.grabOrigin.origin === this) {  // on the same script
-            originPosition = hand.grabOrigin.position.add(hand.grabOrigin.origin.position());
-            block.setPosition(originPosition);
+            if (SnapActions.isCollaborating()) {
+                originPosition = hand.grabOrigin.position.add(hand.grabOrigin.origin.position());
+                block.setPosition(originPosition);
+            }
         } else {  // move between scripts!
 
-            // Revert the block back to the origin in case this fails
-            originPosition = hand.grabOrigin.position.add(hand.grabOrigin.origin.position());
-            hand.grabOrigin.origin.add(block);
-            block.setPosition(originPosition);
+            if (SnapActions.isCollaborating()) {
+                // Revert the block back to the origin in case this fails
+                originPosition = hand.grabOrigin.position.add(hand.grabOrigin.origin.position());
+                hand.grabOrigin.origin.add(block);
+                block.setPosition(originPosition);
+            }
 
             // copy the blocks and add them to the new editor
             var dup = block.fullCopy();
