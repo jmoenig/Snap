@@ -5741,57 +5741,16 @@ ScriptsMorph.prototype.userMenu = function () {
             ide = blockEditor.target.parentThatIsA(IDE_Morph);
         }
     }
-    if (this.dropRecord) {
-        if (this.dropRecord.lastRecord) {
-            hasUndropQueue = true;
-            menu.addItem(
-                [
-                    new SymbolMorph(
-                        'turnBack',
-                        MorphicPreferences.menuFontSize
-                    ),
-                    'undrop'
-                ],
-                'undrop',
-                'undo the last\nblock drop\nin this pane'
-            );
-        }
-        if (this.dropRecord.nextRecord) {
-            hasUndropQueue = true;
-            menu.addItem(
-                [
-                    new SymbolMorph(
-                        'turnForward',
-                        MorphicPreferences.menuFontSize
-                    ),
-                    'redrop'
-                ],
-                'redrop',
-                'redo the last undone\nblock drop\nin this pane'
-            );
-        }
-        if (hasUndropQueue) {
-            if (shiftClicked) {
-                menu.addItem(
-                    "clear undrop queue",
-                    function () {
-                        myself.dropRecord = null;
-                        myself.clearDropInfo();
-                        myself.recordDrop();
-                    },
-                    'forget recorded block drops\non this pane',
-                    new Color(100, 0, 0)
-                );
-            }
-            menu.addLine();
-        }
-    }
 
-    menu.addItem('clean up', 'cleanUp', 'arrange scripts\nvertically');
-    menu.addItem('add comment', 'addComment');
     if (SnapUndo.canUndo(obj)) {
         menu.addItem(
-            'undo',
+            [
+                new SymbolMorph(
+                    'turnBack',
+                    MorphicPreferences.menuFontSize
+                ),
+                'undo'
+            ],
             function() {
                 SnapUndo.undo(obj);
             },
@@ -5800,14 +5759,25 @@ ScriptsMorph.prototype.userMenu = function () {
     }
     if (SnapUndo.canRedo(obj)) {
         menu.addItem(
-            'redo',
+            [
+                new SymbolMorph(
+                    'turnForward',
+                    MorphicPreferences.menuFontSize
+                ),
+                'redo'
+            ],
             function() {
                 SnapUndo.redo(obj);
             },
             'redo the last edit'
         );
     }
+    if (SnapUndo.canUndo(obj) || SnapUndo.canRedo(obj)) {
+        menu.addLine();
+    }
 
+    menu.addItem('clean up', 'cleanUp', 'arrange scripts\nvertically');
+    menu.addItem('add comment', 'addComment');
     menu.addItem(
         'scripts pic...',
         'exportScriptsPicture',
