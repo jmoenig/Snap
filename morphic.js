@@ -1136,7 +1136,7 @@
 
 /*global window, HTMLCanvasElement, FileReader, Audio, FileList*/
 
-var morphicVersion = '2016-December-07';
+var morphicVersion = '2016-December-12';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = getBlurredShadowSupport(); // check for Chrome-bug
 
@@ -1814,8 +1814,10 @@ function Animation(setter, getter, delta, duration, easing, onComplete) {
 }
 
 Animation.prototype.easings = {
-    // dictionary of a few pre-defined easing functions used to transgress the
-    //
+    // dictionary of a few pre-defined easing functions used to transition
+    // two states
+
+    // ease both in and out:
     linear: function (t) {return t; },
     sinusoidal: function (t) {return 1 - Math.cos(radians(t * 90)); },
     quadratic: function (t) {
@@ -1827,7 +1829,16 @@ Animation.prototype.easings = {
         return t < 0.5 ?
                 4 * t * t * t
                     : ((t - 1) * ((2 * t) - 2) * ((2 * t) - 2)) + 1;
-    }
+    },
+
+    // ease in only:
+    sine_in: function (t) {return 1 - Math.sin(radians(90 + (t * 90))); },
+    quad_in: function (t) {return t * t; },
+    cubic_in: function (t) {return t * t * t; },
+
+    // ease out only:
+    sine_out: function (t) {return Math.sin(radians(t * 90)); },
+    quad_out: function (t) {return t * (2 - t); }
 };
 
 Animation.prototype.start = function () {

@@ -3185,7 +3185,8 @@ http://snap.berkeley.edu/run#cloud:Username=jens&ProjectName=rotation
 
 161212
 ------
-* fixed #1560 
+* fixed #1560
+* Morphic: added a few in-/out- only easing functions for animations 
 
 
 == v4.10 === (in development)
