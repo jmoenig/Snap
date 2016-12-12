@@ -2158,7 +2158,12 @@ ActionManager.prototype.__updateActiveEditor = function(blockId) {
         ide = this.ide(),
         owner;
 
-    if (this.currentEvent.replayType) {
+    if (this.currentEvent.replayType) {  // don't change focus if undo/redo
+        return;
+    }
+
+    if (this.isCollaborating() && this.currentEvent.user !== this.id) {
+        // other user edits should not change the active editor
         return;
     }
 
