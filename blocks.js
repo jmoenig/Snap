@@ -149,7 +149,7 @@ isSnapObject, copy, PushButtonMorph, SpriteIconMorph, Process, AlignmentMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2016-December-09';
+modules.blocks = '2016-December-12';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -2452,7 +2452,11 @@ BlockMorph.prototype.userMenu = function () {
     if (this.parent.parentThatIsA(RingMorph)) {
         menu.addLine();
         menu.addItem("unringify", 'unringify');
-        menu.addItem("ringify", 'ringify');
+        top = this.topBlock();
+        if (this instanceof ReporterBlockMorph ||
+                (!(top instanceof HatBlockMorph))) {
+            menu.addItem("ringify", 'ringify');
+        }
         return menu;
     }
     if (this.parent instanceof ReporterSlotMorph
@@ -2587,6 +2591,9 @@ BlockMorph.prototype.ringify = function () {
             this.parent.silentReplaceInput(this, ring);
             ring.embed(this);
         } else if (top) { // command
+            if (top instanceof HatBlockMorph) {
+                return;
+            }
             top.parent.add(ring);
             ring.embed(top);
             ring.setCenter(center);

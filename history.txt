@@ -3183,6 +3183,10 @@ http://snap.berkeley.edu/run#cloud:Username=jens&ProjectName=rotation
 ------
 * Translation updates (Russian, Polish, Danish, Portuguese)
 
+161212
+------
+* fixed #1560 
+
 
 == v4.10 === (in development)
 
