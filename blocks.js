@@ -6307,8 +6307,10 @@ ScriptsMorph.prototype.setBlockPosition = function (block, hand) {
         originPosition;
 
     if (hand) {
-        originPosition = hand.grabOrigin.position.add(hand.grabOrigin.origin.position());
-        block.setPosition(originPosition);
+        if (hand.grabOrigin.origin === this) {  // not dropped between scripts
+            originPosition = hand.grabOrigin.position.add(hand.grabOrigin.origin.position());
+            block.setPosition(originPosition);
+        }
     }
 
     SnapActions.setBlockPosition(block, position);
