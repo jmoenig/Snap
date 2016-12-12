@@ -185,7 +185,7 @@ SnapTranslator.dict.ca = {
     'translator_e-mail':
         'bernat@arduino.org, jguille2@xtec.cat', // optional
     'last_changed':
-        '2016-07-07', // this, too, will appear in the Translators tab
+        '2016-12-12', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -225,6 +225,8 @@ SnapTranslator.dict.ca = {
         'Programes',
     'Costumes':
         'Vestits',
+    'Backgrounds':
+        'Fons',
     'Sounds':
         'Sons',
 
@@ -815,12 +817,16 @@ SnapTranslator.dict.ca = {
         'marca\'m per habilitar\nles animacions de la interfície',
     'Flat design':
         'Disseny pla',
+    'Nested auto-wrapping':
+        'Englobar blocs interns',
     'Keyboard Editing':
         'Edició per teclat',
     'Table support':
         'Edició de taules',
     'Table lines':
         'Línies de taules',
+    'Visible stepping':
+        'Monitoritzar pas a pas',
     'Thread safe scripts':
         'Fil d\'execució segur',
     'uncheck to allow\nscript reentrance':
@@ -924,9 +930,11 @@ SnapTranslator.dict.ca = {
     'add comment':
         'afegeix un comentari',
     'undrop':
-        'recupera bloc',
+        'desfés',
     'undo the last\nblock drop\nin this pane':
-        'recupera l\'últim bloc\nque s\'hagi llençat',
+        'desfés l\'últim moviment\nde blocs',
+    'redrop':
+        'refés',
     'scripts pic...':
         'exporta com a imatge...',
     'open a new window\nwith a picture of all scripts':
@@ -1144,7 +1152,7 @@ SnapTranslator.dict.ca = {
     'current module versions:':
         'versions actuals dels mòduls',
     'Contributors':
-        'Contribuïdors',
+        'Col·laboradors',
     'Translations':
         'Traduccions',
 
@@ -1200,6 +1208,18 @@ SnapTranslator.dict.ca = {
         'Buit',
 
     // graphical effects
+    'color':
+        'color',
+    'fisheye':
+        'ull de peix',
+    'whirl':
+        'remolí',
+    'pixelate':
+        'pixelat',
+    'mosaic':
+        'mosaic',
+    'saturation':
+        'saturació',
     'brightness':
         'brillantor',
     'ghost':
@@ -1351,9 +1371,11 @@ SnapTranslator.dict.ca = {
     'command':
         'comanda',
     'reporter':
-        'reporter',
+        'reportador',
     'predicate':
         'predicat',
+    'sprite':
+        'objecte',
 
     // list indices
     'last':
@@ -1381,7 +1403,7 @@ SnapTranslator.dict.ca = {
     'other clones':
         'altres clons',
     'dangling?':
-        'Baumeln?',
+        'penjat?',
     'rotation x':
         'rotació x',
     'rotation y':
@@ -1389,6 +1411,9 @@ SnapTranslator.dict.ca = {
     'center x':
         'centre x',
     'center y':
-        'centre y'
-
+        'centre y',
+    'name':
+        'nom',
+    'stage':
+        'escenari'
 };
