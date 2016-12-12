@@ -3567,7 +3567,7 @@ BlockMorph.prototype.destroy = function () {
         comment.destroy();
     });
 
-    if (!this.parent || !this.parent.topBlock
+    if ((!this.parent || !this.parent.topBlock)
             && this.activeProcess()) {
         this.activeProcess().stop();
     }
@@ -6277,7 +6277,7 @@ ScriptsMorph.prototype.reactToDropOf = function (droppedMorph, hand) {
 
         target = droppedMorph.snapTarget(hand);
         if (target) {  // moveBlock
-            SnapActions.moveBlock(droppedMorph, target);
+            this.moveBlock(droppedMorph, target, hand);
         } else if (!droppedMorph.id) {  // addBlock
             this.addBlock(droppedMorph);
         } else {  // change position
@@ -6287,15 +6287,35 @@ ScriptsMorph.prototype.reactToDropOf = function (droppedMorph, hand) {
     this.adjustBounds();
 };
 
+ScriptsMorph.prototype.moveBlock = function (block, target, hand) {
+    var origin = hand && hand.grabOrigin.origin;
+
+    if (origin !== this && origin instanceof ScriptsMorph) {  // moving between open editors
+        // Revert the block back to the origin in case this fails
+        var originPosition = hand.grabOrigin.position.add(hand.grabOrigin.origin.position()),
+            dup = block.fullCopy(),
+            ownerId = this.definitionOrSprite().id;
+
+        // TODO: will this work if coming from connected block?
+        hand.grabOrigin.origin.add(block);
+        block.setPosition(originPosition);
+
+        // copy the blocks and add them to the new editor
+        dup.id = null;
+        return SnapActions.moveBlock(dup, target)
+            // if that succeeds, remove them from the current editor
+            .accept(function() {
+                SnapActions.removeBlock(block);
+            });
+    } else {  // basic moveBlock
+        SnapActions.moveBlock(block, target);
+    }
+};
+
 ScriptsMorph.prototype.addBlock = function (block) {
     var position = block.position(),
-        blockEditor = this.parentThatIsA(BlockEditorMorph),
         scripts = block.parentThatIsA(ScriptsMorph),
-        ownerId = this.owner.id;
-
-    if (blockEditor) {
-        ownerId = blockEditor.definition.id;
-    }
+        ownerId = this.definitionOrSprite().id;
 
     SnapActions.addBlock(block, scripts, position, ownerId);
 
@@ -6307,9 +6327,25 @@ ScriptsMorph.prototype.setBlockPosition = function (block, hand) {
         originPosition;
 
     if (hand) {
-        if (hand.grabOrigin.origin === this) {  // not dropped between scripts
+        if (hand.grabOrigin.origin === this) {  // on the same script
             originPosition = hand.grabOrigin.position.add(hand.grabOrigin.origin.position());
             block.setPosition(originPosition);
+        } else {  // move between scripts!
+
+            // Revert the block back to the origin in case this fails
+            originPosition = hand.grabOrigin.position.add(hand.grabOrigin.origin.position());
+            hand.grabOrigin.origin.add(block);
+            block.setPosition(originPosition);
+
+            // copy the blocks and add them to the new editor
+            var dup = block.fullCopy();
+                ownerId = this.definitionOrSprite().id;
+
+            return SnapActions.addBlock(dup, this, position, ownerId)
+                // if that succeeds, remove them from the current editor
+                .accept(function() {
+                    SnapActions.removeBlock(block);
+                });
         }
     }
 

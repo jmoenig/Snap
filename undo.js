@@ -272,12 +272,12 @@ UndoManager.Invert.removeBlock = function(args) {
     // args are
     //  [id, userDestroy, y, x, ownerId, block]
     // or 
-    //  [id, userDestroy, target]
-    if (args.length === 3) {
+    //  [id, userDestroy, target, block]
+    if (args.length === 4) {
         args.splice(1, 1);
         return {
             type: 'moveBlock',
-            args: args
+            args: args.reverse()
         };
     } else {
         return {

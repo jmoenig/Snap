@@ -504,21 +504,22 @@ ActionManager.prototype._replaceBlock = function(block, newBlock) {
 ActionManager.prototype._removeBlock = function(block, userDestroy) {
     var serialized = this.serializeBlock(block, true),
         position = this._positionOf[block.id],
+        target = this._targetOf[block.id],
         ownerId = this._blockToOwnerId[block.id],
         args = [
             block.id,
             userDestroy
         ];
         
-    if (position) {
+    if (target && !(target.loc === 'top' && position)) {
+        args.push(this._targetOf[block.id], serialized);
+    } else if (position) {
         args.push(
             position.y,
             position.x,
             ownerId,
             serialized
         );
-    } else {
-        args.push(this._targetOf[block.id]);
     }
 
     return args;
