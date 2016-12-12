@@ -1830,23 +1830,24 @@ Animation.prototype.easings = {
                 4 * t * t * t
                     : ((t - 1) * ((2 * t) - 2) * ((2 * t) - 2)) + 1;
     },
+    elastic: function (t) {
+        return (t -= 0.5) < 0 ?
+            (0.01 + 0.01 / t) * Math.sin(50 * t)
+                : (0.02 - 0.01 / t) * Math.sin(50 * t) + 1;
+    },
 
     // ease in only:
     sine_in: function (t) {return 1 - Math.sin(radians(90 + (t * 90))); },
     quad_in: function (t) {return t * t; },
     cubic_in: function (t) {return t * t * t; },
+    elastic_in: function (t) {
+        return (0.04 - 0.04 / t) * Math.sin(25 * t) + 1;
+    },
 
     // ease out only:
     sine_out: function (t) {return Math.sin(radians(t * 90)); },
     quad_out: function (t) {return t * (2 - t); },
-    elastic_out: function (t) { // this one's fun!
-        // thanks to Josh Marinacci's blog:
-        // http://www.joshondesign.com/2013/03/01/improvedEasingEquations
-        var p = 0.3;
-        return Math.pow(2, -10 * t) * Math.sin(
-            (t - p / 4) * (2 * Math.PI) / p
-        ) + 1;
-    }
+    elastic_out: function (t) {return 0.04 * t / (--t) * Math.sin(25 * t); }
 };
 
 Animation.prototype.start = function () {
