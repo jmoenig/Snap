@@ -818,7 +818,7 @@ SnapTranslator.dict.ca = {
     'Flat design':
         'Disseny pla',
     'Nested auto-wrapping':
-        'Englobar blocs interns',
+        'Engloba blocs interns',
     'Keyboard Editing':
         'Edició per teclat',
     'Table support':
@@ -1199,7 +1199,7 @@ SnapTranslator.dict.ca = {
     'edge':
         'vora',
     'pen trails':
-        'rastre del llapis',
+        'dibuix sobre l\'escenari',
 
     // costumes
     'Turtle':
@@ -1603,7 +1603,7 @@ SnapTranslator.dict.ca = {
     'Codification support':
         'Suport pel mapeig de codi',
     'check for block\nto text mapping features':
-        'marqueu per habilitar les funcionalitats\nde mapeig de blocs en codi.',
+        'marqueu per habilitar les funcionalitats\nde mapeig de blocs en codi',
     'saved.':
         'desat.',
     'options...':
@@ -1741,9 +1741,9 @@ SnapTranslator.dict.ca = {
     'robot':
         'robot',
     'turn pen trails into new costume...':
-        'crear un nou vestit amb la imatge dibuixada…',
+        'crea un nou vestit amb la imatge dibuixada…',
     'turn all pen trails and stamps\ninto a new costume for the\ncurrently selected sprite':
-        'crea un nou vestit per l\'actual vestit\namb la imatge dibuixada',
+        'crea un nou vestit per l\'actual objecte\namb la imatge dibuixada',
     'pen':
         'llapis',
     'tip':
@@ -1781,7 +1781,7 @@ SnapTranslator.dict.ca = {
     'open a new window\nwith a picture of both\nthis script and its result':
         'obre una finestra\n amb el programa i el resultat',
     'JavaScript function ( %mult%s ) { %code }':
-        'funció JavaScript ( %mult%s ) { %code }',
+        'JavaScript function ( %mult%s ) { %code }',
     'Select categories of additional blocks to add to this project.':
         'Trieu conjunts de blocs addicionals per afegir a aquest projecte.',
     'Import sound':
@@ -1909,5 +1909,67 @@ SnapTranslator.dict.ca = {
     'uncheck to disable\nsprite inheritance features':
         'desmarqueu per deshabilitar les\nfuncionalitats relatives a l\'herència d\'objectes',
     'check for sprite\ninheritance features':
-        'marqueu per habilitar les\nfuncionalitats relatives a l\'herència d\'objectes'
+        'marqueu per habilitar les\nfuncionalitats relatives a l\'herència d\'objectes',
+
+//More strings missed in de and pt translations
+
+//Mode developer blocks
+	'wardrobe':
+		'vestits',
+	'jukebox':
+		'sons',
+	'save %imgsource as costume named %s':
+		'desa %imgsource com a vestit amb nom %s',
+	'screenshot':
+		'captura de pantalla',
+	'stage image':
+		'imatge de l\'escenari',
+	'frames':
+		'frames',
+	'processes':
+		'processos',
+	'map %repRing over %l':
+		'mapeja %repRing sobre %l',
+	'for %upvar in %l %cl':
+		'per cada %upvar dins %l %cl',
+	'show table %l':
+		'mostra la taula %l',
+	'%txtfun of %s':
+		'%txtfun de %s',
+
+//IDE Messages
+	'entering development mode.\n\nerror catching is turned off,\nuse the browser\'s web console\nto see error messages.':
+		'entrant en mode desenvolupador.\n\ndeshabilitada la captura d\'errades,\nutilitzeu la consola del navegador\nper veure els errors.',
+	'entering user mode':
+		'entrant en mode d\'usuari',
+	'dragging threshold':
+		'llindar per l\'arrossegament',
+	'redo the last undone block drop in this pane':
+		'refés l\'últim moviment\nde blocs desfet',
+
+//costumes and backgrounds
+	'rename background':
+		'canvia el nom del fons',
+	'turn pen trails into new background...':
+		'crea un nou fons amb la imatge dibuixada…',
+	'turn all pen trails and stamps\ninto a new background for the stage':
+		'crea un nou fons d\'escenari\namb la imatge dibuixada',
+
+//Helping text for menu options
+	'uncheck for default\nGUI design':
+		'desmarqueu per obtenir la\ninterfície gràfica per defecte',
+	'uncheck to confine auto-wrapping\nto top-level block stacks':
+		'desmarqueu per restringir\nl\'englobament de blocs a les piles senceres',
+	'check to enable auto-wrapping\ninside nested block stacks':
+		'marqueu per habilitar\nl\'englobament de blocs interns',
+	'check to turn on\n visible stepping (slow)':
+		'marqueu per monitoritzar la\nprogramació per pas a pas (alenteix)',
+	'uncheck to turn off\nvisible stepping':
+		'desmarqueu per deshabilitar\nla monitorització pas a pas',
+	'uncheck to disable\nblock to text mapping features':
+		'demarqueu per deshabilitar les\nfuncionalitats de mapeig de blocs en codi',
+	'uncheck for smooth\nscaling of vector costumes':
+		'desmarqueu per atenuar\nescalant les imatges vectorials',
+	'check to enable\nsprite composition':
+		'marqueu per habilitar\nl\'ancoratge d\'objectes'
 };
