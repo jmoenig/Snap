@@ -3189,6 +3189,10 @@ http://snap.berkeley.edu/run#cloud:Username=jens&ProjectName=rotation
 * Morphic: added a few in-/out- only easing functions for animations
 * Morphic: added easeOutElastic function thanks to @joshmarinacci’s excellent blog post
 
+161213
+------
+* Catalan translation update, thanks, @jguille2 !
+
 
 == v4.10 === (in development)
 
@@ -3205,6 +3209,4 @@ Features:
 Fixes:
 * Music (play note) to work again in new and recent browser versions (Chrome 55)
 * IDE layout: fixed resizing issues when the window becomes too small
-* Translation updates (Russian, Polish, Danish, Portuguese)
-
-
+* Translation updates (Russian, Polish, Danish, Portuguese, Catalan)
