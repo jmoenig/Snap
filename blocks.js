@@ -6163,36 +6163,52 @@ ScriptsMorph.prototype.addUndoControls = function () {
 
 ScriptsMorph.prototype.updateUndoControls = function () {
     var sf = this.parentThatIsA(ScrollFrameMorph),
-        owner = this.definitionOrSprite();
+        owner = this.definitionOrSprite(),
+        changed = false;
 
     if (!sf) {return; }
+
     if (!sf.toolBar) {
         sf.toolBar = this.addUndoControls();
         sf.add(sf.toolBar);
     }
+
     if (SnapUndo.canUndo(owner)) {
-        if (!sf.toolBar.undoButton.isVisible) {
-            sf.toolBar.undoButton.show();
+        if (!sf.toolBar.undoButton.isEnabled) {
+            sf.toolBar.undoButton.enable();
+            changed = true;
         }
-    } else if (sf.toolBar.undoButton.isVisible) {
-        sf.toolBar.undoButton.hide();
+    } else if (sf.toolBar.undoButton.isEnabled) {
+        sf.toolBar.undoButton.disable();
+        changed = true;
     }
 
     if (SnapUndo.canRedo(owner)) {
-        if (!sf.toolBar.redoButton.isVisible) {
-            sf.toolBar.redoButton.show();
+        if (!sf.toolBar.redoButton.isEnabled) {
+            sf.toolBar.redoButton.enable();
             sf.toolBar.undoButton.mouseLeave();
+            changed = true;
         }
-    } else if (sf.toolBar.redoButton.isVisible) {
-        sf.toolBar.redoButton.hide();
+    } else if (sf.toolBar.redoButton.isEnabled) {
+        sf.toolBar.redoButton.disable();
+        changed = true;
     }
 
-    if (sf.toolBar.undoButton.isVisible || sf.toolBar.redoButton.isVisible) {
-        sf.toolBar.drawNew();
-        sf.toolBar.changed();
-    } else {
+    if (sf.toolBar.undoButton.isEnabled || sf.toolBar.redoButton.isEnabled) {
+        // both buttons should be visible
+        if (!sf.toolBar.undoButton.isVisible || !sf.toolBar.redoButton.isVisible) {
+            sf.toolBar.undoButton.show();
+            sf.toolBar.redoButton.show();
+            changed = true;
+        }
+    } else if (sf.toolBar.undoButton.isVisible || sf.toolBar.redoButton.isVisible) {
         sf.removeChild(sf.toolBar);
         sf.toolBar = null;
+    }
+
+    if (changed && sf.toolBar) {
+        sf.toolBar.drawNew();
+        sf.toolBar.changed();
     }
     sf.adjustToolBar();
 };
