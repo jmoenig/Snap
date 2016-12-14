@@ -1264,14 +1264,16 @@ ActionManager.prototype.onMoveBlock = function(id, rawTarget) {
             target.element = this.getBlockFromId(target.element);
         }
         scripts = target.element.parentThatIsA(ScriptsMorph);
-        if (target.loc === 'bottom' && block.parent) {
-            // disconnect command block
-            block.parent.removeChild(block);
-            scripts.add(block);
-        } else if (target.loc === 'top' && !(block.parent instanceof ScriptsMorph)) {
-            // disconnect if connecting to a parent
-            block.parent.removeChild(block);
-            scripts.add(block);
+        if (block.parent) {
+            if (target.loc === 'bottom') {
+                // disconnect command block
+                block.parent.removeChild(block);
+                scripts.add(block);
+            } else if (target.loc === 'top' && !(block.parent instanceof ScriptsMorph)) {
+                // disconnect if connecting to a parent
+                block.parent.removeChild(block);
+                scripts.add(block);
+            }
         }
     } else if (block instanceof ReporterBlockMorph || block instanceof CommentMorph) {
         target = this.getBlockFromId(target);
