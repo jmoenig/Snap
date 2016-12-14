@@ -1565,12 +1565,27 @@ ActionManager.prototype.onDeleteVariable = function(name, ownerId) {
 };
 
 ActionManager.prototype.onRingify = function(blockId, ringId) {
-    var block = this.getBlockFromId(blockId);
+    var block = this.getBlockFromId(blockId),
+        ownerId = this._blockToOwnerId[block.id];
 
     if (block) {
-        var ring = block.ringify();
+        var ring = block.ringify(),
+            scripts = ring.parentThatIsA(ScriptsMorph);
+
         ring.id = ringId;
         this._blocks[ring.id] = ring;
+        this._blockToOwnerId[ring.id] = ownerId;
+
+        // Record the ring state
+        this._positionOf[ring.id] = this.getStandardPosition(scripts, ring.position());
+
+        // If it is a Reporter, potentially may need to update the target
+        if (block instanceof ReporterBlockMorph && this._targetOf[block.id]) {
+            this._targetOf[ring.id] = this._targetOf[block.id];  // ring occupies the block's old target
+            // update the block for it's new id
+            var newTarget = this.getId(block.parent, block.parent.inputs().indexOf(block));
+            this._targetOf[block.id] = newTarget;
+        }
     }
     this._updateBlockDefinitions(block);
 };
