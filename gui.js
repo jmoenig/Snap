@@ -4208,14 +4208,14 @@ IDE_Morph.prototype.rawOpenBlocksString = function (str, name, silently) {
         blocks = this.serializer.loadBlocks(str, myself.stage);
     }
     if (silently) {
-        this.importCustomBlocks(blocks);
+        this.importCustomBlocks(blocks, name);
     } else {
         new BlockImportDialogMorph(blocks, this.stage, name).popUp();
     }
     return blocks;
 };
 
-IDE_Morph.prototype.importCustomBlocks = function (blocks) {
+IDE_Morph.prototype.importCustomBlocks = function (blocks, name) {
     var myself = this;
 
     blocks.forEach(function (def) {
