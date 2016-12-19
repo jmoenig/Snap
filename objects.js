@@ -1318,6 +1318,7 @@ function SpriteMorph(globals) {
 }
 
 SpriteMorph.prototype.init = function (globals) {
+    this.blockNames = {};
     this.name = localize('Sprite');
     this.variables = new VariableFrame(globals || null, this);
     this.scripts = new ScriptsMorph(this);
@@ -2407,7 +2408,6 @@ SpriteMorph.prototype.freshPalette = function (category) {
 };
 
 // SpriteMorph blocks searching
-
 SpriteMorph.prototype.blocksMatching = function (
     searchString,
     strictly,
@@ -2462,6 +2462,29 @@ SpriteMorph.prototype.blocksMatching = function (
         return newBlock;
     }
 
+    function generateCombinations(splitSpec) {
+        var specCombinations = [];
+        splitSpec.forEach(function (part) {
+            if (specCombinations.length === 0) {
+                specCombinations = specCombinations.concat(part);
+            } else if (isString(part)) {
+                specCombinations = specCombinations.map(
+                    function (name) {
+                        return (name + " " + part);
+                    }
+                );
+            } else {
+                specCombinations.forEach(function (name, idx) {
+                    specCombinations.splice(idx, 1);
+                    part.forEach(function (choice) {
+                        specCombinations.push(name + " " + choice);
+                    });
+                });
+            }
+        });
+        return specCombinations;
+    }
+
     // variable getters
     varNames.forEach(function (vName) {
         var rel = relevance(labelOf(vName.toLowerCase()), search);
@@ -2477,6 +2500,41 @@ SpriteMorph.prototype.blocksMatching = function (
                     rel = relevance(labelOf(spec), search);
                 if (rel !== -1) {
                     blocks.push([definition.templateInstance(), rel + '2']);
+                } else {
+                    var splitSpec = BlockMorph.prototype.parseSpec(
+                            definition.spec.split("'").join("")
+                        ),
+                        noChoices = true;
+
+                    splitSpec = splitSpec.map(function (part) {
+                        if (part.indexOf("%") === 0 && part.length > 1) {
+                            var choices = definition.inputOptionsOf(
+                                    part.substring(1))[0];
+                            if (choices) {
+                                noChoices = false;
+                                return Object.keys(choices);
+                            }
+                        }
+                        return part;
+                    });
+                    if (noChoices) {
+                        return;
+                    }
+                    splitSpec = splitSpec.filter(function (part) {
+                        return (part && (part instanceof Array ||
+                                (part.indexOf("%") !== 0 ||
+                                 part.length === 1)));
+                    });
+                    rel = Math.max.apply(
+                        null,
+                        generateCombinations(splitSpec).map(function (name) {
+                            return relevance(name.toLowerCase(), search);
+                        })
+                    );
+                    if (rel !== -1) {
+                        blocks.push([definition.templateInstance(),
+                                rel + '2']);
+                    }
                 }
             }
         });
@@ -2487,17 +2545,67 @@ SpriteMorph.prototype.blocksMatching = function (
         if (!StageMorph.prototype.hiddenPrimitives[selector] &&
                 contains(types, blocksDict[selector].type)) {
             var block = blocksDict[selector],
-                spec = localize(block.alias || block.spec).toLowerCase(),
-                rel = relevance(labelOf(spec), search);
+                spec = localize(block.alias || block.spec),
+                rel = relevance(labelOf(spec.toLowerCase()), search);
             if (
                 (rel !== -1) &&
                     (!block.dev) &&
                     (!block.only || (block.only === myself.constructor))
             ) {
                 blocks.push([primitive(selector), rel + '3']);
+            } else {
+                if (!myself.blockNames.hasOwnProperty(selector)) {
+                    var splitSpec = BlockMorph.prototype.parseSpec(spec),
+                        noChoices = true;
+                    splitSpec = splitSpec.map(function (part) {
+                        if (part.indexOf("%") === 0) {
+                            var input = SyntaxElementMorph.prototype
+                                .labelPart(part);
+                            if (input instanceof InputSlotMorph &&
+                                    input.choices &&
+                                    !isString(input.choices)) {
+                                noChoices = false;
+                                return Object.keys(input.choices).map(
+                                    function (choice) {
+                                        return choice.toLowerCase();
+                                    }
+                                );
+                            }
+                        }
+                        return part.toLowerCase();
+                    });
+                    if (noChoices) {
+                        myself.blockNames[selector] = false;
+                        return;
+                    }
+                    splitSpec = splitSpec.filter(function (part) {
+                        return (part instanceof Array ||
+                                part.indexOf("%") !== 0);
+                    });
+                    myself.blockNames[selector] = generateCombinations(
+                        splitSpec
+                    );
+                }
+                if (myself.blockNames[selector]) {
+                    rel = Math.max.apply(null,
+                            myself.blockNames[selector].map(
+                        function (name) {
+                            return relevance(name, search);
+                            }
+                        )
+                    );
+                    if (
+                        (rel !== -1) &&
+                            (!block.dev) &&
+                            (!block.only || (block.only === myself.constructor))
+                    ) {
+                        blocks.push([primitive(selector), rel + '3']);
+                    }
+                }
             }
         }
     });
+
     blocks.sort(function (x, y) {return x[1] < y[1] ? -1 : 1; });
     return blocks.map(function (each) {return each[0]; });
 };
