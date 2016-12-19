@@ -2744,10 +2744,12 @@ SpriteMorph.prototype.reporterize = function (expressionString) {
             if (ast[i] instanceof Array) {
                 block.silentReplaceInput(inps[i], blockFromAST(ast[i]));
             } else if (isString(ast[i])) {
-                block.silentReplaceInput(
-                    inps[i],
-                    SpriteMorph.prototype.variableBlock(ast[i])
-                );
+                if (ast[i] !== '_') {
+                    block.silentReplaceInput(
+                        inps[i],
+                        SpriteMorph.prototype.variableBlock(ast[i])
+                    );
+                }
             } else { // number
                 inps[i].setContents(ast[i]);
             }
@@ -2758,10 +2760,12 @@ SpriteMorph.prototype.reporterize = function (expressionString) {
                 if (ast[i] instanceof Array) {
                     block.silentReplaceInput(inps[i - 1], blockFromAST(ast[i]));
                 } else if (isString(ast[i])) {
-                    block.silentReplaceInput(
-                        inps[i - 1],
-                        SpriteMorph.prototype.variableBlock(ast[i])
-                    );
+                    if (ast[i] !== '_') {
+                        block.silentReplaceInput(
+                            inps[i - 1],
+                            SpriteMorph.prototype.variableBlock(ast[i])
+                        );
+                    }
                 } else { // number
                     inps[i - 1].setContents(ast[i]);
                 }
