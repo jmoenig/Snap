@@ -161,7 +161,7 @@ PushButtonMorph.prototype.init = function (
     // initialize inherited properties:
     TriggerMorph.uber.init.call(this);
 
-    this.isEnabled = true;
+    this.disabled = false;
     this.enabledColor = PushButtonMorph.prototype.labelColor;
     this.disabledColor = PushButtonMorph.prototype.disabledColor;
 
@@ -474,25 +474,25 @@ PushButtonMorph.prototype.createLabel = function () {
 
 PushButtonMorph.prototype.trigger = function () {
     // Only trigger if not disabled
-    if (this.isEnabled) {
+    if (!this.disabled) {
         PushButtonMorph.uber.trigger.call(this);
     }
 };
 
 PushButtonMorph.prototype.mouseDownLeft = function () {
-    if (this.isEnabled) {
+    if (!this.disabled) {
         PushButtonMorph.uber.mouseDownLeft.call(this);
     }
 };
 
 PushButtonMorph.prototype.mouseClickLeft = function () {
-    if (this.isEnabled) {
+    if (!this.disabled) {
         PushButtonMorph.uber.mouseClickLeft.call(this);
     }
 };
 
 PushButtonMorph.prototype.disable = function () {
-    if (this.isEnabled) {
+    if (!this.disabled) {
         if (this.enabledColor !== this.labelColor) {
             this.enabledColor = this.labelColor;
         }
@@ -500,7 +500,7 @@ PushButtonMorph.prototype.disable = function () {
         this.drawNew();
         this.fixLayout();
     }
-    this.isEnabled = false;
+    this.disabled = true;
 };
 
 PushButtonMorph.prototype.enable = function () {
@@ -509,7 +509,11 @@ PushButtonMorph.prototype.enable = function () {
         this.drawNew();
         this.fixLayout();
     }
-    this.isEnabled = true;
+    this.disabled = false;
+};
+
+PushButtonMorph.prototype.isEnabled = function () {
+    return !this.disabled;
 };
 
 // ToggleButtonMorph ///////////////////////////////////////////////////////

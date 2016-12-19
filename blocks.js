@@ -6174,27 +6174,27 @@ ScriptsMorph.prototype.updateUndoControls = function () {
     }
 
     if (SnapUndo.canUndo(owner)) {
-        if (!sf.toolBar.undoButton.isEnabled) {
+        if (!sf.toolBar.undoButton.isEnabled()) {
             sf.toolBar.undoButton.enable();
             changed = true;
         }
-    } else if (sf.toolBar.undoButton.isEnabled) {
+    } else if (sf.toolBar.undoButton.isEnabled()) {
         sf.toolBar.undoButton.disable();
         changed = true;
     }
 
     if (SnapUndo.canRedo(owner)) {
-        if (!sf.toolBar.redoButton.isEnabled) {
+        if (!sf.toolBar.redoButton.isEnabled()) {
             sf.toolBar.redoButton.enable();
             sf.toolBar.undoButton.mouseLeave();
             changed = true;
         }
-    } else if (sf.toolBar.redoButton.isEnabled) {
+    } else if (sf.toolBar.redoButton.isEnabled()) {
         sf.toolBar.redoButton.disable();
         changed = true;
     }
 
-    if (sf.toolBar.undoButton.isEnabled || sf.toolBar.redoButton.isEnabled) {
+    if (sf.toolBar.undoButton.isEnabled() || sf.toolBar.redoButton.isEnabled()) {
         // both buttons should be visible
         if (!sf.toolBar.undoButton.isVisible || !sf.toolBar.redoButton.isVisible) {
             sf.toolBar.undoButton.show();
