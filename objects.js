@@ -2640,85 +2640,126 @@ SpriteMorph.prototype.reporterize = function (expressionString) {
     // highly experimental Christmas Easter Egg 2016 :-)
     var ast;
 
-    function parseInfix(expression, operator, already) {
-        // very basic binary infix parser for arithmetic expressions
-        // with strict left-to-right operator precedence (like in Smalltalk)
-        // which can be overriden by - nested - parentheses.
-        // assumes well-formed expressions, no graceful error handling yet.
-
-        var inputs = ['', ''],
-            idx = 0,
-            ch;
-
-        function format(value) {
-            return value instanceof Array || isNaN(+value) ? value : +value;
-        }
-
-        function nested() {
-            var level = 1,
-                expr = '';
-            while (idx < expression.length) {
-                ch = expression[idx];
-                idx += 1;
-                switch (ch) {
-                case '(':
-                    level += 1;
-                    break;
-                case ')':
-                    level -= 1;
-                    if (!level) {
-                        return expr;
-                    }
-                    break;
-                }
-                expr += ch;
-            }
-        }
-
-        while (idx < expression.length) {
-            ch = expression[idx];
-            idx += 1;
-            switch (ch) {
-            case ' ':
-                break;
-            case '(':
-                if (inputs[operator ? 1 : 0].length) {
-                    inputs[operator ? 1 : 0] = [
-                        inputs[operator ? 1 : 0],
-                        parseInfix(nested())
-                    ];
-                } else {
-                    inputs[operator ? 1 : 0] = parseInfix(nested());
-                }
-                break;
-            case '-':
-            case '+':
-            case '*':
-            case '/':
-            case '%':
-                if (!operator && !inputs[0].length) {
-                    inputs[0] += ch;
-                } else if (operator) {
-                    return parseInfix(
-                        expression.slice(idx),
-                        ch,
-                        [operator, already, format(inputs[1])]
-                    );
-                } else {
-                    operator = ch;
-                    already = format(inputs[0]);
-                }
-                break;
-            default:
-                inputs[operator ? 1 : 0] += ch;
-            }
-        }
-        if (operator) {
-            return [operator, already, format(inputs[1])];
-        }
-        return format(inputs[0]);
+    function trim(string) {
+        return string.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, '');
     }
 
+    function tokenize(expressionString) {
+        var tokens = [];
+        var token;
+        expressionString = trim(expressionString);
+        function findIdent(s) {
+            var token = "";
+            while (expressionString.length > 0 && /\w|_/.test(expressionString[0])) {
+                token += expressionString[0];
+                expressionString = expressionString.slice(1);
+            };
+            return token
+        }
+        function findNumber(s) {
+            var token = "";
+            while (expressionString.length > 0 && /\d|\./.test(expressionString[0])) {
+                token += expressionString[0];
+                expressionString = expressionString.slice(1);
+            };
+            return token
+        }
+        while (expressionString.length > 0) {
+            expressionString = trim(expressionString);
+            if (/\w|_/.test(expressionString[0])) {
+                token = findIdent(expressionString);
+                tokens.push({ type: "ident", val: token});
+            } else if (/\d|\./.test(expressionString[0])) {
+                token = findNumber(expressionString);
+                tokens.push({ type: "number", val: token});
+            } else if (/[+\-*/%]/.test(expressionString[0])) {
+                tokens.push({ type: "operator", val: expressionString[0]});
+                expressionString = expressionString.slice(1);
+            } else if (expressionString[0] === "(") {
+                tokens.push({ type: "lp", val: "("});
+                expressionString = expressionString.slice(1);
+            } else if (expressionString[0] === ")") {
+                tokens.push({ type: "rp", val: "("});
+                expressionString = expressionString.slice(1);
+            } else if (expressionString[0] === ",") {
+                tokens.push({ type: "comma", val: ","});
+                expressionString = expressionString.slice(1);
+            }
+        };
+        return tokens;
+    }
+
+    function createASTFromTokens(tokens) {
+        return precedence2(tokens);
+        function precedence0(tokens) {
+            console.log(tokens)
+            var token = tokens.shift(0);
+            console.log(tokens)
+            if (token.type === "lp") {
+                var exp = createASTFromTokens(tokens);
+                if (tokens.pop(0).type !== "rp") {
+                    throw "Mismatched parenthesis";
+                }
+                return exp
+            } else if (token.type === "number") {
+                return +token.val
+            } else if (token.type === "operator") {
+                if (token.val === "-" || token.val === "+") {
+                    return [token.val, 0, createASTFromTokens(tokens)]
+                } else {
+                    throw "Invalid prefix operator"
+                }
+            } else if (token.type === "ident") {
+                if (tokens.length > 0 && tokens[0].type === "lp") {
+                    var args = [];
+                    tokens.remove(0);
+                    while (tokens[0].type !== "rp") {
+                        args.push(createASTFromTokens(tokens));
+                        if (tokens[0].type !== "comma") {
+                            throw "No comma between arguments";
+                        }
+                    };
+                    tokens.remove(0);
+                    return [token.val] + args;
+                } else {
+                    return token.val
+                }
+            } else {
+                throw "Invalid expression"
+            }
+        }
+        function precedence1(tokens) {
+            var lh = precedence0(tokens);
+            if (tokens.length === 0) return lh;
+            var op = tokens[0];
+            console.log("p1", op);
+            if (op.type !== "operator") throw "Invalid operator";
+            switch (op.val) {
+                case "*":
+                case "/":
+                case "%": break;
+                default: return lh
+            }
+            tokens.remove(0);
+            var rh = precedence1(tokens);
+            return [op, lh, rh];
+        }
+        function precedence2(tokens) {
+            var lh = precedence1(tokens);
+            if (tokens.length === 0) return lh;
+            var op = tokens[0];
+            console.log("p2", op);
+            if (op.type !== "operator") throw "Invalid operator";
+            switch (op.val) {
+                case "+":
+                case "-": break;
+                default: return lh
+            }
+            tokens.remove(0);
+            var rh = precedence2(tokens);
+            return [op, lh, rh];
+        }
+    }
     function blockFromAST(ast) {
         var block, selectors, monads, i, inps;
         selectors = {
