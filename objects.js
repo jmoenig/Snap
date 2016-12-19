@@ -2638,8 +2638,7 @@ SpriteMorph.prototype.searchBlocks = function (
 
 SpriteMorph.prototype.reporterize = function (expressionString) {
     // highly experimental Christmas Easter Egg 2016 :-)
-    var ast,
-        myself = this;
+    var ast;
 
     function parseInfix(expression, operator, already) {
         // very basic binary infix parser for arithmetic expressions
@@ -2683,12 +2682,20 @@ SpriteMorph.prototype.reporterize = function (expressionString) {
             case ' ':
                 break;
             case '(':
-                inputs[operator ? 1 : 0] = parseInfix(nested());
+                if (inputs[operator ? 1 : 0].length) {
+                    inputs[operator ? 1 : 0] = [
+                        inputs[operator ? 1 : 0],
+                        parseInfix(nested())
+                    ];
+                } else {
+                    inputs[operator ? 1 : 0] = parseInfix(nested());
+                }
                 break;
             case '-':
             case '+':
             case '*':
             case '/':
+            case '%':
                 if (!operator && !inputs[0].length) {
                     inputs[0] += ch;
                 } else if (operator) {
@@ -2713,28 +2720,54 @@ SpriteMorph.prototype.reporterize = function (expressionString) {
     }
 
     function blockFromAST(ast) {
-        var block, selectors, i, inps;
+        var block, selectors, monads, i, inps;
         selectors = {
             '+': 'reportSum',
             '-': 'reportDifference',
             '*': 'reportProduct',
-            '/': 'reportQuotient'
+            '/': 'reportQuotient',
+            '%': 'reportModulus'
         };
-        block = myself.blockForSelector(selectors[ast[0]], true);
-        block.isDraggable = true;
-        inps = block.inputs();
-        for (i = 1; i < 3; i += 1) {
+        monads = ['abs', 'ceiling', 'floor', 'sqrt', 'sin', 'cos', 'tan',
+            'asin', 'acos', 'atan', 'ln', 'log', 'round'];
+        if (contains(monads, ast[0])) { // monad
+            if (ast[0] === 'round') {
+                block = SpriteMorph.prototype.blockForSelector('reportRound');
+                inps = block.inputs();
+                i = 0;
+            } else {
+                block = SpriteMorph.prototype.blockForSelector('reportMonadic');
+                inps = block.inputs();
+                inps[0].setContents([ast[0]]);
+                i = 1;
+            }
             if (ast[i] instanceof Array) {
-                block.silentReplaceInput(inps[i - 1], blockFromAST(ast[i]));
+                block.silentReplaceInput(inps[i], blockFromAST(ast[i]));
             } else if (isString(ast[i])) {
                 block.silentReplaceInput(
-                    inps[i - 1],
-                    myself.variableBlock(ast[i])
+                    inps[i],
+                    SpriteMorph.prototype.variableBlock(ast[i])
                 );
             } else { // number
-                inps[i - 1].setContents(ast[i]);
+                inps[i].setContents(ast[i]);
+            }
+        } else { // diadic
+            block = SpriteMorph.prototype.blockForSelector(selectors[ast[0]]);
+            inps = block.inputs();
+            for (i = 1; i < 3; i += 1) {
+                if (ast[i] instanceof Array) {
+                    block.silentReplaceInput(inps[i - 1], blockFromAST(ast[i]));
+                } else if (isString(ast[i])) {
+                    block.silentReplaceInput(
+                        inps[i - 1],
+                        SpriteMorph.prototype.variableBlock(ast[i])
+                    );
+                } else { // number
+                    inps[i - 1].setContents(ast[i]);
+                }
             }
         }
+        block.isDraggable = true;
         block.fixLayout();
         block.fixBlockColor(null, true);
         return block;
@@ -6451,6 +6484,7 @@ StageMorph.prototype.palette = SpriteMorph.prototype.palette;
 StageMorph.prototype.freshPalette = SpriteMorph.prototype.freshPalette;
 StageMorph.prototype.blocksMatching = SpriteMorph.prototype.blocksMatching;
 StageMorph.prototype.searchBlocks = SpriteMorph.prototype.searchBlocks;
+StageMorph.prototype.reporterize = SpriteMorph.prototype.reporterize;
 StageMorph.prototype.showingWatcher = SpriteMorph.prototype.showingWatcher;
 StageMorph.prototype.addVariable = SpriteMorph.prototype.addVariable;
 StageMorph.prototype.deleteVariable = SpriteMorph.prototype.deleteVariable;
