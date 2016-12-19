@@ -3196,7 +3196,7 @@ http://snap.berkeley.edu/run#cloud:Username=jens&ProjectName=rotation
 161219
 ------
 * GUI: new url-switch: &noExitWarning
-* Blocks: highly experimental infix-expression-to-reporter parser
+* Blocks, Objects: highly experimental infix-expression-to-reporter parser
 
 
 == v4.10 === (in development)
@@ -3211,7 +3211,7 @@ Features:
 * new url option switch: &noExitWarning
 * svg support for images from the web (svg files have been supported for a long time)
 * use media dialog for browsing and importing sounds
-* highly experimental infix-expression-to-reporter parser
+* highly experimental infix-expression-to-reporter parser. Thanks, Bernat, for the brilliant idea to add it to the search-blocks field!
 
 Fixes:
 * Music (play note) to work again in new and recent browser versions (Chrome 55)

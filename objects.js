@@ -82,7 +82,7 @@ SpeechBubbleMorph, RingMorph, isNil, FileReader, TableDialogMorph,
 BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph*/
 
-modules.objects = '2016-December-09';
+modules.objects = '2016-December-19';
 
 var SpriteMorph;
 var StageMorph;
@@ -2425,7 +2425,8 @@ SpriteMorph.prototype.blocksMatching = function (
         blocksDict,
         myself = this,
         search = searchString.toLowerCase(),
-        stage = this.parentThatIsA(StageMorph);
+        stage = this.parentThatIsA(StageMorph),
+        reporterized;
 
     if (!types || !types.length) {
         types = ['hat', 'command', 'reporter', 'predicate', 'ring'];
@@ -2498,6 +2499,15 @@ SpriteMorph.prototype.blocksMatching = function (
             }
         }
     });
+    // infix arithmetic expression
+    if (contains(types, 'reporter')) {
+        reporterized = this.reporterize(searchString);
+        if (reporterized) {
+            // reporterized.isTemplate = true;
+            // reporterized.isDraggable = false;
+            blocks.push([reporterized, '']);
+        }
+    }
     blocks.sort(function (x, y) {return x[1] < y[1] ? -1 : 1; });
     return blocks.map(function (each) {return each[0]; });
 };
@@ -2622,6 +2632,121 @@ SpriteMorph.prototype.searchBlocks = function (
     ide.fixLayout('refreshPalette');
     searchBar.edit();
     if (searchString) {searchPane.reactToKeystroke(); }
+};
+
+// SpritMorph parsing simple arithmetic expressions to reporter blocks
+
+SpriteMorph.prototype.reporterize = function (expressionString) {
+    // highly experimental Christmas Easter Egg 2016 :-)
+    var ast,
+        myself = this;
+
+    function parseInfix(expression, operator, already) {
+        // very basic binary infix parser for arithmetic expressions
+        // with strict left-to-right operator precedence (like in Smalltalk)
+        // which can be overriden by - nested - parentheses.
+        // assumes well-formed expressions, no graceful error handling yet.
+
+        var inputs = ['', ''],
+            idx = 0,
+            ch;
+
+        function format(value) {
+            return value instanceof Array || isNaN(+value) ? value : +value;
+        }
+
+        function nested() {
+            var level = 1,
+                expr = '';
+            while (idx < expression.length) {
+                ch = expression[idx];
+                idx += 1;
+                switch (ch) {
+                case '(':
+                    level += 1;
+                    break;
+                case ')':
+                    level -= 1;
+                    if (!level) {
+                        return expr;
+                    }
+                    break;
+                }
+                expr += ch;
+            }
+        }
+
+        while (idx < expression.length) {
+            ch = expression[idx];
+            idx += 1;
+            switch (ch) {
+            case ' ':
+                break;
+            case '(':
+                inputs[operator ? 1 : 0] = parseInfix(nested());
+                break;
+            case '-':
+            case '+':
+            case '*':
+            case '/':
+                if (!operator && !inputs[0].length) {
+                    inputs[0] += ch;
+                } else if (operator) {
+                    return parseInfix(
+                        expression.slice(idx),
+                        ch,
+                        [operator, already, format(inputs[1])]
+                    );
+                } else {
+                    operator = ch;
+                    already = format(inputs[0]);
+                }
+                break;
+            default:
+                inputs[operator ? 1 : 0] += ch;
+            }
+        }
+        if (operator) {
+            return [operator, already, format(inputs[1])];
+        }
+        return format(inputs[0]);
+    }
+
+    function blockFromAST(ast) {
+        var block, selectors, i, inps;
+        selectors = {
+            '+': 'reportSum',
+            '-': 'reportDifference',
+            '*': 'reportProduct',
+            '/': 'reportQuotient'
+        };
+        block = myself.blockForSelector(selectors[ast[0]], true);
+        block.isDraggable = true;
+        inps = block.inputs();
+        for (i = 1; i < 3; i += 1) {
+            if (ast[i] instanceof Array) {
+                block.silentReplaceInput(inps[i - 1], blockFromAST(ast[i]));
+            } else if (isString(ast[i])) {
+                block.silentReplaceInput(
+                    inps[i - 1],
+                    myself.variableBlock(ast[i])
+                );
+            } else { // number
+                inps[i - 1].setContents(ast[i]);
+            }
+        }
+        block.fixLayout();
+        block.fixBlockColor(null, true);
+        return block;
+    }
+
+    if (expressionString > 100) {return null; }
+    try {
+        ast = parseInfix(expressionString);
+        return ast instanceof Array ? blockFromAST(ast) : null;
+    } catch (error) {
+        return null;
+    }
 };
 
 // SpriteMorph variable management

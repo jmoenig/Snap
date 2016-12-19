@@ -12330,8 +12330,7 @@ CommentMorph.prototype.fixLayout = function () {
 
 CommentMorph.prototype.userMenu = function () {
     var menu = new MenuMorph(this),
-        myself = this,
-        block = this.blockify();
+        myself = this;
 
     menu.addItem(
         "duplicate",
@@ -12354,24 +12353,6 @@ CommentMorph.prototype.userMenu = function () {
         },
         'open a new window\nwith a picture of this comment'
     );
-    if (block) {
-        menu.addLine();
-        menu.addItem(
-            block,
-            function () {
-                var world = myself.world(),
-                    ide = myself.parentThatIsA(IDE_Morph);
-                block.pickUp(world);
-                if (ide) {
-                    world.hand.grabOrigin = {
-                        origin: ide.palette,
-                        position: ide.palette.center()
-                    };
-                }
-            },
-            'blockify this expression'
-        );
-    }
     return menu;
 };
 
@@ -12506,125 +12487,6 @@ CommentMorph.prototype.destroy = function () {
 
 CommentMorph.prototype.stackHeight = function () {
     return this.height();
-};
-
-// CommentMorph parsing simple arithmetic expressions to reporters
-
-CommentMorph.prototype.blockify = function () {
-    // highly experimental Christmas Easter Egg 2016 :-)
-    var ast;
-
-    function parseInfix(expression, operator, already) {
-        // very basic binary infix parser for arithmetic expressions
-        // with strict left-to-right operator precedence (like in Smalltalk)
-        // which can be overriden by - nested - parentheses.
-        // assumes well-formed expressions, no graceful error handling yet.
-
-        var inputs = ['', ''],
-            idx = 0,
-            ch;
-
-        function format(value) {
-            return value instanceof Array || isNaN(+value) ? value : +value;
-        }
-
-        function nested() {
-            var level = 1,
-                expr = '';
-            while (idx < expression.length) {
-                ch = expression[idx];
-                idx += 1;
-                switch (ch) {
-                case '(':
-                    level += 1;
-                    break;
-                case ')':
-                    level -= 1;
-                    if (!level) {
-                        return expr;
-                    }
-                    break;
-                }
-                expr += ch;
-            }
-        }
-
-        while (idx < expression.length) {
-            ch = expression[idx];
-            idx += 1;
-            switch (ch) {
-            case ' ':
-                break;
-            case '(':
-                inputs[operator ? 1 : 0] = parseInfix(nested());
-                break;
-            case '-':
-            case '+':
-            case '*':
-            case '/':
-                if (!operator && !inputs[0].length) {
-                    inputs[0] += ch;
-                } else if (operator) {
-                    return parseInfix(
-                        expression.slice(idx),
-                        ch,
-                        [operator, already, format(inputs[1])]
-                    );
-                } else {
-                    operator = ch;
-                    already = format(inputs[0]);
-                }
-                break;
-            default:
-                inputs[operator ? 1 : 0] += ch;
-            }
-        }
-        if (operator) {
-            return [operator, already, format(inputs[1])];
-        }
-        return format(inputs[0]);
-    }
-
-    function blockFromAST(ast) {
-        var block, selectors, i, inps;
-        selectors = {
-            '+': 'reportSum',
-            '-': 'reportDifference',
-            '*': 'reportProduct',
-            '/': 'reportQuotient'
-        };
-        block = SpriteMorph.prototype.blockForSelector(selectors[ast[0]], true);
-        block.isDraggable = true;
-        inps = block.inputs();
-        for (i = 1; i < 3; i += 1) {
-            if (ast[i] instanceof Array) {
-                block.silentReplaceInput(inps[i - 1], blockFromAST(ast[i]));
-            } else if (isString(ast[i])) {
-                block.silentReplaceInput(
-                    inps[i - 1],
-                    SpriteMorph.prototype.variableBlock(ast[i])
-                );
-            } else { // number
-                inps[i - 1].setContents(ast[i]);
-            }
-        }
-        block.fixLayout();
-        block.fixBlockColor(null, true);
-        return block;
-    }
-
-    if (this.contents.text.length > 100) {return null; }
-    if (Process.prototype.isCatchingErrors) {
-        try {
-            ast = parseInfix(this.contents.text);
-            return ast instanceof Array ? blockFromAST(ast) : null;
-        } catch (error) {
-            return null;
-        }
-    } else {
-        ast = parseInfix(this.contents.text);
-        return ast instanceof Array ? blockFromAST(ast) : null;
-    }
 };
 
 // ScriptFocusMorph //////////////////////////////////////////////////////////
