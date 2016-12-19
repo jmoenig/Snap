@@ -72,7 +72,7 @@ isRetinaSupported, SliderMorph, Animation*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2016-December-09';
+modules.gui = '2016-December-19';
 
 // Declarations
 
@@ -407,7 +407,10 @@ IDE_Morph.prototype.openIn = function (world) {
 
                             if (dict.hideControls) {
                                 myself.controlBar.hide();
-                                window.onbeforeunload = function () {nop(); };
+                                window.onbeforeunload = nop;
+                            }
+                            if (dict.noExitWarning) {
+                                window.onbeforeunload = nop;
                             }
                         }
                     ]);

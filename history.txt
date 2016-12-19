@@ -3193,6 +3193,10 @@ http://snap.berkeley.edu/run#cloud:Username=jens&ProjectName=rotation
 ------
 * Catalan translation update, thanks, @jguille2 !
 
+161219
+------
+* GUI: new url-switch: &noExitWarning
+
 
 == v4.10 === (in development)
 
@@ -3203,10 +3207,11 @@ Features:
 * basic typography support for custom block labels, thanks, Bernat!!
 * Treat JS-function reporters the same as variable getters wrt rings
 * new url switch #dl: for downloading raw shared projects
+* new url option switch: &noExitWarning
 * svg support for images from the web (svg files have been supported for a long time)
 * use media dialog for browsing and importing sounds
 
 Fixes:
 * Music (play note) to work again in new and recent browser versions (Chrome 55)
 * IDE layout: fixed resizing issues when the window becomes too small
-* Translation updates (Russian, Polish, Danish, Portuguese, Catalan)
+* Translation updates (Russian, Polish, Danish, Portuguese, Catalan, German)
