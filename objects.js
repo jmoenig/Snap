@@ -2830,10 +2830,8 @@ SpriteMorph.prototype.reporterize = function (expressionString) {
     if (expressionString > 100) {return null; }
     try {
         ast = createASTFromTokens(tokenize(expressionString));
-        console.log(ast);
         return ast instanceof Array ? blockFromAST(ast) : null;
     } catch (error) {
-        console.log(error);
         return null;
     }
 };
