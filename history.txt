@@ -3198,6 +3198,10 @@ http://snap.berkeley.edu/run#cloud:Username=jens&ProjectName=rotation
 * GUI: new url-switch: &noExitWarning
 * Blocks, Objects: highly experimental infix-expression-to-reporter parser
 
+161220
+------
+* Objects: tweaked “reporterize”
+
 
 == v4.10 === (in development)
 
