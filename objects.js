@@ -2706,7 +2706,7 @@ SpriteMorph.prototype.reporterize = function (expressionString) {
             } else if (token.type === "ident") {
                 if (tokens.length > 0 && tokens[0].type === "lp") {
                     var args = [];
-                    tokens.splice(0, 1);
+                    tokens.shift();
                     while (tokens[0].type !== "rp") {
                         args.push(createASTFromTokens(tokens));
                         if (tokens[0].type === "rp") {
@@ -2716,7 +2716,7 @@ SpriteMorph.prototype.reporterize = function (expressionString) {
                             throw "No comma between arguments";
                         }
                     }
-                    tokens.splice(0, 1);
+                    tokens.shift();
                     return [token.val].concat(args);
                 } else {
                     return token.val;
@@ -2741,7 +2741,7 @@ SpriteMorph.prototype.reporterize = function (expressionString) {
                     case "%": break;
                     default: return exp;
                 }
-                tokens.splice(0, 1);
+                tokens.shift();
                 exp = [op.val, exp, precedence0(tokens)];
             }
             return exp;
@@ -2761,7 +2761,7 @@ SpriteMorph.prototype.reporterize = function (expressionString) {
                     case "-": break;
                     default: return exp;
                 }
-                tokens.splice(0, 1);
+                tokens.shift();
                 exp = [op.val, exp, precedence1(tokens)];
             }
             return exp;
