@@ -2730,8 +2730,9 @@ SpriteMorph.prototype.reporterize = function (expressionString) {
             if (tokens.length === 0) {
                 return exp;
             }
-            var op = tokens[0];
+            var op;
             while (tokens.length > 0 && /[*/%]/.test(tokens[0].val)) {
+                op = tokens[0];
                 if (op.type !== "operator") {
                     return exp;
                 }
@@ -2751,8 +2752,9 @@ SpriteMorph.prototype.reporterize = function (expressionString) {
             if (tokens.length === 0) {
                 return exp;
             }
-            var op = tokens[0];
+            var op;
             while (tokens.length > 0 && /[+\-]/.test(tokens[0].val)) {
+                op = tokens[0];
                 if (op.type !== "operator") {
                     return exp;
                 }
