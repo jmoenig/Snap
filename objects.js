@@ -82,7 +82,7 @@ SpeechBubbleMorph, RingMorph, isNil, FileReader, TableDialogMorph,
 BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph*/
 
-modules.objects = '2016-December-19';
+modules.objects = '2016-December-20';
 
 var SpriteMorph;
 var StageMorph;
@@ -2768,7 +2768,7 @@ SpriteMorph.prototype.reporterize = function (expressionString) {
         }
     }
     function blockFromAST(ast) {
-        var block, selectors, monads, i, inps, offset;
+        var block, selectors, monads, alias, key, i, inps, offset;
         selectors = {
             '+': 'reportSum',
             '-': 'reportDifference',
@@ -2778,8 +2778,10 @@ SpriteMorph.prototype.reporterize = function (expressionString) {
         };
         monads = ['abs', 'ceiling', 'floor', 'sqrt', 'sin', 'cos', 'tan',
             'asin', 'acos', 'atan', 'ln', 'log', 'round'];
-        if (contains(monads, ast[0])) { // monad
-            if (ast[0] === 'round') {
+        alias = {ceil: 'ceiling'};
+        key = alias[ast[0]] || ast[0];
+        if (contains(monads, key)) {
+            if (key === 'round') {
                 block = SpriteMorph.prototype.blockForSelector('reportRound');
                 inps = block.inputs();
                 i = 0;
@@ -2787,7 +2789,7 @@ SpriteMorph.prototype.reporterize = function (expressionString) {
             } else {
                 block = SpriteMorph.prototype.blockForSelector('reportMonadic');
                 inps = block.inputs();
-                inps[0].setContents([ast[0]]);
+                inps[0].setContents([key]);
                 i = 1;
                 offset = 0;
             }
