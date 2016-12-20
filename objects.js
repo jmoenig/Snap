@@ -2640,37 +2640,33 @@ SpriteMorph.prototype.reporterize = function (expressionString) {
     // highly experimental Christmas Easter Egg 2016 :-)
     var ast;
 
-    function trim(string) {
-        return string.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, '');
-    }
-
     function tokenize(expressionString) {
         var tokens = [];
         var token;
-        expressionString = trim(expressionString);
-        function findIdent(s) {
-            var token = "";
-            while (expressionString.length > 0 && /\w|_/.test(expressionString[0])) {
-                token += expressionString[0];
+        expressionString = expressionString.trim();
+        function findIdent() {
+            var next = "";
+            while (expressionString.length > 0 && /[A-Za-z_0-9]/.test(expressionString[0])) {
+                next += expressionString[0];
                 expressionString = expressionString.slice(1);
-            };
-            return token
+            }
+            return next;
         }
-        function findNumber(s) {
-            var token = "";
+        function findNumber() {
+            var next = "";
             while (expressionString.length > 0 && /\d|\./.test(expressionString[0])) {
-                token += expressionString[0];
+                next += expressionString[0];
                 expressionString = expressionString.slice(1);
-            };
-            return token
+            }
+            return parseFloat(next);
         }
         while (expressionString.length > 0) {
-            expressionString = trim(expressionString);
-            if (/\w|_/.test(expressionString[0])) {
-                token = findIdent(expressionString);
+            expressionString = expressionString.trim();
+            if (/[A-Za-z_]/.test(expressionString[0])) {
+                token = findIdent();
                 tokens.push({ type: "ident", val: token});
             } else if (/\d|\./.test(expressionString[0])) {
-                token = findNumber(expressionString);
+                token = findNumber();
                 tokens.push({ type: "number", val: token});
             } else if (/[+\-*/%]/.test(expressionString[0])) {
                 tokens.push({ type: "operator", val: expressionString[0]});
@@ -2685,83 +2681,94 @@ SpriteMorph.prototype.reporterize = function (expressionString) {
                 tokens.push({ type: "comma", val: ","});
                 expressionString = expressionString.slice(1);
             }
-        };
+        }
         return tokens;
     }
 
     function createASTFromTokens(tokens) {
         return precedence2(tokens);
         function precedence0(tokens) {
-            console.log(tokens)
-            var token = tokens.shift(0);
-            console.log(tokens)
+            var token = tokens.shift();
             if (token.type === "lp") {
                 var exp = createASTFromTokens(tokens);
-                if (tokens.pop(0).type !== "rp") {
+                if (tokens.shift().type !== "rp") {
                     throw "Mismatched parenthesis";
                 }
-                return exp
+                return exp;
             } else if (token.type === "number") {
-                return +token.val
+                return +token.val;
             } else if (token.type === "operator") {
                 if (token.val === "-" || token.val === "+") {
-                    return [token.val, 0, createASTFromTokens(tokens)]
+                    return [token.val, 0, precedence0(tokens)];
                 } else {
-                    throw "Invalid prefix operator"
+                    throw "Invalid prefix operator";
                 }
             } else if (token.type === "ident") {
                 if (tokens.length > 0 && tokens[0].type === "lp") {
                     var args = [];
-                    tokens.remove(0);
+                    tokens.splice(0, 1);
                     while (tokens[0].type !== "rp") {
                         args.push(createASTFromTokens(tokens));
+                        if (tokens[0].type === "rp") {
+                            break;
+                        }
                         if (tokens[0].type !== "comma") {
                             throw "No comma between arguments";
                         }
-                    };
-                    tokens.remove(0);
-                    return [token.val] + args;
+                    }
+                    tokens.splice(0, 1);
+                    return [token.val].concat(args);
                 } else {
-                    return token.val
+                    return token.val;
                 }
             } else {
-                throw "Invalid expression"
+                throw "Invalid expression";
             }
         }
         function precedence1(tokens) {
-            var lh = precedence0(tokens);
-            if (tokens.length === 0) return lh;
-            var op = tokens[0];
-            console.log("p1", op);
-            if (op.type !== "operator") throw "Invalid operator";
-            switch (op.val) {
-                case "*":
-                case "/":
-                case "%": break;
-                default: return lh
+            var exp = precedence0(tokens);
+            if (tokens.length === 0) {
+                return exp;
             }
-            tokens.remove(0);
-            var rh = precedence1(tokens);
-            return [op, lh, rh];
+            var op = tokens[0];
+            while (tokens.length > 0 && /[*/%]/.test(tokens[0].val)) {
+                if (op.type !== "operator") {
+                    return exp;
+                }
+                switch (op.val) {
+                    case "*":
+                    case "/":
+                    case "%": break;
+                    default: return exp;
+                }
+                tokens.splice(0, 1);
+                exp = [op.val, exp, precedence0(tokens)];
+            }
+            return exp;
         }
         function precedence2(tokens) {
-            var lh = precedence1(tokens);
-            if (tokens.length === 0) return lh;
-            var op = tokens[0];
-            console.log("p2", op);
-            if (op.type !== "operator") throw "Invalid operator";
-            switch (op.val) {
-                case "+":
-                case "-": break;
-                default: return lh
+            var exp = precedence1(tokens);
+            if (tokens.length === 0) {
+                return exp;
             }
-            tokens.remove(0);
-            var rh = precedence2(tokens);
-            return [op, lh, rh];
+            var op = tokens[0];
+            while (tokens.length > 0 && /[+\-]/.test(tokens[0].val)) {
+                if (op.type !== "operator") {
+                    return exp;
+                }
+                switch (op.val) {
+                    case "+":
+                    case "-": break;
+                    default: return exp;
+                }
+                tokens.splice(0, 1);
+                exp = [op.val, exp, precedence1(tokens)];
+            }
+            return exp;
         }
     }
     function blockFromAST(ast) {
-        var block, selectors, monads, i, inps;
+        var block, selectors, monads, i, inps, offset;
         selectors = {
             '+': 'reportSum',
             '-': 'reportDifference',
@@ -2776,23 +2783,25 @@ SpriteMorph.prototype.reporterize = function (expressionString) {
                 block = SpriteMorph.prototype.blockForSelector('reportRound');
                 inps = block.inputs();
                 i = 0;
+                offset = 1;
             } else {
                 block = SpriteMorph.prototype.blockForSelector('reportMonadic');
                 inps = block.inputs();
                 inps[0].setContents([ast[0]]);
                 i = 1;
+                offset = 0;
             }
-            if (ast[i] instanceof Array) {
-                block.silentReplaceInput(inps[i], blockFromAST(ast[i]));
-            } else if (isString(ast[i])) {
-                if (ast[i] !== '_') {
+            if (ast[i + offset] instanceof Array) {
+                block.silentReplaceInput(inps[i], blockFromAST(ast[i + offset]));
+            } else if (isString(ast[i + offset])) {
+                if (ast[i + offset] !== '_') {
                     block.silentReplaceInput(
                         inps[i],
-                        SpriteMorph.prototype.variableBlock(ast[i])
+                        SpriteMorph.prototype.variableBlock(ast[i + offset])
                     );
                 }
             } else { // number
-                inps[i].setContents(ast[i]);
+                inps[i].setContents(ast[i + offset]);
             }
         } else { // diadic
             block = SpriteMorph.prototype.blockForSelector(selectors[ast[0]]);
@@ -2820,9 +2829,11 @@ SpriteMorph.prototype.reporterize = function (expressionString) {
 
     if (expressionString > 100) {return null; }
     try {
-        ast = parseInfix(expressionString);
+        ast = createASTFromTokens(tokenize(expressionString));
+        console.log(ast);
         return ast instanceof Array ? blockFromAST(ast) : null;
     } catch (error) {
+        console.log(error);
         return null;
     }
 };
