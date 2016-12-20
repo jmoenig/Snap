@@ -2675,7 +2675,7 @@ SpriteMorph.prototype.reporterize = function (expressionString) {
                 tokens.push({ type: "lp", val: "("});
                 expressionString = expressionString.slice(1);
             } else if (expressionString[0] === ")") {
-                tokens.push({ type: "rp", val: "("});
+                tokens.push({ type: "rp", val: ")"});
                 expressionString = expressionString.slice(1);
             } else if (expressionString[0] === ",") {
                 tokens.push({ type: "comma", val: ","});
