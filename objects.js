@@ -82,7 +82,7 @@ SpeechBubbleMorph, RingMorph, isNil, FileReader, TableDialogMorph,
 BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph*/
 
-modules.objects = '2016-December-20';
+modules.objects = '2016-December-21';
 
 var SpriteMorph;
 var StageMorph;
@@ -2779,7 +2779,7 @@ SpriteMorph.prototype.reporterize = function (expressionString) {
         return block;
     }
 
-    if (expressionString > 100) {return null; }
+    if (expressionString.length > 100) {return null; }
     try {
         ast = parseInfix(expressionString);
         return ast instanceof Array ? blockFromAST(ast) : null;
