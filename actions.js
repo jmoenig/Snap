@@ -1422,6 +1422,9 @@ ActionManager.prototype.updateCommentsPositions = function(block) {
 ActionManager.prototype.getFieldValue = function(block, index) {
     var fieldId = this.getId(block, index);
 
+    if (this.fieldValues[fieldId] instanceof StringMorph) {
+        return this.fieldValues[fieldId].text;
+    }
     return this.fieldValues[fieldId];
 };
 
