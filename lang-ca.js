@@ -1122,9 +1122,9 @@ SnapTranslator.dict.ca = {
     'Command\n(C-shape)':
         'Comanda\n(en forma de C)',
     'Any\n(unevaluated)':
-        'Qualsevol\n(sense evaluar)',
+        'Qualsevol\n(sense avaluar)',
     'Boolean\n(unevaluated)':
-        'Booleà\n(sense evaluar)',
+        'Booleà\n(sense avaluar)',
     'Single input.':
         'Entrada única.',
     'Default Value:':
