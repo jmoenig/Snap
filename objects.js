@@ -2641,34 +2641,41 @@ SpriteMorph.prototype.reporterize = function (expressionString) {
     var ast;
 
     function tokenize(expressionString) {
+        // very basic tokenizer for arithmetic expressions
         var tokens = [];
+        var DIGITS = /\d|\./;
+        var IDENT_START = /[A-Za-z_]/;
+        var IDENT_WITH_DIGITS = /[A-Za-z_0-9]/;
+        var OPERATORS = /[+\-*/%]/;
         var token;
         expressionString = expressionString.trim();
         function findIdent() {
-            var next = "";
-            while (expressionString.length > 0 && /[A-Za-z_0-9]/.test(expressionString[0])) {
-                next += expressionString[0];
+            var ident = "";
+            while (expressionString && IDENT_WITH_DIGITS.test(expressionString[0])) {
+                ident += expressionString[0];
                 expressionString = expressionString.slice(1);
             }
-            return next;
+            return ident;
         }
         function findNumber() {
-            var next = "";
-            while (expressionString.length > 0 && /\d|\./.test(expressionString[0])) {
-                next += expressionString[0];
+            var num = "";
+            while (expressionString &&
+                  (DIGITS.test(expressionString[0]) || expressionString[0] === "-")) {
+                num += expressionString[0];
                 expressionString = expressionString.slice(1);
             }
-            return parseFloat(next);
+            return parseFloat(num);
         }
         while (expressionString.length > 0) {
             expressionString = expressionString.trim();
-            if (/[A-Za-z_]/.test(expressionString[0])) {
+            if (IDENT_START.test(expressionString[0])) {
                 token = findIdent();
                 tokens.push({ type: "ident", val: token});
-            } else if (/\d|\./.test(expressionString[0])) {
+            } else if (DIGITS.test(expressionString[0]) ||
+                      (expressionString[0] === "-" && DIGITS.test(expressionString[1]))) {
                 token = findNumber();
                 tokens.push({ type: "number", val: token});
-            } else if (/[+\-*/%]/.test(expressionString[0])) {
+            } else if (OPERATORS.test(expressionString[0])) {
                 tokens.push({ type: "operator", val: expressionString[0]});
                 expressionString = expressionString.slice(1);
             } else if (expressionString[0] === "(") {
@@ -2836,6 +2843,7 @@ SpriteMorph.prototype.reporterize = function (expressionString) {
         ast = createASTFromTokens(tokenize(expressionString));
         return ast instanceof Array ? blockFromAST(ast) : null;
     } catch (error) {
+        console.log(error);
         return null;
     }
 };
