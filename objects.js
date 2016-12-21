@@ -2696,6 +2696,11 @@ SpriteMorph.prototype.reporterize = function (expressionString) {
             case '*':
             case '/':
             case '%':
+            case '=':
+            case '<':
+            case '>':
+            case '&':
+            case '|':
                 if (!operator && !inputs[0].length) {
                     inputs[0] += ch;
                 } else if (operator) {
@@ -2720,21 +2725,32 @@ SpriteMorph.prototype.reporterize = function (expressionString) {
     }
 
     function blockFromAST(ast) {
-        var block, selectors, monads, alias, key, i, inps;
+        var block, selectors, monads, alias, key, sel, i, inps;
         selectors = {
             '+': 'reportSum',
             '-': 'reportDifference',
             '*': 'reportProduct',
             '/': 'reportQuotient',
-            '%': 'reportModulus'
+            '%': 'reportModulus',
+            '=': 'reportEquals',
+            '<': 'reportLessThan',
+            '>': 'reportGreaterThan',
+            '&': 'reportAnd',
+            '|': 'reportOr',
+            round: 'reportRound',
+            not: 'reportNot'
         };
         monads = ['abs', 'ceiling', 'floor', 'sqrt', 'sin', 'cos', 'tan',
-            'asin', 'acos', 'atan', 'ln', 'log', 'round'];
-        alias = {ceil: 'ceiling'};
+            'asin', 'acos', 'atan', 'ln', 'log', 'round', 'not'];
+        alias = {
+            ceil: 'ceiling',
+            '!' : 'not'
+        };
         key = alias[ast[0]] || ast[0];
         if (contains(monads, key)) {
-            if (key === 'round') {
-                block = SpriteMorph.prototype.blockForSelector('reportRound');
+            sel = selectors[key];
+            if (sel) {
+                block = SpriteMorph.prototype.blockForSelector(sel);
                 inps = block.inputs();
                 i = 0;
             } else {
@@ -2746,7 +2762,14 @@ SpriteMorph.prototype.reporterize = function (expressionString) {
             if (ast[1] instanceof Array) {
                 block.silentReplaceInput(inps[i], blockFromAST(ast[1]));
             } else if (isString(ast[1])) {
-                if (ast[1] !== '_') {
+                if (contains(['true', 'false'], ast[1])) {
+                    block.silentReplaceInput(
+                        inps[i],
+                        SpriteMorph.prototype.blockForSelector(
+                            ast[1] === 'true' ? 'reportTrue' : 'reportFalse'
+                        )
+                    );
+                } else if (ast[1] !== '_') {
                     block.silentReplaceInput(
                         inps[i],
                         SpriteMorph.prototype.variableBlock(ast[1])
@@ -2762,7 +2785,14 @@ SpriteMorph.prototype.reporterize = function (expressionString) {
                 if (ast[i] instanceof Array) {
                     block.silentReplaceInput(inps[i - 1], blockFromAST(ast[i]));
                 } else if (isString(ast[i])) {
-                    if (ast[i] !== '_') {
+                    if (contains(['true', 'false'], ast[i])) {
+                        block.silentReplaceInput(
+                            inps[i - 1],
+                            SpriteMorph.prototype.blockForSelector(
+                                ast[i] === 'true' ? 'reportTrue' : 'reportFalse'
+                            )
+                        );
+                    } else if (ast[i] !== '_') {
                         block.silentReplaceInput(
                             inps[i - 1],
                             SpriteMorph.prototype.variableBlock(ast[i])

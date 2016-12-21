@@ -3202,6 +3202,9 @@ http://snap.berkeley.edu/run#cloud:Username=jens&ProjectName=rotation
 ------
 * Objects: tweaked “reporterize”
 
+161221
+------
+* Objects: added Boolean operators to “reporterize”
 
 == v4.10 === (in development)
 
