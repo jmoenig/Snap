@@ -846,7 +846,7 @@ SnapTranslator.dict.ca = {
     'uncheck for round ends of lines':
         'desmarqueu per fer que\nels extrems de les línies\ndel llapis siguin arrodonides',
     'Inheritance support':
-        'Suport per a herència',
+        'Suport a l\'herència d\'objectes',
 
     // inputs
     'with inputs':
@@ -1904,8 +1904,6 @@ SnapTranslator.dict.ca = {
         'desmarqueu per deshabilitar\nel suport a l\'edició per teclat',
     'check to enable\nkeyboard editing support':
         'marqueu per habilitar\nel suport a l\'edició per teclat',
-    'Inheritance support':
-        'Suport a l\'herència d\'objectes',
     'uncheck to disable\nsprite inheritance features':
         'desmarqueu per deshabilitar les\nfuncionalitats relatives a l\'herència d\'objectes',
     'check for sprite\ninheritance features':
@@ -1924,8 +1922,6 @@ SnapTranslator.dict.ca = {
 		'captura de pantalla',
 	'stage image':
 		'imatge de l\'escenari',
-	'frames':
-		'frames',
 	'processes':
 		'processos',
 	'map %repRing over %l':
