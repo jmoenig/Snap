@@ -2514,6 +2514,8 @@ SpriteMorph.prototype.blocksMatching = function (
                 // Can't drag
                 block.isTemplate = false;
                 block.isDraggable = false;
+				block.userMenu = nop;
+				block.mouseClickLeft = nop;
 
                 blocks.push([block, '']);
             }
