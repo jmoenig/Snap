@@ -2743,17 +2743,17 @@ SpriteMorph.prototype.reporterize = function (expressionString) {
                 inps[0].setContents([key]);
                 i = 1;
             }
-            if (ast[i] instanceof Array) {
-                block.silentReplaceInput(inps[i], blockFromAST(ast[i]));
-            } else if (isString(ast[i])) {
-                if (ast[i] !== '_') {
+            if (ast[1] instanceof Array) {
+                block.silentReplaceInput(inps[i], blockFromAST(ast[1]));
+            } else if (isString(ast[1])) {
+                if (ast[1] !== '_') {
                     block.silentReplaceInput(
                         inps[i],
-                        SpriteMorph.prototype.variableBlock(ast[i])
+                        SpriteMorph.prototype.variableBlock(ast[1])
                     );
                 }
             } else { // number
-                inps[i].setContents(ast[i]);
+                inps[i].setContents(ast[1]);
             }
         } else { // diadic
             block = SpriteMorph.prototype.blockForSelector(selectors[ast[0]]);
