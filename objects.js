@@ -2634,7 +2634,7 @@ SpriteMorph.prototype.searchBlocks = function (
     if (searchString) {searchPane.reactToKeystroke(); }
 };
 
-// SpritMorph parsing simple arithmetic expressions to reporter blocks
+// SpriteMorph parsing simple arithmetic expressions to reporter blocks
 
 SpriteMorph.prototype.reporterize = function (expressionString) {
     // highly experimental Christmas Easter Egg 2016 :-)
