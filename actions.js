@@ -2310,6 +2310,9 @@ ActionManager.OwnerFor.moveBlock = function(block, target) {
     // Base this off the target since the block could be new...
     blockId = (typeof target) === 'string' ? target : target.element;
 
+    // Get the parent block (if referencing a field)
+    blockId = blockId.split('/')[0];
+
     if (this._customBlocks[blockId]) {
         return blockId;
     } else {
