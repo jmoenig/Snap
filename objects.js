@@ -82,7 +82,7 @@ SpeechBubbleMorph, RingMorph, isNil, FileReader, TableDialogMorph,
 BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph*/
 
-modules.objects = '2016-December-21';
+modules.objects = '2016-December-22';
 
 var SpriteMorph;
 var StageMorph;
@@ -2641,7 +2641,7 @@ SpriteMorph.prototype.reporterize = function (expressionString) {
     var ast;
 
     function parseInfix(expression, operator, already) {
-        // very basic binary infix parser for arithmetic expressions
+        // very basic diadic infix parser for arithmetic expressions
         // with strict left-to-right operator precedence (like in Smalltalk)
         // which can be overriden by - nested - parentheses.
         // assumes well-formed expressions, no graceful error handling yet.
@@ -2725,7 +2725,8 @@ SpriteMorph.prototype.reporterize = function (expressionString) {
     }
 
     function blockFromAST(ast) {
-        var block, selectors, monads, alias, key, sel, i, inps;
+        var block, selectors, monads, alias, key, sel, i, inps,
+            off = 1;
         selectors = {
             '+': 'reportSum',
             '-': 'reportDifference',
@@ -2747,60 +2748,40 @@ SpriteMorph.prototype.reporterize = function (expressionString) {
             '!' : 'not'
         };
         key = alias[ast[0]] || ast[0];
-        if (contains(monads, key)) {
+        if (contains(monads, key)) { // monadic
             sel = selectors[key];
-            if (sel) {
+            if (sel) { // single input
                 block = SpriteMorph.prototype.blockForSelector(sel);
                 inps = block.inputs();
-                i = 0;
-            } else {
+            } else { // two inputs, first is function name
                 block = SpriteMorph.prototype.blockForSelector('reportMonadic');
                 inps = block.inputs();
                 inps[0].setContents([key]);
-                i = 1;
+                off = 0;
             }
-            if (ast[1] instanceof Array) {
-                block.silentReplaceInput(inps[i], blockFromAST(ast[1]));
-            } else if (isString(ast[1])) {
-                if (contains(['true', 'false'], ast[1])) {
+        } else { // diadic
+            block = SpriteMorph.prototype.blockForSelector(selectors[key]);
+            inps = block.inputs();
+        }
+        for (i = 1; i < ast.length; i += 1) {
+            if (ast[i] instanceof Array) {
+                block.silentReplaceInput(inps[i - off], blockFromAST(ast[i]));
+            } else if (isString(ast[i])) {
+                if (contains(['true', 'false'], ast[i])) {
                     block.silentReplaceInput(
-                        inps[i],
+                        inps[i - off],
                         SpriteMorph.prototype.blockForSelector(
-                            ast[1] === 'true' ? 'reportTrue' : 'reportFalse'
+                            ast[i] === 'true' ? 'reportTrue' : 'reportFalse'
                         )
                     );
-                } else if (ast[1] !== '_') {
+                } else if (ast[i] !== '_') {
                     block.silentReplaceInput(
-                        inps[i],
-                        SpriteMorph.prototype.variableBlock(ast[1])
+                        inps[i - off],
+                        SpriteMorph.prototype.variableBlock(ast[i])
                     );
                 }
             } else { // number
-                inps[i].setContents(ast[1]);
-            }
-        } else { // diadic
-            block = SpriteMorph.prototype.blockForSelector(selectors[ast[0]]);
-            inps = block.inputs();
-            for (i = 1; i < 3; i += 1) {
-                if (ast[i] instanceof Array) {
-                    block.silentReplaceInput(inps[i - 1], blockFromAST(ast[i]));
-                } else if (isString(ast[i])) {
-                    if (contains(['true', 'false'], ast[i])) {
-                        block.silentReplaceInput(
-                            inps[i - 1],
-                            SpriteMorph.prototype.blockForSelector(
-                                ast[i] === 'true' ? 'reportTrue' : 'reportFalse'
-                            )
-                        );
-                    } else if (ast[i] !== '_') {
-                        block.silentReplaceInput(
-                            inps[i - 1],
-                            SpriteMorph.prototype.variableBlock(ast[i])
-                        );
-                    }
-                } else { // number
-                    inps[i - 1].setContents(ast[i]);
-                }
+                inps[i - off].setContents(ast[i]);
             }
         }
         block.isDraggable = true;
