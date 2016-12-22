@@ -2666,7 +2666,7 @@ SpriteMorph.prototype.reporterize = function (expressionString) {
             }
             return parseFloat(num);
         }
-        while (expressionString.length > 0) {
+        while (expressionString.length) {
             expressionString = expressionString.trim();
             if (IDENT_START.test(expressionString[0])) {
                 token = findIdent();
@@ -2711,7 +2711,7 @@ SpriteMorph.prototype.reporterize = function (expressionString) {
                     throw "Invalid prefix operator";
                 }
             } else if (token.type === "ident") {
-                if (tokens.length > 0 && tokens[0].type === "lp") {
+                if (tokens.length && tokens[0].type === "lp") {
                     var args = [];
                     tokens.shift();
                     while (tokens[0].type !== "rp") {
@@ -2734,11 +2734,11 @@ SpriteMorph.prototype.reporterize = function (expressionString) {
         }
         function precedence1(tokens) {
             var exp = precedence0(tokens);
-            if (tokens.length === 0) {
+            if (!tokens.length) {
                 return exp;
             }
             var op;
-            while (tokens.length > 0 && /[*/%]/.test(tokens[0].val)) {
+            while (tokens.length && /[*/%]/.test(tokens[0].val)) {
                 op = tokens[0];
                 if (op.type !== "operator") {
                     return exp;
@@ -2756,11 +2756,11 @@ SpriteMorph.prototype.reporterize = function (expressionString) {
         }
         function precedence2(tokens) {
             var exp = precedence1(tokens);
-            if (tokens.length === 0) {
+            if (!tokens) {
                 return exp;
             }
             var op;
-            while (tokens.length > 0 && /[+\-]/.test(tokens[0].val)) {
+            while (tokens.length && /[+\-]/.test(tokens[0].val)) {
                 op = tokens[0];
                 if (op.type !== "operator") {
                     return exp;
@@ -2837,7 +2837,6 @@ SpriteMorph.prototype.reporterize = function (expressionString) {
         ast = createASTFromTokens(tokenize(expressionString));
         return ast instanceof Array ? blockFromAST(ast) : null;
     } catch (error) {
-        console.log(error);
         return null;
     }
 };
