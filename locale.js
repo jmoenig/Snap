@@ -42,7 +42,7 @@
 
 /*global modules, contains*/
 
-modules.locale = '2016-September-22';
+modules.locale = '2016-December-09';
 
 // Global stuff
 
@@ -160,7 +160,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org',
     'last_changed':
-        '2016-09-22'
+        '2016-11-22'
 };
 
 SnapTranslator.dict.it = {
@@ -215,7 +215,7 @@ SnapTranslator.dict.pt = {
     'translator_e-mail':
         'mmsequeira@gmail.com',
     'last_changed':
-        '2016-01-08'
+        '2016-10-30'
 };
 
 SnapTranslator.dict.cs = {
@@ -259,7 +259,7 @@ SnapTranslator.dict.fr = {
     'translator_e-mail':
         'i.scool@mac.com',
     'last_changed':
-        '2016-02-24'
+        '2016-10-27'
 };
 
 SnapTranslator.dict.si = {
@@ -281,7 +281,7 @@ SnapTranslator.dict.ru = {
     'translator_e-mail':
         'svetlanap@berkeley.edu, tema@school830.ru',
     'last_changed':
-        '2016-05-25'
+        '2016-06-21'
 };
 
 SnapTranslator.dict.es = {
@@ -310,11 +310,11 @@ SnapTranslator.dict.pl = {
     'language_name':
         'Polski',
     'language_translator':
-        'Witek Kranas',
+        'Witek Kranas & deKrain',
     'translator_e-mail':
         'witek@oeiizk.waw.pl',
     'last_changed':
-        '2015-09-23'
+        '2016-11-14'
 };
 
 SnapTranslator.dict.tw = {
@@ -343,11 +343,11 @@ SnapTranslator.dict.dk = {
     'language_name':
         'Dansk',
     'language_translator':
-        'FAB',
+        'FAB, Pelle Hjek',
     'translator_e-mail':
-        'fab@nielsen.mail.dk',
+        'fab@nielsen.mail.dk, hjek@mail.com',
     'last_changed':
-        '2013-09-16'
+        '2016-11-16'
 };
 
 SnapTranslator.dict.el = {
@@ -557,4 +557,15 @@ SnapTranslator.dict.et = {
         'hasso.tepper@gmail.com',
     'last_changed':
         '2016-05-03'
+};
+
+SnapTranslator.dict.gl = {
+    'language_name':
+        'Galego',
+    'language_translator':
+        'tecnoloxia',
+    'translator_e-mail':
+        '',
+    'last_changed':
+        '2016-11-09'
 };

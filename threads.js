@@ -59,9 +59,9 @@ degrees, detect, nop, radians, ReporterSlotMorph, CSlotMorph, RingMorph,
 IDE_Morph, ArgLabelMorph, localize, XML_Element, hex_sha512, TableDialogMorph,
 StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph,
-TableFrameMorph, isSnapObject*/
+TableFrameMorph, ColorSlotMorph, isSnapObject*/
 
-modules.threads = '2016-October-24';
+modules.threads = '2016-December-22';
 
 var ThreadManager;
 var Process;
@@ -3357,7 +3357,8 @@ Process.prototype.flashContext = function () {
             expr instanceof SyntaxElementMorph &&
             !(expr instanceof CommandSlotMorph) &&
             !this.context.isFlashing &&
-            expr.world()) {
+            expr.world() &&
+            !(expr instanceof ColorSlotMorph)) {
         this.unflash();
         expr.flash();
         this.context.isFlashing = true;
