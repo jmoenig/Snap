@@ -145,11 +145,11 @@ radians, useBlurredShadows, SpeechBubbleMorph, modules, StageMorph,
 fontHeight, TableFrameMorph, SpriteMorph, Context, ListWatcherMorph,
 CellMorph, DialogBoxMorph, BlockInputFragmentMorph, PrototypeHatBlockMorph,
 Costume, IDE_Morph, BlockDialogMorph, BlockEditorMorph, localize, isNil,
-isSnapObject, copy, PushButtonMorph, SpriteIconMorph, Process*/
+isSnapObject, copy, PushButtonMorph, SpriteIconMorph, Process, AlignmentMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2016-November-24';
+modules.blocks = '2016-December-19';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -186,7 +186,7 @@ WorldMorph.prototype.customMorphs = function () {
 /*
     return [
         new SymbolMorph(
-            'stepForward',
+            'turnForward',
             50,
             new Color(250, 250, 250),
             new Point(-1, -1),
@@ -2452,7 +2452,11 @@ BlockMorph.prototype.userMenu = function () {
     if (this.parent.parentThatIsA(RingMorph)) {
         menu.addLine();
         menu.addItem("unringify", 'unringify');
-        menu.addItem("ringify", 'ringify');
+        top = this.topBlock();
+        if (this instanceof ReporterBlockMorph ||
+                (!(top instanceof HatBlockMorph))) {
+            menu.addItem("ringify", 'ringify');
+        }
         return menu;
     }
     if (this.parent instanceof ReporterSlotMorph
@@ -2546,9 +2550,10 @@ BlockMorph.prototype.deleteBlock = function () {
             }
         });
     }
-    if ((this.parent instanceof BlockMorph)
-            || (this.parent instanceof MultiArgMorph)
-            || (this.parent instanceof ReporterSlotMorph)) {
+    if (this instanceof ReporterBlockMorph &&
+			((this.parent instanceof BlockMorph)
+            	|| (this.parent instanceof MultiArgMorph)
+            	|| (this.parent instanceof ReporterSlotMorph))) {
         this.parent.revertToDefaultInput(this);
     } else { // CommandBlockMorph
         if (this.parent) {
@@ -2586,6 +2591,9 @@ BlockMorph.prototype.ringify = function () {
             this.parent.silentReplaceInput(this, ring);
             ring.embed(this);
         } else if (top) { // command
+            if (top instanceof HatBlockMorph) {
+                return;
+            }
             top.parent.add(ring);
             ring.embed(top);
             ring.setCenter(center);
@@ -3967,6 +3975,7 @@ CommandBlockMorph.prototype.userDestroy = function () {
     }
 
     var scripts = this.parentThatIsA(ScriptsMorph),
+        parent = this.parentThatIsA(SyntaxElementMorph),
         cslot = this.parentThatIsA(CSlotMorph);
 
     // for undrop / redrop
@@ -3981,6 +3990,9 @@ CommandBlockMorph.prototype.userDestroy = function () {
     if (cslot) {
         cslot.fixLayout();
     }
+    if (parent) {
+        parent.reactToGrabOf(this); // fix highlight
+    }
 };
 
 CommandBlockMorph.prototype.userDestroyJustThis = function () {
@@ -3990,6 +4002,7 @@ CommandBlockMorph.prototype.userDestroyJustThis = function () {
         pb,
         nb = this.nextBlock(),
         above,
+        parent = this.parentThatIsA(SyntaxElementMorph),
         cslot = this.parentThatIsA(CSlotMorph);
 
     // for undrop / redrop
@@ -4021,6 +4034,9 @@ CommandBlockMorph.prototype.userDestroyJustThis = function () {
         }
     } else if (cslot) {
         cslot.fixLayout();
+    }
+    if (parent) {
+        parent.reactToGrabOf(this); // fix highlight
     }
 };
 
@@ -5328,7 +5344,7 @@ ScriptsMorph.prototype.cleanUpMargin = 20;
 ScriptsMorph.prototype.cleanUpSpacing = 15;
 ScriptsMorph.prototype.isPreferringEmptySlots = true;
 ScriptsMorph.prototype.enableKeyboard = true;
-ScriptsMorph.prototype.enableNestedAutoWrapping = false;
+ScriptsMorph.prototype.enableNestedAutoWrapping = true;
 
 // ScriptsMorph instance creation:
 
@@ -5358,6 +5374,8 @@ ScriptsMorph.prototype.init = function (owner) {
     this.noticesTransparentClick = true;
 
     // initialize "undrop" queue
+    this.isAnimating = false;
+    this.dropRecord = null;
     this.recordDrop();
 };
 
@@ -5689,6 +5707,7 @@ ScriptsMorph.prototype.closestBlock = function (comment, hand) {
 ScriptsMorph.prototype.userMenu = function () {
     var menu = new MenuMorph(this),
         ide = this.parentThatIsA(IDE_Morph),
+        shiftClicked = this.world().currentKey === 16,
         blockEditor,
         myself = this,
         obj = this.owner,
@@ -5705,7 +5724,13 @@ ScriptsMorph.prototype.userMenu = function () {
         if (this.dropRecord.lastRecord) {
             hasUndropQueue = true;
             menu.addItem(
-                'undrop',
+                [
+                    new SymbolMorph(
+                        'turnBack',
+                        MorphicPreferences.menuFontSize
+                    ),
+                    localize('undrop')
+                ],
                 'undrop',
                 'undo the last\nblock drop\nin this pane'
             );
@@ -5713,12 +5738,30 @@ ScriptsMorph.prototype.userMenu = function () {
         if (this.dropRecord.nextRecord) {
             hasUndropQueue = true;
             menu.addItem(
-                'redrop',
+                [
+                    new SymbolMorph(
+                        'turnForward',
+                        MorphicPreferences.menuFontSize
+                    ),
+                    localize('redrop')
+                ],
                 'redrop',
                 'redo the last undone\nblock drop\nin this pane'
             );
         }
         if (hasUndropQueue) {
+            if (shiftClicked) {
+                menu.addItem(
+                    "clear undrop queue",
+                    function () {
+                        myself.dropRecord = null;
+                        myself.clearDropInfo();
+                        myself.recordDrop();
+                    },
+                    'forget recorded block drops\non this pane',
+                    new Color(100, 0, 0)
+                );
+            }
             menu.addLine();
         }
     }
@@ -5845,31 +5888,48 @@ ScriptsMorph.prototype.addComment = function () {
     }
 };
 
+// ScriptsMorph undrop / redrop
+
 ScriptsMorph.prototype.undrop = function () {
+    var myself = this;
+    if (this.isAnimating) {return; }
     if (!this.dropRecord || !this.dropRecord.lastRecord) {return; }
     if (!this.dropRecord.situation) {
         this.dropRecord.situation =
             this.dropRecord.lastDroppedBlock.situation();
     }
+    this.isAnimating = true;
     this.dropRecord.lastDroppedBlock.slideBackTo(
         this.dropRecord.lastOrigin,
         null,
-        this.recoverLastDrop()
+        this.recoverLastDrop(),
+        function () {
+            myself.updateUndropControls();
+            myself.isAnimating = false;
+        }
     );
     this.dropRecord = this.dropRecord.lastRecord;
 };
 
 ScriptsMorph.prototype.redrop = function () {
+    var myself = this;
+    if (this.isAnimating) {return; }
     if (!this.dropRecord || !this.dropRecord.nextRecord) {return; }
     this.dropRecord = this.dropRecord.nextRecord;
     if (this.dropRecord.action === 'delete') {
         this.recoverLastDrop(true);
         this.dropRecord.lastDroppedBlock.destroy();
+        this.updateUndropControls();
     } else {
+        this.isAnimating = true;
         this.dropRecord.lastDroppedBlock.slideBackTo(
             this.dropRecord.situation,
             null,
-            this.recoverLastDrop(true)
+            this.recoverLastDrop(true),
+            function () {
+                myself.updateUndropControls();
+                myself.isAnimating = false;
+            }
         );
     }
 };
@@ -6026,11 +6086,79 @@ ScriptsMorph.prototype.recordDrop = function (lastGrabOrigin) {
         situation: null,
         lastRecord: this.dropRecord,
         nextRecord: null
-     };
-     if (this.dropRecord) {
+    };
+    if (this.dropRecord) {
         this.dropRecord.nextRecord = record;
-     }
-     this.dropRecord = record;
+    }
+    this.dropRecord = record;
+    this.updateUndropControls();
+};
+
+ScriptsMorph.prototype.addUndropControls = function () {
+    var toolBar = new AlignmentMorph(),
+        shade = (new Color(140, 140, 140));
+    toolBar.undoButton = new PushButtonMorph(
+        this,
+        "undrop",
+        new SymbolMorph("turnBack", 12)
+    );
+    toolBar.redoButton = new PushButtonMorph(
+        this,
+        "redrop",
+        new SymbolMorph("turnForward", 12)
+    );
+    toolBar.undoButton.alpha = 0.2;
+    // toolBar.undoButton.hint = 'undo the last\nblock drop\nin this pane';
+    toolBar.undoButton.labelShadowColor = shade;
+    toolBar.undoButton.drawNew();
+    toolBar.undoButton.fixLayout();
+    toolBar.add(toolBar.undoButton);
+
+    toolBar.redoButton.alpha = 0.2;
+    // toolBar.redoButton.hint = 'redo the last undone\nblock drop\nin this pane';
+    toolBar.redoButton.labelShadowColor = shade;
+    toolBar.redoButton.drawNew();
+    toolBar.redoButton.fixLayout();
+    toolBar.add(toolBar.redoButton);
+    return toolBar;
+};
+
+ScriptsMorph.prototype.updateUndropControls = function () {
+    var sf = this.parentThatIsA(ScrollFrameMorph);
+    if (!sf) {return; }
+    if (!sf.toolBar) {
+        sf.toolBar = this.addUndropControls();
+        sf.add(sf.toolBar);
+    }
+    if (this.dropRecord) {
+        if (this.dropRecord.lastRecord) {
+            if (!sf.toolBar.undoButton.isVisible) {
+                sf.toolBar.undoButton.show();
+            }
+        } else {
+            if (sf.toolBar.undoButton.isVisible) {
+                sf.toolBar.undoButton.hide();
+            }
+        }
+        if (this.dropRecord.nextRecord) {
+            if (!sf.toolBar.redoButton.isVisible) {
+                sf.toolBar.redoButton.show();
+                sf.toolBar.undoButton.mouseLeave();
+            }
+        } else {
+            if (sf.toolBar.redoButton.isVisible) {
+                sf.toolBar.redoButton.hide();
+            }
+        }
+    }
+    if (sf.toolBar.undoButton.isVisible || sf.toolBar.redoButton.isVisible) {
+        sf.toolBar.drawNew();
+        sf.toolBar.changed();
+    } else {
+        sf.removeChild(sf.toolBar);
+        sf.toolBar = null;
+    }
+    sf.adjustToolBar();
 };
 
 // ScriptsMorph sorting blocks and comments
@@ -9093,6 +9221,8 @@ SymbolMorph.prototype.names = [
     'pipette',
     'speechBubble',
     'speechBubbleOutline',
+    'turnBack',
+    'turnForward',
     'arrowUp',
     'arrowUpOutline',
     'arrowLeft',
@@ -9101,7 +9231,8 @@ SymbolMorph.prototype.names = [
     'arrowDownOutline',
     'arrowRight',
     'arrowRightOutline',
-    'robot'
+    'robot',
+    'magnifiyingGlass'
 ];
 
 // SymbolMorph instance creation:
@@ -9249,6 +9380,10 @@ SymbolMorph.prototype.symbolCanvasColored = function (aColor) {
         return this.drawSymbolSpeechBubble(canvas, aColor);
     case 'speechBubbleOutline':
         return this.drawSymbolSpeechBubbleOutline(canvas, aColor);
+    case 'turnBack':
+        return this.drawSymbolTurnBack(canvas, aColor);
+    case 'turnForward':
+        return this.drawSymbolTurnForward(canvas, aColor);
     case 'arrowUp':
         return this.drawSymbolArrowUp(canvas, aColor);
     case 'arrowUpOutline':
@@ -9267,6 +9402,8 @@ SymbolMorph.prototype.symbolCanvasColored = function (aColor) {
         return this.drawSymbolArrowRightOutline(canvas, aColor);
     case 'robot':
         return this.drawSymbolRobot(canvas, aColor);
+    case 'magnifiyingGlass':
+        return this.drawSymbolMagnifyingGlass(canvas, aColor);
     default:
         return canvas;
     }
@@ -9295,6 +9432,8 @@ SymbolMorph.prototype.symbolWidth = function () {
     case 'cloud':
     case 'cloudGradient':
     case 'cloudOutline':
+    case 'turnBack':
+    case 'turnForward':
         return size * 1.6;
     case 'turnRight':
     case 'turnLeft':
@@ -10164,6 +10303,54 @@ SymbolMorph.prototype.drawSymbolSpeechBubbleOutline = function (
     return canvas;
 };
 
+SymbolMorph.prototype.drawSymbolTurnBack = function (canvas, aColor) {
+    var ctx = canvas.getContext('2d'),
+        w = canvas.width,
+        h = canvas.height,
+        w2 = canvas.width / 2,
+        h2 = canvas.height / 2,
+        l = Math.max(w / 20, 0.5);
+
+    ctx.fillStyle = aColor.toString();
+    ctx.lineWidth = l * 2;
+    ctx.beginPath();
+    ctx.moveTo(0, h2);
+    ctx.lineTo(w2, 0);
+    ctx.lineTo(w2, h);
+    ctx.closePath();
+    ctx.fill();
+    ctx.lineWidth = l * 3;
+    ctx.strokeStyle = aColor.toString();
+    ctx.beginPath();
+    ctx.arc(w2, h, h2, radians(0), radians(-90), true);
+    ctx.stroke();
+    return canvas;
+};
+
+SymbolMorph.prototype.drawSymbolTurnForward = function (canvas, aColor) {
+    var ctx = canvas.getContext('2d'),
+        w = canvas.width,
+        h = canvas.height,
+        w2 = canvas.width / 2,
+        h2 = canvas.height / 2,
+        l = Math.max(w / 20, 0.5);
+
+    ctx.fillStyle = aColor.toString();
+    ctx.lineWidth = l * 2;
+    ctx.beginPath();
+    ctx.moveTo(w, h2);
+    ctx.lineTo(w2, 0);
+    ctx.lineTo(w2, h);
+    ctx.closePath();
+    ctx.fill();
+    ctx.lineWidth = l * 3;
+    ctx.strokeStyle = aColor.toString();
+    ctx.beginPath();
+    ctx.arc(w2, h, h2, radians(-180), radians(-90), false);
+    ctx.stroke();
+    return canvas;
+};
+
 SymbolMorph.prototype.drawSymbolArrowUp = function (canvas, color) {
     // answer a canvas showing an up arrow
     var ctx = canvas.getContext('2d'),
@@ -10349,6 +10536,48 @@ SymbolMorph.prototype.drawSymbolRobot = function (canvas, color) {
     ctx.lineTo(n * 4.5, n * 3.5);
     ctx.closePath();
     ctx.fill();
+
+    return canvas;
+};
+
+SymbolMorph.prototype.drawSymbolMagnifyingGlass = function (canvas, color) {
+    // answer a canvas showing a magnifying glass
+    var ctx = canvas.getContext('2d'),
+        gradient,
+        w = canvas.width,
+        h = canvas.height,
+        r = w * 0.3,
+        x = w * 2 / 3 - Math.sqrt(r),
+        y = h / 3 + Math.sqrt(r),
+        l = Math.max(w / 5, 0.5);
+
+    ctx.strokeStyle = color.toString();
+
+    gradient = ctx.createRadialGradient(
+        x,
+        y,
+        0,
+        x + r,
+        y + r,
+        w
+    );
+    
+    gradient.addColorStop(0, color.inverted().lighter(50).toString());
+    gradient.addColorStop(1, color.inverted().darker(25).toString());
+    ctx.fillStyle = gradient;
+    ctx.arc(x, y, r, radians(0), radians(360), false);
+    ctx.fill();
+
+    ctx.lineWidth = l / 2;
+    ctx.arc(x, y, r, radians(0), radians(360), false);
+    ctx.stroke();
+    
+    ctx.lineWidth = l;
+    ctx.beginPath();
+    ctx.moveTo(l / 2, h - l / 2);
+    ctx.lineTo(x - Math.sqrt(r + l), y + Math.sqrt(r + l));
+    ctx.closePath();
+    ctx.stroke();
 
     return canvas;
 };
@@ -13018,6 +13247,7 @@ ScriptFocusMorph.prototype.reactToKeyEvent = function (key) {
         return this.deleteLastElement();
     case 'ctrl z':
         return this.undrop();
+    case 'ctrl y':
     case 'ctrl shift z':
         return this.redrop();
     case 'ctrl [': // ignore the first press of the Mac cmd key

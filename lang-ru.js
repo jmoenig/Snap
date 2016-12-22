@@ -245,7 +245,7 @@ SnapTranslator.dict.ru = {
 
     // tab help
     'costumes tab help':
-        'импортируйте изображение с другого веб-сайта\nили со своего компьютера скопировав его сюда',
+        'импортируйте изображение с другого веб-сайта\nили со своего компьютера, скопировав его сюда',
     'import a sound from your computer\nby dragging it into here':
         'импортируйте звук со своего компьютера\nскопировав его сюда',
 
@@ -443,13 +443,13 @@ SnapTranslator.dict.ru = {
     'wait %n secs':
         'ждать %n сек.',
     'wait until %b':
-        'ждать пока %b',
+        'ждать до %b',
     'forever %c':
         'непрерывно %c',
     'repeat %n %c':
         'повторять %n %c',
     'repeat until %b %c':
-        'повторять пока %b %c',
+        'повторять пока не %b %c',
     'if %b %c':
         'если %b %c',
     'if %b %c else %c':
@@ -457,9 +457,9 @@ SnapTranslator.dict.ru = {
     'report %s':
         'результат %s',
     'stop %stopChoices':
-        'стоп %stopChoices',
+        'остановить %stopChoices',
     'all':
-        'все',
+        'всё',
     'this script':
         'этот скрипт',
     'this block':
