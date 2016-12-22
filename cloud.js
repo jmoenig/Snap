@@ -2,7 +2,7 @@
 
     cloud.js
 
-    a backend API for Snap!
+    a backend API for SNAP!
 
     written by Jens Mönig
 

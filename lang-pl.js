@@ -2,7 +2,7 @@
 
     lang-pl.js
 
-    Polskie tłumaczenie Snap!
+    Polskie tłumaczenie SNAP!
 
     Podziękowania dla Jensa Möniga
 

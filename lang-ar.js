@@ -2,7 +2,7 @@
 
     lang-ar.js
 
-    Arabic transelation  for Snap!
+    Arabic transelation  for SNAP!
 
     written by Jens MÃ¶nig
 
@@ -631,7 +631,7 @@ SnapTranslator.dict.ar = {
      // menus
     // snap menu
     'About...':
-        'عن Snap!...',
+        'عن SNAP!...',
     'Reference manual':
         'دليل التشغيل',
     'Snap! website':

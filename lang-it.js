@@ -2,7 +2,7 @@
 
 	lang-it.js
 
-	Italian  translation for Snap!
+	Italian  translation for SNAP!
 
 	written by Jens Mönig
 

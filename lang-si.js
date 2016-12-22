@@ -2,7 +2,7 @@
 
 	lang-si.js
 
-	Slovenian translation for Snap!
+	Slovenian translation for SNAP!
 
 	translated by Sasa Divjak
 

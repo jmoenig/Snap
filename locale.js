@@ -2,7 +2,7 @@
 
     locale.js
 
-    spoken language translation for Snap!
+    spoken language translation for SNAP!
 
     written by Jens Mönig
 

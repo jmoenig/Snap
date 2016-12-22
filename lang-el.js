@@ -2,7 +2,7 @@
 
     lang-el.js
 
-    Greek translation for Snap!
+    Greek translation for SNAP!
 
     written by Ino Samaras
 

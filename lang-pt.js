@@ -2,7 +2,7 @@
 
     lang-pt.js
 
-    Portuguese (literary) translation for Snap!
+    Portuguese (literary) translation for SNAP!
 
     translated by Manuel Menezes de Sequeira
 

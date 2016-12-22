@@ -2,7 +2,7 @@
 
 	lang-eo.js
 
-	German translation for Snap!
+	German translation for SNAP!
 
 	written by Jens Mönig
 

@@ -2,7 +2,7 @@
 
     lang-et.js
 
-    Estonian translation for Snap!
+    Estonian translation for SNAP!
 
     written by Hasso Tepper
 

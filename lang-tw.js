@@ -2,7 +2,7 @@
 
 	lang-tw.js
 
-	Traditional Chinese translation for Snap!
+	Traditional Chinese translation for SNAP!
 	SNAP 繁體中文翻譯版
 
 	written by chu-chung Huang

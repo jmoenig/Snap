@@ -2,7 +2,7 @@
 
     lang-ca.js
 
-    Catalan translation for Snap!
+    Catalan translation for SNAP!
 
     written by Jens Mönig
 

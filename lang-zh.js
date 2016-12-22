@@ -2,7 +2,7 @@
 
     lang-zh.js
 
-    Simplified Chinese translation for Snap!
+    Simplified Chinese translation for SNAP!
 
     written by 五百刀/邓江华
 

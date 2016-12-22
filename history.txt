@@ -1016,7 +1016,7 @@ ______
 
 120816
 ------
-* Snap! Connection Strategy
+* SNAP! Connection Strategy
 * OS-native File Dialog for importing projects, pictures, sounds (also for Safari 6)
 
 120830

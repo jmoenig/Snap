@@ -2,7 +2,7 @@
 
     lang-hu.js
 
-    A Snap! magyar fordítása
+    A SNAP! magyar fordítása
 
     written by Makány György
 

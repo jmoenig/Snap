@@ -2,7 +2,7 @@
 
 	lang-cs.js
 
-	Czech translation for Snap!
+	Czech translation for SNAP!
 
 	written by Michal Moc
 
