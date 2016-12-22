@@ -2834,7 +2834,7 @@ SpriteMorph.prototype.reporterize = function (expressionString) {
         return block;
     }
 
-    if (expressionString > 100) {return null; }
+    if (expressionString.length > 100) {return null; }
     try {
         ast = createASTFromTokens(tokenize(expressionString));
         return ast instanceof Array ? blockFromAST(ast) : null;
