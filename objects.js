@@ -82,7 +82,7 @@ SpeechBubbleMorph, RingMorph, isNil, FileReader, TableDialogMorph,
 BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph*/
 
-modules.objects = '2016-December-20';
+modules.objects = '2016-December-22';
 
 var SpriteMorph;
 var StageMorph;
@@ -2777,7 +2777,8 @@ SpriteMorph.prototype.reporterize = function (expressionString) {
         }
     }
     function blockFromAST(ast) {
-        var block, selectors, monads, alias, key, i, inps, offset;
+        var block, selectors, monads, alias, key, sel, i, inps,
+            off = 1;
         selectors = {
             '+': 'reportSum',
             '-': 'reportDifference',
@@ -2789,47 +2790,40 @@ SpriteMorph.prototype.reporterize = function (expressionString) {
             'asin', 'acos', 'atan', 'ln', 'log', 'round'];
         alias = {ceil: 'ceiling'};
         key = alias[ast[0]] || ast[0];
-        if (contains(monads, key)) {
-            if (key === 'round') {
-                block = SpriteMorph.prototype.blockForSelector('reportRound');
+        if (contains(monads, key)) { // monadic
+            sel = selectors[key];
+            if (sel) { // single input
+                block = SpriteMorph.prototype.blockForSelector(sel);
                 inps = block.inputs();
-                i = 0;
-                offset = 1;
-            } else {
+            } else { // two inputs, first is function name
                 block = SpriteMorph.prototype.blockForSelector('reportMonadic');
                 inps = block.inputs();
                 inps[0].setContents([key]);
-                i = 1;
-                offset = 0;
+                off = 0;
             }
-            if (ast[i + offset] instanceof Array) {
-                block.silentReplaceInput(inps[i], blockFromAST(ast[i + offset]));
-            } else if (isString(ast[i + offset])) {
-                if (ast[i + offset] !== '_') {
+        } else { // diadic
+            block = SpriteMorph.prototype.blockForSelector(selectors[key]);
+            inps = block.inputs();
+        }
+        for (i = 1; i < ast.length; i += 1) {
+            if (ast[i] instanceof Array) {
+                block.silentReplaceInput(inps[i - off], blockFromAST(ast[i]));
+            } else if (isString(ast[i])) {
+                if (contains(['true', 'false'], ast[i])) {
                     block.silentReplaceInput(
-                        inps[i],
-                        SpriteMorph.prototype.variableBlock(ast[i + offset])
+                        inps[i - off],
+                        SpriteMorph.prototype.blockForSelector(
+                            ast[i] === 'true' ? 'reportTrue' : 'reportFalse'
+                        )
+                    );
+                } else if (ast[i] !== '_') {
+                    block.silentReplaceInput(
+                        inps[i - off],
+                        SpriteMorph.prototype.variableBlock(ast[i])
                     );
                 }
             } else { // number
-                inps[i].setContents(ast[i + offset]);
-            }
-        } else { // diadic
-            block = SpriteMorph.prototype.blockForSelector(selectors[ast[0]]);
-            inps = block.inputs();
-            for (i = 1; i < 3; i += 1) {
-                if (ast[i] instanceof Array) {
-                    block.silentReplaceInput(inps[i - 1], blockFromAST(ast[i]));
-                } else if (isString(ast[i])) {
-                    if (ast[i] !== '_') {
-                        block.silentReplaceInput(
-                            inps[i - 1],
-                            SpriteMorph.prototype.variableBlock(ast[i])
-                        );
-                    }
-                } else { // number
-                    inps[i - 1].setContents(ast[i]);
-                }
+                inps[i - off].setContents(ast[i]);
             }
         }
         block.isDraggable = true;
