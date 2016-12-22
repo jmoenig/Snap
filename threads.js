@@ -3358,7 +3358,7 @@ Process.prototype.flashContext = function () {
             !(expr instanceof CommandSlotMorph) &&
             !this.context.isFlashing &&
             expr.world() &&
-			!(expr instanceof ColorSlotMorph)) {
+            !(expr instanceof ColorSlotMorph)) {
         this.unflash();
         expr.flash();
         this.context.isFlashing = true;
