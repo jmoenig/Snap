@@ -2722,6 +2722,7 @@ SpriteMorph.prototype.reporterize = function (expressionString) {
                         if (tokens[0].type !== "comma") {
                             throw "No comma between arguments";
                         }
+                        tokens.shift();
                     }
                     tokens.shift();
                     return [token.val].concat(args);
@@ -2784,7 +2785,8 @@ SpriteMorph.prototype.reporterize = function (expressionString) {
             '-': 'reportDifference',
             '*': 'reportProduct',
             '/': 'reportQuotient',
-            '%': 'reportModulus'
+            '%': 'reportModulus',
+            'random': 'reportRandom'
         };
         monads = ['abs', 'ceiling', 'floor', 'sqrt', 'sin', 'cos', 'tan',
             'asin', 'acos', 'atan', 'ln', 'log', 'round'];
