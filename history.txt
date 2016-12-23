@@ -3209,6 +3209,11 @@ http://snap.berkeley.edu/run#cloud:Username=jens&ProjectName=rotation
 161222
 ------
 * Objects: simplified reporterize>>blockFromAST
+* Threads: prevented color slots from flashing. Good catch, thanks, Joan!
+
+161223
+------
+* Objects: tweaked reporterize infixParser
 
 == v4.10 === (in development)
 
