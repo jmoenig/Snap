@@ -661,6 +661,43 @@ SyntaxElementMorph.prototype.getVarNamesDict = function () {
     return {};
 };
 
+// Variable refactoring
+
+SyntaxElementMorph.prototype.refactorVarInStack = function (oldName, newName) {
+    if (this instanceof RingMorph
+            || (this.selector === 'doDeclareVariables'
+                && this.definesScriptVariable(oldName))) {
+        return;
+    }
+
+    if (this.selector === 'reportGetVar'
+            && this.blockSpec === oldName) {
+        this.setSpec(newName);
+        this.fullChanged();
+        this.fixLabelColor();
+    } 
+
+    if (this.choices === 'getVarNamesDict'
+            && this.contents().text === oldName) {
+        this.setContents(newName);
+    }
+
+    if (this instanceof CustomCommandBlockMorph) {
+        this.definition.body.expression.refactorVarInStack(oldName, newName);
+    }
+
+    this.inputs().forEach(function (input) {
+        input.refactorVarInStack(oldName, newName);
+    });
+
+    if (this.nextBlock) {
+        var nb = this.nextBlock();
+        if (nb) {
+            nb.refactorVarInStack(oldName, newName);
+        }
+    }
+};
+
 // SyntaxElementMorph drag & drop:
 
 SyntaxElementMorph.prototype.reactToGrabOf = function (grabbedMorph) {
@@ -2332,10 +2369,19 @@ BlockMorph.prototype.userMenu = function () {
                     'mapToCode'
                 );
             }
+            if (this.selector === 'reportGetVar') {
+                menu.addLine();
+                menu.addItem(
+                    'rename all occurrences...',
+                    'refactorThisVar'
+                );
+            }
         }
         return menu;
-    }
+    }  
+
     menu.addLine();
+
     if (this.selector === 'reportGetVar') {
         blck = this.fullCopy();
         blck.addShadow();
@@ -2997,6 +3043,59 @@ BlockMorph.prototype.codeMappingHeader = function () {
         hat.alternateBlockColor();
     }
     return hat;
+};
+
+// Variable refactoring
+
+BlockMorph.prototype.refactorThisVar = function () {
+    var oldName = this.blockSpec,
+        receiver = this.receiver(),
+        ide = this.parentThatIsA(IDE_Morph),
+        oldValue, stage;
+
+    new DialogBoxMorph(
+            this,
+            function (newName) {
+                if (receiver.hasSpriteVariable(oldName)) {
+                    // sprite local var
+                    receiver.refactorVariableInstances(oldName, newName, false);
+                    receiver.toggleVariableWatcher(newName, false);
+                } else {
+                    // global var
+                    stage = receiver.parentThatIsA(StageMorph);
+                    
+                    oldValue = ide.globalVariables.vars[oldName];
+                    stage.deleteVariable(oldName);
+                    stage.addVariable(newName, true);
+                    ide.globalVariables.vars[newName] = oldValue;
+                    stage.toggleVariableWatcher(newName, true);
+
+                    stage.refactorVariableInstances(oldName, newName, true);
+                    stage.forAllChildren(function (child) {
+                        if (child instanceof SpriteMorph) {
+                            child.refactorVariableInstances(oldName, newName, true);
+                        }
+                    });
+                }
+                ide.flushBlocksCache('variables');
+                ide.refreshPalette();
+            },
+            this
+            ).prompt(
+                "Variable name",
+                oldName,
+                this.world(),
+                this.fullImage(), // pic
+                InputSlotMorph.prototype.getVarNamesDict.call(this)
+                );
+};
+
+BlockMorph.prototype.definesScriptVariable = function (name) {
+    return (this.selector === 'doDeclareVariables' 
+            && detect(this.inputs()[0].allInputs(), function (input) {
+                return (input.selector === 'reportGetVar'
+                        && input.blockSpec === name)
+            }));
 };
 
 // BlockMorph drawing
