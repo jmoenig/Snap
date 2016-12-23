@@ -82,7 +82,7 @@ SpeechBubbleMorph, RingMorph, isNil, FileReader, TableDialogMorph,
 BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph*/
 
-modules.objects = '2016-December-22';
+modules.objects = '2016-December-23';
 
 var SpriteMorph;
 var StageMorph;
@@ -2642,7 +2642,7 @@ SpriteMorph.prototype.reporterize = function (expressionString) {
 
     function parseInfix(expression, operator, already) {
         // very basic diadic infix parser for arithmetic expressions
-        // with strict left-to-right operator precedence (like in Smalltalk)
+        // with strict left-to-right operator precedence (as in Smalltalk)
         // which can be overriden by - nested - parentheses.
         // assumes well-formed expressions, no graceful error handling yet.
 
@@ -2702,13 +2702,17 @@ SpriteMorph.prototype.reporterize = function (expressionString) {
             case '&':
             case '|':
                 if (!operator && !inputs[0].length) {
-                    inputs[0] += ch;
+                    inputs[0] = ch;
                 } else if (operator) {
-                    return parseInfix(
-                        expression.slice(idx),
-                        ch,
-                        [operator, already, format(inputs[1])]
-                    );
+                    if (!inputs[1].length) {
+                        inputs[1] = ch;
+                    } else {
+                        return parseInfix(
+                            expression.slice(idx),
+                            ch,
+                            [operator, already, format(inputs[1])]
+                        );
+                    }
                 } else {
                     operator = ch;
                     already = format(inputs[0]);
