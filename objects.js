@@ -2642,35 +2642,34 @@ SpriteMorph.prototype.reporterize = function (expressionString) {
 
     function tokenize(expressionString) {
         // very basic tokenizer for arithmetic expressions
-        var tokens = [];
-        var DIGITS = /\d|\./;
-        var IDENT_START = /[A-Za-z_]/;
-        var IDENT_WITH_DIGITS = /[A-Za-z_0-9]/;
-        var OPERATORS = /[+\-*/%]/;
-        var token;
+        var tokens = [],
+            DIGITS = /\d|\./,
+            IDENTIFIER_START = /[A-Za-z_]/,
+            IDENTIFIER_WITH_DIGITS = /[A-Za-z_0-9]/,
+            OPERATORS = /[+\-*/%]/,
+            token;
         expressionString = expressionString.trim();
-        function findIdent() {
-            var ident = "";
-            while (expressionString && IDENT_WITH_DIGITS.test(expressionString[0])) {
-                ident += expressionString[0];
+        function findIdentifier() {
+            var identifier= "";
+            while (expressionString && IDENTIFIER_WITH_DIGITS.test(expressionString[0])) {
+                identifier += expressionString[0];
                 expressionString = expressionString.slice(1);
             }
-            return ident;
+            return identifier;
         }
         function findNumber() {
             var num = "";
-            while (expressionString &&
-                  (DIGITS.test(expressionString[0]) || expressionString[0] === "-")) {
+            do {
                 num += expressionString[0];
                 expressionString = expressionString.slice(1);
-            }
+            } while (expressionString && DIGITS.test(expressionString[0]));
             return parseFloat(num);
         }
         while (expressionString.length) {
             expressionString = expressionString.trim();
-            if (IDENT_START.test(expressionString[0])) {
-                token = findIdent();
-                tokens.push({ type: "ident", val: token});
+            if (IDENTIFIER_START.test(expressionString[0])) {
+                token = findIdentifier();
+                tokens.push({ type: "identifier", val: token});
             } else if (DIGITS.test(expressionString[0]) ||
                       (expressionString[0] === "-" && DIGITS.test(expressionString[1]))) {
                 token = findNumber();
@@ -2710,7 +2709,7 @@ SpriteMorph.prototype.reporterize = function (expressionString) {
                 } else {
                     throw "Invalid prefix operator";
                 }
-            } else if (token.type === "ident") {
+            } else if (token.type === "identifier") {
                 if (tokens.length && tokens[0].type === "lp") {
                     var args = [];
                     tokens.shift();
@@ -2734,11 +2733,10 @@ SpriteMorph.prototype.reporterize = function (expressionString) {
             }
         }
         function precedence1(tokens) {
-            var exp = precedence0(tokens);
+            var exp = precedence0(tokens), op;
             if (!tokens.length) {
                 return exp;
             }
-            var op;
             while (tokens.length && /[*/%]/.test(tokens[0].val)) {
                 op = tokens[0];
                 if (op.type !== "operator") {
@@ -2756,11 +2754,10 @@ SpriteMorph.prototype.reporterize = function (expressionString) {
             return exp;
         }
         function precedence2(tokens) {
-            var exp = precedence1(tokens);
+            var exp = precedence1(tokens), op;
             if (!tokens) {
                 return exp;
             }
-            var op;
             while (tokens.length && /[+\-]/.test(tokens[0].val)) {
                 op = tokens[0];
                 if (op.type !== "operator") {
