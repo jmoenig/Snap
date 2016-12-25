@@ -72,7 +72,7 @@ isRetinaSupported, SliderMorph, Animation*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2016-December-19';
+modules.gui = '2016-December-25';
 
 // Declarations
 
@@ -1358,6 +1358,7 @@ IDE_Morph.prototype.createSpriteEditor = function () {
         this.spriteEditor.contents.acceptsDrops = true;
 
         scripts.scrollFrame = this.spriteEditor;
+        scripts.updateUndropControls();
         this.add(this.spriteEditor);
         this.spriteEditor.scrollX(this.spriteEditor.padding);
         this.spriteEditor.scrollY(this.spriteEditor.padding);
@@ -4475,6 +4476,8 @@ IDE_Morph.prototype.toggleAppMode = function (appMode) {
                 }
             });
         }
+        // update undrop controls
+        this.currentSprite.scripts.updateUndropControls();
     }
     this.setExtent(this.world().extent()); // resume trackChanges
 };

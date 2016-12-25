@@ -3215,6 +3215,11 @@ http://snap.berkeley.edu/run#cloud:Username=jens&ProjectName=rotation
 ------
 * Objects: tweaked reporterize infixParser
 
+161225
+------
+* GUI: update undrop controls when switching sprites and display modes
+
+
 == v4.10 === (in development)
 
 Features:
