@@ -2551,7 +2551,7 @@ BlockMorph.prototype.deleteBlock = function () {
         });
     }
     if (this instanceof ReporterBlockMorph &&
-			((this.parent instanceof BlockMorph)
+                        ((this.parent instanceof BlockMorph)
             	|| (this.parent instanceof MultiArgMorph)
             	|| (this.parent instanceof ReporterSlotMorph))) {
         this.parent.revertToDefaultInput(this);
@@ -7533,6 +7533,7 @@ InputSlotMorph.prototype.setContents = function (aStringOrFloat) {
 InputSlotMorph.prototype.dropDownMenu = function (enableKeyboard) {
     var choices = this.choices,
         key,
+        menustack = [],
         menu = new MenuMorph(
             this.setContents,
             null,
@@ -7553,13 +7554,38 @@ InputSlotMorph.prototype.dropDownMenu = function (enableKeyboard) {
         if (Object.prototype.hasOwnProperty.call(choices, key)) {
             if (key[0] === '~') {
                 menu.addLine();
-            // } else if (key.indexOf('§_def') === 0) {
-            //     menu.addItem(choices[key].blockInstance(), choices[key]);
+        // } else if (key.indexOf('§_def') === 0) { 
+        // menu.addItem(choices[key].blockInstance(), choices[key]);
+            } else if (key.charCodeAt(key.length-1) == 0x25ba) {
+                // Submenu
+                menu.addItem(key, choices[key]);
+                menustack.push(menu);
+                menu = new MenuMorph(
+                                     this.setContents,
+                                     null,
+                                     this,
+                                     this.fontSize
+                                 );
+            } else if (key.charCodeAt(0) == 0x25c4) {
+                var oldmenu=menustack[menustack.length-1],
+                    items=oldmenu.items;
+                items[items.length-1][6] = menu;
+                oldmenu.addChild(menu);
+                menu = menustack.pop();
             } else {
                 menu.addItem(key, choices[key]);
             }
         }
     }
+
+    while (menustack.length > 0) {
+        var oldmenu=menustack[menustack.length-1],
+            items=oldmenu.items;
+        items[items.length-1][6] = menu;
+        oldmenu.addChild(menu);
+        menu = menustack.pop();
+    }
+
     if (menu.items.length > 0) {
         if (enableKeyboard) {
             menu.popup(this.world(), this.bottomLeft());
