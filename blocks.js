@@ -7533,7 +7533,7 @@ InputSlotMorph.prototype.setContents = function (aStringOrFloat) {
 InputSlotMorph.prototype.dropDownMenu = function (enableKeyboard) {
     var choices = this.choices,
         key,
-        menustack = [],
+        menuStack = [],
         menu = new MenuMorph(
             this.setContents,
             null,
@@ -7556,10 +7556,12 @@ InputSlotMorph.prototype.dropDownMenu = function (enableKeyboard) {
                 menu.addLine();
         // } else if (key.indexOf('§_def') === 0) { 
         // menu.addItem(choices[key].blockInstance(), choices[key]);
-            } else if (key.charCodeAt(key.length-1) == 0x25ba) {
+            } else if (key.charCodeAt(key.length - 1) == 0x25ba) {
                 // Submenu
+				// 0x25ba = Unicode "BLACK RIGHT-POINTING POINTER"
+				// (not to be confused with "black right-pointing TRIANGLE")
                 menu.addItem(key, choices[key]);
-                menustack.push(menu);
+                menuStack.push(menu);
                 menu = new MenuMorph(
                                      this.setContents,
                                      null,
@@ -7567,23 +7569,24 @@ InputSlotMorph.prototype.dropDownMenu = function (enableKeyboard) {
                                      this.fontSize
                                  );
             } else if (key.charCodeAt(0) == 0x25c4) {
-                var oldmenu=menustack[menustack.length-1],
-                    items=oldmenu.items;
-                items[items.length-1][6] = menu;
+				// "BLACK LEFT-POINTING POINTER"
+                var oldmenu = menuStack[menuStack.length - 1],
+                    items = oldmenu.items;
+                items[items.length - 1][6] = menu;
                 oldmenu.addChild(menu);
-                menu = menustack.pop();
+                menu = menuStack.pop();
             } else {
                 menu.addItem(key, choices[key]);
             }
         }
     }
 
-    while (menustack.length > 0) {
-        var oldmenu=menustack[menustack.length-1],
+    while (menuStack.length > 0) {
+        var oldmenu=menuStack[menuStack.length - 1],
             items=oldmenu.items;
         items[items.length-1][6] = menu;
         oldmenu.addChild(menu);
-        menu = menustack.pop();
+        menu = menuStack.pop();
     }
 
     if (menu.items.length > 0) {

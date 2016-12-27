@@ -7683,6 +7683,10 @@ MenuMorph.prototype.unselectAllItems = function () {
 };
 
 MenuMorph.prototype.popup = function (world, pos, submenu) {
+	// submenu is True if this menu is a submenu,
+	// so that we don't make it the world's activeMenu nor
+	// destroy its parent menu.
+
     this.drawNew();
     this.setPosition(pos);
     this.addShadow(new Point(2, 2), 80);
@@ -7823,22 +7827,19 @@ MenuMorph.prototype.select = function (aMenuItem) {
 MenuMorph.prototype.mouseLeave = function () {
     if (this.parent instanceof MenuMorph) {
         // this is a submenu so we vanish when lose focus
-        var mouses = this.world.hand.allMorphsAtPointer();
-        if (contains(mouses, this.parent)) {
-            var items = mouses.filter(function (morph)
-                                      {return morph instanceof MenuItemMorph});
-            if (items[0].doubleClickAction != this) {
-                this.destroy();
-            }
-        } else {
-            this.destroy();
-        }
+		this.destroy();
     }
 }
             
 
 MenuMorph.prototype.destroy = function () {
-var myself = this;
+var myself = this,
+    subitems = function(menu) {
+        return menu.children.filter(function (child) {
+                    return (child instanceof MenuItemMorph) &&
+                           (child.doubleClickAction instanceof MenuMorph);
+			} )
+	};
 
     if (this.hasFocus) {
         this.world.keyboardReceiver = null;
@@ -7846,21 +7847,17 @@ var myself = this;
 
     if ((this.parent instanceof MenuMorph) && this.world) {
         // If I'm a submenu, un-highlight the item pointing to me.
-        var mouses = this.world.hand.allMorphsAtPointer(),
-        items = this.parent.children.filter(function (child) {
-            return (child instanceof MenuItemMorph) &&
-            (child.doubleClickAction instanceof MenuMorph) &&
-            !(contains(mouses, child)); });
-        items.forEach(function (item) {item.image = item.normalImage;
-                                       item.changed(); });
-}
+		subitems(this.parent).forEach(function (item) {
+            item.image = item.normalImage;
+            item.changed();
+        } );
+    };
 
     // Also kill my submenus if any.
-    var triggers = this.children.filter(function (each) {
-        return (each instanceof MenuItemMorph) &&
-                (each.doubleClickAction instanceof MenuMorph);
-    });
-    triggers.forEach(function (item) {item.doubleClickAction.destroy();});
+    subitems(this).forEach(function (item) {
+                              item.doubleClickAction.destroy();
+                          });
+
     MenuMorph.uber.destroy.call(this);
 };
 
@@ -9443,7 +9440,7 @@ MenuItemMorph.prototype.mouseEnter = function () {
         this.changed();
     }
     if (this.doubleClickAction instanceof MenuMorph) {
-        var w=this.parentThatIsA(WorldMorph);
+        var w = this.parentThatIsA(WorldMorph);
         this.doubleClickAction.popup(w,
                                      new Point(this.parent.bounds.right()-10,
                                      w.hand.position().y-10),
@@ -9459,11 +9456,11 @@ MenuItemMorph.prototype.mouseEnter = function () {
 MenuItemMorph.prototype.mouseLeave = function () {
     if (this.doubleClickAction instanceof MenuMorph) {
 		if (!contains(this.world().hand.allMorphsAtPointer(),
-                     this.doubleClickAction)) {
-        this.doubleClickAction.destroy();
-        this.image = this.normalImage;
-        this.changed();
-}
+                      this.doubleClickAction)) {
+            this.doubleClickAction.destroy();
+            this.image = this.normalImage;
+            this.changed();
+        }
     } else if (!this.isListItem()) {
         this.image = this.normalImage;
         this.changed();
