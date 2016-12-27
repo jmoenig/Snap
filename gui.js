@@ -2755,31 +2755,6 @@ IDE_Morph.prototype.projectMenu = function () {
                 'Costumes' : 'Backgrounds',
         shiftClicked = (world.currentKey === 16);
 
-    function createMediaMenu(folderName, loadFunction) {
-        // Utility for creating Libraries, etc menus.
-        // loadFunction takes in two parameters:
-        // a file URL, and a canonical name
-        return function () {
-            myself.getMediaList(
-                folderName,
-                function (names) {
-                    var mediaMenu = new MenuMorph(
-                        myself,
-                        localize('Import') + ' ' + localize(folderName)
-                    );
-                    names.forEach(function (item) {
-                        mediaMenu.addItem(
-                            item.name,
-                            function () {loadFunction(item.file, item.name); },
-                            item.help
-                        );
-                    });
-                    mediaMenu.popup(world, pos);
-                }
-            );
-        };
-    }
-
     menu = new MenuMorph(this);
     menu.addItem('Project notes...', 'editProjectNotes');
     menu.addLine();
@@ -2912,17 +2887,16 @@ IDE_Morph.prototype.projectMenu = function () {
     );
     menu.addItem(
         'Libraries...',
-        createMediaMenu(
-            'libraries',
-            function (file, name) {
-                myself.getURL(
-                    myself.resourceURL('libraries', file),
-                    function (txt) {
-                        myself.droppedText(txt, name);
-                    }
-                );
-            }
-        ),
+        function() {
+            myself.getURL(
+                myself.resourceURL('libraries', 'LIBRARIES'),
+                function (txt) {
+                    var libraries = myself.parseResourceFile(txt);
+                    debugger;
+                    new LibraryImportDialogMorph(myself, libraries).popUp();
+                }
+            )
+        },
         'Select categories of additional blocks to add to this project.'
     );
 
@@ -2983,30 +2957,22 @@ IDE_Morph.prototype.getMediaList = function (dirname, callback) {
 };
 
 IDE_Morph.prototype.parseResourceFile = function (text) {
+    // TODO: Cleanup the resulting key names.
     // A Resource File lists all the files that could be loaded in a submenu
     // Examples are libraries/LIBRARIES, Costumes/COSTUMES, etc
-    // A File is very simple:
-    // A "//" starts a comment line, that is ignored.
-    // All lines have 3 fields: file-name, Display Name, Help Text
-    // These fields are delimited by tabs.
+    // The file format is tab-delimited, with unix newlines:
+    // file-name, Display Name, Help Text (optional)
     var parts,
-        items = [],
-        comment = '//',
-        delimter = '\t';
+        items = [];
 
-    text = text.split(/\n|\r\n/);
-
-    text.map(function (line) {
+    text.split('\n').map(function (line) {
         return line.trim();
     }).filter(function (line) {
-        return line.length > 0 && line[0] !== comment;
+        return line.length > 0;
     }).forEach(function (line) {
-        parts = line.split(delimter);
-        parts = parts.map(function (str) { return str.trim(); });
+        parts = line.split('\t').map(function (str) { return str.trim(); });
 
-        if (parts.length < 2) {
-            return;
-        }
+        if (parts.length < 2) {return; }
 
         items.push({
             file: parts[0],
@@ -5357,6 +5323,7 @@ ProjectDialogMorph.prototype.init = function (ide, task) {
     };
 };
 
+// TODO: Reduce this.listField settings duplication.
 ProjectDialogMorph.prototype.buildContents = function () {
     var thumbnail, notification;
 
@@ -5657,6 +5624,7 @@ ProjectDialogMorph.prototype.buildFilterField = function () {
 
 // ProjectDialogMorph ops
 
+// TODO: Reduce this.listField settings duplication.
 ProjectDialogMorph.prototype.setSource = function (source) {
     var myself = this,
         msg;
@@ -6250,6 +6218,267 @@ ProjectDialogMorph.prototype.fixLayout = function () {
     Morph.prototype.trackChanges = oldFlag;
     this.changed();
 };
+
+// LibraryImportDialogMorph ///////////////////////////////////////////
+// I am preview dialog shown before importing a library.
+// I inherit from a DialogMorph and look similar to the ProjectDialogMorph.
+
+LibraryImportDialogMorph.prototype = new DialogBoxMorph();
+LibraryImportDialogMorph.prototype.constructor = LibraryImportDialogMorph;
+LibraryImportDialogMorph.uber = DialogBoxMorph.prototype;
+
+// LibraryImportDialogMorph instance creation:
+
+function LibraryImportDialogMorph(ide, librariesData) {
+    world.Mydialog = this;
+    this.init(ide, librariesData);
+}
+
+LibraryImportDialogMorph.prototype.init = function (ide, librariesData) {
+    var myself = this;
+
+    // additional properties:
+    this.ide = ide;
+    this.librariesData = librariesData; // [{name: , file: , help:}]
+    // TODO: Could possibly cache the serialized version?
+    this.libraryCache = {}; // {fileName: library content}
+
+    this.handle = null;
+    this.listField = null;
+    this.preview = null;
+    this.notesText = null;
+    this.notesField = null;
+    this.importButton = null;
+
+    // initialize inherited properties:
+    LibraryImportDialogMorph.uber.init.call(
+        this,
+        this, // target
+        null, // function
+        null  // environment
+    );
+
+    // override inherited properites:
+    this.labelString = 'Import Library';
+    this.createLabel();
+    this.key = 'importLibrary';
+
+    // build contents
+    this.buildContents();
+    // this.onNextStep = function () { // yield to show "updating" message
+    //     myself.setSource(myself.source);
+    // };
+};
+
+// TODO: Reduce this.listField settings duplication.
+LibraryImportDialogMorph.prototype.buildContents = function () {
+    this.addBody(new Morph());
+    this.body.color = this.color;
+
+    this.listField = new ListMorph([]);
+    this.body.add(this.listField);
+
+    this.preview = new Morph();
+    this.preview.fixLayout = nop;
+    this.preview.edge = InputFieldMorph.prototype.edge;
+    this.preview.fontSize = InputFieldMorph.prototype.fontSize;
+    this.preview.typeInPadding = InputFieldMorph.prototype.typeInPadding;
+    this.preview.contrast = InputFieldMorph.prototype.contrast;
+    this.preview.drawNew = function () {
+        InputFieldMorph.prototype.drawNew.call(this);
+        if (this.texture) {
+            this.drawTexture(this.texture);
+        }
+    };
+    this.preview.drawCachedTexture = function () {
+        var context = this.image.getContext('2d');
+        context.drawImage(this.cachedTexture, this.edge, this.edge);
+        this.changed();
+    };
+    this.preview.drawRectBorder = InputFieldMorph.prototype.drawRectBorder;
+    this.preview.setExtent(
+        this.ide.serializer.thumbnailSize.add(this.preview.edge * 2)
+    );
+
+    this.body.add(this.preview);
+    this.preview.drawNew();
+
+    this.notesField = new ScrollFrameMorph();
+    this.notesField.fixLayout = nop;
+
+    this.notesField.edge = InputFieldMorph.prototype.edge;
+    this.notesField.fontSize = InputFieldMorph.prototype.fontSize;
+    this.notesField.typeInPadding = InputFieldMorph.prototype.typeInPadding;
+    this.notesField.contrast = InputFieldMorph.prototype.contrast;
+    this.notesField.drawNew = InputFieldMorph.prototype.drawNew;
+    this.notesField.drawRectBorder = InputFieldMorph.prototype.drawRectBorder;
+
+    this.notesField.acceptsDrops = false;
+    this.notesField.contents.acceptsDrops = false;
+
+    // TODO: Set to library description.
+    this.notesText = new TextMorph('');
+
+    this.notesField.isTextLineWrapping = true;
+    this.notesField.padding = 3;
+    this.notesField.setContents(this.notesText);
+    // this.notesField.setWidth(this.preview.width());
+    this.notesField.setWidth(50);
+
+    this.body.add(this.notesField);
+
+    this.importButton = this.addButton('importLibrary', 'Import');
+    this.addButton('cancel', 'Close');
+
+    this.setExtent(new Point(455, 335));
+    this.fixLayout();
+    this.displayContents();
+};
+
+LibraryImportDialogMorph.prototype.popUp = function (wrrld) {
+    var world = wrrld || this.ide.world();
+    if (world) {
+        LibraryImportDialogMorph.uber.popUp.call(this, world);
+        this.handle = new HandleMorph(
+            this,
+            350,
+            300,
+            this.corner,
+            this.corner
+        );
+    }
+};
+
+//
+LibraryImportDialogMorph.prototype.fixListFieldItemColors =
+    ProjectDialogMorph.prototype.fixListFieldItemColors;
+
+// TODO: Reduce this.listField settings duplication.
+LibraryImportDialogMorph.prototype.displayContents = function () {
+    var myself = this;
+
+    if (this.listField) {
+        this.listField.destroy();
+    }
+    this.listField = new ListMorph(
+        this.librariesData,
+        function (element) {return element.name; },
+        null,
+        function () {myself.importLibrary(); }
+    );
+
+    this.fixListFieldItemColors();
+    
+    this.listField.fixLayout = nop;
+    this.listField.edge = InputFieldMorph.prototype.edge;
+    this.listField.fontSize = InputFieldMorph.prototype.fontSize;
+    this.listField.typeInPadding = InputFieldMorph.prototype.typeInPadding;
+    this.listField.contrast = InputFieldMorph.prototype.contrast;
+    this.listField.drawNew = InputFieldMorph.prototype.drawNew;
+    this.listField.drawRectBorder = InputFieldMorph.prototype.drawRectBorder;
+
+    this.listField.action = function (item) {
+        var src, xml;
+        if (item === undefined) {return; }
+        if (myself.nameField) {
+            myself.nameField.setContents(item.name || '');
+        }
+        // src = myself.ide.getURL(myself.ide.resourceURL('libraries', item.file));
+        // TODO: Consider only parsing part of the file/
+        // xml = myself.ide.serializer.parse(src);
+        myself.notesText.text = item.help || '';
+        myself.notesText.drawNew();
+        myself.notesField.contents.adjustBounds();
+        // TODO: Load Blocks Preview
+        // myself.preview.texture = xml.childNamed('thumbnail').contents || null;
+        // myself.preview.cachedTexture = null;
+        // myself.preview.drawNew();
+        // myself.edit();
+    };
+
+    this.body.add(this.listField);
+    this.buttons.fixLayout();
+    this.fixLayout();
+};
+
+LibraryImportDialogMorph.prototype.importLibrary = function () {
+    var ide = this.ide,
+        selectedLibrary = this.listField.selected.file,
+        selectedName = this.listField.selected.name;
+
+    if (this.libraryCache.hasOwnProperty(selectedLibrary)) {
+        ide.droppedText(this.libraryCache[selectedLibrary], selectedName);
+    } else {
+        ide.getURL(
+            ide.resourceURL('libraries', selectedLibrary),
+            function(libraryText) {
+                ide.droppedText(libraryText, selectedName);
+            }
+        );
+    }
+
+    this.cancel();
+}
+
+LibraryImportDialogMorph.prototype.fixLayout = function () {
+    var th = fontHeight(this.titleFontSize) + this.titlePadding * 2,
+        thin = this.padding / 2,
+        inputField = this.nameField,
+        oldFlag = Morph.prototype.trackChanges;
+
+    Morph.prototype.trackChanges = false;
+
+    if (this.buttons && (this.buttons.children.length > 0)) {
+        this.buttons.fixLayout();
+    }
+
+    if (this.body) {
+        this.body.setPosition(this.position().add(new Point(
+            this.padding,
+            th + this.padding
+        )));
+        this.body.setExtent(new Point(
+            this.width() - this.padding * 2,
+            this.height() - this.padding * 3 - th - this.buttons.height()
+        ));
+
+        this.listField.setLeft(this.padding);
+        this.listField.setWidth(
+            this.body.width()
+                - this.preview.width()
+                - this.padding
+                - thin
+        );
+        this.listField.contents.children[0].adjustWidths();
+
+        this.listField.setTop(this.label.bottom() + this.padding);
+        this.listField.setHeight(
+            this.body.height() - this.padding
+        );
+
+        this.preview.setRight(this.body.right());
+        this.preview.setTop(this.label.bottom() + this.padding);
+
+        this.notesField.setTop(this.preview.bottom() + thin);
+        this.notesField.setLeft(this.preview.left());
+        this.notesField.setHeight(
+            this.body.bottom() - this.preview.bottom() - thin
+        );
+    }
+
+    if (this.label) {
+        this.label.setCenter(this.center());
+        this.label.setTop(this.top() + (th - this.label.height()) / 2);
+    }
+
+    if (this.buttons && (this.buttons.children.length > 0)) {
+        this.buttons.setCenter(this.center());
+        this.buttons.setBottom(this.bottom() - this.padding);
+    }
+
+    Morph.prototype.trackChanges = oldFlag;
+    this.changed();
+}
 
 // SpriteIconMorph ////////////////////////////////////////////////////
 
