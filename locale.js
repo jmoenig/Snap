@@ -229,7 +229,7 @@ SnapTranslator.dict.cs = {
         '2015-11-16'
 };
 
-SnapTranslator.dict.zh = {
+SnapTranslator.dict.zh_CN = {
     'language_name':
         '简体中文',
     'language_translator':
@@ -317,7 +317,7 @@ SnapTranslator.dict.pl = {
         '2016-11-14'
 };
 
-SnapTranslator.dict.tw = {
+SnapTranslator.dict.zh_TW = {
     'language_name':
         '繁體中文',
     'language_translator':
