@@ -9479,8 +9479,10 @@ MenuItemMorph.prototype.mouseDownLeft = function (pos) {
     if (this.isListItem()) {
         this.parent.unselectAllItems();
         this.escalateEvent('mouseDownLeft', pos);
-    }
-    this.image = this.pressImage;
+        this.image = this.pressImage;
+    } else if (!(this.doubleClickAction instanceof MenuMorph)) {
+        this.image = this.pressImage;
+	}
     this.changed();
 };
 
@@ -9491,16 +9493,23 @@ MenuItemMorph.prototype.mouseMove = function () {
 };
 
 MenuItemMorph.prototype.mouseClickLeft = function () {
-    if (!this.isListItem()) {
-        var topmenu = this.parent;
-        while (topmenu.parent instanceof MenuMorph) {
-            topmenu = topmenu.parent;
+	if (!(this.doubleClickAction instanceof MenuMorph)) {
+        if (!this.isListItem()) {
+            var topmenu = this.parent;
+            while (topmenu.parent instanceof MenuMorph) {
+                topmenu = topmenu.parent;
+            }
+            topmenu.destroy();
+            this.root().activeMenu = null;
         }
-        topmenu.destroy();
-        this.root().activeMenu = null;
+        this.trigger();
     }
-    this.trigger();
 };
+
+MenuItemMorph.prototype.mouseDoubleClick = function () {
+    if (!(this.doubleClickAction instanceof MenuMorph))
+        this.triggerDoubleClick();
+}
 
 MenuItemMorph.prototype.isListItem = function () {
     if (this.parent) {
