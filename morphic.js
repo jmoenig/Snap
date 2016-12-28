@@ -9440,7 +9440,7 @@ MenuItemMorph.prototype.mouseEnter = function () {
         this.changed();
     }
     if (this.doubleClickAction instanceof MenuMorph) {
-        var w = this.parentThatIsA(WorldMorph);
+        var w = this.world();
         this.doubleClickAction.popup(w,
                                      new Point(this.parent.bounds.right()-10,
                                      w.hand.position().y-10),
@@ -9504,8 +9504,9 @@ MenuItemMorph.prototype.mouseClickLeft = function () {
 };
 
 MenuItemMorph.prototype.mouseDoubleClick = function () {
-    if (!(this.doubleClickAction instanceof MenuMorph))
+    if (!(this.doubleClickAction instanceof MenuMorph)) {
         this.triggerDoubleClick();
+	}
 }
 
 MenuItemMorph.prototype.isListItem = function () {
