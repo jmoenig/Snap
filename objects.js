@@ -2647,7 +2647,9 @@ SpriteMorph.prototype.reporterize = function (expressionString) {
             IDENTIFIER_START = /[A-Za-z_]/,
             IDENTIFIER_WITH_DIGITS = /[A-Za-z_0-9]/,
             OPERATORS = /[+\-*/%]/,
-            token;
+            token,
+            next,
+            fixedTokens;
         expressionString = expressionString.trim();
         function findIdentifier() {
             var identifier= "";
@@ -2688,7 +2690,23 @@ SpriteMorph.prototype.reporterize = function (expressionString) {
                 expressionString = expressionString.slice(1);
             }
         }
-        return tokens;
+        // fix the tokens list so that "1-1" is correctly tokenized as [1, "-", 1]
+        // this is very much a kludge, but I can't think of a better way to do this right now
+        fixedTokens = [];
+        for (var i = 0; i < tokens.length; i++) {
+            token = tokens[i];
+            next = tokens[i + 1];
+            fixedTokens.push(token);
+            // if we have two number tokens right next to each other
+            // and if the second number starts with "-"...
+            if (token.type === "number" && next &&
+                next.type === "number" && next.val.toString()[0] === "-") {
+                    // ... replace the second number with a "-" and the abs of that number
+                    fixedTokens.push({ type: "operator", val: "-"});
+                    fixedTokens.push({ type: "number", val: Math.abs(next.val)});
+            }
+        }
+        return fixedTokens;
     }
 
     function createASTFromTokens(tokens) {
@@ -2783,10 +2801,11 @@ SpriteMorph.prototype.reporterize = function (expressionString) {
             '*': 'reportProduct',
             '/': 'reportQuotient',
             '%': 'reportModulus',
-            'random': 'reportRandom'
+            'random': 'reportRandom',
+            'round': 'reportRound'
         };
         monads = ['abs', 'ceiling', 'floor', 'sqrt', 'sin', 'cos', 'tan',
-            'asin', 'acos', 'atan', 'ln', 'log', 'round'];
+            'asin', 'acos', 'atan', 'ln', 'log'];
         alias = {ceil: 'ceiling'};
         key = alias[ast[0]] || ast[0];
         if (contains(monads, key)) { // monadic
