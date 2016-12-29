@@ -4423,6 +4423,7 @@ SpriteMorph.prototype.toggleVariableWatcher = function (varName, isGlobal) {
     stage.add(watcher);
     watcher.fixLayout();
     watcher.keepWithin(stage);
+    return watcher;
 };
 
 SpriteMorph.prototype.showingVariableWatcher = function (varName) {
@@ -4828,6 +4829,8 @@ SpriteMorph.prototype.deletableVariableNames = function () {
 SpriteMorph.prototype.hasSpriteVariable = function (varName) {
     return contains(this.variables.names(), varName);
 };
+
+// Variable refactoring
 
 SpriteMorph.prototype.refactorVariableInstances = function (oldName, newName, isGlobal) {
     var oldValue;
