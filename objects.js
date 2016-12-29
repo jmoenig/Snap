@@ -2646,13 +2646,13 @@ SpriteMorph.prototype.reporterize = function (expressionString) {
             DIGITS = /\d|\./,
             IDENTIFIER_START = /[A-Za-z_]/,
             IDENTIFIER_WITH_DIGITS = /[A-Za-z_0-9]/,
-            OPERATORS = /[+\-*/%]/,
+            OPERATORS = /[+\-*/%>|<&=!]/,
             token,
             next,
             fixedTokens;
         expressionString = expressionString.trim();
         function findIdentifier() {
-            var identifier= "";
+            var identifier = "";
             while (expressionString && IDENTIFIER_WITH_DIGITS.test(expressionString[0])) {
                 identifier += expressionString[0];
                 expressionString = expressionString.slice(1);
@@ -2667,6 +2667,14 @@ SpriteMorph.prototype.reporterize = function (expressionString) {
             } while (expressionString && DIGITS.test(expressionString[0]));
             return parseFloat(num);
         }
+        function findOperator() {
+            var operator = "";
+            while (expressionString && OPERATORS.test(expressionString[0])) {
+                operator += expressionString[0];
+                expressionString = expressionString.slice(1);
+            }
+            return operator;
+        }
         while (expressionString.length) {
             expressionString = expressionString.trim();
             if (IDENTIFIER_START.test(expressionString[0])) {
@@ -2677,8 +2685,7 @@ SpriteMorph.prototype.reporterize = function (expressionString) {
                 token = findNumber();
                 tokens.push({ type: "number", val: token});
             } else if (OPERATORS.test(expressionString[0])) {
-                tokens.push({ type: "operator", val: expressionString[0]});
-                expressionString = expressionString.slice(1);
+                tokens.push({ type: "operator", val: findOperator()});
             } else if (expressionString[0] === "(") {
                 tokens.push({ type: "lp", val: "("});
                 expressionString = expressionString.slice(1);
@@ -2710,7 +2717,7 @@ SpriteMorph.prototype.reporterize = function (expressionString) {
     }
 
     function createASTFromTokens(tokens) {
-        return precedence2(tokens);
+        return precedence4(tokens);
         function precedence0(tokens) {
             var token = tokens.shift();
             if (token.type === "lp") {
@@ -2722,8 +2729,8 @@ SpriteMorph.prototype.reporterize = function (expressionString) {
             } else if (token.type === "number") {
                 return +token.val;
             } else if (token.type === "operator") {
-                if (token.val === "-" || token.val === "+") {
-                    return [token.val, 0, precedence0(tokens)];
+                if (token.val === "!") {
+                    return [token.val, precedence0(tokens)];
                 } else {
                     throw "Invalid prefix operator";
                 }
@@ -2791,9 +2798,50 @@ SpriteMorph.prototype.reporterize = function (expressionString) {
             }
             return exp;
         }
+        function precedence3(tokens) {
+            var exp = precedence2(tokens), op;
+            if (!tokens) {
+                return exp;
+            }
+            while (tokens.length && /[=<>]/.test(tokens[0].val)) {
+                op = tokens[0];
+                if (op.type !== "operator") {
+                    return exp;
+                }
+                switch (op.val) {
+                    case "=":
+                    case ">":
+                    case "<": break;
+                    default: return exp;
+                }
+                tokens.shift();
+                exp = [op.val, exp, precedence2(tokens)];
+            }
+            return exp;
+        }
+        function precedence4(tokens) {
+            var exp = precedence3(tokens), op;
+            if (!tokens) {
+                return exp;
+            }
+            while (tokens.length && /[&|]/.test(tokens[0].val)) {
+                op = tokens[0];
+                if (op.type !== "operator") {
+                    return exp;
+                }
+                switch (op.val) {
+                    case "&&":
+                    case "||": break;
+                    default: return exp;
+                }
+                tokens.shift();
+                exp = [op.val, exp, precedence3(tokens)];
+            }
+            return exp;
+        }
     }
     function blockFromAST(ast) {
-        var block, selectors, monads, alias, key, sel, i, inps,
+        var block, selectors, of_options, alias, key, sel, i, inps,
             off = 1;
         selectors = {
             '+': 'reportSum',
@@ -2802,27 +2850,28 @@ SpriteMorph.prototype.reporterize = function (expressionString) {
             '/': 'reportQuotient',
             '%': 'reportModulus',
             'random': 'reportRandom',
-            'round': 'reportRound'
+            'round': 'reportRound',
+            '<': 'reportLessThan',
+            '>': 'reportGreaterThan',
+            '=': 'reportEquals',
+            '!': 'reportNot',
+            '&&': 'reportAnd',
+            '||': 'reportOr'
         };
-        monads = ['abs', 'ceiling', 'floor', 'sqrt', 'sin', 'cos', 'tan',
+        of_options = ['abs', 'ceiling', 'floor', 'sqrt', 'sin', 'cos', 'tan',
             'asin', 'acos', 'atan', 'ln', 'log'];
         alias = {ceil: 'ceiling'};
         key = alias[ast[0]] || ast[0];
-        if (contains(monads, key)) { // monadic
-            sel = selectors[key];
-            if (sel) { // single input
-                block = SpriteMorph.prototype.blockForSelector(sel);
-                inps = block.inputs();
-            } else { // two inputs, first is function name
-                block = SpriteMorph.prototype.blockForSelector('reportMonadic');
-                inps = block.inputs();
-                inps[0].setContents([key]);
-                off = 0;
-            }
-        } else { // diadic
+        if (contains(of_options, key)) { // The function's name is a choice in the "of" operator block
+            block = SpriteMorph.prototype.blockForSelector('reportMonadic');
+            inps = block.inputs();
+            inps[0].setContents([key]);
+            off = 0;
+        } else { // The function or operator has its own block
             block = SpriteMorph.prototype.blockForSelector(selectors[key]);
             inps = block.inputs();
         }
+        // Set the inputs to the block
         for (i = 1; i < ast.length; i += 1) {
             if (ast[i] instanceof Array) {
                 block.silentReplaceInput(inps[i - off], blockFromAST(ast[i]));
