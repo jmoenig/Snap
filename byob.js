@@ -102,13 +102,12 @@ AlignmentMorph, ToggleMorph, InputFieldMorph, ReporterBlockMorph,
 StringMorph, nop, newCanvas, radians, BoxMorph, ArrowMorph, PushButtonMorph,
 contains, InputSlotMorph, ToggleButtonMorph, IDE_Morph, MenuMorph, copy,
 ToggleElementMorph, Morph, fontHeight, StageMorph, SyntaxElementMorph,
-SnapSerializer, CommentMorph, localize, CSlotMorph, SpeechBubbleMorph,
-MorphicPreferences, SymbolMorph, isNil, CursorMorph, VariableFrame,
-WatcherMorph, Variable*/
+SnapSerializer, CommentMorph, localize, CSlotMorph, MorphicPreferences,
+SymbolMorph, isNil, CursorMorph, VariableFrame, WatcherMorph, Variable*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2016-December-27';
+modules.byob = '2016-December-29';
 
 // Declarations
 
@@ -948,6 +947,9 @@ CustomCommandBlockMorph.prototype.deleteBlockDefinition = function () {
 
 // CustomCommandBlockMorph events:
 
+// hover help - commented out for now
+/*
+
 CustomCommandBlockMorph.prototype.mouseEnter = function () {
     var comment, help;
     if (this.isTemplate && this.definition.comment) {
@@ -981,6 +983,8 @@ CustomCommandBlockMorph.prototype.popUpbubbleHelp = function (
         1
     ).popUp(this.world(), this.rightCenter().add(new Point(-8, 0)));
 };
+
+*/
 
 // CustomCommandBlockMorph relabelling
 
@@ -1127,11 +1131,14 @@ CustomReporterBlockMorph.prototype.deleteBlockDefinition
 
 // CustomReporterBlockMorph events:
 
+// hover help - commented out for now
+/*
 CustomReporterBlockMorph.prototype.mouseEnter
     = CustomCommandBlockMorph.prototype.mouseEnter;
 
 CustomReporterBlockMorph.prototype.mouseLeave
     = CustomCommandBlockMorph.prototype.mouseLeave;
+*/
 
 // CustomReporterBlockMorph bubble help:
 

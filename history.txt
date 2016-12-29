@@ -3223,6 +3223,10 @@ http://snap.berkeley.edu/run#cloud:Username=jens&ProjectName=rotation
 ------
 * GUI, Threads, Objects, Store: Disable JS-Functions, to protect users from malicious scripts, commented out for now
 
+161229
+------
+* BYOB: Disabled hover-help for custom blocks (some people find it annoying)
+
 
 == v4.10 === (in development)
 
