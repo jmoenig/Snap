@@ -725,7 +725,11 @@ ActionManager.prototype._moveBlock = function(block, target) {
     // If the target is a ReporterBlockMorph, then we are replacing that block.
     // Undo should place that block back into it's current place
     if (target instanceof ReporterBlockMorph) {  // displacing a block
-        displacedTarget = [target.id, this._getCurrentTarget(target)];
+        displacedTarget = [
+            this.serializeBlock(target, target instanceof RingMorph),
+            this._getCurrentTarget(target)
+        ];
+
     } else if (target.loc === 'top') {
         targetState = this._getBlockState(target.element.id);
     }
@@ -1281,6 +1285,11 @@ ActionManager.prototype.onMoveBlock = function(id, rawTarget) {
 
         // Disconnect the given block
         this.disconnectBlock(block, scripts);
+
+        // If the target is a RingMorph, it will be overwritten rather than popped out
+        if (target instanceof RingMorph) {
+            this.__clearBlockRecords(target.id);
+        }
     } else {
         logger.error('Unsupported "onMoveBlock":', block);
     }
@@ -1336,10 +1345,7 @@ ActionManager.prototype.onRemoveBlock = function(id, userDestroy) {
 
         // Remove the block
         block[method]();
-        delete this._blocks[id];
-        delete this._positionOf[id];
-        delete this._blockToOwnerId[id];
-        delete this._targetOf[id];
+        this.__clearBlockRecords(id);
 
         this._updateBlockDefinitions(block);
 
@@ -1449,7 +1455,6 @@ ActionManager.prototype.disconnectBlock = function(block, scripts) {
             }
             oldParent.changed();
 
-            // TODO: if it had a field value, set the value now
             if (scripts) {
                 scripts.drawNew();
                 scripts.changed();
@@ -1460,13 +1465,6 @@ ActionManager.prototype.disconnectBlock = function(block, scripts) {
     if (block.fixBlockColor) {  // not a comment
         block.fixBlockColor();
     }
-};
-
-ActionManager.prototype.onBlockDisconnected = function(id, pId, conn) {
-    var block = this.getBlockFromId(id),
-        scripts = block.parentThatIsA(ScriptsMorph);
-
-    scripts.add(block);
 };
 
 ActionManager.prototype.onAddListInput = function(id, count) {
@@ -2195,6 +2193,13 @@ ActionManager.prototype.__updateActiveEditor = function(blockId) {
     if (owner === ide.currentSprite) {
         ide.setActiveEditor();
     }
+};
+
+ActionManager.prototype.__clearBlockRecords = function(id) {
+    delete this._blocks[id];
+    delete this._positionOf[id];
+    delete this._blockToOwnerId[id];
+    delete this._targetOf[id];
 };
 
 ActionManager.prototype.afterActionApplied = function(/*msg*/) {

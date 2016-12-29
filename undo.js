@@ -372,10 +372,8 @@ UndoManager.Invert.moveBlock = function(args) {
         revertToOldState = UndoManager.Invert._actionForState.call(null, args[4]);
         event.args.unshift(revertToOldState);
     } else if (args.length > 4) {  // If a block was displaced, move it back to it's original target
-        event.args.push({
-            type: 'moveBlock',
-            args: args[3]
-        });
+        revertToOldState = UndoManager.Invert._actionForState.call(null, args[4]);
+        event.args.push(revertToOldState);
     }
 
     return event;
