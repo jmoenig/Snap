@@ -82,7 +82,7 @@ SpeechBubbleMorph, RingMorph, isNil, FileReader, TableDialogMorph,
 BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph*/
 
-modules.objects = '2016-October-27';
+modules.objects = '2016-December-21';
 
 var SpriteMorph;
 var StageMorph;
@@ -2425,7 +2425,8 @@ SpriteMorph.prototype.blocksMatching = function (
         blocksDict,
         myself = this,
         search = searchString.toLowerCase(),
-        stage = this.parentThatIsA(StageMorph);
+        stage = this.parentThatIsA(StageMorph),
+        reporterized;
 
     if (!types || !types.length) {
         types = ['hat', 'command', 'reporter', 'predicate', 'ring'];
@@ -2498,6 +2499,15 @@ SpriteMorph.prototype.blocksMatching = function (
             }
         }
     });
+    // infix arithmetic expression
+    if (contains(types, 'reporter')) {
+        reporterized = this.reporterize(searchString);
+        if (reporterized) {
+            // reporterized.isTemplate = true;
+            // reporterized.isDraggable = false;
+            blocks.push([reporterized, '']);
+        }
+    }
     blocks.sort(function (x, y) {return x[1] < y[1] ? -1 : 1; });
     return blocks.map(function (each) {return each[0]; });
 };
@@ -2622,6 +2632,190 @@ SpriteMorph.prototype.searchBlocks = function (
     ide.fixLayout('refreshPalette');
     searchBar.edit();
     if (searchString) {searchPane.reactToKeystroke(); }
+};
+
+// SpritMorph parsing simple arithmetic expressions to reporter blocks
+
+SpriteMorph.prototype.reporterize = function (expressionString) {
+    // highly experimental Christmas Easter Egg 2016 :-)
+    var ast;
+
+    function parseInfix(expression, operator, already) {
+        // very basic binary infix parser for arithmetic expressions
+        // with strict left-to-right operator precedence (like in Smalltalk)
+        // which can be overriden by - nested - parentheses.
+        // assumes well-formed expressions, no graceful error handling yet.
+
+        var inputs = ['', ''],
+            idx = 0,
+            ch;
+
+        function format(value) {
+            return value instanceof Array || isNaN(+value) ? value : +value;
+        }
+
+        function nested() {
+            var level = 1,
+                expr = '';
+            while (idx < expression.length) {
+                ch = expression[idx];
+                idx += 1;
+                switch (ch) {
+                case '(':
+                    level += 1;
+                    break;
+                case ')':
+                    level -= 1;
+                    if (!level) {
+                        return expr;
+                    }
+                    break;
+                }
+                expr += ch;
+            }
+        }
+
+        while (idx < expression.length) {
+            ch = expression[idx];
+            idx += 1;
+            switch (ch) {
+            case ' ':
+                break;
+            case '(':
+                if (inputs[operator ? 1 : 0].length) {
+                    inputs[operator ? 1 : 0] = [
+                        inputs[operator ? 1 : 0],
+                        parseInfix(nested())
+                    ];
+                } else {
+                    inputs[operator ? 1 : 0] = parseInfix(nested());
+                }
+                break;
+            case '-':
+            case '+':
+            case '*':
+            case '/':
+            case '%':
+            case '=':
+            case '<':
+            case '>':
+            case '&':
+            case '|':
+                if (!operator && !inputs[0].length) {
+                    inputs[0] += ch;
+                } else if (operator) {
+                    return parseInfix(
+                        expression.slice(idx),
+                        ch,
+                        [operator, already, format(inputs[1])]
+                    );
+                } else {
+                    operator = ch;
+                    already = format(inputs[0]);
+                }
+                break;
+            default:
+                inputs[operator ? 1 : 0] += ch;
+            }
+        }
+        if (operator) {
+            return [operator, already, format(inputs[1])];
+        }
+        return format(inputs[0]);
+    }
+
+    function blockFromAST(ast) {
+        var block, selectors, monads, alias, key, sel, i, inps;
+        selectors = {
+            '+': 'reportSum',
+            '-': 'reportDifference',
+            '*': 'reportProduct',
+            '/': 'reportQuotient',
+            '%': 'reportModulus',
+            '=': 'reportEquals',
+            '<': 'reportLessThan',
+            '>': 'reportGreaterThan',
+            '&': 'reportAnd',
+            '|': 'reportOr',
+            round: 'reportRound',
+            not: 'reportNot'
+        };
+        monads = ['abs', 'ceiling', 'floor', 'sqrt', 'sin', 'cos', 'tan',
+            'asin', 'acos', 'atan', 'ln', 'log', 'round', 'not'];
+        alias = {
+            ceil: 'ceiling',
+            '!' : 'not'
+        };
+        key = alias[ast[0]] || ast[0];
+        if (contains(monads, key)) {
+            sel = selectors[key];
+            if (sel) {
+                block = SpriteMorph.prototype.blockForSelector(sel);
+                inps = block.inputs();
+                i = 0;
+            } else {
+                block = SpriteMorph.prototype.blockForSelector('reportMonadic');
+                inps = block.inputs();
+                inps[0].setContents([key]);
+                i = 1;
+            }
+            if (ast[1] instanceof Array) {
+                block.silentReplaceInput(inps[i], blockFromAST(ast[1]));
+            } else if (isString(ast[1])) {
+                if (contains(['true', 'false'], ast[1])) {
+                    block.silentReplaceInput(
+                        inps[i],
+                        SpriteMorph.prototype.blockForSelector(
+                            ast[1] === 'true' ? 'reportTrue' : 'reportFalse'
+                        )
+                    );
+                } else if (ast[1] !== '_') {
+                    block.silentReplaceInput(
+                        inps[i],
+                        SpriteMorph.prototype.variableBlock(ast[1])
+                    );
+                }
+            } else { // number
+                inps[i].setContents(ast[1]);
+            }
+        } else { // diadic
+            block = SpriteMorph.prototype.blockForSelector(selectors[ast[0]]);
+            inps = block.inputs();
+            for (i = 1; i < 3; i += 1) {
+                if (ast[i] instanceof Array) {
+                    block.silentReplaceInput(inps[i - 1], blockFromAST(ast[i]));
+                } else if (isString(ast[i])) {
+                    if (contains(['true', 'false'], ast[i])) {
+                        block.silentReplaceInput(
+                            inps[i - 1],
+                            SpriteMorph.prototype.blockForSelector(
+                                ast[i] === 'true' ? 'reportTrue' : 'reportFalse'
+                            )
+                        );
+                    } else if (ast[i] !== '_') {
+                        block.silentReplaceInput(
+                            inps[i - 1],
+                            SpriteMorph.prototype.variableBlock(ast[i])
+                        );
+                    }
+                } else { // number
+                    inps[i - 1].setContents(ast[i]);
+                }
+            }
+        }
+        block.isDraggable = true;
+        block.fixLayout();
+        block.fixBlockColor(null, true);
+        return block;
+    }
+
+    if (expressionString.length > 100) {return null; }
+    try {
+        ast = parseInfix(expressionString);
+        return ast instanceof Array ? blockFromAST(ast) : null;
+    } catch (error) {
+        return null;
+    }
 };
 
 // SpriteMorph variable management
@@ -3714,32 +3908,6 @@ SpriteMorph.prototype.rootForGrab = function () {
     return SpriteMorph.uber.rootForGrab.call(this);
 };
 
-SpriteMorph.prototype.slideBackTo = function (situation, inSteps) {
-    // override the inherited default to make sure my parts follow
-    var steps = inSteps || 5,
-        pos = situation.origin.position().add(situation.position),
-        xStep = -(this.left() - pos.x) / steps,
-        yStep = -(this.top() - pos.y) / steps,
-        stepCount = 0,
-        oldStep = this.step,
-        oldFps = this.fps,
-        myself = this;
-
-    this.fps = 0;
-    this.step = function () {
-        myself.moveBy(new Point(xStep, yStep));
-        stepCount += 1;
-        if (stepCount === steps) {
-            situation.origin.add(myself);
-            if (situation.origin.reactToDropOf) {
-                situation.origin.reactToDropOf(myself);
-            }
-            myself.step = oldStep;
-            myself.fps = oldFps;
-        }
-    };
-};
-
 SpriteMorph.prototype.setCenter = function (aPoint, justMe) {
     // override the inherited default to make sure my parts follow
     // unless it's justMe
@@ -4655,6 +4823,35 @@ SpriteMorph.prototype.deletableVariableNames = function () {
             }
         )
     );
+};
+
+SpriteMorph.prototype.hasSpriteVariable = function (varName) {
+    return contains(this.variables.names(), varName);
+};
+
+SpriteMorph.prototype.refactorVariableInstances = function (oldName, newName, isGlobal) {
+    var oldValue;
+
+    if (isGlobal && this.hasSpriteVariable(oldName)) {
+        return;
+    }
+
+    if (!isGlobal) {
+        oldValue = this.variables.vars[oldName];
+        this.deleteVariable(oldName);
+        this.addVariable(newName, false);
+        this.variables.vars[newName] = oldValue;
+        this.blocksCache['variables'] = null;
+        this.paletteCache['variables'] = null;
+        this.parentThatIsA(IDE_Morph).refreshPalette();
+    }
+
+    this.scripts.children.forEach(function (child) {
+        if (child instanceof BlockMorph) {
+            child.refactorVarInStack(oldName, newName);
+        }
+    });
+
 };
 
 // SpriteMorph inheritance - custom blocks
@@ -5629,6 +5826,14 @@ StageMorph.prototype.fireKeyEvent = function (key) {
         if (!ide.isAppMode) {ide.currentSprite.searchBlocks(); }
         return;
     }
+    if (evt === 'ctrl z') {
+        if (!ide.isAppMode) {ide.currentSprite.scripts.undrop(); }
+         return;
+    }
+    if (evt === 'ctrl shift z' || (evt === 'ctrl y')) {
+        if (!ide.isAppMode) {ide.currentSprite.scripts.redrop(); }
+         return;
+    }
     if (evt === 'ctrl n') {
         if (!ide.isAppMode) {ide.createNewProject(); }
         return;
@@ -6225,7 +6430,9 @@ StageMorph.prototype.userMenu = function () {
     if (shiftClicked) {
         menu.addLine();
         menu.addItem(
-            "turn pen trails into new costume...",
+            ide.currentSprite instanceof SpriteMorph ?
+                "turn pen trails into new costume..."
+                    : "turn pen trails into new background...",
             function () {
                 var costume = new Costume(
                     myself.trailsCanvas,
@@ -6235,8 +6442,11 @@ StageMorph.prototype.userMenu = function () {
                 ide.currentSprite.wearCostume(costume);
                 ide.hasChangedMedia = true;
             },
-            'turn all pen trails and stamps\n' +
-                'into a new costume for the\ncurrently selected sprite',
+            ide.currentSprite instanceof SpriteMorph ?
+                'turn all pen trails and stamps\n' +
+                    'into a new costume for the\ncurrently selected sprite'
+                        : 'turn all pen trails and stamps\n' +
+                            'into a new background for the stage',
             new Color(100, 0, 0)
         );
     }
@@ -6339,6 +6549,7 @@ StageMorph.prototype.palette = SpriteMorph.prototype.palette;
 StageMorph.prototype.freshPalette = SpriteMorph.prototype.freshPalette;
 StageMorph.prototype.blocksMatching = SpriteMorph.prototype.blocksMatching;
 StageMorph.prototype.searchBlocks = SpriteMorph.prototype.searchBlocks;
+StageMorph.prototype.reporterize = SpriteMorph.prototype.reporterize;
 StageMorph.prototype.showingWatcher = SpriteMorph.prototype.showingWatcher;
 StageMorph.prototype.addVariable = SpriteMorph.prototype.addVariable;
 StageMorph.prototype.deleteVariable = SpriteMorph.prototype.deleteVariable;
@@ -6530,6 +6741,14 @@ StageMorph.prototype.globalVariables
 StageMorph.prototype.inheritedVariableNames = function () {
     return [];
 };
+
+// StageMorph variable refactoring
+
+StageMorph.prototype.hasSpriteVariable
+    = SpriteMorph.prototype.hasSpriteVariable;
+
+StageMorph.prototype.refactorVariableInstances
+    = SpriteMorph.prototype.refactorVariableInstances;
 
 // SpriteBubbleMorph ////////////////////////////////////////////////////////
 
@@ -7318,7 +7537,7 @@ Note.prototype.setupContext = function () {
             window.msAudioContext ||
             window.oAudioContext ||
             window.webkitAudioContext;
-        if (!ctx.prototype.hasOwnProperty('createGain')) {
+        if (!ctx.prototype.createGain) {
             ctx.prototype.createGain = ctx.prototype.createGainNode;
         }
         return ctx;

@@ -55,7 +55,8 @@
         (7) turtle graphics
         (8) damage list housekeeping
         (9) supporting high-resolution "retina" screens
-        (10) minifying morphic.js
+        (10 animations
+        (11) minifying morphic.js
     VIII. acknowledgements
     IX. contributors
 
@@ -66,6 +67,7 @@
     indentation indicating inheritance. Refer to this list to get a
     contextual overview:
 
+    Animation
     Color
     Node
         Morph
@@ -108,6 +110,7 @@
     Global settings
     Global functions
 
+    Animation
     Color
     Point
     Rectangle
@@ -1035,7 +1038,37 @@
     stage (high-resolution) into a sprite-costume (normal resolution).
 
 
-    (10) minifying morphic.js
+    (10) animations
+    ---------------
+    Animations handle gradual transitions between one state and another over a
+    period of time. Transition effects can be specified using easing functions.
+    An easing function maps a fraction of the transition time to a fraction of
+    the state delta. This way accelerating / decelerating and bouncing sliding
+    effects can be accomplished.
+
+    Animations are generic and not limited to motion, i.e. they can also handle
+    other transitions such as color changes, transparency fadings, growing,
+    shrinking, turning etc.
+
+    Animations need to be stepped by a scheduler, e. g. an interval function.
+    In Morphic the preferred way to run an animation is to register it with
+    the World by adding it to the World's animation queue. The World steps each
+    registered animation once per display cycle independently of the Morphic
+    stepping mechanism.
+
+    For an example how to use animations look at how the Morph's methods
+    
+        glideTo()
+        fadeTo()
+
+    and
+    
+        slideBackTo()
+
+    are implemented.
+
+
+    (11) minifying morphic.js
     -------------------------
     Coming from Smalltalk and being a Squeaker at heart I am a huge fan
     of browsing the code itself to make sense of it. Therefore I have
@@ -1103,7 +1136,7 @@
 
 /*global window, HTMLCanvasElement, FileReader, Audio, FileList*/
 
-var morphicVersion = '2016-October-27';
+var morphicVersion = '2016-December-12';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = getBlurredShadowSupport(); // check for Chrome-bug
 
@@ -1508,9 +1541,9 @@ function enableRetinaSupport() {
             return this._isRetinaEnabled;
         },
         set: function(enabled) {
-            var prevPixelRatio = getPixelRatio(this);
-            var prevWidth = this.width;
-            var prevHeight = this.height;
+            var prevPixelRatio = getPixelRatio(this),
+                prevWidth = this.width,
+                prevHeight = this.height;
 
             this._isRetinaEnabled = enabled;
             if (getPixelRatio(this) != prevPixelRatio) {
@@ -1526,12 +1559,19 @@ function enableRetinaSupport() {
             return uber.width.get.call(this) / getPixelRatio(this);
         },
         set: function(width) {
-            var pixelRatio = getPixelRatio(this);
-            uber.width.set.call(this, width * pixelRatio);
-            var context = this.getContext('2d');
-            context.restore();
-            context.save();
-            context.scale(pixelRatio, pixelRatio);
+            try { // workaround one of FF's dreaded NS_ERROR_FAILURE bugs
+                // this should be taken out as soon as FF gets fixed again
+                var pixelRatio = getPixelRatio(this),
+                    context;
+                uber.width.set.call(this, width * pixelRatio);
+                context = this.getContext('2d');
+                context.restore();
+                context.save();
+                context.scale(pixelRatio, pixelRatio);
+            } catch (err) {
+                console.log('Retina Display Support Problem', err);
+                uber.width.set.call(this, width);
+            }
         }
     });
 
@@ -1540,9 +1580,10 @@ function enableRetinaSupport() {
             return uber.height.get.call(this) / getPixelRatio(this);
         },
         set: function(height) {
-            var pixelRatio = getPixelRatio(this);
+            var pixelRatio = getPixelRatio(this),
+                context;
             uber.height.set.call(this, height * pixelRatio);
-            var context = this.getContext('2d');
+            context = this.getContext('2d');
             context.restore();
             context.save();
             context.scale(pixelRatio, pixelRatio);
@@ -1724,6 +1765,115 @@ function normalizeCanvas(aCanvas, getCopy) {
     return aCanvas;
 }
 
+// Animations //////////////////////////////////////////////////////////////
+
+/*
+    Animations handle gradual transitions between one state and another over a
+    period of time. Transition effects can be specified using easing functions.
+    An easing function maps a fraction of the transition time to a fraction of
+    the state delta. This way accelerating / decelerating and bouncing sliding
+    effects can be accomplished.
+
+    Animations are generic and not limited to motion, i.e. they can also handle
+    other transitions such as color changes, transparency fadings, growing,
+    shrinking, turning etc.
+
+    Animations need to be stepped by a scheduler, e. g. an interval function.
+    In Morphic the preferred way to run an animation is to register it with
+    the World by adding it to the World's animation queue. The World steps each
+    registered animation once per display cycle independently of the Morphic
+    stepping mechanism.
+
+    For an example how to use animations look at how the Morph's methods
+    
+        glideTo()
+        fadeTo()
+
+    and
+    
+        slideBackTo()
+
+    are implemented.
+*/
+
+// Animation instance creation:
+
+function Animation(setter, getter, delta, duration, easing, onComplete) {
+    this.setter = setter; // function
+    this.getter = getter; // function
+    this.delta = delta || 0; // number
+    this.duration = duration || 0; // milliseconds
+    this.easing = isString(easing) ? // string or function
+            this.easings[easing] || this.easings.sinusoidal
+                : easing || this.easings.sinusoidal;
+    this.onComplete = onComplete || null; // optional callback
+    this.endTime = null;
+    this.destination = null;
+    this.isActive = false;
+    this.start();
+}
+
+Animation.prototype.easings = {
+    // dictionary of a few pre-defined easing functions used to transition
+    // two states
+
+    // ease both in and out:
+    linear: function (t) {return t; },
+    sinusoidal: function (t) {return 1 - Math.cos(radians(t * 90)); },
+    quadratic: function (t) {
+        return t < 0.5 ?
+                2 * t * t
+                    : ((4 - (2 * t)) * t) - 1;
+    },
+    cubic: function (t) {
+        return t < 0.5 ?
+                4 * t * t * t
+                    : ((t - 1) * ((2 * t) - 2) * ((2 * t) - 2)) + 1;
+    },
+    elastic: function (t) {
+        return (t -= 0.5) < 0 ?
+            (0.01 + 0.01 / t) * Math.sin(50 * t)
+                : (0.02 - 0.01 / t) * Math.sin(50 * t) + 1;
+    },
+
+    // ease in only:
+    sine_in: function (t) {return 1 - Math.sin(radians(90 + (t * 90))); },
+    quad_in: function (t) {return t * t; },
+    cubic_in: function (t) {return t * t * t; },
+    elastic_in: function (t) {
+        return (0.04 - 0.04 / t) * Math.sin(25 * t) + 1;
+    },
+
+    // ease out only:
+    sine_out: function (t) {return Math.sin(radians(t * 90)); },
+    quad_out: function (t) {return t * (2 - t); },
+    elastic_out: function (t) {return 0.04 * t / (--t) * Math.sin(25 * t); }
+};
+
+Animation.prototype.start = function () {
+    // (re-) activate the animation, e.g. if is has previously completed,
+    // make sure to plug it into something that repeatedly triggers step(),
+    // e.g. the World's animations queue
+    this.endTime = Date.now() + this.duration;
+    this.destination = this.getter.call(this) + this.delta;
+    this.isActive = true;
+};
+
+Animation.prototype.step = function () {
+    if (!this.isActive) {return; }
+    var now = Date.now();
+    if (now > this.endTime) {
+        this.setter(this.destination);
+        this.isActive = false;
+        if (this.onComplete) {this.onComplete(); }
+    } else {
+        this.setter(
+            this.destination -
+                (this.delta * this.easing((this.endTime - now) / this.duration))
+        );
+    }
+};
+
 // Colors //////////////////////////////////////////////////////////////
 
 // Color instance creation:
@@ -1894,7 +2044,7 @@ Color.prototype.inverted = function () {
         255 - this.g,
         255 - this.b
     );
-}
+};
 
 // Points //////////////////////////////////////////////////////////////
 
@@ -3613,29 +3763,88 @@ Morph.prototype.situation = function () {
     return null;
 };
 
-Morph.prototype.slideBackTo = function (situation, inSteps) {
-    var steps = inSteps || 5,
-        pos = situation.origin.position().add(situation.position),
-        xStep = -(this.left() - pos.x) / steps,
-        yStep = -(this.top() - pos.y) / steps,
-        stepCount = 0,
-        oldStep = this.step,
-        oldFps = this.fps,
+Morph.prototype.slideBackTo = function (
+    situation,
+    msecs,
+    onBeforeDrop,
+    onComplete
+) {
+    var pos = situation.origin.position().add(situation.position),
         myself = this;
-
-    this.fps = 0;
-    this.step = function () {
-        myself.moveBy(new Point(xStep, yStep));
-        stepCount += 1;
-        if (stepCount === steps) {
+    this.glideTo(
+        pos,
+        msecs,
+        null, // easing
+        function () {
             situation.origin.add(myself);
+            if (onBeforeDrop) {onBeforeDrop(); }
+            if (myself.justDropped) {myself.justDropped(); }
             if (situation.origin.reactToDropOf) {
                 situation.origin.reactToDropOf(myself);
             }
-            myself.step = oldStep;
-            myself.fps = oldFps;
+            if (onComplete) {onComplete(); }
         }
-    };
+    );
+};
+
+// Morph animating:
+
+Morph.prototype.glideTo = function (endPoint, msecs, easing, onComplete) {
+    var world = this.world(),
+        myself = this;
+    world.animations.push(new Animation(
+        function (x) {myself.setLeft(x); },
+        function () {return myself.left(); },
+        -(this.left() - endPoint.x),
+        msecs || 100,
+        easing,
+        onComplete
+    ));
+    world.animations.push(new Animation(
+        function (y) {myself.setTop(y); },
+        function () {return myself.top(); },
+        -(this.top() - endPoint.y),
+        msecs || 100,
+        easing
+    ));
+};
+
+Morph.prototype.fadeTo = function (endAlpha, msecs, easing, onComplete) {
+    // include all my children, restore all original transparencies
+    // on completion, so I can be recovered
+    var world = this.world(),
+        myself = this,
+        oldAlpha = this.alpha;
+    this.children.forEach(function (child) {
+        child.fadeTo(endAlpha, msecs, easing);
+    });
+    world.animations.push(new Animation(
+        function (n) {
+            myself.alpha = n;
+            myself.changed();
+        },
+        function () {return myself.alpha; },
+        endAlpha - this.alpha,
+        msecs || 200,
+        easing,
+        function () {
+            myself.alpha = oldAlpha;
+            if (onComplete) {onComplete(); }
+        }
+    ));
+};
+
+Morph.prototype.perish = function (msecs, onComplete) {
+    var myself = this;
+    this.fadeTo(
+        0,
+        msecs || 100,
+        null,
+        function () {
+            myself.destroy();
+            if (onComplete) {onComplete(); }
+        }
+    );
 };
 
 // Morph utilities:
@@ -9496,6 +9705,7 @@ ScrollFrameMorph.prototype.init = function (scroller, size, sliderColor) {
     };
     this.vBar.isDraggable = false;
     this.add(this.vBar);
+    this.toolBar = null; // optional slot
 };
 
 ScrollFrameMorph.prototype.adjustScrollBars = function () {
@@ -9547,6 +9757,17 @@ ScrollFrameMorph.prototype.adjustScrollBars = function () {
         this.vBar.drawNew();
     } else {
         this.vBar.hide();
+    }
+    this.adjustToolBar();
+};
+
+ScrollFrameMorph.prototype.adjustToolBar = function () {
+    var padding = 3;
+    if (this.toolBar) {
+        this.toolBar.setTop(this.top() + padding);
+        this.toolBar.setRight(
+            (this.vBar.isVisible ? this.vBar.left() : this.right()) - padding
+        );
     }
 };
 
@@ -10561,6 +10782,7 @@ HandMorph.prototype.processDrop = function (event) {
                 event.dataTransfer.getData('URL') : null,
         txt = event.dataTransfer ?
                 event.dataTransfer.getData('Text/HTML') : null,
+        suffix,
         src,
         target = this.morphAtPointer(),
         img = new Image(),
@@ -10636,6 +10858,21 @@ HandMorph.prototype.processDrop = function (event) {
         frd.readAsArrayBuffer(aFile);
     }
 
+    function readURL(url, callback) {
+        var request = new XMLHttpRequest();
+        request.open('GET', url);
+        request.onreadystatechange = function () {
+            if (request.readyState === 4) {
+                if (request.responseText) {
+                    callback(request.responseText);
+                } else {
+                    throw new Error('unable to retrieve ' + url);
+                }
+            }
+        };
+        request.send();
+    }
+
     function parseImgURL(html) {
         var iurl = '',
             idx,
@@ -10670,10 +10907,11 @@ HandMorph.prototype.processDrop = function (event) {
             }
         }
     } else if (url) {
+        suffix = url.slice(url.lastIndexOf('.') + 1).toLowerCase();
         if (
             contains(
                 ['gif', 'png', 'jpg', 'jpeg', 'bmp'],
-                url.slice(url.lastIndexOf('.') + 1).toLowerCase()
+                suffix
             )
         ) {
             while (!target.droppedImage) {
@@ -10686,6 +10924,27 @@ HandMorph.prototype.processDrop = function (event) {
                 target.droppedImage(canvas);
             };
             img.src = url;
+        } else if (suffix === 'svg' && !MorphicPreferences.rasterizeSVGs) {
+            while (!target.droppedSVG) {
+                target = target.parent;
+            }
+            readURL(
+                url,
+                function (txt) {
+                    var pic = new Image();
+                    pic.onload = function () {
+                        target.droppedSVG(
+                            pic,
+                            url.slice(
+                                url.lastIndexOf('/') + 1,
+                                url.lastIndexOf('.')
+                            )
+                        );
+                    };
+                    pic.src = 'data:image/svg+xml;utf8,' +
+                        encodeURIComponent(txt);
+                }
+            );
         }
     } else if (txt) {
         while (!target.droppedImage) {
@@ -10762,6 +11021,7 @@ WorldMorph.prototype.init = function (aCanvas, fillPage) {
     }
     this.isDevMode = false;
     this.broken = [];
+    this.animations = [];
     this.hand = new HandMorph(this);
     this.keyboardReceiver = null;
     this.cursor = null;
@@ -10799,6 +11059,13 @@ WorldMorph.prototype.updateBroken = function () {
     this.broken = [];
 };
 
+WorldMorph.prototype.stepAnimations = function () {
+    this.animations.forEach(function (anim) {anim.step(); });
+    this.animations = this.animations.filter(function (anim) {
+        return anim.isActive;
+    });
+};
+
 WorldMorph.prototype.condenseDamages = function () {
     // collapse clustered damaged rectangles into their unions,
     // thereby reducing the array of brokens to a manageable size
@@ -10829,6 +11096,7 @@ WorldMorph.prototype.condenseDamages = function () {
 
 WorldMorph.prototype.doOneCycle = function () {
     this.stepFrame();
+    this.stepAnimations();
     this.updateBroken();
 };
 

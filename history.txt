@@ -3112,3 +3112,115 @@ http://snap.berkeley.edu/run#cloud:Username=jens&ProjectName=rotation
 * Blocks, GUI: preference setting to enable auto-wrapping inside nested block stacks
 * Blocks: Treat JS-function reporters the same as variable getters wrt rings
 * German translation update
+
+161114
+------
+* Blocks, Objects: Unlimited “Undrop / Redrop” of block drops per script pane and session (under construction)
+* GUI: new url switch #dl: for downloading raw shared projects
+
+161121
+------
+* Blocks: Delete variable getter blocks if the user drops them on template slots (e.g. script vars)
+
+161122
+------
+* Blocks, GUI: “Undrop / Redrop” for deleting blocks via the context menu or in keyboard edit mode
+* Morphic: support “onBeforeDrop” callback parameter in slideBackTo()
+
+161123
+------
+* Blocks, Morphic: “Undrop / Redrop” support for sticky comments
+
+161124
+------
+* Morphic, Store: work around a dreaded FF NS_ERROR_FAILURE for supporting retina
+* Blocks: drag-origin support for blocks and comments duplicated inside a block editor
+
+161125
+------
+* Morphic: First-class animations
+* Blocks, Objects, GUI: Switch to new animation mechanism, add a few
+
+161128
+------
+* Objects, Blocks: map keyboard shortcut ctr-y to “undrop” (in addition to shift-ctrl-z)
+* Blocks: added symbols for “turnBack” and “turnForward”
+* Morphic: added support for floating tool bars in scroll frames
+* Blocks: added dynamic “undo” / “redo” buttons to each scripting pane
+* GUI, Blocks: Enable nested auto-wrapping by default
+
+161129
+------
+* Blocks: added undo / redo icons to scripts pane context menu
+* Blocks: added hidden “clear undrop queue” option to scripts pane context menu
+
+161201
+------
+* GUI: fixed #1540
+* Morphic, Blocks, GUI: Filter Project Names in the “open” dialog, thanks, Bernat!!
+* GUI: update scrollbars of the project dialog as the project list is filtered
+* Blocks: fixed #1522
+
+161205
+------
+* Objects: fixed #1543
+
+161206
+------
+* GUI: Switch to asynchronous loading of resources (costumes, sounds, libraries etc.) 
+* Morphic: Added support for dropping links to SVGs from other web pages onto the World
+* GUI: Support importing unrasterized SVG_Costumes from the “Costumes” and “Backgrounds” dialog
+
+161207
+------
+* Morphic, GUI: URI-encode SVG data for Firefox-compatibility
+
+161208
+------
+* GUI: use media dialog for browsing and importing sounds
+
+161209
+------
+* Translation updates (Russian, Polish, Danish, Portuguese)
+
+161212
+------
+* fixed #1560
+* Morphic: added a few in-/out- only easing functions for animations
+* Morphic: added easeOutElastic function thanks to @joshmarinacci’s excellent blog post
+
+161213
+------
+* Catalan translation update, thanks, @jguille2 !
+
+161219
+------
+* GUI: new url-switch: &noExitWarning
+* Blocks, Objects: highly experimental infix-expression-to-reporter parser
+
+161220
+------
+* Objects: tweaked “reporterize”
+
+161221
+------
+* Objects: added Boolean operators to “reporterize”
+
+== v4.10 === (in development)
+
+Features:
+* auto-wrapping of C-slots
+* undo / redo for blocks, unlimited, but has some issues
+* search field for projects, thanks, Bernat!!
+* basic typography support for custom block labels, thanks, Bernat!!
+* Treat JS-function reporters the same as variable getters wrt rings
+* new url switch #dl: for downloading raw shared projects
+* new url option switch: &noExitWarning
+* svg support for images from the web (svg files have been supported for a long time)
+* use media dialog for browsing and importing sounds
+* highly experimental infix-expression-to-reporter parser. Thanks, Bernat, for the brilliant idea to add it to the search-blocks field!
+
+Fixes:
+* Music (play note) to work again in new and recent browser versions (Chrome 55)
+* IDE layout: fixed resizing issues when the window becomes too small
+* Translation updates (Russian, Polish, Danish, Portuguese, Catalan, German)
