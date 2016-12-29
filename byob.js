@@ -2,7 +2,7 @@
 
     byob.js
 
-    "build your own blocks" for SNAP!
+    "build your own blocks" for Snap!
     based on morphic.js, widgets.js blocks.js, threads.js and objects.js
     inspired by Scratch
 
@@ -108,7 +108,7 @@ WatcherMorph, Variable*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2016-September-27';
+modules.byob = '2016-December-27';
 
 // Declarations
 

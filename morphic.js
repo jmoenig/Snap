@@ -1136,7 +1136,7 @@
 
 /*global window, HTMLCanvasElement, FileReader, Audio, FileList*/
 
-var morphicVersion = '2016-December-12';
+var morphicVersion = '2016-December-27';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = getBlurredShadowSupport(); // check for Chrome-bug
 
@@ -3849,9 +3849,7 @@ Morph.prototype.perish = function (msecs, onComplete) {
 
 // Morph utilities:
 
-Morph.prototype.nop = function () {
-    nop();
-};
+Morph.prototype.nop = nop;
 
 Morph.prototype.resize = function () {
     this.world().activeHandle = new HandleMorph(this);
@@ -4122,7 +4120,7 @@ Morph.prototype.developersMenu = function () {
     menu.addItem(
         "pick up",
         'pickUp',
-        'disattach and put \ninto the hand'
+        'detach and put \ninto the hand'
     );
     menu.addItem(
         "attach...",
@@ -6310,9 +6308,7 @@ SliderButtonMorph.prototype.init = function (orientation) {
     SliderButtonMorph.uber.init.call(this, orientation);
 };
 
-SliderButtonMorph.prototype.autoOrientation = function () {
-    nop();
-};
+SliderButtonMorph.prototype.autoOrientation = nop;
 
 SliderButtonMorph.prototype.drawNew = function () {
     var colorBak = this.color.copy();
@@ -6548,9 +6544,7 @@ SliderMorph.prototype.init = function (
     // this.drawNew();
 };
 
-SliderMorph.prototype.autoOrientation = function () {
-    nop();
-};
+SliderMorph.prototype.autoOrientation = nop;
 
 SliderMorph.prototype.rangeSize = function () {
     return this.stop - this.start;
@@ -9833,9 +9827,7 @@ ScrollFrameMorph.prototype.scrollY = function (steps) {
     }
 };
 
-ScrollFrameMorph.prototype.step = function () {
-    nop();
-};
+ScrollFrameMorph.prototype.step = nop;
 
 ScrollFrameMorph.prototype.mouseDownLeft = function (pos) {
     if (!this.isScrollingByDragging) {
@@ -10025,7 +10017,6 @@ ScrollFrameMorph.prototype.developersMenu = function () {
     }
     return menu;
 };
-
 
 ScrollFrameMorph.prototype.toggleTextLineWrapping = function () {
     this.isTextLineWrapping = !this.isTextLineWrapping;
@@ -11447,21 +11438,13 @@ WorldMorph.prototype.initEventListeners = function () {
     };
 };
 
-WorldMorph.prototype.mouseDownLeft = function () {
-    nop();
-};
+WorldMorph.prototype.mouseDownLeft = nop;
 
-WorldMorph.prototype.mouseClickLeft = function () {
-    nop();
-};
+WorldMorph.prototype.mouseClickLeft = nop;
 
-WorldMorph.prototype.mouseDownRight = function () {
-    nop();
-};
+WorldMorph.prototype.mouseDownRight = nop;
 
-WorldMorph.prototype.mouseClickRight = function () {
-    nop();
-};
+WorldMorph.prototype.mouseClickRight = nop;
 
 WorldMorph.prototype.wantsDropOf = function () {
     // allow handle drops if any drops are allowed
@@ -11538,7 +11521,7 @@ WorldMorph.prototype.contextMenu = function () {
         menu.addItem(
             "fill page...",
             'fillPage',
-            'let the World automatically\nadjust to browser resizings'
+            'let the World automatically\nadjust to browser resizing'
         );
         if (useBlurredShadows) {
             menu.addItem(

@@ -149,7 +149,7 @@ isSnapObject, copy, PushButtonMorph, SpriteIconMorph, Process, AlignmentMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2016-December-19';
+modules.blocks = '2016-December-27';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -246,52 +246,52 @@ SyntaxElementMorph.uber = Morph.prototype;
 
     outline:
 
-        corner        - radius of command block rounding
+        corner      - radius of command block rounding
         rounding    - radius of reporter block rounding
         edge        - width of 3D-ish shading box
-        hatHeight    - additional top space for hat blocks
+        hatHeight   - additional top space for hat blocks
         hatWidth    - minimum width for hat blocks
         rfBorder    - pixel width of reification border (grey outline)
         minWidth    - minimum width for any syntax element's contents
 
     jigsaw shape:
 
-        inset        - distance from indentation to left edge
+        inset       - distance from indentation to left edge
         dent        - width of indentation bottom
 
     paddings:
 
-        bottomPadding    - adds to the width of the bottom most c-slot
+        bottomPadding   - adds to the width of the bottom most c-slot
         cSlotPadding    - adds to the width of the open "C" in c-slots
-        typeInPadding    - adds pixels between text and edge in input slots
+        typeInPadding   - adds pixels between text and edge in input slots
         labelPadding    - adds left/right pixels to block labels
 
     label:
 
-        labelFontName    - <string> specific font family name
-        labelFontStyle    - <string> generic font family name, cascaded
-        fontSize        - duh
-        embossing        - <Point> offset for embossing effect
-        labelWidth        - column width, used for word wrapping
-        labelWordWrap    - <bool> if true labels can break after each word
-        dynamicInputLabels - <bool> if true inputs can have dynamic labels
+        labelFontName       - <string> specific font family name
+        labelFontStyle      - <string> generic font family name, cascaded
+        fontSize            - duh
+        embossing           - <Point> offset for embossing effect
+        labelWidth          - column width, used for word wrapping
+        labelWordWrap       - <bool> if true labels can break after each word
+        dynamicInputLabels  - <bool> if true inputs can have dynamic labels
 
     snapping:
 
-        feedbackColor        - <Color> for displaying drop feedbacks
-        feedbackMinHeight    - height of white line for command block snaps
-        minSnapDistance        - threshold when commands start snapping
-        reporterDropFeedbackPadding    - increases reporter drop feedback
+        feedbackColor       - <Color> for displaying drop feedbacks
+        feedbackMinHeight   - height of white line for command block snaps
+        minSnapDistance     - threshold when commands start snapping
+        reporterDropFeedbackPadding  - increases reporter drop feedback
 
     color gradients:
 
         contrast        - <percent int> 3D-ish shading gradient contrast
-        labelContrast    - <percent int> 3D-ish label shading contrast
-        activeHighlight    - <Color> for stack highlighting when active
-        errorHighlight    - <Color> for error highlighting
-        activeBlur        - <pixels int> shadow for blurred activeHighlight
+        labelContrast   - <percent int> 3D-ish label shading contrast
+        activeHighlight - <Color> for stack highlighting when active
+        errorHighlight  - <Color> for error highlighting
+        activeBlur      - <pixels int> shadow for blurred activeHighlight
         activeBorder    - <pixels int> unblurred activeHighlight
-        rfColor            - <Color> for reified outlines and slot backgrounds
+        rfColor         - <Color> for reified outlines and slot backgrounds
 */
 
 SyntaxElementMorph.prototype.setScale = function (num) {
@@ -1120,7 +1120,8 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             part = new InputSlotMorph(
                 null,
                 false,
-                {   color: ['color'],
+                {
+                    color: ['color'],
                     fisheye: ['fisheye'],
                     whirl: ['whirl'],
                     pixelate: ['pixelate'],
@@ -2020,14 +2021,14 @@ SyntaxElementMorph.prototype.endLayout = function () {
     SyntaxElementMorph my most important attributes and public
     accessors are:
 
-    selector    - (string) name of method to be triggered
-    receiver()    - answer the object (sprite) to which I apply
-    inputs()    - answer an array with my arg slots and nested reporters
-    defaults    - an optional Array containing default input values
-    topBlock()    - answer the top block of the stack I'm attached to
-    blockSpec    - a formalized description of my label parts
-    setSpec()    - force me to change my label structure
-    evaluate()    - answer the result of my evaluation
+    selector        - (string) name of method to be triggered
+    receiver()      - answer the object (sprite) to which I apply
+    inputs()        - answer an array with my arg slots and nested reporters
+    defaults        - an optional Array containing default input values
+    topBlock()      - answer the top block of the stack I'm attached to
+    blockSpec       - a formalized description of my label parts
+    setSpec()       - force me to change my label structure
+    evaluate()      - answer the result of my evaluation
     isUnevaluated() - answer whether I am part of a special form
 
     Zebra coloring provides a mechanism to alternate brightness of nested,
@@ -2101,28 +2102,28 @@ SyntaxElementMorph.prototype.endLayout = function () {
 
     arity: multiple
 
-    %mult%x    - where %x stands for any of the above single inputs
-    %inputs - for an additional text label 'with inputs'
-    %words - for an expandable list of default 2 (used in JOIN)
-    %exp - for a static expandable list of minimum 0 (used in LIST)
-    %scriptVars - for an expandable list of variable reporter templates
-    %parms - for an expandable list of formal parameters
-    %ringparms - the same for use inside Rings
+    %mult%x      - where %x stands for any of the above single inputs
+    %inputs      - for an additional text label 'with inputs'
+    %words       - for an expandable list of default 2 (used in JOIN)
+    %exp         - for a static expandable list of minimum 0 (used in LIST)
+    %scriptVars  - for an expandable list of variable reporter templates
+    %parms       - for an expandable list of formal parameters
+    %ringparms   - the same for use inside Rings
 
     special form: upvar
 
-    %upvar - same as %t (inline variable reporter template)
+    %upvar       - same as %t (inline variable reporter template)
 
     special form: input name
 
-    %inputName - variable blob (used in input type dialog)
+    %inputName   - variable blob (used in input type dialog)
 
     examples:
 
         'if %b %c else %c'        - creates Scratch's If/Else block
-        'set pen color to %clr'    - creates Scratch's Pen color block
+        'set pen color to %clr'   - creates Scratch's Pen color block
         'list %mult%s'            - creates BYOB's list reporter block
-        'call %n %inputs'        - creates BYOB's Call block
+        'call %n %inputs'         - creates BYOB's Call block
         'the script %parms %c'    - creates BYOB's THE SCRIPT block
 */
 
@@ -2349,7 +2350,7 @@ BlockMorph.prototype.userMenu = function () {
             menu.addItem(
                 "script pic with result...",
                 function () {
-                    top.ExportResultPic();
+                    top.exportResultPic();
                 },
                 'open a new window\n' +
                     'with a picture of both\nthis script and its result',
@@ -4909,7 +4910,7 @@ ReporterBlockMorph.prototype.mouseClickLeft = function (pos) {
 
 // ReporterBlock exporting picture with result bubble
 
-ReporterBlockMorph.prototype.ExportResultPic = function () {
+ReporterBlockMorph.prototype.exportResultPic = function () {
     var top = this.topBlock(),
         receiver = top.receiver(),
         stage;
@@ -4922,7 +4923,6 @@ ReporterBlockMorph.prototype.ExportResultPic = function () {
         }
     }
 };
-
 
 // ReporterBlockMorph deleting
 
@@ -8620,19 +8620,18 @@ TemplateSlotMorph.prototype.unflash = function () {
     I am a diamond-shaped argument slot.
     My block spec is
 
-    %b        - Boolean
+    %b         - Boolean
     %boolUE    - Boolean unevaluated
 
     I can be directly edited. When the user clicks on me I toggle
     between <true>, <false> and <null> values.
 
-    evaluate returns my value.
+    evaluate() returns my value.
 
     my most important public attributes and accessors are:
 
-    value - user editable contents (Boolean or null)
+    value                      - user editable contents (Boolean or null)
     setContents(Boolean/null)  - display the argument (Boolean or null)
-
 */
 
 // BooleanSlotMorph inherits from ArgMorph:
@@ -10848,7 +10847,7 @@ function BlockHighlightMorph() {
     evaluation is handles by the interpreter
 */
 
-// MultiArgMorph  inherits from ArgMorph:
+// MultiArgMorph inherits from ArgMorph:
 
 MultiArgMorph.prototype = new ArgMorph();
 MultiArgMorph.prototype.constructor = MultiArgMorph;
@@ -11256,10 +11255,9 @@ MultiArgMorph.prototype.mappedCode = function (definitions) {
 // MultiArgMorph arity evaluating:
 
 MultiArgMorph.prototype.evaluate = function () {
-/*
-    this is usually overridden by the interpreter. This method is only
-    called (and needed) for the variables menu.
-*/
+    // this is usually overridden by the interpreter. This method is only
+    // called (and needed) for the variables menu.
+
     var result = [];
     this.inputs().forEach(function (slot) {
         result.push(slot.evaluate());
@@ -11285,7 +11283,7 @@ MultiArgMorph.prototype.isEmptySlot = function () {
     input's value along.
 */
 
-// ArgLabelMorph  inherits from ArgMorph:
+// ArgLabelMorph inherits from ArgMorph:
 
 ArgLabelMorph.prototype = new ArgMorph();
 ArgLabelMorph.prototype.constructor = ArgLabelMorph;
@@ -11395,10 +11393,9 @@ ArgLabelMorph.prototype.reactToGrabOf = function () {
 // ArgLabelMorph evaluating:
 
 ArgLabelMorph.prototype.evaluate = function () {
-/*
-    this is usually overridden by the interpreter. This method is only
-    called (and needed) for the variables menu.
-*/
+    // this is usually overridden by the interpreter. This method is only
+    // called (and needed) for the variables menu.
+
     return this.argMorph().evaluate();
 };
 
@@ -11410,7 +11407,7 @@ ArgLabelMorph.prototype.isEmptySlot = function () {
 
 /*
     I am an unevaluated, non-editable, rf-colored, rounded or diamond
-    input slot.    My current (only) use is in the THE BLOCK block.
+    input slot. My current (only) use is in the THE BLOCK block.
 
     My command spec is %f
 */

@@ -3206,6 +3206,24 @@ http://snap.berkeley.edu/run#cloud:Username=jens&ProjectName=rotation
 ------
 * Objects: added Boolean operators to “reporterize”
 
+161222
+------
+* Objects: simplified reporterize>>blockFromAST
+* Threads: prevented color slots from flashing. Good catch, thanks, Joan!
+
+161223
+------
+* Objects: tweaked reporterize infixParser
+
+161225
+------
+* GUI: update undrop controls when switching sprites and display modes
+
+161227
+------
+* GUI, Threads, Objects, Store: Disable JS-Functions, to protect users from malicious scripts, commented out for now
+
+
 == v4.10 === (in development)
 
 Features:

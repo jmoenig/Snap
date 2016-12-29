@@ -1,6 +1,6 @@
 /*
 
-	lang-tw.js
+	lang-zh_TW.js
 
 	Traditional Chinese translation for SNAP!
 	SNAP 繁體中文翻譯版
@@ -167,7 +167,7 @@
 
 /*global SnapTranslator*/
 
-SnapTranslator.dict.tw = {
+SnapTranslator.dict.zh_TW = {
 
 /*
     Special characters: (see <http://0xcc.net/jsescape/>)
