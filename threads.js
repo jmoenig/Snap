@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph,
 TableFrameMorph, ColorSlotMorph, isSnapObject*/
 
-modules.threads = '2016-December-22';
+modules.threads = '2016-December-27';
 
 var ThreadManager;
 var Process;
@@ -473,6 +473,7 @@ Process.prototype.isCatchingErrors = true;
 Process.prototype.enableLiveCoding = false; // experimental
 Process.prototype.enableSingleStepping = false; // experimental
 Process.prototype.flashTime = 0; // experimental
+// Process.prototype.enableJS = false;
 
 function Process(topBlock, onComplete, rightAway) {
     this.topBlock = topBlock || null;
@@ -1000,6 +1001,11 @@ Process.prototype.evaluate = function (
 ) {
     if (!context) {return null; }
     if (context instanceof Function) {
+        /*
+        if (!this.enableJS) {
+            throw new Error('JavaScript is not enabled');
+        }
+        */
         return context.apply(
             this.blockReceiver(),
             args.asArray().concat([this])

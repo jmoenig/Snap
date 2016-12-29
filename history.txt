@@ -3219,6 +3219,10 @@ http://snap.berkeley.edu/run#cloud:Username=jens&ProjectName=rotation
 ------
 * GUI: update undrop controls when switching sprites and display modes
 
+161227
+------
+* GUI, Threads, Objects, Store: Disable JS-Functions, to protect users from malicious scripts, commented out for now
+
 
 == v4.10 === (in development)
 

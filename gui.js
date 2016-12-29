@@ -72,7 +72,7 @@ isRetinaSupported, SliderMorph, Animation*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2016-December-25';
+modules.gui = '2016-December-27';
 
 // Declarations
 
@@ -2411,6 +2411,20 @@ IDE_Morph.prototype.settingsMenu = function () {
         );
     }
     menu.addLine();
+    /*
+    addPreference(
+        'JavaScript',
+        function () {
+            Process.prototype.enableJS = !Process.prototype.enableJS;
+            myself.currentSprite.blocksCache.operators = null;
+            myself.currentSprite.paletteCache.operators = null;
+            myself.refreshPalette();
+        },
+        Process.prototype.enableJS,
+        'uncheck to disable support for\nnative JavaScript functions',
+        'check to support\nnative JavaScript functions'
+    );
+    */
     if (isRetinaSupported()) {
         addPreference(
             'Retina display support',
@@ -2486,7 +2500,7 @@ IDE_Morph.prototype.settingsMenu = function () {
             'Execute on slider change',
             'toggleSliderExecute',
             ArgMorph.prototype.executeOnSliderEdit,
-            'uncheck to supress\nrunning scripts\nwhen moving the slider',
+            'uncheck to suppress\nrunning scripts\nwhen moving the slider',
             'check to run\nthe edited script\nwhen moving the slider'
         );
     }
