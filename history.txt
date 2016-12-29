@@ -3226,6 +3226,7 @@ http://snap.berkeley.edu/run#cloud:Username=jens&ProjectName=rotation
 161229
 ------
 * BYOB: Disabled hover-help for custom blocks (some people find it annoying)
+* GUI: Hide setting for “prefer smooth animations” (now - mostly - redundant)
 
 
 == v4.10 === (in development)
