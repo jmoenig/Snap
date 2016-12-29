@@ -2695,6 +2695,8 @@ SpriteMorph.prototype.reporterize = function (expressionString) {
             } else if (expressionString[0] === ",") {
                 tokens.push({ type: "comma", val: ","});
                 expressionString = expressionString.slice(1);
+            } else {
+                throw "Unknown character in expression";
             }
         }
         // fix the tokens list so that "1-1" is correctly tokenized as [1, "-", 1]
