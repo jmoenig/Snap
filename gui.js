@@ -6484,7 +6484,7 @@ LibraryImportDialogMorph.prototype.displayLoadingMessage = function
 };
 
 LibraryImportDialogMorph.prototype.fixLayout = function () {
-    var th = fontHeight(this.titleFontSize) + this.titlePadding * 2,
+    var titleHeight = fontHeight(this.titleFontSize) + this.titlePadding * 2,
         thin = this.padding / 2,
         oldFlag = Morph.prototype.trackChanges;
 
@@ -6497,7 +6497,7 @@ LibraryImportDialogMorph.prototype.fixLayout = function () {
     if (this.body) {
         this.body.setPosition(this.position().add(new Point(
             this.padding,
-            th + this.padding
+            titleHeight + this.padding
         )));
         this.body.setExtent(new Point(
             this.width() - this.padding * 2,
@@ -6508,7 +6508,7 @@ LibraryImportDialogMorph.prototype.fixLayout = function () {
             this.body.left() + this.padding,
             this.body.top() + this.padding
         ));
-        this.listField.setHeight(this.body.height() - this.padding * 2);
+        this.listField.setHeight(this.body.height() - this.padding);
         this.listField.setWidth(
             this.body.width()
                 - this.palette.width()
@@ -6520,8 +6520,10 @@ LibraryImportDialogMorph.prototype.fixLayout = function () {
         this.palette.setRight(this.body.right());
         this.palette.setTop(this.body.top() + this.padding);
 
-        this.notesField.setTop(this.palette.bottom() + thin);
-        this.notesField.setLeft(this.palette.left());
+        this.notesField.setPosition(new Point(
+            this.palette.left(),
+            this.palette.bottom() + thin
+        ));
         this.notesField.setHeight(
             this.body.bottom() - this.palette.bottom() - thin
         );
