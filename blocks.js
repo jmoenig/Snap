@@ -2552,8 +2552,8 @@ BlockMorph.prototype.deleteBlock = function () {
     }
     if (this instanceof ReporterBlockMorph &&
                         ((this.parent instanceof BlockMorph)
-            	|| (this.parent instanceof MultiArgMorph)
-            	|| (this.parent instanceof ReporterSlotMorph))) {
+                || (this.parent instanceof MultiArgMorph)
+                || (this.parent instanceof ReporterSlotMorph))) {
         this.parent.revertToDefaultInput(this);
     } else { // CommandBlockMorph
         if (this.parent) {
@@ -7533,6 +7533,8 @@ InputSlotMorph.prototype.setContents = function (aStringOrFloat) {
 InputSlotMorph.prototype.dropDownMenu = function (enableKeyboard) {
     var choices = this.choices,
         key,
+		oldmenu,
+		items,
         menuStack = [],
         menu = new MenuMorph(
             this.setContents,
@@ -7554,13 +7556,15 @@ InputSlotMorph.prototype.dropDownMenu = function (enableKeyboard) {
         if (Object.prototype.hasOwnProperty.call(choices, key)) {
             if (key[0] === '~') {
                 menu.addLine();
-        // } else if (key.indexOf('§_def') === 0) { 
-        // menu.addItem(choices[key].blockInstance(), choices[key]);
-            } else if (key.charCodeAt(key.length - 1) == 0x25ba) {
+         // } else if (key.indexOf('§_def') === 0) { 
+         //     menu.addItem(choices[key].blockInstance(), choices[key]);
+            } else if (key.charAt(key.length - 1) == '{') {
                 // Submenu
-				// 0x25ba = Unicode "BLACK RIGHT-POINTING POINTER"
-				// (not to be confused with "black right-pointing TRIANGLE")
-                menu.addItem(key, choices[key]);
+                // 0x25ba = Unicode "BLACK RIGHT-POINTING POINTER"
+                // (not to be confused with "black right-pointing TRIANGLE")
+                menu.addItem(key.substring(0,key.length - 1).
+							 concat(String.fromCharCode(0x25ba)),
+							 choices[key]);
                 menuStack.push(menu);
                 menu = new MenuMorph(
                                      this.setContents,
@@ -7568,10 +7572,10 @@ InputSlotMorph.prototype.dropDownMenu = function (enableKeyboard) {
                                      this,
                                      this.fontSize
                                  );
-            } else if (key.charCodeAt(0) == 0x25c4) {
-				// "BLACK LEFT-POINTING POINTER"
-                var oldmenu = menuStack[menuStack.length - 1],
-                    items = oldmenu.items;
+            } else if (key.charAt(0) == '}') {
+                // "BLACK LEFT-POINTING POINTER"
+                oldmenu = menuStack[menuStack.length - 1];
+                items = oldmenu.items;
                 items[items.length - 1][6] = menu;
                 oldmenu.addChild(menu);
                 menu = menuStack.pop();
@@ -7582,8 +7586,8 @@ InputSlotMorph.prototype.dropDownMenu = function (enableKeyboard) {
     }
 
     while (menuStack.length > 0) {
-        var oldmenu=menuStack[menuStack.length - 1],
-            items=oldmenu.items;
+        oldmenu=menuStack[menuStack.length - 1];
+		items=oldmenu.items;
         items[items.length-1][6] = menu;
         oldmenu.addChild(menu);
         menu = menuStack.pop();

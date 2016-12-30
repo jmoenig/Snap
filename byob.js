@@ -292,11 +292,17 @@ CustomBlockDefinition.prototype.inputOptionsOfIdx = function (idx) {
 };
 
 CustomBlockDefinition.prototype.dropDownMenuOf = function (inputName) {
-    var dict = {};
+    var dict = {},
+	    gensym = 1;
     if (this.declarations[inputName] && this.declarations[inputName][2]) {
         this.declarations[inputName][2].split('\n').forEach(function (line) {
-            var pair = line.split('=');
-            dict[pair[0]] = isNil(pair[1]) ? pair[0] : pair[1];
+            var pair = line.split('='),
+			    unique = pair[0];
+			if (unique == '~' || unique == '}') {
+				unique = unique.concat(gensym.toString());
+				gensym++;
+			};
+            dict[unique] = isNil(pair[1]) ? unique : pair[1];
         });
         return dict;
     }

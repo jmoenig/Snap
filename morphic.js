@@ -7682,7 +7682,8 @@ MenuMorph.prototype.unselectAllItems = function () {
     this.changed();
 };
 
-MenuMorph.prototype.popup = function (world, pos, submenu) {
+MenuMorph.prototype.popup = function (world, pos) {
+	var submenu = (this.parent instanceof MenuMorph);
 	// submenu is True if this menu is a submenu,
 	// so that we don't make it the world's activeMenu nor
 	// destroy its parent menu.
@@ -7828,17 +7829,16 @@ MenuMorph.prototype.mouseLeave = function () {
     if (this.parent instanceof MenuMorph) {
         // this is a submenu so we vanish when lose focus
 		this.destroy();
-    }
+    };
 }
             
 
 MenuMorph.prototype.destroy = function () {
-var myself = this,
-    subitems = function(menu) {
+var subitems = function(menu) {
         return menu.children.filter(function (child) {
                     return (child instanceof MenuItemMorph) &&
                            (child.doubleClickAction instanceof MenuMorph);
-			} )
+			} );
 	};
 
     if (this.hasFocus) {
@@ -7850,7 +7850,7 @@ var myself = this,
 		subitems(this.parent).forEach(function (item) {
             item.image = item.normalImage;
             item.changed();
-        } );
+        } )
     };
 
     // Also kill my submenus if any.
@@ -9440,13 +9440,12 @@ MenuItemMorph.prototype.mouseEnter = function () {
         this.changed();
     }
     if (this.doubleClickAction instanceof MenuMorph) {
-        var w = this.world();
-        this.doubleClickAction.popup(w,
-                                     new Point(this.parent.bounds.right()-10,
-                                     w.hand.position().y-10),
-                                     true);
-        if (!contains(this.parent.children, this.doubleClickAction))
+        if (!contains(this.parent.children, this.doubleClickAction)) {
             this.parent.addChild(this.doubleClickAction);
+		}
+        this.doubleClickAction.popup(this.world(),
+                                     new Point(this.parent.bounds.right()-10,
+                                               this.position().y-4));
     }
     if (this.hint) {
         this.bubbleHelp(this.hint);
@@ -9507,7 +9506,7 @@ MenuItemMorph.prototype.mouseDoubleClick = function () {
     if (!(this.doubleClickAction instanceof MenuMorph)) {
         this.triggerDoubleClick();
 	}
-}
+};
 
 MenuItemMorph.prototype.isListItem = function () {
     if (this.parent) {
