@@ -686,6 +686,7 @@ SyntaxElementMorph.prototype.refactorVarInStack = function (oldName, newName, is
 
     if (this instanceof CustomCommandBlockMorph
             && this.definition.body
+            && isNil(this.definition.declarations[oldName])
             && !contains(this.definition.variableNames, oldName)) {
         this.definition.body.expression.refactorVarInStack(oldName, newName);
     }
@@ -3077,28 +3078,58 @@ BlockMorph.prototype.refactorThisVar = function () {
     new DialogBoxMorph(
             this,
             function (newName) {
+                var definer;
+                
                 if (this.parent instanceof SyntaxElementMorph) {
                     // script var
-                    this.parentThatIsA(CommandBlockMorph).refactorVarInStack(oldName, newName, true);
+                    definer = this.parentThatIsA(CommandBlockMorph);
+                    if (definer.definesScriptVariable(newName)) {
+                        varExistsError();
+                        return;
+                    } else {
+                        definer.refactorVarInStack(oldName, newName, true);
+                    }
                 } else if (receiver.hasSpriteVariable(oldName)) {
                     // sprite local var
-                    receiver.refactorVariableInstances(oldName, newName, false);
-                    receiver.customBlocks.forEach(function (eachBlock) {
-                        eachBlock.definition.body.expression.refactorVarInStack(oldName, newName);
-                    });
+                    if (receiver.hasSpriteVariable(newName)) {
+                        varExistsError();
+                        return;
+                    } else if (!isNil(ide.globalVariables.vars[newName])) {
+                        varExistsError('as a global variable');
+                        return;
+                    } else {
+                        receiver.refactorVariableInstances(oldName, newName, false);
+                        receiver.customBlocks.forEach(function (eachBlock) {
+                            eachBlock.definition.body.expression.refactorVarInStack(oldName, newName);
+                        });
+                    }
                 } else {
                     // global var
-                    oldValue = ide.globalVariables.vars[oldName];
-                    stage.deleteVariable(oldName);
-                    stage.addVariable(newName, true);
-                    ide.globalVariables.vars[newName] = oldValue;
+                    if (!isNil(ide.globalVariables.vars[newName])) {
+                        varExistsError();
+                        return;
+                    } else if (
+                            detect(
+                                stage.children,
+                                function (any) {
+                                    return any.hasSpriteVariable(newName);
+                                })
+                            ) {
+                        varExistsError('as a sprite local variable');
+                        return;
+                    } else {
+                        oldValue = ide.globalVariables.vars[oldName];
+                        stage.deleteVariable(oldName);
+                        stage.addVariable(newName, true);
+                        ide.globalVariables.vars[newName] = oldValue;
 
-                    stage.refactorVariableInstances(oldName, newName, true);
-                    stage.forAllChildren(function (child) {
-                        if (child instanceof SpriteMorph) {
-                            child.refactorVariableInstances(oldName, newName, true);
-                        }
-                    });
+                        stage.refactorVariableInstances(oldName, newName, true);
+                        stage.forAllChildren(function (child) {
+                            if (child instanceof SpriteMorph) {
+                                child.refactorVariableInstances(oldName, newName, true);
+                            }
+                        });
+                    }
                 }
 
                 if (oldWatcher && oldWatcher.isVisible) {
@@ -3117,6 +3148,14 @@ BlockMorph.prototype.refactorThisVar = function () {
                 this.fullImage(), // pic
                 InputSlotMorph.prototype.getVarNamesDict.call(this)
                 );
+    
+    function varExistsError (where) {
+        ide.inform(
+            'Variable exists', 
+            'A variable with this name already exists ' +
+                (where || 'in this context') + '.'
+            );
+    };
 };
 
 // BlockMorph drawing
