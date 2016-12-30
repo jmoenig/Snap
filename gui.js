@@ -6251,7 +6251,7 @@ LibraryImportDialogMorph.prototype.init = function (ide, librariesData) {
     this.ide = ide;
     this.librariesData = librariesData; // [{name: , fileName: , description:}]
 
-    // I contain a cached version of the libaries I try to display,
+    // I contain a cached version of the libaries I have displayed,
     // because users may choose to explore a library many times before
     // importing.
     this.libraryCache = {}; // {fileName: {xml:, blocks: }}
@@ -6346,8 +6346,8 @@ LibraryImportDialogMorph.prototype.popUp = function () {
         LibraryImportDialogMorph.uber.popUp.call(this, world);
         this.handle = new HandleMorph(
             this,
-            350,
-            300,
+            450,
+            450,
             this.corner,
             this.corner
         );
@@ -6409,7 +6409,9 @@ LibraryImportDialogMorph.prototype.installLibrariesList = function () {
         if (myself.hasCached(item.fileName)) {
             myself.displayBlocks(item.fileName);
         } else {
-            // TODO: Display Loading Indicator?
+            myself.showMessage(
+                localize('Loading') + ' ' + localize(item.name)
+            );
             myself.ide.getURL(
                 myself.ide.resourceURL('libraries', item.fileName),
                 function(libraryXML) {
@@ -6437,6 +6439,7 @@ LibraryImportDialogMorph.prototype.importLibrary = function () {
     if (this.hasCached(selectedLibrary)) {
         ide.droppedText(this.cachedXML(selectedLibrary), libraryName);
     } else {
+        ide.showMessage(localize('Loading') + ' ' + localize(libraryName));
         ide.getURL(
             ide.resourceURL('libraries', selectedLibrary),
             function(libraryText) {
@@ -6449,19 +6452,16 @@ LibraryImportDialogMorph.prototype.importLibrary = function () {
 }
 
 LibraryImportDialogMorph.prototype.displayBlocks = function (libraryKey) {
-    var x, y, blocksList, block, blockImage, previousCategory, blockContainer,
+    var x, y, blocksList, blockImage, previousCategory, blockContainer,
         myself = this,
         padding = 4;
-        this.blocks = [];
 
     // Create a copy of the array; we'll remove blocks as we draw them.
     blocksList = this.cachedBlocks(libraryKey).slice(0);
- 
-    // create a fresh plaette
-    this.initializePalette();
 
     if (!blocksList.length) {return; }
-    // populate palette
+    // populate palette, grouped by categories.
+    this.initializePalette();
     x = this.palette.left() + padding;
     y = this.palette.top();
     SpriteMorph.prototype.categories.forEach(function (category) {
@@ -6472,11 +6472,14 @@ LibraryImportDialogMorph.prototype.displayBlocks = function (libraryKey) {
             }
             
             previousCategory = category;
-            block = definition.templateInstance();
-            blockImage = block.fullImage();
+            blockImage = definition.templateInstance().fullImage();
             blockContainer = new Morph();
+            blockContainer.contents = blockImage;
             blockContainer.image = blockImage;
             blockContainer.setPosition(new Point(x, y));
+            blockContainer.setExtent(
+                new Point(blockImage.width, blockImage.height)
+            );
             myself.palette.add(blockContainer);
             y += blockContainer.fullBounds().height() + padding;
             blocksList.pop(idx);
@@ -6488,12 +6491,10 @@ LibraryImportDialogMorph.prototype.displayBlocks = function (libraryKey) {
     this.fixLayout();
 }
 
-LibraryImportDialogMorph.prototype.displayLoadingMessage = function
-    (libraryName) {
-    
-    var msg = new MenuMorph(null, localize('Loading') + ' ' + libraryName);
+LibraryImportDialogMorph.prototype.showMessage = function (msgText) {
+    var msg = new MenuMorph(null, msgText);
     this.initializePalette();
-    this.palette.add(msg);
+    msg.popUpCenteredInWorld(this.palette);
     this.fixLayout();
 };
 
@@ -6506,16 +6507,21 @@ LibraryImportDialogMorph.prototype.fixLayout = function () {
 
     if (this.buttons) {
         this.buttons.fixLayout();
+        this.buttons.setCenter(this.center());
+        this.buttons.setBottom(this.bottom() - this.padding);
     }
     
     if (this.body) {
         this.body.setPosition(this.position().add(new Point(
-            this.padding,
-            titleHeight + this.padding
+            thin,
+            titleHeight + thin
         )));
         this.body.setExtent(new Point(
             this.width() - this.padding * 2,
-            this.height() - this.padding * 3 - th - this.buttons.height()
+            this.height()
+                - this.padding * 2
+                - titleHeight
+                - this.buttons.height()
         ));
 
         this.listField.setPosition(new Point(
@@ -6529,11 +6535,12 @@ LibraryImportDialogMorph.prototype.fixLayout = function () {
                 - this.padding
                 - thin
         );
+        
         this.listField.contents.children[0].adjustWidths();
         
         this.palette.setRight(this.body.right());
         this.palette.setTop(this.body.top() + this.padding);
-
+        
         this.notesField.setPosition(new Point(
             this.palette.left(),
             this.palette.bottom() + thin
@@ -6545,13 +6552,13 @@ LibraryImportDialogMorph.prototype.fixLayout = function () {
 
     if (this.label) {
         this.label.setCenter(this.center());
-        this.label.setTop(this.top() + (th - this.label.height()) / 2);
+        this.label.setTop(this.top() + (titleHeight - this.label.height()) / 2);
     }
 
-    if (this.buttons && this.buttons.children.length) {
-        this.buttons.setCenter(this.center());
-        this.buttons.setBottom(this.bottom() - this.padding);
-    }
+    // if (this.buttons && this.buttons.children.length) {
+    //     this.buttons.setCenter(this.center());
+    //     this.buttons.setBottom(this.bottom() - this.padding);
+    // }
 
     Morph.prototype.trackChanges = oldFlag;
     this.changed();
