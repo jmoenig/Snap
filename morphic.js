@@ -7519,6 +7519,10 @@ MenuMorph.prototype.addLine = function (width) {
     this.items.push([0, width || 1]);
 };
 
+MenuMorph.prototype.addSubmenu = function (key, submenu) {
+	this.addItem(key, key, , , , , , submenu);
+
+
 MenuMorph.prototype.createLabel = function () {
     var text;
     if (this.label !== null) {

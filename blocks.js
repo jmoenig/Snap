@@ -7558,12 +7558,11 @@ InputSlotMorph.prototype.dropDownMenu = function (enableKeyboard) {
                 menu.addLine();
          // } else if (key.indexOf('§_def') === 0) { 
          //     menu.addItem(choices[key].blockInstance(), choices[key]);
-            } else if (key.charAt(key.length - 1) == '{') {
+            } else if (key[key.length - 1] == '{') {
                 // Submenu
                 // 0x25ba = Unicode "BLACK RIGHT-POINTING POINTER"
                 // (not to be confused with "black right-pointing TRIANGLE")
-                menu.addItem(key.substring(0,key.length - 1).
-							 concat(String.fromCharCode(0x25ba)),
+                menu.addItem(key.substring(0,key.length - 1) + '\u25ba',
 							 choices[key]);
                 menuStack.push(menu);
                 menu = new MenuMorph(

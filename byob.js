@@ -299,8 +299,7 @@ CustomBlockDefinition.prototype.dropDownMenuOf = function (inputName) {
             var pair = line.split('='),
 			    unique = pair[0];
 			if (unique == '~' || unique == '}') {
-				unique = unique.concat(gensym.toString());
-				gensym++;
+				unique += gensym++;
 			};
             dict[unique] = isNil(pair[1]) ? unique : pair[1];
         });
