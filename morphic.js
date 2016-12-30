@@ -7520,8 +7520,8 @@ MenuMorph.prototype.addLine = function (width) {
 };
 
 MenuMorph.prototype.addSubmenu = function (key, submenu) {
-	this.addItem(key, key, , , , , , submenu);
-
+	this.addItem(key, key, null, null, null, null, null, submenu);
+};
 
 MenuMorph.prototype.createLabel = function () {
     var text;
