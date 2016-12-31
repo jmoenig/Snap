@@ -7753,6 +7753,8 @@ MenuMorph.prototype.processKeyDown = function (event) {
         return this.destroy();
     case 38: // 'up arrow'
         return this.selectUp();
+	case 39: // 'right arrow'
+		return this.selectRight();
     case 40: // 'down arrow'
         return this.selectDown();
     default:
@@ -7816,6 +7818,21 @@ MenuMorph.prototype.selectDown = function () {
     this.select(triggers[idx]);
 };
 
+MenuMorph.prototype.selectRight = function () {
+    var triggers, idx;
+
+    triggers = this.children.filter(function (each) {
+        return each instanceof MenuItemMorph;
+    });
+    if (!this.selection) {
+        return;
+    }
+	if (this.selection.doubleClickAction instanceof MenuMorph) {
+		this.selection.mouseEnter();
+		this.selection.doubleClickAction.getFocus();
+	}
+};
+
 MenuMorph.prototype.select = function (aMenuItem) {
     this.unselectAllItems();
     aMenuItem.image = aMenuItem.highlightImage;
@@ -7840,7 +7857,12 @@ var subitems = function(menu) {
 	};
 
     if (this.hasFocus) {
-        this.world.keyboardReceiver = null;
+		if (this.parent instanceof MenuMorph) {
+			this.world.keyboardReceiver = this.parent;
+			this.parent.selectFirst();
+		} else {
+			this.world.keyboardReceiver = null;
+		}
     }
 
     if ((this.parent instanceof MenuMorph) && this.world) {
