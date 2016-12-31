@@ -3219,6 +3219,15 @@ http://snap.berkeley.edu/run#cloud:Username=jens&ProjectName=rotation
 ------
 * GUI: update undrop controls when switching sprites and display modes
 
+161227
+------
+* GUI, Threads, Objects, Store: Disable JS-Functions, to protect users from malicious scripts, commented out for now
+
+161229
+------
+* BYOB: Disabled hover-help for custom blocks (some people find it annoying)
+* GUI: Hide setting for “prefer smooth animations” (now - mostly - redundant)
+
 
 == v4.10 === (in development)
 

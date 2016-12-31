@@ -1,6 +1,6 @@
 /*
 
-    lang-zh.js
+    lang-zh_CN.js
 
     Simplified Chinese translation for SNAP!
 
@@ -166,7 +166,7 @@
 
 /*global SnapTranslator*/
 
-SnapTranslator.dict.zh = {
+SnapTranslator.dict.zh_CN = {
 
 /*
     Special characters: (see <http://0xcc.net/jsescape/>)
