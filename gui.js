@@ -6472,14 +6472,13 @@ LibraryImportDialogMorph.prototype.displayBlocks = function (libraryKey) {
             }
             
             previousCategory = category;
-            block = definition.templateInstance();
-            blockImage = block.fullImage();
+            blockImage = definition.templateInstance().fullImage();
             blockContainer = new Morph();
-            blockContainer.image = blockImage;
-            blockContainer.setPosition(new Point(x, y));
             blockContainer.setExtent(
                 new Point(blockImage.width, blockImage.height)
             );
+            blockContainer.image = blockImage;
+            blockContainer.setPosition(new Point(x, y));
             myself.palette.add(blockContainer);
             y += blockContainer.fullBounds().height() + padding;
             blocksList.pop(idx);
