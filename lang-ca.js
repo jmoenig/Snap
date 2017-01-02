@@ -1967,5 +1967,19 @@ SnapTranslator.dict.ca = {
 	'uncheck for smooth\nscaling of vector costumes':
 		'desmarqueu per atenuar\nescalant les imatges vectorials',
 	'check to enable\nsprite composition':
-		'marqueu per habilitar\nl\'ancoratge d\'objectes'
+		'marqueu per habilitar\nl\'ancoratge d\'objectes',
+
+	'Execute on slider change':
+		'Executa en utilitzar els lliscadors',
+	'uncheck to suppress\nrunning scripts\nwhen moving the slider':
+		'desmarqueu per no llançar\nl\'execució dels programes\nen utilitzar els seus lliscadors',
+	'check to run\nthe edited script\nwhen moving the slider':
+		'marqueu per habilitar\nl\'execució dels programes\nen utilitzar els seus lliscadors',
+
+//Developer mode menus
+	'detach and put \ninto the hand':
+		'arrossega i mou\namb el punter',
+	//World options
+	'let the World automatically\nadjust to browser resizing':
+		'permet que el Món s\'ajusti\nautomàticament al canvi de mida de la finestra'
 };
