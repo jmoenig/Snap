@@ -2114,6 +2114,13 @@ SnapTranslator.dict.ca = {
 	'sensor demo':
 		'exemple de sensor',
 	'animation demo':
-		'exemple d\'animació'
-	
+		'exemple d\'animació',
+
+//future JS options
+	'uncheck to disable support for\nnative JavaScript functions':
+		'desmarqueu per deshabilitar\nl\'execució de Javascript',
+	'check to support\nnative JavaScript functions':
+		'marqueu per habilitar\nl\'execució de Javascript',
+	'JavaScript is not enabled':
+		'l\'execució de Javascript està deshabilitada'
 };
