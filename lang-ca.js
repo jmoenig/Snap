@@ -2083,5 +2083,37 @@ SnapTranslator.dict.ca = {
 	'development mode...':
 		'mode de desenvolupament',
 	'about morphic.js...':
-		'sobre morphic.js...'
+		'sobre morphic.js...',
+	//Make a Morph
+	'make a morph':
+		'crea un \'morph\'',
+	'rectangle':
+		'rectangle',
+	'box':
+		'caixa',
+	'circle box':
+		'caixa circular',
+	'frame':
+		'marc',
+	'scroll frame':
+		'marc amb desplaçament',
+	'handle':
+		'nansa',
+	'string':
+		'cadena',
+	'Hello, World!':
+		'Hola Món!',
+	'speech bubble':
+		'bafarada',
+	'gray scale palette':
+		'paleta d\'escala de grisos',
+	'color palette':
+		'paleta de colors',
+	'color picker':
+		'selector de color',
+	'sensor demo':
+		'exemple de sensor',
+	'animation demo':
+		'exemple d\'animació'
+	
 };

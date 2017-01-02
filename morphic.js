@@ -11540,7 +11540,7 @@ WorldMorph.prototype.contextMenu = function () {
             "color...",
             function () {
                 this.pickColor(
-                    menu.title + '\ncolor:',
+                    menu.title + localize('\ncolor:'),
                     this.setColor,
                     this,
                     this.color
