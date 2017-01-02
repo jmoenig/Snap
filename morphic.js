@@ -7676,19 +7676,25 @@ MenuMorph.prototype.unselectAllItems = function () {
     this.changed();
 };
 
-MenuMorph.prototype.popup = function (world, pos) {
+MenuMorph.prototype.popup = function (world, pos, submenu) {
+	// submenu is True if this menu is a submenu,
+	// so that we don't make it the world's activeMenu nor
+	// destroy its parent menu.
+
     this.drawNew();
     this.setPosition(pos);
     this.addShadow(new Point(2, 2), 80);
     this.keepWithin(world);
-    if (world.activeMenu) {
+    if (world.activeMenu && !submenu) {
         world.activeMenu.destroy();
     }
     if (this.items.length < 1 && !this.title) { // don't show empty menus
         return;
     }
-    world.add(this);
-    world.activeMenu = this;
+    if (!submenu) {
+        world.add(this);
+        world.activeMenu = this;
+    }
     this.world = world; // optionally enable keyboard support
     this.fullChanged();
 };
@@ -7812,10 +7818,40 @@ MenuMorph.prototype.select = function (aMenuItem) {
     this.selection = aMenuItem;
 };
 
+MenuMorph.prototype.mouseLeave = function () {
+    if (this.parent instanceof MenuMorph) {
+        // this is a submenu so we vanish when lose focus
+		this.destroy();
+    }
+}
+            
+
 MenuMorph.prototype.destroy = function () {
+var myself = this,
+    subitems = function(menu) {
+        return menu.children.filter(function (child) {
+                    return (child instanceof MenuItemMorph) &&
+                           (child.doubleClickAction instanceof MenuMorph);
+			} )
+	};
+
     if (this.hasFocus) {
         this.world.keyboardReceiver = null;
     }
+
+    if ((this.parent instanceof MenuMorph) && this.world) {
+        // If I'm a submenu, un-highlight the item pointing to me.
+		subitems(this.parent).forEach(function (item) {
+            item.image = item.normalImage;
+            item.changed();
+        } );
+    };
+
+    // Also kill my submenus if any.
+    subitems(this).forEach(function (item) {
+                              item.doubleClickAction.destroy();
+                          });
+
     MenuMorph.uber.destroy.call(this);
 };
 
@@ -9397,16 +9433,34 @@ MenuItemMorph.prototype.mouseEnter = function () {
         this.image = this.highlightImage;
         this.changed();
     }
+    if (this.doubleClickAction instanceof MenuMorph) {
+        var w = this.world();
+        this.doubleClickAction.popup(w,
+                                     new Point(this.parent.bounds.right()-10,
+                                     w.hand.position().y-10),
+                                     true);
+        if (!contains(this.parent.children, this.doubleClickAction))
+            this.parent.addChild(this.doubleClickAction);
+    }
     if (this.hint) {
         this.bubbleHelp(this.hint);
     }
 };
 
 MenuItemMorph.prototype.mouseLeave = function () {
-    if (!this.isListItem()) {
+    if (this.doubleClickAction instanceof MenuMorph) {
+		if (!contains(this.world().hand.allMorphsAtPointer(),
+                      this.doubleClickAction)) {
+            this.doubleClickAction.destroy();
+            this.image = this.normalImage;
+            this.changed();
+        }
+    } else if (!this.isListItem()) {
         this.image = this.normalImage;
         this.changed();
     }
+
+
     if (this.hint) {
         this.world().hand.destroyTemporaries();
     }
@@ -9416,8 +9470,10 @@ MenuItemMorph.prototype.mouseDownLeft = function (pos) {
     if (this.isListItem()) {
         this.parent.unselectAllItems();
         this.escalateEvent('mouseDownLeft', pos);
-    }
-    this.image = this.pressImage;
+        this.image = this.pressImage;
+    } else if (!(this.doubleClickAction instanceof MenuMorph)) {
+        this.image = this.pressImage;
+	}
     this.changed();
 };
 
@@ -9428,12 +9484,24 @@ MenuItemMorph.prototype.mouseMove = function () {
 };
 
 MenuItemMorph.prototype.mouseClickLeft = function () {
-    if (!this.isListItem()) {
-        this.parent.destroy();
-        this.root().activeMenu = null;
+	if (!(this.doubleClickAction instanceof MenuMorph)) {
+        if (!this.isListItem()) {
+            var topmenu = this.parent;
+            while (topmenu.parent instanceof MenuMorph) {
+                topmenu = topmenu.parent;
+            }
+            topmenu.destroy();
+            this.root().activeMenu = null;
+        }
+        this.trigger();
     }
-    this.trigger();
 };
+
+MenuItemMorph.prototype.mouseDoubleClick = function () {
+    if (!(this.doubleClickAction instanceof MenuMorph)) {
+        this.triggerDoubleClick();
+	}
+}
 
 MenuItemMorph.prototype.isListItem = function () {
     if (this.parent) {
