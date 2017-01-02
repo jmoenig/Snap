@@ -2301,6 +2301,20 @@ SpriteMorph.prototype.freshPalette = function (category) {
                 }
             );
         }
+
+        // Add undo block removal support
+        if (SnapUndo.canUndo('palette')) {
+            // Get the custom block name
+            var len = SnapUndo.eventHistory.palette.length,
+                action = SnapUndo.eventHistory.palette[len-1];
+                deletedBlock = ide.serializer.parse(action.args[2]);
+
+            menu.addItem(
+                'restore "' + deletedBlock.attributes.s + '"',
+                function() {
+                    SnapUndo.undo('palette');
+                });
+        }
         return menu;
     };
 

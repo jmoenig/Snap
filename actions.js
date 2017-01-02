@@ -2277,7 +2277,6 @@ ActionManager.OwnerFor.addCustomBlock = function(ownerId) {
 ActionManager.OwnerFor.addSound =
 ActionManager.OwnerFor.addCostume =
 
-ActionManager.OwnerFor.deleteCustomBlock =
 ActionManager.OwnerFor.addBlock = function(block, ownerId) {
     return ownerId;
 };
@@ -2334,9 +2333,13 @@ ActionManager.OwnerFor.addSprite = function() {
     return null;
 };
 
-// Corral events
+// Corral/Palette events
 ActionManager.OwnerFor.removeSprite = function() {
     return 'corral';
+};
+
+ActionManager.OwnerFor.deleteCustomBlock = function() {
+    return 'palette';
 };
 
 SnapActions = new ActionManager();
