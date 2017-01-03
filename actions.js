@@ -2096,12 +2096,14 @@ ActionManager.prototype.loadOwner = function(owner) {
 
     // Load the costumes
     owner.costumes.asArray().forEach(function(costume) {
+        costume.id = costume.id || myself.newId();
         myself._costumes[costume.id] = costume;
         myself._costumeToOwner[costume.id] = owner;
     });
 
     // Load the sounds
     owner.sounds.asArray().forEach(function(sound) {
+        sound.id = sound.id || myself.newId();
         myself._sounds[sound.id] = sound;
         myself._soundToOwner[sound.id] = owner;
     });
