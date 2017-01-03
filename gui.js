@@ -6260,7 +6260,7 @@ LibraryImportDialogMorph.prototype.init = function (ide, librariesData) {
     // I contain a cached version of the libaries I have displayed,
     // because users may choose to explore a library many times before
     // importing.
-    this.libraryCache = {}; // {fileName: {xml:, blocks: }}
+    this.libraryCache = {}; // {fileName: [blocks-array] }
 
     this.handle = null;
     this.listField = null;
@@ -6335,43 +6335,6 @@ LibraryImportDialogMorph.prototype.initializeLibraryDescription = function () {
     this.body.add(this.notesField);
 };
 
-LibraryImportDialogMorph.prototype.popUp = function () {
-    var world = this.ide.world();
-    if (world) {
-        LibraryImportDialogMorph.uber.popUp.call(this, world);
-        this.handle = new HandleMorph(
-            this,
-            450,
-            450,
-            this.corner,
-            this.corner
-        );
-    }
-};
-
-LibraryImportDialogMorph.prototype.fixListFieldItemColors =
-    ProjectDialogMorph.prototype.fixListFieldItemColors;
-
-LibraryImportDialogMorph.prototype.clearDetails =
-    ProjectDialogMorph.prototype.clearDetails;
-
-// Library Cache Utilities.
-LibraryImportDialogMorph.prototype.hasCached = function (key) {
-    return this.libraryCache.hasOwnProperty(key)
-}
-
-LibraryImportDialogMorph.prototype.cacheLibrary = function (key, str, blocks) {
-    this.libraryCache[key] = { xml: str, blocks: blocks };
-}
-
-LibraryImportDialogMorph.prototype.cachedBlocks = function (key) {
-    return this.libraryCache[key].blocks;
-}
-
-LibraryImportDialogMorph.prototype.cachedXML = function (key) {
-    return this.libraryCache[key].xml;
-}
-
 LibraryImportDialogMorph.prototype.installLibrariesList = function () {
     var myself = this;
 
@@ -6381,7 +6344,7 @@ LibraryImportDialogMorph.prototype.installLibrariesList = function () {
         this.librariesData,
         function (element) {return element.name; },
         null,
-        myself.importLibrary
+        this.importLibrary
     );
 
     this.fixListFieldItemColors();
@@ -6405,14 +6368,13 @@ LibraryImportDialogMorph.prototype.installLibrariesList = function () {
             myself.displayBlocks(item.fileName);
         } else {
             myself.showMessage(
-                localize('Loading') + ' ' + localize(item.name)
+                localize('Loading') + '\n' + localize(item.name)
             );
             myself.ide.getURL(
                 myself.ide.resourceURL('libraries', item.fileName),
                 function(libraryXML) {
                     myself.cacheLibrary(
                         item.fileName,
-                        libraryXML,
                         myself.ide.serializer.loadBlocks(libraryXML)
                     );
                     myself.displayBlocks(item.fileName);
@@ -6426,13 +6388,116 @@ LibraryImportDialogMorph.prototype.installLibrariesList = function () {
     this.fixLayout();
 };
 
+LibraryImportDialogMorph.prototype.popUp = function () {
+    var world = this.ide.world();
+    if (world) {
+        LibraryImportDialogMorph.uber.popUp.call(this, world);
+        this.handle = new HandleMorph(
+            this,
+            450,
+            450,
+            this.corner,
+            this.corner
+        );
+    }
+};
+
+LibraryImportDialogMorph.prototype.fixListFieldItemColors =
+    ProjectDialogMorph.prototype.fixListFieldItemColors;
+
+LibraryImportDialogMorph.prototype.clearDetails =
+    ProjectDialogMorph.prototype.clearDetails;
+
+LibraryImportDialogMorph.prototype.fixLayout = function () {
+    var titleHeight = fontHeight(this.titleFontSize) + this.titlePadding * 2,
+        thin = this.padding / 2,
+        oldFlag = Morph.prototype.trackChanges;
+
+    Morph.prototype.trackChanges = false;
+
+    if (this.buttons) {
+        this.buttons.fixLayout();
+        this.buttons.setCenter(this.center());
+        this.buttons.setBottom(this.bottom() - this.padding);
+    }
+
+    if (this.body) {
+        this.body.setPosition(this.position().add(new Point(
+            thin,
+            titleHeight + thin
+        )));
+        this.body.setExtent(new Point(
+            this.width() - this.padding * 2,
+            this.height()
+                - this.padding * 2
+                - titleHeight
+                - this.buttons.height()
+        ));
+
+        this.listField.setPosition(new Point(
+            this.body.left() + this.padding,
+            this.body.top() + this.padding
+        ));
+        this.listField.setHeight(this.body.height() - this.padding);
+        this.listField.setWidth(
+            this.body.width()
+                - this.palette.width()
+                - this.padding
+                - thin
+        );
+
+        this.listField.contents.children[0].adjustWidths();
+
+        this.palette.setRight(this.body.right());
+        this.palette.setTop(this.body.top() + this.padding);
+
+        this.notesField.setPosition(new Point(
+            this.palette.left(),
+            this.palette.bottom() + thin
+        ));
+        this.notesField.setHeight(
+            this.body.bottom() - this.palette.bottom() - thin
+        );
+    }
+
+    if (this.label) {
+        this.label.setCenter(this.center());
+        this.label.setTop(
+            this.top() + (titleHeight - this.label.height()) / 2
+        );
+    }
+
+    Morph.prototype.trackChanges = oldFlag;
+    this.changed();
+};
+    
+// Library Cache Utilities.
+LibraryImportDialogMorph.prototype.hasCached = function (key) {
+    return this.libraryCache.hasOwnProperty(key)
+}
+
+LibraryImportDialogMorph.prototype.cacheLibrary = function (key, blocks) {
+    this.libraryCache[key] = blocks ;
+}
+
+LibraryImportDialogMorph.prototype.cachedLibrary = function (key) {
+    return this.libraryCache[key];
+}
+
 LibraryImportDialogMorph.prototype.importLibrary = function () {
-    var ide = this.ide,
+    var blocks,
+        ide = this.ide,
         selectedLibrary = this.listField.selected.fileName,
         libraryName = this.listField.selected.name;
 
     if (this.hasCached(selectedLibrary)) {
-        ide.droppedText(this.cachedXML(selectedLibrary), libraryName);
+        blocks = this.cachedLibrary(selectedLibrary);
+        blocks.forEach(function (def) {
+            def.receiver = ide.stage;
+            ide.stage.globalBlocks.push(def);
+            ide.stage.replaceDoubleDefinitionsFor(def);
+        });
+        ide.showMessage(localize('Imported') + ' ' + localize(libraryName), 2);
     } else {
         ide.showMessage(localize('Loading') + ' ' + localize(libraryName));
         ide.getURL(
@@ -6452,7 +6517,7 @@ LibraryImportDialogMorph.prototype.displayBlocks = function (libraryKey) {
         padding = 4;
 
     // Create a copy of the array; we'll remove blocks as we draw them.
-    blocksList = this.cachedBlocks(libraryKey).slice(0);
+    blocksList = this.cachedLibrary(libraryKey).slice(0);
 
     if (!blocksList.length) {return; }
     // populate palette, grouped by categories.
@@ -6492,67 +6557,6 @@ LibraryImportDialogMorph.prototype.showMessage = function (msgText) {
     this.initializePalette();
     msg.popUpCenteredInWorld(this.palette);
     this.fixLayout();
-};
-
-LibraryImportDialogMorph.prototype.fixLayout = function () {
-    var titleHeight = fontHeight(this.titleFontSize) + this.titlePadding * 2,
-        thin = this.padding / 2,
-        oldFlag = Morph.prototype.trackChanges;
-
-    Morph.prototype.trackChanges = false;
-
-    if (this.buttons) {
-        this.buttons.fixLayout();
-        this.buttons.setCenter(this.center());
-        this.buttons.setBottom(this.bottom() - this.padding);
-    }
-    
-    if (this.body) {
-        this.body.setPosition(this.position().add(new Point(
-            thin,
-            titleHeight + thin
-        )));
-        this.body.setExtent(new Point(
-            this.width() - this.padding * 2,
-            this.height()
-                - this.padding * 2
-                - titleHeight
-                - this.buttons.height()
-        ));
-
-        this.listField.setPosition(new Point(
-            this.body.left() + this.padding,
-            this.body.top() + this.padding
-        ));
-        this.listField.setHeight(this.body.height() - this.padding);
-        this.listField.setWidth(
-            this.body.width()
-                - this.palette.width()
-                - this.padding
-                - thin
-        );
-        
-        this.listField.contents.children[0].adjustWidths();
-        
-        this.palette.setRight(this.body.right());
-        this.palette.setTop(this.body.top() + this.padding);
-        
-        this.notesField.setPosition(new Point(
-            this.palette.left(),
-            this.palette.bottom() + thin
-        ));
-        this.notesField.setHeight(
-            this.body.bottom() - this.palette.bottom() - thin
-        );
-    }
-
-    if (this.label) {
-        this.label.setCenter(this.center());
-        this.label.setTop(this.top() + (titleHeight - this.label.height()) / 2);
-    }
-
-    Morph.prototype.trackChanges = oldFlag;
-    this.changed();
 };
 
 // SpriteIconMorph ////////////////////////////////////////////////////
