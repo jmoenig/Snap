@@ -6513,12 +6513,10 @@ LibraryImportDialogMorph.prototype.importLibrary = function () {
 }
 
 LibraryImportDialogMorph.prototype.displayBlocks = function (libraryKey) {
-    var x, y, blocksList, blockImage, previousCategory, blockContainer,
+    var x, y, blockImage, previousCategory, blockContainer,
         myself = this,
-        padding = 4;
-
-    // Create a copy of the array; we'll remove blocks as we draw them.
-    blocksList = this.cachedLibrary(libraryKey).slice(0);
+        padding = 4,
+        blocksList = this.cachedLibrary(libraryKey);
 
     if (!blocksList.length) {return; }
     // populate palette, grouped by categories.
@@ -6527,13 +6525,12 @@ LibraryImportDialogMorph.prototype.displayBlocks = function (libraryKey) {
     y = this.palette.top();
 
     SpriteMorph.prototype.categories.forEach(function (category) {
-        blocksList.forEach(function (definition, idx) {
+        blocksList.forEach(function (definition) {
             if (definition.category !== category) {return; }
             if (category !== previousCategory) {
                 y += padding;
             }
             previousCategory = category;
-            blocksList.pop(idx);
 
             blockImage = definition.templateInstance().fullImage();
             blockContainer = new Morph();
