@@ -6440,18 +6440,15 @@ LibraryImportDialogMorph.prototype.fixLayout = function () {
             this.notesField.width(),
             this.body.height() - this.notesField.height() - thin
         ));
+        this.listField.contents.children[0].adjustWidths();
 
         this.listField.setPosition(this.body.position());
-        this.palette.setPosition(new Point(
-            this.listField.right() + thin,
-            this.body.top()
+        this.palette.setPosition(this.listField.topRight().add(
+            new Point(thin, 0)
         ));
-        this.notesField.setPosition(new Point(
-            this.palette.left(),
-            this.palette.bottom() + thin
+        this.notesField.setPosition(this.pallete.bottomLeft().add(
+            new Point(0, thin)
         ));
-
-        this.listField.contents.children[0].adjustWidths();
     }
 
     if (this.label) {
