@@ -4052,9 +4052,15 @@ Morph.prototype.hierarchyMenu = function () {
 
     parents.forEach(function (each) {
         if (each.developersMenu && (each !== world)) {
+            menu.addMenu(
+                each.toString().slice(0, 50),
+                each.developersMenu()
+            );
+        /*
             menu.addItem(each.toString().slice(0, 50), function () {
                 each.developersMenu().popUpAtHand(world);
             });
+        */
         }
     });
     return menu;
