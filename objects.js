@@ -4821,20 +4821,8 @@ SpriteMorph.prototype.hasSpriteVariable = function (varName) {
 // Variable refactoring
 
 SpriteMorph.prototype.refactorVariableInstances = function (oldName, newName, isGlobal) {
-    var oldValue;
-
     if (isGlobal && this.hasSpriteVariable(oldName)) {
         return;
-    }
-
-    if (!isGlobal) {
-        oldValue = this.variables.vars[oldName];
-        this.deleteVariable(oldName);
-        this.addVariable(newName, false);
-        this.variables.vars[newName] = oldValue;
-        this.blocksCache['variables'] = null;
-        this.paletteCache['variables'] = null;
-        this.parentThatIsA(IDE_Morph).refreshPalette();
     }
 
     this.scripts.children.forEach(function (child) {
