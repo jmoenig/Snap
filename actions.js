@@ -2327,6 +2327,9 @@ ActionManager.OwnerFor.moveBlock = function(block, target) {
 };
 
 // Can't undo
+ActionManager.OwnerFor.addVariable =
+ActionManager.OwnerFor.deleteVariable =
+
 ActionManager.OwnerFor.setStageSize =
 ActionManager.OwnerFor.importBlocks =
 ActionManager.OwnerFor.importSprites =
