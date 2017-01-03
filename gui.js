@@ -6284,9 +6284,9 @@ LibraryImportDialogMorph.prototype.buildContents = function () {
     this.installLibrariesList();
 
     this.addButton('importLibrary', 'Import');
-    this.addButton('cancel', 'Close');
+    this.addButton('cancel', 'Cancel');
 
-    this.setExtent(new Point(455, 455));
+    this.setExtent(new Point(460, 455));
     this.fixLayout();
 };
 
@@ -6304,8 +6304,6 @@ LibraryImportDialogMorph.prototype.initializePalette = function () {
     this.palette.isDraggable = false;
     this.palette.acceptsDrops = false;
     this.palette.contents.acceptsDrops = false;
-
-    this.palette.setExtent(new Point(200, 250));
 
     this.body.add(this.palette);
 };
@@ -6331,7 +6329,7 @@ LibraryImportDialogMorph.prototype.initializeLibraryDescription = function () {
     this.notesField.isTextLineWrapping = true;
     this.notesField.padding = 3;
     this.notesField.setContents(this.notesText);
-    this.notesField.setWidth(this.palette.width());
+    this.notesField.setHeight(100);
 
     this.body.add(this.notesField);
 };
@@ -6384,6 +6382,7 @@ LibraryImportDialogMorph.prototype.installLibrariesList = function () {
         }
     };
 
+    this.listField.setWidth(200);
     this.body.add(this.listField);
 
     this.fixLayout();
@@ -6395,8 +6394,8 @@ LibraryImportDialogMorph.prototype.popUp = function () {
         LibraryImportDialogMorph.uber.popUp.call(this, world);
         this.handle = new HandleMorph(
             this,
-            450,
-            450,
+            300,
+            300,
             this.corner,
             this.corner
         );
@@ -6416,49 +6415,46 @@ LibraryImportDialogMorph.prototype.fixLayout = function () {
 
     Morph.prototype.trackChanges = false;
 
-    if (this.buttons) {
-        this.buttons.fixLayout();
-        this.buttons.setCenter(this.center());
-        this.buttons.setBottom(this.bottom() - this.padding);
-    }
-
     if (this.body) {
         this.body.setPosition(this.position().add(new Point(
-            thin,
-            titleHeight + thin
+            this.padding,
+            titleHeight + this.padding
         )));
         this.body.setExtent(new Point(
             this.width() - this.padding * 2,
             this.height()
-                - this.padding * 2
+                - this.padding * 3 // top, bottom and button padding.
                 - titleHeight
                 - this.buttons.height()
         ));
 
-        this.listField.setPosition(new Point(
-            this.body.left() + this.padding,
-            this.body.top() + this.padding
+        this.listField.setExtent(new Point(
+            200,
+            this.body.height()
         ));
-        this.listField.setHeight(this.body.height() - this.padding);
-        this.listField.setWidth(
-            this.body.width()
-                - this.palette.width()
-                - this.padding
-                - thin
-        );
+        this.notesField.setExtent(new Point(
+            this.body.width() - this.listField.width() - thin,
+            100
+        ));
+        this.palette.setExtent(new Point(
+            this.notesField.width(),
+            this.body.height() - this.notesField.height() - thin
+        ));
 
-        this.listField.contents.children[0].adjustWidths();
-
-        this.palette.setRight(this.body.right());
-        this.palette.setTop(this.body.top() + this.padding);
-
+        this.listField.setPosition(new Point(
+            this.body.left(),
+            this.body.top()
+        ));
+        this.palette.setPosition(new Point(
+            this.listField.right() + thin,
+            this.body.top()
+        ));
         this.notesField.setPosition(new Point(
             this.palette.left(),
             this.palette.bottom() + thin
         ));
-        this.notesField.setHeight(
-            this.body.bottom() - this.palette.bottom() - thin
-        );
+
+        this.listField.contents.children[0].adjustWidths();
     }
 
     if (this.label) {
@@ -6466,6 +6462,12 @@ LibraryImportDialogMorph.prototype.fixLayout = function () {
         this.label.setTop(
             this.top() + (titleHeight - this.label.height()) / 2
         );
+    }
+
+    if (this.buttons) {
+        this.buttons.fixLayout();
+        this.buttons.setCenter(this.center());
+        this.buttons.setBottom(this.bottom() - this.padding);
     }
 
     Morph.prototype.trackChanges = oldFlag;
