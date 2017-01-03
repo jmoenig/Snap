@@ -730,7 +730,7 @@ ActionManager.prototype._moveBlock = function(block, target) {
             this._getCurrentTarget(target)
         ];
 
-    } else if (target.loc === 'top') {
+    } else if (target.loc === 'top' || target.loc === 'wrap') {
         targetState = this._getBlockState(target.element.id);
     }
 

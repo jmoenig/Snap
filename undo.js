@@ -368,7 +368,7 @@ UndoManager.Invert.moveBlock = function(args) {
     if (spliceEvent) {
         event.args.unshift(spliceEvent);
     }
-    if (target.loc === 'top') {  // top connection - need to revert target to old state!
+    if (target.loc === 'top' || target.loc === 'wrap') {
         revertToOldState = UndoManager.Invert._actionForState.call(null, args[4]);
         event.args.unshift(revertToOldState);
     } else if (args.length > 4) {  // If a block was displaced, move it back to it's original target
