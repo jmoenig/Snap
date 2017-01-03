@@ -6441,10 +6441,7 @@ LibraryImportDialogMorph.prototype.fixLayout = function () {
             this.body.height() - this.notesField.height() - thin
         ));
 
-        this.listField.setPosition(new Point(
-            this.body.left(),
-            this.body.top()
-        ));
+        this.listField.setPosition(this.body.position());
         this.palette.setPosition(new Point(
             this.listField.right() + thin,
             this.body.top()
