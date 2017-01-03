@@ -6245,22 +6245,6 @@ function LibraryImportDialogMorph(ide, librariesData) {
 }
 
 LibraryImportDialogMorph.prototype.init = function (ide, librariesData) {
-    var myself = this;
-
-    // additional properties:
-    this.ide = ide;
-    this.librariesData = librariesData; // [{name: , fileName: , description:}]
-
-    // I contain a cached version of the libaries I have displayed,
-    // because users may choose to explore a library many times before
-    // importing.
-    this.libraryCache = {}; // {fileName: {xml:, blocks: }}
-
-    this.listField = null;
-    this.palette = null;
-    this.notesText = null;
-    this.notesField = null;
-
     // initialize inherited properties:
     LibraryImportDialogMorph.uber.init.call(
         this,
@@ -6269,10 +6253,23 @@ LibraryImportDialogMorph.prototype.init = function (ide, librariesData) {
         null  // environment
     );
 
-    // override inherited properites:
+    this.ide = ide;
+    this.key = 'importLibrary';
+    this.librariesData = librariesData; // [{name: , fileName: , description:}]
+
+    // I contain a cached version of the libaries I have displayed,
+    // because users may choose to explore a library many times before
+    // importing.
+    this.libraryCache = {}; // {fileName: {xml:, blocks: }}
+
+    this.handle = null;
+    this.listField = null;
+    this.palette = null;
+    this.notesText = null;
+    this.notesField = null;
+
     this.labelString = 'Import Library';
     this.createLabel();
-    this.key = 'importLibrary';
 
     this.buildContents();
 };
@@ -6294,9 +6291,7 @@ LibraryImportDialogMorph.prototype.buildContents = function () {
 
 LibraryImportDialogMorph.prototype.initializePalette = function () {
     // I will display a scrolling list of blocks.
-    if (this.palette) {
-        this.palette.destroy();
-    }
+    if (this.palette) {this.palette.destroy(); }
 
     this.palette = new ScrollFrameMorph(
         null,
@@ -6309,7 +6304,7 @@ LibraryImportDialogMorph.prototype.initializePalette = function () {
     this.palette.acceptsDrops = false;
     this.palette.contents.acceptsDrops = false;
 
-    this.palette.setExtent(new Point(250, 250));
+    this.palette.setExtent(new Point(200, 250));
 
     this.body.add(this.palette);
 };
@@ -6386,7 +6381,7 @@ LibraryImportDialogMorph.prototype.installLibrariesList = function () {
         this.librariesData,
         function (element) {return element.name; },
         null,
-        function () {myself.importLibrary(); }
+        myself.importLibrary
     );
 
     this.fixListFieldItemColors();
@@ -6464,14 +6459,16 @@ LibraryImportDialogMorph.prototype.displayBlocks = function (libraryKey) {
     this.initializePalette();
     x = this.palette.left() + padding;
     y = this.palette.top();
+
     SpriteMorph.prototype.categories.forEach(function (category) {
         blocksList.forEach(function (definition, idx) {
             if (definition.category !== category) {return; }
             if (category !== previousCategory) {
                 y += padding;
             }
-            
             previousCategory = category;
+            blocksList.pop(idx);
+
             blockImage = definition.templateInstance().fullImage();
             blockContainer = new Morph();
             blockContainer.setExtent(
@@ -6479,9 +6476,9 @@ LibraryImportDialogMorph.prototype.displayBlocks = function (libraryKey) {
             );
             blockContainer.image = blockImage;
             blockContainer.setPosition(new Point(x, y));
-            myself.palette.add(blockContainer);
+            myself.palette.addContents(blockContainer);
+
             y += blockContainer.fullBounds().height() + padding;
-            blocksList.pop(idx);
         });
     });
 
@@ -6553,11 +6550,6 @@ LibraryImportDialogMorph.prototype.fixLayout = function () {
         this.label.setCenter(this.center());
         this.label.setTop(this.top() + (titleHeight - this.label.height()) / 2);
     }
-
-    // if (this.buttons && this.buttons.children.length) {
-    //     this.buttons.setCenter(this.center());
-    //     this.buttons.setBottom(this.bottom() - this.padding);
-    // }
 
     Morph.prototype.trackChanges = oldFlag;
     this.changed();
