@@ -9,7 +9,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2016 by Jens Mönig
+    Copyright (C) 2017 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -107,7 +107,7 @@ SymbolMorph, isNil, CursorMorph, VariableFrame, WatcherMorph, Variable*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2016-December-29';
+modules.byob = '2017-January-03';
 
 // Declarations
 
@@ -291,20 +291,29 @@ CustomBlockDefinition.prototype.inputOptionsOfIdx = function (idx) {
 };
 
 CustomBlockDefinition.prototype.dropDownMenuOf = function (inputName) {
-    var dict = {},
-	    gensym = 1;
     if (this.declarations[inputName] && this.declarations[inputName][2]) {
-        this.declarations[inputName][2].split('\n').forEach(function (line) {
-            var pair = line.split('='),
-			    unique = pair[0];
-			if (unique == '~' || unique == '}') {
-				unique += gensym++;
-			};
-            dict[unique] = isNil(pair[1]) ? unique : pair[1];
-        });
-        return dict;
+        return this.parseChoices(this.declarations[inputName][2]);
     }
     return null;
+};
+
+CustomBlockDefinition.prototype.parseChoices = function (string) {
+    var dict = {},
+        stack = [dict];
+    string.split('\n').forEach(function (line) {
+        var pair = line.split('=');
+        if (pair[0] === '}') {
+            stack.pop();
+            dict = stack[stack.length - 1];
+        } else if (pair[1] === '{') {
+            dict = {};
+            stack[stack.length - 1][pair[0]] = dict;
+            stack.push(dict);
+        } else {
+            dict[pair[0]] = isNil(pair[1]) ? pair[0] : pair[1];
+        }
+    });
+    return dict;
 };
 
 CustomBlockDefinition.prototype.isReadOnlyInput = function (inputName) {
@@ -3259,8 +3268,9 @@ InputSlotDialogMorph.prototype.editSlotOptions = function () {
         myself.fragment.options,
         myself.world(),
         null,
-        localize('Enter one option per line.' +
-            'Optionally use "=" as key/value delimiter\n' +
+        localize('Enter one option per line.\n' +
+            'Optionally use "=" as key/value delimiter ' +
+            'and {} for submenus. ' +
             'e.g.\n   the answer=42')
     );
 };

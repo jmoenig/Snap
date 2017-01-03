@@ -8,7 +8,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2016 by Jens Mönig
+    Copyright (C) 2017 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -1136,7 +1136,7 @@
 
 /*global window, HTMLCanvasElement, FileReader, Audio, FileList*/
 
-var morphicVersion = '2016-December-27';
+var morphicVersion = '2017-January-03';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = getBlurredShadowSupport(); // check for Chrome-bug
 
@@ -3347,7 +3347,8 @@ Morph.prototype.toggleVisibility = function () {
 // Morph full image:
 
 Morph.prototype.fullImageClassic = function () {
-    var fb = this.cachedFullBounds || this.fullBounds(), // use the cache since fullDrawOn() will
+    // use the cache since fullDrawOn() will
+    var fb = this.cachedFullBounds || this.fullBounds(),
         img = newCanvas(fb.extent()),
         ctx = img.getContext('2d');
     ctx.translate(-fb.origin.x, -fb.origin.y);
@@ -4067,12 +4068,7 @@ Morph.prototype.developersMenu = function () {
         menu = new MenuMorph(this, this.constructor.name ||
             this.constructor.toString().split(' ')[1].split('(')[0]);
     if (userMenu) {
-        menu.addItem(
-            'user features...',
-            function () {
-                userMenu.popUpAtHand(world);
-            }
-        );
+        menu.addMenu('user features', userMenu);
         menu.addLine();
     }
     menu.addItem(
@@ -7470,6 +7466,7 @@ MenuMorph.prototype.init = function (target, title, environment, fontSize) {
     this.isListContents = false;
     this.hasFocus = false;
     this.selection = null;
+    this.submenu = null;
 
     // initialize inherited properties:
     MenuMorph.uber.init.call(this);
@@ -7489,7 +7486,8 @@ MenuMorph.prototype.addItem = function (
     color,
     bold, // bool
     italic, // bool
-    doubleClickAction // optional, when used as list contents
+    doubleClickAction, // optional, when used as list contents
+    shortcut // optional string, icon (Morph or Canvas) or tuple [icon, string]
 ) {
     /*
     labelString is normally a single-line string. But it can also be one
@@ -7506,15 +7504,20 @@ MenuMorph.prototype.addItem = function (
         color,
         bold || false,
         italic || false,
-        doubleClickAction]);
+        doubleClickAction,
+        shortcut]);
+};
+
+MenuMorph.prototype.addMenu = function (label, aMenu, indicator) {
+    this.addPair(label, aMenu, isNil(indicator) ? '\u25ba' : indicator);
+};
+
+MenuMorph.prototype.addPair = function (label, action, shortcut, hint) {
+    this.addItem(label, action, hint, null, null, null, null, shortcut);
 };
 
 MenuMorph.prototype.addLine = function (width) {
     this.items.push([0, width || 1]);
-};
-
-MenuMorph.prototype.addSubmenu = function (key, submenu) {
-	this.addItem(key, key, null, null, null, null, null, submenu);
 };
 
 MenuMorph.prototype.createLabel = function () {
@@ -7602,7 +7605,8 @@ MenuMorph.prototype.drawNew = function () {
                 tuple[3], // color
                 tuple[4], // bold
                 tuple[5], // italic
-                tuple[6] // doubleclick action
+                tuple[6], // doubleclick action
+                tuple[7] // shortcut
             );
         }
         if (isLine) {
@@ -7631,9 +7635,12 @@ MenuMorph.prototype.maxWidth = function () {
         }
     }
     this.children.forEach(function (item) {
-
         if (item instanceof MenuItemMorph) {
-            w = Math.max(w, item.children[0].width() + 8);
+            w = Math.max(
+                w,
+                item.label.width() + 8 +
+                    (item.shortcut ? item.shortcut.width() + 4 : 0)
+            );
         } else if ((item instanceof StringFieldMorph) ||
                 (item instanceof ColorPickerMorph) ||
                 (item instanceof SliderMorph)) {
@@ -7653,6 +7660,7 @@ MenuMorph.prototype.adjustWidths = function () {
     this.children.forEach(function (item) {
         item.silentSetWidth(w);
         if (item instanceof MenuItemMorph) {
+            item.fixLayout();
             isSelected = (item.image === item.pressImage);
             item.createBackgrounds();
             if (isSelected) {
@@ -7681,25 +7689,18 @@ MenuMorph.prototype.unselectAllItems = function () {
 };
 
 MenuMorph.prototype.popup = function (world, pos) {
-	var submenu = (this.parent instanceof MenuMorph);
-	// submenu is True if this menu is a submenu,
-	// so that we don't make it the world's activeMenu nor
-	// destroy its parent menu.
-
     this.drawNew();
     this.setPosition(pos);
     this.addShadow(new Point(2, 2), 80);
     this.keepWithin(world);
-    if (world.activeMenu && !submenu) {
+    if (world.activeMenu) {
         world.activeMenu.destroy();
     }
     if (this.items.length < 1 && !this.title) { // don't show empty menus
         return;
     }
-    if (!submenu) {
-        world.add(this);
-        world.activeMenu = this;
-    }
+    world.add(this);
+    world.activeMenu = this;
     this.world = world; // optionally enable keyboard support
     this.fullChanged();
 };
@@ -7731,6 +7732,24 @@ MenuMorph.prototype.popUpCenteredInWorld = function (world) {
     );
 };
 
+// MenuMorph submenus
+
+MenuMorph.prototype.closeRootMenu = function () {
+    if (this.parent instanceof MenuMorph) {
+        this.parent.closeRootMenu();
+    } else {
+        this.destroy();
+    }
+};
+
+MenuMorph.prototype.closeSubmenu = function () {
+    if (this.submenu) {
+        this.submenu.destroy();
+        this.submenu = null;
+        this.unselectAllItems();
+    }
+};
+
 // MenuMorph keyboard accessibility
 
 MenuMorph.prototype.getFocus = function () {
@@ -7741,20 +7760,25 @@ MenuMorph.prototype.getFocus = function () {
 };
 
 MenuMorph.prototype.processKeyDown = function (event) {
-    //console.log(event.keyCode);
+    // console.log(event.keyCode);
     switch (event.keyCode) {
     case 13: // 'enter'
     case 32: // 'space'
         if (this.selection) {
             this.selection.mouseClickLeft();
+            if (this.submenu) {
+                this.submenu.getFocus();
+            }
         }
         return;
     case 27: // 'esc'
         return this.destroy();
+    case 37: // 'left arrow'
+        return this.leaveSubmenu();
     case 38: // 'up arrow'
         return this.selectUp();
-	case 39: // 'right arrow'
-		return this.selectRight();
+    case 39: // 'right arrow'
+        return this.enterSubmenu();
     case 40: // 'down arrow'
         return this.selectDown();
     default:
@@ -7818,19 +7842,23 @@ MenuMorph.prototype.selectDown = function () {
     this.select(triggers[idx]);
 };
 
-MenuMorph.prototype.selectRight = function () {
-    var triggers, idx;
-
-    triggers = this.children.filter(function (each) {
-        return each instanceof MenuItemMorph;
-    });
-    if (!this.selection) {
-        return;
+MenuMorph.prototype.enterSubmenu = function () {
+    if (this.selection && this.selection.action instanceof MenuMorph) {
+        this.selection.popUpSubmenu();
+        if (this.submenu) {
+            this.submenu.getFocus();
+        }
     }
-	if (this.selection.doubleClickAction instanceof MenuMorph) {
-		this.selection.mouseEnter();
-		this.selection.doubleClickAction.getFocus();
-	}
+};
+
+MenuMorph.prototype.leaveSubmenu = function () {
+    var menu = this.parent;
+    if (this.parent instanceof MenuMorph) {
+        menu.submenu = null;
+        menu.hasFocus = true;
+        this.destroy();
+        menu.world.keyboardReceiver = menu;
+    }
 };
 
 MenuMorph.prototype.select = function (aMenuItem) {
@@ -7840,44 +7868,10 @@ MenuMorph.prototype.select = function (aMenuItem) {
     this.selection = aMenuItem;
 };
 
-MenuMorph.prototype.mouseLeave = function () {
-    if (this.parent instanceof MenuMorph) {
-        // this is a submenu so we vanish when lose focus
-		this.destroy();
-    };
-}
-            
-
 MenuMorph.prototype.destroy = function () {
-var subitems = function(menu) {
-        return menu.children.filter(function (child) {
-                    return (child instanceof MenuItemMorph) &&
-                           (child.doubleClickAction instanceof MenuMorph);
-			} );
-	};
-
     if (this.hasFocus) {
-		if (this.parent instanceof MenuMorph) {
-			this.world.keyboardReceiver = this.parent;
-			this.parent.selectFirst();
-		} else {
-			this.world.keyboardReceiver = null;
-		}
+        this.world.keyboardReceiver = null;
     }
-
-    if ((this.parent instanceof MenuMorph) && this.world) {
-        // If I'm a submenu, un-highlight the item pointing to me.
-		subitems(this.parent).forEach(function (item) {
-            item.image = item.normalImage;
-            item.changed();
-        } )
-    };
-
-    // Also kill my submenus if any.
-    subitems(this).forEach(function (item) {
-                              item.doubleClickAction.destroy();
-                          });
-
     MenuMorph.uber.destroy.call(this);
 };
 
@@ -9158,6 +9152,7 @@ TriggerMorph.prototype.init = function (
     this.labelString = labelString || null;
     this.label = null;
     this.hint = hint || null; // null, String, or Function
+    this.schedule = null; // animation slot for displaying hints
     this.fontSize = fontSize || MorphicPreferences.menuFontSize;
     this.fontStyle = fontStyle || 'sans-serif';
     this.highlightColor = new Color(192, 192, 192);
@@ -9251,6 +9246,9 @@ TriggerMorph.prototype.trigger = function () {
         treat it as function property of target and execute it
         for selector-like actions
     */
+    if (this.schedule) {
+        this.schedule.isActive = false;
+    }
     if (typeof this.target === 'function') {
         if (typeof this.action === 'function') {
             this.target.call(this.environment, this.action.call(), this);
@@ -9270,6 +9268,9 @@ TriggerMorph.prototype.triggerDoubleClick = function () {
     // same as trigger() but use doubleClickAction instead of action property
     // note that specifying a doubleClickAction is optional
     if (!this.doubleClickAction) {return; }
+    if (this.schedule) {
+        this.schedule.isActive = false;
+    }
     if (typeof this.target === 'function') {
         if (typeof this.doubleClickAction === 'function') {
             this.target.call(
@@ -9303,6 +9304,9 @@ TriggerMorph.prototype.mouseEnter = function () {
 TriggerMorph.prototype.mouseLeave = function () {
     this.image = this.normalImage;
     this.changed();
+    if (this.schedule) {
+        this.schedule.isActive = false;
+    }
     if (this.hint) {
         this.world().hand.destroyTemporaries();
     }
@@ -9330,15 +9334,17 @@ TriggerMorph.prototype.rootForGrab = function () {
 // TriggerMorph bubble help:
 
 TriggerMorph.prototype.bubbleHelp = function (contents) {
-    var myself = this;
-    this.fps = 2;
-    this.step = function () {
-        if (this.bounds.containsPoint(this.world().hand.position())) {
-            myself.popUpbubbleHelp(contents);
-        }
-        myself.fps = 0;
-        delete myself.step;
-    };
+    var world = this.world(),
+        myself = this;
+    this.schedule = new Animation(
+        nop,
+        nop,
+        0,
+        500,
+        nop,
+        function () {myself.popUpbubbleHelp(contents); }
+    );
+    world.animations.push(this.schedule);
 };
 
 TriggerMorph.prototype.popUpbubbleHelp = function (contents) {
@@ -9375,8 +9381,14 @@ function MenuItemMorph(
     color,
     bold,
     italic,
-    doubleClickAction // optional when used as list morph item
+    doubleClickAction, // optional when used as list morph item
+    shortcut // optional string, Morph, Canvas or tuple: [icon, string]
 ) {
+    // additional properties:
+    this.shortcutString = shortcut || null;
+    this.shortcut = null;
+
+    // initialize inherited properties:
     this.init(
         target,
         action,
@@ -9393,31 +9405,58 @@ function MenuItemMorph(
 }
 
 MenuItemMorph.prototype.createLabel = function () {
-    var icon, lbl, np;
-    if (this.label !== null) {
+    var w, h;
+    if (this.label) {
         this.label.destroy();
     }
-    if (isString(this.labelString)) {
-        this.label = this.createLabelString(this.labelString);
-    } else if (this.labelString instanceof Array) {
+    this.label = this.createLabelPart(this.labelString);
+    this.add(this.label);
+    w = this.label.width();
+    h = this.label.height();
+    if (this.shortcut) {
+        this.shortcut.destroy();
+    }
+    if (this.shortcutString) {
+        this.shortcut = this.createLabelPart(this.shortcutString);
+        w += this.shortcut.width() + 4;
+        h = Math.max(h, this.shortcut.height());
+        this.add(this.shortcut);
+    }
+    this.silentSetExtent(new Point(w + 8, h));
+    this.fixLayout();
+};
+
+MenuItemMorph.prototype.fixLayout = function () {
+    var cntr = this.center();
+    this.label.setCenter(cntr);
+    this.label.setLeft(this.left() + 4);
+    if (this.shortcut) {
+        this.shortcut.setCenter(cntr);
+        this.shortcut.setRight(this.right() - 4);
+    }
+};
+
+MenuItemMorph.prototype.createLabelPart = function (source) {
+    var part, icon, lbl;
+    if (isString(source)) {
+        return this.createLabelString(source);
+    }
+    if (source instanceof Array) {
         // assume its pattern is: [icon, string]
-        this.label = new Morph();
-        this.label.alpha = 0; // transparent
-        icon = this.createIcon(this.labelString[0]);
-        this.label.add(icon);
-        lbl = this.createLabelString(this.labelString[1]);
-        this.label.add(lbl);
+        part = new Morph();
+        part.alpha = 0; // transparent
+        icon = this.createIcon(source[0]);
+        part.add(icon);
+        lbl = this.createLabelString(source[1]);
+        part.add(lbl);
         lbl.setCenter(icon.center());
         lbl.setLeft(icon.right() + 4);
-        this.label.bounds = (icon.bounds.merge(lbl.bounds));
-        this.label.drawNew();
-    } else { // assume it's either a Morph or a Canvas
-        this.label = this.createIcon(this.labelString);
+        part.bounds = (icon.bounds.merge(lbl.bounds));
+        part.drawNew();
+        return part;
     }
-    this.silentSetExtent(this.label.extent().add(new Point(8, 0)));
-    np = this.position().add(new Point(4, 0));
-    this.label.bounds = np.extent(this.label.extent());
-    this.add(this.label);
+    // assume it's either a Morph or a Canvas
+    return this.createIcon(source);
 };
 
 MenuItemMorph.prototype.createIcon = function (source) {
@@ -9455,37 +9494,36 @@ MenuItemMorph.prototype.createLabelString = function (string) {
 // MenuItemMorph events:
 
 MenuItemMorph.prototype.mouseEnter = function () {
+    var menu = this.parentThatIsA(MenuMorph);
+    if (this.isShowingSubmenu()) {
+        return;
+    }
+    if (menu) {
+        menu.closeSubmenu();
+    }
     if (!this.isListItem()) {
         this.image = this.highlightImage;
         this.changed();
     }
-    if (this.doubleClickAction instanceof MenuMorph) {
-        if (!contains(this.parent.children, this.doubleClickAction)) {
-            this.parent.addChild(this.doubleClickAction);
-		}
-        this.doubleClickAction.popup(this.world(),
-                                     new Point(this.parent.bounds.right()-10,
-                                               this.position().y-4));
-    }
-    if (this.hint) {
+    if (this.action instanceof MenuMorph) {
+        this.delaySubmenu();
+    } else if (this.hint) {
         this.bubbleHelp(this.hint);
     }
 };
 
 MenuItemMorph.prototype.mouseLeave = function () {
-    if (this.doubleClickAction instanceof MenuMorph) {
-		if (!contains(this.world().hand.allMorphsAtPointer(),
-                      this.doubleClickAction)) {
-            this.doubleClickAction.destroy();
+    if (!this.isListItem()) {
+        if (this.isShowingSubmenu()) {
+            this.image = this.highlightImage;
+        } else {
             this.image = this.normalImage;
-            this.changed();
         }
-    } else if (!this.isListItem()) {
-        this.image = this.normalImage;
         this.changed();
     }
-
-
+    if (this.schedule) {
+        this.schedule.isActive = false;
+    }
     if (this.hint) {
         this.world().hand.destroyTemporaries();
     }
@@ -9495,10 +9533,8 @@ MenuItemMorph.prototype.mouseDownLeft = function (pos) {
     if (this.isListItem()) {
         this.parent.unselectAllItems();
         this.escalateEvent('mouseDownLeft', pos);
-        this.image = this.pressImage;
-    } else if (!(this.doubleClickAction instanceof MenuMorph)) {
-        this.image = this.pressImage;
-	}
+    }
+    this.image = this.pressImage;
     this.changed();
 };
 
@@ -9509,23 +9545,15 @@ MenuItemMorph.prototype.mouseMove = function () {
 };
 
 MenuItemMorph.prototype.mouseClickLeft = function () {
-	if (!(this.doubleClickAction instanceof MenuMorph)) {
+    if (this.action instanceof MenuMorph) {
+        this.popUpSubmenu();
+    } else {
         if (!this.isListItem()) {
-            var topmenu = this.parent;
-            while (topmenu.parent instanceof MenuMorph) {
-                topmenu = topmenu.parent;
-            }
-            topmenu.destroy();
-            this.root().activeMenu = null;
+            this.parent.closeRootMenu();
+            this.world().activeMenu = null;
         }
         this.trigger();
     }
-};
-
-MenuItemMorph.prototype.mouseDoubleClick = function () {
-    if (!(this.doubleClickAction instanceof MenuMorph)) {
-        this.triggerDoubleClick();
-	}
 };
 
 MenuItemMorph.prototype.isListItem = function () {
@@ -9540,6 +9568,44 @@ MenuItemMorph.prototype.isSelectedListItem = function () {
         return this.image === this.pressImage;
     }
     return false;
+};
+
+MenuItemMorph.prototype.isShowingSubmenu = function () {
+    var menu = this.parentThatIsA(MenuMorph);
+    if (menu && (this.action instanceof MenuMorph)) {
+        return menu.submenu === this.action;
+    }
+    return false;
+};
+
+// MenuItemMorph submenus:
+
+MenuItemMorph.prototype.delaySubmenu = function () {
+    var world = this.world(),
+        myself = this;
+    this.schedule = new Animation(
+        nop,
+        nop,
+        0,
+        500,
+        nop,
+        function () {myself.popUpSubmenu(); }
+    );
+    world.animations.push(this.schedule);
+};
+
+MenuItemMorph.prototype.popUpSubmenu = function () {
+    var menu = this.parentThatIsA(MenuMorph);
+    if (!(this.action instanceof MenuMorph)) {return; }
+    this.action.drawNew();
+    this.action.setPosition(this.topRight().subtract(new Point(0, 5)));
+    this.action.addShadow(new Point(2, 2), 80);
+    this.action.keepWithin(this.world());
+    if (this.action.items.length < 1 && !this.action.title) {return; }
+    menu.add(this.action);
+    menu.submenu = this.action;
+    menu.submenu.world = menu.world; // keyboard control
+    this.action.fullChanged();
 };
 
 // FrameMorph //////////////////////////////////////////////////////////
