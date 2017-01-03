@@ -72,7 +72,7 @@ isRetinaSupported, SliderMorph, Animation*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2016-December-27';
+modules.gui = '2016-December-29';
 
 // Declarations
 
@@ -2706,7 +2706,8 @@ IDE_Morph.prototype.settingsMenu = function () {
         'toggleVariableFrameRate',
         StageMorph.prototype.frameRate,
         'uncheck for greater speed\nat variable frame rates',
-        'check for smooth, predictable\nanimations across computers'
+        'check for smooth, predictable\nanimations across computers',
+        true
     );
     addPreference(
         'Flat line ends',
