@@ -6343,7 +6343,7 @@ LibraryImportDialogMorph.prototype.installLibrariesList = function () {
         this.librariesData,
         function (element) {return element.name; },
         null,
-        this.importLibrary
+        function () {myself.importLibrary(); }
     );
 
     this.fixListFieldItemColors();
@@ -6445,6 +6445,7 @@ LibraryImportDialogMorph.prototype.fixLayout = function () {
         this.listField.setPosition(this.body.position());
         this.palette.setPosition(this.listField.topRight().add(
             new Point(thin, 0)
+        
         ));
         this.notesField.setPosition(this.pallete.bottomLeft().add(
             new Point(0, thin)
