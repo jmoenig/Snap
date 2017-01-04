@@ -2879,7 +2879,7 @@ IDE_Morph.prototype.projectMenu = function () {
             function() {
                 myself.saveFileAs(
                     JSON.stringify(SnapUndo.allEvents, null, 2),
-                    'text/json;charset=utf-8,',
+                    'text/json;charset=utf-8',
                     'replay-actions'
                 );
             },
