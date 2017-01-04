@@ -9,7 +9,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2016 by Jens Mönig
+    Copyright (C) 2017 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -82,7 +82,7 @@ SpeechBubbleMorph, RingMorph, isNil, FileReader, TableDialogMorph,
 BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph*/
 
-modules.objects = '2016-December-27';
+modules.objects = '2017-January-03';
 
 var SpriteMorph;
 var StageMorph;
@@ -2272,7 +2272,11 @@ SpriteMorph.prototype.freshPalette = function (category) {
             });
         }
 
-        menu.addItem('find blocks...', function () {myself.searchBlocks(); });
+        menu.addPair(
+            'find blocks...',
+            function () {myself.searchBlocks(); },
+            '⌘F'
+        );
         if (canHidePrimitives()) {
             menu.addItem(
                 'hide primitives',

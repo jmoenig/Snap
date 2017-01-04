@@ -3228,6 +3228,20 @@ http://snap.berkeley.edu/run#cloud:Username=jens&ProjectName=rotation
 * BYOB: Disabled hover-help for custom blocks (some people find it annoying)
 * GUI: Hide setting for “prefer smooth animations” (now - mostly - redundant)
 
+161231
+------
+* Morphic: support for menu shortcuts (ongoing)
+* GUI, Blocks: menu shortcuts (experimental)
+
+170102
+------
+* Morphic: use animations to schedule tool tips
+
+170103
+------
+* Hierarchical menus, thanks, Brian!
+* Tweaks to hierarchical menus
+
 
 == v4.10 === (in development)
 
@@ -3242,6 +3256,7 @@ Features:
 * svg support for images from the web (svg files have been supported for a long time)
 * use media dialog for browsing and importing sounds
 * highly experimental infix-expression-to-reporter parser. Thanks, Bernat, for the brilliant idea to add it to the search-blocks field!
+* hierarchical menus, also for custom blocks, thanks, Brian!
 
 Fixes:
 * Music (play note) to work again in new and recent browser versions (Chrome 55)

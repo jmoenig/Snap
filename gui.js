@@ -9,7 +9,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2016 by Jens Mönig
+    Copyright (C) 2017 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -72,7 +72,7 @@ isRetinaSupported, SliderMorph, Animation*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2016-December-29';
+modules.gui = '2017-January-03';
 
 // Declarations
 
@@ -2798,9 +2798,9 @@ IDE_Morph.prototype.projectMenu = function () {
     menu = new MenuMorph(this);
     menu.addItem('Project notes...', 'editProjectNotes');
     menu.addLine();
-    menu.addItem('New', 'createNewProject');
-    menu.addItem('Open...', 'openProjectsBrowser');
-    menu.addItem('Save', "save");
+    menu.addPair('New', 'createNewProject', '⌘N');
+    menu.addPair('Open...', 'openProjectsBrowser', '⌘O');
+    menu.addPair('Save', "save", '⌘S');
     menu.addItem('Save As...', 'saveProjectsBrowser');
     menu.addLine();
     menu.addItem(
@@ -3209,7 +3209,7 @@ IDE_Morph.prototype.aboutSnap = function () {
         world = this.world();
 
     aboutTxt = 'Snap! 4.0.10 - dev -\nBuild Your Own Blocks\n\n'
-        + 'Copyright \u24B8 2016 Jens M\u00F6nig and '
+        + 'Copyright \u24B8 2017 Jens M\u00F6nig and '
         + 'Brian Harvey\n'
         + 'jens@moenig.org, bh@cs.berkeley.edu\n\n'
 

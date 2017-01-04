@@ -9,7 +9,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2016 by Jens Mönig
+    Copyright (C) 2017 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -149,7 +149,7 @@ isSnapObject, copy, PushButtonMorph, SpriteIconMorph, Process, AlignmentMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2016-December-27';
+modules.blocks = '2017-January-03';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -5914,7 +5914,7 @@ ScriptsMorph.prototype.userMenu = function () {
     if (this.dropRecord) {
         if (this.dropRecord.lastRecord) {
             hasUndropQueue = true;
-            menu.addItem(
+            menu.addPair(
                 [
                     new SymbolMorph(
                         'turnBack',
@@ -5923,12 +5923,13 @@ ScriptsMorph.prototype.userMenu = function () {
                     localize('undrop')
                 ],
                 'undrop',
+                '⌘Z',
                 'undo the last\nblock drop\nin this pane'
             );
         }
         if (this.dropRecord.nextRecord) {
             hasUndropQueue = true;
-            menu.addItem(
+            menu.addPair(
                 [
                     new SymbolMorph(
                         'turnForward',
@@ -5937,6 +5938,7 @@ ScriptsMorph.prototype.userMenu = function () {
                     localize('redrop')
                 ],
                 'redrop',
+                '⌘Y',
                 'redo the last undone\nblock drop\nin this pane'
             );
         }
@@ -7722,8 +7724,19 @@ InputSlotMorph.prototype.setContents = function (aStringOrFloat) {
 // InputSlotMorph drop-down menu:
 
 InputSlotMorph.prototype.dropDownMenu = function (enableKeyboard) {
-    var choices = this.choices,
-        key,
+    var menu = this.menuFromDict(this.choices);
+    if (menu.items.length > 0) {
+        if (enableKeyboard) {
+            menu.popup(this.world(), this.bottomLeft());
+            menu.getFocus();
+        } else {
+            menu.popUpAtHand(this.world());
+        }
+    }
+};
+
+InputSlotMorph.prototype.menuFromDict = function (choices, noEmptyOption) {
+    var key,
         menu = new MenuMorph(
             this.setContents,
             null,
@@ -7736,31 +7749,24 @@ InputSlotMorph.prototype.dropDownMenu = function (enableKeyboard) {
     } else if (isString(choices)) {
         choices = this[choices]();
     }
-    if (!choices) {
-        return null;
+    if (!noEmptyOption) {
+        menu.addItem(' ', null);
     }
-    menu.addItem(' ', null);
     for (key in choices) {
         if (Object.prototype.hasOwnProperty.call(choices, key)) {
             if (key[0] === '~') {
                 menu.addLine();
             // } else if (key.indexOf('§_def') === 0) {
             //     menu.addItem(choices[key].blockInstance(), choices[key]);
+            } else if (choices[key] instanceof Object &&
+                    !(choices[key] instanceof Array)) {
+                menu.addMenu(key, this.menuFromDict(choices[key], true));
             } else {
                 menu.addItem(key, choices[key]);
             }
         }
     }
-    if (menu.items.length > 0) {
-        if (enableKeyboard) {
-            menu.popup(this.world(), this.bottomLeft());
-            menu.getFocus();
-        } else {
-            menu.popUpAtHand(this.world());
-        }
-    } else {
-        return null;
-    }
+    return menu;
 };
 
 InputSlotMorph.prototype.messagesMenu = function () {
@@ -7793,7 +7799,6 @@ InputSlotMorph.prototype.messagesMenu = function () {
             myself.world()
         );
     };
-
     return dict;
 };
 
@@ -7825,7 +7830,6 @@ InputSlotMorph.prototype.messagesReceivedMenu = function () {
             myself.world()
         );
     };
-
     return dict;
 };
 
