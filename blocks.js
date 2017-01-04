@@ -2390,7 +2390,7 @@ BlockMorph.prototype.userMenu = function () {
         if (this.selector === 'reportGetVar') {
             menu.addLine();
             menu.addItem(
-                'rename all occurrences...',
+                'rename all in this scope...',
                 'refactorThisVar'
             );
         }
