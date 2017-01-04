@@ -2327,6 +2327,10 @@ ActionManager.OwnerFor.moveBlock = function(block, target) {
 };
 
 // Can't undo
+ActionManager.OwnerFor.renameSprite =
+ActionManager.OwnerFor.toggleDraggable =
+ActionManager.OwnerFor.setRotationStyle =
+
 ActionManager.OwnerFor.addVariable =
 ActionManager.OwnerFor.deleteVariable =
 
