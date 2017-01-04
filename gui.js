@@ -569,14 +569,20 @@ IDE_Morph.prototype.setActiveEditor = function (dialog) {
 };
 
 IDE_Morph.prototype.onSetActive = function () {
+    // TODO: Update this
     if (this.currentTab === 'scripts') {
         this.currentSprite.scripts.updateUndoControls();
+    } else {
+        this.spriteEditor.updateUndoControls();
     }
 };
 
 IDE_Morph.prototype.onUnsetActive = function () {
+    // TODO: Update this
     if (this.currentTab === 'scripts') {
         this.currentSprite.scripts.hideUndoControls();
+    } else {
+        this.spriteEditor.updateUndoControls();
     }
 };
 
@@ -588,7 +594,8 @@ IDE_Morph.prototype.getActiveEntity = function () {
     if (this.activeEditor instanceof BlockEditorMorph) {
         return this.activeEditor.definition;
     }
-    return this.currentSprite;
+    // TODO: Add the tab type (scripts, costumes, sounds)
+    return this.currentSprite + '/' + this.currentTab;
 };
 
 IDE_Morph.prototype.createControlBar = function () {
@@ -1405,6 +1412,7 @@ IDE_Morph.prototype.createSpriteEditor = function () {
 
         this.spriteEditor.acceptsDrops = false;
         this.spriteEditor.contents.acceptsDrops = false;
+        this.spriteEditor.updateUndoControls();
     } else if (this.currentTab === 'sounds') {
         this.spriteEditor = new JukeboxMorph(
             this.currentSprite,
@@ -1415,6 +1423,7 @@ IDE_Morph.prototype.createSpriteEditor = function () {
         this.spriteEditor.updateSelection();
         this.spriteEditor.acceptDrops = false;
         this.spriteEditor.contents.acceptsDrops = false;
+        this.spriteEditor.updateUndoControls();
     } else {
         this.spriteEditor = new Morph();
         this.spriteEditor.color = this.groupColor;
@@ -7406,6 +7415,7 @@ WardrobeMorph.prototype.updateList = function () {
     this.changed();
 
     this.updateSelection();
+    this.onNextStep = this.updateUndoControls;
 };
 
 WardrobeMorph.prototype.updateSelection = function () {
@@ -7467,6 +7477,17 @@ WardrobeMorph.prototype.reactToDropOf = function (icon) {
     this.sprite.costumes.add(costume, idx + 1);
     this.updateList();
     icon.mouseClickLeft(); // select
+};
+
+// Undo/Redo support
+WardrobeMorph.prototype.updateUndoControls =
+    ScriptsMorph.prototype.updateUndoControls;
+
+WardrobeMorph.prototype.addUndoControls =
+    ScriptsMorph.prototype.addUndoControls;
+
+WardrobeMorph.prototype.definitionOrSprite = function() {
+    return this.sprite.id + '/costumes';
 };
 
 // SoundIconMorph ///////////////////////////////////////////////////////
@@ -7753,6 +7774,7 @@ JukeboxMorph.prototype.updateList = function () {
     this.changed();
 
     this.updateSelection();
+    this.onNextStep = this.updateUndoControls;
 };
 
 JukeboxMorph.prototype.updateSelection = function () {
@@ -7798,6 +7820,17 @@ JukeboxMorph.prototype.reactToDropOf = function (icon) {
     });
     this.sprite.sounds.add(costume, idx);
     this.updateList();
+};
+
+// Undo/Redo support
+JukeboxMorph.prototype.updateUndoControls =
+    ScriptsMorph.prototype.updateUndoControls;
+
+JukeboxMorph.prototype.addUndoControls =
+    ScriptsMorph.prototype.addUndoControls;
+
+JukeboxMorph.prototype.definitionOrSprite = function() {
+    return this.sprite.id + '/sounds';
 };
 
 // StageHandleMorph ////////////////////////////////////////////////////////

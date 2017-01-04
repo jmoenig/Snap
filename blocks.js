@@ -5863,10 +5863,10 @@ ScriptsMorph.prototype.definitionOrSprite = function () {
         owner = this.owner;
 
     if (gparent instanceof BlockEditorMorph) {
-        owner = gparent.definition;
+        return owner = gparent.definition;
     }
 
-    return owner;
+    return owner.id + '/scripts';
 };
 
 ScriptsMorph.prototype.addUndoControls = function () {
@@ -5914,6 +5914,7 @@ ScriptsMorph.prototype.updateUndoControls = function () {
     if (!sf.toolBar) {
         sf.toolBar = this.addUndoControls();
         sf.add(sf.toolBar);
+        changed = true;
     }
 
     if (SnapUndo.canUndo(owner)) {
