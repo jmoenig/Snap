@@ -3137,14 +3137,24 @@ BlockMorph.prototype.refactorThisVar = function (justTheTemplate) {
                         receiver.variables.setVar(newName, oldValue);
 
                         if (oldWatcher && oldWatcher.isVisible) {
-                            newWatcher = receiver.toggleVariableWatcher(newName, false);
+                            newWatcher = receiver.toggleVariableWatcher(
+                                newName,
+                                false
+                            );
                             newWatcher.setPosition(oldWatcher.position());
                         }
 
                         if (!justTheTemplate) {
-                            receiver.refactorVariableInstances(oldName, newName, false);
+                            receiver.refactorVariableInstances(
+                                oldName,
+                                newName,
+                                false
+                            );
                             receiver.customBlocks.forEach(function (eachBlock) {
-                                eachBlock.body.expression.refactorVarInStack(oldName, newName);
+                                eachBlock.body.expression.refactorVarInStack(
+                                    oldName,
+                                    newName
+                                );
                             });
                         }
                     }
@@ -3170,21 +3180,40 @@ BlockMorph.prototype.refactorThisVar = function (justTheTemplate) {
                         ide.globalVariables.setVar(newName, oldValue);
 
                         if (oldWatcher && oldWatcher.isVisible) {
-                            newWatcher = receiver.toggleVariableWatcher(newName, true);
+                            newWatcher = receiver.toggleVariableWatcher(
+                                newName,
+                                true
+                            );
                             newWatcher.setPosition(oldWatcher.position());
                         }
 
                         if (!justTheTemplate) {
-                            stage.refactorVariableInstances(oldName, newName, true);
+                            stage.refactorVariableInstances(
+                                oldName,
+                                newName,
+                                true
+                            );
                             stage.globalBlocks.forEach(function (eachBlock) {
-                                eachBlock.body.expression.refactorVarInStack(oldName, newName);
+                                eachBlock.body.expression.refactorVarInStack(
+                                    oldName,
+                                    newName
+                                );
                             });
 
                             stage.forAllChildren(function (child) {
                                 if (child instanceof SpriteMorph) {
-                                    child.refactorVariableInstances(oldName, newName, true);
-                                    child.customBlocks.forEach(function (eachBlock) {
-                                        eachBlock.body.expression.refactorVarInStack(oldName, newName);
+                                    child.refactorVariableInstances(
+                                        oldName,
+                                        newName,
+                                        true
+                                    );
+                                    child.customBlocks.forEach(
+                                        function (eachBlock) {
+                                            eachBlock.body.expression
+                                                .refactorVarInStack(
+                                                    oldName,
+                                                    newName
+                                                );
                                     });
                                 }
                             });
