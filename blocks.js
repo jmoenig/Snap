@@ -145,11 +145,12 @@ radians, useBlurredShadows, SpeechBubbleMorph, modules, StageMorph,
 fontHeight, TableFrameMorph, SpriteMorph, Context, ListWatcherMorph,
 CellMorph, DialogBoxMorph, BlockInputFragmentMorph, PrototypeHatBlockMorph,
 Costume, IDE_Morph, BlockDialogMorph, BlockEditorMorph, localize, isNil,
-isSnapObject, copy, PushButtonMorph, SpriteIconMorph, Process, AlignmentMorph*/
+isSnapObject, copy, PushButtonMorph, SpriteIconMorph, Process, AlignmentMorph,
+CustomCommandBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2017-January-03';
+modules.blocks = '2017-January-04';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -710,7 +711,7 @@ SyntaxElementMorph.prototype.definesScriptVariable = function (name) {
                 || (this.blockSpec && this.blockSpec.match('%upvar')))
             && (detect(this.inputs()[0].allInputs(), function (input) {
                 return (input.selector === 'reportGetVar'
-                        && input.blockSpec === name)
+                        && input.blockSpec === name);
             })));
 };
 
@@ -2387,11 +2388,12 @@ BlockMorph.prototype.userMenu = function () {
                 );
             }
         } 
-        if (this.selector === 'reportGetVar') {
+        if (this.selector === 'reportGetVar' && !this.isInheritedVariable()) {
             menu.addLine();
             menu.addItem(
-                'rename all in this scope...',
-                'refactorThisVar'
+                'rename all...',
+                'refactorThisVar',
+                'rename all blocks that\naccess this variable'
             );
         }
     } else { 
@@ -2399,28 +2401,33 @@ BlockMorph.prototype.userMenu = function () {
     }
 
     if (this.selector === 'reportGetVar') {
-        blck = this.fullCopy();
-        blck.addShadow();
-        menu.addItem(
-            'rename just here...',
-            function () {
-                if (this.isTemplate) {
-                    myself.refactorThisVar(true); // just the template
-                } else {
-                    new DialogBoxMorph(
-                        myself,
-                        myself.userSetSpec,
-                        myself
-                    ).prompt(
-                        "Variable name",
-                        myself.blockSpec,
-                        world,
-                        blck.fullImage(), // pic
-                        InputSlotMorph.prototype.getVarNamesDict.call(myself)
-                    );
-                }
-            }
-        );
+        if (!(this.isInheritedVariable())) {
+            blck = this.fullCopy();
+            blck.addShadow();
+            menu.addItem(
+                'rename...',
+                function () {
+                    if (this.isTemplate) {
+                        myself.refactorThisVar(true); // just the template
+                    } else {
+                        new DialogBoxMorph(
+                            myself,
+                            myself.userSetSpec,
+                            myself
+                        ).prompt(
+                            "Variable name",
+                            myself.blockSpec,
+                            world,
+                            blck.fullImage(), // pic
+                            InputSlotMorph.prototype.getVarNamesDict.call(
+                                myself
+                            )
+                        );
+                    }
+                },
+                'rename only\nthis reporter'
+            );
+        }
         if (this.isTemplate) {
             return menu;
         }
@@ -2587,6 +2594,19 @@ BlockMorph.prototype.hidePrimitive = function () {
     if (cat === 'lists') {cat = 'variables'; }
     ide.flushBlocksCache(cat);
     ide.refreshPalette();
+};
+
+BlockMorph.prototype.isInheritedVariable = function () {
+    // private - only for variable getter template inside the palette
+    if (this.isTemplate &&
+            (this.selector === 'reportGetVar') &&
+            (this.parent instanceof FrameMorph)) {
+        return contains(
+            this.receiver().inheritedVariableNames(),
+            this.blockSpec
+        );
+    }
+    return false;
 };
 
 BlockMorph.prototype.isTransientVariable = function () {
@@ -3080,8 +3100,10 @@ BlockMorph.prototype.refactorThisVar = function (justTheTemplate) {
         ide = this.parentThatIsA(IDE_Morph),
         stage = ide.stage,
         oldWatcher = receiver.findVariableWatcher(oldName),
+        cpy = this.fullCopy(),
         oldValue, newWatcher;
 
+    cpy.addShadow();
     new DialogBoxMorph(
             this,
             function (newName) {
@@ -3178,7 +3200,7 @@ BlockMorph.prototype.refactorThisVar = function (justTheTemplate) {
                 'Variable name',
                 oldName,
                 this.world(),
-                this.fullImage(), // pic
+                cpy.fullImage(), // pic
                 InputSlotMorph.prototype.getVarNamesDict.call(this)
                 );
     
@@ -3188,7 +3210,7 @@ BlockMorph.prototype.refactorThisVar = function (justTheTemplate) {
             'A variable with this name already exists ' +
                 (where || 'in this context') + '.'
             );
-    };
+    }
 };
 
 // BlockMorph drawing
