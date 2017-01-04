@@ -569,20 +569,18 @@ IDE_Morph.prototype.setActiveEditor = function (dialog) {
 };
 
 IDE_Morph.prototype.onSetActive = function () {
-    // TODO: Update this
     if (this.currentTab === 'scripts') {
         this.currentSprite.scripts.updateUndoControls();
-    } else {
+    } else if (this.spriteEditor.updateUndoControls) {
         this.spriteEditor.updateUndoControls();
     }
 };
 
 IDE_Morph.prototype.onUnsetActive = function () {
-    // TODO: Update this
     if (this.currentTab === 'scripts') {
         this.currentSprite.scripts.hideUndoControls();
-    } else {
-        this.spriteEditor.updateUndoControls();
+    } else if (this.spriteEditor.hideUndoControls) {
+        this.spriteEditor.hideUndoControls();
     }
 };
 
@@ -594,7 +592,6 @@ IDE_Morph.prototype.getActiveEntity = function () {
     if (this.activeEditor instanceof BlockEditorMorph) {
         return this.activeEditor.definition;
     }
-    // TODO: Add the tab type (scripts, costumes, sounds)
     return this.currentSprite + '/' + this.currentTab;
 };
 
