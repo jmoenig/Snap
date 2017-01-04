@@ -9,7 +9,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2016 by Jens Mönig
+    Copyright (C) 2017 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph,
 TableFrameMorph, ColorSlotMorph, isSnapObject*/
 
-modules.threads = '2016-December-27';
+modules.threads = '2017-January-04';
 
 var ThreadManager;
 var Process;
@@ -380,7 +380,7 @@ ThreadManager.prototype.doWhen = function (block, stopIt) {
             'the predicate takes\ntoo long for a\ncustom hat block',
             true // suppress errors => handle them right here instead
         ) === true) {
-            this.startProcess(block);
+            this.startProcess(block, null, null, null, null, true); // atomic
         }
     } catch (error) {
         block.addErrorHighlight();
