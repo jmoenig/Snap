@@ -6445,9 +6445,8 @@ LibraryImportDialogMorph.prototype.fixLayout = function () {
         this.listField.setPosition(this.body.position());
         this.palette.setPosition(this.listField.topRight().add(
             new Point(thin, 0)
-        
         ));
-        this.notesField.setPosition(this.pallete.bottomLeft().add(
+        this.notesField.setPosition(this.palette.bottomLeft().add(
             new Point(0, thin)
         ));
     }
@@ -6550,8 +6549,8 @@ LibraryImportDialogMorph.prototype.displayBlocks = function (libraryKey) {
 LibraryImportDialogMorph.prototype.showMessage = function (msgText) {
     var msg = new MenuMorph(null, msgText);
     this.initializePalette();
-    msg.popUpCenteredInWorld(this.palette);
     this.fixLayout();
+    msg.popUpCenteredInWorld(this.palette.contents);
 };
 
 // SpriteIconMorph ////////////////////////////////////////////////////
