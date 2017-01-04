@@ -4415,6 +4415,7 @@ SpriteMorph.prototype.toggleVariableWatcher = function (varName, isGlobal) {
     stage.add(watcher);
     watcher.fixLayout();
     watcher.keepWithin(stage);
+    return watcher;
 };
 
 SpriteMorph.prototype.showingVariableWatcher = function (varName) {
@@ -4815,6 +4816,25 @@ SpriteMorph.prototype.deletableVariableNames = function () {
             }
         )
     );
+};
+
+SpriteMorph.prototype.hasSpriteVariable = function (varName) {
+    return contains(this.variables.names(), varName);
+};
+
+// Variable refactoring
+
+SpriteMorph.prototype.refactorVariableInstances = function (oldName, newName, isGlobal) {
+    if (isGlobal && this.hasSpriteVariable(oldName)) {
+        return;
+    }
+
+    this.scripts.children.forEach(function (child) {
+        if (child instanceof BlockMorph) {
+            child.refactorVarInStack(oldName, newName);
+        }
+    });
+
 };
 
 // SpriteMorph inheritance - custom blocks
@@ -6707,6 +6727,14 @@ StageMorph.prototype.globalVariables
 StageMorph.prototype.inheritedVariableNames = function () {
     return [];
 };
+
+// StageMorph variable refactoring
+
+StageMorph.prototype.hasSpriteVariable
+    = SpriteMorph.prototype.hasSpriteVariable;
+
+StageMorph.prototype.refactorVariableInstances
+    = SpriteMorph.prototype.refactorVariableInstances;
 
 // SpriteBubbleMorph ////////////////////////////////////////////////////////
 
