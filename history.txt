@@ -3250,6 +3250,7 @@ http://snap.berkeley.edu/run#cloud:Username=jens&ProjectName=rotation
 170105
 ------
 * Blocks: refactored variable refactoring code
+* fixed #1604
 
 
 == v4.10 === (in development)

@@ -2329,8 +2329,7 @@ BlockMorph.prototype.userMenu = function () {
         vNames = proc && proc.context && proc.context.outerContext ?
                 proc.context.outerContext.variables.names() : [],
         alternatives,
-        top,
-        blck;
+        top;
 
     function addOption(label, toggle, test, onHint, offHint) {
         var on = '\u2611 ',
@@ -2339,6 +2338,22 @@ BlockMorph.prototype.userMenu = function () {
             (test ? on : off) + localize(label),
             toggle,
             test ? onHint : offHint
+        );
+    }
+
+    function renameVar() {
+        var blck = myself.fullCopy();
+        blck.addShadow();
+        new DialogBoxMorph(
+            myself,
+            myself.userSetSpec,
+            myself
+        ).prompt(
+            "Variable name",
+            myself.blockSpec,
+            world,
+            blck.fullImage(), // pic
+            InputSlotMorph.prototype.getVarNamesDict.call(myself)
         );
     }
 
@@ -2361,15 +2376,46 @@ BlockMorph.prototype.userMenu = function () {
         }
     }
     if (this.isTemplate) {
-        if (!(this.parent instanceof SyntaxElementMorph)) {
-            if (this.selector === 'reportGetVar') {
-                addOption(
-                    'transient',
-                    'toggleTransientVariable',
-                    myself.isTransientVariable(),
-                    'uncheck to save contents\nin the project',
-                    'check to prevent contents\nfrom being saved'
+        if (this.parent instanceof SyntaxElementMorph) { // in-line
+            if (this.selector === 'reportGetVar') { // script var definition
+                menu.addLine();
+                menu.addItem(
+                    'rename...',
+                    function () {
+                        myself.refactorThisVar(true); // just the template
+                    },
+                    'rename only\nthis reporter'
                 );
+                menu.addItem(
+                    'rename all...',
+                    'refactorThisVar',
+                    'rename all blocks that\naccess this variable'
+                );
+            }
+        } else { // in palette
+            if (this.selector === 'reportGetVar') {
+                if (!this.isInheritedVariable()) {
+                    addOption(
+                        'transient',
+                        'toggleTransientVariable',
+                        myself.isTransientVariable(),
+                        'uncheck to save contents\nin the project',
+                        'check to prevent contents\nfrom being saved'
+                    );
+                    menu.addLine();
+                    menu.addItem(
+                        'rename...',
+                        function () {
+                            myself.refactorThisVar(true); // just the template
+                        },
+                        'rename only\nthis reporter'
+                    );
+                    menu.addItem(
+                        'rename all...',
+                        'refactorThisVar',
+                        'rename all blocks that\naccess this variable'
+                    );
+                }
             } else if (this.selector !== 'evaluateCustomBlock') {
                 menu.addItem(
                     "hide",
@@ -2387,50 +2433,16 @@ BlockMorph.prototype.userMenu = function () {
                     'mapToCode'
                 );
             }
-        } 
-        if (this.selector === 'reportGetVar' && !this.isInheritedVariable()) {
-            menu.addLine();
-            menu.addItem(
-                'rename all...',
-                'refactorThisVar',
-                'rename all blocks that\naccess this variable'
-            );
         }
-    } else { 
-        menu.addLine();
+        return menu;
     }
-
+    menu.addLine();
     if (this.selector === 'reportGetVar') {
-        if (!(this.isInheritedVariable())) {
-            blck = this.fullCopy();
-            blck.addShadow();
-            menu.addItem(
-                'rename...',
-                function () {
-                    if (this.isTemplate) {
-                        myself.refactorThisVar(true); // just the template
-                    } else {
-                        new DialogBoxMorph(
-                            myself,
-                            myself.userSetSpec,
-                            myself
-                        ).prompt(
-                            "Variable name",
-                            myself.blockSpec,
-                            world,
-                            blck.fullImage(), // pic
-                            InputSlotMorph.prototype.getVarNamesDict.call(
-                                myself
-                            )
-                        );
-                    }
-                },
-                'rename only\nthis reporter'
-            );
-        }
-        if (this.isTemplate) {
-            return menu;
-        }
+        menu.addItem(
+            'rename...',
+            renameVar,
+            'rename only\nthis reporter'
+        );
     } else if (SpriteMorph.prototype.blockAlternatives[this.selector]) {
         menu.addItem(
             'relabel...',
