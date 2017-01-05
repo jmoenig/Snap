@@ -3275,3 +3275,4 @@ Fixes:
 * Music (play note) to work again in new and recent browser versions (Chrome 55)
 * IDE layout: fixed resizing issues when the window becomes too small
 * Translation updates (Russian, Polish, Danish, Portuguese, Catalan, German)
+* Keep left-over blocks from “relabel” around
