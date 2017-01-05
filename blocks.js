@@ -2765,21 +2765,33 @@ BlockMorph.prototype.relabel = function (alternativeSelectors) {
 BlockMorph.prototype.setSelector = function (aSelector) {
     // private - used only for relabel()
     var oldInputs = this.inputs(),
+        scripts = this.parentThatIsA(ScriptsMorph),
+        surplus,
         info;
     info = SpriteMorph.prototype.blocks[aSelector];
     this.setCategory(info.category);
     this.selector = aSelector;
     this.setSpec(localize(info.spec));
-    this.restoreInputs(oldInputs);
+    surplus = this.restoreInputs(oldInputs);
     this.fixLabelColor();
+
+    // place surplus blocks on scipts
+    if (scripts && surplus.length) {
+        surplus.forEach(function (blk) {
+            blk.moveBy(10);
+            scripts.add(blk);
+        });
+    }
 };
 
 BlockMorph.prototype.restoreInputs = function (oldInputs) {
     // private - used only for relabel()
     // try to restore my previous inputs when my spec has been changed
+    // return an Array of left-over blocks, if any
     var i = 0,
         old,
         nb,
+        leftOver = [],
         myself = this;
 
     this.inputs().forEach(function (inp) {
@@ -2801,7 +2813,18 @@ BlockMorph.prototype.restoreInputs = function (oldInputs) {
         }
         i += 1;
     });
+
+    // gather surplus blocks
+    for (i; i < oldInputs.length; i += 1) {
+        old = oldInputs[i];
+        if (old instanceof ReporterBlockMorph) {
+            leftOver.push(old);
+        } else if (old instanceof CommandSlotMorph) {
+            leftOver.push(old.nestedBlock());
+        }
+    }
     this.cachedInputs = null;
+    return leftOver;
 };
 
 BlockMorph.prototype.showHelp = function () {
