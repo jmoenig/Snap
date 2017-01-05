@@ -5984,7 +5984,7 @@ ScriptsMorph.prototype.userMenu = function () {
                     localize('undrop')
                 ],
                 'undrop',
-                '⌘Z',
+                '^Z',
                 'undo the last\nblock drop\nin this pane'
             );
         }
@@ -5999,7 +5999,7 @@ ScriptsMorph.prototype.userMenu = function () {
                     localize('redrop')
                 ],
                 'redrop',
-                '⌘Y',
+                '^Y',
                 'redo the last undone\nblock drop\nin this pane'
             );
         }

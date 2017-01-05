@@ -3251,6 +3251,7 @@ http://snap.berkeley.edu/run#cloud:Username=jens&ProjectName=rotation
 ------
 * Blocks: refactored variable refactoring code
 * fixed #1604
+* Blocks, GUI: changed shortcut symbol for “Ctrl” key to ^
 
 
 == v4.10 === (in development)

@@ -72,7 +72,7 @@ isRetinaSupported, SliderMorph, Animation*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2017-January-03';
+modules.gui = '2017-January-05';
 
 // Declarations
 
@@ -2798,9 +2798,9 @@ IDE_Morph.prototype.projectMenu = function () {
     menu = new MenuMorph(this);
     menu.addItem('Project notes...', 'editProjectNotes');
     menu.addLine();
-    menu.addPair('New', 'createNewProject', '⌘N');
-    menu.addPair('Open...', 'openProjectsBrowser', '⌘O');
-    menu.addPair('Save', "save", '⌘S');
+    menu.addPair('New', 'createNewProject', '^N');
+    menu.addPair('Open...', 'openProjectsBrowser', '^O');
+    menu.addPair('Save', "save", '^S');
     menu.addItem('Save As...', 'saveProjectsBrowser');
     menu.addLine();
     menu.addItem(
