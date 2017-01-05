@@ -3247,6 +3247,10 @@ http://snap.berkeley.edu/run#cloud:Username=jens&ProjectName=rotation
 * Variable refactoring, yay! Thanks, Bernat!!
 * Threads: fixed #1602
 
+170105
+------
+* Blocks: refactored variable refactoring code
+
 
 == v4.10 === (in development)
 
