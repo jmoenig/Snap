@@ -327,8 +327,28 @@ IDE_Morph.prototype.openIn = function (world) {
         this.inform('Snap!', motd);
     }
     */
+
     function interpretUrlAnchors() {
         var dict;
+	function doDictFlags() {
+            if (dict.editMode) {
+                myself.toggleAppMode(false);
+            } else {
+                myself.toggleAppMode(true);
+            }
+
+            if (!dict.noRun) {
+                myself.runScripts();
+            }
+
+            if (dict.hideControls) {
+                myself.controlBar.hide();
+                window.onbeforeunload = nop;
+            }
+            if (dict.noExitWarning) {
+                window.onbeforeunload = nop;
+            }
+	};
         if (location.hash.substr(0, 6) === '#open:') {
             hash = location.hash.substr(6);
             if (hash.charAt(0) === '%'
@@ -349,6 +369,7 @@ IDE_Morph.prototype.openIn = function (world) {
             }
         } else if (location.hash.substr(0, 5) === '#run:') {
             hash = location.hash.substr(5);
+	    hash = hash.slice(0,hash.indexOf("&"));
             if (hash.charAt(0) === '%'
                     || hash.search(/\%(?:[0-9a-f]{2})/i) > -1) {
                 hash = decodeURIComponent(hash);
@@ -359,7 +380,9 @@ IDE_Morph.prototype.openIn = function (world) {
                 this.rawOpenProjectString(getURL(hash));
             }
             this.toggleAppMode(true);
-            this.runScripts();
+            dict = SnapCloud.parseDict(location.hash.substr(5));
+
+	    doDictFlags();
         } else if (location.hash.substr(0, 9) === '#present:') {
             this.shield = new Morph();
             this.shield.color = this.color;
@@ -394,24 +417,8 @@ IDE_Morph.prototype.openIn = function (world) {
                             myself.shield.destroy();
                             myself.shield = null;
                             msg.destroy();
-
-                            if (dict.editMode) {
-                                myself.toggleAppMode(false);
-                            } else {
-                                myself.toggleAppMode(true);
-                            }
-
-                            if (!dict.noRun) {
-                                myself.runScripts();
-                            }
-
-                            if (dict.hideControls) {
-                                myself.controlBar.hide();
-                                window.onbeforeunload = nop;
-                            }
-                            if (dict.noExitWarning) {
-                                window.onbeforeunload = nop;
-                            }
+			    
+			    doDictFlags();
                         }
                     ]);
                 },
@@ -2706,7 +2713,8 @@ IDE_Morph.prototype.settingsMenu = function () {
         'toggleVariableFrameRate',
         StageMorph.prototype.frameRate,
         'uncheck for greater speed\nat variable frame rates',
-        'check for smooth, predictable\nanimations across computers'
+        'check for smooth, predictable\nanimations across computers',
+	true
     );
     addPreference(
         'Flat line ends',
