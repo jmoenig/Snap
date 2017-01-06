@@ -1815,12 +1815,8 @@ IDE_Morph.prototype.droppedImage = function (aCanvas, name) {
 };
 
 IDE_Morph.prototype.droppedSVG = function (anImage, name) {
-    // TODO: Use the collaborator
     var costume = new SVG_Costume(anImage, name.split('.')[0]);
-    this.currentSprite.addCostume(costume);
-    this.currentSprite.wearCostume(costume);
-    this.spriteBar.tabBar.tabTo('costumes');
-    this.hasChangedMedia = true;
+    SnapActions.addCostume(costume, this.currentSprite, true);
 };
 
 IDE_Morph.prototype.droppedAudio = function (anAudio, name) {
