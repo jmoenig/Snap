@@ -3475,78 +3475,78 @@ IDE_Morph.prototype.saveProject = function (name) {
     ]);
 };
 
-// Save a project and show a URL
-IDE_Morph.prototype.saveAndShare = function() {
+// Save a project and pop up a dialog with a copyable URL.
+IDE_Morph.prototype.saveAndShare = function () {
     var myself = this,
-	world = this.world(),
-	projectDialog;
+        world = this.world(),
+        projectDialog;
 
     function shareProject() {
-	var dialog, frame, text, width,
-	    publicURL;
+        var dialog, frame, text, width,
+            publicURL;
 
-	publicURL = myself.publicProjectURL(
-	    SnapCloud.username,
-	    myself.projectName
-	);
+        publicURL = myself.publicProjectURL(
+            SnapCloud.username,
+            myself.projectName
+        );
 
-	// only call Snap!Cloud if the project has needs to be shared
-	if (window.location.href !== publicURL) {
-	    myself.showMessage('sharing\nproject...');
-	    SnapCloud.reconnect(
-		function () {
-		    SnapCloud.callService(
-			'publishProject',
-			function () {
-			    myself.showMessage('shared.', 2);
-			    window.location.hash = (new URL(publicURL)).hash;
-			},
-			myself.cloudError(),
-			[
-			    myself.projectName,
-			    myself.stage.thumbnail(
-				SnapSerializer.prototype.thumbnailSize
-			    ).toDataURL('image/png')
-			]
-		    );
-		},
-		myself.cloudError()
-	    );
-	}
+        // only call Snap!Cloud if the project has needs to be shared
+        if (window.location.href !== publicURL) {
+            myself.showMessage('sharing\nproject...');
+            SnapCloud.reconnect(
+                function () {
+                    SnapCloud.callService(
+                        'publishProject',
+                        function () {
+                            myself.showMessage('shared.', 2);
+                            window.location.hash = (new URL(publicURL)).hash;
+                        },
+                        myself.cloudError(),
+                        [
+                            myself.projectName,
+                            myself.stage.thumbnail(
+                                SnapSerializer.prototype.thumbnailSize
+                            ).toDataURL('image/png')
+                        ]
+                    );
+                },
+                myself.cloudError()
+            );
+        }
 
-	dialog = new DialogBoxMorph().withKey('sharedURLDialog');
-	dialog.labelString = 'Copy the public address:';
-	dialog.createLabel();
+        dialog = new DialogBoxMorph().withKey('sharedURLDialog');
+        dialog.labelString = 'Copy the public address:';
+        dialog.createLabel();
 
-	frame = new ScrollFrameMorph(),
-	text = new StringMorph(publicURL),
-	width = 250,
+        frame = new ScrollFrameMorph(),
+        text = new StringMorph(publicURL),
+        width = 250,
 
-	frame.padding = 6;
-	frame.setWidth(width);
-	text.setWidth(width - frame.padding * 2);
-	text.setPosition(frame.topLeft().add(frame.padding));
-	text.enableSelecting();
-	text.isEditable = true;
+        frame.padding = 6;
+        frame.setWidth(width);
+        text.setWidth(width - frame.padding * 2);
+        text.setPosition(frame.topLeft().add(frame.padding));
+        text.enableSelecting();
+        text.isEditable = true;
 
-	frame.fixLayout = nop;
-	frame.edge = InputFieldMorph.prototype.edge;
-	frame.fontSize = InputFieldMorph.prototype.fontSize;
-	frame.typeInPadding = InputFieldMorph.prototype.typeInPadding;
-	frame.contrast = InputFieldMorph.prototype.contrast;
-	frame.drawNew = InputFieldMorph.prototype.drawNew;
-	frame.drawRectBorder = InputFieldMorph.prototype.drawRectBorder;
+        frame.fixLayout = nop;
+        frame.edge = InputFieldMorph.prototype.edge;
+        frame.fontSize = InputFieldMorph.prototype.fontSize;
+        frame.typeInPadding = InputFieldMorph.prototype.typeInPadding;
+        frame.contrast = InputFieldMorph.prototype.contrast;
+        frame.drawNew = InputFieldMorph.prototype.drawNew;
+        frame.drawRectBorder = InputFieldMorph.prototype.drawRectBorder;
 
-	frame.addContents(text);
-	text.drawNew();
-	dialog.addBody(frame);
-	frame.drawNew();
-	dialog.addButton('ok', 'OK');
-	dialog.fixLayout();
-	dialog.drawNew();
-	dialog.popUp(world);
-	dialog.setCenter(world.center());
-	text.edit();
+        frame.addContents(text);
+        text.drawNew();
+        dialog.addBody(frame);
+        frame.drawNew();
+        dialog.addButton('ok', 'OK');
+        dialog.fixLayout();
+        dialog.drawNew();
+        dialog.popUp(world);
+        dialog.setCenter(world.center());
+        text.edit();
     }
 
     if (!this.projectName) {
@@ -3554,7 +3554,7 @@ IDE_Morph.prototype.saveAndShare = function() {
         // When a project it saved to the cloud, also share it.
         projectDialog.saveCloudProject = function () {
             myself.showMessage('Saving project\nto the cloud...');
-	    SnapCloud.saveProject(myself, shareProject, myself.cloudError());
+            SnapCloud.saveProject(myself, shareProject, myself.cloudError());
             this.destroy();
         };
         projectDialog.popUp();
