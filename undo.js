@@ -370,7 +370,10 @@ UndoManager.Invert.moveBlock = function(args) {
     }
     if (target.loc === 'top' || target.loc === 'wrap') {
         revertToOldState = UndoManager.Invert._actionForState.call(null, args[4]);
-        event.args.unshift(revertToOldState);
+        // Never need to revert to a 'wrap'
+        if (!(revertToOldState.type === 'moveBlock' && revertToOldState.args[1].loc === 'wrap')) {
+            event.args.unshift(revertToOldState);
+        }
     } else if (args.length > 4) {  // If a block was displaced, move it back to it's original target
         revertToOldState = UndoManager.Invert._actionForState.call(null, args[4]);
         event.args.push(revertToOldState);
