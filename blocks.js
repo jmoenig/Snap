@@ -668,7 +668,7 @@ SyntaxElementMorph.prototype.refactorVarInStack = function (oldName, newName, is
     // Rename all oldName var occurrences found in this block stack into newName
     // taking care of not being too greedy
 
-    if (this instanceof RingMorph
+    if ((this instanceof RingMorph && contains(this.inputNames(), oldName))
             || (!isScriptVar && this.definesScriptVariable(oldName))) {
         return;
     }
