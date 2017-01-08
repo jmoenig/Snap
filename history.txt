@@ -3254,6 +3254,10 @@ http://snap.berkeley.edu/run#cloud:Username=jens&ProjectName=rotation
 * Blocks, GUI: changed shortcut symbol for “Ctrl” key to ^
 * Blocks: fixed #696 - Keep left-over blocks from “relabel” around
 
+170108
+------
+* Blocks: fixed #1608
+
 
 == v4.10 === (in development)
 
