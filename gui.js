@@ -72,7 +72,7 @@ isRetinaSupported, SliderMorph, Animation*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2017-January-05';
+modules.gui = '2017-January-09';
 
 // Declarations
 
@@ -318,6 +318,24 @@ IDE_Morph.prototype.openIn = function (world) {
         }
     }
 
+	function applyFlags(dict) {
+        if (dict.editMode) {
+            myself.toggleAppMode(false);
+        } else {
+            myself.toggleAppMode(true);
+        }
+        if (!dict.noRun) {
+            myself.runScripts();
+        }
+        if (dict.hideControls) {
+            myself.controlBar.hide();
+            window.onbeforeunload = nop;
+        }
+        if (dict.noExitWarning) {
+            window.onbeforeunload = nop;
+        }
+	}
+
     // dynamic notifications from non-source text files
     // has some issues, commented out for now
     /*
@@ -327,27 +345,9 @@ IDE_Morph.prototype.openIn = function (world) {
         this.inform('Snap!', motd);
     }
     */
+
     function interpretUrlAnchors() {
-        var dict;
-	function doDictFlags() {
-            if (dict.editMode) {
-                myself.toggleAppMode(false);
-            } else {
-                myself.toggleAppMode(true);
-            }
-
-            if (!dict.noRun) {
-                myself.runScripts();
-            }
-
-            if (dict.hideControls) {
-                myself.controlBar.hide();
-                window.onbeforeunload = nop;
-            }
-            if (dict.noExitWarning) {
-                window.onbeforeunload = nop;
-            }
-	};
+        var dict, idx;
 
         if (location.hash.substr(0, 6) === '#open:') {
             hash = location.hash.substr(6);
@@ -369,8 +369,10 @@ IDE_Morph.prototype.openIn = function (world) {
             }
         } else if (location.hash.substr(0, 5) === '#run:') {
             hash = location.hash.substr(5);
-	    idx = hash.indexOf("&");
-	    if (idx > 0) {hash = hash.slice(0,idx);}
+            idx = hash.indexOf("&");
+            if (idx > 0) {
+                hash = hash.slice(0, idx);
+            }
             if (hash.charAt(0) === '%'
                     || hash.search(/\%(?:[0-9a-f]{2})/i) > -1) {
                 hash = decodeURIComponent(hash);
@@ -380,9 +382,7 @@ IDE_Morph.prototype.openIn = function (world) {
             } else {
                 this.rawOpenProjectString(getURL(hash));
             }
-            this.toggleAppMode(true);
-            dict = SnapCloud.parseDict(location.hash.substr(5));
-	    doDictFlags();
+            applyFlags(SnapCloud.parseDict(location.hash.substr(5)));
         } else if (location.hash.substr(0, 9) === '#present:') {
             this.shield = new Morph();
             this.shield.color = this.color;
@@ -417,8 +417,7 @@ IDE_Morph.prototype.openIn = function (world) {
                             myself.shield.destroy();
                             myself.shield = null;
                             msg.destroy();
-
-			    doDictFlags();
+                            applyFlags(dict);
                         }
                     ]);
                 },
