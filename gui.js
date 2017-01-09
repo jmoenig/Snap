@@ -3483,7 +3483,10 @@ IDE_Morph.prototype.saveAndShare = function () {
 
     function shareProject() {
         var dialog, frame, text, width,
-            publicURL;
+            publicURL,
+            directions = new StringMorph(
+                localize('Use ^C to copy the address to the clipboard.')
+            );
 
         publicURL = myself.publicProjectURL(
             SnapCloud.username,
@@ -3527,7 +3530,7 @@ IDE_Morph.prototype.saveAndShare = function () {
         text.setWidth(width - frame.padding * 2);
         text.setPosition(frame.topLeft().add(frame.padding));
         text.enableSelecting();
-        text.isEditable = true;
+        text.isEditable = true; // we can't select text that isn't editable.
 
         frame.fixLayout = nop;
         frame.edge = InputFieldMorph.prototype.edge;
@@ -3541,12 +3544,17 @@ IDE_Morph.prototype.saveAndShare = function () {
         text.drawNew();
         dialog.addBody(frame);
         frame.drawNew();
+        dialog.add(directions);
         dialog.addButton('ok', 'OK');
         dialog.fixLayout();
+        directions.setPosition(new Point(
+            frame.left(),
+            frame.bottom() + frame.padding
+        ));
         dialog.drawNew();
         dialog.popUp(world);
         dialog.setCenter(world.center());
-        text.edit();
+        text.selectAll();
     }
 
     if (!this.projectName) {
