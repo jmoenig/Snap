@@ -4081,7 +4081,7 @@ Morph.prototype.developersMenu = function () {
         "color...",
         function () {
             this.pickColor(
-                menu.title + '\ncolor:',
+                menu.title + localize('\ncolor:'),
                 this.setColor,
                 this,
                 this.color
@@ -4093,7 +4093,7 @@ Morph.prototype.developersMenu = function () {
         "transparency...",
         function () {
             this.prompt(
-                menu.title + '\nalpha\nvalue:',
+                menu.title + localize('\nalpha\nvalue:'),
                 this.setAlphaScaled,
                 this,
                 (this.alpha * 100).toString(),
@@ -11705,7 +11705,7 @@ WorldMorph.prototype.contextMenu = function () {
             "color...",
             function () {
                 this.pickColor(
-                    menu.title + '\ncolor:',
+                    menu.title + localize('\ncolor:'),
                     this.setColor,
                     this,
                     this.color
