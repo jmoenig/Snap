@@ -1128,6 +1128,7 @@
     Davide Della Casa contributed performance optimizations for Firefox.
     Jason N (@cyderize) contributed native copy & paste for text editing.
     Bartosz Leper contributed retina display support.
+    Brian Harvey contributed to the design and implemenatation of submenus.
 
     - Jens Mönig
 */

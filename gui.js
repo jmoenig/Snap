@@ -52,6 +52,8 @@
     Nathan Dinsmore contributed saving and loading of projects,
     ypr-Snap! project conversion and countless bugfixes
     Ian Reynolds contributed handling and visualization of sounds
+    Michael Ball contributed the LibraryImportDialogMorph and countless
+    utilities to load libraries from relative urls
 
 */
 
@@ -78,6 +80,7 @@ modules.gui = '2017-January-09';
 
 var IDE_Morph;
 var ProjectDialogMorph;
+var LibraryImportDialogMorph;
 var SpriteIconMorph;
 var CostumeIconMorph;
 var TurtleIconMorph;
@@ -2915,7 +2918,7 @@ IDE_Morph.prototype.projectMenu = function () {
                     var libraries = myself.parseResourceFile(txt);
                     new LibraryImportDialogMorph(myself, libraries).popUp();
                 }
-            )
+            );
         },
         'Select categories of additional blocks to add to this project.'
     );
@@ -3178,7 +3181,7 @@ IDE_Morph.prototype.aboutSnap = function () {
         module, btn1, btn2, btn3, btn4, licenseBtn, translatorsBtn,
         world = this.world();
 
-    aboutTxt = 'Snap! 4.0.10 - dev -\nBuild Your Own Blocks\n\n'
+    aboutTxt = 'Snap! 4.0.10 - rc -\nBuild Your Own Blocks\n\n'
         + 'Copyright \u24B8 2017 Jens M\u00F6nig and '
         + 'Brian Harvey\n'
         + 'jens@moenig.org, bh@cs.berkeley.edu\n\n'
@@ -3218,7 +3221,8 @@ IDE_Morph.prototype.aboutSnap = function () {
         + '\n\nNathan Dinsmore: Saving/Loading, Snap-Logo Design, '
         + '\ncountless bugfixes and optimizations'
         + '\nKartik Chandra: Paint Editor'
-        + '\nMichael Ball: Time/Date UI, many bugfixes'
+        + '\nMichael Ball: Time/Date UI, Library Import Dialog,'
+        + '\ncountless bugfixes and optimizations'
         + '\nBartosz Leper: Retina Display Support'
         + '\nBernat Romagosa: Countless contributions'
         + '\n"Ava" Yuan Yuan, Dylan Servilla: Graphic Effects'
@@ -6476,16 +6480,16 @@ LibraryImportDialogMorph.prototype.fixLayout = function () {
     
 // Library Cache Utilities.
 LibraryImportDialogMorph.prototype.hasCached = function (key) {
-    return this.libraryCache.hasOwnProperty(key)
-}
+    return this.libraryCache.hasOwnProperty(key);
+};
 
 LibraryImportDialogMorph.prototype.cacheLibrary = function (key, blocks) {
     this.libraryCache[key] = blocks ;
-}
+};
 
 LibraryImportDialogMorph.prototype.cachedLibrary = function (key) {
     return this.libraryCache[key];
-}
+};
 
 LibraryImportDialogMorph.prototype.importLibrary = function () {
     var blocks,
@@ -6512,7 +6516,7 @@ LibraryImportDialogMorph.prototype.importLibrary = function () {
     }
 
     this.destroy();
-}
+};
 
 LibraryImportDialogMorph.prototype.displayBlocks = function (libraryKey) {
     var x, y, blockImage, previousCategory, blockContainer,
@@ -6550,7 +6554,7 @@ LibraryImportDialogMorph.prototype.displayBlocks = function (libraryKey) {
     this.palette.scrollX(padding);
     this.palette.scrollY(padding);
     this.fixLayout();
-}
+};
 
 LibraryImportDialogMorph.prototype.showMessage = function (msgText) {
     var msg = new MenuMorph(null, msgText);

@@ -3258,6 +3258,11 @@ http://snap.berkeley.edu/run#cloud:Username=jens&ProjectName=rotation
 ------
 * Blocks: fixed #1608
 
+170109
+------
+* GUI: “#run:” flags, thanks, Brian!
+* GUI: Libraries Browser, thanks, Michael!
+
 
 == v4.10 === (in development)
 
@@ -3274,9 +3279,12 @@ Features:
 * highly experimental infix-expression-to-reporter parser. Thanks, Bernat, for the brilliant idea to add it to the search-blocks field!
 * hierarchical menus, also for custom blocks, thanks, Brian!
 * variable refactoring, thanks, Bernat!
+* “#run:” flags (same as “#present:”): ’editMode’, ‘noRun’, ‘hideControls’, thanks, Brian!
+* Libraries Browser, thanks, Michael!
 
 Fixes:
 * Music (play note) to work again in new and recent browser versions (Chrome 55)
 * IDE layout: fixed resizing issues when the window becomes too small
-* Translation updates (Russian, Polish, Danish, Portuguese, Catalan, German)
 * Keep left-over blocks from “relabel” around
+* Evaluate the generic WHEN-hat block’s predicate and first step of the attached script in the same atom
+* Translation updates (Russian, Polish, Danish, Portuguese, Catalan, German)
