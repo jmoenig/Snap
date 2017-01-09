@@ -150,7 +150,7 @@ CustomCommandBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2017-January-08';
+modules.blocks = '2017-January-09';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -664,7 +664,11 @@ SyntaxElementMorph.prototype.getVarNamesDict = function () {
 
 // Variable refactoring
 
-SyntaxElementMorph.prototype.refactorVarInStack = function (oldName, newName, isScriptVar) {
+SyntaxElementMorph.prototype.refactorVarInStack = function (
+    oldName,
+    newName,
+    isScriptVar
+) {
     // Rename all oldName var occurrences found in this block stack into newName
     // taking care of not being too greedy
 
