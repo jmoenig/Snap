@@ -3262,6 +3262,7 @@ http://snap.berkeley.edu/run#cloud:Username=jens&ProjectName=rotation
 ------
 * GUI: “#run:” flags, thanks, Brian!
 * GUI: Libraries Browser, thanks, Michael!
+* Blocks: Fixed out of bounds issue with “go back _ layers”, thanks, Brian Broll!
 
 
 == v4.10 === (in development)
@@ -3287,4 +3288,5 @@ Fixes:
 * IDE layout: fixed resizing issues when the window becomes too small
 * Keep left-over blocks from “relabel” around
 * Evaluate the generic WHEN-hat block’s predicate and first step of the attached script in the same atom
+* “go back _ layers” to work with out-of bounds numbers, thanks, Brian Broll!
 * Translation updates (Russian, Polish, Danish, Portuguese, Catalan, German)
