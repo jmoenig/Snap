@@ -5863,7 +5863,7 @@ ScriptsMorph.prototype.definitionOrSprite = function () {
         owner = this.owner;
 
     if (gparent instanceof BlockEditorMorph) {
-        return owner = gparent.definition;
+        owner = gparent.definition;
     }
 
     return owner.id + '/scripts';

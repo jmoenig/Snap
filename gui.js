@@ -590,7 +590,7 @@ IDE_Morph.prototype.getActiveEntity = function () {
     // sprite being edited
 
     if (this.activeEditor instanceof BlockEditorMorph) {
-        return this.activeEditor.definition;
+        return this.activeEditor.definition + '/scripts';
     }
     return this.currentSprite + '/' + this.currentTab;
 };
