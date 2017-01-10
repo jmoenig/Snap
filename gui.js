@@ -74,7 +74,7 @@ isRetinaSupported, SliderMorph, Animation*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2017-January-09';
+modules.gui = '2017-January-10';
 
 // Declarations
 
@@ -6279,7 +6279,7 @@ LibraryImportDialogMorph.prototype.init = function (ide, librariesData) {
     this.notesText = null;
     this.notesField = null;
 
-    this.labelString = 'Import Library';
+    this.labelString = 'Import library';
     this.createLabel();
 
     this.buildContents();
