@@ -1075,7 +1075,7 @@ SnapTranslator.dict.de = {
     'rename all...':
         'alle umbenennen...',
     'rename all blocks that\naccess this variable':
-        'alle Blöcke umbenennen,/ndie diese Variable referenzieren',
+        'alle Blöcke umbenennen,\ndie diese Variable referenzieren',
 
 
     // block dialog
