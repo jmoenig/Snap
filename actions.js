@@ -2041,6 +2041,10 @@ ActionManager.prototype._registerBlockState = function(block) {
 
     if (!(block instanceof PrototypeHatBlockMorph || block.isPrototype)) {
         block.id = block.id || this.newId();
+        if (this._blocks[block.id] && this._blocks[block.id] !== block) {
+            console.warn('Block id ' + block.id + ' already used. Reissuing id');
+            block.id = this.newId();
+        }
         this._blocks[block.id] = block;
 
         // Record the block's initial state...
