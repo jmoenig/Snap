@@ -37,7 +37,6 @@ ActionManager.prototype.addActions = function() {
             var args = Array.prototype.slice.apply(arguments),
                 fn = '_' + method,
                 ownerId = this.ide().stage.id,
-                result,
                 msg;
 
             if (this[fn]) {
@@ -442,7 +441,7 @@ ActionManager.prototype.deserializeBlock = function(ser) {
     }
 
     if (ser[0] !== '<') {
-        return this._blocks[ser];
+        return this.getBlockFromId(ser);
     } else if (ser.indexOf('<script>') === 0) {
         return this.serializer.loadScript(this.serializer.parse(ser));
     } else {  // Comment
