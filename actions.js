@@ -120,7 +120,9 @@ ActionManager.prototype.initializeEventMethods = function() {
 
         'toggleBoolean',
         'setColorField',
-        'setField'
+        'setField',
+
+        'openProject'  // for replaying
     );
 };
 
@@ -202,11 +204,8 @@ ActionManager.prototype._enableCollaboration = function() {
         } else if (msg.type === 'session-project-request') {
             // Return the serialized project
             var str = self.serializer.serialize(self.ide().stage);
-            msg.project = str;
+            msg.args = [str];
             self._ws.send(JSON.stringify(msg));
-        } else if (msg.type === 'session-project') {
-            // Load the given project
-            self.ide().openProjectString(msg.project);
         } else if (msg.type === 'session-id') {
             self.sessionId = msg.value;
             location.hash = 'collaborate=' + self.sessionId;
@@ -1969,6 +1968,9 @@ ActionManager.prototype.onImportBlocks = function(aString, lbl) {
     return this.ide().openBlocksString(aString, lbl, true);
 };
 
+ActionManager.prototype.onOpenProject = function(str) {
+    this.ide().openProjectString(str);
+}
 //////////////////// Loading Projects ////////////////////
 ActionManager.prototype.loadProject = function(ide, lastSeen) {
     var myself = this;
@@ -2360,6 +2362,7 @@ ActionManager.OwnerFor.deleteVariable =
 ActionManager.OwnerFor.setStageSize =
 ActionManager.OwnerFor.importBlocks =
 ActionManager.OwnerFor.importSprites =
+ActionManager.OwnerFor.openProject =
 ActionManager.OwnerFor.duplicateSprites =
 ActionManager.OwnerFor.addSprite = function() {
     return null;
