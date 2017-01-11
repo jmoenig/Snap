@@ -3264,6 +3264,14 @@ http://snap.berkeley.edu/run#cloud:Username=jens&ProjectName=rotation
 * GUI: Libraries Browser, thanks, Michael!
 * Blocks: Fixed out of bounds issue with “go back _ layers”, thanks, Brian Broll!
 
+170110
+------
+* German translation update
+
+170111
+------
+* Error handling improvements for custom drop-down submenus and generic WHEN hats
+
 
 == v4.10 === (in development)
 

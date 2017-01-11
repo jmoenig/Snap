@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph,
 TableFrameMorph, ColorSlotMorph, isSnapObject*/
 
-modules.threads = '2017-January-04';
+modules.threads = '2017-January-11';
 
 var ThreadManager;
 var Process;
@@ -361,6 +361,9 @@ ThreadManager.prototype.findProcess = function (block) {
 
 ThreadManager.prototype.doWhen = function (block, stopIt) {
     if (this.pauseCustomHatBlocks) {return; }
+    if ((!block) || this.findProcess(block)) {
+        return;
+    }
     var pred = block.inputs()[0], world;
     if (block.removeHighlight()) {
         world = block.world();
@@ -369,8 +372,6 @@ ThreadManager.prototype.doWhen = function (block, stopIt) {
         }
     }
     if (stopIt) {return; }
-    if ((!block) || this.findProcess(block)
-    ) {return; }
     try {
         if (invoke(
             pred,
