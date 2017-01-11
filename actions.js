@@ -1977,15 +1977,13 @@ ActionManager.prototype.loadProject = function(ide, lastSeen) {
     // Clear old info
     this.initializeRecords();
 
+    // Update the id counter
+    this.lastSeen = lastSeen || 0;
+
     // Load the owners
     ide.sprites.asArray().concat(ide.stage).forEach(function(sprite) {
         return myself.loadOwner(sprite);
     });
-
-    //  - Traverse all blocks in custom block definitions
-
-    // Update the id counter
-    this.lastSeen = lastSeen || 0;
 };
 
 ActionManager.prototype._getCurrentTarget = function(block) {
@@ -2037,14 +2035,18 @@ ActionManager.prototype._registerBlockState = function(block) {
         standardPosition,
         fieldId,
         contents,
+        oldId,
         value,
         target;
 
     if (!(block instanceof PrototypeHatBlockMorph || block.isPrototype)) {
         block.id = block.id || this.newId();
         if (this._blocks[block.id] && this._blocks[block.id] !== block) {
-            console.warn('Block id ' + block.id + ' already used. Reissuing id');
-            block.id = this.newId();
+            oldId = block.id;
+            while (this._blocks[block.id] && this._blocks[block.id] !== block) {
+                block.id = this.newId();
+            }
+            console.warn('Block id ' + oldId + ' already used. Reissuing id ' + block.id);
         }
         this._blocks[block.id] = block;
 
