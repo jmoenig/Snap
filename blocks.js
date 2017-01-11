@@ -150,7 +150,7 @@ CustomCommandBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2017-January-09';
+modules.blocks = '2017-January-11';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -7788,7 +7788,7 @@ InputSlotMorph.prototype.setContents = function (aStringOrFloat) {
         cnts.isItalic = !this.isReadOnly;
     } else { // assume dta is a localizable choice if it's a key in my choices
         cnts.isItalic = false;
-        if (this.choices !== null && this.choices[dta] instanceof Array) {
+        if (!isNil(this.choices) && this.choices[dta] instanceof Array) {
             return this.setContents(this.choices[dta]);
         }
     }
