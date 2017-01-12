@@ -5866,13 +5866,17 @@ ScriptsMorph.prototype.definitionOrSprite = function () {
         owner = gparent.definition;
     }
 
-    return owner.id + '/scripts';
+    return owner;
+};
+
+ScriptsMorph.prototype.undoOwnerId = function () {
+    return this.definitionOrSprite().id + '/' + this.undoCategory;
 };
 
 ScriptsMorph.prototype.addUndoControls = function () {
     var toolBar = new AlignmentMorph(),
         shade = (new Color(140, 140, 140)),
-        owner = this.definitionOrSprite();
+        owner = this.undoOwnerId();
 
     toolBar.undoButton = new PushButtonMorph(
         this,
@@ -5906,7 +5910,7 @@ ScriptsMorph.prototype.addUndoControls = function () {
 
 ScriptsMorph.prototype.updateUndoControls = function () {
     var sf = this.parentThatIsA(ScrollFrameMorph),
-        owner = this.definitionOrSprite(),
+        owner = this.undoOwnerId(),
         changed = false;
 
     if (!sf) {return; }
@@ -12493,6 +12497,7 @@ CommentMorph.prototype.stackHeight = function () {
 
 ScriptFocusMorph.prototype = new BoxMorph();
 ScriptFocusMorph.prototype.constructor = ScriptFocusMorph;
+ScriptsMorph.prototype.undoCategory = 'scripts';
 ScriptFocusMorph.uber = BoxMorph.prototype;
 
 // ScriptFocusMorph instance creation:

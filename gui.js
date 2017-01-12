@@ -7300,6 +7300,7 @@ TurtleIconMorph.prototype.userMenu = function () {
 // WardrobeMorph inherits from ScrollFrameMorph
 
 WardrobeMorph.prototype = new ScrollFrameMorph();
+WardrobeMorph.prototype.undoCategory = 'costumes';
 WardrobeMorph.prototype.constructor = WardrobeMorph;
 WardrobeMorph.uber = ScrollFrameMorph.prototype;
 
@@ -7479,8 +7480,11 @@ WardrobeMorph.prototype.updateUndoControls =
 WardrobeMorph.prototype.addUndoControls =
     ScriptsMorph.prototype.addUndoControls;
 
+WardrobeMorph.prototype.undoOwnerId =
+    ScriptsMorph.prototype.undoOwnerId;
+
 WardrobeMorph.prototype.definitionOrSprite = function() {
-    return this.sprite.id + '/costumes';
+    return this.sprite;
 };
 
 // SoundIconMorph ///////////////////////////////////////////////////////
@@ -7701,6 +7705,7 @@ SoundIconMorph.prototype.prepareToBeGrabbed = function () {
 // JukeboxMorph instance creation
 
 JukeboxMorph.prototype = new ScrollFrameMorph();
+JukeboxMorph.prototype.undoCategory = 'sounds';
 JukeboxMorph.prototype.constructor = JukeboxMorph;
 JukeboxMorph.uber = ScrollFrameMorph.prototype;
 
@@ -7822,8 +7827,11 @@ JukeboxMorph.prototype.updateUndoControls =
 JukeboxMorph.prototype.addUndoControls =
     ScriptsMorph.prototype.addUndoControls;
 
+JukeboxMorph.prototype.undoOwnerId =
+    ScriptsMorph.prototype.undoOwnerId;
+
 JukeboxMorph.prototype.definitionOrSprite = function() {
-    return this.sprite.id + '/sounds';
+    return this.sprite;
 };
 
 // StageHandleMorph ////////////////////////////////////////////////////////

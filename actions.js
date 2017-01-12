@@ -1090,9 +1090,7 @@ ActionManager.prototype._getScriptsFor = function(blockId) {
 
 ActionManager.prototype.registerBlocks = function(firstBlock, owner) {
     var myself = this,
-        block = firstBlock,
-        target,
-        prevBlock;
+        block = firstBlock;
 
     this.traverse(block, function(block) {
         myself._registerBlockState(block);
@@ -2238,11 +2236,7 @@ ActionManager.prototype.afterActionApplied = function(/*msg*/) {
     // a custom block)
 
 
-    if (active instanceof BlockEditorMorph) {
-        active.onSetActive();
-    } else {  // IDE
-        ide.currentSprite.scripts.updateUndoControls();
-    }
+    active.onSetActive();
 };
 
 ActionManager.prototype.onMessage = function(msg) {
