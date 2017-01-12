@@ -1088,12 +1088,12 @@ ActionManager.prototype._getScriptsFor = function(blockId) {
     return editor.body.contents;
 };
 
-ActionManager.prototype.registerBlocks = function(firstBlock, owner) {
+ActionManager.prototype.registerBlocks = function(firstBlock, owner, initial) {
     var myself = this,
         block = firstBlock;
 
     this.traverse(block, function(block) {
-        myself._registerBlockState(block);
+        myself._registerBlockState(block, initial);
         myself._blockToOwnerId[block.id] = owner.id;
     });
     return firstBlock;
@@ -2027,7 +2027,7 @@ ActionManager.prototype._getCurrentTarget = function(block) {
     return null;
 };
 
-ActionManager.prototype._registerBlockState = function(block) {
+ActionManager.prototype._registerBlockState = function(block, initial) {
     var myself = this,
         scripts,
         standardPosition,
@@ -2038,14 +2038,7 @@ ActionManager.prototype._registerBlockState = function(block) {
         target;
 
     if (!(block instanceof PrototypeHatBlockMorph || block.isPrototype)) {
-        block.id = block.id || this.newId();
-        if (this._blocks[block.id] && this._blocks[block.id] !== block) {
-            oldId = block.id;
-            while (this._blocks[block.id] && this._blocks[block.id] !== block) {
-                block.id = this.newId();
-            }
-            console.warn('Block id ' + oldId + ' already used. Reissuing id ' + block.id);
-        }
+        this.__assignUniqueBlockId(block, initial);
         this._blocks[block.id] = block;
 
         // Record the block's initial state...
@@ -2080,6 +2073,23 @@ ActionManager.prototype._registerBlockState = function(block) {
     }
 };
 
+ActionManager.prototype.__assignUniqueBlockId = function(block, silent) {
+    var oldId;
+
+    block.id = block.id || this.newId();
+
+    // verify that the id is unique
+    if (this._blocks[block.id] && this._blocks[block.id] !== block) {
+        oldId = block.id;
+        while (this._blocks[block.id] && this._blocks[block.id] !== block) {
+            block.id = this.newId();
+        }
+        if (!silent) {
+            console.warn('Block id ' + oldId + ' already used. Reissuing id ' + block.id);
+        }
+    }
+};
+
 ActionManager.prototype.loadOwner = function(owner) {
     var myself = this;
 
@@ -2088,18 +2098,17 @@ ActionManager.prototype.loadOwner = function(owner) {
     // Load the blocks from scripts
     owner.scripts.children.forEach(function(topBlock) {  // id the blocks
         myself.traverse(topBlock, function(block) {
-            block.id = block.id || myself.newId();
+            myself.__assignUniqueBlockId(block, true);
             myself._blocks[block.id] = block;
         });
     });
+
     owner.scripts.children.forEach(function(block) {
         myself.registerBlocks(block, owner);
     });
 
     // Load the blocks from custom block definitions
-    var customBlocks = owner.customBlocks,
-        editor,
-        scripts;
+    var customBlocks = owner.customBlocks;
 
     if (owner.globalBlocks) {
         customBlocks = customBlocks.concat(owner.globalBlocks);
@@ -2135,7 +2144,7 @@ ActionManager.prototype.loadCustomBlocks = function(blocks, owner) {
         editor = myself._getCustomBlockEditor(def.id);
         scripts = editor.body.contents;
         scripts.children.forEach(function(block) {
-            myself.registerBlocks(block, def);
+            myself.registerBlocks(block, def, true);
         });
         editor.updateDefinition();
     });
