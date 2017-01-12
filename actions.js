@@ -1529,9 +1529,15 @@ ActionManager.prototype.onSetCommentText = function(id, text) {
 };
 
 ActionManager.prototype.onSetSelector = function(id, sel) {
-    var block = this.getBlockFromId(id);
+    var block = this.getBlockFromId(id),
+        myself = this;
+
     block.setSelector(sel);
     block.changed();
+    // update input block records
+    this.traverse(block, function(block) {
+        myself._blocks[block.id] = block;
+    });
     this._updateBlockDefinitions(block);
 };
 
