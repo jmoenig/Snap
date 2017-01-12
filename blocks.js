@@ -6035,12 +6035,12 @@ ScriptsMorph.prototype.moveBlock = function (block, target, hand) {
 
         if (SnapActions.isCollaborating()) {
             // only revert if collaborating - ow, this can't fail!
-            hand.grabOrigin.origin.add(block);
             block.setPosition(originPosition);
         }
 
         // copy the blocks and add them to the new editor
         dup.id = null;
+        hand.grabOrigin.origin.add(block);
         return SnapActions.moveBlock(dup, target)
             // if that succeeds, remove them from the current editor
             .accept(function() {
@@ -6076,9 +6076,9 @@ ScriptsMorph.prototype.setBlockPosition = function (block, hand) {
             if (SnapActions.isCollaborating()) {
                 // Revert the block back to the origin in case this fails
                 originPosition = hand.grabOrigin.position.add(hand.grabOrigin.origin.position());
-                hand.grabOrigin.origin.add(block);
                 block.setPosition(originPosition);
             }
+            hand.grabOrigin.origin.add(block);
 
             // copy the blocks and add them to the new editor
             var dup = block.fullCopy();
