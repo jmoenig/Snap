@@ -1973,13 +1973,23 @@ ActionManager.prototype.onImportBlocks = function(aString, lbl) {
 
 ActionManager.prototype.onOpenProject = function(str) {
     this.ide().openProjectString(str);
-}
+};
+
 //////////////////// Loading Projects ////////////////////
 ActionManager.prototype.loadProject = function(ide, lastSeen) {
-    var myself = this;
+    var myself = this,
+        str = this.serializer.serialize(ide.stage),
+        event;
 
     // Clear old info
     this.initializeRecords();
+
+    // Record the event
+    event = {
+        type: 'openProject',
+        args: [str]
+    };
+    SnapUndo.record(event);
 
     // Update the id counter
     this.lastSeen = lastSeen || 0;
@@ -1988,6 +1998,8 @@ ActionManager.prototype.loadProject = function(ide, lastSeen) {
     ide.sprites.asArray().concat(ide.stage).forEach(function(sprite) {
         return myself.loadOwner(sprite);
     });
+
+    return event;
 };
 
 ActionManager.prototype._getCurrentTarget = function(block) {
