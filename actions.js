@@ -413,7 +413,7 @@ ActionManager.prototype.getId = function (block, index) {
     return id;
 };
 
-ActionManager.prototype.serializeBlock = function(block, force) {
+ActionManager.prototype.serializeBlock = function(block, force, justMe) {
     if (block.id && !force) {
         return block.id;
     }
@@ -422,7 +422,9 @@ ActionManager.prototype.serializeBlock = function(block, force) {
         return block.toXML(this.serializer);
     }
 
-    return block.toScriptXML(this.serializer);
+    return justMe ?
+        '<script>' + block.toBlockXML(this.serializer) + '</script>':
+        block.toScriptXML(this.serializer);
 };
 
 ActionManager.prototype.deserializeBlock = function(ser) {
@@ -501,7 +503,7 @@ ActionManager.prototype._replaceBlock = function(block, newBlock) {
 };
 
 ActionManager.prototype._removeBlock = function(block, userDestroy) {
-    var serialized = this.serializeBlock(block, true),
+    var serialized = this.serializeBlock(block, true, userDestroy),
         position = this._positionOf[block.id],
         target = this._targetOf[block.id],
         ownerId = this._blockToOwnerId[block.id],
