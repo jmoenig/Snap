@@ -150,7 +150,7 @@ CustomCommandBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2017-January-11';
+modules.blocks = '2017-January-13';
 
 var SyntaxElementMorph;
 var BlockMorph;

@@ -74,7 +74,7 @@ isRetinaSupported, SliderMorph, Animation*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2017-January-10';
+modules.gui = '2017-January-13';
 
 // Declarations
 
@@ -251,6 +251,8 @@ IDE_Morph.prototype.init = function (isAutoFill) {
 
     this.loadNewProject = false; // flag when starting up translated
     this.shield = null;
+
+    this.savingPreferences = true; // for bh's infamous "Eisenbergification"
 
     // initialize inherited properties:
     IDE_Morph.uber.init.call(this);
@@ -2069,6 +2071,9 @@ IDE_Morph.prototype.applySavedSettings = function () {
 };
 
 IDE_Morph.prototype.saveSetting = function (key, value) {
+    if (!this.savingPreferences) {
+        return;
+    }
     if (localStorage) {
         localStorage['-snap-setting-' + key] = value;
     }
@@ -3182,7 +3187,7 @@ IDE_Morph.prototype.aboutSnap = function () {
         module, btn1, btn2, btn3, btn4, licenseBtn, translatorsBtn,
         world = this.world();
 
-    aboutTxt = 'Snap! 4.0.10 - rc -\nBuild Your Own Blocks\n\n'
+    aboutTxt = 'Snap! 4.0.10\nBuild Your Own Blocks\n\n'
         + 'Copyright \u24B8 2017 Jens M\u00F6nig and '
         + 'Brian Harvey\n'
         + 'jens@moenig.org, bh@cs.berkeley.edu\n\n'

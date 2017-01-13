@@ -42,7 +42,7 @@
 
 /*global modules, contains*/
 
-modules.locale = '2017-January-10';
+modules.locale = '2017-January-13';
 
 // Global stuff
 

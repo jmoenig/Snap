@@ -3272,8 +3272,12 @@ http://snap.berkeley.edu/run#cloud:Username=jens&ProjectName=rotation
 ------
 * Error handling improvements for custom drop-down submenus and generic WHEN hats
 
+170113
+------
+* GUI: added "savingPreferences" flag for bh's "Eisenbergification" library, sigh.
 
-== v4.10 === (in development)
+
+== v4.10 ===
 
 Features:
 * auto-wrapping of C-slots
