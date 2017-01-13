@@ -9,7 +9,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2016 by Jens Mönig
+    Copyright (C) 2017 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -82,7 +82,7 @@ SpeechBubbleMorph, RingMorph, isNil, FileReader, TableDialogMorph,
 BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph*/
 
-modules.objects = '2016-December-27';
+modules.objects = '2017-January-09';
 
 var SpriteMorph;
 var StageMorph;
@@ -2272,7 +2272,11 @@ SpriteMorph.prototype.freshPalette = function (category) {
             });
         }
 
-        menu.addItem('find blocks...', function () {myself.searchBlocks(); });
+        menu.addPair(
+            'find blocks...',
+            function () {myself.searchBlocks(); },
+            '⌘F'
+        );
         if (canHidePrimitives()) {
             menu.addItem(
                 'hide primitives',
@@ -3197,12 +3201,15 @@ SpriteMorph.prototype.comeToFront = function () {
 };
 
 SpriteMorph.prototype.goBack = function (layers) {
-    var layer, newLayer = +layers || 0;
+    var layer,
+        newLayer = +layers,
+        targetLayer;
+
     if (!this.parent) {return null; }
     layer = this.parent.children.indexOf(this);
-    if (layer < newLayer) {return null; }
     this.parent.removeChild(this);
-    this.parent.children.splice(layer - newLayer, null, this);
+    targetLayer = Math.max(layer - newLayer, 0);
+    this.parent.children.splice(targetLayer, null, this);
     this.parent.changed();
 };
 
@@ -3342,7 +3349,7 @@ SpriteMorph.prototype.applyGraphicsEffects = function (canvas) {
 
     var ctx, imagedata;
 
-    function transform_fisheye (imagedata, value) {
+    function transform_fisheye(imagedata, value) {
         var pixels, newImageData, newPixels, centerX, centerY,
             w, h, x, y, dx, dy, r, angle, srcX, srcY, i, srcI;
 
@@ -3362,8 +3369,12 @@ SpriteMorph.prototype.applyGraphicsEffects = function (canvas) {
                 r = Math.pow(Math.sqrt(dx * dx + dy * dy), value);
                 if (r <= 1) {
                     angle = Math.atan2(dy, dx);
-                    srcX = Math.floor(centerX + (r * Math.cos(angle) * centerX));
-                    srcY = Math.floor(centerY + (r * Math.sin(angle) * centerY));
+                    srcX = Math.floor(
+                        centerX + (r * Math.cos(angle) * centerX)
+                    );
+                    srcY = Math.floor(
+                        centerY + (r * Math.sin(angle) * centerY)
+                    );
                 } else {
                     srcX = x;
                     srcY = y;
@@ -3379,7 +3390,7 @@ SpriteMorph.prototype.applyGraphicsEffects = function (canvas) {
         return newImageData;
     }
 
-    function transform_whirl (imagedata, value) {
+    function transform_whirl(imagedata, value) {
         var pixels, newImageData, newPixels, w, h, centerX, centerY,
             x, y, radius, scaleX, scaleY, whirlRadians, radiusSquared,
             dx, dy, d, factor, angle, srcX, srcY, i, srcI, sina, cosa;
@@ -3412,8 +3423,12 @@ SpriteMorph.prototype.applyGraphicsEffects = function (canvas) {
                     angle = whirlRadians * (factor * factor);
                     sina = Math.sin(angle);
                     cosa = Math.cos(angle);
-                    srcX = Math.floor((cosa * dx - sina * dy) / scaleX + centerX);
-                    srcY = Math.floor((sina * dx + cosa * dy) / scaleY + centerY);
+                    srcX = Math.floor(
+                        (cosa * dx - sina * dy) / scaleX + centerX
+                    );
+                    srcY = Math.floor(
+                        (sina * dx + cosa * dy) / scaleY + centerY
+                    );
                 } else {
                     srcX = x;
                     srcY = y;
@@ -3429,7 +3444,7 @@ SpriteMorph.prototype.applyGraphicsEffects = function (canvas) {
         return newImageData;
     }
 
-    function transform_pixelate (imagedata, value) {
+    function transform_pixelate(imagedata, value) {
         var pixels, newImageData, newPixels, w, h,
             x, y, srcX, srcY, i, srcI;
 
@@ -3455,14 +3470,17 @@ SpriteMorph.prototype.applyGraphicsEffects = function (canvas) {
         return newImageData;
     }
 
-    function transform_mosaic (imagedata, value) {
+    function transform_mosaic(imagedata, value) {
         var pixels, i, l, newImageData, newPixels, srcI;
         pixels = imagedata.data;
         newImageData = ctx.createImageData(imagedata.width, imagedata.height);
         newPixels = newImageData.data;
 
         value = Math.round((Math.abs(value) + 10) / 10);
-        value = Math.max(0, Math.min(value, Math.min(imagedata.width, imagedata.height)));
+        value = Math.max(
+            0,
+            Math.min(value, Math.min(imagedata.width, imagedata.height))
+        );
         for (i = 0, l = pixels.length; i < l; i += 4) {
             srcI = i * value % l;
             newPixels[i] = pixels[srcI];
@@ -3473,7 +3491,7 @@ SpriteMorph.prototype.applyGraphicsEffects = function (canvas) {
         return newImageData;
     }
 
-    function transform_duplicate (imagedata, value) {
+    function transform_duplicate(imagedata, value) {
         var pixels, i;
         pixels = imagedata.data;
         for (i = 0; i < pixels.length; i += 4) {
@@ -3485,7 +3503,12 @@ SpriteMorph.prototype.applyGraphicsEffects = function (canvas) {
         return imagedata;
     }
 
-    function transform_HSV (imagedata, hueShift, saturationShift, brightnessShift) {
+    function transform_HSV(
+            imagedata,
+            hueShift,
+            saturationShift,
+            brightnessShift
+    ) {
         var pixels, index, l, r, g, b, max, min, span,
             h, s, v, i, f, p, q, t, newR, newG, newB;
         pixels = imagedata.data;
@@ -3609,21 +3632,38 @@ SpriteMorph.prototype.applyGraphicsEffects = function (canvas) {
         imagedata = ctx.getImageData(0, 0, canvas.width, canvas.height);
 
         if (this.graphicsValues.fisheye) {
-            imagedata = transform_fisheye(imagedata, this.graphicsValues.fisheye);
+            imagedata = transform_fisheye(
+                imagedata,
+                this.graphicsValues.fisheye
+            );
         }
         if (this.graphicsValues.whirl) {
-            imagedata = transform_whirl(imagedata, this.graphicsValues.whirl);
+            imagedata = transform_whirl(
+                imagedata,
+                this.graphicsValues.whirl
+            );
         }
         if (this.graphicsValues.pixelate) {
-            imagedata = transform_pixelate(imagedata, this.graphicsValues.pixelate);
+            imagedata = transform_pixelate(
+                imagedata,
+                this.graphicsValues.pixelate
+            );
         }
         if (this.graphicsValues.mosaic) {
-            imagedata = transform_mosaic(imagedata, this.graphicsValues.mosaic);
+            imagedata = transform_mosaic(
+                imagedata,
+                this.graphicsValues.mosaic
+            );
         }
         if (this.graphicsValues.duplicate) {
-            imagedata = transform_duplicate(imagedata, this.graphicsValues.duplicate);
+            imagedata = transform_duplicate(
+                imagedata,
+                this.graphicsValues.duplicate
+            );
         }
-        if (this.graphicsValues.color || this.graphicsValues.saturation || this.graphicsValues.brightness) {
+        if (this.graphicsValues.color ||
+                this.graphicsValues.saturation ||
+                this.graphicsValues.brightness) {
             imagedata = transform_HSV(
                 imagedata,
                 this.graphicsValues.color,
@@ -3632,13 +3672,22 @@ SpriteMorph.prototype.applyGraphicsEffects = function (canvas) {
             );
         }
         if (this.graphicsValues.negative) {
-            imagedata = transform_negative(imagedata, this.graphicsValues.negative);
+            imagedata = transform_negative(
+                imagedata,
+                this.graphicsValues.negative
+            );
         }
         if (this.graphicsValues.comic) {
-            imagedata = transform_comic(imagedata, this.graphicsValues.comic);
+            imagedata = transform_comic(
+                imagedata,
+                this.graphicsValues.comic
+            );
         }
         if (this.graphicsValues.confetti) {
-            imagedata = transform_confetti(imagedata, this.graphicsValues.confetti);
+            imagedata = transform_confetti(
+                imagedata,
+                this.graphicsValues.confetti
+            );
         }
 
         ctx.putImageData(imagedata, 0, 0);
@@ -4411,6 +4460,7 @@ SpriteMorph.prototype.toggleVariableWatcher = function (varName, isGlobal) {
     stage.add(watcher);
     watcher.fixLayout();
     watcher.keepWithin(stage);
+    return watcher;
 };
 
 SpriteMorph.prototype.showingVariableWatcher = function (varName) {
@@ -4811,6 +4861,29 @@ SpriteMorph.prototype.deletableVariableNames = function () {
             }
         )
     );
+};
+
+SpriteMorph.prototype.hasSpriteVariable = function (varName) {
+    return contains(this.variables.names(), varName);
+};
+
+// Variable refactoring
+
+SpriteMorph.prototype.refactorVariableInstances = function (
+    oldName,
+    newName,
+    isGlobal
+) {
+    if (isGlobal && this.hasSpriteVariable(oldName)) {
+        return;
+    }
+
+    this.scripts.children.forEach(function (child) {
+        if (child instanceof BlockMorph) {
+            child.refactorVarInStack(oldName, newName);
+        }
+    });
+
 };
 
 // SpriteMorph inheritance - custom blocks
@@ -6703,6 +6776,14 @@ StageMorph.prototype.globalVariables
 StageMorph.prototype.inheritedVariableNames = function () {
     return [];
 };
+
+// StageMorph variable refactoring
+
+StageMorph.prototype.hasSpriteVariable
+    = SpriteMorph.prototype.hasSpriteVariable;
+
+StageMorph.prototype.refactorVariableInstances
+    = SpriteMorph.prototype.refactorVariableInstances;
 
 // SpriteBubbleMorph ////////////////////////////////////////////////////////
 

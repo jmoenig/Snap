@@ -185,7 +185,7 @@ SnapTranslator.dict.ca = {
     'translator_e-mail':
         'bernat@arduino.org, jguille2@xtec.cat', // optional
     'last_changed':
-        '2016-12-12', // this, too, will appear in the Translators tab
+        '2017-01-09', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -1967,5 +1967,160 @@ SnapTranslator.dict.ca = {
 	'uncheck for smooth\nscaling of vector costumes':
 		'desmarqueu per atenuar\nescalant les imatges vectorials',
 	'check to enable\nsprite composition':
-		'marqueu per habilitar\nl\'ancoratge d\'objectes'
+		'marqueu per habilitar\nl\'ancoratge d\'objectes',
+
+	'Execute on slider change':
+		'Executa en utilitzar els lliscadors',
+	'uncheck to suppress\nrunning scripts\nwhen moving the slider':
+		'desmarqueu per no llançar\nl\'execució dels programes\nen utilitzar els seus lliscadors',
+	'check to run\nthe edited script\nwhen moving the slider':
+		'marqueu per habilitar\nl\'execució dels programes\nen utilitzar els seus lliscadors',
+
+//Developer mode menus
+	'user features...':
+		'opcions d\'usuari...',
+	'color...':
+		'color...',
+	'\ncolor:':
+		'\ncolor:',
+	'choose another color \nfor this morph':
+		'trieu un altre color\nper aquest \'morph\'',
+	'transparency...':
+		'transparència...',
+	'\nalpha\nvalue:':
+		'\nvalor del\ncanal alfa:',
+	'set this morph\'s\nalpha value':
+		'fixeu el valor del canal\nalfa per aquest \'morph\'',
+	'resize...':
+		'redimensiona...',
+	'show a handle\nwhich can be dragged\nto change this morph\'s extent':
+		'mostra una nansa per\npoder-la arrossegar i canviar\nla mida d\'aquest \'morph\'',
+	'duplicate':
+		'duplica',
+	'make a copy\nand pick it up':
+		'fés una còpia\ni pren-la',
+	'pick up':
+		'pren aquest \'morph\'',
+	'detach and put \ninto the hand':
+		'arrossega i mou\namb el punter',
+	'attach...':
+		'enganxa...',
+	'stick this morph\nto another one':
+		'enganxa aquest \'morph\' a un altre',
+	'move...':
+		'mou...',
+	'show a handle\nwhich can be dragged\nto move this morph':
+		'mostra una nansa per\npoder-la arrossegar i\nmoure aquest \'morph\'',
+	'inspect...':
+		'examina...',
+	'open a window\non all properties':
+		'obre una finestra\namb totes les propietats',
+	'pic...':
+		'imatge...',
+	'open a new window\nwith a picture of this morph':
+		'obre una finestra amb\nuna imatge d\'aquest \'morph\'',
+	'lock':
+		'bloqueja',
+	'make this morph\nunmovable':
+		'fés que aquest \'morph\'\nno es pugui moure',
+	'unlock':
+		'desbloqueja',
+	'make this morph\nmovable':
+		'fés que aquest \'morph\'\nes pugui moure',
+	'World...':
+		'Món...',
+	'show the\nWorld\'s menu':
+		'mostra el menú del Món',
+	//World options
+	'demo...':
+		'exemple...',
+	'sample morphs':
+		'crea un \'morph\' de mostra',
+	'hide all...':
+		'amaga-ho tot',
+	'show all...':
+		'mostra-ho tot',
+	'move all inside...':
+		'mou tot a dins',
+	'keep all submorphs\nwithin and visible':
+		'manté tots els \'submorphs\'\na dins i visibles',
+	'open a window on\nall properties':
+		'obre una finestra\namb totes les propietats',
+	'screenshot...':
+		'captura de pantalla...',
+	'open a new window\nwith a picture of this morph':
+		'obre una finestra\n amb la imatge del Món',
+	'restore display':
+		'reestableix la visualització',
+	'redraw the\nscreen once':
+		'repinta la pantalla\nuna vegada',
+	'fill page...':
+		'omple la finestra...',
+	'let the World automatically\nadjust to browser resizing':
+		'permet que el Món s\'ajusti\nautomàticament al canvi de mida de la finestra',
+	'sharp shadows...':
+		'ombres contrastades...',
+	'sharp drop shadows\nuse for old browsers':
+		'utilitza ombres contrastades\nper a navegadors antics',
+	'blurred shadows...':
+		'ombres degradades...',
+	'blurry shades,\n use for new browsers':
+		'utilitza ombres degradades\n per a navegadors moderns',
+	'choose the World\'s\nbackground color':
+		'tria el color de\nfons del Món',
+	'touch screen settings':
+		'configuració per pantalla tàctil',
+	'bigger menu fonts\nand sliders':
+		'fa més grans els lliscadors i els menús',
+	'standard settings':
+		'configuració estàndard',
+	'smaller menu fonts\nand sliders':
+		'fa més petits els lliscadors i els menús',
+	'user mode...':
+		'mode d\'usuari...',
+	'disable developers\'\ncontext menus':
+		'desabilita els menús\ndel mode de desenvolupament',
+	'development mode...':
+		'mode de desenvolupament',
+	'about morphic.js...':
+		'sobre morphic.js...',
+	//Make a Morph
+	'make a morph':
+		'crea un \'morph\'',
+	'rectangle':
+		'rectangle',
+	'box':
+		'caixa',
+	'circle box':
+		'caixa circular',
+	'frame':
+		'marc',
+	'scroll frame':
+		'marc amb desplaçament',
+	'handle':
+		'nansa',
+	'string':
+		'cadena',
+	'Hello, World!':
+		'Hola Món!',
+	'speech bubble':
+		'bafarada',
+	'gray scale palette':
+		'paleta d\'escala de grisos',
+	'color palette':
+		'paleta de colors',
+	'color picker':
+		'selector de color',
+	'sensor demo':
+		'exemple de sensor',
+	'animation demo':
+		'exemple d\'animació',
+
+//future JS options
+	'uncheck to disable support for\nnative JavaScript functions':
+		'desmarqueu per deshabilitar\nl\'execució de Javascript',
+	'check to support\nnative JavaScript functions':
+		'marqueu per habilitar\nl\'execució de Javascript',
+	'JavaScript is not enabled':
+		'l\'execució de Javascript està deshabilitada'
 };
