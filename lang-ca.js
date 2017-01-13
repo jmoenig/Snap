@@ -1069,6 +1069,15 @@ SnapTranslator.dict.ca = {
     'for this sprite only':
         'només per a aquest objecte',
 
+    // variables refactoring
+    'rename only\nthis reporter':
+        'reanomena només\naquesta instància',
+    'rename all...':
+        'reanomena arreu...',
+    'rename all blocks that\naccess this variable':
+        'reanomena totes les instàncies\nd\'aquesta variable',
+
+
     // block dialog
     'Change block':
         'Canvia el bloc',
@@ -2122,5 +2131,38 @@ SnapTranslator.dict.ca = {
 	'check to support\nnative JavaScript functions':
 		'marqueu per habilitar\nl\'execució de Javascript',
 	'JavaScript is not enabled':
-		'l\'execució de Javascript està deshabilitada'
+		'l\'execució de Javascript està deshabilitada',
+
+//Libraries
+	'Loading':
+		'S\'està carregant',
+	'Imported':
+		'S\'ha importat',
+	'Iteration, composition':
+		'Iteracions i composició',
+	'List utilities':
+		'Utilitats per a llistes',
+	'Streams (lazy lists)':
+		'Streams (llistes presconstruides)',
+	'Variadic reporters':
+		'Càlculs multientrada',
+	'Web services access (https)':
+		'Accés a serveis Web (https)',
+	'Words, sentences':
+		'Paraules i frases',
+	'Multi-branched conditional (switch)':
+		'Condicionals compostos (switch)',
+	'LEAP Motion controller':
+		'Controladors per a LEAP Motion',
+	'Set RGB or HSV pen color':
+		'Acoloriment del llapis per RGB o HSV',
+	'Save and restore pictures drawn by pen':
+		'Gestió de les captures d\'imatges dibuixades',
+	'Catch errors in a script':
+		'Alternatives per les errades dels programes',
+	'Allow multi-line text input to a block':
+		'Entrades multilínia',
+//
+	'(no matches)':
+		'(cap resultat)'
 };
