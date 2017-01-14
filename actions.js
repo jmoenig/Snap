@@ -18,7 +18,7 @@ function ActionManager() {
     this._onAccept = {};
     this._onReject = {};
     this.initialize();
-};
+}
 
 ActionManager.prototype.addActions = function() {
     var actions = Array.prototype.slice.call(arguments),
@@ -1974,13 +1974,25 @@ ActionManager.prototype.onImportBlocks = function(aString, lbl) {
 };
 
 ActionManager.prototype.onOpenProject = function(str) {
-    this.ide().openProjectString(str);
+    if (str) {
+        this.disableCollaboration();
+        SnapUndo.reset();
+        location.hash = '';
+
+        if (str.indexOf('<project') === 0) {
+            return this.rawOpenProjectString(str);
+        }
+        if (str.indexOf('<snapdata') === 0) {
+            return this.rawOpenCloudDataString(str);
+        }
+    } else {
+        this.ide().newProject();
+    }
 };
 
 //////////////////// Loading Projects ////////////////////
-ActionManager.prototype.loadProject = function(ide, lastSeen) {
+ActionManager.prototype.loadProject = function(ide, lastSeen, serialized) {
     var myself = this,
-        str = this.serializer.serialize(ide.stage),
         event;
 
     // Clear old info
@@ -1989,8 +2001,12 @@ ActionManager.prototype.loadProject = function(ide, lastSeen) {
     // Record the event
     event = {
         type: 'openProject',
-        args: [str]
+        args: []
     };
+
+    if (serialized) {
+        event.args.push(serialized);
+    }
     SnapUndo.record(event);
 
     // Update the id counter

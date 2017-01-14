@@ -4072,6 +4072,8 @@ IDE_Morph.prototype.openProjectString = function (str) {
 };
 
 IDE_Morph.prototype.rawOpenProjectString = function (str) {
+    var project;
+
     this.toggleAppMode(false);
     this.spriteBar.tabBar.tabTo('scripts');
     StageMorph.prototype.hiddenPrimitives = {};
@@ -4083,7 +4085,7 @@ IDE_Morph.prototype.rawOpenProjectString = function (str) {
     Process.prototype.enableLiveCoding = false;
     if (Process.prototype.isCatchingErrors) {
         try {
-            this.serializer.openProject(
+            project = this.serializer.openProject(
                 this.serializer.load(str, this),
                 this
             );
@@ -4091,11 +4093,12 @@ IDE_Morph.prototype.rawOpenProjectString = function (str) {
             this.showMessage('Load failed: ' + err);
         }
     } else {
-        this.serializer.openProject(
+        project = this.serializer.openProject(
             this.serializer.load(str, this),
             this
         );
     }
+    SnapActions.loadProject(this, project.collabStartIndex, str);
     this.stopFastTracking();
 };
 
@@ -4118,7 +4121,8 @@ IDE_Morph.prototype.openCloudDataString = function (str) {
 };
 
 IDE_Morph.prototype.rawOpenCloudDataString = function (str) {
-    var model;
+    var project,
+        model;
     StageMorph.prototype.hiddenPrimitives = {};
     StageMorph.prototype.codeMappings = {};
     StageMorph.prototype.codeHeaders = {};
@@ -4132,7 +4136,7 @@ IDE_Morph.prototype.rawOpenCloudDataString = function (str) {
         try {
             model = this.serializer.parse(str);
             this.serializer.loadMediaModel(model.childNamed('media'));
-            this.serializer.openProject(
+            project = this.serializer.openProject(
                 this.serializer.loadProjectModel(
                     model.childNamed('project'),
                     this
@@ -4145,7 +4149,7 @@ IDE_Morph.prototype.rawOpenCloudDataString = function (str) {
     } else {
         model = this.serializer.parse(str);
         this.serializer.loadMediaModel(model.childNamed('media'));
-        this.serializer.openProject(
+        project = this.serializer.openProject(
             this.serializer.loadProjectModel(
                 model.childNamed('project'),
                 this
@@ -4153,6 +4157,7 @@ IDE_Morph.prototype.rawOpenCloudDataString = function (str) {
             this
         );
     }
+    SnapActions.loadProject(this, project.collabStartIndex, str);
     this.stopFastTracking();
 };
 
