@@ -61,7 +61,7 @@ normalizeCanvas*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2016-November-24';
+modules.store = '2016-December-27';
 
 
 // XML_Serializer ///////////////////////////////////////////////////////
@@ -1017,6 +1017,16 @@ SnapSerializer.prototype.loadBlock = function (model, isReporter) {
                 model.attributes['var']
             );
         }
+        /*
+        if (model.attributes.s === 'reportJSFunction' &&
+                !Process.prototype.enableJS) {
+            if (window.confirm('enable JavaScript?')) {
+                Process.prototype.enableJS = true;
+            } else {
+                throw new Error('JavaScript is not enabled');
+            }
+        }
+        */
         block = SpriteMorph.prototype.blockForSelector(model.attributes.s);
     } else if (model.tag === 'custom-block') {
         isGlobal = model.attributes.scope ? false : true;
