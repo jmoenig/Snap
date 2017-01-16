@@ -2990,7 +2990,7 @@ IDE_Morph.prototype.parseResourceFile = function (text) {
     // Examples are libraries/LIBRARIES.json, Costumes/COSTUMES.json, etc
     // The file format is JSON, with a single key 'resources' which is an array
     // of objects in the form {fileName:, name:, description:}
-    return JSON.parse(text).resources;
+    return JSON.parse(text);
 };
 
 IDE_Morph.prototype.importMedia = function (folderName) {
