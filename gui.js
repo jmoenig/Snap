@@ -885,7 +885,7 @@ IDE_Morph.prototype.createControlBar = function () {
         }
         this.refreshResumeSymbol();
     };
-    
+
     this.controlBar.refreshResumeSymbol = function () {
         var pauseSymbols;
         if (Process.prototype.enableSingleStepping &&
@@ -2919,7 +2919,7 @@ IDE_Morph.prototype.projectMenu = function () {
         'Libraries...',
         function() {
             myself.getURL(
-                myself.resourceURL('libraries', 'LIBRARIES'),
+                myself.resourceURL('libraries', 'LIBRARIES.json'),
                 function (txt) {
                     var libraries = myself.parseResourceFile(txt);
                     new LibraryImportDialogMorph(myself, libraries).popUp();
@@ -2960,7 +2960,7 @@ IDE_Morph.prototype.getMediaList = function (dirname, callback) {
     // based on the contents file.
     // If no callback is specified, synchronously return the list of files
     // Note: Synchronous fetching has been deprecated and should be switched
-    var url = this.resourceURL(dirname, dirname.toUpperCase()),
+    var url = this.resourceURL(dirname, dirname.toUpperCase() + ".json"),
         async = callback instanceof Function,
         myself = this,
         data;
@@ -2987,29 +2987,10 @@ IDE_Morph.prototype.getMediaList = function (dirname, callback) {
 
 IDE_Morph.prototype.parseResourceFile = function (text) {
     // A Resource File lists all the files that could be loaded in a submenu
-    // Examples are libraries/LIBRARIES, Costumes/COSTUMES, etc
-    // The file format is tab-delimited, with unix newlines:
-    // file-name, Display Name, Help Text (optional)
-    var parts,
-        items = [];
-
-    text.split('\n').map(function (line) {
-        return line.trim();
-    }).filter(function (line) {
-        return line.length > 0;
-    }).forEach(function (line) {
-        parts = line.split('\t').map(function (str) { return str.trim(); });
-
-        if (parts.length < 2) {return; }
-
-        items.push({
-            fileName: parts[0],
-            name: parts[1],
-            description: parts.length > 2 ? parts[2] : ''
-        });
-    });
-
-    return items;
+    // Examples are libraries/LIBRARIES.json, Costumes/COSTUMES.json, etc
+    // The file format is JSON, with a single key 'resources' which is an array
+    // of objects in the form {fileName:, name:, description:}
+    return JSON.parse(text).resources;
 };
 
 IDE_Morph.prototype.importMedia = function (folderName) {
@@ -4203,7 +4184,7 @@ IDE_Morph.prototype.saveFileAs = function (
 IDE_Morph.prototype.saveCanvasAs = function (canvas, fileName, newWindow) {
     // Export a Canvas object as a PNG image
     // Note: This commented out due to poor browser support.
-    // cavas.toBlob() is currently supported in Firefox, IE, Chrome but 
+    // cavas.toBlob() is currently supported in Firefox, IE, Chrome but
     // browsers prevent easily saving the generated files.
     // Do not re-enable without revisiting issue #1191
     // if (canvas.toBlob) {
@@ -4213,7 +4194,7 @@ IDE_Morph.prototype.saveCanvasAs = function (canvas, fileName, newWindow) {
     //     });
     //     return;
     // }
-    
+
     this.saveFileAs(canvas.toDataURL(), 'image/png', fileName, newWindow);
 };
 
@@ -5620,7 +5601,7 @@ ProjectDialogMorph.prototype.buildFilterField = function () {
     this.filterField.reactToKeystroke = function (evt) {
         var text = this.getValue();
 
-        myself.listField.elements = 
+        myself.listField.elements =
             myself.projectList.filter(function (aProject) {
                 var name,
                     notes;
@@ -6248,7 +6229,7 @@ ProjectDialogMorph.prototype.fixLayout = function () {
 
 // LibraryImportDialogMorph ///////////////////////////////////////////
 // I am preview dialog shown before importing a library.
-// I inherit from a DialogMorph but look similar to 
+// I inherit from a DialogMorph but look similar to
 // ProjectDialogMorph, and BlockImportDialogMorph
 
 LibraryImportDialogMorph.prototype = new DialogBoxMorph();
@@ -6483,7 +6464,7 @@ LibraryImportDialogMorph.prototype.fixLayout = function () {
     Morph.prototype.trackChanges = oldFlag;
     this.changed();
 };
-    
+
 // Library Cache Utilities.
 LibraryImportDialogMorph.prototype.hasCached = function (key) {
     return this.libraryCache.hasOwnProperty(key);
@@ -8122,8 +8103,7 @@ PaletteHandleMorph.prototype.mouseEnter
 
 PaletteHandleMorph.prototype.mouseLeave
     = StageHandleMorph.prototype.mouseLeave;
-    
+
 PaletteHandleMorph.prototype.mouseDoubleClick = function () {
     this.target.parentThatIsA(IDE_Morph).setPaletteWidth(200);
 };
-
