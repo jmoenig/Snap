@@ -2021,10 +2021,10 @@ ActionManager.prototype.onOpenProject = function(str) {
         location.hash = '';
 
         if (str.indexOf('<project') === 0) {
-            return this.rawOpenProjectString(str);
+            return this.ide().rawOpenProjectString(str);
         }
         if (str.indexOf('<snapdata') === 0) {
-            return this.rawOpenCloudDataString(str);
+            return this.ide().rawOpenCloudDataString(str);
         }
     } else {
         this.ide().newProject();
