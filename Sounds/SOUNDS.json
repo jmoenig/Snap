@@ -1,14 +1,64 @@
 {
-    "Cat.mp3": "Cat\n",
-    "Chord.wav": "Chord\n",
-    "Dog1.wav": "Dog 1\n",
-    "Dog2.wav": "Dog 2\n",
-    "FingerSnap.wav": "Finger Snap\n",
-    "Kitten.wav": "Kitten\n",
-    "Laugh-female.wav": "Laugh Female\n",
-    "Laugh-male1.wav": "Laugh Male 1\n",
-    "Laugh-male2.wav": "Laugh Male 2\n",
-    "Laugh-male3.mp3": "Laugh Male 3\n",
-    "Meow.wav": "Meow\n",
-    "Pop.wav": "Pop\n"
+    "resources": [
+        {
+            "fileName": "Cat.mp3",
+            "name": "Cat",
+            "description": ""
+        },
+        {
+            "fileName": "Chord.wav",
+            "name": "Chord",
+            "description": ""
+        },
+        {
+            "fileName": "Dog1.wav",
+            "name": "Dog 1",
+            "description": ""
+        },
+        {
+            "fileName": "Dog2.wav",
+            "name": "Dog 2",
+            "description": ""
+        },
+        {
+            "fileName": "FingerSnap.wav",
+            "name": "Finger Snap",
+            "description": ""
+        },
+        {
+            "fileName": "Kitten.wav",
+            "name": "Kitten",
+            "description": ""
+        },
+        {
+            "fileName": "Laugh-female.wav",
+            "name": "Laugh Female",
+            "description": ""
+        },
+        {
+            "fileName": "Laugh-male1.wav",
+            "name": "Laugh Male 1",
+            "description": ""
+        },
+        {
+            "fileName": "Laugh-male2.wav",
+            "name": "Laugh Male 2",
+            "description": ""
+        },
+        {
+            "fileName": "Laugh-male3.mp3",
+            "name": "Laugh Male 3",
+            "description": ""
+        },
+        {
+            "fileName": "Meow.wav",
+            "name": "Meow",
+            "description": ""
+        },
+        {
+            "fileName": "Pop.wav",
+            "name": "Pop",
+            "description": ""
+        }
+    ]
 }
