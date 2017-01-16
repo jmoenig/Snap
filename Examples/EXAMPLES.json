@@ -1,54 +1,52 @@
-{
-    "resources": [
-        {
-            "fileName": "animal-game.xml",
-            "name": "Animal Game",
-            "description": ""
-        },
-        {
-            "fileName": "Codification.xml",
-            "name": "Codification",
-            "description": ""
-        },
-        {
-            "fileName": "copter.xml",
-            "name": "Copter",
-            "description": ""
-        },
-        {
-            "fileName": "count-change.xml",
-            "name": "Count Change",
-            "description": ""
-        },
-        {
-            "fileName": "icecream-visual.xml",
-            "name": "Icecream Visual",
-            "description": ""
-        },
-        {
-            "fileName": "JSfunctions.xml",
-            "name": "JSfunctions",
-            "description": ""
-        },
-        {
-            "fileName": "live-tree.xml",
-            "name": "Live Tree",
-            "description": ""
-        },
-        {
-            "fileName": "swimmer.xml",
-            "name": "Swimmer",
-            "description": ""
-        },
-        {
-            "fileName": "tree.xml",
-            "name": "Tree",
-            "description": ""
-        },
-        {
-            "fileName": "vee.xml",
-            "name": "Vee",
-            "description": ""
-        }
-    ]
-}
+[
+    {
+        "fileName": "animal-game.xml",
+        "name": "Animal Game",
+        "description": ""
+    },
+    {
+        "fileName": "Codification.xml",
+        "name": "Codification",
+        "description": ""
+    },
+    {
+        "fileName": "copter.xml",
+        "name": "Copter",
+        "description": ""
+    },
+    {
+        "fileName": "count-change.xml",
+        "name": "Count Change",
+        "description": ""
+    },
+    {
+        "fileName": "icecream-visual.xml",
+        "name": "Icecream Visual",
+        "description": ""
+    },
+    {
+        "fileName": "JSfunctions.xml",
+        "name": "JSfunctions",
+        "description": ""
+    },
+    {
+        "fileName": "live-tree.xml",
+        "name": "Live Tree",
+        "description": ""
+    },
+    {
+        "fileName": "swimmer.xml",
+        "name": "Swimmer",
+        "description": ""
+    },
+    {
+        "fileName": "tree.xml",
+        "name": "Tree",
+        "description": ""
+    },
+    {
+        "fileName": "vee.xml",
+        "name": "Vee",
+        "description": ""
+    }
+]

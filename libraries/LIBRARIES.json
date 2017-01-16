@@ -1,64 +1,62 @@
-{
-    "resources": [
-        {
-            "fileName": "iteration-composition.xml",
-            "name": "Iteration, composition",
-            "description": "Traditional loop constructs (while, until, etc.) plus the Lisp \"named let\" (a generalization of FOR) plus functional iteration (repeated invocation of a function) and function composition."
-        },
-        {
-            "fileName": "list-utilities.xml",
-            "name": "List utilities",
-            "description": "Some standard functions on lists (append, reverse, etc.)"
-        },
-        {
-            "fileName": "stream-tools.xml",
-            "name": "Streams (lazy lists)",
-            "description": "A variation on the list data type in which each list item aren't computed until it's needed, so you can construct million-item lists without really taking up all that time or memory, or even infinite-sized lists.  (A block that reports all the prime numbers is included as an example.)"
-        },
-        {
-            "fileName": "variadic-reporters.xml",
-            "name": "Variadic reporters",
-            "description": "Versions of +, x, AND, and OR that take more than two inputs."
-        },
-        {
-            "fileName": "httpBlocks.xml",
-            "name": "Web services access (https)",
-            "description": "An extended version of the HTTP:// block that allows POST, PUT, and DELETE as well as GET requests, allows using the secure HTTPS protocol, and gives control over headers, etc."
-        },
-        {
-            "fileName": "word-sentence.xml",
-            "name": "Words, sentences",
-            "description": "One of the big ideas in Logo that they left out of Scratch is thinking of text as structured into words and sentences, rather than just a string of characters.  This library (along with the JOIN WORDS block in the Tools library) brings back that idea."
-        },
-        {
-            "fileName": "cases.xml",
-            "name": "Multi-branched conditional (switch)",
-            "description": "Like \"switch\" in C-like languages or \"cond\" in Lisp.  Thanks to Nathan Dinsmore for inventing the idea of a separate block for each branch!"
-        },
-        {
-            "fileName": "leap-library.xml",
-            "name": "LEAP Motion controller",
-            "description": "Report hand positions from LEAP Motion controller (leapmotion.com)."
-        },
-        {
-            "fileName": "setrgb.xml",
-            "name": "Set RGB or HSV pen color",
-            "description": "Set or report pen color as RGB (red, blue, green) or HSV (hue, saturation, value)."
-        },
-        {
-            "fileName": "penTrails.xml",
-            "name": "Save and restore pictures drawn by pen",
-            "description": "Save and restore lines drawn and costumes stamped on the stage, or make a sprite costume from saved pen trails."
-        },
-        {
-            "fileName": "try-catch.xml",
-            "name": "Catch errors in a script",
-            "description": "Run a script; if an error happens, instead of stopping the script with a red halo, run another script to handle the error. Also includes a block to cause an error with a message given as input. Also includes a block to create a script variable and give it a value."
-        },
-        {
-            "fileName": "multiline.xml",
-            "name": "Allow multi-line text input to a block",
-            "description": "In general, text inputs allow only a single line.  The MULTILINE block accepts multi-line text input and can be used in text input slots of other blocks."
-        }
-    ]
-}
+[
+    {
+        "fileName": "iteration-composition.xml",
+        "name": "Iteration, composition",
+        "description": "Traditional loop constructs (while, until, etc.) plus the Lisp \"named let\" (a generalization of FOR) plus functional iteration (repeated invocation of a function) and function composition."
+    },
+    {
+        "fileName": "list-utilities.xml",
+        "name": "List utilities",
+        "description": "Some standard functions on lists (append, reverse, etc.)"
+    },
+    {
+        "fileName": "stream-tools.xml",
+        "name": "Streams (lazy lists)",
+        "description": "A variation on the list data type in which each list item aren't computed until it's needed, so you can construct million-item lists without really taking up all that time or memory, or even infinite-sized lists.  (A block that reports all the prime numbers is included as an example.)"
+    },
+    {
+        "fileName": "variadic-reporters.xml",
+        "name": "Variadic reporters",
+        "description": "Versions of +, x, AND, and OR that take more than two inputs."
+    },
+    {
+        "fileName": "httpBlocks.xml",
+        "name": "Web services access (https)",
+        "description": "An extended version of the HTTP:// block that allows POST, PUT, and DELETE as well as GET requests, allows using the secure HTTPS protocol, and gives control over headers, etc."
+    },
+    {
+        "fileName": "word-sentence.xml",
+        "name": "Words, sentences",
+        "description": "One of the big ideas in Logo that they left out of Scratch is thinking of text as structured into words and sentences, rather than just a string of characters.  This library (along with the JOIN WORDS block in the Tools library) brings back that idea."
+    },
+    {
+        "fileName": "cases.xml",
+        "name": "Multi-branched conditional (switch)",
+        "description": "Like \"switch\" in C-like languages or \"cond\" in Lisp.  Thanks to Nathan Dinsmore for inventing the idea of a separate block for each branch!"
+    },
+    {
+        "fileName": "leap-library.xml",
+        "name": "LEAP Motion controller",
+        "description": "Report hand positions from LEAP Motion controller (leapmotion.com)."
+    },
+    {
+        "fileName": "setrgb.xml",
+        "name": "Set RGB or HSV pen color",
+        "description": "Set or report pen color as RGB (red, blue, green) or HSV (hue, saturation, value)."
+    },
+    {
+        "fileName": "penTrails.xml",
+        "name": "Save and restore pictures drawn by pen",
+        "description": "Save and restore lines drawn and costumes stamped on the stage, or make a sprite costume from saved pen trails."
+    },
+    {
+        "fileName": "try-catch.xml",
+        "name": "Catch errors in a script",
+        "description": "Run a script; if an error happens, instead of stopping the script with a red halo, run another script to handle the error. Also includes a block to cause an error with a message given as input. Also includes a block to create a script variable and give it a value."
+    },
+    {
+        "fileName": "multiline.xml",
+        "name": "Allow multi-line text input to a block",
+        "description": "In general, text inputs allow only a single line.  The MULTILINE block accepts multi-line text input and can be used in text input slots of other blocks."
+    }
+]
