@@ -1298,13 +1298,9 @@ ActionManager.prototype.onMoveBlock = function(id, rawTarget) {
         scripts = target.element.parentThatIsA(ScriptsMorph);
         if (block.parent) {
             if (target.loc === 'bottom') {
-                // disconnect command block
-                block.parent.removeChild(block);
-                scripts.add(block);
+                this.disconnectBlock(block, scripts);
             } else if (target.loc === 'top' && !(block.parent instanceof ScriptsMorph)) {
-                // disconnect if connecting to a parent
-                block.parent.removeChild(block);
-                scripts.add(block);
+                this.disconnectBlock(block, scripts);
             }
         }
     } else if (block instanceof ReporterBlockMorph || block instanceof CommentMorph) {
@@ -1477,27 +1473,27 @@ ActionManager.prototype.disconnectBlock = function(block, scripts) {
     var oldParent = block.parent,
         inputIndex;
 
-    if (scripts) block.parent = scripts;
-
     scripts = scripts || block.parentThatIsA(ScriptsMorph);
-    if (oldParent) {
+    if (oldParent && !(oldParent instanceof ScriptsMorph)) {
+
         inputIndex = oldParent.inputs ? oldParent.inputs().indexOf(block) : -1;
+        if (inputIndex > -1 && oldParent.revertToDefaultInput) {
+            oldParent.revertToDefaultInput(block);
+        }
 
-        if (oldParent.revertToDefaultInput) oldParent.revertToDefaultInput(block);
+        scripts.add(block);
 
-        if (!(oldParent instanceof ScriptsMorph)) {
-            if (oldParent.reactToGrabOf) {
-                oldParent.reactToGrabOf(block);
-            }
-            if (oldParent.fixLayout) {
-                oldParent.fixLayout();
-            }
-            oldParent.changed();
+        if (oldParent.reactToGrabOf) {
+            oldParent.reactToGrabOf(block);
+        }
+        if (oldParent.fixLayout) {
+            oldParent.fixLayout();
+        }
+        oldParent.changed();
 
-            if (scripts) {
-                scripts.drawNew();
-                scripts.changed();
-            }
+        if (scripts) {
+            scripts.drawNew();
+            scripts.changed();
         }
     }
 
