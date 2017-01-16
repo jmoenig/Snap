@@ -2988,8 +2988,7 @@ IDE_Morph.prototype.getMediaList = function (dirname, callback) {
 IDE_Morph.prototype.parseResourceFile = function (text) {
     // A Resource File lists all the files that could be loaded in a submenu
     // Examples are libraries/LIBRARIES.json, Costumes/COSTUMES.json, etc
-    // The file format is JSON, with a single key 'resources' which is an array
-    // of objects in the form {fileName:, name:, description:}
+    // The file format is a JSON array of objects in the form {fileName:, name:, description:}
     return JSON.parse(text);
 };
 
