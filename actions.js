@@ -146,6 +146,7 @@ ActionManager.prototype.initializeRecords = function() {
     // Additional records for undo/redo support
     this._positionOf = {};
     this._targetOf = {};
+    this._targetFor = {};  // reverse map of _targetOf TODO
     this._blockToOwnerId = {};
 };
 
@@ -522,6 +523,18 @@ ActionManager.prototype._removeBlock = function(block, userDestroy) {
             serialized
         );
     }
+
+    // Get the records to restore on undo
+    var restoreMoves = [],
+        ids;
+
+    if (this._targetFor[block.id]) {
+        ids = Object.keys(this._targetFor[block.id]);
+        for (var i = ids.length; i--;) {
+            restoreMoves.push([ids[i], this._targetFor[block.id][ids[i]]]);
+        }
+    }
+    args.push(restoreMoves);
 
     return args;
 };
@@ -1044,10 +1057,26 @@ ActionManager.prototype._onSetBlocksPositions = function(ids, positions) {
 };
 
 ActionManager.prototype._onSetBlockPosition = function(id, x, y) {
-    var position = new Point(x, y);
+    var position = new Point(x, y),
+        connectedIds,
+        target;
 
     this._positionOf[id] = position;
+    // If there is a block connected to the 'top' of this block, clear the given
+    // target
+    if (this._targetFor[id]) {
+        connectedIds = Object.keys(this._targetFor[id]);
+        for (var i = connectedIds.length; i--;) {
+            target = this._targetFor[id][connectedIds[i]];
+            if (target.loc === 'top') {
+                // Clear the record
+                // TODO
+                console.error('TODO: clear the record!');
+            }
+        }
+    }
     delete this._targetOf[id];
+
     this.onSetBlockPosition(id, position);
 };
 
@@ -1253,7 +1282,7 @@ ActionManager.prototype.onMoveBlock = function(id, rawTarget) {
         target = copy(rawTarget),
         scripts;
 
-    this._targetOf[id] = rawTarget;
+    this.__recordTarget(block.id, rawTarget);
 
     if (block instanceof CommandBlockMorph) {
         // Check if connecting to the beginning of a custom block definition
@@ -1305,7 +1334,7 @@ ActionManager.prototype.onMoveBlock = function(id, rawTarget) {
     scripts.drawNew();
 
     if (isNewBlock) {
-        this._targetOf[block.id] = rawTarget;
+        this._positionOf[block.id] = this.getStandardPosition(scripts, block.position());
         // set the owner to custom block id if necessary
         if (target.element instanceof PrototypeHatBlockMorph) {
             this.registerBlocks(block, target.element.definition);
@@ -1331,7 +1360,8 @@ ActionManager.prototype.onMoveBlock = function(id, rawTarget) {
 };
 
 ActionManager.prototype.onRemoveBlock = function(id, userDestroy) {
-    var block = this.getBlockFromId(id),
+    var myself = this,
+        block = this.getBlockFromId(id),
         method = userDestroy && block.userDestroy ? 'userDestroy' : 'destroy',
         scripts = block.parentThatIsA(ScriptsMorph),
         parent = block.parent;
@@ -1342,9 +1372,19 @@ ActionManager.prototype.onRemoveBlock = function(id, userDestroy) {
             block.prepareToBeGrabbed(this.world().hand);
         }
 
+        // clear the records for entire deleted subtree/following blocks
+        var root = block;
+        if (method === 'userDestroy') {  // only provide the reporter inputs
+            root = block.inputs();
+            this.__clearBlockRecords(id);
+        }
+
+        this.traverse(root, function(block) {
+            myself.__clearBlockRecords(id);
+        });
+
         // Remove the block
         block[method]();
-        this.__clearBlockRecords(id);
 
         this._updateBlockDefinitions(block);
 
@@ -1589,10 +1629,11 @@ ActionManager.prototype.onRingify = function(blockId, ringId) {
 
         // If it is a Reporter, potentially may need to update the target
         if (block instanceof ReporterBlockMorph && this._targetOf[block.id]) {
-            this._targetOf[ring.id] = this._targetOf[block.id];  // ring occupies the block's old target
+            this.__recordTarget(ring.id, this._targetOf[block.id]);
+
             // update the block for it's new id
             var newTarget = this.getId(block.parent, block.parent.inputs().indexOf(block));
-            this._targetOf[block.id] = newTarget;
+            this.__recordTarget(block.id, newTarget);
         }
     }
     this._updateBlockDefinitions(block);
@@ -2082,7 +2123,7 @@ ActionManager.prototype._registerBlockState = function(block, initial) {
         scripts = block.parentThatIsA(ScriptsMorph);
 
         if (target) {
-            this._targetOf[block.id] = target;
+            this.__recordTarget(block.id, target);
         } else if (scripts) {
             standardPosition = this.getStandardPosition(scripts, block.position());
             this._positionOf[block.id] = standardPosition;
@@ -2187,7 +2228,7 @@ ActionManager.prototype.loadCustomBlocks = function(blocks, owner) {
 };
 
 ActionManager.prototype.traverse = function(block, fn) {
-    var current = [block],
+    var current = block instanceof Array ? block : [block],
         next,
         inputs,
         i,j;
@@ -2265,9 +2306,61 @@ ActionManager.prototype.__updateActiveEditor = function(itemId) {
 };
 
 ActionManager.prototype.__clearBlockRecords = function(id) {
+    var target = this._targetOf[id],
+        targetId;
+
     delete this._blocks[id];
     delete this._positionOf[id];
     delete this._blockToOwnerId[id];
+
+    delete this._targetOf[id];
+
+    if (this._targetFor[id]) {
+        // Clear the target ids of all blocks connected to this block
+        var connectedIds = Object.keys(this._targetFor[id]);
+        for (var i = connectedIds.length; i--;) {
+            delete this._targetOf[connectedIds[i]];
+        }
+    }
+    delete this._targetFor[id];
+    this.__clearTarget(id, true);
+};
+
+ActionManager.prototype.__recordTarget = function(id, target) {
+    var targetId = this.__targetId(target);
+
+    this.__clearTarget(id);
+
+    this._targetOf[id] = target;
+
+    // Record the targetTo records
+    if (!this._targetFor[targetId]) {
+        this._targetFor[targetId] = {};
+    }
+    this._targetFor[targetId][id] = target;
+};
+
+ActionManager.prototype.__targetId = function(target) {
+    if ((typeof target) === 'object') {
+        return target.element;
+    } else {
+        return target;
+    }
+};
+
+ActionManager.prototype.__clearTarget = function(id) {
+    var oldTarget = this._targetOf[id],
+        oldTargetId;
+
+    // Clear targetFor record
+    if (oldTarget) {  // Remove old targetFor
+        oldTargetId = this.__targetId(this._targetOf[id]);
+        if (this._targetFor[oldTargetId]) {
+            delete this._targetFor[oldTargetId][id];
+        }
+    }
+
+    // Clear regular record
     delete this._targetOf[id];
 };
 

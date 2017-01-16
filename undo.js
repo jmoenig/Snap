@@ -270,21 +270,38 @@ UndoManager.Invert.addBlock = function(args) {
 
 UndoManager.Invert.removeBlock = function(args) {
     // args are
-    //  [id, userDestroy, y, x, ownerId, block]
+    //  [id, userDestroy, y, x, ownerId, block, reconnectPairs]
     // or 
-    //  [id, userDestroy, target, block]
+    //  [id, userDestroy, target, block, reconnectPairs]
+
+    var pairs = args.pop(),
+        event = {
+            type: 'batch',
+            args: []
+        };
+
     if (args.length === 4) {
         args.splice(1, 1);
-        return {
+        event.args.push({
             type: 'moveBlock',
             args: args.reverse()
-        };
+        });
     } else {
-        return {
+        event.args.push({
             type: 'addBlock',
             args: args.reverse()
-        };
+        });
     }
+
+    // TODO: reconnect all blocks that were connected to this one
+    for (var i = pairs.length; i--;) {
+        event.args.push({
+            type: 'moveBlock',
+            args: pairs[i]
+        });
+    }
+
+    return event;
 };
 
 UndoManager.Invert._actionForState = function(state) {
