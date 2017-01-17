@@ -1202,20 +1202,25 @@ ActionManager.prototype.world = function() {
     return owner ? owner.parentThatIsA(WorldMorph) : null;
 };
 
-ActionManager.prototype._getCustomBlockEditor = function(blockId) {
+ActionManager.prototype._getCustomBlockEditor = function(id, block) {
     // Check for the block editor in the world children for this definition
     var children = this.world() ? this.world().children : [],
-        owner = this._customBlockOwner[blockId],
-        blockDef = this._customBlocks[blockId],
+        owner = this._customBlockOwner[id],
+        blockDef = this._customBlocks[id],
         editor = detect(children, function(child) {
-            return child instanceof BlockEditorMorph && child.definition.id === blockId;
+            return child instanceof BlockEditorMorph && child.definition.id === id;
         });
 
     if (!editor && blockDef) {  // Create new editor dialog
-        editor = new BlockEditorMorph(blockDef, owner);
-        editor.popUp();  // need to guarantee the correct pos
-        editor.setInitialDimensions();
-        editor.cancel();
+        if (block) {
+            editor = block.parentThatIsA(BlockEditorMorph);
+        }
+        if (!editor) {
+            editor = new BlockEditorMorph(blockDef, owner);
+            editor.popUp();  // need to guarantee the correct pos
+            editor.setInitialDimensions();
+            editor.cancel();
+        }
     }
 
     return editor;
@@ -1287,7 +1292,7 @@ ActionManager.prototype.onMoveBlock = function(id, rawTarget) {
     if (block instanceof CommandBlockMorph) {
         // Check if connecting to the beginning of a custom block definition
         if (this._customBlocks[target.element]) {
-            target.element = this._getCustomBlockEditor(target.element)
+            target.element = this._getCustomBlockEditor(target.element, block)
                 .body.contents  // get ScriptsMorph of BlockEditorMorph
                 .children.find(function(child) {
                     return child instanceof PrototypeHatBlockMorph
