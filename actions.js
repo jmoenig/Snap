@@ -1470,16 +1470,12 @@ ActionManager.prototype.getFieldValue = function(block, index) {
 };
 
 ActionManager.prototype.disconnectBlock = function(block, scripts) {
-    var oldParent = block.parent,
-        inputIndex;
+    var oldParent = block.parent;
 
     scripts = scripts || block.parentThatIsA(ScriptsMorph);
     if (oldParent && !(oldParent instanceof ScriptsMorph)) {
 
-        inputIndex = oldParent.inputs ? oldParent.inputs().indexOf(block) : -1;
-        if (inputIndex > -1 && oldParent.revertToDefaultInput) {
-            oldParent.revertToDefaultInput(block);
-        }
+        block.prepareToBeGrabbed();
 
         scripts.add(block);
 
