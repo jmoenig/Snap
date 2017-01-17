@@ -2093,7 +2093,7 @@ ActionManager.prototype._getCurrentTarget = function(block) {
             block.id = id;
             return target;
         }
-    } else if (block instanceof CommentMorph) {
+    } else if (block instanceof CommentMorph && block.block) {
         return block.block.id;
     }
 
