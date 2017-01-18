@@ -6377,7 +6377,7 @@ LibraryImportDialogMorph.prototype.installLibrariesList = function () {
             myself.displayBlocks(item.fileName);
         } else {
             myself.showMessage(
-                localize('Loading') + '\n' + localize(item.name)
+                localize('Loading preview') + '\n' + localize(item.name)
             );
             myself.ide.getURL(
                 myself.ide.resourceURL('libraries', item.fileName),
