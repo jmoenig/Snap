@@ -146,7 +146,7 @@ ActionManager.prototype.initializeRecords = function() {
     // Additional records for undo/redo support
     this._positionOf = {};
     this._targetOf = {};
-    this._targetFor = {};  // reverse map of _targetOf TODO
+    this._targetFor = {};
     this._blockToOwnerId = {};
 };
 
@@ -1069,13 +1069,11 @@ ActionManager.prototype._onSetBlockPosition = function(id, x, y) {
         for (var i = connectedIds.length; i--;) {
             target = this._targetFor[id][connectedIds[i]];
             if (target.loc === 'top') {
-                // Clear the record
-                // TODO
-                console.error('TODO: clear the record!');
+                this.__clearTarget(this.__targetId(target));
             }
         }
     }
-    delete this._targetOf[id];
+    this.__clearTarget(id);
 
     this.onSetBlockPosition(id, position);
 };
@@ -1345,7 +1343,7 @@ ActionManager.prototype.onMoveBlock = function(id, rawTarget) {
     }
 
     if (target instanceof ReporterBlockMorph) {
-        delete this._targetOf[target.id];
+        this.__clearTarget(target.id);
         this._positionOf[target.id] = this.getStandardPosition(scripts, target.position());
     }
 
@@ -2303,14 +2301,9 @@ ActionManager.prototype.__updateActiveEditor = function(itemId) {
 };
 
 ActionManager.prototype.__clearBlockRecords = function(id) {
-    var target = this._targetOf[id],
-        targetId;
-
     delete this._blocks[id];
     delete this._positionOf[id];
     delete this._blockToOwnerId[id];
-
-    delete this._targetOf[id];
 
     if (this._targetFor[id]) {
         // Clear the target ids of all blocks connected to this block
@@ -2320,7 +2313,7 @@ ActionManager.prototype.__clearBlockRecords = function(id) {
         }
     }
     delete this._targetFor[id];
-    this.__clearTarget(id, true);
+    this.__clearTarget(id);
 };
 
 ActionManager.prototype.__recordTarget = function(id, target) {
