@@ -1309,11 +1309,11 @@ ActionManager.prototype.onMoveBlock = function(id, rawTarget) {
             }
         }
     } else if (block instanceof ReporterBlockMorph || block instanceof CommentMorph) {
-        target = this.getBlockFromId(target);
-        scripts = target.parentThatIsA(ScriptsMorph);
-
         // Disconnect the given block
         this.disconnectBlock(block, scripts);
+
+        target = this.getBlockFromId(target);
+        scripts = target.parentThatIsA(ScriptsMorph);
 
         // If the target is a RingMorph, it will be overwritten rather than popped out
         if (target instanceof RingMorph) {
