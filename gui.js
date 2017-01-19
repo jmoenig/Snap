@@ -7145,7 +7145,7 @@ CostumeIconMorph.prototype.renameCostume = function () {
             }
         }
     ).prompt(
-        this.currentSprite instanceof SpriteMorph ?
+        ide.currentSprite instanceof SpriteMorph ?
             'rename costume' : 'rename background',
         costume.name,
         this.world()

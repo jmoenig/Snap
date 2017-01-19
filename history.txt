@@ -3313,3 +3313,4 @@ Fixes:
 * Objects: support localization when typing expressions
 * German translation update
 * Blocks: changed keyboard shortcut indicator for “find blocks” to “^”
+* GUI: fixed #1631
