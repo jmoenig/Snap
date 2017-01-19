@@ -887,6 +887,7 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             part.setSpec('%rr %ringparms');
             part.isDraggable = true;
             part.isStatic = true;
+            part.type = 'reporter';
             break;
         case '%predRing':
             part = new RingMorph(true);
@@ -895,6 +896,7 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             part.setSpec('%rp %ringparms');
             part.isDraggable = true;
             part.isStatic = true;
+            part.type = 'boolean';
             break;
         case '%words':
             part = new MultiArgMorph('%s', null, 0);
@@ -947,6 +949,7 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             break;
         case '%obj':
             part = new ArgMorph('object');
+            part.type = ['stage', 'sprite'];
             break;
         case '%n':
             part = new InputSlotMorph(null, true);
@@ -1396,6 +1399,7 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
         case '%clr':
             part = new ColorSlotMorph();
             part.isStatic = true;
+            part.type = 'color';
             break;
         case '%t':
             part = new TemplateSlotMorph('a');
@@ -6682,12 +6686,13 @@ function CommandSlotMorph() {
 }
 
 CommandSlotMorph.prototype.init = function (silently) {
-    CommandSlotMorph.uber.init.call(this, null, true); // silently
+    CommandSlotMorph.uber.init.call(this, 'command', true); // silently
     this.color = new Color(0, 17, 173);
     this.setExtent(
         new Point(230, this.corner * 4 + this.cSlotPadding),
         silently
     );
+    //this.type = 'command';
 };
 
 CommandSlotMorph.prototype.getSpec = function () {
@@ -7146,6 +7151,7 @@ RingCommandSlotMorph.prototype.init = function (silently) {
     this.color = new Color(0, 17, 173);
     this.alpha = RingMorph.prototype.alpha;
     this.contrast = RingMorph.prototype.contrast;
+    this.type = 'reporter';
 };
 
 RingCommandSlotMorph.prototype.getSpec = function () {
@@ -7750,6 +7756,12 @@ InputSlotMorph.prototype.init = function (
     contents.isDraggable = false;
     contents.enableSelecting();
     this.setContents(text);
+    
+    if (this.isNumeric) {
+        this.type = 'number';
+    } else {
+        this.type = 'text';
+    }
 };
 
 // InputSlotMorph accessing:
@@ -8814,7 +8826,7 @@ function BooleanSlotMorph(initialValue) {
 BooleanSlotMorph.prototype.init = function (initialValue) {
     this.value = (typeof initialValue === 'boolean') ? initialValue : null;
     this.isUnevaluated = false;
-    BooleanSlotMorph.uber.init.call(this);
+    BooleanSlotMorph.uber.init.call(this, 'boolean');
 };
 
 BooleanSlotMorph.prototype.getSpec = function () {
@@ -10892,7 +10904,7 @@ function ColorSlotMorph(clr) {
 }
 
 ColorSlotMorph.prototype.init = function (clr) {
-    ColorSlotMorph.uber.init.call(this, null, true); // silently
+    ColorSlotMorph.uber.init.call(this, 'color', true); // silently
     this.setColor(clr || new Color(145, 26, 68));
 };
 
@@ -11070,7 +11082,8 @@ MultiArgMorph.prototype.init = function (
     this.shadowOffset = shadowOffset || null;
 
     this.canBeEmpty = true;
-    MultiArgMorph.uber.init.call(this, null, true); // silently
+    // TODO: Designate the list type?
+    MultiArgMorph.uber.init.call(this, 'list', true); // silently
 
     // MultiArgMorphs are transparent by default b/c of zebra coloring
     this.alpha = isTransparent === false ? 1 : 0;

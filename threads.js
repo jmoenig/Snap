@@ -907,16 +907,69 @@ Process.prototype.expectReport = function () {
 // Process Exception Handling
 
 Process.prototype.handleError = function (error, element) {
-    var m = element;
+    // Turn a block spec into a human readable from by stripping 
+    // the inputs from the name.
+    // "tell %s to %cs" → "TELL TO"
+    // TODO: Localization?
+    function humanReadableName(block) {
+        block.parseSpec(block.blockSpec).filter(function (str) {
+            return str.indexOf('%') !== 0;
+        }).join(' ').toUpperCase();
+    };
+    
+    var m = element,
+        template,
+        templateInputs,
+        msgText,
+        humanBlockName,
+        slotNumber,
+        typeMsg;
+        
     this.stop();
     this.errorFlag = true;
     this.topBlock.addErrorHighlight();
     if (isNil(m) || isNil(m.world())) {m = this.topBlock; }
+    msgText = m === element ? '' : 'Inside: ';
+    
+    if (!isNil(element)) {
+        // TODO: Assert contents of list are right?
+        template = element.definition.templateInstance();
+        templateInputs = template.parts().filter(function (part) {
+            return part instanceof ArgMorph;
+        });
+        element.inputs().some(function (input, idx) {
+            var inputSlot = templateInputs[idx],
+                inputType;
+            slotNumber = idx + 1;
+            try {
+                if (input instanceof InputSlotMorph) {
+                    inputType = this.reportTypeOf(input.evaluate());
+                } else {
+                    inputType = this.reportTypeOf(input);
+                }
+            } catch (Error) {
+                inputType = 'unkown';
+            }
+            if (inputType !== inputSlot.type) {
+                typeMsg = inputSlot.type + ' but received a ' + inputType;
+                return true;
+            }
+        });
+        humanBlockName = humanReadableName(template);
+        msgText += humanReadableName + '\n';
+        if (error.message && error.name === 'Snap Error') {
+            msgText += error.message;
+        } else {
+            msgText += 'input ' + slotNumber
+                    + ' expected an input of type '
+                    + typeMsg;
+        }
+    } else {
+        msgText += error.name + '\n' + error.message;
+    }
+    
     m.showBubble(
-        (m === element ? '' : 'Inside: ')
-            + error.name
-            + '\n'
-            + error.message,
+        msgText,
         this.exportResult
     );
 };
