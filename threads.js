@@ -171,6 +171,21 @@ function invoke(
     return proc.homeContext.inputs[0];
 }
 
+// SnapError ///////////////////////////////////////////////////////////
+/*
+    A SnapError is a wrapper around a standard JS Error message.
+    By throwing SnapError we can distinguish between our error messages
+    and ones from JS, which can be presented differently to users.
+*/
+function SnapError(message) {
+  this.name = 'Snap Error';
+  this.message = localize(message || 'An error has occurred.');
+  this.stack = (new Error()).stack;
+}
+
+SnapError.prototype = new Error();
+SnapError.prototype.constructor = SnapError;
+
 // ThreadManager ///////////////////////////////////////////////////////
 
 function ThreadManager() {
