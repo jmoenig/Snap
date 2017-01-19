@@ -2275,7 +2275,7 @@ SpriteMorph.prototype.freshPalette = function (category) {
         menu.addPair(
             'find blocks...',
             function () {myself.searchBlocks(); },
-            '⌘F'
+            '^F'
         );
         if (canHidePrimitives()) {
             menu.addItem(
