@@ -2283,6 +2283,9 @@ Process.prototype.assertType = function (thing, typeString) {
     if (typeString instanceof Array && contains(typeString, thingType)) {
         return true;
     }
+    if (typeString instanceof Array) {
+        typeString = typeString.join(' or ');
+    }
     throw new Error('expecting ' + typeString + ' but getting ' + thingType);
 };
 
