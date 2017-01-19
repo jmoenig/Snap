@@ -150,7 +150,7 @@ CustomCommandBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2017-January-13';
+modules.blocks = '2017-January-19';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -2824,7 +2824,10 @@ BlockMorph.prototype.restoreInputs = function (oldInputs) {
         if (old instanceof ReporterBlockMorph) {
             leftOver.push(old);
         } else if (old instanceof CommandSlotMorph) {
-            leftOver.push(old.nestedBlock());
+            nb = old.nestedBlock();
+            if (nb) {
+                leftOver.push(nb);
+            }
         }
     }
     this.cachedInputs = null;

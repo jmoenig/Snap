@@ -3277,7 +3277,7 @@ http://snap.berkeley.edu/run#cloud:Username=jens&ProjectName=rotation
 * GUI: added "savingPreferences" flag for bh's "Eisenbergification" library, sigh.
 
 
-== v4.10 ===
+== v4.0.10 ===
 
 Features:
 * auto-wrapping of C-slots
@@ -3302,3 +3302,11 @@ Fixes:
 * Evaluate the generic WHEN-hat block’s predicate and first step of the attached script in the same atom
 * “go back _ layers” to work with out-of bounds numbers, thanks, Brian Broll!
 * Translation updates (Russian, Polish, Danish, Portuguese, Catalan, German)
+
+
+== v4.0.10.1 - in development - ===
+
+170119
+------
+* GUI: began new development version
+* Blocks: fixed #1630
