@@ -3310,3 +3310,5 @@ Fixes:
 ------
 * GUI: began new development version
 * Blocks: fixed #1630
+* Objects: support localization when typing expressions
+* German translation update

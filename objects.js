@@ -82,7 +82,7 @@ SpeechBubbleMorph, RingMorph, isNil, FileReader, TableDialogMorph,
 BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph*/
 
-modules.objects = '2017-January-13';
+modules.objects = '2017-January-19';
 
 var SpriteMorph;
 var StageMorph;
@@ -2737,7 +2737,8 @@ SpriteMorph.prototype.reporterize = function (expressionString) {
 
     function blockFromAST(ast) {
         var block, selectors, monads, alias, key, sel, i, inps,
-            off = 1;
+            off = 1,
+            reverseDict = {};
         selectors = {
             '+': 'reportSum',
             '-': 'reportDifference',
@@ -2758,7 +2759,10 @@ SpriteMorph.prototype.reporterize = function (expressionString) {
             ceil: 'ceiling',
             '!' : 'not'
         };
-        key = alias[ast[0]] || ast[0];
+        monads.concat(['true', 'false']).forEach(function (word) {
+            reverseDict[localize(word).toLowerCase()] = word;
+        });
+        key = alias[ast[0]] || reverseDict[ast[0].toLowerCase()] || ast[0];
         if (contains(monads, key)) { // monadic
             sel = selectors[key];
             if (sel) { // single input
@@ -2778,11 +2782,14 @@ SpriteMorph.prototype.reporterize = function (expressionString) {
             if (ast[i] instanceof Array) {
                 block.silentReplaceInput(inps[i - off], blockFromAST(ast[i]));
             } else if (isString(ast[i])) {
-                if (contains(['true', 'false'], ast[i])) {
+                if (contains(
+                    ['true', 'false'], reverseDict[ast[i]] || ast[i])
+                ) {
                     block.silentReplaceInput(
                         inps[i - off],
                         SpriteMorph.prototype.blockForSelector(
-                            ast[i] === 'true' ? 'reportTrue' : 'reportFalse'
+                            (reverseDict[ast[i]] || ast[i]) === 'true' ?
+                                    'reportTrue' : 'reportFalse'
                         )
                     );
                 } else if (ast[i] !== '_') {
