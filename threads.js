@@ -1580,23 +1580,23 @@ Process.prototype.reportCONS = function (car, cdr) {
 };
 
 Process.prototype.reportCDR = function (list) {
+    if (!list) {return; }
     // this.assertType(list, 'list');
     return list.cdr();
 };
 
 Process.prototype.doAddToList = function (element, list) {
+    if (!list) {return; }
     // this.assertType(list, 'list');
     list.add(element);
 };
 
 Process.prototype.doDeleteFromList = function (index, list) {
     var idx = index;
+    if (index === '' || !list) {return; }
     // this.assertType(list, 'list');
     if (this.inputOption(index) === 'all') {
         return list.clear();
-    }
-    if (index === '') {
-        return null;
     }
     if (this.inputOption(index) === 'last') {
         idx = list.length();
@@ -1608,10 +1608,8 @@ Process.prototype.doDeleteFromList = function (index, list) {
 
 Process.prototype.doInsertInList = function (element, index, list) {
     var idx = index;
+    if (index === '' || !list) {return; }
     // this.assertType(list, 'list');
-    if (index === '') {
-        return null;
-    }
     if (this.inputOption(index) === 'any') {
         idx = this.reportRandom(1, list.length() + 1);
     }
@@ -1623,10 +1621,8 @@ Process.prototype.doInsertInList = function (element, index, list) {
 
 Process.prototype.doReplaceInList = function (index, list, element) {
     var idx = index;
+    if (index === '' || !list) {return; }
     // this.assertType(list, 'list');
-    if (index === '') {
-        return null;
-    }
     if (this.inputOption(index) === 'any') {
         idx = this.reportRandom(1, list.length());
     }
@@ -1638,10 +1634,8 @@ Process.prototype.doReplaceInList = function (index, list, element) {
 
 Process.prototype.reportListItem = function (index, list) {
     var idx = index;
+    if (index === '' || !list) {return ''; }
     // this.assertType(list, 'list');
-    if (index === '') {
-        return '';
-    }
     if (this.inputOption(index) === 'any') {
         idx = this.reportRandom(1, list.length());
     }
@@ -1652,11 +1646,13 @@ Process.prototype.reportListItem = function (index, list) {
 };
 
 Process.prototype.reportListLength = function (list) {
+    if (!list) {return 0; }
     // this.assertType(list, 'list');
     return list.length();
 };
 
 Process.prototype.reportListContainsItem = function (list, element) {
+    if (!list) {return false; }
     // this.assertType(list, 'list');
     return list.contains(element);
 };
