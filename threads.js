@@ -2585,16 +2585,11 @@ Process.prototype.reportUnicodeAsLetter = function (num) {
 
 Process.prototype.reportTextSplit = function (string, delimiter) {
     var types = ['text', 'number'],
-        strType = this.reportTypeOf(string),
-        delType = this.reportTypeOf(this.inputOption(delimiter)),
         str,
         del;
-    if (!contains(types, strType)) {
-        throw new Error('expecting text instead of a ' + strType);
-    }
-    if (!contains(types, delType)) {
-        throw new Error('expecting a text delimiter instead of a ' + delType);
-    }
+    this.assertType(string, types);
+    this.assertType(this.inputOption(delimiter), types);
+
     str = isNil(string) ? '' : string.toString();
     switch (this.inputOption(delimiter)) {
     case 'line':
