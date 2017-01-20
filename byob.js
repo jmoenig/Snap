@@ -2926,7 +2926,7 @@ InputSlotDialogMorph.prototype.symbolMenu = function () {
             '$' + symbol
         ]);
     });
-    symbols.push(['\u03A0 ' + localize('line break'), 'br']);
+    symbols.push(['\u03A0 ' + localize('line break'), '$br']);
     return symbols;
 };
 
