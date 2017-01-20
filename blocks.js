@@ -1859,7 +1859,7 @@ BlockMorph.prototype.toggleSnapSound = function () {
         this.snapSound = null;
     } else {
         BlockMorph.prototype.snapSound = document.createElement('audio');
-        BlockMorph.prototype.snapSound.src = 'click.wav';
+        BlockMorph.prototype.snapSound.src = = config.asset_path + 'click.wav';
     }
     CommentMorph.prototype.snapSound = BlockMorph.prototype.snapSound;
 };
