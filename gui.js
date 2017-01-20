@@ -6266,7 +6266,7 @@ LibraryImportDialogMorph.prototype.init = function (ide, librariesData) {
     LibraryImportDialogMorph.uber.init.call(
         this,
         this, // target
-        null, // function
+        this.importLibrary, // action
         null  // environment
     );
 
