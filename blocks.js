@@ -8852,8 +8852,10 @@ BooleanSlotMorph.prototype.setContents = function (boolOrNull, silently) {
 };
 
 BooleanSlotMorph.prototype.toggleValue = function () {
-    var ide = this.parentThatIsA(IDE_Morph);
-    if (this.isStatic) {
+    var ide = this.parentThatIsA(IDE_Morph),
+        binary = isNil(this.parentThatIsA(RingMorph)) &&
+            !isNil(this.parentThatIsA(ScriptsMorph));
+    if (this.isStatic || binary) {
         this.setContents(!this.value, true);
     } else {
         switch (this.value) {

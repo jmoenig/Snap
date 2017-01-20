@@ -3320,3 +3320,4 @@ Fixes:
 * Blocks: improved inspectability of local variables
 * GUI: improved library browser, thanks, Michael!
 * BYOB: support user-forced line-breaks in custom block labels
+* Blocks: limit Boolean input slots to “true/false” unless inside a ring or in the palette
