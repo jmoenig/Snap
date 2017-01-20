@@ -8844,6 +8844,11 @@ BooleanSlotMorph.prototype.isEmptySlot = function () {
     return this.value === null;
 };
 
+BooleanSlotMorph.prototype.isBinary = function () {
+    return isNil(this.parentThatIsA(RingMorph)) &&
+        !isNil(this.parentThatIsA(ScriptsMorph));
+};
+
 BooleanSlotMorph.prototype.setContents = function (boolOrNull, silently) {
     this.value = (typeof boolOrNull === 'boolean') ? boolOrNull : null;
     if (silently) {return; }
@@ -8852,10 +8857,8 @@ BooleanSlotMorph.prototype.setContents = function (boolOrNull, silently) {
 };
 
 BooleanSlotMorph.prototype.toggleValue = function () {
-    var ide = this.parentThatIsA(IDE_Morph),
-        binary = isNil(this.parentThatIsA(RingMorph)) &&
-            !isNil(this.parentThatIsA(ScriptsMorph));
-    if (this.isStatic || binary) {
+    var ide = this.parentThatIsA(IDE_Morph);
+    if (this.isStatic || this.isBinary()) {
         this.setContents(!this.value, true);
     } else {
         switch (this.value) {
@@ -8902,7 +8905,7 @@ BooleanSlotMorph.prototype.mouseClickLeft = function () {
 
 BooleanSlotMorph.prototype.mouseEnter = function () {
     if (this.isStatic) {return; }
-    if (this.value === false) {
+    if (this.value === false && !this.isBinary()) {
         var oldValue = this.value;
         this.value = null;
         this.drawNew(3);
