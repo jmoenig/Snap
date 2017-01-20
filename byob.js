@@ -107,7 +107,7 @@ SymbolMorph, isNil, CursorMorph, VariableFrame, WatcherMorph, Variable*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2017-January-03';
+modules.byob = '2017-January-20';
 
 // Declarations
 
@@ -236,6 +236,8 @@ CustomBlockDefinition.prototype.blockSpec = function () {
     parts.forEach(function (part) {
         if (part[0] === '%' && part.length > 1) {
             spec = myself.typeOf(part.slice(1));
+        } else if (part === '$br') {
+            spec = '%br';
         } else {
             spec = part;
         }
@@ -2463,6 +2465,8 @@ BlockLabelFragmentMorph.prototype.userMenu = function () {
             name
         );
     });
+    menu.addLine();
+    menu.addItem('\u03A0 ' + localize('line break'), 'br');
     return menu;
 };
 
@@ -2922,6 +2926,7 @@ InputSlotDialogMorph.prototype.symbolMenu = function () {
             '$' + symbol
         ]);
     });
+    symbols.push(['\u03A0 ' + localize('line break'), 'br']);
     return symbols;
 };
 
