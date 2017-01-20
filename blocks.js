@@ -2175,7 +2175,7 @@ BlockMorph.prototype.init = function (silently) {
 
     BlockMorph.uber.init.call(this, silently);
     this.color = new Color(0, 17, 173);
-    this.cashedInputs = null;
+    this.cachedInputs = null;
 };
 
 BlockMorph.prototype.receiver = function () {
