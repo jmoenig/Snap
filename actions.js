@@ -1413,15 +1413,9 @@ ActionManager.prototype._updateBlockDefinitions = function(block) {
 ActionManager.prototype.onSetBlockPosition = function(id, position) {
     // Disconnect from previous...
     var block = this.getBlockFromId(id),
-        scripts = block.parentThatIsA(ScriptsMorph),
-        oldParent = block.parent,
-        inputIndex = oldParent && oldParent.inputs ? oldParent.inputs().indexOf(block) : -1;
+        scripts = block.parentThatIsA(ScriptsMorph);
 
     console.assert(block, 'Block "' + id + '" does not exist! Cannot set position');
-
-    if (block && block.prepareToBeGrabbed) {
-        block.prepareToBeGrabbed({world: this.ide().world()});
-    }
 
     // Check if editing a custom block
     var editor = block.parentThatIsA(BlockEditorMorph);
@@ -1429,23 +1423,10 @@ ActionManager.prototype.onSetBlockPosition = function(id, position) {
         scripts = editor.body.contents;
     }
 
+    this.disconnectBlock(block, scripts);
+
     position = this.getAdjustedPosition(position, scripts);
     block.setPosition(position);
-    scripts.add(block);
-
-    if (!(oldParent instanceof ScriptsMorph)) {
-        oldParent.fixLayout();
-        oldParent.drawNew();
-        oldParent.changed();
-
-        scripts.drawNew();
-        scripts.changed();
-    }
-
-    if (block.fixBlockColor) {  // not a comment
-        block.fixBlockColor();
-    }
-    block.changed();
 
     this.updateCommentsPositions(block);
 
