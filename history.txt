@@ -3318,3 +3318,4 @@ Fixes:
 170120
 ------
 * Blocks: improved inspectability of local variables
+* GUI: improved library browser, thanks, Michael!
