@@ -3314,3 +3314,7 @@ Fixes:
 * German translation update
 * Blocks: changed keyboard shortcut indicator for “find blocks” to “^”
 * GUI: fixed #1631
+
+170120
+------
+* Blocks: improved inspectability of local variables

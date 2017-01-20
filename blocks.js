@@ -150,7 +150,7 @@ CustomCommandBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2017-January-19';
+modules.blocks = '2017-January-20';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -2539,6 +2539,16 @@ BlockMorph.prototype.userMenu = function () {
                 );
             });
         }
+        proc.homeContext.variables.names().forEach(function (vn) {
+            if (!contains(vNames, vn)) {
+                menu.addItem(
+                    vn + '...',
+                    function () {
+                        proc.doShowVar(vn);
+                    }
+                );
+            }
+        });
         return menu;
     }
     if (this.parent.parentThatIsA(RingMorph)) {
