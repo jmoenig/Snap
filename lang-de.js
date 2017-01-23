@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org', // optional
     'last_changed':
-        '2017-01-19', // this, too, will appear in the Translators tab
+        '2017-01-23', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -845,6 +845,8 @@ SnapTranslator.dict.de = {
         'einschalten f\u00fcr flache\nPinselstrichenden',
     'uncheck for round ends of lines':
         'auschalten f\u00fcr runde\nPinselstrichenden',
+    'Ternary Boolean slots':
+        'Ternäre Bool\'sche Inputs',
     'Inheritance support':
         'Prototypische Vererbung',
 

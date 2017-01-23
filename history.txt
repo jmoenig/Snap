@@ -3326,3 +3326,4 @@ Fixes:
 ------
 * BYOB, Blocks, Store: added support for default values in custom block Boolean slots
 * GUI, Blocks, Store: allow project-setting “Ternary Boolean slots” to be switched off
+* German translation update
