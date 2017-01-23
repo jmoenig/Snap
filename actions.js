@@ -437,10 +437,7 @@ ActionManager.prototype.deserializeBlock = function(ser) {
         owner = this._owners[ownerId],
         stage = owner.parentThatIsA(StageMorph);
 
-        this.serializer.project = {
-            stage: stage,
-            sprites: {}
-        };
+        this.serializer.project = this.ide();
     }
 
     if (ser[0] !== '<') {
