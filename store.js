@@ -412,6 +412,8 @@ SnapSerializer.prototype.rawLoadProjectModel = function (xmlNode) {
     project.stage.setExtent(StageMorph.prototype.dimensions);
     SpriteMorph.prototype.useFlatLineEnds =
         model.stage.attributes.lines === 'flat';
+    BooleanSlotMorph.prototype.isTernary =
+        model.stage.attributes.ternary !== 'false';
     project.stage.isThreadSafe =
         model.stage.attributes.threadsafe === 'true';
     StageMorph.prototype.enableCodeMapping =
@@ -1511,6 +1513,7 @@ StageMorph.prototype.toXML = function (serializer) {
             '<stage name="@" width="@" height="@" ' +
             'costume="@" tempo="@" threadsafe="@" ' +
             'lines="@" ' +
+            'ternary="@" ' +
             'codify="@" ' +
             'inheritance="@" ' +
             'sublistIDs="@" ' +
@@ -1540,6 +1543,7 @@ StageMorph.prototype.toXML = function (serializer) {
         this.getTempo(),
         this.isThreadSafe,
         SpriteMorph.prototype.useFlatLineEnds ? 'flat' : 'round',
+        BooleanSlotMorph.prototype.isTernary,
         this.enableCodeMapping,
         this.enableInheritance,
         this.enableSublistIDs,

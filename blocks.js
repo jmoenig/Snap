@@ -8824,6 +8824,10 @@ BooleanSlotMorph.prototype = new ArgMorph();
 BooleanSlotMorph.prototype.constructor = BooleanSlotMorph;
 BooleanSlotMorph.uber = ArgMorph.prototype;
 
+// BooleanSlotMorph preferences settings
+
+BooleanSlotMorph.prototype.isTernary = true;
+
 // BooleanSlotMorph instance creation:
 
 function BooleanSlotMorph(initialValue) {
@@ -8851,7 +8855,8 @@ BooleanSlotMorph.prototype.isEmptySlot = function () {
 };
 
 BooleanSlotMorph.prototype.isBinary = function () {
-    return isNil(this.parentThatIsA(RingMorph)) &&
+    return !this.isTernary &&
+        isNil(this.parentThatIsA(RingMorph)) &&
         !isNil(this.parentThatIsA(ScriptsMorph));
 };
 
