@@ -7,7 +7,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2016 by Jens Mönig
+    Copyright (C) 2017 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -57,11 +57,11 @@ BlockMorph, ArgMorph, InputSlotMorph, TemplateSlotMorph, CommandSlotMorph,
 FunctionSlotMorph, MultiArgMorph, ColorSlotMorph, nop, CommentMorph, isNil,
 localize, sizeOf, ArgLabelMorph, SVG_Costume, MorphicPreferences,
 SyntaxElementMorph, Variable, isSnapObject, console, BooleanSlotMorph,
-normalizeCanvas*/
+normalizeCanvas, contains*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2016-December-27';
+modules.store = '2017-January-23';
 
 
 // XML_Serializer ///////////////////////////////////////////////////////
@@ -836,7 +836,9 @@ SnapSerializer.prototype.loadCustomBlocks = function (
                 i += 1;
                 definition.declarations[names[i]] = [
                     child.attributes.type,
-                    child.contents,
+                    contains(['%b', '%boolUE'], child.attributes.type) ?
+                        (child.contents ? child.contents === 'true' : null)
+                            : child.contents,
                     options ? options.contents : undefined,
                     child.attributes.readonly === 'true'
                 ];

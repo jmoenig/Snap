@@ -103,11 +103,12 @@ StringMorph, nop, newCanvas, radians, BoxMorph, ArrowMorph, PushButtonMorph,
 contains, InputSlotMorph, ToggleButtonMorph, IDE_Morph, MenuMorph, copy,
 ToggleElementMorph, Morph, fontHeight, StageMorph, SyntaxElementMorph,
 SnapSerializer, CommentMorph, localize, CSlotMorph, MorphicPreferences,
-SymbolMorph, isNil, CursorMorph, VariableFrame, WatcherMorph, Variable*/
+SymbolMorph, isNil, CursorMorph, VariableFrame, WatcherMorph, Variable,
+BooleanSlotMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2017-January-20';
+modules.byob = '2017-January-23';
 
 // Declarations
 
@@ -545,7 +546,7 @@ CustomCommandBlockMorph.prototype.refreshDefaults = function () {
     var inputs = this.inputs(), idx = 0, myself = this;
 
     inputs.forEach(function (inp) {
-        if (inp instanceof InputSlotMorph) {
+        if (inp instanceof InputSlotMorph || inp instanceof BooleanSlotMorph) {
             inp.setContents(myself.definition.defaultValueOfInputIdx(idx));
         }
         idx += 1;
@@ -2811,7 +2812,13 @@ InputSlotDialogMorph.prototype.getInput = function () {
     }
     if (lbl) {
         this.fragment.labelString = lbl;
-        this.fragment.defaultValue = this.slots.defaultInputField.getValue();
+        if (contains(['%b', '%boolUE'], this.fragment.type)) {
+            this.fragment.defaultValue =
+                this.slots.defaultSwitch.evaluate();
+        } else {
+            this.fragment.defaultValue =
+                this.slots.defaultInputField.getValue();
+        }
         return lbl;
     } else if (!this.noDelete) {
         this.fragment.isDeleted = true;
@@ -2937,7 +2944,7 @@ InputSlotDialogMorph.prototype.deleteFragment = function () {
 
 InputSlotDialogMorph.prototype.createSlotTypeButtons = function () {
     // populate my 'slots' area with radio buttons, labels and input fields
-    var myself = this, defLabel, defInput,
+    var myself = this, defLabel, defInput, defSwitch,
         oldFlag = Morph.prototype.trackChanges;
 
     Morph.prototype.trackChanges = false;
@@ -2979,7 +2986,7 @@ InputSlotDialogMorph.prototype.createSlotTypeButtons = function () {
     defLabel.setColor(new Color(255, 255, 255));
     defLabel.refresh = function () {
         if (myself.isExpanded && contains(
-                ['%s', '%n', '%txt', '%anyUE'],
+                ['%s', '%n', '%txt', '%anyUE', '%b', '%boolUE'],
                 myself.fragment.type
             )) {
             defLabel.show();
@@ -2996,7 +3003,10 @@ InputSlotDialogMorph.prototype.createSlotTypeButtons = function () {
     defInput.contents().drawNew();
     defInput.setWidth(50);
     defInput.refresh = function () {
-        if (defLabel.isVisible) {
+        if (myself.isExpanded && contains(
+            ['%s', '%n', '%txt', '%anyUE'],
+            myself.fragment.type
+        )) {
             defInput.show();
             if (myself.fragment.type === '%n') {
                 defInput.setIsNumeric(true);
@@ -3010,6 +3020,21 @@ InputSlotDialogMorph.prototype.createSlotTypeButtons = function () {
     this.slots.defaultInputField = defInput;
     this.slots.add(defInput);
     defInput.drawNew();
+
+    defSwitch = new BooleanSlotMorph(this.fragment.defaultValue);
+    defSwitch.refresh = function () {
+        if (myself.isExpanded && contains(
+            ['%b', '%boolUE'],
+            myself.fragment.type
+        )) {
+            defSwitch.show();
+        } else {
+            defSwitch.hide();
+        }
+    };
+    this.slots.defaultSwitch = defSwitch;
+    this.slots.add(defSwitch);
+    defSwitch.drawNew();
 
     Morph.prototype.trackChanges = oldFlag;
 };
@@ -3189,6 +3214,13 @@ InputSlotDialogMorph.prototype.fixSlotsLayout = function () {
     this.slots.defaultInputField.setCenter(
         this.slots.defaultInputLabel.center().add(new Point(
             this.slots.defaultInputField.width() / 2
+                + this.slots.defaultInputLabel.width() / 2 + 5,
+            0
+        ))
+    );
+    this.slots.defaultSwitch.setCenter(
+        this.slots.defaultInputLabel.center().add(new Point(
+            this.slots.defaultSwitch.width() / 2
                 + this.slots.defaultInputLabel.width() / 2 + 5,
             0
         ))

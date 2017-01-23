@@ -150,7 +150,7 @@ CustomCommandBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2017-January-20';
+modules.blocks = '2017-January-23';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -567,14 +567,20 @@ SyntaxElementMorph.prototype.revertToDefaultInput = function (arg, noValues) {
     if (idx !== -1) {
         if (this instanceof BlockMorph) {
             deflt = this.labelPart(this.parseSpec(this.blockSpec)[idx]);
-            if (deflt instanceof InputSlotMorph && this.definition) {
-                deflt.setChoices.apply(
-                    deflt,
-                    this.definition.inputOptionsOfIdx(inp)
-                );
-                deflt.setContents(
-                    this.definition.defaultValueOfInputIdx(inp)
-                );
+            if (this.definition) {
+                if (deflt instanceof InputSlotMorph) {
+                    deflt.setChoices.apply(
+                        deflt,
+                        this.definition.inputOptionsOfIdx(inp)
+                    );
+                }
+                if (deflt instanceof InputSlotMorph ||
+                    (deflt instanceof BooleanSlotMorph)
+                ) {
+                    deflt.setContents(
+                        this.definition.defaultValueOfInputIdx(inp)
+                    );
+                }
             }
         } else if (this instanceof MultiArgMorph) {
             deflt = this.labelPart(this.slotSpec);
