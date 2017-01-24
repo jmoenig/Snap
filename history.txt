@@ -3331,3 +3331,4 @@ Fixes:
 170124
 ------
 * BYOB: changed “new line” symbol to $nl
+* German translation update

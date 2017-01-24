@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org', // optional
     'last_changed':
-        '2017-01-23', // this, too, will appear in the Translators tab
+        '2017-01-24', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -897,6 +897,8 @@ SnapTranslator.dict.de = {
         'ausschalten, um den Inhalt\nim Projekt zu speichern',
     'check to prevent contents\nfrom being saved':
         'einschalten, um das Speichern des Inhalts\nim Projekt zu verhindern',
+    'new line':
+        'neue Zeile',
 
     // custom blocks:
     'delete block definition...':
