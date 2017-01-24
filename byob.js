@@ -108,7 +108,7 @@ BooleanSlotMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2017-January-23';
+modules.byob = '2017-January-24';
 
 // Declarations
 
@@ -237,7 +237,7 @@ CustomBlockDefinition.prototype.blockSpec = function () {
     parts.forEach(function (part) {
         if (part[0] === '%' && part.length > 1) {
             spec = myself.typeOf(part.slice(1));
-        } else if (part === '$br') {
+        } else if (part === '$nl') {
             spec = '%br';
         } else {
             spec = part;
@@ -2467,7 +2467,7 @@ BlockLabelFragmentMorph.prototype.userMenu = function () {
         );
     });
     menu.addLine();
-    menu.addItem('\u03A0 ' + localize('line break'), 'br');
+    menu.addItem('\u23CE ' + localize('new line'), 'nl');
     return menu;
 };
 
@@ -2933,7 +2933,7 @@ InputSlotDialogMorph.prototype.symbolMenu = function () {
             '$' + symbol
         ]);
     });
-    symbols.push(['\u03A0 ' + localize('line break'), '$br']);
+    symbols.push(['\u23CE ' + localize('new line'), '$nl']);
     return symbols;
 };
 
