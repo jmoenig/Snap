@@ -3332,3 +3332,4 @@ Fixes:
 ------
 * BYOB: changed “new line” symbol to $nl
 * German translation update
+* BYOB: new experimental feature: duplicate block definition (hidden in shift-click context menu)

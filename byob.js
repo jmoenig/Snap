@@ -826,6 +826,7 @@ CustomCommandBlockMorph.prototype.userMenu = function () {
     var hat = this.parentThatIsA(PrototypeHatBlockMorph),
         rcvr = this.receiver(),
         myself = this,
+        shiftClicked = this.world().currentKey === 16,
         menu;
 
    function monitor(vName) {
@@ -904,8 +905,15 @@ CustomCommandBlockMorph.prototype.userMenu = function () {
         } else {
             menu.addLine();
         }
-
-        // menu.addItem("export definition...", 'exportBlockDefinition');
+        if (shiftClicked) {
+            // menu.addItem("export definition...", 'exportBlockDefinition');
+            menu.addItem(
+                "duplicate block definition...",
+                'duplicateBlockDefinition',
+                null,
+                new Color(100, 0, 0)
+            );
+        }
         menu.addItem("delete block definition...", 'deleteBlockDefinition');
 
         this.variables.names().forEach(function (vName) {
@@ -921,6 +929,19 @@ CustomCommandBlockMorph.prototype.exportBlockDefinition = function () {
         ide = this.parentThatIsA(IDE_Morph);
 
     ide.saveXMLAs(xml, this.spec);
+};
+
+CustomCommandBlockMorph.prototype.duplicateBlockDefinition = function () {
+    var dup = this.definition.copyAndBindTo(this.receiver),
+        ide = this.parentThatIsA(IDE_Morph);
+    if (this.definition.isGlobal) {
+        ide.stage.globalBlocks.push(dup);
+    } else {
+        this.definition.receiver.customBlocks.push(dup);
+    }
+    ide.flushPaletteCache();
+    ide.refreshPalette();
+    new BlockEditorMorph(dup, this.definition.receiver).popUp();
 };
 
 CustomCommandBlockMorph.prototype.deleteBlockDefinition = function () {
@@ -1101,6 +1122,9 @@ CustomReporterBlockMorph.prototype.isInUse
 
 CustomReporterBlockMorph.prototype.userMenu
     = CustomCommandBlockMorph.prototype.userMenu;
+
+CustomReporterBlockMorph.prototype.duplicateBlockDefinition
+    = CustomCommandBlockMorph.prototype.duplicateBlockDefinition;
 
 CustomReporterBlockMorph.prototype.deleteBlockDefinition
     = CustomCommandBlockMorph.prototype.deleteBlockDefinition;
