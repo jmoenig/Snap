@@ -5334,7 +5334,7 @@ ProjectDialogMorph.prototype.init = function (ide, task) {
     this.srcBar = null;
     this.nameField = null;
     this.filterField = null;
-    this.magnifiyingGlass = null;
+    this.magnifyingGlass = null;
     this.listField = null;
     this.preview = null;
     this.notesText = null;
@@ -5619,13 +5619,13 @@ ProjectDialogMorph.prototype.buildFilterField = function () {
     var myself = this;
 
     this.filterField = new InputFieldMorph('');
-    this.magnifiyingGlass =
+    this.magnifyingGlass =
         new SymbolMorph(
-            'magnifiyingGlass',
+            'magnifyingGlass',
             this.filterField.height(),
             this.titleBarColor.darker(50));
 
-    this.body.add(this.magnifiyingGlass);
+    this.body.add(this.magnifyingGlass);
     this.body.add(this.filterField);
 
     this.filterField.reactToKeystroke = function (evt) {
@@ -6228,9 +6228,9 @@ ProjectDialogMorph.prototype.fixLayout = function () {
             this.body.height() - inputField.height() - this.padding
         );
 
-        if (this.magnifiyingGlass) {
-            this.magnifiyingGlass.setTop(inputField.top());
-            this.magnifiyingGlass.setLeft(this.listField.left());
+        if (this.magnifyingGlass) {
+            this.magnifyingGlass.setTop(inputField.top());
+            this.magnifyingGlass.setLeft(this.listField.left());
         }
 
         this.preview.setRight(this.body.right());
