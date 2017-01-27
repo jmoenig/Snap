@@ -8404,3 +8404,335 @@ StagePrompterMorph.prototype.mouseClickLeft = function () {
 StagePrompterMorph.prototype.accept = function () {
     this.isDone = true;
 };
+
+// Replay Slider
+ReplayControls.prototype = new Morph();
+ReplayControls.prototype.buttonColor = new Color(200, 200, 200);
+ReplayControls.prototype.constructor = ReplayControls;
+ReplayControls.uber = Morph.prototype;
+
+function ReplayControls(ide) {
+    this.init(ide);
+}
+
+ReplayControls.prototype.init = function(ide) {
+    var myself = this,
+        mouseDown;
+
+    this.ide = ide;
+    this.alpha = 0;
+    this.actions = null;
+    this.actionIndex = -1;
+    this.actionTime = 0;
+    this.isApplyingAction = false;
+    this.isPlaying = false;
+    this.isShowingCaptions = false;
+
+    this.playButton = new SymbolMorph('pointRight', 40, this.buttonColor);
+    this.playButton.mouseClickLeft = function() {
+        myself.play();
+    };
+
+    this.captionsButton = new SymbolMorph('speechBubble', 30, this.buttonColor);
+    this.captionsButton.mouseClickLeft = function() {
+        myself.toggleCaptions();
+    };
+
+    this.stepForwardButton = new SymbolMorph('stepForward', 20, this.buttonColor);
+    this.stepForwardButton.mouseClickLeft = function() {
+        myself.stepForward();
+    };
+
+    this.stepBackwardButton = new SymbolMorph('stepBackward', 20, this.buttonColor);
+    this.stepBackwardButton.mouseClickLeft = function() {
+        myself.stepBackward();
+    };
+
+    this.slider = new SliderMorph(0, 100, 0, 1, 'horizontal');
+    this.slider.start = 0;
+    this.slider.value = 0;
+    mouseDown = this.slider.mouseDownLeft;
+    this.slider.mouseDownLeft = function(pos) {
+        myself.pause();
+        mouseDown.call(this, pos);
+    };
+
+    this.add(this.slider);
+    this.add(this.playButton);
+    this.add(this.captionsButton);
+    this.add(this.stepForwardButton);
+    this.add(this.stepBackwardButton);
+
+    this.update();
+};
+
+ReplayControls.prototype.toggleCaptions = function() {
+    var myself = this,
+        ide = this.parentThatIsA(IDE_Morph),
+        color;
+
+    this.isShowingCaptions = !this.isShowingCaptions;
+    color = this.isShowingCaptions ? new Color(98, 194, 19) : this.buttonColor;
+    ide.showMessage(localize('captions ' + (this.isShowingCaptions ? 'enabled' : 'disabled')), 1);
+
+    this.captionsButton.color = color;
+    this.captionsButton.drawNew();
+    this.captionsButton.changed();
+};
+
+ReplayControls.prototype.stepForward = function() {
+    this.pause();
+    this.playNext();
+};
+
+ReplayControls.prototype.stepBackward = function() {
+    this.pause();
+    this.playNext(-1);
+};
+
+ReplayControls.prototype.displayCaption = function(action, originalEvent) {
+    var message, 
+        intervalHandle,
+        m;
+
+    // TODO: add the user, too
+    message = action.type;
+    if (action.replayType === UndoManager.UNDO) {
+        // Get the originalEvent
+        if (originalEvent === action) {  // going forwards
+            originalEvent = this.getInverseEvent(action);
+        }
+        message = originalEvent.type + ' (undo)';
+    } else if (action.replayType === UndoManager.REDO) {
+        message += ' (redo)';
+    }
+
+    // Show the caption
+    m = new MenuMorph(null, message, null, 16);
+
+    var pos = new Point(this.center().x, this.top()-50);
+    m.popup(this.world(), pos);
+
+    intervalHandle = setInterval(function () {
+        m.destroy();
+        clearInterval(intervalHandle);
+    }, 4000);
+
+    return m;
+};
+
+ReplayControls.prototype.play = function() {
+    var myself = this;
+
+    if (this.actionIndex < this.actions.length-1) {
+        var currentAction = this.actions[this.actionIndex],
+            nextAction = this.actions[this.actionIndex+1],
+            delay = currentAction ? nextAction.time - currentAction.time : 0;
+
+        this.isPlaying = true;
+        this.lastPlayUpdate = Date.now();
+
+        this.removeChild(this.playButton);
+        this.playButton = new SymbolMorph('pause', 40, this.buttonColor);
+        this.playButton.mouseClickLeft = function() {
+            myself.pause();
+        };
+        this.add(this.playButton);
+        this.fixLayout();
+    }
+};
+
+ReplayControls.prototype.getSliderLeftFromValue = function(value) {
+    return (value-this.slider.start) * this.slider.unitSize() +
+        this.slider.left();
+};
+
+ReplayControls.prototype.step = function() {
+    if (this.isPlaying) {
+        // Get the change in time
+        var now = Date.now(),
+            delta = now - this.lastPlayUpdate,
+            value = this.slider.value + delta;
+
+        // if at the end, pause it!
+        if (value > this.slider.stop) {
+            value = this.slider.stop;
+            this.pause();
+        }
+        this.slider.button.setLeft(this.getSliderLeftFromValue(value));
+        this.slider.updateValue();
+        this.lastPlayUpdate = now;
+    }
+};
+
+ReplayControls.prototype.playNext = function(dir) {
+    // Get the position of the button in the slider and move it
+    var myself = this,
+        currentAction,
+        nextAction,
+        value;
+
+    dir = dir || 1;
+    nextAction = this.actions[this.actionIndex + Math.max(dir, 0)];
+
+    if (nextAction) {
+        value = nextAction.time + dir;
+
+        this.slider.button.setLeft(this.getSliderLeftFromValue(value));
+        this.slider.updateValue();
+    }
+    this.pause();
+};
+
+ReplayControls.prototype.pause = function() {
+    var myself = this;
+
+    this.removeChild(this.playButton);
+    this.playButton = new SymbolMorph('pointRight', 40, this.buttonColor);
+    this.playButton.mouseClickLeft = function() {
+        myself.play();
+    };
+    this.add(this.playButton);
+    this.fixLayout();
+
+    this.isPlaying = false;
+};
+
+ReplayControls.prototype.fixLayout = function() {
+    var center = this.center(),
+        bottom = this.bottom(),
+        top = this.top(),
+        width = this.width(),
+        height = this.height(),
+        sliderHeight = 15,
+        btnSize,
+        margin = 10;
+
+    btnSize = height - (3*margin + sliderHeight);
+    this.playButton.size = btnSize;
+
+    this.playButton.setLeft(this.left() + 8*margin);
+    this.playButton.setTop(top + sliderHeight + margin);
+    this.playButton.drawNew();
+
+    this.captionsButton.setTop(top + sliderHeight + margin);
+    this.captionsButton.setRight(this.right() - 3*margin);
+    this.captionsButton.drawNew();
+
+    this.stepBackwardButton.setCenter(this.playButton.center());
+    this.stepBackwardButton.setRight(this.playButton.left() - 2.5*margin);
+    this.stepBackwardButton.drawNew();
+
+    this.stepForwardButton.setCenter(this.playButton.center());
+    this.stepForwardButton.setLeft(this.playButton.right() + 2.5*margin);
+    this.stepForwardButton.drawNew();
+
+    this.slider.setWidth(width - 2*margin);
+    this.slider.setHeight(sliderHeight);
+    this.slider.setCenter(new Point(center.x, 0));
+    this.slider.setTop(top);
+
+    this.slider.drawNew();
+    this.slider.changed();
+};
+
+ReplayControls.prototype.setActions = function(actions) {
+    this.actions = actions;
+    this.slider.start = actions[0].time - 1;
+    this.slider.value = this.slider.start;
+    this.slider.setStop(actions[actions.length-1].time + 1);
+    this.isPlaying = false;
+};
+
+// apply any actions between 
+ReplayControls.prototype.update = function() {
+    var myself = this,
+        originalEvent,
+        diff,
+        dir,
+        index,
+        action;
+
+    if (this.actionTime !== this.slider.value && this.actions && !this.isApplyingAction) {
+        diff = this.slider.value - this.actionTime;
+        dir = diff/Math.abs(diff);
+
+        // Since actionIndex is the last applied action, the reverse direction
+        // should use that value -> not one prior
+
+        if (dir === 1) {
+            index = this.actionIndex + dir;
+            originalEvent = this.actions[index];
+            action = originalEvent;
+            if (!originalEvent || originalEvent.time >= this.slider.value) {
+                return setTimeout(this.update.bind(this), 100);
+            }
+        } else {  // "rewind"
+            originalEvent = this.actions[this.actionIndex];
+            if (!originalEvent || originalEvent.time <= this.slider.value) {
+                return setTimeout(this.update.bind(this), 100);
+            }
+            action = this.getInverseEvent(originalEvent);
+        }
+
+        // Apply the given event
+        this.isApplyingAction = true;
+        SnapActions.applyEvent(action)
+            .accept(function() {
+                myself.actionIndex += dir;
+                myself.actionTime = originalEvent.time;
+                myself.isApplyingAction = false;
+
+                if (myself.isShowingCaptions) {
+                    myself.displayCaption(action, originalEvent);
+                }
+
+                setTimeout(myself.update.bind(myself), 10);
+            })
+            .reject(function() {
+                throw Error('Could not apply event: ' + JSON.stringify(action, null, 2));
+            });
+    } else {
+        setTimeout(this.update.bind(this), 100);
+    }
+};
+
+ReplayControls.prototype.getInverseEvent = function(event) {
+    if (!event.replayType) {
+        var undoEvent = SnapUndo.getInverseEvent(event);
+        undoEvent.replayType = UndoManager.UNDO;
+        undoEvent.owner = event.owner;
+        return undoEvent;
+    } else {  // undo the undo event (look up the original event)
+        var nestedPairsCnt = 0,
+            iter;
+
+        for (var i = this.actionIndex-1; i--;) {
+            iter = this.actions[i];
+            iter.replayType = iter.replayType || 0;
+            if (iter.owner !== event.owner) {  // skip other event queues
+                continue;
+            }
+
+            //  undo events should be looking for the original event (!replayType)
+            //  redo events should be looking for the undo event (replayType === 1)
+            //
+            //  if event.replayType is 1, iter.replayType should be undefined (0)
+            //  if event.replayType is 2, iter.replayType should be 1
+            if ((event.replayType === iter.replayType + 1) && nestedPairsCnt === 0) {
+                return this.actions[i];  // found the original event to replay
+            }
+
+            //  The undo events will create a "parens-start" when encountering
+            //  another undo event
+            //
+            //  The redo events will create a "parens-start" when encountering
+            //  another redo event
+            if (iter.replayType === event.replayType) {
+                nestedPairsCnt--;
+            } else {
+                nestedPairsCnt++;
+            }
+        }
+    }
+};

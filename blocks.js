@@ -9102,6 +9102,7 @@ SymbolMorph.prototype.names = [
     'square',
     'pointRight',
     'stepForward',
+    'stepBackward',
     'gears',
     'file',
     'fullScreen',
@@ -9229,6 +9230,8 @@ SymbolMorph.prototype.symbolCanvasColored = function (aColor) {
         return this.drawSymbolPointRight(canvas, aColor);
     case 'stepForward':
         return this.drawSymbolStepForward(canvas, aColor);
+    case 'stepBackward':
+        return this.drawSymbolStepBackward(canvas, aColor);
     case 'gears':
         return this.drawSymbolGears(canvas, aColor);
     case 'file':
@@ -9395,6 +9398,28 @@ SymbolMorph.prototype.drawSymbolStepForward = function (canvas, color) {
     ctx.fill();
     ctx.fillRect(
         canvas.width * 0.75,
+        0,
+        canvas.width * 0.25,
+        canvas.height
+    );
+    return canvas;
+};
+
+SymbolMorph.prototype.drawSymbolStepBackward = function (canvas, color) {
+    // answer a canvas showing a left-pointing triangle
+    // followed by a vertical bar
+    var ctx = canvas.getContext('2d');
+
+    ctx.fillStyle = color.toString();
+    ctx.beginPath();
+    ctx.moveTo(canvas.width * 0.25, Math.round(canvas.height / 2));
+    ctx.lineTo(canvas.width, 0);
+    ctx.lineTo(canvas.width, canvas.height);
+    ctx.lineTo(canvas.width * 0.25, Math.round(canvas.height / 2));
+    ctx.closePath();
+    ctx.fill();
+    ctx.fillRect(
+        0,
         0,
         canvas.width * 0.25,
         canvas.height

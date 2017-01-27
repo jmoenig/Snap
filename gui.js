@@ -237,6 +237,7 @@ IDE_Morph.prototype.init = function (isAutoFill) {
 
     this.isAutoFill = isAutoFill === undefined ? true : isAutoFill;
     this.isAppMode = false;
+    this.isReplayMode = false;
     this.isSmallStage = false;
     this.filePicker = null;
     this.hasChangedMedia = false;
@@ -505,6 +506,7 @@ IDE_Morph.prototype.buildPanes = function () {
     this.createSpriteEditor();
     this.createCorralBar();
     this.createCorral();
+    this.createReplayControls();
 };
 
 IDE_Morph.prototype.createLogo = function () {
@@ -1635,6 +1637,15 @@ IDE_Morph.prototype.createCorral = function () {
     };
 };
 
+IDE_Morph.prototype.createReplayControls = function () {
+    var myself = this;
+    this.replayControls = new ReplayControls(this);
+
+    this.add(this.replayControls);
+    this.replayControls.drawNew();
+    this.replayControls.hide();
+};
+
 // IDE_Morph layout
 
 IDE_Morph.prototype.fixLayout = function (situation) {
@@ -1722,6 +1733,18 @@ IDE_Morph.prototype.fixLayout = function (situation) {
             this.corral.fixLayout();
         }
     }
+
+    var width = Math.max(this.width() * 0.8, 250);
+
+    // Set position
+    this.removeChild(this.replayControls);
+    this.add(this.replayControls);  // make sure it is on top!
+
+    this.replayControls.setWidth(this.width()-40);
+    this.replayControls.setHeight(80);
+    this.replayControls.setCenter(new Point(this.width()/2, 0));
+    this.replayControls.setBottom(this.bottom());
+    this.replayControls.fixLayout();
 
     Morph.prototype.trackChanges = true;
     this.changed();
@@ -2883,7 +2906,7 @@ IDE_Morph.prototype.projectMenu = function () {
             localize('Replay events from file'),
             function() {
                 var inp = document.createElement('input');
-                if (SnapUndo.allEvents.length) {
+                if (SnapUndo.allEvents.length > 1) {
                     return this.showMessage('events can only be replayed on empty project');
                 }
 
@@ -3087,10 +3110,19 @@ IDE_Morph.prototype.loadSnapActions = function (text) {
         this.showMessage('action load failed: invalid json');
         return;
     }
+    this.replayEvents(actions);
+};
 
-    for (var i = 0; i < actions.length; i++) {
-        SnapActions.applyEvent(actions[i]);
-    }
+IDE_Morph.prototype.replayEvents = function (actions) {
+    this.replayControls.show();
+    this.replayControls.setActions(actions);
+    this.isReplayMode = true;
+    // TODO: Update this
+};
+
+IDE_Morph.prototype.exitReplayMode = function () {
+    this.isReplayMode = false;
+    this.replayControls.hide();
 };
 
 IDE_Morph.prototype.resourceURL = function () {
@@ -3577,6 +3609,7 @@ IDE_Morph.prototype.newProject = function () {
     this.createCorral();
     this.selectSprite(this.stage.children[0]);
     this.fixLayout();
+    this.isReplayMode = false;
     SnapActions.disableCollaboration();
     SnapUndo.reset();
     SnapActions.loadProject(this);
@@ -4057,6 +4090,8 @@ IDE_Morph.prototype.exportProjectSummary = function (useDropShadows) {
 IDE_Morph.prototype.openProjectString = function (str) {
     var msg,
         myself = this;
+
+    this.exitReplayMode();
     this.nextSteps([
         function () {
             msg = myself.showMessage('Opening project...');
@@ -4106,6 +4141,8 @@ IDE_Morph.prototype.openCloudDataString = function (str) {
     var msg,
         myself = this,
         size = Math.round(str.length / 1024);
+
+    this.exitReplayMode();
     this.nextSteps([
         function () {
             msg = myself.showMessage('Opening project\n' + size + ' KB...');
@@ -4749,7 +4786,10 @@ IDE_Morph.prototype.createNewProject = function () {
     this.confirm(
         'Replace the current project with a new one?',
         'New Project',
-        function () {myself.newProject(); }
+        function () {
+            myself.exitReplayMode();
+            myself.newProject();
+        }
     );
 };
 
@@ -5712,7 +5752,6 @@ ProjectDialogMorph.prototype.buildContents = function () {
         this.setExtent(new Point(455, 335));
     }
     this.fixLayout();
-
 };
 
 ProjectDialogMorph.prototype.popUp = function (wrrld) {
