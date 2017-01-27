@@ -1,0 +1,47 @@
+<blocks app="Snap! 4.0, http://snap.berkeley.edu" version="1"><block-definition s="setting %&apos;which&apos;" type="reporter" category="sensing"><header></header><code></code><inputs><input type="%s" readonly="true"><options>Project notes
+Project name
+User
+Presentation mode
+Language
+Zoom blocks
+Stage size
+Stage scale
+Retina display support
+Long form input dialog
+Plain prototype labels
+Input sliders
+Execute on slider change
+Clicking sound
+Turbo mode
+Flat design
+Keyboard editing
+Table support
+Table lines
+Visible stepping
+Thread safe scripts
+Prefer smooth animations
+Flat line ends
+Codification support
+Inheritance support</options></input></inputs><script><block s="doReport"><block s="evaluate"><block s="reportJSFunction"><list><l>which</l></list><l>var   stage = this.parentThatIsA(StageMorph),&#xD;        ide = stage.parentThatIsA(IDE_Morph),&#xD;        world = stage.parentThatIsA(WorldMorph);&#xD;&#xD;switch (which) {&#xD;    case &apos;Project notes&apos;:&#xD;        return ide.projectNotes;&#xD;    case &apos;Project name&apos;:&#xD;        return ide.projectName;&#xD;    case &apos;User&apos;:&#xD;        return SnapCloud.username;&#xD;    case &apos;Presentation mode&apos;:&#xD;        return ide.isAppMode;&#xD;    case &apos;Language&apos;:&#xD;        return SnapTranslator.language;&#xD;    case &apos;Zoom blocks&apos;:&#xD;        return SyntaxElementMorph.prototype.scale;&#xD;    case &apos;Stage size&apos;:&#xD;        return new List([StageMorph.prototype.dimensions.x,&#xD;                                   StageMorph.prototype.dimensions.y]);&#xD;    case &apos;Stage scale&apos;:&#xD;       return stage.scale;&#xD;    case &apos;Retina display support&apos;:&#xD;        return isRetinaEnabled();&#xD;    case &apos;Long form input dialog&apos;:&#xD;        return InputSlotDialogMorph.prototype.isLaunchingExpanded;&#xD;    case &apos;Plain prototype labels&apos;:&#xD;        return BlockLabelPlaceHolderMorph.prototype.plainLabel;&#xD;    case &apos;Input sliders&apos;:&#xD;        return MorphicPreferences.useSliderForInput;&#xD;    case &apos;Execute on slider change&apos;:&#xD;        return ArgMorph.prototype.executeOnSliderEdit;&#xD;    case &apos;Clicking sound&apos;:&#xD;        return !!BlockMorph.prototype.snapSound;&#xD;    case &apos;Turbo mode&apos;:&#xD;        return stage.isFastTracked;&#xD;    case &apos;Flat design&apos;:&#xD;        return MorphicPreferences.isFlat;&#xD;    case &apos;Keyboard editing&apos;:&#xD;        return ScriptsMorph.prototype.enableKeyboard;&#xD;    case &apos;Table support&apos;:&#xD;        return List.prototype.enableTables;&#xD;    case &apos;Table lines&apos;:&#xD;        return TableMorph.prototype.highContrast;&#xD;    case &apos;Visible stepping&apos;:&#xD;        return Process.prototype.enableSingleStepping;&#xD;    case &apos;Thread safe scripts&apos;:&#xD;        return stage.isThreadSafe;&#xD;    case &apos;Prefer smooth animations&apos;:&#xD;        return StageMorph.prototype.frameRate &gt; 0;&#xD;    case &apos;Flat line ends&apos;:&#xD;        return SpriteMorph.prototype.useFlatLineEnds;&#xD;    case &apos;Codification support&apos;:&#xD;        return StageMorph.prototype.enableCodeMapping;&#xD;    case &apos;Inheritance support&apos;:&#xD;        return StageMorph.prototype.enableInheritance;&#xD;    default: return which;&#xD;}</l></block><list><block var="which"/></list></block></block></script></block-definition><block-definition s="set flag %&apos;which&apos; to %&apos;tf&apos;" type="command" category="sensing"><header></header><code></code><inputs><input type="%s" readonly="true"><options>Presentation mode
+Retina display support
+Long form input dialog
+Plain prototype labels
+Input sliders
+Execute on slider change
+Clicking sound
+Turbo mode
+Flat design
+Keyboard editing
+Table support
+Table lines
+Visible stepping
+Thread safe scripts
+Prefer smooth animations
+Flat line ends
+Codification support
+Inheritance support</options></input><input type="%b"></input></inputs><script><block s="doRun"><block s="reportJSFunction"><list><l>which</l><l>tf</l></list><l>var   stage = this.parentThatIsA(StageMorph),&#xD;        ide = stage.parentThatIsA(IDE_Morph),&#xD;        world = stage.parentThatIsA(WorldMorph);&#xD;&#xD;if (tf != !!tf) return;&#xD;&#xD;try{&#xD;ide.savingPreferences = false;&#xD;&#xD;switch (which) {&#xD;    case &apos;Presentation mode&apos;:&#xD;        if (tf != ide.isAppMode) ide.toggleAppMode();&#xD;        break;&#xD;    case &apos;Retina display support&apos;:&#xD;        if (tf != isRetinaEnabled()) ide.toggleRetina();&#xD;        break;&#xD;    case &apos;Long form input dialog&apos;:&#xD;        if (tf != InputSlotDialogMorph.prototype.isLaunchingExpanded)&#xD;            ide.toggleLongFormInputDialog();&#xD;        break;&#xD;    case &apos;Plain prototype labels&apos;:&#xD;        if (tf != BlockLabelPlaceHolderMorph.prototype.plainLabel)&#xD;            ide.togglePlainPrototypeLabels();&#xD;        break;&#xD;    case &apos;Input sliders&apos;:&#xD;        MorphicPreferences.useSliderForInput = tf;&#xD;        break;&#xD;    case &apos;Execute on slider change&apos;:&#xD;        ArgMorph.prototype.executeOnSliderEdit = tf;&#xD;        break;&#xD;    case &apos;Clicking sound&apos;:&#xD;        if (tf != !!BlockMorph.prototype.snapSound)&#xD;            BlockMorph.prototype.toggleSnapSound();&#xD;        break;&#xD;    case &apos;Turbo mode&apos;:&#xD;        if (tf != stage.isFastTracked)&#xD;            ide.toggleFastTracking();&#xD;        break;&#xD;    case &apos;Flat design&apos;:&#xD;        if (tf == MorphicPreferences.isFlat) break;&#xD;        if (tf)&#xD;            ide.flatDesign();&#xD;        else&#xD;            ide.defaultDesign();&#xD;        break;&#xD;    case &apos;Keyboard editing&apos;:&#xD;            ScriptsMorph.prototype.enableKeyboard = tf;&#xD;        break;&#xD;    case &apos;Table support&apos;:&#xD;            List.prototype.enableTables = tf;&#xD;        break;&#xD;    case &apos;Table lines&apos;:&#xD;                TableMorph.prototype.highContrast = tf;&#xD;        break;&#xD;    case &apos;Visible stepping&apos;:&#xD;        if (tf != Process.prototype.enableSingleStepping)&#xD;            ide.toggleSingleStepping();&#xD;        break;&#xD;    case &apos;Thread safe scripts&apos;:&#xD;        stage.isThreadSafe = tf;&#xD;        break;&#xD;    case &apos;Prefer smooth animations&apos;:&#xD;        if (tf != (StageMorph.prototype.frameRate &gt; 0))&#xD;            ide.toggleVariableFrameRate();&#xD;        break;&#xD;    case &apos;Flat line ends&apos;:&#xD;        SpriteMorph.prototype.useFlatLineEnds = tf;&#xD;        break;&#xD;    case &apos;Codification support&apos;:&#xD;        if (tf != StageMorph.prototype.enableCodeMapping) {&#xD;            StageMorph.prototype.enableCodeMapping = tf;&#xD;            ide.currentSprite.blocksCache.variables = null;&#xD;            ide.currentSprite.paletteCache.variables = null;&#xD;            ide.refreshPalette();&#xD;        }&#xD;        break;&#xD;    case &apos;Inheritance support&apos;:&#xD;        if (tf != StageMorph.prototype.enableInheritance) {&#xD;            StageMorph.prototype.enableInheritance = tf;&#xD;            ide.currentSprite.blocksCache.variables = null;&#xD;            ide.currentSprite.paletteCache.variables = null;&#xD;            ide.refreshPalette();&#xD;        }&#xD;        break;&#xD;};&#xD;}&#xD;finally {&#xD;ide.savingPreferences = false;&#xD;};&#xD;</l></block><list><block var="which"/><block var="tf"/></list></block></script></block-definition><block-definition s="set value %&apos;which&apos; to %&apos;value&apos;" type="command" category="sensing"><header></header><code></code><inputs><input type="%s" readonly="true"><options>Project notes
+Project name
+Language
+Zoom blocks
+Stage size
+Stage scale</options></input><input type="%s"></input></inputs><script><block s="doRun"><block s="reportJSFunction"><list><l>which</l><l>value</l></list><l>var   stage = this.parentThatIsA(StageMorph),&#xD;        ide = stage.parentThatIsA(IDE_Morph),&#xD;        world = stage.parentThatIsA(WorldMorph);&#xD;&#xD;try {&#xD;ide.savingPreferences = false;&#xD;&#xD;switch (which) {&#xD;    case &apos;Project notes&apos;:&#xD;        ide.projectNotes = value;&#xD;        break;&#xD;    case &apos;Project name&apos;:&#xD;        ide.setProjectName(value);&#xD;        break;&#xD;    case &apos;Language&apos;:&#xD;        ide.setLanguage(value);&#xD;        break;&#xD;    case &apos;Zoom blocks&apos;:&#xD;        if (!isNaN(value)) ide.setBlocksScale(Math.min(value, 12));&#xD;        break;&#xD;    case &apos;Stage size&apos;:&#xD;        if ((value instanceof List) &amp;&amp; value.length()==2&#xD;                       &amp;&amp; !isNaN(value.at(1)) &amp;&amp; !isNaN(value.at(2)))&#xD;            ide.setStageExtent(new Point(value.at(1), value.at(2)));&#xD;        break;&#xD;    case &apos;Stage scale&apos;:&#xD;        ide.toggleStageSize(value != 1, Math.max(0.1, value));&#xD;        break;&#xD;};&#xD;}&#xD;finally {ide.savingPreferences = true;&#xD;};</l></block><list><block var="which"/><block var="value"/></list></block></script></block-definition></blocks>

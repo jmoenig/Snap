@@ -1909,8 +1909,6 @@ SnapTranslator.dict.pt = {
         'Desassinalar para desactivar\na edição usando o teclado.',
     'check to enable\nkeyboard editing support':
         'Assinalar para activar\na edição usando o teclado.',
-    'Inheritance support':
-        'Suporte para herança',
     'uncheck to disable\nsprite inheritance features':
         'Desassinalar para desactivar\nfuncionalidades de herança de actores.',
     'check for sprite\ninheritance features':

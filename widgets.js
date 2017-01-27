@@ -7,7 +7,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2015 by Jens Mönig
+    Copyright (C) 2017 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -74,7 +74,7 @@ HTMLCanvasElement, fontHeight, SymbolMorph, localize, SpeechBubbleMorph,
 ArrowMorph, MenuMorph, isString, isNil, SliderMorph, MorphicPreferences,
 ScrollFrameMorph*/
 
-modules.widgets = '2016-July-19';
+modules.widgets = '2017-January-03';
 
 var PushButtonMorph;
 var ToggleButtonMorph;
@@ -624,6 +624,9 @@ ToggleButtonMorph.prototype.mouseLeave = function () {
     if (!this.state) {
         this.image = this.normalImage;
         this.changed();
+    }
+    if (this.schedule) {
+        this.schedule.isActive = false;
     }
     if (this.hint) {
         this.world().hand.destroyTemporaries();
