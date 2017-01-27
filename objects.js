@@ -8718,6 +8718,7 @@ ReplayControls.prototype.init = function(ide) {
     this.isShowingCaptions = false;
 
     this.replaySpeed = 1.0;
+    this.maxInactiveDuration = 0;
 
     this.playButton = new SymbolMorph('pointRight', 40, this.buttonColor);
     this.playButton.mouseClickLeft = function() {
@@ -8776,22 +8777,46 @@ ReplayControls.prototype.settingsMenu = function() {
             'fast': 5,
             'really fast': 10,
             'ludicrous speed': 20
+        },
+        durations = {
+            'no acceleration': 0,
+            'tiny': 0.5,
+            'small': 1,
+            'medium': 2,
+            'long': 5
+        },
+        createSubMenu = function(dict, key, suffix, skip) {
+            var menu = new MenuMorph(myself);
+            // add the number (w/ the suffix) to the text names
+            skip = skip || [];
+
+            Object.keys(dict).forEach(function(name) {
+                var value = dict[name],
+                    preserveName = contains(skip, name);
+
+                delete dict[name];
+                if (!preserveName) {
+                    name = localize(name) + ' (' + value + suffix + ')';
+                } else {
+                    name = localize(name);
+                }
+
+                dict[name] = value;
+                menu.addItem(preserveName ? name : value + suffix, function() {
+                    myself[key] = value;
+                }, null, null, myself[key] === value);
+            });
+            return menu;
         };
 
-    Object.keys(speeds).forEach(function(name) {
-        var value = speeds[name];
-        delete speeds[name];
+    // Skip empty gaps
+    menu.addMenu(
+        'Max inactive duration...',
+        createSubMenu(durations, 'maxInactiveDuration', 's', ['no acceleration'])
+    );
 
-        name = localize(name) + ' (' + value + 'x)';
-        speeds[name] = value;
-    });
-
-    Object.keys(speeds).forEach(function(name) {
-        var speed = speeds[name];
-        replaySpeedMenu.addItem(speed + 'x', function() {
-            myself.replaySpeed = speed;
-        }, null, null, myself.replaySpeed === speed);
-    });
+    // Replay Speed
+    replaySpeedMenu = createSubMenu(speeds, 'replaySpeed', 'x');
     replaySpeedMenu.addItem('other...', function() {
         new DialogBoxMorph(
             null,
@@ -8905,8 +8930,23 @@ ReplayControls.prototype.step = function() {
     if (this.isPlaying) {
         // Get the change in time
         var now = Date.now(),
-            delta = (now - this.lastPlayUpdate) * this.replaySpeed,
-            value = this.slider.value + delta;
+            delta = now - this.lastPlayUpdate,
+            nextAction = this.actions[this.actionIndex+1],
+            nextTime,
+            timeUntilNext,
+            value;
+
+        if (this.maxInactiveDuration && nextAction) {
+            // if the duration until the next action is too far,
+            // increase delta
+            timeUntilNext = nextAction.time - this.slider.value;
+            if (this.maxInactiveDuration*1000 < timeUntilNext) {
+                delta = nextAction.time - this.maxInactiveDuration*1000 - this.slider.value;
+            }
+        }
+
+        delta *= this.replaySpeed;
+        value = this.slider.value + delta;
 
         // if at the end, pause it!
         if (value > this.slider.stop) {
