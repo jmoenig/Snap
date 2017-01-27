@@ -61,7 +61,7 @@ normalizeCanvas, contains*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2017-January-23';
+modules.store = '2017-January-27';
 
 
 // XML_Serializer ///////////////////////////////////////////////////////
@@ -1011,7 +1011,8 @@ SnapSerializer.prototype.loadComment = function (model) {
 
 SnapSerializer.prototype.loadBlock = function (model, isReporter) {
     // private
-    var block, info, inputs, isGlobal, rm, receiver;
+    var block, info, inputs, isGlobal, rm, receiver, migration,
+        migrationOffset = 0;
     if (model.tag === 'block') {
         if (Object.prototype.hasOwnProperty.call(
                 model.attributes,
@@ -1032,6 +1033,10 @@ SnapSerializer.prototype.loadBlock = function (model, isReporter) {
         }
         */
         block = SpriteMorph.prototype.blockForSelector(model.attributes.s);
+        migration = SpriteMorph.prototype.blockMigrations[model.attributes.s];
+        if (migration) {
+            migrationOffset = migration.offset;
+        }
     } else if (model.tag === 'custom-block') {
         isGlobal = model.attributes.scope ? false : true;
         receiver = isGlobal ? this.project.stage
@@ -1092,7 +1097,7 @@ SnapSerializer.prototype.loadBlock = function (model, isReporter) {
         } else if (child.tag === 'receiver') {
             nop(); // ignore
         } else {
-            this.loadInput(child, inputs[i], block);
+            this.loadInput(child, inputs[i + migrationOffset], block);
         }
     }, this);
     block.cachedInputs = null;

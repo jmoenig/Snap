@@ -150,7 +150,7 @@ CustomCommandBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2017-January-23';
+modules.blocks = '2017-January-27';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -1315,6 +1315,21 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                 true
             );
             part.setContents(['number']);
+            break;
+        case '%mapValue':
+            part = new InputSlotMorph(
+                null,
+                false,
+                {
+                    String : ['String'],
+                    Number : ['Number'],
+                    'true' : ['true'],
+                    'false' : ['false']
+                },
+                true
+            );
+            part.setContents(['String']);
+            part.isStatic = true;
             break;
         case '%var':
             part = new InputSlotMorph(
@@ -8319,13 +8334,20 @@ InputSlotMorph.prototype.freshTextEdit = function (aStringOrTextMorph) {
 
 InputSlotMorph.prototype.userMenu = function () {
     var menu = new MenuMorph(this);
-    if (!StageMorph.prototype.enableCodeMapping || this.isNumeric) {
+    if (!StageMorph.prototype.enableCodeMapping) {
         return this.parent.userMenu();
     }
-    menu.addItem(
-        'code string mapping...',
-        'mapToCode'
-    );
+    if (this.isNumeric) {
+        menu.addItem(
+            'code number mapping...',
+            'mapNumberToCode'
+        );
+    } else {
+        menu.addItem(
+            'code string mapping...',
+            'mapStringToCode'
+        );
+    }
     return menu;
 };
 
@@ -8337,7 +8359,7 @@ InputSlotMorph.prototype.userMenu = function () {
     it's not part of Snap's evaluator and not needed for Snap itself
 */
 
-InputSlotMorph.prototype.mapToCode = function () {
+InputSlotMorph.prototype.mapStringToCode = function () {
     // private - open a dialog box letting the user map code via the GUI
     new DialogBoxMorph(
         this,
@@ -8352,12 +8374,30 @@ InputSlotMorph.prototype.mapToCode = function () {
     );
 };
 
-InputSlotMorph.prototype.mappedCode = function () {
-    var code = StageMorph.prototype.codeMappings.string || '<#1>',
-        block = this.parentThatIsA(BlockMorph),
-        val = this.evaluate();
+InputSlotMorph.prototype.mapNumberToCode = function () {
+    // private - open a dialog box letting the user map code via the GUI
+    new DialogBoxMorph(
+        this,
+        function (code) {
+            StageMorph.prototype.codeMappings.number = code;
+        },
+        this
+    ).promptCode(
+        'Code mapping - Number <#1>',
+        StageMorph.prototype.codeMappings.number || '',
+        this.world()
+    );
+};
 
-    if (this.isNumeric) {return val; }
+InputSlotMorph.prototype.mappedCode = function () {
+    var block = this.parentThatIsA(BlockMorph),
+        val = this.evaluate(),
+        code;
+
+    if (this.isNumeric) {
+        code = StageMorph.prototype.codeMappings.number || '<#1>';
+        return code.replace(/<#1>/g, val);
+    }
     if (!isNaN(parseFloat(val))) {return val; }
     if (!isString(val)) {return val; }
     if (block && contains(
@@ -8366,6 +8406,7 @@ InputSlotMorph.prototype.mappedCode = function () {
         )) {
         return val;
     }
+    code = StageMorph.prototype.codeMappings.string || '<#1>';
     return code.replace(/<#1>/g, val);
 };
 
@@ -8932,6 +8973,72 @@ BooleanSlotMorph.prototype.mouseLeave = function () {
     if (this.isStatic) {return; }
     this.drawNew();
     this.changed();
+};
+
+// BooleanSlotMorph menu:
+
+BooleanSlotMorph.prototype.userMenu = function () {
+    var menu = new MenuMorph(this);
+    if (!StageMorph.prototype.enableCodeMapping) {
+        return this.parent.userMenu();
+    }
+    if (this.evaluate() === true) {
+        menu.addItem(
+            'code true mapping...',
+            'mapTrueToCode'
+        );
+    } else {
+        menu.addItem(
+            'code false mapping...',
+            'mapFalseToCode'
+        );
+    }
+    return menu;
+};
+
+// BooleanSlotMorph code mapping
+
+/*
+    code mapping lets you use blocks to generate arbitrary text-based
+    source code that can be exported and compiled / embedded elsewhere,
+    it's not part of Snap's evaluator and not needed for Snap itself
+*/
+
+BooleanSlotMorph.prototype.mapTrueToCode = function () {
+    // private - open a dialog box letting the user map code via the GUI
+    new DialogBoxMorph(
+        this,
+        function (code) {
+            StageMorph.prototype.codeMappings['true'] = code;
+        },
+        this
+    ).promptCode(
+        'Code mapping - true',
+        StageMorph.prototype.codeMappings['true'] || 'true',
+        this.world()
+    );
+};
+
+BooleanSlotMorph.prototype.mapFalseToCode = function () {
+    // private - open a dialog box letting the user map code via the GUI
+    new DialogBoxMorph(
+        this,
+        function (code) {
+            StageMorph.prototype.codeMappings['false'] = code;
+        },
+        this
+    ).promptCode(
+        'Code mapping - false',
+        StageMorph.prototype.codeMappings['false'] || 'false',
+        this.world()
+    );
+};
+
+BooleanSlotMorph.prototype.mappedCode = function () {
+    if (this.evaluate() === true) {
+        return StageMorph.prototype.codeMappings.boolTrue || 'true';
+    }
+    return StageMorph.prototype.codeMappings.boolFalse || 'false';
 };
 
 // BooleanSlotMorph drawing:

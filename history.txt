@@ -3333,3 +3333,7 @@ Fixes:
 * BYOB: changed “new line” symbol to $nl
 * German translation update
 * BYOB: new experimental feature: duplicate block definition (hidden in shift-click context menu)
+
+170127
+------
+* Blocks, Objects, Threaes, Store: added support for codification of String, Number and Boolean value types
