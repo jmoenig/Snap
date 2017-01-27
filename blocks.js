@@ -9651,7 +9651,7 @@ SymbolMorph.prototype.names = [
     'arrowRight',
     'arrowRightOutline',
     'robot',
-    'magnifiyingGlass'
+    'magnifyingGlass'
 ];
 
 // SymbolMorph instance creation:
@@ -9821,7 +9821,7 @@ SymbolMorph.prototype.symbolCanvasColored = function (aColor) {
         return this.drawSymbolArrowRightOutline(canvas, aColor);
     case 'robot':
         return this.drawSymbolRobot(canvas, aColor);
-    case 'magnifiyingGlass':
+    case 'magnifyingGlass':
         return this.drawSymbolMagnifyingGlass(canvas, aColor);
     default:
         return canvas;
