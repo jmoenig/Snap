@@ -9,7 +9,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2016 by Jens Mönig
+    Copyright (C) 2017 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -82,7 +82,7 @@ SpeechBubbleMorph, RingMorph, isNil, FileReader, TableDialogMorph,
 BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph*/
 
-modules.objects = '2016-December-09';
+modules.objects = '2017-January-27';
 
 var SpriteMorph;
 var StageMorph;
@@ -1185,12 +1185,20 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'other',
             spec: 'map %cmdRing to %codeKind %code'
         },
+        doMapValueCode: { // experimental
+            type: 'command',
+            category: 'other',
+            spec: 'map %mapValue to code %code',
+            defaults: [['String'], '<#1>']
+        },
+    /* obsolete - superseded by 'doMapValue'
         doMapStringCode: { // experimental
             type: 'command',
             category: 'other',
             spec: 'map String to code %code',
             defaults: ['<#1>']
         },
+    */
         doMapListCode: { // experimental
             type: 'command',
             category: 'other',
@@ -1231,6 +1239,11 @@ SpriteMorph.prototype.initBlockMigrations = function () {
         reportFalse: {
             selector: 'reportBoolean',
             inputs: [false]
+        },
+        doMapStringCode: {
+            selector: 'doMapValueCode',
+            inputs: [['String'], '<#1>'],
+            offset: 1
         }
     };
 };
@@ -2024,8 +2037,11 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push('-');
         blocks.push(block('reportIsA'));
         blocks.push(block('reportIsIdentical'));
-        blocks.push('-');
-        blocks.push(block('reportJSFunction'));
+
+        if (true) { // (Process.prototype.enableJS) {
+            blocks.push('-');
+            blocks.push(block('reportJSFunction'));
+        }
 
     // for debugging: ///////////////
 
@@ -2153,7 +2169,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
 
         if (StageMorph.prototype.enableCodeMapping) {
             blocks.push(block('doMapCodeOrHeader'));
-            blocks.push(block('doMapStringCode'));
+            blocks.push(block('doMapValueCode'));
             blocks.push(block('doMapListCode'));
             blocks.push('-');
             blocks.push(block('reportMappedCode'));
@@ -2263,7 +2279,11 @@ SpriteMorph.prototype.freshPalette = function (category) {
             });
         }
 
-        menu.addItem('find blocks...', function () {myself.searchBlocks(); });
+        menu.addPair(
+            'find blocks...',
+            function () {myself.searchBlocks(); },
+            '^F'
+        );
         if (canHidePrimitives()) {
             menu.addItem(
                 'hide primitives',
@@ -2433,7 +2453,8 @@ SpriteMorph.prototype.blocksMatching = function (
         blocksDict,
         myself = this,
         search = searchString.toLowerCase(),
-        stage = this.parentThatIsA(StageMorph);
+        stage = this.parentThatIsA(StageMorph),
+        reporterized;
 
     if (!types || !types.length) {
         types = ['hat', 'command', 'reporter', 'predicate', 'ring'];
@@ -2506,6 +2527,15 @@ SpriteMorph.prototype.blocksMatching = function (
             }
         }
     });
+    // infix arithmetic expression
+    if (contains(types, 'reporter')) {
+        reporterized = this.reporterize(searchString);
+        if (reporterized) {
+            // reporterized.isTemplate = true;
+            // reporterized.isDraggable = false;
+            blocks.push([reporterized, '']);
+        }
+    }
     blocks.sort(function (x, y) {return x[1] < y[1] ? -1 : 1; });
     return blocks.map(function (each) {return each[0]; });
 };
@@ -2630,6 +2660,182 @@ SpriteMorph.prototype.searchBlocks = function (
     ide.fixLayout('refreshPalette');
     searchBar.edit();
     if (searchString) {searchPane.reactToKeystroke(); }
+};
+
+// SpritMorph parsing simple arithmetic expressions to reporter blocks
+
+SpriteMorph.prototype.reporterize = function (expressionString) {
+    // highly experimental Christmas Easter Egg 2016 :-)
+    var ast;
+
+    function parseInfix(expression, operator, already) {
+        // very basic diadic infix parser for arithmetic expressions
+        // with strict left-to-right operator precedence (as in Smalltalk)
+        // which can be overriden by - nested - parentheses.
+        // assumes well-formed expressions, no graceful error handling yet.
+
+        var inputs = ['', ''],
+            idx = 0,
+            ch;
+
+        function format(value) {
+            return value instanceof Array || isNaN(+value) ? value : +value;
+        }
+
+        function nested() {
+            var level = 1,
+                expr = '';
+            while (idx < expression.length) {
+                ch = expression[idx];
+                idx += 1;
+                switch (ch) {
+                case '(':
+                    level += 1;
+                    break;
+                case ')':
+                    level -= 1;
+                    if (!level) {
+                        return expr;
+                    }
+                    break;
+                }
+                expr += ch;
+            }
+        }
+
+        while (idx < expression.length) {
+            ch = expression[idx];
+            idx += 1;
+            switch (ch) {
+            case ' ':
+                break;
+            case '(':
+                if (inputs[operator ? 1 : 0].length) {
+                    inputs[operator ? 1 : 0] = [
+                        inputs[operator ? 1 : 0],
+                        parseInfix(nested())
+                    ];
+                } else {
+                    inputs[operator ? 1 : 0] = parseInfix(nested());
+                }
+                break;
+            case '-':
+            case '+':
+            case '*':
+            case '/':
+            case '%':
+            case '=':
+            case '<':
+            case '>':
+            case '&':
+            case '|':
+                if (!operator && !inputs[0].length) {
+                    inputs[0] = ch;
+                } else if (operator) {
+                    if (!inputs[1].length) {
+                        inputs[1] = ch;
+                    } else {
+                        return parseInfix(
+                            expression.slice(idx),
+                            ch,
+                            [operator, already, format(inputs[1])]
+                        );
+                    }
+                } else {
+                    operator = ch;
+                    already = format(inputs[0]);
+                }
+                break;
+            default:
+                inputs[operator ? 1 : 0] += ch;
+            }
+        }
+        if (operator) {
+            return [operator, already, format(inputs[1])];
+        }
+        return format(inputs[0]);
+    }
+
+    function blockFromAST(ast) {
+        var block, selectors, monads, alias, key, sel, i, inps,
+            off = 1,
+            reverseDict = {};
+        selectors = {
+            '+': 'reportSum',
+            '-': 'reportDifference',
+            '*': 'reportProduct',
+            '/': 'reportQuotient',
+            '%': 'reportModulus',
+            '=': 'reportEquals',
+            '<': 'reportLessThan',
+            '>': 'reportGreaterThan',
+            '&': 'reportAnd',
+            '|': 'reportOr',
+            round: 'reportRound',
+            not: 'reportNot'
+        };
+        monads = ['abs', 'ceiling', 'floor', 'sqrt', 'sin', 'cos', 'tan',
+            'asin', 'acos', 'atan', 'ln', 'log', 'round', 'not'];
+        alias = {
+            ceil: 'ceiling',
+            '!' : 'not'
+        };
+        monads.concat(['true', 'false']).forEach(function (word) {
+            reverseDict[localize(word).toLowerCase()] = word;
+        });
+        key = alias[ast[0]] || reverseDict[ast[0].toLowerCase()] || ast[0];
+        if (contains(monads, key)) { // monadic
+            sel = selectors[key];
+            if (sel) { // single input
+                block = SpriteMorph.prototype.blockForSelector(sel);
+                inps = block.inputs();
+            } else { // two inputs, first is function name
+                block = SpriteMorph.prototype.blockForSelector('reportMonadic');
+                inps = block.inputs();
+                inps[0].setContents([key]);
+                off = 0;
+            }
+        } else { // diadic
+            block = SpriteMorph.prototype.blockForSelector(selectors[key]);
+            inps = block.inputs();
+        }
+        for (i = 1; i < ast.length; i += 1) {
+            if (ast[i] instanceof Array) {
+                block.silentReplaceInput(inps[i - off], blockFromAST(ast[i]));
+            } else if (isString(ast[i])) {
+                if (contains(
+                    ['true', 'false'], reverseDict[ast[i]] || ast[i])
+                ) {
+                    block.silentReplaceInput(
+                        inps[i - off],
+                        SpriteMorph.prototype.blockForSelector(
+                            (reverseDict[ast[i]] || ast[i]) === 'true' ?
+                                    'reportTrue' : 'reportFalse'
+                        )
+                    );
+                } else if (ast[i] !== '_') {
+                    block.silentReplaceInput(
+                        inps[i - off],
+                        SpriteMorph.prototype.variableBlock(ast[i])
+                    );
+                }
+            } else { // number
+                inps[i - off].setContents(ast[i]);
+            }
+        }
+        block.isDraggable = true;
+        block.fixLayout();
+        block.fixBlockColor(null, true);
+        return block;
+    }
+
+    if (expressionString.length > 100) {return null; }
+    try {
+        ast = parseInfix(expressionString);
+        return ast instanceof Array ? blockFromAST(ast) : null;
+    } catch (error) {
+        return null;
+    }
 };
 
 // SpriteMorph variable management
@@ -3023,12 +3229,15 @@ SpriteMorph.prototype.comeToFront = function () {
 };
 
 SpriteMorph.prototype.goBack = function (layers) {
-    var layer, newLayer = +layers || 0;
+    var layer,
+        newLayer = +layers,
+        targetLayer;
+
     if (!this.parent) {return null; }
     layer = this.parent.children.indexOf(this);
-    if (layer < newLayer) {return null; }
     this.parent.removeChild(this);
-    this.parent.children.splice(layer - newLayer, null, this);
+    targetLayer = Math.max(layer - newLayer, 0);
+    this.parent.children.splice(targetLayer, null, this);
     this.parent.changed();
 };
 
@@ -3168,7 +3377,7 @@ SpriteMorph.prototype.applyGraphicsEffects = function (canvas) {
 
     var ctx, imagedata;
 
-    function transform_fisheye (imagedata, value) {
+    function transform_fisheye(imagedata, value) {
         var pixels, newImageData, newPixels, centerX, centerY,
             w, h, x, y, dx, dy, r, angle, srcX, srcY, i, srcI;
 
@@ -3188,8 +3397,12 @@ SpriteMorph.prototype.applyGraphicsEffects = function (canvas) {
                 r = Math.pow(Math.sqrt(dx * dx + dy * dy), value);
                 if (r <= 1) {
                     angle = Math.atan2(dy, dx);
-                    srcX = Math.floor(centerX + (r * Math.cos(angle) * centerX));
-                    srcY = Math.floor(centerY + (r * Math.sin(angle) * centerY));
+                    srcX = Math.floor(
+                        centerX + (r * Math.cos(angle) * centerX)
+                    );
+                    srcY = Math.floor(
+                        centerY + (r * Math.sin(angle) * centerY)
+                    );
                 } else {
                     srcX = x;
                     srcY = y;
@@ -3205,7 +3418,7 @@ SpriteMorph.prototype.applyGraphicsEffects = function (canvas) {
         return newImageData;
     }
 
-    function transform_whirl (imagedata, value) {
+    function transform_whirl(imagedata, value) {
         var pixels, newImageData, newPixels, w, h, centerX, centerY,
             x, y, radius, scaleX, scaleY, whirlRadians, radiusSquared,
             dx, dy, d, factor, angle, srcX, srcY, i, srcI, sina, cosa;
@@ -3238,8 +3451,12 @@ SpriteMorph.prototype.applyGraphicsEffects = function (canvas) {
                     angle = whirlRadians * (factor * factor);
                     sina = Math.sin(angle);
                     cosa = Math.cos(angle);
-                    srcX = Math.floor((cosa * dx - sina * dy) / scaleX + centerX);
-                    srcY = Math.floor((sina * dx + cosa * dy) / scaleY + centerY);
+                    srcX = Math.floor(
+                        (cosa * dx - sina * dy) / scaleX + centerX
+                    );
+                    srcY = Math.floor(
+                        (sina * dx + cosa * dy) / scaleY + centerY
+                    );
                 } else {
                     srcX = x;
                     srcY = y;
@@ -3255,7 +3472,7 @@ SpriteMorph.prototype.applyGraphicsEffects = function (canvas) {
         return newImageData;
     }
 
-    function transform_pixelate (imagedata, value) {
+    function transform_pixelate(imagedata, value) {
         var pixels, newImageData, newPixels, w, h,
             x, y, srcX, srcY, i, srcI;
 
@@ -3281,14 +3498,17 @@ SpriteMorph.prototype.applyGraphicsEffects = function (canvas) {
         return newImageData;
     }
 
-    function transform_mosaic (imagedata, value) {
+    function transform_mosaic(imagedata, value) {
         var pixels, i, l, newImageData, newPixels, srcI;
         pixels = imagedata.data;
         newImageData = ctx.createImageData(imagedata.width, imagedata.height);
         newPixels = newImageData.data;
 
         value = Math.round((Math.abs(value) + 10) / 10);
-        value = Math.max(0, Math.min(value, Math.min(imagedata.width, imagedata.height)));
+        value = Math.max(
+            0,
+            Math.min(value, Math.min(imagedata.width, imagedata.height))
+        );
         for (i = 0, l = pixels.length; i < l; i += 4) {
             srcI = i * value % l;
             newPixels[i] = pixels[srcI];
@@ -3299,7 +3519,7 @@ SpriteMorph.prototype.applyGraphicsEffects = function (canvas) {
         return newImageData;
     }
 
-    function transform_duplicate (imagedata, value) {
+    function transform_duplicate(imagedata, value) {
         var pixels, i;
         pixels = imagedata.data;
         for (i = 0; i < pixels.length; i += 4) {
@@ -3311,7 +3531,12 @@ SpriteMorph.prototype.applyGraphicsEffects = function (canvas) {
         return imagedata;
     }
 
-    function transform_HSV (imagedata, hueShift, saturationShift, brightnessShift) {
+    function transform_HSV(
+            imagedata,
+            hueShift,
+            saturationShift,
+            brightnessShift
+    ) {
         var pixels, index, l, r, g, b, max, min, span,
             h, s, v, i, f, p, q, t, newR, newG, newB;
         pixels = imagedata.data;
@@ -3435,21 +3660,38 @@ SpriteMorph.prototype.applyGraphicsEffects = function (canvas) {
         imagedata = ctx.getImageData(0, 0, canvas.width, canvas.height);
 
         if (this.graphicsValues.fisheye) {
-            imagedata = transform_fisheye(imagedata, this.graphicsValues.fisheye);
+            imagedata = transform_fisheye(
+                imagedata,
+                this.graphicsValues.fisheye
+            );
         }
         if (this.graphicsValues.whirl) {
-            imagedata = transform_whirl(imagedata, this.graphicsValues.whirl);
+            imagedata = transform_whirl(
+                imagedata,
+                this.graphicsValues.whirl
+            );
         }
         if (this.graphicsValues.pixelate) {
-            imagedata = transform_pixelate(imagedata, this.graphicsValues.pixelate);
+            imagedata = transform_pixelate(
+                imagedata,
+                this.graphicsValues.pixelate
+            );
         }
         if (this.graphicsValues.mosaic) {
-            imagedata = transform_mosaic(imagedata, this.graphicsValues.mosaic);
+            imagedata = transform_mosaic(
+                imagedata,
+                this.graphicsValues.mosaic
+            );
         }
         if (this.graphicsValues.duplicate) {
-            imagedata = transform_duplicate(imagedata, this.graphicsValues.duplicate);
+            imagedata = transform_duplicate(
+                imagedata,
+                this.graphicsValues.duplicate
+            );
         }
-        if (this.graphicsValues.color || this.graphicsValues.saturation || this.graphicsValues.brightness) {
+        if (this.graphicsValues.color ||
+                this.graphicsValues.saturation ||
+                this.graphicsValues.brightness) {
             imagedata = transform_HSV(
                 imagedata,
                 this.graphicsValues.color,
@@ -3458,13 +3700,22 @@ SpriteMorph.prototype.applyGraphicsEffects = function (canvas) {
             );
         }
         if (this.graphicsValues.negative) {
-            imagedata = transform_negative(imagedata, this.graphicsValues.negative);
+            imagedata = transform_negative(
+                imagedata,
+                this.graphicsValues.negative
+            );
         }
         if (this.graphicsValues.comic) {
-            imagedata = transform_comic(imagedata, this.graphicsValues.comic);
+            imagedata = transform_comic(
+                imagedata,
+                this.graphicsValues.comic
+            );
         }
         if (this.graphicsValues.confetti) {
-            imagedata = transform_confetti(imagedata, this.graphicsValues.confetti);
+            imagedata = transform_confetti(
+                imagedata,
+                this.graphicsValues.confetti
+            );
         }
 
         ctx.putImageData(imagedata, 0, 0);
@@ -4237,6 +4488,7 @@ SpriteMorph.prototype.toggleVariableWatcher = function (varName, isGlobal) {
     stage.add(watcher);
     watcher.fixLayout();
     watcher.keepWithin(stage);
+    return watcher;
 };
 
 SpriteMorph.prototype.showingVariableWatcher = function (varName) {
@@ -4637,6 +4889,29 @@ SpriteMorph.prototype.deletableVariableNames = function () {
             }
         )
     );
+};
+
+SpriteMorph.prototype.hasSpriteVariable = function (varName) {
+    return contains(this.variables.names(), varName);
+};
+
+// Variable refactoring
+
+SpriteMorph.prototype.refactorVariableInstances = function (
+    oldName,
+    newName,
+    isGlobal
+) {
+    if (isGlobal && this.hasSpriteVariable(oldName)) {
+        return;
+    }
+
+    this.scripts.children.forEach(function (child) {
+        if (child instanceof BlockMorph) {
+            child.refactorVarInStack(oldName, newName);
+        }
+    });
+
 };
 
 // SpriteMorph inheritance - custom blocks
@@ -6030,8 +6305,11 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push('-');
         blocks.push(block('reportIsA'));
         blocks.push(block('reportIsIdentical'));
-        blocks.push('-');
-        blocks.push(block('reportJSFunction'));
+
+        if (true) { // (Process.prototype.enableJS) {
+            blocks.push('-');
+            blocks.push(block('reportJSFunction'));
+        }
 
     // for debugging: ///////////////
 
@@ -6142,7 +6420,7 @@ StageMorph.prototype.blockTemplates = function (category) {
 
         if (StageMorph.prototype.enableCodeMapping) {
             blocks.push(block('doMapCodeOrHeader'));
-            blocks.push(block('doMapStringCode'));
+            blocks.push(block('doMapValueCode'));
             blocks.push(block('doMapListCode'));
             blocks.push('-');
             blocks.push(block('reportMappedCode'));
@@ -6331,6 +6609,7 @@ StageMorph.prototype.palette = SpriteMorph.prototype.palette;
 StageMorph.prototype.freshPalette = SpriteMorph.prototype.freshPalette;
 StageMorph.prototype.blocksMatching = SpriteMorph.prototype.blocksMatching;
 StageMorph.prototype.searchBlocks = SpriteMorph.prototype.searchBlocks;
+StageMorph.prototype.reporterize = SpriteMorph.prototype.reporterize;
 StageMorph.prototype.showingWatcher = SpriteMorph.prototype.showingWatcher;
 StageMorph.prototype.addVariable = SpriteMorph.prototype.addVariable;
 StageMorph.prototype.deleteVariable = SpriteMorph.prototype.deleteVariable;
@@ -6522,6 +6801,14 @@ StageMorph.prototype.globalVariables
 StageMorph.prototype.inheritedVariableNames = function () {
     return [];
 };
+
+// StageMorph variable refactoring
+
+StageMorph.prototype.hasSpriteVariable
+    = SpriteMorph.prototype.hasSpriteVariable;
+
+StageMorph.prototype.refactorVariableInstances
+    = SpriteMorph.prototype.refactorVariableInstances;
 
 // SpriteBubbleMorph ////////////////////////////////////////////////////////
 
@@ -8145,6 +8432,7 @@ WatcherMorph.prototype.userMenu = function () {
                 inp.style.left = "0px";
                 inp.style.width = "0px";
                 inp.style.height = "0px";
+                inp.style.display = "none";
                 inp.addEventListener(
                     "change",
                     function () {

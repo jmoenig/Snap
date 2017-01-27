@@ -3193,20 +3193,147 @@ http://snap.berkeley.edu/run#cloud:Username=jens&ProjectName=rotation
 ------
 * Catalan translation update, thanks, @jguille2 !
 
+161219
+------
+* GUI: new url-switch: &noExitWarning
+* Blocks, Objects: highly experimental infix-expression-to-reporter parser
 
-== v4.10 === (in development)
+161220
+------
+* Objects: tweaked “reporterize”
+
+161221
+------
+* Objects: added Boolean operators to “reporterize”
+
+161222
+------
+* Objects: simplified reporterize>>blockFromAST
+* Threads: prevented color slots from flashing. Good catch, thanks, Joan!
+
+161223
+------
+* Objects: tweaked reporterize infixParser
+
+161225
+------
+* GUI: update undrop controls when switching sprites and display modes
+
+161227
+------
+* GUI, Threads, Objects, Store: Disable JS-Functions, to protect users from malicious scripts, commented out for now
+
+161229
+------
+* BYOB: Disabled hover-help for custom blocks (some people find it annoying)
+* GUI: Hide setting for “prefer smooth animations” (now - mostly - redundant)
+
+161231
+------
+* Morphic: support for menu shortcuts (ongoing)
+* GUI, Blocks: menu shortcuts (experimental)
+
+170102
+------
+* Morphic: use animations to schedule tool tips
+
+170103
+------
+* Hierarchical menus, thanks, Brian!
+* Tweaks to hierarchical menus
+
+170104
+------
+* Variable refactoring, yay! Thanks, Bernat!!
+* Threads: fixed #1602
+
+170105
+------
+* Blocks: refactored variable refactoring code
+* fixed #1604
+* Blocks, GUI: changed shortcut symbol for “Ctrl” key to ^
+* Blocks: fixed #696 - Keep left-over blocks from “relabel” around
+
+170108
+------
+* Blocks: fixed #1608
+
+170109
+------
+* GUI: “#run:” flags, thanks, Brian!
+* GUI: Libraries Browser, thanks, Michael!
+* Blocks: Fixed out of bounds issue with “go back _ layers”, thanks, Brian Broll!
+
+170110
+------
+* German translation update
+
+170111
+------
+* Error handling improvements for custom drop-down submenus and generic WHEN hats
+
+170113
+------
+* GUI: added "savingPreferences" flag for bh's "Eisenbergification" library, sigh.
+
+
+== v4.0.10 ===
 
 Features:
 * auto-wrapping of C-slots
 * undo / redo for blocks, unlimited, but has some issues
 * search field for projects, thanks, Bernat!!
 * basic typography support for custom block labels, thanks, Bernat!!
-* Treat JS-function reporters the same as variable getters wrt rings
+* treat JS-function reporters the same as variable getters wrt rings
 * new url switch #dl: for downloading raw shared projects
+* new url option switch: &noExitWarning
 * svg support for images from the web (svg files have been supported for a long time)
 * use media dialog for browsing and importing sounds
+* highly experimental infix-expression-to-reporter parser. Thanks, Bernat, for the brilliant idea to add it to the search-blocks field!
+* hierarchical menus, also for custom blocks, thanks, Brian!
+* variable refactoring, thanks, Bernat!
+* “#run:” flags (same as “#present:”): ’editMode’, ‘noRun’, ‘hideControls’, thanks, Brian!
+* Libraries Browser, thanks, Michael!
 
 Fixes:
 * Music (play note) to work again in new and recent browser versions (Chrome 55)
 * IDE layout: fixed resizing issues when the window becomes too small
-* Translation updates (Russian, Polish, Danish, Portuguese, Catalan)
+* Keep left-over blocks from “relabel” around
+* Evaluate the generic WHEN-hat block’s predicate and first step of the attached script in the same atom
+* “go back _ layers” to work with out-of bounds numbers, thanks, Brian Broll!
+* Translation updates (Russian, Polish, Danish, Portuguese, Catalan, German)
+
+
+== v4.0.10.1 - in development - ===
+
+170119
+------
+* GUI: began new development version
+* Blocks: fixed #1630
+* Objects: support localization when typing expressions
+* German translation update
+* Blocks: changed keyboard shortcut indicator for “find blocks” to “^”
+* GUI: fixed #1631
+
+170120
+------
+* Blocks: improved inspectability of local variables
+* GUI: improved library browser, thanks, Michael!
+* BYOB: support user-forced line-breaks in custom block labels
+* Blocks: limit Boolean input slots to “true/false” unless inside a ring or in the palette
+
+170123
+------
+* BYOB, Blocks, Store: added support for default values in custom block Boolean slots
+* GUI, Blocks, Store: allow project-setting “Ternary Boolean slots” to be switched off
+* German translation update
+
+170124
+------
+* BYOB: changed “new line” symbol to $nl
+* German translation update
+* BYOB: new experimental feature: duplicate block definition (hidden in shift-click context menu)
+
+170127
+------
+* Blocks, Objects, Threaes, Store: added support for codification of String, Number and Boolean value types

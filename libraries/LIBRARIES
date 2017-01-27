@@ -1,12 +1,13 @@
-iteration-composition.xml	Iteration, composition
-list-utilities.xml	List utilities
-stream-tools.xml	Streams (lazy lists)
-variadic-reporters.xml	Variadic reporters
-httpBlocks.xml	Web services access (https)
-word-sentence.xml	Words, sentences
-cases.xml	Multi-branched conditional (switch)
-leap-library.xml	LEAP Motion controller
-setrgb.xml	Set RGB or HSV pen color
-penTrails.xml	Save and restore pictures drawn by pen
-try-catch.xml	Catch errors in a script
-multiline.xml Allow multi-line text input to a block
+iteration-composition.xml	Iteration, composition	Traditional loop constructs (while, until, etc.) plus the Lisp "named let" (a generalization of FOR) plus functional iteration (repeated invocation of a function) and function composition.
+list-utilities.xml	List utilities	Some standard functions on lists (append, reverse, etc.)
+stream-tools.xml	Streams (lazy lists)	A variation on the list data type in which each list item aren't computed until it's needed, so you can construct million-item lists without really taking up all that time or memory, or even infinite-sized lists.  (A block that reports all the prime numbers is included as an example.)
+variadic-reporters.xml	Variadic reporters	Versions of +, x, AND, and OR that take more than two inputs.
+httpBlocks.xml	Web services access (https)	An extended version of the HTTP:// block that allows POST, PUT, and DELETE as well as GET requests, allows using the secure HTTPS protocol, and gives control over headers, etc.
+word-sentence.xml	Words, sentences	One of the big ideas in Logo that they left out of Scratch is thinking of text as structured into words and sentences, rather than just a string of characters.  This library (along with the JOIN WORDS block in the Tools library) brings back that idea.
+cases.xml	Multi-branched conditional (switch)	Like "switch" in C-like languages or "cond" in Lisp.  Thanks to Nathan Dinsmore for inventing the idea of a separate block for each branch!
+leap-library.xml	LEAP Motion controller	Report hand positions from LEAP Motion controller (leapmotion.com).
+setrgb.xml	Set RGB or HSV pen color	Set or report pen color as RGB (red, blue, green) or HSV (hue, saturation, value).
+penTrails.xml	Save and restore pictures drawn by pen	Save and restore lines drawn and costumes stamped on the stage, or make a sprite costume from saved pen trails.
+try-catch.xml	Catch errors in a script	Run a script; if an error happens, instead of stopping the script with a red halo, run another script to handle the error. Also includes a block to cause an error with a message given as input. Also includes a block to create a script variable and give it a value.
+multiline.xml	Allow multi-line text input to a block	In general, text inputs allow only a single line.  The MULTILINE block accepts multi-line text input and can be used in text input slots of other blocks.
+Eisenbergification.xml	Provide getters and setters for all GUI-controlled global settings	Eisenberg's Law: Anything that can be done from the GUI should be doable from the programming language, and vice versa.
