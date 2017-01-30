@@ -61,7 +61,7 @@ normalizeCanvas, contains*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2017-January-27';
+modules.store = '2017-January-30';
 
 
 // XML_Serializer ///////////////////////////////////////////////////////
@@ -1118,6 +1118,9 @@ SnapSerializer.prototype.obsoleteBlock = function (isReporter) {
 SnapSerializer.prototype.loadInput = function (model, input, block) {
     // private
     var inp, val, myself = this;
+    if (isNil(input)) {
+        return;
+    }
     if (model.tag === 'script') {
         inp = this.loadScript(model);
         if (inp) {

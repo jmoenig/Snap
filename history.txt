@@ -3337,3 +3337,7 @@ Fixes:
 170127
 ------
 * Blocks, Objects, Threaes, Store: added support for codification of String, Number and Boolean value types
+
+170130
+------
+* Store: fixed #1645
