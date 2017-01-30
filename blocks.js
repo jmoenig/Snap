@@ -1874,6 +1874,7 @@ SyntaxElementMorph.prototype.stringify = function () {
 
 SyntaxElementMorph.prototype.stringifyCategory = function () {
     // private. answers with scratchblocks category specifier
+    if (!this.category) return '';
     return ' :: ' + ({
         'lists': 'list',
         'other': 'grey',
@@ -6731,8 +6732,12 @@ ArgMorph.prototype.isEmptySlot = function () {
 // ArgMorph to "scratchblocks"
 
 ArgMorph.prototype.stringify = function () {
-    if (this.isHole) { // empty hole in ring
-        return this.isPredicate ? '< >' : '( )';
+    if (this.isHole) {
+        if (this.children[0] instanceof ArgMorph) {
+            return this.isPredicate ? '< >' : '( )';
+        } else {
+            return this.children[0].stringify();
+        }
     } else if (this.type === 'list') {
         return '[ ]'; // scratchblocks renderer does not have a "list" symbol
     }
@@ -8845,7 +8850,8 @@ TemplateSlotMorph.prototype.evaluate = function () {
 // TemplateSlotMorph to "scratchblocks"
 
 TemplateSlotMorph.prototype.stringify = function () {
-    return '(' + this.labelString + ')';
+    var category = this.parent.stringifyCategory() || ' :: grey';
+    return '(' + this.children[0].stringify() + category + ')';
 };
 
 // TemplateSlotMorph layout:
@@ -11436,13 +11442,17 @@ MultiArgMorph.prototype.removeInput = function () {
 
 MultiArgMorph.prototype.stringify = function () {
     var arrows = this.arrows().children,
-        inner;
-    inner = this.inputs().map(function(child) {
+        label = this.children[0],
+        result = '';
+    if (label.isVisible) {
+        result += label.text;
+    }
+    result += this.inputs().map(function(child) {
         return child.stringify();
     }).join(' ');
-    if (arrows[0].isVisible) inner += ' @delInput';
-    if (arrows[1].isVisible) inner += ' @addInput';
-    return inner;
+    if (arrows[0].isVisible) result += ' @delInput';
+    if (arrows[1].isVisible) result += ' @addInput';
+    return result;
 };
 
 // MultiArgMorph events:
