@@ -869,7 +869,7 @@ CustomCommandBlockMorph.prototype.userMenu = function () {
     if (this.isPrototype) {
         menu = new MenuMorph(this);
         menu.addItem(
-            'forum code...',
+            'scratchblocks code...',
               function() {
                   var code = myself.parent.toScratchblocks();
                   window.prompt('scratchblocks code for you to copy and paste', code);
