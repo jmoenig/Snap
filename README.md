@@ -1,4 +1,16 @@
+BeetleBlocks is a visual, blocks-based programming environment for
+3D design and fabrication. BeetleBlocks programs move a graphical
+"beetle" around a 3D world, where it can place 3D shapes, extrude 
+its path as a tube, and generate geometry in other ways. The
+resulting 3D geometry can be exported as a 3D-printable file.
 
+BeetleBlocks is a project by Eric Rosenbaum and Duks Koschitz, 
+with software development by Bernat Romagosa and Jens Moenig.
+
+Try it here:
+http://ericrosenbaum.github.io/BeetleBlocks/beetleblocks.html
+
+BeetleBlocks is based on:
 Snap! Build Your Own Blocks
 
 http://snap.berkeley.edu
@@ -23,6 +35,3 @@ GNU Affero General Public License for more details.
 
 You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-Want to use Snap! but scared by the open-source license? Get in touch with us,
-we'll make it work.
