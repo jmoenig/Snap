@@ -203,7 +203,7 @@ ActionManager.prototype._enableCollaboration = function() {
             }
         } else if (msg.type === 'session-project-request') {
             // Return the serialized project
-            var str = self.serializer.serialize(self.ide().stage);
+            var str = self.serialize(self.ide().stage);
             msg.args = [str];
             self._ws.send(JSON.stringify(msg));
         } else if (msg.type === 'session-id') {
@@ -416,6 +416,12 @@ ActionManager.prototype.getId = function (block, index) {
     return id;
 };
 
+ActionManager.prototype.serialize = function(object) {
+    var serialized = this.serializer.serialize(object);
+    this.serializer.flush();
+    return serialized;
+};
+
 ActionManager.prototype.serializeBlock = function(block, force, justMe) {
     if (block.id && !force) {
         return block.id;
@@ -425,22 +431,16 @@ ActionManager.prototype.serializeBlock = function(block, force, justMe) {
         return block.toXML(this.serializer);
     }
 
-    return justMe ?
+    var serialized = justMe ?
         '<script>' + block.toBlockXML(this.serializer) + '</script>':
         block.toScriptXML(this.serializer);
+
+    this.serializer.flush();
+    return serialized;
 };
 
 ActionManager.prototype.deserializeBlock = function(ser) {
-    var ownerId = Object.keys(this._owners).pop(),
-        owner,
-        stage;
-
-    if (ownerId) {  // Update the stage for custom blocks
-        owner = this._owners[ownerId],
-        stage = owner.parentThatIsA(StageMorph);
-
-        this.serializer.project = this.ide();
-    }
+    this.serializer.project = this.ide();
 
     if (ser[0] !== '<') {
         return this.getBlockFromId(ser);
@@ -590,7 +590,7 @@ ActionManager.prototype._addCustomBlock = function(definition, owner) {
         args;
 
     definition.id = this.newId();
-    serialized = this.serializer.serialize(definition);
+    serialized = this.serialize(definition);
     if (definition.isGlobal) {  // global defs are stored in the stage
         owner = this.ide().stage;
     }
@@ -605,7 +605,7 @@ ActionManager.prototype._addCustomBlock = function(definition, owner) {
 
 ActionManager.prototype._deleteCustomBlock = function(definition) {
     var owner = this._customBlockOwner[definition.id],
-        serialized = this.serializer.serialize(definition);
+        serialized = this.serialize(definition);
 
     return [definition.id, owner.id, serialized, definition.isGlobal];
 };
@@ -615,7 +615,7 @@ ActionManager.prototype._deleteCustomBlocks = function(blocks) {
         ids = [];
 
     for (var i = blocks.length; i--;) {
-        serialized.push(this.serializer.serialize(blocks[i]));
+        serialized.push(this.serialize(blocks[i]));
         ids.push(blocks[i].id);
     }
 
@@ -971,7 +971,7 @@ ActionManager.prototype._addSprite = function(sprite, costume, position) {
         //sprite.addCostume(costume);
         //sprite.wearCostume(costume);
     //}
-    serialized = '<sprites>' + this.serializer.serialize(sprite) + '</sprites>';
+    serialized = '<sprites>' + this.serialize(sprite) + '</sprites>';
 
     return [serialized, this.id, sprite.id];
 };
@@ -994,7 +994,7 @@ ActionManager.prototype.uniqueIdForImport = function (str) {
 
 ActionManager.prototype._removeSprite = function(sprite) {
     var costumes = sprite.costumes.asArray(),
-        serialized = '<sprites>' + this.serializer.serialize(sprite) + '</sprites>';
+        serialized = '<sprites>' + this.serialize(sprite) + '</sprites>';
 
     return [sprite.id, serialized];
 };
@@ -1017,7 +1017,7 @@ ActionManager.prototype._duplicateSprite = function(sprite, position) {
     newSprite.parent = ide.stage;
 
     // Create new ids for all the sprite's children
-    serialized = this.serializer.serialize(newSprite);
+    serialized = this.serialize(newSprite);
 
     start = '<sprites>' + this._getOpeningSpriteTag(serialized);
     end = '</sprites>';
