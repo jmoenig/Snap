@@ -1874,7 +1874,7 @@ SyntaxElementMorph.prototype.toScratchblocks = function () {
 
 SyntaxElementMorph.prototype.toScratchblocksCategory = function () {
     // private. answers with scratchblocks category specifier
-    if (!this.category) return '';
+    if (!this.category) { return ''; }
     return ' :: ' + ({
         'lists': 'list',
         'other': 'grey',
@@ -2548,7 +2548,7 @@ BlockMorph.prototype.userMenu = function () {
     );
     menu.addItem(
       'scratchblocks code...',
-        function() {
+        function () {
             var code = myself.toScratchblocks();
             window.prompt('scratchblocks code for you to copy and paste', code);
         },

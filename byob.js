@@ -870,7 +870,7 @@ CustomCommandBlockMorph.prototype.userMenu = function () {
         menu = new MenuMorph(this);
         menu.addItem(
             'scratchblocks code...',
-              function() {
+              function () {
                   var code = myself.parent.toScratchblocks();
                   window.prompt('scratchblocks code for you to copy and paste', code);
               },
