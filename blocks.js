@@ -2547,7 +2547,7 @@ BlockMorph.prototype.userMenu = function () {
         'userDestroy'
     );
     menu.addItem(
-      'stringify...',
+      'forum code...',
         function() {
             var code = myself.stringify();
             window.prompt('scratchblocks code for you to copy and paste', code);
