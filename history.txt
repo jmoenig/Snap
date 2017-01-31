@@ -3341,3 +3341,7 @@ Fixes:
 170130
 ------
 * Store: fixed #1645
+
+170131
+------
+* Lists: experimental methods for use as objects (hierarchical dictionaries)
