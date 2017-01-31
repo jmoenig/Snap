@@ -871,7 +871,7 @@ CustomCommandBlockMorph.prototype.userMenu = function () {
         menu.addItem(
             'forum code...',
               function() {
-                  var code = myself.parent.stringify();
+                  var code = myself.parent.toScratchblocks();
                   window.prompt('scratchblocks code for you to copy and paste', code);
               },
             'generate `scratchblocks` code for the Scratch Forums'
@@ -2198,13 +2198,13 @@ PrototypeHatBlockMorph.prototype.userMenu = function () {
           
 // PrototypeHatBlockMorph to "scratchblocks"
 
-PrototypeHatBlockMorph.prototype.stringify = function () {
+PrototypeHatBlockMorph.prototype.toScratchblocks = function () {
     var customCommand = this.parts()[0],
         nb = this.nextBlock(),
         result;
-    result = '{' + customCommand.stringify() + '} :: control hat';
+    result = '{' + customCommand.toScratchblocks() + '} :: control hat';
     if (nb) {
-      result += '\n' + nb.stringify();
+      result += '\n' + nb.toScratchblocks();
     }
     return result;
 };
@@ -2551,7 +2551,7 @@ BlockLabelPlaceHolderMorph.prototype.init = function () {
 
 // BlockLabelPlaceHolderMorph to "scratchblocks"
 
-BlockLabelPlaceHolderMorph.prototype.stringify = function () {
+BlockLabelPlaceHolderMorph.prototype.toScratchblocks = function () {
     return ''; // don't include plusses in scratchblocks output
 };
 

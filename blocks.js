@@ -1854,25 +1854,25 @@ SyntaxElementMorph.prototype.isEmptySlot = function () {
 
 // SyntaxElementMorph to "scratchblocks"
 
-SyntaxElementMorph.prototype.stringify = function () {
+SyntaxElementMorph.prototype.toScratchblocks = function () {
     var nb = this.nextBlock && this.nextBlock(),
         result;
     result = this.parts().map(function(child) {
-        if (child.stringify) {
-          return child.stringify();
+        if (child.toScratchblocks) {
+          return child.toScratchblocks();
         } else if (child instanceof StringMorph) {
           return child.text;
         } else {
           return ''; // should never happen
         }
-    }).join(' ') + this.stringifyCategory();
+    }).join(' ') + this.toScratchblocksCategory();
     if (nb) {
-        result += '\n' + nb.stringify()
+        result += '\n' + nb.toScratchblocks()
     }
     return result;
 };
 
-SyntaxElementMorph.prototype.stringifyCategory = function () {
+SyntaxElementMorph.prototype.toScratchblocksCategory = function () {
     // private. answers with scratchblocks category specifier
     if (!this.category) return '';
     return ' :: ' + ({
@@ -2549,7 +2549,7 @@ BlockMorph.prototype.userMenu = function () {
     menu.addItem(
       'forum code...',
         function() {
-            var code = myself.stringify();
+            var code = myself.toScratchblocks();
             window.prompt('scratchblocks code for you to copy and paste', code);
         },
       'generate `scratchblocks` code for the Scratch Forums'
@@ -5096,8 +5096,8 @@ ReporterBlockMorph.prototype.determineSlotSpec = function () {
 
 // ReporterBlockMorph to "scratchblocks"
 
-ReporterBlockMorph.prototype.stringify = function () {
-    var inner = ReporterBlockMorph.uber.stringify.call(this);
+ReporterBlockMorph.prototype.toScratchblocks = function () {
+    var inner = ReporterBlockMorph.uber.toScratchblocks.call(this);
     if (this.isPredicate) {
         return '<' + inner + '>';
     } else {
@@ -5668,9 +5668,9 @@ RingMorph.prototype.fixBlockColor = function (nearest, isForced) {
 
 // RingMorph to "scratchblocks"
 
-RingMorph.prototype.stringifyCategory = function () {
+RingMorph.prototype.toScratchblocksCategory = function () {
     // force rendering as a 'ring' shape.
-    return RingMorph.uber.stringifyCategory.call(this) + ' ring';
+    return RingMorph.uber.toScratchblocksCategory.call(this) + ' ring';
 };
 
 
@@ -6731,12 +6731,12 @@ ArgMorph.prototype.isEmptySlot = function () {
 
 // ArgMorph to "scratchblocks"
 
-ArgMorph.prototype.stringify = function () {
+ArgMorph.prototype.toScratchblocks = function () {
     if (this.isHole) {
         if (this.children[0] instanceof ArgMorph) {
             return this.isPredicate ? '< >' : '( )';
         } else {
-            return this.children[0].stringify();
+            return this.children[0].toScratchblocks();
         }
     } else if (this.type === 'list') {
         return '[ ]'; // scratchblocks renderer does not have a "list" symbol
@@ -6893,9 +6893,9 @@ CommandSlotMorph.prototype.isEmptySlot = function () {
 
 // CommandSlotMorph to "scratchblocks"
 
-CommandSlotMorph.prototype.stringify = function () {
+CommandSlotMorph.prototype.toScratchblocks = function () {
     var inside = this.children.map(function(child) {
-        return child.stringify();
+        return child.toScratchblocks();
     }).join('\n');
     // need line break if empty
     // otherwise scratchblocks renders an empty embedded block
@@ -8481,7 +8481,7 @@ InputSlotMorph.prototype.isEmptySlot = function () {
 
 // InputSlotMorph to "scratchblocks"
 
-InputSlotMorph.prototype.stringify = function () {
+InputSlotMorph.prototype.toScratchblocks = function () {
     var contents = this.contents(),
         text = contents.text;
     if (this.isNumeric) {
@@ -8849,9 +8849,9 @@ TemplateSlotMorph.prototype.evaluate = function () {
 
 // TemplateSlotMorph to "scratchblocks"
 
-TemplateSlotMorph.prototype.stringify = function () {
-    var category = this.parent.stringifyCategory() || ' :: grey';
-    return '(' + this.children[0].stringify() + category + ')';
+TemplateSlotMorph.prototype.toScratchblocks = function () {
+    var category = this.parent.toScratchblocksCategory() || ' :: grey';
+    return '(' + this.children[0].toScratchblocks() + category + ')';
 };
 
 // TemplateSlotMorph layout:
@@ -9018,7 +9018,7 @@ BooleanSlotMorph.prototype.toggleValue = function () {
 
 // BooleanSlotMorph to "scratchblocks"
 
-BooleanSlotMorph.prototype.stringify = function () {
+BooleanSlotMorph.prototype.toScratchblocks = function () {
     if (this.value === null) {
       return '< >'; // empty boolean slot
     } else {
@@ -9707,7 +9707,7 @@ SymbolMorph.prototype.setLabelColor = function (
 
 // SymbolMorph to "scratchblocks"
 
-SymbolMorph.prototype.stringify = function () {
+SymbolMorph.prototype.toScratchblocks = function () {
     var symbol = {
         'flag': 'greenFlag',
     }[this.name] || this.name;
@@ -11440,7 +11440,7 @@ MultiArgMorph.prototype.removeInput = function () {
 
 // MultiArgMorph to "scratchblocks"
 
-MultiArgMorph.prototype.stringify = function () {
+MultiArgMorph.prototype.toScratchblocks = function () {
     var arrows = this.arrows().children,
         label = this.children[0],
         result = '';
@@ -11448,7 +11448,7 @@ MultiArgMorph.prototype.stringify = function () {
         result += label.text;
     }
     result += this.inputs().map(function(child) {
-        return child.stringify();
+        return child.toScratchblocks();
     }).join(' ');
     if (arrows[0].isVisible) result += ' @delInput';
     if (arrows[1].isVisible) result += ' @addInput';
