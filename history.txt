@@ -3345,3 +3345,7 @@ Fixes:
 170131
 ------
 * Lists: experimental methods for use as objects (hierarchical dictionaries)
+
+170201
+------
+* GUI: let costume icons indicate svg costumes 
