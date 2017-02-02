@@ -2392,7 +2392,7 @@ ActionManager.OwnerFor.setBlockPosition = function(blockOrInputId) {
 
 ActionManager.OwnerFor.replaceBlock = function(block) {
     block = this.deserializeBlock(block);
-    return this._blockToOwnerId[block.id + '/scripts'];
+    return this._blockToOwnerId[block.id]+ '/scripts';
 };
 
 ActionManager.OwnerFor.addBlock = function(block, ownerId) {
