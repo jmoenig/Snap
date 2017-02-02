@@ -97,6 +97,7 @@ Process.prototype.setPositionOnAxis = function (axis, pos) {
     var beetle = this.homeContext.receiver.beetle,
         p = new THREE.Vector3(),
         startPoint =  p.copy(beetle.position),
+        axis = axis[0],
         stage = this.homeContext.receiver.parentThatIsA(StageMorph);
 
 
@@ -130,6 +131,7 @@ Process.prototype.changePositionBy = function (axis, dist) {
     var beetle = this.homeContext.receiver.beetle,
         p = new THREE.Vector3(),
         startPoint =  p.copy(beetle.position),
+        axis = axis[0],
         stage = this.homeContext.receiver.parentThatIsA(StageMorph);
 
     dist = Number(dist) * beetle.multiplierScale;
@@ -160,6 +162,7 @@ Process.prototype.changePositionBy = function (axis, dist) {
 
 Process.prototype.setRotationOnAxis = function (axis, angle) {
     var beetle = this.homeContext.receiver.beetle,
+        axis = axis[0],
         stage = this.homeContext.receiver.parentThatIsA(StageMorph);
 
     angle = Number(angle);
@@ -271,6 +274,7 @@ Process.prototype.move = function (dist) {
 Process.prototype.rotate = function (axis, angle) {
     var beetle = this.homeContext.receiver.beetle,
         stage = this.homeContext.receiver.parentThatIsA(StageMorph),
+        axis = axis[0],
         angle = Number(angle);
 
     if (axis === 'x') {
@@ -448,6 +452,7 @@ Process.prototype.text2D = function (textString, size) {
 
 Process.prototype.startExtrusion = function (extrudeStyle) {
     var beetle = this.homeContext.receiver.beetle,
+        extrudeStyle = extrudeStyle[0],
         stage = this.homeContext.receiver.parentThatIsA(StageMorph),
         p = new THREE.Vector3();
 
@@ -552,7 +557,8 @@ Process.prototype.changeExtrusionDiameter = function (delta) {
 };
 
 Process.prototype.startDrawing = function (drawStyle) {
-    var beetle = this.homeContext.receiver.beetle;
+    var beetle = this.homeContext.receiver.beetle,
+        drawStyle = drawStyle[0];
 
     if (!beetle.drawing) {
         beetle.drawing = true;
@@ -588,6 +594,7 @@ Process.prototype.pickHue = function (value) {
 Process.prototype.setHSLA = function (channel, value) {
     var beetle = this.homeContext.receiver.beetle,
         stage = this.homeContext.receiver.parentThatIsA(StageMorph),
+        channel = channel[0],
         value = Number(value),
         hsl = beetle.color.getHSL(),
         style;
@@ -624,6 +631,7 @@ Process.prototype.setHSLA = function (channel, value) {
 Process.prototype.changeHSLA = function (channel, value) {	
     var beetle = this.homeContext.receiver.beetle,
         stage = this.homeContext.receiver.parentThatIsA(StageMorph),
+        channel = channel[0],
         value = Number(value),
         style;
 
@@ -657,7 +665,8 @@ Process.prototype.changeHSLA = function (channel, value) {
 };
 
 Process.prototype.getHSLA = function (channel) {
-    var beetle = this.homeContext.receiver.beetle;
+    var beetle = this.homeContext.receiver.beetle,
+        channel = channel[0];
 
     if (channel === 'hue') {
         return beetle.color.state.h;
@@ -677,6 +686,7 @@ Process.prototype.getHSLA = function (channel) {
 
 Process.prototype.getPosition = function (axis) {
     var beetle = this.homeContext.receiver.beetle,
+        axis = axis[0],
         pos = 0;
 
     if (axis === 'x') {
@@ -694,6 +704,7 @@ Process.prototype.getPosition = function (axis) {
 
 Process.prototype.getRotation = function (axis) {
     var beetle = this.homeContext.receiver.beetle,
+        axis = axis[0],
         rot = 0;
 
     if (axis === 'x') {
