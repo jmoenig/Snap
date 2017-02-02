@@ -3353,3 +3353,4 @@ Fixes:
 170202
 ------
 * Objects, BYOB: highly experimental custom block inheritance, under construction…
+* Blocks: fixed #1650
