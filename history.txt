@@ -3349,3 +3349,7 @@ Fixes:
 170201
 ------
 * GUI: let costume icons indicate svg costumes 
+
+170202
+------
+* Objects, BYOB: highly experimental custom block inheritance, under construction…

@@ -108,7 +108,7 @@ BooleanSlotMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2017-January-24';
+modules.byob = '2017-February-02';
 
 // Declarations
 
@@ -734,7 +734,7 @@ CustomCommandBlockMorph.prototype.mouseClickLeft = function () {
 };
 
 CustomCommandBlockMorph.prototype.edit = function () {
-    var myself = this, editor, block, hat;
+    var myself = this, editor, block, hat, rcvr;
 
     if (this.isPrototype) {
         block = this.definition.blockInstance();
@@ -759,6 +759,16 @@ CustomCommandBlockMorph.prototype.edit = function () {
             myself.isInUse()
         );
     } else {
+        // checking for custom block inheritance, highly experimental
+        rcvr = this.receiver();
+        if (rcvr && contains(
+                Object.keys(rcvr.inheritedBlocks()),
+                this.definition.blockSpec()
+            )
+        ) {
+            this.duplicateBlockDefinition();
+            return;
+        }
         Morph.prototype.trackChanges = false;
         editor = new BlockEditorMorph(this.definition, this.receiver());
         editor.popUp();
@@ -932,16 +942,17 @@ CustomCommandBlockMorph.prototype.exportBlockDefinition = function () {
 };
 
 CustomCommandBlockMorph.prototype.duplicateBlockDefinition = function () {
-    var dup = this.definition.copyAndBindTo(this.receiver),
+    var rcvr = this.receiver(),
+        dup = this.definition.copyAndBindTo(rcvr),
         ide = this.parentThatIsA(IDE_Morph);
     if (this.definition.isGlobal) {
         ide.stage.globalBlocks.push(dup);
     } else {
-        this.definition.receiver.customBlocks.push(dup);
+        rcvr.customBlocks.push(dup);
     }
     ide.flushPaletteCache();
     ide.refreshPalette();
-    new BlockEditorMorph(dup, this.definition.receiver).popUp();
+    new BlockEditorMorph(dup, rcvr).popUp();
 };
 
 CustomCommandBlockMorph.prototype.deleteBlockDefinition = function () {
