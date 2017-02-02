@@ -8,10 +8,6 @@ var logger = {
 
 // If not the leader, send operations to the leader for approval
 function ActionManager() {
-    this.lastSeen = 0;
-    this.lastSent = null;
-    this.idCount = 0;
-
     this.id = null;
     this.rank = null;
     this.isLeader = false;
@@ -126,6 +122,10 @@ ActionManager.prototype.initializeEventMethods = function() {
 };
 
 ActionManager.prototype.initializeRecords = function() {
+    this.lastSeen = 0;
+    this.lastSent = null;
+    this.idCount = 0;
+
     this.blockChildren = {};
     this.blockToParent = {};
     this.fieldValues = {};
@@ -2002,6 +2002,7 @@ ActionManager.prototype.onOpenProject = function(str) {
             return this.ide().rawOpenCloudDataString(str);
         }
     } else {
+        this.initializeRecords();
         this.ide().newProject();
     }
 };
