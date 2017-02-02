@@ -8716,6 +8716,7 @@ ReplayControls.prototype.init = function(ide) {
     this.isPlaying = false;
 
     this.isShowingCaptions = false;
+    this.lastCaption = null;
 
     this.replaySpeed = 1.0;
     this.maxInactiveDuration = 0;
@@ -8854,6 +8855,11 @@ ReplayControls.prototype.toggleCaptions = function() {
     color = this.isShowingCaptions ? new Color(98, 194, 19) : this.buttonColor;
     ide.showMessage(localize('captions ' + (this.isShowingCaptions ? 'enabled' : 'disabled')), 1);
 
+    if (this.lastCaption) {
+        this.lastCaption.destroy();
+        this.lastCaption = null;
+    }
+
     this.captionsButton.color = color;
     this.captionsButton.drawNew();
     this.captionsButton.changed();
@@ -8872,7 +8878,7 @@ ReplayControls.prototype.stepBackward = function() {
 ReplayControls.prototype.displayCaption = function(action, originalEvent) {
     var message, 
         intervalHandle,
-        m;
+        menu;
 
     // TODO: add the user, too
     message = action.type;
@@ -8887,17 +8893,31 @@ ReplayControls.prototype.displayCaption = function(action, originalEvent) {
     }
 
     // Show the caption
-    m = new MenuMorph(null, message, null, 16);
+    menu = new MenuMorph(null, message, null, 16);
 
-    var pos = new Point(this.center().x, this.top()-50);
-    m.popup(this.world(), pos);
+    var pos = new Point(this.center().x, this.top()-50),
+        world = this.world();
+
+    // Display the caption
+    if (this.lastCaption) {
+        this.lastCaption.destroy();
+    }
+
+    menu.drawNew();
+    menu.setPosition(pos);
+    menu.addShadow(new Point(2, 2), 80);
+    menu.keepWithin(world);
+    world.add(menu);
+    menu.world = world; // optionally enable keyboard support
+    menu.fullChanged();
+    this.lastCaption = menu;
 
     intervalHandle = setInterval(function () {
-        m.destroy();
+        menu.destroy();
         clearInterval(intervalHandle);
     }, 4000);
 
-    return m;
+    return menu;
 };
 
 ReplayControls.prototype.play = function() {
