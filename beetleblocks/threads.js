@@ -389,10 +389,12 @@ Process.prototype.addTubeGeom = function (length, outer, inner) {
         innerRadius = inner/2;
 
         arcShape = new THREE.Shape();
-        arcShape.absarc(0, 0, outerRadius, 0, Math.PI * 2, 0, false);
+        arcShape.absarc(0, 0, outerRadius, 0, Math.PI * 2, false);
 
+        // ThreeJS r84 (maybe earlier) doesn't close circles unless they go
+        // over Math.PI * 2. Werid.
         holePath = new THREE.Path();
-        holePath.absarc(0, 0, innerRadius, 0, Math.PI * 2, true);
+        holePath.absarc(0, 0, innerRadius, 0, Math.PI * 2.01, true);
         arcShape.holes.push(holePath);
 
         tubeGeom = new THREE.ExtrudeGeometry(
