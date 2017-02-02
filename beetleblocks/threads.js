@@ -589,7 +589,7 @@ Process.prototype.stopNegativeGeometry = function () {
 };
 
 Process.prototype.pickHue = function (value) {
-    this.setHSLA('hue', value.hsv()[0] * 360);
+    this.setHSLA(['hue'], value.hsv()[0] * 360);
 };
 Process.prototype.setHSLA = function (channel, value) {
     var beetle = this.homeContext.receiver.beetle,
