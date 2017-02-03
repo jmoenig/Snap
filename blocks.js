@@ -150,7 +150,7 @@ CustomCommandBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2017-January-27';
+modules.blocks = '2017-February-02';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -2515,9 +2515,13 @@ BlockMorph.prototype.userMenu = function () {
             function () {
                 var cpy = myself.fullCopy(),
                     nb = cpy.nextBlock(),
-                    ide = myself.parentThatIsA(IDE_Morph);
+                    ide = myself.parentThatIsA(IDE_Morph),
+                    blockEditor = myself.parentThatIsA(BlockEditorMorph);
                 if (nb) {nb.destroy(); }
                 cpy.pickUp(world);
+                if (!ide && blockEditor) {
+                    ide = blockEditor.target.parentThatIsA(IDE_Morph);
+                }
                 if (ide) {
                     world.hand.grabOrigin = {
                         origin: ide.palette,
