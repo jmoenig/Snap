@@ -1378,7 +1378,7 @@ ActionManager.prototype.onRemoveBlock = function(id, userDestroy) {
         }
 
         this.traverse(root, function(block) {
-            myself.__clearBlockRecords(id);
+            myself.__clearBlockRecords(block.id);
         });
 
         // Remove the block
