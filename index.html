@@ -59,6 +59,7 @@
                 ide;
 
             window.onload = function () {
+                disableRetinaSupport();
                 world = new WorldMorph(document.getElementById('world'));
                 world.worldCanvas.focus();
                 ide = new IDE_Morph();

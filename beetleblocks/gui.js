@@ -163,32 +163,18 @@ IDE_Morph.prototype.projectMenu = function () {
             );
 
     menu.addItem(
-            'Libraries...',
-            function () {
-                // read a list of libraries from an external file,
-                var libMenu = new MenuMorph(myself, 'Import library'),
-                libUrl = 'libraries/LIBRARIES';
-
-                function loadLib(name) {
-                    var url = 'libraries/'
-                        + name
-                        + '.xml';
-                    myself.droppedText(myself.getURL(url), name);
+        'Libraries...',
+        function() {
+            myself.getURL(
+                myself.resourceURL('libraries', 'LIBRARIES'),
+                function (txt) {
+                    var libraries = myself.parseResourceFile(txt);
+                    new LibraryImportDialogMorph(myself, libraries).popUp();
                 }
-
-                myself.getURL(libUrl).split('\n').forEach(function (line) {
-                    if (line.length > 0) {
-                        libMenu.addItem(
-                                line.substring(line.indexOf('\t') + 1),
-                                function () { loadLib(line.substring(0, line.indexOf('\t'))) }
-                                );
-                    }
-                });
-
-                libMenu.popup(world, pos);
-            },
-            'Select categories of additional blocks to add to this project.'
-                );
+            );
+        },
+        'Select categories of additional blocks to add to this project.'
+    );
 
     menu.addLine();
 
