@@ -6334,7 +6334,7 @@ ScriptsMorph.prototype.reactToDropOf = function (droppedMorph, hand) {
             this.moveBlock(droppedMorph, target, hand);
         } else if (!droppedMorph.id) {  // addBlock
             this.addBlock(droppedMorph);
-        } else {  // change position
+        } else if (hand) {  // change position
             this.setBlockPosition(droppedMorph, hand);
         }
     }
