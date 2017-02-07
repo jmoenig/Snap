@@ -2017,9 +2017,12 @@ ActionManager.prototype.onSetCustomBlockType = function(id, cat, type) {
 
 ////////////////////////// Sprites //////////////////////////
 ActionManager.prototype.ide = function() {
-    var ownerId = Object.keys(this._owners)[0];
+    if (!this.__ide) {
+        var ownerId = Object.keys(this._owners)[0];
+        this.__ide = this._owners[ownerId].parentThatIsA(IDE_Morph);
+    }
 
-    return this._owners[ownerId].parentThatIsA(IDE_Morph);
+    return this.__ide;
 };
 
 ActionManager.prototype._loadCostume = function(savedCostume, callback) {
@@ -2306,6 +2309,7 @@ ActionManager.prototype.loadProject = function(ide, lastSeen, serialized) {
         return myself.loadOwner(sprite);
     });
 
+    this.__ide = ide;
     return event;
 };
 
@@ -2615,7 +2619,6 @@ ActionManager.prototype.afterActionApplied = function(/*msg*/) {
 
     // Update the focus (set to the owner if the owner is the currentSprite or
     // a custom block)
-
 
     active.onSetActive();
 };
