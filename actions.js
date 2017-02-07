@@ -1500,10 +1500,16 @@ ActionManager.prototype.computeMovePosition = function(block, target) {
 
         if (target.loc === 'bottom') {
             if (target.type === 'slot') {
+                if (targetBlock instanceof CSlotMorph) {
+                    return new Point(
+                        targetBlock.left() + targetBlock.inset,
+                        targetBlock.top() + targetBlock.corner
+                    );
+                }
                 return new Point(
-                    targetBlock.left() + targetBlock.inset,
-                    targetBlock.top() + targetBlock.corner
-                )
+                    targetBlock.left() + targetBlock.edge + targetBlock.rfBorder,
+                    targetBlock.top() + targetBlock.edge + targetBlock.rfBorder
+                );
             } else {
                 return new Point(
                     target.element.left(),
