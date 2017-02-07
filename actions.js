@@ -720,26 +720,29 @@ ActionManager.prototype._getSpliceEvent = function(target) {
     // occupant
     var topBlock,
         bottomBlock,
-        target;
+        restoreTarget;
 
-    if (target.element instanceof CommandBlockMorph) {
-        if (target.loc === 'top') {
-            topBlock = target.element.parent instanceof CommandBlockMorph ?
-                target.element.parent : null;
-            bottomBlock = target.element;
-        } else if (target.loc === 'bottom') {
-            topBlock = target.element;
-            bottomBlock = target.element.nextBlock() ?
-                target.element.nextBlock() : null;
+    if (target.loc === 'top') {
+        topBlock = target.element.parent instanceof BlockMorph ?
+            target.element.parent : null;
+        bottomBlock = target.element;
+    } else if (target.loc === 'bottom') {
+        topBlock = target.element;
+
+        if (target.type === 'slot') {
+            bottomBlock = target.element.nestedBlock();
+        } else {
+            bottomBlock = target.element.nextBlock();
         }
     }
 
     if (topBlock && bottomBlock) {  // splice!
-        target = {
-            type: 'block',
+        restoreTarget = {
+            type: target.type,
             loc: 'bottom',
             element: topBlock.id,
-            point: topBlock.bottomAttachPoint()
+            point: target.type === 'slot' ? topBlock.slotAttachPoint() :
+                topBlock.bottomAttachPoint()
         };
         return {
             type: 'moveBlock',
