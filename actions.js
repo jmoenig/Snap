@@ -1581,6 +1581,7 @@ ActionManager.prototype._onRemoveBlock = function(id, userDestroy, callback) {
         parent = block.parent,
         afterRemove = function() {
             block[method]();
+
             myself.__updateBlockDefinitions(block);
             callback();
         };
@@ -1623,15 +1624,14 @@ ActionManager.prototype._onRemoveBlock = function(id, userDestroy, callback) {
             );
         } else {
             afterRemove();
-
-            // Update parent block's UI
-            if (parent) {
-                if (parent.reactToGrabOf) {
-                    parent.reactToGrabOf(block);
-                }
-                if (parent.fixLayout) parent.fixLayout();
-                parent.changed();
+        }
+        // Update parent block's UI
+        if (parent) {
+            if (parent.reactToGrabOf) {
+                parent.reactToGrabOf(block);
             }
+            if (parent.fixLayout) parent.fixLayout();
+            parent.changed();
         }
         if (scripts) {
             scripts.drawNew();
