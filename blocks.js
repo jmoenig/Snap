@@ -150,7 +150,7 @@ CustomCommandBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2017-February-02';
+modules.blocks = '2017-February-07';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -2276,6 +2276,10 @@ BlockMorph.prototype.setSpec = function (spec, silently) {
             inputIdx += 1;
         }
         part = myself.labelPart(word);
+        if (isNil(part)) {
+            // console.log('could not create label part', word);
+            return;
+        }
         myself.add(part);
         if (!(part instanceof CommandSlotMorph ||
                 part instanceof StringMorph)) {

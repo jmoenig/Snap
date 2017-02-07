@@ -3354,3 +3354,7 @@ Fixes:
 ------
 * Objects, BYOB: highly experimental custom block inheritance, under construction…
 * Blocks: fixed #1650
+
+170207
+------
+* Blocks: catch block label part issues, prevent palette from not showing
