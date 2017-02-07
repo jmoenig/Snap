@@ -1501,8 +1501,8 @@ ActionManager.prototype.computeMovePosition = function(block, target) {
         if (target.loc === 'bottom') {
             if (target.type === 'slot') {
                 return new Point(
-                    targetBlock.left() + targetBlock.edge + targetBlock.rfBorder,
-                    targetBlock.top() + targetBlock.edge + targetBlock.rfBorder
+                    targetBlock.left() + targetBlock.inset,
+                    targetBlock.top() + targetBlock.corner
                 )
             } else {
                 return new Point(
