@@ -918,6 +918,7 @@ Process.prototype.handleError = function (error, element) {
     };
     
     var m = element,
+        myself = this,
         template,
         templateInputs,
         msgText,
@@ -930,11 +931,13 @@ Process.prototype.handleError = function (error, element) {
     this.topBlock.addErrorHighlight();
     if (isNil(m) || isNil(m.world())) {m = this.topBlock; }
     msgText = m === element ? '' : 'Inside: ';
-    
+
     if (!isNil(element)) {
         // TODO: Assert contents of list are right?
-        template = element.definition.templateInstance();
-        templateInputs = template.parts().filter(function (part) {
+        template = SpriteMorph.prototype.blockForSelector(
+            element.selector, true
+        );
+        templateInputs = template.inputs().filter(function (part) {
             return part instanceof ArgMorph;
         });
         element.inputs().some(function (input, idx) {
@@ -943,20 +946,21 @@ Process.prototype.handleError = function (error, element) {
             slotNumber = idx + 1;
             try {
                 if (input instanceof InputSlotMorph) {
-                    inputType = this.reportTypeOf(input.evaluate());
+                    inputType = myself.reportTypeOf(input.evaluate());
                 } else {
-                    inputType = this.reportTypeOf(input);
+                    inputType = myself.reportTypeOf(input);
                 }
-            } catch (Error) {
-                inputType = 'unkown';
+            } catch (e) {
+                console.log(e);
+                debugger
             }
-            if (inputType !== inputSlot.type) {
+            if (inputType && inputType !== inputSlot.type) {
                 typeMsg = inputSlot.type + ' but received a ' + inputType;
                 return true;
             }
         });
-        humanBlockName = humanReadableName(template);
-        msgText += humanReadableName + '\n';
+        humanBlockName = humanReadableName(element);
+        msgText += humanBlockName + '\n';
         if (error.message && error.name === 'Snap Error') {
             msgText += error.message;
         } else {
