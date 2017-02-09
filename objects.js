@@ -3460,9 +3460,16 @@ SpriteMorph.prototype.destroy3dSprite = function() {
 }
 
 SpriteMorph.prototype.hide3D = function() {
-    if (this.object.visible) {
+    if (this.object && this.object.visible) {
         this.object.visible = false;
         this.parent.changed();
+    }
+    else {
+        this.isVisible=false;
+        this.changed();
+        this.children.forEach(function (child) {
+        child.hide();
+        });
     }
 }
 
@@ -3470,6 +3477,13 @@ SpriteMorph.prototype.show3D = function() {
     if (!this.object.visible) {
         this.object.visible = true;
         this.parent.changed();
+    }
+    else { 
+        this.isVisible = true;
+        this.changed();
+        this.children.forEach(function (child) {
+            child.show();
+        });
     }
 }
 
