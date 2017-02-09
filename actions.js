@@ -260,7 +260,7 @@ ActionManager.prototype.completeAction = function(result) {
         }
         // Otherwise, the batch is over.
         action = this.currentBatch;
-        this.currentBatch = null;;
+        this.currentBatch = null;
     }
 
     this.isApplyingAction = false;
@@ -326,7 +326,7 @@ ActionManager.prototype._joinSession = function(sessionId, error) {
 function Action(manager, event) {
     this._manager = manager;
     this.id = event.id;
-};
+}
 
 Action.prototype.accept = function(fn) {
     this._manager._onAccept[this.id] = fn;
@@ -380,9 +380,6 @@ ActionManager.prototype._isBatchEvent = function(msg) {
 };
 
 ActionManager.prototype._applyEvent = function(msg) {
-    var myself = this,
-        result;
-
     logger.debug('received event:', msg);
     this.currentEvent = msg;
     this.isApplyingAction = true;
@@ -392,18 +389,16 @@ ActionManager.prototype._applyEvent = function(msg) {
         this._rawApplyEvent(msg.args[0]);
     } else {
         this.currentBatch = null;
-        result = this._rawApplyEvent(msg);
+        this._rawApplyEvent(msg);
     }
     // TODO: handle exceptions...
 };
 
 ActionManager.prototype._rawApplyEvent = function(event) {
-    var method = this._getMethodFor(event.type),
-        result;
+    var method = this._getMethodFor(event.type);
 
     this.currentEvent = event;
-    result = this[method].apply(this, event.args);
-    return result;
+    this[method].apply(this, event.args);
 };
 
 ActionManager.prototype.send = function(json) {
@@ -677,7 +672,7 @@ ActionManager.prototype._deleteBlockLabel = function(definition, label) {
 };
 
 ActionManager.prototype._updateBlockLabel = function(definition, label, fragment) {
-    var index = label.parent.children.indexOf(label);
+    var index = label.parent.children.indexOf(label),
         type = fragment.type,
         value = fragment.labelString;
 
@@ -719,8 +714,7 @@ ActionManager.prototype._getSpliceEvent = function(target) {
     // Create the move event for reconnecting the target element to the current
     // occupant
     var topBlock,
-        bottomBlock,
-        restoreTarget;
+        bottomBlock;
 
     if (target.loc === 'top') {
         topBlock = target.element.parent instanceof BlockMorph ?
@@ -737,13 +731,6 @@ ActionManager.prototype._getSpliceEvent = function(target) {
     }
 
     if (topBlock && bottomBlock) {  // splice!
-        restoreTarget = {
-            type: target.type,
-            loc: 'bottom',
-            element: topBlock.id,
-            point: target.type === 'slot' ? topBlock.slotAttachPoint() :
-                topBlock.bottomAttachPoint()
-        };
         return {
             type: 'moveBlock',
             args: [
@@ -757,7 +744,6 @@ ActionManager.prototype._getSpliceEvent = function(target) {
 
 ActionManager.prototype._moveBlock = function(block, target) {
     var isNewBlock = !block.id,
-        position,
         serialized,
         ids,
         spliceEvent,
@@ -765,7 +751,6 @@ ActionManager.prototype._moveBlock = function(block, target) {
         oldState,
         displacedTarget,
         targetState,
-        isSplicing = false,
         args;
 
     // If the target is a ReporterBlockMorph, then we are replacing that block.
@@ -992,26 +977,20 @@ ActionManager.prototype._updateCostume = function(original, newCostume) {
     ];
 };
 
-ActionManager.prototype._addSprite = function(sprite, costume, position) {
+ActionManager.prototype._addSprite = function(sprite, costume) {
     var serialized,
         stage = this.ide().stage;
 
     sprite.parent = stage;
-    position = position || sprite.rotationCenter();
     sprite.id = this.newId();
 
-    //if (costume) {
-        //sprite.addCostume(costume);
-        //sprite.wearCostume(costume);
-    //}
     serialized = '<sprites>' + this.serialize(sprite) + '</sprites>';
 
     return [serialized, this.id, sprite.id];
 };
 
 ActionManager.prototype.uniqueIdForImport = function (str) {
-    var msg,
-        myself = this,
+    var myself = this,
         model = myself.serializer.parse(str),
         children = model.allChildren();
 
@@ -1026,8 +1005,7 @@ ActionManager.prototype.uniqueIdForImport = function (str) {
 };
 
 ActionManager.prototype._removeSprite = function(sprite) {
-    var costumes = sprite.costumes.asArray(),
-        serialized = '<sprites>' + this.serialize(sprite) + '</sprites>';
+    var serialized = '<sprites>' + this.serialize(sprite) + '</sprites>';
 
     return [sprite.id, serialized];
 };
@@ -1036,7 +1014,7 @@ ActionManager.prototype._renameSprite = function(sprite, name) {
     return [sprite.id, name, sprite.name];
 };
 
-ActionManager.prototype._duplicateSprite = function(sprite, position) {
+ActionManager.prototype._duplicateSprite = function(sprite) {
     var id = this.newId(),
         newSprite = sprite.copy(),
         ide = this.ide(),
@@ -1222,11 +1200,9 @@ ActionManager.prototype.onReplaceBlock = function(block, newBlock) {
 
 ActionManager.prototype._onAddBlock = function(block, ownerId, x, y, callback) {
     var myself = this,
-        block,
         ide = this.ide(),
         owner = this._owners[ownerId],
         world = ide.parentThatIsA(WorldMorph),
-        hand = world.hand,
         position = new Point(x, y),
         firstBlock,
         afterAdd = function() {
@@ -1287,7 +1263,7 @@ ActionManager.prototype._onAddBlock = function(block, ownerId, x, y, callback) {
     }
     // register generic hat blocks
     if (firstBlock.selector === 'receiveCondition') {
-        stage = ide.stage;
+        var stage = ide.stage;
         if (stage) {
             stage.enableCustomHatBlocks = true;
             stage.threads.pauseCustomHatBlocks = false;
@@ -1301,7 +1277,7 @@ ActionManager.prototype.onAddBlock = function(block, ownerId, x, y) {
 
     this._onAddBlock(block, ownerId, x, y, function(block) {
         myself.completeAction(block);
-    })
+    });
 };
 
 ActionManager.prototype.world = function() {
@@ -1344,11 +1320,12 @@ ActionManager.prototype.getBlockFromId = function(id) {
 
     // If the block is part of a custom block def, refresh it
     if (editor) {
-        var customBlockId = editor.definition.id,
+        var currentEditor,
             found = false,
             current,
             next;
 
+        customBlockId = editor.definition.id;
         currentEditor = this._getCustomBlockEditor(customBlockId);
         if (editor !== currentEditor) {  // update the block record
             editor = currentEditor;
@@ -1381,7 +1358,7 @@ ActionManager.prototype.getBlockFromId = function(id) {
         }
     }
 
-    for (var i = 0; i < ids.length; i++) {
+    for (i = 0; i < ids.length; i++) {
         if (ids[i]) {
             block = block.inputs()[ids[i]];
         }
@@ -1407,7 +1384,7 @@ ActionManager.prototype.onMoveBlock = function(id, rawTarget) {
             target.element = this._getCustomBlockEditor(target.element, block)
                 .body.contents  // get ScriptsMorph of BlockEditorMorph
                 .children.find(function(child) {
-                    return child instanceof PrototypeHatBlockMorph
+                    return child instanceof PrototypeHatBlockMorph;
                 });
         } else {  // basic connection for sprite/stage/etc
             target.element = this.getBlockFromId(target.element);
@@ -1610,7 +1587,7 @@ ActionManager.prototype._onRemoveBlock = function(id, userDestroy, callback) {
             canAnimate = this.__canAnimate() &&
                 (method === 'destroy' || !hasNextBlock);
 
-        if (canAnimate) {;
+        if (canAnimate) {
             // Animate the block deletion
             var palette = this.ide().palette;
 
@@ -1738,7 +1715,7 @@ ActionManager.prototype.onRemoveListInput = function(id, count) {
         block.removeInput();
     }
 
-    block.changed()
+    block.changed();
     scripts.changed();
     this.__updateBlockDefinitions(block);
     this.completeAction();
@@ -1812,7 +1789,7 @@ ActionManager.prototype.onAddVariable = function(name, ownerId) {
         owner = this._owners[Object.keys(this._owners)[0]];
     }
 
-    owner.addVariable(name, isGlobal)
+    owner.addVariable(name, isGlobal);
     if (!owner.showingVariableWatcher(name, isGlobal)) {
         owner.toggleVariableWatcher(name, isGlobal);
     }
@@ -1828,7 +1805,7 @@ ActionManager.prototype.onDeleteVariable = function(name, ownerId) {
         owner = isGlobal ? this._owners[Object.keys(this._owners)[0]] :
             this._owners[ownerId];
 
-    owner.deleteVariable(name)
+    owner.deleteVariable(name);
     this.completeAction();
 };
 
@@ -1872,7 +1849,6 @@ ActionManager.prototype.onUnringify = function(id) {
 
 ActionManager.prototype.onToggleBoolean = function(id, fromValue) {
     var block = this.getBlockFromId(id),
-        iter = 0,
         prev;
 
     if (typeof fromValue !== 'boolean') {
@@ -1892,13 +1868,10 @@ ActionManager.prototype.onToggleBoolean = function(id, fromValue) {
 };
 
 ////////////////////////// Custom Blocks //////////////////////////
-ActionManager.prototype.onAddCustomBlock = function(ownerId, serialized, isGlobal, creatorId) {
+ActionManager.prototype.onAddCustomBlock = function(ownerId, serialized, isGlobal) {
     var owner = this._owners[ownerId],
         ide = this.ide(),
-        addedReporter = false,
-        editor,
-        def,
-        body;
+        def;
 
     // Load the CustomBlockDefinition
     def = this.serializer.loadCustomBlock(this.serializer.parse(serialized));
@@ -2048,7 +2021,7 @@ ActionManager.prototype._loadCostume = function(savedCostume, callback) {
 ActionManager.prototype.onDuplicateSprite =
 ActionManager.prototype.onAddSprite = function(serialized, creatorId) {
     var ide = this.ide(),
-        sprite;
+        sprites;
 
     sprites = this.serializer.loadSprites(serialized, ide);
     if (creatorId === this.id) {
@@ -2093,7 +2066,6 @@ ActionManager.prototype._registerCostume = function(costume, sprite) {
 
 ActionManager.prototype.onAddCostume = function(savedCostume, ownerId, creatorId) {
     var ide = this.ide(),
-        wardrobeMorph,
         sprite = this._owners[ownerId],
         myself = this;
 
@@ -2143,8 +2115,7 @@ ActionManager.prototype.onRemoveCostume = function(id) {
     var costume = this._costumes[id],
         sprite = this._costumeToOwner[id],
         idx = sprite.costumes.asArray().indexOf(costume),
-        ide = this.ide(),
-        wardrobe;
+        ide = this.ide();
 
     sprite.costumes.remove(idx + 1);
 
@@ -2362,7 +2333,6 @@ ActionManager.prototype._registerBlockState = function(block, initial) {
         standardPosition,
         fieldId,
         contents,
-        oldId,
         value,
         target;
 
@@ -2483,7 +2453,7 @@ ActionManager.prototype.traverse = function(block, fn) {
     var current = block instanceof Array ? block : [block],
         next,
         inputs,
-        i,j;
+        i;
 
     while (current.length) {
         next = [];
@@ -2614,8 +2584,7 @@ ActionManager.prototype.__clearTarget = function(id) {
 ActionManager.prototype.afterActionApplied = function(/*msg*/) {
     // Update the undo buttons of the focused window
     var ide = this.ide(),
-        active = ide.activeEditor,
-        scripts;
+        active = ide.activeEditor;
 
     // Update the focus (set to the owner if the owner is the currentSprite or
     // a custom block)
@@ -2624,8 +2593,7 @@ ActionManager.prototype.afterActionApplied = function(/*msg*/) {
 };
 
 ActionManager.prototype.onMessage = function(msg) {
-    var method = this._getMethodFor(msg.type),
-        accepted = true;
+    var accepted = true;
 
     if (this.isLeader) {
         // Verify that the lastSeen value is the same as the current

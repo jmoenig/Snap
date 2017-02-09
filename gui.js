@@ -3133,7 +3133,6 @@ IDE_Morph.prototype.replayEvents = function (actions) {
     this.replayControls.show();
     this.replayControls.setActions(actions);
     this.isReplayMode = true;
-    // TODO: Update this
 };
 
 IDE_Morph.prototype.exitReplayMode = function () {
