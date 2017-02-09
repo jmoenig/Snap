@@ -11,3 +11,4 @@ penTrails.xml	Save and restore pictures drawn by pen	Save and restore lines draw
 try-catch.xml	Catch errors in a script	Run a script; if an error happens, instead of stopping the script with a red halo, run another script to handle the error. Also includes a block to cause an error with a message given as input. Also includes a block to create a script variable and give it a value.
 multiline.xml	Allow multi-line text input to a block	In general, text inputs allow only a single line.  The MULTILINE block accepts multi-line text input and can be used in text input slots of other blocks.
 Eisenbergification.xml	Provide getters and setters for all GUI-controlled global settings	Eisenberg's Law: Anything that can be done from the GUI should be doable from the programming language, and vice versa.
+bignumbers.xml	Infinite precision integers, exact rationals, complex	The full Scheme numeric tower.  "USE BIGNUMS <True>" to enable.
