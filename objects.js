@@ -8736,6 +8736,14 @@ ReplayControls.prototype.init = function(ide) {
         myself.stepBackward();
     };
 
+    this.displayTime = new TextMorph(
+        '0:00 / 1:00',
+        1.5*PushButtonMorph.prototype.fontSize,
+        PushButtonMorph.prototype.fontStyle,
+        true
+    );
+    this.displayTime.color = this.buttonColor;
+
     // Buttons on the right
     this.settingsButton = new SymbolMorph('gears', 30, this.buttonColor);
     this.settingsButton.mouseClickLeft = function() {
@@ -8755,11 +8763,17 @@ ReplayControls.prototype.init = function(ide) {
         myself.pause();
         mouseDown.call(this, pos);
     };
+    var updateValue = this.slider.updateValue;
+    this.slider.updateValue = function() {
+        updateValue.apply(this, arguments);
+        myself.updateDisplayTime();
+    };
 
     this.add(this.slider);
     this.add(this.playButton);
     this.add(this.stepForwardButton);
     this.add(this.stepBackwardButton);
+    this.add(this.displayTime);
 
     this.add(this.captionsButton);
     this.add(this.settingsButton);
@@ -8979,6 +8993,50 @@ ReplayControls.prototype.step = function() {
     }
 };
 
+ReplayControls.prototype.formatTime = function(time) {
+    var secs,
+        min,
+        hrs,
+        minInMs = 1000*60,
+        hourInMs = minInMs*60,
+        setDisplayLength = function(num, len) {
+            num = num.toString();
+            while (num.length < len) {
+                num = '0' + num;
+            }
+            return num;
+        };
+
+    if (time > hourInMs) {
+        hrs = Math.floor(time/hourInMs);
+        time = time - hrs*hourInMs;
+    }
+
+    min = Math.floor(time/minInMs);
+    time = time - min*minInMs;
+
+    secs = Math.floor(time/1000);
+    time = time - secs*1000;
+
+    secs = setDisplayLength(secs, 2);
+    if (hrs) {
+        min = setDisplayLength(min, 2);
+        return [hrs, min, secs].join(':');
+    } else {
+        return [min, secs].join(':');
+    }
+};
+
+ReplayControls.prototype.updateDisplayTime = function() {
+    var totalTime = this.slider.rangeSize(),
+        currentTime = this.slider.value - this.slider.start;
+
+    this.displayTime.text = this.formatTime(currentTime) + ' / ' +
+        this.formatTime(totalTime);
+
+    this.displayTime.drawNew();
+};
+
 ReplayControls.prototype.playNext = function(dir) {
     // Get the position of the button in the slider and move it
     var myself = this,
@@ -9037,6 +9095,10 @@ ReplayControls.prototype.fixLayout = function() {
     this.stepForwardButton.setLeft(this.playButton.right() + 2.5*margin);
     this.stepForwardButton.drawNew();
 
+    this.displayTime.setCenter(this.playButton.center());
+    this.displayTime.setLeft(this.stepForwardButton.right() + 4*margin);
+    this.displayTime.drawNew();
+
     // Buttons on the right
     this.settingsButton.setTop(top + sliderHeight + margin);
     this.settingsButton.setRight(this.right() - 3*margin);
@@ -9062,6 +9124,7 @@ ReplayControls.prototype.setActions = function(actions) {
     this.slider.value = this.slider.start;
     this.slider.setStop(actions[actions.length-1].time + 1);
     this.isPlaying = false;
+    this.updateDisplayTime();
 };
 
 // apply any actions between 
