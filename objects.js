@@ -9035,6 +9035,7 @@ ReplayControls.prototype.updateDisplayTime = function() {
         this.formatTime(totalTime);
 
     this.displayTime.drawNew();
+    this.displayTime.changed();
 };
 
 ReplayControls.prototype.playNext = function(dir) {
