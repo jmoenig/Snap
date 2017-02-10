@@ -150,7 +150,7 @@ CustomCommandBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2017-February-09';
+modules.blocks = '2017-February-10';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -3862,11 +3862,16 @@ BlockMorph.prototype.allComments = function () {
     });
 };
 
-BlockMorph.prototype.destroy = function () {
-    this.allComments().forEach(function (comment) {
-        comment.destroy();
-    });
-
+BlockMorph.prototype.destroy = function (justThis) {
+    if (justThis) {
+        if (!isNil(this.comment)) {
+            this.comment.destroy();
+        }
+    } else {
+        this.allComments().forEach(function (comment) {
+            comment.destroy();
+        });
+    }
     if (!this.parent || !this.parent.topBlock
             && this.activeProcess()) {
         this.activeProcess().stop();
@@ -4346,7 +4351,7 @@ CommandBlockMorph.prototype.userDestroyJustThis = function () {
     } else if (cs && (cs.nestedBlock() === this)) {
         above = cs;
     }
-    this.destroy();
+    this.destroy(true); // just this block
     if (nb) {
         if (above instanceof CommandSlotMorph) {
             above.nestedBlock(nb);
@@ -12895,6 +12900,10 @@ CommentMorph.prototype.startFollowing = function (topBlock, world) {
     this.addShadow();
     this.stickyOffset = this.position().subtract(this.block.position());
     this.step = function () {
+        if (!this.block) { // kludge - only needed for "redo"
+            this.stopFollowing();
+            return;
+        }
         this.setPosition(this.block.position().add(this.stickyOffset));
     };
 };
