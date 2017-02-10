@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph,
 TableFrameMorph, ColorSlotMorph, isSnapObject*/
 
-modules.threads = '2017-January-27';
+modules.threads = '2017-February-09';
 
 var ThreadManager;
 var Process;
@@ -941,7 +941,7 @@ Process.prototype.reify = function (topBlock, parameterNames, isCustomBlock) {
                 topBlock : topBlock.fullCopy();
         context.expression.show(); // be sure to make visible if in app mode
 
-        if (!isCustomBlock) {
+        if (!isCustomBlock && !parameterNames.length()) {
             // mark all empty slots with an identifier
             context.expression.allEmptySlots().forEach(function (slot) {
                 i += 1;

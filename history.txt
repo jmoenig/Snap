@@ -3362,3 +3362,4 @@ Fixes:
 170209
 ------
 * Blocks: prevent Snap from “hanging” when encountering certain errors in visible stepping mode
+* Threads: fixed #1618 - only mark implicit parameters if no formal ones exist
