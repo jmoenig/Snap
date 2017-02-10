@@ -150,7 +150,7 @@ CustomCommandBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2017-February-07';
+modules.blocks = '2017-February-09';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -1874,17 +1874,18 @@ SyntaxElementMorph.prototype.showBubble = function (value, exportPic) {
         txt,
         img,
         morphToShow,
+        rcvr,
         isClickable = false,
         ide = this.parentThatIsA(IDE_Morph),
-        rcvr = this.receiver(),
         anchor = this,
         pos = this.rightCenter().add(new Point(2, 0)),
         sf = this.parentThatIsA(ScrollFrameMorph),
         wrrld = this.world();
 
-    if ((value === undefined) || !wrrld) {
+    if ((value === undefined) || !wrrld || !this.receiver) {
         return null;
     }
+    rcvr = this.receiver();
     if (value instanceof ListWatcherMorph) {
         morphToShow = value;
         morphToShow.update(true);

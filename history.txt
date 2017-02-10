@@ -3358,3 +3358,7 @@ Fixes:
 170207
 ------
 * Blocks: catch block label part issues, prevent palette from not showing
+
+170209
+------
+* Blocks: prevent Snap from “hanging” when encountering certain errors in visible stepping mode
