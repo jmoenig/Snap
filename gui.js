@@ -5818,20 +5818,21 @@ ProjectDialogMorph.prototype.installProjectList = function (pl) {
             if (myself.nameField) {
                 myself.nameField.setContents(item.name || '');
             }
-            src = myself.ide.getURL(
-                myself.ide.resourceURL('Examples', item.fileName)
+            myself.ide.getURL(
+                myself.ide.resourceURL('Examples', item.fileName),
+                function (src) {
+                    xml = myself.ide.serializer.parse(src);
+                    myself.notesText.text = xml.childNamed('notes').contents
+                        || '';
+                    myself.notesText.drawNew();
+                    myself.notesField.contents.adjustBounds();
+                    myself.preview.texture = xml.childNamed('thumbnail').contents
+                        || null;
+                    myself.preview.cachedTexture = null;
+                    myself.preview.drawNew();
+                    myself.edit();
+                }
             );
-
-            xml = myself.ide.serializer.parse(src);
-            myself.notesText.text = xml.childNamed('notes').contents
-                || '';
-            myself.notesText.drawNew();
-            myself.notesField.contents.adjustBounds();
-            myself.preview.texture = xml.childNamed('thumbnail').contents
-                || null;
-            myself.preview.cachedTexture = null;
-            myself.preview.drawNew();
-            myself.edit();
         };
     } else if (this.source === 'cloud') {
         this.listField.action = function (item) {
@@ -5900,16 +5901,20 @@ ProjectDialogMorph.prototype.clearDetails = function () {
 
 ProjectDialogMorph.prototype.openProject = function () {
     var proj = this.listField.selected,
-        src;
+        src, myself = this;
     if (!proj) {return; }
     this.ide.source = this.source;
     if (this.source === 'cloud') {
         this.openCloudProject(proj);
     } else if (this.source === 'examples') {
         // Note "file" is a property of the parseResourceFile function.
-        src = this.ide.getURL(this.ide.resourceURL('Examples', proj.fileName));
-        this.ide.openProjectString(src);
-        this.destroy();
+        this.ide.getURL(
+            this.ide.resourceURL('Examples', proj.fileName),
+            function (src) {
+                myself.ide.openProjectString(src);
+                myself.destroy();
+            }
+        );
     } else { // 'local'
         this.ide.openProject(proj.name);
         this.destroy();
