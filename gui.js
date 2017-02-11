@@ -308,21 +308,6 @@ IDE_Morph.prototype.openIn = function (world) {
 
     this.reactToWorldResize(world.bounds);
 
-    function getURL(url) {
-        try {
-            var request = new XMLHttpRequest();
-            request.open('GET', url, false);
-            request.send();
-            if (request.status === 200) {
-                return request.responseText;
-            }
-            throw new Error('unable to retrieve ' + url);
-        } catch (err) {
-            myself.showMessage('unable to retrieve project');
-            return '';
-        }
-    }
-
 	function applyFlags(dict) {
         if (dict.editMode) {
             myself.toggleAppMode(false);
