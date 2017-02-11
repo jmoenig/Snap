@@ -370,7 +370,12 @@ IDE_Morph.prototype.openIn = function (world) {
                 )) {
                 this.droppedText(hash);
             } else {
-                this.droppedText(getURL(hash));
+                this.getURL(
+                    hash,
+                    function (txt) {
+                        myself.droppedText(txt);
+                    }
+                );
             }
         } else if (location.hash.substr(0, 5) === '#run:') {
             hash = location.hash.substr(5);
@@ -385,7 +390,12 @@ IDE_Morph.prototype.openIn = function (world) {
             if (hash.substr(0, 8) === '<project>') {
                 this.rawOpenProjectString(hash);
             } else {
-                this.rawOpenProjectString(getURL(hash));
+                this.getURL(
+                    hash,
+                    function (txt) {
+                        myself.rawOpenProjectString(txt);
+                    }
+                );
             }
             applyFlags(SnapCloud.parseDict(location.hash.substr(5)));
         } else if (location.hash.substr(0, 9) === '#present:') {
