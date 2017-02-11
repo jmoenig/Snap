@@ -1569,6 +1569,10 @@ Process.prototype.reportCDR = function (list) {
     return list.cdr();
 };
 
+Process.prototype.reportListCopy = function (list) {
+    return this.reportCONS(list.at(1), list.cdr());
+};
+
 Process.prototype.doAddToList = function (element, list) {
     // this.assertType(list, 'list');
     list.add(element);

@@ -1119,6 +1119,11 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'lists',
             spec: 'all but first of %l'
         },
+        reportListCopy: {
+            type: 'reporter',
+            category: 'lists',
+            spec: 'copy of %l'
+        },
         reportListLength: {
             type: 'reporter',
             category: 'lists',
@@ -2140,6 +2145,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('reportCONS'));
         blocks.push(block('reportListItem'));
         blocks.push(block('reportCDR'));
+        blocks.push(block('reportListCopy'));
         blocks.push('-');
         blocks.push(block('reportListLength'));
         blocks.push(block('reportListContainsItem'));
@@ -2258,6 +2264,7 @@ SpriteMorph.prototype.freshPalette = function (category) {
                         'reportCONS',
                         'reportListItem',
                         'reportCDR',
+                        'reportListCopy',
                         'reportListLength',
                         'reportListContainsItem',
                         'doAddToList',
@@ -6398,6 +6405,7 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('reportCONS'));
         blocks.push(block('reportListItem'));
         blocks.push(block('reportCDR'));
+        blocks.push(block('reportListCopy'));
         blocks.push('-');
         blocks.push(block('reportListLength'));
         blocks.push(block('reportListContainsItem'));
@@ -8459,9 +8467,12 @@ WatcherMorph.prototype.userMenu = function () {
                         function readText(aFile) {
                             var frd = new FileReader();
                             frd.onloadend = function (e) {
+                            	text = frd.result.split('\n');
+                                varList = new List();
+                                varList.contents = text;
                                 myself.target.setVar(
                                     myself.getter,
-                                    e.target.result
+                                    varList
                                 );
                             };
 
