@@ -3367,3 +3367,7 @@ Fixes:
 170209
 ------
 * Blocks: fixed #1406
+
+170214
+------
+* Lists: remove experimental methods for object-use
