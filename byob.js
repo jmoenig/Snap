@@ -108,7 +108,7 @@ BooleanSlotMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2017-February-02';
+modules.byob = '2017-February-14';
 
 // Declarations
 
@@ -761,6 +761,8 @@ CustomCommandBlockMorph.prototype.edit = function () {
     } else {
         // checking for custom block inheritance, highly experimental
         rcvr = this.receiver();
+
+        /* // under construction, commented out for now
         if (rcvr && contains(
                 Object.keys(rcvr.inheritedBlocks()),
                 this.definition.blockSpec()
@@ -769,8 +771,10 @@ CustomCommandBlockMorph.prototype.edit = function () {
             this.duplicateBlockDefinition();
             return;
         }
+        */
+
         Morph.prototype.trackChanges = false;
-        editor = new BlockEditorMorph(this.definition, this.receiver());
+        editor = new BlockEditorMorph(this.definition, rcvr);
         editor.popUp();
         Morph.prototype.trackChanges = true;
         editor.changed();

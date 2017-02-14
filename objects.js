@@ -82,7 +82,7 @@ SpeechBubbleMorph, RingMorph, isNil, FileReader, TableDialogMorph,
 BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph*/
 
-modules.objects = '2017-February-02';
+modules.objects = '2017-February-14';
 
 var SpriteMorph;
 var StageMorph;
@@ -2418,6 +2418,7 @@ SpriteMorph.prototype.freshPalette = function (category) {
     });
 
     // inherited custom blocks: (under construction...)
+    /*
     // y += unit * 1.6;
     if (this.exemplar) {
         this.inheritedBlocks(true).forEach(function (definition) {
@@ -2438,6 +2439,7 @@ SpriteMorph.prototype.freshPalette = function (category) {
             }
         });
     }
+    */
 
     //layout
 
@@ -4931,6 +4933,7 @@ SpriteMorph.prototype.hasSpriteVariable = function (varName) {
 // SpriteMorph inheritance - custom blocks
 // under construction
 
+/*
 SpriteMorph.prototype.ownBlocks = function () {
     var dict = {};
     this.customBlocks.forEach(function (def) {
@@ -4970,6 +4973,7 @@ SpriteMorph.prototype.inheritedBlocks = function (valuesOnly) {
     }
     return dict;
 };
+*/
 
 // SpriteMorph thumbnail
 

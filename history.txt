@@ -3371,3 +3371,4 @@ Fixes:
 170214
 ------
 * Lists: remove experimental methods for object-use
+* Objects, BYOB: disable (comment out) experimental block inheritance for now
