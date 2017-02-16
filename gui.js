@@ -2924,7 +2924,7 @@ IDE_Morph.prototype.projectMenu = function () {
             function() {
                 var inp = document.createElement('input');
                 if (SnapUndo.allEvents.length > 1) {
-                    return this.showMessage('events can only be replayed on empty project');
+                    myself.newProject();
                 }
 
                 if (myself.filePicker) {
