@@ -9191,7 +9191,7 @@ ReplayControls.prototype.getInverseEvent = function(event) {
         var nestedPairsCnt = 0,
             iter;
 
-        for (var i = this.actionIndex-1; i--;) {
+        for (var i = this.actionIndex; i--;) {
             iter = this.actions[i];
             iter.replayType = iter.replayType || 0;
             if (iter.owner !== event.owner) {  // skip other event queues
