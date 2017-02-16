@@ -74,7 +74,7 @@ isRetinaSupported, SliderMorph, Animation, BooleanSlotMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2017-February-01';
+modules.gui = '2017-February-16';
 
 // Declarations
 
@@ -6972,7 +6972,7 @@ SpriteIconMorph.prototype.copyStack = function (block) {
     // delete all custom blocks pointing to local definitions
     // under construction...
     dup.allChildren().forEach(function (morph) {
-        if (morph.definition && !morph.definition.isGlobal) {
+        if (morph.definition && !morph.definition.value.isGlobal) {
             morph.deleteBlock();
         }
     });

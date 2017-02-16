@@ -3372,3 +3372,7 @@ Fixes:
 ------
 * Lists: remove experimental methods for object-use
 * Objects, BYOB: disable (comment out) experimental block inheritance for now
+
+170216
+------
+* turn “definition” property of custom block instances into a double-pointer (Variable) structure, in preparation for OOP (method inheritance)

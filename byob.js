@@ -108,7 +108,7 @@ BooleanSlotMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2017-February-14';
+modules.byob = '2017-February-16';
 
 // Declarations
 
@@ -373,7 +373,7 @@ CustomBlockDefinition.prototype.isDirectlyRecursive = function () {
             function (morph) {
                 return morph instanceof BlockMorph &&
                     morph.definition &&
-                    morph.definition.spec === myspec;
+                    morph.definition.value.spec === myspec;
             }
         );
     }
@@ -445,7 +445,7 @@ function CustomCommandBlockMorph(definition, isProto) {
 }
 
 CustomCommandBlockMorph.prototype.init = function (definition, isProto) {
-    this.definition = definition; // mandatory
+    this.definition = new Variable(definition); // mandatory
     this.isPrototype = isProto || false; // optional
     CustomCommandBlockMorph.uber.init.call(this, true); // silently
     this.category = definition.category;
@@ -460,7 +460,7 @@ CustomCommandBlockMorph.prototype.init = function (definition, isProto) {
 CustomCommandBlockMorph.prototype.initializeVariables = function (oldVars) {
     var myself = this;
     this.variables = new VariableFrame();
-    this.definition.variableNames.forEach(function (name) {
+    this.definition.value.variableNames.forEach(function (name) {
         var v = oldVars ? oldVars[name] : null;
         myself.variables.addVar(
             name,
@@ -470,7 +470,7 @@ CustomCommandBlockMorph.prototype.initializeVariables = function (oldVars) {
 };
 
 CustomCommandBlockMorph.prototype.refresh = function (silently) {
-    var def = this.definition,
+    var def = this.definition.value,
         newSpec = this.isPrototype ?
                 def.spec : def.blockSpec(),
         oldInputs;
@@ -547,7 +547,9 @@ CustomCommandBlockMorph.prototype.refreshDefaults = function () {
 
     inputs.forEach(function (inp) {
         if (inp instanceof InputSlotMorph || inp instanceof BooleanSlotMorph) {
-            inp.setContents(myself.definition.defaultValueOfInputIdx(idx));
+            inp.setContents(
+                myself.definition.value.defaultValueOfInputIdx(idx)
+            );
         }
         idx += 1;
     });
@@ -576,7 +578,7 @@ CustomCommandBlockMorph.prototype.refreshPrototype = function () {
             if (part.fragment.type) { // marked as input, take label as is
                 frags.push(part.fragment);
             } else { // not an input, devide into several non-input fragments
-                words = myself.definition.parseSpec(
+                words = myself.definition.value.parseSpec(
                     part.fragment.labelString
                 );
                 words.forEach(function (word) {
@@ -597,7 +599,7 @@ CustomCommandBlockMorph.prototype.refreshPrototype = function () {
     if (this instanceof CustomCommandBlockMorph
             && ((hat.type === 'reporter') || (hat.type === 'predicate'))) {
         myself = new CustomReporterBlockMorph(
-            this.definition,
+            this.definition.value,
             hat.type === 'predicate',
             true
         );
@@ -605,7 +607,7 @@ CustomCommandBlockMorph.prototype.refreshPrototype = function () {
     } else if (this instanceof CustomReporterBlockMorph) {
         if (hat.type === 'command') {
             myself = new CustomCommandBlockMorph(
-                this.definition,
+                this.definition.value,
                 true
             );
             hat.silentReplaceInput(this, myself);
@@ -723,7 +725,7 @@ CustomCommandBlockMorph.prototype.parseSpec = function (spec) {
     if (!this.isPrototype) {
         return CustomCommandBlockMorph.uber.parseSpec.call(this, spec);
     }
-    return this.definition.parseSpec.call(this, spec);
+    return this.definition.value.parseSpec.call(this, spec);
 };
 
 CustomCommandBlockMorph.prototype.mouseClickLeft = function () {
@@ -737,7 +739,7 @@ CustomCommandBlockMorph.prototype.edit = function () {
     var myself = this, editor, block, hat, rcvr;
 
     if (this.isPrototype) {
-        block = this.definition.blockInstance();
+        block = this.definition.value.blockInstance();
         block.addShadow();
         hat = this.parentThatIsA(PrototypeHatBlockMorph);
         new BlockDialogMorph(
@@ -765,7 +767,7 @@ CustomCommandBlockMorph.prototype.edit = function () {
         /* // under construction, commented out for now
         if (rcvr && contains(
                 Object.keys(rcvr.inheritedBlocks()),
-                this.definition.blockSpec()
+                this.definition.value.blockSpec()
             )
         ) {
             this.duplicateBlockDefinition();
@@ -774,7 +776,7 @@ CustomCommandBlockMorph.prototype.edit = function () {
         */
 
         Morph.prototype.trackChanges = false;
-        editor = new BlockEditorMorph(this.definition, rcvr);
+        editor = new BlockEditorMorph(this.definition.value, rcvr);
         editor.popUp();
         Morph.prototype.trackChanges = true;
         editor.changed();
@@ -822,7 +824,7 @@ CustomCommandBlockMorph.prototype.attachTargets = function () {
 CustomCommandBlockMorph.prototype.isInUse = function () {
     // answer true if an instance of my definition is found
     // in any of my receiver's scripts or block definitions
-    var def = this.definition,
+    var def = this.definition.value,
         ide = this.receiver().parentThatIsA(IDE_Morph);
     if (def.isGlobal && ide) {
         return ide.sprites.asArray().concat([ide.stage]).some(
@@ -939,7 +941,7 @@ CustomCommandBlockMorph.prototype.userMenu = function () {
 };
 
 CustomCommandBlockMorph.prototype.exportBlockDefinition = function () {
-    var xml = new SnapSerializer().serialize(this.definition),
+    var xml = new SnapSerializer().serialize(this.definition.value),
         ide = this.parentThatIsA(IDE_Morph);
 
     ide.saveXMLAs(xml, this.spec);
@@ -947,9 +949,9 @@ CustomCommandBlockMorph.prototype.exportBlockDefinition = function () {
 
 CustomCommandBlockMorph.prototype.duplicateBlockDefinition = function () {
     var rcvr = this.receiver(),
-        dup = this.definition.copyAndBindTo(rcvr),
+        dup = this.definition.value.copyAndBindTo(rcvr),
         ide = this.parentThatIsA(IDE_Morph);
-    if (this.definition.isGlobal) {
+    if (this.definition.value.isGlobal) {
         ide.stage.globalBlocks.push(dup);
     } else {
         rcvr.customBlocks.push(dup);
@@ -964,21 +966,21 @@ CustomCommandBlockMorph.prototype.deleteBlockDefinition = function () {
     if (this.isPrototype) {
         return null; // under construction...
     }
-    block = myself.definition.blockInstance();
+    block = myself.definition.value.blockInstance();
     block.addShadow();
     new DialogBoxMorph(
         this,
         function () {
             rcvr = myself.receiver();
-            rcvr.deleteAllBlockInstances(myself.definition);
-            if (myself.definition.isGlobal) {
+            rcvr.deleteAllBlockInstances(myself.definition.value);
+            if (myself.definition.value.isGlobal) {
                 stage = rcvr.parentThatIsA(StageMorph);
-                idx = stage.globalBlocks.indexOf(myself.definition);
+                idx = stage.globalBlocks.indexOf(myself.definition.value);
                 if (idx !== -1) {
                     stage.globalBlocks.splice(idx, 1);
                 }
             } else {
-                idx = rcvr.customBlocks.indexOf(myself.definition);
+                idx = rcvr.customBlocks.indexOf(myself.definition.value);
                 if (idx !== -1) {
                     rcvr.customBlocks.splice(idx, 1);
                 }
@@ -1001,6 +1003,9 @@ CustomCommandBlockMorph.prototype.deleteBlockDefinition = function () {
 // CustomCommandBlockMorph relabelling
 
 CustomCommandBlockMorph.prototype.relabel = function (alternatives) {
+    // +++ this needs tweaking for block inheritance
+    // +++ and also so embeded blocks do not get lost
+    // +++ -Jens
     var menu = new MenuMorph(this),
         oldInputs = this.inputs().map(
             function (each) {return each.fullCopy(); }
@@ -1014,7 +1019,7 @@ CustomCommandBlockMorph.prototype.relabel = function (alternatives) {
         menu.addItem(
             block,
             function () {
-                myself.definition = def;
+                myself.definition.value = def; // +++ needs tweaking for inheritance
                 myself.refresh();
             }
         );
@@ -1031,8 +1036,8 @@ CustomCommandBlockMorph.prototype.alternatives = function () {
         allDefs = rcvr.customBlocks.concat(stage.globalBlocks),
         myself = this;
     return allDefs.filter(function (each) {
-        return each !== myself.definition &&
-            each.type === myself.definition.type;
+        return each !== myself.definition.value &&
+            each.type === myself.definition.value.type;
     });
 };
 
@@ -1055,7 +1060,7 @@ CustomReporterBlockMorph.prototype.init = function (
     isPredicate,
     isProto
 ) {
-    this.definition = definition; // mandatory
+    this.definition = new Variable(definition); // mandatory
     this.isPrototype = isProto || false; // optional
     CustomReporterBlockMorph.uber.init.call(this, isPredicate, true); // sil.
     this.category = definition.category;
@@ -1073,7 +1078,7 @@ CustomReporterBlockMorph.prototype.initializeVariables =
 CustomReporterBlockMorph.prototype.refresh = function () {
     CustomCommandBlockMorph.prototype.refresh.call(this, true);
     if (!this.isPrototype) {
-        this.isPredicate = (this.definition.type === 'predicate');
+        this.isPredicate = (this.definition.value.type === 'predicate');
     }
     if (this.parent instanceof SyntaxElementMorph) {
         this.parent.cachedInputs = null;
@@ -1945,11 +1950,13 @@ BlockEditorMorph.prototype.close = function () {
         block = detect(
             this.body.contents.allChildren(),
             function (morph) {
-                return morph.definition && !morph.definition.isGlobal;
+                return morph.definition &&
+                    morph.definition.value && // exclude the prototype
+                    !morph.definition.value.isGlobal;
             }
         );
         if (block) {
-            block = block.definition.blockInstance();
+            block = block.definition.value.blockInstance();
             block.addShadow();
             new DialogBoxMorph().inform(
                 'Local Block(s) in Global Definition',

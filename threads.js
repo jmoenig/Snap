@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph,
 TableFrameMorph, ColorSlotMorph, isSnapObject*/
 
-modules.threads = '2017-February-09';
+modules.threads = '2017-February-16';
 
 var ThreadManager;
 var Process;
@@ -1269,8 +1269,8 @@ Process.prototype.runContinuation = function (aContext, args) {
 
 Process.prototype.evaluateCustomBlock = function () {
     var caller = this.context.parentContext,
-        context = this.context.expression.definition.body,
-        declarations = this.context.expression.definition.declarations,
+        context = this.context.expression.definition.value.body,
+        declarations = this.context.expression.definition.value.declarations,
         args = new List(this.context.inputs),
         parms = args.asArray(),
         runnable,
@@ -1290,7 +1290,7 @@ Process.prototype.evaluateCustomBlock = function () {
     // only splice in block vars if any are defined, because block vars
     // can cause race conditions in global block definitions that
     // access sprite-local variables at the same time.
-    if (this.context.expression.definition.variableNames.length) {
+    if (this.context.expression.definition.value.variableNames.length) {
         this.context.expression.variables.parentFrame = outer.receiver ?
                 outer.receiver.variables : null;
     } else {
@@ -1329,7 +1329,7 @@ Process.prototype.evaluateCustomBlock = function () {
     }
 
     // tag return target
-    if (this.context.expression.definition.type !== 'command') {
+    if (this.context.expression.definition.value.type !== 'command') {
         if (caller) {
             // tag caller, so "report" can catch it later
             caller.tag = 'exit';
@@ -1361,7 +1361,8 @@ Process.prototype.evaluateCustomBlock = function () {
         }
         // yield commands unless explicitly "warped" or directly recursive
         if (!this.isAtomic &&
-                this.context.expression.definition.isDirectlyRecursive()) {
+                this.context.expression.definition.value.isDirectlyRecursive()
+        ) {
             this.readyToYield = true;
         }
     }
@@ -3660,7 +3661,7 @@ function Variable(value, isTransient) {
 }
 
 Variable.prototype.toString = function () {
-    return 'a ' + this.isTransient ? 'transient ' : '' + 'Variable [' +
+    return 'a ' + (this.isTransient ? 'transient ' : '') + 'Variable [' +
         this.value + ']';
 };
 
