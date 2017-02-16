@@ -3618,6 +3618,7 @@ IDE_Morph.prototype.newProject = function () {
     this.selectSprite(this.stage.children[0]);
     this.fixLayout();
     this.isReplayMode = false;
+    SnapActions.loadProject(this);
 };
 
 IDE_Morph.prototype.save = function () {
@@ -4798,7 +4799,6 @@ IDE_Morph.prototype.createNewProject = function () {
             myself.newProject();
             SnapActions.disableCollaboration();
             SnapUndo.reset();
-            SnapActions.loadProject(myself);
         }
     );
 };
