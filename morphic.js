@@ -7461,12 +7461,14 @@ function MenuMorph(target, title, environment, fontSize) {
     */
 }
 
-MenuMorph.prototype.init = function (target, title, environment, fontSize) {
+MenuMorph.prototype.defaultFontSize = 16;
+
+MenuMorph.prototype.init = function(target, title, environment, fontSize) {
     // additional properties:
     this.target = target;
     this.title = title || null;
     this.environment = environment || null;
-    this.fontSize = fontSize || null;
+    this.fontSize = fontSize || MenuMorph.prototype.defaultFontSize;
     this.items = [];
     this.label = null;
     this.world = null;
