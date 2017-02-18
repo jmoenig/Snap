@@ -82,7 +82,7 @@ SpeechBubbleMorph, RingMorph, isNil, FileReader, TableDialogMorph,
 BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph*/
 
-modules.objects = '2017-February-02';
+modules.objects = '2017-February-16';
 
 var SpriteMorph;
 var StageMorph;
@@ -1408,7 +1408,7 @@ SpriteMorph.prototype.fullCopy = function (forClone) {
             cb = def.copyAndBindTo(c);
             c.customBlocks.push(cb);
             c.allBlockInstances(def).forEach(function (block) {
-                block.definition = cb;
+                block.definition.value = cb; // +++ might have to be tweaked, -Jens
             });
         });
     }
@@ -2418,6 +2418,7 @@ SpriteMorph.prototype.freshPalette = function (category) {
     });
 
     // inherited custom blocks: (under construction...)
+    /*
     // y += unit * 1.6;
     if (this.exemplar) {
         this.inheritedBlocks(true).forEach(function (definition) {
@@ -2438,6 +2439,7 @@ SpriteMorph.prototype.freshPalette = function (category) {
             }
         });
     }
+    */
 
     //layout
 
@@ -4635,7 +4637,7 @@ SpriteMorph.prototype.allBlockInstances = function (definition) {
         stage.globalBlocks.forEach(function (def) {
             if (def.body) {
                 def.body.expression.allChildren().forEach(function (c) {
-                    if (c.definition && (c.definition === definition)) {
+                    if (c.definition && (c.definition.value === definition)) {
                         inDefinitions.push(c);
                     }
                 });
@@ -4650,14 +4652,14 @@ SpriteMorph.prototype.allLocalBlockInstances = function (definition) {
     var inScripts, inDefinitions, inBlockEditors, inPalette, result;
 
     inScripts = this.scripts.allChildren().filter(function (c) {
-        return c.definition && (c.definition === definition);
+        return c.definition && (c.definition.value === definition);
     });
 
     inDefinitions = [];
     this.customBlocks.forEach(function (def) {
         if (def.body) {
             def.body.expression.allChildren().forEach(function (c) {
-                if (c.definition && (c.definition === definition)) {
+                if (c.definition && (c.definition.value === definition)) {
                     inDefinitions.push(c);
                 }
             });
@@ -4685,7 +4687,8 @@ SpriteMorph.prototype.allEditorBlockInstances = function (definition) {
             morph.body.contents.allChildren().forEach(function (block) {
                 if (!block.isPrototype
                         && !(block instanceof PrototypeHatBlockMorph)
-                        && (block.definition === definition)) {
+                        && block.definition
+                        && (block.definition.value === definition)) {
                     inBlockEditors.push(block);
                 }
             });
@@ -4701,7 +4704,8 @@ SpriteMorph.prototype.paletteBlockInstance = function (definition) {
     return detect(
         ide.palette.contents.children,
         function (block) {
-            return block.definition === definition;
+            return block.definition &&
+                (block.definition.value === definition);
         }
     );
 };
@@ -4716,7 +4720,7 @@ SpriteMorph.prototype.usesBlockInstance = function (
         inScripts = detect(
             this.scripts.allChildren(),
             function (c) {
-                return c.definition && (c.definition === definition);
+                return c.definition && (c.definition.value === definition);
             }
         );
 
@@ -4730,7 +4734,9 @@ SpriteMorph.prototype.usesBlockInstance = function (
                 if (skipBlocks && contains(skipBlocks, def)) {return; }
                 if (def.body) {
                     def.body.expression.allChildren().forEach(function (c) {
-                        if (c.definition && (c.definition === definition)) {
+                        if (c.definition &&
+                                (c.definition.value === definition)
+                        ) {
                             inDefinitions.push(c);
                         }
                     });
@@ -4744,7 +4750,7 @@ SpriteMorph.prototype.usesBlockInstance = function (
     this.customBlocks.forEach(function (def) {
         if (def.body) {
             def.body.expression.allChildren().forEach(function (c) {
-                if (c.definition && (c.definition === definition)) {
+                if (c.definition && (c.definition.value === definition)) {
                     inDefinitions.push(c);
                 }
             });
@@ -4780,7 +4786,7 @@ SpriteMorph.prototype.replaceDoubleDefinitionsFor = function (definition) {
         ide;
     doubles.forEach(function (double) {
         myself.allBlockInstances(double).forEach(function (block) {
-            block.definition = definition;
+            block.definition.value = definition; // might have to be tweaked +++
             block.refresh();
         });
     });
@@ -4931,6 +4937,7 @@ SpriteMorph.prototype.hasSpriteVariable = function (varName) {
 // SpriteMorph inheritance - custom blocks
 // under construction
 
+/*
 SpriteMorph.prototype.ownBlocks = function () {
     var dict = {};
     this.customBlocks.forEach(function (def) {
@@ -4970,6 +4977,7 @@ SpriteMorph.prototype.inheritedBlocks = function (valuesOnly) {
     }
     return dict;
 };
+*/
 
 // SpriteMorph thumbnail
 
