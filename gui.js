@@ -3027,11 +3027,10 @@ IDE_Morph.prototype.importMedia = function (folderName) {
     // costumes, backgrounds or sounds
     var myself = this,
         msg = this.showMessage('Opening ' + folderName + '...');
-    this.getMediaList(
-        folderName,
-        function (items) {
-            msg.destroy();
-            myself.popupMediaImportDialog(folderName, items);
+    myself.getURL(
+        folderName + "/catalog.json",
+        function (txt) {
+            myself.popupMediaImportDialog(folderName, JSON.parse(txt));
         }
     );
 
@@ -3041,40 +3040,144 @@ IDE_Morph.prototype.popupMediaImportDialog = function (folderName, items) {
     // private - this gets called by importMedia() and creates
     // the actual dialog
     var dialog = new DialogBoxMorph().withKey('import' + folderName),
+        content = new Morph(),
         frame = new ScrollFrameMorph(),
         selectedIcon = null,
         turtle = new SymbolMorph('turtle', 60),
         myself = this,
         world = this.world(),
-        handle;
+        handle,
+        msg,
+        count,
+        listFieldWidth = 180,
+        isSound = (folderName.toLowerCase() === "sounds"),
+        buttonColor = new Color(237, 237, 237);
+    buttonHighlightColor = buttonColor.darker();
+    buttonPressColor = buttonHighlightColor.darker().darker();
+    buttonTextColor = new Color(100, 100, 100);
 
+    var itemsSortFilter = function (a, b) {
+        if (a.name.toLowerCase() < b.name.toLowerCase()) return -1;
+        else return 1;
+    };
+
+    var sectionsSortFilter = function (a, b) {
+        if (a.name === "other") return 1;
+        if (b.name === "other") return -1;
+        return itemsSortFilter(a, b);
+    };
+
+    var colect = {};
+    items.forEach(function (item) {
+        var section = (item.section === "") ? "other" : item.section;
+        colect[section] = "";
+    });
+
+    var sections = [];
+    for (var section in colect) {
+        sections.push({ "name": section });
+    };
+
+    items.sort(itemsSortFilter);
+    sections.sort(sectionsSortFilter);
+    sections.push({ "name": "All" });
+
+    var listField = new ListMorph(sections,
+        function (element) {
+            return element.name;
+        },
+        null,
+        function () {
+            console.log(this);
+        }
+    );
+
+    content.color = dialog.color;
+    listField.setWidth(listFieldWidth);
+    listField.contents.children[0].alpha = 0;
+    listField.contents.children[0].children.forEach(function (item) {
+        item.createLabel = function () {
+            var w, h;
+            if (this.label) {
+                this.label.destroy();
+            }
+            this.label = this.createLabelPart(this.labelString);
+            this.add(this.label);
+            w = listFieldWidth - 8;
+            h = this.label.height();
+            this.silentSetExtent(new Point(w, h));
+            this.fixLayout();
+        };
+        item.pressColor = dialog.titleBarColor.darker(20);
+        item.color = new Color(0, 0, 0, 0);
+        item.noticesTransparentClick = true;
+        item.bounds.corner = new Point(
+            item.bounds.origin.x + listFieldWidth,
+            item.bounds.origin.y + 20
+        );
+        item.drawNew();
+    });
+
+    listField.fixLayout = nop;
+    listField.edge = InputFieldMorph.prototype.edge;
+    listField.fontSize = InputFieldMorph.prototype.fontSize;
+    listField.typeInPadding = InputFieldMorph.prototype.typeInPadding;
+    listField.contrast = InputFieldMorph.prototype.contrast;
+    listField.drawNew = InputFieldMorph.prototype.drawNew;
+    listField.drawRectBorder = InputFieldMorph.prototype.drawRectBorder;
     frame.acceptsDrops = false;
     frame.contents.acceptsDrops = false;
-    frame.color = myself.groupColor;
     frame.fixLayout = nop;
+    frame.edge = InputFieldMorph.prototype.edge;
+    frame.fontSize = InputFieldMorph.prototype.fontSize;
+    frame.typeInPadding = InputFieldMorph.prototype.typeInPadding;
+    frame.contrast = InputFieldMorph.prototype.contrast;
+    frame.drawNew = InputFieldMorph.prototype.drawNew;
+    frame.drawRectBorder = InputFieldMorph.prototype.drawRectBorder;
     dialog.labelString = folderName;
     dialog.createLabel();
-    dialog.addBody(frame);
+    content.add(frame);
+    content.add(listField);
+    dialog.addBody(content);
     dialog.addButton('ok', 'Import');
     dialog.addButton('cancel', 'Cancel');
 
     dialog.ok = function () {
+        var url, img;
         if (selectedIcon) {
             if (selectedIcon.object instanceof Sound) {
                 myself.droppedAudio(
                     selectedIcon.object.copy().audio,
                     selectedIcon.labelString
                 );
-            } else if (selectedIcon.object instanceof SVG_Costume) {
-                myself.droppedSVG(
-                    selectedIcon.object.contents,
-                    selectedIcon.labelString
-                );
             } else {
-                myself.droppedImage(
-                    selectedIcon.object.contents,
-                    selectedIcon.labelString
-                );
+                url = myself.resourceURL(folderName, selectedIcon.fileName);
+                img = new Image();
+                if (selectedIcon.object instanceof SVG_Costume) {
+                    img.onload = function () {
+                        myself.droppedSVG(
+                            img,
+                            selectedIcon.labelString
+                        );
+                    };
+                    myself.getURL(
+                        url,
+                        function (txt) {
+                            img.src = 'data:image/svg+xml;utf8,' +
+                                encodeURIComponent(txt);
+                        }
+                    );
+                } else {
+                    img.onload = function () {
+                        var canvas = newCanvas(new Point(img.width, img.height), true);
+                        canvas.getContext('2d').drawImage(img, 0, 0);
+                        myself.droppedImage(
+                            canvas,
+                            selectedIcon.labelString
+                        );
+                    };
+                    img.src = url;
+                }
             }
         }
     };
@@ -3083,102 +3186,154 @@ IDE_Morph.prototype.popupMediaImportDialog = function (folderName, items) {
         var th = fontHeight(this.titleFontSize) + this.titlePadding * 2,
             x = 0,
             y = 0,
-            fp, fw;
+            lw = listFieldWidth,
+            margin = 15,
+            cp, ce,
+            lp, le,
+            fp, fe, fw;
         this.buttons.fixLayout();
-        this.body.setPosition(this.position().add(new Point(
+
+        cp = this.position().add(new Point(
             this.padding,
             th + this.padding
-        )));
-        this.body.setExtent(new Point(
+        ));
+        ce = new Point(
             this.width() - this.padding * 2,
             this.height() - this.padding * 3 - th - this.buttons.height()
-        ));
-        fp = this.body.position();
-        fw = this.body.width();
+        );
+        content.setPosition(cp);
+        content.setExtent(ce);
+
+        this.body.setPosition(new Point(cp.x, cp.y));
+        this.body.setExtent(new Point(ce.x, ce.y));
+
+        fp = new Point(cp.x + lw + margin, cp.y);
+        lp = new Point(cp.x, cp.y);
+
+        fe = new Point(ce.x - lw - margin, ce.y);
+        le = new Point(lw, ce.y);
+
+        frame.setPosition(fp);
+        frame.setExtent(fe);
+        listField.setPosition(lp);
+        listField.setExtent(le);
+
         frame.contents.children.forEach(function (icon) {
-              icon.setPosition(fp.add(new Point(x, y)));
+            icon.setPosition(fp.add(new Point(x + 5, y + 5)));
             x += icon.width();
-            if (x + icon.width() > fw) {
+            if (x + icon.width() > fe.x) {
                 x = 0;
-                y += icon.height();
-            }
+                y += icon.height() + 4;
+            };
         });
         frame.contents.adjustBounds();
+
         this.label.setCenter(this.center());
         this.label.setTop(this.top() + (th - this.label.height()) / 2);
         this.buttons.setCenter(this.center());
         this.buttons.setBottom(this.bottom() - this.padding);
     };
 
-    items.forEach(function (item) {
-        // Caution: creating very many thumbnails can take a long time!
-        var url = myself.resourceURL(folderName, item.fileName),
-            img = new Image(),
-            suffix = url.slice(url.lastIndexOf('.') + 1).toLowerCase(),
-            isSVG = suffix === 'svg' && !MorphicPreferences.rasterizeSVGs,
-            isSound = contains(['wav', 'mp3'], suffix),
-            cstTemplate,
-            sndTemplate,
-            icon;
-
-        if (isSound) {
-            sndTemplate = icon = new SoundIconMorph(
-                new Sound(new Audio(), item.name),
-                sndTemplate
-            );
-        } else {
-            cstTemplate = icon = new CostumeIconMorph(
-                new Costume(turtle.image, item.name),
-                cstTemplate
-            );
+    var decrement = function () {
+        count--;
+        // console.log(count);
+        if (count === 0) {
+            msg.destroy();
         }
-        icon.isDraggable = false;
-        icon.userMenu = nop;
-        icon.action = function () {
-            if (selectedIcon === icon) {return; }
-            var prevSelected = selectedIcon;
-            selectedIcon = icon;
-            if (prevSelected) {prevSelected.refresh(); }
-        };
-        icon.doubleClickAction = dialog.ok;
-        icon.query = function () {
-            return icon === selectedIcon;
-        };
-        frame.addContents(icon);
-        if (isSound) {
-            icon.object.audio.onloadeddata = function () {
-                icon.createThumbnail();
-                icon.fixLayout();
-                icon.refresh();
-            };
+    };
 
-            icon.object.audio.src = url;
-            icon.object.audio.load();
-        } else if (isSVG) {
-            img.onload = function () {
-                icon.object = new SVG_Costume(img, item.name);
-                icon.refresh();
-            };
-            myself.getURL(
-                url,
-                function (txt) {
-                    img.src = 'data:image/svg+xml;utf8,' +
-                        encodeURIComponent(txt);
-                }
-            );
-        } else {
-            img.onload = function () {
-                var canvas = newCanvas(new Point(img.width, img.height), true);
-                canvas.getContext('2d').drawImage(img, 0, 0);
-                icon.object = new Costume(canvas, item.name);
-                icon.refresh();
-            };
-            img.src = url;
-        }
-    });
+    listField.action = function (elt) {
+        msg = myself.showMessage('Opening ' + elt.name + '...');
+        // Not proud of this... I wasn't able to display the msg dialog
+        // immediatly without using this setTimeout :
+        setTimeout(function () {
+            var section = (elt.name === "other") ? "" : elt.name;
+            frame.contents.children.splice(0, frame.contents.children.length);
+            count = items.length;
+            items.forEach(function (item) {
+
+                if ((item.section === section) || (section === "All")) {
+                    var dName = (isSound) ? folderName : folderName + "/thumbnails";
+                    var fName = (isSound) ? item.fileName : item.name + ".png";
+                    var url = myself.resourceURL(dName, fName),
+                        img = new Image(),
+                        suffix = item.fileName.slice(item.fileName.lastIndexOf('.') + 1).toLowerCase(),
+                        isSVG = suffix === 'svg' && !MorphicPreferences.rasterizeSVGs,
+                        template,
+                        cstTemplate,
+                        sndTemplate,
+                        icon;
+
+                    if (isSound) {
+                        sndTemplate = icon = new SoundIconMorph(
+                            new Sound(new Audio(), item.name),
+                            sndTemplate
+                        );
+                    } else {
+                        cstTemplate = icon = new CostumeIconMorph(
+                            new Costume(turtle.image, item.name),
+                            cstTemplate
+                        );
+                    };
+                    icon.isDraggable = false;
+                    icon.userMenu = nop;
+                    icon.action = function () {
+                        if (selectedIcon === icon) {
+                            return;
+                        }
+                        var prevSelected = selectedIcon;
+                        selectedIcon = icon;
+                        if (prevSelected) { prevSelected.refresh(); }
+                    };
+                    icon.doubleClickAction = dialog.ok;
+                    icon.query = function () {
+                        return icon === selectedIcon;
+                    };
+                    frame.addContents(icon);
+
+                    icon.color = buttonColor;
+                    icon.highlightColor = buttonHighlightColor;
+                    icon.pressColor = buttonPressColor;
+                    icon.labelColor = buttonTextColor;
+                    icon.labelBold = false;
+                    icon.fontSize = 12;
+                    icon.drawEdges = nop;
+                    icon.drawOutline = nop;
+
+                    if (isSound) {
+                        icon.object.audio.oncanplay = function () {
+                            icon.createThumbnail();
+                            icon.fixLayout();
+                            icon.refresh();
+                            decrement();
+                        };
+                        // console.log(url);
+                        icon.object.audio.src = url;
+                        icon.object.audio.load();
+                    } else {
+                        img.onload = function () {
+                            var canvas = newCanvas(new Point(img.width, img.height), true);
+                            canvas.getContext('2d').drawImage(img, 0, 0);
+                            icon.object = (isSVG) ? new SVG_Costume(canvas, item.name) : new Costume(canvas, item.name);
+                            icon.refresh();
+                            icon.fileName = item.fileName;
+                            decrement();
+                        };
+                        img.src = url;
+                    }
+                } else decrement();
+            });
+            dialog.fixLayout();
+        }, 100);
+
+    };
+
     dialog.popUp(world);
-    dialog.setExtent(new Point(400, 300));
+    dialog.setExtent(new Point(770, 500));
     dialog.setCenter(world.center());
+
+    listField.select(listField.elements[0], listField.listContents.children[0]);
+    listField.listContents.children[0].mouseDownLeft();
     dialog.drawNew();
 
     handle = new HandleMorph(
@@ -6600,6 +6755,7 @@ SpriteIconMorph.prototype.thumbSize = new Point(40, 40);
 SpriteIconMorph.prototype.labelShadowOffset = null;
 SpriteIconMorph.prototype.labelShadowColor = null;
 SpriteIconMorph.prototype.labelColor = new Color(255, 255, 255);
+SpriteIconMorph.prototype.labelBold = true;
 SpriteIconMorph.prototype.fontSize = 9;
 
 // SpriteIconMorph instance creation:
@@ -6698,7 +6854,7 @@ SpriteIconMorph.prototype.createLabel = function () {
         this.object.name,
         this.fontSize,
         this.fontStyle,
-        true,
+        this.labelBold,
         false,
         false,
         this.labelShadowOffset,
