@@ -241,13 +241,13 @@ IDE_Morph.prototype.init = function (isAutoFill) {
 
     this.isAutoFill = isAutoFill === undefined ? true : isAutoFill;
     this.isAppMode = false;
-    this.isSmallStage = false;
+    this.isSmallStage = true;
     this.filePicker = null;
     this.hasChangedMedia = false;
 
     this.isAnimating = true;
     this.paletteWidth = 300; // initially same as logo width
-    this.stageRatio = 1; // for IDE animations, e.g. when zooming
+    this.stageRatio = 0.75; // for IDE animations, e.g. when zooming
 
     this.loadNewProject = false; // flag when starting up translated
     this.shield = null;

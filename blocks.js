@@ -296,7 +296,7 @@ SyntaxElementMorph.uber = Morph.prototype;
 */
 
 SyntaxElementMorph.prototype.setScale = function (num) {
-    var scale = Math.min(Math.max(num, 1), 25);
+    var scale = Math.min(Math.max(num, 1.2), 25);
     this.scale = scale;
     this.corner = 3 * scale;
     this.rounding = 9 * scale;
