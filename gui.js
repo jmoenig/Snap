@@ -3027,8 +3027,8 @@ IDE_Morph.prototype.importMedia = function (folderName) {
     // costumes, backgrounds or sounds
     var myself = this,
         msg = this.showMessage('Opening ' + folderName + '...');
-    myself.getURL(
-        folderName + "/catalog.json",
+    this.getURL(
+        this.resourceURL(folderName, 'catalog.json'),
         function (txt) {
             myself.popupMediaImportDialog(folderName, JSON.parse(txt));
         }
@@ -3069,7 +3069,7 @@ IDE_Morph.prototype.popupMediaImportDialog = function (folderName, items) {
 
     var colect = {};
     items.forEach(function (item) {
-        var section = (item.section === "") ? "other" : item.section;
+        var section = isNil(item.section) || (item.section === "") ? "other" : item.section;
         colect[section] = "";
     });
 
@@ -3085,10 +3085,6 @@ IDE_Morph.prototype.popupMediaImportDialog = function (folderName, items) {
     var listField = new ListMorph(sections,
         function (element) {
             return element.name;
-        },
-        null,
-        function () {
-            console.log(this);
         }
     );
 
