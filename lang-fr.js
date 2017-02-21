@@ -671,6 +671,10 @@ SnapTranslator.dict.fr = {
         'importer un projet export\u00E9,\nune biblioth\u00E8que de '
             + 'blocs\n'
             + 'un costume ou un son',
+    'Select a sound from the media library':
+        'Selectionner un son dans la bibliothèque de médias.',
+    'Select a costume from the media library':
+        'Selectionner un costume dans la bibliothèque de médias.',
     'Export project as plain text...':
         'Exporter le projet comme texte...',
     'Export project...':

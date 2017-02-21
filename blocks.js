@@ -9797,6 +9797,8 @@ SymbolMorph.prototype.symbolCanvasColored = function (aColor) {
         return this.drawSymbolFlash(canvas, aColor);
     case 'brush':
         return this.drawSymbolBrush(canvas, aColor);
+    case 'import':
+        return this.drawSymbolImport(canvas, aColor);
     case 'rectangle':
         return this.drawSymbolRectangle(canvas, aColor);
     case 'rectangleSolid':
@@ -10450,6 +10452,54 @@ SymbolMorph.prototype.drawSymbolFlash = function (canvas, color) {
     ctx.fill();
     return canvas;
 };
+
+SymbolMorph.prototype.drawSymbolImport = function(canvas, color) {
+    // answer a canvas showing a import icon
+    var ctx = canvas.getContext('2d'),
+        w = canvas.width,
+        h = canvas.height,
+        l = Math.max(w / 30, 0.5),
+        rw = w - 2,
+        rh = h - 4,
+        rx = 1,
+        ry = h - rh - 1,
+        r = 3,
+        hole = rw - 6,
+        ax = w / 2,
+        ay = h - 4,
+        aw = 3,
+        ah = 4;
+
+    ctx.lineWidth = l * 4;
+    ctx.lineJoin = 'round';
+    ctx.lineCap = 'round';
+    ctx.strokeStyle = color.darker().toString();
+    ctx.fillStyle = color.toString();
+
+    ctx.beginPath();
+    ctx.moveTo(rx + (rw + hole) / 2, ry);
+    ctx.lineTo(rx + rw - r, ry);
+    ctx.quadraticCurveTo(rx + rw, ry, rx + rw, ry + r, r);
+    ctx.lineTo(rx + rw, ry + rh - r);
+    ctx.quadraticCurveTo(rx + rw, ry + rh, rx + rw - r, ry + rh, r);
+    ctx.lineTo(rx + r, ry + rh);
+    ctx.quadraticCurveTo(rx, ry + rh, rx, ry + rh - r, r);
+    ctx.lineTo(rx, ry + r);
+    ctx.quadraticCurveTo(rx, ry, rx + r, ry, r);
+    ctx.lineTo(rx + (rw - hole) / 2, ry);
+    ctx.stroke();
+
+    ctx.strokeStyle = color.toString();
+    ctx.beginPath();
+    ctx.moveTo(ax, 0);
+    ctx.lineTo(ax, ay);
+    ctx.moveTo(ax + aw, ay - ah);
+    ctx.lineTo(ax, ay);
+    ctx.lineTo(ax - aw, ay - ah);
+    ctx.stroke();
+    return canvas;
+};
+
 
 SymbolMorph.prototype.drawSymbolBrush = function (canvas, color) {
     // answer a canvas showing a paintbrush
