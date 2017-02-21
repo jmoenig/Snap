@@ -166,6 +166,31 @@ CSlotMorph.prototype.fixLayout = function () {
     }
 };
 
+// Stack copying
+BlockMorph.prototype.originalUserMenu = BlockMorph.prototype.userMenu;
+BlockMorph.prototype.userMenu = function () {
+    var myself = this,
+        menu = this.originalUserMenu();
+    menu.addLine();
+    menu.addItem(
+        'download script',
+        function () {
+            var ide = myself.parentThatIsA(IDE_Morph),
+                blockEditor = myself.parentThatIsA(BlockEditorMorph);
+            if (!ide && blockEditor) {
+                ide = blockEditor.target.parentThatIsA(IDE_Morph);
+            }
+            if (ide) {
+                ide.saveXMLAs(
+                    ide.serializer.serialize(myself),
+                    myself.selector + ' stack',
+                    false);
+            }
+        });
+
+    return menu;
+};
+
 // SymbolMorph icons
 
 // Camera SymbolMorph

@@ -1864,4 +1864,66 @@ IDE_Morph.prototype.setLanguage = function(lang, callback) {
     });
 };
 
+// Stack copying
+IDE_Morph.prototype.originalDroppedText = IDE_Morph.prototype.droppedText;
+IDE_Morph.prototype.droppedText = function (aString, name) {
+    this.originalDroppedText(aString, name);
+    if (aString.indexOf('<script') === 0) {
+        return this.openScriptString(aString, true);
+    }
+};
+
+IDE_Morph.prototype.openScriptString = function (str) {
+    var msg,
+        myself = this;
+    this.nextSteps([
+        function () {
+            msg = myself.showMessage('Opening script...');
+        },
+        function () {nop(); }, // yield (bug in Chrome)
+        function () {
+            myself.rawOpenScriptsString(str);
+        },
+        function () {
+            msg.destroy();
+        }
+    ]);
+};
+
+IDE_Morph.prototype.rawOpenScriptsString = function (str) {
+    var xml,
+        script,
+        scripts = this.currentSprite.scripts,
+        world = this.world(),
+        dropPosition = world.hand.position(),
+        myself = this;
+
+    if (Process.prototype.isCatchingErrors) {
+        try {
+            xml = this.serializer.parse(str);
+            script = this.serializer.loadScript(xml);
+        } catch (err) {
+            this.showMessage('Load failed: ' + err);
+        }
+    } else {
+        xml = this.serializer.loadScript(str);
+        script = this.serializer.loadScript(xml);
+    }
+
+    scripts.add(script);
+    
+    if (world.topMorphAt(dropPosition) !== scripts) {
+        dropPosition = new Point(
+            scripts.left() + scripts.cleanUpMargin,
+            scripts.top() + scripts.cleanUpMargin);
+    }
+
+    script.setCenter(dropPosition);
+    scripts.adjustBounds();
+    
+    this.showMessage(
+        'Imported Script.',
+        2
+    );
+};
 
