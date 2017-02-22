@@ -1404,6 +1404,8 @@ SnapTranslator.dict.fr = {
         'Contraindre les proportions de la forme ?\n(vous pouvez aussi maintenir appuy\u00E9 Maj)',
 
     // Import dialog box :    
+    'Opening section':
+        'Ouverture de la section',
     'Animals':
         'Animaux',
     'Buttons':

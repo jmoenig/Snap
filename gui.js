@@ -3049,6 +3049,7 @@ IDE_Morph.prototype.popupMediaImportDialog = function (folderName, items) {
         handle,
         msg,
         count,
+        section,
         listFieldWidth = 180,
         isSound = (folderName.toLowerCase() === "sounds"),
         buttonColor = new Color(237, 237, 237);
@@ -3056,12 +3057,12 @@ IDE_Morph.prototype.popupMediaImportDialog = function (folderName, items) {
     buttonPressColor = buttonHighlightColor.darker().darker();
     buttonTextColor = new Color(100, 100, 100);
 
-    var itemsSortFilter = function (a, b) {
+    function itemsSortFilter (a, b) {
         if (a.name.toLowerCase() < b.name.toLowerCase()) return -1;
         else return 1;
     };
 
-    var sectionsSortFilter = function (a, b) {
+    function sectionsSortFilter (a, b) {
         if (a.name === "other") return 1;
         if (b.name === "other") return -1;
         return itemsSortFilter(a, b);
@@ -3069,12 +3070,12 @@ IDE_Morph.prototype.popupMediaImportDialog = function (folderName, items) {
 
     var colect = {};
     items.forEach(function (item) {
-        var section = isNil(item.section) || (item.section === "") ? "other" : item.section;
+        section = isNil(item.section) || (item.section === "") ? "other" : item.section;
         colect[section] = "";
     });
 
     var sections = [];
-    for (var section in colect) {
+    for (section in colect) {
         sections.push({ "name": section });
     };
 
@@ -3082,7 +3083,8 @@ IDE_Morph.prototype.popupMediaImportDialog = function (folderName, items) {
     sections.sort(sectionsSortFilter);
     sections.push({ "name": "All" });
 
-    var listField = new ListMorph(sections,
+    var listField = new ListMorph(
+        sections,
         function (element) {
             return element.name;
         }
@@ -3090,7 +3092,7 @@ IDE_Morph.prototype.popupMediaImportDialog = function (folderName, items) {
 
     content.color = dialog.color;
     listField.setWidth(listFieldWidth);
-    listField.contents.children[0].alpha = 0;
+    listField.listContents.alpha = 0;
     listField.contents.children[0].children.forEach(function (item) {
         item.createLabel = function () {
             var w, h;
@@ -3230,95 +3232,99 @@ IDE_Morph.prototype.popupMediaImportDialog = function (folderName, items) {
         this.buttons.setBottom(this.bottom() - this.padding);
     };
 
-    var decrement = function () {
+    function decrement () {
         count--;
-        // console.log(count);
         if (count === 0) {
             msg.destroy();
         }
     };
 
+    function renderIcon (item) {
+        if ((item.section === section) || (section === "All")) {
+            var dName = (isSound) ? folderName : folderName + "/thumbnails";
+            var fName = (isSound) ? item.fileName : item.name + ".png";
+            var url = myself.resourceURL(dName, fName),
+                img = new Image(),
+                suffix = item.fileName.slice(item.fileName.lastIndexOf('.') + 1).toLowerCase(),
+                isSVG = suffix === 'svg' && !MorphicPreferences.rasterizeSVGs,
+                template,
+                cstTemplate,
+                sndTemplate,
+                icon;
+
+            if (isSound) {
+                sndTemplate = icon = new SoundIconMorph(
+                    new Sound(new Audio(), item.name),
+                    sndTemplate
+                );
+            } else {
+                cstTemplate = icon = new CostumeIconMorph(
+                    new Costume(turtle.image, item.name),
+                    cstTemplate
+                );
+            };
+            icon.isDraggable = false;
+            icon.userMenu = nop;
+            icon.action = function() {
+                if (selectedIcon === icon) {
+                    return;
+                }
+                var prevSelected = selectedIcon;
+                selectedIcon = icon;
+                if (prevSelected) { prevSelected.refresh(); }
+            };
+            icon.doubleClickAction = dialog.ok;
+            icon.query = function() {
+                return icon === selectedIcon;
+            };
+            frame.addContents(icon);
+
+            icon.color = buttonColor;
+            icon.highlightColor = buttonHighlightColor;
+            icon.pressColor = buttonPressColor;
+            icon.labelColor = buttonTextColor;
+            icon.labelBold = false;
+            icon.fontSize = 12;
+            icon.drawEdges = nop;
+            icon.drawOutline = nop;
+
+            if (isSound) {
+                icon.object.audio.oncanplay = function() {
+                    icon.createThumbnail();
+                    icon.fixLayout();
+                    icon.refresh();
+                    decrement();
+                };
+                icon.object.audio.src = url;
+                icon.object.audio.load();
+            } else {
+                img.onload = function() {
+                    var canvas = newCanvas(new Point(img.width, img.height), true);
+                    canvas.getContext('2d').drawImage(img, 0, 0);
+                    icon.object = (isSVG) ? new SVG_Costume(canvas, item.name) : new Costume(canvas, item.name);
+                    icon.refresh();
+                    icon.fileName = item.fileName;
+                    decrement();
+                };
+                img.src = url;
+            }
+        } else {
+            decrement();
+        }
+    };
+
+
     listField.action = function (elt) {
-        msg = myself.showMessage('Opening ' + elt.name + '...');
+        msg = new MenuMorph(null, localize('Opening section') + " " + localize(elt.name) + '...');
+        msg.popUpCenteredInWorld(frame);
+        section = (elt.name === "other") ? "" : elt.name;
+        frame.contents.children.splice(0, frame.contents.children.length);
+        count = items.length;
+        
         // Not proud of this... I wasn't able to display the msg dialog
         // immediatly without using this setTimeout :
         setTimeout(function () {
-            var section = (elt.name === "other") ? "" : elt.name;
-            frame.contents.children.splice(0, frame.contents.children.length);
-            count = items.length;
-            items.forEach(function (item) {
-
-                if ((item.section === section) || (section === "All")) {
-                    var dName = (isSound) ? folderName : folderName + "/thumbnails";
-                    var fName = (isSound) ? item.fileName : item.name + ".png";
-                    var url = myself.resourceURL(dName, fName),
-                        img = new Image(),
-                        suffix = item.fileName.slice(item.fileName.lastIndexOf('.') + 1).toLowerCase(),
-                        isSVG = suffix === 'svg' && !MorphicPreferences.rasterizeSVGs,
-                        template,
-                        cstTemplate,
-                        sndTemplate,
-                        icon;
-
-                    if (isSound) {
-                        sndTemplate = icon = new SoundIconMorph(
-                            new Sound(new Audio(), item.name),
-                            sndTemplate
-                        );
-                    } else {
-                        cstTemplate = icon = new CostumeIconMorph(
-                            new Costume(turtle.image, item.name),
-                            cstTemplate
-                        );
-                    };
-                    icon.isDraggable = false;
-                    icon.userMenu = nop;
-                    icon.action = function () {
-                        if (selectedIcon === icon) {
-                            return;
-                        }
-                        var prevSelected = selectedIcon;
-                        selectedIcon = icon;
-                        if (prevSelected) { prevSelected.refresh(); }
-                    };
-                    icon.doubleClickAction = dialog.ok;
-                    icon.query = function () {
-                        return icon === selectedIcon;
-                    };
-                    frame.addContents(icon);
-
-                    icon.color = buttonColor;
-                    icon.highlightColor = buttonHighlightColor;
-                    icon.pressColor = buttonPressColor;
-                    icon.labelColor = buttonTextColor;
-                    icon.labelBold = false;
-                    icon.fontSize = 12;
-                    icon.drawEdges = nop;
-                    icon.drawOutline = nop;
-
-                    if (isSound) {
-                        icon.object.audio.oncanplay = function () {
-                            icon.createThumbnail();
-                            icon.fixLayout();
-                            icon.refresh();
-                            decrement();
-                        };
-                        // console.log(url);
-                        icon.object.audio.src = url;
-                        icon.object.audio.load();
-                    } else {
-                        img.onload = function () {
-                            var canvas = newCanvas(new Point(img.width, img.height), true);
-                            canvas.getContext('2d').drawImage(img, 0, 0);
-                            icon.object = (isSVG) ? new SVG_Costume(canvas, item.name) : new Costume(canvas, item.name);
-                            icon.refresh();
-                            icon.fileName = item.fileName;
-                            decrement();
-                        };
-                        img.src = url;
-                    }
-                } else decrement();
-            });
+            items.forEach(renderIcon);
             dialog.fixLayout();
         }, 100);
 
