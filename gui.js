@@ -7525,7 +7525,6 @@ WardrobeMorph.prototype.updateList = function () {
     importbutton.setCenter(icon.center());
     importbutton.setLeft(paintbutton.right() + padding * 2);
 
-
     this.addContents(importbutton);
 
     txt = new TextMorph(localize(
@@ -7845,7 +7844,6 @@ SoundIconMorph.prototype.prepareToBeGrabbed = function () {
 JukeboxMorph.prototype = new ScrollFrameMorph();
 JukeboxMorph.prototype.constructor = JukeboxMorph;
 JukeboxMorph.uber = ScrollFrameMorph.prototype;
-
 
 function JukeboxMorph(aSprite, sliderColor) {
     this.init(aSprite, sliderColor);
