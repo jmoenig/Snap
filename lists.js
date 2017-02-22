@@ -398,6 +398,22 @@ List.prototype.becomeLinked = function () {
     }
 };
 
+List.prototype.asJSON = function () {
+    function itemToJSON (item) {
+        if (item instanceof List) {
+            return '[' +
+                item.asArray().map(
+                    function (each) {
+                        return itemToJSON(each);
+                    }) +
+                ']';
+        } else {
+            return JSON.stringify(item);
+        }
+    };
+    return itemToJSON(this);
+};
+
 // List testing
 
 List.prototype.equalTo = function (other) {

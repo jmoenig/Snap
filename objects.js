@@ -8365,6 +8365,7 @@ WatcherMorph.prototype.mouseClickLeft = function () {
 WatcherMorph.prototype.userMenu = function () {
     var myself = this,
         menu = new MenuMorph(this),
+        subMenu,
         on = '\u25CF',
         off = '\u25CB',
         vNames;
@@ -8496,17 +8497,12 @@ WatcherMorph.prototype.userMenu = function () {
         );
         if (this.currentValue &&
                 (isString(this.currentValue) || !isNaN(+this.currentValue))) {
-            menu.addItem(
-                'export...',
-                function () {
-                    var ide = myself.parentThatIsA(IDE_Morph);
-                    ide.saveFileAs(
-                        myself.currentValue.toString(),
-                        'text/plain;charset=utf-8',
-                        myself.getter // variable name
-                    );
-                }
-            );
+            menu.addItem('export...', this.valueExporter('plain'));
+        } else if (this.currentValue instanceof List) {
+            subMenu = new MenuMorph(this.currentValue);
+            subMenu.addItem('JSON', this.valueExporter('json'));
+            subMenu.addItem('XML', this.valueExporter('xml'));
+            menu.addMenu('export...', subMenu);
         } else if (this.currentValue instanceof Context) {
             vNames = this.currentValue.outerContext.variables.names();
             if (vNames.length) {
@@ -8518,6 +8514,33 @@ WatcherMorph.prototype.userMenu = function () {
         }
     }
     return menu;
+};
+
+WatcherMorph.prototype.valueExporter = function (format) {
+    var myself = this,
+        contents,
+        format = format || 'plain',
+        ide = myself.parentThatIsA(IDE_Morph);
+
+    switch (format) {
+        case 'plain':
+            contents = this.currentValue.toString();
+            break;
+        case 'json':
+            contents = this.currentValue.asJSON();
+            break;
+        case 'xml':
+            contents = ide.serializer.serialize(this.currentValue);
+            break;
+    }
+
+    return function () {
+        ide.saveFileAs(
+            contents,
+            'text/' + format + ';charset=utf-8',
+            myself.getter // variable name
+            );
+    };
 };
 
 WatcherMorph.prototype.setStyle = function (style) {
