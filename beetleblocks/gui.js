@@ -50,7 +50,7 @@ IDE_Morph.prototype.createStage = function () {
 IDE_Morph.prototype.setDefaultDesign = IDE_Morph.prototype.setFlatDesign; 
 
 IDE_Morph.prototype.originalInit = IDE_Morph.prototype.init;
-IDE_Morph.prototype.init = function(isAutoFill) {
+IDE_Morph.prototype.init = function (isAutoFill) {
     this.originalInit();
 
     // Borders are actually just paddings, so we set the bg white to get them to be white
@@ -136,7 +136,7 @@ IDE_Morph.prototype.projectMenu = function () {
     }
     menu.addItem(
             'Download 2D lines as...',
-            function() { myself.downloadSVG() },
+            function () { myself.downloadSVG() },
             'download the currently rendered 2D lines\ninto an SVG file'
             );
 
@@ -164,7 +164,7 @@ IDE_Morph.prototype.projectMenu = function () {
 
     menu.addItem(
         'Libraries...',
-        function() {
+        function () {
             myself.getURL(
                 myself.resourceURL('libraries', 'LIBRARIES'),
                 function (txt) {
@@ -208,7 +208,7 @@ IDE_Morph.prototype.projectMenu = function () {
     }
     menu.addItem(
             'Start tutorial',
-            function() {
+            function () {
                 myself.startTutorial(world);
             }
             );
@@ -703,7 +703,7 @@ IDE_Morph.prototype.downloadBinarySTL = function () {
         stlString,
         blob;
 
-    scene.children = scene.children.filter(function(each) { return each.name != 'beetle' });
+    scene.children = scene.children.filter(function (each) { return each.name != 'beetle' });
     stlString = exporter.parse(scene);
     blob = new Blob([stlString], {type: 'text/plain;charset=utf-8'});
 
@@ -716,7 +716,7 @@ IDE_Morph.prototype.downloadSTL = function () {
         stlString,
         blob;
 
-    scene.children = scene.children.filter(function(each) { return each.name != 'beetle' });
+    scene.children = scene.children.filter(function (each) { return each.name != 'beetle' });
     stlString = exporter.parse(scene);
     blob = new Blob([stlString], {type: 'text/plain'});
     saveAs(blob, (this.projectName ? this.projectName : 'beetleblocks_export') + '.stl'); 
@@ -730,7 +730,7 @@ IDE_Morph.prototype.downloadOBJ = function () {
         objString, 
         blob;
 
-    scene.children = scene.children.filter(function(each) { return each.name != 'beetle' });
+    scene.children = scene.children.filter(function (each) { return each.name != 'beetle' });
     objString = exporter.parse(scene);
     blob = new Blob([objString], {type: 'text/plain;charset=utf-8'});
 
@@ -741,7 +741,7 @@ IDE_Morph.prototype.downloadOBJ = function () {
 IDE_Morph.prototype.downloadSVG = function () {
     var lines = [];
     this.stage.myObjects.children.forEach(
-            function(element, index, ar){
+            function (element, index, ar){
                 if (element instanceof THREE.Line) {
                     lines.push(element);
                 } 
@@ -766,7 +766,7 @@ IDE_Morph.prototype.downloadSVG = function () {
                 + 'stroke-linecap="round" stroke-linejoin="round" '
                 + 'points="';
 
-            line.geometry.vertices.forEach(function(vertex) {
+            line.geometry.vertices.forEach(function (vertex) {
                 svgStr += (vertex.x * scaleMultiplier)
                     + ','
                     + (vertex.z * scaleMultiplier)
@@ -832,7 +832,7 @@ IDE_Morph.prototype.downloadSVG = function () {
                 return result;
             }
 
-            catmullRomToBezier(line.anchorPoints).forEach(function(catmull) {
+            catmullRomToBezier(line.anchorPoints).forEach(function (catmull) {
                 svgStr += 'C' + catmull[0].x * scaleMultiplier
                     + ',' + catmull[0].z * scaleMultiplier
                     + ' ' + catmull[1].x * scaleMultiplier
@@ -1000,7 +1000,7 @@ ProjectDialogMorph.prototype.getExamplesProjectList = function () {
         projects = [];
 
     dir = JSON.parse(this.ide.getURL('https://api.github.com/repos/ericrosenbaum/BeetleBlocks/contents/run/beetleblocks/examples'));
-    dir.forEach(function(each){
+    dir.forEach(function (each){
         var dta = {
             name: each.name.replace('.xml',''),
             thumb: null,
@@ -1326,9 +1326,10 @@ IDE_Morph.prototype.resetBlocksScale = function () {
 };
 
 IDE_Morph.prototype.originalCreatePalette = IDE_Morph.prototype.createPalette;
-IDE_Morph.prototype.createPalette = function(forSearching){
+IDE_Morph.prototype.createPalette = function (forSearching) {
     this.originalCreatePalette(forSearching);
     this.palette.color = new Color(230, 230, 230);
+    return this.palette;
 };
 
 IDE_Morph.prototype.createStatusDisplay = function () {
@@ -1705,7 +1706,7 @@ IDE_Morph.prototype.createStatusDisplay = function () {
 
     // Add all contents
 
-    elements.forEach(function(each) { myself.statusDisplay.addElement(each) });
+    elements.forEach(function (each) { myself.statusDisplay.addElement(each) });
 };
 
 IDE_Morph.prototype.selectSprite = function (sprite) {
@@ -1841,7 +1842,7 @@ IDE_Morph.prototype.refreshPalette = function (shouldIgnorePosition) {
 // Language
 
 IDE_Morph.prototype.originalSetLanguage = IDE_Morph.prototype.setLanguage;
-IDE_Morph.prototype.setLanguage = function(lang, callback) {
+IDE_Morph.prototype.setLanguage = function (lang, callback) {
     var myself = this;
 
     myself.originalSetLanguage(lang, function () {

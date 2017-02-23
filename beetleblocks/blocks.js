@@ -166,7 +166,8 @@ CSlotMorph.prototype.fixLayout = function () {
     }
 };
 
-// Stack copying
+// Script Downloading
+
 BlockMorph.prototype.originalUserMenu = BlockMorph.prototype.userMenu;
 BlockMorph.prototype.userMenu = function () {
     var myself = this,
