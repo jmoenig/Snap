@@ -398,20 +398,18 @@ List.prototype.becomeLinked = function () {
     }
 };
 
-List.prototype.asJSON = function () {
-    function itemToJSON (item) {
-        if (item instanceof List) {
-            return '[' +
-                item.asArray().map(
-                    function (each) {
-                        return itemToJSON(each);
-                    }) +
-                ']';
-        } else {
-            return JSON.stringify(item);
-        }
-    };
-    return itemToJSON(this);
+List.prototype.toJSON = function () {
+    return this.contents;
+};
+
+List.prototype.toCSV = function () {
+    // Expects the list to be properly mappable into a
+    // two-dimensional table.
+    return this.contents.map(function (eachRow) {
+        return eachRow.contents.map(function (eachCell) {
+            return JSON.stringify(eachCell);
+        }).join(',');
+    }).join('\n');
 };
 
 // List testing

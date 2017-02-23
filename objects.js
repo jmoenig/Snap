@@ -8500,8 +8500,15 @@ WatcherMorph.prototype.userMenu = function () {
             menu.addItem('export...', this.valueExporter('plain'));
         } else if (this.currentValue instanceof List) {
             subMenu = new MenuMorph(this.currentValue);
+            if (!this.currentValue.contents.some(
+                    function (any) {
+                        return any instanceof List;
+                    })) {
+                subMenu.addItem('Plain text', this.valueExporter('plain'));
+            }
             subMenu.addItem('JSON', this.valueExporter('json'));
             subMenu.addItem('XML', this.valueExporter('xml'));
+            subMenu.addItem('CSV', this.valueExporter('csv'));
             menu.addMenu('export...', subMenu);
         } else if (this.currentValue instanceof Context) {
             vNames = this.currentValue.outerContext.variables.names();
@@ -8518,23 +8525,38 @@ WatcherMorph.prototype.userMenu = function () {
 
 WatcherMorph.prototype.valueExporter = function (format) {
     var myself = this,
+        value = this.currentValue,
         contents,
         format = format || 'plain',
         ide = myself.parentThatIsA(IDE_Morph);
 
-    switch (format) {
-        case 'plain':
-            contents = this.currentValue.toString();
-            break;
-        case 'json':
-            contents = this.currentValue.asJSON();
-            break;
-        case 'xml':
-            contents = ide.serializer.serialize(this.currentValue);
-            break;
-    }
-
     return function () {
+        switch (format) {
+            case 'plain':
+                contents = value instanceof List ? 
+                    value.asArray().join(', ') : 
+                    value.toString();
+                break;
+            case 'json':
+                contents = JSON.stringify(value);
+                break;
+            case 'xml':
+                contents = ide.serializer.serialize(value);
+                break;
+            case 'csv':
+                try {
+                    contents = value.toCSV();
+                } catch (err) {
+                    if (Process.prototype.isCatchingErrors) {
+                        ide.showMessage('List cannot be converted into CSV', 2);
+                    } else {
+                        throw err;
+                    }
+                    return;
+                }
+                break;
+        }
+
         ide.saveFileAs(
             contents,
             'text/' + format + ';charset=utf-8',
