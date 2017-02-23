@@ -8534,7 +8534,7 @@ WatcherMorph.prototype.valueExporter = function (format) {
         switch (format) {
             case 'plain':
                 contents = value instanceof List ? 
-                    value.asArray().join(', ') : 
+                    value.asArray().join('\n') : 
                     value.toString();
                 break;
             case 'json':
