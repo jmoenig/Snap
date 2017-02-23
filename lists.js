@@ -399,14 +399,14 @@ List.prototype.becomeLinked = function () {
 };
 
 List.prototype.toJSON = function () {
-    return this.contents;
+    return this.asArray();
 };
 
 List.prototype.toCSV = function () {
     // Expects the list to be properly mappable into a
     // two-dimensional table.
-    return this.contents.map(function (eachRow) {
-        return eachRow.contents.map(function (eachCell) {
+    return this.asArray().map(function (eachRow) {
+        return eachRow.asArray().map(function (eachCell) {
             return JSON.stringify(eachCell);
         }).join(',');
     }).join('\n');
