@@ -1416,6 +1416,7 @@ IDE_Morph.prototype.createCorralBar = function () {
     var padding = 5,
         newbutton,
         paintbutton,
+        importbutton,
         colors = [
             this.groupColor,
             this.frameColor.darker(50),
@@ -1477,6 +1478,29 @@ IDE_Morph.prototype.createCorralBar = function () {
         this.corralBar.left() + padding + newbutton.width() + padding
     );
     this.corralBar.add(paintbutton);
+
+    importbutton = new PushButtonMorph(
+        this,
+        "addNewSpriteFromLibrary",
+        new SymbolMorph("import", 15)
+    );
+    importbutton.padding = 0;
+    importbutton.corner = 12;
+    importbutton.color = colors[0];
+    importbutton.highlightColor = colors[1];
+    importbutton.pressColor = colors[2];
+    importbutton.labelMinExtent = new Point(36, 18);
+    importbutton.labelShadowOffset = new Point(-1, -1);
+    importbutton.labelShadowColor = colors[1];
+    importbutton.labelColor = this.buttonLabelColor;
+    importbutton.contrast = this.buttonContrast;
+    importbutton.drawNew();
+    importbutton.hint = "add a new sprite";
+    importbutton.fixLayout();
+    importbutton.setCenter(this.corralBar.center());
+    importbutton.setLeft(paintbutton.right() + padding);
+    this.corralBar.add(importbutton);
+
 };
 
 IDE_Morph.prototype.createCorral = function () {
@@ -2093,6 +2117,19 @@ IDE_Morph.prototype.removeSetting = function (key) {
 };
 
 // IDE_Morph sprite list access
+
+IDE_Morph.prototype.addNewSpriteFromLibrary = function () {
+    var sprite = new SpriteMorph(this.globalVariables),
+        rnd = Process.prototype.reportRandom;
+
+    sprite.name = this.newSpriteName(sprite.name);
+    sprite.setCenter(this.stage.center());
+    this.stage.add(sprite);
+    this.sprites.add(sprite);
+    this.corral.addSprite(sprite);
+    this.selectSprite(sprite);
+    this.importMedia("Costumes");
+};
 
 IDE_Morph.prototype.addNewSprite = function () {
     var sprite = new SpriteMorph(this.globalVariables),
