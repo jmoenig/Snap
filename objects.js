@@ -8726,14 +8726,24 @@ ReplayControls.prototype.init = function(ide) {
         myself.play();
     };
 
-    this.stepForwardButton = new SymbolMorph('stepForward', 20, this.buttonColor);
+    this.stepForwardButton = new SymbolMorph('stepForward', 17, this.buttonColor);
     this.stepForwardButton.mouseClickLeft = function() {
         myself.stepForward();
     };
 
-    this.stepBackwardButton = new SymbolMorph('stepBackward', 20, this.buttonColor);
+    this.stepBackwardButton = new SymbolMorph('stepBackward', 17, this.buttonColor);
     this.stepBackwardButton.mouseClickLeft = function() {
         myself.stepBackward();
+    };
+
+    this.jumpBackwardButton = new SymbolMorph('jumpBackward', 20, this.buttonColor);
+    this.jumpBackwardButton.mouseClickLeft = function() {
+        myself.jumpToBeginning();
+    };
+
+    this.jumpForwardButton = new SymbolMorph('jumpForward', 20, this.buttonColor);
+    this.jumpForwardButton.mouseClickLeft = function() {
+        myself.jumpToEnd();
     };
 
     this.displayTime = new TextMorph(
@@ -8772,6 +8782,8 @@ ReplayControls.prototype.init = function(ide) {
     this.add(this.slider);
     this.add(this.playButton);
     this.add(this.stepForwardButton);
+    this.add(this.jumpForwardButton);
+    this.add(this.jumpBackwardButton);
     this.add(this.stepBackwardButton);
     this.add(this.displayTime);
 
@@ -8877,6 +8889,18 @@ ReplayControls.prototype.toggleCaptions = function() {
     this.captionsButton.color = color;
     this.captionsButton.drawNew();
     this.captionsButton.changed();
+};
+
+ReplayControls.prototype.jumpToBeginning = function() {
+    var value = this.slider.start;
+    this.slider.button.setLeft(this.getSliderLeftFromValue(value));
+    this.slider.updateValue();
+};
+
+ReplayControls.prototype.jumpToEnd = function() {
+    var value = this.slider.stop;
+    this.slider.button.setLeft(this.getSliderLeftFromValue(value));
+    this.slider.updateValue();
 };
 
 ReplayControls.prototype.stepForward = function() {
@@ -9084,20 +9108,30 @@ ReplayControls.prototype.fixLayout = function() {
     btnSize = height - (3*margin + sliderHeight);
     this.playButton.size = btnSize;
 
-    this.playButton.setLeft(this.left() + 8*margin);
     this.playButton.setTop(top + sliderHeight + margin);
     this.playButton.drawNew();
-
+    this.jumpBackwardButton.setCenter(this.playButton.center());
     this.stepBackwardButton.setCenter(this.playButton.center());
-    this.stepBackwardButton.setRight(this.playButton.left() - 2.5*margin);
+
+    this.jumpBackwardButton.setLeft(this.left() + 2.5*margin);
+    this.jumpBackwardButton.drawNew();
+
+    this.stepBackwardButton.setLeft(this.jumpBackwardButton.right() + 1.5*margin);
     this.stepBackwardButton.drawNew();
 
+    this.playButton.setLeft(this.stepBackwardButton.right() + 2*margin);
+    this.playButton.drawNew();
+
     this.stepForwardButton.setCenter(this.playButton.center());
-    this.stepForwardButton.setLeft(this.playButton.right() + 2.5*margin);
+    this.stepForwardButton.setLeft(this.playButton.right() + 2*margin);
     this.stepForwardButton.drawNew();
 
+    this.jumpForwardButton.setCenter(this.stepForwardButton.center());
+    this.jumpForwardButton.setLeft(this.stepForwardButton.right() + 1.5*margin);
+    this.jumpForwardButton.drawNew();
+
     this.displayTime.setCenter(this.playButton.center());
-    this.displayTime.setLeft(this.stepForwardButton.right() + 4*margin);
+    this.displayTime.setLeft(this.jumpForwardButton.right() + 4*margin);
     this.displayTime.drawNew();
 
     // Buttons on the right

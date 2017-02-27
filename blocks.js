@@ -9645,10 +9645,16 @@ SymbolMorph.prototype.symbolCanvasColored = function (aColor) {
         return this.drawSymbolStop(canvas, aColor);
     case 'pointRight':
         return this.drawSymbolPointRight(canvas, aColor);
+    case 'doubleArrowForward':
+        return this.drawSymbolStepForward(canvas, aColor);
     case 'stepForward':
         return this.drawSymbolStepForward(canvas, aColor);
     case 'stepBackward':
         return this.drawSymbolStepBackward(canvas, aColor);
+    case 'jumpForward':
+        return this.drawSymbolJumpForward(canvas, aColor);
+    case 'jumpBackward':
+        return this.drawSymbolJumpBackward(canvas, aColor);
     case 'gears':
         return this.drawSymbolGears(canvas, aColor);
     case 'file':
@@ -9840,6 +9846,76 @@ SymbolMorph.prototype.drawSymbolStepBackward = function (canvas, color) {
         0,
         canvas.width * 0.25,
         canvas.height
+    );
+    return canvas;
+};
+
+SymbolMorph.prototype.drawSymbolJumpForward = function (canvas, color) {
+    // answer a canvas showing a double right-pointing triangle
+    // followed by a vertical bar
+    var ctx = canvas.getContext('2d'),
+        arrowWidth = 3/7 * canvas.width,
+        height = 4/7 * canvas.height,
+        zeroY = 1.5/7 * canvas.height,
+        rectWidth = 1/7 * canvas.width;
+
+    ctx.fillStyle = color.toString();
+    ctx.beginPath();
+    ctx.moveTo(0, zeroY);
+    ctx.lineTo(arrowWidth, zeroY + Math.round(height / 2));
+    ctx.lineTo(0, zeroY+height);
+    ctx.lineTo(0, zeroY);
+    ctx.closePath();
+    ctx.fill();
+
+    ctx.beginPath();
+    ctx.moveTo(arrowWidth, zeroY);
+    ctx.lineTo(2*arrowWidth, zeroY + Math.round(height / 2));
+    ctx.lineTo(arrowWidth, zeroY+height);
+    ctx.lineTo(arrowWidth, zeroY);
+    ctx.closePath();
+    ctx.fill();
+
+    ctx.fillRect(
+        2*arrowWidth,
+        zeroY,
+        rectWidth,
+        height
+    );
+    return canvas;
+};
+
+SymbolMorph.prototype.drawSymbolJumpBackward = function (canvas, color) {
+    // answer a canvas showing a double left-pointing triangle
+    // followed by a vertical bar
+    var ctx = canvas.getContext('2d'),
+        arrowWidth = 3/7 * canvas.width,
+        height = 4/7 * canvas.height,
+        zeroY = 1.5/7 * canvas.height,
+        rectWidth = 1/7 * canvas.width;
+
+    ctx.fillStyle = color.toString();
+    ctx.beginPath();
+    ctx.moveTo(rectWidth + arrowWidth, zeroY);
+    ctx.lineTo(rectWidth, zeroY + Math.round(height / 2));
+    ctx.lineTo(rectWidth + arrowWidth, zeroY+height);
+    ctx.lineTo(rectWidth + arrowWidth, zeroY);
+    ctx.closePath();
+    ctx.fill();
+
+    ctx.beginPath();
+    ctx.moveTo(rectWidth + 2 * arrowWidth, zeroY);
+    ctx.lineTo(rectWidth + arrowWidth, zeroY + Math.round(height / 2));
+    ctx.lineTo(rectWidth + 2 * arrowWidth, zeroY+height);
+    ctx.lineTo(rectWidth + 2 * arrowWidth, zeroY);
+    ctx.closePath();
+    ctx.fill();
+
+    ctx.fillRect(
+        0,
+        zeroY,
+        rectWidth,
+        height
     );
     return canvas;
 };
