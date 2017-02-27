@@ -9193,6 +9193,17 @@ ReplayControls.prototype.update = function() {
             action = this.getInverseEvent(originalEvent);
         }
 
+        // make the 'openProject' event undo-able...
+        if (action.type === 'openProject' && !action.replayType && action.args.length < 2) {
+            var ide = this.parentThatIsA(IDE_Morph),
+                serialized = ide.serializer.serialize(ide.stage);
+
+            if (action.args.length === 0) {
+                action.args.push(null);
+            }
+            action.args.push(serialized);
+        }
+
         // Apply the given event
         this.isApplyingAction = true;
         SnapActions.applyEvent(action)

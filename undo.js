@@ -454,6 +454,10 @@ UndoManager.Invert.removeSound = function(args) {
     };
 };
 
+UndoManager.Invert.openProject = function(args) {
+    return [args[1]];
+};
+
 UndoManager.Invert.renameSprite =
 
 UndoManager.Invert.updateCostume =
