@@ -80,9 +80,9 @@ document, isNaN, isString, newCanvas, nop, parseFloat, radians, window,
 modules, IDE_Morph, VariableDialogMorph, HTMLCanvasElement, Context, List,
 SpeechBubbleMorph, RingMorph, isNil, FileReader, TableDialogMorph,
 BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
-TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph*/
+TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, Variable*/
 
-modules.objects = '2017-February-16';
+modules.objects = '2017-February-17';
 
 var SpriteMorph;
 var StageMorph;
@@ -1375,6 +1375,7 @@ SpriteMorph.prototype.init = function (globals) {
 
     // sprite inheritance
     this.exemplar = null;
+    this.methods = {}; // not to be serialized, blockSpec: Variable[definition]
 
     SpriteMorph.uber.init.call(this);
 
@@ -4935,18 +4936,33 @@ SpriteMorph.prototype.hasSpriteVariable = function (varName) {
 };
 
 // SpriteMorph inheritance - custom blocks
-// under construction
+// +++ under construction
 
-/*
-SpriteMorph.prototype.ownBlocks = function () {
-    var dict = {};
-    this.customBlocks.forEach(function (def) {
-        dict[def.blockSpec()] = def;
+SpriteMorph.prototype.updateMethods = function () {
+    var all = this.allBlocks(),
+        methods = this.methods,
+        obsolete;
+
+    Object.keys(all).forEach(function (spec) {
+        var slot = methods[spec];
+        if (slot instanceof Variable) {
+            slot.value = all[spec];
+        } else {
+            methods[spec] = new Variable(all[spec]);
+        }
     });
-    return dict;
+
+    // remove unused entries
+    obsolete = Object.keys(methods).filter(function (spec) {
+        return !contains(Object.keys(all), spec);
+    });
+    obsolete.forEach(function (spec) {
+        methods.delete(spec);
+    });
 };
 
 SpriteMorph.prototype.allBlocks = function (valuesOnly) {
+    // private
     var dict = {};
     this.allExemplars().reverse().forEach(function (sprite) {
         sprite.customBlocks.forEach(function (def) {
@@ -4959,7 +4975,17 @@ SpriteMorph.prototype.allBlocks = function (valuesOnly) {
     return dict;
 };
 
+SpriteMorph.prototype.ownBlocks = function () {
+    // private
+    var dict = {};
+    this.customBlocks.forEach(function (def) {
+        dict[def.blockSpec()] = def;
+    });
+    return dict;
+};
+
 SpriteMorph.prototype.inheritedBlocks = function (valuesOnly) {
+    // private
     var dict = {},
         own = Object.keys(this.ownBlocks()),
         others = this.allExemplars().reverse();
@@ -4977,7 +5003,6 @@ SpriteMorph.prototype.inheritedBlocks = function (valuesOnly) {
     }
     return dict;
 };
-*/
 
 // SpriteMorph thumbnail
 
