@@ -1120,7 +1120,7 @@ ActionManager.prototype._onSetBlockPosition = function(id, x, y, callback) {
 
 ActionManager.prototype.onSetBlocksPositions = function(ids, positions) {
     var myself = this,
-        movedCount = ids.length,
+        movedCount = 0,
         callback = function() {
             movedCount++;
             if (movedCount === ids.length) {
