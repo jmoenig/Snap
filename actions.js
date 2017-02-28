@@ -1067,6 +1067,7 @@ ActionManager.prototype._onSetBlockPosition = function(id, x, y, callback) {
         block = this.getBlockFromId(id),
         scripts = block.parentThatIsA(ScriptsMorph),
         afterMove = function() {
+            if (block.justDropped) {block.justDropped(); }
             block.changed();
             block.removeShadow();
             myself.updateCommentsPositions(block);
@@ -1666,7 +1667,7 @@ ActionManager.prototype.disconnectBlock = function(block, scripts) {
     var oldParent = block.parent;
 
     scripts = scripts || block.parentThatIsA(ScriptsMorph);
-    block.prepareToBeGrabbed();
+    block.prepareToBeGrabbed(this.world().hand);
 
     if (oldParent && !(oldParent instanceof ScriptsMorph)) {
 
