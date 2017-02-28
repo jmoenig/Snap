@@ -537,7 +537,7 @@ ActionManager.prototype._removeBlock = function(block, userDestroy) {
             userDestroy
         ];
         
-    if (target && !(target.loc === 'top' && position)) {
+    if (target && !(ActionManager.isWeakTarget(target) && position)) {
         args.push(this._targetOf[block.id], serialized);
     } else if (position) {
         args.push(
@@ -563,6 +563,12 @@ ActionManager.prototype._removeBlock = function(block, userDestroy) {
     return args;
 };
 
+ActionManager.isWeakTarget = function(target) {
+    // I consider a target a 'weak target' if it should be ignored for restoring
+    // the block's state (fall back on position)
+    return target.loc === 'top' || target.loc === 'wrap';
+};
+
 ActionManager.prototype._getBlockState = function(id) {
     var target = this._targetOf[id],
         position = this._positionOf[id],
@@ -570,7 +576,7 @@ ActionManager.prototype._getBlockState = function(id) {
 
     // Use the last connection unless the last connection was to the
     // top of a command block and it has a position set
-    if (target && !(target.loc === 'top' && position)) {
+    if (target && !(ActionManager.isWeakTarget(target) && position)) {
         state = [this._targetOf[id]];
     } else if (position) {
         state = [position.x, position.y];
@@ -1398,6 +1404,7 @@ ActionManager.prototype.onMoveBlock = function(id, rawTarget) {
                 this.disconnectBlock(block, scripts);
             }
         }
+        target.point = new Point(target.point.x, target.point.y);
     } else if (block instanceof ReporterBlockMorph || block instanceof CommentMorph) {
         // Disconnect the given block
         this.disconnectBlock(block, scripts);
@@ -1440,7 +1447,7 @@ ActionManager.prototype.onMoveBlock = function(id, rawTarget) {
             myself._positionOf[target.id] = myself.getStandardPosition(scripts, target.position());
         }
 
-        if (target.loc === 'top') {
+        if (ActionManager.isWeakTarget(target)) {
             var topBlock = block.topBlock();
             myself._positionOf[topBlock.id] = myself.getStandardPosition(scripts, topBlock.position());
         }
