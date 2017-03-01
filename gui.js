@@ -918,8 +918,9 @@ IDE_Morph.prototype.createControlBar = function () {
             return;
         }
 
+		if (!myself.projectName) myself.projectName = localize('untitled');
         this.label = new StringMorph(
-            (myself.projectName || localize('untitled')) + suffix,
+            myself.projectName + suffix,
             14,
             'sans-serif',
             true,
