@@ -3380,3 +3380,7 @@ Fixes:
 170227
 ------
 * Objects: experiment with new “methods” attribute
+
+170301
+------
+* Objects: experiment with new dynamic method (cache) updating

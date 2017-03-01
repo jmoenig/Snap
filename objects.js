@@ -82,7 +82,7 @@ SpeechBubbleMorph, RingMorph, isNil, FileReader, TableDialogMorph,
 BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, Variable*/
 
-modules.objects = '2017-February-17';
+modules.objects = '2017-March-01';
 
 var SpriteMorph;
 var StageMorph;
@@ -4936,20 +4936,39 @@ SpriteMorph.prototype.hasSpriteVariable = function (varName) {
 };
 
 // SpriteMorph inheritance - custom blocks
-// +++ under construction
+// +++ under construction - remember to propagate to StageMorph
 
-SpriteMorph.prototype.updateMethods = function () {
+SpriteMorph.prototype.updateMethod = function (aDefinition, spec) {
+    var slot;
+    if (isNil(spec)) {
+        spec = aDefinition.blockSpec();
+    }
+
+    // sanity checks, to be removed after thorough testing
+    if (aDefinition.isGlobal) {
+        throw new Error('cannot update methods with global block');
+    }
+    if (spec === '') {
+        throw new Error('missing spec in definition update');
+    }
+
+    slot = this.methods[spec];
+    if (slot instanceof Variable) {
+        slot.value = aDefinition;
+    } else {
+        slot = new Variable(aDefinition);
+        this.methods[spec] = slot;
+    }
+    return slot;
+};
+
+SpriteMorph.prototype.updateAllMethods = function () {
     var all = this.allBlocks(),
         methods = this.methods,
         obsolete;
 
     Object.keys(all).forEach(function (spec) {
-        var slot = methods[spec];
-        if (slot instanceof Variable) {
-            slot.value = all[spec];
-        } else {
-            methods[spec] = new Variable(all[spec]);
-        }
+        this.updateMethod(all[spec], spec);
     });
 
     // remove unused entries
