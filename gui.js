@@ -489,6 +489,8 @@ IDE_Morph.prototype.openIn = function (world) {
         } else if (location.hash.substr(0, 7) === '#signup') {
             this.createCloudAccount();
         }
+    this.loadNewProject = false;
+
     }
 
     if (this.userLanguage) {
