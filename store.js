@@ -61,7 +61,7 @@ normalizeCanvas, contains*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2017-February-16';
+modules.store = '2017-March-01';
 
 
 // XML_Serializer ///////////////////////////////////////////////////////
@@ -1827,23 +1827,23 @@ ReporterBlockMorph.prototype.toScriptXML = function (
 };
 
 CustomCommandBlockMorph.prototype.toBlockXML = function (serializer) {
-    var scope = this.definition.value.isGlobal ? undefined
-        : this.definition.value.receiver.name;
+    var scope = this.definition.isGlobal ? undefined
+        : this.definition.receiver.name;
     return serializer.format(
         '<custom-block s="@"%>%%%%</custom-block>',
         this.blockSpec,
-        this.definition.value.isGlobal ?
+        this.definition.isGlobal ?
                 '' : serializer.format(' scope="@"', scope),
         serializer.store(this.inputs()),
-        this.definition.value.variableNames.length ?
+        this.definition.variableNames.length ?
                 '<variables>' +
                     this.variables.toXML(serializer) +
                     '</variables>'
                         : '',
         this.comment ? this.comment.toXML(serializer) : '',
-        scope && !this.definition.value.receiver[serializer.idProperty] ?
+        scope && !this.definition.receiver[serializer.idProperty] ?
                 '<receiver>' +
-                    serializer.store(this.definition.value.receiver) +
+                    serializer.store(this.definition.receiver) +
                     '</receiver>'
                         : ''
     );

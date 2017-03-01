@@ -150,7 +150,7 @@ CustomCommandBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2017-February-16';
+modules.blocks = '2017-March-01';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -571,14 +571,14 @@ SyntaxElementMorph.prototype.revertToDefaultInput = function (arg, noValues) {
                 if (deflt instanceof InputSlotMorph) {
                     deflt.setChoices.apply(
                         deflt,
-                        this.definition.value.inputOptionsOfIdx(inp)
+                        this.definition.inputOptionsOfIdx(inp)
                     );
                 }
                 if (deflt instanceof InputSlotMorph ||
                     (deflt instanceof BooleanSlotMorph)
                 ) {
                     deflt.setContents(
-                        this.definition.value.defaultValueOfInputIdx(inp)
+                        this.definition.defaultValueOfInputIdx(inp)
                     );
                 }
             }
@@ -696,13 +696,10 @@ SyntaxElementMorph.prototype.refactorVarInStack = function (
     }
 
     if (this instanceof CustomCommandBlockMorph
-            && this.definition.value.body
-            && isNil(this.definition.value.declarations[oldName])
-            && !contains(this.definition.value.variableNames, oldName)) {
-        this.definition.value.body.expression.refactorVarInStack(
-            oldName,
-            newName
-        );
+            && this.definition.body
+            && isNil(this.definition.declarations[oldName])
+            && !contains(this.definition.variableNames, oldName)) {
+        this.definition.body.expression.refactorVarInStack(oldName, newName);
     }
 
     this.inputs().forEach(function (input) {
@@ -1546,7 +1543,7 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
         // has issues when loading costumes (asynchronously)
         // commented out for now
 
-        var rcvr = this.definition.value.receiver || this.receiver(),
+        var rcvr = this.definition.receiver || this.receiver(),
             id = spec.slice(1),
             cst;
         if (!rcvr) {return this.labelPart('%stop'); }
@@ -2303,7 +2300,7 @@ BlockMorph.prototype.setSpec = function (spec, silently) {
         if (part instanceof InputSlotMorph && myself.definition) {
             part.setChoices.apply(
                 part,
-                myself.definition.value.inputOptionsOfIdx(inputIdx)
+                myself.definition.inputOptionsOfIdx(inputIdx)
             );
         }
     });
@@ -2887,7 +2884,7 @@ BlockMorph.prototype.showHelp = function () {
         block,
         isCustomBlock = this.selector === 'evaluateCustomBlock',
         spec = isCustomBlock ?
-                this.definition.value.helpSpec() : this.selector,
+                this.definition.helpSpec() : this.selector,
         ctx;
 
     if (!ide) {
@@ -2909,10 +2906,10 @@ BlockMorph.prototype.showHelp = function () {
         );
     };
 
-    if (isCustomBlock && this.definition.value.comment) {
+    if (isCustomBlock && this.definition.comment) {
         block = this.fullCopy();
         block.addShadow();
-        comment = this.definition.value.comment.fullCopy();
+        comment = this.definition.comment.fullCopy();
         comment.contents.parse();
         help = '';
         comment.contents.lines.forEach(function (line) {
@@ -2960,7 +2957,7 @@ BlockMorph.prototype.mapToHeader = function () {
         this,
         function (code) {
             if (key === 'evaluateCustomBlock') {
-                myself.definition.value.codeHeader = code;
+                myself.definition.codeHeader = code;
             } else {
                 StageMorph.prototype.codeHeaders[key] = code;
             }
@@ -2968,7 +2965,7 @@ BlockMorph.prototype.mapToHeader = function () {
         this
     ).promptCode(
         'Header mapping',
-        key === 'evaluateCustomBlock' ? this.definition.value.codeHeader || ''
+        key === 'evaluateCustomBlock' ? this.definition.codeHeader || ''
                  : StageMorph.prototype.codeHeaders[key] || '',
         this.world(),
         pic,
@@ -2989,7 +2986,7 @@ BlockMorph.prototype.mapToCode = function () {
         this,
         function (code) {
             if (key === 'evaluateCustomBlock') {
-                myself.definition.value.codeMapping = code;
+                myself.definition.codeMapping = code;
             } else {
                 StageMorph.prototype.codeMappings[key] = code;
             }
@@ -2997,7 +2994,7 @@ BlockMorph.prototype.mapToCode = function () {
         this
     ).promptCode(
         'Code mapping',
-        key === 'evaluateCustomBlock' ? this.definition.value.codeMapping || ''
+        key === 'evaluateCustomBlock' ? this.definition.codeMapping || ''
                  : StageMorph.prototype.codeMappings[key] || '',
         this.world(),
         pic,
@@ -3013,7 +3010,7 @@ BlockMorph.prototype.mapHeader = function (aString, key) {
             'reify' : this.selector;
     if (aString) {
         if (this.definition) { // custom block
-            this.definition.value.codeHeader = aString;
+            this.definition.codeHeader = aString;
         } else {
             StageMorph.prototype.codeHeaders[sel] = aString;
         }
@@ -3026,7 +3023,7 @@ BlockMorph.prototype.mapCode = function (aString, key) {
             'reify' : this.selector;
     if (aString) {
         if (this.definition) { // custom block
-            this.definition.value.codeMapping = aString;
+            this.definition.codeMapping = aString;
         } else {
             StageMorph.prototype.codeMappings[sel] = aString;
         }
@@ -3044,24 +3041,22 @@ BlockMorph.prototype.mappedCode = function (definitions) {
         headerLines,
         body,
         bodyLines,
-        defKey = this.definition ? this.definition.value.spec : key,
+        defKey = this.definition ? this.definition.spec : key,
         defs = definitions || {},
         parts = [];
     code = key === 'reportGetVar' ? this.blockSpec
-            : this.definition ? this.definition.value.codeMapping || ''
+            : this.definition ? this.definition.codeMapping || ''
                     : StageMorph.prototype.codeMappings[key] || '';
 
     // map header
     if (key !== 'reportGetVar' && !defs.hasOwnProperty(defKey)) {
         defs[defKey] = null; // create the property for recursive definitions
         if (this.definition) {
-            header = this.definition.value.codeHeader || '';
+            header = this.definition.codeHeader || '';
             if (header.indexOf('<body') !== -1) { // replace with def mapping
                 body = '';
-                if (this.definition.value.body) {
-                    body = this.definition.value.body.expression.mappedCode(
-                        defs
-                    );
+                if (this.definition.body) {
+                    body = this.definition.body.expression.mappedCode(defs);
                 }
                 bodyLines = body.split('\n');
                 headerLines = header.split('\n');
@@ -3133,9 +3128,8 @@ BlockMorph.prototype.mappedCode = function (definitions) {
 };
 
 BlockMorph.prototype.codeDefinitionHeader = function () {
-    var block = this.definition ?
-            new PrototypeHatBlockMorph(this.definition.value)
-                : SpriteMorph.prototype.blockForSelector(this.selector),
+    var block = this.definition ? new PrototypeHatBlockMorph(this.definition)
+            : SpriteMorph.prototype.blockForSelector(this.selector),
         hat = new HatBlockMorph(),
         count = 1;
 
@@ -3156,7 +3150,7 @@ BlockMorph.prototype.codeDefinitionHeader = function () {
 };
 
 BlockMorph.prototype.codeMappingHeader = function () {
-    var block = this.definition ? this.definition.value.blockInstance()
+    var block = this.definition ? this.definition.blockInstance()
             : SpriteMorph.prototype.blockForSelector(this.selector),
         hat = new HatBlockMorph(),
         count = 1;
@@ -3683,7 +3677,7 @@ BlockMorph.prototype.reactToTemplateCopy = function () {
 
 BlockMorph.prototype.hasBlockVars = function () {
     return this.anyChild(function (any) {
-        return any.definition && any.definition.value.variableNames.length;
+        return any.definition && any.definition.variableNames.length;
     });
 };
 

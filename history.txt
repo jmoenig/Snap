@@ -3384,3 +3384,4 @@ Fixes:
 170301
 ------
 * Objects: experiment with new dynamic method (cache) updating
+* Objects, Blocks, BYOB, Store, Threads, GUI: roll-back double-pointer container cache for methods
