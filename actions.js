@@ -2592,7 +2592,8 @@ ActionManager.prototype.onMessage = function(msg) {
         // Return the serialized project
         var str = this.serialize(this.ide().stage);
         msg.args = [str];
-        this._ws.send(JSON.stringify(msg));
+        msg.id = this.lastSeen;
+        this.send(msg);
     } else if (msg.type === 'session-id') {
         this.sessionId = msg.value;
         location.hash = 'collaborate=' + this.sessionId;
