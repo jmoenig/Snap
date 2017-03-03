@@ -189,32 +189,7 @@ ActionManager.prototype._enableCollaboration = function() {
 
     this._ws.onmessage = function(raw) {
         var msg = JSON.parse(raw.data);
-
-        if (msg.type === 'rank') {
-            self.rank = msg.value;
-            logger.info('assigned rank of', self.rank);
-        } else if (msg.type === 'leader-appoint') {
-            self.isLeader = msg.value;
-            if (msg.value) {
-                logger.info('Appointed leader!');
-            }
-        } else if (msg.type === 'uuid') {
-            self.id = msg.value;
-            logger.info('assigned id of', self.id);
-            if (self.onconnect) {
-                self.onconnect();
-            }
-        } else if (msg.type === 'session-project-request') {
-            // Return the serialized project
-            var str = self.serialize(self.ide().stage);
-            msg.args = [str];
-            self._ws.send(JSON.stringify(msg));
-        } else if (msg.type === 'session-id') {
-            self.sessionId = msg.value;
-            location.hash = 'collaborate=' + self.sessionId;
-        } else {  // block action
-            self.onMessage(msg);
-        }
+        self.onMessage(msg);
     };
 };
 
@@ -2599,13 +2574,35 @@ ActionManager.prototype.afterActionApplied = function(/*msg*/) {
 ActionManager.prototype.onMessage = function(msg) {
     var accepted = true;
 
-    if (this.isLeader) {
+    if (msg.type === 'rank') {
+        this.rank = msg.value;
+        logger.info('assigned rank of', this.rank);
+    } else if (msg.type === 'leader-appoint') {
+        this.isLeader = msg.value;
+        if (msg.value) {
+            logger.info('Appointed leader!');
+        }
+    } else if (msg.type === 'uuid') {
+        this.id = msg.value;
+        logger.info('assigned id of', this.id);
+        if (this.onconnect) {
+            this.onconnect();
+        }
+    } else if (msg.type === 'session-project-request') {
+        // Return the serialized project
+        var str = this.serialize(this.ide().stage);
+        msg.args = [str];
+        this._ws.send(JSON.stringify(msg));
+    } else if (msg.type === 'session-id') {
+        this.sessionId = msg.value;
+        location.hash = 'collaborate=' + this.sessionId;
+    } else if (this.isLeader) {  // block action
         // Verify that the lastSeen value is the same as the current
         accepted = this.lastSeen === (msg.id - 1);
         if (accepted) {
             this.acceptEvent(msg);
         }
-    } else {
+    } else {  // block action
         this._applyEvent(msg);
     }
 };
