@@ -454,7 +454,7 @@ Process.prototype.text2D = function (textString, size) {
 
 Process.prototype.startExtrusion = function (extrudeStyle) {
     var beetle = this.homeContext.receiver.beetle,
-        extrudeStyle = extrudeStyle[0],
+        extrudeStyle = extrudeStyle ? extrudeStyle[0] : 'lines',
         stage = this.homeContext.receiver.parentThatIsA(StageMorph),
         p = new THREE.Vector3();
 
@@ -560,7 +560,7 @@ Process.prototype.changeExtrusionDiameter = function (delta) {
 
 Process.prototype.startDrawing = function (drawStyle) {
     var beetle = this.homeContext.receiver.beetle,
-        drawStyle = drawStyle[0];
+        drawStyle = drawStyle ? drawStyle[0] : 'lines';
 
     if (!beetle.drawing) {
         beetle.drawing = true;
