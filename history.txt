@@ -3385,3 +3385,7 @@ Fixes:
 ------
 * Objects: experiment with new dynamic method (cache) updating
 * Objects, Blocks, BYOB, Store, Threads, GUI: roll-back double-pointer container cache for methods
+
+170307
+------
+* Morphic, Objects, translation: let sprites’s rotation centers be adjusted onstage

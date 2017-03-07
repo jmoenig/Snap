@@ -80,9 +80,9 @@ document, isNaN, isString, newCanvas, nop, parseFloat, radians, window,
 modules, IDE_Morph, VariableDialogMorph, HTMLCanvasElement, Context, List,
 SpeechBubbleMorph, RingMorph, isNil, FileReader, TableDialogMorph,
 BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
-TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph*/
+TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph*/
 
-modules.objects = '2017-March-01';
+modules.objects = '2017-March-07';
 
 var SpriteMorph;
 var StageMorph;
@@ -3032,6 +3032,13 @@ SpriteMorph.prototype.userMenu = function () {
     }
     menu.addItem("delete", 'remove');
     menu.addItem("move", 'moveCenter');
+    if (this.costume) {
+        menu.addItem(
+            "pivot",
+            'moveRotationCenter',
+            'edit the costume\'s\nrotation center'
+        );
+    }
     if (!this.isClone) {
         menu.addItem("edit", 'edit');
     }
@@ -4228,6 +4235,32 @@ SpriteMorph.prototype.setRotationCenter = function (absoluteCoordinate) {
     normal = this.costume.rotationCenter.add(new Point(delta.x, -delta.y));
     this.costume.rotationCenter = normal;
     this.drawNew();
+};
+
+SpriteMorph.prototype.moveRotationCenter = function () {
+    // make this a method of Snap >> SpriteMorph
+    this.world().activeHandle = new HandleMorph(
+        this,
+        null,
+        null,
+        null,
+        null,
+        'movePivot'
+    );
+};
+
+SpriteMorph.prototype.setPivot = function (worldCoordinate) {
+    var stage = this.parentThatIsA(StageMorph),
+        cntr;
+    if (stage) {
+        cntr = stage.center();
+        this.setRotationCenter(
+            new Point(
+                (worldCoordinate.x - cntr.x) / stage.scale,
+                (cntr.y - worldCoordinate.y) / stage.scale
+            )
+        );
+    }
 };
 
 SpriteMorph.prototype.xCenter = function () {

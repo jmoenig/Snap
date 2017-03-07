@@ -1137,7 +1137,7 @@
 
 /*global window, HTMLCanvasElement, FileReader, Audio, FileList*/
 
-var morphicVersion = '2017-January-09';
+var morphicVersion = '2017-March-07';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = getBlurredShadowSupport(); // check for Chrome-bug
 
@@ -4432,11 +4432,14 @@ HandleMorph.prototype.init = function (
     this.target = target || null;
     this.minExtent = new Point(minX || 0, minY || 0);
     this.inset = new Point(insetX || 0, insetY || insetX || 0);
-    this.type =  type || 'resize'; // can also be 'move', 'moveCenter'
+    this.type =  type || 'resize'; // also: 'move', 'moveCenter', 'movePivot'
     HandleMorph.uber.init.call(this);
     this.color = new Color(255, 255, 255);
     this.isDraggable = false;
     this.noticesTransparentClick = true;
+    if (this.type === 'movePivot') {
+        size *= 2;
+    }
     this.setExtent(new Point(size, size));
 };
 
@@ -4445,20 +4448,27 @@ HandleMorph.prototype.init = function (
 HandleMorph.prototype.drawNew = function () {
     this.normalImage = newCanvas(this.extent());
     this.highlightImage = newCanvas(this.extent());
-    this.drawOnCanvas(
-        this.normalImage,
-        this.color,
-        new Color(100, 100, 100)
-    );
-    this.drawOnCanvas(
-        this.highlightImage,
-        new Color(100, 100, 255),
-        new Color(255, 255, 255)
-    );
+    if (this.type === 'movePivot') {
+        this.drawCrosshairsOnCanvas(this.normalImage, 0.6);
+        this.drawCrosshairsOnCanvas(this.highlightImage, 0.5);
+    } else {
+        this.drawOnCanvas(
+            this.normalImage,
+            this.color,
+            new Color(100, 100, 100)
+        );
+        this.drawOnCanvas(
+            this.highlightImage,
+            new Color(100, 100, 255),
+            new Color(255, 255, 255)
+        );
+    }
     this.image = this.normalImage;
     if (this.target) {
         if (this.type === 'moveCenter') {
             this.setCenter(this.target.center());
+        } else if (this.type === 'movePivot') {
+            this.setCenter(this.target.rotationCenter());
         } else { // 'resize', 'move'
             this.setPosition(
                 this.target.bottomRight().subtract(
@@ -4469,6 +4479,25 @@ HandleMorph.prototype.drawNew = function () {
         this.target.add(this);
         this.target.changed();
     }
+};
+
+HandleMorph.prototype.drawCrosshairsOnCanvas = function (aCanvas, fract) {
+    var ctx = aCanvas.getContext('2d'),
+        r = aCanvas.width / 2;
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
+    ctx.arc(r, r, r * 0.9, radians(0), radians(360), false);
+    ctx.fill();
+    ctx.strokeStyle = 'black';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.arc(r, r, r * fract, radians(0), radians(360), false);
+    ctx.stroke();
+    ctx.moveTo(0, r);
+    ctx.lineTo(aCanvas.width, r);
+    ctx.stroke();
+    ctx.moveTo(r, 0);
+    ctx.lineTo(r, aCanvas.height);
+    ctx.stroke();
 };
 
 HandleMorph.prototype.drawOnCanvas = function (
@@ -4574,7 +4603,7 @@ HandleMorph.prototype.mouseDownLeft = function (pos) {
     if (!this.target) {
         return null;
     }
-    if (this.type === 'moveCenter') {
+    if (this.type.indexOf('move') === 0) {
         offset = pos.subtract(this.center());
     } else {
         offset = pos.subtract(this.bounds.origin);
@@ -4597,6 +4626,9 @@ HandleMorph.prototype.mouseDownLeft = function (pos) {
                 );
             } else if (this.type === 'moveCenter') {
                 myself.target.setCenter(newPos);
+            } else if (this.type === 'movePivot') {
+                myself.target.setPivot(newPos);
+                myself.setCenter(this.target.rotationCenter());
             } else { // type === 'move'
                 myself.target.setPosition(
                     newPos.subtract(this.target.extent())

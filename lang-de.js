@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org', // optional
     'last_changed':
-        '2017-01-24', // this, too, will appear in the Translators tab
+        '2017-03-07', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -911,6 +911,10 @@ SnapTranslator.dict.de = {
         'Bearbeiten',
     'move':
         'Verschieben',
+    'pivot':
+        'Angelpunkt',
+    'edit the costume\'s\nrotation center':
+        'Drehpunkt des Kostüms\nanzeigen und verschieben',
     'detach from':
         'Abtrennen von',
     'detach all parts':
