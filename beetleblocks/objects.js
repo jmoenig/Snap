@@ -747,6 +747,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('receiveGo'));
         blocks.push(block('receiveKey'));
         //        blocks.push(block('receiveClick')); // This should not be here, we have no sprites anymore!
+        blocks.push(block('receiveCondition'));
         blocks.push(block('receiveMessage'));
         blocks.push('-');
         blocks.push(block('doBroadcast'));
