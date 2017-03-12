@@ -6255,16 +6255,11 @@ ScriptsMorph.prototype.updateUndoControls = function () {
         changed = true;
     }
 
-    if (sf.toolBar.undoButton.isEnabled() || sf.toolBar.redoButton.isEnabled()) {
-        // both buttons should be visible
-        if (!sf.toolBar.undoButton.isVisible || !sf.toolBar.redoButton.isVisible) {
-            sf.toolBar.undoButton.show();
-            sf.toolBar.redoButton.show();
-            changed = true;
-        }
-    } else if (sf.toolBar.undoButton.isVisible || sf.toolBar.redoButton.isVisible) {
-        sf.removeChild(sf.toolBar);
-        sf.toolBar = null;
+    // both buttons should always be visible
+    if (!sf.toolBar.undoButton.isVisible || !sf.toolBar.redoButton.isVisible) {
+        sf.toolBar.undoButton.show();
+        sf.toolBar.redoButton.show();
+        changed = true;
     }
 
     if (changed && sf.toolBar) {
