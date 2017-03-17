@@ -3646,7 +3646,6 @@ IDE_Morph.prototype.newProject = function () {
     this.createCorral();
     this.selectSprite(this.stage.children[0]);
     this.fixLayout();
-    this.isReplayMode = false;
     SnapActions.loadProject(this);
 };
 
