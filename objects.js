@@ -9153,12 +9153,21 @@ ReplayControls.prototype.fixLayout = function() {
     this.slider.changed();
 };
 
-ReplayControls.prototype.setActions = function(actions) {
+ReplayControls.prototype.setActions = function(actions, atEnd) {
+    var endTime = actions[actions.length-1].time + 1;
     this.actions = actions;
     this.slider.start = actions[0].time - 1;
-    this.slider.value = this.slider.start;
-    this.slider.setStop(actions[actions.length-1].time + 1);
     this.isPlaying = false;
+
+    if (atEnd) {
+        this.slider.value = endTime;
+        this.actionIndex = actions.length-1;
+        this.actionTime = endTime-1;
+    } else {
+        this.slider.value = this.slider.start;
+    }
+    this.slider.setStop(endTime);
+
     this.updateDisplayTime();
 };
 

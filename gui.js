@@ -2812,6 +2812,29 @@ IDE_Morph.prototype.settingsMenu = function () {
             false
         );
     }
+    addPreference(
+        'Replay Mode',
+        function() {
+            if (myself.isReplayMode) return myself.exitReplayMode();
+            if (SnapActions.isCollaborating()) {
+                this.confirm(
+                    'Cannot enter replay mode while collaborating. \nWould you ' +
+                    'like to disable collaboration and enter replay mode?',
+                    'Disable Collaboration?',
+                    function () {
+                        SnapActions.disableCollaboration();
+                        myself.replayEvents();
+                    }
+                );
+            } else {
+                myself.replayEvents();
+            }
+        },
+        myself.isReplayMode,
+        'uncheck to disable replay mode',
+        'check to enable replay mode',
+        false
+    );
     menu.addLine(); // everything below this line is stored in the project
     addPreference(
         'Thread safe scripts',
@@ -3130,8 +3153,14 @@ IDE_Morph.prototype.loadSnapActions = function (text) {
 };
 
 IDE_Morph.prototype.replayEvents = function (actions) {
+    var atEnd = false;
+
+    if (!actions) {  // If no actions, use current session
+        atEnd = true;
+        actions = JSON.parse(JSON.stringify(SnapUndo.allEvents));
+    }
     this.replayControls.show();
-    this.replayControls.setActions(actions);
+    this.replayControls.setActions(actions, atEnd);
     this.isReplayMode = true;
 };
 
