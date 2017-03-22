@@ -241,9 +241,7 @@ ActionManager.prototype.completeAction = function(result) {
     this.isApplyingAction = false;
     this.lastSeen = action.id;
     this.idCount = 0;
-    if (!this.ide().isReplayMode) {
-        SnapUndo.record(action);
-    }
+    SnapUndo.record(action);
 
     // Call 'success' or 'reject', if relevant
     if (action.user === this.id) {
@@ -323,11 +321,26 @@ ActionManager.prototype.applyEvent = function(event) {
         return;
     }
 
-    if (this.isLeader) {
-        this.acceptEvent(event);
+    // if in replay mode, check that the event is a replay event
+    var myself = this,
+        ide = this.ide();
+
+    if (ide.isReplayMode && !event.isReplay) {
+        ide.promptExitReplay(function() {
+            if (myself.isLeader) {
+                myself.acceptEvent(event);
+            } else {
+                myself.send(event);
+            }
+        });
     } else {
-        this.send(event);
+        if (this.isLeader) {
+            this.acceptEvent(event);
+        } else {
+            this.send(event);
+        }
     }
+
     return new Action(this, event);
 };
 

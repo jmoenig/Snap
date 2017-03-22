@@ -9215,6 +9215,7 @@ ReplayControls.prototype.update = function() {
 
         // Apply the given event
         this.isApplyingAction = true;
+        action.isReplay = true;
         SnapActions.applyEvent(action)
             .accept(function() {
                 myself.actionIndex += dir;

@@ -3166,6 +3166,8 @@ IDE_Morph.prototype.replayEvents = function (actions) {
 
 IDE_Morph.prototype.exitReplayMode = function () {
     this.isReplayMode = false;
+    SnapUndo.trimAll();  // trim the undo queues
+    this.activeEditor.onSetActive();
     this.replayControls.hide();
 };
 
@@ -5215,6 +5217,19 @@ IDE_Morph.prototype.promptCollaboration = function () {
     dialog.drawNew();
     dialog.popUp(world);
     dialog.setCenter(world.center());
+};
+
+IDE_Morph.prototype.promptExitReplay = function (onExit) {
+    var myself = this;
+    this.confirm(
+        'The given action cannot be applied while in replay mode. \n' +
+        'Would you like to exit replay mode?',
+        'Exit Replay?',
+        function() {
+            myself.exitReplayMode();
+            onExit();
+        }
+    );
 };
 
 IDE_Morph.prototype.resetCloudPassword = function () {
