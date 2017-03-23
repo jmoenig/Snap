@@ -2803,7 +2803,15 @@ IDE_Morph.prototype.settingsMenu = function () {
                 if (SnapActions.isCollaborating()) {
                     SnapActions.disableCollaboration();
                 } else {
-                    SnapActions.enableCollaboration();
+                    myself.confirm(
+                        'Cannot enter collaborate while in replay mode. \nWould you ' +
+                        'like to exit replay mode and enable collaborative editing?',
+                        'Exit Replay Mode?',
+                        function() {
+                            myself.exitReplayMode();
+                            SnapActions.enableCollaboration();
+                        }
+                    );
                 }
             },
             SnapActions.isCollaborating(),
