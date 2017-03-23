@@ -6539,6 +6539,7 @@ SliderMorph.prototype.init = function (
     this.button.color = new Color(200, 200, 200);
     this.button.highlightColor = new Color(210, 210, 255);
     this.button.pressColor = new Color(180, 180, 255);
+    this.tickMarks = [];
     SliderMorph.uber.init.call(this, orientation);
     this.add(this.button);
     this.alpha = 0.3;
@@ -6557,12 +6558,14 @@ SliderMorph.prototype.ratio = function () {
     return this.size / (this.rangeSize() + 1);
 };
 
-SliderMorph.prototype.unitSize = function () {
+SliderMorph.prototype.unitSize = function (size) {
     if (this.orientation === 'vertical') {
-        return (this.height() - this.button.height()) /
+        size = size || this.button.height()
+        return (this.height() - size) /
             this.rangeSize();
     }
-    return (this.width() - this.button.width()) /
+    size = size || this.button.width()
+    return (this.width() - size) /
         this.rangeSize();
 };
 
@@ -6595,6 +6598,36 @@ SliderMorph.prototype.drawNew = function () {
     );
     this.button.drawNew();
     this.button.changed();
+
+    // Update the tick marks
+    var tickMark,
+        pos;
+
+    for (var i = this.tickMarks.length; i--;) {
+        tickMark = this.tickMarks[i];
+        if (this.orientation === 'vertical') {
+            pos = Math.min(
+                Math.round((tickMark.value - this.start) * this.unitSize(tickMark.size)),
+                this.height() - tickMark.size - this.width()/2
+            );
+            pos = Math.max(this.width()/2, pos);
+
+            tickMark.setWidth(this.width());
+            tickMark.setHeight(tickMark.size);
+            tickMark.setPosition(new Point(this.left(), pos + this.top()));
+        } else {
+            pos = Math.min(
+                Math.round((tickMark.value - this.start) * this.unitSize(tickMark.size)),
+                this.width() - tickMark.size - this.height()/2
+            );
+            pos = Math.max(this.height()/2, pos);
+
+            tickMark.setWidth(tickMark.size);
+            tickMark.setHeight(this.height());
+            tickMark.setPosition(new Point(pos + this.left(), this.top()));
+        }
+    }
+
 };
 
 SliderMorph.prototype.updateValue = function () {
@@ -6615,6 +6648,30 @@ SliderMorph.prototype.updateTarget = function () {
         } else { // assume it's a String
             this.target[this.action](this.value);
         }
+    }
+};
+
+SliderMorph.prototype.addTick = function (value, color, size) {
+    // Create a tick mark on the slider at the given value
+    var tickMark = new Morph(),
+        pos;
+
+    size = size || 2;
+    color = color || this.color.darker();
+
+    tickMark.value = value;
+    tickMark.color = color;
+    tickMark.size = size;
+
+    this.addBack(tickMark);
+    this.tickMarks.push(tickMark);
+
+    return tickMark;
+};
+
+SliderMorph.prototype.clearTicks = function () {
+    for (var i = this.tickMarks.length; i--;) {
+        this.tickMarks[i].destroy();
     }
 };
 

@@ -9168,6 +9168,13 @@ ReplayControls.prototype.setActions = function(actions, atEnd) {
     }
     this.slider.setStop(endTime);
 
+    // Add tickmarks for each action
+    this.slider.clearTicks();
+    for (var i = 0; i < actions.length; i++) {
+        this.slider.addTick(actions[i].time);
+    }
+    this.slider.drawNew();
+
     this.updateDisplayTime();
 };
 
