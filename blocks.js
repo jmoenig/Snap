@@ -6187,21 +6187,22 @@ ScriptsMorph.prototype.undoOwnerId = function () {
 };
 
 ScriptsMorph.prototype.addUndoControls = function () {
-    var toolBar = new AlignmentMorph(),
+    var myself = this,
+        toolBar = new AlignmentMorph(),
         shade = (new Color(140, 140, 140)),
         owner = this.undoOwnerId();
 
     toolBar.undoButton = new PushButtonMorph(
         this,
         function() {
-            SnapUndo.undo(owner);
+            SnapUndo.undo(myself.undoOwnerId());
         },
         new SymbolMorph("turnBack", 12)
     );
     toolBar.redoButton = new PushButtonMorph(
         this,
         function() {
-            SnapUndo.redo(owner);
+            SnapUndo.redo(myself.undoOwnerId());
         },
         new SymbolMorph("turnForward", 12)
     );
