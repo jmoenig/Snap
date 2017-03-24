@@ -2038,6 +2038,8 @@ ActionManager.prototype.onAddSprite = function(serialized, creatorId) {
 ActionManager.prototype.onRemoveSprite = function(spriteId) {
     var sprite = this._owners[spriteId];
     this.ide().removeSprite(sprite);
+
+    this.__clearOwnerRecords(spriteId);
     this.completeAction();
 };
 
@@ -2134,7 +2136,7 @@ ActionManager.prototype.onRemoveCostume = function(id) {
     }
 
     this.__updateActiveEditor(id);
-    delete this._costumes[id];  // FIXME: remove all costume records
+    this.__clearCostumeRecords(id);
     this.completeAction();
 };
 
@@ -2205,8 +2207,7 @@ ActionManager.prototype.onRemoveSound = function(id) {
     }
 
     this.__updateActiveEditor(id);
-    delete this._sounds[id];
-    delete this._soundToOwner[id];
+    this.__clearSoundRecords(id);
     this.completeAction();
 };
 
@@ -2526,6 +2527,44 @@ ActionManager.prototype.__updateActiveEditor = function(itemId) {
     if (!owner || owner === ide.currentSprite) {
         ide.setActiveEditor();
     }
+};
+
+ActionManager.prototype.__clearOwnerRecords = function(ownerId) {
+    var blockIds = Object.keys(this._blockToOwnerId),
+        costumeIds = Object.keys(this._costumeToOwner),
+        soundIds = Object.keys(this._soundToOwner),
+        owner = this._owners[ownerId],
+        i;
+
+    for (i = blockIds.length; i--;) {
+        if (this._blockToOwnerId[blockIds[i]] === ownerId) {
+            this.__clearBlockRecords(blockIds[i]);
+        }
+    }
+
+    for (i = costumeIds.length; i--;) {
+        if (this._costumeToOwner[costumeIds[i]].id === ownerId) {
+            this.__clearCostumeRecords(costumeIds[i]);
+        }
+    }
+
+    for (i = soundIds.length; i--;) {
+        if (this._soundToOwner[soundIds[i]].id === ownerId) {
+            this.__clearSoundRecords(soundIds[i]);
+        }
+    }
+
+    delete this._owners[ownerId];
+};
+
+ActionManager.prototype.__clearSoundRecords = function(id) {
+    delete this._soundToOwner[id];
+    delete this._sounds[id];
+};
+
+ActionManager.prototype.__clearCostumeRecords = function(id) {
+    delete this._costumeToOwner[id];
+    delete this._costumes[id];
 };
 
 ActionManager.prototype.__clearBlockRecords = function(id) {
