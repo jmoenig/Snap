@@ -2198,7 +2198,7 @@ ActionManager.prototype.onRenameSound = function(id, name) {
 ActionManager.prototype.onRemoveSound = function(id) {
     var owner = this._soundToOwner[id],
         ide = this.ide(),
-        idx = owner.sounds.asArray().indexOf(this._sounds[id]);
+        idx = owner.sounds.asArray().indexOf(this._sounds[id]) + 1;
         
     owner.sounds.remove(idx);
 
