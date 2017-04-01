@@ -8,7 +8,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2016 by Jens Mönig
+    Copyright (C) 2017 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -55,7 +55,8 @@
         (7) turtle graphics
         (8) damage list housekeeping
         (9) supporting high-resolution "retina" screens
-        (10) minifying morphic.js
+        (10 animations
+        (11) minifying morphic.js
     VIII. acknowledgements
     IX. contributors
 
@@ -66,6 +67,7 @@
     indentation indicating inheritance. Refer to this list to get a
     contextual overview:
 
+    Animation
     Color
     Node
         Morph
@@ -108,6 +110,7 @@
     Global settings
     Global functions
 
+    Animation
     Color
     Point
     Rectangle
@@ -1035,7 +1038,37 @@
     stage (high-resolution) into a sprite-costume (normal resolution).
 
 
-    (10) minifying morphic.js
+    (10) animations
+    ---------------
+    Animations handle gradual transitions between one state and another over a
+    period of time. Transition effects can be specified using easing functions.
+    An easing function maps a fraction of the transition time to a fraction of
+    the state delta. This way accelerating / decelerating and bouncing sliding
+    effects can be accomplished.
+
+    Animations are generic and not limited to motion, i.e. they can also handle
+    other transitions such as color changes, transparency fadings, growing,
+    shrinking, turning etc.
+
+    Animations need to be stepped by a scheduler, e. g. an interval function.
+    In Morphic the preferred way to run an animation is to register it with
+    the World by adding it to the World's animation queue. The World steps each
+    registered animation once per display cycle independently of the Morphic
+    stepping mechanism.
+
+    For an example how to use animations look at how the Morph's methods
+    
+        glideTo()
+        fadeTo()
+
+    and
+    
+        slideBackTo()
+
+    are implemented.
+
+
+    (11) minifying morphic.js
     -------------------------
     Coming from Smalltalk and being a Squeaker at heart I am a huge fan
     of browsing the code itself to make sense of it. Therefore I have
@@ -1095,6 +1128,7 @@
     Davide Della Casa contributed performance optimizations for Firefox.
     Jason N (@cyderize) contributed native copy & paste for text editing.
     Bartosz Leper contributed retina display support.
+    Brian Harvey contributed to the design and implemenatation of submenus.
 
     - Jens Mönig
 */
@@ -1103,7 +1137,7 @@
 
 /*global window, HTMLCanvasElement, FileReader, Audio, FileList*/
 
-var morphicVersion = '2016-October-27';
+var morphicVersion = '2017-March-07';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = getBlurredShadowSupport(); // check for Chrome-bug
 
@@ -1508,9 +1542,9 @@ function enableRetinaSupport() {
             return this._isRetinaEnabled;
         },
         set: function(enabled) {
-            var prevPixelRatio = getPixelRatio(this);
-            var prevWidth = this.width;
-            var prevHeight = this.height;
+            var prevPixelRatio = getPixelRatio(this),
+                prevWidth = this.width,
+                prevHeight = this.height;
 
             this._isRetinaEnabled = enabled;
             if (getPixelRatio(this) != prevPixelRatio) {
@@ -1526,12 +1560,19 @@ function enableRetinaSupport() {
             return uber.width.get.call(this) / getPixelRatio(this);
         },
         set: function(width) {
-            var pixelRatio = getPixelRatio(this);
-            uber.width.set.call(this, width * pixelRatio);
-            var context = this.getContext('2d');
-            context.restore();
-            context.save();
-            context.scale(pixelRatio, pixelRatio);
+            try { // workaround one of FF's dreaded NS_ERROR_FAILURE bugs
+                // this should be taken out as soon as FF gets fixed again
+                var pixelRatio = getPixelRatio(this),
+                    context;
+                uber.width.set.call(this, width * pixelRatio);
+                context = this.getContext('2d');
+                context.restore();
+                context.save();
+                context.scale(pixelRatio, pixelRatio);
+            } catch (err) {
+                console.log('Retina Display Support Problem', err);
+                uber.width.set.call(this, width);
+            }
         }
     });
 
@@ -1540,9 +1581,10 @@ function enableRetinaSupport() {
             return uber.height.get.call(this) / getPixelRatio(this);
         },
         set: function(height) {
-            var pixelRatio = getPixelRatio(this);
+            var pixelRatio = getPixelRatio(this),
+                context;
             uber.height.set.call(this, height * pixelRatio);
-            var context = this.getContext('2d');
+            context = this.getContext('2d');
             context.restore();
             context.save();
             context.scale(pixelRatio, pixelRatio);
@@ -1724,6 +1766,115 @@ function normalizeCanvas(aCanvas, getCopy) {
     return aCanvas;
 }
 
+// Animations //////////////////////////////////////////////////////////////
+
+/*
+    Animations handle gradual transitions between one state and another over a
+    period of time. Transition effects can be specified using easing functions.
+    An easing function maps a fraction of the transition time to a fraction of
+    the state delta. This way accelerating / decelerating and bouncing sliding
+    effects can be accomplished.
+
+    Animations are generic and not limited to motion, i.e. they can also handle
+    other transitions such as color changes, transparency fadings, growing,
+    shrinking, turning etc.
+
+    Animations need to be stepped by a scheduler, e. g. an interval function.
+    In Morphic the preferred way to run an animation is to register it with
+    the World by adding it to the World's animation queue. The World steps each
+    registered animation once per display cycle independently of the Morphic
+    stepping mechanism.
+
+    For an example how to use animations look at how the Morph's methods
+    
+        glideTo()
+        fadeTo()
+
+    and
+    
+        slideBackTo()
+
+    are implemented.
+*/
+
+// Animation instance creation:
+
+function Animation(setter, getter, delta, duration, easing, onComplete) {
+    this.setter = setter; // function
+    this.getter = getter; // function
+    this.delta = delta || 0; // number
+    this.duration = duration || 0; // milliseconds
+    this.easing = isString(easing) ? // string or function
+            this.easings[easing] || this.easings.sinusoidal
+                : easing || this.easings.sinusoidal;
+    this.onComplete = onComplete || null; // optional callback
+    this.endTime = null;
+    this.destination = null;
+    this.isActive = false;
+    this.start();
+}
+
+Animation.prototype.easings = {
+    // dictionary of a few pre-defined easing functions used to transition
+    // two states
+
+    // ease both in and out:
+    linear: function (t) {return t; },
+    sinusoidal: function (t) {return 1 - Math.cos(radians(t * 90)); },
+    quadratic: function (t) {
+        return t < 0.5 ?
+                2 * t * t
+                    : ((4 - (2 * t)) * t) - 1;
+    },
+    cubic: function (t) {
+        return t < 0.5 ?
+                4 * t * t * t
+                    : ((t - 1) * ((2 * t) - 2) * ((2 * t) - 2)) + 1;
+    },
+    elastic: function (t) {
+        return (t -= 0.5) < 0 ?
+            (0.01 + 0.01 / t) * Math.sin(50 * t)
+                : (0.02 - 0.01 / t) * Math.sin(50 * t) + 1;
+    },
+
+    // ease in only:
+    sine_in: function (t) {return 1 - Math.sin(radians(90 + (t * 90))); },
+    quad_in: function (t) {return t * t; },
+    cubic_in: function (t) {return t * t * t; },
+    elastic_in: function (t) {
+        return (0.04 - 0.04 / t) * Math.sin(25 * t) + 1;
+    },
+
+    // ease out only:
+    sine_out: function (t) {return Math.sin(radians(t * 90)); },
+    quad_out: function (t) {return t * (2 - t); },
+    elastic_out: function (t) {return 0.04 * t / (--t) * Math.sin(25 * t); }
+};
+
+Animation.prototype.start = function () {
+    // (re-) activate the animation, e.g. if is has previously completed,
+    // make sure to plug it into something that repeatedly triggers step(),
+    // e.g. the World's animations queue
+    this.endTime = Date.now() + this.duration;
+    this.destination = this.getter.call(this) + this.delta;
+    this.isActive = true;
+};
+
+Animation.prototype.step = function () {
+    if (!this.isActive) {return; }
+    var now = Date.now();
+    if (now > this.endTime) {
+        this.setter(this.destination);
+        this.isActive = false;
+        if (this.onComplete) {this.onComplete(); }
+    } else {
+        this.setter(
+            this.destination -
+                (this.delta * this.easing((this.endTime - now) / this.duration))
+        );
+    }
+};
+
 // Colors //////////////////////////////////////////////////////////////
 
 // Color instance creation:
@@ -1886,6 +2037,14 @@ Color.prototype.dansDarker = function () {
         vv = Math.max(hsv[2] - 0.16, 0);
     result.set_hsv(hsv[0], hsv[1], vv);
     return result;
+};
+
+Color.prototype.inverted = function () {
+    return new Color(
+        255 - this.r,
+        255 - this.g,
+        255 - this.b
+    );
 };
 
 // Points //////////////////////////////////////////////////////////////
@@ -3189,7 +3348,8 @@ Morph.prototype.toggleVisibility = function () {
 // Morph full image:
 
 Morph.prototype.fullImageClassic = function () {
-    var fb = this.cachedFullBounds || this.fullBounds(), // use the cache since fullDrawOn() will
+    // use the cache since fullDrawOn() will
+    var fb = this.cachedFullBounds || this.fullBounds(),
         img = newCanvas(fb.extent()),
         ctx = img.getContext('2d');
     ctx.translate(-fb.origin.x, -fb.origin.y);
@@ -3605,36 +3765,93 @@ Morph.prototype.situation = function () {
     return null;
 };
 
-Morph.prototype.slideBackTo = function (situation, inSteps) {
-    var steps = inSteps || 5,
-        pos = situation.origin.position().add(situation.position),
-        xStep = -(this.left() - pos.x) / steps,
-        yStep = -(this.top() - pos.y) / steps,
-        stepCount = 0,
-        oldStep = this.step,
-        oldFps = this.fps,
+Morph.prototype.slideBackTo = function (
+    situation,
+    msecs,
+    onBeforeDrop,
+    onComplete
+) {
+    var pos = situation.origin.position().add(situation.position),
         myself = this;
-
-    this.fps = 0;
-    this.step = function () {
-        myself.moveBy(new Point(xStep, yStep));
-        stepCount += 1;
-        if (stepCount === steps) {
+    this.glideTo(
+        pos,
+        msecs,
+        null, // easing
+        function () {
             situation.origin.add(myself);
+            if (onBeforeDrop) {onBeforeDrop(); }
+            if (myself.justDropped) {myself.justDropped(); }
             if (situation.origin.reactToDropOf) {
                 situation.origin.reactToDropOf(myself);
             }
-            myself.step = oldStep;
-            myself.fps = oldFps;
+            if (onComplete) {onComplete(); }
         }
-    };
+    );
+};
+
+// Morph animating:
+
+Morph.prototype.glideTo = function (endPoint, msecs, easing, onComplete) {
+    var world = this.world(),
+        myself = this;
+    world.animations.push(new Animation(
+        function (x) {myself.setLeft(x); },
+        function () {return myself.left(); },
+        -(this.left() - endPoint.x),
+        msecs || 100,
+        easing,
+        onComplete
+    ));
+    world.animations.push(new Animation(
+        function (y) {myself.setTop(y); },
+        function () {return myself.top(); },
+        -(this.top() - endPoint.y),
+        msecs || 100,
+        easing
+    ));
+};
+
+Morph.prototype.fadeTo = function (endAlpha, msecs, easing, onComplete) {
+    // include all my children, restore all original transparencies
+    // on completion, so I can be recovered
+    var world = this.world(),
+        myself = this,
+        oldAlpha = this.alpha;
+    this.children.forEach(function (child) {
+        child.fadeTo(endAlpha, msecs, easing);
+    });
+    world.animations.push(new Animation(
+        function (n) {
+            myself.alpha = n;
+            myself.changed();
+        },
+        function () {return myself.alpha; },
+        endAlpha - this.alpha,
+        msecs || 200,
+        easing,
+        function () {
+            myself.alpha = oldAlpha;
+            if (onComplete) {onComplete(); }
+        }
+    ));
+};
+
+Morph.prototype.perish = function (msecs, onComplete) {
+    var myself = this;
+    this.fadeTo(
+        0,
+        msecs || 100,
+        null,
+        function () {
+            myself.destroy();
+            if (onComplete) {onComplete(); }
+        }
+    );
 };
 
 // Morph utilities:
 
-Morph.prototype.nop = function () {
-    nop();
-};
+Morph.prototype.nop = nop;
 
 Morph.prototype.resize = function () {
     this.world().activeHandle = new HandleMorph(this);
@@ -3836,9 +4053,15 @@ Morph.prototype.hierarchyMenu = function () {
 
     parents.forEach(function (each) {
         if (each.developersMenu && (each !== world)) {
+            menu.addMenu(
+                each.toString().slice(0, 50),
+                each.developersMenu()
+            );
+        /*
             menu.addItem(each.toString().slice(0, 50), function () {
                 each.developersMenu().popUpAtHand(world);
             });
+        */
         }
     });
     return menu;
@@ -3852,19 +4075,14 @@ Morph.prototype.developersMenu = function () {
         menu = new MenuMorph(this, this.constructor.name ||
             this.constructor.toString().split(' ')[1].split('(')[0]);
     if (userMenu) {
-        menu.addItem(
-            'user features...',
-            function () {
-                userMenu.popUpAtHand(world);
-            }
-        );
+        menu.addMenu('user features', userMenu);
         menu.addLine();
     }
     menu.addItem(
         "color...",
         function () {
             this.pickColor(
-                menu.title + '\ncolor:',
+                menu.title + localize('\ncolor:'),
                 this.setColor,
                 this,
                 this.color
@@ -3876,7 +4094,7 @@ Morph.prototype.developersMenu = function () {
         "transparency...",
         function () {
             this.prompt(
-                menu.title + '\nalpha\nvalue:',
+                menu.title + localize('\nalpha\nvalue:'),
                 this.setAlphaScaled,
                 this,
                 (this.alpha * 100).toString(),
@@ -3905,7 +4123,7 @@ Morph.prototype.developersMenu = function () {
     menu.addItem(
         "pick up",
         'pickUp',
-        'disattach and put \ninto the hand'
+        'detach and put \ninto the hand'
     );
     menu.addItem(
         "attach...",
@@ -4214,11 +4432,14 @@ HandleMorph.prototype.init = function (
     this.target = target || null;
     this.minExtent = new Point(minX || 0, minY || 0);
     this.inset = new Point(insetX || 0, insetY || insetX || 0);
-    this.type =  type || 'resize'; // can also be 'move', 'moveCenter'
+    this.type =  type || 'resize'; // also: 'move', 'moveCenter', 'movePivot'
     HandleMorph.uber.init.call(this);
     this.color = new Color(255, 255, 255);
     this.isDraggable = false;
     this.noticesTransparentClick = true;
+    if (this.type === 'movePivot') {
+        size *= 2;
+    }
     this.setExtent(new Point(size, size));
 };
 
@@ -4227,20 +4448,27 @@ HandleMorph.prototype.init = function (
 HandleMorph.prototype.drawNew = function () {
     this.normalImage = newCanvas(this.extent());
     this.highlightImage = newCanvas(this.extent());
-    this.drawOnCanvas(
-        this.normalImage,
-        this.color,
-        new Color(100, 100, 100)
-    );
-    this.drawOnCanvas(
-        this.highlightImage,
-        new Color(100, 100, 255),
-        new Color(255, 255, 255)
-    );
+    if (this.type === 'movePivot') {
+        this.drawCrosshairsOnCanvas(this.normalImage, 0.6);
+        this.drawCrosshairsOnCanvas(this.highlightImage, 0.5);
+    } else {
+        this.drawOnCanvas(
+            this.normalImage,
+            this.color,
+            new Color(100, 100, 100)
+        );
+        this.drawOnCanvas(
+            this.highlightImage,
+            new Color(100, 100, 255),
+            new Color(255, 255, 255)
+        );
+    }
     this.image = this.normalImage;
     if (this.target) {
         if (this.type === 'moveCenter') {
             this.setCenter(this.target.center());
+        } else if (this.type === 'movePivot') {
+            this.setCenter(this.target.rotationCenter());
         } else { // 'resize', 'move'
             this.setPosition(
                 this.target.bottomRight().subtract(
@@ -4251,6 +4479,25 @@ HandleMorph.prototype.drawNew = function () {
         this.target.add(this);
         this.target.changed();
     }
+};
+
+HandleMorph.prototype.drawCrosshairsOnCanvas = function (aCanvas, fract) {
+    var ctx = aCanvas.getContext('2d'),
+        r = aCanvas.width / 2;
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
+    ctx.arc(r, r, r * 0.9, radians(0), radians(360), false);
+    ctx.fill();
+    ctx.strokeStyle = 'black';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.arc(r, r, r * fract, radians(0), radians(360), false);
+    ctx.stroke();
+    ctx.moveTo(0, r);
+    ctx.lineTo(aCanvas.width, r);
+    ctx.stroke();
+    ctx.moveTo(r, 0);
+    ctx.lineTo(r, aCanvas.height);
+    ctx.stroke();
 };
 
 HandleMorph.prototype.drawOnCanvas = function (
@@ -4356,7 +4603,7 @@ HandleMorph.prototype.mouseDownLeft = function (pos) {
     if (!this.target) {
         return null;
     }
-    if (this.type === 'moveCenter') {
+    if (this.type.indexOf('move') === 0) {
         offset = pos.subtract(this.center());
     } else {
         offset = pos.subtract(this.bounds.origin);
@@ -4379,6 +4626,9 @@ HandleMorph.prototype.mouseDownLeft = function (pos) {
                 );
             } else if (this.type === 'moveCenter') {
                 myself.target.setCenter(newPos);
+            } else if (this.type === 'movePivot') {
+                myself.target.setPivot(newPos);
+                myself.setCenter(this.target.rotationCenter());
             } else { // type === 'move'
                 myself.target.setPosition(
                     newPos.subtract(this.target.extent())
@@ -6093,9 +6343,7 @@ SliderButtonMorph.prototype.init = function (orientation) {
     SliderButtonMorph.uber.init.call(this, orientation);
 };
 
-SliderButtonMorph.prototype.autoOrientation = function () {
-    nop();
-};
+SliderButtonMorph.prototype.autoOrientation = nop;
 
 SliderButtonMorph.prototype.drawNew = function () {
     var colorBak = this.color.copy();
@@ -6331,9 +6579,7 @@ SliderMorph.prototype.init = function (
     // this.drawNew();
 };
 
-SliderMorph.prototype.autoOrientation = function () {
-    nop();
-};
+SliderMorph.prototype.autoOrientation = nop;
 
 SliderMorph.prototype.rangeSize = function () {
     return this.stop - this.start;
@@ -7259,6 +7505,7 @@ MenuMorph.prototype.init = function (target, title, environment, fontSize) {
     this.isListContents = false;
     this.hasFocus = false;
     this.selection = null;
+    this.submenu = null;
 
     // initialize inherited properties:
     MenuMorph.uber.init.call(this);
@@ -7278,7 +7525,8 @@ MenuMorph.prototype.addItem = function (
     color,
     bold, // bool
     italic, // bool
-    doubleClickAction // optional, when used as list contents
+    doubleClickAction, // optional, when used as list contents
+    shortcut // optional string, icon (Morph or Canvas) or tuple [icon, string]
 ) {
     /*
     labelString is normally a single-line string. But it can also be one
@@ -7295,7 +7543,16 @@ MenuMorph.prototype.addItem = function (
         color,
         bold || false,
         italic || false,
-        doubleClickAction]);
+        doubleClickAction,
+        shortcut]);
+};
+
+MenuMorph.prototype.addMenu = function (label, aMenu, indicator) {
+    this.addPair(label, aMenu, isNil(indicator) ? '\u25ba' : indicator);
+};
+
+MenuMorph.prototype.addPair = function (label, action, shortcut, hint) {
+    this.addItem(label, action, hint, null, null, null, null, shortcut);
 };
 
 MenuMorph.prototype.addLine = function (width) {
@@ -7387,7 +7644,8 @@ MenuMorph.prototype.drawNew = function () {
                 tuple[3], // color
                 tuple[4], // bold
                 tuple[5], // italic
-                tuple[6] // doubleclick action
+                tuple[6], // doubleclick action
+                tuple[7] // shortcut
             );
         }
         if (isLine) {
@@ -7416,9 +7674,12 @@ MenuMorph.prototype.maxWidth = function () {
         }
     }
     this.children.forEach(function (item) {
-
         if (item instanceof MenuItemMorph) {
-            w = Math.max(w, item.children[0].width() + 8);
+            w = Math.max(
+                w,
+                item.label.width() + 8 +
+                    (item.shortcut ? item.shortcut.width() + 4 : 0)
+            );
         } else if ((item instanceof StringFieldMorph) ||
                 (item instanceof ColorPickerMorph) ||
                 (item instanceof SliderMorph)) {
@@ -7438,6 +7699,7 @@ MenuMorph.prototype.adjustWidths = function () {
     this.children.forEach(function (item) {
         item.silentSetWidth(w);
         if (item instanceof MenuItemMorph) {
+            item.fixLayout();
             isSelected = (item.image === item.pressImage);
             item.createBackgrounds();
             if (isSelected) {
@@ -7509,6 +7771,24 @@ MenuMorph.prototype.popUpCenteredInWorld = function (world) {
     );
 };
 
+// MenuMorph submenus
+
+MenuMorph.prototype.closeRootMenu = function () {
+    if (this.parent instanceof MenuMorph) {
+        this.parent.closeRootMenu();
+    } else {
+        this.destroy();
+    }
+};
+
+MenuMorph.prototype.closeSubmenu = function () {
+    if (this.submenu) {
+        this.submenu.destroy();
+        this.submenu = null;
+        this.unselectAllItems();
+    }
+};
+
 // MenuMorph keyboard accessibility
 
 MenuMorph.prototype.getFocus = function () {
@@ -7519,18 +7799,25 @@ MenuMorph.prototype.getFocus = function () {
 };
 
 MenuMorph.prototype.processKeyDown = function (event) {
-    //console.log(event.keyCode);
+    // console.log(event.keyCode);
     switch (event.keyCode) {
     case 13: // 'enter'
     case 32: // 'space'
         if (this.selection) {
             this.selection.mouseClickLeft();
+            if (this.submenu) {
+                this.submenu.getFocus();
+            }
         }
         return;
     case 27: // 'esc'
         return this.destroy();
+    case 37: // 'left arrow'
+        return this.leaveSubmenu();
     case 38: // 'up arrow'
         return this.selectUp();
+    case 39: // 'right arrow'
+        return this.enterSubmenu();
     case 40: // 'down arrow'
         return this.selectDown();
     default:
@@ -7592,6 +7879,25 @@ MenuMorph.prototype.selectDown = function () {
         idx = 0;
     }
     this.select(triggers[idx]);
+};
+
+MenuMorph.prototype.enterSubmenu = function () {
+    if (this.selection && this.selection.action instanceof MenuMorph) {
+        this.selection.popUpSubmenu();
+        if (this.submenu) {
+            this.submenu.getFocus();
+        }
+    }
+};
+
+MenuMorph.prototype.leaveSubmenu = function () {
+    var menu = this.parent;
+    if (this.parent instanceof MenuMorph) {
+        menu.submenu = null;
+        menu.hasFocus = true;
+        this.destroy();
+        menu.world.keyboardReceiver = menu;
+    }
 };
 
 MenuMorph.prototype.select = function (aMenuItem) {
@@ -8885,6 +9191,7 @@ TriggerMorph.prototype.init = function (
     this.labelString = labelString || null;
     this.label = null;
     this.hint = hint || null; // null, String, or Function
+    this.schedule = null; // animation slot for displaying hints
     this.fontSize = fontSize || MorphicPreferences.menuFontSize;
     this.fontStyle = fontStyle || 'sans-serif';
     this.highlightColor = new Color(192, 192, 192);
@@ -8978,6 +9285,9 @@ TriggerMorph.prototype.trigger = function () {
         treat it as function property of target and execute it
         for selector-like actions
     */
+    if (this.schedule) {
+        this.schedule.isActive = false;
+    }
     if (typeof this.target === 'function') {
         if (typeof this.action === 'function') {
             this.target.call(this.environment, this.action.call(), this);
@@ -8997,6 +9307,9 @@ TriggerMorph.prototype.triggerDoubleClick = function () {
     // same as trigger() but use doubleClickAction instead of action property
     // note that specifying a doubleClickAction is optional
     if (!this.doubleClickAction) {return; }
+    if (this.schedule) {
+        this.schedule.isActive = false;
+    }
     if (typeof this.target === 'function') {
         if (typeof this.doubleClickAction === 'function') {
             this.target.call(
@@ -9030,6 +9343,9 @@ TriggerMorph.prototype.mouseEnter = function () {
 TriggerMorph.prototype.mouseLeave = function () {
     this.image = this.normalImage;
     this.changed();
+    if (this.schedule) {
+        this.schedule.isActive = false;
+    }
     if (this.hint) {
         this.world().hand.destroyTemporaries();
     }
@@ -9057,15 +9373,17 @@ TriggerMorph.prototype.rootForGrab = function () {
 // TriggerMorph bubble help:
 
 TriggerMorph.prototype.bubbleHelp = function (contents) {
-    var myself = this;
-    this.fps = 2;
-    this.step = function () {
-        if (this.bounds.containsPoint(this.world().hand.position())) {
-            myself.popUpbubbleHelp(contents);
-        }
-        myself.fps = 0;
-        delete myself.step;
-    };
+    var world = this.world(),
+        myself = this;
+    this.schedule = new Animation(
+        nop,
+        nop,
+        0,
+        500,
+        nop,
+        function () {myself.popUpbubbleHelp(contents); }
+    );
+    world.animations.push(this.schedule);
 };
 
 TriggerMorph.prototype.popUpbubbleHelp = function (contents) {
@@ -9102,8 +9420,14 @@ function MenuItemMorph(
     color,
     bold,
     italic,
-    doubleClickAction // optional when used as list morph item
+    doubleClickAction, // optional when used as list morph item
+    shortcut // optional string, Morph, Canvas or tuple: [icon, string]
 ) {
+    // additional properties:
+    this.shortcutString = shortcut || null;
+    this.shortcut = null;
+
+    // initialize inherited properties:
     this.init(
         target,
         action,
@@ -9120,31 +9444,58 @@ function MenuItemMorph(
 }
 
 MenuItemMorph.prototype.createLabel = function () {
-    var icon, lbl, np;
-    if (this.label !== null) {
+    var w, h;
+    if (this.label) {
         this.label.destroy();
     }
-    if (isString(this.labelString)) {
-        this.label = this.createLabelString(this.labelString);
-    } else if (this.labelString instanceof Array) {
+    this.label = this.createLabelPart(this.labelString);
+    this.add(this.label);
+    w = this.label.width();
+    h = this.label.height();
+    if (this.shortcut) {
+        this.shortcut.destroy();
+    }
+    if (this.shortcutString) {
+        this.shortcut = this.createLabelPart(this.shortcutString);
+        w += this.shortcut.width() + 4;
+        h = Math.max(h, this.shortcut.height());
+        this.add(this.shortcut);
+    }
+    this.silentSetExtent(new Point(w + 8, h));
+    this.fixLayout();
+};
+
+MenuItemMorph.prototype.fixLayout = function () {
+    var cntr = this.center();
+    this.label.setCenter(cntr);
+    this.label.setLeft(this.left() + 4);
+    if (this.shortcut) {
+        this.shortcut.setCenter(cntr);
+        this.shortcut.setRight(this.right() - 4);
+    }
+};
+
+MenuItemMorph.prototype.createLabelPart = function (source) {
+    var part, icon, lbl;
+    if (isString(source)) {
+        return this.createLabelString(source);
+    }
+    if (source instanceof Array) {
         // assume its pattern is: [icon, string]
-        this.label = new Morph();
-        this.label.alpha = 0; // transparent
-        icon = this.createIcon(this.labelString[0]);
-        this.label.add(icon);
-        lbl = this.createLabelString(this.labelString[1]);
-        this.label.add(lbl);
+        part = new Morph();
+        part.alpha = 0; // transparent
+        icon = this.createIcon(source[0]);
+        part.add(icon);
+        lbl = this.createLabelString(source[1]);
+        part.add(lbl);
         lbl.setCenter(icon.center());
         lbl.setLeft(icon.right() + 4);
-        this.label.bounds = (icon.bounds.merge(lbl.bounds));
-        this.label.drawNew();
-    } else { // assume it's either a Morph or a Canvas
-        this.label = this.createIcon(this.labelString);
+        part.bounds = (icon.bounds.merge(lbl.bounds));
+        part.drawNew();
+        return part;
     }
-    this.silentSetExtent(this.label.extent().add(new Point(8, 0)));
-    np = this.position().add(new Point(4, 0));
-    this.label.bounds = np.extent(this.label.extent());
-    this.add(this.label);
+    // assume it's either a Morph or a Canvas
+    return this.createIcon(source);
 };
 
 MenuItemMorph.prototype.createIcon = function (source) {
@@ -9182,19 +9533,35 @@ MenuItemMorph.prototype.createLabelString = function (string) {
 // MenuItemMorph events:
 
 MenuItemMorph.prototype.mouseEnter = function () {
+    var menu = this.parentThatIsA(MenuMorph);
+    if (this.isShowingSubmenu()) {
+        return;
+    }
+    if (menu) {
+        menu.closeSubmenu();
+    }
     if (!this.isListItem()) {
         this.image = this.highlightImage;
         this.changed();
     }
-    if (this.hint) {
+    if (this.action instanceof MenuMorph) {
+        this.delaySubmenu();
+    } else if (this.hint) {
         this.bubbleHelp(this.hint);
     }
 };
 
 MenuItemMorph.prototype.mouseLeave = function () {
     if (!this.isListItem()) {
-        this.image = this.normalImage;
+        if (this.isShowingSubmenu()) {
+            this.image = this.highlightImage;
+        } else {
+            this.image = this.normalImage;
+        }
         this.changed();
+    }
+    if (this.schedule) {
+        this.schedule.isActive = false;
     }
     if (this.hint) {
         this.world().hand.destroyTemporaries();
@@ -9217,11 +9584,15 @@ MenuItemMorph.prototype.mouseMove = function () {
 };
 
 MenuItemMorph.prototype.mouseClickLeft = function () {
-    if (!this.isListItem()) {
-        this.parent.destroy();
-        this.root().activeMenu = null;
+    if (this.action instanceof MenuMorph) {
+        this.popUpSubmenu();
+    } else {
+        if (!this.isListItem()) {
+            this.parent.closeRootMenu();
+            this.world().activeMenu = null;
+        }
+        this.trigger();
     }
-    this.trigger();
 };
 
 MenuItemMorph.prototype.isListItem = function () {
@@ -9236,6 +9607,44 @@ MenuItemMorph.prototype.isSelectedListItem = function () {
         return this.image === this.pressImage;
     }
     return false;
+};
+
+MenuItemMorph.prototype.isShowingSubmenu = function () {
+    var menu = this.parentThatIsA(MenuMorph);
+    if (menu && (this.action instanceof MenuMorph)) {
+        return menu.submenu === this.action;
+    }
+    return false;
+};
+
+// MenuItemMorph submenus:
+
+MenuItemMorph.prototype.delaySubmenu = function () {
+    var world = this.world(),
+        myself = this;
+    this.schedule = new Animation(
+        nop,
+        nop,
+        0,
+        500,
+        nop,
+        function () {myself.popUpSubmenu(); }
+    );
+    world.animations.push(this.schedule);
+};
+
+MenuItemMorph.prototype.popUpSubmenu = function () {
+    var menu = this.parentThatIsA(MenuMorph);
+    if (!(this.action instanceof MenuMorph)) {return; }
+    this.action.drawNew();
+    this.action.setPosition(this.topRight().subtract(new Point(0, 5)));
+    this.action.addShadow(new Point(2, 2), 80);
+    this.action.keepWithin(this.world());
+    if (this.action.items.length < 1 && !this.action.title) {return; }
+    menu.add(this.action);
+    menu.submenu = this.action;
+    menu.submenu.world = menu.world; // keyboard control
+    this.action.fullChanged();
 };
 
 // FrameMorph //////////////////////////////////////////////////////////
@@ -9488,6 +9897,7 @@ ScrollFrameMorph.prototype.init = function (scroller, size, sliderColor) {
     };
     this.vBar.isDraggable = false;
     this.add(this.vBar);
+    this.toolBar = null; // optional slot
 };
 
 ScrollFrameMorph.prototype.adjustScrollBars = function () {
@@ -9539,6 +9949,17 @@ ScrollFrameMorph.prototype.adjustScrollBars = function () {
         this.vBar.drawNew();
     } else {
         this.vBar.hide();
+    }
+    this.adjustToolBar();
+};
+
+ScrollFrameMorph.prototype.adjustToolBar = function () {
+    var padding = 3;
+    if (this.toolBar) {
+        this.toolBar.setTop(this.top() + padding);
+        this.toolBar.setRight(
+            (this.vBar.isVisible ? this.vBar.left() : this.right()) - padding
+        );
     }
 };
 
@@ -9604,9 +10025,7 @@ ScrollFrameMorph.prototype.scrollY = function (steps) {
     }
 };
 
-ScrollFrameMorph.prototype.step = function () {
-    nop();
-};
+ScrollFrameMorph.prototype.step = nop;
 
 ScrollFrameMorph.prototype.mouseDownLeft = function (pos) {
     if (!this.isScrollingByDragging) {
@@ -9796,7 +10215,6 @@ ScrollFrameMorph.prototype.developersMenu = function () {
     }
     return menu;
 };
-
 
 ScrollFrameMorph.prototype.toggleTextLineWrapping = function () {
     this.isTextLineWrapping = !this.isTextLineWrapping;
@@ -10553,6 +10971,7 @@ HandMorph.prototype.processDrop = function (event) {
                 event.dataTransfer.getData('URL') : null,
         txt = event.dataTransfer ?
                 event.dataTransfer.getData('Text/HTML') : null,
+        suffix,
         src,
         target = this.morphAtPointer(),
         img = new Image(),
@@ -10628,6 +11047,21 @@ HandMorph.prototype.processDrop = function (event) {
         frd.readAsArrayBuffer(aFile);
     }
 
+    function readURL(url, callback) {
+        var request = new XMLHttpRequest();
+        request.open('GET', url);
+        request.onreadystatechange = function () {
+            if (request.readyState === 4) {
+                if (request.responseText) {
+                    callback(request.responseText);
+                } else {
+                    throw new Error('unable to retrieve ' + url);
+                }
+            }
+        };
+        request.send();
+    }
+
     function parseImgURL(html) {
         var iurl = '',
             idx,
@@ -10662,10 +11096,11 @@ HandMorph.prototype.processDrop = function (event) {
             }
         }
     } else if (url) {
+        suffix = url.slice(url.lastIndexOf('.') + 1).toLowerCase();
         if (
             contains(
                 ['gif', 'png', 'jpg', 'jpeg', 'bmp'],
-                url.slice(url.lastIndexOf('.') + 1).toLowerCase()
+                suffix
             )
         ) {
             while (!target.droppedImage) {
@@ -10678,6 +11113,27 @@ HandMorph.prototype.processDrop = function (event) {
                 target.droppedImage(canvas);
             };
             img.src = url;
+        } else if (suffix === 'svg' && !MorphicPreferences.rasterizeSVGs) {
+            while (!target.droppedSVG) {
+                target = target.parent;
+            }
+            readURL(
+                url,
+                function (txt) {
+                    var pic = new Image();
+                    pic.onload = function () {
+                        target.droppedSVG(
+                            pic,
+                            url.slice(
+                                url.lastIndexOf('/') + 1,
+                                url.lastIndexOf('.')
+                            )
+                        );
+                    };
+                    pic.src = 'data:image/svg+xml;utf8,' +
+                        encodeURIComponent(txt);
+                }
+            );
         }
     } else if (txt) {
         while (!target.droppedImage) {
@@ -10754,6 +11210,7 @@ WorldMorph.prototype.init = function (aCanvas, fillPage) {
     }
     this.isDevMode = false;
     this.broken = [];
+    this.animations = [];
     this.hand = new HandMorph(this);
     this.keyboardReceiver = null;
     this.cursor = null;
@@ -10791,6 +11248,13 @@ WorldMorph.prototype.updateBroken = function () {
     this.broken = [];
 };
 
+WorldMorph.prototype.stepAnimations = function () {
+    this.animations.forEach(function (anim) {anim.step(); });
+    this.animations = this.animations.filter(function (anim) {
+        return anim.isActive;
+    });
+};
+
 WorldMorph.prototype.condenseDamages = function () {
     // collapse clustered damaged rectangles into their unions,
     // thereby reducing the array of brokens to a manageable size
@@ -10821,6 +11285,7 @@ WorldMorph.prototype.condenseDamages = function () {
 
 WorldMorph.prototype.doOneCycle = function () {
     this.stepFrame();
+    this.stepAnimations();
     this.updateBroken();
 };
 
@@ -11171,21 +11636,13 @@ WorldMorph.prototype.initEventListeners = function () {
     };
 };
 
-WorldMorph.prototype.mouseDownLeft = function () {
-    nop();
-};
+WorldMorph.prototype.mouseDownLeft = nop;
 
-WorldMorph.prototype.mouseClickLeft = function () {
-    nop();
-};
+WorldMorph.prototype.mouseClickLeft = nop;
 
-WorldMorph.prototype.mouseDownRight = function () {
-    nop();
-};
+WorldMorph.prototype.mouseDownRight = nop;
 
-WorldMorph.prototype.mouseClickRight = function () {
-    nop();
-};
+WorldMorph.prototype.mouseClickRight = nop;
 
 WorldMorph.prototype.wantsDropOf = function () {
     // allow handle drops if any drops are allowed
@@ -11262,7 +11719,7 @@ WorldMorph.prototype.contextMenu = function () {
         menu.addItem(
             "fill page...",
             'fillPage',
-            'let the World automatically\nadjust to browser resizings'
+            'let the World automatically\nadjust to browser resizing'
         );
         if (useBlurredShadows) {
             menu.addItem(
@@ -11281,7 +11738,7 @@ WorldMorph.prototype.contextMenu = function () {
             "color...",
             function () {
                 this.pickColor(
-                    menu.title + '\ncolor:',
+                    menu.title + localize('\ncolor:'),
                     this.setColor,
                     this,
                     this.color

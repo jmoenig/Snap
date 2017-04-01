@@ -185,7 +185,7 @@ SnapTranslator.dict.pt = {
     'translator_e-mail':
         'mmsequeira@gmail.com',
     'last_changed':
-        '2016-04-06',
+        '2016-10-30',
 
     // GUI
     // control bar:
@@ -225,6 +225,8 @@ SnapTranslator.dict.pt = {
         'Guiões',
     'Costumes':
         'Trajes',
+    'Backgrounds':
+        'Cenários',
     'Sounds':
         'Sons',
 
@@ -527,6 +529,8 @@ SnapTranslator.dict.pt = {
         'o valor do cronómetro',
     '%att of %spr':
         '%att de %spr',
+    'my %get':
+        '%get',
     'http:// %s':
         'o recurso http:// %s',
     'turbo mode?':
@@ -813,12 +817,16 @@ SnapTranslator.dict.pt = {
         'Assinalar para activar\nas animações do AID',
     'Flat design':
         'Design plano',
+    'Nested auto-wrapping':
+        'Quebras de linha aninhadas',
     'Keyboard Editing':
         'Edição usando o teclado',
     'Table support':
         'Suporte de tabelas',
     'Table lines':
         'Tabelas com linhas',
+    'Visible stepping':
+        'Traçado passo a passo visível',
     'Thread safe scripts':
         'Guiões seguros face a threads',
     'uncheck to allow\nscript reentrance':
@@ -925,6 +933,8 @@ SnapTranslator.dict.pt = {
         'desfazer última largada',
     'undo the last\nblock drop\nin this pane':
         'Desfazer a última largada de um bloco\nneste separador.',
+    'redrop':
+        'refazer última largada',
     'scripts pic...':
         'fotografia dos guiões…',
     'open a new window\nwith a picture of all scripts':
@@ -1146,7 +1156,7 @@ SnapTranslator.dict.pt = {
     'Translations':
         'Traduções',
 
-    // observadores de variáveis
+    // monitores de variáveis
     'normal':
         'normal',
     'large':
@@ -1164,7 +1174,7 @@ SnapTranslator.dict.pt = {
     'Slider maximum value':
         'Valor máximo do potenciómetro',
 
-    // observadores de listas
+    // monitores de listas
     'length: ':
         'comprimento: ',
 
@@ -1198,6 +1208,18 @@ SnapTranslator.dict.pt = {
         'vazio',
 
     // efeitos gráficos
+    'color':
+        'cor',
+    'fisheye':
+        'olho-de-peixe',
+    'whirl':
+        'remoinho',
+    'pixelate':
+        'pixelização',
+    'mosaic':
+        'mosaico',
+    'saturation':
+        'saturação',
     'brightness':
         'brilho',
     'ghost':
@@ -1207,7 +1229,7 @@ SnapTranslator.dict.pt = {
     'comic':
         'ondeado',
     'confetti':
-        'cor',
+        'confetes',
 
     // teclas
     'space':
@@ -1352,6 +1374,8 @@ SnapTranslator.dict.pt = {
         'repórter',
     'predicate':
         'predicado',
+    'sprite':
+        'actor',
 
     // índices de listas
     'last':
@@ -1359,7 +1383,67 @@ SnapTranslator.dict.pt = {
     'any':
         'um item ao acaso',
 
+    // attributes
+    'neighbors':
+        'os vizinhos',
+    'self':
+        'tu próprio',
+    'other sprites':
+        'os outros actores',
+    'parts':
+        'as partes',
+    'anchor':
+        'a âncora',
+    'parent':
+        'o progenitor',
+    'children':
+        'os descendentes',
+    'clones':
+        'os clones',
+    'other clones':
+        'os outros clones',
+    'dangling?':
+        'estás pendurado',
+    'rotation x':
+        'a coordenada x de rotação',
+    'rotation y':
+        'a coordenada y de rotação',
+    'center x':
+        'a coordenada x do centro',
+    'center y':
+        'a coordenada y do centro',
+    'name':
+        'o nome',
+    'stage':
+        'o palco',
+
     // em falta no ficheiro lang-de.js
+    'delete %shd':
+        'remove %shd',
+    'Retina display support':
+        'Suporte para o ecrã retina',
+    'uncheck for lower resolution,\nsaves computing resources':
+        'Desassinalar para menor resolução;\npoupa recursos computacionais.',
+    'check for higher resolution,\nuses more computing resources':
+        'Assinalar para maior resolução;\ngasta mais recursos computacionais.',
+    'First-Class Sprites':
+        'Actores de primeira classe',
+    'uncheck to disable support\nfor first-class sprites':
+        'Desassinalar para desactivar o suporte\nde actores de primeira classe.',
+    'check to enable support\n for first-class sprite':
+        'Assinalar para activar o suporte\nde actores de primeira classe.',
+    'Live coding support':
+        'Suporte de programação ao vivo',
+    'EXPERIMENTAL! check to enable\n live custom control structures':
+        'EXPERIMENTAL! Assinalar para activar estruturas\nde controlo personalizadas ao vivo.',
+    'EXPERIMENTAL! uncheck to disable live\ncustom control structures':
+        'EXPERIMENTAL! Desassinalar para desactivar estruturas\nde controlo personalizadas ao vivo.',
+    'Persist linked sublist IDs':
+        'Persistir ID de sublistas ligadas',
+    'check to enable\nsaving linked sublist identities':
+        'Assinalar para activar o\narmazenamento das identidades de sublistas ligadas.',
+    'uncheck to disable\nsaving linked sublist identities':
+        'Desassinalar para desactivar o\narmazenamento das identidades de sublistas ligadas.',
     'grow':
         'aumentar',
     'shrink':
@@ -1375,21 +1459,21 @@ SnapTranslator.dict.pt = {
     'current %dates':
         '%dates corrente',
     'year':
-        'ano',
+        'o ano',
     'month':
-        'mês',
+        'o mês',
     'date':
-        'dia',
+        'o dia',
     'day of week':
-        'dia da semana',
+        'o dia da semana',
     'hour':
-        'hora',
+        'a hora',
     'minute':
-        'minuto',
+        'o minuto',
     'second':
-        'segundo',
+        'o segundo',
     'time in milliseconds':
-        'tempo (em milisegundos)',
+        'o tempo (em milisegundos)',
     'find blocks...':
         'procurar blocos…',
     'costume name':
@@ -1592,8 +1676,6 @@ SnapTranslator.dict.pt = {
         'palco normal',
     'turtle':
         'tartaruga',
-    'stage':
-        'palco',
     'turtleOutline':
         'contorno de tartaruga',
     'pause':
@@ -1726,9 +1808,9 @@ SnapTranslator.dict.pt = {
     'input(s), but getting':
         'argumento(s), mas foram passados',
     'parent...':
-        'pai…',
+        'progenitor…',
     'current parent':
-        'pai actual',
+        'progenitor actual',
     'Dragging threshold...':
         'Limiar de arrastamento…',
     'Cache Inputs':
@@ -1827,8 +1909,6 @@ SnapTranslator.dict.pt = {
         'Desassinalar para desactivar\na edição usando o teclado.',
     'check to enable\nkeyboard editing support':
         'Assinalar para activar\na edição usando o teclado.',
-    'Inheritance support':
-        'Suporte para herança',
     'uncheck to disable\nsprite inheritance features':
         'Desassinalar para desactivar\nfuncionalidades de herança de actores.',
     'check for sprite\ninheritance features':

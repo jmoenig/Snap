@@ -185,7 +185,7 @@ SnapTranslator.dict.ca = {
     'translator_e-mail':
         'bernat@arduino.org, jguille2@xtec.cat', // optional
     'last_changed':
-        '2016-07-07', // this, too, will appear in the Translators tab
+        '2017-01-09', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -225,6 +225,8 @@ SnapTranslator.dict.ca = {
         'Programes',
     'Costumes':
         'Vestits',
+    'Backgrounds':
+        'Fons',
     'Sounds':
         'Sons',
 
@@ -287,7 +289,7 @@ SnapTranslator.dict.ca = {
 
     // motion:
     'Stage selected:\nno motion primitives':
-        'Escenari seleccionat:\nno hi ha primitives de moviment\n'
+        'Esteu a l\'Escenari:\nno hi ha primitives de moviment\n'
             + 'disponibles',
 
     'move %n steps':
@@ -673,11 +675,11 @@ SnapTranslator.dict.ca = {
     'Import...':
         'Importa...',
     'file menu import hint':
-        'carrega una llibreria de projecte\no de blocs exportada, un vestit\no un so',
+        'Importa projectes, blocs,\nimatges o sons',
 
 
     'Export project as plain text...':
-        'Exporta el projecte en text pla...',
+        'Exporta el projecte...',
     'Export project...':
         'Exporta el projecte...',
     'show project data as XML\nin a new browser window':
@@ -685,11 +687,11 @@ SnapTranslator.dict.ca = {
     'Export blocks...':
         'Exporta els blocs...',
     'show global custom block definitions as XML\nin a new browser window':
-        'mostra les definicions de blocs personalitzats\nen format XML en una altra finestra del\nnavegador',
+        'exporta els blocs personalitzats que triis\nen un arxiu en format XML',
     'Unused blocks...':
         'Blocs no utilitzats...',
     'find unused global custom blocks\nand remove their definitions':
-        'busca blocs personalitzats globals\nno utilitzats i esborra\'ls',
+        'cerca els blocs personalitzats globals\nque no s\'utilitzan per poder esborrar-los',
     'Remove unused blocks':
         'Esborra blocs no utilitzats',
     'there are currently no unused\nglobal custom blocks in this project':
@@ -699,7 +701,7 @@ SnapTranslator.dict.ca = {
     'Export summary...':
         'Exporta el resum...',
     'open a new browser browser window\n with a summary of this project':
-        'obre una finestra nova del navegador\namb un resum d\'aquest projecte',
+        'Obre una finestra del navegador\namb un resum d\'aquest projecte',
 
     'Contents':
         'Continguts',
@@ -716,7 +718,7 @@ SnapTranslator.dict.ca = {
     'Import tools':
         'Importa eines',
     'load the official library of\npowerful blocks':
-        'carrega la llibreria\noficial de blocs avançats',
+        'Carrega la llibreria\noficial de blocs avançats',
     'Libraries...':
         'Llibreries...',
     'Import library':
@@ -746,101 +748,105 @@ SnapTranslator.dict.ca = {
     'Blurred shadows':
         'Ombres suavitzades',
     'uncheck to use solid drop\nshadows and highlights':
-        'desmarca\'m per utilitzar\nombres i realçats sòlids',
+        'desmarqueu per utilitzar\nombres i realçats sòlids',
     'check to use blurred drop\nshadows and highlights':
-        'marca\'m per utilitzar\nombres i realçats suavitzats',
+        'marqueu per utilitzar\nombres i realçats suavitzats',
     'Zebra coloring':
         'Coloració en zebra',
     'check to enable alternating\ncolors for nested blocks':
-        'marca\'m per habilitar la coloració\nalternada per a blocs imbricats',
+        'marqueu per habilitar la coloració\nalternada per a blocs imbricats',
     'uncheck to disable alternating\ncolors for nested block':
-        'desmarca\'m per deshabilitar la coloració\nalternada per a blocs imbricats',
+        'desmarqueu per deshabilitar la coloració\nalternada per a blocs imbricats',
     'Dynamic input labels':
         'Etiquetes de camps d\'entrada dinàmics',
     'uncheck to disable dynamic\nlabels for variadic inputs':
-        'marca\'m per desactivar les\netiquetes dinàmiques en camps\namb aritat variable',
+        'desmarqueu per desactivar les\netiquetes dinàmiques en camps variables',
     'check to enable dynamic\nlabels for variadic inputs':
-        'marca\'m per habilitar les\netiquetes dinàmiques en camps\namb aritat variable',
+        'marqueu per habilitar les\netiquetes dinàmiques en camps variables',
     'Prefer empty slot drops':
         'Dóna preferència a les ranures buides',
     'settings menu prefer empty slots hint':
-        'marca\'m per a fer que les ranures\nbuides tinguin preferència sobre les plenes\na l\'hora de deixar-hi caure peces',
+        'marqueu per a fer que les ranures\nbuides tinguin preferència sobre les plenes\na l\'hora de deixar-hi caure peces',
 
     'uncheck to allow dropped\nreporters to kick out others':
-        'marca\'m per a fer que les ranures\nbuides tinguin la mateixa preferència que les\nplenes a l\'hora de deixar-hi caure peces',
+        'desmarqueu per a fer que les ranures\nbuides tinguin la mateixa preferència que les\nplenes a l\'hora de deixar-hi caure peces',
 
     'Long form input dialog':
         'Força el diàleg de selecció de tipus',
     'Plain prototype labels':
         'Etiquetes de prototip simples',
     'uncheck to always show (+) symbols\nin block prototype labels':
-        'desmarca\'m per mostrar sempre el\nsímbol (+) en les etiquetes de prototip\nde bloc (a l\'editor de blocs)',
+        'desmarqueu per mostrar sempre el\nsímbol (+) en les etiquetes de prototip\nde bloc (a l\'editor de blocs)',
     'check to hide (+) symbols\nin block prototype labels':
-        'desmarca\'m per amagar el símbol (+)\nen les etiquetes de prototip\nde bloc (a l\'editor de blocs)',
+        'marqueu per amagar el símbol (+)\nen les etiquetes de prototip\nde bloc (a l\'editor de blocs)',
     'check to always show slot\ntypes in the input dialog':
-        'marca\'m per a mostrar sempre\nel diàleg de selecció de tipus\nen afegir paràmetres als blocs\npersonalitzats',
+        'marqueu per a mostrar sempre\nel diàleg de selecció de tipus\nen afegir paràmetres als blocs\npersonalitzats',
     'uncheck to use the input\ndialog in short form':
-        'desmarca\'m per a no mostrar\nautomàticament el diàleg de selecció\nde tipus en afegir paràmetres\nals blocs personalitzats',
+        'desmarqueu per a no mostrar\nautomàticament el diàleg de selecció\nde tipus en afegir paràmetres\nals blocs personalitzats',
     'Virtual keyboard':
         'Teclat virtual',
     'uncheck to disable\nvirtual keyboard support\nfor mobile devices':
-        'desmarca\'m per inhabilitar\nel suport per al teclat virtual\nen dispositius mòbils',
+        'desmarqueu per inhabilitar\nel suport per al teclat virtual\nen dispositius mòbils',
 
     'check to enable\nvirtual keyboard support\nfor mobile devices':
-        'marca\'m per habilitar\nel suport per al teclat virtual\nen dispositius mòbils',
+        'marqueu per habilitar\nel suport per al teclat virtual\nen dispositius mòbils',
 
     'Input sliders':
         'Lliscadors d\'entrada',
     'uncheck to disable\ninput sliders for\nentry fields':
-        'desmarca\'m per deshabilitar\nels lliscadors per als camps\nd\'entrada',
+        'desmarqueu per deshabilitar\nels lliscadors per als camps\nd\'entrada',
     'check to enable\ninput sliders for\nentry fields':
-        'marca\'m per habilitar\nels lliscadors per als camps\nd\'entrada',
+        'marqueu per habilitar\nels lliscadors per als camps\nd\'entrada',
     'Clicking sound':
         'So de clic',
     'uncheck to turn\nblock clicking\nsound off':
-        'desmarca\'m per deshabilitar\nel so de clic en clicar sobre\nels blocs',
+        'desmarqueu per deshabilitar\nel so de clic en clicar sobre\nels blocs',
     'check to turn\nblock clicking\nsound on':
-        'marca\'m per habilitar\nel so de clic en clicar sobre\nels blocs',
+        'marqueu per habilitar\nel so de clic en clicar sobre\nels blocs',
     'Animations':
         'Animacions',
     'uncheck to disable\nIDE animations':
-        'desmarca\'m per deshabilitar\nles animacions de la interfície',
+        'desmarqueu per deshabilitar\nles animacions de la interfície',
     'Turbo mode':
         'Mode turbo',
     'check to prioritize\nscript execution':
-        'marca\'m per activar el mode de\nprioritat en l\'execució de programes',
+        'marqueu per activar el mode de\nprioritat en l\'execució de programes',
     'uncheck to run scripts\nat normal speed':
-        'desmarca\'m per executar\nels programes a la velocitat\nnormal',
+        'desmarqueu per executar\nels programes a la velocitat\nnormal',
     'check to enable\nIDE animations':
-        'marca\'m per habilitar\nles animacions de la interfície',
+        'marqueu per habilitar\nles animacions de la interfície',
     'Flat design':
         'Disseny pla',
+    'Nested auto-wrapping':
+        'Engloba blocs interns',
     'Keyboard Editing':
         'Edició per teclat',
     'Table support':
         'Edició de taules',
     'Table lines':
         'Línies de taules',
+    'Visible stepping':
+        'Monitoritzar pas a pas',
     'Thread safe scripts':
         'Fil d\'execució segur',
     'uncheck to allow\nscript reentrance':
-        'desmarca\'m per permetre\nla re-entrada als programes',
+        'desmarqueu per permetre\nla re-entrada als programes',
     'check to disallow\nscript reentrance':
-        'marca\'m per no permetre\nla re-entrada als programes',
+        'marqueu per no permetre\nla re-entrada als programes',
     'Prefer smooth animations':
         'Suavitza les animacions',
     'uncheck for greater speed\nat variable frame rates':
-        'desmarca\'m per augmentar la velocitat de\nles animacions fins la màxima capacitat d\'aquesta màquina',
+        'desmarqueu per augmentar la velocitat de\nles animacions fins la màxima capacitat d\'aquesta màquina',
     'check for smooth, predictable\nanimations across computers':
-        'marca\'m per aconseguir unes animacions\nmés suaus i a velocitat predible en màquines diferents',
+        'marqueu per aconseguir unes animacions\nmés suaus i a velocitat previsible en màquines diferents',
     'Flat line ends':
         'Línies del llapis rectes',
     'check for flat ends of lines':
-        'marca\'m per fer que els\nextrems de les línies del\nllapis siguin rectes',
+        'marqueu per fer que els\nextrems de les línies del\nllapis siguin rectes',
     'uncheck for round ends of lines':
-        'desmarca\'m per fer que\nels extrems de les línies\ndel llapis siguin arrodonits',
+        'desmarqueu per fer que\nels extrems de les línies\ndel llapis siguin arrodonides',
     'Inheritance support':
-        'Suport per a herència',
+        'Suport a l\'herència d\'objectes',
 
     // inputs
     'with inputs':
@@ -870,7 +876,7 @@ SnapTranslator.dict.ca = {
     'duplicate':
         'duplica\'m',
     'make a copy\nand pick it up':
-        'crea una còpia\ni agafa-la',
+        'crea una còpia\ni fes-la servir',
     'only duplicate this block':
         'duplica només aquest bloc',
     'delete':
@@ -924,13 +930,15 @@ SnapTranslator.dict.ca = {
     'add comment':
         'afegeix un comentari',
     'undrop':
-        'recupera bloc',
+        'desfés',
     'undo the last\nblock drop\nin this pane':
-        'recupera l\'últim bloc\nque s\'hagi llençat',
+        'desfés l\'últim moviment\nde blocs',
+    'redrop':
+        'refés',
     'scripts pic...':
         'exporta com a imatge...',
     'open a new window\nwith a picture of all scripts':
-        'obre una nova finestra\namb una foto d\'aquests programes',
+        'obre una nova finestra\namb la imatge d\'aquests programes',
     'make a block...':
         'crea un bloc...',
 
@@ -1061,6 +1069,15 @@ SnapTranslator.dict.ca = {
     'for this sprite only':
         'només per a aquest objecte',
 
+    // variables refactoring
+    'rename only\nthis reporter':
+        'reanomena només\naquesta instància',
+    'rename all...':
+        'reanomena arreu...',
+    'rename all blocks that\naccess this variable':
+        'reanomena totes les instàncies\nd\'aquesta variable',
+
+
     // block dialog
     'Change block':
         'Canvia el bloc',
@@ -1114,9 +1131,9 @@ SnapTranslator.dict.ca = {
     'Command\n(C-shape)':
         'Comanda\n(en forma de C)',
     'Any\n(unevaluated)':
-        'Qualsevol\n(sense evaluar)',
+        'Qualsevol\n(sense avaluar)',
     'Boolean\n(unevaluated)':
-        'Booleà\n(sense evaluar)',
+        'Booleà\n(sense avaluar)',
     'Single input.':
         'Entrada única.',
     'Default Value:':
@@ -1144,7 +1161,7 @@ SnapTranslator.dict.ca = {
     'current module versions:':
         'versions actuals dels mòduls',
     'Contributors':
-        'Contribuïdors',
+        'Col·laboradors',
     'Translations':
         'Traduccions',
 
@@ -1191,7 +1208,7 @@ SnapTranslator.dict.ca = {
     'edge':
         'vora',
     'pen trails':
-        'rastre del llapis',
+        'dibuix sobre l\'escenari',
 
     // costumes
     'Turtle':
@@ -1200,6 +1217,18 @@ SnapTranslator.dict.ca = {
         'Buit',
 
     // graphical effects
+    'color':
+        'color',
+    'fisheye':
+        'ull de peix',
+    'whirl':
+        'remolí',
+    'pixelate':
+        'pixelat',
+    'mosaic':
+        'mosaic',
+    'saturation':
+        'saturació',
     'brightness':
         'brillantor',
     'ghost':
@@ -1351,9 +1380,11 @@ SnapTranslator.dict.ca = {
     'command':
         'comanda',
     'reporter':
-        'reporter',
+        'reportador',
     'predicate':
         'predicat',
+    'sprite':
+        'objecte',
 
     // list indices
     'last':
@@ -1381,7 +1412,7 @@ SnapTranslator.dict.ca = {
     'other clones':
         'altres clons',
     'dangling?':
-        'Baumeln?',
+        'penjat?',
     'rotation x':
         'rotació x',
     'rotation y':
@@ -1389,6 +1420,749 @@ SnapTranslator.dict.ca = {
     'center x':
         'centre x',
     'center y':
-        'centre y'
+        'centre y',
+    'name':
+        'nom',
+    'stage':
+        'escenari',
 
+    // missing in lang-de.js - copied from lang-pt.js
+    'delete %shd':
+        'esborra %shd',
+    'Retina display support':
+        'Suport per pantalles Retina',
+    'uncheck for lower resolution,\nsaves computing resources':
+        'desmarqueu per obtenir una resolució més baixa;\nimplicarà menys consum de memòria.',
+    'check for higher resolution,\nuses more computing resources':
+        'marqueu per obtenir una resolució meś alta;\nimplicarà més consum de memòria..',
+    'First-Class Sprites':
+        'Objectes de primera classe',
+    'uncheck to disable support\nfor first-class sprites':
+        'desmarqueu per deshabilitar el suport\nals objectes de primera classe.',
+    'check to enable support\n for first-class sprite':
+        'marqueu per habilitar el suport\nals objectes de primera classe.',
+    'Live coding support':
+        'Suport per a la programació dinàmica',
+    'EXPERIMENTAL! check to enable\n live custom control structures':
+        'EXPERIMENTAL! marqueu per habilitar\nel control dinàmic d\'estructures personalitzades.',
+    'EXPERIMENTAL! uncheck to disable live\ncustom control structures':
+        'EXPERIMENTAL! desmarqueu per deshabilitar\nel control dinàmic d\'estructures personalitzades.',
+    'Persist linked sublist IDs':
+        'Desar mantenint les ID enllaçades a les subllistes',
+    'check to enable\nsaving linked sublist identities':
+        'marqueu per habilitar\nl\'emmagatzament de les ID enllaçades a les subllistes.',
+    'uncheck to disable\nsaving linked sublist identities':
+        'desmarqueu per deshabilitar\nl\'emmagatzament de les ID enllaçades a les subllistes.',
+    'grow':
+        'augmentar',
+    'shrink':
+        'disminuir',
+    'flip ↔':
+        'invertir ↔',
+    'flip ↕':
+        'invertir ↕',
+    'Export all scripts as pic...':
+        'Exporta tots els programes com una imatge…',
+    'show a picture of all scripts\nand block definitions':
+        'mostra una imatge de tots els programes\ni les definicions de blocs',
+    'current %dates':
+        '%dates actual',
+    'year':
+        'any',
+    'month':
+        'mes',
+    'date':
+        'dia',
+    'day of week':
+        'dia de la setmana',
+    'hour':
+        'hora',
+    'minute':
+        'minut',
+    'second':
+        'segon',
+    'time in milliseconds':
+        'temps (milisegons)',
+    'find blocks...':
+        'cerca blocs…',
+    'costume name':
+        'nom del vestit',
+    'Open':
+        'Obre',
+    'Share':
+        'Comparteix',
+    'Snap!Cloud':
+        'Núvol d\'Snap!',
+    'Cloud':
+        'Núvol',
+    'could not connect to:':
+        'no es pot connectar a:',
+    'Service:':
+        'Servei:',
+    'login':
+        'autenticació',
+    'ERROR: INVALID PASSWORD':
+        'ERROR: CONTRASENYA NO VÀLIDA',
+    'Browser':
+        'Navegador',
+    'Sign up':
+        'Registra\'t',
+    'Signup':
+        'Registra\'t',
+    'Sign in':
+        'Inicia la sessió',
+    'Logout':
+        'Surt',
+    'Change Password...':
+        'Canvia la contrassenya…',
+    'Change Password':
+        'Canvia la contrasenya',
+    'Account created.':
+        'Compte creat.',
+    'An e-mail with your password\nhas been sent to the address provided':
+        'S\'ha enviat un correu electrònic\namb la contrasenya d\'accés.',
+    'now connected.':
+        'heu entrat.',
+    'disconnected.':
+        'desconnectats.',
+    'Reset password':
+        'Recupera la contrasenya',
+    'Reset Password...':
+        'Recupera la contrasenya…',
+    'User name:':
+        'Nom d\'usuari:',
+    'Password:':
+        'Contrasenya:',
+    'Old password:':
+        'Contrasenya actual:',
+    'New password:':
+        'Nova contrasenya:',
+    'Repeat new password:':
+        'Torna a escriure la nova contrasenya:',
+    'Birth date:':
+        'Data de naixement:',
+    'January':
+        'gener',
+    'February':
+        'febrer',
+    'March':
+        'març',
+    'April':
+        'abril',
+    'May':
+        'maig',
+    'June':
+        'juny',
+    'July':
+        'juliol',
+    'August':
+        'agost',
+    'September':
+        'setembre',
+    'October':
+        'octubre',
+    'November':
+        'novembre',
+    'December':
+        'desembre',
+    'year:':
+        'any:',
+    ' or before':
+        ' o abans de',
+    'E-mail address:':
+        'Adreça de correu electrònic:',
+    'E-mail address of parent or guardian:':
+        'Adreça de correu electrònic del tutor o educador:',
+    'Terms of Service...':
+        'Condicions d\'ús…',
+    'Privacy...':
+        'Privacitat…',
+    'I have read and agree\nto the Terms of Service':
+        'He llegit i accepto\nles condicions d\'ús',
+    'stay signed in on this computer\nuntil logging out':
+        'mantenir-me autenticat en aquest ordinador\nfins que em desconnecti',
+    'please fill out\nthis field':
+        's\'ha d\'omplir aquest camp.',
+    'User name must be four\ncharacters or longer':
+        'El nom d\'usuari ha de tenir\nalmenys 4 caràcters.',
+    'please provide a valid\nemail address':
+        's\'ha de introduir un correu vàlid.',
+    'password must be six\ncharacters or longer':
+        'la contrasenya ha de tenir\nalmenys sis caràcters.',
+    'passwords do\nnot match':
+        'les contrasenyes\nno coincideixen.',
+    'please agree to\nthe TOS':
+        's\'han d\'acceptar\les condicions d\'ús.',
+    'Examples':
+        'Exemples',
+    'You are not logged in':
+        'No esteu validats',
+    'Updating\nproject list...':
+        'Actualizant \nla llista de projectes…',
+    'Opening project...':
+        'Obrint el projecte…',
+    'Fetching project\nfrom the cloud...':
+        'Descarregant el projecte\ndes del núvol…',
+    'Saving project\nto the cloud...':
+        'Desant el projecte\nal núvol…',
+    'Sprite Nesting':
+        'Ancoratge d\'objectes',
+    'uncheck to disable\nsprite composition':
+        'desmarqueu per deshabilitar\nl\'ancoratge d\'objectes',
+    'Codification support':
+        'Suport pel mapeig de codi',
+    'check for block\nto text mapping features':
+        'marqueu per habilitar les funcionalitats\nde mapeig de blocs en codi',
+    'saved.':
+        'desat.',
+    'options...':
+        'opcions…',
+    'read-only':
+        'només de lectura',
+    'Input Slot Options':
+        'Opcions de la ranura',
+    'Enter one option per line.Optionally use "=" as key/value delimiter\ne.g.\n   the answer=42':
+        'Escriviu cada opció en una línia.\nTambé podeu fer servir "=" com a separador entre\nclau i valor, per exemple resposta=42',
+    'paint a new sprite':
+        'Pinta un nou objecte',
+    'Paint a new costume':
+        'Pinta un nou vestit.',
+    'add a new Turtle sprite':
+        'afegeix un nou objecte',
+    'check for alternative\nGUI design':
+        'marqueu per obtenir una\ninterfície gràfica alternativa',
+    'Rasterize SVGs':
+        'Transforma SVG en mapa de bits',
+    'check to rasterize\nSVGs on import':
+        'marqueu per transformar els\nSVG a mapa de bits en importar',
+    'comment pic...':
+        'imatge del comentari…',
+    'open a new window\nwith a picture of this comment':
+        'obre una finestra\namb una imatge del comentari',
+    'undo':
+        'desfés',
+    'Brush size':
+        'Gruix del pinzell',
+    'Constrain proportions of shapes?\n(you can also hold shift)':
+        'Manté la proporció de les formes?\n(també es pot fer prement la tecla "majúscules")',
+    'Eraser tool':
+        'Goma d\'esborrar',
+    'Paintbrush tool\n(free draw)':
+        'Pinzell\n(dibuix lliure)',
+    'Line tool\n(shift: vertical/horizontal)':
+        'Línies\n(majúscula: vertical/horitzontal)',
+    'Stroked Rectangle\n(shift: square)':
+        'Rectangle traçat\n(majúscula: quadrat)',
+    'Filled Rectangle\n(shift: square)':
+        'Rectangle ple\n(majúscula: quadrat)',
+    'Stroked Ellipse\n(shift: circle)':
+        'El·lipse traçada\n(majúscula: circumferència)',
+    'Filled Ellipse\n(shift: circle)':
+        'El·lipse plena\n(majúscula: cercle)',
+    'Fill a region':
+        'Ompla l\'àrea',
+    'Set the rotation center':
+        'Estableix el centre de rotació',
+    'Pipette tool\n(pick a color anywhere)':
+        'Capturador de color\n(captura el color de qualsevol lloc)',
+    'Paint Editor':
+        'Editor d\'imatges',
+    'square':
+        'quadrat',
+    'pointRight':
+        'punter',
+    'gears':
+        'engranatge',
+    'file':
+        'arxiu',
+    'fullScreen':
+        'pantalla sencera',
+    'normalScreen':
+        'pantalla normal',
+    'smallStage':
+        'escenari petit',
+    'normalStage':
+        'escenari normal',
+    'turtle':
+        'tortuga',
+    'turtleOutline':
+        'contorn de la tortuga',
+    'pause':
+        'pausa',
+    'flag':
+        'bandera',
+    'octagon':
+        'octàgon',
+    'cloud':
+        'núvol',
+    'cloudOutline':
+        'contor de núvol',
+    'cloudGradient':
+        'núvol amb gradient',
+    'turnRight':
+        'girant a la dreta',
+    'turnLeft':
+        'girant a l\'esquerra',
+    'storage':
+        'emmagatzament',
+    'poster':
+        'póster',
+    'flash':
+        'llamp',
+    'brush':
+        'pinzell',
+    'rectangle':
+        'rectangle',
+    'rectangleSolid':
+        'rectàngle sòlid',
+    'circle':
+        'circumferència',
+    'circleSolid':
+        'cercle',
+    'crosshairs':
+        'punt de mira',
+    'paintbucket':
+        'pot de pintura',
+    'eraser':
+        'goma d\'esborrar',
+    'pipette':
+        'pipeta',
+    'speechBubble':
+        'bafarada',
+    'speechBubbleOutline':
+        'contorn de bafarada',
+    'arrowUp':
+        'fletxa amunt',
+    'arrowUpOutline':
+        'contorn de fletxa amunt',
+    'arrowLeft':
+        'fletxa a l\'esquerra',
+    'arrowLeftOutline':
+        'contorn de fletxa a l\'esquerra',
+    'arrowDown':
+        'fletxa avall',
+    'arrowDownOutline':
+        'contorn de fletxa avall',
+    'arrowRight':
+        'fletxa a la dreta',
+    'arrowRightOutline':
+        'contorn de fletxa a la dreta',
+    'robot':
+        'robot',
+    'turn pen trails into new costume...':
+        'crea un nou vestit amb la imatge dibuixada…',
+    'turn all pen trails and stamps\ninto a new costume for the\ncurrently selected sprite':
+        'crea un nou vestit per l\'actual objecte\namb la imatge dibuixada',
+    'pen':
+        'llapis',
+    'tip':
+        'punta',
+    'middle':
+        'mig',
+    'last changed':
+        'el darrer modificat',
+    'Are you sure you want to publish':
+        'Segur que vols compartir-ho?',
+    'Are you sure you want to unpublish':
+        'Segur que vols deixar-ho de compartir?',
+    'Share Project':
+        'Comparteix el Projecte',
+    'Unshare Project':
+        'Deixa de compartir el Projecte',
+    'sharing\nproject...':
+        'compartint\nel projecte…',
+    'unsharing\nproject...':
+        'deixant de compartir\nel projecte…',
+    'shared.':
+        'compartit.',
+    'unshared.':
+        'no compartit.',
+    'Unshare':
+        'Deixa de compartir',
+    'password has been changed.':
+        's\'ha canviat la contrasenya.',
+    'SVG costumes are\nnot yet fully supported\nin every browser':
+        'els vestits SVG encara\no són suportats\per tots els navegadors',
+    'Save Project':
+        'Desa el Projecte',
+    'script pic with result...':
+        'imatge del programa i del resultat…',
+    'open a new window\nwith a picture of both\nthis script and its result':
+        'obre una finestra\n amb el programa i el resultat',
+    'JavaScript function ( %mult%s ) { %code }':
+        'JavaScript function ( %mult%s ) { %code }',
+    'Select categories of additional blocks to add to this project.':
+        'Trieu conjunts de blocs addicionals per afegir a aquest projecte.',
+    'Import sound':
+        'Importa sons',
+    'Select a sound from the media library':
+        'Trieu un so de la biblioteca',
+    'Import':
+        'Importa',
+    'Select a costume from the media library':
+        'Trieu un vestit de la biblioteca',
+    'edit rotation point only...':
+        'edita només el centre de rotació…',
+    'Export Project As...':
+        'Exporta el Projecte com…',
+    'a variable of name \'':
+        'una variable de nom \'',
+    '\'\ndoes not exist in this context':
+        '\'\nno existeix en aquest context',
+    '(temporary)':
+        '(temporal)',
+    'expecting':
+        'esperant',
+    'input(s), but getting':
+        'com a entrada(s), però s\'ha rebut',
+    'parent...':
+        'pare…',
+    'current parent':
+        'pare actual actual',
+    'Dragging threshold...':
+        'Llindar per l\'arrossegament…',
+    'Cache Inputs':
+        'Entrades a la Memòria Cau',
+    'uncheck to stop caching\ninputs (for debugging the evaluator)':
+        'desmarqueu per no desar les entrades\na la memòria cau (per depurar l\'avaluador)',
+    'check to cache inputs\nboosts recursion':
+        'marqueu per a desar les entrades\na la memòria cau (accelera la recursivitat)',
+    'Project URLs':
+        'URL del projecte',
+    'check to enable\nproject data in URLs':
+        'marqueu per habilitar\nles dades del projecte a la URL',
+    'uncheck to disable\nproject data in URLs':
+        'desmarqueu per deshabilitar\nles dades del projecte a la URL',
+    'export project media only...':
+        'exporta només els sons i imatges del projecte…',
+    'export project without media...':
+        'exporta el projecte sense sons ni imatges…',
+    'export project as cloud data...':
+        'exporta el projecte com a dades en el núvol…',
+    'open shared project from cloud...':
+        'obre un projecte compartit en el núvol…',
+    'url...':
+        'URL…',
+    'Export summary with drop-shadows...':
+        'Exporta el resum amb les imatges ombrejades…',
+    'open a new browser browser window\nwith a summary of this project\nwith drop-shadows on all pictures.\nnot supported by all browsers':
+        'Obre una finestra del navegador\namb un resum del projecte i\namb totes les imatges ombrejades.\n No tots els navegadors suporten aquesta funcionalitat',
+    'specify the distance the hand has to move\nbefore it picks up an object':
+        'especifica a què distància\ns\'han d\'arrossegar els blocs\nper a que es moguin',
+    'block variables...':
+        'variables del bloc…',
+    'remove block variables...':
+        'resborra les variables del bloc…',
+    'block variables':
+        'variables del bloc',
+    'experimental -\nunder construction':
+        'Experimental -\nen construcció',
+    'Table view':
+        'Vista de tabla',
+    'open in another dialog...':
+        'obriu en un altre formulari…',
+    'check for multi-column\nlist view support':
+        'marqueu per habilitar el suport\na la vista de llista amb multicolumnes',
+    'uncheck to disable\nmulti-column list views':
+        'desmarqueu per a deshabilitar\nla vista de llista amb multicolumnes',
+    'check for higher contrast\ntable views':
+        'marqueu per obtenir un contrast més alt\n a la vista de taula',
+    'uncheck for less contrast\nmulti-column list views':
+        'desmarqueu per a tenir un baix contrast\na la vista de llista amb multicolumnes',
+    '(in a new window)':
+        '(dins una nova finestra)',
+    'save project data as XML\nto your downloads folder':
+        'Exporta el projecte en un arxiu\nen format XML',
+
+    // més cadenes...
+    'map %cmdRing to %codeKind %code':
+        'mapeja %cmdRing com a %codeKind %code',
+    'map String to code %code':
+        'mapeja un text com a codi %code',
+    'map %codeListPart of %codeListKind to code %code':
+        'mapeja %codeListPart de %codeListKind no com a codi %code',
+    'code of %cmdRing':
+        'codi de %cmdRing',
+    'delimiter':
+        'limitaodr',
+    'collection':
+        'col·lecció',
+    'variables':
+        'variables',
+    'parameters':
+        'paràmetres',
+    'code':
+        'codi',
+    'header':
+        'capçalera',
+    'header mapping...':
+        'mapejant la capçalera…',
+    'code mapping...':
+        'mapejant el codi…',
+    'Code mapping':
+        'Mapeig del codi',
+    'Header mapping':
+        'Mapeig de la capçalera',
+    'Enter code that corresponds to the block\'s definition. Use the formal parameter\nnames as shown and <body> to reference the definition body\'s generated text code.':
+        'Introdueix el codi que correspon a la definició del bloc. Utilitza els noms\ndels paràmetres per mostrar-los i <body> per referenciar el codi generat per la definició del cos',
+    'Enter code that corresponds to the block\'s definition. Choose your own\nformal parameter names (ignoring the ones shown).':
+        'Introdueix el codi que correspon a la definició del bloc. Tria els teus\npropis noms (ignorant els que es mostren).',
+    'Enter code that corresponds to the block\'s operation (usually a single\nfunction invocation). Use <#n> to reference actual arguments as shown.':
+        'Introdueix el codi que correspon a l\'operació del bloc (normalment només una funció). Utilitza <#n> per referenciar els paràmetres actuals tal com es mostren.',
+    'uncheck to disable\nkeyboard editing support':
+        'desmarqueu per deshabilitar\nel suport a l\'edició per teclat',
+    'check to enable\nkeyboard editing support':
+        'marqueu per habilitar\nel suport a l\'edició per teclat',
+    'uncheck to disable\nsprite inheritance features':
+        'desmarqueu per deshabilitar les\nfuncionalitats relatives a l\'herència d\'objectes',
+    'check for sprite\ninheritance features':
+        'marqueu per habilitar les\nfuncionalitats relatives a l\'herència d\'objectes',
+
+//More strings missed in de and pt translations
+
+//Mode developer blocks
+	'wardrobe':
+		'vestits',
+	'jukebox':
+		'sons',
+	'save %imgsource as costume named %s':
+		'desa %imgsource com a vestit amb nom %s',
+	'screenshot':
+		'captura de pantalla',
+	'stage image':
+		'imatge de l\'escenari',
+	'processes':
+		'processos',
+	'map %repRing over %l':
+		'mapeja %repRing sobre %l',
+	'for %upvar in %l %cl':
+		'per cada %upvar dins %l %cl',
+	'show table %l':
+		'mostra la taula %l',
+	'%txtfun of %s':
+		'%txtfun de %s',
+
+//IDE Messages
+	'entering development mode.\n\nerror catching is turned off,\nuse the browser\'s web console\nto see error messages.':
+		'entrant en mode desenvolupador.\n\ndeshabilitada la captura d\'errades,\nutilitzeu la consola del navegador\nper veure els errors.',
+	'entering user mode':
+		'entrant en mode d\'usuari',
+	'dragging threshold':
+		'llindar per l\'arrossegament',
+	'redo the last undone block drop in this pane':
+		'refés l\'últim moviment\nde blocs desfet',
+
+//costumes and backgrounds
+	'rename background':
+		'canvia el nom del fons',
+	'turn pen trails into new background...':
+		'crea un nou fons amb la imatge dibuixada…',
+	'turn all pen trails and stamps\ninto a new background for the stage':
+		'crea un nou fons d\'escenari\namb la imatge dibuixada',
+
+//Helping text for menu options
+	'uncheck for default\nGUI design':
+		'desmarqueu per obtenir la\ninterfície gràfica per defecte',
+	'uncheck to confine auto-wrapping\nto top-level block stacks':
+		'desmarqueu per restringir\nl\'englobament de blocs a les piles senceres',
+	'check to enable auto-wrapping\ninside nested block stacks':
+		'marqueu per habilitar\nl\'englobament de blocs interns',
+	'check to turn on\n visible stepping (slow)':
+		'marqueu per monitoritzar la\nprogramació per pas a pas (alenteix)',
+	'uncheck to turn off\nvisible stepping':
+		'desmarqueu per deshabilitar\nla monitorització pas a pas',
+	'uncheck to disable\nblock to text mapping features':
+		'demarqueu per deshabilitar les\nfuncionalitats de mapeig de blocs en codi',
+	'uncheck for smooth\nscaling of vector costumes':
+		'desmarqueu per atenuar\nescalant les imatges vectorials',
+	'check to enable\nsprite composition':
+		'marqueu per habilitar\nl\'ancoratge d\'objectes',
+
+	'Execute on slider change':
+		'Executa en utilitzar els lliscadors',
+	'uncheck to suppress\nrunning scripts\nwhen moving the slider':
+		'desmarqueu per no llançar\nl\'execució dels programes\nen utilitzar els seus lliscadors',
+	'check to run\nthe edited script\nwhen moving the slider':
+		'marqueu per habilitar\nl\'execució dels programes\nen utilitzar els seus lliscadors',
+
+//Developer mode menus
+	'user features...':
+		'opcions d\'usuari...',
+	'color...':
+		'color...',
+	'\ncolor:':
+		'\ncolor:',
+	'choose another color \nfor this morph':
+		'trieu un altre color\nper aquest \'morph\'',
+	'transparency...':
+		'transparència...',
+	'\nalpha\nvalue:':
+		'\nvalor del\ncanal alfa:',
+	'set this morph\'s\nalpha value':
+		'fixeu el valor del canal\nalfa per aquest \'morph\'',
+	'resize...':
+		'redimensiona...',
+	'show a handle\nwhich can be dragged\nto change this morph\'s extent':
+		'mostra una nansa per\npoder-la arrossegar i canviar\nla mida d\'aquest \'morph\'',
+	'duplicate':
+		'duplica',
+	'make a copy\nand pick it up':
+		'fés una còpia\ni pren-la',
+	'pick up':
+		'pren aquest \'morph\'',
+	'detach and put \ninto the hand':
+		'arrossega i mou\namb el punter',
+	'attach...':
+		'enganxa...',
+	'stick this morph\nto another one':
+		'enganxa aquest \'morph\' a un altre',
+	'move...':
+		'mou...',
+	'show a handle\nwhich can be dragged\nto move this morph':
+		'mostra una nansa per\npoder-la arrossegar i\nmoure aquest \'morph\'',
+	'inspect...':
+		'examina...',
+	'open a window\non all properties':
+		'obre una finestra\namb totes les propietats',
+	'pic...':
+		'imatge...',
+	'open a new window\nwith a picture of this morph':
+		'obre una finestra amb\nuna imatge d\'aquest \'morph\'',
+	'lock':
+		'bloqueja',
+	'make this morph\nunmovable':
+		'fés que aquest \'morph\'\nno es pugui moure',
+	'unlock':
+		'desbloqueja',
+	'make this morph\nmovable':
+		'fés que aquest \'morph\'\nes pugui moure',
+	'World...':
+		'Món...',
+	'show the\nWorld\'s menu':
+		'mostra el menú del Món',
+	//World options
+	'demo...':
+		'exemple...',
+	'sample morphs':
+		'crea un \'morph\' de mostra',
+	'hide all...':
+		'amaga-ho tot',
+	'show all...':
+		'mostra-ho tot',
+	'move all inside...':
+		'mou tot a dins',
+	'keep all submorphs\nwithin and visible':
+		'manté tots els \'submorphs\'\na dins i visibles',
+	'open a window on\nall properties':
+		'obre una finestra\namb totes les propietats',
+	'screenshot...':
+		'captura de pantalla...',
+	'open a new window\nwith a picture of this morph':
+		'obre una finestra\n amb la imatge del Món',
+	'restore display':
+		'reestableix la visualització',
+	'redraw the\nscreen once':
+		'repinta la pantalla\nuna vegada',
+	'fill page...':
+		'omple la finestra...',
+	'let the World automatically\nadjust to browser resizing':
+		'permet que el Món s\'ajusti\nautomàticament al canvi de mida de la finestra',
+	'sharp shadows...':
+		'ombres contrastades...',
+	'sharp drop shadows\nuse for old browsers':
+		'utilitza ombres contrastades\nper a navegadors antics',
+	'blurred shadows...':
+		'ombres degradades...',
+	'blurry shades,\n use for new browsers':
+		'utilitza ombres degradades\n per a navegadors moderns',
+	'choose the World\'s\nbackground color':
+		'tria el color de\nfons del Món',
+	'touch screen settings':
+		'configuració per pantalla tàctil',
+	'bigger menu fonts\nand sliders':
+		'fa més grans els lliscadors i els menús',
+	'standard settings':
+		'configuració estàndard',
+	'smaller menu fonts\nand sliders':
+		'fa més petits els lliscadors i els menús',
+	'user mode...':
+		'mode d\'usuari...',
+	'disable developers\'\ncontext menus':
+		'desabilita els menús\ndel mode de desenvolupament',
+	'development mode...':
+		'mode de desenvolupament',
+	'about morphic.js...':
+		'sobre morphic.js...',
+	//Make a Morph
+	'make a morph':
+		'crea un \'morph\'',
+	'rectangle':
+		'rectangle',
+	'box':
+		'caixa',
+	'circle box':
+		'caixa circular',
+	'frame':
+		'marc',
+	'scroll frame':
+		'marc amb desplaçament',
+	'handle':
+		'nansa',
+	'string':
+		'cadena',
+	'Hello, World!':
+		'Hola Món!',
+	'speech bubble':
+		'bafarada',
+	'gray scale palette':
+		'paleta d\'escala de grisos',
+	'color palette':
+		'paleta de colors',
+	'color picker':
+		'selector de color',
+	'sensor demo':
+		'exemple de sensor',
+	'animation demo':
+		'exemple d\'animació',
+
+//future JS options
+	'uncheck to disable support for\nnative JavaScript functions':
+		'desmarqueu per deshabilitar\nl\'execució de Javascript',
+	'check to support\nnative JavaScript functions':
+		'marqueu per habilitar\nl\'execució de Javascript',
+	'JavaScript is not enabled':
+		'l\'execució de Javascript està deshabilitada',
+
+//Libraries
+	'Loading':
+		'S\'està carregant',
+	'Imported':
+		'S\'ha importat',
+	'Iteration, composition':
+		'Iteracions i composició',
+	'List utilities':
+		'Utilitats per a llistes',
+	'Streams (lazy lists)':
+		'Streams (llistes presconstruides)',
+	'Variadic reporters':
+		'Càlculs multientrada',
+	'Web services access (https)':
+		'Accés a serveis Web (https)',
+	'Words, sentences':
+		'Paraules i frases',
+	'Multi-branched conditional (switch)':
+		'Condicionals compostos (switch)',
+	'LEAP Motion controller':
+		'Controladors per a LEAP Motion',
+	'Set RGB or HSV pen color':
+		'Acoloriment del llapis per RGB o HSV',
+	'Save and restore pictures drawn by pen':
+		'Gestió de les captures d\'imatges dibuixades',
+	'Catch errors in a script':
+		'Alternatives per les errades dels programes',
+	'Allow multi-line text input to a block':
+		'Entrades multilínia',
+//
+	'(no matches)':
+		'(cap resultat)'
 };
