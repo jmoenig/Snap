@@ -1864,10 +1864,11 @@ ActionManager.prototype.onToggleBoolean = function(id, fromValue) {
         prev = block.value;
         block.toggleValue();
     }
-    if (isNil(block.value)) {
-        return;
+
+    if (!isNil(block.value)) {
+        block.reactToSliderEdit();
     }
-    block.reactToSliderEdit();
+
     this.__updateBlockDefinitions(block);
     this.completeAction();
 };
