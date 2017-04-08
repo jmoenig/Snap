@@ -9,7 +9,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2016 by Jens Mönig
+    Copyright (C) 2017 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -72,7 +72,7 @@ isRetinaSupported, SliderMorph, Animation*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2016-December-19';
+modules.gui = '2017-January-05';
 
 // Declarations
 
@@ -1358,6 +1358,7 @@ IDE_Morph.prototype.createSpriteEditor = function () {
         this.spriteEditor.contents.acceptsDrops = true;
 
         scripts.scrollFrame = this.spriteEditor;
+        scripts.updateUndropControls();
         this.add(this.spriteEditor);
         this.spriteEditor.scrollX(this.spriteEditor.padding);
         this.spriteEditor.scrollY(this.spriteEditor.padding);
@@ -2410,6 +2411,20 @@ IDE_Morph.prototype.settingsMenu = function () {
         );
     }
     menu.addLine();
+    /*
+    addPreference(
+        'JavaScript',
+        function () {
+            Process.prototype.enableJS = !Process.prototype.enableJS;
+            myself.currentSprite.blocksCache.operators = null;
+            myself.currentSprite.paletteCache.operators = null;
+            myself.refreshPalette();
+        },
+        Process.prototype.enableJS,
+        'uncheck to disable support for\nnative JavaScript functions',
+        'check to support\nnative JavaScript functions'
+    );
+    */
     if (isRetinaSupported()) {
         addPreference(
             'Retina display support',
@@ -2485,7 +2500,7 @@ IDE_Morph.prototype.settingsMenu = function () {
             'Execute on slider change',
             'toggleSliderExecute',
             ArgMorph.prototype.executeOnSliderEdit,
-            'uncheck to supress\nrunning scripts\nwhen moving the slider',
+            'uncheck to suppress\nrunning scripts\nwhen moving the slider',
             'check to run\nthe edited script\nwhen moving the slider'
         );
     }
@@ -2691,7 +2706,8 @@ IDE_Morph.prototype.settingsMenu = function () {
         'toggleVariableFrameRate',
         StageMorph.prototype.frameRate,
         'uncheck for greater speed\nat variable frame rates',
-        'check for smooth, predictable\nanimations across computers'
+        'check for smooth, predictable\nanimations across computers',
+        true
     );
     addPreference(
         'Flat line ends',
@@ -2782,9 +2798,9 @@ IDE_Morph.prototype.projectMenu = function () {
     menu = new MenuMorph(this);
     menu.addItem('Project notes...', 'editProjectNotes');
     menu.addLine();
-    menu.addItem('New', 'createNewProject');
-    menu.addItem('Open...', 'openProjectsBrowser');
-    menu.addItem('Save', "save");
+    menu.addPair('New', 'createNewProject', '^N');
+    menu.addPair('Open...', 'openProjectsBrowser', '^O');
+    menu.addPair('Save', "save", '^S');
     menu.addItem('Save As...', 'saveProjectsBrowser');
     menu.addLine();
     menu.addItem(
@@ -3193,7 +3209,7 @@ IDE_Morph.prototype.aboutSnap = function () {
         world = this.world();
 
     aboutTxt = 'Snap! 4.0.10 - dev -\nBuild Your Own Blocks\n\n'
-        + 'Copyright \u24B8 2016 Jens M\u00F6nig and '
+        + 'Copyright \u24B8 2017 Jens M\u00F6nig and '
         + 'Brian Harvey\n'
         + 'jens@moenig.org, bh@cs.berkeley.edu\n\n'
 
@@ -4475,6 +4491,8 @@ IDE_Morph.prototype.toggleAppMode = function (appMode) {
                 }
             });
         }
+        // update undrop controls
+        this.currentSprite.scripts.updateUndropControls();
     }
     this.setExtent(this.world().extent()); // resume trackChanges
 };

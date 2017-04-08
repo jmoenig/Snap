@@ -9,7 +9,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2016 by Jens Mönig
+    Copyright (C) 2017 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -145,11 +145,12 @@ radians, useBlurredShadows, SpeechBubbleMorph, modules, StageMorph,
 fontHeight, TableFrameMorph, SpriteMorph, Context, ListWatcherMorph,
 CellMorph, DialogBoxMorph, BlockInputFragmentMorph, PrototypeHatBlockMorph,
 Costume, IDE_Morph, BlockDialogMorph, BlockEditorMorph, localize, isNil,
-isSnapObject, copy, PushButtonMorph, SpriteIconMorph, Process, AlignmentMorph*/
+isSnapObject, copy, PushButtonMorph, SpriteIconMorph, Process, AlignmentMorph,
+CustomCommandBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2016-December-19';
+modules.blocks = '2017-January-05';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -246,52 +247,52 @@ SyntaxElementMorph.uber = Morph.prototype;
 
     outline:
 
-        corner        - radius of command block rounding
+        corner      - radius of command block rounding
         rounding    - radius of reporter block rounding
         edge        - width of 3D-ish shading box
-        hatHeight    - additional top space for hat blocks
+        hatHeight   - additional top space for hat blocks
         hatWidth    - minimum width for hat blocks
         rfBorder    - pixel width of reification border (grey outline)
         minWidth    - minimum width for any syntax element's contents
 
     jigsaw shape:
 
-        inset        - distance from indentation to left edge
+        inset       - distance from indentation to left edge
         dent        - width of indentation bottom
 
     paddings:
 
-        bottomPadding    - adds to the width of the bottom most c-slot
+        bottomPadding   - adds to the width of the bottom most c-slot
         cSlotPadding    - adds to the width of the open "C" in c-slots
-        typeInPadding    - adds pixels between text and edge in input slots
+        typeInPadding   - adds pixels between text and edge in input slots
         labelPadding    - adds left/right pixels to block labels
 
     label:
 
-        labelFontName    - <string> specific font family name
-        labelFontStyle    - <string> generic font family name, cascaded
-        fontSize        - duh
-        embossing        - <Point> offset for embossing effect
-        labelWidth        - column width, used for word wrapping
-        labelWordWrap    - <bool> if true labels can break after each word
-        dynamicInputLabels - <bool> if true inputs can have dynamic labels
+        labelFontName       - <string> specific font family name
+        labelFontStyle      - <string> generic font family name, cascaded
+        fontSize            - duh
+        embossing           - <Point> offset for embossing effect
+        labelWidth          - column width, used for word wrapping
+        labelWordWrap       - <bool> if true labels can break after each word
+        dynamicInputLabels  - <bool> if true inputs can have dynamic labels
 
     snapping:
 
-        feedbackColor        - <Color> for displaying drop feedbacks
-        feedbackMinHeight    - height of white line for command block snaps
-        minSnapDistance        - threshold when commands start snapping
-        reporterDropFeedbackPadding    - increases reporter drop feedback
+        feedbackColor       - <Color> for displaying drop feedbacks
+        feedbackMinHeight   - height of white line for command block snaps
+        minSnapDistance     - threshold when commands start snapping
+        reporterDropFeedbackPadding  - increases reporter drop feedback
 
     color gradients:
 
         contrast        - <percent int> 3D-ish shading gradient contrast
-        labelContrast    - <percent int> 3D-ish label shading contrast
-        activeHighlight    - <Color> for stack highlighting when active
-        errorHighlight    - <Color> for error highlighting
-        activeBlur        - <pixels int> shadow for blurred activeHighlight
+        labelContrast   - <percent int> 3D-ish label shading contrast
+        activeHighlight - <Color> for stack highlighting when active
+        errorHighlight  - <Color> for error highlighting
+        activeBlur      - <pixels int> shadow for blurred activeHighlight
         activeBorder    - <pixels int> unblurred activeHighlight
-        rfColor            - <Color> for reified outlines and slot backgrounds
+        rfColor         - <Color> for reified outlines and slot backgrounds
 */
 
 SyntaxElementMorph.prototype.setScale = function (num) {
@@ -659,6 +660,59 @@ SyntaxElementMorph.prototype.getVarNamesDict = function () {
         return dict;
     }
     return {};
+};
+
+// Variable refactoring
+
+SyntaxElementMorph.prototype.refactorVarInStack = function (oldName, newName, isScriptVar) {
+    // Rename all oldName var occurrences found in this block stack into newName
+    // taking care of not being too greedy
+
+    if (this instanceof RingMorph
+            || (!isScriptVar && this.definesScriptVariable(oldName))) {
+        return;
+    }
+
+    if (this.selector === 'reportGetVar'
+            && this.blockSpec === oldName) {
+        this.setSpec(newName);
+        this.fullChanged();
+        this.fixLabelColor();
+    } 
+
+    if (this.choices === 'getVarNamesDict'
+            && this.contents().text === oldName) {
+        this.setContents(newName);
+    }
+
+    if (this instanceof CustomCommandBlockMorph
+            && this.definition.body
+            && isNil(this.definition.declarations[oldName])
+            && !contains(this.definition.variableNames, oldName)) {
+        this.definition.body.expression.refactorVarInStack(oldName, newName);
+    }
+
+    this.inputs().forEach(function (input) {
+        input.refactorVarInStack(oldName, newName);
+    });
+
+    if (this.nextBlock) {
+        var nb = this.nextBlock();
+        if (nb) {
+            nb.refactorVarInStack(oldName, newName);
+        }
+    }
+};
+
+SyntaxElementMorph.prototype.definesScriptVariable = function (name) {
+    // Returns true if this block is defining either a script local var or
+    // an upVar called `name`
+    return ((this.selector === 'doDeclareVariables'
+                || (this.blockSpec && this.blockSpec.match('%upvar')))
+            && (detect(this.inputs()[0].allInputs(), function (input) {
+                return (input.selector === 'reportGetVar'
+                        && input.blockSpec === name);
+            })));
 };
 
 // SyntaxElementMorph drag & drop:
@@ -1068,7 +1122,8 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             part = new InputSlotMorph(
                 null,
                 false,
-                {   color: ['color'],
+                {
+                    color: ['color'],
                     fisheye: ['fisheye'],
                     whirl: ['whirl'],
                     pixelate: ['pixelate'],
@@ -1968,14 +2023,14 @@ SyntaxElementMorph.prototype.endLayout = function () {
     SyntaxElementMorph my most important attributes and public
     accessors are:
 
-    selector    - (string) name of method to be triggered
-    receiver()    - answer the object (sprite) to which I apply
-    inputs()    - answer an array with my arg slots and nested reporters
-    defaults    - an optional Array containing default input values
-    topBlock()    - answer the top block of the stack I'm attached to
-    blockSpec    - a formalized description of my label parts
-    setSpec()    - force me to change my label structure
-    evaluate()    - answer the result of my evaluation
+    selector        - (string) name of method to be triggered
+    receiver()      - answer the object (sprite) to which I apply
+    inputs()        - answer an array with my arg slots and nested reporters
+    defaults        - an optional Array containing default input values
+    topBlock()      - answer the top block of the stack I'm attached to
+    blockSpec       - a formalized description of my label parts
+    setSpec()       - force me to change my label structure
+    evaluate()      - answer the result of my evaluation
     isUnevaluated() - answer whether I am part of a special form
 
     Zebra coloring provides a mechanism to alternate brightness of nested,
@@ -2049,28 +2104,28 @@ SyntaxElementMorph.prototype.endLayout = function () {
 
     arity: multiple
 
-    %mult%x    - where %x stands for any of the above single inputs
-    %inputs - for an additional text label 'with inputs'
-    %words - for an expandable list of default 2 (used in JOIN)
-    %exp - for a static expandable list of minimum 0 (used in LIST)
-    %scriptVars - for an expandable list of variable reporter templates
-    %parms - for an expandable list of formal parameters
-    %ringparms - the same for use inside Rings
+    %mult%x      - where %x stands for any of the above single inputs
+    %inputs      - for an additional text label 'with inputs'
+    %words       - for an expandable list of default 2 (used in JOIN)
+    %exp         - for a static expandable list of minimum 0 (used in LIST)
+    %scriptVars  - for an expandable list of variable reporter templates
+    %parms       - for an expandable list of formal parameters
+    %ringparms   - the same for use inside Rings
 
     special form: upvar
 
-    %upvar - same as %t (inline variable reporter template)
+    %upvar       - same as %t (inline variable reporter template)
 
     special form: input name
 
-    %inputName - variable blob (used in input type dialog)
+    %inputName   - variable blob (used in input type dialog)
 
     examples:
 
         'if %b %c else %c'        - creates Scratch's If/Else block
-        'set pen color to %clr'    - creates Scratch's Pen color block
+        'set pen color to %clr'   - creates Scratch's Pen color block
         'list %mult%s'            - creates BYOB's list reporter block
-        'call %n %inputs'        - creates BYOB's Call block
+        'call %n %inputs'         - creates BYOB's Call block
         'the script %parms %c'    - creates BYOB's THE SCRIPT block
 */
 
@@ -2274,8 +2329,7 @@ BlockMorph.prototype.userMenu = function () {
         vNames = proc && proc.context && proc.context.outerContext ?
                 proc.context.outerContext.variables.names() : [],
         alternatives,
-        top,
-        blck;
+        top;
 
     function addOption(label, toggle, test, onHint, offHint) {
         var on = '\u2611 ',
@@ -2284,6 +2338,22 @@ BlockMorph.prototype.userMenu = function () {
             (test ? on : off) + localize(label),
             toggle,
             test ? onHint : offHint
+        );
+    }
+
+    function renameVar() {
+        var blck = myself.fullCopy();
+        blck.addShadow();
+        new DialogBoxMorph(
+            myself,
+            myself.userSetSpec,
+            myself
+        ).prompt(
+            "Variable name",
+            myself.blockSpec,
+            world,
+            blck.fullImage(), // pic
+            InputSlotMorph.prototype.getVarNamesDict.call(myself)
         );
     }
 
@@ -2297,7 +2367,7 @@ BlockMorph.prototype.userMenu = function () {
             menu.addItem(
                 "script pic with result...",
                 function () {
-                    top.ExportResultPic();
+                    top.exportResultPic();
                 },
                 'open a new window\n' +
                     'with a picture of both\nthis script and its result',
@@ -2306,15 +2376,46 @@ BlockMorph.prototype.userMenu = function () {
         }
     }
     if (this.isTemplate) {
-        if (!(this.parent instanceof SyntaxElementMorph)) {
-            if (this.selector === 'reportGetVar') {
-                addOption(
-                    'transient',
-                    'toggleTransientVariable',
-                    myself.isTransientVariable(),
-                    'uncheck to save contents\nin the project',
-                    'check to prevent contents\nfrom being saved'
+        if (this.parent instanceof SyntaxElementMorph) { // in-line
+            if (this.selector === 'reportGetVar') { // script var definition
+                menu.addLine();
+                menu.addItem(
+                    'rename...',
+                    function () {
+                        myself.refactorThisVar(true); // just the template
+                    },
+                    'rename only\nthis reporter'
                 );
+                menu.addItem(
+                    'rename all...',
+                    'refactorThisVar',
+                    'rename all blocks that\naccess this variable'
+                );
+            }
+        } else { // in palette
+            if (this.selector === 'reportGetVar') {
+                if (!this.isInheritedVariable()) {
+                    addOption(
+                        'transient',
+                        'toggleTransientVariable',
+                        myself.isTransientVariable(),
+                        'uncheck to save contents\nin the project',
+                        'check to prevent contents\nfrom being saved'
+                    );
+                    menu.addLine();
+                    menu.addItem(
+                        'rename...',
+                        function () {
+                            myself.refactorThisVar(true); // just the template
+                        },
+                        'rename only\nthis reporter'
+                    );
+                    menu.addItem(
+                        'rename all...',
+                        'refactorThisVar',
+                        'rename all blocks that\naccess this variable'
+                    );
+                }
             } else if (this.selector !== 'evaluateCustomBlock') {
                 menu.addItem(
                     "hide",
@@ -2337,23 +2438,10 @@ BlockMorph.prototype.userMenu = function () {
     }
     menu.addLine();
     if (this.selector === 'reportGetVar') {
-        blck = this.fullCopy();
-        blck.addShadow();
         menu.addItem(
             'rename...',
-            function () {
-                new DialogBoxMorph(
-                    myself,
-                    myself.userSetSpec,
-                    myself
-                ).prompt(
-                    "Variable name",
-                    myself.blockSpec,
-                    world,
-                    blck.fullImage(), // pic
-                    InputSlotMorph.prototype.getVarNamesDict.call(myself)
-                );
-            }
+            renameVar,
+            'rename only\nthis reporter'
         );
     } else if (SpriteMorph.prototype.blockAlternatives[this.selector]) {
         menu.addItem(
@@ -2520,6 +2608,19 @@ BlockMorph.prototype.hidePrimitive = function () {
     ide.refreshPalette();
 };
 
+BlockMorph.prototype.isInheritedVariable = function () {
+    // private - only for variable getter template inside the palette
+    if (this.isTemplate &&
+            (this.selector === 'reportGetVar') &&
+            (this.parent instanceof FrameMorph)) {
+        return contains(
+            this.receiver().inheritedVariableNames(),
+            this.blockSpec
+        );
+    }
+    return false;
+};
+
 BlockMorph.prototype.isTransientVariable = function () {
     // private - only for variable getter template inside the palette
     var varFrame = this.receiver().variables.silentFind(this.blockSpec);
@@ -2664,21 +2765,33 @@ BlockMorph.prototype.relabel = function (alternativeSelectors) {
 BlockMorph.prototype.setSelector = function (aSelector) {
     // private - used only for relabel()
     var oldInputs = this.inputs(),
+        scripts = this.parentThatIsA(ScriptsMorph),
+        surplus,
         info;
     info = SpriteMorph.prototype.blocks[aSelector];
     this.setCategory(info.category);
     this.selector = aSelector;
     this.setSpec(localize(info.spec));
-    this.restoreInputs(oldInputs);
+    surplus = this.restoreInputs(oldInputs);
     this.fixLabelColor();
+
+    // place surplus blocks on scipts
+    if (scripts && surplus.length) {
+        surplus.forEach(function (blk) {
+            blk.moveBy(10);
+            scripts.add(blk);
+        });
+    }
 };
 
 BlockMorph.prototype.restoreInputs = function (oldInputs) {
     // private - used only for relabel()
     // try to restore my previous inputs when my spec has been changed
+    // return an Array of left-over blocks, if any
     var i = 0,
         old,
         nb,
+        leftOver = [],
         myself = this;
 
     this.inputs().forEach(function (inp) {
@@ -2700,7 +2813,18 @@ BlockMorph.prototype.restoreInputs = function (oldInputs) {
         }
         i += 1;
     });
+
+    // gather surplus blocks
+    for (i; i < oldInputs.length; i += 1) {
+        old = oldInputs[i];
+        if (old instanceof ReporterBlockMorph) {
+            leftOver.push(old);
+        } else if (old instanceof CommandSlotMorph) {
+            leftOver.push(old.nestedBlock());
+        }
+    }
     this.cachedInputs = null;
+    return leftOver;
 };
 
 BlockMorph.prototype.showHelp = function () {
@@ -2997,6 +3121,158 @@ BlockMorph.prototype.codeMappingHeader = function () {
         hat.alternateBlockColor();
     }
     return hat;
+};
+
+// Variable refactoring
+
+BlockMorph.prototype.refactorThisVar = function (justTheTemplate) {
+    // Rename all occurrences of the variable this block is holding,
+    // taking care of its lexical scope
+
+    var myself = this,
+        oldName = this.blockSpec,
+        receiver = this.receiver(),
+        ide = this.parentThatIsA(IDE_Morph),
+        stage = ide.stage,
+        oldWatcher = receiver.findVariableWatcher(oldName),
+        cpy = this.fullCopy(),
+        oldValue, newWatcher;
+
+    cpy.addShadow();
+    new DialogBoxMorph(this, renameVarTo, this).prompt(
+        'Variable name',
+        oldName,
+        this.world(),
+        cpy.fullImage(), // pic
+        InputSlotMorph.prototype.getVarNamesDict.call(this)
+    );
+
+    function renameVarTo (newName) {
+        var definer;
+        
+        if (this.parent instanceof SyntaxElementMorph) {
+            // script var
+            if (justTheTemplate) {
+                myself.userSetSpec(newName);
+                return;
+            }
+            definer = this.parentThatIsA(CommandBlockMorph);
+            if (definer.definesScriptVariable(newName)) {
+                varExistsError();
+                return;
+            } else {
+                definer.refactorVarInStack(oldName, newName, true);
+            }
+        } else if (receiver.hasSpriteVariable(oldName)) {
+            // sprite local var
+            if (receiver.hasSpriteVariable(newName)) {
+                varExistsError();
+                return;
+            } else if (!isNil(ide.globalVariables.vars[newName])) {
+                varExistsError('as a global variable');
+                return;
+            } else {
+                oldValue = receiver.variables.getVar(oldName);
+                receiver.deleteVariable(oldName);
+                receiver.addVariable(newName, false);
+                receiver.variables.setVar(newName, oldValue);
+
+                if (oldWatcher && oldWatcher.isVisible) {
+                    newWatcher = receiver.toggleVariableWatcher(
+                        newName,
+                        false
+                    );
+                    newWatcher.setPosition(oldWatcher.position());
+                }
+
+                if (!justTheTemplate) {
+                    receiver.refactorVariableInstances(
+                        oldName,
+                        newName,
+                        false
+                    );
+                    receiver.customBlocks.forEach(function (eachBlock) {
+                        eachBlock.body.expression.refactorVarInStack(
+                            oldName,
+                            newName
+                        );
+                    });
+                }
+            }
+        } else {
+            // global var
+            if (!isNil(ide.globalVariables.vars[newName])) {
+                varExistsError();
+                return;
+            } else if (
+                    detect(
+                        stage.children,
+                        function (any) {
+                            return any instanceof SpriteMorph && 
+                                any.hasSpriteVariable(newName);
+                        })
+                    ) {
+                varExistsError('as a sprite local variable');
+                return;
+            } else {
+                oldValue = ide.globalVariables.getVar(oldName);
+                stage.deleteVariable(oldName);
+                stage.addVariable(newName, true);
+                ide.globalVariables.setVar(newName, oldValue);
+
+                if (oldWatcher && oldWatcher.isVisible) {
+                    newWatcher = receiver.toggleVariableWatcher(
+                        newName,
+                        true
+                    );
+                    newWatcher.setPosition(oldWatcher.position());
+                }
+
+                if (!justTheTemplate) {
+                    stage.refactorVariableInstances(
+                        oldName,
+                        newName,
+                        true
+                    );
+                    stage.globalBlocks.forEach(function (eachBlock) {
+                        eachBlock.body.expression.refactorVarInStack(
+                            oldName,
+                            newName
+                        );
+                    });
+
+                    stage.forAllChildren(function (child) {
+                        if (child instanceof SpriteMorph) {
+                            child.refactorVariableInstances(
+                                oldName,
+                                newName,
+                                true
+                            );
+                            child.customBlocks.forEach(
+                                function (eachBlock) {
+                                    eachBlock.body.expression
+                                        .refactorVarInStack(
+                                            oldName,
+                                            newName
+                                        );
+                            });
+                        }
+                    });
+                }
+            }
+        }
+
+        ide.flushBlocksCache('variables');
+        ide.refreshPalette();
+    }
+
+    function varExistsError (where) {
+        ide.inform(
+            'Variable exists', 
+            'A variable with this name already exists ' +
+                (where || 'in this context') + '.'
+            );
+    }
 };
 
 // BlockMorph drawing
@@ -4790,7 +5066,7 @@ ReporterBlockMorph.prototype.mouseClickLeft = function (pos) {
 
 // ReporterBlock exporting picture with result bubble
 
-ReporterBlockMorph.prototype.ExportResultPic = function () {
+ReporterBlockMorph.prototype.exportResultPic = function () {
     var top = this.topBlock(),
         receiver = top.receiver(),
         stage;
@@ -4803,7 +5079,6 @@ ReporterBlockMorph.prototype.ExportResultPic = function () {
         }
     }
 };
-
 
 // ReporterBlockMorph deleting
 
@@ -5723,7 +5998,7 @@ ScriptsMorph.prototype.userMenu = function () {
     if (this.dropRecord) {
         if (this.dropRecord.lastRecord) {
             hasUndropQueue = true;
-            menu.addItem(
+            menu.addPair(
                 [
                     new SymbolMorph(
                         'turnBack',
@@ -5732,12 +6007,13 @@ ScriptsMorph.prototype.userMenu = function () {
                     localize('undrop')
                 ],
                 'undrop',
+                '^Z',
                 'undo the last\nblock drop\nin this pane'
             );
         }
         if (this.dropRecord.nextRecord) {
             hasUndropQueue = true;
-            menu.addItem(
+            menu.addPair(
                 [
                     new SymbolMorph(
                         'turnForward',
@@ -5746,6 +6022,7 @@ ScriptsMorph.prototype.userMenu = function () {
                     localize('redrop')
                 ],
                 'redrop',
+                '^Y',
                 'redo the last undone\nblock drop\nin this pane'
             );
         }
@@ -7531,8 +7808,19 @@ InputSlotMorph.prototype.setContents = function (aStringOrFloat) {
 // InputSlotMorph drop-down menu:
 
 InputSlotMorph.prototype.dropDownMenu = function (enableKeyboard) {
-    var choices = this.choices,
-        key,
+    var menu = this.menuFromDict(this.choices);
+    if (menu.items.length > 0) {
+        if (enableKeyboard) {
+            menu.popup(this.world(), this.bottomLeft());
+            menu.getFocus();
+        } else {
+            menu.popUpAtHand(this.world());
+        }
+    }
+};
+
+InputSlotMorph.prototype.menuFromDict = function (choices, noEmptyOption) {
+    var key,
         menu = new MenuMorph(
             this.setContents,
             null,
@@ -7545,31 +7833,24 @@ InputSlotMorph.prototype.dropDownMenu = function (enableKeyboard) {
     } else if (isString(choices)) {
         choices = this[choices]();
     }
-    if (!choices) {
-        return null;
+    if (!noEmptyOption) {
+        menu.addItem(' ', null);
     }
-    menu.addItem(' ', null);
     for (key in choices) {
         if (Object.prototype.hasOwnProperty.call(choices, key)) {
             if (key[0] === '~') {
                 menu.addLine();
             // } else if (key.indexOf('§_def') === 0) {
             //     menu.addItem(choices[key].blockInstance(), choices[key]);
+            } else if (choices[key] instanceof Object &&
+                    !(choices[key] instanceof Array)) {
+                menu.addMenu(key, this.menuFromDict(choices[key], true));
             } else {
                 menu.addItem(key, choices[key]);
             }
         }
     }
-    if (menu.items.length > 0) {
-        if (enableKeyboard) {
-            menu.popup(this.world(), this.bottomLeft());
-            menu.getFocus();
-        } else {
-            menu.popUpAtHand(this.world());
-        }
-    } else {
-        return null;
-    }
+    return menu;
 };
 
 InputSlotMorph.prototype.messagesMenu = function () {
@@ -7602,7 +7883,6 @@ InputSlotMorph.prototype.messagesMenu = function () {
             myself.world()
         );
     };
-
     return dict;
 };
 
@@ -7634,7 +7914,6 @@ InputSlotMorph.prototype.messagesReceivedMenu = function () {
             myself.world()
         );
     };
-
     return dict;
 };
 
@@ -8501,19 +8780,18 @@ TemplateSlotMorph.prototype.unflash = function () {
     I am a diamond-shaped argument slot.
     My block spec is
 
-    %b        - Boolean
+    %b         - Boolean
     %boolUE    - Boolean unevaluated
 
     I can be directly edited. When the user clicks on me I toggle
     between <true>, <false> and <null> values.
 
-    evaluate returns my value.
+    evaluate() returns my value.
 
     my most important public attributes and accessors are:
 
-    value - user editable contents (Boolean or null)
+    value                      - user editable contents (Boolean or null)
     setContents(Boolean/null)  - display the argument (Boolean or null)
-
 */
 
 // BooleanSlotMorph inherits from ArgMorph:
@@ -10729,7 +11007,7 @@ function BlockHighlightMorph() {
     evaluation is handles by the interpreter
 */
 
-// MultiArgMorph  inherits from ArgMorph:
+// MultiArgMorph inherits from ArgMorph:
 
 MultiArgMorph.prototype = new ArgMorph();
 MultiArgMorph.prototype.constructor = MultiArgMorph;
@@ -11137,10 +11415,9 @@ MultiArgMorph.prototype.mappedCode = function (definitions) {
 // MultiArgMorph arity evaluating:
 
 MultiArgMorph.prototype.evaluate = function () {
-/*
-    this is usually overridden by the interpreter. This method is only
-    called (and needed) for the variables menu.
-*/
+    // this is usually overridden by the interpreter. This method is only
+    // called (and needed) for the variables menu.
+
     var result = [];
     this.inputs().forEach(function (slot) {
         result.push(slot.evaluate());
@@ -11166,7 +11443,7 @@ MultiArgMorph.prototype.isEmptySlot = function () {
     input's value along.
 */
 
-// ArgLabelMorph  inherits from ArgMorph:
+// ArgLabelMorph inherits from ArgMorph:
 
 ArgLabelMorph.prototype = new ArgMorph();
 ArgLabelMorph.prototype.constructor = ArgLabelMorph;
@@ -11276,10 +11553,9 @@ ArgLabelMorph.prototype.reactToGrabOf = function () {
 // ArgLabelMorph evaluating:
 
 ArgLabelMorph.prototype.evaluate = function () {
-/*
-    this is usually overridden by the interpreter. This method is only
-    called (and needed) for the variables menu.
-*/
+    // this is usually overridden by the interpreter. This method is only
+    // called (and needed) for the variables menu.
+
     return this.argMorph().evaluate();
 };
 
@@ -11291,7 +11567,7 @@ ArgLabelMorph.prototype.isEmptySlot = function () {
 
 /*
     I am an unevaluated, non-editable, rf-colored, rounded or diamond
-    input slot.    My current (only) use is in the THE BLOCK block.
+    input slot. My current (only) use is in the THE BLOCK block.
 
     My command spec is %f
 */

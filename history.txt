@@ -3211,6 +3211,50 @@ http://snap.berkeley.edu/run#cloud:Username=jens&ProjectName=rotation
 * Objects: simplified reporterize>>blockFromAST
 * Threads: prevented color slots from flashing. Good catch, thanks, Joan!
 
+161223
+------
+* Objects: tweaked reporterize infixParser
+
+161225
+------
+* GUI: update undrop controls when switching sprites and display modes
+
+161227
+------
+* GUI, Threads, Objects, Store: Disable JS-Functions, to protect users from malicious scripts, commented out for now
+
+161229
+------
+* BYOB: Disabled hover-help for custom blocks (some people find it annoying)
+* GUI: Hide setting for “prefer smooth animations” (now - mostly - redundant)
+
+161231
+------
+* Morphic: support for menu shortcuts (ongoing)
+* GUI, Blocks: menu shortcuts (experimental)
+
+170102
+------
+* Morphic: use animations to schedule tool tips
+
+170103
+------
+* Hierarchical menus, thanks, Brian!
+* Tweaks to hierarchical menus
+
+170104
+------
+* Variable refactoring, yay! Thanks, Bernat!!
+* Threads: fixed #1602
+
+170105
+------
+* Blocks: refactored variable refactoring code
+* fixed #1604
+* Blocks, GUI: changed shortcut symbol for “Ctrl” key to ^
+* Blocks: fixed #696 - Keep left-over blocks from “relabel” around
+
+
 == v4.10 === (in development)
 
 Features:
@@ -3218,14 +3262,17 @@ Features:
 * undo / redo for blocks, unlimited, but has some issues
 * search field for projects, thanks, Bernat!!
 * basic typography support for custom block labels, thanks, Bernat!!
-* Treat JS-function reporters the same as variable getters wrt rings
+* treat JS-function reporters the same as variable getters wrt rings
 * new url switch #dl: for downloading raw shared projects
 * new url option switch: &noExitWarning
 * svg support for images from the web (svg files have been supported for a long time)
 * use media dialog for browsing and importing sounds
 * highly experimental infix-expression-to-reporter parser. Thanks, Bernat, for the brilliant idea to add it to the search-blocks field!
+* hierarchical menus, also for custom blocks, thanks, Brian!
+* variable refactoring, thanks, Bernat!
 
 Fixes:
 * Music (play note) to work again in new and recent browser versions (Chrome 55)
 * IDE layout: fixed resizing issues when the window becomes too small
 * Translation updates (Russian, Polish, Danish, Portuguese, Catalan, German)
+* Keep left-over blocks from “relabel” around
