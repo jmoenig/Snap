@@ -7,7 +7,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2016 by Jens Mönig
+    Copyright (C) 2017 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -57,11 +57,11 @@ BlockMorph, ArgMorph, InputSlotMorph, TemplateSlotMorph, CommandSlotMorph,
 FunctionSlotMorph, MultiArgMorph, ColorSlotMorph, nop, CommentMorph, isNil,
 localize, sizeOf, ArgLabelMorph, SVG_Costume, MorphicPreferences,
 SyntaxElementMorph, Variable, isSnapObject, console, BooleanSlotMorph,
-normalizeCanvas*/
+normalizeCanvas, contains*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2016-December-27';
+modules.store = '2017-March-01';
 
 
 // XML_Serializer ///////////////////////////////////////////////////////
@@ -412,6 +412,8 @@ SnapSerializer.prototype.rawLoadProjectModel = function (xmlNode) {
     project.stage.setExtent(StageMorph.prototype.dimensions);
     SpriteMorph.prototype.useFlatLineEnds =
         model.stage.attributes.lines === 'flat';
+    BooleanSlotMorph.prototype.isTernary =
+        model.stage.attributes.ternary !== 'false';
     project.stage.isThreadSafe =
         model.stage.attributes.threadsafe === 'true';
     StageMorph.prototype.enableCodeMapping =
@@ -836,7 +838,9 @@ SnapSerializer.prototype.loadCustomBlocks = function (
                 i += 1;
                 definition.declarations[names[i]] = [
                     child.attributes.type,
-                    child.contents,
+                    contains(['%b', '%boolUE'], child.attributes.type) ?
+                        (child.contents ? child.contents === 'true' : null)
+                            : child.contents,
                     options ? options.contents : undefined,
                     child.attributes.readonly === 'true'
                 ];
@@ -1007,7 +1011,8 @@ SnapSerializer.prototype.loadComment = function (model) {
 
 SnapSerializer.prototype.loadBlock = function (model, isReporter) {
     // private
-    var block, info, inputs, isGlobal, rm, receiver;
+    var block, info, inputs, isGlobal, rm, receiver, migration,
+        migrationOffset = 0;
     if (model.tag === 'block') {
         if (Object.prototype.hasOwnProperty.call(
                 model.attributes,
@@ -1028,6 +1033,10 @@ SnapSerializer.prototype.loadBlock = function (model, isReporter) {
         }
         */
         block = SpriteMorph.prototype.blockForSelector(model.attributes.s);
+        migration = SpriteMorph.prototype.blockMigrations[model.attributes.s];
+        if (migration) {
+            migrationOffset = migration.offset;
+        }
     } else if (model.tag === 'custom-block') {
         isGlobal = model.attributes.scope ? false : true;
         receiver = isGlobal ? this.project.stage
@@ -1088,7 +1097,7 @@ SnapSerializer.prototype.loadBlock = function (model, isReporter) {
         } else if (child.tag === 'receiver') {
             nop(); // ignore
         } else {
-            this.loadInput(child, inputs[i], block);
+            this.loadInput(child, inputs[i + migrationOffset], block);
         }
     }, this);
     block.cachedInputs = null;
@@ -1109,6 +1118,9 @@ SnapSerializer.prototype.obsoleteBlock = function (isReporter) {
 SnapSerializer.prototype.loadInput = function (model, input, block) {
     // private
     var inp, val, myself = this;
+    if (isNil(input)) {
+        return;
+    }
     if (model.tag === 'script') {
         inp = this.loadScript(model);
         if (inp) {
@@ -1509,6 +1521,7 @@ StageMorph.prototype.toXML = function (serializer) {
             '<stage name="@" width="@" height="@" ' +
             'costume="@" tempo="@" threadsafe="@" ' +
             'lines="@" ' +
+            'ternary="@" ' +
             'codify="@" ' +
             'inheritance="@" ' +
             'sublistIDs="@" ' +
@@ -1538,6 +1551,7 @@ StageMorph.prototype.toXML = function (serializer) {
         this.getTempo(),
         this.isThreadSafe,
         SpriteMorph.prototype.useFlatLineEnds ? 'flat' : 'round',
+        BooleanSlotMorph.prototype.isTernary,
         this.enableCodeMapping,
         this.enableInheritance,
         this.enableSublistIDs,

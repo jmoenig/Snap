@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph,
 TableFrameMorph, ColorSlotMorph, isSnapObject*/
 
-modules.threads = '2017-January-04';
+modules.threads = '2017-March-01';
 
 var ThreadManager;
 var Process;
@@ -361,6 +361,9 @@ ThreadManager.prototype.findProcess = function (block) {
 
 ThreadManager.prototype.doWhen = function (block, stopIt) {
     if (this.pauseCustomHatBlocks) {return; }
+    if ((!block) || this.findProcess(block)) {
+        return;
+    }
     var pred = block.inputs()[0], world;
     if (block.removeHighlight()) {
         world = block.world();
@@ -369,8 +372,6 @@ ThreadManager.prototype.doWhen = function (block, stopIt) {
         }
     }
     if (stopIt) {return; }
-    if ((!block) || this.findProcess(block)
-    ) {return; }
     try {
         if (invoke(
             pred,
@@ -940,7 +941,7 @@ Process.prototype.reify = function (topBlock, parameterNames, isCustomBlock) {
                 topBlock : topBlock.fullCopy();
         context.expression.show(); // be sure to make visible if in app mode
 
-        if (!isCustomBlock) {
+        if (!isCustomBlock && !parameterNames.length()) {
             // mark all empty slots with an identifier
             context.expression.allEmptySlots().forEach(function (slot) {
                 i += 1;
@@ -3213,8 +3214,27 @@ Process.prototype.doMapCode = function (aContext, aString) {
     }
 };
 
-Process.prototype.doMapStringCode = function (aString) {
-    StageMorph.prototype.codeMappings.string = aString || '<#1>';
+Process.prototype.doMapValueCode = function (type, aString) {
+    var tp = this.inputOption(type);
+    switch (tp) {
+    case 'String':
+        StageMorph.prototype.codeMappings.string = aString || '<#1>';
+        break;
+    case 'Number':
+        StageMorph.prototype.codeMappings.number = aString || '<#1>';
+        break;
+    case 'true':
+        StageMorph.prototype.codeMappings.boolTrue = aString || 'true';
+        break;
+    case 'false':
+        StageMorph.prototype.codeMappings.boolFalse = aString || 'true';
+        break;
+    default:
+        throw new Error(
+            localize('unsupported data type') + ' ' + tp
+        );
+    }
+
 };
 
 Process.prototype.doMapListCode = function (part, kind, aString) {
@@ -3640,7 +3660,7 @@ function Variable(value, isTransient) {
 }
 
 Variable.prototype.toString = function () {
-    return 'a ' + this.isTransient ? 'transient ' : '' + 'Variable [' +
+    return 'a ' + (this.isTransient ? 'transient ' : '') + 'Variable [' +
         this.value + ']';
 };
 
