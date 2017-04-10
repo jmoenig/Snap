@@ -1137,7 +1137,7 @@
 
 /*global window, HTMLCanvasElement, FileReader, Audio, FileList*/
 
-var morphicVersion = '2017-January-09';
+var morphicVersion = '2017-April-10';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = getBlurredShadowSupport(); // check for Chrome-bug
 
@@ -11294,29 +11294,13 @@ WorldMorph.prototype.fillPage = function () {
 // WorldMorph global pixel access:
 
 WorldMorph.prototype.getGlobalPixelColor = function (point) {
+    // answer the color at the given point.
+
 /*
-    answer the color at the given point.
+    // original method, now deprecated as of 4/4/2017 because Chrome
+    // "taints" the on-screen canvas as soon as its image data is
+    // requested, significantly slowing down subsequent blittings
 
-    Note: for some strange reason this method works fine if the page is
-    opened via HTTP, but *not*, if it is opened from a local uri
-    (e.g. from a directory), in which case it's always null.
-
-    This behavior is consistent throughout several browsers. I have no
-    clue what's behind this, apparently the imageData attribute of
-    canvas context only gets filled with meaningful data if transferred
-    via HTTP ???
-
-    This is somewhat of a showstopper for color detection in a planned
-    offline version of Snap.
-
-    The issue has also been discussed at: (join lines before pasting)
-    http://stackoverflow.com/questions/4069400/
-    canvas-getimagedata-doesnt-work-when-running-locally-on-windows-
-    security-excep
-
-    The suggestion solution appears to work, since the settings are
-    applied globally.
-*/
     var dta = this.worldCanvas.getContext('2d').getImageData(
         point.x,
         point.y,
@@ -11324,6 +11308,14 @@ WorldMorph.prototype.getGlobalPixelColor = function (point) {
         1
     ).data;
     return new Color(dta[0], dta[1], dta[2]);
+*/
+
+    var clr = this.hand.morphAtPointer().getPixelColor(this.hand.position());
+    // IMPORTANT:
+    // all callers of getGlobalPixelColor should make provisions for retina
+    // display support, which gets null-pixels interlaced with non-null ones:
+    // if (!clr.a) {/* ignore */ }
+    return clr;
 };
 
 // WorldMorph events:

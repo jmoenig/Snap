@@ -3403,3 +3403,7 @@ Fixes:
 170410
 ------
 * Revert to 4.0.10 to prepare for newly surfaced bug in the Chrome browser
+* fixed #1707 (new Chrome blitting issue)
+
+== v4.0.10.1 - maintenance release - ===
+
