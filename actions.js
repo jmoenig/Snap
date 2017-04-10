@@ -2279,7 +2279,9 @@ ActionManager.prototype.loadProject = function(ide, lastSeen, serialized) {
     if (serialized) {
         event.args.push(serialized);
     }
-    SnapUndo.record(event);
+    if (SnapUndo.allEvents.length === 0) {
+        SnapUndo.record(event);
+    }
 
     // Update the id counter
     this.lastSeen = lastSeen || 0;

@@ -138,6 +138,139 @@ XML_Serializer.prototype.mediaXML = function () {
     return xml + '</media>';
 };
 
+XML_Serializer.prototype.undoQueueXML = function (id) {
+    var events = SnapUndo.eventHistory[id] || [];
+
+    return this.format('<undo-queue id="@" undo-count="@">%</undo-queue>',
+        id,
+        SnapUndo.undoCount[id],
+        this.undoEventsXML(events)
+    );
+};
+
+XML_Serializer.prototype.undoEventsXML = function (events) {
+    var queue = [],
+        xml;
+
+    // TODO: cache some things...
+
+    for (var i = events.length; i--;) {
+        event = events[i];
+
+        args = [];
+        for (var a = event.args.length; a--;) {
+            args.unshift(this.getArgumentXML('arg', event.args[a]));
+        }
+        args = args.join('');
+
+        xml = this.format(
+            '<event id="@" type="@" replayType="@" time="@" user="@">%</event>',
+            event.id,
+            event.type,
+            event.replayType || 0,
+            event.time,
+            event.user,
+            args
+        );
+        queue.unshift(xml);
+    }
+
+    return queue.join('');
+};
+
+XML_Serializer.prototype.getArgumentXML = function (tag, item) {
+    var myself = this,
+        xml = item;
+
+    if (item instanceof Object) {
+        var keys = Object.keys(item);
+
+        xml = keys.map(function(key) {
+            if (item[key] instanceof Array) {
+                return item[key].map(function(el) {
+                    // prefix index with '_' since xml can't start with a number
+                    return myself.getArgumentXML('_' + key, el);
+                }).join('');
+            } else {
+                if (/^[^a-zA-Z].*/.test(key)) {
+                    return myself.getArgumentXML('_' + key, item[key]);
+                }
+                return myself.getArgumentXML(key, item[key]);
+            }
+        }).join('');
+
+    } else if (typeof item === 'string' && item[0] === '<') {
+        xml = '<![CDATA[' + item + ']]>';
+    }
+
+    return [
+        '<', tag, '>',
+        xml,
+        '</', tag, '>'
+    ].join('');
+};
+
+XML_Serializer.prototype.loadEventArg = function (xml) {
+    var content,
+        child,
+        isArrayLike,
+        tag,
+        largestIndex = -1;
+
+    if (xml.children.length) {
+        if (xml.children[0].tag === 'CDATA') {
+            return xml.children[0].contents;
+        }
+
+        content = {};
+        isArrayLike = true;
+
+        for (var i = xml.children.length; i--;) {
+            child = xml.children[i];
+            tag = child.tag[0] === '_' ? child.tag.slice(1) : child.tag;
+            if (isNaN(+tag)) {
+                isArrayLike = false;
+            }
+            if (content[tag] instanceof Array) {
+                content[tag].unshift(this.loadEventArg(child));
+            } else if (content[tag]) {
+                content[tag] = [this.loadEventArg(child), content[tag]];
+            } else {
+                content[tag] = this.loadEventArg(child);
+            }
+            if (isArrayLike) {
+                largestIndex = Math.max(largestIndex, +tag);
+            }
+        }
+
+        if (isArrayLike) {
+            content.length = largestIndex + 1;
+            content = Array.prototype.slice.call(content);
+        }
+
+        return content;
+    } else {
+        return xml.contents;
+    }
+};
+
+XML_Serializer.prototype.historyXML = function (ownerId) {
+    var myself = this,
+        prefix = ownerId && ownerId + '/',
+        queueIds = SnapUndo.allQueueIds().filter(function(queueId) {
+            return prefix ? queueId.indexOf(prefix) === 0 :
+                queueId.indexOf('/') === -1;
+        });
+
+    return queueIds.map(function(id) {
+        return myself.undoQueueXML(id);
+    }).join('');
+};
+
+XML_Serializer.prototype.replayHistory = function () {
+    return this.undoEventsXML(SnapUndo.allEvents);
+};
+
 XML_Serializer.prototype.add = function (object) {
     // private - mark the object with a serializationID property and add it
     if (object[this.idProperty]) { // already present
@@ -368,6 +501,7 @@ SnapSerializer.prototype.rawLoadProjectModel = function (xmlNode) {
     model.globalVariables = model.project.childNamed('variables');
     project.globalVariables = new VariableFrame();
     project.collabStartIndex = +(model.project.attributes.collabStartIndex || 0);
+    this.loadReplayHistory(xmlNode.childNamed('replay'));
 
     /* Stage */
 
@@ -460,6 +594,7 @@ SnapSerializer.prototype.rawLoadProjectModel = function (xmlNode) {
         );
     }
     this.loadObject(project.stage, model.stage);
+    this.loadHistory(xmlNode.childNamed('history'));
 
     /* Sprites */
 
@@ -469,6 +604,7 @@ SnapSerializer.prototype.rawLoadProjectModel = function (xmlNode) {
     model.sprites.childrenNamed('sprite').forEach(function (model) {
         myself.loadValue(model);
     });
+
 
     // restore inheritance and nesting associations
     myself.project.stage.children.forEach(function (sprite) {
@@ -580,6 +716,55 @@ SnapSerializer.prototype.rawLoadProjectModel = function (xmlNode) {
     });
     this.objects = {};
     return project;
+};
+
+SnapSerializer.prototype.loadReplayHistory = function (xml) {
+    var queue = xml.children,
+        event;
+
+    for (var e = queue.length; e--;) {
+        // TODO: recover the ownerid
+        event = this.parseEvent(null, queue[e]);
+        SnapUndo.allEvents.unshift(event);
+    }
+};
+
+SnapSerializer.prototype.loadHistory = function (model) {
+    var queues = model.children,
+        queue,
+        event,
+        id;
+
+    for (var i = queues.length; i--;) {
+        id = queues[i].attributes.id;
+        SnapUndo.undoCount[id] = +queues[i].attributes['undo-count'] || 0;
+        SnapUndo.eventHistory[id] = [];
+        queue = queues[i].children;
+        for (var e = queue.length; e--;) {
+            event = this.parseEvent(id, queue[e]);
+            SnapUndo.eventHistory[id].unshift(event);
+        }
+    }
+};
+
+SnapSerializer.prototype.parseEvent = function (owner, xml) {
+    var args = [];
+
+    for (var i = xml.children.length; i--;) {
+        // The argument is the children (if there is one) converted to a
+        // string or the string contents (like a string id)
+        args.unshift(this.loadEventArg(xml.children[i]));
+    }
+
+    return {
+        id: +xml.attributes.id,
+        owner: owner,
+        type: xml.attributes.type,
+        replayType: +xml.attributes.replayType,
+        time: +xml.attributes.time,
+        user: xml.attributes.user,
+        args: args
+    };
 };
 
 SnapSerializer.prototype.loadBlocks = function (xmlString, targetStage) {
@@ -1300,6 +1485,7 @@ SnapSerializer.prototype.loadValue = function (model) {
         v.drawNew();
         v.gotoXY(+model.attributes.x || 0, +model.attributes.y || 0);
         myself.loadObject(v, model);
+        myself.loadHistory(model.childNamed('history'));
         return v;
     case 'context':
         v = new Context(null);
@@ -1499,6 +1685,7 @@ SnapSerializer.prototype.openProject = function (project, ide) {
     //})
 
     ide.world().keyboardReceiver = project.stage;
+
     return project;
 };
 
@@ -1570,6 +1757,8 @@ StageMorph.prototype.toXML = function (serializer) {
             '<code>%</code>' +
             '<blocks>%</blocks>' +
             '<variables>%</variables>' +
+            '<history>%</history>' +
+            '<replay>%</replay>' +
             '</project>',
         SnapActions.lastSeen,
         (ide && ide.projectName) ? ide.projectName : localize('Untitled'),
@@ -1605,7 +1794,9 @@ StageMorph.prototype.toXML = function (serializer) {
         code('codeMappings'),
         serializer.store(this.globalBlocks),
         (ide && ide.globalVariables) ?
-                    serializer.store(ide.globalVariables) : ''
+                    serializer.store(ide.globalVariables) : '',
+        serializer.historyXML(this.id),
+        serializer.replayHistory()
     );
 };
 
@@ -1613,6 +1804,7 @@ SpriteMorph.prototype.toXML = function (serializer) {
     var stage = this.parentThatIsA(StageMorph),
         ide = stage ? stage.parentThatIsA(IDE_Morph) : null,
         idx = ide ? ide.sprites.asArray().indexOf(this) + 1 : 0;
+
     return serializer.format(
         '<sprite name="@" collabId="@" idx="@" x="@" y="@"' +
             ' heading="@"' +
@@ -1628,6 +1820,7 @@ SpriteMorph.prototype.toXML = function (serializer) {
             '<variables>%</variables>' +
             '<blocks>%</blocks>' +
             '<scripts>%</scripts>' +
+            '<history>%</history>' +
             '</sprite>',
         this.name,
         this.id,
@@ -1671,7 +1864,8 @@ SpriteMorph.prototype.toXML = function (serializer) {
         serializer.store(this.variables),
         !this.customBlocks ?
                     '' : serializer.store(this.customBlocks),
-        serializer.store(this.scripts)
+        serializer.store(this.scripts),
+        serializer.historyXML(this.id)
     );
 };
 

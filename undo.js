@@ -43,6 +43,10 @@ UndoManager.prototype.record = function(event) {
     }
 };
 
+UndoManager.prototype.allQueueIds = function(owner) {
+    return Object.keys(this.eventHistory);
+};
+
 UndoManager.prototype.canUndo = function(owner) {
     var ownerId = owner.id || owner;
     return this.eventHistory[ownerId] &&

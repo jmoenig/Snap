@@ -5393,7 +5393,7 @@ IDE_Morph.prototype.exportProjectNoMedia = function (name) {
 };
 
 IDE_Morph.prototype.exportProjectAsCloudData = function (name) {
-    var menu, str, media, dta;
+    var menu, str, media, replay, dta;
     this.serializer.isCollectingMedia = true;
     if (name) {
         this.setProjectName(name);
@@ -5402,7 +5402,8 @@ IDE_Morph.prototype.exportProjectAsCloudData = function (name) {
                 menu = this.showMessage('Exporting');
                 str = this.serializer.serialize(this.stage);
                 media = this.serializer.mediaXML(name);
-                dta = '<snapdata>' + str + media + '</snapdata>';
+                replay = this.serializer.replayHistory();
+                dta = '<snapdata>' + str + replay + media + '</snapdata>';
                 this.saveXMLAs(str, this.projectName);
                 menu.destroy();
                 this.showMessage('Exported!', 1);
@@ -5414,7 +5415,8 @@ IDE_Morph.prototype.exportProjectAsCloudData = function (name) {
             menu = this.showMessage('Exporting');
             str = this.serializer.serialize(this.stage);
             media = this.serializer.mediaXML(name);
-            dta = '<snapdata>' + str + media + '</snapdata>';
+            replay = this.serializer.replayHistory();
+            dta = '<snapdata>' + str + replay + media + '</snapdata>';
             this.saveXMLAs(str, this.projectName);
             menu.destroy();
             this.showMessage('Exported!', 1);

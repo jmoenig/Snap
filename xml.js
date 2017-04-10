@@ -327,6 +327,13 @@ XML_Element.prototype.parseStream = function (stream) {
 
     // tag:
     this.tag = stream.word();
+    if (this.tag.indexOf('![CDATA[') === 0) {
+        this.contents = this.tag.slice(8) + stream.upTo(']]>');
+        this.tag = 'CDATA';
+        stream.skip(3);
+        return;
+    }
+
     stream.skipSpace();
 
     // attributes:
