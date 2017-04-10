@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph,
 TableFrameMorph, ColorSlotMorph, isSnapObject*/
 
-modules.threads = '2017-January-11';
+modules.threads = '2017-April-10';
 
 var ThreadManager;
 var Process;
@@ -941,7 +941,7 @@ Process.prototype.reify = function (topBlock, parameterNames, isCustomBlock) {
                 topBlock : topBlock.fullCopy();
         context.expression.show(); // be sure to make visible if in app mode
 
-        if (!isCustomBlock) {
+        if (!isCustomBlock && !parameterNames.length()) {
             // mark all empty slots with an identifier
             context.expression.allEmptySlots().forEach(function (slot) {
                 i += 1;
@@ -964,6 +964,7 @@ Process.prototype.reify = function (topBlock, parameterNames, isCustomBlock) {
     context.inputs = parameterNames.asArray();
     context.receiver
         = this.context ? this.context.receiver : topBlock.receiver();
+    context.origin = context.receiver; // for serialization
 
     return context;
 };
@@ -1269,8 +1270,11 @@ Process.prototype.runContinuation = function (aContext, args) {
 
 Process.prototype.evaluateCustomBlock = function () {
     var caller = this.context.parentContext,
-        context = this.context.expression.definition.body,
-        declarations = this.context.expression.definition.declarations,
+        block = this.context.expression,
+        method = block.isGlobal ? block.definition
+                : this.blockReceiver().getMethod(block.blockSpec),
+        context = method.body,
+        declarations = method.declarations,
         args = new List(this.context.inputs),
         parms = args.asArray(),
         runnable,
@@ -1284,14 +1288,14 @@ Process.prototype.evaluateCustomBlock = function () {
     outer = new Context();
     outer.receiver = this.context.receiver;
 
-    outer.variables.parentFrame = this.context.expression.variables;
+    outer.variables.parentFrame = block.variables;
 
     // block (instance) var support, experimental:
     // only splice in block vars if any are defined, because block vars
     // can cause race conditions in global block definitions that
     // access sprite-local variables at the same time.
-    if (this.context.expression.definition.variableNames.length) {
-        this.context.expression.variables.parentFrame = outer.receiver ?
+    if (method.variableNames.length) {
+        block.variables.parentFrame = outer.receiver ?
                 outer.receiver.variables : null;
     } else {
         // original code without block variables:
@@ -1329,7 +1333,7 @@ Process.prototype.evaluateCustomBlock = function () {
     }
 
     // tag return target
-    if (this.context.expression.definition.type !== 'command') {
+    if (method.type !== 'command') {
         if (caller) {
             // tag caller, so "report" can catch it later
             caller.tag = 'exit';
@@ -1360,8 +1364,7 @@ Process.prototype.evaluateCustomBlock = function () {
             caller.tag = this.procedureCount;
         }
         // yield commands unless explicitly "warped" or directly recursive
-        if (!this.isAtomic &&
-                this.context.expression.definition.isDirectlyRecursive()) {
+        if (!this.isAtomic && method.isDirectlyRecursive()) {
             this.readyToYield = true;
         }
     }
@@ -3214,8 +3217,27 @@ Process.prototype.doMapCode = function (aContext, aString) {
     }
 };
 
-Process.prototype.doMapStringCode = function (aString) {
-    StageMorph.prototype.codeMappings.string = aString || '<#1>';
+Process.prototype.doMapValueCode = function (type, aString) {
+    var tp = this.inputOption(type);
+    switch (tp) {
+    case 'String':
+        StageMorph.prototype.codeMappings.string = aString || '<#1>';
+        break;
+    case 'Number':
+        StageMorph.prototype.codeMappings.number = aString || '<#1>';
+        break;
+    case 'true':
+        StageMorph.prototype.codeMappings.boolTrue = aString || 'true';
+        break;
+    case 'false':
+        StageMorph.prototype.codeMappings.boolFalse = aString || 'true';
+        break;
+    default:
+        throw new Error(
+            localize('unsupported data type') + ' ' + tp
+        );
+    }
+
 };
 
 Process.prototype.doMapListCode = function (part, kind, aString) {
@@ -3433,6 +3455,7 @@ Process.prototype.unflash = function () {
     outerContext    the Context holding my lexical scope
     expression      SyntaxElementMorph, an array of blocks to evaluate,
                     null or a String denoting a selector, e.g. 'doYield'
+    origin          the object of origin, only used for serialization
     receiver        the object to which the expression applies, if any
     variables       the current VariableFrame, if any
     inputs          an array of input values computed so far
@@ -3461,6 +3484,7 @@ function Context(
     this.parentContext = parentContext || null;
     this.expression = expression || null;
     this.receiver = receiver || null;
+    this.origin = receiver || null; // only for serialization
     this.variables = new VariableFrame();
     if (this.outerContext) {
         this.variables.parentFrame = this.outerContext.variables;
@@ -3641,7 +3665,7 @@ function Variable(value, isTransient) {
 }
 
 Variable.prototype.toString = function () {
-    return 'a ' + this.isTransient ? 'transient ' : '' + 'Variable [' +
+    return 'a ' + (this.isTransient ? 'transient ' : '') + 'Variable [' +
         this.value + ']';
 };
 

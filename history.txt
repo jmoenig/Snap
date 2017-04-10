@@ -3407,3 +3407,21 @@ Fixes:
 
 == v4.0.10.1 - maintenance release - ===
 
+== v4.1 - development - ===
+
+Features:
+* polymorphic sprite-local custom blocks
+* inheritance of sprite-local custom blocks
+* localization support when typing expressions
+* support for user-forced line-breaks in custom block labels
+* ternary Boolean slot setting: support to limit Boolean input slots to “true/false” outside of rings and in palette
+* support for default values in custom block Boolean slots
+* experimental: duplicate block definition (hidden in shift-click context menu)
+* support for codification of String, Number and Boolean value types
+* costume icons indicate svg costumes
+* sprites’s rotation centers can be adjusted onstage
+
+Fixes:
+* changed keyboard shortcut indicator for “find blocks” to “^”
+* prevent Snap from “hanging” when encountering certain errors in visible stepping 
+* only mark implicit parameters if no formal ones exist
