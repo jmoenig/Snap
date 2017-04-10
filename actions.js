@@ -1577,7 +1577,13 @@ ActionManager.prototype._onRemoveBlock = function(id, userDestroy, callback) {
         // clear the records for entire deleted subtree/following blocks
         var root = block;
         if (method === 'userDestroy') {  // only provide the reporter inputs
-            root = block.inputs();
+            root = block.inputs().map(function(child) {
+                if (!child.id && child.children) {
+                    return child.children;
+                } else {
+                    return [child];
+                }
+            }).reduce(function (l1, l2) { return l1.concat(l2)}, []);
             this.__clearBlockRecords(id);
         }
 
