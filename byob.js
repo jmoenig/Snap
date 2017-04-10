@@ -1851,16 +1851,16 @@ BlockEditorMorph.prototype.onSetActive = function() {
 };
 
 BlockEditorMorph.prototype.onUnsetActive = function() {
-    this.body.contents.hideUndoControls()
+    this.body.contents.hideUndoControls();
 };
 
-BlockEditorMorph.prototype.popUp = function () {
+BlockEditorMorph.prototype.popUp = function (silent) {
     var world = this.target.world(),
         ide;
 
     if (world) {
         BlockEditorMorph.uber.popUp.call(this, world);
-        this.setInitialDimensions();
+        this.setInitialDimensions(silent);
         this.handle = new HandleMorph(
             this,
             280,
@@ -1871,7 +1871,9 @@ BlockEditorMorph.prototype.popUp = function () {
         world.keyboardReceiver = null;
         // Set the undo focus
         ide = this.target.parentThatIsA(IDE_Morph);
-        ide.setActiveEditor(this);
+        if (!silent) {
+            ide.setActiveEditor(this);
+        }
     }
 };
 
@@ -1984,7 +1986,7 @@ BlockEditorMorph.prototype.refreshAllBlockInstances = function () {
     }
 };
 
-BlockEditorMorph.prototype.updateDefinition = function () {
+BlockEditorMorph.prototype.updateDefinition = function (silent) {
     var head, ide,
         pos = this.body.contents.position(),
         element,
@@ -2022,11 +2024,14 @@ BlockEditorMorph.prototype.updateDefinition = function () {
     }
 
     this.definition.body = this.context(head);
-    this.refreshAllBlockInstances();
 
-    ide = this.target.parentThatIsA(IDE_Morph);
-    ide.flushPaletteCache();
-    ide.refreshPalette();
+    if (!silent) {
+        this.refreshAllBlockInstances();
+
+        ide = this.target.parentThatIsA(IDE_Morph);
+        ide.flushPaletteCache();
+        ide.refreshPalette();
+    }
 };
 
 BlockEditorMorph.prototype.context = function (prototypeHat) {
@@ -2081,24 +2086,43 @@ BlockEditorMorph.prototype.variableNames = function () {
 
 // BlockEditorMorph layout
 
-BlockEditorMorph.prototype.setInitialDimensions = function () {
+BlockEditorMorph.prototype.setInitialDimensions = function (silent) {
     var world = this.world(),
         mex = world.extent().subtract(new Point(this.padding, this.padding)),
         th = fontHeight(this.titleFontSize) + this.titlePadding * 2,
         bh = this.buttons.height();
 
-    if (this.definition.editorDimensions) {
-        this.setPosition(this.definition.editorDimensions.origin);
-        this.setExtent(this.definition.editorDimensions.extent().min(mex));
-        this.keepWithin(world);
-        return;
+    if (!silent) {
+        if (this.definition.editorDimensions) {
+            this.setPosition(this.definition.editorDimensions.origin);
+            this.setExtent(this.definition.editorDimensions.extent().min(mex));
+            this.keepWithin(world);
+            return;
+        }
+        this.setExtent(
+            this.body.contents.extent().add(
+                new Point(this.padding, this.padding + th + bh)
+            ).min(mex)
+        );
+        this.setCenter(this.world().center());
+    } else {
+        if (this.definition.editorDimensions) {
+            this.silentSetPosition(this.definition.editorDimensions.origin);
+            this.silentSetExtent(this.definition.editorDimensions.extent().min(mex));
+            this.keepWithin(world);
+            return;
+        }
+        this.silentSetExtent(
+            this.body.contents.extent().add(
+                new Point(this.padding, this.padding + th + bh)
+            ).min(mex)
+        );
+        this.silentSetPosition(
+            this.world().center().subtract(
+                this.extent().floorDivideBy(2)
+            )
+        );
     }
-    this.setExtent(
-        this.body.contents.extent().add(
-            new Point(this.padding, this.padding + th + bh)
-        ).min(mex)
-    );
-    this.setCenter(this.world().center());
 };
 
 BlockEditorMorph.prototype.fixLayout = function () {
