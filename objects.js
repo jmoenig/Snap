@@ -80,9 +80,9 @@ document, isNaN, isString, newCanvas, nop, parseFloat, radians, window,
 modules, IDE_Morph, VariableDialogMorph, HTMLCanvasElement, Context, List,
 SpeechBubbleMorph, RingMorph, isNil, FileReader, TableDialogMorph,
 BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
-TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph*/
+TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph*/
 
-modules.objects = '2017-March-07';
+modules.objects = '2017-January-13';
 
 var SpriteMorph;
 var StageMorph;
@@ -1185,20 +1185,12 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'other',
             spec: 'map %cmdRing to %codeKind %code'
         },
-        doMapValueCode: { // experimental
-            type: 'command',
-            category: 'other',
-            spec: 'map %mapValue to code %code',
-            defaults: [['String'], '<#1>']
-        },
-    /* obsolete - superseded by 'doMapValue'
         doMapStringCode: { // experimental
             type: 'command',
             category: 'other',
             spec: 'map String to code %code',
             defaults: ['<#1>']
         },
-    */
         doMapListCode: { // experimental
             type: 'command',
             category: 'other',
@@ -1239,11 +1231,6 @@ SpriteMorph.prototype.initBlockMigrations = function () {
         reportFalse: {
             selector: 'reportBoolean',
             inputs: [false]
-        },
-        doMapStringCode: {
-            selector: 'doMapValueCode',
-            inputs: [['String'], '<#1>'],
-            offset: 1
         }
     };
 };
@@ -2172,7 +2159,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
 
         if (StageMorph.prototype.enableCodeMapping) {
             blocks.push(block('doMapCodeOrHeader'));
-            blocks.push(block('doMapValueCode'));
+            blocks.push(block('doMapStringCode'));
             blocks.push(block('doMapListCode'));
             blocks.push('-');
             blocks.push(block('reportMappedCode'));
@@ -2288,7 +2275,7 @@ SpriteMorph.prototype.freshPalette = function (category) {
         menu.addPair(
             'find blocks...',
             function () {myself.searchBlocks(); },
-            '^F'
+            '⌘F'
         );
         if (canHidePrimitives()) {
             menu.addItem(
@@ -2416,30 +2403,6 @@ SpriteMorph.prototype.freshPalette = function (category) {
             y += block.height();
         }
     });
-
-    // inherited custom blocks: (under construction...)
-    /*
-    // y += unit * 1.6;
-    if (this.exemplar) {
-        this.inheritedBlocks(true).forEach(function (definition) {
-            var block;
-            if (definition.category === category ||
-                    (category === 'variables'
-                        && contains(
-                            ['lists', 'other'],
-                            definition.category
-                        ))) {
-                block = definition.templateInstance();
-                y += unit * 0.3;
-                block.setPosition(new Point(x, y));
-                palette.addContents(block);
-                block.ghost();
-                x = 0;
-                y += block.height();
-            }
-        });
-    }
-    */
 
     //layout
 
@@ -2774,8 +2737,7 @@ SpriteMorph.prototype.reporterize = function (expressionString) {
 
     function blockFromAST(ast) {
         var block, selectors, monads, alias, key, sel, i, inps,
-            off = 1,
-            reverseDict = {};
+            off = 1;
         selectors = {
             '+': 'reportSum',
             '-': 'reportDifference',
@@ -2796,10 +2758,7 @@ SpriteMorph.prototype.reporterize = function (expressionString) {
             ceil: 'ceiling',
             '!' : 'not'
         };
-        monads.concat(['true', 'false']).forEach(function (word) {
-            reverseDict[localize(word).toLowerCase()] = word;
-        });
-        key = alias[ast[0]] || reverseDict[ast[0].toLowerCase()] || ast[0];
+        key = alias[ast[0]] || ast[0];
         if (contains(monads, key)) { // monadic
             sel = selectors[key];
             if (sel) { // single input
@@ -2819,14 +2778,11 @@ SpriteMorph.prototype.reporterize = function (expressionString) {
             if (ast[i] instanceof Array) {
                 block.silentReplaceInput(inps[i - off], blockFromAST(ast[i]));
             } else if (isString(ast[i])) {
-                if (contains(
-                    ['true', 'false'], reverseDict[ast[i]] || ast[i])
-                ) {
+                if (contains(['true', 'false'], ast[i])) {
                     block.silentReplaceInput(
                         inps[i - off],
                         SpriteMorph.prototype.blockForSelector(
-                            (reverseDict[ast[i]] || ast[i]) === 'true' ?
-                                    'reportTrue' : 'reportFalse'
+                            ast[i] === 'true' ? 'reportTrue' : 'reportFalse'
                         )
                     );
                 } else if (ast[i] !== '_') {
@@ -3032,13 +2988,6 @@ SpriteMorph.prototype.userMenu = function () {
     }
     menu.addItem("delete", 'remove');
     menu.addItem("move", 'moveCenter');
-    if (this.costume) {
-        menu.addItem(
-            "pivot",
-            'moveRotationCenter',
-            'edit the costume\'s\nrotation center'
-        );
-    }
     if (!this.isClone) {
         menu.addItem("edit", 'edit');
     }
@@ -4237,32 +4186,6 @@ SpriteMorph.prototype.setRotationCenter = function (absoluteCoordinate) {
     this.drawNew();
 };
 
-SpriteMorph.prototype.moveRotationCenter = function () {
-    // make this a method of Snap >> SpriteMorph
-    this.world().activeHandle = new HandleMorph(
-        this,
-        null,
-        null,
-        null,
-        null,
-        'movePivot'
-    );
-};
-
-SpriteMorph.prototype.setPivot = function (worldCoordinate) {
-    var stage = this.parentThatIsA(StageMorph),
-        cntr;
-    if (stage) {
-        cntr = stage.center();
-        this.setRotationCenter(
-            new Point(
-                (worldCoordinate.x - cntr.x) / stage.scale,
-                (cntr.y - worldCoordinate.y) / stage.scale
-            )
-        );
-    }
-};
-
 SpriteMorph.prototype.xCenter = function () {
     var stage = this.parentThatIsA(StageMorph);
 
@@ -4477,25 +4400,6 @@ SpriteMorph.prototype.reportThreadCount = function () {
         return stage.threads.processes.length;
     }
     return 0;
-};
-
-// SpriteMorph variable refactoring
-
-SpriteMorph.prototype.refactorVariableInstances = function (
-    oldName,
-    newName,
-    isGlobal
-) {
-    if (isGlobal && this.hasSpriteVariable(oldName)) {
-        return;
-    }
-
-    this.scripts.children.forEach(function (child) {
-        if (child instanceof BlockMorph) {
-            child.refactorVarInStack(oldName, newName);
-        }
-    });
-
 };
 
 // SpriteMorph variable watchers (for palette checkbox toggling)
@@ -4963,10 +4867,30 @@ SpriteMorph.prototype.hasSpriteVariable = function (varName) {
     return contains(this.variables.names(), varName);
 };
 
+// Variable refactoring
+
+SpriteMorph.prototype.refactorVariableInstances = function (
+    oldName,
+    newName,
+    isGlobal
+) {
+    if (isGlobal && this.hasSpriteVariable(oldName)) {
+        return;
+    }
+
+    this.scripts.children.forEach(function (child) {
+        if (child instanceof BlockMorph) {
+            child.refactorVarInStack(oldName, newName);
+        }
+    });
+
+};
+
 // SpriteMorph inheritance - custom blocks
-// under construction
 
 /*
+// under construction, commented out for now
+
 SpriteMorph.prototype.ownBlocks = function () {
     var dict = {};
     this.customBlocks.forEach(function (def) {
@@ -5006,6 +4930,7 @@ SpriteMorph.prototype.inheritedBlocks = function (valuesOnly) {
     }
     return dict;
 };
+
 */
 
 // SpriteMorph thumbnail
@@ -6467,7 +6392,7 @@ StageMorph.prototype.blockTemplates = function (category) {
 
         if (StageMorph.prototype.enableCodeMapping) {
             blocks.push(block('doMapCodeOrHeader'));
-            blocks.push(block('doMapValueCode'));
+            blocks.push(block('doMapStringCode'));
             blocks.push(block('doMapListCode'));
             blocks.push('-');
             blocks.push(block('reportMappedCode'));

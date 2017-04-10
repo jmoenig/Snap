@@ -3304,7 +3304,7 @@ Fixes:
 * Translation updates (Russian, Polish, Danish, Portuguese, Catalan, German)
 
 
-== v4.0.10.1 - in development - ===
+== v4.0.11 - in development - ===
 
 170119
 ------
@@ -3389,3 +3389,17 @@ Fixes:
 170307
 ------
 * Morphic, Objects, translation: let sprites’s rotation centers be adjusted onstage
+* BYOB: added attributes for dynamic method definition lookup
+* BYOB, Blocks, Objects, GUI: distinguish custom blocks by shared “isCustomBlock” attribute
+
+170321
+------
+* Change: Methods (sprite-local custom blocks) can no longer have block (instance) vars
+
+170322
+------
+* sprite-local custom block inheritance, first pass, still under heavy development
+
+170410
+------
+* Revert to 4.0.10 to prepare for newly surfaced bug in the Chrome browser
