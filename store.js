@@ -719,7 +719,7 @@ SnapSerializer.prototype.rawLoadProjectModel = function (xmlNode) {
 };
 
 SnapSerializer.prototype.loadReplayHistory = function (xml) {
-    var queue = xml.children,
+    var queue = xml ? xml.children : [],
         event;
 
     for (var e = queue.length; e--;) {
@@ -730,7 +730,7 @@ SnapSerializer.prototype.loadReplayHistory = function (xml) {
 };
 
 SnapSerializer.prototype.loadHistory = function (model) {
-    var queues = model.children,
+    var queues = model ? model.children : [],
         queue,
         event,
         id;
