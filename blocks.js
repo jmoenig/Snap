@@ -2138,6 +2138,12 @@ SyntaxElementMorph.prototype.endLayout = function () {
 BlockMorph.prototype = new SyntaxElementMorph();
 BlockMorph.prototype.constructor = BlockMorph;
 BlockMorph.uber = SyntaxElementMorph.prototype;
+// ID for the next BlockMorph to be created
+BlockMorph.nextId = 0;
+// Flag for whether copied BlockMorphs should also copy block IDs
+// This should default to false, but is temporarily set to true in special
+// circumstances, such as block relabeling
+BlockMorph.copyIDs = false;
 
 // BlockMorph preferences settings:
 
@@ -2165,6 +2171,7 @@ function BlockMorph() {
 }
 
 BlockMorph.prototype.init = function (silently) {
+    this.id = BlockMorph.nextId++;
     this.selector = null; // name of method to be triggered
     this.blockSpec = ''; // formal description of label and arguments
     this.comment = null; // optional "sticky" comment morph
@@ -2196,6 +2203,19 @@ BlockMorph.prototype.toString = function () {
             this.constructor.toString().split(' ')[1].split('(')[0]) +
         ' ("' +
         this.blockSpec.slice(0, 30) + '...")';
+};
+
+BlockMorph.prototype.blockId = function() {
+    return {
+        'selector': this.selector,
+        'id': this.id,
+        'template': this.isTemplate,
+        'spec': this.blockSpec,
+    };
+};
+
+BlockMorph.prototype.userDestroy = function() {
+    Trace.log('Block.userDestroy', this.blockId());
 };
 
 // BlockMorph spec:
@@ -2350,7 +2370,13 @@ BlockMorph.prototype.userMenu = function () {
         blck.addShadow();
         new DialogBoxMorph(
             myself,
-            myself.userSetSpec,
+            function(arg) {
+                Trace.log('Block.rename', {
+                    'id': myself.blockId(),
+                    'name': arg,
+                });
+                myself.userSetSpec(arg);
+            },
             myself
         ).prompt(
             "Variable name",
@@ -2361,10 +2387,14 @@ BlockMorph.prototype.userMenu = function () {
         );
     }
 
-    menu.addItem(
-        "help...",
-        'showHelp'
-    );
+    // Don't show the help menu for custom/imported blocks
+    if (!(this.definition instanceof CustomBlockDefinition) ||
+            (this.definition && this.definition.isImported)) {
+        menu.addItem(
+            "help...",
+            'showHelp'
+        );
+    }
     if (shiftClicked) {
         top = this.topBlock();
         if (top instanceof ReporterBlockMorph) {
@@ -2440,7 +2470,9 @@ BlockMorph.prototype.userMenu = function () {
         }
         return menu;
     }
-    menu.addLine();
+    if (menu.items.length > 0) {
+        menu.addLine();
+    }
     if (this.selector === 'reportGetVar') {
         menu.addItem(
             'rename...',
@@ -2469,6 +2501,7 @@ BlockMorph.prototype.userMenu = function () {
     menu.addItem(
         "duplicate",
         function () {
+            Trace.log('Block.duplicateAll', myself.blockId());
             var dup = myself.fullCopy(),
                 ide = myself.parentThatIsA(IDE_Morph),
                 blockEditor = myself.parentThatIsA(BlockEditorMorph);
@@ -2492,6 +2525,7 @@ BlockMorph.prototype.userMenu = function () {
         menu.addItem(
             (proc ? this.fullCopy() : this).thumbnail(0.5, 60),
             function () {
+                Trace.log('Block.duplicateBlock', myself.blockId());
                 var cpy = myself.fullCopy(),
                     nb = cpy.nextBlock(),
                     ide = myself.parentThatIsA(IDE_Morph);
@@ -2514,6 +2548,7 @@ BlockMorph.prototype.userMenu = function () {
     menu.addItem(
         "script pic...",
         function () {
+            Trace.log('Block.scriptPic', myself.blockId());
             var ide = myself.parentThatIsA(IDE_Morph) ||
                 myself.parentThatIsA(BlockEditorMorph).target.parentThatIsA(
                     IDE_Morph
@@ -2598,6 +2633,7 @@ BlockMorph.prototype.hidePrimitive = function () {
         dict,
         cat;
     if (!ide) {return; }
+    Trace.log('Block.hidePrimitive', this.blockId());
     StageMorph.prototype.hiddenPrimitives[this.selector] = true;
     dict = {
         doWarp: 'control',
@@ -2637,6 +2673,8 @@ BlockMorph.prototype.toggleTransientVariable = function () {
     if (!varFrame) {return; }
     varFrame.vars[this.blockSpec].isTransient =
         !(varFrame.vars[this.blockSpec].isTransient);
+    Trace.log('Block.toggleTransientVariable',
+        varFrame.vars[this.blockSpec].isTransient);
 };
 
 BlockMorph.prototype.deleteBlock = function () {
@@ -2684,6 +2722,7 @@ BlockMorph.prototype.deleteBlock = function () {
 };
 
 BlockMorph.prototype.ringify = function () {
+    Trace.log('Block.ringify', this.blockId());
     // wrap a Ring around me
     var ring = new RingMorph(),
         top = this.topBlock(),
@@ -2714,6 +2753,7 @@ BlockMorph.prototype.ringify = function () {
 };
 
 BlockMorph.prototype.unringify = function () {
+    Trace.log('Block.unringify', this.blockId());
     // remove a Ring around me, if any
     var ring = this.parent.parentThatIsA(RingMorph),
         top = this.topBlock(),
@@ -2756,6 +2796,10 @@ BlockMorph.prototype.relabel = function (alternativeSelectors) {
         menu.addItem(
             block,
             function () {
+                Trace.log('Block.relabel', {
+                    'id': myself.blockId(),
+                    'selector': sel,
+                });
                 myself.setSelector(sel);
             }
         );
@@ -2798,6 +2842,9 @@ BlockMorph.prototype.restoreInputs = function (oldInputs) {
         leftOver = [],
         myself = this;
 
+    // When relabeling, copied blocks in inputs should keep their IDs
+    BlockMorph.copyIDs = true;
+
     this.inputs().forEach(function (inp) {
         old = oldInputs[i];
         if (old instanceof ReporterBlockMorph) {
@@ -2828,10 +2875,13 @@ BlockMorph.prototype.restoreInputs = function (oldInputs) {
         }
     }
     this.cachedInputs = null;
+    // Make sure to set copyIDs back to false when finished
+    BlockMorph.copyIDs = false;
     return leftOver;
 };
 
 BlockMorph.prototype.showHelp = function () {
+    Trace.log('Block.showHelp', this.blockId());
     var myself = this,
         ide = this.parentThatIsA(IDE_Morph),
         blockEditor,
@@ -2848,6 +2898,8 @@ BlockMorph.prototype.showHelp = function () {
         blockEditor = this.parentThatIsA(BlockEditorMorph);
         if (blockEditor) {
             ide = blockEditor.target.parentThatIsA(IDE_Morph);
+        } else {
+            return;
         }
     }
 
@@ -3152,6 +3204,12 @@ BlockMorph.prototype.refactorThisVar = function (justTheTemplate) {
     );
 
     function renameVarTo (newName) {
+        Trace.log('Block.refactorVar', {
+            'id': myself.blockId(),
+            'oldName': oldName,
+            'newName': newName,
+        });
+
         var definer;
         
         if (this.parent instanceof SyntaxElementMorph) {
@@ -3271,6 +3329,12 @@ BlockMorph.prototype.refactorThisVar = function (justTheTemplate) {
     }
 
     function varExistsError (where) {
+        Trace.log('Block.refactorVarError', {
+            'id': myself.blockId(),
+            'oldName': oldName,
+            'newName': newName,
+            'where': where,
+        });
         ide.inform(
             'Variable exists', 
             'A variable with this name already exists ' +
@@ -3334,29 +3398,22 @@ BlockMorph.prototype.eraseHoles = function (context) {
 // BlockMorph highlighting
 
 BlockMorph.prototype.addHighlight = function (oldHighlight) {
-    var isHidden = !this.isVisible,
-        highlight;
-
-    if (isHidden) {this.show(); }
-    highlight = this.highlight(
-        oldHighlight ? oldHighlight.color : this.activeHighlight,
-        this.activeBlur,
-        this.activeBorder
-    );
-    this.addBack(highlight);
-    this.fullChanged();
-    if (isHidden) {this.hide(); }
-    return highlight;
+    return this.addActiveHighlight(
+        oldHighlight ? oldHighlight.color : this.activeHighlight);
 };
 
 BlockMorph.prototype.addErrorHighlight = function () {
+    this.removeHighlight();
+    return this.addActiveHighlight(this.errorHighlight);
+};
+
+BlockMorph.prototype.addActiveHighlight = function(color) {
     var isHidden = !this.isVisible,
         highlight;
 
     if (isHidden) {this.show(); }
-    this.removeHighlight();
     highlight = this.highlight(
-        this.errorHighlight,
+        color,
         this.activeBlur,
         this.activeBorder
     );
@@ -3597,6 +3654,13 @@ BlockMorph.prototype.hasLabels = function () {
 
 // BlockMorph copying
 
+// Override copy so that coppied Blocks get new IDs unless copyIDs is true
+BlockMorph.prototype.copy = function() {
+    var copy = BlockMorph.uber.copy.call(this);
+    if (!BlockMorph.copyIDs) copy.id = BlockMorph.nextId++;
+    return copy;
+};
+
 BlockMorph.prototype.fullCopy = function (forClone) {
     if (forClone) {
         if (this.hasBlockVars()) {
@@ -3629,6 +3693,7 @@ BlockMorph.prototype.fullCopy = function (forClone) {
 };
 
 BlockMorph.prototype.reactToTemplateCopy = function () {
+    Trace.log('Block.created', this.blockId());
     this.forceNormalColoring();
 };
 
@@ -3654,6 +3719,12 @@ BlockMorph.prototype.mouseClickLeft = function () {
     if (receiver) {
         stage = receiver.parentThatIsA(StageMorph);
         if (stage) {
+            var process = stage.threads.findProcess(top);
+            if (process && !process.readyToTerminate) {
+                Trace.log('Block.clickStopRun', top.blockId());
+            } else {
+                Trace.log('Block.clickRun', top.blockId());
+            }
             stage.threads.toggleProcess(top);
         }
     }
@@ -3798,6 +3869,10 @@ BlockMorph.prototype.situation = function () {
 // BlockMorph sticky comments
 
 BlockMorph.prototype.prepareToBeGrabbed = function (hand) {
+    Trace.log('Block.grabbed', {
+        'id': this.blockId(),
+        'origin': this.bounds.origin
+    });
     var myself = this;
     this.allComments().forEach(function (comment) {
         comment.startFollowing(myself, hand.world);
@@ -3857,6 +3932,10 @@ BlockMorph.prototype.stackWidth = function () {
 };
 
 BlockMorph.prototype.snap = function () {
+    Trace.log('Block.snapped', {
+        'id': this.blockId(),
+        'origin': this.bounds.origin,
+    });
     var top = this.topBlock(),
         receiver,
         stage,
@@ -4198,6 +4277,11 @@ CommandBlockMorph.prototype.snap = function (hand) {
         this.setLeft(target.element.left());
         this.bottomBlock().nextBlock(target.element);
     } else if (target.loc === 'wrap') {
+        Trace.log('CommandBlock.wrap', {
+            'id': this.blockId(),
+            'target': target.element.blockId ? target.element.blockId() : null,
+        });
+
         cslot = detect( // this should be a method making use of caching
             this.inputs(), // these are already cached, so maybe it's okay
             function (each) {return each instanceof CSlotMorph; }
@@ -4249,6 +4333,7 @@ CommandBlockMorph.prototype.isStop = function () {
 // CommandBlockMorph deleting
 
 CommandBlockMorph.prototype.userDestroy = function () {
+    CommandBlockMorph.uber.userDestroy.call(this);
     if (this.nextBlock()) {
         this.userDestroyJustThis();
         return;
@@ -5041,7 +5126,8 @@ ReporterBlockMorph.prototype.determineSlotSpec = function () {
 // ReporterBlockMorph events
 
 ReporterBlockMorph.prototype.mouseClickLeft = function (pos) {
-    var label;
+    var label,
+        myself = this;
     if (this.parent instanceof BlockInputFragmentMorph) {
         return this.parent.mouseClickLeft();
     }
@@ -5056,7 +5142,13 @@ ReporterBlockMorph.prototype.mouseClickLeft = function (pos) {
         }
         new DialogBoxMorph(
             this,
-            this.userSetSpec,
+            function(arg) {
+                Trace.log('TemplateArg.rename', {
+                    'id': myself.parent.argId(),
+                    'name': arg,
+                });
+                myself.userSetSpec(arg);
+            },
             this
         ).prompt(
             label,
@@ -5088,6 +5180,7 @@ ReporterBlockMorph.prototype.exportResultPic = function () {
 
 ReporterBlockMorph.prototype.userDestroy = function () {
     // make sure to restore default slot of parent block
+    ReporterBlockMorph.uber.userDestroy.call(this);
 
     // for undrop / redrop
     var scripts = this.parentThatIsA(ScriptsMorph);
@@ -6088,6 +6181,7 @@ ScriptsMorph.prototype.userMenu = function () {
 // ScriptsMorph user menu features:
 
 ScriptsMorph.prototype.cleanUp = function () {
+    Trace.log('Scripts.cleanUp');
     var origin = this.topLeft(),
         y = this.cleanUpMargin,
         myself = this;
@@ -6113,6 +6207,7 @@ ScriptsMorph.prototype.cleanUp = function () {
 };
 
 ScriptsMorph.prototype.exportScriptsPicture = function () {
+    Trace.log('Scripts.exportPicture');
     var pic = this.scriptsPicture(),
         ide = this.world().children[0];
     if (pic) {
@@ -6175,6 +6270,10 @@ ScriptsMorph.prototype.undrop = function () {
     var myself = this;
     if (this.isAnimating) {return; }
     if (!this.dropRecord || !this.dropRecord.lastRecord) {return; }
+    Trace.log('Scripts.undrop', {
+        'action': this.dropRecord.action,
+        'block': this.dropRecord.lastDroppedBlock.blockId()
+    });
     if (!this.dropRecord.situation) {
         this.dropRecord.situation =
             this.dropRecord.lastDroppedBlock.situation();
@@ -6197,6 +6296,10 @@ ScriptsMorph.prototype.redrop = function () {
     if (this.isAnimating) {return; }
     if (!this.dropRecord || !this.dropRecord.nextRecord) {return; }
     this.dropRecord = this.dropRecord.nextRecord;
+    Trace.log('Scripts.redrop', {
+        'action': this.dropRecord.action,
+        'block': this.dropRecord.lastDroppedBlock.blockId()
+    });
     if (this.dropRecord.action === 'delete') {
         this.recoverLastDrop(true);
         this.dropRecord.lastDroppedBlock.destroy();
@@ -6540,6 +6643,19 @@ ArgMorph.prototype.init = function (type, silently) {
     ArgMorph.uber.init.call(this, silently);
     this.color = new Color(0, 17, 173);
     this.setExtent(new Point(50, 50), silently);
+};
+
+// Get a unique ID for the input slot represented by this ArgMorph
+ArgMorph.prototype.argId = function() {
+    var block = this.parentThatIsA(BlockMorph);
+    if (!block) return null;
+    // Get the index of this arg out of all the parent's args
+    var index = this.parent.children.filter(function(child) {
+        return child instanceof ArgMorph;
+    }).indexOf(this);
+    var id = block.blockId();
+    id.argIndex = index;
+    return id;
 };
 
 // ArgMorph preferences settings:
@@ -7824,7 +7940,8 @@ InputSlotMorph.prototype.dropDownMenu = function (enableKeyboard) {
 };
 
 InputSlotMorph.prototype.menuFromDict = function (choices, noEmptyOption) {
-    var key,
+    var myself = this,
+        key,
         menu = new MenuMorph(
             this.setContents,
             null,
@@ -7838,7 +7955,13 @@ InputSlotMorph.prototype.menuFromDict = function (choices, noEmptyOption) {
         choices = this[choices]();
     }
     if (!noEmptyOption) {
-        menu.addItem(' ', null);
+        menu.addItem(' ', function() {
+            Trace.log('InputSlot.menuItemSelected', {
+                'id': myself.argId(),
+                'item': ' ',
+            });
+            return ' ';
+        });
     }
     for (key in choices) {
         if (Object.prototype.hasOwnProperty.call(choices, key)) {
@@ -7851,7 +7974,18 @@ InputSlotMorph.prototype.menuFromDict = function (choices, noEmptyOption) {
                     (typeof choices[key] !== 'function')) {
                 menu.addMenu(key, this.menuFromDict(choices[key], true));
             } else {
-                menu.addItem(key, choices[key]);
+                // capture the key in a function call to avoid closure nonsense
+                (function (fKey) {
+                    menu.addItem(key, function() {
+                        Trace.log('InputSlot.menuItemSelected', {
+                            'id': myself.argId(),
+                            'item': fKey,
+                        });
+                        var choice = choices[fKey];
+                        if (choice instanceof Function) return choice();
+                        return choice;
+                    });
+                })(key);
             }
         }
     }
@@ -8287,6 +8421,10 @@ InputSlotMorph.prototype.reactToKeystroke = function () {
 };
 
 InputSlotMorph.prototype.reactToEdit = function () {
+    Trace.log('InputSlot.edited', {
+        'id': this.argId(),
+        'text': this.contents().text,
+    });
     this.contents().clearSelection();
 };
 
@@ -10934,6 +11072,10 @@ ColorSlotMorph.prototype.getUserColor = function () {
     hand.processMouseDown = nop;
 
     hand.processMouseUp = function () {
+        Trace.log('ColorArg.changeColor', {
+            'id': myself.argId(),
+            'color': myself.color,
+        });
         pal.destroy();
         hand.processMouseMove = mouseMoveBak;
         hand.processMouseDown = mouseDownBak;
@@ -11305,12 +11447,14 @@ MultiArgMorph.prototype.mouseClickLeft = function (pos) {
     if (rightArrow.bounds.containsPoint(pos)) {
         for (i = 0; i < repetition; i += 1) {
             if (rightArrow.isVisible) {
+                Trace.log('MultiArg.addInput', this.argId());
                 this.addInput();
             }
         }
     } else if (leftArrow.bounds.containsPoint(pos)) {
         for (i = 0; i < repetition; i += 1) {
             if (leftArrow.isVisible) {
+                Trace.log('MultiArg.removeInput', this.argId());
                 this.removeInput();
             }
         }
