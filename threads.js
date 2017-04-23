@@ -1542,13 +1542,21 @@ Process.prototype.doRemoveTemporaries = function () {
 // Process sprite inheritance primitives
 
 Process.prototype.doDeleteAttr = function (attrName) {
-    // currently only variables are deletable
     var name = attrName,
         rcvr = this.blockReceiver();
 
     if (name instanceof Context) {
         if (name.expression.selector === 'reportGetVar') {
             name = name.expression.blockSpec;
+        } else { // attribute
+            name = {
+                xPosition: 'x',
+                yPosition: 'y'
+            }[name.expression.selector];
+            if (!isNil(name)) {
+                rcvr.inheritAttribute(name);
+            }
+            return; // +++ error: cannot delete attribute...
         }
     }
     if (contains(rcvr.inheritedVariableNames(true), name)) {
