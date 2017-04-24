@@ -3167,7 +3167,7 @@ IDE_Morph.prototype.replayEvents = function (actions) {
         atEnd = true;
         actions = JSON.parse(JSON.stringify(SnapUndo.allEvents));
     }
-    this.replayControls.show();
+    this.replayControls.enable();
     this.replayControls.setActions(actions, atEnd);
     this.isReplayMode = true;
 };
@@ -3176,7 +3176,7 @@ IDE_Morph.prototype.exitReplayMode = function () {
     this.isReplayMode = false;
     SnapUndo.trimAll();  // trim the undo queues
     this.activeEditor.onSetActive();
-    this.replayControls.hide();
+    this.replayControls.disable();
 };
 
 IDE_Morph.prototype.resourceURL = function () {

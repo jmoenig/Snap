@@ -9153,6 +9153,21 @@ ReplayControls.prototype.fixLayout = function() {
     this.slider.changed();
 };
 
+ReplayControls.prototype.enable = function() {
+    this.enabled = true;
+    this.show();
+};
+
+ReplayControls.prototype.disable = function() {
+    this.enabled = false;
+    this.actions = null;
+    if (this.lastCaption) {
+        this.lastCaption.destroy();
+    }
+
+    this.hide();
+};
+
 ReplayControls.prototype.setActions = function(actions, atEnd) {
     var endTime = actions[actions.length-1].time + 1;
     this.actions = actions;
@@ -9186,6 +9201,10 @@ ReplayControls.prototype.update = function() {
         dir,
         index,
         action;
+
+    if (!this.enabled) {
+        return setTimeout(this.update.bind(this), 100);
+    }
 
     if (this.actionTime !== this.slider.value && this.actions && !this.isApplyingAction) {
         diff = this.slider.value - this.actionTime;
