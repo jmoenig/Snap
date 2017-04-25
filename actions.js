@@ -1637,7 +1637,8 @@ ActionManager.prototype.onRemoveBlock = function(id, userDestroy) {
 };
 
 ActionManager.prototype.__canAnimate = function() {
-    return this.currentEvent.replayType || this.currentEvent.user !== this.id;
+    return this.ide().isReplayMode || this.currentEvent.replayType ||
+        this.currentEvent.user !== this.id;
 };
 
 ActionManager.prototype.__updateBlockDefinitions = function(block) {
