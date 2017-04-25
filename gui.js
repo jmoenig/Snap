@@ -2825,7 +2825,26 @@ IDE_Morph.prototype.settingsMenu = function () {
     addPreference(
         'Replay Mode',
         function() {
-            if (myself.isReplayMode) return myself.exitReplayMode();
+            if (myself.isReplayMode) {
+                var newHistoryLen = this.replayControls.actionIndex + 1,
+                    lostEventCount = SnapUndo.allEvents.filter(function(event) {
+                        return !event.isReplay;
+                    }).length - newHistoryLen;
+
+                if (lostEventCount) {
+                    this.confirm(
+                        'Exiting replay mode now will revert the project to\n' +
+                        'the current point in history (losing any unapplied ' + 
+                        'changes)\n\nAre you sure you want to exit replay mode?',
+                        'Exit Replay Mode?',
+                        function () {
+                            myself.exitReplayMode();
+                        }
+                    );
+                    return;
+                }
+                return myself.exitReplayMode();
+            }
             if (SnapActions.isCollaborating()) {
                 this.confirm(
                     'Cannot enter replay mode while collaborating. \nWould you ' +
@@ -3177,6 +3196,7 @@ IDE_Morph.prototype.replayEvents = function (actions) {
 IDE_Morph.prototype.exitReplayMode = function () {
     this.isReplayMode = false;
     SnapUndo.trimAll();  // trim the undo queues
+    SnapUndo.allEvents = this.replayControls.getCurrentHistory();
     this.activeEditor.onSetActive();
     this.replayControls.disable();
 };

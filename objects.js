@@ -9168,15 +9168,19 @@ ReplayControls.prototype.disable = function() {
     this.hide();
 };
 
+ReplayControls.prototype.getCurrentHistory = function() {
+    return this.actions.slice(0, this.actionIndex+1);
+};
+
 ReplayControls.prototype.setActions = function(actions, atEnd) {
-    var endTime = actions[actions.length-1].time + 1;
     this.actions = actions;
-    this.slider.start = actions[0].time - 1;
+    var endTime = this.actions[this.actions.length-1].time + 1;
+    this.slider.start = this.actions[0].time - 1;
     this.isPlaying = false;
 
     if (atEnd) {
         this.slider.value = endTime;
-        this.actionIndex = actions.length-1;
+        this.actionIndex = this.actions.length-1;
         this.actionTime = endTime-1;
     } else {
         this.slider.value = this.slider.start;
@@ -9185,8 +9189,8 @@ ReplayControls.prototype.setActions = function(actions, atEnd) {
 
     // Add tickmarks for each action
     this.slider.clearTicks();
-    for (var i = 0; i < actions.length; i++) {
-        this.slider.addTick(actions[i].time);
+    for (var i = 0; i < this.actions.length; i++) {
+        this.slider.addTick(this.actions[i].time);
     }
     this.slider.drawNew();
 
@@ -9216,7 +9220,7 @@ ReplayControls.prototype.update = function() {
         if (dir === 1) {
             index = this.actionIndex + dir;
             originalEvent = this.actions[index];
-            action = originalEvent;
+            action = copy(originalEvent);
             if (!originalEvent || originalEvent.time >= this.slider.value) {
                 return setTimeout(this.update.bind(this), 100);
             }
