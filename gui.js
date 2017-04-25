@@ -1871,6 +1871,8 @@ IDE_Morph.prototype.droppedText = function (aString, name) {
         return this.openProjectString(aString);
     }
     if (aString.indexOf('<snapdata') === 0) {
+        SnapActions.disableCollaboration();
+        SnapUndo.reset();
         location.hash = '';
         return this.openCloudDataString(aString);
     }
