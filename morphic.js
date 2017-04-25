@@ -6673,6 +6673,8 @@ SliderMorph.prototype.clearTicks = function () {
     for (var i = this.tickMarks.length; i--;) {
         this.tickMarks[i].destroy();
     }
+    this.tickMarks = [];
+    this.changed();
 };
 
 // SliderMorph menu:
