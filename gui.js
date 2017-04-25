@@ -3200,11 +3200,13 @@ IDE_Morph.prototype.replayEvents = function (actions) {
 };
 
 IDE_Morph.prototype.exitReplayMode = function () {
-    this.isReplayMode = false;
-    SnapUndo.trimAll();  // trim the undo queues
-    SnapUndo.allEvents = this.replayControls.getCurrentHistory();
-    this.activeEditor.onSetActive();
-    this.replayControls.disable();
+    if (this.isReplayMode) {
+        this.isReplayMode = false;
+        SnapUndo.trimAll();  // trim the undo queues
+        SnapUndo.allEvents = this.replayControls.getCurrentHistory();
+        this.activeEditor.onSetActive();
+        this.replayControls.disable();
+    }
 };
 
 IDE_Morph.prototype.resourceURL = function () {
