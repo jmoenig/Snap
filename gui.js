@@ -2826,13 +2826,9 @@ IDE_Morph.prototype.settingsMenu = function () {
         'Replay Mode',
         function() {
             if (myself.isReplayMode) {  // exiting replay mode
-                var newHistoryLen = this.replayControls.actionIndex + 1,
-                    lostEventCount = SnapUndo.allEvents.filter(function(event) {
-                        return !event.isReplay;
-                    }).length - newHistoryLen;
 
-                if (lostEventCount) {
-                    this.confirm(
+                if (myself.isPreviousVersion()) {
+                    myself.confirm(
                         'Exiting replay mode now will revert the project to\n' +
                         'the current point in history (losing any unapplied ' + 
                         'changes)\n\nAre you sure you want to exit replay mode?',
@@ -2847,7 +2843,7 @@ IDE_Morph.prototype.settingsMenu = function () {
             }
             // entering replay mode
             if (SnapUndo.allEvents.length < 2) {
-                return this.showMessage('Nothing to replay!', 2);
+                return myself.showMessage('Nothing to replay!', 2);
             }
             if (SnapActions.isCollaborating()) {
                 this.confirm(
@@ -2961,7 +2957,13 @@ IDE_Morph.prototype.projectMenu = function () {
     menu.addPair('New', 'createNewProject', '^N');
     menu.addPair('Open...', 'openProjectsBrowser', '^O');
     menu.addPair('Save', "save", '^S');
-    menu.addItem('Save As...', 'saveProjectsBrowser');
+    menu.addItem('Save As...', function() {
+            if (myself.isPreviousVersion()) {
+                return myself.showMessage('Please exit replay mode before saving');
+            }
+
+            myself.saveProjectsBrowser();
+        });
     if (shiftClicked) {
         menu.addItem(
             localize('Download replay events'),
@@ -3685,7 +3687,22 @@ IDE_Morph.prototype.newProject = function () {
     SnapActions.loadProject(this);
 };
 
+IDE_Morph.prototype.isPreviousVersion = function () {
+    if (!this.isReplayMode) return false;
+
+    var newHistoryLen = this.replayControls.actionIndex + 1,
+        lostEventCount = SnapUndo.allEvents.filter(function(event) {
+            return !event.isReplay;
+        }).length - newHistoryLen;
+
+    return lostEventCount > 0;
+};
+
 IDE_Morph.prototype.save = function () {
+    if (this.isPreviousVersion()) {
+        return this.showMessage('Please exit replay mode before saving');
+    }
+
     if (this.source === 'examples') {
         this.source = 'local'; // cannot save to examples
     }
