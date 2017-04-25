@@ -2825,7 +2825,7 @@ IDE_Morph.prototype.settingsMenu = function () {
     addPreference(
         'Replay Mode',
         function() {
-            if (myself.isReplayMode) {
+            if (myself.isReplayMode) {  // exiting replay mode
                 var newHistoryLen = this.replayControls.actionIndex + 1,
                     lostEventCount = SnapUndo.allEvents.filter(function(event) {
                         return !event.isReplay;
@@ -2844,6 +2844,10 @@ IDE_Morph.prototype.settingsMenu = function () {
                     return;
                 }
                 return myself.exitReplayMode();
+            }
+            // entering replay mode
+            if (SnapUndo.allEvents.length < 2) {
+                return this.showMessage('Nothing to replay!', 2);
             }
             if (SnapActions.isCollaborating()) {
                 this.confirm(
