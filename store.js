@@ -200,7 +200,7 @@ XML_Serializer.prototype.getArgumentXML = function (tag, item) {
         }).join('');
 
     } else if (typeof item === 'string' && item[0] === '<') {
-        xml = '<![CDATA[' + item + ']]>';
+        xml = '<![CDATA[' + item.replace(/]]>/g, '&ncdata;]>') + ']]>';
     }
 
     return [
@@ -219,7 +219,7 @@ XML_Serializer.prototype.loadEventArg = function (xml) {
 
     if (xml.children.length) {
         if (xml.children[0].tag === 'CDATA') {
-            return xml.children[0].contents;
+            return xml.children[0].contents.replace(/&ncdata;]>/g, ']]>');
         }
 
         content = {};
