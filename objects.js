@@ -97,6 +97,7 @@ var WatcherMorph;
 var StagePrompterMorph;
 var Note;
 var SpriteHighlightMorph;
+var Obj;
 
 function isSnapObject(thing) {
     return thing instanceof SpriteMorph || (thing instanceof StageMorph);
@@ -1089,6 +1090,21 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'other',
             spec: 'script variables %scriptVars'
         },
+		doReportObject: {
+			type: 'reporter',
+			category: 'other',
+			spec: 'empty object'
+		},
+		doReportObjectWith: {
+			type: 'reporter',
+			category: 'other',
+			spec: 'object %s with %s : %s'
+		},
+		doReportOfObject: {
+			type: 'reporter',
+			category: 'other',
+			spec: '%s from object %s'
+		},
 
         // inheritance - experimental
         doDeleteAttr: {
@@ -2110,6 +2126,9 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('doShowVar'));
         blocks.push(block('doHideVar'));
         blocks.push(block('doDeclareVariables'));
+		blocks.push(block('doReportObject'));
+		blocks.push(block('doReportObjectWith'));
+		blocks.push(block('doReportOfObject'));
 
     // inheritance:
 
@@ -6354,6 +6373,9 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('doShowVar'));
         blocks.push(block('doHideVar'));
         blocks.push(block('doDeclareVariables'));
+		blocks.push(block('doReportObject'));
+		blocks.push(block('doReportObjectWith'));
+		blocks.push(block('doReportOfObject'));
         blocks.push('=');
         blocks.push(block('reportNewList'));
         blocks.push('-');
@@ -8661,4 +8683,18 @@ StagePrompterMorph.prototype.mouseClickLeft = function () {
 
 StagePrompterMorph.prototype.accept = function () {
     this.isDone = true;
+};
+
+// Obj is represent Object in Snap!
+function Obj() {
+	this.dict = {};
+
+	this.keys = function() {
+		var keys = Object.keys(this.dict),
+			list = new List(),
+			myself = this;
+
+		keys.forEach(function(key) { list.add(new List([key,myself.dict[key]])); });
+		return list;
+	};
 };

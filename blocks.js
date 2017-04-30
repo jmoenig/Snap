@@ -1911,6 +1911,8 @@ SyntaxElementMorph.prototype.showBubble = function (value, exportPic) {
         morphToShow.silentSetWidth(img.width);
         morphToShow.silentSetHeight(img.height);
         morphToShow.image = img;
+	} else if (value instanceof Obj) {
+		return this.showBubble(new TableFrameMorph(new TableMorph(value.keys(),10)),exportPic);
     } else if (typeof value === 'boolean') {
         morphToShow = SpriteMorph.prototype.booleanMorph.call(
             null,

@@ -1377,6 +1377,20 @@ Process.prototype.doDeclareVariables = function (varNames) {
     });
 };
 
+Process.prototype.doReportObject = function() {
+	return new Obj();
+};
+
+Process.prototype.doReportObjectWith = function (obj, key, value) {
+	if (!(obj instanceof Obj)) return '';
+	obj.dict[key] = value;
+	return obj;
+};
+
+Process.prototype.doReportOfObject = function (key, obj) {
+	return obj instanceof Obj ? obj.dict[key] || '' : '';
+}
+
 Process.prototype.doSetVar = function (varName, value) {
     var varFrame = this.context.variables,
         name = varName,
