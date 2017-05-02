@@ -585,10 +585,14 @@ IDE_Morph.prototype.setActiveEditor = function (dialog) {
 };
 
 IDE_Morph.prototype.onSetActive = function () {
-    if (this.currentTab === 'scripts') {
-        this.currentSprite.scripts.updateUndoControls();
-    } else if (this.spriteEditor.updateUndoControls) {
-        this.spriteEditor.updateUndoControls();
+    if (this.isAppMode) {
+        this.spriteEditor.hide();
+    } else {
+        if (this.currentTab === 'scripts') {
+            this.currentSprite.scripts.updateUndoControls();
+        } else if (this.spriteEditor.updateUndoControls) {
+            this.spriteEditor.updateUndoControls();
+        }
     }
 };
 
@@ -1411,11 +1415,6 @@ IDE_Morph.prototype.createSpriteEditor = function () {
 
         scripts.scrollFrame = this.spriteEditor;
         this.add(this.spriteEditor);
-        if (this.isAppMode) {
-            scripts.hideUndoControls();
-        } else {
-            scripts.updateUndoControls();
-        }
         this.spriteEditor.scrollX(this.spriteEditor.padding);
         this.spriteEditor.scrollY(this.spriteEditor.padding);
     } else if (this.currentTab === 'costumes') {
@@ -1429,7 +1428,6 @@ IDE_Morph.prototype.createSpriteEditor = function () {
 
         this.spriteEditor.acceptsDrops = false;
         this.spriteEditor.contents.acceptsDrops = false;
-        this.spriteEditor.updateUndoControls();
     } else if (this.currentTab === 'sounds') {
         this.spriteEditor = new JukeboxMorph(
             this.currentSprite,
@@ -1440,7 +1438,6 @@ IDE_Morph.prototype.createSpriteEditor = function () {
         this.spriteEditor.updateSelection();
         this.spriteEditor.acceptDrops = false;
         this.spriteEditor.contents.acceptsDrops = false;
-        this.spriteEditor.updateUndoControls();
     } else {
         this.spriteEditor = new Morph();
         this.spriteEditor.color = this.groupColor;
@@ -1456,6 +1453,8 @@ IDE_Morph.prototype.createSpriteEditor = function () {
         };
         this.add(this.spriteEditor);
     }
+
+    this.activeEditor.onSetActive();
 };
 
 IDE_Morph.prototype.createCorralBar = function () {

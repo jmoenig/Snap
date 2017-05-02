@@ -6229,7 +6229,6 @@ ScriptsMorph.prototype.updateUndoControls = function () {
 
     if (!sf) {return; }
 
-    sf.show();
     if (!sf.toolBar) {
         sf.toolBar = this.addUndoControls();
         sf.add(sf.toolBar);
@@ -6264,20 +6263,21 @@ ScriptsMorph.prototype.updateUndoControls = function () {
         changed = true;
     }
 
-    if (changed && sf.toolBar) {
+    if (changed || !sf.toolBar.isVisible) {
+        sf.toolBar.isVisible = true;
         sf.toolBar.drawNew();
         sf.toolBar.changed();
     }
+
     sf.adjustToolBar();
 };
 
 ScriptsMorph.prototype.hideUndoControls = function () {
     var sf = this.parentThatIsA(ScrollFrameMorph);
 
-    sf.hide();
     if (sf.toolBar) {
-        sf.toolBar.undoButton.hide();
-        sf.toolBar.redoButton.hide();
+        sf.toolBar.isVisible = false;
+        sf.toolBar.changed();
     }
 };
 
