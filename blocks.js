@@ -6229,6 +6229,7 @@ ScriptsMorph.prototype.updateUndoControls = function () {
 
     if (!sf) {return; }
 
+    sf.show();
     if (!sf.toolBar) {
         sf.toolBar = this.addUndoControls();
         sf.add(sf.toolBar);
@@ -6273,6 +6274,7 @@ ScriptsMorph.prototype.updateUndoControls = function () {
 ScriptsMorph.prototype.hideUndoControls = function () {
     var sf = this.parentThatIsA(ScrollFrameMorph);
 
+    sf.hide();
     if (sf.toolBar) {
         sf.toolBar.undoButton.hide();
         sf.toolBar.redoButton.hide();

@@ -1411,7 +1411,11 @@ IDE_Morph.prototype.createSpriteEditor = function () {
 
         scripts.scrollFrame = this.spriteEditor;
         this.add(this.spriteEditor);
-        scripts.updateUndoControls();
+        if (this.isAppMode) {
+            scripts.hideUndoControls();
+        } else {
+            scripts.updateUndoControls();
+        }
         this.spriteEditor.scrollX(this.spriteEditor.padding);
         this.spriteEditor.scrollY(this.spriteEditor.padding);
     } else if (this.currentTab === 'costumes') {
@@ -4766,6 +4770,7 @@ IDE_Morph.prototype.toggleAppMode = function (appMode) {
         if (world.keyboardReceiver instanceof ScriptFocusMorph) {
             world.keyboardReceiver.stopEditing();
         }
+        this.currentSprite.scripts.hideUndoControls();
     } else {
         this.setColor(this.backgroundColor);
         this.controlBar.setColor(this.frameColor);
