@@ -1,0 +1,10 @@
+
+
+// Specify to override the default Snap cloud URL
+// window.snapCloudURL = 'https://snap.apps.miosoft.com/SnapCloud';
+
+// Create the logger you want to use on this snap deployment
+window.createLogger = function() {
+    // Logs to the console
+    return new window.ConsoleLogger(50);
+};
