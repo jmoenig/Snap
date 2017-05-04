@@ -2641,102 +2641,216 @@ SpriteMorph.prototype.searchBlocks = function (
     if (searchString) {searchPane.reactToKeystroke(); }
 };
 
-// SpritMorph parsing simple arithmetic expressions to reporter blocks
+// SpriteMorph parsing simple arithmetic expressions to reporter blocks
 
 SpriteMorph.prototype.reporterize = function (expressionString) {
     // highly experimental Christmas Easter Egg 2016 :-)
     var ast;
 
-    function parseInfix(expression, operator, already) {
-        // very basic diadic infix parser for arithmetic expressions
-        // with strict left-to-right operator precedence (as in Smalltalk)
-        // which can be overriden by - nested - parentheses.
-        // assumes well-formed expressions, no graceful error handling yet.
-
-        var inputs = ['', ''],
-            idx = 0,
-            ch;
-
-        function format(value) {
-            return value instanceof Array || isNaN(+value) ? value : +value;
+    function tokenize(expressionString) {
+        // very basic tokenizer for arithmetic expressions
+        var tokens = [],
+            DIGITS = /\d|\./,
+            IDENTIFIER_START = /[A-Za-z_]/,
+            IDENTIFIER_WITH_DIGITS = /[A-Za-z_0-9]/,
+            OPERATORS = /[+\-*/%>|<&=!]/,
+            token,
+            next,
+            fixedTokens;
+        expressionString = expressionString.trim();
+        function findIdentifier() {
+            var identifier = "";
+            while (expressionString && IDENTIFIER_WITH_DIGITS.test(expressionString[0])) {
+                identifier += expressionString[0];
+                expressionString = expressionString.slice(1);
+            }
+            return identifier;
         }
-
-        function nested() {
-            var level = 1,
-                expr = '';
-            while (idx < expression.length) {
-                ch = expression[idx];
-                idx += 1;
-                switch (ch) {
-                case '(':
-                    level += 1;
-                    break;
-                case ')':
-                    level -= 1;
-                    if (!level) {
-                        return expr;
-                    }
-                    break;
-                }
-                expr += ch;
+        function findNumber() {
+            var num = "";
+            do {
+                num += expressionString[0];
+                expressionString = expressionString.slice(1);
+            } while (expressionString && DIGITS.test(expressionString[0]));
+            return parseFloat(num);
+        }
+        function findOperator() {
+            var operator = "";
+            while (expressionString && OPERATORS.test(expressionString[0])) {
+                operator += expressionString[0];
+                expressionString = expressionString.slice(1);
+            }
+            return operator;
+        }
+        while (expressionString.length) {
+            expressionString = expressionString.trim();
+            if (IDENTIFIER_START.test(expressionString[0])) {
+                token = findIdentifier();
+                tokens.push({ type: "identifier", val: token});
+            } else if (DIGITS.test(expressionString[0]) ||
+                      (expressionString[0] === "-" && DIGITS.test(expressionString[1]))) {
+                token = findNumber();
+                tokens.push({ type: "number", val: token});
+            } else if (OPERATORS.test(expressionString[0])) {
+                tokens.push({ type: "operator", val: findOperator()});
+            } else if (expressionString[0] === "(") {
+                tokens.push({ type: "lp", val: "("});
+                expressionString = expressionString.slice(1);
+            } else if (expressionString[0] === ")") {
+                tokens.push({ type: "rp", val: ")"});
+                expressionString = expressionString.slice(1);
+            } else if (expressionString[0] === ",") {
+                tokens.push({ type: "comma", val: ","});
+                expressionString = expressionString.slice(1);
+            } else {
+                throw "Unknown character in expression";
             }
         }
-
-        while (idx < expression.length) {
-            ch = expression[idx];
-            idx += 1;
-            switch (ch) {
-            case ' ':
-                break;
-            case '(':
-                if (inputs[operator ? 1 : 0].length) {
-                    inputs[operator ? 1 : 0] = [
-                        inputs[operator ? 1 : 0],
-                        parseInfix(nested())
-                    ];
-                } else {
-                    inputs[operator ? 1 : 0] = parseInfix(nested());
-                }
-                break;
-            case '-':
-            case '+':
-            case '*':
-            case '/':
-            case '%':
-            case '=':
-            case '<':
-            case '>':
-            case '&':
-            case '|':
-                if (!operator && !inputs[0].length) {
-                    inputs[0] = ch;
-                } else if (operator) {
-                    if (!inputs[1].length) {
-                        inputs[1] = ch;
-                    } else {
-                        return parseInfix(
-                            expression.slice(idx),
-                            ch,
-                            [operator, already, format(inputs[1])]
-                        );
-                    }
-                } else {
-                    operator = ch;
-                    already = format(inputs[0]);
-                }
-                break;
-            default:
-                inputs[operator ? 1 : 0] += ch;
+        // fix the tokens list so that "1-1" is correctly tokenized as [1, "-", 1]
+        // this is very much a kludge, but I can't think of a better way to do this right now
+        fixedTokens = [];
+        for (var i = 0; i < tokens.length; i++) {
+            token = tokens[i];
+            next = tokens[i + 1];
+            fixedTokens.push(token);
+            // if we have two number tokens right next to each other
+            // and if the second number starts with "-"...
+            if (token.type === "number" && next &&
+                next.type === "number" && next.val.toString()[0] === "-") {
+                    // ... replace the second number with a "-" and the abs of that number
+                    fixedTokens.push({ type: "operator", val: "-"});
+                    fixedTokens.push({ type: "number", val: Math.abs(next.val)});
             }
         }
-        if (operator) {
-            return [operator, already, format(inputs[1])];
-        }
-        return format(inputs[0]);
+        return fixedTokens;
     }
 
+    function createASTFromTokens(tokens) {
+        return precedence4(tokens);
+        function precedence0(tokens) {
+            var token = tokens.shift();
+            if (token.type === "lp") {
+                var exp = createASTFromTokens(tokens);
+                if (tokens.shift().type !== "rp") {
+                    throw "Mismatched parenthesis";
+                }
+                return exp;
+            } else if (token.type === "number") {
+                return +token.val;
+            } else if (token.type === "operator") {
+                if (token.val === "!") {
+                    return [token.val, precedence0(tokens)];
+                } else {
+                    throw "Invalid prefix operator";
+                }
+            } else if (token.type === "identifier") {
+                if (tokens.length && tokens[0].type === "lp") {
+                    var args = [];
+                    tokens.shift();
+                    while (tokens[0].type !== "rp") {
+                        args.push(createASTFromTokens(tokens));
+                        if (tokens[0].type === "rp") {
+                            break;
+                        }
+                        if (tokens[0].type !== "comma") {
+                            throw "No comma between arguments";
+                        }
+                        tokens.shift();
+                    }
+                    tokens.shift();
+                    return [token.val].concat(args);
+                } else {
+                    return token.val;
+                }
+            } else {
+                throw "Invalid expression";
+            }
+        }
+        function precedence1(tokens) {
+            var exp = precedence0(tokens), op;
+            if (!tokens.length) {
+                return exp;
+            }
+            while (tokens.length && /[*/%]/.test(tokens[0].val)) {
+                op = tokens[0];
+                if (op.type !== "operator") {
+                    return exp;
+                }
+                switch (op.val) {
+                    case "*":
+                    case "/":
+                    case "%": break;
+                    default: return exp;
+                }
+                tokens.shift();
+                exp = [op.val, exp, precedence0(tokens)];
+            }
+            return exp;
+        }
+        function precedence2(tokens) {
+            var exp = precedence1(tokens), op;
+            if (!tokens) {
+                return exp;
+            }
+            while (tokens.length && /[+\-]/.test(tokens[0].val)) {
+                op = tokens[0];
+                if (op.type !== "operator") {
+                    return exp;
+                }
+                switch (op.val) {
+                    case "+":
+                    case "-": break;
+                    default: return exp;
+                }
+                tokens.shift();
+                exp = [op.val, exp, precedence1(tokens)];
+            }
+            return exp;
+        }
+        function precedence3(tokens) {
+            var exp = precedence2(tokens), op;
+            if (!tokens) {
+                return exp;
+            }
+            while (tokens.length && /[=<>]/.test(tokens[0].val)) {
+                op = tokens[0];
+                if (op.type !== "operator") {
+                    return exp;
+                }
+                switch (op.val) {
+                    case "=":
+                    case ">":
+                    case "<": break;
+                    default: return exp;
+                }
+                tokens.shift();
+                exp = [op.val, exp, precedence2(tokens)];
+            }
+            return exp;
+        }
+        function precedence4(tokens) {
+            var exp = precedence3(tokens), op;
+            if (!tokens) {
+                return exp;
+            }
+            while (tokens.length && /[&|]/.test(tokens[0].val)) {
+                op = tokens[0];
+                if (op.type !== "operator") {
+                    return exp;
+                }
+                switch (op.val) {
+                    case "&&":
+                    case "||": break;
+                    default: return exp;
+                }
+                tokens.shift();
+                exp = [op.val, exp, precedence3(tokens)];
+            }
+            return exp;
+        }
+    }
     function blockFromAST(ast) {
-        var block, selectors, monads, alias, key, sel, i, inps,
+        var block, selectors, of_options, alias, key, sel, i, inps,
             off = 1;
         selectors = {
             '+': 'reportSum',
@@ -2744,36 +2858,29 @@ SpriteMorph.prototype.reporterize = function (expressionString) {
             '*': 'reportProduct',
             '/': 'reportQuotient',
             '%': 'reportModulus',
-            '=': 'reportEquals',
+            'random': 'reportRandom',
+            'round': 'reportRound',
             '<': 'reportLessThan',
             '>': 'reportGreaterThan',
-            '&': 'reportAnd',
-            '|': 'reportOr',
-            round: 'reportRound',
-            not: 'reportNot'
+            '=': 'reportEquals',
+            '!': 'reportNot',
+            '&&': 'reportAnd',
+            '||': 'reportOr'
         };
-        monads = ['abs', 'ceiling', 'floor', 'sqrt', 'sin', 'cos', 'tan',
-            'asin', 'acos', 'atan', 'ln', 'log', 'round', 'not'];
-        alias = {
-            ceil: 'ceiling',
-            '!' : 'not'
-        };
+        of_options = ['abs', 'ceiling', 'floor', 'sqrt', 'sin', 'cos', 'tan',
+            'asin', 'acos', 'atan', 'ln', 'log'];
+        alias = {ceil: 'ceiling'};
         key = alias[ast[0]] || ast[0];
-        if (contains(monads, key)) { // monadic
-            sel = selectors[key];
-            if (sel) { // single input
-                block = SpriteMorph.prototype.blockForSelector(sel);
-                inps = block.inputs();
-            } else { // two inputs, first is function name
-                block = SpriteMorph.prototype.blockForSelector('reportMonadic');
-                inps = block.inputs();
-                inps[0].setContents([key]);
-                off = 0;
-            }
-        } else { // diadic
+        if (contains(of_options, key)) { // The function's name is a choice in the "of" operator block
+            block = SpriteMorph.prototype.blockForSelector('reportMonadic');
+            inps = block.inputs();
+            inps[0].setContents([key]);
+            off = 0;
+        } else { // The function or operator has its own block
             block = SpriteMorph.prototype.blockForSelector(selectors[key]);
             inps = block.inputs();
         }
+        // Set the inputs to the block
         for (i = 1; i < ast.length; i += 1) {
             if (ast[i] instanceof Array) {
                 block.silentReplaceInput(inps[i - off], blockFromAST(ast[i]));
@@ -2803,7 +2910,7 @@ SpriteMorph.prototype.reporterize = function (expressionString) {
 
     if (expressionString.length > 100) {return null; }
     try {
-        ast = parseInfix(expressionString);
+        ast = createASTFromTokens(tokenize(expressionString));
         return ast instanceof Array ? blockFromAST(ast) : null;
     } catch (error) {
         return null;
