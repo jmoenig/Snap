@@ -178,6 +178,9 @@ var CommentMorph;
 var ArgLabelMorph;
 var TextSlotMorph;
 var ScriptFocusMorph;
+var NoteInputMorph;
+var PianoMenuMorph;
+var KeyItemMorph;
 
 WorldMorph.prototype.customMorphs = function () {
     // add examples to the world's demo menu
@@ -963,6 +966,9 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                 }
             );
             part.setContents(90);
+            break;
+        case '%note':
+            part = new NoteInputMorph();
             break;
         case '%inst':
             part = new InputSlotMorph(
@@ -8654,6 +8660,10 @@ InputSlotMorph.prototype.drawRoundBorder = function (context) {
     context.stroke();
 };
 
+
+
+
+
 // TemplateSlotMorph ///////////////////////////////////////////////////
 
 /*
@@ -9369,6 +9379,244 @@ ArrowMorph.prototype.drawNew = function () {
     context.closePath();
     context.fill();
 };
+
+// PianoMenuMorph //////////////////////////////////////////////////////
+/* 
+    I am a menu that looks like a piano keyboard.
+*/
+
+// PianoMenuMorph inherits from MenuMorph
+
+PianoMenuMorph.prototype = new MenuMorph();
+PianoMenuMorph.prototype.constructor = PianoMenuMorph;
+PianoMenuMorph.uber = MenuMorph.prototype;
+
+// PianoMenuMorph instance creation:
+
+function PianoMenuMorph(target, title, environment, fontSize) {
+    this.init(target, title, environment, fontSize);
+}
+
+PianoMenuMorph.prototype.drawNew = function () {
+    var myself = this,
+        item,
+        fb,
+        x,
+        y,
+        label,
+        blackkey,
+        key,
+        keycolor,
+        keywidth,
+        keyheight,
+        keyposition;
+
+    this.children.forEach(function (m) {
+        m.destroy();
+    });
+    this.children = [];
+    if (!this.isListContents) {
+        this.edge = MorphicPreferences.isFlat ? 0 : 5;
+        this.border = MorphicPreferences.isFlat ? 1 : 2;
+    }
+    this.color = new Color(255, 255, 255);
+    this.borderColor = new Color(60, 60, 60);
+    this.silentSetExtent(new Point(0, 0));
+
+    x = this.left() + 4;
+    y = this.top() + 5;
+    label = new StringMorph('');
+    this.items.forEach(function (tuple) {
+        blackkey = tuple[0][1] !== " ";
+        key = new BoxMorph(1, 2);
+        if (blackkey) {
+            keycolor = new Color(0, 0, 0);
+            keywidth = 9;
+            keyheight = 25;
+            keyposition = new Point(x - 17, y);
+        } else {
+            keycolor = new Color(255, 255, 255);
+            keywidth = 15;
+            keyheight = 40;
+            keyposition = new Point(x + 1, y);
+            x = x + keywidth - 1;
+        }
+        key.setColor(keycolor);
+        key.setWidth(keywidth);
+        key.setHeight(keyheight);
+        item = new KeyItemMorph(
+            myself.target,
+            tuple[1],
+            [key, tuple[0]],
+            myself.fontSize || MorphicPreferences.menuFontSize,
+            MorphicPreferences.menuFontName,
+            myself.environment,
+            tuple[2], // bubble help hint
+            tuple[3], // color
+            tuple[4], // bold
+            tuple[5], // italic
+            tuple[6], // doubleclick action
+            label     // String to change
+        );
+        item.setPosition(keyposition);
+        myself.add(item);
+    });
+    label.setPosition(new Point(90, 45));
+    this.add(label);
+    fb = this.fullBounds();
+    this.silentSetExtent(fb.extent().add(4));
+    this.adjustWidths();
+    MenuMorph.uber.drawNew.call(this);
+};
+
+PianoMenuMorph.prototype.popUpAtHand = function (world) {
+    var wrrld = world || this.world;
+    this.drawNew();
+    this.popup(wrrld,
+        wrrld.hand.position().subtract(new Point(this.extent().x / 2, 0)));
+};
+
+
+// NoteInputMorph //////////////////////////////////////////////////////
+/*
+    I am an inputslotmorph designed for selecting midi notes.
+    My block spec is
+
+    %note     - midi notes
+    
+    evaluate returns the integer value of the displayed midi note.
+*/
+
+// NoteInputMorph inherits from InputSlotMorph
+
+NoteInputMorph.prototype = new InputSlotMorph();
+NoteInputMorph.prototype.constructor = NoteInputMorph;
+NoteInputMorph.uber = InputSlotMorph.prototype;
+
+// NoteInputMorph instance creation:
+
+function NoteInputMorph() {
+    this.init();
+}
+
+NoteInputMorph.prototype.init = function () {
+    NoteInputMorph.uber.init.call(this);
+    this.choices = {
+        'C (48)' : 48,
+        'D (50)' : 50,
+        'C# (49)' : 49,
+        'E (52)' : 52,
+        'Eb (51)' : 51,
+        'F (53)' : 53,
+        'G (55)' : 55,
+        'F# (54)' : 54,
+        'A (57)' : 57,
+        'G# (56)' : 56,
+        'B (59)' : 59,
+        'Bb (58)' : 58,
+        'C (60)' : 60,
+        'D (62)' : 62,
+        'C# (61)' : 61,
+        'E (64)' : 64,
+        'Eb (63)' : 63,
+        'F (65)' : 65,
+        'G (67)' : 67,
+        'F# (66)' : 66,
+        'A (69)' : 69,
+        'G# (68)' : 68,
+        'B (71)' : 71,
+        'Bb (70)' : 70,
+        'C (72)' : 72
+    };
+    this.isNumeric = true;
+};
+
+NoteInputMorph.prototype.dropDownMenu = function () {
+    var choices = this.choices,
+        key,
+        menu = new PianoMenuMorph(
+            this.setContents,
+            null,
+            this,
+            this.fontSize
+        );
+    for (key in choices) {
+        if (Object.prototype.hasOwnProperty.call(choices, key)) {
+            menu.addItem(key, choices[key]);
+        }
+    }
+    menu.popUpAtHand(this.world());
+};
+
+// KeyItemMorph ///////////////////////////////////////////////////////
+
+KeyItemMorph.prototype = new MenuItemMorph();
+KeyItemMorph.prototype.constructor = KeyItemMorph;
+KeyItemMorph.uber = MenuItemMorph.prototype;
+
+function KeyItemMorph(
+    target,
+    action,
+    labelString, // can also be a Morph or a Canvas or a tuple: [icon, string]
+    fontSize,
+    fontStyle,
+    environment,
+    hint,
+    color,
+    bold,
+    italic,
+    doubleClickAction, // optional when used as list morph item
+    label
+) {
+    this.init(
+        target,
+        action,
+        labelString,
+        fontSize,
+        fontStyle,
+        environment,
+        hint,
+        color,
+        bold,
+        italic,
+        doubleClickAction,
+        label
+    );
+    this.feedback = label;
+}
+
+KeyItemMorph.prototype.createLabel = function () {
+    var icon;
+    if (this.label !== null) {
+        this.label.destroy();
+    }
+    // assume its pattern is: [icon, string]
+    this.label = new Morph();
+    this.label.alpha = 0; // transparent
+    icon = this.createIcon(this.labelString[0]);
+    this.label.add(icon);
+    this.label.drawNew();
+    this.silentSetExtent(icon.extent());
+    this.label.bounds = this.position().extent(this.label.extent());
+    this.label.silentSetExtent(new Point(0, 0));
+    this.add(this.label);
+};
+
+KeyItemMorph.prototype.mouseEnter = function () {
+    this.feedback.text = this.labelString[1];
+    this.feedback.changed();
+    this.feedback.drawNew();
+    this.feedback.changed();
+    // if (!this.isListItem()) {
+    //     this.image = this.highlightImage;
+    //     this.changed();
+    // }
+    // if (this.hint) {
+    //     this.bubbleHelp(this.hint);
+    // }
+};
+
+
 
 // TextSlotMorph //////////////////////////////////////////////////////
 
