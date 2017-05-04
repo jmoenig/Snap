@@ -1416,6 +1416,7 @@ IDE_Morph.prototype.createCorralBar = function () {
     var padding = 5,
         newbutton,
         paintbutton,
+        importbutton,
         colors = [
             this.groupColor,
             this.frameColor.darker(50),
@@ -1477,6 +1478,29 @@ IDE_Morph.prototype.createCorralBar = function () {
         this.corralBar.left() + padding + newbutton.width() + padding
     );
     this.corralBar.add(paintbutton);
+
+    importbutton = new PushButtonMorph(
+        this,
+        "addNewSpriteFromLibrary",
+        new SymbolMorph("import", 15)
+    );
+    importbutton.padding = 0;
+    importbutton.corner = 12;
+    importbutton.color = colors[0];
+    importbutton.highlightColor = colors[1];
+    importbutton.pressColor = colors[2];
+    importbutton.labelMinExtent = new Point(36, 18);
+    importbutton.labelShadowOffset = new Point(-1, -1);
+    importbutton.labelShadowColor = colors[1];
+    importbutton.labelColor = this.buttonLabelColor;
+    importbutton.contrast = this.buttonContrast;
+    importbutton.drawNew();
+    importbutton.hint = "add a new sprite";
+    importbutton.fixLayout();
+    importbutton.setCenter(this.corralBar.center());
+    importbutton.setLeft(paintbutton.right() + padding);
+    this.corralBar.add(importbutton);
+
 };
 
 IDE_Morph.prototype.createCorral = function () {
@@ -2093,6 +2117,19 @@ IDE_Morph.prototype.removeSetting = function (key) {
 };
 
 // IDE_Morph sprite list access
+
+IDE_Morph.prototype.addNewSpriteFromLibrary = function () {
+    var sprite = new SpriteMorph(this.globalVariables),
+        rnd = Process.prototype.reportRandom;
+
+    sprite.name = this.newSpriteName(sprite.name);
+    sprite.setCenter(this.stage.center());
+    this.stage.add(sprite);
+    this.sprites.add(sprite);
+    this.corral.addSprite(sprite);
+    this.selectSprite(sprite);
+    this.importMedia("Costumes");
+};
 
 IDE_Morph.prototype.addNewSprite = function () {
     var sprite = new SpriteMorph(this.globalVariables),
@@ -7168,7 +7205,7 @@ CostumeIconMorph.prototype.removeCostume = function () {
     var wardrobe = this.parentThatIsA(WardrobeMorph),
         idx = this.parent.children.indexOf(this),
         ide = this.parentThatIsA(IDE_Morph);
-    wardrobe.removeCostumeAt(idx - 2);
+    wardrobe.removeCostumeAt(idx - 3);
     if (ide.currentSprite.costume === this.object) {
         ide.currentSprite.wearCostume(null);
     }
@@ -7429,7 +7466,8 @@ WardrobeMorph.prototype.updateList = function () {
         icon,
         template,
         txt,
-        paintbutton;
+        paintbutton,
+        importbutton;
 
     this.changed();
     oldFlag = Morph.prototype.trackChanges;
@@ -7473,15 +7511,39 @@ WardrobeMorph.prototype.updateList = function () {
 
     this.addContents(paintbutton);
 
+    importbutton = new PushButtonMorph(
+        this,
+        "importNew",
+        new SymbolMorph("import", 15)
+    );
+    importbutton.padding = 0;
+    importbutton.corner = 12;
+    importbutton.color = IDE_Morph.prototype.groupColor;
+    importbutton.highlightColor = IDE_Morph.prototype.frameColor.darker(50);
+    importbutton.pressColor = importbutton.highlightColor;
+    importbutton.labelMinExtent = new Point(36, 18);
+    importbutton.labelShadowOffset = new Point(-1, -1);
+    importbutton.labelShadowColor = importbutton.highlightColor;
+    importbutton.labelColor = TurtleIconMorph.prototype.labelColor;
+    importbutton.contrast = this.buttonContrast;
+    importbutton.drawNew();
+    importbutton.hint = "Select a costume from the media library";
+    importbutton.setPosition(new Point(x, y));
+    importbutton.fixLayout();
+    importbutton.setCenter(icon.center());
+    importbutton.setLeft(paintbutton.right() + padding * 2);
+
+    this.addContents(importbutton);
+
     txt = new TextMorph(localize(
         "costumes tab help" // look up long string in translator
     ));
-    txt.fontSize = 9;
-    txt.setColor(SpriteMorph.prototype.paletteTextColor);
+    txt.fontSize = 12;
+    txt.setColor(SpriteMorph.prototype.paletteTextColor.darker());
 
-    txt.setPosition(new Point(x, y));
+    txt.setPosition(new Point(importbutton.right() + padding * 6, importbutton.top() - 4));
     this.addContents(txt);
-    y = txt.bottom() + padding;
+    y = icon.bottom() + padding;
 
 
     this.sprite.costumes.asArray().forEach(function (costume) {
@@ -7539,6 +7601,13 @@ WardrobeMorph.prototype.paintNew = function () {
             ide.currentSprite.wearCostume(cos);
         }
     });
+};
+
+WardrobeMorph.prototype.importNew = function () {
+    var ide = this.parentThatIsA(IDE_Morph);
+    graphicsName = ide.currentSprite instanceof SpriteMorph ?
+                'Costumes' : 'Backgrounds'
+    ide.importMedia(graphicsName);
 };
 
 // Wardrobe drag & drop
@@ -7803,6 +7872,10 @@ JukeboxMorph.prototype.init = function (aSprite, sliderColor) {
     this.updateList();
 };
 
+JukeboxMorph.prototype.importNew = function () {
+    this.parentThatIsA(IDE_Morph).importMedia('Sounds');
+};
+
 // Jukebox updating
 
 JukeboxMorph.prototype.updateList = function () {
@@ -7813,7 +7886,8 @@ JukeboxMorph.prototype.updateList = function () {
         oldFlag = Morph.prototype.trackChanges,
         icon,
         template,
-        txt;
+        txt,
+        importbutton;
 
     this.changed();
     oldFlag = Morph.prototype.trackChanges;
@@ -7827,12 +7901,34 @@ JukeboxMorph.prototype.updateList = function () {
     };
     this.addBack(this.contents);
 
+    importbutton = new PushButtonMorph(
+        this,
+        "importNew",
+        new SymbolMorph("import", 15)
+    );
+    importbutton.padding = 0;
+    importbutton.corner = 12;
+    importbutton.color = IDE_Morph.prototype.groupColor;
+    importbutton.highlightColor = IDE_Morph.prototype.frameColor.darker(50);
+    importbutton.pressColor = importbutton.highlightColor;
+    importbutton.labelMinExtent = new Point(36, 18);
+    importbutton.labelShadowOffset = new Point(-1, -1);
+    importbutton.labelShadowColor = importbutton.highlightColor;
+    importbutton.labelColor = TurtleIconMorph.prototype.labelColor;
+    importbutton.contrast = this.buttonContrast;
+    importbutton.drawNew();
+    importbutton.hint = "Select a sound from the media library";
+    importbutton.setPosition(new Point(x, y + padding));
+    importbutton.fixLayout();
+    this.addContents(importbutton);
+
+
     txt = new TextMorph(localize(
         'import a sound from your computer\nby dragging it into here'
     ));
-    txt.fontSize = 9;
-    txt.setColor(SpriteMorph.prototype.paletteTextColor);
-    txt.setPosition(new Point(x, y));
+    txt.fontSize = 12;
+    txt.setColor(SpriteMorph.prototype.paletteTextColor.darker());
+    txt.setPosition(new Point(importbutton.right() + padding * 6, y));
     this.addContents(txt);
     y = txt.bottom() + padding;
 
