@@ -865,6 +865,14 @@ CustomCommandBlockMorph.prototype.userMenu = function () {
     if (this.isPrototype) {
         menu = new MenuMorph(this);
         menu.addItem(
+            'scratchblocks code...',
+              function () {
+                  var code = myself.parent.toScratchblocks();
+                  window.prompt('scratchblocks code for you to copy and paste', code);
+              },
+            'generate `scratchblocks` code for the Scratch Forums'
+        );
+        menu.addItem(
             "script pic...",
             function () {
                 var ide = this.world().children[0];
@@ -2160,6 +2168,19 @@ PrototypeHatBlockMorph.prototype.mouseClickLeft = function () {
 PrototypeHatBlockMorph.prototype.userMenu = function () {
     return this.parts()[0].userMenu();
 };
+          
+// PrototypeHatBlockMorph to "scratchblocks"
+
+PrototypeHatBlockMorph.prototype.toScratchblocks = function () {
+    var customCommand = this.parts()[0],
+        nb = this.nextBlock(),
+        result;
+    result = '{' + customCommand.toScratchblocks() + '} :: control hat';
+    if (nb) {
+      result += '\n' + nb.toScratchblocks();
+    }
+    return result;
+};
 
 // PrototypeHatBlockMorph zebra coloring
 
@@ -2497,6 +2518,12 @@ BlockLabelPlaceHolderMorph.prototype.init = function () {
     this.isHighlighted = false;
     this.isProtectedLabel = true; // doesn't participate in zebra coloring
     BlockLabelFragmentMorph.uber.init.call(this, '+');
+};
+
+// BlockLabelPlaceHolderMorph to "scratchblocks"
+
+BlockLabelPlaceHolderMorph.prototype.toScratchblocks = function () {
+    return ''; // don't include plusses in scratchblocks output
 };
 
 // BlockLabelPlaceHolderMorph drawing
