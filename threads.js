@@ -171,6 +171,21 @@ function invoke(
     return proc.homeContext.inputs[0];
 }
 
+// SnapError ///////////////////////////////////////////////////////////
+/*
+    A SnapError is a wrapper around a standard JS Error message.
+    By throwing SnapError we can distinguish between our error messages
+    and ones from JS, which can be presented differently to users.
+*/
+function SnapError(message) {
+  this.name = 'Snap Error';
+  this.message = localize(message || 'An error has occurred.');
+  this.stack = (new Error()).stack;
+}
+
+SnapError.prototype = new Error();
+SnapError.prototype.constructor = SnapError;
+
 // ThreadManager ///////////////////////////////////////////////////////
 
 function ThreadManager() {
@@ -1560,28 +1575,28 @@ Process.prototype.reportNewList = function (elements) {
 };
 
 Process.prototype.reportCONS = function (car, cdr) {
-    // this.assertType(cdr, 'list');
+    this.assertType(cdr, 'list');
     return new List().cons(car, cdr);
 };
 
 Process.prototype.reportCDR = function (list) {
-    // this.assertType(list, 'list');
+    if (!list) {return; }
+    this.assertType(list, 'list');
     return list.cdr();
 };
 
 Process.prototype.doAddToList = function (element, list) {
-    // this.assertType(list, 'list');
+    if (!list) {return; }
+    this.assertType(list, 'list');
     list.add(element);
 };
 
 Process.prototype.doDeleteFromList = function (index, list) {
     var idx = index;
-    // this.assertType(list, 'list');
+    if (index === '' || !list) {return; }
+    this.assertType(list, 'list');
     if (this.inputOption(index) === 'all') {
         return list.clear();
-    }
-    if (index === '') {
-        return null;
     }
     if (this.inputOption(index) === 'last') {
         idx = list.length();
@@ -1593,10 +1608,8 @@ Process.prototype.doDeleteFromList = function (index, list) {
 
 Process.prototype.doInsertInList = function (element, index, list) {
     var idx = index;
-    // this.assertType(list, 'list');
-    if (index === '') {
-        return null;
-    }
+    if (index === '' || !list) {return; }
+    this.assertType(list, 'list');
     if (this.inputOption(index) === 'any') {
         idx = this.reportRandom(1, list.length() + 1);
     }
@@ -1608,10 +1621,8 @@ Process.prototype.doInsertInList = function (element, index, list) {
 
 Process.prototype.doReplaceInList = function (index, list, element) {
     var idx = index;
-    // this.assertType(list, 'list');
-    if (index === '') {
-        return null;
-    }
+    if (index === '' || !list) {return; }
+    this.assertType(list, 'list');
     if (this.inputOption(index) === 'any') {
         idx = this.reportRandom(1, list.length());
     }
@@ -1623,10 +1634,8 @@ Process.prototype.doReplaceInList = function (index, list, element) {
 
 Process.prototype.reportListItem = function (index, list) {
     var idx = index;
-    // this.assertType(list, 'list');
-    if (index === '') {
-        return '';
-    }
+    if (index === '' || !list) {return ''; }
+    this.assertType(list, 'list');
     if (this.inputOption(index) === 'any') {
         idx = this.reportRandom(1, list.length());
     }
@@ -1637,12 +1646,14 @@ Process.prototype.reportListItem = function (index, list) {
 };
 
 Process.prototype.reportListLength = function (list) {
-    // this.assertType(list, 'list');
+    if (!list) {return 0; }
+    this.assertType(list, 'list');
     return list.length();
 };
 
 Process.prototype.reportListContainsItem = function (list, element) {
-    // this.assertType(list, 'list');
+    if (!list) {return false; }
+    this.assertType(list, 'list');
     return list.contains(element);
 };
 
@@ -2272,6 +2283,9 @@ Process.prototype.assertType = function (thing, typeString) {
     if (typeString instanceof Array && contains(typeString, thingType)) {
         return true;
     }
+    if (typeString instanceof Array) {
+        typeString = typeString.join(' or ');
+    }
     throw new Error('expecting ' + typeString + ' but getting ' + thingType);
 };
 
@@ -2574,16 +2588,11 @@ Process.prototype.reportUnicodeAsLetter = function (num) {
 
 Process.prototype.reportTextSplit = function (string, delimiter) {
     var types = ['text', 'number'],
-        strType = this.reportTypeOf(string),
-        delType = this.reportTypeOf(this.inputOption(delimiter)),
         str,
         del;
-    if (!contains(types, strType)) {
-        throw new Error('expecting text instead of a ' + strType);
-    }
-    if (!contains(types, delType)) {
-        throw new Error('expecting a text delimiter instead of a ' + delType);
-    }
+    this.assertType(string, types);
+    this.assertType(this.inputOption(delimiter), types);
+
     str = isNil(string) ? '' : string.toString();
     switch (this.inputOption(delimiter)) {
     case 'line':
