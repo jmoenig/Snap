@@ -1551,7 +1551,8 @@ Process.prototype.doDeleteAttr = function (attrName) {
         } else { // attribute
             name = {
                 xPosition: 'x',
-                yPosition: 'y'
+                yPosition: 'y',
+                direction: 'dir'
             }[name.expression.selector];
             if (!isNil(name)) {
                 rcvr.inheritAttribute(name);

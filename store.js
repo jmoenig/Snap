@@ -61,7 +61,7 @@ normalizeCanvas, contains*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2017-April-10';
+modules.store = '2017-May-05';
 
 
 // XML_Serializer ///////////////////////////////////////////////////////
@@ -478,6 +478,7 @@ SnapSerializer.prototype.rawLoadProjectModel = function (xmlNode) {
             if (exemplar) {
                 sprite.setExemplar(exemplar);
             }
+            sprite.inheritedAttributes = sprite.inheritanceInfo.delegated || [];
         }
         if (sprite.nestingInfo) { // only sprites may have nesting info
             anchor = myself.project.sprites[sprite.nestingInfo.anchor];
@@ -742,9 +743,15 @@ SnapSerializer.prototype.loadObject = function (object, model) {
 
 SnapSerializer.prototype.loadInheritanceInfo = function (object, model) {
     // private
-    var info = model.childNamed('inherit');
+    var info = model.childNamed('inherit'),
+        delegated;
     if (info) {
         object.inheritanceInfo = info.attributes;
+        delegated = info.childNamed('list');
+        if (delegated) {
+            object.inheritanceInfo.delegated =
+                this.loadValue(delegated).asArray();
+        }
     }
 };
 
@@ -1633,8 +1640,12 @@ SpriteMorph.prototype.toXML = function (serializer) {
         // inheritance info
         this.exemplar
             ? '<inherit exemplar="' +
-                    this.exemplar.name
-                    + '"/>'
+                    this.exemplar.name +
+                    '">' +
+                    (this.inheritedAttributes.length ?
+                        serializer.store(new List(this.inheritedAttributes))
+                        : '') +
+                    '</inherit>'
             : '',
 
         // nesting info

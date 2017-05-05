@@ -3409,9 +3409,18 @@ Fixes:
 
 == v4.1 - development - ===
 
+170411
+------
+* Objects: export text from variable watchers to new browser tab by default
+
+170505
+------
+* attribute inheritance support for ‘x’, ‘y’, ‘dir’ and ‘size’
+
 Features:
 * polymorphic sprite-local custom blocks
 * inheritance of sprite-local custom blocks
+* inheritance of sprite attributes (x, y, direction, size)
 * localization support when typing expressions
 * support for user-forced line-breaks in custom block labels
 * ternary Boolean slot setting: support to limit Boolean input slots to “true/false” outside of rings and in palette

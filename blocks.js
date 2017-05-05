@@ -150,7 +150,7 @@ CustomCommandBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2017-April-10';
+modules.blocks = '2017-May-05';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -2363,6 +2363,8 @@ BlockMorph.prototype.userMenu = function () {
         vNames = proc && proc.context && proc.context.outerContext ?
                 proc.context.outerContext.variables.names() : [],
         alternatives,
+        field,
+        rcvr,
         top;
 
     function addOption(label, toggle, test, onHint, offHint) {
@@ -2456,6 +2458,36 @@ BlockMorph.prototype.userMenu = function () {
                     'hidePrimitive'
                 );
             }
+
+            // allow toggling inheritable attributes
+            if (StageMorph.prototype.enableInheritance) {
+                rcvr = this.receiver();
+                field = {
+                    xPosition: 'x',
+                    yPosition: 'y',
+                    direction: 'dir',
+                    getScale: 'size'
+                }[this.selector];
+                if (field && rcvr && rcvr.exemplar) {
+                    menu.addLine();
+                    if (rcvr.inheritsAttribute(field)) {
+                        menu.addItem(
+                            'disinherit',
+                            function () {
+                                rcvr.shadowAttribute(field);
+                            }
+                        );
+                    } else {
+                        menu.addItem(
+                            localize('inherit from') + ' ' + rcvr.exemplar.name,
+                            function () {
+                                rcvr.inheritAttribute(field);
+                            }
+                        );
+                    }
+                }
+            }
+
             if (StageMorph.prototype.enableCodeMapping) {
                 menu.addLine();
                 menu.addItem(
