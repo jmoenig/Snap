@@ -8714,6 +8714,8 @@ ReplayControls.prototype.init = function(ide) {
     this.actionTime = 0;
     this.isApplyingAction = false;
     this.isPlaying = false;
+    this.maxGapDuration = 1000*60*2;  // compress gaps of longer than 2 min
+    this.gapFolds = [];
 
     this.isShowingCaptions = false;
     this.lastCaption = null;
@@ -9052,8 +9054,9 @@ ReplayControls.prototype.formatTime = function(time) {
 };
 
 ReplayControls.prototype.updateDisplayTime = function() {
-    var totalTime = this.slider.rangeSize(),
-        currentTime = this.slider.value - this.slider.start;
+    var totalTime = this.actions[this.actions.length-1].time - this.actions[0].time,
+        currentTime = this.getTimeFromPosition(this.slider.value) -
+            this.getTimeFromPosition(this.slider.start);
 
     this.displayTime.text = this.formatTime(currentTime) + ' / ' +
         this.formatTime(totalTime);
@@ -9073,7 +9076,7 @@ ReplayControls.prototype.playNext = function(dir) {
     nextAction = this.actions[this.actionIndex + Math.max(dir, 0)];
 
     if (nextAction) {
-        value = nextAction.time + dir;
+        value = this.getSliderPosition(nextAction) + dir;
 
         this.slider.button.setLeft(this.getSliderLeftFromValue(value));
         this.slider.updateValue();
@@ -9172,25 +9175,94 @@ ReplayControls.prototype.getCurrentHistory = function() {
     return this.actions.slice(0, this.actionIndex+1);
 };
 
+ReplayControls.prototype.getSliderPosition = function(action) {
+    return this.getSliderPositionFromTime(action.time);
+};
+
+ReplayControls.prototype.getSliderPositionFromTime = function(time) {
+    // get all the folds less than the given time and subtract their size
+    var delta = 0;
+
+    for (var i = this.gapFolds.length; i--;) {
+        if (this.gapFolds[i][1] <= time) {
+            delta += this.gapFolds[i][1] - this.gapFolds[i][0];
+        }
+    }
+
+    return time - delta;
+};
+
+ReplayControls.prototype.getTimeFromPosition = function(value) {
+
+    for (var i = 0; i < this.gapFolds.length; i++) {
+        if (this.gapFolds[i][0] <= value) {
+            value += this.gapFolds[i][1] - this.gapFolds[i][0];
+        }
+    }
+
+    return value;
+};
+
+ReplayControls.prototype.computeGapFolds = function() {
+    var folds = [],
+        foldSize,
+        startTime,
+        endTime;
+
+    for (var i = 1; i < this.actions.length; i++) {
+        foldSize = (this.actions[i].time - this.actions[i-1].time) -
+            this.maxGapDuration;
+
+        if (foldSize > 0) {  // create a fold
+            startTime = this.actions[i-1].time + this.maxGapDuration/2;
+            endTime = this.actions[i].time - this.maxGapDuration/2;
+            folds.push([startTime, endTime]);
+        }
+    }
+
+    this.gapFolds = folds;
+};
+
 ReplayControls.prototype.setActions = function(actions, atEnd) {
-    this.actions = actions;
-    var endTime = this.actions[this.actions.length-1].time + 1;
-    this.slider.start = this.actions[0].time - 1;
+    var endPosition,
+        endTime,
+        i;
+
+    this.slider.clearTicks();
     this.isPlaying = false;
 
+    this.actions = actions;
+    this.computeGapFolds();
+
+    for (i = this.gapFolds.length; i--;) {
+        this.slider.addTick(
+            this.getSliderPositionFromTime(this.gapFolds[i][0]),
+            this.color.lighter(),
+            4
+        );
+        this.slider.addTick(
+            this.getSliderPositionFromTime(this.gapFolds[i][1]),
+            this.color.lighter(),
+            4
+        );
+    }
+
+    endTime = this.actions[this.actions.length-1].time;
+    endPosition = this.getSliderPosition(this.actions[this.actions.length-1]) + 1;
+    this.slider.start = this.getSliderPosition(this.actions[0]) - 1;
+
     if (atEnd) {
-        this.slider.value = endTime;
-        this.actionIndex = this.actions.length-1;
-        this.actionTime = endTime-1;
+        this.slider.value = endPosition;
+        this.actionIndex = this.actions.length - 1;
+        this.actionTime = endTime;
     } else {
         this.slider.value = this.slider.start;
     }
-    this.slider.setStop(endTime);
+    this.slider.setStop(endPosition);
 
     // Add tickmarks for each action
-    this.slider.clearTicks();
-    for (var i = 0; i < this.actions.length; i++) {
-        this.slider.addTick(this.actions[i].time);
+    for (i = 0; i < this.actions.length; i++) {
+        this.slider.addTick(this.getSliderPosition(this.actions[i]));
     }
     this.slider.drawNew();
 
@@ -9201,6 +9273,7 @@ ReplayControls.prototype.setActions = function(actions, atEnd) {
 ReplayControls.prototype.update = function() {
     var myself = this,
         originalEvent,
+        sliderTime = this.getTimeFromPosition(this.slider.value),
         diff,
         dir,
         index,
@@ -9210,8 +9283,8 @@ ReplayControls.prototype.update = function() {
         return setTimeout(this.update.bind(this), 100);
     }
 
-    if (this.actionTime !== this.slider.value && this.actions && !this.isApplyingAction) {
-        diff = this.slider.value - this.actionTime;
+    if (this.actionTime !== sliderTime && this.actions && !this.isApplyingAction) {
+        diff = sliderTime - this.actionTime;
         dir = diff/Math.abs(diff);
 
         // Since actionIndex is the last applied action, the reverse direction
@@ -9221,12 +9294,12 @@ ReplayControls.prototype.update = function() {
             index = this.actionIndex + dir;
             originalEvent = this.actions[index];
             action = copy(originalEvent);
-            if (!originalEvent || originalEvent.time >= this.slider.value) {
+            if (!originalEvent || originalEvent.time >= sliderTime) {
                 return setTimeout(this.update.bind(this), 100);
             }
         } else {  // "rewind"
             originalEvent = this.actions[this.actionIndex];
-            if (!originalEvent || originalEvent.time <= this.slider.value) {
+            if (!originalEvent || originalEvent.time <= sliderTime) {
                 return setTimeout(this.update.bind(this), 100);
             }
             action = this.getInverseEvent(originalEvent);
