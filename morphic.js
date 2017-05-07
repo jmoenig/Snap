@@ -5386,7 +5386,18 @@ CursorMorph.prototype.processKeyDown = function (event) {
         if ((this.target instanceof StringMorph) || shift) {
             this.accept();
         } else {
+            var cursor = this.target.root().cursor;
+            var oldSlot = cursor.slot;
+            cursor.goHome();
+            var line = this.target.text.slice(cursor.slot).split('\n')[0];
+            cursor.gotoSlot(oldSlot);
+
+            var indent = 0;
             this.insert('\n');
+            while (line[indent] === ' ') {
+                indent++;
+                this.insert(' ');
+            }
         }
         this.keyDownEventUsed = true;
         break;
