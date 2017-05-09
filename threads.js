@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph,
 TableFrameMorph, ColorSlotMorph, isSnapObject*/
 
-modules.threads = '2017-April-10';
+modules.threads = '2017-May-09';
 
 var ThreadManager;
 var Process;
@@ -1544,21 +1544,24 @@ Process.prototype.doRemoveTemporaries = function () {
 Process.prototype.doDeleteAttr = function (attrName) {
     var name = attrName,
         rcvr = this.blockReceiver();
-
     if (name instanceof Context) {
         if (name.expression.selector === 'reportGetVar') {
             name = name.expression.blockSpec;
         } else { // attribute
             name = {
-                xPosition: 'x',
-                yPosition: 'y',
-                direction: 'dir'
+                xPosition: 'x position',
+                yPosition: 'y position',
+                direction: 'direction',
+                size: 'size'
             }[name.expression.selector];
             if (!isNil(name)) {
                 rcvr.inheritAttribute(name);
             }
             return; // +++ error: cannot delete attribute...
         }
+    }
+    if (name instanceof Array) {
+        return rcvr.inheritAttribute(this.inputOption(name));
     }
     if (contains(rcvr.inheritedVariableNames(true), name)) {
         rcvr.deleteVariable(name);

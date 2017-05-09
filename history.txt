@@ -3417,6 +3417,11 @@ Fixes:
 ------
 * attribute inheritance support for ‘x’, ‘y’, ‘dir’ and ‘size’
 
+170509
+------
+* added tools to the library browser
+* added attributes to the “delete” block’s drop-down menu
+
 Features:
 * polymorphic sprite-local custom blocks
 * inheritance of sprite-local custom blocks

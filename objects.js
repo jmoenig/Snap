@@ -82,7 +82,7 @@ SpeechBubbleMorph, RingMorph, isNil, FileReader, TableDialogMorph,
 BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph*/
 
-modules.objects = '2017-May-05';
+modules.objects = '2017-May-09';
 
 var SpriteMorph;
 var StageMorph;
@@ -116,9 +116,9 @@ SpriteMorph.uber = PenMorph.prototype;
 
 SpriteMorph.prototype.attributes =
     [
-        'x',
-        'y',
-        'dir',
+        'x position',
+        'y position',
+        'direction',
         'size'
     ];
 
@@ -1387,7 +1387,7 @@ SpriteMorph.prototype.init = function (globals) {
     // sprite inheritance
     this.exemplar = null;
     this.cachedSpecimens = null; // temporary for morphic animations
-    this.inheritedAttributes = []; // 'x', 'y', 'dir', 'size' etc...
+    this.inheritedAttributes = []; // 'x position', 'direction', 'size' etc...
 
     SpriteMorph.uber.init.call(this);
 
@@ -1802,11 +1802,11 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('bounceOffEdge'));
         blocks.push('-');
         blocks.push(watcherToggle('xPosition'));
-        blocks.push(block('xPosition', this.inheritsAttribute('x')));
+        blocks.push(block('xPosition', this.inheritsAttribute('x position')));
         blocks.push(watcherToggle('yPosition'));
-        blocks.push(block('yPosition', this.inheritsAttribute('y')));
+        blocks.push(block('yPosition', this.inheritsAttribute('y position')));
         blocks.push(watcherToggle('direction'));
-        blocks.push(block('direction', this.inheritsAttribute('dir')));
+        blocks.push(block('direction', this.inheritsAttribute('direction')));
 
     } else if (cat === 'looks') {
 
@@ -3873,8 +3873,8 @@ SpriteMorph.prototype.positionTalkBubble = function () {
 SpriteMorph.prototype.prepareToBeGrabbed = function (hand) {
     this.removeShadow();
     this.recordLayers();
-    this.shadowAttribute('x');
-    this.shadowAttribute('y');
+    this.shadowAttribute('x position');
+    this.shadowAttribute('y position');
     this.cachedSpecimens = this.specimens();
     if (!this.bounds.containsPoint(hand.position()) &&
             this.isCorrectingOutsideDrag()) {
@@ -4014,8 +4014,8 @@ SpriteMorph.prototype.moveBy = function (delta, justMe) {
             part.moveBy(delta);
         });
         this.specimens().forEach(function (instance) {
-            var inheritsX = instance.inheritsAttribute('x'),
-                inheritsY = instance.inheritsAttribute('y');
+            var inheritsX = instance.inheritsAttribute('x position'),
+                inheritsY = instance.inheritsAttribute('y position');
             if (inheritsX && inheritsY) {
                 instance.moveBy(delta);
             } else if (inheritsX) {
@@ -4034,8 +4034,8 @@ SpriteMorph.prototype.silentMoveBy = function (delta, justMe) {
             part.moveBy(delta);
         });
         this.specimens().forEach(function (instance) {
-            var inheritsX = instance.inheritsAttribute('x'),
-                inheritsY = instance.inheritsAttribute('y');
+            var inheritsX = instance.inheritsAttribute('x position'),
+                inheritsY = instance.inheritsAttribute('y position');
             if (inheritsX && inheritsY) {
                 instance.moveBy(delta);
             } else if (inheritsX) {
@@ -4129,8 +4129,8 @@ SpriteMorph.prototype.forward = function (steps) {
         );
     }
 
-    this.shadowAttribute('x');
-    this.shadowAttribute('y');
+    this.shadowAttribute('x position');
+    this.shadowAttribute('y position');
 
     this.setPosition(dest);
     this.positionTalkBubble();
@@ -4164,10 +4164,10 @@ SpriteMorph.prototype.setHeading = function (degrees, noShadow) {
 
     // propagate to children that inherit my direction
     if (!noShadow) {
-        this.shadowAttribute('dir');
+        this.shadowAttribute('direction');
     }
     this.specimens().forEach(function (instance) {
-        if (instance.inheritsAttribute('dir')) {
+        if (instance.inheritsAttribute('direction')) {
             instance.setHeading(degrees, true);
         }
     });
@@ -4193,7 +4193,7 @@ SpriteMorph.prototype.turnLeft = function (degrees) {
 };
 
 SpriteMorph.prototype.xPosition = function () {
-    if (this.inheritsAttribute('x')) {
+    if (this.inheritsAttribute('x position')) {
         return this.exemplar.xPosition();
     }
 
@@ -4209,7 +4209,7 @@ SpriteMorph.prototype.xPosition = function () {
 };
 
 SpriteMorph.prototype.yPosition = function () {
-    if (this.inheritsAttribute('y')) {
+    if (this.inheritsAttribute('y position')) {
         return this.exemplar.yPosition();
     }
 
@@ -4225,7 +4225,7 @@ SpriteMorph.prototype.yPosition = function () {
 };
 
 SpriteMorph.prototype.direction = function () {
-    if (this.inheritsAttribute('dir')) {
+    if (this.inheritsAttribute('direction')) {
         return this.exemplar.direction();
     }
     return this.heading;
@@ -4243,8 +4243,8 @@ SpriteMorph.prototype.gotoXY = function (x, y, justMe, noShadow) {
 
     if (!stage) {return; }
     if (!noShadow) {
-        this.shadowAttribute('x');
-        this.shadowAttribute('y');
+        this.shadowAttribute('x position');
+        this.shadowAttribute('y position');
     }
     newX = stage.center().x + (+x || 0) * stage.scale;
     newY = stage.center().y - (+y || 0) * stage.scale;
@@ -4267,7 +4267,7 @@ SpriteMorph.prototype.silentGotoXY = function (x, y, justMe) {
 };
 
 SpriteMorph.prototype.setXPosition = function (num) {
-    this.shadowAttribute('x');
+    this.shadowAttribute('x position');
     this.gotoXY(+num || 0, this.yPosition(), false, true);
 };
 
@@ -4276,7 +4276,7 @@ SpriteMorph.prototype.changeXPosition = function (delta) {
 };
 
 SpriteMorph.prototype.setYPosition = function (num) {
-    this.shadowAttribute('y');
+    this.shadowAttribute('y position');
     this.gotoXY(this.xPosition(), +num || 0, false, true);
 };
 
@@ -4326,9 +4326,9 @@ SpriteMorph.prototype.bounceOffEdge = function () {
         dirY = Math.abs(dirY);
     }
 
-    this.shadowAttribute('x');
-    this.shadowAttribute('y');
-    this.shadowAttribute('dir');
+    this.shadowAttribute('x position');
+    this.shadowAttribute('y position');
+    this.shadowAttribute('direction');
 
     this.setHeading(degrees(Math.atan2(-dirY, dirX)) + 90);
     this.setPosition(this.position().add(
@@ -5140,6 +5140,14 @@ SpriteMorph.prototype.inheritsAttribute = function (aName) {
     return !isNil(this.exemplar) && contains(this.inheritedAttributes, aName);
 };
 
+SpriteMorph.prototype.shadowedAttributes = function () {
+    // answer an array of attribute names that can be deleted/shared
+    var inherited = this.inheritedAttributes;
+    return this.attributes.filter(function (each) {
+        return !contains(inherited, each);
+    });
+};
+
 SpriteMorph.prototype.shadowAttribute = function (aName) {
     var ide;
     if (!this.inheritsAttribute(aName)) {
@@ -5172,11 +5180,11 @@ SpriteMorph.prototype.inheritAttribute = function (aName) {
 
 SpriteMorph.prototype.refreshInheritedAttribute = function (aName) {
     switch (aName) {
-    case 'x':
-    case 'y':
+    case 'x position':
+    case 'y position':
         this.gotoXY(this.xPosition(), this.yPosition(), false, true);
         break;
-    case 'dir':
+    case 'direction':
         this.setHeading(this.direction(), true);
         break;
     case 'size':

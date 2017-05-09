@@ -150,7 +150,7 @@ CustomCommandBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2017-May-05';
+modules.blocks = '2017-May-09';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -2463,9 +2463,9 @@ BlockMorph.prototype.userMenu = function () {
             if (StageMorph.prototype.enableInheritance) {
                 rcvr = this.receiver();
                 field = {
-                    xPosition: 'x',
-                    yPosition: 'y',
-                    direction: 'dir',
+                    xPosition: 'x position',
+                    yPosition: 'y position',
+                    direction: 'direction',
                     getScale: 'size'
                 }[this.selector];
                 if (field && rcvr && rcvr.exemplar) {
@@ -8249,14 +8249,26 @@ InputSlotMorph.prototype.setChoices = function (dict, readonly) {
 
 InputSlotMorph.prototype.shadowedVariablesMenu = function () {
     var block = this.parentThatIsA(BlockMorph),
+        vars,
+        attribs,
         rcvr,
         dict = {};
 
     if (!block) {return dict; }
     rcvr = block.receiver();
-    if (rcvr) {
-        rcvr.inheritedVariableNames(true).forEach(function (name) {
+    if (rcvr && rcvr.exemplar) {
+        vars = rcvr.inheritedVariableNames(true);
+        vars.forEach(function (name) {
             dict[name] = name;
+        });
+        attribs = rcvr.shadowedAttributes();
+        /*
+        if (vars.length && attribs.length) {
+            dict['~'] = null; // add line
+        }
+        */
+        attribs.forEach(function (name) {
+            dict[name] = [name];
         });
     }
     return dict;
