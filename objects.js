@@ -8797,6 +8797,7 @@ ReplayControls.prototype.init = function(ide) {
 
 ReplayControls.prototype.settingsMenu = function() {
     var myself = this,
+        minute = 1000 * 60,
         menu = new MenuMorph(this),
         replaySpeedMenu = new MenuMorph(this),
         speeds = {
@@ -8814,10 +8815,17 @@ ReplayControls.prototype.settingsMenu = function() {
             'medium': 2,
             'long': 5
         },
-        createSubMenu = function(dict, key, suffix, skip) {
+        gapSizes = {
+            '1 minute': 1*minute,
+            '2 minute': 2*minute,
+            '5 minutes': 5*minute,
+            '10 minutes': 10*minute,
+            '20 minutes': 20*minute
+        },
+        createSubMenu = function(dict, key, opts) {
             var menu = new MenuMorph(myself);
             // add the number (w/ the suffix) to the text names
-            skip = skip || [];
+            var skip = opts.skip || [];
 
             Object.keys(dict).forEach(function(name) {
                 var value = dict[name],
@@ -8825,14 +8833,22 @@ ReplayControls.prototype.settingsMenu = function() {
 
                 delete dict[name];
                 if (!preserveName) {
-                    name = localize(name) + ' (' + value + suffix + ')';
+                    name = localize(name) + ' (' + value + opts.suffix + ')';
                 } else {
                     name = localize(name);
                 }
 
                 dict[name] = value;
-                menu.addItem(preserveName ? name : value + suffix, function() {
+                menu.addItem(preserveName ? name : value + opts.suffix, function() {
                     myself[key] = value;
+                    if (opts.refresh) {
+                        // TODO: preserve the current slider position
+                        var time = myself.getTimeFromPosition(myself.slider.value);
+                        myself.setActions(myself.actions);
+                        myself.slider.value = myself.getSliderPositionFromTime(time);
+                        myself.slider.drawNew();
+                        myself.updateDisplayTime();
+                    }
                 }, null, null, myself[key] === value);
             });
             return menu;
@@ -8841,11 +8857,14 @@ ReplayControls.prototype.settingsMenu = function() {
     // Skip empty gaps
     menu.addMenu(
         'Max inactive duration...',
-        createSubMenu(durations, 'maxInactiveDuration', 's', ['no acceleration'])
+        createSubMenu(durations, 'maxInactiveDuration', {
+            suffix: 's',
+            skip: ['no acceleration']
+        })
     );
 
     // Replay Speed
-    replaySpeedMenu = createSubMenu(speeds, 'replaySpeed', 'x');
+    replaySpeedMenu = createSubMenu(speeds, 'replaySpeed', {suffix: 'x'});
     replaySpeedMenu.addItem('other...', function() {
         new DialogBoxMorph(
             null,
@@ -8864,6 +8883,15 @@ ReplayControls.prototype.settingsMenu = function() {
     });
 
     menu.addMenu('Replay speed...', replaySpeedMenu);
+
+    // Customize the maxGapDuration
+    menu.addMenu(
+        'Auto-condense gap size...',
+        createSubMenu(gapSizes, 'maxGapDuration', {
+            skip: Object.keys(gapSizes),
+            refresh: true
+        })
+    );
 
     // pop up with the mouse at the lower right corner
     var world = this.world(),
