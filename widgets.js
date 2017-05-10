@@ -740,35 +740,25 @@ ToggleButtonMorph.prototype.drawEdges = function (
         topColor,
         bottomColor
     );
-
+    context.fillStyle = this.pressColor.toString();
     if (this.hasPreview) { // indicate the possible selection color
         if (MorphicPreferences.isFlat && !this.is3D) {
-            context.fillStyle = this.pressColor.toString();
             context.fillRect(
                 this.outline,
                 this.outline,
                 this.corner,
                 this.height() - this.outline * 2
             );
-            return;
+        } else { // Color without gradient ...
+            context.beginPath();
+            this.previewPath(
+                context,
+                Math.max(this.corner - this.outline, 0),
+                this.outline + 1
+            );
+            context.closePath();
+            context.fill();
         }
-        gradient = context.createLinearGradient(
-            0,
-            0,
-            this.corner,
-            0
-        );
-        gradient.addColorStop(0, this.pressColor.lighter(40).toString());
-        gradient.addColorStop(1, this.pressColor.darker(40).toString());
-        context.fillStyle = gradient; // this.pressColor.toString();
-        context.beginPath();
-        this.previewPath(
-            context,
-            Math.max(this.corner - this.outline, 0),
-            this.outline
-        );
-        context.closePath();
-        context.fill();
     }
 };
 
@@ -831,7 +821,7 @@ ToggleButtonMorph.prototype.createLabel = function () {
                 localize(this.labelString[0]),
                 this.fontSize,
                 this.fontStyle,
-                true,
+                this.labelBold,
                 false,
                 false,
                 shading ? this.labelShadowOffset : null,
@@ -842,7 +832,7 @@ ToggleButtonMorph.prototype.createLabel = function () {
                 localize(this.labelString[1]),
                 this.fontSize,
                 this.fontStyle,
-                true,
+                this.labelBold,
                 false,
                 false,
                 shading ? this.labelShadowOffset : null,
@@ -867,7 +857,7 @@ ToggleButtonMorph.prototype.createLabel = function () {
                 localize(this.labelString),
                 this.fontSize,
                 this.fontStyle,
-                true,
+                this.labelBold,
                 false,
                 false,
                 shading ? this.labelShadowOffset : none,

@@ -241,13 +241,13 @@ IDE_Morph.prototype.init = function (isAutoFill) {
 
     this.isAutoFill = isAutoFill === undefined ? true : isAutoFill;
     this.isAppMode = false;
-    this.isSmallStage = false;
+    this.isSmallStage = true;
     this.filePicker = null;
     this.hasChangedMedia = false;
 
     this.isAnimating = true;
-    this.paletteWidth = 200; // initially same as logo width
-    this.stageRatio = 1; // for IDE animations, e.g. when zooming
+    this.paletteWidth = 300; // initially same as logo width
+    this.stageRatio = 0.75; // for IDE animations, e.g. when zooming
 
     this.loadNewProject = false; // flag when starting up translated
     this.shield = null;
@@ -947,7 +947,7 @@ IDE_Morph.prototype.createCategories = function () {
     this.categories.silentSetWidth(this.paletteWidth);
 
     function addCategoryButton(category) {
-        var labelWidth = 75,
+        var labelWidth = 95,
             colors = [
                 myself.frameColor,
                 myself.frameColor.darker(50),
@@ -975,9 +975,10 @@ IDE_Morph.prototype.createCategories = function () {
             labelWidth, // minWidth
             true // has preview
         );
-
-        button.corner = 8;
-        button.padding = 0;
+        button.corner = 12;
+        button.padding = 4;
+        button.fontSize = 14;
+        button.labelBold = false;
         button.labelShadowOffset = new Point(-1, -1);
         button.labelShadowColor = colors[1];
         button.labelColor = myself.buttonLabelColor;
@@ -991,11 +992,11 @@ IDE_Morph.prototype.createCategories = function () {
         var buttonWidth = myself.categories.children[0].width(),
             buttonHeight = myself.categories.children[0].height(),
             border = 3,
-            rows =  Math.ceil((myself.categories.children.length) / 2),
-            xPadding = (200 // myself.logo.width()
-                - border
+            rows = Math.ceil((myself.categories.children.length) / 2),
+            xPadding = (myself.categories.width() // myself.logo.width()
+                - border 
                 - buttonWidth * 2) / 3,
-            yPadding = 2,
+            yPadding = 5,
             l = myself.categories.left(),
             t = myself.categories.top(),
             i = 0,
@@ -1280,7 +1281,8 @@ IDE_Morph.prototype.createSpriteBar = function () {
             return myself.currentTab === 'scripts';
         }
     );
-    tab.padding = 3;
+    tab.padding = 5;
+    tab.fontSize = 14;
     tab.corner = tabCorner;
     tab.edge = 1;
     tab.labelShadowOffset = new Point(-1, -1);
@@ -1301,7 +1303,8 @@ IDE_Morph.prototype.createSpriteBar = function () {
             return myself.currentTab === 'costumes';
         }
     );
-    tab.padding = 3;
+    tab.padding = 5;
+    tab.fontSize = 14;
     tab.corner = tabCorner;
     tab.edge = 1;
     tab.labelShadowOffset = new Point(-1, -1);
@@ -1320,7 +1323,8 @@ IDE_Morph.prototype.createSpriteBar = function () {
             return myself.currentTab === 'sounds';
         }
     );
-    tab.padding = 3;
+    tab.padding = 5;
+    tab.fontSize = 14;
     tab.corner = tabCorner;
     tab.edge = 1;
     tab.labelShadowOffset = new Point(-1, -1);
