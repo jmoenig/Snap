@@ -675,12 +675,23 @@ ActionManager.prototype._deleteBlockLabel = function(definition, label) {
 };
 
 ActionManager.prototype._updateBlockLabel = function(definition, label, fragment) {
-    var index = label.parent.children.indexOf(label),
-        type = fragment.type,
-        value = fragment.labelString;
+    var index = label.parent.children.indexOf(label);
 
     console.assert(index > -1, 'Cannot find the fragment!');
-    return [definition.id, index, type, value, label.fragment.type, label.fragment.labelString];
+    return [
+        definition.id,
+        index,
+        fragment.type,
+        fragment.labelString,
+        fragment.defaultValue,
+        fragment.options,
+        fragment.isReadOnly,
+        label.fragment.type,
+        label.fragment.labelString,
+        label.fragment.defaultValue,
+        label.fragment.options,
+        label.fragment.isReadOnly
+    ];
 };
 
 ActionManager.prototype._setStageSize = function(width, height) {
@@ -1966,12 +1977,24 @@ ActionManager.prototype._getFragment = function(id, index) {
     return frag;
 };
 
-ActionManager.prototype.onUpdateBlockLabel = function(id, index, type, label) {
+ActionManager.prototype.onUpdateBlockLabel = function(
+    id,
+    index,
+    type,
+    label,
+    defaultValue,
+    options,
+    isReadOnly
+) {
     var fragLabel = new BlockLabelFragment(label),
         fragment = this._getFragment(id, index),
         editor = fragment.parentThatIsA(BlockEditorMorph);
 
     fragLabel.type = type;
+    fragLabel.options = options || '';
+    fragLabel.defaultValue = defaultValue || '';
+    fragLabel.isReadOnly = !!isReadOnly;
+
     fragment.updateBlockLabel(fragLabel);
     editor.updateDefinition();
     this.completeAction();

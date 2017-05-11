@@ -251,7 +251,9 @@ UndoManager.Invert.setCustomBlockType = function(args) {
 };
 
 UndoManager.Invert.updateBlockLabel = function(args) {
-    if (!args[5]) {  // newly created
+    var oldLabelString = args[8];
+
+    if (!oldLabelString) {  // newly created
         args[1] += 1;
         return {
             type: 'deleteBlockLabel',
@@ -259,9 +261,10 @@ UndoManager.Invert.updateBlockLabel = function(args) {
         };
     }
 
-    // swap 2,4 & 3,5 (types, and labelString/values)
-    UndoManager.swap(args, 2, 4);  // type, oldType
-    UndoManager.swap(args, 3, 5);  // labelString, oldLabelString
+    // remove the first half of the actual args
+    var actualArgCount = (args.length - 2)/2;
+    args.splice(2, actualArgCount);
+
     return args;
 };
 
