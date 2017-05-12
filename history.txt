@@ -3424,7 +3424,9 @@ Fixes:
 
 170512
 ------
-* added inheritance support for the wardrobe
+* exposed ‘costumes’ as an attribute
+* added inheritance support for the wardrobe (‘costumes’)
+* added inheritance support for ‘costume #’
 
 
 Features:

@@ -120,7 +120,8 @@ SpriteMorph.prototype.attributes =
         'y position',
         'direction',
         'size',
-        'costumes'
+        'costumes',
+        'costume #'
     ];
 
 SpriteMorph.prototype.categories =
@@ -1814,7 +1815,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('doSwitchToCostume'));
         blocks.push(block('doWearNextCostume'));
         blocks.push(watcherToggle('getCostumeIdx'));
-        blocks.push(block('getCostumeIdx'));
+        blocks.push(block('getCostumeIdx', this.inheritsAttribute('costume #')));
         blocks.push('-');
         blocks.push(block('doSayFor'));
         blocks.push(block('bubble'));
@@ -2906,9 +2907,10 @@ SpriteMorph.prototype.addCostume = function (costume) {
     this.costumes.add(costume);
 };
 
-SpriteMorph.prototype.wearCostume = function (costume) {
+SpriteMorph.prototype.wearCostume = function (costume, noShadow) {
     var x = this.xPosition ? this.xPosition() : null,
         y = this.yPosition ? this.yPosition() : null,
+        idx = isNil(costume) ? null : this.costumes.asArray().indexOf(costume),
         isWarped = this.isWarped;
     if (isWarped) {
         this.endWarp();
@@ -2927,9 +2929,29 @@ SpriteMorph.prototype.wearCostume = function (costume) {
         this.positionTalkBubble();
     }
     this.version = Date.now();
+
+    // propagate to children that inherit my costume #
+    if (!noShadow) {
+        this.shadowAttribute('costume #');
+    }
+    this.specimens().forEach(function (instance) {
+        if (instance.inheritsAttribute('costume #')) {
+            if (idx === null) {
+                instance.wearCostume(null, true);
+            } else if (idx === -1) {
+                instance.wearCostume(costume, true);
+            } else {
+                instance.doSwitchToCostume(idx + 1, true);
+            }
+        }
+    });
+
 };
 
 SpriteMorph.prototype.getCostumeIdx = function () {
+    if (this.inheritsAttribute('costume #')) {
+        return this.exemplar.getCostumeIdx();
+    }
     return this.costumes.asArray().indexOf(this.costume) + 1;
 };
 
@@ -2963,9 +2985,9 @@ SpriteMorph.prototype.doWearPreviousCostume = function () {
     }
 };
 
-SpriteMorph.prototype.doSwitchToCostume = function (id) {
+SpriteMorph.prototype.doSwitchToCostume = function (id, noShadow) {
     if (id instanceof Costume) { // allow first-class costumes
-        this.wearCostume(id);
+        this.wearCostume(id, noShadow);
         return;
     }
 
@@ -2996,7 +3018,7 @@ SpriteMorph.prototype.doSwitchToCostume = function (id) {
             }
         }
     }
-    this.wearCostume(costume);
+    this.wearCostume(costume, noShadow);
 };
 
 SpriteMorph.prototype.reportCostumes = function () {
@@ -5206,6 +5228,9 @@ SpriteMorph.prototype.refreshInheritedAttribute = function (aName) {
         break;
     case 'size':
         this.setScale(this.getScale(), true);
+        break;
+    case 'costume #':
+        this.doSwitchToCostume(this.getCostumeIdx(), true);
         break;
     default:
         nop();
