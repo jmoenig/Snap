@@ -3422,6 +3422,11 @@ Fixes:
 * added tools to the library browser
 * added attributes to the “delete” block’s drop-down menu
 
+170512
+------
+* added inheritance support for the wardrobe
+
+
 Features:
 * polymorphic sprite-local custom blocks
 * inheritance of sprite-local custom blocks

@@ -82,7 +82,7 @@ SpeechBubbleMorph, RingMorph, isNil, FileReader, TableDialogMorph,
 BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph*/
 
-modules.objects = '2017-May-09';
+modules.objects = '2017-May-12';
 
 var SpriteMorph;
 var StageMorph;
@@ -119,7 +119,8 @@ SpriteMorph.prototype.attributes =
         'x position',
         'y position',
         'direction',
-        'size'
+        'size',
+        'costumes'
     ];
 
 SpriteMorph.prototype.categories =
@@ -2901,6 +2902,7 @@ SpriteMorph.prototype.addCostume = function (costume) {
     if (!costume.name) {
         costume.name = 'costume' + (this.costumes.length() + 1);
     }
+    this.shadowAttribute('costumes');
     this.costumes.add(costume);
 };
 
@@ -5149,7 +5151,8 @@ SpriteMorph.prototype.shadowedAttributes = function () {
 };
 
 SpriteMorph.prototype.shadowAttribute = function (aName) {
-    var ide;
+    var ide, wardrobe,
+        myself = this;
     if (!this.inheritsAttribute(aName)) {
         return;
     }
@@ -5157,7 +5160,17 @@ SpriteMorph.prototype.shadowAttribute = function (aName) {
     this.inheritedAttributes = this.inheritedAttributes.filter(
         function (each) {return each !== aName; }
     );
-    if (ide) {
+    if (aName === 'costumes') {
+        wardrobe = new List();
+        this.costumes.asArray().forEach(function (costume) {
+            var cst = costume.copy();
+            wardrobe.add(cst);
+            if (costume === myself.costume) {
+                myself.wearCostume(cst);
+            }
+        });
+        this.costumes = wardrobe;
+    } else if (ide) {
         ide.flushBlocksCache(); // optimization: specify category if known
         ide.refreshPalette();
     }
@@ -5170,10 +5183,14 @@ SpriteMorph.prototype.inheritAttribute = function (aName) {
     }
     if (!this.inheritsAttribute(aName)) {
         this.inheritedAttributes.push(aName);
-        this.refreshInheritedAttribute(aName);
-        if (ide) {
-            ide.flushBlocksCache(); // optimization: specify category if known
-            ide.refreshPalette();
+        if (aName === 'costumes') {
+            this.costumes = this.exemplar.costumes;
+        } else {
+            this.refreshInheritedAttribute(aName);
+            if (ide) {
+                ide.flushBlocksCache(); // optimization: specify category
+                ide.refreshPalette();
+            }
         }
     }
 };

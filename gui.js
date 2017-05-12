@@ -74,7 +74,7 @@ isRetinaSupported, SliderMorph, Animation*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2017-April-10';
+modules.gui = '2017-May-12';
 
 // Declarations
 
@@ -7111,6 +7111,7 @@ CostumeIconMorph.prototype.userMenu = function () {
 };
 
 CostumeIconMorph.prototype.editCostume = function () {
+    this.disinherit();
     if (this.object instanceof SVG_Costume) {
         this.object.editRotationPointOnly(this.world());
     } else {
@@ -7129,6 +7130,7 @@ CostumeIconMorph.prototype.editRotationPointOnly = function () {
 };
 
 CostumeIconMorph.prototype.renameCostume = function () {
+    this.disinherit();
     var costume = this.object,
         wardrobe = this.parentThatIsA(WardrobeMorph),
         ide = this.parentThatIsA(IDE_Morph);
@@ -7189,9 +7191,21 @@ CostumeIconMorph.prototype.exportCostume = function () {
 CostumeIconMorph.prototype.createBackgrounds
     = SpriteIconMorph.prototype.createBackgrounds;
 
+// CostumeIconMorph inheritance
+
+CostumeIconMorph.prototype.disinherit = function () {
+    var wardrobe = this.parentThatIsA(WardrobeMorph),
+        idx = this.parent.children.indexOf(this);
+    if (wardrobe.sprite.inheritsAttribute('costumes')) {
+        wardrobe.sprite.shadowAttribute('costumes');
+        this.object = wardrobe.sprite.costumes.at(idx - 2);
+    }
+};
+
 // CostumeIconMorph drag & drop
 
 CostumeIconMorph.prototype.prepareToBeGrabbed = function () {
+    this.disinherit();
     this.mouseClickLeft(); // select me
     this.removeCostume();
 };
@@ -7521,6 +7535,7 @@ WardrobeMorph.prototype.step = function () {
 // Wardrobe ops
 
 WardrobeMorph.prototype.removeCostumeAt = function (idx) {
+    this.sprite.shadowAttribute('costumes');
     this.sprite.costumes.remove(idx);
     this.updateList();
 };
@@ -7533,6 +7548,7 @@ WardrobeMorph.prototype.paintNew = function () {
         ide = this.parentThatIsA(IDE_Morph),
         myself = this;
     cos.edit(this.world(), ide, true, null, function () {
+        myself.sprite.shadowAttribute('costumes');
         myself.sprite.addCostume(cos);
         myself.updateList();
         if (ide) {
@@ -7558,6 +7574,7 @@ WardrobeMorph.prototype.reactToDropOf = function (icon) {
             idx += 1;
         }
     });
+    this.sprite.shadowAttribute('costumes');
     this.sprite.costumes.add(costume, idx + 1);
     this.updateList();
     icon.mouseClickLeft(); // select
