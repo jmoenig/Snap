@@ -2593,6 +2593,22 @@ BlockMorph.prototype.userMenu = function () {
         },
         'open a new window\nwith a picture of this script'
     );
+    menu.addLine();
+    menu.addItem(
+        'download stack',
+        function () {
+            var ide = myself.parentThatIsA(IDE_Morph),
+                blockEditor = myself.parentThatIsA(BlockEditorMorph);
+            if (!ide && blockEditor) {
+                ide = blockEditor.target.parentThatIsA(IDE_Morph);
+            }
+            if (ide) {
+                ide.saveXMLAs(
+                    ide.serializer.serialize(myself),
+                    myself.selector + ' stack',
+                    false);
+            }
+        });
     if (proc) {
         if (vNames.length) {
             menu.addLine();
