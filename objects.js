@@ -2513,6 +2513,19 @@ SpriteMorph.prototype.blocksMatching = function (
             // reporterized.isTemplate = true;
             // reporterized.isDraggable = false;
             blocks.push([reporterized, '']);
+        } else {
+            if ((searchString[0] === '(') && (searchString[searchString.length-1] === ')')) {
+                // Report parser error
+                var block = SnapSerializer.prototype.obsoleteBlock(true);
+                block.setSpec('Infix parser error!');
+                // Can't drag
+                block.isTemplate = false;
+                block.isDraggable = false;
+                block.userMenu = nop;
+                block.mouseClickLeft = nop;
+
+                blocks.push([block, '']);
+            }
         }
     }
     blocks.sort(function (x, y) {return x[1] < y[1] ? -1 : 1; });
