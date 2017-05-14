@@ -918,6 +918,34 @@ IDE_Morph.prototype.createControlBar = function () {
             return;
         }
 
+    if(myself.projectName == '이름없음' ||
+		myself.projectName == 'Zonder titel' ||
+		myself.projectName == 'Uten navn' ||
+		myself.projectName == 'Bez nazwy' ||
+		myself.projectName == 'Sem título' ||
+		myself.projectName == 'Sem título' ||
+		myself.projectName == 'Неозаглавленный' ||
+		myself.projectName == 'Neimenovan' ||
+		myself.projectName == '無標題' ||
+		myself.projectName == '无标题' ||
+		myself.projectName == 'Senza Titolo' ||
+		myself.projectName == 'শিরোনামহীন' ||
+		myself.projectName == 'Sense títol' ||
+		myself.projectName == 'Bez názvu' ||
+		myself.projectName == 'Unbenannt' ||
+		myself.projectName == 'Unavngivet' ||
+		myself.projectName == 'Χωρίς Τίτλο' ||
+		myself.projectName == 'sentitola' ||
+		myself.projectName == 'Sin T\u00EDtulo' ||
+		myself.projectName == 'Nimet\u00f6n' ||
+		myself.projectName == 'Sans titre' ||
+		myself.projectName == '名称未設定' ||
+		myself.projectName == 'めいしょうみせってい' ||
+		myself.projectName == 'Nepojmenovaný' ||
+		myself.projectName == 'ಹೆಸರಿಡದ '||
+		myself.projectName == 'Untitled'
+		) myself.projectName = '';
+
         this.label = new StringMorph(
             (myself.projectName || localize('untitled')) + suffix,
             14,
