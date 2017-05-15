@@ -82,7 +82,7 @@ SpeechBubbleMorph, RingMorph, isNil, FileReader, TableDialogMorph,
 BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph*/
 
-modules.objects = '2017-May-12';
+modules.objects = '2017-May-15';
 
 var SpriteMorph;
 var StageMorph;
@@ -7200,9 +7200,15 @@ StageMorph.prototype.allDependentInvocationsOf
 
 // StageMorph inheritance support - general
 
+StageMorph.prototype.specimens = function () {
+    return [];
+};
+
 StageMorph.prototype.allSpecimens = function () {
     return [];
 };
+
+StageMorph.prototype.shadowAttribute = nop;
 
 // StageMorph inheritance support - variables
 
