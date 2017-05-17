@@ -2922,6 +2922,10 @@ Process.prototype.reportAttributeOf = function (attribute, name) {
                                 : localize('Empty');
             case 'size':
                 return thatObj.getScale ? thatObj.getScale() : '';
+            case 'stage width':
+                return thatObj.width ? thatObj.width() : '';
+            case 'stage height':
+                return thatObj.height ? thatObj.height() : '';
             }
         }
     }

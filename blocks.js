@@ -8092,7 +8092,10 @@ InputSlotMorph.prototype.attributesMenu = function () {
     } else { // the stage
         dict = {
             'costume #' : ['costume #'],
-            'costume name' : ['costume name']
+            'costume name' : ['costume name'],
+            '~~' : null, // ~~ prevents conflicts with ~ below.
+            'stage height' : ['stage height'],
+            'stage width' : ['stage width']
         };
     }
     varNames = obj.variables.names();
