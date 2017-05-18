@@ -6879,28 +6879,17 @@ LibraryImportDialogMorph.prototype.cachedLibrary = function (key) {
 };
 
 LibraryImportDialogMorph.prototype.importLibrary = function () {
-    var blocks,
-        ide = this.ide,
+    var ide = this.ide,
         selectedLibrary = this.listField.selected.fileName,
         libraryName = this.listField.selected.name;
 
-    if (this.hasCached(selectedLibrary)) {
-        blocks = this.cachedLibrary(selectedLibrary);
-        blocks.forEach(function (def) {
-            def.receiver = ide.stage;
-            ide.stage.globalBlocks.push(def);
-            ide.stage.replaceDoubleDefinitionsFor(def);
-        });
-        ide.showMessage(localize('Imported') + ' ' + localize(libraryName), 2);
-    } else {
-        ide.showMessage(localize('Loading') + ' ' + localize(libraryName));
-        ide.getURL(
-            ide.resourceURL('libraries', selectedLibrary),
-            function(libraryText) {
-                ide.droppedText(libraryText, libraryName);
-            }
-        );
-    }
+    ide.showMessage(localize('Loading') + ' ' + localize(libraryName));
+    ide.getURL(
+        ide.resourceURL('libraries', selectedLibrary),
+        function(libraryText) {
+            ide.droppedText(libraryText, libraryName);
+        }
+    );
 
     this.destroy();
 };
