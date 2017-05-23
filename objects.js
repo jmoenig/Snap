@@ -227,7 +227,7 @@ SpriteMorph.prototype.initBlocks = function () {
         turn3D: {
             type: 'command',
             category: 'motion',
-            spec: 'turn x: %n y: %n z: %n degrees',
+            spec: 'rotate x: %n y: %n z: %n',
             defaults: [0, 0, 0]
         },
         setHeading: {
@@ -243,7 +243,7 @@ SpriteMorph.prototype.initBlocks = function () {
         point3D: {
             type: 'command',
             category: 'motion',
-            spec: 'point x: %n y: %n z: %n degrees',
+            spec: 'angle x: %n y: %n z: %n',
             defaults: [0, 0, 0]
         },
         gotoXY: {
