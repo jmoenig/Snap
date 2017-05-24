@@ -3136,7 +3136,11 @@ BlockMorph.prototype.refactorThisVar = function (justTheTemplate) {
     var myself = this,
         oldName = this.blockSpec,
         receiver = this.receiver(),
-        ide = this.parentThatIsA(IDE_Morph),
+        // Get the IDE by getting the WorldMorph and finding its IDE child
+        // because BlockEditorMorphs are not ancestors of the IDE
+        ide = this.parentThatIsA(WorldMorph).children.filter(function(child) {
+            return child instanceof IDE_Morph;
+        })[0],
         stage = ide.stage,
         oldWatcher = receiver.findVariableWatcher(oldName),
         cpy = this.fullCopy(),
