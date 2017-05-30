@@ -150,7 +150,7 @@ CustomCommandBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2017-May-12';
+modules.blocks = '2017-May-30';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -570,7 +570,7 @@ SyntaxElementMorph.prototype.revertToDefaultInput = function (arg, noValues) {
             deflt = this.labelPart(this.parseSpec(this.blockSpec)[idx]);
             if (this.isCustomBlock) {
                 def = this.isGlobal ? this.definition
-                        : this.receiver().getMethod(this.blockSpec);
+                        : this.scriptTarget().getMethod(this.blockSpec);
                 if (deflt instanceof InputSlotMorph) {
                     deflt.setChoices.apply(
                         deflt,
@@ -636,7 +636,7 @@ SyntaxElementMorph.prototype.getVarNamesDict = function () {
     if (!block) {
         return {};
     }
-    rcvr = block.receiver();
+    rcvr = block.scriptTarget();
     block.allParents().forEach(function (morph) {
         if (morph instanceof PrototypeHatBlockMorph) {
             tempVars.push.apply(
@@ -1546,7 +1546,7 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
         // has issues when loading costumes (asynchronously)
         // commented out for now
 
-        var rcvr = this.definition.receiver || this.receiver(),
+        var rcvr = this.definition.receiver || this.scriptTarget(),
             id = spec.slice(1),
             cst;
         if (!rcvr) {return this.labelPart('%stop'); }
@@ -1888,7 +1888,7 @@ SyntaxElementMorph.prototype.showBubble = function (value, exportPic) {
     if ((value === undefined) || !wrrld || !this.receiver) {
         return null;
     }
-    rcvr = this.receiver();
+    rcvr = this.scriptTarget();
     if (value instanceof ListWatcherMorph) {
         morphToShow = value;
         morphToShow.update(true);
@@ -2053,7 +2053,7 @@ SyntaxElementMorph.prototype.endLayout = function () {
     accessors are:
 
     selector        - (string) name of method to be triggered
-    receiver()      - answer the object (sprite) to which I apply
+    scriptTarget()  - answer the object (sprite) to which I apply
     inputs()        - answer an array with my arg slots and nested reporters
     defaults        - an optional Array containing default input values
     topBlock()      - answer the top block of the stack I'm attached to
@@ -2204,16 +2204,23 @@ BlockMorph.prototype.init = function (silently) {
     this.cachedInputs = null;
 };
 
-BlockMorph.prototype.receiver = function () {
-    // answer the object to which I apply (whose method I represent)
-    var up = this.parent;
-    while (!!up) {
-        if (up.owner) {
-            return up.owner;
-        }
-        up = up.parent;
+BlockMorph.prototype.scriptTarget = function () {
+    // answer the sprite or stage that this block acts on,
+    // if the user clicks on it.
+    // NOTE: since scripts can be shared by more than a single sprite
+    // this method only gives the desired result within the context of
+    // the user actively clicking on a block inside the IDE
+    // there is no direct relationship between a block and a sprite.
+    var scripts = this.parentThatIsA(ScriptsMorph),
+        ide;
+    if (scripts) {
+        return scripts.scriptTarget();
     }
-    return null;
+    ide = this.parentThatIsA(IDE_Morph);
+    if (ide) {
+        return ide.currentSprite;
+    }
+    throw new Error('script target cannot be found for orphaned block');
 };
 
 BlockMorph.prototype.toString = function () {
@@ -2461,7 +2468,7 @@ BlockMorph.prototype.userMenu = function () {
 
             // allow toggling inheritable attributes
             if (StageMorph.prototype.enableInheritance) {
-                rcvr = this.receiver();
+                rcvr = this.scriptTarget();
                 field = {
                     xPosition: 'x position',
                     yPosition: 'y position',
@@ -2695,7 +2702,7 @@ BlockMorph.prototype.isInheritedVariable = function () {
             (this.selector === 'reportGetVar') &&
             (this.parent instanceof FrameMorph)) {
         return contains(
-            this.receiver().inheritedVariableNames(),
+            this.scriptTarget().inheritedVariableNames(),
             this.blockSpec
         );
     }
@@ -2704,13 +2711,13 @@ BlockMorph.prototype.isInheritedVariable = function () {
 
 BlockMorph.prototype.isTransientVariable = function () {
     // private - only for variable getter template inside the palette
-    var varFrame = this.receiver().variables.silentFind(this.blockSpec);
+    var varFrame = this.scriptTarget().variables.silentFind(this.blockSpec);
     return varFrame ? varFrame.vars[this.blockSpec].isTransient : false;
 };
 
 BlockMorph.prototype.toggleTransientVariable = function () {
     // private - only for variable getter template inside the palette
-    var varFrame = this.receiver().variables.silentFind(this.blockSpec);
+    var varFrame = this.scriptTarget().variables.silentFind(this.blockSpec);
     if (!varFrame) {return; }
     varFrame.vars[this.blockSpec].isTransient =
         !(varFrame.vars[this.blockSpec].isTransient);
@@ -3212,7 +3219,7 @@ BlockMorph.prototype.refactorThisVar = function (justTheTemplate) {
 
     var myself = this,
         oldName = this.blockSpec,
-        receiver = this.receiver(),
+        receiver = this.scriptTarget(),
         ide = this.parentThatIsA(IDE_Morph),
         stage = ide.stage,
         oldWatcher = receiver.findVariableWatcher(oldName),
@@ -3674,14 +3681,7 @@ BlockMorph.prototype.hasLabels = function () {
 
 // BlockMorph copying
 
-BlockMorph.prototype.fullCopy = function (forClone) {
-    if (forClone) {
-        if (this.hasBlockVars()) {
-            forClone = false;
-        } else {
-            return copy(this);
-        }
-    }
+BlockMorph.prototype.fullCopy = function () {
     var ans = BlockMorph.uber.fullCopy.call(this);
     ans.removeHighlight();
     ans.isDraggable = true;
@@ -3721,7 +3721,7 @@ BlockMorph.prototype.hasBlockVars = function () {
 
 BlockMorph.prototype.mouseClickLeft = function () {
     var top = this.topBlock(),
-        receiver = top.receiver(),
+        receiver = top.scriptTarget(),
         shiftClicked = this.world().currentKey === 16,
         stage;
     if (shiftClicked && !this.isTemplate) {
@@ -3733,7 +3733,7 @@ BlockMorph.prototype.mouseClickLeft = function () {
     if (receiver) {
         stage = receiver.parentThatIsA(StageMorph);
         if (stage) {
-            stage.threads.toggleProcess(top);
+            stage.threads.toggleProcess(top, receiver);
         }
     }
 };
@@ -3755,7 +3755,7 @@ BlockMorph.prototype.focus = function () {
 
 BlockMorph.prototype.activeProcess = function () {
     var top = this.topBlock(),
-        receiver = top.receiver(),
+        receiver = top.scriptTarget(),
         stage;
     if (top instanceof PrototypeHatBlockMorph) {
         return null;
@@ -3763,7 +3763,7 @@ BlockMorph.prototype.activeProcess = function () {
     if (receiver) {
         stage = receiver.parentThatIsA(StageMorph);
         if (stage) {
-            return stage.threads.findProcess(top);
+            return stage.threads.findProcess(top, receiver);
         }
     }
     return null;
@@ -3908,10 +3908,16 @@ BlockMorph.prototype.destroy = function (justThis) {
             comment.destroy();
         });
     }
+
+    /* +++ needs tweaking:
+    // stop active process(es) for this block
+    // for this we need access to the stage...
+
     if ((!this.parent || !this.parent.topBlock)
             && this.activeProcess()) {
         this.activeProcess().stop();
     }
+    */
 
     BlockMorph.uber.destroy.call(this);
 };
@@ -3957,7 +3963,7 @@ BlockMorph.prototype.snap = function () {
     }
     // register generic hat blocks
     if (this.selector === 'receiveCondition') {
-        receiver = top.receiver();
+        receiver = top.scriptTarget();
         if (receiver) {
             stage = receiver.parentThatIsA(StageMorph);
             if (stage) {
@@ -5156,14 +5162,14 @@ ReporterBlockMorph.prototype.mouseClickLeft = function (pos) {
 
 ReporterBlockMorph.prototype.exportResultPic = function () {
     var top = this.topBlock(),
-        receiver = top.receiver(),
+        receiver = top.scriptTarget(),
         stage;
     if (top !== this) {return; }
     if (receiver) {
         stage = receiver.parentThatIsA(StageMorph);
         if (stage) {
             stage.threads.stopProcess(top);
-            stage.threads.startProcess(top, false, true);
+            stage.threads.startProcess(top, receiver, false, true);
         }
     }
 };
@@ -5711,12 +5717,11 @@ ScriptsMorph.prototype.enableNestedAutoWrapping = true;
 
 // ScriptsMorph instance creation:
 
-function ScriptsMorph(owner) {
-    this.init(owner);
+function ScriptsMorph() {
+    this.init();
 }
 
-ScriptsMorph.prototype.init = function (owner) {
-    this.owner = owner || null;
+ScriptsMorph.prototype.init = function () {
     this.feedbackColor = SyntaxElementMorph.prototype.feedbackColor;
     this.feedbackMorph = new BoxMorph();
     this.rejectsHats = false;
@@ -5744,7 +5749,7 @@ ScriptsMorph.prototype.init = function (owner) {
 
 // ScriptsMorph deep copying:
 
-ScriptsMorph.prototype.fullCopy = function (forClone) {
+ScriptsMorph.prototype.fullCopy = function () {
     var cpy = new ScriptsMorph(),
         pos = this.position(),
         child;
@@ -5753,21 +5758,17 @@ ScriptsMorph.prototype.fullCopy = function (forClone) {
     }
     this.children.forEach(function (morph) {
         if (!morph.block) { // omit anchored comments
-            child = morph.fullCopy(forClone);
+            child = morph.fullCopy();
             cpy.add(child);
-            if (!forClone) {
-                child.setPosition(morph.position().subtract(pos));
-                if (child instanceof BlockMorph) {
-                    child.allComments().forEach(function (comment) {
-                        comment.align(child);
-                    });
-                }
+            child.setPosition(morph.position().subtract(pos));
+            if (child instanceof BlockMorph) {
+                child.allComments().forEach(function (comment) {
+                    comment.align(child);
+                });
             }
         }
     });
-    if (!forClone) {
-        cpy.adjustBounds();
-    }
+    cpy.adjustBounds();
     return cpy;
 };
 
@@ -6073,7 +6074,7 @@ ScriptsMorph.prototype.userMenu = function () {
         shiftClicked = this.world().currentKey === 16,
         blockEditor,
         myself = this,
-        obj = this.owner,
+        obj = this.scriptTarget(),
         hasUndropQueue,
         stage = obj.parentThatIsA(StageMorph);
 
@@ -6594,6 +6595,28 @@ ScriptsMorph.prototype.edit = function (pos) {
     this.focus.getFocus(world);
 };
 
+// ScriptsMorph context - scripts target
+
+ScriptsMorph.prototype.scriptTarget = function () {
+    // answer the sprite or stage that this script editor acts on,
+    // if the user clicks on a block.
+    // NOTE: since scripts can be shared by more than a single sprite
+    // this method only gives the desired result within the context of
+    // the user actively clicking on a block inside the IDE
+    // there is no direct relationship between a block or a scripts editor
+    //  and a sprite.
+    var editor = this.parentThatIsA(IDE_Morph);
+    if (editor) {
+        return editor.currentSprite;
+    }
+    editor = this.parentThatIsA(BlockEditorMorph);
+    if (editor) {
+        return editor.target.currentSprite;
+    }
+    throw new Error('script target bannot be found for orphaned scripts');
+};
+
+
 // ArgMorph //////////////////////////////////////////////////////////
 
 /*
@@ -6644,7 +6667,7 @@ ArgMorph.prototype.reactToSliderEdit = function () {
     block = this.parentThatIsA(BlockMorph);
     if (block) {
         top = block.topBlock();
-        receiver = top.receiver();
+        receiver = top.scriptTarget();
         if (top instanceof PrototypeHatBlockMorph) {
             return;
         }
@@ -6652,7 +6675,7 @@ ArgMorph.prototype.reactToSliderEdit = function () {
             stage = receiver.parentThatIsA(StageMorph);
             if (stage && (stage.isThreadSafe ||
                     Process.prototype.enableSingleStepping)) {
-                stage.threads.startProcess(top, stage.isThreadSafe);
+                stage.threads.startProcess(top, receiver, stage.isThreadSafe);
             } else {
                 top.mouseClickLeft();
             }
@@ -7944,7 +7967,7 @@ InputSlotMorph.prototype.menuFromDict = function (choices, noEmptyOption) {
 
 InputSlotMorph.prototype.messagesMenu = function () {
     var dict = {},
-        rcvr = this.parentThatIsA(BlockMorph).receiver(),
+        rcvr = this.parentThatIsA(BlockMorph).scriptTarget(),
         stage = rcvr.parentThatIsA(StageMorph),
         myself = this,
         allNames = [];
@@ -7977,7 +8000,7 @@ InputSlotMorph.prototype.messagesMenu = function () {
 
 InputSlotMorph.prototype.messagesReceivedMenu = function () {
     var dict = {'any message': ['any message']},
-        rcvr = this.parentThatIsA(BlockMorph).receiver(),
+        rcvr = this.parentThatIsA(BlockMorph).scriptTarget(),
         stage = rcvr.parentThatIsA(StageMorph),
         myself = this,
         allNames = [];
@@ -8012,7 +8035,7 @@ InputSlotMorph.prototype.collidablesMenu = function () {
             edge : ['edge'],
             'pen trails' : ['pen trails']
         },
-        rcvr = this.parentThatIsA(BlockMorph).receiver(),
+        rcvr = this.parentThatIsA(BlockMorph).scriptTarget(),
         stage = rcvr.parentThatIsA(StageMorph),
         allNames = [];
 
@@ -8036,7 +8059,7 @@ InputSlotMorph.prototype.distancesMenu = function () {
     var dict = {
             'mouse-pointer' : ['mouse-pointer']
         },
-        rcvr = this.parentThatIsA(BlockMorph).receiver(),
+        rcvr = this.parentThatIsA(BlockMorph).scriptTarget(),
         stage = rcvr.parentThatIsA(StageMorph),
         allNames = [];
 
@@ -8058,7 +8081,7 @@ InputSlotMorph.prototype.distancesMenu = function () {
 
 InputSlotMorph.prototype.clonablesMenu = function () {
     var dict = {},
-        rcvr = this.parentThatIsA(BlockMorph).receiver(),
+        rcvr = this.parentThatIsA(BlockMorph).scriptTarget(),
         stage = rcvr.parentThatIsA(StageMorph),
         allNames = [];
 
@@ -8080,7 +8103,7 @@ InputSlotMorph.prototype.clonablesMenu = function () {
 };
 
 InputSlotMorph.prototype.objectsMenu = function () {
-    var rcvr = this.parentThatIsA(BlockMorph).receiver(),
+    var rcvr = this.parentThatIsA(BlockMorph).scriptTarget(),
         stage = rcvr.parentThatIsA(StageMorph),
         dict = {},
         allNames = [];
@@ -8146,7 +8169,7 @@ InputSlotMorph.prototype.gettablesMenu = function () {
 InputSlotMorph.prototype.attributesMenu = function () {
     var block = this.parentThatIsA(BlockMorph),
         objName = block.inputs()[1].evaluate(),
-        rcvr = block.receiver(),
+        rcvr = block.scriptTarget(),
         stage = rcvr.parentThatIsA(StageMorph),
         obj,
         dict = {},
@@ -8196,7 +8219,7 @@ InputSlotMorph.prototype.attributesMenu = function () {
 };
 
 InputSlotMorph.prototype.costumesMenu = function () {
-    var rcvr = this.parentThatIsA(BlockMorph).receiver(),
+    var rcvr = this.parentThatIsA(BlockMorph).scriptTarget(),
         dict,
         allNames = [];
     if (rcvr instanceof SpriteMorph) {
@@ -8217,7 +8240,7 @@ InputSlotMorph.prototype.costumesMenu = function () {
 };
 
 InputSlotMorph.prototype.soundsMenu = function () {
-    var rcvr = this.parentThatIsA(BlockMorph).receiver(),
+    var rcvr = this.parentThatIsA(BlockMorph).scriptTarget(),
         allNames = [],
         dict = {};
 
@@ -8257,7 +8280,7 @@ InputSlotMorph.prototype.shadowedVariablesMenu = function () {
         dict = {};
 
     if (!block) {return dict; }
-    rcvr = block.receiver();
+    rcvr = block.scriptTarget();
     if (rcvr && rcvr.exemplar) {
         vars = rcvr.inheritedVariableNames(true);
         vars.forEach(function (name) {
@@ -13237,7 +13260,7 @@ ScriptFocusMorph.prototype.deleteLastElement = function () {
 };
 
 ScriptFocusMorph.prototype.insertBlock = function (block) {
-    var pb, stage, ide;
+    var pb, stage, ide, rcvr;
     block.isTemplate = false;
     block.isDraggable = true;
 
@@ -13303,8 +13326,9 @@ ScriptFocusMorph.prototype.insertBlock = function (block) {
 
     // register generic hat blocks
     if (block.selector === 'receiveCondition') {
-        if (this.editor.owner) {
-            stage = this.editor.owner.parentThatIsA(StageMorph);
+        rcvr = this.editor.scriptTarget();
+        if (rcvr) {
+            stage = rcvr.parentThatIsA(StageMorph);
             if (stage) {
                 stage.enableCustomHatBlocks = true;
                 stage.threads.pauseCustomHatBlocks = false;
@@ -13752,7 +13776,7 @@ ScriptFocusMorph.prototype.reactToKeyEvent = function (key) {
             delete this.fps;
             delete this.step;
             this.show();
-            this.editor.owner.searchBlocks(
+            this.editor.scriptTarget().searchBlocks(
                 key,
                 types,
                 vNames,

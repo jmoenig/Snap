@@ -108,7 +108,7 @@ BooleanSlotMorph, XML_Serializer*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2017-April-10';
+modules.byob = '2017-May-30';
 
 // Declarations
 
@@ -799,7 +799,7 @@ CustomCommandBlockMorph.prototype.edit = function () {
         );
     } else {
         // check for local custom block inheritance
-        rcvr = this.receiver();
+        rcvr = this.scriptTarget();
         if (!this.isGlobal) {
             if (contains(
                     Object.keys(rcvr.inheritedBlocks()),
@@ -860,8 +860,12 @@ CustomCommandBlockMorph.prototype.attachTargets = function () {
 CustomCommandBlockMorph.prototype.isInUse = function () {
     // answer true if an instance of my definition is found
     // in any of my receiver's scripts or block definitions
+    // NOTE: for sprite-local blocks only to be used in a situation
+    // where the user actively clicks on a block in the IDE,
+    // e.g. to edit it (and change its type)
     var def = this.definition,
-        ide = this.receiver().parentThatIsA(IDE_Morph);
+        rcvr = this.scriptTarget(),
+        ide = rcvr.parentThatIsA(IDE_Morph);
     if (def.isGlobal && ide) {
         return ide.sprites.asArray().concat([ide.stage]).some(
             function (any, idx) {
@@ -869,15 +873,14 @@ CustomCommandBlockMorph.prototype.isInUse = function () {
             }
         );
     }
-    // return this.receiver().usesBlockInstance(def);
-    return this.receiver().allDependentInvocationsOf(this.blockSpec).length > 0;
+    return rcvr.allDependentInvocationsOf(this.blockSpec).length > 0;
 };
 
 // CustomCommandBlockMorph menu:
 
 CustomCommandBlockMorph.prototype.userMenu = function () {
     var hat = this.parentThatIsA(PrototypeHatBlockMorph),
-        rcvr = this.receiver(),
+        rcvr = this.scriptTarget(),
         myself = this,
         shiftClicked = this.world().currentKey === 16,
         menu;
@@ -999,7 +1002,7 @@ CustomCommandBlockMorph.prototype.exportBlockDefinition = function () {
 };
 
 CustomCommandBlockMorph.prototype.duplicateBlockDefinition = function () {
-    var rcvr = this.receiver(),
+    var rcvr = this.scriptTarget(),
         ide = this.parentThatIsA(IDE_Morph),
         def = this.isGlobal ? this.definition : rcvr.getMethod(this.blockSpec),
         dup = def.copyAndBindTo(rcvr);
@@ -1015,7 +1018,7 @@ CustomCommandBlockMorph.prototype.duplicateBlockDefinition = function () {
 
 CustomCommandBlockMorph.prototype.deleteBlockDefinition = function () {
     var idx, stage, ide, method, block,
-        rcvr = this.receiver(),
+        rcvr = this.scriptTarget(),
         myself = this;
     if (this.isPrototype) {
         return null; // under construction...
@@ -1093,7 +1096,7 @@ CustomCommandBlockMorph.prototype.relabel = function (alternatives) {
 };
 
 CustomCommandBlockMorph.prototype.alternatives = function () {
-    var rcvr = this.receiver(),
+    var rcvr = this.scriptTarget(),
         stage = rcvr.parentThatIsA(StageMorph),
         allDefs = rcvr.customBlocks.concat(stage.globalBlocks),
         type = this instanceof CommandBlockMorph ? 'command'
@@ -1894,7 +1897,7 @@ BlockEditorMorph.prototype.init = function (definition, target) {
     this.createLabel();
 
     // create scripting area
-    scripts = new ScriptsMorph(target);
+    scripts = new ScriptsMorph();
     scripts.rejectsHats = true;
     scripts.isDraggable = false;
     scripts.color = IDE_Morph.prototype.groupColor;

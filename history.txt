@@ -3428,6 +3428,10 @@ Fixes:
 * added inheritance support for the wardrobe (‘costumes’)
 * added inheritance support for ‘costume #’
 
+170530
+------
+* let clones share the orginal’s scripts without shallow-copying them
+
 
 Features:
 * polymorphic sprite-local custom blocks
@@ -3441,6 +3445,7 @@ Features:
 * support for codification of String, Number and Boolean value types
 * costume icons indicate svg costumes
 * sprites’s rotation centers can be adjusted onstage
+* clones share their original sprite’s scripts, not a shallow-copy of them
 
 Fixes:
 * changed keyboard shortcut indicator for “find blocks” to “^”

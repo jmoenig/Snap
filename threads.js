@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph,
 TableFrameMorph, ColorSlotMorph, isSnapObject*/
 
-modules.threads = '2017-May-12';
+modules.threads = '2017-May-30';
 
 var ThreadManager;
 var Process;
@@ -109,7 +109,7 @@ function snapEquals(a, b) {
 function invoke(
     action, // a BlockMorph or a Context, a reified ("ringified") block
     contextArgs, // optional List of arguments for the context, or null
-    receiver, // optional sprite or environment
+    receiver, // sprite or environment, optional for contexts
     timeout, // msecs
     timeoutErrorMsg, // string
     suppressErrors // bool
@@ -126,23 +126,23 @@ function invoke(
     // Use ThreadManager::startProcess with a callback instead
 
     var proc = new Process(),
-        deadline = (timeout ? Date.now() + timeout : null),
-        rcvr;
+        deadline = (timeout ? Date.now() + timeout : null);
 
     if (action instanceof Context) {
-        if (receiver) {
+        if (receiver) { // optional
             action = proc.reportContextFor(receiver);
         }
         proc.initializeFor(action, contextArgs || new List());
     } else if (action instanceof BlockMorph) {
         proc.topBlock = action;
-        rcvr = receiver || action.receiver();
-        if (rcvr) {
+        if (receiver) {
             proc.homeContext = new Context();
-            proc.homeContext.receiver = rcvr;
-            if (rcvr.variables) {
-                proc.homeContext.variables.parentFrame = rcvr.variables;
+            proc.homeContext.receiver = receiver;
+            if (receiver.variables) {
+                proc.homeContext.variables.parentFrame = receiver.variables;
             }
+        } else {
+            throw new Error('expecting a receiver but getting ' + receiver);
         }
         proc.context = new Context(
             null,
@@ -180,25 +180,26 @@ function ThreadManager() {
 
 ThreadManager.prototype.pauseCustomHatBlocks = false;
 
-ThreadManager.prototype.toggleProcess = function (block) {
-    var active = this.findProcess(block);
+ThreadManager.prototype.toggleProcess = function (block, receiver) {
+    var active = this.findProcess(block, receiver);
     if (active) {
         active.stop();
     } else {
-        return this.startProcess(block, null, null, null, true);
+        return this.startProcess(block, receiver, null, null, null, true);
     }
 };
 
 ThreadManager.prototype.startProcess = function (
     block,
+    receiver,
     isThreadSafe,
-    exportResult,
+    exportResult, // bool
     callback,
     isClicked,
     rightAway
 ) {
-    var active = this.findProcess(block),
-        top = block.topBlock(),
+    var top = block.topBlock(),
+        active = this.findProcess(top, receiver),
         newProc;
     if (active) {
         if (isThreadSafe) {
@@ -207,7 +208,7 @@ ThreadManager.prototype.startProcess = function (
         active.stop();
         this.removeTerminatedProcesses();
     }
-    newProc = new Process(block.topBlock(), callback, rightAway);
+    newProc = new Process(top, receiver, callback, rightAway);
     newProc.exportResult = exportResult;
     newProc.isClicked = isClicked || false;
     if (!newProc.homeContext.receiver.isClone) {
@@ -241,8 +242,8 @@ ThreadManager.prototype.stopAllForReceiver = function (rcvr, excpt) {
     });
 };
 
-ThreadManager.prototype.stopProcess = function (block) {
-    var active = this.findProcess(block);
+ThreadManager.prototype.stopProcess = function (block, receiver) {
+    var active = this.findProcess(block, receiver);
     if (active) {
         active.stop();
     }
@@ -309,7 +310,8 @@ ThreadManager.prototype.removeTerminatedProcesses = function () {
     this.processes.forEach(function (proc) {
         var result;
         if ((!proc.isRunning() && !proc.errorFlag) || proc.isDead) {
-            if (proc.topBlock instanceof BlockMorph) {
+            if (proc.topBlock instanceof BlockMorph
+                    && (!proc.receiver.isClone)) {
                 proc.unflash();
                 proc.topBlock.removeHighlight();
             }
@@ -349,19 +351,19 @@ ThreadManager.prototype.removeTerminatedProcesses = function () {
     this.processes = remaining;
 };
 
-ThreadManager.prototype.findProcess = function (block) {
+ThreadManager.prototype.findProcess = function (block, receiver) {
     var top = block.topBlock();
     return detect(
         this.processes,
         function (each) {
-            return each.topBlock === top;
+            return each.topBlock === top && (each.receiver === receiver);
         }
     );
 };
 
-ThreadManager.prototype.doWhen = function (block, stopIt) {
+ThreadManager.prototype.doWhen = function (block, receiver, stopIt) {
     if (this.pauseCustomHatBlocks) {return; }
-    if ((!block) || this.findProcess(block)) {
+    if ((!block) || this.findProcess(block, receiver)) {
         return;
     }
     var pred = block.inputs()[0], world;
@@ -376,12 +378,20 @@ ThreadManager.prototype.doWhen = function (block, stopIt) {
         if (invoke(
             pred,
             null,
-            block.receiver(), // needed for shallow copied clones - was null
+            receiver,
             50,
             'the predicate takes\ntoo long for a\ncustom hat block',
             true // suppress errors => handle them right here instead
         ) === true) {
-            this.startProcess(block, null, null, null, null, true); // atomic
+            this.startProcess(
+                block,
+                receiver,
+                null,
+                null,
+                null,
+                null,
+                true // atomic
+            );
         }
     } catch (error) {
         block.addErrorHighlight();
@@ -476,9 +486,9 @@ Process.prototype.enableSingleStepping = false; // experimental
 Process.prototype.flashTime = 0; // experimental
 // Process.prototype.enableJS = false;
 
-function Process(topBlock, onComplete, rightAway) {
+function Process(topBlock, receiver, onComplete, rightAway) {
     this.topBlock = topBlock || null;
-
+    this.receiver = receiver;
     this.readyToYield = false;
     this.readyToTerminate = false;
     this.isDead = false;
@@ -486,7 +496,7 @@ function Process(topBlock, onComplete, rightAway) {
     this.isShowingResult = false;
     this.errorFlag = false;
     this.context = null;
-    this.homeContext = new Context();
+    this.homeContext = new Context(null, null, null, receiver);
     this.lastYield =  Date.now();
     this.isFirstStep = true;
     this.isAtomic = false;
@@ -502,7 +512,6 @@ function Process(topBlock, onComplete, rightAway) {
     this.isInterrupted = false; // experimental, for single-stepping
 
     if (topBlock) {
-        this.homeContext.receiver = topBlock.receiver();
         this.homeContext.variables.parentFrame =
             this.homeContext.receiver.variables;
         this.context = new Context(
@@ -651,7 +660,7 @@ Process.prototype.evaluateBlock = function (block, argCount) {
     }
 
     // first evaluate all inputs, then apply the primitive
-    var rcvr = this.context.receiver || this.topBlock.receiver(),
+    var rcvr = this.context.receiver || this.receiver,
         inputs = this.context.inputs;
 
     if (argCount > inputs.length) {
@@ -963,7 +972,7 @@ Process.prototype.reify = function (topBlock, parameterNames, isCustomBlock) {
 
     context.inputs = parameterNames.asArray();
     context.receiver
-        = this.context ? this.context.receiver : topBlock.receiver();
+        = this.context ? this.context.receiver : this.receiver;
     context.origin = context.receiver; // for serialization
 
     return context;
@@ -1136,6 +1145,9 @@ Process.prototype.initializeFor = function (context, args) {
         i,
         value,
         exit;
+
+    // remember the receiver
+    this.context = context.receiver;
 
     // assign parameters if any were passed
     if (parms.length > 0) {
@@ -1557,7 +1569,7 @@ Process.prototype.doDeleteAttr = function (attrName) {
             if (!isNil(name)) {
                 rcvr.inheritAttribute(name);
             }
-            return; // +++ error: cannot delete attribute...
+            return; // error: cannot delete attribute...
         }
     }
     if (name instanceof Array) {
@@ -2063,7 +2075,7 @@ Process.prototype.doThinkFor = function (data, secs) {
 
 Process.prototype.blockReceiver = function () {
     return this.context ? this.context.receiver || this.homeContext.receiver
-            : this.homeContext.receiver;
+            : this.homeContext.receiver || this.receiver;
 };
 
 // Process sound primitives (interpolated)
@@ -2180,7 +2192,6 @@ Process.prototype.doBroadcast = function (message) {
         trg,
         rcvrs,
         myself = this,
-        hats = [],
         procs = [];
 
     if (message instanceof List && (message.length() === 2)) {
@@ -2211,39 +2222,18 @@ Process.prototype.doBroadcast = function (message) {
         stage.lastMessage = message; // the actual data structure
         rcvrs.forEach(function (morph) {
             if (isSnapObject(morph)) {
-                hats = hats.concat(morph.allHatBlocksFor(msg));
+                morph.allHatBlocksFor(msg).forEach(function (block) {
+                    procs.push(stage.threads.startProcess(
+                        block,
+                        morph,
+                        stage.isThreadSafe
+                    ));
+                });
             }
-        });
-        hats.forEach(function (block) {
-            procs.push(stage.threads.startProcess(block, stage.isThreadSafe));
         });
     }
     return procs;
 };
-
-// old purely global broadcast code, commented out and retained in case
-// we need to revert
-
-/*
-Process.prototype.doBroadcast = function (message) {
-    var stage = this.homeContext.receiver.parentThatIsA(StageMorph),
-        hats = [],
-        procs = [];
-
-    if (message !== '') {
-        stage.lastMessage = message;
-        stage.children.concat(stage).forEach(function (morph) {
-            if (isSnapObject(morph)) {
-                hats = hats.concat(morph.allHatBlocksFor(message));
-            }
-        });
-        hats.forEach(function (block) {
-            procs.push(stage.threads.startProcess(block, stage.isThreadSafe));
-        });
-    }
-    return procs;
-};
-*/
 
 Process.prototype.doBroadcastAndWait = function (message) {
     if (!this.context.activeSends) {

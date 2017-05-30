@@ -82,7 +82,7 @@ SpeechBubbleMorph, RingMorph, isNil, FileReader, TableDialogMorph,
 BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph*/
 
-modules.objects = '2017-May-15';
+modules.objects = '2017-May-30';
 
 var SpriteMorph;
 var StageMorph;
@@ -1343,7 +1343,7 @@ function SpriteMorph(globals) {
 SpriteMorph.prototype.init = function (globals) {
     this.name = localize('Sprite');
     this.variables = new VariableFrame(globals || null, this);
-    this.scripts = new ScriptsMorph(this);
+    this.scripts = new ScriptsMorph();
     this.customBlocks = [];
     this.costumes = new List();
     this.costume = null;
@@ -1388,7 +1388,7 @@ SpriteMorph.prototype.init = function (globals) {
 
     // sprite inheritance
     this.exemplar = null;
-    this.cachedSpecimens = null; // temporary for morphic animations
+    this.cachedSpecimens = null; // not to be persisted
     this.inheritedAttributes = []; // 'x position', 'direction', 'size' etc...
 
     SpriteMorph.uber.init.call(this);
@@ -1413,11 +1413,10 @@ SpriteMorph.prototype.fullCopy = function (forClone) {
     c.color = this.color.copy();
     c.blocksCache = {};
     c.paletteCache = {};
-    c.scripts = this.scripts.fullCopy(forClone);
-    c.scripts.owner = c;
     c.variables = this.variables.copy();
     c.variables.owner = c;
     if (!forClone) {
+        c.scripts = this.scripts.fullCopy();
         c.customBlocks = [];
         this.customBlocks.forEach(function (def) {
             cb = def.copyAndBindTo(c);
@@ -3159,7 +3158,8 @@ SpriteMorph.prototype.createClone = function (immediately) {
 };
 
 SpriteMorph.prototype.clonify = function (stage, immediately) {
-    var hats;
+    var hats,
+        myself = this;
     this.parts.forEach(function (part) {
         part.clonify(stage);
     });
@@ -3173,6 +3173,7 @@ SpriteMorph.prototype.clonify = function (stage, immediately) {
     hats.forEach(function (block) {
         stage.threads.startProcess(
             block,
+            myself,
             stage.isThreadSafe,
             null, // export result
             null, // callback
@@ -3899,7 +3900,7 @@ SpriteMorph.prototype.prepareToBeGrabbed = function (hand) {
     this.recordLayers();
     this.shadowAttribute('x position');
     this.shadowAttribute('y position');
-    this.cachedSpecimens = this.specimens();
+    this.specimens(); // make sure specimens are cached
     if (!this.bounds.containsPoint(hand.position()) &&
             this.isCorrectingOutsideDrag()) {
         this.setCenter(hand.position());
@@ -3920,7 +3921,6 @@ SpriteMorph.prototype.justDropped = function () {
     if (stage) {
         stage.enableCustomHatBlocks = true;
     }
-    this.cachedSpecimens = null;
     if (this.exemplar) {
         this.inheritedAttributes.forEach(function (att) {
             myself.refreshInheritedAttribute(att);
@@ -4111,17 +4111,17 @@ SpriteMorph.prototype.slideBackTo = function (
     var myself = this;
 
     // caching specimens
-    this.cachedSpecimens = situation.origin.children.filter(function (m) {
-        return m instanceof SpriteMorph && (m.exemplar === myself);
-    });
+    if (isNil(this.cachedSpecimens)) {
+        this.cachedSpecimens = situation.origin.children.filter(function (m) {
+            return m instanceof SpriteMorph && (m.exemplar === myself);
+        });
+    }
 
     SpriteMorph.uber.slideBackTo.call(
         this,
         situation,
         msecs,
         function () {
-            // make sure to flush cached specimens
-            myself.cachedSpecimens = null;
             if (onBeforeDrop) {onBeforeDrop(); }
         },
         onBeforeDrop,
@@ -4548,11 +4548,16 @@ SpriteMorph.prototype.mouseDownLeft = function () {
 SpriteMorph.prototype.receiveUserInteraction = function (interaction) {
     var stage = this.parentThatIsA(StageMorph),
         procs = [],
+        myself = this,
         hats;
     if (!stage) {return; } // currently dragged
     hats = this.allHatBlocksForInteraction(interaction);
     hats.forEach(function (block) {
-        procs.push(stage.threads.startProcess(block, stage.isThreadSafe));
+        procs.push(stage.threads.startProcess(
+            block,
+            myself,
+            stage.isThreadSafe
+        ));
     });
     return procs;
 };
@@ -5129,6 +5134,7 @@ SpriteMorph.prototype.setExemplar = function (another) {
         ide.flushBlocksCache('variables');
         ide.refreshPalette();
     }
+    another.cachedSpecimens = null;
 };
 
 SpriteMorph.prototype.allExemplars = function () {
@@ -5145,9 +5151,12 @@ SpriteMorph.prototype.allExemplars = function () {
 SpriteMorph.prototype.specimens = function () {
     // without myself
     var myself = this;
-    return this.cachedSpecimens || this.siblings().filter(function (m) {
-        return m instanceof SpriteMorph && (m.exemplar === myself);
-    });
+    if (isNil(this.cachedSpecimens)) {
+        this.cachedSpecimens = this.siblings().filter(function (m) {
+            return m instanceof SpriteMorph && (m.exemplar === myself);
+        });
+    }
+    return this.cachedSpecimens;
 };
 
 SpriteMorph.prototype.allSpecimens = function () {
@@ -5536,6 +5545,16 @@ SpriteMorph.prototype.restoreLayers = function () {
     this.layers = null;
 };
 
+// SpriteMorph destroying
+
+SpriteMorph.prototype.destroy = function () {
+    // make sure to invalidate the specimens cache
+    if (this.exemplar) {
+        this.exemplar.cachedSpecimens = null;
+    }
+    SpriteMorph.uber.destroy.call(this);
+};
+
 // SpriteMorph highlighting
 
 SpriteMorph.prototype.addHighlight = function (oldHighlight) {
@@ -5768,7 +5787,7 @@ StageMorph.prototype.init = function (globals) {
     this.name = localize('Stage');
     this.threads = new ThreadManager();
     this.variables = new VariableFrame(globals || null, this);
-    this.scripts = new ScriptsMorph(this);
+    this.scripts = new ScriptsMorph();
     this.customBlocks = [];
     this.globalBlocks = [];
     this.costumes = new List();
@@ -6174,25 +6193,24 @@ StageMorph.prototype.step = function () {
 };
 
 StageMorph.prototype.stepGenericConditions = function (stopAll) {
-    var hats = [],
+    var hatCount = 0,
         myself = this,
         ide;
     this.children.concat(this).forEach(function (morph) {
-        if (morph instanceof SpriteMorph || morph instanceof StageMorph) {
-            hats = hats.concat(morph.allGenericHatBlocks());
+        if (isSnapObject(morph)) {
+            morph.allGenericHatBlocks().forEach(function (block) {
+                hatCount += 1;
+                myself.threads.doWhen(block, morph, stopAll);
+            });
         }
     });
-    if (!hats.length) {
+    if (!hatCount) {
         this.enableCustomHatBlocks = false;
         ide = this.parentThatIsA(IDE_Morph);
         if (ide) {
             ide.controlBar.stopButton.refresh();
         }
-        return;
     }
-    hats.forEach(function (block) {
-        myself.threads.doWhen(block, stopAll);
-    });
 };
 
 StageMorph.prototype.developersMenu = function () {
@@ -6266,7 +6284,6 @@ StageMorph.prototype.processKeyEvent = function (event, action) {
 
 StageMorph.prototype.fireKeyEvent = function (key) {
     var evt = key.toLowerCase(),
-        hats = [],
         procs = [],
         ide = this.parentThatIsA(IDE_Morph),
         myself = this;
@@ -6311,11 +6328,14 @@ StageMorph.prototype.fireKeyEvent = function (key) {
     }
     this.children.concat(this).forEach(function (morph) {
         if (isSnapObject(morph)) {
-            hats = hats.concat(morph.allHatBlocksForKey(evt));
+            morph.allHatBlocksForKey(evt).forEach(function (block) {
+                procs.push(myself.threads.startProcess(
+                    block,
+                    morph,
+                    myself.isThreadSafe
+                ));
+            });
         }
-    });
-    hats.forEach(function (block) {
-        procs.push(myself.threads.startProcess(block, myself.isThreadSafe));
     });
     return procs;
 };
@@ -6333,20 +6353,19 @@ StageMorph.prototype.inspectKeyEvent
 
 StageMorph.prototype.fireGreenFlagEvent = function () {
     var procs = [],
-        hats = [],
         ide = this.parentThatIsA(IDE_Morph),
         myself = this;
 
     this.children.concat(this).forEach(function (morph) {
         if (isSnapObject(morph)) {
-            hats = hats.concat(morph.allHatBlocksFor('__shout__go__'));
+            morph.allHatBlocksFor('__shout__go__').forEach(function (block) {
+                procs.push(myself.threads.startProcess(
+                    block,
+                    morph,
+                    myself.isThreadSafe
+                ));
+            });
         }
-    });
-    hats.forEach(function (block) {
-        procs.push(myself.threads.startProcess(
-            block,
-            myself.isThreadSafe
-        ));
     });
     if (ide) {
         ide.controlBar.pauseButton.refresh();
@@ -7209,6 +7228,12 @@ StageMorph.prototype.allSpecimens = function () {
 };
 
 StageMorph.prototype.shadowAttribute = nop;
+
+// StageMorph inheritance support - attributes
+
+StageMorph.prototype.inheritsAttribute = function () {
+    return false;
+};
 
 // StageMorph inheritance support - variables
 
