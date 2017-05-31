@@ -995,6 +995,17 @@ Process.prototype.doRun = function (context, args) {
     return this.evaluate(context, args, true);
 };
 
+Process.prototype.findBlock = function(context, selector, _opt_spec) {
+    // Private
+    var exp = context.expression;
+    if (exp instanceof Array) exp = exp[0];
+    return exp.allChildren().filter(function(m){
+        return m != exp && m instanceof BlockMorph;
+    }).some(function(block){
+        return block.selector === selector && (_opt_spec ? block.blockSpec === _opt_spec : true);
+    });
+};
+
 Process.prototype.evaluate = function (
     context,
     args,
@@ -1043,44 +1054,49 @@ Process.prototype.evaluate = function (
         this.readyToYield = (Date.now() - this.lastYield > this.timeout);
     }
 
-    // assign parameters if any were passed
-    if (parms.length > 0) {
+    if (this.findBlock(context, 'reportGetVar', 'arguments')) {
+        // assign the actual arguments list to the special
+        // parameter ID ['arguments'], to be used for variadic inputs
+        outer.variables.addVar(['arguments'], args);
+    } else {
 
-        // assign formal parameters
-        for (i = 0; i < context.inputs.length; i += 1) {
-            value = 0;
-            if (!isNil(parms[i])) {
-                value = parms[i];
+        // assign parameters if any were passed
+        if (parms.length > 0) {
+
+            // assign formal parameters
+            for (i = 0; i < context.inputs.length; i += 1) {
+                value = 0;
+                if (!isNil(parms[i])) {
+                    value = parms[i];
+                }
+                outer.variables.addVar(context.inputs[i], value);
             }
-            outer.variables.addVar(context.inputs[i], value);
-        }
 
-        // assign implicit parameters if there are no formal ones
-        if (context.inputs.length === 0) {
-            // assign the actual arguments list to the special
-            // parameter ID ['arguments'], to be used for variadic inputs
-            outer.variables.addVar(['arguments'], args);
+            // assign implicit parameters if there are no formal ones
+            if (context.inputs.length === 0) {
+                
 
-            // in case there is only one input
-            // assign it to all empty slots
-            if (parms.length === 1) {
-                for (i = 1; i <= context.emptySlots; i += 1) {
-                    outer.variables.addVar(i, parms[0]);
+                // in case there is only one input
+                // assign it to all empty slots
+                if (parms.length === 1) {
+                    for (i = 1; i <= context.emptySlots; i += 1) {
+                        outer.variables.addVar(i, parms[0]);
+                    }
+
+                // if the number of inputs matches the number
+                // of empty slots distribute them sequentially
+                } else if (parms.length === context.emptySlots) {
+                    for (i = 1; i <= parms.length; i += 1) {
+                        outer.variables.addVar(i, parms[i - 1]);
+                    }
+
+                } else if (context.emptySlots !== 1) {
+                    throw new Error(
+                        localize('expecting') + ' ' + context.emptySlots + ' '
+                            + localize('input(s), but getting') + ' '
+                            + parms.length
+                    );
                 }
-
-            // if the number of inputs matches the number
-            // of empty slots distribute them sequentially
-            } else if (parms.length === context.emptySlots) {
-                for (i = 1; i <= parms.length; i += 1) {
-                    outer.variables.addVar(i, parms[i - 1]);
-                }
-
-            } else if (context.emptySlots !== 1) {
-                throw new Error(
-                    localize('expecting') + ' ' + context.emptySlots + ' '
-                        + localize('input(s), but getting') + ' '
-                        + parms.length
-                );
             }
         }
     }
