@@ -61,7 +61,7 @@ normalizeCanvas, contains*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2017-May-05';
+modules.store = '2017-May-31';
 
 
 // XML_Serializer ///////////////////////////////////////////////////////
@@ -494,6 +494,9 @@ SnapSerializer.prototype.rawLoadProjectModel = function (xmlNode) {
             sprite.nestingScale = +(sprite.nestingInfo.scale || sprite.scale);
             delete sprite.nestingInfo;
         }
+        if (sprite.inheritsAttribute('scripts')) {
+            sprite.refreshInheritedAttribute('scripts');
+        }
     });
 
     /* Global Variables */
@@ -735,6 +738,13 @@ SnapSerializer.prototype.loadObject = function (object, model) {
     }
     this.populateCustomBlocks(object, blocks);
     this.loadVariables(object.variables, model.require('variables'), object);
+
+    // loads scripts unless they're inherited
+    if (object.inheritanceInfo &&
+            (object.inheritanceInfo.delegated instanceof Array) &&
+            contains(object.inheritanceInfo.delegated, 'scripts')) {
+        return;
+    }
     this.loadScripts(object, object.scripts, model.require('scripts'));
 
     // note: the dispatches cache isn't cleared until after
@@ -1603,7 +1613,8 @@ StageMorph.prototype.toXML = function (serializer) {
 SpriteMorph.prototype.toXML = function (serializer) {
     var stage = this.parentThatIsA(StageMorph),
         ide = stage ? stage.parentThatIsA(IDE_Morph) : null,
-        idx = ide ? ide.sprites.asArray().indexOf(this) + 1 : 0;
+        idx = ide ? ide.sprites.asArray().indexOf(this) + 1 : 0,
+        noScripts = this.inheritsAttribute('scripts');
 
     return serializer.format(
         '<sprite name="@" idx="@" x="@" y="@"' +
@@ -1620,7 +1631,7 @@ SpriteMorph.prototype.toXML = function (serializer) {
             '<blocks>%</blocks>' +
             '<variables>%</variables>' +
             (this.exemplar ? '<dispatches>%</dispatches>' : '%') +
-            '<scripts>%</scripts>' +
+            (noScripts ? '%' : '<scripts>%</scripts>') +
             '</sprite>',
         this.name,
         idx,
@@ -1669,7 +1680,7 @@ SpriteMorph.prototype.toXML = function (serializer) {
         serializer.store(this.variables),
         this.exemplar ?
                 serializer.store(this.inheritedMethods()) : '',
-        serializer.store(this.scripts)
+        noScripts ? '' : serializer.store(this.scripts)
     );
 };
 

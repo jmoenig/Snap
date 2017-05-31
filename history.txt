@@ -3432,11 +3432,15 @@ Fixes:
 ------
 * let clones share the orginal’s scripts without shallow-copying them
 
+170531
+------
+* added inheritance support for scripts, partly done, copy-on-write is still missing
+
 
 Features:
 * polymorphic sprite-local custom blocks
 * inheritance of sprite-local custom blocks
-* inheritance of sprite attributes (x, y, direction, size)
+* inheritance of sprite attributes (x, y, direction, size, costumes, costume #, scripts)
 * localization support when typing expressions
 * support for user-forced line-breaks in custom block labels
 * ternary Boolean slot setting: support to limit Boolean input slots to “true/false” outside of rings and in palette

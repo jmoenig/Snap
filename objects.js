@@ -82,7 +82,7 @@ SpeechBubbleMorph, RingMorph, isNil, FileReader, TableDialogMorph,
 BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph*/
 
-modules.objects = '2017-May-30';
+modules.objects = '2017-May-31';
 
 var SpriteMorph;
 var StageMorph;
@@ -121,7 +121,8 @@ SpriteMorph.prototype.attributes =
         'direction',
         'size',
         'costumes',
-        'costume #'
+        'costume #',
+        'scripts'
     ];
 
 SpriteMorph.prototype.categories =
@@ -5201,6 +5202,13 @@ SpriteMorph.prototype.shadowAttribute = function (aName) {
             }
         });
         this.costumes = wardrobe;
+    } else if (aName === 'scripts') {
+        this.scripts = this.exemplar.scripts.fullCopy();
+        if (ide && (contains(ide.currentSprite.allExemplars(), this))) {
+            ide.createSpriteEditor();
+            ide.fixLayout('selectSprite');
+            this.scripts.fixMultiArgs();
+        }
     } else if (ide) {
         ide.flushBlocksCache(); // optimization: specify category if known
         ide.refreshPalette();
@@ -5227,6 +5235,7 @@ SpriteMorph.prototype.inheritAttribute = function (aName) {
 };
 
 SpriteMorph.prototype.refreshInheritedAttribute = function (aName) {
+    var ide;
     switch (aName) {
     case 'x position':
     case 'y position':
@@ -5240,6 +5249,19 @@ SpriteMorph.prototype.refreshInheritedAttribute = function (aName) {
         break;
     case 'costume #':
         this.doSwitchToCostume(this.getCostumeIdx(), true);
+        break;
+    case 'scripts':
+        this.scripts = this.exemplar.scripts;
+        ide = this.parentThatIsA(IDE_Morph);
+        if (ide && (contains(ide.currentSprite.allExemplars(), this))) {
+            ide.createSpriteEditor();
+            ide.fixLayout('selectSprite');
+        }
+        this.specimens().forEach(function (sprite) {
+            if (sprite.inheritsAttribute('scripts')) {
+                sprite.refreshInheritedAttribute('scripts');
+            }
+        });
         break;
     default:
         nop();

@@ -145,12 +145,12 @@ radians, useBlurredShadows, SpeechBubbleMorph, modules, StageMorph,
 fontHeight, TableFrameMorph, SpriteMorph, Context, ListWatcherMorph,
 CellMorph, DialogBoxMorph, BlockInputFragmentMorph, PrototypeHatBlockMorph,
 Costume, IDE_Morph, BlockDialogMorph, BlockEditorMorph, localize, isNil,
-isSnapObject, copy, PushButtonMorph, SpriteIconMorph, Process, AlignmentMorph,
+isSnapObject, PushButtonMorph, SpriteIconMorph, Process, AlignmentMorph,
 CustomCommandBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2017-May-30';
+modules.blocks = '2017-May-31';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -6141,6 +6141,24 @@ ScriptsMorph.prototype.userMenu = function () {
     );
     if (ide) {
         menu.addLine();
+        if (obj.exemplar) {
+            if (obj.inheritsAttribute('scripts')) {
+                menu.addItem(
+                    'disinherit scripts',
+                    function () {
+                        obj.shadowAttribute('scripts');
+                    }
+                );
+            } else {
+                menu.addItem(
+                    'inherit scripts\nfrom' + ' ' + obj.exemplar.name,
+                    function () {
+                        obj.inheritAttribute('scripts');
+                    }
+                );
+                menu.addLine();
+            }
+        }
         menu.addItem(
             'make a block...',
             function () {
