@@ -2595,7 +2595,7 @@ BlockMorph.prototype.userMenu = function () {
     );
     menu.addLine();
     menu.addItem(
-        'download stack',
+        'download script',
         function () {
             var ide = myself.parentThatIsA(IDE_Morph),
                 blockEditor = myself.parentThatIsA(BlockEditorMorph);
@@ -2605,7 +2605,7 @@ BlockMorph.prototype.userMenu = function () {
             if (ide) {
                 ide.saveXMLAs(
                     ide.serializer.serialize(myself),
-                    myself.selector + ' stack',
+                    myself.selector + ' script',
                     false);
             }
         });
