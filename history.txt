@@ -3436,6 +3436,10 @@ Fixes:
 ------
 * added inheritance support for scripts, partly done, copy-on-write is still missing
 
+170602
+------
+* added a thread count indicator to shared-script highlights
+
 
 Features:
 * polymorphic sprite-local custom blocks
@@ -3450,6 +3454,7 @@ Features:
 * costume icons indicate svg costumes
 * sprites’s rotation centers can be adjusted onstage
 * clones share their original sprite’s scripts, not a shallow-copy of them
+* a highlight-colored balloon indicates the number of active processes per shared script
 
 Fixes:
 * changed keyboard shortcut indicator for “find blocks” to “^”

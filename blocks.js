@@ -150,7 +150,7 @@ CustomCommandBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2017-May-31';
+modules.blocks = '2017-June-02';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -1872,12 +1872,11 @@ SyntaxElementMorph.prototype.isEmptySlot = function () {
 
 // SyntaxElementMorph speech bubble feedback:
 
-SyntaxElementMorph.prototype.showBubble = function (value, exportPic) {
+SyntaxElementMorph.prototype.showBubble = function (value, exportPic, target) {
     var bubble,
         txt,
         img,
         morphToShow,
-        rcvr,
         isClickable = false,
         ide = this.parentThatIsA(IDE_Morph),
         anchor = this,
@@ -1885,10 +1884,9 @@ SyntaxElementMorph.prototype.showBubble = function (value, exportPic) {
         sf = this.parentThatIsA(ScrollFrameMorph),
         wrrld = this.world();
 
-    if ((value === undefined) || !wrrld || !this.receiver) {
+    if ((value === undefined) || !wrrld) {
         return null;
     }
-    rcvr = this.scriptTarget();
     if (value instanceof ListWatcherMorph) {
         morphToShow = value;
         morphToShow.update(true);
@@ -1963,13 +1961,13 @@ SyntaxElementMorph.prototype.showBubble = function (value, exportPic) {
             this.fontSize
         );
     }
-    if (ide && (ide.currentSprite !== rcvr)) {
-        if (rcvr instanceof StageMorph) {
+    if (ide && (ide.currentSprite !== target)) {
+        if (target instanceof StageMorph) {
             anchor = ide.corral.stageIcon;
         } else {
             anchor = detect(
                 ide.corral.frame.contents.children,
-                function (icon) {return icon.object === rcvr; }
+                function (icon) {return icon.object === target; }
             );
         }
         pos = anchor.center();
@@ -3417,7 +3415,7 @@ BlockMorph.prototype.eraseHoles = function (context) {
 
 // BlockMorph highlighting
 
-BlockMorph.prototype.addHighlight = function (oldHighlight) {
+BlockMorph.prototype.addHighlight = function (oldHighlight, threadCount) {
     var isHidden = !this.isVisible,
         highlight;
 
@@ -3425,7 +3423,8 @@ BlockMorph.prototype.addHighlight = function (oldHighlight) {
     highlight = this.highlight(
         oldHighlight ? oldHighlight.color : this.activeHighlight,
         this.activeBlur,
-        this.activeBorder
+        this.activeBorder,
+        oldHighlight ? oldHighlight.threadCount : threadCount
     );
     this.addBack(highlight);
     this.fullChanged();
@@ -3467,7 +3466,7 @@ BlockMorph.prototype.toggleHighlight = function () {
     }
 };
 
-BlockMorph.prototype.highlight = function (color, blur, border) {
+BlockMorph.prototype.highlight = function (color, blur, border, threadCount) {
     var highlight = new BlockHighlightMorph(),
         fb = this.fullBounds(),
         edge = useBlurredShadows && !MorphicPreferences.isFlat ?
@@ -3477,6 +3476,17 @@ BlockMorph.prototype.highlight = function (color, blur, border) {
     highlight.image = useBlurredShadows && !MorphicPreferences.isFlat ?
             this.highlightImageBlurred(color, blur)
                 : this.highlightImage(color, border);
+
+    // show the thread count in a bubble:
+    if ((threadCount || 0) > 1) {
+        this.addThreadCountToHighlight(
+            highlight.image,
+            threadCount,
+            color,
+            edge / 2
+        );
+    }
+
     highlight.setPosition(fb.origin.subtract(new Point(edge, edge)));
     return highlight;
 };
@@ -3526,6 +3536,32 @@ BlockMorph.prototype.highlightImageBlurred = function (color, blur) {
     ctx.globalCompositeOperation = 'destination-out';
     ctx.drawImage(img, blur, blur);
     return hi;
+};
+
+BlockMorph.prototype.addThreadCountToHighlight = function (
+    aCanvas,
+    threads,
+    color,
+    inset
+) {
+    var ctx = aCanvas.getContext('2d');
+    ctx.globalCompositeOperation = 'source-over';
+    ctx.drawImage(
+        new SpeechBubbleMorph(
+            new TextMorph(
+                threads.toString(),
+                this.fontSize
+            ),
+            color, // color,
+            null, // edge,
+            null, // border,
+            null, // borderColor,
+            null, // padding,
+            1 // isThought - don't draw a hook
+        ).fullImage(),
+        inset,
+        inset
+    );
 };
 
 BlockMorph.prototype.getHighlight = function () {
@@ -11241,7 +11277,8 @@ BlockHighlightMorph.uber = Morph.prototype;
 
 // BlockHighlightMorph instance creation:
 
-function BlockHighlightMorph() {
+function BlockHighlightMorph(threadCount) {
+    this.threadCount = threadCount || 0;
     this.init();
 }
 

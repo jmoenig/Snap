@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph,
 TableFrameMorph, ColorSlotMorph, isSnapObject*/
 
-modules.threads = '2017-May-30';
+modules.threads = '2017-June-02';
 
 var ThreadManager;
 var Process;
@@ -211,9 +211,21 @@ ThreadManager.prototype.startProcess = function (
     newProc = new Process(top, receiver, callback, rightAway);
     newProc.exportResult = exportResult;
     newProc.isClicked = isClicked || false;
-    if (!newProc.homeContext.receiver.isClone) {
+
+    // show a highlight around the running stack
+    // if there are more than one active processes
+    // for a block, display the thread count
+    // next to it
+    if (top.getHighlight()) {
+        top.removeHighlight();
+    }
+    top.addHighlight(null, this.processesForBlock(top).length + 1);
+    /* version without displaying thread count:
+    if (!newProc.homeContext.receiver.isClone && !top.getHighlight()) {
         top.addHighlight();
     }
+    */
+
     this.processes.push(newProc);
     if (rightAway) {
         newProc.runStep();
@@ -306,15 +318,34 @@ ThreadManager.prototype.step = function () {
 
 ThreadManager.prototype.removeTerminatedProcesses = function () {
     // and un-highlight their scripts
-    var remaining = [];
+    var remaining = [],
+        count,
+        myself = this;
     this.processes.forEach(function (proc) {
         var result;
         if ((!proc.isRunning() && !proc.errorFlag) || proc.isDead) {
-            if (proc.topBlock instanceof BlockMorph
-                    && (!proc.receiver.isClone)) {
+
+            if (proc.topBlock instanceof BlockMorph) {
+                // adjust the thread count indicator, if any
+                proc.unflash();
+                proc.topBlock.removeHighlight();
+                if (proc.topBlock.getHighlight()) {
+                    proc.topBlock.removeHighlight();
+                }
+                count = myself.processesForBlock(proc.topBlock).length;
+                if (count)
+                proc.topBlock.addHighlight(null, count);
+            }
+
+            /* old version that doesn't show thread count:
+            if (proc.topBlock instanceof BlockMorph &&
+                    !proc.receiver.isClone &&
+                    !myself.processesForBlock(proc.topBlock).length) {
                 proc.unflash();
                 proc.topBlock.removeHighlight();
             }
+            */
+
             if (proc.prompter) {
                 proc.prompter.destroy();
                 if (proc.homeContext.receiver.stopTalking) {
@@ -334,12 +365,14 @@ ThreadManager.prototype.removeTerminatedProcesses = function () {
                                         new TableMorph(result, 10)
                                     )
                                     : new ListWatcherMorph(result),
-                            proc.exportResult
+                            proc.exportResult,
+                            proc.receiver
                         );
                     } else {
                         proc.topBlock.showBubble(
                             result,
-                            proc.exportResult
+                            proc.exportResult,
+                            proc.receiver
                         );
                     }
                 }
@@ -359,6 +392,15 @@ ThreadManager.prototype.findProcess = function (block, receiver) {
             return each.topBlock === top && (each.receiver === receiver);
         }
     );
+};
+
+ThreadManager.prototype.processesForBlock = function (block) {
+    var top = block.topBlock();
+    return this.processes.filter(function (each) {
+            return each.topBlock === top &&
+                each.isRunning() &&
+                !each.isDead;
+    });
 };
 
 ThreadManager.prototype.doWhen = function (block, receiver, stopIt) {

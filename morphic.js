@@ -1137,7 +1137,7 @@
 
 /*global window, HTMLCanvasElement, FileReader, Audio, FileList*/
 
-var morphicVersion = '2017-April-23';
+var morphicVersion = '2017-June-02';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = getBlurredShadowSupport(); // check for Chrome-bug
 
@@ -5955,7 +5955,7 @@ SpeechBubbleMorph.prototype.init = function (
     border,
     borderColor,
     padding,
-    isThought
+    isThought // bool or anything but "true" to draw no hook at all
 ) {
     this.isPointingRight = true; // orientation of text
     this.contents = contents || '';
@@ -6121,7 +6121,7 @@ SpeechBubbleMorph.prototype.outlinePath = function (
         radians(180),
         false
     );
-    if (this.isThought) {
+    if (this.isThought === true) { // use anything but "true" to draw nothing
         // close large bubble:
         context.lineTo(
             inset,
