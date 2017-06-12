@@ -8716,6 +8716,7 @@ CamSnapshotDialogMorph.prototype.buildContents = function () {
             .then(function (stream) {
                 myself.videoElement.src = window.URL.createObjectURL(stream);
                 myself.videoElement.play();
+                myself.videoElement.stream = stream;
             });
     }
 
@@ -8799,6 +8800,7 @@ CamSnapshotDialogMorph.prototype.destroy = function () {
 
 CamSnapshotDialogMorph.prototype.close = function () {
     if (this.videoElement) {
+        this.videoElement.stream.getTracks()[0].stop();
         this.videoElement.remove();
     }
     CamSnapshotDialogMorph.uber.destroy.call(this);
