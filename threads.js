@@ -2138,7 +2138,8 @@ Process.prototype.reportURL = function (url) {
     var response;
     if (!this.httpRequest) {
         this.httpRequest = new XMLHttpRequest();
-        this.httpRequest.open("GET", 'http://' + url, true);
+        var protocol = document.location.protocol || 'http:';
+        this.httpRequest.open('GET',  protocol + '//' + url, true);
         this.httpRequest.send(null);
     } else if (this.httpRequest.readyState === 4) {
         response = this.httpRequest.responseText;
