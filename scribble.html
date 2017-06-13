@@ -30,6 +30,13 @@
 		<script type="text/javascript">
 			var world;
 			window.onload = function () {
+			  	if ((navigator.platform === 'iPad' || navigator.platform === 'iPhone')
+				  	&& navigator.epubReadingSystem
+			        && navigator.epubReadingSystem.name === 'iBooks') {
+			        // Add a margin to the top for iBooks on iPad and iPhone, where a black bar
+			        // can sit across the top, blocking access to the widget's controls.
+			        document.body.style.marginTop = "88px";
+            	}
 				world = new WorldMorph(document.getElementById('world'));
 				var ide = new IDE_Morph();
                 ide.openIn(world);
