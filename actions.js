@@ -1,6 +1,6 @@
 var logger = {
     log: console.log.bind(console),
-    debug: console.debug.bind(console),
+    debug: console.info.bind(console),
     info: console.info.bind(console),
     warn: console.warn.bind(console),
     error: console.error.bind(console)
