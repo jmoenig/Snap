@@ -1004,14 +1004,16 @@ ActionManager.prototype._addSprite = function(sprite, costume) {
 };
 
 ActionManager.prototype.uniqueIdForImport = function (str) {
-    var myself = this,
-        model = myself.serializer.parse(str),
+    var model = this.serializer.parse(str),
         children = model.allChildren();
 
     // Just add an id to everything... not the most efficient but effective for now
     for (var i = children.length; i--;) {
         if (children[i].attributes) {
             children[i].attributes.collabId = this.newId();
+        }
+        if (children[i].contents) {
+            children[i].contents = this.serializer.escape(children[i].contents);
         }
     }
 
