@@ -3443,6 +3443,8 @@ Fixes:
 170619
 ------
 * threads: fixed #1767 (optimized thread-launch and highlighting)
+* threads, blocks: optimized thread count indicator for “glow” halos
+
 
 Features:
 * polymorphic sprite-local custom blocks

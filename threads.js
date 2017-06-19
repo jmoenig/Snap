@@ -200,6 +200,7 @@ ThreadManager.prototype.startProcess = function (
 ) {
     var top = block.topBlock(),
         active = this.findProcess(top, receiver),
+        glow,
         newProc;
     if (active) {
         if (isThreadSafe) {
@@ -216,15 +217,13 @@ ThreadManager.prototype.startProcess = function (
     // if there are more than one active processes
     // for a block, display the thread count
     // next to it
-    if (top.getHighlight()) {
-        top.removeHighlight();
-    }
-    top.addHighlight(null, this.processesForBlock(top).length + 1);
-    /* version without displaying thread count:
-    if (!newProc.homeContext.receiver.isClone && !top.getHighlight()) {
+    glow = top.getHighlight();
+    if (glow) {
+        glow.threadCount = this.processesForBlock(top).length + 1;
+        glow.updateReadout();
+    } else {
         top.addHighlight();
     }
-    */
 
     this.processes.push(newProc);
     if (rightAway) {
@@ -322,30 +321,22 @@ ThreadManager.prototype.removeTerminatedProcesses = function () {
         count,
         myself = this;
     this.processes.forEach(function (proc) {
-        var result;
+        var result,
+            glow;
         if ((!proc.isRunning() && !proc.errorFlag) || proc.isDead) {
-
             if (proc.topBlock instanceof BlockMorph) {
-                // adjust the thread count indicator, if any
                 proc.unflash();
-                proc.topBlock.removeHighlight();
-                if (proc.topBlock.getHighlight()) {
+                // adjust the thread count indicator, if any
+                count = myself.processesForBlock(proc.topBlock).length;
+                if (count) {
+                    glow = proc.topBlock.getHighlight() ||
+                        proc.topBlock.addHighlight();
+                    glow.threadCount = count;
+                    glow.updateReadout();
+                } else {
                     proc.topBlock.removeHighlight();
                 }
-                count = myself.processesForBlock(proc.topBlock).length;
-                if (count)
-                proc.topBlock.addHighlight(null, count);
             }
-
-            /* old version that doesn't show thread count:
-            if (proc.topBlock instanceof BlockMorph &&
-                    !proc.receiver.isClone &&
-                    !myself.processesForBlock(proc.topBlock).length) {
-                proc.unflash();
-                proc.topBlock.removeHighlight();
-            }
-            */
-
             if (proc.prompter) {
                 proc.prompter.destroy();
                 if (proc.homeContext.receiver.stopTalking) {

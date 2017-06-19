@@ -150,7 +150,7 @@ CustomCommandBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2017-June-02';
+modules.blocks = '2017-June-19';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -3415,7 +3415,7 @@ BlockMorph.prototype.eraseHoles = function (context) {
 
 // BlockMorph highlighting
 
-BlockMorph.prototype.addHighlight = function (oldHighlight, threadCount) {
+BlockMorph.prototype.addHighlight = function (oldHighlight) {
     var isHidden = !this.isVisible,
         highlight;
 
@@ -3423,8 +3423,7 @@ BlockMorph.prototype.addHighlight = function (oldHighlight, threadCount) {
     highlight = this.highlight(
         oldHighlight ? oldHighlight.color : this.activeHighlight,
         this.activeBlur,
-        this.activeBorder,
-        oldHighlight ? oldHighlight.threadCount : threadCount
+        this.activeBorder
     );
     this.addBack(highlight);
     this.fullChanged();
@@ -3466,7 +3465,7 @@ BlockMorph.prototype.toggleHighlight = function () {
     }
 };
 
-BlockMorph.prototype.highlight = function (color, blur, border, threadCount) {
+BlockMorph.prototype.highlight = function (color, blur, border) {
     var highlight = new BlockHighlightMorph(),
         fb = this.fullBounds(),
         edge = useBlurredShadows && !MorphicPreferences.isFlat ?
@@ -3476,17 +3475,6 @@ BlockMorph.prototype.highlight = function (color, blur, border, threadCount) {
     highlight.image = useBlurredShadows && !MorphicPreferences.isFlat ?
             this.highlightImageBlurred(color, blur)
                 : this.highlightImage(color, border);
-
-    // show the thread count in a bubble:
-    if ((threadCount || 0) > 1) {
-        this.addThreadCountToHighlight(
-            highlight.image,
-            threadCount,
-            color,
-            edge / 2
-        );
-    }
-
     highlight.setPosition(fb.origin.subtract(new Point(edge, edge)));
     return highlight;
 };
@@ -3536,32 +3524,6 @@ BlockMorph.prototype.highlightImageBlurred = function (color, blur) {
     ctx.globalCompositeOperation = 'destination-out';
     ctx.drawImage(img, blur, blur);
     return hi;
-};
-
-BlockMorph.prototype.addThreadCountToHighlight = function (
-    aCanvas,
-    threads,
-    color,
-    inset
-) {
-    var ctx = aCanvas.getContext('2d');
-    ctx.globalCompositeOperation = 'source-over';
-    ctx.drawImage(
-        new SpeechBubbleMorph(
-            new TextMorph(
-                threads.toString(),
-                this.fontSize
-            ),
-            color, // color,
-            null, // edge,
-            null, // border,
-            null, // borderColor,
-            null, // padding,
-            1 // isThought - don't draw a hook
-        ).fullImage(),
-        inset,
-        inset
-    );
 };
 
 BlockMorph.prototype.getHighlight = function () {
@@ -11269,6 +11231,13 @@ ColorSlotMorph.prototype.drawRectBorder =
 
 // BlockHighlightMorph /////////////////////////////////////////////////
 
+/*
+    I am a glowing halo around a block or stack of blocks indicating that
+    a script is currently active or has encountered an error.
+    I halso have an optional readout that can display a thread count
+    if more than one process shares the same script
+*/
+
 // BlockHighlightMorph inherits from Morph:
 
 BlockHighlightMorph.prototype = new Morph();
@@ -11277,10 +11246,47 @@ BlockHighlightMorph.uber = Morph.prototype;
 
 // BlockHighlightMorph instance creation:
 
-function BlockHighlightMorph(threadCount) {
-    this.threadCount = threadCount || 0;
+function BlockHighlightMorph() {
+    this.threadCount = 0;
     this.init();
 }
+
+// BlockHighlightMorph thread count readout
+
+BlockHighlightMorph.prototype.readout = function () {
+    return this.children.length ? this.children[0] : null;
+};
+
+BlockHighlightMorph.prototype.updateReadout = function () {
+    var readout = this.readout(),
+        inset = useBlurredShadows && !MorphicPreferences.isFlat ?
+            SyntaxElementMorph.prototype.activeBlur * 0.4
+                : SyntaxElementMorph.prototype.activeBorder * -2;
+    if (this.threadCount < 2) {
+        if (readout) {
+            readout.destroy();
+        }
+        return;
+    }
+    if (readout) {
+        readout.contents = this.threadCount.toString();
+        readout.fullChanged();
+        readout.drawNew();
+        readout.fullChanged();
+    } else {
+        readout = new SpeechBubbleMorph(
+            this.threadCount.toString(),
+            this.color, // color,
+            null, // edge,
+            null, // border,
+            this.color.darker(), // borderColor,
+            null, // padding,
+            1 // isThought - don't draw a hook
+        );
+        this.add(readout);
+    }
+    readout.setPosition(this.position().add(inset));
+};
 
 // MultiArgMorph ///////////////////////////////////////////////////////
 
