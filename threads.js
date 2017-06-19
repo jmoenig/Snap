@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph,
 TableFrameMorph, ColorSlotMorph, isSnapObject*/
 
-modules.threads = '2017-June-02';
+modules.threads = '2017-June-19';
 
 var ThreadManager;
 var Process;
@@ -208,7 +208,7 @@ ThreadManager.prototype.startProcess = function (
         active.stop();
         this.removeTerminatedProcesses();
     }
-    newProc = new Process(top, receiver, callback, rightAway);
+    newProc = new Process(top, receiver, callback, isClicked);
     newProc.exportResult = exportResult;
     newProc.isClicked = isClicked || false;
 
@@ -528,7 +528,7 @@ Process.prototype.enableSingleStepping = false; // experimental
 Process.prototype.flashTime = 0; // experimental
 // Process.prototype.enableJS = false;
 
-function Process(topBlock, receiver, onComplete, rightAway) {
+function Process(topBlock, receiver, onComplete, yieldFirst) {
     this.topBlock = topBlock || null;
     this.receiver = receiver;
     this.readyToYield = false;
@@ -561,7 +561,7 @@ function Process(topBlock, receiver, onComplete, rightAway) {
             topBlock.blockSequence(),
             this.homeContext
         );
-        if (!rightAway) {
+        if (yieldFirst) {
             this.pushContext('doYield'); // highlight top block
         }
     }
