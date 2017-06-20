@@ -1251,6 +1251,10 @@ SpriteMorph.prototype.initBlockMigrations = function () {
             selector: 'reportBoolean',
             inputs: [false]
         },
+        reportCostumes: {
+            selector: 'reportGet',
+            inputs: [['costumes']]
+        },
         doMapStringCode: {
             selector: 'doMapValueCode',
             inputs: [['String'], '<#1>'],
@@ -1847,8 +1851,6 @@ SpriteMorph.prototype.blockTemplates = function (category) {
             txt.fontSize = 9;
             txt.setColor(this.paletteTextColor);
             blocks.push(txt);
-            blocks.push('-');
-            blocks.push(block('reportCostumes'));
             blocks.push('-');
             blocks.push(block('log'));
             blocks.push(block('alert'));
@@ -6555,8 +6557,6 @@ StageMorph.prototype.blockTemplates = function (category) {
             txt.fontSize = 9;
             txt.setColor(this.paletteTextColor);
             blocks.push(txt);
-            blocks.push('-');
-            blocks.push(block('reportCostumes'));
             blocks.push('-');
             blocks.push(block('log'));
             blocks.push(block('alert'));

@@ -3448,6 +3448,7 @@ Fixes:
 170620
 ------
 * threads, blocks, ide: make sure to stop active processes when deleting a block
+* objects: migrate experimental “wardrobe” reporters to the new “my costumes” reporter
 
 
 Features:
