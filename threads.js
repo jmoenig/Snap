@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph,
 TableFrameMorph, ColorSlotMorph, isSnapObject*/
 
-modules.threads = '2017-June-19';
+modules.threads = '2017-June-20';
 
 var ThreadManager;
 var Process;
@@ -253,6 +253,12 @@ ThreadManager.prototype.stopAllForReceiver = function (rcvr, excpt) {
     });
 };
 
+ThreadManager.prototype.stopAllForBlock = function (aTopBlock) {
+    this.processesForBlock(aTopBlock, true).forEach(function (proc) {
+        proc.stop();
+    });
+};
+
 ThreadManager.prototype.stopProcess = function (block, receiver) {
     var active = this.findProcess(block, receiver);
     if (active) {
@@ -385,8 +391,8 @@ ThreadManager.prototype.findProcess = function (block, receiver) {
     );
 };
 
-ThreadManager.prototype.processesForBlock = function (block) {
-    var top = block.topBlock();
+ThreadManager.prototype.processesForBlock = function (block, only) {
+    var top = only ? block : block.topBlock();
     return this.processes.filter(function (each) {
             return each.topBlock === top &&
                 each.isRunning() &&

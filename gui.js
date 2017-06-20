@@ -74,7 +74,7 @@ isRetinaSupported, SliderMorph, Animation*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2017-May-31';
+modules.gui = '2017-June-20';
 
 // Declarations
 
@@ -1063,6 +1063,7 @@ IDE_Morph.prototype.createPalette = function (forSearching) {
             myself.currentSprite.wearCostume(null);
             droppedMorph.perish();
         } else if (droppedMorph instanceof BlockMorph) {
+            myself.stage.threads.stopAllForBlock(droppedMorph);
             if (hand && hand.grabOrigin.origin instanceof ScriptsMorph) {
                 hand.grabOrigin.origin.clearDropInfo();
                 hand.grabOrigin.origin.lastDroppedBlock = droppedMorph;
@@ -2186,6 +2187,13 @@ IDE_Morph.prototype.newSpriteName = function (name, ignoredSprite) {
         newName = stem + '(' + count + ')';
     }
     return newName;
+};
+
+// IDE_Morph deleting scripts
+
+IDE_Morph.prototype.removeBlock = function (aBlock, justThis) {
+    this.stage.threads.stopAllForBlock(aBlock);
+    aBlock.destroy(justThis);
 };
 
 // IDE_Morph menus

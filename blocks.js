@@ -150,7 +150,7 @@ CustomCommandBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2017-June-19';
+modules.blocks = '2017-June-20';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -3897,6 +3897,7 @@ BlockMorph.prototype.allComments = function () {
 };
 
 BlockMorph.prototype.destroy = function (justThis) {
+    // private - use IDE_Morph.removeBlock() to first stop all my processes
     if (justThis) {
         if (!isNil(this.comment)) {
             this.comment.destroy();
@@ -3906,17 +3907,6 @@ BlockMorph.prototype.destroy = function (justThis) {
             comment.destroy();
         });
     }
-
-    /* +++ needs tweaking:
-    // stop active process(es) for this block
-    // for this we need access to the stage...
-
-    if ((!this.parent || !this.parent.topBlock)
-            && this.activeProcess()) {
-        this.activeProcess().stop();
-    }
-    */
-
     BlockMorph.uber.destroy.call(this);
 };
 
@@ -4343,6 +4333,7 @@ CommandBlockMorph.prototype.userDestroy = function () {
     }
 
     var scripts = this.parentThatIsA(ScriptsMorph),
+        ide = this.parentThatIsA(IDE_Morph),
         parent = this.parentThatIsA(SyntaxElementMorph),
         cslot = this.parentThatIsA(CSlotMorph);
 
@@ -4354,7 +4345,12 @@ CommandBlockMorph.prototype.userDestroy = function () {
         scripts.dropRecord.action = 'delete';
     }
 
-    this.destroy();
+    if (ide) {
+        // also stop all active processes hatted by this block
+        ide.removeBlock(this);
+    } else {
+        this.destroy();
+    }
     if (cslot) {
         cslot.fixLayout();
     }
@@ -4366,6 +4362,7 @@ CommandBlockMorph.prototype.userDestroy = function () {
 CommandBlockMorph.prototype.userDestroyJustThis = function () {
     // delete just this one block, reattach next block to the previous one,
     var scripts = this.parentThatIsA(ScriptsMorph),
+        ide = this.parentThatIsA(IDE_Morph),
         cs = this.parentThatIsA(CommandSlotMorph),
         pb,
         nb = this.nextBlock(),
@@ -4391,7 +4388,12 @@ CommandBlockMorph.prototype.userDestroyJustThis = function () {
     } else if (cs && (cs.nestedBlock() === this)) {
         above = cs;
     }
-    this.destroy(true); // just this block
+    if (ide) {
+        // also stop all active processes hatted by this block
+        ide.removeBlock(this, true); // just this block
+    } else {
+        this.destroy(true); // just this block
+    }
     if (nb) {
         if (above instanceof CommandSlotMorph) {
             above.nestedBlock(nb);

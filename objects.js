@@ -82,7 +82,7 @@ SpeechBubbleMorph, RingMorph, isNil, FileReader, TableDialogMorph,
 BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph*/
 
-modules.objects = '2017-May-31';
+modules.objects = '2017-June-20';
 
 var SpriteMorph;
 var StageMorph;
