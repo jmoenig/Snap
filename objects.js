@@ -82,7 +82,7 @@ SpeechBubbleMorph, RingMorph, isNil, FileReader, TableDialogMorph,
 BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph*/
 
-modules.objects = '2017-June-20';
+modules.objects = '2017-June-21';
 
 var SpriteMorph;
 var StageMorph;
@@ -5205,12 +5205,18 @@ SpriteMorph.prototype.shadowAttribute = function (aName) {
         });
         this.costumes = wardrobe;
     } else if (aName === 'scripts') {
+        ide.stage.threads.stopAllForReceiver(this);
         this.scripts = this.exemplar.scripts.fullCopy();
         if (ide && (contains(ide.currentSprite.allExemplars(), this))) {
             ide.createSpriteEditor();
             ide.fixLayout('selectSprite');
             this.scripts.fixMultiArgs();
         }
+        this.specimens().forEach(function (obj) {
+            if (obj.inheritsAttribute('scripts')) {
+                obj.refreshInheritedAttribute('scripts');
+            }
+        });
     } else if (ide) {
         ide.flushBlocksCache(); // optimization: specify category if known
         ide.refreshPalette();
@@ -5255,9 +5261,12 @@ SpriteMorph.prototype.refreshInheritedAttribute = function (aName) {
     case 'scripts':
         this.scripts = this.exemplar.scripts;
         ide = this.parentThatIsA(IDE_Morph);
-        if (ide && (contains(ide.currentSprite.allExemplars(), this))) {
-            ide.createSpriteEditor();
-            ide.fixLayout('selectSprite');
+        if (ide) {
+            ide.stage.threads.stopAllForReceiver(this);
+            if (contains(ide.currentSprite.allExemplars(), this)) {
+                ide.createSpriteEditor();
+                ide.fixLayout('selectSprite');
+            }
         }
         this.specimens().forEach(function (sprite) {
             if (sprite.inheritsAttribute('scripts')) {

@@ -3450,6 +3450,10 @@ Fixes:
 * threads, blocks, ide: make sure to stop active processes when deleting a block
 * objects: migrate experimental “wardrobe” reporters to the new “my costumes” reporter
 
+170621
+------
+* objects: stop all scripts for a sprite when shadowing or inheriting its scripts
+
 
 Features:
 * polymorphic sprite-local custom blocks
