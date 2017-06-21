@@ -416,6 +416,7 @@ SnapSerializer.prototype.init = function () {
     this.project = {};
     this.objects = {};
     this.mediaDict = {};
+    this.isSavingHistory = true;
 };
 
 // SnapSerializer saving:
@@ -1795,7 +1796,7 @@ StageMorph.prototype.toXML = function (serializer) {
         serializer.store(this.globalBlocks),
         (ide && ide.globalVariables) ?
                     serializer.store(ide.globalVariables) : '',
-        serializer.historyXML(this.id),
+        serializer.isSavingHistory ? serializer.historyXML(this.id) : '',
         serializer.replayHistory()
     );
 };
@@ -1865,7 +1866,7 @@ SpriteMorph.prototype.toXML = function (serializer) {
         !this.customBlocks ?
                     '' : serializer.store(this.customBlocks),
         serializer.store(this.scripts),
-        serializer.historyXML(this.id)
+        serializer.isSavingHistory ? serializer.historyXML(this.id): ''
     );
 };
 
