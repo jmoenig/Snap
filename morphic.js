@@ -551,10 +551,23 @@
 
     Right before a morph is picked up its
 
+        selectForEdit
+
+    and
+
         prepareToBeGrabbed(handMorph)
 
-    method is invoked, if it is present. Immediately after the pick-up
-    the former parent's
+    methods are invoked, each if it is present. the optional
+
+        selectForEdit
+
+    if implemented, must return the object that is to be picked up.
+    In addition to just returning the original object chosen by the user
+    your method can also modify the target's environment and instead return
+    a copy of the selected morph if, for example, you would like to implement
+    a copy-on-write mechanism such as in Snap.
+
+    Immediately after the pick-up the former parent's
 
         reactToGrabOf(grabbedMorph)
 
@@ -582,6 +595,17 @@
         wantsDropOf(aMorph)
 
     method.
+
+    Right before dropping a morph the designated new parent's optional
+
+        selectForEdit
+
+    method is invoked if it is present. Again, if implemented this method
+    must return the new parent for the morph that is about to be dropped.
+    Again, in addition to just returning the designeted drop-target
+    your method can also modify its environment and instead return
+    a copy of the new parent if, for example, you would like to implement
+    a copy-on-write mechanism such as in Snap.
 
     Right after a morph has been dropped its
 
@@ -1137,7 +1161,7 @@
 
 /*global window, HTMLCanvasElement, FileReader, Audio, FileList*/
 
-var morphicVersion = '2017-June-02';
+var morphicVersion = '2017-June-22';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = getBlurredShadowSupport(); // check for Chrome-bug
 
@@ -10684,6 +10708,7 @@ HandMorph.prototype.drop = function () {
     if (this.children.length !== 0) {
         morphToDrop = this.children[0];
         target = this.dropTargetFor(morphToDrop);
+        target = target.selectForEdit ? target.selectForEdit() : target;
         this.changed();
         target.add(morphToDrop);
         morphToDrop.cachedFullImage = null;
@@ -10892,7 +10917,8 @@ HandMorph.prototype.processMouseMove = function (event) {
                     MorphicPreferences.grabThreshold)) {
             this.setPosition(this.grabPosition);
             if (this.morphToGrab.isDraggable) {
-                morph = this.morphToGrab;
+                morph = this.morphToGrab.selectForEdit ?
+                        this.morphToGrab.selectForEdit() : this.morphToGrab;
                 this.grab(morph);
             } else if (this.morphToGrab.isTemplate) {
                 morph = this.morphToGrab.fullCopy();
