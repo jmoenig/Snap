@@ -82,7 +82,7 @@ SpeechBubbleMorph, RingMorph, isNil, FileReader, TableDialogMorph,
 BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph*/
 
-modules.objects = '2017-June-21';
+modules.objects = '2017-June-22';
 
 var SpriteMorph;
 var StageMorph;
@@ -5186,7 +5186,8 @@ SpriteMorph.prototype.shadowedAttributes = function () {
 
 SpriteMorph.prototype.shadowAttribute = function (aName) {
     var ide, wardrobe,
-        myself = this;
+        myself = this,
+        pos;
     if (!this.inheritsAttribute(aName)) {
         return;
     }
@@ -5206,11 +5207,14 @@ SpriteMorph.prototype.shadowAttribute = function (aName) {
         this.costumes = wardrobe;
     } else if (aName === 'scripts') {
         ide.stage.threads.stopAllForReceiver(this);
+        pos = this.scripts.position();
         this.scripts = this.exemplar.scripts.fullCopy();
         if (ide && (contains(ide.currentSprite.allExemplars(), this))) {
             ide.createSpriteEditor();
             ide.fixLayout('selectSprite');
             this.scripts.fixMultiArgs();
+            this.scripts.setPosition(pos);
+            ide.spriteEditor.adjustScrollBars();
         }
         this.specimens().forEach(function (obj) {
             if (obj.inheritsAttribute('scripts')) {

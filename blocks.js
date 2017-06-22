@@ -150,7 +150,7 @@ CustomCommandBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2017-June-20';
+modules.blocks = '2017-June-22';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -3736,6 +3736,23 @@ BlockMorph.prototype.mouseClickLeft = function () {
     }
 };
 
+BlockMorph.prototype.selectForEdit = function () {
+    var rcvr = this.scriptTarget(),
+        selected;
+    if (rcvr.inheritsAttribute('scripts')) {
+        // copy on write:
+        this.selectionID = true;
+        rcvr.shadowAttribute('scripts');
+        selected = detect(rcvr.scripts.allChildren(), function (m) {
+            return m.selectionID;
+        });
+        delete this.selectionID;
+        delete selected.selectionID;
+        return selected;
+    }
+    return this;
+};
+
 BlockMorph.prototype.focus = function () {
     var scripts = this.parentThatIsA(ScriptsMorph),
         world = this.world(),
@@ -6600,6 +6617,17 @@ ScriptsMorph.prototype.mouseClickLeft = function (pos) {
         return this.edit(pos);
     }
     if (this.focus) {this.focus.stopEditing(); }
+};
+
+ScriptsMorph.prototype.selectForEdit = function () {
+    var rcvr = this.scriptTarget();
+    if (rcvr.inheritsAttribute('scripts')) {
+        // copy on write:
+        this.feedbackMorph.destroy();
+        rcvr.shadowAttribute('scripts');
+        return rcvr.scripts;
+    }
+    return this;
 };
 
 // ScriptsMorph keyboard support
@@ -12805,6 +12833,9 @@ CommentMorph.prototype.fullCopy = function () {
     var cpy = new CommentMorph(this.contents.text);
     cpy.isCollapsed = this.isCollapsed;
     cpy.setTextWidth(this.textWidth());
+    if (this.selectionID) { // for copy on write
+        cpy.selectionID = true;
+    }
     return cpy;
 };
 
@@ -12961,6 +12992,24 @@ CommentMorph.prototype.prepareToBeGrabbed = function (hand) {
         this.removeShadow();
         this.addShadow();
     }
+};
+
+CommentMorph.prototype.selectForEdit = function () {
+    var scripts = this.parentThatIsA(ScriptsMorph),
+        rcvr = scripts ? scripts.scriptTarget() : null,
+        selected;
+    if (rcvr && rcvr.inheritsAttribute('scripts')) {
+        // copy on write:
+        this.selectionID = true;
+        rcvr.shadowAttribute('scripts');
+        selected = detect(rcvr.scripts.allChildren(), function (m) {
+            return m.selectionID;
+        });
+        delete this.selectionID;
+        delete selected.selectionID;
+        return selected;
+    }
+    return this;
 };
 
 CommentMorph.prototype.snap = function (hand) {
