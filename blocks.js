@@ -728,6 +728,26 @@ SyntaxElementMorph.prototype.definesScriptVariable = function (name) {
             })));
 };
 
+// SyntaxElementMorph copy-on-write support:
+
+SyntaxElementMorph.prototype.selectForEdit = function () {
+    var ide = this.parentThatIsA(IDE_Morph),
+        rcvr = ide ? ide.currentSprite : null,
+        selected;
+    if (rcvr && rcvr.inheritsAttribute('scripts')) {
+        // copy on write:
+        this.selectionID = true;
+        rcvr.shadowAttribute('scripts');
+        selected = detect(rcvr.scripts.allChildren(), function (m) {
+            return m.selectionID;
+        });
+        delete this.selectionID;
+        delete selected.selectionID;
+        return selected;
+    }
+    return this;
+};
+
 // SyntaxElementMorph drag & drop:
 
 SyntaxElementMorph.prototype.reactToGrabOf = function (grabbedMorph) {
@@ -3736,23 +3756,6 @@ BlockMorph.prototype.mouseClickLeft = function () {
     }
 };
 
-BlockMorph.prototype.selectForEdit = function () {
-    var rcvr = this.scriptTarget(),
-        selected;
-    if (rcvr.inheritsAttribute('scripts')) {
-        // copy on write:
-        this.selectionID = true;
-        rcvr.shadowAttribute('scripts');
-        selected = detect(rcvr.scripts.allChildren(), function (m) {
-            return m.selectionID;
-        });
-        delete this.selectionID;
-        delete selected.selectionID;
-        return selected;
-    }
-    return this;
-};
-
 BlockMorph.prototype.focus = function () {
     var scripts = this.parentThatIsA(ScriptsMorph),
         world = this.world(),
@@ -6622,8 +6625,9 @@ ScriptsMorph.prototype.mouseClickLeft = function (pos) {
 };
 
 ScriptsMorph.prototype.selectForEdit = function () {
-    var rcvr = this.scriptTarget();
-    if (rcvr.inheritsAttribute('scripts')) {
+    var ide = this.parentThatIsA(IDE_Morph),
+        rcvr = ide ? ide.currentSprite : null;
+    if (rcvr && rcvr.inheritsAttribute('scripts')) {
         // copy on write:
         this.feedbackMorph.destroy();
         rcvr.shadowAttribute('scripts');
@@ -13002,23 +13006,8 @@ CommentMorph.prototype.prepareToBeGrabbed = function (hand) {
     }
 };
 
-CommentMorph.prototype.selectForEdit = function () {
-    var scripts = this.parentThatIsA(ScriptsMorph),
-        rcvr = scripts ? scripts.scriptTarget() : null,
-        selected;
-    if (rcvr && rcvr.inheritsAttribute('scripts')) {
-        // copy on write:
-        this.selectionID = true;
-        rcvr.shadowAttribute('scripts');
-        selected = detect(rcvr.scripts.allChildren(), function (m) {
-            return m.selectionID;
-        });
-        delete this.selectionID;
-        delete selected.selectionID;
-        return selected;
-    }
-    return this;
-};
+CommentMorph.prototype.selectForEdit =
+    SyntaxElementMorph.prototype.selectForEdit;
 
 CommentMorph.prototype.snap = function (hand) {
     // passing the hand is optional (for when blocks are dragged & dropped)
