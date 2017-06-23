@@ -3464,6 +3464,7 @@ Fixes:
 * Blocks: shadow inherited scripts on deleting blocks and comments via the context menu
 * Blocks: shadow inherited scripts on “clean up”
 * Blocks, Objects: shadow inherited scripts on keyboard entry
+* Blocks: shadow inherited scripts on input edit, ringify/unringify, relabel action
 
 
 Features:

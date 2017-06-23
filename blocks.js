@@ -2785,10 +2785,14 @@ BlockMorph.prototype.deleteBlock = function () {
 
 BlockMorph.prototype.ringify = function () {
     // wrap a Ring around me
-    var ring = new RingMorph(),
-        top = this.topBlock(),
-        center = top.fullBounds().center();
-
+    var ring, top, center,
+        target = this.selectForEdit(); // copy-on-edit
+    if (target !== this) {
+        return this.ringify.call(target);
+    }
+    ring = new RingMorph();
+    top = this.topBlock();
+    center = top.fullBounds().center();
     if (this.parent === null) {return null; }
     top.fullChanged();
     if (this.parent instanceof SyntaxElementMorph) {
@@ -2810,17 +2814,18 @@ BlockMorph.prototype.ringify = function () {
     }
     this.fixBlockColor(null, true);
     top.fullChanged();
-
 };
 
 BlockMorph.prototype.unringify = function () {
     // remove a Ring around me, if any
-    var ring = this.parent.parentThatIsA(RingMorph),
-        top = this.topBlock(),
-        scripts = this.parentThatIsA(ScriptsMorph),
-        block,
-        center;
-
+    var ring, top, center, scripts, block,
+        target = this.selectForEdit(); // copy-on-edit
+    if (target !== this) {
+        return this.unringify.call(target);
+    }
+    ring = this.parent.parentThatIsA(RingMorph);
+    top = this.topBlock();
+    scripts = this.parentThatIsA(ScriptsMorph);
     if (ring === null) {return null; }
     block = ring.contents();
     center = ring.center();
@@ -2845,9 +2850,14 @@ BlockMorph.prototype.unringify = function () {
 };
 
 BlockMorph.prototype.relabel = function (alternativeSelectors) {
-    var menu = new MenuMorph(this),
-        oldInputs = this.inputs(),
-        myself = this;
+    var menu, oldInputs, myself,
+        target = this.selectForEdit(); // copy-on-edit
+    if (target !== this) {
+        return this.relabel.call(target, alternativeSelectors);
+    }
+    menu = new MenuMorph(this);
+    oldInputs = this.inputs();
+    myself = this;
     alternativeSelectors.forEach(function (sel) {
         var block = SpriteMorph.prototype.blockForSelector(sel);
         block.restoreInputs(oldInputs);
@@ -4348,35 +4358,38 @@ CommandBlockMorph.prototype.isStop = function () {
 
 CommandBlockMorph.prototype.userDestroy = function () {
     var target = this.selectForEdit(); // enable copy-on-edit
-    if (target.nextBlock()) {
-        target.userDestroyJustThis();
+    if (target !== this) {
+        return this.userDestroy.call(target);
+    }
+    if (this.nextBlock()) {
+        this.userDestroyJustThis();
         return;
     }
 
-    var scripts = target.parentThatIsA(ScriptsMorph),
-        ide = target.parentThatIsA(IDE_Morph),
-        parent = target.parentThatIsA(SyntaxElementMorph),
-        cslot = target.parentThatIsA(CSlotMorph);
+    var scripts = this.parentThatIsA(ScriptsMorph),
+        ide = this.parentThatIsA(IDE_Morph),
+        parent = this.parentThatIsA(SyntaxElementMorph),
+        cslot = this.parentThatIsA(CSlotMorph);
 
     // for undrop / redrop
     if (scripts) {
         scripts.clearDropInfo();
-        scripts.lastDroppedBlock = target;
-        scripts.recordDrop(target.situation());
+        scripts.lastDroppedBlock = this;
+        scripts.recordDrop(this.situation());
         scripts.dropRecord.action = 'delete';
     }
 
     if (ide) {
         // also stop all active processes hatted by this block
-        ide.removeBlock(target);
+        ide.removeBlock(this);
     } else {
-        target.destroy();
+        this.destroy();
     }
     if (cslot) {
         cslot.fixLayout();
     }
     if (parent) {
-        parent.reactToGrabOf(target); // fix highlight
+        parent.reactToGrabOf(this); // fix highlight
     }
 };
 
@@ -5200,19 +5213,22 @@ ReporterBlockMorph.prototype.exportResultPic = function () {
 ReporterBlockMorph.prototype.userDestroy = function () {
     // make sure to restore default slot of parent block
     var target = this.selectForEdit(); // enable copy-on-edit
+    if (target !== this) {
+        return this.userDestroy.call(target);
+    }
 
     // for undrop / redrop
-    var scripts = target.parentThatIsA(ScriptsMorph);
+    var scripts = this.parentThatIsA(ScriptsMorph);
     if (scripts) {
         scripts.clearDropInfo();
-        scripts.lastDroppedBlock = target;
-        scripts.recordDrop(target.situation());
+        scripts.lastDroppedBlock = this;
+        scripts.recordDrop(this.situation());
         scripts.dropRecord.action = 'delete';
     }
 
-    target.topBlock().fullChanged();
-    target.prepareToBeGrabbed(target.world().hand);
-    target.destroy();
+    this.topBlock().fullChanged();
+    this.prepareToBeGrabbed(this.world().hand);
+    this.destroy();
 };
 
 // ReporterBlockMorph drawing:
@@ -7970,6 +7986,11 @@ InputSlotMorph.prototype.setContents = function (aStringOrFloat) {
     this.constant = isConstant ? aStringOrFloat : null;
 };
 
+InputSlotMorph.prototype.userSetContents = function (aStringOrFloat) {
+    // enable copy-on-edit for inherited scripts
+    this.selectForEdit().setContents(aStringOrFloat);
+};
+
 // InputSlotMorph drop-down menu:
 
 InputSlotMorph.prototype.dropDownMenu = function (enableKeyboard) {
@@ -7987,7 +8008,7 @@ InputSlotMorph.prototype.dropDownMenu = function (enableKeyboard) {
 InputSlotMorph.prototype.menuFromDict = function (choices, noEmptyOption) {
     var key,
         menu = new MenuMorph(
-            this.setContents,
+            this.userSetContents,
             null,
             this,
             this.fontSize
@@ -8433,10 +8454,15 @@ InputSlotMorph.prototype.fixLayout = function () {
 // InputSlotMorph events:
 
 InputSlotMorph.prototype.mouseDownLeft = function (pos) {
+    var world;
     if (this.isReadOnly || this.arrow().bounds.containsPoint(pos)) {
         this.escalateEvent('mouseDownLeft', pos);
     } else {
-        this.contents().edit();
+        world = this.world();
+        if (world) {
+            world.stopEditing();
+        }
+        this.selectForEdit().contents().edit();
     }
 };
 
@@ -9049,7 +9075,12 @@ BooleanSlotMorph.prototype.setContents = function (boolOrNull, silently) {
 };
 
 BooleanSlotMorph.prototype.toggleValue = function () {
-    var ide = this.parentThatIsA(IDE_Morph);
+    var target = this.selectForEdit(),
+        ide;
+    if (target !== this) {
+        return this.toggleValue.call(target);
+    }
+    ide = this.parentThatIsA(IDE_Morph);
     if (this.isStatic || this.isBinary()) {
         this.setContents(!this.value, true);
     } else {
@@ -11220,7 +11251,7 @@ ColorSlotMorph.prototype.getUserColor = function () {
 // ColorSlotMorph events:
 
 ColorSlotMorph.prototype.mouseClickLeft = function () {
-    this.getUserColor();
+    this.selectForEdit().getUserColor();
 };
 
 // ColorSlotMorph evaluating:
@@ -11616,29 +11647,30 @@ MultiArgMorph.prototype.mouseClickLeft = function (pos) {
         return;
     }
     // if the <shift> key is pressed, repeat action 3 times
-    var arrows = this.arrows(),
+    var target = this.selectForEdit(),
+        arrows = target.arrows(),
         leftArrow = arrows.children[0],
         rightArrow = arrows.children[1],
-        repetition = this.world().currentKey === 16 ? 3 : 1,
+        repetition = target.world().currentKey === 16 ? 3 : 1,
         i;
 
-    this.startLayout();
+    target.startLayout();
     if (rightArrow.bounds.containsPoint(pos)) {
         for (i = 0; i < repetition; i += 1) {
             if (rightArrow.isVisible) {
-                this.addInput();
+                target.addInput();
             }
         }
     } else if (leftArrow.bounds.containsPoint(pos)) {
         for (i = 0; i < repetition; i += 1) {
             if (leftArrow.isVisible) {
-                this.removeInput();
+                target.removeInput();
             }
         }
     } else {
-        this.escalateEvent('mouseClickLeft', pos);
+        target.escalateEvent('mouseClickLeft', pos);
     }
-    this.endLayout();
+    target.endLayout();
 };
 
 // MultiArgMorph menu:
