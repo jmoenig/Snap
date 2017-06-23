@@ -5207,12 +5207,16 @@ CursorMorph.prototype.init = function (aStringOrTextMorph) {
 
 CursorMorph.prototype.initializeClipboardHandler = function () {
     // Add hidden text box for copying and pasting
+    // Use an <input> not a <textarea> to prevent autocaps from taking affect.
     var myself = this,
         wrrld = this.target.world();
 
-    this.clipboardHandler = document.createElement('textarea');
+    this.clipboardHandler = document.createElement('input');
     this.clipboardHandler.style.position = 'absolute';
     this.clipboardHandler.style.right = '101%'; // placed just out of view
+    this.clipboardHandler.autocomplete = "off";
+    this.clipboardHandler.autocorrect = "off";
+    this.clipboardHandler.autocapitalize = "off";
 
     document.body.appendChild(this.clipboardHandler);
 
