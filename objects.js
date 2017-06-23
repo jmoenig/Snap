@@ -82,7 +82,7 @@ SpeechBubbleMorph, RingMorph, isNil, FileReader, TableDialogMorph,
 BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph*/
 
-modules.objects = '2017-June-22';
+modules.objects = '2017-June-23';
 
 var SpriteMorph;
 var StageMorph;
@@ -6449,7 +6449,9 @@ StageMorph.prototype.editScripts = function () {
         scripts,
         sorted;
     if (ide.isAppMode || !ScriptsMorph.prototype.enableKeyboard) {return; }
-    scripts = this.parentThatIsA(IDE_Morph).currentSprite.scripts;
+    scripts = this.parentThatIsA(
+        IDE_Morph
+    ).currentSprite.scripts.selectForEdit(); // shadow on edit, if inherited
     scripts.edit(scripts.position());
     sorted = scripts.focus.sortedScripts();
     if (sorted.length) {

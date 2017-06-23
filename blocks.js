@@ -3723,7 +3723,7 @@ BlockMorph.prototype.mouseClickLeft = function () {
         shiftClicked = this.world().currentKey === 16,
         stage;
     if (shiftClicked && !this.isTemplate) {
-        return this.focus();
+        return this.selectForEdit().focus(); // enable coopy-on-edit
     }
     if (top instanceof PrototypeHatBlockMorph) {
         return top.mouseClickLeft();
@@ -6635,12 +6635,14 @@ ScriptsMorph.prototype.selectForEdit = function () {
 // ScriptsMorph keyboard support
 
 ScriptsMorph.prototype.edit = function (pos) {
+    var target;
     var world = this.world();
     if (this.focus) {this.focus.stopEditing(); }
     world.stopEditing();
     if (!ScriptsMorph.prototype.enableKeyboard) {return; }
-    this.focus = new ScriptFocusMorph(this, this, pos);
-    this.focus.getFocus(world);
+    target = this.selectForEdit(); // enable copy-on-edit
+    target.focus = new ScriptFocusMorph(target, target, pos);
+    target.focus.getFocus(world);
 };
 
 // ScriptsMorph context - scripts target
