@@ -3462,6 +3462,7 @@ Fixes:
 170623
 ------
 * Blocks: shadow inherited scripts on deleting blocks and comments via the context menu
+* Blocks: shadow inherited scripts on “clean up”
 
 
 Features:

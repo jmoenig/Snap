@@ -6210,28 +6210,28 @@ ScriptsMorph.prototype.userMenu = function () {
 // ScriptsMorph user menu features:
 
 ScriptsMorph.prototype.cleanUp = function () {
-    var origin = this.topLeft(),
-        y = this.cleanUpMargin,
-        myself = this;
-    this.children.sort(function (a, b) {
+    var target = this.selectForEdit(), // enable copy-on-edit
+        origin = target.topLeft(),
+        y = target.cleanUpMargin;
+    target.children.sort(function (a, b) {
         // make sure the prototype hat block always stays on top
         return a instanceof PrototypeHatBlockMorph ? 0 : a.top() - b.top();
     }).forEach(function (child) {
         if (child instanceof CommentMorph && child.block) {
             return; // skip anchored comments
         }
-        child.setPosition(origin.add(new Point(myself.cleanUpMargin, y)));
+        child.setPosition(origin.add(new Point(target.cleanUpMargin, y)));
         if (child instanceof BlockMorph) {
             child.allComments().forEach(function (comment) {
                 comment.align(child, true); // ignore layer
             });
         }
-        y += child.stackHeight() + myself.cleanUpSpacing;
+        y += child.stackHeight() + target.cleanUpSpacing;
     });
-    if (this.parent) {
-        this.setPosition(this.parent.topLeft());
+    if (target.parent) {
+        target.setPosition(target.parent.topLeft());
     }
-    this.adjustBounds();
+    target.adjustBounds();
 };
 
 ScriptsMorph.prototype.exportScriptsPicture = function () {
