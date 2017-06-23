@@ -3459,6 +3459,10 @@ Fixes:
 * Morphic: support for copy-on-write worlds (“selectForEdit”)
 * Blocks, Objects: shadow inherited scripts on dragging & dropping blocks and comments
 
+170623
+------
+* Blocks: shadow inherited scripts on deleting blocks and comments via the context menu
+
 
 Features:
 * polymorphic sprite-local custom blocks

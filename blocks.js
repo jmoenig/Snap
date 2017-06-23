@@ -150,7 +150,7 @@ CustomCommandBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2017-June-22';
+modules.blocks = '2017-June-23';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -4344,35 +4344,36 @@ CommandBlockMorph.prototype.isStop = function () {
 // CommandBlockMorph deleting
 
 CommandBlockMorph.prototype.userDestroy = function () {
-    if (this.nextBlock()) {
-        this.userDestroyJustThis();
+    var target = this.selectForEdit(); // enable copy-on-edit
+    if (target.nextBlock()) {
+        target.userDestroyJustThis();
         return;
     }
 
-    var scripts = this.parentThatIsA(ScriptsMorph),
-        ide = this.parentThatIsA(IDE_Morph),
-        parent = this.parentThatIsA(SyntaxElementMorph),
-        cslot = this.parentThatIsA(CSlotMorph);
+    var scripts = target.parentThatIsA(ScriptsMorph),
+        ide = target.parentThatIsA(IDE_Morph),
+        parent = target.parentThatIsA(SyntaxElementMorph),
+        cslot = target.parentThatIsA(CSlotMorph);
 
     // for undrop / redrop
     if (scripts) {
         scripts.clearDropInfo();
-        scripts.lastDroppedBlock = this;
-        scripts.recordDrop(this.situation());
+        scripts.lastDroppedBlock = target;
+        scripts.recordDrop(target.situation());
         scripts.dropRecord.action = 'delete';
     }
 
     if (ide) {
         // also stop all active processes hatted by this block
-        ide.removeBlock(this);
+        ide.removeBlock(target);
     } else {
-        this.destroy();
+        target.destroy();
     }
     if (cslot) {
         cslot.fixLayout();
     }
     if (parent) {
-        parent.reactToGrabOf(this); // fix highlight
+        parent.reactToGrabOf(target); // fix highlight
     }
 };
 
@@ -5195,19 +5196,20 @@ ReporterBlockMorph.prototype.exportResultPic = function () {
 
 ReporterBlockMorph.prototype.userDestroy = function () {
     // make sure to restore default slot of parent block
+    var target = this.selectForEdit(); // enable copy-on-edit
 
     // for undrop / redrop
-    var scripts = this.parentThatIsA(ScriptsMorph);
+    var scripts = target.parentThatIsA(ScriptsMorph);
     if (scripts) {
         scripts.clearDropInfo();
-        scripts.lastDroppedBlock = this;
-        scripts.recordDrop(this.situation());
+        scripts.lastDroppedBlock = target;
+        scripts.recordDrop(target.situation());
         scripts.dropRecord.action = 'delete';
     }
 
-    this.topBlock().fullChanged();
-    this.prepareToBeGrabbed(this.world().hand);
-    this.destroy();
+    target.topBlock().fullChanged();
+    target.prepareToBeGrabbed(target.world().hand);
+    target.destroy();
 };
 
 // ReporterBlockMorph drawing:
@@ -12942,7 +12944,7 @@ CommentMorph.prototype.userMenu = function () {
         },
         'make a copy\nand pick it up'
     );
-    menu.addItem("delete", 'destroy');
+    menu.addItem("delete", 'userDestroy');
     menu.addItem(
         "comment pic...",
         function () {
@@ -12957,6 +12959,10 @@ CommentMorph.prototype.userMenu = function () {
         'open a new window\nwith a picture of this comment'
     );
     return menu;
+};
+
+CommentMorph.prototype.userDestroy = function () {
+    this.selectForEdit().destroy(); // enable copy-on-edit
 };
 
 // CommentMorph hiding and showing:
