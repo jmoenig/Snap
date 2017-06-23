@@ -214,6 +214,7 @@ ActionManager.prototype.isCollaborating = function() {
 
 ActionManager.prototype.initialize = function() {
     this.serializer = new SnapSerializer();
+    this.serializer.idProperty = 'actionSerializationID';
     this._ws = null;
     this.supportsCollaboration = null;
     this.isLeader = true;
