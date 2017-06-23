@@ -1797,7 +1797,7 @@ StageMorph.prototype.toXML = function (serializer) {
         (ide && ide.globalVariables) ?
                     serializer.store(ide.globalVariables) : '',
         serializer.isSavingHistory ? serializer.historyXML(this.id) : '',
-        serializer.replayHistory()
+        serializer.isSavingHistory ? serializer.replayHistory() : ''
     );
 };
 
