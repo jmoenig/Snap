@@ -3470,6 +3470,7 @@ Fixes:
 ------
 * Threads: tweaked error-catching & handling for receiver-less scripts
 * Blocks: experimented with first-class sounds, deferred for now
+* corrected a typo in the German translation. Thanks, Jadga, for reporting this!
 
 
 Features:
