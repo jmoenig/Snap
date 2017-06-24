@@ -3466,6 +3466,11 @@ Fixes:
 * Blocks, Objects: shadow inherited scripts on keyboard entry
 * Blocks: shadow inherited scripts on input edit, ringify/unringify, relabel action
 
+170624
+------
+* Threads: tweaked error-catching & handling for receiver-less scripts
+* Blocks: experimented with first-class sounds, deferred for now
+
 
 Features:
 * polymorphic sprite-local custom blocks

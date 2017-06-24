@@ -150,7 +150,7 @@ CustomCommandBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2017-June-23';
+modules.blocks = '2017-June-24';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -8233,6 +8233,7 @@ InputSlotMorph.prototype.gettablesMenu = function () {
     }
     dict.name = ['name'];
     dict.costumes = ['costumes'];
+    // dict.sounds = ['sounds'];
     dict['dangling?'] = ['dangling?'];
     dict['rotation x'] = ['rotation x'];
     dict['rotation y'] = ['rotation y'];

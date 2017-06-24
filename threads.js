@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph,
 TableFrameMorph, ColorSlotMorph, isSnapObject*/
 
-modules.threads = '2017-June-20';
+modules.threads = '2017-June-24';
 
 var ThreadManager;
 var Process;
@@ -965,7 +965,8 @@ Process.prototype.handleError = function (error, element) {
             + error.name
             + '\n'
             + error.message,
-        this.exportResult
+        this.exportResult,
+        this.receiver
     );
 };
 
@@ -3041,6 +3042,10 @@ Process.prototype.reportGet = function (query) {
             return thisObj.parentThatIsA(StageMorph);
         case 'costumes':
             return thisObj.reportCostumes();
+        /*
+        case 'sounds':
+            return thisObj.sounds;
+        */
         }
     }
     return '';
