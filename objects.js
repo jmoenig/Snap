@@ -68,7 +68,7 @@
 // Global stuff ////////////////////////////////////////////////////////
 
 /*global PaintEditorMorph, ListWatcherMorph, PushButtonMorph, ToggleMorph,
-DialogBoxMorph, InputFieldMorph, SpriteIconMorph, BlockMorph,
+DialogBoxMorph, InputFieldMorph, SpriteIconMorph, BlockMorph, SymbolMorph,
 ThreadManager, VariableFrame, detect, BlockMorph, BoxMorph, Color,
 CommandBlockMorph, FrameMorph, HatBlockMorph, MenuMorph, Morph, MultiArgMorph,
 Point, ReporterBlockMorph, ScriptsMorph, StringMorph, SyntaxElementMorph,
@@ -82,7 +82,7 @@ SpeechBubbleMorph, RingMorph, isNil, FileReader, TableDialogMorph,
 BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph*/
 
-modules.objects = '2017-June-23';
+modules.objects = '2017-June-26';
 
 var SpriteMorph;
 var StageMorph;
@@ -3035,7 +3035,7 @@ SpriteMorph.prototype.addSound = function (audio, name) {
 
 SpriteMorph.prototype.playSound = function (name) {
     var stage = this.parentThatIsA(StageMorph),
-        sound = detect(
+        sound = name instanceof Sound ? name : detect(
             this.sounds.asArray(),
             function (s) {return s.name === name; }
         ),
@@ -7409,6 +7409,8 @@ SpriteBubbleMorph.prototype.dataAsMorph = function (data, toggle) {
         contents.silentSetWidth(img.width);
         contents.silentSetHeight(img.height);
         contents.image = img;
+    } else if (data instanceof Sound) {
+        contents = new SymbolMorph('notes', 30);
     } else if (data instanceof HTMLCanvasElement) {
         contents = new Morph();
         contents.silentSetWidth(data.width);
@@ -8309,6 +8311,8 @@ CellMorph.prototype.drawNew = function (toggle, type) {
             this.contentsMorph.silentSetWidth(img.width);
             this.contentsMorph.silentSetHeight(img.height);
             this.contentsMorph.image = img;
+        } else if (this.contents instanceof Sound) {
+            this.contentsMorph = new SymbolMorph('notes', 30);
         } else if (this.contents instanceof List) {
             if ('table' === type || (!toggle && this.contents.isTable())) {
                 this.contentsMorph = new TableFrameMorph(new TableMorph(

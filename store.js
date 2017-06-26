@@ -61,7 +61,7 @@ normalizeCanvas, contains*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2017-May-31';
+modules.store = '2017-June-26';
 
 
 // XML_Serializer ///////////////////////////////////////////////////////
@@ -1207,6 +1207,7 @@ SnapSerializer.prototype.loadValue = function (model, object) {
             myself.mediaDict[model.attributes.mediaID] = v;
         }
     }
+
     switch (model.tag) {
     case 'ref':
         if (Object.prototype.hasOwnProperty.call(model.attributes, 'id')) {
@@ -1443,6 +1444,7 @@ SnapSerializer.prototype.loadValue = function (model, object) {
             )) {
             myself.mediaDict[model.attributes.mediaID] = v;
         }
+        record();
         return v;
     }
     return undefined;

@@ -141,7 +141,7 @@ Color, ColorPaletteMorph, FrameMorph, Function, HandleMorph, Math, MenuMorph,
 Morph, MorphicPreferences, Object, Point, ScrollFrameMorph, ShadowMorph,
 String, StringMorph, TextMorph, WorldMorph, contains, degrees, detect,
 document, getDocumentPositionOf, isNaN, isString, newCanvas, nop, parseFloat,
-radians, useBlurredShadows, SpeechBubbleMorph, modules, StageMorph,
+radians, useBlurredShadows, SpeechBubbleMorph, modules, StageMorph, Sound,
 fontHeight, TableFrameMorph, SpriteMorph, Context, ListWatcherMorph,
 CellMorph, DialogBoxMorph, BlockInputFragmentMorph, PrototypeHatBlockMorph,
 Costume, IDE_Morph, BlockDialogMorph, BlockEditorMorph, localize, isNil,
@@ -150,7 +150,7 @@ CustomCommandBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2017-June-24';
+modules.blocks = '2017-June-26';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -181,13 +181,12 @@ var ScriptFocusMorph;
 
 WorldMorph.prototype.customMorphs = function () {
     // add examples to the world's demo menu
-
     return [];
 
 /*
     return [
         new SymbolMorph(
-            'turnForward',
+            'notes',
             50,
             new Color(250, 250, 250),
             new Point(-1, -1),
@@ -1948,6 +1947,8 @@ SyntaxElementMorph.prototype.showBubble = function (value, exportPic, target) {
         morphToShow.silentSetWidth(img.width);
         morphToShow.silentSetHeight(img.height);
         morphToShow.image = img;
+    } else if (value instanceof Sound) {
+        morphToShow = new SymbolMorph('notes', 30);
     } else if (value instanceof Context) {
         img = value.image();
         morphToShow = new Morph();
@@ -8233,7 +8234,7 @@ InputSlotMorph.prototype.gettablesMenu = function () {
     }
     dict.name = ['name'];
     dict.costumes = ['costumes'];
-    // dict.sounds = ['sounds'];
+    dict.sounds = ['sounds'];
     dict['dangling?'] = ['dangling?'];
     dict['rotation x'] = ['rotation x'];
     dict['rotation y'] = ['rotation y'];
@@ -9823,7 +9824,8 @@ SymbolMorph.prototype.names = [
     'arrowRight',
     'arrowRightOutline',
     'robot',
-    'magnifiyingGlass'
+    'magnifyingGlass',
+    'notes'
 ];
 
 // SymbolMorph instance creation:
@@ -9993,8 +9995,10 @@ SymbolMorph.prototype.symbolCanvasColored = function (aColor) {
         return this.drawSymbolArrowRightOutline(canvas, aColor);
     case 'robot':
         return this.drawSymbolRobot(canvas, aColor);
-    case 'magnifiyingGlass':
+    case 'magnifyingGlass':
         return this.drawSymbolMagnifyingGlass(canvas, aColor);
+    case 'notes':
+        return this.drawSymbolNotes(canvas, aColor);
     default:
         return canvas;
     }
@@ -11170,6 +11174,42 @@ SymbolMorph.prototype.drawSymbolMagnifyingGlass = function (canvas, color) {
     ctx.closePath();
     ctx.stroke();
 
+    return canvas;
+};
+
+SymbolMorph.prototype.drawSymbolNotes = function (canvas, color) {
+    // answer a canvas showing two musical notes
+    var ctx = canvas.getContext('2d'),
+        size = canvas.width,
+        r = size / 6,
+        l = Math.max(r / 3, 1);
+
+    ctx.strokeStyle = color.toString();
+    ctx.fillStyle = color.toString();
+
+    ctx.arc(r, size - r, r, radians(0), radians(360), false);
+    ctx.fill();
+    ctx.arc(size - r, size - (r * 2), r, radians(0), radians(360), false);
+    ctx.fill();
+
+    ctx.beginPath();
+    ctx.moveTo(r * 2 - l, r);
+    ctx.lineTo(size, 0);
+    ctx.lineTo(size, r);
+    ctx.lineTo(r * 2 - l, r * 2);
+    ctx.closePath();
+    ctx.fill();
+
+    ctx.lineWidth = l;
+    ctx.beginPath();
+    ctx.moveTo(r * 2 - (l / 2), size - r);
+    ctx.lineTo(r * 2 - (l / 2), r + l);
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.moveTo(size - (l / 2), size - (r * 2));
+    ctx.lineTo(size - (l / 2), l);
+    ctx.stroke();
     return canvas;
 };
 
