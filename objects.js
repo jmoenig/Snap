@@ -122,6 +122,7 @@ SpriteMorph.prototype.attributes =
         'size',
         'costumes',
         'costume #',
+        'sounds',
         'scripts'
     ];
 
@@ -3030,6 +3031,7 @@ SpriteMorph.prototype.reportCostumes = function () {
 // SpriteMorph sound management
 
 SpriteMorph.prototype.addSound = function (audio, name) {
+    this.shadowAttribute('sounds');
     this.sounds.add(new Sound(audio, name));
 };
 
@@ -5185,7 +5187,7 @@ SpriteMorph.prototype.shadowedAttributes = function () {
 };
 
 SpriteMorph.prototype.shadowAttribute = function (aName) {
-    var ide, wardrobe,
+    var ide, wardrobe, jukebox,
         myself = this,
         pos;
     if (!this.inheritsAttribute(aName)) {
@@ -5205,6 +5207,12 @@ SpriteMorph.prototype.shadowAttribute = function (aName) {
             }
         });
         this.costumes = wardrobe;
+    } else if (aName === 'sounds') {
+        jukebox = new List();
+        this.sounds.asArray().forEach(function (sound) {
+            jukebox.add(sound.copy());
+        });
+        this.sounds = jukebox;
     } else if (aName === 'scripts') {
         ide.stage.threads.stopAllForReceiver(this);
         pos = this.scripts.position();
@@ -5236,6 +5244,8 @@ SpriteMorph.prototype.inheritAttribute = function (aName) {
         this.inheritedAttributes.push(aName);
         if (aName === 'costumes') {
             this.costumes = this.exemplar.costumes;
+        } else if (aName === 'sounds') {
+            this.sounds = this.exemplar.sounds;
         } else {
             this.refreshInheritedAttribute(aName);
             if (ide) {

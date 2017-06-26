@@ -3476,12 +3476,13 @@ Fixes:
 ------
 * Objects, Blocks, Threads, Tables, Store: First-Class Sounds
 * Block: new musical “notes” symbol
+* Objects, Blocks, Threads, GUI: inheritance support for sounds
 
 
 Features:
 * polymorphic sprite-local custom blocks
 * inheritance of sprite-local custom blocks
-* inheritance of sprite attributes (x, y, direction, size, costumes, costume #, scripts)
+* inheritance of sprite attributes (x, y, direction, size, costumes, costume #, sounds, scripts)
 * first-class costumes and sounds
 * localization support when typing expressions
 * support for user-forced line-breaks in custom block labels

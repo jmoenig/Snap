@@ -730,10 +730,11 @@ SyntaxElementMorph.prototype.definesScriptVariable = function (name) {
 // SyntaxElementMorph copy-on-write support:
 
 SyntaxElementMorph.prototype.selectForEdit = function () {
-    var ide = this.parentThatIsA(IDE_Morph),
+    var scripts = this.parentThatIsA(ScriptsMorph),
+        ide = this.parentThatIsA(IDE_Morph),
         rcvr = ide ? ide.currentSprite : null,
         selected;
-    if (rcvr && rcvr.inheritsAttribute('scripts')) {
+    if (scripts && rcvr && rcvr.inheritsAttribute('scripts')) {
         // copy on write:
         this.selectionID = true;
         rcvr.shadowAttribute('scripts');

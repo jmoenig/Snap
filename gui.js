@@ -7761,6 +7761,7 @@ SoundIconMorph.prototype.renameSound = function () {
     var sound = this.object,
         ide = this.parentThatIsA(IDE_Morph),
         myself = this;
+    this.disinherit();
     (new DialogBoxMorph(
         null,
         function (answer) {
@@ -7791,9 +7792,21 @@ SoundIconMorph.prototype.createBackgrounds
 SoundIconMorph.prototype.createLabel
     = SpriteIconMorph.prototype.createLabel;
 
+// SoundIconMorph inheritance
+
+SoundIconMorph.prototype.disinherit = function () {
+    var jukebox = this.parentThatIsA(JukeboxMorph),
+        idx = this.parent.children.indexOf(this);
+    if (jukebox.sprite.inheritsAttribute('sounds')) {
+        jukebox.sprite.shadowAttribute('sounds');
+        this.object = jukebox.sprite.sounds.at(idx);
+    }
+};
+
 // SoundIconMorph drag & drop
 
 SoundIconMorph.prototype.prepareToBeGrabbed = function () {
+    this.disinherit();
     this.removeSound();
 };
 
@@ -7816,7 +7829,7 @@ function JukeboxMorph(aSprite, sliderColor) {
 JukeboxMorph.prototype.init = function (aSprite, sliderColor) {
     // additional properties
     this.sprite = aSprite || new SpriteMorph();
-    this.costumesVersion = null;
+    this.soundsVersion = null;
     this.spriteVersion = null;
 
     // initialize inherited properties
@@ -7867,6 +7880,7 @@ JukeboxMorph.prototype.updateList = function () {
         myself.addContents(icon);
         y = icon.bottom() + padding;
     });
+    this.soundsVersion = this.sprite.costumes.lastChanged;
 
     Morph.prototype.trackChanges = oldFlag;
     this.changed();
@@ -7883,13 +7897,14 @@ JukeboxMorph.prototype.updateSelection = function () {
 
 // Jukebox stepping
 
-/*
 JukeboxMorph.prototype.step = function () {
+    if (this.soundsVersion !== this.sprite.sounds.lastChanged) {
+        this.updateList();
+    }
     if (this.spriteVersion !== this.sprite.version) {
         this.updateSelection();
     }
 };
-*/
 
 // Jukebox ops
 
@@ -7915,6 +7930,8 @@ JukeboxMorph.prototype.reactToDropOf = function (icon) {
             idx += 1;
         }
     });
+
+    this.sprite.shadowAttribute('sounds');
     this.sprite.sounds.add(costume, idx);
     this.updateList();
 };
