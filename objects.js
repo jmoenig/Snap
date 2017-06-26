@@ -5139,7 +5139,9 @@ SpriteMorph.prototype.setExemplar = function (another) {
         ide.flushBlocksCache('variables');
         ide.refreshPalette();
     }
-    another.cachedSpecimens = null;
+    if (another) {
+        another.cachedSpecimens = null;
+    }
 };
 
 SpriteMorph.prototype.allExemplars = function () {

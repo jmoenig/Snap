@@ -730,8 +730,17 @@ SnapSerializer.prototype.loadObject = function (object, model) {
         dispatches = model.childNamed('dispatches');
     this.loadInheritanceInfo(object, model);
     this.loadNestingInfo(object, model);
-    this.loadCostumes(object, model);
+
+    // loads costumes unless they're inherited
+    if (object.inheritanceInfo &&
+            (object.inheritanceInfo.delegated instanceof Array) &&
+            contains(object.inheritanceInfo.delegated, 'costumes')) {
+    } else {
+        this.loadCostumes(object, model);
+    }
+
     this.loadSounds(object, model);
+
     this.loadCustomBlocks(object, blocks);
     if (dispatches) {
         this.loadCustomBlocks(object, dispatches, false, true);
@@ -1616,6 +1625,8 @@ SpriteMorph.prototype.toXML = function (serializer) {
     var stage = this.parentThatIsA(StageMorph),
         ide = stage ? stage.parentThatIsA(IDE_Morph) : null,
         idx = ide ? ide.sprites.asArray().indexOf(this) + 1 : 0,
+        noCostumes = this.inheritsAttribute('costumes'),
+        noSounds = this.inheritsAttribute('sounds'),
         noScripts = this.inheritsAttribute('scripts');
 
     return serializer.format(
@@ -1628,8 +1639,8 @@ SpriteMorph.prototype.toXML = function (serializer) {
             ' costume="@" color="@,@,@" pen="@" ~>' +
             '%' + // inheritance info
             '%' + // nesting info
-            '<costumes>%</costumes>' +
-            '<sounds>%</sounds>' +
+            (noCostumes ? '%' : '<costumes>%</costumes>') +
+            (noSounds ? '%' : '<sounds>%</sounds>') +
             '<blocks>%</blocks>' +
             '<variables>%</variables>' +
             (this.exemplar ? '<dispatches>%</dispatches>' : '%') +
@@ -1675,13 +1686,11 @@ SpriteMorph.prototype.toXML = function (serializer) {
                     + '"/>'
             : '',
 
-        serializer.store(this.costumes, this.name + '_cst'),
-        serializer.store(this.sounds, this.name + '_snd'),
-        !this.customBlocks ?
-                    '' : serializer.store(this.customBlocks),
+        noCostumes ? '' : serializer.store(this.costumes, this.name + '_cst'),
+        noSounds ? '' : serializer.store(this.sounds, this.name + '_snd'),
+        !this.customBlocks ? '' : serializer.store(this.customBlocks),
         serializer.store(this.variables),
-        this.exemplar ?
-                serializer.store(this.inheritedMethods()) : '',
+        this.exemplar ? serializer.store(this.inheritedMethods()) : '',
         noScripts ? '' : serializer.store(this.scripts)
     );
 };
