@@ -61,7 +61,7 @@ normalizeCanvas, contains*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2017-June-26';
+modules.store = '2017-June-27';
 
 
 // XML_Serializer ///////////////////////////////////////////////////////
@@ -489,14 +489,32 @@ SnapSerializer.prototype.rawLoadProjectModel = function (xmlNode) {
         }
     });
     myself.project.stage.children.forEach(function (sprite) {
-        delete sprite.inheritanceInfo;
+        var costume;
         if (sprite.nestingInfo) { // only sprites may have nesting info
             sprite.nestingScale = +(sprite.nestingInfo.scale || sprite.scale);
             delete sprite.nestingInfo;
         }
-        if (sprite.inheritsAttribute('scripts')) {
-            sprite.refreshInheritedAttribute('scripts');
+        ['scripts', 'costumes', 'sounds'].forEach(function (att) {
+            if (sprite.inheritsAttribute(att)) {
+                sprite.refreshInheritedAttribute(att);
+            }
+        });
+        if (sprite.inheritsAttribute('costumes')) {
+            costume = sprite.costumes.asArray()[
+                sprite.inheritanceInfo.costumeNumber - 1
+            ];
+            if (costume) {
+                if (costume.loaded) {
+                    sprite.wearCostume(costume, true);
+                } else {
+                    costume.loaded = function () {
+                        sprite.wearCostume(costume, true);
+                        this.loaded = true;
+                    };
+                }
+            }
         }
+        delete sprite.inheritanceInfo;
     });
 
     /* Global Variables */
@@ -731,15 +749,19 @@ SnapSerializer.prototype.loadObject = function (object, model) {
     this.loadInheritanceInfo(object, model);
     this.loadNestingInfo(object, model);
 
-    // loads costumes unless they're inherited
-    if (object.inheritanceInfo &&
+    // load costumes unless they're inherited
+    if (!(object.inheritanceInfo &&
             (object.inheritanceInfo.delegated instanceof Array) &&
-            contains(object.inheritanceInfo.delegated, 'costumes')) {
-    } else {
+            contains(object.inheritanceInfo.delegated, 'costumes'))) {
         this.loadCostumes(object, model);
     }
 
-    this.loadSounds(object, model);
+    // load sounds unless they're inherited
+    if (!(object.inheritanceInfo &&
+            (object.inheritanceInfo.delegated instanceof Array) &&
+            contains(object.inheritanceInfo.delegated, 'sounds'))) {
+        this.loadSounds(object, model);
+    }
 
     this.loadCustomBlocks(object, blocks);
     if (dispatches) {
@@ -748,13 +770,12 @@ SnapSerializer.prototype.loadObject = function (object, model) {
     this.populateCustomBlocks(object, blocks);
     this.loadVariables(object.variables, model.require('variables'), object);
 
-    // loads scripts unless they're inherited
-    if (object.inheritanceInfo &&
+    // load scripts unless they're inherited
+    if (!(object.inheritanceInfo &&
             (object.inheritanceInfo.delegated instanceof Array) &&
-            contains(object.inheritanceInfo.delegated, 'scripts')) {
-        return;
+            contains(object.inheritanceInfo.delegated, 'scripts'))) {
+        this.loadScripts(object, object.scripts, model.require('scripts'));
     }
-    this.loadScripts(object, object.scripts, model.require('scripts'));
 
     // note: the dispatches cache isn't cleared until after
     // *all* objects are loaded
@@ -771,6 +792,7 @@ SnapSerializer.prototype.loadInheritanceInfo = function (object, model) {
             object.inheritanceInfo.delegated =
                 this.loadValue(delegated).asArray();
         }
+        object.inheritanceInfo.costumeNumber = model.attributes.costume;
     }
 };
 
@@ -796,10 +818,10 @@ SnapSerializer.prototype.loadCostumes = function (object, model) {
         costume = object.costumes.asArray()[model.attributes.costume - 1];
         if (costume) {
             if (costume.loaded) {
-                object.wearCostume(costume);
+                object.wearCostume(costume, true);
             } else {
                 costume.loaded = function () {
-                    object.wearCostume(costume);
+                    object.wearCostume(costume, true);
                     this.loaded = true;
                 };
             }
