@@ -82,7 +82,7 @@ SpeechBubbleMorph, RingMorph, isNil, FileReader, TableDialogMorph,
 BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph*/
 
-modules.objects = '2017-June-26';
+modules.objects = '2017-June-27';
 
 var SpriteMorph;
 var StageMorph;
@@ -5209,12 +5209,22 @@ SpriteMorph.prototype.shadowAttribute = function (aName) {
             }
         });
         this.costumes = wardrobe;
+        this.specimens().forEach(function (obj) {
+            if (obj.inheritsAttribute('costumes')) {
+                obj.refreshInheritedAttribute('costumes');
+            }
+        });
     } else if (aName === 'sounds') {
         jukebox = new List();
         this.sounds.asArray().forEach(function (sound) {
             jukebox.add(sound.copy());
         });
         this.sounds = jukebox;
+        this.specimens().forEach(function (obj) {
+            if (obj.inheritsAttribute('sounds')) {
+                obj.refreshInheritedAttribute('sounds');
+            }
+        });
     } else if (aName === 'scripts') {
         ide.stage.threads.stopAllForReceiver(this);
         pos = this.scripts.position();
@@ -5244,22 +5254,16 @@ SpriteMorph.prototype.inheritAttribute = function (aName) {
     }
     if (!this.inheritsAttribute(aName)) {
         this.inheritedAttributes.push(aName);
-        if (aName === 'costumes') {
-            this.costumes = this.exemplar.costumes;
-        } else if (aName === 'sounds') {
-            this.sounds = this.exemplar.sounds;
-        } else {
-            this.refreshInheritedAttribute(aName);
-            if (ide) {
-                ide.flushBlocksCache(); // optimization: specify category
-                ide.refreshPalette();
-            }
+        this.refreshInheritedAttribute(aName);
+        if (ide) {
+            ide.flushBlocksCache(); // optimization: specify category
+            ide.refreshPalette();
         }
     }
 };
 
 SpriteMorph.prototype.refreshInheritedAttribute = function (aName) {
-    var ide;
+    var ide, idx;
     switch (aName) {
     case 'x position':
     case 'y position':
@@ -5273,6 +5277,24 @@ SpriteMorph.prototype.refreshInheritedAttribute = function (aName) {
         break;
     case 'costume #':
         this.doSwitchToCostume(this.getCostumeIdx(), true);
+        break;
+    case 'costumes':
+        idx = this.getCostumeIdx();
+        this.costumes = this.exemplar.costumes;
+        this.doSwitchToCostume(idx, true);
+        this.specimens().forEach(function (sprite) {
+            if (sprite.inheritsAttribute('costumes')) {
+                sprite.refreshInheritedAttribute('costumes');
+            }
+        });
+        break;
+    case 'sounds':
+        this.sounds = this.exemplar.sounds;
+        this.specimens().forEach(function (sprite) {
+            if (sprite.inheritsAttribute('sounds')) {
+                sprite.refreshInheritedAttribute('sounds');
+            }
+        });
         break;
     case 'scripts':
         this.scripts = this.exemplar.scripts;
@@ -7779,6 +7801,11 @@ Costume.prototype.edit = function (aWorld, anIDE, isnew, oncancel, onsubmit) {
                     myself.shrinkWrap();
                 }
                 anIDE.currentSprite.wearCostume(myself);
+                anIDE.currentSprite.allSpecimens().forEach(function (obj) {
+                    if (obj.costume === myself) {
+                        obj.wearCostume(myself);
+                    }
+                });
                 anIDE.hasChangedMedia = true;
             }
             (onsubmit || nop)();
