@@ -1431,22 +1431,22 @@ SpriteMorph.prototype.fullCopy = function (forClone) {
                 block.definition = cb;
             });
         });
+        this.costumes.asArray().forEach(function (costume) {
+            var cst = forClone ? costume : costume.copy();
+            arr.push(cst);
+            if (costume === myself.costume) {
+                c.costume = cst;
+            }
+        });
+        c.costumes = new List(arr);
+        arr = [];
+        this.sounds.asArray().forEach(function (sound) {
+            var snd = forClone ? sound : sound.copy();
+            arr.push(snd);
+        });
+        c.sounds = new List(arr);
+        arr = [];
     }
-    this.costumes.asArray().forEach(function (costume) {
-        var cst = forClone ? costume : costume.copy();
-        arr.push(cst);
-        if (costume === myself.costume) {
-            c.costume = cst;
-        }
-    });
-    c.costumes = new List(arr);
-    arr = [];
-    this.sounds.asArray().forEach(function (sound) {
-        var snd = forClone ? sound : sound.copy();
-        arr.push(snd);
-    });
-    c.sounds = new List(arr);
-    arr = [];
     c.nestingScale = 1;
     c.rotatesWithAnchor = true;
     c.anchor = null;
