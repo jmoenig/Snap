@@ -454,11 +454,13 @@ ActionManager.prototype.serializeBlock = function(block, force, justMe) {
         return block.toXML(this.serializer);
     }
 
+    this.serializer.isSavingCustomBlockOwners = false;
     var serialized = justMe ?
         '<script>' + block.toBlockXML(this.serializer) + '</script>':
         block.toScriptXML(this.serializer);
 
     this.serializer.flush();
+    this.serializer.isSavingCustomBlockOwners = true;
     return serialized;
 };
 
@@ -1327,6 +1329,10 @@ ActionManager.prototype._getCustomBlockEditor = function(id, block) {
     }
 
     return editor;
+};
+
+ActionManager.prototype.getOwnerFromId = function(id) {
+    return this._owners[id];
 };
 
 ActionManager.prototype.getBlockFromId = function(id) {
