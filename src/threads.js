@@ -1022,8 +1022,13 @@ Process.prototype.handleError = function (error, element) {
 	img = element.fullImage();
 	imageMorph = new Morph();
 	imageMorph.image = img;
+	errorMorph.setExtent(new Point(img.width, img.height));
 	errorMessage.setTop(imageMorph.height());
 	errorMorph.add(imageMorph);
+	errorMorph.setExtent(new Point(
+	    Math.max(imageMorph.width(), errorMessage.width()),
+	    imageMorph.height() + errorMessage.height()
+	));
     }
 
     errorMorph.add(errorMessage);
