@@ -2686,17 +2686,15 @@ BlockMorph.prototype.userMenu = function () {
     );
     if (shiftClicked) {
         top = this.topBlock();
-        if (top instanceof ReporterBlockMorph) {
-            menu.addItem(
-                "script pic with result...",
-                function () {
-                    top.exportResultPic();
-                },
-                'open a new window\n' +
-                    'with a picture of both\nthis script and its result',
-                new Color(100, 0, 0)
-            );
-        }
+	menu.addItem(
+	    "script pic with result...",
+	    function () {
+		top.exportResultPic();
+	    },
+	    'open a new window\n' +
+		'with a picture of both\nthis script and its result',
+	    new Color(100, 0, 0)
+	);
     }
     if (this.isTemplate) {
         if (this.parent instanceof SyntaxElementMorph) { // in-line
@@ -3876,7 +3874,7 @@ BlockMorph.prototype.eraseHoles = function (context) {
         gradient,
         rightX,
         holes = [];
-    
+
     this.parts().forEach(function (part) {
         if (part.isHole) {
             holes.push(part);
@@ -4381,6 +4379,22 @@ BlockMorph.prototype.drawMethodIcon = function (context) {
     context.arc(x + r, y + r, r * 0.4, radians(0), radians(360), false);
     context.closePath();
     context.fill();
+};
+
+// Export with result or error bubble
+
+BlockMorph.prototype.exportResultPic = function () {
+    var top = this.topBlock(),
+    receiver = top.receiver(),
+    stage;
+    if (top !== this) {return; }
+    if (receiver) {
+	stage = receiver.parentThatIsA(StageMorph);
+	if (stage) {
+	    stage.threads.stopProcess(top);
+	    stage.threads.startProcess(top, false, true);
+	}
+    }
 };
 
 // BlockMorph dragging and dropping
@@ -5766,6 +5780,7 @@ ReporterBlockMorph.prototype.exportResultPic = function () {
         }
     }
 };
+
 
 // ReporterBlockMorph deleting
 
