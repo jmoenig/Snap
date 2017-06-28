@@ -3612,7 +3612,7 @@ IDE_Morph.prototype.exportScriptsPicture = function () {
         y += padding;
         y += each.height;
     });
-    this.saveCanvasAs(pic, this.projectName || localize('Untitled'), true);
+    this.saveCanvasAs(pic, this.projectName || localize('untitled'), true);
 };
 
 IDE_Morph.prototype.exportProjectSummary = function (useDropShadows) {
