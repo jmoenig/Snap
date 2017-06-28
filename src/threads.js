@@ -1000,16 +1000,37 @@ Process.prototype.expectReport = function () {
 // Process Exception Handling
 
 Process.prototype.handleError = function (error, element) {
-    var m = element;
+    var m = element,
+	img,
+	errorMorph,
+	imageMorph,
+	errorMessage,
+	errorIsNested = element !== this.topBlock;
+
     this.stop();
     this.errorFlag = true;
-    this.topBlock.addErrorHighlight();
     if (isNil(m) || isNil(m.world())) {m = this.topBlock; }
+
+    this.topBlock.removeHighlight();
+    errorMorph = new Morph();
+    errorMessage = new TextMorph(
+	(errorIsNested ? 'Inside: ' : '') + error.name + ':\n' + error.message,
+	m.fontSize
+    );
+
+    if (errorIsNested) {
+	img = element.fullImage();
+	imageMorph = new Morph();
+	imageMorph.image = img;
+	errorMessage.setTop(imageMorph.height());
+	errorMorph.add(imageMorph);
+    }
+
+    errorMorph.add(errorMessage);
+    errorMorph.alpha = 0;
+    this.topBlock.addErrorHighlight();
     m.showBubble(
-        (m === element ? '' : 'Inside: ')
-            + error.name
-            + '\n'
-            + error.message,
+	errorMorph,
         this.exportResult,
         this.receiver
     );
