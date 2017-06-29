@@ -82,7 +82,7 @@ SpeechBubbleMorph, RingMorph, isNil, FileReader, TableDialogMorph,
 BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph*/
 
-modules.objects = '2017-June-27';
+modules.objects = '2017-June-29';
 
 var SpriteMorph;
 var StageMorph;
@@ -5129,6 +5129,7 @@ SpriteMorph.prototype.chooseExemplar = function () {
 
 SpriteMorph.prototype.setExemplar = function (another) {
     var ide = this.parentThatIsA(IDE_Morph);
+    this.emancipate();
     this.exemplar = another;
     if (isNil(another)) {
         this.variables.parentFrame = (this.globalVariables());
@@ -5141,6 +5142,29 @@ SpriteMorph.prototype.setExemplar = function (another) {
     }
     if (another) {
         another.cachedSpecimens = null;
+        another.specimens(); // update the inheritance cache
+    }
+};
+
+SpriteMorph.prototype.prune = function () {
+    // sever ties with all my specimen, if any,
+    this.specimens().forEach(function (child) {
+        child.shadowAllAttributes();
+        child.shadowAllMethods();
+        child.shadowAllVars();
+    });
+    this.cachedSpecimens = null;
+};
+
+SpriteMorph.prototype.emancipate = function () {
+    // sever all relations with my exemplar, if any,
+    // and make sure I am the root of my specimen
+    if (this.exemplar) {
+        this.shadowAllAttributes();
+        this.shadowAllMethods();
+        this.shadowAllVars();
+        this.exemplar.cachedSpecimens = null;
+        this.exemplar = null;
     }
 };
 
@@ -5185,6 +5209,13 @@ SpriteMorph.prototype.shadowedAttributes = function () {
     var inherited = this.inheritedAttributes;
     return this.attributes.filter(function (each) {
         return !contains(inherited, each);
+    });
+};
+
+SpriteMorph.prototype.shadowAllAttributes = function () {
+    var myself = this;
+    this.attributes.forEach(function (att) {
+        myself.shadowAttribute(att);
     });
 };
 
@@ -5335,6 +5366,13 @@ SpriteMorph.prototype.globalVariables = function () {
     return current;
 };
 
+SpriteMorph.prototype.shadowAllVars = function () {
+    var myself = this;
+    this.inheritedVariableNames().forEach(function (name) {
+        myself.shadowVar(name, myself.variables.getVar(name));
+    });
+};
+
 SpriteMorph.prototype.shadowVar = function (name, value) {
     var ide = this.parentThatIsA(IDE_Morph);
     this.variables.addVar(name, value);
@@ -5427,6 +5465,18 @@ SpriteMorph.prototype.inheritedBlocks = function (valuesOnly) {
         return Object.keys(dict).map(function (key) {return dict[key]; });
     }
     return dict;
+};
+
+SpriteMorph.prototype.shadowAllMethods = function () {
+    var ide = this.parentThatIsA(IDE_Morph),
+        myself = this;
+    this.inheritedMethods().forEach(function (dup) {
+        myself.customBlocks.push(dup);
+    });
+    if (ide) {
+        ide.flushPaletteCache();
+        ide.refreshPalette();
+    }
 };
 
 SpriteMorph.prototype.inheritedMethods = function () {
@@ -5619,10 +5669,9 @@ SpriteMorph.prototype.restoreLayers = function () {
 // SpriteMorph destroying
 
 SpriteMorph.prototype.destroy = function () {
-    // make sure to invalidate the specimens cache
-    if (this.exemplar) {
-        this.exemplar.cachedSpecimens = null;
-    }
+    // make sure to sever all inheritance ties to other sprites
+    this.emancipate();
+    this.prune();
     SpriteMorph.uber.destroy.call(this);
 };
 

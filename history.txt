@@ -3483,6 +3483,10 @@ Fixes:
 * Objects: Inheritance of costumes and sounds - propagate changes
 * Store: Tweaked loading sprites with inherited complex attributes (costumes, sounds)
 
+170629
+------
+* Objects: manage inheritance relationships when setting a prototype or deleting a sprite
+
 
 Features:
 * polymorphic sprite-local custom blocks
