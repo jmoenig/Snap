@@ -5152,6 +5152,7 @@ SpriteMorph.prototype.prune = function () {
         child.shadowAllAttributes();
         child.shadowAllMethods();
         child.shadowAllVars();
+        child.exemplar = null;
     });
     this.cachedSpecimens = null;
 };
