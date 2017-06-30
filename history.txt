@@ -3490,6 +3490,7 @@ Fixes:
 170630
 ------
 * Objects: reflect attribute inheritance status by ghosting / un-ghosting stage monitors
+* Objects: migrate experimental “jukebox” reporters to the new “my sounds” reporter
 
 
 Features:

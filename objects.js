@@ -1227,6 +1227,7 @@ SpriteMorph.prototype.initBlocks = function () {
 SpriteMorph.prototype.initBlocks();
 
 SpriteMorph.prototype.initBlockMigrations = function () {
+    // change blocks in existing projects to their updated version
     SpriteMorph.prototype.blockMigrations = {
         doStopAll: {
             selector: 'doStopThis',
@@ -1255,6 +1256,10 @@ SpriteMorph.prototype.initBlockMigrations = function () {
         reportCostumes: {
             selector: 'reportGet',
             inputs: [['costumes']]
+        },
+        reportSounds: {
+            selector: 'reportGet',
+            inputs: [['sounds']]
         },
         doMapStringCode: {
             selector: 'doMapValueCode',
@@ -1875,20 +1880,6 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('doSetTempo'));
         blocks.push(watcherToggle('getTempo'));
         blocks.push(block('getTempo'));
-
-    // for debugging: ///////////////
-
-        if (this.world().isDevMode) {
-            blocks.push('-');
-            txt = new TextMorph(localize(
-                'development mode \ndebugging primitives:'
-            ));
-            txt.fontSize = 9;
-            txt.setColor(this.paletteTextColor);
-            blocks.push(txt);
-            blocks.push('-');
-            blocks.push(block('reportSounds'));
-        }
 
     } else if (cat === 'pen') {
 
@@ -6679,20 +6670,6 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('doSetTempo'));
         blocks.push(watcherToggle('getTempo'));
         blocks.push(block('getTempo'));
-
-    // for debugging: ///////////////
-
-        if (this.world().isDevMode) {
-            blocks.push('-');
-            txt = new TextMorph(localize(
-                'development mode \ndebugging primitives:'
-            ));
-            txt.fontSize = 9;
-            txt.setColor(this.paletteTextColor);
-            blocks.push(txt);
-            blocks.push('-');
-            blocks.push(block('reportSounds'));
-        }
 
     } else if (cat === 'pen') {
 
