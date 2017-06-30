@@ -3487,6 +3487,10 @@ Fixes:
 ------
 * Objects: manage inheritance relationships when setting a prototype or deleting a sprite
 
+170630
+------
+* Objects: reflect attribute inheritance status by ghosting / un-ghosting stage monitors
+
 
 Features:
 * polymorphic sprite-local custom blocks

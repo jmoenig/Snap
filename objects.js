@@ -82,7 +82,7 @@ SpeechBubbleMorph, RingMorph, isNil, FileReader, TableDialogMorph,
 BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph*/
 
-modules.objects = '2017-June-29';
+modules.objects = '2017-June-30';
 
 var SpriteMorph;
 var StageMorph;
@@ -8721,7 +8721,8 @@ WatcherMorph.prototype.setSliderMax = function (num, noUpdate) {
 // WatcherMorph updating:
 
 WatcherMorph.prototype.update = function () {
-    var newValue, sprite, num;
+    var newValue, sprite, num, att,
+        isGhosted = false;
 
     if (this.target && this.getter) {
         this.updateLabel();
@@ -8749,6 +8750,14 @@ WatcherMorph.prototype.update = function () {
             }
         } else {
             newValue = this.target[this.getter]();
+
+            // determine whether my getter is an inherited attribute
+            att = {
+                xPosition: 'x position',
+                yPosition: 'y position',
+                direction: 'direction',
+                getScale: 'size'} [this.getter];
+            isGhosted = att ? this.target.inheritsAttribute(att) : false;
         }
         if (newValue !== '' && !isNil(newValue)) {
             num = +newValue;
@@ -8759,6 +8768,11 @@ WatcherMorph.prototype.update = function () {
         if (newValue !== this.currentValue) {
             this.changed();
             this.cellMorph.contents = newValue;
+            if (isGhosted) {
+                this.cellMorph.setColor(this.readoutColor.lighter(35));
+            } else {
+                this.cellMorph.setColor(this.readoutColor);
+            }
             this.cellMorph.drawNew();
             if (!isNaN(newValue)) {
                 this.sliderMorph.value = newValue;
