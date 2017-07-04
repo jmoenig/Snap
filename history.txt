@@ -3492,6 +3492,15 @@ Fixes:
 * Objects: reflect attribute inheritance status by ghosting / un-ghosting stage monitors
 * Objects: migrate experimental “jukebox” reporters to the new “my sounds” reporter
 
+170703
+------
+* Objects, Threads, GUI, Blocks, YPR: renamed Sprite::isClone to Sprite:isTemporary
+
+170704
+------
+* Morphic: Simplify contains()
+* Unify Scratch-style clones and Snap-specimens, part 1: implement clones as specimens
+
 
 Features:
 * polymorphic sprite-local custom blocks

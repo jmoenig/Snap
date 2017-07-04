@@ -74,7 +74,7 @@ isRetinaSupported, SliderMorph, Animation*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2017-June-26';
+modules.gui = '2017-July-04';
 
 // Declarations
 
@@ -1514,7 +1514,7 @@ IDE_Morph.prototype.createCorral = function () {
     frame.alpha = 0;
 
     this.sprites.asArray().forEach(function (morph) {
-        if (!morph.isClone) {
+        if (!morph.isTemporary) {
             template = new SpriteIconMorph(morph, template);
             frame.contents.add(template);
         }

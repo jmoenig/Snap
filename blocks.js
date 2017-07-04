@@ -150,7 +150,7 @@ CustomCommandBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2017-June-26';
+modules.blocks = '2017-July-04';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -8117,7 +8117,7 @@ InputSlotMorph.prototype.collidablesMenu = function () {
         allNames = [];
 
     stage.children.forEach(function (morph) {
-        if (morph instanceof SpriteMorph && !morph.isClone) {
+        if (morph instanceof SpriteMorph && !morph.isTemporary) {
             if (morph.name !== rcvr.name) {
                 allNames = allNames.concat(morph.name);
             }
@@ -8166,7 +8166,7 @@ InputSlotMorph.prototype.clonablesMenu = function () {
         dict.myself = ['myself'];
     }
     stage.children.forEach(function (morph) {
-        if (morph instanceof SpriteMorph && !morph.isClone) {
+        if (morph instanceof SpriteMorph && !morph.isTemporary) {
             allNames = allNames.concat(morph.name);
         }
     });

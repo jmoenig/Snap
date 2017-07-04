@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph,
 TableFrameMorph, ColorSlotMorph, isSnapObject*/
 
-modules.threads = '2017-June-26';
+modules.threads = '2017-July-04';
 
 var ThreadManager;
 var Process;
@@ -246,7 +246,7 @@ ThreadManager.prototype.stopAllForReceiver = function (rcvr, excpt) {
     this.processes.forEach(function (proc) {
         if (proc.homeContext.receiver === rcvr && proc !== excpt) {
             proc.stop();
-            if (rcvr.isClone) {
+            if (rcvr.isTemporary) {
                 proc.isDead = true;
             }
         }
@@ -2724,7 +2724,7 @@ Process.prototype.getObjectsNamed = function (name, thisObj, stageObj) {
         those = [];
 
     function check(obj) {
-        return obj instanceof SpriteMorph && obj.isClone ?
+        return obj instanceof SpriteMorph && obj.isTemporary ?
                 obj.cloneOriginName === name : obj.name === name;
     }
 
@@ -3006,13 +3006,14 @@ Process.prototype.reportGet = function (query) {
             objName = thisObj.name || thisObj.cloneOriginName;
             return new List(
                 stage.children.filter(function (each) {
-                    return each.isClone &&
+                    return each.isTemporary &&
                         (each !== thisObj) &&
                         (each.cloneOriginName === objName);
                 })
             );
         case 'other clones':
-            return thisObj.isClone ? this.reportGet(['clones']) : new List();
+            return thisObj.isTemporary ?
+                    this.reportGet(['clones']) : new List();
         case 'neighbors':
             stage = thisObj.parentThatIsA(StageMorph);
             neighborhood = thisObj.bounds.expandBy(new Point(
