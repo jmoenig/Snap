@@ -1161,7 +1161,7 @@
 
 /*global window, HTMLCanvasElement, FileReader, Audio, FileList*/
 
-var morphicVersion = '2017-June-22';
+var morphicVersion = '2017-July-04';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = getBlurredShadowSupport(); // check for Chrome-bug
 
@@ -1253,9 +1253,7 @@ function isNil(thing) {
 
 function contains(list, element) {
     // answer true if element is a member of list
-    return list.some(function (any) {
-        return any === element;
-    });
+    return list.indexOf(element) !== -1;
 }
 
 function detect(list, predicate) {
