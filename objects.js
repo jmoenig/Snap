@@ -82,7 +82,7 @@ SpeechBubbleMorph, RingMorph, isNil, FileReader, TableDialogMorph,
 BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph*/
 
-modules.objects = '2017-July-04';
+modules.objects = '2017-July-05';
 
 var SpriteMorph;
 var StageMorph;
@@ -3074,6 +3074,10 @@ SpriteMorph.prototype.userMenu = function () {
     }
     if (!this.isTemporary) {
         menu.addItem("duplicate", 'duplicate');
+        if (StageMorph.prototype.enableInheritance) {
+            menu.addItem("instantiate", 'instantiate');
+            menu.addLine();
+        }
     }
     menu.addItem("delete", 'remove');
     menu.addItem("move", 'moveCenter');
@@ -3084,7 +3088,15 @@ SpriteMorph.prototype.userMenu = function () {
             'edit the costume\'s\nrotation center'
         );
     }
-    if (!this.isTemporary) {
+    if (this.isTemporary) {
+        if (StageMorph.prototype.enableInheritance) {
+            menu.addItem(
+                "edit",
+                'perpetuateAndEdit',
+                'make permanent and\nshow in the sprite corral'
+            );
+        }
+    } else {
         menu.addItem("edit", 'edit');
     }
     menu.addLine();
@@ -3132,6 +3144,13 @@ SpriteMorph.prototype.duplicate = function () {
     }
 };
 
+SpriteMorph.prototype.instantiate = function () {
+    var ide = this.parentThatIsA(IDE_Morph);
+    if (ide) {
+        ide.instantiateSprite(this);
+    }
+};
+
 SpriteMorph.prototype.remove = function () {
     var ide = this.parentThatIsA(IDE_Morph);
     if (ide) {
@@ -3161,7 +3180,7 @@ SpriteMorph.prototype.remove = function () {
 
 SpriteMorph.prototype.createClone = function (immediately) {
     var stage = this.parentThatIsA(StageMorph);
-    if (stage && stage.cloneCount <= 2000) {
+    if (stage && stage.cloneCount <= 5000) {
         this.fullCopy(true).clonify(stage, immediately);
     }
 };
@@ -3198,9 +3217,82 @@ SpriteMorph.prototype.removeClone = function () {
         // this.stopTalking();
         this.parent.threads.stopAllForReceiver(this);
         this.corpsify();
+        this.instances.forEach(function (child) {
+            if (child.isTemporary) {
+                child.removeClone();
+            }
+        });
         this.destroy();
         this.parent.cloneCount -= 1;
     }
+};
+
+SpriteMorph.prototype.perpetuate = function () {
+    // make a temporary sprite (clone) permanent
+    var stage = this.parentThatIsA(StageMorph),
+        ide = this.parentThatIsA(IDE_Morph);
+
+    if (!this.isTemporary || !stage || !ide) {
+        return;
+    }
+    this.isTemporary = false;
+    this.name = ide.newSpriteName(this.cloneOriginName);
+    this.cloneOriginName = '';
+    stage.cloneCount -= 1;
+    ide.corral.addSprite(this);
+    ide.sprites.add(this);
+    this.parts.forEach(function (part) {
+        part.perpetuate();
+    });
+};
+
+SpriteMorph.prototype.perpetuateAndEdit = function () {
+    var ide = this.parentThatIsA(IDE_Morph);
+    if (ide) {
+        this.perpetuate();
+        ide.selectSprite(this);
+    }
+};
+
+SpriteMorph.prototype.release = function () {
+    // turn a permenent sprite that's an instance of another one
+    // into a temporary one (clone), that will vanish either when
+    // the "delete this clone" operation is executed or when the user
+    // hits the red stop sign button in the IDE
+    var stage = this.parentThatIsA(StageMorph),
+        ide = this.parentThatIsA(IDE_Morph),
+        idx;
+
+    if (this.isTemporary || !this.exemplar || !stage || !ide) {
+        return;
+    }
+    this.parts.forEach(function (part) {
+        part.release();
+    });
+    this.isTemporary = true;
+    this.name = '';
+    this.cloneOriginName = this.exemplar.name;
+    stage.cloneCount += 1;
+    idx = ide.sprites.asArray().indexOf(this) + 1;
+    stage.watchers().forEach(function (watcher) {
+        if (watcher.object() === this) {
+            watcher.destroy();
+        }
+    });
+    if (idx > 0) {
+        ide.sprites.remove(idx);
+    }
+    ide.createCorral();
+    ide.fixLayout();
+    if (ide.currentSprite === this) {
+        ide.currentSprite = detect(
+            stage.children,
+            function (morph) {
+                return morph instanceof SpriteMorph && !morph.isTemporary;
+            }
+        ) || this.stage;
+    }
+    ide.selectSprite(ide.currentSprite);
 };
 
 // SpriteMorph deleting
@@ -3911,7 +4003,6 @@ SpriteMorph.prototype.prepareToBeGrabbed = function (hand) {
     this.recordLayers();
     this.shadowAttribute('x position');
     this.shadowAttribute('y position');
-    this.instances; // make sure specimens are cached
     if (!this.bounds.containsPoint(hand.position()) &&
             this.isCorrectingOutsideDrag()) {
         this.setCenter(hand.position());
@@ -5171,7 +5262,7 @@ SpriteMorph.prototype.allSpecimens = function () {
     // without myself
     var all = this.instances.slice();
     this.instances.forEach(function (child) {
-        all.push.appl(all, child.allSpecimens());
+        all.push.apply(all, child.allSpecimens());
     });
     return all;
 };

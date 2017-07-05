@@ -74,7 +74,7 @@ isRetinaSupported, SliderMorph, Animation*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2017-July-04';
+modules.gui = '2017-July-05';
 
 // Declarations
 
@@ -2140,11 +2140,18 @@ IDE_Morph.prototype.paintNewSprite = function () {
 
 IDE_Morph.prototype.duplicateSprite = function (sprite) {
     var duplicate = sprite.fullCopy();
-
     duplicate.setPosition(this.world().hand.position());
     duplicate.appearIn(this);
     duplicate.keepWithin(this.stage);
     this.selectSprite(duplicate);
+};
+
+IDE_Morph.prototype.instantiateSprite = function (sprite) {
+    var instance = sprite.fullCopy(true);
+    instance.setPosition(this.world().hand.position());
+    instance.appearIn(this);
+    instance.keepWithin(this.stage);
+    this.selectSprite(instance);
 };
 
 IDE_Morph.prototype.removeSprite = function (sprite) {
@@ -2166,7 +2173,9 @@ IDE_Morph.prototype.removeSprite = function (sprite) {
     this.fixLayout();
     this.currentSprite = detect(
         this.stage.children,
-        function (morph) {return morph instanceof SpriteMorph; }
+        function (morph) {
+            return morph instanceof SpriteMorph && !morph.isTemporary;
+        }
     ) || this.stage;
 
     this.selectSprite(this.currentSprite);
@@ -6830,10 +6839,20 @@ SpriteIconMorph.prototype.userMenu = function () {
     menu.addItem("show", 'showSpriteOnStage');
     menu.addLine();
     menu.addItem("duplicate", 'duplicateSprite');
+    if (StageMorph.prototype.enableInheritance) {
+        menu.addItem("instantiate", 'instantiateSprite');
+    }
     menu.addItem("delete", 'removeSprite');
     menu.addLine();
     if (StageMorph.prototype.enableInheritance) {
         menu.addItem("parent...", 'chooseExemplar');
+        if (this.object.exemplar) {
+            menu.addItem(
+                "release",
+                'releaseSprite',
+                'make temporary and\nhide in the sprite corral'
+            );
+        }
     }
     if (this.object.anchor) {
         menu.addItem(
@@ -6858,6 +6877,13 @@ SpriteIconMorph.prototype.duplicateSprite = function () {
     }
 };
 
+SpriteIconMorph.prototype.instantiateSprite = function () {
+    var ide = this.parentThatIsA(IDE_Morph);
+    if (ide) {
+        ide.instantiateSprite(this.object);
+    }
+};
+
 SpriteIconMorph.prototype.removeSprite = function () {
     var ide = this.parentThatIsA(IDE_Morph);
     if (ide) {
@@ -6871,6 +6897,10 @@ SpriteIconMorph.prototype.exportSprite = function () {
 
 SpriteIconMorph.prototype.chooseExemplar = function () {
     this.object.chooseExemplar();
+};
+
+SpriteIconMorph.prototype.releaseSprite = function () {
+    this.object.release();
 };
 
 SpriteIconMorph.prototype.showSpriteOnStage = function () {
