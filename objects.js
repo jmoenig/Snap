@@ -8847,6 +8847,7 @@ WatcherMorph.prototype.update = function () {
                 xPosition: 'x position',
                 yPosition: 'y position',
                 direction: 'direction',
+                getCostumeIdx: 'costume #', //+++
                 getScale: 'size'} [this.getter];
             isGhosted = att ? this.target.inheritsAttribute(att) : false;
         }
