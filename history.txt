@@ -3505,6 +3505,10 @@ Fixes:
 ------
 * Objects, GUI: UI for OOP
 
+170707
+------
+* Objects, GUI, Store: tweak naming of instantiating to “clone”, enable inheritance by default
+
 
 Features:
 * polymorphic sprite-local custom blocks

@@ -61,7 +61,7 @@ normalizeCanvas, contains*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2017-June-27';
+modules.store = '2017-July-07';
 
 
 // XML_Serializer ///////////////////////////////////////////////////////
@@ -419,7 +419,7 @@ SnapSerializer.prototype.rawLoadProjectModel = function (xmlNode) {
     StageMorph.prototype.enableCodeMapping =
         model.stage.attributes.codify === 'true';
     StageMorph.prototype.enableInheritance =
-        model.stage.attributes.inheritance === 'true';
+        model.stage.attributes.inheritance !== 'false';
     StageMorph.prototype.enableSublistIDs =
         model.stage.attributes.sublistIDs === 'true';
 

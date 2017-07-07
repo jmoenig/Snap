@@ -74,7 +74,7 @@ isRetinaSupported, SliderMorph, Animation*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2017-July-05';
+modules.gui = '2017-July-07';
 
 // Declarations
 
@@ -3429,7 +3429,7 @@ IDE_Morph.prototype.newProject = function () {
     StageMorph.prototype.codeMappings = {};
     StageMorph.prototype.codeHeaders = {};
     StageMorph.prototype.enableCodeMapping = false;
-    StageMorph.prototype.enableInheritance = false;
+    StageMorph.prototype.enableInheritance = true;
     StageMorph.prototype.enableSublistIDs = false;
     SpriteMorph.prototype.useFlatLineEnds = false;
     Process.prototype.enableLiveCoding = false;
@@ -3938,7 +3938,7 @@ IDE_Morph.prototype.rawOpenProjectString = function (str) {
     StageMorph.prototype.codeMappings = {};
     StageMorph.prototype.codeHeaders = {};
     StageMorph.prototype.enableCodeMapping = false;
-    StageMorph.prototype.enableInheritance = false;
+    StageMorph.prototype.enableInheritance = true;
     StageMorph.prototype.enableSublistIDs = false;
     Process.prototype.enableLiveCoding = false;
     if (Process.prototype.isCatchingErrors) {
@@ -3983,7 +3983,7 @@ IDE_Morph.prototype.rawOpenCloudDataString = function (str) {
     StageMorph.prototype.codeMappings = {};
     StageMorph.prototype.codeHeaders = {};
     StageMorph.prototype.enableCodeMapping = false;
-    StageMorph.prototype.enableInheritance = false;
+    StageMorph.prototype.enableInheritance = true;
     StageMorph.prototype.enableSublistIDs = false;
     Process.prototype.enableLiveCoding = false;
     if (Process.prototype.isCatchingErrors) {
@@ -6840,11 +6840,21 @@ SpriteIconMorph.prototype.userMenu = function () {
     menu.addLine();
     menu.addItem("duplicate", 'duplicateSprite');
     if (StageMorph.prototype.enableInheritance) {
-        menu.addItem("instantiate", 'instantiateSprite');
+        menu.addItem("clone", 'instantiateSprite');
     }
     menu.addItem("delete", 'removeSprite');
     menu.addLine();
     if (StageMorph.prototype.enableInheritance) {
+        /* version that hides refactoring capability unless shift-clicked
+        if (this.world().currentKey === 16) { // shift-clicked
+            menu.addItem(
+                "parent...",
+                'chooseExemplar',
+                null,
+                new Color(100, 0, 0)
+            );
+        }
+        */
         menu.addItem("parent...", 'chooseExemplar');
         if (this.object.exemplar) {
             menu.addItem(

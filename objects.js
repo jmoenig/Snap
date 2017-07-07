@@ -82,7 +82,7 @@ SpeechBubbleMorph, RingMorph, isNil, FileReader, TableDialogMorph,
 BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph*/
 
-modules.objects = '2017-July-05';
+modules.objects = '2017-July-07';
 
 var SpriteMorph;
 var StageMorph;
@@ -3075,7 +3075,7 @@ SpriteMorph.prototype.userMenu = function () {
     if (!this.isTemporary) {
         menu.addItem("duplicate", 'duplicate');
         if (StageMorph.prototype.enableInheritance) {
-            menu.addItem("instantiate", 'instantiate');
+            menu.addItem("clone", 'instantiate');
             menu.addLine();
         }
     }
@@ -5998,7 +5998,7 @@ StageMorph.prototype.hiddenPrimitives = {};
 StageMorph.prototype.codeMappings = {};
 StageMorph.prototype.codeHeaders = {};
 StageMorph.prototype.enableCodeMapping = false;
-StageMorph.prototype.enableInheritance = false;
+StageMorph.prototype.enableInheritance = true;
 StageMorph.prototype.enableSublistIDs = false;
 
 // StageMorph instance creation
