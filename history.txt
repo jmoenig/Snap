@@ -3509,6 +3509,7 @@ Fixes:
 ------
 * Objects, GUI, Store: tweak naming of instantiating to “clone”, enable inheritance by default
 * Objects, GUI: run “When I start as clone” scripts when manually cloning a sprite, only position at hand pointer if no such scripts exist 
+* Morphic, Objects: confine turtle direction readout to 0-360 degrees, thanks, Cynthia for the bug report!!
 
 
 Features:

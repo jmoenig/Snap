@@ -4262,7 +4262,7 @@ SpriteMorph.prototype.setHeading = function (degrees, noShadow) {
         this.silentGotoXY(x, y, true); // just me
         this.positionTalkBubble();
     } else {
-        this.heading = parseFloat(degrees) % 360;
+        this.heading = ((+degrees % 360) + 360) % 360;
     }
 
     // propagate to my parts

@@ -1161,7 +1161,7 @@
 
 /*global window, HTMLCanvasElement, FileReader, Audio, FileList*/
 
-var morphicVersion = '2017-July-04';
+var morphicVersion = '2017-July-07';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = getBlurredShadowSupport(); // check for Chrome-bug
 
@@ -4838,7 +4838,7 @@ PenMorph.prototype.drawNew = function (facing) {
 // PenMorph access:
 
 PenMorph.prototype.setHeading = function (degrees) {
-    this.heading = parseFloat(degrees) % 360;
+    this.heading = ((+degrees % 360) + 360) % 360;
     this.drawNew();
     this.changed();
 };
