@@ -3207,9 +3207,21 @@ SpriteMorph.prototype.clonify = function (stage, immediately) {
             null, // callback
             null, // is clicked
             immediately // without yielding
-            );
+        );
     });
     this.endWarp();
+};
+
+SpriteMorph.prototype.initClone = function (hats) {
+    // used when manually instantiating a sprite in the IDE
+    var stage = this.parentThatIsA(StageMorph),
+        myself = this;
+    if (stage) {
+        hats.forEach(function (block) {
+            stage.threads.startProcess(block, myself, stage.isThreadSafe);
+        });
+        this.endWarp();
+    }
 };
 
 SpriteMorph.prototype.removeClone = function () {

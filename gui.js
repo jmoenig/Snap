@@ -2147,10 +2147,15 @@ IDE_Morph.prototype.duplicateSprite = function (sprite) {
 };
 
 IDE_Morph.prototype.instantiateSprite = function (sprite) {
-    var instance = sprite.fullCopy(true);
-    instance.setPosition(this.world().hand.position());
+    var instance = sprite.fullCopy(true),
+        hats = instance.allHatBlocksFor('__clone__init__');
     instance.appearIn(this);
-    instance.keepWithin(this.stage);
+    if (hats.length) {
+        instance.initClone(hats);
+    } else {
+        instance.setPosition(this.world().hand.position());
+        instance.keepWithin(this.stage);
+    }
     this.selectSprite(instance);
 };
 

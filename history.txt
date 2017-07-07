@@ -3508,6 +3508,7 @@ Fixes:
 170707
 ------
 * Objects, GUI, Store: tweak naming of instantiating to “clone”, enable inheritance by default
+* Objects, GUI: run “When I start as clone” scripts when manually cloning a sprite, only position at hand pointer if no such scripts exist 
 
 
 Features:
