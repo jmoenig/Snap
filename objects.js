@@ -3225,13 +3225,14 @@ SpriteMorph.prototype.initClone = function (hats) {
 };
 
 SpriteMorph.prototype.removeClone = function () {
+    var exemplar = this.exemplar;
     if (this.isTemporary) {
         // this.stopTalking();
         this.parent.threads.stopAllForReceiver(this);
         this.corpsify();
         this.instances.forEach(function (child) {
             if (child.isTemporary) {
-                child.removeClone();
+                child.setExemplar(exemplar);
             }
         });
         this.destroy();
