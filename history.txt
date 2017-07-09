@@ -3518,7 +3518,7 @@ Fixes:
 
 170709
 ------
-* Objects, Threads: added experimental (hidden in dev mode) “tell ... to ..." and “ask ... for ...” primitives 
+* Objects, Threads: added experimental (only shown in dev mode) “tell ... to ..." and “ask ... for ...” primitives 
 
 
 
@@ -3538,6 +3538,7 @@ Features:
 * clones share their original sprite’s scripts, not a shallow-copy of them
 * a highlight-colored balloon indicates the number of active processes per shared script
 * new musical “notes” symbol
+* turn on the “Inheritance support” setting per default
 * Assert data types to list operations for more meaningful error messages
 
 Fixes:
