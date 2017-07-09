@@ -3,7 +3,6 @@ Snap! History
 
 In Development
 --------------
-
 Features:
 * polymorphic sprite-local custom blocks
 * inheritance of sprite-local custom blocks
@@ -20,13 +19,26 @@ Features:
 * clones share their original sprite’s scripts, not a shallow-copy of them
 * a highlight-colored balloon indicates the number of active processes per shared script
 * new musical “notes” symbol
+* Assert data types to list operations for more meaningful error messages
 
 Fixes:
 * changed keyboard shortcut indicator for “find blocks” to “^”
 * prevent Snap from “hanging” when encountering certain errors in visible stepping
 * only mark implicit parameters if no formal ones exist
 * optimized thread-launch and script highlighting to a single frame instead of formerly two
+* changed direction attribute of sprites to automatically confine to 0-360 degrees
 * fixed some typos
+
+170708
+------
+* Threads: Assert data types to list operations -> meaningful error messages
+
+170707
+------
+* Objects, GUI, Store: tweak naming of instantiating to “clone”, enable inheritance by default
+* Objects, GUI: run “When I start as clone” scripts when manually cloning a sprite, only position at hand pointer if no such scripts exist
+* Morphic, Objects: confine turtle direction readout to 0-360 degrees, thanks, Cynthia for the bug report!!
+
 
 170705
 ------

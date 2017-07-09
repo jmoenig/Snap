@@ -82,7 +82,7 @@ SpeechBubbleMorph, RingMorph, isNil, FileReader, TableDialogMorph,
 BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph*/
 
-modules.objects = '2017-July-05';
+modules.objects = '2017-July-07';
 
 var SpriteMorph;
 var StageMorph;
@@ -3075,7 +3075,7 @@ SpriteMorph.prototype.userMenu = function () {
     if (!this.isTemporary) {
         menu.addItem("duplicate", 'duplicate');
         if (StageMorph.prototype.enableInheritance) {
-            menu.addItem("instantiate", 'instantiate');
+            menu.addItem("clone", 'instantiate');
             menu.addLine();
         }
     }
@@ -3207,19 +3207,32 @@ SpriteMorph.prototype.clonify = function (stage, immediately) {
             null, // callback
             null, // is clicked
             immediately // without yielding
-            );
+        );
     });
     this.endWarp();
 };
 
+SpriteMorph.prototype.initClone = function (hats) {
+    // used when manually instantiating a sprite in the IDE
+    var stage = this.parentThatIsA(StageMorph),
+        myself = this;
+    if (stage) {
+        hats.forEach(function (block) {
+            stage.threads.startProcess(block, myself, stage.isThreadSafe);
+        });
+        this.endWarp();
+    }
+};
+
 SpriteMorph.prototype.removeClone = function () {
+    var exemplar = this.exemplar;
     if (this.isTemporary) {
         // this.stopTalking();
         this.parent.threads.stopAllForReceiver(this);
         this.corpsify();
         this.instances.forEach(function (child) {
             if (child.isTemporary) {
-                child.removeClone();
+                child.setExemplar(exemplar);
             }
         });
         this.destroy();
@@ -4250,7 +4263,7 @@ SpriteMorph.prototype.setHeading = function (degrees, noShadow) {
         this.silentGotoXY(x, y, true); // just me
         this.positionTalkBubble();
     } else {
-        this.heading = parseFloat(degrees) % 360;
+        this.heading = ((+degrees % 360) + 360) % 360;
     }
 
     // propagate to my parts
@@ -5998,7 +6011,7 @@ StageMorph.prototype.hiddenPrimitives = {};
 StageMorph.prototype.codeMappings = {};
 StageMorph.prototype.codeHeaders = {};
 StageMorph.prototype.enableCodeMapping = false;
-StageMorph.prototype.enableInheritance = false;
+StageMorph.prototype.enableInheritance = true;
 StageMorph.prototype.enableSublistIDs = false;
 
 // StageMorph instance creation
