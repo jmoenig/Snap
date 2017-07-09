@@ -872,7 +872,7 @@ SpriteMorph.prototype.initBlocks = function () {
         reportAttributeOf: {
             type: 'reporter',
             category: 'sensing',
-            spec: '%att of ',
+            spec: '%att of %spr',
             defaults: [['costume #']]
         },
         reportURL: {
