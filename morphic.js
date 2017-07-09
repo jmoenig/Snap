@@ -551,10 +551,23 @@
 
     Right before a morph is picked up its
 
+        selectForEdit
+
+    and
+
         prepareToBeGrabbed(handMorph)
 
-    method is invoked, if it is present. Immediately after the pick-up
-    the former parent's
+    methods are invoked, each if it is present. the optional
+
+        selectForEdit
+
+    if implemented, must return the object that is to be picked up.
+    In addition to just returning the original object chosen by the user
+    your method can also modify the target's environment and instead return
+    a copy of the selected morph if, for example, you would like to implement
+    a copy-on-write mechanism such as in Snap.
+
+    Immediately after the pick-up the former parent's
 
         reactToGrabOf(grabbedMorph)
 
@@ -582,6 +595,17 @@
         wantsDropOf(aMorph)
 
     method.
+
+    Right before dropping a morph the designated new parent's optional
+
+        selectForEdit
+
+    method is invoked if it is present. Again, if implemented this method
+    must return the new parent for the morph that is about to be dropped.
+    Again, in addition to just returning the designeted drop-target
+    your method can also modify its environment and instead return
+    a copy of the new parent if, for example, you would like to implement
+    a copy-on-write mechanism such as in Snap.
 
     Right after a morph has been dropped its
 
@@ -1137,7 +1161,7 @@
 
 /*global window, HTMLCanvasElement, FileReader, Audio, FileList*/
 
-var morphicVersion = '2017-January-09';
+var morphicVersion = '2017-July-07';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = getBlurredShadowSupport(); // check for Chrome-bug
 
@@ -1229,9 +1253,7 @@ function isNil(thing) {
 
 function contains(list, element) {
     // answer true if element is a member of list
-    return list.some(function (any) {
-        return any === element;
-    });
+    return list.indexOf(element) !== -1;
 }
 
 function detect(list, predicate) {
@@ -3227,7 +3249,31 @@ Morph.prototype.drawNew = function () {
     this.image = newCanvas(this.extent());
     var context = this.image.getContext('2d');
     context.fillStyle = this.color.toString();
-    context.fillRect(0, 0, this.width(), this.height());
+
+    /*
+        Chrome issue:
+
+            when filling a rectangular area, versions of Chrome beginning with
+            57.0.2987.133 start introducing vertical transparent stripes
+            to the right of the rectangle.
+            The following code replaces the original fillRect() call with
+            an explicit almost-rectangular path that miraculously  makes
+            sure the whole rectangle gets filled correctly.
+
+        Important: This needs to be monitored in the future so we can
+        revert to sane code once this Chrome issue has been resolved again.
+    */
+
+    // context.fillRect(0, 0, this.width(), this.height()); // taken out
+
+    context.beginPath();
+    context.moveTo(0, 0);
+    context.lineTo(this.image.width, 0);
+    context.lineTo(this.image.width, this.image.height);
+    context.lineTo(0, this.image.height + 0.0001); // yeah, I luv Chrome!
+    context.closePath();
+    context.fill();
+
     if (this.cachedTexture) {
         this.drawCachedTexture();
     } else if (this.texture) {
@@ -4432,11 +4478,14 @@ HandleMorph.prototype.init = function (
     this.target = target || null;
     this.minExtent = new Point(minX || 0, minY || 0);
     this.inset = new Point(insetX || 0, insetY || insetX || 0);
-    this.type =  type || 'resize'; // can also be 'move', 'moveCenter'
+    this.type =  type || 'resize'; // also: 'move', 'moveCenter', 'movePivot'
     HandleMorph.uber.init.call(this);
     this.color = new Color(255, 255, 255);
     this.isDraggable = false;
     this.noticesTransparentClick = true;
+    if (this.type === 'movePivot') {
+        size *= 2;
+    }
     this.setExtent(new Point(size, size));
 };
 
@@ -4445,20 +4494,27 @@ HandleMorph.prototype.init = function (
 HandleMorph.prototype.drawNew = function () {
     this.normalImage = newCanvas(this.extent());
     this.highlightImage = newCanvas(this.extent());
-    this.drawOnCanvas(
-        this.normalImage,
-        this.color,
-        new Color(100, 100, 100)
-    );
-    this.drawOnCanvas(
-        this.highlightImage,
-        new Color(100, 100, 255),
-        new Color(255, 255, 255)
-    );
+    if (this.type === 'movePivot') {
+        this.drawCrosshairsOnCanvas(this.normalImage, 0.6);
+        this.drawCrosshairsOnCanvas(this.highlightImage, 0.5);
+    } else {
+        this.drawOnCanvas(
+            this.normalImage,
+            this.color,
+            new Color(100, 100, 100)
+        );
+        this.drawOnCanvas(
+            this.highlightImage,
+            new Color(100, 100, 255),
+            new Color(255, 255, 255)
+        );
+    }
     this.image = this.normalImage;
     if (this.target) {
         if (this.type === 'moveCenter') {
             this.setCenter(this.target.center());
+        } else if (this.type === 'movePivot') {
+            this.setCenter(this.target.rotationCenter());
         } else { // 'resize', 'move'
             this.setPosition(
                 this.target.bottomRight().subtract(
@@ -4469,6 +4525,25 @@ HandleMorph.prototype.drawNew = function () {
         this.target.add(this);
         this.target.changed();
     }
+};
+
+HandleMorph.prototype.drawCrosshairsOnCanvas = function (aCanvas, fract) {
+    var ctx = aCanvas.getContext('2d'),
+        r = aCanvas.width / 2;
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
+    ctx.arc(r, r, r * 0.9, radians(0), radians(360), false);
+    ctx.fill();
+    ctx.strokeStyle = 'black';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.arc(r, r, r * fract, radians(0), radians(360), false);
+    ctx.stroke();
+    ctx.moveTo(0, r);
+    ctx.lineTo(aCanvas.width, r);
+    ctx.stroke();
+    ctx.moveTo(r, 0);
+    ctx.lineTo(r, aCanvas.height);
+    ctx.stroke();
 };
 
 HandleMorph.prototype.drawOnCanvas = function (
@@ -4574,7 +4649,7 @@ HandleMorph.prototype.mouseDownLeft = function (pos) {
     if (!this.target) {
         return null;
     }
-    if (this.type === 'moveCenter') {
+    if (this.type.indexOf('move') === 0) {
         offset = pos.subtract(this.center());
     } else {
         offset = pos.subtract(this.bounds.origin);
@@ -4597,6 +4672,9 @@ HandleMorph.prototype.mouseDownLeft = function (pos) {
                 );
             } else if (this.type === 'moveCenter') {
                 myself.target.setCenter(newPos);
+            } else if (this.type === 'movePivot') {
+                myself.target.setPivot(newPos);
+                myself.setCenter(this.target.rotationCenter());
             } else { // type === 'move'
                 myself.target.setPosition(
                     newPos.subtract(this.target.extent())
@@ -4760,7 +4838,7 @@ PenMorph.prototype.drawNew = function (facing) {
 // PenMorph access:
 
 PenMorph.prototype.setHeading = function (degrees) {
-    this.heading = parseFloat(degrees) % 360;
+    this.heading = ((+degrees % 360) + 360) % 360;
     this.drawNew();
     this.changed();
 };
@@ -5899,7 +5977,7 @@ SpeechBubbleMorph.prototype.init = function (
     border,
     borderColor,
     padding,
-    isThought
+    isThought // bool or anything but "true" to draw no hook at all
 ) {
     this.isPointingRight = true; // orientation of text
     this.contents = contents || '';
@@ -6065,7 +6143,7 @@ SpeechBubbleMorph.prototype.outlinePath = function (
         radians(180),
         false
     );
-    if (this.isThought) {
+    if (this.isThought === true) { // use anything but "true" to draw nothing
         // close large bubble:
         context.lineTo(
             inset,
@@ -10628,6 +10706,7 @@ HandMorph.prototype.drop = function () {
     if (this.children.length !== 0) {
         morphToDrop = this.children[0];
         target = this.dropTargetFor(morphToDrop);
+        target = target.selectForEdit ? target.selectForEdit() : target;
         this.changed();
         target.add(morphToDrop);
         morphToDrop.cachedFullImage = null;
@@ -10836,7 +10915,8 @@ HandMorph.prototype.processMouseMove = function (event) {
                     MorphicPreferences.grabThreshold)) {
             this.setPosition(this.grabPosition);
             if (this.morphToGrab.isDraggable) {
-                morph = this.morphToGrab;
+                morph = this.morphToGrab.selectForEdit ?
+                        this.morphToGrab.selectForEdit() : this.morphToGrab;
                 this.grab(morph);
             } else if (this.morphToGrab.isTemplate) {
                 morph = this.morphToGrab.fullCopy();
@@ -11294,29 +11374,13 @@ WorldMorph.prototype.fillPage = function () {
 // WorldMorph global pixel access:
 
 WorldMorph.prototype.getGlobalPixelColor = function (point) {
+    // answer the color at the given point.
+
 /*
-    answer the color at the given point.
+    // original method, now deprecated as of 4/4/2017 because Chrome
+    // "taints" the on-screen canvas as soon as its image data is
+    // requested, significantly slowing down subsequent blittings
 
-    Note: for some strange reason this method works fine if the page is
-    opened via HTTP, but *not*, if it is opened from a local uri
-    (e.g. from a directory), in which case it's always null.
-
-    This behavior is consistent throughout several browsers. I have no
-    clue what's behind this, apparently the imageData attribute of
-    canvas context only gets filled with meaningful data if transferred
-    via HTTP ???
-
-    This is somewhat of a showstopper for color detection in a planned
-    offline version of Snap.
-
-    The issue has also been discussed at: (join lines before pasting)
-    http://stackoverflow.com/questions/4069400/
-    canvas-getimagedata-doesnt-work-when-running-locally-on-windows-
-    security-excep
-
-    The suggestion solution appears to work, since the settings are
-    applied globally.
-*/
     var dta = this.worldCanvas.getContext('2d').getImageData(
         point.x,
         point.y,
@@ -11324,6 +11388,14 @@ WorldMorph.prototype.getGlobalPixelColor = function (point) {
         1
     ).data;
     return new Color(dta[0], dta[1], dta[2]);
+*/
+
+    var clr = this.hand.morphAtPointer().getPixelColor(this.hand.position());
+    // IMPORTANT:
+    // all callers of getGlobalPixelColor should make provisions for retina
+    // display support, which gets null-pixels interlaced with non-null ones:
+    // if (!clr.a) {/* ignore */ }
+    return clr;
 };
 
 // WorldMorph events:
