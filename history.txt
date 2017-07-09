@@ -3514,6 +3514,12 @@ Fixes:
 170708
 ------
 * Threads: Assert data types to list operations -> meaningful error messages
+* GUI: enable inheritance per default, must be user-enabled for existing projects
+
+170709
+------
+* Objects, Threads: added experimental (hidden in dev mode) “tell ... to ..." and “ask ... for ...” primitives 
+
 
 
 Features:

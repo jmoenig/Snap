@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph,
 TableFrameMorph, ColorSlotMorph, isSnapObject*/
 
-modules.threads = '2017-July-08';
+modules.threads = '2017-July-09';
 
 var ThreadManager;
 var Process;
@@ -1618,6 +1618,22 @@ Process.prototype.doDeleteAttr = function (attrName) {
     if (contains(rcvr.inheritedVariableNames(true), name)) {
         rcvr.deleteVariable(name);
     }
+};
+
+// experimental message passing primitives
+
+Process.prototype.doTellTo = function (sprite, context) {
+    this.doRun(
+        this.reportAttributeOf(context, sprite),
+        new List()
+    );
+};
+
+Process.prototype.reportAskFor = function (sprite, context) {
+    this.evaluate(
+        this.reportAttributeOf(context, sprite),
+        new List()
+    );
 };
 
 // Process lists primitives

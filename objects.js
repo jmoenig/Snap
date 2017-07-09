@@ -82,7 +82,7 @@ SpeechBubbleMorph, RingMorph, isNil, FileReader, TableDialogMorph,
 BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph*/
 
-modules.objects = '2017-July-07';
+modules.objects = '2017-July-09';
 
 var SpriteMorph;
 var StageMorph;
@@ -726,7 +726,23 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: 'warp %c'
         },
 
-        // Cloning - very experimental
+        // Message passing - very experimental
+
+        doTellTo: {
+            dev: true,
+            type: 'command',
+            category: 'control',
+            spec: 'tell %spr to %cl'
+        },
+        reportAskFor: {
+            dev: true,
+            type: 'reporter',
+            category: 'control',
+            spec: 'ask %spr for %repRing'
+        },
+
+        // Cloning
+
         receiveOnClone: {
             type: 'hat',
             category: 'control',
@@ -856,7 +872,7 @@ SpriteMorph.prototype.initBlocks = function () {
         reportAttributeOf: {
             type: 'reporter',
             category: 'sensing',
-            spec: '%att of %spr',
+            spec: '%att of ',
             defaults: [['costume #']]
         },
         reportURL: {
@@ -1967,6 +1983,20 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('removeClone'));
         blocks.push('-');
         blocks.push(block('doPauseAll'));
+
+    // for debugging: ///////////////
+        if (this.world().isDevMode) {
+            blocks.push('-');
+            txt = new TextMorph(localize(
+                'development mode \ndebugging primitives:'
+            ));
+            txt.fontSize = 9;
+            txt.setColor(this.paletteTextColor);
+            blocks.push(txt);
+            blocks.push('-');
+            blocks.push(block('doTellTo'));
+            blocks.push(block('reportAskFor'));
+        }
 
     } else if (cat === 'sensing') {
 
@@ -6855,6 +6885,20 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('createClone'));
         blocks.push('-');
         blocks.push(block('doPauseAll'));
+
+    // for debugging: ///////////////
+        if (this.world().isDevMode) {
+            blocks.push('-');
+            txt = new TextMorph(localize(
+                'development mode \ndebugging primitives:'
+            ));
+            txt.fontSize = 9;
+            txt.setColor(this.paletteTextColor);
+            blocks.push(txt);
+            blocks.push('-');
+            blocks.push(block('doTellTo'));
+            blocks.push(block('reportAskFor'));
+        }
 
     } else if (cat === 'sensing') {
 
