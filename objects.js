@@ -82,7 +82,7 @@ SpeechBubbleMorph, RingMorph, isNil, FileReader, TableDialogMorph,
 BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph*/
 
-modules.objects = '2017-July-09';
+modules.objects = '2017-July-11';
 
 var SpriteMorph;
 var StageMorph;
@@ -1444,6 +1444,11 @@ SpriteMorph.prototype.fullCopy = function (forClone) {
     c.paletteCache = {};
     c.variables = this.variables.copy();
     c.variables.owner = c;
+    arr = [];
+    this.inheritedAttributes.forEach(function (att) {
+        arr.push(att);
+    });
+    c.inheritedAttributes = arr;
     if (forClone) {
         c.exemplar = this;
         this.addSpecimen(c);
@@ -1463,6 +1468,7 @@ SpriteMorph.prototype.fullCopy = function (forClone) {
                 block.definition = cb;
             });
         });
+        arr = [];
         this.costumes.asArray().forEach(function (costume) {
             var cst = forClone ? costume : costume.copy();
             arr.push(cst);

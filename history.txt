@@ -3520,6 +3520,10 @@ Fixes:
 ------
 * Objects, Threads: added experimental (only shown in dev mode) “tell ... to ..." and “ask ... for ...” primitives 
 
+170711
+------
+* Objects: fixed an inheritance glitch for clones
+
 
 
 Features:
