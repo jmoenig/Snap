@@ -3524,6 +3524,7 @@ Fixes:
 ------
 * Objects: fixed an inheritance glitch for clones
 * Objects: fixed variable inheritance for traditional Scratch-like clones
+* Objects: tweaked inheritance indication for stage watchers
 
 
 

@@ -8928,10 +8928,12 @@ WatcherMorph.prototype.update = function () {
         if (newValue !== this.currentValue) {
             this.changed();
             this.cellMorph.contents = newValue;
-            if (isGhosted) {
-                this.cellMorph.setColor(this.readoutColor.lighter(35));
-            } else {
-                this.cellMorph.setColor(this.readoutColor);
+            if (isSnapObject(this.target)) {
+                if (isGhosted) {
+                    this.cellMorph.setColor(this.readoutColor.lighter(35));
+                } else {
+                    this.cellMorph.setColor(this.readoutColor);
+                }
             }
             this.cellMorph.drawNew();
             if (!isNaN(newValue)) {
