@@ -1449,6 +1449,7 @@ SpriteMorph.prototype.fullCopy = function (forClone) {
     c.inheritedAttributes = arr;
     if (forClone) {
         c.exemplar = this;
+        c.customBlocks = [];
         c.variables = new VariableFrame(null, c);
         c.variables.parentFrame = this.variables;
         c.inheritedVariableNames().forEach(function (name) {
@@ -4954,7 +4955,7 @@ SpriteMorph.prototype.deleteAllBlockInstances = function (definition) {
             });
         }
     } else {
-        this.allinstances.concat(this).forEach(function (sprite) {
+        this.allSpecimens().concat(this).forEach(function (sprite) {
             sprite.customBlocks.forEach(function (def) {
                 def.purgeCorpses();
             });
