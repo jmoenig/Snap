@@ -3526,6 +3526,7 @@ Fixes:
 * Objects: fixed variable inheritance for traditional Scratch-like clones
 * Objects: tweaked inheritance indication for stage watchers
 * Objects: fixed custom block inheritance for traditional Scratch-like clones
+* Objects: optimized deleting traditional Scratch-like cones
 
 
 Features:

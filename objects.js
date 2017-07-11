@@ -5257,7 +5257,7 @@ SpriteMorph.prototype.chooseExemplar = function () {
 };
 
 SpriteMorph.prototype.setExemplar = function (another) {
-    var ide = this.parentThatIsA(IDE_Morph);
+    var ide;
     this.emancipate();
     this.exemplar = another;
     if (another) {
@@ -5266,9 +5266,12 @@ SpriteMorph.prototype.setExemplar = function (another) {
     } else {
         this.variables.parentFrame = this.globalVariables();
     }
-    if (ide) {
-        ide.flushBlocksCache('variables');
-        ide.refreshPalette();
+    if (!this.isTemporary) {
+        ide = this.parentThatIsA(IDE_Morph);
+        if (ide) {
+            ide.flushBlocksCache('variables');
+            ide.refreshPalette();
+        }
     }
 };
 
@@ -5424,7 +5427,7 @@ SpriteMorph.prototype.shadowAttribute = function (aName) {
         });
     } else {
         this.updatePropagationCache();
-        if (ide) {
+        if (ide && !this.isTemporary) {
             ide.flushBlocksCache(); // optimization: specify category if known
             ide.refreshPalette();
         }
@@ -5531,11 +5534,14 @@ SpriteMorph.prototype.shadowAllVars = function () {
 };
 
 SpriteMorph.prototype.shadowVar = function (name, value) {
-    var ide = this.parentThatIsA(IDE_Morph);
+    var ide;
     this.variables.addVar(name, value);
-    if (ide) {
-        ide.flushBlocksCache('variables');
-        ide.refreshPalette();
+    if (!this.isTemporary) {
+        ide = this.parentThatIsA(IDE_Morph);
+        if (ide) {
+            ide.flushBlocksCache('variables');
+            ide.refreshPalette();
+        }
     }
 };
 
@@ -5625,14 +5631,17 @@ SpriteMorph.prototype.inheritedBlocks = function (valuesOnly) {
 };
 
 SpriteMorph.prototype.shadowAllMethods = function () {
-    var ide = this.parentThatIsA(IDE_Morph),
+    var ide,
         myself = this;
     this.inheritedMethods().forEach(function (dup) {
         myself.customBlocks.push(dup);
     });
-    if (ide) {
-        ide.flushPaletteCache();
-        ide.refreshPalette();
+    if (!this.isTemporary) {
+        ide = this.parentThatIsA(IDE_Morph);
+        if (ide) {
+            ide.flushPaletteCache();
+            ide.refreshPalette();
+        }
     }
 };
 
