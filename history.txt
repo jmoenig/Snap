@@ -3523,6 +3523,7 @@ Fixes:
 170711
 ------
 * Objects: fixed an inheritance glitch for clones
+* Objects: fixed variable inheritance for traditional Scratch-like clones
 
 
 

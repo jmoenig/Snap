@@ -1442,8 +1442,6 @@ SpriteMorph.prototype.fullCopy = function (forClone) {
     c.color = this.color.copy();
     c.blocksCache = {};
     c.paletteCache = {};
-    c.variables = this.variables.copy();
-    c.variables.owner = c;
     arr = [];
     this.inheritedAttributes.forEach(function (att) {
         arr.push(att);
@@ -1451,6 +1449,11 @@ SpriteMorph.prototype.fullCopy = function (forClone) {
     c.inheritedAttributes = arr;
     if (forClone) {
         c.exemplar = this;
+        c.variables = new VariableFrame(null, c);
+        c.variables.parentFrame = this.variables;
+        c.inheritedVariableNames().forEach(function (name) {
+            c.shadowVar(name, c.variables.getVar(name));
+        });
         this.addSpecimen(c);
         this.cachedPropagation = false;
         ['scripts', 'costumes', 'sounds'].forEach(function (att) {
@@ -1459,6 +1462,8 @@ SpriteMorph.prototype.fullCopy = function (forClone) {
             }
         });
     } else {
+        c.variables = this.variables.copy();
+        c.variables.owner = c;
         c.scripts = this.scripts.fullCopy();
         c.customBlocks = [];
         this.customBlocks.forEach(function (def) {
@@ -5255,10 +5260,10 @@ SpriteMorph.prototype.setExemplar = function (another) {
     this.emancipate();
     this.exemplar = another;
     if (another) {
-        this.variables.parentFrame = (another.variables);
+        this.variables.parentFrame = another.variables;
         another.addSpecimen(this);
     } else {
-        this.variables.parentFrame = (this.globalVariables());
+        this.variables.parentFrame = this.globalVariables();
     }
     if (ide) {
         ide.flushBlocksCache('variables');
@@ -8910,7 +8915,7 @@ WatcherMorph.prototype.update = function () {
                 xPosition: 'x position',
                 yPosition: 'y position',
                 direction: 'direction',
-                getCostumeIdx: 'costume #', //+++
+                getCostumeIdx: 'costume #',
                 getScale: 'size'} [this.getter];
             isGhosted = att ? this.target.inheritsAttribute(att) : false;
         }
