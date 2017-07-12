@@ -82,7 +82,7 @@ SpeechBubbleMorph, RingMorph, isNil, FileReader, TableDialogMorph,
 BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph*/
 
-modules.objects = '2017-July-11';
+modules.objects = '2017-July-12';
 
 var SpriteMorph;
 var StageMorph;
@@ -752,6 +752,11 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'command',
             category: 'control',
             spec: 'create a clone of %cln'
+        },
+        newClone: {
+            type: 'reporter',
+            category: 'control',
+            spec: 'a new clone of %cln'
         },
         removeClone: {
             type: 'command',
@@ -1992,23 +1997,13 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push('-');
         blocks.push(block('receiveOnClone'));
         blocks.push(block('createClone'));
+        blocks.push(block('newClone'));
         blocks.push(block('removeClone'));
         blocks.push('-');
         blocks.push(block('doPauseAll'));
-
-    // for debugging: ///////////////
-        if (this.world().isDevMode) {
-            blocks.push('-');
-            txt = new TextMorph(localize(
-                'development mode \ndebugging primitives:'
-            ));
-            txt.fontSize = 9;
-            txt.setColor(this.paletteTextColor);
-            blocks.push(txt);
-            blocks.push('-');
-            blocks.push(block('doTellTo'));
-            blocks.push(block('reportAskFor'));
-        }
+        blocks.push('-');
+        blocks.push(block('doTellTo'));
+        blocks.push(block('reportAskFor'));
 
     } else if (cat === 'sensing') {
 
@@ -3221,10 +3216,21 @@ SpriteMorph.prototype.remove = function () {
 */
 
 SpriteMorph.prototype.createClone = function (immediately) {
-    var stage = this.parentThatIsA(StageMorph);
+    var stage = this.parentThatIsA(StageMorph),
+        clone;
     if (stage && stage.cloneCount <= 5000) {
-        this.fullCopy(true).clonify(stage, immediately);
+        clone = this.fullCopy(true);
+        clone.clonify(stage, immediately);
     }
+    return clone;
+};
+
+SpriteMorph.prototype.newClone = function (immediately) {
+    var clone = this.createClone(immediately);
+    if (isNil(clone)) {
+        throw new Error('exceeding maximum number of clones');
+    }
+    return clone;
 };
 
 SpriteMorph.prototype.clonify = function (stage, immediately) {
@@ -6904,22 +6910,12 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('reportCallCC'));
         blocks.push('-');
         blocks.push(block('createClone'));
+        blocks.push(block('newClone'));
         blocks.push('-');
         blocks.push(block('doPauseAll'));
-
-    // for debugging: ///////////////
-        if (this.world().isDevMode) {
-            blocks.push('-');
-            txt = new TextMorph(localize(
-                'development mode \ndebugging primitives:'
-            ));
-            txt.fontSize = 9;
-            txt.setColor(this.paletteTextColor);
-            blocks.push(txt);
-            blocks.push('-');
-            blocks.push(block('doTellTo'));
-            blocks.push(block('reportAskFor'));
-        }
+        blocks.push('-');
+        blocks.push(block('doTellTo'));
+        blocks.push(block('reportAskFor'));
 
     } else if (cat === 'sensing') {
 
