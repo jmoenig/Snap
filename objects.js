@@ -1127,7 +1127,7 @@ SpriteMorph.prototype.initBlocks = function () {
         doDeleteAttr: {
             type: 'command',
             category: 'variables',
-            spec: 'delete %shd'
+            spec: 'inherit %shd'
         },
 
         // Lists
