@@ -4086,7 +4086,10 @@ SpriteMorph.prototype.justDropped = function () {
     }
     if (this.exemplar) {
         this.inheritedAttributes.forEach(function (att) {
-            myself.refreshInheritedAttribute(att);
+            if (contains(['direction', 'size', 'costume #'], att)) {
+                // only refresh certain propagated attributes
+                myself.refreshInheritedAttribute(att);
+            }
         });
     }
     this.restoreLayers();

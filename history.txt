@@ -3531,7 +3531,8 @@ Fixes:
 170712
 ------
 * Blocks: fixed #1800. Thanks, Ken, for the bug report!
-* Objects, Threads: “new clone of ...” primitive, made TELL, ASK primitives official 
+* Objects, Threads: “new clone of ...” primitive, made TELL, ASK primitives official
+* Objects: only refresh certain propagated inherited attributes on being dropped
 
 
 
