@@ -1604,6 +1604,7 @@ Process.prototype.doDeleteAttr = function (attrName) {
                 xPosition: 'x position',
                 yPosition: 'y position',
                 direction: 'direction',
+                getCostumeIdx: 'costume #',
                 size: 'size'
             }[name.expression.selector];
             if (!isNil(name)) {

@@ -1370,7 +1370,7 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                 'shadowedVariablesMenu',
                 true
             );
-            part.isStatic = true;
+            // part.isStatic = true;
             break;
         case '%lst':
             part = new InputSlotMorph(
