@@ -3528,6 +3528,11 @@ Fixes:
 * Objects: fixed custom block inheritance for traditional Scratch-like clones
 * Objects: optimized deleting traditional Scratch-like cones
 
+170712
+------
+* Blocks: fixed #1800. Thanks, Ken, for the bug report!
+
+
 
 Features:
 * polymorphic sprite-local custom blocks

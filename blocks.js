@@ -150,7 +150,7 @@ CustomCommandBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2017-July-04';
+modules.blocks = '2017-July-12';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -6683,7 +6683,7 @@ ScriptsMorph.prototype.scriptTarget = function () {
     }
     editor = this.parentThatIsA(BlockEditorMorph);
     if (editor) {
-        return editor.target.currentSprite;
+        return editor.target;
     }
     throw new Error('script target bannot be found for orphaned scripts');
 };
