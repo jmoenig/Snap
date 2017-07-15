@@ -3535,6 +3535,9 @@ Fixes:
 * Objects: only refresh certain propagated inherited attributes on being dropped
 * Objects: renamed “delete” primitive to “inherit”
 
+170715
+------
+* BYOB: shadow inherited scripts when changing the category of an inherited method
 
 
 Features:

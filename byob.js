@@ -108,7 +108,7 @@ BooleanSlotMorph, XML_Serializer*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2017-May-30';
+modules.byob = '2017-July-15';
 
 // Declarations
 
@@ -2114,6 +2114,9 @@ BlockEditorMorph.prototype.updateDefinition = function () {
     });
 
     if (head) {
+        if (this.definition.category !== head.blockCategory) {
+            this.target.shadowAttribute('scripts');
+        }
         this.definition.category = head.blockCategory;
         this.definition.type = head.type;
         if (head.comment) {
