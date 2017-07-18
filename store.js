@@ -1167,7 +1167,11 @@ SnapSerializer.prototype.loadValue = function (model) {
         v.isDraggable = model.attributes.draggable !== 'false';
         v.isVisible = model.attributes.hidden !== 'true';
         v.heading = parseFloat(model.attributes.heading) || 0;
-        if(model.attributes.xRotation && model.attributes.yRotation && model.attributes.zRotation) v.point3D(model.attributes.xRotation || 0, model.attributes.yRotation || 0, model.attributes.zRotation || 0)
+        if(model.attributes.xRotation && model.attributes.yRotation && model.attributes.zRotation) {
+            v._3DRotationX = +model.attributes.xRotation || 0;
+            v._3DRotationY = +model.attributes.yRotation || 0;
+            v._3DRotationZ = +model.attributes.zRotation || 0;
+        }
         v.drawNew();
         v.gotoXY(+model.attributes.x || 0, +model.attributes.y || 0);
 		if(model.attributes.z) v.gotoXYZ(+model.attributes.x || 0, +model.attributes.y || 0, +model.attributes.z || 0);
