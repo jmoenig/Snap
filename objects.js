@@ -7626,7 +7626,6 @@ Note.prototype.play = function (secs) {
     this.gainNode.gain.linearRampToValueAtTime(0, releaseEnd);
 
     this.oscillator.start(0);
-    this.released = false;
 };
 
 Note.prototype.stop = function () {
