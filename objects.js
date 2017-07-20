@@ -7582,7 +7582,9 @@ Note.prototype.setupContext = function () {
     }
     Note.prototype.audioContext = new AudioContext();
     Note.prototype.gainNode = Note.prototype.audioContext.createGain();
-    Note.prototype.gainNode.gain.value = 0.25; // reduce volume by 1/4
+    Note.prototype.volumeLevel = 0.25;
+    Note.prototype.attackTime = 0.075;
+    Note.prototype.releaseTime = 0.075;
 };
 
 // Note playing
@@ -7600,7 +7602,10 @@ Note.prototype.play = function () {
         Math.pow(2, (this.pitch - 69) / 12) * 440;
     this.oscillator.connect(this.gainNode);
     this.gainNode.connect(this.audioContext.destination);
+    this.gainNode.gain.value = 0;
+    this.gainNode.gain.linearRampToValueAtTime(this.volumeLevel, this.audioContext.currentTime + this.attackTime);
     this.oscillator.start(0);
+    this.released = false;
 };
 
 Note.prototype.stop = function () {
@@ -7609,6 +7614,13 @@ Note.prototype.stop = function () {
         this.oscillator = null;
     }
 };
+
+Note.prototype.release = function () {
+    if (!this.released) {
+        this.released = true;
+        this.gainNode.gain.linearRampToValueAtTime(0, this.audioContext.currentTime + this.releaseTime);
+    }
+}
 
 // CellMorph //////////////////////////////////////////////////////////
 
