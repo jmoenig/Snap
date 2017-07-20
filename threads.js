@@ -3297,10 +3297,7 @@ Process.prototype.doPlayNoteForSecs = function (pitch, secs) {
     if (!this.context.startTime) {
         this.context.startTime = Date.now();
         this.context.activeNote = new Note(pitch);
-        this.context.activeNote.play();
-    }
-    if ((Date.now() - this.context.startTime) >= ((secs - this.context.activeNote.releaseTime) * 1000)) {
-        this.context.activeNote.release();
+        this.context.activeNote.play(secs);
     }
     if ((Date.now() - this.context.startTime) >= (secs * 1000)) {
         if (this.context.activeNote) {

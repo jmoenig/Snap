@@ -7589,7 +7589,8 @@ Note.prototype.setupContext = function () {
 
 // Note playing
 
-Note.prototype.play = function () {
+Note.prototype.play = function (secs) {
+    var attackStart, attackEnd, releaseStart, releaseEnd;
     this.oscillator = this.audioContext.createOscillator();
     if (!this.oscillator.start) {
         this.oscillator.start = this.oscillator.noteOn;
@@ -7603,7 +7604,27 @@ Note.prototype.play = function () {
     this.oscillator.connect(this.gainNode);
     this.gainNode.connect(this.audioContext.destination);
     this.gainNode.gain.value = 0;
-    this.gainNode.gain.linearRampToValueAtTime(this.volumeLevel, this.audioContext.currentTime + this.attackTime);
+
+    // attack:
+    attackStart = this.audioContext.currentTime;
+    if (this.attackTime < (secs / 2)) {
+        attackEnd = attackStart + this.attackTime;
+    } else {
+        attackEnd = attackStart + (secs / 2);
+    }
+    this.gainNode.gain.cancelScheduledValues(attackStart);
+    this.gainNode.gain.setValueAtTime(0, attackStart);
+    this.gainNode.gain.linearRampToValueAtTime(this.volumeLevel, attackEnd);
+    // release:
+    releaseEnd = attackStart + secs;
+    if (this.releaseTime < (secs / 2)) {
+        releaseStart = releaseEnd - this.releaseTime;
+    } else {
+        releaseStart = releaseEnd - (secs / 2);
+    }
+    this.gainNode.gain.setValueAtTime(this.volumeLevel, releaseStart);
+    this.gainNode.gain.linearRampToValueAtTime(0, releaseEnd);
+
     this.oscillator.start(0);
     this.released = false;
 };
@@ -7614,13 +7635,6 @@ Note.prototype.stop = function () {
         this.oscillator = null;
     }
 };
-
-Note.prototype.release = function () {
-    if (!this.released) {
-        this.released = true;
-        this.gainNode.gain.linearRampToValueAtTime(0, this.audioContext.currentTime + this.releaseTime);
-    }
-}
 
 // CellMorph //////////////////////////////////////////////////////////
 
