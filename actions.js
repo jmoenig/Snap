@@ -1230,6 +1230,9 @@ ActionManager.prototype._onAddBlock = function(block, ownerId, x, y, callback) {
                 firstBlock.fixChildrensBlockColor(true);
             }
 
+            firstBlock.allComments().forEach(function(comment) {
+                comment.align(firstBlock);
+            });
             myself.registerBlocks(firstBlock, owner);
             myself.__updateActiveEditor(firstBlock.id);
             callback(firstBlock);
