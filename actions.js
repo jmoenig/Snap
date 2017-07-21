@@ -2515,6 +2515,9 @@ ActionManager.prototype.traverse = function(block, fn) {
             if (block.nextBlock && block.nextBlock()) {  // add following blocks
                 next.push(block.nextBlock());
             }
+            if (block.comment) {
+                next.push(block.comment);
+            }
         }
         current = next;
     }
