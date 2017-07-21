@@ -5272,7 +5272,14 @@ ProjectDialogMorph.prototype.saveProject = function () {
     var name = this.nameField.contents().text.text,
         notes = this.notesText.text,
         myself = this;
-    
+    var isUnique = true;
+    for(var i = 0; i<this.listField.elements.length; i++){
+        if (this.listField.elements[i].name == name && !this.listField.elements[i].approved) {
+        isUnique = i;
+        break;
+        }
+    }
+    if(isUnique) SnapCloud.project_id = undefined;
     this.ide.projectNotes = notes || this.ide.projectNotes;
     if (name) {
         if (this.source === 'cloud') {
