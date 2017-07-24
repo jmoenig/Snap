@@ -1234,6 +1234,7 @@ ActionManager.prototype._onAddBlock = function(block, ownerId, x, y, callback) {
                 comment.align(firstBlock);
             });
             myself.registerBlocks(firstBlock, owner);
+            myself.__updateScriptsMorph(firstBlock);
             myself.__updateActiveEditor(firstBlock.id);
             callback(firstBlock);
         };
@@ -1261,14 +1262,12 @@ ActionManager.prototype._onAddBlock = function(block, ownerId, x, y, callback) {
                 null,
                 function() {
                     owner.scripts.add(firstBlock);
-                    owner.scripts.drawNew();
                     afterAdd();
                 }
             );
         } else {
             firstBlock.setPosition(position);
             owner.scripts.add(firstBlock);
-            owner.scripts.changed();
             firstBlock.changed();
             owner.scripts.adjustBounds();
             afterAdd();
@@ -1399,8 +1398,10 @@ ActionManager.prototype.onMoveBlock = function(id, rawTarget) {
         block = this.deserializeBlock(id),
         isNewBlock = !this._blocks[block.id],
         target = copy(rawTarget),
+        isTargetDragging = false,
+        afterMove,
         scripts,
-        afterMove;
+        owner;
 
     this.__recordTarget(block.id, rawTarget);
 
@@ -1416,6 +1417,7 @@ ActionManager.prototype.onMoveBlock = function(id, rawTarget) {
         } else {  // basic connection for sprite/stage/etc
             target.element = this.getBlockFromId(target.element);
         }
+        owner = this._owners[this._blockToOwnerId[target.element.id]];
         scripts = target.element.parentThatIsA(ScriptsMorph);
         if (block.parent) {
             if (target.loc === 'bottom') {
@@ -1430,6 +1432,7 @@ ActionManager.prototype.onMoveBlock = function(id, rawTarget) {
         this.disconnectBlock(block, scripts);
 
         target = this.getBlockFromId(target);
+        owner = this._owners[this._blockToOwnerId[target.id]];
         scripts = target.parentThatIsA(ScriptsMorph);
 
         // If the target is a RingMorph, it will be overwritten rather than popped out
@@ -1440,8 +1443,10 @@ ActionManager.prototype.onMoveBlock = function(id, rawTarget) {
         logger.error('Unsupported "onMoveBlock":', block);
     }
 
+    isTargetDragging = !scripts;
+    scripts = scripts || owner.scripts;
     afterMove = function() {
-        if (isNewBlock) {
+        if (isNewBlock && !isTargetDragging) {
             scripts.add(block);
         } else {
             if (block.parent && block.parent.reactToGrabOf) {
@@ -1450,7 +1455,9 @@ ActionManager.prototype.onMoveBlock = function(id, rawTarget) {
         }
 
         block.snap(target);
-        scripts.drawNew();
+        if (!isTargetDragging) {
+            scripts.drawNew();
+        }
 
         if (isNewBlock) {
             myself._positionOf[block.id] = myself.getStandardPosition(scripts, block.position());
@@ -1459,7 +1466,7 @@ ActionManager.prototype.onMoveBlock = function(id, rawTarget) {
                 myself.registerBlocks(block, target.element.definition);
             } else {
                 myself.registerBlocks(block, scripts.owner);
-        }
+            }
         }
 
         if (target instanceof ReporterBlockMorph) {
@@ -1664,6 +1671,16 @@ ActionManager.prototype.__canAnimate = function() {
         this.currentEvent.user !== this.id;
 };
 
+ActionManager.prototype.__updateScriptsMorph = function(block) {
+    var scripts = block.parentThatIsA(ScriptsMorph),
+        isDragging = !scripts;
+
+    if (!isDragging) {
+        scripts.drawNew();
+        scripts.changed();
+    }
+};
+
 ActionManager.prototype.__updateBlockDefinitions = function(block) {
     var editor = block.parentThatIsA(BlockEditorMorph);
     if (editor) {
@@ -1727,23 +1744,20 @@ ActionManager.prototype.disconnectBlock = function(block, scripts) {
 };
 
 ActionManager.prototype.onAddListInput = function(id, count) {
-    var block = this.getBlockFromId(id),
-        scripts = block.parentThatIsA(ScriptsMorph);
+    var block = this.getBlockFromId(id);
 
     count = count || 1;
     for (var i = 0; i < count; i++) {
         block.addInput();
     }
 
-    scripts.drawNew();
-    scripts.changed();
+    this.__updateScriptsMorph(block);
     this.__updateBlockDefinitions(block);
     this.completeAction();
 };
 
 ActionManager.prototype.onRemoveListInput = function(id, count) {
-    var block = this.getBlockFromId(id),
-        scripts = block.parentThatIsA(ScriptsMorph);
+    var block = this.getBlockFromId(id);
 
     count = count || 1;
     for (var i = 0; i < count; i++) {
@@ -1751,7 +1765,7 @@ ActionManager.prototype.onRemoveListInput = function(id, count) {
     }
 
     block.changed();
-    scripts.changed();
+    this.__updateScriptsMorph(block);
     this.__updateBlockDefinitions(block);
     this.completeAction();
 };
@@ -2585,7 +2599,6 @@ ActionManager.prototype.__clearOwnerRecords = function(ownerId) {
     var blockIds = Object.keys(this._blockToOwnerId),
         costumeIds = Object.keys(this._costumeToOwner),
         soundIds = Object.keys(this._soundToOwner),
-        owner = this._owners[ownerId],
         i;
 
     for (i = blockIds.length; i--;) {
