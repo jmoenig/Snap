@@ -604,6 +604,13 @@ ActionManager.prototype._setBlocksPositions = function(ids, positions) {
         stdPositions,
         oldPositions;
 
+    // Remove any comments (undefined position)
+    for (var i = ids.length; i--;) {
+        if (!positions[i]) {
+            ids.splice(i, 1);
+            positions.splice(i, 1);
+        }
+    }
     oldPositions = ids.map(function(id) {
         return myself._positionOf[id];
     });
