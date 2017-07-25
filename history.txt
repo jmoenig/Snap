@@ -3542,6 +3542,7 @@ Fixes:
 170725
 ------
 * Objects: fixed rotation-bug when flipping costumes in "only turn left/right" mode"
+* BYOB: changed Block Editor label to "Method" for methods
 
 
 Features:
@@ -3569,4 +3570,5 @@ Fixes:
 * only mark implicit parameters if no formal ones exist
 * optimized thread-launch and script highlighting to a single frame instead of formerly two
 * changed direction attribute of sprites to automatically confine to 0-360 degrees
+* fixed rotation-bug when flipping costumes in "only turn left/right" mode"
 * fixed some typos
