@@ -74,7 +74,7 @@ isRetinaSupported, SliderMorph, Animation*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2017-July-07';
+modules.gui = '2017-July-25';
 
 // Declarations
 
@@ -2618,7 +2618,7 @@ IDE_Morph.prototype.settingsMenu = function () {
         ScriptsMorph.prototype.enableNestedAutoWrapping,
         'uncheck to confine auto-wrapping\nto top-level block stacks',
         'check to enable auto-wrapping\ninside nested block stacks',
-        false
+        true
     );
     addPreference(
         'Project URLs',
@@ -2674,7 +2674,7 @@ IDE_Morph.prototype.settingsMenu = function () {
         ScriptsMorph.prototype.enableKeyboard,
         'uncheck to disable\nkeyboard editing support',
         'check to enable\nkeyboard editing support',
-        false
+        true
     );
     addPreference(
         'Table support',
@@ -2690,7 +2690,7 @@ IDE_Morph.prototype.settingsMenu = function () {
         List.prototype.enableTables,
         'uncheck to disable\nmulti-column list views',
         'check for multi-column\nlist view support',
-        false
+        true
     );
     if (List.prototype.enableTables) {
         addPreference(
@@ -2707,7 +2707,7 @@ IDE_Morph.prototype.settingsMenu = function () {
             TableMorph.prototype.highContrast,
             'uncheck for less contrast\nmulti-column list views',
             'check for higher contrast\ntable views',
-            false
+            true
         );
     }
     addPreference(

@@ -3543,6 +3543,7 @@ Fixes:
 ------
 * Objects: fixed rotation-bug when flipping costumes in "only turn left/right" mode"
 * BYOB: changed Block Editor label to "Method" for methods
+* GUI: moved settings 'Keyboard Editing', 'Nested auto-wrapping', "Table support" and "Table lines" to hidden (default is "on" for all)
 
 
 Features:
