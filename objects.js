@@ -82,7 +82,7 @@ SpeechBubbleMorph, RingMorph, isNil, FileReader, TableDialogMorph,
 BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph*/
 
-modules.objects = '2017-July-12';
+modules.objects = '2017-July-25';
 
 var SpriteMorph;
 var StageMorph;
@@ -7986,6 +7986,7 @@ Costume.prototype.flipped = function () {
     ctx.drawImage(this.contents, 0, 0);
     flipped = new Costume(
         canvas,
+        this.name,
         new Point(
             this.width() - this.rotationCenter.x,
             this.rotationCenter.y

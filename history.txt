@@ -3539,6 +3539,10 @@ Fixes:
 ------
 * BYOB: shadow inherited scripts when changing the category of an inherited method
 
+170725
+------
+* Objects: fixed rotation-bug when flipping costumes in "only turn left/right" mode"
+
 
 Features:
 * polymorphic sprite-local custom blocks
