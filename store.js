@@ -417,6 +417,7 @@ SnapSerializer.prototype.init = function () {
     this.objects = {};
     this.mediaDict = {};
     this.isSavingHistory = true;
+    this.isSavingCustomBlockOwners = true;
 };
 
 // SnapSerializer saving:
@@ -1394,6 +1395,9 @@ SnapSerializer.prototype.loadValue = function (model) {
             )) {
             return this.mediaDict[model.attributes.mediaID];
         }
+        if (Object.prototype.hasOwnProperty.call(model.attributes, 'actionID')) {
+            return SnapActions.getOwnerFromId(model.attributes.actionID);
+        }
         throw new Error('expecting a reference id');
     case 'l':
         option = model.childNamed('option');
@@ -2067,7 +2071,9 @@ CustomCommandBlockMorph.prototype.toBlockXML = function (serializer) {
         this.comment ? this.comment.toXML(serializer) : '',
         scope && !this.definition.receiver[serializer.idProperty] ?
                 '<receiver>' +
-                    serializer.store(this.definition.receiver) +
+                    (serializer.isSavingCustomBlockOwners ?
+                    serializer.store(this.definition.receiver) :
+                    '<ref actionID="' + this.definition.receiver.id +'"/>') +
                     '</receiver>'
                         : ''
     );
