@@ -70,11 +70,11 @@ fontHeight, hex_sha512, sb, CommentMorph, CommandBlockMorph,
 BlockLabelPlaceHolderMorph, Audio, SpeechBubbleMorph, ScriptFocusMorph,
 XML_Element, WatcherMorph, BlockRemovalDialogMorph, saveAs, TableMorph,
 isSnapObject, isRetinaEnabled, disableRetinaSupport, enableRetinaSupport,
-isRetinaSupported, SliderMorph, Animation, BooleanSlotMorph*/
+isRetinaSupported, SliderMorph, Animation*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2017-January-23';
+modules.gui = '2017-April-23';
 
 // Declarations
 
@@ -2894,16 +2894,6 @@ IDE_Morph.prototype.settingsMenu = function () {
         'check for flat ends of lines'
     );
     addPreference(
-        'Ternary Boolean slots',
-        function () {
-            BooleanSlotMorph.prototype.isTernary =
-                !BooleanSlotMorph.prototype.isTernary;
-        },
-        BooleanSlotMorph.prototype.isTernary,
-        'uncheck to only\ntoggle true / false\noutside of rings',
-        'check to enable toggling\nBoolean slots to empty'
-    );
-    addPreference(
         'Codification support',
         function () {
             StageMorph.prototype.enableCodeMapping =
@@ -3452,7 +3442,7 @@ IDE_Morph.prototype.aboutSnap = function () {
         module, btn1, btn2, btn3, btn4, licenseBtn, translatorsBtn,
         world = this.world();
 
-    aboutTxt = 'Snap! 4.0.10.1 - dev -\nBuild Your Own Blocks\n\n'
+    aboutTxt = 'Snap! 4.0.10.2\nBuild Your Own Blocks\n\n'
         + 'Copyright \u24B8 2017 Jens M\u00F6nig and '
         + 'Brian Harvey\n'
         + 'jens@moenig.org, bh@cs.berkeley.edu\n\n'
@@ -3680,7 +3670,6 @@ IDE_Morph.prototype.newProject = function () {
     StageMorph.prototype.enableInheritance = false;
     StageMorph.prototype.enableSublistIDs = false;
     SpriteMorph.prototype.useFlatLineEnds = false;
-    BooleanSlotMorph.prototype.isTernary = true;
     Process.prototype.enableLiveCoding = false;
     this.setProjectName('');
     this.projectNotes = '';
@@ -6647,7 +6636,7 @@ LibraryImportDialogMorph.prototype.init = function (ide, librariesData) {
     LibraryImportDialogMorph.uber.init.call(
         this,
         this, // target
-        this.importLibrary, // action
+        null, // function
         null  // environment
     );
 
@@ -6764,7 +6753,7 @@ LibraryImportDialogMorph.prototype.installLibrariesList = function () {
             myself.displayBlocks(item.fileName);
         } else {
             myself.showMessage(
-                localize('Loading preview') + '\n' + localize(item.name)
+                localize('Loading') + '\n' + localize(item.name)
             );
             myself.ide.getURL(
                 myself.ide.resourceURL('libraries', item.fileName),
@@ -7520,7 +7509,7 @@ CostumeIconMorph.prototype.renameCostume = function () {
             }
         }
     ).prompt(
-        ide.currentSprite instanceof SpriteMorph ?
+        this.currentSprite instanceof SpriteMorph ?
             'rename costume' : 'rename background',
         costume.name,
         this.world()
