@@ -82,7 +82,7 @@ SpeechBubbleMorph, RingMorph, isNil, FileReader, TableDialogMorph,
 BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph*/
 
-modules.objects = '2017-July-25';
+modules.objects = '2017-July-26';
 
 var SpriteMorph;
 var StageMorph;
@@ -548,6 +548,11 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'command',
             category: 'pen',
             spec: 'fill'
+        },
+        reportPenTrailsAsCostume: {
+            type: 'reporter',
+            category: 'pen',
+            spec: 'pen trails'
         },
 
         // Control
@@ -1944,6 +1949,8 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push('-');
         blocks.push(block('doStamp'));
         blocks.push(block('floodFill'));
+        blocks.push('-');
+        blocks.push(block('reportPenTrailsAsCostume'));
 
     } else if (cat === 'control') {
 
@@ -4186,6 +4193,17 @@ SpriteMorph.prototype.floodFill = function () {
     }
     ctx.putImageData(img, 0, 0);
     this.parent.changed();
+};
+
+// SpriteMorph pen trails as costume
+
+SpriteMorph.prototype.reportPenTrailsAsCostume = function () {
+    var cst = new Costume(
+        this.parentThatIsA(StageMorph).trailsCanvas,
+        this.newCostumeName(localize('Costume'))
+    );
+    cst.shrinkWrap();
+    return cst;
 };
 
 // SpriteMorph motion - adjustments due to nesting
@@ -6861,6 +6879,7 @@ StageMorph.prototype.blockTemplates = function (category) {
     } else if (cat === 'pen') {
 
         blocks.push(block('clear'));
+        blocks.push(block('reportPenTrailsAsCostume'));
 
     } else if (cat === 'control') {
 
@@ -7194,29 +7213,22 @@ StageMorph.prototype.userMenu = function () {
         },
         'open a new window\nwith a picture of the stage'
     );
-    if (shiftClicked) {
-        menu.addLine();
-        menu.addItem(
-            ide.currentSprite instanceof SpriteMorph ?
-                "turn pen trails into new costume..."
-                    : "turn pen trails into new background...",
-            function () {
-                var costume = new Costume(
-                    myself.trailsCanvas,
-                    Date.now().toString()
-                ).copy();
-                ide.currentSprite.addCostume(costume);
-                ide.currentSprite.wearCostume(costume);
-                ide.hasChangedMedia = true;
-            },
-            ide.currentSprite instanceof SpriteMorph ?
-                'turn all pen trails and stamps\n' +
-                    'into a new costume for the\ncurrently selected sprite'
-                        : 'turn all pen trails and stamps\n' +
-                            'into a new background for the stage',
-            new Color(100, 0, 0)
-        );
-    }
+    menu.addLine();
+    menu.addItem(
+        'pen trails',
+        function () {
+            var costume = ide.currentSprite.reportPenTrailsAsCostume().copy();
+            ide.currentSprite.addCostume(costume);
+            ide.currentSprite.wearCostume(costume);
+            ide.hasChangedMedia = true;
+            ide.spriteBar.tabBar.tabTo('costumes');
+        },
+        ide.currentSprite instanceof SpriteMorph ?
+            'turn all pen trails and stamps\n' +
+                'into a new costume for the\ncurrently selected sprite'
+                    : 'turn all pen trails and stamps\n' +
+                        'into a new background for the stage'
+    );
     return menu;
 };
 
@@ -7566,6 +7578,15 @@ StageMorph.prototype.hasSpriteVariable
 
 StageMorph.prototype.refactorVariableInstances
     = SpriteMorph.prototype.refactorVariableInstances;
+
+// StageMorph pen trails as costume
+
+StageMorph.prototype.reportPenTrailsAsCostume = function () {
+    return new Costume(
+        this.trailsCanvas,
+        this.newCostumeName(localize('Background'))
+    );
+};
 
 // SpriteBubbleMorph ////////////////////////////////////////////////////////
 

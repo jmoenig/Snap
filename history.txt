@@ -3548,6 +3548,7 @@ Fixes:
 170726
 ------
 * Threads: programmatically hide and show primitives in the palette. Thanks, Cynthia Solomon, for this idea!
+* Objects: added "pen trails" reporter primitive and stage context menu entry
 
 
 Features:
