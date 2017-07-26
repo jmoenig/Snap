@@ -3550,6 +3550,7 @@ Fixes:
 * Threads: programmatically hide and show primitives in the palette. Thanks, Cynthia Solomon, for this idea!
 * Objects: added "pen trails" reporter primitive and stage context menu entry
 * Threads, Blocks: added 'costume' and 'sound' as first-class data types
+* Lists, Store, Objects, Threads: enable type-assertion for list elements (costumes, sounds)
 
 Features:
 * polymorphic sprite-local custom blocks

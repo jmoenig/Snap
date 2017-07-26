@@ -61,7 +61,7 @@ normalizeCanvas, contains*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2017-July-07';
+modules.store = '2017-July-25';
 
 
 // XML_Serializer ///////////////////////////////////////////////////////
@@ -810,6 +810,7 @@ SnapSerializer.prototype.loadCostumes = function (object, model) {
         costume;
     if (costumes) {
         object.costumes = this.loadValue(costumes.require('list'));
+        object.costumes.type = 'costume';
     }
     if (Object.prototype.hasOwnProperty.call(
             model.attributes,
@@ -834,6 +835,7 @@ SnapSerializer.prototype.loadSounds = function (object, model) {
     var sounds = model.childNamed('sounds');
     if (sounds) {
         object.sounds = this.loadValue(sounds.require('list'));
+        object.sounds.type = 'sound';
     }
 };
 

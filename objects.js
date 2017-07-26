@@ -1383,8 +1383,10 @@ SpriteMorph.prototype.init = function (globals) {
     this.scripts = new ScriptsMorph();
     this.customBlocks = [];
     this.costumes = new List();
+    this.costumes.type = 'costume';
     this.costume = null;
     this.sounds = new List();
+    this.sounds.type = 'sound';
     this.normalExtent = new Point(60, 60); // only for costume-less situation
     this.scale = 1;
     this.rotationStyle = 1; // 1 = full, 2 = left/right, 0 = off
@@ -7193,7 +7195,6 @@ StageMorph.prototype.clear = function () {
 StageMorph.prototype.userMenu = function () {
     var ide = this.parentThatIsA(IDE_Morph),
         menu = new MenuMorph(this),
-        shiftClicked = this.world().currentKey === 16,
         myself = this;
 
     if (ide && ide.isAppMode) {

@@ -1688,6 +1688,9 @@ Process.prototype.reportCDR = function (list) {
 
 Process.prototype.doAddToList = function (element, list) {
     this.assertType(list, 'list');
+    if (list.type) {
+        this.assertType(element, list.type);
+    }
     list.add(element);
 };
 
@@ -1711,6 +1714,9 @@ Process.prototype.doDeleteFromList = function (index, list) {
 Process.prototype.doInsertInList = function (element, index, list) {
     var idx = index;
     this.assertType(list, 'list');
+    if (list.type) {
+        this.assertType(element, list.type);
+    }
     if (index === '') {
         return null;
     }
@@ -1726,6 +1732,9 @@ Process.prototype.doInsertInList = function (element, index, list) {
 Process.prototype.doReplaceInList = function (index, list, element) {
     var idx = index;
     this.assertType(list, 'list');
+    if (list.type) {
+        this.assertType(element, list.type);
+    }
     if (index === '') {
         return null;
     }
@@ -2361,7 +2370,7 @@ Process.prototype.reportIsA = function (thing, typeString) {
 Process.prototype.assertType = function (thing, typeString) {
     // make sure "thing" is a particular type or any of a number of types
     // and raise an error if not
-    // unused as of now because of performance considerations
+    // use responsibly wrt performance implications
     var thingType = this.reportTypeOf(thing);
     if (thingType === typeString) {return true; }
     if (typeString instanceof Array && contains(typeString, thingType)) {
