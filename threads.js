@@ -54,8 +54,8 @@
 // Global stuff ////////////////////////////////////////////////////////
 
 /*global ArgMorph, BlockMorph, CommandBlockMorph, CommandSlotMorph, Morph,
-MultiArgMorph, Point, ReporterBlockMorph, SyntaxElementMorph, contains,
-degrees, detect, nop, radians, ReporterSlotMorph, CSlotMorph, RingMorph,
+MultiArgMorph, Point, ReporterBlockMorph, SyntaxElementMorph, contains, Costume,
+degrees, detect, nop, radians, ReporterSlotMorph, CSlotMorph, RingMorph, Sound,
 IDE_Morph, ArgLabelMorph, localize, XML_Element, hex_sha512, TableDialogMorph,
 StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph,
@@ -2399,6 +2399,12 @@ Process.prototype.reportTypeOf = function (thing) {
     }
     if (thing instanceof StageMorph) {
         return 'stage';
+    }
+    if (thing instanceof Costume) {
+        return 'costume';
+    }
+    if (thing instanceof Sound) {
+        return 'sound';
     }
     if (thing instanceof Context) {
         if (thing.expression instanceof RingMorph) {
