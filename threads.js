@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph,
 TableFrameMorph, ColorSlotMorph, isSnapObject*/
 
-modules.threads = '2017-July-12';
+modules.threads = '2017-July-26';
 
 var ThreadManager;
 var Process;
@@ -1489,6 +1489,9 @@ Process.prototype.doShowVar = function (varName) {
     if (name instanceof Context) {
         if (name.expression.selector === 'reportGetVar') {
             name = name.expression.blockSpec;
+        } else {
+            this.doChangePrimitiveVisibility(name.expression, false);
+            return;
         }
     }
     if (this.homeContext.receiver) {
@@ -1548,6 +1551,9 @@ Process.prototype.doHideVar = function (varName) {
     if (name instanceof Context) {
         if (name.expression.selector === 'reportGetVar') {
             name = name.expression.blockSpec;
+        } else {
+            this.doChangePrimitiveVisibility(name.expression, true);
+            return;
         }
     }
     if (!name) {
@@ -1589,6 +1595,33 @@ Process.prototype.doRemoveTemporaries = function () {
             });
         }
     }
+};
+
+// Process hiding and showing primitives primitives :-)
+
+Process.prototype.doChangePrimitiveVisibility = function (aBlock, hideIt) {
+    var ide = this.homeContext.receiver.parentThatIsA(IDE_Morph),
+        dict,
+        cat;
+    if (!ide || (aBlock.selector === 'evaluateCustomBlock')) {
+        return;
+    }
+    if (hideIt) {
+        StageMorph.prototype.hiddenPrimitives[aBlock.selector] = true;
+    } else {
+        delete StageMorph.prototype.hiddenPrimitives[aBlock.selector];
+    }
+    dict = {
+        doWarp: 'control',
+        reifyScript: 'operators',
+        reifyReporter: 'operators',
+        reifyPredicate: 'operators',
+        doDeclareVariables: 'variables'
+    };
+    cat = dict[this.selector] || this.category;
+    if (cat === 'lists') {cat = 'variables'; }
+    ide.flushBlocksCache(cat);
+    ide.refreshPalette();
 };
 
 // Process sprite inheritance primitives

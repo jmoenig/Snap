@@ -3545,6 +3545,10 @@ Fixes:
 * BYOB: changed Block Editor label to "Method" for methods
 * GUI: moved settings 'Keyboard Editing', 'Nested auto-wrapping', "Table support" and "Table lines" to hidden (default is "on" for all)
 
+170726
+------
+* Threads: programmatically hide and show primitives in the palette. Thanks, Cynthia Solomon, for this idea!
+
 
 Features:
 * polymorphic sprite-local custom blocks
@@ -3564,6 +3568,7 @@ Features:
 * new musical “notes” symbol
 * turn on the “Inheritance support” setting per default
 * Assert data types to list operations for more meaningful error messages
+* programmatically hide and show primitives in the palette
 
 Fixes:
 * changed keyboard shortcut indicator for “find blocks” to “^”
