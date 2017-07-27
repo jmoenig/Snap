@@ -3557,6 +3557,7 @@ Fixes:
 * Objects: don't shadow costume # when editing a costume
 * Blocks, Objects: remodelled context menu for inheritance to use check-boxes
 * Blocks, Objects, Threads: fold two "stop" commands into one
+* Objects: Allow two-item lists as arguments for "point towards" and "go to" primitives
 
 
 Features:
@@ -3579,6 +3580,7 @@ Features:
 * Assert data types to list operations for more meaningful error messages
 * programmatically hide and show primitives in the palette
 * new "pen trails" reporter primitive and stage context menu entry
+* two-item lists as x-y coordinate arguments for "point towards" and "go to" primitives
 
 Fixes:
 * changed keyboard shortcut indicator for “find blocks” to “^”

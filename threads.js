@@ -2813,6 +2813,13 @@ Process.prototype.doFaceTowards = function (name) {
         if (this.inputOption(name) === 'mouse-pointer') {
             thisObj.faceToXY(this.reportMouseX(), this.reportMouseY());
         } else {
+            if (name instanceof List) {
+                thisObj.faceToXY(
+                    name.at(1),
+                    name.at(2)
+                );
+                return;
+            }
             thatObj = this.getOtherObject(name, this.homeContext.receiver);
             if (thatObj) {
                 thisObj.faceToXY(
@@ -2832,6 +2839,13 @@ Process.prototype.doGotoObject = function (name) {
         if (this.inputOption(name) === 'mouse-pointer') {
             thisObj.gotoXY(this.reportMouseX(), this.reportMouseY());
         } else {
+            if (name instanceof List) {
+                thisObj.gotoXY(
+                    name.at(1),
+                    name.at(2)
+                );
+                return;
+            }
             thatObj = this.getOtherObject(name, this.homeContext.receiver);
             if (thatObj) {
                 thisObj.gotoXY(
