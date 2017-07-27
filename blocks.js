@@ -1310,24 +1310,13 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                 {
                     'all' : ['all'],
                     'this script' : ['this script'],
-                    'this block' : ['this block']
-                },
-                true
-            );
-            part.setContents(['all']);
-            part.isStatic = true;
-            break;
-        case '%stopOthersChoices':
-            part = new InputSlotMorph(
-                null,
-                false,
-                {
+                    'this block' : ['this block'],
                     'all but this script' : ['all but this script'],
                     'other scripts in sprite' : ['other scripts in sprite']
                 },
                 true
             );
-            part.setContents(['all but this script']);
+            part.setContents(['all']);
             part.isStatic = true;
             break;
         case '%typ':

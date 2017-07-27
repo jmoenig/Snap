@@ -664,11 +664,16 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'control',
             spec: 'stop %stopChoices'
         },
+
+    /* migrated to doStopThis:
+
         doStopOthers: {
             type: 'command',
             category: 'control',
             spec: 'stop %stopOthersChoices'
         },
+    */
+
         doRun: {
             type: 'command',
             category: 'control',
@@ -1266,6 +1271,11 @@ SpriteMorph.prototype.initBlockMigrations = function () {
         doStopBlock: {
             selector: 'doStopThis',
             inputs: [['this block']]
+        },
+        doStopOthers: {
+            selector: 'doStopThis',
+            inputs: [['all']],
+            offset: 0
         },
         receiveClick: {
             selector: 'receiveInteraction',
@@ -1924,7 +1934,6 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('doStopAllSounds'));
         blocks.push('-');
         blocks.push(block('doRest'));
-        blocks.push('-');
         blocks.push(block('doPlayNote'));
         blocks.push('-');
         blocks.push(block('doChangeTempo'));
@@ -1980,7 +1989,6 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('doIfElse'));
         blocks.push('-');
         blocks.push(block('doReport'));
-        blocks.push('-');
     /*
     // old STOP variants, migrated to a newer version, now redundant
         blocks.push(block('doStopBlock'));
@@ -1988,7 +1996,10 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('doStopAll'));
     */
         blocks.push(block('doStopThis'));
+    /*
+        // migrated to doStopThis, now redundant
         blocks.push(block('doStopOthers'));
+    */
         blocks.push('-');
         blocks.push(block('doRun'));
         blocks.push(block('fork'));
@@ -6878,7 +6889,6 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('doStopAllSounds'));
         blocks.push('-');
         blocks.push(block('doRest'));
-        blocks.push('-');
         blocks.push(block('doPlayNote'));
         blocks.push('-');
         blocks.push(block('doChangeTempo'));
@@ -6917,7 +6927,6 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('doIfElse'));
         blocks.push('-');
         blocks.push(block('doReport'));
-        blocks.push('-');
     /*
     // old STOP variants, migrated to a newer version, now redundant
         blocks.push(block('doStopBlock'));

@@ -3556,6 +3556,7 @@ Fixes:
 ------
 * Objects: don't shadow costume # when editing a costume
 * Blocks, Objects: remodelled context menu for inheritance to use check-boxes
+* Blocks, Objects, Threads: fold two "stop" commands into one
 
 
 Features:
