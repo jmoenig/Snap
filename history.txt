@@ -3552,6 +3552,11 @@ Fixes:
 * Threads, Blocks: added 'costume' and 'sound' as first-class data types
 * Lists, Store, Objects, Threads: enable type-assertion for list elements (costumes, sounds)
 
+170727
+------
+* Objects: don't shadow costume # when editing a costume
+
+
 Features:
 * polymorphic sprite-local custom blocks
 * inheritance of sprite-local custom blocks

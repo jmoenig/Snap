@@ -82,7 +82,7 @@ SpeechBubbleMorph, RingMorph, isNil, FileReader, TableDialogMorph,
 BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph*/
 
-modules.objects = '2017-July-26';
+modules.objects = '2017-July-27';
 
 var SpriteMorph;
 var StageMorph;
@@ -8041,12 +8041,7 @@ Costume.prototype.edit = function (aWorld, anIDE, isnew, oncancel, onsubmit) {
                     // don't shrinkwrap stage costumes
                     myself.shrinkWrap();
                 }
-                anIDE.currentSprite.wearCostume(myself);
-                anIDE.currentSprite.allSpecimens().forEach(function (obj) {
-                    if (obj.costume === myself) {
-                        obj.wearCostume(myself);
-                    }
-                });
+                anIDE.currentSprite.wearCostume(myself, true); // don't shadow
                 anIDE.hasChangedMedia = true;
             }
             (onsubmit || nop)();
