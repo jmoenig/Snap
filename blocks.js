@@ -150,7 +150,7 @@ CustomCommandBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2017-July-25';
+modules.blocks = '2017-July-27';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -2498,21 +2498,16 @@ BlockMorph.prototype.userMenu = function () {
                 }[this.selector];
                 if (field && rcvr && rcvr.exemplar) {
                     menu.addLine();
-                    if (rcvr.inheritsAttribute(field)) {
-                        menu.addItem(
-                            'disinherit',
-                            function () {
-                                rcvr.shadowAttribute(field);
-                            }
-                        );
-                    } else {
-                        menu.addItem(
-                            localize('inherit from') + ' ' + rcvr.exemplar.name,
-                            function () {
-                                rcvr.inheritAttribute(field);
-                            }
-                        );
-                    }
+                    addOption(
+                        'inherited',
+                        function () {
+                            rcvr.toggleInheritanceForAttribute(field);
+                        },
+                        rcvr.inheritsAttribute(field),
+                        'uncheck to\ndisinherit',
+                        localize('check to inherit\nfrom')
+                            + ' ' + rcvr.exemplar.name
+                    );
                 }
             }
 
@@ -6118,6 +6113,16 @@ ScriptsMorph.prototype.userMenu = function () {
         hasUndropQueue,
         stage = obj.parentThatIsA(StageMorph);
 
+    function addOption(label, toggle, test, onHint, offHint) {
+        var on = '\u2611 ',
+            off = '\u2610 ';
+        menu.addItem(
+            (test ? on : off) + localize(label),
+            toggle,
+            test ? onHint : offHint
+        );
+    }
+
     if (!ide) {
         blockEditor = this.parentThatIsA(BlockEditorMorph);
         if (blockEditor) {
@@ -6182,22 +6187,16 @@ ScriptsMorph.prototype.userMenu = function () {
     if (ide) {
         menu.addLine();
         if (obj.exemplar) {
-            if (obj.inheritsAttribute('scripts')) {
-                menu.addItem(
-                    'disinherit scripts',
+                addOption(
+                    'inherited',
                     function () {
-                        obj.shadowAttribute('scripts');
-                    }
+                        obj.toggleInheritanceForAttribute('scripts');
+                    },
+                    obj.inheritsAttribute('scripts'),
+                    'uncheck to\ndisinherit',
+                    localize('check to inherit\nfrom')
+                        + ' ' + obj.exemplar.name
                 );
-            } else {
-                menu.addItem(
-                    'inherit scripts\nfrom' + ' ' + obj.exemplar.name,
-                    function () {
-                        obj.inheritAttribute('scripts');
-                    }
-                );
-                menu.addLine();
-            }
         }
         menu.addItem(
             'make a block...',

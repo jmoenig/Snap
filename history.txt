@@ -3555,6 +3555,7 @@ Fixes:
 170727
 ------
 * Objects: don't shadow costume # when editing a costume
+* Blocks, Objects: remodelled context menu for inheritance to use check-boxes
 
 
 Features:

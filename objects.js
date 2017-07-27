@@ -5537,6 +5537,14 @@ SpriteMorph.prototype.refreshInheritedAttribute = function (aName) {
     }
 };
 
+SpriteMorph.prototype.toggleInheritanceForAttribute = function (aName) {
+    if (this.inheritsAttribute(aName)) {
+        this.shadowAttribute(aName);
+    } else {
+        this.inheritAttribute(aName);
+    }
+};
+
 // SpriteMorph inheritance - variables
 
 SpriteMorph.prototype.isVariableNameInUse = function (vName, isGlobal) {
