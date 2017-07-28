@@ -182,55 +182,6 @@ var NoteInputMorph;
 var PianoMenuMorph;
 var KeyItemMorph;
 
-WorldMorph.prototype.customMorphs = function () {
-    // add examples to the world's demo menu
-    return [];
-
-/*
-    return [
-        new SymbolMorph(
-            'notes',
-            50,
-            new Color(250, 250, 250),
-            new Point(-1, -1),
-            new Color(20, 20, 20)
-        )
-    ];
-*/
-/*
-    var sm = new ScriptsMorph();
-    sm.setExtent(new Point(800, 600));
-
-    return [
-        new SymbolMorph(),
-        new HatBlockMorph(),
-        new CommandBlockMorph(),
-        sm,
-        new CommandSlotMorph(),
-        new CSlotMorph(),
-        new InputSlotMorph(),
-        new InputSlotMorph(null, true),
-        new BooleanSlotMorph(),
-        new ColorSlotMorph(),
-        new TemplateSlotMorph('foo'),
-        new ReporterBlockMorph(),
-        new ReporterBlockMorph(true),
-        new ArrowMorph(),
-        new MultiArgMorph(),
-        new FunctionSlotMorph(),
-        new ReporterSlotMorph(),
-        new ReporterSlotMorph(true),
-//        new DialogBoxMorph('Dialog Box'),
-//        new InputFieldMorph('Input Field')
-        new RingMorph(),
-        new RingCommandSlotMorph(),
-        new RingReporterSlotMorph(),
-        new RingReporterSlotMorph(true)
-    ];
-*/
-};
-
-
 // SyntaxElementMorph //////////////////////////////////////////////////
 
 // I am the ancestor of all blocks and input slots
@@ -9761,7 +9712,7 @@ PianoMenuMorph.prototype.drawNew = function () {
         item.setPosition(keyposition);
         myself.add(item);
     });
-    label.setPosition(new Point(90, 45));
+    label.setPosition(new Point(90, 2));
     this.add(label);
     fb = this.fullBounds();
     this.silentSetExtent(fb.extent().add(4));
