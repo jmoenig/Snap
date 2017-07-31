@@ -445,6 +445,12 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: 'play note %note for %n beats',
             defaults: [60, 0.5]
         },
+        doSetInstrument: {
+            type: 'command',
+            category: 'sound',
+            spec: 'set instrument to %inst',
+            defaults: [1]
+        },
         doChangeTempo: {
             type: 'command',
             category: 'sound',
@@ -1389,6 +1395,7 @@ function SpriteMorph(globals) {
 
 SpriteMorph.prototype.init = function (globals) {
     this.name = localize('Sprite');
+    this.instrument = null;
     this.variables = new VariableFrame(globals || null, this);
     this.scripts = new ScriptsMorph();
     this.customBlocks = [];
@@ -1935,6 +1942,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push('-');
         blocks.push(block('doRest'));
         blocks.push(block('doPlayNote'));
+        blocks.push(block('doSetInstrument'));
         blocks.push('-');
         blocks.push(block('doChangeTempo'));
         blocks.push(block('doSetTempo'));
@@ -6121,6 +6129,7 @@ function StageMorph(globals) {
 
 StageMorph.prototype.init = function (globals) {
     this.name = localize('Stage');
+    this.instrument = null;
     this.threads = new ThreadManager();
     this.variables = new VariableFrame(globals || null, this);
     this.scripts = new ScriptsMorph();
@@ -6890,6 +6899,7 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push('-');
         blocks.push(block('doRest'));
         blocks.push(block('doPlayNote'));
+        blocks.push(block('doSetInstrument'));
         blocks.push('-');
         blocks.push(block('doChangeTempo'));
         blocks.push(block('doSetTempo'));
@@ -8411,7 +8421,7 @@ Note.prototype.setupContext = function () {
 
 // Note playing
 
-Note.prototype.play = function () {
+Note.prototype.play = function (type) {
     this.oscillator = this.audioContext.createOscillator();
     if (!this.oscillator.start) {
         this.oscillator.start = this.oscillator.noteOn;
@@ -8419,7 +8429,12 @@ Note.prototype.play = function () {
     if (!this.oscillator.stop) {
         this.oscillator.stop = this.oscillator.noteOff;
     }
-    this.oscillator.type = 'sine';
+    this.oscillator.type = [
+        'sine',
+        'square',
+        'sawtooth',
+        'triangle'
+    ][(type || 1) - 1];
     this.oscillator.frequency.value =
         Math.pow(2, (this.pitch - 69) / 12) * 440;
     this.oscillator.connect(this.gainNode);

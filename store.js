@@ -61,7 +61,7 @@ normalizeCanvas, contains*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2017-July-25';
+modules.store = '2017-July-31';
 
 
 // XML_Serializer ///////////////////////////////////////////////////////
@@ -746,6 +746,12 @@ SnapSerializer.prototype.loadObject = function (object, model) {
     // private
     var blocks = model.require('blocks'),
         dispatches = model.childNamed('dispatches');
+
+    // load the instrument
+    if (model.attributes.instrument) {
+        object.instrument = +model.attributes.instrument;
+    }
+
     this.loadInheritanceInfo(object, model);
     this.loadNestingInfo(object, model);
 
@@ -1590,6 +1596,7 @@ StageMorph.prototype.toXML = function (serializer) {
             '<thumbnail>$</thumbnail>' +
             '<stage name="@" width="@" height="@" ' +
             'costume="@" tempo="@" threadsafe="@" ' +
+            '%' +
             'lines="@" ' +
             'ternary="@" ' +
             'codify="@" ' +
@@ -1620,6 +1627,8 @@ StageMorph.prototype.toXML = function (serializer) {
         this.getCostumeIdx(),
         this.getTempo(),
         this.isThreadSafe,
+        this.instrument ?
+                ' instrument="' + parseInt(this.instrument) + '" ' : '',
         SpriteMorph.prototype.useFlatLineEnds ? 'flat' : 'round',
         BooleanSlotMorph.prototype.isTernary,
         this.enableCodeMapping,
@@ -1658,6 +1667,7 @@ SpriteMorph.prototype.toXML = function (serializer) {
             ' heading="@"' +
             ' scale="@"' +
             ' rotation="@"' +
+            '%' +
             ' draggable="@"' +
             '%' +
             ' costume="@" color="@,@,@" pen="@" ~>' +
@@ -1677,6 +1687,8 @@ SpriteMorph.prototype.toXML = function (serializer) {
         this.heading,
         this.scale,
         this.rotationStyle,
+        this.instrument ?
+                ' instrument="' + parseInt(this.instrument) + '" ' : '',
         this.isDraggable,
         this.isVisible ? '' : ' hidden="true"',
         this.getCostumeIdx(),

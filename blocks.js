@@ -975,13 +975,10 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                 null,
                 true,
                 {
-                    '(1) Acoustic Grand' : 1,
-                    '(2) Bright Acoustic' : 2,
-                    '(3) Electric Grand' : 3,
-                    '(4) Honky Tonk' : 4,
-                    '(5) Electric Piano 1' : 5,
-                    '(6) Electric Piano 2' : 6,
-                    '(7) Harpsichord' : 7
+                    '(1) sine' : 1,
+                    '(2) square' : 2,
+                    '(3) sawtooth' : 3,
+                    '(4) triangle' : 4
                 }
             );
             part.setContents(1);

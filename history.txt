@@ -3561,7 +3561,8 @@ Fixes:
 
 170731
 ------
-* fixed PianoMenu to work with block zoom etc.
+* Blocks, Objects: fixed PianoMenu to work with block zoom etc.
+* Threads, Objects, Blocks, Store: added “instruments”: sine, square, sawtooth, triangle waves
 
 
 Features:
