@@ -3559,6 +3559,10 @@ Fixes:
 * Blocks, Objects, Threads: fold two "stop" commands into one
 * Objects: Allow two-item lists as arguments for "point towards" and "go to" primitives
 
+170731
+------
+* fixed PianoMenu to work with block zoom etc.
+
 
 Features:
 * polymorphic sprite-local custom blocks
@@ -3581,6 +3585,7 @@ Features:
 * programmatically hide and show primitives in the palette
 * new "pen trails" reporter primitive and stage context menu entry
 * two-item lists as x-y coordinate arguments for "point towards" and "go to" primitives
+* Piano keyboard as drop-down menu for entering musical notes, Thanks, Michael!
 
 Fixes:
 * changed keyboard shortcut indicator for “find blocks” to “^”
@@ -3589,4 +3594,5 @@ Fixes:
 * optimized thread-launch and script highlighting to a single frame instead of formerly two
 * changed direction attribute of sprites to automatically confine to 0-360 degrees
 * fixed rotation-bug when flipping costumes in "only turn left/right" mode"
+* fixed variable renaming (“refactoring”) bugs, thanks, Bernat!
 * fixed some typos

@@ -139,7 +139,7 @@
 /*global Array, BoxMorph,
 Color, ColorPaletteMorph, FrameMorph, Function, HandleMorph, Math, MenuMorph,
 Morph, MorphicPreferences, Object, Point, ScrollFrameMorph, ShadowMorph,
-String, StringMorph, TextMorph, WorldMorph, contains, degrees, detect,
+String, StringMorph, TextMorph, contains, degrees, detect, MenuItemMorph,
 document, getDocumentPositionOf, isNaN, isString, newCanvas, nop, parseFloat,
 radians, useBlurredShadows, SpeechBubbleMorph, modules, StageMorph, Sound,
 fontHeight, TableFrameMorph, SpriteMorph, Context, ListWatcherMorph,
@@ -150,7 +150,7 @@ CustomCommandBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2017-July-27';
+modules.blocks = '2017-July-31';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -178,9 +178,24 @@ var CommentMorph;
 var ArgLabelMorph;
 var TextSlotMorph;
 var ScriptFocusMorph;
-var NoteInputMorph;
 var PianoMenuMorph;
-var KeyItemMorph;
+var PianoKeyMorph;
+
+/*
+WorldMorph.prototype.customMorphs = function () {
+    // add examples to the world's demo menu
+
+    return [
+        new SymbolMorph(
+            'notes',
+            50,
+            new Color(250, 250, 250),
+            new Point(-1, -1),
+            new Color(20, 20, 20)
+        )
+    ];
+};
+*/
 
 // SyntaxElementMorph //////////////////////////////////////////////////
 
@@ -948,7 +963,12 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             part.setContents(90);
             break;
         case '%note':
-            part = new NoteInputMorph();
+            part = new InputSlotMorph(
+                null, // test
+                true, // numeric
+                'pianoKeyboardMenu',
+                false // read-only
+            );
             break;
         case '%inst':
             part = new InputSlotMorph(
@@ -3205,7 +3225,11 @@ BlockMorph.prototype.refactorThisVar = function (justTheTemplate) {
     function renameVarTo (newName) {
         if (this.parent instanceof SyntaxElementMorph) {
             if (this.parentThatIsA(BlockEditorMorph)) {
-                this.doRefactorBlockParameter(oldName, newName, justTheTemplate);
+                this.doRefactorBlockParameter(
+                    oldName,
+                    newName,
+                    justTheTemplate
+                );
             } else if (this.parentThatIsA(RingMorph)) {
                 this.doRefactorRingParameter(oldName, newName, justTheTemplate);
             } else {
@@ -3227,7 +3251,11 @@ BlockMorph.prototype.varExistsError = function (ide, where) {
     );
 };
 
-BlockMorph.prototype.doRefactorBlockParameter = function (oldName, newName, justTheTemplate) {
+BlockMorph.prototype.doRefactorBlockParameter = function (
+    oldName,
+    newName,
+    justTheTemplate
+) {
     var fragMorph = this.parentThatIsA(BlockInputFragmentMorph),
         fragment = fragMorph.fragment.copy(),
         definer = fragMorph.parent,
@@ -3253,7 +3281,11 @@ BlockMorph.prototype.doRefactorBlockParameter = function (oldName, newName, just
     });
 };
 
-BlockMorph.prototype.doRefactorRingParameter = function (oldName, newName, justTheTemplate) {
+BlockMorph.prototype.doRefactorRingParameter = function (
+    oldName,
+    newName,
+    justTheTemplate
+) {
     var ring = this.parentThatIsA(RingMorph),
         script = ring.contents(),
         tb = this.topBlock();
@@ -3278,13 +3310,17 @@ BlockMorph.prototype.doRefactorRingParameter = function (oldName, newName, justT
     tb.fullChanged();
 };
 
-BlockMorph.prototype.doRefactorScriptVar = function (oldName, newName, justTheTemplate) {
+BlockMorph.prototype.doRefactorScriptVar = function (
+    oldName,
+    newName,
+    justTheTemplate
+) {
     var definer = this.parentThatIsA(CommandBlockMorph),
         receiver, ide;
 
     if (definer.definesScriptVariable(newName)) {
         receiver = this.scriptTarget();
-        ide = receiver.parentThatIsA(IDE_Morph),
+        ide = receiver.parentThatIsA(IDE_Morph);
         this.varExistsError(ide);
         return;
     }
@@ -3298,7 +3334,11 @@ BlockMorph.prototype.doRefactorScriptVar = function (oldName, newName, justTheTe
     definer.refactorVarInStack(oldName, newName, true);
 };
 
-BlockMorph.prototype.doRefactorSpriteVar = function (oldName, newName, justTheTemplate) {
+BlockMorph.prototype.doRefactorSpriteVar = function (
+    oldName,
+    newName,
+    justTheTemplate
+) {
     var receiver = this.scriptTarget(),    
         ide = receiver.parentThatIsA(IDE_Morph),
         oldWatcher = receiver.findVariableWatcher(oldName),
@@ -3343,7 +3383,11 @@ BlockMorph.prototype.doRefactorSpriteVar = function (oldName, newName, justTheTe
     ide.refreshPalette();
 };
 
-BlockMorph.prototype.doRefactorGlobalVar = function (oldName, newName, justTheTemplate) {
+BlockMorph.prototype.doRefactorGlobalVar = function (
+    oldName,
+    newName,
+    justTheTemplate
+) {
     var receiver = this.scriptTarget(),    
         ide = receiver.parentThatIsA(IDE_Morph),
         stage = ide ? ide.stage : null,
@@ -8022,6 +8066,9 @@ InputSlotMorph.prototype.userSetContents = function (aStringOrFloat) {
 
 InputSlotMorph.prototype.dropDownMenu = function (enableKeyboard) {
     var menu = this.menuFromDict(this.choices);
+    if (!menu) { // has already happened
+        return;
+    }
     if (menu.items.length > 0) {
         if (enableKeyboard) {
             menu.popup(this.world(), this.bottomLeft());
@@ -8045,6 +8092,9 @@ InputSlotMorph.prototype.menuFromDict = function (choices, noEmptyOption) {
         choices = choices.call(this);
     } else if (isString(choices)) {
         choices = this[choices]();
+        if (!choices) { // menu has already happened
+            return;
+        }
     }
     if (!noEmptyOption) {
         menu.addItem(' ', null);
@@ -8360,23 +8410,6 @@ InputSlotMorph.prototype.soundsMenu = function () {
     return dict;
 };
 
-InputSlotMorph.prototype.setChoices = function (dict, readonly) {
-    // externally specify choices and read-only status,
-    // used for custom blocks
-    var cnts = this.contents();
-    this.choices = dict;
-    this.isReadOnly = readonly || false;
-    if (this.parent instanceof BlockMorph) {
-        this.parent.fixLabelColor();
-        if (!readonly) {
-            cnts.shadowOffset = new Point();
-            cnts.shadowColor = null;
-            cnts.setColor(new Color(0, 0, 0));
-        }
-    }
-    this.fixLayout();
-};
-
 InputSlotMorph.prototype.shadowedVariablesMenu = function () {
     var block = this.parentThatIsA(BlockMorph),
         vars,
@@ -8402,6 +8435,70 @@ InputSlotMorph.prototype.shadowedVariablesMenu = function () {
         });
     }
     return dict;
+};
+
+InputSlotMorph.prototype.pianoKeyboardMenu = function () {
+    var choices, key, menu;
+    choices = {
+        'C (48)' : 48,
+        'D (50)' : 50,
+        'C# (49)' : 49,
+        'E (52)' : 52,
+        'Eb (51)' : 51,
+        'F (53)' : 53,
+        'G (55)' : 55,
+        'F# (54)' : 54,
+        'A (57)' : 57,
+        'G# (56)' : 56,
+        'B (59)' : 59,
+        'Bb (58)' : 58,
+        'C (60)' : 60,
+        'D (62)' : 62,
+        'C# (61)' : 61,
+        'E (64)' : 64,
+        'Eb (63)' : 63,
+        'F (65)' : 65,
+        'G (67)' : 67,
+        'F# (66)' : 66,
+        'A (69)' : 69,
+        'G# (68)' : 68,
+        'B (71)' : 71,
+        'Bb (70)' : 70,
+        'C (72)' : 72
+    };
+    menu = new PianoMenuMorph(
+        this.setContents,
+        null,
+        this,
+        this.fontSize
+    );
+    for (key in choices) {
+        if (Object.prototype.hasOwnProperty.call(choices, key)) {
+            menu.addItem(key, choices[key]);
+        }
+    }
+    menu.drawNew();
+    menu.popup(this.world(), new Point(
+        this.right() - (menu.width() / 2),
+        this.bottom()
+    ));
+};
+
+InputSlotMorph.prototype.setChoices = function (dict, readonly) {
+    // externally specify choices and read-only status,
+    // used for custom blocks
+    var cnts = this.contents();
+    this.choices = dict;
+    this.isReadOnly = readonly || false;
+    if (this.parent instanceof BlockMorph) {
+        this.parent.fixLabelColor();
+        if (!readonly) {
+            cnts.shadowOffset = new Point();
+            cnts.shadowColor = null;
+            cnts.setColor(new Color(0, 0, 0));
+        }
+    }
+    this.fixLayout();
 };
 
 // InputSlotMorph layout:
@@ -9754,28 +9851,28 @@ PianoMenuMorph.prototype.drawNew = function () {
     this.borderColor = new Color(60, 60, 60);
     this.silentSetExtent(new Point(0, 0));
 
-    x = this.left() + 4;
-    y = this.top() + 5;
-    label = new StringMorph('');
+    x = this.left() + 1;
+    y = this.top() + (this.fontSize * 1.5) + 2;
+    label = new StringMorph('', this.fontSize);
     this.items.forEach(function (tuple) {
         blackkey = tuple[0][1] !== " ";
         key = new BoxMorph(1, 2);
         if (blackkey) {
             keycolor = new Color(0, 0, 0);
-            keywidth = 9;
-            keyheight = 25;
-            keyposition = new Point(x - 17, y);
+            keywidth = myself.fontSize; // 9;
+            keyheight = myself.fontSize * 2.5;
+            keyposition = new Point(x + 2 - (myself.fontSize * 2), y);
         } else {
             keycolor = new Color(255, 255, 255);
-            keywidth = 15;
-            keyheight = 40;
+            keywidth = myself.fontSize * 1.5;
+            keyheight = myself.fontSize * 4;
             keyposition = new Point(x + 1, y);
-            x = x + keywidth - 1;
+            x += keywidth - 1;
         }
         key.setColor(keycolor);
         key.setWidth(keywidth);
         key.setHeight(keyheight);
-        item = new KeyItemMorph(
+        item = new PianoKeyMorph(
             myself.target,
             tuple[1],
             [key, tuple[0]],
@@ -9792,100 +9889,21 @@ PianoMenuMorph.prototype.drawNew = function () {
         item.setPosition(keyposition);
         myself.add(item);
     });
-    label.setPosition(new Point(90, 2));
+    fb = this.fullBounds();
+    label.setPosition(new Point((fb.width() / 2) - this.fontSize, 2));
     this.add(label);
     fb = this.fullBounds();
-    this.silentSetExtent(fb.extent().add(4));
-    this.adjustWidths();
+    this.silentSetExtent(fb.extent().add(2));
     MenuMorph.uber.drawNew.call(this);
 };
 
-PianoMenuMorph.prototype.popUpAtHand = function (world) {
-    var wrrld = world || this.world;
-    this.drawNew();
-    this.popup(wrrld,
-        wrrld.hand.position().subtract(new Point(this.extent().x / 2, 0)));
-};
+// PianoKeyMorph ///////////////////////////////////////////////////////
 
+PianoKeyMorph.prototype = new MenuItemMorph();
+PianoKeyMorph.prototype.constructor = PianoKeyMorph;
+PianoKeyMorph.uber = MenuItemMorph.prototype;
 
-// NoteInputMorph //////////////////////////////////////////////////////
-/*
-    I am an inputslotmorph designed for selecting midi notes.
-    My block spec is
-
-    %note     - midi notes
-    
-    evaluate returns the integer value of the displayed midi note.
-*/
-
-// NoteInputMorph inherits from InputSlotMorph
-
-NoteInputMorph.prototype = new InputSlotMorph();
-NoteInputMorph.prototype.constructor = NoteInputMorph;
-NoteInputMorph.uber = InputSlotMorph.prototype;
-
-// NoteInputMorph instance creation:
-
-function NoteInputMorph() {
-    this.init();
-}
-
-NoteInputMorph.prototype.init = function () {
-    NoteInputMorph.uber.init.call(this);
-    this.choices = {
-        'C (48)' : 48,
-        'D (50)' : 50,
-        'C# (49)' : 49,
-        'E (52)' : 52,
-        'Eb (51)' : 51,
-        'F (53)' : 53,
-        'G (55)' : 55,
-        'F# (54)' : 54,
-        'A (57)' : 57,
-        'G# (56)' : 56,
-        'B (59)' : 59,
-        'Bb (58)' : 58,
-        'C (60)' : 60,
-        'D (62)' : 62,
-        'C# (61)' : 61,
-        'E (64)' : 64,
-        'Eb (63)' : 63,
-        'F (65)' : 65,
-        'G (67)' : 67,
-        'F# (66)' : 66,
-        'A (69)' : 69,
-        'G# (68)' : 68,
-        'B (71)' : 71,
-        'Bb (70)' : 70,
-        'C (72)' : 72
-    };
-    this.isNumeric = true;
-};
-
-NoteInputMorph.prototype.dropDownMenu = function () {
-    var choices = this.choices,
-        key,
-        menu = new PianoMenuMorph(
-            this.setContents,
-            null,
-            this,
-            this.fontSize
-        );
-    for (key in choices) {
-        if (Object.prototype.hasOwnProperty.call(choices, key)) {
-            menu.addItem(key, choices[key]);
-        }
-    }
-    menu.popUpAtHand(this.world());
-};
-
-// KeyItemMorph ///////////////////////////////////////////////////////
-
-KeyItemMorph.prototype = new MenuItemMorph();
-KeyItemMorph.prototype.constructor = KeyItemMorph;
-KeyItemMorph.uber = MenuItemMorph.prototype;
-
-function KeyItemMorph(
+function PianoKeyMorph(
     target,
     action,
     labelString, // can also be a Morph or a Canvas or a tuple: [icon, string]
@@ -9916,7 +9934,7 @@ function KeyItemMorph(
     this.feedback = label;
 }
 
-KeyItemMorph.prototype.createLabel = function () {
+PianoKeyMorph.prototype.createLabel = function () {
     var icon;
     if (this.label !== null) {
         this.label.destroy();
@@ -9933,7 +9951,7 @@ KeyItemMorph.prototype.createLabel = function () {
     this.add(this.label);
 };
 
-KeyItemMorph.prototype.mouseEnter = function () {
+PianoKeyMorph.prototype.mouseEnter = function () {
     this.feedback.text = this.labelString[1];
     this.feedback.changed();
     this.feedback.drawNew();
@@ -9946,8 +9964,6 @@ KeyItemMorph.prototype.mouseEnter = function () {
     //     this.bubbleHelp(this.hint);
     // }
 };
-
-
 
 // TextSlotMorph //////////////////////////////////////////////////////
 
