@@ -3566,7 +3566,11 @@ Fixes:
 
 170801
 ------
-Morphic: Tweaks by Craig Latta (thanks!)
+* Morphic: Tweaks by Craig Latta (thanks!)
+
+170802
+------
+* Blocks: Improve PianoKeyboard for keyboard navigation & entry
 
 
 Features:

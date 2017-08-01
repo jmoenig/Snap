@@ -66,7 +66,11 @@
         BoxMorph*
             CommentMorph
             ScriptFocusMorph
-
+        MenuItemMorph*
+            PianoKeyMorph
+        MenuMorph*
+            PianoMenuMorph
+ 
     * from morphic.js
 
 
@@ -89,6 +93,8 @@
         InputSlotMorph
         BooleanSlotMorph
         ArrowMorph
+        PianoMenuMorph
+        PianoKeyMorph
         TextSlotMorph
         SymbolMorph
         ColorSlotMorph
@@ -150,7 +156,7 @@ CustomCommandBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2017-July-31';
+modules.blocks = '2017-August-02';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -8062,7 +8068,7 @@ InputSlotMorph.prototype.userSetContents = function (aStringOrFloat) {
 // InputSlotMorph drop-down menu:
 
 InputSlotMorph.prototype.dropDownMenu = function (enableKeyboard) {
-    var menu = this.menuFromDict(this.choices);
+    var menu = this.menuFromDict(this.choices, null, enableKeyboard);
     if (!menu) { // has already happened
         return;
     }
@@ -8076,7 +8082,11 @@ InputSlotMorph.prototype.dropDownMenu = function (enableKeyboard) {
     }
 };
 
-InputSlotMorph.prototype.menuFromDict = function (choices, noEmptyOption) {
+InputSlotMorph.prototype.menuFromDict = function (
+    choices,
+    noEmptyOption,
+    enableKeyboard)
+{
     var key,
         menu = new MenuMorph(
             this.userSetContents,
@@ -8088,7 +8098,7 @@ InputSlotMorph.prototype.menuFromDict = function (choices, noEmptyOption) {
     if (choices instanceof Function) {
         choices = choices.call(this);
     } else if (isString(choices)) {
-        choices = this[choices]();
+        choices = this[choices](enableKeyboard);
         if (!choices) { // menu has already happened
             return;
         }
@@ -8434,8 +8444,8 @@ InputSlotMorph.prototype.shadowedVariablesMenu = function () {
     return dict;
 };
 
-InputSlotMorph.prototype.pianoKeyboardMenu = function () {
-    var choices, key, menu;
+InputSlotMorph.prototype.pianoKeyboardMenu = function (enableKeyboard) {
+    var choices, key, menu, sel;
     choices = {
         'C (48)' : 48,
         'D (50)' : 50,
@@ -8479,6 +8489,17 @@ InputSlotMorph.prototype.pianoKeyboardMenu = function () {
         this.right() - (menu.width() / 2),
         this.bottom()
     ));
+    sel = menu.selectKey(this.evaluate());
+    if (enableKeyboard) {
+        menu.world.keyboardReceiver = menu;
+        if (sel) {
+            menu.selection = sel;
+        } else {
+            menu.selection = null;
+            menu.selectFirst();
+        }
+        menu.hasFocus = true;
+    }
 };
 
 InputSlotMorph.prototype.setChoices = function (dict, readonly) {
@@ -9894,6 +9915,60 @@ PianoMenuMorph.prototype.drawNew = function () {
     MenuMorph.uber.drawNew.call(this);
 };
 
+PianoMenuMorph.prototype.select = function(aPianoKeyItem) {
+    this.unselectAllItems();
+    aPianoKeyItem.mouseEnter();
+    this.selection = aPianoKeyItem;
+};
+
+PianoMenuMorph.prototype.unselectAllItems = function () {
+    this.children.forEach(function (item) {
+        if (item instanceof MenuItemMorph) {
+            item.mouseLeave();
+        }
+    });
+    this.changed();
+};
+
+PianoMenuMorph.prototype.selectKey = function (midiNum) {
+    var key;
+    if (isNil(midiNum)) {
+        return;
+    }
+    key = detect(
+        this.children,
+        function (each) {
+            return each.action === midiNum;
+        }
+    );
+    if (key) {
+        this.select(key);
+        return key;
+    }
+};
+
+PianoMenuMorph.prototype.processKeyDown = function (event) {
+    // console.log(event.keyCode);
+    switch (event.keyCode) {
+    case 13: // 'enter'
+    case 32: // 'space'
+        if (this.selection) {
+            this.selection.mouseClickLeft();
+        }
+        return;
+    case 27: // 'esc'
+        return this.destroy();
+    case 37: // 'left arrow'
+    case 40: // 'down arrow'
+        return this.selectUp();
+    case 38: // 'up arrow'
+    case 39: // 'right arrow'
+        return this.selectDown();
+    default:
+        nop();
+    }
+};
+
 // PianoKeyMorph ///////////////////////////////////////////////////////
 
 PianoKeyMorph.prototype = new MenuItemMorph();
@@ -9938,7 +10013,6 @@ PianoKeyMorph.prototype.createLabel = function () {
     }
     // assume its pattern is: [icon, string]
     this.label = new Morph();
-    this.label.alpha = 0; // transparent
     icon = this.createIcon(this.labelString[0]);
     this.label.add(icon);
     this.label.drawNew();
@@ -9949,17 +10023,20 @@ PianoKeyMorph.prototype.createLabel = function () {
 };
 
 PianoKeyMorph.prototype.mouseEnter = function () {
+    this.label.children[0].hide();
+    this.image = this.highlightImage;
+    this.changed();
+
     this.feedback.text = this.labelString[1];
     this.feedback.changed();
     this.feedback.drawNew();
     this.feedback.changed();
-    // if (!this.isListItem()) {
-    //     this.image = this.highlightImage;
-    //     this.changed();
-    // }
-    // if (this.hint) {
-    //     this.bubbleHelp(this.hint);
-    // }
+};
+
+PianoKeyMorph.prototype.mouseLeave = function () {
+    this.label.children[0].show();
+    this.image = this.normalImage;
+    this.changed();
 };
 
 // TextSlotMorph //////////////////////////////////////////////////////
