@@ -3564,6 +3564,10 @@ Fixes:
 * Blocks, Objects: fixed PianoMenu to work with block zoom etc.
 * Threads, Objects, Blocks, Store: added “instruments”: sine, square, sawtooth, triangle waves
 
+170801
+------
+Morphic: Tweaks by Craig Latta (thanks!)
+
 
 Features:
 * polymorphic sprite-local custom blocks
@@ -3587,6 +3591,7 @@ Features:
 * new "pen trails" reporter primitive and stage context menu entry
 * two-item lists as x-y coordinate arguments for "point towards" and "go to" primitives
 * Piano keyboard as drop-down menu for entering musical notes, Thanks, Michael!
+* Basic “instruments” support: sine, square, sawtooth and triangle waves
 
 Fixes:
 * changed keyboard shortcut indicator for “find blocks” to “^”

@@ -1161,7 +1161,7 @@
 
 /*global window, HTMLCanvasElement, FileReader, Audio, FileList*/
 
-var morphicVersion = '2017-July-07';
+var morphicVersion = '2017-August-01';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = getBlurredShadowSupport(); // check for Chrome-bug
 
@@ -5266,6 +5266,7 @@ CursorMorph.prototype.initializeClipboardHandler = function () {
 
     this.clipboardHandler = document.createElement('textarea');
     this.clipboardHandler.style.position = 'absolute';
+    this.clipboardHandler.style.top = window.outerHeight;
     this.clipboardHandler.style.right = '101%'; // placed just out of view
 
     document.body.appendChild(this.clipboardHandler);
@@ -10372,9 +10373,9 @@ ListMorph.prototype.buildListContents = function () {
             myself.doubleClickAction
         );
     });
-    this.listContents.setPosition(this.contents.position());
     this.listContents.isListContents = true;
     this.listContents.drawNew();
+    this.listContents.setPosition(this.contents.position());
     this.addContents(this.listContents);
 };
 
