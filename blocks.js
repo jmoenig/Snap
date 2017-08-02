@@ -8444,62 +8444,18 @@ InputSlotMorph.prototype.shadowedVariablesMenu = function () {
     return dict;
 };
 
-InputSlotMorph.prototype.pianoKeyboardMenu = function (enableKeyboard) {
-    var choices, key, menu, sel;
-    choices = {
-        'C (48)' : 48,
-        'D (50)' : 50,
-        'C# (49)' : 49,
-        'E (52)' : 52,
-        'Eb (51)' : 51,
-        'F (53)' : 53,
-        'G (55)' : 55,
-        'F# (54)' : 54,
-        'A (57)' : 57,
-        'G# (56)' : 56,
-        'B (59)' : 59,
-        'Bb (58)' : 58,
-        'C (60)' : 60,
-        'D (62)' : 62,
-        'C# (61)' : 61,
-        'E (64)' : 64,
-        'Eb (63)' : 63,
-        'F (65)' : 65,
-        'G (67)' : 67,
-        'F# (66)' : 66,
-        'A (69)' : 69,
-        'G# (68)' : 68,
-        'B (71)' : 71,
-        'Bb (70)' : 70,
-        'C (72)' : 72
-    };
+InputSlotMorph.prototype.pianoKeyboardMenu = function () {
+    var menu;
     menu = new PianoMenuMorph(
         this.setContents,
-        null,
         this,
         this.fontSize
     );
-    for (key in choices) {
-        if (Object.prototype.hasOwnProperty.call(choices, key)) {
-            menu.addItem(key, choices[key]);
-        }
-    }
-    menu.drawNew();
     menu.popup(this.world(), new Point(
         this.right() - (menu.width() / 2),
         this.bottom()
     ));
-    sel = menu.selectKey(this.evaluate());
-    if (enableKeyboard) {
-        menu.world.keyboardReceiver = menu;
-        if (sel) {
-            menu.selection = sel;
-        } else {
-            menu.selection = null;
-            menu.selectFirst();
-        }
-        menu.hasFocus = true;
-    }
+    menu.selectKey(this.evaluate());
 };
 
 InputSlotMorph.prototype.setChoices = function (dict, readonly) {
@@ -9839,9 +9795,52 @@ PianoMenuMorph.uber = MenuMorph.prototype;
 
 // PianoMenuMorph instance creation:
 
-function PianoMenuMorph(target, title, environment, fontSize) {
-    this.init(target, title, environment, fontSize);
+function PianoMenuMorph(target, environment, fontSize) {
+    this.init(target, environment, fontSize);
 }
+
+PianoMenuMorph.prototype.init = function (
+    target,
+    environment,
+    fontSize
+) {
+    var choices, key;
+
+    PianoMenuMorph.uber.init.call(this, target, null, environment, fontSize);
+    choices = {
+        'C (48)' : 48,
+        'D (50)' : 50,
+        'C# (49)' : 49,
+        'E (52)' : 52,
+        'Eb (51)' : 51,
+        'F (53)' : 53,
+        'G (55)' : 55,
+        'F# (54)' : 54,
+        'A (57)' : 57,
+        'G# (56)' : 56,
+        'B (59)' : 59,
+        'Bb (58)' : 58,
+        'C (60)' : 60,
+        'D (62)' : 62,
+        'C# (61)' : 61,
+        'E (64)' : 64,
+        'Eb (63)' : 63,
+        'F (65)' : 65,
+        'G (67)' : 67,
+        'F# (66)' : 66,
+        'A (69)' : 69,
+        'G# (68)' : 68,
+        'B (71)' : 71,
+        'Bb (70)' : 70,
+        'C (72)' : 72
+    };
+    for (key in choices) {
+        if (Object.prototype.hasOwnProperty.call(choices, key)) {
+            this.addItem(key, choices[key]);
+        }
+    }
+    this.drawNew();
+};
 
 PianoMenuMorph.prototype.drawNew = function () {
     var myself = this,
@@ -9874,7 +9873,7 @@ PianoMenuMorph.prototype.drawNew = function () {
     label = new StringMorph('', this.fontSize);
     this.items.forEach(function (tuple) {
         blackkey = tuple[0][1] !== " ";
-        key = new BoxMorph(1, 2);
+        key = new BoxMorph(1, 1);
         if (blackkey) {
             keycolor = new Color(0, 0, 0);
             keywidth = myself.fontSize; // 9;
@@ -9915,10 +9914,14 @@ PianoMenuMorph.prototype.drawNew = function () {
     MenuMorph.uber.drawNew.call(this);
 };
 
+// PianoMenuMorph keyboard selecting a key:
+
 PianoMenuMorph.prototype.select = function(aPianoKeyItem) {
     this.unselectAllItems();
     aPianoKeyItem.mouseEnter();
     this.selection = aPianoKeyItem;
+    this.world.keyboardReceiver = this;
+    this.hasFocus = true;
 };
 
 PianoMenuMorph.prototype.unselectAllItems = function () {
@@ -9943,9 +9946,12 @@ PianoMenuMorph.prototype.selectKey = function (midiNum) {
     );
     if (key) {
         this.select(key);
-        return key;
+    } else {
+        this.selectKey(48);
     }
 };
+
+// PianoMenuMorph keyboard navigation & entry:
 
 PianoMenuMorph.prototype.processKeyDown = function (event) {
     // console.log(event.keyCode);
@@ -9960,13 +9966,71 @@ PianoMenuMorph.prototype.processKeyDown = function (event) {
         return this.destroy();
     case 37: // 'left arrow'
     case 40: // 'down arrow'
-        return this.selectUp();
+    case 189: // -
+        return this.selectDown();
     case 38: // 'up arrow'
     case 39: // 'right arrow'
-        return this.selectDown();
+    case 187: // +
+    case 220: // #
+        return this.selectUp();
     default:
-        nop();
+        switch(event.key) {
+        case 'C':
+            return this.selectKey(48);
+        case 'c':
+            return this.selectKey(60);
+        case 'D':
+            return this.selectKey(50);
+        case 'd':
+            return this.selectKey(62);
+        case 'E':
+            return this.selectKey(52);
+        case 'e':
+            return this.selectKey(64);
+        case 'F':
+            return this.selectKey(53);
+        case 'f':
+            return this.selectKey(65);
+        case 'G':
+            return this.selectKey(55);
+        case 'g':
+            return this.selectKey(67);
+        case 'A':
+            return this.selectKey(57);
+        case 'a':
+            return this.selectKey(69);
+        case 'B':
+        case 'H':
+            return this.selectKey(59);
+        case 'b':
+        case 'h':
+            return this.selectKey(71);
+        default:
+            nop();
+        }
     }
+};
+
+MenuMorph.prototype.selectUp = function () {
+    var next = 48;
+    if (this.selection) {
+        next = this.selection.action + 1;
+        if (next > 72) {
+            next = 48;
+        }
+    }
+    this.selectKey(next);
+};
+
+MenuMorph.prototype.selectDown = function () {
+    var next = 48;
+    if (this.selection) {
+        next = this.selection.action - 1;
+        if (next < 48) {
+            next = 72;
+        }
+    }
+    this.selectKey(next);
 };
 
 // PianoKeyMorph ///////////////////////////////////////////////////////
