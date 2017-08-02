@@ -3575,6 +3575,7 @@ Fixes:
 * Blocks, Widgets: Added sound feedback to PianoKeyboard
 * New file: symbols.js (moved out of blocks.js)
 * Updated credits to reflect Michael’s piano keyboard design contribution
+* Threads: simplified “instrument” access
 
 
 Features:

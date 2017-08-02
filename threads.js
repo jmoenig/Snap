@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph,
 TableFrameMorph, ColorSlotMorph, isSnapObject*/
 
-modules.threads = '2017-July-31';
+modules.threads = '2017-August-02';
 
 var ThreadManager;
 var Process;
@@ -3461,7 +3461,7 @@ Process.prototype.doPlayNoteForSecs = function (pitch, secs) {
     if (!this.context.startTime) {
         this.context.startTime = Date.now();
         this.context.activeNote = new Note(pitch);
-        this.context.activeNote.play(this.blockReceiver().instrument);
+        this.context.activeNote.play(this.receiver.instrument);
     }
     if ((Date.now() - this.context.startTime) >= (secs * 1000)) {
         if (this.context.activeNote) {
@@ -3475,7 +3475,7 @@ Process.prototype.doPlayNoteForSecs = function (pitch, secs) {
 };
 
 Process.prototype.doSetInstrument = function (num) {
-    this.blockReceiver().instrument = +num;
+    this.receiver.instrument = +num;
 };
 
 // Process constant input options
