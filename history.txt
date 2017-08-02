@@ -3576,6 +3576,7 @@ Fixes:
 * New file: symbols.js (moved out of blocks.js)
 * Updated credits to reflect Michael’s piano keyboard design contribution
 * Threads: simplified “instrument” access
+* Threads: enable multiple instruments per sprite in parallel threads
 
 
 Features:

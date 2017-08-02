@@ -483,6 +483,9 @@ ThreadManager.prototype.toggleSingleStepping = function () {
                         are children
     receiver            object (sprite) to which the process applies,
                         cached from the top block
+    instrument          musical instrument type, cached from the receiver,
+                        so a single sprite can play several instruments
+                        at once
     context             the Context describing the current state
                         of this process
     homeContext         stores information relevant to the whole process,
@@ -528,6 +531,7 @@ Process.prototype.flashTime = 0; // experimental
 function Process(topBlock, receiver, onComplete, yieldFirst) {
     this.topBlock = topBlock || null;
     this.receiver = receiver;
+    this.instrument = receiver ? receiver.instrument : null;
     this.readyToYield = false;
     this.readyToTerminate = false;
     this.isDead = false;
@@ -3461,7 +3465,7 @@ Process.prototype.doPlayNoteForSecs = function (pitch, secs) {
     if (!this.context.startTime) {
         this.context.startTime = Date.now();
         this.context.activeNote = new Note(pitch);
-        this.context.activeNote.play(this.receiver.instrument);
+        this.context.activeNote.play(this.instrument);
     }
     if ((Date.now() - this.context.startTime) >= (secs * 1000)) {
         if (this.context.activeNote) {
@@ -3475,6 +3479,7 @@ Process.prototype.doPlayNoteForSecs = function (pitch, secs) {
 };
 
 Process.prototype.doSetInstrument = function (num) {
+    this.instrument = +num;
     this.receiver.instrument = +num;
 };
 
