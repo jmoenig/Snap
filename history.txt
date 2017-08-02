@@ -3572,6 +3572,7 @@ Fixes:
 ------
 * Blocks: Improve PianoKeyboard for keyboard navigation & entry
 * Blocks, Widgets: Moved PianoKeyboard code to widgets.js
+* Blocks, Widgets: Added sound feedback to PianoKeyboard
 
 
 Features:

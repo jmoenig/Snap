@@ -78,7 +78,7 @@
 newCanvas, StringMorph, Morph, TextMorph, nop, detect, StringFieldMorph,
 HTMLCanvasElement, fontHeight, SymbolMorph, localize, SpeechBubbleMorph,
 ArrowMorph, MenuMorph, isString, isNil, SliderMorph, MorphicPreferences,
-ScrollFrameMorph, MenuItemMorph*/
+ScrollFrameMorph, MenuItemMorph, Note*/
 
 modules.widgets = '2017-August-02';
 
@@ -3323,17 +3323,18 @@ PianoMenuMorph.uber = MenuMorph.prototype;
 
 // PianoMenuMorph instance creation:
 
-function PianoMenuMorph(target, environment, fontSize) {
-    this.init(target, environment, fontSize);
+function PianoMenuMorph(target, environment, fontSize, soundType) {
+    this.init(target, environment, fontSize, soundType);
 }
 
 PianoMenuMorph.prototype.init = function (
     target,
     environment,
-    fontSize
+    fontSize,
+    soundType // number 1 - 4: 'sine', 'square', 'sawtooth' or 'triangle'
 ) {
     var choices, key;
-
+    this.soundType = soundType;
     PianoMenuMorph.uber.init.call(this, target, null, environment, fontSize);
     choices = {
         'C (48)' : 48,
@@ -3539,7 +3540,7 @@ PianoMenuMorph.prototype.processKeyDown = function (event) {
     }
 };
 
-MenuMorph.prototype.selectUp = function () {
+PianoMenuMorph.prototype.selectUp = function () {
     var next = 48;
     if (this.selection) {
         next = this.selection.action + 1;
@@ -3550,7 +3551,7 @@ MenuMorph.prototype.selectUp = function () {
     this.selectKey(next);
 };
 
-MenuMorph.prototype.selectDown = function () {
+PianoMenuMorph.prototype.selectDown = function () {
     var next = 48;
     if (this.selection) {
         next = this.selection.action - 1;
@@ -3560,6 +3561,16 @@ MenuMorph.prototype.selectDown = function () {
     }
     this.selectKey(next);
 };
+
+PianoMenuMorph.prototype.destroy = function () {
+    this.children.forEach(function (key) {
+        if (key.note) {
+            key.note.stop();
+        }
+    });
+    PianoMenuMorph.uber.destroy.call(this);
+};
+
 
 // PianoKeyMorph ///////////////////////////////////////////////////////
 
@@ -3598,6 +3609,39 @@ function PianoKeyMorph(
     this.feedback = label;
 }
 
+PianoKeyMorph.prototype.init = function (
+    target,
+    action,
+    labelString,
+    fontSize,
+    fontStyle,
+    environment,
+    hint,
+    color,
+    bold,
+    italic,
+    doubleClickAction,
+    label
+) {
+    // additional "note" property for sound output:
+    this.note = new Note(action);
+    PianoKeyMorph.uber.init.call(
+        this,
+        target,
+        action,
+        labelString,
+        fontSize,
+        fontStyle,
+        environment,
+        hint,
+        color,
+        bold,
+        italic,
+        doubleClickAction,
+        label
+    );
+};
+
 PianoKeyMorph.prototype.createLabel = function () {
     var icon;
     if (this.label !== null) {
@@ -3615,17 +3659,33 @@ PianoKeyMorph.prototype.createLabel = function () {
 };
 
 PianoKeyMorph.prototype.mouseEnter = function () {
+    var piano = this.parentThatIsA(PianoMenuMorph),
+        soundType = piano ? piano.soundType : 1,
+        myself = this;
+    if (piano) {
+        piano.unselectAllItems();
+        piano.selection = this;
+        piano.world.keyboardReceiver = piano;
+        piano.hasFocus = true;
+    }
     this.label.children[0].hide();
     this.image = this.highlightImage;
     this.changed();
-
     this.feedback.text = this.labelString[1];
     this.feedback.changed();
     this.feedback.drawNew();
     this.feedback.changed();
+    this.note.play(soundType);
+    setTimeout(
+        function () {
+            myself.note.stop();
+        },
+        400
+    );
 };
 
 PianoKeyMorph.prototype.mouseLeave = function () {
+    this.note.stop();
     this.label.children[0].show();
     this.image = this.normalImage;
     this.changed();

@@ -8437,11 +8437,16 @@ InputSlotMorph.prototype.shadowedVariablesMenu = function () {
 };
 
 InputSlotMorph.prototype.pianoKeyboardMenu = function () {
-    var menu;
+    var menu, block, instrument;
+    block = this.parentThatIsA(BlockMorph);
+    if (block) {
+        instrument = block.scriptTarget().instrument;
+    }
     menu = new PianoMenuMorph(
         this.setContents,
         this,
-        this.fontSize
+        this.fontSize,
+        instrument
     );
     menu.popup(this.world(), new Point(
         this.right() - (menu.width() / 2),
