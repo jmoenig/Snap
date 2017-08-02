@@ -3573,6 +3573,7 @@ Fixes:
 * Blocks: Improve PianoKeyboard for keyboard navigation & entry
 * Blocks, Widgets: Moved PianoKeyboard code to widgets.js
 * Blocks, Widgets: Added sound feedback to PianoKeyboard
+* New file: symbols.js (moved out of blocks.js)
 
 
 Features:
