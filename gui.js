@@ -228,7 +228,7 @@ IDE_Morph.prototype.init = function (isAutoFill) {
 
     // override inherited properites:
     this.color = this.backgroundColor;
-	
+
 	this.corralBarOldX = "";
 	this.corralBarOldY = "";
 };
@@ -818,7 +818,7 @@ IDE_Morph.prototype.createControlBar = function () {
     goalImagesButton = button;
     this.controlBar.add(goalImagesButton);
     this.controlBar.goalImagesButton = goalImagesButton; // for menu positioning
-    
+
     // cloudButton
     button = new PushButtonMorph(
         this,
@@ -877,10 +877,10 @@ IDE_Morph.prototype.createControlBar = function () {
            settingsButton.setCenter(myself.controlBar.center());
            settingsButton.setLeft(this.left() - 40);
         }
-        
+
         goalImagesButton.setCenter(myself.controlBar.center());
         goalImagesButton.setLeft(this.left());
-        
+
         settingsButton.setCenter(myself.controlBar.center());
         settingsButton.setLeft(goalImagesButton.left() - padding - 40);
 
@@ -1079,7 +1079,7 @@ IDE_Morph.prototype.createSpriteBar = function () {
     var rotationStyleButtons = [],
         thumbSize = new Point(45, 45),
         nameField,
-        checkbox, 
+        checkbox,
         checkbox2,
         thumbnail,
         tabCorner = 15,
@@ -1237,7 +1237,7 @@ IDE_Morph.prototype.createSpriteBar = function () {
             },
             'switch to 3D', // TODO: localize
             function () {
-                return myself.currentSprite.costume ? 
+                return myself.currentSprite.costume ?
                     myself.currentSprite.costume.is3D : false;
             }
         );
@@ -1476,7 +1476,7 @@ IDE_Morph.prototype.createCorralBar = function () {
         this.corralBar.left() + padding + newbutton.width() + padding
     );
     this.corralBar.add(paintbutton);
-  
+
     xlabel = new StringMorph(
             "X: 0",
             24,
@@ -1487,13 +1487,13 @@ IDE_Morph.prototype.createCorralBar = function () {
             MorphicPreferences.isFlat ? null : new Point(2, 1),
             this.frameColor.darker(this.buttonContrast)
         );
-  
+
     xlabel.color = this.buttonLabelColor;
     xlabel.drawNew();
     xlabel.setLeft(
         this.corralBar.left() + padding + (newbutton.width() + padding)*2
     );
-  
+
     this.corralBar.add(xlabel)
 
     ylabel = new StringMorph(
@@ -1511,17 +1511,17 @@ IDE_Morph.prototype.createCorralBar = function () {
     ylabel.setLeft(
         this.corralBar.left() + padding + (newbutton.width() + padding)*2 + 100
     );
-  
+
     this.corralBar.add(ylabel)
-    
+
     this.corralBar.step = function() {
       this.parent.updateCorralBar();
     }
-    
+
 };
 
 IDE_Morph.prototype.updateCorralBar = function () {
-   
+
    var MouseX = this.stage.reportMouseX();
    var MouseY = this.stage.reportMouseY();
     Morph.prototype.trackChanges = false;
@@ -1529,16 +1529,16 @@ IDE_Morph.prototype.updateCorralBar = function () {
       MouseX > StageMorph.prototype.dimensions.x / 2 ||
       MouseY > StageMorph.prototype.dimensions.y / 2 ||
       MouseX < StageMorph.prototype.dimensions.x / -2 ||
-      MouseY < StageMorph.prototype.dimensions.y / -2) 
+      MouseY < StageMorph.prototype.dimensions.y / -2)
    {
      this.corralBar.children[2].text = "";
-     this.corralBar.children[3].text = "";     
+     this.corralBar.children[3].text = "";
    } else {
      this.corralBar.children[2].text = "X: " + this.stage.reportMouseX();
      this.corralBar.children[3].text = "Y: " + this.stage.reportMouseY();
    }
    Morph.prototype.trackChanges = true;
-	 
+
    //update only if the coordinates have changed to save CPU
    if(this.corralBarOldX != this.corralBar.children[2].text || this.corralBarOldY != this.corralBar.children[3].text)
    {
@@ -1546,10 +1546,10 @@ IDE_Morph.prototype.updateCorralBar = function () {
      this.corralBarOldY = this.corralBar.children[3].text;
      this.corralBar.children[2].drawNew();
      this.corralBar.children[3].drawNew();
-	   
+
      this.corralBar.changed();
    }
-    
+
 };
 
 IDE_Morph.prototype.createCorral = function () {
@@ -1800,7 +1800,7 @@ IDE_Morph.prototype.droppedImage = function (aCanvas, name, url) {
         );
         return;
     }
-    
+
     if(costume.contents.height >= 360){
         this.showMessage("Using an image greater than 360 will cause inaccuracies in the 'translate by width/height' block");
     }
@@ -2374,7 +2374,7 @@ IDE_Morph.prototype.goalImagesMenu = function() {
         myself = this,
         pos = this.controlBar.goalImagesButton.bottomLeft(),
         shiftClicked = (world.currentKey === 16);
-        
+
         function addPreference(label, toggle, test, onHint, offHint, hide) {
         var on = '\u2611 ',
             off = '\u2610 ';
@@ -2387,7 +2387,7 @@ IDE_Morph.prototype.goalImagesMenu = function() {
             );
         }
     }
-    
+
     new ProjectDialogMorph(this, 'goals').popUp();
 };
 
@@ -2679,11 +2679,11 @@ IDE_Morph.prototype.projectMenu = function () {
             );
             document.body.appendChild(inp);
             myself.filePicker = inp;
-            document.body.onfocus = 		
-                function () {		
-                    document.body.removeChild(inp);		
-                    myself.filePicker = null;		
-                    document.body.onfocus = null;		
+            document.body.onfocus =
+                function () {
+                    document.body.removeChild(inp);
+                    myself.filePicker = null;
+                    document.body.onfocus = null;
                 };
             inp.click();
         },
@@ -2757,7 +2757,7 @@ IDE_Morph.prototype.projectMenu = function () {
         },
         'Select categories of additional blocks to add to this project.'
     );
-    
+
     menu.addLine();
     menu.addItem(
         'Load Demos...',
@@ -2823,7 +2823,7 @@ IDE_Morph.prototype.projectMenu = function () {
                     }
                     catch(e){}
 
-  
+
                 }
 
                 names.forEach(function (line) {
@@ -2840,18 +2840,18 @@ IDE_Morph.prototype.projectMenu = function () {
         );
 
         menu.addItem(
-            'Textures...', // TODO: localize this 
+            'Textures...', // TODO: localize this
             function () {
                 var dir = 'Textures',
                 names = myself.getTexturesList(dir),
                 libMenu = new MenuMorph(
                     myself,
-                    localize('Import') + ' ' + dir 
+                    localize('Import') + ' ' + dir
                 );
 
                 function loadTexture(name) {
                     var url = dir + '/' + name;
-                    myself.droppedTexture(name, url);   
+                    myself.droppedTexture(name, url);
                 }
 
                 names.forEach(function (line) {
@@ -2866,8 +2866,8 @@ IDE_Morph.prototype.projectMenu = function () {
             },
             'Select a texture from the media library'
         );
-            
-            
+
+
     }
     else {
         // StageMorph
@@ -2960,7 +2960,7 @@ IDE_Morph.prototype.getCostumesList = function (dirname) {
     return costumes;
 };
 
-IDE_Morph.prototype.getTexturesList = 
+IDE_Morph.prototype.getTexturesList =
     IDE_Morph.prototype.getCostumesList;
 
 // IDE_Morph menu actions
@@ -2969,7 +2969,7 @@ IDE_Morph.prototype.aboutCSnap = function () {
     var dlg, aboutTxt, noticeTxt, creditsTxt, versions = '', translations,
         module, btn1, btn2, btn3, btn4, licenseBtn, translatorsBtn,
         world = this.world();
-        
+
 
     aboutTxt = 'CSnap 1.0\nCSDTs with Snap!\n\n'
         + 'Culturally Situated Design Tools (CSDTs) were developed at RPI with support from the\n'
@@ -4116,43 +4116,133 @@ IDE_Morph.prototype.saveProjectToCloud = function (name) {
     }
 };
 
-IDE_Morph.prototype.exportProjectMedia = function (name) {
-    var menu, media;
-    this.serializer.isCollectingMedia = true;
+IDE_Morph.prototype.exportProject = function (name, plain) {
+    var menu, str, dataPrefix, url, newWindow;
     if (name) {
         this.setProjectName(name);
         if (Process.prototype.isCatchingErrors) {
             try {
+                dataPrefix = 'data:text/' + plain ? 'plain,' : 'xml,';
                 menu = this.showMessage('Exporting');
-                encodeURIComponent(
-                    this.serializer.serialize(this.stage)
-                );
-                media = encodeURIComponent(
-                    this.serializer.mediaXML(name)
-                );
-                window.open('data:text/xml,' + media);
+                str = this.serializer.serialize(this.stage);
+                url = ('#open:' + dataPrefix + encodeURIComponent(str));
+                if (this.projectsInURLs) {
+                    location.hash = url;
+                }
+                this.saveFileAs(str, 'text/xml;chartset=utf-8', name, newWindow);
                 menu.destroy();
                 this.showMessage('Exported!', 1);
             } catch (err) {
-                this.serializer.isCollectingMedia = false;
                 this.showMessage('Export failed: ' + err);
             }
         } else {
             menu = this.showMessage('Exporting');
-            encodeURIComponent(
+            str = encodeURIComponent(
                 this.serializer.serialize(this.stage)
             );
-            media = encodeURIComponent(
-                this.serializer.mediaXML()
-            );
-            window.open('data:text/xml,' + media);
+            //location.hash = '#open:' + str;
+            window.open('data:text/'
+                + (plain ? 'plain,' + str : 'xml,' + str));
             menu.destroy();
             this.showMessage('Exported!', 1);
         }
     }
-    this.serializer.isCollectingMedia = false;
-    this.serializer.flushMedia();
-    // this.hasChangedMedia = false;
+};
+
+IDE_Morph.prototype.saveFileAs = function (
+    contents,
+    fileType,
+    fileName,
+    newWindow // (optional) defaults to false.
+) {
+    /** Allow for downloading a file to a disk or open in a new tab.
+        This relies the FileSaver.js library which exports saveAs()
+        Two utility methods saveImageAs and saveXMLAs should be used first.
+        1. Opening a new window uses standard URI encoding.
+        2. downloading a file uses Blobs.
+        - every other combo is unsupposed.
+    */
+    var blobIsSupported = false,
+        world = this.world(),
+        fileExt,
+        dataURI, dialog;
+
+    // fileType is a <kind>/<ext>;<charset> format.
+    fileExt = fileType.split('/')[1].split(';')[0];
+    // handle text/plain as a .txt file
+    fileExt = '.' + (fileExt === 'plain' ? 'txt' : fileExt);
+
+    // This is a workaround for a known Chrome crash with large URLs
+    function exhibitsChomeBug(contents) {
+        var MAX_LENGTH = 2e6,
+        isChrome  = navigator.userAgent.indexOf('Chrome') !== -1;
+        return isChrome && contents.length > MAX_LENGTH;
+    }
+
+    function dataURItoBlob(text, mimeType) {
+        var i,
+            data = text,
+            components = text.split(','),
+            hasTypeStr = text.indexOf('data:') === 0;
+        // Convert to binary data, in format Blob() can use.
+        if (hasTypeStr && components[0].indexOf('base64') > -1) {
+            text = atob(components[1]);
+            data = new Uint8Array(text.length);
+            i = text.length;
+            while (i--) {
+                data[i] = text.charCodeAt(i);
+            }
+        }
+        return new Blob([data], {type: mimeType });
+    }
+
+    function dataURLFormat(text) {
+        var hasTypeStr = text.indexOf('data:') === 0;
+        if (hasTypeStr) {return text; }
+        return 'data:' + fileType + ',' + encodeURIComponent(text);
+    }
+
+    try {
+        blobIsSupported = !!new Blob();
+    } catch (e) {}
+
+    if (newWindow) {
+        // Blob URIs need a custom URL to be displayed in a new window
+        if (contents instanceof Blob) {
+            dataURI = URL.createObjectURL(contents);
+        } else {
+            dataURI = dataURLFormat(contents);
+        }
+
+        // Detect crashing errors - fallback to downloading if necessary
+        if (!exhibitsChomeBug(dataURI)) {
+            window.open(dataURI, fileName);
+            // Blob URIs should be "cleaned up" to reduce memory.
+            if (contents instanceof Blob) {
+                URL.revokeObjectURL(dataURI);
+            }
+        } else {
+            // (recursively) call this defauling newWindow to false
+            this.showMessage('download to disk text');
+            this.saveFileAs(contents, fileType, fileName);
+        }
+    } else if (blobIsSupported) {
+        if (!(contents instanceof Blob)) {
+            contents = dataURItoBlob(contents, fileType);
+        }
+        // download a file and delegate to FileSaver
+        // false: Do not preprend a BOM to the file.
+        saveAs(contents, fileName + fileExt, false);
+    } else {
+        dialog = new DialogBoxMorph();
+        dialog.inform(
+            localize('Could not export') + ' ' + fileName,
+            'unable to export text',
+            world
+        );
+        dialog.fixLayout();
+        dialog.drawNew();
+    }
 };
 
 IDE_Morph.prototype.exportProjectNoMedia = function (name) {
@@ -4503,7 +4593,7 @@ ProjectDialogMorph.prototype.buildContents = function () {
         notification.refresh = nop;
         this.srcBar.add(notification);
     }
-    
+
     if(this.task === 'demos'){
         this.addSourceButton('examples', localize('Examples'), 'poster');
     }
@@ -4587,11 +4677,11 @@ ProjectDialogMorph.prototype.buildContents = function () {
 
     this.notesField.acceptsDrops = false;
     this.notesField.contents.acceptsDrops = false;
-	
+
     if (this.task === 'open') {
         this.notesText = new TextMorph('');
     } else { // 'save'
-	
+
 		this.classroomListField = new ListMorph([]);
 		this.fixClassRoomItemColors();
 		this.classroomListField.fixLayout = nop;
@@ -4607,19 +4697,19 @@ ProjectDialogMorph.prototype.buildContents = function () {
 		this.classroomListField.padding = 3;
 		this.classroomListField.setWidth(this.preview.width());
 		this.body.add(this.classroomListField);
-		
+
         this.notesText = new TextMorph(this.ide.projectNotes);
         this.notesText.isEditable = true;
         this.notesText.enableSelecting();
     }
-	
+
 	this.notesField.isTextLineWrapping = true;
 	this.notesField.padding = 3;
 	this.notesField.setContents(this.notesText);
 	this.notesField.setWidth(this.preview.width());
 
     this.body.add(this.notesField);
-	
+
     if (this.task === 'open') {
         this.addButton('openProject', 'Open');
         this.action = 'openProject';
@@ -4790,7 +4880,7 @@ ProjectDialogMorph.prototype.setSource = function (source) {
             }
         );
         this.classroomList = [];
-        SnapCloud.getClassroomList( 
+        SnapCloud.getClassroomList(
             function (classroomList) {
                 myself.installCloudClassroomList(classroomList);
                 msg.destroy();
@@ -4813,10 +4903,10 @@ ProjectDialogMorph.prototype.setSource = function (source) {
     }
     this.listField.destroy();
     this.classroomListField.destroy();
-	
+
 	if(this.source === 'goals'){
 		this.listField = new ListMorph(
-			this.projectList, 
+			this.projectList,
 			this.projectList.length > 0 ?
 					function (element) {
 						return element.thumb;
@@ -4824,7 +4914,7 @@ ProjectDialogMorph.prototype.setSource = function (source) {
 			null,
 			function () {myself.ok();}
 		);
-    
+
     //We need action declaration here to select default
 		this.listField.action = function (item) {
             var img, desc;
@@ -4863,10 +4953,10 @@ ProjectDialogMorph.prototype.setSource = function (source) {
 			function () {myself.ok(); }
 		);
 	}
-    
+
     if(this.source === 'save'){
         this.classroomListField = new ListMorph(
-            this.classroomList, 
+            this.classroomList,
             this.classroomList.length > 0 ?
                     function (element) {
                         return element.team_name;
@@ -4893,7 +4983,7 @@ ProjectDialogMorph.prototype.setSource = function (source) {
     this.classroomListField.contrast = InputFieldMorph.prototype.contrast;
     this.classroomListField.drawNew = InputFieldMorph.prototype.drawNew;
     this.classroomListField.drawRectBorder = InputFieldMorph.prototype.drawRectBorder;
-	
+
     if (this.source === 'local') {
         this.listField.action = function (item) {
             var src, xml;
@@ -4918,7 +5008,7 @@ ProjectDialogMorph.prototype.setSource = function (source) {
             }
             myself.edit();
 			this.classroomListField.hide();
-        };	
+        };
     } else if (this.source === 'goals'){
         this.listField.action = function (item) {
             var img, desc;
@@ -5481,7 +5571,7 @@ ProjectDialogMorph.prototype.fixLayout = function () {
     var th = fontHeight(this.titleFontSize) + this.titlePadding * 2,
         thin = this.padding / 2,
         oldFlag = Morph.prototype.trackChanges;
-        
+
     if(this.task === 'goals'){
         this.setExtent(new Point(550, 450));
     }
