@@ -32,7 +32,7 @@
 
     credits
     -------
-    Michael Ball contributed the first prototype of the piano keyboard
+    Lucas Karahadian contributed a first prototype of the piano keyboard
 
 
     I. hierarchy

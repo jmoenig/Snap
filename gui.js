@@ -3250,7 +3250,7 @@ IDE_Morph.prototype.aboutSnap = function () {
         + '\ncountless bugfixes and optimizations'
         + '\nKartik Chandra: Paint Editor'
         + '\nMichael Ball: Time/Date UI, Library Import Dialog,'
-        + '\nPiano Keyboard design, countless bugfixes and optimizations'
+        + '\ncountless bugfixes and optimizations'
         + '\nBartosz Leper: Retina Display Support'
         + '\nBernat Romagosa: Countless contributions'
         + '\n"Ava" Yuan Yuan, Dylan Servilla: Graphic Effects'
@@ -3259,6 +3259,7 @@ IDE_Morph.prototype.aboutSnap = function () {
         + '\nIan Reynolds: UI Design, Event Bindings, '
         + 'Sound primitives'
         + '\nIvan Motyashov: Initial Squeak Porting'
+        + '\nLucas Karahadian: Piano Keyboard Design'
         + '\nDavide Della Casa: Morphic Optimizations'
         + '\nAchal Dave: Web Audio'
         + '\nJoe Otto: Morphic Testing and Debugging';
