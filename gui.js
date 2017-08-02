@@ -74,7 +74,7 @@ isRetinaSupported, SliderMorph, Animation*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2017-July-25';
+modules.gui = '2017-August-02';
 
 // Declarations
 
@@ -2471,6 +2471,38 @@ IDE_Morph.prototype.settingsMenu = function () {
         );
     }
     addPreference(
+        'Input sliders',
+        'toggleInputSliders',
+        MorphicPreferences.useSliderForInput,
+        'uncheck to disable\ninput sliders for\nentry fields',
+        'check to enable\ninput sliders for\nentry fields'
+    );
+    if (MorphicPreferences.useSliderForInput) {
+        addPreference(
+            'Execute on slider change',
+            'toggleSliderExecute',
+            ArgMorph.prototype.executeOnSliderEdit,
+            'uncheck to suppress\nrunning scripts\nwhen moving the slider',
+            'check to run\nthe edited script\nwhen moving the slider'
+        );
+    }
+    addPreference(
+        'Turbo mode',
+        'toggleFastTracking',
+        this.stage.isFastTracked,
+        'uncheck to run scripts\nat normal speed',
+        'check to prioritize\nscript execution'
+    );
+    addPreference(
+        'Visible stepping',
+        'toggleSingleStepping',
+        Process.prototype.enableSingleStepping,
+        'uncheck to turn off\nvisible stepping',
+        'check to turn on\n visible stepping (slow)',
+        false
+    );
+    menu.addLine(); // everything visible below is persistent
+    addPreference(
         'Blurred shadows',
         'toggleBlurredShadows',
         useBlurredShadows,
@@ -2525,22 +2557,6 @@ IDE_Morph.prototype.settingsMenu = function () {
         true
     );
     addPreference(
-        'Input sliders',
-        'toggleInputSliders',
-        MorphicPreferences.useSliderForInput,
-        'uncheck to disable\ninput sliders for\nentry fields',
-        'check to enable\ninput sliders for\nentry fields'
-    );
-    if (MorphicPreferences.useSliderForInput) {
-        addPreference(
-            'Execute on slider change',
-            'toggleSliderExecute',
-            ArgMorph.prototype.executeOnSliderEdit,
-            'uncheck to suppress\nrunning scripts\nwhen moving the slider',
-            'check to run\nthe edited script\nwhen moving the slider'
-        );
-    }
-    addPreference(
         'Clicking sound',
         function () {
             BlockMorph.prototype.toggleSnapSound();
@@ -2561,13 +2577,6 @@ IDE_Morph.prototype.settingsMenu = function () {
         'uncheck to disable\nIDE animations',
         'check to enable\nIDE animations',
         true
-    );
-    addPreference(
-        'Turbo mode',
-        'toggleFastTracking',
-        this.stage.isFastTracked,
-        'uncheck to run scripts\nat normal speed',
-        'check to prioritize\nscript execution'
     );
     addPreference(
         'Cache Inputs',
@@ -2720,14 +2729,6 @@ IDE_Morph.prototype.settingsMenu = function () {
         'EXPERIMENTAL! uncheck to disable live\ncustom control structures',
         'EXPERIMENTAL! check to enable\n live custom control structures',
         true
-    );
-    addPreference(
-        'Visible stepping',
-        'toggleSingleStepping',
-        Process.prototype.enableSingleStepping,
-        'uncheck to turn off\nvisible stepping',
-        'check to turn on\n visible stepping (slow)',
-        false
     );
     menu.addLine(); // everything below this line is stored in the project
     addPreference(
