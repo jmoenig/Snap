@@ -30,6 +30,11 @@
     needs blocks.js and objects.js
 
 
+    credits
+    -------
+    Michael Ball contributed the first prototype of the piano keyboard
+
+
     I. hierarchy
     -------------
     the following tree lists all constructors hierarchically,

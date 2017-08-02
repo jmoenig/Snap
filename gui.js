@@ -3250,7 +3250,7 @@ IDE_Morph.prototype.aboutSnap = function () {
         + '\ncountless bugfixes and optimizations'
         + '\nKartik Chandra: Paint Editor'
         + '\nMichael Ball: Time/Date UI, Library Import Dialog,'
-        + '\ncountless bugfixes and optimizations'
+        + '\nPiano Keyboard design, countless bugfixes and optimizations'
         + '\nBartosz Leper: Retina Display Support'
         + '\nBernat Romagosa: Countless contributions'
         + '\n"Ava" Yuan Yuan, Dylan Servilla: Graphic Effects'
