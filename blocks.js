@@ -148,7 +148,7 @@ CustomCommandBlockMorph, SymbolMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2017-August-02';
+modules.blocks = '2017-August-03';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -1973,7 +1973,7 @@ SyntaxElementMorph.prototype.exportPictureWithResult = function (aBubble) {
     ide.saveCanvasAs(
         pic,
         ide.projetName || localize('Untitled') + ' ' + localize('script pic'),
-        true
+        false
     );
 };
 
@@ -2553,7 +2553,7 @@ BlockMorph.prototype.userMenu = function () {
                 myself.topBlock().scriptPic(),
                 ide.projetName || localize('Untitled') + ' ' +
                     localize('script pic'),
-                true // request new window
+                false // request new window
             );
         },
         'open a new window\nwith a picture of this script'
@@ -6308,7 +6308,7 @@ ScriptsMorph.prototype.exportScriptsPicture = function () {
             pic,
             ide.projetName || localize('Untitled') + ' ' +
                 localize('script pic'),
-            true // request new window
+            false // request new window
         );
     }
 };
@@ -11657,7 +11657,7 @@ CommentMorph.prototype.userMenu = function () {
                 myself.fullImageClassic(),
                 ide.projetName || localize('Untitled') + ' ' +
                     localize('comment pic'),
-                true // request new window
+                false // request new window
             );
         },
         'open a new window\nwith a picture of this comment'

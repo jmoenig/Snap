@@ -3580,6 +3580,10 @@ Fixes:
 * GUI, Widgets: Changed piano keyboard design credits to  Lucas Karahadian
 * GUI: fixed #1820
 
+170803
+------
+* enable exporting script pics in the newest Chrome version, which disables opening tabs on dataURLs
+
 
 Features:
 * polymorphic sprite-local custom blocks
