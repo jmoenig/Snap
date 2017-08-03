@@ -3071,6 +3071,25 @@ IDE_Morph.prototype.projectMenu = function () {
             'show project data as XML\nin a new browser window',
             new Color(100, 0, 0)
         );
+        menu.addItem(
+            localize('Export project without history...'),
+            function () {
+                var savingHistory = myself.serializer.isSavingHistory;
+                if (myself.projectName) {
+                    myself.serializer.isSavingHistory = false;
+                    myself.exportProject(myself.projectName, shiftClicked);
+                    myself.serializer.isSavingHistory = savingHistory;
+                } else {
+                    myself.prompt('Export Project As...', function (name) {
+                        myself.serializer.isSavingHistory = false;
+                        myself.exportProject(name, shiftClicked);
+                        myself.serializer.isSavingHistory = savingHistory;
+                    }, null, 'exportProject');
+                }
+            },
+            null,
+            new Color(100, 0, 0)
+        );
     }
     menu.addItem(
         shiftClicked ?
