@@ -3584,6 +3584,10 @@ Fixes:
 ------
 * enable exporting script pics in the newest Chrome version, which disables opening tabs on dataURLs
 
+170804
+------
+* GUI: enable exporting project summaries in the newest Chrome version, which disables opening tabs on dataURLs
+
 
 Features:
 * polymorphic sprite-local custom blocks

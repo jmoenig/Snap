@@ -74,7 +74,7 @@ isRetinaSupported, SliderMorph, Animation*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2017-August-02';
+modules.gui = '2017-August-04';
 
 // Declarations
 
@@ -3917,7 +3917,7 @@ IDE_Morph.prototype.exportProjectSummary = function (useDropShadows) {
         '<!DOCTYPE html>' + html.toString(),
         'text/html;charset=utf-8',
         pname,
-        true // request opening a new window.
+        false // request opening a new window.
     );
 };
 
