@@ -3293,7 +3293,6 @@ Process.prototype.doPlayNote = function (pitch, beats) {
 };
 
 Process.prototype.doPlayNoteForSecs = function (pitch, secs) {
-    // interpolated
     if (!this.context.startTime) {
         this.context.startTime = Date.now();
         this.context.activeNote = new Note(pitch);
@@ -3301,7 +3300,6 @@ Process.prototype.doPlayNoteForSecs = function (pitch, secs) {
     }
     if ((Date.now() - this.context.startTime) >= (secs * 1000)) {
         if (this.context.activeNote) {
-            this.context.activeNote.stop();
             this.context.activeNote = null;
         }
         return null;
@@ -3606,7 +3604,6 @@ Context.prototype.addInput = function (input) {
 
 Context.prototype.stopMusic = function () {
     if (this.activeNote) {
-        this.activeNote.stop();
         this.activeNote = null;
     }
 };

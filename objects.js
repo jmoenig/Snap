@@ -7553,7 +7553,6 @@ Sound.prototype.toDataURL = function () {
 function Note(pitch) {
     this.pitch = pitch === 0 ? 0 : pitch || 69;
     this.setupContext();
-    this.oscillator = null;
 }
 
 // Note shared properties
@@ -7581,58 +7580,52 @@ Note.prototype.setupContext = function () {
         throw new Error('Web Audio API is not supported\nin this browser');
     }
     Note.prototype.audioContext = new AudioContext();
-    Note.prototype.gainNode = Note.prototype.audioContext.createGain();
     Note.prototype.volumeLevel = 0.25;
-    Note.prototype.attackTime = 0.075;
-    Note.prototype.releaseTime = 0.075;
+    Note.prototype.releaseTime = 0.1;
 };
 
 // Note playing
 
 Note.prototype.play = function (secs) {
-    var attackStart, attackEnd, releaseStart, releaseEnd;
-    this.oscillator = this.audioContext.createOscillator();
-    if (!this.oscillator.start) {
-        this.oscillator.start = this.oscillator.noteOn;
+    var attackStart, releaseStart, releaseEnd;
+    var oscillator = this.audioContext.createOscillator();
+    var gainNode = this.audioContext.createGain();
+
+    if (!oscillator.start) {
+        oscillator.start = oscillator.noteOn;
     }
-    if (!this.oscillator.stop) {
-        this.oscillator.stop = this.oscillator.noteOff;
-    }
-    this.oscillator.type = 'sine';
-    this.oscillator.frequency.value =
+    oscillator.type = 'sine';
+    oscillator.frequency.value =
         Math.pow(2, (this.pitch - 69) / 12) * 440;
-    this.oscillator.connect(this.gainNode);
-    this.gainNode.connect(this.audioContext.destination);
-    this.gainNode.gain.value = 0;
+    oscillator.connect(gainNode);
+    gainNode.connect(this.audioContext.destination);
+    gainNode.gain.value = 0;
 
-    // attack:
+    // attack (instant, no ramp):
     attackStart = this.audioContext.currentTime;
-    if (this.attackTime < (secs / 2)) {
-        attackEnd = attackStart + this.attackTime;
-    } else {
-        attackEnd = attackStart + (secs / 2);
-    }
-    this.gainNode.gain.cancelScheduledValues(attackStart);
-    this.gainNode.gain.setValueAtTime(0, attackStart);
-    this.gainNode.gain.linearRampToValueAtTime(this.volumeLevel, attackEnd);
+    gainNode.gain.setValueAtTime(this.volumeLevel, attackStart);
+
     // release:
-    releaseEnd = attackStart + secs;
-    if (this.releaseTime < (secs / 2)) {
-        releaseStart = releaseEnd - this.releaseTime;
-    } else {
-        releaseStart = releaseEnd - (secs / 2);
-    }
-    this.gainNode.gain.setValueAtTime(this.volumeLevel, releaseStart);
-    this.gainNode.gain.linearRampToValueAtTime(0, releaseEnd);
+    releaseStart = attackStart + secs;
+    releaseEnd = releaseStart + this.releaseTime;
+    gainNode.gain.setValueAtTime(this.volumeLevel, releaseStart);
+    gainNode.gain.linearRampToValueAtTime(0, releaseEnd);
 
-    this.oscillator.start(0);
-};
+    oscillator.start(0);
 
-Note.prototype.stop = function () {
-    if (this.oscillator) {
-        this.oscillator.stop(0);
-        this.oscillator = null;
-    }
+    // resource deallocation closure
+    var _this = this;
+    var dealloc = function () {
+        if (gainNode.gain.value == 0) {
+            gainNode.disconnect();
+            oscillator.disconnect();
+        }
+        else {
+            // Release somehow hasn't finished. Check again in a second.
+            setTimeout(dealloc, 1000);
+        }
+    };
+    setTimeout(dealloc, (secs + (_this.releaseTime * 2)) * 1000);
 };
 
 // CellMorph //////////////////////////////////////////////////////////
