@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org', // optional
     'last_changed':
-        '2017-01-24', // this, too, will appear in the Translators tab
+        '2017-01-10', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -845,8 +845,6 @@ SnapTranslator.dict.de = {
         'einschalten f\u00fcr flache\nPinselstrichenden',
     'uncheck for round ends of lines':
         'auschalten f\u00fcr runde\nPinselstrichenden',
-    'Ternary Boolean slots':
-        'Ternäre Bool\'sche Inputs',
     'Inheritance support':
         'Prototypische Vererbung',
 
@@ -897,8 +895,6 @@ SnapTranslator.dict.de = {
         'ausschalten, um den Inhalt\nim Projekt zu speichern',
     'check to prevent contents\nfrom being saved':
         'einschalten, um das Speichern des Inhalts\nim Projekt zu verhindern',
-    'new line':
-        'neue Zeile',
 
     // custom blocks:
     'delete block definition...':
@@ -1359,10 +1355,6 @@ SnapTranslator.dict.de = {
         'ln',
     'e^':
         'e^',
-
-    // Boolean expressions keyboard entry
-    'not':
-        'nicht',
 
     // delimiters
     'letter':

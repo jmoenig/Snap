@@ -3304,7 +3304,7 @@ Fixes:
 * Translation updates (Russian, Polish, Danish, Portuguese, Catalan, German)
 
 
-== v4.0.10.1 - in development - ===
+== v4.0.11 - in development - ===
 
 170119
 ------
@@ -3337,3 +3337,73 @@ Fixes:
 170127
 ------
 * Blocks, Objects, Threaes, Store: added support for codification of String, Number and Boolean value types
+
+170130
+------
+* Store: fixed #1645
+
+170131
+------
+* Lists: experimental methods for use as objects (hierarchical dictionaries)
+
+170201
+------
+* GUI: let costume icons indicate svg costumes 
+
+170202
+------
+* Objects, BYOB: highly experimental custom block inheritance, under construction…
+* Blocks: fixed #1650
+
+170207
+------
+* Blocks: catch block label part issues, prevent palette from not showing
+
+170209
+------
+* Blocks: prevent Snap from “hanging” when encountering certain errors in visible stepping mode
+* Threads: fixed #1618 - only mark implicit parameters if no formal ones exist
+
+170209
+------
+* Blocks: fixed #1406
+
+170214
+------
+* Lists: remove experimental methods for object-use
+* Objects, BYOB: disable (comment out) experimental block inheritance for now
+
+170216
+------
+* turn “definition” property of custom block instances into a double-pointer (Variable) structure, in preparation for OOP (method inheritance)
+
+170227
+------
+* Objects: experiment with new “methods” attribute
+
+170301
+------
+* Objects: experiment with new dynamic method (cache) updating
+* Objects, Blocks, BYOB, Store, Threads, GUI: roll-back double-pointer container cache for methods
+
+170307
+------
+* Morphic, Objects, translation: let sprites’s rotation centers be adjusted onstage
+* BYOB: added attributes for dynamic method definition lookup
+* BYOB, Blocks, Objects, GUI: distinguish custom blocks by shared “isCustomBlock” attribute
+
+170321
+------
+* Change: Methods (sprite-local custom blocks) can no longer have block (instance) vars
+
+170322
+------
+* sprite-local custom block inheritance, first pass, still under heavy development
+
+170410
+------
+* Revert to 4.0.10 to prepare for newly surfaced bug in the Chrome browser
+* fixed #1707 (new Chrome blitting issue)
+
+== v4.0.10.1 - maintenance release - ===
+

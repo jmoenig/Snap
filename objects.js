@@ -82,7 +82,7 @@ SpeechBubbleMorph, RingMorph, isNil, FileReader, TableDialogMorph,
 BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph*/
 
-modules.objects = '2017-January-27';
+modules.objects = '2017-January-13';
 
 var SpriteMorph;
 var StageMorph;
@@ -1185,20 +1185,12 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'other',
             spec: 'map %cmdRing to %codeKind %code'
         },
-        doMapValueCode: { // experimental
-            type: 'command',
-            category: 'other',
-            spec: 'map %mapValue to code %code',
-            defaults: [['String'], '<#1>']
-        },
-    /* obsolete - superseded by 'doMapValue'
         doMapStringCode: { // experimental
             type: 'command',
             category: 'other',
             spec: 'map String to code %code',
             defaults: ['<#1>']
         },
-    */
         doMapListCode: { // experimental
             type: 'command',
             category: 'other',
@@ -1239,11 +1231,6 @@ SpriteMorph.prototype.initBlockMigrations = function () {
         reportFalse: {
             selector: 'reportBoolean',
             inputs: [false]
-        },
-        doMapStringCode: {
-            selector: 'doMapValueCode',
-            inputs: [['String'], '<#1>'],
-            offset: 1
         }
     };
 };
@@ -2169,7 +2156,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
 
         if (StageMorph.prototype.enableCodeMapping) {
             blocks.push(block('doMapCodeOrHeader'));
-            blocks.push(block('doMapValueCode'));
+            blocks.push(block('doMapStringCode'));
             blocks.push(block('doMapListCode'));
             blocks.push('-');
             blocks.push(block('reportMappedCode'));
@@ -2282,7 +2269,7 @@ SpriteMorph.prototype.freshPalette = function (category) {
         menu.addPair(
             'find blocks...',
             function () {myself.searchBlocks(); },
-            '^F'
+            '⌘F'
         );
         if (canHidePrimitives()) {
             menu.addItem(
@@ -2758,8 +2745,7 @@ SpriteMorph.prototype.reporterize = function (expressionString) {
 
     function blockFromAST(ast) {
         var block, selectors, monads, alias, key, sel, i, inps,
-            off = 1,
-            reverseDict = {};
+            off = 1;
         selectors = {
             '+': 'reportSum',
             '-': 'reportDifference',
@@ -2780,10 +2766,7 @@ SpriteMorph.prototype.reporterize = function (expressionString) {
             ceil: 'ceiling',
             '!' : 'not'
         };
-        monads.concat(['true', 'false']).forEach(function (word) {
-            reverseDict[localize(word).toLowerCase()] = word;
-        });
-        key = alias[ast[0]] || reverseDict[ast[0].toLowerCase()] || ast[0];
+        key = alias[ast[0]] || ast[0];
         if (contains(monads, key)) { // monadic
             sel = selectors[key];
             if (sel) { // single input
@@ -2803,14 +2786,11 @@ SpriteMorph.prototype.reporterize = function (expressionString) {
             if (ast[i] instanceof Array) {
                 block.silentReplaceInput(inps[i - off], blockFromAST(ast[i]));
             } else if (isString(ast[i])) {
-                if (contains(
-                    ['true', 'false'], reverseDict[ast[i]] || ast[i])
-                ) {
+                if (contains(['true', 'false'], ast[i])) {
                     block.silentReplaceInput(
                         inps[i - off],
                         SpriteMorph.prototype.blockForSelector(
-                            (reverseDict[ast[i]] || ast[i]) === 'true' ?
-                                    'reportTrue' : 'reportFalse'
+                            ast[i] === 'true' ? 'reportTrue' : 'reportFalse'
                         )
                     );
                 } else if (ast[i] !== '_') {
@@ -6420,7 +6400,7 @@ StageMorph.prototype.blockTemplates = function (category) {
 
         if (StageMorph.prototype.enableCodeMapping) {
             blocks.push(block('doMapCodeOrHeader'));
-            blocks.push(block('doMapValueCode'));
+            blocks.push(block('doMapStringCode'));
             blocks.push(block('doMapListCode'));
             blocks.push('-');
             blocks.push(block('reportMappedCode'));

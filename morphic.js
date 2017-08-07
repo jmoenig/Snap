@@ -1137,7 +1137,7 @@
 
 /*global window, HTMLCanvasElement, FileReader, Audio, FileList*/
 
-var morphicVersion = '2017-January-09';
+var morphicVersion = '2017-April-23';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = getBlurredShadowSupport(); // check for Chrome-bug
 
@@ -3227,7 +3227,31 @@ Morph.prototype.drawNew = function () {
     this.image = newCanvas(this.extent());
     var context = this.image.getContext('2d');
     context.fillStyle = this.color.toString();
-    context.fillRect(0, 0, this.width(), this.height());
+
+    /*
+        Chrome issue:
+
+            when filling a rectangular area, versions of Chrome beginning with
+            57.0.2987.133 start introducing vertical transparent stripes
+            to the right of the rectangle.
+            The following code replaces the original fillRect() call with
+            an explicit almost-rectangular path that miraculously  makes
+            sure the whole rectangle gets filled correctly.
+
+        Important: This needs to be monitored in the future so we can
+        revert to sane code once this Chrome issue has been resolved again.
+    */
+
+    // context.fillRect(0, 0, this.width(), this.height()); // taken out
+
+    context.beginPath();
+    context.moveTo(0, 0);
+    context.lineTo(this.image.width, 0);
+    context.lineTo(this.image.width, this.image.height);
+    context.lineTo(0, this.image.height + 0.0001); // yeah, I luv Chrome!
+    context.closePath();
+    context.fill();
+
     if (this.cachedTexture) {
         this.drawCachedTexture();
     } else if (this.texture) {
@@ -11353,29 +11377,13 @@ WorldMorph.prototype.fillPage = function () {
 // WorldMorph global pixel access:
 
 WorldMorph.prototype.getGlobalPixelColor = function (point) {
+    // answer the color at the given point.
+
 /*
-    answer the color at the given point.
+    // original method, now deprecated as of 4/4/2017 because Chrome
+    // "taints" the on-screen canvas as soon as its image data is
+    // requested, significantly slowing down subsequent blittings
 
-    Note: for some strange reason this method works fine if the page is
-    opened via HTTP, but *not*, if it is opened from a local uri
-    (e.g. from a directory), in which case it's always null.
-
-    This behavior is consistent throughout several browsers. I have no
-    clue what's behind this, apparently the imageData attribute of
-    canvas context only gets filled with meaningful data if transferred
-    via HTTP ???
-
-    This is somewhat of a showstopper for color detection in a planned
-    offline version of Snap.
-
-    The issue has also been discussed at: (join lines before pasting)
-    http://stackoverflow.com/questions/4069400/
-    canvas-getimagedata-doesnt-work-when-running-locally-on-windows-
-    security-excep
-
-    The suggestion solution appears to work, since the settings are
-    applied globally.
-*/
     var dta = this.worldCanvas.getContext('2d').getImageData(
         point.x,
         point.y,
@@ -11383,6 +11391,14 @@ WorldMorph.prototype.getGlobalPixelColor = function (point) {
         1
     ).data;
     return new Color(dta[0], dta[1], dta[2]);
+*/
+
+    var clr = this.hand.morphAtPointer().getPixelColor(this.hand.position());
+    // IMPORTANT:
+    // all callers of getGlobalPixelColor should make provisions for retina
+    // display support, which gets null-pixels interlaced with non-null ones:
+    // if (!clr.a) {/* ignore */ }
+    return clr;
 };
 
 // WorldMorph events:

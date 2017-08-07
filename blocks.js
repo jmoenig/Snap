@@ -150,7 +150,7 @@ CustomCommandBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2017-January-27';
+modules.blocks = '2017-April-10';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -567,20 +567,14 @@ SyntaxElementMorph.prototype.revertToDefaultInput = function (arg, noValues) {
     if (idx !== -1) {
         if (this instanceof BlockMorph) {
             deflt = this.labelPart(this.parseSpec(this.blockSpec)[idx]);
-            if (this.definition) {
-                if (deflt instanceof InputSlotMorph) {
-                    deflt.setChoices.apply(
-                        deflt,
-                        this.definition.inputOptionsOfIdx(inp)
-                    );
-                }
-                if (deflt instanceof InputSlotMorph ||
-                    (deflt instanceof BooleanSlotMorph)
-                ) {
-                    deflt.setContents(
-                        this.definition.defaultValueOfInputIdx(inp)
-                    );
-                }
+            if (deflt instanceof InputSlotMorph && this.definition) {
+                deflt.setChoices.apply(
+                    deflt,
+                    this.definition.inputOptionsOfIdx(inp)
+                );
+                deflt.setContents(
+                    this.definition.defaultValueOfInputIdx(inp)
+                );
             }
         } else if (this instanceof MultiArgMorph) {
             deflt = this.labelPart(this.slotSpec);
@@ -1320,21 +1314,6 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                 true
             );
             part.setContents(['number']);
-            break;
-        case '%mapValue':
-            part = new InputSlotMorph(
-                null,
-                false,
-                {
-                    String : ['String'],
-                    Number : ['Number'],
-                    'true' : ['true'],
-                    'false' : ['false']
-                },
-                true
-            );
-            part.setContents(['String']);
-            part.isStatic = true;
             break;
         case '%var':
             part = new InputSlotMorph(
@@ -2202,7 +2181,7 @@ BlockMorph.prototype.init = function (silently) {
 
     BlockMorph.uber.init.call(this, silently);
     this.color = new Color(0, 17, 173);
-    this.cachedInputs = null;
+    this.cashedInputs = null;
 };
 
 BlockMorph.prototype.receiver = function () {
@@ -2575,16 +2554,6 @@ BlockMorph.prototype.userMenu = function () {
                 );
             });
         }
-        proc.homeContext.variables.names().forEach(function (vn) {
-            if (!contains(vNames, vn)) {
-                menu.addItem(
-                    vn + '...',
-                    function () {
-                        proc.doShowVar(vn);
-                    }
-                );
-            }
-        });
         return menu;
     }
     if (this.parent.parentThatIsA(RingMorph)) {
@@ -2879,10 +2848,7 @@ BlockMorph.prototype.restoreInputs = function (oldInputs) {
         if (old instanceof ReporterBlockMorph) {
             leftOver.push(old);
         } else if (old instanceof CommandSlotMorph) {
-            nb = old.nestedBlock();
-            if (nb) {
-                leftOver.push(nb);
-            }
+            leftOver.push(old.nestedBlock());
         }
     }
     this.cachedInputs = null;
@@ -8239,20 +8205,13 @@ InputSlotMorph.prototype.freshTextEdit = function (aStringOrTextMorph) {
 
 InputSlotMorph.prototype.userMenu = function () {
     var menu = new MenuMorph(this);
-    if (!StageMorph.prototype.enableCodeMapping) {
+    if (!StageMorph.prototype.enableCodeMapping || this.isNumeric) {
         return this.parent.userMenu();
     }
-    if (this.isNumeric) {
-        menu.addItem(
-            'code number mapping...',
-            'mapNumberToCode'
-        );
-    } else {
-        menu.addItem(
-            'code string mapping...',
-            'mapStringToCode'
-        );
-    }
+    menu.addItem(
+        'code string mapping...',
+        'mapToCode'
+    );
     return menu;
 };
 
@@ -8264,7 +8223,7 @@ InputSlotMorph.prototype.userMenu = function () {
     it's not part of Snap's evaluator and not needed for Snap itself
 */
 
-InputSlotMorph.prototype.mapStringToCode = function () {
+InputSlotMorph.prototype.mapToCode = function () {
     // private - open a dialog box letting the user map code via the GUI
     new DialogBoxMorph(
         this,
@@ -8279,30 +8238,12 @@ InputSlotMorph.prototype.mapStringToCode = function () {
     );
 };
 
-InputSlotMorph.prototype.mapNumberToCode = function () {
-    // private - open a dialog box letting the user map code via the GUI
-    new DialogBoxMorph(
-        this,
-        function (code) {
-            StageMorph.prototype.codeMappings.number = code;
-        },
-        this
-    ).promptCode(
-        'Code mapping - Number <#1>',
-        StageMorph.prototype.codeMappings.number || '',
-        this.world()
-    );
-};
-
 InputSlotMorph.prototype.mappedCode = function () {
-    var block = this.parentThatIsA(BlockMorph),
-        val = this.evaluate(),
-        code;
+    var code = StageMorph.prototype.codeMappings.string || '<#1>',
+        block = this.parentThatIsA(BlockMorph),
+        val = this.evaluate();
 
-    if (this.isNumeric) {
-        code = StageMorph.prototype.codeMappings.number || '<#1>';
-        return code.replace(/<#1>/g, val);
-    }
+    if (this.isNumeric) {return val; }
     if (!isNaN(parseFloat(val))) {return val; }
     if (!isString(val)) {return val; }
     if (block && contains(
@@ -8311,7 +8252,6 @@ InputSlotMorph.prototype.mappedCode = function () {
         )) {
         return val;
     }
-    code = StageMorph.prototype.codeMappings.string || '<#1>';
     return code.replace(/<#1>/g, val);
 };
 
@@ -8770,10 +8710,6 @@ BooleanSlotMorph.prototype = new ArgMorph();
 BooleanSlotMorph.prototype.constructor = BooleanSlotMorph;
 BooleanSlotMorph.uber = ArgMorph.prototype;
 
-// BooleanSlotMorph preferences settings
-
-BooleanSlotMorph.prototype.isTernary = true;
-
 // BooleanSlotMorph instance creation:
 
 function BooleanSlotMorph(initialValue) {
@@ -8800,12 +8736,6 @@ BooleanSlotMorph.prototype.isEmptySlot = function () {
     return this.value === null;
 };
 
-BooleanSlotMorph.prototype.isBinary = function () {
-    return !this.isTernary &&
-        isNil(this.parentThatIsA(RingMorph)) &&
-        !isNil(this.parentThatIsA(ScriptsMorph));
-};
-
 BooleanSlotMorph.prototype.setContents = function (boolOrNull, silently) {
     this.value = (typeof boolOrNull === 'boolean') ? boolOrNull : null;
     if (silently) {return; }
@@ -8815,7 +8745,7 @@ BooleanSlotMorph.prototype.setContents = function (boolOrNull, silently) {
 
 BooleanSlotMorph.prototype.toggleValue = function () {
     var ide = this.parentThatIsA(IDE_Morph);
-    if (this.isStatic || this.isBinary()) {
+    if (this.isStatic) {
         this.setContents(!this.value, true);
     } else {
         switch (this.value) {
@@ -8866,7 +8796,7 @@ BooleanSlotMorph.prototype.mouseClickLeft = function () {
 
 BooleanSlotMorph.prototype.mouseEnter = function () {
     if (this.isStatic) {return; }
-    if (this.value === false && !this.isBinary()) {
+    if (this.value === false) {
         var oldValue = this.value;
         this.value = null;
         this.drawNew(3);
@@ -8882,72 +8812,6 @@ BooleanSlotMorph.prototype.mouseLeave = function () {
     if (this.isStatic) {return; }
     this.drawNew();
     this.changed();
-};
-
-// BooleanSlotMorph menu:
-
-BooleanSlotMorph.prototype.userMenu = function () {
-    var menu = new MenuMorph(this);
-    if (!StageMorph.prototype.enableCodeMapping) {
-        return this.parent.userMenu();
-    }
-    if (this.evaluate() === true) {
-        menu.addItem(
-            'code true mapping...',
-            'mapTrueToCode'
-        );
-    } else {
-        menu.addItem(
-            'code false mapping...',
-            'mapFalseToCode'
-        );
-    }
-    return menu;
-};
-
-// BooleanSlotMorph code mapping
-
-/*
-    code mapping lets you use blocks to generate arbitrary text-based
-    source code that can be exported and compiled / embedded elsewhere,
-    it's not part of Snap's evaluator and not needed for Snap itself
-*/
-
-BooleanSlotMorph.prototype.mapTrueToCode = function () {
-    // private - open a dialog box letting the user map code via the GUI
-    new DialogBoxMorph(
-        this,
-        function (code) {
-            StageMorph.prototype.codeMappings['true'] = code;
-        },
-        this
-    ).promptCode(
-        'Code mapping - true',
-        StageMorph.prototype.codeMappings['true'] || 'true',
-        this.world()
-    );
-};
-
-BooleanSlotMorph.prototype.mapFalseToCode = function () {
-    // private - open a dialog box letting the user map code via the GUI
-    new DialogBoxMorph(
-        this,
-        function (code) {
-            StageMorph.prototype.codeMappings['false'] = code;
-        },
-        this
-    ).promptCode(
-        'Code mapping - false',
-        StageMorph.prototype.codeMappings['false'] || 'false',
-        this.world()
-    );
-};
-
-BooleanSlotMorph.prototype.mappedCode = function () {
-    if (this.evaluate() === true) {
-        return StageMorph.prototype.codeMappings.boolTrue || 'true';
-    }
-    return StageMorph.prototype.codeMappings.boolFalse || 'false';
 };
 
 // BooleanSlotMorph drawing:
@@ -11065,11 +10929,17 @@ ColorSlotMorph.prototype.getUserColor = function () {
     pal.setPosition(this.bottomLeft().add(new Point(0, this.edge)));
 
     hand.processMouseMove = function (event) {
+        var clr = world.getGlobalPixelColor(hand.position());
         hand.setPosition(new Point(
             event.pageX - posInDocument.x,
             event.pageY - posInDocument.y
         ));
-        myself.setColor(world.getGlobalPixelColor(hand.position()));
+        if (!clr.a) {
+            // ignore transparent,
+            // needed for retina-display support
+            return;
+        }
+        myself.setColor(clr);
     };
 
     hand.processMouseDown = nop;

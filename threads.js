@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph,
 TableFrameMorph, ColorSlotMorph, isSnapObject*/
 
-modules.threads = '2017-January-27';
+modules.threads = '2017-January-11';
 
 var ThreadManager;
 var Process;
@@ -3214,27 +3214,8 @@ Process.prototype.doMapCode = function (aContext, aString) {
     }
 };
 
-Process.prototype.doMapValueCode = function (type, aString) {
-    var tp = this.inputOption(type);
-    switch (tp) {
-    case 'String':
-        StageMorph.prototype.codeMappings.string = aString || '<#1>';
-        break;
-    case 'Number':
-        StageMorph.prototype.codeMappings.number = aString || '<#1>';
-        break;
-    case 'true':
-        StageMorph.prototype.codeMappings.boolTrue = aString || 'true';
-        break;
-    case 'false':
-        StageMorph.prototype.codeMappings.boolFalse = aString || 'true';
-        break;
-    default:
-        throw new Error(
-            localize('unsupported data type') + ' ' + tp
-        );
-    }
-
+Process.prototype.doMapStringCode = function (aString) {
+    StageMorph.prototype.codeMappings.string = aString || '<#1>';
 };
 
 Process.prototype.doMapListCode = function (part, kind, aString) {
