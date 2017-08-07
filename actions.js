@@ -1229,7 +1229,6 @@ ActionManager.prototype._onAddBlock = function(block, ownerId, x, y, callback) {
     var myself = this,
         ide = this.ide(),
         owner = this._owners[ownerId],
-        world = ide.parentThatIsA(WorldMorph),
         position = new Point(x, y),
         firstBlock,
         afterAdd = function() {
@@ -1237,9 +1236,11 @@ ActionManager.prototype._onAddBlock = function(block, ownerId, x, y, callback) {
                 firstBlock.fixChildrensBlockColor(true);
             }
 
-            firstBlock.allComments().forEach(function(comment) {
-                comment.align(firstBlock);
-            });
+            if (firstBlock.allComments) {
+                firstBlock.allComments().forEach(function(comment) {
+                    comment.align(firstBlock);
+                });
+            }
             myself.registerBlocks(firstBlock, owner);
             myself.__updateScriptsMorph(firstBlock);
             myself.__updateActiveEditor(firstBlock.id);
