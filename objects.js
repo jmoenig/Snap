@@ -3045,10 +3045,7 @@ SpriteMorph.prototype.duplicate = function () {
 };
 
 SpriteMorph.prototype.remove = function () {
-    var ide = this.parentThatIsA(IDE_Morph);
-    if (ide) {
-        ide.removeSprite(this);
-    }
+    SnapActions.removeSprite(this);
 };
 
 // SpriteMorph cloning
