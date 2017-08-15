@@ -3847,7 +3847,13 @@ IDE_Morph.prototype.removeUnusedBlocks = function () {
 };
 
 IDE_Morph.prototype.exportSprite = function (sprite) {
-    var str = this.serializer.serialize(sprite.allParts());
+    var isSavingHistory = this.serializer.isSavingHistory,
+        str;
+
+    this.serializer.isSavingHistory = false;
+    str = this.serializer.serialize(sprite.allParts());
+    this.serializer.isSavingHistory = isSavingHistory;
+
     str = '<sprites app="'
         + this.serializer.app
         + '" version="'

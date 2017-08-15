@@ -148,11 +148,11 @@ XML_Serializer.prototype.undoQueueXML = function (id) {
     );
 };
 
-XML_Serializer.prototype.undoEventsXML = function (events) {
+XML_Serializer.prototype.undoEventsXML = function (events, isReplay) {
     var queue = [],
+        event,
+        args,
         xml;
-
-    // TODO: cache some things...
 
     for (var i = events.length; i--;) {
         event = events[i];
@@ -163,15 +163,22 @@ XML_Serializer.prototype.undoEventsXML = function (events) {
         }
         args = args.join('');
 
-        xml = this.format(
-            '<event id="@" type="@" replayType="@" time="@" user="@">%</event>',
-            event.id,
-            event.type,
-            event.replayType || 0,
-            event.time,
-            event.user,
-            args
-        );
+        if (!isReplay) {
+            xml = this.format(
+                '<event id="@"/>',
+                event.id
+            );
+        } else {
+            xml = this.format(
+                '<event id="@" type="@" replayType="@" time="@" user="@">%</event>',
+                event.id,
+                event.type,
+                event.replayType || 0,
+                event.time,
+                event.user,
+                args
+            );
+        }
         queue.unshift(xml);
     }
 
@@ -268,7 +275,7 @@ XML_Serializer.prototype.historyXML = function (ownerId) {
 };
 
 XML_Serializer.prototype.replayHistory = function () {
-    return this.undoEventsXML(SnapUndo.allEvents);
+    return this.undoEventsXML(SnapUndo.allEvents, true);
 };
 
 XML_Serializer.prototype.add = function (object) {
@@ -723,8 +730,7 @@ SnapSerializer.prototype.loadReplayHistory = function (xml) {
         event;
 
     for (var e = queue.length; e--;) {
-        // TODO: recover the ownerid
-        event = this.parseEvent(null, queue[e]);
+        event = this.parseEvent(null, queue[e], true);
         SnapUndo.allEvents.unshift(event);
     }
 };
@@ -733,16 +739,29 @@ SnapSerializer.prototype.loadHistory = function (model) {
     var queues = model ? model.children : [],
         queue,
         event,
-        id;
+        id,
+        rIndex,
+        eventId;
 
     for (var i = queues.length; i--;) {
         id = queues[i].attributes.id;
+        rIndex = SnapUndo.allEvents.length - 1;
         SnapUndo.undoCount[id] = +queues[i].attributes['undo-count'] || 0;
         SnapUndo.eventHistory[id] = [];
         queue = queues[i].children;
         for (var e = queue.length; e--;) {
-            event = this.parseEvent(id, queue[e]);
-            SnapUndo.eventHistory[id].unshift(event);
+            eventId = +queue[e].attributes.id;
+            while (rIndex >= 0 && SnapUndo.allEvents[rIndex].id !== eventId) {
+                rIndex--;
+            }
+            if (rIndex >= 0) {
+                event = SnapUndo.allEvents[rIndex];
+                event.owner = id;
+                SnapUndo.eventHistory[id].unshift(event);
+            } else {
+                console.error('Could not load historical event from replay:', queue[e]);
+            }
+
         }
     }
 };
