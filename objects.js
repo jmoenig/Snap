@@ -9031,6 +9031,7 @@ ReplayControls.prototype.formatTime = function(time) {
     var secs,
         min,
         hrs,
+        days,
         minInMs = 1000*60,
         hourInMs = minInMs*60,
         setDisplayLength = function(num, len) {
@@ -9055,7 +9056,14 @@ ReplayControls.prototype.formatTime = function(time) {
     secs = setDisplayLength(secs, 2);
     if (hrs) {
         min = setDisplayLength(min, 2);
-        return [hrs, min, secs].join(':');
+
+        if (hrs > 24) {
+            days = Math.floor(hrs/24);
+            hrs = hrs - (24 * days);
+            return [days, hrs, min, secs].join(':');
+        } else {
+            return [hrs, min, secs].join(':');
+        }
     } else {
         return [min, secs].join(':');
     }
