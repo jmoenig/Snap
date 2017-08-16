@@ -1486,6 +1486,10 @@ ActionManager.prototype.onMoveBlock = function(id, rawTarget) {
             myself._positionOf[topBlock.id] = myself.getStandardPosition(scripts, topBlock.position());
         }
 
+        if (block.fixChildrensBlockColor) {
+            block.fixChildrensBlockColor(true);
+        }
+
         myself.updateCommentsPositions(block);
         myself.__updateBlockDefinitions(block);
         myself.__updateActiveEditor(block.id);
