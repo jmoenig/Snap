@@ -98,14 +98,6 @@ UndoManager.prototype.redo = function(owner) {
     return SnapActions.applyEvent(event);
 };
 
-UndoManager.prototype.trimAll = function() {
-    // trim all the redos for each queue
-    var ids = Object.keys(this.eventHistory);
-    for (var i = ids.length; i--;) {
-        this.trim(ids[i]);
-    }
-};
-
 UndoManager.prototype.trim = function(ownerId) {
     var index = this.undoCount[ownerId],
         len = this.eventHistory[ownerId].length;
