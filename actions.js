@@ -1277,7 +1277,6 @@ ActionManager.prototype._onAddBlock = function(block, ownerId, x, y, callback) {
             firstBlock.setPosition(position);
             owner.scripts.add(firstBlock);
             firstBlock.changed();
-            owner.scripts.adjustBounds();
             afterAdd();
         }
     } else {
@@ -1490,6 +1489,7 @@ ActionManager.prototype.onMoveBlock = function(id, rawTarget) {
         myself.updateCommentsPositions(block);
         myself.__updateBlockDefinitions(block);
         myself.__updateActiveEditor(block.id);
+        myself.__updateScriptsMorph(block);
         myself.completeAction(null, block);
     };
 
@@ -1684,6 +1684,7 @@ ActionManager.prototype.__updateScriptsMorph = function(block) {
         isDragging = !scripts;
 
     if (!isDragging) {
+        scripts.adjustBounds();
         scripts.drawNew();
         scripts.changed();
     }
