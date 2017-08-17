@@ -241,6 +241,7 @@ IDE_Morph.prototype.init = function (isAutoFill) {
     this.isAutoFill = isAutoFill === undefined ? true : isAutoFill;
     this.isAppMode = false;
     this.isReplayMode = false;
+    this.preReplayUndoState = null;
     this.isSmallStage = false;
     this.filePicker = null;
     this.hasChangedMedia = false;
@@ -3211,12 +3212,31 @@ IDE_Morph.prototype.replayEvents = function (actions) {
     this.replayControls.enable();
     this.replayControls.setActions(actions, atEnd);
     this.isReplayMode = true;
+
+    // store the state of the undo queues (to detect the changed ones after)
+    this.preReplayUndoState = {};
+    var queueIds = SnapUndo.allQueueIds();
+    for (var i = queueIds.length; i--;) {
+        this.preReplayUndoState[queueIds[i]] = SnapUndo.undoCount[queueIds[i]];
+    }
 };
 
 IDE_Morph.prototype.exitReplayMode = function () {
     if (this.isReplayMode) {
         this.isReplayMode = false;
-        SnapUndo.trimAll();  // trim the undo queues
+        // only trim the undo queues for the queues that have changed
+        var myself = this,
+            allIds = SnapUndo.allQueueIds(),
+            changedIds;
+
+        changedIds = allIds.filter(function(id) {
+            return myself.preReplayUndoState[id] !== SnapUndo.undoCount[id];
+        });
+
+        changedIds.forEach(function(id) {
+            SnapUndo.trim(id);
+        });
+
         SnapUndo.allEvents = this.replayControls.getCurrentHistory();
         this.activeEditor.onSetActive();
         this.replayControls.disable();
