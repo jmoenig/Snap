@@ -481,6 +481,17 @@ ActionManager.prototype.registerOwner = function(owner, id) {
     this._owners[owner.id] = owner;
 };
 
+ActionManager.prototype.getBlockOwner = function(block) {
+    var blockId = block.id;
+
+    while (!blockId && block) {
+        blockId = block.id;
+        block = block.parent;
+    }
+
+    return this._owners[this._blockToOwnerId[blockId]];
+};
+
 /* * * * * * * * * * * * Preprocess args (before action is accepted) * * * * * * * * * * * */
 // These are decorators which take the args from the public API and return the args for
 // the event to be sent to the other collaborators (and received by the onEventName methods)
@@ -1426,7 +1437,7 @@ ActionManager.prototype.onMoveBlock = function(id, rawTarget) {
         } else {  // basic connection for sprite/stage/etc
             target.element = this.getBlockFromId(target.element);
         }
-        owner = this._owners[this._blockToOwnerId[target.element.id]];
+        owner = this.getBlockOwner(target.element);
         scripts = target.element.parentThatIsA(ScriptsMorph);
         if (block.parent) {
             if (target.loc === 'bottom') {
@@ -1441,7 +1452,7 @@ ActionManager.prototype.onMoveBlock = function(id, rawTarget) {
         this.disconnectBlock(block, scripts);
 
         target = this.getBlockFromId(target);
-        owner = this._owners[this._blockToOwnerId[target.id]];
+        owner = this.getBlockOwner(target);
         scripts = target.parentThatIsA(ScriptsMorph);
 
         // If the target is a RingMorph, it will be overwritten rather than popped out
