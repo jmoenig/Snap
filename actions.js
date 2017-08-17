@@ -1093,9 +1093,12 @@ ActionManager.prototype._onSetBlockPosition = function(id, x, y, callback) {
         block = this.getBlockFromId(id),
         scripts = block.parentThatIsA(ScriptsMorph),
         afterMove = function() {
+            myself.disconnectBlock(block, scripts);
+
             if (block.justDropped) {block.justDropped(); }
             block.changed();
             block.removeShadow();
+
             myself.updateCommentsPositions(block);
 
             // Save the block definition
@@ -1128,11 +1131,10 @@ ActionManager.prototype._onSetBlockPosition = function(id, x, y, callback) {
         scripts = editor.body.contents;
     }
 
-    this.disconnectBlock(block, scripts);
-
     position = this.getAdjustedPosition(position, scripts);
 
     if (this.__canAnimate()) {
+        this.ide().palette.add(block)
         block.glideTo(
             position,
             null,
@@ -1494,8 +1496,8 @@ ActionManager.prototype.onMoveBlock = function(id, rawTarget) {
     };
 
     // Glide to the given position first
+    this.ide().palette.add(block);
     if (isNewBlock) {
-        this.ide().palette.add(block);
         block.setPosition(this.blockInitPosition());
     }
     if (this.__canAnimate()) {
