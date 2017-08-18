@@ -3038,10 +3038,7 @@ SpriteMorph.prototype.showOnStage = function () {
 };
 
 SpriteMorph.prototype.duplicate = function () {
-    var ide = this.parentThatIsA(IDE_Morph);
-    if (ide) {
-        ide.duplicateSprite(this);
-    }
+    SnapActions.duplicateSprite(this);
 };
 
 SpriteMorph.prototype.remove = function () {
