@@ -7590,6 +7590,7 @@ Note.prototype.play = function (secs) {
     var attackStart, releaseStart, releaseEnd;
     var oscillator = this.audioContext.createOscillator();
     var gainNode = this.audioContext.createGain();
+    this.gainNode = gainNode;
 
     if (!oscillator.start) {
         oscillator.start = oscillator.noteOn;
@@ -7614,7 +7615,7 @@ Note.prototype.play = function (secs) {
     oscillator.start(0);
 
     // resource deallocation closure
-    var _this = this;
+    var releaseTime = this.releaseTime;
     var dealloc = function () {
         if (gainNode.gain.value == 0) {
             gainNode.disconnect();
@@ -7625,8 +7626,16 @@ Note.prototype.play = function (secs) {
             setTimeout(dealloc, 1000);
         }
     };
-    setTimeout(dealloc, (secs + (_this.releaseTime * 2)) * 1000);
+    setTimeout(dealloc, (secs + (releaseTime * 2)) * 1000);
 };
+
+Note.prototype.stop = function () {
+    var currentTime = this.gainNode.context.currentTime;
+    var releaseEnd = currentTime + this.releaseTime;
+    this.gainNode.gain.cancelScheduledValues(currentTime);
+    this.gainNode.gain.setValueAtTime(this.volumeLevel, currentTime);
+    this.gainNode.gain.linearRampToValueAtTime(0, releaseEnd);
+}
 
 // CellMorph //////////////////////////////////////////////////////////
 

@@ -3604,6 +3604,7 @@ Context.prototype.addInput = function (input) {
 
 Context.prototype.stopMusic = function () {
     if (this.activeNote) {
+        this.activeNote.stop();
         this.activeNote = null;
     }
 };
