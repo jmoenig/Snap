@@ -295,6 +295,16 @@ SnapTranslator.dict.es = {
       'Pintar un nuevo objeto',
     'stage':
       'Escenario',
+      'switch to 3D':
+        'Cambiar a 3D',
+      'sprite':
+        'objetos',
+      'Add a new Turtle sprite':
+        'Añadir un nuevo objeto Tortuga',
+      'Paint a new sprite':
+        'Pintar un nuevo objeto',
+      'stage':
+        'Escenario',
 
     // Added blocks
     'translate by %n of %drc':
@@ -335,6 +345,30 @@ SnapTranslator.dict.es = {
       'esconder plano de coordenadas',
     'print list %l':
       'imprimir lista %l',
+    'new size %n percent of current':
+      'Nuevo tamaño %n por ciento de la corriente',
+    'when I start as a clone':
+      'cuando empiezo como un clon',
+    'create a clone of %cln':
+      'crear un clon de %cln',
+    'delete this clone':
+      'borrar este clon',
+    'pause all %pause':
+      'pausar todo %pause',
+    'open website: %s':
+      'abrir sitio web: %s',
+    'new size %n percent of current':
+      'Nuevo tamaño %n por ciento de la corriente',
+    'when I start as a clone':
+      'cuando empiezo como un clon',
+    'create a clone of %cln':
+      'crear un clon de %cln',
+    'delete this clone':
+      'borrar este clon',
+    'pause all %pause':
+      'pausar todo %pause',
+    'open website: %s':
+      'abrir sitio web: %s',
 
     // motion:
     'Stage selected:\nno motion primitives':
