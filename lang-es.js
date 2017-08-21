@@ -284,6 +284,57 @@ SnapTranslator.dict.es = {
 
         without breaking its functionality.
     */
+    //new text
+    'switch to 3D':
+      'Cambiar a 3D',
+    'sprite':
+      'objetos',
+    'Add a new Turtle sprite':
+      'Añadir un nuevo objeto Tortuga',
+    'Paint a new sprite':
+      'Pintar un nuevo objeto',
+    'stage':
+      'Escenario',
+
+    // Added blocks
+    'translate by %n of %drc':
+      'trasladar por %n de %drc',
+    'reflect across X axis':
+      'reflejar en el eje X',
+    'reflect across Y axis':
+      'reflejar en el eje Y',
+    'set costume color to %n':
+      'fijar el color del disfraz en %n',
+    'change costume shade by %n':
+      'cambiar color del disfraz por %n',
+    'break up %s by %s':
+      'romper %s por %s',
+    'imported data':
+      'datos importados',
+    'set coordinate scale %n':
+      'fijar escala de las coordenadas %n',
+    'coordinate scale':
+      'escala de las coordenadas',
+    '3D x rotation':
+      'rotación 3D del eje x',
+    '3D y rotation':
+      'rotación 3D del eje y',
+    '3D z rotation':
+     'rotación 3D del eje z',
+    '3D camera x rotation':
+     'rotación 3D en el eje x de la cámara',
+    '3D camera y rotation':
+      'rotación 3D en el eje y de la cámara',
+    'torus width: %n length: %n':
+      'torus de ancho: %n y largo: %n',
+    'length of arc width: %n length: %n':
+      'largo de arco con ancho: %n y largo: %n',
+    'show coordinate plane':
+      'mostrar plano de coordenadas',
+    'hide coordinate plane':
+      'esconder plano de coordenadas',
+    'print list %l':
+      'imprimir lista %l',
 
     // motion:
     'Stage selected:\nno motion primitives':
