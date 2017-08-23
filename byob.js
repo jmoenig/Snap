@@ -3194,22 +3194,22 @@ BlockExportDialogMorph.prototype.selectNone = function () {
 // BlockExportDialogMorph ops
 
 BlockExportDialogMorph.prototype.exportBlocks = function () {
-    var str = this.serializer.serialize(this.blocks);
+    var str = this.serializer.serialize(this.blocks),
+        ide = this.world().children[0],
+	newWindow;
     if (this.blocks.length > 0) {
-        window.open(encodeURI('data:text/xml,<blocks app="'
+        str = ('<blocks app="'
             + this.serializer.app
             + '" version="'
             + this.serializer.version
             + '">'
             + str
-            + '</blocks>'));
+            + '</blocks>');
     } else {
-        new DialogBoxMorph().inform(
-            'Export blocks',
-            'no blocks were selected',
-            this.world()
-        );
+        return;
     }
+    ide.saveFileAs(str, 'data:text/xml;chartset=utf-8', ide.projectName + ' blocks', newWindow);
+    
 };
 
 // BlockExportDialogMorph layout

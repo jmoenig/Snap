@@ -3291,14 +3291,15 @@ IDE_Morph.prototype.exportGlobalBlocks = function () {
 };
 
 IDE_Morph.prototype.exportSprite = function (sprite) {
-    var str = this.serializer.serialize(sprite);
-    window.open('data:text/xml,<sprites app="'
+    var newWindow;
+    var str = ('<sprites app="'
         + this.serializer.app
         + '" version="'
         + this.serializer.version
         + '">'
-        + str
+        + this.serializer.serialize(sprite)
         + '</sprites>');
+    this.saveFileAs(str, 'data:text/xml;chartset=utf-8', sprite.name, newWindow);
 };
 
 IDE_Morph.prototype.openProjectString = function (str) {
@@ -6252,11 +6253,15 @@ CostumeIconMorph.prototype.removeCostume = function () {
 };
 
 CostumeIconMorph.prototype.exportCostume = function () {
+    var newWindow,
+	ide = this.world().children[0],
+	str;
     if (this.object instanceof SVG_Costume) {
-        window.open(this.object.contents.src);
+        str = this.object.contents.src;
     } else { // rastered Costume
-        window.open(this.object.contents.toDataURL());
+        str = this.object.contents.toDataURL();
     }
+    ide.saveFileAs(str, 'data:image/png;base64', this.object.name, newWindow);
 };
 
 // CostumeIconMorph drawing
