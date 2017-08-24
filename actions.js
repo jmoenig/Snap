@@ -1145,7 +1145,6 @@ ActionManager.prototype._onSetBlockPosition = function(id, x, y, callback) {
     position = this.getAdjustedPosition(position, scripts);
 
     if (this.__canAnimate()) {
-        this.ide().palette.add(block)
         block.glideTo(
             position,
             null,
@@ -1511,7 +1510,6 @@ ActionManager.prototype.onMoveBlock = function(id, rawTarget) {
     };
 
     // Glide to the given position first
-    this.ide().palette.add(block);
     if (isNewBlock) {
         block.setPosition(this.blockInitPosition());
     }
