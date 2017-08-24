@@ -185,6 +185,8 @@ IDE_Morph.prototype.init = function (isAutoFill) {
 
     // restore saved user preferences
     this.userLanguage = null; // user language preference for startup
+    this.afterLanguageUniversalCallback = null;
+    this.isLanguageSet = false;
     this.applySavedSettings();
 
     // additional properties:
@@ -3867,6 +3869,11 @@ IDE_Morph.prototype.reflectLanguage = function (lang, callback) {
     }
     this.saveSetting('language', lang);
     if (callback) {callback.call(this); }
+    if (this.afterLanguageUniversalCallback) {
+        this.afterLanguageUniversalCallback();
+        this.afterLanguageUniversalCallback() = null;
+    }
+    this.isLanguageSet = true;
 };
 
 // IDE_Morph blocks scaling

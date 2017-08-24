@@ -186,7 +186,15 @@ ModuleLoader.prototype.open = function(zip, options) {
     //  If so, load it
     var demo = zip.file("stage.xml");
     if(demo != null) {
-        this.ide.openProjectString(demo.asText());
+	if ((location.hash.substr(0, 6) === '#lang:' || this.ide.userLanguage) && !this.ide.isLanguageSet) {
+		var ide = this.ide
+		ide.afterLanguageUniversalCallback = function(){
+			ide.openProjectString(demo.asText());
+		}
+	}
+	else {
+		this.ide.openProjectString(demo.asText());
+	}
     }
 
     return zip;
