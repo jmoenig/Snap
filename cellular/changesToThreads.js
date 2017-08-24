@@ -52,6 +52,7 @@ Process.prototype.instanceCount = function(countThese)
 			}
         }
         // find the corresponding sprite on the stage
+        var stage = thisObj.parentThatIsA(StageMorph);
         thatObj = stage.getClosestCellularClone(thisObj.xPosition(), thisObj.yPosition(), name);
         if (!thatObj) {
             // check if the sprite in question is currently being
