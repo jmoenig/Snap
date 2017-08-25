@@ -1511,6 +1511,7 @@ ActionManager.prototype.onMoveBlock = function(id, rawTarget) {
 
     // Glide to the given position first
     if (isNewBlock) {
+        this.ide().palette.add(block);
         block.setPosition(this.blockInitPosition());
     }
     if (this.__canAnimate()) {
