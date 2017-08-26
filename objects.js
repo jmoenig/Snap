@@ -9306,8 +9306,7 @@ WatcherMorph.prototype.userMenu = function () {
                 inp.click();
             }
         );
-        if (this.currentValue &&
-                (isString(this.currentValue) || !isNaN(+this.currentValue))) {
+        if (isString(this.currentValue) || !isNaN(+this.currentValue)) {
             menu.addItem(
                 'export...',
                 function () {
@@ -9315,8 +9314,7 @@ WatcherMorph.prototype.userMenu = function () {
                     ide.saveFileAs(
                         myself.currentValue.toString(),
                         'text/plain;charset=utf-8',
-                        myself.getter, // variable name
-                        true
+                        myself.getter // variable name
                     );
                 }
             );

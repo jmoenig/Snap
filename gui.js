@@ -3916,8 +3916,7 @@ IDE_Morph.prototype.exportProjectSummary = function (useDropShadows) {
     this.saveFileAs(
         '<!DOCTYPE html>' + html.toString(),
         'text/html;charset=utf-8',
-        pname,
-        false // request opening a new window.
+        pname
     );
 };
 
