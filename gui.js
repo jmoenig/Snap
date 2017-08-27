@@ -2861,8 +2861,7 @@ IDE_Morph.prototype.projectMenu = function () {
                 } else {
                     myself.prompt('Export Project As...', function (name) {
                         // false - override the shiftClick setting to use XML
-                        // true - open XML in a new tab
-                        myself.exportProject(name, false, true);
+                        myself.exportProject(name, false);
                     }, null, 'exportProject');
                 }
             },
@@ -3500,7 +3499,7 @@ IDE_Morph.prototype.rawSaveProject = function (name) {
 };
 
 
-IDE_Morph.prototype.exportProject = function (name, plain, newWindow) {
+IDE_Morph.prototype.exportProject = function (name, plain) {
     // Export project XML, saving a file to disk
     // newWindow requests displaying the project in a new tab.
     var menu, str, dataPrefix;
@@ -3512,7 +3511,7 @@ IDE_Morph.prototype.exportProject = function (name, plain, newWindow) {
             menu = this.showMessage('Exporting');
             str = this.serializer.serialize(this.stage);
             this.setURL('#open:' + dataPrefix + encodeURIComponent(str));
-            this.saveXMLAs(str, name, newWindow);
+            this.saveXMLAs(str, name);
             menu.destroy();
             this.showMessage('Exported!', 1);
         } catch (err) {
@@ -3636,7 +3635,7 @@ IDE_Morph.prototype.exportScriptsPicture = function () {
         y += padding;
         y += each.height;
     });
-    this.saveCanvasAs(pic, this.projectName || localize('Untitled'), true);
+    this.saveCanvasAs(pic, this.projectName || localize('Untitled'));
 };
 
 IDE_Morph.prototype.exportProjectSummary = function (useDropShadows) {
@@ -4223,7 +4222,7 @@ IDE_Morph.prototype.saveFileAs = function (
     }
 };
 
-IDE_Morph.prototype.saveCanvasAs = function (canvas, fileName, newWindow) {
+IDE_Morph.prototype.saveCanvasAs = function (canvas, fileName) {
     // Export a Canvas object as a PNG image
     // Note: This commented out due to poor browser support.
     // cavas.toBlob() is currently supported in Firefox, IE, Chrome but
@@ -4232,17 +4231,17 @@ IDE_Morph.prototype.saveCanvasAs = function (canvas, fileName, newWindow) {
     // if (canvas.toBlob) {
     //     var myself = this;
     //     canvas.toBlob(function (blob) {
-    //         myself.saveFileAs(blob, 'image/png', fileName, newWindow);
+    //         myself.saveFileAs(blob, 'image/png', fileName);
     //     });
     //     return;
     // }
 
-    this.saveFileAs(canvas.toDataURL(), 'image/png', fileName, newWindow);
+    this.saveFileAs(canvas.toDataURL(), 'image/png', fileName);
 };
 
-IDE_Morph.prototype.saveXMLAs = function(xml, fileName, newWindow) {
+IDE_Morph.prototype.saveXMLAs = function(xml, fileName) {
     // wrapper to saving XML files with a proper type tag.
-    this.saveFileAs(xml, 'text/xml;chartset=utf-8', fileName, newWindow);
+    this.saveFileAs(xml, 'text/xml;chartset=utf-8', fileName);
 };
 
 IDE_Morph.prototype.switchToUserMode = function () {
@@ -6833,8 +6832,7 @@ SpriteIconMorph.prototype.userMenu = function () {
                 var ide = myself.parentThatIsA(IDE_Morph);
                 ide.saveCanvasAs(
                     myself.object.fullImageClassic(),
-                    this.object.name,
-                    true
+                    this.object.name
                 );
             },
             'open a new window\nwith a picture of the stage'
