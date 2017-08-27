@@ -4129,15 +4129,11 @@ IDE_Morph.prototype.setURL = function (str) {
 IDE_Morph.prototype.saveFileAs = function (
     contents,
     fileType,
-    fileName,
-    newWindow // (optional) defaults to false.
+    fileName
 ) {
-    /** Allow for downloading a file to a disk or open in a new tab.
+    /** Allow for downloading a file to a disk.
         This relies the FileSaver.js library which exports saveAs()
         Two utility methods saveImageAs and saveXMLAs should be used first.
-        1. Opening a new window uses standard URI encoding.
-        2. downloading a file uses Blobs.
-        - every other combo is unsupposed.
     */
     var blobIsSupported = false,
         world = this.world(),
@@ -4148,13 +4144,6 @@ IDE_Morph.prototype.saveFileAs = function (
     fileExt = fileType.split('/')[1].split(';')[0];
     // handle text/plain as a .txt file
     fileExt = '.' + (fileExt === 'plain' ? 'txt' : fileExt);
-
-    // This is a workaround for a known Chrome crash with large URLs
-    function exhibitsChomeBug(contents) {
-        var MAX_LENGTH = 2e6,
-        isChrome  = navigator.userAgent.indexOf('Chrome') !== -1;
-        return isChrome && contents.length > MAX_LENGTH;
-    }
 
     function dataURItoBlob(text, mimeType) {
         var i,
@@ -4173,37 +4162,11 @@ IDE_Morph.prototype.saveFileAs = function (
         return new Blob([data], {type: mimeType });
     }
 
-    function dataURLFormat(text) {
-        var hasTypeStr = text.indexOf('data:') === 0;
-        if (hasTypeStr) {return text; }
-        return 'data:' + fileType + ',' + encodeURIComponent(text);
-    }
-
     try {
         blobIsSupported = !!new Blob();
     } catch (e) {}
 
-    if (newWindow) {
-        // Blob URIs need a custom URL to be displayed in a new window
-        if (contents instanceof Blob) {
-            dataURI = URL.createObjectURL(contents);
-        } else {
-            dataURI = dataURLFormat(contents);
-        }
-
-        // Detect crashing errors - fallback to downloading if necessary
-        if (!exhibitsChomeBug(dataURI)) {
-            window.open(dataURI, fileName);
-            // Blob URIs should be "cleaned up" to reduce memory.
-            if (contents instanceof Blob) {
-                URL.revokeObjectURL(dataURI);
-            }
-        } else {
-            // (recursively) call this defauling newWindow to false
-            this.showMessage('download to disk text');
-            this.saveFileAs(contents, fileType, fileName);
-        }
-    } else if (blobIsSupported) {
+    if (blobIsSupported) {
         if (!(contents instanceof Blob)) {
             contents = dataURItoBlob(contents, fileType);
         }

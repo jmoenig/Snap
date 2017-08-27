@@ -65,7 +65,7 @@
         BoxMorph*
             CommentMorph
             ScriptFocusMorph
- 
+
     * from morphic.js
 
 
@@ -1972,8 +1972,7 @@ SyntaxElementMorph.prototype.exportPictureWithResult = function (aBubble) {
     // request to open pic in new window.
     ide.saveCanvasAs(
         pic,
-        ide.projetName || localize('Untitled') + ' ' + localize('script pic'),
-        false
+        ide.projetName || localize('Untitled') + ' ' + localize('script pic')
     );
 };
 
@@ -2552,8 +2551,7 @@ BlockMorph.prototype.userMenu = function () {
             ide.saveCanvasAs(
                 myself.topBlock().scriptPic(),
                 ide.projetName || localize('Untitled') + ' ' +
-                    localize('script pic'),
-                false // request new window
+                    localize('script pic')
             );
         },
         'open a new window\nwith a picture of this script'
@@ -3315,7 +3313,7 @@ BlockMorph.prototype.doRefactorSpriteVar = function (
     newName,
     justTheTemplate
 ) {
-    var receiver = this.scriptTarget(),    
+    var receiver = this.scriptTarget(),
         ide = receiver.parentThatIsA(IDE_Morph),
         oldWatcher = receiver.findVariableWatcher(oldName),
         oldValue, newWatcher;
@@ -3364,7 +3362,7 @@ BlockMorph.prototype.doRefactorGlobalVar = function (
     newName,
     justTheTemplate
 ) {
-    var receiver = this.scriptTarget(),    
+    var receiver = this.scriptTarget(),
         ide = receiver.parentThatIsA(IDE_Morph),
         stage = ide ? ide.stage : null,
         oldWatcher = receiver.findVariableWatcher(oldName),
@@ -6307,8 +6305,7 @@ ScriptsMorph.prototype.exportScriptsPicture = function () {
         ide.saveCanvasAs(
             pic,
             ide.projetName || localize('Untitled') + ' ' +
-                localize('script pic'),
-            false // request new window
+                localize('script pic')
         );
     }
 };
@@ -11656,8 +11653,7 @@ CommentMorph.prototype.userMenu = function () {
             ide.saveCanvasAs(
                 myself.fullImageClassic(),
                 ide.projetName || localize('Untitled') + ' ' +
-                    localize('comment pic'),
-                false // request new window
+                    localize('comment pic')
             );
         },
         'open a new window\nwith a picture of this comment'
