@@ -2803,7 +2803,7 @@ BlockMorph.prototype.setSelector = function (aSelector) {
     surplus = this.restoreInputs(oldInputs);
     this.fixLabelColor();
 
-    // place surplus blocks on scipts
+    // place surplus blocks on scripts
     if (scripts && surplus.length) {
         surplus.forEach(function (blk) {
             blk.moveBy(10);
