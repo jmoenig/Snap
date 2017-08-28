@@ -100,6 +100,8 @@ PushButtonMorph.uber = TriggerMorph.prototype;
 PushButtonMorph.prototype.fontSize = 10;
 PushButtonMorph.prototype.fontStyle = 'sans-serif';
 PushButtonMorph.prototype.labelColor = new Color(0, 0, 0);
+PushButtonMorph.prototype.disabledColor = new Color(75, 75, 75);
+
 PushButtonMorph.prototype.labelShadowColor = new Color(255, 255, 255);
 PushButtonMorph.prototype.labelShadowOffset = new Point(1, 1);
 
@@ -158,6 +160,10 @@ PushButtonMorph.prototype.init = function (
 
     // initialize inherited properties:
     TriggerMorph.uber.init.call(this);
+
+    this.disabled = false;
+    this.enabledColor = PushButtonMorph.prototype.labelColor;
+    this.disabledColor = PushButtonMorph.prototype.disabledColor;
 
     // override inherited properites:
     this.color = PushButtonMorph.prototype.color;
@@ -464,6 +470,50 @@ PushButtonMorph.prototype.createLabel = function () {
         );
     }
     this.add(this.label);
+};
+
+PushButtonMorph.prototype.trigger = function () {
+    // Only trigger if not disabled
+    if (!this.disabled) {
+        PushButtonMorph.uber.trigger.call(this);
+    }
+};
+
+PushButtonMorph.prototype.mouseDownLeft = function () {
+    if (!this.disabled) {
+        PushButtonMorph.uber.mouseDownLeft.call(this);
+    }
+};
+
+PushButtonMorph.prototype.mouseClickLeft = function () {
+    if (!this.disabled) {
+        PushButtonMorph.uber.mouseClickLeft.call(this);
+    }
+};
+
+PushButtonMorph.prototype.disable = function () {
+    if (!this.disabled) {
+        if (this.enabledColor !== this.labelColor) {
+            this.enabledColor = this.labelColor;
+        }
+        this.labelColor = this.disabledColor;
+        this.drawNew();
+        this.fixLayout();
+    }
+    this.disabled = true;
+};
+
+PushButtonMorph.prototype.enable = function () {
+    if (this.labelString instanceof SymbolMorph) {
+        this.labelColor = this.enabledColor;
+        this.drawNew();
+        this.fixLayout();
+    }
+    this.disabled = false;
+};
+
+PushButtonMorph.prototype.isEnabled = function () {
+    return !this.disabled;
 };
 
 // ToggleButtonMorph ///////////////////////////////////////////////////////

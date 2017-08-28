@@ -377,12 +377,12 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: 'go back %n layers',
             defaults: [1]
         },
-        doScreenshot: {
-            type: 'command',
-            category: 'looks',
-            spec: 'save %imgsource as costume named %s',
-            defaults: [['pen trails'], localize('screenshot')]
-        },
+        //doScreenshot: {
+            //type: 'command',
+            //category: 'looks',
+            //spec: 'save %imgsource as costume named %s',
+            //defaults: [['pen trails'], localize('screenshot')]
+        //},
 
         // Looks - Debugging primitives for development mode
         reportCostumes: {
@@ -1738,20 +1738,17 @@ SpriteMorph.prototype.blockTemplates = function (category) {
     }
 
     function addVar(pair) {
-        var ide;
         if (pair) {
             if (myself.isVariableNameInUse(pair[0], pair[1])) {
                 myself.inform('that name is already in use');
             } else {
-                ide = myself.parentThatIsA(IDE_Morph);
-                myself.addVariable(pair[0], pair[1]);
-                if (!myself.showingVariableWatcher(pair[0])) {
-                    myself.toggleVariableWatcher(pair[0], pair[1]);
-                }
-                ide.flushBlocksCache('variables'); // b/c of inheritance
-                ide.refreshPalette();
+                SnapActions.addVariable(pair[0], pair[1] || myself.id);
             }
         }
+    }
+
+    function deleteVar(name) {
+        SnapActions.deleteVariable(name, myself.id);
     }
 
     if (cat === 'motion') {
@@ -2077,7 +2074,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
                 null,
                 function () {
                     var menu = new MenuMorph(
-                        myself.deleteVariable,
+                        deleteVar,
                         null,
                         myself
                     );
@@ -2175,14 +2172,11 @@ SpriteMorph.prototype.blockTemplates = function (category) {
                     null,
                     function (definition) {
                         if (definition.spec !== '') {
-                            if (definition.isGlobal) {
-                                stage.globalBlocks.push(definition);
-                            } else {
-                                myself.customBlocks.push(definition);
-                            }
-                            ide.flushPaletteCache();
-                            ide.refreshPalette();
-                            new BlockEditorMorph(definition, myself).popUp();
+                            SnapActions.addCustomBlock(definition, myself)
+                                .accept(function(def) {
+                                    var editor = new BlockEditorMorph(def, myself);
+                                    editor.popUp();
+                                });
                         }
                     },
                     myself
@@ -2313,6 +2307,20 @@ SpriteMorph.prototype.freshPalette = function (category) {
                     ide.refreshPalette();
                 }
             );
+        }
+
+        // Add undo block removal support
+        if (SnapUndo.canUndo('palette')) {
+            // Get the custom block name
+            var len = SnapUndo.eventHistory.palette.length,
+                action = SnapUndo.eventHistory.palette[len-1],
+                deletedBlock = ide.serializer.parse(action.args[2]);
+
+            menu.addItem(
+                'restore "' + deletedBlock.attributes.s + '"',
+                function() {
+                    SnapUndo.undo('palette');
+                });
         }
         return menu;
     };
@@ -2946,8 +2954,8 @@ SpriteMorph.prototype.reportCostumes = function () {
 
 // SpriteMorph sound management
 
-SpriteMorph.prototype.addSound = function (audio, name) {
-    this.sounds.add(new Sound(audio, name));
+SpriteMorph.prototype.addSound = function (sound) {
+    this.sounds.add(sound);
 };
 
 SpriteMorph.prototype.playSound = function (name) {
@@ -3030,17 +3038,11 @@ SpriteMorph.prototype.showOnStage = function () {
 };
 
 SpriteMorph.prototype.duplicate = function () {
-    var ide = this.parentThatIsA(IDE_Morph);
-    if (ide) {
-        ide.duplicateSprite(this);
-    }
+    SnapActions.duplicateSprite(this);
 };
 
 SpriteMorph.prototype.remove = function () {
-    var ide = this.parentThatIsA(IDE_Morph);
-    if (ide) {
-        ide.removeSprite(this);
-    }
+    SnapActions.removeSprite(this);
 };
 
 // SpriteMorph cloning
@@ -5859,11 +5861,11 @@ StageMorph.prototype.fireKeyEvent = function (key) {
         return;
     }
     if (evt === 'ctrl z') {
-        if (!ide.isAppMode) {ide.currentSprite.scripts.undrop(); }
+        if (!ide.isAppMode) {SnapUndo.undo(ide.getActiveEntity());}
          return;
     }
     if (evt === 'ctrl shift z' || (evt === 'ctrl y')) {
-        if (!ide.isAppMode) {ide.currentSprite.scripts.redrop(); }
+        if (!ide.isAppMode) {SnapUndo.redo(ide.getActiveEntity());}
          return;
     }
     if (evt === 'ctrl n') {
@@ -6048,13 +6050,13 @@ StageMorph.prototype.blockTemplates = function (category) {
             if (myself.isVariableNameInUse(pair[0])) {
                 myself.inform('that name is already in use');
             } else {
-                myself.addVariable(pair[0], pair[1]);
-                myself.toggleVariableWatcher(pair[0], pair[1]);
-                myself.blocksCache[cat] = null;
-                myself.paletteCache[cat] = null;
-                myself.parentThatIsA(IDE_Morph).refreshPalette();
+                SnapActions.addVariable(pair[0], pair[1] || myself.id);
             }
         }
+    }
+
+    function deleteVar(name) {
+        SnapActions.deleteVariable(name, myself.id);
     }
 
     if (cat === 'motion') {
@@ -6324,7 +6326,7 @@ StageMorph.prototype.blockTemplates = function (category) {
                 null,
                 function () {
                     var menu = new MenuMorph(
-                        myself.deleteVariable,
+                        deleteVar,
                         null,
                         myself
                     );
@@ -6407,14 +6409,11 @@ StageMorph.prototype.blockTemplates = function (category) {
                     null,
                     function (definition) {
                         if (definition.spec !== '') {
-                            if (definition.isGlobal) {
-                                myself.globalBlocks.push(definition);
-                            } else {
-                                myself.customBlocks.push(definition);
-                            }
-                            ide.flushPaletteCache();
-                            ide.refreshPalette();
-                            new BlockEditorMorph(definition, myself).popUp();
+                            SnapActions.addCustomBlock(definition, myself)
+                                .accept(function(def) {
+                                    var editor = new BlockEditorMorph(def, myself);
+                                    editor.popUp();
+                                });
                         }
                     },
                     myself
@@ -7242,13 +7241,18 @@ Costume.prototype.edit = function (aWorld, anIDE, isnew, oncancel, onsubmit) {
     );
 };
 
-Costume.prototype.editRotationPointOnly = function (aWorld) {
+Costume.prototype.editRotationPointOnly = function (aWorld, onsubmit) {
     var editor = new CostumeEditorMorph(this),
         action,
         dialog,
         txt;
 
-    action = function () {editor.accept(); };
+    action = function () {
+        editor.accept();
+        if (onsubmit) {
+            onsubmit.call(this);
+        }
+    };
     dialog = new DialogBoxMorph(this, action);
     txt = new TextMorph(
         localize('click or drag crosshairs to move the rotation center'),
@@ -8661,4 +8665,726 @@ StagePrompterMorph.prototype.mouseClickLeft = function () {
 
 StagePrompterMorph.prototype.accept = function () {
     this.isDone = true;
+};
+
+// Replay Slider
+ReplayControls.prototype = new Morph();
+ReplayControls.prototype.buttonColor = new Color(200, 200, 200);
+ReplayControls.prototype.constructor = ReplayControls;
+ReplayControls.uber = Morph.prototype;
+
+function ReplayControls(ide) {
+    this.init(ide);
+}
+
+ReplayControls.prototype.init = function(ide) {
+    var myself = this,
+        mouseDown;
+
+    this.ide = ide;
+    this.alpha = 0;
+    this.actions = null;
+    this.actionIndex = -1;
+    this.actionTime = 0;
+    this.isApplyingAction = false;
+    this.isPlaying = false;
+    this.maxGapDuration = 1000*60*2;  // compress gaps of longer than 2 min
+    this.gapFolds = [];
+
+    this.isShowingCaptions = false;
+    this.lastCaption = null;
+
+    this.replaySpeed = 1.0;
+    this.maxInactiveDuration = 0;
+
+    this.playButton = new SymbolMorph('pointRight', 40, this.buttonColor);
+    this.playButton.mouseClickLeft = function() {
+        myself.play();
+    };
+
+    this.stepForwardButton = new SymbolMorph('stepForward', 17, this.buttonColor);
+    this.stepForwardButton.mouseClickLeft = function() {
+        myself.stepForward();
+    };
+
+    this.stepBackwardButton = new SymbolMorph('stepBackward', 17, this.buttonColor);
+    this.stepBackwardButton.mouseClickLeft = function() {
+        myself.stepBackward();
+    };
+
+    this.jumpBackwardButton = new SymbolMorph('jumpBackward', 20, this.buttonColor);
+    this.jumpBackwardButton.mouseClickLeft = function() {
+        myself.jumpToBeginning();
+    };
+
+    this.jumpForwardButton = new SymbolMorph('jumpForward', 20, this.buttonColor);
+    this.jumpForwardButton.mouseClickLeft = function() {
+        myself.jumpToEnd();
+    };
+
+    this.displayTime = new TextMorph(
+        '0:00 / 1:00',
+        1.5*PushButtonMorph.prototype.fontSize,
+        PushButtonMorph.prototype.fontStyle,
+        true
+    );
+    this.displayTime.color = this.buttonColor;
+
+    // Buttons on the right
+    this.settingsButton = new SymbolMorph('gears', 30, this.buttonColor);
+    this.settingsButton.mouseClickLeft = function() {
+        myself.settingsMenu();
+    };
+
+    this.captionsButton = new SymbolMorph('speechBubble', 30, this.buttonColor);
+    this.captionsButton.mouseClickLeft = function() {
+        myself.toggleCaptions();
+    };
+
+    this.slider = new SliderMorph(0, 100, 0, 1, 'horizontal');
+    this.slider.start = 0;
+    this.slider.value = 0;
+    mouseDown = this.slider.mouseDownLeft;
+    this.slider.mouseDownLeft = function(pos) {
+        myself.pause();
+        mouseDown.call(this, pos);
+    };
+    var updateValue = this.slider.updateValue;
+    this.slider.updateValue = function() {
+        updateValue.apply(this, arguments);
+        myself.updateDisplayTime();
+    };
+
+    this.add(this.slider);
+    this.add(this.playButton);
+    this.add(this.stepForwardButton);
+    this.add(this.jumpForwardButton);
+    this.add(this.jumpBackwardButton);
+    this.add(this.stepBackwardButton);
+    this.add(this.displayTime);
+
+    this.add(this.captionsButton);
+    this.add(this.settingsButton);
+
+    this.update();
+};
+
+ReplayControls.prototype.settingsMenu = function() {
+    var myself = this,
+        minute = 1000 * 60,
+        menu = new MenuMorph(this),
+        replaySpeedMenu = new MenuMorph(this),
+        speeds = {
+            'slow': 0.5,
+            'normal': 1,
+            'slightly faster': 3,
+            'fast': 5,
+            'really fast': 10,
+            'ludicrous speed': 20
+        },
+        durations = {
+            'no acceleration': 0,
+            'tiny': 0.5,
+            'small': 1,
+            'medium': 2,
+            'long': 5
+        },
+        gapSizes = {
+            '1 minute': 1*minute,
+            '2 minute': 2*minute,
+            '5 minutes': 5*minute,
+            '10 minutes': 10*minute,
+            '20 minutes': 20*minute
+        },
+        createSubMenu = function(dict, key, opts) {
+            var menu = new MenuMorph(myself);
+            // add the number (w/ the suffix) to the text names
+            var skip = opts.skip || [];
+
+            Object.keys(dict).forEach(function(name) {
+                var value = dict[name],
+                    preserveName = contains(skip, name);
+
+                delete dict[name];
+                if (!preserveName) {
+                    name = localize(name) + ' (' + value + opts.suffix + ')';
+                } else {
+                    name = localize(name);
+                }
+
+                dict[name] = value;
+                menu.addItem(preserveName ? name : value + opts.suffix, function() {
+                    myself[key] = value;
+                    if (opts.refresh) {
+                        // TODO: preserve the current slider position
+                        var time = myself.getTimeFromPosition(myself.slider.value);
+                        myself.setActions(myself.actions);
+                        myself.slider.value = myself.getSliderPositionFromTime(time);
+                        myself.slider.drawNew();
+                        myself.updateDisplayTime();
+                    }
+                }, null, null, myself[key] === value);
+            });
+            return menu;
+        };
+
+    // Skip empty gaps
+    menu.addMenu(
+        'Max inactive duration...',
+        createSubMenu(durations, 'maxInactiveDuration', {
+            suffix: 's',
+            skip: ['no acceleration']
+        })
+    );
+
+    // Replay Speed
+    replaySpeedMenu = createSubMenu(speeds, 'replaySpeed', {suffix: 'x'});
+    replaySpeedMenu.addItem('other...', function() {
+        new DialogBoxMorph(
+            null,
+            function (num) {
+                myself.replaySpeed = Math.max(+num, 0) || 1;
+            }
+        ).withKey('replaySpeed').prompt(
+            'Replay Speed',
+            myself.replaySpeed.toString(),
+            myself.world(),
+            null, // pic
+            speeds,
+            false, // read only?
+            true // numeric
+        );
+    });
+
+    menu.addMenu('Replay speed...', replaySpeedMenu);
+
+    // Customize the maxGapDuration
+    menu.addMenu(
+        'Auto-condense gap size...',
+        createSubMenu(gapSizes, 'maxGapDuration', {
+            skip: Object.keys(gapSizes),
+            refresh: true
+        })
+    );
+
+    // pop up with the mouse at the lower right corner
+    var world = this.world(),
+        position;
+
+    menu.drawNew();
+    position = world.hand.position().subtract(menu.extent());
+    menu.popup(world, position);
+};
+
+ReplayControls.prototype.toggleCaptions = function() {
+    var myself = this,
+        ide = this.parentThatIsA(IDE_Morph),
+        color;
+
+    this.isShowingCaptions = !this.isShowingCaptions;
+    color = this.isShowingCaptions ? new Color(98, 194, 19) : this.buttonColor;
+    ide.showMessage(localize('captions ' + (this.isShowingCaptions ? 'enabled' : 'disabled')), 1);
+
+    if (this.lastCaption) {
+        this.lastCaption.destroy();
+        this.lastCaption = null;
+    }
+
+    this.captionsButton.color = color;
+    this.captionsButton.drawNew();
+    this.captionsButton.changed();
+};
+
+ReplayControls.prototype.jumpToBeginning = function() {
+    var value = this.slider.start;
+    this.slider.button.setLeft(this.getSliderLeftFromValue(value));
+    this.slider.updateValue();
+};
+
+ReplayControls.prototype.jumpToEnd = function() {
+    var value = this.slider.stop;
+    this.slider.button.setLeft(this.getSliderLeftFromValue(value));
+    this.slider.updateValue();
+};
+
+ReplayControls.prototype.stepForward = function() {
+    this.pause();
+    this.playNext();
+};
+
+ReplayControls.prototype.stepBackward = function() {
+    this.pause();
+    this.playNext(-1);
+};
+
+ReplayControls.prototype.displayCaption = function(action, originalEvent) {
+    var message, 
+        intervalHandle,
+        menu;
+
+    // TODO: add the user, too
+    message = action.type;
+    if (action.replayType === UndoManager.UNDO) {
+        // Get the originalEvent
+        if (originalEvent === action) {  // going forwards
+            originalEvent = this.getInverseEvent(action);
+        }
+        message = originalEvent.type + ' (undo)';
+    } else if (action.replayType === UndoManager.REDO) {
+        message += ' (redo)';
+    }
+
+    // Show the caption
+    menu = new MenuMorph(null, message, null, 16);
+
+    var pos = new Point(this.center().x, this.top()-50),
+        world = this.world();
+
+    // Display the caption
+    if (this.lastCaption) {
+        this.lastCaption.destroy();
+    }
+
+    menu.drawNew();
+    menu.setPosition(pos);
+    menu.addShadow(new Point(2, 2), 80);
+    menu.keepWithin(world);
+    world.add(menu);
+    menu.world = world; // optionally enable keyboard support
+    menu.fullChanged();
+    this.lastCaption = menu;
+
+    intervalHandle = setInterval(function () {
+        menu.destroy();
+        clearInterval(intervalHandle);
+    }, 4000);
+
+    return menu;
+};
+
+ReplayControls.prototype.play = function() {
+    var myself = this;
+
+    if (this.actionIndex < this.actions.length-1) {
+        var currentAction = this.actions[this.actionIndex],
+            nextAction = this.actions[this.actionIndex+1],
+            delay = currentAction ? nextAction.time - currentAction.time : 0;
+
+        this.isPlaying = true;
+        this.lastPlayUpdate = Date.now();
+
+        this.removeChild(this.playButton);
+        this.playButton = new SymbolMorph('pause', 40, this.buttonColor);
+        this.playButton.mouseClickLeft = function() {
+            myself.pause();
+        };
+        this.add(this.playButton);
+        this.fixLayout();
+    }
+};
+
+ReplayControls.prototype.getSliderLeftFromValue = function(value) {
+    return (value-this.slider.start) * this.slider.unitSize() +
+        this.slider.left();
+};
+
+ReplayControls.prototype.step = function() {
+    if (this.isPlaying) {
+        // Get the change in time
+        var now = Date.now(),
+            delta = now - this.lastPlayUpdate,
+            nextAction = this.actions[this.actionIndex+1],
+            nextTime,
+            timeUntilNext,
+            value;
+
+        if (this.maxInactiveDuration && nextAction) {
+            // if the duration until the next action is too far,
+            // increase delta
+            timeUntilNext = nextAction.time - this.slider.value;
+            if (this.maxInactiveDuration*1000 < timeUntilNext) {
+                delta = nextAction.time - this.maxInactiveDuration*1000 - this.slider.value;
+            }
+        }
+
+        delta *= this.replaySpeed;
+        value = this.slider.value + delta;
+
+        // if at the end, pause it!
+        if (value > this.slider.stop) {
+            value = this.slider.stop;
+            this.pause();
+        }
+        this.slider.button.setLeft(this.getSliderLeftFromValue(value));
+        this.slider.updateValue();
+        this.lastPlayUpdate = now;
+    }
+};
+
+ReplayControls.prototype.formatTime = function(time) {
+    var secs,
+        min,
+        hrs,
+        days,
+        minInMs = 1000*60,
+        hourInMs = minInMs*60,
+        setDisplayLength = function(num, len) {
+            num = num.toString();
+            while (num.length < len) {
+                num = '0' + num;
+            }
+            return num;
+        };
+
+    if (time > hourInMs) {
+        hrs = Math.floor(time/hourInMs);
+        time = time - hrs*hourInMs;
+    }
+
+    min = Math.floor(time/minInMs);
+    time = time - min*minInMs;
+
+    secs = Math.floor(time/1000);
+    time = time - secs*1000;
+
+    secs = setDisplayLength(secs, 2);
+    if (hrs) {
+        min = setDisplayLength(min, 2);
+
+        if (hrs > 24) {
+            days = Math.floor(hrs/24);
+            hrs = hrs - (24 * days);
+            return [days, hrs, min, secs].join(':');
+        } else {
+            return [hrs, min, secs].join(':');
+        }
+    } else {
+        return [min, secs].join(':');
+    }
+};
+
+ReplayControls.prototype.updateDisplayTime = function() {
+    var totalTime = this.actions[this.actions.length-1].time - this.actions[0].time,
+        currentTime = this.getTimeFromPosition(this.slider.value) -
+            this.getTimeFromPosition(this.slider.start);
+
+    this.displayTime.text = this.formatTime(currentTime) + ' / ' +
+        this.formatTime(totalTime);
+
+    this.displayTime.drawNew();
+    this.displayTime.changed();
+};
+
+ReplayControls.prototype.playNext = function(dir) {
+    // Get the position of the button in the slider and move it
+    var myself = this,
+        currentAction,
+        nextAction,
+        value;
+
+    dir = dir || 1;
+    nextAction = this.actions[this.actionIndex + Math.max(dir, 0)];
+
+    if (nextAction) {
+        value = this.getSliderPosition(nextAction) + dir;
+
+        this.slider.button.setLeft(this.getSliderLeftFromValue(value));
+        this.slider.updateValue();
+    }
+    this.pause();
+};
+
+ReplayControls.prototype.pause = function() {
+    var myself = this;
+
+    this.removeChild(this.playButton);
+    this.playButton = new SymbolMorph('pointRight', 40, this.buttonColor);
+    this.playButton.mouseClickLeft = function() {
+        myself.play();
+    };
+    this.add(this.playButton);
+    this.fixLayout();
+
+    this.isPlaying = false;
+};
+
+ReplayControls.prototype.fixLayout = function() {
+    var center = this.center(),
+        bottom = this.bottom(),
+        top = this.top(),
+        width = this.width(),
+        height = this.height(),
+        sliderHeight = 15,
+        btnSize,
+        margin = 10;
+
+    btnSize = height - (3*margin + sliderHeight);
+    this.playButton.size = btnSize;
+
+    this.playButton.setTop(top + sliderHeight + margin);
+    this.playButton.drawNew();
+    this.jumpBackwardButton.setCenter(this.playButton.center());
+    this.stepBackwardButton.setCenter(this.playButton.center());
+
+    this.jumpBackwardButton.setLeft(this.left() + 2.5*margin);
+    this.jumpBackwardButton.drawNew();
+
+    this.stepBackwardButton.setLeft(this.jumpBackwardButton.right() + 1.5*margin);
+    this.stepBackwardButton.drawNew();
+
+    this.playButton.setLeft(this.stepBackwardButton.right() + 2*margin);
+    this.playButton.drawNew();
+
+    this.stepForwardButton.setCenter(this.playButton.center());
+    this.stepForwardButton.setLeft(this.playButton.right() + 2*margin);
+    this.stepForwardButton.drawNew();
+
+    this.jumpForwardButton.setCenter(this.stepForwardButton.center());
+    this.jumpForwardButton.setLeft(this.stepForwardButton.right() + 1.5*margin);
+    this.jumpForwardButton.drawNew();
+
+    this.displayTime.setCenter(this.playButton.center());
+    this.displayTime.setLeft(this.jumpForwardButton.right() + 4*margin);
+    this.displayTime.drawNew();
+
+    // Buttons on the right
+    this.settingsButton.setTop(top + sliderHeight + margin);
+    this.settingsButton.setRight(this.right() - 3*margin);
+    this.settingsButton.drawNew();
+
+    this.captionsButton.setTop(top + sliderHeight + margin);
+    this.captionsButton.setRight(this.settingsButton.left() - margin);
+    this.captionsButton.drawNew();
+
+
+    this.slider.setWidth(width - 2*margin);
+    this.slider.setHeight(sliderHeight);
+    this.slider.setCenter(new Point(center.x, 0));
+    this.slider.setTop(top);
+
+    this.slider.drawNew();
+    this.slider.changed();
+};
+
+ReplayControls.prototype.enable = function() {
+    this.enabled = true;
+    this.show();
+};
+
+ReplayControls.prototype.disable = function() {
+    this.enabled = false;
+    this.actions = null;
+    if (this.lastCaption) {
+        this.lastCaption.destroy();
+    }
+
+    this.hide();
+};
+
+ReplayControls.prototype.getCurrentHistory = function() {
+    return this.actions.slice(0, this.actionIndex+1);
+};
+
+ReplayControls.prototype.getSliderPosition = function(action) {
+    return this.getSliderPositionFromTime(action.time);
+};
+
+ReplayControls.prototype.getSliderPositionFromTime = function(time) {
+    // get all the folds less than the given time and subtract their size
+    var delta = 0;
+
+    for (var i = this.gapFolds.length; i--;) {
+        if (this.gapFolds[i][1] <= time) {
+            delta += this.gapFolds[i][1] - this.gapFolds[i][0];
+        }
+    }
+
+    return time - delta;
+};
+
+ReplayControls.prototype.getTimeFromPosition = function(value) {
+
+    for (var i = 0; i < this.gapFolds.length; i++) {
+        if (this.gapFolds[i][0] <= value) {
+            value += this.gapFolds[i][1] - this.gapFolds[i][0];
+        }
+    }
+
+    return value;
+};
+
+ReplayControls.prototype.computeGapFolds = function() {
+    var folds = [],
+        foldSize,
+        startTime,
+        endTime;
+
+    for (var i = 1; i < this.actions.length; i++) {
+        foldSize = (this.actions[i].time - this.actions[i-1].time) -
+            this.maxGapDuration;
+
+        if (foldSize > 0) {  // create a fold
+            startTime = this.actions[i-1].time + this.maxGapDuration/2;
+            endTime = this.actions[i].time - this.maxGapDuration/2;
+            folds.push([startTime, endTime]);
+        }
+    }
+
+    this.gapFolds = folds;
+};
+
+ReplayControls.prototype.setActions = function(actions, atEnd) {
+    var endPosition,
+        endTime,
+        i;
+
+    this.slider.clearTicks();
+    this.isPlaying = false;
+
+    this.actions = actions;
+    this.computeGapFolds();
+
+    for (i = this.gapFolds.length; i--;) {
+        this.slider.addTick(
+            this.getSliderPositionFromTime(this.gapFolds[i][0]),
+            this.color.lighter(),
+            4
+        );
+        this.slider.addTick(
+            this.getSliderPositionFromTime(this.gapFolds[i][1]),
+            this.color.lighter(),
+            4
+        );
+    }
+
+    endTime = this.actions[this.actions.length-1].time;
+    endPosition = this.getSliderPosition(this.actions[this.actions.length-1]) + 1;
+    this.slider.start = this.getSliderPosition(this.actions[0]) - 1;
+
+    if (atEnd) {
+        this.slider.value = endPosition;
+        this.actionIndex = this.actions.length - 1;
+        this.actionTime = endTime;
+    } else {
+        this.slider.value = this.slider.start;
+    }
+    this.slider.setStop(endPosition);
+
+    // Add tickmarks for each action
+    for (i = 0; i < this.actions.length; i++) {
+        this.slider.addTick(this.getSliderPosition(this.actions[i]));
+    }
+    this.slider.drawNew();
+
+    this.updateDisplayTime();
+};
+
+// apply any actions between 
+ReplayControls.prototype.update = function() {
+    var myself = this,
+        originalEvent,
+        sliderTime = this.getTimeFromPosition(this.slider.value),
+        diff,
+        dir,
+        index,
+        action;
+
+    if (!this.enabled) {
+        return setTimeout(this.update.bind(this), 100);
+    }
+
+    if (this.actionTime !== sliderTime && this.actions && !this.isApplyingAction) {
+        diff = sliderTime - this.actionTime;
+        dir = diff/Math.abs(diff);
+
+        // Since actionIndex is the last applied action, the reverse direction
+        // should use that value -> not one prior
+
+        if (dir === 1) {
+            index = this.actionIndex + dir;
+            originalEvent = this.actions[index];
+            action = copy(originalEvent);
+            if (!originalEvent || originalEvent.time >= sliderTime) {
+                return setTimeout(this.update.bind(this), 100);
+            }
+        } else {  // "rewind"
+            originalEvent = this.actions[this.actionIndex];
+            if (!originalEvent || originalEvent.time <= sliderTime) {
+                return setTimeout(this.update.bind(this), 100);
+            }
+            action = this.getInverseEvent(originalEvent);
+        }
+
+        // make the 'openProject' event undo-able...
+        if (action.type === 'openProject' && !action.replayType && action.args.length < 2) {
+            var ide = this.parentThatIsA(IDE_Morph),
+                serialized = ide.serializer.serialize(ide.stage);
+
+            if (action.args.length === 0) {
+                action.args.push(null);
+            }
+            action.args.push(serialized);
+        }
+
+        // Apply the given event
+        this.isApplyingAction = true;
+        action.isReplay = true;
+        SnapActions.applyEvent(action)
+            .accept(function() {
+                myself.actionIndex += dir;
+                myself.actionTime = originalEvent.time;
+                myself.isApplyingAction = false;
+
+                if (myself.isShowingCaptions) {
+                    myself.displayCaption(action, originalEvent);
+                }
+
+                setTimeout(myself.update.bind(myself), 10);
+            })
+            .reject(function() {
+                throw Error('Could not apply event: ' + JSON.stringify(action, null, 2));
+            });
+    } else {
+        setTimeout(this.update.bind(this), 100);
+    }
+};
+
+ReplayControls.prototype.getInverseEvent = function(event) {
+    if (!event.replayType) {
+        var undoEvent = SnapUndo.getInverseEvent(event);
+        undoEvent.replayType = UndoManager.UNDO;
+        undoEvent.owner = event.owner;
+        return undoEvent;
+    } else {  // undo the undo event (look up the original event)
+        var nestedPairsCnt = 0,
+            iter;
+
+        for (var i = this.actionIndex; i--;) {
+            iter = this.actions[i];
+            iter.replayType = iter.replayType || 0;
+            if (iter.owner !== event.owner) {  // skip other event queues
+                continue;
+            }
+
+            //  undo events should be looking for the original event (!replayType)
+            //  redo events should be looking for the undo event (replayType === 1)
+            //
+            //  if event.replayType is 1, iter.replayType should be undefined (0)
+            //  if event.replayType is 2, iter.replayType should be 1
+            if ((event.replayType === iter.replayType + 1) && nestedPairsCnt === 0) {
+                return this.actions[i];  // found the original event to replay
+            }
+
+            //  The undo events will create a "parens-start" when encountering
+            //  another undo event
+            //
+            //  The redo events will create a "parens-start" when encountering
+            //  another redo event
+            if (iter.replayType === event.replayType) {
+                nestedPairsCnt--;
+            } else {
+                nestedPairsCnt++;
+            }
+        }
+    }
 };
