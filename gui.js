@@ -187,6 +187,8 @@ IDE_Morph.prototype.init = function (isAutoFill) {
     this.userLanguage = null; // user language preference for startup
     this.afterLanguageUniversalCallback = null;
     this.isLanguageSet = false;
+    this.afterModuleUniversalCallback = null;
+    this.isModuleLoaded = false;
     this.applySavedSettings();
 
     // additional properties:
@@ -3837,7 +3839,7 @@ IDE_Morph.prototype.setLanguage = function (lang, callback) {
     translation = document.createElement('script');
     translation.id = 'language';
     translation.onload = function () {
-        myself.reflectLanguage(lang, callback);
+	 myself.reflectLanguage(lang, callback);
     };
     document.head.appendChild(translation);
     translation.src = src;

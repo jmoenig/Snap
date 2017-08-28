@@ -122,7 +122,7 @@ Cloud.prototype.saveProject = function (ide, callBack, errorCall) {
     var blob = dataURItoBlob(image_string, 'image/png');
     var image = new FormData();
     image.append('file', blob);
-    
+
     // Get the XML save file
     var xml_string = 'data:text/xml,' + encodeURIComponent(ide.serializer.serialize(ide.stage));
     blob = dataURItoBlob(xml_string, 'text/xml');
@@ -183,7 +183,7 @@ Cloud.prototype.saveProject = function (ide, callBack, errorCall) {
         if(myself.project_id !== undefined) {
             $.ajax({
                 type: 'PUT',
-                url: create_project_url+myself.project_id+"/", 
+                url: create_project_url+myself.project_id+"/",
                 data: {
                     name: ide.projectName,
                     description: '',
@@ -191,7 +191,7 @@ Cloud.prototype.saveProject = function (ide, callBack, errorCall) {
                     application: myself.application_id,
                     project: xml_id,
                     screenshot: image_id
-                }, 
+                },
                 success: function(data, stuff) {
                   update_cloud_settings(data, stuff);
                 },
@@ -220,13 +220,29 @@ Cloud.prototype.saveProject = function (ide, callBack, errorCall) {
     // Alert user
 };
 
+
+
 Cloud.prototype.openProject = function(project, callBack, errorCall) {
-    var myself = this;
+    var myself = this, ide = world.children[0];
+    var loadProject =
     $.get(project.project_url, null, function(data) {
-        myself.project_id = project.id;
-        myself.name = project.name;
-        myself.updateURL(myself.project_url_root+project.id+"/run");
-        callBack(data);
+        if(config.modules.module && !ide.isModuleLoaded)
+        {
+          ide.afterModuleUniversalCallback = function()
+          {
+              myself.project_id = project.id;
+              myself.name = project.name;
+              myself.updateURL(myself.project_url_root+project.id+"/run");
+              callBack(data);
+          };
+        }
+        else
+        {
+            myself.project_id = project.id;
+            myself.name = project.name;
+            myself.updateURL(myself.project_url_root+project.id+"/run");
+            callBack(data);
+        }
     }).fail(errorCall);
 }
 
@@ -235,7 +251,7 @@ Cloud.prototype.getProjectList = function(callBack, errorCall) {
     this.loggedInCallBack(
         function()
         {
-            $.get(myself.list_project_url+"?owner="+myself.user_id, null, 
+            $.get(myself.list_project_url+"?owner="+myself.user_id, null,
             function(data) {
                 callBack(data);
             }, "json").fail(errorCall);
@@ -268,11 +284,11 @@ Cloud.prototype.loggedInCallBack = function(success, failure) {
 Cloud.prototype.getClassroomList = function(callBack, errorCall) {
 	if(!this.loggedIn())
 		return;
-	$.get("/api/team/?user="+this.user_id, null, 
+	$.get("/api/team/?user="+this.user_id, null,
             function(data) {
                 callBack(data);
             }, "json").fail(errorCall);
-    
+
 };
 
 Cloud.prototype.message = function (string) {
