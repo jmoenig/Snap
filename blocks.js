@@ -2847,7 +2847,7 @@ BlockMorph.prototype.restoreInputs = function (oldInputs) {
         old = oldInputs[i];
         if (old instanceof ReporterBlockMorph) {
             leftOver.push(old);
-        } else if (old instanceof CommandSlotMorph) {
+        } else if (old instanceof CommandSlotMorph && old.nestedBlock()) {
             leftOver.push(old.nestedBlock());
         }
     }
