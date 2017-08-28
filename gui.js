@@ -3871,7 +3871,7 @@ IDE_Morph.prototype.reflectLanguage = function (lang, callback) {
     if (callback) {callback.call(this); }
     if (this.afterLanguageUniversalCallback) {
         this.afterLanguageUniversalCallback();
-        this.afterLanguageUniversalCallback() = null;
+        this.afterLanguageUniversalCallback = null;
     }
     this.isLanguageSet = true;
 };
