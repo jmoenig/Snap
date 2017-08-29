@@ -3588,6 +3588,10 @@ Fixes:
 ------
 * GUI: enable exporting project summaries in the newest Chrome version, which disables opening tabs on dataURLs
 
+170829
+------
+* Threads: allow two-item lists as x-y coordinate arguments for “distance to” reporter
+
 
 Features:
 * polymorphic sprite-local custom blocks
@@ -3609,7 +3613,7 @@ Features:
 * Assert data types to list operations for more meaningful error messages
 * programmatically hide and show primitives in the palette
 * new "pen trails" reporter primitive and stage context menu entry
-* two-item lists as x-y coordinate arguments for "point towards" and "go to" primitives
+* two-item lists as x-y coordinate arguments for "point towards”, "go to" and “distance to” primitives
 * Piano keyboard as drop-down menu for entering musical notes, Thanks, Michael!
 * Basic “instruments” support: sine, square, sawtooth and triangle waves
 
