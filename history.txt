@@ -3592,6 +3592,7 @@ Fixes:
 ------
 * Threads: allow two-item lists as x-y coordinate arguments for “distance to” reporter
 * GUI, Objects: enable exporting costumes and variable-data in the newest Chrome version, which disables opening tabs on dataURLs
+* Blocks, Threads: added “temporary?” as gettable and settable attribute for clones
 
 
 Features:

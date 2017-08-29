@@ -3103,6 +3103,8 @@ Process.prototype.reportGet = function (query) {
             return thisObj.exemplar || '';
         case 'children':
             return new List(thisObj.specimens ? thisObj.specimens() : []);
+        case 'temporary?':
+            return thisObj.isTemporary || false;
         case 'clones':
             stage = thisObj.parentThatIsA(StageMorph);
             objName = thisObj.name || thisObj.cloneOriginName;
@@ -3189,6 +3191,16 @@ Process.prototype.doSet = function (attribute, value) {
         value = value instanceof SpriteMorph ? value : null;
         // needed: circularity avoidance
         rcvr.setExemplar(value);
+        break;
+    case 'temporary?':
+        this.assertType(rcvr, 'sprite');
+        this.assertType(value, 'Boolean');
+        if (value) {
+            rcvr.release();
+        } else {
+            rcvr.perpetuate();
+        }
+        rcvr.version = Date.now();
         break;
     case 'dangling?':
         this.assertType(rcvr, 'sprite');
