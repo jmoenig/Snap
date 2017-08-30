@@ -82,7 +82,7 @@ SpeechBubbleMorph, RingMorph, isNil, FileReader, TableDialogMorph,
 BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph*/
 
-modules.objects = '2017-August-29';
+modules.objects = '2017-August-30';
 
 var SpriteMorph;
 var StageMorph;
@@ -4192,7 +4192,7 @@ SpriteMorph.prototype.floodFill = function () {
     if (src[0] === Math.round(this.color.r) &&
             src[1] === Math.round(this.color.g) &&
             src[2] === Math.round(this.color.b) &&
-            src[3] === Math.round(this.color.a * 255)) {
+            src[3] === Math.round(this.color.a)) {
         return;
     }
     while (stack.length > 0) {

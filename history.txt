@@ -3598,6 +3598,7 @@ Fixes:
 ------
 * Blocks, Threads: Confine programmatically setting the “temporary?” attribute to dev mode
 * BYOB: enable exporting script pics of custom blocks in the newest Chrome version, which disables opening tabs on dataURLs
+* Objects: fixed #1843
 
 
 Features:
@@ -3632,4 +3633,5 @@ Fixes:
 * changed direction attribute of sprites to automatically confine to 0-360 degrees
 * fixed rotation-bug when flipping costumes in "only turn left/right" mode"
 * fixed variable renaming (“refactoring”) bugs, thanks, Bernat!
+* fixed “fill” block crash when applying the same color twice
 * fixed some typos
