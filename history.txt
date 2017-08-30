@@ -3599,6 +3599,7 @@ Fixes:
 * Blocks, Threads: Confine programmatically setting the “temporary?” attribute to dev mode
 * BYOB: enable exporting script pics of custom blocks in the newest Chrome version, which disables opening tabs on dataURLs
 * Morphic, Objects: fixed #1843
+* Croation translation update, thanks, Zeljko Hrvoj!
 
 
 Features:
