@@ -3594,6 +3594,10 @@ Fixes:
 * GUI, Objects: enable exporting costumes and variable-data in the newest Chrome version, which disables opening tabs on dataURLs
 * Blocks, Threads: added “temporary?” as gettable and settable attribute for clones
 
+170830
+------
+* Blocks, Threads: Confine programmatically setting the “temporary?” attribute to dev mode
+
 
 Features:
 * polymorphic sprite-local custom blocks

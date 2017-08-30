@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph,
 TableFrameMorph, ColorSlotMorph, isSnapObject*/
 
-modules.threads = '2017-August-29';
+modules.threads = '2017-August-30';
 
 var ThreadManager;
 var Process;
@@ -3195,12 +3195,13 @@ Process.prototype.doSet = function (attribute, value) {
     case 'temporary?':
         this.assertType(rcvr, 'sprite');
         this.assertType(value, 'Boolean');
-        if (value) {
-            rcvr.release();
-        } else {
-            rcvr.perpetuate();
+        if (rcvr.world().isDevMode) {
+            if (value) {
+                rcvr.release();
+            } else {
+                rcvr.perpetuate();
+            }
         }
-        rcvr.version = Date.now();
         break;
     case 'dangling?':
         this.assertType(rcvr, 'sprite');

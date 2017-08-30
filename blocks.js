@@ -148,7 +148,7 @@ CustomCommandBlockMorph, SymbolMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2017-August-29';
+modules.blocks = '2017-August-30';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -8289,7 +8289,9 @@ InputSlotMorph.prototype.gettablesMenu = function () {
     if (StageMorph.prototype.enableInheritance) {
         dict.children = ['children'];
         dict.parent = ['parent'];
-        dict['temporary?'] = ['temporary?'];
+        if (this.world().isDevMode) {
+            dict['temporary?'] = ['temporary?'];
+        }
     }
     dict.name = ['name'];
     dict.costumes = ['costumes'];
