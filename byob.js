@@ -108,7 +108,7 @@ BooleanSlotMorph, XML_Serializer*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2017-July-25';
+modules.byob = '2017-August-29';
 
 // Declarations
 
@@ -932,7 +932,7 @@ CustomCommandBlockMorph.prototype.userMenu = function () {
                     this.topBlock().scriptPic(),
                     ide.projectName || localize('Untitled') + ' ' +
                         localize('script pic'),
-                    true // request opening a new window
+                    false // request opening a new window
                 );
             },
             'open a new window\nwith a picture of this script'
