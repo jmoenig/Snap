@@ -4163,6 +4163,10 @@ SpriteMorph.prototype.floodFill = function () {
     if (!this.parent.bounds.containsPoint(this.rotationCenter())) {
         return;
     }
+    if (this.color.a > 1) {
+        // fix a legacy bug in Morphic color detection
+        this.color.a = this.color.a / 255;
+    }
     var layer = normalizeCanvas(this.parent.penTrails()),
         width = layer.width,
         height = layer.height,
@@ -4192,7 +4196,7 @@ SpriteMorph.prototype.floodFill = function () {
     if (src[0] === Math.round(this.color.r) &&
             src[1] === Math.round(this.color.g) &&
             src[2] === Math.round(this.color.b) &&
-            src[3] === Math.round(this.color.a)) {
+            src[3] === Math.round(this.color.a * 255)) {
         return;
     }
     while (stack.length > 0) {

@@ -1161,7 +1161,7 @@
 
 /*global window, HTMLCanvasElement, FileReader, Audio, FileList*/
 
-var morphicVersion = '2017-August-01';
+var morphicVersion = '2017-August-29';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = getBlurredShadowSupport(); // check for Chrome-bug
 
@@ -3658,7 +3658,7 @@ Morph.prototype.getPixelColor = function (aPoint) {
         data.data[0],
         data.data[1],
         data.data[2],
-        data.data[3]
+        data.data[3] / 255
     );
 };
 
