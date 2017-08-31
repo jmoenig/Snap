@@ -8548,15 +8548,18 @@ StringMorph.prototype.mouseDoubleClick = function (pos) {
             slot -= 1;
         }
 
-        if (isWordChar(this.text[slot])) {
+        if (this.text[slot] && isWordChar(this.text[slot])) {
             this.selectWordAt(slot);
-        } else {
+        } else if (this.text[slot]) {
             this.selectBetweenWordsAt(slot);
+        } else {
+            // special case for when we click right after the
+            // last slot in multi line TextMorphs
+            this.selectAll();
         }
     } else {
         this.escalateEvent('mouseDoubleClick', pos);
     }
- 
 };
 
 StringMorph.prototype.selectWordAt = function (slot) {
