@@ -627,11 +627,11 @@ SnapTranslator.dict.es = {
 
     // variables:
     'Make a variable':
-        'Crear un variable',
+        'Crear una variable',
     'Variable name':
         'Nombre de variable',
     'Delete a variable':
-        'Borrar un variable',
+        'Borrar una variable',
 
     'set %var to %s':
         'fijar %var a %s',
