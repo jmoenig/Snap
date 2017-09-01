@@ -108,7 +108,7 @@ BooleanSlotMorph, XML_Serializer*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2017-July-25';
+modules.byob = '2017-September-01';
 
 // Declarations
 

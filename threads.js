@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph,
 TableFrameMorph, ColorSlotMorph, isSnapObject*/
 
-modules.threads = '2017-August-02';
+modules.threads = '2017-September-01';
 
 var ThreadManager;
 var Process;
@@ -3019,6 +3019,9 @@ Process.prototype.reportDistanceTo = function (name) {
         point = rc;
         if (this.inputOption(name) === 'mouse-pointer') {
             point = thisObj.world().hand.position();
+        } else if (name instanceof List) {
+            return new Point(thisObj.xPosition(), thisObj.yPosition())
+                .distanceTo(new Point(name.at(1), name.at(2)));
         }
         stage = thisObj.parentThatIsA(StageMorph);
         thatObj = this.getOtherObject(name, thisObj, stage);
@@ -3100,6 +3103,8 @@ Process.prototype.reportGet = function (query) {
             return thisObj.exemplar || '';
         case 'children':
             return new List(thisObj.specimens ? thisObj.specimens() : []);
+        case 'temporary?':
+            return thisObj.isTemporary || false;
         case 'clones':
             stage = thisObj.parentThatIsA(StageMorph);
             objName = thisObj.name || thisObj.cloneOriginName;
@@ -3186,6 +3191,17 @@ Process.prototype.doSet = function (attribute, value) {
         value = value instanceof SpriteMorph ? value : null;
         // needed: circularity avoidance
         rcvr.setExemplar(value);
+        break;
+    case 'temporary?':
+        this.assertType(rcvr, 'sprite');
+        this.assertType(value, 'Boolean');
+        if (rcvr.world().isDevMode) {
+            if (value) {
+                rcvr.release();
+            } else {
+                rcvr.perpetuate();
+            }
+        }
         break;
     case 'dangling?':
         this.assertType(rcvr, 'sprite');

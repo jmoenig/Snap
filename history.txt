@@ -3588,8 +3588,21 @@ Fixes:
 ------
 * GUI: enable exporting project summaries in the newest Chrome version, which disables opening tabs on dataURLs
 
+170829
+------
+* Threads: allow two-item lists as x-y coordinate arguments for “distance to” reporter
+* GUI, Objects: enable exporting costumes and variable-data in the newest Chrome version, which disables opening tabs on dataURLs
+* Blocks, Threads: added “temporary?” as gettable and settable attribute for clones
 
-Features:
+170830
+------
+* Blocks, Threads: Confine programmatically setting the “temporary?” attribute to dev mode
+* BYOB: enable exporting script pics of custom blocks in the newest Chrome version, which disables opening tabs on dataURLs
+* Morphic, Objects: fixed #1843
+* Croation translation update, thanks, Zeljko Hrvoj!
+
+
+v4.1 Features:
 * polymorphic sprite-local custom blocks
 * inheritance of sprite-local custom blocks
 * inheritance of sprite attributes (x, y, direction, size, costumes, costume #, sounds, scripts)
@@ -3609,7 +3622,7 @@ Features:
 * Assert data types to list operations for more meaningful error messages
 * programmatically hide and show primitives in the palette
 * new "pen trails" reporter primitive and stage context menu entry
-* two-item lists as x-y coordinate arguments for "point towards" and "go to" primitives
+* two-item lists as x-y coordinate arguments for "point towards”, "go to" and “distance to” primitives
 * Piano keyboard as drop-down menu for entering musical notes, Thanks, Michael!
 * Basic “instruments” support: sine, square, sawtooth and triangle waves
 
@@ -3621,4 +3634,5 @@ Fixes:
 * changed direction attribute of sprites to automatically confine to 0-360 degrees
 * fixed rotation-bug when flipping costumes in "only turn left/right" mode"
 * fixed variable renaming (“refactoring”) bugs, thanks, Bernat!
+* fixed “fill” block crash when applying the same color twice
 * fixed some typos

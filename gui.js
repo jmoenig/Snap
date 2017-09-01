@@ -74,7 +74,7 @@ isRetinaSupported, SliderMorph, Animation*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2017-August-04';
+modules.gui = '2017-September-01';
 
 // Declarations
 
@@ -489,6 +489,8 @@ IDE_Morph.prototype.openIn = function (world) {
         } else if (location.hash.substr(0, 7) === '#signup') {
             this.createCloudAccount();
         }
+    this.loadNewProject = false;
+
     }
 
     if (this.userLanguage) {
@@ -7197,7 +7199,11 @@ CostumeIconMorph.prototype.exportCostume = function () {
         // don't show SVG costumes in a new tab (shows text)
         ide.saveFileAs(this.object.contents.src, 'text/svg', this.object.name);
     } else { // rasterized Costume
+<<<<<<< HEAD
         ide.saveCanvasAs(this.object.contents, this.object.name);
+=======
+        ide.saveCanvasAs(this.object.contents, this.object.name, false);
+>>>>>>> master
     }
 };
 

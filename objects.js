@@ -82,7 +82,7 @@ SpeechBubbleMorph, RingMorph, isNil, FileReader, TableDialogMorph,
 BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph*/
 
-modules.objects = '2017-July-31';
+modules.objects = '2017-September-01';
 
 var SpriteMorph;
 var StageMorph;
@@ -4162,6 +4162,10 @@ SpriteMorph.prototype.drawLine = function (start, dest) {
 SpriteMorph.prototype.floodFill = function () {
     if (!this.parent.bounds.containsPoint(this.rotationCenter())) {
         return;
+    }
+    if (this.color.a > 1) {
+        // fix a legacy bug in Morphic color detection
+        this.color.a = this.color.a / 255;
     }
     var layer = normalizeCanvas(this.parent.penTrails()),
         width = layer.width,

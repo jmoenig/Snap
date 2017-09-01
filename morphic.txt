@@ -9,7 +9,7 @@
 
 	Copyright (C) 2017 by Jens Mönig
 
-	this documentation last changed: June 22, 2017
+	this documentation last changed: September 01, 2017
 
 	This file is part of Snap!.
 
@@ -1153,6 +1153,6 @@
     Davide Della Casa contributed performance optimizations for Firefox.
     Jason N (@cyderize) contributed native copy & paste for text editing.
     Bartosz Leper contributed retina display support.
-    Brian Harvey contributed to the design and implemenatation of submenus.
+    Brian Harvey contributed to the design and implementation of submenus.
 
     - Jens Mönig
