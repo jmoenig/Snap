@@ -70,7 +70,7 @@ SpriteMorph, Context, Costume, ArgMorph, BlockEditorMorph, SymbolMorph,
 SyntaxElementMorph, MenuMorph, SpriteBubbleMorph, SpeechBubbleMorph, Sound,
 CellMorph, ListWatcherMorph, isNil, BoxMorph, Variable, isSnapObject*/
 
-modules.tables = '2017-June-26';
+modules.tables = '2017-September-01';
 
 var Table;
 var TableCellMorph;

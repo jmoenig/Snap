@@ -148,7 +148,7 @@ CustomCommandBlockMorph, SymbolMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2017-August-30';
+modules.blocks = '2017-September-01';
 
 var SyntaxElementMorph;
 var BlockMorph;

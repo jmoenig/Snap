@@ -3602,7 +3602,7 @@ Fixes:
 * Croation translation update, thanks, Zeljko Hrvoj!
 
 
-Features:
+v4.1 Features:
 * polymorphic sprite-local custom blocks
 * inheritance of sprite-local custom blocks
 * inheritance of sprite attributes (x, y, direction, size, costumes, costume #, sounds, scripts)
