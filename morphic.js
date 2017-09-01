@@ -1152,7 +1152,7 @@
     Davide Della Casa contributed performance optimizations for Firefox.
     Jason N (@cyderize) contributed native copy & paste for text editing.
     Bartosz Leper contributed retina display support.
-    Brian Harvey contributed to the design and implemenatation of submenus.
+    Brian Harvey contributed to the design and implementation of submenus.
 
     - Jens Mönig
 */
@@ -1161,7 +1161,7 @@
 
 /*global window, HTMLCanvasElement, FileReader, Audio, FileList*/
 
-var morphicVersion = '2017-August-29';
+var morphicVersion = '2017-September-01';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = getBlurredShadowSupport(); // check for Chrome-bug
 
