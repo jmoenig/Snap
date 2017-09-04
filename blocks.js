@@ -5086,9 +5086,15 @@ ReporterBlockMorph.prototype.exportResultPic = function () {
 
 ReporterBlockMorph.prototype.userDestroy = function () {
     // make sure to restore default slot of parent block
+    var world = this.world(),
+        hand;
+
+    if (world) {
+        hand = world.hand;
+    }
 
     this.topBlock().fullChanged();
-    this.prepareToBeGrabbed(this.world().hand);
+    this.prepareToBeGrabbed(hand);
     this.destroy();
 };
 
