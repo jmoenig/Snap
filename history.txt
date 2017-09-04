@@ -3601,6 +3601,10 @@ Fixes:
 * Morphic, Objects: fixed #1843
 * Croation translation update, thanks, Zeljko Hrvoj!
 
+170904
+------
+* Blocks, Objects: fixed #1339
+
 
 v4.1 Features:
 * polymorphic sprite-local custom blocks
@@ -3635,4 +3639,5 @@ Fixes:
 * fixed rotation-bug when flipping costumes in "only turn left/right" mode"
 * fixed variable renaming (“refactoring”) bugs, thanks, Bernat!
 * fixed “fill” block crash when applying the same color twice
+* fixed occasional empty drop-down menu items named “close” 
 * fixed some typos

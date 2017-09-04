@@ -82,7 +82,7 @@ SpeechBubbleMorph, RingMorph, isNil, FileReader, TableDialogMorph,
 BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph*/
 
-modules.objects = '2017-September-01';
+modules.objects = '2017-September-04';
 
 var SpriteMorph;
 var StageMorph;
@@ -5291,6 +5291,7 @@ SpriteMorph.prototype.chooseExemplar = function () {
         myself = this,
         other = stage.children.filter(function (m) {
             return m instanceof SpriteMorph &&
+                !m.isTemporary &&
                 (!contains(m.allExemplars(), myself));
         }),
         menu;

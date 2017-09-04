@@ -148,7 +148,7 @@ CustomCommandBlockMorph, SymbolMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2017-September-01';
+modules.blocks = '2017-September-04';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -8196,7 +8196,7 @@ InputSlotMorph.prototype.distancesMenu = function () {
         allNames = [];
 
     stage.children.forEach(function (morph) {
-        if (morph instanceof SpriteMorph) {
+        if (morph instanceof SpriteMorph && !morph.isTemporary) {
             if (morph.name !== rcvr.name) {
                 allNames = allNames.concat(morph.name);
             }
@@ -8242,7 +8242,7 @@ InputSlotMorph.prototype.objectsMenu = function () {
 
     dict[stage.name] = stage.name;
     stage.children.forEach(function (morph) {
-        if (morph instanceof SpriteMorph) {
+        if (morph instanceof SpriteMorph && !morph.isTemporary) {
             allNames.push(morph.name);
         }
     });
