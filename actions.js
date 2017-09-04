@@ -482,6 +482,10 @@ ActionManager.prototype.registerOwner = function(owner, id) {
     this._owners[owner.id] = owner;
 };
 
+ActionManager.prototype.getOwnerFromId = function(id) {
+    return this._owners[id];
+};
+
 ActionManager.prototype.getBlockOwner = function(block) {
     var blockId = block.id;
 
@@ -490,7 +494,7 @@ ActionManager.prototype.getBlockOwner = function(block) {
         block = block.parent;
     }
 
-    return this._owners[this._blockToOwnerId[blockId]];
+    return this.getOwnerFromId(this._blockToOwnerId[blockId]);
 };
 
 /* * * * * * * * * * * * Preprocess args (before action is accepted) * * * * * * * * * * * */
@@ -1145,7 +1149,7 @@ ActionManager.prototype._onSetBlockPosition = function(id, x, y, callback) {
 
     position = this.getAdjustedPosition(position, scripts);
 
-    if (this.__canAnimate()) {
+    if (this.canAnimate(this.getBlockOwner(block))) {
         block.glideTo(
             position,
             null,
@@ -1270,7 +1274,7 @@ ActionManager.prototype._onAddBlock = function(block, ownerId, x, y, callback) {
     if (!this._customBlocks[ownerId]) {  // not a custom block
         position = this.getAdjustedPosition(position, owner.scripts);
 
-        if (this.__canAnimate()) {
+        if (this.canAnimate(owner)) {
             var palette = ide.palette;
             
             firstBlock.setPosition(palette.position()
@@ -1353,8 +1357,9 @@ ActionManager.prototype._getCustomBlockEditor = function(id, block) {
     return editor;
 };
 
-ActionManager.prototype.getOwnerFromId = function(id) {
-    return this._owners[id];
+ActionManager.prototype.getBlockOwner = function(block) {
+    var ownerId = this._blockToOwnerId[block.id];
+    return this._owners[ownerId];
 };
 
 ActionManager.prototype.getBlockFromId = function(id) {
@@ -1515,7 +1520,7 @@ ActionManager.prototype.onMoveBlock = function(id, rawTarget) {
         this.ide().palette.add(block);
         block.setPosition(this.blockInitPosition());
     }
-    if (this.__canAnimate()) {
+    if (this.canAnimate(owner)) {
         var position = this.computeMovePosition(block, target);
 
         block.glideTo(
@@ -1650,7 +1655,7 @@ ActionManager.prototype._onRemoveBlock = function(id, userDestroy, callback) {
         // blocks. That is, we are either deleting all following blocks or there
         // are no following blocks
         var hasNextBlock = block.nextBlock && block.nextBlock(),
-            canAnimate = this.__canAnimate() &&
+            canAnimate = this.canAnimate(this.getBlockOwner(block)) &&
                 (method === 'destroy' || !hasNextBlock);
 
         if (canAnimate) {
@@ -1691,9 +1696,16 @@ ActionManager.prototype.onRemoveBlock = function(id, userDestroy) {
     });
 };
 
-ActionManager.prototype.__canAnimate = function() {
-    return this.ide().isReplayMode || this.currentEvent.replayType ||
-        this.currentEvent.user !== this.id;
+ActionManager.prototype.canAnimate = function(owner) {
+    // Animate action if:
+    //   - in replay mode
+    //   - undo/redo action
+    //   - done by another user
+    //   - AND viewing the given owner
+    var viewingOwner = this.ide().currentSprite === owner;
+
+    return viewingOwner && (this.ide().isReplayMode ||
+        this.currentEvent.replayType || this.currentEvent.user !== this.id);
 };
 
 ActionManager.prototype.__updateScriptsMorph = function(block) {
