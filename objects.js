@@ -9622,20 +9622,6 @@ CamSnapshotDialogMorph.prototype.buildContents = function () {
     this.drawNew();
 };
 
-CamSnapshotDialogMorph.prototype.popUp = function (world) {
-    CamSnapshotDialogMorph.uber.popUp.call(this, world);
-
-    if (location.protocol === 'http:') {
-        this.ide.inform(
-            'SSL Error',
-            'Due to browser security policies, you need to\n' +
-            'access Snap! through HTTPS to use the camera.\n\n' +
-            'Plase replace the "http://" part of the address\n' +
-            'in your browser by "https://" and try again.');
-        this.destroy();
-    }
-};
-
 CamSnapshotDialogMorph.prototype.ok = function () {
     var stage = this.ide.stage,
         canvas = newCanvas(stage.dimensions);

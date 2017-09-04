@@ -1487,6 +1487,7 @@ IDE_Morph.prototype.createCorralBar = function () {
         "newCamSprite",
         new SymbolMorph("camera", 15)
     );
+
     cambutton.corner = 12;
     cambutton.color = colors[0];
     cambutton.highlightColor = colors[1];
@@ -1504,6 +1505,15 @@ IDE_Morph.prototype.createCorralBar = function () {
     cambutton.setLeft(
         this.corralBar.left() + padding + newbutton.width() + padding + paintbutton.width() + padding
     );
+
+    if (location.protocol === 'http:') {
+        cambutton.hint = 'Due to browser security policies, you need to\n' +
+            'access Snap! through HTTPS to use the camera.\n\n' +
+            'Plase replace the "http://" part of the address\n' +
+            'in your browser by "https://" and try again.';
+        cambutton.disable();
+    }
+
     this.corralBar.add(cambutton);
 
 };
@@ -7615,6 +7625,14 @@ WardrobeMorph.prototype.updateList = function () {
     cambutton.fixLayout();
     cambutton.setCenter(paintbutton.center());
     cambutton.setLeft(paintbutton.right() + padding * 4);
+
+    if (location.protocol === 'http:') {
+        cambutton.hint = 'Due to browser security policies, you need to\n' +
+            'access Snap! through HTTPS to use the camera.\n\n' +
+            'Plase replace the "http://" part of the address\n' +
+            'in your browser by "https://" and try again.';
+        cambutton.disable();
+    }
 
     this.addContents(cambutton);
 
