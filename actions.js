@@ -1818,8 +1818,10 @@ ActionManager.prototype.onSetField = function(fieldId, value) {
 
 ActionManager.prototype.onSetColorField = function(fieldId, desc) {
     var block = this.getBlockFromId(fieldId),
-        color = new Color(desc.r, desc.g, desc.b, desc.a);
+        color;
 
+    desc = desc || {};
+    color = new Color(desc.r, desc.g, desc.b, desc.a);
     block.setColor(color);
     this.fieldValues[fieldId] = color;
     this.__updateBlockDefinitions(block);
