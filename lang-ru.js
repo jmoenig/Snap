@@ -182,7 +182,7 @@ SnapTranslator.dict.ru = {
     'translator_e-mail':
         'svetlanap@berkeley.edu, tema@school830.ru', // optional
     'last_changed':
-        '2016-06-21', // this, too, will appear in the Translators tab
+        '2017-09-01', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -222,6 +222,8 @@ SnapTranslator.dict.ru = {
         'Скрипты',
     'Costumes':
         'Костюмы',
+    'Backgrounds':
+        'Фоны',
     'Sounds':
         'Звуки',
 
@@ -310,7 +312,7 @@ SnapTranslator.dict.ru = {
     'set y to %n':
         'установить y %n',
     'if on edge, bounce':
-        'на грани развернуться',
+        'на границе развернуться',
     'x position':
         'x позиция',
     'y position':
@@ -411,9 +413,9 @@ SnapTranslator.dict.ru = {
 
     // control:
     'when %greenflag clicked':
-        'когда щелкнуть на %greenflag',
+        'при нажатии на %greenflag',
     'when %keyHat key pressed':
-        'когда нажать %keyHat клавишу',
+        'при нажатии клавиши %keyHat',
     'when I am %interaction':
         'когда меня %interaction',
     'clicked':
@@ -623,6 +625,8 @@ SnapTranslator.dict.ru = {
         'встав. %s в полож. %idx в %l',
     'replace item %idx of %l with %s':
         'заменить элем. %idx в %l на %s',
+    'empty? %l':
+        'пустой? %l',
 
     // other
     'Make a block':
@@ -661,25 +665,37 @@ SnapTranslator.dict.ru = {
     'file menu import hint':
         'загрузить экспортированный проект\nили библиотеку блоков, маску или звук',
     'Export project as plain text...':
-        'Экспорт проект как текстовый файл...',
+        'Экспортировать проект как текстовый файл...',
     'Export project...':
-        'Экспорт проект...',
+        'Экспортировать проект...',
+    'save project data as XML\nto your downloads folder':
+        'сохранить и скачать проект в виде XML файла',
     'Export summary...':
         'Экспортируемая информация...',
-    'show project data as XML\nin a new browser window':
+    'open a new browser browser window\n with a summary of this project':
         'представить проектные данные как XML\nв новом окне браузера',
     'Export blocks...':
-        'Экспорт блоки...',
+        'Экспортировать блоки...',
     'show global custom block definitions as XML\nin a new browser window':
         'представить определения глобальных пользовательских блоков как XML\nв новом окне браузера',
+    'Unused blocks...':
+        'Неиспользуемые блоки...',
+    'find unused global custom blocks\nand remove their definitions':
+        'поиск и удаление неиспользуемых блоков',
     'Import tools':
         'Импортировать сервисные ср-ва',
+    'load the official library of\npowerful blocks':
+        'загрузить служебную библиотеку блоков',
     'Backgrounds...':
         'Фоны...',
     'Libraries...':
         'Библиотеки...',
-    'load the official library of\npowerful blocks':
-        'загрузить служебную библиотеку блоков',
+    'Select categories of additional blocks to add to this project.':
+        'выбрать дополнительные библиотеки блоков\nдля добавления к проекту',
+    'Select a costume from the media library':
+        'Выбор костюма из библиотеки изображений',
+    'Select a sound from the media library':
+        'Выбор звука из медиа-библиотеки',
 
     // settings menu
     'Language...':
@@ -737,7 +753,7 @@ SnapTranslator.dict.ru = {
     'check to enable\ninput sliders for\nentry fields':
         'поставить метку - разрешить использование бегунков\nпри заполнении полей ввода',
     'Clicking sound':
-        'Щелк-звук',
+        'Звук щелчка',
     'uncheck to turn\nblock clicking\nsound off':
         'убрать метку - выключить звук\nпри щелчке на блок',
     'check to turn\nblock clicking\nsound on':
@@ -748,6 +764,44 @@ SnapTranslator.dict.ru = {
         'убрать метку - отключить\nIDE aнимацию',
     'check to enable\nIDE animations':
         'поставить метку - разрешить\nIDE aнимацию',
+    'Turbo mode':
+        'Режим Турбо',
+    'check to prioritize\nscript execution':
+        'отметьте, чтобы ускорить выполнение скрипта',
+    'uncheck to run scripts\nat normal speed':
+        'снимите флажок для выполнения скрипта\nс нормальной скоростью',
+    'Flat design':
+        'Плоский дизайн',
+    'check for alternative\nGUI design':
+        'отметьте для включения\nальтернативного дизайна среды разработки',
+    'uncheck for default\nGUI design':
+        'снимите флажок для включения\nстандартного дизайна среды разработки',
+    'Nested auto-wrapping':
+        'Nested auto-wrapping',
+    'Keyboard Editing':
+        'Редактирование с клавиатуры',
+    'check to enable\nkeyboard editing support':
+        'отметьте, чтобы включить\nвозможность программирования с помощью клавиатуры (Shift+Клик на блок)',
+    'uncheck to disable\nkeyboard editing support':
+        'снимите флажок, чтобы программировать\nтолько мышью без использования клавиатуры',
+    'Table support':
+        'Поддержка таблиц',
+    'uncheck to disable\nmulti-column list views':
+        'снимите флажок для отключения\nвозможности отображения списка в виде таблицы',
+    'check for multi-column\nlist view support':
+        'отметьте для включения\nвозможности отображения списка в виде таблицы',
+    'Table lines':
+        'Выделить линии у таблицы',
+    'uncheck for less contrast\nmulti-column list views':
+        'снимите флажок, чтобы линии таблицы в окне отображения таблиц\nстали менее контрасными',
+    'check for higher contrast\ntable views':
+        'отметьте, чтобы линии таблицы в окне отображения таблиц\nстали более контрасными',
+    'Visible stepping':
+        'Отбражение шагов выполнения',
+    'check to turn on\n visible stepping (slow)':
+        'отметьте, чтобы отображались\nшаги выполнения скрипта (медленно)',
+    'uncheck to turn off\nvisible stepping':
+        'снимите флажок, чтобы отключить отображение\nшагов выполнения скрипта',
     'Thread safe scripts':
         'Защищенность скрипта в многопоточном режиме',
     'uncheck to allow\nscript reentrancy':
@@ -838,6 +892,22 @@ SnapTranslator.dict.ru = {
         'переименовать звук',
 
     // dialogs
+    'Import library':
+        'Загрузка библиотек',
+    'Table view':
+        'Табличный вид',
+    'Save project':
+        'Сохранение проекта',
+    'Export Project As...':
+        'Экспортировать проект как...',
+    'Cloud':
+        'Облако',
+    'Browser':
+        'Браузер',
+    'Examples':
+        'Примеры',
+    
+    
     // buttons
     'OK':
         'OK',
@@ -849,6 +919,10 @@ SnapTranslator.dict.ru = {
         'Да',
     'No':
         'Нет',
+    'Open':
+        'Открыть',
+    'Empty':
+        'Пусто',
 
     // help
     'Help':
@@ -1052,6 +1126,8 @@ SnapTranslator.dict.ru = {
     // keys
     'space':
         'пробел',
+    'any key':
+        'любая клавиша',
     'up arrow':
         'стрелка вверх',
     'down arrow':
@@ -1140,6 +1216,10 @@ SnapTranslator.dict.ru = {
     // math functions
     'abs':
         'абсолютное значение',
+    'ceiling':
+        'округление до большего',
+    'floor':
+        'округление до меньшего',
     'sqrt':
         'квадратный корень',
     'sin':

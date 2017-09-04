@@ -66,11 +66,11 @@
 
 /*global modules, Point, newCanvas, Morph, fontHeight, SliderMorph, List,
 MorphicPreferences, FrameMorph, HandleMorph, DialogBoxMorph, isString,
-SpriteMorph, Context, Costume, ArgMorph, BlockEditorMorph,
-SyntaxElementMorph, MenuMorph, SpriteBubbleMorph, SpeechBubbleMorph,
+SpriteMorph, Context, Costume, ArgMorph, BlockEditorMorph, SymbolMorph,
+SyntaxElementMorph, MenuMorph, SpriteBubbleMorph, SpeechBubbleMorph, Sound,
 CellMorph, ListWatcherMorph, isNil, BoxMorph, Variable, isSnapObject*/
 
-modules.tables = '2016-May-02';
+modules.tables = '2017-September-01';
 
 var Table;
 var TableCellMorph;
@@ -401,6 +401,8 @@ TableCellMorph.prototype.dataRepresentation = function (dta) {
         return dta.image();
     } else if (dta instanceof Costume) {
         return dta.thumbnail(new Point(40, 40));
+    } else if (dta instanceof Sound) {
+        return new SymbolMorph('notes', 30).image;
     } else if (dta instanceof List) {
         return this.listSymbol;
         // return new ListWatcherMorph(dta).fullImageClassic();
