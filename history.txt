@@ -3608,6 +3608,7 @@ Fixes:
 170905
 ------
 * German translation update
+* Threads, Objects: Renamed “http” block to “url”, use location.protocol (support https)
 
 
 v4.1 Features:
@@ -3633,6 +3634,7 @@ v4.1 Features:
 * two-item lists as x-y coordinate arguments for "point towards”, "go to" and “distance to” primitives
 * Piano keyboard as drop-down menu for entering musical notes, Thanks, Michael!
 * Basic “instruments” support: sine, square, sawtooth and triangle waves
+* Support https in “url” reporter
 
 Fixes:
 * changed keyboard shortcut indicator for “find blocks” to “^”

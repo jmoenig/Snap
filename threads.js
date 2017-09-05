@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph,
 TableFrameMorph, ColorSlotMorph, isSnapObject*/
 
-modules.threads = '2017-September-01';
+modules.threads = '2017-September-05';
 
 var ThreadManager;
 var Process;
@@ -2265,10 +2265,19 @@ Process.prototype.reportLastAnswer = function () {
 // Process URI retrieval (interpolated)
 
 Process.prototype.reportURL = function (url) {
-    var response;
+    var idx, protocol, hostname, response;
     if (!this.httpRequest) {
+        // use the location protocol unless the user specifies otherwise
+        idx = url.indexOf('://');
+        if (idx < 0) {
+            protocol = location.protocol + '//';
+            hostname = url;
+        } else {
+            protocol = url.slice(0, idx) + '://';
+            hostname = url.slice(idx + 3, url.length);
+        }
         this.httpRequest = new XMLHttpRequest();
-        this.httpRequest.open("GET", 'http://' + url, true);
+        this.httpRequest.open("GET", protocol + hostname, true);
         this.httpRequest.send(null);
     } else if (this.httpRequest.readyState === 4) {
         response = this.httpRequest.responseText;
