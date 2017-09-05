@@ -3605,6 +3605,10 @@ Fixes:
 ------
 * Blocks, Objects: fixed #1339
 
+170905
+------
+* German translation update
+
 
 v4.1 Features:
 * polymorphic sprite-local custom blocks

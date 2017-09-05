@@ -74,7 +74,7 @@ isRetinaSupported, SliderMorph, Animation*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2017-September-01';
+modules.gui = '2017-September-05';
 
 // Declarations
 
@@ -6656,7 +6656,7 @@ SpriteIconMorph.prototype.init = function (aSprite, aTemplate) {
 
     hover = function () {
         if (!aSprite.exemplar) {return null; }
-        return (localize('parent' + ':\n' + aSprite.exemplar.name));
+        return (localize('parent') + ':\n' + aSprite.exemplar.name);
     };
 
     // additional properties:

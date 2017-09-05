@@ -148,7 +148,7 @@ CustomCommandBlockMorph, SymbolMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2017-September-04';
+modules.blocks = '2017-September-05';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -6232,7 +6232,7 @@ ScriptsMorph.prototype.userMenu = function () {
     );
     if (ide) {
         menu.addLine();
-        if (obj.exemplar) {
+        if (!blockEditor && obj.exemplar) {
                 addOption(
                     'inherited',
                     function () {
