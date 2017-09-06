@@ -148,7 +148,7 @@ CustomCommandBlockMorph, SymbolMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2017-September-05';
+modules.blocks = '2017-September-06';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -1025,7 +1025,8 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                     'whitespace' : ['whitespace'],
                     'line' : ['line'],
                     'tab' : ['tab'],
-                    'cr' : ['cr']
+                    'cr' : ['cr'],
+                    'csv' : ['csv']
                 },
                 false // read-only
             );

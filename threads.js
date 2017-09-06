@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph,
 TableFrameMorph, ColorSlotMorph, isSnapObject*/
 
-modules.threads = '2017-September-05';
+modules.threads = '2017-September-06';
 
 var ThreadManager;
 var Process;
@@ -2727,10 +2727,48 @@ Process.prototype.reportTextSplit = function (string, delimiter) {
     case 'letter':
         del = '';
         break;
+    case 'csv':
+        return this.parseCSV(string);
     default:
         del = isNil(delimiter) ? '' : delimiter.toString();
     }
     return new List(str.split(del));
+};
+
+Process.prototype.parseCSV = function (string) {
+    // parse a single row of CSV data into a one-dimensional list
+    // this assumes that the whole csv data has already been split
+    // by lines.
+    // taken from:
+    // https://stackoverflow.com/questions/8493195/how-can-i-parse-a-csv-string-with-javascript-which-contains-comma-in-data
+
+    var re_valid = /^\s*(?:'[^'\\]*(?:\\[\S\s][^'\\]*)*'|"[^"\\]*(?:\\[\S\s][^"\\]*)*"|[^,'"\s\\]*(?:\s+[^,'"\s\\]+)*)\s*(?:,\s*(?:'[^'\\]*(?:\\[\S\s][^'\\]*)*'|"[^"\\]*(?:\\[\S\s][^"\\]*)*"|[^,'"\s\\]*(?:\s+[^,'"\s\\]+)*)\s*)*$/,
+        re_value = /(?!\s*$)\s*(?:'([^'\\]*(?:\\[\S\s][^'\\]*)*)'|"([^"\\]*(?:\\[\S\s][^"\\]*)*)"|([^,'"\s\\]*(?:\s+[^,'"\s\\]+)*))\s*(?:,|$)/g,
+        a = [];
+
+    if (!re_valid.test(string)) {
+        return new List();
+    }
+    string.replace(
+        re_value,
+        function(m0, m1, m2, m3) {
+            if (m1 !== undefined) {
+                // remove backslash from \' in single quoted values.
+                a.push(m1.replace(/\\'/g, "'"));
+            } else if (m2 !== undefined) {
+                // remove backslash from \" in double quoted values.
+                a.push(m2.replace(/\\"/g, '"'));
+            } else if (m3 !== undefined) {
+                a.push(m3);
+            }
+            return '';
+        }
+    );
+    // special case: empty last value.
+    if (/,\s*$/.test(string)) {
+        a.push('');
+    }
+    return new List(a);
 };
 
 // Process debugging

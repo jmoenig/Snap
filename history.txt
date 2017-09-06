@@ -3610,6 +3610,10 @@ Fixes:
 * German translation update
 * Threads, Objects: Renamed “http” block to “url”, use location.protocol (support https)
 
+170906
+------
+* Blocks, Threads: added “csv” option to the SPLIT primitive
+
 
 v4.1 Features:
 * polymorphic sprite-local custom blocks
@@ -3635,6 +3639,7 @@ v4.1 Features:
 * Piano keyboard as drop-down menu for entering musical notes, Thanks, Michael!
 * Basic “instruments” support: sine, square, sawtooth and triangle waves
 * Support https in “url” reporter
+* splitting csv-text
 
 Fixes:
 * changed keyboard shortcut indicator for “find blocks” to “^”
