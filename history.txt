@@ -3613,6 +3613,7 @@ Fixes:
 170906
 ------
 * Blocks, Threads: added “csv” option to the SPLIT primitive
+* Threads: allow https query from locally loaded sources (thanks, Michael, for the hint!)
 
 
 v4.1 Features:

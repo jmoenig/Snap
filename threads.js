@@ -2265,19 +2265,19 @@ Process.prototype.reportLastAnswer = function () {
 // Process URI retrieval (interpolated)
 
 Process.prototype.reportURL = function (url) {
-    var idx, protocol, hostname, response;
+    var response;
     if (!this.httpRequest) {
         // use the location protocol unless the user specifies otherwise
-        idx = url.indexOf('://');
-        if (idx < 0) {
-            protocol = location.protocol + '//';
-            hostname = url;
-        } else {
-            protocol = url.slice(0, idx) + '://';
-            hostname = url.slice(idx + 3, url.length);
+        if (url.indexOf('//') < 0) {
+            if (location.protocol === 'file:') {
+                // allow requests from locally loaded sources
+                url = 'https://' + url;
+            } else {
+                url = location.protocol + '//' + url;
+            }
         }
         this.httpRequest = new XMLHttpRequest();
-        this.httpRequest.open("GET", protocol + hostname, true);
+        this.httpRequest.open("GET", url, true);
         this.httpRequest.send(null);
     } else if (this.httpRequest.readyState === 4) {
         response = this.httpRequest.responseText;
