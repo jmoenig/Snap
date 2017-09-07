@@ -930,7 +930,7 @@ CustomCommandBlockMorph.prototype.userMenu = function () {
                 var ide = this.world().children[0];
                 ide.saveCanvasAs(
                     this.topBlock().scriptPic(),
-                    ide.projectName || localize('Untitled') + ' ' +
+                    (ide.projectName || localize('untitled')) + ' ' +
                         localize('script pic'),
                     false // request opening a new window
                 );
@@ -3706,7 +3706,7 @@ BlockExportDialogMorph.prototype.exportBlocks = function () {
             + '</blocks>';
         ide.saveXMLAs(
             str,
-            ide.projectName || localize('Untitled') + ' ' + localize('blocks')
+            (ide.projectName || localize('untitled')) + ' ' + localize('blocks')
         );
     } else {
         new DialogBoxMorph().inform(
