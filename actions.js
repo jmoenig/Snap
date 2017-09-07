@@ -1154,7 +1154,13 @@ ActionManager.prototype._onSetBlockPosition = function(id, x, y, callback) {
             position,
             null,
             null,
-            afterMove
+            function() {
+                try {
+                    afterMove();
+                } catch(e) {
+                    callback(e);
+                }
+            }
         );
     } else {
         block.setPosition(position);
@@ -1229,14 +1235,17 @@ ActionManager.prototype.onReplaceBlock = function(block, newBlock) {
     ownerId = this._blockToOwnerId[block.id];
     position = this._positionOf[block.id];
 
-    this._onRemoveBlock(block.id, true, function() {
+    this._onRemoveBlock(block.id, true, function(err) {
+        if (err) {
+            return myself.completeAction(err);
+        }
         myself._onAddBlock(
             newBlock,
             ownerId,
             position.x,
             position.y,
-            function(result) {
-                myself.completeAction(null, result);
+            function(err, result) {
+                myself.completeAction(err, result);
             }
         );
     });
@@ -1261,7 +1270,7 @@ ActionManager.prototype._onAddBlock = function(block, ownerId, x, y, callback) {
             myself.registerBlocks(firstBlock, owner);
             myself.__updateScriptsMorph(firstBlock);
             myself.__updateActiveEditor(firstBlock.id);
-            callback(firstBlock);
+            callback(null, firstBlock);
         };
 
 
@@ -1286,8 +1295,12 @@ ActionManager.prototype._onAddBlock = function(block, ownerId, x, y, callback) {
                 null,
                 null,
                 function() {
-                    owner.scripts.add(firstBlock);
-                    afterAdd();
+                    try {
+                        owner.scripts.add(firstBlock);
+                        afterAdd();
+                    } catch(e) {
+                        callback(e);
+                    }
                 }
             );
         } else {
@@ -1321,8 +1334,8 @@ ActionManager.prototype._onAddBlock = function(block, ownerId, x, y, callback) {
 ActionManager.prototype.onAddBlock = function(block, ownerId, x, y) {
     var myself = this;
 
-    this._onAddBlock(block, ownerId, x, y, function(block) {
-        myself.completeAction(null, block);
+    this._onAddBlock(block, ownerId, x, y, function(err, block) {
+        myself.completeAction(err, block);
     });
 };
 
@@ -1527,7 +1540,13 @@ ActionManager.prototype.onMoveBlock = function(id, rawTarget) {
             position,
             null,
             null,
-            afterMove
+            function() {
+                try {
+                    afterMove();
+                } catch(e) {
+                    myself.completeAction(e);
+                }
+            }
         );
     } else {
         afterMove();
@@ -1668,7 +1687,13 @@ ActionManager.prototype._onRemoveBlock = function(id, userDestroy, callback) {
                 this.blockInitPosition(),
                 null,
                 null,
-                afterRemove
+                function() {
+                    try {
+                        afterRemove();
+                    } catch(e) {
+                        callback(e);
+                    }
+                }
             );
         } else {
             afterRemove();
@@ -2763,13 +2788,13 @@ ActionManager.prototype.onMessage = function(msg) {
     } else if (msg.type === 'session-id') {
         this.sessionId = msg.value;
         location.hash = 'collaborate=' + this.sessionId;
-    } else if (this.isLeader) {  // block action
+    } else if (this.isLeader) {
         // Verify that the lastSeen value is the same as the current
         accepted = this.lastSeen === (msg.id - 1);
         if (accepted) {
             this.acceptEvent(msg);
         }
-    } else {  // block action
+    } else {
         this._applyEvent(msg);
     }
 };
