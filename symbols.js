@@ -41,7 +41,7 @@
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.symbols = '2017-September-01';
+modules.symbols = '2017-September-08';
 
 var SymbolMorph;
 

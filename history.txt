@@ -3615,12 +3615,17 @@ Fixes:
 * Blocks, Threads: added “csv” option to the SPLIT primitive
 * Threads: allow https query from locally loaded sources (thanks, Michael, for the hint!)
 
+170908
+------
+* GUI, Objects, Widgets, Symbols: Camera Snapshot Dialog. Thank you, Bernat!!
+
 
 v4.1 Features:
 * polymorphic sprite-local custom blocks
 * inheritance of sprite-local custom blocks
 * inheritance of sprite attributes (x, y, direction, size, costumes, costume #, sounds, scripts)
 * first-class costumes and sounds
+* camera snapshots for costumes and new sprites
 * localization support when typing expressions
 * support for user-forced line-breaks in custom block labels
 * ternary Boolean slot setting: support to limit Boolean input slots to “true/false” outside of rings and in palette

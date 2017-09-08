@@ -70,11 +70,11 @@ fontHeight, hex_sha512, sb, CommentMorph, CommandBlockMorph,
 BlockLabelPlaceHolderMorph, Audio, SpeechBubbleMorph, ScriptFocusMorph,
 XML_Element, WatcherMorph, BlockRemovalDialogMorph, saveAs, TableMorph,
 isSnapObject, isRetinaEnabled, disableRetinaSupport, enableRetinaSupport,
-isRetinaSupported, SliderMorph, Animation*/
+isRetinaSupported, SliderMorph, Animation, CamSnapshotDialogMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2017-September-05';
+modules.gui = '2017-September-08';
 
 // Declarations
 
@@ -1503,7 +1503,12 @@ IDE_Morph.prototype.createCorralBar = function () {
     cambutton.fixLayout();
     cambutton.setCenter(this.corralBar.center());
     cambutton.setLeft(
-        this.corralBar.left() + padding + newbutton.width() + padding + paintbutton.width() + padding
+        this.corralBar.left() +
+        padding +
+        newbutton.width() +
+        padding +
+        paintbutton.width() +
+        padding
     );
 
     if (location.protocol === 'http:') {

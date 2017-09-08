@@ -80,9 +80,10 @@ document, isNaN, isString, newCanvas, nop, parseFloat, radians, window,
 modules, IDE_Morph, VariableDialogMorph, HTMLCanvasElement, Context, List,
 SpeechBubbleMorph, RingMorph, isNil, FileReader, TableDialogMorph,
 BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
-TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph*/
+TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph,
+AlignmentMorph*/
 
-modules.objects = '2017-September-05';
+modules.objects = '2017-September-08';
 
 var SpriteMorph;
 var StageMorph;
@@ -9526,7 +9527,7 @@ StagePrompterMorph.prototype.mouseClickLeft = function () {
 
 StagePrompterMorph.prototype.accept = function () {
     this.isDone = true;
-}
+};
 
 // CamSnapshotDialogMorph /////////////////////////////////////////////////////////
 
@@ -9546,7 +9547,7 @@ CamSnapshotDialogMorph.uber = DialogBoxMorph.prototype;
 
 function CamSnapshotDialogMorph(ide, sprite, onCancel, onAccept) {
     this.init(ide, sprite, onCancel, onAccept);
-};
+}
 
 CamSnapshotDialogMorph.prototype.init = function (ide, sprite, onCancel, onAccept) {
     this.ide = ide;
@@ -9568,8 +9569,7 @@ CamSnapshotDialogMorph.prototype.init = function (ide, sprite, onCancel, onAccep
 };
 
 CamSnapshotDialogMorph.prototype.buildContents = function () {
-    var myself = this,
-        stage = this.ide.stage;
+    var myself = this;
 
     this.videoElement = document.createElement('video');
     this.videoElement.hidden = true;
@@ -9625,9 +9625,9 @@ CamSnapshotDialogMorph.prototype.buildContents = function () {
 
 CamSnapshotDialogMorph.prototype.ok = function () {
     var stage = this.ide.stage,
-        canvas = newCanvas(stage.dimensions);
+        canvas = newCanvas(stage.dimensions),
+        context = canvas.getContext('2d');
 
-    context = canvas.getContext('2d');
     context.translate(stage.dimensions.x, 0);
     context.scale(-1, 1);
 
