@@ -7562,6 +7562,7 @@ WardrobeMorph.prototype.updateList = function () {
         x = this.left() + 5,
         y = this.top() + 5,
         padding = 4,
+        toolsPadding = 5,
         oldFlag = Morph.prototype.trackChanges,
         oldPos = this.contents.position(),
         icon,
@@ -7631,7 +7632,7 @@ WardrobeMorph.prototype.updateList = function () {
     cambutton.setPosition(new Point(x, y));
     cambutton.fixLayout();
     cambutton.setCenter(paintbutton.center());
-    cambutton.setLeft(paintbutton.right() + padding * 4);
+    cambutton.setLeft(paintbutton.right() + toolsPadding);
 
     if (location.protocol === 'http:') {
         cambutton.hint = 'Due to browser security policies, you need to\n' +
