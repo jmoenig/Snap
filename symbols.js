@@ -129,7 +129,8 @@ SymbolMorph.prototype.names = [
     'arrowRightOutline',
     'robot',
     'magnifyingGlass',
-    'notes'
+    'notes',
+    'camera'
 ];
 
 // SymbolMorph instance creation:
@@ -303,6 +304,8 @@ SymbolMorph.prototype.symbolCanvasColored = function (aColor) {
         return this.drawSymbolMagnifyingGlass(canvas, aColor);
     case 'notes':
         return this.drawSymbolNotes(canvas, aColor);
+    case 'camera':
+        return this.drawSymbolCamera(canvas, aColor);
     default:
         return canvas;
     }
@@ -1514,5 +1517,40 @@ SymbolMorph.prototype.drawSymbolNotes = function (canvas, color) {
     ctx.moveTo(size - (l / 2), size - (r * 2));
     ctx.lineTo(size - (l / 2), l);
     ctx.stroke();
+    return canvas;
+};
+
+SymbolMorph.prototype.drawSymbolCamera = function (canvas, color) {
+    // answer a canvas showing a camera
+    var ctx = canvas.getContext('2d'),
+        w = canvas.width,
+        h = canvas.width,
+        r = w * 0.16,
+        l = Math.max(w / 20, 0.5);
+
+    ctx.lineWidth = l * 2;
+
+    // camera body
+    ctx.fillStyle = color.toString();
+    ctx.beginPath();
+    ctx.moveTo(l, h * 5 / 6);
+    ctx.lineTo(w - l, h * 5 / 6);
+    ctx.lineTo(w - l, h / 4);
+    ctx.lineTo(w * 3 / 4 , h / 4);
+    ctx.lineTo(w * 5 / 8 , l);
+    ctx.lineTo(w * 3 / 8 , l);
+    ctx.lineTo(w / 4 , h / 4);
+    ctx.lineTo(l , h / 4);
+    ctx.closePath();
+    ctx.fill();
+
+    // camera lens
+    ctx.save();
+    ctx.globalCompositeOperation = 'destination-out';
+    ctx.beginPath();
+    ctx.arc(w / 2, h / 2, r, radians(0), radians(360), false);
+    ctx.fill();
+    ctx.restore();
+
     return canvas;
 };
