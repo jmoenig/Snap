@@ -148,7 +148,7 @@ CustomCommandBlockMorph, SymbolMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2017-September-01';
+modules.blocks = '2017-September-06';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -1025,7 +1025,8 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                     'whitespace' : ['whitespace'],
                     'line' : ['line'],
                     'tab' : ['tab'],
-                    'cr' : ['cr']
+                    'cr' : ['cr'],
+                    'csv' : ['csv']
                 },
                 false // read-only
             );
@@ -1972,7 +1973,7 @@ SyntaxElementMorph.prototype.exportPictureWithResult = function (aBubble) {
     // request to open pic in new window.
     ide.saveCanvasAs(
         pic,
-        ide.projetName || localize('Untitled') + ' ' + localize('script pic')
+        (ide.projetName || localize('untitled')) + ' ' + localize('script pic')
     );
 };
 
@@ -2550,7 +2551,7 @@ BlockMorph.prototype.userMenu = function () {
             );
             ide.saveCanvasAs(
                 myself.topBlock().scriptPic(),
-                ide.projetName || localize('Untitled') + ' ' +
+                (ide.projetName || localize('untitled')) + ' ' +
                     localize('script pic')
             );
         },
@@ -6230,7 +6231,7 @@ ScriptsMorph.prototype.userMenu = function () {
     );
     if (ide) {
         menu.addLine();
-        if (obj.exemplar) {
+        if (!blockEditor && obj.exemplar) {
                 addOption(
                     'inherited',
                     function () {
@@ -6304,7 +6305,7 @@ ScriptsMorph.prototype.exportScriptsPicture = function () {
     if (pic) {
         ide.saveCanvasAs(
             pic,
-            ide.projetName || localize('Untitled') + ' ' +
+            (ide.projetName || localize('untitled')) + ' ' +
                 localize('script pic')
         );
     }
@@ -8193,7 +8194,7 @@ InputSlotMorph.prototype.distancesMenu = function () {
         allNames = [];
 
     stage.children.forEach(function (morph) {
-        if (morph instanceof SpriteMorph) {
+        if (morph instanceof SpriteMorph && !morph.isTemporary) {
             if (morph.name !== rcvr.name) {
                 allNames = allNames.concat(morph.name);
             }
@@ -8239,7 +8240,7 @@ InputSlotMorph.prototype.objectsMenu = function () {
 
     dict[stage.name] = stage.name;
     stage.children.forEach(function (morph) {
-        if (morph instanceof SpriteMorph) {
+        if (morph instanceof SpriteMorph && !morph.isTemporary) {
             allNames.push(morph.name);
         }
     });
@@ -11655,7 +11656,7 @@ CommentMorph.prototype.userMenu = function () {
             var ide = myself.parentThatIsA(IDE_Morph);
             ide.saveCanvasAs(
                 myself.fullImageClassic(),
-                ide.projetName || localize('Untitled') + ' ' +
+                (ide.projetName || localize('untitled')) + ' ' +
                     localize('comment pic')
             );
         },

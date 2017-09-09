@@ -85,7 +85,7 @@ HTMLCanvasElement, fontHeight, SymbolMorph, localize, SpeechBubbleMorph,
 ArrowMorph, MenuMorph, isString, isNil, SliderMorph, MorphicPreferences,
 ScrollFrameMorph, MenuItemMorph, Note*/
 
-modules.widgets = '2017-September-01';
+modules.widgets = '2017-September-08';
 
 var PushButtonMorph;
 var ToggleButtonMorph;
@@ -168,6 +168,7 @@ PushButtonMorph.prototype.init = function (
     this.hint = hint || null;
     this.template = template || null; // for pre-computed backbrounds
     // if a template is specified, its background images are used as cache
+    this.enabled = true;
 
     // initialize inherited properties:
     TriggerMorph.uber.init.call(this);
@@ -204,9 +205,11 @@ PushButtonMorph.prototype.mouseDownLeft = function () {
 };
 
 PushButtonMorph.prototype.mouseClickLeft = function () {
-    PushButtonMorph.uber.mouseClickLeft.call(this);
-    if (this.label) {
-        this.label.setCenter(this.center());
+    if (this.enabled) {
+        PushButtonMorph.uber.mouseClickLeft.call(this);
+        if (this.label) {
+            this.label.setCenter(this.center());
+        }
     }
 };
 
@@ -477,6 +480,22 @@ PushButtonMorph.prototype.createLabel = function () {
         );
     }
     this.add(this.label);
+};
+
+// PushButtonMorph states
+
+PushButtonMorph.prototype.disable = function () {
+    this.enabled = false;
+    this.forAllChildren(function (child) {
+        child.alpha = 0.3;
+    });
+};
+
+PushButtonMorph.prototype.enable = function () {
+    this.enabled = true;
+    this.forAllChildren(function (child) {
+        child.alpha = 1;
+    });
 };
 
 // ToggleButtonMorph ///////////////////////////////////////////////////////

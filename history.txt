@@ -3601,12 +3601,31 @@ Fixes:
 * Morphic, Objects: fixed #1843
 * Croation translation update, thanks, Zeljko Hrvoj!
 
+170904
+------
+* Blocks, Objects: fixed #1339
+
+170905
+------
+* German translation update
+* Threads, Objects: Renamed “http” block to “url”, use location.protocol (support https)
+
+170906
+------
+* Blocks, Threads: added “csv” option to the SPLIT primitive
+* Threads: allow https query from locally loaded sources (thanks, Michael, for the hint!)
+
+170908
+------
+* GUI, Objects, Widgets, Symbols: Camera Snapshot Dialog. Thank you, Bernat!!
+
 
 v4.1 Features:
 * polymorphic sprite-local custom blocks
 * inheritance of sprite-local custom blocks
 * inheritance of sprite attributes (x, y, direction, size, costumes, costume #, sounds, scripts)
 * first-class costumes and sounds
+* camera snapshots for costumes and new sprites
 * localization support when typing expressions
 * support for user-forced line-breaks in custom block labels
 * ternary Boolean slot setting: support to limit Boolean input slots to “true/false” outside of rings and in palette
@@ -3625,6 +3644,8 @@ v4.1 Features:
 * two-item lists as x-y coordinate arguments for "point towards”, "go to" and “distance to” primitives
 * Piano keyboard as drop-down menu for entering musical notes, Thanks, Michael!
 * Basic “instruments” support: sine, square, sawtooth and triangle waves
+* Support https in “url” reporter
+* splitting csv-text
 
 Fixes:
 * changed keyboard shortcut indicator for “find blocks” to “^”
@@ -3635,4 +3656,5 @@ Fixes:
 * fixed rotation-bug when flipping costumes in "only turn left/right" mode"
 * fixed variable renaming (“refactoring”) bugs, thanks, Bernat!
 * fixed “fill” block crash when applying the same color twice
+* fixed occasional empty drop-down menu items named “close” 
 * fixed some typos
