@@ -178,11 +178,11 @@ SnapTranslator.dict.ru = {
     'language_name':
         'Русский', // the name as it should appear in the language menu
     'language_translator':
-        'Svetlana Ptashnaya', // your name for the Translators tab
+        'Svetlana Ptashnaya, Проскурнёв Артём', // your name for the Translators tab
     'translator_e-mail':
-        'svetlanap@berkeley.edu', // optional
+        'svetlanap@berkeley.edu, tema@school830.ru', // optional
     'last_changed':
-        '2014-09-29', // this, too, will appear in the Translators tab
+        '2017-09-01', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -222,6 +222,8 @@ SnapTranslator.dict.ru = {
         'Скрипты',
     'Costumes':
         'Костюмы',
+    'Backgrounds':
+        'Фоны',
     'Sounds':
         'Звуки',
 
@@ -237,7 +239,7 @@ SnapTranslator.dict.ru = {
     'can rotate':
         'вращаемый',
     'only face left/right':
-        'вращаемый только на лево и направо',
+        'зеркальное отображение лево-право при вращении',
 
     // new sprite button:
     'add a new sprite':
@@ -245,7 +247,7 @@ SnapTranslator.dict.ru = {
 
     // tab help
     'costumes tab help':
-        'импортируйте изображение с другого веб-сайта\nили со своего компьютера скопировав его сюда',
+        'импортируйте изображение с другого веб-сайта\nили со своего компьютера, скопировав его сюда',
     'import a sound from your computer\nby dragging it into here':
         'импортируйте звук со своего компьютера\nскопировав его сюда',
 
@@ -310,7 +312,7 @@ SnapTranslator.dict.ru = {
     'set y to %n':
         'установить y %n',
     'if on edge, bounce':
-        'на грани развернуться',
+        'на границе развернуться',
     'x position':
         'x позиция',
     'y position':
@@ -406,14 +408,28 @@ SnapTranslator.dict.ru = {
         'установить размер пера %n',
     'stamp':
         'оттиск',
+    'fill':
+        'заливка',
 
     // control:
     'when %greenflag clicked':
-        'когда щелкнуть на %greenflag',
+        'при нажатии на %greenflag',
     'when %keyHat key pressed':
-        'когда нажать %keyHat клавишу',
-    'when I am clicked':
-        'когда щелкнуть на меня',
+        'при нажатии клавиши %keyHat',
+    'when I am %interaction':
+        'когда меня %interaction',
+    'clicked':
+        'кликнут',
+    'pressed':
+        'нажмут',
+    'dropped':
+        'бросят',
+    'mouse-entered':
+        'заденет курсор',
+    'mouse-departed':
+        'покинет курсор',
+    'when %b':
+        'когда %b',
     'when I receive %msgHat':
         'когда я получу %msgHat',
     'broadcast %msg':
@@ -422,28 +438,40 @@ SnapTranslator.dict.ru = {
         'переслать %msg всем и ждать',
     'Message name':
         'Название сообщения',
+    'message':
+        'сообщение',
+    'any message':
+        'любое сообщение',
     'wait %n secs':
         'ждать %n сек.',
     'wait until %b':
-        'ждать пока %b',
+        'ждать до %b',
     'forever %c':
         'непрерывно %c',
     'repeat %n %c':
         'повторять %n %c',
     'repeat until %b %c':
-        'повторять пока %b %c',
+        'повторять пока не %b %c',
     'if %b %c':
         'если %b %c',
     'if %b %c else %c':
         'если %b %c иначе %c',
     'report %s':
         'результат %s',
-    'stop block':
-        'стоп блок',
-    'stop script':
-        'стоп скрипт',
-    'stop all %stop':
-        'стоп все %stop',
+    'stop %stopChoices':
+        'остановить %stopChoices',
+    'all':
+        'всё',
+    'this script':
+        'этот скрипт',
+    'this block':
+        'этот блок',
+    'stop %stopOthersChoices':
+        'стоп %stopOthersChoices',
+    'all but this script':
+        'всех, кроме меня',
+    'other scripts in sprite':
+        'все другие мои скрипты',
     'run %cmdRing %inputs':
         'выполнять %cmdRing %inputs',
     'launch %cmdRing %inputs':
@@ -455,19 +483,29 @@ SnapTranslator.dict.ru = {
     'call %cmdRing w/continuation':
         'вызвать %cmdRing с продолжением',
     'warp %c':
-        'warp %c',
+        'сразу %c',
+    'when I start as a clone':
+        'когда я создан как клон',
+    'create a clone of %cln':
+        'клонировать %cln',
+    'myself':
+        'меня',
+    'delete this clone':
+        'удалить клона',
+    'pause all %pause':
+        'пауза для всех %pause',
 
     // sensing:
     'touching %col ?':
-        'касаеться %col ?',
+        'касается %col ?',
     'touching %clr ?':
-        'касаеться %clr ?',
+        'касается %clr ?',
     'color %clr is touching %clr ?':
         'цвет %clr касаеться %clr ?',
     'ask %s and wait':
         'спросить %s и ждать',
     'what\'s your name?':
-        'как вас зовут?',
+        'Как Вас зовут?',
     'answer':
         'ответ',
     'mouse x':
@@ -484,8 +522,16 @@ SnapTranslator.dict.ru = {
         'переустановить таймер',
     'timer':
         'таймер',
+    '%att of %spr':
+        '%att у %spr',
+    'my %get':
+        'атрибут %get',
     'http:// %s':
         'http:// %s',
+    'turbo mode?':
+        'режим турбо?',
+    'set turbo mode to %b':
+        'установить турбо-режим %b',
 
     'filtered for %clr':
         'отфильтровано для %clr',
@@ -516,7 +562,7 @@ SnapTranslator.dict.ru = {
     'join %words':
         'объединить %words',
     'hello':
-        'привет',
+        'Привет',
     'world':
         'мир',
     'letter %n of %s':
@@ -531,6 +577,8 @@ SnapTranslator.dict.ru = {
         '%s это %typ ?',
     'is %s identical to %s ?':
         '%s тождественно %s ?',
+    'split %s by %delim':
+        'разделить %s по %delim',
 
     'type of %s':
         'тип %s',
@@ -577,6 +625,8 @@ SnapTranslator.dict.ru = {
         'встав. %s в полож. %idx в %l',
     'replace item %idx of %l with %s':
         'заменить элем. %idx в %l на %s',
+    'empty? %l':
+        'пустой? %l',
 
     // other
     'Make a block':
@@ -615,23 +665,51 @@ SnapTranslator.dict.ru = {
     'file menu import hint':
         'загрузить экспортированный проект\nили библиотеку блоков, маску или звук',
     'Export project as plain text...':
-        'Экспорт проект как текстовый файл...',
+        'Экспортировать проект как текстовый файл...',
     'Export project...':
-        'Экспорт проект...',
-    'show project data as XML\nin a new browser window':
+        'Экспортировать проект...',
+    'save project data as XML\nto your downloads folder':
+        'сохранить и скачать проект в виде XML файла',
+    'Export summary...':
+        'Экспортируемая информация...',
+    'open a new browser browser window\n with a summary of this project':
         'представить проектные данные как XML\nв новом окне браузера',
     'Export blocks...':
-        'Экспорт блоки...',
+        'Экспортировать блоки...',
     'show global custom block definitions as XML\nin a new browser window':
         'представить определения глобальных пользовательских блоков как XML\nв новом окне браузера',
+    'Unused blocks...':
+        'Неиспользуемые блоки...',
+    'find unused global custom blocks\nand remove their definitions':
+        'поиск и удаление неиспользуемых блоков',
     'Import tools':
-        'Импорт сервисные ср-ва',
+        'Импортировать сервисные ср-ва',
     'load the official library of\npowerful blocks':
         'загрузить служебную библиотеку блоков',
+    'Backgrounds...':
+        'Фоны...',
+    'Libraries...':
+        'Библиотеки...',
+    'Select categories of additional blocks to add to this project.':
+        'выбрать дополнительные библиотеки блоков\nдля добавления к проекту',
+    'Select a costume from the media library':
+        'Выбор костюма из библиотеки изображений',
+    'Select a sound from the media library':
+        'Выбор звука из медиа-библиотеки',
 
     // settings menu
     'Language...':
         'Язык...',
+    'Zoom blocks...':
+        'Увеличение блоков кода...',
+    'Stage size...':
+        'Размер сцены...',
+    'Stage size':
+        'Размер сцены',
+    'Stage width':
+        'Ширина сцены',
+    'Stage height':
+        'Высота сцены',
     'Blurred shadows':
         'Контрастность тени',
     'uncheck to use solid drop\nshadows and highlights':
@@ -675,7 +753,7 @@ SnapTranslator.dict.ru = {
     'check to enable\ninput sliders for\nentry fields':
         'поставить метку - разрешить использование бегунков\nпри заполнении полей ввода',
     'Clicking sound':
-        'Щелк-звук',
+        'Звук щелчка',
     'uncheck to turn\nblock clicking\nsound off':
         'убрать метку - выключить звук\nпри щелчке на блок',
     'check to turn\nblock clicking\nsound on':
@@ -686,6 +764,44 @@ SnapTranslator.dict.ru = {
         'убрать метку - отключить\nIDE aнимацию',
     'check to enable\nIDE animations':
         'поставить метку - разрешить\nIDE aнимацию',
+    'Turbo mode':
+        'Режим Турбо',
+    'check to prioritize\nscript execution':
+        'отметьте, чтобы ускорить выполнение скрипта',
+    'uncheck to run scripts\nat normal speed':
+        'снимите флажок для выполнения скрипта\nс нормальной скоростью',
+    'Flat design':
+        'Плоский дизайн',
+    'check for alternative\nGUI design':
+        'отметьте для включения\nальтернативного дизайна среды разработки',
+    'uncheck for default\nGUI design':
+        'снимите флажок для включения\nстандартного дизайна среды разработки',
+    'Nested auto-wrapping':
+        'Nested auto-wrapping',
+    'Keyboard Editing':
+        'Редактирование с клавиатуры',
+    'check to enable\nkeyboard editing support':
+        'отметьте, чтобы включить\nвозможность программирования с помощью клавиатуры (Shift+Клик на блок)',
+    'uncheck to disable\nkeyboard editing support':
+        'снимите флажок, чтобы программировать\nтолько мышью без использования клавиатуры',
+    'Table support':
+        'Поддержка таблиц',
+    'uncheck to disable\nmulti-column list views':
+        'снимите флажок для отключения\nвозможности отображения списка в виде таблицы',
+    'check for multi-column\nlist view support':
+        'отметьте для включения\nвозможности отображения списка в виде таблицы',
+    'Table lines':
+        'Выделить линии у таблицы',
+    'uncheck for less contrast\nmulti-column list views':
+        'снимите флажок, чтобы линии таблицы в окне отображения таблиц\nстали менее контрасными',
+    'check for higher contrast\ntable views':
+        'отметьте, чтобы линии таблицы в окне отображения таблиц\nстали более контрасными',
+    'Visible stepping':
+        'Отбражение шагов выполнения',
+    'check to turn on\n visible stepping (slow)':
+        'отметьте, чтобы отображались\nшаги выполнения скрипта (медленно)',
+    'uncheck to turn off\nvisible stepping':
+        'снимите флажок, чтобы отключить отображение\nшагов выполнения скрипта',
     'Thread safe scripts':
         'Защищенность скрипта в многопоточном режиме',
     'uncheck to allow\nscript reentrancy':
@@ -776,6 +892,22 @@ SnapTranslator.dict.ru = {
         'переименовать звук',
 
     // dialogs
+    'Import library':
+        'Загрузка библиотек',
+    'Table view':
+        'Табличный вид',
+    'Save project':
+        'Сохранение проекта',
+    'Export Project As...':
+        'Экспортировать проект как...',
+    'Cloud':
+        'Облако',
+    'Browser':
+        'Браузер',
+    'Examples':
+        'Примеры',
+    
+    
     // buttons
     'OK':
         'OK',
@@ -787,6 +919,10 @@ SnapTranslator.dict.ru = {
         'Да',
     'No':
         'Нет',
+    'Open':
+        'Открыть',
+    'Empty':
+        'Пусто',
 
     // help
     'Help':
@@ -990,6 +1126,8 @@ SnapTranslator.dict.ru = {
     // keys
     'space':
         'пробел',
+    'any key':
+        'любая клавиша',
     'up arrow':
         'стрелка вверх',
     'down arrow':
@@ -1078,6 +1216,10 @@ SnapTranslator.dict.ru = {
     // math functions
     'abs':
         'абсолютное значение',
+    'ceiling':
+        'округление до большего',
+    'floor':
+        'округление до меньшего',
     'sqrt':
         'квадратный корень',
     'sin':
@@ -1097,6 +1239,18 @@ SnapTranslator.dict.ru = {
     'e^':
         'e^',
 
+    // delimiters
+    'letter':
+        'буквам',
+    'whitespace':
+        'пробелам',
+    'line':
+        'строкам',
+    'tab':
+        'табуляторам',
+    'cr':
+        'концам строк',
+        
     // data types
     'number':
         'число',
@@ -1112,6 +1266,8 @@ SnapTranslator.dict.ru = {
         'генератор значений',
     'predicate':
         'предикат',
+    'sprite':
+        'спрайт',
 
     // list indices
     'last':
@@ -1121,6 +1277,61 @@ SnapTranslator.dict.ru = {
     'now connected':
         'вы вошли в систему',
     'undo':
-        'отменить'
+        'отменить',
+        
+    // attributes
+    'neighbors':
+        'соседи',
+    'self':
+        'я',
+    'other sprites':
+        'другие спрайты',
+    'parts':
+        'части',
+    'anchor':
+        'якорь',
+    'parent':
+        'родитель',
+    'children':
+        'потомок',
+    'clones':
+        'клоны',
+    'other clones':
+        'другие клоны',
+    'dangling?':
+        'висячий?',
+    'rotation x':
+        'смещение по x',
+    'rotation y':
+        'смещение по y',
+    'center x':
+        'x центра спрайта',
+    'center y':
+        'y центра спрайта',
+    'name':
+        'имя',
+    'stage':
+        'сцена',
+    //Переводы найденых в программе, но не в файле перевода
+    'current %dates':
+        'сейчас %dates',
+    'year':
+        'год',
+    'month':
+        'месяц',
+    'date':
+        'день',
+    'day of week':
+        'день недели',
+    'hour':
+        'часов',
+    'minute':
+        'минут',
+    'second':
+        'секунд',
+    'time in milliseconds':
+        'время в миллисекундах',
+    'costume name':
+        'имя костюма'
+    
 };
-

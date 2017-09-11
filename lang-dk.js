@@ -2,7 +2,7 @@
 
     lang-dk.js
 
-    German translation for SNAP!
+    Danish translation for SNAP!
 
     written by FAB
 
@@ -185,11 +185,11 @@ SnapTranslator.dict.dk = {
     'language_name':
         'Dansk', // the name as it should appear in the language menu
     'language_translator':
-        'FAB', // your name for the Translators tab
+        'FAB, Pelle Hjek', // your name for the Translators tab
     'translator_e-mail':
-        'fab@nielsen.mail.dk', // optional
+        'fab@nielsen.mail.dk, hjek@mail.com', // optional
     'last_changed':
-        '2013-09-16', // this, too, will appear in the Translators tab
+        '2016-11-16', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -202,33 +202,33 @@ SnapTranslator.dict.dk = {
     'Motion':
         'Bev\u00E6gelse',
     'Looks':
-        'Udseender',
+        'Udseende',
     'Sound':
         'Lyd',
     'Pen':
         'Pensel',
     'Control':
-        'Kontrol',
+        'Styring',
     'Sensing':
-        'Sensorer',
+        'Sansning',
     'Operators':
-        'Operationer',
+        'Operatorer',
     'Variables':
-        'Variabler',
+        'Variable',
     'Lists':
-        'H\u00F8relse',
+        'Lister',
     'Other':
         'Andet',
 
     // editor:
     'draggable':
-        'tr\u00E6kbar',
+        'kan tr\u00E6kkes',
 
     // tabs:
     'Scripts':
-        'Programmer',
+        'Scripts',
     'Costumes':
-        'Udseender',
+        'Kostumer',
     'Sounds':
         'Lyde',
 
@@ -236,23 +236,23 @@ SnapTranslator.dict.dk = {
     'Sprite':
         'Figur',
     'Stage':
-        'Stadie',
+        'Scene',
 
     // rotation styles:
     'don\'t rotate':
-        'Ingen rotation',
+        'roter ikke',
     'can rotate':
-        'Fri rotation',
+        'kan rotere',
     'only face left/right':
-        'Drej kun mod h\u00F8jre/venstre',
+        'vend kun mod h\u00F8jre/venstre',
 
     // new sprite button:
-    'add a new Sprite':
-        'Tilf\u00F8j en ny figur',
+    'add a new Turtle sprite':
+        'Tilf\u00F8j en ny Skildpaddefigur',
 
     // tab help
     'costumes tab help':
-        'Importer et billede fra din computer\n'
+        'Importer et billede fra din computer eller en webside\n'
             + 'ved at tr\u00E6kke det her hen',
     'import a sound from your computer\nby dragging it into here':
         'Importer en lyd fra din computer ved at tr\u00E6kke den her hen',
@@ -291,338 +291,344 @@ SnapTranslator.dict.dk = {
 
     // motion:
     'Stage selected:\nno motion primitives':
-        'B\u00fchne ausgew\u00e4hlt:\nkeine Standardbewegungsbl\u00f6cke\n'
-            + 'vorhanden',
+        'Scene valgt:\ningen bev\u00E6gelsesblokke\n',
 
     'move %n steps':
-        'Flyt %n trin',
+        'g\u00E5 %n trin',
     'turn %clockwise %n degrees':
-        'Drej %clockwise %n grader',
+        'drej %clockwise %n grader',
     'turn %counterclockwise %n degrees':
-        'Drej %counterclockwise %n grader',
+        'drej %counterclockwise %n grader',
     'point in direction %dir':
-        'Skift retning %dir',
+        'peg i retning %dir',
     'point towards %dst':
-        'Se mod %dst',
+        'peg mod %dst',
     'go to x: %n y: %n':
-        'G\u00E5 til x: %n y: %n',
+        'g\u00E5 til x: %n y: %n',
     'go to %dst':
-        'G\u00E5 til %dst',
+        'g\u00E5 til %dst',
     'glide %n secs to x: %n y: %n':
-        'Bev\u00E6g dig %n sek. til x: %n y: %n',
+        'sv\u00E6v i %n sekunder til x: %n y: %n',
     'change x by %n':
-        'L\u00E6g %n til x',
+        '\u00E6ndr x med %n',
     'set x to %n':
-        'S\u00E6t x til %n',
+        's\u00E6t x til %n',
     'change y by %n':
-        'L\u00E6g %n til y',
+        '\u00E6ndr y med %n',
     'set y to %n':
-        'S\u00E6t y til %n',
+        's\u00E6t y til %n',
     'if on edge, bounce':
-        'Undvig v\u00E6g',
+        'hop tilbage ved kanten',
     'x position':
         'x-position',
     'y position':
         'y-position',
     'direction':
-        'Retning',
+        'retning',
 
     // looks:
     'switch to costume %cst':
-        'Skift til udseende %cst',
+        'skift til kostume %cst',
     'next costume':
-        'N\u00E6ste udseende',
+        'n\u00E6ste kostume',
     'costume #':
-        'Udseende nr.',
+        'kostume nummer',
     'say %s for %n secs':
-        'Sig %s i %n sek.',
+        'sig %s i %n sekunder',
     'say %s':
-        'Sig %s',
+        'sig %s',
     'think %s for %n secs':
-        'T\u00E6nk %s i %n sek.',
+        't\u00E6nk %s i %n sekunder',
     'think %s':
-        'T\u00E6nk %s',
+        't\u00E6nk %s',
     'Hello!':
         'Hej!',
     'Hmm...':
         'Hmm...',
     'change %eff effect by %n':
-        'Skift %eff -effekt i %n',
+        '\u00E6ndr effekten %eff med %n',
     'set %eff effect to %n':
-        'S\u00E6t %eff -effekt til %n',
+        's\u00E6t effekten %eff til %n',
     'clear graphic effects':
-        'Ryd grafiske effekter',
+        'ryd grafiske effekter',
     'change size by %n':
-        'Skift st\u00F8rrelse med %n',
+        '\u00E6ndr st\u00F8rrelse med %n',
     'set size to %n %':
-        'S\u00E6t st\u00F8rrelse til %n %',
+        's\u00E6t st\u00F8rrelse til %n %',
     'size':
-        'St\u00F8rrelse',
+        'st\u00F8rrelse',
     'show':
-        'Vis',
+        'vis',
     'hide':
-        'Skjul',
+        'skjul',
     'go to front':
-        'G\u00E5 til forsiden',
+        'kom forrest',
     'go back %n layers':
-        'G\u00E5 %n lag tilbage',
+        'smut %n lag tilbage',
 
     'development mode \ndebugging primitives:':
-        'Udviklertilstand \nfejlfindingsenheder',
+        'udviklertilstand \nfejlfindingsenheder',
     'console log %mult%s':
-        'Skriv i konsollen: %mult%s',
+        'skriv i konsollen: %mult%s',
     'alert %mult%s':
-        'Alarmer: %mult%s',
+        'alarm %mult%s',
 
     // sound:
     'play sound %snd':
-        'Spil lyd %snd',
+        'afspil lyd %snd',
     'play sound %snd until done':
-        'Spil lyd %snd til den er f\u00E6rdig',
+        'afspil lyd %snd indtil f\u00E6rdig',
     'stop all sounds':
-        'Stop alle lyde',
+        'stop alle lyde',
     'rest for %n beats':
-        'Pause lyd i %n slag',
+        'hvil i %n slag',
     'play note %n for %n beats':
-        'Spil node %n i %n slag',
+        'afspil node %n i %n slag',
     'change tempo by %n':
-        'Skift tempoet med %n',
+        '\u00E6ndr tempoet med %n',
     'set tempo to %n bpm':
-        'S\u00E6t tempoet til %n slag/min.',
+        's\u00E6t tempoet til %n slag per minut',
     'tempo':
-        'Tempo',
+        'tempo',
 
     // pen:
     'clear':
-        'Ryd',
+        'ryd',
     'pen down':
-        'Pensel op',
+        'pensel ned',
     'pen up':
-        'Pensel ned',
+        'pensel op',
     'set pen color to %clr':
-        'Penselfarve %clr',
+        's\u00E6t penselfarve til %clr',
     'change pen color by %n':
-        '\u00C6ndr penselfarven med %n',
+        '\u00E6ndr penselfarven med %n',
     'set pen color to %n':
-        'Skift penselfarven til %n',
+        's\u00E6t penselfarven til %n',
     'change pen shade by %n':
-        '\u00C6ndr penselskyggen med %n',
+        '\u00E6ndr penselskyggen med %n',
     'set pen shade to %n':
-        'Skift penselskyggen til %n',
+        's\u00E6t penselskyggen til %n',
     'change pen size by %n':
-        '\u00C6ndr penselst\u00F8rrelsen med %n',
+        '\u00E6ndr penselst\u00F8rrelsen med %n',
     'set pen size to %n':
-        '\u00C6ndr penselst\u00F8rrelsen til %n',
+        's\u00E6t penselst\u00F8rrelsen til %n',
     'stamp':
-        'Stempel',
+        'stempel',
+    'fill':
+        'fyld',
 
     // control:
     'when %greenflag clicked':
-        'N\u00E5r %greenflag klikkes',
+        'n\u00E5r %greenflag klikkes',
     'when %keyHat key pressed':
-        'N\u00E5r der tastes %keyHat',
+        'n\u00E5r %keyHat trykkes',
     'when I am clicked':
-        'N\u00E5r jeg klikkes',
+        'n\u00E5r jeg klikkes',
     'when I receive %msgHat':
-        'N\u00E5r jeg modtager %msgHat',
+        'n\u00E5r jeg modtager %msgHat',
     'broadcast %msg':
-        'Send %msg',
+        'send %msg',
     'broadcast %msg and wait':
-        'Send %msg og vent',
+        'send %msg og vent',
     'Message name':
         'Beskednavn',
     'wait %n secs':
-        'Vent i %n sek.',
+        'vent i %n sekunder',
     'wait until %b':
-        'Vent indtid %b',
+        'Vent indtil %b',
     'forever %c':
-        'Altid %c',
+        'for evigt %c',
     'repeat %n %c':
-        'Gentag %n mal %c',
+        'gentag %n gange %c',
     'repeat until %b %c':
-        'Gentag indtil %b %c',
+        'gentag indtil %b %c',
     'if %b %c':
-        'Hvis %b %c',
+        'hvis %b %c',
     'if %b %c else %c':
-        'Hvis %b %c sonst %c',
+        'hvis %b %c ellers %c',
     'report %s':
-        'Rapporter %s',
+        'papporter %s',
+    'stop':
+        'stop',
     'stop block':
-        'Stop denne blok',
+        'stop blok',
     'stop script':
-        'Stop programmet',
+        'stop script',
     'stop all %stop':
-        'Stop alt %stop',
+        'stop alt %stop',
     'run %cmdRing %inputs':
-        'Udf\u00F8r %cmdRing %inputs',
+        'k\u00F8r %cmdRing %inputs',
     'launch %cmdRing %inputs':
-        'Aktiver %cmdRing %inputs',
+        'igangs\u00E6t %cmdRing %inputs',
     'call %repRing %inputs':
-        'Hent %repRing auf %inputs',
+        'kald %repRing %inputs',
     'run %cmdRing w/continuation':
-        'K\u00F8r %cmdRing med kontinuitet',
+        'k\u00F8r %cmdRing med forts\u00E6ttelse ',
     'call %cmdRing w/continuation':
-        'Hent %cmdRing med kontinuitet',
+        'kald %cmdRing med forts\u00E6ttelse',
     'warp %c':
-        'Genvej %c',
+        'forskyd %c',
     'when I start as a clone':
-        'N\u00E5r jeg starter som klon',
+        'n\u00E5r jeg starter som klon',
     'create a clone of %cln':
-        'Opret klon %cln',
+        'lav en klon af %cln',
     'myself':
-        'Mig',
+        'migselv',
     'delete this clone':
-        'Slet denne klon',
+        'slet denne klon',
+    'pause all':
+        's\u00E6t alt p\u00E5 pause',
 
     // sensing:
     'touching %col ?':
-        'R\u00F8r ved %col ?',
+        'r\u00F8rer ved %col ?',
     'touching %clr ?':
-        'R\u00F8r ved %clr ?',
+        'r\u00F8rer ved %clr ?',
     'color %clr is touching %clr ?':
-        'r\u00F8r farven %clr ved farven %clr ?',
+        'r\u00F8rer farven %clr ved farven %clr ?',
     'ask %s and wait':
-        'Sp\u00F8rg %s og vent',
+        'sp\u00F8rg %s og vent',
     'what\'s your name?':
-        'Hvad hedder du?',
+        'hvad hedder du?',
     'answer':
-        'Svar',
+        'svar',
     'mouse x':
-        'Mus x-position',
+        'mus x',
     'mouse y':
-        'Mus y-Position',
+        'mus y',
     'mouse down?':
-        'Mus aktiveret?',
+        'mus nede?',
     'key %key pressed?':
-        'Tast %key aktiveret?',
+        'tast %key trykket ned?',
     'distance to %dst':
-        'Afstand til %dst',
+        'afstand til %dst',
     'reset timer':
-        'Nulstil timer',
+        'nulstil ur',
     'timer':
-        'Timer',
+        'ur',
     '%att of %spr':
         '%att af %spr',
     'http:// %s':
         'http:// %s',
     'turbo mode?':
-        'Turbotilstand?',
+        'turbotilstand?',
     'set turbo mode to %b':
-        'S\u00E6t turbotilstand til %b',
+        's\u00E6t turbotilstand til %b',
 
     'filtered for %clr':
-        'Rens for %clr',
+        'renset for %clr',
     'stack size':
-        'Stabelst\u00F8rrelse',
+        'stakst\u00F8rrelse',
     'frames':
-        'Ramme',
+        'billeder',
 
     // operators:
     '%n mod %n':
-        '%n mod %n',
+        '%n modulo %n',
     'round %n':
-        'Afrund %n',
+        'afrund %n',
     '%fun of %n':
         '%fun af %n',
     'pick random %n to %n':
-        'V\u00E6lg tilf\u00E6ldigt tal mellem %n og %n',
+        'v\u00E6lg tilf\u00E6ldig %n til %n',
     '%b and %b':
         '%b og %b',
     '%b or %b':
         '%b eller %b',
     'not %b':
-        'Forskellig fra %b',
+        'ikke %b',
     'true':
-        'Sandt',
+        'sandt',
     'false':
-        'Falsk',
+        'falsk',
     'join %words':
-        'Sammens\u00E6t %words',
+        'forbind %words',
     'hello':
-        'Hej',
+        'hej',
     'world':
-        'Verden',
+        'verden',
     'letter %n of %s':
-        'Bogstav %n af %s',
+        'bogstav %n af %s',
     'length of %s':
-        'L\u00E6ngde af %s',
+        'l\u00E6ngde af %s',
     'unicode of %s':
-        'Unicode af %s',
+        'unicode af %s',
     'unicode %n as letter':
-        'Unicode %n som bogstav',
+        'unicode %n som bogstav',
     'is %s a %typ ?':
-        'Er %s et %typ ?',
+        'er %s et %typ ?',
     'is %s identical to %s ?':
-        'Er %s identisk med %s ?',
+        'er %s identisk med %s ?',
 
     'type of %s':
-        'Type af %s',
+        'type af %s',
 
     // variables:
     'Make a variable':
-        'Ny variabel',
+        'lav en variabel',
     'Variable name':
-        'Variabelnavn',
+        'variabelnavn',
     'Delete a variable':
-        'Slet variabel',
+        'slet en variabel',
 
     'set %var to %s':
-        'S\u00E6t %var til %s',
+        's\u00E6t %var til %s',
     'change %var by %n':
-        '\u00C6ndr %var med %n',
+        '\u00E6ndr %var med %n',
     'show variable %var':
-        'Vis variabel %var',
+        'vis variabel %var',
     'hide variable %var':
-        'Skjul variabel %var',
+        'skjul variabel %var',
+// hvad er "script" paa dansk?
     'script variables %scriptVars':
-        'Programvariabler %scriptVars',
+        'scriptvariable %scriptVars',
 
     // lists:
     'list %exp':
-        'Liste %exp',
+        'liste %exp',
     '%s in front of %l':
         '%s foran %l',
     'item %idx of %l':
-        'Element %idx af %l',
+        'genstand %idx af %l',
     'all but first of %l':
-        'Alle, undtagen det f\u00F8rste af %l',
+        'alle undtagen den f\u00F8rste af %l',
     'length of %l':
-        'L\u00E6ngde af %l',
+        'l\u00E6ngde af %l',
     '%l contains %s':
         '%l indeholder %s',
     'thing':
         'ting',
     'add %s to %l':
-        'Tilf\u00F8j %s til %l',
+        'tilf\u00F8j %s til %l',
     'delete %ida of %l':
-        'Slet %ida fra %l',
+        'slet %ida fra %l',
     'insert %s at %idx of %l':
-        'Inds\u00E6t %s ved %idx i %l ein',
+        'inds\u00E6t %s ved %idx i %l',
     'replace item %idx of %l with %s':
-        'Erstat element %idx af %l med %s',
+        'erstat genstand %idx af %l med %s',
 
     // other
     'Make a block':
-        'Ny blok',
+        'Lav en blok',
 
     // menus
     // snap menu
     'About...':
-        'Om Snap!...',
+        'Om...',
     'Reference manual':
-        'Manual',
+        'Referencemanual',
     'Snap! website':
-        'Snap! Hjemmeside',
+        'Snap! hjemmeside',
     'Download source':
         'Hent kildekode',
     'Switch back to user mode':
-        'Skift til brugertilstand',
+        'Skift tilbage til brugertilstand',
     'disable deep-Morphic\ncontext menus\nand show user-friendly ones':
-        'Sl\u00E5 Morphics fra \nog vis brugervenlige \ni stedet',
+        'sl\u00E5 deep-Morphics kontekstmenuer fra \nog vis brugervenlige \ni stedet',
     'Switch to dev mode':
         'Skift til udviklertilstand',
     'enable Morphic\ncontext menus\nand inspectors,\nnot user-friendly!':
-        'erm\u00f6glicht Morphic Funktionen',
+        's\u00E6t deep-Morphics kontekstmenuer til \nog vis brugervenlige \ni stedet',
 
     // project menu
     'Project Notes...':
@@ -630,7 +636,7 @@ SnapTranslator.dict.dk = {
     'New':
         'Ny',
     'Open...':
-        '\u00C5ben...',
+        '\u00C5bn...',
     'Save':
         'Gem',
     'Save As...':
@@ -639,186 +645,242 @@ SnapTranslator.dict.dk = {
         'Importer...',
     'file menu import hint':
         'Importer et eksporteret projekt,'
-            + 'et blokbibliotek, et udseende'
+            + 'et blokbibliotek, et kostume'
             + 'eller en lydfil',
     'Export project as plain text ...':
         'Eksporter projekt som ren tekst...',
     'Export project...':
         'Eksporter projekt...',
+    'Export summary...':
+        'Eksporter opsummering...',
     'show project data as XML\nin a new browser window':
         'Vis projekt som XML\ni et nyt browservindue',
     'Export blocks ...':
         'Eksporter blokke...',
     'show global custom block definitions as XML\nin a new browser window':
-        'Vis global udseendeblok-definition som XML/i et nyt browservindue',
-    'Import tools...':
+        'Vis globale tilpassede blokdefinitioner som XML\ni et nyt browser-vindue',
+    'Import tools':
         'Importer v\u00E6rkt\u00F8jer...',
     'load the official library of\npowerful blocks':
-        'Hent det officielle bibliotek med \neffektive blokke',
+        'Indl\u00E6s det officielle bibliotek med \nkraftfulde blokke',
+    'Libraries...':
+        'Biblioteker...',
+    'Import library':
+        'Importer bibliotek',
 
     // cloud menu
     'Login...':
         'Login...',
     'Signup...':
         'Registrer...',
+    'Reset Password...':
+        'Nulstil kodeord...',
 
     // settings menu
     'Language...':
         'Sprog...',
+    'Zoom blocks...':
+        'Forst\u00F8r blokke...',
+    'Stage size...':
+        'Scenest\u00F8rrelse...',
+    'Stage size':
+        'Scenest\u00F8rrelse',
+    'Stage width':
+        'Scenebredde',
+    'Stage height':
+        'Sceneh\u00F8jde',
     'Blurred shadows':
-        'Sl\u00F8rrede skygger',
+        'Sl\u00F8rede skygger',
     'uncheck to use solid drop\nshadows and highlights':
-        'Fjern flueben for solide skygger og fremh\u00E6velser',
+        'afmarker for at bruge h\u00E5rde skygger og fremh\u00E6velser',
     'check to use blurred drop\nshadows and highlights':
-        'S\u00E6t flueben for sl\u00F8rrede \nskygger og fremh\u00E6velser',
+        'marker for at bruge bl\u00F8de \nskygger og fremh\u00E6velser',
     'Zebra coloring':
-        'Zebrafarver',
+        'Zebrafarvning',
     'check to enable alternating\ncolors for nested blocks':
-        'S\u00E6t flueben for at \u00E6ndre \nfarven af indlejrede blokke',
+        'marker for at vise skiftende \nfarver for blokke inden i hinanden',
     'uncheck to disable alternating\ncolors for nested block':
-        'Fjern flueben for at forhindre \n\u00E6ndring i farven af indlejrede blokke',
+        'afmarker for ikke at vise skiftende \nfarver for blokke inden i hinanden',
     'Dynamic input labels':
         'Dynamiske inputm\u00E6rkater',
     'uncheck to disable dynamic\nlabels for variadic inputs':
-        'Fjen flueben for at forhindre \nm\u00E6rkater til variable input',
+// what does variadic even mean?
+        'afmarker for ikke at vise dynamiske \nm\u00E6rkater til varierende input',
     'check to enable dynamic\nlabels for variadic inputs':
-        'S\u00E6t flueben for at forhindre \nm\u00E6rkater til variable input',
+        'marker for at vise dynamiske \nm\u00E6rkater til varierende input',
     'Prefer empty slot drops':
-        'Foretr\u00E6k tomme slot drops',
+        'Foretr\u00E6k tomme hylstre',
     'settings menu prefer empty slots hint':
-        'Settingen foretr\u00E6kker tomme slot hints',
+        'indstillingsmenu foretr\u00E6kker tomme hylstre',
     'uncheck to allow dropped\nreporters to kick out others':
-        'Fjern flueben for at tillade indsatte rapporter at fjerne andre',
+        'afmarker for at lade indsatte rapport\u00F8rer sparke andre ud',
     'Long form input dialog':
-        'Lang form input-dialog',
+        'Lang formularinputdialog',
+    'Plain prototype labels':
+        'Klare prototypem\u00E6rkater',
     'check to always show slot\ntypes in the input dialog':
-        'S\u00E6t flueben for \naltid at vise slottyper i input-dialog',
+        'marker for \naltid at vise hylstertyper i inputdialog',
     'uncheck to use the input\ndialog in short form':
-        'Fjern flueben for at anvende input-dialog i kort format',
+        'afmarker for at bruge inputsdialogen i kort form',
     'Virtual keyboard':
-        'Virtuel tastatur',
+        'Virtuelt tastatur',
     'uncheck to disable\nvirtual keyboard support\nfor mobile devices':
-        'Fjern flueben for at forhindre brug \naf virtuel tastetur til mobile enheder',
+        'afmarker for at fjerne underst\u00F8ttelse \naf virtuelt tastetur til mobile enheder',
     'check to enable\nvirtual keyboard support\nfor mobile devices':
-        'S\u00E6t flueben for at tillade brug \naf virtuel tastetur til mobile enheder ',
+        'marker for at bruge underst\u00F8ttelse \naf virtuelt tastetur til mobile enheder ',
     'Input sliders':
-        'Input sliders',
+        'Indtastningsskydeknapper',
     'uncheck to disable\ninput sliders for\nentry fields':
-        'Fjern flueben \nfor ikke at tillade \nsliders i inputfelter',
+        'afmarker \nfor at fjerne \nskydeknapper i inputfelter',
     'check to enable\ninput sliders for\nentry fields':
-        'S\u00E6t flueben \nfor at tillade \nsliders i inputfelter',
+        'marker \nfor at vise \nskydeknapper i inputfelter',
     'Clicking sound':
         'Kliklyd',
     'uncheck to turn\nblock clicking\nsound off':
-        'Fjern flueben for \nat fjerne blokkliklyden',
+        'afmarker for \nat slukke for blokkliklyd',
     'check to turn\nblock clicking\nsound on':
-        'S\u00E6t flueben ',
+        'marker til for at t\u00E6nde for blokkliklyd',
     'Animations':
         'Animationer',
     'uncheck to disable\nIDE animations':
-        'Fjern flueben for at deaktivere IDE-animationer',
+        'afmarker for at fjerne IDE-animationer',
+    'Flat design':
+        'Fladt udseende',
+    'check for alternative GUI design':
+        'marker for alternativ grafisk brugerflade',
+    'uncheck for default GUI design':
+        'afmarker for s\u00E6dvanlig brugerflade',
+    'Nested auto-wrapping':
+        'Automatisk omklamring',
+    'Keyboard Editing':
+        'Tastaturredigering',
+    'Table support':
+        'Tabelunderst\u00F8ttelse',
+    'Table lines':
+        'Tabeller med linjer',
+    'Visible stepping':
+        'Synlig gennemgang',
     'Turbo mode':
-        'Turbotilstand',
+        'Hurtig gennemgang',
     'check to prioritize\nscript execution':
-        'S\u00E6t flueben for at prioritere dette program',
+        'marker for at prioritere scriptudf\u00F8rsel',
     'uncheck to run scripts\nat normal speed':
-        'Fjern flueben for at afvikle programmet i almindeligt tempo',
+        'afmarker for at afvikle scriptet i normal hastighed',
     'check to enable\nIDE animations':
-        'S\u00E6t flueben for at tillade IDE-animationer',
+        'marker for at bruge IDE-animationer',
     'Thread safe scripts':
-        'Thread safe programmer',
+        'Tr\u00E5dsikre scripts',
     'uncheck to allow\nscript reentrance':
-        'Fjern flueben for at tillade program\u00E6ndringer',
+        'afmarker for at tillade scriptgenindgang',
     'check to disallow\nscript reentrance':
-        'S\u00E6t flueben for at forhindre program\u00E6ndringer ',
+        'marker for at forbyde scriptgenindgang',
     'Prefer smooth animations':
         'Foretr\u00E6k flydende animationer',
     'uncheck for greater speed\nat variable frame rates':
-        'Fjern flueben for \u00F8get framehastighed',
+        'afmarker for \u00F8get afspildningshastighed ved variabel billedfrekvens',
     'check for smooth, predictable\nanimations across computers':
-        'Kontroller at animationerne k\u00E6rer ordenligt',
+        'marker for flydende, forudsigelige animationer p\u00E5 forskellige computere',
+    'Flat line ends':
+        'Flade penselstr\u00F8g',
+    'check for flat ends of lines':
+        'marker for flade\npenselstr\u00F8g',
+    'uncheck for round ends of lines':
+        'afmarker for afrundede linjespidser',
+    'Codification support':
+        'Afkodningsunderst\u00F8ttelse',
+    'Inheritance support':
+        'Nedarvningsunderst\u00F8gttelse',
+
 
     // inputs
     'with inputs':
-        'Med inputs',
+        'med input',
     'input names:':
-        'Inputnavne:',
+        'inputnavne:',
     'Input Names:':
         'Inputnavne:',
     'input list:':
-        'Inputliste:',
+        'inputliste:',
 
     // context menus:
     'help':
-        'Hj\u00E6lp',
+        'hj\u00E6lp',
 
     // blocks:
     'help...':
-        'Hj\u00E6lp...',
+        'hj\u00E6lp...',
     'relabel...':
-        'Nyt m\u00E6rkat...',
+        'nyt m\u00E6rkat...',
     'duplicate':
-        'Dupliker',
+        'dupliker',
     'make a copy\nand pick it up':
-        'Lav en kopi og saml den op',
+        'lav en kopi og saml den op',
     'only duplicate this block':
-        'Dupliker kun denne blok',
+        'dupliker kun denne blok',
     'delete':
-        'Slet',
+        'slet',
     'script pic...':
-        'Programbilled...',
+        'scriptbillede...',
     'open a new window\nwith a picture of this script':
-        '\u00C5ben et nyt vindue \nmed et billede af dette program',
+        '\u00E5bn et nyt vindue \nmed et billede af dette script',
     'ringify':
-        'Omkrans',
+        'omring',
     'unringify':
-        'Fjern omringning',
+        'fjern omringning',
 
     // custom blocks:
     'delete block definition...':
-        'Slet blokdefinitionen',
+        'slet blokdefinitionen...',
     'edit...':
-        'Rediger...',
+        'rediger...',
 
     // sprites:
     'edit':
-        'Rediger',
+        'rediger',
+    'move':
+        'flyt',
+    'detach from':
+        'l\u00F8sriv fra',
+    'detach all parts':
+        'L\u00F8sriv alle dele',
     'export...':
-        'Eksporter...',
+        'eksporter...',
+    'paint a new sprite':
+        'mal en ny figur',
 
     // stage:
     'show all':
-        'Vis alle',
+        'vis alle',
 
     // scripting area
     'clean up':
-        'Ryd op',
+        'ryd op',
     'arrange scripts\nvertically':
-        'Arranger programmer \nvertikalt',
+        'arranger scripts \nlodret',
     'add comment':
-        'Tilf\u00F8j kommentar',
+        'tilf\u00F8j kommentar',
     'make a block...':
-        'Lav en ny blok…',
+        'lav en blok...',
 
     // costumes
     'rename':
-        'Skift navn',
+        'skift navn',
     'export':
-        'Eksporter',
+        'eksporter',
     'rename costume':
-        'Skift costumenavn',
+        'skift kostumenavn',
 
     // sounds
     'Play sound':
-        'Spil lyd',
+        'Afspil lyd',
     'Stop sound':
         'Stop lyd',
     'Stop':
         'Stop',
     'Play':
-        'Spil',
+        'Afspil',
     'rename sound':
-        'Skift lydens navn',
+        'skift lydens navn',
 
     // dialogs
     // buttons
@@ -827,7 +889,7 @@ SnapTranslator.dict.dk = {
     'Ok':
         'OK',
     'Cancel':
-        'Luk',
+        'Annuller',
     'Yes':
         'Ja',
     'No':
@@ -841,7 +903,7 @@ SnapTranslator.dict.dk = {
     'Untitled':
         'Unavngivet',
     'Open Project':
-        '\u00C5ben projekt',
+        '\u00C5bn projekt',
     '(empty)':
         '(tom)',
     'Saved!':
@@ -849,29 +911,29 @@ SnapTranslator.dict.dk = {
     'Delete Project':
         'Slet projekt',
     'Are you sure you want to delete':
-        'Er du sikker p\u00E5 at du vil slette projektet?',
+        'Er du sikker p\u00E5 at du vil slette',
     'rename...':
-        'Skift navn...',
+        'skift navn...',
 
     // costume editor
     'Costume Editor':
-        'Udseendedesigner',
+        'Kostumev\u00E6rkt\u00F8j',
     'click or drag crosshairs to move the rotation center':
-        'Tryk og tr\00E6k med krydset for at flytte omdrejningscentrum',
+        'klik eller tr\00E6k med sigtekornet for at flytte omdrejningspunktet',
 
     // project notes
-    'Project Notes':
-        'Projektnoter',
+    'Project notes...':
+        'Projektnoter...',
 
     // new project
     'New Project':
         'Nyt projekt',
     'Replace the current project with a new one?':
-        'Erstat det nuv\u00E6rende projekt med et nyt?',
+        'Erstat det nuv\u00E6rende projekt med et nyt et?',
 
     // save project
     'Save Project As...':
-        'Gem projektet som...',
+        'Gem projekt som...',
 
     // export blocks
     'Export blocks':
@@ -879,19 +941,19 @@ SnapTranslator.dict.dk = {
     'Import blocks':
         'Importer blokke',
     'this project doesn\'t have any\ncustom global blocks yet':
-        'Dette projekt har ikke nogen unikke globale blokke endnu',
+        'dette projekt har ingen tilpassede globale blokke endnu',
     'select':
-        'V\u00E6lg',
+        'v\u00E6lg',
     'all':
-        'Alle',
+        'alle',
     'none':
-        'Ingen',
+        'ingen',
 
     // variable dialog
     'for all sprites':
-        'For alle figurer',
+        'for alle figurer',
     'for this sprite only':
-        'Kun for denne figur',
+        'kun for denne figur',
 
     // block dialog
     'Change block':
@@ -899,19 +961,19 @@ SnapTranslator.dict.dk = {
     'Command':
         'Kommando',
     'Reporter':
-        'Funktion',
+        'Rapport\u00F8r',
     'Predicate':
-        'Pr\u00E5tegning',
+        'Pr\u00E6dikat',
 
     // block editor
     'Block Editor':
-        'Blokdesigner',
+        'Blokv\u00E6rkt\u00F8j',
     'Apply':
         'Anvend',
 
     // block deletion dialog
     'Delete Custom Block':
-        'Slet unik blok',
+        'Slet tilpasset blok',
     'block deletion dialog text':
         'Skal denne blok virkelig slettes?',
 
@@ -923,87 +985,87 @@ SnapTranslator.dict.dk = {
     'Edit label fragment':
         'Rediger m\u00E6rkat',
     'Title text':
-        'Overskiftstekst',
+        'Titelstekst',
     'Input name':
-        'Imputnavn',
+        'inputnavn',
     'Delete':
         'Slet',
     'Object':
         'Objekt',
     'Number':
-        'Nummer',
+        'Tal',
     'Text':
         'Tekst',
     'List':
         'Liste',
     'Any type':
-        'Tilf\u00E6ldig skriftstype',
+        'Hvad som helst',
     'Boolean (T/F)':
-        'Boolsk (W/F)',
+        'Boolsk (S/F)',
     'Command\n(inline)':
-        'Befehl',
+        'Kommando\n(integreret)',
     'Command\n(C-shape)':
-        'Befehl\n(C-Form)',
+        'Kommando\n(C-form)',
     'Any\n(unevaluated)':
-        'Tilf\u00E5ldig\n(uevalueret)',
+        'Hvad som helst\n(uevalueret)',
     'Boolean\n(unevaluated)':
-        'Boolsk\n(zitiert)',
+        'Boolsk\n(uevalueret)',
     'Single input.':
-        'Enkelt input.',
+        'Enkel input.',
     'Default Value:':
-        'Startv\u00E6rdi:',
+        'V\u00E6rdi som udgangspunkt:',
     'Multiple inputs (value is list of inputs)':
-        'Flere input (v\u00E6rdier fra liste)',
+        'Flere inputs (v\u00E6rdi er liste af inputs)',
     'Upvar - make internal variable visible to caller':
-        'G\u00F8r interne variabler synlige',
+        'Opvar - g\u00F8r interne variable synlige for kalderen',
 
     // About Snap
     'About Snap':
-        'Om  Snap',
+        'Om Snap',
     'Back...':
         'Tilbage...',
     'License...':
-        'Licens...',
+        'Lisens...',
     'Modules...':
-        'Komponenter...',
+        'Moduler...',
     'Credits...':
-        'Medvirkende...',
+        'Anerkendelse...',
     'Translators...':
         'Overs\u00E6ttere',
     'License':
         'Licens',
     'current module versions:':
-        'Komponentversion',
+        'Nuv\u00E6rende modulversioner',
     'Contributors':
-        'Medvirkende',
+        'Bidragydere',
     'Translations':
-        'Overs\u00E6ttere',
+        'Overs\u00E6ttelser',
 
     // variable watchers
     'normal':
-        'Normal',
+        'normal',
     'large':
-        'Stor',
+        'stor',
     'slider':
-        'Skydeknap',
+        'skydeknap',
     'slider min...':
-        'Skydeknap minimum...',
+        'skydeknap minimum...',
     'slider max...':
-        'Skydeknap maksimum...',
+        'skydeknap maksimum...',
     'import...':
-        'Importer...',
+        'importer...',
     'Slider minimum value':
-        'Skydeknap minimumsv\u00E6rdi:',
+        'skydeknap minimumsv\u00E6rdi:',
     'Slider maximum value':
-        'Skydeknap maksimumsv\u00E6rdi:',
+        'skydeknap maksimumsv\u00E6rdi:',
 
     // list watchers
     'length: ':
-        'L\u00E6ngde: ',
+        'l\u00E6ngde: ',
 
     // coments
     'add comment here...':
-        'Tilf\u00F8j kommentar',
+        'tilf\u00F8j kommentar her...',
 
     // drow downs
     // directions
@@ -1018,33 +1080,53 @@ SnapTranslator.dict.dk = {
 
     // collision detection
     'mouse-pointer':
-        'Musemark\u00F8r',
+        'musemark\u00F8r',
     'edge':
-        'Kant',
+        'kant',
     'pen trails':
-        'Penselspor',
+        'penselspor',
 
     // costumes
     'Turtle':
-        'Mark\u00F8r',
+        'Skildpadde',
     'Empty':
         'Tom',
 
     // graphical effects
     'ghost':
-        'Sp\u00F8gelseseffekt',
+        'sp\u00F8gelse',
+    'color':
+        'farve',
+    'fisheye':
+        'fiske\u00F8je',
+    'whirl':
+        'hvirvel',
+    'pixelate':
+        'pixeler',
+    'mosaic':
+        'mosaik',
+    'negative':
+        'negativ',
+    'comic':
+        'tegneserie',
+    'confetti':
+        'konfetti',
+    'saturation':
+        'm\u00E6tning',
+    'brightness':
+        'lysstyrke',
 
     // keys
     'space':
-        'Mellemrum',
+        'mellemrum',
     'up arrow':
-        'Pil op',
+        'pil op',
     'down arrow':
-        'Pil ned',
+        'pil ned',
     'right arrow':
-        'Pil h\u00F8jre',
+        'pil h\u00F8jre',
     'left arrow':
-        'Pil venstre',
+        'pil venstre',
     'a':
         'a',
     'b':
@@ -1120,11 +1202,11 @@ SnapTranslator.dict.dk = {
 
     // messages
     'new...':
-        'Ny...',
+        'ny...',
 
     // math functions
     'abs':
-        'absolut v\u00E6rdi',
+        'absolut',
     'sqrt':
         'kvadratrod',
     'sin':
@@ -1146,23 +1228,23 @@ SnapTranslator.dict.dk = {
 
     // data types
     'number':
-        'Tal',
+        'tal',
     'text':
-        'Tekst',
+        'tekst',
     'Boolean':
-        'Boolsk',
+        'boolsk',
     'list':
-        'Liste',
+        'liste',
     'command':
-        'Kommando',
+        'kommando',
     'reporter':
-        'Funktionsblok',
+        'rapport\u00F8r',
     'predicate':
-        'Pr\u00e4dikat',
+        'pr\u00e4dikat',
 
     // list indices
     'last':
-        'Sidst',
+        'sidste',
     'any':
-        'Tilf\u00E6ldig'
+        'hvilken som helst'
 };

@@ -22,15 +22,19 @@
 		<script type="text/javascript" src="lists.js"></script>
 		<script type="text/javascript" src="byob.js"></script>
 		<script type="text/javascript" src="scribble/changesToBYOB.js"></script>
+		<script type="text/javascript" src="tables.js"></script>
+		<script type="text/javascript" src="symbols.js"></script>
 		<script type="text/javascript" src="xml.js"></script>
 		<script type="text/javascript" src="store.js"></script>
 		<script type="text/javascript" src="cloud.js"></script>
 		<script type="text/javascript" src="sha512.js"></script>
         <script type="text/javascript" src="jszip/jszip.js"></script>
+		<script type="text/javascript" src="FileSaver.min.js"></script>
 		<script type="text/javascript">
 			var world;
 			window.onload = function () {
 				world = new WorldMorph(document.getElementById('world'));
+                world.worldCanvas.focus();
 				var ide = new IDE_Morph();
                 ide.openIn(world);
                 window.onInteractiveLoad = function() {
@@ -41,9 +45,10 @@
 				        ide.toggleAppMode(true);
                     }
                 }
-				setInterval(loop, 1);
+		        loop();
 			};
 			function loop() {
+        		requestAnimationFrame(loop);
 				world.doOneCycle();
 			}
 		</script>

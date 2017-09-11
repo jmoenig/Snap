@@ -1,27 +1,27 @@
 /*
 
-	lang-de.js
+  lang-de.js
 
-	German translation for SNAP!
+  German translation for SNAP!
 
-	written by Jens Mönig
+  written by Jens Mönig
 
-	Copyright (C) 2012 by Jens Mönig
+  Copyright (C) 2012 by Jens Mönig
 
-	This file is part of Snap!.
+  This file is part of Snap!.
 
-	Snap! is free software: you can redistribute it and/or modify
-	it under the terms of the GNU Affero General Public License as
-	published by the Free Software Foundation, either version 3 of
-	the License, or (at your option) any later version.
+  Snap! is free software: you can redistribute it and/or modify
+  it under the terms of the GNU Affero General Public License as
+  published by the Free Software Foundation, either version 3 of
+  the License, or (at your option) any later version.
 
-	This program is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-	GNU Affero General Public License for more details.
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU Affero General Public License for more details.
 
-	You should have received a copy of the GNU Affero General Public License
-	along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  You should have received a copy of the GNU Affero General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 
@@ -171,28 +171,40 @@ SnapTranslator.dict.fr = {
 /*
     Special characters: (see <http://0xcc.net/jsescape/>)
 
-    Ä, ä   \u00c4, \u00e4
-    Ö, ö   \u00d6, \u00f6
-    Ü, ü   \u00dc, \u00fc
-    ß      \u00df
+    À      \u00C0
+    à      \u00E0
+    É      \u00C9
+    è      \u00E8
+    é      \u00E9
+    ê      \u00EA
+    ç      \u00E7
+    ï      \u00EF
+    ô      \u00F4
+    ù      \u00F9
+    °      \u00B0
+    '      \u0027
+    «      \u00AB
+    »      \u00BB
+    ↔      \u2194
+    ↕      \u2195
 */
 
     // translations meta information
     'language_name':
         'Fran\u00E7ais', // the name as it should appear in the language menu
     'language_translator':
-        'Jean-Jacques Valliet, Mark Rafter, Martin Quinson', // your name for the Translators tab
+        'Jean-Jacques Valliet, Mark Rafter, Martin Quinson, Damien Caselli', // your name for the Translators tab
     'translator_e-mail':
         'i.scool@mac.com', // optional
     'last_changed':
-        '2015-06-25', // this, too, will appear in the Translators tab
+        '2016-10-27', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
     'untitled':
         'Sans Titre',
     'development mode':
-        'mode de d\u00E9veloppeur',
+        'mode d\u00E9veloppeur',
 
     // categories:
     'Motion':
@@ -339,11 +351,11 @@ SnapTranslator.dict.fr = {
     'think %s':
         'penser %s',
     'Hello!':
-        'Salut!',
+        'Salut !',
     'Hmm...':
         'Mmmh...',
     'change %eff effect by %n':
-        'ajouter  \u00E0 l\u0027effet %eff  %n',
+        'ajouter \u00E0 l\u0027effet %eff %n',
     'set %eff effect to %n':
         'mettre l\u0027effet %eff \u00E0 %n',
     'clear graphic effects':
@@ -411,6 +423,8 @@ SnapTranslator.dict.fr = {
         'choisir la taille %n pour le stylo',
     'stamp':
         'estampiller',
+    'fill':
+        'remplir',
 
       // control:
     'when %greenflag clicked':
@@ -419,8 +433,8 @@ SnapTranslator.dict.fr = {
         'Quand %keyHat est press\u00E9',
     'when I am clicked':
         'Quand je suis press\u00E9 ',
-	'when I am %interaction':
-		'Quand je suis %interaction',
+  'when I am %interaction':
+    'Quand je suis %interaction',
     'when I receive %msgHat':
         'Quand je re\u00E7ois %msgHat',
     'broadcast %msg':
@@ -440,19 +454,19 @@ SnapTranslator.dict.fr = {
     'repeat until %b %c':
         'r\u00E9p\u00E9ter jusqu\u0027\u00E0 %b %c',
     'if %b %c':
-        'si %b  %c',
+        'si %b %c',
     'if %b %c else %c':
-        'si %b  %c sinon %c',
+        'si %b %c sinon %c',
     'report %s':
         'rapporte %s',
     'stop block':
         'arr\u00EAter le bloc',
     'stop script':
         'arr\u00EAter le script',
-	'stop %stopOthersChoices':
-		'arr\u00EAter %stopOthersChoices',
-	'stop %stopChoices':
-		'arr\u00EAter %stopChoices',
+  'stop %stopOthersChoices':
+    'arr\u00EAter %stopOthersChoices',
+  'stop %stopChoices':
+    'arr\u00EAter %stopChoices',
     'stop all %stop':
         'arr\u00EAter tout %stop',
     'run %cmdRing %inputs':
@@ -460,7 +474,7 @@ SnapTranslator.dict.fr = {
     'launch %cmdRing %inputs':
         'lance %cmdRing %inputs',
     'call %repRing %inputs':
-        'appelle %repRing  %inputs',
+        'appelle %repRing %inputs',
     'run %cmdRing w/continuation':
         'ex\u00E9cute %cmdRing avec continuation',
     'call %cmdRing w/continuation':
@@ -477,26 +491,26 @@ SnapTranslator.dict.fr = {
         'supprime ce clone',
     'pause all %pause':
         'mettre en pause %pause',
-	'all but this script':
-		'tout sauf ce lutin',
-	'other scripts in sprite':
-		'les autres scripts de ce lutin',
-	'this script':
-		'ce script',
-	'this block':
-		'ce bloc',
-        
+  'all but this script':
+    'tout sauf ce script',
+  'other scripts in sprite':
+    'les autres scripts de ce lutin',
+  'this script':
+    'ce script',
+  'this block':
+    'ce bloc',
+
      // sensing:
     'touching %col ?':
-        ' %col touch\u00E9?',
+        '%col touch\u00E9 ?',
     'touching %clr ?':
-        ' couleur %clr touch\u00E9e?',
+        'couleur %clr touch\u00E9e ?',
     'color %clr is touching %clr ?':
         'couleur %clr touche %clr ?',
     'ask %s and wait':
         'demander %s et attendre',
     'what\'s your name?':
-        'Quel est ton nom?',
+        'Quel est ton nom ?',
     'answer':
         'r\u00E9ponse',
     'mouse x':
@@ -504,9 +518,9 @@ SnapTranslator.dict.fr = {
     'mouse y':
         'souris y',
     'mouse down?':
-        'souris press\u00E9e?',
+        'souris press\u00E9e ?',
     'key %key pressed?':
-        'touche %key press\u00E9e?',
+        'touche %key press\u00E9e ?',
     'distance to %dst':
         'distance de %dst',
     'reset timer':
@@ -515,15 +529,17 @@ SnapTranslator.dict.fr = {
         'chronom\u00E8tre',
     '%att of %spr':
         '%att de %spr',
+    'my %get':
+        'attribut %get',
     'http:// %s':
         'http:// %s',
     'turbo mode?':
-        'turbo mode activ\u00E9?',
+        'turbo mode activ\u00E9 ?',
     'set turbo mode to %b':
         'turbo mode prend la valeur %b',
 
     'filtered for %clr':
-        'filtr\u00E9 pour %clr ',
+        'filtr\u00E9 pour %clr',
     'stack size':
         'taille de la pile',
     'frames':
@@ -565,9 +581,9 @@ SnapTranslator.dict.fr = {
     'unicode %n as letter':
         'unicode %n comme lettre',
     'is %s a %typ ?':
-        'est %s un(e) %typ ?',
+        '%s est un(e) %typ ?',
     'is %s identical to %s ?':
-        '%s est identique \u00E0 %s',
+        '%s est identique \u00E0 %s ?',
 
     'type of %s':
         'type de %s',
@@ -583,9 +599,9 @@ SnapTranslator.dict.fr = {
     'set %var to %s':
         '%var prend la valeur %s',
     'change %var by %n':
-        'ajouter \u00E0 %var %n ',
+        'ajouter \u00E0 %var %n',
     'show variable %var':
-        'afficher la variable  %var',
+        'afficher la variable %var',
     'hide variable %var':
         'cacher la variable %var',
     'script variables %scriptVars':
@@ -599,7 +615,7 @@ SnapTranslator.dict.fr = {
     'item %idx of %l':
         '\u00E9l\u00E9ment %idx de %l',
     'all but first of %l':
-        'tous sauf le premier de  %l',
+        'tous sauf le premier de %l',
     'length of %l':
         'longueur de %l',
     '%l contains %s':
@@ -622,7 +638,9 @@ SnapTranslator.dict.fr = {
    // menus
     // snap menu
     'About...':
-        'A propos de Snap!...',
+        '\u00C0 propos de Snap!...',
+    'Reference manual':
+        'Manuel de r\u00E9f\u00E9rence',
     'Snap! website':
         'Snap! le site web',
     'Download source':
@@ -632,7 +650,7 @@ SnapTranslator.dict.fr = {
     'disable deep-Morphic\ncontext menus\nand show user-friendly ones':
         'd\u00E9sactiver la fonction morphic',
     'Switch to dev mode':
-        'Passer en mode d\u00E9velopper',
+        'Passer en mode d\u00E9veloppeur',
     'enable Morphic\ncontext menus\nand inspectors,\nnot user-friendly!':
         'activer la fonction morphic',
 
@@ -657,12 +675,28 @@ SnapTranslator.dict.fr = {
         'Exporter le projet comme texte...',
     'Export project...':
         'Exporter le projet...',
+    'save project data as XML\nto your downloads folder':
+        'sauvegarder le projet au\nformat XML dans votre\ndossier T\u00E9l\u00E9chargements',
     'show project data as XML\nin a new browser window':
         'ouvrir le projet au format XML\ndans une nouvelle fen\u00EAtre de votre navigateur',
     'Export blocks...':
         'Exporter les blocs ',
     'show global custom block definitions as XML\nin a new browser window':
         'montrer les d\u00E9finitions de bloc global personnalis\u00E9 au format XML \ndans une nouvelle fen\u00EAtre de navigateur',
+    'Unused blocks...':
+        'Blocs inutilis\u00E9s...',
+    'find unused global custom blocks\nand remove their definitions':
+        'trouver et supprimer les blocs personnalis\u00E9s inutilis\u00E9s',
+    'Remove unused blocks':
+        'Supprimer les blocs inutilis\u00E9s',
+    'there are currently no unused\nglobal custom blocks in this project':
+        'Aucun bloc inutilis\u00E9 dans ce projet',
+    'unused block(s) removed':
+        'bloc(s) inutilis\u00E9(s) supprim\u00E9(s)',
+    'Export summary...':
+        'Exporter un r\u00E9sum\u00E9...',
+    'open a new browser browser window\n with a summary of this project':
+        'voir un résumé de ce projet dans\nune nouvelle fenêtre du navigateur',
     'Import tools':
         'Importer les outils',
     'load the official library of\npowerful blocks':
@@ -680,85 +714,97 @@ SnapTranslator.dict.fr = {
     'uncheck to use solid drop\nshadows and highlights':
         'D\u00E9cocher pour utiliser des rehauts et des ombres \n port\u00E9es floues',
     'check to use blurred drop\nshadows and highlights':
-        'Cocher pour utiliser des rehauts et des ombres \n port\u00E9es pleines',
+        'cocher pour utiliser des rehauts et des ombres \n port\u00E9es pleines',
     'Zebra coloring':
         'Colorations altern\u00E9es',
     'check to enable alternating\ncolors for nested blocks':
-        'Cocher pour activer des couleurs altern\u00E9es \n pour les blocs embo\u00EEt\u00E9s',
+        'cocher pour activer des couleurs altern\u00E9es \n pour les blocs embo\u00EEt\u00E9s',
     'uncheck to disable alternating\ncolors for nested block':
-        'D\u00E9cocher pour d\u00E9sactiver des couleurs altern\u00E9es \n pour les blocs embo\u00EEt\u00E9s',
+        'd\u00E9cocher pour d\u00E9sactiver des couleurs altern\u00E9es \n pour les blocs embo\u00EEt\u00E9s',
     'Prefer empty slot drops':
         'Pr\u00E9f\u00E9rer des entr\u00E9es vides',
     'settings menu prefer empty slots hint':
-        'Cocher pour pr\u00E9f\u00E9rer des entr\u00E9es vides \n'
-            + 'lors du glisser-d\u00E9poser d\u0027un reporter',
+        'cocher pour pr\u00E9f\u00E9rer des entr\u00E9es vides \n'
+        + 'lors du glisser-d\u00E9poser d\u0027un reporter',
     'uncheck to allow dropped\nreporters to kick out others':
-        'D\u00E9cocher pour ne pas pr\u00E9f\u00E9rer des entr\u00E9es vides \n'
-		+ 'lors du glisser-d\u00E9poser d\u0027un reporter',
+        'd\u00E9cocher pour ne pas pr\u00E9f\u00E9rer des entr\u00E9es vides \n'
+    + 'lors du glisser-d\u00E9poser d\u0027un reporter',
     'Long form input dialog':
         'Bo\u00EEte d\u0027entr\u00E9e en mode d\u00E9taill\u00E9',
     'check to always show slot\ntypes in the input dialog':
-        'Cocher pour toujours ouvrir la bo\u00EEte de dialogue \nd\u0027entr\u00E9e en mode d\u00E9taill\u00E9 : avec tous les types de blocs',
+        'cocher pour toujours ouvrir la bo\u00EEte de dialogue \nd\u0027entr\u00E9e en mode d\u00E9taill\u00E9 : avec tous les types de blocs',
     'uncheck to use the input\ndialog in short form':
-        'D\u00E9cocher pour utiliser la bo\u00EEte de dialogue \nd\u0027entr\u00E9e en mode simple ',
+        'd\u00E9cocher pour utiliser la bo\u00EEte de dialogue \nd\u0027entr\u00E9e en mode simple ',
     'Virtual keyboard':
         'Clavier virtuel',
     'uncheck to disable\nvirtual keyboard support\nfor mobile devices':
-        'D\u00E9cocher pour d\u00E9sactiver le clavier virtuel pour \nles tablettes et smartphones : mobile devices  ',
+        'd\u00E9cocher pour d\u00E9sactiver le clavier virtuel pour \nles tablettes et smartphones : mobile devices  ',
     'check to enable\nvirtual keyboard support\nfor mobile devices':
-        'Cocher pour activer le clavier virtuel pour \nles tablettes et smartphones : mobile devices  ',
+        'cocher pour activer le clavier virtuel pour \nles tablettes et smartphones : mobile devices  ',
     'Input sliders':
         'Entr\u00E9e curseurs',
     'uncheck to disable\ninput sliders for\nentry fields':
-        'D\u00E9cocher pour d\u00E9sactiver le curseur coulissant \ndans le champ de saisie',
+        'd\u00E9cocher pour d\u00E9sactiver le curseur coulissant \ndans le champ de saisie',
     'check to enable\ninput sliders for\nentry fields':
-        'Cocher pour activer un curseur coulissant \ndans le champ de saisie ',
+        'cocher pour activer un curseur coulissant \ndans le champ de saisie ',
     'Clicking sound':
         'Cliquetis',
     'uncheck to turn\nblock clicking\nsound off':
-        'D\u00E9cocher pour d\u00E9sactiver le cliquetis \n'
-		+'lors de l\u0027embo\u00EEtement des blocs' ,
+        'd\u00E9cocher pour d\u00E9sactiver le cliquetis \n'
+    +'lors de l\u0027embo\u00EEtement des blocs' ,
     'check to turn\nblock clicking\nsound on':
-        'Cocher pour activer le cliquetis \n'
-		+'lors de l\u0027embo\u00EEtement des blocs',
+        'cocher pour activer le cliquetis \n'
+    +'lors de l\u0027embo\u00EEtement des blocs',
     'Turbo mode':
         'Mode turbo',
     'check to prioritize\nscript execution':
-        'Cocher pour favoriser l\'ex\u00E9cution du script',
+        'cocher pour favoriser l\'ex\u00E9cution du script',
     'uncheck to run scripts\nat normal speed':
-        'D\u00E9cocher pour ex\u00E9cuter le script en vitesse normale',
+        'd\u00E9cocher pour ex\u00E9cuter le script en vitesse normale',
     'Flat design':
         'Style al\u00E9g\u00E9',
     'check for alternative\nGUI design':
-        'Cocher pour un style d\interface alternatif',
+        'cocher pour un style d\'interface alternatif',
     'uncheck for default\nGUI design':
-	'D\u00E9cocher pour le style classique d\interface',		
+     'd\u00E9cocher pour le style classique d\'interface',
+    'Keyboard Editing':
+        '\u00C9dition au clavier',
+    'uncheck to disable\nkeyboard editing support':
+        'd\u00E9cocher pour d\u00E9sactiver l\'\u00E9dition au clavier',
+    'check to enable\nkeyboard editing support':
+        'cocher pour activer l\'\u00E9dition au clavier',
     'Thread safe scripts':
         'Scripts réentrants',
     'check to disallow\nscript reentrance':
-        'Cocher pour interdire\n la r\u00E9entrance des scripts\n'
-	  +'et les ex\u00E9cuter s\u00E9par\u00E9ment',
+        'cocher pour interdire\n la r\u00E9entrance des scripts\n'
+      + 'et les ex\u00E9cuter s\u00E9par\u00E9ment',
     'uncheck to allow\nscript reentrance':
-        'D\u00E9cocher pour permettre\n la r\u00E9entrance des scripts\n'
-	  +'o\u00F9 certains s\'ex\u00E9cutent en paral\u00E8lle',
+        'd\u00E9cocher pour permettre\n la r\u00E9entrance des scripts\n'
+      + 'o\u00F9 certains s\'ex\u00E9cutent en paral\u00E8lle',
     'Prefer smooth animations':
         'Vitesse d\'animation fixe',
     'uncheck for greater speed\nat variable frame rates':
-        'D\u00E9cocher pour une vitesse\nd\'animation maximale (mais variable)',
+        'd\u00E9cocher pour une vitesse\nd\'animation maximale (mais variable)',
     'check for smooth, predictable\nanimations across computers':
-        'Cocher pour une vitesse d\'animation\nfixe et identique sur tous les ordinateurs',
-	
+        'cocher pour une vitesse d\'animation\nfixe et identique sur tous les ordinateurs',
+
     // inputs
     'with inputs':
         'avec entr\u00E9es',
     'input names:':
-        'renseigner un nom:',
+        'renseigner un nom :',
     'Input Names:':
-        'renseigner un nom:',
+        'Renseigner un nom :',
 
     // context menus:
     'help':
         'Aide',
+
+    // palette:
+    'hide primitives':
+        'Masquer les blocs de base',
+    'show primitives':
+        'Afficher les blocs de base',
 
     // blocks:
     'help...':
@@ -767,6 +813,8 @@ SnapTranslator.dict.fr = {
         'dupliquer',
     'make a copy\nand pick it up':
         'faire une copie\n et le d\u00E9placer',
+    'only duplicate this block':
+        'ne dupliquer que ce bloc',
     'delete':
         'supprimer',
     'script pic...':
@@ -787,8 +835,14 @@ SnapTranslator.dict.fr = {
     // sprites:
     'edit':
         '\u00E9diter',
+    'move':
+        'd\u00E9placer',
+    'detach from':
+        'D\u00E9tacher de',
+    'detach all parts':
+        'D\u00E9tacher toutes les parties',
     'export...':
-        'exporter...',
+        'Exporter...',
     'paint a new sprite':
         'dessiner un nouveau lutin',
 
@@ -802,7 +856,7 @@ SnapTranslator.dict.fr = {
     'make a block...':
         'cr\u00E9er un nouveau bloc...',
 
-        // costumes
+    // costumes
     'rename':
         'renommer',
     'export':
@@ -836,6 +890,12 @@ SnapTranslator.dict.fr = {
         'Oui',
     'No':
         'Non',
+    'Open':
+        'Ouvrir',
+    'Browser':
+        'Navigateur',
+    'Examples':
+        'Exemples',
 
     // help
     'Help':
@@ -853,9 +913,9 @@ SnapTranslator.dict.fr = {
     'Delete Project':
         'Supprimer un projet',
     'Are you sure you want to delete':
-        'Est ce que vous voulez le supprimer?',
+        'Souhaitez-vous vraiment supprimer ?',
     'rename...':
-        'Renommer',
+        'Renommer...',
 
      // costume editor
     'Costume Editor':
@@ -871,7 +931,7 @@ SnapTranslator.dict.fr = {
     'New Project':
         'Nouveau projet',
     'Replace the current project with a new one?':
-        'Remplacer le projet actuel par un nouveau?',
+        'Remplacer le projet actuel par un nouveau ?',
 
     // open project
     'Open Projekt':
@@ -879,7 +939,7 @@ SnapTranslator.dict.fr = {
 
     // save project
     'Save Project As...':
-        'Sauvegarder un projet sous...',
+        'Sauvegarder le projet sous...',
 
     // export blocks
     'Export blocks':
@@ -909,7 +969,7 @@ SnapTranslator.dict.fr = {
     'Predicate':
         'Pr\u00E9dicat',
 
- // block editor
+    // block editor
     'Block Editor':
         '\u00C9diteur de bloc',
     'Apply':
@@ -919,11 +979,11 @@ SnapTranslator.dict.fr = {
     'Delete Custom Block':
         'Effacer le bloc personnalis\u00E9',
     'block deletion dialog text':
-        'Etes-vous s\u00FBr de supprimer ce bloc personnalis\u00E9 \net ' +
-            'toutes ces instances?',
+        '\u00CAtes-vous s\u00FBr de vouloir supprimer ce bloc personnalis\u00E9 \net ' +
+            'toutes ses instances ?',
 
     // input dialog
-     'Create input name':
+    'Create input name':
         'Cr\u00E9er le nom de l\u0027entr\u00E9e',
     'Edit input name':
         '\u00C9diter le nom de l\u0027entr\u00E9e',
@@ -958,7 +1018,7 @@ SnapTranslator.dict.fr = {
     'Single input.':
         'Entr\u00E9e unique.',
     'Default Value:':
-        'Valeur par d\u00E9faut:',
+        'Valeur par d\u00E9faut :',
     'Multiple inputs (value is list of inputs)':
         'Entr\u00E9es multiples (la valeur est une liste des entr\u00E9es)',
     'Upvar - make internal variable visible to caller':
@@ -972,12 +1032,12 @@ SnapTranslator.dict.fr = {
         'tabulations',
     'cr':
         'retours de ligne',
-	'letter':
-		'lettres',
-	
-  // About Snap
+  'letter':
+    'lettres',
+
+    // About Snap
     'About Snap':
-        'A propos de Snap',
+        '\u00C0 propos de Snap',
     'Back...':
         'Retour...',
     'License...':
@@ -987,11 +1047,11 @@ SnapTranslator.dict.fr = {
     'Credits...':
         'Contributeurs...',
     'Translators...':
-        'Traducteurs',
+        'Traducteurs...',
     'License':
         'License',
     'current module versions:':
-        'Versions du module courant',
+        'Versions du module courant :',
     'Contributors':
         'Contributeurs',
     'Translations':
@@ -1015,7 +1075,7 @@ SnapTranslator.dict.fr = {
 
     // list watchers
     'length: ':
-        'Longueur: ',
+        'Longueur : ',
 
     // coments
     'add comment here...':
@@ -1043,10 +1103,32 @@ SnapTranslator.dict.fr = {
     // costumes
     'Turtle':
         'Pointeur',
+    'Empty':
+        'Vide',
 
     // graphical effects
+    'color':
+        'couleur',
+    'fisheye':
+        'fisheye',
+    'whirl':
+        'tourbillon',
+    'pixelate':
+        'pixelisation',
+    'mosaic':
+        'mosa\u00EFque',
+    'saturation':
+        'saturation',
+    'brightness':
+        'luminosit\u00E9',
     'ghost':
         'transparence',
+    'negative':
+        'n\u00E9gatif',
+    'comic':
+        'moir\u00E9',
+    'confetti':
+        'confetti',
 
     // keys
     'space':
@@ -1180,131 +1262,145 @@ SnapTranslator.dict.fr = {
     'any':
         'n\u0027importe quel',
 
-	// miscellaneous
-	'find blocks...':
-		'chercher des blocs...',
-	'hide primitives':
-		'cacher les primitives',
-	'show primitives':
-		'montrer les primitives',
-	'Login...':
-		'Connexion...',
-	'Signup...':
-		'S\u0027enregistrer...',
-	'Reset Password...':
-		'Remise \u00E0 z\u00E9ro du mot de passe',
-	'show all':
-		'tout montrer',
-	'pic...':
-		'image...',
-	'open a new window\nwith a picture of the stage':
-		'ouvre une nouvelle fen\u00EAtre\navec une image de la sc\u00E8ne',
-	'scripts pic...':
-		'image des scripts...',
-	'open a new window\nwith a picture of all scripts':
-		'ouvre une nouvelle fen\u00EAtre\navec une image de tous les scripts',
-	'Stage size...':
-		'Taille de la sc\u00E8ne...',
-	'Zoom blocks...':
-		'Agrandir les blocs...',
+    // miscellaneous
+    'find blocks...':
+        'chercher des blocs...',
+    'hide primitives':
+        'cacher les primitives',
+    'show primitives':
+        'montrer les primitives',
+    'Login...':
+        'Connexion...',
+    'Signup...':
+        'S\u0027enregistrer...',
+    'Reset Password...':
+        'Remise \u00E0 z\u00E9ro du mot de passe...',
+    'show all':
+        'tout montrer',
+    'pic...':
+        'image...',
+    'open a new window\nwith a picture of the stage':
+        'ouvre une nouvelle fen\u00EAtre\navec une image de la sc\u00E8ne',
+    'scripts pic...':
+        'image des scripts...',
+    'open a new window\nwith a picture of all scripts':
+        'ouvre une nouvelle fen\u00EAtre\navec une image de tous les scripts',
+    'Stage size...':
+        'Taille de la sc\u00E8ne...',
+    'Zoom blocks...':
+        'Agrandir les blocs...',
 
-	'Plain prototype labels':
-		'\u00C9tiquettes simples de d\u00E9finition',
-	'uncheck to always show (+) symbols\nin block prototype labels':
-		'd\u00E9cocher pour montrer en permance le symbole (+)\ndans les \u00e9tiquettes de d\u00E9finition de bloc',
-	'check to hide (+) symbols\nin block prototype labels':
-		'cocher pour cacher le symbole (+)\ndans les \u00e9tiquettes de d\u00E9finition de bloc',
+    'Plain prototype labels':
+        '\u00C9tiquettes simples de d\u00E9finition',
+    'uncheck to always show (+) symbols\nin block prototype labels':
+        'd\u00E9cocher pour montrer en permanance le symbole (+)\ndans les \u00e9tiquettes de d\u00E9finition de bloc',
+    'check to hide (+) symbols\nin block prototype labels':
+        'cocher pour cacher le symbole (+)\ndans les \u00e9tiquettes de d\u00E9finition de bloc',
 
-	'check for flat ends of lines':
-		'cocher pour dessiner des fins de ligne plates',
-	'uncheck for round ends of lines':
-		'd\u00E9cocher pour dessiner des fins de lignes arrondies',
-	'Flat line ends':
-		'Fins de ligne plates',
+    'check for flat ends of lines':
+        'cocher pour dessiner des fins de ligne plates',
+    'uncheck for round ends of lines':
+        'd\u00E9cocher pour dessiner des fins de lignes arrondies',
+    'Flat line ends':
+        'Fins de ligne plates',
 
-	'Codification support':
-		'Support de la \u00AB codification \u00BB',
-	'uncheck to disable\nblock to text mapping features':
-		'd\u00E9cocher pour d\u00E9activer\nla fonction de transformation :\nbloc vers texte',
-	'check for block\nto text mapping features':
-		'cocher pour activer\nla fonction de transformation :\nbloc vers texte',
+    'Codification support':
+        'Support de la \u00AB codification \u00BB',
+    'uncheck to disable\nblock to text mapping features':
+        'd\u00E9cocher pour d\u00E9activer\nla fonction de transformation :\nbloc vers texte',
+    'check for block\nto text mapping features':
+        'cocher pour activer\nla fonction de transformation :\nbloc vers texte',
 
-	'current %dates':
-		'date courante %dates',
-	'year':'ann\u00E9e',
-	'month':'mois',
-	'date':'jour',
-	'hour':'heure',
-	'minute':'minute',
-	'second':'seconde',
-	'time in milliseconds':
-		'heure en millisecondes',
-	'day of week':
-		'jour de la semaine',
+    'Inheritance support':
+        'Support de l\'h\u00E9ritage',
 
-	'brightness':
-		'luminosit\u00E9',
-	'transparence':
-		'transparence',
-	'negative':
-		'n\u00E9gatif',
-	'comic':
-		'bande dessin\u00E9e',
+    'current %dates':
+        'date courante %dates',
+    'year':
+        'ann\u00E9e',
+    'month':
+        'mois',
+    'date':
+        'jour',
+    'hour':
+        'heure',
+    'minute':
+        'minute',
+    'second':
+        'seconde',
+    'time in milliseconds':
+        'heure en millisecondes',
+    'day of week':
+        'jour de la semaine',
 
-	'clicked':
-		'cliqu\u00E9',
-	'pressed':
-		'press\u00E9',
-	'dropped':
-		'd\u00E9pos\u00E9',
-	'mouse-entered':
-		'survol\u00E9',
-	'mouse-departed':
-		'quitt\u00E9',
+    'brightness':
+        'luminosit\u00E9',
+    'transparence':
+        'transparence',
+    'negative':
+        'n\u00E9gatif',
+    'comic':
+        'bande dessin\u00E9e',
 
-	'JavaScript function ( %mult%s ) { %code }':
-		'fonction JavaScript ( %mult%s ) { %code }',
+    'clicked':
+        'cliqu\u00E9',
+    'pressed':
+        'press\u00E9',
+    'dropped':
+        'd\u00E9pos\u00E9',
+    'mouse-entered':
+        'survol\u00E9',
+    'mouse-departed':
+        'quitt\u00E9',
+    'when %b':
+        'Quand %b',
+
+    'JavaScript function ( %mult%s ) { %code }':
+        'fonction JavaScript ( %mult%s ) { %code }',
 
 
-	// Copy / Paste
-	'Press CTRL+C one more time to effectively copy to clipboard.':
-		'Taper une nouvelle fois sur CTRL+C pour copier effectivement vers le presse-papier.',
-	'Press CTRL+V one more time to effectively paste from clipboard.':
-		'Taper une nouvelle fois sur CTRL+V pour coller effectivement depuis le presse-papier.',
-	'Press CTRL+X one more time to effectively cut to clipboard.':
-		'Taper une nouvelle fois sur CTRL+X pour couper effectivement vers le presse-papier.',
+    // Copy / Paste
+    'Press CTRL+C one more time to effectively copy to clipboard.':
+        'Taper une nouvelle fois sur CTRL+C pour copier effectivement vers le presse-papier.',
+    'Press CTRL+V one more time to effectively paste from clipboard.':
+        'Taper une nouvelle fois sur CTRL+V pour coller effectivement depuis le presse-papier.',
+    'Press CTRL+X one more time to effectively cut to clipboard.':
+        'Taper une nouvelle fois sur CTRL+X pour couper effectivement vers le presse-papier.',
 
-	// Paint.js
-	'undo':'d\u00E9faire',
-	'Paintbrush tool\n(free draw)':
-		'Pinceau\n(dessin \u00E0 main lev\u00E9)',
-	'Stroked Rectangle\n(shift: square)':
-		'Rectangle\n(Maj: carr\u00E9)',
-	'Stroked Ellipse\n(shift: circle)':
-		'Ellipse\n(Maj: cercle)',
-	'Eraser tool':
-		'Gomme',
-	'Set the rotation center':
-		'Fixe le centre de rotation',
-	'Line tool\n(shift: vertical/horizontal)':
-		'Ligne\n(Maj: verticale/horizontale)',
-	'Filled Rectangle\n(shift: square)':
-		'Rectangle plein\n(Maj: carr\u00E9)',
-	'Filled Ellipse\n(shift: circle)':
-		'Ellipse pleine\n(Maj: cercle)',
-	'Fill a region':
-		'Remplir une r\u00E9gion',
-	'Pipette tool\n(pick a color anywhere)':
-		'Pipette\n(s\u00E9lectionnez une couleur n\u0027importe o\u00F9',
-	'grow':'agrandir',
-	'shrink':'r\u00E9duire',
-	'flip \u2194':
-		'miroir \u2194',
-	'flip \u2195':
-		'miroir \u2195',
-	'Brush size':
-		'Taille de pinceau',
-	'Constrain proportions of shapes?\n(you can also hold shift)':
-		'Contrainte sur les proportions de la forme ?\n(vous pouvez aussi maintenir appuy\u00E9 Maj)'
+    // Paint.js
+    'undo':
+        'd\u00E9faire',
+    'Paintbrush tool\n(free draw)':
+        'Pinceau\n(dessin \u00E0 main lev\u00E9e)',
+    'Stroked Rectangle\n(shift: square)':
+        'Rectangle\n(Maj : carr\u00E9)',
+    'Stroked Ellipse\n(shift: circle)':
+        'Ellipse\n(Maj : cercle)',
+    'Eraser tool':
+        'Gomme',
+    'Set the rotation center':
+        'Fixer le centre de rotation',
+    'Line tool\n(shift: vertical/horizontal)':
+        'Ligne\n(Maj: verticale/horizontale)',
+    'Filled Rectangle\n(shift: square)':
+        'Rectangle plein\n(Maj: carr\u00E9)',
+    'Filled Ellipse\n(shift: circle)':
+        'Ellipse pleine\n(Maj: cercle)',
+    'Fill a region':
+        'Remplir une r\u00E9gion',
+    'Pipette tool\n(pick a color anywhere)':
+        'Pipette\n(s\u00E9lectionnez une couleur n\u0027importe o\u00F9)',
+    'grow':
+        'agrandir',
+    'shrink':
+        'r\u00E9duire',
+    'flip \u2194':
+        'miroir \u2194',
+    'flip \u2195':
+        'miroir \u2195',
+    'Brush size':
+        'Taille de pinceau',
+    'Constrain proportions of shapes?\n(you can also hold shift)':
+        'Contraindre les proportions de la forme ?\n(vous pouvez aussi maintenir appuy\u00E9 Maj)'
 
 };

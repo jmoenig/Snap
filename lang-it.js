@@ -181,11 +181,11 @@ SnapTranslator.dict.it = {
     'language_name':
         'Italiano', // the name as it should appear in the language menu
     'language_translator':
-        'Stefano Federici, Alberto Firpo', // your name for the Translators tab
+        'Stefano Federici, Alberto Firpo, Massimo Ghisalberti', // your name for the Translators tab
     'translator_e-mail':
-        's_federici@yahoo.com, albertofirpo12@gmail.com', // optional
+        's_federici@yahoo.com, albertofirpo12@gmail.com, zairik@gmail.com', // optional
     'last_changed':
-        '2015-01-12', // this, too, will appear in the Translators tab
+        '2016-10-31', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -410,12 +410,28 @@ SnapTranslator.dict.it = {
         'porta dimensione penna a %n',
     'stamp':
         'timbra',
+    'fill':
+        'riempi',
 
     // control:
+    'when %b':
+        'quando %b',
     'when %greenflag clicked':
         'quando si clicca su %greenflag',
     'when %keyHat key pressed':
         'quando si preme il tasto %keyHat',
+    'when I am %interaction':
+        'quando sono %interaction',
+    'clicked':
+        'cliccato',
+    'pressed':
+        'premuto',
+    'dropped':
+        'lasciato',
+    'mouse-entered':
+        'il mouse entra',
+    'mouse-departed':
+        'il mouse esce',
     'when I am clicked':
         'quando vengo cliccato',
     'when I receive %msgHat':
@@ -448,7 +464,12 @@ SnapTranslator.dict.it = {
         'risultato %s',
     'stop block':
         'ferma il blocco',
-   'all':
+	  'stop %stopOthersChoices':
+		  'ferma %stopOthersChoices',
+	  'stop %stopChoices':
+		  'ferma %stopChoices',        
+        
+    'all':
         'tutti',
     'this script':
         'questo script',
@@ -514,12 +535,34 @@ SnapTranslator.dict.it = {
         'cronometro',
     '%att of %spr':
         '%att di %spr',
+    'my %get':
+        'attributo %get',
     'http:// %s':
         'leggi pagina web http:// %s',
     'turbo mode?':
         'modalit\u00E0 turbo attiva',
     'set turbo mode to %b':
         'porta modalit\u00E0 turbo a %b',
+        
+    'current %dates':
+        '%dates attuale',
+        
+  	'year':
+          'anno',
+    'month':
+          'mese',
+    'date':
+          'giorno',
+    'hour':
+          'ora',
+    'minute':
+          'minuto',
+    'second':
+          'secondo',
+    'time in milliseconds':
+	    'ora in millisecondi',
+    'day of week':
+	    'giorno della settimana',
 
     'filtered for %clr':
         'selezionati per colore %clr',
@@ -567,9 +610,10 @@ SnapTranslator.dict.it = {
         '%s \u00E8 di tipo %typ',
     'is %s identical to %s ?':
         '%s \u00E8 identico a %s ?',
-
     'type of %s':
         'tipo di %s',
+    'JavaScript function ( %mult%s ) { %code }':
+        'funzione JavaScript ( %mult%s ) { %code }',
 
     // variables:
     'Make a variable':
@@ -638,6 +682,11 @@ SnapTranslator.dict.it = {
         'Passa alla modalit\u00E0 sviluppo',
     'enable Morphic\ncontext menus\nand inspectors,\nnot user-friendly!':
         'Abilita i menu contestuali\ndi Morphic e l\'inspector,\n non user-friendly',
+
+    'Export summary...':
+        'Esporta sommario...',
+    'open a new browser browser window\n with a summary of this project':
+        'apre una nuova finestra del browser\ncon un sommario del progetto',
 
     // project menu
     'Project notes...':
@@ -766,7 +815,11 @@ SnapTranslator.dict.it = {
     'check to enable\nIDE animations':
         'abilitare per nconsentire\nanimazioni dell\u0027IDE',
     'Thread safe scripts':
-        'Script thread safe',
+        'Script sicuri per i thread',
+    'check to disallow\nscript reentrance':
+        'attivare per disabilitare\nla \'rientranza\' degli script',
+    'uncheck to allow\nscript reentrance':
+        'disattivare per abilitare\nla \'rientranza\' degli script',
     'uncheck to allow\nscript reentrancy':
         'disabilitare per permettere agli script di rientrare',
     'check to disallow\nscript reentrancy':
@@ -777,14 +830,55 @@ SnapTranslator.dict.it = {
         'disabilitare per massima velocità\na framerate variabile',
     'check for smooth, predictable\nanimations across computers':
         'abilitare per avere animazioni\nfluide su tutti i computer',
-   'Flat line ends':
+    'Flat line ends':
         'fine linea piana',
     'check for flat ends of lines':
         'abilitare per fine linea netti',
     'uncheck for round ends of lines':
         'disabilitare per fine linea arrotondati',
-
-
+    'Inheritance support':
+        'Supporto ereditarietà degli sprite',
+    'check for sprite\ninheritance features':
+        'attivare per\n la ereditarietà degli sprite',   
+     'uncheck to disable\nsprite inheritance features':   
+        'disattivare per rimuovere\n la ereditarietà degli sprite',  
+    'Codification support':
+        'Supporto per il codice nei blocchi',
+    'check for block\nto text mapping features':
+        'attivare per il supporto\n al codice nei blocchi',
+    'uncheck to disable\nblock to text mapping features':
+        'disattivare per disabilitare\n il supporto al codice nei blocchi',
+    'Flat design':
+        'Aspetto piatto interfaccia',
+    'check for alternative\nGUI design':
+        'attivare per una interfaccia alternativa',  
+    'uncheck for default\nGUI design':
+        'disattivare per la interfaccia normale',       
+    'Keyboard Editing':
+        'Modifica della tastiera',
+    'check to enable\nkeyboard editing support':
+        'attivare per la modifica della tastiera',
+    'uncheck to disable\nkeyboard editing support':
+        'disattivare per la modifica della tastiera',
+    'Table support':
+        'Supporto per le tabelle',
+    'Table lines':
+        'Tabelle con linee',
+    'Visible stepping':
+        'Evidenzia esecuzione',
+    'uncheck to turn off\nvisible stepping':
+        'Deseleziona per disattivare la\nevidenziazione dell\'esecuzione',
+    'check to turn on\n visible stepping (slow)':
+        'Seleziona per attivare la\nevidenziazione dell\'esecuzione',
+    'check for multi-column\nlist view support':
+        'attiva la vista multicolonna',
+    'uncheck to disable\nmulti-column list views':
+        'disattiva la vista multicolonna',
+    'check for higher contrast\ntable views':
+        'attivare per un maggior contrasto',
+    'uncheck for less contrast\nmulti-column list views':
+        'disattivare per un minor contrasto',
+        
     // inputs
     'with inputs':
         'con argomenti',
@@ -1287,5 +1381,87 @@ SnapTranslator.dict.it = {
     'last':
         'ultimo',
     'any':
-        'qualunque'
+        'qualunque',
+        
+    // attributes
+    'neighbors':
+        'vicinato',
+    'self':
+        'me stesso',
+    'other sprites':
+        'altri sprite',
+    'parts':
+        'parti',
+    'anchor':
+        'ancora',
+    'parent':
+        'genitore',
+    'children':
+        'figli',
+    'clones':
+        'cloni',
+    'other clones':
+        'altri cloni',
+    'dangling?':
+        'pendente?',
+    'rotation x':
+        'rotazione x',
+    'rotation y':
+        'rotazione y',
+    'center x':
+        'centro x',
+    'center y':
+        'centro y',
+    'name':
+        'nome',
+    'stage':
+        'stage',    
+    
+    // Paint.js
+    'Paint editor':
+        'Editor grafico',
+    'undo':
+        'annulla',
+    'Paintbrush tool\n(free draw)':
+        'Pennello (disegno libero)',
+    'Stroked Rectangle\n(shift: square)':
+        'Rettangolo\n(shift: quadrato)',
+    'Stroked Ellipse\n(shift: circle)':
+        'Ellisse\n(shift: cerchio)',
+    'Eraser tool':
+        'Gomma per cancellare',
+    'Set the rotation center':
+        'imposta centro di rotazione',
+    'Line tool\n(shift: vertical/horizontal)':
+        'Linea\n(shift: verticale/orizzontale)',
+    'Filled Rectangle\n(shift: square)':
+        'Rettangolo pieno\n(shift: quadrato)',
+    'Filled Ellipse\n(shift: circle)':
+        'Ellisse piena\n(shift: cerchio)',
+    'Fill a region':
+        'Riempi un\'area',
+    'Pipette tool\n(pick a color anywhere)':
+        'contagocce\n(preleva un colore dovunque)',
+    'grow':
+        'ingrandisci',
+    'shrink':
+        'rimpicciolisci',
+    'flip \u2194':
+        'capovolgi ↔ ',
+    'flip \u2195':
+        'capovolgi ↕',
+    'Brush size':
+        'dimensione del pennello',
+    'Constrain proportions of shapes?\n(you can also hold shift)':
+        'Costringi le proporzioni della figura?\n(puoi tenere premuto il tasto: shift)',
+
+    // thread.js
+    'a variable of name \'':
+        'una variabile di nome \'',
+    '\'\ndoes not exist in this context':
+        '\'\nnon esiste in questo contesto',
+    'expecting':
+        'aspettando',
+    'input(s), but getting':
+        'entra(s), ma arriva'
 };

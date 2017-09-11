@@ -6,7 +6,7 @@
 
     written by Jens Mönig
 
-    Copyright (C) 2015 by Jens Mönig
+    Copyright (C) 2017 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org', // optional
     'last_changed':
-        '2015-10-07', // this, too, will appear in the Translators tab
+        '2017-09-05', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -225,6 +225,8 @@ SnapTranslator.dict.de = {
         'Skripte',
     'Costumes':
         'Kost\u00fcme',
+    'Backgrounds':
+        'Hintergr\u00fcnde',
     'Sounds':
         'Kl\u00e4nge',
 
@@ -379,14 +381,26 @@ SnapTranslator.dict.de = {
         'stoppe alle Kl\u00e4nge',
     'rest for %n beats':
         'spiele Pause f\u00fcr %n Schl\u00e4ge',
-    'play note %n for %n beats':
-        'spiele Note %n f\u00fcr %n Schl\u00e4ge',
+    'play note %note for %n beats':
+        'spiele Note %note f\u00fcr %n Schl\u00e4ge',
+    'set instrument to %inst':
+        'setze Instrument auf %inst',
     'change tempo by %n':
         '\u00e4ndere Tempo um %n',
     'set tempo to %n bpm':
         'setze Tempo auf %n Schl\u00e4ge/Min.',
     'tempo':
         'Tempo',
+
+    // "instruments", i.e. wave forms
+    '(1) sine':
+        '(1) Sinus',
+    '(2) square':
+        '(2) Quadrat',
+    '(3) sawtooth':
+        '(3) Sägeblatt',
+    '(4) triangle':
+        '(4) Dreieck',
 
     // pen:
     'clear':
@@ -411,6 +425,8 @@ SnapTranslator.dict.de = {
         'setze Stiftdicke auf %n',
     'stamp':
         'stemple',
+    'fill':
+        'male aus',
 
     // control:
     'when %greenflag clicked':
@@ -429,6 +445,8 @@ SnapTranslator.dict.de = {
         'vom Mauszeiger betreten',
     'mouse-departed':
         'vom Mauszeiger verlassen',
+    'when %b':
+        'Wenn %b',
     'when I receive %msgHat':
         'Wenn ich %msgHat empfange',
     'broadcast %msg':
@@ -489,10 +507,16 @@ SnapTranslator.dict.de = {
         'Wenn ich geklont werde',
     'create a clone of %cln':
         'klone %cln',
+    'a new clone of %cln':
+        'neuer Klon von %cln',
     'myself':
-        'mich',
+        'selbst',
     'delete this clone':
         'entferne diesen Klon',
+    'tell %spr to %cl':
+        'lasse %spr tun %cl',
+    'ask %spr for %repRing':
+        'frage %spr nach %repRing',
 
     // sensing:
     'touching %col ?':
@@ -523,12 +547,32 @@ SnapTranslator.dict.de = {
         'Stoppuhr',
     '%att of %spr':
         '%att von %spr',
+    'my %get':
+        'Attribut %get',
     'http:// %s':
         'http:// %s',
     'turbo mode?':
         'Turbomodus?',
     'set turbo mode to %b':
         'setze Turbomodus auf %b',
+    'current %dates':
+        'Kalender %dates',
+    'year':
+        'Jahr',
+    'month':
+        'Monat',
+    'date':
+        'Datum',
+    'day of week':
+        'Wochentag',
+    'hour':
+        'Stunde',
+    'minute':
+        'Minute',
+    'second':
+        'Sekunde',
+    'time in milliseconds':
+        'Zeit in Millisekunden',
 
     'filtered for %clr':
         'nach %clr gefiltert',
@@ -576,6 +620,8 @@ SnapTranslator.dict.de = {
         'ist %s ein(e) %typ ?',
     'is %s identical to %s ?':
         'ist %s identisch mit %s ?',
+    'JavaScript function ( %mult%s ) { %code }':
+        'JavaScript Funktion ( %mult%s ) { %code }',
 
     'type of %s':
         'Typ von %s',
@@ -587,6 +633,8 @@ SnapTranslator.dict.de = {
         'Variablenname',
     'Script variable name':
         'Skriptvariablenname',
+    'inherit %shd':
+        'erbe %shd',
     'Delete a variable':
         'Variable l\u00f6schen',
 
@@ -789,6 +837,10 @@ SnapTranslator.dict.de = {
         'ausschalten um Schieber\nin Eingabefeldern zu verhindern',
     'check to enable\ninput sliders for\nentry fields':
         'einschalten um Schieber\nin Eingabefeldern zu aktivieren',
+    'Retina display support':
+        'Retina Bildschirmauflösung',
+    'Codification support':
+        'Kodifikation',
     'Clicking sound':
         'Akustisches Klicken',
     'uncheck to turn\nblock clicking\nsound off':
@@ -809,8 +861,16 @@ SnapTranslator.dict.de = {
         'einschalten um IDE-\nAnimationen zu erlauben',
     'Flat design':
         'Helles Design',
+    'Nested auto-wrapping':
+        'Automatisches Umklammern',
     'Keyboard Editing':
         'Tastaturunterstützung',
+    'Table support':
+        'Tabellenunterstützung',
+    'Table lines':
+        'Tabellen mit Linien',
+    'Visible stepping':
+        'Programmausführung verfolgen',
     'Thread safe scripts':
         'Threadsicherheit',
     'uncheck to allow\nscript reentrance':
@@ -829,6 +889,8 @@ SnapTranslator.dict.de = {
         'einschalten f\u00fcr flache\nPinselstrichenden',
     'uncheck for round ends of lines':
         'auschalten f\u00fcr runde\nPinselstrichenden',
+    'Ternary Boolean slots':
+        'Ternäre Bool\'sche Inputs',
     'Inheritance support':
         'Prototypische Vererbung',
 
@@ -873,6 +935,14 @@ SnapTranslator.dict.de = {
         'Umringen',
     'unringify':
         'Entringen',
+    'transient':
+        'nicht persistent',
+    'uncheck to save contents\nin the project':
+        'ausschalten, um den Inhalt\nim Projekt zu speichern',
+    'check to prevent contents\nfrom being saved':
+        'einschalten, um das Speichern des Inhalts\nim Projekt zu verhindern',
+    'new line':
+        'neue Zeile',
 
     // custom blocks:
     'delete block definition...':
@@ -883,14 +953,28 @@ SnapTranslator.dict.de = {
     // sprites:
     'edit':
         'Bearbeiten',
+    'clone':
+        'Klonen',
     'move':
         'Verschieben',
+    'pivot':
+        'Angelpunkt',
+    'edit the costume\'s\nrotation center':
+        'Drehpunkt des Kostüms\nanzeigen und verschieben',
     'detach from':
         'Abtrennen von',
     'detach all parts':
         'Alle Teile abtrennen',
     'export...':
         'Exportieren...',
+    'parent...':
+        'Vorfahr...',
+    'current parent':
+        'aktueller Vorfahr',
+    'release':
+        'Entlassen',
+    'make temporary and\nhide in the sprite corral':
+        'temporär machen\nund Icon verstecken',
 
     // stage:
     'show all':
@@ -911,8 +995,10 @@ SnapTranslator.dict.de = {
         'R\u00fcckg\u00e4ngig',
     'undo the last\nblock drop\nin this pane':
         'Setzen des letzten Blocks\nwiderrufen',
+    'redrop':
+        'Wiederherstellen',
     'scripts pic...':
-        'Bild aller Scripte...',
+        'Bild aller Skripte...',
     'open a new window\nwith a picture of all scripts':
         'ein neues Browserfenster mit einem\nBild aller Skripte \u00f6ffnen',
     'make a block...':
@@ -937,6 +1023,18 @@ SnapTranslator.dict.de = {
         'Los',
     'rename sound':
         'Klang umbenennen',
+
+    // lists and tables
+    'list view...':
+        'Listenansicht...',
+    'table view...':
+        'tabellarische Ansicht...',
+    'open in dialog...':
+        'in neuem Fenster \u00f6ffnen',
+    'reset columns':
+        'Spaltenbreiten zur\u00fccksetzen',
+    'items':
+        'Elemente',
 
     // dialogs
     // buttons
@@ -1033,6 +1131,15 @@ SnapTranslator.dict.de = {
     'for this sprite only':
         'nur f\u00fcr dieses Objekt',
 
+    // variables refactoring
+    'rename only\nthis reporter':
+        'nur diesen Block\numbenennen',
+    'rename all...':
+        'alle umbenennen...',
+    'rename all blocks that\naccess this variable':
+        'alle Blöcke umbenennen,\ndie diese Variable referenzieren',
+
+
     // block dialog
     'Change block':
         'Block ver\u00e4ndern',
@@ -1046,6 +1153,8 @@ SnapTranslator.dict.de = {
     // block editor
     'Block Editor':
         'Blockeditor',
+    'Method':
+        'Methode',
     'Apply':
         'Anwenden',
 
@@ -1172,6 +1281,18 @@ SnapTranslator.dict.de = {
         'Leer',
 
     // graphical effects
+    'color':
+        'Farbe',
+    'fisheye':
+        'Fischauge',
+    'whirl':
+        'Wirbel',
+    'pixelate':
+        'Pixel',
+    'mosaic':
+        'Mosaik',
+    'saturation':
+        'Sättigung',
     'brightness':
         'Helligeit',
     'ghost':
@@ -1194,6 +1315,8 @@ SnapTranslator.dict.de = {
         'Pfeil nach rechts',
     'left arrow':
         'Pfeil nach links',
+    'any key':
+        'beliebige Taste',
     'a':
         'a',
     'b':
@@ -1297,6 +1420,10 @@ SnapTranslator.dict.de = {
     'e^':
         'e^',
 
+    // Boolean expressions keyboard entry
+    'not':
+        'nicht',
+
     // delimiters
     'letter':
         'Buchstabe',
@@ -1324,10 +1451,60 @@ SnapTranslator.dict.de = {
         'Funktionsblock',
     'predicate':
         'Pr\u00e4dikat',
+    'sprite':
+        'Objekt',
 
     // list indices
     'last':
         'letztes',
     'any':
-        'beliebig'
+        'beliebig',
+
+    // attributes
+    'neighbors':
+        'Nachbarn',
+    'self':
+        'selbst',
+    'other sprites':
+        'andere Objekte',
+    'parts':
+        'Teile',
+    'anchor':
+        'Verankerung',
+    'parent':
+        'Vorfahr',
+    'children':
+        'Abkömmlinge',
+    'clones':
+        'Klone',
+    'other clones':
+        'andere Klone',
+    'dangling?':
+        'Baumeln?',
+    'rotation x':
+        'Drehpunkt x',
+    'rotation y':
+        'Drehpunkt y',
+    'center x':
+        'Mittelpunkt x',
+    'center y':
+        'Mittelpunkt y',
+    'name':
+        'Name',
+    'stage':
+        'B\u00fchne',
+    'costumes':
+        'Kostüme',
+    'sounds':
+        'Klänge',
+    'scripts':
+        'Skripte',
+
+    // inheritance
+    'inherited':
+        'geerbt',
+    'check to inherit\nfrom':
+        'einschalten, um zu erben\nvon',
+    'uncheck to\ndisinherit':
+        'ausschalten, um \nnicht mehr zu erben'
 };
