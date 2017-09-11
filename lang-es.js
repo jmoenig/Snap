@@ -369,6 +369,8 @@ SnapTranslator.dict.es = {
       'pausar todo %pause',
     'open website: %s':
       'abrir sitio web: %s',
+    'set costume shade to %n':
+      'fijar el brilo de la disfraz a %n',
 
     // motion:
     'Stage selected:\nno motion primitives':
