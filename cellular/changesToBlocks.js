@@ -74,44 +74,48 @@ InputSlotMorph.prototype.cellAttributesMenu = function () {
 */
 BlockMorph.prototype.mouseClickLeft = function () {
     var top = this.topBlock(),
-        receiver = top.receiver(),
+        receiver = top.scriptTarget(),
+        shiftClicked = this.world().currentKey === 16,
         stage;
+    if (shiftClicked && !this.isTemplate) {
+        return this.selectForEdit().focus(); // enable coopy-on-edit
+    }
     if (top instanceof PrototypeHatBlockMorph) {
         return top.mouseClickLeft();
     }
     if (receiver) {
         stage = receiver.parentThatIsA(StageMorph);
-		if (stage) {
-			if (receiver === stage)
-			{
-				stage.threads.toggleProcess(top, stage);
-			}
-			else
-			{
-				if (this instanceof ReporterBlockMorph)
-				{
-					stage.children.some(function (child)
-					{
-						if (child instanceof SpriteMorph && child.parentSprite == receiver)
-						{
-							stage.threads.toggleProcess(top, child);
-							return true;
-						}
-						return false;
-					});
-				}
-				else
-				{
-					stage.children.forEach(function (child)
-					{
-						if (child instanceof SpriteMorph && child.parentSprite == receiver)
-						{
-							stage.threads.toggleProcess(top, child);
-						}
-					});
-				}
-			}
-		}
+        if (stage) {
+            if (receiver === stage)
+            {
+                stage.threads.toggleProcess(top, stage);
+            }
+            else
+            {
+                if (this instanceof ReporterBlockMorph)
+                {
+                    stage.children.some(function (child)
+                    {
+                        if (child instanceof SpriteMorph && child.parentSprite == receiver)
+                        {
+                            stage.threads.toggleProcess(top, child);
+                            return true;
+                        }
+                        return false;
+                    });
+                }
+                else
+                {
+                    stage.children.forEach(function (child)
+                    {
+                        if (child instanceof SpriteMorph && child.parentSprite == receiver)
+                        {
+                             stage.threads.toggleProcess(top, child);
+                        }
+                    });
+                }
+            }
+        }
     }
 };
 

@@ -3,6 +3,7 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 		<title>Cellular, Beta</title>
+		<link rel="shortcut icon" href="favicon.ico">
 		<!-- Base-64 library -->
 		<script type="text/javascript" src="cellular/mdnb64.js"></script>
 		
@@ -52,6 +53,8 @@
 		<!-- Inherit scribble changes to Snap! -->
 		<script type="text/javascript" src="scribble/changesToBYOB.js"></script>
 		<script type="text/javascript" src="cellular/changesToBYOB.js"></script>
+		<script type="text/javascript" src="tables.js"></script>
+		<script type="text/javascript" src="symbols.js"></script>
 		
 		<script type="text/javascript" src="xml.js"></script>
 		<script type="text/javascript" src="store.js"></script>
@@ -59,10 +62,12 @@
 		<script type="text/javascript" src="cloud.js"></script>
 		<script type="text/javascript" src="sha512.js"></script>
         <script type="text/javascript" src="jszip/jszip.js"></script>
+		<script type="text/javascript" src="FileSaver.min.js"></script>
 		<script type="text/javascript">
 			var world;
 			window.onload = function () {
 				world = new WorldMorph(document.getElementById('world'));
+                world.worldCanvas.focus();
 				var ide = new IDE_Morph();
                 ide.openIn(world);
                 window.onInteractiveLoad = function() {
@@ -73,14 +78,15 @@
 				        ide.toggleAppMode(true);
                     }
                 }
-				setInterval(loop, 1);
+		        loop();
 			};
 			function loop() {
+        		requestAnimationFrame(loop);
 				world.doOneCycle();
 			}
 		</script>
 	</head>
 	<body style="margin: 0;">
 		<canvas id="world" tabindex="1" style="position: absolute;" />
-    </body>
+	</body>
 </html>
