@@ -20,16 +20,18 @@ VariableFrame.prototype.deleteVar = function (name) {
 ThreadManager.prototype.uberStartProcess = ThreadManager.prototype.startProcess;	
 ThreadManager.prototype.startProcess = function (
     block,
+    receiver,
     isThreadSafe,
-    exportResult,
+    exportResult, // bool
     callback,
-    receiver
+    isClicked,
+    rightAway
 ) {
 	//Final chance to prevent the prototype SpriteMorphs from doing shit.
 	if (receiver instanceof SpriteMorph && !receiver.shouldPerformEvents()) {
 		return null;
 	}
-	return this.uberStartProcess(block, isThreadSafe, exportResult, callback, receiver);
+	return this.uberStartProcess.apply(this, arguments);
 };
 
 /*

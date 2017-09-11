@@ -1937,8 +1937,20 @@ SyntaxElementMorph.prototype.showBubble = function (value, exportPic, target) {
                 ide.corral.frame.contents.children,
                 function (icon) {return icon.object === target; }
             );
+            // SNAPAPPS: This function is used to show the result bubble that appears
+            // when you click on a reporter block. By default, the bubble appears above 
+            // the icon for the reciever spritemorph. However, in Cellular, this fails 
+            // since the reciever is an instance of the original spritemorph and does not
+            // have an icon, leaving anchor == null. To fix this, we will allow showing the
+            // bubble above the actual instance. It's more useful this way anyways.
+            if (anchor == null) {
+            	// This is an instance.
+        		anchor = target;
+            }
         }
-        pos = anchor.center();
+        if (anchor != null) {
+        	pos = anchor.center();
+        }
     }
     bubble = new SpeechBubbleMorph(
         morphToShow,
@@ -1956,6 +1968,8 @@ SyntaxElementMorph.prototype.showBubble = function (value, exportPic, target) {
     }
     if (anchor instanceof SpriteIconMorph) {
         bubble.keepWithin(ide.corral);
+    } else if (anchor instanceof SpriteMorph) {
+        bubble.keepWithin(ide.stage);
     } else if (sf) {
         bubble.keepWithin(sf);
     }

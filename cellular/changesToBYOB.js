@@ -23,7 +23,7 @@ VariableDialogMorph.prototype.createTypeButtons = function () {
     var myself = this;
 
     this.addTypeButton(
-        function () {myself.setType('gobal'); },
+        function () {myself.setType('global'); },
         "global",
         function () {return myself.isGlobal; }
     );
