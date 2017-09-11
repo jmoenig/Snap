@@ -660,7 +660,7 @@ SnapSerializer.prototype.loadSprites = function (xmlString, ide) {
 	
 	var tempSprites = [];
     model.childrenNamed('sprite').forEach(function (model) {
-		tempSprites.push(myself.loadSprite(model, project));
+		tempSprites.push(myself.loadSprite(model, project, ide));
     });
     
 	this.spritesLoaded(ide.stage, tempSprites);
@@ -1213,14 +1213,14 @@ SnapSerializer.prototype.spritesLoaded = function(stage, spriteList)
 	//dependancies and so it is important all sprites are loaded
 }
 
-SnapSerializer.prototype.loadSprite = function (model, project) {
+SnapSerializer.prototype.loadSprite = function (model, project, ide) {
     var sprite  = new SpriteMorph(project.globalVariables);
 
     if (model.attributes.id) {
         this.objects[model.attributes.id] = sprite;
     }
     if (model.attributes.name) {
-        sprite.name = ide.newSpriteName(model.attributes.name);
+        sprite.name = ide ? ide.newSpriteName(model.attributes.name) :  model.attributes.name;
         project.sprites[sprite.name] = sprite;
     }
     if (model.attributes.idx) {
@@ -1233,7 +1233,9 @@ SnapSerializer.prototype.loadSprite = function (model, project) {
         sprite.penPoint = model.attributes.pen;
     }
     project.stage.add(sprite);
-    ide.sprites.add(sprite);
+    if (ide) {
+	    ide.sprites.add(sprite);
+    }
     sprite.scale = parseFloat(model.attributes.scale || '1');
     sprite.rotationStyle = parseFloat(
         model.attributes.rotation || '1'
@@ -1331,7 +1333,7 @@ SnapSerializer.prototype.loadValue = function (model, object) {
         });
         return v;
     case 'sprite':
-		var v = this.loadSprite(model, myself.project);
+		var v = this.loadSprite(model, myself.project); // Ignore Ide parameter. Upstream doesn't need it either.
         return v;
     case 'context':
         v = new Context(null);

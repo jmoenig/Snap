@@ -1326,7 +1326,7 @@ SpriteMorph.prototype.drawText = function (text)
     context.scale(1 / stage.scale, 1 / stage.scale);
     context.translate(-stage.left(), -stage.top());
     
-    context.font = currentFontSize + "px \"" + currentFont + "\"";
+    context.font = currentFontSize * stage.scale + "px \"" + currentFont + "\"";
     var stringy = "rgba("+Math.round(textColor.r)+","+Math.round(textColor.g)+","+Math.round(textColor.b)+","+textColor.a+")";
     context.fillStyle = stringy;
     context.fillText(text, x, y);

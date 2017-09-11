@@ -12,10 +12,10 @@ modules.cellularStore = '2013-December-1';
 /*
 ** Creates a clone or a parent sprite depending.
 */
-SnapSerializer.prototype.loadSprite = function (model, project) {
-	var v;
-	
+SnapSerializer.prototype.uberLoadSprite = SnapSerializer.prototype.loadSprite;
+SnapSerializer.prototype.loadSprite = function (model, project, ide) {
 	if (model.attributes.parentSprite) {
+		var v;
 		//This is a cellular instance, do not create a full SpriteMorph.
 		//Instead, copy the important things.
 		v = {};
@@ -35,40 +35,12 @@ SnapSerializer.prototype.loadSprite = function (model, project) {
 		v.costume = +model.attributes.costume;
 		v.variables = new VariableFrame();
 		this.loadVariables(v.variables, model.require('variables'));
+		return v;
 	}
 	else
 	{
-		v = new SpriteMorph(project.globalVariables);
-		
-		if (model.attributes.id) {
-			this.objects[model.attributes.id] = v;
-		}
-		if (model.attributes.name) {
-			v.name = model.attributes.name;
-			project.sprites[model.attributes.name] = v;
-		}
-		if (model.attributes.idx) {
-			v.idx = +model.attributes.idx;
-		}
-		if (model.attributes.color) {
-			v.color = this.loadColor(model.attributes.color);
-		}
-		if (model.attributes.pen) {
-			v.penPoint = model.attributes.pen;
-		}
-		project.stage.add(v);
-		v.scale = parseFloat(model.attributes.scale || '1');
-		v.rotationStyle = parseFloat(
-			model.attributes.rotation || '1'
-		);
-		v.isDraggable = model.attributes.draggable !== 'false';
-		v.isVisible = model.attributes.hidden !== 'true';
-		v.heading = parseFloat(model.attributes.heading) || 0;
-		v.drawNew();
-		v.gotoXY(+model.attributes.x || 0, +model.attributes.y || 0);
-		this.loadObject(v, model);
+		return this.uberLoadSprite(model, project, ide);
 	}
-	return v;
 }
 
 /*
