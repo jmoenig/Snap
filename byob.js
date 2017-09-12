@@ -768,7 +768,7 @@ CustomCommandBlockMorph.prototype.mouseClickLeft = function () {
     this.edit();
 };
 
-CustomCommandBlockMorph.prototype.snapAppsCanEdit = function () { return true; }
+CustomCommandBlockMorph.prototype.snapAppsCanEdit = function (cb) { cb.call(this); }
 CustomCommandBlockMorph.prototype.edit = function () {
     var myself = this,
         def = this.definition,

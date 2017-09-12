@@ -34,7 +34,7 @@ CustomCommandBlockMorph.prototype.snapAppsCanEdit = function (callback)
 	}
 	else
 	{
-		callback();
+        callback.call(this);
 	}
 }
 
