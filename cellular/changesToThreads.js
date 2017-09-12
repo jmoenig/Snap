@@ -96,7 +96,7 @@ Process.prototype.getLastClone = function () {
 
 //When a clone is created, we need to note down the last created clone
 Process.prototype.createClone = function (name) {
-    var thisObj = this.homeContext.receiver;
+    var thisObj = this.receiver;
 		
 	this.lastCreatedClone = null;
 
@@ -113,25 +113,6 @@ Process.prototype.createClone = function (name) {
 			}
         }
     }
-};
-
-Process.prototype.asObject = function (object, commandBlock) {
-    var args = this.context.inputs;
-    if (object instanceof SpriteMorph) {
-        if (args[1]) {
-			this.popContext();
-			this.pushContext('doYield');
-			this.context.receiver = object;
-			this.pushContext(args[1].blockSequence(), this.context);
-			this.pushContext();
-		}
-	} else {
-		var stage = this.context.receiver.parentThatIsA(StageMorph);
-		if (stage.isNobody(object)) {
-			throw new Error("The object is nobody!");
-		}
-		throw new Error("Not an object!");
-	}
 };
 
 Process.prototype.nearestObject = function (otherObjectName, x, y, predicate) {
@@ -158,7 +139,7 @@ Process.prototype.nearestObject = function (otherObjectName, x, y, predicate) {
 			return null; 
 		}
 		if (otherObjectName == "myself")
-			otherObjectName = this.parentSprite ? this.parentSprite.name : this.name;
+			otherObjectName = this.context.receiver.parentSprite ? this.context.receiver.parentSprite.name : this.context.receiver.name;
 			
 		var objects = [];
 		this.context.receiver.parentThatIsA(StageMorph).children.forEach(function (x) {
@@ -168,7 +149,8 @@ Process.prototype.nearestObject = function (otherObjectName, x, y, predicate) {
 			}
 		});
 		
-		this.context.nearestObjectState = { 
+		this.context.nearestObjectState = {
+		    originalReceiver: this.receiver,
 			objects: objects,
 			lastObject: null, 
 			minSqDist: -1, 
@@ -209,6 +191,7 @@ Process.prototype.nearestObject = function (otherObjectName, x, y, predicate) {
 		predicate.outerContext =  predicate.parentContext = this.context;
 		predicate.receiver = state.lastObject;
 		this.context = predicate;
+		this.receiver = state.lastObject;
 		this.pushContext();
 		
 		//this.inputs[4] will be calculated once we return...
@@ -218,6 +201,7 @@ Process.prototype.nearestObject = function (otherObjectName, x, y, predicate) {
 	{
 		//Remove atomicity
         this.isAtomic = false;
+        this.receiver = this.context.nearestObjectState.originalReceiver;
 		//No more objects! Clean up and return minimum.
 		delete this.context.nearestObjectState;
 		return state.minObject;

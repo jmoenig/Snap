@@ -321,7 +321,6 @@ SpriteMorph.prototype.snapappsHookBlockTemplates = function(blocks, block, cat, 
         blocks.push(block('getObjectCellY'));
         blocks.push(block('setObjectCellPosition'));
         blocks.push('-');
-        blocks.push(block('asObject'));
         blocks.push(block('nearestObject'));
         blocks.push(block('nearestObjectToMe'));
     }
@@ -1016,8 +1015,8 @@ StageMorph.prototype.obliterate = function(otherObject)
     }
 }
 
-SpriteMorph.prototype.objectIsA = function(otherObject) {
-    return this.parentThatIsA(StageMorph).objectIsA(otherObject);
+SpriteMorph.prototype.objectIsA = function(otherObject, spriteMorph) {
+    return this.parentThatIsA(StageMorph).objectIsA(otherObject, spriteMorph);
 }
 StageMorph.prototype.objectIsA = function(otherObject, spriteMorph)
 {
@@ -1121,6 +1120,7 @@ StageMorph.prototype.setVariable = function(n,v,x)
     if (x instanceof SpriteMorph)
     {
         x.variables.setVar(n, v);
+        return;
     }
     if (this.isNobody(x)) {
         throw new Error("The object is nobody!");
