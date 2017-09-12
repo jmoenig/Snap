@@ -181,9 +181,9 @@ SnapTranslator.dict.es = {
     'language_name':
         'Espa\u00F1ol', // the name as it should appear in the language menu
     'language_translator':
-        'V\u00EDctor Manuel Muratalla Morales', // your name for the Translators tab
+        'V\u00EDctor Manuel Muratalla Morales y Cristián Rizzi Iribarren', // your name for the Translators tab
     'translator_e-mail':
-        'victor.muratalla@yahoo.com', // optional
+        'victor.muratalla@yahoo.com / rizzi.cristian@gmail.com', // optional
     'last_changed':
         '2013-03-25', // this, too, will appear in the Translators tab
 
@@ -222,7 +222,7 @@ SnapTranslator.dict.es = {
 
     // tabs:
     'Scripts':
-        'Objetos',
+        'Programas',
     'Costumes':
         'Disfraces',
     'Sounds':
@@ -325,7 +325,7 @@ SnapTranslator.dict.es = {
 
     // looks:
     'switch to costume %cst':
-        'cambiar el disfraz a %cst',
+        'cambiar al disfraz %cst',
     'next costume':
         'siguiente disfraz',
     'costume #':
@@ -472,13 +472,13 @@ SnapTranslator.dict.es = {
     'ask %s and wait':
         'preguntar %s y esperar',
     'what\'s your name?':
-        '\u00BFC\u00F3mo te llamas?',
+        '\u00BFC\u00F3mo es tu nombre?',
     'answer':
         'respuesta',
     'mouse x':
-        'x del rat\u00F3n',
+        'x del mouse',
     'mouse y':
-        'y del rat\u00F3n',
+        'y del mouse',
     'mouse down?':
         '\u00BFrat\u00F3n abajo?',
     'key %key pressed?':
@@ -861,11 +861,11 @@ SnapTranslator.dict.es = {
     'Reporter':
         'Reportero',
     'Predicate':
-        'Predicado',
+        'Condición',
 
     // block editor
     'Block Editor':
-        'Bloquear editor',
+        'Editor de bloques',
     'Apply':
         'Aplicar',
 
@@ -877,15 +877,15 @@ SnapTranslator.dict.es = {
 
     // input dialog
     'Create input name':
-        'Crear nombre de insumo',
+        'Crear nombre de entrada',
     'Edit input name':
-        'Editar nombre de insumo',
+        'Editar nombre de entrada',
     'Edit label fragment':
         'Editar fragmento de etiqueta',
     'Title text':
         'Texto de t\u00EDtulo',
     'Input name':
-        'Nombre de insumo',
+        'Ingresar nombre',
     'Delete':
         'Borrar',
     'Object':
@@ -927,7 +927,7 @@ SnapTranslator.dict.es = {
     'Modules...':
         'M\u00F3dulos...',
     'Credits...':
-        'Creditos...',
+        'Créditos...',
     'Translators...':
         'Traductores',
     'License':
@@ -935,7 +935,7 @@ SnapTranslator.dict.es = {
     'current module versions:':
         'versiones del m\u00F3dulo actual',
     'Contributors':
-        'Contribuidores',
+        'Colaboradores',
     'Translations':
         'Traducciones',
 
@@ -947,13 +947,13 @@ SnapTranslator.dict.es = {
     'slider':
         'deslizador',
     'slider min...':
-        'm\u00EDnimo de deslizador...',
+        'valor m\u00EDnimo de deslizador...',
     'slider max...':
-        'm\u00E1ximo de deslizador...',
+        'valor m\u00E1ximo de deslizador...',
     'Slider minimum value':
-        'm\u00EDnimo valor de deslizador',
+        'valor m\u00EDnimo valor de deslizador',
     'Slider maximum value':
-        'm\u00E1ximo valor de deslizador',
+        'valor m\u00E1ximo valor de deslizador',
 
     // list watchers
     'length: ':
@@ -976,7 +976,7 @@ SnapTranslator.dict.es = {
 
     // collision detection
     'mouse-pointer':
-        'puntero del rat\u00F3n',
+        'puntero del mouse',
     'edge':
         'borde',
     'pen trails':
@@ -1120,5 +1120,428 @@ SnapTranslator.dict.es = {
     'last':
         '\u00FAltimo',
     'any':
-        'cualquier'
+        'cualquier',
+        
+    // MISSING UPSTREAM:
+        
+	'when I am %interaction':
+		'Al ser %interaction',
+	'clicked':
+        'cliqueado',
+    'pressed':
+        'presionado',
+    'dropped':
+        'soltado',
+    'mouse-entered':
+        'pasado el mouse por encima sin cliquear',
+    'mouse-departed':
+        'pasado el mouse por encima sin cliquear y luego alejar',
+        
+    'stop %stopChoices':
+        'detener %stopChoices',
+    'all':
+        'todos',
+    'this script':
+        'este script',
+    'this block':
+        'este bloque',
+    'stop %stopOthersChoices':
+        'detener %stopOthersChoices',
+    'all but this script':
+        'todos excepto este script',
+    'other scripts in sprite':
+        'otros scripts del objeto',
+    'pause all %pause':
+        'pausar todos %pause',
+    
+      
+    'when I start as a clone':
+        'Al comenzar como clon',
+    'create a clone of %cln':
+        'crear clon de %cln',
+    'myself':
+        'mío',
+    'delete this clone':
+        'eliminar este clon',
+        
+    // under "broadcast %msg and wait"
+    'message':
+        'mensaje',
+        
+    'turbo mode?':
+        'modo turbo?',
+        
+    // under "graphical effects"
+    'brightness':
+        'brillo',
+    'negative':
+        'negativo',
+    'comic':
+        'historieta',
+    'confetti':
+        'confite',
+        
+    // under "Input sliders"
+    'Plain prototype labels':
+        'Etiquetas de prototipo planas',
+    'Turbo mode':
+        'Modo turbo',
+    'Flat design':
+        'Diseño plano',
+    'Keyboard Editing':
+        'Edición de teclado',
+    'Prefer smooth animations':
+        'Preferir animaciones suaves',
+    'Flat line ends':
+        'Bordes de línea planos',
+    'Codification support':
+        'Soporte de codificación',
+    'Inheritance support':
+        'Soporte de herencia',
+    'Zoom blocks...':
+        'Agrandar bloques...',
+        
+    // SCRIBBLE:
+    
+    'point to x: %n y: %n':
+        'apuntar hacia x: %n y: %n',
+    'go to random location':
+        'ir a una dirección al azar',
+    'point in direction %n':
+        'apuntar en dirección %n',
+        
+    'get pen alpha':
+        'tomar lápiz alfa',
+    'change pen alpha by %n':
+        'cambiar lápiz alfa por %n',
+    'set pen alpha to %n':
+        'cambiar lápiz alfa a %n',
+    'get pen color string':
+        'tomar texto de color de lápiz',
+    'pen down?':
+        'lápiz abajo?',
+        
+    'when %keyHat key released':
+        'Al soltar tecla %keyHat',
+        
+    // text:
+    'draw text %s':
+		    'dibujar texto %s',
+    'set text color to %clr':
+		    'setear color texto a %clr',
+    'set text color string %n':
+		    'setear valor color texto a %n',
+    'change text hue by %n':
+		    'cambiar luminosidad texto por %n',
+    'change text shade by %n':
+		    'cambiar sombreado de texto por %n',
+    'change text alpha by %n':
+		    'cambiar transparencia texto por %n',
+    'set text alpha to %n':
+		    'setear transparencia texto a %n',
+    'set text shade to %n':
+		    'setear sombreado de texto a %n',
+    'set text hue to %n':
+		    'setear luminosidad texto a %n',
+    'get text hue':
+		    'tomar luminosidad texto',
+    'get text shade':
+		    'tomar sombreado texto',
+    'get text alpha':
+		    'tomar transparencia texto',
+    'get text color string':
+		    'tomar texto de color texto',
+    'set font to %font':
+		    'setear fuente a %font',
+    'set font size to %n':
+		    'setear tamaño de fuente a %n',
+        
+
+    // shapes:
+    'start shape':
+            'comenzar figura',
+    'end shape':
+            'finalizar figura',
+    'set fill color to %clr':
+            'setear color de relleno a %clr',
+    'set fill color string %s':
+		    'setear texto de color de relleno %s',
+    'change fill hue by %n':
+		    'cambiar luminosidad de relleno por %n',
+    'set fill hue to %n':
+		    'seterar luminosidad de relleno a %n',
+    'get fill hue':
+		    'tomar luminosidad de relleno',
+    'change fill shade by %n':
+		    'cambiar sombreado de relleno por %n',
+    'get fill shade':
+		    'tomar sombreado de relleno',
+    'set fill shade to %n':
+		    'setear sombreado de relleno a %n',
+    'change fill alpha by %n':
+		    'cambiar alfa relleno por %n',
+    'get fill alpha':
+		    'obtener alfa relleno',
+    'get fill color string':
+		    'obtener texto de color de relleno',
+    'set fill alpha to %n':
+		    'setear alfa relleno a %n',
+    'draw circle radius %n':
+		    'dibujar círculo de radio %n',
+    'draw oval radius %n by %n':
+		    'dibujar óvalo de radio %n por %n',
+    'draw rectangle %n by %n':
+		    'dibujar rectángulo %n por %n',
+    'Drawn shapes and pen strokes are\ncleared with the same block. It is\nadded here for convenience:':
+		    'Las figuras dibujadas y el relleno de los lápices se\nborran con el mismo bloque. Se agrega \nacá por conveniencia:',
+        
+    // CELLULAR:
+    
+    // Titles.
+    'Neighbours':
+        'Vecinas',
+    'Cells':
+        'Celdas',
+    'Objects':
+        'Objetos',
+    'Shapes':
+        'Figuras',
+        
+    // Movement:
+    'cell X':
+        'celda X',
+    'cell Y':
+        'celda Y',
+    'move to nbr cell':
+        'mover a celda vecina',
+    'move to empty nbr cell':
+        'mover a celda vcn vacía',
+    'move to any cell':
+        'mover a cualquier celda',
+    'move to any empty cell':
+        'mover a una celda vacía',
+    'move to cell at cell x: %n cell y: %n':
+        'mover a celda en celda x: %n celda y: %n',
+    'snap to centre of cell':
+        'ubicar en centro de la celda',
+        
+    // control:
+    'instance count of %cln':
+        'cantidad de instancias de %cln',
+    'last created clone':
+        'último clon creado',
+
+    // sensing:
+    'system time':
+        'hora del sistema',
+
+    // cells
+    'Make a cell attribute':
+        'Crear atributo de celda',
+    'Delete a cell attribute':
+        'Eliminar atributo de celda',
+    
+    // "Show [] to []"
+    'Show':
+        'Mostrar',
+    "to": 
+        "a",
+           
+    'cells X':
+            'celdas X',
+    'cells Y':
+            'celdas Y',
+    'show cell attribute %clat':
+		    'mostrar atributo de celda %clat',
+    'hide cell attribute %clat':
+		    'ocultar atributo de celda %clat',
+    'value of %clat at x: %n y: %n':
+		    'valor de %clat en x: %n y: %n',
+    'Cell attribute name':
+		    'Nombre de atributo de celda',
+    'value of %clat at cell x: %n cell y: %n':
+		    'valor de %clat en celda x: %n celda y: %n',
+    'value of %clat here':
+		    'valor de %clat acá',
+    'average value of %clat':
+		    'valor promedio de %clat',
+    'minimum value of %clat':
+		    'valor mínimo de %clat',
+    'maximum value of %clat':
+		    'valor máximo de %clat',
+    'set %clat at x: %n y: %n to %n':
+		    'setear %clat en x: %n y: %n a %n',
+    'set %clat at cell x: %n cell y: %n to %n':
+		    'setear %clat en celda x: %n celda y: %n a %n',
+    'set %clat here to %n':
+		    'setear %clat acá a %n',
+    'set %clat everywhere to %n':
+		    'setear %clat en todos lados a %n',
+    'change %clat at x: %n y: %n by %n':
+		    'cambiar %clat en x: %n y: %n por %n',
+    'change %clat at cell x: %n cell y: %n by %n':
+		    'cambiar %clat en celda x: %n celda y: %n por %n',
+    'change %clat here by %n':
+		    'cambiar %clat acá por %n',
+    'change %clat everywhere by %n':
+		    'cambiar %clat en todos lados por %n',
+
+    // objects:
+    'nobody':
+		    'nadie',
+    'this':
+		    'este',
+    '%obj is this':
+		    '%obj es éste',
+    '%obj is nobody':
+		    '%obj es nadie',
+    'set var %s to %s in %obj':
+		    'setear var %s a %s en %obj',
+    'get var %s in %obj':
+		    'tomar var %s en %obj',
+    'change var %s by %s in %obj':
+		    'cambiar var %s por %s en %obj',
+    'scale to cell size':
+		    'escalar a tamaño de celda',
+    'costume name':
+		    'nombre de disfraz',
+    'costume name of %obj':
+		    'nombre de disfraz de %obj',
+    'costume # of %obj':
+		    'disfraz # de %obj',
+    'type of %obj':
+		    'tipo de %obj',
+    '%obj is a %spr':
+		    '%obj es un %spr',
+    'obliterate %obj':
+		    'destruir %obj',
+    'list of all %cln':
+		    'lista de todos los %cln',
+    'x position of %obj':
+		    'posición x de %obj',
+    'y position of %obj':
+		    'posición y de %obj',
+    'cell x position of %obj':
+		    'posición celda x de %obj',
+    'cell y position of %obj':
+		    'posición celda y de %obj',
+    'move %obj to x: %n y: %n':
+		    'mover %obj a x: %n y: %n',
+    'move %obj to cell x: %n cell y: %n':
+		    'mover %obj a celda x: %n celda y: %n',
+    'nearest %cln to x: %n y: %n where %predRing':
+		    '%cln más cerca de x: %n y: %n donde %predRing',
+    'nearest %cln to myself':
+		    '%cln más cerca mío',
+		
+    // neighbours:
+    'above':
+		    'arriba',
+    'top left':
+		    'arriba izquierda',
+    'top right':
+		    'arriba derecha',
+    'left':
+		    'izquierda',
+    'right':
+		    'derecha',
+    'below':
+		    'abajo',
+    'bottom left':
+		    'abajo izquierda',
+    'bottom right':
+		    'abajo derecha',
+    'object in cell %celldir':
+		    'objeto en celda %celldir',
+    'object in cell cellX: %n cellY: %n':
+		    'objeto en celda cellX: %n cellY: %n',
+    'object in cell x: %n y: %n':
+		    'objeto en celda x: %n y: %n',
+    'objects in cell %celldir':
+		    'objetos en celda %celldir',
+    'objects in cell cellX: %n cellY: %n':
+		    'objetos en celda celdaX: %n celdaY: %n',
+    'objects in cell x: %n y: %n':
+		    'objetos en celda x: %n y: %n',
+    'list of objects in nbr cells':
+		    'lista de objetos en celdas vcns',
+    '# object %spr in nbr cells':
+		    '# objecto %spr en celdas vcns',
+    '# costume %cst in nbr cells':
+		    '# disfraz %cst en celdas vcns',
+    'is costume %cst in cell %celldir':
+		    'hay un disfraz %cst en celda %celldir',
+    'is object %spr in cell %celldir':
+		    'hay un objeto %spr en celda %celldir',
+    'is any object in cell %celldir':
+		    'hay algún objeto en celda %celldir',
+    'is costume %cst in all nbr cells':
+		    'hay disfraz %cst en todas las celdas vcns',
+		
+    'is object %spr in all nbr cells':
+     		'es objeto %spr en todas las celdas vcns', 
+    'is an object in every nbr cell':
+		    'es objeto en cada celda vcn',
+    'number of filled nbr cells':
+     		'cantidad de celdas vcns llenas',
+
+    // New variable dialog "global" type radio button.
+    "global": "¿Qué?",
+    
+    // New variable dialog "for each instance of this sprite" type radio button.
+    "for each instance of this sprite": "¿Qué?",
+    
+    // to plot the value of a variable
+    "plot": "¿Qué?",
+    
+    // used to plot the value of a variable (show variable, right click on the little watcher, "plot...")
+    "plot...": "¿Qué?",
+    
+    // Default name of a variable in the Objects panel.
+    "varName": "NomVar",
+    
+    // default cell attribute name
+    "CellAttr1": "AtrCelda1",
+        
+    // hover text for draw button under stage
+    "draw to cell attributes": "pintar atributo en celdas",
+    
+    // label for setting draw brush radius
+    "cell radius:": "radio de celda:",
+    
+    // hover text for setting draw brush radius
+    "brush size (in cells)": "tamaño pincel (en celdas)",
+    
+    // label for setting brush hardness
+    "hard:": "trazo:",
+    
+    // hover text for setting brush hardness
+    "brush hardness (0-1)": "dureza trazo (0-1)",
+    
+    // label for setting brush value
+    "value:": "valor:",
+    
+    // hover text for setting brush value
+    "brush value": "valor pincel",
+    
+    // label for setting brush attribute
+    "attribute:": "atributo:",
+    
+    // hover text for setting brush attribute
+    "attribute": "atributo",
+    
+    // label for setting grid size
+    "grid size:": "tamaño grilla:",
+    
+    // hover text for setting grid size
+    "grid size": "tamaño grilla",
+    
+    // hover text for clear button
+    "clear current cell attribute": "¿Qué?",
+    
+    // default cell query text
+    "(hover to query)": "(mouse encima para ver valor)",
+    
+    // the "at" in "CellAttr1 at (1, 2) = 30". Used in query text.
+    "at": "en",
 };

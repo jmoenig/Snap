@@ -159,7 +159,7 @@ function addCellAttributeButtons(blocks, block, cat, helpMenu)
         colour.nextIsRight = true;
         blocks.push(colour);
 
-        var txt = new TextMorph("Show");
+        var txt = new TextMorph(localize("Show"));
         txt.fontSize = 12;
         txt.setColor(this.paletteTextColor);
         txt.nextIsRight = true;
@@ -188,7 +188,7 @@ function addCellAttributeButtons(blocks, block, cat, helpMenu)
         fromField.nextIsRight = true;
         blocks.push(fromField);
 
-        txt = new TextMorph("to");
+        txt = new TextMorph(localize("to"));
         txt.fontSize = 12;
         txt.setColor(this.paletteTextColor);
         txt.nextIsRight = true;
@@ -710,19 +710,19 @@ SpriteMorph.prototype.addCellularBlocks = function () {
         type: 'command',
         category: 'objects',
         spec: 'set var %s to %s in %obj',
-        defaults: ["varName", 0, null]
+        defaults: [localize("varName"), 0, null]
     };
     SpriteMorph.prototype.blocks.getVariable = {
         type: 'reporter',
         category: 'objects',
         spec: 'get var %s in %obj',
-        defaults: ["varName"]
+        defaults: [localize("varName")]
     };
     SpriteMorph.prototype.blocks.changeVariable = {
         type: 'reporter',
         category: 'objects',
         spec: 'change var %s by %s in %obj',
-        defaults: ["varName", 1, null]
+        defaults: [localize("varName"), 1, null]
     };
     SpriteMorph.prototype.blocks.scaleToCellSize = {
         type: 'command',
@@ -2378,7 +2378,7 @@ StageMorph.prototype.dirtyEntireStage = function()
     world.broken.push(this.bounds.spread());
 }
 
-StageMorph.prototype.visibleAttributes = ["CellAttr1"];
+StageMorph.prototype.visibleAttributes = [Cell.attributes[0]];
 
 /*
 ** Converts annoying stage coordinates ([-240,240],[-180,180]) to normal screen coordinates
@@ -2624,7 +2624,7 @@ StageMorph.prototype.updateQueryText = function(screenPoint) {
         var cellY = Math.floor(cellSpacePoint.y);
         var hoverCell = this.cells[cellY][cellX];
         var hoverCellValue = hoverCell.getAttribute(drawAttribute);
-        newText = drawAttribute + " at (" + cellX + ", " + cellY + ") = " + hoverCellValue.toFixed(2);
+        newText = drawAttribute + " " + localize("at") + " (" + cellX + ", " + cellY + ") = " + hoverCellValue.toFixed(2);
     } else {
         newText = this.queryTextDefault;
     }

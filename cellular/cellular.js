@@ -50,9 +50,7 @@ Cell.prototype.removeSpriteMorph = function(morph)
 	if (index > -1) {
 		this.spriteMorphs.splice(index, 1);
 	} else {
-        debugger;
         console.error("Error removing sprite from cell.");
-        throw new Error("Error moving...");
 	}
 	if (this.spriteMorphs.length == 0)
 		this.parentECT.cellMadeEmpty();
@@ -92,13 +90,11 @@ Cell.attributeDrawRange = {};
 ** Sets the attributes to just one red attribute named "CellAttr1"
 */
 Cell.resetToDefault = function() {
-    Cell.attributes = ["CellAttr1"];
-    Cell.attributeColours = {
-        "CellAttr1": new Color(255, 0, 0)
-    };
-    Cell.attributeDrawRange = {
-        "CellAttr1": [0, 10]
-    }
+    var cellAttributeOne = localize("CellAttr1");
+    Cell.attributes = [cellAttributeOne];
+    Cell.attributeColours = {};
+    Cell.attributeColours[cellAttributeOne] = new Color(255, 0, 0);
+    Cell.attributeDrawRange[cellAttributeOne] = [0, 10];
 }
 Cell.resetToDefault();
 

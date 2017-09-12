@@ -56,7 +56,7 @@ SpriteMorph.prototype.snapappsHookBlockTemplates = function(blocks, block, cat, 
         blocks.push('-');
 		
 		var txt = new TextMorph(
-			'Drawn shapes and pen strokes are\ncleared with the same block. It is\nadded here for convenience:'
+			localize('Drawn shapes and pen strokes are\ncleared with the same block. It is\nadded here for convenience:')
 		);
 		txt.fontSize = 12;
 		txt.setColor(this.paletteTextColor);

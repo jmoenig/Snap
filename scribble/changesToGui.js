@@ -106,7 +106,7 @@ IDE_Morph.prototype.exportProjectZip = function()
         {
             hadError = true;
             var dlg = new DialogBoxMorph();
-            dlg.inform('Error', 
+            dlg.inform(localize('Error'), 
                        'There was an error zipping the file:\n' + error + '\nThis could because of ' + 
                        'the browser you are using.', myself.world());
             dlg.fixLayout();
@@ -217,12 +217,12 @@ IDE_Morph.prototype.projectMenuSnapAppsModifier = function (menu)
         var myself = this;
         menu.addLine();
         menu.addItem(
-            'Export to ZIP',
+            localize('Export to ZIP'),
             function () {
                 var msg;
                 myself.nextSteps([
                     function () {
-                        msg = myself.showMessage('Zipping project...');
+                        msg = myself.showMessage(localize('Zipping project...'));
                     },
                     function () {
                         myself.exportProjectZip();
@@ -232,7 +232,7 @@ IDE_Morph.prototype.projectMenuSnapAppsModifier = function (menu)
                     }
                 ]);
             },
-            'Export project as ZIP file',
+            localize('Export project as ZIP file'),
             new Color(100, 0, 0)
         );
     }

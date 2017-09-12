@@ -97,7 +97,7 @@ IDE_Morph.prototype.createCorral = function()
     scribbleButton.labelShadowColor = colors[1];
     scribbleButton.labelColor = new Color(0, 200, 200);
     scribbleButton.contrast = this.buttonContrast;
-    scribbleButton.hint = "draw to cell attributes";
+    scribbleButton.hint = localize("draw to cell attributes");
 
     function createBasicLabel(text) {
         var basicLabel = new TextMorph(text);
@@ -123,9 +123,9 @@ IDE_Morph.prototype.createCorral = function()
         return basicField;
     };
 
-    var sizeLabel = createBasicLabel("cell radius:");
+    var sizeLabel = createBasicLabel(localize("cell radius:"));
 
-    var sizeField = createBasicField("brush size (in cells)", 32, function () {
+    var sizeField = createBasicField(localize("brush size (in cells)"), 32, function () {
         var value = Number(sizeField.getValue());
         if (isNaN(value))
         {
@@ -145,9 +145,9 @@ IDE_Morph.prototype.createCorral = function()
         myself.stage.strokeSize = value;
     }, this.stage.strokeSize.toString());
 
-    var hardnessLabel = createBasicLabel("hard:");
+    var hardnessLabel = createBasicLabel(localize("hard:"));
 
-    var hardnessField = createBasicField("brush hardness (0-1)", 32, function () {
+    var hardnessField = createBasicField(localize("brush hardness (0-1)"), 32, function () {
         var value = Number(hardnessField.getValue());
         if (isNaN(value))
         {
@@ -167,9 +167,9 @@ IDE_Morph.prototype.createCorral = function()
         myself.stage.strokeHardness = value;
     }, this.stage.strokeHardness.toString());
 
-    var valueLabel = createBasicLabel("value:");
+    var valueLabel = createBasicLabel(localize("value:"));
 
-    var valueField = createBasicField("brush value", 32, function () {
+    var valueField = createBasicField(localize("brush value"), 32, function () {
         var value = Number(valueField.getValue());
         if (isNaN(value))
         {
@@ -179,7 +179,7 @@ IDE_Morph.prototype.createCorral = function()
         myself.stage.strokeValue = value;
     }, this.stage.strokeValue.toString());
 
-    var attributeSelectorLabel = createBasicLabel("attribute:");
+    var attributeSelectorLabel = createBasicLabel(localize("attribute:"));
 
     var attributeSelector = new InputFieldMorph(Cell.attributes.length > 0 ? Cell.attributes[0] : "", false, function() {
         var retn = {};
@@ -195,10 +195,10 @@ IDE_Morph.prototype.createCorral = function()
     attributeSelector.corner = 12;
     attributeSelector.padding = 0;
     attributeSelector.contrast = this.buttonContrast;
-    attributeSelector.hint = "grid size";
+    attributeSelector.hint = localize("attribute");
     this.attributeSelector = attributeSelector;
 
-    var gridSizerLabel = createBasicLabel("grid size:");
+    var gridSizerLabel = createBasicLabel(localize("grid size:"));
 
     var gridSizer = new InputFieldMorph(
             "40x30", false, // numeric?
@@ -216,18 +216,18 @@ IDE_Morph.prototype.createCorral = function()
     gridSizer.corner = 12;
     gridSizer.padding = 0;
     gridSizer.contrast = this.buttonContrast;
-    gridSizer.hint = "grid size";
+    gridSizer.hint = localize("grid size");
     gridSizer.contents().minWidth = 0;
 
     var clearButton = new PushButtonMorph(
         myself,
         'onClearButton',
-        'clear',
+        localize('clear'),
         null,
-        'clear current cell attribute',
+        localize('clear current cell attribute'),
         null);
 
-    var queryValueLabel = createBasicLabel("(hover to query)");
+    var queryValueLabel = createBasicLabel(localize("(hover to query)"));
     this.cellAttributeQueryText = queryValueLabel;
 
     var lineHeight = this.logo.height();
@@ -526,6 +526,7 @@ SpriteIconMorph.prototype.fixLayout = function () {
 IDE_Morph.prototype.uberNewProject = IDE_Morph.prototype.newProject;
 IDE_Morph.prototype.newProject = function() {
     Cell.resetToDefault();
+    this.stage.setCellAttributeVisibility(Cell.attributes[0], true);
     return this.uberNewProject();
 }
 
