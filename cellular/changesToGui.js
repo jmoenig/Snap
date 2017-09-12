@@ -449,7 +449,7 @@ SpriteIconMorph.prototype.updateDuplicator = function()
 
 // SpriteIconMorph layout (we need to change it so we can add room for the text box)
 SpriteIconMorph.prototype.fixLayout = function () {
-    if (!this.thumbnail || !this.label || !this.duplicator) {return null; }
+    if (!this.thumbnail || !this.label || (!(this.object instanceof StageMorph) && !this.duplicator)) {return null; }
 
     this.setWidth(
         this.thumbnail.width()
