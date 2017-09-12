@@ -442,39 +442,46 @@ SnapSerializer.prototype.loadProjectModel = function (xmlNode) {
 	retn.cellAttributes = [];
 	retn.cellAttributeColours = {};
 	retn.cellAttributeDrawRange = {};
-	cellAttributes.childrenNamed('attribute').forEach(function (model) {
-		var attribute = JSON.parse(model.contents);
-		retn.cellAttributes.push(attribute.name);
-		retn.cellAttributeDrawRange[attribute.name] = [attribute.drawFrom, attribute.drawTo];
-		retn.cellAttributeColours[attribute.name] = new Color(attribute.r, attribute.g, attribute.b);
-    });
+    if (cellAttributes != null) {
+	    cellAttributes.childrenNamed('attribute').forEach(function (model) {
+		    var attribute = JSON.parse(model.contents);
+		    retn.cellAttributes.push(attribute.name);
+		    retn.cellAttributeDrawRange[attribute.name] = [attribute.drawFrom, attribute.drawTo];
+		    retn.cellAttributeColours[attribute.name] = new Color(attribute.r, attribute.g, attribute.b);
+        });
+    }
 	
-	var cellData = xmlNode.childNamed('cellData');
-	var byteView = base64DecToArr(cellData.contents, 8);
-	var cellArray = new Float64Array(byteView.buffer,0);
-	var cai = 0;
-	
-	retn.stage.cellsX = Number(cellAttributes.childNamed('cellsX').contents); 
-	retn.stage.cellsY = Number(cellAttributes.childNamed('cellsY').contents);
+	retn.stage.cellsX = cellAttributes == null ? 40 : Number(cellAttributes.childNamed('cellsX').contents); 
+	retn.stage.cellsY = cellAttributes == null ? 30 : Number(cellAttributes.childNamed('cellsY').contents);
 	retn.stage.updateCells();
 	
-	for (var i=0; i<retn.stage.cellsY; i++)
-	{
-		for (var j=0; j<retn.stage.cellsX; j++)
-		{
-			var cell = retn.stage.cells[i][j]
-			if (cell)
-			{
-				for (var k=0; k<retn.cellAttributes.length; k++)
-				{
-					cell.setAttribute(retn.cellAttributes[k], cellArray[cai], false);
-					cai++;
-				}
-			}
-		}
+	var cellData = xmlNode.childNamed('cellData');
+	if (cellData != null) {
+	    var byteView = base64DecToArr(cellData.contents, 8);
+	    var cellArray = new Float64Array(byteView.buffer,0);
+	    var cai = 0;
+	
+	    for (var i=0; i<retn.stage.cellsY; i++)
+	    {
+		    for (var j=0; j<retn.stage.cellsX; j++)
+		    {
+			    var cell = retn.stage.cells[i][j]
+			    if (cell)
+			    {
+				    for (var k=0; k<retn.cellAttributes.length; k++)
+				    {
+					    cell.setAttribute(retn.cellAttributes[k], cellArray[cai], false);
+					    cai++;
+				    }
+			    }
+		    }
+	    }
 	}
 	
-	retn.stage.visibleAttributes = JSON.parse(xmlNode.childNamed('visibleAttributes').contents);
+	var visibleAttributes = xmlNode.childNamed('visibleAttributes');
+    if (visibleAttributes) {
+	    retn.stage.visibleAttributes = JSON.parse(visibleAttributes.contents);
+	}
 	
 	return retn;
 };

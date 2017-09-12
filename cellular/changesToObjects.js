@@ -51,7 +51,8 @@ SpriteMorph.prototype.blockForSelector = function (selector, setDefaults) {
     var block = this.uberBlockForSelector(selector, setDefaults);
     if (block instanceof ReporterBlockMorph)
     {
-        block.isArrow = this.blocks[selector].type === 'arrow';
+        var spec = this.blocks[selector];
+            block.isArrow = spec ? spec.type === 'arrow' : false;
     }
     return block;
 };
