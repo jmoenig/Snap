@@ -49,6 +49,10 @@ Cell.prototype.removeSpriteMorph = function(morph)
 	var index = this.spriteMorphs.indexOf(morph);
 	if (index > -1) {
 		this.spriteMorphs.splice(index, 1);
+	} else {
+        debugger;
+        console.error("Error removing sprite from cell.");
+        throw new Error("Error moving...");
 	}
 	if (this.spriteMorphs.length == 0)
 		this.parentECT.cellMadeEmpty();
@@ -139,29 +143,39 @@ function EmptyCellTree(childA, childB)
 	    {
             child.parent = myself;
             myself.nEmpty += child.nEmpty;
+            myself.nChildren += child.nChildren;
         }
         else if (child instanceof Cell)
         {
             myself.leafNode = true;
             child.parentECT = myself;
             myself.nEmpty += child.spriteMorphs.length == 0 ? 1 : 0;
+            myself.nChildren += 1;
         }
     }
 
     this.parent = null;
     this.nEmpty = 0;
     this.leafNode = false;
+    this.nChildren = 0;
     
 	this.childA = childA;
 	attachChild(childA);
         
 	this.childB = childB;
 	attachChild(childB);
+	
+    if (this.nEmpty < 0 || this.nEmpty > this.nChildren) {
+        console.error("Error constructing tree.");
+    }
 }
 
 EmptyCellTree.prototype.cellMadeEmpty = function()
 {
     this.nEmpty++;
+    if (this.nEmpty < 0 || this.nEmpty > this.nChildren) {
+        console.error("Error marking cell empty");
+    }
     if (this.parent != null)
         this.parent.cellMadeEmpty();
 }
@@ -169,6 +183,9 @@ EmptyCellTree.prototype.cellMadeEmpty = function()
 EmptyCellTree.prototype.cellFilled = function()
 {
     this.nEmpty--;
+    if (this.nEmpty < 0 || this.nEmpty > this.nChildren) {
+        console.error("Error marking cell filled");
+    }
     if (this.parent != null)
         this.parent.cellFilled();
 }

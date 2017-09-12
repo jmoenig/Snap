@@ -1464,10 +1464,16 @@ StageMorph.prototype.getEmptyCell = function(tree, n)
     {
         if (n == 1)
         {
+            if (tree.childB === null) {
+                throw new Error("ChildB is null");
+            }
             return tree.childB;
         }
         else
         {
+            if ((tree.childA.spriteMorphs.length == 0 ? tree.childA : tree.childB) === null) {
+                throw new Error("Child is null");
+            }
             return tree.childA.spriteMorphs.length == 0 ? tree.childA : tree.childB;
         }
     }
@@ -1827,7 +1833,7 @@ SpriteMorph.prototype.createClone = function () {
         stage.add(clone);
         var hats = clone.allHatBlocksFor('__clone__init__');
         hats.forEach(function (block) {
-            stage.threads.startProcess(block, stage.isThreadSafe, undefined, undefined, clone);
+            stage.threads.startProcess(block, clone, stage.isThreadSafe);
         });
         return clone;
     }
@@ -2758,6 +2764,7 @@ SpriteMorph.prototype.createCellularClone = function()
 
 	// Cloning an object actually clones all of its attributes. 
 	c.__workaround__removed = true;
+	c.currentCell = null;
 
     return c;
 }
