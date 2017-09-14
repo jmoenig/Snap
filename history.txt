@@ -3619,6 +3619,10 @@ Fixes:
 ------
 * GUI, Objects, Widgets, Symbols: Camera Snapshot Dialog. Thank you, Bernat!!
 
+170914
+------
+* GUI: disable camera (but make it accessible as hidden setting) because of retina issues
+
 
 v4.1 Features:
 * polymorphic sprite-local custom blocks
