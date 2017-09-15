@@ -3626,6 +3626,7 @@ Fixes:
 170914
 ------
 * Blocks, Objects: added “inherited” option to inheritable variable templates’ context menu in the palette
+* Objects: disabled context menu and dragging for watchers in presentation mode
 
 
 v4.1 Features:
@@ -3654,6 +3655,7 @@ v4.1 Features:
 * Basic “instruments” support: sine, square, sawtooth and triangle waves
 * Support https in “url” reporter
 * splitting csv-text
+* prevent context menu and dragging for stage watchers in presentation mode
 
 Fixes:
 * changed keyboard shortcut indicator for “find blocks” to “^”

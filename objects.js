@@ -9166,6 +9166,17 @@ WatcherMorph.prototype.mouseDoubleClick = function (pos) {
     }
 };
 
+// WatcherMorph dragging and dropping:
+
+WatcherMorph.prototype.rootForGrab = function () {
+    // prevent watchers to be dragged in presentation mode
+    var ide = this.parentThatIsA(IDE_Morph);
+    if (ide && ide.isAppMode) {
+        return ide;
+    }
+    return this;
+};
+
 /*
 // Scratch-like watcher-toggling, commented out b/c we have a drop-down menu
 
@@ -9189,6 +9200,7 @@ WatcherMorph.prototype.mouseClickLeft = function () {
 
 WatcherMorph.prototype.userMenu = function () {
     var myself = this,
+        ide = this.parentThatIsA(IDE_Morph),
         menu = new MenuMorph(this),
         on = '\u25CF',
         off = '\u25CB',
@@ -9229,6 +9241,10 @@ WatcherMorph.prototype.userMenu = function () {
                 watcher.fixLayout();
             }
         );
+    }
+
+    if (ide && ide.isAppMode) { // prevent context menu in app mode
+        return;
     }
 
     menu.addItem(
