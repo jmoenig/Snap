@@ -1973,7 +1973,7 @@ SyntaxElementMorph.prototype.exportPictureWithResult = function (aBubble) {
     // request to open pic in new window.
     ide.saveCanvasAs(
         pic,
-        (ide.projetName || localize('untitled')) + ' ' + localize('script pic')
+        (ide.projectName || localize('untitled')) + ' ' + localize('script pic')
     );
 };
 
@@ -2574,9 +2574,8 @@ BlockMorph.prototype.userMenu = function () {
             );
             ide.saveCanvasAs(
                 myself.topBlock().scriptPic(),
-                (ide.projetName || localize('untitled')) + ' ' +
-                    localize('script pic'),
-                false // request new window
+                (ide.projectName || localize('untitled')) + ' ' +
+                    localize('script pic')
             );
         },
         'open a new window\nwith a picture of this script'
@@ -6329,9 +6328,8 @@ ScriptsMorph.prototype.exportScriptsPicture = function () {
     if (pic) {
         ide.saveCanvasAs(
             pic,
-            (ide.projetName || localize('untitled')) + ' ' +
-                localize('script pic'),
-            false // request new window
+            (ide.projectName || localize('untitled')) + ' ' +
+                localize('script pic')
         );
     }
 };
@@ -11681,9 +11679,8 @@ CommentMorph.prototype.userMenu = function () {
             var ide = myself.parentThatIsA(IDE_Morph);
             ide.saveCanvasAs(
                 myself.fullImageClassic(),
-                (ide.projetName || localize('untitled')) + ' ' +
-                    localize('comment pic'),
-                false // request new window
+                (ide.projectName || localize('untitled')) + ' ' +
+                    localize('comment pic')
             );
         },
         'open a new window\nwith a picture of this comment'

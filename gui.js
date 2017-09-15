@@ -889,7 +889,7 @@ IDE_Morph.prototype.createControlBar = function () {
         }
         this.refreshResumeSymbol();
     };
-    
+
     this.controlBar.refreshResumeSymbol = function () {
         var pauseSymbols;
         if (Process.prototype.enableSingleStepping &&
@@ -2945,8 +2945,7 @@ IDE_Morph.prototype.projectMenu = function () {
                 } else {
                     myself.prompt('Export Project As...', function (name) {
                         // false - override the shiftClick setting to use XML
-                        // true - open XML in a new tab
-                        myself.exportProject(name, false, true);
+                        myself.exportProject(name, false);
                     }, null, 'exportProject');
                 }
             },
@@ -3584,7 +3583,7 @@ IDE_Morph.prototype.rawSaveProject = function (name) {
 };
 
 
-IDE_Morph.prototype.exportProject = function (name, plain, newWindow) {
+IDE_Morph.prototype.exportProject = function (name, plain) {
     // Export project XML, saving a file to disk
     // newWindow requests displaying the project in a new tab.
     var menu, str, dataPrefix;
@@ -3596,7 +3595,7 @@ IDE_Morph.prototype.exportProject = function (name, plain, newWindow) {
             menu = this.showMessage('Exporting');
             str = this.serializer.serialize(this.stage);
             this.setURL('#open:' + dataPrefix + encodeURIComponent(str));
-            this.saveXMLAs(str, name, newWindow);
+            this.saveXMLAs(str, name);
             menu.destroy();
             this.showMessage('Exported!', 1);
         } catch (err) {
@@ -3720,7 +3719,7 @@ IDE_Morph.prototype.exportScriptsPicture = function () {
         y += padding;
         y += each.height;
     });
-    this.saveCanvasAs(pic, this.projectName || localize('untitled'), true);
+    this.saveCanvasAs(pic, this.projectName || localize('Untitled'));
 };
 
 IDE_Morph.prototype.exportProjectSummary = function (useDropShadows) {
@@ -4000,8 +3999,7 @@ IDE_Morph.prototype.exportProjectSummary = function (useDropShadows) {
     this.saveFileAs(
         '<!DOCTYPE html>' + html.toString(),
         'text/html;charset=utf-8',
-        pname,
-        false // request opening a new window.
+        pname
     );
 };
 
@@ -4215,15 +4213,11 @@ IDE_Morph.prototype.setURL = function (str) {
 IDE_Morph.prototype.saveFileAs = function (
     contents,
     fileType,
-    fileName,
-    newWindow // (optional) defaults to false.
+    fileName
 ) {
-    /** Allow for downloading a file to a disk or open in a new tab.
+    /** Allow for downloading a file to a disk.
         This relies the FileSaver.js library which exports saveAs()
         Two utility methods saveImageAs and saveXMLAs should be used first.
-        1. Opening a new window uses standard URI encoding.
-        2. downloading a file uses Blobs.
-        - every other combo is unsupposed.
     */
     var blobIsSupported = false,
         world = this.world(),
@@ -4234,13 +4228,6 @@ IDE_Morph.prototype.saveFileAs = function (
     fileExt = fileType.split('/')[1].split(';')[0];
     // handle text/plain as a .txt file
     fileExt = '.' + (fileExt === 'plain' ? 'txt' : fileExt);
-
-    // This is a workaround for a known Chrome crash with large URLs
-    function exhibitsChomeBug(contents) {
-        var MAX_LENGTH = 2e6,
-        isChrome  = navigator.userAgent.indexOf('Chrome') !== -1;
-        return isChrome && contents.length > MAX_LENGTH;
-    }
 
     function dataURItoBlob(text, mimeType) {
         var i,
@@ -4259,37 +4246,11 @@ IDE_Morph.prototype.saveFileAs = function (
         return new Blob([data], {type: mimeType });
     }
 
-    function dataURLFormat(text) {
-        var hasTypeStr = text.indexOf('data:') === 0;
-        if (hasTypeStr) {return text; }
-        return 'data:' + fileType + ',' + encodeURIComponent(text);
-    }
-
     try {
         blobIsSupported = !!new Blob();
     } catch (e) {}
 
-    if (newWindow) {
-        // Blob URIs need a custom URL to be displayed in a new window
-        if (contents instanceof Blob) {
-            dataURI = URL.createObjectURL(contents);
-        } else {
-            dataURI = dataURLFormat(contents);
-        }
-
-        // Detect crashing errors - fallback to downloading if necessary
-        if (!exhibitsChomeBug(dataURI)) {
-            window.open(dataURI, fileName);
-            // Blob URIs should be "cleaned up" to reduce memory.
-            if (contents instanceof Blob) {
-                URL.revokeObjectURL(dataURI);
-            }
-        } else {
-            // (recursively) call this defauling newWindow to false
-            this.showMessage('download to disk text');
-            this.saveFileAs(contents, fileType, fileName);
-        }
-    } else if (blobIsSupported) {
+    if (blobIsSupported) {
         if (!(contents instanceof Blob)) {
             contents = dataURItoBlob(contents, fileType);
         }
@@ -4308,26 +4269,26 @@ IDE_Morph.prototype.saveFileAs = function (
     }
 };
 
-IDE_Morph.prototype.saveCanvasAs = function (canvas, fileName, newWindow) {
+IDE_Morph.prototype.saveCanvasAs = function (canvas, fileName) {
     // Export a Canvas object as a PNG image
     // Note: This commented out due to poor browser support.
-    // cavas.toBlob() is currently supported in Firefox, IE, Chrome but 
+    // cavas.toBlob() is currently supported in Firefox, IE, Chrome but
     // browsers prevent easily saving the generated files.
     // Do not re-enable without revisiting issue #1191
     // if (canvas.toBlob) {
     //     var myself = this;
     //     canvas.toBlob(function (blob) {
-    //         myself.saveFileAs(blob, 'image/png', fileName, newWindow);
+    //         myself.saveFileAs(blob, 'image/png', fileName);
     //     });
     //     return;
     // }
-    
-    this.saveFileAs(canvas.toDataURL(), 'image/png', fileName, newWindow);
+
+    this.saveFileAs(canvas.toDataURL(), 'image/png', fileName);
 };
 
-IDE_Morph.prototype.saveXMLAs = function(xml, fileName, newWindow) {
+IDE_Morph.prototype.saveXMLAs = function(xml, fileName) {
     // wrapper to saving XML files with a proper type tag.
-    this.saveFileAs(xml, 'text/xml;chartset=utf-8', fileName, newWindow);
+    this.saveFileAs(xml, 'text/xml;chartset=utf-8', fileName);
 };
 
 IDE_Morph.prototype.switchToUserMode = function () {
@@ -5728,7 +5689,7 @@ ProjectDialogMorph.prototype.buildFilterField = function () {
     this.filterField.reactToKeystroke = function (evt) {
         var text = this.getValue();
 
-        myself.listField.elements = 
+        myself.listField.elements =
             myself.projectList.filter(function (aProject) {
                 var name,
                     notes;
@@ -6356,7 +6317,7 @@ ProjectDialogMorph.prototype.fixLayout = function () {
 
 // LibraryImportDialogMorph ///////////////////////////////////////////
 // I am preview dialog shown before importing a library.
-// I inherit from a DialogMorph but look similar to 
+// I inherit from a DialogMorph but look similar to
 // ProjectDialogMorph, and BlockImportDialogMorph
 
 LibraryImportDialogMorph.prototype = new DialogBoxMorph();
@@ -6591,7 +6552,7 @@ LibraryImportDialogMorph.prototype.fixLayout = function () {
     Morph.prototype.trackChanges = oldFlag;
     this.changed();
 };
-    
+
 // Library Cache Utilities.
 LibraryImportDialogMorph.prototype.hasCached = function (key) {
     return this.libraryCache.hasOwnProperty(key);
@@ -6918,8 +6879,7 @@ SpriteIconMorph.prototype.userMenu = function () {
                 var ide = myself.parentThatIsA(IDE_Morph);
                 ide.saveCanvasAs(
                     myself.object.fullImageClassic(),
-                    this.object.name,
-                    true
+                    this.object.name
                 );
             },
             'open a new window\nwith a picture of the stage'
@@ -7322,7 +7282,7 @@ CostumeIconMorph.prototype.exportCostume = function () {
         // don't show SVG costumes in a new tab (shows text)
         ide.saveFileAs(this.object.contents.src, 'text/svg', this.object.name);
     } else { // rasterized Costume
-        ide.saveCanvasAs(this.object.contents, this.object.name, false);
+        ide.saveCanvasAs(this.object.contents, this.object.name);
     }
 };
 
@@ -8347,7 +8307,7 @@ PaletteHandleMorph.prototype.mouseEnter
 
 PaletteHandleMorph.prototype.mouseLeave
     = StageHandleMorph.prototype.mouseLeave;
-    
+
 PaletteHandleMorph.prototype.mouseDoubleClick = function () {
     this.target.parentThatIsA(IDE_Morph).setPaletteWidth(200);
 };
@@ -8447,7 +8407,7 @@ CamSnapshotDialogMorph.prototype.buildContents = function () {
 
     this.addButton('ok', 'Save');
     this.addButton('cancel', 'Cancel');
- 
+
     this.fixLayout();
     this.drawNew();
 };
