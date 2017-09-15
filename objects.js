@@ -82,7 +82,7 @@ SpeechBubbleMorph, RingMorph, isNil, FileReader, TableDialogMorph,
 BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph*/
 
-modules.objects = '2017-September-08';
+modules.objects = '2017-September-15';
 
 var SpriteMorph;
 var StageMorph;
@@ -5603,6 +5603,14 @@ SpriteMorph.prototype.shadowVar = function (name, value) {
             ide.flushBlocksCache('variables');
             ide.refreshPalette();
         }
+    }
+};
+
+SpriteMorph.prototype.toggleInheritedVariable = function (vName) {
+    if (contains(this.inheritedVariableNames(true), vName)) { // is shadowed
+        this.deleteVariable(vName);
+    } else if (contains(this.inheritedVariableNames(), vName)) { // inherited
+        this.shadowVar(vName, this.variables.getVar(vName));
     }
 };
 

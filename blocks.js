@@ -148,7 +148,7 @@ CustomCommandBlockMorph, SymbolMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2017-September-06';
+modules.blocks = '2017-September-15';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -2399,7 +2399,30 @@ BlockMorph.prototype.userMenu = function () {
             }
         } else { // in palette
             if (this.selector === 'reportGetVar') {
-                if (!this.isInheritedVariable()) {
+                rcvr = this.scriptTarget();
+                if (this.isInheritedVariable(false)) { // fully inherited
+                    addOption(
+                        'inherited',
+                        function () {
+                            rcvr.toggleInheritedVariable(myself.blockSpec);
+                        },
+                        true,
+                        'uncheck to\ndisinherit',
+                        null
+                    );
+                } else { // not inherited
+                    if (this.isInheritedVariable(true)) { // shadowed
+                        addOption(
+                            'inherited',
+                            function () {
+                                rcvr.toggleInheritedVariable(myself.blockSpec);
+                            },
+                            false,
+                            null,
+                            localize('check to inherit\nfrom')
+                                + ' ' + rcvr.exemplar.name
+                        );
+                    }
                     addOption(
                         'transient',
                         'toggleTransientVariable',
@@ -2653,13 +2676,13 @@ BlockMorph.prototype.hidePrimitive = function () {
     ide.refreshPalette();
 };
 
-BlockMorph.prototype.isInheritedVariable = function () {
+BlockMorph.prototype.isInheritedVariable = function (shadowedOnly) {
     // private - only for variable getter template inside the palette
     if (this.isTemplate &&
             (this.selector === 'reportGetVar') &&
             (this.parent instanceof FrameMorph)) {
         return contains(
-            this.scriptTarget().inheritedVariableNames(),
+            this.scriptTarget().inheritedVariableNames(shadowedOnly),
             this.blockSpec
         );
     }

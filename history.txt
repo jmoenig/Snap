@@ -3623,13 +3623,17 @@ Fixes:
 ------
 * GUI: disable camera (but make it accessible as hidden setting) because of retina issues
 
+170914
+------
+* Blocks, Objects: added “inherited” option to inheritable variable templates’ context menu in the palette
+
 
 v4.1 Features:
 * polymorphic sprite-local custom blocks
 * inheritance of sprite-local custom blocks
 * inheritance of sprite attributes (x, y, direction, size, costumes, costume #, sounds, scripts)
 * first-class costumes and sounds
-* camera snapshots for costumes and new sprites
+* [experimental, hidden] camera snapshots for costumes and new sprites
 * localization support when typing expressions
 * support for user-forced line-breaks in custom block labels
 * ternary Boolean slot setting: support to limit Boolean input slots to “true/false” outside of rings and in palette
