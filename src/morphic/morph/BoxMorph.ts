@@ -3,19 +3,17 @@
 // I can have an optionally rounded border
 
 import Morph from "./Morph";
+import {newCanvas, radians} from "../util";
 
 // BoxMorph instance creation:
 
 export default class BoxMorph extends Morph {
-    constructor(edge?, border?, borderColor?) {
-        this.init(edge, border, borderColor);
-    }
+    public border: number;
 
-    init(edge, border, borderColor) {
-        this.edge = edge || 4;
+    constructor(public edge = 4, border?: number, public borderColor = new Color()) {
+        super();
+
         this.border = border || ((border === 0) ? 0 : 2);
-        this.borderColor = borderColor || new Color();
-        super.init.call(this);
     }
 
     // BoxMorph drawing:
@@ -27,7 +25,7 @@ export default class BoxMorph extends Morph {
         context = this.image.getContext('2d');
         if ((this.edge === 0) && (this.border === 0)) {
             super.drawNew.call(this);
-            return null;
+            return;
         }
         context.fillStyle = this.color.toString();
         context.beginPath();
@@ -48,7 +46,7 @@ export default class BoxMorph extends Morph {
         }
     }
 
-    outlinePath(context, radius, inset) {
+    outlinePath(context: CanvasRenderingContext2D, radius: number, inset: number) {
         const offset = radius + inset;
         const w = this.width();
         const h = this.height();
@@ -143,7 +141,7 @@ export default class BoxMorph extends Morph {
         return menu;
     }
 
-    setBorderWidth(size) {
+    setBorderWidth(size: number) {
         // for context menu demo purposes
         let newSize;
         if (typeof size === 'number') {
@@ -158,7 +156,7 @@ export default class BoxMorph extends Morph {
         this.changed();
     }
 
-    setBorderColor(color) {
+    setBorderColor(color?: Color) {
         // for context menu demo purposes
         if (color) {
             this.borderColor = color;
@@ -167,7 +165,7 @@ export default class BoxMorph extends Morph {
         }
     }
 
-    setCornerSize(size) {
+    setCornerSize(size: number) {
         // for context menu demo purposes
         let newSize;
         if (typeof size === 'number') {
