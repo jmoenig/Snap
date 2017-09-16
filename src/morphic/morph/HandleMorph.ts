@@ -3,25 +3,34 @@
 // I am a resize / move handle that can be attached to any Morph
 
 import Morph from "./Morph";
+import {MorphicPreferences} from "../settings";
+import {newCanvas, nop, radians} from "../util";
+import Point from "../Point";
+import WorldMorph from "./WorldMorph";
+import MenuMorph from "./MenuMorph";
 
 // HandleMorph instance creation:
 
 export default class HandleMorph extends Morph {
-    constructor(target?, minX?, minY?, insetX?, insetY?, type?) {
-        // if insetY is missing, it will be the same as insetX
-        this.init(target, minX, minY, insetX, insetY, type);
-    }
+    public minExtent: Point;
+    public inset: Point;
 
-    init(target, minX, minY, insetX, insetY, type) {
+    public isDraggable = false;
+    public noticesTransparentClick = true;
+
+    public normalImage: HTMLCanvasElement;
+    public highlightImage: HTMLCanvasElement;
+
+    constructor(public target: Morph = null, minX = 0, minY = 0, insetX = 0, insetY = 0,
+                public type: "resize" | "move" | "moveCenter" | "movePivot" = "resize") {
+        super();
+
+        // if insetY is missing, it will be the same as insetX
         let size = MorphicPreferences.handleSize;
-        this.target = target || null;
-        this.minExtent = new Point(minX || 0, minY || 0);
-        this.inset = new Point(insetX || 0, insetY || insetX || 0);
-        this.type =  type || 'resize'; // also: 'move', 'moveCenter', 'movePivot'
-        super.init.call(this);
+        this.minExtent = new Point(minX, minY);
+        this.inset = new Point(insetX, insetY || insetX);
         this.color = new Color(255, 255, 255);
-        this.isDraggable = false;
-        this.noticesTransparentClick = true;
+
         if (this.type === 'movePivot') {
             size *= 2;
         }
@@ -53,7 +62,7 @@ export default class HandleMorph extends Morph {
             if (this.type === 'moveCenter') {
                 this.setCenter(this.target.center());
             } else if (this.type === 'movePivot') {
-                this.setCenter(this.target.rotationCenter());
+                this.setCenter(this.target.rotationCenter()); // TODO
             } else { // 'resize', 'move'
                 this.setPosition(
                     this.target.bottomRight().subtract(
@@ -66,7 +75,7 @@ export default class HandleMorph extends Morph {
         }
     }
 
-    drawCrosshairsOnCanvas(aCanvas, fract) {
+    drawCrosshairsOnCanvas(aCanvas: HTMLCanvasElement, fract: number) {
         const ctx = aCanvas.getContext('2d');
         const r = aCanvas.width / 2;
         ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
@@ -85,7 +94,7 @@ export default class HandleMorph extends Morph {
         ctx.stroke();
     }
 
-    drawOnCanvas(aCanvas, color, shadowColor) {
+    drawOnCanvas(aCanvas: HTMLCanvasElement, color: Color, shadowColor: Color) {
         const context = aCanvas.getContext('2d');
         const isSquare = (this.type.indexOf('move') === 0);
         let p1;
@@ -172,13 +181,13 @@ export default class HandleMorph extends Morph {
         }
     }
 
-    mouseDownLeft(pos) {
-        const world = this.root();
-        let offset;
+    mouseDownLeft(pos: Point) {
+        const world = <WorldMorph> this.root();
+        let offset: Point;
         const myself = this;
 
         if (!this.target) {
-            return null;
+            return;
         }
         if (this.type.indexOf('move') === 0) {
             offset = pos.subtract(this.center());
@@ -219,7 +228,7 @@ export default class HandleMorph extends Morph {
         };
         if (!this.target.step) {
             this.target.step = () => {
-                nop();
+                // nop();
             };
         }
     }
