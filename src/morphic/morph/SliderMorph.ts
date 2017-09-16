@@ -6,6 +6,7 @@ import Point from "../Point";
 import MenuMorph from "./MenuMorph";
 import Node from "../Node";
 import Morph from "./Morph";
+import WorldMorph from "./WorldMorph";
 
 export default class SliderMorph extends CircleBoxMorph {
     public target: Morph = null;
@@ -291,7 +292,7 @@ export default class SliderMorph extends CircleBoxMorph {
         } else {
             this.offset = pos.subtract(this.button.bounds.origin);
         }
-        const world = this.root();
+        const world = <WorldMorph> this.root();
         this.step = function () {
             let mousePos;
             let newX;

@@ -8,11 +8,8 @@ import Morph from "./Morph";
 
 export default class BlinkerMorph extends Morph {
     constructor(rate = 2) {
-        this.init(rate);
-    }
+        super();
 
-    init(rate) {
-        super.init.call(this);
         this.color = new Color(0, 0, 0);
         this.fps = rate || 2;
         this.drawNew();
