@@ -1,13 +1,14 @@
 // MenuMorph ///////////////////////////////////////////////////////////
 
 import BoxMorph from "./BoxMorph";
+import MenuItemMorph from "./MenuItemMorph";
 
 // MenuMorph: referenced constructors
 
 // MenuMorph instance creation:
 
 export default class MenuMorph extends BoxMorph {
-    constructor(target, title, environment, fontSize) {
+    constructor(target, title, environment?, fontSize?) {
         this.init(target, title, environment, fontSize);
 
         /*
@@ -58,17 +59,17 @@ export default class MenuMorph extends BoxMorph {
 
     addItem(
         labelString,
-        action,
-        hint,
-        color,
+        action?,
+        hint?,
+        color?,
         // bool
-        bold,
+        bold?,
         // bool
-        italic,
+        italic?,
         // optional, when used as list contents
-        doubleClickAction,
+        doubleClickAction?,
         // optional string, icon (Morph or Canvas) or tuple [icon, string]
-        shortcut) {
+        shortcut?) {
         /*
         labelString is normally a single-line string. But it can also be one
         of the following:
@@ -88,7 +89,7 @@ export default class MenuMorph extends BoxMorph {
             shortcut]);
     }
 
-    addMenu(label, aMenu, indicator) {
+    addMenu(label, aMenu, indicator?) {
         this.addPair(label, aMenu, isNil(indicator) ? '\u25ba' : indicator);
     }
 
@@ -96,8 +97,8 @@ export default class MenuMorph extends BoxMorph {
         this.addItem(label, action, hint, null, null, null, null, shortcut);
     }
 
-    addLine(width) {
-        this.items.push([0, width || 1]);
+    addLine(width = 1) {
+        this.items.push([0, width]);
     }
 
     createLabel() {

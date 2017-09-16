@@ -1,4 +1,23 @@
-import Node from "./Node";
+import Node from "../Node";
+import Rectangle from "../Rectangle";
+import {contains, copy, detect, newCanvas, nop} from "../util";
+import MenuMorph from "./MenuMorph";
+import WorldMorph from "./WorldMorph";
+import Point from "../Point";
+import ShadowMorph from "./ShadowMorph";
+import {MorphicPreferences, useBlurredShadows} from "../settings";
+import ScrollFrameMorph from "./ScrollFrameMorph";
+import FrameMorph from "./FrameMorph";
+import HandMorph from "./HandMorph";
+import InspectorMorph from "./InspectorMorph";
+import HandleMorph from "./HandleMorph";
+import Animation, {Easing} from "../Animation";
+import StringFieldMorph from "./StringFieldMorph";
+import SliderMorph from "./SliderMorph";
+import ColorPickerMorph from "./ColorPickerMorph";
+import {localize} from "../../locale/SnapTranslator";
+import StringMorph from "./StringMorph";
+import TextMorph from "./TextMorph";
 
 // Morph settings:
 
@@ -26,39 +45,43 @@ import Node from "./Node";
     methods of SyntaxElementMorph in the Snap application.
 */
 
-Morph.prototype.trackChanges = true;
-Morph.prototype.shadowBlur = 4;
-
-// Morph instance creation:
+export interface ISituation {
+    origin: Morph,
+    position: Point
+}
 
 export default class Morph extends Node {
-    constructor() {
-        this.init();
-    }
+    public trackChanges: boolean; // prototype
+    public shadowBlur: number; // prototype
 
-    // Morph initialization:
+    public step: Function; // prototype
+    public nop: Function; // prototype
 
-    init(noDraw) {
-        super.init.call(this);
-        this.isMorph = true;
-        this.image = null;
-        this.bounds = new Rectangle(0, 0, 50, 40);
-        this.cachedFullImage = null;
-        this.cachedFullBounds = null;
-        this.color = new Color(80, 80, 80);
-        this.texture = null; // optional url of a fill-image
-        this.cachedTexture = null; // internal cache of actual bg image
-        this.alpha = 1;
-        this.isVisible = true;
-        this.isDraggable = false;
-        this.isTemplate = false;
-        this.acceptsDrops = false;
-        this.noticesTransparentClick = false;
+    public isMorph = true;
+    public image: HTMLCanvasElement = null;
+    public bounds = new Rectangle(0, 0, 50, 40);
+    public cachedFullImage: HTMLCanvasElement = null; // TODO?
+    public cachedFullBounds: Rectangle = null; // TODO?
+    public color = new Color(80, 80, 80);
+    public texture: string = null;
+    public cachedTexture: HTMLImageElement = null;
+    public alpha = 1;
+    public isVisible = true;
+    public isDraggable = false;
+    public isTemplate = false;
+    public acceptsDrops = false;
+    public noticesTransparentClick = false;
+    public fps = 0;
+    public customContextMenu: MenuMorph = null;
+    public lastTime = Date.now();
+    public onNextStep: () => void = null;
+
+    public children: Morph[]; // children should be morphs
+
+    constructor(noDraw?: boolean) {
+        super();
+
         if (!noDraw) {this.drawNew(); }
-        this.fps = 0;
-        this.customContextMenu = null;
-        this.lastTime = Date.now();
-        this.onNextStep = null; // optional function to be run once
     }
 
     // Morph string representation: e.g. 'a Morph 2 [20@45 | 130@250]'
@@ -81,7 +104,7 @@ export default class Morph extends Node {
 
     stepFrame() {
         if (!this.step) {
-            return null;
+            return;
         }
         let current;
         let elapsed;
@@ -108,14 +131,13 @@ export default class Morph extends Node {
         }
     }
 
-    nextSteps(arrayOfFunctions) {
+    nextSteps(arrayOfFunctions: (() => void)[]) { // TODO: Fix O(n^2) method
         const lst = arrayOfFunctions || [];
         const nxt = lst.shift();
-        const myself = this;
         if (nxt) {
             this.onNextStep = () => {
-                nxt.call(myself);
-                myself.nextSteps(lst);
+                nxt.call(this);
+                this.nextSteps(lst);
             };
         }
     }
@@ -199,8 +221,7 @@ export default class Morph extends Node {
     }
 
     fullBounds() {
-        let result;
-        result = this.bounds;
+        let result = this.bounds;
         this.children.forEach(child => {
             if (child.isVisible) {
                 result = result.merge(child.fullBounds());
@@ -211,8 +232,7 @@ export default class Morph extends Node {
 
     fullBoundsNoShadow() {
         // answer my full bounds but ignore any shadow
-        let result;
-        result = this.bounds;
+        let result = this.bounds;
         this.children.forEach(child => {
             if (!(child instanceof ShadowMorph) && (child.isVisible)) {
                 result = result.merge(child.fullBounds());
@@ -226,7 +246,7 @@ export default class Morph extends Node {
         let visible = this.bounds;
 
         const frames = this.allParents().filter(p => p instanceof FrameMorph);
-        frames.forEach(f => {
+        frames.forEach((f: FrameMorph) => {
             visible = visible.intersect(f.bounds);
         });
         return visible;
@@ -234,13 +254,13 @@ export default class Morph extends Node {
 
     // Morph accessing - simple changes:
 
-    moveBy(delta) {
-        this.fullChanged();
+    moveBy(delta: Point | number) {
+        this.fullChanged(); // TODO: ???
         this.silentMoveBy(delta);
         this.fullChanged();
     }
 
-    silentMoveBy(delta) {
+    silentMoveBy(delta: Point | number) {
         const children = this.children;
         let i = children.length;
         this.bounds = this.bounds.translateBy(delta);
@@ -253,21 +273,21 @@ export default class Morph extends Node {
         }
     }
 
-    setPosition(aPoint) {
+    setPosition(aPoint: Point) {
         const delta = aPoint.subtract(this.topLeft());
         if ((delta.x !== 0) || (delta.y !== 0)) {
             this.moveBy(delta);
         }
     }
 
-    silentSetPosition(aPoint) {
+    silentSetPosition(aPoint: Point) {
         const delta = aPoint.subtract(this.topLeft());
         if ((delta.x !== 0) || (delta.y !== 0)) {
             this.silentMoveBy(delta);
         }
     }
 
-    setLeft(x) {
+    setLeft(x: number) {
         this.setPosition(
             new Point(
                 x,
@@ -276,7 +296,7 @@ export default class Morph extends Node {
         );
     }
 
-    setRight(x) {
+    setRight(x: number) {
         this.setPosition(
             new Point(
                 x - this.width(),
@@ -285,7 +305,7 @@ export default class Morph extends Node {
         );
     }
 
-    setTop(y) {
+    setTop(y: number) {
         this.setPosition(
             new Point(
                 this.left(),
@@ -294,7 +314,7 @@ export default class Morph extends Node {
         );
     }
 
-    setBottom(y) {
+    setBottom(y: number) {
         this.setPosition(
             new Point(
                 this.left(),
@@ -303,7 +323,7 @@ export default class Morph extends Node {
         );
     }
 
-    setCenter(aPoint) {
+    setCenter(aPoint: Point) {
         this.setPosition(
             aPoint.subtract(
                 this.extent().floorDivideBy(2)
@@ -311,7 +331,7 @@ export default class Morph extends Node {
         );
     }
 
-    setFullCenter(aPoint) {
+    setFullCenter(aPoint: Point) {
         this.setPosition(
             aPoint.subtract(
                 this.fullBounds().extent().floorDivideBy(2)
@@ -319,7 +339,7 @@ export default class Morph extends Node {
         );
     }
 
-    keepWithin(aMorph) {
+    keepWithin(aMorph: Morph) {
         // make sure I am completely within another Morph's bounds
         let leftOff;
 
@@ -349,7 +369,7 @@ export default class Morph extends Node {
         let rightOff;
         let topOff;
         let bottomOff;
-        const sf = this.parentThatIsA(ScrollFrameMorph);
+        const sf = <ScrollFrameMorph> this.parentThatIsA(ScrollFrameMorph);
         if (!sf) {return; }
         rightOff = Math.min(
             this.fullBounds().right() - sf.right(),
@@ -375,7 +395,7 @@ export default class Morph extends Node {
 
     // Morph accessing - dimensional changes requiring a complete redraw
 
-    setExtent(aPoint, silently) {
+    setExtent(aPoint: Point, silently?: boolean) {
         // silently avoids redrawing the receiver
         if (silently) {
             this.silentSetExtent(aPoint);
@@ -389,7 +409,7 @@ export default class Morph extends Node {
         }
     }
 
-    silentSetExtent(aPoint) {
+    silentSetExtent(aPoint: Point) {
         let ext;
         let newWidth;
         let newHeight;
@@ -402,11 +422,11 @@ export default class Morph extends Node {
         );
     }
 
-    setWidth(width) {
+    setWidth(width: number) {
         this.setExtent(new Point(width || 0, this.height()));
     }
 
-    silentSetWidth(width) {
+    silentSetWidth(width: number) {
         // do not drawNew() just yet
         const w = Math.max(Math.round(width || 0), 0);
         this.bounds.corner = new Point(
@@ -415,11 +435,11 @@ export default class Morph extends Node {
         );
     }
 
-    setHeight(height) {
+    setHeight(height: number) {
         this.setExtent(new Point(this.width(), height || 0));
     }
 
-    silentSetHeight(height) {
+    silentSetHeight(height: number) {
         // do not drawNew() just yet
         const h = Math.max(Math.round(height || 0), 0);
         this.bounds.corner = new Point(
@@ -428,7 +448,7 @@ export default class Morph extends Node {
         );
     }
 
-    setColor(aColor) {
+    setColor(aColor: Color) {
         if (aColor) {
             if (!this.color.eq(aColor)) {
                 this.color = aColor;
@@ -477,7 +497,7 @@ export default class Morph extends Node {
         }
     }
 
-    drawTexture(url) {
+    drawTexture(url: string) {
         const myself = this;
         this.cachedTexture = new Image();
         this.cachedTexture.onload = () => {
@@ -512,7 +532,7 @@ export default class Morph extends Node {
     };
     */
 
-    drawOn(aCanvas, aRect) {
+    drawOn(aCanvas: HTMLCanvasElement, aRect?: Rectangle) {
         let rectangle;
         let area;
         let delta;
@@ -525,7 +545,7 @@ export default class Morph extends Node {
         const pic = this.cachedFullImage || this.image;
         const bounds = this.cachedFullBounds || this.bounds;
         if (!this.isVisible) {
-            return null;
+            return;
         }
         rectangle = aRect || bounds;
         area = rectangle.intersect(bounds);
@@ -541,7 +561,7 @@ export default class Morph extends Node {
             h = Math.min(src.height(), pic.height - st);
 
             if (w < 1 || h < 1) {
-                return null;
+                return;
             }
 
             context.drawImage(
@@ -558,12 +578,11 @@ export default class Morph extends Node {
         }
     }
 
-    fullDrawOn(aCanvas, aRect) {
-        let rectangle;
+    fullDrawOn(aCanvas: HTMLCanvasElement, aRect?: Rectangle) {
         if (!this.isVisible) {
-            return null;
+            return;
         }
-        rectangle = aRect || this.cachedFullBounds || this.fullBounds();
+        const rectangle = aRect || this.cachedFullBounds || this.fullBounds();
         this.drawOn(aCanvas, rectangle);
         if (this.cachedFullImage) {return; }
         this.children.forEach(child => {
@@ -574,7 +593,7 @@ export default class Morph extends Node {
     hide() {
         this.isVisible = false;
         this.changed();
-        this.children.forEach(child => {
+        this.children.forEach((child: Morph) => {
             child.hide();
         });
     }
@@ -582,7 +601,7 @@ export default class Morph extends Node {
     show() {
         this.isVisible = true;
         this.changed();
-        this.children.forEach(child => {
+        this.children.forEach((child: Morph) => {
             child.show();
         });
     }
@@ -590,7 +609,7 @@ export default class Morph extends Node {
     toggleVisibility() {
         this.isVisible = (!this.isVisible);
         this.changed();
-        this.children.forEach(child => {
+        this.children.forEach((child: Morph) => {
             child.toggleVisibility();
         });
     }
@@ -610,13 +629,11 @@ export default class Morph extends Node {
     }
 
     fullImage() {
-        let img;
-        let ctx;
-        let fb;
-        img = newCanvas(this.fullBounds().extent());
-        ctx = img.getContext('2d');
-        fb = this.fullBounds();
-        this.allChildren().forEach(morph => {
+        let img = newCanvas(this.fullBounds().extent());
+        let ctx = img.getContext('2d');
+        let fb = this.fullBounds();
+
+        this.allChildren().forEach((morph: Morph) => {
             if (morph.isVisible) {
                 ctx.globalAlpha = morph.alpha;
                 if (morph.image.width && morph.image.height) {
@@ -633,7 +650,7 @@ export default class Morph extends Node {
 
     // Morph shadow:
 
-    shadowImage(off, color) {
+    shadowImage(off: Point, color: Color) {
         // fallback for Windows Chrome-Shadow bug
         let fb;
 
@@ -663,7 +680,7 @@ export default class Morph extends Node {
         return sha;
     }
 
-    shadowImageBlurred(off, color) {
+    shadowImageBlurred(off: Point, color: Color) {
         let fb;
         let img;
         let sha;
@@ -696,9 +713,9 @@ export default class Morph extends Node {
         return sha;
     }
 
-    shadow(off, a, color) {
+    shadow(off: Point = new Point(7, 7), a?: number, color?: Color) {
         const shadow = new ShadowMorph();
-        const offset = off || new Point(7, 7);
+        const offset = off;
         const alpha = a || ((a === 0) ? 0 : 0.2);
         const fb = this.fullBounds();
         shadow.setExtent(fb.extent().add(this.shadowBlur * 2));
@@ -714,9 +731,9 @@ export default class Morph extends Node {
         return shadow;
     }
 
-    addShadow(off, a, color) {
+    addShadow(off: Point = new Point(7, 7), a?: number, color?: Color) {
         let shadow;
-        const offset = off || new Point(7, 7);
+        const offset = off;
         const alpha = a || ((a === 0) ? 0 : 0.2);
         shadow = this.shadow(offset, alpha, color);
         this.addBack(shadow);
@@ -759,7 +776,7 @@ export default class Morph extends Node {
                 w.broken.push(this.visibleBounds().spread());
             }
         }
-        if (this.parent) {
+        if (this.parent && this.parent instanceof Morph) {
             this.parent.childChanged(this);
         }
     }
@@ -775,18 +792,18 @@ export default class Morph extends Node {
         }
     }
 
-    childChanged() {
+    childChanged(morph?: Morph) {
         // react to a change in one of my children,
         // default is to just pass this message on upwards
         // override this method for Morphs that need to adjust accordingly
-        if (this.parent) {
+        if (this.parent && this.parent instanceof Morph) {
             this.parent.childChanged(this);
         }
     }
 
     // Morph accessing - structure:
 
-    world() {
+    world(): WorldMorph {
         const root = this.root();
         if (root instanceof WorldMorph) {
             return root;
@@ -797,7 +814,7 @@ export default class Morph extends Node {
         return null;
     }
 
-    add(aMorph) {
+    add(aMorph: Morph) {
         const owner = aMorph.parent;
         if (owner !== null) {
             owner.removeChild(aMorph);
@@ -805,7 +822,7 @@ export default class Morph extends Node {
         this.addChild(aMorph);
     }
 
-    addBack(aMorph) {
+    addBack(aMorph: Morph) {
         const owner = aMorph.parent;
         if (owner !== null) {
             owner.removeChild(aMorph);
@@ -813,20 +830,20 @@ export default class Morph extends Node {
         this.addChildFirst(aMorph);
     }
 
-    topMorphAt(point) {
+    topMorphAt(point: Point): Morph {
         let i;
         let result;
         if (!this.isVisible) {return null; }
         for (i = this.children.length - 1; i >= 0; i -= 1) {
             result = this.children[i].topMorphAt(point);
-            if (result) {return result; }
+            if (result) { return result; }
         }
         return this.bounds.containsPoint(point) &&
             (this.noticesTransparentClick || !this.isTransparentAt(point)) ? this
                   : null;
     }
 
-    topMorphSuchThat(predicate) {
+    topMorphSuchThat(predicate: (morph: Morph) => boolean): Morph {
         let next;
         if (predicate.call(null, this)) {
             next = detect(
@@ -849,9 +866,8 @@ export default class Morph extends Node {
         const myself = this;
         const allParents = this.allParents();
         const allChildren = this.allChildren();
-        let morphs;
 
-        morphs = world.allChildren();
+        const morphs = world.allChildren();
         return morphs.filter(m => m.isVisible &&
             m !== myself &&
             m !== world &&
@@ -862,7 +878,7 @@ export default class Morph extends Node {
 
     // Morph pixel access:
 
-    getPixelColor(aPoint) {
+    getPixelColor(aPoint: Point) {
         let point;
         let context;
         let data;
@@ -877,7 +893,7 @@ export default class Morph extends Node {
         );
     }
 
-    isTransparentAt(aPoint) {
+    isTransparentAt(aPoint: Point) {
         let point;
         let context;
         let data;
@@ -915,17 +931,17 @@ export default class Morph extends Node {
         Other properties are also *shallow* copied, so you must override
         to deep copy Arrays and (complex) Objects
         */
-        const map = new Map();
+        const map: Map<Morph, Morph> = new Map();
 
         let c;
         c = this.copyRecordingReferences(map);
-        c.forAllChildren(m => {
+        c.forAllChildren((m: Morph) => {
             m.updateReferences(map);
         });
         return c;
     }
 
-    copyRecordingReferences(map) {
+    copyRecordingReferences(map: Map<Morph, Morph>) {
         /*
         Recursively copy this entire composite morph, recording the
         correspondence between old and new morphs in the given dictionary.
@@ -946,7 +962,7 @@ export default class Morph extends Node {
         return c;
     }
 
-    updateReferences(map) {
+    updateReferences(map: Map<Morph, Morph>) {
         /*
         Update intra-morph references within a composite morph that has
         been copied. For example, if a button refers to morph X in the
@@ -962,19 +978,19 @@ export default class Morph extends Node {
         let i;
         for (i = 0; i < l; i += 1) {
             property = properties[i];
-            value = this[property];
+            value = (<any> this)[property]; // TODO
             if (value && value.isMorph) {
                 reference = map.get(value);
-                if (reference) { this[property] = reference; }
+                if (reference) { (<any> this)[property] = reference; }
             }
         }
     }
 
     // Morph dragging and dropping:
 
-    rootForGrab() {
+    rootForGrab(): Morph {
         if (this instanceof ShadowMorph) {
-            return this.parent.rootForGrab();
+            return (<Morph> this.parent).rootForGrab();
         }
         if (this.parent instanceof ScrollFrameMorph) {
             return this.parent;
@@ -985,7 +1001,7 @@ export default class Morph extends Node {
                 this.isDraggable === true) {
             return this;
         }
-        return this.parent.rootForGrab();
+        return (<Morph> this.parent).rootForGrab();
     }
 
     isCorrectingOutsideDrag() {
@@ -995,7 +1011,7 @@ export default class Morph extends Node {
         return true;
     }
 
-    wantsDropOf(aMorph) {
+    wantsDropOf(aMorph: Morph) {
         // default is to answer the general flag - change for my heirs
         if ((aMorph instanceof HandleMorph) ||
                 (aMorph instanceof MenuMorph) ||
@@ -1005,8 +1021,7 @@ export default class Morph extends Node {
         return this.acceptsDrops;
     }
 
-    pickUp(wrrld) {
-        const world = wrrld || this.world();
+    pickUp(world: WorldMorph = this.world()) {
         this.setPosition(
             world.hand.position().subtract(
                 this.extent().floorDivideBy(2)
@@ -1019,10 +1034,10 @@ export default class Morph extends Node {
         return this.parentThatIsA(HandMorph) !== null;
     }
 
-    situation() {
+    situation(): ISituation {
         // answer a dictionary specifying where I am right now, so
         // I can slide back to it if I'm dropped somewhere else
-        if (this.parent) {
+        if (this.parent && this.parent instanceof Morph) {
             return {
                 origin: this.parent,
                 position: this.position().subtract(this.parent.position())
@@ -1031,19 +1046,18 @@ export default class Morph extends Node {
         return null;
     }
 
-    slideBackTo(situation, msecs, onBeforeDrop, onComplete) {
+    slideBackTo(situation: ISituation, msecs: number, onBeforeDrop?: () => void, onComplete?: () => void) {
         const pos = situation.origin.position().add(situation.position);
-        const myself = this;
         this.glideTo(
             pos,
             msecs,
             null, // easing
             () => {
-                situation.origin.add(myself);
+                situation.origin.add(this);
                 if (onBeforeDrop) {onBeforeDrop(); }
-                if (myself.justDropped) {myself.justDropped(); }
+                if (this.justDropped) {this.justDropped(); }
                 if (situation.origin.reactToDropOf) {
-                    situation.origin.reactToDropOf(myself);
+                    situation.origin.reactToDropOf(this);
                 }
                 if (onComplete) {onComplete(); }
             }
@@ -1052,7 +1066,7 @@ export default class Morph extends Node {
 
     // Morph animating:
 
-    glideTo(endPoint, msecs, easing, onComplete) {
+    glideTo(endPoint: Point, msecs: number, easing: string | Easing, onComplete?: () => void) {
         const world = this.world();
         const myself = this;
         world.animations.push(new Animation(
@@ -1072,7 +1086,7 @@ export default class Morph extends Node {
         ));
     }
 
-    fadeTo(endAlpha, msecs, easing, onComplete) {
+    fadeTo(endAlpha: number, msecs: number, easing: string | Easing, onComplete?: () => void) {
         // include all my children, restore all original transparencies
         // on completion, so I can be recovered
         const world = this.world();
@@ -1098,7 +1112,7 @@ export default class Morph extends Node {
         ));
     }
 
-    perish(msecs, onComplete) {
+    perish(msecs: number, onComplete?: () => void) {
         const myself = this;
         this.fadeTo(
             0,
@@ -1137,7 +1151,7 @@ export default class Morph extends Node {
         );
     }
 
-    hint(msg) {
+    hint(msg: string) {
         let m;
         let text;
         text = msg;
@@ -1153,7 +1167,7 @@ export default class Morph extends Node {
         m.popUpCenteredAtHand(this.world());
     }
 
-    inform(msg) {
+    inform(msg: string) {
         let m;
         let text;
         text = msg;
@@ -1171,29 +1185,27 @@ export default class Morph extends Node {
     }
 
     prompt(
-        msg,
-        callback,
-        environment,
-        defaultContents,
-        width,
-        floorNum,
-        ceilingNum,
-        isRounded) {
-        let menu;
-        let entryField;
+        msg: string,
+        callback: () => void,
+        environment: any, // TODO
+        defaultContents = "",
+        width = 100,
+        floorNum?: number,
+        ceilingNum?: number,
+        isRounded?: boolean) {
         let slider;
         let isNumeric;
         if (ceilingNum) {
             isNumeric = true;
         }
-        menu = new MenuMorph(
+        const menu = new MenuMorph(
             callback || null,
             msg || '',
             environment || null
         );
-        entryField = new StringFieldMorph(
-            defaultContents || '',
-            width || 100,
+        const entryField = new StringFieldMorph(
+            defaultContents,
+            width,
             MorphicPreferences.prompterFontSize,
             MorphicPreferences.prompterFontName,
             false,
@@ -1244,15 +1256,13 @@ export default class Morph extends Node {
         entryField.text.edit();
     }
 
-    pickColor(msg, callback, environment, defaultContents) {
-        let menu;
-        let colorPicker;
-        menu = new MenuMorph(
-            callback || null,
-            msg || '',
-            environment || null
+    pickColor(msg: string = "", callback: () => void = null, environment: any /* TODO */ = null, defaultContents?: Color) {
+        const menu = new MenuMorph(
+            callback,
+            msg,
+            environment
         );
-        colorPicker = new ColorPickerMorph(defaultContents);
+        const colorPicker = new ColorPickerMorph(defaultContents);
         menu.items.push(colorPicker);
         menu.addLine(2);
         menu.addItem('Ok', () => colorPicker.getChoice());
@@ -1261,12 +1271,12 @@ export default class Morph extends Node {
         menu.popUpAtHand(this.world());
     }
 
-    inspect(anotherObject) {
-        const world = this.world instanceof Function ?
+    inspect(anotherObject: Morph) {
+        const world: WorldMorph = this.world instanceof Function ?
                 this.world() : this.root() || this.world;
 
         let inspector;
-        let inspectee = this;
+        let inspectee: Morph = this;
 
         if (anotherObject) {
             inspectee = anotherObject;
@@ -1302,7 +1312,7 @@ export default class Morph extends Node {
         const world = this.world instanceof Function ? this.world() : this.world;
         const menu = new MenuMorph(this, null);
 
-        parents.forEach(each => {
+        parents.forEach((each: Morph) => {
             if (each.developersMenu && (each !== world)) {
                 menu.addMenu(
                     each.toString().slice(0, 50),
@@ -1320,10 +1330,10 @@ export default class Morph extends Node {
 
     developersMenu() {
         // 'name' is not an official property of a function, hence:
-        const world = this.world instanceof Function ? this.world() : this.world;
+        const world: WorldMorph = this.world instanceof Function ? this.world() : this.world;
 
         const userMenu = this.userMenu() ||
-            (this.parent && this.parent.userMenu());
+            (this.parent && (<Morph> this.parent).userMenu());
 
         const menu = new MenuMorph(this, this.constructor.name ||
             this.constructor.toString().split(' ')[1].split('(')[0]);
@@ -1430,13 +1440,13 @@ export default class Morph extends Node {
         return menu;
     }
 
-    userMenu() {
+    userMenu(): MenuMorph {
         return null;
     }
 
     // Morph menu actions
 
-    setAlphaScaled(alpha) {
+    setAlphaScaled(alpha: number) {
         // for context menu demo purposes
         let newAlpha;
 
@@ -1499,7 +1509,7 @@ export default class Morph extends Node {
                 each instanceof TextMorph));
     }
 
-    nextEntryField(current) {
+    nextEntryField(current: Morph) {
         const fields = this.allEntryFields();
         const idx = fields.indexOf(current);
         if (idx !== -1) {
@@ -1510,7 +1520,7 @@ export default class Morph extends Node {
         return fields[0];
     }
 
-    previousEntryField(current) {
+    previousEntryField(current: Morph) {
         const fields = this.allEntryFields();
         const idx = fields.indexOf(current);
         if (idx !== -1) {
@@ -1522,7 +1532,7 @@ export default class Morph extends Node {
         return fields[0];
     }
 
-    tab(editField) {
+    tab(editField: Morph) {
     /*
         the <tab> key was pressed in one of my edit fields.
         invoke my "nextTab()" function if it exists, else
@@ -1535,7 +1545,7 @@ export default class Morph extends Node {
         }
     }
 
-    backTab(editField) {
+    backTab(editField: Morph) {
     /*
         the <back tab> key was pressed in one of my edit fields.
         invoke my "previousTab()" function if it exists, else
@@ -1572,8 +1582,8 @@ export default class Morph extends Node {
 
     // Morph events:
 
-    escalateEvent(functionName, arg) {
-        let handler = this.parent;
+    escalateEvent(functionName: string, arg: any) {
+        let handler: any = this.parent; // TODO
         while (!handler[functionName] && handler.parent !== null) {
             handler = handler.parent;
         }
@@ -1583,8 +1593,8 @@ export default class Morph extends Node {
     }
 
     // Morph eval:
-
-    evaluateString(code) {
+    // TODO: Scope/context, etc.
+    evaluateString(code: string) {
         let result;
 
         try {
@@ -1599,7 +1609,7 @@ export default class Morph extends Node {
 
     // Morph collision detection:
 
-    isTouching(otherMorph) {
+    isTouching(otherMorph: Morph) {
         const oImg = this.overlappingImage(otherMorph);
         let data;
         if (!oImg.width || !oImg.height) {
@@ -1614,7 +1624,7 @@ export default class Morph extends Node {
         ) !== null;
     }
 
-    overlappingImage(otherMorph) {
+    overlappingImage(otherMorph: Morph) {
         const fb = this.fullBounds();
         const otherFb = otherMorph.fullBounds();
         const oRect = fb.intersect(otherFb);
@@ -1637,6 +1647,9 @@ export default class Morph extends Node {
         return oImg;
     }
 }
+
+Morph.prototype.trackChanges = true;
+Morph.prototype.shadowBlur = 4;
 
 Morph.prototype.step = nop;
 

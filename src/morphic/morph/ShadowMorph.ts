@@ -4,7 +4,7 @@ import Morph from "./Morph";
 
 // ShadowMorph instance creation:
 
-class ShadowMorph extends Morph {
+export default class ShadowMorph extends Morph {
     constructor() {
         this.init();
     }

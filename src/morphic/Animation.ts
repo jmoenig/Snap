@@ -35,7 +35,7 @@ export type Easing = (t: number) => number;
 export type AnimationSetter = (destination: number) => void;
 export type AnimationGetter = () => number;
 
-class Animation {
+export default class Animation {
     public easings: { [easing: string]: Easing }; // prototype
 
     public easing: Easing;

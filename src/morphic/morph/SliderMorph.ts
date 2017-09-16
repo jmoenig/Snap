@@ -3,7 +3,7 @@
 import CircleBoxMorph from "./CircleBoxMorph";
 
 export default class SliderMorph extends CircleBoxMorph {
-    constructor(start, stop, value, size, orientation, color) {
+    constructor(start, stop, value, size, orientation, color?) {
         this.init(
             start || 1,
             stop || 100,

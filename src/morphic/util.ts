@@ -76,13 +76,12 @@ export interface IPosition {
     y: number;
 }
 
-export function newCanvas(extentPoint: IPosition, nonRetina: boolean) {
+export function newCanvas(extentPoint: IPosition, nonRetina?: boolean): HTMLCanvasElement {
     // answer a new empty instance of Canvas, don't display anywhere
     // nonRetina - optional Boolean "false"
     // by default retina support is automatic
-    let canvas, ext;
-    ext = extentPoint || {x: 0, y: 0};
-    canvas = document.createElement('canvas');
+    const ext = extentPoint || {x: 0, y: 0};
+    const canvas = document.createElement('canvas');
     canvas.width = ext.x;
     canvas.height = ext.y;
     if (nonRetina && canvas.isRetinaEnabled) { // TODO
@@ -164,28 +163,28 @@ export function getDocumentPositionOf(aDOMelement: HTMLElement) {
     return pos;
 }
 
-export function copy(target: any) {
+export function copy<T>(target: T): T {
     // answer a shallow copy of target
-    let value, c: any, property, keys;
+    let c: any;
 
     if (typeof target !== 'object') {
         return target;
     }
-    value = target.valueOf();
+    let value = target.valueOf();
     if (target !== value) {
-        return new target.constructor(value);
+        return new (<any> target.constructor)(value); // TODO
     }
     if (target instanceof target.constructor &&
             target.constructor !== Object) {
         c = Object.create(target.constructor.prototype);
-        keys = Object.keys(target);
+        const keys = Object.keys(target);
         for (let l = keys.length, i = 0; i < l; i += 1) {
-            property = keys[i];
-            c[property] = target[property];
+            const property = keys[i];
+            c[property] = (<any> target)[property];
         }
     } else {
         c = {};
-        for (property in target) {
+        for (let property in target) {
             c[property] = target[property];
         }
     }
