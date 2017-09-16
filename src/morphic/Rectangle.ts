@@ -5,12 +5,15 @@ import Point from "./Point";
 // Rectangle instance creation:
 
 export default class Rectangle {
-    constructor(left, top, right, bottom) {
-        this.init(new Point((left || 0), (top || 0)),
-                new Point((right || 0), (bottom || 0)));
+    public origin: Point;
+    public corner: Point;
+
+    constructor(left = 0, top = 0, right = 0, bottom = 0) {
+        this.init(new Point(left, top),
+                new Point(right, bottom));
     }
 
-    init(originPoint, cornerPoint) {
+    init(originPoint: Point, cornerPoint: Point) {
         this.origin = originPoint;
         this.corner = cornerPoint;
     }
@@ -34,7 +37,7 @@ export default class Rectangle {
 
     // Rectangle accessing - setting:
 
-    setTo(left, top, right, bottom) {
+    setTo(left: number, top: number, right: number, bottom: number) {
         // note: all inputs are optional and can be omitted
 
         this.origin = new Point(
@@ -142,7 +145,7 @@ export default class Rectangle {
 
     // Rectangle comparison:
 
-    eq(aRect) {
+    eq(aRect: Rectangle) {
         return this.origin.eq(aRect.origin) &&
             this.corner.eq(aRect.corner);
     }
@@ -158,45 +161,42 @@ export default class Rectangle {
 
     // Rectangle functions:
 
-    insetBy(delta) {
-        // delta can be either a Point or a Number
+    insetBy(delta: Point | number) {
         const result = new Rectangle();
         result.origin = this.origin.add(delta);
         result.corner = this.corner.subtract(delta);
         return result;
     }
 
-    expandBy(delta) {
-        // delta can be either a Point or a Number
+    expandBy(delta: Point | number) {
         const result = new Rectangle();
         result.origin = this.origin.subtract(delta);
         result.corner = this.corner.add(delta);
         return result;
     }
 
-    growBy(delta) {
-        // delta can be either a Point or a Number
+    growBy(delta: Point | number) {
         const result = new Rectangle();
         result.origin = this.origin.copy();
         result.corner = this.corner.add(delta);
         return result;
     }
 
-    intersect(aRect) {
+    intersect(aRect: Rectangle) {
         const result = new Rectangle();
         result.origin = this.origin.max(aRect.origin);
         result.corner = this.corner.min(aRect.corner);
         return result;
     }
 
-    merge(aRect) {
+    merge(aRect: Rectangle) {
         const result = new Rectangle();
         result.origin = this.origin.min(aRect.origin);
         result.corner = this.corner.max(aRect.corner);
         return result;
     }
 
-    mergeWith(aRect) {
+    mergeWith(aRect: Rectangle) {
         // mutates myself
         this.origin = this.origin.min(aRect.origin);
         this.corner = this.corner.max(aRect.corner);
@@ -213,7 +213,7 @@ export default class Rectangle {
         return this.origin.floor().corner(this.corner.ceil()).expandBy(1);
     }
 
-    amountToTranslateWithin(aRect) {
+    amountToTranslateWithin(aRect: Rectangle) {
         /*
             Answer a Point, delta, such that self + delta is forced within
             aRectangle. when all of me cannot be made to fit, prefer to keep
@@ -240,16 +240,16 @@ export default class Rectangle {
 
     // Rectangle testing:
 
-    containsPoint(aPoint) {
+    containsPoint(aPoint: Point) {
         return this.origin.le(aPoint) && aPoint.lt(this.corner);
     }
 
-    containsRectangle(aRect) {
+    containsRectangle(aRect: Rectangle) {
         return aRect.origin.gt(this.origin) &&
             aRect.corner.lt(this.corner);
     }
 
-    intersects(aRect) {
+    intersects(aRect: Rectangle) {
         const ro = aRect.origin;
         const rc = aRect.corner;
         return (rc.x >= this.origin.x) &&
@@ -258,10 +258,10 @@ export default class Rectangle {
             (ro.y <= this.corner.y);
     }
 
-    isNearTo(aRect, threshold) {
+    isNearTo(aRect: Rectangle, threshold = 0) {
         const ro = aRect.origin;
         const rc = aRect.corner;
-        const border = threshold || 0;
+        const border = threshold;
         return (rc.x + border >= this.origin.x) &&
             (rc.y  + border >= this.origin.y) &&
             (ro.x - border <= this.corner.x) &&
@@ -270,7 +270,7 @@ export default class Rectangle {
 
     // Rectangle transforming:
 
-    scaleBy(scale) {
+    scaleBy(scale: Point | number) {
         // scale can be either a Point or a scalar
         const o = this.origin.multiplyBy(scale);
 
@@ -278,7 +278,7 @@ export default class Rectangle {
         return new Rectangle(o.x, o.y, c.x, c.y);
     }
 
-    translateBy(factor) {
+    translateBy(factor: Point | number) {
         // factor can be either a Point or a scalar
         const o = this.origin.add(factor);
 
