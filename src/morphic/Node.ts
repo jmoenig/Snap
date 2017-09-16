@@ -115,7 +115,8 @@ export default class Node {
         return this.parent.children.filter(child => child !== myself);
     }
 
-    parentThatIsA(constructor): Node {
+    // TODO: Constructor types
+    parentThatIsA(constructor: Function): Node {
         // including myself
         if (this instanceof constructor) {
             return this;
@@ -126,7 +127,7 @@ export default class Node {
         return this.parent.parentThatIsA(constructor);
     }
 
-    parentThatIsAnyOf(constructors): Node {
+    parentThatIsAnyOf(constructors: Function[]): Node {
         // including myself
         let yup = false;
 
