@@ -3,11 +3,8 @@
 // Color instance creation:
 
 class Color {
-    constructor(r, g, b, a) {
+    constructor(public r = 0, public g = 0, public b = 0, public a?: number) {
         // all values are optional, just (r, g, b) is fine
-        this.r = r || 0;
-        this.g = g || 0;
-        this.b = b || 0;
         this.a = a || ((a === 0) ? 0 : 1);
     }
 
@@ -30,7 +27,7 @@ class Color {
 
     // Color comparison:
 
-    eq(aColor) {
+    eq(aColor: Color) {
         // ==
         return aColor &&
             this.r === aColor.r &&
@@ -78,7 +75,7 @@ class Color {
         return [h, s, v];
     }
 
-    set_hsv(h, s, v) {
+    set_hsv(h: number, s: number, v: number) {
         // ignore alpha, h, s and v are to be within [0, 1]
         let i;
 
@@ -131,7 +128,7 @@ class Color {
 
     // Color mixing:
 
-    mixed(proportion, otherColor) {
+    mixed(proportion: number, otherColor: Color) {
         // answer a copy of this color mixed with another color, ignore alpha
         const frac1 = Math.min(Math.max(proportion, 0), 1);
 
@@ -143,7 +140,7 @@ class Color {
         );
     }
 
-    darker(percent) {
+    darker(percent: number) {
         // return an rgb-interpolated darker copy of me, ignore alpha
         let fract = 0.8333;
         if (percent) {
@@ -152,7 +149,7 @@ class Color {
         return this.mixed(fract, new Color(0, 0, 0));
     }
 
-    lighter(percent) {
+    lighter(percent: number) {
         // return an rgb-interpolated lighter copy of me, ignore alpha
         let fract = 0.8333;
         if (percent) {

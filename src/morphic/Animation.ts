@@ -38,26 +38,19 @@ export type AnimationGetter = () => number;
 class Animation {
     public easings: { [easing: string]: Easing }; // prototype
 
-    public setter: AnimationSetter;
-    public getter: AnimationGetter;
-    public delta: number;
-    public duration: number;
     public easing: Easing;
-    public onComplete: Function;
 
     public endTime: number = null;
     public destination: number = null;
     public isActive: boolean = false;
 
-    constructor(setter: AnimationSetter, getter: AnimationGetter, delta = 0, duration = 0, easing: string | Easing, onComplete: Function = null) {
-        this.setter = setter;
-        this.getter = getter;
-        this.delta = delta;
-        this.duration = duration; // milliseconds
+    constructor(public setter: AnimationSetter, public getter: AnimationGetter, public delta = 0,
+                public duration = 0 /* milliseconds */, easing: string | Easing,
+                public onComplete: () => void = null /* optional callback */) {
         this.easing = isString(easing) ? // string or function
-                this.easings[<string> easing] || this.easings.sinusoidal
-                    : <Easing> easing || this.easings.sinusoidal;
-        this.onComplete = onComplete; // optional callback
+            this.easings[<string> easing] || this.easings.sinusoidal
+            : <Easing> easing || this.easings.sinusoidal;
+
         this.start();
     }
 
@@ -71,16 +64,20 @@ class Animation {
     }
 
     step() {
-        if (!this.isActive) {return; }
+        if (!this.isActive) {
+            return;
+        }
         const now = Date.now();
         if (now > this.endTime) {
             this.setter(this.destination);
             this.isActive = false;
-            if (this.onComplete) {this.onComplete(); }
+            if (this.onComplete) {
+                this.onComplete();
+            }
         } else {
             this.setter(
                 this.destination -
-                    (this.delta * this.easing((this.endTime - now) / this.duration))
+                (this.delta * this.easing((this.endTime - now) / this.duration))
             );
         }
     }
@@ -91,35 +88,51 @@ Animation.prototype.easings = {
     // two states
 
     // ease both in and out:
-    linear(t: number) {return t; },
-    sinusoidal(t: number) {return 1 - Math.cos(radians(t * 90)); },
+    linear(t: number) {
+        return t;
+    },
+    sinusoidal(t: number) {
+        return 1 - Math.cos(radians(t * 90));
+    },
     quadratic(t: number) {
         return t < 0.5 ?
-                2 * t * t
-                    : ((4 - (2 * t)) * t) - 1;
+            2 * t * t
+            : ((4 - (2 * t)) * t) - 1;
     },
     cubic(t: number) {
         return t < 0.5 ?
-                4 * t * t * t
-                    : ((t - 1) * ((2 * t) - 2) * ((2 * t) - 2)) + 1;
+            4 * t * t * t
+            : ((t - 1) * ((2 * t) - 2) * ((2 * t) - 2)) + 1;
     },
     elastic(t: number) {
         return (t -= 0.5) < 0 ?
             (0.01 + 0.01 / t) * Math.sin(50 * t)
-                : (0.02 - 0.01 / t) * Math.sin(50 * t) + 1;
+            : (0.02 - 0.01 / t) * Math.sin(50 * t) + 1;
     },
 
     // ease in only:
-    sine_in(t: number) {return 1 - Math.sin(radians(90 + (t * 90))); },
-    quad_in(t: number) {return t * t; },
-    cubic_in(t: number) {return t * t * t; },
+    sine_in(t: number) {
+        return 1 - Math.sin(radians(90 + (t * 90)));
+    },
+    quad_in(t: number) {
+        return t * t;
+    },
+    cubic_in(t: number) {
+        return t * t * t;
+    },
     elastic_in(t: number) {
         return (0.04 - 0.04 / t) * Math.sin(25 * t) + 1;
     },
 
     // ease out only:
-    sine_out(t: number) {return Math.sin(radians(t * 90)); },
-    quad_out(t: number) {return t * (2 - t); },
-    elastic_out(t: number) {return 0.04 * t / (--t) * Math.sin(25 * t); }
+    sine_out(t: number) {
+        return Math.sin(radians(t * 90));
+    },
+    quad_out(t: number) {
+        return t * (2 - t);
+    },
+    elastic_out(t: number) {
+        return 0.04 * t / (--t) * Math.sin(25 * t);
+    }
 };
 
