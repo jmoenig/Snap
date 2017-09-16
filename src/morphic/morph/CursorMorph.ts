@@ -7,6 +7,8 @@ import {contains, fontHeight, isNil} from "../util";
 import TextMorph from "./TextMorph";
 import Point from "../Point";
 import StringMorph from "./StringMorph";
+import ScrollFrameMorph from "./ScrollFrameMorph";
+import WorldMorph from "./WorldMorph";
 
 // CursorMorph: referenced constructors
 
@@ -21,7 +23,9 @@ export default class CursorMorph extends BlinkerMorph {
     public target: StringMorph | TextMorph;
     public originalContents: string;
     public originalAlignment: "left" | "right" | "center";
+    public slot: number;
 
+    public clipboardHandler: HTMLTextAreaElement;
 
     constructor(aStringOrTextMorph: StringMorph | TextMorph) {
         super();
@@ -31,7 +35,7 @@ export default class CursorMorph extends BlinkerMorph {
         // additional properties:
         this.target = aStringOrTextMorph;
         this.originalContents = this.target.text; // TODO: ???
-        this.originalAlignment = this.target.alignment;
+        this.originalAlignment = this.target.alignment; // TODO
         this.slot = this.target.text.length;
         super.init.call(this);
         ls = fontHeight(this.target.fontSize);
@@ -54,7 +58,7 @@ export default class CursorMorph extends BlinkerMorph {
 
         this.clipboardHandler = document.createElement('textarea');
         this.clipboardHandler.style.position = 'absolute';
-        this.clipboardHandler.style.top = window.outerHeight;
+        this.clipboardHandler.style.top = "" + window.outerHeight;
         this.clipboardHandler.style.right = '101%'; // placed just out of view
 
         document.body.appendChild(this.clipboardHandler);
@@ -115,19 +119,19 @@ export default class CursorMorph extends BlinkerMorph {
 
     // CursorMorph event processing:
 
-    processKeyPress(event) {
+    processKeyPress(event: KeyboardEvent) {
         // this.inspectKeyEvent(event);
         if (this.keyDownEventUsed) {
             this.keyDownEventUsed = false;
-            return null;
+            return;
         }
         if ((event.keyCode === 40) || event.charCode === 40) {
             this.insert('(');
-            return null;
+            return;
         }
         if ((event.keyCode === 37) || event.charCode === 37) {
             this.insert('%');
-            return null;
+            return;
         }
         if (event.keyCode) { // Opera doesn't support charCode
             if (event.ctrlKey && (!event.altKey)) {
@@ -156,7 +160,7 @@ export default class CursorMorph extends BlinkerMorph {
         this.target.escalateEvent('reactToKeystroke', event);
     }
 
-    processKeyDown(event) {
+    processKeyDown(event: KeyboardEvent) {
         // this.inspectKeyEvent(event);
         const shift = event.shiftKey;
 
@@ -239,7 +243,7 @@ export default class CursorMorph extends BlinkerMorph {
             this.keyDownEventUsed = true;
             break;
         default:
-            nop();
+            // nop();
             // this.inspectKeyEvent(event);
         }
         // notify target's parent of key event
@@ -257,7 +261,7 @@ export default class CursorMorph extends BlinkerMorph {
     };
     */
 
-    gotoSlot(slot) {
+    gotoSlot(slot: number) {
         const length = this.target.text.length;
         const pos = this.target.slotPosition(slot);
         let right;
@@ -290,37 +294,37 @@ export default class CursorMorph extends BlinkerMorph {
         }
     }
 
-    goLeft(shift, howMany) {
+    goLeft(shift?: boolean, howMany = 1) {
         this.updateSelection(shift);
-        this.gotoSlot(this.slot - (howMany || 1));
-        this.updateSelection(shift);
-    }
-
-    goRight(shift, howMany) {
-        this.updateSelection(shift);
-        this.gotoSlot(this.slot + (howMany || 1));
+        this.gotoSlot(this.slot - howMany);
         this.updateSelection(shift);
     }
 
-    goUp(shift) {
+    goRight(shift: boolean, howMany = 1) {
+        this.updateSelection(shift);
+        this.gotoSlot(this.slot + howMany);
+        this.updateSelection(shift);
+    }
+
+    goUp(shift: boolean) {
         this.updateSelection(shift);
         this.gotoSlot(this.target.upFrom(this.slot));
         this.updateSelection(shift);
     }
 
-    goDown(shift) {
+    goDown(shift: boolean) {
         this.updateSelection(shift);
         this.gotoSlot(this.target.downFrom(this.slot));
         this.updateSelection(shift);
     }
 
-    goHome(shift) {
+    goHome(shift: boolean) {
         this.updateSelection(shift);
         this.gotoSlot(this.target.startOfLine(this.slot));
         this.updateSelection(shift);
     }
 
-    goEnd(shift) {
+    goEnd(shift: boolean) {
         this.updateSelection(shift);
         this.gotoSlot(this.target.endOfLine(this.slot));
         this.updateSelection(shift);
@@ -333,7 +337,7 @@ export default class CursorMorph extends BlinkerMorph {
 
     // CursorMorph selecting:
 
-    updateSelection(shift) {
+    updateSelection(shift: boolean) {
         if (shift) {
             if (isNil(this.target.endMark) && isNil(this.target.startMark)) {
                 this.target.startMark = this.slot;
@@ -353,7 +357,7 @@ export default class CursorMorph extends BlinkerMorph {
     accept() {
         const world = this.root();
         if (world) {
-            world.stopEditing();
+            (<WorldMorph> world).stopEditing(); // TODO
         }
         this.escalateEvent('accept', this);
     }
@@ -362,7 +366,7 @@ export default class CursorMorph extends BlinkerMorph {
         const world = this.root();
         this.undo();
         if (world) {
-            world.stopEditing();
+            (<WorldMorph> world).stopEditing();
         }
         this.escalateEvent('cancel', this);
     }
@@ -375,7 +379,7 @@ export default class CursorMorph extends BlinkerMorph {
         this.gotoSlot(0);
     }
 
-    insert(aChar, shiftKey?) {
+    insert(aChar: string, shiftKey?: boolean) {
         let text;
         if (aChar === '\u0009') {
             this.target.escalateEvent('reactToEdit', this.target);
@@ -402,7 +406,7 @@ export default class CursorMorph extends BlinkerMorph {
         }
     }
 
-    ctrl(aChar, shiftKey) {
+    ctrl(aChar: number, shiftKey?: boolean) {
         if (aChar === 64 || (aChar === 65 && shiftKey)) {
             this.insert('@');
         } else if (aChar === 65) {
@@ -430,7 +434,7 @@ export default class CursorMorph extends BlinkerMorph {
 
     }
 
-    cmd(aChar, shiftKey) {
+    cmd(aChar: string, shiftKey?: boolean) {
         if (aChar === 64 || (aChar === 65 && shiftKey)) {
             this.insert('@');
         } else if (aChar === 65) {
