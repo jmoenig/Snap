@@ -1,15 +1,15 @@
 // GrayPaletteMorph ///////////////////////////////////////////////////
 
 import ColorPaletteMorph from "./ColorPaletteMorph";
+import {newCanvas} from "../util";
+import Morph from "./Morph";
+import Point from "../Point";
 
 // GrayPaletteMorph instance creation:
 
 export default class GrayPaletteMorph extends ColorPaletteMorph {
-    constructor(target, sizePoint) {
-        this.init(
-            target || null,
-            sizePoint || new Point(80, 10)
-        );
+    constructor(target: Morph = null, sizePoint = new Point(80, 10)) {
+        super(target, sizePoint);
     }
 
     drawNew() {

@@ -434,7 +434,7 @@ export default class CursorMorph extends BlinkerMorph {
 
     }
 
-    cmd(aChar: string, shiftKey?: boolean) {
+    cmd(aChar: number, shiftKey?: boolean) {
         if (aChar === 64 || (aChar === 65 && shiftKey)) {
             this.insert('@');
         } else if (aChar === 65) {
@@ -509,7 +509,7 @@ export default class CursorMorph extends BlinkerMorph {
 
     // CursorMorph utilities:
 
-    inspectKeyEvent(event) {
+    inspectKeyEvent(event: KeyboardEvent) {
         // private
         this.inform(
             `Key pressed: ${String.fromCharCode(event.charCode)}\n------------------------\ncharCode: ${event.charCode.toString()}\nkeyCode: ${event.keyCode.toString()}\nshiftKey: ${event.shiftKey.toString()}\naltKey: ${event.altKey.toString()}\nctrlKey: ${event.ctrlKey.toString()}\ncmdKey: ${event.metaKey.toString()}`
