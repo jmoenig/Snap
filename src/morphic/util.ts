@@ -1,29 +1,31 @@
 // Global Functions ////////////////////////////////////////////////////
 
-export function nop() {
+import {MorphicPreferences} from "./settings";
+
+export function nop(): void {
     // do explicitly nothing
-    return null;
 }
 
-export function localize(string) {
+// TODO
+export function localize(string: string) {
     // override this function with custom localizations
     return string;
 }
 
-export function isNil(thing) {
+export function isNil(thing: any) {
     return thing === undefined || thing === null;
 }
 
-export function contains(list, element) {
+export function contains<T>(list: T[], element: T) {
     // answer true if element is a member of list
     return list.indexOf(element) !== -1;
 }
 
-export function detect(list, predicate) {
+export function detect<T>(list: T[], predicate: (thing: T) => boolean) {
     // answer the first element of list for which predicate evaluates
     // true, otherwise answer null
-    var i, size = list.length;
-    for (i = 0; i < size; i += 1) {
+    const size = list.length;
+    for (let i = 0; i < size; i += 1) {
         if (predicate.call(null, list[i])) {
             return list[i];
         }
@@ -31,10 +33,10 @@ export function detect(list, predicate) {
     return null;
 }
 
-export function sizeOf(object) {
+export function sizeOf(object: any) {
     // answer the number of own properties
-    var size = 0, key;
-    for (key in object) {
+    let size = 0;
+    for (let key in object) {
         if (Object.prototype.hasOwnProperty.call(object, key)) {
             size += 1;
         }
@@ -42,43 +44,48 @@ export function sizeOf(object) {
     return size;
 }
 
-export function isString(target) {
+export function isString(target: any) {
     return typeof target === 'string' || target instanceof String;
 }
 
-export function isObject(target) {
+export function isObject(target: any) {
     return target !== null &&
         (typeof target === 'object' || target instanceof Object);
 }
 
-export function radians(degrees) {
+export function radians(degrees: number) {
     return degrees * Math.PI / 180;
 }
 
-export function degrees(radians) {
+export function degrees(radians: number) {
     return radians * 180 / Math.PI;
 }
 
-export function fontHeight(height) {
-    var minHeight = Math.max(height, MorphicPreferences.minimumFontHeight);
+export function fontHeight(height: number) {
+    const minHeight = Math.max(height, MorphicPreferences.minimumFontHeight);
     return minHeight * 1.2; // assuming 1/5 font size for ascenders
 }
 
-export function isWordChar(aCharacter) {
+export function isWordChar(aCharacter: string) {
     // can't use \b or \w because they ignore diacritics
     return aCharacter.match(/[A-zÀ-ÿ0-9]/);
 }
 
-export function newCanvas(extentPoint, nonRetina) {
+export interface IPosition {
+    x: number;
+    y: number;
+}
+
+export function newCanvas(extentPoint: IPosition, nonRetina: boolean) {
     // answer a new empty instance of Canvas, don't display anywhere
     // nonRetina - optional Boolean "false"
     // by default retina support is automatic
-    var canvas, ext;
+    let canvas, ext;
     ext = extentPoint || {x: 0, y: 0};
     canvas = document.createElement('canvas');
     canvas.width = ext.x;
     canvas.height = ext.y;
-    if (nonRetina && canvas.isRetinaEnabled) {
+    if (nonRetina && canvas.isRetinaEnabled) { // TODO
         canvas.isRetinaEnabled = false;
     }
     return canvas;
@@ -86,10 +93,10 @@ export function newCanvas(extentPoint, nonRetina) {
 
 export function getMinimumFontHeight() {
     // answer the height of the smallest font renderable in pixels
-    var str = 'I',
+    const str = 'I',
         size = 50,
-        canvas = document.createElement('canvas'),
-        ctx,
+        canvas = document.createElement('canvas');
+    let ctx,
         maxX,
         data,
         x,
@@ -116,7 +123,7 @@ export function getMinimumFontHeight() {
 export function getBlurredShadowSupport() {
     // check for Chrome issue 90001
     // http://code.google.com/p/chromium/issues/detail?id=90001
-    var source, target, ctx;
+    let source, target, ctx;
     source = document.createElement('canvas');
     source.width = 10;
     source.height = 10;
@@ -133,17 +140,17 @@ export function getBlurredShadowSupport() {
     ctx.shadowBlur = 10;
     ctx.shadowColor = 'rgba(0, 0, 255, 1)';
     ctx.drawImage(source, 0, 0);
-    return ctx.getImageData(0, 0, 1, 1).data[3] ? true : false;
+    return !!ctx.getImageData(0, 0, 1, 1).data[3];
 }
 
-export function getDocumentPositionOf(aDOMelement) {
+export function getDocumentPositionOf(aDOMelement: HTMLElement) {
     // answer the absolute coordinates of a DOM element in the document
-    var pos, offsetParent;
+    let pos: IPosition, offsetParent: HTMLElement;
     if (aDOMelement === null) {
         return {x: 0, y: 0};
     }
     pos = {x: aDOMelement.offsetLeft, y: aDOMelement.offsetTop};
-    offsetParent = aDOMelement.offsetParent;
+    offsetParent = <HTMLElement> aDOMelement.offsetParent;
     while (offsetParent !== null) {
         pos.x += offsetParent.offsetLeft;
         pos.y += offsetParent.offsetTop;
@@ -152,14 +159,14 @@ export function getDocumentPositionOf(aDOMelement) {
             pos.x -= offsetParent.scrollLeft;
             pos.y -= offsetParent.scrollTop;
         }
-        offsetParent = offsetParent.offsetParent;
+        offsetParent = <HTMLElement> offsetParent.offsetParent;
     }
     return pos;
 }
 
-export function copy(target) {
+export function copy(target: any) {
     // answer a shallow copy of target
-    var value, c, property, keys, l, i;
+    let value, c: any, property, keys;
 
     if (typeof target !== 'object') {
         return target;
@@ -172,7 +179,7 @@ export function copy(target) {
             target.constructor !== Object) {
         c = Object.create(target.constructor.prototype);
         keys = Object.keys(target);
-        for (l = keys.length, i = 0; i < l; i += 1) {
+        for (let l = keys.length, i = 0; i < l; i += 1) {
             property = keys[i];
             c[property] = target[property];
         }
@@ -252,33 +259,33 @@ export function enableRetinaSupport() {
 
     // Get the window's pixel ratio for canvas elements.
     // See: http://www.html5rocks.com/en/tutorials/canvas/hidpi/
-    var ctx = document.createElement("canvas").getContext("2d"),
+    const ctx = document.createElement("canvas").getContext("2d"),
         backingStorePixelRatio = ctx.webkitBackingStorePixelRatio ||
             ctx.mozBackingStorePixelRatio ||
             ctx.msBackingStorePixelRatio ||
             ctx.oBackingStorePixelRatio ||
             ctx.backingStorePixelRatio || 1,
 
-    // Unfortunately, it's really hard to make this work well when changing
-    // zoom level, so let's leave it like this right now, and stick to
-    // whatever the ratio was in the beginning.
+        // Unfortunately, it's really hard to make this work well when changing
+        // zoom level, so let's leave it like this right now, and stick to
+        // whatever the ratio was in the beginning.
 
         // originalDevicePixelRatio = window.devicePixelRatio,
 
-    // [Jens]: As of summer 2016 non-integer devicePixelRatios lead to
-    // artifacts when blitting images onto canvas elements in all browsers
-    // except Chrome, especially Firefox, Edge, IE (Safari doesn't even
-    // support retina mode as implemented here).
-    // therefore - to ensure crisp fonts - use the ceiling of whatever
-    // the devicePixelRatio is. This needs more memory, but looks nicer.
+        // [Jens]: As of summer 2016 non-integer devicePixelRatios lead to
+        // artifacts when blitting images onto canvas elements in all browsers
+        // except Chrome, especially Firefox, Edge, IE (Safari doesn't even
+        // support retina mode as implemented here).
+        // therefore - to ensure crisp fonts - use the ceiling of whatever
+        // the devicePixelRatio is. This needs more memory, but looks nicer.
 
         originalDevicePixelRatio = Math.ceil(window.devicePixelRatio),
 
         canvasProto = HTMLCanvasElement.prototype,
         contextProto = CanvasRenderingContext2D.prototype,
 
-    // [Jens]: keep track of original properties in a dictionary
-    // so they can be iterated over and restored
+        // [Jens]: keep track of original properties in a dictionary
+        // so they can be iterated over and restored
         uber = {
             drawImage: contextProto.drawImage,
             getImageData: contextProto.getImageData,
@@ -309,8 +316,8 @@ export function enableRetinaSupport() {
     if (backingStorePixelRatio === originalDevicePixelRatio) {return; }
     // [Jens]: check whether properties can be overridden, needed for Safari
     if (Object.keys(uber).some(function (any) {
-        var prop = uber[any];
-        return prop.hasOwnProperty('configurable') && (!prop.configurable);
+            const prop = uber[any];
+            return prop.hasOwnProperty('configurable') && (!prop.configurable);
     })) {return; }
 
     function getPixelRatio(imageSource) {
@@ -328,7 +335,7 @@ export function enableRetinaSupport() {
             return this._isRetinaEnabled;
         },
         set: function(enabled) {
-            var prevPixelRatio = getPixelRatio(this),
+            const prevPixelRatio = getPixelRatio(this),
                 prevWidth = this.width,
                 prevHeight = this.height;
 
@@ -348,8 +355,8 @@ export function enableRetinaSupport() {
         set: function(width) {
             try { // workaround one of FF's dreaded NS_ERROR_FAILURE bugs
                 // this should be taken out as soon as FF gets fixed again
-                var pixelRatio = getPixelRatio(this),
-                    context;
+                const pixelRatio = getPixelRatio(this);
+                let context;
                 uber.width.set.call(this, width * pixelRatio);
                 context = this.getContext('2d');
                 context.restore();
@@ -367,8 +374,8 @@ export function enableRetinaSupport() {
             return uber.height.get.call(this) / getPixelRatio(this);
         },
         set: function(height) {
-            var pixelRatio = getPixelRatio(this),
-                context;
+            const pixelRatio = getPixelRatio(this);
+            let context;
             uber.height.set.call(this, height * pixelRatio);
             context = this.getContext('2d');
             context.restore();
@@ -378,9 +385,9 @@ export function enableRetinaSupport() {
     });
 
     contextProto.drawImage = function(image) {
-        var pixelRatio = getPixelRatio(image),
-            sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight;
-        
+        const pixelRatio = getPixelRatio(image);
+        let sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight;
+
         // Different signatures of drawImage() method have different
         // parameter assignments.
         switch (arguments.length) {
@@ -430,7 +437,7 @@ export function enableRetinaSupport() {
     };
 
     contextProto.getImageData = function(sx, sy, sw, sh) {
-        var pixelRatio = getPixelRatio(this.canvas);
+        const pixelRatio = getPixelRatio(this.canvas);
         return uber.getImageData.call(
                 this,
                 sx * pixelRatio, sy * pixelRatio,
@@ -443,7 +450,7 @@ export function enableRetinaSupport() {
                 getPixelRatio(this.canvas);
         },
         set: function(offset) {
-            var pixelRatio = getPixelRatio(this.canvas);
+            const pixelRatio = getPixelRatio(this.canvas);
             uber.shadowOffsetX.set.call(this, offset * pixelRatio);
         }
     });
@@ -454,7 +461,7 @@ export function enableRetinaSupport() {
                 getPixelRatio(this.canvas);
         },
         set: function(offset) {
-            var pixelRatio = getPixelRatio(this.canvas);
+            const pixelRatio = getPixelRatio(this.canvas);
             uber.shadowOffsetY.set.call(this, offset * pixelRatio);
         }
     });
@@ -465,14 +472,14 @@ export function enableRetinaSupport() {
                 getPixelRatio(this.canvas);
         },
         set: function(blur) {
-            var pixelRatio = getPixelRatio(this.canvas);
+            const pixelRatio = getPixelRatio(this.canvas);
             uber.shadowBlur.set.call(this, blur * pixelRatio);
         }
     });
 }
 
 export function isRetinaSupported () {
-    var ctx = document.createElement("canvas").getContext("2d"),
+    const ctx = document.createElement("canvas").getContext("2d"),
         backingStorePixelRatio = ctx.webkitBackingStorePixelRatio ||
             ctx.mozBackingStorePixelRatio ||
             ctx.msBackingStorePixelRatio ||
@@ -507,8 +514,8 @@ export function isRetinaSupported () {
         };
     return backingStorePixelRatio !== window.devicePixelRatio &&
         !(Object.keys(uber).some(function (any) {
-            var prop = uber[any];
-            return prop.hasOwnProperty('configurable') && (!prop.configurable);
+                const prop = uber[any];
+                return prop.hasOwnProperty('configurable') && (!prop.configurable);
         })
     );
 }
@@ -520,7 +527,7 @@ export function isRetinaEnabled () {
 export function disableRetinaSupport() {
     // uninstalls Retina utilities. Make sure to re-create every Canvas
     // element afterwards
-    var canvasProto, contextProto, uber;
+    let canvasProto, contextProto, uber;
     if (!isRetinaEnabled()) {return; }
     canvasProto = HTMLCanvasElement.prototype;
     contextProto = CanvasRenderingContext2D.prototype;
@@ -540,7 +547,7 @@ export function disableRetinaSupport() {
 export function normalizeCanvas(aCanvas, getCopy) {
     // make sure aCanvas is non-retina, otherwise convert it in place (!)
     // or answer a normalized copy if the "getCopy" flag is <true>
-    var cpy;
+    let cpy;
     if (!aCanvas.isRetinaEnabled) {return aCanvas; }
     cpy = newCanvas(new Point(aCanvas.width, aCanvas.height), true);
     cpy.getContext('2d').drawImage(aCanvas, 0, 0);

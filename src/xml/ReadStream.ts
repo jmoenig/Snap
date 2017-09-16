@@ -5,14 +5,19 @@
 // ReadStream instance creation:
 
 export default class ReadStream {
-    constructor(arrayOrString) {
-        this.contents = arrayOrString || '';
-        this.index = 0;
+    nonSpace: RegExp; // prototype
+    nonWord: RegExp; // prototype
+
+    contents: string | string[];
+    index = 0;
+
+    constructor(arrayOrString: string = "") {
+        this.contents = arrayOrString;
     }
 
     // ReadStream accessing:
 
-    next(count) {
+    next(count?: number) {
         let element;
         let start;
         if (count === undefined) {
@@ -29,8 +34,8 @@ export default class ReadStream {
         return this.contents[this.index];
     }
 
-    skip(count) {
-        this.index += count || 1;
+    skip(count = 1) {
+        this.index += count;
     }
 
     atEnd() {
@@ -39,26 +44,26 @@ export default class ReadStream {
 
     // ReadStream accessing String contents:
 
-    upTo(str) {
+    upTo(str: string): string {
         const i = this.contents.indexOf(str, this.index);
-        return i === -1 ? '' : this.contents.slice(this.index, this.index = i);
+        return i === -1 ? '' : <string> this.contents.slice(this.index, this.index = i);
     }
 
-    peekUpTo(str) {
+    peekUpTo(str: string): string {
         const i = this.contents.indexOf(str, this.index);
-        return i === -1 ? '' : this.contents.slice(this.index, i);
+        return i === -1 ? '' : <string> this.contents.slice(this.index, i);
     }
 
     skipSpace() {
         this.nonSpace.lastIndex = this.index;
-        const result = this.nonSpace.exec(this.contents);
+        const result = this.nonSpace.exec(<string> this.contents);
         if (result) this.index = result.index;
     }
 
-    word() {
+    word(): string {
         this.nonWord.lastIndex = this.index;
-        const result = this.nonWord.exec(this.contents);
-        return result ? this.contents.slice(this.index, this.index = result.index) : '';
+        const result = this.nonWord.exec(<string> this.contents);
+        return result ? <string> this.contents.slice(this.index, this.index = result.index) : '';
     }
 }
 

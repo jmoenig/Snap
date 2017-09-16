@@ -3,13 +3,12 @@
 // Node instance creation:
 
 export default class Node {
-    constructor(parent, childrenArray) {
-        this.init(parent || null, childrenArray || []);
-    }
+    public parent: Node;
+    public children: Node[];
 
-    init(parent, childrenArray) {
-        this.parent = parent || null;
-        this.children = childrenArray || [];
+    constructor(parent: Node = null, childrenArray: Node[] = []) {
+        this.parent = parent;
+        this.children = childrenArray;
     }
 
     // Node string representation: e.g. 'a Node[3]'
@@ -20,17 +19,17 @@ export default class Node {
 
     // Node accessing:
 
-    addChild(aNode) {
+    addChild(aNode: Node): void {
         this.children.push(aNode);
         aNode.parent = this;
     }
 
-    addChildFirst(aNode) {
+    addChildFirst(aNode: Node): void {
         this.children.splice(0, null, aNode);
         aNode.parent = this;
     }
 
-    removeChild(aNode) {
+    removeChild(aNode: Node): void {
         const idx = this.children.indexOf(aNode);
         if (idx !== -1) {
             this.children.splice(idx, 1);
@@ -39,30 +38,32 @@ export default class Node {
 
     // Node functions:
 
-    root() {
+    root(): Node {
         if (this.parent === null) {
             return this;
         }
         return this.parent.root();
     }
 
-    depth() {
+    depth(): number {
         if (this.parent === null) {
             return 0;
         }
         return this.parent.depth() + 1;
     }
 
-    allChildren() {
+    allChildren(): Node[] {
+        // TODO: Fix O(n^2) implementation
+
         // includes myself
-        let result = [this];
+        let result: Node[] = [this];
         this.children.forEach(child => {
             result = result.concat(child.allChildren());
         });
         return result;
     }
 
-    forAllChildren(aFunction) {
+    forAllChildren(aFunction: (child: Node) => void): void {
         if (this.children.length > 0) {
             this.children.forEach(child => {
                 child.forAllChildren(aFunction);
@@ -71,7 +72,7 @@ export default class Node {
         aFunction.call(null, this);
     }
 
-    anyChild(aPredicate) {
+    anyChild(aPredicate: (node: Node) => boolean): boolean {
         // includes myself
         let i;
         if (aPredicate.call(null, this)) {
@@ -85,8 +86,8 @@ export default class Node {
         return false;
     }
 
-    allLeafs() {
-        const result = [];
+    allLeafs(): Node[] {
+        const result: Node[] = [];
         this.allChildren().forEach(element => {
             if (element.children.length === 0) {
                 result.push(element);
@@ -95,16 +96,18 @@ export default class Node {
         return result;
     }
 
-    allParents() {
+    allParents(): Node[] {
+        // TODO: Fix O(n^2) implementation
+
         // includes myself
-        let result = [this];
+        let result: Node[] = [this];
         if (this.parent !== null) {
             result = result.concat(this.parent.allParents());
         }
         return result;
     }
 
-    siblings() {
+    siblings(): Node[] {
         const myself = this;
         if (this.parent === null) {
             return [];
@@ -112,7 +115,7 @@ export default class Node {
         return this.parent.children.filter(child => child !== myself);
     }
 
-    parentThatIsA(constructor) {
+    parentThatIsA(constructor): Node {
         // including myself
         if (this instanceof constructor) {
             return this;
@@ -123,7 +126,7 @@ export default class Node {
         return this.parent.parentThatIsA(constructor);
     }
 
-    parentThatIsAnyOf(constructors) {
+    parentThatIsAnyOf(constructors): Node {
         // including myself
         let yup = false;
 

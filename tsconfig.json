@@ -6,7 +6,8 @@
 			"es2015",
 			"dom"
 		],
-		"sourceMap": true
+		"sourceMap": true,
+		"noImplicitAny": true
 	},
 	"exclude": [
 		"node_modules"

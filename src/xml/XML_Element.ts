@@ -6,26 +6,21 @@
 */
 
 import Node from "../morphic/Node";
-
-// XML_Element preferences settings:
-
-XML_Element.prototype.indentation = '  ';
-
-// XML_Element instance creation:
+import {detect, isNil} from "../morphic/util";
+import ReadStream from "./ReadStream";
 
 export default class XML_Element extends Node {
-    constructor(tag, contents, parent) {
-        this.init(tag, contents, parent);
-    }
+    public indentation: string; // prototype
 
-    init(tag, contents, parent) {
-        // additional properties:
+    public tag: string;
+    public attributes: { [attr: string]: string } = {};
+    public contents: string;
+
+    constructor(tag = "unnamed", contents = "", parent: Node) {
+        super();
+
         this.tag = tag || 'unnamed';
-        this.attributes = {};
         this.contents = contents || '';
-
-        // initialize inherited properties:
-        super.init.call(this);
 
         // override inherited properties
         if (parent) parent.addChild(this);
@@ -33,7 +28,7 @@ export default class XML_Element extends Node {
 
     // XML_Element DOM navigation: (aside from what's inherited from Node)
 
-    require(tagName) {
+    require(tagName: string) {
         // answer the first direct child with the specified tagName, or throw
         // an error if it doesn't exist
         const child = this.childNamed(tagName);
@@ -43,38 +38,39 @@ export default class XML_Element extends Node {
         return child;
     }
 
-    childNamed(tagName) {
+    childNamed(tagName: string) {
         // answer the first direct child with the specified tagName, or null
         return detect(
             this.children,
-            child => child.tag === tagName
+            (child: XML_Element) => child.tag === tagName
         );
     }
 
-    childrenNamed(tagName) {
+    childrenNamed(tagName: string) {
         // answer all direct children with the specified tagName
         return this.children.filter(
-            child => child.tag === tagName
+            (child: XML_Element) => child.tag === tagName
         );
     }
 
-    parentNamed(tagName) {
+    parentNamed(tagName: string): XML_Element {
         // including myself
         if (this.tag === tagName) {
             return this;
         }
-        if (!this.parent) {
+        if (!this.parent || !(this.parent instanceof XML_Element)) {
             return null;
         }
+
         return this.parent.parentNamed(tagName);
     }
 
     // XML_Element output:
 
-    toString(isFormatted, indentationLevel) {
+    toString(isFormatted?: boolean, indentationLevel: number = 0) {
         let result = '';
         let indent = '';
-        const level = indentationLevel || 0;
+        const level = indentationLevel;
         let key;
         let i;
 
@@ -103,7 +99,7 @@ export default class XML_Element extends Node {
         } else {
             result += '>';
             result += this.contents;
-            this.children.forEach(element => {
+            this.children.forEach((element: XML_Element) => {
                 if (isFormatted) {
                     result += '\n';
                 }
@@ -117,7 +113,7 @@ export default class XML_Element extends Node {
         return result;
     }
 
-    escape(string, ignoreQuotes) {
+    escape(string: string, ignoreQuotes: boolean) {
         const src = isNil(string) ? '' : string.toString();
         let result = '';
         let i;
@@ -153,7 +149,7 @@ export default class XML_Element extends Node {
         return result;
     }
 
-    unescape(string) {
+    unescape(string: string) {
         return string.replace(/&(amp|apos|quot|lt|gt|#xD|#126);/g, (_, name) => {
             switch (name) {
                 case 'amp': return '&';
@@ -170,14 +166,14 @@ export default class XML_Element extends Node {
 
     // XML_Element parsing:
 
-    parseString(string) {
+    parseString(string: string) {
         const stream = new ReadStream(string);
         stream.upTo('<');
         stream.skip();
         this.parseStream(stream);
     }
 
-    parseStream(stream) {
+    parseStream(stream: ReadStream) {
         let key;
         let value;
         let ch;
@@ -242,3 +238,6 @@ export default class XML_Element extends Node {
     }
 }
 
+// XML_Element preferences settings:
+
+XML_Element.prototype.indentation = '  ';
