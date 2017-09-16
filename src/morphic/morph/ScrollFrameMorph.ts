@@ -1,24 +1,32 @@
 // ScrollFrameMorph ////////////////////////////////////////////////////
 
 import FrameMorph from "./FrameMorph";
+import {MorphicPreferences} from "../settings";
+import SliderMorph from "./SliderMorph";
+import Point from "../Point";
+import Morph from "./Morph";
+import {nop} from "../util";
 
 export default class ScrollFrameMorph extends FrameMorph {
-    constructor(scroller, size, sliderColor) {
-        this.init(scroller, size, sliderColor);
-    }
+    // public step: Function; // prototype
 
-    init(scroller, size, sliderColor) {
+    public autoScrollTrigger: number = null;
+    public enableAutoScrolling = true; // change to suppress
+    public isScrollingByDragging = true; // change to suppress
+    public hasVelocity = true; // dto.
+    public padding = 0; // around the scrollable area
+    public growth = 0; // pixels or Point to grow right/left when near edge
+    public isTextLineWrapping = false;
+    public contents: FrameMorph;
+    public hBar: SliderMorph;
+    public vBar: SliderMorph;
+    public toolBar: Morph = null; // optional slot
+
+    constructor(scroller: FrameMorph, public scrollBarSize = MorphicPreferences.scrollBarSize, sliderColor?: Color) {
+        super();
+
         const myself = this;
 
-        super.init.call(this);
-        this.scrollBarSize = size || MorphicPreferences.scrollBarSize;
-        this.autoScrollTrigger = null;
-        this.enableAutoScrolling = true; // change to suppress
-        this.isScrollingByDragging = true; // change to suppress
-        this.hasVelocity = true; // dto.
-        this.padding = 0; // around the scrollable area
-        this.growth = 0; // pixels or Point to grow right/left when near edge
-        this.isTextLineWrapping = false;
         this.contents = scroller || new FrameMorph(this);
         this.add(this.contents);
         this.hBar = new SliderMorph(
@@ -59,7 +67,6 @@ export default class ScrollFrameMorph extends FrameMorph {
         };
         this.vBar.isDraggable = false;
         this.add(this.vBar);
-        this.toolBar = null; // optional slot
     }
 
     adjustScrollBars() {
@@ -125,12 +132,12 @@ export default class ScrollFrameMorph extends FrameMorph {
         }
     }
 
-    addContents(aMorph) {
+    addContents(aMorph: Morph) {
         this.contents.add(aMorph);
         this.contents.adjustBounds();
     }
 
-    setContents(aMorph) {
+    setContents(aMorph: Morph) {
         this.contents.children.forEach(m => {
             m.destroy();
         });
@@ -139,7 +146,7 @@ export default class ScrollFrameMorph extends FrameMorph {
         this.addContents(aMorph);
     }
 
-    setExtent(aPoint) {
+    setExtent(aPoint: Point) {
         if (this.isTextLineWrapping) {
             this.contents.setPosition(this.position().copy());
         }
@@ -149,7 +156,7 @@ export default class ScrollFrameMorph extends FrameMorph {
 
     // ScrollFrameMorph scrolling by dragging:
 
-    scrollX(steps) {
+    scrollX(steps: number) {
         const cl = this.contents.left();
         const l = this.left();
         const cw = this.contents.width();
@@ -168,7 +175,7 @@ export default class ScrollFrameMorph extends FrameMorph {
         }
     }
 
-    scrollY(steps) {
+    scrollY(steps: number) {
         const ct = this.contents.top();
         const t = this.top();
         const ch = this.contents.height();
@@ -187,7 +194,7 @@ export default class ScrollFrameMorph extends FrameMorph {
         }
     }
 
-    mouseDownLeft(pos) {
+    mouseDownLeft(pos: Point) {
         if (!this.isScrollingByDragging) {
             return null;
         }
@@ -199,7 +206,7 @@ export default class ScrollFrameMorph extends FrameMorph {
         let deltaY = 0;
         const friction = 0.8;
 
-        this.step = function () {
+        this.step = function (): void {
             let newPos;
             if (hand.mouseButton &&
                     (hand.children.length === 0) &&
@@ -249,14 +256,13 @@ export default class ScrollFrameMorph extends FrameMorph {
         const myself = this;
         const inset = MorphicPreferences.scrollBarSize * 3;
         const world = this.world();
-        let hand;
         let inner;
         let pos;
 
         if (!world) {
-            return null;
+            return;
         }
-        hand = world.hand;
+        const hand = world.hand;
         if (!this.autoScrollTrigger) {
             this.autoScrollTrigger = Date.now();
         }
@@ -276,16 +282,13 @@ export default class ScrollFrameMorph extends FrameMorph {
         };
     }
 
-    autoScroll(pos) {
-        let inset;
-        let area;
-
+    autoScroll(pos: Point) {
         if (Date.now() - this.autoScrollTrigger < 500) {
-            return null;
+            return;
         }
 
-        inset = MorphicPreferences.scrollBarSize * 3;
-        area = this.topLeft().extent(new Point(this.width(), inset));
+        const inset = MorphicPreferences.scrollBarSize * 3;
+        let area = this.topLeft().extent(new Point(this.width(), inset));
         if (area.containsPoint(pos)) {
             this.scrollY(inset - (pos.y - this.top()));
         }
@@ -308,7 +311,7 @@ export default class ScrollFrameMorph extends FrameMorph {
 
     // ScrollFrameMorph scrolling by editing text:
 
-    scrollCursorIntoView(morph) {
+    scrollCursorIntoView(morph: Morph) { // TODO
         const txt = morph.target;
         const offset = txt.position().subtract(this.contents.position());
         const ft = this.top() + this.padding;
@@ -326,7 +329,7 @@ export default class ScrollFrameMorph extends FrameMorph {
 
     // ScrollFrameMorph events:
 
-    mouseScroll(y, x) {
+    mouseScroll(y: number, x: number) {
         if (y) {
             this.scrollY(y * MorphicPreferences.mouseScrollAmount);
         }
@@ -338,7 +341,7 @@ export default class ScrollFrameMorph extends FrameMorph {
 
     // ScrollFrameMorph duplicating:
 
-    updateReferences(map) {
+    updateReferences(map: Map<Morph, Morph>) {
         const myself = this;
         super.updateReferences.call(this, map);
         if (this.hBar) {
