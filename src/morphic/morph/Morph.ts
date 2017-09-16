@@ -813,7 +813,7 @@ export default class Morph extends Node {
             return root;
         }
         if (root instanceof HandMorph) {
-            return root.world;
+            return root._world;
         }
         return null;
     }
@@ -1276,8 +1276,7 @@ export default class Morph extends Node {
     }
 
     inspect(anotherObject: Morph) {
-        const world: WorldMorph = this.world instanceof Function ?
-                this.world() : this.root() || this.world;
+        const world: WorldMorph = this.world();
 
         let inspector;
         let inspectee: Morph = this;
@@ -1300,7 +1299,7 @@ export default class Morph extends Node {
         if (this.customContextMenu) {
             return this.customContextMenu;
         }
-        world = this.world instanceof Function ? this.world() : this.world;
+        world = this.world();
         if (world && world.isDevMode) {
             if (this.parent === world) {
                 return this.developersMenu();
@@ -1313,7 +1312,7 @@ export default class Morph extends Node {
 
     hierarchyMenu() {
         const parents = this.allParents();
-        const world = this.world instanceof Function ? this.world() : this.world;
+        const world = this.world();
         const menu = new MenuMorph(this, null);
 
         parents.forEach((each: Morph) => {
@@ -1334,7 +1333,7 @@ export default class Morph extends Node {
 
     developersMenu() {
         // 'name' is not an official property of a function, hence:
-        const world: WorldMorph = this.world instanceof Function ? this.world() : this.world;
+        const world = this.world();
 
         const userMenu = this.userMenu() ||
             (this.parent && (<Morph> this.parent).userMenu());

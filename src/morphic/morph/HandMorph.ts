@@ -2,40 +2,50 @@
 
 // I represent the Mouse cursor
 
-import Morph from "./Morph"
+import Morph, {ISituation} from "./Morph"
 import Rectangle from "../Rectangle";
+import Point from "../Point";
+import WorldMorph from "./WorldMorph";
+import {contains, nop, getDocumentPositionOf, newCanvas} from "../util";
+import {MorphicPreferences} from "../settings";
+import ScrollFrameMorph from "./ScrollFrameMorph";
 
 // HandMorph instance creation:
 
 export default class HandMorph extends Morph {
-    constructor(aWorld) {
-        this.init(aWorld);
+    public _world: WorldMorph;
+
+    world(): WorldMorph {
+        return this._world;
+    }
+
+    public mouseButton: "left" | "right" | "middle" = null;
+    public mouseOverList: Morph[] = [];
+    public morphToGrab: Morph = null;
+    public grabPosition: Point = null;
+    public grabOrigin: ISituation = null;
+    public temporaries: Morph[] = [];
+    public touchHoldTimeout: number = null;
+    public contextMenuEnabled = false;
+
+    constructor(aWorld: WorldMorph) {
+        super(true);
+
+        this.bounds = new Rectangle();
+
+        // additional properties:
+        this._world = aWorld;
     }
 
     // HandMorph initialization:
 
-    init(aWorld) {
-        super.init.call(this, true);
-        this.bounds = new Rectangle();
-
-        // additional properties:
-        this.world = aWorld;
-        this.mouseButton = null;
-        this.mouseOverList = [];
-        this.morphToGrab = null;
-        this.grabPosition = null;
-        this.grabOrigin = null;
-        this.temporaries = [];
-        this.touchHoldTimeout = null;
-        this.contextMenuEnabled = false;
-    }
 
     changed() {
         let b;
-        if (this.world !== null) {
+        if (this._world !== null) {
             b = this.fullBounds();
             if (!b.extent().eq(new Point())) {
-                this.world.broken.push(b.spread());
+                this._world.broken.push(b.spread());
             }
         }
     }
@@ -43,13 +53,13 @@ export default class HandMorph extends Morph {
     // HandMorph navigation:
 
     morphAtPointer() {
-        return this.world.topMorphAt(this.bounds.origin) || this.world;
+        return this._world.topMorphAt(this.bounds.origin) || this._world;
     }
 
     allMorphsAtPointer() {
-        const morphs = this.world.allChildren();
+        const morphs = this._world.allChildren();
         const myself = this;
-        return morphs.filter(m => m.isVisible &&
+        return morphs.filter((m: Morph) => m.isVisible &&
             m.visibleBounds().containsPoint(myself.bounds.origin));
     }
 
@@ -64,7 +74,7 @@ export default class HandMorph extends Morph {
             reactToDropOf(droppedMorph, handMorph) -> newParent
     */
 
-    dropTargetFor(aMorph) {
+    dropTargetFor(aMorph: Morph) {
         let target = this.morphAtPointer();
         while (!target.wantsDropOf(aMorph)) {
             target = target.parent;
@@ -72,13 +82,13 @@ export default class HandMorph extends Morph {
         return target;
     }
 
-    grab(aMorph) {
+    grab(aMorph: Morph) {
         const oldParent = aMorph.parent;
         if (aMorph instanceof WorldMorph) {
-            return null;
+            return;
         }
         if (this.children.length === 0) {
-            this.world.stopEditing();
+            this._world.stopEditing();
             this.grabOrigin = aMorph.situation();
             aMorph.addShadow();
             if (aMorph.prepareToBeGrabbed) {
@@ -135,10 +145,7 @@ export default class HandMorph extends Morph {
             mouseScroll
     */
 
-    processMouseDown(event) {
-        let morph;
-        let actualClick;
-
+    processMouseDown(event: MouseEvent) {
         this.destroyTemporaries();
         this.contextMenuEnabled = true;
         this.morphToGrab = null;
@@ -147,31 +154,32 @@ export default class HandMorph extends Morph {
             this.drop();
             this.mouseButton = null;
         } else {
-            morph = this.morphAtPointer();
-            if (this.world.activeMenu) {
+            const morph = this.morphAtPointer();
+            if (this._world.activeMenu) {
                 if (!contains(
                         morph.allParents(),
-                        this.world.activeMenu
+                        this._world.activeMenu
                     )) {
-                    this.world.activeMenu.destroy();
+                    this._world.activeMenu.destroy();
                 } else {
                     clearInterval(this.touchHoldTimeout);
                 }
             }
-            if (this.world.activeHandle) {
-                if (morph !== this.world.activeHandle) {
-                    this.world.activeHandle.destroy();
+            if (this._world.activeHandle) {
+                if (morph !== this._world.activeHandle) {
+                    this._world.activeHandle.destroy();
                 }
             }
-            if (this.world.cursor) {
-                if (morph !== this.world.cursor.target) {
-                    this.world.stopEditing();
+            if (this._world.cursor) {
+                if (morph !== this._world.cursor.target) {
+                    this._world.stopEditing();
                 }
             }
             if (!morph.mouseMove) {
                 this.morphToGrab = morph.rootForGrab();
                 this.grabPosition = this.bounds.origin.copy();
             }
+            let actualClick: string;
             if (event.button === 2 || event.ctrlKey) {
                 this.mouseButton = 'right';
                 actualClick = 'mouseDownRight';
@@ -179,14 +187,14 @@ export default class HandMorph extends Morph {
                 this.mouseButton = 'left';
                 actualClick = 'mouseDownLeft';
             }
-            while (!morph[actualClick]) {
+            while (!morph[actualClick]) { // TODO
                 morph = morph.parent;
             }
             morph[actualClick](this.bounds.origin);
         }
     }
 
-    processTouchStart(event) {
+    processTouchStart(event: TouchEvent) {
         const myself = this;
         MorphicPreferences.isTouchDevice = true;
         clearInterval(this.touchHoldTimeout);
@@ -194,7 +202,7 @@ export default class HandMorph extends Morph {
             this.touchHoldTimeout = setInterval( // simulate mouseRightClick
                 () => {
                     myself.processMouseDown({button: 2});
-                    myself.processMouseUp({button: 2});
+                    myself.processMouseUp({button: 2}); // TODO: ???
                     event.preventDefault();
                     clearInterval(myself.touchHoldTimeout);
                 },
@@ -206,7 +214,7 @@ export default class HandMorph extends Morph {
         }
     }
 
-    processTouchMove(event) {
+    processTouchMove(event: TouchEvent) {
         MorphicPreferences.isTouchDevice = true;
         if (event.touches.length === 1) {
             const touch = event.touches[0];
@@ -215,11 +223,11 @@ export default class HandMorph extends Morph {
         }
     }
 
-    processTouchEnd(event) {
+    processTouchEnd(event: TouchEvent) {
         MorphicPreferences.isTouchDevice = true;
         clearInterval(this.touchHoldTimeout);
-        nop(event);
-        this.processMouseUp({button: 0});
+        // nop(event);
+        this.processMouseUp({button: 0}); // TODO: ???
     }
 
     processMouseUp() {
@@ -240,12 +248,12 @@ export default class HandMorph extends Morph {
                     context = morph;
                     contextMenu = context.contextMenu();
                     while ((!contextMenu) &&
-                            context.parent) {
+                    context.parent) {
                         context = context.parent;
                         contextMenu = context.contextMenu();
                     }
                     if (contextMenu) {
-                        contextMenu.popUpAtHand(this.world);
+                        contextMenu.popUpAtHand(this._world);
                     }
                 }
             }
@@ -274,13 +282,10 @@ export default class HandMorph extends Morph {
         this.mouseButton = null;
     }
 
-    processMouseMove(event) {
+    processMouseMove(event: MouseEvent) {
         let pos;
-        const posInDocument = getDocumentPositionOf(this.world.worldCanvas);
-        let mouseOverNew;
+        const posInDocument = getDocumentPositionOf(this._world.worldCanvas);
         const myself = this;
-        let morph;
-        let topMorph;
 
         pos = new Point(
             event.pageX - posInDocument.x,
@@ -291,11 +296,11 @@ export default class HandMorph extends Morph {
 
         // determine the new mouse-over-list:
         // mouseOverNew = this.allMorphsAtPointer();
-        mouseOverNew = this.morphAtPointer().allParents();
+        const mouseOverNew = this.morphAtPointer().allParents();
 
         if (!this.children.length && this.mouseButton) {
-            topMorph = this.morphAtPointer();
-            morph = topMorph.rootForGrab();
+            const topMorph = this.morphAtPointer();
+            const morph = topMorph.rootForGrab();
             if (topMorph.mouseMove) {
                 topMorph.mouseMove(pos, this.mouseButton);
                 if (this.mouseButton === 'right') {
@@ -305,13 +310,13 @@ export default class HandMorph extends Morph {
 
             // if a morph is marked for grabbing, just grab it
             if (this.mouseButton === 'left' &&
-                    this.morphToGrab &&
-                    (this.grabPosition.distanceTo(this.bounds.origin) >
-                        MorphicPreferences.grabThreshold)) {
+                this.morphToGrab &&
+                (this.grabPosition.distanceTo(this.bounds.origin) >
+                    MorphicPreferences.grabThreshold)) {
                 this.setPosition(this.grabPosition);
                 if (this.morphToGrab.isDraggable) {
                     morph = this.morphToGrab.selectForEdit ?
-                            this.morphToGrab.selectForEdit() : this.morphToGrab;
+                        this.morphToGrab.selectForEdit() : this.morphToGrab;
                     this.grab(morph);
                 } else if (this.morphToGrab.isTemplate) {
                     morph = this.morphToGrab.fullCopy();
@@ -350,8 +355,8 @@ export default class HandMorph extends Morph {
             // autoScrolling support:
             if (myself.children.length > 0) {
                 if (newMorph instanceof ScrollFrameMorph &&
-                        newMorph.enableAutoScrolling &&
-                        newMorph.contents.allChildren().some(any => any.wantsDropOf(myself.children[0]))
+                    newMorph.enableAutoScrolling &&
+                    newMorph.contents.allChildren().some(any => any.wantsDropOf(myself.children[0]))
                 ) {
                     if (!newMorph.bounds.insetBy(
                             MorphicPreferences.scrollBarSize * 3
@@ -364,7 +369,7 @@ export default class HandMorph extends Morph {
         this.mouseOverList = mouseOverNew;
     }
 
-    processMouseScroll(event) {
+    processMouseScroll(event: MouseEvent) {
         let morph = this.morphAtPointer();
         while (morph && !morph.mouseScroll) {
             morph = morph.parent;
@@ -376,8 +381,8 @@ export default class HandMorph extends Morph {
                         event,
                         'wheelDeltaY'
                     ) ?
-                            event.wheelDeltaY / 120 :
-                            event.wheelDelta / 120
+                        event.wheelDeltaY / 120 :
+                        event.wheelDelta / 120
                 ),
                 event.wheelDeltaX / 120 || 0
             );
@@ -393,7 +398,7 @@ export default class HandMorph extends Morph {
             droppedText
     */
 
-    processDrop(event) {
+    processDrop(event: DragEvent) {
         /*
             find out whether an external image or audio file was dropped
             onto the world canvas, turn it into an offscreen canvas or audio
@@ -406,24 +411,23 @@ export default class HandMorph extends Morph {
             events to interested Morphs at the mouse pointer
         */
         const files = event instanceof FileList ? event
-                    : event.target.files || event.dataTransfer.files;
+            : (<any> event.target).files || event.dataTransfer.files;
 
         let file;
 
         const url = event.dataTransfer ?
-                event.dataTransfer.getData('URL') : null;
+            event.dataTransfer.getData('URL') : null;
 
         const txt = event.dataTransfer ?
-                event.dataTransfer.getData('Text/HTML') : null;
+            event.dataTransfer.getData('Text/HTML') : null;
 
         let suffix;
         let src;
         let target = this.morphAtPointer();
         let img = new Image();
         let canvas;
-        let i;
 
-        function readSVG(aFile) {
+        function readSVG(aFile: File) {
             const pic = new Image();
             let frd = new FileReader();
             while (!target.droppedSVG) {
@@ -439,7 +443,7 @@ export default class HandMorph extends Morph {
             frd.readAsDataURL(aFile);
         }
 
-        function readImage(aFile) {
+        function readImage(aFile: File) {
             const pic = new Image();
             let frd = new FileReader();
             while (!target.droppedImage) {
@@ -457,7 +461,7 @@ export default class HandMorph extends Morph {
             frd.readAsDataURL(aFile);
         }
 
-        function readAudio(aFile) {
+        function readAudio(aFile: File) {
             const snd = new Audio();
             const frd = new FileReader();
             while (!target.droppedAudio) {
@@ -470,7 +474,7 @@ export default class HandMorph extends Morph {
             frd.readAsDataURL(aFile);
         }
 
-        function readText(aFile) {
+        function readText(aFile: File) {
             const frd = new FileReader();
             while (!target.droppedText) {
                 target = target.parent;
@@ -481,7 +485,7 @@ export default class HandMorph extends Morph {
             frd.readAsText(aFile);
         }
 
-        function readBinary(aFile) {
+        function readBinary(aFile: File) {
             const frd = new FileReader();
             while (!target.droppedBinary) {
                 target = target.parent;
@@ -492,7 +496,7 @@ export default class HandMorph extends Morph {
             frd.readAsArrayBuffer(aFile);
         }
 
-        function readURL(url, callback) {
+        function readURL(url: string, callback: (response: string) => void) {
             const request = new XMLHttpRequest();
             request.open('GET', url);
             request.onreadystatechange = () => {
@@ -507,7 +511,7 @@ export default class HandMorph extends Morph {
             request.send();
         }
 
-        function parseImgURL(html) {
+        function parseImgURL(html: string) {
             let iurl = '';
             let idx;
             let c;
@@ -525,10 +529,10 @@ export default class HandMorph extends Morph {
         }
 
         if (files.length > 0) {
-            for (i = 0; i < files.length; i += 1) {
+            for (let i = 0; i < files.length; i += 1) {
                 file = files[i];
                 if (file.type.includes("svg")
-                        && !MorphicPreferences.rasterizeSVGs) {
+                    && !MorphicPreferences.rasterizeSVGs) {
                     readSVG(file);
                 } else if (file.type.indexOf("image") === 0) {
                     readImage(file);
@@ -597,12 +601,12 @@ export default class HandMorph extends Morph {
     // HandMorph tools
 
     destroyTemporaries() {
-    /*
-        temporaries are just an array of morphs which will be deleted upon
-        the next mouse click, or whenever another temporary Morph decides
-        that it needs to remove them. The primary purpose of temporaries is
-        to display tools tips of speech bubble help.
-    */
+        /*
+            temporaries are just an array of morphs which will be deleted upon
+            the next mouse click, or whenever another temporary Morph decides
+            that it needs to remove them. The primary purpose of temporaries is
+            to display tools tips of speech bubble help.
+        */
         const myself = this;
         this.temporaries.forEach(morph => {
             if (!(morph.isClickable
