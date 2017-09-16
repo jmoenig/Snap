@@ -1,19 +1,19 @@
 // Points //////////////////////////////////////////////////////////////
 
 import Rectangle from "./Rectangle";
+import {degrees, radians} from "./util";
 
 // Point instance creation:
 
 export default class Point {
-    constructor(x, y) {
-        this.x = x || 0;
-        this.y = y || 0;
+    constructor(public x = 0, public y = 0) {
+
     }
 
     // Point string representation: e.g. '12@68'
 
     toString() {
-        return `${Math.round(this.x.toString())}@${Math.round(this.y.toString())}`;
+        return `${Math.round(this.x)}@${Math.round(this.y)}`;
     }
 
     // Point copying:
@@ -24,37 +24,37 @@ export default class Point {
 
     // Point comparison:
 
-    eq(aPoint) {
+    eq(aPoint: Point) {
         // ==
         return this.x === aPoint.x && this.y === aPoint.y;
     }
 
-    lt(aPoint) {
+    lt(aPoint: Point) {
         // <
         return this.x < aPoint.x && this.y < aPoint.y;
     }
 
-    gt(aPoint) {
+    gt(aPoint: Point) {
         // >
         return this.x > aPoint.x && this.y > aPoint.y;
     }
 
-    ge(aPoint) {
+    ge(aPoint: Point) {
         // >=
         return this.x >= aPoint.x && this.y >= aPoint.y;
     }
 
-    le(aPoint) {
+    le(aPoint: Point) {
         // <=
         return this.x <= aPoint.x && this.y <= aPoint.y;
     }
 
-    max(aPoint) {
+    max(aPoint: Point) {
         return new Point(Math.max(this.x, aPoint.x),
             Math.max(this.y, aPoint.y));
     }
 
-    min(aPoint) {
+    min(aPoint: Point) {
         return new Point(Math.min(this.x, aPoint.x),
             Math.min(this.y, aPoint.y));
     }
@@ -90,35 +90,35 @@ export default class Point {
 
     // Point arithmetic:
 
-    add(other) {
+    add(other: Point | number) {
         if (other instanceof Point) {
             return new Point(this.x + other.x, this.y + other.y);
         }
         return new Point(this.x + other, this.y + other);
     }
 
-    subtract(other) {
+    subtract(other: Point | number) {
         if (other instanceof Point) {
             return new Point(this.x - other.x, this.y - other.y);
         }
         return new Point(this.x - other, this.y - other);
     }
 
-    multiplyBy(other) {
+    multiplyBy(other: Point | number) {
         if (other instanceof Point) {
             return new Point(this.x * other.x, this.y * other.y);
         }
         return new Point(this.x * other, this.y * other);
     }
 
-    divideBy(other) {
+    divideBy(other: Point | number) {
         if (other instanceof Point) {
             return new Point(this.x / other.x, this.y / other.y);
         }
         return new Point(this.x / other, this.y / other);
     }
 
-    floorDivideBy(other) {
+    floorDivideBy(other: Point | number) {
         if (other instanceof Point) {
             return new Point(Math.floor(this.x / other.x),
                 Math.floor(this.y / other.y));
@@ -188,15 +188,15 @@ export default class Point {
 
     // Point functions:
 
-    crossProduct(aPoint) {
+    crossProduct(aPoint: Point) {
         return this.multiplyBy(aPoint.mirror());
     }
 
-    distanceTo(aPoint) {
+    distanceTo(aPoint: Point) {
         return (aPoint.subtract(this)).r();
     }
 
-    rotate(direction, center) {
+    rotate(direction: "right" | "left" | "pi", center: Point) {
         // direction must be 'right', 'left' or 'pi'
         const offset = this.subtract(center);
         if (direction === 'right') {
@@ -209,7 +209,7 @@ export default class Point {
         return center.subtract(offset);
     }
 
-    flip(direction, center) {
+    flip(direction: "vertical" | "horizontal", center: Point) {
         // direction must be 'vertical' or 'horizontal'
         if (direction === 'vertical') {
             return new Point(this.x, center.y * 2 - this.y);
@@ -218,7 +218,7 @@ export default class Point {
         return new Point(center.x * 2 - this.x, this.y);
     }
 
-    distanceAngle(dist, angle) {
+    distanceAngle(dist: number, angle: number) {
         let deg = angle;
         let x;
         let y;
@@ -239,16 +239,16 @@ export default class Point {
 
     // Point transforming:
 
-    scaleBy(scalePoint) {
+    scaleBy(scalePoint: Point | number) {
         return this.multiplyBy(scalePoint);
     }
 
-    translateBy(deltaPoint) {
+    translateBy(deltaPoint: Point | number) {
         return this.add(deltaPoint);
     }
 
-    rotateBy(angle, centerPoint) {
-        const center = centerPoint || new Point(0, 0);
+    rotateBy(angle: number, centerPoint: Point = new Point(0, 0)) {
+        const center = centerPoint;
         const p = this.subtract(center);
         const r = p.r();
         const theta = angle - p.theta();
@@ -265,7 +265,7 @@ export default class Point {
     }
 
     // creating Rectangle instances from Points:
-    corner(cornerPoint) {
+    corner(cornerPoint: Point) {
         // answer a new Rectangle
         return new Rectangle(
             this.x,
@@ -274,7 +274,7 @@ export default class Point {
             cornerPoint.y
         );
     }
-    rectangle(aPoint) {
+    rectangle(aPoint: Point) {
         // answer a new Rectangle
         let org;
 
@@ -283,7 +283,7 @@ export default class Point {
         crn = this.max(aPoint);
         return new Rectangle(org.x, org.y, crn.x, crn.y);
     }
-    extent(aPoint) {
+    extent(aPoint: Point) {
         //answer a new Rectangle
         const crn = this.add(aPoint);
         return new Rectangle(this.x, this.y, crn.x, crn.y);
