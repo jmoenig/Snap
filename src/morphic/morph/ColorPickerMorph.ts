@@ -1,18 +1,21 @@
 // ColorPickerMorph ///////////////////////////////////////////////////
 
 import Morph from "./Morph";
+import Point from "../Point";
+import ColorPaletteMorph from "./ColorPaletteMorph";
+import GrayPaletteMorph from "./GrayPaletteMorph";
 
 // ColorPickerMorph instance creation:
 
 export default class ColorPickerMorph extends Morph {
-    constructor(defaultColor) {
-        this.init(defaultColor || new Color(255, 255, 255));
-    }
+    public choice: Color;
+    public color = new Color(255, 255, 255);
 
-    init(defaultColor) {
+    constructor(defaultColor = new Color(255, 255, 255)) {
+        super();
+
         this.choice = defaultColor;
-        super.init.call(this);
-        this.color = new Color(255, 255, 255);
+
         this.silentSetExtent(new Point(80, 80));
         this.drawNew();
     }
