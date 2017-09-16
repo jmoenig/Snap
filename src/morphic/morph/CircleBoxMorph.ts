@@ -3,16 +3,15 @@
 // I can be used for sliders
 
 import Morph from "./Morph";
+import Point from "../Point";
+import {newCanvas} from "../util";
+import Rectangle from "../Rectangle";
 
 export default class CircleBoxMorph extends Morph {
-    constructor(orientation) {
-        this.init(orientation || 'vertical');
-    }
+    public autoOrient = true;
 
-    init(orientation) {
-        super.init.call(this);
-        this.orientation = orientation;
-        this.autoOrient = true;
+    constructor(public orientation: "horizontal" | "vertical" = "vertical") {
+        super();
         this.setExtent(new Point(20, 100));
     }
 
@@ -25,22 +24,21 @@ export default class CircleBoxMorph extends Morph {
     }
 
     drawNew() {
-        let radius;
-        let center1;
-        let center2;
-        let rect;
-        let points;
-        let x;
-        let y;
-        let context;
-        let ext;
+        let radius: number;
+        let center1: Point;
+        let center2: Point;
+        let rect: Rectangle;
+        let points: Point[];
+        let x: number;
+        let y: number;
+        let ext: Point;
         const myself = this;
 
         if (this.autoOrient) {
             this.autoOrientation();
         }
         this.image = newCanvas(this.extent());
-        context = this.image.getContext('2d');
+        const context = this.image.getContext('2d');
 
         if (this.orientation === 'vertical') {
             radius = this.width() / 2;

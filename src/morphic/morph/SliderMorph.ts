@@ -1,33 +1,26 @@
 // SliderMorph ///////////////////////////////////////////////////
 
 import CircleBoxMorph from "./CircleBoxMorph";
+import SliderButtonMorph from "./SliderButtonMorph";
+import Point from "../Point";
+import MenuMorph from "./MenuMorph";
+import Node from "../Node";
+import Morph from "./Morph";
 
 export default class SliderMorph extends CircleBoxMorph {
-    constructor(start, stop, value, size, orientation, color?) {
-        this.init(
-            start || 1,
-            stop || 100,
-            value || 50,
-            size || 10,
-            orientation || 'vertical',
-            color
-        );
-    }
+    public target: Morph = null;
+    public action: Function | string = null;
+    public offset: Point = null;
+    public button = new SliderButtonMorph();
 
-    init(start, stop, value, size, orientation, color) {
-        this.target = null;
-        this.action = null;
-        this.start = start;
-        this.stop = stop;
-        this.value = value;
-        this.size = size;
-        this.offset = null;
-        this.button = new SliderButtonMorph();
+    constructor(public start = 1, public stop = 100, public value = 50, public size = 10,
+                orientation: "horizontal" | "vertical" = "vertical", color?: Color) {
+        super(orientation);
+
         this.button.isDraggable = false;
         this.button.color = new Color(200, 200, 200);
         this.button.highlightColor = new Color(210, 210, 255);
         this.button.pressColor = new Color(180, 180, 255);
-        super.init.call(this, orientation);
         this.add(this.button);
         this.alpha = 0.3;
         this.color = color || new Color(0, 0, 0);
@@ -102,7 +95,7 @@ export default class SliderMorph extends CircleBoxMorph {
             if (typeof this.action === 'function') {
                 this.action.call(this.target, this.value);
             } else { // assume it's a String
-                this.target[this.action](this.value);
+                (<any> this.target)[this.action](this.value);
             }
         }
     }
@@ -175,15 +168,15 @@ export default class SliderMorph extends CircleBoxMorph {
     }
 
     showValue() {
-        this.inform(this.value);
+        this.inform(this.value.toString());
     }
 
-    userSetStart(num) {
+    userSetStart(num: number) {
         // for context menu demo purposes
         this.start = Math.max(num, this.stop);
     }
 
-    setStart(num, noUpdate) {
+    setStart(num: number | string, noUpdate?: boolean) {
         // for context menu demo purposes
         let newStart;
         if (typeof num === 'number') {
@@ -206,7 +199,7 @@ export default class SliderMorph extends CircleBoxMorph {
         this.changed();
     }
 
-    setStop(num, noUpdate) {
+    setStop(num: number | string, noUpdate?: boolean) {
         // for context menu demo purposes
         let newStop;
         if (typeof num === 'number') {
@@ -223,7 +216,7 @@ export default class SliderMorph extends CircleBoxMorph {
         this.changed();
     }
 
-    setSize(num, noUpdate) {
+    setSize(num: number | string, noUpdate?: boolean) {
         // for context menu demo purposes
         let newSize;
         if (typeof num === 'number') {
@@ -290,8 +283,7 @@ export default class SliderMorph extends CircleBoxMorph {
         return list;
     }
 
-    mouseDownLeft(pos) {
-        let world;
+    mouseDownLeft(pos: Point) {
         const myself = this;
 
         if (!this.button.bounds.containsPoint(pos)) {
@@ -299,7 +291,7 @@ export default class SliderMorph extends CircleBoxMorph {
         } else {
             this.offset = pos.subtract(this.button.bounds.origin);
         }
-        world = this.root();
+        const world = this.root();
         this.step = function () {
             let mousePos;
             let newX;
@@ -332,9 +324,12 @@ export default class SliderMorph extends CircleBoxMorph {
             }
         };
     }
-}
 
-SliderMorph.prototype.autoOrientation = nop;
+
+    autoOrientation() {
+        // nop
+    }
+}
 
 // SliderMorph stepping:
 

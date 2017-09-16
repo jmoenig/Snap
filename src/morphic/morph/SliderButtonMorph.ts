@@ -1,19 +1,23 @@
 // SliderButtonMorph ///////////////////////////////////////////////////
 
 import CircleBoxMorph from "./CircleBoxMorph";
+import {MorphicPreferences} from "../settings";
+import {nop, radians} from "../util";
+import Point from "../Point";
 
 export default class SliderButtonMorph extends CircleBoxMorph {
-    constructor(orientation) {
-        this.init(orientation);
-    }
+    public color = new Color(80, 80, 80);
+    public highlightColor = new Color(90, 90, 140);
+    public pressColor = new Color(80, 80, 160);
+    public is3D = false;
+    public hasMiddleDip = true;
 
-    init(orientation) {
-        this.color = new Color(80, 80, 80);
-        this.highlightColor = new Color(90, 90, 140);
-        this.pressColor = new Color(80, 80, 160);
-        this.is3D = false;
-        this.hasMiddleDip = true;
-        super.init.call(this, orientation);
+    public normalImage: HTMLCanvasElement;
+    public highlightImage: HTMLCanvasElement;
+    public pressImage: HTMLCanvasElement;
+
+    constructor(orientation: "horizontal" | "vertical" = "vertical") {
+        super(orientation);
     }
 
     drawNew() {
@@ -187,7 +191,7 @@ export default class SliderButtonMorph extends CircleBoxMorph {
         this.changed();
     }
 
-    mouseDownLeft(pos) {
+    mouseDownLeft(pos: Point) { // TODO?
         this.image = this.pressImage;
         this.changed();
         this.escalateEvent('mouseDownLeft', pos);
@@ -200,8 +204,10 @@ export default class SliderButtonMorph extends CircleBoxMorph {
 
     mouseMove() {
         // prevent my parent from getting picked up
-        nop();
+        // nop();
+    }
+
+    autoOrientation() {
+        // nop
     }
 }
-
-SliderButtonMorph.prototype.autoOrientation = nop;

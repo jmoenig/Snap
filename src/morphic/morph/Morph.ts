@@ -54,7 +54,7 @@ export default class Morph extends Node {
     public trackChanges: boolean; // prototype
     public shadowBlur: number; // prototype
 
-    public step: Function; // prototype
+    // public step: Function; // prototype
     public nop: Function; // prototype
 
     public isMorph = true;
@@ -101,6 +101,10 @@ export default class Morph extends Node {
     }
 
     // Morph stepping:
+
+    step() {
+        // nop
+    }
 
     stepFrame() {
         if (!this.step) {
@@ -858,7 +862,7 @@ export default class Morph extends Node {
         return null;
     }
 
-    overlappedMorphs() {
+    overlappedMorphs(): Morph[] {
         //exclude the World
         const world = this.world();
 
@@ -1650,8 +1654,6 @@ export default class Morph extends Node {
 
 Morph.prototype.trackChanges = true;
 Morph.prototype.shadowBlur = 4;
-
-Morph.prototype.step = nop;
 
 // Morph utilities:
 
