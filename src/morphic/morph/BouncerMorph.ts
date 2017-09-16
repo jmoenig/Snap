@@ -3,22 +3,25 @@
 // I am a Demo of a stepping custom Morph
 
 import Morph from "./Morph";
+import Point from "../Point";
 
 // BouncerMorph instance creation:
 
 export default class BouncerMorph extends Morph {
+    public fps = 50;
+
+    public isStopped = false;
+    public type: "horizontal" | "vertical";
+    public direction: "up" | "down" | "left" | "right";
+    public speed: number;
+
     constructor() {
-        this.init();
-    }
+        super();
 
-    // BouncerMorph initialization:
-
-    init(type, speed) {
-        super.init.call(this);
-        this.fps = 50;
+        const type: null = null; // TODO
+        const speed: null = null;
 
         // additional properties:
-        this.isStopped = false;
         this.type = type || 'vertical';
         if (this.type === 'vertical') {
             this.direction = 'down';
@@ -56,11 +59,11 @@ export default class BouncerMorph extends Morph {
                 } else {
                     this.moveUp();
                 }
-                if (this.fullBounds().top() < this.parent.top() &&
+                if (this.fullBounds().top() < (<Morph> this.parent).top() &&
                         this.direction === 'up') {
                     this.direction = 'down';
                 }
-                if (this.fullBounds().bottom() > this.parent.bottom() &&
+                if (this.fullBounds().bottom() > (<Morph> this.parent).bottom() &&
                         this.direction === 'down') {
                     this.direction = 'up';
                 }
@@ -70,11 +73,11 @@ export default class BouncerMorph extends Morph {
                 } else {
                     this.moveLeft();
                 }
-                if (this.fullBounds().left() < this.parent.left() &&
+                if (this.fullBounds().left() < (<Morph> this.parent).left() &&
                         this.direction === 'left') {
                     this.direction = 'right';
                 }
-                if (this.fullBounds().right() > this.parent.right() &&
+                if (this.fullBounds().right() > (<Morph> this.parent).right() &&
                         this.direction === 'right') {
                     this.direction = 'left';
                 }
