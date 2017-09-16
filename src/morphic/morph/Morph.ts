@@ -1650,11 +1650,15 @@ export default class Morph extends Node {
         return oImg;
     }
 
-    mouseMove: (pos: Point) => void;
+    mouseMove(pos: Point) { // TODO: Rewrite this event system
+        // noop
+    }
 }
 
 Morph.prototype.trackChanges = true;
 Morph.prototype.shadowBlur = 4;
+
+Morph.prototype.mouseMove = null;
 
 // Morph utilities:
 

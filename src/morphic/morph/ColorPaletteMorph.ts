@@ -1,25 +1,18 @@
 // ColorPaletteMorph ///////////////////////////////////////////////////
 
 import Morph from "./Morph";
-
-// ColorPaletteMorph inherits from Morph:
-
-// ColorPaletteMorph instance creation:
+import {newCanvas} from "../util";
+import Point from "../Point";
+import MenuMorph from "./MenuMorph";
 
 export default class ColorPaletteMorph extends Morph {
-    constructor(target, sizePoint) {
-        this.init(
-            target || null,
-            sizePoint || new Point(80, 50)
-        );
-    }
+    public targetSetter = 'color';
+    public choice: Color = null;
 
-    init(target, size) {
-        super.init.call(this);
-        this.target = target;
-        this.targetSetter = 'color';
-        this.silentSetExtent(size);
-        this.choice = null;
+    constructor(public target: Morph = null, sizePoint = new Point(80, 50)) {
+        super();
+
+        this.silentSetExtent(sizePoint);
         this.drawNew();
     }
 
@@ -45,22 +38,22 @@ export default class ColorPaletteMorph extends Morph {
         }
     }
 
-    mouseMove(pos) {
+    mouseMove(pos: Point) {
         this.choice = this.getPixelColor(pos);
         this.updateTarget();
     }
 
-    mouseDownLeft(pos) {
+    mouseDownLeft(pos: Point) {
         this.choice = this.getPixelColor(pos);
         this.updateTarget();
     }
 
     updateTarget() {
-        if (this.target instanceof Morph && this.choice !== null) {
-            if (this.target[this.targetSetter] instanceof Function) {
-                this.target[this.targetSetter](this.choice);
+        if (this.target instanceof Morph && this.choice !== null) { // TODO
+            if ((<any> this.target)[this.targetSetter] instanceof Function) {
+                (<any> this.target)[this.targetSetter](this.choice);
             } else {
-                this.target[this.targetSetter] = this.choice;
+                (<any> this.target)[this.targetSetter] = this.choice;
                 this.target.drawNew();
                 this.target.changed();
             }
