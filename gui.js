@@ -2898,6 +2898,7 @@ IDE_Morph.prototype.projectMenu = function () {
     menu.addPair('Open...', 'openProjectsBrowser', '^O');
     menu.addPair('Save', "save", '^S');
     menu.addItem('Save As...', 'saveProjectsBrowser');
+    menu.addItem('Save and Share...', "saveAndShare");
     menu.addLine();
     menu.addItem(
         'Import...',
@@ -3054,8 +3055,10 @@ IDE_Morph.prototype.projectMenu = function () {
     menu.popup(world, pos);
 };
 
-IDE_Morph.prototype.resourceURL = function () {
-    // Take in variadic inputs that represent an a nested folder structure.
+// IDE_Morph utility methods of dynamic submenu lists
+
+IDE_Morph.prototype.resourceURL = function (folder, file) {
+    // Give a path a file in subfolders.
     // Method can be easily overridden if running in a custom location.
     // Default Snap! simply returns a path (relative to snap.html)
     var args = Array.prototype.slice.call(arguments, 0);
@@ -3560,6 +3563,104 @@ IDE_Morph.prototype.saveProject = function (name) {
     ]);
 };
 
+// Save a project and pop up a dialog with a copyable URL.
+IDE_Morph.prototype.saveAndShare = function () {
+    var myself = this,
+        world = this.world(),
+        projectDialog;
+
+    function shareProject() {
+        var dialog, frame, text, width,
+            publicURL,
+            directions = new StringMorph(
+                localize('Use ^C to copy the address to the clipboard.')
+            );
+
+        publicURL = myself.publicProjectURL(
+            SnapCloud.username,
+            myself.projectName
+        );
+
+        // only call Snap!Cloud if the project has needs to be shared
+        if (window.location.href !== publicURL) {
+            myself.showMessage('sharing\nproject...');
+            SnapCloud.reconnect(
+                function () {
+                    SnapCloud.callService(
+                        'publishProject',
+                        function () {
+                            myself.showMessage('shared.', 2);
+                            window.location.hash = (new URL(publicURL)).hash;
+                        },
+                        myself.cloudError(),
+                        [
+                            myself.projectName,
+                            myself.stage.thumbnail(
+                                SnapSerializer.prototype.thumbnailSize
+                            ).toDataURL('image/png')
+                        ]
+                    );
+                },
+                myself.cloudError()
+            );
+        }
+
+        dialog = new DialogBoxMorph().withKey('sharedURLDialog');
+        dialog.labelString = 'Copy the public address:';
+        dialog.createLabel();
+
+        frame = new ScrollFrameMorph(),
+        text = new StringMorph(publicURL),
+        width = 250,
+
+        frame.padding = 6;
+        frame.setWidth(width);
+        text.setWidth(width - frame.padding * 2);
+        text.setPosition(frame.topLeft().add(frame.padding));
+        text.enableSelecting();
+        text.isEditable = true; // we can't select text that isn't editable.
+
+        frame.fixLayout = nop;
+        frame.edge = InputFieldMorph.prototype.edge;
+        frame.fontSize = InputFieldMorph.prototype.fontSize;
+        frame.typeInPadding = InputFieldMorph.prototype.typeInPadding;
+        frame.contrast = InputFieldMorph.prototype.contrast;
+        frame.drawNew = InputFieldMorph.prototype.drawNew;
+        frame.drawRectBorder = InputFieldMorph.prototype.drawRectBorder;
+
+        frame.addContents(text);
+        text.drawNew();
+        dialog.addBody(frame);
+        frame.drawNew();
+        dialog.add(directions);
+        dialog.addButton('ok', 'OK');
+        dialog.fixLayout();
+        directions.setPosition(new Point(
+            frame.left(),
+            frame.bottom() + frame.padding
+        ));
+        dialog.drawNew();
+        dialog.popUp(world);
+        dialog.setCenter(world.center());
+        text.selectAll();
+    }
+
+    if (!this.projectName) {
+        projectDialog = new ProjectDialogMorph(this, 'save');
+        // When a project it saved to the cloud, also share it.
+        projectDialog.saveCloudProject = function () {
+            myself.showMessage('Saving project\nto the cloud...');
+            SnapCloud.saveProject(myself, shareProject, myself.cloudError());
+            this.destroy();
+        };
+        projectDialog.popUp();
+    } else {
+        this.showMessage('Saving project\nto the cloud...');
+        this.setProjectName(this.projectName);
+        SnapCloud.saveProject(this, shareProject, this.cloudError());
+    }
+};
+
 // Serialize a project and save to the browser.
 IDE_Morph.prototype.rawSaveProject = function (name) {
     var str;
@@ -3582,7 +3683,6 @@ IDE_Morph.prototype.rawSaveProject = function (name) {
         }
     }
 };
-
 
 IDE_Morph.prototype.exportProject = function (name, plain, newWindow) {
     // Export project XML, saving a file to disk
@@ -5321,8 +5421,17 @@ IDE_Morph.prototype.setCloudURL = function () {
     );
 };
 
-// IDE_Morph HTTP data fetching
+IDE_Morph.prototype.publicProjectURL = function (username, projectName) {
+    // Return a new URL to a public Snap! project
+    var url = new URL(window.location);
+    url.hash = 'present:' + SnapCloud.encodeDict({
+        'Username': username,
+        'ProjectName': projectName
+    });
+    return url.href;
+}
 
+// IDE_Morph HTTP data fetching
 IDE_Morph.prototype.getURL = function (url, callback) {
     // fetch the contents of a url and pass it into the specified callback.
     // If no callback is specified synchronously fetch and return it
