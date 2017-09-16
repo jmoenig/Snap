@@ -29,21 +29,35 @@
     are implemented.
 */
 
-// Animation instance creation:
+import {isString, radians} from "./util";
+
+export type Easing = (t: number) => number;
+export type AnimationSetter = (destination: number) => void;
+export type AnimationGetter = () => number;
 
 class Animation {
-    constructor(setter, getter, delta, duration, easing, onComplete) {
-        this.setter = setter; // function
-        this.getter = getter; // function
-        this.delta = delta || 0; // number
-        this.duration = duration || 0; // milliseconds
+    public easings: { [easing: string]: Easing }; // prototype
+
+    public setter: AnimationSetter;
+    public getter: AnimationGetter;
+    public delta: number;
+    public duration: number;
+    public easing: Easing;
+    public onComplete: Function;
+
+    public endTime: number = null;
+    public destination: number = null;
+    public isActive: boolean = false;
+
+    constructor(setter: AnimationSetter, getter: AnimationGetter, delta = 0, duration = 0, easing: string | Easing, onComplete: Function = null) {
+        this.setter = setter;
+        this.getter = getter;
+        this.delta = delta;
+        this.duration = duration; // milliseconds
         this.easing = isString(easing) ? // string or function
-                this.easings[easing] || this.easings.sinusoidal
-                    : easing || this.easings.sinusoidal;
-        this.onComplete = onComplete || null; // optional callback
-        this.endTime = null;
-        this.destination = null;
-        this.isActive = false;
+                this.easings[<string> easing] || this.easings.sinusoidal
+                    : <Easing> easing || this.easings.sinusoidal;
+        this.onComplete = onComplete; // optional callback
         this.start();
     }
 
@@ -77,35 +91,35 @@ Animation.prototype.easings = {
     // two states
 
     // ease both in and out:
-    linear(t) {return t; },
-    sinusoidal(t) {return 1 - Math.cos(radians(t * 90)); },
-    quadratic(t) {
+    linear(t: number) {return t; },
+    sinusoidal(t: number) {return 1 - Math.cos(radians(t * 90)); },
+    quadratic(t: number) {
         return t < 0.5 ?
                 2 * t * t
                     : ((4 - (2 * t)) * t) - 1;
     },
-    cubic(t) {
+    cubic(t: number) {
         return t < 0.5 ?
                 4 * t * t * t
                     : ((t - 1) * ((2 * t) - 2) * ((2 * t) - 2)) + 1;
     },
-    elastic(t) {
+    elastic(t: number) {
         return (t -= 0.5) < 0 ?
             (0.01 + 0.01 / t) * Math.sin(50 * t)
                 : (0.02 - 0.01 / t) * Math.sin(50 * t) + 1;
     },
 
     // ease in only:
-    sine_in(t) {return 1 - Math.sin(radians(90 + (t * 90))); },
-    quad_in(t) {return t * t; },
-    cubic_in(t) {return t * t * t; },
-    elastic_in(t) {
+    sine_in(t: number) {return 1 - Math.sin(radians(90 + (t * 90))); },
+    quad_in(t: number) {return t * t; },
+    cubic_in(t: number) {return t * t * t; },
+    elastic_in(t: number) {
         return (0.04 - 0.04 / t) * Math.sin(25 * t) + 1;
     },
 
     // ease out only:
-    sine_out(t) {return Math.sin(radians(t * 90)); },
-    quad_out(t) {return t * (2 - t); },
-    elastic_out(t) {return 0.04 * t / (--t) * Math.sin(25 * t); }
+    sine_out(t: number) {return Math.sin(radians(t * 90)); },
+    quad_out(t: number) {return t * (2 - t); },
+    elastic_out(t: number) {return 0.04 * t / (--t) * Math.sin(25 * t); }
 };
 
