@@ -254,7 +254,7 @@ export default class Morph extends Node {
 
     // Morph accessing - simple changes:
 
-    moveBy(delta: Point | number) {
+    moveBy(delta: Point | number, arg2?: any) { // TODO arg2
         this.fullChanged(); // TODO: ???
         this.silentMoveBy(delta);
         this.fullChanged();

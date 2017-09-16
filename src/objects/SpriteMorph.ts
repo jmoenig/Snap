@@ -4225,7 +4225,7 @@ export default class SpriteMorph extends PenMorph {
 
     // SpriteMorph motion - adjustments due to nesting
 
-    moveBy(delta, justMe) {
+    moveBy(delta, justMe?) {
         // override the inherited default to make sure my parts follow
         // unless it's justMe (a correction)
         const start = this.isDown && !justMe && this.parent ?

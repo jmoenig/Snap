@@ -1,21 +1,22 @@
 // FrameMorph //////////////////////////////////////////////////////////
 
 import Morph from "./Morph";
+import ShadowMorph from "./ShadowMorph";
+import TextMorph from "./TextMorph";
+import ScrollFrameMorph from "./ScrollFrameMorph";
+import Rectangle from "../Rectangle";
+import Point from "../Point";
 
 // I clip my submorphs at my bounds
 
 export default class FrameMorph extends Morph {
-    constructor(aScrollFrame) {
-        this.init(aScrollFrame);
-    }
+    public color = new Color(255, 250, 245);
+    public acceptsDrops = true;
 
-    init(aScrollFrame) {
-        this.scrollFrame = aScrollFrame || null;
+    constructor(public scrollFrame: ScrollFrameMorph = null) {
+        super();
 
-        super.init.call(this);
-        this.color = new Color(255, 250, 245);
         this.drawNew();
-        this.acceptsDrops = true;
 
         if (this.scrollFrame) {
             this.isDraggable = false;
@@ -37,16 +38,14 @@ export default class FrameMorph extends Morph {
         return this.image;
     }
 
-    fullDrawOn(aCanvas, aRect) {
-        let rectangle;
-        let dirty;
+    fullDrawOn(aCanvas: HTMLCanvasElement, aRect: Rectangle) {
         if (!this.isVisible) {
-            return null;
+            return;
         }
-        rectangle = aRect || this.fullBounds();
-        dirty = this.bounds.intersect(rectangle);
+        const rectangle = aRect || this.fullBounds();
+        const dirty = this.bounds.intersect(rectangle);
         if (!dirty.extent().gt(new Point(0, 0))) {
-            return null;
+            return;
         }
         this.drawOn(aCanvas, dirty);
         this.children.forEach(child => {
@@ -60,15 +59,15 @@ export default class FrameMorph extends Morph {
 
     // FrameMorph navigation:
 
-    topMorphAt(point) {
-        let i;
-        let result;
+    topMorphAt(point: Point): Morph {
         if (!(this.isVisible && this.bounds.containsPoint(point))) {
             return null;
         }
-        for (i = this.children.length - 1; i >= 0; i -= 1) {
+
+        let result;
+        for (let i = this.children.length - 1; i >= 0; i -= 1) {
             result = this.children[i].topMorphAt(point);
-            if (result) {return result; }
+            if (result) { return result; }
         }
         return this.noticesTransparentClick ||
             !this.isTransparentAt(point) ? this : null;
@@ -77,7 +76,7 @@ export default class FrameMorph extends Morph {
     // FrameMorph scrolling support:
 
     submorphBounds() {
-        let result = null;
+        let result: Rectangle = null;
 
         if (this.children.length > 0) {
             result = this.children[0].bounds;
@@ -90,7 +89,7 @@ export default class FrameMorph extends Morph {
 
     keepInScrollFrame() {
         if (this.scrollFrame === null) {
-            return null;
+            return;
         }
         if (this.left() > this.scrollFrame.left()) {
             this.moveBy(
@@ -121,7 +120,7 @@ export default class FrameMorph extends Morph {
         const myself = this;
 
         if (this.scrollFrame === null) {
-            return null;
+            return;
         }
 
         subBounds = this.submorphBounds();
