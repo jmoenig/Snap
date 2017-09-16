@@ -1,81 +1,61 @@
 // TextMorph ////////////////////////////////////////////////////////////////
 
 import Morph from "./Morph";
+import {MorphicPreferences} from "../settings";
+import Point from "../Point";
+import {fontHeight, isObject, newCanvas} from "../util";
+import InspectorMorph from "./InspectorMorph";
+import StringMorph from "./StringMorph";
+import MenuMorph from "./MenuMorph";
 
 // I am a multi-line, word-wrapping String, quasi-inheriting from StringMorph
 
 // TextMorph instance creation:
 
-export default class TextMorph extends Morph {
-    constructor(
-        text,
-        fontSize,
-        fontStyle,
-        bold,
-        italic,
-        alignment,
-        width,
-        fontName,
-        shadowOffset,
-        shadowColor) {
-        this.init(text,
-            fontSize,
-            fontStyle,
-            bold,
-            italic,
-            alignment,
-            width,
-            fontName,
-            shadowOffset,
-            shadowColor);
-    }
+export interface IReceiver {
+    evaluateString(str: string): string;
+}
 
-    init(
-        text,
-        fontSize,
-        fontStyle,
-        bold,
-        italic,
-        alignment,
-        width,
-        fontName,
-        shadowOffset,
-        shadowColor) {
+export default class TextMorph extends Morph {
+    public text: string;
+    public words: string[] = [];
+    public lines: string[] = [];
+    public lineSlots: number[] = [];
+    public maxLineWidth = 0;
+    public backgroundColor: Color = null;
+    public isEditable = false;
+
+    // additional properties for ad-hoc evaluation:
+    public receiver: IReceiver = null;
+
+    // additional properties for text-editing:
+    public isScrollable = true; // scrolls into view when edited
+    public currentlySelecting = false;
+    public startMark = 0;
+    public endMark = 0;
+    public markedTextColor = new Color(255, 255, 255);
+    public markedBackgoundColor = new Color(60, 60, 120);
+
+    // override inherited properites:
+    public color = new Color(0, 0, 0);
+    public noticesTransparentClick = true;
+
+    constructor(
+        text?: string,
+        public fontSize = 12,
+        public fontStyle = "sans-serif",
+        public isBold = false,
+        public isItalic = false,
+        public alignment: "left" | "center" | "right" = "left",
+        public maxWidth = 0,
+        public fontName = MorphicPreferences.globalFontFamily,
+        public shadowOffset = new Point(0, 0),
+        public shadowColor: Color = null) {
+        super();
+
         // additional properties:
         this.text = text || (text === '' ? text : 'TextMorph');
-        this.words = [];
-        this.lines = [];
-        this.lineSlots = [];
-        this.fontSize = fontSize || 12;
-        this.fontName = fontName || MorphicPreferences.globalFontFamily;
-        this.fontStyle = fontStyle || 'sans-serif';
-        this.isBold = bold || false;
-        this.isItalic = italic || false;
-        this.alignment = alignment || 'left';
-        this.shadowOffset = shadowOffset || new Point(0, 0);
-        this.shadowColor = shadowColor || null;
-        this.maxWidth = width || 0;
-        this.maxLineWidth = 0;
-        this.backgroundColor = null;
-        this.isEditable = false;
 
-        //additional properties for ad-hoc evaluation:
-        this.receiver = null;
-
-        // additional properties for text-editing:
-        this.isScrollable = true; // scrolls into view when edited
-        this.currentlySelecting = false;
-        this.startMark = 0;
-        this.endMark = 0;
-        this.markedTextColor = new Color(255, 255, 255);
-        this.markedBackgoundColor = new Color(60, 60, 120);
-
-        // initialize inherited properties:
-        super.init.call(this);
-
-        // override inherited properites:
-        this.color = new Color(0, 0, 0);
-        this.noticesTransparentClick = true;
         this.drawNew();
     }
 
@@ -250,7 +230,7 @@ export default class TextMorph extends Morph {
         }
     }
 
-    setExtent(aPoint) {
+    setExtent(aPoint: Point) {
         this.maxWidth = Math.max(aPoint.x, 0);
         this.changed();
         this.drawNew();
@@ -258,7 +238,7 @@ export default class TextMorph extends Morph {
 
     // TextMorph mesuring:
 
-    columnRow(slot) {
+    columnRow(slot: number) {
         // answer the logical position point of the given index ("slot")
         let row;
 
@@ -281,7 +261,7 @@ export default class TextMorph extends Morph {
         );
     }
 
-    slotPosition(slot) {
+    slotPosition(slot: number) {
         // answer the physical position point of the given index ("slot")
         // where the cursor should be placed
         const colRow = this.columnRow(slot);
@@ -303,7 +283,7 @@ export default class TextMorph extends Morph {
         return new Point(x, y);
     }
 
-    slotAt(aPoint) {
+    slotAt(aPoint: number) {
         // answer the slot (index) closest to the given point taking
         // in account how far from the middle of the character it is,
         // so the cursor can be moved accordingly
@@ -335,7 +315,7 @@ export default class TextMorph extends Morph {
         }
     }
 
-    upFrom(slot) {
+    upFrom(slot: number) {
         // answer the slot above the given one
         let above;
 
@@ -350,7 +330,7 @@ export default class TextMorph extends Morph {
         return this.lineSlots[colRow.y - 1] + colRow.x;
     }
 
-    downFrom(slot) {
+    downFrom(slot: number) {
         // answer the slot below the given one
         let below;
 
@@ -365,12 +345,12 @@ export default class TextMorph extends Morph {
         return this.lineSlots[colRow.y + 1] + colRow.x;
     }
 
-    startOfLine(slot) {
+    startOfLine(slot: number) {
         // answer the first slot (index) of the line for the given slot
         return this.lineSlots[this.columnRow(slot).y];
     }
 
-    endOfLine(slot) {
+    endOfLine(slot: number) {
         // answer the slot (index) indicating the EOL for the given slot
         return this.startOfLine(slot) +
             this.lines[this.columnRow(slot).y].length - 1;
@@ -474,7 +454,7 @@ export default class TextMorph extends Morph {
         return menu;
     }
 
-    setReceiver(obj) {
+    setReceiver(obj: IReceiver) {
         this.receiver = obj;
         this.customContextMenu = this.evaluationMenu();
     }
@@ -503,6 +483,33 @@ export default class TextMorph extends Morph {
             inspector.changed();
         }
     }
+
+    font: typeof StringMorph.prototype.font;
+    previousWordFrom: typeof StringMorph.prototype.previousWordFrom;
+    nextWordFrom: typeof StringMorph.prototype.nextWordFrom;
+
+    edit: typeof StringMorph.prototype.edit;
+    selection: typeof StringMorph.prototype.selection;
+    selectionStartSlot: typeof StringMorph.prototype.selectionStartSlot;
+    clearSelection: typeof StringMorph.prototype.clearSelection;
+    deleteSelection: typeof StringMorph.prototype.deleteSelection;
+    selectAll: typeof StringMorph.prototype.selectAll;
+    mouseDownLeft: typeof StringMorph.prototype.mouseDownLeft;
+    shiftClick: typeof StringMorph.prototype.shiftClick;
+    mouseClickLeft: typeof StringMorph.prototype.mouseClickLeft;
+    mouseDoubleClick: typeof StringMorph.prototype.mouseDoubleClick;
+    selectWordAt: typeof StringMorph.prototype.selectWordAt;
+    selectBetweenWordsAt: typeof StringMorph.prototype.selectBetweenWordsAt;
+    enableSelecting: typeof StringMorph.prototype.enableSelecting;
+    disableSelecting: typeof StringMorph.prototype.disableSelecting;
+    // toggleIsDraggable: typeof StringMorph.prototype.toggleIsDraggable;
+    toggleWeight: typeof StringMorph.prototype.toggleWeight;
+    toggleItalic: typeof StringMorph.prototype.toggleItalic;
+    setSerif: typeof StringMorph.prototype.setSerif;
+    setSansSerif: typeof StringMorph.prototype.setSansSerif;
+    setText: typeof StringMorph.prototype.setText;
+    setFontSize: typeof StringMorph.prototype.setFontSize;
+    // numericalSetters: typeof StringMorph.prototype.numericalSetters;
 }
 
 TextMorph.prototype.font = StringMorph.prototype.font;

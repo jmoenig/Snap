@@ -55,7 +55,7 @@ export default class WorldMorph extends FrameMorph {
     public hand: HandMorph;
     public keyboardReceiver: CursorMorph = null;
     public cursor: CursorMorph = null;
-    public lastEditedText: string | TextMorph = null;
+    public lastEditedText: StringMorph | TextMorph = null;
     public activeMenu: MenuMorph = null;
     public activeHandle: HandleMorph = null;
     public virtualKeyboard: HTMLInputElement = null;
@@ -506,7 +506,7 @@ export default class WorldMorph extends FrameMorph {
         }
     }
 
-    previousTab(editField: StringMorph) {
+    previousTab(editField: StringMorph) { // TODO
         const prev = this.previousEntryField(editField);
         if (prev) {
             editField.clearSelection();
@@ -808,7 +808,7 @@ export default class WorldMorph extends FrameMorph {
         );
     }
 
-    edit(aStringOrTextMorph: string | TextMorph) { // TODO: This seems more like a string only thing
+    edit(aStringOrTextMorph: StringMorph | TextMorph) {
         const pos = getDocumentPositionOf(this.worldCanvas);
 
         if (!aStringOrTextMorph.isEditable) {
@@ -841,7 +841,7 @@ export default class WorldMorph extends FrameMorph {
         this.lastEditedText = aStringOrTextMorph;
     }
 
-    slide(aStringOrTextMorph: string | TextMorph) { // TODO: ditto
+    slide(aStringOrTextMorph: StringMorph | TextMorph) {
         // display a slider for numeric text entries
         let val = parseFloat(aStringOrTextMorph.text);
 

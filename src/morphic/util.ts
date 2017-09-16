@@ -76,11 +76,11 @@ export interface IPosition {
     y: number;
 }
 
-export function newCanvas(extentPoint: IPosition, nonRetina?: boolean): HTMLCanvasElement {
+export function newCanvas(extentPoint: IPosition = {x: 0, y: 0}, nonRetina?: boolean): HTMLCanvasElement {
     // answer a new empty instance of Canvas, don't display anywhere
     // nonRetina - optional Boolean "false"
     // by default retina support is automatic
-    const ext = extentPoint || {x: 0, y: 0};
+    const ext = extentPoint;
     const canvas = document.createElement('canvas');
     canvas.width = ext.x;
     canvas.height = ext.y;

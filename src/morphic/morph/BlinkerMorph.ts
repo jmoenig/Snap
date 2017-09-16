@@ -7,7 +7,7 @@ import Morph from "./Morph";
 // BlinkerMorph instance creation:
 
 export default class BlinkerMorph extends Morph {
-    constructor(rate) {
+    constructor(rate = 2) {
         this.init(rate);
     }
 

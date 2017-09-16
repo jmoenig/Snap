@@ -3,75 +3,43 @@
 // I am a single line of text
 
 import Morph from "./Morph";
-
-// StringMorph instance creation:
+import {MorphicPreferences} from "../settings";
+import Point from "../Point";
+import {fontHeight, isNil, isWordChar, newCanvas, radians} from "../util";
 
 export default class StringMorph extends Morph {
-    constructor(
-        text,
-        fontSize,
-        fontStyle,
-        bold,
-        italic,
-        isNumeric,
-        shadowOffset,
-        shadowColor,
-        color,
-        fontName) {
-        this.init(
-            text,
-            fontSize,
-            fontStyle,
-            bold,
-            italic,
-            isNumeric,
-            shadowOffset,
-            shadowColor,
-            color,
-            fontName
-        );
-    }
+    public text: string;
+    public isEditable = false;
+    public isPassword = false;
+    public isShowingBlanks = false;
+    public blanksColor = new Color(180, 140, 140);
 
-    init(
-        text,
-        fontSize,
-        fontStyle,
-        bold,
-        italic,
-        isNumeric,
-        shadowOffset,
-        shadowColor,
-        color,
-        fontName) {
+    // additional properties for text-editing:
+    public isScrollable = true; // scrolls into view when edited
+    public currentlySelecting = false;
+    public startMark = 0;
+    public endMark = 0;
+    public markedTextColor = new Color(255, 255, 255);
+    public markedBackgoundColor = new Color(60, 60, 120);
+
+    // override inherited properites:
+    public noticesTransparentClick = true;
+
+    constructor(text?: string,
+                public fontSize = 12,
+                public fontStyle = 'sans-serif',
+                public isBold = false,
+                public isItalic = false,
+                public isNumeric = false,
+                public shadowOffset = new Point(0, 0),
+                public shadowColor: Color = null,
+                public color = new Color(0, 0, 0),
+                public fontName = MorphicPreferences.globalFontFamily) {
+        super(true);
+
         // additional properties:
         this.text = text || ((text === '') ? '' : 'StringMorph');
-        this.fontSize = fontSize || 12;
-        this.fontName = fontName || MorphicPreferences.globalFontFamily;
-        this.fontStyle = fontStyle || 'sans-serif';
-        this.isBold = bold || false;
-        this.isItalic = italic || false;
-        this.isEditable = false;
-        this.isNumeric = isNumeric || false;
-        this.isPassword = false;
-        this.shadowOffset = shadowOffset || new Point(0, 0);
-        this.shadowColor = shadowColor || null;
-        this.isShowingBlanks = false;
-        this.blanksColor = new Color(180, 140, 140);
 
-        // additional properties for text-editing:
-        this.isScrollable = true; // scrolls into view when edited
-        this.currentlySelecting = false;
-        this.startMark = 0;
-        this.endMark = 0;
-        this.markedTextColor = new Color(255, 255, 255);
-        this.markedBackgoundColor = new Color(60, 60, 120);
-
-        // initialize inherited properties:
-        super.init.call(this, true);
-
-        // override inherited properites:
-        this.color = color || new Color(0, 0, 0);
-        this.noticesTransparentClick = true;
         this.drawNew();
     }
 
@@ -81,7 +49,7 @@ export default class StringMorph extends Morph {
         this.constructor.toString().split(' ')[1].split('(')[0]}("${this.text.slice(0, 30)}...")`;
     }
 
-    password(letter, length) {
+    password(letter: string, length: number) {
         let ans = '';
         let i;
         for (i = 0; i < length; i += 1) {
@@ -100,7 +68,7 @@ export default class StringMorph extends Morph {
             font = `${font}italic `;
         }
         return `${font +
-    this.fontSize}px ${this.fontName ? this.fontName + ', ' : ''}${this.fontStyle}`;
+        this.fontSize}px ${this.fontName ? this.fontName + ', ' : ''}${this.fontStyle}`;
     }
 
     drawNew() {
@@ -116,7 +84,7 @@ export default class StringMorph extends Morph {
         const shadowOffset = this.shadowOffset || new Point();
 
         const txt = this.isPassword ?
-                this.password('*', this.text.length) : this.text;
+            this.password('*', this.text.length) : this.text;
 
         // initialize my surface property
         this.image = newCanvas();
@@ -176,18 +144,17 @@ export default class StringMorph extends Morph {
 
         // notify my parent of layout change
         if (this.parent) {
-            if (this.parent.fixLayout) {
+            if (this.parent.fixLayout) { // TODO
                 this.parent.fixLayout();
             }
         }
     }
 
-    renderWithBlanks(context, startX, y) {
+    renderWithBlanks(context: CanvasRenderingContext2D, x: number = 0, y: number) {
         const space = context.measureText(' ').width;
         const blank = newCanvas(new Point(space, this.height()));
         const ctx = blank.getContext('2d');
         const words = this.text.split(' ');
-        let x = startX || 0;
         let isFirst = true;
 
         // create the blank form
@@ -221,11 +188,11 @@ export default class StringMorph extends Morph {
 
     // StringMorph measuring:
 
-    slotPosition(slot) {
+    slotPosition(slot: number) {
         // answer the position point of the given index ("slot")
         // where the cursor should be placed
         const txt = this.isPassword ?
-                    this.password('*', this.text.length) : this.text;
+            this.password('*', this.text.length) : this.text;
 
         const dest = Math.min(Math.max(slot, 0), txt.length);
         const context = this.image.getContext('2d');
@@ -238,19 +205,19 @@ export default class StringMorph extends Morph {
         for (idx = 0; idx < dest; idx += 1) {
             xOffset += context.measureText(txt[idx]).width;
         }
-        this.pos = dest;
+        this.pos = dest; // TODO: This property doesn't exist and is never accessed
         x = this.left() + xOffset;
         y = this.top();
         return new Point(x, y);
     }
 
-    slotAt(aPoint) {
+    slotAt(aPoint: Point) {
         // answer the slot (index) closest to the given point taking
         // in account how far from the middle of the character it is,
         // so the cursor can be moved accordingly
 
         const txt = this.isPassword ?
-                    this.password('*', this.text.length) : this.text;
+            this.password('*', this.text.length) : this.text;
 
         let idx = 0;
         let charX = 0;
@@ -262,7 +229,7 @@ export default class StringMorph extends Morph {
             if (idx === txt.length) {
                 if ((context.measureText(txt).width -
                         (context.measureText(txt[idx - 1]).width / 2)) <
-                        (aPoint.x - this.left())) {
+                    (aPoint.x - this.left())) {
                     return idx;
                 }
             }
@@ -270,19 +237,19 @@ export default class StringMorph extends Morph {
 
         // see where our click fell with respect to the middle of the char
         if (aPoint.x - this.left() >
-                charX - context.measureText(txt[idx - 1]).width / 2) {
+            charX - context.measureText(txt[idx - 1]).width / 2) {
             return idx;
         } else {
             return idx - 1;
         }
     }
 
-    upFrom(slot) {
+    upFrom(slot: number) {
         // answer the slot above the given one
         return slot;
     }
 
-    downFrom(slot) {
+    downFrom(slot: number) {
         // answer the slot below the given one
         return slot;
     }
@@ -297,11 +264,11 @@ export default class StringMorph extends Morph {
         return this.text.length;
     }
 
-    previousWordFrom(aSlot) {
+    previousWordFrom(aSlot: number) {
         // answer the slot (index) slots indicating the position of the
         // previous word to the left of aSlot
         let index = aSlot - 1;
-        
+
         // while the current character is non-word one, we skip it, so that
         // if we are in the middle of a non-alphanumeric sequence, we'll get
         // right to the beginning of the previous word
@@ -318,9 +285,9 @@ export default class StringMorph extends Morph {
         return index;
     }
 
-    nextWordFrom(aSlot) {
+    nextWordFrom(aSlot: number) {
         let index = aSlot;
-        
+
         while (index < this.endOfLine() && !isWordChar(this.text[index])) {
             index += 1;
         }
@@ -441,7 +408,7 @@ export default class StringMorph extends Morph {
         this.changed();
     }
 
-    setFontSize(size) {
+    setFontSize(size: number) {
         // for context menu demo purposes
         let newSize;
         if (typeof size === 'number') {
@@ -459,7 +426,7 @@ export default class StringMorph extends Morph {
         this.changed();
     }
 
-    setText(size) {
+    setText(size: number) {
         // for context menu demo purposes
         this.text = Math.round(size).toString();
         this.changed();
@@ -480,7 +447,7 @@ export default class StringMorph extends Morph {
 
     // StringMorph editing:
 
-    edit() {
+    edit() { // TODO
         this.root().edit(this);
     }
 
@@ -498,8 +465,8 @@ export default class StringMorph extends Morph {
 
     clearSelection() {
         if (!this.currentlySelecting &&
-                isNil(this.startMark) &&
-                isNil(this.endMark)) {
+            isNil(this.startMark) &&
+            isNil(this.endMark)) {
             return;
         }
         this.currentlySelecting = false;
@@ -535,7 +502,7 @@ export default class StringMorph extends Morph {
         }
     }
 
-    mouseDownLeft(pos) {
+    mouseDownLeft(pos: Point) {
         if (this.world().currentKey === 16) {
             this.shiftClick(pos);
         } else if (this.isEditable) {
@@ -545,7 +512,7 @@ export default class StringMorph extends Morph {
         }
     }
 
-    shiftClick(pos) {
+    shiftClick(pos: Point) {
         const cursor = this.root().cursor;
 
         if (cursor) {
@@ -561,7 +528,7 @@ export default class StringMorph extends Morph {
         this.escalateEvent('mouseDownLeft', pos);
     }
 
-    mouseClickLeft(pos) {
+    mouseClickLeft(pos: Point) {
         let cursor;
         if (this.isEditable) {
             if (!this.currentlySelecting) {
@@ -577,7 +544,7 @@ export default class StringMorph extends Morph {
         }
     }
 
-    mouseDoubleClick(pos) {
+    mouseDoubleClick(pos: Point) {
         // selects the word at pos
         // if there is no word, we select whatever is between
         // the previous and next words
@@ -604,7 +571,7 @@ export default class StringMorph extends Morph {
         }
     }
 
-    selectWordAt(slot) {
+    selectWordAt(slot: number) {
         const cursor = this.root().cursor;
 
         if (slot === 0 || isWordChar(this.text[slot - 1])) {
@@ -621,7 +588,7 @@ export default class StringMorph extends Morph {
         this.changed();
     }
 
-    selectBetweenWordsAt(slot) {
+    selectBetweenWordsAt(slot: number) {
         const cursor = this.root().cursor;
 
         cursor.gotoSlot(this.nextWordFrom(this.previousWordFrom(slot)));
@@ -629,7 +596,7 @@ export default class StringMorph extends Morph {
         this.endMark = cursor.slot;
 
         while (this.endMark < this.text.length
-                && !isWordChar(this.text[this.endMark])) {
+        && !isWordChar(this.text[this.endMark])) {
             this.endMark += 1;
         }
 
@@ -651,14 +618,16 @@ export default class StringMorph extends Morph {
                     this.startMark = this.slotAt(pos);
                     this.endMark = this.startMark;
                     this.currentlySelecting = true;
-                    if (!already) {this.escalateEvent('mouseDownLeft', pos); }
+                    if (!already) {
+                        this.escalateEvent('mouseDownLeft', pos);
+                    }
                 }
             }
         };
         this.mouseMove = function (pos) {
             if (this.isEditable &&
-                    this.currentlySelecting &&
-                    (!this.isDraggable)) {
+                this.currentlySelecting &&
+                (!this.isDraggable)) {
                 const newMark = this.slotAt(pos);
                 if (newMark !== this.endMark) {
                     this.endMark = newMark;
@@ -671,6 +640,7 @@ export default class StringMorph extends Morph {
 
     disableSelecting() {
         this.mouseDownLeft = StringMorph.prototype.mouseDownLeft;
-        delete this.mouseMove;
+        this.mouseMove = null;
+        // delete this.mouseMove;
     }
 }

@@ -3,7 +3,10 @@
 // I am a String/Text editing widget
 
 import BlinkerMorph from "./BlinkerMorph";
-import {contains} from "../util";
+import {contains, fontHeight, isNil} from "../util";
+import TextMorph from "./TextMorph";
+import Point from "../Point";
+import StringMorph from "./StringMorph";
 
 // CursorMorph: referenced constructors
 
@@ -14,17 +17,20 @@ CursorMorph.prototype.viewPadding = 1;
 // CursorMorph instance creation:
 
 export default class CursorMorph extends BlinkerMorph {
-    constructor(aStringOrTextMorph) {
-        this.init(aStringOrTextMorph);
-    }
+    public keyDownEventUsed = false;
+    public target: StringMorph | TextMorph;
+    public originalContents: string;
+    public originalAlignment: "left" | "right" | "center";
 
-    init(aStringOrTextMorph) {
+
+    constructor(aStringOrTextMorph: StringMorph | TextMorph) {
+        super();
+
         let ls;
 
         // additional properties:
-        this.keyDownEventUsed = false;
         this.target = aStringOrTextMorph;
-        this.originalContents = this.target.text;
+        this.originalContents = this.target.text; // TODO: ???
         this.originalAlignment = this.target.alignment;
         this.slot = this.target.text.length;
         super.init.call(this);
@@ -33,7 +39,7 @@ export default class CursorMorph extends BlinkerMorph {
         this.drawNew();
         this.image.getContext('2d').font = this.target.font();
         if (this.target instanceof TextMorph &&
-                (this.target.alignment !== 'left')) {
+            (this.target.alignment !== 'left')) {
             this.target.setAlignmentToLeft();
         }
         this.gotoSlot(this.slot);
@@ -320,7 +326,7 @@ export default class CursorMorph extends BlinkerMorph {
         this.updateSelection(shift);
     }
 
-    gotoPos(aPoint) {
+    gotoPos(aPoint: Point) {
         this.gotoSlot(this.target.slotAt(aPoint));
         this.show();
     }

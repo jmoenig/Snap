@@ -1649,6 +1649,8 @@ export default class Morph extends Node {
         );
         return oImg;
     }
+
+    mouseMove: (pos: Point) => void;
 }
 
 Morph.prototype.trackChanges = true;
