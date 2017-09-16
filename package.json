@@ -1,0 +1,17 @@
+{
+  "name": "Snap--Build-Your-Own-Blocks",
+  "version": "0.1.0",
+  "description": "a visual programming language inspired by Scratch",
+  "main": "index.js",
+  "repository": "https://github.com/jmoenig/Snap--Build-Your-Own-Blocks",
+  "author": "Jens Mönig <jens@moenig.org>",
+  "license": "AGPL-3.0",
+  "scripts": {
+    "watch": "webpack --watch"
+  },
+  "devDependencies": {
+    "ts-loader": "^2.3.7",
+    "typescript": "^2.5.2",
+    "webpack": "^3.6.0"
+  }
+}
