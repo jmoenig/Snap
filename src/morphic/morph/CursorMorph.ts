@@ -3,6 +3,7 @@
 // I am a String/Text editing widget
 
 import BlinkerMorph from "./BlinkerMorph";
+import {contains} from "../util";
 
 // CursorMorph: referenced constructors
 
@@ -368,7 +369,7 @@ export default class CursorMorph extends BlinkerMorph {
         this.gotoSlot(0);
     }
 
-    insert(aChar, shiftKey) {
+    insert(aChar, shiftKey?) {
         let text;
         if (aChar === '\u0009') {
             this.target.escalateEvent('reactToEdit', this.target);

@@ -44,6 +44,8 @@ export const touchScreenSettings = {
 
 export const MorphicPreferences = standardSettings;
 
+export const morphicVersion = '2017-September-01';
+
 // first, try enabling support for retina displays - can be turned off later
 
 /*

@@ -77,7 +77,7 @@ export default class HandMorph extends Morph {
     dropTargetFor(aMorph: Morph) {
         let target = this.morphAtPointer();
         while (!target.wantsDropOf(aMorph)) {
-            target = target.parent;
+            target = <Morph> target.parent;
         }
         return target;
     }

@@ -22,7 +22,7 @@ export default class ScrollFrameMorph extends FrameMorph {
     public vBar: SliderMorph;
     public toolBar: Morph = null; // optional slot
 
-    constructor(scroller: FrameMorph, public scrollBarSize = MorphicPreferences.scrollBarSize, sliderColor?: Color) {
+    constructor(scroller?: FrameMorph, public scrollBarSize = MorphicPreferences.scrollBarSize, sliderColor?: Color) {
         super();
 
         const myself = this;

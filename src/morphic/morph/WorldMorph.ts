@@ -3,60 +3,90 @@
 // I represent the <canvas> element
 
 import FrameMorph from "./FrameMorph";
+import Rectangle from "../Rectangle";
+import {detect, getDocumentPositionOf, nop} from "../util";
+import HandMorph from "./HandMorph";
+import Animation from "../Animation";
+import CursorMorph from "./CursorMorph";
+import {
+    MorphicPreferences,
+    morphicVersion,
+    standardSettings,
+    touchScreenSettings,
+    useBlurredShadows
+} from "../settings";
+import MenuMorph from "./MenuMorph";
+import TextMorph from "./TextMorph";
+import HandleMorph from "./HandleMorph";
+import Point from "../Point";
+import Morph from "./Morph";
+import StringMorph from "./StringMorph";
+import {localize} from "../../locale/SnapTranslator";
+import BoxMorph from "./BoxMorph";
+import CircleBoxMorph from "./CircleBoxMorph";
+import SliderMorph from "./SliderMorph";
+import ScrollFrameMorph from "./ScrollFrameMorph";
+import SpeechBubbleMorph from "./SpeechBubbleMorph";
+import GrayPaletteMorph from "./GrayPaletteMorph";
+import ColorPaletteMorph from "./ColorPaletteMorph";
+import ColorPickerMorph from "./ColorPickerMorph";
+import MouseSensorMorph from "./MouseSensorMorph";
+import BouncerMorph from "./BouncerMorph";
+import PenMorph from "./PenMorph";
 
 // WorldMorph instance creation:
 
 export default class WorldMorph extends FrameMorph {
-    constructor(aCanvas, fillPage) {
-        this.init(aCanvas, fillPage);
-    }
+    public color = new Color(205, 205, 205); // (130, 130, 130)
+    public alpha = 1;
+    public isVisible = true;
+    public isDraggable = false;
 
-    // WorldMorph initialization:
+    public currentKey: number = null; // currently pressed key code
+    public worldCanvas: HTMLCanvasElement;
 
-    init(aCanvas, fillPage) {
-        super.init.call(this);
-        this.color = new Color(205, 205, 205); // (130, 130, 130)
-        this.alpha = 1;
+    public noticesTransparentClick = true;
+    public stamp: number;
+    public useFillPage: boolean;
+
+    public isDevMode = false;
+    public broken: Rectangle[] = [];
+    public animations: Animation[] = [];
+    public hand: HandMorph;
+    public keyboardReceiver: CursorMorph = null;
+    public cursor: CursorMorph = null;
+    public lastEditedText: string | TextMorph = null;
+    public activeMenu: MenuMorph = null;
+    public activeHandle: HandleMorph = null;
+    public virtualKeyboard: HTMLInputElement = null;
+
+    constructor(aCanvas: HTMLCanvasElement, fillPage: boolean = true) {
+        super();
+
         this.bounds = new Rectangle(0, 0, aCanvas.width, aCanvas.height);
         this.drawNew();
-        this.isVisible = true;
-        this.isDraggable = false;
-        this.currentKey = null; // currently pressed key code
+
         this.worldCanvas = aCanvas;
-        this.noticesTransparentClick = true;
 
         // additional properties:
         this.stamp = Date.now(); // reference in multi-world setups
-        while (this.stamp === Date.now()) {nop(); }
+        while (this.stamp === Date.now()) {nop(); } // TODO: What is the purpose of this?
         this.stamp = Date.now();
 
         this.useFillPage = fillPage;
-        if (this.useFillPage === undefined) {
-            this.useFillPage = true;
-        }
-        this.isDevMode = false;
-        this.broken = [];
-        this.animations = [];
-        this.hand = new HandMorph(this);
-        this.keyboardReceiver = null;
-        this.cursor = null;
-        this.lastEditedText = null;
-        this.activeMenu = null;
-        this.activeHandle = null;
-        this.virtualKeyboard = null;
 
         this.initEventListeners();
     }
 
     // World Morph display:
 
-    brokenFor(aMorph) {
+    brokenFor(aMorph: Morph) {
         // private
         const fb = aMorph.fullBounds();
         return this.broken.filter(rect => rect.intersects(fb));
     }
 
-    fullDrawOn(aCanvas, aRect) {
+    fullDrawOn(aCanvas: HTMLCanvasElement, aRect: Rectangle) {
         super.fullDrawOn.call(this, aCanvas, aRect);
         this.hand.fullDrawOn(aCanvas, aRect);
     }
@@ -77,31 +107,30 @@ export default class WorldMorph extends FrameMorph {
         this.animations = this.animations.filter(anim => anim.isActive);
     }
 
+    private static condense(src: Rectangle[]) {
+        const trgt: Rectangle[] = [];
+        let hit;
+        src.forEach(rect => {
+            hit = detect(
+                trgt,
+                each => each.isNearTo(rect, 20)
+            );
+            if (hit) {
+                hit.mergeWith(rect);
+            } else {
+                trgt.push(rect);
+            }
+        });
+        return trgt;
+    }
+
     condenseDamages() {
         // collapse clustered damaged rectangles into their unions,
         // thereby reducing the array of brokens to a manageable size
-
-        function condense(src) {
-            const trgt = [];
-            let hit;
-            src.forEach(rect => {
-                hit = detect(
-                    trgt,
-                    each => each.isNearTo(rect, 20)
-                );
-                if (hit) {
-                    hit.mergeWith(rect);
-                } else {
-                    trgt.push(rect);
-                }
-            });
-            return trgt;
-        }
-
         let again = true;
         let size = this.broken.length;
         while (again) {
-            this.broken = condense(this.broken);
+            this.broken = WorldMorph.condense(this.broken);
             again = (this.broken.length < size);
             size = this.broken.length;
         }
@@ -149,7 +178,7 @@ export default class WorldMorph extends FrameMorph {
 
     // WorldMorph global pixel access:
 
-    getGlobalPixelColor(point) {
+    getGlobalPixelColor(point: Point) {
         // answer the color at the given point.
 
     /*
@@ -198,7 +227,7 @@ export default class WorldMorph extends FrameMorph {
         this.virtualKeyboard.style.left = "0px";
         this.virtualKeyboard.style.width = "0px";
         this.virtualKeyboard.style.height = "0px";
-        this.virtualKeyboard.autocapitalize = "none"; // iOS specific
+        (<any> this.virtualKeyboard).autocapitalize = "none"; // iOS specific
         document.body.appendChild(this.virtualKeyboard);
 
         this.virtualKeyboard.addEventListener(
@@ -285,7 +314,7 @@ export default class WorldMorph extends FrameMorph {
             "mouseup",
             event => {
                 event.preventDefault();
-                myself.hand.processMouseUp(event);
+                myself.hand.processMouseUp(event); // TODO: ???
             },
             false
         );
@@ -458,7 +487,7 @@ export default class WorldMorph extends FrameMorph {
         return this.acceptsDrops;
     }
 
-    droppedImage() {
+    droppedImage() { // TODO
         return null;
     }
 
@@ -468,8 +497,8 @@ export default class WorldMorph extends FrameMorph {
 
     // WorldMorph text field tabbing:
 
-    nextTab(editField) {
-        const next = this.nextEntryField(editField);
+    nextTab(editField: StringMorph) {
+        const next = this.nextEntryField(editField); // TODO
         if (next) {
             editField.clearSelection();
             next.selectAll();
@@ -477,7 +506,7 @@ export default class WorldMorph extends FrameMorph {
         }
     }
 
-    previousTab(editField) {
+    previousTab(editField: StringMorph) {
         const prev = this.previousEntryField(editField);
         if (prev) {
             editField.clearSelection();
@@ -489,7 +518,7 @@ export default class WorldMorph extends FrameMorph {
     // WorldMorph menu:
 
     contextMenu() {
-        let menu;
+        let menu: MenuMorph;
 
         if (this.isDevMode) {
             menu = new MenuMorph(this, this.constructor.name ||
@@ -585,15 +614,14 @@ export default class WorldMorph extends FrameMorph {
 
     userCreateMorph() {
         const myself = this;
-        let menu;
         let newMorph;
 
-        function create(aMorph) {
+        function create(aMorph: Morph) {
             aMorph.isDraggable = true;
             aMorph.pickUp(myself);
         }
 
-        menu = new MenuMorph(this, 'make a morph');
+        const menu = new MenuMorph(this, 'make a morph');
         menu.addItem('rectangle', () => {
             create(new Morph());
         });
@@ -754,7 +782,7 @@ export default class WorldMorph extends FrameMorph {
     }
 
     showAllHiddens() {
-        this.forAllChildren(child => {
+        this.forAllChildren((child: Morph) => {
             if (!child.isVisible) {
                 child.show();
             }
@@ -765,11 +793,12 @@ export default class WorldMorph extends FrameMorph {
         let versions = '';
         let module;
 
-        for (module in modules) {
-            if (Object.prototype.hasOwnProperty.call(modules, module)) {
-                versions += (`\n${module} (${modules[module]})`);
-            }
-        }
+        // TODO: Fix module tags, etc.
+        // for (module in modules) {
+        //     if (Object.prototype.hasOwnProperty.call(modules, module)) {
+        //         versions += (`\n${module} (${modules[module]})`);
+        //     }
+        // }
         if (versions !== '') {
             versions = `\n\nmodules:\n\nmorphic (${morphicVersion})${versions}`;
         }
@@ -779,11 +808,11 @@ export default class WorldMorph extends FrameMorph {
         );
     }
 
-    edit(aStringOrTextMorph) {
+    edit(aStringOrTextMorph: string | TextMorph) { // TODO: This seems more like a string only thing
         const pos = getDocumentPositionOf(this.worldCanvas);
 
         if (!aStringOrTextMorph.isEditable) {
-            return null;
+            return;
         }
         if (this.cursor) {
             this.cursor.destroy();
@@ -812,7 +841,7 @@ export default class WorldMorph extends FrameMorph {
         this.lastEditedText = aStringOrTextMorph;
     }
 
-    slide(aStringOrTextMorph) {
+    slide(aStringOrTextMorph: string | TextMorph) { // TODO: ditto
         // display a slider for numeric text entries
         let val = parseFloat(aStringOrTextMorph.text);
 
@@ -882,13 +911,21 @@ export default class WorldMorph extends FrameMorph {
             MorphicPreferences = standardSettings;
         }
     }
+
+    mouseDownLeft() {
+        // nop
+    }
+
+    mouseClickLeft() {
+        // nop
+    }
+
+    mouseDownRight() {
+        // nop
+    }
+
+    mouseClickRight() {
+        // nop
+    }
 }
-
-WorldMorph.prototype.mouseDownLeft = nop;
-
-WorldMorph.prototype.mouseClickLeft = nop;
-
-WorldMorph.prototype.mouseDownRight = nop;
-
-WorldMorph.prototype.mouseClickRight = nop;
 

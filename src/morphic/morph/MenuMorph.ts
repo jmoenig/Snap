@@ -8,7 +8,7 @@ import MenuItemMorph from "./MenuItemMorph";
 // MenuMorph instance creation:
 
 export default class MenuMorph extends BoxMorph {
-    constructor(target, title, environment?, fontSize?) {
+    constructor(target?, title?, environment?, fontSize?) {
         this.init(target, title, environment, fontSize);
 
         /*

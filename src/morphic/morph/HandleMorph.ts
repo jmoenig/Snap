@@ -7,7 +7,7 @@ import Morph from "./Morph";
 // HandleMorph instance creation:
 
 export default class HandleMorph extends Morph {
-    constructor(target, minX?, minY?, insetX?, insetY?, type?) {
+    constructor(target?, minX?, minY?, insetX?, insetY?, type?) {
         // if insetY is missing, it will be the same as insetX
         this.init(target, minX, minY, insetX, insetY, type);
     }

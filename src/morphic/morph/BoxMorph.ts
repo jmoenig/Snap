@@ -7,7 +7,7 @@ import Morph from "./Morph";
 // BoxMorph instance creation:
 
 export default class BoxMorph extends Morph {
-    constructor(edge, border, borderColor) {
+    constructor(edge?, border?, borderColor?) {
         this.init(edge, border, borderColor);
     }
 
