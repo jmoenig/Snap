@@ -148,7 +148,7 @@ CustomCommandBlockMorph, SymbolMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2017-September-15';
+modules.blocks = '2017-September-18';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -1591,6 +1591,8 @@ SyntaxElementMorph.prototype.fixLayout = function (silently) {
         lines = [],
         space = this.isPrototype ?
                 1 : Math.floor(fontHeight(this.fontSize) / 3),
+        ico = this.isCustomBlock && !this.isGlobal ?
+                this.methodIconExtent().x + space : 0,
         bottomCorrection,
         initialExtent = this.extent();
 
@@ -1659,11 +1661,11 @@ SyntaxElementMorph.prototype.fixLayout = function (silently) {
         y = this.top();
     }
     lines.forEach(function (line) {
-        x = myself.left() + myself.edge + myself.labelPadding;
+        x = myself.left() + ico + myself.edge + myself.labelPadding;
         if (myself instanceof RingMorph) {
             x = myself.left() + space; //myself.labelPadding;
         } else if (myself.isPredicate) {
-            x = myself.left() + myself.rounding;
+            x = myself.left() + ico + myself.rounding;
         } else if (myself instanceof MultiArgMorph
                 || myself instanceof ArgLabelMorph) {
             x = myself.left();
@@ -1674,7 +1676,7 @@ SyntaxElementMorph.prototype.fixLayout = function (silently) {
             if (part instanceof CSlotMorph) {
                 x -= myself.labelPadding;
                 if (myself.isPredicate) {
-                    x = myself.left() + myself.rounding;
+                    x = myself.left() + ico + myself.rounding;
                 }
                 part.setColor(myself.color);
                 part.setPosition(new Point(x, y));
@@ -1764,9 +1766,9 @@ SyntaxElementMorph.prototype.fixLayout = function (silently) {
     parts.forEach(function (part) {
         if (part instanceof CSlotMorph) {
             if (myself.isPredicate) {
-                part.setWidth(blockWidth - myself.rounding * 2);
+                part.setWidth(blockWidth - ico - myself.rounding * 2);
             } else {
-                part.setWidth(blockWidth - myself.edge);
+                part.setWidth(blockWidth - myself.edge - ico);
             }
         }
     });
@@ -1819,6 +1821,13 @@ SyntaxElementMorph.prototype.fixHighlight = function () {
     if (top.getHighlight && top.getHighlight()) {
         top.addHighlight(top.removeHighlight());
     }
+};
+
+SyntaxElementMorph.prototype.methodIconExtent = function () {
+    // answer the span of the icon for the "local method" indicator
+    var ico = this.fontSize * 1.2;
+    return this.isCustomBlock && !this.isGlobal ?
+            new Point(ico * 0.66, ico) : new Point(0, 0);
 };
 
 // SyntaxElementMorph evaluating:
@@ -3922,6 +3931,41 @@ BlockMorph.prototype.scriptPic = function () {
     return pic;
 };
 
+// BlockMorph local method indicator drawing
+
+BlockMorph.prototype.drawMethodIcon = function (context) {
+    var ext = this.methodIconExtent(),
+        w = ext.x,
+        h = ext.y,
+        r = w / 2,
+        x = this.edge + this.labelPadding,
+        y = this.edge,
+        isNormal =
+            this.color === SpriteMorph.prototype.blockColor[this.category];
+
+    if (this.isPredicate) {
+        x = this.rounding;
+    }
+    if (this instanceof CommandBlockMorph) {
+        y += this.corner;
+    }
+    context.fillStyle = isNormal ? this.cachedClrBright : this.cachedClrDark;
+
+    // pin
+    context.beginPath();
+    context.arc(x + r, y + r, r, radians(-210), radians(30), false);
+    context.lineTo(x + r, y + h);
+    context.closePath();
+    context.fill();
+
+    // hole
+    context.fillStyle = this.cachedClr;
+    context.beginPath();
+    context.arc(x + r, y + r, r * 0.4, radians(0), radians(360), false);
+    context.closePath();
+    context.fill();
+};
+
 // BlockMorph dragging and dropping
 
 BlockMorph.prototype.rootForGrab = function () {
@@ -4541,6 +4585,11 @@ CommandBlockMorph.prototype.drawNew = function () {
             context, 0, this.height() - this.corner
         );
         */
+    }
+
+    // draw method icon if applicable
+    if (this.isCustomBlock && !this.isGlobal) {
+        this.drawMethodIcon(context);
     }
 
     // erase CommandSlots
@@ -5314,6 +5363,10 @@ ReporterBlockMorph.prototype.drawNew = function () {
         this.drawRounded(context);
     }
 
+    // draw method icon if applicable
+    if (this.isCustomBlock && !this.isGlobal) {
+        this.drawMethodIcon(context);
+    }
     // erase CommandSlots
     this.eraseHoles(context);
 };

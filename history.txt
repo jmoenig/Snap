@@ -3628,12 +3628,18 @@ Fixes:
 * Blocks, Objects: added “inherited” option to inheritable variable templates’ context menu in the palette
 * Objects: disabled context menu and dragging for watchers in presentation mode
 
+170918
+------
+* Symbols: added ‘location’ icon (map-pin)
+* Blocks: added visual “map-pin” icon to indicate local method blocks
+
 
 v4.1 Features:
 * polymorphic sprite-local custom blocks
 * inheritance of sprite-local custom blocks
 * inheritance of sprite attributes (x, y, direction, size, costumes, costume #, sounds, scripts)
 * first-class costumes and sounds
+* visual indicator (map-pin icon) for sprite-local custom blocks (i.e. methods)
 * [experimental, hidden] camera snapshots for costumes and new sprites
 * localization support when typing expressions
 * support for user-forced line-breaks in custom block labels

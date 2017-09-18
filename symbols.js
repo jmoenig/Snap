@@ -41,7 +41,7 @@
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.symbols = '2017-September-08';
+modules.symbols = '2017-September-18';
 
 var SymbolMorph;
 
@@ -51,7 +51,7 @@ WorldMorph.prototype.customMorphs = function () {
 
     return [
         new SymbolMorph(
-            'notes',
+            'location',
             50,
             new Color(250, 250, 250),
             new Point(-1, -1),
@@ -130,7 +130,8 @@ SymbolMorph.prototype.names = [
     'robot',
     'magnifyingGlass',
     'notes',
-    'camera'
+    'camera',
+    'location'
 ];
 
 // SymbolMorph instance creation:
@@ -306,6 +307,8 @@ SymbolMorph.prototype.symbolCanvasColored = function (aColor) {
         return this.drawSymbolNotes(canvas, aColor);
     case 'camera':
         return this.drawSymbolCamera(canvas, aColor);
+    case 'location':
+        return this.drawSymbolLocation(canvas, aColor);
     default:
         return canvas;
     }
@@ -321,6 +324,8 @@ SymbolMorph.prototype.symbolWidth = function () {
     switch (this.name) {
     case 'pointRight':
         return Math.sqrt(size * size - Math.pow(size / 2, 2));
+    case 'location':
+        return size * 0.6;
     case 'flash':
     case 'file':
         return size * 0.8;
@@ -1551,6 +1556,31 @@ SymbolMorph.prototype.drawSymbolCamera = function (canvas, color) {
     ctx.arc(w / 2, h / 2, r, radians(0), radians(360), false);
     ctx.fill();
     ctx.restore();
+
+    return canvas;
+};
+
+SymbolMorph.prototype.drawSymbolLocation = function (canvas, color) {
+    // answer a canvas showing a camera
+    var ctx = canvas.getContext('2d'),
+        w = canvas.width,
+        h = canvas.height,
+        r = w / 2;
+
+    // pin
+    ctx.fillStyle = color.toString();
+    ctx.beginPath();
+    ctx.arc(r, r, r, radians(-210), radians(30), false);
+    ctx.lineTo(r, h);
+    ctx.closePath();
+    ctx.fill();
+
+    // hole
+    ctx.globalCompositeOperation = 'destination-out';
+    ctx.beginPath();
+    ctx.arc(r, r, r * 0.5, radians(0), radians(360), false);
+    ctx.closePath();
+    ctx.fill();
 
     return canvas;
 };
