@@ -1895,7 +1895,7 @@ ActionManager.prototype.onSetSelector = function(id, sel) {
 ActionManager.prototype.onAddVariable = function(name, ownerId) {
     // Get the sprite or the stage
     var owner,
-        isGlobal = ownerId === true;
+        isGlobal = ownerId.toString() === 'true';
 
     if (!isGlobal) {
         owner = this._owners[ownerId];
@@ -1915,7 +1915,7 @@ ActionManager.prototype.onAddVariable = function(name, ownerId) {
 };
 
 ActionManager.prototype.onDeleteVariable = function(name, ownerId) {
-    var isGlobal = ownerId === true,
+    var isGlobal = ownerId.toString() === 'true',
         owner = isGlobal ? this._owners[Object.keys(this._owners)[0]] :
             this._owners[ownerId];
 
