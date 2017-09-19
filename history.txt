@@ -3669,6 +3669,7 @@ v4.1 Features:
 * Support https in “url” reporter
 * splitting csv-text
 * prevent context menu and dragging for stage watchers in presentation mode
+* "floating" search button in the blocks palette
 
 Fixes:
 * changed keyboard shortcut indicator for “find blocks” to “^”
