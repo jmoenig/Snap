@@ -7248,8 +7248,7 @@ StageMorph.prototype.userMenu = function () {
         function () {
             ide.saveCanvasAs(
                 myself.fullImageClassic(),
-                myself.name,
-                true // open as new window
+                myself.name
             );
         },
         'open a new window\nwith a picture of the stage'
@@ -9335,8 +9334,7 @@ WatcherMorph.prototype.userMenu = function () {
                 inp.click();
             }
         );
-        if (this.currentValue &&
-                (isString(this.currentValue) || !isNaN(+this.currentValue))) {
+        if (isString(this.currentValue) || !isNaN(+this.currentValue)) {
             menu.addItem(
                 'export...',
                 function () {
@@ -9344,8 +9342,7 @@ WatcherMorph.prototype.userMenu = function () {
                     ide.saveFileAs(
                         myself.currentValue.toString(),
                         'text/plain;charset=utf-8',
-                        myself.getter, // variable name
-                        false
+                        myself.getter // variable name
                     );
                 }
             );

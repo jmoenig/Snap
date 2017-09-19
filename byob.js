@@ -941,8 +941,7 @@ CustomCommandBlockMorph.prototype.userMenu = function () {
                 ide.saveCanvasAs(
                     this.topBlock().scriptPic(),
                     (ide.projectName || localize('untitled')) + ' ' +
-                        localize('script pic'),
-                    false // request opening a new window
+                        localize('script pic')
                 );
             },
             'open a new window\nwith a picture of this script'
