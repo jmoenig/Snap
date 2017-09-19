@@ -2069,6 +2069,7 @@ IDE_Morph.prototype.refreshIDE = function () {
     if (this.loadNewProject) {
         this.newProject();
     } else {
+        SnapUndo.reset();
         this.openProjectString(projectData);
     }
 };
@@ -4732,6 +4733,7 @@ IDE_Morph.prototype.toggleDynamicInputLabels = function () {
     this.spriteBar.tabBar.tabTo('scripts');
     this.createCategories();
     this.createCorralBar();
+    SnapUndo.reset();
     this.openProjectString(projectData);
 };
 
@@ -5011,6 +5013,7 @@ IDE_Morph.prototype.reflectLanguage = function (lang, callback) {
         this.newProject();
         location.hash = urlBar;
     } else {
+        SnapUndo.reset();
         this.openProjectString(projectData);
     }
     this.saveSetting('language', lang);
