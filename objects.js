@@ -2332,7 +2332,7 @@ SpriteMorph.prototype.freshPalette = function (category) {
     palette.toolBar = new PushButtonMorph(
         this,
         "searchBlocks",
-        new SymbolMorph("magnifierOutline", 16)
+        new SymbolMorph("magnifierOutline", 14)
     );
     palette.toolBar.alpha = 0.2;
     palette.toolBar.hint = localize('find blocks') + '...';
