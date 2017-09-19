@@ -7170,8 +7170,25 @@ CostumeIconMorph.prototype.init = function (aCostume, aTemplate) {
     this.fps = 1;
 };
 
-CostumeIconMorph.prototype.createThumbnail
-    = SpriteIconMorph.prototype.createThumbnail;
+CostumeIconMorph.prototype.createThumbnail = function () {
+    var txt;
+    SpriteIconMorph.prototype.createThumbnail.call(this);
+    if (this.object instanceof SVG_Costume) {
+        txt = new StringMorph(
+            'svg',
+            this.fontSize * 0.8,
+            this.fontStyle,
+            false,
+            false,
+            false,
+            this.labelShadowOffset,
+            this.labelShadowColor,
+            this.labelColor
+        );
+        txt.setBottom(this.thumbnail.bottom());
+        this.thumbnail.add(txt);
+    }
+};
 
 CostumeIconMorph.prototype.createLabel
     = SpriteIconMorph.prototype.createLabel;
