@@ -108,7 +108,7 @@ BooleanSlotMorph, XML_Serializer*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2017-September-01';
+modules.byob = '2017-September-19';
 
 // Declarations
 
@@ -885,6 +885,16 @@ CustomCommandBlockMorph.prototype.userMenu = function () {
         shiftClicked = this.world().currentKey === 16,
         menu;
 
+    function addOption(label, toggle, test, onHint, offHint) {
+        var on = '\u2611 ',
+            off = '\u2610 ';
+        menu.addItem(
+            (test ? on : off) + localize(label),
+            toggle,
+            test ? onHint : offHint
+        );
+    }
+
    function monitor(vName) {
         var stage = rcvr.parentThatIsA(StageMorph),
             varFrame = myself.variables;
@@ -973,17 +983,69 @@ CustomCommandBlockMorph.prototype.userMenu = function () {
             );
         }
 
-        // if global or own method - let the user delete the definition
-        if (this.isGlobal ||
-            contains(
-                Object.keys(rcvr.ownBlocks()),
-                this.blockSpec
-            )
-        ) {
-            menu.addItem(
-                "delete block definition...",
-                'deleteBlockDefinition'
-            );
+        if (this.isTemplate) { // inside the palette
+            if (this.isGlobal) {
+                menu.addItem(
+                    "delete block definition...",
+                    'deleteBlockDefinition'
+                );
+            } else { // local method
+                if (contains(
+                        Object.keys(rcvr.inheritedBlocks()),
+                        this.blockSpec
+                )) {
+                    // inherited
+                    addOption(
+                        'inherited',
+                        function () {
+                            var ide = myself.parentThatIsA(IDE_Morph);
+                            rcvr.customBlocks.push(
+                                rcvr.getMethod(
+                                    myself.blockSpec
+                                ).copyAndBindTo(rcvr)
+                            );
+                            if (ide) {
+                                ide.flushPaletteCache();
+                                ide.refreshPalette();
+                            }
+                        },
+                        true,
+                        'uncheck to\ndisinherit',
+                        null
+                    );
+                } else if (rcvr.exemplar &&
+                    rcvr.exemplar.getMethod(this.blockSpec
+                )) {
+                    // shadowed
+                    addOption(
+                        'inherited',
+                        'deleteBlockDefinition',
+                        false,
+                        null,
+                        localize('check to inherit\nfrom')
+                            + ' ' + rcvr.exemplar.name
+                    );
+                } else {
+                    // own block
+                    menu.addItem(
+                        "delete block definition...",
+                        'deleteBlockDefinition'
+                    );
+                }
+            }
+        } else { // inside a script
+            // if global or own method - let the user delete the definition
+            if (this.isGlobal ||
+                contains(
+                    Object.keys(rcvr.ownBlocks()),
+                    this.blockSpec
+                )
+            ) {
+                menu.addItem(
+                    "delete block definition...",
+                    'deleteBlockDefinition'
+                );
+            }
         }
 
         this.variables.names().forEach(function (vName) {

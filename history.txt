@@ -3633,6 +3633,10 @@ Fixes:
 * Symbols: added ‘location’ icon (map-pin)
 * Blocks: added visual “map-pin” icon to indicate local method blocks
 
+170919
+------
+* BYOB: added “inherited” option to inheritable method templates’ context menu in the palette
+
 
 v4.1 Features:
 * polymorphic sprite-local custom blocks
