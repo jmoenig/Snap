@@ -2327,6 +2327,20 @@ SpriteMorph.prototype.freshPalette = function (category) {
     palette.color = this.paletteColor;
     palette.growth = new Point(0, MorphicPreferences.scrollBarSize);
 
+    // toolbar:
+
+    palette.toolBar = new PushButtonMorph(
+        this,
+        "searchBlocks",
+        new SymbolMorph("magnifierOutline", 16)
+    );
+    palette.toolBar.alpha = 0.2;
+    palette.toolBar.hint = localize('find blocks') + '...';
+    palette.toolBar.labelShadowColor = new Color(140, 140, 140);
+    palette.toolBar.drawNew();
+    palette.toolBar.fixLayout();
+    palette.add(palette.toolBar);
+
     // menu:
 
     palette.userMenu = function () {
@@ -2372,7 +2386,13 @@ SpriteMorph.prototype.freshPalette = function (category) {
         }
 
         menu.addPair(
-            'find blocks...',
+            [
+                new SymbolMorph(
+                    'magnifyingGlass',
+                    MorphicPreferences.menuFontSize
+                ),
+                localize('find blocks') + '...'
+            ],
             function () {myself.searchBlocks(); },
             '^F'
         );
@@ -2420,9 +2440,9 @@ SpriteMorph.prototype.freshPalette = function (category) {
 
     blocks = this.blocksCache[category];
     if (!blocks) {
-        blocks = myself.blockTemplates(category);
+        blocks = this.blockTemplates(category);
         if (this.isCachingPrimitives) {
-            myself.blocksCache[category] = blocks;
+            this.blocksCache[category] = blocks;
         }
     }
 

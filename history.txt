@@ -3638,6 +3638,7 @@ Fixes:
 * BYOB: added “inherited” option to inheritable method templates’ context menu in the palette
 * fixes for exporting resources, thanks, Michael!
 * GUI: let costume icons indicate svg icons (again! how come this was lost?!, I hate Git!!)
+* Objects, etc.: added floating search button to blocks palette
 
 
 v4.1 Features:

@@ -41,7 +41,7 @@
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.symbols = '2017-September-18';
+modules.symbols = '2017-September-19';
 
 var SymbolMorph;
 
@@ -129,6 +129,7 @@ SymbolMorph.prototype.names = [
     'arrowRightOutline',
     'robot',
     'magnifyingGlass',
+    'magnifierOutline',
     'notes',
     'camera',
     'location'
@@ -303,6 +304,8 @@ SymbolMorph.prototype.symbolCanvasColored = function (aColor) {
         return this.drawSymbolRobot(canvas, aColor);
     case 'magnifyingGlass':
         return this.drawSymbolMagnifyingGlass(canvas, aColor);
+    case 'magnifierOutline':
+        return this.drawSymbolMagnifierOutline(canvas, aColor);
     case 'notes':
         return this.drawSymbolNotes(canvas, aColor);
     case 'camera':
@@ -1476,6 +1479,32 @@ SymbolMorph.prototype.drawSymbolMagnifyingGlass = function (canvas, color) {
     ctx.fill();
 
     ctx.lineWidth = l / 2;
+    ctx.arc(x, y, r, radians(0), radians(360), false);
+    ctx.stroke();
+
+    ctx.lineWidth = l;
+    ctx.beginPath();
+    ctx.moveTo(l / 2, h - l / 2);
+    ctx.lineTo(x - Math.sqrt(r + l), y + Math.sqrt(r + l));
+    ctx.closePath();
+    ctx.stroke();
+
+    return canvas;
+};
+
+SymbolMorph.prototype.drawSymbolMagnifierOutline = function (canvas, color) {
+    // answer a canvas showing a magnifying glass
+    var ctx = canvas.getContext('2d'),
+        w = canvas.width,
+        h = canvas.height,
+        r = w * 0.3,
+        x = w * 2 / 3 - Math.sqrt(r),
+        y = h / 3 + Math.sqrt(r),
+        l = Math.max(w / 5, 0.5);
+
+    ctx.strokeStyle = color.toString();
+
+    ctx.lineWidth = l * 0.5;
     ctx.arc(x, y, r, radians(0), radians(360), false);
     ctx.stroke();
 

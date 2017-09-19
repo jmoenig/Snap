@@ -6639,7 +6639,8 @@ ScriptsMorph.prototype.recordDrop = function (lastGrabOrigin) {
 
 ScriptsMorph.prototype.addUndropControls = function () {
     var toolBar = new AlignmentMorph(),
-        shade = (new Color(140, 140, 140));
+        shade = new Color(140, 140, 140);
+    // toolBar.respectHiddens = true; // uncomment to keep buttons in place
     toolBar.undoButton = new PushButtonMorph(
         this,
         "undrop",
