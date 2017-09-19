@@ -3636,6 +3636,7 @@ Fixes:
 170919
 ------
 * BYOB: added “inherited” option to inheritable method templates’ context menu in the palette
+* fixes for exporting resources, thanks, Michael!
 
 
 v4.1 Features:

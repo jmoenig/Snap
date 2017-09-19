@@ -75,7 +75,7 @@ isRetinaSupported, SliderMorph, Animation*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2017-September-14';
+modules.gui = '2017-September-19';
 
 // Declarations
 
@@ -4222,7 +4222,7 @@ IDE_Morph.prototype.saveFileAs = function (
     var blobIsSupported = false,
         world = this.world(),
         fileExt,
-        dataURI, dialog;
+        dialog;
 
     // fileType is a <kind>/<ext>;<charset> format.
     fileExt = fileType.split('/')[1].split(';')[0];
