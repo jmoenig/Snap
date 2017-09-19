@@ -6652,6 +6652,7 @@ ScriptsMorph.prototype.addUndropControls = function () {
         new SymbolMorph("turnForward", 12)
     );
     toolBar.undoButton.alpha = 0.2;
+    toolBar.undoButton.padding = 2;
     // toolBar.undoButton.hint = 'undo the last\nblock drop\nin this pane';
     toolBar.undoButton.labelShadowColor = shade;
     toolBar.undoButton.drawNew();
@@ -6659,6 +6660,7 @@ ScriptsMorph.prototype.addUndropControls = function () {
     toolBar.add(toolBar.undoButton);
 
     toolBar.redoButton.alpha = 0.2;
+    toolBar.redoButton.padding = 2;
     // toolBar.redoButton.hint = 'redo the last undone\nblock drop\nin this pane';
     toolBar.redoButton.labelShadowColor = shade;
     toolBar.redoButton.drawNew();

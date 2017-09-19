@@ -2332,9 +2332,10 @@ SpriteMorph.prototype.freshPalette = function (category) {
     palette.toolBar = new PushButtonMorph(
         this,
         "searchBlocks",
-        new SymbolMorph("magnifierOutline", 14)
+        new SymbolMorph("magnifierOutline", 16)
     );
     palette.toolBar.alpha = 0.2;
+    palette.toolBar.padding = 1;
     palette.toolBar.hint = localize('find blocks') + '...';
     palette.toolBar.labelShadowColor = new Color(140, 140, 140);
     palette.toolBar.drawNew();
