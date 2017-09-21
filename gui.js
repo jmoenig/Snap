@@ -1049,6 +1049,7 @@ IDE_Morph.prototype.createPalette = function (forSearching) {
         );
 
         // search toolbar (floating cancel button):
+        /* commented out for now
         this.palette.toolBar = new PushButtonMorph(
             this,
             function () {
@@ -1064,6 +1065,7 @@ IDE_Morph.prototype.createPalette = function (forSearching) {
         this.palette.toolBar.drawNew();
         this.palette.toolBar.fixLayout();
         this.palette.add(this.palette.toolBar);
+	    */
     } else {
         this.palette = this.currentSprite.palette(this.currentCategory);
     }
