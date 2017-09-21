@@ -75,7 +75,7 @@ isRetinaSupported, SliderMorph, Animation*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2017-September-19';
+modules.gui = '2017-September-21';
 
 // Declarations
 
@@ -1047,6 +1047,23 @@ IDE_Morph.prototype.createPalette = function (forSearching) {
             null,
             this.currentSprite.sliderColor
         );
+
+        // search toolbar (floating cancel button):
+        this.palette.toolBar = new PushButtonMorph(
+            this,
+            function () {
+                myself.refreshPalette();
+                myself.palette.adjustScrollBars();
+            },
+            new SymbolMorph("magnifierOutline", 16)
+        );
+        this.palette.toolBar.alpha = 0.2;
+        this.palette.toolBar.padding = 1;
+        // this.palette.toolBar.hint = 'Cancel';
+        this.palette.toolBar.labelShadowColor = new Color(140, 140, 140);
+        this.palette.toolBar.drawNew();
+        this.palette.toolBar.fixLayout();
+        this.palette.add(this.palette.toolBar);
     } else {
         this.palette = this.currentSprite.palette(this.currentCategory);
     }

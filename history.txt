@@ -3640,6 +3640,10 @@ Fixes:
 * GUI: let costume icons indicate svg icons (again! how come this was lost?!, I hate Git!!)
 * Objects, etc.: added floating search button to blocks palette
 
+170921
+------
+* GUI, Objects: added floating search button to search palette to take the user back
+
 
 v4.1 Features:
 * polymorphic sprite-local custom blocks

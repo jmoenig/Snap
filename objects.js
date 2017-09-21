@@ -82,7 +82,7 @@ SpeechBubbleMorph, RingMorph, isNil, FileReader, TableDialogMorph,
 BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph*/
 
-modules.objects = '2017-September-19';
+modules.objects = '2017-September-21';
 
 var SpriteMorph;
 var StageMorph;
@@ -2328,7 +2328,6 @@ SpriteMorph.prototype.freshPalette = function (category) {
     palette.growth = new Point(0, MorphicPreferences.scrollBarSize);
 
     // toolbar:
-
     palette.toolBar = new PushButtonMorph(
         this,
         "searchBlocks",
@@ -2343,7 +2342,6 @@ SpriteMorph.prototype.freshPalette = function (category) {
     palette.add(palette.toolBar);
 
     // menu:
-
     palette.userMenu = function () {
         var menu = new MenuMorph(),
             ide = this.parentThatIsA(IDE_Morph),
