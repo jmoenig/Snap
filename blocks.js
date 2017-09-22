@@ -3216,7 +3216,7 @@ BlockMorph.prototype.refactorThisVar = function (justTheTemplate) {
     // taking care of its lexical scope
 
     var receiver = this.scriptTarget(),
-        oldName = this.blockSpec,
+        oldName = this.instantiationSpec || this.blockSpec,
         cpy = this.fullCopy();
 
     cpy.addShadow();
