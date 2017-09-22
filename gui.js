@@ -8415,7 +8415,6 @@ CamSnapshotDialogMorph.prototype.buildContents = function () {
                 myself.videoElement.stream = stream;
             })
             .catch(function (error) {
-                myself.disable();
                 myself.ide.inform(
                     'Failed to initialize camera',
                     'Please make sure your camera is connected and\n' +
