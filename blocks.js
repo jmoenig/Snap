@@ -2589,22 +2589,26 @@ BlockMorph.prototype.userMenu = function () {
         },
         'open a new window\nwith a picture of this script'
     );
-    menu.addLine();
-    menu.addItem(
-        'download script',
-        function () {
-            var ide = myself.parentThatIsA(IDE_Morph),
-                blockEditor = myself.parentThatIsA(BlockEditorMorph);
-            if (!ide && blockEditor) {
-                ide = blockEditor.target.parentThatIsA(IDE_Morph);
-            }
-            if (ide) {
-                ide.saveXMLAs(
-                    ide.serializer.serialize(myself),
-                    myself.selector + ' script',
-                    false);
-            }
-        });
+    if (shiftClicked) {
+        menu.addItem(
+            'download script',
+            function () {
+                var ide = myself.parentThatIsA(IDE_Morph),
+                    blockEditor = myself.parentThatIsA(BlockEditorMorph);
+                if (!ide && blockEditor) {
+                    ide = blockEditor.target.parentThatIsA(IDE_Morph);
+                }
+                if (ide) {
+                    ide.saveXMLAs(
+                        ide.serializer.serialize(myself),
+                        myself.selector + ' script',
+                        false);
+                }
+            },
+            'download this script\nas an XML file',
+            new Color(100, 0, 0)
+            );
+    }
     if (proc) {
         if (vNames.length) {
             menu.addLine();
