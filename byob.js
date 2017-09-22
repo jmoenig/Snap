@@ -697,7 +697,7 @@ CustomCommandBlockMorph.prototype.userMenu = function () {
         menu.addItem(
             "script pic...",
             function () {
-                window.open(this.topBlock().fullImage().toDataURL());
+              world.children[0].saveFileAs(myself.object.fullImageClassic().toDataURL(), 'image/png', world.children[0].projetName + ' Script');
             },
             'open a new window\nwith a picture of this script'
         );
@@ -717,7 +717,7 @@ CustomCommandBlockMorph.prototype.userMenu = function () {
 
 CustomCommandBlockMorph.prototype.exportBlockDefinition = function () {
     var xml = new SnapSerializer().serialize(this.definition);
-    window.open('data:text/xml,' + encodeURIComponent(xml));
+    world.children[0].saveFileAs(encodeURIComponent(xml), 'data:text/xml', world.children[0].projetName + ' Block Export');
 };
 
 CustomCommandBlockMorph.prototype.deleteBlockDefinition = function () {
@@ -3209,7 +3209,7 @@ BlockExportDialogMorph.prototype.exportBlocks = function () {
         return;
     }
     ide.saveFileAs(str, 'data:text/xml;chartset=utf-8', ide.projectName + ' blocks', newWindow);
-    
+
 };
 
 // BlockExportDialogMorph layout

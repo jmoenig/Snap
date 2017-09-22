@@ -673,7 +673,7 @@ SpriteMorph.prototype.initBlocks = function () {
             type: 'reporter',
             category: 'pen',
             spec: 'pen size',
-        },        
+        },
         setBorderSize: {
             type: 'command',
             category: 'pen',
@@ -916,15 +916,15 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'control',
             spec: 'pause all %pause'
         },
-      
+
         // Open website
-      
+
         openWebsite: {
           type: 'command',
           category: 'control',
           spec: 'open website: %s',
           defaults: ['http://']
-        
+
         },
 
         // Sensing
@@ -1331,7 +1331,7 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: 'code of %cmdRing'
         }
     };
-    
+
     for(block in SpriteMorph.prototype._blocks) {
         SpriteMorph.prototype.blocks[block] = SpriteMorph.prototype._blocks[block];
     }
@@ -1443,7 +1443,7 @@ SpriteMorph.prototype.init = function (globals) {
     this.variables = new VariableFrame(globals || null, this);
     this.scripts = new ScriptsMorph(this);
     this.customBlocks = [];
-    this.costumes = new List(); 
+    this.costumes = new List();
     this.costume = null;
     this.texture = null;
     this.sounds = new List();
@@ -1574,7 +1574,7 @@ SpriteMorph.prototype.drawNew = function () {
         // show the 2D Sprite
         this.show();
     }
-    
+
     if (this.isWarped) {
         this.wantsRedraw = true;
         return;
@@ -1986,7 +1986,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('setBorderHue'));
 		blocks.push(block('getBorderShade'));
 		blocks.push(block('setBorderShade'));
-		blocks.push(block('changeBorderShade'));		
+		blocks.push(block('changeBorderShade'));
         blocks.push(watcherToggle('penBorderColor'))
         blocks.push(block('penBorderColor'))
         blocks.push('-');
@@ -2322,21 +2322,21 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         button.showHelp = BlockMorph.prototype.showHelp;
         blocks.push(button);
     }
-    
+
     if(typeof SpriteMorph.prototype._blockTemplates[cat] !== 'undefined') {
         for(var i=0; i < SpriteMorph.prototype._blockTemplates[cat].length; i += 1) {
             var bb = SpriteMorph.prototype._blockTemplates[cat][i]
             blocks.push(block(bb));
         }
     }
-    
+
     return blocks;
 };
 
 SpriteMorph.prototype.palette = function (category) {
     var paletteCache = (this.costume && this.costume.is3D) ?
         this.paletteCache3D : this.paletteCache;
-        
+
     if (this.updatesPalette || !paletteCache[category]) {
         paletteCache[category] = this.freshPalette(category);
     }
@@ -2591,8 +2591,8 @@ SpriteMorph.prototype.wearCostume = function (costume) {
     if (costume && costume.is3D) { // if (costume == null), that means a Turtle
         if (costume.geometry != null) {
             // we have loaded a 3D geometry already
-            var color = new THREE.Color(this.color.r/255, 
-                                        this.color.g/255, 
+            var color = new THREE.Color(this.color.r/255,
+                                        this.color.g/255,
                                         this.color.b/255),
                 material, mesh, sphere;
 
@@ -2621,10 +2621,10 @@ SpriteMorph.prototype.wearCostume = function (costume) {
         else {
             // first time we load this geometry
             var loader = new THREE.JSONLoader(), myself = this;
-			
+
             var geometry = loader.parse(eval("("+decodeURIComponent(costume.url.substring(15))+")")).geometry;
-			var color = new THREE.Color(myself.color.r/255, 
-										myself.color.g/255, 
+			var color = new THREE.Color(myself.color.r/255,
+										myself.color.g/255,
 										myself.color.b/255);
 			var material = new THREE.MeshLambertMaterial({color: color}),
 				mesh = new THREE.Mesh(geometry, material),
@@ -2633,7 +2633,7 @@ SpriteMorph.prototype.wearCostume = function (costume) {
 			myself.mesh = mesh;
 			if(!myself.object)
 				myself.object = new THREE.Object3D();
-			
+
 			myself.object.add(myself.mesh);
 			myself.object.position.x = myself.xPosition();
 			myself.object.position.y = myself.yPosition();
@@ -2761,12 +2761,12 @@ SpriteMorph.prototype.wearTexture = function (texture) {
 
         THREE.ImageUtils.loadTexture(texture.url, new THREE.UVMapping(), function(map) {
             // do the following after the texture is loaded
-            var material = new THREE.MeshPhongMaterial({map: map, 
+            var material = new THREE.MeshPhongMaterial({map: map,
                                                         color: color,
                                                         vertexColors: THREE.NoColors});
             var mesh = new THREE.Mesh(geometry, material);
 
-            var sphere = geometry.boundingSphere; // THREE.Sphere   
+            var sphere = geometry.boundingSphere; // THREE.Sphere
             mesh.position.set( -sphere.center.x, -sphere.center.y, -sphere.center.z );
 
             myself.object.remove(myself.mesh);
@@ -2957,7 +2957,7 @@ SpriteMorph.prototype.setColor = function (aColor) {
         this.color = aColor;
         this.drawNew();
         this.gotoXY(x, y);
-        
+
         if (this.costume && this.costume.is3D) {
             // wear the same costume with a different color
             this.wearCostume(this.costume);
@@ -3021,7 +3021,7 @@ SpriteMorph.prototype.setBorderShade = (function () {
       var hsv = this.borderColor.hsv(),
         x = this.xPosition(),
         y = this.yPosition();
-			
+
 		//Num goes in 0-100 range. 0 is black, 50 is the unchanged hue, 100 is white
 		num = Math.max(Math.min(+num || 0, 100), 0) / 50;
 		hsv[1] = 1;
@@ -3056,7 +3056,7 @@ SpriteMorph.prototype.setBrightness = function (num) {
     var hsv = this.color.hsv(),
         x = this.xPosition(),
         y = this.yPosition();
-        
+
     //Num goes in 0-100 range. 0 is black, 50 is the unchanged hue, 100 is white
     num = Math.max(Math.min(+num || 0, 100), 0) / 50;
     hsv[1] = 1;
@@ -3170,14 +3170,14 @@ SpriteMorph.prototype.clear = function () {
           });
         }
     });
-	
-	
+
+
     if ( stage.renderer instanceof THREE.CanvasRenderer ) {
       stage.scene.__lights = { length: 0, push: function(){}, indexOf: function (){ return -1 }, splice: function(){} }
       stage.scene.__objectsAdded = { length: 0, push: function(){}, indexOf: function (){ return -1 }, splice: function(){} }
       stage.scene.__objectsRemoved = { length: 0, push: function(){}, indexOf: function (){ return -1 }, splice: function(){} }
     }
-	
+
     stage.shownObjects.clear();
     stage.hiddenObjects.clear();
     stage.changed();
@@ -3196,7 +3196,7 @@ SpriteMorph.prototype.show3dPen = function () {
 
         stage.hiddenObjects.clear();
         stage.changed();
-        this.is3dPenVisible = true;        
+        this.is3dPenVisible = true;
     }
 }
 
@@ -3209,8 +3209,8 @@ SpriteMorph.prototype.hide3dPen = function () {
 
 // SpriteMorph 3D shape rendering
 SpriteMorph.prototype.render3dShape = function (geometry, centering) {
-    var color = new THREE.Color(this.color.r/255, 
-                                this.color.g/255, 
+    var color = new THREE.Color(this.color.r/255,
+                                this.color.g/255,
                                 this.color.b/255),
         material, mesh, sphere,
         centering = (centering == null) ? true : centering;
@@ -3232,7 +3232,7 @@ SpriteMorph.prototype.render3dShape = function (geometry, centering) {
         sphere = geometry.boundingSphere;
         mesh.position.set(-sphere.center.x, -sphere.center.y, -sphere.center.z);
     }
-        
+
     object = new THREE.Object3D();
     object.add(mesh);
 
@@ -3268,8 +3268,8 @@ SpriteMorph.prototype.renderBox = function (width, height, depth) {
 SpriteMorph.prototype.renderArc = function (width, height) {
     const THREEJS_ARC_SEGMENTS = 60,
         THREEJS_TUBE_SEGMENTS = THREEJS_ARC_SEGMENTS;
-    var xRadius = width/2, yRadius = height, x, y, points = new Array(), 
-        path, 
+    var xRadius = width/2, yRadius = height, x, y, points = new Array(),
+        path,
         THREEJS_TUBE_RADIUS = this.penSize(),
         THREEJS_TUBE_RADIUS_SEGMENTS = 4,
 		geometry;
@@ -3280,7 +3280,7 @@ SpriteMorph.prototype.renderArc = function (width, height) {
         points.push(new THREE.Vector3(x, y, 0));
     }
     path = new THREE.SplineCurve3(points);
-    geometry = new THREE.TubeGeometry(path, 
+    geometry = new THREE.TubeGeometry(path,
                                       THREEJS_TUBE_SEGMENTS,
                                       THREEJS_TUBE_RADIUS,
                                       THREEJS_TUBE_RADIUS_SEGMENTS,
@@ -3290,14 +3290,14 @@ SpriteMorph.prototype.renderArc = function (width, height) {
 
 SpriteMorph.prototype.renderCylinder = function (top, bottom, height) {
     const THREEJS_CYLINDER_RADIUS_SEGMENTS = 90;
-    this.render3dShape(new THREE.CylinderGeometry(top, bottom, height, 
+    this.render3dShape(new THREE.CylinderGeometry(top, bottom, height,
                                                   THREEJS_CYLINDER_RADIUS_SEGMENTS));
 }
 
 SpriteMorph.prototype.renderTorusKnot = function (radius, tube, p, q, heightScale) {
     const THREEJS_TORUS_KNOT_RADIAL_SEGMENTS = 24,
         THREEJS_TORUS_KNOT_TUBULAR_SEGMENTS = 10;
-    this.render3dShape(new THREE.TorusKnotGeometry(radius, tube, 
+    this.render3dShape(new THREE.TorusKnotGeometry(radius, tube,
                                                    THREEJS_TORUS_KNOT_RADIAL_SEGMENTS,
                                                    THREEJS_TORUS_KNOT_TUBULAR_SEGMENTS,
                                                    p, q, heightScale));
@@ -3419,8 +3419,8 @@ SpriteMorph.prototype.toggle3D = function() {
             height = this.costume.contents.height;
             this.costume.geometry = new THREE.PlaneGeometry(width, height);
         }
-        var mesh = new THREE.Mesh(this.costume.geometry, 
-                                  new THREE.MeshPhongMaterial({map: this.costume.map, 
+        var mesh = new THREE.Mesh(this.costume.geometry,
+                                  new THREE.MeshPhongMaterial({map: this.costume.map,
                                                                side: THREE.DoubleSide}));
         mesh.position.set( -width/2, -height/2, 0 );
 
@@ -3478,7 +3478,7 @@ SpriteMorph.prototype.show3D = function() {
         this.object.visible = true;
         this.parent.changed();
     }
-    else { 
+    else {
         this.isVisible = true;
         this.changed();
         this.children.forEach(function (child) {
@@ -3646,7 +3646,7 @@ SpriteMorph.prototype.smoothBorders = function(start, dest) {
       this.size = this.lineList[line][2];
       this.color = this.lineList[line][3];
       this.drawLine(this.lineList[line][0], this.lineList[line][1], false);
-                                                                        
+
     }
     this.size = tempSize;
     this.color = tempColor;
@@ -3904,7 +3904,7 @@ SpriteMorph.prototype.gotoXYZ = function (x, y, z, justMe) {
         this.object.position.y = y;
         this.object.position.z = z;
         this.parent.changed();
-		
+
 	}
 }
 
@@ -5046,7 +5046,7 @@ StageMorph.prototype.init3D = function () {
     // camera
     this.camera = new THREE.PerspectiveCamera(vFOV,
                                               canvas.width / canvas.height, 0.1, 10000);
-    this.camera.position.set(THREEJS_CAMERA_DEFAULT_X_POSITION, 
+    this.camera.position.set(THREEJS_CAMERA_DEFAULT_X_POSITION,
                              THREEJS_CAMERA_DEFAULT_Y_POSITION,
                              THREEJS_CAMERA_DEFAULT_Z_POSITION);
     this.camera.lookAt({x:0, y:0, z:0});
@@ -5090,7 +5090,7 @@ StageMorph.prototype.toggleGrid = function () {
         return;
     }
 
-    var grid = new THREE.Geometry(), 
+    var grid = new THREE.Geometry(),
     gridMaterial = new THREE.LineBasicMaterial({color:0xabcdef, opacity:0.5}),
     step = 20,
     size = 200;
@@ -5114,13 +5114,13 @@ StageMorph.prototype.toggleGrid = function () {
     yAxis.vertices.push(new THREE.Vector3(0, -size * 4/5, 0));
     yAxis.vertices.push(new THREE.Vector3(0,  size * 4/5, 0));
 
-    var textX = new THREE.TextGeometry("X", 
-                                       {size:10, height:2, curveSegments:8, 
+    var textX = new THREE.TextGeometry("X",
+                                       {size:10, height:2, curveSegments:8,
                                         font:"helvetiker"}),
     textY = new THREE.TextGeometry("Y",
-                                   {size:10, height:2, curveSegments:8, 
+                                   {size:10, height:2, curveSegments:8,
                                     font:"helvetiker"}),
-    textZ = new THREE.TextGeometry("Z", 
+    textZ = new THREE.TextGeometry("Z",
                                    {size:10, height:2, curveSegments:8,
                                     font:"helvetiker"});
     var textXMaterial = new THREE.MeshBasicMaterial({color: 0xaa0000, overdraw: true}),
@@ -5131,19 +5131,19 @@ StageMorph.prototype.toggleGrid = function () {
     textZMesh = new THREE.Mesh(textZ, textZMaterial);
 
     textX.computeBoundingBox();
-    textXMesh.position = {x: size + step, 
-                          y: 0, 
+    textXMesh.position = {x: size + step,
+                          y: 0,
                           z: textX.boundingBox.center().y};
     textXMesh.rotation.x = radians(-90);
 
     textY.computeBoundingBox();
-    textYMesh.position = {x:-textY.boundingBox.center().x, 
-                          y: size * 4/5 + step, 
+    textYMesh.position = {x:-textY.boundingBox.center().x,
+                          y: size * 4/5 + step,
                           z:-textY.boundingBox.center().z};
 
     textZ.computeBoundingBox();
     textZMesh.position = {x:-textZ.boundingBox.center().x,
-                          y: 0, 
+                          y: 0,
                           z:size + step};
     textZMesh.rotation.x = radians(-90);
 
@@ -5155,7 +5155,7 @@ StageMorph.prototype.toggleGrid = function () {
     this.grid.add(textYMesh);
     this.grid.add(textZMesh);
     this.scene.add(this.grid);
-    
+
     this.changed();
 }
 
@@ -5915,7 +5915,7 @@ StageMorph.prototype.userMenu = function () {
     menu.addItem(
         "pic...",
         function () {
-            window.open(myself.fullImageClassic().toDataURL());
+            world.children[0].saveFileAs(myself.fullImageClassic().toDataURL(), 'image/png', world.children[0].projetName + ' image');
         },
         'open a new window\nwith a picture of the stage'
     );
@@ -6101,7 +6101,7 @@ StageMorph.prototype.turnCameraAroundXAxis = function(deg) {
     var y = this.camera.position.y, z = this.camera.position.z,
         radius = Math.sqrt(Math.pow(y, 2) + Math.pow(z, 2)),
         theta = Math.acos(z / radius);
-    
+
     if (0 < y)
         theta = 2 * Math.PI - theta;
 
@@ -6115,7 +6115,7 @@ StageMorph.prototype.turnCameraAroundYAxis = function(deg) {
     var x = this.camera.position.x, z = this.camera.position.z,
         radius = Math.sqrt(Math.pow(x, 2) + Math.pow(z, 2)),
         theta = Math.acos(z / radius);
-    
+
     if (x < 0)
         theta = 2 * Math.PI - theta;
 
@@ -7834,10 +7834,7 @@ WatcherMorph.prototype.userMenu = function () {
             menu.addItem(
                 'export...',
                 function () {
-                    window.open(
-                        'data:text/plain;charset=utf-8,' +
-                            encodeURIComponent(this.currentValue.toString())
-                    );
+                    world.children[0].saveFileAs(encodeURIComponent(this.currentValue.toString()), 'data:text/plain;charset=utf-8,', world.children[0].projetName + ' project');
                 }
             );
         }

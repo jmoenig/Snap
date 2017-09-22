@@ -3445,7 +3445,7 @@ Morph.prototype.developersMenu = function () {
     menu.addItem(
         "pic...",
         function () {
-            window.open(this.fullImageClassic().toDataURL());
+            world.children[0].saveFileAs(this.fullImageClassic().toDataURL(), 'image/png', world.children[0].projetName + ' image');
         },
         'open a new window\nwith a picture of this morph'
     );
@@ -6665,7 +6665,7 @@ MenuMorph.prototype.addItem = function (
         * an icon (either a Morph or a Canvas)
         * a tuple of format: [icon, string]
     */
-    
+
     this.items.push([
         localize(labelString || 'close'),
         action || nop,
@@ -6750,7 +6750,7 @@ MenuMorph.prototype.drawNew = function () {
                 tuple instanceof ColorPickerMorph ||
                 tuple instanceof SliderMorph) {
             item = tuple;
-            
+
             if (isLine) {
                 y += 1;
             }
@@ -6765,7 +6765,7 @@ MenuMorph.prototype.drawNew = function () {
             item = new Morph();
             item.color = myself.borderColor;
             item.setHeight(tuple[1]);
-            
+
             if (isLine) {
                 y += 1;
             }
@@ -6775,13 +6775,13 @@ MenuMorph.prototype.drawNew = function () {
             if (isLine) {
                 y += 1;
             }
-        } else if(tuple[0] instanceof Image && tuple[0].src.indexOf("goals") != -1){    
+        } else if(tuple[0] instanceof Image && tuple[0].src.indexOf("goals") != -1){
             var m = new Morph();
             m.isIcon = true;
-            m.image = tuple[0]; 
+            m.image = tuple[0];
             m.addShadow();
             m.drawNew();
-            
+
             item = new MenuItemMorph(
                 myself.target,
                 tuple[1],
@@ -6795,12 +6795,12 @@ MenuMorph.prototype.drawNew = function () {
                 tuple[5], // italic
                 tuple[6] // doubleclick action
             );
-            
+
             if (isLine) {
                 y += 1;
             }
             count += 1;
-            item.setPosition(new Point(x, y));          
+            item.setPosition(new Point(x, y));
             myself.add(item);
             if(count < 3){
                 x = x + item.width();
@@ -6812,7 +6812,7 @@ MenuMorph.prototype.drawNew = function () {
             if (isLine) {
                 y += 1;
             }
-        }else {         
+        }else {
             item = new MenuItemMorph(
                 myself.target,
                 tuple[1],
@@ -6825,8 +6825,8 @@ MenuMorph.prototype.drawNew = function () {
                 tuple[4], // bold
                 tuple[5], // italic
                 tuple[6] // doubleclick action
-            );  
-            
+            );
+
             if (isLine) {
                 y += 1;
             }
@@ -6838,7 +6838,7 @@ MenuMorph.prototype.drawNew = function () {
             }
         }
     });
-    
+
     fb = this.fullBounds();
     this.silentSetExtent(fb.extent().add(4));
     this.adjustWidths();
@@ -9081,7 +9081,7 @@ ListMorph.prototype.buildListContents = function () {
         this.elements = ['(empty)'];
     }
     this.elements.forEach(function (element) {
-        
+
         /*if(element instanceof HTMLImageElement){
             myself.drawTexture(element.src);
         }*/

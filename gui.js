@@ -2338,9 +2338,7 @@ IDE_Morph.prototype.cloudMenu = function () {
                             function (projectData) {
                                 var msg;
                                 if (!Process.prototype.isCatchingErrors) {
-                                    window.open(
-                                        'data:text/xml,' + projectData
-                                    );
+                                    world.children[0].saveFileAs(projectData, 'data:text/xml', world.children[0].projetName + ' Project Data');
                                 }
                                 myself.nextSteps([
                                     function () {
@@ -3258,8 +3256,7 @@ IDE_Morph.prototype.exportProject = function (name, plain) {
                     this.serializer.serialize(this.stage)
                 );
                 //location.hash = '#open:' + str;
-                window.open('data:text/'
-                    + (plain ? 'plain,' + str : 'xml,' + str));
+                world.children[0].saveFileAs(str, 'data:text/'  + (plain ? 'plain,' : 'xml,'), world.children[0].projetName + ' project');
                 menu.destroy();
                 this.showMessage('Exported!', 1);
             } catch (err) {
@@ -3271,8 +3268,7 @@ IDE_Morph.prototype.exportProject = function (name, plain) {
                 this.serializer.serialize(this.stage)
             );
             //location.hash = '#open:' + str;
-            window.open('data:text/'
-                + (plain ? 'plain,' + str : 'xml,' + str));
+            world.children[0].saveFileAs(str, 'data:text/'  + (plain ? 'plain,' : 'xml,'), world.children[0].projetName + ' project');
             menu.destroy();
             this.showMessage('Exported!', 1);
         }
@@ -4151,8 +4147,7 @@ IDE_Morph.prototype.exportProject = function (name, plain) {
                 this.serializer.serialize(this.stage)
             );
             //location.hash = '#open:' + str;
-            window.open('data:text/'
-                + (plain ? 'plain,' + str : 'xml,' + str));
+            world.children[0].saveFileAs(str, 'data:text/'  + (plain ? 'plain,' : 'xml,'), world.children[0].projetName + ' project');
             menu.destroy();
             this.showMessage('Exported!', 1);
         }
@@ -4226,7 +4221,7 @@ IDE_Morph.prototype.saveFileAs = function (
 
         // Detect crashing errors - fallback to downloading if necessary
         if (!exhibitsChomeBug(dataURI)) {
-            window.open(dataURI, fileName);
+            world.children[0].saveFileAs(dataURI, 'data:text/plain',fileName);
             // Blob URIs should be "cleaned up" to reduce memory.
             if (contents instanceof Blob) {
                 URL.revokeObjectURL(dataURI);
@@ -4266,7 +4261,7 @@ IDE_Morph.prototype.exportProjectNoMedia = function (name) {
                 str = encodeURIComponent(
                     this.serializer.serialize(this.stage)
                 );
-                window.open('data:text/xml,' + str);
+                world.children[0].saveFileAs(str, 'data:text/xml',fileName);
                 menu.destroy();
                 this.showMessage('Exported!', 1);
             } catch (err) {
@@ -4278,7 +4273,7 @@ IDE_Morph.prototype.exportProjectNoMedia = function (name) {
             str = encodeURIComponent(
                 this.serializer.serialize(this.stage)
             );
-            window.open('data:text/xml,' + str);
+            world.children[0].saveFileAs(str, 'data:text/xml', world.children[0].projetName + ' Project');
             menu.destroy();
             this.showMessage('Exported!', 1);
         }
@@ -4305,7 +4300,7 @@ IDE_Morph.prototype.exportProjectAsCloudData = function (name) {
                     + str
                     + media
                     + encodeURIComponent('</snapdata>');
-                window.open('data:text/xml,' + dta);
+                world.children[0].saveFileAs(dta, 'data:text/xml', world.children[0].projetName + ' Project');
                 menu.destroy();
                 this.showMessage('Exported!', 1);
             } catch (err) {
@@ -4324,7 +4319,7 @@ IDE_Morph.prototype.exportProjectAsCloudData = function (name) {
                 + str
                 + media
                 + encodeURIComponent('</snapdata>');
-            window.open('data:text/xml,' + dta);
+            world.children[0].saveFileAs(dta, 'data:text/xml', world.children[0].projetName + ' Project');
             menu.destroy();
             this.showMessage('Exported!', 1);
         }
@@ -5900,7 +5895,7 @@ SpriteIconMorph.prototype.userMenu = function () {
         menu.addItem(
             'pic...',
             function () {
-                window.open(myself.object.fullImageClassic().toDataURL());
+                world.children[0].saveFileAs(myself.object.fullImageClassic().toDataURL(), 'image/png', world.children[0].projetName + ' Stage');
             },
             'open a new window\nwith a picture of the stage'
         );

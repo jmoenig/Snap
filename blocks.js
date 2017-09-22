@@ -2111,7 +2111,7 @@ BlockMorph.prototype.userMenu = function () {
     menu.addItem(
         "script pic...",
         function () {
-            window.open(myself.topBlock().fullImage().toDataURL());
+            world.children[0].saveFileAs(myself.topBlock().fullImage().toDataURL(), 'image/png', world.children[0].projetName || localize('Untitled') + ' script');
         },
         'open a new window\nwith a picture of this script'
     );
@@ -7934,7 +7934,7 @@ SymbolMorph.prototype.drawSymbolMutedSounds = function (canvas, color) {
 
     ctx.fillStyle = color.darker(40).toString();
     ctx.fillRect(0, 0, w, h);
-	
+
     return canvas;
 };
 
