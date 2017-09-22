@@ -108,7 +108,7 @@ BooleanSlotMorph, XML_Serializer*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2017-April-10';
+modules.byob = '2017-September-19';
 
 // Declarations
 
@@ -799,7 +799,7 @@ CustomCommandBlockMorph.prototype.edit = function () {
         );
     } else {
         // check for local custom block inheritance
-        rcvr = this.receiver();
+        rcvr = this.scriptTarget();
         if (!this.isGlobal) {
             if (contains(
                     Object.keys(rcvr.inheritedBlocks()),
@@ -860,8 +860,12 @@ CustomCommandBlockMorph.prototype.attachTargets = function () {
 CustomCommandBlockMorph.prototype.isInUse = function () {
     // answer true if an instance of my definition is found
     // in any of my receiver's scripts or block definitions
+    // NOTE: for sprite-local blocks only to be used in a situation
+    // where the user actively clicks on a block in the IDE,
+    // e.g. to edit it (and change its type)
     var def = this.definition,
-        ide = this.receiver().parentThatIsA(IDE_Morph);
+        rcvr = this.scriptTarget(),
+        ide = rcvr.parentThatIsA(IDE_Morph);
     if (def.isGlobal && ide) {
         return ide.sprites.asArray().concat([ide.stage]).some(
             function (any, idx) {
@@ -869,18 +873,27 @@ CustomCommandBlockMorph.prototype.isInUse = function () {
             }
         );
     }
-    // return this.receiver().usesBlockInstance(def);
-    return this.receiver().allDependentInvocationsOf(this.blockSpec).length > 0;
+    return rcvr.allDependentInvocationsOf(this.blockSpec).length > 0;
 };
 
 // CustomCommandBlockMorph menu:
 
 CustomCommandBlockMorph.prototype.userMenu = function () {
     var hat = this.parentThatIsA(PrototypeHatBlockMorph),
-        rcvr = this.receiver(),
+        rcvr = this.scriptTarget(),
         myself = this,
         shiftClicked = this.world().currentKey === 16,
         menu;
+
+    function addOption(label, toggle, test, onHint, offHint) {
+        var on = '\u2611 ',
+            off = '\u2610 ';
+        menu.addItem(
+            (test ? on : off) + localize(label),
+            toggle,
+            test ? onHint : offHint
+        );
+    }
 
    function monitor(vName) {
         var stage = rcvr.parentThatIsA(StageMorph),
@@ -927,9 +940,8 @@ CustomCommandBlockMorph.prototype.userMenu = function () {
                 var ide = this.world().children[0];
                 ide.saveCanvasAs(
                     this.topBlock().scriptPic(),
-                    ide.projectName || localize('Untitled') + ' ' +
-                        localize('script pic'),
-                    true // request opening a new window
+                    (ide.projectName || localize('untitled')) + ' ' +
+                        localize('script pic')
                 );
             },
             'open a new window\nwith a picture of this script'
@@ -970,17 +982,69 @@ CustomCommandBlockMorph.prototype.userMenu = function () {
             );
         }
 
-        // if global or own method - let the user delete the definition
-        if (this.isGlobal ||
-            contains(
-                Object.keys(rcvr.ownBlocks()),
-                this.blockSpec
-            )
-        ) {
-            menu.addItem(
-                "delete block definition...",
-                'deleteBlockDefinition'
-            );
+        if (this.isTemplate) { // inside the palette
+            if (this.isGlobal) {
+                menu.addItem(
+                    "delete block definition...",
+                    'deleteBlockDefinition'
+                );
+            } else { // local method
+                if (contains(
+                        Object.keys(rcvr.inheritedBlocks()),
+                        this.blockSpec
+                )) {
+                    // inherited
+                    addOption(
+                        'inherited',
+                        function () {
+                            var ide = myself.parentThatIsA(IDE_Morph);
+                            rcvr.customBlocks.push(
+                                rcvr.getMethod(
+                                    myself.blockSpec
+                                ).copyAndBindTo(rcvr)
+                            );
+                            if (ide) {
+                                ide.flushPaletteCache();
+                                ide.refreshPalette();
+                            }
+                        },
+                        true,
+                        'uncheck to\ndisinherit',
+                        null
+                    );
+                } else if (rcvr.exemplar &&
+                    rcvr.exemplar.getMethod(this.blockSpec
+                )) {
+                    // shadowed
+                    addOption(
+                        'inherited',
+                        'deleteBlockDefinition',
+                        false,
+                        null,
+                        localize('check to inherit\nfrom')
+                            + ' ' + rcvr.exemplar.name
+                    );
+                } else {
+                    // own block
+                    menu.addItem(
+                        "delete block definition...",
+                        'deleteBlockDefinition'
+                    );
+                }
+            }
+        } else { // inside a script
+            // if global or own method - let the user delete the definition
+            if (this.isGlobal ||
+                contains(
+                    Object.keys(rcvr.ownBlocks()),
+                    this.blockSpec
+                )
+            ) {
+                menu.addItem(
+                    "delete block definition...",
+                    'deleteBlockDefinition'
+                );
+            }
         }
 
         this.variables.names().forEach(function (vName) {
@@ -999,7 +1063,7 @@ CustomCommandBlockMorph.prototype.exportBlockDefinition = function () {
 };
 
 CustomCommandBlockMorph.prototype.duplicateBlockDefinition = function () {
-    var rcvr = this.receiver(),
+    var rcvr = this.scriptTarget(),
         ide = this.parentThatIsA(IDE_Morph),
         def = this.isGlobal ? this.definition : rcvr.getMethod(this.blockSpec),
         dup = def.copyAndBindTo(rcvr);
@@ -1015,7 +1079,7 @@ CustomCommandBlockMorph.prototype.duplicateBlockDefinition = function () {
 
 CustomCommandBlockMorph.prototype.deleteBlockDefinition = function () {
     var idx, stage, ide, method, block,
-        rcvr = this.receiver(),
+        rcvr = this.scriptTarget(),
         myself = this;
     if (this.isPrototype) {
         return null; // under construction...
@@ -1093,7 +1157,7 @@ CustomCommandBlockMorph.prototype.relabel = function (alternatives) {
 };
 
 CustomCommandBlockMorph.prototype.alternatives = function () {
-    var rcvr = this.receiver(),
+    var rcvr = this.scriptTarget(),
         stage = rcvr.parentThatIsA(StageMorph),
         allDefs = rcvr.customBlocks.concat(stage.globalBlocks),
         type = this instanceof CommandBlockMorph ? 'command'
@@ -1890,11 +1954,11 @@ BlockEditorMorph.prototype.init = function (definition, target) {
 
     // override inherited properites:
     this.key = 'editBlock' + definition.spec;
-    this.labelString = 'Block Editor';
+    this.labelString = this.definition.isGlobal ? 'Block Editor' : 'Method';
     this.createLabel();
 
     // create scripting area
-    scripts = new ScriptsMorph(target);
+    scripts = new ScriptsMorph();
     scripts.rejectsHats = true;
     scripts.isDraggable = false;
     scripts.color = IDE_Morph.prototype.groupColor;
@@ -2111,6 +2175,9 @@ BlockEditorMorph.prototype.updateDefinition = function () {
     });
 
     if (head) {
+        if (this.definition.category !== head.blockCategory) {
+            this.target.shadowAttribute('scripts');
+        }
         this.definition.category = head.blockCategory;
         this.definition.type = head.type;
         if (head.comment) {
@@ -3700,7 +3767,7 @@ BlockExportDialogMorph.prototype.exportBlocks = function () {
             + '</blocks>';
         ide.saveXMLAs(
             str,
-            ide.projectName || localize('Untitled') + ' ' + localize('blocks')
+            (ide.projectName || localize('untitled')) + ' ' + localize('blocks')
         );
     } else {
         new DialogBoxMorph().inform(

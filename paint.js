@@ -747,7 +747,7 @@ PaintCanvasMorph.prototype.floodfill = function (sourcepoint) {
         ctx = this.paper.getContext("2d"),
         img = ctx.getImageData(0, 0, width, height),
         data = img.data,
-        stack = [Math.round(sourcepoint.y) * width + sourcepoint.x],
+        stack = [Math.round(Math.round(sourcepoint.y) * width + sourcepoint.x)],
         currentpoint,
         read,
         sourcecolor,

@@ -551,10 +551,23 @@
 
     Right before a morph is picked up its
 
+        selectForEdit
+
+    and
+
         prepareToBeGrabbed(handMorph)
 
-    method is invoked, if it is present. Immediately after the pick-up
-    the former parent's
+    methods are invoked, each if it is present. the optional
+
+        selectForEdit
+
+    if implemented, must return the object that is to be picked up.
+    In addition to just returning the original object chosen by the user
+    your method can also modify the target's environment and instead return
+    a copy of the selected morph if, for example, you would like to implement
+    a copy-on-write mechanism such as in Snap.
+
+    Immediately after the pick-up the former parent's
 
         reactToGrabOf(grabbedMorph)
 
@@ -582,6 +595,17 @@
         wantsDropOf(aMorph)
 
     method.
+
+    Right before dropping a morph the designated new parent's optional
+
+        selectForEdit
+
+    method is invoked if it is present. Again, if implemented this method
+    must return the new parent for the morph that is about to be dropped.
+    Again, in addition to just returning the designeted drop-target
+    your method can also modify its environment and instead return
+    a copy of the new parent if, for example, you would like to implement
+    a copy-on-write mechanism such as in Snap.
 
     Right after a morph has been dropped its
 
@@ -1128,7 +1152,7 @@
     Davide Della Casa contributed performance optimizations for Firefox.
     Jason N (@cyderize) contributed native copy & paste for text editing.
     Bartosz Leper contributed retina display support.
-    Brian Harvey contributed to the design and implemenatation of submenus.
+    Brian Harvey contributed to the design and implementation of submenus.
 
     - Jens Mönig
 */
@@ -1137,7 +1161,7 @@
 
 /*global window, HTMLCanvasElement, FileReader, Audio, FileList*/
 
-var morphicVersion = '2017-April-23';
+var morphicVersion = '2017-September-01';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = getBlurredShadowSupport(); // check for Chrome-bug
 
@@ -1229,9 +1253,7 @@ function isNil(thing) {
 
 function contains(list, element) {
     // answer true if element is a member of list
-    return list.some(function (any) {
-        return any === element;
-    });
+    return list.indexOf(element) !== -1;
 }
 
 function detect(list, predicate) {
@@ -3636,7 +3658,7 @@ Morph.prototype.getPixelColor = function (aPoint) {
         data.data[0],
         data.data[1],
         data.data[2],
-        data.data[3]
+        data.data[3] / 255
     );
 };
 
@@ -4816,7 +4838,7 @@ PenMorph.prototype.drawNew = function (facing) {
 // PenMorph access:
 
 PenMorph.prototype.setHeading = function (degrees) {
-    this.heading = parseFloat(degrees) % 360;
+    this.heading = ((+degrees % 360) + 360) % 360;
     this.drawNew();
     this.changed();
 };
@@ -5244,6 +5266,7 @@ CursorMorph.prototype.initializeClipboardHandler = function () {
 
     this.clipboardHandler = document.createElement('textarea');
     this.clipboardHandler.style.position = 'absolute';
+    this.clipboardHandler.style.top = window.outerHeight;
     this.clipboardHandler.style.right = '101%'; // placed just out of view
 
     document.body.appendChild(this.clipboardHandler);
@@ -5955,7 +5978,7 @@ SpeechBubbleMorph.prototype.init = function (
     border,
     borderColor,
     padding,
-    isThought
+    isThought // bool or anything but "true" to draw no hook at all
 ) {
     this.isPointingRight = true; // orientation of text
     this.contents = contents || '';
@@ -6121,7 +6144,7 @@ SpeechBubbleMorph.prototype.outlinePath = function (
         radians(180),
         false
     );
-    if (this.isThought) {
+    if (this.isThought === true) { // use anything but "true" to draw nothing
         // close large bubble:
         context.lineTo(
             inset,
@@ -8525,15 +8548,18 @@ StringMorph.prototype.mouseDoubleClick = function (pos) {
             slot -= 1;
         }
 
-        if (isWordChar(this.text[slot])) {
+        if (this.text[slot] && isWordChar(this.text[slot])) {
             this.selectWordAt(slot);
-        } else {
+        } else if (this.text[slot]) {
             this.selectBetweenWordsAt(slot);
+        } else {
+            // special case for when we click right after the
+            // last slot in multi line TextMorphs
+            this.selectAll();
         }
     } else {
         this.escalateEvent('mouseDoubleClick', pos);
     }
- 
 };
 
 StringMorph.prototype.selectWordAt = function (slot) {
@@ -10350,9 +10376,9 @@ ListMorph.prototype.buildListContents = function () {
             myself.doubleClickAction
         );
     });
-    this.listContents.setPosition(this.contents.position());
     this.listContents.isListContents = true;
     this.listContents.drawNew();
+    this.listContents.setPosition(this.contents.position());
     this.addContents(this.listContents);
 };
 
@@ -10684,6 +10710,7 @@ HandMorph.prototype.drop = function () {
     if (this.children.length !== 0) {
         morphToDrop = this.children[0];
         target = this.dropTargetFor(morphToDrop);
+        target = target.selectForEdit ? target.selectForEdit() : target;
         this.changed();
         target.add(morphToDrop);
         morphToDrop.cachedFullImage = null;
@@ -10892,7 +10919,8 @@ HandMorph.prototype.processMouseMove = function (event) {
                     MorphicPreferences.grabThreshold)) {
             this.setPosition(this.grabPosition);
             if (this.morphToGrab.isDraggable) {
-                morph = this.morphToGrab;
+                morph = this.morphToGrab.selectForEdit ?
+                        this.morphToGrab.selectForEdit() : this.morphToGrab;
                 this.grab(morph);
             } else if (this.morphToGrab.isTemplate) {
                 morph = this.morphToGrab.fullCopy();
