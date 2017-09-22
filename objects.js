@@ -82,7 +82,7 @@ SpeechBubbleMorph, RingMorph, isNil, FileReader, TableDialogMorph,
 BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph*/
 
-modules.objects = '2017-September-19';
+modules.objects = '2017-September-21';
 
 var SpriteMorph;
 var StageMorph;
@@ -2327,8 +2327,21 @@ SpriteMorph.prototype.freshPalette = function (category) {
     palette.color = this.paletteColor;
     palette.growth = new Point(0, MorphicPreferences.scrollBarSize);
 
-    // menu:
+    // toolbar:
+    palette.toolBar = new PushButtonMorph(
+        this,
+        "searchBlocks",
+        new SymbolMorph("magnifierOutline", 16)
+    );
+    palette.toolBar.alpha = 0.2;
+    palette.toolBar.padding = 1;
+    palette.toolBar.hint = localize('find blocks') + '...';
+    palette.toolBar.labelShadowColor = new Color(140, 140, 140);
+    palette.toolBar.drawNew();
+    palette.toolBar.fixLayout();
+    palette.add(palette.toolBar);
 
+    // menu:
     palette.userMenu = function () {
         var menu = new MenuMorph(),
             ide = this.parentThatIsA(IDE_Morph),
@@ -2372,7 +2385,13 @@ SpriteMorph.prototype.freshPalette = function (category) {
         }
 
         menu.addPair(
-            'find blocks...',
+            [
+                new SymbolMorph(
+                    'magnifyingGlass',
+                    MorphicPreferences.menuFontSize
+                ),
+                localize('find blocks') + '...'
+            ],
             function () {myself.searchBlocks(); },
             '^F'
         );
@@ -2420,9 +2439,9 @@ SpriteMorph.prototype.freshPalette = function (category) {
 
     blocks = this.blocksCache[category];
     if (!blocks) {
-        blocks = myself.blockTemplates(category);
+        blocks = this.blockTemplates(category);
         if (this.isCachingPrimitives) {
-            myself.blocksCache[category] = blocks;
+            this.blocksCache[category] = blocks;
         }
     }
 

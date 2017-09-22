@@ -75,7 +75,7 @@ isRetinaSupported, SliderMorph, Animation*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2017-September-19';
+modules.gui = '2017-September-21';
 
 // Declarations
 
@@ -1047,6 +1047,25 @@ IDE_Morph.prototype.createPalette = function (forSearching) {
             null,
             this.currentSprite.sliderColor
         );
+
+        // search toolbar (floating cancel button):
+        /* commented out for now
+        this.palette.toolBar = new PushButtonMorph(
+            this,
+            function () {
+                myself.refreshPalette();
+                myself.palette.adjustScrollBars();
+            },
+            new SymbolMorph("magnifierOutline", 16)
+        );
+        this.palette.toolBar.alpha = 0.2;
+        this.palette.toolBar.padding = 1;
+        // this.palette.toolBar.hint = 'Cancel';
+        this.palette.toolBar.labelShadowColor = new Color(140, 140, 140);
+        this.palette.toolBar.drawNew();
+        this.palette.toolBar.fixLayout();
+        this.palette.add(this.palette.toolBar);
+	    */
     } else {
         this.palette = this.currentSprite.palette(this.currentCategory);
     }
@@ -7154,8 +7173,25 @@ CostumeIconMorph.prototype.init = function (aCostume, aTemplate) {
     this.fps = 1;
 };
 
-CostumeIconMorph.prototype.createThumbnail
-    = SpriteIconMorph.prototype.createThumbnail;
+CostumeIconMorph.prototype.createThumbnail = function () {
+    var txt;
+    SpriteIconMorph.prototype.createThumbnail.call(this);
+    if (this.object instanceof SVG_Costume) {
+        txt = new StringMorph(
+            'svg',
+            this.fontSize * 0.8,
+            this.fontStyle,
+            false,
+            false,
+            false,
+            this.labelShadowOffset,
+            this.labelShadowColor,
+            this.labelColor
+        );
+        txt.setBottom(this.thumbnail.bottom());
+        this.thumbnail.add(txt);
+    }
+};
 
 CostumeIconMorph.prototype.createLabel
     = SpriteIconMorph.prototype.createLabel;

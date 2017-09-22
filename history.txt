@@ -3637,6 +3637,12 @@ Fixes:
 ------
 * BYOB: added “inherited” option to inheritable method templates’ context menu in the palette
 * fixes for exporting resources, thanks, Michael!
+* GUI: let costume icons indicate svg icons (again! how come this was lost?!, I hate Git!!)
+* Objects, etc.: added floating search button to blocks palette
+
+170921
+------
+* GUI, Objects: added floating search button to search palette to take the user back
 
 
 v4.1 Features:
@@ -3667,6 +3673,7 @@ v4.1 Features:
 * Support https in “url” reporter
 * splitting csv-text
 * prevent context menu and dragging for stage watchers in presentation mode
+* "floating" search button in the blocks palette
 
 Fixes:
 * changed keyboard shortcut indicator for “find blocks” to “^”
