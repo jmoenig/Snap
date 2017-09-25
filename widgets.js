@@ -489,6 +489,7 @@ PushButtonMorph.prototype.disable = function () {
     this.forAllChildren(function (child) {
         child.alpha = 0.3;
     });
+    this.changed();
 };
 
 PushButtonMorph.prototype.enable = function () {
@@ -496,6 +497,7 @@ PushButtonMorph.prototype.enable = function () {
     this.forAllChildren(function (child) {
         child.alpha = 1;
     });
+    this.changed();
 };
 
 // ToggleButtonMorph ///////////////////////////////////////////////////////

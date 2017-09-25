@@ -1544,44 +1544,43 @@ IDE_Morph.prototype.createCorralBar = function () {
     );
     this.corralBar.add(paintbutton);
 
-    if (CamSnapshotDialogMorph.prototype.enableCamera) {
-        cambutton = new PushButtonMorph(
+    cambutton = new PushButtonMorph(
             this,
             "newCamSprite",
             new SymbolMorph("camera", 15)
-        );
-        cambutton.corner = 12;
-        cambutton.color = colors[0];
-        cambutton.highlightColor = colors[1];
-        cambutton.pressColor = colors[2];
-        cambutton.labelMinExtent = new Point(36, 18);
-        cambutton.padding = 0;
-        cambutton.labelShadowOffset = new Point(-1, -1);
-        cambutton.labelShadowColor = colors[1];
-        cambutton.labelColor = this.buttonLabelColor;
-        cambutton.contrast = this.buttonContrast;
-        cambutton.drawNew();
-        cambutton.hint = "take a camera snapshot and\nimport it as a new sprite";
-        cambutton.fixLayout();
-        cambutton.setCenter(this.corralBar.center());
-        cambutton.setLeft(
-            this.corralBar.left() +
-            padding +
-            newbutton.width() +
-            padding +
-            paintbutton.width() +
-            padding
-        );
-        if (location.protocol === 'http:') {
-            cambutton.hint = 'Due to browser security policies, you need to\n' +
-                'access Snap! through HTTPS to use the camera.\n\n' +
-                'Plase replace the "http://" part of the address\n' +
-                'in your browser by "https://" and try again.';
-            cambutton.disable();
-        }
-        this.corralBar.add(cambutton);
-    }
+            );
+    cambutton.corner = 12;
+    cambutton.color = colors[0];
+    cambutton.highlightColor = colors[1];
+    cambutton.pressColor = colors[2];
+    cambutton.labelMinExtent = new Point(36, 18);
+    cambutton.padding = 0;
+    cambutton.labelShadowOffset = new Point(-1, -1);
+    cambutton.labelShadowColor = colors[1];
+    cambutton.labelColor = this.buttonLabelColor;
+    cambutton.contrast = this.buttonContrast;
+    cambutton.drawNew();
+    cambutton.hint = "take a camera snapshot and\nimport it as a new sprite";
+    cambutton.fixLayout();
+    cambutton.setCenter(this.corralBar.center());
+    cambutton.setLeft(
+        this.corralBar.left() +
+        padding +
+        newbutton.width() +
+        padding +
+        paintbutton.width() +
+        padding
+    );
 
+    this.corralBar.add(cambutton);
+
+    document.addEventListener(
+        'cameraDisabled',
+        function (event) {
+            cambutton.disable();
+            cambutton.hint = CamSnapshotDialogMorph.prototype.notSupportedMessage;
+        }
+    );
 };
 
 IDE_Morph.prototype.createCorral = function () {
@@ -1980,14 +1979,6 @@ IDE_Morph.prototype.toggleSingleStepping = function () {
     this.controlBar.refreshSlider();
 };
 
-IDE_Morph.prototype.toggleCameraSupport = function () {
-    CamSnapshotDialogMorph.prototype.enableCamera =
-        !CamSnapshotDialogMorph.prototype.enableCamera;
-    this.spriteBar.tabBar.tabTo(this.currentTab);
-    this.createCorralBar();
-    this.fixLayout();
-};
-
 IDE_Morph.prototype.startFastTracking = function () {
     this.stage.isFastTracked = true;
     this.stage.fps = 0;
@@ -2270,6 +2261,7 @@ IDE_Morph.prototype.newCamSprite = function () {
         function (costume) {
             sprite.addCostume(costume);
             sprite.wearCostume(costume);
+            this.close();
         });
 
     camDialog.popUp(this.world());
@@ -2637,14 +2629,6 @@ IDE_Morph.prototype.settingsMenu = function () {
         'uncheck to turn off\nvisible stepping',
         'check to turn on\n visible stepping (slow)',
         false
-    );
-    addPreference(
-        'Camera support',
-        'toggleCameraSupport',
-        CamSnapshotDialogMorph.prototype.enableCamera,
-        'uncheck to disable\ncamera support',
-        'check to enable\ncamera support',
-        true
     );
     menu.addLine(); // everything visible below is persistent
     addPreference(
@@ -7354,7 +7338,7 @@ CostumeIconMorph.prototype.duplicateCostume = function () {
 CostumeIconMorph.prototype.removeCostume = function () {
     var wardrobe = this.parentThatIsA(WardrobeMorph),
         idx = this.parent.children.indexOf(this),
-        off = CamSnapshotDialogMorph.prototype.enableCamera ? 3 : 2,
+        off = 3,
         ide = this.parentThatIsA(IDE_Morph);
     wardrobe.removeCostumeAt(idx - off); // ignore paintbrush and camera buttons
     if (ide.currentSprite.costume === this.object) {
@@ -7674,37 +7658,42 @@ WardrobeMorph.prototype.updateList = function () {
 
     this.addContents(paintbutton);
 
-    if (CamSnapshotDialogMorph.prototype.enableCamera) {
-        cambutton = new PushButtonMorph(
-            this,
-            "newFromCam",
-            new SymbolMorph("camera", 15)
+    cambutton = new PushButtonMorph(
+        this,
+        "newFromCam",
+        new SymbolMorph("camera", 15)
         );
-        cambutton.padding = 0;
-        cambutton.corner = 12;
-        cambutton.color = IDE_Morph.prototype.groupColor;
-        cambutton.highlightColor = IDE_Morph.prototype.frameColor.darker(50);
-        cambutton.pressColor = paintbutton.highlightColor;
-        cambutton.labelMinExtent = new Point(36, 18);
-        cambutton.labelShadowOffset = new Point(-1, -1);
-        cambutton.labelShadowColor = paintbutton.highlightColor;
-        cambutton.labelColor = TurtleIconMorph.prototype.labelColor;
-        cambutton.contrast = this.buttonContrast;
-        cambutton.drawNew();
-        cambutton.hint = "Import a new costume from your webcam";
-        cambutton.setPosition(new Point(x, y));
-        cambutton.fixLayout();
-        cambutton.setCenter(paintbutton.center());
-        cambutton.setLeft(paintbutton.right() + toolsPadding);
-        if (location.protocol === 'http:') {
-            cambutton.hint = 'Due to browser security policies, you need to\n' +
-                'access Snap! through HTTPS to use the camera.\n\n' +
-                'Plase replace the "http://" part of the address\n' +
-                'in your browser by "https://" and try again.';
-            cambutton.disable();
-        }
-        this.addContents(cambutton);
+    cambutton.padding = 0;
+    cambutton.corner = 12;
+    cambutton.color = IDE_Morph.prototype.groupColor;
+    cambutton.highlightColor = IDE_Morph.prototype.frameColor.darker(50);
+    cambutton.pressColor = paintbutton.highlightColor;
+    cambutton.labelMinExtent = new Point(36, 18);
+    cambutton.labelShadowOffset = new Point(-1, -1);
+    cambutton.labelShadowColor = paintbutton.highlightColor;
+    cambutton.labelColor = TurtleIconMorph.prototype.labelColor;
+    cambutton.contrast = this.buttonContrast;
+    cambutton.drawNew();
+    cambutton.hint = "Import a new costume from your webcam";
+    cambutton.setPosition(new Point(x, y));
+    cambutton.fixLayout();
+    cambutton.setCenter(paintbutton.center());
+    cambutton.setLeft(paintbutton.right() + toolsPadding);
+
+    this.addContents(cambutton);
+
+    if (!CamSnapshotDialogMorph.prototype.enabled) {
+        cambutton.disable();
+        cambutton.hint = CamSnapshotDialogMorph.prototype.notSupportedMessage;
     }
+
+    document.addEventListener(
+        'cameraDisabled',
+        function () {
+            cambutton.disable();
+            cambutton.hint = CamSnapshotDialogMorph.prototype.notSupportedMessage;
+        }
+    );
 
     txt = new TextMorph(localize(
         "costumes tab help" // look up long string in translator
@@ -8403,8 +8392,6 @@ PaletteHandleMorph.prototype.mouseDoubleClick = function () {
 /*
     I am a dialog morph that lets users take a snapshot using their webcam
     and use it as a costume for their sprites or a background for the Stage.
-
-    NOTE: Currently disabled because of issues with retina displays.
 */
 
 // CamSnapshotDialogMorph inherits from DialogBoxMorph:
@@ -8419,6 +8406,15 @@ CamSnapshotDialogMorph.uber = DialogBoxMorph.prototype;
 function CamSnapshotDialogMorph(ide, sprite, onCancel, onAccept) {
     this.init(ide, sprite, onCancel, onAccept);
 }
+
+CamSnapshotDialogMorph.prototype.enabled = true;
+CamSnapshotDialogMorph.prototype.notSupportedMessage =
+    'Due to browser security policies, you need to\n' +
+    'access Snap! through HTTPS to use the camera.\n\n' +
+    'Plase replace the "http://" part of the address\n' +
+    'in your browser by "https://" and try again.\n\n' +
+    'Please also make sure your camera is properly\n' +
+    'connected and configured.';
 
 CamSnapshotDialogMorph.prototype.init = function (
     ide,
@@ -8444,27 +8440,52 @@ onAccept) {
 };
 
 CamSnapshotDialogMorph.prototype.buildContents = function () {
-    var myself = this;
+    var myself = this,
+        stage = this.sprite.parentThatIsA(StageMorph);
 
     this.videoElement = document.createElement('video');
     this.videoElement.hidden = true;
+    this.videoElement.width = stage.dimensions.x;
+    this.videoElement.height = stage.dimensions.y;
+
     document.body.appendChild(this.videoElement);
 
     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
         navigator.mediaDevices.getUserMedia({ video: true })
             .then(function (stream) {
                 myself.videoElement.src = window.URL.createObjectURL(stream);
-                myself.videoElement.play();
+                myself.videoElement.play().catch(function (error) {
+                    myself.disable();
+                    myself.ide.inform(
+                        'Camera not supported',
+                        CamSnapshotDialogMorph.prototype.notSupportedMessage
+                    );
+                    myself.cancel();
+                });
                 myself.videoElement.stream = stream;
+            })
+            .catch(function (error) {
+                myself.ide.inform(
+                    'Failed to initialize camera',
+                    'Please make sure your camera is connected and\n' +
+                    'accept the browser request to access it.'
+                );
+                myself.cancel();
             });
     }
 
-    this.videoView.setExtent(this.ide.stage.dimensions);
-    this.videoView.image = newCanvas(this.videoView.extent());
+    this.videoView.setExtent(stage.dimensions);
+    this.videoView.image = newCanvas(stage.dimensions);
+
     this.videoView.drawOn = function (aCanvas) {
         var context = aCanvas.getContext('2d'),
-            w = this.width(),
-            h = this.height();
+            videoWidth = myself.videoElement.videoWidth,
+            videoHeight = myself.videoElement.videoHeight,
+            w = stage.dimensions.x,
+            h = stage.dimensions.y,
+            clippingWidth, clippingHeight;
+
+        if (!videoWidth) { return; }
 
         context.save();
 
@@ -8472,8 +8493,22 @@ CamSnapshotDialogMorph.prototype.buildContents = function () {
         context.translate(w, 0);
         context.scale(-1, 1);
 
+        if (videoWidth / w > videoHeight / h) {
+            // preserve height, crop width
+            clippingWidth = w * (videoHeight / h);
+            clippingHeight = videoHeight;
+        } else {
+            // preserve width, crop height
+            clippingWidth = videoWidth;
+            clippingHeight = h * (videoWidth / w);
+        }
+
         context.drawImage(
             myself.videoElement,
+            0,
+            0,
+            clippingWidth,
+            clippingHeight,
             this.left() * -1,
             this.top(),
             w,
@@ -8499,23 +8534,16 @@ CamSnapshotDialogMorph.prototype.buildContents = function () {
 };
 
 CamSnapshotDialogMorph.prototype.ok = function () {
-    var stage = this.ide.stage,
-        canvas = newCanvas(stage.dimensions),
-        context = canvas.getContext('2d');
+    this.accept(
+        new Costume(
+            this.videoView.fullImageClassic(),
+            this.sprite.newCostumeName('camera')
+        ));
+};
 
-    context.translate(stage.dimensions.x, 0);
-    context.scale(-1, 1);
-
-    context.drawImage(
-        this.videoElement,
-        0,
-        0,
-        stage.dimensions.x,
-        stage.dimensions.y
-    );
-
-    this.accept(new Costume(canvas), this.sprite.newCostumeName('camera'));
-    this.close();
+CamSnapshotDialogMorph.prototype.disable = function () {
+    CamSnapshotDialogMorph.prototype.enabled = false;
+    document.dispatchEvent(new Event('cameraDisabled'));
 };
 
 CamSnapshotDialogMorph.prototype.destroy = function () {
@@ -8524,7 +8552,7 @@ CamSnapshotDialogMorph.prototype.destroy = function () {
 };
 
 CamSnapshotDialogMorph.prototype.close = function () {
-    if (this.videoElement) {
+    if (this.videoElement && this.videoElement.stream) {
         this.videoElement.stream.getTracks()[0].stop();
         this.videoElement.remove();
     }
