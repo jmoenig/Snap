@@ -8402,13 +8402,10 @@ CamSnapshotDialogMorph.prototype = new DialogBoxMorph();
 CamSnapshotDialogMorph.prototype.constructor = CamSnapshotDialogMorph;
 CamSnapshotDialogMorph.uber = DialogBoxMorph.prototype;
 
-// CamSnapshotDialogMorph instance creation
-
-function CamSnapshotDialogMorph(ide, sprite, onCancel, onAccept) {
-    this.init(ide, sprite, onCancel, onAccept);
-}
+// CamSnapshotDialogMorph settings
 
 CamSnapshotDialogMorph.prototype.enabled = true;
+
 CamSnapshotDialogMorph.prototype.notSupportedMessage =
     'Due to browser security policies, you need to\n' +
     'access Snap! through HTTPS to use the camera.\n\n' +
@@ -8417,32 +8414,44 @@ CamSnapshotDialogMorph.prototype.notSupportedMessage =
     'Please also make sure your camera is properly\n' +
     'connected and configured.';
 
+// CamSnapshotDialogMorph instance creation
+
+function CamSnapshotDialogMorph(ide, sprite, onCancel, onAccept) {
+    this.init(ide, sprite, onCancel, onAccept);
+}
+
 CamSnapshotDialogMorph.prototype.init = function (
     ide,
     sprite,
     onCancel,
-onAccept) {
+	onAccept
+) {
     this.ide = ide;
     this.sprite = sprite;
     this.padding = 10;
-
     this.oncancel = onCancel;
     this.accept = onAccept;
-
     this.videoElement = null; // an HTML5 video element
     this.videoView = new Morph(); // a morph where we'll copy the video contents
 
     CamSnapshotDialogMorph.uber.init.call(this);
-
     this.labelString = 'Camera';
     this.createLabel();
-
     this.buildContents();
 };
 
 CamSnapshotDialogMorph.prototype.buildContents = function () {
     var myself = this,
         stage = this.sprite.parentThatIsA(StageMorph);
+
+	function noCameraSupport() {
+        myself.disable();
+        myself.ide.inform(
+            'Camera not supported',
+            CamSnapshotDialogMorph.prototype.notSupportedMessage
+        );
+        myself.cancel();
+	}
 
     this.videoElement = document.createElement('video');
     this.videoElement.hidden = true;
@@ -8455,24 +8464,10 @@ CamSnapshotDialogMorph.prototype.buildContents = function () {
         navigator.mediaDevices.getUserMedia({ video: true })
             .then(function (stream) {
                 myself.videoElement.src = window.URL.createObjectURL(stream);
-                myself.videoElement.play().catch(function (error) {
-                    myself.disable();
-                    myself.ide.inform(
-                        'Camera not supported',
-                        CamSnapshotDialogMorph.prototype.notSupportedMessage
-                    );
-                    myself.cancel();
-                });
+                myself.videoElement.play().catch(noCameraSupport);
                 myself.videoElement.stream = stream;
             })
-            .catch(function (error) {
-                myself.ide.inform(
-                    'Failed to initialize camera',
-                    'Please make sure your camera is connected and\n' +
-                    'accept the browser request to access it.'
-                );
-                myself.cancel();
-            });
+            .catch(noCameraSupport);
     }
 
     this.videoView.setExtent(stage.dimensions);
