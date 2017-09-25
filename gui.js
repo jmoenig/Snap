@@ -1578,7 +1578,8 @@ IDE_Morph.prototype.createCorralBar = function () {
         'cameraDisabled',
         function (event) {
             cambutton.disable();
-            cambutton.hint = CamSnapshotDialogMorph.prototype.notSupportedMessage;
+            cambutton.hint =
+            	CamSnapshotDialogMorph.prototype.notSupportedMessage;
         }
     );
 };
@@ -7691,7 +7692,8 @@ WardrobeMorph.prototype.updateList = function () {
         'cameraDisabled',
         function () {
             cambutton.disable();
-            cambutton.hint = CamSnapshotDialogMorph.prototype.notSupportedMessage;
+            cambutton.hint =
+            	CamSnapshotDialogMorph.prototype.notSupportedMessage;
         }
     );
 
@@ -8396,7 +8398,6 @@ PaletteHandleMorph.prototype.mouseDoubleClick = function () {
 
 // CamSnapshotDialogMorph inherits from DialogBoxMorph:
 
-CamSnapshotDialogMorph.prototype.enableCamera = false; // has issues with retina
 CamSnapshotDialogMorph.prototype = new DialogBoxMorph();
 CamSnapshotDialogMorph.prototype.constructor = CamSnapshotDialogMorph;
 CamSnapshotDialogMorph.uber = DialogBoxMorph.prototype;
@@ -8538,7 +8539,8 @@ CamSnapshotDialogMorph.prototype.ok = function () {
         new Costume(
             this.videoView.fullImageClassic(),
             this.sprite.newCostumeName('camera')
-        ));
+        ).flipped()
+    );
 };
 
 CamSnapshotDialogMorph.prototype.disable = function () {
