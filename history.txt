@@ -3649,6 +3649,7 @@ Fixes:
 * GUI, Symbols: added “visible stepping” toggle button to the control bar
 * fixed camera retina issues, thanks, Bernat!!
 * Widgets: inverted property name for “enabled” to “isDisabled” for PushButtons
+* GUI: hiding camera support (again), because of issues with Safari
 
 
 v4.1 Features:
@@ -3657,7 +3658,7 @@ v4.1 Features:
 * inheritance of sprite attributes (x, y, direction, size, costumes, costume #, sounds, scripts)
 * first-class costumes and sounds
 * visual indicator (map-pin icon) for sprite-local custom blocks (i.e. methods)
-* camera snapshots for costumes and new sprites
+* [experimental hidden] camera snapshots for costumes and new sprites
 * localization support when typing expressions
 * support for user-forced line-breaks in custom block labels
 * ternary Boolean slot setting: support to limit Boolean input slots to “true/false” outside of rings and in palette
