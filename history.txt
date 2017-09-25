@@ -3648,6 +3648,7 @@ Fixes:
 ------
 * GUI, Symbols: added “visible stepping” toggle button to the control bar
 * fixed camera retina issues, thanks, Bernat!!
+* Widgets: inverted property name for “enabled” to “isDisabled” for PushButtons
 
 
 v4.1 Features:

@@ -168,7 +168,7 @@ PushButtonMorph.prototype.init = function (
     this.hint = hint || null;
     this.template = template || null; // for pre-computed backbrounds
     // if a template is specified, its background images are used as cache
-    this.enabled = true;
+    this.isDisabled = false;
 
     // initialize inherited properties:
     TriggerMorph.uber.init.call(this);
@@ -205,11 +205,10 @@ PushButtonMorph.prototype.mouseDownLeft = function () {
 };
 
 PushButtonMorph.prototype.mouseClickLeft = function () {
-    if (this.enabled) {
-        PushButtonMorph.uber.mouseClickLeft.call(this);
-        if (this.label) {
-            this.label.setCenter(this.center());
-        }
+    if (this.isDisabled) {return; }
+    PushButtonMorph.uber.mouseClickLeft.call(this);
+    if (this.label) {
+        this.label.setCenter(this.center());
     }
 };
 
@@ -485,7 +484,7 @@ PushButtonMorph.prototype.createLabel = function () {
 // PushButtonMorph states
 
 PushButtonMorph.prototype.disable = function () {
-    this.enabled = false;
+    this.isDisabled = true;
     this.forAllChildren(function (child) {
         child.alpha = 0.3;
     });
@@ -493,7 +492,7 @@ PushButtonMorph.prototype.disable = function () {
 };
 
 PushButtonMorph.prototype.enable = function () {
-    this.enabled = true;
+    this.isDisabled = false;
     this.forAllChildren(function (child) {
         child.alpha = 1;
     });
