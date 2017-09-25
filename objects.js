@@ -80,7 +80,8 @@ document, isNaN, isString, newCanvas, nop, parseFloat, radians, window,
 modules, IDE_Morph, VariableDialogMorph, HTMLCanvasElement, Context, List,
 SpeechBubbleMorph, RingMorph, isNil, FileReader, TableDialogMorph,
 BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
-TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph*/
+TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph,
+AlignmentMorph*/
 
 modules.objects = '2017-September-25';
 
@@ -2292,46 +2293,9 @@ SpriteMorph.prototype.blockTemplates = function (category) {
 
 SpriteMorph.prototype.makeBlockButton = function (category) {
 	// answer a button that prompts the user to make a new block
-    var myself = this,
-    	button = new PushButtonMorph(
-        null,
-        function () {
-            var ide = myself.parentThatIsA(IDE_Morph),
-                stage = myself.parentThatIsA(StageMorph),
-                clr = SpriteMorph.prototype.blockColor[category],
-                dlg;
-            dlg = new BlockDialogMorph(
-                null,
-                function (definition) {
-                    if (definition.spec !== '') {
-                        if (definition.isGlobal) {
-                            stage.globalBlocks.push(definition);
-                        } else {
-                            myself.customBlocks.push(definition);
-                        }
-                        ide.flushPaletteCache();
-                        ide.refreshPalette();
-                        new BlockEditorMorph(definition, myself).popUp();
-                    }
-                },
-                myself
-            );
-            if (category) {
-                dlg.category = category;
-                dlg.categories.children.forEach(function (each) {
-                    each.refresh();
-                });
-                dlg.types.children.forEach(function (each) {
-                    each.setColor(clr);
-                each.refresh();
-                });
-            }
-            dlg.prompt(
-                'Make a block',
-                null,
-                myself.world()
-            );
-        },
+    var button = new PushButtonMorph(
+        this,
+		'makeBlock',
         'Make a block'
     );
 
@@ -2344,6 +2308,47 @@ SpriteMorph.prototype.makeBlockButton = function (category) {
     button.selector = 'addCustomBlock';
     button.showHelp = BlockMorph.prototype.showHelp;
     return button;
+};
+
+SpriteMorph.prototype.makeBlock = function () {
+    // prompt the user to make a new block
+    var ide = this.parentThatIsA(IDE_Morph),
+        stage = this.parentThatIsA(StageMorph),
+        category = ide.currentCategory,
+        clr = SpriteMorph.prototype.blockColor[category],
+        myself = this,
+        dlg;
+    dlg = new BlockDialogMorph(
+        null,
+        function (definition) {
+            if (definition.spec !== '') {
+                if (definition.isGlobal) {
+                    stage.globalBlocks.push(definition);
+                } else {
+                    myself.customBlocks.push(definition);
+                }
+                ide.flushPaletteCache();
+                ide.refreshPalette();
+                new BlockEditorMorph(definition, myself).popUp();
+            }
+        },
+        myself
+    );
+    if (category !== 'variables') {
+        dlg.category = category;
+        dlg.categories.children.forEach(function (each) {
+            each.refresh();
+        });
+        dlg.types.children.forEach(function (each) {
+            each.setColor(clr);
+        each.refresh();
+        });
+    }
+    dlg.prompt(
+        'Make a block',
+        null,
+        myself.world()
+    );
 };
 
 SpriteMorph.prototype.palette = function (category) {
@@ -2363,7 +2368,10 @@ SpriteMorph.prototype.freshPalette = function (category) {
         hideNextSpace = false,
         myself = this,
         stage = this.parentThatIsA(StageMorph),
-        oldFlag = Morph.prototype.trackChanges;
+        oldFlag = Morph.prototype.trackChanges,
+        shade = new Color(140, 140, 140),
+        searchButton,
+        makeButton;
 
     Morph.prototype.trackChanges = false;
 
@@ -2373,17 +2381,36 @@ SpriteMorph.prototype.freshPalette = function (category) {
     palette.growth = new Point(0, MorphicPreferences.scrollBarSize);
 
     // toolbar:
-    palette.toolBar = new PushButtonMorph(
+    
+    palette.toolBar = new AlignmentMorph('column');
+
+    searchButton = new PushButtonMorph(
         this,
         "searchBlocks",
         new SymbolMorph("magnifierOutline", 16)
     );
-    palette.toolBar.alpha = 0.2;
-    palette.toolBar.padding = 1;
-    palette.toolBar.hint = localize('find blocks') + '...';
-    palette.toolBar.labelShadowColor = new Color(140, 140, 140);
-    palette.toolBar.drawNew();
-    palette.toolBar.fixLayout();
+    searchButton.alpha = 0.2;
+    searchButton.padding = 1;
+    searchButton.hint = localize('find blocks') + '...';
+    searchButton.labelShadowColor = shade;
+    searchButton.drawNew();
+    searchButton.fixLayout();
+	palette.toolBar.add(searchButton);
+
+    makeButton = new PushButtonMorph(
+        this,
+        "makeBlock",
+        new SymbolMorph("cross", 16)
+    );
+    makeButton.alpha = 0.2;
+    makeButton.padding = 1;
+    makeButton.hint = localize('Make a block') + '...';
+    makeButton.labelShadowColor = shade;
+    makeButton.drawNew();
+    makeButton.fixLayout();
+    palette.toolBar.add(makeButton);
+
+	palette.toolBar.fixLayout();
     palette.add(palette.toolBar);
 
     // menu:

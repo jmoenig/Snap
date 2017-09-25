@@ -111,6 +111,7 @@ SymbolMorph.prototype.names = [
     'circle',
     'circleSolid',
     'line',
+    'cross',
     'crosshairs',
     'paintbucket',
     'eraser',
@@ -269,6 +270,8 @@ SymbolMorph.prototype.symbolCanvasColored = function (aColor) {
         return this.drawSymbolCircleSolid(canvas, aColor);
     case 'line':
         return this.drawSymbolLine(canvas, aColor);
+    case 'cross':
+        return this.drawSymbolCross(canvas, aColor);
     case 'crosshairs':
         return this.drawSymbolCrosshairs(canvas, aColor);
     case 'paintbucket':
@@ -1018,7 +1021,7 @@ SymbolMorph.prototype.drawSymbolCircleSolid = function (canvas, color) {
 };
 
 SymbolMorph.prototype.drawSymbolLine = function (canvas, color) {
-    // answer a canvas showing a diagonal line
+    // answer a canvas showing a plus sign cross
     var ctx = canvas.getContext('2d'),
         w = canvas.width,
         h = canvas.height,
@@ -1029,6 +1032,24 @@ SymbolMorph.prototype.drawSymbolLine = function (canvas, color) {
     ctx.lineCap = 'round';
     ctx.moveTo(l, l);
     ctx.lineTo(w - l, h - l);
+    ctx.stroke();
+    return canvas;
+};
+
+SymbolMorph.prototype.drawSymbolCross = function (canvas, color) {
+    // answer a canvas showing a diagonal line
+    var ctx = canvas.getContext('2d'),
+        w = canvas.width,
+        l = Math.max(w / 20, 0.5);
+
+    ctx.strokeStyle = color.toString();
+    ctx.lineWidth = l * 2;
+    ctx.lineCap = 'round';
+    ctx.moveTo(l, w / 2);
+    ctx.lineTo(w - l, w / 2);
+    ctx.stroke();
+    ctx.moveTo(w / 2, l);
+    ctx.lineTo(w / 2, w - l);
     ctx.stroke();
     return canvas;
 };
