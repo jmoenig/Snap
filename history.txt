@@ -3650,6 +3650,7 @@ Fixes:
 * fixed camera retina issues, thanks, Bernat!!
 * Widgets: inverted property name for “enabled” to “isDisabled” for PushButtons
 * GUI: hiding camera support (again), because of issues with Safari
+* Objects: added "Make a block" button to every category
 
 
 v4.1 Features:
@@ -3669,7 +3670,7 @@ v4.1 Features:
 * sprites’s rotation centers can be adjusted onstage
 * clones share their original sprite’s scripts, not a shallow-copy of them
 * a highlight-colored balloon indicates the number of active processes per shared script
-* new musical “notes” symbol
+* new musical “notes” and "location" symbols
 * new “visible stepping” toggle button in the control bar
 * turn on the “Inheritance support” setting per default
 * Assert data types to list operations for more meaningful error messages
@@ -3682,6 +3683,7 @@ v4.1 Features:
 * splitting csv-text
 * prevent context menu and dragging for stage watchers in presentation mode
 * "floating" search button in the blocks palette
+* "Make a block" button in every category
 
 Fixes:
 * changed keyboard shortcut indicator for “find blocks” to “^”
