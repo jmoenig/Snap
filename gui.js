@@ -75,7 +75,7 @@ isRetinaSupported, SliderMorph, Animation*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2017-September-25';
+modules.gui = '2017-September-26';
 
 // Declarations
 
@@ -8425,16 +8425,16 @@ CamSnapshotDialogMorph.uber = DialogBoxMorph.prototype;
 
 // CamSnapshotDialogMorph settings
 
-CamSnapshotDialogMorph.prototype.enableCamera = false; // off while experimental
+CamSnapshotDialogMorph.prototype.enableCamera = true; // off while experimental
 CamSnapshotDialogMorph.prototype.enabled = true;
 
 CamSnapshotDialogMorph.prototype.notSupportedMessage =
-    'Due to browser security policies, you need to\n' +
-    'access Snap! through HTTPS to use the camera.\n\n' +
+	'Please make sure your web browser is up to date\n' +
+	'and your camera is properly configured. \n\n' +
+	'Some browsers also require you to access Snap!\n' +
+	'through HTTPS to use the camera.\n\n' +
     'Plase replace the "http://" part of the address\n' +
-    'in your browser by "https://" and try again.\n\n' +
-    'Please also make sure your camera is properly\n' +
-    'connected and configured.';
+    'in your browser by "https://" and try again.';
 
 // CamSnapshotDialogMorph instance creation
 
@@ -8472,6 +8472,9 @@ CamSnapshotDialogMorph.prototype.buildContents = function () {
             'Camera not supported',
             CamSnapshotDialogMorph.prototype.notSupportedMessage
         );
+        if (myself.videoElement) {
+        	myself.videoElement.remove();
+        }
         myself.cancel();
 	}
 
@@ -8485,16 +8488,7 @@ CamSnapshotDialogMorph.prototype.buildContents = function () {
     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
         navigator.mediaDevices.getUserMedia({ video: true })
             .then(function (stream) {
-            	/*
-             		there are issues at this point with current Safari 11:
-               		URL.createObjectURL is still considered experimental
-                 	and needs to be prefixed with webkitURL for URL,
-                  	and - worse - does not accept a stream as argument,
-                   	throwing a type error. Until these issues are resolved
-					we'll disable camera support, treating it as a hidden
-					experimental feature. -Jens
-             	*/
-                myself.videoElement.src = window.URL.createObjectURL(stream);
+                myself.videoElement.srcObject = stream;
                 myself.videoElement.play().catch(noCameraSupport);
                 myself.videoElement.stream = stream;
             })

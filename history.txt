@@ -3656,6 +3656,7 @@ Fixes:
 170926
 ------
 * Symbols: added 'keyboard' and 'keyboardFilled' icons
+* GUI: fixed camera support for Safari, thanks, Bernat!
 
 
 v4.1 Features:
@@ -3664,7 +3665,7 @@ v4.1 Features:
 * inheritance of sprite attributes (x, y, direction, size, costumes, costume #, sounds, scripts)
 * first-class costumes and sounds
 * visual indicator (map-pin icon) for sprite-local custom blocks (i.e. methods)
-* [experimental hidden] camera snapshots for costumes and new sprites
+* camera snapshots for costumes and new sprites
 * localization support when typing expressions
 * support for user-forced line-breaks in custom block labels
 * ternary Boolean slot setting: support to limit Boolean input slots to “true/false” outside of rings and in palette
