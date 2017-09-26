@@ -3653,6 +3653,10 @@ Fixes:
 * Objects: added "Make a block" button to every category
 * Symbols, Objects: new "floating" make-a-block button in the palette
 
+170926
+------
+* Symbols: added 'keyboard' and 'keyboardFilled' icons
+
 
 v4.1 Features:
 * polymorphic sprite-local custom blocks
@@ -3671,7 +3675,7 @@ v4.1 Features:
 * sprites’s rotation centers can be adjusted onstage
 * clones share their original sprite’s scripts, not a shallow-copy of them
 * a highlight-colored balloon indicates the number of active processes per shared script
-* new musical “notes”, "location", "footprints" and "cross" symbols
+* new musical “notes”, "location", "footprints", "cross" and "keyboard" symbols
 * new “visible stepping” toggle button in the control bar
 * turn on the “Inheritance support” setting per default
 * Assert data types to list operations for more meaningful error messages

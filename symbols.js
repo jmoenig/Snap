@@ -41,7 +41,7 @@
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.symbols = '2017-September-25';
+modules.symbols = '2017-September-26';
 
 var SymbolMorph;
 
@@ -51,8 +51,8 @@ WorldMorph.prototype.customMorphs = function () {
 
     return [
         new SymbolMorph(
-            'footprints',
-            18,
+            'keyboardFilled',
+            50,
             new Color(250, 250, 250),
             new Point(-1, -1),
             new Color(20, 20, 20)
@@ -134,7 +134,9 @@ SymbolMorph.prototype.names = [
     'notes',
     'camera',
     'location',
-    'footprints'
+    'footprints',
+    'keyboard',
+    'keyboardFilled'
 ];
 
 // SymbolMorph instance creation:
@@ -318,6 +320,10 @@ SymbolMorph.prototype.symbolCanvasColored = function (aColor) {
         return this.drawSymbolLocation(canvas, aColor);
     case 'footprints':
         return this.drawSymbolFootprints(canvas, aColor);
+    case 'keyboard':
+        return this.drawSymbolKeyboard(canvas, aColor);
+    case 'keyboardFilled':
+        return this.drawSymbolKeyboardFilled(canvas, aColor);
     default:
         return canvas;
     }
@@ -350,6 +356,8 @@ SymbolMorph.prototype.symbolWidth = function () {
     case 'cloudOutline':
     case 'turnBack':
     case 'turnForward':
+    case 'keyboard':
+    case 'keyboardFilled':
         return size * 1.6;
     case 'turnRight':
     case 'turnLeft':
@@ -1674,5 +1682,54 @@ SymbolMorph.prototype.drawSymbolFootprints = function (canvas, color) {
     ctx.arc(w - (u * 2.25), u * 9, u, radians(0), radians(-150), false);
     ctx.closePath();
     ctx.fill();
+    return canvas;
+};
+
+SymbolMorph.prototype.drawSymbolKeyboard = function (canvas, color) {
+    // answer a canvas showing a typing keyboard
+    var ctx = canvas.getContext('2d'),
+        h = canvas.height,
+        u = h / 10,
+        k = h / 5,
+        row, col;
+
+    ctx.fillStyle = color.toString();
+    for (row = 0; row < 2; row += 1) {
+		for (col = 0; col < 5; col += 1) {
+			ctx.fillRect(
+      			((u + k) * col) + u,
+          		((u + k) * row) + u,
+           		k,
+           		k
+			);
+   		}
+  	}
+	ctx.fillRect(u * 4, u * 7, k * 4, k);
+	return canvas;
+};
+
+SymbolMorph.prototype.drawSymbolKeyboardFilled = function (canvas, color) {
+    // answer a canvas showing a typing keyboard
+    var ctx = canvas.getContext('2d'),
+        w = canvas.width,
+        h = canvas.height,
+        u = h / 10,
+        k = h / 5,
+        row, col;
+
+    ctx.fillStyle = color.toString();
+    ctx.fillRect(0, 0, w, h);
+    ctx.globalCompositeOperation = 'destination-out';
+    for (row = 0; row < 2; row += 1) {
+        for (col = 0; col < 5; col += 1) {
+            ctx.fillRect(
+                  ((u + k) * col) + u,
+                  ((u + k) * row) + u,
+                   k,
+                   k
+            );
+           }
+      }
+    ctx.fillRect(u * 4, u * 7, k * 4, k);
     return canvas;
 };
