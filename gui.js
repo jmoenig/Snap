@@ -269,7 +269,7 @@ IDE_Morph.prototype.openIn = function (world) {
     var hash, usr, myself = this, urlLanguage = null;
 
     // get persistent user data, if any
-    if (localStorage) {
+    if (this.hasLocalStorage()) {
         usr = localStorage['-snap-user'];
         if (usr) {
             usr = SnapCloud.parseResponse(usr)[0];
@@ -2188,22 +2188,34 @@ IDE_Morph.prototype.saveSetting = function (key, value) {
     if (!this.savingPreferences) {
         return;
     }
-    if (localStorage) {
+    if (this.hasLocalStorage()) {
         localStorage['-snap-setting-' + key] = value;
     }
 };
 
 IDE_Morph.prototype.getSetting = function (key) {
-    if (localStorage) {
+    if (this.hasLocalStorage()) {
         return localStorage['-snap-setting-' + key];
     }
     return null;
 };
 
 IDE_Morph.prototype.removeSetting = function (key) {
-    if (localStorage) {
+    if (this.hasLocalStorage()) {
         delete localStorage['-snap-setting-' + key];
     }
+};
+
+IDE_Morph.prototype.hasLocalStorage = function () {
+	// checks whether localStorage is available,
+    // this kludgy try/catch mechanism is needed
+    // because Safari 11 is paranoid about accessing
+    // localstorage from the file:// protocol
+	try {
+		return !isNil(localStorage);
+	} catch (err) {
+    	return false;
+	}
 };
 
 // IDE_Morph sprite list access

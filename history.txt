@@ -3659,6 +3659,7 @@ Fixes:
 * GUI: fixed camera support for Safari, thanks, Bernat!
 * Morphic: added stopEditing() event for keyboardReceiver
 * Blocks: added floating toggle for keyboard entry to scripts toolbar
+* GUI: make Snap! work in Safari 11 offline (file:// protocol) again, Sheesh
 
 === v4.1 release candidate ===
 
