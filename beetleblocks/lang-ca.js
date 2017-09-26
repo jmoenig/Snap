@@ -63,8 +63,8 @@ tempDict = {
 		'Eixos',
 	'Wireframe':
 		'Model de filferros',
-	'Parallel projection':
-		'Projecció paral·lela',
+	'2D mode':
+		'Mode 2D',
 	'Grid':
 		'Graella',
 	'Position: ':

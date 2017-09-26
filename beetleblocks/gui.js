@@ -1528,7 +1528,7 @@ IDE_Morph.prototype.createStatusDisplay = function () {
             function () {
                 stage.renderer.toggleParallelProjection();
             },
-            'Parallel projection',
+            '2D mode',
             function () {
                 return stage.renderer.isParallelProjection
             });
