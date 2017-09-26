@@ -1423,7 +1423,9 @@ StageMorph.prototype.mouseMove = function (pos, button) {
         var horzAngle = deltaX / (this.dimensions.x * this.scale) * 360;
         var vertAngle = deltaY / (this.dimensions.y * this.scale) * 360;
         this.controls.rotateLeft(radians(horzAngle));
+          if (!this.renderer.isParallelProjection){
         this.controls.rotateUp(radians(vertAngle));
+        }
     }
 
     this.controls.update();
