@@ -3657,6 +3657,7 @@ Fixes:
 ------
 * Symbols: added 'keyboard' and 'keyboardFilled' icons
 * GUI: fixed camera support for Safari, thanks, Bernat!
+* Morphic: added stopEditing() event for keyboardReceiver
 
 
 v4.1 Features:

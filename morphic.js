@@ -1161,7 +1161,7 @@
 
 /*global window, HTMLCanvasElement, FileReader, Audio, FileList*/
 
-var morphicVersion = '2017-September-01';
+var morphicVersion = '2017-September-26';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = getBlurredShadowSupport(); // check for Chrome-bug
 
@@ -12093,6 +12093,9 @@ WorldMorph.prototype.stopEditing = function () {
         this.cursor.target.clearSelection();
         this.cursor.destroy();
         this.cursor = null;
+    }
+    if (this.keyboardReceiver && this.keyboardReceiver.stopEditing) {
+    	this.keyboardReceiver.stopEditing();
     }
     this.keyboardReceiver = null;
     if (this.virtualKeyboard) {
