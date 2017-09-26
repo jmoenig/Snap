@@ -3658,6 +3658,7 @@ Fixes:
 * Symbols: added 'keyboard' and 'keyboardFilled' icons
 * GUI: fixed camera support for Safari, thanks, Bernat!
 * Morphic: added stopEditing() event for keyboardReceiver
+* Blocks: added floating toggle for keyboard entry to scripts toolbar
 
 
 v4.1 Features:
@@ -3679,6 +3680,7 @@ v4.1 Features:
 * a highlight-colored balloon indicates the number of active processes per shared script
 * new musical “notes”, "location", "footprints", "cross" and "keyboard" symbols
 * new “visible stepping” toggle button in the control bar
+* new "keyboard entry" toggle button in the scripts tool bar
 * turn on the “Inheritance support” setting per default
 * Assert data types to list operations for more meaningful error messages
 * programmatically hide and show primitives in the palette

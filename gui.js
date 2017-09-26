@@ -1434,7 +1434,7 @@ IDE_Morph.prototype.createSpriteEditor = function () {
         this.spriteEditor.contents.acceptsDrops = true;
 
         scripts.scrollFrame = this.spriteEditor;
-        scripts.updateUndropControls();
+        scripts.updateToolbar();
         this.add(this.spriteEditor);
         this.spriteEditor.scrollX(this.spriteEditor.padding);
         this.spriteEditor.scrollY(this.spriteEditor.padding);
@@ -4611,7 +4611,7 @@ IDE_Morph.prototype.toggleAppMode = function (appMode) {
             });
         }
         // update undrop controls
-        this.currentSprite.scripts.updateUndropControls();
+        this.currentSprite.scripts.updateToolbar();
     }
     this.setExtent(this.world().extent()); // resume trackChanges
 };

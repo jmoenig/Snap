@@ -144,11 +144,11 @@ fontHeight, TableFrameMorph, SpriteMorph, Context, ListWatcherMorph,
 CellMorph, DialogBoxMorph, BlockInputFragmentMorph, PrototypeHatBlockMorph,
 Costume, IDE_Morph, BlockDialogMorph, BlockEditorMorph, localize, isNil,
 isSnapObject, PushButtonMorph, SpriteIconMorph, Process, AlignmentMorph,
-CustomCommandBlockMorph, SymbolMorph*/
+CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2017-September-25';
+modules.blocks = '2017-September-26';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -6447,7 +6447,7 @@ ScriptsMorph.prototype.undrop = function () {
         null,
         this.recoverLastDrop(),
         function () {
-            myself.updateUndropControls();
+            myself.updateToolbar();
             myself.isAnimating = false;
         }
     );
@@ -6462,7 +6462,7 @@ ScriptsMorph.prototype.redrop = function () {
     if (this.dropRecord.action === 'delete') {
         this.recoverLastDrop(true);
         this.dropRecord.lastDroppedBlock.destroy();
-        this.updateUndropControls();
+        this.updateToolbar();
     } else {
         this.isAnimating = true;
         this.dropRecord.lastDroppedBlock.slideBackTo(
@@ -6470,7 +6470,7 @@ ScriptsMorph.prototype.redrop = function () {
             null,
             this.recoverLastDrop(true),
             function () {
-                myself.updateUndropControls();
+                myself.updateToolbar();
                 myself.isAnimating = false;
             }
         );
@@ -6634,22 +6634,20 @@ ScriptsMorph.prototype.recordDrop = function (lastGrabOrigin) {
         this.dropRecord.nextRecord = record;
     }
     this.dropRecord = record;
-    this.updateUndropControls();
+    this.updateToolbar();
 };
 
-ScriptsMorph.prototype.addUndropControls = function () {
+ScriptsMorph.prototype.addToolbar = function () {
     var toolBar = new AlignmentMorph(),
+    	myself = this,
         shade = new Color(140, 140, 140);
+
     // toolBar.respectHiddens = true; // uncomment to keep buttons in place
+
     toolBar.undoButton = new PushButtonMorph(
         this,
         "undrop",
         new SymbolMorph("turnBack", 12)
-    );
-    toolBar.redoButton = new PushButtonMorph(
-        this,
-        "redrop",
-        new SymbolMorph("turnForward", 12)
     );
     toolBar.undoButton.alpha = 0.2;
     toolBar.undoButton.padding = 2;
@@ -6659,6 +6657,11 @@ ScriptsMorph.prototype.addUndropControls = function () {
     toolBar.undoButton.fixLayout();
     toolBar.add(toolBar.undoButton);
 
+    toolBar.redoButton = new PushButtonMorph(
+        this,
+        "redrop",
+        new SymbolMorph("turnForward", 12)
+    );
     toolBar.redoButton.alpha = 0.2;
     toolBar.redoButton.padding = 2;
     // toolBar.redoButton.hint = 'redo the last undone\nblock drop\nin this pane';
@@ -6666,16 +6669,39 @@ ScriptsMorph.prototype.addUndropControls = function () {
     toolBar.redoButton.drawNew();
     toolBar.redoButton.fixLayout();
     toolBar.add(toolBar.redoButton);
+
+    toolBar.keyboardButton = new ToggleButtonMorph(
+    	null, // colors
+        this, // target
+        "toggleKeyboardEntry",
+        [
+            new SymbolMorph('keyboard', 12),
+            new SymbolMorph('keyboardFilled', 12)
+        ],
+		function () { // query
+			return !isNil(myself.focus);
+		}
+    );
+    toolBar.keyboardButton.alpha = 0.2;
+    toolBar.keyboardButton.padding = 2;
+    toolBar.keyboardButton.hint = 'use the keyboard\nto enter blocks';
+    //toolBar.keyboardButton.pressColor = new Color(40, 40, 40);
+    toolBar.keyboardButton.labelShadowColor = shade;
+    toolBar.keyboardButton.drawNew();
+    toolBar.keyboardButton.fixLayout();
+    toolBar.add(toolBar.keyboardButton);
+
     return toolBar;
 };
 
-ScriptsMorph.prototype.updateUndropControls = function () {
+ScriptsMorph.prototype.updateToolbar = function () {
     var sf = this.parentThatIsA(ScrollFrameMorph);
     if (!sf) {return; }
     if (!sf.toolBar) {
-        sf.toolBar = this.addUndropControls();
+        sf.toolBar = this.addToolbar();
         sf.add(sf.toolBar);
     }
+    sf.toolBar.keyboardButton.refresh();
     if (this.dropRecord) {
         if (this.dropRecord.lastRecord) {
             if (!sf.toolBar.undoButton.isVisible) {
@@ -6696,13 +6722,7 @@ ScriptsMorph.prototype.updateUndropControls = function () {
                 sf.toolBar.redoButton.hide();
             }
         }
-    }
-    if (sf.toolBar.undoButton.isVisible || sf.toolBar.redoButton.isVisible) {
-        sf.toolBar.drawNew();
-        sf.toolBar.changed();
-    } else {
-        sf.removeChild(sf.toolBar);
-        sf.toolBar = null;
+	    sf.toolBar.fixLayout();
     }
     sf.adjustToolBar();
 };
@@ -6779,14 +6799,39 @@ ScriptsMorph.prototype.selectForEdit = function () {
 // ScriptsMorph keyboard support
 
 ScriptsMorph.prototype.edit = function (pos) {
-    var target;
-    var world = this.world();
+    var target,
+		world = this.world();
     if (this.focus) {this.focus.stopEditing(); }
     world.stopEditing();
     if (!ScriptsMorph.prototype.enableKeyboard) {return; }
     target = this.selectForEdit(); // enable copy-on-edit
     target.focus = new ScriptFocusMorph(target, target, pos);
     target.focus.getFocus(world);
+};
+
+ScriptsMorph.prototype.toggleKeyboardEntry = function () {
+	// when the user clicks the keyboard button in the toolbar
+    var target, sorted,
+        world = this.world();
+    if (this.focus) {
+    	this.focus.stopEditing();
+        return;
+    }
+    world.stopEditing();
+    if (!ScriptsMorph.prototype.enableKeyboard) {return; }
+    target = this.selectForEdit(); // enable copy-on-edit
+    target.focus = new ScriptFocusMorph(target, target, target.position());
+    target.focus.getFocus(world);
+    sorted = target.focus.sortedScripts();
+    if (sorted.length) {
+        target.focus.element = sorted[0];
+        if (target.focus.element instanceof HatBlockMorph) {
+            target.focus.nextCommand();
+        }
+    } else {
+        target.focus.moveBy(new Point(50, 50));
+    }
+    target.focus.fixLayout();
 };
 
 // ScriptsMorph context - scripts target
@@ -11988,6 +12033,7 @@ ScriptFocusMorph.prototype.getFocus = function (world) {
     }
     world.keyboardReceiver = this;
     this.fixLayout();
+    this.editor.updateToolbar();
 };
 
 // ScriptFocusMorph layout:
@@ -12262,6 +12308,7 @@ ScriptFocusMorph.prototype.insertVariableGetter = function () {
 
 ScriptFocusMorph.prototype.stopEditing = function () {
     this.editor.focus = null;
+    this.editor.updateToolbar();
     this.world().keyboardReceiver = null;
     this.destroy();
 };

@@ -108,7 +108,7 @@ BooleanSlotMorph, XML_Serializer*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2017-September-19';
+modules.byob = '2017-September-26';
 
 // Declarations
 
@@ -2002,6 +2002,7 @@ BlockEditorMorph.prototype.init = function (definition, target) {
     scriptsFrame.acceptsDrops = false;
     scriptsFrame.contents.acceptsDrops = true;
     scripts.scrollFrame = scriptsFrame;
+    scripts.updateToolbar();
 
     this.addBody(scriptsFrame);
     this.addButton('ok', 'OK');
