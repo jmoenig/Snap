@@ -2832,6 +2832,7 @@ IDE_Morph.prototype.settingsMenu = function () {
         function () {
             ScriptsMorph.prototype.enableKeyboard =
                 !ScriptsMorph.prototype.enableKeyboard;
+            myself.currentSprite.scripts.updateToolbar();
             if (ScriptsMorph.prototype.enableKeyboard) {
                 myself.removeSetting('keyboard');
             } else {

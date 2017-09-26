@@ -6701,7 +6701,12 @@ ScriptsMorph.prototype.updateToolbar = function () {
         sf.toolBar = this.addToolbar();
         sf.add(sf.toolBar);
     }
-    sf.toolBar.keyboardButton.refresh();
+    if (this.enableKeyboard) {
+    	sf.toolBar.keyboardButton.show();
+    	sf.toolBar.keyboardButton.refresh();
+    } else {
+        sf.toolBar.keyboardButton.hide();
+    }
     if (this.dropRecord) {
         if (this.dropRecord.lastRecord) {
             if (!sf.toolBar.undoButton.isVisible) {
@@ -6722,9 +6727,14 @@ ScriptsMorph.prototype.updateToolbar = function () {
                 sf.toolBar.redoButton.hide();
             }
         }
-	    sf.toolBar.fixLayout();
     }
-    sf.adjustToolBar();
+	if (detect(
+			sf.toolBar.children,
+            function (each) {return each.isVisible; }
+    )) {
+	    sf.toolBar.fixLayout();
+	    sf.adjustToolBar();
+	}
 };
 
 // ScriptsMorph sorting blocks and comments
