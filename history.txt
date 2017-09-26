@@ -3660,6 +3660,8 @@ Fixes:
 * Morphic: added stopEditing() event for keyboardReceiver
 * Blocks: added floating toggle for keyboard entry to scripts toolbar
 
+=== v4.1 release candidate ===
+
 
 v4.1 Features:
 * polymorphic sprite-local custom blocks
