@@ -11663,10 +11663,6 @@ WorldMorph.prototype.initEventListeners = function () {
         function () {
             if (myself.useFillPage) {
                 myself.fillPage();
-
-                // fillPage will resize worldCanvas, which clears it.
-                // so we redraw immediately, to prevent flickering
-                myself.updateBroken();
             }
         },
         false
