@@ -1342,21 +1342,34 @@ StageMorph.prototype.initCamera = function () {
 
           this.reset();
 
-          var boundingBox = new THREE.Box3().setFromObject(myself.myObjects),
-              boundingSphere = boundingBox.getBoundingSphere(),
-              center = boundingSphere.center,
-              distance = boundingSphere.radius;
-              console.log(boundingBox)
+          var boundingBox = new THREE.Box3().setFromObject(myself.myObjects);
 
               if (!boundingBox.isEmpty()){
 
-               this.position.set(center.x, center.y, center.z);
-               this.translateZ(distance * 1.2);
+                var boundingSphere = boundingBox.getBoundingSphere(),
+                    center = boundingSphere.center,
+                    distance = boundingSphere.radius;
 
-               myself.controls.center.set(center.x, center.y, center.z);
-               myself.controls.dollyOut(1.2);
-               myself.controls.update();
-               myself.reRender();
+
+                this.position.set(center.x, center.y, center.z);
+                this.translateZ(distance * 1.2);
+
+                myself.controls.center.set(center.x, center.y, center.z);
+
+                if (myself.renderer.is2DMode){
+                  var width = Math.max(myself.width(), 480),
+                      height = Math.max(myself.height(), 360);
+
+                  while (width / this.zoomFactor < distance ||
+                         height / this.zoomFactor < distance){
+                    this.zoomFactor /= 1.1;
+                  }
+                  this.applyZoom();
+                }
+
+                myself.controls.dollyOut(1.2);
+                myself.controls.update();
+                myself.reRender();
              }
         };
     };
