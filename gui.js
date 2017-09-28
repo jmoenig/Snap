@@ -272,14 +272,16 @@ IDE_Morph.prototype.openIn = function (world) {
     if (this.hasLocalStorage()) {
         usr = localStorage['-snap-user'];
         if (usr) {
-            usr = SnapCloud.parseResponse(usr)[0];
-            if (usr) {
-                SnapCloud.username = usr.username || null;
-                SnapCloud.password = usr.password || null;
-                if (SnapCloud.username) {
-                    this.source = 'cloud';
+            SnapCloud.checkCredentials(
+                function (username) {
+                    if (username) {
+                        this.source = 'cloud';
+                    }
+                },
+                function () {
+                    delete localStorage['-snap-user'];
                 }
-            }
+            );
         }
     }
 
@@ -5050,20 +5052,12 @@ IDE_Morph.prototype.initializeCloud = function () {
     new DialogBoxMorph(
         null,
         function (user) {
-            var pwh = hex_sha512(user.password),
-                str;
             SnapCloud.login(
                 user.username,
-                pwh,
+                user.password,
                 function () {
                     if (user.choice) {
-                        str = SnapCloud.encodeDict(
-                            {
-                                username: user.username,
-                                password: pwh
-                            }
-                        );
-                        localStorage['-snap-user'] = str;
+                        localStorage['-snap-user'] = user.username;
                     }
                     myself.source = 'cloud';
                     myself.showMessage('now connected.', 2);
@@ -5098,13 +5092,14 @@ IDE_Morph.prototype.createCloudAccount = function () {
         function (user) {
             SnapCloud.signup(
                 user.username,
+                user.password,
+                user.passwordRepeat,
                 user.email,
                 function (txt, title) {
                     new DialogBoxMorph().inform(
                         title,
                         txt +
-                            '.\n\nAn e-mail with your password\n' +
-                            'has been sent to the address provided',
+                            '.\n\nYou can now log in.',
                         world,
                         myself.cloudIcon(null, new Color(0, 180, 0))
                     );
