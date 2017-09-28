@@ -1116,7 +1116,7 @@ SnapSerializer.prototype.loadBlock = function (model, isReporter, object) {
     } else if (model.tag === 'custom-block') {
         isGlobal = model.attributes.scope ? false : true;
         receiver = isGlobal ? this.project.stage : object;
-        if (isGlobal) {
+        if (isGlobal && receiver) {
             info = detect(receiver.globalBlocks, function (block) {
                 return block.blockSpec() === model.attributes.s;
             });
@@ -1128,7 +1128,7 @@ SnapSerializer.prototype.loadBlock = function (model, isReporter, object) {
                     }
                 );
             }
-        } else {
+        } else if (receiver) {
             // lookup in inherited methods
             info = detect(receiver.customBlocks, function (block) {
                 return block.blockSpec() === model.attributes.s;

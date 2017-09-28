@@ -1904,6 +1904,9 @@ IDE_Morph.prototype.droppedText = function (aString, name) {
     if (aString.indexOf('<media') === 0) {
         return this.openMediaString(aString);
     }
+    if (aString.indexOf('<script') === 0) {
+        return this.openScriptString(aString);
+    }
 };
 
 IDE_Morph.prototype.droppedBinary = function (anArrayBuffer, name) {
@@ -4276,6 +4279,60 @@ IDE_Morph.prototype.openMediaString = function (str) {
         this.serializer.loadMedia(str);
     }
     this.showMessage('Imported Media Module.', 2);
+};
+
+IDE_Morph.prototype.openScriptString = function (str) {
+    var msg,
+        myself = this;
+    this.nextSteps([
+        function () {
+            msg = myself.showMessage('Opening script...');
+        },
+        function () {nop(); }, // yield (bug in Chrome)
+        function () {
+            myself.rawOpenScriptString(str);
+        },
+        function () {
+            msg.destroy();
+        }
+    ]);
+};
+
+IDE_Morph.prototype.rawOpenScriptString = function (str) {
+    var xml,
+        script,
+        scripts = this.currentSprite.scripts,
+        world = this.world(),
+        dropPosition = world.hand.position(),
+        myself = this;
+
+    if (Process.prototype.isCatchingErrors) {
+        try {
+            xml = this.serializer.parse(str, this.currentSprite);
+            script = this.serializer.loadScript(xml, this.currentSprite);
+        } catch (err) {
+            this.showMessage('Load failed: ' + err);
+        }
+    } else {
+        xml = this.serializer.loadScript(str, this.currentSprite);
+        script = this.serializer.loadScript(xml, this.currentSprite);
+    }
+
+    scripts.add(script);
+
+    if (world.topMorphAt(dropPosition) !== scripts) {
+        dropPosition = new Point(
+            scripts.left() + scripts.cleanUpMargin,
+            scripts.top() + scripts.cleanUpMargin);
+    }
+
+    script.setCenter(dropPosition);
+    scripts.adjustBounds();
+
+    this.showMessage(
+        'Imported Script.',
+        2
+    );
 };
 
 IDE_Morph.prototype.openProject = function (name) {
