@@ -177,7 +177,7 @@ Cloud.prototype.post = function (path, body, onSuccess, onError, errorMsg) {
 Cloud.prototype.checkCredentials = function (onSuccess, onError) {
     var myself = this;
     this.getCurrentUser(
-        function (user) { 
+        function (user) {
             if (user.username) {
                 myself.username = user.username;
             }
@@ -222,6 +222,45 @@ Cloud.prototype.signup = function (username, password, password_repeat, email, o
         onSuccess,
         onError,
         'signup failed');
+};
+
+// Projects
+
+Cloud.prototype.saveProject = function (ide, onSuccess, onError) {
+    var myself = this,
+        projectData = ide.projectMeta();
+
+    this.checkCredentials(
+        function (username) {
+            if (username) {
+                var xml = ide.serializer.serialize(ide.stage);
+                // check if serialized data can be parsed back again
+                try {
+                    ide.serializer.parse(xml);
+                } catch (err) {
+                    ide.showMessage('Serialization of program data failed:\n' + err);
+                    throw new Error('Serialization of program data failed:\n' + err);
+                }
+
+                ide.showMessage('Uploading project...');
+
+                myself.post(
+                        '/projects/' + username + '/' +
+                        projectData.projectName + '?' +
+                        myself.encodeDict(projectData),
+                        xml, // POST body
+                        onSuccess,
+                        onError,
+                        'Project could not be saved')
+
+            } else {
+                onError.call(this, 'You are not logged in', 'Snap!Cloud');
+            }
+        }
+    );
+};
+
+Cloud.prototype.getProjectList = function (onSuccess, onError) {
 };
 
 var SnapCloud = new Cloud('http://localhost:8080');

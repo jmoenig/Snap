@@ -3631,11 +3631,19 @@ IDE_Morph.prototype.save = function () {
         if (this.source === 'local') { // as well as 'examples'
             this.saveProject(this.projectName);
         } else { // 'cloud'
-            this.saveProjectToCloud(this.projectName);
+            this.saveProjectToCloud();
         }
     } else {
         this.saveProjectsBrowser();
     }
+};
+
+IDE_Morph.prototype.projectMeta = function () {
+    return {
+        projectName: this.projectName,
+        notes: this.projectNotes,
+        thumbnail: this.stage.fullImageClassic().toDataURL(),
+    };
 };
 
 IDE_Morph.prototype.saveProject = function (name) {
@@ -5207,13 +5215,13 @@ IDE_Morph.prototype.logout = function () {
     );
 };
 
-IDE_Morph.prototype.saveProjectToCloud = function (name) {
+IDE_Morph.prototype.saveProjectToCloud = function (projectData) {
     var myself = this;
-    if (name) {
+    if (projectData) {
         this.showMessage('Saving project\nto the cloud...');
-        this.setProjectName(name);
+        this.setProjectName(projectData.projectName);
         SnapCloud.saveProject(
-            this,
+            projectData,
             function () {myself.showMessage('saved.', 2); },
             this.cloudError()
         );
@@ -6161,6 +6169,7 @@ ProjectDialogMorph.prototype.saveProject = function () {
         myself = this;
 
     this.ide.projectNotes = notes || this.ide.projectNotes;
+
     if (name) {
         if (this.source === 'cloud') {
             if (detect(
