@@ -1984,11 +1984,20 @@ Process.prototype.doForever = function (body) {
     }
     this.pushContext();
 };
-
 Process.prototype.doRepeat = function (counter, body) {
     var block = this.context.expression,
         outer = this.context.outerContext, // for tail call elimination
         isCustomBlock = this.context.isCustomBlock;
+
+	if (isNaN(counter) || !isFinite(counter)) {
+		function DoRepeatError(value) {
+			this.name = "Repeat Error";
+			this.message = localize("The repeat loop was given an " +
+			                        "unsupported number of repetitions: ") + value;
+		}
+
+		throw new DoRepeatError(counter);
+	}
 
     if (counter < 1) { // was '=== 0', which caused infinite loops on non-ints
         return null;
@@ -2466,26 +2475,53 @@ Process.prototype.reportTypeOf = function (thing) {
 
 // Process math primtives
 
+Process.prototype.UndefinedOperationError = function (opName, argA, symbol, argB) {
+    var localOp = localize(opName);
+    this.name = localize("%s operation error").replace("%s", localOp);
+    this.message = localize("undefined %s operation:").replace("%s", localOp);
+    this.message += " ";
+    if (symbol !== undefined && argB !== undefined) {
+        this.message += "(" + argA + ") " + symbol + " (" + argB + ")";
+    } else {
+        this.message += localOp + "(" + argA + ")";
+    }
+}
+
+Process.prototype.checkBinaryOperationResult = function(result, opName, argA, symbol, argB) {
+    if (isNaN(result)) {
+        throw new this.UndefinedOperationError(opName, argA, symbol, argB);
+    }
+    return result;
+}
+
 Process.prototype.reportSum = function (a, b) {
-    return +a + (+b);
+    return this.checkBinaryOperationResult(+a + +b, "sum", +a, "+", +b);
 };
 
 Process.prototype.reportDifference = function (a, b) {
-    return +a - +b;
+    return this.checkBinaryOperationResult(+a - +b, "difference", +a, "-", +b);
 };
 
 Process.prototype.reportProduct = function (a, b) {
-    return +a * +b;
+    return this.checkBinaryOperationResult(+a * +b, "product", +a, "*", +b);
 };
 
 Process.prototype.reportQuotient = function (a, b) {
-    return +a / +b;
+    var result = +a / +b;
+    if (isNaN(result) || +b === 0) {
+        throw new this.UndefinedOperationError("division", +a, "/", +b);
+    }
+    return result;
 };
 
 Process.prototype.reportModulus = function (a, b) {
     var x = +a,
-        y = +b;
-    return ((x % y) + y) % y;
+        y = +b,
+        result = ((x % y) + y) % y;
+    if (isNaN(result) || y === 0) {
+        throw new this.UndefinedOperationError("modulus", x, "mod", y);
+    }
+    return result;
 };
 
 Process.prototype.reportRandom = function (min, max) {
@@ -2617,6 +2653,9 @@ Process.prototype.reportMonadic = function (fname, n) {
         break;
     default:
         nop();
+    }
+    if (isNaN(result)) {
+        throw new this.UndefinedOperationError(fname, n);
     }
     return result;
 };

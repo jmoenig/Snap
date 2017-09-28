@@ -4424,9 +4424,21 @@ SpriteMorph.prototype.setPosition = function (aPoint, justMe) {
     }
 };
 
+SpriteMorph.prototype.defaultFiniteValue = function (num, def) {
+	num = +num || 0;
+    if (isNaN(num) || !isFinite(num)) {
+        return def;
+    } else {
+        return num;
+    }
+}
+
 SpriteMorph.prototype.forward = function (steps) {
     var dest,
-        dist = steps * this.parent.scale || 0;
+        dist;
+    
+    steps = this.defaultFiniteValue(steps, 0);
+    dist = steps * this.parent.scale || 0;
 
     if (dist >= 0) {
         dest = this.position().distanceAngle(dist, this.heading);
@@ -4447,7 +4459,7 @@ SpriteMorph.prototype.forward = function (steps) {
 SpriteMorph.prototype.setHeading = function (degrees, noShadow) {
     var x = this.xPosition(),
         y = this.yPosition(),
-        dir = (+degrees || 0),
+        dir = this.defaultFiniteValue(degrees, 0),
         turn = dir - this.heading;
 
     // apply to myself
@@ -4550,6 +4562,9 @@ SpriteMorph.prototype.gotoXY = function (x, y, justMe, noShadow) {
         newX,
         newY,
         dest;
+    
+    x = this.defaultFiniteValue(x, 0);
+    y = this.defaultFiniteValue(y, 0);
 
     if (!stage) {return; }
     if (!noShadow) {
