@@ -3671,6 +3671,7 @@ Fixes:
 * Blocks: made "import script" undoable
 * Objects: make sure inheritance hierarchies are consistently made temporary
 * new "Animation" library
+* new "Pixels" library for MediaComp
 
 
 v4.1 Features:
@@ -3707,6 +3708,7 @@ v4.1 Features:
 * "Make a block" button in every category
 * experimental "download script" feature
 * new "Animation" library
+* new "Pixels" library for MediaComp
 
 Fixes:
 * changed keyboard shortcut indicator for “find blocks” to “^”
