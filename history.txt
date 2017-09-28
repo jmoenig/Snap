@@ -3667,6 +3667,8 @@ Fixes:
 170928
 ------
 * GUI: enable experimental setting for "ternary Boolean slots"
+* GUI, Blocks: experimental feature: Download script, thanks, Bernat!
+* Blocks: made "import script" undoable
 
 
 v4.1 Features:
@@ -3701,6 +3703,7 @@ v4.1 Features:
 * prevent context menu and dragging for stage watchers in presentation mode
 * "floating" search and make-a-block buttons in the blocks palette
 * "Make a block" button in every category
+* experimental "download script" feature
 
 Fixes:
 * changed keyboard shortcut indicator for “find blocks” to “^”

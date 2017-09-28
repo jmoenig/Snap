@@ -61,7 +61,7 @@ normalizeCanvas, contains*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2017-September-01';
+modules.store = '2017-September-28';
 
 
 // XML_Serializer ///////////////////////////////////////////////////////
@@ -1116,7 +1116,7 @@ SnapSerializer.prototype.loadBlock = function (model, isReporter, object) {
     } else if (model.tag === 'custom-block') {
         isGlobal = model.attributes.scope ? false : true;
         receiver = isGlobal ? this.project.stage : object;
-        if (isGlobal && receiver) {
+        if (isGlobal) {
             info = detect(receiver.globalBlocks, function (block) {
                 return block.blockSpec() === model.attributes.s;
             });
@@ -1128,7 +1128,7 @@ SnapSerializer.prototype.loadBlock = function (model, isReporter, object) {
                     }
                 );
             }
-        } else if (receiver) {
+        } else {
             // lookup in inherited methods
             info = detect(receiver.customBlocks, function (block) {
                 return block.blockSpec() === model.attributes.s;

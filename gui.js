@@ -4301,10 +4301,7 @@ IDE_Morph.prototype.openScriptString = function (str) {
 IDE_Morph.prototype.rawOpenScriptString = function (str) {
     var xml,
         script,
-        scripts = this.currentSprite.scripts,
-        world = this.world(),
-        dropPosition = world.hand.position(),
-        myself = this;
+        scripts = this.currentSprite.scripts;
 
     if (Process.prototype.isCatchingErrors) {
         try {
@@ -4317,18 +4314,16 @@ IDE_Morph.prototype.rawOpenScriptString = function (str) {
         xml = this.serializer.loadScript(str, this.currentSprite);
         script = this.serializer.loadScript(xml, this.currentSprite);
     }
-
+    script.setPosition(this.world().hand.position());
     scripts.add(script);
-
-    if (world.topMorphAt(dropPosition) !== scripts) {
-        dropPosition = new Point(
-            scripts.left() + scripts.cleanUpMargin,
-            scripts.top() + scripts.cleanUpMargin);
-    }
-
-    script.setCenter(dropPosition);
     scripts.adjustBounds();
-
+    scripts.lastDroppedBlock = script;
+    scripts.recordDrop(
+		{
+            origin: this.palette,
+            position: this.palette.center()
+        }
+    );
     this.showMessage(
         'Imported Script.',
         2
