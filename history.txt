@@ -3670,6 +3670,7 @@ Fixes:
 * GUI, Blocks: experimental feature: Download script, thanks, Bernat!
 * Blocks: made "import script" undoable
 * Objects: make sure inheritance hierarchies are consistently made temporary
+* new "Animation" library
 
 
 v4.1 Features:
@@ -3705,6 +3706,7 @@ v4.1 Features:
 * "floating" search and make-a-block buttons in the blocks palette
 * "Make a block" button in every category
 * experimental "download script" feature
+* new "Animation" library
 
 Fixes:
 * changed keyboard shortcut indicator for “find blocks” to “^”
