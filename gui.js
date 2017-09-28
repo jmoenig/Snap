@@ -67,7 +67,7 @@ AlignmentMorph, TabMorph, Costume, MorphicPreferences, Sound, BlockMorph,
 ToggleMorph, InputSlotDialogMorph, ScriptsMorph, isNil, SymbolMorph,
 BlockExportDialogMorph, BlockImportDialogMorph, SnapTranslator, localize,
 List, ArgMorph, SnapCloud, Uint8Array, HandleMorph, SVG_Costume,
-fontHeight, hex_sha512, sb, CommentMorph, CommandBlockMorph,
+fontHeight, hex_sha512, sb, CommentMorph, CommandBlockMorph, BooleanSlotMorph,
 BlockLabelPlaceHolderMorph, Audio, SpeechBubbleMorph, ScriptFocusMorph,
 XML_Element, WatcherMorph, BlockRemovalDialogMorph, saveAs, TableMorph,
 isSnapObject, isRetinaEnabled, disableRetinaSupport, enableRetinaSupport,
@@ -75,7 +75,7 @@ isRetinaSupported, SliderMorph, Animation*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2017-September-26';
+modules.gui = '2017-September-28';
 
 // Declarations
 
@@ -2650,6 +2650,17 @@ IDE_Morph.prototype.settingsMenu = function () {
         'uncheck to turn off\nvisible stepping',
         'check to turn on\n visible stepping (slow)',
         false
+    );
+    addPreference(
+        'Ternary Boolean slots',
+        function () {
+        	BooleanSlotMorph.prototype.isTernary =
+        		!BooleanSlotMorph.prototype.isTernary;
+      	},
+        BooleanSlotMorph.prototype.isTernary,
+        'uncheck to limit\nBoolean slots to true / false',
+        'check to allow\nempty Boolean slots',
+        true
     );
     addPreference(
         'Camera support',

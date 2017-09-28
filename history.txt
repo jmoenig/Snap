@@ -3664,6 +3664,10 @@ Fixes:
 
 === v4.1 release candidate ===
 
+170928
+------
+* GUI: enable experimental setting for "ternary Boolean slots"
+
 
 v4.1 Features:
 * polymorphic sprite-local custom blocks
