@@ -3669,6 +3669,7 @@ Fixes:
 * GUI: enable experimental setting for "ternary Boolean slots"
 * GUI, Blocks: experimental feature: Download script, thanks, Bernat!
 * Blocks: made "import script" undoable
+* Objects: make sure inheritance hierarchies are consistently made temporary
 
 
 v4.1 Features:

@@ -83,7 +83,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph,
 AlignmentMorph*/
 
-modules.objects = '2017-September-25';
+modules.objects = '2017-September-28';
 
 var SpriteMorph;
 var StageMorph;
@@ -3412,6 +3412,10 @@ SpriteMorph.prototype.perpetuate = function () {
     var stage = this.parentThatIsA(StageMorph),
         ide = this.parentThatIsA(IDE_Morph);
 
+	// make sure my exemplar-chain is fully perpetuated
+    if (this.exemplar) {
+        this.exemplar.perpetuate();
+    }
     if (!this.isTemporary || !stage || !ide) {
         return;
     }
@@ -3446,8 +3450,13 @@ SpriteMorph.prototype.release = function () {
     if (this.isTemporary || !this.exemplar || !stage || !ide) {
         return;
     }
+
+	// make sure all parts and instances are also released
     this.parts.forEach(function (part) {
         part.release();
+    });
+    this.instances.forEach(function (inst) {
+    	inst.release();
     });
     this.isTemporary = true;
     this.name = '';
