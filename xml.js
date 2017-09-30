@@ -231,6 +231,11 @@ XML_Element.prototype.toString = function (isFormatted, indentationLevel) {
         result += indent;
     }
 
+    if (this.tag === 'CDATA') {
+        result += '<![CDATA[' + this.contents + ']]>';
+        return result;
+    }
+
     // opening tag
     result += ('<' + this.tag);
 
