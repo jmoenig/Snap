@@ -16,6 +16,10 @@ function ActionManager() {
     this.initialize();
 }
 
+ActionManager.prototype.configure = function(ide) {
+    this.__ide = ide;
+};
+
 ActionManager.prototype.addActions = function() {
     var actions = Array.prototype.slice.call(arguments),
         myself = this;
@@ -123,7 +127,7 @@ ActionManager.prototype.initializeEventMethods = function() {
 
 ActionManager.prototype.initializeRecords = function() {
     this.currentBatch = null;
-    this.lastSeen = 0;
+    this.lastSeen = -1;
     this.lastSent = null;
     this.idCount = 0;
 
@@ -1027,6 +1031,11 @@ ActionManager.prototype._addSprite = function(sprite, costume) {
     serialized = '<sprites>' + this.serialize(sprite) + '</sprites>';
 
     return [serialized, this.id, sprite.id];
+};
+
+ActionManager.prototype._openProject = function(str) {
+    this.initializeRecords();
+    return [str];
 };
 
 ActionManager.prototype.uniqueIdForImport = function (str) {
@@ -2117,11 +2126,6 @@ ActionManager.prototype.onSetCustomBlockType = function(id, cat, type) {
 
 ////////////////////////// Sprites //////////////////////////
 ActionManager.prototype.ide = function() {
-    if (!this.__ide) {
-        var ownerId = Object.keys(this._owners)[0];
-        this.__ide = this._owners[ownerId].parentThatIsA(IDE_Morph);
-    }
-
     return this.__ide;
 };
 
@@ -2363,51 +2367,48 @@ ActionManager.prototype.onImportBlocks = function(aString, lbl) {
 };
 
 ActionManager.prototype.onOpenProject = function(str) {
+    var myself = this,
+        project = null,
+        ide = this.ide();
+
+    SnapUndo.reset();
+    this.initializeRecords();
     if (str) {
         if (str.indexOf('<project') === 0) {
-            this.ide().rawOpenProjectString(str);
+            project = this.ide().rawOpenProjectString(str);
         } else if (str.indexOf('<snapdata') === 0) {
-            this.ide().rawOpenCloudDataString(str);
+            project = this.ide().rawOpenCloudDataString(str);
         }
+
     } else {
-        this.initializeRecords();
         this.ide().newProject();
     }
-    this.completeAction();
-};
-
-//////////////////// Loading Projects ////////////////////
-ActionManager.prototype.loadProject = function(ide, lastSeen, serialized) {
-    var myself = this,
-        event;
-
-    // Clear old info
-    this.initializeRecords();
-
-    // Record the event
-    event = {
-        type: 'openProject',
-        time: Date.now(),
-        args: []
-    };
-
-    if (serialized) {
-        event.args.push(serialized);
-    }
-    if (SnapUndo.allEvents.length === 0) {
-        SnapUndo.record(event);
-    }
-
-    // Update the id counter
-    this.lastSeen = lastSeen || 0;
 
     // Load the owners
     ide.sprites.asArray().concat(ide.stage).forEach(function(sprite) {
         return myself.loadOwner(sprite);
     });
 
-    this.__ide = ide;
-    return event;
+    var event = this.currentEvent;
+
+    this.completeAction();
+
+    if (!this.ide().isReplayMode) {
+        // Load the replay and action manager state from project
+        var len = SnapUndo.allEvents.length;
+
+        // Remove the openProject event from the replay history.
+        // In the future, this information would be good to collect
+        // but it will not be recorded for now since it will exponentially
+        // inflate the project size...
+        if (event === SnapUndo.allEvents[len-1]) {
+            SnapUndo.allEvents.pop();
+        }
+
+        if (project && project.collabStartIndex !== undefined) {
+            this.lastSeen = project.collabStartIndex;
+        }
+    }
 };
 
 ActionManager.prototype._getCurrentTarget = function(block) {

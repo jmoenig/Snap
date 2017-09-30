@@ -282,9 +282,9 @@ IDE_Morph.prototype.openIn = function (world) {
     }
 
     this.buildPanes();
+    SnapActions.configure(this);
     SnapActions.disableCollaboration();
     SnapUndo.reset();
-    SnapActions.loadProject(this);
     world.add(this);
     world.userMenu = this.userMenu;
 
@@ -388,9 +388,9 @@ IDE_Morph.prototype.openIn = function (world) {
                 hash = decodeURIComponent(hash);
             }
             if (hash.substr(0, 8) === '<project>') {
-                this.rawOpenProjectString(hash);
+                SnapActions.openProject(hash);
             } else {
-                this.rawOpenProjectString(getURL(hash));
+                SnapActions.openProject(getURL(hash));
             }
             applyFlags(SnapCloud.parseDict(location.hash.substr(5)));
         } else if (location.hash.substr(0, 9) === '#present:') {
@@ -414,13 +414,7 @@ IDE_Morph.prototype.openIn = function (world) {
                         },
                         function () {nop(); }, // yield (bug in Chrome)
                         function () {
-                            if (projectData.indexOf('<snapdata') === 0) {
-                                myself.rawOpenCloudDataString(projectData);
-                            } else if (
-                                projectData.indexOf('<project') === 0
-                            ) {
-                                myself.rawOpenProjectString(projectData);
-                            }
+                            SnapActions.openProject(projectData);
                             myself.hasChangedMedia = true;
                         },
                         function () {
@@ -454,13 +448,7 @@ IDE_Morph.prototype.openIn = function (world) {
                         },
                         function () {nop(); }, // yield (bug in Chrome)
                         function () {
-                            if (projectData.indexOf('<snapdata') === 0) {
-                                myself.rawOpenCloudDataString(projectData);
-                            } else if (
-                                projectData.indexOf('<project') === 0
-                            ) {
-                                myself.rawOpenProjectString(projectData);
-                            }
+                            SnapActions.openProject(projectData);
                             myself.hasChangedMedia = true;
                         },
                         function () {
@@ -498,6 +486,8 @@ IDE_Morph.prototype.openIn = function (world) {
             // Get the session id and join it!
             SnapActions.enableCollaboration();
             SnapActions.joinSession(sessionId, this.cloudError());
+        } else {
+            SnapActions.openProject();
         }
     }
 
@@ -2067,7 +2057,7 @@ IDE_Morph.prototype.refreshIDE = function () {
     this.buildPanes();
     this.fixLayout();
     if (this.loadNewProject) {
-        this.newProject();
+        SnapActions.openProject();
     } else {
         SnapUndo.reset();
         this.openProjectString(projectData);
@@ -2458,9 +2448,7 @@ IDE_Morph.prototype.cloudMenu = function () {
                                     },
                                     function () {nop(); }, // yield (Chrome)
                                     function () {
-                                        myself.rawOpenCloudDataString(
-                                            projectData
-                                        );
+                                        SnapActions.openProject(projectData);
                                     },
                                     function () {
                                         msg.destroy();
@@ -3730,7 +3718,6 @@ IDE_Morph.prototype.newProject = function () {
     this.createCorral();
     this.selectSprite(this.stage.children[0]);
     this.fixLayout();
-    SnapActions.loadProject(this);
 };
 
 IDE_Morph.prototype.isPreviousVersion = function () {
@@ -4237,7 +4224,7 @@ IDE_Morph.prototype.openProjectString = function (str) {
         },
         function () {nop(); }, // yield (bug in Chrome)
         function () {
-            myself.rawOpenProjectString(str);
+            SnapActions.openProject(str);
         },
         function () {
             msg.destroy();
@@ -4272,8 +4259,8 @@ IDE_Morph.prototype.rawOpenProjectString = function (str) {
             this
         );
     }
-    SnapActions.loadProject(this, project.collabStartIndex, str);
     this.stopFastTracking();
+    return project;
 };
 
 IDE_Morph.prototype.openCloudDataString = function (str) {
@@ -4288,7 +4275,7 @@ IDE_Morph.prototype.openCloudDataString = function (str) {
         },
         function () {nop(); }, // yield (bug in Chrome)
         function () {
-            myself.rawOpenCloudDataString(str);
+            SnapActions.openProject(str);
         },
         function () {
             msg.destroy();
@@ -4297,8 +4284,8 @@ IDE_Morph.prototype.openCloudDataString = function (str) {
 };
 
 IDE_Morph.prototype.rawOpenCloudDataString = function (str) {
-    var project,
-        model;
+    var model,
+        project;
     StageMorph.prototype.hiddenPrimitives = {};
     StageMorph.prototype.codeMappings = {};
     StageMorph.prototype.codeHeaders = {};
@@ -4333,8 +4320,8 @@ IDE_Morph.prototype.rawOpenCloudDataString = function (str) {
             this
         );
     }
-    SnapActions.loadProject(this, project.collabStartIndex, str);
     this.stopFastTracking();
+    return project;
 };
 
 IDE_Morph.prototype.uniqueIdForImport = function (str, name, callback) {
@@ -4931,9 +4918,9 @@ IDE_Morph.prototype.createNewProject = function () {
         'New Project',
         function () {
             myself.exitReplayMode();
-            myself.newProject();
             SnapActions.disableCollaboration();
             SnapUndo.reset();
+            SnapActions.openProject();
         }
     );
 };
@@ -5010,7 +4997,7 @@ IDE_Morph.prototype.reflectLanguage = function (lang, callback) {
     this.createCorralBar();
     this.fixLayout();
     if (this.loadNewProject) {
-        this.newProject();
+        SnapActions.openProject();
         location.hash = urlBar;
     } else {
         SnapUndo.reset();
