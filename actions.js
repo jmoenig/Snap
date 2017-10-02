@@ -336,7 +336,7 @@ ActionManager.prototype.applyEvent = function(event) {
     var myself = this,
         ide = this.ide();
 
-    if (ide.isReplayMode && !event.isReplay) {
+    if (ide.isReplayMode && !event.isReplay && event.type !== 'openProject') {
         ide.promptExitReplay(function() {
             if (myself.isLeader) {
                 myself.acceptEvent(event);
