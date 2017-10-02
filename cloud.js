@@ -5,7 +5,7 @@
     a backend API for SNAP!
 
     written by Bernat Romagosa
-    inspired in old cloud API by Jens Mönig
+    inspired in the old cloud API by Jens Mönig
 
     Copyright (C) 2017 by Bernat Romagosa
     Copyright (C) 2015 by Jens Mönig
@@ -88,7 +88,9 @@ Cloud.prototype.encodeDict = function (dict) {
 
 // Low level functionality
 
-Cloud.prototype.get = function (path, onSuccess, onError, errorMsg) {
+// TODO: refactor all these
+
+Cloud.prototype.get = function (path, onSuccess, onError, errorMsg, wantsRawResponse) {
     var request = new XMLHttpRequest(),
         myself = this;
     try {
@@ -105,7 +107,9 @@ Cloud.prototype.get = function (path, onSuccess, onError, errorMsg) {
         request.onreadystatechange = function () {
             if (request.readyState === 4) {
                 if (request.responseText) {
-                    var response = JSON.parse(request.responseText);
+                    var response = wantsRawResponse ?
+                        request.responseText :
+                        JSON.parse(request.responseText);
                     if (response.errors) {
                        onError.call(
                             null,
@@ -172,6 +176,49 @@ Cloud.prototype.post = function (path, body, onSuccess, onError, errorMsg) {
     }
 };
 
+Cloud.prototype.doDelete = function (path, onSuccess, onError, errorMsg) {
+    var request = new XMLHttpRequest(),
+        myself = this;
+    try {
+        request.open(
+            'DELETE',
+            this.url + path,
+            true
+        );
+        request.setRequestHeader(
+            'Content-Type',
+            'application/json; charset=utf-8'
+        );
+        request.withCredentials = true;
+        request.onreadystatechange = function () {
+            if (request.readyState === 4) {
+                if (request.responseText) {
+                    var response = JSON.parse(request.responseText);
+                    if (response.errors) {
+                       onError.call(
+                            null,
+                            response.errors[0],
+                            errorMsg
+                        );
+                    } else {
+                        onSuccess.call(null, response.message || response);
+                    }
+                } else {
+                    onError.call(
+                        null,
+                        myself.url,
+                        errorMsg
+                    );
+                }
+            }
+        };
+        request.send();
+    } catch (err) {
+        onError.call(this, err.toString(), 'Cloud Error');
+    }
+};
+
+
 // Credentials management
 
 Cloud.prototype.checkCredentials = function (onSuccess, onError) {
@@ -183,7 +230,8 @@ Cloud.prototype.checkCredentials = function (onSuccess, onError) {
             }
             if (onSuccess) { onSuccess.call(null, user.username); }
         },
-        onError);
+        onError
+    );
 };
 
 Cloud.prototype.getCurrentUser = function (onSuccess, onError) {
@@ -196,7 +244,8 @@ Cloud.prototype.logout = function (onSuccess, onError) {
         null,
         onSuccess,
         onError,
-        'logout failed');
+        'logout failed'
+    );
 };
 
 Cloud.prototype.login = function (username, password, onSuccess, onError) {
@@ -227,31 +276,68 @@ Cloud.prototype.signup = function (username, password, password_repeat, email, o
 // Projects
 
 Cloud.prototype.saveProject = function (ide, onSuccess, onError) {
-    var myself = this,
-        projectData = ide.projectMeta();
+    var myself = this;
 
     this.checkCredentials(
         function (username) {
             if (username) {
-                var xml = ide.serializer.serialize(ide.stage);
+                var xml = ide.serializer.serialize(ide.stage),
+                    thumbnail = ide.stage.thumbnail(
+                        SnapSerializer.prototype.thumbnailSize).toDataURL(),
+                    body, mediaSize, size;
+
+                ide.serializer.isCollectingMedia = true;
+                body = {
+                    notes: ide.projectNotes,
+                    xml: xml,
+                    media: ide.hasChangedMedia ?
+                        ide.serializer.mediaXML(ide.projectName) : null,
+                    thumbnail: thumbnail
+                };
+                ide.serializer.isCollectingMedia = false;
+                ide.serializer.flushMedia();
+
+                mediaSize = body.media ? body.media.length : 0;
+                size = body.xml.length + mediaSize;
+                if (mediaSize > 10485760) {
+                    new DialogBoxMorph().inform(
+                        'Snap!Cloud - Cannot Save Project',
+                        'The media inside this project exceeds 10 MB.\n' +
+                            'Please reduce the size of costumes or sounds.\n',
+                        ide.world(),
+                        ide.cloudIcon(null, new Color(180, 0, 0))
+                    );
+                    throw new Error('Project media exceeds 10 MB size limit');
+                }
+
                 // check if serialized data can be parsed back again
                 try {
-                    ide.serializer.parse(xml);
+                    ide.serializer.parse(body.xml);
                 } catch (err) {
                     ide.showMessage('Serialization of program data failed:\n' + err);
                     throw new Error('Serialization of program data failed:\n' + err);
                 }
+                if (body.media !== null) {
+                    try {
+                        ide.serializer.parse(body.media);
+                    } catch (err) {
+                        ide.showMessage('Serialization of media failed:\n' + err);
+                        throw new Error('Serialization of media failed:\n' + err);
+                    }
+                }
+                ide.serializer.isCollectingMedia = false;
+                ide.serializer.flushMedia();
 
-                ide.showMessage('Uploading project...');
+                ide.showMessage('Uploading ' + Math.round(size / 1024) + ' KB...');
 
                 myself.post(
-                        '/projects/' + username + '/' +
-                        projectData.projectName + '?' +
-                        myself.encodeDict(projectData),
-                        xml, // POST body
-                        onSuccess,
-                        onError,
-                        'Project could not be saved')
+                    '/projects/' + username + '/' +
+                    ide.projectName,
+                    JSON.stringify(body), // POST body
+                    onSuccess,
+                    onError,
+                    'Project could not be saved'
+                );
 
             } else {
                 onError.call(this, 'You are not logged in', 'Snap!Cloud');
@@ -260,7 +346,85 @@ Cloud.prototype.saveProject = function (ide, onSuccess, onError) {
     );
 };
 
+// TODO: refactor all these
+
 Cloud.prototype.getProjectList = function (onSuccess, onError) {
+    var myself = this;
+
+    this.checkCredentials(
+        function (username) {
+            if (username) {
+                myself.get(
+                    '/projects/' + username,
+                    onSuccess,
+                    onError,
+                    'Could not fetch projects'
+                );
+            } else {
+                onError.call(this, 'You are not logged in', 'Snap!Cloud');
+            }
+        }
+    );
+};
+
+Cloud.prototype.getThumbnail = function (projectName, onSuccess, onError) {
+    var myself = this;
+
+    this.checkCredentials(
+        function (username) {
+            if (username) {
+                myself.get(
+                    '/projects/' + username + '/' + projectName + '/thumbnail',
+                    onSuccess,
+                    onError,
+                    'Could not fetch thumbnail',
+                    true // raw response contents
+                );
+            } else {
+                onError.call(this, 'You are not logged in', 'Snap!Cloud');
+            }
+        }
+    );
+};
+
+Cloud.prototype.getRawProject = function (projectName, onSuccess, onError) {
+    var myself = this;
+
+    this.checkCredentials(
+        function (username) {
+            if (username) {
+                myself.get(
+                    '/projects/' + username + '/' + projectName,
+                    onSuccess,
+                    onError,
+                    'Could not fetch project',
+                    true // raw response contents
+                );
+            } else {
+                onError.call(this, 'You are not logged in', 'Snap!Cloud');
+            }
+
+        }
+    );
+};
+
+Cloud.prototype.deleteProject = function (projectName, onSuccess, onError) {
+    var myself = this;
+
+    this.checkCredentials(
+        function (username) {
+            if (username) {
+                myself.doDelete(
+                    '/projects/' + username + '/' + projectName,
+                    onSuccess,
+                    onError
+                );
+            } else {
+                onError.call(this, 'You are not logged in', 'Snap!Cloud');
+            }
+
+        }
+    );
 };
 
 var SnapCloud = new Cloud('http://localhost:8080');
