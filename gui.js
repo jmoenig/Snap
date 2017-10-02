@@ -2190,7 +2190,7 @@ IDE_Morph.prototype.addNewSprite = function () {
     sprite.setXPosition(rnd.call(this, -220, 220));
     sprite.setYPosition(rnd.call(this, -160, 160));
 
-    SnapActions.addSprite(sprite);
+    return SnapActions.addSprite(sprite);
 };
 
 IDE_Morph.prototype.paintNewSprite = function () {
