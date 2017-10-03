@@ -251,16 +251,21 @@ ActionManager.prototype.completeAction = function(err, result) {
     }
 
     // Call 'success' or 'reject', if relevant
+    var fn;
     if (action.user === this.id) {
         if (err) {
             if (this._onReject[action.id]) {
-                this._onReject[action.id](err);
+                fn = this._onReject[action.id];
+                delete this._onReject[action.id];
+                delete this._onAccept[action.id];
+                fn(err);
             }
         } else if (this._onAccept[action.id]){
-            this._onAccept[action.id](result);
+            fn = this._onAccept[action.id];
+            delete this._onAccept[action.id];
+            delete this._onReject[action.id];
+            fn(result);
         }
-        delete this._onAccept[action.id];
-        delete this._onReject[action.id];
 
         // We can call reject for any ids less than the given id...
         for (var i = action.id; i--;) {
