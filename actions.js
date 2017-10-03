@@ -252,9 +252,12 @@ ActionManager.prototype.completeAction = function(err, result) {
 
     // Call 'success' or 'reject', if relevant
     if (action.user === this.id) {
-        var dictName = err ? '_onReject' : '_onAccept';
-        if (this[dictName][action.id]) {
-            this[dictName][action.id](result);
+        if (err) {
+            if (this._onReject[action.id]) {
+                this._onReject[action.id](err);
+            }
+        } else if (this._onAccept[action.id]){
+            this._onAccept[action.id](result);
         }
         delete this._onAccept[action.id];
         delete this._onReject[action.id];
