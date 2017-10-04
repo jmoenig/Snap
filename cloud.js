@@ -46,12 +46,8 @@ function Cloud(url) {
 Cloud.prototype.init = function (url) {
     this.url = url;
     this.username = null;
-    this.checkCredentials();
 };
 
-Cloud.prototype.clear = function () {
-    this.username = null;
-};
 
 // Dictionary handling
 
@@ -193,6 +189,18 @@ Cloud.prototype.withCredentialsRequest = function (
 
 // Credentials management
 
+Cloud.prototype.initSession = function (onSuccess) {
+    var myself = this;
+    this.request(
+        'POST',
+        '/init',
+        function () { myself.checkCredentials(onSuccess); },
+        nop,
+        null,
+        true
+    );
+};
+
 Cloud.prototype.checkCredentials = function (onSuccess, onError) {
     var myself = this;
     this.getCurrentUser(
@@ -211,20 +219,25 @@ Cloud.prototype.getCurrentUser = function (onSuccess, onError) {
 };
 
 Cloud.prototype.logout = function (onSuccess, onError) {
+    this.username = null;
     this.request(
         'POST',
-        '/users/' + this.username + '/logout',
+        '/logout',
         onSuccess,
         onError,
         'logout failed'
     );
 };
 
-Cloud.prototype.login = function (username, password, onSuccess, onError) {
+Cloud.prototype.login = function (username, password, persist, onSuccess, onError) {
     var myself = this;
     this.request(
         'POST',
-        '/users/' + username + '/login?' + this.encodeDict({ password: password }),
+        '/users/' + username + '/login?' +
+            this.encodeDict({
+                password: password,
+                persist: persist
+            }),
         function () {
             myself.checkCredentials(onSuccess, onError);
         },

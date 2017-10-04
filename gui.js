@@ -268,22 +268,13 @@ IDE_Morph.prototype.init = function (isAutoFill) {
 IDE_Morph.prototype.openIn = function (world) {
     var hash, usr, myself = this, urlLanguage = null;
 
-    // get persistent user data, if any
-    if (this.hasLocalStorage()) {
-        usr = localStorage['-snap-user'];
-        if (usr) {
-            SnapCloud.checkCredentials(
-                function (username) {
-                    if (username) {
-                        this.source = 'cloud';
-                    }
-                },
-                function () {
-                    delete localStorage['-snap-user'];
-                }
-            );
+    SnapCloud.initSession(
+        function (username) {
+            if (username) {
+                myself.source = 'cloud';
+            }
         }
-    }
+    );
 
     this.buildPanes();
     world.add(this);
@@ -5055,10 +5046,8 @@ IDE_Morph.prototype.initializeCloud = function () {
             SnapCloud.login(
                 user.username,
                 user.password,
+                user.choice,
                 function () {
-                    if (user.choice) {
-                        localStorage['-snap-user'] = user.username;
-                    }
                     myself.source = 'cloud';
                     myself.showMessage('now connected.', 2);
                 },
@@ -5082,11 +5071,7 @@ IDE_Morph.prototype.initializeCloud = function () {
 IDE_Morph.prototype.createCloudAccount = function () {
     var myself = this,
         world = this.world();
-/*
-    // force-logout, commented out for now:
-    delete localStorage['-snap-user'];
-    SnapCloud.clear();
-*/
+
     new DialogBoxMorph(
         null,
         function (user) {
@@ -5124,11 +5109,7 @@ IDE_Morph.prototype.createCloudAccount = function () {
 IDE_Morph.prototype.resetCloudPassword = function () {
     var myself = this,
         world = this.world();
-/*
-    // force-logout, commented out for now:
-    delete localStorage['-snap-user'];
-    SnapCloud.clear();
-*/
+
     new DialogBoxMorph(
         null,
         function (user) {
@@ -5194,14 +5175,11 @@ IDE_Morph.prototype.changeCloudPassword = function () {
 
 IDE_Morph.prototype.logout = function () {
     var myself = this;
-    delete localStorage['-snap-user'];
     SnapCloud.logout(
         function () {
-            SnapCloud.clear();
             myself.showMessage('disconnected.', 2);
         },
         function () {
-            SnapCloud.clear();
             myself.showMessage('disconnected.', 2);
         }
     );
