@@ -3673,6 +3673,10 @@ Fixes:
 * new "Animation" library
 * new "Pixels" library for MediaComp
 
+171004
+------
+* Objects: limited sprites' direction and coordinates to finite numbers
+
 
 v4.1 Features:
 * polymorphic sprite-local custom blocks
@@ -3721,3 +3725,4 @@ Fixes:
 * fixed “fill” block crash when applying the same color twice
 * fixed occasional empty drop-down menu items named “close” 
 * fixed some typos
+* limited sprites' direction and coordinates to finite numbers
