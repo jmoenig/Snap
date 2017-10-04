@@ -61,7 +61,7 @@ normalizeCanvas, contains*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2017-September-28';
+modules.store = '2017-October-04';
 
 
 // XML_Serializer ///////////////////////////////////////////////////////
@@ -79,6 +79,7 @@ function XML_Serializer() {
     this.contents = [];
     this.media = [];
     this.isCollectingMedia = false;
+    this.isExportingBlocksLibrary = false;
 }
 
 // XML_Serializer preferences settings:
@@ -90,11 +91,12 @@ XML_Serializer.prototype.version = 1; // increment on structural change
 
 // XML_Serializer accessing:
 
-XML_Serializer.prototype.serialize = function (object) {
+XML_Serializer.prototype.serialize = function (object, forBlocksLibrary) {
     // public: answer an XML string representing the given object
     var xml;
     this.flush(); // in case an error occurred in an earlier attempt
     this.flushMedia();
+    this.isExportingBlocksLibrary = forBlocksLibrary;
     xml = this.store(object);
     this.flush();
     return xml;
@@ -187,6 +189,7 @@ XML_Serializer.prototype.flushMedia = function () {
         });
     }
     this.media = [];
+    this.isExportingBlocksLibrary = false;
 };
 
 // XML_Serializer formatting:
@@ -1925,7 +1928,9 @@ CustomCommandBlockMorph.prototype.toBlockXML = function (serializer) {
         this.isGlobal ?
                 '' : serializer.format(' scope="@"', scope),
         serializer.store(this.inputs()),
-        this.isGlobal && this.definition.variableNames.length ?
+        this.isGlobal &&
+        	this.definition.variableNames.length &&
+            !serializer.isExportingBlocksLibrary ?
                 '<variables>' +
                     this.variables.toXML(serializer) +
                     '</variables>'
