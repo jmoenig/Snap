@@ -165,7 +165,8 @@ Cloud.prototype.withCredentialsRequest = function (
     onSuccess,
     onError,
     errorMsg,
-    wantsRawResponse) {
+    wantsRawResponse,
+    body) {
 
     var myself = this;
     this.checkCredentials(
@@ -178,7 +179,8 @@ Cloud.prototype.withCredentialsRequest = function (
                     onSuccess,
                     onError,
                     errorMsg,
-                    wantsRawResponse);
+                    wantsRawResponse,
+                    body);
             } else {
                 onError.call(this, 'You are not logged in', 'Snap!Cloud');
             }
@@ -352,6 +354,46 @@ Cloud.prototype.deleteProject = function (projectName, onSuccess, onError) {
         onSuccess,
         onError,
         'Could not delete project'
+    );
+};
+
+Cloud.prototype.shareProject = function (projectName, onSuccess, onError) {
+    this.withCredentialsRequest(
+        'POST',
+        '/projects/%username/' + projectName + '/metadata?ispublic=true',
+        onSuccess,
+        onError,
+        'Could not share project'
+    );
+};
+
+Cloud.prototype.unshareProject = function (projectName, onSuccess, onError) {
+    this.withCredentialsRequest(
+        'POST',
+        '/projects/%username/' + projectName + '/metadata?ispublic=false&ispublished=false',
+        onSuccess,
+        onError,
+        'Could not unshare project'
+    );
+};
+
+Cloud.prototype.publishProject = function (projectName, onSuccess, onError) {
+    this.withCredentialsRequest(
+        'POST',
+        '/projects/%username/' + projectName + '/metadata?ispublished=true',
+        onSuccess,
+        onError,
+        'Could not publish project'
+    );
+};
+
+Cloud.prototype.unpublishProject = function (projectName, onSuccess, onError) {
+    this.withCredentialsRequest(
+        'POST',
+        '/projects/%username/' + projectName + '/metadata?ispublished=false',
+        onSuccess,
+        onError,
+        'Could not unpublish project'
     );
 };
 
