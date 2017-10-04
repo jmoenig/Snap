@@ -3677,6 +3677,7 @@ Fixes:
 ------
 * Objects: limited sprites' direction and coordinates to finite numbers
 * Store, BYOB: made block vars transient for block libraries
+* updated “Animation” library
 
 
 v4.1 Features:
