@@ -83,7 +83,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph,
 AlignmentMorph*/
 
-modules.objects = '2017-September-28';
+modules.objects = '2017-October-04';
 
 var SpriteMorph;
 var StageMorph;
@@ -4447,7 +4447,7 @@ SpriteMorph.prototype.forward = function (steps) {
 SpriteMorph.prototype.setHeading = function (degrees, noShadow) {
     var x = this.xPosition(),
         y = this.yPosition(),
-        dir = (+degrees || 0),
+        dir = !isFinite(degrees) ? 0 : +degrees,
         turn = dir - this.heading;
 
     // apply to myself
@@ -4556,8 +4556,10 @@ SpriteMorph.prototype.gotoXY = function (x, y, justMe, noShadow) {
         this.shadowAttribute('x position');
         this.shadowAttribute('y position');
     }
-    newX = stage.center().x + (+x || 0) * stage.scale;
-    newY = stage.center().y - (+y || 0) * stage.scale;
+    x = !isFinite(+x) ? 0 : +x;
+    y = !isFinite(+y) ? 0 : +y;
+    newX = stage.center().x + x * stage.scale;
+    newY = stage.center().y - y * stage.scale;
     if (this.costume) {
         dest = new Point(newX, newY).subtract(this.rotationOffset);
     } else {
