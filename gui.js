@@ -403,10 +403,10 @@ IDE_Morph.prototype.openIn = function (world) {
 
             // make sure to lowercase the username
             dict = SnapCloud.parseDict(location.hash.substr(9));
-            dict.Username = dict.Username.toLowerCase();
 
             SnapCloud.getPublicProject(
-                SnapCloud.encodeDict(dict),
+                dict.ProjectName,
+                dict.Username,
                 function (projectData) {
                     var msg;
                     myself.nextSteps([
@@ -443,10 +443,10 @@ IDE_Morph.prototype.openIn = function (world) {
 
             // make sure to lowercase the username
             dict = SnapCloud.parseDict(location.hash.substr(7));
-            dict.Username = dict.Username.toLowerCase();
 
             SnapCloud.getPublicProject(
-                SnapCloud.encodeDict(dict),
+                dict.ProjectName,
+                dict.Username,
                 function (projectData) {
                     var msg;
                     myself.nextSteps([
@@ -479,10 +479,10 @@ IDE_Morph.prototype.openIn = function (world) {
 
             // make sure to lowercase the username
             dict = SnapCloud.parseDict(location.hash.substr(4));
-            dict.Username = dict.Username.toLowerCase();
 
             SnapCloud.getPublicProject(
-                SnapCloud.encodeDict(dict),
+                dict.ProjectName,
+                dict.Username,
                 function (projectData) {
                     window.open('data:text/xml,' + projectData);
                 },
@@ -3631,7 +3631,7 @@ IDE_Morph.prototype.save = function () {
         if (this.source === 'local') { // as well as 'examples'
             this.saveProject(this.projectName);
         } else { // 'cloud'
-            this.saveProjectToCloud();
+            this.saveProjectToCloud(this.projectName);
         }
     } else {
         this.saveProjectsBrowser();
@@ -5207,13 +5207,13 @@ IDE_Morph.prototype.logout = function () {
     );
 };
 
-IDE_Morph.prototype.saveProjectToCloud = function (projectData) {
+IDE_Morph.prototype.saveProjectToCloud = function (name) {
     var myself = this;
-    if (projectData) {
+    if (name) {
         this.showMessage('Saving project\nto the cloud...');
-        this.setProjectName(projectData.projectName);
+        this.setProjectName(name);
         SnapCloud.saveProject(
-            projectData,
+            this,
             function () {myself.showMessage('saved.', 2); },
             this.cloudError()
         );
@@ -5840,8 +5840,8 @@ ProjectDialogMorph.prototype.buildFilterField = function () {
                 var name,
                     notes;
 
-                if (aProject.ProjectName) { // cloud
-                    name = aProject.ProjectName;
+                if (aProject.projectName) { // cloud
+                    name = aProject.projectName;
                     notes = aProject.Notes;
                 } else { // local or examples
                     name = aProject.name;
@@ -6178,7 +6178,7 @@ ProjectDialogMorph.prototype.saveProject = function () {
         if (this.source === 'cloud') {
             if (detect(
                     this.projectList,
-                    function (item) {return item.ProjectName === name; }
+                    function (item) {return item.projectName === name; }
                 )) {
                 this.ide.confirm(
                     localize(

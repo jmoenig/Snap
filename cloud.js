@@ -96,9 +96,8 @@ Cloud.prototype.genericError = function () {
     throw new Error(Cloud.genericErrorMessage);
 };
 
-// Low level functionality
 
-// TODO: refactor all these
+// Low level functionality
 
 Cloud.prototype.request = function (
     method,
@@ -126,9 +125,12 @@ Cloud.prototype.request = function (
         request.onreadystatechange = function () {
             if (request.readyState === 4) {
                 if (request.responseText) {
-                    var response = wantsRawResponse ?
-                        request.responseText :
-                        JSON.parse(request.responseText);
+                    var response =
+                        (!wantsRawResponse ||
+                        (request.responseText.indexOf('{"errors"') === 0)) ?
+                            JSON.parse(request.responseText) :
+                            request.responseText;
+
                     if (response.errors) {
                        onError.call(
                             null,
@@ -342,7 +344,18 @@ Cloud.prototype.getRawProject = function (projectName, onSuccess, onError) {
         '/projects/%username/' + projectName,
         onSuccess,
         onError,
-        'Could not fetch project',
+        'Could not fetch project ' + projectName,
+        true
+    );
+};
+
+Cloud.prototype.getPublicProject = function (projectName, username, onSuccess, onError) {
+    this.request(
+        'GET',
+        '/projects/' + username + '/' + projectName,
+        onSuccess,
+        onError,
+        'Could not fetch project ' + projectName,
         true
     );
 };
