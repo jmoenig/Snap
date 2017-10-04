@@ -86,16 +86,35 @@ Cloud.prototype.encodeDict = function (dict) {
     return str;
 };
 
+// Error handling
+
+Cloud.genericErrorMessage =
+    'There was an error while trying to access\n' +
+    'a Snap!Cloud service. Please try again later.';
+
+Cloud.prototype.genericError = function () {
+    throw new Error(Cloud.genericErrorMessage);
+};
+
 // Low level functionality
 
 // TODO: refactor all these
 
-Cloud.prototype.get = function (path, onSuccess, onError, errorMsg, wantsRawResponse) {
+Cloud.prototype.request = function (
+    method,
+    path,
+    onSuccess,
+    onError,
+    errorMsg,
+    wantsRawResponse,
+    body) {
+
     var request = new XMLHttpRequest(),
         myself = this;
+
     try {
         request.open(
-            'GET',
+            method,
             this.url + path,
             true
         );
@@ -117,56 +136,20 @@ Cloud.prototype.get = function (path, onSuccess, onError, errorMsg, wantsRawResp
                             errorMsg
                         );
                     } else {
-                        onSuccess.call(null, response.message || response);
+                        if (onSuccess) {
+                            onSuccess.call(null, response.message || response);
+                        }
                     }
                 } else {
-                    onError.call(
-                        null,
-                        myself.url,
-                        errorMsg
-                    );
-                }
-            }
-        };
-        request.send();
-    } catch (err) {
-        onError.call(this, err.toString(), 'Cloud Error');
-    }
-};
-
-Cloud.prototype.post = function (path, body, onSuccess, onError, errorMsg) {
-    var request = new XMLHttpRequest(),
-        myself = this;
-    try {
-        request.open(
-            'POST',
-            this.url + path,
-            true
-        );
-        request.setRequestHeader(
-            'Content-Type',
-            'application/json'
-        );
-        request.withCredentials = true;
-        request.onreadystatechange = function () {
-            if (request.readyState === 4) {
-                if (request.responseText) {
-                    var response = JSON.parse(request.responseText);
-                    if (response.errors) {
+                    if (onError) {
                         onError.call(
-                            this,
-                            response.errors[0],
-                            'Cloud Error'
+                            null,
+                            myself.url,
+                            errorMsg || Cloud.genericErrorMessage
                         );
                     } else {
-                        onSuccess.call(null, response.message || response);
+                        myself.genericError();
                     }
-                } else {
-                    onError.call(
-                        null,
-                        myself.url + path,
-                        localize('could not connect to:')
-                    );
                 }
             }
         };
@@ -176,46 +159,31 @@ Cloud.prototype.post = function (path, body, onSuccess, onError, errorMsg) {
     }
 };
 
-Cloud.prototype.doDelete = function (path, onSuccess, onError, errorMsg) {
-    var request = new XMLHttpRequest(),
-        myself = this;
-    try {
-        request.open(
-            'DELETE',
-            this.url + path,
-            true
-        );
-        request.setRequestHeader(
-            'Content-Type',
-            'application/json; charset=utf-8'
-        );
-        request.withCredentials = true;
-        request.onreadystatechange = function () {
-            if (request.readyState === 4) {
-                if (request.responseText) {
-                    var response = JSON.parse(request.responseText);
-                    if (response.errors) {
-                       onError.call(
-                            null,
-                            response.errors[0],
-                            errorMsg
-                        );
-                    } else {
-                        onSuccess.call(null, response.message || response);
-                    }
-                } else {
-                    onError.call(
-                        null,
-                        myself.url,
-                        errorMsg
-                    );
-                }
+Cloud.prototype.withCredentialsRequest = function (
+    method,
+    path,
+    onSuccess,
+    onError,
+    errorMsg,
+    wantsRawResponse) {
+
+    var myself = this;
+    this.checkCredentials(
+        function (username) {
+            if (username) {
+                myself.request(
+                    method,
+                    // %username is replaced by the actual username
+                    path.replace('%username', username),
+                    onSuccess,
+                    onError,
+                    errorMsg,
+                    wantsRawResponse);
+            } else {
+                onError.call(this, 'You are not logged in', 'Snap!Cloud');
             }
-        };
-        request.send();
-    } catch (err) {
-        onError.call(this, err.toString(), 'Cloud Error');
-    }
+        }
+    );
 };
 
 
@@ -235,13 +203,13 @@ Cloud.prototype.checkCredentials = function (onSuccess, onError) {
 };
 
 Cloud.prototype.getCurrentUser = function (onSuccess, onError) {
-    this.get('/users/c', onSuccess, onError, 'Could not retrieve current user');
+    this.request('GET', '/users/c', onSuccess, onError, 'Could not retrieve current user');
 };
 
 Cloud.prototype.logout = function (onSuccess, onError) {
-    this.post(
+    this.request(
+        'POST',
         '/users/' + this.username + '/logout',
-        null,
         onSuccess,
         onError,
         'logout failed'
@@ -250,9 +218,9 @@ Cloud.prototype.logout = function (onSuccess, onError) {
 
 Cloud.prototype.login = function (username, password, onSuccess, onError) {
     var myself = this;
-    this.post(
+    this.request(
+        'POST',
         '/users/' + username + '/login?' + this.encodeDict({ password: password }),
-        null,
         function () {
             myself.checkCredentials(onSuccess, onError);
         },
@@ -261,13 +229,13 @@ Cloud.prototype.login = function (username, password, onSuccess, onError) {
 };
 
 Cloud.prototype.signup = function (username, password, password_repeat, email, onSuccess, onError){
-    this.post(
+    this.request(
+        'POST',
         '/users/' + username + '?' + this.encodeDict({
             email: email,
             password: password,
             password_repeat: password_repeat
         }),
-        null,
         onSuccess,
         onError,
         'signup failed');
@@ -277,7 +245,6 @@ Cloud.prototype.signup = function (username, password, password_repeat, email, o
 
 Cloud.prototype.saveProject = function (ide, onSuccess, onError) {
     var myself = this;
-
     this.checkCredentials(
         function (username) {
             if (username) {
@@ -330,15 +297,15 @@ Cloud.prototype.saveProject = function (ide, onSuccess, onError) {
 
                 ide.showMessage('Uploading ' + Math.round(size / 1024) + ' KB...');
 
-                myself.post(
-                    '/projects/' + username + '/' +
-                    ide.projectName,
-                    JSON.stringify(body), // POST body
+                myself.request(
+                    'POST',
+                    '/projects/' + username + '/' + ide.projectName,
                     onSuccess,
                     onError,
-                    'Project could not be saved'
+                    'Project could not be saved',
+                    false,
+                    JSON.stringify(body), // POST body
                 );
-
             } else {
                 onError.call(this, 'You are not logged in', 'Snap!Cloud');
             }
@@ -346,84 +313,45 @@ Cloud.prototype.saveProject = function (ide, onSuccess, onError) {
     );
 };
 
-// TODO: refactor all these
-
 Cloud.prototype.getProjectList = function (onSuccess, onError) {
-    var myself = this;
-
-    this.checkCredentials(
-        function (username) {
-            if (username) {
-                myself.get(
-                    '/projects/' + username,
-                    onSuccess,
-                    onError,
-                    'Could not fetch projects'
-                );
-            } else {
-                onError.call(this, 'You are not logged in', 'Snap!Cloud');
-            }
-        }
+    this.withCredentialsRequest(
+        'GET',
+        '/projects/%username',
+        onSuccess,
+        onError,
+        'Could not fetch projects'
     );
 };
 
 Cloud.prototype.getThumbnail = function (projectName, onSuccess, onError) {
-    var myself = this;
-
-    this.checkCredentials(
-        function (username) {
-            if (username) {
-                myself.get(
-                    '/projects/' + username + '/' + projectName + '/thumbnail',
-                    onSuccess,
-                    onError,
-                    'Could not fetch thumbnail',
-                    true // raw response contents
-                );
-            } else {
-                onError.call(this, 'You are not logged in', 'Snap!Cloud');
-            }
-        }
+    this.withCredentialsRequest(
+        'GET',
+        '/projects/%username/' + projectName + '/thumbnail',
+        onSuccess,
+        onError,
+        'Could not fetch thumbnail',
+        true
     );
 };
 
 Cloud.prototype.getRawProject = function (projectName, onSuccess, onError) {
-    var myself = this;
-
-    this.checkCredentials(
-        function (username) {
-            if (username) {
-                myself.get(
-                    '/projects/' + username + '/' + projectName,
-                    onSuccess,
-                    onError,
-                    'Could not fetch project',
-                    true // raw response contents
-                );
-            } else {
-                onError.call(this, 'You are not logged in', 'Snap!Cloud');
-            }
-
-        }
+    this.withCredentialsRequest(
+        'GET',
+        '/projects/%username/' + projectName,
+        onSuccess,
+        onError,
+        'Could not fetch project',
+        true
     );
 };
 
 Cloud.prototype.deleteProject = function (projectName, onSuccess, onError) {
-    var myself = this;
-
-    this.checkCredentials(
-        function (username) {
-            if (username) {
-                myself.doDelete(
-                    '/projects/' + username + '/' + projectName,
-                    onSuccess,
-                    onError
-                );
-            } else {
-                onError.call(this, 'You are not logged in', 'Snap!Cloud');
-            }
-
-        }
+    this.withCredentialsRequest(
+        'DELETE',
+        '/projects/%username/' + projectName,
+        onSuccess,
+        onError,
+        'Could not delete project'
     );
 };
 
