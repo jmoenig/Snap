@@ -2506,15 +2506,12 @@ IDE_Morph.prototype.cloudMenu = function () {
             function () {
                 myself.prompt('Author name…', function (usr) {
                     myself.prompt('Project name...', function (prj) {
-                        var id = 'Username=' +
-                            encodeURIComponent(usr.toLowerCase()) +
-                            '&ProjectName=' +
-                            encodeURIComponent(prj);
                         myself.showMessage(
                             'Fetching project\nfrom the cloud...'
                         );
                         SnapCloud.getPublicProject(
-                            id,
+                            prj,
+                            usr,
                             function (projectData) {
                                 var msg;
                                 if (!Process.prototype.isCatchingErrors) {
