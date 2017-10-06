@@ -42,7 +42,7 @@
 
 /*global modules, contains*/
 
-modules.locale = '2017-September-19';
+modules.locale = '2017-October-06';
 
 // Global stuff
 
@@ -246,9 +246,9 @@ SnapTranslator.dict.eo = {
     'language_translator':
         'Sebastian Cyprych',
     'translator_e-mail':
-        'scy(ĉe)epf.pl',
+        'sebacyp(heliko)gmail(punkto)com',
     'last_changed':
-        '2012-11-11'
+        '2017-10-01'
 };
 
 SnapTranslator.dict.fr = {

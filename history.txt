@@ -3679,6 +3679,10 @@ Fixes:
 * Store, BYOB: made block vars transient for block libraries
 * updated “Animation” library
 
+171006
+------
+* Esperanto translate update, thanks, Sebastian!
+
 
 v4.1 Features:
 * polymorphic sprite-local custom blocks
