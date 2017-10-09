@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org', // optional
     'last_changed':
-        '2017-09-19', // this, too, will appear in the Translators tab
+        '2017-10-09', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -1155,8 +1155,8 @@ SnapTranslator.dict.de = {
     // block editor
     'Block Editor':
         'Blockeditor',
-    'Method':
-        'Methode',
+    'Method Editor':
+        'Methodeneditor',
     'Apply':
         'Anwenden',
 

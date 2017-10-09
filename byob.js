@@ -108,7 +108,7 @@ BooleanSlotMorph, XML_Serializer*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2017-October-04';
+modules.byob = '2017-October-09';
 
 // Declarations
 
@@ -1954,7 +1954,8 @@ BlockEditorMorph.prototype.init = function (definition, target) {
 
     // override inherited properites:
     this.key = 'editBlock' + definition.spec;
-    this.labelString = this.definition.isGlobal ? 'Block Editor' : 'Method';
+    this.labelString = this.definition.isGlobal ? 'Block Editor'
+    		: 'Method Editor';
     this.createLabel();
 
     // create scripting area

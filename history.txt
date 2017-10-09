@@ -3683,6 +3683,10 @@ Fixes:
 ------
 * Esperanto translate update, thanks, Sebastian!
 
+171009
+------
+* changed label of "Method" to "Method Editor", thanks, Brian!
+
 
 v4.1 Features:
 * polymorphic sprite-local custom blocks
