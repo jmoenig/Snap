@@ -373,6 +373,16 @@ Cloud.prototype.getPublicProject = function (projectName, username, onSuccess, o
     );
 };
 
+Cloud.prototype.getProjectMetadata = function (projectName, username, onSuccess, onError) {
+    this.request(
+        'GET',
+        '/projects/' + username + '/' + projectName + '/metadata',
+        onSuccess,
+        onError,
+        'Could not fetch metadata for ' + projectName
+    );
+};
+
 Cloud.prototype.deleteProject = function (projectName, onSuccess, onError) {
     this.withCredentialsRequest(
         'DELETE',
