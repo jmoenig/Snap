@@ -3687,6 +3687,10 @@ Fixes:
 ------
 * changed label of "Method" to "Method Editor", thanks, Brian!
 
+171010
+------
+* Blocks: fixed #1885
+
 
 v4.1 Features:
 * polymorphic sprite-local custom blocks

@@ -148,7 +148,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2017-September-28';
+modules.blocks = '2017-October-10';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -1939,6 +1939,12 @@ SyntaxElementMorph.prototype.showBubble = function (value, exportPic, target) {
         if (target instanceof StageMorph) {
             anchor = ide.corral.stageIcon;
         } else {
+        	if (target.isTemporary) {
+         		target = detect(
+					target.allExemplars(),
+     				function (each) {return !each.isTemporary; }
+         		);
+     		}
             anchor = detect(
                 ide.corral.frame.contents.children,
                 function (icon) {return icon.object === target; }
