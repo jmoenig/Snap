@@ -340,6 +340,16 @@ Cloud.prototype.getProjectList = function (onSuccess, onError) {
     );
 };
 
+Cloud.prototype.getPublishedProjectList = function (username, onSuccess, onError) {
+    this.request(
+        'GET',
+        '/projects/' + username + '?ispublished=true',
+        onSuccess,
+        onError,
+        'Could not fetch projects'
+    );
+};
+
 Cloud.prototype.getThumbnail = function (projectName, onSuccess, onError) {
     this.withCredentialsRequest(
         'GET',
