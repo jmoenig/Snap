@@ -4274,7 +4274,7 @@ SpriteMorph.prototype.floodFill = function () {
         img = ctx.getImageData(0, 0, width, height),
         dta = img.data,
         stack = [
-            ((height / 2) - Math.round(this.yPosition())) * width +
+            Math.round((height / 2) - this.yPosition()) * width +
             Math.round(this.xPosition() + (width / 2))
         ],
         current,
