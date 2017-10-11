@@ -3691,6 +3691,11 @@ Fixes:
 ------
 * Blocks: fixed #1885
 
+171010
+------
+* Objects: make sure to fully remove parts from their anchor when deleting them
+
+
 
 v4.1 Features:
 * polymorphic sprite-local custom blocks

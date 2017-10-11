@@ -83,7 +83,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph,
 AlignmentMorph*/
 
-modules.objects = '2017-October-04';
+modules.objects = '2017-October-11';
 
 var SpriteMorph;
 var StageMorph;
@@ -6007,6 +6007,9 @@ SpriteMorph.prototype.restoreLayers = function () {
 
 SpriteMorph.prototype.destroy = function () {
     // make sure to sever all inheritance ties to other sprites
+    if (this.anchor) {
+        this.anchor.detachPart(this);
+    }
     this.emancipate();
     if (!this.isTemporary) {
         this.prune();
