@@ -8076,7 +8076,7 @@ Costume.prototype.canvasBoundingBox = function (pic) {
 
     function getTop() {
         for (row = 0; row <= h; row += 1) {
-            for (col = 0; col <= h; col += 1) {
+            for (col = 0; col <= w; col += 1) {
                 if (getAlpha(col, row)) {
                     return row;
                 }

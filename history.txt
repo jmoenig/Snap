@@ -3694,6 +3694,7 @@ Fixes:
 171010
 ------
 * Objects: make sure to fully remove parts from their anchor when deleting them
+* Objects: fixed a bounding-box-detection bug in Costumes. Thanks, Simon Mong!
 
 
 
