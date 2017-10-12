@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph,
 TableFrameMorph, ColorSlotMorph, isSnapObject*/
 
-modules.threads = '2017-September-06';
+modules.threads = '2017-October-12';
 
 var ThreadManager;
 var Process;
@@ -1164,6 +1164,7 @@ Process.prototype.evaluate = function (
 Process.prototype.fork = function (context, args) {
     var proc = new Process(),
         stage = this.homeContext.receiver.parentThatIsA(StageMorph);
+    proc.instrument = this.instrument;
     proc.initializeFor(context, args);
     // proc.pushContext('doYield');
     stage.threads.processes.push(proc);

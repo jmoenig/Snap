@@ -3697,6 +3697,9 @@ Fixes:
 * Objects: fixed a bounding-box-detection bug in Costumes. Thanks, Simon Mong!
 * Objects: fixed a flood-fill rounding bug. Thanks, Simon Mong!
 
+171012
+------
+* Threads: make sure to retain the current instrument when launching a new thread
 
 
 v4.1 Features:
