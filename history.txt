@@ -3700,6 +3700,7 @@ Fixes:
 171012
 ------
 * Threads: make sure to retain the current instrument when launching a new thread
+* Threads: retain the current receiver when launching a new thread
 
 
 v4.1 Features:
