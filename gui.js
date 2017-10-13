@@ -6036,7 +6036,7 @@ ProjectDialogMorph.prototype.getExamplesProjectList = function () {
 
 ProjectDialogMorph.prototype.installCloudProjectList = function (pl) {
     var myself = this;
-    this.projectList = pl || [];
+    this.projectList = pl[0] ? pl : [];
     this.projectList.sort(function (x, y) {
         return x.projectname.toLowerCase() < y.projectname.toLowerCase() ?
                  -1 : 1;
@@ -6081,6 +6081,7 @@ ProjectDialogMorph.prototype.installCloudProjectList = function (pl) {
             myself.notesField.contents.adjustBounds();
             // we ask for the thumbnail when selecting a project
             SnapCloud.getThumbnail(
+                null, // username is implicit
                 item.projectname, 
                 function (thumbnail) {
                     myself.preview.texture = thumbnail;

@@ -340,25 +340,46 @@ Cloud.prototype.getProjectList = function (onSuccess, onError) {
     );
 };
 
-Cloud.prototype.getPublishedProjectList = function (username, onSuccess, onError) {
+Cloud.prototype.getPublishedProjectList = function (username, page, pageSize, searchTerm, onSuccess, onError) {
+    var path = '/projects' + (username ? '/' + username : '') + '?ispublished=true';
+
+    if (page) {
+        path += '&page=' + page + '&pagesize=' + (pageSize || 16);
+    }
+
+    if (searchTerm) {
+        path += '&matchtext=' + searchTerm;
+    }
+
     this.request(
         'GET',
-        '/projects/' + username + '?ispublished=true',
+        path,
         onSuccess,
         onError,
         'Could not fetch projects'
     );
 };
 
-Cloud.prototype.getThumbnail = function (projectName, onSuccess, onError) {
-    this.withCredentialsRequest(
-        'GET',
-        '/projects/%username/' + projectName + '/thumbnail',
-        onSuccess,
-        onError,
-        'Could not fetch thumbnail',
-        true
-    );
+Cloud.prototype.getThumbnail = function (username, projectName, onSuccess, onError) {
+    if (username) {
+        this.request(
+            'GET',
+            '/projects/' + username + '/' + projectName + '/thumbnail',
+            onSuccess,
+            onError,
+            'Could not fetch thumbnail',
+            true
+        );
+    } else {
+        this.withCredentialsRequest(
+            'GET',
+            '/projects/%username/' + projectName + '/thumbnail',
+            onSuccess,
+            onError,
+            'Could not fetch thumbnail',
+            true
+        );
+    }
 };
 
 Cloud.prototype.getRawProject = function (projectName, onSuccess, onError) {
