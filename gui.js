@@ -6295,11 +6295,19 @@ ProjectDialogMorph.prototype.shareProject = function () {
             'Share Project',
             function () {
                 myself.ide.showMessage('sharing\nproject...');
+
+                var hash = 'present:Username=' +
+                    encodeURIComponent(SnapCloud.username.toLowerCase()) +
+                    '&ProjectName=' +
+                    encodeURIComponent(proj.ProjectName);
+
                 SnapCloud.reconnect(
                     function () {
                         SnapCloud.callService(
                             'publishProject',
                             function () {
+                                var isCopied = false;
+
                                 SnapCloud.disconnect();
                                 proj.Public = 'true';
                                 myself.unshareButton.show();
@@ -6309,19 +6317,27 @@ ProjectDialogMorph.prototype.shareProject = function () {
                                 entry.label.changed();
                                 myself.buttons.fixLayout();
                                 myself.drawNew();
-                                myself.ide.showMessage('shared.', 2);
+
+                                try {
+                                    var clipboard = document.getElementById('clipboard');
+                                    var location = window.location;
+
+                                    clipboard.value = location.protocol + '//' + location.hostname + location.pathname + '#' + hash;
+                                    clipboard.focus();
+                                    clipboard.setSelectionRange(0, clipboard.value.length);
+
+                                    isCopied = document.execCommand('copy');
+                                } catch (e) {}
+
+                                myself.ide.showMessage('shared' + (isCopied ? ' and copied' : '') + '.', 2);
                             },
                             myself.ide.cloudError(),
                             [proj.ProjectName]
                         );
+
                         // Set the Shared URL if the project is currently open
                         if (proj.ProjectName === ide.projectName) {
-                            var usr = SnapCloud.username,
-                                projectId = 'Username=' +
-                                    encodeURIComponent(usr.toLowerCase()) +
-                                    '&ProjectName=' +
-                                    encodeURIComponent(proj.ProjectName);
-                            location.hash = 'present:' + projectId;
+                            location.hash = hash;
                         }
                     },
                     myself.ide.cloudError()
