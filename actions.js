@@ -346,18 +346,10 @@ ActionManager.prototype.applyEvent = function(event) {
 
     if (ide.isReplayMode && !event.isReplay && event.type !== 'openProject') {
         ide.promptExitReplay(function() {
-            if (myself.isLeader) {
-                myself.acceptEvent(event);
-            } else {
-                myself.send(event);
-            }
+            myself.submitAction(event);
         });
     } else {
-        if (this.isLeader) {
-            this.acceptEvent(event);
-        } else {
-            this.send(event);
-        }
+        this.submitAction(event);
     }
 
     return new Action(this, event);
@@ -412,10 +404,19 @@ ActionManager.prototype._rawApplyEvent = function(event) {
     }
 };
 
+ActionManager.prototype.submitAction = function(action) {
+    if (this.isLeader || !this.isCollaborating() || action.type === 'openProject') {
+        return this.acceptEvent(action);
+    } else {
+        return this.send(action);
+    }
+};
+
 ActionManager.prototype.send = function(json) {
+    var canSend = this._ws && this._ws.readyState === WebSocket.OPEN;
     json.id = json.id || this.lastSeen + 1;
     this.lastSent = json.id;
-    if (this._ws && this._ws.readyState === WebSocket.OPEN) {
+    if (this.isCollaborating() && json.type !== 'openProject' && canSend) {
         this._ws.send(JSON.stringify(json));
     }
 };
