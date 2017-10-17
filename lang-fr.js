@@ -1401,6 +1401,52 @@ SnapTranslator.dict.fr = {
     'Brush size':
         'Taille de pinceau',
     'Constrain proportions of shapes?\n(you can also hold shift)':
-        'Contraindre les proportions de la forme ?\n(vous pouvez aussi maintenir appuy\u00E9 Maj)'
+        'Contraindre les proportions de la forme ?\n(vous pouvez aussi maintenir appuy\u00E9 Maj)',
+
+    // Import dialog box :    
+    'Opening section':
+        'Ouverture de la section',
+    'Animals':
+        'Animaux',
+    'Buttons':
+        'Boutons',
+    'City':
+        'Ville',
+    'Food':
+        'Nourriture',
+    'Letters':
+        'Lettres',
+    'Music':
+        'Musique',
+    'Nature':
+        'Nature',
+    'Numbers':
+        'Chiffres',
+    'People':
+        'Gens',
+    'Sport':
+        'Sport',
+    'Things':
+        'Choses',
+    'Transportation':
+        'Transport',
+    'All':
+        'Tout',
+    'Castle':
+        'Château',
+    'Coordinates':
+        'Coordonnées',
+    'House':
+        'Maison',
+    'Patterns':
+        'Motifs',
+    'School':
+        'École',
+    'Show':
+        'Spectacle',
+    'Walls':
+        'Murs',
+    'Noise':
+        'Bruit'
 
 };
