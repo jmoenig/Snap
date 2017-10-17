@@ -148,7 +148,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2017-October-10';
+modules.blocks = '2017-October-17';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -6668,8 +6668,7 @@ ScriptsMorph.prototype.addToolbar = function () {
     	myself = this,
         shade = new Color(140, 140, 140);
 
-    // toolBar.respectHiddens = true; // uncomment to keep buttons in place
-
+    toolBar.respectHiddens = true;
     toolBar.undoButton = new PushButtonMorph(
         this,
         "undrop",
