@@ -8559,7 +8559,24 @@ InputSlotMorph.prototype.shadowedVariablesMenu = function () {
 
     if (!block) {return dict; }
     rcvr = block.scriptTarget();
-    if (rcvr && rcvr.exemplar) {
+    if (this.parentThatIsA(RingMorph)) {
+    	// show own local vars and attributes, because this is likely to be
+     	// inside TELL, ASK or OF
+        vars = rcvr.variables.names();
+        vars.forEach(function (name) {
+            dict[name] = name;
+        });
+        attribs = rcvr.attributes;
+        /*
+        if (vars.length && attribs.length) {
+            dict['~'] = null; // add line
+        }
+        */
+        attribs.forEach(function (name) {
+            dict[name] = [name];
+        });
+    } else if (rcvr && rcvr.exemplar) {
+    	// only show shadowed vars and attributes
         vars = rcvr.inheritedVariableNames(true);
         vars.forEach(function (name) {
             dict[name] = name;
