@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org', // optional
     'last_changed':
-        '2017-10-09', // this, too, will appear in the Translators tab
+        '2017-10-17', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -513,10 +513,10 @@ SnapTranslator.dict.de = {
         'selbst',
     'delete this clone':
         'entferne diesen Klon',
-    'tell %spr to %cl':
-        'lasse %spr tun %cl',
-    'ask %spr for %repRing':
-        'frage %spr nach %repRing',
+    'tell %spr to %cmdRing %inputs':
+        'lasse %spr %cmdRing tun %inputs',
+    'ask %spr for %repRing %inputs':
+        'frage %spr nach %repRing %inputs',
 
     // sensing:
     'touching %col ?':

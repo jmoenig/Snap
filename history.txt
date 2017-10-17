@@ -3703,12 +3703,14 @@ Fixes:
 * Threads: make sure to retain the current instrument when launching a new thread
 * Threads: retain the current receiver when launching a new thread
 
-171019
+171017
 ------
 * Blocks: keep “undo” and “redo” buttons at the same location
 * Objects, Threads: added "with inpus" to TELL and ASK prims, changed TELL's C-shape to command-style input
 * Objects: moved TELL and ASK templates in the palette up underneath RUN CALL
 * Blocks: show all own vars and attributes in INHERIT drop-down when inside a ring
+* Objects: made 'myself' default input for "a new clone of" reporter
+* German translation update
 
 
 v4.1 Features:

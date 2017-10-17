@@ -83,7 +83,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph,
 AlignmentMorph*/
 
-modules.objects = '2017-October-19';
+modules.objects = '2017-October-17';
 
 var SpriteMorph;
 var StageMorph;
@@ -774,7 +774,8 @@ SpriteMorph.prototype.initBlocks = function () {
         newClone: {
             type: 'reporter',
             category: 'control',
-            spec: 'a new clone of %cln'
+            spec: 'a new clone of %cln',
+            defaults: [['myself']]
         },
         removeClone: {
             type: 'command',
@@ -7439,6 +7440,7 @@ StageMorph.prototype.show = function () {
 // StageMorph cloning override
 
 StageMorph.prototype.createClone = nop;
+StageMorph.prototype.newClone = nop;
 
 // StageMorph pseudo-inherited behavior
 
