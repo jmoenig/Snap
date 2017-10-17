@@ -83,7 +83,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph,
 AlignmentMorph*/
 
-modules.objects = '2017-October-11';
+modules.objects = '2017-October-19';
 
 var SpriteMorph;
 var StageMorph;
@@ -745,17 +745,18 @@ SpriteMorph.prototype.initBlocks = function () {
 
         // Message passing - very experimental
 
-        doTellTo: {
+        doTellTo: { // under construction +++
             dev: true,
             type: 'command',
             category: 'control',
-            spec: 'tell %spr to %cl'
+            // spec: 'tell %spr to %cl' // I liked this version much better, -Jens
+            spec: 'tell %spr to %cmdRing %inputs'
         },
         reportAskFor: {
             dev: true,
             type: 'reporter',
             category: 'control',
-            spec: 'ask %spr for %repRing'
+            spec: 'ask %spr for %repRing %inputs'
         },
 
         // Cloning
