@@ -3707,7 +3707,7 @@ Fixes:
 ------
 * Blocks: keep “undo” and “redo” buttons at the same location
 * Objects, Threads: added "with inpus" to TELL and ASK prims, changed TELL's C-shape to command-style input
-
+* Objects: moved TELL and ASK templates in the palette up underneath RUN CALL
 
 v4.1 Features:
 * polymorphic sprite-local custom blocks
