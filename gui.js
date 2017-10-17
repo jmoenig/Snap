@@ -75,7 +75,7 @@ isRetinaSupported, SliderMorph, Animation*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2017-September-28';
+modules.gui = '2017-October-17';
 
 // Declarations
 
@@ -7112,6 +7112,14 @@ SpriteIconMorph.prototype.releaseSprite = function () {
 
 SpriteIconMorph.prototype.showSpriteOnStage = function () {
     this.object.showOnStage();
+};
+
+// SpriteIconMorph events
+
+SpriteIconMorph.prototype.mouseDoubleClick = function () {
+	if (this.object instanceof SpriteMorph) {
+    	this.object.flash();
+    }
 };
 
 // SpriteIconMorph drawing

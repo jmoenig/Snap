@@ -69,7 +69,7 @@
 
 /*global PaintEditorMorph, ListWatcherMorph, PushButtonMorph, ToggleMorph,
 DialogBoxMorph, InputFieldMorph, SpriteIconMorph, BlockMorph, SymbolMorph,
-ThreadManager, VariableFrame, detect, BlockMorph, BoxMorph, Color,
+ThreadManager, VariableFrame, detect, BlockMorph, BoxMorph, Color, Animation,
 CommandBlockMorph, FrameMorph, HatBlockMorph, MenuMorph, Morph, MultiArgMorph,
 Point, ReporterBlockMorph, ScriptsMorph, StringMorph, SyntaxElementMorph,
 TextMorph, contains, degrees, detect, newCanvas, nop, radians, Array,
@@ -6013,6 +6013,20 @@ SpriteMorph.prototype.destroy = function () {
 };
 
 // SpriteMorph highlighting
+
+SpriteMorph.prototype.flash = function () {
+	var world = this.world(),
+		myself = this;
+    this.addHighlight();
+	world.animations.push(new Animation(
+		nop,
+  		nop,
+    	0,
+     	800,
+      	nop,
+      	function () {myself.removeHighlight(); }
+	));
+};
 
 SpriteMorph.prototype.addHighlight = function (oldHighlight) {
     var isHidden = !this.isVisible,

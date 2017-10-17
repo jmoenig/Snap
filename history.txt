@@ -3711,6 +3711,7 @@ Fixes:
 * Blocks: show all own vars and attributes in INHERIT drop-down when inside a ring
 * Objects: made 'myself' default input for "a new clone of" reporter
 * German translation update
+* GUI, Objects: double-clicking a corral sprite icon flashes the sprite onstage
 
 
 v4.1 Features:
@@ -3748,6 +3749,7 @@ v4.1 Features:
 * experimental "download script" feature
 * new "Animation" library
 * new "Pixels" library for MediaComp
+* double-clicking a corral sprite icon flashes the sprite onstage
 
 Fixes:
 * changed keyboard shortcut indicator for “find blocks” to “^”
