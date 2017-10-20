@@ -3713,6 +3713,11 @@ Fixes:
 * German translation update
 * GUI, Objects: double-clicking a corral sprite icon flashes the sprite onstage
 
+171020
+------
+* fixed SVG encoding, thanks, Joan for the contribution!
+* German translation update
+
 
 v4.1 Features:
 * polymorphic sprite-local custom blocks
@@ -3765,3 +3770,4 @@ Fixes:
 * limited sprites' direction and coordinates to finite numbers
 * made block vars transient for block libraries
 * keep “undo” and “redo” buttons at the same location
+* fixed SVG encoding for exporting vector costumes
