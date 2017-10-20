@@ -2270,7 +2270,7 @@ Process.prototype.reportURL = function (url) {
     var response;
     if (!this.httpRequest) {
         // use the location protocol unless the user specifies otherwise
-        if (url.indexOf('//') < 0) {
+        if (url.indexOf('//') < 0 || url.indexOf('//') > 8) {
             if (location.protocol === 'file:') {
                 // allow requests from locally loaded sources
                 url = 'https://' + url;
