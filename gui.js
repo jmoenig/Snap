@@ -3347,8 +3347,8 @@ IDE_Morph.prototype.popupMediaImportDialog = function (folderName, items) {
             myself.getURL(
                 url,
                 function (txt) {
-                    img.src = 'data:image/svg+xml;utf8,' +
-                        encodeURIComponent(txt);
+                    img.src = 'data:image/svg+xml;base64,' +
+                         window.btoa(txt);
                 }
             );
         } else {
