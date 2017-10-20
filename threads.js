@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph,
 TableFrameMorph, ColorSlotMorph, isSnapObject*/
 
-modules.threads = '2017-October-17';
+modules.threads = '2017-October-20';
 
 var ThreadManager;
 var Process;
@@ -2270,7 +2270,7 @@ Process.prototype.reportURL = function (url) {
     var response;
     if (!this.httpRequest) {
         // use the location protocol unless the user specifies otherwise
-        if (url.indexOf('//') < 0) {
+        if (url.indexOf('//') < 0 || url.indexOf('//') > 8) {
             if (location.protocol === 'file:') {
                 // allow requests from locally loaded sources
                 url = 'https://' + url;
