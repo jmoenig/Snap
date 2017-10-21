@@ -3718,6 +3718,7 @@ Fixes:
 * fixed SVG encoding, thanks, Joan for the contribution!
 * German translation update
 
+=== v4.1 major release ===
 
 v4.1 Features:
 * polymorphic sprite-local custom blocks
