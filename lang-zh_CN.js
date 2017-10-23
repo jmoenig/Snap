@@ -626,6 +626,8 @@ SnapTranslator.dict.zh_CN = {
         '停止 %n 拍',
     'play note %n for %n beats':
         '弹奏 %n %n 拍',
+    'set instrument to %inst':
+        '将乐器设定为 %inst',
     'change tempo by %n':
         '把节奏加快 %n',
     'set tempo to %n bpm':
@@ -732,6 +734,10 @@ SnapTranslator.dict.zh_CN = {
         '启动 %cmdRing %inputs',
     'call %repRing %inputs':
         '调用 %repRing %inputs',
+    'tell %spr to %cmdRing %inputs':
+        '命令 %spr 运行 %cmdRing %inputs',
+    'ask %spr for %repRing %inputs'：
+        '请求 %spr 返回 %repRing %inputs',
     'run %cmdRing w/continuation':
         '持续运行 %cmdRing',
     'call %cmdRing w/continuation':
@@ -742,6 +748,8 @@ SnapTranslator.dict.zh_CN = {
         '当我被克隆',
     'create a clone of %cln':
         '克隆一个 %cln',
+    'a new clone of %cln':
+        '%cln 的一个新克隆',
     'myself':
         '自己',
     'delete this clone':
@@ -861,6 +869,8 @@ SnapTranslator.dict.zh_CN = {
         '变量名',
     'Script variable name':
         '脚本变量名',
+    'inherit %shd':
+        '继承 %shd',
     'Delete a variable':
         '删除变量',
 
