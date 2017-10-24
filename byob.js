@@ -108,7 +108,7 @@ BooleanSlotMorph, XML_Serializer*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2017-September-26';
+modules.byob = '2017-October-09';
 
 // Declarations
 
@@ -1954,7 +1954,8 @@ BlockEditorMorph.prototype.init = function (definition, target) {
 
     // override inherited properites:
     this.key = 'editBlock' + definition.spec;
-    this.labelString = this.definition.isGlobal ? 'Block Editor' : 'Method';
+    this.labelString = this.definition.isGlobal ? 'Block Editor'
+    		: 'Method Editor';
     this.createLabel();
 
     // create scripting area
@@ -3755,7 +3756,7 @@ BlockExportDialogMorph.prototype.selectNone = function () {
 // BlockExportDialogMorph ops
 
 BlockExportDialogMorph.prototype.exportBlocks = function () {
-    var str = this.serializer.serialize(this.blocks),
+    var str = this.serializer.serialize(this.blocks, true), // for library
         ide = this.world().children[0];
 
     if (this.blocks.length > 0) {

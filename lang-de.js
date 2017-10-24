@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org', // optional
     'last_changed':
-        '2017-09-19', // this, too, will appear in the Translators tab
+        '2017-10-20', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -513,10 +513,10 @@ SnapTranslator.dict.de = {
         'selbst',
     'delete this clone':
         'entferne diesen Klon',
-    'tell %spr to %cl':
-        'lasse %spr tun %cl',
-    'ask %spr for %repRing':
-        'frage %spr nach %repRing',
+    'tell %spr to %cmdRing %inputs':
+        'lasse %spr %cmdRing tun %inputs',
+    'ask %spr for %repRing %inputs':
+        'frage %spr nach %repRing %inputs',
 
     // sensing:
     'touching %col ?':
@@ -999,6 +999,8 @@ SnapTranslator.dict.de = {
         'Setzen des letzten Blocks\nwiderrufen',
     'redrop':
         'Wiederherstellen',
+    'use the keyboard\nto enter blocks':
+    	'Blöcke per Tastatur\neingeben',
     'scripts pic...':
         'Bild aller Skripte...',
     'open a new window\nwith a picture of all scripts':
@@ -1155,8 +1157,8 @@ SnapTranslator.dict.de = {
     // block editor
     'Block Editor':
         'Blockeditor',
-    'Method':
-        'Methode',
+    'Method Editor':
+        'Methodeneditor',
     'Apply':
         'Anwenden',
 

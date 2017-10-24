@@ -75,7 +75,7 @@ isRetinaSupported, SliderMorph, Animation*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2017-September-28';
+modules.gui = '2017-October-22';
 
 // Declarations
 
@@ -3361,8 +3361,8 @@ IDE_Morph.prototype.popupMediaImportDialog = function (folderName, items) {
             myself.getURL(
                 url,
                 function (txt) {
-                    img.src = 'data:image/svg+xml;utf8,' +
-                        encodeURIComponent(txt);
+                    img.src = 'data:image/svg+xml;base64,' +
+                         window.btoa(txt);
                 }
             );
         } else {
@@ -3396,7 +3396,7 @@ IDE_Morph.prototype.aboutSnap = function () {
         module, btn1, btn2, btn3, btn4, licenseBtn, translatorsBtn,
         world = this.world();
 
-    aboutTxt = 'Snap! 4.1 - rc -\nBuild Your Own Blocks\n\n'
+    aboutTxt = 'Snap! 4.1\nBuild Your Own Blocks\n\n'
         + 'Copyright \u24B8 2017 Jens M\u00F6nig and '
         + 'Brian Harvey\n'
         + 'jens@moenig.org, bh@cs.berkeley.edu\n\n'
@@ -7209,6 +7209,14 @@ SpriteIconMorph.prototype.releaseSprite = function () {
 
 SpriteIconMorph.prototype.showSpriteOnStage = function () {
     this.object.showOnStage();
+};
+
+// SpriteIconMorph events
+
+SpriteIconMorph.prototype.mouseDoubleClick = function () {
+	if (this.object instanceof SpriteMorph) {
+    	this.object.flash();
+    }
 };
 
 // SpriteIconMorph drawing

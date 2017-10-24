@@ -69,7 +69,7 @@
 
 /*global PaintEditorMorph, ListWatcherMorph, PushButtonMorph, ToggleMorph,
 DialogBoxMorph, InputFieldMorph, SpriteIconMorph, BlockMorph, SymbolMorph,
-ThreadManager, VariableFrame, detect, BlockMorph, BoxMorph, Color,
+ThreadManager, VariableFrame, detect, BlockMorph, BoxMorph, Color, Animation,
 CommandBlockMorph, FrameMorph, HatBlockMorph, MenuMorph, Morph, MultiArgMorph,
 Point, ReporterBlockMorph, ScriptsMorph, StringMorph, SyntaxElementMorph,
 TextMorph, contains, degrees, detect, newCanvas, nop, radians, Array,
@@ -83,7 +83,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph,
 AlignmentMorph*/
 
-modules.objects = '2017-October-04';
+modules.objects = '2017-October-17';
 
 var SpriteMorph;
 var StageMorph;
@@ -745,17 +745,18 @@ SpriteMorph.prototype.initBlocks = function () {
 
         // Message passing - very experimental
 
-        doTellTo: {
+        doTellTo: { // under construction +++
             dev: true,
             type: 'command',
             category: 'control',
-            spec: 'tell %spr to %cl'
+            // spec: 'tell %spr to %cl' // I liked this version much better, -Jens
+            spec: 'tell %spr to %cmdRing %inputs'
         },
         reportAskFor: {
             dev: true,
             type: 'reporter',
             category: 'control',
-            spec: 'ask %spr for %repRing'
+            spec: 'ask %spr for %repRing %inputs'
         },
 
         // Cloning
@@ -773,7 +774,8 @@ SpriteMorph.prototype.initBlocks = function () {
         newClone: {
             type: 'reporter',
             category: 'control',
-            spec: 'a new clone of %cln'
+            spec: 'a new clone of %cln',
+            defaults: [['myself']]
         },
         removeClone: {
             type: 'command',
@@ -2023,13 +2025,9 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('fork'));
         blocks.push(block('evaluate'));
         blocks.push('-');
-    /*
-    // list variants commented out for now (redundant)
-        blocks.push(block('doRunWithInputList'));
-        blocks.push(block('forkWithInputList'));
-        blocks.push(block('evaluateWithInputList'));
+        blocks.push(block('doTellTo'));
+        blocks.push(block('reportAskFor'));
         blocks.push('-');
-    */
         blocks.push(block('doCallCC'));
         blocks.push(block('reportCallCC'));
         blocks.push('-');
@@ -2039,9 +2037,6 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('removeClone'));
         blocks.push('-');
         blocks.push(block('doPauseAll'));
-        blocks.push('-');
-        blocks.push(block('doTellTo'));
-        blocks.push(block('reportAskFor'));
         blocks.push('=');
         blocks.push(this.makeBlockButton(cat));
 
@@ -4274,7 +4269,7 @@ SpriteMorph.prototype.floodFill = function () {
         img = ctx.getImageData(0, 0, width, height),
         dta = img.data,
         stack = [
-            ((height / 2) - Math.round(this.yPosition())) * width +
+            Math.round((height / 2) - this.yPosition()) * width +
             Math.round(this.xPosition() + (width / 2))
         ],
         current,
@@ -6007,6 +6002,9 @@ SpriteMorph.prototype.restoreLayers = function () {
 
 SpriteMorph.prototype.destroy = function () {
     // make sure to sever all inheritance ties to other sprites
+    if (this.anchor) {
+        this.anchor.detachPart(this);
+    }
     this.emancipate();
     if (!this.isTemporary) {
         this.prune();
@@ -6015,6 +6013,20 @@ SpriteMorph.prototype.destroy = function () {
 };
 
 // SpriteMorph highlighting
+
+SpriteMorph.prototype.flash = function () {
+	var world = this.world(),
+		myself = this;
+    this.addHighlight();
+	world.animations.push(new Animation(
+		nop,
+  		nop,
+    	0,
+     	800,
+      	nop,
+      	function () {myself.removeHighlight(); }
+	));
+};
 
 SpriteMorph.prototype.addHighlight = function (oldHighlight) {
     var isHidden = !this.isVisible,
@@ -7074,13 +7086,9 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('fork'));
         blocks.push(block('evaluate'));
         blocks.push('-');
-    /*
-    // list variants commented out for now (redundant)
-        blocks.push(block('doRunWithInputList'));
-        blocks.push(block('forkWithInputList'));
-        blocks.push(block('evaluateWithInputList'));
+        blocks.push(block('doTellTo'));
+        blocks.push(block('reportAskFor'));
         blocks.push('-');
-    */
         blocks.push(block('doCallCC'));
         blocks.push(block('reportCallCC'));
         blocks.push('-');
@@ -7088,9 +7096,6 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('newClone'));
         blocks.push('-');
         blocks.push(block('doPauseAll'));
-        blocks.push('-');
-        blocks.push(block('doTellTo'));
-        blocks.push(block('reportAskFor'));
         blocks.push('=');
         blocks.push(this.makeBlockButton(cat));
 
@@ -7449,6 +7454,7 @@ StageMorph.prototype.show = function () {
 // StageMorph cloning override
 
 StageMorph.prototype.createClone = nop;
+StageMorph.prototype.newClone = nop;
 
 // StageMorph pseudo-inherited behavior
 
@@ -8073,7 +8079,7 @@ Costume.prototype.canvasBoundingBox = function (pic) {
 
     function getTop() {
         for (row = 0; row <= h; row += 1) {
-            for (col = 0; col <= h; col += 1) {
+            for (col = 0; col <= w; col += 1) {
                 if (getAlpha(col, row)) {
                     return row;
                 }

@@ -148,7 +148,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2017-September-28';
+modules.blocks = '2017-October-17';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -1939,6 +1939,12 @@ SyntaxElementMorph.prototype.showBubble = function (value, exportPic, target) {
         if (target instanceof StageMorph) {
             anchor = ide.corral.stageIcon;
         } else {
+        	if (target.isTemporary) {
+         		target = detect(
+					target.allExemplars(),
+     				function (each) {return !each.isTemporary; }
+         		);
+     		}
             anchor = detect(
                 ide.corral.frame.contents.children,
                 function (icon) {return icon.object === target; }
@@ -6662,8 +6668,7 @@ ScriptsMorph.prototype.addToolbar = function () {
     	myself = this,
         shade = new Color(140, 140, 140);
 
-    // toolBar.respectHiddens = true; // uncomment to keep buttons in place
-
+    toolBar.respectHiddens = true;
     toolBar.undoButton = new PushButtonMorph(
         this,
         "undrop",
@@ -8554,7 +8559,24 @@ InputSlotMorph.prototype.shadowedVariablesMenu = function () {
 
     if (!block) {return dict; }
     rcvr = block.scriptTarget();
-    if (rcvr && rcvr.exemplar) {
+    if (this.parentThatIsA(RingMorph)) {
+    	// show own local vars and attributes, because this is likely to be
+     	// inside TELL, ASK or OF
+        vars = rcvr.variables.names();
+        vars.forEach(function (name) {
+            dict[name] = name;
+        });
+        attribs = rcvr.attributes;
+        /*
+        if (vars.length && attribs.length) {
+            dict['~'] = null; // add line
+        }
+        */
+        attribs.forEach(function (name) {
+            dict[name] = [name];
+        });
+    } else if (rcvr && rcvr.exemplar) {
+    	// only show shadowed vars and attributes
         vars = rcvr.inheritedVariableNames(true);
         vars.forEach(function (name) {
             dict[name] = name;

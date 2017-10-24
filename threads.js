@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph,
 TableFrameMorph, ColorSlotMorph, isSnapObject*/
 
-modules.threads = '2017-September-06';
+modules.threads = '2017-October-20';
 
 var ThreadManager;
 var Process;
@@ -1164,6 +1164,8 @@ Process.prototype.evaluate = function (
 Process.prototype.fork = function (context, args) {
     var proc = new Process(),
         stage = this.homeContext.receiver.parentThatIsA(StageMorph);
+    proc.instrument = this.instrument;
+    proc.receiver = this.receiver;
     proc.initializeFor(context, args);
     // proc.pushContext('doYield');
     stage.threads.processes.push(proc);
@@ -1660,17 +1662,17 @@ Process.prototype.doDeleteAttr = function (attrName) {
 
 // experimental message passing primitives
 
-Process.prototype.doTellTo = function (sprite, context) {
+Process.prototype.doTellTo = function (sprite, context, args) {
     this.doRun(
         this.reportAttributeOf(context, sprite),
-        new List()
+        args
     );
 };
 
-Process.prototype.reportAskFor = function (sprite, context) {
+Process.prototype.reportAskFor = function (sprite, context, args) {
     this.evaluate(
         this.reportAttributeOf(context, sprite),
-        new List()
+        args
     );
 };
 
@@ -2268,7 +2270,7 @@ Process.prototype.reportURL = function (url) {
     var response;
     if (!this.httpRequest) {
         // use the location protocol unless the user specifies otherwise
-        if (url.indexOf('//') < 0) {
+        if (url.indexOf('//') < 0 || url.indexOf('//') > 8) {
             if (location.protocol === 'file:') {
                 // allow requests from locally loaded sources
                 url = 'https://' + url;

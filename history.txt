@@ -3676,7 +3676,49 @@ Fixes:
 171004
 ------
 * Objects: limited sprites' direction and coordinates to finite numbers
+* Store, BYOB: made block vars transient for block libraries
+* updated “Animation” library
 
+171006
+------
+* Esperanto translate update, thanks, Sebastian!
+
+171009
+------
+* changed label of "BYOB4 (Snap) history
+* changed label of "Method" to "Method Editor", thanks, Brian!
+
+171010
+------
+* Blocks: fixed #1885
+
+171011
+------
+* Objects: make sure to fully remove parts from their anchor when deleting them
+* Objects: fixed a bounding-box-detection bug in Costumes. Thanks, Simon Mong!
+* Objects: fixed a flood-fill rounding bug. Thanks, Simon Mong!
+
+171012
+------
+* Threads: make sure to retain the current instrument when launching a new thread
+* Threads: retain the current receiver when launching a new thread
+
+171017
+------
+* Blocks: keep “undo” and “redo” buttons at the same location
+* Objects, Threads: added "with inpus" to TELL and ASK prims, changed TELL's C-shape to command-style input
+* Objects: moved TELL and ASK templates in the palette up underneath RUN CALL
+* Blocks: show all own vars and attributes in INHERIT drop-down when inside a ring
+* Objects: made 'myself' default input for "a new clone of" reporter
+* German translation update
+* GUI, Objects: double-clicking a corral sprite icon flashes the sprite onstage
+
+171020
+------
+* fixed SVG encoding, thanks, Joan for the contribution!
+* German translation update
+
+=== v4.1 major release ===
 
 v4.1 Features:
 * polymorphic sprite-local custom blocks
@@ -3713,6 +3755,7 @@ v4.1 Features:
 * experimental "download script" feature
 * new "Animation" library
 * new "Pixels" library for MediaComp
+* double-clicking a corral sprite icon flashes the sprite onstage
 
 Fixes:
 * changed keyboard shortcut indicator for “find blocks” to “^”
@@ -3726,3 +3769,6 @@ Fixes:
 * fixed occasional empty drop-down menu items named “close” 
 * fixed some typos
 * limited sprites' direction and coordinates to finite numbers
+* made block vars transient for block libraries
+* keep “undo” and “redo” buttons at the same location
+* fixed SVG encoding for exporting vector costumes
