@@ -367,7 +367,7 @@ SnapTranslator.dict.ca = {
     'language_translator':
         'Bernat Romagosa Carrasquer, Joan Guillén i Pelegay',
     'translator_e-mail':
-        'bernat@arduino.org, jguille2@xtec.cat',
+        'bernat@snap4arduino.rocks, jguille2@xtec.cat',
     'last_changed':
         '2017-01-09'
 };
