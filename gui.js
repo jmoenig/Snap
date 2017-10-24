@@ -5861,9 +5861,9 @@ ProjectDialogMorph.prototype.buildFilterField = function () {
                 var name,
                     notes;
 
-                if (aProject.projectName) { // cloud
-                    name = aProject.projectName;
-                    notes = aProject.Notes;
+                if (aProject.projectname) { // cloud
+                    name = aProject.projectname;
+                    notes = aProject.notes;
                 } else { // local or examples
                     name = aProject.name;
                     notes = aProject.notes || '';
@@ -5901,10 +5901,10 @@ ProjectDialogMorph.prototype.setSource = function (source) {
         msg = myself.ide.showMessage('Updating\nproject list...');
         this.projectList = [];
         SnapCloud.getProjectList(
-            function (projectList) {
+            function (response) {
                 // Don't show cloud projects if user has since switch panes.
                 if (myself.source === 'cloud') {
-                    myself.installCloudProjectList(projectList);
+                    myself.installCloudProjectList(response.projects);
                 }
                 msg.destroy();
             },
