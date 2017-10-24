@@ -330,18 +330,28 @@ Cloud.prototype.saveProject = function (ide, onSuccess, onError) {
     );
 };
 
-Cloud.prototype.getProjectList = function (onSuccess, onError) {
+Cloud.prototype.getProjectList = function (onSuccess, onError, withThumbnail) {
+    var path = '/projects/%username';
+
+    if (withThumbnail) {
+        path += '?withthumbnail=true';
+    }
+
     this.withCredentialsRequest(
         'GET',
-        '/projects/%username',
+        path,
         onSuccess,
         onError,
         'Could not fetch projects'
     );
 };
 
-Cloud.prototype.getPublishedProjectList = function (username, page, pageSize, searchTerm, onSuccess, onError) {
+Cloud.prototype.getPublishedProjectList = function (username, page, pageSize, searchTerm, onSuccess, onError, withThumbnail) {
     var path = '/projects' + (username ? '/' + username : '') + '?ispublished=true';
+
+    if (withThumbnail) {
+        path += '&withthumbnail=true';
+    }
 
     if (page) {
         path += '&page=' + page + '&pagesize=' + (pageSize || 16);
