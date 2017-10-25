@@ -142,8 +142,8 @@ Cloud.prototype.request = function (
                     if (onError) {
                         onError.call(
                             null,
-                            myself.url,
-                            errorMsg || Cloud.genericErrorMessage
+                            errorMsg || Cloud.genericErrorMessage,
+                            myself.url
                         );
                     } else {
                         myself.genericError();
@@ -471,6 +471,18 @@ Cloud.prototype.unpublishProject = function (projectName, onSuccess, onError) {
         onSuccess,
         onError,
         'Could not unpublish project'
+    );
+};
+
+Cloud.prototype.updateNotes = function (projectName, notes, onSuccess, onError) {
+    this.withCredentialsRequest(
+        'POST',
+        '/projects/%username/' + projectName + '/metadata',
+        onSuccess,
+        onError,
+        'Could not update project notes',
+        false, // wants raw response
+        JSON.stringify({ notes: notes })
     );
 };
 
