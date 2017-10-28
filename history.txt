@@ -3781,3 +3781,9 @@ Fixes:
 
 === v4.1.0.1 maintenance release ===
 
+171028
+------
+* Store: fixed a glitch that raised an error instead of creating an “obsolete” block
+
+=== v4.1.0.2 maintenance release ===
+
