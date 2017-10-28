@@ -3772,3 +3772,12 @@ Fixes:
 * made block vars transient for block libraries
 * keep “undo” and “redo” buttons at the same location
 * fixed SVG encoding for exporting vector costumes
+
+171028
+------
+* Store: fixed a glitch when loading method blocks stored in sprite-local vars
+* Objects: sped up "turbo" mode frame rate (slowing down "turbo" but making it more generally usable)
+* Chinese and Catalan translation updates
+
+=== v4.1.0.1 maintenance release ===
+
