@@ -381,14 +381,26 @@ SnapTranslator.dict.ca = {
         'atura tots els sons',
     'rest for %n beats':
         'fes silenci durant %n temps',
-    'play note %n for %n beats':
-        'toca la nota %n durant %n temps',
+    'play note %note for %n beats':
+        'toca la nota %note durant %n temps',
+    'set instrument to %inst':
+        'fixa l\'instrument a %inst',
     'change tempo by %n':
         'augmenta el tempo en %n',
     'set tempo to %n bpm':
         'fixa el tempo a %n',
     'tempo':
         'tempo',
+
+    // "instruments", i.e. wave forms
+    '(1) sine':
+        '(1) sinus',
+    '(2) square':
+        '(2) quadrat',
+    '(3) sawtooth':
+        '(3) dent de serra',
+    '(4) triangle':
+        '(4) triangle',
 
     // pen:
     'clear':
@@ -495,10 +507,16 @@ SnapTranslator.dict.ca = {
         'quan una còpia meva comenci',
     'create a clone of %cln':
         'crea un clon de %cln',
+    'a new clone of %cln':
+        'un nou clon de %cln',
     'myself':
         'mi mateix',
     'delete this clone':
         'esborra aquest clon',
+    'tell %spr to %cmdRing %inputs':
+        'digues a %spr que faci %cmdRing %inputs',
+    'ask %spr for %repRing %inputs':
+        'pregunta a %spr per %repRing %inputs',
 
     // sensing:
     'touching %col ?':
@@ -595,6 +613,8 @@ SnapTranslator.dict.ca = {
         'Nom de variable',
     'Script variable name':
         'Nom de la variable de programa',
+    'inherit %shd':
+        'hereta %shd',
     'Delete a variable':
         'Esborra una variable',
 
@@ -845,6 +865,10 @@ SnapTranslator.dict.ca = {
         'marqueu per fer que els\nextrems de les línies del\nllapis siguin rectes',
     'uncheck for round ends of lines':
         'desmarqueu per fer que\nels extrems de les línies\ndel llapis siguin arrodonides',
+    'Ternary Boolean slots':
+        'Tres opcions per a les ranures booleanes',
+    'Camera support':
+        'Suport per a càmera',
     'Inheritance support':
         'Suport a l\'herència d\'objectes',
 
@@ -863,6 +887,8 @@ SnapTranslator.dict.ca = {
         'ajuda',
 
     // palette:
+    'find blocks':
+        'Cerca blocs',
     'hide primitives':
         'amaga els blocs primitius',
     'show primitives':
@@ -895,6 +921,8 @@ SnapTranslator.dict.ca = {
         'desactiveu l\'opció per desar els continguts\nen el projecte',
     'check to prevent contents\nfrom being saved':
         'activeu l\'opció per evitar que els continguts\nes desin',
+    'new line':
+        'nova línia',
 
     // custom blocks:
     'delete block definition...':
@@ -905,14 +933,28 @@ SnapTranslator.dict.ca = {
     // sprites:
     'edit':
         'edita',
+    'clone':
+        'clona',
     'move':
         'mou',
+    'pivot':
+        'pivota',
+    'edit the costume\'s\nrotation center':
+        'canvia el centre de\nrotació del vestit',
     'detach from':
         'desenganxa de',
     'detach all parts':
         'desenganxa totes les parts',
     'export...':
         'exporta...',
+    'parent...':
+        'pare...',
+    'current parent':
+        'pare actual',
+    'release':
+        'allibera',
+    'make temporary and\nhide in the sprite corral':
+        'transforma\'l en temporal i\ntreu-lo de l\'àrea dels objectes',
 
     // stage:
     'show all':
@@ -935,6 +977,8 @@ SnapTranslator.dict.ca = {
         'desfés l\'últim moviment\nde blocs',
     'redrop':
         'refés',
+    'use the keyboard\nto enter blocks':
+    	'utilitza el teclat\nper escriure els blocs',
     'scripts pic...':
         'exporta com a imatge...',
     'open a new window\nwith a picture of all scripts':
@@ -1091,6 +1135,8 @@ SnapTranslator.dict.ca = {
     // block editor
     'Block Editor':
         'Editor de blocs',
+    'Method Editor':
+        'Editor de funcions',
     'Apply':
         'Aplica',
 
@@ -1356,6 +1402,10 @@ SnapTranslator.dict.ca = {
     'e^':
         'e^',
 
+    // Boolean expressions keyboard entry
+    'not':
+        'no',
+
     // delimiters
     'letter':
         'lletra',
@@ -1425,6 +1475,20 @@ SnapTranslator.dict.ca = {
         'nom',
     'stage':
         'escenari',
+    'costumes':
+        'vestits',
+    'sounds':
+        'sons',
+    'scripts':
+        'programes',
+
+    // inheritance
+    'inherited':
+        'heretat',
+    'check to inherit\nfrom':
+        'marqueu per heretar\n de',
+    'uncheck to\ndisinherit':
+        'desmarqueu per a\ndesheretar',
 
     // missing in lang-de.js - copied from lang-pt.js
     'delete %shd':
@@ -1817,8 +1881,6 @@ SnapTranslator.dict.ca = {
         'com a entrada(s), però s\'ha rebut',
     'parent...':
         'pare…',
-    'current parent':
-        'pare actual actual',
     'Dragging threshold...':
         'Llindar per l\'arrossegament…',
     'Cache Inputs':
@@ -1971,6 +2033,14 @@ SnapTranslator.dict.ca = {
 		'marqueu per monitoritzar la\nprogramació per pas a pas (alenteix)',
 	'uncheck to turn off\nvisible stepping':
 		'desmarqueu per deshabilitar\nla monitorització pas a pas',
+    'check to allow\nempty Boolean slots':
+        'marqueu per permetre tornar a\ndeixar buides les ranures booleanes',
+    'uncheck to limit\nBoolean slots to true / false':
+        'desmarqueu per commutar les ranures\nbooleanes només entre cert i fals',
+    'uncheck to disable\ncamera support':
+        'desmarqueu per deshabilitar\nel suport per a càmeres',
+    'check to enable\ncamera support':
+        'marqueu per habilitar\nel suport a càmeres',
 	'uncheck to disable\nblock to text mapping features':
 		'demarqueu per deshabilitar les\nfuncionalitats de mapeig de blocs en codi',
 	'uncheck for smooth\nscaling of vector costumes':
@@ -2164,5 +2234,9 @@ SnapTranslator.dict.ca = {
 		'Entrades multilínia',
 //
 	'(no matches)':
-		'(cap resultat)'
+		'(cap resultat)',
+    'take a camera snapshot and\nimport it as a new sprite':
+        'pren una imatge amb la càmera\ni importa-la com un nou vestit',
+    'Import a new costume from your webcam':
+        'Importa un nou vestit amb la webcam'
 };
