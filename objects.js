@@ -83,7 +83,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph,
 AlignmentMorph*/
 
-modules.objects = '2017-October-17';
+modules.objects = '2017-October-28';
 
 var SpriteMorph;
 var StageMorph;
@@ -6629,7 +6629,7 @@ StageMorph.prototype.step = function () {
                 }
             }
         });
-        while ((Date.now() - this.lastTime) < 100) {
+        while ((Date.now() - this.lastTime) < 17) { // approx. 60 fps
             this.threads.step();
         }
         this.children.forEach(function (morph) {
