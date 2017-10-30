@@ -185,7 +185,7 @@ SnapTranslator.dict.pt = {
     'translator_e-mail':
         'mmsequeira@gmail.com',
     'last_changed':
-        '2017-10-29',
+        '2017-10-30',
 
     // GUI
     // control bar:
@@ -1939,12 +1939,14 @@ SnapTranslator.dict.pt = {
     // produção de código
     'map %cmdRing to %codeKind %code':
         'mapear %cmdRing no %codeKind %code',
-    'map String to code %code':
-        'mapear texto no código %code',
+    'map %mapValue to code %code':
+        'mapear %mapValue no código %code',
     'map %codeListPart of %codeListKind to code %code':
         'mapear %codeListPart de %codeListKind no código %code',
     'code of %cmdRing':
         'o código de %cmdRing',
+    'String':
+        'texto',
     'delimiter':
         'delimitador',
     'collection':
