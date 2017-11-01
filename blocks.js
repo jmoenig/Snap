@@ -6196,11 +6196,12 @@ ScriptsMorph.prototype.addUndoControls = function () {
 
 ScriptsMorph.prototype.updateUndoControls = function () {
     var sf = this.parentThatIsA(ScrollFrameMorph),
-        owner = this.undoOwnerId(),
-        changed = false;
+        changed = false,
+        owner;
 
     if (!sf) {return; }
 
+    owner = this.undoOwnerId();
     if (!sf.toolBar) {
         sf.toolBar = this.addUndoControls();
         sf.add(sf.toolBar);
