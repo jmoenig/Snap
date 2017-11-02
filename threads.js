@@ -2688,12 +2688,20 @@ Process.prototype.reportStringSize = function (data) {
 };
 
 Process.prototype.reportUnicode = function (string) {
-    var str = (string || '').toString()[0];
-    return str ? str.charCodeAt(0) : 0;
+    var str = (string || '\u0000').toString()[0];
+
+    if (str.codePointAt) { // support for Unicode in newer browsers.
+        return str.codePointAt(0);
+    }
+    return str.charCodeAt(0);
 };
 
 Process.prototype.reportUnicodeAsLetter = function (num) {
     var code = +(num || 0);
+
+    if (String.fromCodePoint) { // support for Unicode in newer browsers.
+        String.fromCodePoint(code);
+    }
     return String.fromCharCode(code);
 };
 
