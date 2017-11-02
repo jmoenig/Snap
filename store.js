@@ -61,7 +61,7 @@ normalizeCanvas, contains*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2017-October-04';
+modules.store = '2017-October-28';
 
 
 // XML_Serializer ///////////////////////////////////////////////////////
@@ -1135,9 +1135,13 @@ SnapSerializer.prototype.loadBlock = function (model, isReporter, object) {
             // lookup in inherited methods
             info = detect(receiver.customBlocks, function (block) {
                 return block.blockSpec() === model.attributes.s;
-            }) || detect(receiver.inheritedMethodsCache, function (block) {
-                return block.blockSpec() === model.attributes.s;
-            });
+            }) || (
+            	receiver.inheritedMethodsCache ?
+                	detect(receiver.inheritedMethodsCache, function (block) {
+                    	return block.blockSpec() === model.attributes.s;
+                	})
+          		: null
+          	);
         }
         if (!info) {
             return this.obsoleteBlock(isReporter);
@@ -1367,7 +1371,7 @@ SnapSerializer.prototype.loadValue = function (model, object) {
             el = model.childNamed('block') ||
                 model.childNamed('custom-block');
             if (el) {
-                v.expression = this.loadBlock(el, origin);
+                v.expression = this.loadBlock(el, null, origin);
             } else {
                 el = model.childNamed('l');
                 if (el) {
