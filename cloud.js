@@ -235,14 +235,16 @@ Cloud.prototype.login = function (username, password, persist, onSuccess, onErro
         'POST',
         '/users/' + username + '/login?' +
             this.encodeDict({
-                password: password,
                 persist: persist
             }),
         function () {
             myself.checkCredentials(onSuccess, onError);
         },
         onError,
-        'login failed');
+        'login failed',
+        'false', // wants raw response
+        password // password travels inside the body
+    );
 };
 
 Cloud.prototype.signup = function (username, password, password_repeat, email, onSuccess, onError){
@@ -486,4 +488,4 @@ Cloud.prototype.updateNotes = function (projectName, notes, onSuccess, onError) 
     );
 };
 
-var SnapCloud = new Cloud('http://localhost:8080');
+var SnapCloud = new Cloud('https://localhost');
