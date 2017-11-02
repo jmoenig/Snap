@@ -2688,7 +2688,7 @@ Process.prototype.reportStringSize = function (data) {
 };
 
 Process.prototype.reportUnicode = function (string) {
-    var str = (string || '\u0000').toString()[0];
+    var str = isNil(string) ? '\u0000' : string.toString();
 
     if (str.codePointAt) { // support for Unicode in newer browsers.
         return str.codePointAt(0);
