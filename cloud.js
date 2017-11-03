@@ -208,7 +208,7 @@ Cloud.prototype.checkCredentials = function (onSuccess, onError) {
             if (user.username) {
                 myself.username = user.username;
             }
-            if (onSuccess) { onSuccess.call(null, user.username); }
+            if (onSuccess) { onSuccess.call(null, user.username, user.isadmin); }
         },
         onError
     );
@@ -373,25 +373,15 @@ Cloud.prototype.getPublishedProjectList = function (username, page, pageSize, se
 };
 
 Cloud.prototype.getThumbnail = function (username, projectName, onSuccess, onError) {
-    if (username) {
-        this.request(
-            'GET',
-            '/projects/' + username + '/' + projectName + '/thumbnail',
-            onSuccess,
-            onError,
-            'Could not fetch thumbnail',
-            true
-        );
-    } else {
-        this.withCredentialsRequest(
-            'GET',
-            '/projects/%username/' + projectName + '/thumbnail',
-            onSuccess,
-            onError,
-            'Could not fetch thumbnail',
-            true
-        );
-    }
+    this[username ? 'request' : 'withCredentialsRequest'](
+        'GET',
+        '/projects/' + (username || '%username') + '/'
+            + projectName + '/thumbnail',
+        onSuccess,
+        onError,
+        'Could not fetch thumbnail',
+        true
+    );
 };
 
 Cloud.prototype.getRawProject = function (projectName, onSuccess, onError) {
@@ -426,50 +416,54 @@ Cloud.prototype.getProjectMetadata = function (projectName, username, onSuccess,
     );
 };
 
-Cloud.prototype.deleteProject = function (projectName, onSuccess, onError) {
-    this.withCredentialsRequest(
+Cloud.prototype.deleteProject = function (projectName, username, onSuccess, onError) {
+    this[username ? 'request' : 'withCredentialsRequest'](
         'DELETE',
-        '/projects/%username/' + projectName,
+        '/projects/' + (username || '%username') + '/' + projectName,
         onSuccess,
         onError,
         'Could not delete project'
     );
 };
 
-Cloud.prototype.shareProject = function (projectName, onSuccess, onError) {
-    this.withCredentialsRequest(
+Cloud.prototype.shareProject = function (projectName, username, onSuccess, onError) {
+    this[username ? 'request' : 'withCredentialsRequest'](
         'POST',
-        '/projects/%username/' + projectName + '/metadata?ispublic=true',
+        '/projects/' + (username || '%username') + '/'
+            + projectName + '/metadata?ispublic=true',
         onSuccess,
         onError,
         'Could not share project'
     );
 };
 
-Cloud.prototype.unshareProject = function (projectName, onSuccess, onError) {
-    this.withCredentialsRequest(
+Cloud.prototype.unshareProject = function (projectName, username, onSuccess, onError) {
+    this[username ? 'request' : 'withCredentialsRequest'](
         'POST',
-        '/projects/%username/' + projectName + '/metadata?ispublic=false&ispublished=false',
+        '/projects/' + (username || '%username') + '/'
+            + projectName + '/metadata?ispublic=false&ispublished=false',
         onSuccess,
         onError,
         'Could not unshare project'
     );
 };
 
-Cloud.prototype.publishProject = function (projectName, onSuccess, onError) {
-    this.withCredentialsRequest(
+Cloud.prototype.publishProject = function (projectName, username, onSuccess, onError) {
+    this[username ? 'request' : 'withCredentialsRequest'](
         'POST',
-        '/projects/%username/' + projectName + '/metadata?ispublished=true',
+        '/projects/' + (username || '%username') + '/'
+            + projectName + '/metadata?ispublished=true',
         onSuccess,
         onError,
         'Could not publish project'
     );
 };
 
-Cloud.prototype.unpublishProject = function (projectName, onSuccess, onError) {
-    this.withCredentialsRequest(
+Cloud.prototype.unpublishProject = function (projectName, username, onSuccess, onError) {
+    this[username ? 'request' : 'withCredentialsRequest'](
         'POST',
-        '/projects/%username/' + projectName + '/metadata?ispublished=false',
+        '/projects/' + (username || '%username') + '/'
+            + projectName + '/metadata?ispublished=false',
         onSuccess,
         onError,
         'Could not unpublish project'

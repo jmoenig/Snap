@@ -6278,6 +6278,7 @@ ProjectDialogMorph.prototype.deleteProject = function () {
                 function () {
                     SnapCloud.deleteProject(
                         proj.projectname,
+                        null, // username is implicit
                         function () {
                             myself.ide.hasChangedMedia = true;
                             idx = myself.projectList.indexOf(proj);
@@ -6324,6 +6325,7 @@ ProjectDialogMorph.prototype.shareProject = function () {
                 myself.ide.showMessage('sharing\nproject...');
                 SnapCloud.shareProject(
                     proj.projectname,
+                    null, // username is implicit
                     function () {
                         proj.ispublic = true;
                         myself.unshareButton.show();
@@ -6370,6 +6372,7 @@ ProjectDialogMorph.prototype.unshareProject = function () {
                 myself.ide.showMessage('unsharing\nproject...');
                 SnapCloud.unshareProject(
                     proj.projectname,
+                    null, // username is implicit
                     function () {
                         proj.ispublic = false;
                         myself.shareButton.show();
@@ -6410,6 +6413,7 @@ ProjectDialogMorph.prototype.publishProject = function () {
                 myself.ide.showMessage('publishing\nproject...');
                 SnapCloud.publishProject(
                     proj.projectname,
+                    null, // username is implicit
                     function () {
                         proj.ispublished = true;
                         myself.unshareButton.show();
@@ -6457,6 +6461,7 @@ ProjectDialogMorph.prototype.unpublishProject = function () {
                 myself.ide.showMessage('unpublishing\nproject...');
                 SnapCloud.unpublishProject(
                     proj.projectname,
+                    null, // username is implicit
                     function () {
                         proj.ispublished = false;
                         myself.unshareButton.show();
