@@ -218,6 +218,10 @@ Cloud.prototype.getCurrentUser = function (onSuccess, onError) {
     this.request('GET', '/users/c', onSuccess, onError, 'Could not retrieve current user');
 };
 
+Cloud.prototype.getUser = function (username, onSuccess, onError) {
+    this.request('GET', '/users/' + username, onSuccess, onError, 'Could not retrieve user');
+};
+
 Cloud.prototype.logout = function (onSuccess, onError) {
     this.username = null;
     this.request(
