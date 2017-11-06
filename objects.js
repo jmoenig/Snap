@@ -1658,8 +1658,11 @@ SpriteMorph.prototype.drawNew = function () {
         }
     }
     this.version = Date.now();
-    this.originalPixels = this.image.getContext('2d').createImageData(this.width(), this.height());
-    this.originalPixels = this.image.getContext('2d').getImageData(0, 0, this.width(), this.height());
+    if(this.width() >0 && this.height() >0)
+    {
+        this.originalPixels = this.image.getContext('2d').createImageData(this.width(), this.height());
+        this.originalPixels = this.image.getContext('2d').getImageData(0, 0, this.width(), this.height());
+    }
 };
 
 SpriteMorph.prototype.endWarp = function () {
