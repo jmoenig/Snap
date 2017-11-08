@@ -2700,7 +2700,7 @@ Process.prototype.reportUnicodeAsLetter = function (num) {
     var code = +(num || 0);
 
     if (String.fromCodePoint) { // support for Unicode in newer browsers.
-        String.fromCodePoint(code);
+        return String.fromCodePoint(code);
     }
     return String.fromCharCode(code);
 };
