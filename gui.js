@@ -5199,8 +5199,8 @@ IDE_Morph.prototype.changeCloudPassword = function () {
             SnapCloud.changePassword(
                 user.oldpassword,
                 user.password,
+                user.passwordRepeat,
                 function () {
-                    myself.logout();
                     myself.showMessage('password has been changed.', 2);
                 },
                 myself.cloudError()

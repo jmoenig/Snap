@@ -251,17 +251,32 @@ Cloud.prototype.login = function (username, password, persist, onSuccess, onErro
     );
 };
 
-Cloud.prototype.signup = function (username, password, password_repeat, email, onSuccess, onError){
+Cloud.prototype.signup = function (username, password, passwordRepeat, email, onSuccess, onError) {
     this.request(
         'POST',
         '/users/' + username + '?' + this.encodeDict({
             email: email,
             password: password,
-            password_repeat: password_repeat
+            password_repeat: passwordRepeat
         }),
         onSuccess,
         onError,
         'signup failed');
+};
+
+Cloud.prototype.changePassword = function (password, newPassword, passwordRepeat, onSuccess, onError) {
+    this.withCredentialsRequest(
+        'POST',
+        '/users/%username/newpassword?' + this.encodeDict({
+            oldpassword: password,
+            password_repeat: passwordRepeat,
+            newpassword: newPassword
+        }),
+        onSuccess,
+        onError,
+        'Could not change password'
+    );
+
 };
 
 // Projects
