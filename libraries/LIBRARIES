@@ -14,3 +14,4 @@ Eisenbergification.xml	Provide getters and setters for all GUI-controlled global
 bignumbers.xml	Infinite precision integers, exact rationals, complex	The full Scheme numeric tower.  "USE BIGNUMS <True>" to enable.
 animation_module.xml	Animation	glide, grow and rotate using easing functions.
 pixel_module.xml	Pixels	manipulate costumes pixel-wise.
+audioComp_module.xml	Audio Comp	analyze, manipulate and generate sound samples.
