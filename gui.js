@@ -75,7 +75,7 @@ isRetinaSupported, SliderMorph, Animation*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2017-October-28';
+modules.gui = '2017-November-15';
 
 // Declarations
 
@@ -4987,7 +4987,7 @@ IDE_Morph.prototype.userSetStageSize = function () {
 IDE_Morph.prototype.setStageExtent = function (aPoint) {
     var myself = this,
         world = this.world(),
-        ext = aPoint.max(new Point(480, 180));
+        ext = aPoint.max(new Point(240, 180));
 
     function zoom() {
         myself.step = function () {

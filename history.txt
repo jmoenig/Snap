@@ -3791,3 +3791,4 @@ Fixes:
 ------
 * Portuguese & Polish translation updates, thanks, Witek and Manuel!!
 * escape xml attribute contents, thanks, Brian Broll!
+* changed minimum stage width to 240
