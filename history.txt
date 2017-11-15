@@ -3787,3 +3787,7 @@ Fixes:
 
 === v4.1.0.2 maintenance release ===
 
+171115
+------
+* Portuguese & Polish translation updates, thanks, Witek and Manuel!!
+* escape xml attribute contents, thanks, Brian Broll!
