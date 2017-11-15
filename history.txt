@@ -3793,3 +3793,5 @@ Fixes:
 * escape xml attribute contents, thanks, Brian Broll!
 * changed minimum stage width to 240
 * new Audio Comp library for Guzdial-style sound samples fun
+
+=== v4.1.0.3 maintenance release ===
