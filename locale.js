@@ -215,7 +215,7 @@ SnapTranslator.dict.pt = {
     'translator_e-mail':
         'mmsequeira@gmail.com',
     'last_changed':
-        '2016-10-30'
+        '2017-10-30'
 };
 
 SnapTranslator.dict.cs = {
