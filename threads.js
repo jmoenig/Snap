@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph,
 TableFrameMorph, ColorSlotMorph, isSnapObject*/
 
-modules.threads = '2017-October-20';
+modules.threads = '2017-November-16';
 
 var ThreadManager;
 var Process;
@@ -1166,12 +1166,12 @@ Process.prototype.fork = function (context, args) {
         stage = this.homeContext.receiver.parentThatIsA(StageMorph);
     proc.instrument = this.instrument;
     proc.receiver = this.receiver;
-    proc.initializeFor(context, args);
+    proc.initializeFor(context, args, this.enableSingleStepping);
     // proc.pushContext('doYield');
     stage.threads.processes.push(proc);
 };
 
-Process.prototype.initializeFor = function (context, args) {
+Process.prototype.initializeFor = function (context, args, ignoreExit) {
     // used by Process.fork() and global invoke()
     if (context.isContinuation) {
         throw new Error(
@@ -1243,14 +1243,16 @@ Process.prototype.initializeFor = function (context, args) {
         // insert a tagged exit context
         // which "report" can catch later
         // needed for invoke() situations
-        exit = new Context(
-            runnable.parentContext,
-            'expectReport',
-            outer,
-            outer.receiver
-        );
-        exit.tag = 'exit';
-        runnable.parentContext = exit;
+        if (!ignoreExit) { // when single stepping LAUNCH
+	        exit = new Context(
+    	        runnable.parentContext,
+        	    'expectReport',
+            	outer,
+            	outer.receiver
+        	);
+        	exit.tag = 'exit';
+        	runnable.parentContext = exit;
+    	}
     }
 
     this.homeContext = new Context(); // context.outerContext;

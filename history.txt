@@ -3795,3 +3795,10 @@ Fixes:
 * new Audio Comp library for Guzdial-style sound samples fun
 
 === v4.1.0.3 maintenance release ===
+
+171116
+------
+* Threads: suppress "exit" context when forking a process while single-stepping, this avoids a false "reporter didn't report" error message
+* Blocks: avoid coloring the block-highlight when re-coloring a syntax element, this prevents highlighted blocks inside LAUNCH statements to expand when repeatedly single-stepped.
+
+=== v4.1.0.4 maintenance release ===

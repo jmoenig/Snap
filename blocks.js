@@ -148,7 +148,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2017-October-17';
+modules.blocks = '2017-November-16';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -737,7 +737,8 @@ SyntaxElementMorph.prototype.setColor = function (aColor, silently) {
             this.color = aColor;
             if (!silently) {this.drawNew(); }
             this.children.forEach(function (child) {
-                if (!silently || child instanceof TemplateSlotMorph) {
+                if ((!silently || child instanceof TemplateSlotMorph) &&
+                		!(child instanceof BlockHighlightMorph)) {
                     child.drawNew();
                     child.changed();
                 }
