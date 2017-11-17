@@ -1056,9 +1056,6 @@ ActionManager.prototype.uniqueIdForImport = function (str) {
         if (children[i].attributes) {
             children[i].attributes.collabId = this.newId();
         }
-        if (children[i].contents) {
-            children[i].contents = this.serializer.escape(children[i].contents);
-        }
     }
 
     return model;
