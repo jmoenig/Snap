@@ -62,7 +62,7 @@ CellMorph, ArrowMorph, MenuMorph, snapEquals, Morph, isNil, localize,
 MorphicPreferences, TableDialogMorph, SpriteBubbleMorph, SpeechBubbleMorph,
 TableFrameMorph, TableMorph, Variable, isSnapObject*/
 
-modules.lists = '2017-February-14';
+modules.lists = '2017-September-01';
 
 var List;
 var ListWatcherMorph;
@@ -105,6 +105,7 @@ var ListWatcherMorph;
 // List instance creation:
 
 function List(array) {
+    this.type = null; // for UI lists, such as costumes, sounds, sprites
     this.contents = array || [];
     this.first = null;
     this.rest = null;

@@ -63,6 +63,8 @@
     Jan 18 - avoid pixel collision detection in PaintCanvas (Jens)
     Mar 22 - fixed automatic rotation center point mechanism (Jens)
     May 10 - retina display support adjustments (Jens)
+    2017
+    April 10 - getGlobalPixelColor adjustment for Chrome & retina (Jens)
 */
 
 /*global Point, Rectangle, DialogBoxMorph, AlignmentMorph, PushButtonMorph,
@@ -73,7 +75,7 @@ StageMorph, isNil*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.paint = '2016-July-14';
+modules.paint = '2017-April-10';
 
 // Declarations
 
@@ -461,6 +463,11 @@ PaintEditorMorph.prototype.getUserColor = function () {
             event.pageY - posInDocument.y
         ));
         color = world.getGlobalPixelColor(hand.position());
+        if (!color.a) {
+            // ignore transparent,
+            // needed for retina-display support
+            return;
+        }
         color.a = 255;
         myself.propertiesControls.colorpicker.action(color);
     };
@@ -740,7 +747,7 @@ PaintCanvasMorph.prototype.floodfill = function (sourcepoint) {
         ctx = this.paper.getContext("2d"),
         img = ctx.getImageData(0, 0, width, height),
         data = img.data,
-        stack = [Math.round(sourcepoint.y) * width + sourcepoint.x],
+        stack = [Math.round(Math.round(sourcepoint.y) * width + sourcepoint.x)],
         currentpoint,
         read,
         sourcecolor,

@@ -8,7 +8,7 @@ The above copyright notice and this permission notice shall be included in all c
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-Last changed 2013-04-03 by Jens Moenig (disabled text area overlay)
+Last changed 2017-07-04 by Jens Moenig (disabled text area overlay, introduced Sprite::isTemporary)
 
 */
 
@@ -392,7 +392,7 @@ var sb = (function (sb) {
 
 	sb.addFields(-1, 'Slider', 'BorderedMorph', 'slider,value,setValueSelector,sliderShadow,sliderColor,descending,model');
 	sb.addFields(-2, 'AbstractSound', '', '');
-	sb.addFields(-3, 'ScriptableScratchMorph', 'Morph', 'objName,vars,blocksBin,customBlocks,isClone,media,costume');
+	sb.addFields(-3, 'ScriptableScratchMorph', 'Morph', 'objName,vars,blocksBin,customBlocks,isTemporary,media,costume');
 	sb.addFields(-4, 'ArgMorph', 'BorderedMorph', 'labelMorph');
 	sb.addFields(-5, 'PasteUpMorph', 'BorderedMorph', '');
 	sb.addFields(-6, 'ScratchMedia', '', 'mediaName');

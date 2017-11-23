@@ -182,7 +182,7 @@ SnapTranslator.dict.ru = {
     'translator_e-mail':
         'svetlanap@berkeley.edu, tema@school830.ru', // optional
     'last_changed':
-        '2017-04-02', // this, too, will appear in the Translators tab
+        '2017-09-01', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
