@@ -61,7 +61,7 @@ normalizeCanvas, contains*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2017-October-28';
+modules.store = '2017-November-26';
 
 
 // XML_Serializer ///////////////////////////////////////////////////////
@@ -406,7 +406,7 @@ SnapSerializer.prototype.rawLoadProjectModel = function (xmlNode) {
     StageMorph.prototype.dimensions = new Point(480, 360);
     if (model.stage.attributes.width) {
         StageMorph.prototype.dimensions.x =
-            Math.max(+model.stage.attributes.width, 480);
+            Math.max(+model.stage.attributes.width, 240);
     }
     if (model.stage.attributes.height) {
         StageMorph.prototype.dimensions.y =
