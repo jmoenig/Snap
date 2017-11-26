@@ -3802,3 +3802,7 @@ Fixes:
 * Blocks: avoid coloring the block-highlight when re-coloring a syntax element, this prevents highlighted blocks inside LAUNCH statements to expand when repeatedly single-stepped.
 
 === v4.1.0.4 maintenance release ===
+
+171126
+------
+* GUI: fixed #1933 - avoid creating "obsolete" blocks by not copying method blocks into sprites that don't understand them
