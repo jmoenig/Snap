@@ -3808,3 +3808,4 @@ Fixes:
 * GUI: fixed #1933 - avoid creating "obsolete" blocks by not copying method blocks into sprites that don't understand them
 * Store: fixed #1937 - allow stage width to be a minimum of 240 pixels
 
+=== v4.1.0.5 maintenance release ===
