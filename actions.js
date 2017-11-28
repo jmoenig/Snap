@@ -2158,13 +2158,15 @@ ActionManager.prototype._loadCostume = function(savedCostume, callback) {
 ActionManager.prototype.onDuplicateSprite =
 ActionManager.prototype.onAddSprite = function(serialized, creatorId) {
     var ide = this.ide(),
-        sprites;
+        allSprites,
+        sprite;
 
-    sprites = this.serializer.loadSprites(serialized, ide);
+    allSprites = this.serializer.loadSprites(serialized, ide);
+    sprite = allSprites[allSprites.length-1];
     if (creatorId === this.id) {
-        ide.selectSprite(sprites[sprites.length-1]);
+        ide.selectSprite(sprite);
     }
-    this.completeAction();
+    this.completeAction(null, sprite);
 };
 
 ActionManager.prototype.onRemoveSprite = function(spriteId) {
@@ -2184,7 +2186,7 @@ ActionManager.prototype.onRenameSprite = function(spriteId, name) {
     if (ide.currentSprite === sprite) {
         ide.spriteBar.nameField.setContents(name);
     }
-    this.completeAction();
+    this.completeAction(null, name);
 };
 
 ActionManager.prototype.onToggleDraggable = function(spriteId, draggable) {
