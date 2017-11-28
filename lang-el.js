@@ -633,7 +633,7 @@ SnapTranslator.dict.el = {
     'New':
         'Νέο',
     'Open...':
-        'Άμοιγα...',
+        'Άνοιγμα...',
     'Save':
         'Αποθήκευση',
     'Save As...':
