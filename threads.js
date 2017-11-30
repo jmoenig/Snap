@@ -2743,35 +2743,29 @@ Process.prototype.parseCSV = function (string) {
     // parse a single row of CSV data into a one-dimensional list
     // this assumes that the whole csv data has already been split
     // by lines.
-    // taken from:
-    // https://stackoverflow.com/questions/8493195/how-can-i-parse-a-csv-string-with-javascript-which-contains-comma-in-data
+    // Following RFC 4180 specifications
 
-    var re_valid = /^\s*(?:'[^'\\]*(?:\\[\S\s][^'\\]*)*'|"[^"\\]*(?:\\[\S\s][^"\\]*)*"|[^,'"\s\\]*(?:\s+[^,'"\s\\]+)*)\s*(?:,\s*(?:'[^'\\]*(?:\\[\S\s][^'\\]*)*'|"[^"\\]*(?:\\[\S\s][^"\\]*)*"|[^,'"\s\\]*(?:\s+[^,'"\s\\]+)*)\s*)*$/,
-        re_value = /(?!\s*$)\s*(?:'([^'\\]*(?:\\[\S\s][^'\\]*)*)'|"([^"\\]*(?:\\[\S\s][^"\\]*)*)"|([^,'"\s\\]*(?:\s+[^,'"\s\\]+)*))\s*(?:,|$)/g,
-        a = [];
-
+    var re_valid = /^(?:"(?:(?:"{2})*[^"]*)*"|([^",]*))(?:,(?:"(?:(?:"{2})*[^"]*)*"|([^",]*)))*$/;
     if (!re_valid.test(string)) {
         return new List();
     }
+
+    var re_value = /(?:^|,)(?:"((?:(?:"{2})*[^"]*)*)"|([^",]*))(?=(?:,|$))/g,
+        a = [];
+
     string.replace(
         re_value,
-        function(m0, m1, m2, m3) {
+        function(m0, m1, m2) {
             if (m1 !== undefined) {
-                // remove backslash from \' in single quoted values.
-                a.push(m1.replace(/\\'/g, "'"));
+                // load a quoted field
+                a.push(m1.replace(/"{2}/g, "\""));
             } else if (m2 !== undefined) {
-                // remove backslash from \" in double quoted values.
-                a.push(m2.replace(/\\"/g, '"'));
-            } else if (m3 !== undefined) {
-                a.push(m3);
+                // load a non-quoted field
+                a.push(m2.replace(/"{2}/g, "\""));
             }
             return '';
         }
     );
-    // special case: empty last value.
-    if (/,\s*$/.test(string)) {
-        a.push('');
-    }
     return new List(a);
 };
 
