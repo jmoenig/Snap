@@ -1394,10 +1394,20 @@ ActionManager.prototype.getBlockFromId = function(id) {
     var ids = id.split('/'),
         blockId = ids.shift(),
         block = this._blocks[blockId],
-        editor = block.parentThatIsA(BlockEditorMorph),
-        customBlockId;
+        customBlockId,
+        editor;
+
+    // If the id is a custom block id, it is referencing the PrototypeHatBlockMorph
+    if (this._customBlocks[id]) {
+        return this._getCustomBlockEditor(id)
+            .body.contents  // get ScriptsMorph of BlockEditorMorph
+            .children.find(function(child) {
+                return child instanceof PrototypeHatBlockMorph;
+            });
+    }
 
     // If the block is part of a custom block def, refresh it
+    editor = block.parentThatIsA(BlockEditorMorph);
     if (editor) {
         var currentEditor,
             found = false,
@@ -1460,16 +1470,7 @@ ActionManager.prototype.onMoveBlock = function(id, rawTarget) {
 
     // Resolve the target
     if (block instanceof CommandBlockMorph) {
-        // Check if connecting to the beginning of a custom block definition
-        if (this._customBlocks[target.element]) {
-            target.element = this._getCustomBlockEditor(target.element, block)
-                .body.contents  // get ScriptsMorph of BlockEditorMorph
-                .children.find(function(child) {
-                    return child instanceof PrototypeHatBlockMorph;
-                });
-        } else {  // basic connection for sprite/stage/etc
-            target.element = this.getBlockFromId(target.element);
-        }
+        target.element = this.getBlockFromId(target.element);
         owner = this.getBlockOwner(target.element);
         scripts = target.element.parentThatIsA(ScriptsMorph);
         if (block.parent) {

@@ -2167,6 +2167,7 @@ PrototypeHatBlockMorph.prototype.init = function (definition) {
     proto.refreshPrototypeSlotTypes(); // show slot type indicators
     this.fixLayout();
     proto.fixBlockColor(this, true);
+    this.id = this.definition.id;
 };
 
 PrototypeHatBlockMorph.prototype.mouseClickLeft = function () {
