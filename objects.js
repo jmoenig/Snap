@@ -3015,7 +3015,7 @@ SpriteMorph.prototype.setBorderHue = function (num) {
 
 SpriteMorph.prototype.getBorderShade = (function () {
 	return function () {
-		return ((this.borderColor.hsv()[2] * 50) + (50 - (this.borderColor.hsv()[2] * 50)));
+		return ((this.borderColor.hsv()[2] * 50) + (50 - (this.borderColor.hsv()[1] * 50)));
 	};
 }());
 
