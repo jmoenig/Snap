@@ -3015,7 +3015,7 @@ SpriteMorph.prototype.setBorderHue = function (num) {
 
 SpriteMorph.prototype.getBorderShade = (function () {
 	return function () {
-		return this.borderColor.hsv()[2] * 50;
+		return ((this.borderColor.hsv()[2] * 50) + (50 - (this.borderColor.hsv()[2] * 50)));
 	};
 }());
 
@@ -3052,7 +3052,7 @@ SpriteMorph.prototype.changeBorderShade = (function () {
 	};
 }());
 SpriteMorph.prototype.getBrightness = function () {
-    return this.color.hsv()[2] * 100;
+    return (this.color.hsv()[2] * 50) + (50 - (this.color.hsv()[1] * 50));
 };
 
 SpriteMorph.prototype.setBrightness = function (num) {
@@ -3080,9 +3080,12 @@ SpriteMorph.prototype.setBrightness = function (num) {
     this.gotoXY(x, y);
 };
 
-SpriteMorph.prototype.changeBrightness = function (delta) {
-    this.setBrightness(this.getBrightness() + (+delta || 0));
-};
+
+SpriteMorph.prototype.changeBrightness = (function () {
+	return function (delta) {
+		this.setBrightness(this.getBrightness() + (+delta || 0));
+	};
+}());
 
 // SpriteMorph layers
 
