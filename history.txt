@@ -1,4 +1,4 @@
-BYOB4 (Snap) history
+BYOB4 (Snap!) history
 ---------------------
 110511
 ------
@@ -3809,3 +3809,12 @@ Fixes:
 * Store: fixed #1937 - allow stage width to be a minimum of 240 pixels
 
 === v4.1.0.5 maintenance release ===
+
+*** in development ***
+
+171201
+------
+* GUI: started development on v 4.1.1
+* BYOB, Store, Threads: Localization support for custom blocks (experimental)
+* Tools: German translation of tools (experimental)
+
