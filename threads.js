@@ -2745,15 +2745,10 @@ Process.prototype.parseCSV = function (string) {
     // by lines.
     // Following RFC 4180 specifications
 
-    var re_valid = /^(?:"(?:(?:"{2})*[^"]*)*"|([^",]*))(?:,(?:"(?:(?:"{2})*[^"]*)*"|([^",]*)))*$/;
-    if (!re_valid.test(string)) {
-        return new List();
-    }
-
     var re_value = /(?:^|,)(?:"((?:(?:"{2})*[^"]*)*)"|([^",]*))(?=(?:,|$))/g,
         a = [];
 
-    string.replace(
+    var remaining = string.replace(
         re_value,
         function(m0, m1, m2) {
             if (m1 !== undefined) {
@@ -2766,6 +2761,10 @@ Process.prototype.parseCSV = function (string) {
             return '';
         }
     );
+    if (remaining !== '') {
+        // if remaining contains something, string has a non valid format
+        return new List();
+    }
     return new List(a);
 };
 
