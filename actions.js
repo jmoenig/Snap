@@ -2391,7 +2391,6 @@ ActionManager.prototype.onOpenProject = function(str) {
 
     SnapUndo.reset();
     this.initializeRecords();
-    this.lastSeen = event.id;  // don't reset lastSeen
 
     if (str) {
         if (str.indexOf('<project') === 0) {
@@ -2409,6 +2408,7 @@ ActionManager.prototype.onOpenProject = function(str) {
         return myself.loadOwner(sprite);
     });
 
+    this.lastSeen = event.id;  // don't reset lastSeen
     this.completeAction();
 
     if (!this.ide().isReplayMode) {
