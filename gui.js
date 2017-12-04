@@ -601,9 +601,9 @@ IDE_Morph.prototype.getActiveEntity = function () {
     // sprite being edited
 
     if (this.activeEditor instanceof BlockEditorMorph) {
-        return this.activeEditor.definition + '/scripts';
+        return this.activeEditor.definition.id + '/scripts';
     }
-    return this.currentSprite + '/' + this.currentTab;
+    return this.currentSprite.id + '/' + this.currentTab;
 };
 
 IDE_Morph.prototype.createControlBar = function () {
