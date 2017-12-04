@@ -244,7 +244,6 @@ ActionManager.prototype.completeAction = function(err, result) {
     }
 
     this.isApplyingAction = false;
-    this.lastSeen = action.id;
     this.idCount = 0;
     if (!err) {
         SnapUndo.record(action);
@@ -367,21 +366,26 @@ ActionManager.prototype.acceptEvent = function(msg) {
     // If we are undo/redo-ing, make sure it hasn't already been sent
     this.send(msg);
 
-    if (this.isApplyingAction) {  // Queue events if in transaction
-        this.queuedActions.push(msg);
-    } else {
-        setTimeout(this._applyEvent.bind(this), 0, msg);
-    }
+    setTimeout(this.onReceiveAction.bind(this), 0, msg);
 };
 
 ActionManager.prototype._isBatchEvent = function(msg) {
     return msg.type === 'batch';
 };
 
+ActionManager.prototype.onReceiveAction = function(msg) {
+    if (this.isApplyingAction || this.queuedActions.length) {
+        this.queuedActions.push(msg);  // Queue events if in transaction
+    } else {
+        this._applyEvent(msg);
+    }
+};
+
 ActionManager.prototype._applyEvent = function(msg) {
     logger.debug('received event:', msg);
     this.currentEvent = msg;
     this.isApplyingAction = true;
+    this.lastSeen = this.currentEvent.id;
 
     if (this._isBatchEvent(msg)) {
         this.currentBatch = msg;
@@ -2805,7 +2809,7 @@ ActionManager.prototype.onMessage = function(msg) {
             this.acceptEvent(msg);
         }
     } else {
-        this._applyEvent(msg);
+        this.onReceiveAction(msg);
     }
 };
 
