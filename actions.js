@@ -2382,10 +2382,13 @@ ActionManager.prototype.onImportBlocks = function(aString, lbl) {
 ActionManager.prototype.onOpenProject = function(str) {
     var myself = this,
         project = null,
+        event = this.currentEvent,
         ide = this.ide();
 
     SnapUndo.reset();
     this.initializeRecords();
+    this.lastSeen = event.id;  // don't reset lastSeen
+
     if (str) {
         if (str.indexOf('<project') === 0) {
             project = this.ide().rawOpenProjectString(str);
@@ -2401,8 +2404,6 @@ ActionManager.prototype.onOpenProject = function(str) {
     ide.sprites.asArray().concat(ide.stage).forEach(function(sprite) {
         return myself.loadOwner(sprite);
     });
-
-    var event = this.currentEvent;
 
     this.completeAction();
 
