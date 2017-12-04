@@ -60,7 +60,7 @@ function Cloud() {
         }
     }
     this.user_id = config.user_id;
-    this.classroom_id = 25;
+    this.classroom_id = null;
     this.application_id = config.application_id;
 }
 
