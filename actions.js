@@ -266,6 +266,10 @@ ActionManager.prototype.completeAction = function(err, result) {
             fn(result);
         }
 
+        // Ensure that the handlers are removed
+        delete this._onAccept[action.id];
+        delete this._onReject[action.id];
+
         // We can call reject for any ids less than the given id...
         for (var i = action.id; i--;) {
             if (this._onReject[i]) {
