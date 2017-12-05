@@ -61,7 +61,7 @@ normalizeCanvas, contains*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2017-October-28';
+modules.store = '2017-December-01';
 
 
 // XML_Serializer ///////////////////////////////////////////////////////
@@ -406,7 +406,7 @@ SnapSerializer.prototype.rawLoadProjectModel = function (xmlNode) {
     StageMorph.prototype.dimensions = new Point(480, 360);
     if (model.stage.attributes.width) {
         StageMorph.prototype.dimensions.x =
-            Math.max(+model.stage.attributes.width, 480);
+            Math.max(+model.stage.attributes.width, 240);
     }
     if (model.stage.attributes.height) {
         StageMorph.prototype.dimensions.y =
@@ -875,7 +875,7 @@ SnapSerializer.prototype.loadCustomBlocks = function (
     // private
     var myself = this;
     element.children.forEach(function (child) {
-        var definition, names, inputs, vars, header, code, comment, i;
+        var definition, names, inputs, vars, header, code, trans, comment, i;
         if (child.tag !== 'block-definition') {
             return;
         }
@@ -940,6 +940,11 @@ SnapSerializer.prototype.loadCustomBlocks = function (
         code = child.childNamed('code');
         if (code) {
             definition.codeMapping = code.contents;
+        }
+
+        trans = child.childNamed('translations');
+        if (trans) {
+            definition.updateTranslations(trans.contents);
         }
 
         comment = child.childNamed('comment');
@@ -1928,7 +1933,7 @@ CustomCommandBlockMorph.prototype.toBlockXML = function (serializer) {
     var scope = this.isGlobal ? undefined : 'local';
     return serializer.format(
         '<custom-block s="@"%>%%%</custom-block>',
-        this.blockSpec,
+        this.semanticSpec,
         this.isGlobal ?
                 '' : serializer.format(' scope="@"', scope),
         serializer.store(this.inputs()),
@@ -1949,7 +1954,6 @@ CustomReporterBlockMorph.prototype.toBlockXML
 CustomBlockDefinition.prototype.toXML = function (serializer) {
     var myself = this;
 
-
     function encodeScripts(array) {
         return array.reduce(function (xml, element) {
             if (element instanceof BlockMorph) {
@@ -1968,6 +1972,7 @@ CustomBlockDefinition.prototype.toXML = function (serializer) {
             (this.variableNames.length ? '<variables>%</variables>' : '@') +
             '<header>@</header>' +
             '<code>@</code>' +
+            '<translations>@</translations>' +
             '<inputs>%</inputs>%%' +
             '</block-definition>',
         this.spec,
@@ -1978,6 +1983,7 @@ CustomBlockDefinition.prototype.toXML = function (serializer) {
                 serializer.store(new List(this.variableNames)) : ''),
         this.codeHeader || '',
         this.codeMapping || '',
+        this.translationsAsText(),
         Object.keys(this.declarations).reduce(function (xml, decl) {
                 return xml + serializer.format(
                     '<input type="@"$>$%</input>',

@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph,
 TableFrameMorph, ColorSlotMorph, isSnapObject*/
 
-modules.threads = '2017-November-16';
+modules.threads = '2017-December-01';
 
 var ThreadManager;
 var Process;
@@ -1332,7 +1332,7 @@ Process.prototype.evaluateCustomBlock = function () {
     var caller = this.context.parentContext,
         block = this.context.expression,
         method = block.isGlobal ? block.definition
-                : this.blockReceiver().getMethod(block.blockSpec),
+                : this.blockReceiver().getMethod(block.semanticSpec),
         context = method.body,
         declarations = method.declarations,
         args = new List(this.context.inputs),

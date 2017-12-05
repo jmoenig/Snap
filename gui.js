@@ -75,7 +75,7 @@ isRetinaSupported, SliderMorph, Animation*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2017-November-16';
+modules.gui = '2017-December-01';
 
 // Declarations
 
@@ -3386,7 +3386,7 @@ IDE_Morph.prototype.aboutSnap = function () {
         module, btn1, btn2, btn3, btn4, licenseBtn, translatorsBtn,
         world = this.world();
 
-    aboutTxt = 'Snap! 4.1.0.4\nBuild Your Own Blocks\n\n'
+    aboutTxt = 'Snap! 4.1.1 - dev -\nBuild Your Own Blocks\n\n'
         + 'Copyright \u24B8 2017 Jens M\u00F6nig and '
         + 'Brian Harvey\n'
         + 'jens@moenig.org, bh@cs.berkeley.edu\n\n'
@@ -7203,22 +7203,26 @@ SpriteIconMorph.prototype.reactToDropOf = function (morph, hand) {
 };
 
 SpriteIconMorph.prototype.copyStack = function (block) {
-    var dup = block.fullCopy(),
-        y = Math.max(this.object.scripts.children.map(function (stack) {
+    var sprite = this.object,
+    	dup = block.fullCopy(),
+        y = Math.max(sprite.scripts.children.map(function (stack) {
             return stack.fullBounds().bottom();
-        }).concat([this.object.scripts.top()]));
+        }).concat([sprite.scripts.top()]));
 
-    dup.setPosition(new Point(this.object.scripts.left() + 20, y + 20));
-    this.object.scripts.add(dup);
+    dup.setPosition(new Point(sprite.scripts.left() + 20, y + 20));
+    sprite.scripts.add(dup);
     dup.allComments().forEach(function (comment) {
         comment.align(dup);
     });
-    this.object.scripts.adjustBounds();
+    sprite.scripts.adjustBounds();
 
-    // delete all custom blocks pointing to local definitions
-    // under construction...
+    // delete all local custom blocks (methods) that the receiver
+    // doesn't understand
     dup.allChildren().forEach(function (morph) {
-        if (morph.definition && !morph.definition.isGlobal) {
+	    if (morph.isCustomBlock &&
+        		!morph.isGlobal &&
+        		!sprite.getMethod(morph.blockSpec)
+        ) {
             morph.deleteBlock();
         }
     });
