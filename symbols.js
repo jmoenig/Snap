@@ -1562,7 +1562,6 @@ SymbolMorph.prototype.drawSymbolMagnifierOutline = function (canvas, color) {
     return canvas;
 };
 
-
 SymbolMorph.prototype.drawSymbolSelection = function (canvas, color) {
     // answer a canvas showing a filled arrow and a dashed rectangle
     var ctx = canvas.getContext('2d'),
