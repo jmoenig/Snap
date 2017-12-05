@@ -61,7 +61,7 @@ normalizeCanvas, contains*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2017-May-31';
+modules.store = '2017-December-01';
 
 
 // XML_Serializer ///////////////////////////////////////////////////////
@@ -79,6 +79,7 @@ function XML_Serializer() {
     this.contents = [];
     this.media = [];
     this.isCollectingMedia = false;
+    this.isExportingBlocksLibrary = false;
 }
 
 // XML_Serializer preferences settings:
@@ -90,11 +91,12 @@ XML_Serializer.prototype.version = 1; // increment on structural change
 
 // XML_Serializer accessing:
 
-XML_Serializer.prototype.serialize = function (object) {
+XML_Serializer.prototype.serialize = function (object, forBlocksLibrary) {
     // public: answer an XML string representing the given object
     var xml;
     this.flush(); // in case an error occurred in an earlier attempt
     this.flushMedia();
+    this.isExportingBlocksLibrary = forBlocksLibrary;
     xml = this.store(object);
     this.flush();
     return xml;
@@ -187,6 +189,7 @@ XML_Serializer.prototype.flushMedia = function () {
         });
     }
     this.media = [];
+    this.isExportingBlocksLibrary = false;
 };
 
 // XML_Serializer formatting:
@@ -403,7 +406,7 @@ SnapSerializer.prototype.rawLoadProjectModel = function (xmlNode) {
     StageMorph.prototype.dimensions = new Point(480, 360);
     if (model.stage.attributes.width) {
         StageMorph.prototype.dimensions.x =
-            Math.max(+model.stage.attributes.width, 480);
+            Math.max(+model.stage.attributes.width, 240);
     }
     if (model.stage.attributes.height) {
         StageMorph.prototype.dimensions.y =
@@ -419,7 +422,7 @@ SnapSerializer.prototype.rawLoadProjectModel = function (xmlNode) {
     StageMorph.prototype.enableCodeMapping =
         model.stage.attributes.codify === 'true';
     StageMorph.prototype.enableInheritance =
-        model.stage.attributes.inheritance === 'true';
+        model.stage.attributes.inheritance !== 'false';
     StageMorph.prototype.enableSublistIDs =
         model.stage.attributes.sublistIDs === 'true';
 
@@ -489,14 +492,32 @@ SnapSerializer.prototype.rawLoadProjectModel = function (xmlNode) {
         }
     });
     myself.project.stage.children.forEach(function (sprite) {
-        delete sprite.inheritanceInfo;
+        var costume;
         if (sprite.nestingInfo) { // only sprites may have nesting info
             sprite.nestingScale = +(sprite.nestingInfo.scale || sprite.scale);
             delete sprite.nestingInfo;
         }
-        if (sprite.inheritsAttribute('scripts')) {
-            sprite.refreshInheritedAttribute('scripts');
+        ['scripts', 'costumes', 'sounds'].forEach(function (att) {
+            if (sprite.inheritsAttribute(att)) {
+                sprite.refreshInheritedAttribute(att);
+            }
+        });
+        if (sprite.inheritsAttribute('costumes')) {
+            costume = sprite.costumes.asArray()[
+                sprite.inheritanceInfo.costumeNumber - 1
+            ];
+            if (costume) {
+                if (costume.loaded) {
+                    sprite.wearCostume(costume, true);
+                } else {
+                    costume.loaded = function () {
+                        sprite.wearCostume(costume, true);
+                        this.loaded = true;
+                    };
+                }
+            }
         }
+        delete sprite.inheritanceInfo;
     });
 
     /* Global Variables */
@@ -728,10 +749,29 @@ SnapSerializer.prototype.loadObject = function (object, model) {
     // private
     var blocks = model.require('blocks'),
         dispatches = model.childNamed('dispatches');
+
+    // load the instrument
+    if (model.attributes.instrument) {
+        object.instrument = +model.attributes.instrument;
+    }
+
     this.loadInheritanceInfo(object, model);
     this.loadNestingInfo(object, model);
-    this.loadCostumes(object, model);
-    this.loadSounds(object, model);
+
+    // load costumes unless they're inherited
+    if (!(object.inheritanceInfo &&
+            (object.inheritanceInfo.delegated instanceof Array) &&
+            contains(object.inheritanceInfo.delegated, 'costumes'))) {
+        this.loadCostumes(object, model);
+    }
+
+    // load sounds unless they're inherited
+    if (!(object.inheritanceInfo &&
+            (object.inheritanceInfo.delegated instanceof Array) &&
+            contains(object.inheritanceInfo.delegated, 'sounds'))) {
+        this.loadSounds(object, model);
+    }
+
     this.loadCustomBlocks(object, blocks);
     if (dispatches) {
         this.loadCustomBlocks(object, dispatches, false, true);
@@ -739,13 +779,12 @@ SnapSerializer.prototype.loadObject = function (object, model) {
     this.populateCustomBlocks(object, blocks);
     this.loadVariables(object.variables, model.require('variables'), object);
 
-    // loads scripts unless they're inherited
-    if (object.inheritanceInfo &&
+    // load scripts unless they're inherited
+    if (!(object.inheritanceInfo &&
             (object.inheritanceInfo.delegated instanceof Array) &&
-            contains(object.inheritanceInfo.delegated, 'scripts')) {
-        return;
+            contains(object.inheritanceInfo.delegated, 'scripts'))) {
+        this.loadScripts(object, object.scripts, model.require('scripts'));
     }
-    this.loadScripts(object, object.scripts, model.require('scripts'));
 
     // note: the dispatches cache isn't cleared until after
     // *all* objects are loaded
@@ -762,6 +801,7 @@ SnapSerializer.prototype.loadInheritanceInfo = function (object, model) {
             object.inheritanceInfo.delegated =
                 this.loadValue(delegated).asArray();
         }
+        object.inheritanceInfo.costumeNumber = model.attributes.costume;
     }
 };
 
@@ -779,6 +819,7 @@ SnapSerializer.prototype.loadCostumes = function (object, model) {
         costume;
     if (costumes) {
         object.costumes = this.loadValue(costumes.require('list'));
+        object.costumes.type = 'costume';
     }
     if (Object.prototype.hasOwnProperty.call(
             model.attributes,
@@ -787,10 +828,10 @@ SnapSerializer.prototype.loadCostumes = function (object, model) {
         costume = object.costumes.asArray()[model.attributes.costume - 1];
         if (costume) {
             if (costume.loaded) {
-                object.wearCostume(costume);
+                object.wearCostume(costume, true);
             } else {
                 costume.loaded = function () {
-                    object.wearCostume(costume);
+                    object.wearCostume(costume, true);
                     this.loaded = true;
                 };
             }
@@ -803,6 +844,7 @@ SnapSerializer.prototype.loadSounds = function (object, model) {
     var sounds = model.childNamed('sounds');
     if (sounds) {
         object.sounds = this.loadValue(sounds.require('list'));
+        object.sounds.type = 'sound';
     }
 };
 
@@ -833,7 +875,7 @@ SnapSerializer.prototype.loadCustomBlocks = function (
     // private
     var myself = this;
     element.children.forEach(function (child) {
-        var definition, names, inputs, vars, header, code, comment, i;
+        var definition, names, inputs, vars, header, code, trans, comment, i;
         if (child.tag !== 'block-definition') {
             return;
         }
@@ -898,6 +940,11 @@ SnapSerializer.prototype.loadCustomBlocks = function (
         code = child.childNamed('code');
         if (code) {
             definition.codeMapping = code.contents;
+        }
+
+        trans = child.childNamed('translations');
+        if (trans) {
+            definition.updateTranslations(trans.contents);
         }
 
         comment = child.childNamed('comment');
@@ -1093,9 +1140,13 @@ SnapSerializer.prototype.loadBlock = function (model, isReporter, object) {
             // lookup in inherited methods
             info = detect(receiver.customBlocks, function (block) {
                 return block.blockSpec() === model.attributes.s;
-            }) || detect(receiver.inheritedMethodsCache, function (block) {
-                return block.blockSpec() === model.attributes.s;
-            });
+            }) || (
+            	receiver.inheritedMethodsCache ?
+                	detect(receiver.inheritedMethodsCache, function (block) {
+                    	return block.blockSpec() === model.attributes.s;
+                	})
+          		: null
+          	);
         }
         if (!info) {
             return this.obsoleteBlock(isReporter);
@@ -1207,6 +1258,7 @@ SnapSerializer.prototype.loadValue = function (model, object) {
             myself.mediaDict[model.attributes.mediaID] = v;
         }
     }
+
     switch (model.tag) {
     case 'ref':
         if (Object.prototype.hasOwnProperty.call(model.attributes, 'id')) {
@@ -1324,7 +1376,7 @@ SnapSerializer.prototype.loadValue = function (model, object) {
             el = model.childNamed('block') ||
                 model.childNamed('custom-block');
             if (el) {
-                v.expression = this.loadBlock(el, origin);
+                v.expression = this.loadBlock(el, null, origin);
             } else {
                 el = model.childNamed('l');
                 if (el) {
@@ -1443,6 +1495,7 @@ SnapSerializer.prototype.loadValue = function (model, object) {
             )) {
             myself.mediaDict[model.attributes.mediaID] = v;
         }
+        record();
         return v;
     }
     return undefined;
@@ -1555,6 +1608,7 @@ StageMorph.prototype.toXML = function (serializer) {
             '<thumbnail>$</thumbnail>' +
             '<stage name="@" width="@" height="@" ' +
             'costume="@" tempo="@" threadsafe="@" ' +
+            '%' +
             'lines="@" ' +
             'ternary="@" ' +
             'codify="@" ' +
@@ -1585,6 +1639,8 @@ StageMorph.prototype.toXML = function (serializer) {
         this.getCostumeIdx(),
         this.getTempo(),
         this.isThreadSafe,
+        this.instrument ?
+                ' instrument="' + parseInt(this.instrument) + '" ' : '',
         SpriteMorph.prototype.useFlatLineEnds ? 'flat' : 'round',
         BooleanSlotMorph.prototype.isTernary,
         this.enableCodeMapping,
@@ -1614,6 +1670,8 @@ SpriteMorph.prototype.toXML = function (serializer) {
     var stage = this.parentThatIsA(StageMorph),
         ide = stage ? stage.parentThatIsA(IDE_Morph) : null,
         idx = ide ? ide.sprites.asArray().indexOf(this) + 1 : 0,
+        noCostumes = this.inheritsAttribute('costumes'),
+        noSounds = this.inheritsAttribute('sounds'),
         noScripts = this.inheritsAttribute('scripts');
 
     return serializer.format(
@@ -1621,13 +1679,14 @@ SpriteMorph.prototype.toXML = function (serializer) {
             ' heading="@"' +
             ' scale="@"' +
             ' rotation="@"' +
+            '%' +
             ' draggable="@"' +
             '%' +
             ' costume="@" color="@,@,@" pen="@" ~>' +
             '%' + // inheritance info
             '%' + // nesting info
-            '<costumes>%</costumes>' +
-            '<sounds>%</sounds>' +
+            (noCostumes ? '%' : '<costumes>%</costumes>') +
+            (noSounds ? '%' : '<sounds>%</sounds>') +
             '<blocks>%</blocks>' +
             '<variables>%</variables>' +
             (this.exemplar ? '<dispatches>%</dispatches>' : '%') +
@@ -1640,6 +1699,8 @@ SpriteMorph.prototype.toXML = function (serializer) {
         this.heading,
         this.scale,
         this.rotationStyle,
+        this.instrument ?
+                ' instrument="' + parseInt(this.instrument) + '" ' : '',
         this.isDraggable,
         this.isVisible ? '' : ' hidden="true"',
         this.getCostumeIdx(),
@@ -1673,13 +1734,11 @@ SpriteMorph.prototype.toXML = function (serializer) {
                     + '"/>'
             : '',
 
-        serializer.store(this.costumes, this.name + '_cst'),
-        serializer.store(this.sounds, this.name + '_snd'),
-        !this.customBlocks ?
-                    '' : serializer.store(this.customBlocks),
+        noCostumes ? '' : serializer.store(this.costumes, this.name + '_cst'),
+        noSounds ? '' : serializer.store(this.sounds, this.name + '_snd'),
+        !this.customBlocks ? '' : serializer.store(this.customBlocks),
         serializer.store(this.variables),
-        this.exemplar ?
-                serializer.store(this.inheritedMethods()) : '',
+        this.exemplar ? serializer.store(this.inheritedMethods()) : '',
         noScripts ? '' : serializer.store(this.scripts)
     );
 };
@@ -1874,11 +1933,13 @@ CustomCommandBlockMorph.prototype.toBlockXML = function (serializer) {
     var scope = this.isGlobal ? undefined : 'local';
     return serializer.format(
         '<custom-block s="@"%>%%%</custom-block>',
-        this.blockSpec,
+        this.semanticSpec,
         this.isGlobal ?
                 '' : serializer.format(' scope="@"', scope),
         serializer.store(this.inputs()),
-        this.isGlobal && this.definition.variableNames.length ?
+        this.isGlobal &&
+        	this.definition.variableNames.length &&
+            !serializer.isExportingBlocksLibrary ?
                 '<variables>' +
                     this.variables.toXML(serializer) +
                     '</variables>'
@@ -1892,7 +1953,6 @@ CustomReporterBlockMorph.prototype.toBlockXML
 
 CustomBlockDefinition.prototype.toXML = function (serializer) {
     var myself = this;
-
 
     function encodeScripts(array) {
         return array.reduce(function (xml, element) {
@@ -1912,6 +1972,7 @@ CustomBlockDefinition.prototype.toXML = function (serializer) {
             (this.variableNames.length ? '<variables>%</variables>' : '@') +
             '<header>@</header>' +
             '<code>@</code>' +
+            '<translations>@</translations>' +
             '<inputs>%</inputs>%%' +
             '</block-definition>',
         this.spec,
@@ -1922,6 +1983,7 @@ CustomBlockDefinition.prototype.toXML = function (serializer) {
                 serializer.store(new List(this.variableNames)) : ''),
         this.codeHeader || '',
         this.codeMapping || '',
+        this.translationsAsText(),
         Object.keys(this.declarations).reduce(function (xml, decl) {
                 return xml + serializer.format(
                     '<input type="@"$>$%</input>',

@@ -217,7 +217,8 @@ PaintEditorMorph.prototype.buildToolbox = function () {
 };
 
 PaintEditorMorph.prototype.buildEdits = function () {
-    var paper = this.paper;
+    var myself = this,
+        paper = this.paper;
 
     this.edits.add(this.pushButton(
         "undo",
@@ -228,6 +229,25 @@ PaintEditorMorph.prototype.buildEdits = function () {
         "clear",
         function () {paper.clearCanvas(); }
     ));
+    this.edits.add(this.pushButton(
+        'Vector',
+        function () {
+            if (myself.paper.undoBuffer.length > 0) {
+                myself.ide.confirm(
+                    'This will erase your current drawing.\n' +
+                    'Are you sure you want to continue?',
+                    'Switch to vector editor?',
+                    function () {
+                        myself.switchToVector();
+                    },
+                    nop
+                );
+            } else {
+                myself.switchToVector();
+            }
+        }
+    ));
+
     this.edits.fixLayout();
 };
 
@@ -252,10 +272,11 @@ PaintEditorMorph.prototype.buildScaleBox = function () {
     this.scaleBox.fixLayout();
 };
 
-PaintEditorMorph.prototype.openIn = function (world, oldim, oldrc, callback) {
+PaintEditorMorph.prototype.openIn = function (world, oldim, oldrc, callback, anIDE) {
     // Open the editor in a world with an optional image to edit
     this.oldim = oldim;
     this.callback = callback || nop;
+    this.ide = anIDE;
 
     this.processKeyUp = function () {
         this.shift = false;
@@ -322,6 +343,20 @@ PaintEditorMorph.prototype.ok = function () {
 PaintEditorMorph.prototype.cancel = function () {
     if (this.oncancel) {this.oncancel(); }
     this.destroy();
+};
+
+PaintEditorMorph.prototype.switchToVector = function () {
+    var myself = this;
+    this.object = new SVG_Costume(new Image(), '', new Point(0,0));
+    this.object.edit(
+        this.world(),
+        this.ide,
+        true,
+        this.oncancel,
+        function() {
+            myself.ide.currentSprite.changed();
+        }
+    );
 };
 
 PaintEditorMorph.prototype.populatePropertiesMenu = function () {
@@ -747,7 +782,7 @@ PaintCanvasMorph.prototype.floodfill = function (sourcepoint) {
         ctx = this.paper.getContext("2d"),
         img = ctx.getImageData(0, 0, width, height),
         data = img.data,
-        stack = [Math.round(sourcepoint.y) * width + sourcepoint.x],
+        stack = [Math.round(Math.round(sourcepoint.y) * width + sourcepoint.x)],
         currentpoint,
         read,
         sourcecolor,

@@ -54,14 +54,14 @@
 // Global stuff ////////////////////////////////////////////////////////
 
 /*global ArgMorph, BlockMorph, CommandBlockMorph, CommandSlotMorph, Morph,
-MultiArgMorph, Point, ReporterBlockMorph, SyntaxElementMorph, contains,
-degrees, detect, nop, radians, ReporterSlotMorph, CSlotMorph, RingMorph,
+MultiArgMorph, Point, ReporterBlockMorph, SyntaxElementMorph, contains, Costume,
+degrees, detect, nop, radians, ReporterSlotMorph, CSlotMorph, RingMorph, Sound,
 IDE_Morph, ArgLabelMorph, localize, XML_Element, hex_sha512, TableDialogMorph,
 StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph,
 TableFrameMorph, ColorSlotMorph, isSnapObject*/
 
-modules.threads = '2017-May-30';
+modules.threads = '2017-December-01';
 
 var ThreadManager;
 var Process;
@@ -200,6 +200,7 @@ ThreadManager.prototype.startProcess = function (
 ) {
     var top = block.topBlock(),
         active = this.findProcess(top, receiver),
+        glow,
         newProc;
     if (active) {
         if (isThreadSafe) {
@@ -208,12 +209,22 @@ ThreadManager.prototype.startProcess = function (
         active.stop();
         this.removeTerminatedProcesses();
     }
-    newProc = new Process(top, receiver, callback, rightAway);
+    newProc = new Process(top, receiver, callback, isClicked);
     newProc.exportResult = exportResult;
     newProc.isClicked = isClicked || false;
-    if (!newProc.homeContext.receiver.isClone) {
+
+    // show a highlight around the running stack
+    // if there are more than one active processes
+    // for a block, display the thread count
+    // next to it
+    glow = top.getHighlight();
+    if (glow) {
+        glow.threadCount = this.processesForBlock(top).length + 1;
+        glow.updateReadout();
+    } else {
         top.addHighlight();
     }
+
     this.processes.push(newProc);
     if (rightAway) {
         newProc.runStep();
@@ -235,10 +246,16 @@ ThreadManager.prototype.stopAllForReceiver = function (rcvr, excpt) {
     this.processes.forEach(function (proc) {
         if (proc.homeContext.receiver === rcvr && proc !== excpt) {
             proc.stop();
-            if (rcvr.isClone) {
+            if (rcvr.isTemporary) {
                 proc.isDead = true;
             }
         }
+    });
+};
+
+ThreadManager.prototype.stopAllForBlock = function (aTopBlock) {
+    this.processesForBlock(aTopBlock, true).forEach(function (proc) {
+        proc.stop();
     });
 };
 
@@ -306,14 +323,25 @@ ThreadManager.prototype.step = function () {
 
 ThreadManager.prototype.removeTerminatedProcesses = function () {
     // and un-highlight their scripts
-    var remaining = [];
+    var remaining = [],
+        count,
+        myself = this;
     this.processes.forEach(function (proc) {
-        var result;
+        var result,
+            glow;
         if ((!proc.isRunning() && !proc.errorFlag) || proc.isDead) {
-            if (proc.topBlock instanceof BlockMorph
-                    && (!proc.receiver.isClone)) {
+            if (proc.topBlock instanceof BlockMorph) {
                 proc.unflash();
-                proc.topBlock.removeHighlight();
+                // adjust the thread count indicator, if any
+                count = myself.processesForBlock(proc.topBlock).length;
+                if (count) {
+                    glow = proc.topBlock.getHighlight() ||
+                        proc.topBlock.addHighlight();
+                    glow.threadCount = count;
+                    glow.updateReadout();
+                } else {
+                    proc.topBlock.removeHighlight();
+                }
             }
             if (proc.prompter) {
                 proc.prompter.destroy();
@@ -334,12 +362,14 @@ ThreadManager.prototype.removeTerminatedProcesses = function () {
                                         new TableMorph(result, 10)
                                     )
                                     : new ListWatcherMorph(result),
-                            proc.exportResult
+                            proc.exportResult,
+                            proc.receiver
                         );
                     } else {
                         proc.topBlock.showBubble(
                             result,
-                            proc.exportResult
+                            proc.exportResult,
+                            proc.receiver
                         );
                     }
                 }
@@ -359,6 +389,15 @@ ThreadManager.prototype.findProcess = function (block, receiver) {
             return each.topBlock === top && (each.receiver === receiver);
         }
     );
+};
+
+ThreadManager.prototype.processesForBlock = function (block, only) {
+    var top = only ? block : block.topBlock();
+    return this.processes.filter(function (each) {
+            return each.topBlock === top &&
+                each.isRunning() &&
+                !each.isDead;
+    });
 };
 
 ThreadManager.prototype.doWhen = function (block, receiver, stopIt) {
@@ -444,6 +483,9 @@ ThreadManager.prototype.toggleSingleStepping = function () {
                         are children
     receiver            object (sprite) to which the process applies,
                         cached from the top block
+    instrument          musical instrument type, cached from the receiver,
+                        so a single sprite can play several instruments
+                        at once
     context             the Context describing the current state
                         of this process
     homeContext         stores information relevant to the whole process,
@@ -486,9 +528,10 @@ Process.prototype.enableSingleStepping = false; // experimental
 Process.prototype.flashTime = 0; // experimental
 // Process.prototype.enableJS = false;
 
-function Process(topBlock, receiver, onComplete, rightAway) {
+function Process(topBlock, receiver, onComplete, yieldFirst) {
     this.topBlock = topBlock || null;
     this.receiver = receiver;
+    this.instrument = receiver ? receiver.instrument : null;
     this.readyToYield = false;
     this.readyToTerminate = false;
     this.isDead = false;
@@ -519,7 +562,7 @@ function Process(topBlock, receiver, onComplete, rightAway) {
             topBlock.blockSequence(),
             this.homeContext
         );
-        if (!rightAway) {
+        if (yieldFirst) {
             this.pushContext('doYield'); // highlight top block
         }
     }
@@ -926,7 +969,8 @@ Process.prototype.handleError = function (error, element) {
             + error.name
             + '\n'
             + error.message,
-        this.exportResult
+        this.exportResult,
+        this.receiver
     );
 };
 
@@ -1120,12 +1164,14 @@ Process.prototype.evaluate = function (
 Process.prototype.fork = function (context, args) {
     var proc = new Process(),
         stage = this.homeContext.receiver.parentThatIsA(StageMorph);
-    proc.initializeFor(context, args);
+    proc.instrument = this.instrument;
+    proc.receiver = this.receiver;
+    proc.initializeFor(context, args, this.enableSingleStepping);
     // proc.pushContext('doYield');
     stage.threads.processes.push(proc);
 };
 
-Process.prototype.initializeFor = function (context, args) {
+Process.prototype.initializeFor = function (context, args, ignoreExit) {
     // used by Process.fork() and global invoke()
     if (context.isContinuation) {
         throw new Error(
@@ -1197,14 +1243,16 @@ Process.prototype.initializeFor = function (context, args) {
         // insert a tagged exit context
         // which "report" can catch later
         // needed for invoke() situations
-        exit = new Context(
-            runnable.parentContext,
-            'expectReport',
-            outer,
-            outer.receiver
-        );
-        exit.tag = 'exit';
-        runnable.parentContext = exit;
+        if (!ignoreExit) { // when single stepping LAUNCH
+	        exit = new Context(
+    	        runnable.parentContext,
+        	    'expectReport',
+            	outer,
+            	outer.receiver
+        	);
+        	exit.tag = 'exit';
+        	runnable.parentContext = exit;
+    	}
     }
 
     this.homeContext = new Context(); // context.outerContext;
@@ -1284,7 +1332,7 @@ Process.prototype.evaluateCustomBlock = function () {
     var caller = this.context.parentContext,
         block = this.context.expression,
         method = block.isGlobal ? block.definition
-                : this.blockReceiver().getMethod(block.blockSpec),
+                : this.blockReceiver().getMethod(block.semanticSpec),
         context = method.body,
         declarations = method.declarations,
         args = new List(this.context.inputs),
@@ -1449,6 +1497,9 @@ Process.prototype.doShowVar = function (varName) {
     if (name instanceof Context) {
         if (name.expression.selector === 'reportGetVar') {
             name = name.expression.blockSpec;
+        } else {
+            this.doChangePrimitiveVisibility(name.expression, false);
+            return;
         }
     }
     if (this.homeContext.receiver) {
@@ -1508,6 +1559,9 @@ Process.prototype.doHideVar = function (varName) {
     if (name instanceof Context) {
         if (name.expression.selector === 'reportGetVar') {
             name = name.expression.blockSpec;
+        } else {
+            this.doChangePrimitiveVisibility(name.expression, true);
+            return;
         }
     }
     if (!name) {
@@ -1551,6 +1605,33 @@ Process.prototype.doRemoveTemporaries = function () {
     }
 };
 
+// Process hiding and showing primitives primitives :-)
+
+Process.prototype.doChangePrimitiveVisibility = function (aBlock, hideIt) {
+    var ide = this.homeContext.receiver.parentThatIsA(IDE_Morph),
+        dict,
+        cat;
+    if (!ide || (aBlock.selector === 'evaluateCustomBlock')) {
+        return;
+    }
+    if (hideIt) {
+        StageMorph.prototype.hiddenPrimitives[aBlock.selector] = true;
+    } else {
+        delete StageMorph.prototype.hiddenPrimitives[aBlock.selector];
+    }
+    dict = {
+        doWarp: 'control',
+        reifyScript: 'operators',
+        reifyReporter: 'operators',
+        reifyPredicate: 'operators',
+        doDeclareVariables: 'variables'
+    };
+    cat = dict[this.selector] || this.category;
+    if (cat === 'lists') {cat = 'variables'; }
+    ide.flushBlocksCache(cat);
+    ide.refreshPalette();
+};
+
 // Process sprite inheritance primitives
 
 Process.prototype.doDeleteAttr = function (attrName) {
@@ -1564,6 +1645,7 @@ Process.prototype.doDeleteAttr = function (attrName) {
                 xPosition: 'x position',
                 yPosition: 'y position',
                 direction: 'direction',
+                getCostumeIdx: 'costume #',
                 size: 'size'
             }[name.expression.selector];
             if (!isNil(name)) {
@@ -1580,6 +1662,22 @@ Process.prototype.doDeleteAttr = function (attrName) {
     }
 };
 
+// experimental message passing primitives
+
+Process.prototype.doTellTo = function (sprite, context, args) {
+    this.doRun(
+        this.reportAttributeOf(context, sprite),
+        args
+    );
+};
+
+Process.prototype.reportAskFor = function (sprite, context, args) {
+    this.evaluate(
+        this.reportAttributeOf(context, sprite),
+        args
+    );
+};
+
 // Process lists primitives
 
 Process.prototype.reportNewList = function (elements) {
@@ -1587,23 +1685,26 @@ Process.prototype.reportNewList = function (elements) {
 };
 
 Process.prototype.reportCONS = function (car, cdr) {
-    // this.assertType(cdr, 'list');
+    this.assertType(cdr, 'list');
     return new List().cons(car, cdr);
 };
 
 Process.prototype.reportCDR = function (list) {
-    // this.assertType(list, 'list');
+    this.assertType(list, 'list');
     return list.cdr();
 };
 
 Process.prototype.doAddToList = function (element, list) {
-    // this.assertType(list, 'list');
+    this.assertType(list, 'list');
+    if (list.type) {
+        this.assertType(element, list.type);
+    }
     list.add(element);
 };
 
 Process.prototype.doDeleteFromList = function (index, list) {
     var idx = index;
-    // this.assertType(list, 'list');
+    this.assertType(list, 'list');
     if (this.inputOption(index) === 'all') {
         return list.clear();
     }
@@ -1620,7 +1721,10 @@ Process.prototype.doDeleteFromList = function (index, list) {
 
 Process.prototype.doInsertInList = function (element, index, list) {
     var idx = index;
-    // this.assertType(list, 'list');
+    this.assertType(list, 'list');
+    if (list.type) {
+        this.assertType(element, list.type);
+    }
     if (index === '') {
         return null;
     }
@@ -1635,7 +1739,10 @@ Process.prototype.doInsertInList = function (element, index, list) {
 
 Process.prototype.doReplaceInList = function (index, list, element) {
     var idx = index;
-    // this.assertType(list, 'list');
+    this.assertType(list, 'list');
+    if (list.type) {
+        this.assertType(element, list.type);
+    }
     if (index === '') {
         return null;
     }
@@ -1650,7 +1757,7 @@ Process.prototype.doReplaceInList = function (index, list, element) {
 
 Process.prototype.reportListItem = function (index, list) {
     var idx = index;
-    // this.assertType(list, 'list');
+    this.assertType(list, 'list');
     if (index === '') {
         return '';
     }
@@ -1664,12 +1771,12 @@ Process.prototype.reportListItem = function (index, list) {
 };
 
 Process.prototype.reportListLength = function (list) {
-    // this.assertType(list, 'list');
+    this.assertType(list, 'list');
     return list.length();
 };
 
 Process.prototype.reportListContainsItem = function (list, element) {
-    // this.assertType(list, 'list');
+    this.assertType(list, 'list');
     return list.contains(element);
 };
 
@@ -1759,7 +1866,7 @@ Process.prototype.doStopThis = function (choice) {
         this.doStopBlock();
         break;
     default:
-        nop();
+        this.doStopOthers(choice);
     }
 };
 
@@ -2164,8 +2271,17 @@ Process.prototype.reportLastAnswer = function () {
 Process.prototype.reportURL = function (url) {
     var response;
     if (!this.httpRequest) {
+        // use the location protocol unless the user specifies otherwise
+        if (url.indexOf('//') < 0 || url.indexOf('//') > 8) {
+            if (location.protocol === 'file:') {
+                // allow requests from locally loaded sources
+                url = 'https://' + url;
+            } else {
+                url = location.protocol + '//' + url;
+            }
+        }
         this.httpRequest = new XMLHttpRequest();
-        this.httpRequest.open("GET", 'http://' + url, true);
+        this.httpRequest.open("GET", url, true);
         this.httpRequest.send(null);
     } else if (this.httpRequest.readyState === 4) {
         response = this.httpRequest.responseText;
@@ -2271,7 +2387,7 @@ Process.prototype.reportIsA = function (thing, typeString) {
 Process.prototype.assertType = function (thing, typeString) {
     // make sure "thing" is a particular type or any of a number of types
     // and raise an error if not
-    // unused as of now because of performance considerations
+    // use responsibly wrt performance implications
     var thingType = this.reportTypeOf(thing);
     if (thingType === typeString) {return true; }
     if (typeString instanceof Array && contains(typeString, thingType)) {
@@ -2309,6 +2425,12 @@ Process.prototype.reportTypeOf = function (thing) {
     }
     if (thing instanceof StageMorph) {
         return 'stage';
+    }
+    if (thing instanceof Costume) {
+        return 'costume';
+    }
+    if (thing instanceof Sound) {
+        return 'sound';
     }
     if (thing instanceof Context) {
         if (thing.expression instanceof RingMorph) {
@@ -2609,10 +2731,48 @@ Process.prototype.reportTextSplit = function (string, delimiter) {
     case 'letter':
         del = '';
         break;
+    case 'csv':
+        return this.parseCSV(string);
     default:
         del = isNil(delimiter) ? '' : delimiter.toString();
     }
     return new List(str.split(del));
+};
+
+Process.prototype.parseCSV = function (string) {
+    // parse a single row of CSV data into a one-dimensional list
+    // this assumes that the whole csv data has already been split
+    // by lines.
+    // taken from:
+    // https://stackoverflow.com/questions/8493195/how-can-i-parse-a-csv-string-with-javascript-which-contains-comma-in-data
+
+    var re_valid = /^\s*(?:'[^'\\]*(?:\\[\S\s][^'\\]*)*'|"[^"\\]*(?:\\[\S\s][^"\\]*)*"|[^,'"\s\\]*(?:\s+[^,'"\s\\]+)*)\s*(?:,\s*(?:'[^'\\]*(?:\\[\S\s][^'\\]*)*'|"[^"\\]*(?:\\[\S\s][^"\\]*)*"|[^,'"\s\\]*(?:\s+[^,'"\s\\]+)*)\s*)*$/,
+        re_value = /(?!\s*$)\s*(?:'([^'\\]*(?:\\[\S\s][^'\\]*)*)'|"([^"\\]*(?:\\[\S\s][^"\\]*)*)"|([^,'"\s\\]*(?:\s+[^,'"\s\\]+)*))\s*(?:,|$)/g,
+        a = [];
+
+    if (!re_valid.test(string)) {
+        return new List();
+    }
+    string.replace(
+        re_value,
+        function(m0, m1, m2, m3) {
+            if (m1 !== undefined) {
+                // remove backslash from \' in single quoted values.
+                a.push(m1.replace(/\\'/g, "'"));
+            } else if (m2 !== undefined) {
+                // remove backslash from \" in double quoted values.
+                a.push(m2.replace(/\\"/g, '"'));
+            } else if (m3 !== undefined) {
+                a.push(m3);
+            }
+            return '';
+        }
+    );
+    // special case: empty last value.
+    if (/,\s*$/.test(string)) {
+        a.push('');
+    }
+    return new List(a);
 };
 
 // Process debugging
@@ -2684,7 +2844,7 @@ Process.prototype.getObjectsNamed = function (name, thisObj, stageObj) {
         those = [];
 
     function check(obj) {
-        return obj instanceof SpriteMorph && obj.isClone ?
+        return obj instanceof SpriteMorph && obj.isTemporary ?
                 obj.cloneOriginName === name : obj.name === name;
     }
 
@@ -2708,6 +2868,13 @@ Process.prototype.doFaceTowards = function (name) {
         if (this.inputOption(name) === 'mouse-pointer') {
             thisObj.faceToXY(this.reportMouseX(), this.reportMouseY());
         } else {
+            if (name instanceof List) {
+                thisObj.faceToXY(
+                    name.at(1),
+                    name.at(2)
+                );
+                return;
+            }
             thatObj = this.getOtherObject(name, this.homeContext.receiver);
             if (thatObj) {
                 thisObj.faceToXY(
@@ -2727,6 +2894,13 @@ Process.prototype.doGotoObject = function (name) {
         if (this.inputOption(name) === 'mouse-pointer') {
             thisObj.gotoXY(this.reportMouseX(), this.reportMouseY());
         } else {
+            if (name instanceof List) {
+                thisObj.gotoXY(
+                    name.at(1),
+                    name.at(2)
+                );
+                return;
+            }
             thatObj = this.getOtherObject(name, this.homeContext.receiver);
             if (thatObj) {
                 thisObj.gotoXY(
@@ -2753,6 +2927,22 @@ Process.prototype.createClone = function (name) {
             if (thatObj) {
                 thatObj.createClone(!this.isFirstStep);
             }
+        }
+    }
+};
+
+Process.prototype.newClone = function (name) {
+    var thisObj = this.blockReceiver(),
+        thatObj;
+
+    if (!name) {return; }
+    if (thisObj) {
+        if (this.inputOption(name) === 'myself') {
+            return thisObj.newClone(!this.isFirstStep);
+        }
+        thatObj = this.getOtherObject(name, thisObj);
+        if (thatObj) {
+            return thatObj.newClone(!this.isFirstStep);
         }
     }
 };
@@ -2880,6 +3070,9 @@ Process.prototype.reportDistanceTo = function (name) {
         point = rc;
         if (this.inputOption(name) === 'mouse-pointer') {
             point = thisObj.world().hand.position();
+        } else if (name instanceof List) {
+            return new Point(thisObj.xPosition(), thisObj.yPosition())
+                .distanceTo(new Point(name.at(1), name.at(2)));
         }
         stage = thisObj.parentThatIsA(StageMorph);
         thatObj = this.getOtherObject(name, thisObj, stage);
@@ -2961,18 +3154,21 @@ Process.prototype.reportGet = function (query) {
             return thisObj.exemplar || '';
         case 'children':
             return new List(thisObj.specimens ? thisObj.specimens() : []);
+        case 'temporary?':
+            return thisObj.isTemporary || false;
         case 'clones':
             stage = thisObj.parentThatIsA(StageMorph);
             objName = thisObj.name || thisObj.cloneOriginName;
             return new List(
                 stage.children.filter(function (each) {
-                    return each.isClone &&
+                    return each.isTemporary &&
                         (each !== thisObj) &&
                         (each.cloneOriginName === objName);
                 })
             );
         case 'other clones':
-            return thisObj.isClone ? this.reportGet(['clones']) : new List();
+            return thisObj.isTemporary ?
+                    this.reportGet(['clones']) : new List();
         case 'neighbors':
             stage = thisObj.parentThatIsA(StageMorph);
             neighborhood = thisObj.bounds.expandBy(new Point(
@@ -3002,6 +3198,8 @@ Process.prototype.reportGet = function (query) {
             return thisObj.parentThatIsA(StageMorph);
         case 'costumes':
             return thisObj.reportCostumes();
+        case 'sounds':
+            return thisObj.sounds;
         }
     }
     return '';
@@ -3044,6 +3242,17 @@ Process.prototype.doSet = function (attribute, value) {
         value = value instanceof SpriteMorph ? value : null;
         // needed: circularity avoidance
         rcvr.setExemplar(value);
+        break;
+    case 'temporary?':
+        this.assertType(rcvr, 'sprite');
+        this.assertType(value, 'Boolean');
+        if (rcvr.world().isDevMode) {
+            if (value) {
+                rcvr.release();
+            } else {
+                rcvr.perpetuate();
+            }
+        }
         break;
     case 'dangling?':
         this.assertType(rcvr, 'sprite');
@@ -3323,7 +3532,7 @@ Process.prototype.doPlayNoteForSecs = function (pitch, secs) {
     if (!this.context.startTime) {
         this.context.startTime = Date.now();
         this.context.activeNote = new Note(pitch);
-        this.context.activeNote.play();
+        this.context.activeNote.play(this.instrument);
     }
     if ((Date.now() - this.context.startTime) >= (secs * 1000)) {
         if (this.context.activeNote) {
@@ -3334,6 +3543,11 @@ Process.prototype.doPlayNoteForSecs = function (pitch, secs) {
     }
     this.pushContext('doYield');
     this.pushContext();
+};
+
+Process.prototype.doSetInstrument = function (num) {
+    this.instrument = +num;
+    this.receiver.instrument = +num;
 };
 
 // Process constant input options
