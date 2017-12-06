@@ -667,7 +667,7 @@ SnapTranslator.dict.ru = {
     'Snap! website':
         'Веб-сайт программы Snap!',
     'Download source':
-        'Загрузить материалы источника',
+        'Загрузить исходники программы',
     'Switch back to user mode':
         'Вернуться в режим пользователя',
     'disable deep-Morphic\ncontext menus\nand show user-friendly ones':
@@ -959,9 +959,13 @@ SnapTranslator.dict.ru = {
     'use the keyboard\nto enter blocks':
         'использовать клавиатуру\nдля работы с блоками',
     'undrop':
-        'вернуть',
+        'отменить',
     'undo the last\nblock drop\nin this pane':
-        'вернуть последний блок\nвыложенный на лист скриптов',
+        'отменить последнее\nдействие с блоком',
+    'redrop':
+        'вернуть',
+    'redo the last undone\nblock drop\nin this pane':
+        'повторить отменённое\nдействие с блоком',
 
     // costumes
     'rename':
