@@ -182,7 +182,7 @@ SnapTranslator.dict.ru = {
     'translator_e-mail':
         'svetlanap@berkeley.edu, tema@school830.ru', // optional
     'last_changed':
-        '2017-09-01', // this, too, will appear in the Translators tab
+        '2017-12-06', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -896,6 +896,12 @@ SnapTranslator.dict.ru = {
         'обвести',
     'unringify':
         'убрать обводку',
+    'find blocks':
+        'найти блоки',
+    'hide primitives':
+        'скрыть стандартные блоки',
+    'show primitives':
+        'отобразить стандартные блоки',
 
     // custom blocks:
     'delete block definition...':
@@ -944,10 +950,18 @@ SnapTranslator.dict.ru = {
         'размещать скрипты\nвертикально',
     'add comment':
         'добавить комментарий',
+    'scripts pic...':
+        'скрипты в картинку...',
+    'open a new window\nwith a picture of all scripts':
+        'преобразовать скрипты на листе\nв картинку',
     'make a block...':
         'новый блок...',
     'use the keyboard\nto enter blocks':
         'использовать клавиатуру\nдля работы с блоками',
+    'undrop':
+        'вернуть',
+    'undo the last\nblock drop\nin this pane':
+        'вернуть последний блок\nвыложенный на лист скриптов',
 
     // costumes
     'rename':
