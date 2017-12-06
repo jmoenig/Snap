@@ -375,19 +375,37 @@ SnapTranslator.dict.ru = {
     'stop all sounds':
         'остановить все звуки',
     'rest for %n beats':
-        'пауза %n тактов',
-    'play note %n for %n beats':
-        'сыграть ноту %n %n тактов',
+        'пауза в тактах %n',
+    'play note %note for %n beats':
+        'играть ноту %note длит. %n',
     'change tempo by %n':
         'изменить темп на %n',
     'set tempo to %n bpm':
-        'устан. темп %n ударов в мин.',
+        'уст. темп %n такт/мин',
+    'set instrument to %inst':
+        'инструмент %inst',
     'tempo':
         'темп',
+    'sine':
+        'синус (sine)',
+    'square':
+        'квадрат (square)',
+    'sawtooth':
+        'пила (sawtooth)',
+    'triangle':
+        'треугольник (triangle)',
+    '(1) sine':
+        '(1) синус (sine)',
+    '(2) square':
+        '(2) квадрат (square)',
+    '(3) sawtooth':
+        '(3) пила (sawtooth)',
+    '(4) triangle':
+        '(4) треугольник (triangle)',
 
     // pen:
     'clear':
-        'убрать все',
+        'очистить всё',
     'pen down':
         'опустить перо',
     'pen up':
@@ -482,12 +500,18 @@ SnapTranslator.dict.ru = {
         'выполнять %cmdRing с продолжением',
     'call %cmdRing w/continuation':
         'вызвать %cmdRing с продолжением',
+    'tell %spr to %cmdRing %inputs':
+        'передать %spr команды %cmdRing %inputs',
+    'ask %spr for %repRing %inputs':
+        'запросить у %spr информацию %cmdRing %inputs',
     'warp %c':
         'сразу %c',
     'when I start as a clone':
         'когда я создан как клон',
     'create a clone of %cln':
         'клонировать %cln',
+    'a new clone of %cln':
+        'новый клон %cln',
     'myself':
         'меня',
     'delete this clone':
@@ -601,6 +625,8 @@ SnapTranslator.dict.ru = {
         'спрятать переменную %var',
     'script variables %scriptVars':
         'переменные скрипта %scriptVars',
+    'inherit %shd':
+        'наследовать %shd',
 
     // lists:
     'list %exp':
@@ -631,13 +657,15 @@ SnapTranslator.dict.ru = {
     // other
     'Make a block':
         'Новый блок',
+    'find blocks...':
+        'Найти блоки...',
 
     // menus
     // snap menu
     'About...':
-        'Snap!  Реквизиты',
+        'О программе...',
     'Snap! website':
-        'Snap! веб-сайт',
+        'Веб-сайт программы Snap!',
     'Download source':
         'Загрузить материалы источника',
     'Switch back to user mode':
@@ -713,57 +741,57 @@ SnapTranslator.dict.ru = {
     'Blurred shadows':
         'Контрастность тени',
     'uncheck to use solid drop\nshadows and highlights':
-        'убрать метку - использовать сплошные\nтени и подсветки',
+        'снимите флажок, чтобы использовать сплошные\nтени и подсветки',
     'check to use blurred drop\nshadows and highlights':
-        'поставить метку - использовать размытые\nтени и подсветки',
+        'отметьте, чтобы использовать размытые\nтени и подсветки',
     'Zebra coloring':
         'Использование альтернативных цветов',
     'check to enable alternating\ncolors for nested blocks':
-        'поставить метку - разрешить использование\nперемежающихся цветов для вложенных блоков',
+        'отметьте, чтобы разрешить использование\nперемежающихся цветов для вложенных блоков',
     'uncheck to disable alternating\ncolors for nested block':
-        'убрать метку - отключить использование\nперемежающихся цветов для вложенных блоков',
+        'снимите флажок, чтобы отключить использование\nперемежающихся цветов для вложенных блоков',
     'Dynamic input labels':
         'Использование динамических обозначений',
     'uncheck to disable dynamic\nlabels for variadic inputs':
-        'убрать метку - отключить использование динамических обозначений\nпри вводе с переменным числом аргументов',
+        'снимите флажок, чтобы отключить использование динамических обозначений\nпри вводе с переменным числом аргументов',
     'check to enable dynamic\nlabels for variadic inputs':
-        'поставить метку - разрешить использование динамических обозначений\nпри вводе с переменным числом аргументов',
+        'отметьте, чтобы разрешить использование динамических обозначений\nпри вводе с переменным числом аргументов',
     'Prefer empty slot drops':
         'Использование незанятых ячеек ввода',
     'settings menu prefer empty slots hint':
-        'поставить метку - помещать генераторы значений\nтолько в незанятые ячейки ввода',
+        'отметьте, чтобы помещать генераторы значений\nтолько в незанятые ячейки ввода',
     'uncheck to allow dropped\nreporters to kick out others':
-        'убрать метку - разрешить помещать генераторы значений\nв занятые ячейки ввода',
+        'снимите флажок, чтобы разрешить помещать генераторы значений\nв занятые ячейки ввода',
     'Long form input dialog':
         'Расширенная форма диалога ввода',
     'check to always show slot\ntypes in the input dialog':
-        'поставить метку - указывать типы ячеек ввода\nв диалоге ввода',
+        'отметьте, чтобы указывать типы ячеек ввода\nв диалоге ввода',
     'uncheck to use the input\ndialog in short form':
-        'убрать метку - использовать краткую форму\nдиалога ввода',
+        'снимите флажок, чтобы использовать краткую форму\nдиалога ввода',
     'Virtual keyboard':
         'Виртуальная клавиатура',
     'uncheck to disable\nvirtual keyboard support\nfor mobile devices':
-        'убрать метку - отключить использование виртуальной клавиатуры\nдля мобильных устройств',
+        'снимите флажок, чтобы отключить использование виртуальной клавиатуры\nдля мобильных устройств',
     'check to enable\nvirtual keyboard support\nfor mobile devices':
-        'поставить метку - разрешить использование виртуальной клавиатуры\nдля мобильных устройств',
+        'отметьте, чтобы разрешить использование виртуальной клавиатуры\nдля мобильных устройств',
     'Input sliders':
         'Использование бегунков ввода',
     'uncheck to disable\ninput sliders for\nentry fields':
-        'убрать метку - отключить использование бегунков\nпри заполнении полей ввода',
+        'снимите флажок, чтобы отключить использование бегунков\nпри заполнении полей ввода',
     'check to enable\ninput sliders for\nentry fields':
-        'поставить метку - разрешить использование бегунков\nпри заполнении полей ввода',
+        'отметьте, чтобы разрешить использование бегунков\nпри заполнении полей ввода',
     'Clicking sound':
         'Звук щелчка',
     'uncheck to turn\nblock clicking\nsound off':
-        'убрать метку - выключить звук\nпри щелчке на блок',
+        'снимите флажок, чтобы выключить звук\nпри щелчке на блок',
     'check to turn\nblock clicking\nsound on':
-        'поставить метку - включить звук\nпри щелчке на блок',
+        'отметьте, чтобы включить звук\nпри щелчке на блок',
     'Animations':
         'Aнимация',
     'uncheck to disable\nIDE animations':
-        'убрать метку - отключить\nIDE aнимацию',
+        'снимите флажок, чтобы отключить\nIDE aнимацию',
     'check to enable\nIDE animations':
-        'поставить метку - разрешить\nIDE aнимацию',
+        'отметьте, чтобы разрешить\nIDE aнимацию',
     'Turbo mode':
         'Режим Турбо',
     'check to prioritize\nscript execution':
@@ -797,17 +825,41 @@ SnapTranslator.dict.ru = {
     'check for higher contrast\ntable views':
         'отметьте, чтобы линии таблицы в окне отображения таблиц\nстали более контрасными',
     'Visible stepping':
-        'Отбражение шагов выполнения',
+        'Отображение шагов выполнения',
     'check to turn on\n visible stepping (slow)':
         'отметьте, чтобы отображались\nшаги выполнения скрипта (медленно)',
     'uncheck to turn off\nvisible stepping':
         'снимите флажок, чтобы отключить отображение\nшагов выполнения скрипта',
     'Thread safe scripts':
         'Защищенность скрипта в многопоточном режиме',
-    'uncheck to allow\nscript reentrancy':
-        'убрать метку - разрешить\nповторное вхождение в скрипт',
-    'check to disallow\nscript reentrancy':
-        'поставить метку - отключить\nповторное вхождение в скрипт',
+    'uncheck to allow\nscript reentrance':
+        'снимите флажок, чтобы разрешить\nповторный вход в скрипт',
+    'check to disallow\nscript reentrance':
+        'отметьте, чтобы отключить\nповторный вход в скрипт',
+    'Plain prototype labels':
+        'Простые заголовки блоков',
+    'uncheck to always show (+) symbols\nin block prototype labels':
+        'снимите флажок, чтобы показывать (+)\nпри редактировании заголовка в редакторе блоков',
+    'check to hide (+) symbols\nin block prototype labels':
+        'отметьте, чтобы отключить (+)\nпри редактировании заголовка в редакторе блоков',
+    'Flat line ends':
+        'Прямоугольные завершения линий',
+    'uncheck for round ends of lines':
+        'снимите флажок, чтобы\nконцы нарисованных линий закруглялись',
+    'check for flat ends of lines':
+        'отметьте, чтобы отключить\nзакругления на концах нарисованных линий',
+    'Codification support':
+        'Поддержка кодификации блоков',
+    'uncheck to disable\nblock to text mapping features':
+        'снимите флажок, чтобы убрать блоки\nтрансляции в текст на другой язык программирования',
+    'check for block\nto text mapping features':
+        'отметьте, чтобы добавить блоки\nтрансляции в текст на другой язык программирования',
+    'Inheritance support':
+        'Поддержка наследования',
+    'uncheck to disable\nsprite inheritance features':
+        'снимите флажок, чтобы отключить\nнаследование свойств спрайтов',
+    'check for sprite\ninheritance features':
+        'отметьте, чтобы включить\nнаследование свойств спрайтов',
 
     // inputs
     'with inputs':
@@ -854,12 +906,36 @@ SnapTranslator.dict.ru = {
     // sprites:
     'edit':
         'редактировать',
+    'move':
+        'переместить',
+    'clone':
+        'клонировать',
     'export...':
         'экспорт...',
+    'parent...':
+        'родитель...',
+    'release':
+        'освободить',
+    'make temporary and\nhide in the sprite corral':
+        'сделать временным и\nубрать отдельный спрайт',
+    'current parent':
+        'родитель спрайта',
+    'add a new Turtle sprite':
+        'создать новый стандартный спрайт',
+    'paint a new sprite':
+        'нарисовать новый спрайт',
+    'take a camera snapshot and\nimport it as a new sprite':
+        'сделать фотографию камерой и\nиспользовать изображение как новый спрайт',
+    'take a camera snapshot and\nimport it as a new sprite':
+        'сделать фотографию камерой и\nиспользовать изображение как новый спрайт',
 
     // stage:
     'show all':
         'показать все',
+    'pic...':
+        'картинка...',
+    'open a new window\nwith a picture of the stage':
+        'преобразовать вид текущей сцены\nв картинку',
 
     // scripting area
     'clean up':
@@ -870,6 +946,8 @@ SnapTranslator.dict.ru = {
         'добавить комментарий',
     'make a block...':
         'новый блок...',
+    'use the keyboard\nto enter blocks':
+        'использовать клавиатуру\nдля работы с блоками',
 
     // costumes
     'rename':
@@ -980,9 +1058,9 @@ SnapTranslator.dict.ru = {
 
     // variable dialog
     'for all sprites':
-        'применительно ко всем Образам',
+        'для всех спрайтов',
     'for this sprite only':
-        'применительно только к данному Образу',
+        'только для текущего спрайта',
 
     // block dialog
     'Change block':
@@ -1050,7 +1128,7 @@ SnapTranslator.dict.ru = {
 
     // About Snap
     'About Snap':
-        'О Snap!',
+        'О программе',
     'Back...':
         'Bозврат...',
     'License...':
@@ -1069,6 +1147,8 @@ SnapTranslator.dict.ru = {
         'Участники',
     'Translations':
         'Переводы',
+    'Reference manual':
+        'Инструкция пользователя',
 
     // variable watchers
     'normal':
@@ -1122,6 +1202,26 @@ SnapTranslator.dict.ru = {
     // graphical effects
     'ghost':
         'прозрачность',
+    'color':
+        'цвет',
+    'fisheye':
+        'рыбий глаз',
+    'whirl':
+        'вихрь',
+    'pixelate':
+        'пикселизация',
+    'mosaic':
+        'мозаика',
+    'negative':
+        'негатив',
+    'comic':
+        'комикс',
+    'confetti':
+        'конфетти',
+    'saturation':
+        'насыщенность',
+    'brightness':
+        'яркость',
 
     // keys
     'space':
@@ -1268,6 +1368,10 @@ SnapTranslator.dict.ru = {
         'предикат',
     'sprite':
         'спрайт',
+    'costume':
+        'костюм',
+    'sound':
+        'звук',
 
     // list indices
     'last':
@@ -1312,7 +1416,14 @@ SnapTranslator.dict.ru = {
         'имя',
     'stage':
         'сцена',
+    'costumes':
+        'костюмы',
+    'sounds':
+        'звуки',
+
     //Переводы найденых в программе, но не в файле перевода
+    'Please make sure your web browser is up to date\nand your camera is properly configured. \n\nSome browsers also require you to access Snap!\nthrough HTTPS to use the camera.\n\nPlase replace the "http://" part of the address\nin your browser by "https://" and try again.':
+        'Пожалуйста, проверьте, что Ваш браузер обновлён до последней версии\nи Ваша камера правильно сконфигурирована. \n\nНекоторые браузеры требуют протокола HTTPS\nдля доступа к СНАП к камере.\n\nПопробуйте заменить "http://" в адресной строке\nВашего браузера на "https://" и попробуйте ещё раз.',
     'current %dates':
         'сейчас %dates',
     'year':
