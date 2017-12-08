@@ -284,9 +284,17 @@ ActionManager.prototype.completeAction = function(err, result) {
     this.afterActionApplied(action);
     this.currentEvent = null;
 
-    if (this.queuedActions.length) {
+    if (this.queuedActions.length && this.isNextAction(this.queuedActions[0])) {
         setTimeout(this._applyEvent.bind(this), 0, this.queuedActions.shift());
     }
+};
+
+ActionManager.prototype.isNextAction = function(action) {
+    return action.id === (this.lastSeen + 1);
+};
+
+ActionManager.prototype.isPreviousAction = function(action) {
+    return action.id < (this.lastSeen + 1);
 };
 
 ActionManager.prototype.joinSession = function(sessionId, error) {
@@ -378,10 +386,26 @@ ActionManager.prototype._isBatchEvent = function(msg) {
 };
 
 ActionManager.prototype.onReceiveAction = function(msg) {
-    if (this.isApplyingAction || this.queuedActions.length) {
-        this.queuedActions.push(msg);  // Queue events if in transaction
-    } else {
+    if (this.isPreviousAction(msg)) return;
+
+    if (this.isNextAction(msg) && !this.isApplyingAction) {
         this._applyEvent(msg);
+    } else {
+        this.addActionToQueue(msg);
+    }
+};
+
+ActionManager.prototype.addActionToQueue = function(msg) {
+    // insert into the queue
+    var i = 0;
+    var len = this.queuedActions.length;
+    while (i < len && this.queuedActions[i].id < msg.id) {
+        i++;
+    }
+    // Make sure it isn't a duplicate
+    var isDuplicate = this.queuedActions[i] && msg.id === this.queuedActions[i].id;
+    if (!isDuplicate) {
+        this.queuedActions.splice(i, 0, msg);
     }
 };
 
@@ -2809,8 +2833,7 @@ ActionManager.prototype.onMessage = function(msg) {
         location.hash = 'collaborate=' + this.sessionId;
     } else if (this.isLeader) {
         // Verify that the lastSeen value is the same as the current
-        accepted = this.lastSeen === (msg.id - 1);
-        if (accepted) {
+        if (this.isNextAction(msg)) {
             this.acceptEvent(msg);
         }
     } else {
