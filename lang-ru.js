@@ -247,9 +247,9 @@ SnapTranslator.dict.ru = {
 
     // tab help
     'costumes tab help':
-        'импортируйте изображение с другого веб-сайта\nили со своего компьютера, скопировав его сюда',
+        'Вы можете перенести и бросить сюда изображение со своего компьютера',
     'import a sound from your computer\nby dragging it into here':
-        'импортируйте звук со своего компьютера\nскопировав его сюда',
+        'Вы можете перенести и бросить сюда звуковой файл со своего компьютера',
 
     // primitive blocks:
 
@@ -973,7 +973,7 @@ SnapTranslator.dict.ru = {
     'export':
         'экспорт',
     'rename costume':
-        'переименовать маску',
+        'переименовать костюм',
 
     // sounds
     'Play sound':
@@ -1019,6 +1019,8 @@ SnapTranslator.dict.ru = {
         'Открыть',
     'Empty':
         'Пусто',
+    'Import':
+        'Импортировать',
 
     // help
     'Help':
@@ -1215,7 +1217,19 @@ SnapTranslator.dict.ru = {
 
     // costumes
     'Turtle':
-        'Черепашка',
+        'Стрела',
+    'Opening Costumes...':
+        'Загрузка костюмов...',
+    'pen':
+        'перо',
+    'tip':
+        'на острие',
+    'middle':
+        'посередине',
+    'Paint a new costume':
+        'Нарисовать новый костюм',
+    'Import a new costume from your webcam':
+        'Сделать костюм из фотографии вебкамерой',
 
     // graphical effects
     'ghost':
@@ -1439,7 +1453,47 @@ SnapTranslator.dict.ru = {
     'sounds':
         'звуки',
 
+    //Paint editor
+    'Paint Editor':
+        'Графический редактор',
+    'flip \u2194':
+        'отраж. \u2194',
+    'flip \u2195':
+        'отраж. \u2195',
+    'grow':
+        'увел.',
+    'shrink':
+        'умен.',
+    'Brush size':
+        'Размер кисти',
+    'Constrain proportions of shapes?\n(you can also hold shift)':
+        'Сохранять пропорции фигур (круг, квадрат)?\nТак же можно использовать Shift',
+	'Paintbrush tool\n(free draw)':
+		'Кисть (свободное рисование)',
+	'Stroked Rectangle\n(shift: square)':
+		'Прямоугольник\n(shift: квадрат)',
+	'Stroked Ellipse\n(shift: circle)':
+		'Эллипс\n(shift: окружность)',
+	'Eraser tool':
+		'Ластик',
+	'Set the rotation center':
+		'Установка центра вращения',
+	'Line tool\n(shift: vertical/horizontal)':
+		'Линия\n(shift: вертикальная/горизонтальная)',
+	'Filled Rectangle\n(shift: square)':
+		'Закрашенный прямоугольник\n(shift: квадрат)',
+	'Filled Ellipse\n(shift: circle)':
+		'Закрашенный эллипс\n(shift: окружность)',
+	'Fill a region':
+		'Заливка',
+	'Pipette tool\n(pick a color anywhere)':
+		'Пипетка\n(взять цвет кликом на любую точку)',
+
     //Переводы найденых в программе, но не в файле перевода
+    'Camera':
+        'Камера',
+    'Camera not supported':
+        'Камера не поддерживается',
     'Please make sure your web browser is up to date\nand your camera is properly configured. \n\nSome browsers also require you to access Snap!\nthrough HTTPS to use the camera.\n\nPlase replace the "http://" part of the address\nin your browser by "https://" and try again.':
         'Пожалуйста, проверьте, что Ваш браузер обновлён до последней версии\nи Ваша камера правильно сконфигурирована. \n\nНекоторые браузеры требуют протокола HTTPS\nдля доступа к СНАП к камере.\n\nПопробуйте заменить "http://" в адресной строке\nВашего браузера на "https://" и попробуйте ещё раз.',
     'current %dates':
