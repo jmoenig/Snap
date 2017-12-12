@@ -3818,3 +3818,6 @@ Fixes:
 * BYOB, Store, Threads: Localization support for custom blocks (experimental)
 * Tools: German translation of tools (experimental)
 
+171212
+------
+* fixed #1963

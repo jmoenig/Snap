@@ -83,7 +83,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph,
 AlignmentMorph*/
 
-modules.objects = '2017-October-28';
+modules.objects = '2017-December-12';
 
 var SpriteMorph;
 var StageMorph;
@@ -6513,6 +6513,26 @@ StageMorph.prototype.colorFiltered = function (aColor, excludedSprite) {
     }
     ctx.putImageData(dta, 0, 0);
     return morph;
+};
+
+// StageMorph pixel access:
+
+StageMorph.prototype.getPixelColor = function (aPoint) {
+    var point, context, data;
+	if (this.trailsCanvas) {
+        point = aPoint.subtract(this.bounds.origin);
+        context = this.trailsCanvas.getContext('2d');
+        data = context.getImageData(point.x, point.y, 1, 1);
+        if (data.data[3] === 0) {
+        	return StageMorph.uber.getPixelColor.call(this, aPoint);
+        }
+        return new Color(
+            data.data[0],
+            data.data[1],
+            data.data[2],
+            data.data[3] / 255
+        );
+ 	}
 };
 
 // StageMorph accessing
