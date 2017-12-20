@@ -343,7 +343,7 @@ Action.prototype.reject = function(fn) {
 
 ActionManager.prototype.applyEvent = function(event) {
     event.user = this.id;
-    event.id = event.id || this.lastSeen + 1;
+    event.id = this.lastSeen + 1;
     event.time = event.time || Date.now();
 
     // Skip duplicate undo/redo events
