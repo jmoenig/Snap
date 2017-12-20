@@ -601,9 +601,9 @@ IDE_Morph.prototype.getActiveEntity = function () {
     // sprite being edited
 
     if (this.activeEditor instanceof BlockEditorMorph) {
-        return this.activeEditor.definition + '/scripts';
+        return this.activeEditor.definition.id + '/scripts';
     }
-    return this.currentSprite + '/' + this.currentTab;
+    return this.currentSprite.id + '/' + this.currentTab;
 };
 
 IDE_Morph.prototype.createControlBar = function () {
@@ -1255,7 +1255,9 @@ IDE_Morph.prototype.createSpriteBar = function () {
             safeName = myself.newSpriteName(newName, myself.currentSprite);
 
         if (safeName !== currentName) {
-            SnapActions.renameSprite(myself.currentSprite, safeName);
+            return SnapActions.renameSprite(myself.currentSprite, safeName);
+        } else {
+            nameField.setContents(safeName);
         }
     };
     this.spriteBar.nameField = nameField;

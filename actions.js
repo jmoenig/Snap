@@ -244,7 +244,6 @@ ActionManager.prototype.completeAction = function(err, result) {
     }
 
     this.isApplyingAction = false;
-    this.lastSeen = action.id;
     this.idCount = 0;
     if (!err) {
         SnapUndo.record(action);
@@ -267,6 +266,10 @@ ActionManager.prototype.completeAction = function(err, result) {
             fn(result);
         }
 
+        // Ensure that the handlers are removed
+        delete this._onAccept[action.id];
+        delete this._onReject[action.id];
+
         // We can call reject for any ids less than the given id...
         for (var i = action.id; i--;) {
             if (this._onReject[i]) {
@@ -281,9 +284,17 @@ ActionManager.prototype.completeAction = function(err, result) {
     this.afterActionApplied(action);
     this.currentEvent = null;
 
-    if (this.queuedActions.length) {
+    if (this.queuedActions.length && this.isNextAction(this.queuedActions[0])) {
         setTimeout(this._applyEvent.bind(this), 0, this.queuedActions.shift());
     }
+};
+
+ActionManager.prototype.isNextAction = function(action) {
+    return action.id === (this.lastSeen + 1);
+};
+
+ActionManager.prototype.isPreviousAction = function(action) {
+    return action.id < (this.lastSeen + 1);
 };
 
 ActionManager.prototype.joinSession = function(sessionId, error) {
@@ -332,7 +343,7 @@ Action.prototype.reject = function(fn) {
 
 ActionManager.prototype.applyEvent = function(event) {
     event.user = this.id;
-    event.id = event.id || this.lastSeen + 1;
+    event.id = this.lastSeen + 1;
     event.time = event.time || Date.now();
 
     // Skip duplicate undo/redo events
@@ -367,21 +378,42 @@ ActionManager.prototype.acceptEvent = function(msg) {
     // If we are undo/redo-ing, make sure it hasn't already been sent
     this.send(msg);
 
-    if (this.isApplyingAction) {  // Queue events if in transaction
-        this.queuedActions.push(msg);
-    } else {
-        setTimeout(this._applyEvent.bind(this), 0, msg);
-    }
+    setTimeout(this.onReceiveAction.bind(this), 0, msg);
 };
 
 ActionManager.prototype._isBatchEvent = function(msg) {
     return msg.type === 'batch';
 };
 
+ActionManager.prototype.onReceiveAction = function(msg) {
+    if (this.isPreviousAction(msg)) return;
+
+    if (this.isNextAction(msg) && !this.isApplyingAction) {
+        this._applyEvent(msg);
+    } else {
+        this.addActionToQueue(msg);
+    }
+};
+
+ActionManager.prototype.addActionToQueue = function(msg) {
+    // insert into the queue
+    var i = 0;
+    var len = this.queuedActions.length;
+    while (i < len && this.queuedActions[i].id < msg.id) {
+        i++;
+    }
+    // Make sure it isn't a duplicate
+    var isDuplicate = this.queuedActions[i] && msg.id === this.queuedActions[i].id;
+    if (!isDuplicate) {
+        this.queuedActions.splice(i, 0, msg);
+    }
+};
+
 ActionManager.prototype._applyEvent = function(msg) {
     logger.debug('received event:', msg);
     this.currentEvent = msg;
     this.isApplyingAction = true;
+    this.lastSeen = this.currentEvent.id;
 
     if (this._isBatchEvent(msg)) {
         this.currentBatch = msg;
@@ -1394,10 +1426,20 @@ ActionManager.prototype.getBlockFromId = function(id) {
     var ids = id.split('/'),
         blockId = ids.shift(),
         block = this._blocks[blockId],
-        editor = block.parentThatIsA(BlockEditorMorph),
-        customBlockId;
+        customBlockId,
+        editor;
+
+    // If the id is a custom block id, it is referencing the PrototypeHatBlockMorph
+    if (this._customBlocks[id]) {
+        return this._getCustomBlockEditor(id)
+            .body.contents  // get ScriptsMorph of BlockEditorMorph
+            .children.find(function(child) {
+                return child instanceof PrototypeHatBlockMorph;
+            });
+    }
 
     // If the block is part of a custom block def, refresh it
+    editor = block.parentThatIsA(BlockEditorMorph);
     if (editor) {
         var currentEditor,
             found = false,
@@ -1460,16 +1502,7 @@ ActionManager.prototype.onMoveBlock = function(id, rawTarget) {
 
     // Resolve the target
     if (block instanceof CommandBlockMorph) {
-        // Check if connecting to the beginning of a custom block definition
-        if (this._customBlocks[target.element]) {
-            target.element = this._getCustomBlockEditor(target.element, block)
-                .body.contents  // get ScriptsMorph of BlockEditorMorph
-                .children.find(function(child) {
-                    return child instanceof PrototypeHatBlockMorph;
-                });
-        } else {  // basic connection for sprite/stage/etc
-            target.element = this.getBlockFromId(target.element);
-        }
+        target.element = this.getBlockFromId(target.element);
         owner = this.getBlockOwner(target.element);
         scripts = target.element.parentThatIsA(ScriptsMorph);
         if (block.parent) {
@@ -2158,13 +2191,15 @@ ActionManager.prototype._loadCostume = function(savedCostume, callback) {
 ActionManager.prototype.onDuplicateSprite =
 ActionManager.prototype.onAddSprite = function(serialized, creatorId) {
     var ide = this.ide(),
-        sprites;
+        allSprites,
+        sprite;
 
-    sprites = this.serializer.loadSprites(serialized, ide);
+    allSprites = this.serializer.loadSprites(serialized, ide);
+    sprite = allSprites[allSprites.length-1];
     if (creatorId === this.id) {
-        ide.selectSprite(sprites[sprites.length-1]);
+        ide.selectSprite(sprite);
     }
-    this.completeAction();
+    this.completeAction(null, sprite);
 };
 
 ActionManager.prototype.onRemoveSprite = function(spriteId) {
@@ -2184,7 +2219,7 @@ ActionManager.prototype.onRenameSprite = function(spriteId, name) {
     if (ide.currentSprite === sprite) {
         ide.spriteBar.nameField.setContents(name);
     }
-    this.completeAction();
+    this.completeAction(null, name);
 };
 
 ActionManager.prototype.onToggleDraggable = function(spriteId, draggable) {
@@ -2375,10 +2410,12 @@ ActionManager.prototype.onImportBlocks = function(aString, lbl) {
 ActionManager.prototype.onOpenProject = function(str) {
     var myself = this,
         project = null,
+        event = this.currentEvent,
         ide = this.ide();
 
     SnapUndo.reset();
     this.initializeRecords();
+
     if (str) {
         if (str.indexOf('<project') === 0) {
             project = this.ide().rawOpenProjectString(str);
@@ -2395,8 +2432,7 @@ ActionManager.prototype.onOpenProject = function(str) {
         return myself.loadOwner(sprite);
     });
 
-    var event = this.currentEvent;
-
+    this.lastSeen = event.id;  // don't reset lastSeen
     this.completeAction();
 
     if (!this.ide().isReplayMode) {
@@ -2797,12 +2833,11 @@ ActionManager.prototype.onMessage = function(msg) {
         location.hash = 'collaborate=' + this.sessionId;
     } else if (this.isLeader) {
         // Verify that the lastSeen value is the same as the current
-        accepted = this.lastSeen === (msg.id - 1);
-        if (accepted) {
+        if (this.isNextAction(msg)) {
             this.acceptEvent(msg);
         }
     } else {
-        this._applyEvent(msg);
+        this.onReceiveAction(msg);
     }
 };
 

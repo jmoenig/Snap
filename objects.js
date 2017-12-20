@@ -8673,15 +8673,16 @@ ReplayControls.prototype.buttonColor = new Color(200, 200, 200);
 ReplayControls.prototype.constructor = ReplayControls;
 ReplayControls.uber = Morph.prototype;
 
-function ReplayControls(ide) {
-    this.init(ide);
+function ReplayControls() {
+    this.init();
 }
 
-ReplayControls.prototype.init = function(ide) {
+ReplayControls.prototype.init = function() {
     var myself = this,
         mouseDown;
 
-    this.ide = ide;
+    ReplayControls.uber.init.call(this);
+
     this.alpha = 0;
     this.actions = null;
     this.actionIndex = -1;
@@ -8994,7 +8995,6 @@ ReplayControls.prototype.step = function() {
         var now = Date.now(),
             delta = now - this.lastPlayUpdate,
             nextAction = this.actions[this.actionIndex+1],
-            nextTime,
             timeUntilNext,
             value;
 
@@ -9329,24 +9329,28 @@ ReplayControls.prototype.update = function() {
         // Apply the given event
         this.isApplyingAction = true;
         action.isReplay = true;
-        SnapActions.applyEvent(action)
-            .accept(function() {
-                myself.actionIndex += dir;
-                myself.actionTime = originalEvent.time;
-                myself.isApplyingAction = false;
+        this.applyEvent(action, function() {
+            myself.actionIndex += dir;
+            myself.actionTime = originalEvent.time;
+            myself.isApplyingAction = false;
 
-                if (myself.isShowingCaptions) {
-                    myself.displayCaption(action, originalEvent);
-                }
+            if (myself.isShowingCaptions) {
+                myself.displayCaption(action, originalEvent);
+            }
 
-                setTimeout(myself.update.bind(myself), 10);
-            })
-            .reject(function() {
-                throw Error('Could not apply event: ' + JSON.stringify(action, null, 2));
-            });
+            setTimeout(myself.update.bind(myself), 10);
+        });
     } else {
         setTimeout(this.update.bind(this), 100);
     }
+};
+
+ReplayControls.prototype.applyEvent = function(event, next) {
+    return SnapActions.applyEvent(event)
+        .accept(next)
+        .reject(function() {
+            throw Error('Could not apply event: ' + JSON.stringify(event, null, 2));
+        });
 };
 
 ReplayControls.prototype.getInverseEvent = function(event) {
