@@ -4347,9 +4347,7 @@ IDE_Morph.prototype.openProject = function (name) {
 
 IDE_Morph.prototype.setURL = function (str) {
     // Set the URL to a project's XML contents
-    if (this.projectsInURLs) {
-        location.hash = str;
-    }
+    location.hash = this.projectsInURLs ? str : '';
 };
 
 IDE_Morph.prototype.saveFileAs = function (
