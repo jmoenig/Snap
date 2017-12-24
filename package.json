@@ -1,0 +1,21 @@
+{
+  "name": "snap",
+  "version": "4.1.0",
+  "description": "A visual programming language inspired by Scratch",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jmoenig/Snap--Build-Your-Own-Blocks.git"
+  },
+  "license": "AGPL-3.0",
+  "bugs": {
+    "url": "https://github.com/jmoenig/Snap--Build-Your-Own-Blocks/issues"
+  },
+  "homepage": "http://snap.berkeley.edu/",
+  "devDependencies": {
+    "gulp": "gulpjs/gulp#4.0",
+    "gulp-concat": "^2.6.1",
+    "gulp-rename": "^1.2.2",
+    "gulp-replace": "^0.6.1",
+    "gulp-uglify": "^3.0.0"
+  }
+}
