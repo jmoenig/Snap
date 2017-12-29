@@ -932,8 +932,10 @@ SnapTranslator.dict.ru = {
         'нарисовать новый спрайт',
     'take a camera snapshot and\nimport it as a new sprite':
         'сделать фотографию камерой и\nиспользовать изображение как новый спрайт',
-    'take a camera snapshot and\nimport it as a new sprite':
-        'сделать фотографию камерой и\nиспользовать изображение как новый спрайт',
+    'pivot':
+        'центр вращения',
+    'edit the costume\'s\nrotation center':
+        'указать центр вращения для костюма',
 
     // stage:
     'show all':
@@ -1071,8 +1073,6 @@ SnapTranslator.dict.ru = {
         'У этого проекта пока нет глобальных\nпользовательских блоков',
     'select':
         'выделить',
-    'all':
-        'все',
     'none':
         'ничего',
 
