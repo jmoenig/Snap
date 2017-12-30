@@ -182,7 +182,7 @@ SnapTranslator.dict.ru = {
     'translator_e-mail':
         'svetlanap@berkeley.edu, tema@school830.ru', // optional
     'last_changed':
-        '2017-12-06', // this, too, will appear in the Translators tab
+        '2017-12-29', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -1191,6 +1191,14 @@ SnapTranslator.dict.ru = {
     // list watchers
     'length: ':
         'длина: ',
+    'list view...':
+        'в виде списка...',
+    'table view...':
+        'в виде таблицы...',
+    'open in dialog...':
+        'открыть в отдельном окне...',
+    'open in another dialog...':
+        'открыть в ещё одном окне...',
 
     // coments
     'add comment here...':
@@ -1411,7 +1419,7 @@ SnapTranslator.dict.ru = {
     'any':
         'любой',
     'now connected':
-        'вы вошли в систему',
+        'соединение установлено',
     'undo':
         'отменить',
         
