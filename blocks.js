@@ -9,7 +9,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2017 by Jens Mönig
+    Copyright (C) 2018 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -148,7 +148,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2017-November-16';
+modules.blocks = '2018-January-02';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -1056,6 +1056,17 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                 }
             );
             part.setContents(1);
+            break;
+        case '%rel':
+            part = new InputSlotMorph(
+                null, // text
+                false, // numeric?
+                {
+                    'distance' : ['distance'],
+                    'direction' : ['direction']
+                },
+                true // read-only
+            );
             break;
         case '%spr':
             part = new InputSlotMorph(
@@ -2075,6 +2086,7 @@ SyntaxElementMorph.prototype.endLayout = function () {
     %ida    - white roundish type-in slot with drop-down for list indices
     %idx    - white roundish type-in slot for indices incl. "any"
     %obj    - specially drawn slot for object reporters
+    %rel    - chameleon colored rectangular drop-down for relation options
     %spr    - chameleon colored rectangular drop-down for object-names
     %col    - chameleon colored rectangular drop-down for collidables
     %dst    - chameleon colored rectangular drop-down for distances

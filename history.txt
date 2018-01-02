@@ -3821,3 +3821,16 @@ Fixes:
 171212
 ------
 * fixed #1963
+
+180102
+------
+* new "direction to..." primitive as variant of "distance to..." in "Sensing"
+
+
+
+v4.1.1 Features:
+* translation support for custom blocks
+* new "direction to..." primitive as variant of "distance to..." in "Sensing"
+
+Fixes:
+* enabled color picker for pen trails on stage

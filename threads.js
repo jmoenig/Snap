@@ -9,7 +9,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2017 by Jens Mönig
+    Copyright (C) 2018 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph,
 TableFrameMorph, ColorSlotMorph, isSnapObject*/
 
-modules.threads = '2017-December-01';
+modules.threads = '2018-January-02';
 
 var ThreadManager;
 var Process;
@@ -3058,6 +3058,17 @@ Process.prototype.reportColorIsTouchingColor = function (color1, color2) {
     return false;
 };
 
+Process.prototype.reportRelationTo = function (relation, name) {
+	var rel = this.inputOption(relation);
+ 	if (rel === 'distance') {
+  		return this.reportDistanceTo(name);
+  	}
+    if (rel === 'direction') {
+    	return this.reportDirectionTo(name);
+    }
+    return 0;
+};
+
 Process.prototype.reportDistanceTo = function (name) {
     var thisObj = this.blockReceiver(),
         thatObj,
@@ -3080,6 +3091,32 @@ Process.prototype.reportDistanceTo = function (name) {
             point = thatObj.rotationCenter();
         }
         return rc.distanceTo(point) / stage.scale;
+    }
+    return 0;
+};
+
+Process.prototype.reportDirectionTo = function (name) {
+    var thisObj = this.blockReceiver(),
+        thatObj;
+
+    if (thisObj) {
+        if (this.inputOption(name) === 'mouse-pointer') {
+            return thisObj.angleToXY(this.reportMouseX(), this.reportMouseY());
+        }
+        if (name instanceof List) {
+            return thisObj.angleToXY(
+                name.at(1),
+                name.at(2)
+            );
+        }
+        thatObj = this.getOtherObject(name, this.homeContext.receiver);
+        if (thatObj) {
+            return thisObj.angleToXY(
+                thatObj.xPosition(),
+                thatObj.yPosition()
+            );
+        }
+        return thisObj.direction();
     }
     return 0;
 };

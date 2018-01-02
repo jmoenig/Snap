@@ -9,7 +9,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2017 by Jens Mönig
+    Copyright (C) 2018 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -75,7 +75,7 @@ isRetinaSupported, SliderMorph, Animation*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2017-December-01';
+modules.gui = '2018-January-02';
 
 // Declarations
 
@@ -3387,7 +3387,7 @@ IDE_Morph.prototype.aboutSnap = function () {
         world = this.world();
 
     aboutTxt = 'Snap! 4.1.1 - dev -\nBuild Your Own Blocks\n\n'
-        + 'Copyright \u24B8 2017 Jens M\u00F6nig and '
+        + 'Copyright \u24B8 2018 Jens M\u00F6nig and '
         + 'Brian Harvey\n'
         + 'jens@moenig.org, bh@cs.berkeley.edu\n\n'
 

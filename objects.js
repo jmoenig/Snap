@@ -9,7 +9,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2017 by Jens Mönig
+    Copyright (C) 2018 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -83,7 +83,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph,
 AlignmentMorph*/
 
-modules.objects = '2017-December-12';
+modules.objects = '2018-January-02';
 
 var SpriteMorph;
 var StageMorph;
@@ -573,16 +573,6 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'control',
             spec: 'when %keyHat key pressed'
         },
-
-    /* migrated to a newer block version:
-
-        receiveClick: {
-            type: 'hat',
-            category: 'control',
-            spec: 'when I am clicked'
-        },
-    */
-
         receiveInteraction: {
             type: 'hat',
             category: 'control',
@@ -696,25 +686,6 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'control',
             spec: 'call %repRing %inputs'
         },
-    /*
-        doRunWithInputList: {
-            type: 'command',
-            category: 'control',
-            spec: 'run %cmd with input list %l'
-        },
-
-        forkWithInputList: {
-            type: 'command',
-            category: 'control',
-            spec: 'launch %cmd with input list %l'
-        },
-
-        evaluateWithInputList: {
-            type: 'reporter',
-            category: 'control',
-            spec: 'call %r with input list %l'
-        },
-    */
         doReport: {
             type: 'command',
             category: 'control',
@@ -745,7 +716,7 @@ SpriteMorph.prototype.initBlocks = function () {
 
         // Message passing - very experimental
 
-        doTellTo: { // under construction +++
+        doTellTo: {
             dev: true,
             type: 'command',
             category: 'control',
@@ -872,10 +843,19 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'sensing',
             spec: 'key %key pressed?'
         },
-        reportDistanceTo: {
+    /*
+        reportDistanceTo: { // has been superseded by reportRelationTo
             type: 'reporter',
             category: 'sensing',
             spec: 'distance to %dst'
+        },
+    */
+        reportRelationTo: {
+            only: SpriteMorph,
+            type: 'reporter',
+            category: 'sensing',
+            spec: '%rel to %dst',
+            defaults: [['distance']]
         },
         doResetTimer: {
             type: 'command',
@@ -1309,6 +1289,11 @@ SpriteMorph.prototype.initBlockMigrations = function () {
         doMapStringCode: {
             selector: 'doMapValueCode',
             inputs: [['String'], '<#1>'],
+            offset: 1
+        },
+        reportDistanceTo: {
+        	selector: 'reportRelationTo',
+         	inputs: [['distance']],
             offset: 1
         }
     };
@@ -2058,7 +2043,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push('-');
         blocks.push(block('reportKeyPressed'));
         blocks.push('-');
-        blocks.push(block('reportDistanceTo'));
+        blocks.push(block('reportRelationTo'));
         blocks.push('-');
         blocks.push(block('doResetTimer'));
         blocks.push(watcherToggle('getTimer'));
@@ -4479,6 +4464,10 @@ SpriteMorph.prototype.setHeading = function (degrees, noShadow) {
 };
 
 SpriteMorph.prototype.faceToXY = function (x, y) {
+    this.setHeading(this.angleToXY(x, y));
+};
+
+SpriteMorph.prototype.angleToXY = function (x, y) {
     var deltaX = (x - this.xPosition()) * this.parent.scale,
         deltaY = (y - this.yPosition()) * this.parent.scale,
         angle = Math.abs(deltaX) < 0.001 ? (deltaY < 0 ? 90 : 270)
@@ -4486,7 +4475,7 @@ SpriteMorph.prototype.faceToXY = function (x, y) {
                 (deltaX >= 0 ? 0 : 180)
                     - (Math.atan(deltaY / deltaX) * 57.2957795131)
             );
-    this.setHeading(angle + 90);
+    return angle + 90;
 };
 
 SpriteMorph.prototype.turn = function (degrees) {

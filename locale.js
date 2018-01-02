@@ -6,7 +6,7 @@
 
     written by Jens Mönig
 
-    Copyright (C) 2017 by Jens Mönig
+    Copyright (C) 2018 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -42,7 +42,7 @@
 
 /*global modules, contains*/
 
-modules.locale = '2017-November-15';
+modules.locale = '2018-January-02';
 
 // Global stuff
 
@@ -160,7 +160,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org',
     'last_changed':
-        '2017-10-20'
+        '2018-01-02'
 };
 
 SnapTranslator.dict.it = {
