@@ -329,6 +329,16 @@ IDE_Morph.prototype.openIn = function (world) {
     */
     function interpretUrlAnchors() {
         var dict;
+
+        dict = {};
+        if (location.href.indexOf('?') > -1) {
+            var querystring = location.href
+                .replace(/^.*\?/, '')
+                .replace('#' + location.hash, '');
+
+            dict = SnapCloud.parseDict(querystring);
+        }
+
         if (location.hash.substr(0, 6) === '#open:') {
             hash = location.hash.substr(6);
             if (hash.charAt(0) === '%'
@@ -360,16 +370,16 @@ IDE_Morph.prototype.openIn = function (world) {
             }
             this.toggleAppMode(true);
             this.runScripts();
-        } else if (location.hash.substr(0, 9) === '#present:') {
+        } else if (location.hash.substr(0, 9) === '#present:' || dict.action === 'present') {
             this.shield = new Morph();
             this.shield.color = this.color;
             this.shield.setExtent(this.parent.extent());
             this.parent.add(this.shield);
             myself.showMessage('Fetching project\nfrom the cloud...');
 
-            // make sure to lowercase the username
-            dict = SnapCloud.parseDict(location.hash.substr(9));
-            dict.Username = dict.Username.toLowerCase();
+            if (location.hash.substr(0, 9) === '#present:') {
+                dict = SnapCloud.parseDict(location.hash.substr(9));
+            }
 
             SnapCloud.getPublicProject(
                 SnapCloud.encodeDict(dict),
