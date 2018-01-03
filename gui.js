@@ -1965,6 +1965,26 @@ IDE_Morph.prototype.toggleVariableFrameRate = function () {
     }
 };
 
+IDE_Morph.prototype.toggleCollaborativeEditing = function () {
+    var myself = this;
+
+    if (SnapActions.isCollaborating()) {
+        SnapActions.disableCollaboration();
+    } else if (this.isReplayMode) {
+        this.confirm(
+            'Cannot enter collaborate while in replay mode. \nWould you ' +
+            'like to exit replay mode and enable collaborative editing?',
+            'Exit Replay Mode?',
+            function() {
+                myself.exitReplayMode();
+                SnapActions.enableCollaboration();
+            }
+        );
+    } else {
+        SnapActions.enableCollaboration();
+    }
+};
+
 IDE_Morph.prototype.toggleSingleStepping = function () {
     this.stage.threads.toggleSingleStepping();
     this.controlBar.refreshSlider();
@@ -2809,23 +2829,7 @@ IDE_Morph.prototype.settingsMenu = function () {
     if (SnapActions.supportsCollaboration !== false) {
         addPreference(
             'Collaborative editing',
-            function() {
-                if (SnapActions.isCollaborating()) {
-                    SnapActions.disableCollaboration();
-                } else if (myself.isReplayMode) {
-                    myself.confirm(
-                        'Cannot enter collaborate while in replay mode. \nWould you ' +
-                        'like to exit replay mode and enable collaborative editing?',
-                        'Exit Replay Mode?',
-                        function() {
-                            myself.exitReplayMode();
-                            SnapActions.enableCollaboration();
-                        }
-                    );
-                } else {
-                    SnapActions.enableCollaboration();
-                }
-            },
+            'toggleCollaborativeEditing',
             SnapActions.isCollaborating(),
             'uncheck to disable Google Docs-style collaboration',
             'check to enable Google Docs-style collaboration',
@@ -3124,7 +3128,7 @@ IDE_Morph.prototype.projectMenu = function () {
     if (this.stage.globalBlocks.length) {
         menu.addItem(
             'Export blocks...',
-            function () {myself.exportGlobalBlocks(); },
+            'exportGlobalBlocks',
             'show global custom block definitions as XML' +
                 '\nin a new browser window'
         );
