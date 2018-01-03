@@ -3817,7 +3817,8 @@ IDE_Morph.prototype.exportGlobalBlocks = function () {
     if (this.stage.globalBlocks.length > 0) {
         new BlockExportDialogMorph(
             this.serializer,
-            this.stage.globalBlocks
+            this.stage.globalBlocks,
+            this.stage
         ).popUp(this.world());
     } else {
         this.inform(
