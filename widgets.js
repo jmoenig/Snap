@@ -2217,6 +2217,11 @@ DialogBoxMorph.prototype.promptCredentials = function (
             return false;
         }
         if (purpose === 'signup') {
+            var username = usr.getValue();
+            if (username.indexOf('@') > -1) {
+                indicate(usr, 'User name cannot contain\nany @ symbols');
+                return false;
+            }
             if (usr.getValue().length < 4) {
                 indicate(usr, 'User name must be four\ncharacters or longer');
                 return false;
