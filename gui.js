@@ -414,14 +414,16 @@ IDE_Morph.prototype.openIn = function (world) {
                         },
                         function () {nop(); }, // yield (bug in Chrome)
                         function () {
-                            SnapActions.openProject(projectData);
-                            myself.hasChangedMedia = true;
-                        },
-                        function () {
-                            myself.shield.destroy();
-                            myself.shield = null;
-                            msg.destroy();
-                            applyFlags(dict);
+                            var action = myself.droppedText(projectData);
+                            if (action) {
+                                action.accept(function () {
+                                    myself.hasChangedMedia = true;
+                                    myself.shield.destroy();
+                                    myself.shield = null;
+                                    msg.destroy();
+                                    applyFlags(dict);
+                                });
+                            }
                         }
                     ]);
                 },
@@ -448,14 +450,14 @@ IDE_Morph.prototype.openIn = function (world) {
                         },
                         function () {nop(); }, // yield (bug in Chrome)
                         function () {
-                            SnapActions.openProject(projectData);
-                            myself.hasChangedMedia = true;
-                        },
-                        function () {
-                            myself.shield.destroy();
-                            myself.shield = null;
-                            msg.destroy();
-                            myself.toggleAppMode(false);
+                            var action = SnapActions.openProject(projectData);
+                            action.accept(function() {
+                                myself.hasChangedMedia = true;
+                                myself.shield.destroy();
+                                myself.shield = null;
+                                msg.destroy();
+                                myself.toggleAppMode(false);
+                            });
                         }
                     ]);
                 },
