@@ -591,6 +591,13 @@ SnapSerializer.prototype.rawLoadProjectModel = function (xmlNode) {
         });
     }
 
+    // Add message types
+    model.messageTypes = model.stage.childNamed('messageTypes');
+    if (model.messageTypes) {
+        var messageTypes = model.messageTypes.children;
+        messageTypes.forEach(this.loadMessageType.bind(this, project.stage));
+    }
+
     model.globalBlocks = model.project.childNamed('blocks');
     if (model.globalBlocks) {
         this.loadCustomBlocks(project.stage, model.globalBlocks, true);
@@ -1767,6 +1774,7 @@ StageMorph.prototype.toXML = function (serializer) {
             '<sounds>%</sounds>' +
             '<variables>%</variables>' +
             '<blocks>%</blocks>' +
+            '<messageTypes>%</messageTypes>' +
             '<scripts>%</scripts><sprites>%</sprites>' +
             '</stage>' +
             '<hidden>$</hidden>' +
@@ -1800,6 +1808,7 @@ StageMorph.prototype.toXML = function (serializer) {
         serializer.store(this.sounds, this.name + '_snd'),
         serializer.store(this.variables),
         serializer.store(this.customBlocks),
+        serializer.store(this.messageTypes),
         serializer.store(this.scripts),
         serializer.store(this.children),
         Object.keys(StageMorph.prototype.hiddenPrimitives).reduce(
