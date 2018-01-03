@@ -6192,6 +6192,8 @@ ProjectDialogMorph.prototype.setSource = function (source) {
 
                 if (src) {
                     xml = myself.ide.serializer.parse(src);
+                    // Select a role to display
+                    xml = xml.children[0].children[0];
 
                     myself.notesText.text = xml.childNamed('notes').contents
                         || '';
