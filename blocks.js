@@ -9512,6 +9512,10 @@ SymbolMorph.prototype.symbolCanvasColored = function (aColor) {
     switch (this.name) {
     case 'square':
         return this.drawSymbolStop(canvas, aColor);
+    case 'plus':
+        return this.drawSymbolPlus(canvas, aColor);
+    case 'mail':
+        return this.drawSymbolMail(canvas, aColor);
     case 'pointRight':
         return this.drawSymbolPointRight(canvas, aColor);
     case 'doubleArrowForward':
@@ -9635,6 +9639,7 @@ SymbolMorph.prototype.symbolWidth = function () {
         return size * 1.2;
     case 'turtle':
     case 'turtleOutline':
+    case 'mail':
     case 'stage':
         return size * 1.3;
     case 'cloud':
@@ -9657,6 +9662,45 @@ SymbolMorph.prototype.drawSymbolStop = function (canvas, color) {
 
     ctx.fillStyle = color.toString();
     ctx.fillRect(0, 0, canvas.width, canvas.height);
+    return canvas;
+};
+
+SymbolMorph.prototype.drawSymbolPlus = function (canvas, color) {
+    var ctx = canvas.getContext('2d'),
+        w = canvas.width,
+        l = Math.max(w / 12, 1),
+        h = canvas.height;
+
+    ctx.lineWidth = l;
+    ctx.strokeStyle = color.toString();
+    ctx.fillStyle = color.toString();
+
+    ctx.moveTo(0, h/2);
+    ctx.lineTo(w, h/2);
+    ctx.moveTo(w/2, 0);
+    ctx.lineTo(w/2, h);
+    ctx.stroke();
+
+    return canvas;
+};
+
+SymbolMorph.prototype.drawSymbolMail = function(canvas, color) {
+    var ctx = canvas.getContext('2d'),
+        w = canvas.width,
+        l = Math.max(w / 12, 1),
+        h = canvas.height;
+
+    ctx.lineWidth = l;
+    ctx.fillStyle = color.toString();
+    ctx.strokeStyle = color.darker(50).toString();
+    ctx.fillRect(0, 0, w, h);
+
+    ctx.rect(0, 0, w, h);
+    ctx.moveTo(0, 0);
+    ctx.lineTo(w/2, 2*h/3);
+    ctx.lineTo(w, 0);
+    ctx.stroke();
+
     return canvas;
 };
 
