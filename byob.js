@@ -3417,11 +3417,11 @@ BlockExportDialogMorph.prototype.key = 'blockExport';
 
 // BlockExportDialogMorph instance creation:
 
-function BlockExportDialogMorph(serializer, blocks) {
-    this.init(serializer, blocks);
+function BlockExportDialogMorph(serializer, blocks, stage) {
+    this.init(serializer, blocks, stage);
 }
 
-BlockExportDialogMorph.prototype.init = function (serializer, blocks) {
+BlockExportDialogMorph.prototype.init = function (serializer, blocks, stage) {
     var myself = this;
 
     // additional properties:
@@ -3432,13 +3432,13 @@ BlockExportDialogMorph.prototype.init = function (serializer, blocks) {
     // initialize inherited properties:
     BlockExportDialogMorph.uber.init.call(
         this,
-        null, // target
+        stage, // target
         function () {myself.exportBlocks(); },
         null // environment
     );
 
     // override inherited properites:
-    this.labelString = 'Export blocks';
+    this.labelString = 'Export blocks / message types';
     this.createLabel();
 
     // build contents
@@ -3448,6 +3448,7 @@ BlockExportDialogMorph.prototype.init = function (serializer, blocks) {
 BlockExportDialogMorph.prototype.buildContents = function () {
     var palette, x, y, block, checkBox, lastCat,
         myself = this,
+        stage = this.target,
         padding = 4;
 
     // create plaette
@@ -3506,6 +3507,44 @@ BlockExportDialogMorph.prototype.buildContents = function () {
         });
     });
 
+    // add message types
+    this.msgs = [];
+    for (var i = 0; i < stage.deletableMessageNames().length; i++) {
+        // assume that the user wants to export ALL message types at first
+        var msg = new ReporterBlockMorph();
+        msg.setSpec(stage.deletableMessageNames()[i]);
+        msg.setColor(new Color(217,77,17));
+        this.msgs.push(msg);
+    }
+
+    this.msgs.forEach(function (msg) {
+        checkBox = new ToggleMorph(
+            'checkbox',
+            myself,
+            function() {
+                if (myself.msgs.includes(msg)) {
+                    myself.msgs.splice(myself.msgs.indexOf(msg), 1);
+                } else {
+                    myself.msgs.push(msg);
+                }
+            },
+            null,
+            function() {
+                return myself.msgs.includes(msg);
+            },
+            null,
+            null,
+            null,
+            msg.fullImage()
+        );
+        checkBox.setPosition(new Point(
+            x,
+            y + (checkBox.top() - checkBox.toggleElement.top())
+        ));
+        palette.addContents(checkBox);
+        y += checkBox.fullBounds().height() + padding;
+    });
+
     palette.scrollX(padding);
     palette.scrollY(padding);
     this.addBody(palette);
@@ -3560,15 +3599,24 @@ BlockExportDialogMorph.prototype.selectNone = function () {
 
 BlockExportDialogMorph.prototype.exportBlocks = function () {
     var str = this.serializer.serialize(this.blocks),
-        ide = this.world().children[0];
+        ide = this.world().children[0],
+        stage = ide.stage,
+        msgs = '';
 
-    if (this.blocks.length > 0) {
+    for (var i = 0; i < this.msgs.length; i++) {
+        msgs += '<messageType>' +
+            stage.messageTypes.getMsgType(this.msgs[i].blockSpec).toXML(this.serializer) +
+            '</messageType>';
+    }
+
+    if (this.blocks.length > 0 || this.msgs.length > 0) {
         str = '<blocks app="'
             + this.serializer.app
             + '" version="'
             + this.serializer.version
             + '">'
             + str
+            + msgs
             + '</blocks>';
         ide.saveXMLAs(
             str,
@@ -3576,8 +3624,8 @@ BlockExportDialogMorph.prototype.exportBlocks = function () {
         );
     } else {
         new DialogBoxMorph().inform(
-            'Export blocks',
-            'no blocks were selected',
+            'Export blocks / message types',
+            'no blocks or message types were selected',
             this.world()
         );
     }
