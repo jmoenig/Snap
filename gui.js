@@ -90,6 +90,21 @@ var JukeboxMorph;
 var StageHandleMorph;
 var PaletteHandleMorph;
 
+var SERVER_URL = SERVER_URL || window.location.origin;
+var SERVER_ADDRESS = SERVER_URL.replace(/^.*\/\//, '');
+function ensureFullUrl(url) {
+    // if it's not a full path attach serverURL to the front
+    // regex is checking to see if the protocol is there (eg http://, ws://)
+    if(url.match(/^\w+:\/\//) === null) {
+        if (url.substring(0,1)[0] === '/') {
+            url = SERVER_URL + url;
+        } else {
+            url = SERVER_URL + '/' + url;
+        }
+    }
+    return url;
+}
+
 // IDE_Morph ///////////////////////////////////////////////////////////
 
 // I am SNAP's top-level frame, the Editor window
@@ -314,6 +329,7 @@ IDE_Morph.prototype.openIn = function (world) {
     this.reactToWorldResize(world.bounds);
 
     function getURL(url) {
+        url = ensureFullUrl(url);
         try {
             var request = new XMLHttpRequest();
             request.open('GET', url, false);
