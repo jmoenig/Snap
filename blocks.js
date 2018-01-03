@@ -11495,7 +11495,8 @@ MultiArgMorph.prototype.removeInput = function () {
 MultiArgMorph.prototype.mouseClickLeft = function (pos) {
     // prevent expansion in the palette
     // (because it can be hard or impossible to collapse again)
-    if (!this.parentThatIsA(ScriptsMorph)) {
+    var isMsgTypeBlock = this.parentThatIsA(MessageDefinitionBlock);
+    if (!this.parentThatIsA(ScriptsMorph) && !isMsgTypeBlock) {
         this.escalateEvent('mouseClickLeft', pos);
         return;
     }
@@ -11506,15 +11507,27 @@ MultiArgMorph.prototype.mouseClickLeft = function (pos) {
         repetition = this.world().currentKey === 16 ? 3 : 1,
         i;
 
-    repetition = Math.min(repetition, this.inputs().length - this.minInputs);
     this.startLayout();
     if (rightArrow.bounds.containsPoint(pos)) {
         if (rightArrow.isVisible) {
-            SnapActions.addListInput(this, repetition);
+            if (isMsgTypeBlock) {
+                for (i = 0; i < repetition; i++) {
+                    this.addInput();
+                }
+            } else {
+                SnapActions.addListInput(this, repetition);
+            }
         }
     } else if (leftArrow.bounds.containsPoint(pos)) {
         if (leftArrow.isVisible) {
-            SnapActions.removeListInput(this, repetition);
+            repetition = Math.min(repetition, this.inputs().length - this.minInputs);
+            if (isMsgTypeBlock) {
+                for (i = 0; i < repetition; i++) {
+                    this.removeInput();
+                }
+            } else {
+                SnapActions.removeListInput(this, repetition);
+            }
         }
     } else {
         this.escalateEvent('mouseClickLeft', pos);
