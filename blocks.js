@@ -1213,6 +1213,49 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             part = this.labelPart('%key');
             part.isStatic = true;
             break;
+        case '%msgType':
+            part = new InputSlotMorph(
+                null,
+                false,
+                'messageTypes',
+                true
+            );
+            break;
+        case '%msgOutput':
+            part = new MessageOutputSlotMorph();
+            break;
+        case '%msgInput':
+            part = new MessageInputSlotMorph();
+            break;
+        case '%roles':
+            // role ids
+            part = new InputSlotMorph(
+                null,
+                false,
+                'roleNames',
+                true
+            );
+            break;
+        case '%rpcNames':
+            part = new InputSlotMorph(
+                null,
+                false,
+                'rpcNames',
+                true
+            );
+            part.isStatic = true;
+            break;
+        case '%rpcActions':
+            part = new InputSlotMorph(
+                null,
+                false,
+                'rpcActions',
+                true
+            );
+            break;
+        case '%rpcMethod':
+            part = new RPCInputSlotMorph();
+            break;
         case '%msg':
             part = new InputSlotMorph(
                 null,
@@ -7763,6 +7806,93 @@ InputSlotMorph.prototype.menuFromDict = function (choices, noEmptyOption) {
     return menu;
 };
 
+InputSlotMorph.prototype.messageTypesMenu = function() {
+    var rcvr = this.parentThatIsA(BlockMorph).receiver(),
+        stage = rcvr.parentThatIsA(StageMorph),
+        names = stage.messageTypes.names(),
+        dict = {};
+
+    for (var i = names.length; i--;) {
+        dict[names[i]] = names[i];
+    }
+    return dict;
+};
+
+InputSlotMorph.prototype.messageTypes = function () {
+    var stage = this.parentThatIsA(IDE_Morph).stage,
+        msgTypes = stage.messageTypes.names(),
+        dict = {};
+
+    for (var i = msgTypes.length; i--;) {
+        dict[msgTypes[i]] = msgTypes[i];
+    }
+
+    return dict;
+};
+
+InputSlotMorph.prototype.roleNames = function () {
+    var ide = this.root().children[0],
+        roles = ide.room.getRoleNames(),
+        dict = {};
+
+    for (var i = roles.length; i--;) {
+        if (ide.projectName !== roles[i]) {  // project name is roleid
+            dict[roles[i]] = roles[i];
+        }
+    }
+
+    dict['others in room'] = 'others in room';
+    dict['everyone in room'] = 'everyone in room';
+    return dict;
+};
+
+// IDE_Morph is not always accessible. quick fix => add getURL to
+// InputSlotMorph
+InputSlotMorph.prototype.getURL = function (url) {
+    try {
+        url = ensureFullUrl(url);
+        var request = new XMLHttpRequest();
+        request.open('GET', url, false);
+        request.send();
+        if (request.status === 200) {
+            return request.responseText;
+        }
+        throw new Error('unable to retrieve ' + url);
+    } catch (err) {
+        return '';
+    }
+};
+
+InputSlotMorph.prototype.rpcNames = function () {
+    var rpcs = JSON.parse(this.getURL('/rpc')),
+        dict = {};
+
+    for (var i = 0; i < rpcs.length; i++) {
+        dict[rpcs[i]] = rpcs[i];
+    }
+    return dict;
+};
+
+InputSlotMorph.prototype.rpcActions = function () {
+    var field = this.parent.inputs()[0],
+        dict = {},
+        actions,
+        rpc;
+
+    // assume that the rpc name is the first field
+    if (field) {
+        rpc = field.evaluate();
+    }
+
+    if (rpc) {
+        actions = Object.keys(JSON.parse(this.getURL('/rpc/' + rpc)));
+        for (var i = actions.length; i--;) {
+            dict[actions[i]] = actions[i];
+        }
+    }
+
+    return dict;
+};
 InputSlotMorph.prototype.messagesMenu = function () {
     var dict = {},
         rcvr = this.parentThatIsA(BlockMorph).receiver(),
