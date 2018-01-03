@@ -3684,7 +3684,11 @@ BlockMorph.prototype.mouseClickLeft = function () {
     if (receiver) {
         stage = receiver.parentThatIsA(StageMorph);
         if (stage) {
-            stage.threads.toggleProcess(top);
+            var active = stage.threads.findProcess(top);
+            // msg handlers can only be stopped - not started
+            if (!(top.selector === 'receiveSocketMessage' && !active)) {
+                stage.threads.toggleProcess(top);
+            }
         }
     }
 };
