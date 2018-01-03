@@ -5839,6 +5839,14 @@ StageMorph.prototype.processKeyEvent = function (event, action) {
             keyName = 'ctrl ' + (event.shiftKey ? 'shift ' : '') + keyName;
         }
     }
+
+    switch (event.key) {
+    case '+':
+    case '-':
+        keyName = event.key;
+        break;
+    }
+
     action.call(this, keyName);
 };
 
