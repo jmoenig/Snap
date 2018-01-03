@@ -409,6 +409,23 @@ Cloud.prototype.getProjectList = function (callBack, errorCall) {
     );
 };
 
+Cloud.prototype.getSharedProjectList = function(callBack, errorCall) {
+    var myself = this;
+    this.reconnect(
+        function () {
+            myself.callService(
+                'getSharedProjectList',
+                function (response, url) {
+                    callBack.call(null, response, url);
+                    myself.disconnect();
+                },
+                errorCall
+            );
+        },
+        errorCall
+    );
+};
+
 Cloud.prototype.changePassword = function (
     oldPW,
     newPW,
@@ -492,6 +509,10 @@ Cloud.prototype.callURL = function (url, callBack, errorCall) {
     } catch (err) {
         errorCall.call(this, err.toString(), url);
     }
+};
+
+Cloud.prototype.supportsService = function (serviceName) {
+    return !!this.api[serviceName];
 };
 
 Cloud.prototype.callService = function (
