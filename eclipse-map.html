@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Eclipse 2017 Map</title>
+    <script src="https://maps.google.com/maps/api/js?key=AIzaSyCrrRz9ezJ69jv1pXdUKVQf2A7pkSvxogQ"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gmaps.js/0.4.25/gmaps.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.16.2/axios.min.js"></script>
+    <style type="text/css">
+    #map {
+        width: 90vw;
+        height: 90vh;
+    }
+    </style>
+</head>
+<body>
+    method:
+    <select id="method">
+        <option value="stationsInfo">selectedStations</option>
+        <option value="selectSectionBased">selectSectionBased</option>
+        <option value="selectPointBased">selectPointBased</option>
+        <option value="availableStations">availableStations</option>
+    </select> args: <input type="text" value="numSections=160&perSection=1" id="args"></input> <button id="draw">draw</button>
+    <span>availableStations args: maxReadingMedian=500&maxDistanceFromCenter=50</span>
+    <div id="map"></div>
+    <script>
+        var map = new GMaps({
+            el: '#map',
+            lat: 39.0277,
+            lng: -98.525,
+            zoom: 5
+        });
+
+        // converts a snapified json to json
+        function kvListToJson(kvList){
+            let obj = {};
+            kvList.forEach(keyVal => {
+                obj[keyVal[0]] = keyVal[1];
+            });
+            return obj;
+        }
+
+        axios.get('/rpc/Eclipse2017/eclipsePath').then(resp => {
+            nasaCenters = resp.data;
+            let path = (nasaCenters.map(point => {
+                return { lat: point[0], lng: point[1], title: 'pathIndicator'};
+            }));
+            map.addMarkers(path);
+        })
+
+        document.getElementById('draw').addEventListener('click', e => {
+            let methodSelect = document.getElementById('method');
+            let method = methodSelect.options[methodSelect.selectedIndex].value;
+            let args = document.getElementById('args').value.split(',');
+            map.removeMarkers();
+            let url = `/rpc/Eclipse2017/${method}?${args}`;
+            axios.get(url).then(resp => {
+                let stations = resp.data.filter(station => station);
+                alert(`${stations.length} stations`)
+                stations.forEach(station => {
+                    // check if what we are getting is in json or snapStructure format
+                    if (station[0]) station = kvListToJson(station); 
+                    map.addMarker({
+                        lat: station.latitude,
+                        lng: station.longitude,
+                        fillColor: 'green',
+                        title: station.pws,
+                        click: ()=>console.log(station),
+                        infoWindow: {
+                            content: `<ul>
+                            <li>readingsMedian: ${station.readingMedian}</li>
+                            <li>number of updates: ${station.updates}</li>
+                            <li>distance: ${station.distance}</li>
+                            <li>elevation: ${station.elevation}</li>
+                            <li>city: ${station.city}, ${station.state}</li>
+                            <li>type: ${station.type}</li>
+                            <li><a href="https://www.wunderground.com/personal-weather-station/dashboard?ID=${station.pws}" target="_blank">pws: ${station.pws}</a></li>
+                            </ul>`
+                        }
+                    }); //end of add marker
+                })
+            }).catch(console.error); // end of axios
+
+        });
+    </script>
+</body>
+</html>
