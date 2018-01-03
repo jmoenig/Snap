@@ -1691,5 +1691,10 @@ SnapTranslator.dict.hu = {
     'Enter code that corresponds to the block\'s definition. Choose your own\nformal parameter names (ignoring the ones shown).':
         'Gépelje be a blokk definíciójának megfelelő programkódot. Használja a saját formális paramétereit (hagyja figyelmen kívül a láthatókat).',
     'Enter code that corresponds to the block\'s operation (usually a single\nfunction invocation). Use <#n> to reference actual arguments as shown.':
-        'Gépelje be a blokk működésének megfelelő programkódot (általában egy függvény bevezetésével). Használja a <#n> hivatkozási helyen látható aktuális argumentumokat.'
+        'Gépelje be a blokk működésének megfelelő programkódot (általában egy függvény bevezetésével). Használja a <#n> hivatkozási helyen látható aktuális argumentumokat.',
+
+    'Room': 'Szoba',
+    'role name': 'szerep név',
+    'all role names': 'minden szerep név',
+    'Services': 'Uzenetek'
 };
