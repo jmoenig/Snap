@@ -9174,6 +9174,7 @@ ReplayControls.prototype.enable = function() {
 ReplayControls.prototype.disable = function() {
     this.enabled = false;
     this.actions = null;
+    this.isPlaying = false;
     if (this.lastCaption) {
         this.lastCaption.destroy();
     }
