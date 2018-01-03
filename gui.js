@@ -5873,12 +5873,21 @@ ProjectDialogMorph.prototype.buildContents = function () {
     };
     this.preview.drawCachedTexture = function () {
         var context = this.image.getContext('2d');
-        context.drawImage(this.cachedTexture, this.edge, this.edge);
+        var scale = Math.min(
+                (this.width() / this.cachedTexture.width),
+                (this.height() / this.cachedTexture.height)
+            ),
+            width = scale * this.cachedTexture.width,
+            height = scale * this.cachedTexture.height;
+
+        context.drawImage(this.cachedTexture, this.edge, this.edge,
+            width, height);
+
         this.changed();
     };
     this.preview.drawRectBorder = InputFieldMorph.prototype.drawRectBorder;
     this.preview.setExtent(
-        this.ide.serializer.thumbnailSize.add(this.preview.edge * 2)
+        this.ide.serializer.thumbnailSize.divideBy(4).add(this.preview.edge * 2)
     );
 
     this.body.add(this.preview);
