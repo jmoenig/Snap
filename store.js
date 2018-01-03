@@ -1321,6 +1321,41 @@ SnapSerializer.prototype.loadBlock = function (model, isReporter) {
     block.isDraggable = true;
     block.id = model.attributes.collabId;
     inputs = block.inputs();
+
+    // Try to batch children for the inputs if appropriate. This is
+    // used with StructInputSlotMorphs
+    if (inputs.length < model.children.length) {
+        var struct = detect(inputs, function(input) {
+                return input instanceof StructInputSlotMorph;
+            }),
+            structIndex = inputs.indexOf(struct);
+
+        // Find the StructInputSlotMorph and batch the given value and the extras
+        // together
+        if (structIndex !== -1) {
+            // Set the contents for the entire batch
+            var self = this,
+                batch,
+                batchLength = model.children.length - inputs.length,
+                structVals;
+
+            inputs.splice(structIndex, 1);
+            batch = model.children.splice(structIndex, structIndex + batchLength + 1);
+            structVals = batch.map(function(value) {
+                if (value.tag === 'block' || value.tag === 'custom-block') {
+                    return self.loadBlock(value);
+                }
+                if (value.tag === 'script') {
+                    return self.loadScript(value);
+                }
+                if (value.tag === 'color') {
+                    return self.loadColor(value);
+                }
+                return self.loadValue(value) || '';
+            });
+        }
+    }
+
     model.children.forEach(function (child, i) {
         if (child.tag === 'variables') {
             this.loadVariables(block.variables, child);
@@ -1334,6 +1369,17 @@ SnapSerializer.prototype.loadBlock = function (model, isReporter) {
         }
     }, this);
     block.cachedInputs = null;
+
+    if (struct && structVals) {
+        if (struct instanceof MessageInputSlotMorph) {
+            var msgType = this.project.stage.messageTypes.getMsgType(structVals[0]);
+
+            struct.setContents(structVals[0], structVals.slice(1), msgType);
+        } else {
+            struct.setContents(structVals[0], structVals.slice(1));
+        }
+    }
+
     return block;
 };
 
@@ -1386,7 +1432,14 @@ SnapSerializer.prototype.loadInput = function (model, input, block) {
             // checking whether "input" is nil should not
             // be necessary, but apparently is after retina support
             // was added.
-            input.setContents(this.loadValue(model));
+            if (input instanceof MessageInputSlotMorph) {
+                var typeName = this.loadValue(model),
+                    messageType = this.project.stage.messageTypes.getMsgType(typeName);
+
+                input.setContents(typeName, null, messageType);
+            } else {
+                input.setContents(this.loadValue(model));
+            }
         }
     }
 };

@@ -839,6 +839,20 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             return part;
         }
 
+        // inputs with hint text
+        if ((spec.length > 5) && (spec.slice(0, 5) === '%hint')) {
+            part = new HintInputSlotMorph('', spec.slice(5));
+            return part;
+        }
+
+        if ((spec.length > 6) && (spec.slice(0, 6) === '%mhint')) {
+            var token = spec.slice(6);
+            part = new MultiHintArgMorph(token, null, 1);
+
+            part.isStatic = true;
+            part.canBeEmpty = false;
+            return part;
+        }
         // single-arg and specialized multi-arg slots:
         switch (spec) {
         case '%imgsource':
