@@ -26,7 +26,8 @@ ProjectDialogMorph.prototype.deleteProject = function () {
 // adapted from installCloudProjectList
 ProjectDialogMorph.prototype._openProject = ProjectDialogMorph.prototype.openProject;
 ProjectDialogMorph.prototype.openProject = function () {
-    var proj = this.listField.selected,
+    var myself = this,
+        proj = this.listField.selected,
         response;
 
     if (this.source === 'examples') {
@@ -36,8 +37,7 @@ ProjectDialogMorph.prototype.openProject = function () {
         // role name
         this.ide.updateUrlQueryString(proj.name, false, true);
     } else if (this.source === 'cloud-shared'){
-        var myself = this;
-        myself.destroy();
+        this.destroy();
         SnapCloud.callService('joinActiveProject', function(response) {
             myself.ide.rawLoadCloudProject(response[0], proj.Public);
         }, myself.ide.cloudError(), [proj.ProjectName, proj.Owner]);
@@ -65,6 +65,7 @@ ProjectDialogMorph.prototype.rawOpenCloudProject = function (proj) {
         },
         myself.ide.cloudError()
     );
+    this.destroy();
 };
 
 ////////////////////////////////////////////////////
