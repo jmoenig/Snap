@@ -34,15 +34,23 @@ NetsBloxMorph.prototype.buildPanes = function () {
 
 NetsBloxMorph.prototype.openIn = function (world) {
     var myself = this,
-        onConnect = this.sockets.onConnect;
+        onConnect = this.sockets.onConnect,
+        opened = false;
 
     this.projectName = 'myRole';
     this.sockets.onConnect = function() {
+        opened = true;
         myself.sockets.onConnect = onConnect;
         NetsBloxMorph.uber.openIn.call(myself, world);
         myself.sockets.onConnect();
         return;
     };
+
+    setTimeout(function() {
+        if (!opened) {  // Make sure it opens regardless
+            NetsBloxMorph.uber.openIn.call(myself, world);
+        }
+    }, 500);
 };
 
 NetsBloxMorph.prototype.newRole = function (name) {
