@@ -273,6 +273,12 @@ NetsBloxMorph.prototype.createSpriteBar = function () {
         tabColors = this.tabColors,
         tab;
 
+    // tabBar.fixLayout (called in the IDE_Morph) results in reversing the
+    // order of the children. Unfortunately, this results in the order being
+    // messed up if we don't restore the original order before our call to
+    // fixLayout (after adding our additional tab)
+    tabBar.children.reverse();
+
     tab = new TabMorph(
         tabColors,
         null, // target
@@ -293,9 +299,7 @@ NetsBloxMorph.prototype.createSpriteBar = function () {
     tabBar.add(tab);
 
     tabBar.fixLayout();
-    tabBar.children.forEach(function (each) {
-        each.refresh();
-    });
+    tab.refresh();
 };
 
 NetsBloxMorph.prototype.projectMenu = function () {
