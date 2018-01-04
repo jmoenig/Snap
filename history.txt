@@ -3826,6 +3826,10 @@ Fixes:
 ------
 * new "direction to..." primitive as variant of "distance to..." in "Sensing"
 
+180104
+------
+* Morphic: scroll menus if they are taller than the world
+
 
 
 v4.1.1 Features:
@@ -3833,4 +3837,5 @@ v4.1.1 Features:
 * new "direction to..." primitive as variant of "distance to..." in "Sensing"
 
 Fixes:
+* scroll menus if they are taller than the world
 * enabled color picker for pen trails on stage
