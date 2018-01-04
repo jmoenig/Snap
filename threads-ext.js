@@ -355,36 +355,49 @@ NetsProcess.prototype.getJSFromRPCDropdown = function (rpc, action, params) {
 };
 
 // Process Geo
-NetsProcess.prototype.reportLatitude = function () {
-    var self = this;
-    if (!this.location) {
+NetsProcess.prototype.getLocation = function () {
+    var myself = this,
+        errorName;
+
+    if (this.location === undefined) {
+        this.locationError = null;
         navigator.geolocation.getCurrentPosition(function(location) {
-            self.location = location;
+            myself.location = location;
+        }, function(err) {
+            // Raise an error...
+            myself.locationError = err;
+            myself.location = null;
         });
-        this.location = 'loading...';
-    } else if (this.location !== 'loading...') {
+    } else {
         var location = this.location;
-        this.location = null;
-        return location.coords.latitude;
+        this.location = undefined;
+        if (this.locationError || !location) {
+            this.locationError = this.locationError || new Error('Could not determine location');
+            // Error 'name' is not always provided for PositionErrors. Try to get
+            // the name of the Error. Fall back on 'Error'
+            errorName = this.locationError.name || (this.locationError.constructor &&
+                this.locationError.constructor.name);
+            this.locationError.name = errorName || 'Error';
+            throw this.locationError;
+        }
+        return location.coords;
     }
     this.pushContext('doYield');
     this.pushContext();
 };
 
-NetsProcess.prototype.reportLongitude = function () {
-    var self = this;
-    if (!this.location) {
-        navigator.geolocation.getCurrentPosition(function(location) {
-            self.location = location;
-        });
-        this.location = 'loading...';
-    } else if (this.location !== 'loading...') {
-        var location = this.location;
-        this.location = null;
-        return location.coords.longitude;
+NetsProcess.prototype.reportLatitude = function () {
+    var location = this.getLocation();
+    if (location) {
+        return location.latitude;
     }
-    this.pushContext('doYield');
-    this.pushContext();
+};
+
+NetsProcess.prototype.reportLongitude = function () {
+    var location = this.getLocation();
+    if (location) {
+        return location.longitude;
+    }
 };
 
 // TODO: I can probably move these next two to the Sprite/StageMorphs
