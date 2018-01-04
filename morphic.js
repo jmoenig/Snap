@@ -7918,21 +7918,31 @@ MenuMorph.prototype.processKeyPress = function (event) {
 };
 
 MenuMorph.prototype.selectFirst = function () {
-    var i;
-    for (i = 0; i < this.children.length; i += 1) {
-        if (this.children[i] instanceof MenuItemMorph) {
-            this.select(this.children[i]);
+    var scroller, items, i;
+
+    scroller = detect(this.children, function (morph) {
+         return morph instanceof ScrollFrameMorph;
+    });
+    items = scroller ? scroller.contents.children : this.children;
+    for (i = 0; i < items.length; i += 1) {
+        if (items[i] instanceof MenuItemMorph) {
+            this.select(items[i]);
             return;
-        }
-    }
+    	}
+	}
 };
 
 MenuMorph.prototype.selectUp = function () {
-    var triggers, idx;
+    var scroller, triggers, idx;
 
-    triggers = this.children.filter(function (each) {
-        return each instanceof MenuItemMorph;
+	scroller = detect(this.children, function (morph) {
+ 		return morph instanceof ScrollFrameMorph;
     });
+    triggers = (scroller ? scroller.contents.children : this.children).filter(
+    	function (each) {
+        	return each instanceof MenuItemMorph;
+    	}
+    );
     if (!this.selection) {
         if (triggers.length) {
             this.select(triggers[0]);
@@ -7947,11 +7957,16 @@ MenuMorph.prototype.selectUp = function () {
 };
 
 MenuMorph.prototype.selectDown = function () {
-    var triggers, idx;
+    var scroller, triggers, idx;
 
-    triggers = this.children.filter(function (each) {
-        return each instanceof MenuItemMorph;
+    scroller = detect(this.children, function (morph) {
+         return morph instanceof ScrollFrameMorph;
     });
+    triggers = (scroller ? scroller.contents.children : this.children).filter(
+        function (each) {
+            return each instanceof MenuItemMorph;
+        }
+    );
     if (!this.selection) {
         if (triggers.length) {
             this.select(triggers[0]);
@@ -7988,6 +8003,7 @@ MenuMorph.prototype.select = function (aMenuItem) {
     this.unselectAllItems();
     aMenuItem.image = aMenuItem.highlightImage;
     aMenuItem.changed();
+    aMenuItem.scrollIntoView();
     this.selection = aMenuItem;
 };
 

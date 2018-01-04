@@ -3829,6 +3829,7 @@ Fixes:
 180104
 ------
 * Morphic: scroll menus if they are taller than the world
+* Morphic: added keyboard navigation for menus that scroll
 
 
 
