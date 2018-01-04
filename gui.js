@@ -5831,7 +5831,7 @@ ProjectDialogMorph.prototype.buildContents = function () {
     }
 
     this.addSourceButton('cloud', localize('Cloud'), 'cloud');
-    if (this.task === 'open' && SnapCloud.supportsService('getSharedProjectList')) {
+    if (this.task === 'open') {
         this.addSourceButton('cloud-shared', localize('Shared with me'), 'cloud');
         baseSize.y += 50;
     }
