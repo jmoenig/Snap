@@ -5192,7 +5192,7 @@ ProjectDialogMorph.prototype.init = function (ide, task) {
 };
 
 ProjectDialogMorph.prototype.buildContents = function () {
-    var thumbnail, notification;
+    var thumbnail, notification, baseSize = new Point(455, 335);
 
     this.addBody(new Morph());
     this.body.color = this.color;
@@ -5219,6 +5219,7 @@ ProjectDialogMorph.prototype.buildContents = function () {
     this.addSourceButton('cloud', localize('Cloud'), 'cloud');
     if (this.task === 'open' && SnapCloud.supportsService('getSharedProjectList')) {
         this.addSourceButton('cloud-shared', localize('Shared with me'), 'cloud');
+        baseSize.y += 50;
     }
     this.addSourceButton('local', localize('Browser'), 'storage');
     if (this.task === 'open') {
@@ -5320,9 +5321,9 @@ ProjectDialogMorph.prototype.buildContents = function () {
     this.addButton('cancel', 'Cancel');
 
     if (notification) {
-        this.setExtent(new Point(455, 335).add(notification.extent()));
+        this.setExtent(baseSize.add(notification.extent()));
     } else {
-        this.setExtent(new Point(455, 335));
+        this.setExtent(baseSize);
     }
     this.fixLayout();
 
