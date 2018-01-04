@@ -6229,6 +6229,7 @@ ProjectDialogMorph.prototype.setSource = function (source) {
             );
 
             xml = myself.ide.serializer.parse(src);
+            xml = xml.children[0].children[0];  // get project info of first role
             myself.notesText.text = xml.childNamed('notes').contents
                 || '';
             myself.notesText.drawNew();
