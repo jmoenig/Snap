@@ -1,6 +1,5 @@
-/* globals ProjectDialogMorph, ensureFullUrl, InputFieldMorph, localize,
-   Point, TextMorph, nop, ListMorph, IDE_Morph, Process, SnapCloud,
-   BlockExportDialogMorph, SpeechBubbleMorph
+/* globals ProjectDialogMorph, ensureFullUrl, localize,
+   IDE_Morph, Process, SnapCloud, BlockExportDialogMorph
    */
 
 ProjectDialogMorph.prototype._deleteProject =
@@ -32,7 +31,7 @@ ProjectDialogMorph.prototype.openProject = function () {
 
     if (this.source === 'examples') {
         this.destroy();
-        response = this.ide.getURL('api/Examples/' + proj.name);
+        response = this.ide.getURL(this.ide.resourceURL('Examples', proj.name));
         this.ide.droppedText(response);
         // role name
         this.ide.updateUrlQueryString(proj.name, false, true);
@@ -43,7 +42,7 @@ ProjectDialogMorph.prototype.openProject = function () {
             myself.ide.rawLoadCloudProject(response[0], proj.Public);
         }, myself.ide.cloudError(), [proj.ProjectName, proj.Owner]);
     } else {
-        return ProjectDialogMorph.prototype._openProject.call(this);
+        return this._openProject();
     }
 };
 
