@@ -209,7 +209,7 @@ NetsBloxMorph.prototype.createControlBar = function () {
 NetsBloxMorph.prototype.loadNextRoom = function () {
     if (this.room.nextRoom) {
         var next = this.room.nextRoom;
-        this.room._name = next.roomName;  // silent set
+        this.room.name = next.roomName;  // silent set
         this.room.ownerId = next.ownerId;
         this.silentSetProjectName(next.roleId);
 
@@ -800,7 +800,7 @@ NetsBloxMorph.prototype.rawLoadCloudProject = function (project, isPublic) {
         this.droppedText(project.SourceCode);
     } else {  // initialize an empty code base
         this.newRole(roleId);
-        this.room._name = newRoom;  // silent set name
+        this.room.name = newRoom;  // silent set name
         // FIXME: this could cause problems later
         this.room.ownerId = project.Owner;
         this.sockets.updateRoomInfo();
@@ -814,7 +814,7 @@ NetsBloxMorph.prototype.rawLoadCloudProject = function (project, isPublic) {
 NetsBloxMorph.prototype.updateUrlQueryString = function (room, isPublic, isExample) {
     var url = location.pathname;
 
-    room = room || this.room._name;
+    room = room || this.room.name;
     if (isExample) {
         url += '?action=example&ProjectName=' + encodeURIComponent(room);
     } else if (isPublic) {
