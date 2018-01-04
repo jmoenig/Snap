@@ -3830,12 +3830,14 @@ Fixes:
 ------
 * Morphic: scroll menus if they are taller than the world
 * Morphic: added keyboard navigation for menus that scroll
+* added "width" and "height" selectors to Pixels library
 
 
 
 v4.1.1 Features:
 * translation support for custom blocks
 * new "direction to..." primitive as variant of "distance to..." in "Sensing"
+* added "width" and "height" selectors to Pixels library
 
 Fixes:
 * scroll menus if they are taller than the world
