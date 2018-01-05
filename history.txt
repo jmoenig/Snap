@@ -3832,6 +3832,9 @@ Fixes:
 * Morphic: added keyboard navigation for menus that scroll
 * added "width" and "height" selectors to Pixels library
 
+180104
+------
+* Objects: fixed #1979 - make sure to always re-focus the world-canvas
 
 
 v4.1.1 Features:
@@ -3842,3 +3845,4 @@ v4.1.1 Features:
 Fixes:
 * scroll menus if they are taller than the world
 * enabled color picker for pen trails on stage
+* track keyboard events after accepting ASK using the keyboard
