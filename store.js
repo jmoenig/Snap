@@ -1270,7 +1270,7 @@ SnapSerializer.prototype.loadBlock = function (model, isReporter) {
         receiver = isGlobal ? this.project.stage
             : this.project.sprites[model.attributes.scope];
         rm = model.childNamed('receiver');
-        if (rm && rm.children[0]) {
+        if (rm && rm.children[0] && rm.children[0].tag !== 'project') {
             receiver = this.loadValue(
                 model.childNamed('receiver').children[0]
             );
@@ -2160,7 +2160,7 @@ CustomCommandBlockMorph.prototype.toBlockXML = function (serializer) {
                     '</variables>'
                         : '',
         this.comment ? this.comment.toXML(serializer) : '',
-        scope && !this.definition.receiver[serializer.idProperty] ?
+        (serializer.isSavingPortable || scope) && !this.definition.receiver[serializer.idProperty] ?
                 '<receiver>' +
                     (serializer.isSavingCustomBlockOwners ?
                     serializer.store(this.definition.receiver) :

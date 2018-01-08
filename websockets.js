@@ -299,34 +299,54 @@ WebSocketManager.prototype.serializeMessage = function(message) {
 WebSocketManager.prototype.deserializeMessage = function(message) {
     var content = message.content,
         fields = Object.keys(content),
-        value,
-        receiver,
+        values = fields.map(function(field) {
+            return content[field];
+        });
+
+    this.deserializeData(values).forEach(function(value, index) {
+        message.content[fields[index]] = value;
+    });
+
+    return message.content;
+};
+
+WebSocketManager.prototype.deserializeData = function(dataList) {
+    var receiver,
         project,
+        nodes,
         model;
 
-    this.serializer.project = {
+    SnapActions.serializer.project = {
         stage: new StageMorph(),
         sprites: {}
     };
 
-    for (var i = fields.length; i--;) {
-        value = content[fields[i]];
+    return dataList.map(function(value) {
         if (value[0] === '<') {
             try {
-                model = this.serializer.parse(value);
-                receiver = model.childNamed('receiver');
-                project = receiver && receiver.childNamed('project');
+                model = SnapActions.serializer.parse(value);
+                nodes = model.children;
+                project = null;
+
+                // Check if the project is the receiver somewhere
+                for (var i = 0; !project && i < nodes.length; i++) {
+                    receiver = nodes[i].childNamed('receiver');
+                    project = receiver && receiver.childNamed('project');
+                }
+
                 // If the receiver is the project...
                 if (project) {
-                    this.serializer.rawLoadProjectModel(project);
+                    SnapActions.serializer.rawLoadProjectModel(project);
                 }
-                content[fields[i]] = this.serializer.loadValue(model);
+
+                return SnapActions.serializer.loadValue(model);
             } catch(e) {  // must not have been XML
                 console.error('Could not deserialize!', e);
+                return value;
             }
         }
-    }
-    return content;
+        return value;
+    });
 };
 
 WebSocketManager.prototype.onConnect = function() {
