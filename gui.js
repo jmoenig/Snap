@@ -514,6 +514,77 @@ IDE_Morph.prototype.openIn = function (world) {
             // Get the session id and join it!
             SnapActions.enableCollaboration();
             SnapActions.joinSession(sessionId, this.cloudError());
+        } else if (location.hash.substr(0, 9) === '#example:' || dict.action === 'example') {
+            var example = dict ? dict.ProjectName : location.hash.substr(9),
+                msg;
+
+            this.shield = new Morph();
+            this.shield.alpha = 0;
+            this.shield.setExtent(this.parent.extent());
+            this.parent.add(this.shield);
+
+            SnapCloud.passiveLogin(myself, function() {
+                var projectData = myself.getURL(myself.resourceURL('Examples', example));
+
+                myself.nextSteps([
+                    function () {
+                        msg = myself.showMessage('Opening ' + example + ' example...');
+                    },
+                    function () {nop(); }, // yield (bug in Chrome)
+                    function () {
+                        var action = myself.droppedText(projectData);
+                        if (action) {
+                            action.accept(function () {
+                                myself.hasChangedMedia = true;
+                                myself.shield.destroy();
+                                myself.shield = null;
+                                msg.destroy();
+                                applyFlags(dict);
+                            });
+                        }
+                    }
+                ]);
+            }, true);
+        } else if (location.hash.substr(0, 9) === '#private:' || dict.action === 'private') {
+            var name = dict ? dict.ProjectName : location.hash.substr(9);
+
+            SnapCloud.passiveLogin(myself, function(isLoggedIn) {
+                if (!isLoggedIn) {
+                    myself.showMessage('You are not logged in. Cannot open ' + name);
+                    return;
+                }
+
+                myself.nextSteps([
+                    function () {
+                        msg = myself.showMessage('Opening ' + name + ' example...');
+                    },
+                    function () {nop(); }, // yield (bug in Chrome)
+                    function () {
+                        SnapCloud.reconnect(
+                            function () {
+                                SnapCloud.callService(
+                                    'getProject',
+                                    function (response) {
+                                        msg.destroy();
+                                        var action = myself.rawLoadCloudProject(response[0]);
+                                        if (action) {
+                                            action.accept(function() {
+                                                applyFlags(dict);
+                                            });
+                                        } else {
+                                            applyFlags(dict);
+                                        }
+                                    },
+                                    myself.cloudError(),
+                                    [SnapCloud.username, dict.ProjectName, SnapCloud.socketId()]
+                                );
+                            },
+                            myself.cloudError()
+                        );
+                    }
+                ]);
+            }, true);
+
         } else {
             SnapActions.openProject();
         }

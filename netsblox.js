@@ -803,7 +803,7 @@ NetsBloxMorph.prototype.rawLoadCloudProject = function (project, isPublic) {
             roomName: newRoom,
             roleId: roleId
         };
-        this.droppedText(project.SourceCode);
+        return SnapActions.openProject(project.SourceCode);
     } else {  // initialize an empty code base
         this.newRole(roleId);
         this.room.name = newRoom;  // silent set name
