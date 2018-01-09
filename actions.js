@@ -2659,9 +2659,9 @@ ActionManager.prototype.getBlockInputs = function(block) {
                 allInputs.push(inputs[j]);
             } else if (inputs[j] instanceof ArgMorph) {
                 allInputs = allInputs.concat(this.getBlockInputs(inputs[j]));
+            }
 
-            } else if (inputs[j].nestedBlock && inputs[j].nestedBlock()) {
-
+            if (inputs[j].nestedBlock && inputs[j].nestedBlock()) {
                 allInputs.push(inputs[j].nestedBlock());
             }
         }
