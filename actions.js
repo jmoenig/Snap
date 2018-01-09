@@ -2657,7 +2657,7 @@ ActionManager.prototype.getBlockInputs = function(block) {
         for (var j = inputs.length; j--;) {
             if (inputs[j] instanceof ReporterBlockMorph) {
                 allInputs.push(inputs[j]);
-            } else if (inputs[j] instanceof MultiArgMorph) {
+            } else if (inputs[j] instanceof ArgMorph) {
                 allInputs = allInputs.concat(this.getBlockInputs(inputs[j]));
 
             } else if (inputs[j].nestedBlock && inputs[j].nestedBlock()) {
