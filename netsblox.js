@@ -298,7 +298,7 @@ NetsBloxMorph.prototype.createSpriteBar = function () {
     // order of the children. Unfortunately, this results in the order being
     // messed up if we don't restore the original order before our call to
     // fixLayout (after adding our additional tab)
-    var tabOrder = ['Scripts', 'Costumes', 'Sounds'];
+    var tabOrder = ['Scripts', 'Costumes', 'Backgrounds', 'Sounds'];
     tabBar.children.sort(function(tab1, tab2) {
         var i1 = tabOrder.indexOf(tab1.labelString),
             i2 = tabOrder.indexOf(tab2.labelString);
