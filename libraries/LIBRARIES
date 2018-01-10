@@ -12,3 +12,8 @@ try-catch.xml	Catch errors in a script	Run a script; if an error happens, instea
 multiline.xml	Allow multi-line text input to a block	In general, text inputs allow only a single line.  The MULTILINE block accepts multi-line text input and can be used in text input slots of other blocks.
 Eisenbergification.xml	Provide getters and setters for all GUI-controlled global settings	Eisenberg's Law: Anything that can be done from the GUI should be doable from the programming language, and vice versa.
 bignumbers.xml	Infinite precision integers, exact rationals, complex	The full Scheme numeric tower.  "USE BIGNUMS <True>" to enable.
+time-utils.xml	Time conversion utility	Convert between different time
+formats.
+struct-utils.xml	Structured data	Provide getters and setters for working with structured data using keys.
+costume-loader.xml	Costume loader	Get a costume from an image url
+matrix-operations.xml	Matrix Operations	Use MATLAB-like syntax for creating and working with vectors and matrices
