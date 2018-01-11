@@ -2650,19 +2650,24 @@ ActionManager.prototype.traverse = function(block, fn) {
 
 ActionManager.prototype.getBlockInputs = function(block) {
     var allInputs = [],
-        inputs;
+        inputs,
+        input;
 
     if (block.inputs) {  // Add nested blocks
         inputs = block.inputs();
         for (var j = inputs.length; j--;) {
-            if (inputs[j] instanceof ReporterBlockMorph) {
-                allInputs.push(inputs[j]);
-            } else if (inputs[j] instanceof ArgMorph) {
-                allInputs = allInputs.concat(this.getBlockInputs(inputs[j]));
+            input = inputs[j];
+            if (input instanceof ReporterBlockMorph) {
+                allInputs.push(input);
+            } else if (input instanceof ArgMorph && !(input instanceof TemplateSlotMorph)) {
+                // Get all the children of any ArgMorphs. Skip TemplateSlotMorphs
+                // since they cannot actually be moved and aren't really a block
+                // in their own right
+                allInputs = allInputs.concat(this.getBlockInputs(input));
             }
 
-            if (inputs[j].nestedBlock && inputs[j].nestedBlock()) {
-                allInputs.push(inputs[j].nestedBlock());
+            if (input.nestedBlock && input.nestedBlock()) {
+                allInputs.push(input.nestedBlock());
             }
         }
     }
