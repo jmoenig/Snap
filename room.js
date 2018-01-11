@@ -1520,7 +1520,7 @@ RoomEditorMorph.prototype.exitReplayMode = function() {
 
 RoomEditorMorph.prototype.enterReplayMode = function() {
     var ide = this.parentThatIsA(IDE_Morph);
-    var url = ide.resourceURL('socket', 'messages', ide.sockets.uuid);
+    var url = ide.resourceURL('api', 'socket', 'messages', ide.sockets.uuid);
     var messages = [];
 
     try {
