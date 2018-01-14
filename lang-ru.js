@@ -491,13 +491,13 @@ SnapTranslator.dict.ru = {
     'other scripts in sprite':
         'все другие мои скрипты',
     'run %cmdRing %inputs':
-        'выполнять %cmdRing %inputs',
+        'выполнить %cmdRing %inputs',
     'launch %cmdRing %inputs':
         'запустить %cmdRing %inputs',
     'call %repRing %inputs':
         'вызвать %repRing %inputs',
     'run %cmdRing w/continuation':
-        'выполнять %cmdRing с продолжением',
+        'выполнить %cmdRing с продолжением',
     'call %cmdRing w/continuation':
         'вызвать %cmdRing с продолжением',
     'tell %spr to %cmdRing %inputs':
@@ -1097,6 +1097,18 @@ SnapTranslator.dict.ru = {
         'Редактор Блоков',
     'Apply':
         'Применить',
+    'translations...':
+        'переводы',
+    'block variables...':
+        'переменные блока...',
+    'rename all...':
+        'переименовать все...',
+    'block variables':
+        'переменные блока',
+    'Block variable name':
+        'Имя переменной блока',
+    'remove block variables...':
+        'убрать переменные блока',
 
     // block deletion dialog
     'Delete Custom Block':
@@ -1498,6 +1510,8 @@ SnapTranslator.dict.ru = {
 		'Пипетка\n(взять цвет кликом на любую точку)',
 
     //Переводы найденых в программе, но не в файле перевода
+    'experimental -\nunder construction':
+        'экспериментальная возможность -\nв разработке',
     'Camera':
         'Камера',
     'Camera not supported':
