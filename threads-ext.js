@@ -371,7 +371,9 @@ NetsProcess.prototype.getJSFromRPCStruct = function (rpc, methodSignature) {
 };
 
 NetsProcess.prototype.getJSFromRPCDropdown = function (rpc, action, params) {
-    return this.getJSFromRPC(['', rpc, action].join('/'), params);
+    if (rpc && action) {
+        return this.getJSFromRPC(['', rpc, action].join('/'), params);
+    }
 };
 
 // Process Geo
