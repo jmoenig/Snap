@@ -1567,7 +1567,7 @@ RoomEditorMorph.prototype.addToggleReplay = function() {
             null,
 
             this.isReplayMode() ? localize('Exit network trace replayer') :
-                localize('View last network trace'),
+                localize('View last network trace')
         );
         replayButton.alpha = 0.2;
         replayButton.labelShadowColor = shade;
