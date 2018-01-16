@@ -178,6 +178,6 @@ SnapActions.submitIfAllowed = function(event) {
 
 SnapActions.mightRejectActions = function() {
     var room = this.ide().room;
-    return room.isEditable() || room.isCapturingTrace() ||
-        ActionManager.prototype.mightRejectActions.call(this);
+    return !(room.isEditable() && !room.isCapturingTrace() &&
+        !ActionManager.prototype.mightRejectActions.call(this));
 };
