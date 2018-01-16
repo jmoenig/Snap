@@ -4812,7 +4812,6 @@ IDE_Morph.prototype.toggleAppMode = function (appMode) {
         if (world.keyboardReceiver instanceof ScriptFocusMorph) {
             world.keyboardReceiver.stopEditing();
         }
-        this.currentSprite.scripts.hideUndoControls();
     } else {
         this.setColor(this.backgroundColor);
         this.controlBar.setColor(this.frameColor);
@@ -4841,8 +4840,6 @@ IDE_Morph.prototype.toggleAppMode = function (appMode) {
                 }
             });
         }
-        // update undo controls
-        this.currentSprite.scripts.updateUndoControls();
     }
     this.setExtent(this.world().extent()); // resume trackChanges
 };
