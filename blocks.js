@@ -9728,6 +9728,8 @@ SymbolMorph.prototype.symbolCanvasColored = function (aColor) {
         return this.drawSymbolCircle(canvas, aColor);
     case 'circleSolid':
         return this.drawSymbolCircleSolid(canvas, aColor);
+    case 'encircledCircle':
+        return this.drawSymbolEncircledCircle(canvas, aColor);
     case 'line':
         return this.drawSymbolLine(canvas, aColor);
     case 'crosshairs':
@@ -10595,6 +10597,26 @@ SymbolMorph.prototype.drawSymbolCircleSolid = function (canvas, color) {
     ctx.fillStyle = color.toString();
     ctx.arc(w / 2, w / 2, w / 2, radians(0), radians(360), false);
     ctx.fill();
+    return canvas;
+};
+
+SymbolMorph.prototype.drawSymbolEncircledCircle = function(canvas, color) {
+    var ctx = canvas.getContext('2d'),
+        w = canvas.width,
+        l = Math.max(w / 30, 0.5);
+
+    ctx.strokeStyle = color.toString();
+    ctx.fillStyle = color.toString();
+
+    ctx.beginPath();
+    ctx.arc(w / 2, w / 2, w / 4, radians(0), radians(360), false);
+    ctx.fill();
+
+    ctx.beginPath();
+    ctx.lineWidth = l * 2;
+    ctx.arc(w / 2, w / 2, w / 2 - l, radians(0), radians(360), false);
+    ctx.stroke();
+
     return canvas;
 };
 
