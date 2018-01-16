@@ -183,9 +183,9 @@ SnapTranslator.dict.ca = {
     'language_translator':
         'Bernat Romagosa Carrasquer, Joan Guillén i Pelegay', // your name for the Translators tab
     'translator_e-mail':
-        'bernat@arduino.org, jguille2@xtec.cat', // optional
+        'bernat@snap4arduino.rocks, jguille2@xtec.cat', // optional
     'last_changed':
-        '2017-01-09', // this, too, will appear in the Translators tab
+        '2017-11-15', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:

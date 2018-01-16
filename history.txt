@@ -1,4 +1,4 @@
-BYOB4 (Snap) history
+BYOB4 (Snap!) history
 ---------------------
 110511
 ------
@@ -3787,3 +3787,62 @@ Fixes:
 
 === v4.1.0.2 maintenance release ===
 
+171115
+------
+* Portuguese & Polish translation updates, thanks, Witek and Manuel!!
+* escape xml attribute contents, thanks, Brian Broll!
+* changed minimum stage width to 240
+* new Audio Comp library for Guzdial-style sound samples fun
+
+=== v4.1.0.3 maintenance release ===
+
+171116
+------
+* Threads: suppress "exit" context when forking a process while single-stepping, this avoids a false "reporter didn't report" error message
+* Blocks: avoid coloring the block-highlight when re-coloring a syntax element, this prevents highlighted blocks inside LAUNCH statements to expand when repeatedly single-stepped.
+
+=== v4.1.0.4 maintenance release ===
+
+171126
+------
+* GUI: fixed #1933 - avoid creating "obsolete" blocks by not copying method blocks into sprites that don't understand them
+* Store: fixed #1937 - allow stage width to be a minimum of 240 pixels
+
+=== v4.1.0.5 maintenance release ===
+
+*** in development ***
+
+171201
+------
+* GUI: started development on v 4.1.1
+* BYOB, Store, Threads: Localization support for custom blocks (experimental)
+* Tools: German translation of tools (experimental)
+
+171212
+------
+* fixed #1963
+
+180102
+------
+* new "direction to..." primitive as variant of "distance to..." in "Sensing"
+
+180104
+------
+* Morphic: scroll menus if they are taller than the world
+* Morphic: added keyboard navigation for menus that scroll
+* added "width" and "height" selectors to Pixels library
+
+180104
+------
+* Objects: fixed #1979 - make sure to always re-focus the world-canvas
+
+
+v4.1.1 Features:
+* translation support for custom blocks
+* new "direction to..." primitive as variant of "distance to..." in "Sensing"
+* added "width" and "height" selectors to Pixels library
+
+Fixes:
+* scroll menus if they are taller than the world
+* enabled color picker for pen trails on stage
+* track keyboard events after accepting ASK using the keyboard
