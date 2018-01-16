@@ -43,10 +43,18 @@ WebSocketManager.MessageHandlers = {
             messageType = msg.msgType,
             content = msg.content;
 
-        // filter for gameplay
+        // When replaying a network trace, actual messages to the client are ignored
+        if (this.ide.room.isReplayingTrace()) {
+            if (!this.ide.room.trace.notified) {
+                this.ide.showMessage(localize('Ignoring messages received during replay mode'));
+                this.ide.room.trace.notified = true;
+            }
+            return;
+        }
+
         if (dstId === this.ide.projectName || dstId === 'others in room' || dstId === 'everyone in room') {
             content = this.deserializeMessage(msg);
-            this.onMessageReceived(messageType, content, 'role', msg);
+            this.onMessageReceived(messageType, content, msg);
         }
     },
 
@@ -400,7 +408,7 @@ WebSocketManager.prototype.updateRoomInfo = function() {
  * @param {String} message
  * @return {undefined}
  */
-WebSocketManager.prototype.onMessageReceived = function (message, content, role, msg) {
+WebSocketManager.prototype.onMessageReceived = function (message, content, msg) {
     var hats = [],
         context,
         idle = !this.processes.length,
@@ -415,7 +423,7 @@ WebSocketManager.prototype.onMessageReceived = function (message, content, role,
         });
         stage.children.concat(stage).forEach(function (morph) {
             if (morph instanceof SpriteMorph || morph instanceof StageMorph) {
-                hats = hats.concat(morph.allHatBlocksForSocket(message, role));  // FIXME
+                hats = hats.concat(morph.allHatBlocksForSocket(message));
             }
         });
 

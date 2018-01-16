@@ -174,6 +174,36 @@ NetsBloxMorph.prototype.createSpriteEditor = function() {
     }
 };
 
+NetsBloxMorph.prototype.promptExitTraceReplay = function (onExit) {
+    var myself = this;
+    this.confirm(
+        'The given action cannot be applied while replaying network trace. \n' +
+        'Would you like to stop replaying the network trace?',
+        'Stop replaying network trace?',
+        function() {
+            if (this.currentTab === 'room') {
+                this.spriteEditor.exitReplayMode();
+            } else {
+                myself.room.stopTraceReplay();
+            }
+            onExit();
+        }
+    );
+};
+
+NetsBloxMorph.prototype.promptExitTraceCapture = function (onExit) {
+    var myself = this;
+    this.confirm(
+        'The given action cannot be applied while capturing network trace. \n' +
+        'Would you like to stop capturing the network trace?',
+        'Stop capturing network trace?',
+        function() {
+            myself.room.endTrace();
+            onExit();
+        }
+    );
+};
+
 NetsBloxMorph.prototype.setProjectName = function (string) {
     this.room.setRoleName(string);
 };

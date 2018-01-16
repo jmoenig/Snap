@@ -37,6 +37,7 @@ RoomMorph.prototype.init = function(ide) {
     this.ide = ide;
     this.displayedMsgMorphs = [];
     this.invitations = {};  // open invitations
+    this.trace = {};
 
     this.ownerId = null;
     this.collaborators = [];
@@ -116,6 +117,8 @@ RoomMorph.prototype.init = function(ide) {
     // Set the initial values
     // Shared messages array for when messages are sent to unoccupied roles
     this.sharedMsgs = [];
+
+    this.blockHighlights = [];
 };
 
 RoomMorph.prototype.setReadOnly = function(value) {
@@ -828,7 +831,7 @@ RoomMorph.prototype.checkForSharedMsgs = function(role) {
     }
 };
 
-RoomMorph.prototype.showMessage = function(msg) {
+RoomMorph.prototype.showMessage = function(msg, sliderValue) {
     var myself = this;
 
     // Clear the last message(s)
@@ -895,6 +898,35 @@ RoomMorph.prototype.showSentMsg = function(msg, srcId, dstId) {
     this.addBack(msgMorph);
     this.displayedMsgMorphs.push(msgMorph);
     this.updateDisplayedMsg(msgMorph);
+
+    this.blockHighlights.forEach(function(highlight) {
+        var block = highlight.parent;
+        if (block && block.getHighlight() === highlight) {
+            block.removeHighlight();
+        }
+    });
+
+    // If the message is sent to the current role, highlight the blocks
+    // that handled the message
+
+    if (dstId === this.getCurrentRoleName()) {
+        var stage = this.ide.stage,
+            blocks = stage.children.concat(stage)
+                .map(function (morph) {
+                    var blocks = [];
+                    if (morph instanceof SpriteMorph || morph instanceof StageMorph) {
+                        blocks = morph.allHatBlocksForSocket(msg.msgType);
+                    }
+                    return blocks;
+                })
+                .reduce(function(l1, l2) {
+                    return l1.concat(l2);
+                }, []);
+
+        this.blockHighlights = blocks.map(function(block) {
+            return block.addHighlight();
+        });
+    }
 };
 
 RoomMorph.prototype.hideSentMsgs = function() {
@@ -904,6 +936,62 @@ RoomMorph.prototype.hideSentMsgs = function() {
     this.displayedMsgs = [];
 };
 
+RoomMorph.prototype.isCapturingTrace = function() {
+    return this.trace.startTime && !this.trace.endTime;
+};
+
+RoomMorph.prototype.isReplayingTrace = function() {
+    return !!this.trace.replayer;
+};
+
+RoomMorph.prototype.startTraceReplay = function(replayer) {
+    this.setReadOnly(true);
+
+    replayer.setMessages(this.trace.messages);
+    this.trace.replayer = replayer;
+};
+
+RoomMorph.prototype.stopTraceReplay = function() {
+    this.hideSentMsgs();
+    this.setReadOnly(false);
+    this.trace.replayer = null;
+};
+
+RoomMorph.prototype.resetTrace = function() {
+    this.trace = {};
+};
+
+RoomMorph.prototype.startTrace = function() {
+    this.trace = {startTime: Date.now()};
+};
+
+RoomMorph.prototype.endTrace = function() {
+    this.trace.endTime = Date.now();
+    this.trace.messages = this.getMessagesForTrace(this.trace);
+
+    if (this.trace.messages.length === 0) {
+        this.ide.showMessage('No messages captured', 2);
+        this.resetTrace();
+    }
+};
+
+RoomMorph.prototype.getMessagesForTrace = function(trace) {
+    var ide = this.ide;
+    var url = ide.resourceURL('api', 'messages', ide.sockets.uuid);
+    var messages = [];
+
+    // Update this to request start/end times
+    url += '?startTime=' + trace.startTime + '&endTime=' + trace.endTime;
+    try {
+        messages = JSON.parse(ide.getURL(url));
+    } catch(e) {
+        ide.showMessage('Failed to retrieve messages', 2);
+        this.resetTrace();
+        throw e;
+    }
+
+    return messages;
+};
 //////////// SentMessageMorph ////////////
 // Should:
 //  - draw an arrow from the source to the destination
@@ -1377,10 +1465,15 @@ RoomEditorMorph.prototype.init = function(room, sliderColor) {
     this.room.checkForSharedMsgs(this.room.getCurrentRoleName());
 
     // Replay Controls
-    this.replayControls = new NetworkReplayControls(this);
+    if (this.room.isReplayingTrace()) {
+        this.replayControls = this.room.trace.replayer;
+    } else {
+        this.replayControls = new NetworkReplayControls(this);
+        this.replayControls.hide();
+    }
+
     this.add(this.replayControls);
     this.replayControls.drawNew();
-    this.replayControls.hide();
 
     var button = new PushButtonMorph(
         this.room,
@@ -1436,6 +1529,7 @@ RoomEditorMorph.prototype.updateControlButtons = function() {
 
     if (sf.toolBar) {
         sf.removeChild(sf.toolBar);
+        this.changed();
     }
     sf.toolBar = this.addToggleReplay();
     sf.add(sf.toolBar);
@@ -1452,29 +1546,56 @@ RoomEditorMorph.prototype.addToggleReplay = function() {
     var myself = this,
         toolBar = new AlignmentMorph(),
         shade = (new Color(140, 140, 140)),
-        enterSymbol = new SymbolMorph('pointRight', 12),
-        exitSymbol = new SymbolMorph('square', 12);
+        recordSymbol = new SymbolMorph('encircledCircle', 14),
+        stopRecordSymbol = new SymbolMorph('circleSolid', 14, new Color(200, 0, 0)),
+        enterSymbol = new SymbolMorph('pointRight', 14),
+        exitSymbol = new SymbolMorph('square', 14);
 
-    var replayButton = new PushButtonMorph(
+    if (this.hasNetworkRecording()) {
+        var replayButton = new PushButtonMorph(
+            this,
+            function() {
+                // FIXME: change this when we have an exit button on the replay slider
+                if (this.isReplayMode()) {
+                    myself.exitReplayMode();
+                } else {
+                    myself.enterReplayMode();
+                }
+                myself.updateControlButtons();
+            },
+            this.isReplayMode() ? exitSymbol : enterSymbol,
+            null,
+
+            this.isReplayMode() ? localize('Exit network trace replayer') :
+                localize('View last network trace'),
+        );
+        replayButton.alpha = 0.2;
+        replayButton.labelShadowColor = shade;
+        replayButton.drawNew();
+        replayButton.fixLayout();
+
+        toolBar.replayButton = replayButton;
+        toolBar.add(replayButton);
+    }
+
+    var recordButton = new PushButtonMorph(
         this,
         function() {
-            // FIXME: change this when we have an exit button on the replay slider
-            if (this.isReplayMode()) {
-                myself.exitReplayMode();
-            } else {
-                myself.enterReplayMode();
-            }
+            myself.toggleRecordMode();
             myself.updateControlButtons();
         },
-        this.isReplayMode() ? exitSymbol : enterSymbol
+        this.isRecording() ? stopRecordSymbol : recordSymbol,
+        null,
+        this.isRecording() ? localize('Stop capturing network trace') :
+            localize('Start capturing network trace')
     );
-    replayButton.alpha = 0.2;
-    replayButton.labelShadowColor = shade;
-    replayButton.drawNew();
-    replayButton.fixLayout();
+    recordButton.alpha = 0.2;
+    recordButton.labelShadowColor = shade;
+    recordButton.drawNew();
+    recordButton.fixLayout();
 
-    toolBar.replayButton = replayButton;
-    toolBar.add(replayButton);
+    toolBar.recordButton = recordButton;
+    toolBar.add(recordButton);
 
     return toolBar;
 };
@@ -1508,35 +1629,54 @@ RoomEditorMorph.prototype.setExtent = function(point) {
     this.fixLayout();
 };
 
+RoomEditorMorph.prototype.isRecording = function() {
+    return this.room.isCapturingTrace();
+};
+
+RoomEditorMorph.prototype.hasNetworkRecording = function() {
+    var trace = this.room.trace;
+    return !!(trace.startTime && trace.endTime);
+};
+
+RoomEditorMorph.prototype.toggleRecordMode = function() {
+    if (this.isRecording()) {
+        this.exitRecordMode();
+    } else {
+        this.enterRecordMode();
+    }
+};
+
+RoomEditorMorph.prototype.enterRecordMode = function() {
+    if (SnapActions.isCollaborating()) {
+        this.room.ide.showMessage(localize('Cannot trace network actions while collaborating'));
+        return;
+    }
+
+    this.room.startTrace();
+};
+
+RoomEditorMorph.prototype.exitRecordMode = function() {
+    this.room.endTrace();
+};
+
 RoomEditorMorph.prototype.isReplayMode = function() {
     return this.replayControls.enabled;
 };
 
 RoomEditorMorph.prototype.exitReplayMode = function() {
     this.replayControls.disable();
-    this.room.hideSentMsgs();
-    this.room.setReadOnly(false);
+    this.room.stopTraceReplay();
 };
 
 RoomEditorMorph.prototype.enterReplayMode = function() {
-    var ide = this.parentThatIsA(IDE_Morph);
-    var url = ide.resourceURL('api', 'socket', 'messages', ide.sockets.uuid);
-    var messages = [];
-
-    try {
-        messages = JSON.parse(ide.getURL(url));
-        if (messages.length === 0) {
-            ide.showMessage('No messages to replay', 2);
-            return;
-        }
-        this.replayControls.enable();
-        this.replayControls.setMessages(messages);
-        this.room.setReadOnly(true);
-        this.updateRoomControls();
-    } catch(e) {
-        ide.showMessage('Failed to retrieve messages', 2);
-        throw e;
+    if (SnapActions.isCollaborating()) {
+        this.room.ide.showMessage(localize('Cannot replay network actions while collaborating'));
+        return;
     }
+
+    this.replayControls.enable();
+    this.room.startTraceReplay(this.replayControls);
+    this.updateRoomControls();
 };
 
 RoomEditorMorph.prototype.updateRoomControls = function() {

@@ -56,24 +56,14 @@ var readOnlyReporterClick = function(pos) {
 };
 
 // SpriteMorph additions
-SpriteMorph.prototype.allHatBlocksForSocket = function (message, role) {
+SpriteMorph.prototype.allHatBlocksForSocket = function (message) {
     if (typeof message === 'number') {
         message = message.toString();
     }
 
-    var event,
-        r;  // receiver listened for by block
     return this.scripts.children.filter(function (morph) {
-        if (morph.selector === 'receiveSocketEvent') {
-            event = morph.inputs()[0].evaluate();
-            r = morph.inputs()[1].evaluate();
-            return (event === message || (event instanceof Array)) &&
-                (r === role || (r instanceof Array));
-        }
-        if (morph.selector === 'receiveSocketMessage') {
-            return message === morph.inputs()[0].contents().text;
-        }
-        return false;
+        return morph.selector === 'receiveSocketMessage' &&
+            message === morph.inputs()[0].contents().text;
     });
 };
 

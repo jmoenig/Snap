@@ -144,32 +144,22 @@ SnapActions.completeAction = function(error) {
     return ActionManager.prototype.completeAction.apply(this, arguments);
 };
 
-SnapActions.applyEvent = function(event) {
-    var ide = this.ide();
-    if (ide.room.isEditable() || event.type === 'openProject') {
-        event.user = this.id;
-        event.id = this.lastSeen + 1;
-        event.time = event.time || Date.now();
+SnapActions.submitIfAllowed = function(event) {
+    var myself = this,
+        ide = this.ide(),
+        room = ide.room;
 
-        // Skip duplicate undo/redo events
-        if (event.replayType && this.lastSent === event.id) {
-            return;
-        }
-
-        // if in replay mode, check that the event is a replay event
-        var myself = this;
-
-        if (ide.isReplayMode && !event.isReplay && event.type !== 'openProject') {
-            ide.promptExitReplay(function() {
-                myself.submitAction(event);
-            });
-        } else {
-            myself.submitAction(event);
-        }
-
-        return new Action(this, event);
-    } else {
-        // ask the user if he/she would like to request to be a collaborator
+    if (event.type === 'openProject') {
+        this.submitAction(event);
+    } else if (room.isCapturingTrace()) {
+        ide.promptExitTraceCapture(function() {
+            myself.submitIfAllowed(event);
+        });
+    } else if (room.isReplayingTrace()) {
+        ide.promptExitTraceReplay(function() {
+            myself.submitIfAllowed(event);
+        });
+    } else if (!room.isEditable()) {
         ide.confirm(
             'Edits cannot be made on projects by guests.\n\nWould ' +
             'you like to request to be made a collaborator?',
@@ -181,5 +171,13 @@ SnapActions.applyEvent = function(event) {
                 });
             }
         );
+    } else {
+        ActionManager.prototype.submitIfAllowed.call(this, event);
     }
+};
+
+SnapActions.mightRejectActions = function() {
+    var room = this.ide().room;
+    return room.isEditable() || room.isCapturingTrace() ||
+        ActionManager.prototype.mightRejectActions.call(this);
 };
