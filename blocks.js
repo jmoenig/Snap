@@ -6418,13 +6418,13 @@ ScriptsMorph.prototype.setBlockPosition = function (block, hand) {
 
     if (hand) {
         if (hand.grabOrigin.origin === this) {  // on the same script
-            if (SnapActions.isCollaborating()) {
+            if (SnapActions.mightRejectActions()) {
                 originPosition = hand.grabOrigin.position.add(hand.grabOrigin.origin.position());
                 block.setPosition(originPosition);
             }
         } else {  // move between scripts!
 
-            if (SnapActions.isCollaborating()) {
+            if (SnapActions.mightRejectActions()) {
                 // Revert the block back to the origin in case this fails
                 originPosition = hand.grabOrigin.position.add(hand.grabOrigin.origin.position());
                 block.setPosition(originPosition);

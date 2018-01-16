@@ -352,18 +352,28 @@ ActionManager.prototype.applyEvent = function(event) {
     }
 
     // if in replay mode, check that the event is a replay event
+    this.submitIfAllowed(event);
+
+    return new Action(this, event);
+};
+
+ActionManager.prototype.submitIfAllowed = function(event) {
     var myself = this,
         ide = this.ide();
 
-    if (ide.isReplayMode && !event.isReplay && event.type !== 'openProject') {
+    if (event.type === 'openProject') {
+        this.submitAction(event);
+    } else if (ide.isReplayMode && !event.isReplay) {
         ide.promptExitReplay(function() {
-            myself.submitAction(event);
+            myself.submitIfAllowed(event);
         });
     } else {
         this.submitAction(event);
     }
+};
 
-    return new Action(this, event);
+ActionManager.prototype.mightRejectActions = function() {
+    return this.ide().isReplayMode || this.isCollaborating();
 };
 
 ActionManager.prototype._getMethodFor = function(action) {
