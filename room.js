@@ -981,7 +981,8 @@ RoomMorph.prototype.getMessagesForTrace = function(trace) {
     var messages = [];
 
     // Update this to request start/end times
-    url += '?startTime=' + trace.startTime + '&endTime=' + trace.endTime;
+    url += '?startTime=' + trace.startTime + '&endTime=' + trace.endTime +
+        '&now=' + Date.now();
     try {
         messages = JSON.parse(ide.getURL(url));
     } catch(e) {
