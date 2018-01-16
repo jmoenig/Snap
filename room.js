@@ -899,16 +899,10 @@ RoomMorph.prototype.showSentMsg = function(msg, srcId, dstId) {
     this.displayedMsgMorphs.push(msgMorph);
     this.updateDisplayedMsg(msgMorph);
 
-    this.blockHighlights.forEach(function(highlight) {
-        var block = highlight.parent;
-        if (block && block.getHighlight() === highlight) {
-            block.removeHighlight();
-        }
-    });
-
     // If the message is sent to the current role, highlight the blocks
     // that handled the message
 
+    this.clearBlockHighlights();
     if (dstId === this.getCurrentRoleName()) {
         var stage = this.ide.stage,
             blocks = stage.children.concat(stage)
@@ -927,6 +921,16 @@ RoomMorph.prototype.showSentMsg = function(msg, srcId, dstId) {
             return block.addHighlight();
         });
     }
+};
+
+RoomMorph.prototype.clearBlockHighlights = function() {
+    this.blockHighlights.forEach(function(highlight) {
+        var block = highlight.parent;
+        if (block && block.getHighlight() === highlight) {
+            block.removeHighlight();
+        }
+    });
+    this.blockHighlights = [];
 };
 
 RoomMorph.prototype.hideSentMsgs = function() {
@@ -953,6 +957,7 @@ RoomMorph.prototype.startTraceReplay = function(replayer) {
 
 RoomMorph.prototype.stopTraceReplay = function() {
     this.hideSentMsgs();
+    this.clearBlockHighlights();
     this.setReadOnly(false);
     this.trace.replayer = null;
 };
