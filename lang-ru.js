@@ -732,6 +732,12 @@ SnapTranslator.dict.ru = {
         'Увеличение блоков кода...',
     'Stage size...':
         'Размер сцены...',
+    'Retina display support':
+        'Поддержка технологии Retina display',
+    'uncheck for lower resolution,\nsaves computing resources':
+        'снимите флажок для использования низкого разрешения\nэто уменьшит нагрузку на ресурсы компьютера',
+    'check for higher resolution,\nuses more computing resources':
+        'отметьте, чтобы использовать высокое разрешение\nэто увеличит нагрузку на ресурсы компьютера',
     'Stage size':
         'Размер сцены',
     'Stage width':
