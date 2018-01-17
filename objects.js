@@ -83,7 +83,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph,
 AlignmentMorph*/
 
-modules.objects = '2018-January-05';
+modules.objects = '2018-January-17';
 
 var SpriteMorph;
 var StageMorph;
@@ -6814,7 +6814,7 @@ StageMorph.prototype.fireKeyEvent = function (key) {
                 procs.push(myself.threads.startProcess(
                     block,
                     morph,
-                    myself.isThreadSafe
+                    true // ignore running scripts, was: myself.isThreadSafe
                 ));
             });
         }

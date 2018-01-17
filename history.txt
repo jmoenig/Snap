@@ -3836,13 +3836,22 @@ Fixes:
 ------
 * Objects: fixed #1979 - make sure to always re-focus the world-canvas
 
+180117
+------
+* Objects: made keyboard events always be thread safe (same as in Scratch nowadays)
+
+
 
 v4.1.1 Features:
 * translation support for custom blocks
 * new "direction to..." primitive as variant of "distance to..." in "Sensing"
 * added "width" and "height" selectors to Pixels library
 
+Changes:
+* made keyboard events always be thread safe (same as in Scratch nowadays)
+
 Fixes:
 * scroll menus if they are taller than the world
 * enabled color picker for pen trails on stage
 * track keyboard events after accepting ASK using the keyboard
+
