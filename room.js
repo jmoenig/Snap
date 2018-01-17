@@ -3,7 +3,7 @@
  TextMorph, MorphicPreferences, ScrollFrameMorph, ReporterBlockMorph,
  MessageOutputSlotMorph, MessageInputSlotMorph, SymbolMorph, PushButtonMorph, MenuMorph,
  SpeechBubbleMorph, ProjectDialogMorph, HandleMorph, ReplayControls, fontHeight,
- AlignmentMorph, copy, TableDialogMorph, Table*/
+ AlignmentMorph, copy, TableDialogMorph, Table, WebSocketManager*/
 /* * * * * * * * * RoomMorph * * * * * * * * */
 RoomMorph.prototype = new Morph();
 RoomMorph.prototype.constructor = RoomMorph;
@@ -1126,7 +1126,7 @@ MessageMorph.prototype.getTableContents = function () {
 
     fields.forEach(function(field, index) {
         table.contents[index][0] = field;
-        table.contents[index][1] = myself.contents[field];
+        table.contents[index][1] = myself.deserializeData([myself.contents[field]])[0];
     });
     table.colNames.push('field');
     table.colNames.push('value');
@@ -1134,6 +1134,8 @@ MessageMorph.prototype.getTableContents = function () {
     return table;
 };
 
+MessageMorph.prototype.deserializeData =
+    WebSocketManager.prototype.deserializeData;
 
 MessageMorph.prototype.mouseClickLeft = function () {
     var table = this.getTableContents(),
