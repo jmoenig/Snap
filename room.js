@@ -3,7 +3,7 @@
  TextMorph, MorphicPreferences, ScrollFrameMorph, ReporterBlockMorph,
  MessageOutputSlotMorph, MessageInputSlotMorph, SymbolMorph, PushButtonMorph, MenuMorph,
  SpeechBubbleMorph, ProjectDialogMorph, HandleMorph, ReplayControls, fontHeight,
- AlignmentMorph, copy*/
+ AlignmentMorph, copy, TableDialogMorph, Table*/
 /* * * * * * * * * RoomMorph * * * * * * * * */
 RoomMorph.prototype = new Morph();
 RoomMorph.prototype.constructor = RoomMorph;
@@ -1119,6 +1119,48 @@ MessageMorph.prototype.fixLayout = function () {
     this.label.setBottom(this.bottom());
 };
 
+MessageMorph.prototype.getTableContents = function () {
+    var myself = this,
+        fields = Object.keys(this.contents),
+        table = new Table(2, fields.length);
+
+    fields.forEach(function(field, index) {
+        table.contents[index][0] = field;
+        table.contents[index][1] = myself.contents[field];
+    });
+    table.colNames.push('field');
+    table.colNames.push('value');
+
+    return table;
+};
+
+
+MessageMorph.prototype.mouseClickLeft = function () {
+    var table = this.getTableContents(),
+        dialog = new TableDialogMorph(table),
+        margin = 10;
+
+    dialog.labelString = localize('Contents of') + ' "' + this.msgType + '"';
+    dialog.createLabel();
+    dialog.setInitialDimensions = function() {
+        var world = this.world(),
+            mex = world.extent().subtract(new Point(this.padding, this.padding)),
+            th = fontHeight(this.titleFontSize) + this.titlePadding * 3, // hm...
+            minWidth = Math.max(100, dialog.label.width() + 2*margin),
+            bh = this.buttons.height();
+
+        this.setExtent(
+            this.tableView.globalExtent().add(
+                new Point(this.padding * 2, this.padding * 2 + th + bh)
+            ).min(mex).max(new Point(minWidth, 100))
+        );
+        this.setCenter(this.world().center());
+    };
+    dialog.popUp(this.world());
+
+    return dialog;
+};
+
 //////////// Network Replay Controls ////////////
 NetworkReplayControls.prototype = Object.create(ReplayControls.prototype);
 NetworkReplayControls.prototype.constructor = NetworkReplayControls;
@@ -1222,6 +1264,10 @@ RoleMorph.prototype.init = function(name, users) {
     this.acceptsDrops = true;
     this.setOccupants(users);
     this.drawNew();
+};
+
+RoleMorph.prototype.wantsDropOf = function(aMorph) {
+    return aMorph instanceof ReporterBlockMorph && aMorph.forMsg;
 };
 
 RoleMorph.prototype.setOccupants = function(users) {
@@ -1459,7 +1505,6 @@ function RoomEditorMorph(room, sliderColor) {
 
 RoomEditorMorph.prototype.init = function(room, sliderColor) {
     RoomEditorMorph.uber.init.call(this, null, null, sliderColor);
-    this.acceptsDrops = false;
 
     this.palette = this.createMsgPalette();
     this.add(this.palette);
@@ -1507,6 +1552,9 @@ RoomEditorMorph.prototype.init = function(room, sliderColor) {
 
     this.room.drawNew();
     this.updateControlButtons();
+
+    this.acceptsDrops = false;
+    this.contents.acceptsDrops = false;
 };
 
 RoomEditorMorph.prototype.step = function() {
@@ -1701,6 +1749,8 @@ RoomEditorMorph.prototype.createMsgPalette = function() {
     var palette = new ScrollFrameMorph();
     palette.setColor(new Color(0, 0, 0, 0));
     palette.padding = 12;
+    palette.acceptsDrops = false;
+    palette.contents.acceptsDrops = false;
 
     return palette;
 };
