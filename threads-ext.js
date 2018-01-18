@@ -306,6 +306,20 @@ NetsProcess.prototype.getCostumeFromRPC = function (rpc, action, params) {
 };
 
 NetsProcess.prototype.getJSFromRPC = function (rpc, params) {
+    if (typeof params === 'string') {
+        var oldParams = params;
+        params = {};
+        oldParams.split('&').forEach(function(param) {
+            var chunks = param.split('='),
+                name = chunks[0],
+                value = chunks[1];
+
+            if (name) {
+                params[name] = value;
+            }
+        });
+    }
+
     var result = this.callRPC(rpc, params, true);
     if (result) {
         try {  // Try to convert it to JSON
