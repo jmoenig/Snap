@@ -1188,6 +1188,18 @@ NetworkReplayControls.prototype.applyEvent = function(event, next) {
     next();
 };
 
+NetworkReplayControls.prototype.getColorForTick = function(event) {
+    var ide = this.parentThatIsA(IDE_Morph),
+        room = ide.room,
+        srcId = event.srcId.split('@').shift(),
+        role = room.getRole(srcId);
+
+
+    if (role) {
+        return role.color;
+    }
+};
+
 NetworkReplayControls.prototype.getInverseEvent = function(event) {
     var inverseEvent = copy(event);
     inverseEvent.isInverse = true;
