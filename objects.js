@@ -9273,11 +9273,18 @@ ReplayControls.prototype.setActions = function(actions, atEnd) {
 
     // Add tickmarks for each action
     for (i = 0; i < this.actions.length; i++) {
-        this.slider.addTick(this.getSliderPosition(this.actions[i]));
+        this.slider.addTick(
+            this.getSliderPosition(this.actions[i]),
+            this.getColorForTick(this.actions[i])
+        );
     }
     this.slider.drawNew();
 
     this.updateDisplayTime();
+};
+
+ReplayControls.prototype.getColorForTick = function(/*action*/) {
+    return null;  // use the default
 };
 
 // apply any actions between 
