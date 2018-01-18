@@ -140,6 +140,9 @@ NetsBloxMorph.prototype.settingsMenu = function () {
 
 NetsBloxMorph.prototype.newProject = function (projectName) {
     this.clearProject();
+    this.sprites.asArray().concat(this.stage).forEach(function(sprite) {
+        return SnapActions.loadOwner(sprite);
+    });
 
     // Get new room name
     this.sockets.sendMessage({
