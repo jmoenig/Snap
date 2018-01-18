@@ -148,7 +148,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2018-January-02';
+modules.blocks = '2018-January-18';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -8128,6 +8128,8 @@ InputSlotMorph.prototype.init = function (
     contents.isShowingBlanks = true;
     contents.drawNew();
 
+	this.selectedBlock = null;
+
     this.isUnevaluated = false;
     this.choices = choiceDict || null; // object, function or selector
     this.oldContentsExtent = contents.extent();
@@ -8173,13 +8175,22 @@ InputSlotMorph.prototype.arrow = function () {
     );
 };
 
-InputSlotMorph.prototype.setContents = function (aStringOrFloat) {
+InputSlotMorph.prototype.setContents = function (data) {
+	// data can be a String, Float, or "wish" Block
     var cnts = this.contents(),
-        dta = aStringOrFloat,
+        dta = data,
         isConstant = dta instanceof Array;
+
+	if (this.selectedBlock) {
+   		this.selectedBlock = null;
+	}
+
     if (isConstant) {
         dta = localize(dta[0]);
         cnts.isItalic = !this.isReadOnly;
+    } else if (dta instanceof BlockMorph) {
+    	this.selectedBlock = dta;
+      	dta = ''; // make sure the contents text emptied
     } else { // assume dta is a localizable choice if it's a key in my choices
         cnts.isItalic = false;
         if (!isNil(this.choices) && this.choices[dta] instanceof Array) {
@@ -8200,7 +8211,7 @@ InputSlotMorph.prototype.setContents = function (aStringOrFloat) {
     }
 
     // remember the constant, if any
-    this.constant = isConstant ? aStringOrFloat : null;
+    this.constant = isConstant ? data : null;
 };
 
 InputSlotMorph.prototype.userSetContents = function (aStringOrFloat) {
@@ -8253,8 +8264,8 @@ InputSlotMorph.prototype.menuFromDict = function (
         if (Object.prototype.hasOwnProperty.call(choices, key)) {
             if (key[0] === '~') {
                 menu.addLine();
-            // } else if (key.indexOf('§_def') === 0) {
-            //     menu.addItem(choices[key].blockInstance(), choices[key]);
+            } else if (key.indexOf('§_def') === 0) {
+                menu.addItem(choices[key], choices[key]);
             } else if (choices[key] instanceof Object &&
                     !(choices[key] instanceof Array) &&
                     (typeof choices[key] !== 'function')) {
@@ -8518,11 +8529,9 @@ InputSlotMorph.prototype.attributesMenu = function () {
             dict[name] = name;
         });
     }
-    /*
-    obj.customBlocks.forEach(function (def, i) {
-        dict['§_def' + i] = def
+    obj.allBlocks(true).forEach(function (def, i) {
+        dict['§_def' + i] = def.blockInstance(true); // include translations
     });
-    */
     return dict;
 };
 
@@ -8668,26 +8677,36 @@ InputSlotMorph.prototype.fixLayout = function () {
     }
     arrowWidth = arrow.isVisible ? arrow.width() : 0;
 
-    height = contents.height() + this.edge * 2; // + this.typeInPadding * 2
-    if (this.isNumeric) {
-        width = contents.width()
-            + Math.floor(arrowWidth * 0.5)
-            + height
+	// determine slot dimensions
+    if (this.selectedBlock) { // a "wish" in the OF-block's left slot
+        height = this.selectedBlock.height() + this.edge * 2;
+         width = this.selectedBlock.width()
+            + arrowWidth
+            + this.edge * 2
             + this.typeInPadding * 2;
-    } else {
-        width = Math.max(
-            contents.width()
-                + arrowWidth
-                + this.edge * 2
-                + this.typeInPadding * 2,
-            contents.rawHeight ? // single vs. multi-line contents
-                        contents.rawHeight() + arrowWidth
-                                : fontHeight(contents.fontSize) / 1.3
-                                    + arrowWidth,
-            this.minWidth // for text-type slots
-        );
+     } else {
+    	height = contents.height() + this.edge * 2; // + this.typeInPadding * 2
+        if (this.isNumeric) {
+            width = contents.width()
+                + Math.floor(arrowWidth * 0.5)
+                + height
+                + this.typeInPadding * 2;
+        } else {
+            width = Math.max(
+                contents.width()
+                    + arrowWidth
+                    + this.edge * 2
+                    + this.typeInPadding * 2,
+                contents.rawHeight ? // single vs. multi-line contents
+                            contents.rawHeight() + arrowWidth
+                                    : fontHeight(contents.fontSize) / 1.3
+                                        + arrowWidth,
+                this.minWidth // for text-type slots
+            );
+        }
     }
     this.setExtent(new Point(width, height));
+
     if (this.isNumeric) {
         contents.setPosition(new Point(
             Math.floor(height / 2),
@@ -8849,16 +8868,21 @@ InputSlotMorph.prototype.mappedCode = function () {
 
 InputSlotMorph.prototype.evaluate = function () {
 /*
-    answer my content's text string. If I am numerical convert that
-    string to a number. If the conversion fails answer the string
+    answer my contents, which can be a "wish", i.e. a block that refers to
+    another sprite's local method, or a text string. If I am numerical convert
+    that string to a number. If the conversion fails answer the string
     (e.g. for special choices like 'any', 'all' or 'last') otherwise
     the numerical value.
 */
-    var num,
-        contents = this.contents();
+    var num, contents;
+
+ 	if (this.selectedBlock) {
+  		return this.selectedBlock;
+  	}
     if (this.constant) {
         return this.constant;
     }
+    contents = this.contents();
     if (this.isNumeric) {
         num = parseFloat(contents.text || '0');
         if (!isNaN(num)) {
@@ -8956,6 +8980,16 @@ InputSlotMorph.prototype.drawNew = function () {
             this.drawRoundBorder(context);
         }
     }
+
+	// draw my "wish" block, if any
+	if (this.selectedBlock) {
+ 		context.drawImage(
+        	this.selectedBlock.fullImageClassic(),
+            this.edge + this.typeInPadding,
+            this.edge
+        );
+ 	}
+
 };
 
 InputSlotMorph.prototype.drawRectBorder = function (context) {

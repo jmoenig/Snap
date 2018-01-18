@@ -3840,11 +3840,15 @@ Fixes:
 ------
 * Objects: made keyboard events always be thread safe (same as in Scratch nowadays)
 
+180118
+------
+* Blocks, Threads, BYOB, Store: included local methods in the OF-block's left drop-down menu
 
 
 v4.1.1 Features:
 * translation support for custom blocks
 * new "direction to..." primitive as variant of "distance to..." in "Sensing"
+* included local methods in the OF-block's left drop-down menu
 * added "width" and "height" selectors to Pixels library
 
 Changes:
