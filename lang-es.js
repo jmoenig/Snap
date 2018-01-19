@@ -185,7 +185,7 @@ SnapTranslator.dict.es = {
     'translator_e-mail':
         'victor.muratalla@yahoo.com / rizzi.cristian@gmail.com', // optional
     'last_changed':
-        '2013-03-25', // this, too, will appear in the Translators tab
+        '2017-10-04', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -419,7 +419,6 @@ SnapTranslator.dict.es = {
         'sellar',
     'fill':
         'llenar',
-
 
     // control:
     'when %greenflag clicked':
@@ -1249,7 +1248,6 @@ SnapTranslator.dict.es = {
         'pasado el mouse por encima sin cliquear',
     'mouse-departed':
         'pasado el mouse por encima sin cliquear y luego alejar',
-        
     'stop %stopChoices':
         'detener %stopChoices',
     'all':
@@ -1266,8 +1264,6 @@ SnapTranslator.dict.es = {
         'otros scripts del objeto',
     'pause all %pause':
         'pausar todos %pause',
-    
-      
     'when I start as a clone':
         'Al comenzar como clon',
     'create a clone of %cln':
@@ -1282,7 +1278,6 @@ SnapTranslator.dict.es = {
     // under "broadcast %msg and wait"
     'message':
         'mensaje',
-        
     'turbo mode?':
         'modo turbo?',
     'set turbo mode to %b':
@@ -1363,74 +1358,73 @@ SnapTranslator.dict.es = {
         
     // text:
     'draw text %s':
-		    'dibujar texto %s',
+        'dibujar texto %s',
     'set text color to %clr':
-		    'setear color texto a %clr',
+        'setear color texto a %clr',
     'set text color string %n':
-		    'setear valor color texto a %n',
+        'setear valor color texto a %n',
     'change text hue by %n':
-		    'cambiar luminosidad texto por %n',
+        'cambiar luminosidad texto por %n',
     'change text shade by %n':
-		    'cambiar sombreado de texto por %n',
+        'cambiar sombreado de texto por %n',
     'change text alpha by %n':
-		    'cambiar transparencia texto por %n',
+        'cambiar transparencia texto por %n',
     'set text alpha to %s':
-            'setear transparencia texto a %s',
+        'setear transparencia texto a %s',
     'set text shade to %n':
-		    'setear sombreado de texto a %n',
+        'setear sombreado de texto a %n',
     'set text hue to %n':
-		    'setear luminosidad texto a %n',
+        'setear luminosidad texto a %n',
     'get text hue':
-		    'tomar luminosidad texto',
+        'tomar luminosidad texto',
     'get text shade':
-		    'tomar sombreado texto',
+        'tomar sombreado texto',
     'get text alpha':
-		    'tomar transparencia texto',
+        'tomar transparencia texto',
     'get text color string':
-		    'tomar texto de color texto',
+        'tomar texto de color texto',
     'set font to %font':
-		    'setear fuente a %font',
+        'setear fuente a %font',
     'set font size to %n':
-		    'setear tamaño de fuente a %n',
-        
+        'setear tamaño de fuente a %n',
 
     // shapes:
     'start shape':
-            'comenzar figura',
+        'comenzar figura',
     'end shape':
-            'finalizar figura',
+        'finalizar figura',
     'set fill color to %clr':
-            'setear color de relleno a %clr',
+        'setear color de relleno a %clr',
     'set fill color string %s':
-		    'setear texto de color de relleno %s',
+        'setear texto de color de relleno %s',
     'change fill hue by %n':
-		    'cambiar luminosidad de relleno por %n',
+        'cambiar luminosidad de relleno por %n',
     'set fill hue to %n':
-		    'seterar luminosidad de relleno a %n',
+        'seterar luminosidad de relleno a %n',
     'get fill hue':
-		    'tomar luminosidad de relleno',
+        'tomar luminosidad de relleno',
     'change fill shade by %n':
-		    'cambiar sombreado de relleno por %n',
+        'cambiar sombreado de relleno por %n',
     'get fill shade':
-		    'tomar sombreado de relleno',
+        'tomar sombreado de relleno',
     'set fill shade to %n':
-		    'setear sombreado de relleno a %n',
+        'setear sombreado de relleno a %n',
     'change fill alpha by %n':
-		    'cambiar alfa relleno por %n',
+        'cambiar alfa relleno por %n',
     'get fill alpha':
-		    'obtener alfa relleno',
+        'obtener alfa relleno',
     'get fill color string':
-		    'obtener texto de color de relleno',
+        'obtener texto de color de relleno',
     'set fill alpha to %n':
-		    'setear alfa relleno a %n',
+        'setear alfa relleno a %n',
     'draw circle radius %n':
-		    'dibujar círculo de radio %n',
+        'dibujar círculo de radio %n',
     'draw oval radius %n by %n':
-		    'dibujar óvalo de radio %n por %n',
+        'dibujar óvalo de radio %n por %n',
     'draw rectangle %n by %n':
-		    'dibujar rectángulo %n por %n',
+        'dibujar rectángulo %n por %n',
     'Drawn shapes and pen strokes are\ncleared with the same block. It is\nadded here for convenience:':
-		    'Las figuras dibujadas y el relleno de los lápices se\nborran con el mismo bloque. Se agrega \nacá por conveniencia:',
+        'Las figuras dibujadas y el relleno de los lápices se\nborran con el mismo bloque. Se agrega \nacá por conveniencia:',
         
     // CELLULAR:
     
@@ -1487,144 +1481,142 @@ SnapTranslator.dict.es = {
         'Mostrar',
     "to": 
         "a",
-           
     'cells X':
-            'celdas X',
+        'celdas X',
     'cells Y':
-            'celdas Y',
+        'celdas Y',
     'show cell attribute %clat':
-		    'mostrar atributo de celda %clat',
+        'mostrar atributo de celda %clat',
     'hide cell attribute %clat':
-		    'ocultar atributo de celda %clat',
+        'ocultar atributo de celda %clat',
     'value of %clat at x: %n y: %n':
-		    'valor de %clat en x: %n y: %n',
+        'valor de %clat en x: %n y: %n',
     'Cell attribute name':
-		    'Nombre de atributo de celda',
+        'Nombre de atributo de celda',
     'value of %clat at cell x: %n cell y: %n':
-		    'valor de %clat en celda x: %n celda y: %n',
+        'valor de %clat en celda x: %n celda y: %n',
     'value of %clat here':
-		    'valor de %clat acá',
+        'valor de %clat acá',
     'average value of %clat':
-		    'valor promedio de %clat',
+        'valor promedio de %clat',
     'minimum value of %clat':
-		    'valor mínimo de %clat',
+        'valor mínimo de %clat',
     'maximum value of %clat':
-		    'valor máximo de %clat',
+        'valor máximo de %clat',
     'set %clat at x: %n y: %n to %n':
-		    'setear %clat en x: %n y: %n a %n',
+        'setear %clat en x: %n y: %n a %n',
     'set %clat at cell x: %n cell y: %n to %n':
-		    'setear %clat en celda x: %n celda y: %n a %n',
+        'setear %clat en celda x: %n celda y: %n a %n',
     'set %clat here to %n':
-		    'setear %clat acá a %n',
+        'setear %clat acá a %n',
     'set %clat everywhere to %n':
-		    'setear %clat en todos lados a %n',
+        'setear %clat en todos lados a %n',
     'change %clat at x: %n y: %n by %n':
-		    'cambiar %clat en x: %n y: %n por %n',
+        'cambiar %clat en x: %n y: %n por %n',
     'change %clat at cell x: %n cell y: %n by %n':
-		    'cambiar %clat en celda x: %n celda y: %n por %n',
+        'cambiar %clat en celda x: %n celda y: %n por %n',
     'change %clat here by %n':
-		    'cambiar %clat acá por %n',
+        'cambiar %clat acá por %n',
     'change %clat everywhere by %n':
-		    'cambiar %clat en todos lados por %n',
+        'cambiar %clat en todos lados por %n',
 
     // objects:
     'nobody':
-		    'nadie',
+        'nadie',
     'this':
-		    'este',
+        'este',
     '%obj is this':
-		    '%obj es éste',
+        '%obj es éste',
     '%obj is nobody':
-		    '%obj es nadie',
+        '%obj es nadie',
     'set var %s to %s in %obj':
-		    'setear var %s a %s en %obj',
+        'setear var %s a %s en %obj',
     'get var %s in %obj':
-		    'tomar var %s en %obj',
+        'tomar var %s en %obj',
     'change var %s by %s in %obj':
-		    'cambiar var %s por %s en %obj',
+        'cambiar var %s por %s en %obj',
     'scale to cell size':
-		    'escalar a tamaño de celda',
+        'escalar a tamaño de celda',
     'costume name':
-		    'nombre de disfraz',
+        'nombre de disfraz',
     'costume name of %obj':
-		    'nombre de disfraz de %obj',
+        'nombre de disfraz de %obj',
     'costume # of %obj':
-		    'disfraz # de %obj',
+        'disfraz # de %obj',
     'type of %obj':
-		    'tipo de %obj',
+        'tipo de %obj',
     '%obj is a %spr':
-		    '%obj es un %spr',
+        '%obj es un %spr',
     'obliterate %obj':
-		    'destruir %obj',
+        'destruir %obj',
     'list of all %cln':
-		    'lista de todos los %cln',
+        'lista de todos los %cln',
     'x position of %obj':
-		    'posición x de %obj',
+        'posición x de %obj',
     'y position of %obj':
-		    'posición y de %obj',
+        'posición y de %obj',
     'cell x position of %obj':
-		    'posición celda x de %obj',
+        'posición celda x de %obj',
     'cell y position of %obj':
-		    'posición celda y de %obj',
+        'posición celda y de %obj',
     'move %obj to x: %n y: %n':
-		    'mover %obj a x: %n y: %n',
+        'mover %obj a x: %n y: %n',
     'move %obj to cell x: %n cell y: %n':
-		    'mover %obj a celda x: %n celda y: %n',
+        'mover %obj a celda x: %n celda y: %n',
     'nearest %cln to x: %n y: %n where %predRing':
-		    '%cln más cerca de x: %n y: %n donde %predRing',
+        '%cln más cerca de x: %n y: %n donde %predRing',
     'nearest %cln to myself':
-		    '%cln más cerca mío',
+        '%cln más cerca mío',
 		
     // neighbours:
     'above':
-		    'arriba',
+        'arriba',
     'top left':
-		    'arriba izquierda',
+        'arriba izquierda',
     'top right':
-		    'arriba derecha',
+        'arriba derecha',
     'left':
-		    'izquierda',
+        'izquierda',
     'right':
-		    'derecha',
+        'derecha',
     'below':
-		    'abajo',
+        'abajo',
     'bottom left':
-		    'abajo izquierda',
+        'abajo izquierda',
     'bottom right':
-		    'abajo derecha',
+        'abajo derecha',
     'object in cell %celldir':
-		    'objeto en celda %celldir',
+        'objeto en celda %celldir',
     'object in cell cellX: %n cellY: %n':
-		    'objeto en celda cellX: %n cellY: %n',
+        'objeto en celda cellX: %n cellY: %n',
     'object in cell x: %n y: %n':
-		    'objeto en celda x: %n y: %n',
+        'objeto en celda x: %n y: %n',
     'objects in cell %celldir':
-		    'objetos en celda %celldir',
+        'objetos en celda %celldir',
     'objects in cell cellX: %n cellY: %n':
-		    'objetos en celda celdaX: %n celdaY: %n',
+        'objetos en celda celdaX: %n celdaY: %n',
     'objects in cell x: %n y: %n':
-		    'objetos en celda x: %n y: %n',
+        'objetos en celda x: %n y: %n',
     'list of objects in nbr cells':
-		    'lista de objetos en celdas vcns',
+        'lista de objetos en celdas vcns',
     '# object %spr in nbr cells':
-		    '# objecto %spr en celdas vcns',
+        '# objecto %spr en celdas vcns',
     '# costume %cst in nbr cells':
 		    '# disfraz %cst en celdas vcns',
     'is costume %cst in cell %celldir':
-		    'hay un disfraz %cst en celda %celldir',
+        'hay un disfraz %cst en celda %celldir',
     'is object %spr in cell %celldir':
-		    'hay un objeto %spr en celda %celldir',
+        'hay un objeto %spr en celda %celldir',
     'is any object in cell %celldir':
-		    'hay algún objeto en celda %celldir',
+        'hay algún objeto en celda %celldir',
     'is costume %cst in all nbr cells':
-		    'hay disfraz %cst en todas las celdas vcns',
-		
+        'hay disfraz %cst en todas las celdas vcns',
     'is object %spr in all nbr cells':
-     		'es objeto %spr en todas las celdas vcns', 
+        'es objeto %spr en todas las celdas vcns', 
     'is an object in every nbr cell':
-		    'es objeto en cada celda vcn',
+        'es objeto en cada celda vcn',
     'number of filled nbr cells':
-     		'cantidad de celdas vcns llenas',
+        'cantidad de celdas vcns llenas',
 
     // New variable dialog "global" type radio button.
     "global": "para todos los objetos",
