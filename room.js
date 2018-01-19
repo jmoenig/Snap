@@ -3,7 +3,8 @@
  TextMorph, MorphicPreferences, ScrollFrameMorph, ReporterBlockMorph,
  MessageOutputSlotMorph, MessageInputSlotMorph, SymbolMorph, PushButtonMorph, MenuMorph,
  SpeechBubbleMorph, ProjectDialogMorph, HandleMorph, ReplayControls, fontHeight,
- AlignmentMorph, copy, TableDialogMorph, Table, WebSocketManager*/
+ AlignmentMorph, copy, TableDialogMorph, Table, TableMorph, WebSocketManager,
+ TableFrameMorph*/
 /* * * * * * * * * RoomMorph * * * * * * * * */
 RoomMorph.prototype = new Morph();
 RoomMorph.prototype.constructor = RoomMorph;
@@ -921,6 +922,10 @@ RoomMorph.prototype.showSentMsg = function(msg, srcId, dstId) {
             return block.addHighlight();
         });
     }
+
+    if (this.messageInspector) {
+        this.messageInspector.setMessage(msgMorph.message);
+    }
 };
 
 RoomMorph.prototype.clearBlockHighlights = function() {
@@ -960,6 +965,10 @@ RoomMorph.prototype.stopTraceReplay = function() {
     this.clearBlockHighlights();
     this.setReadOnly(false);
     this.trace.replayer = null;
+    if (this.messageInspector) {
+        this.messageInspector.destroy();
+        this.messageInspector = null;
+    }
 };
 
 RoomMorph.prototype.resetTrace = function() {
@@ -998,6 +1007,12 @@ RoomMorph.prototype.getMessagesForTrace = function(trace) {
 
     return messages;
 };
+
+RoomMorph.prototype.inspectMessage = function(msg) {
+    this.messageInspector = new MessageInspectorMorph(msg);
+    this.messageInspector.popUp(this.world());
+};
+
 //////////// SentMessageMorph ////////////
 // Should:
 //  - draw an arrow from the source to the destination
@@ -1139,29 +1154,51 @@ MessageMorph.prototype.deserializeData =
     WebSocketManager.prototype.deserializeData;
 
 MessageMorph.prototype.mouseClickLeft = function () {
-    var table = this.getTableContents(),
-        dialog = new TableDialogMorph(table),
+    var room = this.parentThatIsA(RoomMorph);
+
+    room.inspectMessage(this);
+};
+
+MessageInspectorMorph.prototype = Object.create(TableDialogMorph.prototype);
+MessageInspectorMorph.prototype.constructor = MessageInspectorMorph;
+MessageInspectorMorph.uber = TableDialogMorph.prototype;
+
+function MessageInspectorMorph(message) {
+    this.init(message);
+}
+
+MessageInspectorMorph.prototype.init = function (message) {
+    MessageInspectorMorph.uber.init.call(this, message.getTableContents());
+    this.key = 'inspectNetworkMessage';
+
+    this.labelString = localize('Contents of') + ' "' + message.msgType + '"';
+    this.createLabel();
+};
+
+MessageInspectorMorph.prototype.setInitialDimensions = function () {
+    var world = this.world(),
+        mex = world.extent().subtract(new Point(this.padding, this.padding)),
+        th = fontHeight(this.titleFontSize) + this.titlePadding * 3, // hm...
+        minWidth = Math.max(100, this.label.width() + 2*margin),
+        bh = this.buttons.height(),
         margin = 10;
 
-    dialog.labelString = localize('Contents of') + ' "' + this.msgType + '"';
-    dialog.createLabel();
-    dialog.setInitialDimensions = function() {
-        var world = this.world(),
-            mex = world.extent().subtract(new Point(this.padding, this.padding)),
-            th = fontHeight(this.titleFontSize) + this.titlePadding * 3, // hm...
-            minWidth = Math.max(100, dialog.label.width() + 2*margin),
-            bh = this.buttons.height();
+    this.setExtent(
+        this.tableView.globalExtent().add(
+            new Point(this.padding * 2, this.padding * 2 + th + bh)
+        ).min(mex).max(new Point(minWidth, 100))
+    );
+    this.setCenter(this.world().center());
+};
 
-        this.setExtent(
-            this.tableView.globalExtent().add(
-                new Point(this.padding * 2, this.padding * 2 + th + bh)
-            ).min(mex).max(new Point(minWidth, 100))
-        );
-        this.setCenter(this.world().center());
-    };
-    dialog.popUp(this.world());
+MessageInspectorMorph.prototype.setMessage = function (message) {
+    this.tableView = new TableMorph(message.getTableContents());
 
-    return dialog;
+    this.labelString = localize('Contents of') + ' "' + message.msgType + '"';
+    this.createLabel();
+
+    this.addBody(new TableFrameMorph(this.tableView, true));
+    this.drawNew();
 };
 
 //////////// Network Replay Controls ////////////
