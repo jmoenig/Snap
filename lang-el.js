@@ -497,7 +497,7 @@ SnapTranslator.dict.el = {
     'key %key pressed?':
         'είναι το πλήκτρο %key πατημένο;',
     'distance to %dst':
-        'αποόσταση από %dst',
+        'απόσταση από %dst',
     'reset timer':
         'επανέφερε το χρονόμετρο',
     'timer':
@@ -633,7 +633,7 @@ SnapTranslator.dict.el = {
     'New':
         'Νέο',
     'Open...':
-        'Άμοιγα...',
+        'Άνοιγμα...',
     'Save':
         'Αποθήκευση',
     'Save As...':
