@@ -736,7 +736,7 @@ SnapTranslator.dict.zh_CN = {
         '调用 %repRing %inputs',
     'tell %spr to %cmdRing %inputs':
         '命令 %spr 运行 %cmdRing %inputs',
-    'ask %spr for %repRing %inputs'：
+    'ask %spr for %repRing %inputs':
         '请求 %spr 返回 %repRing %inputs',
     'run %cmdRing w/continuation':
         '持续运行 %cmdRing',

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="563.9812"
+   height="127.46787"
+   id="svg3294"
+   version="1.1"
+   inkscape:version="0.48.4 r9939"
+   sodipodi:docname="snap4arduino.svg">
+  <defs
+     id="defs3296" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.5"
+     inkscape:cx="-27.470282"
+     inkscape:cy="10.446792"
+     inkscape:document-units="px"
+     inkscape:current-layer="capa1"
+     showgrid="false"
+     inkscape:window-width="1918"
+     inkscape:window-height="1078"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="0"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0" />
+  <metadata
+     id="metadata3299">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Capa 1"
+     inkscape:groupmode="layer"
+     id="capa1"
+     transform="translate(-95.152247,-328.62825)">
+    <path
+       style="fill:#84c1c3;fill-opacity:1;stroke:none"
+       d="m 96.983587,454.48725 24.243663,-95.96449 c 108.49257,-16.70258 356.12219,-16.12241 537.90622,-16.16244 l -23.73858,95.45942 c -180.28746,3.60154 -441.96792,-2.6112 -538.411303,16.66751 z"
+       id="path9786-3"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ccccc"
+       inkscape:export-filename="/home/bromagosa/Documents/Feina/Arduino/snap4arduino.png"
+       inkscape:export-xdpi="79.790001"
+       inkscape:export-ydpi="79.790001" />
+    <path
+       inkscape:connector-curvature="0"
+       style="fill:#007481;fill-opacity:1;stroke:none"
+       d="m 136.40225,328.63005 c -10.69394,0.11306 -23.95026,5.57093 -40.906253,18.625 34.103753,-11.30754 46.587833,-12.46436 60.000003,17.5 0,0 -9.98661,46.08483 -60.343753,89.65625 10.438253,-4.61023 19.844463,-11.00214 28.125003,-18.03125 11.67702,-1.73695 41.68451,-4.32422 58.8125,-4.59375 13.5569,23.91224 33.06373,34.91278 71.625,10.8125 C 179.07713,466.0223 190.8904,328.054 136.40225,328.63005 z m 27.3125,57.90625 c 3.92966,11.2716 7.73365,22.38201 12.03125,32.3125 -9.70642,0.60972 -25.59695,1.73942 -37.78125,3.28125 16.55064,-18.11085 25.75,-35.59375 25.75,-35.59375 z"
+       id="path9009-3"
+       inkscape:export-filename="/home/bromagosa/Documents/Feina/Arduino/snap4arduino.png"
+       inkscape:export-xdpi="79.790001"
+       inkscape:export-ydpi="79.790001" />
+    <text
+       xml:space="preserve"
+       style="font-size:53.12345886px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:-0.20659123px;word-spacing:0px;fill:#007481;fill-opacity:1;stroke:none;font-family:Sans"
+       x="205.22298"
+       y="411.89633"
+       id="text9014-8"
+       sodipodi:linespacing="125%"
+       transform="scale(1.0012265,0.99877501)"
+       inkscape:export-filename="/home/bromagosa/Documents/Feina/Arduino/snap4arduino.png"
+       inkscape:export-xdpi="79.790001"
+       inkscape:export-ydpi="79.790001"><tspan
+         sodipodi:role="line"
+         id="tspan9016-9"
+         x="205.22298"
+         y="411.89633"
+         style="font-weight:bold;fill:#007481;fill-opacity:1;-inkscape-font-specification:Sans Bold">Snap4Arduino</tspan></text>
+  </g>
+</svg>
