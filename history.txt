@@ -3844,6 +3844,10 @@ Fixes:
 ------
 * Blocks, Threads, BYOB, Store: included local methods in the OF-block's left drop-down menu
 
+180119
+------
+* merged a bunch of pull requests (unicode support for emojis, translation updates)
+
 
 v4.1.1 Features:
 * translation support for custom blocks
@@ -3858,4 +3862,9 @@ Fixes:
 * scroll menus if they are taller than the world
 * enabled color picker for pen trails on stage
 * track keyboard events after accepting ASK using the keyboard
+* improved support for emojis, thanks, Michael!
+
+Translation Updates:
+* German
+* Greek
 
