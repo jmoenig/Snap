@@ -976,12 +976,16 @@ RoomMorph.prototype.resetTrace = function() {
 };
 
 RoomMorph.prototype.startTrace = function() {
-    this.trace = {startTime: Date.now()};
+    var ide = this.ide,
+        url = ide.resourceURL('api', 'trace', 'start', ide.sockets.uuid),
+        startTime = +ide.getURL(url);
+
+    this.trace = {startTime: startTime};
 };
 
 RoomMorph.prototype.endTrace = function() {
     this.trace.endTime = Date.now();
-    this.trace.messages = this.getMessagesForTrace(this.trace);
+    this.trace.messages = this.getMessagesForTrace();
 
     if (this.trace.messages.length === 0) {
         this.ide.showMessage('No messages captured', 2);
@@ -989,14 +993,12 @@ RoomMorph.prototype.endTrace = function() {
     }
 };
 
-RoomMorph.prototype.getMessagesForTrace = function(trace) {
+RoomMorph.prototype.getMessagesForTrace = function() {
     var ide = this.ide;
-    var url = ide.resourceURL('api', 'messages', ide.sockets.uuid);
+    var url = ide.resourceURL('api', 'trace', 'end', ide.sockets.uuid);
     var messages = [];
 
     // Update this to request start/end times
-    url += '?startTime=' + trace.startTime + '&endTime=' + trace.endTime +
-        '&now=' + Date.now();
     try {
         messages = JSON.parse(ide.getURL(url));
     } catch(e) {
