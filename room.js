@@ -1018,7 +1018,7 @@ SentMessageMorph.prototype.init = function(msg, srcId, dstId, endpoint) {
     this.endpoint = endpoint;
     this.message = new MessageMorph(msg.type, msg.content);
     SentMessageMorph.uber.init.call(this);
-    this.color = IDE_Morph.prototype.frameColor.darker(50);
+    this.color = white;
     this.add(this.message);
 };
 
@@ -1103,6 +1103,7 @@ MessageMorph.prototype.init = function (type, contents) {
         null,
         true
     );
+    this.label.color = white;
     this.label.drawNew();
 
     this.add(this.label);

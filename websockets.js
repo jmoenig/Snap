@@ -46,7 +46,7 @@ WebSocketManager.MessageHandlers = {
         // When replaying a network trace, actual messages to the client are ignored
         if (this.ide.room.isReplayingTrace()) {
             if (!this.ide.room.trace.notified) {
-                this.ide.showMessage(localize('Ignoring messages received during replay mode'));
+                this.ide.showMessage(localize('Ignoring messages received while\nviewing network trace'));
                 this.ide.room.trace.notified = true;
             }
             return;
