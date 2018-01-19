@@ -1181,6 +1181,7 @@ ActionManager.prototype._onSetBlockPosition = function(id, x, y, callback) {
         },
         editor;
 
+    this.ensureNotDragging(block);
     // If there is a block connected to the 'top' of this block, clear the given
     // target
     if (this._targetFor[id]) {
@@ -1508,11 +1509,13 @@ ActionManager.prototype.onMoveBlock = function(id, rawTarget) {
         scripts,
         owner;
 
+    this.ensureNotDragging(block);
     this.__recordTarget(block.id, rawTarget);
 
     // Resolve the target
     if (block instanceof CommandBlockMorph) {
         target.element = this.getBlockFromId(target.element);
+        this.ensureNotDragging(target.element);
         owner = this.getBlockOwner(target.element);
         scripts = target.element.parentThatIsA(ScriptsMorph);
         if (block.parent) {
@@ -1528,6 +1531,7 @@ ActionManager.prototype.onMoveBlock = function(id, rawTarget) {
         this.disconnectBlock(block, scripts);
 
         target = this.getBlockFromId(target);
+        this.ensureNotDragging(target);
         owner = this.getBlockOwner(target);
         scripts = target.parentThatIsA(ScriptsMorph);
 
@@ -1692,12 +1696,40 @@ ActionManager.prototype.blockInitPosition = function() {
     return new Point(palette.width()/2, palette.height()/4);
 };
 
+ActionManager.prototype.ensureNotDragging = function(block) {
+    var hand = block.parentThatIsA(HandMorph);
+    if (hand) {  // drop the item back on the world
+        var situation = hand.grabOrigin;
+
+        block = hand.children[0];  // get the top block
+        block.cachedFullImage = null;
+        block.cachedFullBounds = null;
+        block.changed();
+        block.removeShadow();
+        hand.children = [];
+        hand.destroyTemporaries();
+        hand.contextMenuEnabled = true;
+        hand.morphToGrab = null;
+        hand.grabPosition = null;
+
+        block.justDropped(hand);
+
+        // Put it back in the grab origin (immediately)
+        block.setPosition(situation.origin.position().add(situation.position));
+        situation.origin.add(block);
+        if (block.justDropped) {block.justDropped(); }
+        if (situation.origin.reactToDropOf) {
+            situation.origin.reactToDropOf(block);
+        }
+    }
+};
+
 ActionManager.prototype._onRemoveBlock = function(id, userDestroy, callback) {
     var myself = this,
         block = this.getBlockFromId(id),
         method = userDestroy && block.userDestroy ? 'userDestroy' : 'destroy',
-        scripts = block.parentThatIsA(ScriptsMorph),
-        parent = block.parent,
+        scripts,
+        parent,
         afterRemove = function() {
             block[method]();
 
@@ -1705,6 +1737,9 @@ ActionManager.prototype._onRemoveBlock = function(id, userDestroy, callback) {
             callback();
         };
 
+    this.ensureNotDragging(block);
+    scripts = block.parentThatIsA(ScriptsMorph);
+    parent = block.parent;
     if (block) {
         // Check the parent and revert to default input
         if (block.prepareToBeGrabbed) {
@@ -1867,6 +1902,7 @@ ActionManager.prototype.disconnectBlock = function(block, scripts) {
 ActionManager.prototype.onAddListInput = function(id, count) {
     var block = this.getBlockFromId(id);
 
+    this.ensureNotDragging(block);
     count = count || 1;
     for (var i = 0; i < count; i++) {
         block.addInput();
@@ -1880,6 +1916,7 @@ ActionManager.prototype.onAddListInput = function(id, count) {
 ActionManager.prototype.onRemoveListInput = function(id, count) {
     var block = this.getBlockFromId(id);
 
+    this.ensureNotDragging(block);
     count = count || 1;
     for (var i = 0; i < count; i++) {
         block.removeInput();
@@ -1893,6 +1930,7 @@ ActionManager.prototype.onRemoveListInput = function(id, count) {
 
 ActionManager.prototype.onSetBlockSpec = function(id, spec) {
     var block = this.getBlockFromId(id);
+    this.ensureNotDragging(block);
     block.userSetSpec(spec);
     this.__updateBlockDefinitions(block);
     this.completeAction();
@@ -1926,6 +1964,7 @@ ActionManager.prototype.onSetColorField = function(fieldId, desc) {
 ActionManager.prototype.onSetCommentText = function(id, text) {
     var block = this.getBlockFromId(id);
 
+    this.ensureNotDragging(block);
     block.contents.text = text;
     block.contents.drawNew();
     block.contents.changed();
@@ -1940,6 +1979,7 @@ ActionManager.prototype.onSetSelector = function(id, sel) {
     var block = this.getBlockFromId(id),
         myself = this;
 
+    this.ensureNotDragging(block);
     block.setSelector(sel);
     block.changed();
     // update input block records
@@ -1983,11 +2023,15 @@ ActionManager.prototype.onDeleteVariable = function(name, ownerId) {
 
 ActionManager.prototype.onRingify = function(blockId, ringId) {
     var block = this.getBlockFromId(blockId),
-        ownerId = this._blockToOwnerId[block.id];
+        ownerId = this._blockToOwnerId[block.id],
+        scripts,
+        ring;
 
     if (block) {
-        var ring = block.ringify(),
-            scripts = ring.parentThatIsA(ScriptsMorph);
+        this.ensureNotDragging(block);
+
+        ring = block.ringify();
+        scripts = ring.parentThatIsA(ScriptsMorph);
 
         ring.id = ringId;
         this._blocks[ring.id] = ring;
@@ -2012,6 +2056,7 @@ ActionManager.prototype.onRingify = function(blockId, ringId) {
 ActionManager.prototype.onUnringify = function(id) {
     var block = this.getBlockFromId(id);
     if (block) {
+        this.ensureNotDragging(block);
         var ring = block.unringify();
         delete this._blocks[ring.id];
     }
