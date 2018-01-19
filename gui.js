@@ -1612,22 +1612,25 @@ IDE_Morph.prototype.createCorral = function () {
 
     this.corral.reactToDropOf = function (spriteIcon) {
         var idx = 1,
-            pos = spriteIcon.position();
+            pos = spriteIcon.position(),
+            stillExists = !!SnapActions.getOwnerFromId(spriteIcon.object.id);
+
         spriteIcon.destroy();
-        this.frame.contents.children.forEach(function (icon) {
-            if (pos.gt(icon.position()) || pos.y > icon.bottom()) {
-                idx += 1;
-            }
-        });
-        myself.sprites.add(spriteIcon.object, idx);
-        myself.createCorral();
-        myself.fixLayout();
+        if (stillExists) {
+            this.frame.contents.children.forEach(function (icon) {
+                if (pos.gt(icon.position()) || pos.y > icon.bottom()) {
+                    idx += 1;
+                }
+            });
+            myself.sprites.add(spriteIcon.object, idx);
+            myself.createCorral();
+            myself.fixLayout();
+        }
     };
 
     this.corral.userMenu = function() {
         var menu = new MenuMorph(this),
             action,
-            sprites,
             deletedSprite,
             len;
 
