@@ -1614,8 +1614,8 @@ RoomEditorMorph.prototype.addToggleReplay = function() {
     var myself = this,
         toolBar = new AlignmentMorph(),
         shade = (new Color(140, 140, 140)),
-        recordSymbol = new SymbolMorph('encircledCircle', 14),
-        stopRecordSymbol = new SymbolMorph('circleSolid', 14, new Color(200, 0, 0)),
+        recordSymbol = new SymbolMorph('circleSolid', 14),
+        stopRecordSymbol = new SymbolMorph('square', 14),
         enterSymbol = new SymbolMorph('pointRight', 14),
         exitSymbol = new SymbolMorph('square', 14);
 
@@ -1657,6 +1657,7 @@ RoomEditorMorph.prototype.addToggleReplay = function() {
         this.isRecording() ? localize('Stop capturing network trace') :
             localize('Start capturing network trace')
     );
+    recordButton.labelColor = new Color(125, 0, 0);
     recordButton.alpha = 0.2;
     recordButton.labelShadowColor = shade;
     recordButton.drawNew();
