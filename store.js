@@ -805,7 +805,8 @@ SnapSerializer.prototype.loadCustomBlocks = function (
             child.attributes.s || '',
             object
         );
-        definition.category = child.attributes.category || 'other';
+        definition.category = SpriteMorph.prototype.categories.indexOf(child.attributes.category) !== -1 ?
+            child.attributes.category : 'other';
         definition.type = child.attributes.type || 'command';
         definition.isGlobal = (isGlobal === true);
         if (definition.isGlobal) {
