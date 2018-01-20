@@ -1164,7 +1164,7 @@ ActionManager.prototype._onSetBlockPosition = function(id, x, y, callback) {
         connectedIds,
         target,
         block = this.getBlockFromId(id),
-        scripts = block.parentThatIsA(ScriptsMorph),
+        scripts,
         afterMove = function() {
             myself.disconnectBlock(block, scripts);
 
@@ -1205,6 +1205,7 @@ ActionManager.prototype._onSetBlockPosition = function(id, x, y, callback) {
         scripts = editor.body.contents;
     }
 
+    scripts = block.parentThatIsA(ScriptsMorph);
     position = this.getAdjustedPosition(position, scripts);
 
     if (this.canAnimate(this.getBlockOwner(block))) {
@@ -1942,6 +1943,7 @@ ActionManager.prototype.onSetField = function(fieldId, value) {
     console.assert(block instanceof InputSlotMorph,
         'Unexpected block type: ' + block.constructor);
 
+    this.ensureNotDragging(block);
     this.fieldValues[fieldId] = value;
     block.setContents(value);
 
@@ -1953,6 +1955,7 @@ ActionManager.prototype.onSetColorField = function(fieldId, desc) {
     var block = this.getBlockFromId(fieldId),
         color;
 
+    this.ensureNotDragging(block);
     desc = desc || {};
     color = new Color(desc.r, desc.g, desc.b, desc.a);
     block.setColor(color);
