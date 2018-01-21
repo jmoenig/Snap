@@ -3848,6 +3848,12 @@ Fixes:
 ------
 * merged a bunch of pull requests (unicode support for emojis, translation updates)
 
+180121
+------
+* Threads: fixed a scope-glitch in the new OF-block's drop-down mechanism
+* Blocks: made the OF-block auto-unringify when dropped on ring-slots
+* Blocks: disabled firing the Custom-Block-Dialog when accidentall clicking on a custom block definition script
+
 
 v4.1.1 Features:
 * translation support for custom blocks
@@ -3856,7 +3862,9 @@ v4.1.1 Features:
 * added "width" and "height" selectors to Pixels library
 
 Changes:
-* made keyboard events always be thread safe (same as in Scratch nowadays)
+* keyboard events are now always thread safe (the same as in Scratch nowadays)
+* the OF-block auto-unringified when being dropped on ring-slots, such as in CALL
+* accidentally clicking on a custom block definition no longer fires up the Block Dialog
 
 Fixes:
 * scroll menus if they are taller than the world

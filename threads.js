@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph,
 TableFrameMorph, ColorSlotMorph, isSnapObject*/
 
-modules.threads = '2018-January-19';
+modules.threads = '2018-January-21';
 
 var ThreadManager;
 var Process;
@@ -3132,8 +3132,7 @@ Process.prototype.reportDirectionTo = function (name) {
 Process.prototype.reportAttributeOf = function (attribute, name) {
     var thisObj = this.blockReceiver(),
         thatObj,
-        stage,
-        ctx;
+        stage;
 
     if (thisObj) {
         this.assertAlive(thisObj);
@@ -3146,16 +3145,14 @@ Process.prototype.reportAttributeOf = function (attribute, name) {
         if (thatObj) {
             this.assertAlive(thatObj);
             if (attribute instanceof BlockMorph) { // a "wish"
-            	ctx =  this.reify(
-                	thatObj.getMethod(attribute.semanticSpec).blockInstance(),
-                	new List()
+            	return this.reportContextFor(
+             	   this.reify(
+                		thatObj.getMethod(attribute.semanticSpec)
+                        	.blockInstance(),
+                		new List()
+                	),
+                 	thatObj
                 );
-			    ctx.receiver = thatObj;
-    			if (ctx.outerContext) {
-        			ctx.outerContext.receiver = thatObj;
-        			ctx.outerContext.variables.parentFrame = thatObj.variables;
-    			}
-       			return ctx;
             }
             if (attribute instanceof Context) {
                 return this.reportContextFor(attribute, thatObj);

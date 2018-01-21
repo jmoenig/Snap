@@ -148,7 +148,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2018-January-18';
+modules.blocks = '2018-January-21';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -3869,7 +3869,7 @@ BlockMorph.prototype.mouseClickLeft = function () {
         return this.selectForEdit().focus(); // enable coopy-on-edit
     }
     if (top instanceof PrototypeHatBlockMorph) {
-        return top.mouseClickLeft();
+        return; // top.mouseClickLeft();
     }
     if (receiver) {
         stage = receiver.parentThatIsA(StageMorph);
@@ -5851,6 +5851,7 @@ RingMorph.prototype.vanishForSimilar = function () {
     }
     if (block.selector === 'reportGetVar' ||
         block.selector === 'reportJSFunction' ||
+        block.selector == 'reportAttributeOf' ||
         (block instanceof RingMorph)
     ) {
         this.parent.silentReplaceInput(this, block);
