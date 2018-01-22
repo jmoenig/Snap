@@ -10977,6 +10977,7 @@ HandMorph.prototype.processMouseMove = function (event) {
                         this.morphToGrab.selectForEdit() : this.morphToGrab;
                 this.grab(morph);
             } else if (this.morphToGrab.isTemplate) {
+                this.world.stopEditing();
                 morph = this.morphToGrab.fullCopy();
                 morph.isTemplate = false;
                 morph.isDraggable = true;
