@@ -3861,6 +3861,7 @@ Fixes:
 * Blocks, GUI: minor fixes, contributed by the community
 * various Translation updates, contributed by the community
 * Blocks, Objects, Threads: separated global and local variables in the palette, marked local ones with location pin
+* Blocks, Objects: added scroll events, thanks, Bernat!
 
 
 v4.1.1 New Features:
@@ -3868,6 +3869,7 @@ v4.1.1 New Features:
 * new "direction to..." primitive as variant of "distance to..." in "Sensing"
 * included local methods in the OF-block's left drop-down menu
 * added "width" and "height" selectors to Pixels library
+* added scroll events, thanks, Bernat!
 
 Notable Changes:
 * global and local variables are now separat in the palette, each sorted alphabetically, local vars marked with location pin (only in palette)

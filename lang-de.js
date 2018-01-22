@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org', // optional
     'last_changed':
-        '2018-01-02', // this, too, will appear in the Translators tab
+        '2018-01-22', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -445,6 +445,10 @@ SnapTranslator.dict.de = {
         'vom Mauszeiger betreten',
     'mouse-departed':
         'vom Mauszeiger verlassen',
+    'scrolled-down':
+    	'nach unten gescrollt',
+    'scrolled-up':
+        'nach oben gescrollt',
     'when %b':
         'Wenn %b',
     'when I receive %msgHat':
