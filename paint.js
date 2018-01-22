@@ -772,7 +772,7 @@ PaintCanvasMorph.prototype.floodfill = function (sourcepoint) {
     if (sourcecolor[0] === this.settings.primarycolor.r &&
             sourcecolor[1] === this.settings.primarycolor.g &&
             sourcecolor[2] === this.settings.primarycolor.b &&
-            sourcecolor[3] === this.settings.primarycolor.a) {
+            sourcecolor[3] === this.settings.primarycolor.a * 255) {
         return;
     }
     if (sourcecolor[3] === 0 && this.settings.primarycolor.a === 0) {
