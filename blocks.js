@@ -3474,10 +3474,12 @@ BlockMorph.prototype.doRefactorGlobalVar = function (
                 true
             );
             stage.globalBlocks.forEach(function (eachBlock) {
-                eachBlock.body.expression.refactorVarInStack(
-                    oldName,
-                    newName
-                );
+                if (eachBlock.body) {
+                    eachBlock.body.expression.refactorVarInStack(
+                        oldName,
+                        newName
+                    );
+                }
             });
             stage.forAllChildren(function (child) {
                 if (child instanceof SpriteMorph) {
