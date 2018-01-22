@@ -185,7 +185,7 @@ SnapTranslator.dict.tr = {
     'translator_e-mail':
         'hakanatas@gmail.com, mustafaipekbayrak@gmail.com', // optional (Mail adresleri)
     'last_changed':
-        '2018-1-05', // this, too, will appear in the Translators tab (Son güncelleme tarihi)
+        '2018-01-22', // this, too, will appear in the Translators tab (Son güncelleme tarihi)
 
     // GUI
     // control bar:

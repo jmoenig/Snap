@@ -75,7 +75,7 @@ isRetinaSupported, SliderMorph, Animation*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2018-January-02';
+modules.gui = '2018-January-22';
 
 // Declarations
 

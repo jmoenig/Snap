@@ -3857,27 +3857,34 @@ Fixes:
 180121
 ------
 * Morphic: fixed occasional stuck cursors, thanks, Bernat!
+* Paint: fixed a flood-fill alpha issue, thanks, Bernat!I
+* Blocks, GUI: minor fixes, contributed by the community
+* various Translation updates, contributed by the community
 
 
-v4.1.1 Features:
+v4.1.1 New Features:
 * translation support for custom blocks
 * new "direction to..." primitive as variant of "distance to..." in "Sensing"
 * included local methods in the OF-block's left drop-down menu
 * added "width" and "height" selectors to Pixels library
 
-Changes:
+Notable Changes:
 * keyboard events are now always thread safe (the same as in Scratch nowadays)
 * the OF-block auto-unringified when being dropped on ring-slots, such as in CALL
 * accidentally clicking on a custom block definition no longer fires up the Block Dialog
 
-Fixes:
+Notable Fixes:
 * scroll menus if they are taller than the world
 * enabled color picker for pen trails on stage
 * track keyboard events after accepting ASK using the keyboard
 * improved support for emojis, thanks, Michael!
 * avoid occasional stuck text cursors, thanks, Bernat!
+* paint editor flood fill alpha issue, thanks, Bernat!
+
 
 Translation Updates:
 * German
 * Greek
-
+* Turkish
+* Chinese
+* Spanish
