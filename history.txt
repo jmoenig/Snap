@@ -3854,12 +3854,13 @@ Fixes:
 * Blocks: made the OF-block auto-unringify when dropped on ring-slots
 * Blocks: disabled firing the Custom-Block-Dialog when accidentall clicking on a custom block definition script
 
-180121
+180122
 ------
 * Morphic: fixed occasional stuck cursors, thanks, Bernat!
 * Paint: fixed a flood-fill alpha issue, thanks, Bernat!I
 * Blocks, GUI: minor fixes, contributed by the community
 * various Translation updates, contributed by the community
+* Blocks, Objects, Threads: separated global and local variables in the palette, marked local ones with location pin
 
 
 v4.1.1 New Features:
@@ -3869,8 +3870,9 @@ v4.1.1 New Features:
 * added "width" and "height" selectors to Pixels library
 
 Notable Changes:
+* global and local variables are now separat in the palette, each sorted alphabetically, local vars marked with location pin (only in palette)
 * keyboard events are now always thread safe (the same as in Scratch nowadays)
-* the OF-block auto-unringified when being dropped on ring-slots, such as in CALL
+* the OF-block auto-unringifies when being dropped on ring-slots, such as in CALL
 * accidentally clicking on a custom block definition no longer fires up the Block Dialog
 
 Notable Fixes:

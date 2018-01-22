@@ -1603,8 +1603,8 @@ SyntaxElementMorph.prototype.fixLayout = function (silently) {
         lines = [],
         space = this.isPrototype ?
                 1 : Math.floor(fontHeight(this.fontSize) / 3),
-        ico = this.isCustomBlock && !this.isGlobal ?
-                this.methodIconExtent().x + space : 0,
+        ico = this instanceof BlockMorph && this.hasLocationPin() ?
+        	this.methodIconExtent().x + space : 0,
         bottomCorrection,
         initialExtent = this.extent();
 
@@ -1838,8 +1838,8 @@ SyntaxElementMorph.prototype.fixHighlight = function () {
 SyntaxElementMorph.prototype.methodIconExtent = function () {
     // answer the span of the icon for the "local method" indicator
     var ico = this.fontSize * 1.2;
-    return this.isCustomBlock && !this.isGlobal ?
-            new Point(ico * 0.66, ico) : new Point(0, 0);
+    return this.hasLocationPin() ? new Point(ico * 0.66, ico)
+    		: new Point(0, 0);
 };
 
 // SyntaxElementMorph evaluating:
@@ -3558,6 +3558,10 @@ BlockMorph.prototype.eraseHoles = function (context) {
 
 };
 
+BlockMorph.prototype.hasLocationPin = function () {
+	return (this.isCustomBlock && !this.isGlobal) || this.isLocalVarTemplate;
+};
+
 // BlockMorph highlighting
 
 BlockMorph.prototype.addHighlight = function (oldHighlight) {
@@ -3849,6 +3853,11 @@ BlockMorph.prototype.fullCopy = function () {
 };
 
 BlockMorph.prototype.reactToTemplateCopy = function () {
+    if (this.isLocalVarTemplate) {
+    	this.isLocalVarTemplate = null;
+        this.drawNew();
+        this.fixLayout();
+    }
     this.forceNormalColoring();
 };
 
@@ -4627,8 +4636,8 @@ CommandBlockMorph.prototype.drawNew = function () {
         */
     }
 
-    // draw method icon if applicable
-    if (this.isCustomBlock && !this.isGlobal) {
+    // draw location pin icon if applicable
+    if (this.hasLocationPin()) {
         this.drawMethodIcon(context);
     }
 
@@ -5182,6 +5191,7 @@ ReporterBlockMorph.prototype.init = function (isPredicate, silently) {
     this.isPredicate = isPredicate || false;
     this.setExtent(new Point(200, 80), silently);
     this.cachedSlotSpec = null; // don't serialize
+    this.isLocalVarTemplate = null; // don't serialize
 };
 
 // ReporterBlockMorph drag & drop:
@@ -5403,10 +5413,11 @@ ReporterBlockMorph.prototype.drawNew = function () {
         this.drawRounded(context);
     }
 
-    // draw method icon if applicable
-    if (this.isCustomBlock && !this.isGlobal) {
+    // draw location pin icon if applicable
+    if (this.hasLocationPin()) {
         this.drawMethodIcon(context);
     }
+
     // erase CommandSlots
     this.eraseHoles(context);
 };
