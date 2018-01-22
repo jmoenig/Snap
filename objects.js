@@ -4827,6 +4827,10 @@ SpriteMorph.prototype.mouseDownLeft = function () {
     return this.receiveUserInteraction('pressed');
 };
 
+SpriteMorph.prototype.mouseScroll = function (y) {
+    return this.receiveUserInteraction('scrolled-' + (y > 0 ? 'up' : 'down'));
+};
+
 SpriteMorph.prototype.receiveUserInteraction = function (interaction) {
     var stage = this.parentThatIsA(StageMorph),
         procs = [],
@@ -7684,6 +7688,9 @@ StageMorph.prototype.mouseLeave = function () {
 
 StageMorph.prototype.mouseDownLeft
     = SpriteMorph.prototype.mouseDownLeft;
+
+StageMorph.prototype.mouseScroll
+    = SpriteMorph.prototype.mouseScroll;
 
 StageMorph.prototype.receiveUserInteraction
     = SpriteMorph.prototype.receiveUserInteraction;
