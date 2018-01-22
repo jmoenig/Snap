@@ -7689,6 +7689,9 @@ StageMorph.prototype.mouseLeave = function () {
 StageMorph.prototype.mouseDownLeft
     = SpriteMorph.prototype.mouseDownLeft;
 
+StageMorph.prototype.mouseScroll
+    = SpriteMorph.prototype.mouseScroll;
+
 StageMorph.prototype.receiveUserInteraction
     = SpriteMorph.prototype.receiveUserInteraction;
 
