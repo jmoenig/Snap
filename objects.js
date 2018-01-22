@@ -83,7 +83,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph,
 AlignmentMorph*/
 
-modules.objects = '2018-January-05';
+modules.objects = '2018-January-17';
 
 var SpriteMorph;
 var StageMorph;
@@ -1751,11 +1751,12 @@ SpriteMorph.prototype.blockForSelector = function (selector, setDefaults) {
     return block;
 };
 
-SpriteMorph.prototype.variableBlock = function (varName) {
+SpriteMorph.prototype.variableBlock = function (varName, isLocalTemplate) {
     var block = new ReporterBlockMorph(false);
     block.selector = 'reportGetVar';
     block.color = this.blockColor.variables;
     block.category = 'variables';
+    block.isLocalVarTemplate = isLocalTemplate;
     block.setSpec(varName);
     block.isDraggable = true;
     return block;
@@ -1778,8 +1779,8 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         return newBlock;
     }
 
-    function variableBlock(varName) {
-        var newBlock = SpriteMorph.prototype.variableBlock(varName);
+    function variableBlock(varName, isLocal) {
+        var newBlock = SpriteMorph.prototype.variableBlock(varName, isLocal);
         newBlock.isDraggable = false;
         newBlock.isTemplate = true;
         if (contains(inheritedVars, varName)) {
@@ -2195,11 +2196,20 @@ SpriteMorph.prototype.blockTemplates = function (category) {
 
         blocks.push('-');
 
-        varNames = this.variables.allNames();
+        varNames = this.reachableGlobalVariableNames(true);
         if (varNames.length > 0) {
             varNames.forEach(function (name) {
                 blocks.push(variableWatcherToggle(name));
                 blocks.push(variableBlock(name));
+            });
+            blocks.push('-');
+        }
+
+        varNames = this.allLocalVariableNames(true);
+        if (varNames.length > 0) {
+            varNames.forEach(function (name) {
+                blocks.push(variableWatcherToggle(name));
+                blocks.push(variableBlock(name, true));
             });
             blocks.push('-');
         }
@@ -5735,6 +5745,41 @@ SpriteMorph.prototype.hasSpriteVariable = function (varName) {
     return contains(this.variables.names(), varName);
 };
 
+SpriteMorph.prototype.allLocalVariableNames = function (sorted) {
+    var exceptGlobals = this.globalVariables(),
+    	globalNames = exceptGlobals.names(),
+     	data;
+
+    function alphabetically(x, y) {
+        return x.toLowerCase() < y.toLowerCase() ? -1 : 1;
+    }
+
+ 	data = this.variables.allNames(exceptGlobals).filter(function (each) {
+		return !contains(globalNames, each);
+    });
+	if (sorted) {
+ 		data.sort(alphabetically);
+   }
+   return data;
+};
+
+SpriteMorph.prototype.reachableGlobalVariableNames = function (sorted) {
+    var locals = this.allLocalVariableNames(),
+    	data;
+
+    function alphabetically(x, y) {
+        return x.toLowerCase() < y.toLowerCase() ? -1 : 1;
+    }
+
+	data = this.globalVariables().names().filter(function (each) {
+    	return !contains(locals, each);
+	});
+    if (sorted) {
+    	data.sort(alphabetically);
+   }
+   return data;
+};
+
 // SpriteMorph inheritance - custom blocks
 
 SpriteMorph.prototype.getMethod = function (spec) {
@@ -6814,7 +6859,7 @@ StageMorph.prototype.fireKeyEvent = function (key) {
                 procs.push(myself.threads.startProcess(
                     block,
                     morph,
-                    myself.isThreadSafe
+                    true // ignore running scripts, was: myself.isThreadSafe
                 ));
             });
         }
@@ -6927,12 +6972,13 @@ StageMorph.prototype.blockTemplates = function (category) {
         return newBlock;
     }
 
-    function variableBlock(varName) {
-        var newBlock = SpriteMorph.prototype.variableBlock(varName);
+    function variableBlock(varName, isLocal) {
+        var newBlock = SpriteMorph.prototype.variableBlock(varName, isLocal);
         newBlock.isDraggable = false;
         newBlock.isTemplate = true;
         return newBlock;
     }
+
 
     function watcherToggle(selector) {
         if (myself.hiddenPrimitives[selector]) {
@@ -7267,11 +7313,20 @@ StageMorph.prototype.blockTemplates = function (category) {
 
         blocks.push('-');
 
-        varNames = this.variables.allNames();
+        varNames = this.reachableGlobalVariableNames(true);
         if (varNames.length > 0) {
             varNames.forEach(function (name) {
                 blocks.push(variableWatcherToggle(name));
                 blocks.push(variableBlock(name));
+            });
+            blocks.push('-');
+        }
+
+        varNames = this.allLocalVariableNames(true);
+        if (varNames.length > 0) {
+            varNames.forEach(function (name) {
+                blocks.push(variableWatcherToggle(name));
+                blocks.push(variableBlock(name, true));
             });
             blocks.push('-');
         }
@@ -7697,6 +7752,12 @@ StageMorph.prototype.globalVariables
 StageMorph.prototype.inheritedVariableNames = function () {
     return [];
 };
+
+StageMorph.prototype.allLocalVariableNames
+	= SpriteMorph.prototype.allLocalVariableNames;
+
+StageMorph.prototype.reachableGlobalVariableNames
+	= SpriteMorph.prototype.reachableGlobalVariableNames;
 
 // StageMorph inheritance - custom blocks
 

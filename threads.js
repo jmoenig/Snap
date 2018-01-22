@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph,
 TableFrameMorph, ColorSlotMorph, isSnapObject*/
 
-modules.threads = '2018-January-02';
+modules.threads = '2018-January-22';
 
 var ThreadManager;
 var Process;
@@ -2690,12 +2690,20 @@ Process.prototype.reportStringSize = function (data) {
 };
 
 Process.prototype.reportUnicode = function (string) {
-    var str = (string || '').toString()[0];
-    return str ? str.charCodeAt(0) : 0;
+    var str = isNil(string) ? '\u0000' : string.toString();
+
+    if (str.codePointAt) { // support for Unicode in newer browsers.
+        return str.codePointAt(0);
+    }
+    return str.charCodeAt(0);
 };
 
 Process.prototype.reportUnicodeAsLetter = function (num) {
     var code = +(num || 0);
+
+    if (String.fromCodePoint) { // support for Unicode in newer browsers.
+        return String.fromCodePoint(code);
+    }
     return String.fromCharCode(code);
 };
 
@@ -3136,6 +3144,16 @@ Process.prototype.reportAttributeOf = function (attribute, name) {
         }
         if (thatObj) {
             this.assertAlive(thatObj);
+            if (attribute instanceof BlockMorph) { // a "wish"
+            	return this.reportContextFor(
+             	   this.reify(
+                		thatObj.getMethod(attribute.semanticSpec)
+                        	.blockInstance(),
+                		new List()
+                	),
+                 	thatObj
+                );
+            }
             if (attribute instanceof Context) {
                 return this.reportContextFor(attribute, thatObj);
             }
@@ -4082,7 +4100,8 @@ VariableFrame.prototype.names = function () {
     return names;
 };
 
-VariableFrame.prototype.allNamesDict = function () {
+VariableFrame.prototype.allNamesDict = function (upTo) {
+	// "upTo" is an optional parent frame at which to stop, e.g. globals
     var dict = {}, current = this;
 
     function addKeysToDict(srcDict, trgtDict) {
@@ -4094,19 +4113,20 @@ VariableFrame.prototype.allNamesDict = function () {
         }
     }
 
-    while (current) {
+    while (current && (current !== upTo)) {
         addKeysToDict(current.vars, dict);
         current = current.parentFrame;
     }
     return dict;
 };
 
-VariableFrame.prototype.allNames = function () {
+VariableFrame.prototype.allNames = function (upTo) {
 /*
     only show the names of the lexical scope, hybrid scoping is
     reserved to the daring ;-)
+	"upTo" is an optional parent frame at which to stop, e.g. globals
 */
-    var answer = [], each, dict = this.allNamesDict();
+    var answer = [], each, dict = this.allNamesDict(upTo);
 
     for (each in dict) {
         if (Object.prototype.hasOwnProperty.call(dict, each)) {

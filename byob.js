@@ -9,7 +9,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2017 by Jens Mönig
+    Copyright (C) 2018 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -108,7 +108,7 @@ BooleanSlotMorph, XML_Serializer, SnapTranslator*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2017-December-01';
+modules.byob = '2018-January-18';
 
 // Declarations
 
@@ -153,11 +153,14 @@ function CustomBlockDefinition(spec, receiver) {
     this.editorDimensions = null; // a rectangle, last bounds of the editor
     this.cachedIsRecursive = null; // for automatic yielding
     this.cachedTranslation = null; // for localized block specs
+
+	// transient - for "wishes"
+ 	this.storedSemanticSpec = null;
 }
 
 // CustomBlockDefinition instantiating blocks
 
-CustomBlockDefinition.prototype.blockInstance = function () {
+CustomBlockDefinition.prototype.blockInstance = function (storeTranslations) {
     var block;
     if (this.type === 'command') {
         block = new CustomCommandBlockMorph(this);
@@ -168,6 +171,9 @@ CustomBlockDefinition.prototype.blockInstance = function () {
         );
     }
     block.isDraggable = true;
+    if (storeTranslations) { // only for "wishes"
+    	block.storedTranslations = this.translationsAsText();
+    }
     return block;
 };
 
@@ -236,6 +242,10 @@ CustomBlockDefinition.prototype.copyAndBindTo = function (sprite, headerOnly) {
 // CustomBlockDefinition accessing
 
 CustomBlockDefinition.prototype.blockSpec = function () {
+	if (this.storedSemanticSpec) {
+ 		return this.storedSemanticSpec; // for "wishes"
+ 	}
+
     var myself = this,
         ans = [],
         parts = this.parseSpec(this.spec),
@@ -550,6 +560,7 @@ CustomCommandBlockMorph.prototype.init = function (definition, isProto) {
     this.category = definition.category;
     this.selector = 'evaluateCustomBlock';
     this.variables = null;
+	this.storedTranslations = null; // transient - only for "wishes"
     this.initializeVariables();
     if (definition) { // needed for de-serializing
         this.refresh();
@@ -1286,6 +1297,7 @@ CustomReporterBlockMorph.prototype.init = function (
     this.isPrototype = isProto || false; // optional
     CustomReporterBlockMorph.uber.init.call(this, isPredicate, true); // sil.
     this.category = definition.category;
+    this.storedTranslations = null; // transient - only for "wishes"
     this.variables = new VariableFrame();
     this.initializeVariables();
     this.selector = 'evaluateCustomBlock';
