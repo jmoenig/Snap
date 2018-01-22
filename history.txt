@@ -3854,6 +3854,10 @@ Fixes:
 * Blocks: made the OF-block auto-unringify when dropped on ring-slots
 * Blocks: disabled firing the Custom-Block-Dialog when accidentall clicking on a custom block definition script
 
+180121
+------
+* Morphic: fixed occasional stuck cursors, thanks, Bernat!
+
 
 v4.1.1 Features:
 * translation support for custom blocks
@@ -3871,6 +3875,7 @@ Fixes:
 * enabled color picker for pen trails on stage
 * track keyboard events after accepting ASK using the keyboard
 * improved support for emojis, thanks, Michael!
+* avoid occasional stuck text cursors, thanks, Bernat!
 
 Translation Updates:
 * German
