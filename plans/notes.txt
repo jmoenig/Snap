@@ -1,0 +1,90 @@
+https://github.com/wcyuan/snap-github/blob/master/gui.js
+
+ProjectDialogMorph.prototype.buildContents - add a source button for git
+ProjectDialogMorph.prototype.setSource - add a case for 'git'
+Somewhere, we need to ask for (and display) the repo url
+Then we read the entire repo and show any xml files?  (name = path within the repo/name.xml)
+
+https://github.com/wcyuan/snap-github/blob/master/cloud.js
+
+Make look like cloud.
+
+"saveProjectToCloud" = save
+"saveCloudProject" = saveAs
+
+Possible designs:
+ A - provide github repo when you open, repo/user/pass when you save
+   - prompt the user with pop-ups every time?
+     - or try to remember it, but then need a way for the user to change them
+   - remove the share button from the open dialog
+ B - have a separate place where you can set the repo and provide user/pass, put it where you login to snap
+
+ How do we send or save the password, is it plaintext?  Hash it?
+
+save as:
+  - opens the Save As dialog
+  - user clicks 'setSource' (if necessary)
+  - this prompts for username / repo
+    - SnapGithub.promptRepoGetProjectList
+      - saves the lastUser and lastRepo in SnapGithub object
+  - user clicks 'save'
+  - calls saveProject
+  - calls saveGithubProjectWithList (with the project list)
+  - this checks the project list to see if the project with that name already exists
+    - if so, prompts the user to confirm overwrite
+    - also saves the sha
+  - saveAsGithubProject
+    - SnapGithub.promptPasswordSaveProject (prompts for password only)
+      - reuses the lastUser and lastRepo in SnapGithub object
+
+
+save:
+  - user clicks save, doesn't open any dialog
+  - calls saveGithubProjectNoList (with the project list)
+    - gets the project list
+    - calls SnapGithub.maybePromptGetProjectList
+      - if name, lastUser and lastRepo are not set, prompts for everything
+        - SnapGithub.promptRepoPasswordSaveProject
+      - otherwise, reuses lastUser and lastRepo to download the project list
+      	- once it has the list, (re)uses saveGithubProjectWithList
+	  which will prompt for the password
+	- actually, this branch almost never happens because the only ways
+	  that set the source to github also set lastUser and lastRepo
+
+Todo:
+ [ ] handle github 2-factor auth
+ [ ] handle non-master branches
+ [ ] fix buttons on open/save github (they need more space, currently they collide with
+     the source buttons)
+ [ ] remove the preview / notes / last modified time in the open/save dialog for github
+ [ ] turn github on and off in settings?  A little weird
+     because I think those are saved with the project, right?
+ [ ] localize strings, add icons
+ [ ] add a way to include the repo in a link so you can send someone a link to your snap projects
+   [ ] if you are given a #run or #present, and the file is on github, extract the
+       username, repo, and path from it?
+ [ ] handle github pagination
+ [ ] add a way to add a new folder
+     - you can currently do it if you save a project as "directory/name"
+ [ ] add a way to create a new repository?
+
+Done:
+ [-] show files in all sub-directories of the repo (?)
+   [x] add "path" as a separate variable aside from repo
+   [x] default to "/"
+   [-] would be better to be able to traverse directories properly
+       [x] if user selects a directory, it just refreshes the project list
+       [x] subdirectories need a way to go up
+       [-] at that point, remove path as a separate input?  Or I guess it's fine to leave it
+ [x] remember username/repo, and provide a button to change repo
+ [x] when source=github, remove "share" button
+ [x] only show xml files
+ [x] until delete is ready, remove the "delete" button for github
+ [x] add to snap_fast.html
+ [x] Fix double-clicking on directories in the ProjectDialogMorph
+     Currently it just closes the dialog because DialogBoxMorph.prototype.accept
+     ends with this.destroy();
+ [x] button alignment on ProjectDialogMorph gets screwed up when
+     you switch from github back to local
+ [x] allow user to specify a commit message
+ [x] handle delete project

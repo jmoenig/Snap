@@ -1924,6 +1924,9 @@ DialogBoxMorph.prototype.promptCredentials = function (
         pw1 = new InputFieldMorph(),
         pw2 = new InputFieldMorph(),
         opw = new InputFieldMorph(),
+        repo = new InputFieldMorph(),
+        commitMsg = new InputFieldMorph('Commit from Snap!'),
+        path = new InputFieldMorph('/'),
         agree = false,
         chk,
         dof = new AlignmentMorph('row', 4),
@@ -2053,6 +2056,9 @@ DialogBoxMorph.prototype.promptCredentials = function (
     pw1.setWidth(200);
     pw2.setWidth(200);
     opw.setWidth(200);
+    repo.setWidth(200);
+    commitMsg.setWidth(400);
+    path.setWidth(200);
     pw1.contents().text.toggleIsPassword();
     pw2.contents().text.toggleIsPassword();
     opw.contents().text.toggleIsPassword();
@@ -2094,6 +2100,35 @@ DialogBoxMorph.prototype.promptCredentials = function (
     if (purpose === 'resetPassword') {
         inp.add(labelText('User name:'));
         inp.add(usr);
+    }
+
+    if (purpose === 'github get') {
+        inp.add(labelText('User name:'));
+        inp.add(usr);
+        inp.add(labelText('Repo:'));
+        inp.add(repo);
+        inp.add(labelText('Directory:'));
+        inp.add(path);
+    }
+
+    if (purpose === 'github save') {
+        inp.add(labelText('User name:'));
+        inp.add(usr);
+        inp.add(labelText('Repo:'));
+        inp.add(repo);
+        inp.add(labelText('Directory:'));
+        inp.add(path);
+        inp.add(labelText('Password:'));
+        inp.add(pw1);
+        inp.add(labelText('Commit Message:'));
+        inp.add(commitMsg);
+    }
+
+    if (purpose === 'github save as') {
+        inp.add(labelText('Password:'));
+        inp.add(pw1);
+        inp.add(labelText('Commit Message:'));
+        inp.add(commitMsg);
     }
 
     if (msg) {
@@ -2152,6 +2187,8 @@ DialogBoxMorph.prototype.promptCredentials = function (
     pw1.drawNew();
     pw2.drawNew();
     opw.drawNew();
+    repo.drawNew();
+    commitMsg.drawNew();
     eml.drawNew();
     bdy.fixLayout();
 
@@ -2181,6 +2218,12 @@ DialogBoxMorph.prototype.promptCredentials = function (
 
         if (purpose === 'login') {
             checklist = [usr, pw1];
+	} else if (purpose === 'github get') {
+	    checklist = [usr, repo, path];
+	} else if (purpose === 'github save') {
+	    checklist = [usr, repo, path, pw1, commitMsg];
+	} else if (purpose === 'github save as') {
+	    checklist = [pw1, commitMsg];
         } else if (purpose === 'signup') {
             checklist = [usr, bmn, byr, eml];
         } else if (purpose === 'changePassword') {
@@ -2238,6 +2281,8 @@ DialogBoxMorph.prototype.promptCredentials = function (
     this.edit = function () {
         if (purpose === 'changePassword') {
             opw.edit();
+        } else if (purpose === 'github save as') {
+            pw1.edit();
         } else { // 'signup', 'login', 'resetPassword'
             usr.edit();
         }
@@ -2249,6 +2294,9 @@ DialogBoxMorph.prototype.promptCredentials = function (
             email: eml.getValue(),
             oldpassword: opw.getValue(),
             password: pw1.getValue(),
+	    repo: repo.getValue(),
+	    path: path.getValue(),
+	    commitMsg: commitMsg.getValue(),
             choice: agree
         };
     };

@@ -3634,6 +3634,8 @@ IDE_Morph.prototype.save = function () {
     if (this.projectName) {
         if (this.source === 'local') { // as well as 'examples'
             this.saveProject(this.projectName);
+	} else if (this.source === 'github') {
+            this.saveGithubProjectNoList(this.projectName);
         } else { // 'cloud'
             this.saveProjectToCloud(this.projectName);
         }
@@ -5229,6 +5231,83 @@ IDE_Morph.prototype.saveProjectToCloud = function (name) {
     }
 };
 
+IDE_Morph.prototype.saveGithubProjectNoList = function (name, dialog) {
+    var myself = this;
+    SnapGithub.maybePromptGetProjectList(
+	this,
+        function (projectList) {
+            myself.saveGithubProjectWithList(dialog, name, projectList, false);
+        },
+        function (err, lbl) {
+            myself.ide.cloudError().call(null, err, lbl);
+        }
+    );
+};
+
+IDE_Morph.prototype.saveGithubProjectWithList = function (
+    dialog,
+    name,
+    projectList,
+    shouldConfirm
+) {
+    var myself = this;
+    var existing = detect(
+	projectList,
+	function (item) {
+	    if (item.ProjectName === name) {
+		return true;
+	    } else if (name.endsWith(".xml") && !item.ProjectName.endsWith(".xml")) {
+		return item.ProjectName + ".xml" === name;
+	    } else if (!name.endsWith(".xml") && item.ProjectName.endsWith(".xml")) {
+		return item.ProjectName === name + ".xml";
+	    }
+	    return false;
+	}
+    );
+    if (existing) {
+	if (shouldConfirm) {
+            this.confirm(
+		localize(
+                    'Are you sure you want to replace'
+		) + '\n"' + name + '" (sha = ' + existing.sha + ')?',
+		'Replace Project',
+		function () {
+                    myself.setProjectName(name);
+                    myself.saveAsGithubProject(dialog, existing);
+		}
+            );
+	} else {
+            this.setProjectName(name);
+            this.saveAsGithubProject(dialog, existing);
+	}
+    } else {
+        this.setProjectName(name);
+        this.saveAsGithubProject(dialog);
+    }
+}
+
+IDE_Morph.prototype.saveAsGithubProject = function (dialog, existing) {
+    var myself = this;
+    var sha;
+    if (existing) {
+	sha = existing.sha;
+    }
+    this.showMessage('Saving project\nto Github...');
+    SnapGithub.promptPasswordSaveProject(
+        this,
+        function () {
+            myself.source = 'github';
+            myself.showMessage('saved.', 2);
+        },
+	// TODO(wcy): cloudError -> githubError
+        this.cloudError(),
+	sha // sha
+    );
+    if (dialog) {
+	dialog.destroy();
+    }
+};
+
 IDE_Morph.prototype.exportProjectMedia = function (name) {
     var menu, media;
     this.serializer.isCollectingMedia = true;
@@ -5550,6 +5629,7 @@ ProjectDialogMorph.prototype.init = function (ide, task) {
     this.deleteButton = null;
     this.shareButton = null;
     this.unshareButton = null;
+    this.changeRepoButton = null;
 
     // initialize inherited properties:
     ProjectDialogMorph.uber.init.call(
@@ -5597,6 +5677,7 @@ ProjectDialogMorph.prototype.buildContents = function () {
     }
 
     this.addSourceButton('cloud', localize('Cloud'), 'cloud');
+    this.addSourceButton('github', localize('Github'), 'github');
     this.addSourceButton('local', localize('Browser'), 'storage');
     if (this.task === 'open') {
         this.buildFilterField();
@@ -5690,12 +5771,23 @@ ProjectDialogMorph.prototype.buildContents = function () {
         this.addButton('saveProject', 'Save');
         this.action = 'saveProject';
     }
+    this.ok = function() {
+	// The only difference between this and the inherited
+	// DialogBoxMorph.prototype.accept function is that
+	// this does not automatically call this.destroy
+	// That way, we can make it so that if you open
+	// a directory, it changes the project list without
+	// destroying the dialog.
+	this.target[this.action](this.getInput());
+    };
     this.shareButton = this.addButton('shareProject', 'Share');
     this.unshareButton = this.addButton('unshareProject', 'Unshare');
     this.shareButton.hide();
     this.unshareButton.hide();
     this.deleteButton = this.addButton('deleteProject', 'Delete');
     this.addButton('cancel', 'Cancel');
+    this.changeRepoButton = this.addButton('changeRepo', 'Change Repo');
+    this.changeRepoButton.hide();
 
     if (notification) {
         this.setExtent(new Point(455, 335).add(notification.extent()));
@@ -5887,7 +5979,7 @@ ProjectDialogMorph.prototype.setSource = function (source) {
             function (projectList) {
                 // Don't show cloud projects if user has since switch panes.
                 if (myself.source === 'cloud') {
-                    myself.installCloudProjectList(projectList);
+                    myself.installCloudProjectList(projectList, myself.source);
                 }
                 msg.destroy();
             },
@@ -5903,6 +5995,10 @@ ProjectDialogMorph.prototype.setSource = function (source) {
     case 'local':
         this.projectList = this.getLocalProjectList();
         break;
+    case 'github':
+        this.projectList = [];
+        this.changeRepo(true, true);
+        return;
     }
 
     this.listField.destroy();
@@ -5983,6 +6079,7 @@ ProjectDialogMorph.prototype.setSource = function (source) {
     } else { // examples
         this.deleteButton.hide();
     }
+    this.changeRepoButton.hide();
     this.buttons.fixLayout();
     this.fixLayout();
     if (this.task === 'open') {
@@ -6015,7 +6112,7 @@ ProjectDialogMorph.prototype.getExamplesProjectList = function () {
     return this.ide.getMediaList('Examples');
 };
 
-ProjectDialogMorph.prototype.installCloudProjectList = function (pl) {
+ProjectDialogMorph.prototype.installCloudProjectList = function (pl, source) {
     var myself = this;
     this.projectList = pl || [];
     this.projectList.sort(function (x, y) {
@@ -6071,20 +6168,35 @@ ProjectDialogMorph.prototype.installCloudProjectList = function (pl) {
                 myself.preview.rightCenter().add(new Point(2, 0))
             );
         }
-        if (item.Public === 'true') {
-            myself.shareButton.hide();
-            myself.unshareButton.show();
-        } else {
-            myself.unshareButton.hide();
-            myself.shareButton.show();
-        }
+	if (source === 'github') {
+	    myself.shareButton.hide();
+	    myself.unshareButton.hide();
+	    myself.changeRepoButton.show();
+	} else { // cloud
+            if (item.Public === 'true') {
+		myself.shareButton.hide();
+		myself.unshareButton.show();
+            } else {
+		myself.unshareButton.hide();
+		myself.shareButton.show();
+            }
+	    myself.changeRepoButton.hide();
+	}
+	myself.deleteButton.show();
         myself.buttons.fixLayout();
         myself.fixLayout();
         myself.edit();
     };
     this.body.add(this.listField);
-    this.shareButton.show();
-    this.unshareButton.hide();
+    if (source === 'github') {
+	this.shareButton.hide();
+	this.unshareButton.hide();
+	this.changeRepoButton.show();
+    } else { // cloud
+	this.shareButton.show();
+	this.unshareButton.hide();
+	this.changeRepoButton.hide();
+    }
     this.deleteButton.show();
     this.buttons.fixLayout();
     this.fixLayout();
@@ -6109,11 +6221,21 @@ ProjectDialogMorph.prototype.openProject = function () {
     this.ide.source = this.source;
     if (this.source === 'cloud') {
         this.openCloudProject(proj);
+	this.destroy();
     } else if (this.source === 'examples') {
         // Note "file" is a property of the parseResourceFile function.
         src = this.ide.getURL(this.ide.resourceURL('Examples', proj.fileName));
         this.ide.openProjectString(src);
         this.destroy();
+    } else if (this.source === 'github') {
+	if (proj.type === "dir") {
+	    this.changeRepo(true, true, proj.ProjectName);
+	    return;
+	} else {
+	    location.hash = '#run:' + encodeURIComponent(proj.file);
+	    this.ide.rawOpenProjectString(this.ide.getURL(proj.file));
+            this.destroy();
+	}
     } else { // 'local'
         this.ide.openProject(proj.name);
         this.destroy();
@@ -6190,6 +6312,8 @@ ProjectDialogMorph.prototype.saveProject = function () {
                 this.ide.setProjectName(name);
                 myself.saveCloudProject();
             }
+        } else if (this.source === 'github') {
+	    this.ide.saveGithubProjectWithList(this, name, this.projectList, true);
         } else { // 'local'
             if (detect(
                     this.projectList,
@@ -6256,7 +6380,8 @@ ProjectDialogMorph.prototype.deleteProject = function () {
                                     idx = myself.projectList.indexOf(proj);
                                     myself.projectList.splice(idx, 1);
                                     myself.installCloudProjectList(
-                                        myself.projectList
+                                        myself.projectList,
+					myself.source
                                     ); // refresh list
                                 },
                                 myself.ide.cloudError(),
@@ -6267,6 +6392,33 @@ ProjectDialogMorph.prototype.deleteProject = function () {
                     );
                 }
             );
+        }
+    } else if (this.source === 'github') {
+        proj = this.listField.selected;
+        if (proj) {
+            this.ide.confirm(
+                localize(
+                    'Are you sure you want to delete'
+                ) + '\n"' + proj.ProjectName + '"?',
+                'Delete Project',
+                function () {
+                    SnapGithub.promptPasswordDeleteFile(
+                        proj.ProjectName,
+			myself.ide,
+                        function () {
+                            myself.ide.hasChangedMedia = true;
+                            idx = myself.projectList.indexOf(proj);
+                            myself.projectList.splice(idx, 1);
+                            myself.installCloudProjectList(
+                                myself.projectList,
+				myself.source
+                            ); // refresh list
+                        },
+                        myself.ide.cloudError(),
+			proj.sha
+		    );
+		}
+	    );
         }
     } else { // 'local, examples'
         if (this.listField.selected) {
@@ -6283,6 +6435,41 @@ ProjectDialogMorph.prototype.deleteProject = function () {
             );
         }
     }
+};
+
+ProjectDialogMorph.prototype.changeRepo = function (skipPrompt, showMessage, newPath) {
+    var myself = this;
+    var fcn = SnapGithub.promptRepoGetProjectList;
+    if (skipPrompt) {
+	fcn = SnapGithub.maybePromptGetProjectList;
+	if (newPath) {
+	    SnapGithub.updatePath(newPath);
+	}
+    }
+    var msg;
+    if (showMessage) {
+        msg = this.ide.showMessage('Updating\nproject list...');
+    }
+    fcn.call(
+	SnapGithub,
+	this.ide,
+        function (projectList) {
+            // Don't show github projects if user has since switch panes.
+            if (myself.source === 'github') {
+		this.projectList = [];
+                myself.installCloudProjectList(projectList, myself.source);
+            }
+	    if (msg) {
+		msg.destroy();
+	    }
+        },
+        function (err, lbl) {
+	    if (msg) {
+		msg.destroy();
+	    }
+            myself.ide.cloudError().call(null, err, lbl);
+        }
+    );
 };
 
 ProjectDialogMorph.prototype.shareProject = function () {
