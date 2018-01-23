@@ -3866,6 +3866,7 @@ Fixes:
 180123
 ------
 * fixed #1972, thanks, Joan!
+* Objects, GUI: When deleting a temporary clone, detach all its parts and delete the temporary ones
 
 
 v4.1.1 New Features:
@@ -3889,6 +3890,7 @@ Notable Fixes:
 * avoid occasional stuck text cursors, thanks, Bernat!
 * paint editor flood fill alpha issue, thanks, Bernat!
 * implicit parameter binding in visible stepping, thanks, Joan!
+* when deleting a temporary clone, detach all its parts and delete the temporary ones
 
 
 Translation Updates:

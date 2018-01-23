@@ -83,7 +83,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph,
 AlignmentMorph*/
 
-modules.objects = '2018-January-22';
+modules.objects = '2018-January-23';
 
 var SpriteMorph;
 var StageMorph;
@@ -3382,10 +3382,15 @@ SpriteMorph.prototype.initClone = function (hats) {
 };
 
 SpriteMorph.prototype.removeClone = function () {
-    var exemplar = this.exemplar;
+    var exemplar = this.exemplar,
+    	myself = this;
     if (this.isTemporary) {
         // this.stopTalking();
         this.parent.threads.stopAllForReceiver(this);
+        this.parts.slice().forEach(function (part) {
+        	myself.detachPart(part);
+            part.removeClone();
+        });
         this.corpsify();
         this.instances.forEach(function (child) {
             if (child.isTemporary) {

@@ -75,7 +75,7 @@ isRetinaSupported, SliderMorph, Animation*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2018-January-22';
+modules.gui = '2018-January-23';
 
 // Declarations
 
@@ -2318,7 +2318,9 @@ IDE_Morph.prototype.instantiateSprite = function (sprite) {
 
 IDE_Morph.prototype.removeSprite = function (sprite) {
     var idx, myself = this;
-    sprite.parts.forEach(function (part) {myself.removeSprite(part); });
+    sprite.parts.slice().forEach(function (part) {
+    	myself.removeSprite(part);
+    });
     idx = this.sprites.asArray().indexOf(sprite) + 1;
     this.stage.threads.stopAllForReceiver(sprite);
     sprite.corpsify();
