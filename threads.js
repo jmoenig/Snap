@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph,
 TableFrameMorph, ColorSlotMorph, isSnapObject*/
 
-modules.threads = '2018-January-22';
+modules.threads = '2018-January-23';
 
 var ThreadManager;
 var Process;
@@ -855,6 +855,7 @@ Process.prototype.evaluateInput = function (input) {
         } else {
             ans = this.context.variables.getVar(input.bindingID);
         }
+    	delete input.bindingID;
     } else {
         ans = input.evaluate();
         if (ans) {

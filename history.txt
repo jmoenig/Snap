@@ -3863,6 +3863,10 @@ Fixes:
 * Blocks, Objects, Threads: separated global and local variables in the palette, marked local ones with location pin
 * Blocks, Objects: added scroll events, thanks, Bernat!
 
+180123
+------
+* fixed #1972, thanks, Joan!
+
 
 v4.1.1 New Features:
 * translation support for custom blocks
@@ -3884,6 +3888,7 @@ Notable Fixes:
 * improved support for emojis, thanks, Michael!
 * avoid occasional stuck text cursors, thanks, Bernat!
 * paint editor flood fill alpha issue, thanks, Bernat!
+* implicit parameter binding in visible stepping, thanks, Joan!
 
 
 Translation Updates:
