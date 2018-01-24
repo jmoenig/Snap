@@ -83,7 +83,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph,
 AlignmentMorph*/
 
-modules.objects = '2018-January-17';
+modules.objects = '2018-January-23';
 
 var SpriteMorph;
 var StageMorph;
@@ -3382,10 +3382,15 @@ SpriteMorph.prototype.initClone = function (hats) {
 };
 
 SpriteMorph.prototype.removeClone = function () {
-    var exemplar = this.exemplar;
+    var exemplar = this.exemplar,
+    	myself = this;
     if (this.isTemporary) {
         // this.stopTalking();
         this.parent.threads.stopAllForReceiver(this);
+        this.parts.slice().forEach(function (part) {
+        	myself.detachPart(part);
+            part.removeClone();
+        });
         this.corpsify();
         this.instances.forEach(function (child) {
             if (child.isTemporary) {
@@ -4825,6 +4830,10 @@ SpriteMorph.prototype.mouseEnter = function () {
 
 SpriteMorph.prototype.mouseDownLeft = function () {
     return this.receiveUserInteraction('pressed');
+};
+
+SpriteMorph.prototype.mouseScroll = function (y) {
+    return this.receiveUserInteraction('scrolled-' + (y > 0 ? 'up' : 'down'));
 };
 
 SpriteMorph.prototype.receiveUserInteraction = function (interaction) {
@@ -7684,6 +7693,9 @@ StageMorph.prototype.mouseLeave = function () {
 
 StageMorph.prototype.mouseDownLeft
     = SpriteMorph.prototype.mouseDownLeft;
+
+StageMorph.prototype.mouseScroll
+    = SpriteMorph.prototype.mouseScroll;
 
 StageMorph.prototype.receiveUserInteraction
     = SpriteMorph.prototype.receiveUserInteraction;

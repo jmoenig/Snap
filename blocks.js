@@ -993,7 +993,9 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                     'pressed' : ['pressed'],
                     'dropped' : ['dropped'],
                     'mouse-entered' : ['mouse-entered'],
-                    'mouse-departed' : ['mouse-departed']
+                    'mouse-departed' : ['mouse-departed'],
+                    'scrolled-up' : ['scrolled-up'],
+                    'scrolled-down' : ['scrolled-down']
                 },
                 true // read-only
             );
