@@ -1953,7 +1953,7 @@ SyntaxElementMorph.prototype.showBubble = function (value, exportPic, target) {
     if (ide && (ide.currentSprite !== target)) {
         if (target instanceof StageMorph) {
             anchor = ide.corral.stageIcon;
-        } else {
+        } else if (target) {
         	if (target.isTemporary) {
          		target = detect(
 					target.allExemplars(),
@@ -1964,6 +1964,8 @@ SyntaxElementMorph.prototype.showBubble = function (value, exportPic, target) {
                 ide.corral.frame.contents.children,
                 function (icon) {return icon.object === target; }
             );
+        } else {
+        	target = ide;
         }
         pos = anchor.center();
     }

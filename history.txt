@@ -3875,6 +3875,7 @@ Fixes:
 * Objects: added "rotate" option to Sprite context menu
 * Threads, Blocks: fixed Joan's fix for #1972, because it broke HOFs
 * new Sound Recorder, yay!! Thanks, Bernat!
+* Blocks: fixed a glitch in the error-bubble handling mechanism
 
 
 
