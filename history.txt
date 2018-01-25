@@ -3868,6 +3868,14 @@ Fixes:
 * fixed #1972, thanks, Joan!
 * Objects, GUI: When deleting a temporary clone, detach all its parts and delete the temporary ones
 
+180125
+------
+* Morphic: new DialMorph widget
+* Blocks: added dial widget to POINT IN DIRECTION's drop-down menu
+* Objects: added "rotate" option to Sprite context menu
+* Threads, Blocks: fixed Joan's fix for #1972, because it broke HOFs
+
+
 
 v4.1.1 New Features:
 * translation support for custom blocks
@@ -3875,6 +3883,8 @@ v4.1.1 New Features:
 * included local methods in the OF-block's left drop-down menu
 * added "width" and "height" selectors to Pixels library
 * added scroll events, thanks, Bernat!
+* new dial widget POINT IN DIRECTION's drop-down menu
+* new "rotate" option for sprite context menu
 
 Notable Changes:
 * global and local variables are now separat in the palette, each sorted alphabetically, local vars marked with location pin (only in palette)

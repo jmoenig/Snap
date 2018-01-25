@@ -144,11 +144,11 @@ fontHeight, TableFrameMorph, SpriteMorph, Context, ListWatcherMorph,
 CellMorph, DialogBoxMorph, BlockInputFragmentMorph, PrototypeHatBlockMorph,
 Costume, IDE_Morph, BlockDialogMorph, BlockEditorMorph, localize, isNil,
 isSnapObject, PushButtonMorph, SpriteIconMorph, Process, AlignmentMorph,
-CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph*/
+CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2018-January-22';
+modules.blocks = '2018-January-25';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -934,6 +934,7 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                 null,
                 true,
                 {
+                	'§_dir': null,
                     '(90) right' : 90,
                     '(-90) left' : -90,
                     '(0) up' : '0',
@@ -4067,6 +4068,9 @@ BlockMorph.prototype.situation = function () {
 
 BlockMorph.prototype.prepareToBeGrabbed = function (hand) {
     var myself = this;
+    this.allInputs().forEach(function (input) {
+        delete input.bindingID;
+    });
     this.allComments().forEach(function (comment) {
         comment.startFollowing(myself, hand.world);
     });
@@ -8257,13 +8261,19 @@ InputSlotMorph.prototype.menuFromDict = function (
     noEmptyOption,
     enableKeyboard)
 {
-    var key,
+    var key, dial,
+    	myself = this,
         menu = new MenuMorph(
             this.userSetContents,
             null,
             this,
             this.fontSize
         );
+
+	function update (num) {
+    	myself.setContents(num);
+        myself.reactToSliderEdit();
+ 	}
 
     if (choices instanceof Function) {
         choices = choices.call(this);
@@ -8282,6 +8292,17 @@ InputSlotMorph.prototype.menuFromDict = function (
                 menu.addLine();
             } else if (key.indexOf('§_def') === 0) {
                 menu.addItem(choices[key], choices[key]);
+            } else if (key.indexOf('§_dir') === 0) {
+			    dial = new DialMorph();
+    			dial.rootForGrab = function () {return this; };
+    			dial.target = this;
+       			dial.action = update;
+       			dial.fillColor = this.parent.color;
+          		dial.setRadius(this.fontSize * 3);
+				dial.setValue(this.evaluate(), false, true);
+       			menu.addLine();
+			    menu.items.push(dial);
+            	menu.addLine();
             } else if (choices[key] instanceof Object &&
                     !(choices[key] instanceof Array) &&
                     (typeof choices[key] !== 'function')) {
@@ -9198,10 +9219,6 @@ InputSlotMorph.prototype.drawRoundBorder = function (context) {
     );
     context.stroke();
 };
-
-
-
-
 
 // TemplateSlotMorph ///////////////////////////////////////////////////
 

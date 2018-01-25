@@ -75,7 +75,7 @@ isRetinaSupported, SliderMorph, Animation*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2018-January-23';
+modules.gui = '2018-January-25';
 
 // Declarations
 
@@ -301,7 +301,8 @@ IDE_Morph.prototype.openIn = function (world) {
     // prevent non-DialogBoxMorphs from being dropped
     // onto the World in user-mode
     world.reactToDropOf = function (morph) {
-        if (!(morph instanceof DialogBoxMorph)) {
+        if (!(morph instanceof DialogBoxMorph ||
+        		(morph instanceof MenuMorph))) {
             if (world.hand.grabOrigin) {
                 morph.slideBackTo(world.hand.grabOrigin);
             } else {
@@ -4454,7 +4455,8 @@ IDE_Morph.prototype.switchToUserMode = function () {
     // prevent non-DialogBoxMorphs from being dropped
     // onto the World in user-mode
     world.reactToDropOf = function (morph) {
-        if (!(morph instanceof DialogBoxMorph)) {
+        if (!(morph instanceof DialogBoxMorph ||
+        		(morph instanceof MenuMorph))) {
             if (world.hand.grabOrigin) {
                 morph.slideBackTo(world.hand.grabOrigin);
             } else {
