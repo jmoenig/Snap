@@ -71,7 +71,7 @@ fontHeight, hex_sha512, sb, CommentMorph, CommandBlockMorph, BooleanSlotMorph,
 BlockLabelPlaceHolderMorph, Audio, SpeechBubbleMorph, ScriptFocusMorph,
 XML_Element, WatcherMorph, BlockRemovalDialogMorph, saveAs, TableMorph,
 isSnapObject, isRetinaEnabled, disableRetinaSupport, enableRetinaSupport,
-isRetinaSupported, SliderMorph, Animation*/
+isRetinaSupported, SliderMorph, Animation, BoxMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
@@ -2383,7 +2383,7 @@ IDE_Morph.prototype.newSpriteName = function (name, ignoredSprite) {
         ).map(
             function (each) {return each.name; }
         );
-    return this.newName(name, all)
+    return this.newName(name, all);
 };
 
 IDE_Morph.prototype.newName = function (name, elements) {
@@ -8246,7 +8246,7 @@ JukeboxMorph.prototype.updateList = function () {
     recordButton = new PushButtonMorph(
         ide,
         'recordNewSound',
-        new SymbolMorph('circleSolid', 15),
+        new SymbolMorph('circleSolid', 15)
     );
     recordButton.padding = 0;
     recordButton.corner = 12;
@@ -8871,7 +8871,8 @@ SoundRecorderDialogMorph.prototype.buildProgressBar = function () {
         this.indicator.setLeft(
             line.left() +
             (line.width() / 100 * percentage) -
-            this.indicator.width() / 2)
+            this.indicator.width() / 2
+        );
     };
 
     this.progressBar.step = function () {
@@ -8892,8 +8893,6 @@ SoundRecorderDialogMorph.prototype.record = function () {
 };
 
 SoundRecorderDialogMorph.prototype.stop = function () {
-    var myself = this;
-
     if (this.mediaRecorder && this.mediaRecorder.state !== 'inactive') {
         this.mediaRecorder.stop();
     }
@@ -8910,7 +8909,7 @@ SoundRecorderDialogMorph.prototype.play = function () {
     this.audioElement.oncanplaythrough = function () {
         this.play();
         this.oncanplaythrough = nop;
-    }
+    };
     this.playButton.label.setColor(new Color(0, 255, 0));
 };
 
