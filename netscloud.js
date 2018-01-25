@@ -390,74 +390,18 @@ NetCloud.prototype.callService = function (
     }
 };
 
-NetCloud.prototype.passiveLogin = function (ide, callback, callOnFail) {
-    // Try to login w/ cookie only
-    var request = new XMLHttpRequest(),
-        socketId = this.socketId(),
-        usr = JSON.stringify({
-            return_user: true,
-            api: true,
-            silent: true,
-            socketId: socketId
-        }),
-        myself = this,
-        response;
-
-    callback = callback || nop;
-    try {
-        request.open(
-            'POST',
-            (this.hasProtocol() ? '' : 'http://') +
-                this.url,
-            true
-        );
-        request.setRequestHeader(
-            'Content-Type',
-            'application/json; charset=utf-8'
-        );
-        // glue this session to a route:
-        request.withCredentials = true;
-        request.onreadystatechange = function () {
-            if (request.readyState === 4) {
-                if (request.status === 200) {  // 204 means not logged in (No Content)
-                    response = JSON.parse(request.responseText);
-                    myself.api = myself.parseAPI(response.api);
-                    myself.username = response.username;
-                    myself.session = true;
-                    myself.password = true;
-                    if (ide) {
-                        ide.source = 'cloud';
-                    }
-                    myself.onPassiveLogin();
-                    callback(true);
-                } else if (callOnFail) {
-                    callback(false);
-                }
-            }
-        };
-        request.send(usr);
-    } catch (err) {
-        console.error(err.toString());
-    }
-    
-};
-
 NetCloud.prototype.reconnect = function (callback, errorCall) {
-    if (this.password === true) {  // if using session cookie, don't login then back out
-        this.passiveLogin(null, callback);
-    } else {
-        if (!(this.username && this.password)) {
-            this.message('You are not logged in');
-            return;
-        }
-        this.login(
-            this.username,
-            this.password,
-            undefined,
-            callback,
-            errorCall
-        );
+    if (!(this.username && this.password)) {
+        this.message('You are not logged in');
+        return;
     }
+    this.login(
+        this.username,
+        this.password,
+        undefined,
+        callback,
+        errorCall
+    );
 };
 
 NetCloud.prototype.disconnect = nop;

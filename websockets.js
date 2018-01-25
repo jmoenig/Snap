@@ -372,7 +372,7 @@ WebSocketManager.prototype.onConnect = function() {
     if (SnapCloud.username) {  // Reauthenticate if needed
         SnapCloud.reconnect(afterConnect, afterConnect);
     } else {
-        SnapCloud.passiveLogin(this.ide, afterConnect, true);
+        afterConnect();
     }
     this.inActionRequest = false;
 };
