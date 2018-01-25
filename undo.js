@@ -171,6 +171,36 @@ UndoManager.Invert.duplicateSprite = function(args) {
     };
 };
 
+UndoManager.Invert.attachParts = function(args) {
+    var partIds = args[1];
+    return {
+        type: 'detachParts',
+        args: [partIds]
+    };
+};
+
+UndoManager.Invert.detachParts = function(args) {
+    var partIds = args[0],
+        anchorIds = args[1],
+        events;
+
+    events = anchorIds
+        .map(function(id, index) {
+            return {
+                type: 'attachParts',
+                args: [id, [partIds[index]]]
+            };
+        })
+        .filter(function(event) {
+            return !!event.args[0];
+        });
+
+    return {
+        type: 'batch',
+        args: events
+    };
+};
+
 UndoManager.Invert.replaceBlock = function(args) {
     return args.reverse();
 };

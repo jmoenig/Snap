@@ -7253,13 +7253,17 @@ SpriteIconMorph.prototype.userMenu = function () {
     if (this.object.anchor) {
         menu.addItem(
             localize('detach from') + ' ' + this.object.anchor.name,
-            function () {myself.object.detachFromAnchor(); }
+            function() {
+                SnapActions.detachParts([this.object]);
+            }
         );
     }
     if (this.object.parts.length) {
         menu.addItem(
             'detach all parts',
-            function () {myself.object.detachAllParts(); }
+            function() {
+                SnapActions.detachParts(this.object.parts);
+            }
         );
     }
     menu.addItem("export...", 'exportSprite');

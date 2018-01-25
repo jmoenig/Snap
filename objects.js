@@ -3003,11 +3003,15 @@ SpriteMorph.prototype.userMenu = function () {
     if (this.anchor) {
         menu.addItem(
             localize('detach from') + ' ' + this.anchor.name,
-            'detachFromAnchor'
+            function() {
+                SnapActions.detachParts([this]);
+            }
         );
     }
     if (this.parts.length) {
-        menu.addItem('detach all parts', 'detachAllParts');
+        menu.addItem('detach all parts', function() {
+            SnapActions.detachParts(this.parts);
+        });
     }
     menu.addItem("export...", 'exportSprite');
     return menu;
@@ -5247,7 +5251,7 @@ SpriteMorph.prototype.wantsDropOf = function (morph) {
 
 SpriteMorph.prototype.reactToDropOf = function (morph, hand) {
     this.removeHighlight();
-    this.attachPart(morph.object);
+    SnapActions.attachParts(this, [morph.object]);
     this.world().add(morph);
     morph.slideBackTo(hand.grabOrigin);
 };
@@ -5683,7 +5687,7 @@ StageMorph.prototype.wantsDropOf = function (aMorph) {
 StageMorph.prototype.reactToDropOf = function (morph, hand) {
     if (morph instanceof SpriteIconMorph) { // detach sprite from anchor
         if (morph.object.anchor) {
-            morph.object.anchor.detachPart(morph.object);
+            SnapActions.detachParts([morph.object]);
         }
         this.world().add(morph);
         morph.slideBackTo(hand.grabOrigin);
