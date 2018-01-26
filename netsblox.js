@@ -1271,12 +1271,9 @@ NetsBloxMorph.prototype.promptCollabInvite = function (params) {  // id, room, r
     // Create a confirm dialog about joining the group
     var myself = this,
         // unpack the params
-        id = params.id,
         roomName = params.roomName,
-
-        action = this.collabResponse.bind(this, id, true),
-        dialog = new DialogBoxMorph(null, action),
         enabled = false,
+        dialog,
         msg;
 
     if (!SnapActions.isCollaborating()) {
@@ -1291,12 +1288,17 @@ NetsBloxMorph.prototype.promptCollabInvite = function (params) {  // id, room, r
             '"\nAccept?';
     }
 
+    dialog = new DialogBoxMorph(null, function() {
+        myself.collabResponse(params, true);
+        dialog.destroy();
+    });
+
     dialog.cancel = function() {
-        myself.collabResponse(id, false);
+        myself.collabResponse(params, false);
         if (enabled) {
             SnapActions.disableCollaboration();
         }
-        this.destroy();
+        dialog.destroy();
     };
 
     dialog.askYesNo(
@@ -1306,14 +1308,41 @@ NetsBloxMorph.prototype.promptCollabInvite = function (params) {  // id, room, r
     );
 };
 
-NetsBloxMorph.prototype.collabResponse = function (id, response) {
+NetsBloxMorph.prototype.collabResponse = function (invite, response) {
     var myself = this;
 
     SnapCloud.collabResponse(
-        id,
+        invite.id,
         response,
         function() {
-            myself.showMessage('Added to the project!', 2);
+            var dialog,
+                msg;
+
+            if (response) {
+                dialog = new DialogBoxMorph(null, function() {
+                    // Open the given project
+                    SnapCloud.reconnect(
+                        function () {
+                            SnapCloud.callService(
+                                'joinActiveProject',
+                                function (response) {
+                                    myself.rawLoadCloudProject(response[0]);
+                                },
+                                myself.cloudError(),
+                                [invite.roomName, invite.inviter, SnapCloud.socketId()]
+                            );
+                        },
+                        myself.cloudError()
+                    );
+                    dialog.destroy();
+                });
+                msg = 'Would you like to open the shared project now?';
+                dialog.askYesNo(
+                    localize('Open Shared Project?'),
+                    localize(msg),
+                    myself.world()
+                );
+            }
         },
         function(err){
             myself.showMessage(err, 2);
