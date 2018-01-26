@@ -174,11 +174,10 @@ WebSocketManager.MessageHandlers = {
                                 (msg.fields.length === 0 ? ' fields.' : (msg.fields.length === 1 ? ' field: ' + msg.fields : ' fields: ' + msg.fields));
 
                             // notify
-                            this.destroy();
+                            dialog.destroy();
                             myself.ide.showMessage(notification, 2);
 
                             // refresh message palette
-                            ide.room.parentThatIsA(RoomEditorMorph).updateRoom();
                             if (ide && ide.currentTab === 'room') {
                                 ide.spriteBar.tabBar.tabTo('room');
                             }
