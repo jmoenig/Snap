@@ -83,7 +83,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph,
 AlignmentMorph*/
 
-modules.objects = '2018-January-23';
+modules.objects = '2018-January-25';
 
 var SpriteMorph;
 var StageMorph;
@@ -3227,6 +3227,7 @@ SpriteMorph.prototype.userMenu = function () {
     }
     menu.addItem("delete", 'remove');
     menu.addItem("move", 'moveCenter');
+    menu.addItem("rotate", 'setRotation');
     if (this.costume) {
         menu.addItem(
             "pivot",
