@@ -501,4 +501,4 @@ Cloud.prototype.updateNotes = function (projectName, notes, onSuccess, onError) 
     );
 };
 
-var SnapCloud = new Cloud('https://localhost');
+var SnapCloud = new Cloud('https://104.131.28.71');
