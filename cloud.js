@@ -247,7 +247,7 @@ Cloud.prototype.login = function (username, password, persist, onSuccess, onErro
         onError,
         'login failed',
         'false', // wants raw response
-        password // password travels inside the body
+        hex_sha512(password) // password travels inside the body
     );
 };
 
@@ -256,8 +256,8 @@ Cloud.prototype.signup = function (username, password, passwordRepeat, email, on
         'POST',
         '/users/' + username + '?' + this.encodeDict({
             email: email,
-            password: password,
-            password_repeat: passwordRepeat
+            password: hex_sha512(password),
+            password_repeat: hex_sha512(passwordRepeat)
         }),
         onSuccess,
         onError,
@@ -268,9 +268,9 @@ Cloud.prototype.changePassword = function (password, newPassword, passwordRepeat
     this.withCredentialsRequest(
         'POST',
         '/users/%username/newpassword?' + this.encodeDict({
-            oldpassword: password,
-            password_repeat: passwordRepeat,
-            newpassword: newPassword
+            oldpassword: hex_sha512(password),
+            password_repeat: hex_sha512(passwordRepeat),
+            newpassword: hex_sha512(newPassword)
         }),
         onSuccess,
         onError,
