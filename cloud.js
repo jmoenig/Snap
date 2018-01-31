@@ -403,14 +403,13 @@ Cloud.prototype.getThumbnail = function (username, projectName, onSuccess, onErr
     );
 };
 
-Cloud.prototype.getRawProject = function (projectName, onSuccess, onError) {
+Cloud.prototype.getProject = function (projectName, onSuccess, onError) {
     this.withCredentialsRequest(
         'GET',
         '/projects/%username/' + projectName,
         onSuccess,
         onError,
-        'Could not fetch project ' + projectName,
-        true
+        'Could not fetch project ' + projectName
     );
 };
 
@@ -420,8 +419,7 @@ Cloud.prototype.getPublicProject = function (projectName, username, onSuccess, o
         '/projects/' + username + '/' + projectName,
         onSuccess,
         onError,
-        'Could not fetch project ' + projectName,
-        true
+        'Could not fetch project ' + projectName
     );
 };
 
