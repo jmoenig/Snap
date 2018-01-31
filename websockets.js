@@ -174,7 +174,6 @@ WebSocketManager.MessageHandlers = {
                                 (msg.fields.length === 0 ? ' fields.' : (msg.fields.length === 1 ? ' field: ' + msg.fields : ' fields: ' + msg.fields));
 
                             // notify
-                            dialog.destroy();
                             myself.ide.showMessage(notification, 2);
 
                             // refresh message palette
@@ -182,7 +181,7 @@ WebSocketManager.MessageHandlers = {
                                 ide.spriteBar.tabBar.tabTo('room');
                             }
                         });
-                    this.destroy();
+                    dialog.destroy();
                 };
             }
         }
