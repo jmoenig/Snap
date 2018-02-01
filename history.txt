@@ -3877,6 +3877,9 @@ Fixes:
 * new Sound Recorder, yay!! Thanks, Bernat!
 * Blocks: fixed a glitch in the error-bubble handling mechanism
 
+180201
+------
+* GUI: encode recorded sounds to base64
 
 
 v4.1.1 New Features:
