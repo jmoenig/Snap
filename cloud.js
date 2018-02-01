@@ -409,7 +409,8 @@ Cloud.prototype.getProject = function (projectName, onSuccess, onError) {
         '/projects/%username/' + projectName,
         onSuccess,
         onError,
-        'Could not fetch project ' + projectName
+        'Could not fetch project ' + projectName,
+        true
     );
 };
 
@@ -419,7 +420,8 @@ Cloud.prototype.getPublicProject = function (projectName, username, onSuccess, o
         '/projects/' + username + '/' + projectName,
         onSuccess,
         onError,
-        'Could not fetch project ' + projectName
+        'Could not fetch project ' + projectName,
+        true
     );
 };
 

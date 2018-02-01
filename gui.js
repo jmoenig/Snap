@@ -402,28 +402,37 @@ IDE_Morph.prototype.openIn = function (world) {
 
             // make sure to lowercase the username
             dict = SnapCloud.parseDict(location.hash.substr(9));
+            dict.Username = dict.Username.toLowerCase();
 
             SnapCloud.getPublicProject(
                 dict.ProjectName,
                 dict.Username,
-                function (response) {
+                function (projectData) {
+                    var msg;
                     myself.nextSteps([
                         function () {
-                            myself.openMediaString(response.media);
+                            msg = myself.showMessage('Opening project...');
+                        },
+                        function () {nop(); }, // yield (bug in Chrome)
+                        function () {
+                            if (projectData.indexOf('<snapdata') === 0) {
+                                myself.rawOpenCloudDataString(projectData);
+                            } else if (
+                                projectData.indexOf('<project') === 0
+                            ) {
+                                myself.rawOpenProjectString(projectData);
+                            }
+                            myself.hasChangedMedia = true;
                         },
                         function () {
-                            myself.openProjectString(response.project);
-                        },
-                        function () {
-                            // If I keep it, it doesn't load the project, if I take it away,
-                            // flags are not applied and the project doesn't go full screen
-                            // applyFlags(dict);
+                            myself.shield.destroy();
+                            myself.shield = null;
+                            msg.destroy();
+                            applyFlags(dict);
                         }
                     ]);
-                    myself.shield.destroy();
-                    myself.shield = null;
                 },
-                myself.cloudError()
+                this.cloudError()
             );
         } else if (location.hash.substr(0, 7) === '#cloud:') {
             this.shield = new Morph();
@@ -6208,14 +6217,11 @@ ProjectDialogMorph.prototype.rawOpenCloudProject = function (proj) {
     var myself = this;
     SnapCloud.getProject(
         proj.projectname,
-        function (response) {
+        function (clouddata) {
             myself.ide.source = 'cloud';
             myself.ide.nextSteps([
                 function () {
-                    myself.ide.openMediaString(response.media);
-                },
-                function () {
-                    myself.ide.openProjectString(response.project);
+                    myself.ide.openCloudDataString(clouddata);
                 }
             ]);
             if (proj.ispublic) {
