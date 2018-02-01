@@ -5901,16 +5901,8 @@ ProjectDialogMorph.prototype.buildFilterField = function () {
 
         myself.listField.elements =
             myself.projectList.filter(function (aProject) {
-                var name,
-                    notes;
-
-                if (aProject.projectname) { // cloud
-                    name = aProject.projectname;
-                    notes = aProject.notes;
-                } else { // local or examples
-                    name = aProject.name;
+                var name = aProject.projectname || aProject.name,
                     notes = aProject.notes || '';
-                }
 
                 return name.toLowerCase().indexOf(text.toLowerCase()) > -1 ||
                     notes.toLowerCase().indexOf(text.toLowerCase()) > -1;
