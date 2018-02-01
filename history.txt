@@ -3880,6 +3880,7 @@ Fixes:
 180201
 ------
 * GUI: encode recorded sounds to base64
+* snap.html: added version queries to script urls
 
 
 v4.1.1 New Features:
