@@ -1,5 +1,5 @@
-/* globals ProjectDialogMorph, ensureFullUrl, localize,
-   IDE_Morph, Process, SnapCloud, BlockExportDialogMorph
+/* globals ProjectDialogMorph, ensureFullUrl, localize, nop,
+   IDE_Morph, Process, SnapCloud, BlockExportDialogMorph, DialogBoxMorph
    */
 
 ProjectDialogMorph.prototype._deleteProject =
@@ -44,6 +44,67 @@ ProjectDialogMorph.prototype.openProject = function () {
     } else {
         return this._openProject();
     }
+};
+
+ProjectDialogMorph.prototype.openCloudProject = function (project) {
+    var myself = this,
+        msg;
+
+    this.destroy();
+    myself.ide.nextSteps([
+        function () {
+            msg = myself.ide.showMessage('Fetching project\nfrom the cloud...');
+        },
+        function () {
+            SnapCloud.reconnect(function() {
+                var isReopen = project.ProjectName === myself.ide.room.name,
+                    onlyMe = myself.ide.room.getCurrentOccupants() === 1;
+
+                if (isReopen && onlyMe) {  // reopening own project
+                    myself.rawOpenCloudProject(project);
+                } else {
+                    SnapCloud.isProjectActive(
+                        project.ProjectName,
+                        function(isActive) {
+                            var choices,
+                                dialog;
+
+                            if (isActive) {
+                                // Prompt if we should join the project or open new
+                                dialog = new DialogBoxMorph(null, nop);
+                                choices = {};
+                                choices['Join Existing'] = function() {
+                                    SnapCloud.callService('joinActiveProject', function(response) {
+                                        myself.ide.rawLoadCloudProject(response[0], project.Public);
+                                    }, myself.ide.cloudError(), [project.ProjectName, project.Owner]);
+                                    dialog.destroy();
+                                    myself.destroy();
+                                };
+                                choices['Create Copy'] = function() {
+                                    myself.rawOpenCloudProject(project);
+                                    dialog.destroy();
+                                };
+                                dialog.ask(
+                                    localize('Join Existing Project'),
+                                    localize('This project is already open. Would you like to join\n' +
+                                        'the active one or create a new copy?'),
+                                    myself.world(),
+                                    choices
+                                );
+                            } else {
+                                myself.rawOpenCloudProject(project);
+                            }
+                        },
+                        myself.ide.cloudError()
+                    );
+                }
+            }, myself.ide.cloudError());
+
+        },
+        function() {
+            msg.destroy();
+        }
+    ]);
 };
 
 // TODO: Why is this one so much different?
