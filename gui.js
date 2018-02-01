@@ -5749,11 +5749,12 @@ ProjectDialogMorph.prototype.buildContents = function () {
     this.unshareButton = this.addButton('unshareProject', 'Unshare');
     this.shareButton.hide();
     this.unshareButton.hide();
+    /*
     this.publishButton = this.addButton('publishProject', 'Publish');
     this.unpublishButton = this.addButton('unpublishProject', 'Unpublish');
     this.publishButton.hide();
     this.unpublishButton.hide();
-
+    */
     this.deleteButton = this.addButton('deleteProject', 'Delete');
     this.addButton('cancel', 'Cancel');
 
@@ -6030,8 +6031,10 @@ ProjectDialogMorph.prototype.setSource = function (source) {
     this.body.add(this.listField);
     this.shareButton.hide();
     this.unshareButton.hide();
+    /*
     this.publishButton.hide();
     this.unpublishButton.hide();
+    */
     if (this.source === 'local') {
         this.deleteButton.show();
     } else { // examples
@@ -6138,6 +6141,7 @@ ProjectDialogMorph.prototype.installCloudProjectList = function (pl) {
         if (item.ispublic) {
             myself.shareButton.hide();
             myself.unshareButton.show();
+            /*
             if (item.ispublished) {
                 myself.publishButton.hide();
                 myself.unpublishButton.show();
@@ -6145,11 +6149,14 @@ ProjectDialogMorph.prototype.installCloudProjectList = function (pl) {
                 myself.publishButton.show();
                 myself.unpublishButton.hide();
             }
+            */
         } else {
             myself.unshareButton.hide();
             myself.shareButton.show();
+            /*
             myself.publishButton.hide();
             myself.unpublishButton.hide();
+            */
         }
         myself.buttons.fixLayout();
         myself.fixLayout();
@@ -6365,8 +6372,10 @@ ProjectDialogMorph.prototype.shareProject = function () {
                         proj.ispublic = true;
                         myself.unshareButton.show();
                         myself.shareButton.hide();
+                        /*
                         myself.publishButton.show();
                         myself.unpublishButton.hide();
+                        */
                         entry.label.isBold = true;
                         entry.label.drawNew();
                         entry.label.changed();
@@ -6412,8 +6421,10 @@ ProjectDialogMorph.prototype.unshareProject = function () {
                         proj.ispublic = false;
                         myself.shareButton.show();
                         myself.unshareButton.hide();
+                        /*
                         myself.publishButton.hide();
                         myself.unpublishButton.hide();
+                        */
                         entry.label.isBold = false;
                         entry.label.isItalic = false;
                         entry.label.drawNew();
@@ -6455,7 +6466,6 @@ ProjectDialogMorph.prototype.publishProject = function () {
                         myself.shareButton.hide();
                         myself.publishButton.hide();
                         myself.unpublishButton.show();
-//                        entry.label.color = new Color(0, 220, 0);
                         entry.label.isItalic = true;
                         entry.label.drawNew();
                         entry.label.changed();
@@ -6503,7 +6513,6 @@ ProjectDialogMorph.prototype.unpublishProject = function () {
                         myself.shareButton.hide();
                         myself.publishButton.show();
                         myself.unpublishButton.hide();
-//                        entry.label.color = new Color(0, 0, 0);
                         entry.label.isItalic = false;
                         entry.label.drawNew();
                         entry.label.changed();
