@@ -404,7 +404,7 @@ NetsBloxMorph.prototype.projectMenu = function () {
         return true;
     });
 
-    if (SnapCloud.username && this.room.isGuest()) {
+    if (SnapCloud.username && !this.room.isOwner()) {
         item = ['Save a Copy', 'saveACopy'];
         var itemIndex = menu.items.map(function(item) {
             return item[1];
