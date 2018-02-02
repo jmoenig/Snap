@@ -6,7 +6,7 @@
 
     written by Jens Mönig
 
-    Copyright (C) 2017 by Jens Mönig
+    Copyright (C) 2018 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -42,7 +42,7 @@
 
 /*global modules, contains*/
 
-modules.locale = '2017-October-20';
+modules.locale = '2018-January-25';
 
 // Global stuff
 
@@ -160,7 +160,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org',
     'last_changed':
-        '2017-10-20'
+        '2018-01-25'
 };
 
 SnapTranslator.dict.it = {
@@ -215,7 +215,7 @@ SnapTranslator.dict.pt = {
     'translator_e-mail':
         'mmsequeira@gmail.com',
     'last_changed':
-        '2016-10-30'
+        '2017-10-30'
 };
 
 SnapTranslator.dict.cs = {
@@ -237,7 +237,7 @@ SnapTranslator.dict.zh_CN = {
     'translator_e-mail':
         'ubertao@qq.com/djh@rhjxx.cn',
     'last_changed':
-        '2016-05-09'
+        '2018-01-22'
 };
 
 SnapTranslator.dict.eo = {
@@ -292,7 +292,7 @@ SnapTranslator.dict.es = {
     'translator_e-mail':
         'victor.muratalla@yahoo.com',
     'last_changed':
-        '2013-03-25'
+        '2018-01-22'
 };
 
 SnapTranslator.dict.nl = {
@@ -314,7 +314,7 @@ SnapTranslator.dict.pl = {
     'translator_e-mail':
         'witek@oeiizk.waw.pl',
     'last_changed':
-        '2016-11-14'
+        '2017-11-09'
 };
 
 SnapTranslator.dict.zh_TW = {
@@ -358,7 +358,7 @@ SnapTranslator.dict.el = {
     'translator_e-mail':
         'ino.samaras@berkeley.edu',
     'last_changed':
-        '2013-09-16'
+        '2018-01-19'
 };
 
 SnapTranslator.dict.ca = {
@@ -367,9 +367,9 @@ SnapTranslator.dict.ca = {
     'language_translator':
         'Bernat Romagosa Carrasquer, Joan Guillén i Pelegay',
     'translator_e-mail':
-        'bernat@arduino.org, jguille2@xtec.cat',
+        'bernat@snap4arduino.rocks, jguille2@xtec.cat',
     'last_changed':
-        '2017-01-09'
+        '2017-11-15'
 };
 
 SnapTranslator.dict.fi = {
@@ -468,7 +468,7 @@ SnapTranslator.dict.tr = {
     'translator_e-mail':
         'hakanatas@gmail.com',
     'last_changed':
-        '2015-7-27'
+        '2018-01-22'
 };
 
 SnapTranslator.dict.hu = {

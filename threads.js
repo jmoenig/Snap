@@ -9,7 +9,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2017 by Jens Mönig
+    Copyright (C) 2018 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph,
 TableFrameMorph, ColorSlotMorph, isSnapObject*/
 
-modules.threads = '2017-October-20';
+modules.threads = '2018-January-25';
 
 var ThreadManager;
 var Process;
@@ -1166,12 +1166,12 @@ Process.prototype.fork = function (context, args) {
         stage = this.homeContext.receiver.parentThatIsA(StageMorph);
     proc.instrument = this.instrument;
     proc.receiver = this.receiver;
-    proc.initializeFor(context, args);
+    proc.initializeFor(context, args, this.enableSingleStepping);
     // proc.pushContext('doYield');
     stage.threads.processes.push(proc);
 };
 
-Process.prototype.initializeFor = function (context, args) {
+Process.prototype.initializeFor = function (context, args, ignoreExit) {
     // used by Process.fork() and global invoke()
     if (context.isContinuation) {
         throw new Error(
@@ -1243,14 +1243,16 @@ Process.prototype.initializeFor = function (context, args) {
         // insert a tagged exit context
         // which "report" can catch later
         // needed for invoke() situations
-        exit = new Context(
-            runnable.parentContext,
-            'expectReport',
-            outer,
-            outer.receiver
-        );
-        exit.tag = 'exit';
-        runnable.parentContext = exit;
+        if (!ignoreExit) { // when single stepping LAUNCH
+	        exit = new Context(
+    	        runnable.parentContext,
+        	    'expectReport',
+            	outer,
+            	outer.receiver
+        	);
+        	exit.tag = 'exit';
+        	runnable.parentContext = exit;
+    	}
     }
 
     this.homeContext = new Context(); // context.outerContext;
@@ -1330,7 +1332,7 @@ Process.prototype.evaluateCustomBlock = function () {
     var caller = this.context.parentContext,
         block = this.context.expression,
         method = block.isGlobal ? block.definition
-                : this.blockReceiver().getMethod(block.blockSpec),
+                : this.blockReceiver().getMethod(block.semanticSpec),
         context = method.body,
         declarations = method.declarations,
         args = new List(this.context.inputs),
@@ -2688,12 +2690,20 @@ Process.prototype.reportStringSize = function (data) {
 };
 
 Process.prototype.reportUnicode = function (string) {
-    var str = (string || '').toString()[0];
-    return str ? str.charCodeAt(0) : 0;
+    var str = isNil(string) ? '\u0000' : string.toString();
+
+    if (str.codePointAt) { // support for Unicode in newer browsers.
+        return str.codePointAt(0);
+    }
+    return str.charCodeAt(0);
 };
 
 Process.prototype.reportUnicodeAsLetter = function (num) {
     var code = +(num || 0);
+
+    if (String.fromCodePoint) { // support for Unicode in newer browsers.
+        return String.fromCodePoint(code);
+    }
     return String.fromCharCode(code);
 };
 
@@ -3056,6 +3066,17 @@ Process.prototype.reportColorIsTouchingColor = function (color1, color2) {
     return false;
 };
 
+Process.prototype.reportRelationTo = function (relation, name) {
+	var rel = this.inputOption(relation);
+ 	if (rel === 'distance') {
+  		return this.reportDistanceTo(name);
+  	}
+    if (rel === 'direction') {
+    	return this.reportDirectionTo(name);
+    }
+    return 0;
+};
+
 Process.prototype.reportDistanceTo = function (name) {
     var thisObj = this.blockReceiver(),
         thatObj,
@@ -3082,6 +3103,32 @@ Process.prototype.reportDistanceTo = function (name) {
     return 0;
 };
 
+Process.prototype.reportDirectionTo = function (name) {
+    var thisObj = this.blockReceiver(),
+        thatObj;
+
+    if (thisObj) {
+        if (this.inputOption(name) === 'mouse-pointer') {
+            return thisObj.angleToXY(this.reportMouseX(), this.reportMouseY());
+        }
+        if (name instanceof List) {
+            return thisObj.angleToXY(
+                name.at(1),
+                name.at(2)
+            );
+        }
+        thatObj = this.getOtherObject(name, this.homeContext.receiver);
+        if (thatObj) {
+            return thisObj.angleToXY(
+                thatObj.xPosition(),
+                thatObj.yPosition()
+            );
+        }
+        return thisObj.direction();
+    }
+    return 0;
+};
+
 Process.prototype.reportAttributeOf = function (attribute, name) {
     var thisObj = this.blockReceiver(),
         thatObj,
@@ -3097,6 +3144,16 @@ Process.prototype.reportAttributeOf = function (attribute, name) {
         }
         if (thatObj) {
             this.assertAlive(thatObj);
+            if (attribute instanceof BlockMorph) { // a "wish"
+            	return this.reportContextFor(
+             	   this.reify(
+                		thatObj.getMethod(attribute.semanticSpec)
+                        	.blockInstance(),
+                		new List()
+                	),
+                 	thatObj
+                );
+            }
             if (attribute instanceof Context) {
                 return this.reportContextFor(attribute, thatObj);
             }
@@ -4043,7 +4100,8 @@ VariableFrame.prototype.names = function () {
     return names;
 };
 
-VariableFrame.prototype.allNamesDict = function () {
+VariableFrame.prototype.allNamesDict = function (upTo) {
+	// "upTo" is an optional parent frame at which to stop, e.g. globals
     var dict = {}, current = this;
 
     function addKeysToDict(srcDict, trgtDict) {
@@ -4055,19 +4113,20 @@ VariableFrame.prototype.allNamesDict = function () {
         }
     }
 
-    while (current) {
+    while (current && (current !== upTo)) {
         addKeysToDict(current.vars, dict);
         current = current.parentFrame;
     }
     return dict;
 };
 
-VariableFrame.prototype.allNames = function () {
+VariableFrame.prototype.allNames = function (upTo) {
 /*
     only show the names of the lexical scope, hybrid scoping is
     reserved to the daring ;-)
+	"upTo" is an optional parent frame at which to stop, e.g. globals
 */
-    var answer = [], each, dict = this.allNamesDict();
+    var answer = [], each, dict = this.allNamesDict(upTo);
 
     for (each in dict) {
         if (Object.prototype.hasOwnProperty.call(dict, each)) {

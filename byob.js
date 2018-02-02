@@ -9,7 +9,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2017 by Jens Mönig
+    Copyright (C) 2018 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -104,11 +104,11 @@ contains, InputSlotMorph, ToggleButtonMorph, IDE_Morph, MenuMorph, copy,
 ToggleElementMorph, Morph, fontHeight, StageMorph, SyntaxElementMorph,
 SnapSerializer, CommentMorph, localize, CSlotMorph, MorphicPreferences,
 SymbolMorph, isNil, CursorMorph, VariableFrame, WatcherMorph, Variable,
-BooleanSlotMorph, XML_Serializer*/
+BooleanSlotMorph, XML_Serializer, SnapTranslator*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2017-October-09';
+modules.byob = '2018-January-18';
 
 // Declarations
 
@@ -146,16 +146,21 @@ function CustomBlockDefinition(spec, receiver) {
     this.comment = null;
     this.codeMapping = null; // experimental, generate text code
     this.codeHeader = null; // experimental, generate text code
+    this.translations = {}; // experimental, format: {lang : spec}
 
     // don't serialize (not needed for functionality):
     this.receiver = receiver || null; // for serialization only (pointer)
     this.editorDimensions = null; // a rectangle, last bounds of the editor
     this.cachedIsRecursive = null; // for automatic yielding
+    this.cachedTranslation = null; // for localized block specs
+
+	// transient - for "wishes"
+ 	this.storedSemanticSpec = null;
 }
 
 // CustomBlockDefinition instantiating blocks
 
-CustomBlockDefinition.prototype.blockInstance = function () {
+CustomBlockDefinition.prototype.blockInstance = function (storeTranslations) {
     var block;
     if (this.type === 'command') {
         block = new CustomCommandBlockMorph(this);
@@ -166,6 +171,9 @@ CustomBlockDefinition.prototype.blockInstance = function () {
         );
     }
     block.isDraggable = true;
+    if (storeTranslations) { // only for "wishes"
+    	block.storedTranslations = this.translationsAsText();
+    }
     return block;
 };
 
@@ -234,6 +242,10 @@ CustomBlockDefinition.prototype.copyAndBindTo = function (sprite, headerOnly) {
 // CustomBlockDefinition accessing
 
 CustomBlockDefinition.prototype.blockSpec = function () {
+	if (this.storedSemanticSpec) {
+ 		return this.storedSemanticSpec; // for "wishes"
+ 	}
+
     var myself = this,
         ans = [],
         parts = this.parseSpec(this.spec),
@@ -383,6 +395,82 @@ CustomBlockDefinition.prototype.isDirectlyRecursive = function () {
     return this.cachedIsRecursive;
 };
 
+// CustomBlockDefinition localizing, highly experimental
+
+CustomBlockDefinition.prototype.localizedSpec = function () {
+	if (this.cachedTranslation) {return this.cachedTranslation; }
+
+	var loc = this.translations[SnapTranslator.language],
+		sem = this.blockSpec(),
+        locParts,
+  		inputs,
+    	i = -1;
+
+	function isInput(str) {
+    	return (str.length > 1) && (str[0] === '%');
+ 	}
+
+    if (isNil(loc)) {return sem; }
+    inputs = BlockMorph.prototype.parseSpec(sem).filter(function (str) {
+        return (isInput(str));
+    });
+	locParts = BlockMorph.prototype.parseSpec(loc);
+
+	// perform a bunch of sanity checks on the localized spec
+	if (locParts.some(function (str) {return isInput(str); }) ||
+ 			(locParts.filter(function (str) {return str === '_'; }).length !==
+            	inputs.length)
+    ) {
+ 		this.cachedTranslation = sem;
+    } else {
+		// substitute each input place holder with its semantic spec part
+		locParts = locParts.map(function (str) {
+			if (str === '_') {
+  				i += 1;
+  				return inputs[i];
+  			}
+    		return str;
+		});
+ 		this.cachedTranslation = locParts.join(' ');
+   	}
+  	return this.cachedTranslation;
+};
+
+CustomBlockDefinition.prototype.abstractBlockSpec = function () {
+	// answer the semantic block spec substituting each input
+ 	// with an underscore
+    return BlockMorph.prototype.parseSpec(this.blockSpec()).map(
+    	function (str) {
+    		return (str.length > 1 && (str[0]) === '%') ? '_' : str;
+    	}
+    ).join(' ');
+};
+
+CustomBlockDefinition.prototype.translationsAsText = function () {
+	var myself = this,
+ 		txt = '';
+	Object.keys(this.translations).forEach(function (lang) {
+ 		txt += (lang + ':' + myself.translations[lang] + '\n');
+    });
+    return txt;
+};
+
+CustomBlockDefinition.prototype.updateTranslations = function (text) {
+	var myself = this,
+    	lines = text.split('\n').filter(function (txt) {
+     	   return txt.length;
+    	});
+	this.translations = {};
+ 	lines.forEach(function (txt) {
+  		var idx = txt.indexOf(':'),
+    		key = txt.slice(0, idx).trim(),
+      		val = txt.slice(idx + 1).trim();
+    	if (idx) {
+     		myself.translations[key] = val;
+     	}
+    });
+};
+
 // CustomBlockDefinition picturing
 
 CustomBlockDefinition.prototype.scriptsPicture = function () {
@@ -465,12 +553,14 @@ function CustomCommandBlockMorph(definition, isProto) {
 
 CustomCommandBlockMorph.prototype.init = function (definition, isProto) {
     this.definition = definition; // mandatory
+    this.semanticSpec = '';
     this.isGlobal = definition ? definition.isGlobal : false;
     this.isPrototype = isProto || false; // optional
     CustomCommandBlockMorph.uber.init.call(this, true); // silently
     this.category = definition.category;
     this.selector = 'evaluateCustomBlock';
     this.variables = null;
+	this.storedTranslations = null; // transient - only for "wishes"
     this.initializeVariables();
     if (definition) { // needed for de-serializing
         this.refresh();
@@ -495,8 +585,10 @@ CustomCommandBlockMorph.prototype.initializeVariables = function (oldVars) {
 CustomCommandBlockMorph.prototype.refresh = function (aDefinition, silently) {
     var def = aDefinition || this.definition,
         newSpec = this.isPrototype ?
-                def.spec : def.blockSpec(),
+                def.spec : def.localizedSpec(),
         oldInputs;
+
+	this.semanticSpec = def.blockSpec();
 
     // make sure local custom blocks don't hold on to a method.
     // future performance optimization plan:
@@ -809,7 +901,7 @@ CustomCommandBlockMorph.prototype.edit = function () {
                 this.duplicateBlockDefinition();
                 return;
             }
-            def = rcvr.getMethod(this.blockSpec);
+            def = rcvr.getMethod(this.semanticSpec);
         }
         Morph.prototype.trackChanges = false;
         editor = new BlockEditorMorph(def, rcvr);
@@ -945,6 +1037,13 @@ CustomCommandBlockMorph.prototype.userMenu = function () {
                 );
             },
             'open a new window\nwith a picture of this script'
+        );
+        menu.addItem(
+            "translations...",
+            function () {
+                hat.parentThatIsA(BlockEditorMorph).editTranslations();
+            },
+            'experimental -\nunder construction'
         );
         if (this.isGlobal) {
             if (hat.inputs().length < 2) {
@@ -1193,10 +1292,12 @@ CustomReporterBlockMorph.prototype.init = function (
     isProto
 ) {
     this.definition = definition; // mandatory
+    this.semanticSpec = ''; // used for translations
     this.isGlobal = definition ? definition.isGlobal : false;
     this.isPrototype = isProto || false; // optional
     CustomReporterBlockMorph.uber.init.call(this, isPredicate, true); // sil.
     this.category = definition.category;
+    this.storedTranslations = null; // transient - only for "wishes"
     this.variables = new VariableFrame();
     this.initializeVariables();
     this.selector = 'evaluateCustomBlock';
@@ -1942,6 +2043,7 @@ BlockEditorMorph.prototype.init = function (definition, target) {
 
     // additional properties:
     this.definition = definition;
+    this.translations = definition.translationsAsText();
     this.handle = null;
 
     // initialize inherited properties:
@@ -2161,6 +2263,8 @@ BlockEditorMorph.prototype.updateDefinition = function () {
     this.definition.declarations = this.prototypeSlots();
     this.definition.variableNames = this.variableNames();
     this.definition.scripts = [];
+    this.definition.updateTranslations(this.translations);
+    this.definition.cachedTranslation = null;
     this.definition.editorDimensions = this.bounds.copy();
     this.definition.cachedIsRecursive = null; // flush the cache, don't update
 
@@ -2245,6 +2349,32 @@ BlockEditorMorph.prototype.variableNames = function () {
         this.body.contents.children,
         function (c) {return c instanceof PrototypeHatBlockMorph; }
     ).variableNames();
+};
+
+// BlockEditorMorph translation
+
+BlockEditorMorph.prototype.editTranslations = function () {
+    var myself = this,
+    	block = this.definition.blockInstance();
+    block.addShadow(new Point(3, 3));
+    new DialogBoxMorph(
+        myself,
+        function (text) {
+            myself.translations = text;
+        },
+        myself
+    ).promptCode(
+        'Custom Block Translations',
+        myself.translations,
+        myself.world(),
+        block.fullImage(),
+        myself.definition.abstractBlockSpec() +
+            '\n\n' +
+            localize('Enter one translation per line. ' +
+                'use colon (":") as lang/spec delimiter\n' +
+                'and underscore ("_") as placeholder for an input, ' +
+                'e.g.:\n\nen:say _ for _ secs')
+    );
 };
 
 // BlockEditorMorph layout
