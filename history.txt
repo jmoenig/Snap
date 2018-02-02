@@ -3882,6 +3882,9 @@ Fixes:
 * GUI: encode recorded sounds to base64
 * snap.html: added version queries to script urls
 
+180202
+------
+* Libraries: Crayons library, thanks, Brian!
 
 v4.1.1 New Features:
 * translation support for custom blocks
@@ -3892,6 +3895,7 @@ v4.1.1 New Features:
 * new dial widget POINT IN DIRECTION's drop-down menu
 * new "rotate" option for sprite context menu
 * new sound recorder, thanks, Bernat!
+* new "Crayons" library, thanks, Brian!
 
 Notable Changes:
 * global and local variables are now separat in the palette, each sorted alphabetically, local vars marked with location pin (only in palette)
