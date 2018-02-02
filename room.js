@@ -342,8 +342,14 @@ RoomMorph.prototype.updateRoles = function(roleInfo) {
     return changed;
 };
 
+RoomMorph.prototype.getInnerHeight = function() {
+    // Get the height of the morph w/o the owner, collaborator labels
+    return (this.ownerLabel.top() - 10) - this.top();
+};
+
 RoomMorph.prototype.getRadius = function() {
-    return Math.min(this.width(), this.height())/2;
+    var innerHeight = this.getInnerHeight();
+    return Math.min(this.width(), innerHeight)/2;
 };
 
 RoomMorph.prototype.getRoleSize = function() {
@@ -351,7 +357,7 @@ RoomMorph.prototype.getRoleSize = function() {
     // Given the angle, compute the distance between the points
     var roleCount = this.getRoles().length,
         angle = (2*Math.PI)/roleCount,
-        radius = Math.min(this.width(), this.height())/2,
+        radius = this.getRadius(),
         maxRoleSize = 150,
         minRoleGapSize = 10,
         startPoint,
@@ -379,33 +385,41 @@ RoomMorph.prototype.fixLayout = function() {
         angleSize = 2*Math.PI/roles.length,
         angle = -Math.PI / 2 + this.index*angleSize,
         len = RoleMorph.COLORS.length,
-        radius = this.getRadius(),
+        radius,
         position,
-        circleSize = this.getRoleSize(),
+        circleSize,
+        center,
         color,
         x,y,
         role;
 
-    // Draw the role
+    this.collabList.setCenter(this.center());
+    this.collabList.setBottom(this.bottom() - 25);
+    this.ownerLabel.setCenter(this.center());
+    this.ownerLabel.setBottom(this.collabList.top() - 10);
+
+    // Adjust the center...
+    center = new Point(
+        this.center().x,
+        this.top() + this.getInnerHeight()/2
+    );
+    this.roomName.setCenter(center);
+
+    radius = this.getRadius();
+    circleSize = this.getRoleSize();
     for (var i = 0; i < roles.length; i++) {
         // position the label
         role = roles[i];
         angle = -Math.PI / 2 + i*angleSize,
         x = 0.65 * radius * Math.cos(angle);
         y = 0.65 * radius * Math.sin(angle);
-        position = this.center().add(new Point(x, y));
+        position = center.add(new Point(x, y));
         color = RoleMorph.COLORS[i%len];
 
         role.setExtent(new Point(circleSize, circleSize));
         role.setCenter(position);
         role.setColor(color);
     }
-
-    this.roomName.setCenter(this.center());
-    this.collabList.setCenter(this.center());
-    this.collabList.setBottom(this.bottom() - 25);
-    this.ownerLabel.setCenter(this.center());
-    this.ownerLabel.setBottom(this.collabList.top() - 10);
 
     // Update the positions of the message morphs
     this.displayedMsgMorphs.forEach(function(morph) {
