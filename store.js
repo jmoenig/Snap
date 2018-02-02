@@ -7,7 +7,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2017 by Jens Mönig
+    Copyright (C) 2018 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -61,7 +61,7 @@ normalizeCanvas, contains*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2017-October-04';
+modules.store = '2018-January-18';
 
 
 // XML_Serializer ///////////////////////////////////////////////////////
@@ -406,7 +406,7 @@ SnapSerializer.prototype.rawLoadProjectModel = function (xmlNode) {
     StageMorph.prototype.dimensions = new Point(480, 360);
     if (model.stage.attributes.width) {
         StageMorph.prototype.dimensions.x =
-            Math.max(+model.stage.attributes.width, 480);
+            Math.max(+model.stage.attributes.width, 240);
     }
     if (model.stage.attributes.height) {
         StageMorph.prototype.dimensions.y =
@@ -875,7 +875,7 @@ SnapSerializer.prototype.loadCustomBlocks = function (
     // private
     var myself = this;
     element.children.forEach(function (child) {
-        var definition, names, inputs, vars, header, code, comment, i;
+        var definition, names, inputs, vars, header, code, trans, comment, i;
         if (child.tag !== 'block-definition') {
             return;
         }
@@ -940,6 +940,11 @@ SnapSerializer.prototype.loadCustomBlocks = function (
         code = child.childNamed('code');
         if (code) {
             definition.codeMapping = code.contents;
+        }
+
+        trans = child.childNamed('translations');
+        if (trans) {
+            definition.updateTranslations(trans.contents);
         }
 
         comment = child.childNamed('comment');
@@ -1135,9 +1140,13 @@ SnapSerializer.prototype.loadBlock = function (model, isReporter, object) {
             // lookup in inherited methods
             info = detect(receiver.customBlocks, function (block) {
                 return block.blockSpec() === model.attributes.s;
-            }) || detect(receiver.inheritedMethodsCache, function (block) {
-                return block.blockSpec() === model.attributes.s;
-            });
+            }) || (
+            	receiver.inheritedMethodsCache ?
+                	detect(receiver.inheritedMethodsCache, function (block) {
+                    	return block.blockSpec() === model.attributes.s;
+                	})
+          		: null
+          	);
         }
         if (!info) {
             return this.obsoleteBlock(isReporter);
@@ -1233,6 +1242,7 @@ SnapSerializer.prototype.loadInput = function (model, input, block, object) {
 SnapSerializer.prototype.loadValue = function (model, object) {
     // private
     var v, i, lst, items, el, center, image, name, audio, option, bool, origin,
+    	wish, def,
         myself = this;
 
     function record() {
@@ -1270,6 +1280,10 @@ SnapSerializer.prototype.loadValue = function (model, object) {
         bool = model.childNamed('bool');
         if (bool) {
             return this.loadValue(bool);
+        }
+        wish = model.childNamed('wish');
+        if (wish) {
+            return this.loadValue(wish);
         }
         return model.contents;
     case 'bool':
@@ -1367,7 +1381,7 @@ SnapSerializer.prototype.loadValue = function (model, object) {
             el = model.childNamed('block') ||
                 model.childNamed('custom-block');
             if (el) {
-                v.expression = this.loadBlock(el, origin);
+                v.expression = this.loadBlock(el, null, origin);
             } else {
                 el = model.childNamed('l');
                 if (el) {
@@ -1488,6 +1502,13 @@ SnapSerializer.prototype.loadValue = function (model, object) {
         }
         record();
         return v;
+    case 'wish':
+    	def = new CustomBlockDefinition(model.attributes.s);
+     	def.type = model.attributes.type;
+      	def.category = model.attributes.category;
+       	def.storedSemanticSpec = model.attributes.s;
+        def.updateTranslations(model.contents);
+        return def.blockInstance(true); // include translations
     }
     return undefined;
 };
@@ -1924,7 +1945,7 @@ CustomCommandBlockMorph.prototype.toBlockXML = function (serializer) {
     var scope = this.isGlobal ? undefined : 'local';
     return serializer.format(
         '<custom-block s="@"%>%%%</custom-block>',
-        this.blockSpec,
+        this.semanticSpec,
         this.isGlobal ?
                 '' : serializer.format(' scope="@"', scope),
         serializer.store(this.inputs()),
@@ -1945,7 +1966,6 @@ CustomReporterBlockMorph.prototype.toBlockXML
 CustomBlockDefinition.prototype.toXML = function (serializer) {
     var myself = this;
 
-
     function encodeScripts(array) {
         return array.reduce(function (xml, element) {
             if (element instanceof BlockMorph) {
@@ -1964,6 +1984,7 @@ CustomBlockDefinition.prototype.toXML = function (serializer) {
             (this.variableNames.length ? '<variables>%</variables>' : '@') +
             '<header>@</header>' +
             '<code>@</code>' +
+            '<translations>@</translations>' +
             '<inputs>%</inputs>%%' +
             '</block-definition>',
         this.spec,
@@ -1974,6 +1995,7 @@ CustomBlockDefinition.prototype.toXML = function (serializer) {
                 serializer.store(new List(this.variableNames)) : ''),
         this.codeHeader || '',
         this.codeMapping || '',
+        this.translationsAsText(),
         Object.keys(this.declarations).reduce(function (xml, decl) {
                 return xml + serializer.format(
                     '<input type="@"$>$%</input>',
@@ -2008,6 +2030,16 @@ BooleanSlotMorph.prototype.toXML = function () {
 };
 
 InputSlotMorph.prototype.toXML = function (serializer) {
+	if (this.selectedBlock) {
+ 		return serializer.format(
+        	'<l><wish s="@" type="@" category="@">@</wish></l>',
+            this.selectedBlock.semanticSpec,
+         	this.selectedBlock instanceof CommandBlockMorph ? 'command'
+          		: (this.selectedBlock.isPredicate ? 'predicate' : 'reporter'),
+            this.selectedBlock.category,
+            this.selectedBlock.storedTranslations
+        );
+ 	}
     if (this.constant) {
         return serializer.format(
             '<l><option>$</option></l>',

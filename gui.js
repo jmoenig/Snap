@@ -9,7 +9,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2017 by Jens Mönig
+    Copyright (C) 2018 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -71,11 +71,11 @@ fontHeight, hex_sha512, sb, CommentMorph, CommandBlockMorph, BooleanSlotMorph,
 BlockLabelPlaceHolderMorph, Audio, SpeechBubbleMorph, ScriptFocusMorph,
 XML_Element, WatcherMorph, BlockRemovalDialogMorph, saveAs, TableMorph,
 isSnapObject, isRetinaEnabled, disableRetinaSupport, enableRetinaSupport,
-isRetinaSupported, SliderMorph, Animation*/
+isRetinaSupported, SliderMorph, Animation, BoxMorph, MediaRecorder*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2017-October-22';
+modules.gui = '2018-February-01';
 
 // Declarations
 
@@ -301,7 +301,8 @@ IDE_Morph.prototype.openIn = function (world) {
     // prevent non-DialogBoxMorphs from being dropped
     // onto the World in user-mode
     world.reactToDropOf = function (morph) {
-        if (!(morph instanceof DialogBoxMorph)) {
+        if (!(morph instanceof DialogBoxMorph ||
+        		(morph instanceof MenuMorph))) {
             if (world.hand.grabOrigin) {
                 morph.slideBackTo(world.hand.grabOrigin);
             } else {
@@ -482,7 +483,11 @@ IDE_Morph.prototype.openIn = function (world) {
             SnapCloud.getPublicProject(
                 SnapCloud.encodeDict(dict),
                 function (projectData) {
-                    window.open('data:text/xml,' + projectData);
+                	myself.saveXMLAs(projectData, dict.ProjectName);
+                 	myself.showMessage(
+                  	   'Saved project\n' + dict.ProjectName,
+                      	2
+                 	);
                 },
                 this.cloudError()
             );
@@ -2291,6 +2296,25 @@ IDE_Morph.prototype.newCamSprite = function () {
     camDialog.popUp(this.world());
 };
 
+IDE_Morph.prototype.recordNewSound = function () {
+    var soundRecorder,
+        myself = this;
+
+    soundRecorder = new SoundRecorderDialogMorph(
+        function (sound) {
+            if (sound) {
+                myself.currentSprite.addSound(
+                	sound,
+                    myself.newSoundName('recording')
+                );
+                myself.spriteBar.tabBar.tabTo('sounds');
+                myself.hasChangedMedia = true;
+            }
+        });
+
+    soundRecorder.popUp(this.world());
+};
+
 IDE_Morph.prototype.duplicateSprite = function (sprite) {
     var duplicate = sprite.fullCopy();
     duplicate.setPosition(this.world().hand.position());
@@ -2314,7 +2338,9 @@ IDE_Morph.prototype.instantiateSprite = function (sprite) {
 
 IDE_Morph.prototype.removeSprite = function (sprite) {
     var idx, myself = this;
-    sprite.parts.forEach(function (part) {myself.removeSprite(part); });
+    sprite.parts.slice().forEach(function (part) {
+    	myself.removeSprite(part);
+    });
     idx = this.sprites.asArray().indexOf(sprite) + 1;
     this.stage.threads.stopAllForReceiver(sprite);
     sprite.corpsify();
@@ -2339,17 +2365,37 @@ IDE_Morph.prototype.removeSprite = function (sprite) {
     this.selectSprite(this.currentSprite);
 };
 
+IDE_Morph.prototype.newSoundName = function (name) {
+    var lastSound =
+            this.currentSprite.sounds.at(
+                this.currentSprite.sounds.length());
+
+    return this.newName(
+        lastSound.name || name,
+        this.currentSprite.sounds.asArray().map(
+            function (eachSound) {
+                return eachSound.name;
+            }
+        )
+    );
+};
+
 IDE_Morph.prototype.newSpriteName = function (name, ignoredSprite) {
-    var ix = name.indexOf('('),
-        stem = (ix < 0) ? name : name.substring(0, ix),
-        count = 1,
-        newName = stem,
-        all = this.sprites.asArray().concat(this.stage).filter(
+    var all = this.sprites.asArray().concat(this.stage).filter(
             function (each) {return each !== ignoredSprite; }
         ).map(
             function (each) {return each.name; }
         );
-    while (contains(all, newName)) {
+    return this.newName(name, all);
+};
+
+IDE_Morph.prototype.newName = function (name, elements) {
+    var ix = name.indexOf('('),
+        stem = (ix < 0) ? name : name.substring(0, ix),
+        count = 1,
+        newName = stem;
+
+    while (contains(elements, newName)) {
         count += 1;
         newName = stem + '(' + count + ')';
     }
@@ -3382,8 +3428,8 @@ IDE_Morph.prototype.aboutSnap = function () {
         module, btn1, btn2, btn3, btn4, licenseBtn, translatorsBtn,
         world = this.world();
 
-    aboutTxt = 'Snap! 4.1\nBuild Your Own Blocks\n\n'
-        + 'Copyright \u24B8 2017 Jens M\u00F6nig and '
+    aboutTxt = 'Snap! 4.1.1 - dev -\nBuild Your Own Blocks\n\n'
+        + 'Copyright \u24B8 2018 Jens M\u00F6nig and '
         + 'Brian Harvey\n'
         + 'jens@moenig.org, bh@cs.berkeley.edu\n\n'
 
@@ -4343,9 +4389,7 @@ IDE_Morph.prototype.openProject = function (name) {
 
 IDE_Morph.prototype.setURL = function (str) {
     // Set the URL to a project's XML contents
-    if (this.projectsInURLs) {
-        location.hash = str;
-    }
+    location.hash = this.projectsInURLs ? str : '';
 };
 
 IDE_Morph.prototype.saveFileAs = function (
@@ -4450,7 +4494,8 @@ IDE_Morph.prototype.switchToUserMode = function () {
     // prevent non-DialogBoxMorphs from being dropped
     // onto the World in user-mode
     world.reactToDropOf = function (morph) {
-        if (!(morph instanceof DialogBoxMorph)) {
+        if (!(morph instanceof DialogBoxMorph ||
+        		(morph instanceof MenuMorph))) {
             if (world.hand.grabOrigin) {
                 morph.slideBackTo(world.hand.grabOrigin);
             } else {
@@ -4983,7 +5028,7 @@ IDE_Morph.prototype.userSetStageSize = function () {
 IDE_Morph.prototype.setStageExtent = function (aPoint) {
     var myself = this,
         world = this.world(),
-        ext = aPoint.max(new Point(480, 180));
+        ext = aPoint.max(new Point(240, 180));
 
     function zoom() {
         myself.step = function () {
@@ -7199,22 +7244,26 @@ SpriteIconMorph.prototype.reactToDropOf = function (morph, hand) {
 };
 
 SpriteIconMorph.prototype.copyStack = function (block) {
-    var dup = block.fullCopy(),
-        y = Math.max(this.object.scripts.children.map(function (stack) {
+    var sprite = this.object,
+    	dup = block.fullCopy(),
+        y = Math.max(sprite.scripts.children.map(function (stack) {
             return stack.fullBounds().bottom();
-        }).concat([this.object.scripts.top()]));
+        }).concat([sprite.scripts.top()]));
 
-    dup.setPosition(new Point(this.object.scripts.left() + 20, y + 20));
-    this.object.scripts.add(dup);
+    dup.setPosition(new Point(sprite.scripts.left() + 20, y + 20));
+    sprite.scripts.add(dup);
     dup.allComments().forEach(function (comment) {
         comment.align(dup);
     });
-    this.object.scripts.adjustBounds();
+    sprite.scripts.adjustBounds();
 
-    // delete all custom blocks pointing to local definitions
-    // under construction...
+    // delete all local custom blocks (methods) that the receiver
+    // doesn't understand
     dup.allChildren().forEach(function (morph) {
-        if (morph.definition && !morph.definition.isGlobal) {
+	    if (morph.isCustomBlock &&
+        		!morph.isGlobal &&
+        		!sprite.getMethod(morph.blockSpec)
+        ) {
             morph.deleteBlock();
         }
     });
@@ -8104,7 +8153,7 @@ SoundIconMorph.prototype.renameSound = function () {
 
 SoundIconMorph.prototype.removeSound = function () {
     var jukebox = this.parentThatIsA(JukeboxMorph),
-        idx = this.parent.children.indexOf(this);
+        idx = this.parent.children.indexOf(this + 1);
     jukebox.removeSound(idx);
 };
 
@@ -8173,7 +8222,9 @@ JukeboxMorph.prototype.updateList = function () {
         oldFlag = Morph.prototype.trackChanges,
         icon,
         template,
-        txt;
+        txt,
+        ide = this.sprite.parentThatIsA(IDE_Morph),
+        recordButton;
 
     this.changed();
     oldFlag = Morph.prototype.trackChanges;
@@ -8194,7 +8245,31 @@ JukeboxMorph.prototype.updateList = function () {
     txt.setColor(SpriteMorph.prototype.paletteTextColor);
     txt.setPosition(new Point(x, y));
     this.addContents(txt);
-    y = txt.bottom() + padding;
+
+    recordButton = new PushButtonMorph(
+        ide,
+        'recordNewSound',
+        new SymbolMorph('circleSolid', 15)
+    );
+    recordButton.padding = 0;
+    recordButton.corner = 12;
+    recordButton.color = IDE_Morph.prototype.groupColor;
+    recordButton.highlightColor = IDE_Morph.prototype.frameColor.darker(50);
+    recordButton.pressColor = recordButton.highlightColor;
+    recordButton.labelMinExtent = new Point(36, 18);
+    recordButton.labelShadowOffset = new Point(-1, -1);
+    recordButton.labelShadowColor = recordButton.highlightColor;
+    recordButton.labelColor = TurtleIconMorph.prototype.labelColor;
+    recordButton.contrast = this.buttonContrast;
+    recordButton.drawNew();
+    recordButton.hint = 'Record a new sound';
+    recordButton.fixLayout();
+    recordButton.label.setColor(new Color(255, 20, 20));
+    recordButton.setPosition(txt.bottomLeft().add(new Point(0, padding * 2)));
+
+    this.addContents(recordButton);
+
+    y = recordButton.bottom() + padding;
 
     this.sprite.sounds.asArray().forEach(function (sound) {
         template = icon = new SoundIconMorph(sound, template);
@@ -8663,4 +8738,211 @@ CamSnapshotDialogMorph.prototype.close = function () {
         this.videoElement.remove();
     }
     CamSnapshotDialogMorph.uber.destroy.call(this);
+};
+
+// SoundRecorderDialogMorph ////////////////////////////////////////////////////
+
+/*
+    I am a dialog morph that lets users record sound snippets for their
+    sprites or Stage.
+*/
+
+// SoundRecorderDialogMorph inherits from DialogBoxMorph:
+
+SoundRecorderDialogMorph.prototype = new DialogBoxMorph();
+SoundRecorderDialogMorph.prototype.constructor = SoundRecorderDialogMorph;
+SoundRecorderDialogMorph.uber = DialogBoxMorph.prototype;
+
+// SoundRecorderDialogMorph instance creation
+
+function SoundRecorderDialogMorph(onAccept) {
+    this.init(onAccept);
+}
+
+SoundRecorderDialogMorph.prototype.init = function (onAccept) {
+    var myself = this;
+    this.padding = 10;
+    this.accept = onAccept;
+
+    this.mediaRecorder = null; // an HTML5 MediaRecorder object
+    this.audioElement = document.createElement('audio');
+    this.audioElement.hidden = true;
+    this.audioElement.onended = function (event) {
+        myself.stop();
+    };
+    document.body.appendChild(this.audioElement);
+
+    this.recordButton = null;
+    this.stopButton = null;
+    this.playButton = null;
+    this.progressBar = new BoxMorph();
+
+    SoundRecorderDialogMorph.uber.init.call(this);
+    this.labelString = 'Sound Recorder';
+    this.createLabel();
+    this.buildContents();
+};
+
+SoundRecorderDialogMorph.prototype.buildContents = function () {
+    var myself = this,
+        audioChunks = [];
+
+    this.recordButton = new PushButtonMorph(
+        this,
+        'record',
+        new SymbolMorph('circleSolid', 10)
+    );
+    this.recordButton.drawNew();
+    this.recordButton.fixLayout();
+
+    this.stopButton = new PushButtonMorph(
+        this,
+        'stop',
+        new SymbolMorph('rectangleSolid', 10)
+    );
+    this.stopButton.drawNew();
+    this.stopButton.fixLayout();
+
+    this.playButton = new PushButtonMorph(
+        this,
+        'play',
+        new SymbolMorph('pointRight', 10)
+    );
+    this.playButton.drawNew();
+    this.playButton.fixLayout();
+
+    this.buildProgressBar();
+
+    this.addBody(new AlignmentMorph('row', this.padding));
+    this.body.add(this.recordButton);
+    this.body.add(this.stopButton);
+    this.body.add(this.playButton);
+    this.body.add(this.progressBar);
+
+    this.body.fixLayout();
+
+    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+        navigator.mediaDevices.getUserMedia({ audio: true })
+            .then(function (stream) {
+                myself.mediaRecorder = new MediaRecorder(stream);
+                myself.mediaRecorder.ondataavailable = function (event) {
+                    audioChunks.push(event.data);
+                };
+                myself.mediaRecorder.onstop = function (event) {
+					var buffer = new Blob(audioChunks),
+						reader = new window.FileReader();
+					reader.readAsDataURL(buffer);
+					reader.onloadend = function() {
+   						var base64 = reader.result;
+    					base64 = 'data:audio/ogg;base64,' +
+         	               base64.split(',')[1];
+						myself.audioElement.src = base64;
+                    	myself.audioElement.load();
+                    	audioChunks = [];
+					};
+                };
+            });
+    }
+
+    this.addButton('ok', 'Save');
+    this.addButton('cancel', 'Cancel');
+
+    this.fixLayout();
+    this.drawNew();
+};
+
+SoundRecorderDialogMorph.prototype.buildProgressBar = function () {
+    var line = new Morph(),
+        myself = this;
+
+    this.progressBar.setExtent(new Point(150, 20));
+    this.progressBar.setColor(new Color(200, 200, 200));
+    this.progressBar.setBorderWidth(1);
+    this.progressBar.setBorderColor(new Color(150, 150, 150));
+
+    line.setExtent(new Point(130, 2));
+    line.setColor(new Color(50, 50, 50));
+    line.setCenter(this.progressBar.center());
+    this.progressBar.add(line);
+
+    this.progressBar.indicator = new Morph();
+    this.progressBar.indicator.setExtent(new Point(5, 15));
+    this.progressBar.indicator.setColor(new Color(50, 200, 50));
+    this.progressBar.indicator.setCenter(line.leftCenter());
+
+    this.progressBar.add(this.progressBar.indicator);
+
+    this.progressBar.setPercentage = function (percentage) {
+        this.indicator.setLeft(
+            line.left() +
+            (line.width() / 100 * percentage) -
+            this.indicator.width() / 2
+        );
+    };
+
+    this.progressBar.step = function () {
+        if (myself.audioElement.duration) {
+            this.setPercentage(
+                myself.audioElement.currentTime /
+                myself.audioElement.duration * 100);
+        } else {
+            this.setPercentage(0);
+        }
+    };
+};
+
+SoundRecorderDialogMorph.prototype.record = function () {
+    this.mediaRecorder.start();
+    this.recordButton.label.setColor(new Color(255, 0, 0));
+    this.playButton.label.setColor(new Color(0, 0, 0));
+};
+
+SoundRecorderDialogMorph.prototype.stop = function () {
+    if (this.mediaRecorder && this.mediaRecorder.state !== 'inactive') {
+        this.mediaRecorder.stop();
+    }
+
+    this.audioElement.pause();
+    this.audioElement.currentTime = 0;
+
+    this.recordButton.label.setColor(new Color(0, 0, 0));
+    this.playButton.label.setColor(new Color(0, 0, 0));
+};
+
+SoundRecorderDialogMorph.prototype.play = function () {
+    this.stop();
+    this.audioElement.oncanplaythrough = function () {
+        this.play();
+        this.oncanplaythrough = nop;
+    };
+    this.playButton.label.setColor(new Color(0, 255, 0));
+};
+
+SoundRecorderDialogMorph.prototype.ok = function () {
+    var myself = this;
+    this.stop();
+    this.audioElement.oncanplaythrough = function () {
+        if (this.duration && this.duration !== Infinity) {
+            myself.accept(this);
+            this.oncanplaythrough = nop;
+            myself.destroy();
+        } else {
+            // For some reason, we need to play the sound
+            // at least once to get its duration.
+            myself.buttons.children.forEach(function (button) {
+                button.disable();
+            });
+            this.play();
+        }
+    };
+
+};
+
+SoundRecorderDialogMorph.prototype.destroy = function () {
+    this.stop();
+    this.audioElement.remove();
+    if (this.mediaRecorder) {
+        this.mediaRecorder.stream.getTracks()[0].stop();
+    }
+    SoundRecorderDialogMorph.uber.destroy.call(this);
 };

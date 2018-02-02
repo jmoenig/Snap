@@ -6,7 +6,7 @@
 
     written by Jens Mönig
 
-    Copyright (C) 2017 by Jens Mönig
+    Copyright (C) 2018 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org', // optional
     'last_changed':
-        '2017-10-20', // this, too, will appear in the Translators tab
+        '2018-01-25', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -445,6 +445,10 @@ SnapTranslator.dict.de = {
         'vom Mauszeiger betreten',
     'mouse-departed':
         'vom Mauszeiger verlassen',
+    'scrolled-down':
+    	'nach unten gescrollt',
+    'scrolled-up':
+        'nach oben gescrollt',
     'when %b':
         'Wenn %b',
     'when I receive %msgHat':
@@ -539,8 +543,10 @@ SnapTranslator.dict.de = {
         'Maustaste gedr\u00fcckt?',
     'key %key pressed?':
         'Taste %key gedr\u00fcckt?',
-    'distance to %dst':
-        'Entfernung von %dst',
+    '%rel to %dst':
+        '%rel zu %dst',
+    'distance':
+    	'Entfernung',
     'reset timer':
         'starte Stoppuhr neu',
     'timer':
@@ -963,6 +969,8 @@ SnapTranslator.dict.de = {
         'Angelpunkt',
     'edit the costume\'s\nrotation center':
         'Drehpunkt des Kostüms\nanzeigen und verschieben',
+    'rotate':
+    	'Drehen',
     'detach from':
         'Abtrennen von',
     'detach all parts':

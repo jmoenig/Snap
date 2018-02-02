@@ -64,7 +64,9 @@
     Mar 22 - fixed automatic rotation center point mechanism (Jens)
     May 10 - retina display support adjustments (Jens)
     2017
-    April 10 - getGlobalPixelColor adjustment for Chrome & retina (Jens)
+    Apr 10 - getGlobalPixelColor adjustment for Chrome & retina (Jens)
+    2018
+    Jan 22 - floodfill alpha tweak (Bernat)
 */
 
 /*global Point, Rectangle, DialogBoxMorph, AlignmentMorph, PushButtonMorph,
@@ -75,7 +77,7 @@ StageMorph, isNil*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.paint = '2017-April-10';
+modules.paint = '2018-January-22';
 
 // Declarations
 
@@ -772,7 +774,7 @@ PaintCanvasMorph.prototype.floodfill = function (sourcepoint) {
     if (sourcecolor[0] === this.settings.primarycolor.r &&
             sourcecolor[1] === this.settings.primarycolor.g &&
             sourcecolor[2] === this.settings.primarycolor.b &&
-            sourcecolor[3] === this.settings.primarycolor.a) {
+            sourcecolor[3] === this.settings.primarycolor.a * 255) {
         return;
     }
     if (sourcecolor[3] === 0 && this.settings.primarycolor.a === 0) {

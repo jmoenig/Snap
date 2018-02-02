@@ -1,4 +1,4 @@
-BYOB4 (Snap) history
+BYOB4 (Snap!) history
 ---------------------
 110511
 ------
@@ -3772,3 +3772,151 @@ Fixes:
 * made block vars transient for block libraries
 * keep “undo” and “redo” buttons at the same location
 * fixed SVG encoding for exporting vector costumes
+
+171028
+------
+* Store: fixed a glitch when loading method blocks stored in sprite-local vars
+* Objects: sped up "turbo" mode frame rate (slowing down "turbo" but making it more generally usable)
+* Chinese and Catalan translation updates
+
+=== v4.1.0.1 maintenance release ===
+
+171028
+------
+* Store: fixed a glitch that raised an error instead of creating an “obsolete” block
+
+=== v4.1.0.2 maintenance release ===
+
+171115
+------
+* Portuguese & Polish translation updates, thanks, Witek and Manuel!!
+* escape xml attribute contents, thanks, Brian Broll!
+* changed minimum stage width to 240
+* new Audio Comp library for Guzdial-style sound samples fun
+
+=== v4.1.0.3 maintenance release ===
+
+171116
+------
+* Threads: suppress "exit" context when forking a process while single-stepping, this avoids a false "reporter didn't report" error message
+* Blocks: avoid coloring the block-highlight when re-coloring a syntax element, this prevents highlighted blocks inside LAUNCH statements to expand when repeatedly single-stepped.
+
+=== v4.1.0.4 maintenance release ===
+
+171126
+------
+* GUI: fixed #1933 - avoid creating "obsolete" blocks by not copying method blocks into sprites that don't understand them
+* Store: fixed #1937 - allow stage width to be a minimum of 240 pixels
+
+=== v4.1.0.5 maintenance release ===
+
+*** in development ***
+
+171201
+------
+* GUI: started development on v 4.1.1
+* BYOB, Store, Threads: Localization support for custom blocks (experimental)
+* Tools: German translation of tools (experimental)
+
+171212
+------
+* fixed #1963
+
+180102
+------
+* new "direction to..." primitive as variant of "distance to..." in "Sensing"
+
+180104
+------
+* Morphic: scroll menus if they are taller than the world
+* Morphic: added keyboard navigation for menus that scroll
+* added "width" and "height" selectors to Pixels library
+
+180104
+------
+* Objects: fixed #1979 - make sure to always re-focus the world-canvas
+
+180117
+------
+* Objects: made keyboard events always be thread safe (same as in Scratch nowadays)
+
+180118
+------
+* Blocks, Threads, BYOB, Store: included local methods in the OF-block's left drop-down menu
+
+180119
+------
+* merged a bunch of pull requests (unicode support for emojis, translation updates)
+
+180121
+------
+* Threads: fixed a scope-glitch in the new OF-block's drop-down mechanism
+* Blocks: made the OF-block auto-unringify when dropped on ring-slots
+* Blocks: disabled firing the Custom-Block-Dialog when accidentall clicking on a custom block definition script
+
+180122
+------
+* Morphic: fixed occasional stuck cursors, thanks, Bernat!
+* Paint: fixed a flood-fill alpha issue, thanks, Bernat!I
+* Blocks, GUI: minor fixes, contributed by the community
+* various Translation updates, contributed by the community
+* Blocks, Objects, Threads: separated global and local variables in the palette, marked local ones with location pin
+* Blocks, Objects: added scroll events, thanks, Bernat!
+
+180123
+------
+* fixed #1972, thanks, Joan!
+* Objects, GUI: When deleting a temporary clone, detach all its parts and delete the temporary ones
+
+180125
+------
+* Morphic: new DialMorph widget
+* Blocks: added dial widget to POINT IN DIRECTION's drop-down menu
+* Objects: added "rotate" option to Sprite context menu
+* Threads, Blocks: fixed Joan's fix for #1972, because it broke HOFs
+* new Sound Recorder, yay!! Thanks, Bernat!
+* Blocks: fixed a glitch in the error-bubble handling mechanism
+
+180201
+------
+* GUI: encode recorded sounds to base64
+* snap.html: added version queries to script urls
+
+180202
+------
+* Libraries: Crayons library, thanks, Brian!
+
+v4.1.1 New Features:
+* translation support for custom blocks
+* new "direction to..." primitive as variant of "distance to..." in "Sensing"
+* included local methods in the OF-block's left drop-down menu
+* added "width" and "height" selectors to Pixels library
+* added scroll events, thanks, Bernat!
+* new dial widget POINT IN DIRECTION's drop-down menu
+* new "rotate" option for sprite context menu
+* new sound recorder, thanks, Bernat!
+* new "Crayons" library, thanks, Brian!
+
+Notable Changes:
+* global and local variables are now separat in the palette, each sorted alphabetically, local vars marked with location pin (only in palette)
+* keyboard events are now always thread safe (the same as in Scratch nowadays)
+* the OF-block auto-unringifies when being dropped on ring-slots, such as in CALL
+* accidentally clicking on a custom block definition no longer fires up the Block Dialog
+
+Notable Fixes:
+* scroll menus if they are taller than the world
+* enabled color picker for pen trails on stage
+* track keyboard events after accepting ASK using the keyboard
+* improved support for emojis, thanks, Michael!
+* avoid occasional stuck text cursors, thanks, Bernat!
+* paint editor flood fill alpha issue, thanks, Bernat!
+* implicit parameter binding in visible stepping, thanks, Joan!
+* when deleting a temporary clone, detach all its parts and delete the temporary ones
+
+
+Translation Updates:
+* German
+* Greek
+* Turkish
+* Chinese
+* Spanish
