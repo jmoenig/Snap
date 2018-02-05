@@ -3888,6 +3888,7 @@ Fixes:
 
 180205
 ------
+* Russian translation update, thanks, temap!
 * release
 
 
@@ -3928,3 +3929,4 @@ Translation Updates:
 * Turkish
 * Chinese
 * Spanish
+* Russian
