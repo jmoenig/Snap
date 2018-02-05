@@ -174,10 +174,17 @@ NetsProcess.prototype.doSocketRequest = function (msgInfo) {
 // reply block
 NetsProcess.prototype.doSocketResponse = function (resource) {
     var ide = this.homeContext.receiver.parentThatIsA(IDE_Morph),
+        requestId,
+        srcId,
         contents;
 
-    var requestId = this.context.variables.getVar('__requestId__');
-    var srcId = this.context.variables.getVar('__srcId__');
+    try {
+        requestId = this.context.variables.getVar('__requestId__');
+        srcId = this.context.variables.getVar('__srcId__');
+    } catch (e) {
+        // Clean the error message
+        throw new Error(localize('Cannot find message to which to respond!'));
+    }
 
     // Create the message
     contents = {body: resource};
