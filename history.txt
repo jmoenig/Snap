@@ -3886,6 +3886,13 @@ Fixes:
 ------
 * Libraries: Crayons library, thanks, Brian!
 
+180205
+------
+* release
+
+
+=== v4.1.1 minor release ===
+
 v4.1.1 New Features:
 * translation support for custom blocks
 * new "direction to..." primitive as variant of "distance to..." in "Sensing"
@@ -3912,6 +3919,7 @@ Notable Fixes:
 * paint editor flood fill alpha issue, thanks, Bernat!
 * implicit parameter binding in visible stepping, thanks, Joan!
 * when deleting a temporary clone, detach all its parts and delete the temporary ones
+* new release protocol to avoid browser caching related version conflicts
 
 
 Translation Updates:
