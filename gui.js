@@ -6120,6 +6120,8 @@ ProjectDialogMorph.prototype.installCloudProjectList = function (pl) {
             myself.notesText.text = item.notes || '';
             myself.notesText.drawNew();
             myself.notesField.contents.adjustBounds();
+            myself.preview.texture = '';
+            myself.preview.drawNew();
             // we ask for the thumbnail when selecting a project
             SnapCloud.getThumbnail(
                 null, // username is implicit
