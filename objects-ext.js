@@ -4,7 +4,7 @@
    MessageFrame, BlockMorph, ToggleMorph, MessageCreatorMorph,
    VariableDialogMorph, SnapCloud, contains, List, CommandBlockMorph,
    MessageType, isNil, RingMorph, SnapActions, RoomEditorMorph, NetsBloxMorph,
-   SnapUndo, newCanvas, ReplayControls, copy*/
+   SnapUndo, newCanvas, ReplayControls, WatcherMorph */
 
 SpriteMorph.prototype.categories =
 [
@@ -258,6 +258,12 @@ SpriteMorph.prototype.initBlocks = function () {
         category: 'network',
         spec: 'costume from %rpcNames / %rpcActions with %s',
         defaults: ['GoogleTrends', '']
+    };
+
+    SpriteMorph.prototype.blocks.reportRPCError = {
+        type: 'reporter',
+        category: 'network',
+        spec: 'error'
     };
 
     // Network Messages
@@ -651,17 +657,17 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('receiveSocketMessage'));
         blocks.push(block('doSocketMessage'));
         blocks.push('-');
+
         blocks.push(block('doSocketRequest'));
         blocks.push(block('doSocketResponse'));
         blocks.push('-');
-        blocks.push(block('getProjectId'));
-        blocks.push(block('getProjectIds'));
 
         blocks.push(block('getJSFromRPCStruct'));
-        if (this.world().isDevMode) {
-            blocks.push(block('getCostumeFromRPC'));
-        }
+        blocks.push(watcherToggle('reportRPCError'));
+        blocks.push(block('reportRPCError'));
         blocks.push('-');
+        blocks.push(block('getProjectIds'));
+        blocks.push(block('getProjectId'));
 
         // Add custom message types
         button = new PushButtonMorph(
@@ -1233,15 +1239,13 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('doSocketRequest'));
         blocks.push(block('doSocketResponse'));
         blocks.push('-');
-        blocks.push(block('getProjectId'));
-        blocks.push(block('getProjectIds'));
-        blocks.push('-');
 
         blocks.push(block('getJSFromRPCStruct'));
-        if (this.world().isDevMode) {
-            blocks.push(block('getCostumeFromRPC'));
-        }
+        blocks.push(watcherToggle('reportRPCError'));
+        blocks.push(block('reportRPCError'));
         blocks.push('-');
+        blocks.push(block('getProjectIds'));
+        blocks.push(block('getProjectId'));
 
         // Add custom message types
         button = new PushButtonMorph(
@@ -1713,3 +1717,18 @@ ReplayControls.prototype.applyEvent = function(event, next) {
     }
 };
 
+SpriteMorph.prototype.reportRPCError = function () {
+    return this.parentThatIsA(StageMorph).rpcError;
+};
+
+StageMorph.prototype.reportRPCError = function () {
+    return this.rpcError;
+};
+
+WatcherMorph.prototype._isGlobal =
+    WatcherMorph.prototype.isGlobal;
+
+WatcherMorph.prototype.isGlobal = function (selector) {
+    return selector === 'reportRPCError' ||
+        WatcherMorph.prototype._isGlobal.call(this, selector);
+};

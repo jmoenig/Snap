@@ -238,6 +238,7 @@ NetsProcess.prototype.callRPC = function (rpc, params, noCache) {
     var url = this.createRPCUrl(rpc),
         response,
         contentType,
+        stage,
         image;
 
     if (noCache) {
@@ -252,7 +253,9 @@ NetsProcess.prototype.callRPC = function (rpc, params, noCache) {
         this.rpcRequest.send(JSON.stringify(params));
     } else if (this.rpcRequest.readyState === 4) {
         if (this.rpcRequest.status === 0) {
-            throw new Error('Request too large.');
+            stage = this.homeContext.receiver.parentThatIsA(StageMorph);
+            stage.rpcError = 'Request too large';
+            return;
         }
         contentType = this.rpcRequest.getResponseHeader('content-type');
         if (contentType && contentType.indexOf('image') === 0) {
@@ -263,6 +266,12 @@ NetsProcess.prototype.callRPC = function (rpc, params, noCache) {
             return image;
         } else {  // assume text
             response = String.fromCharCode.apply(null, new Uint8Array(this.rpcRequest.response));
+            stage = this.homeContext.receiver.parentThatIsA(StageMorph);
+            if (this.rpcRequest.status < 200 || this.rpcRequest.status > 299) {
+                stage.rpcError = response;
+            } else {
+                stage.rpcError = null;
+            }
             this.rpcRequest = null;
             return response;
         }
