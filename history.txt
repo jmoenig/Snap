@@ -3877,7 +3877,22 @@ Fixes:
 * new Sound Recorder, yay!! Thanks, Bernat!
 * Blocks: fixed a glitch in the error-bubble handling mechanism
 
+180201
+------
+* GUI: encode recorded sounds to base64
+* snap.html: added version queries to script urls
 
+180202
+------
+* Libraries: Crayons library, thanks, Brian!
+
+180205
+------
+* Russian translation update, thanks, temap!
+* release
+
+
+=== v4.1.1 minor release ===
 
 v4.1.1 New Features:
 * translation support for custom blocks
@@ -3888,6 +3903,7 @@ v4.1.1 New Features:
 * new dial widget POINT IN DIRECTION's drop-down menu
 * new "rotate" option for sprite context menu
 * new sound recorder, thanks, Bernat!
+* new "Crayons" library, thanks, Brian!
 
 Notable Changes:
 * global and local variables are now separat in the palette, each sorted alphabetically, local vars marked with location pin (only in palette)
@@ -3904,6 +3920,7 @@ Notable Fixes:
 * paint editor flood fill alpha issue, thanks, Bernat!
 * implicit parameter binding in visible stepping, thanks, Joan!
 * when deleting a temporary clone, detach all its parts and delete the temporary ones
+* new release protocol to avoid browser caching related version conflicts
 
 
 Translation Updates:
@@ -3912,3 +3929,4 @@ Translation Updates:
 * Turkish
 * Chinese
 * Spanish
+* Russian

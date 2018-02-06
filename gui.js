@@ -71,11 +71,11 @@ fontHeight, hex_sha512, sb, CommentMorph, CommandBlockMorph, BooleanSlotMorph,
 BlockLabelPlaceHolderMorph, Audio, SpeechBubbleMorph, ScriptFocusMorph,
 XML_Element, WatcherMorph, BlockRemovalDialogMorph, saveAs, TableMorph,
 isSnapObject, isRetinaEnabled, disableRetinaSupport, enableRetinaSupport,
-isRetinaSupported, SliderMorph, Animation, BoxMorph*/
+isRetinaSupported, SliderMorph, Animation, BoxMorph, MediaRecorder*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2018-January-25';
+modules.gui = '2018-February-05';
 
 // Declarations
 
@@ -2321,7 +2321,10 @@ IDE_Morph.prototype.recordNewSound = function () {
     soundRecorder = new SoundRecorderDialogMorph(
         function (sound) {
             if (sound) {
-                myself.currentSprite.addSound(sound, myself.newSoundName('recording'));
+                myself.currentSprite.addSound(
+                	sound,
+                    myself.newSoundName('recording')
+                );
                 myself.spriteBar.tabBar.tabTo('sounds');
                 myself.hasChangedMedia = true;
             }
@@ -3440,7 +3443,7 @@ IDE_Morph.prototype.aboutSnap = function () {
         module, btn1, btn2, btn3, btn4, licenseBtn, translatorsBtn,
         world = this.world();
 
-    aboutTxt = 'Snap! 4.1.1 - dev -\nBuild Your Own Blocks\n\n'
+    aboutTxt = 'Snap! 4.1.1\nBuild Your Own Blocks\n\n'
         + 'Copyright \u24B8 2018 Jens M\u00F6nig and '
         + 'Brian Harvey\n'
         + 'jens@moenig.org, bh@cs.berkeley.edu\n\n'
@@ -8934,15 +8937,17 @@ SoundRecorderDialogMorph.prototype.buildContents = function () {
                     audioChunks.push(event.data);
                 };
                 myself.mediaRecorder.onstop = function (event) {
-                    myself.audioElement.src =
-                        window.URL.createObjectURL(
-                           new Blob(
-                               audioChunks,
-                               {'type': 'audio/ogg; codecs=opus'}
-                           )
-                        );
-                    myself.audioElement.load();
-                    audioChunks = [];
+					var buffer = new Blob(audioChunks),
+						reader = new window.FileReader();
+					reader.readAsDataURL(buffer);
+					reader.onloadend = function() {
+   						var base64 = reader.result;
+    					base64 = 'data:audio/ogg;base64,' +
+         	               base64.split(',')[1];
+						myself.audioElement.src = base64;
+                    	myself.audioElement.load();
+                    	audioChunks = [];
+					};
                 };
             });
     }
