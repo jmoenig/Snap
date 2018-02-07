@@ -3810,8 +3810,6 @@ Fixes:
 
 === v4.1.0.5 maintenance release ===
 
-*** in development ***
-
 171201
 ------
 * GUI: started development on v 4.1.1
@@ -3891,7 +3889,6 @@ Fixes:
 * Russian translation update, thanks, temap!
 * release
 
-
 === v4.1.1 minor release ===
 
 v4.1.1 New Features:
@@ -3922,7 +3919,6 @@ Notable Fixes:
 * when deleting a temporary clone, detach all its parts and delete the temporary ones
 * new release protocol to avoid browser caching related version conflicts
 
-
 Translation Updates:
 * German
 * Greek
@@ -3934,3 +3930,21 @@ Translation Updates:
 === development ===
 * New cloud API
 * Russian
+
+*** in development ***
+
+180206
+------
+* GUI: start developing v4.1.2
+* Morphic: roll back temporary rectangle filling workaround for a bug in Chrome v57
+
+
+=== v4.1.2 features ===
+
+v4.1.2 New Features:
+
+Notable Changes:
+
+Notable Fixes:
+
+Translation Updates:
