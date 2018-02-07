@@ -71,11 +71,11 @@ fontHeight, hex_sha512, sb, CommentMorph, CommandBlockMorph, BooleanSlotMorph,
 BlockLabelPlaceHolderMorph, Audio, SpeechBubbleMorph, ScriptFocusMorph,
 XML_Element, WatcherMorph, BlockRemovalDialogMorph, saveAs, TableMorph,
 isSnapObject, isRetinaEnabled, disableRetinaSupport, enableRetinaSupport,
-isRetinaSupported, SliderMorph, Animation, BoxMorph*/
+isRetinaSupported, SliderMorph, Animation, BoxMorph, MediaRecorder*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2018-January-25';
+modules.gui = '2018-February-05';
 
 // Declarations
 
@@ -402,6 +402,7 @@ IDE_Morph.prototype.openIn = function (world) {
 
             // make sure to lowercase the username
             dict = SnapCloud.parseDict(location.hash.substr(9));
+            dict.Username = dict.Username.toLowerCase();
 
             SnapCloud.getPublicProject(
                 dict.ProjectName,
@@ -2320,7 +2321,10 @@ IDE_Morph.prototype.recordNewSound = function () {
     soundRecorder = new SoundRecorderDialogMorph(
         function (sound) {
             if (sound) {
-                myself.currentSprite.addSound(sound, myself.newSoundName('recording'));
+                myself.currentSprite.addSound(
+                	sound,
+                    myself.newSoundName('recording')
+                );
                 myself.spriteBar.tabBar.tabTo('sounds');
                 myself.hasChangedMedia = true;
             }
@@ -3439,7 +3443,7 @@ IDE_Morph.prototype.aboutSnap = function () {
         module, btn1, btn2, btn3, btn4, licenseBtn, translatorsBtn,
         world = this.world();
 
-    aboutTxt = 'Snap! 4.1.1 - dev -\nBuild Your Own Blocks\n\n'
+    aboutTxt = 'Snap! 4.1.1\nBuild Your Own Blocks\n\n'
         + 'Copyright \u24B8 2018 Jens M\u00F6nig and '
         + 'Brian Harvey\n'
         + 'jens@moenig.org, bh@cs.berkeley.edu\n\n'
@@ -5748,11 +5752,12 @@ ProjectDialogMorph.prototype.buildContents = function () {
     this.unshareButton = this.addButton('unshareProject', 'Unshare');
     this.shareButton.hide();
     this.unshareButton.hide();
+    /*
     this.publishButton = this.addButton('publishProject', 'Publish');
     this.unpublishButton = this.addButton('unpublishProject', 'Unpublish');
     this.publishButton.hide();
     this.unpublishButton.hide();
-
+    */
     this.deleteButton = this.addButton('deleteProject', 'Delete');
     this.addButton('cancel', 'Cancel');
 
@@ -5900,16 +5905,8 @@ ProjectDialogMorph.prototype.buildFilterField = function () {
 
         myself.listField.elements =
             myself.projectList.filter(function (aProject) {
-                var name,
-                    notes;
-
-                if (aProject.projectname) { // cloud
-                    name = aProject.projectname;
-                    notes = aProject.notes;
-                } else { // local or examples
-                    name = aProject.name;
+                var name = aProject.projectname || aProject.name,
                     notes = aProject.notes || '';
-                }
 
                 return name.toLowerCase().indexOf(text.toLowerCase()) > -1 ||
                     notes.toLowerCase().indexOf(text.toLowerCase()) > -1;
@@ -6037,8 +6034,10 @@ ProjectDialogMorph.prototype.setSource = function (source) {
     this.body.add(this.listField);
     this.shareButton.hide();
     this.unshareButton.hide();
+    /*
     this.publishButton.hide();
     this.unpublishButton.hide();
+    */
     if (this.source === 'local') {
         this.deleteButton.show();
     } else { // examples
@@ -6121,6 +6120,8 @@ ProjectDialogMorph.prototype.installCloudProjectList = function (pl) {
             myself.notesText.text = item.notes || '';
             myself.notesText.drawNew();
             myself.notesField.contents.adjustBounds();
+            myself.preview.texture = '';
+            myself.preview.drawNew();
             // we ask for the thumbnail when selecting a project
             SnapCloud.getThumbnail(
                 null, // username is implicit
@@ -6145,6 +6146,7 @@ ProjectDialogMorph.prototype.installCloudProjectList = function (pl) {
         if (item.ispublic) {
             myself.shareButton.hide();
             myself.unshareButton.show();
+            /*
             if (item.ispublished) {
                 myself.publishButton.hide();
                 myself.unpublishButton.show();
@@ -6152,11 +6154,14 @@ ProjectDialogMorph.prototype.installCloudProjectList = function (pl) {
                 myself.publishButton.show();
                 myself.unpublishButton.hide();
             }
+            */
         } else {
             myself.unshareButton.hide();
             myself.shareButton.show();
+            /*
             myself.publishButton.hide();
             myself.unpublishButton.hide();
+            */
         }
         myself.buttons.fixLayout();
         myself.fixLayout();
@@ -6214,11 +6219,15 @@ ProjectDialogMorph.prototype.openCloudProject = function (project) {
 
 ProjectDialogMorph.prototype.rawOpenCloudProject = function (proj) {
     var myself = this;
-    SnapCloud.getRawProject(
+    SnapCloud.getProject(
         proj.projectname,
-        function (projectXML) {
+        function (clouddata) {
             myself.ide.source = 'cloud';
-            myself.ide.droppedText(projectXML);
+            myself.ide.nextSteps([
+                function () {
+                    myself.ide.openCloudDataString(clouddata);
+                }
+            ]);
             if (proj.ispublic) {
                 location.hash = '#present:Username=' +
                     encodeURIComponent(SnapCloud.username) +
@@ -6368,8 +6377,10 @@ ProjectDialogMorph.prototype.shareProject = function () {
                         proj.ispublic = true;
                         myself.unshareButton.show();
                         myself.shareButton.hide();
+                        /*
                         myself.publishButton.show();
                         myself.unpublishButton.hide();
+                        */
                         entry.label.isBold = true;
                         entry.label.drawNew();
                         entry.label.changed();
@@ -6415,8 +6426,10 @@ ProjectDialogMorph.prototype.unshareProject = function () {
                         proj.ispublic = false;
                         myself.shareButton.show();
                         myself.unshareButton.hide();
+                        /*
                         myself.publishButton.hide();
                         myself.unpublishButton.hide();
+                        */
                         entry.label.isBold = false;
                         entry.label.isItalic = false;
                         entry.label.drawNew();
@@ -6458,7 +6471,6 @@ ProjectDialogMorph.prototype.publishProject = function () {
                         myself.shareButton.hide();
                         myself.publishButton.hide();
                         myself.unpublishButton.show();
-//                        entry.label.color = new Color(0, 220, 0);
                         entry.label.isItalic = true;
                         entry.label.drawNew();
                         entry.label.changed();
@@ -6506,7 +6518,6 @@ ProjectDialogMorph.prototype.unpublishProject = function () {
                         myself.shareButton.hide();
                         myself.publishButton.show();
                         myself.unpublishButton.hide();
-//                        entry.label.color = new Color(0, 0, 0);
                         entry.label.isItalic = false;
                         entry.label.drawNew();
                         entry.label.changed();
@@ -8928,15 +8939,17 @@ SoundRecorderDialogMorph.prototype.buildContents = function () {
                     audioChunks.push(event.data);
                 };
                 myself.mediaRecorder.onstop = function (event) {
-                    myself.audioElement.src =
-                        window.URL.createObjectURL(
-                           new Blob(
-                               audioChunks,
-                               {'type': 'audio/ogg; codecs=opus'}
-                           )
-                        );
-                    myself.audioElement.load();
-                    audioChunks = [];
+					var buffer = new Blob(audioChunks),
+						reader = new window.FileReader();
+					reader.readAsDataURL(buffer);
+					reader.onloadend = function() {
+   						var base64 = reader.result;
+    					base64 = 'data:audio/ogg;base64,' +
+         	               base64.split(',')[1];
+						myself.audioElement.src = base64;
+                    	myself.audioElement.load();
+                    	audioChunks = [];
+					};
                 };
             });
     }
