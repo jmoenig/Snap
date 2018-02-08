@@ -222,7 +222,13 @@ NetsBloxMorph.prototype.createControlBar = function () {
     NetsBloxMorph.uber.createControlBar.call(this);
 
     this.controlBar.updateLabel = function () {
-        var suffix = ' @ ' + myself.room.name;
+        var headerName = myself.room.name,
+            suffix = '';
+
+        if (myself.room.getRoleNames().length > 1) {
+            headerName = (myself.projectName || localize('untitled'));
+            suffix = ' @ ' + myself.room.name;
+        }
 
         suffix += myself.world().isDevMode ?
             ' - ' + localize('development mode') : '';
@@ -235,7 +241,7 @@ NetsBloxMorph.prototype.createControlBar = function () {
         }
 
         this.label = new StringMorph(
-            (myself.projectName || localize('untitled')) + suffix,
+            headerName + suffix,
             14,
             'sans-serif',
             true,

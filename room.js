@@ -248,7 +248,6 @@ RoomMorph.equalLists = function(first, second) {
 
 RoomMorph.prototype.update = function(ownerId, name, roles, collaborators) {
     var wasEditable = this.isEditable(),
-        oldRoleName = this.getCurrentRoleName(),
         changed;
 
     changed = name && this.name !== name;
@@ -276,9 +275,7 @@ RoomMorph.prototype.update = function(ownerId, name, roles, collaborators) {
     }
 
     // Check if current role name changed...
-    if (this.getCurrentRoleName() !== oldRoleName) {
-        this.ide.silentSetProjectName(this.getCurrentRoleName());
-    }
+    this.ide.silentSetProjectName(this.getCurrentRoleName());
 
     if (changed) {
         this.version = Date.now();
