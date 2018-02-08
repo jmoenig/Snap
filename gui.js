@@ -67,7 +67,7 @@ AlignmentMorph, TabMorph, Costume, MorphicPreferences, Sound, BlockMorph,
 ToggleMorph, InputSlotDialogMorph, ScriptsMorph, isNil, SymbolMorph,
 BlockExportDialogMorph, BlockImportDialogMorph, SnapTranslator, localize,
 List, ArgMorph, SnapCloud, Uint8Array, HandleMorph, SVG_Costume,
-fontHeight, hex_sha512, sb, CommentMorph, CommandBlockMorph, BooleanSlotMorph,
+fontHeight, sb, CommentMorph, CommandBlockMorph, BooleanSlotMorph,
 BlockLabelPlaceHolderMorph, Audio, SpeechBubbleMorph, ScriptFocusMorph,
 XML_Element, WatcherMorph, BlockRemovalDialogMorph, saveAs, TableMorph,
 isSnapObject, isRetinaEnabled, disableRetinaSupport, enableRetinaSupport,
@@ -75,7 +75,7 @@ isRetinaSupported, SliderMorph, Animation, BoxMorph, MediaRecorder*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2018-February-06';
+modules.gui = '2018-February-08';
 
 // Declarations
 
@@ -270,7 +270,7 @@ IDE_Morph.prototype.init = function (isAutoFill) {
 };
 
 IDE_Morph.prototype.openIn = function (world) {
-    var hash, usr, myself = this, urlLanguage = null;
+    var hash, myself = this, urlLanguage = null;
 
     SnapCloud.initSession(
         function (username) {
@@ -1567,7 +1567,8 @@ IDE_Morph.prototype.createCorralBar = function () {
         cambutton.labelColor = this.buttonLabelColor;
         cambutton.contrast = this.buttonContrast;
         cambutton.drawNew();
-        cambutton.hint = "take a camera snapshot and\nimport it as a new sprite";
+        cambutton.hint = "take a camera snapshot and\n" +
+        	"import it as a new sprite";
         cambutton.fixLayout();
         cambutton.setCenter(this.corralBar.center());
         cambutton.setLeft(
@@ -6497,7 +6498,6 @@ ProjectDialogMorph.prototype.publishProject = function () {
 
 ProjectDialogMorph.prototype.unpublishProject = function () {
     var myself = this,
-        ide = this.ide,
         proj = this.listField.selected,
         entry = this.listField.active;
 
@@ -7945,7 +7945,8 @@ WardrobeMorph.prototype.updateList = function () {
 
         if (!CamSnapshotDialogMorph.prototype.enabled) {
             cambutton.disable();
-            cambutton.hint = CamSnapshotDialogMorph.prototype.notSupportedMessage;
+            cambutton.hint =
+            	CamSnapshotDialogMorph.prototype.notSupportedMessage;
         }
 
         document.addEventListener(

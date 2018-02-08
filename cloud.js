@@ -5,9 +5,9 @@
     a backend API for SNAP!
 
     written by Bernat Romagosa
-    inspired in the old cloud API by Jens Mönig
+    inspired by the original cloud API by Jens Mönig
 
-    Copyright (C) 2017 by Bernat Romagosa
+    Copyright (C) 2018 by Bernat Romagosa
     Copyright (C) 2015 by Jens Mönig
 
     This file is part of Snap!.
@@ -29,25 +29,27 @@
 
 // Global settings /////////////////////////////////////////////////////
 
-/*global modules, IDE_Morph, SnapSerializer, nop, localize*/
+/*global modules, SnapSerializer, nop, hex_sha512, DialogBoxMorph, Color*/
 
-modules.cloud = '2015-December-15';
+modules.cloud = '2018-February-08';
 
 // Global stuff
 
 var Cloud;
+var SnapCloud;
 
 // Cloud /////////////////////////////////////////////////////////////
 
 function Cloud(url) {
     this.init(url);
-};
+}
 
 Cloud.prototype.init = function (url) {
     this.url = url;
     this.username = null;
 };
 
+SnapCloud = new Cloud('https://snap-cloud.cs10.org');
 
 // Dictionary handling
 
@@ -91,7 +93,6 @@ Cloud.genericErrorMessage =
 Cloud.prototype.genericError = function () {
     throw new Error(Cloud.genericErrorMessage);
 };
-
 
 // Low level functionality
 
@@ -186,7 +187,6 @@ Cloud.prototype.withCredentialsRequest = function (
     );
 };
 
-
 // Credentials management
 
 Cloud.prototype.initSession = function (onSuccess) {
@@ -208,18 +208,32 @@ Cloud.prototype.checkCredentials = function (onSuccess, onError) {
             if (user.username) {
                 myself.username = user.username;
             }
-            if (onSuccess) { onSuccess.call(null, user.username, user.isadmin); }
+            if (onSuccess) {
+            	onSuccess.call(null, user.username, user.isadmin);
+            }
         },
         onError
     );
 };
 
 Cloud.prototype.getCurrentUser = function (onSuccess, onError) {
-    this.request('GET', '/users/c', onSuccess, onError, 'Could not retrieve current user');
+    this.request(
+    	'GET',
+        '/users/c',
+        onSuccess,
+        onError,
+        'Could not retrieve current user'
+    );
 };
 
 Cloud.prototype.getUser = function (username, onSuccess, onError) {
-    this.request('GET', '/users/' + username, onSuccess, onError, 'Could not retrieve user');
+    this.request(
+    	'GET',
+        '/users/' + username,
+        onSuccess,
+        onError,
+        'Could not retrieve user'
+    );
 };
 
 Cloud.prototype.logout = function (onSuccess, onError) {
@@ -233,7 +247,13 @@ Cloud.prototype.logout = function (onSuccess, onError) {
     );
 };
 
-Cloud.prototype.login = function (username, password, persist, onSuccess, onError) {
+Cloud.prototype.login = function (
+	username,
+    password,
+    persist,
+    onSuccess,
+    onError
+) {
     var myself = this;
     this.request(
         'POST',
@@ -251,7 +271,14 @@ Cloud.prototype.login = function (username, password, persist, onSuccess, onErro
     );
 };
 
-Cloud.prototype.signup = function (username, password, passwordRepeat, email, onSuccess, onError) {
+Cloud.prototype.signup = function (
+	username,
+    password,
+    passwordRepeat,
+    email,
+    onSuccess,
+    onError
+) {
     this.request(
         'POST',
         '/users/' + username + '?' + this.encodeDict({
@@ -264,7 +291,13 @@ Cloud.prototype.signup = function (username, password, passwordRepeat, email, on
         'signup failed');
 };
 
-Cloud.prototype.changePassword = function (password, newPassword, passwordRepeat, onSuccess, onError) {
+Cloud.prototype.changePassword = function (
+	password,
+    newPassword,
+    passwordRepeat,
+    onSuccess,
+    onError
+) {
     this.withCredentialsRequest(
         'POST',
         '/users/%username/newpassword?' + this.encodeDict({
@@ -319,21 +352,31 @@ Cloud.prototype.saveProject = function (ide, onSuccess, onError) {
                 try {
                     ide.serializer.parse(body.xml);
                 } catch (err) {
-                    ide.showMessage('Serialization of program data failed:\n' + err);
-                    throw new Error('Serialization of program data failed:\n' + err);
+                    ide.showMessage(
+                    	'Serialization of program data failed:\n' + err
+                    );
+                    throw new Error(
+                    	'Serialization of program data failed:\n' + err
+                    );
                 }
                 if (body.media !== null) {
                     try {
                         ide.serializer.parse(body.media);
                     } catch (err) {
-                        ide.showMessage('Serialization of media failed:\n' + err);
-                        throw new Error('Serialization of media failed:\n' + err);
+                        ide.showMessage(
+                        	'Serialization of media failed:\n' + err
+                        );
+                        throw new Error(
+                        	'Serialization of media failed:\n' + err
+                        );
                     }
                 }
                 ide.serializer.isCollectingMedia = false;
                 ide.serializer.flushMedia();
 
-                ide.showMessage('Uploading ' + Math.round(size / 1024) + ' KB...');
+                ide.showMessage(
+                	'Uploading ' + Math.round(size / 1024) + ' KB...'
+                );
 
                 myself.request(
                     'POST',
@@ -342,7 +385,7 @@ Cloud.prototype.saveProject = function (ide, onSuccess, onError) {
                     onError,
                     'Project could not be saved',
                     false,
-                    JSON.stringify(body), // POST body
+                    JSON.stringify(body) // POST body
                 );
             } else {
                 onError.call(this, 'You are not logged in', 'Snap!Cloud');
@@ -367,8 +410,18 @@ Cloud.prototype.getProjectList = function (onSuccess, onError, withThumbnail) {
     );
 };
 
-Cloud.prototype.getPublishedProjectList = function (username, page, pageSize, searchTerm, onSuccess, onError, withThumbnail) {
-    var path = '/projects' + (username ? '/' + username : '') + '?ispublished=true';
+Cloud.prototype.getPublishedProjectList = function (
+	username,
+    page,
+    pageSize,
+    searchTerm,
+    onSuccess,
+    onError,
+    withThumbnail
+) {
+    var path = '/projects' +
+    		(username ? '/' + username : '') +
+	        '?ispublished=true';
 
     if (withThumbnail) {
         path += '&withthumbnail=true';
@@ -391,7 +444,12 @@ Cloud.prototype.getPublishedProjectList = function (username, page, pageSize, se
     );
 };
 
-Cloud.prototype.getThumbnail = function (username, projectName, onSuccess, onError) {
+Cloud.prototype.getThumbnail = function (
+	username,
+    projectName,
+    onSuccess,
+    onError
+) {
     this[username ? 'request' : 'withCredentialsRequest'](
         'GET',
         '/projects/' + (username || '%username') + '/'
@@ -414,7 +472,12 @@ Cloud.prototype.getProject = function (projectName, onSuccess, onError) {
     );
 };
 
-Cloud.prototype.getPublicProject = function (projectName, username, onSuccess, onError) {
+Cloud.prototype.getPublicProject = function (
+	projectName,
+    username,
+    onSuccess,
+    onError
+) {
     this.request(
         'GET',
         '/projects/' + username + '/' + projectName,
@@ -425,7 +488,12 @@ Cloud.prototype.getPublicProject = function (projectName, username, onSuccess, o
     );
 };
 
-Cloud.prototype.getProjectMetadata = function (projectName, username, onSuccess, onError) {
+Cloud.prototype.getProjectMetadata = function (
+	projectName,
+    username,
+    onSuccess,
+    onError
+) {
     this.request(
         'GET',
         '/projects/' + username + '/' + projectName + '/metadata',
@@ -435,7 +503,12 @@ Cloud.prototype.getProjectMetadata = function (projectName, username, onSuccess,
     );
 };
 
-Cloud.prototype.deleteProject = function (projectName, username, onSuccess, onError) {
+Cloud.prototype.deleteProject = function (
+	projectName,
+    username,
+    onSuccess,
+    onError
+) {
     this[username ? 'request' : 'withCredentialsRequest'](
         'DELETE',
         '/projects/' + (username || '%username') + '/' + projectName,
@@ -445,51 +518,86 @@ Cloud.prototype.deleteProject = function (projectName, username, onSuccess, onEr
     );
 };
 
-Cloud.prototype.shareProject = function (projectName, username, onSuccess, onError) {
+Cloud.prototype.shareProject = function (
+	projectName,
+    username,
+    onSuccess,
+    onError
+) {
     this[username ? 'request' : 'withCredentialsRequest'](
         'POST',
-        '/projects/' + (username || '%username') + '/'
-            + projectName + '/metadata?ispublic=true',
+        '/projects/' +
+        	(username || '%username') +
+            '/' + projectName +
+            '/metadata?ispublic=true',
         onSuccess,
         onError,
         'Could not share project'
     );
 };
 
-Cloud.prototype.unshareProject = function (projectName, username, onSuccess, onError) {
+Cloud.prototype.unshareProject = function (
+	projectName,
+    username,
+    onSuccess,
+    onError
+) {
     this[username ? 'request' : 'withCredentialsRequest'](
         'POST',
-        '/projects/' + (username || '%username') + '/'
-            + projectName + '/metadata?ispublic=false&ispublished=false',
+        '/projects/' +
+        	(username || '%username') + '/' +
+            projectName +
+            '/metadata?ispublic=false&ispublished=false',
         onSuccess,
         onError,
         'Could not unshare project'
     );
 };
 
-Cloud.prototype.publishProject = function (projectName, username, onSuccess, onError) {
+Cloud.prototype.publishProject = function (
+	projectName,
+    username,
+    onSuccess,
+    onError
+) {
     this[username ? 'request' : 'withCredentialsRequest'](
         'POST',
-        '/projects/' + (username || '%username') + '/'
-            + projectName + '/metadata?ispublished=true',
+        '/projects/' +
+        	(username || '%username') +
+            '/' +
+            projectName +
+            '/metadata?ispublished=true',
         onSuccess,
         onError,
         'Could not publish project'
     );
 };
 
-Cloud.prototype.unpublishProject = function (projectName, username, onSuccess, onError) {
+Cloud.prototype.unpublishProject = function (
+	projectName,
+    username,
+    onSuccess,
+    onError
+) {
     this[username ? 'request' : 'withCredentialsRequest'](
         'POST',
-        '/projects/' + (username || '%username') + '/'
-            + projectName + '/metadata?ispublished=false',
+        '/projects/' +
+        	(username || '%username') +
+            '/' +
+            projectName +
+            '/metadata?ispublished=false',
         onSuccess,
         onError,
         'Could not unpublish project'
     );
 };
 
-Cloud.prototype.updateNotes = function (projectName, notes, onSuccess, onError) {
+Cloud.prototype.updateNotes = function (
+	projectName,
+    notes,
+    onSuccess,
+    onError
+) {
     this.withCredentialsRequest(
         'POST',
         '/projects/%username/' + projectName + '/metadata',
@@ -501,4 +609,3 @@ Cloud.prototype.updateNotes = function (projectName, notes, onSuccess, onError) 
     );
 };
 
-var SnapCloud = new Cloud('https://snap-cloud.cs10.org');
