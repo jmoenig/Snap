@@ -3925,10 +3925,6 @@ Translation Updates:
 * Turkish
 * Chinese
 * Spanish
-
-
-=== development ===
-* New cloud API
 * Russian
 
 *** in development ***
@@ -3937,6 +3933,10 @@ Translation Updates:
 ------
 * GUI: start developing v4.1.2
 * Morphic: roll back temporary rectangle filling workaround for a bug in Chrome v57
+
+180208
+------
+* Cloud, GUI, Widgets: New Cloud API, thanks, Bernat!
 
 
 === v4.1.2 features ===
