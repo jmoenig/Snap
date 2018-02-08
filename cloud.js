@@ -29,7 +29,8 @@
 
 // Global settings /////////////////////////////////////////////////////
 
-/*global modules, SnapSerializer, nop, hex_sha512, DialogBoxMorph, Color*/
+/*global modules, SnapSerializer, nop, hex_sha512, DialogBoxMorph, Color,
+normalizeCanvas*/
 
 modules.cloud = '2018-February-08';
 
@@ -320,8 +321,10 @@ Cloud.prototype.saveProject = function (ide, onSuccess, onError) {
         function (username) {
             if (username) {
                 var xml = ide.serializer.serialize(ide.stage),
-                    thumbnail = ide.stage.thumbnail(
-                        SnapSerializer.prototype.thumbnailSize).toDataURL(),
+                    thumbnail = normalizeCanvas(
+                    	ide.stage.thumbnail(
+                        	SnapSerializer.prototype.thumbnailSize
+                    )).toDataURL(),
                     body, mediaSize, size;
 
                 ide.serializer.isCollectingMedia = true;
@@ -452,8 +455,11 @@ Cloud.prototype.getThumbnail = function (
 ) {
     this[username ? 'request' : 'withCredentialsRequest'](
         'GET',
-        '/projects/' + (username || '%username') + '/'
-            + projectName + '/thumbnail',
+        '/projects/' +
+        	(username || '%username') +
+            '/' +
+            projectName +
+            '/thumbnail',
         onSuccess,
         onError,
         'Could not fetch thumbnail',
