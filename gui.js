@@ -6230,6 +6230,7 @@ ProjectDialogMorph.prototype.rawOpenCloudProject = function (proj) {
                     myself.ide.openCloudDataString(clouddata);
                 }
             ]);
+	        location.hash = '';
             if (proj.ispublic) {
                 location.hash = '#present:Username=' +
                     encodeURIComponent(SnapCloud.username) +

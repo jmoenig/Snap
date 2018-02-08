@@ -3937,6 +3937,7 @@ Translation Updates:
 180208
 ------
 * Cloud, GUI, Widgets: New Cloud API, thanks, Bernat!
+* GUI: fixed a url-bar refresh bug introduced by the new cloud mechanism
 
 
 === v4.1.2 features ===
