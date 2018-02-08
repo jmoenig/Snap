@@ -6250,12 +6250,11 @@ ProjectDialogMorph.prototype.saveProject = function () {
         myself = this;
 
     this.ide.projectNotes = notes || this.ide.projectNotes;
-
     if (name) {
         if (this.source === 'cloud') {
             if (detect(
                     this.projectList,
-                    function (item) {return item.projectName === name; }
+                    function (item) {return item.projectname === name; }
                 )) {
                 this.ide.confirm(
                     localize(

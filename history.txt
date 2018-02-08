@@ -3940,6 +3940,7 @@ Translation Updates:
 * GUI: fixed a url-bar refresh bug introduced by the new cloud mechanism
 * GUI: made sure user names are lower case when sent to the cloud
 * Cloud: made sure project thumbnails are normalized when saved
+* Cloud: warn user if overwriting an existing project with another one
 
 
 === v4.1.2 features ===
