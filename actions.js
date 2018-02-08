@@ -345,6 +345,7 @@ Action.prototype.reject = function(fn) {
 
 ActionManager.prototype.applyEvent = function(event) {
     event.user = this.id;
+    event.username = SnapCloud.username;
     event.id = this.lastSeen + 1;
     event.time = event.time || Date.now();
 
