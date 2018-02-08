@@ -5484,8 +5484,9 @@ IDE_Morph.prototype.setCloudURL = function () {
         this.world(),
         null,
         {
-            'Snap!Cloud' :
-                'https://snap.apps.miosoft.com/SnapCloud'
+            'Snap!Cloud' : 'https://snap-cloud.cs10.org',
+            'localhost' : 'http://localhost:8080',
+            'localhost (secure)' : 'https://localhost:8080'
         }
     );
 };
@@ -6125,7 +6126,7 @@ ProjectDialogMorph.prototype.installCloudProjectList = function (pl) {
             // we ask for the thumbnail when selecting a project
             SnapCloud.getThumbnail(
                 null, // username is implicit
-                item.projectname, 
+                item.projectname,
                 function (thumbnail) {
                     myself.preview.texture = thumbnail;
                     myself.preview.cachedTexture = null;
@@ -6333,7 +6334,7 @@ ProjectDialogMorph.prototype.deleteProject = function () {
                             myself.installCloudProjectList(
                                 myself.projectList
                             ); // refresh list
-                        }, 
+                        },
                         myself.ide.cloudError()
                     );
                 }
