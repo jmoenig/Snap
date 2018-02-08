@@ -3938,6 +3938,7 @@ Translation Updates:
 ------
 * Cloud, GUI, Widgets: New Cloud API, thanks, Bernat!
 * GUI: fixed a url-bar refresh bug introduced by the new cloud mechanism
+* GUI: made sure user names are lower case when sent to the cloud
 
 
 === v4.1.2 features ===

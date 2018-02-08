@@ -479,6 +479,7 @@ IDE_Morph.prototype.openIn = function (world) {
 
             // make sure to lowercase the username
             dict = SnapCloud.parseDict(location.hash.substr(4));
+            dict.Username = dict.Username.toLowerCase();
 
             SnapCloud.getPublicProject(
                 dict.ProjectName,
@@ -2583,7 +2584,7 @@ IDE_Morph.prototype.cloudMenu = function () {
                         );
                         SnapCloud.getPublicProject(
                             prj,
-                            usr,
+                            usr.toLowerCase(),
                             function (projectData) {
                                 var msg;
                                 if (!Process.prototype.isCatchingErrors) {
@@ -5134,7 +5135,7 @@ IDE_Morph.prototype.initializeCloud = function () {
         null,
         function (user) {
             SnapCloud.login(
-                user.username,
+                user.username.toLowerCase(),
                 user.password,
                 user.choice,
                 function () {
@@ -6230,7 +6231,7 @@ ProjectDialogMorph.prototype.rawOpenCloudProject = function (proj) {
                     myself.ide.openCloudDataString(clouddata);
                 }
             ]);
-	        location.hash = '';
+			location.hash = '';
             if (proj.ispublic) {
                 location.hash = '#present:Username=' +
                     encodeURIComponent(SnapCloud.username) +
