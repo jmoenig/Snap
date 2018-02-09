@@ -1,5 +1,5 @@
 /* global ThreadManager, ensureFullUrl, Process, Context, IDE_Morph, Costume, StageMorph,
-   List, SnapActions, isObject*/
+   List, SnapActions, isObject, newCanvas, Point */
 
 ThreadManager.prototype.startProcess = function (
     block,
@@ -315,7 +315,10 @@ NetsProcess.prototype.getCostumeFromRPC = function (rpc, action, params) {
         // Clear request
         image = this.requestedImage;
         this.requestedImage = null;
-        return new Costume(image, rpc);
+
+        var canvas = newCanvas(new Point(image.width, image.height), true);
+        canvas.getContext('2d').drawImage(image, 0, 0);
+        return new Costume(canvas, rpc);
     }
     this.pushContext('doYield');
     this.pushContext();
