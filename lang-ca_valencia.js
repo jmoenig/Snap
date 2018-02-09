@@ -1381,7 +1381,7 @@ SnapTranslator.dict.ca_valencia = {
     'other clones':
         'altres clons',
     'dangling?':
-        'Baumeln?',
+        'penjant?',
     'rotation x':
         'rotació x',
     'rotation y':
