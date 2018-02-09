@@ -3942,6 +3942,10 @@ Translation Updates:
 * Cloud: made sure project thumbnails are normalized when saved
 * Cloud: warn user if overwriting an existing project with another one
 
+180209
+------
+* Store, GUI: small tweaks
+
 
 === v4.1.2 features ===
 

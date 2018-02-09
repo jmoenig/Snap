@@ -61,7 +61,7 @@ normalizeCanvas, contains*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2018-January-18';
+modules.store = '2018-February-09';
 
 
 // XML_Serializer ///////////////////////////////////////////////////////
@@ -1148,7 +1148,10 @@ SnapSerializer.prototype.loadBlock = function (model, isReporter, object) {
           		: null
           	);
         }
-        if (!info || !contains(SpriteMorph.prototype.categories, info.category)) {
+        if (!info || !contains(
+        		// catch other forks' blocks
+        		SpriteMorph.prototype.categories, info.category
+        )) {
             return this.obsoleteBlock(isReporter);
         }
         block = info.type === 'command' ? new CustomCommandBlockMorph(

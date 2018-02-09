@@ -75,7 +75,7 @@ isRetinaSupported, SliderMorph, Animation, BoxMorph, MediaRecorder*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2018-February-08';
+modules.gui = '2018-February-09';
 
 // Declarations
 
@@ -2391,7 +2391,7 @@ IDE_Morph.prototype.newSoundName = function (name) {
                 this.currentSprite.sounds.length());
 
     return this.newName(
-        lastSound.name || name,
+        name || lastSound.name,
         this.currentSprite.sounds.asArray().map(
             function (eachSound) {
                 return eachSound.name;
