@@ -166,7 +166,7 @@
 
 /*global SnapTranslator*/
 
-SnapTranslator.dict.ca_valencia = {
+SnapTranslator.dict.ca_VA = {
 
 /*
     Special characters: (see <http://0xcc.net/jsescape/>)
@@ -179,11 +179,11 @@ SnapTranslator.dict.ca_valencia = {
 
     // translations meta information
     'language_name':
-        'Valencià', // the name as it should appear in the language menu
+        'Català - Valencià', // the name as it should appear in the language menu
     'language_translator':
         'Bernat Romagosa Carrasquer, Joan Guillén i Pelegay, Pilar Embid', // your name for the Translators tab
     'translator_e-mail':
-        'bernat@arduino.org, jguille2@xtec.cat, embid_mar@gva.es', // optional
+        'bernat@snap4arduino.rocks, jguille2@xtec.cat, embid_mar@gva.es', // optional
     'last_changed':
         '2018-02-08', // this, too, will appear in the Translators tab
 
@@ -1381,7 +1381,7 @@ SnapTranslator.dict.ca_valencia = {
     'other clones':
         'altres clons',
     'dangling?':
-        'Baumeln?',
+        'penjant?',
     'rotation x':
         'rotació x',
     'rotation y':

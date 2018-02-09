@@ -42,7 +42,7 @@
 
 /*global modules, contains*/
 
-modules.locale = '2018-February-5';
+modules.locale = '2018-February-9';
 
 // Global stuff
 
@@ -370,6 +370,17 @@ SnapTranslator.dict.ca = {
         'bernat@snap4arduino.rocks, jguille2@xtec.cat',
     'last_changed':
         '2017-11-15'
+};
+
+SnapTranslator.dict.ca_VA = {
+    'language_name':
+    	'Català - Valencià',
+    'language_translator':
+        'Bernat Romagosa Carrasquer, Joan Guillén i Pelegay, Pilar Embid',
+    'translator_e-mail':
+        'bernat@snap4arduino.rocks, jguille2@xtec.cat, embid_mar@gva.es',
+    'last_changed':
+        '2018-02-08'
 };
 
 SnapTranslator.dict.fi = {

@@ -3945,6 +3945,7 @@ Translation Updates:
 180209
 ------
 * Store, GUI: small tweaks
+* new Valencian Catalan translation, thanks, Jose A. Múrcia!!
 
 
 === v4.1.2 features ===
