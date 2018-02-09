@@ -1148,7 +1148,7 @@ SnapSerializer.prototype.loadBlock = function (model, isReporter, object) {
           		: null
           	);
         }
-        if (!info) {
+        if (!info || !contains(SpriteMorph.prototype.categories, info.category)) {
             return this.obsoleteBlock(isReporter);
         }
         block = info.type === 'command' ? new CustomCommandBlockMorph(
