@@ -313,6 +313,16 @@ Cloud.prototype.changePassword = function (
 
 };
 
+Cloud.prototype.resetPassword = function (username, onSuccess, onError) {
+    this.request(
+        'POST',
+        '/users/' + username + '/resetpassword',
+        onSuccess,
+        onError,
+        'Password reset request failed'
+    );
+};
+
 // Projects
 
 Cloud.prototype.saveProject = function (ide, onSuccess, onError) {
