@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph,
 TableFrameMorph, ColorSlotMorph, isSnapObject*/
 
-modules.threads = '2018-January-25';
+modules.threads = '2018-February-12';
 
 var ThreadManager;
 var Process;
@@ -151,6 +151,8 @@ function invoke(
         );
     } else if (action.evaluate) {
         return action.evaluate();
+    } else if (action instanceof Function) {
+    	return action.apply(receiver, contextArgs.asArray());
     } else {
         throw new Error('expecting a block or ring but getting ' + action);
     }

@@ -3947,6 +3947,10 @@ Translation Updates:
 * Store, GUI: small tweaks
 * new Valencian Catalan translation, thanks, Jose A. Múrcia!!
 
+180212
+------
+* Threads: Allow JS-functions for invoke()
+
 
 === v4.1.2 features ===
 
