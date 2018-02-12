@@ -83,7 +83,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph,
 AlignmentMorph*/
 
-modules.objects = '2018-January-25';
+modules.objects = '2018-February-12';
 
 var SpriteMorph;
 var StageMorph;
@@ -1078,6 +1078,12 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'operators',
             spec: '%txtfun of %s',
             defaults: [null, "Abelson & Sussman"]
+        },
+        reportCompiled: { // only in dev mode - experimental
+            dev: true,
+            type: 'reporter',
+            category: 'operators',
+            spec: 'compiled %repRing'
         },
 
     /*
@@ -2143,6 +2149,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
             blocks.push('-');
             blocks.push(block('reportTypeOf'));
             blocks.push(block('reportTextFunction'));
+            blocks.push(block('reportCompiled'));
         }
 
     /////////////////////////////////

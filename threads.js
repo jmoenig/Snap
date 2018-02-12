@@ -696,7 +696,9 @@ Process.prototype.evaluateContext = function () {
 };
 
 Process.prototype.evaluateBlock = function (block, argCount) {
-    var selector = block.selector;
+    var rcvr, inputs,
+    	selector = block.selector;
+
     // check for special forms
     if (selector === 'reportOr' ||
             selector ===  'reportAnd' ||
@@ -705,8 +707,8 @@ Process.prototype.evaluateBlock = function (block, argCount) {
     }
 
     // first evaluate all inputs, then apply the primitive
-    var rcvr = this.context.receiver || this.receiver,
-        inputs = this.context.inputs;
+    rcvr = this.context.receiver || this.receiver;
+    inputs = this.context.inputs;
 
     if (argCount > inputs.length) {
         this.evaluateNextInput(block);
@@ -731,6 +733,44 @@ Process.prototype.evaluateBlock = function (block, argCount) {
             this.popContext();
         }
     }
+};
+
+// Process: Compile simple, side-effect free Reporters
+// with only implicit formal parameters (empty input slots)
+// ** highly experimental and heavily under construction **
+
+Process.prototype.reportCompiled = function (context) {
+	this.assertType(context, 'reporter');
+ 	return this.compile(context.expression);
+};
+
+Process.prototype.compile = function (block) {
+	// private - totally under construction and unusable at this time
+    var selector = block.selector,
+	    rcvr = this.context.receiver || this.receiver,
+        args = [],
+		func = this[selector] ||
+			(this.context.receiver || this.receiver)[selector];
+
+/*
+	function f(a, b, c) {return a * b + c};
+	function ff(f, p1) {return f.apply(null, [3, 4, p1]); }
+  	function fff(x) {return ff.apply(null, [f, x]); }
+*/
+
+	block.inputs().forEach(function (inp) {
+ 		if (inp.isEmptySlot && inp.isEmptySlot()) {
+   			// add to formal parameters
+   		} else if (inp instanceof ArgMorph) {
+     		// literal - evaluate inline
+     		args.push(inp.evaluate());
+     	} else if (inp instanceof BlockMorph) {
+      		// recurse
+      	} else {
+       		// raise error about unsupported slot
+		}
+ 	});
+	return function () {return func.apply(rcvr, args); };
 };
 
 // Process: Special Forms Blocks Primitives

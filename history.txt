@@ -3950,6 +3950,7 @@ Translation Updates:
 180212
 ------
 * Threads: Allow JS-functions for invoke()
+* Threads, Objects: Small compilation experiment
 
 
 === v4.1.2 features ===
