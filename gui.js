@@ -2519,6 +2519,10 @@ IDE_Morph.prototype.cloudMenu = function () {
             'Reset Password...',
             'resetCloudPassword'
         );
+        menu.addItem(
+            'Resend Verification Email...',
+            'resendVerification'
+        );
     } else {
         menu.addItem(
             localize('Logout') + ' ' + SnapCloud.username,
@@ -5140,7 +5144,7 @@ IDE_Morph.prototype.initializeCloud = function () {
                 user.choice,
                 function (username, isadmin, response) {
                     myself.source = 'cloud';
-                    if (response.days_left) {
+                    if (!isNil(response.days_left)) {
                         new DialogBoxMorph().inform(
                             'Unverified account: ' + response.days_left + ' days left',
                             'You are now logged in, but your account\n' +
@@ -5237,6 +5241,43 @@ IDE_Morph.prototype.resetCloudPassword = function () {
     ).withKey('cloudresetpassword').promptCredentials(
         'Reset password',
         'resetPassword',
+        null,
+        null,
+        null,
+        null,
+        null,
+        world,
+        myself.cloudIcon(),
+        myself.cloudMsg
+    );
+};
+
+IDE_Morph.prototype.resendVerification = function () {
+    var myself = this,
+        world = this.world();
+
+    new DialogBoxMorph(
+        null,
+        function (user) {
+            SnapCloud.resendVerification(
+                user.username,
+                function (txt, title) {
+                    new DialogBoxMorph().inform(
+                        title,
+                        txt +
+                            '.\n\nAn e-mail with a link to\n' +
+                            'verify your account\n' +
+                            'has been sent to the address provided',
+                        world,
+                        myself.cloudIcon(null, new Color(0, 180, 0))
+                    );
+                },
+                myself.cloudError()
+            );
+        }
+    ).withKey('cloudresendverification').promptCredentials(
+        'Resend verification email',
+        'resendVerification',
         null,
         null,
         null,
@@ -5458,9 +5499,6 @@ IDE_Morph.prototype.cloudError = function () {
         if (explanation) {
             myself.showMessage(explanation);
             return;
-        }
-        if (response.length > 50) {
-            response = response.substring(0, 50) + '...';
         }
         new DialogBoxMorph().inform(
             'Snap!Cloud',

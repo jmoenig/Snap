@@ -2095,7 +2095,7 @@ DialogBoxMorph.prototype.promptCredentials = function (
         inp.add(pw2);
     }
 
-    if (purpose === 'resetPassword') {
+    if (purpose === 'resetPassword' || purpose === 'resendVerification') {
         inp.add(labelText('User name:'));
         inp.add(usr);
     }
@@ -2189,7 +2189,7 @@ DialogBoxMorph.prototype.promptCredentials = function (
             checklist = [usr, bmn, byr, eml, pw1, pw2];
         } else if (purpose === 'changePassword') {
             checklist = [opw, pw1, pw2];
-        } else if (purpose === 'resetPassword') {
+        } else if (purpose === 'resetPassword' || purpose === 'resendVerification') {
             checklist = [usr];
         }
 
@@ -2242,7 +2242,7 @@ DialogBoxMorph.prototype.promptCredentials = function (
     this.edit = function () {
         if (purpose === 'changePassword') {
             opw.edit();
-        } else { // 'signup', 'login', 'resetPassword'
+        } else { // 'signup', 'login', 'resetPassword', 'resendVerification'
             usr.edit();
         }
     };

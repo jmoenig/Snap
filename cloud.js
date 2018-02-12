@@ -321,12 +321,23 @@ Cloud.prototype.changePassword = function (
 Cloud.prototype.resetPassword = function (username, onSuccess, onError) {
     this.request(
         'POST',
-        '/users/' + username + '/resetpassword',
+        '/users/' + username + '/password_reset',
         onSuccess,
         onError,
         'Password reset request failed'
     );
 };
+
+Cloud.prototype.resendVerification = function (username, onSuccess, onError) {
+    this.request(
+        'POST',
+        '/users/' + username + '/resendverification',
+        onSuccess,
+        onError,
+        'Could not send verification email'
+    );
+};
+
 
 // Projects
 
