@@ -5138,9 +5138,23 @@ IDE_Morph.prototype.initializeCloud = function () {
                 user.username.toLowerCase(),
                 user.password,
                 user.choice,
-                function () {
+                function (username, isadmin, response) {
                     myself.source = 'cloud';
-                    myself.showMessage('now connected.', 2);
+                    if (response.days_left) {
+                        new DialogBoxMorph().inform(
+                            'Unverified account: ' + response.days_left + ' days left',
+                            'You are now logged in, but your account\n' +
+                            'has not been verified yet.\n' +
+                            'Please use the verification link that\n' +
+                            'was sent to your email address when you\n' +
+                            'signed up.\n\n' +
+                            'You have ' + response.days_left + ' days left.',
+                            world,
+                            myself.cloudIcon(null, new Color(0, 180, 0))
+                        );
+                    } else {
+                        myself.showMessage(response.message, 2);
+                    }
                 },
                 myself.cloudError()
             );

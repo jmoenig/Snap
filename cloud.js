@@ -202,7 +202,7 @@ Cloud.prototype.initSession = function (onSuccess) {
     );
 };
 
-Cloud.prototype.checkCredentials = function (onSuccess, onError) {
+Cloud.prototype.checkCredentials = function (onSuccess, onError, response) {
     var myself = this;
     this.getCurrentUser(
         function (user) {
@@ -210,7 +210,12 @@ Cloud.prototype.checkCredentials = function (onSuccess, onError) {
                 myself.username = user.username;
             }
             if (onSuccess) {
-            	onSuccess.call(null, user.username, user.isadmin);
+            	onSuccess.call(
+                    null,
+                    user.username,
+                    user.isadmin,
+                    JSON.parse(response)
+                );
             }
         },
         onError
@@ -262,8 +267,8 @@ Cloud.prototype.login = function (
             this.encodeDict({
                 persist: persist
             }),
-        function () {
-            myself.checkCredentials(onSuccess, onError);
+        function (response) {
+            myself.checkCredentials(onSuccess, onError, response);
         },
         onError,
         'login failed',
