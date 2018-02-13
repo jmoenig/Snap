@@ -175,7 +175,7 @@ Cloud.prototype.withCredentialsRequest = function (
                 myself.request(
                     method,
                     // %username is replaced by the actual username
-                    path.replace('%username', username),
+                    path.replace('%username', encodeURIComponent(username)),
                     onSuccess,
                     onError,
                     errorMsg,
@@ -235,7 +235,7 @@ Cloud.prototype.getCurrentUser = function (onSuccess, onError) {
 Cloud.prototype.getUser = function (username, onSuccess, onError) {
     this.request(
     	'GET',
-        '/users/' + username,
+        '/users/' + encodeURIComponent(username),
         onSuccess,
         onError,
         'Could not retrieve user'
@@ -263,7 +263,7 @@ Cloud.prototype.login = function (
     var myself = this;
     this.request(
         'POST',
-        '/users/' + username + '/login?' +
+        '/users/' + encodeURIComponent(username) + '/login?' +
             this.encodeDict({
                 persist: persist
             }),
@@ -287,7 +287,7 @@ Cloud.prototype.signup = function (
 ) {
     this.request(
         'POST',
-        '/users/' + username + '?' + this.encodeDict({
+        '/users/' + encodeURIComponent(username) + '?' + this.encodeDict({
             email: email,
             password: hex_sha512(password),
             password_repeat: hex_sha512(passwordRepeat)
@@ -321,7 +321,7 @@ Cloud.prototype.changePassword = function (
 Cloud.prototype.resetPassword = function (username, onSuccess, onError) {
     this.request(
         'POST',
-        '/users/' + username + '/password_reset',
+        '/users/' + encodeURIComponent(username) + '/password_reset',
         onSuccess,
         onError,
         'Password reset request failed'
@@ -331,7 +331,7 @@ Cloud.prototype.resetPassword = function (username, onSuccess, onError) {
 Cloud.prototype.resendVerification = function (username, onSuccess, onError) {
     this.request(
         'POST',
-        '/users/' + username + '/resendverification',
+        '/users/' + encodeURIComponent(username) + '/resendverification',
         onSuccess,
         onError,
         'Could not send verification email'
@@ -409,7 +409,7 @@ Cloud.prototype.saveProject = function (ide, onSuccess, onError) {
 
                 myself.request(
                     'POST',
-                    '/projects/' + username + '/' + ide.projectName,
+                    '/projects/' + encodeURIComponent(username) + '/' + encodeURIComponent(ide.projectName),
                     onSuccess,
                     onError,
                     'Project could not be saved',
@@ -449,7 +449,7 @@ Cloud.prototype.getPublishedProjectList = function (
     withThumbnail
 ) {
     var path = '/projects' +
-    		(username ? '/' + username : '') +
+    		(username ? '/' + encodeURIComponent(username) : '') +
 	        '?ispublished=true';
 
     if (withThumbnail) {
@@ -461,7 +461,7 @@ Cloud.prototype.getPublishedProjectList = function (
     }
 
     if (searchTerm) {
-        path += '&matchtext=' + searchTerm;
+        path += '&matchtext=' + encodeURIComponent(searchTerm);
     }
 
     this.request(
@@ -482,9 +482,9 @@ Cloud.prototype.getThumbnail = function (
     this[username ? 'request' : 'withCredentialsRequest'](
         'GET',
         '/projects/' +
-        	(username || '%username') +
+            (encodeURIComponent(username) || '%username') +
             '/' +
-            projectName +
+            encodeURIComponent(projectName) +
             '/thumbnail',
         onSuccess,
         onError,
@@ -496,7 +496,7 @@ Cloud.prototype.getThumbnail = function (
 Cloud.prototype.getProject = function (projectName, onSuccess, onError) {
     this.withCredentialsRequest(
         'GET',
-        '/projects/%username/' + projectName,
+        '/projects/%username/' + encodeURIComponent(projectName),
         onSuccess,
         onError,
         'Could not fetch project ' + projectName,
@@ -512,7 +512,7 @@ Cloud.prototype.getPublicProject = function (
 ) {
     this.request(
         'GET',
-        '/projects/' + username + '/' + projectName,
+        '/projects/' + encodeURIComponent(username) + '/' + encodeURIComponent(projectName),
         onSuccess,
         onError,
         'Could not fetch project ' + projectName,
@@ -528,7 +528,7 @@ Cloud.prototype.getProjectMetadata = function (
 ) {
     this.request(
         'GET',
-        '/projects/' + username + '/' + projectName + '/metadata',
+        '/projects/' + encodeURIComponent(username) + '/' + encodeURIComponent(projectName) + '/metadata',
         onSuccess,
         onError,
         'Could not fetch metadata for ' + projectName
@@ -543,7 +543,7 @@ Cloud.prototype.deleteProject = function (
 ) {
     this[username ? 'request' : 'withCredentialsRequest'](
         'DELETE',
-        '/projects/' + (username || '%username') + '/' + projectName,
+        '/projects/' + (encodeURIComponent(username) || '%username') + '/' + encodeURIComponent(projectName),
         onSuccess,
         onError,
         'Could not delete project'
@@ -559,8 +559,8 @@ Cloud.prototype.shareProject = function (
     this[username ? 'request' : 'withCredentialsRequest'](
         'POST',
         '/projects/' +
-        	(username || '%username') +
-            '/' + projectName +
+            (encodeURIComponent(username) || '%username') +
+            '/' + encodeURIComponent(projectName) +
             '/metadata?ispublic=true',
         onSuccess,
         onError,
@@ -577,8 +577,8 @@ Cloud.prototype.unshareProject = function (
     this[username ? 'request' : 'withCredentialsRequest'](
         'POST',
         '/projects/' +
-        	(username || '%username') + '/' +
-            projectName +
+            (encodeURIComponent(username) || '%username') + '/' +
+            encodeURIComponent(projectName) +
             '/metadata?ispublic=false&ispublished=false',
         onSuccess,
         onError,
@@ -595,9 +595,9 @@ Cloud.prototype.publishProject = function (
     this[username ? 'request' : 'withCredentialsRequest'](
         'POST',
         '/projects/' +
-        	(username || '%username') +
+        	(encodeURIComponent(username) || '%username') +
             '/' +
-            projectName +
+            encodeURIComponent(projectName) +
             '/metadata?ispublished=true',
         onSuccess,
         onError,
@@ -614,9 +614,9 @@ Cloud.prototype.unpublishProject = function (
     this[username ? 'request' : 'withCredentialsRequest'](
         'POST',
         '/projects/' +
-        	(username || '%username') +
+        	(encodeURIComponent(username) || '%username') +
             '/' +
-            projectName +
+            encodeURIComponent(projectName) +
             '/metadata?ispublished=false',
         onSuccess,
         onError,
@@ -632,7 +632,7 @@ Cloud.prototype.updateNotes = function (
 ) {
     this.withCredentialsRequest(
         'POST',
-        '/projects/%username/' + projectName + '/metadata',
+        '/projects/%username/' + encodeURIComponent(projectName) + '/metadata',
         onSuccess,
         onError,
         'Could not update project notes',
