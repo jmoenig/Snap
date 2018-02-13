@@ -83,7 +83,7 @@ BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph,
 AlignmentMorph*/
 
-modules.objects = '2018-February-12';
+modules.objects = '2018-February-13';
 
 var SpriteMorph;
 var StageMorph;
@@ -1083,7 +1083,7 @@ SpriteMorph.prototype.initBlocks = function () {
             dev: true,
             type: 'reporter',
             category: 'operators',
-            spec: 'compiled %repRing'
+            spec: 'compile %repRing'
         },
 
     /*
@@ -7283,6 +7283,7 @@ StageMorph.prototype.blockTemplates = function (category) {
             blocks.push('-');
             blocks.push(block('reportTypeOf'));
             blocks.push(block('reportTextFunction'));
+            blocks.push(block('reportCompiled'));
         }
 
     //////////////////////////////////

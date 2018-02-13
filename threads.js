@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph,
 TableFrameMorph, ColorSlotMorph, isSnapObject*/
 
-modules.threads = '2018-February-12';
+modules.threads = '2018-February-13';
 
 var ThreadManager;
 var Process;
@@ -736,41 +736,68 @@ Process.prototype.evaluateBlock = function (block, argCount) {
 };
 
 // Process: Compile simple, side-effect free Reporters
-// with only implicit formal parameters (empty input slots)
+// with only explicit formal parameters (no empty input slots)
 // ** highly experimental and heavily under construction **
 
 Process.prototype.reportCompiled = function (context) {
 	this.assertType(context, 'reporter');
- 	return this.compile(context.expression);
+	return this.compileFunction(context.expression, context.inputs);
 };
 
-Process.prototype.compile = function (block) {
-	// private - totally under construction and unusable at this time
+Process.prototype.compileFunction = function (block, parameters) {
+	// private
+ 	return this.compileExpression(block);
+
+	// parameter binding is commented out for now
+ 	/*
     var selector = block.selector,
-	    rcvr = this.context.receiver || this.receiver,
-        args = [],
-		func = this[selector] ||
-			(this.context.receiver || this.receiver)[selector];
+	    args = this.compileInputs(block),
+        body = 'return Cfunc.apply(null, [' + args.toString() + ']);',
+		method = this[selector] ||
+        	(this.context.receiver || this.receiver)[selector];
 
-/*
-	function f(a, b, c) {return a * b + c};
-	function ff(f, p1) {return f.apply(null, [3, 4, p1]); }
-  	function fff(x) {return ff.apply(null, [f, x]); }
-*/
+	// global!
+	Cfunc = function () {return method.apply(null, arguments); };
 
+    return Function.apply(null, parameters.concat([body]));
+    */
+};
+
+Process.prototype.compileExpression = function (block) {
+	// private
+    var selector = block.selector,
+        args = this.compileInputs(block),
+        method = this[selector] ||
+            (this.context.receiver || this.receiver)[selector];
+
+	function evalArg(value) {
+    	 return value instanceof Function ? value() : value;
+	}
+
+    return function () {return method.apply(null, args.map(evalArg)); };
+};
+
+Process.prototype.compileInputs = function (block) {
+	var args = [],
+ 		myself = this;
 	block.inputs().forEach(function (inp) {
- 		if (inp.isEmptySlot && inp.isEmptySlot()) {
-   			// add to formal parameters
-   		} else if (inp instanceof ArgMorph) {
-     		// literal - evaluate inline
-     		args.push(inp.evaluate());
-     	} else if (inp instanceof BlockMorph) {
-      		// recurse
-      	} else {
-       		// raise error about unsupported slot
-		}
- 	});
-	return function () {return func.apply(rcvr, args); };
+    	if (inp.isEmptySlot && inp.isEmptySlot()) {
+        	// implicit parameter
+        } else if (inp instanceof ArgMorph) {
+            // literal - evaluate inline
+        	args.push(inp.evaluate());
+    	} else if (inp instanceof BlockMorph) {
+            if (inp.selector === 'reportGetVar') {
+            	args.push(inp.blockSpec);
+            } else {
+                // recurse
+                args.push(myself.compileExpression(inp));
+            }
+        } else {
+            // raise error about unsupported slot
+    	}
+    });
+	return args;
 };
 
 // Process: Special Forms Blocks Primitives
