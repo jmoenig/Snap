@@ -482,7 +482,7 @@ Cloud.prototype.getThumbnail = function (
     this[username ? 'request' : 'withCredentialsRequest'](
         'GET',
         '/projects/' +
-            (encodeURIComponent(username) || '%username') +
+            (username ? encodeURIComponent(username) : '%username') +
             '/' +
             encodeURIComponent(projectName) +
             '/thumbnail',
@@ -543,7 +543,8 @@ Cloud.prototype.deleteProject = function (
 ) {
     this[username ? 'request' : 'withCredentialsRequest'](
         'DELETE',
-        '/projects/' + (encodeURIComponent(username) || '%username') + '/' + encodeURIComponent(projectName),
+        '/projects/' + (username ? encodeURIComponent(username) : '%username') +
+        '/' + encodeURIComponent(projectName),
         onSuccess,
         onError,
         'Could not delete project'
@@ -559,7 +560,7 @@ Cloud.prototype.shareProject = function (
     this[username ? 'request' : 'withCredentialsRequest'](
         'POST',
         '/projects/' +
-            (encodeURIComponent(username) || '%username') +
+            (username ? encodeURIComponent(username) : '%username') +
             '/' + encodeURIComponent(projectName) +
             '/metadata?ispublic=true',
         onSuccess,
@@ -577,8 +578,8 @@ Cloud.prototype.unshareProject = function (
     this[username ? 'request' : 'withCredentialsRequest'](
         'POST',
         '/projects/' +
-            (encodeURIComponent(username) || '%username') + '/' +
-            encodeURIComponent(projectName) +
+            (username ? encodeURIComponent(username) : '%username') +
+            '/' + encodeURIComponent(projectName) +
             '/metadata?ispublic=false&ispublished=false',
         onSuccess,
         onError,
@@ -595,9 +596,8 @@ Cloud.prototype.publishProject = function (
     this[username ? 'request' : 'withCredentialsRequest'](
         'POST',
         '/projects/' +
-        	(encodeURIComponent(username) || '%username') +
-            '/' +
-            encodeURIComponent(projectName) +
+            (username ? encodeURIComponent(username) : '%username') +
+            '/' + encodeURIComponent(projectName) +
             '/metadata?ispublished=true',
         onSuccess,
         onError,
@@ -614,9 +614,8 @@ Cloud.prototype.unpublishProject = function (
     this[username ? 'request' : 'withCredentialsRequest'](
         'POST',
         '/projects/' +
-        	(encodeURIComponent(username) || '%username') +
-            '/' +
-            encodeURIComponent(projectName) +
+            (username ? encodeURIComponent(username) : '%username') +
+            '/' + encodeURIComponent(projectName) +
             '/metadata?ispublished=false',
         onSuccess,
         onError,
