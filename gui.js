@@ -310,6 +310,21 @@ IDE_Morph.prototype.openIn = function (world) {
 
     this.reactToWorldResize(world.bounds);
 
+    function getURL(url) {
+        try {
+            var request = new XMLHttpRequest();
+            request.open('GET', url, false);
+            request.send();
+            if (request.status === 200) {
+                return request.responseText;
+            }
+            throw new Error('unable to retrieve ' + url);
+        } catch (err) {
+            myself.showMessage('unable to retrieve project');
+            return '';
+        }
+    }
+
     function applyFlags(dict) {
         if (dict.embedMode) {
             myself.setEmbedMode();
@@ -332,11 +347,14 @@ IDE_Morph.prototype.openIn = function (world) {
     }
 
     // dynamic notifications from non-source text files
-    this.getURL('motd.txt', function (text, request) {
-        if (text && request.status == 200) {
-            this.inform('Snap!', text);
-        }
-    });
+    // has some issues, commented out for now
+    /*
+    this.cloudMsg = getURL('http://snap.berkeley.edu/cloudmsg.txt');
+    motd = getURL('http://snap.berkeley.edu/motd.txt');
+    if (motd) {
+        this.inform('Snap!', motd);
+    }
+    */
 
     function interpretUrlAnchors() {
         var dict, idx;
@@ -5558,8 +5576,7 @@ IDE_Morph.prototype.getURL = function (url, callback) {
                     if (request.responseText) {
                         callback.call(
                             myself,
-                            request.responseText,
-                            request
+                            request.responseText
                         );
                     } else {
                         throw new Error('unable to retrieve ' + url);
@@ -5575,7 +5592,6 @@ IDE_Morph.prototype.getURL = function (url, callback) {
             throw new Error('unable to retrieve ' + url);
         }
     } catch (err) {
-        alert('CATCHING ERROR', err)
         myself.showMessage(err.toString());
         if (async) {
             callback.call(this);
