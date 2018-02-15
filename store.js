@@ -170,12 +170,13 @@ XML_Serializer.prototype.undoEventsXML = function (events, isReplay) {
             );
         } else {
             xml = this.format(
-                '<event id="@" type="@" replayType="@" time="@" user="@">%</event>',
+                '<event id="@" type="@" replayType="@" time="@" user="@" username="@">%</event>',
                 event.id,
                 event.type,
                 event.replayType || 0,
                 event.time,
                 event.user,
+                event.username || '',
                 args
             );
         }
@@ -782,6 +783,7 @@ SnapSerializer.prototype.parseEvent = function (owner, xml) {
         replayType: +xml.attributes.replayType,
         time: +xml.attributes.time,
         user: xml.attributes.user,
+        username: xml.attributes.username || undefined,
         args: args
     };
 };
