@@ -3819,6 +3819,7 @@ SpriteMorph.prototype.isCorrectingOutsideDrag = function () {
 SpriteMorph.prototype.justDropped = function () {
     var stage = this.parentThatIsA(StageMorph);
     if (stage) {
+        SnapActions.setSpritePosition(this);
         stage.enableCustomHatBlocks = true;
     }
     this.restoreLayers();
@@ -8975,6 +8976,10 @@ ReplayControls.prototype.displayCaption = function(action, originalEvent) {
     return menu;
 };
 
+ReplayControls.prototype.getCaptionFor = function(action) {
+    return action.type;
+};
+
 ReplayControls.prototype.play = function() {
     var myself = this;
 
@@ -9366,6 +9371,7 @@ ReplayControls.prototype.update = function() {
 };
 
 ReplayControls.prototype.applyEvent = function(event, next) {
+    if (event.isUserAction) return next();
     return SnapActions.applyEvent(event)
         .accept(next)
         .reject(function() {

@@ -3747,6 +3747,9 @@ BlockMorph.prototype.mouseClickLeft = function () {
             // msg handlers can only be stopped - not started
             if (!(top.selector === 'receiveSocketMessage' && !active)) {
                 stage.threads.toggleProcess(top);
+                if (top.id) {  // record that the block has been executed
+                    SnapActions.startScript(top, active);
+                }
             }
         }
     }

@@ -2042,6 +2042,7 @@ IDE_Morph.prototype.refreshPalette = function (shouldIgnorePosition) {
 };
 
 IDE_Morph.prototype.pressStart = function () {
+    SnapActions.pressStart(this.world().currentKey === 16);
     if (this.world().currentKey === 16) { // shiftClicked
         this.toggleFastTracking();
     } else {
@@ -2115,6 +2116,7 @@ IDE_Morph.prototype.runScripts = function () {
 };
 
 IDE_Morph.prototype.togglePauseResume = function () {
+    SnapActions.togglePause(this.stage.threads.isPaused());
     if (this.stage.threads.isPaused()) {
         this.stage.threads.resumeAll(this.stage);
     } else {
@@ -2129,6 +2131,7 @@ IDE_Morph.prototype.isPaused = function () {
 };
 
 IDE_Morph.prototype.stopAllScripts = function () {
+    SnapActions.stopAllScripts();
     if (this.stage.enableCustomHatBlocks) {
         this.stage.threads.pauseCustomHatBlocks =
             !this.stage.threads.pauseCustomHatBlocks;

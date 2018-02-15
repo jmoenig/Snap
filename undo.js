@@ -110,11 +110,13 @@ UndoManager.prototype.getInverseEvent = function(event) {
     var type = event.type,
         result;
     
+    event = JSON.parse(JSON.stringify(event));  // deep copy
+
+    if (event.isUserAction) return event;
     if (!UndoManager.Invert[type]) {
         throw Error('Cannot undo "' + type + '" event!');
     }
 
-    event = JSON.parse(JSON.stringify(event));  // deep copy
     result = UndoManager.Invert[type].call(this, event.args);
 
     if (result instanceof Array) {  // shorthand inverter result
@@ -126,7 +128,7 @@ UndoManager.prototype.getInverseEvent = function(event) {
         result = {
             type: result,
             args: event.args
-        }
+        };
     }
 
     return result;

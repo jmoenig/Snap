@@ -60,6 +60,36 @@ ActionManager.prototype.addActions = function() {
     });
 };
 
+ActionManager.prototype.addUserActions = function() {
+    var actions = Array.prototype.slice.call(arguments),
+        myself = this;
+
+    actions.forEach(function(method) {
+        myself[method] = function() {
+            var args = Array.prototype.slice.apply(arguments),
+                fn = '_' + method,
+                msg;
+
+            if (this[fn]) {
+                args = this[fn].apply(this, args) || args;
+            }
+
+            msg = {
+                isUserAction: true,
+                type: method,
+                args: args
+            };
+
+            // Create the event object, ID it, and share it!
+            return this.applyEvent(msg);
+        };
+    });
+};
+
+ActionManager.prototype.isUserAction = function(event) {
+    return event.isUserAction;
+};
+
 ActionManager.prototype.initializeEventMethods = function() {
     this.addActions(
         'setStageSize',
@@ -123,7 +153,15 @@ ActionManager.prototype.initializeEventMethods = function() {
         'setColorField',
         'setField',
 
-        'openProject'  // for replaying
+        'openProject'
+    );
+
+    this.addUserActions(
+        'pressStart',
+        'stopAllScripts',
+        'startScript',
+        'setSpritePosition',
+        'togglePause'
     );
 };
 
@@ -355,7 +393,11 @@ ActionManager.prototype.applyEvent = function(event) {
     }
 
     // if in replay mode, check that the event is a replay event
-    this.submitIfAllowed(event);
+    if (this.isUserAction(event)) {
+        this.submitAction(event);
+    } else {
+        this.submitIfAllowed(event);
+    }
 
     return new Action(this, event);
 };
@@ -400,6 +442,7 @@ ActionManager.prototype._isBatchEvent = function(msg) {
 
 ActionManager.prototype.onReceiveAction = function(msg) {
     if (this.isPreviousAction(msg)) return;
+    if (this.isUserAction(msg)) return SnapUndo.record(msg);
 
     if (this.isNextAction(msg) && !this.isApplyingAction) {
         this._applyEvent(msg);
@@ -775,6 +818,22 @@ ActionManager.prototype._updateBlockLabel = function(definition, label, fragment
         label.fragment.defaultValue,
         label.fragment.options,
         label.fragment.isReadOnly
+    ];
+};
+
+ActionManager.prototype._startScript = function(topBlock, isActive) {
+    var isStart = !isActive;
+    return [
+        topBlock.id,
+        isStart
+    ];
+};
+
+ActionManager.prototype._setSpritePosition = function(sprite) {
+    return [
+        sprite.id,
+        sprite.xPosition(),
+        sprite.yPosition()
     ];
 };
 
