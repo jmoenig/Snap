@@ -9358,6 +9358,25 @@ ReplayControls.prototype.update = function() {
 };
 
 ReplayControls.prototype.applyEvent = function(event, next) {
+    var ide = this.parentThatIsA(IDE_Morph),
+        chunks,
+        ownerId,
+        tabName,
+        owner;
+
+    // Show the applied event
+    if (event.owner) {
+        chunks = event.owner.split('/');
+        ownerId = chunks[0];
+        tabName = chunks[1];
+        owner = SnapActions.getOwnerFromId(ownerId);
+        if (owner) {
+            // Select the given sprite/stage and the tab
+            ide.selectSprite(owner);
+            ide.spriteBar.tabBar.tabTo(tabName);
+        }
+    }
+
     return SnapActions.applyEvent(event)
         .accept(next)
         .reject(function() {
