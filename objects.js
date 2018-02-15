@@ -81,9 +81,9 @@ modules, IDE_Morph, VariableDialogMorph, HTMLCanvasElement, Context, List,
 SpeechBubbleMorph, RingMorph, isNil, FileReader, TableDialogMorph,
 BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph,
-AlignmentMorph*/
+AlignmentMorph, Process*/
 
-modules.objects = '2018-February-13';
+modules.objects = '2018-February-15';
 
 var SpriteMorph;
 var StageMorph;
@@ -1079,8 +1079,7 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: '%txtfun of %s',
             defaults: [null, "Abelson & Sussman"]
         },
-        reportCompiled: { // only in dev mode - experimental
-            dev: true,
+        reportCompiled: { // experimental
             type: 'reporter',
             category: 'operators',
             spec: 'compile %repRing'
@@ -2134,6 +2133,9 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         if (true) { // (Process.prototype.enableJS) {
             blocks.push('-');
             blocks.push(block('reportJSFunction'));
+            if (Process.prototype.enableCompiling) {
+	            blocks.push(block('reportCompiled'));
+            }
         }
 
     // for debugging: ///////////////
@@ -2149,7 +2151,6 @@ SpriteMorph.prototype.blockTemplates = function (category) {
             blocks.push('-');
             blocks.push(block('reportTypeOf'));
             blocks.push(block('reportTextFunction'));
-            blocks.push(block('reportCompiled'));
         }
 
     /////////////////////////////////
@@ -7268,6 +7269,9 @@ StageMorph.prototype.blockTemplates = function (category) {
         if (true) { // (Process.prototype.enableJS) {
             blocks.push('-');
             blocks.push(block('reportJSFunction'));
+            if (Process.prototype.enableCompiling) {
+                blocks.push(block('reportCompiled'));
+            }
         }
 
     // for debugging: ///////////////
@@ -7283,7 +7287,6 @@ StageMorph.prototype.blockTemplates = function (category) {
             blocks.push('-');
             blocks.push(block('reportTypeOf'));
             blocks.push(block('reportTextFunction'));
-            blocks.push(block('reportCompiled'));
         }
 
     //////////////////////////////////

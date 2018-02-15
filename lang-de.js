@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org', // optional
     'last_changed':
-        '2018-01-25', // this, too, will appear in the Translators tab
+        '2018-02-15', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -628,6 +628,8 @@ SnapTranslator.dict.de = {
         'ist %s identisch mit %s ?',
     'JavaScript function ( %mult%s ) { %code }':
         'JavaScript Funktion ( %mult%s ) { %code }',
+    'compile %repRing':
+    	'kompiliere %repRing',
 
     'type of %s':
         'Typ von %s',

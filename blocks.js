@@ -148,7 +148,7 @@ CustomCommandBlockMorph, SymbolMorph, ToggleButtonMorph, DialMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2018-January-25';
+modules.blocks = '2018-February-15';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -5873,6 +5873,7 @@ RingMorph.prototype.vanishForSimilar = function () {
     if (block.selector === 'reportGetVar' ||
         block.selector === 'reportJSFunction' ||
         block.selector == 'reportAttributeOf' ||
+        block.selector == 'reportCompiled' ||
         (block instanceof RingMorph)
     ) {
         this.parent.silentReplaceInput(this, block);

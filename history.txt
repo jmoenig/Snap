@@ -3952,12 +3952,18 @@ Translation Updates:
 * Threads: Allow JS-functions for invoke()
 * Threads, Objects: Small compilation experiment
 
+180215
+------
+* Threads, Blocks, Objects: experimental JIT compiler
+
 
 === v4.1.2 features ===
 
 v4.1.2 New Features:
+* experimental JIT compiler (in progress)
 
 Notable Changes:
+* new cloud backend
 
 Notable Fixes:
 

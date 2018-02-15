@@ -75,7 +75,7 @@ isRetinaSupported, SliderMorph, Animation, BoxMorph, MediaRecorder*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2018-February-09';
+modules.gui = '2018-February-15';
 
 // Declarations
 
@@ -2968,6 +2968,20 @@ IDE_Morph.prototype.settingsMenu = function () {
         Process.prototype.enableLiveCoding,
         'EXPERIMENTAL! uncheck to disable live\ncustom control structures',
         'EXPERIMENTAL! check to enable\n live custom control structures',
+        true
+    );
+    addPreference(
+        'JIT compiler support',
+        function () {
+            Process.prototype.enableCompiling =
+                !Process.prototype.enableCompiling;
+            myself.currentSprite.blocksCache.operators = null;
+            myself.currentSprite.paletteCache.operators = null;
+            myself.refreshPalette();
+        },
+        Process.prototype.enableCompiling,
+        'EXPERIMENTAL! uncheck to disable live\nsupport for compiling',
+        'EXPERIMENTAL! check to enable\nsupport for compiling',
         true
     );
     menu.addLine(); // everything below this line is stored in the project
