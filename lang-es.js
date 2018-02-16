@@ -733,66 +733,246 @@ SnapTranslator.dict.es = {
     // settings menu
     'Language...':
         'Idioma...',
+    'Zoom blocks...':
+        'Agrandar bloques...',
+    'Stage size...':
+        'Tama\u00F1o del escenario...',
+
+    'Dragging threshold...':
+        'Umbral de arrastre...',
+    'specify the distance the hand has to move\nbefore it picks up an object':
+        'especifica cu\u00E1nto hay que arrastrar\nun objeto para comenzar a moverlo',
+
+    'Retina display support':
+        'Soporte para pantallas Retina',
+    'uncheck for lower resolution,\nsaves computing resources':
+        'desmarcar para una menor resoluci\u00F3n\n(ahorra recursos de computaci\u00F3n)',
+    'check for higher resolution,\nuses more computing resources':
+        'marcar para una mayor resoluci\u00F3n\n(usa m\u00E1s recursos de computaci\u00F3n)',
+
+    'Input sliders':
+        'Deslizadores en campos de entrada',
+    'uncheck to disable\ninput sliders for\nentry fields':
+        'desmarcar para desactivar\nlos deslizadores\nen los campos de entrada',
+    'check to enable\ninput sliders for\nentry fields':
+        'marcar para activar\nlos deslizadores\nen los campos de entrada',
+
+    'Execute on slider change':
+        'Ejecutar cuando un deslizador cambie',
+    'uncheck to suppress\nrunning scripts\nwhen moving the slider':
+        'desmarcar para no ejecutar el programa\ncuando se mueva el deslizador',
+    'check to run\nthe edited script\nwhen moving the slider':
+        'marcar para ejecutar el programa\ncuando se mueva el deslizador',
+
+    'Turbo mode':
+        'Modo turbo',
+    'uncheck to run scripts\nat normal speed':
+        'desmarcar para ejecutar\nlos programas a velocidad normal',
+    'check to prioritize\nscript execution':
+        'marcar para priorizar\nla ejecuci\u00F3n del programa',
+
+    'Visible stepping':
+        'Depuraci\u00F3n paso a paso',
+    'uncheck to turn off\nvisible stepping':
+        'desmarcar para desactivar\nla depuraci\u00F3n paso a paso',
+    'check to turn on\n visible stepping (slow)':
+        'marcar para activar\nla depuraci\u00F3n paso a paso (lento)',
+
+    'Ternary Boolean slots':
+        'Huecos booleanos triestado',
+    'uncheck to limit\nBoolean slots to true / false':
+        'desmarcar para restringir\nlos huecos booleanos a cierto / falso',
+    'check to allow\nempty Boolean slots':
+        'marcar para permitir\nhuecos booleanos vac\u00EDos',
+
+    'Camera support':
+        'Soporte para c\u00E1mara',
+    'uncheck to disable\ncamera support':
+        'desmarcar para desactivar\nel soporte de c\u00E1mara',
+    'check to enable\ncamera support':
+        'marcar para activar\nel soporte de c\u00E1mara',
+
     'Blurred shadows':
         'Sombras difuminadas',
     'uncheck to use solid drop\nshadows and highlights':
         'desmarcar para usar sombras\ny brillos s\u00F3lidos',
     'check to use blurred drop\nshadows and highlights':
         'marcar para usar sombras\ny brillos difuminados',
+
     'Zebra coloring':
         'Coloraci\u00F3n de cebra',
     'check to enable alternating\ncolors for nested blocks':
         'marcar para habilitar alternaci\u00F3n\nde colores para bloques anidados',
     'uncheck to disable alternating\ncolors for nested block':
         'desmarcar para inhabilitar alternaci\u00F3n\nde colores para bloques anidados',
+
     'Dynamic input labels':
         'Etiquetas de entrada din\u00E1micas',
     'uncheck to disable dynamic\nlabels for variadic inputs':
-        'desmarcar para inhabilitar etiquetas\ndin\u00E1micas para entradas vari\u00E1dicas',
+        'desmarcar para inhabilitar etiquetas\ndin\u00E1micas para entradas variables',
     'check to enable dynamic\nlabels for variadic inputs':
-        'marcar para habilitar etiquetas\ndin\u00E1micas para entradas vari\u00E1dicas',
+        'marcar para habilitar etiquetas\ndin\u00E1micas para entradas variables',
+
     'Prefer empty slot drops':
-        'Preferir ranuras de gotas vac\u00EDas',
+        'Dar preferencia a huecos vac\u00EDos',
     'settings menu prefer empty slots hint':
-        'men\u00FA de ajustes prefiere pistas de ranuras vac\u00EDas',
+        'marcar para impedir que los bloques puedan\nocupar el lugar de otros al ser soltados',
     'uncheck to allow dropped\nreporters to kick out others':
-        'desmarcar para permitir reporteros\nca\u00EDdos para echar a otros',
+        'desmarcar para permitir que los bloques puedan\nocupar el lugar de otros al ser soltados',
+
     'Long form input dialog':
-        'di\u00E1logo de entradas de forma larga',
-    'check to always show slot\ntypes in the input dialog':
-        'marcar para siempre mostrar tipos\nde espacios en el di\u00E1logo de insumo',
+        'Editor de par\u00E1metros extendido',
     'uncheck to use the input\ndialog in short form':
-        'desmarcar para usar el di\u00E1logo\nde insumo en forma corta',
+        'desmarcar para ocultar autom\u00E1ticamente\nlos tipos en el editor de par\u00E1metros',
+    'check to always show slot\ntypes in the input dialog':
+        'marcar para mostrar autom\u00E1ticamente\nlos tipos en el editor de par\u00E1metros',
+
+    'Plain prototype labels':
+        'Etiquetas planas',
+    'uncheck to always show (+) symbols\nin block prototype labels':
+        'desmarcar para mostrar los (+)\ndurante la definici\u00F3n de bloques',
+    'check to hide (+) symbols\nin block prototype labels':
+        'marcar para ocultar los (+)\ndurante la definici\u00F3n de bloques',
+
     'Virtual keyboard':
         'Teclado virtual',
     'uncheck to disable\nvirtual keyboard support\nfor mobile devices':
-        'desmarcar para inhabilitar\nsoporte al teclado virtual\npara dispositivos m\u00F3viles',
+        'desmarcar para inhabilitar\nel soporte del teclado virtual\npara dispositivos m\u00F3viles',
     'check to enable\nvirtual keyboard support\nfor mobile devices':
-        'marcar para habilitar\nsoporte para el teclado virtual\npara dispositivos m\u00F3viles',
-    'Input sliders':
-        'Deslizadores de insumo',
-    'uncheck to disable\ninput sliders for\nentry fields':
-        'desmarcar para inhabilitar\ndeslizadores de insumo para\ncampos de entrada',
-    'check to enable\ninput sliders for\nentry fields':
-        'marcar para habilitar\ndeslizadores de entrada para\ncampos de entrada',
+        'marcar para habilitar\nel soporte del teclado virtual\npara dispositivos m\u00F3viles',
+
     'Clicking sound':
         'Sonido de clic',
     'uncheck to turn\nblock clicking\nsound off':
-        'desmarcar para encender\nbloquear clic\napagar sonido',
+        'desmarcar para que no suene un "clic"\ncuando se coloca un bloque',
     'check to turn\nblock clicking\nsound on':
-        'marcar para encender\nbloque de clic\nencender sonido',
+        'marcar para que suene un "clic"\ncuando se coloca un bloque',
+
     'Animations':
         'Animaciones',
     'uncheck to disable\nIDE animations':
         'desmarcar para inhabilitar\nanimaciones del IDE',
     'check to enable\nIDE animations':
         'marcar para habilitar\nanimaciones del IDE',
+
+    'Cache Inputs':
+        'Cachear entradas',
+    'uncheck to stop caching\ninputs (for debugging the evaluator)':
+        'desmarcar para no cachear entradas\n(para depurar el evaluador)',
+    'check to cache inputs\nboosts recursion':
+        'marcar para cachear entradas\n(dispara la recusi\u00F3n)',
+
+    'Rasterize SVGs':
+        'Rasterizar SVGs',
+    'uncheck for smooth\nscaling of vector costumes':
+        'desmarcar para usar\nescalado suave en im\u00E1genes vectoriales',
+    'check to rasterize\nSVGs on import':
+        'marcar para rasterizar los SVGs\ntras haberlos importado',
+
+    'Flat design':
+        'Dise\u00F1o plano',
+    'uncheck for default\nGUI design':
+        'desmarcar para utilizar\nla interfaz predeterminada',
+    'check for alternative\nGUI design':
+        'marcar para utilizar\nla interfaz alternativa',
+
+    'Nested auto-wrapping':
+        'Encapsular bloques internos',
+    'uncheck to confine auto-wrapping\nto top-level block stacks':
+        'desmarcar para que bloques tipo C\nsolo puedan encapsular a otros m\u00E1s externos',
+    'check to enable auto-wrapping\ninside nested block stacks':
+        'marcar para permitir que bloques tipo C\npuedan encapsular a otros m\u00E1s internos',
+
+    'Project URLs':
+        'URLs de proyecto',
+    'uncheck to disable\nproject data in URLs':
+        'desmarcar para no incluir\ndatos de proyecto en las URLs',
+    'check to enable\nproject data in URLs':
+        'marcar para incluir\ndatos de proyecto en las URLs',
+
+    'Sprite Nesting':
+        'Anidamiento de objetos',
+    'uncheck to disable\nsprite composition':
+        'desmarcar para desactivar\nla composici\u00F3n de objetos',
+    'check to enable\nsprite composition':
+        'marcar para activar\nla composici\u00F3n de objetos',
+
+    'First-Class Sprites':
+        'Objetos de primera clase',
+    'uncheck to disable support\nfor first-class sprites':
+        'desmarcar para inhabilitar el\nsoporte para objectos de primera clase',
+    'check to enable support\n for first-class sprite':
+        'marcar para habilitar el\nsoporte para objectos de primera clase',
+
+    'Keyboard Editing':
+        'Edici\u00F3n de teclado',
+    'uncheck to disable\nkeyboard editing support':
+        'desmarcar para inhabilitar\nel soporte de edici\u00F3n de teclado',
+    'check to enable\nkeyboard editing support':
+        'marcar para habilitar\nel soporte de edici\u00F3n de teclado',
+
+    'Table support':
+        'Soporte para tablas',
+    'uncheck to disable\nmulti-column list views':
+        'desmarcar para no visualizar\nlistas multicolumna como tablas',
+    'check for multi-column\nlist view support':
+        'marcar para visualizar\nlistas multicolumna como tablas',
+
+    'Table lines':
+        'L\u00EDneas de tablas',
+    'uncheck for less contrast\nmulti-column list views':
+        'desmarcar para ver tablas\n con un menor contraste',
+    'check for higher contrast\ntable views':
+        'marcar para ver tablas\ncon un mayor contraste',
+
+    'Live coding support':
+        'Soporte para programaci\u00F3n en vivo',
+    'EXPERIMENTAL! uncheck to disable live\ncustom control structures':
+        '¡EXPERIMENTAL! desmarcar para inhabilitar las\nestructuras de control personalizadas en vivo',
+    'EXPERIMENTAL! check to enable\n live custom control structures':
+        '¡EXPERIMENTAL! marcar para habilitar las\nestructuras de control personalizadas en vivo',
+
     'Thread safe scripts':
         'Programas seguros para uso paralelo',
-    'uncheck to allow\nscript reentrancy':
-        'desmarcar para permitir\nreingreso de programa',
-    'check to disallow\nscript reentrancy':
-        'marcar para no permitir\nreingreso de programa',
+    'uncheck to allow\nscript reentrance':
+        'desmarcar para permitir\nla reentrada de programas',
+    'check to disallow\nscript reentrance':
+        'marcar para no permitir\nla reentrada de programas',
+
+    'Prefer smooth animations':
+        'Preferir animaciones suaves',
+    'uncheck for greater speed\nat variable frame rates':
+        'desmarcar para mayor velocidad\na cuadros por segundo variables',
+    'check for smooth, predictable\nanimations across computers':
+        'marcar para animaciones suaves y predecibles entre ordenadores',
+
+    'Flat line ends':
+        'Extremos de l\u00EDnea rectos',
+    'uncheck for round ends of lines':
+        'desmarcar para dibujar l\u00EDneas\ncon extremos redondeados',
+    'check for flat ends of lines':
+        'marcar para dibujar l\u00EDneas\ncon extremos rectos',
+
+    'Codification support':
+        'Soporte de codificaci\u00F3n',
+    'uncheck to disable\nblock to text mapping features':
+        'desmarcar para desactivar el soporte\nde conversi\u00F3n de bloques a c\u00F3digo',
+    'check for block\nto text mapping features':
+        'marcar para activar el soporte\nde conversi\u00F3n de bloques a c\u00F3digo',
+
+    'Inheritance support':
+        'Soporte de herencia',
+    'uncheck to disable\nsprite inheritance features':
+        'desmarcar para desactivar\nel soporte de herencia de objetos',
+    'check for sprite\ninheritance features':
+        'marcar para activar\nel soporte de herencia de objetos',
+
+    'Persist linked sublist IDs':
+        'IDs de sublistas enlazadas persistentes',
+    'uncheck to disable\nsaving linked sublist identities':
+        'desmarcar para impedir guardar\nlas identidades de sublistas enlazadas',
+    'check to enable\nsaving linked sublist identities':
+        'marcar para permitir guardar\nlas identidades de sublistas enlazadas',
 
     // inputs
     'with inputs':
@@ -1378,24 +1558,4 @@ SnapTranslator.dict.es = {
         'historieta',
     'confetti':
         'confite',
-
-    // under "Input sliders"
-    'Plain prototype labels':
-        'Etiquetas de prototipo planas',
-    'Turbo mode':
-        'Modo turbo',
-    'Flat design':
-        'Diseño plano',
-    'Keyboard Editing':
-        'Edición de teclado',
-    'Prefer smooth animations':
-        'Preferir animaciones suaves',
-    'Flat line ends':
-        'Bordes de línea planos',
-    'Codification support':
-        'Soporte de codificación',
-    'Inheritance support':
-        'Soporte de herencia',
-    'Zoom blocks...':
-        'Agrandar bloques...'
 };
