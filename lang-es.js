@@ -641,29 +641,69 @@ SnapTranslator.dict.es = {
         'Guardar',
     'Save As...':
         'Guardar como...',
+
     'Import...':
         'Importar...',
     'file menu import hint':
-        'men\u00FA de archivo de importaci\u00F3n indirecta',
-    'Export project as plain text...':
-        'Exportar proyecto como texto...',
+        'importa proyectos, bloques,\nim\u00E1genes o sonidos',
+
     'Export project...':
         'Exportar proyecto...',
+    '(in a new window)':
+        '(en una nueva ventana)',
+    'save project data as XML\nto your downloads folder':
+        'guarda el proyecto en XML\nen tu carpeta de descargas',
     'show project data as XML\nin a new browser window':
-        'mostrar informaci\u00F3n de proyecto como XML\nen una nueva ventana',
+        'muestra el proyecto en XML\nen una nueva ventana del navegador',
+
+    'Export project as plain text...':
+        'Exportar proyecto como texto...',
+
     'Export blocks...':
         'Exportar bloques...',
     'show global custom block definitions as XML\nin a new browser window':
-        'mostrar definiciones de bloques globales personalizados como XML\nen una nueva ventana',
-        'Export summary...':
-        'Resumen de exportación...',
+        'muestra definiciones de\nbloques personalizados en XML\nen una nueva ventana',
+
+    'Unused blocks...':
+        'Bloques no utilizados...',
+    'find unused global custom blocks\nand remove their definitions':
+        'busca bloques personalizados\nque no se est\u00E9n usando\ny borra sus definiciones',
+
+    'Export summary...':
+        'Exportar resumen...',
+    'open a new browser browser window\n with a summary of this project':
+        'muestra un resumen de este proyecto\nen una nueva ventana del navegador',
+
+    'Export summary with drop-shadows...':
+        'Exportar resumen (im\u00E1genes con sombra)...',
+    'open a new browser browser window\nwith a summary of this project\nwith drop-shadows on all pictures.\nnot supported by all browsers':
+        'muestra un resumen de este proyecto\ndonde las im\u00E1genes tienen sombra\nen una nueva ventana del navegador.\nno funciona en todos los navegadores',
+
+    'Export all scripts as pic...':
+        'Exportar todos los programas como imagen',
+    'show a picture of all scripts\nand block definitions':
+        'muestra una imagen con todos\nlos programas y definiciones de bloques',
+
     'Import tools':
-        'Herramientas de importaci\u00F3n',
+        'Importar herramientas',
     'load the official library of\npowerful blocks':
-        'cargar la biblioteca oficial de\nbloques potentes',
+        'carga la biblioteca oficial de\nbloques potentes',
+
     'Libraries...':
         'Bibliotecas...',
-        
+    'Select categories of additional blocks to add to this project.':
+        'a\u00F1ade bloques adicionales\npor categor\u00EDas a este proyecto',
+
+    'Costumes':
+        'Disfraces',
+    'Select a costume from the media library':
+        'a\u00F1ade un disfraz desde la biblioteca',
+
+    'Sounds':
+       'Sonidos',
+    'Select a sound from the media library':
+        'a\u00F1ade un sonido desde la biblioteca',
+
     // settings menu
     'Language...':
         'Idioma...',
