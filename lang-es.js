@@ -704,6 +704,32 @@ SnapTranslator.dict.es = {
     'Select a sound from the media library':
         'a\u00F1ade un sonido desde la biblioteca',
 
+    // cloud menu:
+    'Login...':
+        'Iniciar sesi\u00F3n...',
+    'Signup...':
+        'Registrarse...',
+    'Reset Password...':
+        'Reiniciar contrase\u00F1a...',
+    'Resend Verification Email...':
+        'Reenviar correo de verificaci\u00F3n...',
+
+    'Logout...':
+        'Cerrar sesi\u00F3n...',
+    'Change Password...':
+        'Cambiar contrase\u00F1a',
+
+    'url...':
+        'Url...',
+    'export project media only...':
+        'Exportar solamente medios del proyecto...',
+    'export project without media...':
+        'Exportar proyecto sin medios...',
+    'export project as cloud data...':
+        'Exportar proyecto como datos en la nube...',
+    'open shared project from cloud...':
+        'Abrir proyecto compartido en la nube...',
+
     // settings menu
     'Language...':
         'Idioma...',
