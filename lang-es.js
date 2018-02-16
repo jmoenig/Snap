@@ -615,18 +615,20 @@ SnapTranslator.dict.es = {
     // snap menu
     'About...':
         'Acerca de...',
+    'Reference manual':
+        'Manual de referencia',
     'Snap! website':
-        'Sitio Web de Snap!',
+        'Sitio web de Snap!',
     'Download source':
-        'Bajar recurso',
+        'Descargar c\u00F3digo fuente',
     'Switch back to user mode':
-        'Regresar a modo de usuario',
+        'Regresar a modo usuario',
     'disable deep-Morphic\ncontext menus\nand show user-friendly ones':
-        'inhabilitar men\u0075s contextuales de Morphic\ny mostrar unos f\u0061ciles de utilizar',
+        'inhabilitar men\u0075s contextuales de Morphic\ny mostrar unos f\u00E1ciles de utilizar',
     'Switch to dev mode':
-        'Cambiar a modo de elaborador',
+        'Cambiar a modo desarrollador',
     'enable Morphic\ncontext menus\nand inspectors,\nnot user-friendly!':
-        'habilitar men\u0075s contextuales\n e inspectores de Morphic,\n\u00A1no son f\u0061ciles de utilizar! ',
+        'habilitar men\u0075s contextuales\n e inspectores de Morphic,\n\u00A1no son f\u00E1ciles de utilizar!',
 
     // project menu
     'Project notes...':
