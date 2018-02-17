@@ -685,7 +685,7 @@ SnapTranslator.dict.es = {
         'muestra una imagen con todos\nlos programas y definiciones de bloques',
 
     'Import tools':
-        'Importar herramientas',
+        'Importar utilidades',
     'load the official library of\npowerful blocks':
         'carga la biblioteca oficial de\nbloques potentes',
 
@@ -1671,4 +1671,103 @@ SnapTranslator.dict.es = {
         'historieta',
     'confetti':
         'confite',
+
+    //libraries
+    'Tools':
+        'Utilidades',
+    'Standard library of powerful blocks (for, map, etc.)':
+        'Biblioteca est\u00E1ndar de bloques potentes (for, map, etc...)',
+
+    'Iteration, composition':
+        'Iteraci\u00F3n, composici\u00F3n',
+    'Traditional loop constructs (while, until, etc.) plus the Lisp "named let" (a generalization of FOR) plus functional iteration (repeated invocation of a function) and function composition.':
+        'Bucles tradicionales (while, until, etc...) + el "named let" de Lisp (una generalizaci\u00F3n del for) + iteraci\u00F3n funcional (invocaci\u00F3n repetida de una funci\u00F3n) y composici\u00F3n de funciones.',
+
+    'List utilities':
+        'Utilidades de lista',
+    'Some standard functions on lists (append, reverse, etc.)':
+        'Algunas funciones est\u00E1ndar de listas (append, reverse, etc...)',
+
+    'Streams (lazy lists)':
+        'Streams (listas perezosas)',
+    'A variation on the list data type in which each list item aren\'t computed until it\'s needed, so you can construct million-item lists without really taking up all that time or memory, or even infinite-sized lists.  (A block that reports all the prime numbers is included as an example.)':
+        'Una variaci\u00F3n del tipo de dato lista en el que cada elemento se calcula solo cuando es necesario, as\u00ED que puedes construir listas de un mill\u00F3n de elementos sin gastar tiempo o memoria, o incluso listas infinitas. (Un bloque que reporta todos los n\u00FAmeros primos viene incluido como ejemplo.)',
+
+    'Variadic reporters':
+        'Reporteros de aridad variable',
+    'Versions of +, x, AND, and OR that take more than two inputs.':
+        'Versiones de +, x, AND, y OR que toman m\u00E1s de dos argumentos.',
+
+    'Web services access (https)':
+        'Acceso a servicios web (https)',
+    'An extended version of the HTTP:// block that allows POST, PUT, and DELETE as well as GET requests, allows using the secure HTTPS protocol, and gives control over headers, etc.':
+        'Una versi\u00F3n extendida del bloque HTTP:// que permite hacer peticiones POST, PUT y DELETE adem\u00E1s de GET, utilizar el protocolo HTTPS, controlar cabeceras, etc...',
+
+    'Words, sentences':
+        'Palabras, frases',
+    'One of the big ideas in Logo that they left out of Scratch is thinking of text as structured into words and sentences, rather than just a string of characters.  This library (along with the JOIN WORDS block in the Tools library) brings back that idea.':
+        'Una de las mejores ideas de Logo no inclu\u00EDda en Scratch es la de considerar un texto como estructurado en palabras y frases, en lugar de simplemente una cadena de caracteres. Esta biblioteca (junto al bloque UNIR de la biblioteca Utilidades) recupera esa idea.',
+
+    'Multi-branched conditional (switch)':
+        'Condicionales multirama (switch)',
+    'Like "switch" in C-like languages or "cond" in Lisp.  Thanks to Nathan Dinsmore for inventing the idea of a separate block for each branch!':
+        'Como el "switch" de C o el "cond" de Lisp. \u00A1Gracias a Nathan Dinsmore por inventar la idea de un bloque separado para cada rama!',
+
+    'LEAP Motion controller':
+        'Control gestual (LEAP)',
+    'Report hand positions from LEAP Motion controller (leapmotion.com).':
+        'Reporta las posiciones de las manos desde el controlador de LEAP Motion (leapmotion.com).',
+
+    'Set RGB or HSV pen color':
+        'Colores RGB o HSV',
+    'Set or report pen color as RGB (red, blue, green) or HSV (hue, saturation, value).':
+        'Fija o devuelve el color del l\u00E1piz como RGB (rojo, azul, verde) o HSV (luminosidad, saturaci\u00F3n, valor).',
+
+    'Catch errors in a script':
+        'Captura de errores en programas',
+    'Run a script; if an error happens, instead of stopping the script with a red halo, run another script to handle the error. Also includes a block to cause an error with a message given as input. Also includes a block to create a script variable and give it a value.':
+        'Ejecuta un programa. Si ocurre alg\u00FAn error, en lugar de detener la ejecuci\u00F3n el programa con un mensaje en rojo puedes ejecutar otro programa para tratar el error. Tambi\u00E9n incluye un bloque para lanzar un error con un mensaje. Tambi\u00E9n incluye un bloque para crear una variable de programa y darle un valor.',
+
+    'Allow multi-line text input to a block':
+        'Texto multilinea',
+    'In general, text inputs allow only a single line.  The MULTILINE block accepts multi-line text input and can be used in text input slots of other blocks.':
+        'En general, las entradas de texto solo aceptan una \u00FAnica l\u00EDnea. El bloque MULTILINEA acepta texto en varias l\u00EDneas y puede ser usado como texto de entrada en otros bloques',
+
+    'Provide getters and setters for all GUI-controlled global settings':
+        'Manejo de opciones globales',
+
+    'Infinite precision integers, exact rationals, complex':
+        'Precisi\u00F3n arbitraria, racionales exactos, n\u00FAmeros complejos',
+    'The full Scheme numeric tower.  "USE BIGNUMS <True>" to enable.':
+        'La torre num\u00E9rica completa de Scheme. "UTILIZAR BIGNUMS <Verdad>" para activarla.',
+
+    'Provide 100 selected colors':
+        'Paleta de 100 colores preseleccionados',
+    'to use instead of hue for better selection':
+        'para usar en lugar de la luminosidad para una mejor selecci\u00F3n',
+
+    'Animation':
+        'Animaci\u00F3n',
+    'glide, grow and rotate using easing functions.':
+        'deslizamientos, zooms y rotaciones utilizando funciones curva.',
+
+    'Pixels':
+        'P\u00EDxeles',
+    'manipulate costumes pixel-wise.':
+        'manipula disfraces a nivel de pixel.',
+
+    'Audio Comp':
+        'Audio',
+    'analyze, manipulate and generate sound samples.':
+        'analiza, manipula y genera muestras de sonido',
+
+    // library dialog
+    'Import library':
+        'Importar biblioteca',
+    'Import':
+        'Importar',
+    'Imported':
+        'Se ha importado',
+    'Loading':
+        'Cargando',
 };
