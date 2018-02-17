@@ -192,7 +192,7 @@ SnapTranslator.dict.es = {
     'untitled':
         'Sin t\u00EDtulo',
     'development mode':
-        'modo de desarrollo',
+        'modo desarrollador',
 
     // categories:
     'Motion':
@@ -285,10 +285,13 @@ SnapTranslator.dict.es = {
         without breaking its functionality.
     */
 
+    // shared messages:
+    'development mode \ndebugging primitives:':
+        'primitivas de depuraci\u00F3n\ndel modo desarrollador:',
+
     // motion:
     'Stage selected:\nno motion primitives':
-        'Escenario seleccionado:\nno hay primitivos de movimiento\n'
-            + 'disponibles',
+        'Escenario seleccionado:\nno hay primitivas de movimiento\ndisponibles',
 
     'move %n steps':
         'mover %n pasos',
@@ -323,6 +326,16 @@ SnapTranslator.dict.es = {
     'direction':
         'direcci\u00F3n',
 
+    // %dir values for (point in direction %dir):
+    '(90) right':
+        '(90) derecha',
+    '(-90) left':
+        '(-90) izquierda',
+    '(0) up':
+        '(0) arriba',
+    '(180) down':
+        '(180) abajo',
+
     // looks:
     'switch to costume %cst':
         'cambiar al disfraz %cst',
@@ -330,10 +343,6 @@ SnapTranslator.dict.es = {
         'siguiente disfraz',
     'costume #':
         '# de disfraz',
-    '%att of %spr':
-        '%att de %spr',
-    'my %get':
-        'mi(s) %get',
     'say %s for %n secs':
         'decir %s por %n segs',
     'say %s':
@@ -342,10 +351,6 @@ SnapTranslator.dict.es = {
         'pensar %s por %n segs',
     'think %s':
         'pensar %s',
-    'Hello!':
-        '\u00A1Hola!',
-    'Hmm...':
-        'mmm...',
     'change %eff effect by %n':
         'cambiar efecto %eff por %n',
     'set %eff effect to %n':
@@ -367,12 +372,53 @@ SnapTranslator.dict.es = {
     'go back %n layers':
         'enviar hacia atr\u00E1s %n capas',
 
-    'development mode \ndebugging primitives:':
-        'modo de desarrollo \nprimitivos de depuraci\u00F3n',
+    // looks' development mode primitives:
     'console log %mult%s':
-        'log de consola: %mult%s',
+        'registrar en consola %mult%s',
     'alert %mult%s':
-        'alerta: %mult%s',
+        'alerta %mult%s',
+    'save %imgsource as costume named %s':
+        'guardar %imgsource en disfraz %s',
+
+    // default values for (say %s):
+    'Hello!':
+        '\u00A1Hola!',
+
+    // default values for (think %s):
+    'Hmm...':
+        'Mmm...',
+
+    // %eff values for (change %eff effect by %n):
+    'color':
+        'color',
+    'fisheye':
+        'ojo de pez',
+    'whirl':
+        'remolino',
+    'pixelate':
+        'pixelado',
+    'mosaic':
+        'mosaico',
+    'duplicate':
+        'duplicar',
+    'negative':
+        'negativo',
+    'comic':
+        'historieta',
+    'confetti':
+        'confeti',
+    'saturation':
+        'saturaci\u00F3n',
+    'brightness':
+        'brillo',
+    'ghost':
+        'fantasma',
+
+    // %imgsource values for (save %imgsource as costume named %s):
+    'pen trails':
+        'rastro del l\u00E1piz',
+    'stage image':
+        'imagen del escenario',
 
     // sound:
     'play sound %snd':
@@ -393,6 +439,22 @@ SnapTranslator.dict.es = {
         'fijar tempo a %n',
     'tempo':
         'tempo',
+
+    // %note values for (play note %note for %n beats):
+    // Notes can be translated indeed but do it would break the piano layout
+    // example:
+    // 'Eb (63)':
+    //    '(63) Mi♭',
+
+    // %inst values for (set instrument to %inst):
+    '(1) sine':
+        '(1) \u223F\u223F onda sinusoidal',
+    '(2) square':
+        '(2) \u238D\u238D onda cuadrada',
+    '(3) sawtooth':
+        '(3) \u2A58\u2A58 onda dentada',
+    '(4) triangle':
+        '(4) \u22C0\u22C0 onda triangular',
 
     // pen:
     'clear':
@@ -419,28 +481,28 @@ SnapTranslator.dict.es = {
         'sellar',
     'fill':
         'llenar',
+    'pen trails':
+        'rastro del l\u00E1piz',
 
     // control:
     'when %greenflag clicked':
-        'Al presionar %greenflag',
+        'cuando se pulse %greenflag',
     'when %keyHat key pressed':
-        'Al presionar tecla %keyHat',
-    'when I am clicked':
-        'Cuando soy cliqueado',
+        'cuando se pulse la tecla %keyHat',
+    'when I am %interaction':
+        'cuando me %interaction',
     'when %b':
         'cuando %b',
     'when I receive %msgHat':
-        'Al recibir %msgHat',
+        'cuando me llegue %msgHat',
     'broadcast %msg':
         'enviar mensaje %msg',
     'broadcast %msg and wait':
         'enviar mensaje %msg y esperar',
-    'Message name':
-        'Nombre de mensaje',
     'message':
         'mensaje',
-    'any message':
-        'cualquier mensaje',
+    'warp %c':
+        'ejecutar en modo turbo %c',
     'wait %n secs':
         'esperar %n segs',
     'wait until %b':
@@ -457,24 +519,163 @@ SnapTranslator.dict.es = {
         'si %b %c si no %c',
     'report %s':
         'reportar %s',
-    'stop block':
-        'detener bloque',
-    'stop script':
-        'detener programa',
-    'stop all %stop':
-        'detener todo %stop',
+    'stop %stopChoices':
+        'detener %stopChoices',
     'run %cmdRing %inputs':
-        'correr %cmdRing %inputs',
+        'ejecutar %cmdRing %inputs',
     'launch %cmdRing %inputs':
         'iniciar %cmdRing %inputs',
     'call %repRing %inputs':
         'llamar %repRing %inputs',
+    'tell %spr to %cmdRing %inputs':
+        'decir a %spr que %cmdRing %inputs',
+    'ask %spr for %repRing %inputs':
+        'preguntar a %spr por %repRing %inputs',
     'run %cmdRing w/continuation':
-        'correr %cmdRing con continuaci\u00F3n',
+        'ejecutar %cmdRing con continuaci\u00F3n',
     'call %cmdRing w/continuation':
         'llamar %cmdRing con continuaci\u00F3n',
-    'warp %c':
-        'ejecutar en modo turbo %c',
+    'when I start as a clone':
+        'cuando comience como clon',
+    'create a clone of %cln':
+        'crear clon de %cln',
+    'a new clone of %cln':
+        'un nuevo clon de %cln',
+    'delete this clone':
+        'eliminar este clon',
+    'pause all %pause':
+        'pausar todos %pause',
+
+    // %keyHat values for (when %keyHat key pressed):
+    'space':
+        'espacio',
+    'up arrow':
+        '↑ (flecha arriba)',
+    'down arrow':
+        '↓ (flecha abajo)',
+    'right arrow':
+        '→ (flecha derecha)',
+    'left arrow':
+        '← (flecha izquierda)',
+    'any key':
+        'cualquier tecla',
+    'a':
+        'a',
+    'b':
+        'b',
+    'c':
+        'c',
+    'd':
+        'd',
+    'e':
+        'e',
+    'f':
+        'f',
+    'g':
+        'g',
+    'h':
+        'h',
+    'i':
+        'i',
+    'j':
+        'j',
+    'k':
+        'k',
+    'l':
+        'l',
+    'm':
+        'm',
+    'n':
+        'n',
+    'o':
+        'o',
+    'p':
+        'p',
+    'q':
+        'q',
+    'r':
+        'r',
+    's':
+        's',
+    't':
+        't',
+    'u':
+        'u',
+    'v':
+        'v',
+    'w':
+        'w',
+    'x':
+        'x',
+    'y':
+        'y',
+    'z':
+        'z',
+    '0':
+        '0',
+    '1':
+        '1',
+    '2':
+        '2',
+    '3':
+        '3',
+    '4':
+        '4',
+    '5':
+        '5',
+    '6':
+        '6',
+    '7':
+        '7',
+    '8':
+        '8',
+    '9':
+        '9',
+
+    // %interaction values for (when I am %interaction):
+    // In spanish read as "Cuando me %interaction"
+    'clicked':
+        'hagan clic',
+    'pressed':
+        'pulsen',
+    'dropped':
+        'arrastren y me suelten',
+    'mouse-entered':
+        'toquen con el rat\u00F3n',
+    'mouse-departed':
+        'dejen de tocar con el rat\u00F3n',
+    'scrolled-up':
+        'giren la rueda del rat\u00F3n hacia abajo',
+    'scrolled-down':
+        'giren la rueda del rat\u00F3n hacia arriba',
+
+    // "any message" for (when I receive %msgHat):
+    'any message':
+        'cualquier mensaje',
+
+    // "new..." for (broadcast %msg):
+    'new...':
+        'nuevo mensaje...',
+
+    // %stopChoices values for (stop %stopChoices):
+    'all':
+        'todos',
+    'this script':
+        'este programa',
+    'this block':
+        'este bloque',
+    'all but this script':
+        'todos los programas excepto este',
+    'other scripts in sprite':
+        'el resto de programas del objeto',
+
+    // "myself" for (create a clone of %cln)
+    'myself':
+        'm\u00ED mismo',
+
+    // New message name dialog:
+    'Message name':
+        'Nombre de mensaje',
 
     // sensing:
     'touching %col ?':
@@ -485,33 +686,120 @@ SnapTranslator.dict.es = {
         '\u00BFcolor %clr tocando %clr ?',
     'ask %s and wait':
         'preguntar %s y esperar',
-    'what\'s your name?':
-        '\u00BFC\u00F3mo es tu nombre?',
     'answer':
         'respuesta',
     'mouse x':
-        'x del mouse',
+        'rat\u00F3n x',
     'mouse y':
-        'y del mouse',
+        'rat\u00F3n y',
     'mouse down?':
-        '\u00BFrat\u00F3n abajo?',
+        '\u00BFrat\u00F3n pulsado?',
     'key %key pressed?':
-        '\u00BFtecla %key presionada?',
-    'distance to %dst':
-        'distancia a %dst',
+        '\u00BFtecla %key pulsada?',
+    '%rel to %dst':
+        '%rel a %dst',
     'reset timer':
         'reiniciar cron\u00F3metro',
     'timer':
         'cron\u00F3metro',
-    'http:// %s':
-        'http:// %s',
+    '%att of %spr':
+        '%att de %spr',
+    'my %get':
+        'mi(s) %get',
+    'url %s':
+        'url %s',
+    'turbo mode?':
+        '\u00BFmodo turbo?',
+    'set turbo mode to %b':
+         'fijar modo turbo a %b',
+    'current %dates':
+         '%dates actual',
 
+    // sensing's development mode primitives:
+    'processes':
+        'procesos',
     'filtered for %clr':
-        'filtrado para %clr',
+        'filtrado por %clr',
     'stack size':
         'tama\u00F1o de pila',
     'frames':
-        'marcos',
+        'cuadros',
+
+    // %col values for (touching %col ?):
+    'mouse-pointer':
+        'puntero del rat\u00F3n',
+    'edge':
+        'borde del escenario',
+    'pen trails':
+        'rastro del l\u00E1piz',
+
+    // default value for (ask %s and wait):
+    'what\'s your name?':
+        '\u00BFCu\u00E1l es tu nombre?',
+
+    // %rel values for (%rel to %dst):
+    'distance':
+        'distancia',
+    'direction':
+        'direcci\u00F3n',
+
+    // %get values for (my %get):
+    'neighbors':
+        'vecinos',
+    'self':
+        'mismo',
+    'other sprites':
+        'otros objetos',
+    'clones':
+        'clones',
+    'other clones':
+        'otros clones',
+    'parts':
+        'partes',
+    'anchor':
+        'anclaje',
+    'stage':
+        'escenario',
+    'children':
+        'hijos',
+    'parent':
+        'padre',
+    'temporary?':
+        '\u00BFsoy temporal?',
+    'name':
+        'nombre',
+    'costumes':
+        'disfraces',
+    'sounds':
+        'sonidos',
+    'dangling?':
+        '\u00BFcuelgo de otro objeto?',
+    'rotation x':
+        'rotaci\u00F3n x',
+    'rotation y':
+        'rotaci\u00F3n y',
+    'center x':
+        'centro x',
+    'center y':
+        'centro y',
+
+    // %dates values for (current %dates):
+    'year':
+        'a\u00F1o',
+    'month':
+        'mes',
+    'date':
+        'd\u00EDa',
+    'day of week':
+        'd\u00EDa de la semana',
+    'hour':
+        'hora',
+    'minute':
+        'minuto',
+    'second':
+        'segundo',
+    'time in milliseconds':
+        'tiempo en milisegundos',
 
     // operators:
     '%n mod %n':
@@ -534,10 +822,6 @@ SnapTranslator.dict.es = {
         'falso',
     'join %words':
         'unir %words',
-    'hello':
-        'hola',
-    'world':
-        'mundo',
     'split %s by %delim':
         'separar %s por %delim',
     'letter %n of %s':
@@ -545,18 +829,111 @@ SnapTranslator.dict.es = {
     'length of %s':
         'longitud de %s',
     'unicode of %s':
-        'UniC\u00F3digo de  %s',
+        'unic\u00F3digo de %s',
     'unicode %n as letter':
-        'UniC\u00F3digo %n como letra',
+        'unic\u00F3digo %n como letra',
     'is %s a %typ ?':
         '\u00BFes %s un %typ ?',
     'is %s identical to %s ?':
         '\u00BFes %s id\u00E9ntico a %s ?',
     'JavaScript function ( %mult%s ) { %code }':
-        'Función JavaScript  ( %mult%s ) { %code }',
+        'función JavaScript ( %mult%s ) { %code }',
 
+    // operators' developer mode primitives:
     'type of %s':
         'tipo de %s',
+    '%txtfun of %s':
+        '%txtfun de %s',
+    'compile %repRing':
+        'compilar %repRing',
+
+    // %fun values for (%fun of %n):
+    'abs':
+        'valor absoluto',
+    'ceiling':
+        'redondeo por arriba',
+    'floor':
+        'redondeo por abajo',
+    'sqrt':
+        'ra\u00EDz cuadrada',
+    'sin':
+        'seno',
+    'cos':
+        'coseno',
+    'tan':
+        'tangente',
+    'asin':
+        'arcoseno',
+    'acos':
+        'arcocoseno',
+    'atan':
+        'arcotangente',
+    'ln':
+        'log neperiano',
+    'log':
+        'log₁₀',
+    'e^':
+        'e^',
+    '10^':
+        '10^',
+
+    // default values for (join %words):
+    'hello':
+        'hola',
+    'world':
+        'mundo',
+
+    // %delim values (split by %delim)
+   'letter':
+       'letra',
+   'whitespace':
+       'espacio',
+   'line':
+       'l\u00EDnea',
+   'tab':
+       'tabulador',
+   'cr':
+       'retorno de carro',
+   'csv':
+       'coma',
+
+    // %typ values for (is %s a %typ ?)
+    'number':
+        'n\u00FAmero',
+    'text':
+        'texto',
+    'Boolean':
+        'booleano',
+    'list':
+        'lista',
+    'sprite':
+        'objeto',
+    'costume':
+        'disfraz',
+    'sound':
+        'sonido',
+    'command':
+        'comando',
+    'reporter':
+        'reportero',
+    'predicate':
+        'predicado',
+
+    // %txtfun values for (%txtfun of %s):
+    'encode URI':
+        'codificar URI',
+    'decode URI':
+        'decodificar URI',
+    'encode URI component':
+        'codificar componente URI',
+    'decode URI component':
+        'decodificar componente URI',
+    'XML escape':
+        'escapar XML',
+    'XML unescape':
+        'desescapar XML',
+    'hex sha512 hash':
+        'hash sha512 (hexadecimal)',
 
     // variables:
     'Make a variable':
@@ -592,8 +969,6 @@ SnapTranslator.dict.es = {
         'longitud de %l',
     '%l contains %s':
         '%l contiene %s',
-    'thing':
-        'cosa',
     'add %s to %l':
         'agregar %s a %l',
     'delete %ida of %l':
@@ -602,10 +977,24 @@ SnapTranslator.dict.es = {
         'insertar %s en %idx de %l',
     'replace item %idx of %l with %s':
         'reemplazar elemento %idx de %l con %s',
-    'copy of %l':
-        'copiar de %l',
-    'get text from %l seperated by %s':
-        'tomar texto de %l separado por %s',
+
+    // lists' development mode blocks:
+    'map %repRing over %l':
+        'mapear %repRing sobre %l',
+    'for %upvar in %l %cl':
+        'para %upvar en %l %cl',
+    'show table %l':
+        'mostrar tabla %l',
+
+    // %idx values for (item %idx of %l):
+    'last':
+        '\u00FAltimo',
+    'any':
+        'aleatorio',
+
+    // default value for (%l contains %s):
+    'thing':
+        'cosa',
 
     // other
     'Make a block':
@@ -1025,9 +1414,9 @@ SnapTranslator.dict.es = {
     'Live coding support':
         'Soporte para programaci\u00F3n en vivo',
     'EXPERIMENTAL! uncheck to disable live\ncustom control structures':
-        '¡EXPERIMENTAL! desmarcar para inhabilitar las\nestructuras de control personalizadas en vivo',
+        '\u00A1EXPERIMENTAL! desmarcar para inhabilitar las\nestructuras de control personalizadas en vivo',
     'EXPERIMENTAL! check to enable\n live custom control structures':
-        '¡EXPERIMENTAL! marcar para habilitar las\nestructuras de control personalizadas en vivo',
+        '\u00A1EXPERIMENTAL! marcar para habilitar las\nestructuras de control personalizadas en vivo',
 
     'Thread safe scripts':
         'Programas seguros para uso paralelo',
@@ -1077,7 +1466,7 @@ SnapTranslator.dict.es = {
 
     // stage size dialog
     'Stage size':
-        'Tamaño del escenario',
+        'Tama\u00F1o del escenario',
     'Stage width':
         'Anchura del escenario',
     'Stage height':
@@ -1157,30 +1546,6 @@ SnapTranslator.dict.es = {
     'rename costume':
         'renombrar disfraz',
         
-   // graphical effects
-    'color':
-        'Color',
-    'fisheye':
-        'Ojo de pez',
-    'whirl':
-        'Remolino',
-    'pixelate':
-        'Pixelado',
-    'mosaic':
-        'Mosaico',
-    'saturation':
-        'Saturación',
-    'brightness':
-        'Brillo',
-    'ghost':
-        'Fantasma',
-    'negative':
-        'Negativo',
-    'comic':
-        'Historieta',
-    'confetti':
-        'Confite',
-
     // sounds
     'Play sound':
         'Tocar sonido',
@@ -1376,301 +1741,9 @@ SnapTranslator.dict.es = {
     'add comment here...':
         'agregar comentario aqu\u00ED',
 
-    // drow downs
-    // directions
-    '(90) right':
-        '(90) derecha',
-    '(-90) left':
-        '(-90) izquierda',
-    '(0) up':
-        '(0) arriba',
-    '(180) down':
-        '(180) abajo',
-
-    // collision detection
-    'mouse-pointer':
-        'puntero del mouse',
-    'edge':
-        'borde',
-    'pen trails':
-        'rastro del l\u00E1piz',
-
     // costumes
     'Turtle':
         'Tortuga',
-
-    // graphical effects
-    'ghost':
-        'fantasma',
-
-    // keys
-    'space':
-        'espacio',
-    'up arrow':
-        'flecha de arriba',
-    'down arrow':
-        'flecha de abajo',
-    'right arrow':
-        'flecha derecha',
-    'left arrow':
-        'flecha izquierda',
-    'any key':
-        'cualquier tecla',
-    'a':
-        'a',
-    'b':
-        'b',
-    'c':
-        'c',
-    'd':
-        'd',
-    'e':
-        'e',
-    'f':
-        'f',
-    'g':
-        'g',
-    'h':
-        'h',
-    'i':
-        'i',
-    'j':
-        'j',
-    'k':
-        'k',
-    'l':
-        'l',
-    'm':
-        'm',
-    'n':
-        'n',
-    'o':
-        'o',
-    'p':
-        'p',
-    'q':
-        'q',
-    'r':
-        'r',
-    's':
-        's',
-    't':
-        't',
-    'u':
-        'u',
-    'v':
-        'v',
-    'w':
-        'w',
-    'x':
-        'x',
-    'y':
-        'y',
-    'z':
-        'z',
-    '0':
-        '0',
-    '1':
-        '1',
-    '2':
-        '2',
-    '3':
-        '3',
-    '4':
-        '4',
-    '5':
-        '5',
-    '6':
-        '6',
-    '7':
-        '7',
-    '8':
-        '8',
-    '9':
-        '9',
-
-    // messages
-    'new...':
-        'crear nuevo mensaje...',
-
-    // math functions
-    'abs':
-        'abs',
-    'ceiling':
-        'redondear hacia arriba',
-    'floor':
-        'redondear hacia abajo',
-    'sqrt':
-        'ra\u00EDz cuadrada',
-    'sin':
-        'sen',
-    'cos':
-        'cos',
-    'tan':
-        'tan',
-    'asin':
-        'asen',
-    'acos':
-        'acos',
-    'atan':
-        'atan',
-    'ln':
-        'ln',
-    'e^':
-        'e^',
-
-     // delimiters
-    'letter':
-        'Letra',
-    'whitespace':
-        'Espacio',
-    'line':
-        'Línea',
-    'tab':
-        'Tabulador',
-    'cr':
-        'Retorno de línea',
-    'csv':
-        'Coma',
-
-    // data types
-    'number':
-        'n\u00FAmero',
-    'text':
-        'texto',
-    'Boolean':
-        'Booleano',
-    'list':
-        'lista',
-    'command':
-        'comando',
-    'reporter':
-        'reportero',
-    'predicate':
-        'predicado',
-
-    // list indices
-    'last':
-        '\u00FAltimo',
-    'any':
-        'cualquier',
-
-    // attributes
-    'neighbors':
-        'vecinos',
-    'self':
-        'yo mismo',
-    'other sprites':
-        'otros Objetos',
-    'parts':
-        'partes',
-    'anchor':
-        'anclaje',
-    'parent':
-        'padre',
-    'children':
-        'hijo',
-    'clones':
-        'clones',
-    'other clones':
-        'otros clones',
-    'dangling?':
-        'colgado?',
-    'rotation x':
-        'rotación x',
-    'rotation y':
-        'rotación y',
-    'center x':
-        'centro x',
-    'center y':
-        'centro y',
-    'name':
-        'nombre',
-    'stage':
-        'escenario',
-    'costumes':
-        'disfraces',
-    'sounds':
-        'sonidos',
-    'scripts':
-        'scripts',
-
-    // MISSING UPSTREAM:
-
-	'when I am %interaction':
-		'Cuando soy %interaction',
-	'clicked':
-        'cliqueado',
-    'pressed':
-        'presionado',
-    'dropped':
-        'soltado',
-    'mouse-entered':
-        'pasado el mouse por encima sin cliquear',
-    'mouse-departed':
-        'pasado el mouse por encima sin cliquear y luego alejar',
-    'stop %stopChoices':
-        'detener %stopChoices',
-    'all':
-        'todos',
-    'this script':
-        'este script',
-    'this block':
-        'este bloque',
-    'stop %stopOthersChoices':
-        'detener %stopOthersChoices',
-    'all but this script':
-        'todos excepto este script',
-    'other scripts in sprite':
-        'otros scripts del objeto',
-    'pause all %pause':
-        'pausar todos %pause',
-    'when I start as a clone':
-        'Al comenzar como clon',
-    'create a clone of %cln':
-        'crear clon de %cln',
-    'myself':
-        'mío',
-     'a new clone of %cln':
-        'un nuevo clon de %cln',
-    'delete this clone':
-        'eliminar este clon',
-
-    // under "broadcast %msg and wait"
-    'message':
-        'mensaje',
-    'turbo mode?':
-        'modo turbo?',
-    'set turbo mode to %b':
-         'fijar modo turbo a %b',
-    'current %dates':
-         '%dates actual',
-    'year':
-        'año',
-    'month':
-        'mes',
-    'date':
-        'fecha',
-    'day of week':
-        'día de la semana',
-    'hour':
-        'hora',
-    'minute':
-        'minuto',
-    'second':
-        'segundo',
-    'time in milliseconds':
-        'tiempo en milisegundos',
-
-    // under "graphical effects"
-    'brightness':
-        'brillo',
-    'negative':
-        'negativo',
-    'comic':
-        'historieta',
-    'confetti':
-        'confite',
 
     //libraries
     'Tools':
