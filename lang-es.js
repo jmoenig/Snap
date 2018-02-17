@@ -357,6 +357,12 @@ SnapTranslator.dict.es = {
     // shared messages:
     'development mode \ndebugging primitives:':
         'primitivas de depuraci\u00F3n\ndel modo desarrollador:',
+    'find blocks':
+        'buscar bloques',
+    'show primitives':
+        'mostrar primitivas',
+    'hide primitives':
+        'ocultar primitivas',
 
     // motion:
     'Stage selected:\nno motion primitives':
@@ -1007,10 +1013,19 @@ SnapTranslator.dict.es = {
     // variables:
     'Make a variable':
         'Crear una variable',
+    'Script variable name':
+        'Nombre de variable de programa',
     'Variable name':
         'Nombre de variable',
     'Delete a variable':
         'Borrar una variable',
+
+    'transient':
+        'excluir al guardar',
+    'uncheck to save contents\nin the project':
+        'desmarcar para guardar\nel contenido junto con el proyecto',
+    'check to prevent contents\nfrom being saved':
+        'marcar para no guardar\nel contenido junto con el proyecto',
 
     'set %var to %s':
         'fijar %var a %s',
@@ -1646,6 +1661,8 @@ SnapTranslator.dict.es = {
         'abre una nueva ventana\ncon una imagen de todos los programas',
     'make a block...':
         'crear bloque...',
+    'use the keyboard\nto enter blocks':
+        'usar el teclado\npara escribir bloques',
 
     // costumes
     'rename':
