@@ -1559,7 +1559,7 @@ SnapTranslator.dict.es = {
     'help':
         'ayuda',
 
-    // blocks:
+    // blocks context menus:
     'help...':
         'ayuda...',
     'relabel...':
@@ -1567,45 +1567,73 @@ SnapTranslator.dict.es = {
     'duplicate':
         'duplicar',
     'make a copy\nand pick it up':
-        'crear una copia y recogerla',
+        'crea una copia y\npermite moverla a otra parte',
     'only duplicate this block':
-        'duplicar s\u00F3lo este bloque',
+        'duplica solamente este bloque',
     'delete':
         'borrar',
-    'script pic...':
-        'foto de programa...',
-    'open a new window\nwith a picture of this script':
-        'abrir una nueva ventana\ncon una foto de este programa',
-    'ringify':
-        'zumbar',
-    'unringify':
-        'deszumbar',
 
-    // custom blocks:
+    'script pic...':
+        'imagen de programa...',
+    'open a new window\nwith a picture of this script':
+        'abre una nueva ventana\ncon una imagen de este programa',
+
+    'ringify':
+        'encapsular',
+    'unringify':
+        'desencapsular',
+
+    // custom blocks context menus:
     'delete block definition...':
-        'borrar definici\u00F3n de bloque',
+        'eliminar definici\u00F3n de bloque...',
     'edit...':
         'editar...',
 
     // sprites:
     'edit':
         'editar',
+    'clone':
+        'clonar',
+    'parent...':
+        'padre...',
     'export...':
         'exportar...',
 
     // stage:
     'show all':
         'mostrar todos',
+    'pic...':
+        'imagen...',
+    'open a new window\nwith a picture of the stage':
+        'abre una nueva ventana\ncon una imagen del escenario',
+    'pen trails':
+        'rastro del l\u00E1piz',
+    'turn all pen trails and stamps\ninto a new costume for the\ncurrently selected sprite':
+        'convierte todo rastro del l\u00E1piz\nen un nuevo disfraz para el objeto\nactualmente seleccionado',
+    'turn all pen trails and stamps\ninto a new background for the stage':
+        'convierte todo rastro del l\u00E1piz\nen un nuevo fondo para el escenario',
 
-    // scripting area
+    // scripting area:
+    'undrop':
+        'deshacer',
+    'undo the last\nblock drop\nin this pane':
+        'deshace el \u00FAltimo cambio\nhecho con bloques',
+    'redrop':
+        'rehacer',
+    'redo the last undone\nblock drop\nin this pane':
+        'rehace el \u00FAltimo cambio\ndeshecho con bloques',
     'clean up':
-        'limpiar',
+        'ordenar',
     'arrange scripts\nvertically':
-        'alinear programas\nverticalmente',
+        'alinea los programas\nverticalmente',
     'add comment':
-        'agregar comentario',
+        'a\u00F1adir comentario',
+    'scripts pic...':
+        'imagen de programas...',
+    'open a new window\nwith a picture of all scripts':
+        'abre una nueva ventana\ncon una imagen de todos los programas',
     'make a block...':
-        'crear un bloque...',
+        'crear bloque...',
 
     // costumes
     'rename':
@@ -1616,23 +1644,29 @@ SnapTranslator.dict.es = {
         'renombrar disfraz',
         
     // sounds
+    'Play':
+        'Reproducir',
     'Play sound':
-        'Tocar sonido',
-    'Stop sound':
-        'Detener sonido',
+        'reproduce este sonido',
     'Stop':
         'Detener',
-    'Play':
-        'Tocar',
+    'Stop sound':
+        'detiene este sonido',
+
+    // rename costume dialog:
+    'rename background':
+        'Renombrar disfraz',
+
+    // rename sound dialog:
     'rename sound':
-        'renombrar sonido',
+        'Renombrar sonido',
 
     // dialogs
     // buttons
     'OK':
-        'OK',
+        'Aceptar',
     'Ok':
-        'Ok',
+        'Aceptar',
     'Cancel':
         'Cancelar',
     'Yes':
@@ -1649,36 +1683,46 @@ SnapTranslator.dict.es = {
         'Sin T\u00EDtulo',
     'Open Project':
         'Abrir Proyecto',
+    'Save Project':
+        'Guardar proyecto',
+    'Save Project As...':
+        'Guardar proyecto como...',
     '(empty)':
-        '(vacio)',
+        '(vac\u00EDo)',
+    'Open':
+        'Abrir',
+    'Delete':
+        'Eliminar',
     'Saved!':
         '\u00A1Guardado!',
     'Delete Project':
-        'Borrar Proyecto',
+        'Eliminar proyecto',
     'Are you sure you want to delete':
-        '\u00BFEst\u00E1s seguro de que deseas borrar?',
+        '\u00BFEst\u00E1s seguro de que deseas eliminar',
     'rename...':
         'renombrar...',
+    'Cloud':
+        'Nube',
+    'Browser':
+        'Navegador',
+    'Examples':
+        'Ejemplos',
 
     // costume editor
     'Costume Editor':
         'Editor de disfraz',
     'click or drag crosshairs to move the rotation center':
-        'haz clic o arrastra punto de mira para mover el centro de rotaci\u00F3n',
+        'haz clic o arrastra el punto de mira\npara mover el centro de rotaci\u00F3n',
 
-    // project notes
+    // project notes dialog:
     'Project Notes':
         'Notas del proyecto',
 
-    // new project
+    // new project dialog:
     'New Project':
-        'Nuevo Proyecto',
+        'Nuevo proyecto',
     'Replace the current project with a new one?':
         '\u00BFReemplazar este proyecto con uno nuevo?',
-
-    // save project
-    'Save Project As...':
-        'Guardar Proyecto Como...',
 
     // export blocks
     'Export blocks':
@@ -1716,11 +1760,11 @@ SnapTranslator.dict.es = {
     'Apply':
         'Aplicar',
 
-    // block deletion dialog
+    // block deletion dialog:
     'Delete Custom Block':
-        'Borrar Bloque Personalizado',
+        'Eliminar bloque personalizado',
     'block deletion dialog text':
-        'texto de di\u00E1logo de borrado de bloque',
+        '\u00BFEst\u00E1s seguro de que quieres eliminar\neste bloque personalizado y todas sus instancias?',
 
     // input dialog
     'Create input name':
@@ -1808,7 +1852,7 @@ SnapTranslator.dict.es = {
 
     // coments
     'add comment here...':
-        'agregar comentario aqu\u00ED',
+        'añadir comentario aqu\u00ED...',
 
     //libraries
     'Tools':
