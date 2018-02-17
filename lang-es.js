@@ -1588,6 +1588,18 @@ SnapTranslator.dict.es = {
         'eliminar definici\u00F3n de bloque...',
     'edit...':
         'editar...',
+    'rename...':
+        'renombrar...',
+    'rename all...':
+        'renombrar todos...',
+    'translations...':
+        'traducciones...',
+    'block variables...':
+        'variables de bloque...',
+    'remove block variables...':
+        'eliminar variables de bloque...',
+    'experimental -\nunder construction':
+        'experimental\n(en construcci\u00F3n)',
 
     // sprites:
     'edit':
@@ -1642,6 +1654,12 @@ SnapTranslator.dict.es = {
         'exportar',
     'rename costume':
         'renombrar disfraz',
+
+    // input context menu
+    'options...':
+        'opciones...',
+    'read-only':
+        'solo lectura',
         
     // sounds
     'Play':
@@ -1699,8 +1717,6 @@ SnapTranslator.dict.es = {
         'Eliminar proyecto',
     'Are you sure you want to delete':
         '\u00BFEst\u00E1s seguro de que deseas eliminar',
-    'rename...':
-        'renombrar...',
     'Cloud':
         'Nube',
     'Browser':
@@ -1738,11 +1754,11 @@ SnapTranslator.dict.es = {
     'none':
         'ninguno',
 
-    // variable dialog
+    // variable dialog:
     'for all sprites':
         'para todos los objetos',
     'for this sprite only':
-        'para este objeto solamente',
+        's\u00F3lo para este objeto',
 
     // block dialog
     'Change block':
@@ -1752,13 +1768,21 @@ SnapTranslator.dict.es = {
     'Reporter':
         'Reportero',
     'Predicate':
-        'Condición',
+        'Predicado',
 
     // block editor
     'Block Editor':
         'Editor de bloques',
     'Apply':
         'Aplicar',
+    'block variables':
+        'variables de bloque',
+
+    // custom block translations dialog:
+    'Custom Block Translations':
+        'Traducciones del bloque personalizado',
+    'Enter one translation per line. use colon (":") as lang/spec delimiter\nand underscore ("_") as placeholder for an input, e.g.:\n\nen:say _ for _ secs':
+        'Escribe cada traducci\u00F3n en una l\u00EDnea.\nUtiliza (:) para separar el idioma y el mensaje\ny (_) para argumentos de entrada, por ejemplo:\n\n  es:decir _ durante _ segs',
 
     // block deletion dialog:
     'Delete Custom Block':
@@ -1766,47 +1790,58 @@ SnapTranslator.dict.es = {
     'block deletion dialog text':
         '\u00BFEst\u00E1s seguro de que quieres eliminar\neste bloque personalizado y todas sus instancias?',
 
-    // input dialog
+    // input dialog:
     'Create input name':
-        'Crear nombre de entrada',
+        'Crear par\u00E1metro',
     'Edit input name':
-        'Editar nombre de entrada',
+        'Editar par\u00E1metro',
     'Edit label fragment':
-        'Editar fragmento de etiqueta',
+        'Editar fragmento de texto',
     'Title text':
-        'Texto de t\u00EDtulo',
+        'Texto',
     'Input name':
-        'Ingresar nombre',
+        'Par\u00E1metro',
     'Delete':
         'Borrar',
+
     'Object':
         'Objeto',
-    'Number':
-        'N\u00FAmero',
     'Text':
         'Texto',
     'List':
         'Lista',
+    'Number':
+        'N\u00FAmero',
     'Any type':
         'Cualquier tipo',
     'Boolean (T/F)':
-        'Booleano (C/F)',
+        'Booleano (V/F)',
     'Command\n(inline)':
         'Comando\n(en l\u00EDnea)',
+    'Reporter':
+        'Reportero',
+    'Predicate':
+        'Predicado',
     'Command\n(C-shape)':
         'Comando\n(forma C)',
     'Any\n(unevaluated)':
-        'Cualquier\n(sin evaluar)',
+        'Cualquier tipo\n(no evaluado)',
     'Boolean\n(unevaluated)':
-        'Booleano\n(sin evaluar)',
+        'Booleano\n(no evaluado)',
+
     'Single input.':
-        'Entrada sola.',
+        'Entrada simple.',
     'Default Value:':
-        'Valor Predeterminado:',
+        'Valor predeterminado:',
     'Multiple inputs (value is list of inputs)':
-        'M\u00FAltiples entradas (valor es lista de insumos)',
+        'Entrada m\u00FAltiple (valores accesibles como lista)',
     'Upvar - make internal variable visible to caller':
-        'Hacer que la variable interna sea visible al llamador',
+        'Salida (hace visible una variable interna)',
+
+    'Input Slot Options':
+        'Opciones de par\u00E1metro de entrada',
+    'Enter one option per line.\nOptionally use "=" as key/value delimiter and {} for submenus. e.g.\n   the answer=42':
+        'Escribe cada opci\u00F3n en una l\u00EDnea.\nUsa "=" para asignar un valor y {} para submen\u00FAs, por ejemplo:\n  respuesta=42',
 
     // About Snap
     'About Snap':
