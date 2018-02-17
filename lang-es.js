@@ -704,7 +704,11 @@ SnapTranslator.dict.es = {
     'Select a sound from the media library':
         'a\u00F1ade un sonido desde la biblioteca',
 
-    // cloud menu:
+    // export project as... dialog
+    'Export Project As...':
+        'Exportar proyecto como...',
+
+    // cloud menu
     'Login...':
         'Iniciar sesi\u00F3n...',
     'Signup...':
@@ -729,6 +733,99 @@ SnapTranslator.dict.es = {
         'Exportar proyecto como datos en la nube...',
     'open shared project from cloud...':
         'Abrir proyecto compartido en la nube...',
+
+    // cloud url dialog
+    'Cloud URL':
+        'URL de la nube',
+    'Snap!Cloud':
+        'Snap!Cloud',
+    'localhost':
+        'localhost',
+    'localhost (secure)':
+        'localhost (seguro)',
+
+    // signup dialog
+    'Sign up':
+        'Registro',
+    'User name:':
+        'Nombre de usuario:',
+    'Birth date:':
+        'Fecha de nacimiento:',
+    'year:':
+        'a\u00F1o:',
+    'E-mail address:':
+        'Correo electr\u00F3nico:',
+    'Password:':
+        'Contrase\u00F1a:',
+    'Repeat Password:':
+        'Repetir contrase\u00F1a',
+    'Terms of Service...':
+        'T\u00E9rminos y condiciones de uso...',
+    'Privacy...':
+        'Privacidad...',
+    'I have read and agree\nto the Terms of Service':
+        'He le\u00EDdo y acepto los t\u00E9rminos\n y condiciones de uso',
+
+    'January':
+        'Enero',
+    'February':
+        'Febrero',
+    'March':
+        'Marzo',
+    'April':
+        'Abril',
+    'May':
+        'Mayo',
+    'June':
+        'Junio',
+    'July':
+        'Julio',
+    'August':
+        'Agosto',
+    'September':
+        'Septiembre',
+    'October':
+        'Octubre',
+    'November':
+        'Noviembre',
+    'December':
+        'Diciembre',
+    'or before':
+        'o antes',
+
+    // signin dialog
+    'Sign in':
+        'Iniciar sesi\u00F3n',
+    'stay signed in on this computer\nuntil logging out':
+        'Mantener la sesi\u00F3n iniciada en este ordenador',
+
+    // reset password dialog
+    'Reset password':
+        'Reiniciar contrase\u00F1a',
+
+    // resend verification email dialog
+    'Resend verification email':
+        'Reenviar correo de verificaci\u00F3n',
+
+    // change password dialog
+    'Change Password':
+        'Cambiar contrase\u00F1a',
+    'Old password:':
+        'Contrase\u00F1a actual:',
+    'New password:':
+        'Nueva contrase\u00F1a:',
+    'Repeat new password:':
+        'Repetir nueva contrase\u00F1a:',
+
+    // open shared project in cloud dialog
+    'Author name\u2026':
+        'Nombre del autor...',
+    'Project name...':
+        'Nombre del proyecto...',
+    'Fetching project\nfrom the cloud...':
+        'Descargando proyecto\ndesde la nube...',
+    'Opening project...':
+        'Abriendo proyecto...',
 
     // settings menu
     'Language...':
@@ -973,6 +1070,22 @@ SnapTranslator.dict.es = {
         'desmarcar para impedir guardar\nlas identidades de sublistas enlazadas',
     'check to enable\nsaving linked sublist identities':
         'marcar para permitir guardar\nlas identidades de sublistas enlazadas',
+
+    // zoom blocks dialog
+    'Zoom blocks':
+        'Agrandar bloques',
+
+    // stage size dialog
+    'Stage size':
+        'Tamaño del escenario',
+    'Stage width':
+        'Anchura del escenario',
+    'Stage height':
+        'Altura del escenario',
+
+    // dragging threshold dialog
+    'Dragging threshold':
+        'Umbral de arrastre',
 
     // inputs
     'with inputs':
