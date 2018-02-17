@@ -217,12 +217,20 @@ SnapTranslator.dict.es = {
         'Otro',
 
     // editor:
+    'don\'t rotate':
+        'no girar',
+    'can rotate':
+        'puede girar',
+    'only face left/right':
+        's\u00F3lo mirar a izquierda y derecha',
     'draggable':
         'arrastrable',
 
     // tabs:
     'Scripts':
         'Programas',
+    'Backgrounds':
+        'Fondos de escenario',
     'Costumes':
         'Disfraces',
     'Sounds':
@@ -233,25 +241,86 @@ SnapTranslator.dict.es = {
         'Objeto',
     'Stage':
         'Escenario',
+    'Turtle':
+        'Tortuga',
 
-    // rotation styles:
-    'don\'t rotate':
-        'no girar',
-    'can rotate':
-        'puede girar',
-    'only face left/right':
-        's\u00F3lo mirar izquierda/derecha',
+    // stage tab:
+    'Empty':
+        'Vac\u00EDo',
 
-    // new sprite button:
-    'add a new sprite':
-        'agregar un nuevo objeto',
-
-    // tab help
+    // costumes tab:
+    'Paint a new costume':
+        'dibujar un nuevo disfraz',
+    'Import a new costume from your webcam':
+        'importar un nuevo disfraz desde la c\u00E1mara',
     'costumes tab help':
-        'importar una foto de otro sitio Web o desde\n'
-            + 'su ordenador arrastr\u00E1ndolo hasta aqu\u00ED',
+        'Puedes importar un disfraz de otro sitio web\no desde tu ordenador arrastr\u00E1ndolo hasta aqu\u00ED',
+
+    // paint editor dialog:
+    'Paint Editor':
+        'Editor gr\u00E1fico',
+    'undo':
+        'deshacer',
+    'Paintbrush tool\n(free draw)':
+        'Pincel\n(dibujo libre)',
+    'Stroked Rectangle\n(shift: square)':
+        'Rect\u00E1ngulo\n(\u21E7 = cuadrado)',
+    'Stroked Ellipse\n(shift: circle)':
+        'Elipse\n(\u21E7 = c\u00EDrculo)',
+    'Eraser tool':
+        'Goma de borrar',
+    'Set the rotation center':
+        'Establecer centro de rotaci\u00F3n',
+    'Line tool\n(shift: vertical/horizontal)':
+        'L\u00EDnea\n(\u21E7 = vertical/horizontal)',
+    'Filled Rectangle\n(shift: square)':
+        'Rect\u00E1ngulo relleno\n(\u21E7 = cuadrado)',
+    'Filled Ellipse\n(shift: circle)':
+        'Elipse rellena\n(\u21E7 = c\u00EDrculo)',
+    'Fill a region':
+        'Bote de pintura',
+    'Pipette tool\n(pick a color anywhere)':
+        'Cuentagotas\n(obtiene colores de cualquier lugar)',
+    'grow':
+        'ampliar',
+    'shrink':
+        'reducir',
+    'flip \u2194':
+        'voltear \u2194',
+    'flip \u2195':
+        'voltear \u2195',
+    'Brush size':
+        'Tama\u00F1o de pincel',
+    'Constrain proportions of shapes?\n(you can also hold shift)':
+        'Figuras proporcionales\n(o mant\u00E9n pulsado \u21E7)',
+
+    // camera dialog:
+    'Camera':
+        'C\u00E1mara',
+    'Camera not supported':
+        'C\u00E1mara no soportada',
+    'Please make sure your web browser is up to date\nand your camera is properly configured. \n\nSome browsers also require you to access Snap!\nthrough HTTPS to use the camera.\n\nPlase replace the "http://" part of the address\nin your browser by "https://" and try again.':
+        'Por favor, comprueba que tu navegador est\u00E9 actualizado\ny tu c\u00E1mara configurada correctamente.\n\nAlgunos navegadores necesitan que accedas a Snap!\na trav\u00E9s de HTTPS para usar la c\u00E1mara.\n\nPor favor, reemplaza el "http://" en la barra de direcciones\nde tu navegador por "https://" y vuelve a intentarlo.',
+    'camera':
+        'c\u00E1mara',
+
+    // sound tab:
+    'Record a new sound':
+        'grabar un nuevo sonido',
     'import a sound from your computer\nby dragging it into here':
-        'importar un sonido desde su ordenador\narrastr\u00E1ndolo hasta aqu\u00ED',
+        'Puedes importar un sonido desde tu ordenador\narrastr\u00E1ndolo hasta aqu\u00ED',
+
+    // sound recorder dialog:
+    'Sound Recorder':
+        'Grabador de sonidos',
+
+    // stage & sprite corral:
+    'add a new Turtle sprite':
+        'a\u00F1adir una nueva tortuga',
+    'paint a new sprite':
+        'dibujar un nuevo objeto',
+    'take a camera snapshot and\nimport it as a new sprite':
+        'hacer una captura de c\u00E1mara\ne importarla como nuevo objeto',
 
     // primitive blocks:
 
@@ -1740,10 +1809,6 @@ SnapTranslator.dict.es = {
     // coments
     'add comment here...':
         'agregar comentario aqu\u00ED',
-
-    // costumes
-    'Turtle':
-        'Tortuga',
 
     //libraries
     'Tools':
