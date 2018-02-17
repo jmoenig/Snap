@@ -1873,13 +1873,17 @@ SnapTranslator.dict.es = {
     'slider':
         'deslizador',
     'slider min...':
-        'valor m\u00EDnimo de deslizador...',
+        'm\u00EDnimo valor del deslizador...',
     'slider max...':
-        'valor m\u00E1ximo de deslizador...',
+        'm\u00E1ximo valor del deslizador...',
+    'import...':
+        'importar...',
+
+    // slider dialog:
     'Slider minimum value':
-        'valor m\u00EDnimo valor de deslizador',
+        'M\u00EDnimo valor del deslizador',
     'Slider maximum value':
-        'valor m\u00E1ximo valor de deslizador',
+        'M\u00E1ximo valor del deslizador',
 
     // list watchers
     'length: ':
