@@ -3956,15 +3956,19 @@ Translation Updates:
 ------
 * Threads, Blocks, Objects: experimental JIT compiler
 
+180217
+------
+release
 
-=== v4.1.2 features ===
+=== v4.1.2 minor release ===
 
-v4.1.2 New Features:
-* experimental JIT compiler (in progress)
-
-Notable Changes:
+v4.1.2 Notable Changes:
 * new cloud backend
 
-Notable Fixes:
+New Features:
+* experimental JIT compiler (in progress)
 
 Translation Updates:
+* new Catalan-Valencia translation
+* Catalan
+* German
