@@ -718,8 +718,8 @@ SnapTranslator.dict.es = {
     'Resend Verification Email...':
         'Reenviar correo de verificaci\u00F3n...',
 
-    'Logout...':
-        'Cerrar sesi\u00F3n...',
+    'Logout':
+        'Cerrar sesi\u00F3n',
     'Change Password...':
         'Cambiar contrase\u00F1a',
 
