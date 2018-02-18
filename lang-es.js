@@ -418,6 +418,8 @@ SnapTranslator.dict.es = {
         'siguiente disfraz',
     'costume #':
         '# de disfraz',
+    'costume name':
+        'nombre del disfraz',
     'say %s for %n secs':
         'decir %s por %n segs',
     'say %s':
@@ -448,6 +450,8 @@ SnapTranslator.dict.es = {
         'enviar hacia atr\u00E1s %n capas',
 
     // looks' development mode primitives:
+    'wardrobe': // objects.js:401
+        'guardarropa',
     'console log %mult%s':
         'registrar en consola %mult%s',
     'alert %mult%s':
@@ -458,6 +462,8 @@ SnapTranslator.dict.es = {
     // default values for (say %s):
     'Hello!':
         '\u00A1Hola!',
+    'Hello, World!':
+        '\u00A1Hola, Mundo!',
 
     // default values for (think %s):
     'Hmm...':
@@ -514,6 +520,10 @@ SnapTranslator.dict.es = {
         'fijar tempo a %n',
     'tempo':
         'tempo',
+
+    // sound development mode blocks
+    'jukebox': // objects.js:474
+        'gramola',
 
     // %note values for (play note %note for %n beats):
     // Notes can be translated indeed but do it would break the piano layout
@@ -912,7 +922,7 @@ SnapTranslator.dict.es = {
     'is %s identical to %s ?':
         '\u00BFes %s id\u00E9ntico a %s ?',
     'JavaScript function ( %mult%s ) { %code }':
-        'función JavaScript ( %mult%s ) { %code }',
+        'funci\u00F3n JavaScript ( %mult%s ) { %code }',
 
     // operators' developer mode primitives:
     'type of %s':
@@ -944,9 +954,9 @@ SnapTranslator.dict.es = {
     'atan':
         'arcotangente',
     'ln':
-        'log neperiano',
+        'ln',
     'log':
-        'log₁₀',
+        'log',
     'e^':
         'e^',
     '10^':
@@ -1027,6 +1037,21 @@ SnapTranslator.dict.es = {
     'check to prevent contents\nfrom being saved':
         'marcar para no guardar\nel contenido junto con el proyecto',
 
+    'rename...':
+        'renombrar...',
+    'rename only\nthis reporter':
+        'renombra s\u00F3lo\neste reportero',
+    'rename all...':
+        'renombrar todos...',
+    'rename all blocks that\naccess this variable':
+        'renombra todos los bloques\nque acceden a esta variable',
+    'inherited':
+        'herencia',
+    'uncheck to\ndisinherit':
+        'desmarcar para no heredar',
+    'check to inherit\nfrom':
+        'marcar para heredar de',
+
     'set %var to %s':
         'fijar %var a %s',
     'change %var by %n':
@@ -1039,6 +1064,10 @@ SnapTranslator.dict.es = {
         'variables de programa %scriptVars',
     'inherit %shd':
         'heredar %shd',
+    'a variable of name \'':
+        'no existe ninguna variable llamada\n\'',
+    '\'\ndoes not exist in this context':
+        '\'\nen este contexto',
 
     // lists:
     'list %exp':
@@ -1108,6 +1137,12 @@ SnapTranslator.dict.es = {
     'false':
         'falso',
 
+    // %codeKind values for (map %cmdRing to %codeKind %code)
+    'code':
+        'c\u00F3digo',
+    'header':
+        'cabecera',
+
     // %mapValue values for (map %mapValue to code %code):
     'list':
         'lista',
@@ -1115,6 +1150,14 @@ SnapTranslator.dict.es = {
         'elemento',
     'delimiter':
         'delimitador',
+
+    // $codeListKind values for (map %codeListPart of %codeListKind to code %code)
+    'collection':
+        'colecci\u00F3n',
+    'variables':
+        'variables',
+    'parameters':
+        'par\u00E1metros',
 
     // menus
     // snap menu
@@ -1196,7 +1239,7 @@ SnapTranslator.dict.es = {
     'Import tools':
         'Importar utilidades',
     'load the official library of\npowerful blocks':
-        'carga la biblioteca oficial de\nbloques potentes',
+        'carga la biblioteca oficial de\nbloques avanzados',
 
     'Libraries...':
         'Bibliotecas...',
@@ -1243,7 +1286,7 @@ SnapTranslator.dict.es = {
     'url...':
         'Url...',
     'export project media only...':
-        'Exportar solamente medios del proyecto...',
+        'Exportar s\u00F3lo medios del proyecto...',
     'export project without media...':
         'Exportar proyecto sin medios...',
     'export project as cloud data...':
@@ -1272,6 +1315,8 @@ SnapTranslator.dict.es = {
         'a\u00F1o:',
     'E-mail address:':
         'Correo electr\u00F3nico:',
+    'E-mail address of parent or guardian:':
+        'Correo electr\u00F3nico del padre/madre o tutor legal',
     'Password:':
         'Contrase\u00F1a:',
     'Repeat Password:':
@@ -1310,6 +1355,19 @@ SnapTranslator.dict.es = {
     'or before':
         'o antes',
 
+    'please fill out\nthis field':
+        'por favor,\ncompleta este campo',
+    'User name must be four\ncharacters or longer':
+        'el nombre de usuario ha de tener\ncomo m\u00EDnimo 4 caracteres',
+    'please provide a valid\nemail address':
+        'por favor, proporciona\nuna direcci\u00F3n de correo v\u00E1lida',
+    'password must be six\ncharacters or longer':
+        'la contrase\u00F1a ha de tener\ncomo m\u00EDnimo 6 caracteres',
+    'passwords do\nnot match':
+        'las contrase\u00F1a no coindicen',
+    'please agree to\nthe TOS':
+        'por favor, acepta los\nt\u00E9rminos y condiciones de uso',
+
     // signin dialog
     'Sign in':
         'Iniciar sesi\u00F3n',
@@ -1333,6 +1391,8 @@ SnapTranslator.dict.es = {
         'Nueva contrase\u00F1a:',
     'Repeat new password:':
         'Repetir nueva contrase\u00F1a:',
+    'password has been changed.':
+        'Contrase\u00F1a cambiada.',
 
     // open shared project in cloud dialog
     'Author name\u2026':
@@ -1343,6 +1403,15 @@ SnapTranslator.dict.es = {
         'Descargando proyecto\ndesde la nube...',
     'Opening project...':
         'Abriendo proyecto...',
+
+    'Cloud Connection':
+        'Conexi\u00F3n con la nube',
+    'Successfully connected to:':     // would this be translated? (gui.js:5439)
+        'Conectado correctamente a:',
+    'disconnected.':
+        'Desconectado.',
+    'You are not logged in':
+        'No has iniciado sesi\u00F3n',
 
     // settings menu
     'Language...':
@@ -1648,7 +1717,7 @@ SnapTranslator.dict.es = {
     'make a copy\nand pick it up':
         'crea una copia y\npermite moverla a otra parte',
     'only duplicate this block':
-        'duplica solamente este bloque',
+        'duplica s\u00F3lo este bloque',
     'delete':
         'borrar',
 
@@ -1657,10 +1726,37 @@ SnapTranslator.dict.es = {
     'open a new window\nwith a picture of this script':
         'abre una nueva ventana\ncon una imagen de este programa',
 
+    'download script':
+        'descargar programa',
+    'download this script\nas an XML file':
+        'descarga este programa en XML',
+
+    'script pic with result...':
+        'imagen de programa con resultado...',
+    'open a new window\nwith a picture of both\nthis script and its result':
+        'abre una nueva ventana\ncon una imagen de este programa y su resultado',
+
     'ringify':
         'encapsular',
     'unringify':
         'desencapsular',
+
+    'header mapping...':
+        'mapeo a cabecera...',
+    'code mapping...':
+        'mapeo a c\u00F3digo...',
+
+    // Map to header/code dialog:
+    'Header mapping':
+        'Mapeo a cabecera',
+    'Enter code that corresponds to the block\'s definition. Use the formal parameter\nnames as shown and <body> to reference the definition body\'s generated text code.':
+        'Escribe el c\u00F3digo correspondiente a la definici\u00F3n del bloque.\nUsa los nombres de los par\u00E1metros formales aqu\u00ED mostrados\ny <body> para referenciar el c\u00F3digo generado del cuerpo de la definici\u00F3n.',
+    'Enter code that corresponds to the block\'s definition. Choose your own\nformal parameter names (ignoring the ones shown).':
+        'Escribe el c\u00F3digo correspondiente a la definici\u00F3n del bloque.\nPuedes usar tus propios par\u00E1metros formales (ignora los aqu\u00ED mostrados).',
+    'Code mapping':
+        'Mapeo a c\u00F3digo',
+    'Enter code that corresponds to the block\'s operation (usually a single\nfunction invocation). Use <#n> to reference actual arguments as shown.':
+        'Escribe el c\u00F3digo correspondiente a la implementaci\u00F3n del bloque\n(normalmente una \u00FAnica llamada a funci\u00F3n).\nUsa <#n> para referenciar los argumentos aqu\u00ED mostrados.',
 
     // custom blocks context menus:
     'delete block definition...':
@@ -1683,10 +1779,26 @@ SnapTranslator.dict.es = {
     // sprites:
     'edit':
         'editar',
+    'rotate':
+        'rotar',
+    'move':
+        'mover',
     'clone':
         'clonar',
     'parent...':
         'padre...',
+    'current parent':
+        'padre actual',
+    'none':
+        'ninguno',
+    'release':
+        'liberar',
+    'make temporary and\nhide in the sprite corral':
+        'lo hace temporal y oculta\nen el corral de objetos',
+    'detach from':
+        'desvincular de',
+    'detach all parts':
+        'desvincular todo',
     'export...':
         'exportar...',
 
@@ -1713,6 +1825,10 @@ SnapTranslator.dict.es = {
         'rehacer',
     'redo the last undone\nblock drop\nin this pane':
         'rehace el \u00FAltimo cambio\ndeshecho con bloques',
+    'clear undrop queue':
+        'vaciar historial de cambios',
+    'forget recorded block drops\non this pane':
+        'olvida el historial\nde cambios hechos con bloques',
     'clean up':
         'ordenar',
     'arrange scripts\nvertically':
@@ -1752,6 +1868,20 @@ SnapTranslator.dict.es = {
     'Stop sound':
         'detiene este sonido',
 
+    // lists context menu
+    'items':
+        'elementos',
+    'reset columns':
+        'reiniciar columnas',
+    'open in another dialog...':
+        'abrir en otro di\u00E1logo',
+    'table view...':
+        'ver como tabla...',
+    'list view...':
+        'ver como lista...',
+    'open in dialog...':
+        'abrir en di\u00E1logo...',
+
     // rename costume dialog:
     'rename background':
         'Renombrar disfraz',
@@ -1759,6 +1889,362 @@ SnapTranslator.dict.es = {
     // rename sound dialog:
     'rename sound':
         'Renombrar sonido',
+
+    // comments context menu
+    'comment pic...':
+        'imagen de comentario...',
+    'open a new window\nwith a picture of this comment':
+        'abre una nueva ventana\ncon una imagen de este comentario',
+
+    // morph context menu
+    'user features':
+        'men\u00FA de usuario',
+
+    'color...':
+        'color...',
+    '\ncolor:':
+        '\ncolor:',
+    'choose another color \nfor this morph':
+        'elige otro color\npara este morph',
+
+    'transparency...':
+        'transparencia...',
+    '\nalpha\nvalue:':
+        'valor alfa',
+    'set this morph\'s\nalpha value':
+        'establece el valor alfa\nde este morph',
+
+    'resize...':
+        'redimensionar...',
+    'show a handle\nwhich can be dragged\nto change this morph\'s extent':
+        'muestra una muesca que puede ser arrastrada\npara cambiar el tama\u00F1o de este morph',
+
+    'duplicate':
+        'duplicar',
+    'make a copy\nand pick it up':
+        'crea una copia y\npermite moverla a otro lugar',
+
+    'pick up':
+        'coger',
+    'detach and put \ninto the hand':
+        'permite moverlo a otro lugar',
+
+    'attach...':
+        'vincular',
+    'stick this morph\nto another one':
+        'pega este morph a otro',
+
+    'move...':
+        'mover...',
+    'show a handle\nwhich can be dragged\nto move this morph':
+        'muestra una muesca que puede ser\narrastrada para mover este morph',
+
+    'inspect...':
+        'inspeccionar',
+    'open a window\non all properties':
+        'abre una ventana\ncon todas las propiedades',
+    'open a window on\nall properties':
+        'abre una ventana\ncon todas las propiedades',
+
+    'pic...':
+        'imagen...',
+    'open a new window\nwith a picture of this morph':
+        'abre una nueva ventana\ncon una image de este morph',
+
+    'lock':
+        'bloquear',
+    'make this morph\nunmovable':
+        'impide que este morph\nse pueda mover',
+
+    'unlock':
+        'desbloquear',
+    'make this morph\nmovable':
+        'permite que este morph\nse pueda mover',
+
+    'hide':
+        'ocultar',
+
+    'delete':
+        'eliminar',
+
+    'World...':
+        'Mundo...',
+    'show the\nWorld\'s menu':
+        'muestra el men\u00FA del Mundo',
+
+    'set rotation':
+        'rotar',
+    'interactively turn this morph\nusing a dial widget':
+        'gira este morph\nutilizando un control de disco',
+    'edit rotation point only...':
+        'editar s\u00F3lo punto de rotaci\u00F3n...',
+    'pivot':
+        'pivote',
+    'edit the costume\'s\nrotation center':
+        'edita el centro\nde rotaci\u00F3n del disfraz',
+    'edit':
+        'editar',
+    'make permanent and\nshow in the sprite corral':
+        'lo hace permanente y\nlo muestra en el corral de objetos',
+
+    'move all inside...':
+        'mover todos dentro...',
+    'keep all submorphs\nwithin and visible':
+        'retiene dentro y hace visibles\ntodos los sub-morphs',
+
+    'stop':
+        'detener',
+    'terminate all running threads':
+        'termina todos los hilos en ejecuci\u00F3n',
+
+    'auto line wrap off...':
+        'desactivar ajuste de l\u00EDnea...',
+    'turn automatic\nline wrapping\noff':
+        'desactiva el ajuste\nde l\u00EDnea autom\u00E1tico',
+    'auto line wrap on...':
+        'activar ajuste de l\u00EDnea...',
+    'enable automatic\nline wrapping':
+        'activa el ajuste\nde l\u00EDnea autom\u00E1tico',
+
+    'delete block':
+        'eliminar bloque',
+    'spec...':
+        'definici\u00F3n...',
+
+    'font size...':
+        'tama\u00F1o de fuente...',
+    'set this String\'s\nfont point size':
+        'establece el tama\u00F1o de fuente\nde este texto',
+
+    'serif':
+        'serif',
+    'sans-serif':
+        'sans-serif',
+    'normal weight':
+        'grosor normal',
+    'bold':
+        'negrita',
+    'normal style':
+        'estilo normal',
+    'italic':
+        'cursiva',
+    'hide blanks':
+        'ocultar espacios',
+    'show blanks':
+        'mostrar espacios',
+    'show characters':
+        'mostrar caracteres',
+    'hide characters':
+        'ocultar caracteres',
+
+    'middle':
+        'mitad',
+    'tip':
+        'punta',
+
+    'screenshot':
+        'imagen',
+
+    'make a morph':
+        'crear un morph',
+
+    // WorldMorph context menu
+    'demo...':
+        'demo...',
+    'sample morphs':
+        'morphs de muestra',
+    'hide all...':
+        'ocultar todos...',
+    'show all...':
+        'mostrar todos...',
+    'screenshot...':
+        'captura de pantalla...',
+    'restore display':
+        'restaurar pantalla',
+    'redraw the\nscreen once':
+        'redibuja la pantalla',
+    "fill page...":
+        'llenar p\u00E1gina',
+    'let the World automatically\nadjust to browser resizing':
+        'hace que el Mundo se ajuste\nautom\u00E1ticamente cuando\nse redimensiona el navegador', // @todo
+    'sharp shadows...':
+        'sombras n\u00EDtidas...',
+    'sharp drop shadows\nuse for old browsers':
+        'sombras n\u00EDtidas\n(para navegadores antiguos)',
+    'blurred shadows...':
+        'sombras difuminadas...',
+    'blurry shades,\n use for new browsers':
+        'sombras difuminadas\n(para navegadores modernos)',
+    'color...':
+        'color...',
+    'choose the World\'s\nbackground color':
+        'selecciona el color\nde fondo del Mundo',
+    'touch screen settings':
+        'perfil de pantallas t\u00E1ctiles',
+    'bigger menu fonts\nand sliders':
+        'fuentes y deslizadores\nm\u00E1s grandes',
+    'standard settings':
+        'perfil de ordenador',
+    'smaller menu fonts\nand sliders':
+        'fuentes y deslizadores m\u00E1s peque\u00F1os',
+    'user mode...':
+        'modo usuario...',
+    'disable developers\'\ncontext menus':
+        'desactiva los men\u00FAs\ncontextuales de desarrollador',
+    'development mode...':
+        'modo desarrollador...',
+    'about morphic.js...':
+        'acerca de morphic.js',
+
+    // morph samples
+    'rectangle':
+        'rect\u00E1ngulo',
+    'box':
+        'caja',
+    'circle box':
+        'caja circular',
+    'slider':
+        'deslizador',
+    'dial':
+        'disco',
+    'frame':
+        'panel',
+    'scroll frame':
+        'panel con deslizadores',
+    'handle':
+        'muesca',
+    'string':
+        'string',
+    'text':
+        'texto',
+    'speech bubble':
+        'mensaje popup',
+    'gray scale palette':
+        'paleta de grises',
+    'color palette':
+        'paleta de color',
+    'color picker':
+        'medidor de color',
+    'sensor demo':
+        'demo: sensor',
+    'animation demo':
+        'demo: animaci\u00F3n',
+    'pen':
+        'tortuga',
+
+    // custom block text fragment symbols
+    'square':
+        'cuadrado',
+    'pointRight':
+        'apuntar a la derecha',
+    'stepForward':
+        'siguiente paso',
+    'gears':
+        'engranaje',
+    'file':
+        'fichero',
+    'fullScreen':
+        'pantalla completa',
+    'normalScreen':
+        'pantalla normal',
+    'smallStage':
+        'escenario peque\u00F1o',
+    'normalStage':
+        'escenario normal',
+    'turtle':
+        'tortuga',
+    'stage':
+        'escenario',
+    'turtleOutline':
+        'tortuga (contorno)',
+    'pause':
+        'pausa',
+    'flag':
+        'bander\u00EDn',
+    'octagon':
+        'oct\u00F3gono',
+    'cloud':
+        'nube',
+    'cloudOutline':
+        'nube (contorno)',
+    'cloudGradient':
+        'nube (degradado)',
+    'turnRight':
+        'giro a la derecha',
+    'turnLeft':
+        'giro a la izquierda',
+    'storage':
+        'almacenamiento',
+    'poster':
+        'p\u00F3ster',
+    'flash':
+        'rel\u00E1mpago',
+    'brush':
+        'pincel',
+    'rectangle':
+        'rect\u00E1ngulo',
+    'rectangleSolid':
+        'rect\u00E1ngulo (s\u00F3lido)',
+    'circle':
+        'c\u00EDrculo',
+    'circleSolid':
+        'c\u00EDrculo (s\u00F3lido)',
+    'line':
+        'l\u00EDnea',
+    'cross':
+        'cruz',
+    'crosshairs':
+        'punto de mira',
+    'paintbucket':
+        'bote de pintura',
+    'eraser':
+        'goma de borrar',
+    'pipette':
+        'cuentagotas',
+    'speechBubble':
+        'bocadillo',
+    'speechBubbleOutline':
+        'bocadillo (contorno)',
+    'turnBack':
+        'ir atr\u00E1s',
+    'turnForward':
+        'ir adelante',
+    'arrowUp':
+        'flecha arriba',
+    'arrowUpOutline':
+        'flecha arriba (contorno)',
+    'arrowLeft':
+        'flecha izquierda',
+    'arrowLeftOutline':
+        'flecha izquierda (contorno)',
+    'arrowDown':
+        'flecha abajo',
+    'arrowDownOutline':
+        'flecha abajo (contorno)',
+    'arrowRight':
+        'flecha derecha',
+    'arrowRightOutline':
+        'flecha derecha (contorno)',
+    'robot':
+        'robot',
+    'magnifyingGlass':
+        'lupa',
+    'magnifierOutline':
+        'lupa (contorno)',
+    'notes':
+        'notas musicales',
+    'camera':
+        'c\u00E1mara',
+    'location':
+        'ubicaci\u00F3n',
+    'footprints':
+        'huellas de pasos',
+    'keyboard':
+        'teclado',
+    'keyboardFilled':
+        'teclado (s\u00F3lido)',
+    'new line':
+        'nueva l\u00EDnea',
 
     // dialogs
     // buttons
@@ -1768,6 +2254,8 @@ SnapTranslator.dict.es = {
         'Aceptar',
     'Cancel':
         'Cancelar',
+    'Default':
+        'Predeterminado',
     'Yes':
         'S\u00ED',
     'No':
@@ -1788,12 +2276,18 @@ SnapTranslator.dict.es = {
         'Guardar proyecto como...',
     '(empty)':
         '(vac\u00EDo)',
+    '(no matches)':
+        '(ninguna coincidencia)',
     'Open':
         'Abrir',
     'Delete':
         'Eliminar',
+    'Share':
+        'Compartir',
     'Share Project':
         'Compartir',
+    'Unshare':
+        'No compartir',
     'Unshare Project':
         'Dejar de compartir',
     'Saved!':
@@ -1808,6 +2302,12 @@ SnapTranslator.dict.es = {
         'Navegador',
     'Examples':
         'Ejemplos',
+    'Updating\nproject list...':
+        'Actualizando\nlista de proyectos...',
+    'Saving project\nto the cloud...':
+        'Guardando proyecto\nen la nube...',
+    'saved.':
+        'Guardado.',
     'last changed':
         '\u00FAltima modificaci\u00F3n',
     'Are you sure you want to share':
@@ -1822,6 +2322,22 @@ SnapTranslator.dict.es = {
         'dejando de compartir...',
     'unshared.':
         'no compartido.',
+    'Are you sure you want to publish':
+        '\u00BFEst\u00E1s seguro de que\nquieres publicar',
+    'Are you sure you want to unpublish':
+        '\u00BFEst\u00E1s seguro de que\nquieres dejar de publicar',
+    'Publish Project':
+        'Publicar proyecto',
+    'Unpublish Project':
+        'Dejar de publicar',
+    'publishing\nproject...':
+        'Publicando\nproyecto...',
+    'unpublishing\nproject...':
+        'Cancelando publicaci\u00F3n...',
+    'published.':
+        'Publicado.',
+    'unpublished.':
+        'No publicado',
 
     // costume editor
     'Costume Editor':
@@ -1872,6 +2388,8 @@ SnapTranslator.dict.es = {
     // block editor
     'Block Editor':
         'Editor de bloques',
+    'Method Editor':
+        'Editor de m\u00E9todos',
     'Apply':
         'Aplicar',
     'block variables':
@@ -1990,7 +2508,7 @@ SnapTranslator.dict.es = {
 
     // coments
     'add comment here...':
-        'añadir comentario aqu\u00ED...',
+        'a\u00F1adir comentario aqu\u00ED...',
 
     // exported summary
     'Contents':
@@ -2024,7 +2542,7 @@ SnapTranslator.dict.es = {
     'Tools':
         'Utilidades',
     'Standard library of powerful blocks (for, map, etc.)':
-        'Biblioteca est\u00E1ndar de bloques potentes (for, map, etc...)',
+        'Biblioteca est\u00E1ndar de bloques avanzados (for, map, etc...)',
 
     'Iteration, composition':
         'Iteraci\u00F3n, composici\u00F3n',
@@ -2118,4 +2636,12 @@ SnapTranslator.dict.es = {
         'Se ha importado',
     'Loading':
         'Cargando',
+
+    // threads.js
+    'expecting':
+        'se esperaban las entradas',
+    'input(s), but getting':
+        'pero se ha encontrado',
+    '(temporary)':
+        '(temporal)',
 };
