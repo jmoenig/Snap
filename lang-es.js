@@ -1080,9 +1080,41 @@ SnapTranslator.dict.es = {
     'thing':
         'cosa',
 
+    // table view dialog:
+    'Table view':
+        'Visor de tablas',
+
     // other
     'Make a block':
         'Crear un bloque',
+
+    // other development mode blocks:
+    'code of %cmdRing':
+        'c\u00F3digo de %cmdRing',
+    'map %cmdRing to %codeKind %code':
+        'mapear %cmdRing a %codeKind %code',
+    'map %mapValue to code %code':
+        'mapear %mapValue a c\u00F3digo %code',
+    'map %codeListPart of %codeListKind to code %code':
+        'mapear %codeListPart de %codeListKind a c\u00F3digo %code',
+
+    // %cmdRing values for (map %cmdRing to %codeKind %code):
+    'String':
+        'String',
+    'Number':
+        'n\u00FAmero',
+    'true':
+        'verdadero',
+    'false':
+        'falso',
+
+    // %mapValue values for (map %mapValue to code %code):
+    'list':
+        'lista',
+    'item':
+        'elemento',
+    'delimiter':
+        'delimitador',
 
     // menus
     // snap menu
@@ -1102,6 +1134,10 @@ SnapTranslator.dict.es = {
         'Cambiar a modo desarrollador',
     'enable Morphic\ncontext menus\nand inspectors,\nnot user-friendly!':
         'habilitar men\u0075s contextuales\n e inspectores de Morphic,\n\u00A1no son f\u00E1ciles de utilizar!',
+    'entering development mode.\n\nerror catching is turned off,\nuse the browser\'s web console\nto see error messages.':
+        'Se ha activado el modo desarrollador.\n\nEl cacheo de errores est\u00E1 desactivado,\nusa la consola del navegador\npara ver mensajes de error.',
+    'entering user mode':
+        'Se ha activado el modo usuario.',
 
     // project menu
     'Project notes...':
@@ -1180,6 +1216,14 @@ SnapTranslator.dict.es = {
     // export project as... dialog
     'Export Project As...':
         'Exportar proyecto como...',
+
+    // remove unused blocks dialog:
+    'Remove unused blocks':
+        'Borrar bloques no utilizados',
+    'there are currently no unused\nglobal custom blocks in this project':
+        'No hay bloques personalizados\nno utilizados en este proyecto',
+    'unused block(s) removed':
+        'bloque(s) no utilizado(s) eliminados',
 
     // cloud menu
     'Login...':
@@ -1547,6 +1591,26 @@ SnapTranslator.dict.es = {
     // zoom blocks dialog
     'Zoom blocks':
         'Agrandar bloques',
+    'build':
+        'construye',
+    'your own':
+        'tus propios',
+    'blocks':
+        'bloques',
+    'normal (1x)':
+        'normal (1x)',
+    'demo (1.2x)':
+        'demo (1.2x)',
+    'presentation (1.4x)':
+        'presentaci\u00F3n (1.4x)',
+    'big (2x)':
+        'grande (2x)',
+    'huge (4x)':
+        'inmenso (4x)',
+    'giant (8x)':
+        'gigantesco (8x)',
+    'monstrous (10x)':
+        'monstruoso (10x)',
 
     // stage size dialog
     'Stage size':
@@ -1728,6 +1792,10 @@ SnapTranslator.dict.es = {
         'Abrir',
     'Delete':
         'Eliminar',
+    'Share Project':
+        'Compartir',
+    'Unshare Project':
+        'Dejar de compartir',
     'Saved!':
         '\u00A1Guardado!',
     'Delete Project':
@@ -1740,6 +1808,20 @@ SnapTranslator.dict.es = {
         'Navegador',
     'Examples':
         'Ejemplos',
+    'last changed':
+        '\u00FAltima modificaci\u00F3n',
+    'Are you sure you want to share':
+        '\u00BFEst\u00E1s seguro de que\nquieres compartir',
+    'Are you sure you want to unshare':
+        '\u00BFEst\u00E1s seguro de que\nquieres dejar de compartir',
+    'sharing\nproject...':
+        'compartiendo proyecto...',
+    'shared.':
+        'compartido.',
+    'unsharing\nproject...':
+        'dejando de compartir...',
+    'unshared.':
+        'no compartido.',
 
     // costume editor
     'Costume Editor':
@@ -1909,6 +1991,34 @@ SnapTranslator.dict.es = {
     // coments
     'add comment here...':
         'añadir comentario aqu\u00ED...',
+
+    // exported summary
+    'Contents':
+        'Contenido',
+    'Kind of':
+        'Clase de',
+    'Part of':
+        'Parte de',
+    'Parts':
+        'Partes',
+    'Costumes':
+        'Disfraces',
+    'Sounds':
+        'Sonidos',
+    'Scripts':
+        'Programas',
+    'For all Sprites':
+        'Para todos los objetos',
+    'Blocks':
+        'Bloques',
+    'Variables':
+        'Variables',
+
+    // exported summary dialog
+    'Could not export':
+        'No se ha podido exportar',
+    'unable to export text':
+        'no se ha podido exportar el texto',
 
     //libraries
     'Tools':
