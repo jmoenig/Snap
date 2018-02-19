@@ -181,11 +181,11 @@ SnapTranslator.dict.es = {
     'language_name':
         'Espa\u00F1ol', // the name as it should appear in the language menu
     'language_translator':
-        'V\u00EDctor Manuel Muratalla Morales y Cristi\u00E1n Rizzi Iribarren', // your name for the Translators tab
+        'V\u00EDctor Manuel Muratalla Morales / Cristi\u00E1n Rizzi Iribarren / Alfonso Ruzafa', // your name for the Translators tab
     'translator_e-mail':
         'victor.muratalla@yahoo.com / rizzi.cristian@gmail.com', // optional
     'last_changed':
-        '2018-01-22', // this, too, will appear in the Translators tab
+        '2018-02-19', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
