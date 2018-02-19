@@ -181,7 +181,7 @@ SnapTranslator.dict.es = {
     'language_name':
         'Espa\u00F1ol', // the name as it should appear in the language menu
     'language_translator':
-        'V\u00EDctor Manuel Muratalla Morales y Cristián Rizzi Iribarren', // your name for the Translators tab
+        'V\u00EDctor Manuel Muratalla Morales y Cristi\u00E1n Rizzi Iribarren', // your name for the Translators tab
     'translator_e-mail':
         'victor.muratalla@yahoo.com / rizzi.cristian@gmail.com', // optional
     'last_changed':
@@ -624,7 +624,7 @@ SnapTranslator.dict.es = {
     'with inputs':
         'con argumentos',
     'input names:':
-        'parámetros:',
+        'par\u00E1metros:',
     'Input Names:':
         'Nombres de entradas:',
     'input list:':
@@ -1184,7 +1184,7 @@ SnapTranslator.dict.es = {
     'Switch back to user mode':
         'Regresar a modo usuario',
     'disable deep-Morphic\ncontext menus\nand show user-friendly ones':
-        'desactiva los men\u0075s contextuales de Morphic\ny muestra unos más f\u00E1ciles de utilizar',
+        'desactiva los men\u0075s contextuales de Morphic\ny muestra unos m\u00E1s f\u00E1ciles de utilizar',
     'Switch to dev mode':
         'Cambiar a modo desarrollador',
     'enable Morphic\ncontext menus\nand inspectors,\nnot user-friendly!':
@@ -1574,7 +1574,7 @@ SnapTranslator.dict.es = {
     'Nested auto-wrapping':
         'Encapsular bloques internos',
     'uncheck to confine auto-wrapping\nto top-level block stacks':
-        'desmarcar para que bloques tipo C\nsólo puedan encapsular a otros m\u00E1s externos',
+        'desmarcar para que bloques tipo C\ns\u00F3lo puedan encapsular a otros m\u00E1s externos',
     'check to enable auto-wrapping\ninside nested block stacks':
         'marcar para permitir que bloques tipo C\npuedan encapsular a otros m\u00E1s internos',
 
@@ -1628,7 +1628,7 @@ SnapTranslator.dict.es = {
         '\u00A1EXPERIMENTAL! marcar para activar las\nestructuras de control personalizadas en vivo',
 
     'Thread safe scripts':
-        'Hilos de ejecución seguros',
+        'Hilos de ejecuci\u00F3n seguros',
     'uncheck to allow\nscript reentrance':
         'desmarcar para permitir\nla reentrada de programas',
     'check to disallow\nscript reentrance':
@@ -1671,7 +1671,7 @@ SnapTranslator.dict.es = {
 
     // zoom blocks dialog
     'Zoom blocks':
-        'Tamaño de bloque',
+        'Tama\u00F1o de bloque',
     'build':
         'construye',
     'your own':
@@ -2405,7 +2405,7 @@ SnapTranslator.dict.es = {
     'this project doesn\'t have any\ncustom global blocks yet':
         'este proyecto no tiene ning\u00FAn bloque personalizado todav\u00EDa',
     'no blocks were selected':
-        'No se ha seleccionado ningún bloque',
+        'No se ha seleccionado ning\u00FAn bloque',
     'select':
         'seleccionar',
     'all':
@@ -2510,7 +2510,7 @@ SnapTranslator.dict.es = {
     'Modules...':
         'M\u00F3dulos...',
     'Credits...':
-        'Créditos...',
+        'Cr\u00E9ditos...',
     'Translators...':
         'Traductores...',
     'License':
