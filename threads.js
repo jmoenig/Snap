@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph,
 TableFrameMorph, ColorSlotMorph, isSnapObject*/
 
-modules.threads = '2018-February-15';
+modules.threads = '2018-February-19';
 
 var ThreadManager;
 var Process;
@@ -2481,6 +2481,10 @@ Process.prototype.doBroadcast = function (message) {
 Process.prototype.doBroadcastAndWait = function (message) {
     if (!this.context.activeSends) {
         this.context.activeSends = this.doBroadcast(message);
+        this.context.activeSends.forEach(function (proc) {
+        	// optimize for atomic sub-routines
+            proc.runStep();
+        });
     }
     this.context.activeSends = this.context.activeSends.filter(
         function (proc) {
@@ -3867,6 +3871,7 @@ Process.prototype.unflash = function () {
     startValue      initial value for interpolated operations
     activeAudio     audio buffer for interpolated operations, don't persist
     activeNote      audio oscillator for interpolated ops, don't persist
+    activeSends		forked processes waiting to be completed
     isCustomBlock   marker for return ops
     emptySlots      caches the number of empty slots for reification
     tag             string or number to optionally identify the Context,
@@ -3894,6 +3899,7 @@ function Context(
     this.pc = 0;
     this.isContinuation = false;
     this.startTime = null;
+    this.activeSends = null;
     this.activeAudio = null;
     this.activeNote = null;
     this.isCustomBlock = false; // marks the end of a custom block's stack

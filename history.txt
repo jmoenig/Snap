@@ -3927,8 +3927,6 @@ Translation Updates:
 * Spanish
 * Russian
 
-*** in development ***
-
 180206
 ------
 * GUI: start developing v4.1.2
@@ -3972,3 +3970,19 @@ Translation Updates:
 * new Catalan-Valencia translation
 * Catalan
 * German
+
+*** in development ***
+
+180217
+------
+* GUI, snap.html: started v4.1.2.1 development
+* Threads: optimized "broadcast and wait" for atomic subroutines
+
+v4.1.2.1 New Features:
+
+Notable Changes:
+* optimized "broadcast and wait" for atomic subroutines
+
+Notable Fixes:
+
+Translation Updates:
