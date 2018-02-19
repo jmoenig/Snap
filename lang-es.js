@@ -383,21 +383,21 @@ SnapTranslator.dict.es = {
     'go to %dst':
         'ir a %dst',
     'glide %n secs to x: %n y: %n':
-        'deslizar %n segs a x: %n y: %n',
+        'deslizar en %n segs a x: %n y: %n',
     'change x by %n':
-        'cambiar x por %n',
+        'cambiar x en %n',
     'set x to %n':
         'fijar x a %n',
     'change y by %n':
-        'cambiar y por %n',
+        'cambiar y en %n',
     'set y to %n':
         'fijar y a %n',
     'if on edge, bounce':
-        'rebotar si est\u0061 tocando un borde',
+        'rebotar si toca un borde',
     'x position':
-        'posici\u00F3n en x',
+        'posici\u00F3n x',
     'y position':
-        'posici\u00F3n en y',
+        'posici\u00F3n y',
     'direction':
         'direcci\u00F3n',
 
@@ -429,13 +429,13 @@ SnapTranslator.dict.es = {
     'think %s':
         'pensar %s',
     'change %eff effect by %n':
-        'cambiar efecto %eff por %n',
+        'cambiar efecto %eff en %n',
     'set %eff effect to %n':
         'fijar efecto %eff a %n',
     'clear graphic effects':
         'quitar efectos gr\u00E1ficos',
     'change size by %n':
-        'cambiar tama\u00F1o por %n',
+        'cambiar tama\u00F1o en %n',
     'set size to %n %':
         'fijar tama\u00F1o a %n %',
     'size':
@@ -447,7 +447,7 @@ SnapTranslator.dict.es = {
     'go to front':
         'enviar al frente',
     'go back %n layers':
-        'enviar hacia atr\u00E1s %n capas',
+        'enviar %n capas hacia atr\u00E1s',
 
     // looks' development mode primitives:
     'wardrobe': // objects.js:401
@@ -455,7 +455,7 @@ SnapTranslator.dict.es = {
     'console log %mult%s':
         'registrar en consola %mult%s',
     'alert %mult%s':
-        'alerta %mult%s',
+        'mostrar mensaje %mult%s',
     'save %imgsource as costume named %s':
         'guardar %imgsource en disfraz %s',
 
@@ -503,9 +503,9 @@ SnapTranslator.dict.es = {
 
     // sound:
     'play sound %snd':
-        'tocar sonido %snd',
+        'reproducir sonido %snd',
     'play sound %snd until done':
-        'tocar sonido %snd y esperar',
+        'reproducir sonido %snd y esperar',
     'stop all sounds':
         'detener todos los sonidos',
     'rest for %n beats':
@@ -515,7 +515,7 @@ SnapTranslator.dict.es = {
     'set instrument to %inst':
         'fijar instrumento a %inst',
     'change tempo by %n':
-        'cambiar tempo por %n',
+        'cambiar tempo en %n',
     'set tempo to %n bpm':
         'fijar tempo a %n',
     'tempo':
@@ -551,15 +551,15 @@ SnapTranslator.dict.es = {
     'set pen color to %clr':
         'fijar color de l\u00E1piz a %clr',
     'change pen color by %n':
-        'cambiar color de l\u00E1piz por %n',
+        'cambiar color de l\u00E1piz en %n',
     'set pen color to %n':
         'fijar color de l\u00E1piz a %n',
     'change pen shade by %n':
-        'cambiar intensidad de l\u00E1piz por %n',
+        'cambiar brillo de l\u00E1piz en %n',
     'set pen shade to %n':
-        'fijar intensidad de l\u00E1piz a %n',
+        'fijar brillo de l\u00E1piz a %n',
     'change pen size by %n':
-        'cambiar tama\u00F1o de l\u00E1piz por %n',
+        'cambiar tama\u00F1o de l\u00E1piz en %n',
     'set pen size to %n':
         'fijar tama\u00F1o de l\u00E1piz a %n',
     'stamp':
@@ -587,7 +587,7 @@ SnapTranslator.dict.es = {
     'message':
         'mensaje',
     'warp %c':
-        'ejecutar en modo turbo %c',
+        'instrucci\u00F3n at\u00F3mica %c',
     'wait %n secs':
         'esperar %n segs',
     'wait until %b':
@@ -601,7 +601,7 @@ SnapTranslator.dict.es = {
     'if %b %c':
         'si %b %c',
     'if %b %c else %c':
-        'si %b %c si no %c',
+        'si %b %c sino %c',
     'report %s':
         'reportar %s',
     'stop %stopChoices':
@@ -1053,9 +1053,9 @@ SnapTranslator.dict.es = {
         'marcar para heredar de',
 
     'set %var to %s':
-        'fijar %var a %s',
+        'asignar a %var el valor %s',
     'change %var by %n':
-        'cambiar %var por %n',
+        'incrementar %var en %n',
     'show variable %var':
         'mostrar variable %var',
     'hide variable %var':
@@ -1073,17 +1073,17 @@ SnapTranslator.dict.es = {
     'list %exp':
         'lista %exp',
     '%s in front of %l':
-        '%s en frente de %l',
+        '%s delante de %l',
     'item %idx of %l':
         'elemento %idx de %l',
     'all but first of %l':
-        'todo menos la primera de %l',
+        '%l sin el primer elemento',
     'length of %l':
         'longitud de %l',
     '%l contains %s':
-        '%l contiene %s',
+        '\u00BF %l contiene %s ?',
     'add %s to %l':
-        'agregar %s a %l',
+        'a\u00F1adir %s a %l',
     'delete %ida of %l':
         'borrar %ida de %l',
     'insert %s at %idx of %l':
