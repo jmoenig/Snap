@@ -3977,6 +3977,7 @@ Translation Updates:
 ------
 * GUI, snap.html: started v4.1.2.1 development
 * Threads: optimized "broadcast and wait" for atomic subroutines
+* Spanish translation update
 
 v4.1.2.1 New Features:
 
@@ -3986,3 +3987,4 @@ Notable Changes:
 Notable Fixes:
 
 Translation Updates:
+* Spanish
