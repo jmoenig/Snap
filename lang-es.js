@@ -398,8 +398,9 @@ SnapTranslator.dict.es = {
         'posici\u00F3n x',
     'y position':
         'posici\u00F3n y',
-    'direction':
-        'direcci\u00F3n',
+    // already defined
+    // 'direction':
+    //    'direcci\u00F3n',
 
     // %dir values for (point in direction %dir):
     '(90) right':
@@ -566,8 +567,9 @@ SnapTranslator.dict.es = {
         'sellar',
     'fill':
         'llenar',
-    'pen trails':
-        'rastro del l\u00E1piz',
+    // already defined
+    // 'pen trails':
+    //    'rastro del l\u00E1piz',
 
     // control:
     'when %greenflag clicked':
@@ -825,8 +827,9 @@ SnapTranslator.dict.es = {
         'puntero del rat\u00F3n',
     'edge':
         'borde del escenario',
-    'pen trails':
-        'rastro del l\u00E1piz',
+    // already defined
+    // 'pen trails':
+    //    'rastro del l\u00E1piz',
 
     // default value for (ask %s and wait):
     'what\'s your name?':
@@ -835,6 +838,7 @@ SnapTranslator.dict.es = {
     // %rel values for (%rel to %dst):
     'distance':
         'distancia',
+    // already defined
     'direction':
         'direcci\u00F3n',
 
@@ -1144,10 +1148,11 @@ SnapTranslator.dict.es = {
         'String',
     'Number':
         'n\u00FAmero',
-    'true':
-        'verdadero',
-    'false':
-        'falso',
+    // already defined
+    // 'true':
+    //     'verdadero',
+    // 'false':
+    //     'falso',
 
     // %codeKind values for (map %cmdRing to %codeKind %code)
     'code':
@@ -1156,8 +1161,9 @@ SnapTranslator.dict.es = {
         'cabecera',
 
     // %mapValue values for (map %mapValue to code %code):
-    'list':
-        'lista',
+    // already defined
+    // 'list':
+    //    'lista',
     'item':
         'elemento',
     'delimiter':
@@ -1258,13 +1264,15 @@ SnapTranslator.dict.es = {
     'Select categories of additional blocks to add to this project.':
         'a\u00F1ade bloques adicionales\npor categor\u00EDas a este proyecto',
 
-    'Costumes':
-        'Disfraces',
+    // already defined
+    // 'Costumes':
+    //    'Disfraces',
     'Select a costume from the media library':
         'a\u00F1ade un disfraz desde la biblioteca',
 
-    'Sounds':
-       'Sonidos',
+    // already defined
+    // 'Sounds':
+    //    'Sonidos',
     'Select a sound from the media library':
         'a\u00F1ade un sonido desde la biblioteca',
 
@@ -1714,8 +1722,9 @@ SnapTranslator.dict.es = {
         'ayuda...',
     'relabel...':
         'renombrar...',
-    'duplicate':
-        'duplicar',
+    // already defined
+    // 'duplicate':
+    //     'duplicar',
     'make a copy\nand pick it up':
         'crea una copia y\npermite moverla a otra parte',
     'only duplicate this block':
@@ -1815,8 +1824,9 @@ SnapTranslator.dict.es = {
     'open a new window\nwith a picture of the stage':
         'abre una nueva ventana\ncon una imagen del escenario',
 
-    'pen trails':
-        'rastro del l\u00E1piz',
+    // already defined
+    // 'pen trails':
+    //    'rastro del l\u00E1piz',
     'turn all pen trails and stamps\ninto a new costume for the\ncurrently selected sprite':
         'convierte todo rastro del l\u00E1piz\nen un nuevo disfraz para el objeto\nactualmente seleccionado',
     'turn all pen trails and stamps\ninto a new background for the stage':
@@ -1892,12 +1902,14 @@ SnapTranslator.dict.es = {
     'check to prevent contents\nfrom being saved':
         'marcar para no guardar\nel contenido junto con el proyecto',
 
-    'rename...':
-        'renombrar...',
+    // already defined
+    // 'rename...':
+    //     'renombrar...',
     'rename only\nthis reporter':
         'renombra s\u00F3lo\neste reportero',
-    'rename all...':
-        'renombrar todos...',
+    // already defined
+    // 'rename all...':
+    //     'renombrar todos...',
     'rename all blocks that\naccess this variable':
         'renombra todos los bloques\nque acceden a esta variable',
     'inherited':
@@ -1958,10 +1970,11 @@ SnapTranslator.dict.es = {
     'show a handle\nwhich can be dragged\nto change this morph\'s extent':
         'muestra una muesca que puede ser arrastrada\npara cambiar el tama\u00F1o de este morph',
 
-    'duplicate':
-        'duplicar',
-    'make a copy\nand pick it up':
-        'crea una copia y\npermite moverla a otro lugar',
+    // already defined
+    // 'duplicate':
+    //     'duplicar',
+    // 'make a copy\nand pick it up':
+    //     'crea una copia y\npermite moverla a otro lugar',
 
     'pick up':
         'coger',
@@ -1985,8 +1998,9 @@ SnapTranslator.dict.es = {
     'open a window on\nall properties':
         'abre una ventana\ncon todas las propiedades',
 
-    'pic...':
-        'imagen...',
+    // already defined
+    // 'pic...':
+    //     'imagen...',
     'open a new window\nwith a picture of this morph':
         'abre una nueva ventana\ncon una image de este morph',
 
@@ -2000,11 +2014,11 @@ SnapTranslator.dict.es = {
     'make this morph\nmovable':
         'permite que este morph\nse pueda mover',
 
-    'hide':
-        'ocultar',
-
-    'delete':
-        'eliminar',
+    // already defined
+    // 'hide':
+    //     'ocultar',
+    // 'delete':
+    //     'eliminar',
 
     'World...':
         'Mundo...',
@@ -2024,8 +2038,9 @@ SnapTranslator.dict.es = {
     'edit the costume\'s\nrotation center':
         'edita el centro\nde rotaci\u00F3n del disfraz',
 
-    'edit':
-        'editar',
+    // already defined
+    // 'edit':
+    //     'editar',
 
     'move all inside...':
         'mover todos dentro...',
@@ -2115,8 +2130,9 @@ SnapTranslator.dict.es = {
         'sombras difuminadas...',
     'blurry shades,\n use for new browsers':
         'sombras difuminadas\n(para navegadores modernos)',
-    'color...':
-        'color...',
+    // already defined
+    // 'color...':
+    //     'color...',
     'choose the World\'s\nbackground color':
         'selecciona el color\nde fondo del Mundo',
     'touch screen settings':
@@ -2143,8 +2159,9 @@ SnapTranslator.dict.es = {
         'caja',
     'circle box':
         'caja circular',
-    'slider':
-        'deslizador',
+    // already defined
+    // 'slider':
+    //     'deslizador',
     'dial':
         'disco',
     'frame':
@@ -2155,8 +2172,9 @@ SnapTranslator.dict.es = {
         'muesca',
     'string':
         'string',
-    'text':
-        'texto',
+    // already defined
+    // 'text':
+    //     'texto',
     'speech bubble':
         'mensaje popup',
     'gray scale palette':
@@ -2193,8 +2211,9 @@ SnapTranslator.dict.es = {
         'escenario normal',
     'turtle':
         'tortuga',
-    'stage':
-        'escenario',
+    // already defined
+    // 'stage':
+    //     'escenario',
     'turtleOutline':
         'tortuga (contorno)',
     'pause':
@@ -2221,16 +2240,18 @@ SnapTranslator.dict.es = {
         'rel\u00E1mpago',
     'brush':
         'pincel',
-    'rectangle':
-        'rect\u00E1ngulo',
+    // already defined
+    // 'rectangle':
+    //     'rect\u00E1ngulo',
     'rectangleSolid':
         'rect\u00E1ngulo (s\u00F3lido)',
     'circle':
         'c\u00EDrculo',
     'circleSolid':
         'c\u00EDrculo (s\u00F3lido)',
-    'line':
-        'l\u00EDnea',
+    // already defined
+    // 'line':
+    //     'l\u00EDnea',
     'cross':
         'cruz',
     'crosshairs':
@@ -2273,8 +2294,9 @@ SnapTranslator.dict.es = {
         'lupa (contorno)',
     'notes':
         'notas musicales',
-    'camera':
-        'c\u00E1mara',
+    // already defined
+    // 'camera':
+    //     'c\u00E1mara',
     'location':
         'ubicaci\u00F3n',
     'footprints':
@@ -2408,10 +2430,11 @@ SnapTranslator.dict.es = {
         'No se ha seleccionado ning\u00FAn bloque',
     'select':
         'seleccionar',
-    'all':
-        'todos',
-    'none':
-        'ninguno',
+    // already defined
+    // 'all':
+    //     'todos',
+    // 'none':
+    //     'ninguno',
 
     // variable dialog:
     'for all sprites':
@@ -2458,8 +2481,9 @@ SnapTranslator.dict.es = {
         'Texto',
     'Input name':
         'Par\u00E1metro',
-    'Delete':
-        'Eliminar',
+    // already defined
+    // 'Delete':
+    //     'Eliminar',
 
     'Object':
         'Objeto',
@@ -2467,18 +2491,20 @@ SnapTranslator.dict.es = {
         'Texto',
     'List':
         'Lista',
-    'Number':
-        'N\u00FAmero',
+    // already defined
+    // 'Number':
+    //     'N\u00FAmero',
     'Any type':
         'Cualquier tipo',
     'Boolean (T/F)':
         'Booleano (V/F)',
     'Command\n(inline)':
         'Comando\n(en l\u00EDnea)',
-    'Reporter':
-        'Reportero',
-    'Predicate':
-        'Predicado',
+    // already defined
+    // 'Reporter':
+    //     'Reportero',
+    // 'Predicate':
+    //     'Predicado',
     'Command\n(C-shape)':
         'Comando\n(tipo C)',
     'Any\n(unevaluated)':
@@ -2531,18 +2557,20 @@ SnapTranslator.dict.es = {
         'Parte de',
     'Parts':
         'Partes',
-    'Costumes':
-        'Disfraces',
-    'Sounds':
-        'Sonidos',
-    'Scripts':
-        'Programas',
+    // already defined
+    // 'Costumes':
+    //     'Disfraces',
+    // 'Sounds':
+    //     'Sonidos',
+    // 'Scripts':
+    //     'Programas',
     'For all Sprites':
         'Para todos los objetos',
     'Blocks':
         'Bloques',
-    'Variables':
-        'Variables',
+    // already defined
+    // 'Variables':
+    //     'Variables',
 
     // exported summary dialog
     'Could not export':
