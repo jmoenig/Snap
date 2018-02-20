@@ -3971,8 +3971,6 @@ Translation Updates:
 * Catalan
 * German
 
-*** in development ***
-
 180219
 ------
 * GUI, snap.html: started v4.1.2.1 development
@@ -3982,13 +3980,15 @@ Translation Updates:
 180220
 ------
 * Libraries: Changed LeapMotion library source to https
+* account verification
+* release
 
-v4.1.2.1 New Features:
+=== v4.1.2.1 maintenance release ===
 
-Notable Changes:
+v4.1.2.1 Notable Changes:
+* account verification
 * optimized "broadcast and wait" for atomic subroutines
-
-Notable Fixes:
+* changed leap motion library to https
 
 Translation Updates:
 * Spanish
