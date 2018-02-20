@@ -208,6 +208,7 @@ Cloud.prototype.checkCredentials = function (onSuccess, onError, response) {
         function (user) {
             if (user.username) {
                 myself.username = user.username;
+                myself.verified = user.verified;
             }
             if (onSuccess) {
             	onSuccess.call(
