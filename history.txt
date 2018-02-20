@@ -3973,11 +3973,15 @@ Translation Updates:
 
 *** in development ***
 
-180217
+180219
 ------
 * GUI, snap.html: started v4.1.2.1 development
 * Threads: optimized "broadcast and wait" for atomic subroutines
 * Spanish translation update
+
+180220
+------
+* Libraries: Changed LeapMotion library source to https
 
 v4.1.2.1 New Features:
 
