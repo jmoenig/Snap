@@ -276,6 +276,22 @@ IDE_Morph.prototype.openIn = function (world) {
         function (username) {
             if (username) {
                 myself.source = 'cloud';
+                if (!SnapCloud.verified) {
+                        new DialogBoxMorph().inform(
+                            'Unverified account',
+                            'Your account is still unverified.\n' +
+                            'Please use the verification link that\n' +
+                            'was sent to your email address when you\n' +
+                            'signed up.\n\n' +
+                            'If you cannot find that email, please\n' +
+                            'check your spam folder. If you still\n' +
+                            'cannot find it, please use the "Resend\n' +
+                            'Verification Email..." option in the cloud\n' +
+                            'menu.',
+                            world,
+                            myself.cloudIcon(null, new Color(0, 180, 0))
+                        );
+                }
             }
         }
     );
@@ -5161,11 +5177,16 @@ IDE_Morph.prototype.initializeCloud = function () {
                     if (!isNil(response.days_left)) {
                         new DialogBoxMorph().inform(
                             'Unverified account: ' + response.days_left + ' days left',
-                            'You are now logged in, but your account\n' +
-                            'has not been verified yet.\n' +
+                            'You are now logged in, and your account\n' +
+                            'is enabled for three days.\n' +
                             'Please use the verification link that\n' +
                             'was sent to your email address when you\n' +
                             'signed up.\n\n' +
+                            'If you cannot find that email, please\n' +
+                            'check your spam folder. If you still\n' +
+                            'cannot find it, please use the "Resend\n' +
+                            'Verification Email..." option in the cloud\n' +
+                            'menu.\n\n' +
                             'You have ' + response.days_left + ' days left.',
                             world,
                             myself.cloudIcon(null, new Color(0, 180, 0))
