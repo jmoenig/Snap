@@ -3992,3 +3992,11 @@ v4.1.2.1 Notable Changes:
 
 Translation Updates:
 * Spanish
+
+180222
+------
+* crayons library: fixed "nearest crayon to" reporter
+* release
+
+=== v4.1.2.2 maintenance release ===
+
