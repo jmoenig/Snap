@@ -5263,7 +5263,7 @@ IDE_Morph.prototype.resetCloudPassword = function () {
                     new DialogBoxMorph().inform(
                         title,
                         txt +
-                            '.\n\nAn e-mail with a link to\n' +
+                            '\n\nAn e-mail with a link to\n' +
                             'reset your password\n' +
                             'has been sent to the address provided',
                         world,
@@ -5299,10 +5299,7 @@ IDE_Morph.prototype.resendVerification = function () {
                 function (txt, title) {
                     new DialogBoxMorph().inform(
                         title,
-                        txt +
-                            '.\n\nAn e-mail with a link to\n' +
-                            'verify your account\n' +
-                            'has been sent to the address provided',
+                        txt,
                         world,
                         myself.cloudIcon(null, new Color(0, 180, 0))
                     );
