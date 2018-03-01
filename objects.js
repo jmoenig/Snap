@@ -8747,7 +8747,11 @@ ReplayControls.prototype.init = function() {
     // Buttons on the right
     this.settingsButton = new SymbolMorph('gears', 30, this.buttonColor);
     this.settingsButton.mouseClickLeft = function() {
-        myself.settingsMenu();
+        var world = this.world(),
+            menu = myself.settingsMenu(),
+            position = world.hand.position().subtract(menu.extent());
+
+        menu.popup(world, position);
     };
 
     this.captionsButton = new SymbolMorph('speechBubble', 30, this.buttonColor);
@@ -8881,13 +8885,8 @@ ReplayControls.prototype.settingsMenu = function() {
         })
     );
 
-    // pop up with the mouse at the lower right corner
-    var world = this.world(),
-        position;
-
     menu.drawNew();
-    position = world.hand.position().subtract(menu.extent());
-    menu.popup(world, position);
+    return menu;
 };
 
 ReplayControls.prototype.toggleCaptions = function() {
