@@ -8979,10 +8979,6 @@ ReplayControls.prototype.play = function() {
     var myself = this;
 
     if (this.actionIndex < this.actions.length-1) {
-        var currentAction = this.actions[this.actionIndex],
-            nextAction = this.actions[this.actionIndex+1],
-            delay = currentAction ? nextAction.time - currentAction.time : 0;
-
         this.isPlaying = true;
         this.lastPlayUpdate = Date.now();
 
@@ -9306,7 +9302,6 @@ ReplayControls.prototype.update = function() {
         sliderTime = this.getTimeFromPosition(this.slider.value),
         diff,
         dir,
-        index,
         action;
 
     if (!this.enabled) {
@@ -9321,8 +9316,7 @@ ReplayControls.prototype.update = function() {
         // should use that value -> not one prior
 
         if (dir === 1) {
-            index = this.actionIndex + dir;
-            originalEvent = this.actions[index];
+            originalEvent = this.actions[this.actionIndex + 1];
             action = copy(originalEvent);
             if (!originalEvent || originalEvent.time >= sliderTime) {
                 return setTimeout(this.update.bind(this), 100);
@@ -9349,9 +9343,9 @@ ReplayControls.prototype.update = function() {
         // Apply the given event
         this.isApplyingAction = true;
         action.isReplay = true;
+        this.actionIndex += dir;
+        this.actionTime = originalEvent.time;
         this.applyEvent(action, function() {
-            myself.actionIndex += dir;
-            myself.actionTime = originalEvent.time;
             myself.isApplyingAction = false;
 
             if (myself.isShowingCaptions) {
