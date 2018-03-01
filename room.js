@@ -843,11 +843,8 @@ RoomMorph.prototype.checkForSharedMsgs = function(role) {
     }
 };
 
-RoomMorph.prototype.showMessage = function(msg, sliderValue) {
+RoomMorph.prototype.showMessage = function(msg, msgIndex) {
     var myself = this;
-
-    // Clear the last message(s)
-    this.hideSentMsgs();
 
     // Get the source role
     var address = msg.srcId.split('@');
@@ -871,41 +868,18 @@ RoomMorph.prototype.showMessage = function(msg, sliderValue) {
 
     // If they are both in the room and they both exist, animate the message
     if (this.getRole(relSrcId)) {
+        // get a message for each
         relDstIds.forEach(function(dstId) {
-            myself.showSentMsg(msg, relSrcId, dstId);
+            myself.showSentMsg(msg, relSrcId, dstId, msgIndex);
         });
     }
 };
 
-RoomMorph.prototype.updateDisplayedMsg = function(msg) {
-    // Update the msg morph position and size
-    var srcRole = this.getRole(msg.srcRoleName),
-        dstRole = this.getRole(msg.dstRoleName),
-        srcPoint = srcRole.center(),
-        dstPoint = dstRole.center(),
-        relEndpoint = dstPoint.subtract(srcPoint),
-        roleRadius = this.getRoleSize()/2,
-        size;
-
-    // move the relEndpoint so that it doesn't overlap the roles
-    var dist = dstPoint.distanceTo(srcPoint),
-        targetDist = dist - 2*roleRadius;
-
-    relEndpoint = relEndpoint.scaleBy(targetDist/dist);
-
-    size = relEndpoint.abs().add(2*msg.padding);
-    msg.setExtent(size);
-    msg.setCenter(dstPoint.add(srcPoint).divideBy(2));
-    msg.endpoint = relEndpoint;
-    msg.setMessageColor(srcRole.color.darker());
-    msg.drawNew();
-};
-
-RoomMorph.prototype.showSentMsg = function(msg, srcId, dstId) {
+RoomMorph.prototype.showSentMsg = function(msg, srcId, dstId, msgLabel) {
     var srcRole = this.getRole(srcId),
         dstRole = this.getRole(dstId),
         relEndpoint = dstRole.center().subtract(srcRole.center()),
-        msgMorph = new SentMessageMorph(msg, srcId, dstId, relEndpoint);
+        msgMorph = new SentMessageMorph(msg, srcId, dstId, relEndpoint, msgLabel);
 
     this.addBack(msgMorph);
     this.displayedMsgMorphs.push(msgMorph);
@@ -934,9 +908,39 @@ RoomMorph.prototype.showSentMsg = function(msg, srcId, dstId) {
         });
     }
 
+    // Only update the inspector if there are
     if (this.messageInspector) {
-        this.messageInspector.setMessage(msgMorph.message);
+        if (!msgLabel) {
+            this.messageInspector.setMessage(msgMorph.message);
+        } else {  // close the message inspector
+            this.messageInspector.destroy();
+            this.messageInspector = null;
+        }
     }
+};
+
+RoomMorph.prototype.updateDisplayedMsg = function(msg) {
+    // Update the msg morph position and size
+    var srcRole = this.getRole(msg.srcRoleName),
+        dstRole = this.getRole(msg.dstRoleName),
+        srcPoint = srcRole.center(),
+        dstPoint = dstRole.center(),
+        relEndpoint = dstPoint.subtract(srcPoint),
+        roleRadius = this.getRoleSize()/2,
+        size;
+
+    // move the relEndpoint so that it doesn't overlap the roles
+    var dist = dstPoint.distanceTo(srcPoint),
+        targetDist = dist - 2*roleRadius;
+
+    relEndpoint = relEndpoint.scaleBy(targetDist/dist);
+
+    size = relEndpoint.abs().add(2*msg.padding);
+    msg.setExtent(size);
+    msg.setCenter(dstPoint.add(srcPoint).divideBy(2));
+    msg.endpoint = relEndpoint;
+    msg.setMessageColor(srcRole.color.darker());
+    msg.drawNew();
 };
 
 RoomMorph.prototype.clearBlockHighlights = function() {
@@ -953,7 +957,7 @@ RoomMorph.prototype.hideSentMsgs = function() {
     this.displayedMsgMorphs.forEach(function(msgMorph) {
         msgMorph.destroy();
     });
-    this.displayedMsgs = [];
+    this.displayedMsgMorphs = [];
 };
 
 RoomMorph.prototype.isCapturingTrace = function() {
@@ -1034,11 +1038,11 @@ SentMessageMorph.prototype = new Morph();
 SentMessageMorph.prototype.constructor = SentMessageMorph;
 SentMessageMorph.uber = Morph.prototype;
 
-function SentMessageMorph(msg, srcId, dstId, endpoint) {
-    this.init(msg, srcId, dstId, endpoint);
+function SentMessageMorph(msg, srcId, dstId, endpoint, label) {
+    this.init(msg, srcId, dstId, endpoint, label);
 }
 
-SentMessageMorph.prototype.init = function(msg, srcId, dstId, endpoint) {
+SentMessageMorph.prototype.init = function(msg, srcId, dstId, endpoint, label) {
     this.srcRoleName = srcId;
     this.dstRoleName = dstId;
     this.padding = 10;
@@ -1046,6 +1050,20 @@ SentMessageMorph.prototype.init = function(msg, srcId, dstId, endpoint) {
     this.endpoint = endpoint;
     this.message = new MessageMorph(msg.type, msg.content);
     SentMessageMorph.uber.init.call(this);
+
+    this.label = null;
+    if (label) {
+        this.label = new StringMorph(
+            label.toString(),
+            12,
+            null,
+            null,
+            true
+        );
+        this.label.color = white;
+        this.label.drawNew();
+        this.add(this.label);
+    }
     this.color = white;
     this.add(this.message);
 };
@@ -1100,6 +1118,13 @@ SentMessageMorph.prototype.drawNew = function() {
 SentMessageMorph.prototype.fixLayout = function() {
     // position the message icon
     this.message.setCenter(this.center());
+    if (this.label) {
+        var padding = 5;
+
+        // align just to the right of the message morph
+        this.label.setCenter(this.message.center());
+        this.label.setRight(this.message.left() - 5)
+    }
 };
 
 SentMessageMorph.prototype.setMessageColor = function(color) {
@@ -1223,6 +1248,11 @@ function NetworkReplayControls() {
     this.init();
 }
 
+NetworkReplayControls.prototype.init = function() {
+    NetworkReplayControls.uber.init.call(this);
+    this.displayedMsgCount = 1;
+};
+
 NetworkReplayControls.prototype.displayCaption = function(/*event*/) {
     // for now, we will not display any captions
 };
@@ -1232,11 +1262,57 @@ NetworkReplayControls.prototype.setMessages = function(messages) {
 };
 
 NetworkReplayControls.prototype.applyEvent = function(event, next) {
-    var ide = this.parentThatIsA(IDE_Morph);
-    var room = ide.room;
-
-    room.showMessage(event);
+    this.updateDisplayedMessages();
     next();
+};
+
+NetworkReplayControls.prototype.updateDisplayedMessages = function() {
+    var ide = this.parentThatIsA(IDE_Morph),
+        room = ide.room,
+        event = this.actions[this.actionIndex];
+
+    // Clear the last message(s)
+    room.hideSentMsgs();
+
+    if (!event) return;
+
+    // Make sure that the slider position is at the current event
+    var value = this.getSliderPosition(event);
+
+    this.slider.button.setLeft(this.getSliderLeftFromValue(value));
+    this.slider.updateValue();
+
+    if (this.displayedMsgCount > 1) {
+        var displayedMsgCount = Math.min(this.displayedMsgCount, this.actionIndex+1),
+            startIndex = this.actionIndex - displayedMsgCount + 1;
+
+        // Show each message
+        for (var i = 0; i < displayedMsgCount; i++) {
+            event = this.actions[startIndex+i];
+            room.showMessage(event, i+1);
+        }
+    } else {
+        room.showMessage(event);
+    }
+};
+
+NetworkReplayControls.prototype.settingsMenu = function() {
+    var myself = this,
+        menu = NetworkReplayControls.uber.settingsMenu.call(this),
+        submenu = new MenuMorph(myself),
+        counts = [1, 2, 3, 4, 5];
+
+    counts.forEach(function(count) {
+        var suffix = count === 1 ? 'message' : 'messages';
+        submenu.addItem(count + ' ' + localize(suffix), function() {
+            myself.displayedMsgCount = count;
+            myself.updateDisplayedMessages();
+        }, null, null, myself.displayedMsgCount === count);
+    });
+    menu.addMenu('Displayed Message Count...', submenu);
+
+    menu.drawNew();
+    return menu;
 };
 
 NetworkReplayControls.prototype.getColorForTick = function(event) {
