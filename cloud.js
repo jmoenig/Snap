@@ -32,7 +32,7 @@
 /*global modules, SnapSerializer, nop, hex_sha512, DialogBoxMorph, Color,
 normalizeCanvas*/
 
-modules.cloud = '2018-February-20';
+modules.cloud = '2018-March-02';
 
 // Global stuff
 
@@ -50,7 +50,7 @@ Cloud.prototype.init = function (url) {
     this.username = null;
 };
 
-SnapCloud = new Cloud('https://snap-cloud.cs10.org');
+SnapCloud = new Cloud('https://cloud.snap.berkeley.edu');
 
 // Dictionary handling
 
