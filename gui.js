@@ -75,7 +75,7 @@ isRetinaSupported, SliderMorph, Animation, BoxMorph, MediaRecorder*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2018-February-22';
+modules.gui = '2018-March-02';
 
 // Declarations
 
@@ -5570,9 +5570,10 @@ IDE_Morph.prototype.setCloudURL = function () {
         this.world(),
         null,
         {
-            'Snap!Cloud' : 'https://snap-cloud.cs10.org',
+            'Snap!Cloud' : 'https://cloud.snap.berkeley.edu',
+            'Snap!Cloud (cs10)' : 'https://snap-cloud.cs10.org',
             'localhost' : 'http://localhost:8080',
-            'localhost (secure)' : 'https://localhost:8080'
+            'localhost (secure)' : 'https://localhost:4431'
         }
     );
 };
