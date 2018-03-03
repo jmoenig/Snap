@@ -1258,6 +1258,8 @@ SnapTranslator.dict.es = {
         'Importar utilidades',
     'load the official library of\npowerful blocks':
         'carga la biblioteca oficial de\nbloques avanzados',
+    'Opening blocks...':
+        'Abriendo bloques...',
 
     'Libraries...':
         'Bibliotecas...',
@@ -2597,7 +2599,7 @@ SnapTranslator.dict.es = {
     'Streams (lazy lists)':
         'Streams (listas perezosas)',
     'A variation on the list data type in which each list item aren\'t computed until it\'s needed, so you can construct million-item lists without really taking up all that time or memory, or even infinite-sized lists.  (A block that reports all the prime numbers is included as an example.)':
-        'Una variaci\u00F3n del tipo de dato lista en el que cada elemento se calcula solo cuando es necesario, as\u00ED que puedes construir listas de un mill\u00F3n de elementos sin gastar tiempo o memoria, o incluso listas infinitas. (Un bloque que reporta todos los n\u00FAmeros primos viene incluido como ejemplo.)',
+        'Una variaci\u00F3n del tipo de dato lista en el que cada elemento se calcula s\u00F3lo cuando es necesario, as\u00ED que puedes construir listas de un mill\u00F3n de elementos sin gastar tiempo o memoria, o incluso listas infinitas. (Se incluye un bloque de ejemplo que reporta todos los n\u00FAmeros primos)',
 
     'Variadic reporters':
         'Reporteros de aridad variable',
@@ -2612,7 +2614,7 @@ SnapTranslator.dict.es = {
     'Words, sentences':
         'Palabras, frases',
     'One of the big ideas in Logo that they left out of Scratch is thinking of text as structured into words and sentences, rather than just a string of characters.  This library (along with the JOIN WORDS block in the Tools library) brings back that idea.':
-        'Una de las mejores ideas de Logo no inclu\u00EDda en Scratch es la de considerar un texto como estructurado en palabras y frases, en lugar de simplemente una cadena de caracteres. Esta biblioteca (junto al bloque UNIR de la biblioteca Utilidades) recupera esa idea.',
+        'Una de las mejores ideas de Logo no inclu\u00EDda en Scratch es la de considerar un texto como una secuencia de palabras y frases, en lugar de simplemente una cadena de caracteres. Esta biblioteca (junto al bloque UNIR de la biblioteca Utilidades) recupera esa idea.',
 
     'Multi-branched conditional (switch)':
         'Condicionales multirama (switch)',
@@ -2626,46 +2628,48 @@ SnapTranslator.dict.es = {
 
     'Set RGB or HSV pen color':
         'Colores RGB o HSV',
-    'Set or report pen color as RGB (red, blue, green) or HSV (hue, saturation, value).':
-        'Fija o devuelve el color del l\u00E1piz como RGB (rojo, azul, verde) o HSV (luminosidad, saturaci\u00F3n, valor).',
+    'Set or report pen color as RGB (red, green, blue) or HSV (hue, saturation, value).':
+        'Fija o devuelve el color del l\u00E1piz como RGB (rojo, verde, azul) o HSV (matiz, saturaci\u00F3n, valor).',
 
     'Catch errors in a script':
         'Captura de errores en programas',
     'Run a script; if an error happens, instead of stopping the script with a red halo, run another script to handle the error. Also includes a block to cause an error with a message given as input. Also includes a block to create a script variable and give it a value.':
-        'Ejecuta un programa. Si ocurre alg\u00FAn error, en lugar de detener la ejecuci\u00F3n el programa con un mensaje en rojo puedes ejecutar otro programa para tratar el error. Tambi\u00E9n incluye un bloque para lanzar un error con un mensaje. Tambi\u00E9n incluye un bloque para crear una variable de programa y darle un valor.',
+        'Ejecuta un programa. Si ocurre alg\u00FAn error, en lugar de detener la ejecuci\u00F3n el programa con un mensaje en rojo puedes ejecutar otro programa para tratar el error. Tambi\u00E9n incluye un bloque para lanzar un error con un mensaje, un bloque para crear una variable de programa y darle un valor.',
 
     'Allow multi-line text input to a block':
         'Texto multilinea',
     'In general, text inputs allow only a single line.  The MULTILINE block accepts multi-line text input and can be used in text input slots of other blocks.':
-        'En general, las entradas de texto solo aceptan una \u00FAnica l\u00EDnea. El bloque MULTILINEA acepta texto en varias l\u00EDneas y puede ser usado como texto de entrada en otros bloques',
+        'En general, las entradas de texto s\u00F3lo aceptan una \u00FAnica l\u00EDnea. El bloque MULTILINEA acepta texto en varias l\u00EDneas y puede ser usado como texto de entrada en otros bloques.',
 
     'Provide getters and setters for all GUI-controlled global settings':
         'Manejo de opciones globales',
+    'Eisenberg\'s Law: Anything that can be done from the GUI should be doable from the programming language, and vice versa.':
+        'Ley de Eisenberg: Cualquier cosa que pueda hacerse desde la interfaz gr\u00E1fica tambi\u00E9n deber\u00EDa de poder hacerse desde el lenguaje de programaci\u00F3n y viceversa.',
 
     'Infinite precision integers, exact rationals, complex':
-        'Precisi\u00F3n arbitraria, racionales exactos, n\u00FAmeros complejos',
+        'Precisi\u00F3n arbitraria, racionales exactos, n\u00FAmeros complejos.',
     'The full Scheme numeric tower.  "USE BIGNUMS <True>" to enable.':
-        'La torre num\u00E9rica completa de Scheme. "UTILIZAR BIGNUMS <Verdad>" para activarla.',
+        'La torre num\u00E9rica completa de Scheme. "UTILIZAR BIGNUMS <verdadero>" para activarla.',
 
     'Provide 100 selected colors':
         'Paleta de 100 colores preseleccionados',
     'to use instead of hue for better selection':
-        'para usar en lugar de la luminosidad para una mejor selecci\u00F3n',
+        'Para seleccionar un color por nombre en lugar de por su matiz.',
 
     'Animation':
         'Animaci\u00F3n',
     'glide, grow and rotate using easing functions.':
-        'deslizamientos, zooms y rotaciones utilizando funciones curva.',
+        'Deslizamientos, zooms y rotaciones utilizando funciones curva.',
 
     'Pixels':
         'P\u00EDxeles',
     'manipulate costumes pixel-wise.':
-        'manipula disfraces a nivel de pixel.',
+        'Manipula disfraces a nivel de pixel.',
 
     'Audio Comp':
         'Audio',
     'analyze, manipulate and generate sound samples.':
-        'analiza, manipula y genera muestras de sonido',
+        'Analiza, manipula y genera muestras de sonido.',
 
     // library dialog:
     'Import library':

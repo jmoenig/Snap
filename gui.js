@@ -6832,7 +6832,7 @@ LibraryImportDialogMorph.prototype.installLibrariesList = function () {
     this.listField.action = function (item) {
         if (isNil(item)) {return; }
 
-        myself.notesText.text = item.description || '';
+        myself.notesText.text = localize(item.description || '');
         myself.notesText.drawNew();
         myself.notesField.contents.adjustBounds();
 
