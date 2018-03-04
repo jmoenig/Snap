@@ -75,7 +75,7 @@ isRetinaSupported, SliderMorph, Animation, BoxMorph, MediaRecorder*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2018-March-02';
+modules.gui = '2018-March-05';
 
 // Declarations
 
@@ -1921,9 +1921,29 @@ IDE_Morph.prototype.droppedSVG = function (anImage, name) {
 };
 
 IDE_Morph.prototype.droppedAudio = function (anAudio, name) {
-    this.currentSprite.addSound(anAudio, name.split('.')[0]); // up to period
-    this.spriteBar.tabBar.tabTo('sounds');
-    this.hasChangedMedia = true;
+	var myself = this;
+    if (anAudio.src.indexOf('data:audio') !== 0) {
+    	// fetch and base 64 encode samples using FileReader
+    	this.getURL(
+        	anAudio.src,
+        	function (blob) {
+                var reader = new window.FileReader();
+                reader.readAsDataURL(blob);
+                reader.onloadend = function() {
+                	var base64 = reader.result;
+                    base64 = 'data:audio/ogg;base64,' +
+                        base64.split(',')[1];
+                    anAudio.src = base64;
+                    myself.droppedAudio(anAudio, name);
+                };
+            },
+            'blob'
+        );
+    } else {
+    	this.currentSprite.addSound(anAudio, name.split('.')[0]); // up to '.'
+    	this.spriteBar.tabBar.tabTo('sounds');
+    	this.hasChangedMedia = true;
+    }
 };
 
 IDE_Morph.prototype.droppedText = function (aString, name) {
@@ -5580,22 +5600,25 @@ IDE_Morph.prototype.setCloudURL = function () {
 
 // IDE_Morph HTTP data fetching
 
-IDE_Morph.prototype.getURL = function (url, callback) {
+IDE_Morph.prototype.getURL = function (url, callback, responseType) {
     // fetch the contents of a url and pass it into the specified callback.
     // If no callback is specified synchronously fetch and return it
     // Note: Synchronous fetching has been deprecated and should be switched
     var request = new XMLHttpRequest(),
         async = callback instanceof Function,
-        myself = this;
+        myself = this,
+        rsp;
+    request.responseType = responseType || 'text';
+    rsp = (request.responseType === 'text') ? 'responseText' : 'response';
     try {
         request.open('GET', url, async);
         if (async) {
             request.onreadystatechange = function () {
                 if (request.readyState === 4) {
-                    if (request.responseText) {
+                    if (request[rsp]) {
                         callback.call(
                             myself,
-                            request.responseText
+                            request[rsp]
                         );
                     } else {
                         throw new Error('unable to retrieve ' + url);
@@ -5606,7 +5629,7 @@ IDE_Morph.prototype.getURL = function (url, callback) {
         request.send();
         if (!async) {
             if (request.status === 200) {
-                return request.responseText;
+                return request[rsp];
             }
             throw new Error('unable to retrieve ' + url);
         }
@@ -5615,7 +5638,7 @@ IDE_Morph.prototype.getURL = function (url, callback) {
         if (async) {
             callback.call(this);
         } else {
-            return request.responseText;
+            return request[rsp];
         }
     }
 };
