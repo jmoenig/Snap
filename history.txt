@@ -4000,3 +4000,13 @@ Translation Updates:
 
 === v4.1.2.2 maintenance release ===
 
+180305
+------
+* cloud tweaks, thanks, Bernat and Michael!
+* fixed "join words" in the tools, library, thanks, Brian, for reporting the bug!
+* added new "text to speech" library
+* made sure sound data is always stored in the project (not referenced)
+* added capability to compile input slot options to experimental JIT
+* Spanish and German translation updates
+
+=== v4.1.2.3 maintenance release ===

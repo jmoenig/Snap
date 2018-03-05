@@ -61,7 +61,7 @@ StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph,
 TableFrameMorph, ColorSlotMorph, isSnapObject*/
 
-modules.threads = '2018-February-19';
+modules.threads = '2018-March-05';
 
 var ThreadManager;
 var Process;
@@ -836,6 +836,9 @@ Process.prototype.compileInput = function (inp) {
         case 'list':
             return 'new List([' + this.compileInputs(value) + '])';
         default:
+        	if (value instanceof Array) {
+         		return '"' + value[0] + '"';
+         	}
             throw new Error(
                 'compiling does not yet support\n' +
                 'inputs of type\n' +
