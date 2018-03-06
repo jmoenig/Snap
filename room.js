@@ -1048,14 +1048,14 @@ SentMessageMorph.prototype.init = function(msg, srcId, dstId, endpoint, label) {
     this.padding = 10;
 
     this.endpoint = endpoint;
-    this.message = new MessageMorph(msg.type, msg.content);
+    this.message = new MessageMorph(msg.msgType, msg.content);
     SentMessageMorph.uber.init.call(this);
 
     this.label = null;
     if (label) {
         this.label = new StringMorph(
             label.toString(),
-            12,
+            18,
             null,
             null,
             true
