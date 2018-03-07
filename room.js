@@ -456,7 +456,7 @@ RoomMorph.prototype.setCollaborators = function(collaborators) {
     this.collaborators = collaborators;
     if (this.collaborators.length) {
         this.collabList.text = localize('Collaborators') + ':\n' +
-            this.collaborators.join('\n');
+            this.collaborators.join(',\n');
     } else {
         this.collabList.text = 'No collaborators';
     }
