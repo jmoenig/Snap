@@ -365,7 +365,9 @@ NetsBloxMorph.prototype.createSpriteBar = function () {
     tabBar.add(tab);
 
     tabBar.fixLayout();
-    tab.refresh();
+    tabBar.children.forEach(function (each) {
+        each.refresh();
+    });
 };
 
 NetsBloxMorph.prototype.projectMenu = function () {
