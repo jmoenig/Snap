@@ -4010,3 +4010,7 @@ Translation Updates:
 * Spanish and German translation updates
 
 === v4.1.2.3 maintenance release ===
+
+180308
+------
+* Objects: fixed #2053
