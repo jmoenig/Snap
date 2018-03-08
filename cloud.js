@@ -30,7 +30,7 @@
 // Global settings /////////////////////////////////////////////////////
 
 /*global modules, SnapSerializer, nop, hex_sha512, DialogBoxMorph, Color,
-normalizeCanvas*/
+normalizeCanvas _, _nop, _expr */
 
 modules.cloud = '2018-March-02';
 
@@ -87,12 +87,13 @@ Cloud.prototype.encodeDict = function (dict) {
 
 // Error handling
 
-Cloud.genericErrorMessage =
+Cloud.genericErrorMessage = _nop(
     'There was an error while trying to access\n' +
-    'a Snap!Cloud service. Please try again later.';
+    'a {{ cloudName }} service. Please try again later.'
+);
 
 Cloud.prototype.genericError = function () {
-    throw new Error(Cloud.genericErrorMessage);
+    throw new Error(_expr(Cloud.genericErrorMessage, 'Snap!Cloud'));
 };
 
 // Low level functionality
@@ -144,7 +145,7 @@ Cloud.prototype.request = function (
                     if (onError) {
                         onError.call(
                             null,
-                            errorMsg || Cloud.genericErrorMessage,
+                            errorMsg || _expr(Cloud.genericErrorMessage, 'Snap!Cloud'),
                             myself.url
                         );
                     } else {
@@ -155,7 +156,7 @@ Cloud.prototype.request = function (
         };
         request.send(body);
     } catch (err) {
-        onError.call(this, err.toString(), 'Cloud Error');
+        onError.call(this, err.toString(), _('Cloud Error'));
     }
 };
 
@@ -182,7 +183,11 @@ Cloud.prototype.withCredentialsRequest = function (
                     wantsRawResponse,
                     body);
             } else {
-                onError.call(this, 'You are not logged in', 'Snap!Cloud');
+                onError.call(
+                    this,
+                    _('You are not logged in'),
+                    'Snap!Cloud'
+                );
             }
         }
     );
@@ -229,7 +234,7 @@ Cloud.prototype.getCurrentUser = function (onSuccess, onError) {
         '/users/c',
         onSuccess,
         onError,
-        'Could not retrieve current user'
+        _('Could not retrieve current user')
     );
 };
 
@@ -239,7 +244,7 @@ Cloud.prototype.getUser = function (username, onSuccess, onError) {
         '/users/' + encodeURIComponent(username),
         onSuccess,
         onError,
-        'Could not retrieve user'
+        _('Could not retrieve user')
     );
 };
 
@@ -250,7 +255,7 @@ Cloud.prototype.logout = function (onSuccess, onError) {
         '/logout',
         onSuccess,
         onError,
-        'logout failed'
+        _('logout failed')
     );
 };
 
@@ -272,7 +277,7 @@ Cloud.prototype.login = function (
             myself.checkCredentials(onSuccess, onError, response);
         },
         onError,
-        'login failed',
+        _('login failed'),
         'false', // wants raw response
         hex_sha512(password) // password travels inside the body
     );
@@ -295,7 +300,8 @@ Cloud.prototype.signup = function (
         }),
         onSuccess,
         onError,
-        'signup failed');
+        _('signup failed')
+    );
 };
 
 Cloud.prototype.changePassword = function (
@@ -314,7 +320,7 @@ Cloud.prototype.changePassword = function (
         }),
         onSuccess,
         onError,
-        'Could not change password'
+        _('Could not change password')
     );
 
 };
@@ -325,7 +331,7 @@ Cloud.prototype.resetPassword = function (username, onSuccess, onError) {
         '/users/' + encodeURIComponent(username) + '/password_reset',
         onSuccess,
         onError,
-        'Password reset request failed'
+        _('Password reset request failed')
     );
 };
 
@@ -335,7 +341,7 @@ Cloud.prototype.resendVerification = function (username, onSuccess, onError) {
         '/users/' + encodeURIComponent(username) + '/resendverification',
         onSuccess,
         onError,
-        'Could not send verification email'
+        _('Could not send verification email')
     );
 };
 
@@ -369,13 +375,19 @@ Cloud.prototype.saveProject = function (ide, onSuccess, onError) {
                 size = body.xml.length + mediaSize;
                 if (mediaSize > 10485760) {
                     new DialogBoxMorph().inform(
-                        'Snap!Cloud - Cannot Save Project',
-                        'The media inside this project exceeds 10 MB.\n' +
+                        'Snap!Cloud - ' + _('Cannot Save Project'),
+                        _(
+                            'The media inside this project exceeds {{ size }}.\n' +
                             'Please reduce the size of costumes or sounds.\n',
+                            '10 MB'
+                        ),
                         ide.world(),
                         ide.cloudIcon(null, new Color(180, 0, 0))
                     );
-                    throw new Error('Project media exceeds 10 MB size limit');
+                    throw new Error(_(
+                        'Project media exceeds {{ size }} size limit',
+                        '10 MB'
+                    ));
                 }
 
                 // check if serialized data can be parsed back again
@@ -383,10 +395,10 @@ Cloud.prototype.saveProject = function (ide, onSuccess, onError) {
                     ide.serializer.parse(body.xml);
                 } catch (err) {
                     ide.showMessage(
-                    	'Serialization of program data failed:\n' + err
+                        _('Serialization of program data failed:') + '\n' + err
                     );
                     throw new Error(
-                    	'Serialization of program data failed:\n' + err
+                        _('Serialization of program data failed:') + '\n' + err
                     );
                 }
                 if (body.media !== null) {
@@ -394,31 +406,36 @@ Cloud.prototype.saveProject = function (ide, onSuccess, onError) {
                         ide.serializer.parse(body.media);
                     } catch (err) {
                         ide.showMessage(
-                        	'Serialization of media failed:\n' + err
+                            _('Serialization of media failed:') + '\n' + err
                         );
                         throw new Error(
-                        	'Serialization of media failed:\n' + err
+                            _('Serialization of media failed:') + '\n' + err
                         );
                     }
                 }
                 ide.serializer.isCollectingMedia = false;
                 ide.serializer.flushMedia();
 
-                ide.showMessage(
-                	'Uploading ' + Math.round(size / 1024) + ' KB...'
-                );
+                ide.showMessage(_(
+                    'Uploading {{ size }}...',
+                    Math.round(size / 1024) + ' KB'
+                ));
 
                 myself.request(
                     'POST',
                     '/projects/' + encodeURIComponent(username) + '/' + encodeURIComponent(ide.projectName),
                     onSuccess,
                     onError,
-                    'Project could not be saved',
+                    _('Project could not be saved'),
                     false,
                     JSON.stringify(body) // POST body
                 );
             } else {
-                onError.call(this, 'You are not logged in', 'Snap!Cloud');
+                onError.call(
+                    this,
+                    _('You are not logged in'),
+                    'Snap!Cloud'
+                );
             }
         }
     );
@@ -436,7 +453,7 @@ Cloud.prototype.getProjectList = function (onSuccess, onError, withThumbnail) {
         path,
         onSuccess,
         onError,
-        'Could not fetch projects'
+        _('Could not fetch projects')
     );
 };
 
@@ -470,7 +487,7 @@ Cloud.prototype.getPublishedProjectList = function (
         path,
         onSuccess,
         onError,
-        'Could not fetch projects'
+        _('Could not fetch projects')
     );
 };
 
@@ -489,7 +506,7 @@ Cloud.prototype.getThumbnail = function (
             '/thumbnail',
         onSuccess,
         onError,
-        'Could not fetch thumbnail',
+        _('Could not fetch thumbnail'),
         true
     );
 };
@@ -500,7 +517,7 @@ Cloud.prototype.getProject = function (projectName, onSuccess, onError) {
         '/projects/%username/' + encodeURIComponent(projectName),
         onSuccess,
         onError,
-        'Could not fetch project ' + projectName,
+        _('Could not fetch project {{ name }}', projectName),
         true
     );
 };
@@ -516,7 +533,7 @@ Cloud.prototype.getPublicProject = function (
         '/projects/' + encodeURIComponent(username) + '/' + encodeURIComponent(projectName),
         onSuccess,
         onError,
-        'Could not fetch project ' + projectName,
+        _('Could not fetch project {{ name }}', projectName),
         true
     );
 };
@@ -532,7 +549,7 @@ Cloud.prototype.getProjectMetadata = function (
         '/projects/' + encodeURIComponent(username) + '/' + encodeURIComponent(projectName) + '/metadata',
         onSuccess,
         onError,
-        'Could not fetch metadata for ' + projectName
+        _('Could not fetch metadata for {{ name }}', projectName)
     );
 };
 
@@ -548,7 +565,7 @@ Cloud.prototype.deleteProject = function (
         '/' + encodeURIComponent(projectName),
         onSuccess,
         onError,
-        'Could not delete project'
+        _('Could not delete project')
     );
 };
 
@@ -566,7 +583,7 @@ Cloud.prototype.shareProject = function (
             '/metadata?ispublic=true',
         onSuccess,
         onError,
-        'Could not share project'
+        _('Could not share project')
     );
 };
 
@@ -584,7 +601,7 @@ Cloud.prototype.unshareProject = function (
             '/metadata?ispublic=false&ispublished=false',
         onSuccess,
         onError,
-        'Could not unshare project'
+        _('Could not unshare project')
     );
 };
 
@@ -602,7 +619,7 @@ Cloud.prototype.publishProject = function (
             '/metadata?ispublished=true',
         onSuccess,
         onError,
-        'Could not publish project'
+        _('Could not publish project')
     );
 };
 
@@ -620,7 +637,7 @@ Cloud.prototype.unpublishProject = function (
             '/metadata?ispublished=false',
         onSuccess,
         onError,
-        'Could not unpublish project'
+        _('Could not unpublish project')
     );
 };
 
@@ -635,7 +652,7 @@ Cloud.prototype.updateNotes = function (
         '/projects/%username/' + encodeURIComponent(projectName) + '/metadata',
         onSuccess,
         onError,
-        'Could not update project notes',
+        _('Could not update project notes'),
         false, // wants raw response
         JSON.stringify({ notes: notes })
     );

@@ -68,7 +68,7 @@
 MorphicPreferences, FrameMorph, HandleMorph, DialogBoxMorph, isString,
 SpriteMorph, Context, Costume, ArgMorph, BlockEditorMorph, SymbolMorph,
 SyntaxElementMorph, MenuMorph, SpriteBubbleMorph, SpeechBubbleMorph, Sound,
-CellMorph, ListWatcherMorph, isNil, BoxMorph, Variable, isSnapObject*/
+CellMorph, ListWatcherMorph, isNil, BoxMorph, Variable, isSnapObject, _*/
 
 modules.tables = '2017-September-01';
 
@@ -1021,19 +1021,19 @@ TableMorph.prototype.userMenu = function () {
     var menu = new MenuMorph(this);
     if (this.parentThatIsA(TableDialogMorph)) {
         if (this.colWidths.length) {
-            menu.addItem('reset columns', 'resetColumns');
+            menu.addItem(_('reset columns'), 'resetColumns');
             menu.addLine();
         }
-        menu.addItem('open in another dialog...', 'openInDialog');
+        menu.addItem(_('open in another dialog...'), 'openInDialog');
         return menu;
     }
 
     if (this.colWidths.length) {
-        menu.addItem('reset columns', 'resetColumns');
+        menu.addItem(_('reset columns'), 'resetColumns');
     }
-    menu.addItem('list view...', 'showListView');
+    menu.addItem(_('list view...'), 'showListView');
     menu.addLine();
-    menu.addItem('open in dialog...', 'openInDialog');
+    menu.addItem(_('open in dialog...'), 'openInDialog');
     return menu;
 };
 
@@ -1183,7 +1183,7 @@ TableDialogMorph.prototype.init = function (
     TableDialogMorph.uber.init.call(this);
 
     // override inherited properites:
-    this.labelString = 'Table view';
+    this.labelString = _('Table view');
     this.createLabel();
 
     // build contents
@@ -1209,7 +1209,7 @@ TableDialogMorph.prototype.buildContents = function (
         null // padding
     );
     this.addBody(new TableFrameMorph(this.tableView, true));
-    this.addButton('ok', 'OK');
+    this.addButton('ok', _('OK'));
 };
 
 TableDialogMorph.prototype.setInitialDimensions = function () {

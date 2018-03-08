@@ -56,7 +56,7 @@
 /*global ArgMorph, BlockMorph, CommandBlockMorph, CommandSlotMorph, Morph,
 MultiArgMorph, Point, ReporterBlockMorph, SyntaxElementMorph, contains, Costume,
 degrees, detect, nop, radians, ReporterSlotMorph, CSlotMorph, RingMorph, Sound,
-IDE_Morph, ArgLabelMorph, localize, XML_Element, hex_sha512, TableDialogMorph,
+IDE_Morph, ArgLabelMorph, _, _expr, XML_Element, hex_sha512, TableDialogMorph,
 StageMorph, SpriteMorph, StagePrompterMorph, Note, modules, isString, copy,
 isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph,
 TableFrameMorph, ColorSlotMorph, isSnapObject*/
@@ -142,7 +142,10 @@ function invoke(
                 proc.homeContext.variables.parentFrame = receiver.variables;
             }
         } else {
-            throw new Error('expecting a receiver but getting ' + receiver);
+            throw new Error(_(
+                'expecting a receiver but getting {{ actual }}',
+                receiver
+            ));
         }
         proc.context = new Context(
             null,
@@ -154,7 +157,10 @@ function invoke(
     } else if (action instanceof Function) {
     	return action.apply(receiver, contextArgs.asArray());
     } else {
-        throw new Error('expecting a block or ring but getting ' + action);
+        throw new Error(_(
+            'expecting a block or ring but getting {{ actual }}',
+            action
+        ));
     }
     if (suppressErrors) {
         proc.isCatchingErrors = false;
@@ -162,11 +168,9 @@ function invoke(
     while (proc.isRunning()) {
         if (deadline && (Date.now() > deadline)) {
             throw (new Error(
-                localize(
-                    timeoutErrorMsg ||
-                        "a synchronous Snap! script has timed out")
-                )
-            );
+                timeoutErrorMsg ||
+                _('a synchronous {{ appName }} script has timed out', 'Snap!')
+            ));
         }
         proc.runStep(deadline);
     }
@@ -421,7 +425,7 @@ ThreadManager.prototype.doWhen = function (block, receiver, stopIt) {
             null,
             receiver,
             50,
-            'the predicate takes\ntoo long for a\ncustom hat block',
+            _('the predicate takes\ntoo long for a\ncustom hat block'),
             true // suppress errors => handle them right here instead
         ) === true) {
             this.startProcess(
@@ -751,10 +755,10 @@ Process.prototype.compileFunction = function (block, parameters) {
   		if (morph.selector === 'reportGetVar' &&
         	!contains(parameters, morph.blockSpec)
         ) {
-	        throw new Error(
+	        throw new Error(_(
     	        'compiling does not yet support\n' +
-        	    'variables that are not\nformal parameters'
-        	);
+                'variables that are not\nformal parameters'
+            ));
         }
     });
 	return Function.apply(
@@ -778,8 +782,7 @@ Process.prototype.compileExpression = function (block) {
         return this.compileInfix('&&', inputs);
     case 'evaluateCustomBlock':
         throw new Error(
-            'compiling does not yet support\n' +
-            'custom blocks'
+            _('compiling does not yet support\ncustom blocks')
         );
     default:
         src = this[selector] ? this : (this.context.receiver || this.receiver);
@@ -812,10 +815,10 @@ Process.prototype.compileInput = function (inp) {
 
     if (inp.isEmptySlot && inp.isEmptySlot()) {
         // implicit parameter - unsupported for now
-    	throw new Error(
+        throw new Error(_(
         	'compiling does not yet support\n' +
             'implicit parameters\n(empty input slots)'
-    	);
+        ));
     } else if (inp instanceof MultiArgMorph) {
         if (inp.isStatic) {
             return 'new List([' + this.compileInputs(inp.inputs()) + '])';
@@ -839,11 +842,10 @@ Process.prototype.compileInput = function (inp) {
         	if (value instanceof Array) {
          		return '"' + value[0] + '"';
          	}
-            throw new Error(
-                'compiling does not yet support\n' +
-                'inputs of type\n' +
-                 type
-            );
+            throw new Error(_(
+                'compiling does not yet support\ninputs of type\n{{ type }}',
+                type
+            ));
         }
     } else if (inp instanceof BlockMorph) {
         if (inp.selector === 'reportGetVar') {
@@ -853,11 +855,10 @@ Process.prototype.compileInput = function (inp) {
             return this.compileExpression(inp);
         }
     } else {
-        throw new Error(
-            'compiling does not yet support\n' +
-            'input slots of type\n' +
+        throw new Error(_(
+            'compiling does not yet support\ninput slots of type\n{{ type }}',
             inp.constructor.name
-        );
+        ));
     }
 };
 
@@ -1083,29 +1084,27 @@ Process.prototype.doYield = function () {
 };
 
 Process.prototype.expectReport = function () {
-    this.handleError(new Error("reporter didn't report"));
+    this.handleError(new Error(_('reporter didn\'t report')));
 };
 
 // Process Exception Handling
 
 Process.prototype.handleError = function (error, element) {
-    var m = element;
+    var m = element, errorInfo = error.name + '\n' + error.message;
     this.stop();
     this.errorFlag = true;
     this.topBlock.addErrorHighlight();
     if (isNil(m) || isNil(m.world())) {m = this.topBlock; }
-    m.showBubble(
-        (m === element ? '' : 'Inside: ')
-            + error.name
-            + '\n'
-            + error.message,
+    m.showBubble((m === element)
+        ? errorInfo
+        : (_('Inside:') + ' ' + errorInfo),
         this.exportResult,
         this.receiver
     );
 };
 
 Process.prototype.errorObsolete = function () {
-    throw new Error('a custom block definition is missing');
+    throw new Error(_('a custom block definition is missing'));
 };
 
 // Process Lambda primitives
@@ -1188,7 +1187,7 @@ Process.prototype.evaluate = function (
     if (context instanceof Function) {
         /*
         if (!this.enableJS) {
-            throw new Error('JavaScript is not enabled');
+            throw new Error(_('JavaScript is not enabled'));
         }
         */
         return context.apply(
@@ -1200,7 +1199,10 @@ Process.prototype.evaluate = function (
         return this.runContinuation(context, args);
     }
     if (!(context instanceof Context)) {
-        throw new Error('expecting a ring but getting ' + context);
+        throw new Error(_(
+            'expecting a ring but getting {{ actual }}',
+            context
+        ));
     }
 
     var outer = new Context(null, null, context.outerContext),
@@ -1260,11 +1262,14 @@ Process.prototype.evaluate = function (
                 }
 
             } else if (context.emptySlots !== 1) {
-                throw new Error(
-                    localize('expecting') + ' ' + context.emptySlots + ' '
-                        + localize('input(s), but getting') + ' '
-                        + parms.length
-                );
+                throw new Error(_(
+                    'expecting {{ expected }} input(s), ' +
+                    'but getting {{ actual }}',
+                    {
+                        expected: context.emptySlots,
+                        actual: parms.length
+                    }
+                ));
             }
         }
     }
@@ -1304,12 +1309,12 @@ Process.prototype.fork = function (context, args) {
 Process.prototype.initializeFor = function (context, args, ignoreExit) {
     // used by Process.fork() and global invoke()
     if (context.isContinuation) {
-        throw new Error(
-            'continuations cannot be forked'
-        );
+        throw new Error(_('continuations cannot be forked'));
     }
     if (!(context instanceof Context)) {
-        throw new Error('expecting a ring but getting ' + context);
+        throw new Error(
+            _('expecting a ring but getting {{ actual }}', context)
+        );
     }
 
     var outer = new Context(null, null, context.outerContext),
@@ -1358,11 +1363,14 @@ Process.prototype.initializeFor = function (context, args, ignoreExit) {
                 }
 
             } else if (context.emptySlots !== 1) {
-                throw new Error(
-                    localize('expecting') + ' ' + context.emptySlots + ' '
-                        + localize('input(s), but getting') + ' '
-                        + parms.length
-                );
+                throw new Error(_(
+                    'expecting {{ expected }} input(s), ' +
+                    'but getting {{ actual }}',
+                    {
+                        expected: context.emptySlots,
+                        actual: parms.length
+                    }
+                ));
             }
         }
     }
@@ -1659,7 +1667,7 @@ Process.prototype.doShowVar = function (varName) {
             if (isGlobal || target.owner) {
                 label = name;
             } else {
-                label = name + ' ' + localize('(temporary)');
+                label = _('{{ varName }} (temporary)', name);
             }
             watcher = new WatcherMorph(
                 label,
@@ -2527,12 +2535,15 @@ Process.prototype.assertType = function (thing, typeString) {
     if (typeString instanceof Array && contains(typeString, thingType)) {
         return true;
     }
-    throw new Error('expecting ' + typeString + ' but getting ' + thingType);
+    throw new Error(_(
+        'expecting {{ expected }} but getting {{ actual }}',
+        { expected: typeString, actual: thingType }
+    ));
 };
 
 Process.prototype.assertAlive = function (thing) {
     if (thing && thing.isCorpse) {
-        throw new Error('cannot operate on a deleted sprite');
+        throw new Error(_('cannot operate on a deleted sprite'));
     }
 };
 
@@ -2848,10 +2859,16 @@ Process.prototype.reportTextSplit = function (string, delimiter) {
         str,
         del;
     if (!contains(types, strType)) {
-        throw new Error('expecting text instead of a ' + strType);
+        throw new Error(_(
+            'expecting text instead of a {{ type }}',
+            strType
+        ));
     }
     if (!contains(types, delType)) {
-        throw new Error('expecting a text delimiter instead of a ' + delType);
+        throw new Error(_(
+            'expecting a text delimiter instead of a {{ type }}',
+            delType
+        ));
     }
     str = isNil(string) ? '' : string.toString();
     switch (this.inputOption(delimiter)) {
@@ -3326,9 +3343,11 @@ Process.prototype.reportAttributeOf = function (attribute, name) {
             case 'costume #':
                 return thatObj.getCostumeIdx();
             case 'costume name':
-                return thatObj.costume ? thatObj.costume.name
-                        : thatObj instanceof SpriteMorph ? localize('Turtle')
-                                : localize('Empty');
+                return thatObj.costume
+                    ? thatObj.costume.name
+                    : thatObj instanceof SpriteMorph
+                        ? _('Turtle')
+                        : _('Empty');
             case 'size':
                 return thatObj.getScale ? thatObj.getScale() : '';
             }
@@ -3426,7 +3445,7 @@ Process.prototype.doSet = function (attribute, value) {
     this.assertAlive(rcvr);
     if (!(attribute instanceof Context) ||
             attribute.expression.selector !== 'reportGet') {
-        throw new Error(localize('unsupported attribute'));
+        throw new Error(_('unsupported attribute'));
     }
     name = attribute.expression.inputs()[0].evaluate();
     if (name instanceof Array) {
@@ -3440,7 +3459,7 @@ Process.prototype.doSet = function (attribute, value) {
             // conflicts while the user drags parts over prospective targets
             if (!rcvr.enableNesting || contains(rcvr.allParts(), value)) {
                 throw new Error(
-                    localize('unable to nest\n(disabled or circular?)')
+                    _('unable to nest\n(disabled or circular?)')
                 );
             }
             value.attachPart(rcvr);
@@ -3483,7 +3502,7 @@ Process.prototype.doSet = function (attribute, value) {
         break;
     default:
         throw new Error(
-            '"' + localize(name) + '" ' + localize('is read-only')
+            _('"{{ name }}" is read-only', _expr(name))
         );
     }
 };
@@ -3620,9 +3639,7 @@ Process.prototype.doMapCodeOrHeader = function (aContext, anOption, aString) {
     if (this.inputOption(anOption) === 'header') {
         return this.doMapHeader(aContext, aString);
     }
-    throw new Error(
-        ' \'' + anOption + '\'\nis not a valid option'
-    );
+    throw new Error(_('"{{ name }}"\nis not a valid option', anOption));
 };
 
 Process.prototype.doMapHeader = function (aContext, aString) {
@@ -3657,9 +3674,7 @@ Process.prototype.doMapValueCode = function (type, aString) {
         StageMorph.prototype.codeMappings.boolFalse = aString || 'true';
         break;
     default:
-        throw new Error(
-            localize('unsupported data type') + ' ' + tp
-        );
+        throw new Error(_('unsupported data type {{ type }}', tp));
     }
 
 };
@@ -3940,7 +3955,10 @@ Context.prototype.toString = function () {
             expr = '[' + expr[0] + ']';
         }
     }
-    return 'Context >> ' + expr + ' ' + this.variables;
+    return _(
+        '{{ className }} >> {{ expression }} {{ variables }}',
+        { className: 'Context', expression: expr, variables: this.variables }
+    );
 };
 
 Context.prototype.image = function () {
@@ -4096,8 +4114,13 @@ function Variable(value, isTransient) {
 }
 
 Variable.prototype.toString = function () {
-    return 'a ' + (this.isTransient ? 'transient ' : '') + 'Variable [' +
-        this.value + ']';
+    var vars = {
+        className: 'Variable',
+        value: this.value
+    };
+    return this.isTransient
+        ? _('a transient {{ className }} [{{ value }}]', vars)
+        : _('a {{ className }} [{{ value }}]', vars);
 };
 
 Variable.prototype.copy = function () {
@@ -4113,7 +4136,13 @@ function VariableFrame(parentFrame, owner) {
 }
 
 VariableFrame.prototype.toString = function () {
-    return 'a VariableFrame {' + this.names() + '}';
+    return _(
+        'a {{ className }} {{{ value }}}',
+        {
+            className: 'VariableFrame',
+            value: this.names()
+        }
+    );
 };
 
 VariableFrame.prototype.copy = function () {
@@ -4144,11 +4173,10 @@ VariableFrame.prototype.find = function (name) {
 */
     var frame = this.silentFind(name);
     if (frame) {return frame; }
-    throw new Error(
-        localize('a variable of name \'')
-            + name
-            + localize('\'\ndoes not exist in this context')
-    );
+    throw new Error(_(
+        'a variable of name "{{ name }}"\ndoes not exist in this context',
+        name
+    ));
 };
 
 VariableFrame.prototype.silentFind = function (name) {
@@ -4226,11 +4254,10 @@ VariableFrame.prototype.getVar = function (name) {
         // empty input with a Binding-ID called without an argument
         return '';
     }
-    throw new Error(
-        localize('a variable of name \'')
-            + name
-            + localize('\'\ndoes not exist in this context')
-    );
+    throw new Error(_(
+        'a variable of name "{{ name }}"\ndoes not exist in this context',
+        name
+    ));
 };
 
 VariableFrame.prototype.addVar = function (name, value) {

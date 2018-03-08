@@ -55,7 +55,7 @@ CommandBlockMorph, detect, CustomCommandBlockMorph, CustomReporterBlockMorph,
 Color, List, newCanvas, Costume, Sound, Audio, IDE_Morph, ScriptsMorph,
 BlockMorph, ArgMorph, InputSlotMorph, TemplateSlotMorph, CommandSlotMorph,
 FunctionSlotMorph, MultiArgMorph, ColorSlotMorph, nop, CommentMorph, isNil,
-localize, sizeOf, ArgLabelMorph, SVG_Costume, MorphicPreferences,
+_, _expr, sizeOf, ArgLabelMorph, SVG_Costume, MorphicPreferences,
 SyntaxElementMorph, Variable, isSnapObject, console, BooleanSlotMorph,
 normalizeCanvas, contains*/
 
@@ -232,7 +232,7 @@ XML_Serializer.prototype.load = function (xmlString) {
     // XML string.
     nop(xmlString);
     throw new Error(
-        'loading should be implemented in heir of XML_Serializer'
+        _('loading should be implemented in heir of XML_Serializer')
     );
 };
 
@@ -293,7 +293,7 @@ SnapSerializer.prototype.init = function () {
 XML_Serializer.prototype.mediaXML = function (name) {
     // under construction....
     var xml = '<media name="' +
-            (name || 'untitled') +
+            (name || _('untitled')) +
             '" app="' + this.app +
             '" version="' +
             this.version +
@@ -325,10 +325,13 @@ SnapSerializer.prototype.loadProjectModel = function (xmlNode, ide) {
 
     if (ide && app && app !== this.app.split(' ')[0]) {
         ide.inform(
-            app + ' Project',
-            'This project has been created by a different app:\n\n' +
-                app +
-                '\n\nand may be incompatible or fail to load here.'
+            _('{{ appName }} Project', app),
+            _(
+                'This project has been created by a different app:\n\n' +
+                '{{ appName }}\n\n' +
+                'and may be incompatible or fail to load here.',
+                app
+            )
         );
     }
     return this.rawLoadProjectModel(xmlNode);
@@ -345,7 +348,7 @@ SnapSerializer.prototype.rawLoadProjectModel = function (xmlNode) {
 
     model = {project: xmlNode };
     if (+xmlNode.attributes.version > this.version) {
-        throw 'Project uses newer version of Serializer';
+        throw _('Project uses newer version of Serializer');
     }
 
     /* Project Info */
@@ -362,7 +365,7 @@ SnapSerializer.prototype.rawLoadProjectModel = function (xmlNode) {
         ) {
             nameID += 1;
         }
-        project.name = 'Untitled ' + nameID;
+        project.name = _('Untitled') + nameID;
     }
     model.notes = model.project.childNamed('notes');
     if (model.notes) {
@@ -565,7 +568,7 @@ SnapSerializer.prototype.rawLoadProjectModel = function (xmlNode) {
             );
         } else {
             watcher = new WatcherMorph(
-                localize(myself.watcherLabels[model.attributes.s]),
+                _expr(myself.watcherLabels[model.attributes.s]),
                 color,
                 target,
                 model.attributes.s,
@@ -624,7 +627,7 @@ SnapSerializer.prototype.loadBlocks = function (xmlString, targetStage) {
     };
     model = this.parse(xmlString);
     if (+model.attributes.version > this.version) {
-        throw 'Module uses newer version of Serializer';
+        throw _('Module uses newer version of Serializer');
     }
     this.loadCustomBlocks(stage, model, true);
     this.populateCustomBlocks(
@@ -656,7 +659,7 @@ SnapSerializer.prototype.loadSprites = function (xmlString, ide) {
 
     model = this.parse(xmlString);
     if (+model.attributes.version > this.version) {
-        throw 'Module uses newer version of Serializer';
+        throw _('Module uses newer version of Serializer');
     }
     model.childrenNamed('sprite').forEach(function (model) {
         var sprite  = new SpriteMorph(project.globalVariables);
@@ -737,7 +740,7 @@ SnapSerializer.prototype.loadMediaModel = function (xmlNode) {
         model = xmlNode;
     this.mediaDict = {};
     if (+model.attributes.version > this.version) {
-        throw 'Module uses newer version of Serializer';
+        throw _('Module uses newer version of Serializer');
     }
     model.children.forEach(function (model) {
         myself.loadValue(model);
@@ -1069,9 +1072,10 @@ SnapSerializer.prototype.loadScript = function (model, object) {
                 block.nextBlock(nextBlock);
             } else {
                 console.log(
-                    'SNAP: expecting a command but getting a reporter:\n' +
-                        '  ' + block.blockSpec + '\n' +
-                        '  ' + nextBlock.blockSpec
+                    'Snap! ' +
+                    _('expecting a command but getting a reporter:') + '\n' +
+                    '  ' + block.blockSpec + '\n' +
+                    '  ' + nextBlock.blockSpec
                 );
                 return topBlock;
             }
@@ -1112,7 +1116,7 @@ SnapSerializer.prototype.loadBlock = function (model, isReporter, object) {
             if (window.confirm('enable JavaScript?')) {
                 Process.prototype.enableJS = true;
             } else {
-                throw new Error('JavaScript is not enabled');
+                throw new Error(_('JavaScript is not enabled'));
             }
         }
         */
@@ -1191,7 +1195,7 @@ SnapSerializer.prototype.obsoleteBlock = function (isReporter) {
             : new CommandBlockMorph();
     block.selector = 'errorObsolete';
     block.color = new Color(200, 0, 20);
-    block.setSpec('Obsolete!');
+    block.setSpec(_('Obsolete!'));
     block.isDraggable = true;
     return block;
 };
@@ -1275,7 +1279,7 @@ SnapSerializer.prototype.loadValue = function (model, object) {
             )) {
             return this.mediaDict[model.attributes.mediaID];
         }
-        throw new Error('expecting a reference id');
+        throw new Error(_('expecting a reference id'));
     case 'l':
         option = model.childNamed('option');
         if (option) {
@@ -1644,7 +1648,7 @@ StageMorph.prototype.toXML = function (serializer) {
             '<blocks>%</blocks>' +
             '<variables>%</variables>' +
             '</project>',
-        (ide && ide.projectName) ? ide.projectName : localize('Untitled'),
+        (ide && ide.projectName) ? ide.projectName : _('Untitled'),
         serializer.app,
         serializer.version,
         (ide && ide.projectNotes) ? ide.projectNotes : '',

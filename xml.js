@@ -63,7 +63,7 @@
 
 */
 
-/*global modules, detect, Node, isNil*/
+/*global modules, detect, Node, isNil, _*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
@@ -183,7 +183,10 @@ XML_Element.prototype.require = function (tagName) {
     // an error if it doesn't exist
     var child = this.childNamed(tagName);
     if (!child) {
-        throw new Error('Missing required element <' + tagName + '>!');
+        throw new Error(_(
+            'Missing required element <{{ tagName }}>!',
+            tagName
+        ));
     }
     return child;
 };
@@ -335,12 +338,14 @@ XML_Element.prototype.parseStream = function (stream) {
         key = stream.word();
         stream.skipSpace();
         if (stream.next() !== '=') {
-            throw new Error('Expected "=" after attribute name');
+            throw new Error(_('Expected "=" after attribute name'));
         }
         stream.skipSpace();
         ch = stream.next();
         if (ch !== '"' && ch !== "'") {
-            throw new Error('Expected single- or double-quoted attribute value');
+            throw new Error(
+                _('Expected single- or double-quoted attribute value')
+            );
         }
         value = stream.upTo(ch);
         stream.skip(1);
@@ -353,12 +358,14 @@ XML_Element.prototype.parseStream = function (stream) {
     if (ch === '/') {
         stream.skip();
         if (stream.next() !== '>') {
-            throw new Error('Expected ">" after "/" in empty tag');
+            throw new Error(_('Expected ">" after "/" in empty tag'));
         }
         return;
     }
     if (stream.next() !== '>') {
-        throw new Error('Expected ">" after tag name and attributes');
+        throw new Error(
+            _('Expected ">" after tag name and attributes')
+        );
     }
 
     // contents and children
@@ -368,7 +375,9 @@ XML_Element.prototype.parseStream = function (stream) {
             if (stream.peek() === '/') { // closing tag
                 stream.skip();
                 if (stream.word() !== this.tag) {
-                    throw new Error('Expected to close ' + this.tag);
+                    throw new Error(
+                        _('Expected to close {{ tagName }}', this.tag)
+                    );
                 }
                 stream.upTo('>');
                 stream.skip();

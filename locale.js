@@ -40,7 +40,7 @@
 
 // Global settings /////////////////////////////////////////////////////
 
-/*global modules, contains*/
+/*global modules, contains, isObject, containsKey */
 
 modules.locale = '2018-March-09';
 
@@ -49,22 +49,55 @@ modules.locale = '2018-March-09';
 var Localizer;
 var SnapTranslator = new Localizer();
 
-function localize(string) {
-    return SnapTranslator.translate(string);
+function _(string, replacements) {
+    return SnapTranslator.translate(string, replacements);
+}
+
+function _expr(expression, replacements) {
+    return SnapTranslator.translate(expression, replacements);
 }
 
 // Localizer /////////////////////////////////////////////////////////////
 
 function Localizer(language, dict) {
     this.language = language || 'en';
-    this.dict = dict || {};
+    this.dict = dict || { 'en': {} };
 }
 
-Localizer.prototype.translate = function (string) {
-    return Object.prototype.hasOwnProperty.call(
-        this.dict[this.language],
-        string
-    ) ? this.dict[this.language][string] : string;
+Localizer.prototype.lookup = function (string) {
+    return this.dict[this.language][string];
+}
+
+Localizer.prototype.renderTemplate = function (template, vars) {
+    var replacements = isObject(vars)
+        ? function(match, key) {
+            return containsKey(vars, key)
+                ? ('' + vars[key]).toString()
+                : '';
+        }
+        : ('' + vars).toString();
+    return ('' + template).replace(/\{\{\s*(\w+)\s*\}\}/g, replacements);
+}
+
+Localizer.prototype.translate = function (string, replacements) {
+    var original = '' + string,
+        matches,
+        translation;
+
+    translation = this.lookup(original);
+    if (translation) {
+        return this.renderTemplate(translation, replacements);
+    }
+
+    // if none found... try the same string without trailing symbols
+    matches = original.match(/(\.\.\.|:|\.)$/)
+    if (matches) {
+        original = original.slice(0, -matches[1].length);
+        return this.translate(original, replacements) + matches[1];
+    }
+
+    // if none found... renders and returns the original string
+    return this.renderTemplate(original, replacements);
 };
 
 Localizer.prototype.languages = function () {

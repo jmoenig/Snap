@@ -79,7 +79,7 @@ SliderMorph, String, StringMorph, TextMorph, contains, copy, degrees, detect,
 document, isNaN, isString, newCanvas, nop, parseFloat, radians, window,
 modules, IDE_Morph, VariableDialogMorph, HTMLCanvasElement, Context, List,
 SpeechBubbleMorph, RingMorph, isNil, FileReader, TableDialogMorph,
-BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, localize,
+BlockEditorMorph, BlockDialogMorph, PrototypeHatBlockMorph, _, _nop, _expr,
 TableMorph, TableFrameMorph, normalizeCanvas, BooleanSlotMorph, HandleMorph,
 AlignmentMorph, Process*/
 
@@ -141,6 +141,22 @@ SpriteMorph.prototype.categories =
         'other'
     ];
 
+SpriteMorph.prototype.categoryLabel = function (category) {
+    var labels = {
+        'motion': _('Motion'),
+        'control': _('Control'),
+        'looks': _('Looks'),
+        'sensing': _('Sensing'),
+        'sound': _('Sound'),
+        'operators': _('Operators'),
+        'pen': _('Pen'),
+        'variables': _('Variables'),
+        'lists': _('Lists'),
+        'other': _('Other')
+    };
+    return labels[category] || category;
+};
+
 SpriteMorph.prototype.blockColor = {
     motion : new Color(74, 108, 212),
     looks : new Color(143, 86, 227),
@@ -182,219 +198,219 @@ SpriteMorph.prototype.initBlocks = function () {
             only: SpriteMorph,
             type: 'command',
             category: 'motion',
-            spec: 'move %n steps',
+            spec: _nop('move %n steps'),
             defaults: [10]
         },
         turn: {
             only: SpriteMorph,
             type: 'command',
             category: 'motion',
-            spec: 'turn %clockwise %n degrees',
+            spec: _nop('turn %clockwise %n degrees'),
             defaults: [15]
         },
         turnLeft: {
             only: SpriteMorph,
             type: 'command',
             category: 'motion',
-            spec: 'turn %counterclockwise %n degrees',
+            spec: _nop('turn %counterclockwise %n degrees'),
             defaults: [15]
         },
         setHeading: {
             only: SpriteMorph,
             type: 'command',
             category: 'motion',
-            spec: 'point in direction %dir'
+            spec: _nop('point in direction %dir')
         },
         doFaceTowards: {
             only: SpriteMorph,
             type: 'command',
             category: 'motion',
-            spec: 'point towards %dst'
+            spec: _nop('point towards %dst')
         },
         gotoXY: {
             only: SpriteMorph,
             type: 'command',
             category: 'motion',
-            spec: 'go to x: %n y: %n',
+            spec: _nop('go to x: %n y: %n'),
             defaults: [0, 0]
         },
         doGotoObject: {
             only: SpriteMorph,
             type: 'command',
             category: 'motion',
-            spec: 'go to %dst'
+            spec: _nop('go to %dst')
         },
         doGlide: {
             only: SpriteMorph,
             type: 'command',
             category: 'motion',
-            spec: 'glide %n secs to x: %n y: %n',
+            spec: _nop('glide %n secs to x: %n y: %n'),
             defaults: [1, 0, 0]
         },
         changeXPosition: {
             only: SpriteMorph,
             type: 'command',
             category: 'motion',
-            spec: 'change x by %n',
+            spec: _nop('change x by %n'),
             defaults: [10]
         },
         setXPosition: {
             only: SpriteMorph,
             type: 'command',
             category: 'motion',
-            spec: 'set x to %n',
+            spec: _nop('set x to %n'),
             defaults: [0]
         },
         changeYPosition: {
             only: SpriteMorph,
             type: 'command',
             category: 'motion',
-            spec: 'change y by %n',
+            spec: _nop('change y by %n'),
             defaults: [10]
         },
         setYPosition: {
             only: SpriteMorph,
             type: 'command',
             category: 'motion',
-            spec: 'set y to %n',
+            spec: _nop('set y to %n'),
             defaults: [0]
         },
         bounceOffEdge: {
             only: SpriteMorph,
             type: 'command',
             category: 'motion',
-            spec: 'if on edge, bounce'
+            spec: _nop('if on edge, bounce')
         },
         xPosition: {
             only: SpriteMorph,
             type: 'reporter',
             category: 'motion',
-            spec: 'x position'
+            spec: _nop('x position')
         },
         yPosition: {
             only: SpriteMorph,
             type: 'reporter',
             category: 'motion',
-            spec: 'y position'
+            spec: _nop('y position')
         },
         direction: {
             only: SpriteMorph,
             type: 'reporter',
             category: 'motion',
-            spec: 'direction'
+            spec: _nop('direction')
         },
 
         // Looks
         doSwitchToCostume: {
             type: 'command',
             category: 'looks',
-            spec: 'switch to costume %cst'
+            spec: _nop('switch to costume %cst')
         },
         doWearNextCostume: {
             type: 'command',
             category: 'looks',
-            spec: 'next costume'
+            spec: _nop('next costume')
         },
         getCostumeIdx: {
             type: 'reporter',
             category: 'looks',
-            spec: 'costume #'
+            spec: _nop('costume #')
         },
         doSayFor: {
             only: SpriteMorph,
             type: 'command',
             category: 'looks',
-            spec: 'say %s for %n secs',
-            defaults: [localize('Hello!'), 2]
+            spec: _nop('say %s for %n secs'),
+            defaults: [_('Hello!'), 2]
         },
         bubble: {
             only: SpriteMorph,
             type: 'command',
             category: 'looks',
-            spec: 'say %s',
-            defaults: [localize('Hello!')]
+            spec: _nop('say %s'),
+            defaults: [_('Hello!')]
         },
         doThinkFor: {
             only: SpriteMorph,
             type: 'command',
             category: 'looks',
-            spec: 'think %s for %n secs',
-            defaults: [localize('Hmm...'), 2]
+            spec: _nop('think %s for %n secs'),
+            defaults: [_('Hmm...'), 2]
         },
         doThink: {
             only: SpriteMorph,
             type: 'command',
             category: 'looks',
-            spec: 'think %s',
-            defaults: [localize('Hmm...')]
+            spec: _nop('think %s'),
+            defaults: [_('Hmm...')]
         },
         changeEffect: {
             type: 'command',
             category: 'looks',
-            spec: 'change %eff effect by %n',
+            spec: _nop('change %eff effect by %n'),
             defaults: [null, 25]
         },
         setEffect: {
             type: 'command',
             category: 'looks',
-            spec: 'set %eff effect to %n',
+            spec: _nop('set %eff effect to %n'),
             defaults: [null, 0]
         },
         clearEffects: {
             type: 'command',
             category: 'looks',
-            spec: 'clear graphic effects'
+            spec: _nop('clear graphic effects')
         },
         changeScale: {
             only: SpriteMorph,
             type: 'command',
             category: 'looks',
-            spec: 'change size by %n',
+            spec: _nop('change size by %n'),
             defaults: [10]
         },
         setScale: {
             only: SpriteMorph,
             type: 'command',
             category: 'looks',
-            spec: 'set size to %n %',
+            spec: _nop('set size to %n %'),
             defaults: [100]
         },
         getScale: {
             only: SpriteMorph,
             type: 'reporter',
             category: 'looks',
-            spec: 'size'
+            spec: _nop('size')
         },
         show: {
             only: SpriteMorph,
             type: 'command',
             category: 'looks',
-            spec: 'show'
+            spec: _nop('show')
         },
         hide: {
             only: SpriteMorph,
             type: 'command',
             category: 'looks',
-            spec: 'hide'
+            spec: _nop('hide')
         },
         comeToFront: {
             only: SpriteMorph,
             type: 'command',
             category: 'looks',
-            spec: 'go to front'
+            spec: _nop('go to front')
         },
         goBack: {
             only: SpriteMorph,
             type: 'command',
             category: 'looks',
-            spec: 'go back %n layers',
+            spec: _nop('go back %n layers'),
             defaults: [1]
         },
         doScreenshot: {
             type: 'command',
             category: 'looks',
-            spec: 'save %imgsource as costume named %s',
-            defaults: [['pen trails'], localize('screenshot')]
+            spec: _nop('save %imgsource as costume named %s'),
+            defaults: [['pen trails'], _('screenshot')]
         },
 
         // Looks - Debugging primitives for development mode
@@ -402,72 +418,72 @@ SpriteMorph.prototype.initBlocks = function () {
             dev: true,
             type: 'reporter',
             category: 'looks',
-            spec: 'wardrobe'
+            spec: _nop('wardrobe')
         },
 
         alert: {
             dev: true,
             type: 'command',
             category: 'looks',
-            spec: 'alert %mult%s'
+            spec: _nop('alert %mult%s')
         },
         log: {
             dev: true,
             type: 'command',
             category: 'looks',
-            spec: 'console log %mult%s'
+            spec: _nop('console log %mult%s')
         },
 
         // Sound
         playSound: {
             type: 'command',
             category: 'sound',
-            spec: 'play sound %snd'
+            spec: _nop('play sound %snd')
         },
         doPlaySoundUntilDone: {
             type: 'command',
             category: 'sound',
-            spec: 'play sound %snd until done'
+            spec: _nop('play sound %snd until done')
         },
         doStopAllSounds: {
             type: 'command',
             category: 'sound',
-            spec: 'stop all sounds'
+            spec: _nop('stop all sounds')
         },
         doRest: {
             type: 'command',
             category: 'sound',
-            spec: 'rest for %n beats',
+            spec: _nop('rest for %n beats'),
             defaults: [0.2]
         },
         doPlayNote: {
             type: 'command',
             category: 'sound',
-            spec: 'play note %note for %n beats',
+            spec: _nop('play note %note for %n beats'),
             defaults: [60, 0.5]
         },
         doSetInstrument: {
             type: 'command',
             category: 'sound',
-            spec: 'set instrument to %inst',
+            spec: _nop('set instrument to %inst'),
             defaults: [1]
         },
         doChangeTempo: {
             type: 'command',
             category: 'sound',
-            spec: 'change tempo by %n',
+            spec: _nop('change tempo by %n'),
             defaults: [20]
         },
         doSetTempo: {
             type: 'command',
             category: 'sound',
-            spec: 'set tempo to %n bpm',
+            spec: _nop('set tempo to %n bpm'),
             defaults: [60]
         },
         getTempo: {
             type: 'reporter',
             category: 'sound',
-            spec: 'tempo'
+            spec: _nop('tempo')
         },
 
         // Sound - Debugging primitives for development mode
@@ -475,171 +491,171 @@ SpriteMorph.prototype.initBlocks = function () {
             dev: true,
             type: 'reporter',
             category: 'sound',
-            spec: 'jukebox'
+            spec: _nop('jukebox')
         },
 
         // Pen
         clear: {
             type: 'command',
             category: 'pen',
-            spec: 'clear'
+            spec: _nop('clear')
         },
         down: {
             only: SpriteMorph,
             type: 'command',
             category: 'pen',
-            spec: 'pen down'
+            spec: _nop('pen down')
         },
         up: {
             only: SpriteMorph,
             type: 'command',
             category: 'pen',
-            spec: 'pen up'
+            spec: _nop('pen up')
         },
         setColor: {
             only: SpriteMorph,
             type: 'command',
             category: 'pen',
-            spec: 'set pen color to %clr'
+            spec: _nop('set pen color to %clr')
         },
         changeHue: {
             only: SpriteMorph,
             type: 'command',
             category: 'pen',
-            spec: 'change pen color by %n',
+            spec: _nop('change pen color by %n'),
             defaults: [10]
         },
         setHue: {
             only: SpriteMorph,
             type: 'command',
             category: 'pen',
-            spec: 'set pen color to %n',
+            spec: _nop('set pen color to %n'),
             defaults: [0]
         },
         changeBrightness: {
             only: SpriteMorph,
             type: 'command',
             category: 'pen',
-            spec: 'change pen shade by %n',
+            spec: _nop('change pen shade by %n'),
             defaults: [10]
         },
         setBrightness: {
             only: SpriteMorph,
             type: 'command',
             category: 'pen',
-            spec: 'set pen shade to %n',
+            spec: _nop('set pen shade to %n'),
             defaults: [100]
         },
         changeSize: {
             only: SpriteMorph,
             type: 'command',
             category: 'pen',
-            spec: 'change pen size by %n',
+            spec: _nop('change pen size by %n'),
             defaults: [1]
         },
         setSize: {
             only: SpriteMorph,
             type: 'command',
             category: 'pen',
-            spec: 'set pen size to %n',
+            spec: _nop('set pen size to %n'),
             defaults: [1]
         },
         doStamp: {
             only: SpriteMorph,
             type: 'command',
             category: 'pen',
-            spec: 'stamp'
+            spec: _nop('stamp')
         },
         floodFill: {
             only: SpriteMorph,
             type: 'command',
             category: 'pen',
-            spec: 'fill'
+            spec: _nop('fill')
         },
         reportPenTrailsAsCostume: {
             type: 'reporter',
             category: 'pen',
-            spec: 'pen trails'
+            spec: _nop('pen trails')
         },
 
         // Control
         receiveGo: {
             type: 'hat',
             category: 'control',
-            spec: 'when %greenflag clicked'
+            spec: _nop('when %greenflag clicked')
         },
         receiveKey: {
             type: 'hat',
             category: 'control',
-            spec: 'when %keyHat key pressed'
+            spec: _nop('when %keyHat key pressed')
         },
         receiveInteraction: {
             type: 'hat',
             category: 'control',
-            spec: 'when I am %interaction',
+            spec: _nop('when I am %interaction'),
             defaults: ['clicked']
         },
         receiveMessage: {
             type: 'hat',
             category: 'control',
-            spec: 'when I receive %msgHat'
+            spec: _nop('when I receive %msgHat')
         },
         receiveCondition: {
             type: 'hat',
             category: 'control',
-            spec: 'when %b'
+            spec: _nop('when %b')
         },
         doBroadcast: {
             type: 'command',
             category: 'control',
-            spec: 'broadcast %msg'
+            spec: _nop('broadcast %msg')
         },
         doBroadcastAndWait: {
             type: 'command',
             category: 'control',
-            spec: 'broadcast %msg and wait'
+            spec: _nop('broadcast %msg and wait')
         },
         getLastMessage: {
             type: 'reporter',
             category: 'control',
-            spec: 'message'
+            spec: _nop('message')
         },
         doWait: {
             type: 'command',
             category: 'control',
-            spec: 'wait %n secs',
+            spec: _nop('wait %n secs'),
             defaults: [1]
         },
         doWaitUntil: {
             type: 'command',
             category: 'control',
-            spec: 'wait until %b'
+            spec: _nop('wait until %b')
         },
         doForever: {
             type: 'command',
             category: 'control',
-            spec: 'forever %c'
+            spec: _nop('forever %c')
         },
         doRepeat: {
             type: 'command',
             category: 'control',
-            spec: 'repeat %n %c',
+            spec: _nop('repeat %n %c'),
             defaults: [10]
         },
         doUntil: {
             type: 'command',
             category: 'control',
-            spec: 'repeat until %b %c'
+            spec: _nop('repeat until %b %c')
         },
         doIf: {
             type: 'command',
             category: 'control',
-            spec: 'if %b %c'
+            spec: _nop('if %b %c')
         },
         doIfElse: {
             type: 'command',
             category: 'control',
-            spec: 'if %b %c else %c'
+            spec: _nop('if %b %c else %c')
         },
 
     /* migrated to a newer block version:
@@ -647,19 +663,19 @@ SpriteMorph.prototype.initBlocks = function () {
         doStop: {
             type: 'command',
             category: 'control',
-            spec: 'stop script'
+            spec: _nop('stop script')
         },
         doStopAll: {
             type: 'command',
             category: 'control',
-            spec: 'stop all %stop'
+            spec: _nop('stop all %stop')
         },
     */
 
         doStopThis: {
             type: 'command',
             category: 'control',
-            spec: 'stop %stopChoices'
+            spec: _nop('stop %stopChoices')
         },
 
     /* migrated to doStopThis:
@@ -667,51 +683,51 @@ SpriteMorph.prototype.initBlocks = function () {
         doStopOthers: {
             type: 'command',
             category: 'control',
-            spec: 'stop %stopOthersChoices'
+            spec: _nop('stop %stopOthersChoices')
         },
     */
 
         doRun: {
             type: 'command',
             category: 'control',
-            spec: 'run %cmdRing %inputs'
+            spec: _nop('run %cmdRing %inputs')
         },
         fork: {
             type: 'command',
             category: 'control',
-            spec: 'launch %cmdRing %inputs'
+            spec: _nop('launch %cmdRing %inputs')
         },
         evaluate: {
             type: 'reporter',
             category: 'control',
-            spec: 'call %repRing %inputs'
+            spec: _nop('call %repRing %inputs')
         },
         doReport: {
             type: 'command',
             category: 'control',
-            spec: 'report %s'
+            spec: _nop('report %s')
         },
     /*
         doStopBlock: { // migrated to a newer block version
             type: 'command',
             category: 'control',
-            spec: 'stop block'
+            spec: _nop('stop block')
         },
     */
         doCallCC: {
             type: 'command',
             category: 'control',
-            spec: 'run %cmdRing w/continuation'
+            spec: _nop('run %cmdRing w/continuation')
         },
         reportCallCC: {
             type: 'reporter',
             category: 'control',
-            spec: 'call %cmdRing w/continuation'
+            spec: _nop('call %cmdRing w/continuation')
         },
         doWarp: {
             type: 'command',
             category: 'other',
-            spec: 'warp %c'
+            spec: _nop('warp %c')
         },
 
         // Message passing - very experimental
@@ -719,13 +735,13 @@ SpriteMorph.prototype.initBlocks = function () {
         doTellTo: {
             type: 'command',
             category: 'control',
-            // spec: 'tell %spr to %cl' // I liked this version much better, -Jens
-            spec: 'tell %spr to %cmdRing %inputs'
+            // spec: _nop('tell %spr to %cl' // I liked this version much better, -Jens)
+            spec: _nop('tell %spr to %cmdRing %inputs')
         },
         reportAskFor: {
             type: 'reporter',
             category: 'control',
-            spec: 'ask %spr for %repRing %inputs'
+            spec: _nop('ask %spr for %repRing %inputs')
         },
 
         // Cloning
@@ -733,23 +749,23 @@ SpriteMorph.prototype.initBlocks = function () {
         receiveOnClone: {
             type: 'hat',
             category: 'control',
-            spec: 'when I start as a clone'
+            spec: _nop('when I start as a clone')
         },
         createClone: {
             type: 'command',
             category: 'control',
-            spec: 'create a clone of %cln'
+            spec: _nop('create a clone of %cln')
         },
         newClone: {
             type: 'reporter',
             category: 'control',
-            spec: 'a new clone of %cln',
+            spec: _nop('a new clone of %cln'),
             defaults: [['myself']]
         },
         removeClone: {
             type: 'command',
             category: 'control',
-            spec: 'delete this clone'
+            spec: _nop('delete this clone')
         },
 
         // Debugging - pausing
@@ -757,7 +773,7 @@ SpriteMorph.prototype.initBlocks = function () {
         doPauseAll: {
             type: 'command',
             category: 'control',
-            spec: 'pause all %pause'
+            spec: _nop('pause all %pause')
         },
 
         // Sensing
@@ -766,142 +782,142 @@ SpriteMorph.prototype.initBlocks = function () {
             only: SpriteMorph,
             type: 'predicate',
             category: 'sensing',
-            spec: 'touching %col ?'
+            spec: _nop('touching %col ?')
         },
         reportTouchingColor: {
             only: SpriteMorph,
             type: 'predicate',
             category: 'sensing',
-            spec: 'touching %clr ?'
+            spec: _nop('touching %clr ?')
         },
         reportColorIsTouchingColor: {
             only: SpriteMorph,
             type: 'predicate',
             category: 'sensing',
-            spec: 'color %clr is touching %clr ?'
+            spec: _nop('color %clr is touching %clr ?')
         },
         colorFiltered: {
             dev: true,
             type: 'reporter',
             category: 'sensing',
-            spec: 'filtered for %clr'
+            spec: _nop('filtered for %clr')
         },
         reportStackSize: {
             dev: true,
             type: 'reporter',
             category: 'sensing',
-            spec: 'stack size'
+            spec: _nop('stack size')
         },
         reportFrameCount: {
             dev: true,
             type: 'reporter',
             category: 'sensing',
-            spec: 'frames'
+            spec: _nop('frames')
         },
         reportThreadCount: {
             dev: true,
             type: 'reporter',
             category: 'sensing',
-            spec: 'processes'
+            spec: _nop('processes')
         },
         doAsk: {
             type: 'command',
             category: 'sensing',
-            spec: 'ask %s and wait',
-            defaults: [localize('what\'s your name?')]
+            spec: _nop('ask %s and wait'),
+            defaults: [_('what\'s your name?')]
         },
         reportLastAnswer: { // retained for legacy compatibility
             dev: true,
             type: 'reporter',
             category: 'sensing',
-            spec: 'answer'
+            spec: _nop('answer')
         },
         getLastAnswer: {
             type: 'reporter',
             category: 'sensing',
-            spec: 'answer'
+            spec: _nop('answer')
         },
         reportMouseX: {
             type: 'reporter',
             category: 'sensing',
-            spec: 'mouse x'
+            spec: _nop('mouse x')
         },
         reportMouseY: {
             type: 'reporter',
             category: 'sensing',
-            spec: 'mouse y'
+            spec: _nop('mouse y')
         },
         reportMouseDown: {
             type: 'predicate',
             category: 'sensing',
-            spec: 'mouse down?'
+            spec: _nop('mouse down?')
         },
         reportKeyPressed: {
             type: 'predicate',
             category: 'sensing',
-            spec: 'key %key pressed?'
+            spec: _nop('key %key pressed?')
         },
     /*
         reportDistanceTo: { // has been superseded by reportRelationTo
             type: 'reporter',
             category: 'sensing',
-            spec: 'distance to %dst'
+            spec: _nop('distance to %dst')
         },
     */
         reportRelationTo: {
             only: SpriteMorph,
             type: 'reporter',
             category: 'sensing',
-            spec: '%rel to %dst',
+            spec: _nop('%rel to %dst'),
             defaults: [['distance']]
         },
         doResetTimer: {
             type: 'command',
             category: 'sensing',
-            spec: 'reset timer'
+            spec: _nop('reset timer')
         },
         reportTimer: { // retained for legacy compatibility
             dev: true,
             type: 'reporter',
             category: 'sensing',
-            spec: 'timer'
+            spec: _nop('timer')
         },
         getTimer: {
             type: 'reporter',
             category: 'sensing',
-            spec: 'timer'
+            spec: _nop('timer')
         },
         reportAttributeOf: {
             type: 'reporter',
             category: 'sensing',
-            spec: '%att of %spr',
+            spec: _nop('%att of %spr'),
             defaults: [['costume #']]
         },
         reportURL: {
             type: 'reporter',
             category: 'sensing',
-            spec: 'url %s',
+            spec: _nop('url %s'),
             defaults: ['snap.berkeley.edu']
         },
         reportIsFastTracking: {
             type: 'predicate',
             category: 'sensing',
-            spec: 'turbo mode?'
+            spec: _nop('turbo mode?')
         },
         doSetFastTracking: {
             type: 'command',
             category: 'sensing',
-            spec: 'set turbo mode to %b'
+            spec: _nop('set turbo mode to %b')
         },
         reportDate: {
             type: 'reporter',
             category: 'sensing',
-            spec: 'current %dates'
+            spec: _nop('current %dates')
         },
         reportGet: {
             type: 'reporter',
             category: 'sensing',
-            spec: 'my %get',
+            spec: _nop('my %get'),
             defaults: [['neighbors']]
         },
 
@@ -944,28 +960,28 @@ SpriteMorph.prototype.initBlocks = function () {
         reportQuotient: {
             type: 'reporter',
             category: 'operators',
-            spec: '%n / %n' // '%n \u00F7 %n'
+            spec: '%n / %n', // '%n \u00F7 %n
         },
         reportRound: {
             type: 'reporter',
             category: 'operators',
-            spec: 'round %n'
+            spec: _nop('round %n')
         },
         reportMonadic: {
             type: 'reporter',
             category: 'operators',
-            spec: '%fun of %n',
+            spec: _nop('%fun of %n'),
             defaults: [null, 10]
         },
         reportModulus: {
             type: 'reporter',
             category: 'operators',
-            spec: '%n mod %n'
+            spec: _nop('%n mod %n')
         },
         reportRandom: {
             type: 'reporter',
             category: 'operators',
-            spec: 'pick random %n to %n',
+            spec: _nop('pick random %n to %n'),
             defaults: [1, 10]
         },
         reportLessThan: {
@@ -986,17 +1002,17 @@ SpriteMorph.prototype.initBlocks = function () {
         reportAnd: {
             type: 'predicate',
             category: 'operators',
-            spec: '%b and %b'
+            spec: _nop('%b and %b')
         },
         reportOr: {
             type: 'predicate',
             category: 'operators',
-            spec: '%b or %b'
+            spec: _nop('%b or %b')
         },
         reportNot: {
             type: 'predicate',
             category: 'operators',
-            spec: 'not %b'
+            spec: _nop('not %b')
         },
         reportBoolean: {
             type: 'predicate',
@@ -1014,85 +1030,85 @@ SpriteMorph.prototype.initBlocks = function () {
         reportJoinWords: {
             type: 'reporter',
             category: 'operators',
-            spec: 'join %words',
-            defaults: [localize('hello') + ' ', localize('world')]
+            spec: _nop('join %words'),
+            defaults: [_('hello') + ' ', _('world')]
         },
         reportLetter: {
             type: 'reporter',
             category: 'operators',
-            spec: 'letter %n of %s',
-            defaults: [1, localize('world')]
+            spec: _nop('letter %n of %s'),
+            defaults: [1, _('world')]
         },
         reportStringSize: {
             type: 'reporter',
             category: 'operators',
-            spec: 'length of %s',
-            defaults: [localize('world')]
+            spec: _nop('length of %s'),
+            defaults: [_('world')]
         },
         reportUnicode: {
             type: 'reporter',
             category: 'operators',
-            spec: 'unicode of %s',
+            spec: _nop('unicode of %s'),
             defaults: ['a']
         },
         reportUnicodeAsLetter: {
             type: 'reporter',
             category: 'operators',
-            spec: 'unicode %n as letter',
+            spec: _nop('unicode %n as letter'),
             defaults: [65]
         },
         reportIsA: {
             type: 'predicate',
             category: 'operators',
-            spec: 'is %s a %typ ?',
+            spec: _nop('is %s a %typ ?'),
             defaults: [5]
         },
         reportIsIdentical: {
             type: 'predicate',
             category: 'operators',
-            spec: 'is %s identical to %s ?'
+            spec: _nop('is %s identical to %s ?')
         },
         reportTextSplit: {
             type: 'reporter',
             category: 'operators',
-            spec: 'split %s by %delim',
-            defaults: [localize('hello') + ' ' + localize('world'), " "]
+            spec: _nop('split %s by %delim'),
+            defaults: [_('hello') + ' ' + _('world'), " "]
         },
         reportJSFunction: { // experimental
             type: 'reporter',
             category: 'operators',
-            spec: 'JavaScript function ( %mult%s ) { %code }'
+            spec: _nop('JavaScript function ( %mult%s ) { %code }')
         },
         reportTypeOf: { // only in dev mode for debugging
             dev: true,
             type: 'reporter',
             category: 'operators',
-            spec: 'type of %s',
+            spec: _nop('type of %s'),
             defaults: [5]
         },
         reportTextFunction: { // only in dev mode - experimental
             dev: true,
             type: 'reporter',
             category: 'operators',
-            spec: '%txtfun of %s',
+            spec: _nop('%txtfun of %s'),
             defaults: [null, "Abelson & Sussman"]
         },
         reportCompiled: { // experimental
             type: 'reporter',
             category: 'operators',
-            spec: 'compile %repRing'
+            spec: _nop('compile %repRing')
         },
 
     /*
         reportScript: {
             type: 'reporter',
             category: 'operators',
-            spec: 'the script %parms %c'
+            spec: _nop('the script %parms %c')
         },
         reify: {
             type: 'reporter',
             category: 'operators',
-            spec: 'the %f block %parms'
+            spec: _nop('the %f block %parms')
         },
     */
 
@@ -1100,94 +1116,94 @@ SpriteMorph.prototype.initBlocks = function () {
         doSetVar: {
             type: 'command',
             category: 'variables',
-            spec: 'set %var to %s',
+            spec: _nop('set %var to %s'),
             defaults: [null, 0]
         },
         doChangeVar: {
             type: 'command',
             category: 'variables',
-            spec: 'change %var by %n',
+            spec: _nop('change %var by %n'),
             defaults: [null, 1]
         },
         doShowVar: {
             type: 'command',
             category: 'variables',
-            spec: 'show variable %var'
+            spec: _nop('show variable %var')
         },
         doHideVar: {
             type: 'command',
             category: 'variables',
-            spec: 'hide variable %var'
+            spec: _nop('hide variable %var')
         },
         doDeclareVariables: {
             type: 'command',
             category: 'other',
-            spec: 'script variables %scriptVars'
+            spec: _nop('script variables %scriptVars')
         },
 
         // inheritance - experimental
         doDeleteAttr: {
             type: 'command',
             category: 'variables',
-            spec: 'inherit %shd'
+            spec: _nop('inherit %shd')
         },
 
         // Lists
         reportNewList: {
             type: 'reporter',
             category: 'lists',
-            spec: 'list %exp'
+            spec: _nop('list %exp')
         },
         reportCONS: {
             type: 'reporter',
             category: 'lists',
-            spec: '%s in front of %l'
+            spec: _nop('%s in front of %l')
         },
         reportListItem: {
             type: 'reporter',
             category: 'lists',
-            spec: 'item %idx of %l',
+            spec: _nop('item %idx of %l'),
             defaults: [1]
         },
         reportCDR: {
             type: 'reporter',
             category: 'lists',
-            spec: 'all but first of %l'
+            spec: _nop('all but first of %l')
         },
         reportListLength: {
             type: 'reporter',
             category: 'lists',
-            spec: 'length of %l'
+            spec: _nop('length of %l')
         },
         reportListContainsItem: {
             type: 'predicate',
             category: 'lists',
-            spec: '%l contains %s',
-            defaults: [null, localize('thing')]
+            spec: _nop('%l contains %s'),
+            defaults: [null, _('thing')]
         },
         doAddToList: {
             type: 'command',
             category: 'lists',
-            spec: 'add %s to %l',
-            defaults: [localize('thing')]
+            spec: _nop('add %s to %l'),
+            defaults: [_('thing')]
         },
         doDeleteFromList: {
             type: 'command',
             category: 'lists',
-            spec: 'delete %ida of %l',
+            spec: _nop('delete %ida of %l'),
             defaults: [1]
         },
         doInsertInList: {
             type: 'command',
             category: 'lists',
-            spec: 'insert %s at %idx of %l',
-            defaults: [localize('thing'), 1]
+            spec: _nop('insert %s at %idx of %l'),
+            defaults: [_('thing'), 1]
         },
         doReplaceInList: {
             type: 'command',
             category: 'lists',
-            spec: 'replace item %idx of %l with %s',
-            defaults: [1, null, localize('thing')]
+            spec: _nop('replace item %idx of %l with %s'),
+            defaults: [1, null, _('thing')]
         },
 
         // MAP - experimental
@@ -1195,14 +1211,14 @@ SpriteMorph.prototype.initBlocks = function () {
             dev: true,
             type: 'reporter',
             category: 'lists',
-            spec: 'map %repRing over %l'
+            spec: _nop('map %repRing over %l')
         },
         doForEach: {
             dev: true,
             type: 'command',
             category: 'lists',
-            spec: 'for %upvar in %l %cl',
-            defaults: [localize('each item')]
+            spec: _nop('for %upvar in %l %cl'),
+            defaults: [_('each item')]
         },
 
         // Tables - experimental
@@ -1211,38 +1227,38 @@ SpriteMorph.prototype.initBlocks = function () {
             dev: true,
             type: 'command',
             category: 'lists',
-            spec: 'show table %l'
+            spec: _nop('show table %l')
         },
 
         // Code mapping - experimental
         doMapCodeOrHeader: { // experimental
             type: 'command',
             category: 'other',
-            spec: 'map %cmdRing to %codeKind %code'
+            spec: _nop('map %cmdRing to %codeKind %code')
         },
         doMapValueCode: { // experimental
             type: 'command',
             category: 'other',
-            spec: 'map %mapValue to code %code',
+            spec: _nop('map %mapValue to code %code'),
             defaults: [['String'], '<#1>']
         },
     /* obsolete - superseded by 'doMapValue'
         doMapStringCode: { // experimental
             type: 'command',
             category: 'other',
-            spec: 'map String to code %code',
+            spec: _nop('map String to code %code'),
             defaults: ['<#1>']
         },
     */
         doMapListCode: { // experimental
             type: 'command',
             category: 'other',
-            spec: 'map %codeListPart of %codeListKind to code %code'
+            spec: _nop('map %codeListPart of %codeListKind to code %code')
         },
         reportMappedCode: { // experimental
             type: 'reporter',
             category: 'other',
-            spec: 'code of %cmdRing'
+            spec: _nop('code of %cmdRing')
         }
     };
 };
@@ -1385,7 +1401,7 @@ function SpriteMorph(globals) {
 }
 
 SpriteMorph.prototype.init = function (globals) {
-    this.name = localize('Sprite');
+    this.name = _('Sprite');
     this.instrument = null;
     this.variables = new VariableFrame(globals || null, this);
     this.scripts = new ScriptsMorph();
@@ -1735,7 +1751,7 @@ SpriteMorph.prototype.blockForSelector = function (selector, setDefaults) {
     if (contains(['reifyReporter', 'reifyPredicate'], block.selector)) {
         block.isStatic = true;
     }
-    block.setSpec(localize(info.spec));
+    block.setSpec(_expr(info.spec));
     if ((setDefaults && info.defaults) || (migration && migration.inputs)) {
         defaults = migration ? migration.inputs : info.defaults;
         block.defaults = defaults;
@@ -1803,7 +1819,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
             function () {
                 myself.toggleWatcher(
                     selector,
-                    localize(info.spec),
+                    _expr(info.spec),
                     myself.blockColor[info.category]
                 );
             },
@@ -1832,7 +1848,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
 
     function helpMenu() {
         var menu = new MenuMorph(this);
-        menu.addItem('help...', 'showHelp');
+        menu.addItem(_('help...'), 'showHelp');
         return menu;
     }
 
@@ -1840,7 +1856,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         var ide;
         if (pair) {
             if (myself.isVariableNameInUse(pair[0], pair[1])) {
-                myself.inform('that name is already in use');
+                myself.inform(_('that name is already in use'));
             } else {
                 ide = myself.parentThatIsA(IDE_Morph);
                 myself.addVariable(pair[0], pair[1]);
@@ -1913,9 +1929,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
 
         if (this.world().isDevMode) {
             blocks.push('-');
-            txt = new TextMorph(localize(
-                'development mode \ndebugging primitives:'
-            ));
+            txt = new TextMorph(_('development mode\ndebugging primitives:'));
             txt.fontSize = 9;
             txt.setColor(this.paletteTextColor);
             blocks.push(txt);
@@ -2072,9 +2086,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         if (this.world().isDevMode) {
 
             blocks.push('-');
-            txt = new TextMorph(localize(
-                'development mode \ndebugging primitives:'
-            ));
+            txt = new TextMorph(_('development mode\ndebugging primitives:'));
             txt.fontSize = 9;
             txt.setColor(this.paletteTextColor);
             blocks.push(txt);
@@ -2140,9 +2152,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
 
         if (this.world().isDevMode) {
             blocks.push('-');
-            txt = new TextMorph(localize(
-                'development mode \ndebugging primitives:'
-            ));
+            txt = new TextMorph(_('development mode\ndebugging primitives:'));
             txt.fontSize = 9;
             txt.setColor(this.paletteTextColor);
             blocks.push(txt);
@@ -2166,12 +2176,12 @@ SpriteMorph.prototype.blockTemplates = function (category) {
                     addVar,
                     myself
                 ).prompt(
-                    'Variable name',
+                    _('Variable name'),
                     null,
                     myself.world()
                 );
             },
-            'Make a variable'
+            _('Make a variable')
         );
         button.userMenu = helpMenu;
         button.selector = 'addVariable';
@@ -2192,7 +2202,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
                     });
                     menu.popUpAtHand(myself.world());
                 },
-                'Delete a variable'
+                _('Delete a variable')
             );
             button.userMenu = helpMenu;
             button.selector = 'deleteVariable';
@@ -2255,9 +2265,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
 
         if (this.world().isDevMode) {
             blocks.push('-');
-            txt = new TextMorph(localize(
-                'development mode \ndebugging primitives:'
-            ));
+            txt = new TextMorph(_('development mode\ndebugging primitives:'));
             txt.fontSize = 9;
             txt.setColor(this.paletteTextColor);
             blocks.push(txt);
@@ -2292,12 +2300,12 @@ SpriteMorph.prototype.makeBlockButton = function (category) {
     var button = new PushButtonMorph(
         this,
 		'makeBlock',
-        'Make a block'
+        _('Make a block')
     );
 
     button.userMenu = function () {
         var menu = new MenuMorph(this);
-        menu.addItem('help...', 'showHelp');
+        menu.addItem(_('help...'), 'showHelp');
         return menu;
     };
 
@@ -2341,7 +2349,7 @@ SpriteMorph.prototype.makeBlock = function () {
         });
     }
     dlg.prompt(
-        'Make a block',
+        _('Make a block'),
         null,
         myself.world()
     );
@@ -2387,7 +2395,7 @@ SpriteMorph.prototype.freshPalette = function (category) {
     );
     searchButton.alpha = 0.2;
     searchButton.padding = 1;
-    searchButton.hint = localize('find blocks') + '...';
+    searchButton.hint = _('find blocks...');
     searchButton.labelShadowColor = shade;
     searchButton.drawNew();
     searchButton.fixLayout();
@@ -2400,7 +2408,7 @@ SpriteMorph.prototype.freshPalette = function (category) {
     );
     makeButton.alpha = 0.2;
     makeButton.padding = 1;
-    makeButton.hint = localize('Make a block') + '...';
+    makeButton.hint = _('Make a block...');
     makeButton.labelShadowColor = shade;
     makeButton.drawNew();
     makeButton.fixLayout();
@@ -2458,14 +2466,14 @@ SpriteMorph.prototype.freshPalette = function (category) {
                     'magnifyingGlass',
                     MorphicPreferences.menuFontSize
                 ),
-                localize('find blocks') + '...'
+                _('find blocks...')
             ],
             function () {myself.searchBlocks(); },
             '^F'
         );
         if (canHidePrimitives()) {
             menu.addItem(
-                'hide primitives',
+                _('hide primitives'),
                 function () {
                     var defs = SpriteMorph.prototype.blocks;
                     Object.keys(defs).forEach(function (sel) {
@@ -2483,7 +2491,7 @@ SpriteMorph.prototype.freshPalette = function (category) {
         }
         if (hasHiddenPrimitives()) {
             menu.addItem(
-                'show primitives',
+                _('show primitives'),
                 function () {
                     var hiddens = StageMorph.prototype.hiddenPrimitives,
                         defs = SpriteMorph.prototype.blocks;
@@ -2690,7 +2698,7 @@ SpriteMorph.prototype.blocksMatching = function (
     [this.customBlocks, stage.globalBlocks].forEach(function (blocksList) {
         blocksList.forEach(function (definition) {
             if (contains(types, definition.type)) {
-                var spec = localize(definition.blockSpec()).toLowerCase(),
+                var spec = _expr(definition.blockSpec()).toLowerCase(),
                     rel = relevance(labelOf(spec), search);
                 if (rel !== -1) {
                     blocks.push([definition.templateInstance(), rel + '2']);
@@ -2704,7 +2712,7 @@ SpriteMorph.prototype.blocksMatching = function (
         if (!StageMorph.prototype.hiddenPrimitives[selector] &&
                 contains(types, blocksDict[selector].type)) {
             var block = blocksDict[selector],
-                spec = localize(block.alias || block.spec).toLowerCase(),
+                spec = (_expr(block.alias || block.spec)).toLowerCase(),
                 rel = relevance(labelOf(spec), search);
             if (
                 (rel !== -1) &&
@@ -2968,8 +2976,8 @@ SpriteMorph.prototype.reporterize = function (expressionString) {
             ceil: 'ceiling',
             '!' : 'not'
         };
-        monads.concat(['true', 'false']).forEach(function (word) {
-            reverseDict[localize(word).toLowerCase()] = word;
+        monads.concat([_('true'), _('false')]).forEach(function (word) {
+            reverseDict[word.toLowerCase()] = word;
         });
         key = alias[ast[0]] || reverseDict[ast[0].toLowerCase()] || ast[0];
         if (contains(monads, key)) { // monadic
@@ -3058,7 +3066,7 @@ SpriteMorph.prototype.deleteVariable = function (varName) {
 
 SpriteMorph.prototype.addCostume = function (costume) {
     if (!costume.name) {
-        costume.name = 'costume' + (this.costumes.length() + 1);
+        costume.name = _('costume') + (this.costumes.length() + 1);
     }
     this.shadowAttribute('costumes');
     this.costumes.add(costume);
@@ -3155,7 +3163,7 @@ SpriteMorph.prototype.doSwitchToCostume = function (id, noShadow) {
         costume;
     if (
         contains(
-            [localize('Turtle'), localize('Empty')],
+            [_('Turtle'), _('Empty')],
             (id instanceof Array ? id[0] : null)
         )
     ) {
@@ -3225,44 +3233,44 @@ SpriteMorph.prototype.userMenu = function () {
         return menu;
     }
     if (!this.isTemporary) {
-        menu.addItem("duplicate", 'duplicate');
+        menu.addItem(_('duplicate'), 'duplicate');
         if (StageMorph.prototype.enableInheritance) {
-            menu.addItem("clone", 'instantiate');
+            menu.addItem(_('clone'), 'instantiate');
             menu.addLine();
         }
     }
-    menu.addItem("delete", 'remove');
-    menu.addItem("move", 'moveCenter');
-    menu.addItem("rotate", 'setRotation');
+    menu.addItem(_('delete'), 'remove');
+    menu.addItem(_('move'), 'moveCenter');
+    menu.addItem(_('rotate'), 'setRotation');
     if (this.costume) {
         menu.addItem(
-            "pivot",
+            _('pivot'),
             'moveRotationCenter',
-            'edit the costume\'s\nrotation center'
+            _('edit the costume\'s\nrotation center')
         );
     }
     if (this.isTemporary) {
         if (StageMorph.prototype.enableInheritance) {
             menu.addItem(
-                "edit",
+                _('edit'),
                 'perpetuateAndEdit',
-                'make permanent and\nshow in the sprite corral'
+                _('make permanent and\nshow in the sprite corral')
             );
         }
     } else {
-        menu.addItem("edit", 'edit');
+        menu.addItem(_('edit'), 'edit');
     }
     menu.addLine();
     if (this.anchor) {
         menu.addItem(
-            localize('detach from') + ' ' + this.anchor.name,
+            _('detach from {{ name }}', this.anchor.name),
             'detachFromAnchor'
         );
     }
     if (this.parts.length) {
-        menu.addItem('detach all parts', 'detachAllParts');
+        menu.addItem(_('detach all parts'), 'detachAllParts');
     }
-    menu.addItem("export...", 'exportSprite');
+    menu.addItem(_('export...'), 'exportSprite');
     return menu;
 };
 
@@ -3344,7 +3352,7 @@ SpriteMorph.prototype.createClone = function (immediately) {
 SpriteMorph.prototype.newClone = function (immediately) {
     var clone = this.createClone(immediately);
     if (isNil(clone)) {
-        throw new Error('exceeding maximum number of clones');
+        throw new Error(_('exceeding maximum number of clones'));
     }
     return clone;
 };
@@ -4327,7 +4335,7 @@ SpriteMorph.prototype.floodFill = function () {
 SpriteMorph.prototype.reportPenTrailsAsCostume = function () {
     var cst = new Costume(
         this.parentThatIsA(StageMorph).trailsCanvas,
-        this.newCostumeName(localize('Costume'))
+        this.newCostumeName(_('Costume'))
     );
     cst.shrinkWrap();
     return cst;
@@ -4668,7 +4676,7 @@ SpriteMorph.prototype.setRotationY = function (absoluteY) {
 SpriteMorph.prototype.setRotationCenter = function (absoluteCoordinate) {
     var delta, normal;
     if (!this.costume) {
-        throw new Error('setting the rotation center requires a costume');
+        throw new Error(_('setting the rotation center requires a costume'));
     }
     delta = absoluteCoordinate.subtract(
         new Point(this.xPosition(), this.yPosition())
@@ -5409,15 +5417,14 @@ SpriteMorph.prototype.chooseExemplar = function () {
         menu;
     menu = new MenuMorph(
         function (aSprite) {myself.setExemplar(aSprite); },
-        localize('current parent') +
-            ':\n' +
-            (this.exemplar ? this.exemplar.name : localize('none'))
+        _('current parent:') + '\n' +
+            (this.exemplar ? this.exemplar.name : _('none'))
     );
     other.forEach(function (eachSprite) {
         menu.addItem(eachSprite.name, eachSprite);
     });
     menu.addLine();
-    menu.addItem(localize('none'), null);
+    menu.addItem(_('none'), null);
     menu.popUpAtHand(this.world());
 };
 
@@ -6305,7 +6312,7 @@ function StageMorph(globals) {
 }
 
 StageMorph.prototype.init = function (globals) {
-    this.name = localize('Stage');
+    this.name = _('Stage');
     this.instrument = null;
     this.threads = new ThreadManager();
     this.variables = new VariableFrame(globals || null, this);
@@ -6760,11 +6767,11 @@ StageMorph.prototype.developersMenu = function () {
     var myself = this,
         menu = StageMorph.uber.developersMenu.call(this);
     menu.addItem(
-        "stop",
+        _('stop'),
         function () {
             myself.threads.stopAll();
         },
-        'terminate all running threads'
+        _('terminate all running threads')
     );
     return menu;
 };
@@ -7007,7 +7014,7 @@ StageMorph.prototype.blockTemplates = function (category) {
             function () {
                 myself.toggleWatcher(
                     selector,
-                    localize(info.spec),
+                    _expr(info.spec),
                     myself.blockColor[info.category]
                 );
             },
@@ -7037,7 +7044,7 @@ StageMorph.prototype.blockTemplates = function (category) {
     function addVar(pair) {
         if (pair) {
             if (myself.isVariableNameInUse(pair[0])) {
-                myself.inform('that name is already in use');
+                myself.inform(_('that name is already in use'));
             } else {
                 myself.addVariable(pair[0], pair[1]);
                 myself.toggleVariableWatcher(pair[0], pair[1]);
@@ -7050,9 +7057,7 @@ StageMorph.prototype.blockTemplates = function (category) {
 
     if (cat === 'motion') {
 
-        txt = new TextMorph(localize(
-            'Stage selected:\nno motion primitives'
-        ));
+        txt = new TextMorph(_('Stage selected:\nno motion primitives'));
         txt.fontSize = 9;
         txt.setColor(this.paletteTextColor);
         blocks.push(txt);
@@ -7077,9 +7082,7 @@ StageMorph.prototype.blockTemplates = function (category) {
 
         if (this.world().isDevMode) {
             blocks.push('-');
-            txt = new TextMorph(localize(
-                'development mode \ndebugging primitives:'
-            ));
+            txt = new TextMorph(_('development mode\ndebugging primitives:'));
             txt.fontSize = 9;
             txt.setColor(this.paletteTextColor);
             blocks.push(txt);
@@ -7208,9 +7211,7 @@ StageMorph.prototype.blockTemplates = function (category) {
         if (this.world().isDevMode) {
 
             blocks.push('-');
-            txt = new TextMorph(localize(
-                'development mode \ndebugging primitives:'
-            ));
+            txt = new TextMorph(_('development mode\ndebugging primitives:'));
             txt.fontSize = 9;
             txt.setColor(this.paletteTextColor);
             blocks.push(txt);
@@ -7276,9 +7277,7 @@ StageMorph.prototype.blockTemplates = function (category) {
 
         if (this.world().isDevMode) {
             blocks.push('-');
-            txt = new TextMorph(
-                'development mode \ndebugging primitives:'
-            );
+            txt = new TextMorph(_('development mode\ndebugging primitives:'));
             txt.fontSize = 9;
             txt.setColor(this.paletteTextColor);
             blocks.push(txt);
@@ -7302,12 +7301,12 @@ StageMorph.prototype.blockTemplates = function (category) {
                     addVar,
                     myself
                 ).prompt(
-                    'Variable name',
+                    _('Variable name'),
                     null,
                     myself.world()
                 );
             },
-            'Make a variable'
+            _('Make a variable')
         );
         blocks.push(button);
 
@@ -7325,7 +7324,7 @@ StageMorph.prototype.blockTemplates = function (category) {
                     });
                     menu.popUpAtHand(myself.world());
                 },
-                'Delete a variable'
+                _('Delete a variable')
             );
             blocks.push(button);
         }
@@ -7374,9 +7373,7 @@ StageMorph.prototype.blockTemplates = function (category) {
 
         if (this.world().isDevMode) {
             blocks.push('-');
-            txt = new TextMorph(localize(
-                'development mode \ndebugging primitives:'
-            ));
+            txt = new TextMorph(_('development mode\ndebugging primitives:'));
             txt.fontSize = 9;
             txt.setColor(this.paletteTextColor);
             blocks.push(txt);
@@ -7422,21 +7419,21 @@ StageMorph.prototype.userMenu = function () {
         // menu.addItem('help', 'nop');
         return menu;
     }
-    menu.addItem("edit", 'edit');
-    menu.addItem("show all", 'showAll');
+    menu.addItem(_('edit'), 'edit');
+    menu.addItem(_('show all'), 'showAll');
     menu.addItem(
-        "pic...",
+        _('pic...'),
         function () {
             ide.saveCanvasAs(
                 myself.fullImageClassic(),
                 myself.name
             );
         },
-        'open a new window\nwith a picture of the stage'
+        _('open a new window\nwith a picture of the stage')
     );
     menu.addLine();
     menu.addItem(
-        'pen trails',
+        _('pen trails'),
         function () {
             var costume = ide.currentSprite.reportPenTrailsAsCostume().copy();
             ide.currentSprite.addCostume(costume);
@@ -7444,11 +7441,11 @@ StageMorph.prototype.userMenu = function () {
             ide.hasChangedMedia = true;
             ide.spriteBar.tabBar.tabTo('costumes');
         },
-        ide.currentSprite instanceof SpriteMorph ?
-            'turn all pen trails and stamps\n' +
-                'into a new costume for the\ncurrently selected sprite'
-                    : 'turn all pen trails and stamps\n' +
-                        'into a new background for the stage'
+        ide.currentSprite instanceof SpriteMorph
+            ? _('turn all pen trails and stamps\n' +
+                'into a new costume for the\ncurrently selected sprite')
+            : _('turn all pen trails and stamps\n' +
+                'into a new background for the stage')
     );
     return menu;
 };
@@ -7817,7 +7814,7 @@ StageMorph.prototype.refactorVariableInstances
 StageMorph.prototype.reportPenTrailsAsCostume = function () {
     return new Costume(
         this.trailsCanvas,
-        this.newCostumeName(localize('Background'))
+        this.newCostumeName(_('Background'))
     );
 };
 
@@ -8096,7 +8093,13 @@ Costume.prototype.maxExtent = function () {
 };
 
 Costume.prototype.toString = function () {
-    return 'a Costume(' + this.name + ')';
+    return _(
+        'a {{ className }}({{ name }})',
+        {
+            className: 'Costume',
+            name: this.name
+        }
+    );
 };
 
 // Costume dimensions - all relative
@@ -8290,7 +8293,7 @@ Costume.prototype.editRotationPointOnly = function (aWorld) {
     action = function () {editor.accept(); };
     dialog = new DialogBoxMorph(this, action);
     txt = new TextMorph(
-        localize('click or drag crosshairs to move the rotation center'),
+        _('click or drag crosshairs to move the rotation center'),
         dialog.fontSize,
         dialog.fontStyle,
         true,
@@ -8302,12 +8305,12 @@ Costume.prototype.editRotationPointOnly = function (aWorld) {
         new Color(255, 255, 255)
     );
 
-    dialog.labelString = 'Costume Editor';
+    dialog.labelString = _('Costume Editor');
     dialog.createLabel();
     dialog.setPicture(editor);
     dialog.addBody(txt);
-    dialog.addButton('ok', 'Ok');
-    dialog.addButton('cancel', 'Cancel');
+    dialog.addButton('ok', _('OK'));
+    dialog.addButton('cancel', _('Cancel'));
     dialog.fixLayout();
     dialog.drawNew();
     dialog.fixLayout();
@@ -8389,7 +8392,13 @@ function SVG_Costume(svgImage, name, rotationCenter) {
 }
 
 SVG_Costume.prototype.toString = function () {
-    return 'an SVG_Costume(' + this.name + ')';
+    return _(
+        'an {{ className }}({{ name }})',
+        {
+            className: 'SVG_Costume',
+            'name': this.name
+        }
+    );
 };
 
 // SVG_Costume duplication
@@ -8558,7 +8567,7 @@ CostumeEditorMorph.prototype.mouseMove
 
 function Sound(audio, name) {
     this.audio = audio; // mandatory
-    this.name = name || "Sound";
+    this.name = name || _('Sound');
 }
 
 Sound.prototype.play = function () {
@@ -8617,7 +8626,7 @@ Note.prototype.setupContext = function () {
         return ctx;
     }());
     if (!AudioContext) {
-        throw new Error('Web Audio API is not supported\nin this browser');
+        throw new Error(_('Web Audio API is not supported\nin this browser'));
     }
     Note.prototype.audioContext = new AudioContext();
     Note.prototype.gainNode = Note.prototype.audioContext.createGain();
@@ -9394,8 +9403,8 @@ WatcherMorph.prototype.userMenu = function () {
     var myself = this,
         ide = this.parentThatIsA(IDE_Morph),
         menu = new MenuMorph(this),
-        on = '\u25CF',
-        off = '\u25CB',
+        on = '\u25CF ',
+        off = '\u25CB ',
         vNames;
 
     function monitor(vName) {
@@ -9419,7 +9428,7 @@ WatcherMorph.prototype.userMenu = function () {
                     return;
                 }
                 watcher = new WatcherMorph(
-                    vName + ' ' + localize('(temporary)'),
+                    _('{{ varName }} (temporary)', vName),
                     SpriteMorph.prototype.blockColor.variables,
                     varFrame,
                     vName
@@ -9440,30 +9449,30 @@ WatcherMorph.prototype.userMenu = function () {
     }
 
     menu.addItem(
-        (this.style === 'normal' ? on : off) + ' ' + localize('normal'),
+        (this.style === 'normal' ? on : off) + _('normal'),
         'styleNormal'
     );
     menu.addItem(
-        (this.style === 'large' ? on : off) + ' ' + localize('large'),
+        (this.style === 'large' ? on : off) + _('large'),
         'styleLarge'
     );
     if (this.target instanceof VariableFrame) {
         menu.addItem(
-            (this.style === 'slider' ? on : off) + ' ' + localize('slider'),
+            (this.style === 'slider' ? on : off) + _('slider'),
             'styleSlider'
         );
         menu.addLine();
         menu.addItem(
-            'slider min...',
+            _('slider min...'),
             'userSetSliderMin'
         );
         menu.addItem(
-            'slider max...',
+            _('slider max...'),
             'userSetSliderMax'
         );
         menu.addLine();
         menu.addItem(
-            'import...',
+            _('import...'),
             function () {
                 var inp = document.createElement('input'),
                     ide = myself.parentThatIsA(IDE_Morph);
@@ -9489,11 +9498,12 @@ WatcherMorph.prototype.userMenu = function () {
 
                         function txtOnlyMsg(ftype) {
                             ide.inform(
-                                'Unable to import',
-                                'Snap! can only import "text" files.\n' +
-                                    'You selected a file of type "' +
-                                    ftype +
-                                    '".'
+                                _('Unable to import'),
+                                _(
+                                    '{{ appName }} can only import "text" files.\n' +
+                                    'You selected a file of type "{{ type }}".',
+                                    { appName: 'Snap!', type: ftype }
+                                )
                             );
                         }
 
@@ -9529,7 +9539,7 @@ WatcherMorph.prototype.userMenu = function () {
         );
         if (isString(this.currentValue) || !isNaN(+this.currentValue)) {
             menu.addItem(
-                'export...',
+                _('export...'),
                 function () {
                     var ide = myself.parentThatIsA(IDE_Morph);
                     ide.saveFileAs(
@@ -9575,7 +9585,7 @@ WatcherMorph.prototype.userSetSliderMin = function () {
         this.setSliderMin,
         this
     ).prompt(
-        "Slider minimum value",
+        _('Slider minimum value'),
         this.sliderMorph.start.toString(),
         this.world(),
         null, // pic
@@ -9591,7 +9601,7 @@ WatcherMorph.prototype.userSetSliderMax = function () {
         this.setSliderMax,
         this
     ).prompt(
-        "Slider maximum value",
+        _('Slider maximum value'),
         this.sliderMorph.stop.toString(),
         this.world(),
         null, // pic

@@ -1244,9 +1244,18 @@ function nop() {
     return null;
 }
 
-function localize(string) {
+function _(string, replacements) {
     // override this function with custom localizations
     return string;
+}
+
+function _nop(string) {
+    return string;
+}
+
+function _expr(expression, replacements) {
+    // override this function with custom localizations
+    return expression;
 }
 
 function isNil(thing) {
@@ -1256,6 +1265,10 @@ function isNil(thing) {
 function contains(list, element) {
     // answer true if element is a member of list
     return list.indexOf(element) !== -1;
+}
+
+function containsKey(object, key) {
+    return Object.prototype.hasOwnProperty.call(object, key);
 }
 
 function detect(list, predicate) {
@@ -1594,7 +1607,7 @@ function enableRetinaSupport() {
                 context.save();
                 context.scale(pixelRatio, pixelRatio);
             } catch (err) {
-                console.log('Retina Display Support Problem', err);
+                console.log(_('Retina Display Support Problem'), err);
                 uber.width.set.call(this, width);
             }
         }
@@ -1656,8 +1669,10 @@ function enableRetinaSupport() {
                 break;
 
             default:
-                throw Error('Called drawImage() with ' + arguments.length +
-                        ' arguments');
+                throw Error(_(
+                    'Called {{ function }} with {{ count }} arguments',
+                    { function: 'drawImage()', count: arguments.length }
+                ));
         }
         uber.drawImage.call(
                 this, image,
@@ -2659,7 +2674,13 @@ Node.prototype.init = function (parent, childrenArray) {
 // Node string representation: e.g. 'a Node[3]'
 
 Node.prototype.toString = function () {
-    return 'a Node' + '[' + this.children.length.toString() + ']';
+    return _(
+        'a {{ className }}[{{ count }}]',
+        {
+            className: 'Node',
+            count: this.children.length.toString()
+        }
+    );
 };
 
 // Node accessing:
@@ -2876,12 +2897,13 @@ Morph.prototype.init = function (noDraw) {
 // Morph string representation: e.g. 'a Morph 2 [20@45 | 130@250]'
 
 Morph.prototype.toString = function () {
-    return 'a ' +
-        (this.constructor.name ||
-            this.constructor.toString().split(' ')[1].split('(')[0]) +
-        ' ' +
-        this.children.length.toString() + ' ' +
-        this.bounds;
+    return _('a {{ className }} {{ count }} {{ bounds }}', {
+        className:
+            this.constructor.name ||
+            this.constructor.toString().split(' ')[1].split('(')[0],
+        count: this.children.length.toString(),
+        bounds: this.bounds
+    });
 };
 
 // Morph deleting:
@@ -3929,7 +3951,7 @@ Morph.prototype.inform = function (msg) {
         text = 'NULL';
     }
     m = new MenuMorph(this, text);
-    m.addItem("Ok");
+    m.addItem(_('OK'));
     m.isDraggable = true;
     m.popUpCenteredAtHand(this.world());
 };
@@ -3999,10 +4021,10 @@ Morph.prototype.prompt = function (
     }
 
     menu.addLine(2);
-    menu.addItem('Ok', function () {
+    menu.addItem(_('OK'), function () {
         return entryField.string();
     });
-    menu.addItem('Cancel', function () {
+    menu.addItem(_('Cancel'), function () {
         return null;
     });
     menu.isDraggable = true;
@@ -4025,10 +4047,10 @@ Morph.prototype.pickColor = function (
     colorPicker = new ColorPickerMorph(defaultContents);
     menu.items.push(colorPicker);
     menu.addLine(2);
-    menu.addItem('Ok', function () {
+    menu.addItem(_('OK'), function () {
         return colorPicker.getChoice();
     });
-    menu.addItem('Cancel', function () {
+    menu.addItem(_('Cancel'), function () {
         return null;
     });
     menu.isDraggable = true;
@@ -4099,26 +4121,26 @@ Morph.prototype.developersMenu = function () {
         menu = new MenuMorph(this, this.constructor.name ||
             this.constructor.toString().split(' ')[1].split('(')[0]);
     if (userMenu) {
-        menu.addMenu('user features', userMenu);
+        menu.addMenu(_('user features'), userMenu);
         menu.addLine();
     }
     menu.addItem(
-        "color...",
+        _('color...'),
         function () {
             this.pickColor(
-                menu.title + localize('\ncolor:'),
+                menu.title + '\n' + _('color:'),
                 this.setColor,
                 this,
                 this.color
             );
         },
-        'choose another color \nfor this morph'
+        _('choose another color\nfor this morph')
     );
     menu.addItem(
-        "transparency...",
+        _('transparency...'),
         function () {
             this.prompt(
-                menu.title + localize('\nalpha\nvalue:'),
+                menu.title + '\n' + _('alpha value:'),
                 this.setAlphaScaled,
                 this,
                 (this.alpha * 100).toString(),
@@ -4128,73 +4150,73 @@ Morph.prototype.developersMenu = function () {
                 true
             );
         },
-        'set this morph\'s\nalpha value'
+        _('set this morph\'s\nalpha value')
     );
     menu.addItem(
-        "resize...",
+        _('resize...'),
         'resize',
-        'show a handle\nwhich can be dragged\nto change this morph\'s' +
-            ' extent'
+        _('show a handle\nwhich can be dragged\n' +
+            'to change this morph\'s extent')
     );
     menu.addLine();
     menu.addItem(
-        "duplicate",
+        _('duplicate'),
         function () {
             this.fullCopy().pickUp(this.world());
         },
-        'make a copy\nand pick it up'
+        _('make a copy\nand pick it up')
     );
     menu.addItem(
-        "pick up",
+        _('pick up'),
         'pickUp',
-        'detach and put \ninto the hand'
+        _('detach and put\ninto the hand')
     );
     menu.addItem(
-        "attach...",
+        _('attach...'),
         'attach',
-        'stick this morph\nto another one'
+        _('stick this morph\nto another one')
     );
     menu.addItem(
-        "move...",
+        _('move...'),
         'move',
-        'show a handle\nwhich can be dragged\nto move this morph'
+        _('show a handle\nwhich can be dragged\nto move this morph')
     );
     menu.addItem(
-        "inspect...",
+        _('inspect...'),
         'inspect',
-        'open a window\non all properties'
+        _('open a window\non all properties')
     );
     menu.addItem(
-        "pic...",
+        _('pic...'),
         function () {
             window.open(this.fullImageClassic().toDataURL());
         },
-        'open a new window\nwith a picture of this morph'
+        _('open a new window\nwith a picture of this morph')
     );
     menu.addLine();
     if (this.isDraggable) {
         menu.addItem(
-            "lock",
+            _('lock'),
             'toggleIsDraggable',
-            'make this morph\nunmovable'
+            _('make this morph\nunmovable')
         );
     } else {
         menu.addItem(
-            "unlock",
+            _('unlock'),
             'toggleIsDraggable',
-            'make this morph\nmovable'
+            _('make this morph\nmovable')
         );
     }
-    menu.addItem("hide", 'hide');
-    menu.addItem("delete", 'destroy');
+    menu.addItem(_('hide'), 'hide');
+    menu.addItem(_('delete'), 'destroy');
     if (!(this instanceof WorldMorph)) {
         menu.addLine();
         menu.addItem(
-            "World...",
+            _('World...'), // @todo i18n?
             function () {
                 world.contextMenu().popUpAtHand(world);
             },
-            'show the\nWorld\'s menu'
+            _('show the\n{{ WorldMorph }}\'s menu', 'World') // @todo i18n?
         );
     }
     return menu;
@@ -4224,7 +4246,7 @@ Morph.prototype.setAlphaScaled = function (alpha) {
 
 Morph.prototype.attach = function () {
     var choices = this.overlappedMorphs(),
-        menu = new MenuMorph(this, 'choose new parent:'),
+        menu = new MenuMorph(this, _('choose new parent:')),
         myself = this;
 
     choices.forEach(function (each) {
@@ -4692,7 +4714,7 @@ HandleMorph.prototype.mouseLeave = function () {
 
 HandleMorph.prototype.attach = function () {
     var choices = this.overlappedMorphs(),
-        menu = new MenuMorph(this, 'choose target:'),
+        menu = new MenuMorph(this, _('choose target:')),
         myself = this;
 
     choices.forEach(function (each) {
@@ -4839,9 +4861,9 @@ PenMorph.prototype.developersMenu = function () {
     var menu = PenMorph.uber.developersMenu.call(this);
     menu.addLine();
     menu.addItem(
-        'set rotation',
+        _('set rotation'),
         "setRotation",
-        'interactively turn this morph\nusing a dial widget'
+        _('interactively turn this morph\nusing a dial widget')
     );
     return menu;
 };
@@ -4859,10 +4881,10 @@ PenMorph.prototype.setRotation = function () {
     dial.action = 'setHeading';
     menu.items.push(dial);
     menu.addLine();
-    menu.addItem('(90) right', function () {this.setHeading(90); });
-    menu.addItem('(-90) left', function () {this.setHeading(-90); });
-    menu.addItem('(0) up', function () {this.setHeading(0); });
-    menu.addItem('(180) down', function () {this.setHeading(180); });
+    menu.addItem(_('(90) right'), function () {this.setHeading(90); });
+    menu.addItem(_('(-90) left'), function () {this.setHeading(-90); });
+    menu.addItem(_('(0) up'), function () {this.setHeading(0); });
+    menu.addItem(_('(180) down'), function () {this.setHeading(180); });
     menu.isDraggable = true;
     menu.popUpAtHand(this.world());
 };
@@ -5063,17 +5085,17 @@ ColorPaletteMorph.prototype.developersMenu = function () {
     var menu = ColorPaletteMorph.uber.developersMenu.call(this);
     menu.addLine();
     menu.addItem(
-        'set target',
+        _('set target'),
         "setTarget",
-        'choose another morph\nwhose color property\n will be' +
-            ' controlled by this one'
+        _('choose another morph\nwhose color property\n' +
+            'will be controlled by this one')
     );
     return menu;
 };
 
 ColorPaletteMorph.prototype.setTarget = function () {
     var choices = this.overlappedMorphs(),
-        menu = new MenuMorph(this, 'choose target:'),
+        menu = new MenuMorph(this, _('choose target:')),
         myself = this;
 
     choices.push(this.world());
@@ -5093,7 +5115,7 @@ ColorPaletteMorph.prototype.setTarget = function () {
 
 ColorPaletteMorph.prototype.setTargetSetter = function () {
     var choices = this.target.colorSetters(),
-        menu = new MenuMorph(this, 'choose target property:'),
+        menu = new MenuMorph(this, _('choose target property:')),
         myself = this;
 
     choices.forEach(function (each) {
@@ -5742,7 +5764,7 @@ CursorMorph.prototype.destroyClipboardHandler = function () {
 
 CursorMorph.prototype.inspectKeyEvent = function (event) {
     // private
-    this.inform(
+    this.inform( // @todo i18n?
         'Key pressed: ' +
             String.fromCharCode(event.charCode) +
             '\n------------------------' +
@@ -5866,10 +5888,10 @@ BoxMorph.prototype.developersMenu = function () {
     var menu = BoxMorph.uber.developersMenu.call(this);
     menu.addLine();
     menu.addItem(
-        "border width...",
+        _('border width...'),
         function () {
             this.prompt(
-                menu.title + '\nborder\nwidth:',
+                menu.title + '\n' + _('border width:'),
                 this.setBorderWidth,
                 this,
                 this.border.toString(),
@@ -5879,25 +5901,25 @@ BoxMorph.prototype.developersMenu = function () {
                 true
             );
         },
-        'set the border\'s\nline size'
+        _('set the border\'s\nline size')
     );
     menu.addItem(
-        "border color...",
+        _('border color...'),
         function () {
             this.pickColor(
-                menu.title + '\nborder color:',
+                menu.title + '\n' + _('border color:'),
                 this.setBorderColor,
                 this,
                 this.borderColor
             );
         },
-        'set the border\'s\nline color'
+        _('set the border\'s\nline color')
     );
     menu.addItem(
-        "corner size...",
+        _('corner size...'),
         function () {
             this.prompt(
-                menu.title + '\ncorner\nsize:',
+                menu.title + '\n' + _('corner size:'),
                 this.setCornerSize,
                 this,
                 this.edge.toString(),
@@ -5907,7 +5929,7 @@ BoxMorph.prototype.developersMenu = function () {
                 true
             );
         },
-        'set the corner\'s\nradius'
+        _('set the corner\'s\nradius')
     );
     return menu;
 };
@@ -6523,17 +6545,17 @@ DialMorph.prototype.developersMenu = function () {
     var menu = DialMorph.uber.developersMenu.call(this);
     menu.addLine();
     menu.addItem(
-        'set target',
+        _('set target'),
         "setTarget",
-        'select another morph\nwhose numerical property\nwill be ' +
-            'controlled by this one'
+        _('select another morph\nwhose numerical property\n' +
+            'will be controlled by this one')
     );
     return menu;
 };
 
 DialMorph.prototype.setTarget = function () {
     var choices = this.overlappedMorphs(),
-        menu = new MenuMorph(this, 'choose target:'),
+        menu = new MenuMorph(this, _('choose target:')),
         myself = this;
 
     choices.push(this.world());
@@ -6553,7 +6575,7 @@ DialMorph.prototype.setTarget = function () {
 
 DialMorph.prototype.setTargetSetter = function () {
     var choices = this.target.numericalSetters(),
-        menu = new MenuMorph(this, 'choose target property:'),
+        menu = new MenuMorph(this, _('choose target property:')),
         myself = this;
 
     choices.forEach(function (each) {
@@ -6672,15 +6694,15 @@ CircleBoxMorph.prototype.developersMenu = function () {
     menu.addLine();
     if (this.orientation === 'vertical') {
         menu.addItem(
-            "horizontal...",
+            _('horizontal...'),
             'toggleOrientation',
-            'toggle the\norientation'
+            _('toggle the\norientation')
         );
     } else {
         menu.addItem(
-            "vertical...",
+            _('vertical...'),
             'toggleOrientation',
-            'toggle the\norientation'
+            _('toggle the\norientation')
         );
     }
     return menu;
@@ -7035,15 +7057,15 @@ SliderMorph.prototype.updateTarget = function () {
 SliderMorph.prototype.developersMenu = function () {
     var menu = SliderMorph.uber.developersMenu.call(this);
     menu.addItem(
-        "show value...",
+        _('show value...'),
         'showValue',
-        'display a dialog box\nshowing the selected number'
+        _('display a dialog box\nshowing the selected number')
     );
     menu.addItem(
-        "floor...",
+        _('floor...'),
         function () {
             this.prompt(
-                menu.title + '\nfloor:',
+                menu.title + '\n' + _('floor:'),
                 this.setStart,
                 this,
                 this.start.toString(),
@@ -7053,13 +7075,13 @@ SliderMorph.prototype.developersMenu = function () {
                 true
             );
         },
-        'set the minimum value\nwhich can be selected'
+        _('set the minimum value\nwhich can be selected')
     );
     menu.addItem(
-        "ceiling...",
+        _('ceiling...'),
         function () {
             this.prompt(
-                menu.title + '\nceiling:',
+                menu.title + '\n' + _('ceiling:'),
                 this.setStop,
                 this,
                 this.stop.toString(),
@@ -7069,13 +7091,13 @@ SliderMorph.prototype.developersMenu = function () {
                 true
             );
         },
-        'set the maximum value\nwhich can be selected'
+        _('set the maximum value\nwhich can be selected')
     );
     menu.addItem(
-        "button size...",
+        _('button size...'),
         function () {
             this.prompt(
-                menu.title + '\nbutton size:',
+                menu.title + '\n' + _('button size:'),
                 this.setSize,
                 this,
                 this.size.toString(),
@@ -7085,14 +7107,14 @@ SliderMorph.prototype.developersMenu = function () {
                 true
             );
         },
-        'set the range\ncovered by\nthe slider button'
+        _('set the range\ncovered by\nthe slider button')
     );
     menu.addLine();
     menu.addItem(
-        'set target',
+        _('set target'),
         "setTarget",
-        'select another morph\nwhose numerical property\nwill be ' +
-            'controlled by this one'
+        _('select another morph\nwhose numerical property\n' +
+            'will be controlled by this one')
     );
     return menu;
 };
@@ -7171,7 +7193,7 @@ SliderMorph.prototype.setSize = function (num, noUpdate) {
 
 SliderMorph.prototype.setTarget = function () {
     var choices = this.overlappedMorphs(),
-        menu = new MenuMorph(this, 'choose target:'),
+        menu = new MenuMorph(this, _('choose target:')),
         myself = this;
 
     choices.push(this.world());
@@ -7191,7 +7213,7 @@ SliderMorph.prototype.setTarget = function () {
 
 SliderMorph.prototype.setTargetSetter = function () {
     var choices = this.target.numericalSetters(),
-        menu = new MenuMorph(this, 'choose target property:'),
+        menu = new MenuMorph(this, _('choose target property:')),
         myself = this;
 
     choices.forEach(function (each) {
@@ -7539,7 +7561,7 @@ InspectorMorph.prototype.buildPanes = function () {
 
     // properties button
     this.buttonSubset = new TriggerMorph();
-    this.buttonSubset.labelString = 'show...';
+    this.buttonSubset.labelString = _('show...');
     this.buttonSubset.action = function () {
         var menu;
         menu = new MenuMorph();
@@ -7566,13 +7588,12 @@ InspectorMorph.prototype.buildPanes = function () {
         );
         menu.addLine();
         menu.addItem(
-            (myself.markOwnProperties ?
-                    'un-mark own' : 'mark own'),
+            myself.markOwnProperties ? _('un-mark own') : _('mark own'),
             function () {
                 myself.markOwnProperties = !myself.markOwnProperties;
                 myself.buildPanes();
             },
-            'highlight\n\'own\' properties'
+            _('highlight\n\'own\' properties')
         );
         menu.popUpAtHand(myself.world());
     };
@@ -7580,13 +7601,13 @@ InspectorMorph.prototype.buildPanes = function () {
 
     // inspect button
     this.buttonInspect = new TriggerMorph();
-    this.buttonInspect.labelString = 'inspect...';
+    this.buttonInspect.labelString = _('inspect...');
     this.buttonInspect.action = function () {
         var menu, world, inspector;
         if (isObject(myself.currentProperty)) {
             menu = new MenuMorph();
             menu.addItem(
-                'in new inspector...',
+                _('in new inspector...'),
                 function () {
                     world = myself.world();
                     inspector = new InspectorMorph(
@@ -7599,7 +7620,7 @@ InspectorMorph.prototype.buildPanes = function () {
                 }
             );
             menu.addItem(
-                'here...',
+                _('here...'),
                 function () {
                     myself.setTarget(myself.currentProperty);
                 }
@@ -7607,9 +7628,12 @@ InspectorMorph.prototype.buildPanes = function () {
             menu.popUpAtHand(myself.world());
         } else {
             myself.inform(
-                (myself.currentProperty === null ?
-                        'null' : typeof myself.currentProperty) +
-                            '\nis not inspectable'
+                _(
+                    '{{ name }}\nis not inspectable',
+                    myself.currentProperty === null
+                        ? 'null'
+                        : typeof myself.currentProperty
+                )
             );
         }
     };
@@ -7622,18 +7646,18 @@ InspectorMorph.prototype.buildPanes = function () {
     this.buttonEdit.action = function () {
         var menu;
         menu = new MenuMorph(myself);
-        menu.addItem("save", 'save', 'accept changes');
+        menu.addItem(_('save'), 'save', _('accept changes'));
         menu.addLine();
-        menu.addItem("add property...", 'addProperty');
-        menu.addItem("rename...", 'renameProperty');
-        menu.addItem("remove...", 'removeProperty');
+        menu.addItem(_('add property...'), 'addProperty');
+        menu.addItem(_('rename...'), 'renameProperty');
+        menu.addItem(_('remove...'), 'removeProperty');
         menu.popUpAtHand(myself.world());
     };
     this.add(this.buttonEdit);
 
     // close button
     this.buttonClose = new TriggerMorph();
-    this.buttonClose.labelString = 'close';
+    this.buttonClose.labelString = _('close');
     this.buttonClose.action = function () {
         myself.destroy();
     };
@@ -7758,7 +7782,7 @@ InspectorMorph.prototype.save = function () {
 InspectorMorph.prototype.addProperty = function () {
     var myself = this;
     this.prompt(
-        'new property name:',
+        _('new property name:'),
         function (prop) {
             if (prop) {
                 myself.target[prop] = null;
@@ -7771,7 +7795,7 @@ InspectorMorph.prototype.addProperty = function () {
             }
         },
         this,
-        'property' // Chrome cannot handle empty strings (others do)
+        _('property') // Chrome cannot handle empty strings (others do)
     );
 };
 
@@ -7779,7 +7803,7 @@ InspectorMorph.prototype.renameProperty = function () {
     var myself = this,
         propertyName = this.list.selected;
     this.prompt(
-        'property name:',
+        _('property name:'),
         function (prop) {
             try {
                 delete (myself.target[propertyName]);
@@ -7917,7 +7941,7 @@ MenuMorph.prototype.addItem = function (
         * a tuple of format: [icon, string]
     */
     this.items.push([
-        localize(labelString || 'close'),
+        labelString || _('close'),
         action || nop,
         hint,
         color,
@@ -7945,7 +7969,7 @@ MenuMorph.prototype.createLabel = function () {
         this.label.destroy();
     }
     text = new TextMorph(
-        localize(this.title),
+        this.title,
         this.fontSize || MorphicPreferences.menuFontSize,
         MorphicPreferences.menuFontName,
         true,
@@ -8435,10 +8459,15 @@ StringMorph.prototype.init = function (
 
 StringMorph.prototype.toString = function () {
     // e.g. 'a StringMorph("Hello World")'
-    return 'a ' +
-        (this.constructor.name ||
-            this.constructor.toString().split(' ')[1].split('(')[0]) +
-        '("' + this.text.slice(0, 30) + '...")';
+    return _(
+        'a {{ className }} ("{{ value }}...")',
+        {
+            className:
+                this.constructor.name ||
+                this.constructor.toString().split(' ')[1].split('(')[0],
+            value: this.text.slice(0, 30)
+        }
+    );
 };
 
 StringMorph.prototype.password = function (letter, length) {
@@ -8694,12 +8723,12 @@ StringMorph.prototype.developersMenu = function () {
     var menu = StringMorph.uber.developersMenu.call(this);
 
     menu.addLine();
-    menu.addItem("edit", 'edit');
+    menu.addItem(_('edit'), 'edit');
     menu.addItem(
-        "font size...",
+        _('font size...'),
         function () {
             this.prompt(
-                menu.title + '\nfont\nsize:',
+                menu.title + '\n' + _('font size:'),
                 this.setFontSize,
                 this,
                 this.fontSize.toString(),
@@ -8709,33 +8738,33 @@ StringMorph.prototype.developersMenu = function () {
                 true
             );
         },
-        'set this String\'s\nfont point size'
+        _('set this String\'s\nfont point size')
     );
     if (this.fontStyle !== 'serif') {
-        menu.addItem("serif", 'setSerif');
+        menu.addItem(_('serif'), 'setSerif');
     }
     if (this.fontStyle !== 'sans-serif') {
-        menu.addItem("sans-serif", 'setSansSerif');
+        menu.addItem(_('sans-serif'), 'setSansSerif');
     }
     if (this.isBold) {
-        menu.addItem("normal weight", 'toggleWeight');
+        menu.addItem(_('normal weight'), 'toggleWeight');
     } else {
-        menu.addItem("bold", 'toggleWeight');
+        menu.addItem(_('bold'), 'toggleWeight');
     }
     if (this.isItalic) {
-        menu.addItem("normal style", 'toggleItalic');
+        menu.addItem(_('normal style'), 'toggleItalic');
     } else {
-        menu.addItem("italic", 'toggleItalic');
+        menu.addItem(_('italic'), 'toggleItalic');
     }
     if (this.isShowingBlanks) {
-        menu.addItem("hide blanks", 'toggleShowBlanks');
+        menu.addItem(_('hide blanks'), 'toggleShowBlanks');
     } else {
-        menu.addItem("show blanks", 'toggleShowBlanks');
+        menu.addItem(_('show blanks'), 'toggleShowBlanks');
     }
     if (this.isPassword) {
-        menu.addItem("show characters", 'toggleIsPassword');
+        menu.addItem(_('show characters'), 'toggleIsPassword');
     } else {
-        menu.addItem("hide characters", 'toggleIsPassword');
+        menu.addItem(_('hide characters'), 'toggleIsPassword');
     }
     return menu;
 };
@@ -9110,7 +9139,13 @@ TextMorph.prototype.init = function (
 
 TextMorph.prototype.toString = function () {
     // e.g. 'a TextMorph("Hello World")'
-    return 'a TextMorph' + '("' + this.text.slice(0, 30) + '...")';
+    return _(
+        'a {{ className }} ("{{ value }}...")',
+        {
+            className: 'TextMorph',
+            value: this.text.slice(0, 30)
+        }
+    );
 };
 
 TextMorph.prototype.font = StringMorph.prototype.font;
@@ -9435,12 +9470,12 @@ TextMorph.prototype.selectAllAndEdit = function () {
 TextMorph.prototype.developersMenu = function () {
     var menu = TextMorph.uber.developersMenu.call(this);
     menu.addLine();
-    menu.addItem("edit", 'edit');
+    menu.addItem(_('edit'), 'edit');
     menu.addItem(
-        "font size...",
+        _('font size...'),
         function () {
             this.prompt(
-                menu.title + '\nfont\nsize:',
+                menu.title + '\n' + _('font size:'),
                 this.setFontSize,
                 this,
                 this.fontSize.toString(),
@@ -9450,33 +9485,33 @@ TextMorph.prototype.developersMenu = function () {
                 true
             );
         },
-        'set this Text\'s\nfont point size'
+        _('set this Text\'s\nfont point size')
     );
     if (this.alignment !== 'left') {
-        menu.addItem("align left", 'setAlignmentToLeft');
+        menu.addItem(_('align left'), 'setAlignmentToLeft');
     }
     if (this.alignment !== 'right') {
-        menu.addItem("align right", 'setAlignmentToRight');
+        menu.addItem(_('align right'), 'setAlignmentToRight');
     }
     if (this.alignment !== 'center') {
-        menu.addItem("align center", 'setAlignmentToCenter');
+        menu.addItem(_('align center'), 'setAlignmentToCenter');
     }
     menu.addLine();
     if (this.fontStyle !== 'serif') {
-        menu.addItem("serif", 'setSerif');
+        menu.addItem(_('serif'), 'setSerif');
     }
     if (this.fontStyle !== 'sans-serif') {
-        menu.addItem("sans-serif", 'setSansSerif');
+        menu.addItem(_('sans-serif'), 'setSansSerif');
     }
     if (this.isBold) {
-        menu.addItem("normal weight", 'toggleWeight');
+        menu.addItem(_('normal weight'), 'toggleWeight');
     } else {
-        menu.addItem("bold", 'toggleWeight');
+        menu.addItem(_('bold'), 'toggleWeight');
     }
     if (this.isItalic) {
-        menu.addItem("normal style", 'toggleItalic');
+        menu.addItem(_('normal style'), 'toggleItalic');
     } else {
-        menu.addItem("italic", 'toggleItalic');
+        menu.addItem(_('italic'), 'toggleItalic');
     }
     return menu;
 };
@@ -9521,22 +9556,22 @@ TextMorph.prototype.numericalSetters = StringMorph.prototype.numericalSetters;
 TextMorph.prototype.evaluationMenu = function () {
     var menu = new MenuMorph(this, null);
     menu.addItem(
-        "do it",
+        _('do it'),
         'doIt',
-        'evaluate the\nselected expression'
+        _('evaluate the\nselected expression')
     );
     menu.addItem(
-        "show it",
+        _('show it'),
         'showIt',
-        'evaluate the\nselected expression\nand show the result'
+        _('evaluate the\nselected expression\nand show the result')
     );
     menu.addItem(
-        "inspect it",
+        _('inspect it'),
         'inspectIt',
-        'evaluate the\nselected expression\nand inspect the result'
+        _('evaluate the\nselected expression\nand inspect the result')
     );
     menu.addLine();
-    menu.addItem("select all", 'selectAllAndEdit');
+    menu.addItem(_('select all'), 'selectAllAndEdit');
     return menu;
 };
 
@@ -9828,7 +9863,7 @@ TriggerMorph.prototype.bubbleHelp = function (contents) {
 
 TriggerMorph.prototype.popUpbubbleHelp = function (contents) {
     new SpeechBubbleMorph(
-        localize(contents),
+        contents,
         null,
         null,
         1
@@ -10261,9 +10296,9 @@ FrameMorph.prototype.developersMenu = function () {
     if (this.children.length > 0) {
         menu.addLine();
         menu.addItem(
-            "move all inside...",
+            _('move all inside...'),
             'keepAllSubmorphsWithin',
-            'keep all submorphs\nwithin and visible'
+            _('keep all submorphs\nwithin and visible')
         );
     }
     return menu;
@@ -10643,15 +10678,15 @@ ScrollFrameMorph.prototype.developersMenu = function () {
     var menu = ScrollFrameMorph.uber.developersMenu.call(this);
     if (this.isTextLineWrapping) {
         menu.addItem(
-            "auto line wrap off...",
+            _('auto line wrap off...'),
             'toggleTextLineWrapping',
-            'turn automatic\nline wrapping\noff'
+            _('turn automatic\nline wrapping\noff')
         );
     } else {
         menu.addItem(
-            "auto line wrap on...",
+            _('auto line wrap on...'),
             'toggleTextLineWrapping',
-            'enable automatic\nline wrapping'
+            _('enable automatic\nline wrapping')
         );
     }
     return menu;
@@ -10739,7 +10774,7 @@ ListMorph.prototype.buildListContents = function () {
         this
     );
     if (this.elements.length === 0) {
-        this.elements = ['(empty)'];
+        this.elements = [_('(empty)')];
     }
     this.elements.forEach(function (element) {
         var color = null,
@@ -11503,7 +11538,9 @@ HandMorph.prototype.processDrop = function (event) {
                 if (request.responseText) {
                     callback(request.responseText);
                 } else {
-                    throw new Error('unable to retrieve ' + url);
+                    throw new Error(
+                        _('unable to retrieve {{ resource }}', url)
+                    );
                 }
             }
         };
@@ -12066,7 +12103,7 @@ WorldMorph.prototype.initEventListeners = function () {
 
     window.onbeforeunload = function (evt) {
         var e = evt || window.event,
-            msg = "Are you sure you want to leave?";
+            msg = _('Are you sure you want to leave?');
         // For IE and Firefox
         if (e) {
             e.returnValue = msg;
@@ -12129,88 +12166,88 @@ WorldMorph.prototype.contextMenu = function () {
         menu = new MenuMorph(this, 'Morphic');
     }
     if (this.isDevMode) {
-        menu.addItem("demo...", 'userCreateMorph', 'sample morphs');
+        menu.addItem(_('demo...'), 'userCreateMorph', _('sample morphs'));
         menu.addLine();
-        menu.addItem("hide all...", 'hideAll');
-        menu.addItem("show all...", 'showAllHiddens');
+        menu.addItem(_('hide all...'), 'hideAll');
+        menu.addItem(_('show all...'), 'showAllHiddens');
         menu.addItem(
-            "move all inside...",
+            _('move all inside...'),
             'keepAllSubmorphsWithin',
-            'keep all submorphs\nwithin and visible'
+            _('keep all submorphs\nwithin and visible')
         );
         menu.addItem(
-            "inspect...",
+            _('inspect...'),
             'inspect',
-            'open a window on\nall properties'
+            _('open a window on\nall properties')
         );
         menu.addItem(
-            "screenshot...",
+            _('screenshot...'),
             function () {
                 window.open(this.fullImageClassic().toDataURL());
             },
-            'open a new window\nwith a picture of this morph'
+            _('open a new window\nwith a picture of this morph')
         );
         menu.addLine();
         menu.addItem(
-            "restore display",
+            _('restore display'),
             'changed',
-            'redraw the\nscreen once'
+            _('redraw the\nscreen once')
         );
         menu.addItem(
-            "fill page...",
+            _('fill page...'),
             'fillPage',
-            'let the World automatically\nadjust to browser resizing'
+            _('let the World automatically\nadjust to browser resizing')
         );
         if (useBlurredShadows) {
             menu.addItem(
-                "sharp shadows...",
+                _('sharp shadows...'),
                 'toggleBlurredShadows',
-                'sharp drop shadows\nuse for old browsers'
+                _('sharp drop shadows\nuse for old browsers')
             );
         } else {
             menu.addItem(
-                "blurred shadows...",
+                _('blurred shadows...'),
                 'toggleBlurredShadows',
-                'blurry shades,\n use for new browsers'
+                _('blurry shades\nuse for new browsers')
             );
         }
         menu.addItem(
-            "color...",
+            _('color...'),
             function () {
                 this.pickColor(
-                    menu.title + localize('\ncolor:'),
+                    menu.title + '\n' + _('color:'),
                     this.setColor,
                     this,
                     this.color
                 );
             },
-            'choose the World\'s\nbackground color'
+            _('choose the World\'s\nbackground color')
         );
         if (MorphicPreferences === standardSettings) {
             menu.addItem(
-                "touch screen settings",
+                _('touch screen settings'),
                 'togglePreferences',
-                'bigger menu fonts\nand sliders'
+                _('bigger menu fonts\nand sliders')
             );
         } else {
             menu.addItem(
-                "standard settings",
+                _('standard settings'),
                 'togglePreferences',
-                'smaller menu fonts\nand sliders'
+                _('smaller menu fonts\nand sliders')
             );
         }
         menu.addLine();
     }
     if (this.isDevMode) {
         menu.addItem(
-            "user mode...",
+            _('user mode...'),
             'toggleDevMode',
-            'disable developers\'\ncontext menus'
+            _('disable developers\'\ncontext menus')
         );
     } else {
-        menu.addItem("development mode...", 'toggleDevMode');
+        menu.addItem(_('development mode...'), 'toggleDevMode');
     }
-    menu.addItem("about morphic.js...", 'about');
+    menu.addItem(_('about {{ resource }}...', 'morphic.js'), 'about');
     return menu;
 };
 
@@ -12222,46 +12259,46 @@ WorldMorph.prototype.userCreateMorph = function () {
         aMorph.pickUp(myself);
     }
 
-    menu = new MenuMorph(this, 'make a morph');
-    menu.addItem('rectangle', function () {
+    menu = new MenuMorph(this, _('make a morph'));
+    menu.addItem(_('rectangle'), function () {
         create(new Morph());
     });
-    menu.addItem('box', function () {
+    menu.addItem(_('box'), function () {
         create(new BoxMorph());
     });
-    menu.addItem('circle box', function () {
+    menu.addItem(_('circle box'), function () {
         create(new CircleBoxMorph());
     });
     menu.addLine();
-    menu.addItem('slider', function () {
+    menu.addItem(_('slider'), function () {
         create(new SliderMorph());
     });
-    menu.addItem('dial', function () {
+    menu.addItem(_('dial'), function () {
     	newMorph = new DialMorph();
      	newMorph.pickUp(this);
     });
-    menu.addItem('frame', function () {
+    menu.addItem(_('frame'), function () {
         newMorph = new FrameMorph();
         newMorph.setExtent(new Point(350, 250));
         create(newMorph);
     });
-    menu.addItem('scroll frame', function () {
+    menu.addItem(_('scroll frame'), function () {
         newMorph = new ScrollFrameMorph();
         newMorph.contents.acceptsDrops = true;
         newMorph.contents.adjustBounds();
         newMorph.setExtent(new Point(350, 250));
         create(newMorph);
     });
-    menu.addItem('handle', function () {
+    menu.addItem(_('handle'), function () {
         create(new HandleMorph());
     });
     menu.addLine();
-    menu.addItem('string', function () {
-        newMorph = new StringMorph('Hello, World!');
+    menu.addItem(_('string'), function () {
+        newMorph = new StringMorph(_('Hello, World!'));
         newMorph.isEditable = true;
         create(newMorph);
     });
-    menu.addItem('text', function () {
+    menu.addItem(_('text'), function () {
         newMorph = new TextMorph(
             "Ich wei\u00DF nicht, was soll es bedeuten, dass ich so " +
                 "traurig bin, ein M\u00E4rchen aus uralten Zeiten, das " +
@@ -12284,22 +12321,22 @@ WorldMorph.prototype.userCreateMorph = function () {
         newMorph.drawNew();
         create(newMorph);
     });
-    menu.addItem('speech bubble', function () {
-        newMorph = new SpeechBubbleMorph('Hello, World!');
+    menu.addItem(_('speech bubble'), function () {
+        newMorph = new SpeechBubbleMorph(_('Hello, World!'));
         create(newMorph);
     });
     menu.addLine();
-    menu.addItem('gray scale palette', function () {
+    menu.addItem(_('gray scale palette'), function () {
         create(new GrayPaletteMorph());
     });
-    menu.addItem('color palette', function () {
+    menu.addItem(_('color palette'), function () {
         create(new ColorPaletteMorph());
     });
-    menu.addItem('color picker', function () {
+    menu.addItem(_('color picker'), function () {
         create(new ColorPickerMorph());
     });
     menu.addLine();
-    menu.addItem('sensor demo', function () {
+    menu.addItem(_('sensor demo'), function () {
         newMorph = new MouseSensorMorph();
         newMorph.setColor(new Color(230, 200, 100));
         newMorph.edge = 35;
@@ -12309,7 +12346,7 @@ WorldMorph.prototype.userCreateMorph = function () {
         newMorph.setExtent(new Point(100, 100));
         create(newMorph);
     });
-    menu.addItem('animation demo', function () {
+    menu.addItem(_('animation demo'), function () {
         var foo, bar, baz, garply, fred;
 
         foo = new BouncerMorph();
@@ -12358,7 +12395,7 @@ WorldMorph.prototype.userCreateMorph = function () {
 
         create(foo);
     });
-    menu.addItem('pen', function () {
+    menu.addItem(_('pen'), function () {
         create(new PenMorph());
     });
     if (myself.customMorphs) {
@@ -12399,17 +12436,20 @@ WorldMorph.prototype.about = function () {
         }
     }
     if (versions !== '') {
-        versions = '\n\nmodules:\n\n' +
+        versions = '\n\n' +
+            _('modules:') + '\n\n' +
             'morphic (' + morphicVersion + ')' +
             versions;
     }
 
     this.inform(
         'morphic.js\n\n' +
-            'a lively Web GUI\ninspired by Squeak\n' +
-            morphicVersion +
-            '\n\nwritten by Jens M\u00F6nig\njens@moenig.org' +
-            versions
+            _('a lively Web GUI\ninspired by Squeak') +
+            '\n' + morphicVersion + '\n\n' +
+            _(
+                'written by {{ author }}\n{{ email }}',
+                { author: 'Jens M\u00F6nig', email: 'jens@moenig.org' }
+            ) + '\n' + versions
     );
 };
 
