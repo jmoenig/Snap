@@ -4014,3 +4014,4 @@ Translation Updates:
 180308
 ------
 * Objects: fixed #2053
+* GUI: fixed #2052
