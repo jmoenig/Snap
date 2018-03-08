@@ -120,7 +120,7 @@ List.prototype.enableTables = false; // default, to not confuse NYC teachers
 // List printing
 
 List.prototype.toString = function () {
-    return 'a List [' + this.length + ' elements]';
+    return 'a List [' + this.length() + ' elements]';
 };
 
 // List updating:
