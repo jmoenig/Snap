@@ -249,7 +249,7 @@ SnapTranslator.dict.pt = {
         'adicionar um novo actor',
 
     // ajuda nos tabuladores
-    'costumes tab help':
+    'import a picture from another web page or from\na file on your computer by dropping it here':
         'Importa uma imagem de uma página Web ou de um\n'
             + 'arquivo no teu computador arrastando-a para aqui',
     'import a sound from your computer\nby dragging it into here':
@@ -714,7 +714,7 @@ SnapTranslator.dict.pt = {
         'Guardar este projecto como…',
     'Import...':
         'Importar…',
-    'file menu import hint':
+    'load an exported project file\nor block library, a costume\nor a sound':
         'Abrir um projecto exportado,\nsubstitundo o projecto corrente, ou\n'
             + 'importar uma biblioteca de blocos, um\n'
             + 'traje ou um som para o projecto corrente.',
@@ -805,7 +805,7 @@ SnapTranslator.dict.pt = {
         'Assinalar para activar etiquetas\ndinâmicas nas entradas variádicas.',
     'Prefer empty slot drops':
         'Preferir largadas em ranhuras vazias',
-    'settings menu prefer empty slots hint':
+    'check to focus on empty slots\nwhen dragging & dropping reporters':
         'Assinalar para focar em ranhuras vazias\nquando arrastando e '
             + 'largando repórteres.',
     'uncheck to allow dropped\nreporters to kick out others':
@@ -1165,7 +1165,7 @@ SnapTranslator.dict.pt = {
     // caixa de diálogo de remoção de bloco
     'Delete Custom Block':
         'Remover Bloco Personalizado',
-    'block deletion dialog text':
+    'Are you sure you want to delete this\ncustom block and all its instances?':
         'Quer mesmo remover este bloco e '
             + 'todas as suas utilizações?',
 

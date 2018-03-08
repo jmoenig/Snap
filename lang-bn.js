@@ -247,7 +247,7 @@ SnapTranslator.dict.bn = {
         'একটি নতুন স্পাইট যোগ কর',
 
     // tab help
-    'costumes tab help':
+    'import a picture from another web page or from\na file on your computer by dropping it here':
         '\nনতুন/অতিরিক্ত পরিচ্ছদ ব্যবহারের জন্য প্রথমে ডান দিকের নিচের পরিচ্ছদ আইটেমে একটি ক্লিক কর, তারপর কম্পিউটার থেকে প্রত্যাশিত ছবির ফাইল নির্বাচন করে\nএখানে আনয়ন কর \n'
     	+'\n\n'+
     	'নতুন/অতিরিক্ত স্পাইট ব্যবহারের জন্য প্রথমে ডান দিকের নিচের স্পাইট আইটেমে একটি ক্লিক কর, তারপর কম্পিউটার থেকে প্রত্যাশিত ছবির ফাইল নির্বাচন করে\nএখানে আনয়ন কর \n',
@@ -645,7 +645,7 @@ SnapTranslator.dict.bn = {
         'প্রকল্পটির নামান্তর কর...',
     'Import...':
         'প্রকল্প ইম্পোর্ট কর...',
-    'file menu import hint':
+    'load an exported project file\nor block library, a costume\nor a sound':
         'XMLফাইল হিসেবে সংরক্ষিত কোন প্রকল্প ইম্পোর্ট কর',
     'Export project as plain text...':
         'প্রকল্পটি প্লেইন টেক্সট হিসাবে এক্সপোর্ট কর ...',
@@ -704,7 +704,7 @@ SnapTranslator.dict.bn = {
         'ভারিয়াদিক  ইনপুট এর গতিশীল লেবেল সক্রিয় করার জন্য চেক কর',
     'Prefer empty slot drops':
         'খালি স্লট ড্রপ পছন্দ কর',
-    'settings menu prefer empty slots hint':
+    'check to focus on empty slots\nwhen dragging & dropping reporters':
         'খালি স্লট মেনু স্থাপন করার সাহায্যপূর্ণ ইঙ্গিত',
     'uncheck to allow dropped\nreporters to kick out others':
         'ঝরে পরা রিপোর্টারসমূহ অন্যদের বের করে দেওয়ার জন্য আনচেক কর',
@@ -940,7 +940,7 @@ SnapTranslator.dict.bn = {
     // block deletion dialog
     'Delete Custom Block':
         'কাস্টম ব্লক মুছে দাও',
-    'block deletion dialog text':
+    'Are you sure you want to delete this\ncustom block and all its instances?':
         'তুমি কি এই কাস্টম ব্লক এবং সংশ্লিষ্ট সকল উপাদান মুছে দেওয়ার জন্য নিশ্চিত?',
 
     // input dialog

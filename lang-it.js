@@ -247,7 +247,7 @@ SnapTranslator.dict.it = {
         'aggiungi un nuovo sprite',
 
     // tab help
-    'costumes tab help':
+    'import a picture from another web page or from\na file on your computer by dropping it here':
         'Importa un\'immagine da una pagina web\n'
             + 'o da un file sul tuo computer trascinandolo qui',
     'import a sound from your computer\nby dragging it into here':
@@ -701,7 +701,7 @@ SnapTranslator.dict.it = {
         'Salva con nome...',
     'Import...':
         'Importa...',
-    'file menu import hint':
+    'load an exported project file\nor block library, a costume\nor a sound':
         'carica un file di progetto,\nuna libreria di blocchi,'
             + '\nun costume o un suono esportati'
             + '\n\nNon supportato da tutti i browser',
@@ -767,7 +767,7 @@ SnapTranslator.dict.it = {
 
     'Prefer empty slot drops':
         'Favorisci l\'aggancio a slot vuoti',
-    'settings menu prefer empty slots hint':
+    'check to focus on empty slots\nwhen dragging & dropping reporters':
         'abilitare per favorire l\'inserimento in slot vuoti\nquando si trascinano e rilasciano dei reporter',
     'uncheck to allow dropped\nreporters to kick out others':
         'disabilitare per permettere agli slot di espellere\ni reporter inclusi al loro interno',
@@ -1107,7 +1107,7 @@ SnapTranslator.dict.it = {
     // block deletion dialog
     'Delete Custom Block':
         'Cancella Blocco',
-    'block deletion dialog text':
+    'Are you sure you want to delete this\ncustom block and all its instances?':
         'Sei sicuro di voler cancellare questo blocco\n' +
             'e tutte le sue occorrenze?',
 

@@ -246,7 +246,7 @@ SnapTranslator.dict.ru = {
         'Добавить новый спрайт',
 
     // tab help
-    'costumes tab help':
+    'import a picture from another web page or from\na file on your computer by dropping it here':
         'Вы можете перенести и бросить сюда изображение со своего компьютера',
     'import a sound from your computer\nby dragging it into here':
         'Вы можете перенести и бросить сюда звуковой файл со своего компьютера',
@@ -690,7 +690,7 @@ SnapTranslator.dict.ru = {
         'Сохранить как...',
     'Import...':
         'Импорт...',
-    'file menu import hint':
+    'load an exported project file\nor block library, a costume\nor a sound':
         'загрузить экспортированный проект\nили библиотеку блоков, маску или звук',
     'Export project as plain text...':
         'Экспортировать проект как текстовый файл...',
@@ -764,7 +764,7 @@ SnapTranslator.dict.ru = {
         'отметьте, чтобы разрешить использование динамических обозначений\nпри вводе с переменным числом аргументов',
     'Prefer empty slot drops':
         'Использование незанятых ячеек ввода',
-    'settings menu prefer empty slots hint':
+    'check to focus on empty slots\nwhen dragging & dropping reporters':
         'отметьте, чтобы помещать генераторы значений\nтолько в незанятые ячейки ввода',
     'uncheck to allow dropped\nreporters to kick out others':
         'снимите флажок, чтобы разрешить помещать генераторы значений\nв занятые ячейки ввода',
@@ -1119,7 +1119,7 @@ SnapTranslator.dict.ru = {
     // block deletion dialog
     'Delete Custom Block':
         'Удалить Пользовательский Блок',
-    'block deletion dialog text':
+    'Are you sure you want to delete this\ncustom block and all its instances?':
         'Вы уверены вы хотите удалить этот блок?',
 
     // input dialog

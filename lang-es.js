@@ -253,7 +253,7 @@ SnapTranslator.dict.es = {
         'dibujar un nuevo disfraz',
     'Import a new costume from your webcam':
         'importar un nuevo disfraz desde la c\u00E1mara',
-    'costumes tab help':
+    'import a picture from another web page or from\na file on your computer by dropping it here':
         'Puedes importar un disfraz de otro sitio web\no desde tu ordenador arrastr\u00E1ndolo hasta aqu\u00ED',
 
     // paint editor dialog:
@@ -1214,7 +1214,7 @@ SnapTranslator.dict.es = {
 
     'Import...':
         'Importar...',
-    'file menu import hint':
+    'load an exported project file\nor block library, a costume\nor a sound':
         'importa proyectos, bloques,\ndisfraces o sonidos',
 
     'Export project...':
@@ -1520,7 +1520,7 @@ SnapTranslator.dict.es = {
 
     'Prefer empty slot drops':
         'Dar preferencia a huecos vac\u00EDos',
-    'settings menu prefer empty slots hint':
+    'check to focus on empty slots\nwhen dragging & dropping reporters':
         'marcar para impedir que los bloques puedan\nocupar el lugar de otros al ser soltados',
     'uncheck to allow dropped\nreporters to kick out others':
         'desmarcar para permitir que los bloques puedan\nocupar el lugar de otros al ser soltados',
@@ -2469,7 +2469,7 @@ SnapTranslator.dict.es = {
     // block deletion dialog:
     'Delete Custom Block':
         'Eliminar bloque personalizado',
-    'block deletion dialog text':
+    'Are you sure you want to delete this\ncustom block and all its instances?':
         '\u00BFSeguro que quieres eliminar\neste bloque personalizado\ny todas sus instancias?',
 
     // input dialog:
@@ -2577,7 +2577,7 @@ SnapTranslator.dict.es = {
     // exported summary dialog
     'Could not export':
         'No se ha podido exportar',
-    'unable to export text':
+    'This item could not be exported from Snap!.\nIt\'s likely that your project may contain a lot of media (sounds and images) or that you are using an older browser.\nPlease try using a recent version of Chrome, Firefox, or Safari.':
         'No se ha podido exportar el texto',
 
     //libraries

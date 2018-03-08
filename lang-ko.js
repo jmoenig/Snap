@@ -255,7 +255,7 @@ SnapTranslator.dict.ko = {
         '새로운 모양 그리기',
 
     // tab help
-    'costumes tab help':
+    'import a picture from another web page or from\na file on your computer by dropping it here':
         '다른 웹페이지나 컴퓨터에 있는 이미지 파일을\n'
             + '여기로 드래그해서 가져옵니다.',
     'import a sound from your computer\nby dragging it into here':
@@ -716,7 +716,7 @@ SnapTranslator.dict.ko = {
         '다른 이름으로 저장하기...',
     'Import...':
         '가져오기...',
-    'file menu import hint':
+    'load an exported project file\nor block library, a costume\nor a sound':
         '내보낸 프로젝트 파일, 블록 라이브러리\n'
 		+ '스프라이트 모양 또는 소리를 가져옵니다.',
     'Export project as plain text...':
@@ -801,7 +801,7 @@ SnapTranslator.dict.ko = {
     
     'Prefer empty slot drops':
         '빈 슬롯에 입력 가능',
-    'settings menu prefer empty slots hint':
+    'check to focus on empty slots\nwhen dragging & dropping reporters':
         '설정 메뉴에 빈 슬롯의\n힌트를 사용할 수 있습니다.',
     'uncheck to allow dropped\nreporters to kick out others':
         '체크해제하면, 기존 리포터 블록에\n새로운 리포터 블록으로 대체할 수 있습니다.',
@@ -1092,7 +1092,7 @@ SnapTranslator.dict.ko = {
     // block deletion dialog
     'Delete Custom Block':
         '블록 삭제하기',
-    'block deletion dialog text':
+    'Are you sure you want to delete this\ncustom block and all its instances?':
         '이 블록과 모든 인스턴스를\n 삭제해도 괜찮습니까?',
 
     // input dialog

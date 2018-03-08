@@ -252,7 +252,7 @@ SnapTranslator.dict.eo = {
         'aldoni novan objekton',
 
     // tab help
-    'costumes tab help':
+    'import a picture from another web page or from\na file on your computer by dropping it here':
         'trenu tien bildojn\nel aliaj retpa\u011doj a\u016d de via komputilo',
     'import a sound from your computer\nby dragging it into here':
         'importu sonon de via komputilo\ntrenante \u011din \u0109i tien',
@@ -671,7 +671,7 @@ SnapTranslator.dict.eo = {
         'Konservi kiel...',
     'Import...':
         'Importi...',
-    'file menu import hint':
+    'load an exported project file\nor block library, a costume\nor a sound':
         'el\u015dutu dosieron kun blokoj sonoj a\u016d kostumoj',
     'Export project as plain text...':
         'Eksporti projekton en plata teksta formo...',
@@ -759,7 +759,7 @@ SnapTranslator.dict.eo = {
         '\u015daltu por ebligi dinamikajn\nenigoetikedojn por enigo de variabloj',
     'Prefer empty slot drops':
         'Preferas malplenajn ingojn',
-    'settings menu prefer empty slots hint':
+    'check to focus on empty slots\nwhen dragging & dropping reporters':
         'agorda menuo preferas indikojn \u0109e malpenaj ingoj',
     'uncheck to allow dropped\nreporters to kick out others':
         'mal\u015daltu por ebligi demetatajn\nraportilojn for\u015dovi la aliajn',
@@ -1089,7 +1089,7 @@ SnapTranslator.dict.eo = {
     // block deletion dialog
     'Delete Custom Block':
         'Forigi propran blokon',
-    'block deletion dialog text':
+    'Are you sure you want to delete this\ncustom block and all its instances?':
         'forigo de la bloko estas ne malfarebla, \u0109u vi vere volas \u011din forigi?',
 
     // input dialog

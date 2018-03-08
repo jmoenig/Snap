@@ -247,7 +247,7 @@ SnapTranslator.dict.hu = {
         'Új szereplő',
 
     // tab help
-    'costumes tab help':
+    'import a picture from another web page or from\na file on your computer by dropping it here':
         'Kép importálása egy webhelyről vagy a számítógépről',
     'import a sound from your computer\nby dragging it into here':
         'Hang importálása egy webhelyről vagy a számítógépről',
@@ -663,7 +663,7 @@ SnapTranslator.dict.hu = {
         'Mentés másként...',
     'Import...':
         'Importálás...',
-    'file menu import hint':
+    'load an exported project file\nor block library, a costume\nor a sound':
         'egy exportált projekt, feladatkönyvtár,\njelmez vagy hang betöltése',
     'Export project as plain text...':
         'Projekt exportálása egyszerű szövegként...',
@@ -725,7 +725,7 @@ SnapTranslator.dict.hu = {
         'bejelölve engedélyezi a többszörös\nbeviteli mezők dinamikus feliratait',
     'Prefer empty slot drops':
         'Szóköz használata üres karakterként',
-    'settings menu prefer empty slots hint':
+    'check to focus on empty slots\nwhen dragging & dropping reporters':
         'einschalten um leere Platzhalter\nbeim Platzieren von Bl\u00f6cken'
             + 'zu bevorzugen',
     'uncheck to allow dropped\nreporters to kick out others':
@@ -1014,7 +1014,7 @@ SnapTranslator.dict.hu = {
     // block deletion dialog
     'Delete Custom Block':
         'Felhasználói blokk törlése',
-    'block deletion dialog text':
+    'Are you sure you want to delete this\ncustom block and all its instances?':
         'Biztos, hogy eltávolítja ezt\na blokkot és minden példányát?',
 
     // input dialog

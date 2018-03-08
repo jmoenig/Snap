@@ -254,7 +254,7 @@ SnapTranslator.dict.pl = {
         'dodaj nowego duszka-żółwia',
 
     // tab help
-    'costumes tab help':
+    'import a picture from another web page or from\na file on your computer by dropping it here':
         'Importuj obrazy z innej strony\n'
             + 'lub z komputera przeci\u0105gaj\u0105c tu',
     'import a sound from your computer\nby dragging it into here':
@@ -718,7 +718,7 @@ SnapTranslator.dict.pl = {
         'Zapisz jako...',
     'Import...':
         'Importuj...',
-    'file menu import hint':
+    'load an exported project file\nor block library, a costume\nor a sound':
         '\u0142aduje wyeksportowany projekt\n'
 		  + 'biblitek\u0119 '
           + 'kostium lub d\u017Awi\u0119k',
@@ -812,7 +812,7 @@ SnapTranslator.dict.pl = {
         'zaznacz, aby w\u0142\u0105czy\u0107 dynamiczne\nopisy dla wej\u015B\u0107 variadic',
     'Prefer empty slot drops':
         'Preferuj empty slot drops',
-    'settings menu prefer empty slots hint':
+    'check to focus on empty slots\nwhen dragging & dropping reporters':
         'menu ustawie\u0144 prefer empty slots hint',
     'uncheck to allow dropped\nreporters to kick out others':
         'odznacz to allow dropped\nreporters to kick out others',
@@ -1243,7 +1243,7 @@ SnapTranslator.dict.pl = {
     // block deletion dialog
     'Delete Custom Block':
         'Usu\u0144 w\u0142asny blok',
-    'block deletion dialog text':
+    'Are you sure you want to delete this\ncustom block and all its instances?':
         'czy ten blok ze wszystkimi wyst\u0105pieniami\n' +
             'rzeczywi\u015Bcie usun\u0105\u0107?',
 

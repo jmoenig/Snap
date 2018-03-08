@@ -247,7 +247,7 @@ SnapTranslator.dict.ja_HIRA = {
         'あたらしいスプライトをついかする',
 
     // tab help
-    'costumes tab help':
+    'import a picture from another web page or from\na file on your computer by dropping it here':
         'ほかのWebページやコンピューターじょうのがぞうを\n'
             + 'ここにドロップしてよみこみます',
     'import a sound from your computer\nby dragging it into here':
@@ -628,7 +628,7 @@ SnapTranslator.dict.ja_HIRA = {
         'なまえをつけてほぞん...',
     'Import...':
         'よみこみ...',
-    'file menu import hint':
+    'load an exported project file\nor block library, a costume\nor a sound':
         'チェックするとレポーターをドラッグ&ドロップするとき\n'
 		+ 'そらのレポーターにフォーカスします\n\n'
 		+ 'いくつかのブラウザーではサポートされません',
@@ -678,7 +678,7 @@ SnapTranslator.dict.ja_HIRA = {
         'チェックするとかへんこひきすうの\nどうてきラベルをかのうにします',
     'Prefer empty slot drops':
         'そらのスロットのドロップをゆるす',
-    'settings menu prefer empty slots hint':
+    'check to focus on empty slots\nwhen dragging & dropping reporters':
         'せっていメニューがそらのスロットのヒントをゆるします',
     'uncheck to allow dropped\nreporters to kick out others':
         'チェックをはずすとドロップしたレポーターが\nほかをおしだせるようになります',
@@ -937,7 +937,7 @@ SnapTranslator.dict.ja_HIRA = {
     // block deletion dialog
     'Delete Custom Block':
         'カスタムブロックをさくじょ',
-    'block deletion dialog text':
+    'Are you sure you want to delete this\ncustom block and all its instances?':
         'このカスタムブロックとすべてのインスタンスを\nさくじょしてもよいですか?',
 
     // input dialog

@@ -247,7 +247,7 @@ SnapTranslator.dict.ro = {
         'adauga o noua animatie',
 
     // tab help
-    'costumes tab help':
+    'import a picture from another web page or from\na file on your computer by dropping it here':
         'ajutor pentru costume',
     'import a sound from your computer\nby dragging it into here':
         'adauga un sunet tragandu-l aici',
@@ -663,7 +663,7 @@ SnapTranslator.dict.ro = {
         'Salveaza sub numele...',
     'Import...':
         'Importa...',
-    'file menu import hint':
+    'load an exported project file\nor block library, a costume\nor a sound':
         'indiciu import meniul fisiere',
     'Export project as plain text...':
         'Exporta proiectul ca text...',
@@ -751,7 +751,7 @@ SnapTranslator.dict.ro = {
         'difeaza pentru a folosi etichete\n dinamice pentru intrari variabile',
     'Prefer empty slot drops':
         'Foloseste slot drops goale',
-    'settings menu prefer empty slots hint':
+    'check to focus on empty slots\nwhen dragging & dropping reporters':
         'indicii de slot goale in meniul setari',
     'uncheck to allow dropped\nreporters to kick out others':
         'debifeaza pentru a folosi\nreporteri pentru a elimina altii',
@@ -1042,7 +1042,7 @@ SnapTranslator.dict.ro = {
     // block deletion dialog
     'Delete Custom Block':
         'Sterge blocul utilizator',
-    'block deletion dialog text':
+    'Are you sure you want to delete this\ncustom block and all its instances?':
         'textul pentru stergerea unui bloc',
 
     // input dialog

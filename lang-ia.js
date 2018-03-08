@@ -257,7 +257,7 @@ SnapTranslator.dict.ia = {
         'adde spirito nove',
 
     // tab help
-    'costumes tab help':
+    'import a picture from another web page or from\na file on your computer by dropping it here':
         'costumes adjuta',
     'import a sound from your computer\nby dragging it into here':
         'face importa un sono per trahe hic',
@@ -681,7 +681,7 @@ SnapTranslator.dict.ia = {
         'Salvo como nomine...',
     'Import...':
         'Importa...',
-    'file menu import hint':
+    'load an exported project file\nor block library, a costume\nor a sound':
         'Importa insinua per menu de file ',
     'Export project as plain text...':
         'Exporta projecto in texto simple...',
@@ -753,7 +753,7 @@ SnapTranslator.dict.ia = {
     'Prefer empty slot drops':
         'Dar le preferentia a cader in apatur vacue', 
 				// ..' in foramine vacue'
-    'settings menu prefer empty slots hint':
+    'check to focus on empty slots\nwhen dragging & dropping reporters':
         'Dar le preferentia in menu predefinite\n'
         + ' per apatur vacue insinua',
     'uncheck to allow dropped\nreporters to kick out others':
@@ -1059,7 +1059,7 @@ SnapTranslator.dict.ia = {
     // block deletion dialog
     'Delete Custom Block':
         'Dele bloco artificiose',
-    'block deletion dialog text':
+    'Are you sure you want to delete this\ncustom block and all its instances?':
         'Edita bloco dele dialogo texto',  //??
 
     // input dialog

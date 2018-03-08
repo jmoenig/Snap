@@ -247,7 +247,7 @@ SnapTranslator.dict.ja = {
         '新しいスプライトを追加する',
 
     // tab help
-    'costumes tab help':
+    'import a picture from another web page or from\na file on your computer by dropping it here':
         '他のWebページやコンピューター上の画像を\n'
             + 'ここにドロップして読み込みます',
     'import a sound from your computer\nby dragging it into here':
@@ -628,7 +628,7 @@ SnapTranslator.dict.ja = {
         '名前をつけて保存...',
     'Import...':
         '読み込み...',
-    'file menu import hint':
+    'load an exported project file\nor block library, a costume\nor a sound':
         'チェックするとレポーターをドラッグ&ドロップするとき\n'
 		+ '空のレポーターにフォーカスします\n\n'
 		+ 'いくつかのブラウザーではサポートされません',
@@ -678,7 +678,7 @@ SnapTranslator.dict.ja = {
         'チェックすると可変個引数の\n動的ラベルを可能にします',
     'Prefer empty slot drops':
         '空のスロットのドロップを許す',
-    'settings menu prefer empty slots hint':
+    'check to focus on empty slots\nwhen dragging & dropping reporters':
         '設定メニューが空のスロットのヒントを許します',
     'uncheck to allow dropped\nreporters to kick out others':
         'チェックを外すとドロップしたレポーターが\n他を押し出せるようになります',
@@ -937,7 +937,7 @@ SnapTranslator.dict.ja = {
     // block deletion dialog
     'Delete Custom Block':
         'カスタムブロックを削除',
-    'block deletion dialog text':
+    'Are you sure you want to delete this\ncustom block and all its instances?':
         'このカスタムブロックとすべてのインスタンスを\n削除してもよいですか?',
 
     // input dialog

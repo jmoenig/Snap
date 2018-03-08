@@ -261,7 +261,7 @@ SnapTranslator.dict.fr = {
         'ajouter un nouveau lutin Tortue',
 
     // tab help
-    'costumes tab help':
+    'import a picture from another web page or from\na file on your computer by dropping it here':
         'Importer une image depuis votre ordinateur ou une page web \npar un presser-glisser-d\u00E9poser dans l\u0027aire des costumes',
     'import a sound from your computer\nby dragging it into here':
         'Importer un son depuis votre ordinateur \npar un presser-glisser-d\u00E9poser dans l\u0027aire des sons',
@@ -667,7 +667,7 @@ SnapTranslator.dict.fr = {
         'Sauvegarder sous...',
     'Import...':
         'Importer...',
-    'file menu import hint':
+    'load an exported project file\nor block library, a costume\nor a sound':
         'importer un projet export\u00E9,\nune biblioth\u00E8que de '
             + 'blocs\n'
             + 'un costume ou un son',
@@ -723,7 +723,7 @@ SnapTranslator.dict.fr = {
         'd\u00E9cocher pour d\u00E9sactiver des couleurs altern\u00E9es \n pour les blocs embo\u00EEt\u00E9s',
     'Prefer empty slot drops':
         'Pr\u00E9f\u00E9rer des entr\u00E9es vides',
-    'settings menu prefer empty slots hint':
+    'check to focus on empty slots\nwhen dragging & dropping reporters':
         'cocher pour pr\u00E9f\u00E9rer des entr\u00E9es vides \n'
         + 'lors du glisser-d\u00E9poser d\u0027un reporter',
     'uncheck to allow dropped\nreporters to kick out others':
@@ -978,7 +978,7 @@ SnapTranslator.dict.fr = {
     // block deletion dialog
     'Delete Custom Block':
         'Effacer le bloc personnalis\u00E9',
-    'block deletion dialog text':
+    'Are you sure you want to delete this\ncustom block and all its instances?':
         '\u00CAtes-vous s\u00FBr de vouloir supprimer ce bloc personnalis\u00E9 \net ' +
             'toutes ses instances ?',
 

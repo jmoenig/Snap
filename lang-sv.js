@@ -249,7 +249,7 @@ SnapTranslator.dict.sv = {
         'l\u00E4gg till ny Sprite',
 
     // tab help
-    'costumes tab help':
+    'import a picture from another web page or from\na file on your computer by dropping it here':
         'importera en bild fr\u00E5n en annan webbsida eller fr\u00E5n\nen fil p\u00E5 din dator genom att dra den hit',
 
     'import a sound from your computer\nby dragging it into here':
@@ -688,7 +688,7 @@ SnapTranslator.dict.sv = {
         'Spara som...',
     'Import...':
         'Importera...',
-    'file menu import hint':
+    'load an exported project file\nor block library, a costume\nor a sound':
         'l\u00E4ser in ett exporterat projekt,\nett bibliotek med block,\nen kostym, eller ett ljud',
     'Export project as plain text ...':
         'Exportera projektet som vanlig text...',
@@ -740,7 +740,7 @@ SnapTranslator.dict.sv = {
         'kryssa f\u00F6r att aktivera \ndynamiska namn f\u00F6r indata \nmed flera variabelf\u00E4lt',
     'Prefer empty slot drops':
         'F\u00F6redra sl\u00E4pp p\u00E5 tomma utrymmen',
-    'settings menu prefer empty slots hint':
+    'check to focus on empty slots\nwhen dragging & dropping reporters':
         'Inst\u00E4llningar\nf\u00F6redra sl\u00E4pp p\u00E5 tomma utrymmen',
     'uncheck to allow dropped\nreporters to kick out others':
         'avmarkera f\u00F6r att till\u00E5ta placerade\n rappporterare att flytta ut andra',
@@ -966,7 +966,7 @@ SnapTranslator.dict.sv = {
     // block deletion dialog
     'Delete Custom Block':
         'Radera block',
-    'block deletion dialog text':
+    'Are you sure you want to delete this\ncustom block and all its instances?':
         'Ska detta block med alla dess instanser\n' +
             'tas bort?',
 

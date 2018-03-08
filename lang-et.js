@@ -99,9 +99,9 @@ SnapTranslator.dict.et = {
         'Lisa uus sprait',
 
     // tab help
-    'costumes tab help':
-	'Pilte saad Snapi\'i lisada lohistades neid\n'
-	    + 'oma arvutist või veebilehtedelt siia.',
+    'import a picture from another web page or from\na file on your computer by dropping it here':
+    	'Pilte saad Snapi\'i lisada lohistades neid\n'
+	        + 'oma arvutist või veebilehtedelt siia.',
     'import a sound from your computer\nby dragging it into here':
         'Helifaile saad Snap\'i lisada lohistades\n'
             + 'neid oma arvutist siia.',
@@ -491,7 +491,7 @@ SnapTranslator.dict.et = {
         'Salvesta kui ...',
     'Import...':
         'Import ...',
-    'file menu import hint':
+    'load an exported project file\nor block library, a costume\nor a sound':
         'Eksporditud projekti,\nplokkide teegi, kostüümi\nvõi heli laadimine.',
     'Export project as plain text...':
         'Ekspordi projekt tavatekstiks ...',
@@ -579,7 +579,7 @@ SnapTranslator.dict.et = {
         'check to enable dynamic\nlabels for variadic inputs',
     'Prefer empty slot drops':
         'Tühjade pesade eelistamine',
-    'settings menu prefer empty slots hint':
+    'check to focus on empty slots\nwhen dragging & dropping reporters':
         'Funktsioonide lohistamisel ja\nkukutamisel tühjadele pesadele\nkeskendumiseks lülita see sisse.',
     'uncheck to allow dropped\nreporters to kick out others':
         'Et lubada kukutatavatel\nfunktsioonidel teisi oma kohalt\nvälja lüüa, lülita see välja.',
@@ -892,7 +892,7 @@ SnapTranslator.dict.et = {
     // block deletion dialog
     'Delete Custom Block':
         'Kustuta omaloodud plokk',
-    'block deletion dialog text':
+    'Are you sure you want to delete this\ncustom block and all its instances?':
         'Kas kustutada see plokk ja kõik selle koopiad?',
 
 

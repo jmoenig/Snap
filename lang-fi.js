@@ -247,7 +247,7 @@ SnapTranslator.dict.fi = {
         'lis\u00e4\u00e4 uusi hahmo',
 
     // tab help
-    'costumes tab help':
+    'import a picture from another web page or from\na file on your computer by dropping it here':
         'Tuo kuva verkosta tai koneeltasi\n'
             + 'siirt\u00e4m\u00e4ll\u00e4 se hiirell\u00e4 t\u00e4h\u00e4n',
     'import a sound from your computer\nby dragging it into here':
@@ -655,7 +655,7 @@ SnapTranslator.dict.fi = {
         'Tallenna nimell\u00e4...',
     'Import...':
         'Tuo...',
-    'file menu import hint':
+    'load an exported project file\nor block library, a costume\nor a sound':
         'lataa viety projekti,\npalikkakirjasto, asu\ntai \u00e4\u00e4ni',
     'Export project as plain text...':
         'Vie projekti tekstin\u00e4...',
@@ -718,7 +718,7 @@ SnapTranslator.dict.fi = {
         'asettamalla saat vaihtuville\nsy\u00f6tteille vaihtuvat tunnukset',
     'Prefer empty slot drops':
         'Suosi asettamista tyhjiin aukkoihin',
-    'settings menu prefer empty slots hint':
+    'check to focus on empty slots\nwhen dragging & dropping reporters':
         'asettamalla saat asetettavat\npalikat osumaan tyhjiin aukkoihin',
     'uncheck to allow dropped\nreporters to kick out others':
         'poistamalla sallit asetettujen\npalikoiden pois potkimisen',
@@ -1011,7 +1011,7 @@ SnapTranslator.dict.fi = {
     // block deletion dialog
     'Delete Custom Block':
         'Poista palikka',
-    'block deletion dialog text':
+    'Are you sure you want to delete this\ncustom block and all its instances?':
         'Poistetaanko t\u00e4m\u00e4 palikka\n ja kaikki sen esiintym\u00e4t?',
 
 

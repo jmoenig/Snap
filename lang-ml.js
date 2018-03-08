@@ -247,7 +247,7 @@ SnapTranslator.dict.ml = {
          'പുതിയ ദേവത ചേര്‍ക്കുക',
 
     // tab help
-    'costumes tab help':
+    'import a picture from another web page or from\na file on your computer by dropping it here':
          'വേഷം ലഘുപട്ടിക സഹായം',
     'import a sound from your computer\nby dragging it into here':
         'കമ്പ്യൂട്ടറില്‍ നിന്നും ശബ്തം ഇറക്കുമതി\n ഇവിടെ വലിച്ചിട്ടുക',
@@ -650,7 +650,7 @@ SnapTranslator.dict.ml = {
         'എന്ന് സേവ് ചെയ്യുക...',
     'Import...':
         'കൊണ്ടുവരിക...',
-    'file menu import hint':
+    'load an exported project file\nor block library, a costume\nor a sound':
         'l\u00e4dt ein exportiertes Projekt,\neine Bibliothek mit '
             + 'Bl\u00f6cken\n'
             + 'ein Kost\u00fcm oder einen Klang',
@@ -714,7 +714,7 @@ SnapTranslator.dict.ml = {
         'einschalten um Mehrfacheingabefelder\nautomatisch zu beschriften',
     'Prefer empty slot drops':
         'Leere Platzhalter bevorzugen',
-    'settings menu prefer empty slots hint':
+    'check to focus on empty slots\nwhen dragging & dropping reporters':
         'einschalten um leere Platzhalter\nbeim Platzieren von Bl\u00f6cken'
             + 'zu bevorzugen',
     'uncheck to allow dropped\nreporters to kick out others':
@@ -1003,7 +1003,7 @@ SnapTranslator.dict.ml = {
     // block deletion dialog
     'Delete Custom Block':
         'Block L\u00f6schen',
-    'block deletion dialog text':
+    'Are you sure you want to delete this\ncustom block and all its instances?':
         'Soll dieser Block mit allen seinen Exemplare\n' +
             'wirklich gel\u00f6scht werden?',
 

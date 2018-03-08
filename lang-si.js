@@ -249,7 +249,7 @@ SnapTranslator.dict.si = {
         'dodaj nov objekt',
 
     // tab help
-    'costumes tab help':
+    'import a picture from another web page or from\na file on your computer by dropping it here':
         'Slike uvozi\u0161 s povle\u010Denjem iz ene druge\n'
             + 'spletne strani ali ra\u010Dunalnika',
     'import a sound from your computer\nby dragging it into here':
@@ -683,7 +683,7 @@ SnapTranslator.dict.si = {
         'Shrani kot...',
     'Import...':
         'Uvozi...',
-    'file menu import hint':
+    'load an exported project file\nor block library, a costume\nor a sound':
         'Nalaganje izvo\u017Eenega projekta,\nknji\u017Enice z '
             + 'bloki\n'
             + 'obleko ali zvokom',
@@ -755,7 +755,7 @@ SnapTranslator.dict.si = {
         'izklopi izmenjujo\u010De barve gnezdenih blokov',
     'Prefer empty slot drops':
         'Imejmo raje prazne re\u017Ee',
-    'settings menu prefer empty slots hint':
+    'check to focus on empty slots\nwhen dragging & dropping reporters':
         'vklop raje namiga za prazne re\u017Ee'
             + 'zu bevorzugen',
     'uncheck to allow dropped\nreporters to kick out others':
@@ -1059,7 +1059,7 @@ SnapTranslator.dict.si = {
     // block deletion dialog
     'Delete Custom Block':
         'Zbri\u0161i latni blok',
-    'block deletion dialog text':
+    'Are you sure you want to delete this\ncustom block and all its instances?':
         'Ali naj res zbri\u0161em ta blok\n' +
             'z vsemi njegovimi primeri?',
 

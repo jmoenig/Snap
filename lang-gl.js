@@ -249,7 +249,7 @@ SnapTranslator.dict.gl = {
         'Engade un novo obxecto',
 
     // tab help
-    'costumes tab help':
+    'import a picture from another web page or from\na file on your computer by dropping it here':
         'Importa unha imaxe de internet ou do \n'
             + 'teu ordenador arrastrándoa aquí',
     'import a sound from your computer\nby dragging it into here':
@@ -673,7 +673,7 @@ SnapTranslator.dict.gl = {
         'Gardar como...',
     'Import...':
         'Importar...',
-    'file menu import hint':
+    'load an exported project file\nor block library, a costume\nor a sound':
         'Abrir un proxecto exportado,\nsubstituíndo o proxecto actual, ou\n'
             + 'importar unha biblioteca de bloques, unha\n'
             + 'vestimenta ou um son para o proxecto actual.',
@@ -763,7 +763,7 @@ SnapTranslator.dict.gl = {
         'Marcar para activar etiquetas\ndinámicas para entradas variádicas',
     'Prefer empty slot drops':
         'Prefer empty slot drops',
-    'settings menu prefer empty slots hint':
+    'check to focus on empty slots\nwhen dragging & dropping reporters':
         'settings menu prefer empty slots hint',
     'uncheck to allow dropped\nreporters to kick out others':
         'uncheck to allow dropped\nreporters to kick out others',
@@ -1078,7 +1078,7 @@ SnapTranslator.dict.gl = {
     // block deletion dialog
     'Delete Custom Block':
         'Eliminar bloque personalizado',
-    'block deletion dialog text':
+    'Are you sure you want to delete this\ncustom block and all its instances?':
         'Queres eliminar este bloque e' 
 	   + 'todas as súas utilizacións?',
     // input dialog

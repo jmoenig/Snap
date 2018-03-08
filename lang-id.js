@@ -247,7 +247,7 @@ SnapTranslator.dict.id = {
         'tambah sprite baru',
 
     // tab help
-    'costumes tab help':
+    'import a picture from another web page or from\na file on your computer by dropping it here':
         'impor gambar dari site atau \n'
             + 'sebiah file dengan cara men-drag file nya',
     'import a sound from your computer\nby dragging it into here':
@@ -670,7 +670,7 @@ SnapTranslator.dict.id = {
         'Simpan sebagai',
     'Import...':
         'Impor',
-    'file menu import hint':
+    'load an exported project file\nor block library, a costume\nor a sound':
         'impor sebuah projek yang sudah diekspor atau\n '
             + 'pustaka blok,\n'
             + 'kostum atau suara',
@@ -760,7 +760,7 @@ SnapTranslator.dict.id = {
         'centang untuk menyalahkan label\ndinamik untu input variadik',
     'Prefer empty slot drops':
         'Memilih jatuh slot kosong',
-    'settings menu prefer empty slots hint':
+    'check to focus on empty slots\nwhen dragging & dropping reporters':
         'jangan centang untuk mengizinkan reporter yang jatuh menendang'
             + 'yang lain',
     'uncheck to allow dropped\nreporters to kick out others':
@@ -1077,7 +1077,7 @@ SnapTranslator.dict.id = {
     // block deletion dialog
     'Delete Custom Block':
         'Hapus blok',
-    'block deletion dialog text':
+    'Are you sure you want to delete this\ncustom block and all its instances?':
         'Apakah anda yaking anda mau menghapus\n' +
             'blok ini dan instans-nya?',
 

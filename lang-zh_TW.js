@@ -248,7 +248,7 @@ SnapTranslator.dict.zh_TW = {
         '新增角色',
 
     // tab help
-    'costumes tab help':
+    'import a picture from another web page or from\na file on your computer by dropping it here':
         '造型選卡幫助\n要使用另外網站上的圖片或電腦中的圖像'
             + '只需拖到圖像到這裏即可',
     'import a sound from your computer\nby dragging it into here':
@@ -632,7 +632,7 @@ SnapTranslator.dict.zh_TW = {
         '另存為...',
     'Import...':
         '導入...',
-    'file menu import hint':
+    'load an exported project file\nor block library, a costume\nor a sound':
         '當你拖動到系統，注意查看檢查報告\n'
 		+ '要注意檢查報告為空\n\n'
 		+ '有一些流覽器不支持這一功能',
@@ -681,7 +681,7 @@ SnapTranslator.dict.zh_TW = {
         'marcar para habilitar etiquetas\ndin\u00E1micas para entradas varidic',
     'Prefer empty slot drops':
         '喜歡減少空槽',
-    'settings menu prefer empty slots hint':
+    'check to focus on empty slots\nwhen dragging & dropping reporters':
         '喜歡空槽設置菜單',
     'uncheck to allow dropped\nreporters to kick out others':
         '取消選中 允許下降報告並取消其他報告',
@@ -935,7 +935,7 @@ SnapTranslator.dict.zh_TW = {
     // block deletion dialog
     'Delete Custom Block':
         '刪除自定義程式塊',
-    'block deletion dialog text':
+    'Are you sure you want to delete this\ncustom block and all its instances?':
         '你確定要刪除自定義程式塊及所有實例嗎？',
 
     // input dialog

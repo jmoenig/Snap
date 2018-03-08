@@ -249,7 +249,7 @@ SnapTranslator.dict.cs = {
         'přidat nový sprite želvy',
 
     // tab help
-    'costumes tab help':
+    'import a picture from another web page or from\na file on your computer by dropping it here':
         'Nahrajte obrázek odjinud z webu\n'
             + 'nebo nahrajte soubor z Vašeho počítače přetažením sem.',
     'import a sound from your computer\nby dragging it into here':
@@ -673,7 +673,7 @@ SnapTranslator.dict.cs = {
         'Uložit jako...',
     'Import...':
         'Importovat...',
-    'file menu import hint':
+    'load an exported project file\nor block library, a costume\nor a sound':
         'Načíst exportovaný projekt, '
             + 'knihovnu bloků, kostýmy nebo zvuky',
     'Export project as plain text...':
@@ -798,7 +798,7 @@ SnapTranslator.dict.cs = {
         'Odškrtnutí zruší použití střídavých barev pro vložené bloky',
     'Prefer empty slot drops':
         'Preferovat prázdný slot pro puštění',
-    'settings menu prefer empty slots hint':
+    'check to focus on empty slots\nwhen dragging & dropping reporters':
         'Zaškrtnutím bude preferováno prázdné místo na umístění',
     'uncheck to allow dropped\nreporters to kick out others':
         'odškrtnutím bude upřednostňováno nahrazení celé podmínky',
@@ -1082,7 +1082,7 @@ SnapTranslator.dict.cs = {
     // block deletion dialog
     'Delete Custom Block':
         'smazat vlastní blok',
-    'block deletion dialog text':
+    'Are you sure you want to delete this\ncustom block and all its instances?':
         'Smazáním tohoto bloku se odstraní všechna jeho použití.\n' +
             'Opravdu chcete tento blok smazat?',
 

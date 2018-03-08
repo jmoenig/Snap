@@ -247,7 +247,7 @@ SnapTranslator.dict.el = {
         'προσθέστε ένα νέο sprite',
 
     // tab help
-    'costumes tab help':
+    'import a picture from another web page or from\na file on your computer by dropping it here':
         'εισαγωγή εικόνας από τον υπολογιστή σας ή μια ιστοσελίδα' 
 	+ 'σέρνοντας την εικόνα στην περιοχή των κοστουμιών',
     'import a sound from your computer\nby dragging it into here':
@@ -640,7 +640,7 @@ SnapTranslator.dict.el = {
         'Αποθήκευση Ως...',
     'Import...':
         'Εισαγωγή...',
-    'file menu import hint':
+    'load an exported project file\nor block library, a costume\nor a sound':
         'μπορείτε να φορτώσετε ένα αρχείο από το browser σας στον\n κατάλογο του ήχου η των' +
             'κοστουμιών που ',
     'Export project as plain text...':
@@ -694,7 +694,7 @@ SnapTranslator.dict.el = {
         'ενεργοποιήστε για να εμφανίσετε τις δυναμικες\nετικέτες για μεταβλητές τιμές',
     'Prefer empty slot drops':
         'Ευνοούν την προσκόλληση σε κενές θέσεις',
-    'settings menu prefer empty slots hint':
+    'check to focus on empty slots\nwhen dragging & dropping reporters':
         'διευκολύνουν την εισαγωγλη σε κενές υποδοχές\nόταν σύρετε και αφήσετε τον ρεπόρτερ',
     'uncheck to allow dropped\nreporters to kick out others':
         'απενεργοποιήστε για να μπορούν οι ρεπορτερ που αφήνετε\nνα αντικαταστούν τους άλλους',
@@ -967,7 +967,7 @@ SnapTranslator.dict.el = {
     // block deletion dialog
     'Delete Custom Block':
         'Διαγραφή προσαρμοσμένου μπλοκ',
-    'block deletion dialog text':
+    'Are you sure you want to delete this\ncustom block and all its instances?':
         'Είστε σίγουροι ότι θέλετε να διαγράψετε αυτο το μπλολ\n' +
         'Και όλων των εμφανίσεών του?',
 

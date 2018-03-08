@@ -239,7 +239,7 @@ SnapTranslator.dict.kn = {
         '\u0CB9\u0CCA\u0CB8\u0020\u0CAF\u0C95\u0CCD\u0CB7\u0CBF\u0CA3\u0CBF\u0CAF\u0CA8\u0CCD\u0CA8\u0CC1\u0020\u0C95\u0CC2\u0CA1\u0CBF\u0CB8\u0CC1',
 
     // tab help
-    'costumes tab help':
+    'import a picture from another web page or from\na file on your computer by dropping it here':
         '\u0C87\u0CA8\u0CCD\u0CA8\u0CBF\u0CA4\u0CB0\u0020\u0C9C\u0CBE\u0CB2\u0CA4\u0CBE\u0CA3\u0020\u0C85\u0CA5\u0CB5\u0CBE\u0020\u0CA8\u0CBF\u0CAE\u0CCD\u0CAE\u0020\u0C97\u0CA3\u0C95\u0CAF\u0C82\u0CA4\u0CCD\u0CB0\u0CA6\u0CBF\u0C82\u0CA6\u0020\u0C9A\u0CBF\u0CA4\u0CCD\u0CB0\u0CB5\u0CA8\u0CCD\u0CA8\u0CC1\u0020\u0C87\u0CB2\u0CCD\u0CB2\u0CBF\u0C97\u0CC6\u0020\u0C8E\u0CB3\u0CC6\u0CAF\u0CC1\u0CB5\u0CC1\u0CA6\u0CB0\u0CBF\u0C82\u0CA6\u0020\u0C86\u0CAE\u0CA6\u0CC1\u0020\u0CAE\u0CBE\u0CA1\u0CBF\u0C95\u0CCA\u0CB3\u0CCD\u0CB3\u0CAC\u0CB9\u0CC1\u0CA6\u0CC1\u0020'
            ,
     'import a sound from your computer\nby dragging it into here':
@@ -643,7 +643,7 @@ SnapTranslator.dict.kn = {
         '\u0C8E\u0C82\u0CA6\u0CC1\u0020\u0C89\u0CB3\u0CBF\u0CB8\u0CC1...',
     'Import...':
         '\u0C86\u0CAE\u0CA6\u0CC1...',
-    'file menu import hint':
+    'load an exported project file\nor block library, a costume\nor a sound':
         '\u0C95\u0CA1\u0CA4\u0CA6\u0020\u0CAA\u0CB0\u0CBF\u0CB5\u0CBF\u0CA1\u0CBF\u0020\u0CB8\u0CC2\u0C9A\u0CA8\u0CC6\u0CAF\u0CA8\u0CCD\u0CA8\u0CC1\u0020\u0C86\u0CAE\u0CA6\u0CC1\u0020\u0CAE\u0CBE\u0CA1\u0CBF\u0C95\u0CCA\u0CB3\u0CCD\u0CB3\u0CBF'
            ,
     'Export project as plain text...':
@@ -706,7 +706,7 @@ SnapTranslator.dict.kn = {
         'einschalten um Mehrfacheingabefelder\nautomatisch zu beschriften',
     'Prefer empty slot drops':
         'Leere Platzhalter bevorzugen',
-    'settings menu prefer empty slots hint':
+    'check to focus on empty slots\nwhen dragging & dropping reporters':
         'einschalten um leere Platzhalter\nbeim Platzieren von Bl\u00f6cken'
             + 'zu bevorzugen',
     'uncheck to allow dropped\nreporters to kick out others':
@@ -995,7 +995,7 @@ SnapTranslator.dict.kn = {
     // block deletion dialog
     'Delete Custom Block':
         '\u0CB8\u0CCD\u0CB5\u0CAF\u0C82\u0020\u0CA8\u0CBF\u0CB0\u0CCD\u0CAE\u0CBF\u0CA4\u0020\u0CB5\u0CBF\u0CAD\u0CBE\u0C97\u0CB5\u0CA8\u0CCD\u0CA8\u0CC1\u0020\u0C85\u0CB3\u0CBF\u0CB8\u0CBF',
-    'block deletion dialog text':
+    'Are you sure you want to delete this\ncustom block and all its instances?':
         '\u0CB5\u0CBF\u0CAD\u0CBE\u0C97\u0020\u0C85\u0CB3\u0CBF\u0CB8\u0CAC\u0CC7\u0C95\u0CBE\u0CA6\u0020\u0CB8\u0C82\u0CAD\u0CBE\u0CB7\u0CA3\u0CBE\u0020\u0CAA\u0CA0\u0CCD\u0CAF',
            
     // input dialog

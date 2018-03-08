@@ -247,7 +247,7 @@ SnapTranslator.dict.pt_BR = {
         'adicionar um novo ator',
 
     // ajuda nos tabuladores
-    'costumes tab help':
+    'import a picture from another web page or from\na file on your computer by dropping it here':
         'Importa uma imagem de uma página Web ou de um\n'
             + 'arquivo no teu computador arrastando-a para aqui',
     'import a sound from your computer\nby dragging it into here':
@@ -651,7 +651,7 @@ SnapTranslator.dict.pt_BR = {
         'Salvar como…',
     'Import...':
         'Importar…',
-    'file menu import hint':
+    'load an exported project file\nor block library, a costume\nor a sound':
         'Importar para este projecto\num projeto exportado,\n'
             + 'uma biblioteca de blocos,\n'
             + 'um traje ou um som.',
@@ -705,7 +705,7 @@ SnapTranslator.dict.pt_BR = {
         'Marque para ativar nomes\ndinâmicos nas variáveis de entrada.',
     'Prefer empty slot drops':
         'Procure encaixar blocos de valor (repórteres) em campos vazios ao soltar',
-    'settings menu prefer empty slots hint':
+    'check to focus on empty slots\nwhen dragging & dropping reporters':
         'Marque para focar em campos vazios\nquando  estiver arrastando e '
             + 'soltando blocos de valor (repórteres).',
     'uncheck to allow dropped\nreporters to kick out others':
@@ -752,7 +752,7 @@ SnapTranslator.dict.pt_BR = {
     'check to prioritize\nscript execution':
         'Marque para priorizar\na execução de roteiros.',
     'uncheck to run scripts\nat normal speed':
-        'Desmarque para executar os roteiros\nna� velocidade normal.',
+        'Desmarque para executar os roteiros\nna� velocidade normal.',
     'check to enable\nIDE animations':
         'Marque para ativar\nas animações da interface de usuário.',
     'Thread safe scripts':
@@ -935,7 +935,7 @@ SnapTranslator.dict.pt_BR = {
     'click or drag crosshairs to move the rotation center':
         'Clique ou arraste a mira para mudar o centro de rotação.',
 
-    // Anota��es de projeto
+    // Anota��es de projeto
     'Project Notes':
         'Notas do Projeto',
 
@@ -986,7 +986,7 @@ SnapTranslator.dict.pt_BR = {
     // caixa de diálogo de remoção de bloco
     'Delete Custom Block':
         'Remova Bloco Personalizado',
-    'block deletion dialog text':
+    'Are you sure you want to delete this\ncustom block and all its instances?':
         'Quer mesmo remover este bloco e '
             + 'todas as suas aplicações?',
 

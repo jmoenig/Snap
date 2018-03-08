@@ -247,7 +247,7 @@ SnapTranslator.dict.ar = {
         'اضافة كائن جديد',
 
     // tab help
-    'costumes tab help':
+    'import a picture from another web page or from\na file on your computer by dropping it here':
         'استيراد الصور من الحاسوب او من الانترنت  \n بسحب و افلات الملف هنا', 
     'import a sound from your computer\nby dragging it into here':
         'استيراد الاصوات من الحاسوب او من الانترنت  \n بسحب و افلات الملف هنا', 
@@ -664,7 +664,7 @@ SnapTranslator.dict.ar = {
         'حفظ بأسم ...',
     'Import...':
         'استيراد...',
-    'file menu import hint':
+    'load an exported project file\nor block library, a costume\nor a sound':
         'استيراد مشروع تم تصديره من قبل',
     'Export project as plain text...':
         'تصدير المشروع كمستند نصي ...',
@@ -751,7 +751,7 @@ SnapTranslator.dict.ar = {
         'حدد لتفعيل بطاقات الادخال الديناميكية للمدخلات',
     'Prefer empty slot drops':
         'Prefer empty slot drops',
-    'settings menu prefer empty slots hint':
+    'check to focus on empty slots\nwhen dragging & dropping reporters':
         'settings menu prefer empty slots hint',
     'uncheck to allow dropped\nreporters to kick out others':
         'uncheck to allow dropped\nreporters to kick out others',
@@ -1046,7 +1046,7 @@ SnapTranslator.dict.ar = {
     // block deletion dialog
     'Delete Custom Block':
         'حذف بلوك مخصص',
-    'block deletion dialog text':
+    'Are you sure you want to delete this\ncustom block and all its instances?':
         'هل تريد حقا حذف هذه الكتلة مع جميع النسخ منها',
 
     // input dialog

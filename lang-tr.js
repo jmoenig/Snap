@@ -247,7 +247,7 @@ SnapTranslator.dict.tr = {
         'yeni bir karakter ekle',
 
     // tab help
-    'costumes tab help':
+    'import a picture from another web page or from\na file on your computer by dropping it here':
         'kostüm sekmesi yardımı',
     'import a sound from your computer\nby dragging it into here':
         'bilgisayarınızdan bir sesi\n'
@@ -651,7 +651,7 @@ SnapTranslator.dict.tr = {
         'Farklı kaydet...',
     'Import...':
         'İçeri aktar...',
-    'file menu import hint':
+    'load an exported project file\nor block library, a costume\nor a sound':
         'dosya menü içeri aktar ipucu',
     'Export project as plain text...':
         'Düz metin olarak projeyi dışarı aktar...',
@@ -713,7 +713,7 @@ SnapTranslator.dict.tr = {
         'farklı girdiler için dinamik etkiletlemeyi\netkinleştirmek için seçimi kaldırın',
     'Prefer empty slot drops':
         'Boş slotları tercih et',
-    'settings menu prefer empty slots hint':
+    'check to focus on empty slots\nwhen dragging & dropping reporters':
         'boş slotlar için menü ayarları',
     'uncheck to allow dropped\nreporters to kick out others':
         'uncheck to allow dropped\nreporters to kick out others',
@@ -998,7 +998,7 @@ SnapTranslator.dict.tr = {
     // block deletion dialog
     'Delete Custom Block':
         'Bloğu Sil',
-    'block deletion dialog text':
+    'Are you sure you want to delete this\ncustom block and all its instances?':
         'BSoll dieser Block mit allen seinen Exemplare\n' +
             'wirklich gel\u00f6scht werden?',
 

@@ -251,7 +251,7 @@ SnapTranslator.dict.dk = {
         'Tilf\u00F8j en ny Skildpaddefigur',
 
     // tab help
-    'costumes tab help':
+    'import a picture from another web page or from\na file on your computer by dropping it here':
         'Importer et billede fra din computer eller en webside\n'
             + 'ved at tr\u00E6kke det her hen',
     'import a sound from your computer\nby dragging it into here':
@@ -643,7 +643,7 @@ SnapTranslator.dict.dk = {
         'Gem som...',
     'Import...':
         'Importer...',
-    'file menu import hint':
+    'load an exported project file\nor block library, a costume\nor a sound':
         'Importer et eksporteret projekt,'
             + 'et blokbibliotek, et kostume'
             + 'eller en lydfil',
@@ -710,7 +710,7 @@ SnapTranslator.dict.dk = {
         'marker for at vise dynamiske \nm\u00E6rkater til varierende input',
     'Prefer empty slot drops':
         'Foretr\u00E6k tomme hylstre',
-    'settings menu prefer empty slots hint':
+    'check to focus on empty slots\nwhen dragging & dropping reporters':
         'indstillingsmenu foretr\u00E6kker tomme hylstre',
     'uncheck to allow dropped\nreporters to kick out others':
         'afmarker for at lade indsatte rapport\u00F8rer sparke andre ud',
@@ -974,7 +974,7 @@ SnapTranslator.dict.dk = {
     // block deletion dialog
     'Delete Custom Block':
         'Slet tilpasset blok',
-    'block deletion dialog text':
+    'Are you sure you want to delete this\ncustom block and all its instances?':
         'Skal denne blok virkelig slettes?',
 
     // input dialog

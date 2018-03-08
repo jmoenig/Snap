@@ -249,7 +249,7 @@ SnapTranslator.dict.zh_CN = {
         '添加一个海龟角色',
 
     // tab help
-    'costumes tab help':
+    'import a picture from another web page or from\na file on your computer by dropping it here':
         '把网页或电脑中的图片拖到这里，可以添加一个造型',
 
     'import a sound from your computer\nby dragging it into here':
@@ -950,7 +950,7 @@ SnapTranslator.dict.zh_CN = {
         '另存为…',
     'Import...':
         '导入…',
-    'file menu import hint':
+    'load an exported project file\nor block library, a costume\nor a sound':
         '加载导出的项目、积木库、造型或声音',
 
 
@@ -1173,7 +1173,7 @@ SnapTranslator.dict.zh_CN = {
         '开：可变输入项使用动态标记',
     'Prefer empty slot drops':
         '只放空白项',
-    'settings menu prefer empty slots hint':
+    'check to focus on empty slots\nwhen dragging & dropping reporters':
         '开：“报告积木”优先\n放在没有积木的输入项上',
     'uncheck to allow dropped\nreporters to kick out others':
         '关：“报告积木”可以\n踢走输入项上已有的积木',
@@ -1695,7 +1695,7 @@ SnapTranslator.dict.zh_CN = {
     // block deletion dialog
     'Delete Custom Block':
         '删除自制积木',
-    'block deletion dialog text':
+    'Are you sure you want to delete this\ncustom block and all its instances?':
         '你确实要删除所有这种自制积木和它的定义吗？',
     'block variables...':
         '积木变量…',

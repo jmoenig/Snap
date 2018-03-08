@@ -243,7 +243,7 @@ SnapTranslator.dict.nl = {
         'een nieuw object toevoegen',
 
     // tab help
-    'costumes tab help':
+    'import a picture from another web page or from\na file on your computer by dropping it here':
         'help uiterlijkentab',
     'import a sound from your computer\nby dragging it into here':
         'importeer een geluid vanaf je computer\ndoor deze hierin te slepen',
@@ -664,7 +664,7 @@ SnapTranslator.dict.nl = {
         'Opslaan als...',
     'Import...':
         'Importeren...',
-    'file menu import hint':
+    'load an exported project file\nor block library, a costume\nor a sound':
         'importeer een project,\neen bibliotheek met blokken,\neen uiterlijk of een geluid',
     'Export project as plain text...':
         'Project exporteren als tekst...',
@@ -752,7 +752,7 @@ SnapTranslator.dict.nl = {
         'dynamische labels voor\nmeervaksinvoer aanzetten',
     'Prefer empty slot drops':
         'Voorkeur voor lege plaatshouders',
-    'settings menu prefer empty slots hint':
+    'check to focus on empty slots\nwhen dragging & dropping reporters':
         'lege plaatshouders in instellingenmenu',
     'uncheck to allow dropped\nreporters to kick out others':
         'uitschakelen om lege functies\n anderen uit te sluiten',
@@ -1081,7 +1081,7 @@ SnapTranslator.dict.nl = {
     // block deletion dialog
     'Delete Custom Block':
         'Verwijder aangepast blok',
-    'block deletion dialog text':
+    'Are you sure you want to delete this\ncustom block and all its instances?':
         'Moet dit blok met al zijn\ninstanties verwijderd worden?',
 
     // input dialog

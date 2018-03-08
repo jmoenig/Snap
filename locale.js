@@ -161,28 +161,6 @@ SnapTranslator.dict.en = {
     // rewordings in English avoiding having to adjust all other translations
     'any':
         'random',
-
-    // long strings look-up only
-    'file menu import hint':
-        'load an exported project file\nor block library, a costume\n'
-            + 'or a sound',
-    'settings menu prefer empty slots hint':
-        'check to focus on empty slots\nwhen dragging & '
-                + 'dropping reporters',
-    'costumes tab help':
-        'import a picture from another web page or from\n'
-            + 'a file on your computer by dropping it here\n',
-    'block deletion dialog text':
-        'Are you sure you want to delete this\n'
-            + 'custom block and all its instances?',
-    'download to disk text':
-        'This item could not be opened in a new tab.\n' +
-        'It has been saved to your browser\'s downloads folder.',
-    'unable to export text':
-        'This item could not be exported from Snap!.\n' +
-        'It\'s likely that your project may contain a lot of media ' +
-        '(sounds and images) or that you are using an older browser.' +
-        'Please try using a recent version of Chrome, Firefox, or Safari.'
 };
 
 SnapTranslator.dict.de = {
