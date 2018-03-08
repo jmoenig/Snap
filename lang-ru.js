@@ -163,27 +163,22 @@
 /*global SnapTranslator*/
 
 SnapTranslator.dict.ru = {
+    metadata: {
+        name: // the name as it should appear in the language menu
+            'Русский',
+        english_name: // the english name of the language
+            'Russian',
+        translators: [ // translators authors for the Translators tab
+            'Svetlana Ptashnaya <svetlanap@berkeley.edu>',
+            'Проскурнёв Артём <tema@school830.ru>'
+        ],
+        last_changed: // this, too, will appear in the Translators tab
+            '2017-12-29',
+    },
+    strings: {}
+};
 
-/*
-    Special characters: (see <http://0xcc.net/jsescape/>)
-
-    ,    \u00c4, \u00e4
-
-,    \u00d6, \u00f6
-    ,    \u00dc, \u00fc
-    §      \u00df
-*/
-
-    // translations meta information
-    'language_name':
-        'Русский', // the name as it should appear in the language menu
-    'language_translator':
-        'Svetlana Ptashnaya, Проскурнёв Артём', // your name for the Translators tab
-    'translator_e-mail':
-        'svetlanap@berkeley.edu, tema@school830.ru', // optional
-    'last_changed':
-        '2017-12-29', // this, too, will appear in the Translators tab
-
+SnapTranslator.dict.ru.strings = {
     // GUI
     // control bar:
     'untitled':

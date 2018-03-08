@@ -168,27 +168,21 @@
 /*global SnapTranslator*/
 
 SnapTranslator.dict.eo = {
+    metadata: {
+        name: // the name as it should appear in the language menu
+            'Esperanto',
+        english_name: // the english name of the language
+            'Esperanto',
+        translators: [ // translators authors for the Translators tab
+            'Sebastian CYPRYCH <sebacyp@gmail.com>'
+        ],
+        last_changed: // this, too, will appear in the Translators tab
+            '2017-10-01',
+    },
+    strings: {}
+};
 
-/*
-    Special characters: (see <http://0xcc.net/jsescape/>)
-
-    Ĉ, ĉ   \u0108, \u0109
-    Ĝ, ĝ   \u011c, \u011d
-    Ĥ, ĥ   \u0124, \u0125
-    Ĵ, ĵ   \u0134, \u0135
-    Ŝ, ŝ   \u015c, \u015d
-    Ŭ, ŭ   \u016c, \u016d
-*/
-
-    // translations meta information
-    'language_name':
-        'Esperanto',
-    'language_translator':
-        'Sebastian CYPRYCH',
-    'translator_e-mail':
-        'sebacyp(heliko)gmail(punkto)com',
-    'last_changed':
-        '2017-10-01',
+SnapTranslator.dict.eo.strings = {
 
     // GUI
     // control bar:

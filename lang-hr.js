@@ -167,26 +167,21 @@
 /*global SnapTranslator*/
 
 SnapTranslator.dict.hr = {
+    metadata: {
+        name: // the name as it should appear in the language menu
+            'Hrvatski',
+        english_name: // the english name of the language
+            'Croatian',
+        translators: [ // translators authors for the Translators tab
+            'u017Deljko Hrvoj <zeljko.hrvoj@zg.t-com.hr>'
+        ],
+        last_changed: // this, too, will appear in the Translators tab
+            '2017-08-15',
+    },
+    strings: {}
+};
 
-/*
-    Special characters: (see <http://0xcc.net/jsescape/>)
-
-    Ä, ä   \u00c4, \u00e4
-    Ö, ö   \u00d6, \u00f6
-    Ü, ü   \u00dc, \u00fc
-    ß      \u00df
-*/
-
-    // translations meta information 4.0.10.2
-    'language_name':
-        'Hrvatski', // the name as it should appear in the language menu
-    'language_translator':
-        '\u017Deljko Hrvoj', // your name for the Translators tab
-    'translator_e-mail':
-        'zeljko.hrvoj@zg.t-com.hr', // optional
-    'last_changed':
-        '2017-08-15', // this, too, will appear in the Translators tab
-
+SnapTranslator.dict.hr.strings = {
     // GUI
     // control bar:
     'untitled':

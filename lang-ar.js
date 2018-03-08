@@ -167,26 +167,21 @@
 /*global SnapTranslator*/
 
 SnapTranslator.dict.ar = {
+    metadata: {
+        name: // the name as it should appear in the language menu
+            'العربية',
+        english_name: // the english name of the language
+            'Arabic',
+        translators: [ // translators authors for the Translators tab
+            'طارق جلال <tarekgalal46@hotmail.com>'
+        ],
+        last_changed: // this, too, will appear in the Translators tab
+            '2016-01-23',
+    },
+    strings: {}
+};
 
-/*
-    Special characters: (see <http://0xcc.net/jsescape/>)
-
-    Ã„, Ã¤   \u00c4, \u00e4
-    Ã–, Ã¶   \u00d6, \u00f6
-    Ãœ, Ã¼   \u00dc, \u00fc
-    ÃŸ      \u00df
-*/
-
-    // translations meta information
-    'language_name':
-        'العربية', // the name as it should appear in the language menu
-    'language_translator':
-        'طارق جلال', // your name for the Translators tab
-    'translator_e-mail':
-        'tarekgalal46@hotmail.com', // optional
-    'last_changed':
-        '2016-01-23', // this, too, will appear in the Translators tab
-
+SnapTranslator.dict.ar.strings = {
     // GUI
     // control bar:
     'untitled':

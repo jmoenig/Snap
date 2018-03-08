@@ -167,26 +167,23 @@
 /*global SnapTranslator*/
 
 SnapTranslator.dict.es = {
+    metadata: {
+        name: // the name as it should appear in the language menu
+            'Español',
+        english_name: // the english name of the language
+            'Spanish',
+        translators: [ // translators authors for the Translators tab
+            'Víctor Manuel Muratalla Morales <victor.muratalla@yahoo.com>',
+            'Cristián Rizzi Iribarren <rizzi.cristian@gmail.com>',
+            'Alfonso Ruzafa <superruzafa@gmail.com>'
+        ],
+        last_changed: // this, too, will appear in the Translators tab
+            '2018-02-19',
+    },
+    strings: {}
+};
 
-/*
-    Special characters: (see <http://0xcc.net/jsescape/>)
-
-    Ä, ä   \u00c4, \u00e4
-    Ö, ö   \u00d6, \u00f6
-    Ü, ü   \u00dc, \u00fc
-    ß      \u00df
-*/
-
-    // translations meta information
-    'language_name':
-        'Espa\u00F1ol', // the name as it should appear in the language menu
-    'language_translator':
-        'V\u00EDctor Manuel Muratalla Morales / Cristi\u00E1n Rizzi Iribarren / Alfonso Ruzafa', // your name for the Translators tab
-    'translator_e-mail':
-        'victor.muratalla@yahoo.com / rizzi.cristian@gmail.com', // optional
-    'last_changed':
-        '2018-02-19', // this, too, will appear in the Translators tab
-
+SnapTranslator.dict.es.strings = {
     // GUI
     // control bar:
     'untitled':

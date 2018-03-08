@@ -167,28 +167,21 @@
 /*global SnapTranslator*/
 
 SnapTranslator.dict.no = {
+    metadata: {
+        name: // the name as it should appear in the language menu
+            'Norsk',
+        english_name: // the english name of the language
+            'Norwegian',
+        translators: [ // translators authors for the Translators tab
+            'Olav A Marschall <mattebananer@gmail.com>'
+        ],
+        last_changed: // this, too, will appear in the Translators tab
+            '2013-09-16',
+    },
+    strings: {}
+};
 
-/*
-    Special characters: (see <http://0xcc.net/jsescape/>)
-
-    � , \u00F8
-    � , \u00E6
-    � , \u00E5
-    � , \u00D8
-    � ; \u00C6
-    � , \u00C5
-*/
-
-    // translations meta information
-    'language_name':
-        'Norsk', // the name as it should appear in the language menu
-    'language_translator':
-        'Olav A Marschall', // your name for the Translators tab
-    'translator_e-mail':
-        'mattebananer@gmail.com', // optional
-    'last_changed':
-        '2013-09-16', // this, too, will appear in the Translators tab
-
+SnapTranslator.dict.no.strings = {
     // GUI
     // control bar:
     'untitled':

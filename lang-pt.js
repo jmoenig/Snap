@@ -167,26 +167,21 @@
 /*global SnapTranslator*/
 
 SnapTranslator.dict.pt = {
+    metadata: {
+        name: // the name as it should appear in the language menu
+            'Português',
+        english_name: // the english name of the language
+            'Portuguese',
+        translators: [ // translators authors for the Translators tab
+            'Manuel Menezes de Sequeira <mmsequeira@gmail.com>'
+        ],
+        last_changed: // this, too, will appear in the Translators tab
+            '2017-10-30',
+    },
+    strings: {}
+};
 
-/*
-    Special characters: (see <http://0xcc.net/jsescape/>)
-
-    Ä, ä   \u00c4, \u00e4
-    Ö, ö   \u00d6, \u00f6
-    Ü, ü   \u00dc, \u00fc
-    ß      \u00df
-*/
-
-    // meta informação sobre a tradução
-    'language_name':
-        'Português',
-    'language_translator':
-        'Manuel Menezes de Sequeira',
-    'translator_e-mail':
-        'mmsequeira@gmail.com',
-    'last_changed':
-        '2017-10-30',
-
+SnapTranslator.dict.pt.strings = {
     // GUI
     // control bar:
     'untitled':

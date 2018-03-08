@@ -167,26 +167,22 @@
 /*global SnapTranslator*/
 
 SnapTranslator.dict.tr = {
+    metadata: {
+        name: // the name as it should appear in the language menu
+            'Türkçe',
+        english_name: // the english name of the language
+            'Turkish',
+        translators: [ // translators authors for the Translators tab
+            'Hakan Atas <hakanatas@gmail.com>',
+            '3dRoboLab <mustafaipekbayrak@gmail.com> (www.3drobolab.com)'
+        ],
+        last_changed: // this, too, will appear in the Translators tab
+            '2018-01-22',
+    },
+    strings: {}
+};
 
-/*
-    Special characters: (see <http://0xcc.net/jsescape/>)
-
-    Ä, ä   \u00c4, \u00e4
-    Ö, ö   \u00d6, \u00f6
-    Ü, ü   \u00dc, \u00fc
-    ß      \u00df
-*/
-
-    // translations meta information
-    'language_name':
-        'Türkçe', // the name as it should appear in the language menu (Dil menüsünde görünmesi gereken isim)
-    'language_translator':
-        'Hakan Atas, www.3drobolab.com', // your name for the Translators tab (Çevirenlerin isimleri)
-    'translator_e-mail':
-        'hakanatas@gmail.com, mustafaipekbayrak@gmail.com', // optional (Mail adresleri)
-    'last_changed':
-        '2018-01-22', // this, too, will appear in the Translators tab (Son güncelleme tarihi)
-
+SnapTranslator.dict.tr.strings = {
     // GUI
     // control bar:
     'untitled':

@@ -167,26 +167,22 @@
 /*global SnapTranslator*/
 
 SnapTranslator.dict.zh_CN = {
+    metadata: {
+        name: // the name as it should appear in the language menu
+            '简体中文',
+        english_name: // the english name of the language
+            'Simplified Chinese',
+        translators: [ // translators authors for the Translators tab
+            '五百刀 <ubertao@qq.com>',
+            '邓江华 <djh@rhjxx.cn>'
+        ],
+        last_changed: // this, too, will appear in the Translators tab
+            '2018-01-22',
+    },
+    strings: {}
+};
 
-/*
-    Special characters: (see <http://0xcc.net/jsescape/>)
-
-    Ä, ä   \u00c4, \u00e4
-    Ö, ö   \u00d6, \u00f6
-    Ü, ü   \u00dc, \u00fc
-    ß      \u00df
-*/
-
-    // translations meta information
-    'language_name':
-        '简体中文',
-    'language_translator':
-        '五百刀/邓江华',
-    'translator_e-mail':
-        'ubertao@qq.com/djh@rhjxx.cn',
-    'last_changed':
-        '2018-01-22',
-
+SnapTranslator.dict.zh_CN.strings = {
     // GUI
     // control bar:
     'untitled':

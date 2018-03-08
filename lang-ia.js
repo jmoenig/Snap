@@ -180,23 +180,21 @@
 /*global SnapTranslator*/
 
 SnapTranslator.dict.ia = {
+    metadata: {
+        name: // the name as it should appear in the language menu
+            'Interlingua',
+        english_name: // the english name of the language
+            'Interlingua',
+        translators: [ // translators authors for the Translators tab
+            'Ken Dickey <ken.dickey@whidbey.com>'
+        ],
+        last_changed: // this, too, will appear in the Translators tab
+            '2015-08-09',
+    },
+    strings: {}
+};
 
-/*
-    Special characters: (see <http://0xcc.net/jsescape/>)
-
-	None
-*/
-
-    // translations meta information
-    'language_name':
-        'Interlingua', // the name as it should appear in the language menu
-    'language_translator':
-        'Ken Dickey', // your name for the Translators tab
-    'translator_e-mail':
-        'Ken.Dickey@whidbey.com', // optional
-    'last_changed':
-        '2015-08-09', // this, too, will appear in the Translators tab
-
+SnapTranslator.dict.ia.strings = {
     // GUI
     // control bar:
     'untitled':

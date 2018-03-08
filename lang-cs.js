@@ -167,26 +167,22 @@
 /*global SnapTranslator*/
 
 SnapTranslator.dict.cs = {
+    metadata: {
+        name: // the name as it should appear in the language menu
+            'Česky',
+        english_name: // the english name of the language
+            'Czech',
+        translators: [ // translators authors for the Translators tab
+            'Michal Moc <info@iguru.eu>',
+            'Jan Tomsa <jan.tomsa.1976@gmail.com>'
+        ],
+        last_changed: // this, too, will appear in the Translators tab
+            '2015-11-16',
+    },
+    strings: {}
+};
 
-/*
-    Special characters: (see <http://0xcc.net/jsescape/>)
-
-    Ä, ä   \u00c4, \u00e4
-    Ö, ö   \u00d6, \u00f6
-    Ü, ü   \u00dc, \u00fc
-    ß      \u00df
-*/
-
-    // translations meta information
-    'language_name':
-        'Česky', // the name as it should appear in the language menu
-    'language_translator':
-        'Michal Moc, Jan Tomsa', // your name for the Translators tab
-    'translator_e-mail':
-        'info@iguru.eu, jan.tomsa.1976@gmail.com', // optional
-    'last_changed':
-        '2015-11-16', // this, too, will appear in the Translators tab
-
+SnapTranslator.dict.cs.strings = {
     // GUI
     // control bar:
     'untitled':

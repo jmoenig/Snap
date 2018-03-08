@@ -167,26 +167,21 @@
 /*global SnapTranslator*/
 
 SnapTranslator.dict.bn = {
+    metadata: {
+        name: // the name as it should appear in the language menu
+            'বাংলা',
+        english_name: // the english name of the language
+            'Bengali',
+        translators: [ // translators authors for the Translators tab
+            'Dr. Mokter Hossain <mokter@gmail.com>'
+        ],
+        last_changed: // this, too, will appear in the Translators tab
+            '2014-07-02',
+    },
+    strings: {}
+};
 
-/*
-    Special characters: (see <http://0xcc.net/jsescape/>)
-
-    Ä, ä   \u00c4, \u00e4
-    Ö, ö   \u00d6, \u00f6
-    Ü, ü   \u00dc, \u00fc
-    ß      \u00df
-*/
-    // translations meta information
-    'language_name':
-        'বাংলা', // the name as it should appear in the language menu
-    'language_translator':
-        'Dr. Mokter Hossain', // your name for the Translators tab
-    'translator_e-mail':
-        'mokter@gmail.com', // optional
-    'last_changed':
-        '2014-07-02', // this, too, will appear in the Translators tab
-
-
+SnapTranslator.dict.bn.strings = {
     // GUI
     // control bar:
     'untitled':

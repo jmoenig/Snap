@@ -163,27 +163,21 @@
 /*global SnapTranslator*/
 
 SnapTranslator.dict.bg = {
+    metadata: {
+        name: // the name as it should appear in the language menu
+            'Български',
+        english_name: // the english name of the language
+            'Bulgarian',
+        translators: [ // translators authors for the Translators tab
+            'Иван Савов <ivan.savov@gmail.com>'
+        ],
+        last_changed: // this, too, will appear in the Translators tab
+            '2015-11-02',
+    },
+    strings: {}
+};
 
-/*
-    Special characters: (see <http://0xcc.net/jsescape/>)
-
-    ,    \u00c4, \u00e4
-
-,    \u00d6, \u00f6
-    ,    \u00dc, \u00fc
-    §      \u00df
-*/
-
-    // translations meta information
-    'language_name':
-        'Български', // the name as it should appear in the language menu
-    'language_translator':
-        'Иван Савов', // your name for the Translators tab
-    'translator_e-mail':
-        'ivan.savov@gmail.com', // optional
-    'last_changed':
-        '2015-11-02', // this, too, will appear in the Translators tab
-
+SnapTranslator.dict.bg.strings = {
     // GUI
     // control bar:
     'untitled':

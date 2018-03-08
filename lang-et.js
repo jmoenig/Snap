@@ -28,17 +28,21 @@
 /*global SnapTranslator*/
 
 SnapTranslator.dict.et = {
+    metadata: {
+        name: // the name as it should appear in the language menu
+            'Eesti',
+        english_name: // the english name of the language
+            'Estonian',
+        translators: [ // translators authors for the Translators tab
+            'Hasso Tepper <hasso.tepper@gmail.com>'
+        ],
+        last_changed: // this, too, will appear in the Translators tab
+            '2016-03-01',
+    },
+    strings: {}
+};
 
-    // translations meta information
-    'language_name':
-        'Eesti', // the name as it should appear in the language menu
-    'language_translator':
-        'Hasso Tepper', // your name for the Translators tab
-    'translator_e-mail':
-        'hasso.tepper@gmail.com', // optional
-    'last_changed':
-        '2016-03-01', // this, too, will appear in the Translators tab
-
+SnapTranslator.dict.et.strings = {
     // GUI
     // control bar:
     'untitled':

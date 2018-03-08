@@ -167,31 +167,23 @@
 /*global SnapTranslator*/
 
 SnapTranslator.dict.pl = {
+    metadata: {
+        name: // the name as it should appear in the language menu
+            'Polski',
+        english_name: // the english name of the language
+            'Polish',
+        translators: [ // translators authors for the Translators tab
+            'Witek Kranas <witek@oeiizk.waw.pl>',
+            'deKrain',
+            'AB'
+        ],
+        last_changed: // this, too, will appear in the Translators tab
+            '2017-11-09',
+    },
+    strings: {}
+};
 
-/*
-    Special characters: (see <http://0xcc.net/jsescape/>)
-	Ą, ą	\u0104,	
-	Ć, ć	\u0106,	\u0107
-	Ę, ę	\u0118,	\u0119
-	Ł, ł	\u0141, \u0142
-	Ń, ń	\u0143, \u0144\u0105
-	Ś, ś	\u015A, \u015B
-	Ó, ó	\u00D3, \u00F3
-	Ź, ź	\u0179,	\u017A
-	Ż, ż	\u017B, \u017C
-	
-*/
-
-    // translations meta information
-    'language_name':
-        'Polski', // the name as it should appear in the language menu
-    'language_translator':
-        'Witek Kranas & deKrain & AB', // your name for the Translators tab
-    'translator_e-mail':
-        'witek@oeiizk.waw.pl', // optional
-    'last_changed':
-        '2017-11-09', // this, too, will appear in the Translators tab
-
+SnapTranslator.dict.pl.strings = {
     // GUI
     // control bar:
     'untitled':

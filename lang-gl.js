@@ -169,26 +169,21 @@
 /*global SnapTranslator*/
 
 SnapTranslator.dict.gl = {
+    metadata: {
+        name: // the name as it should appear in the language menu
+            'Galego',
+        english_name: // the english name of the language
+            'Galician',
+        translators: [ // translators authors for the Translators tab
+            'tecnoloxia'
+        ],
+        last_changed: // this, too, will appear in the Translators tab
+            '2016-11-09',
+    },
+    strings: {}
+};
 
-/*
-    Special characters: (see <http://0xcc.net/jsescape/>)
-
-    Ä, ä   \u00c4, \u00e4
-    Ö, ö   \u00d6, \u00f6
-    Ü, ü   \u00dc, \u00fc
-    ß      \u00df
-*/
-
-    // translations meta information
-    'language_name':
-        'Galego', // the name as it should appear in the language menu
-    'language_translator':
-        'tecnoloxia', // your name for the Translators tab
-    'translator_e-mail':
-        '', // optional
-    'last_changed':
-        '2016-11-09', // this, too, will appear in the Translators tab
-
+SnapTranslator.dict.gl.strings = {
     // GUI
     // control bar:
     'untitled':

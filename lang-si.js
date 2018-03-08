@@ -169,26 +169,22 @@
 /*global SnapTranslator*/
 
 SnapTranslator.dict.si = {
+    metadata: {
+        name: // the name as it should appear in the language menu
+            'Slovenščina',
+        english_name: // the english name of the language
+            'Slovak',
+        translators: [ // translators authors for the Translators tab
+            'Sasa Divjak <sasa.divjak@fri.uni-lj.si>',
+            'Gorazd Breskvar'
+        ],
+        last_changed: // this, too, will appear in the Translators tab
+            '2016-04-22',
+    },
+    strings: {}
+};
 
-/*
-    Special characters: (see <http://0xcc.net/jsescape/>)
-
-   Ss ,    \u0160, \u0161
-   Cc     \u010C, \u010D
-   Zz,   \u017D, \u017E
-
-*/
-
-    // translations meta information
-    'language_name':
-        'Sloven\u0161\u010Dina', // the name as it should appear in the language menu
-    'language_translator':
-        'Sasa Divjak, Gorazd Breskvar', // your name for the Translators tab
-    'translator_e-mail':
-        'sasa.divjak@fri.uni-lj.si', // optional
-    'last_changed':
-        '2016-04-22', // this, too, will appear in the Translators tab
-
+SnapTranslator.dict.si.strings = {
     // GUI
     // control bar:
     'untitled':

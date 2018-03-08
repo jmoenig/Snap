@@ -167,26 +167,21 @@
 /*global SnapTranslator*/
 
 SnapTranslator.dict.pt_BR = {
+    metadata: {
+        name: // the name as it should appear in the language menu
+            'Português do Brasil',
+        english_name: // the english name of the language
+            'Portuguese (Brazil)',
+        translators: [ // translators authors for the Translators tab
+            'Aldo von Wangenheim <awangenh@inf.ufsc.br>'
+        ],
+        last_changed: // this, too, will appear in the Translators tab
+            '2014-04-20',
+    },
+    strings: {}
+};
 
-/*
-    Special characters: (see <http://0xcc.net/jsescape/>)
-
-    Ä, ä   \u00c4, \u00e4
-    Ö, ö   \u00d6, \u00f6
-    Ü, ü   \u00dc, \u00fc
-    ß      \u00df
-*/
-
-    // meta informação sobre a tradução
-    'language_name':
-        'Português do Brasil',
-    'language_translator':
-        'Aldo von Wangenheim',
-    'translator_e-mail':
-        'awangenh@inf.ufsc.br',
-    'last_changed':
-        '2014-04-20',
-
+SnapTranslator.dict.pt_BR.strings = {
     // GUI
     // control bar:
     'untitled':

@@ -167,26 +167,21 @@
 /*global SnapTranslator*/
 
 SnapTranslator.dict.hu = {
+    metadata: {
+        name: // the name as it should appear in the language menu
+            'Magyar',
+        english_name: // the english name of the language
+            'Hungarian',
+        translators: [ // translators authors for the Translators tab
+            'Makány György <makany.gyorgy@gmail.com>'
+        ],
+        last_changed: // this, too, will appear in the Translators tab
+            '2015-07-26',
+    },
+    strings: {}
+};
 
-/*
-    Special characters: (see <http://0xcc.net/jsescape/>)
-
-    Ä, ä   \u00c4, \u00e4
-    Ö, ö   \u00d6, \u00f6
-    Ü, ü   \u00dc, \u00fc
-    ß      \u00df
-*/
-
-    // translations meta information
-    'language_name':
-        'Magyar', // the name as it should appear in the language menu
-    'language_translator':
-        'Makány György', // your name for the Translators tab
-    'translator_e-mail':
-        'makany.gyorgy@gmail.com', // optional
-    'last_changed':
-        '2015-07-26', // this, too, will appear in the Translators tab
-
+SnapTranslator.dict.hu.strings = {
     // GUI
     // control bar:
     'untitled':

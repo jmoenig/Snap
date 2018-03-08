@@ -167,18 +167,21 @@
 /*global SnapTranslator*/
 
 SnapTranslator.dict.kn = {
+    metadata: {
+        name: // the name as it should appear in the language menu
+            'ಕನ್ನಡ',
+        english_name: // the english name of the language
+            'Kannada',
+        translators: [ // translators authors for the Translators tab
+            'Vinayakumar R <vnkmr7620@gmail.com>'
+        ],
+        last_changed: // this, too, will appear in the Translators tab
+            '2014-25-11',
+    },
+    strings: {}
+};
 
-
-    // translations meta information
-    'language_name':
-        '\u0C95\u0CA8\u0CCD\u0CA8\u0CA1', // the name as it should appear in the language menu
-    'language_translator':
-        'Vinayakumar R', // your name for the Translators tab
-    'translator_e-mail':
-        'vnkmr7620@gmail.com', // optional
-    'last_changed':
-        '2014-25-11', // this, too, will appear in the Translators tab
-
+SnapTranslator.dict.kn.strings = {
     // GUI
     // control bar:
     'untitled':

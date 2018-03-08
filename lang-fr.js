@@ -167,38 +167,24 @@
 /*global SnapTranslator*/
 
 SnapTranslator.dict.fr = {
+    metadata: {
+        name: // the name as it should appear in the language menu
+            'Français',
+        english_name: // the english name of the language
+            'French',
+        translators: [ // translators authors for the Translators tab
+            'Jean-Jacques Valliet',
+            'Mark Rafter',
+            'Martin Quinson',
+            'Damien Caselli'
+        ],
+        last_changed: // this, too, will appear in the Translators tab
+            '2016-10-27',
+    },
+    strings: {}
+};
 
-/*
-    Special characters: (see <http://0xcc.net/jsescape/>)
-
-    À      \u00C0
-    à      \u00E0
-    É      \u00C9
-    è      \u00E8
-    é      \u00E9
-    ê      \u00EA
-    ç      \u00E7
-    ï      \u00EF
-    ô      \u00F4
-    ù      \u00F9
-    °      \u00B0
-    '      \u0027
-    «      \u00AB
-    »      \u00BB
-    ↔      \u2194
-    ↕      \u2195
-*/
-
-    // translations meta information
-    'language_name':
-        'Fran\u00E7ais', // the name as it should appear in the language menu
-    'language_translator':
-        'Jean-Jacques Valliet, Mark Rafter, Martin Quinson, Damien Caselli', // your name for the Translators tab
-    'translator_e-mail':
-        'i.scool@mac.com', // optional
-    'last_changed':
-        '2016-10-27', // this, too, will appear in the Translators tab
-
+SnapTranslator.dict.fr.strings = {
     // GUI
     // control bar:
     'untitled':

@@ -167,30 +167,22 @@
 /*global SnapTranslator*/
 
 SnapTranslator.dict.dk = {
+    metadata: {
+        name: // the name as it should appear in the language menu
+            'Dansk',
+        english_name: // the english name of the language
+            'Danish',
+        translators: [ // translators authors for the Translators tab
+            'FAB <fab@nielsen.mail.dk>',
+            'Pelle Hjek <hjek@mail.com>'
+        ],
+        last_changed: // this, too, will appear in the Translators tab
+            '2016-11-16',
+    },
+    strings: {}
+};
 
-/*
-    Special characters: (see <http://0xcc.net/jsescape/>)
-
-    €, Š   \u00c4, \u00e4
-    …, š   \u00d6, \u00f6
-    †, Ÿ   \u00dc, \u00fc
-    §      \u00df
-    Æ,æ  	\u00C6,\u00E6
-    Ø,ø	\u00D8,\u00F8
-    Å,å	\u00C5,\u00E5
-
-*/
-
-    // translations meta information
-    'language_name':
-        'Dansk', // the name as it should appear in the language menu
-    'language_translator':
-        'FAB, Pelle Hjek', // your name for the Translators tab
-    'translator_e-mail':
-        'fab@nielsen.mail.dk, hjek@mail.com', // optional
-    'last_changed':
-        '2016-11-16', // this, too, will appear in the Translators tab
-
+SnapTranslator.dict.dk.strings = {
     // GUI
     // control bar:
     'untitled':

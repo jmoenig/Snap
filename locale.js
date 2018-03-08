@@ -61,11 +61,11 @@ function _expr(expression, replacements) {
 
 function Localizer(language, dict) {
     this.language = language || 'en';
-    this.dict = dict || { 'en': {} };
+    this.dict = dict || { 'en': { strings: {} } };
 }
 
 Localizer.prototype.lookup = function (string) {
-    return this.dict[this.language][string];
+    return this.dict[this.language].strings[string];
 }
 
 Localizer.prototype.renderTemplate = function (template, vars) {
@@ -111,483 +111,660 @@ Localizer.prototype.languages = function () {
 };
 
 Localizer.prototype.languageName = function (lang) {
-    return this.dict[lang].language_name || lang;
+    return this.dict[lang].metadata.name || this.englishLanguageName(lang);
+};
+
+Localizer.prototype.englishLanguageName = function (lang) {
+    return this.dict[lang].metadata.english_name || lang;
 };
 
 Localizer.prototype.credits = function () {
     var txt = '',
         myself = this;
     this.languages().forEach(function (lang) {
+        var translators = myself.dict[lang].metadata.translators
+            .map(function(translator) {
+                return translator.split('<')[0].trim();
+            })
+            .join('/');
         txt = txt + '\n'
             + myself.languageName(lang)
             + ' (' + lang + ') - '
-            + myself.dict[lang].language_translator
-            + ' - ' + myself.dict[lang].last_changed;
+            + translators
+            + ' - ' + myself.dict[lang].metadata.last_changed;
     });
     return txt;
 };
 
 Localizer.prototype.unload = function () {
     var dict,
-        keep = ['language_name', 'language_translator', 'last_changed'],
         myself = this;
-    this.languages().forEach(function (lang) {
-        var key;
-        if (lang !== 'en') {
+    this.languages()
+        .forEach(function (lang) {
             dict = myself.dict[lang];
-            for (key in dict) {
-                if (Object.prototype.hasOwnProperty.call(dict, key)
-                        && !contains(keep, key)) {
-                    delete dict[key];
-                }
-            }
-        }
-    });
+            delete dict.strings;
+            dict.strings = {};
+        });
 };
 
-// SnapTranslator initialization
+// SnapTranslator initialization ///////////////////////////////////////
 
 SnapTranslator.dict.en = {
-    // meta information
-    'language_name':
-        'English',
-    'language_translator':
-        'Jens M\u00F6nig',
-    'translator_e-mail':
-        'jens@moenig.org',
-    'last_changed':
-        '2015-12-22',
-
-    // rewordings in English avoiding having to adjust all other translations
-    'any':
-        'random',
-};
+    metadata: {
+        name: // the name as it should appear in the language menu
+            'English',
+        english_name: // the english name of the language
+            'English',
+        translators: [ // translators authors for the Translators tab
+            'Jens M\u00F6nig <jens@moenig.org>'
+        ],
+        last_changed: // this, too, will appear in the Translators tab
+            '2015-12-22'
+    },
+    strings: {}
+}
 
 SnapTranslator.dict.de = {
-    'language_name':
-        'Deutsch',
-    'language_translator':
-        'Jens M\u00F6nig',
-    'translator_e-mail':
-        'jens@moenig.org',
-    'last_changed':
-        '2018-03-09'
-};
+    metadata: {
+        name: // the name as it should appear in the language menu
+            'Deutsch',
+        english_name: // the english name of the language
+            'German',
+        translators: [ // translators authors for the Translators tab
+            'Jens M\u00F6nig <jens@moenig.org>'
+        ],
+        last_changed: // this, too, will appear in the Translators tab
+            '2018-03-09'
+    },
+    strings: {}
+}
 
 SnapTranslator.dict.it = {
-    'language_name':
-        'Italiano',
-    'language_translator':
-        'Stefano Federici, Alberto Firpo, Massimo Ghisalberti',
-    'translator_e-mail':
-        's_federici@yahoo.com, albertofirpo12@gmail.com, zairik@gmail.com',
-    'last_changed':
-        '2016-05-10'
-};
+    metadata: {
+        name: // the name as it should appear in the language menu
+            'Italiano',
+        english_name: // the english name of the language
+            'Italian',
+        translators: [ // translators authors for the Translators tab
+            'Stefano Federici <s_federici@yahoo.com>',
+            'Alberto Firpo <albertofirpo12@gmail.com>',
+            'Massimo Ghisalbert <zairik@gmail.com>'
+        ],
+        last_changed: // this, too, will appear in the Translators tab
+            '2016-10-31'
+    },
+    strings: {}
+}
 
 SnapTranslator.dict.ja = {
-    'language_name':
-        '日本語',
-    'language_translator':
-        'Kazuhiro Abe',
-    'translator_e-mail':
-        'abee@squeakland.jp',
-    'last_changed':
-        '2012-04-02'
-};
+    metadata: {
+        name: // the name as it should appear in the language menu
+            '\u65E5\u672C\u8A9E',
+        english_name: // the english name of the language
+            'Japanese',
+        translators: [ // translators authors for the Translators tab
+            'Kazuhiro Abe <abee@squeakland.jp>'
+        ],
+        last_changed: // this, too, will appear in the Translators tab
+            '2013-04-02'
+    },
+    strings: {}
+}
 
 SnapTranslator.dict.ja_HIRA = {
-    'language_name':
-        'にほんご',
-    'language_translator':
-        'Kazuhiro Abe',
-    'translator_e-mail':
-        'abee@squeakland.jp',
-    'last_changed':
-        '2012-04-02'
-};
+    metadata: {
+        name: // the name as it should appear in the language menu
+            '\u306B\u307B\u3093\u3054',
+        english_name: // the english name of the language
+            'Japanese (Hiragana)',
+        translators: [ // translators authors for the Translators tab
+            'Kazuhiro Abe <abee@squeakland.jp>'
+        ],
+        last_changed: // this, too, will appear in the Translators tab
+            '2013-04-02'
+    },
+    strings: {}
+}
 
 SnapTranslator.dict.ko = {
-    'language_name':
-        '한국어',
-    'language_translator':
-        'Yunjae Jang',
-    'translator_e-mail':
-        'janggoons@gmail.com',
-    'last_changed':
-        '2015-01-21'
-};
+    metadata: {
+        name: // the name as it should appear in the language menu
+            '\uD55C\uAD6D\uC5B4',
+        english_name: // the english name of the language
+            'Korean',
+        translators: [ // translators authors for the Translators tab
+            'Yunjae Jang <janggoons@gmail.com>'
+        ],
+        last_changed: // this, too, will appear in the Translators tab
+            '2015-01-21'
+    },
+    strings: {}
+}
 
 SnapTranslator.dict.pt = {
-    'language_name':
-        'Português',
-    'language_translator':
-        'Manuel Menezes de Sequeira',
-    'translator_e-mail':
-        'mmsequeira@gmail.com',
-    'last_changed':
-        '2017-10-30'
-};
+    metadata: {
+        name: // the name as it should appear in the language menu
+            'Portugu\u00EAs',
+        english_name: // the english name of the language
+            'Portuguese',
+        translators: [ // translators authors for the Translators tab
+            'Manuel Menezes de Sequeira <mmsequeira@gmail.com>'
+        ],
+        last_changed: // this, too, will appear in the Translators tab
+            '2017-10-30'
+    },
+    strings: {}
+}
 
 SnapTranslator.dict.cs = {
-    'language_name':
-        'Česky',
-    'language_translator':
-        'Michal Moc, Jan Tomsa',
-    'translator_e-mail':
-        'info@iguru.eu, jan.tomsa.1976@gmail.com',
-    'last_changed':
-        '2015-11-16'
-};
+    metadata: {
+        name: // the name as it should appear in the language menu
+            '\u010Cesky',
+        english_name: // the english name of the language
+            'Czech',
+        translators: [ // translators authors for the Translators tab
+            'Michal Moc <info@iguru.eu>',
+            'Jan Tomsa <jan.tomsa.1976@gmail.com>'
+        ],
+        last_changed: // this, too, will appear in the Translators tab
+            '2015-11-16'
+    },
+    strings: {}
+}
 
 SnapTranslator.dict.zh_CN = {
-    'language_name':
-        '简体中文',
-    'language_translator':
-        '五百刀/邓江华',
-    'translator_e-mail':
-        'ubertao@qq.com/djh@rhjxx.cn',
-    'last_changed':
-        '2018-01-22'
-};
+    metadata: {
+        name: // the name as it should appear in the language menu
+            '\u7B80\u4F53\u4E2D\u6587',
+        english_name: // the english name of the language
+            'Simplified Chinese',
+        translators: [ // translators authors for the Translators tab
+            '\u4E94\u767E\u5200 <ubertao@qq.com>',
+            '\u9093\u6C5F\u534E <djh@rhjxx.cn>'
+        ],
+        last_changed: // this, too, will appear in the Translators tab
+            '2018-01-22'
+    },
+    strings: {}
+}
 
 SnapTranslator.dict.eo = {
-    'language_name':
-        'Esperanto',
-    'language_translator':
-        'Sebastian Cyprych',
-    'translator_e-mail':
-        'sebacyp(heliko)gmail(punkto)com',
-    'last_changed':
-        '2017-10-01'
-};
+    metadata: {
+        name: // the name as it should appear in the language menu
+            'Esperanto',
+        english_name: // the english name of the language
+            'Esperanto',
+        translators: [ // translators authors for the Translators tab
+            'Sebastian CYPRYCH <sebacyp@gmail.com>'
+        ],
+        last_changed: // this, too, will appear in the Translators tab
+            '2017-10-01'
+    },
+    strings: {}
+}
 
 SnapTranslator.dict.fr = {
-    'language_name':
-        'Fran\u00E7ais',
-    'language_translator':
-        'Jean-Jacques Valliet, Mark Rafter, Martin Quinson, Damien Caselli',
-    'translator_e-mail':
-        'i.scool@mac.com',
-    'last_changed':
-        '2016-10-27'
-};
+    metadata: {
+        name: // the name as it should appear in the language menu
+            'Fran\u00E7ais',
+        english_name: // the english name of the language
+            'French',
+        translators: [ // translators authors for the Translators tab
+            'Jean-Jacques Valliet',
+            'Mark Rafter',
+            'Martin Quinson',
+            'Damien Caselli'
+        ],
+        last_changed: // this, too, will appear in the Translators tab
+            '2016-10-27'
+    },
+    strings: {}
+}
 
 SnapTranslator.dict.si = {
-    'language_name':
-        'Sloven\u0161\u010Dina',
-    'language_translator':
-        'Sasa Divjak, Gorazd Breskvar',
-    'translator_e-mail':
-        'sasa.divjak@fri.uni-lj.si',
-    'last_changed':
-        '2016-04-22'
-};
+    metadata: {
+        name: // the name as it should appear in the language menu
+            'Sloven\u0161\u010Dina',
+        english_name: // the english name of the language
+            'Slovak',
+        translators: [ // translators authors for the Translators tab
+            'Sasa Divjak <sasa.divjak@fri.uni-lj.si>',
+            'Gorazd Breskvar'
+        ],
+        last_changed: // this, too, will appear in the Translators tab
+            '2016-04-22'
+    },
+    strings: {}
+}
 
 SnapTranslator.dict.ru = {
-    'language_name':
-        'Русский',
-    'language_translator':
-        'Svetlana Ptashnaya, Проскурнёв Артём',
-    'translator_e-mail':
-        'svetlanap@berkeley.edu, tema@school830.ru',
-    'last_changed':
-        '2018-02-05'
-};
+    metadata: {
+        name: // the name as it should appear in the language menu
+            '\u0420\u0443\u0441\u0441\u043A\u0438\u0439',
+        english_name: // the english name of the language
+            'Russian',
+        translators: [ // translators authors for the Translators tab
+            'Svetlana Ptashnaya <svetlanap@berkeley.edu>',
+            '\u041F\u0440\u043E\u0441\u043A\u0443\u0440\u043D\u0451\u0432 \u0410\u0440\u0442\u0451\u043C <tema@school830.ru>'
+        ],
+        last_changed: // this, too, will appear in the Translators tab
+            '2017-12-29'
+    },
+    strings: {}
+}
 
 SnapTranslator.dict.es = {
-    'language_name':
-        'Espa\u00F1ol',
-    'language_translator':
-        'V\u00EDctor Manuel Muratalla Morales / Cristi\u00E1n Rizzi Iribarren / Alfonso Ruzafa',
-    'translator_e-mail':
-        'victor.muratalla@yahoo.com / rizzi.cristian@gmail.com',
-    'last_changed':
-        '2018-02-19'
-};
+    metadata: {
+        name: // the name as it should appear in the language menu
+            'Espa\u00F1ol',
+        english_name: // the english name of the language
+            'Spanish',
+        translators: [ // translators authors for the Translators tab
+            'V\u00EDctor Manuel Muratalla Morales <victor.muratalla@yahoo.com>',
+            'Cristi\u00E1n Rizzi Iribarren <rizzi.cristian@gmail.com>',
+            'Alfonso Ruzafa <superruzafa@gmail.com>'
+        ],
+        last_changed: // this, too, will appear in the Translators tab
+            '2018-02-19'
+    },
+    strings: {}
+}
 
 SnapTranslator.dict.nl = {
-    'language_name':
-        'Nederlands',
-    'language_translator':
-        'Sjoerd Dirk Meijer, Frank Sierens, Jan-Gerard van der Toorn',
-    'translator_e-mail':
-        'sjoerddirk@fromScratchEd.nl, frank.sierens@telenet.be, jg.2019@xs4all.nl',
-    'last_changed':
-        '2017-09-01'
-};
+    metadata: {
+        name: // the name as it should appear in the language menu
+            'Nederlands',
+        english_name: // the english name of the language
+            'Dutch',
+        translators: [ // translators authors for the Translators tab
+            'Sjoerd Dirk Meijer <sjoerddirk@fromScratchEd.nl>',
+            'Frank Sierens <frank.sierens@telenet.be>',
+            'Jan-Gerard van der Toorn <jg.2019@xs4all.nl>'
+        ],
+        last_changed: // this, too, will appear in the Translators tab
+            '2017-09-01'
+    },
+    strings: {}
+}
 
 SnapTranslator.dict.pl = {
-    'language_name':
-        'Polski',
-    'language_translator':
-        'Witek Kranas & deKrain',
-    'translator_e-mail':
-        'witek@oeiizk.waw.pl',
-    'last_changed':
-        '2017-11-09'
-};
+    metadata: {
+        name: // the name as it should appear in the language menu
+            'Polski',
+        english_name: // the english name of the language
+            'Polish',
+        translators: [ // translators authors for the Translators tab
+            'Witek Kranas <witek@oeiizk.waw.pl>',
+            'deKrain',
+            'AB'
+        ],
+        last_changed: // this, too, will appear in the Translators tab
+            '2017-11-09'
+    },
+    strings: {}
+}
 
 SnapTranslator.dict.zh_TW = {
-    'language_name':
-        '繁體中文',
-    'language_translator':
-        'cch',
-    'translator_e-mail':
-        'cchuang2009@gmail.com',
-    'last_changed':
-        '2013-8-14'
-};
+    metadata: {
+        name: // the name as it should appear in the language menu
+            '\u7E41\u9AD4\u4E2D\u6587',
+        english_name: // the english name of the language
+            'Traditional Chinese',
+        translators: [ // translators authors for the Translators tab
+            'cch <cchuang2009@gmail.com>'
+        ],
+        last_changed: // this, too, will appear in the Translators tab
+            '2013-8-14'
+    },
+    strings: {}
+}
 
 SnapTranslator.dict.no = {
-    'language_name':
-        'Norsk',
-    'language_translator':
-        'Olav A Marschall',
-    'translator_e-mail':
-        'mattebananer@gmail.com',
-    'last_changed':
-        '2013-09-16'
-};
+    metadata: {
+        name: // the name as it should appear in the language menu
+            'Norsk',
+        english_name: // the english name of the language
+            'Norwegian',
+        translators: [ // translators authors for the Translators tab
+            'Olav A Marschall <mattebananer@gmail.com>'
+        ],
+        last_changed: // this, too, will appear in the Translators tab
+            '2013-09-16'
+    },
+    strings: {}
+}
 
 SnapTranslator.dict.dk = {
-    'language_name':
-        'Dansk',
-    'language_translator':
-        'FAB, Pelle Hjek',
-    'translator_e-mail':
-        'fab@nielsen.mail.dk, hjek@mail.com',
-    'last_changed':
-        '2016-11-16'
-};
+    metadata: {
+        name: // the name as it should appear in the language menu
+            'Dansk',
+        english_name: // the english name of the language
+            'Danish',
+        translators: [ // translators authors for the Translators tab
+            'FAB <fab@nielsen.mail.dk>',
+            'Pelle Hjek <hjek@mail.com>'
+        ],
+        last_changed: // this, too, will appear in the Translators tab
+            '2016-11-16'
+    },
+    strings: {}
+}
 
 SnapTranslator.dict.el = {
-    'language_name':
-        'Ελληνικά',
-    'language_translator':
-        'Ino Samaras',
-    'translator_e-mail':
-        'ino.samaras@berkeley.edu',
-    'last_changed':
-        '2018-01-19'
-};
+    metadata: {
+        name: // the name as it should appear in the language menu
+            '\u0395\u03BB\u03BB\u03B7\u03BD\u03B9\u03BA\u03AC',
+        english_name: // the english name of the language
+            'Greek',
+        translators: [ // translators authors for the Translators tab
+            'Ino Samaras <ino.samaras@berkeley.edu>'
+        ],
+        last_changed: // this, too, will appear in the Translators tab
+            '2018-01-19'
+    },
+    strings: {}
+}
 
 SnapTranslator.dict.ca = {
-    'language_name':
-        'Català',
-    'language_translator':
-        'Bernat Romagosa Carrasquer, Joan Guillén i Pelegay',
-    'translator_e-mail':
-        'bernat@snap4arduino.rocks, jguille2@xtec.cat',
-    'last_changed':
-        '2017-11-15'
-};
+    metadata: {
+        name: // the name as it should appear in the language menu
+            'Catal\u00E0',
+        english_name: // the english name of the language
+            'Catalan',
+        translators: [ // translators authors for the Translators tab
+            'Bernat Romagosa Carrasquer <bernat@snap4arduino.rocks>',
+            'Joan Guill\u00E9n i Pelegay <jguille2@xtec.cat>'
+        ],
+        last_changed: // this, too, will appear in the Translators tab
+            '2017-11-15'
+    },
+    strings: {}
+}
 
 SnapTranslator.dict.ca_VA = {
-    'language_name':
-    	'Català - Valencià',
-    'language_translator':
-        'Bernat Romagosa Carrasquer, Joan Guillén i Pelegay, Pilar Embid',
-    'translator_e-mail':
-        'bernat@snap4arduino.rocks, jguille2@xtec.cat, embid_mar@gva.es',
-    'last_changed':
-        '2018-02-08'
-};
+    metadata: {
+        name: // the name as it should appear in the language menu
+            'Catal\u00E0 - Valenci\u00E0',
+        english_name: // the english name of the language
+            'Catalan - Valencian',
+        translators: [ // translators authors for the Translators tab
+            'Bernat Romagosa Carrasquer <bernat@snap4arduino.rocks>',
+            'Joan Guill\u00E9n i Pelegay <jguille2@xtec.cat>',
+            'Pilar Embid <embid_mar@gva.es>'
+        ],
+        last_changed: // this, too, will appear in the Translators tab
+            '2018-02-08'
+    },
+    strings: {}
+}
 
 SnapTranslator.dict.fi = {
-    'language_name':
-        'suomi',
-    'language_translator':
-        'Jouni K. Sepp\u00e4nen',
-    'translator_e-mail':
-        'jks@iki.fi',
-    'last_changed':
-        '2014-04-18'
-};
+    metadata: {
+        name: // the name as it should appear in the language menu
+            'Suomi',
+        english_name: // the english name of the language
+            'Finnish',
+        translators: [ // translators authors for the Translators tab
+            'Jouni K. Sepp\u00E4nen <jks@iki.fi>'
+        ],
+        last_changed: // this, too, will appear in the Translators tab
+            '2014-04-18'
+    },
+    strings: {}
+}
 
 SnapTranslator.dict.sv = {
-    'language_name':
-        'svenska',
-    'language_translator':
-        'Erik A. Olsson',
-    'translator_e-mail':
-        'eolsson@gmail.com',
-    'last_changed':
-        '2016-06-09'
-};
+    metadata: {
+        name: // the name as it should appear in the language menu
+            'Svenska',
+        english_name: // the english name of the language
+            'Swedish',
+        translators: [ // translators authors for the Translators tab
+            'Erik A Olsson <eolsson@gmail.com>'
+        ],
+        last_changed: // this, too, will appear in the Translators tab
+            '2016-06-09'
+    },
+    strings: {}
+}
 
 SnapTranslator.dict.pt_BR = {
-    'language_name':
-        'Português do Brasil',
-    'language_translator':
-        'Aldo von Wangenheim',
-    'translator_e-mail':
-        'awangenh@inf.ufsc.br',
-    'last_changed':
-        '2014-04-20'
-};
+    metadata: {
+        name: // the name as it should appear in the language menu
+            'Portugu\u00EAs do Brasil',
+        english_name: // the english name of the language
+            'Portuguese (Brazil)',
+        translators: [ // translators authors for the Translators tab
+            'Aldo von Wangenheim <awangenh@inf.ufsc.br>'
+        ],
+        last_changed: // this, too, will appear in the Translators tab
+            '2014-04-20'
+    },
+    strings: {}
+}
 
 SnapTranslator.dict.bn = {
-    'language_name':
-        'বাংলা',
-    'language_translator':
-        'Dr. Mokter Hossain',
-    'translator_e-mail':
-        'mokter@gmail.com',
-    'last_changed':
-        '2014-07-02'
-};
+    metadata: {
+        name: // the name as it should appear in the language menu
+            '\u09AC\u09BE\u0982\u09B2\u09BE',
+        english_name: // the english name of the language
+            'Bengali',
+        translators: [ // translators authors for the Translators tab
+            'Dr. Mokter Hossain <mokter@gmail.com>'
+        ],
+        last_changed: // this, too, will appear in the Translators tab
+            '2014-07-02'
+    },
+    strings: {}
+}
 
 SnapTranslator.dict.kn = {
-    'language_name':
-        '\u0C95\u0CA8\u0CCD\u0CA8\u0CA1',
-    'language_translator':
-        'Vinayakumar R',
-    'translator_e-mail':
-        'vnkmr7620@gmail.com',
-    'last_changed':
-        '2014-12-02'
-};
+    metadata: {
+        name: // the name as it should appear in the language menu
+            '\u0C95\u0CA8\u0CCD\u0CA8\u0CA1',
+        english_name: // the english name of the language
+            'Kannada',
+        translators: [ // translators authors for the Translators tab
+            'Vinayakumar R <vnkmr7620@gmail.com>'
+        ],
+        last_changed: // this, too, will appear in the Translators tab
+            '2014-25-11'
+    },
+    strings: {}
+}
 
 SnapTranslator.dict.ml = {
-    'language_name':
-        'Malayalam',
-    'language_translator':
-        'vinayakumar R',
-    'translator_e-mail':
-        'vnkmr7620@gmail.com',
-    'last_changed':
-        '2015-02-20'
-};
+    metadata: {
+        name: // the name as it should appear in the language menu
+            '\u0D2E\u0D32\u0D2F\u0D3E\u0D33\u0D02',
+        english_name: // the english name of the language
+            'Malayalam',
+        translators: [ // translators authors for the Translators tab
+            'vinayakumar R <vnkmr7620@gmail.com>'
+        ],
+        last_changed: // this, too, will appear in the Translators tab
+            '2015-02-20'
+    },
+    strings: {}
+}
 
 SnapTranslator.dict.ta = {
-    'language_name':
-        'Tamil',
-    'language_translator':
-        'vinayakumar R',
-    'translator_e-mail':
-        'vnkmr7620@gmail.com',
-    'last_changed':
-        '2015-02-20'
-};
+    metadata: {
+        name: // the name as it should appear in the language menu
+            '\u0BA4\u0BAE\u0BBF\u0BB4\u0BCD',
+        english_name: // the english name of the language
+            'Tamil',
+        translators: [ // translators authors for the Translators tab
+            'vinayakumar R <vnkmr7620@gmail.com>'
+        ],
+        last_changed: // this, too, will appear in the Translators tab
+            '2015-02-20'
+    },
+    strings: {}
+}
 
 SnapTranslator.dict.te = {
-    'language_name':
-        'Telagu', // the name as it should appear in the language menu
-    'language_translator':
-        'vinayakumar R', // your name for the Translators tab
-    'translator_e-mail':
-        'vnkmr7620@gmail.com', // optional
-    'last_changed':
-        '2015-02-20'
-};
+    metadata: {
+        name: // the name as it should appear in the language menu
+            '\u0C24\u0C46\u0C32\u0C41\u0C17\u0C41',
+        english_name: // the english name of the language
+            'Telugu',
+        translators: [ // translators authors for the Translators tab
+            'vinayakumar R <vnkmr7620@gmail.com>'
+        ],
+        last_changed: // this, too, will appear in the Translators tab
+            '2015-02-20'
+    },
+    strings: {}
+}
 
 SnapTranslator.dict.tr = {
-    'language_name':
-        'Türkçe',
-    'language_translator':
-        'Hakan Atas',
-    'translator_e-mail':
-        'hakanatas@gmail.com',
-    'last_changed':
-        '2018-01-22'
-};
+    metadata: {
+        name: // the name as it should appear in the language menu
+            'T\u00FCrk\u00E7e',
+        english_name: // the english name of the language
+            'Turkish',
+        translators: [ // translators authors for the Translators tab
+            'Hakan Atas <hakanatas@gmail.com>',
+            '3dRoboLab <mustafaipekbayrak@gmail.com> (www.3drobolab.com)'
+        ],
+        last_changed: // this, too, will appear in the Translators tab
+            '2018-01-22'
+    },
+    strings: {}
+}
 
 SnapTranslator.dict.hu = {
-    'language_name':
-        'Magyar',
-    'language_translator':
-        'Makány György',
-    'translator_e-mail':
-        'makany.gyorgy@gmail.com',
-    'last_changed':
-        '2015-07-27'
-};
+    metadata: {
+        name: // the name as it should appear in the language menu
+            'Magyar',
+        english_name: // the english name of the language
+            'Hungarian',
+        translators: [ // translators authors for the Translators tab
+            'Mak\u00E1ny Gy\u00F6rgy <makany.gyorgy@gmail.com>'
+        ],
+        last_changed: // this, too, will appear in the Translators tab
+            '2015-07-26'
+    },
+    strings: {}
+}
 
 SnapTranslator.dict.ia = {
-    'language_name':
-        'Interlingua',
-    'language_translator':
-        'Ken Dickey',
-    'translator_e-mail':
-        'Ken.Dickey@whidbey.com',
-    'last_changed':
-        '2015-08-09'
-};
+    metadata: {
+        name: // the name as it should appear in the language menu
+            'Interlingua',
+        english_name: // the english name of the language
+            'Interlingua',
+        translators: [ // translators authors for the Translators tab
+            'Ken Dickey <ken.dickey@whidbey.com>'
+        ],
+        last_changed: // this, too, will appear in the Translators tab
+            '2015-08-09'
+    },
+    strings: {}
+}
 
 SnapTranslator.dict.hr = {
-    'language_name':
-        'Hrvatski',
-    'language_translator':
-        '\u017Deljko Hrvoj',
-    'translator_e-mail':
-        'zeljko.hrvoj@zg.t-com.hr',
-    'last_changed':
-        '2017-08-15'
-};
+    metadata: {
+        name: // the name as it should appear in the language menu
+            'Hrvatski',
+        english_name: // the english name of the language
+            'Croatian',
+        translators: [ // translators authors for the Translators tab
+            'u017Deljko Hrvoj <zeljko.hrvoj@zg.t-com.hr>'
+        ],
+        last_changed: // this, too, will appear in the Translators tab
+            '2017-08-15'
+    },
+    strings: {}
+}
 
 SnapTranslator.dict.bg = {
-    'language_name':
-        'Български',
-    'language_translator':
-        'Ivan Savov',
-    'translator_e-mail':
-        'ivan.savov@gmail.com',
-    'last_changed':
-        '2015-11-16'
-};
+    metadata: {
+        name: // the name as it should appear in the language menu
+            '\u0411\u044A\u043B\u0433\u0430\u0440\u0441\u043A\u0438',
+        english_name: // the english name of the language
+            'Bulgarian',
+        translators: [ // translators authors for the Translators tab
+            '\u0418\u0432\u0430\u043D \u0421\u0430\u0432\u043E\u0432 <ivan.savov@gmail.com>'
+        ],
+        last_changed: // this, too, will appear in the Translators tab
+            '2015-11-02'
+    },
+    strings: {}
+}
 
 SnapTranslator.dict.ro = {
-    'language_name':
-        'Român',
-    'language_translator':
-        'Cristian Macarascu',
-    'translator_e-mail':
-        '',
-    'last_changed':
-        '2015-10-24'
-};
+    metadata: {
+        name: // the name as it should appear in the language menu
+            'Rom\u00E2n\u0103',
+        english_name: // the english name of the language
+            'Romanian',
+        translators: [ // translators authors for the Translators tab
+            'Cristian Macarascu'
+        ],
+        last_changed: // this, too, will appear in the Translators tab
+            '2015-10-24'
+    },
+    strings: {}
+}
 
 SnapTranslator.dict.ar = {
-    'language_name':
-        'العربية', // the name as it should appear in the language menu
-    'language_translator':
-        'طارق جلال', // your name for the Translators tab
-    'translator_e-mail':
-        'tarekgalal46@hotmail.com', // optional
-    'last_changed':
-        '2016-02-24'
-};
+    metadata: {
+        name: // the name as it should appear in the language menu
+            '\u0627\u0644\u0639\u0631\u0628\u064A\u0629',
+        english_name: // the english name of the language
+            'Arabic',
+        translators: [ // translators authors for the Translators tab
+            '\u0637\u0627\u0631\u0642 \u062C\u0644\u0627\u0644 <tarekgalal46@hotmail.com>'
+        ],
+        last_changed: // this, too, will appear in the Translators tab
+            '2016-01-23'
+    },
+    strings: {}
+}
 
 SnapTranslator.dict.id = {
-    'language_name':
-        'Bahasa Indonesia',
-    'language_translator':
-        'Alexander Raphael Liu',
-    'translator_e-mail':
-        'raphaxander@gmail.com',
-    'last_changed':
-        '2016-5-2'
-};
+    metadata: {
+        name: // the name as it should appear in the language menu
+            'Bahasa Indonesia',
+        english_name: // the english name of the language
+            'Indonesian',
+        translators: [ // translators authors for the Translators tab
+            'Alexander Raphael Liu <raphaxander@gmail.com>'
+        ],
+        last_changed: // this, too, will appear in the Translators tab
+            '2016-05-02'
+    },
+    strings: {}
+}
 
 SnapTranslator.dict.et = {
-    'language_name':
-        'Eesti',
-    'language_translator':
-        'Hasso Tepper',
-    'translator_e-mail':
-        'hasso.tepper@gmail.com',
-    'last_changed':
-        '2016-05-03'
-};
+    metadata: {
+        name: // the name as it should appear in the language menu
+            'Eesti',
+        english_name: // the english name of the language
+            'Estonian',
+        translators: [ // translators authors for the Translators tab
+            'Hasso Tepper <hasso.tepper@gmail.com>'
+        ],
+        last_changed: // this, too, will appear in the Translators tab
+            '2016-03-01'
+    },
+    strings: {}
+}
 
 SnapTranslator.dict.gl = {
-    'language_name':
-        'Galego',
-    'language_translator':
-        'tecnoloxia',
-    'translator_e-mail':
-        '',
-    'last_changed':
-        '2016-11-09'
-};
+    metadata: {
+        name: // the name as it should appear in the language menu
+            'Galego',
+        english_name: // the english name of the language
+            'Galician',
+        translators: [ // translators authors for the Translators tab
+            'tecnoloxia'
+        ],
+        last_changed: // this, too, will appear in the Translators tab
+            '2016-11-09'
+    },
+    strings: {}
+}

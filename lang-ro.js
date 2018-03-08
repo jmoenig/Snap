@@ -167,26 +167,21 @@
 /*global SnapTranslator*/
 
 SnapTranslator.dict.ro = {
+    metadata: {
+        name: // the name as it should appear in the language menu
+            'Română',
+        english_name: // the english name of the language
+            'Romanian',
+        translators: [ // translators authors for the Translators tab
+            'Cristian Macarascu'
+        ],
+        last_changed: // this, too, will appear in the Translators tab
+            '2015-10-24',
+    },
+    strings: {}
+};
 
-/*
-    Special characters: (see <http://0xcc.net/jsescape/>)
-
-    Ä, ä   \u00c4, \u00e4
-    Ö, ö   \u00d6, \u00f6
-    Ü, ü   \u00dc, \u00fc
-    ß      \u00df
-*/
-
-    // translations meta information
-    'language_name':
-        'Romanian', // the name as it should appear in the language menu
-    'language_translator':
-        'Cristian Macarascu', // your name for the Translators tab
-    'translator_e-mail':
-        '', // optional
-    'last_changed':
-        '2015-10-24', // this, too, will appear in the Translators tab
-
+SnapTranslator.dict.ro.strings = {
     // GUI
     // control bar:
     'untitled':

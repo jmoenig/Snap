@@ -161,26 +161,23 @@
 /*global SnapTranslator*/
 
 SnapTranslator.dict.nl = {
+    metadata: {
+        name: // the name as it should appear in the language menu
+            'Nederlands',
+        english_name: // the english name of the language
+            'Dutch',
+        translators: [ // translators authors for the Translators tab
+            'Sjoerd Dirk Meijer <sjoerddirk@fromScratchEd.nl>',
+            'Frank Sierens <frank.sierens@telenet.be>',
+            'Jan-Gerard van der Toorn <jg.2019@xs4all.nl>'
+        ],
+        last_changed: // this, too, will appear in the Translators tab
+            '2017-09-01',
+    },
+    strings: {}
+};
 
-/*
-    Special characters: (see <http://0xcc.net/jsescape/>)
-
-    Ä, ä   \u00c4, \u00e4
-    Ö, ö   \u00d6, \u00f6
-    Ü, ü   \u00dc, \u00fc
-    ß      \u00df
-*/
-
-    // translations meta information
-    'language_name':
-        'Nederlands', // the name as it should appear in the language menu
-    'language_translator':
-        'Sjoerd Dirk Meijer, Frank Sierens, Jan-Gerard van der Toorn', // your name for the Translators tab
-    'translator_e-mail':
-        'sjoerddirk@fromScratchEd.nl, frank.sierens@telenet.be, jg.2019@xs4all.nl', // optional
-    'last_changed':
-        '2017-09-01', // this, too, will appear in the Translators tab
-
+SnapTranslator.dict.nl.strings = {
     // GUI
     // control bar:
     'untitled':

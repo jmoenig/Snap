@@ -167,26 +167,23 @@
 /*global SnapTranslator*/
 
 SnapTranslator.dict.ca_VA = {
+    metadata: {
+        name: // the name as it should appear in the language menu
+            'Català - Valencià',
+        english_name: // the english name of the language
+            'Catalan - Valencian',
+        translators: [ // translators authors for the Translators tab
+            'Bernat Romagosa Carrasquer <bernat@snap4arduino.rocks>',
+            'Joan Guillén i Pelegay <jguille2@xtec.cat>',
+            'Pilar Embid <embid_mar@gva.es>'
+        ],
+        last_changed: // this, too, will appear in the Translators tab
+            '2018-02-08',
+    },
+    strings: {}
+};
 
-/*
-    Special characters: (see <http://0xcc.net/jsescape/>)
-
-    Ä, ä   \u00c4, \u00e4
-    Ö, ö   \u00d6, \u00f6
-    Ü, ü   \u00dc, \u00fc
-    ß      \u00df
-*/
-
-    // translations meta information
-    'language_name':
-        'Català - Valencià', // the name as it should appear in the language menu
-    'language_translator':
-        'Bernat Romagosa Carrasquer, Joan Guillén i Pelegay, Pilar Embid', // your name for the Translators tab
-    'translator_e-mail':
-        'bernat@snap4arduino.rocks, jguille2@xtec.cat, embid_mar@gva.es', // optional
-    'last_changed':
-        '2018-02-08', // this, too, will appear in the Translators tab
-
+SnapTranslator.dict.ca_VA.strings = {
     // GUI
     // control bar:
     'untitled':
